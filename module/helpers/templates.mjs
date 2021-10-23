@@ -7,6 +7,7 @@
   return loadTemplates([
 
     // Actor partials.
+    "systems/ambersteel/templates/actor/parts/actor-personals.hbs",
     "systems/ambersteel/templates/actor/parts/actor-basics.hbs",
     "systems/ambersteel/templates/actor/parts/actor-beliefs.hbs",
     "systems/ambersteel/templates/actor/parts/actor-fate.hbs",

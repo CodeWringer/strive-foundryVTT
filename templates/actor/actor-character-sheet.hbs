@@ -5,31 +5,7 @@
     <img class="profile-img" src="{{actor.img}}" data-edit="img" title="{{actor.name}}" height="100" width="100"/>
     <div class="header-fields">
       <h1 class="charname"><input name="name" type="text" value="{{actor.name}}" placeholder="Name"/></h1>
-      {{!-- The grid classes are defined in scss/global/_grid.scss. To use,
-      use both the "grid" and "grid-Ncol" class where "N" can be any number
-      from 1 to 12 and will create that number of columns.  --}}
-      <div class="resources grid grid-3col">
-
-        <div class="flex-group-center">
-          <div class="flexrow flex-center flex-between">
-            <label for="data.person.species">Species</label>
-            <input type="text" name="data.person.species" value="{{data.person.species}}" />
-            <label for="data.person.culture">Culture</label>
-            <input type="text" name="data.person.culture" value="{{data.person.culture}}" />
-          </div>
-          <div class="flexrow flex-center flex-between">
-            <label for="data.person.sex">Sex</label>
-            <input type="text" name="data.person.sex" value="{{data.person.sex}}" />
-            <label for="data.person.age">Age</label>
-            <input type="text" name="data.person.age" value="{{data.person.age}}" />
-          </div>
-          <div class="flexrow flex-center flex-between">
-            <label for="data.person.appearance">Appearance</label>
-            <input type="text" name="data.person.appearance" value="{{data.person.appearance}}" />
-          </div>
-        </div>
-
-      </div>
+       {{> "systems/ambersteel/templates/actor/parts/actor-personals.hbs"}}
     </div>
   </header>
 

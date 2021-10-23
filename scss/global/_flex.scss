@@ -1,4 +1,18 @@
 // Flexbox.
+.flex {
+  display: flex;
+  flex-direction: row;
+}
+
+.flex-column {
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+
+.flex-grow {
+  flex: 1;
+}
+
 .flex-group-center,
 .flex-group-left,
 .flex-group-right {

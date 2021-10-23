@@ -53,3 +53,25 @@
     padding: 0 8px;
   }
 }
+
+.blckchncy {
+  font-family: 'Black-Chancery';
+}
+
+.line-height {
+  height: $line-height;
+  line-height: 1;
+  font-size: $font-size-default;
+}
+
+.pad-sm {
+  padding: $padding-sm;
+}
+
+.pad-md {
+  padding: $padding-md;
+}
+
+.pad-lg {
+  padding: $padding-lg;
+}
