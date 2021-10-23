@@ -37,8 +37,10 @@
   <nav class="sheet-tabs tabs" data-group="primary">
     {{!-- Default tab is specified in actor-sheet.mjs --}}
     <a class="item" data-tab="basics">Basics</a>
+    {{#if (eq actor.type "pc")}}
     <a class="item" data-tab="beliefs">Beliefs</a>
     <a class="item" data-tab="fate">Fate</a>
+    {{/if}}
     <a class="item" data-tab="health">Health</a>
     <a class="item" data-tab="possessions">Possessions</a>
     <a class="item" data-tab="biography">Biography</a>
@@ -49,33 +51,34 @@
 
     {{!-- Basics Tab --}}
     <div class="tab basics" data-group="primary" data-tab="basics">
-       {{> "systems/ambersteel/templates/actor/parts/actor-basics.html"}}
+       {{> "systems/ambersteel/templates/actor/parts/actor-basics.hbs"}}
     </div>
 
+    {{#if (eq actor.type "pc")}}
     {{!-- Beliefs Tab --}}
     <div class="tab beliefs" data-group="primary" data-tab="beliefs">
-       {{> "systems/ambersteel/templates/actor/parts/actor-beliefs.html"}}
+       {{> "systems/ambersteel/templates/actor/parts/actor-beliefs.hbs"}}
     </div>
 
     {{!-- Fate Tab --}}
     <div class="tab fate" data-group="primary" data-tab="fate">
-       {{> "systems/ambersteel/templates/actor/parts/actor-fate.html"}}
+       {{> "systems/ambersteel/templates/actor/parts/actor-fate.hbs"}}
     </div>
+    {{/if}}
 
     {{!-- Health Tab --}}
     <div class="tab health" data-group="primary" data-tab="health">
-       {{> "systems/ambersteel/templates/actor/parts/actor-health.html"}}
+       {{> "systems/ambersteel/templates/actor/parts/actor-health.hbs"}}
     </div>
 
     {{!-- Possessions Tab --}}
     <div class="tab possessions" data-group="primary" data-tab="possessions">
-       {{> "systems/ambersteel/templates/actor/parts/actor-possessions.html"}}
+       {{> "systems/ambersteel/templates/actor/parts/actor-possessions.hbs"}}
     </div>
 
     {{!-- Biography Tab --}}
     <div class="tab biography" data-group="primary" data-tab="biography">
-      {{!-- If you want TinyMCE editors to output inline rolls when rendered, you need to pass the actor's roll data to the rollData property. --}}
-      {{editor content=data.biography target="data.biography" rollData=rollData button=true owner=owner editable=editable}}
+       {{> "systems/ambersteel/templates/actor/parts/actor-biography.hbs"}}
     </div>
 
   </section>

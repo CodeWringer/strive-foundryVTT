@@ -4,7 +4,7 @@ export class AmbersteelActorSheet extends ActorSheet {
   static get defaultOptions() {
     return mergeObject(super.defaultOptions, {
       classes: ["boilerplate", "sheet", "actor"],
-      template: "systems/ambersteel/templates/actor/actor-sheet.html",
+      template: "systems/ambersteel/templates/actor/actor-character-sheet.html",
       width: 600,
       height: 600,
       tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "features" }]
@@ -13,7 +13,7 @@ export class AmbersteelActorSheet extends ActorSheet {
 
   /** @override */
   get template() {
-    return `systems/ambersteel/templates/actor/actor-${this.actor.data.type}-sheet.html`;
+    return `systems/ambersteel/templates/actor/actor-character-sheet.html`;
   }
 
   /* -------------------------------------------- */
