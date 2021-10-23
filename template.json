@@ -1,0 +1,155 @@
+{
+  "Actor": {
+    "types": ["pc", "npc"],
+    "templates": {
+      "character": {
+        "person": {
+          "name": "",
+          "age": 0,
+          "species": "",
+          "culture": "",
+          "sex": "",
+          "appearance": ""
+        },
+        "attributes": {
+          "physical": {
+            "agility": {
+              "value": 1,
+              "min": 1,
+              "abbreviation": "agi"
+            },
+            "endurance": {
+              "value": 1,
+              "min": 1,
+              "abbreviation": "end"
+            },
+            "perception": {
+              "value": 1,
+              "min": 1,
+              "abbreviation": "perc"
+            },
+            "strength": {
+              "value": 1,
+              "min": 1,
+              "abbreviation": "str"
+            },
+            "toughness": {
+              "value": 1,
+              "min": 1,
+              "abbreviation": "tough"
+            }
+          },
+          "mental": {
+            "intelligence": {
+              "value": 1,
+              "min": 1,
+              "abbreviation": "int"
+            },
+            "wisdom": {
+              "value": 1,
+              "min": 1,
+              "abbreviation": "wis"
+            }
+          },
+          "social": {
+            "empathy": {
+              "value": 1,
+              "min": 1,
+              "abbreviation": "emp"
+            },
+            "oratory": {
+              "value": 1,
+              "min": 1,
+              "abbreviation": "ora"
+            },
+            "willpower": {
+              "value": 1,
+              "min": 1,
+              "abbreviation": "will"
+            }
+          },
+          "arcane": {
+            "arcana": {
+              "value": 0,
+              "min": 0,
+              "abbreviation": "arc"
+            },
+            "magicSense": {
+              "value": 0,
+              "min": 0,
+              "abbreviation": "ms"
+            }
+          }
+        },
+        "skills": [],
+        "health": {
+          "maxHP": 0,
+          "HP": 0,
+          "maxInjuries": 0,
+          "injuries": [],
+          "maxExhaustion": 0,
+          "exhaustion": 0,
+          "illness": null,
+          "statusEffect": ""
+        },
+        "possessions": {
+          "carryingCapacity": 0,
+          "usedCapacity": 0,
+          "items": []
+        },
+        "biography": {
+          "origin": "",
+          "youth": "",
+          "lastFewYears": ""
+        }
+      }
+    },
+    "pc": {
+      "templates": ["character"],
+      "beliefSystem": {
+        "ambition": "",
+        "beliefs": [],
+        "instincts": []
+      },
+      "fateSystem": {
+        "miFP": 0,
+        "maFP": 0,
+        "AFP": 0,
+        "maxFateCards": 5,
+        "fateCards": []
+      }
+    },
+    "npc": {
+      "templates": ["character"]
+    }
+  },
+  "Item": {
+    "types": ["item", "injury", "illness", "spell"],
+    "templates": {
+      "base": {
+        "description": ""
+      },
+      "healthImpediment": {
+        "name": "",
+        "description": "",
+        "treatment": ""
+      }
+    },
+    "item": {
+      "templates": ["base"],
+      "quantity": 1,
+      "weight": 0,
+      "formula": "d20 + @str.mod + ceil(@lvl / 2)"
+    },
+    "illness": {
+      "templates": ["healthImpediment"]
+    },
+    "injury": {
+      "templates": ["healthImpediment"]
+    },
+    "spell": {
+      "templates": ["base"],
+      "spellLevel": 1
+    }
+  }
+}

@@ -1,0 +1,83 @@
+<form class="{{cssClass}} {{actor.type}} flexcol" autocomplete="off">
+
+  {{!-- Sheet Header --}}
+  <header class="sheet-header">
+    <img class="profile-img" src="{{actor.img}}" data-edit="img" title="{{actor.name}}" height="100" width="100"/>
+    <div class="header-fields">
+      <h1 class="charname"><input name="name" type="text" value="{{actor.name}}" placeholder="Name"/></h1>
+      {{!-- The grid classes are defined in scss/global/_grid.scss. To use,
+      use both the "grid" and "grid-Ncol" class where "N" can be any number
+      from 1 to 12 and will create that number of columns.  --}}
+      <div class="resources grid grid-3col">
+
+        <div class="flex-group-center">
+          <div class="flexrow flex-center flex-between">
+            <label for="data.person.species">Species</label>
+            <input type="text" name="data.person.species" value="{{data.person.species}}" />
+            <label for="data.person.culture">Culture</label>
+            <input type="text" name="data.person.culture" value="{{data.person.culture}}" />
+          </div>
+          <div class="flexrow flex-center flex-between">
+            <label for="data.person.sex">Sex</label>
+            <input type="text" name="data.person.sex" value="{{data.person.sex}}" />
+            <label for="data.person.age">Age</label>
+            <input type="text" name="data.person.age" value="{{data.person.age}}" />
+          </div>
+          <div class="flexrow flex-center flex-between">
+            <label for="data.person.appearance">Appearance</label>
+            <input type="text" name="data.person.appearance" value="{{data.person.appearance}}" />
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  {{!-- Sheet Tab Navigation --}}
+  <nav class="sheet-tabs tabs" data-group="primary">
+    {{!-- Default tab is specified in actor-sheet.mjs --}}
+    <a class="item" data-tab="basics">Basics</a>
+    <a class="item" data-tab="beliefs">Beliefs</a>
+    <a class="item" data-tab="fate">Fate</a>
+    <a class="item" data-tab="health">Health</a>
+    <a class="item" data-tab="possessions">Possessions</a>
+    <a class="item" data-tab="biography">Biography</a>
+  </nav>
+
+  {{!-- Sheet Body --}}
+  <section class="sheet-body">
+
+    {{!-- Basics Tab --}}
+    <div class="tab basics" data-group="primary" data-tab="basics">
+       {{> "systems/ambersteel/templates/actor/parts/actor-basics.html"}}
+    </div>
+
+    {{!-- Beliefs Tab --}}
+    <div class="tab beliefs" data-group="primary" data-tab="beliefs">
+       {{> "systems/ambersteel/templates/actor/parts/actor-beliefs.html"}}
+    </div>
+
+    {{!-- Fate Tab --}}
+    <div class="tab fate" data-group="primary" data-tab="fate">
+       {{> "systems/ambersteel/templates/actor/parts/actor-fate.html"}}
+    </div>
+
+    {{!-- Health Tab --}}
+    <div class="tab health" data-group="primary" data-tab="health">
+       {{> "systems/ambersteel/templates/actor/parts/actor-health.html"}}
+    </div>
+
+    {{!-- Possessions Tab --}}
+    <div class="tab possessions" data-group="primary" data-tab="possessions">
+       {{> "systems/ambersteel/templates/actor/parts/actor-possessions.html"}}
+    </div>
+
+    {{!-- Biography Tab --}}
+    <div class="tab biography" data-group="primary" data-tab="biography">
+      {{!-- If you want TinyMCE editors to output inline rolls when rendered, you need to pass the actor's roll data to the rollData property. --}}
+      {{editor content=data.biography target="data.biography" rollData=rollData button=true owner=owner editable=editable}}
+    </div>
+
+  </section>
+</form>
+

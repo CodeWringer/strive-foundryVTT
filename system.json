@@ -1,0 +1,28 @@
+{
+  "name": "ambersteel",
+  "title": "Ambersteel",
+  "description": "The Ambersteel system for FoundryVTT",
+  "version": "0.2.0",
+  "minimumCoreVersion": "0.8.3",
+  "compatibleCoreVersion": "0.8.9",
+  "author": "Nicolas Haase",
+  "esmodules": ["module/ambersteel.mjs"],
+  "styles": ["css/ambersteel.css"],
+  "scripts": [],
+  "packs": [],
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    }
+  ],
+  "gridDistance": 3,
+  "gridUnits": "ft",
+  "primaryTokenAttribute": null,
+  "secondaryTokenAttribute": null,
+  "url": "",
+  "manifest": "",
+  "download": "",
+  "license": "LICENSE.txt"
+}
