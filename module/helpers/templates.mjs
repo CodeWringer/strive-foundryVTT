@@ -7,9 +7,6 @@
   return loadTemplates([
 
     // Actor partials.
-    "systems/ambersteel/templates/actor/parts/actor-features.html",
-    "systems/ambersteel/templates/actor/parts/actor-items.html",
-    "systems/ambersteel/templates/actor/parts/actor-spells.html",
-    "systems/ambersteel/templates/actor/parts/actor-effects.html",
+    "systems/ambersteel/templates/actor/parts/actor-basics.html"
   ]);
 };

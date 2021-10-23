@@ -15,69 +15,57 @@
           "physical": {
             "agility": {
               "value": 1,
-              "min": 1,
-              "abbreviation": "agi"
+              "min": 1
             },
             "endurance": {
               "value": 1,
-              "min": 1,
-              "abbreviation": "end"
+              "min": 1
             },
             "perception": {
               "value": 1,
-              "min": 1,
-              "abbreviation": "perc"
+              "min": 1
             },
             "strength": {
               "value": 1,
-              "min": 1,
-              "abbreviation": "str"
+              "min": 1
             },
             "toughness": {
               "value": 1,
-              "min": 1,
-              "abbreviation": "tough"
+              "min": 1
             }
           },
           "mental": {
             "intelligence": {
               "value": 1,
-              "min": 1,
-              "abbreviation": "int"
+              "min": 1
             },
             "wisdom": {
               "value": 1,
-              "min": 1,
-              "abbreviation": "wis"
+              "min": 1
             }
           },
           "social": {
             "empathy": {
               "value": 1,
-              "min": 1,
-              "abbreviation": "emp"
+              "min": 1
             },
             "oratory": {
               "value": 1,
-              "min": 1,
-              "abbreviation": "ora"
+              "min": 1
             },
             "willpower": {
               "value": 1,
-              "min": 1,
-              "abbreviation": "will"
+              "min": 1
             }
           },
           "arcane": {
             "arcana": {
               "value": 0,
-              "min": 0,
-              "abbreviation": "arc"
+              "min": 0
             },
             "magicSense": {
               "value": 0,
-              "min": 0,
-              "abbreviation": "ms"
+              "min": 0
             }
           }
         },
@@ -124,7 +112,7 @@
     }
   },
   "Item": {
-    "types": ["item", "injury", "illness", "spell"],
+    "types": ["generic", "item", "spell"],
     "templates": {
       "base": {
         "description": ""
@@ -134,6 +122,9 @@
         "description": "",
         "treatment": ""
       }
+    },
+    "generic": {
+      "templates": ["base"]
     },
     "item": {
       "templates": ["base"],

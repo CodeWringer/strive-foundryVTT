@@ -1,5 +1,3 @@
-import {onManageActiveEffect, prepareActiveEffectCategories} from "../helpers/effects.mjs";
-
 export class AmbersteelActorSheet extends ActorSheet {
 
   /** @override */
@@ -48,9 +46,6 @@ export class AmbersteelActorSheet extends ActorSheet {
 
     // Add roll data for TinyMCE editors.
     context.rollData = context.actor.getRollData();
-
-    // Prepare active effects
-    context.effects = prepareActiveEffectCategories(this.actor.effects);
 
     return context;
   }
@@ -145,9 +140,6 @@ export class AmbersteelActorSheet extends ActorSheet {
       item.delete();
       li.slideUp(200, () => this.render(false));
     });
-
-    // Active Effect management
-    html.find(".effect-control").click(ev => onManageActiveEffect(ev, this.actor));
 
     // Rollable abilities.
     html.find('.rollable').click(this._onRoll.bind(this));

@@ -1,22 +1,62 @@
 {
-  "BOILERPLATE.AbilityStr": "Strength",
-  "BOILERPLATE.AbilityCon": "Constitution",
-  "BOILERPLATE.AbilityDex": "Dexterity",
-  "BOILERPLATE.AbilityInt": "Intelligence",
-  "BOILERPLATE.AbilityWis": "Wisdom",
-  "BOILERPLATE.AbilityCha": "Charisma",
-
-  "BOILERPLATE.AbilityStrAbbr": "str",
-  "BOILERPLATE.AbilityConAbbr": "con",
-  "BOILERPLATE.AbilityDexAbbr": "dex",
-  "BOILERPLATE.AbilityIntAbbr": "int",
-  "BOILERPLATE.AbilityWisAbbr": "wis",
-  "BOILERPLATE.AbilityChaAbbr": "cha",
-
-  "BOILERPLATE.EffectCreate": "Create Effect",
-  "BOILERPLATE.EffectToggle": "Toggle Effect",
-  "BOILERPLATE.EffectEdit": "Edit Effect",
-  "BOILERPLATE.EffectDelete": "Delete Effect",
-
-  "BOILERPLATE.Add": "Add"
+  "ambersteel": {
+    "weaponTypes": {
+      "unarmed": "Unarmed",
+      "shortBlade": "Short Blade",
+      "longBlade": "Long Blade",
+      "greatBlade": "Great Blade",
+      "axe": "Axe",
+      "greatAxe": "Great Axe",
+      "spear": "Spear",
+      "lance": "Lance",
+      "polearm": "Polearm",
+      "club": "Club",
+      "smallCrusher": "Small Crusher",
+      "largeCrusher": "Large Crusher",
+      "shortBow": "Short Bow",
+      "longBow": "Long Bow",
+      "warBow": "War Bow",
+      "crossbow": "Crossbow",
+      "firearm": "Firearm"
+    },
+    "armorTypes": {
+      "light": "Light Armor",
+      "medium": "Medium Armor",
+      "heavy": "Heavy Armor"
+    },
+    "shieldTypes": {
+      "buckler": "Buckler",
+      "roundShield": "Round Shield",
+      "heaterShield": "Heater Shield",
+      "kiteShield": "Kite Shield"
+    },
+    "attributes": {
+      "agility": "Agility",
+      "endurance": "Endurance",
+      "perception": "Perception",
+      "strength": "Strength",
+      "toughness": "Toughness",
+      "intelligence": "Intelligence",
+      "wisdom": "Wisdom",
+      "empathy": "Empathy",
+      "oratory": "Oratory",
+      "willpower": "Willpower",
+      "arcana": "Arcana",
+      "magicSense": "Magic-Sense"
+    },
+    "attributeAbbrevs": {
+      "agility": "Agi",
+      "endurance": "End",
+      "perception": "Perc",
+      "strength": "Str",
+      "toughness": "Tough",
+      "intelligence": "Int",
+      "wisdom": "Wis",
+      "empathy": "Emp",
+      "oratory": "Ora",
+      "willpower": "Will",
+      "arcana": "Arc",
+      "magicSense": "MS"
+    }
+  }
 }

@@ -1,3 +1,5 @@
+// Import main config.
+import { ambersteel } from "./config.js"
 // Import document classes.
 import { AmbersteelActor } from "./documents/actor.mjs";
 import { AmbersteelItem } from "./documents/item.mjs";
@@ -13,6 +15,8 @@ import { preloadHandlebarsTemplates } from "./helpers/templates.mjs";
 
 Hooks.once('init', async function() {
 
+  CONFIG.ambersteel = ambersteel;
+
   // Add utility classes to the global game object so that they're more easily
   // accessible in global contexts.
   game.ambersteel = {
@@ -27,6 +31,7 @@ Hooks.once('init', async function() {
   // Register sheet application classes
   Actors.unregisterSheet("core", ActorSheet);
   Actors.registerSheet("ambersteel", AmbersteelActorSheet, { makeDefault: true });
+  
   Items.unregisterSheet("core", ItemSheet);
   Items.registerSheet("ambersteel", AmbersteelItemSheet, { makeDefault: true });
 
