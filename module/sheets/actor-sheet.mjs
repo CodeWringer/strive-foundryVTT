@@ -4,7 +4,7 @@ export class AmbersteelActorSheet extends ActorSheet {
   static get defaultOptions() {
     return mergeObject(super.defaultOptions, {
       classes: ["boilerplate", "sheet", "actor"],
-      template: "systems/ambersteel/templates/actor/actor-character-sheet.html",
+      template: "systems/ambersteel/templates/actor/actor-character-sheet.hbs",
       width: 600,
       height: 600,
       tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "features" }]
@@ -13,7 +13,7 @@ export class AmbersteelActorSheet extends ActorSheet {
 
   /** @override */
   get template() {
-    return `systems/ambersteel/templates/actor/actor-character-sheet.html`;
+    return `systems/ambersteel/templates/actor/actor-character-sheet.hbs`;
   }
 
   /* -------------------------------------------- */
@@ -32,17 +32,6 @@ export class AmbersteelActorSheet extends ActorSheet {
     // Add the actor's data to context.data for easier access, as well as flags.
     context.data = actorData.data;
     context.flags = actorData.flags;
-
-    // Prepare PC data and items.
-    if (actorData.type == 'pc') {
-      this._prepareItems(context);
-      this._prepareCharacterData(context);
-    }
-
-    // Prepare NPC data and items.
-    if (actorData.type == 'npc') {
-      this._prepareItems(context);
-    }
 
     // Add roll data for TinyMCE editors.
     context.rollData = context.actor.getRollData();
