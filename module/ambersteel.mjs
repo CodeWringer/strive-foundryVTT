@@ -45,8 +45,8 @@ Hooks.once('init', async function() {
 
 // If you need to add Handlebars helpers, here are a few useful examples:
 Handlebars.registerHelper('concat', function() {
-  var outStr = '';
-  for (var arg in arguments) {
+  let outStr = '';
+  for (let arg in arguments) {
     if (typeof arguments[arg] != 'object') {
       outStr += arguments[arg];
     }
@@ -63,7 +63,7 @@ Handlebars.registerHelper('times', function(n, content) {
   for (let i = 0; i < n; i++) {
     result += content.fn(i);
   }
-  
+
   return result;
 });
 
