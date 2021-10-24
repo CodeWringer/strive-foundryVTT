@@ -5,8 +5,8 @@ export class AmbersteelActorSheet extends ActorSheet {
     return mergeObject(super.defaultOptions, {
       classes: ["boilerplate", "sheet", "actor"],
       template: "systems/ambersteel/templates/actor/actor-character-sheet.hbs",
-      width: 600,
-      height: 600,
+      width: 720,
+      height: 900,
       tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "basics" }]
     });
   }
@@ -137,7 +137,7 @@ export class AmbersteelActorSheet extends ActorSheet {
     html.find('.rollable').click(this._onRoll.bind(this));
 
     // Drag events for macros.
-    if (this.actor.owner) {
+    if (this.actor.isOwner) {
       let handler = ev => this._onDragStart(ev);
       html.find('li.item').each((i, li) => {
         if (li.classList.contains("inventory-header")) return;

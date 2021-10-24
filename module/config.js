@@ -34,48 +34,85 @@ ambersteel.shieldTypes = {
 }
 
 ambersteel.character = {
-    attributes: {
-        agility: "ambersteel.attributes.agility",
-        endurance: "ambersteel.attributes.endurance",
-        perception: "ambersteel.attributes.perception",
-        strength: "ambersteel.attributes.strength",
-        toughness: "ambersteel.attributes.toughness",
-        intelligence: "ambersteel.attributes.intelligence",
-        wisdom: "ambersteel.attributes.wisdom",
-        empathy: "ambersteel.attributes.empathy",
-        oratory: "ambersteel.attributes.oratory",
-        willpower: "ambersteel.attributes.willpower",
-        arcana: "ambersteel.attributes.arcana",
-        magicSense: "ambersteel.attributes.magicSense"
+    attributeGroups: {
+        physical: "ambersteel.attributeGroups.physical",
+        mental: "ambersteel.attributeGroups.mental",
+        social: "ambersteel.attributeGroups.social",
+        arcane: "ambersteel.attributeGroups.arcane"
     },
-    attributeAbbrevs: {
-        agility: "ambersteel.attributeAbbrevs.agility",
-        endurance: "ambersteel.attributeAbbrevs.endurance",
-        perception: "ambersteel.attributeAbbrevs.perception",
-        strength: "ambersteel.attributeAbbrevs.strength",
-        toughness: "ambersteel.attributeAbbrevs.toughness",
-        intelligence: "ambersteel.attributeAbbrevs.intelligence",
-        wisdom: "ambersteel.attributeAbbrevs.wisdom",
-        empathy: "ambersteel.attributeAbbrevs.empathy",
-        oratory: "ambersteel.attributeAbbrevs.oratory",
-        willpower: "ambersteel.attributeAbbrevs.willpower",
-        arcana: "ambersteel.attributeAbbrevs.arcana",
-        magicSense: "ambersteel.attributeAbbrevs.magicSense"
+    attributes: {
+        agility: {
+            name: "ambersteel.attributes.agility",
+            abbrev: "ambersteel.attributeAbbrevs.agility"
+        },
+        endurance: {
+            name: "ambersteel.attributes.endurance",
+            abbrev: "ambersteel.attributeAbbrevs.endurance"
+        },
+        perception: {
+            name: "ambersteel.attributes.perception",
+            abbrev: "ambersteel.attributeAbbrevs.perception"
+        },
+        strength: {
+            name: "ambersteel.attributes.strength",
+            abbrev: "ambersteel.attributeAbbrevs.strength"
+        },
+        toughness: {
+            name: "ambersteel.attributes.toughness",
+            abbrev: "ambersteel.attributeAbbrevs.toughness"
+        },
+        intelligence: {
+            name: "ambersteel.attributes.intelligence",
+            abbrev: "ambersteel.attributeAbbrevs.intelligence"
+        },
+        wisdom: {
+            name: "ambersteel.attributes.wisdom",
+            abbrev: "ambersteel.attributeAbbrevs.wisdom"
+        },
+        empathy: {
+            name: "ambersteel.attributes.empathy",
+            abbrev: "ambersteel.attributeAbbrevs.empathy"
+        },
+        oratory: {
+            name: "ambersteel.attributes.oratory",
+            abbrev: "ambersteel.attributeAbbrevs.oratory"
+        },
+        willpower: {
+            name: "ambersteel.attributes.willpower",
+            abbrev: "ambersteel.attributeAbbrevs.willpower"
+        },
+        arcana: {
+            name: "ambersteel.attributes.arcana",
+            abbrev: "ambersteel.attributeAbbrevs.arcana"
+        },
+        magicSense: {
+            name: "ambersteel.attributes.magicSense",
+            abbrev: "ambersteel.attributeAbbrevs.magicSense"
+        }
     },
     biography: {
-        "origin": "ambersteel.biography.origin",
-        "youth": "ambersteel.biography.youth",
-        "lastFewYears": "ambersteel.biography.lastFewYears"
+        origin: "ambersteel.biography.origin",
+        youth: "ambersteel.biography.youth",
+        lastFewYears: "ambersteel.biography.lastFewYears"
     },
     personals: {
-        "species": "ambersteel.personals.species",
-        "culture": "ambersteel.personals.culture",
-        "sex": "ambersteel.personals.sex",
-        "age": "ambersteel.personals.age"
+        species: "ambersteel.personals.species",
+        culture: "ambersteel.personals.culture",
+        sex: "ambersteel.personals.sex",
+        age: "ambersteel.personals.age"
     },
     beliefSystem: {
-        "ambition": "ambersteel.beliefSystem.ambition",
-        "beliefs": "ambersteel.beliefSystem.beliefs",
-        "instincts": "ambersteel.beliefSystem.instincts"
+        ambition: "ambersteel.beliefSystem.ambition",
+        beliefs: "ambersteel.beliefSystem.beliefs",
+        instincts: "ambersteel.beliefSystem.instincts"
     }
+}
+
+ambersteel.labels = {
+    level: "ambersteel.labels.level",
+    requiredSuccessFailureAbbreviation: "ambersteel.labels.requiredSuccessFailureAbbreviation",
+    successAbbreviation: "ambersteel.labels.successAbbreviation",
+    failureAbbreviation: "ambersteel.labels.failureAbbreviation",
+    learningSkill: "ambersteel.labels.learningSkill",
+    knownSkill: "ambersteel.labels.knownSkill",
 }

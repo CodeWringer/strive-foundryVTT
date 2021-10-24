@@ -4,6 +4,11 @@
   src: url("../font/BLKCHCRY.TTF") format("truetype");
 }
 
+.fancy-font {
+  font-family: "Black-Chancery";
+  font-size: 13pt;
+}
+
 /* Global styles */
 .window-app {
   font-family: "Roboto", sans-serif;
@@ -339,10 +344,6 @@
   padding: 0 8px;
 }
 
-.boilerplate .blckchncy {
-  font-family: 'Black-Chancery';
-}
-
 .boilerplate .line-height {
   height: 30px;
   line-height: 1;
@@ -359,6 +360,10 @@
 
 .boilerplate .pad-lg {
   padding: 20px;
+}
+
+.boilerplate .input-slim {
+  max-width: 30px;
 }
 
 .boilerplate .resource-label {

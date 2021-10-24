@@ -14,5 +14,7 @@
     "systems/ambersteel/templates/actor/parts/actor-health.hbs",
     "systems/ambersteel/templates/actor/parts/actor-possessions.hbs",
     "systems/ambersteel/templates/actor/parts/actor-biography.hbs",
+    "systems/ambersteel/templates/actor/attribute-table-section.hbs",
+    "systems/ambersteel/templates/actor/skill-table-section.hbs",
   ]);
 };

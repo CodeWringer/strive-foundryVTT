@@ -61,10 +61,6 @@
   }
 }
 
-.blckchncy {
-  font-family: 'Black-Chancery';
-}
-
 .line-height {
   height: $line-height;
   line-height: 1;
@@ -81,4 +77,8 @@
 
 .pad-lg {
   padding: $padding-lg;
+}
+
+.input-slim {
+  max-width: 30px;
 }

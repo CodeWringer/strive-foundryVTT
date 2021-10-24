@@ -1,0 +1,48 @@
+<section>
+    <table class="skill-table">
+        <tbody>
+            <tr class="fancy-font">
+                <th class="pad-sm">
+                    {{localize name}}
+                </th>
+                <th class="pad-sm">
+                    {{localize "ambersteel.labels.attributeAbbreviation"}}
+                </th>
+                <th class="pad-sm">
+                    {{localize "ambersteel.labels.level"}}
+                </th>
+                <th class="pad-sm">
+                    {{localize "ambersteel.labels.requiredSuccessFailureAbbreviation"}}
+                </th>
+                <th class="pad-sm">
+                    {{localize "ambersteel.labels.successAbbreviation"}}
+                </th>
+                <th class="pad-sm">
+                    {{localize "ambersteel.labels.failureAbbreviation"}}
+                </th>
+            </tr>
+            {{#each skills as |skill|}}
+            <tr>
+                <td class="pad-sm fancy-font flex">
+                    {{localize skill.name}}
+                </td>
+                <td class="pad-sm input-slim">
+                    {{skill.abbreviation}}
+                </td>
+                <td class="pad-sm input-slim">
+                    <input name="skill.value" type="number" value="{{skill.value}}" />
+                </td>
+                <td class="pad-sm">
+                    {{skill.requiredSuccessses}} / {{skill.requiredFailures}}
+                </td>
+                <td class="pad-sm input-slim">
+                    <input name="skill.successes" type="number" value="{{skill.successes}}" />
+                </td>
+                <td class="pad-sm input-slim">
+                    <input name="skill.failures" type="number" value="{{skill.failures}}" />
+                </td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</section>

@@ -30,6 +30,12 @@
       "heaterShield": "Heater Shield",
       "kiteShield": "Kite Shield"
     },
+    "attributeGroups": {
+      "physical": "Physical Attributes",
+      "mental": "Mental Attributes",
+      "social": "Social Attributes",
+      "arcane": "Arcane Attributes"
+    },
     "attributes": {
       "agility": "Agility",
       "endurance": "Endurance",
@@ -44,7 +50,7 @@
       "arcana": "Arcana",
       "magicSense": "Magic-Sense"
     },
-    "attributeAbbrevs": {
+    "attributeAbbreviations": {
       "agility": "Agi",
       "endurance": "End",
       "perception": "Perc",
@@ -73,6 +79,15 @@
       "ambition": "Ambition",
       "beliefs": "Beliefs",
       "instincts": "Instincts"
+    },
+    "labels": {
+      "level": "Level",
+      "attributeAbbreviation": "Attr.",
+      "requiredSuccessFailureAbbreviation": "Req. S/F",
+      "successAbbreviation": "S",
+      "failureAbbreviation": "F",
+      "learningSkill": "Learning Skills",
+      "knownSkill": "Known Skills"
     }
   }
 }
