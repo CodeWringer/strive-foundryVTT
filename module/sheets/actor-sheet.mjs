@@ -46,6 +46,14 @@ export class AmbersteelActorSheet extends ActorSheet {
     // Add the actor's data to context.data for easier access, as well as flags.
     context.data = actorData.data;
     context.flags = actorData.flags;
+    
+    // Derived data. 
+    for (let skill of actorData.data.skills) {
+      this._prepareDerivedSkillData(skill);
+    }
+    for (let skill of actorData.data.learningSkills) {
+      this._prepareDerivedSkillData(skill);
+    }
 
     // Add roll data for TinyMCE editors.
     context.rollData = context.actor.getRollData();
@@ -53,6 +61,18 @@ export class AmbersteelActorSheet extends ActorSheet {
     context.config = CONFIG.ambersteel;
 
     return context;
+  }
+
+  _prepareDerivedSkillData(skill) {
+    if (skill.data.value == 0) {
+      skill.requiredSuccessses = 10
+      skill.requiredFailures = 14
+    } else {
+      let skillValue = parseInt(skill.data.value)
+      
+      skill.requiredSuccessses = (skillValue + 1) * skillValue * 2
+      skill.requiredFailures = (skillValue + 1) * skillValue * 3
+    }
   }
 
   /**
@@ -104,12 +124,8 @@ export class AmbersteelActorSheet extends ActorSheet {
   activateListeners(html) {
     super.activateListeners(html);
 
-    // Render the item sheet for viewing/editing prior to the editable check.
-    html.find('.item-edit').click(ev => {
-      const li = $(ev.currentTarget).parents(".item");
-      const item = this.actor.items.get(li.data("itemId"));
-      item.sheet.render(true);
-    });
+    // Show item sheet.
+    html.find(".ambersteel-item-show").click(this._onItemShow.bind(this));
 
     // -------------------------------------------------------------
     // Everything below here is only needed if the sheet is editable
@@ -136,9 +152,6 @@ export class AmbersteelActorSheet extends ActorSheet {
 
     // Delete item. 
     html.find(".ambersteel-item-delete").click(this._onItemDelete.bind(this));
-
-    // Show item sheet.
-    html.find(".ambersteel-item-show").click(this._onItemShow.bind(this));
   }
 
   /**
