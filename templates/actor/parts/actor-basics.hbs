@@ -1,30 +1,17 @@
 <section>
     <div class="grid grid-2col">
-        {{!-- Attributes and Learning Skills block --}}
         <div>
             {{!-- Attributes --}}
             {{> "systems/ambersteel/templates/actor/attribute-table-section.hbs" attGroup=data.attributeGroups.physical atts=data.attributes.physical}}
             {{> "systems/ambersteel/templates/actor/attribute-table-section.hbs" attGroup=data.attributeGroups.mental atts=data.attributes.mental}}
             {{> "systems/ambersteel/templates/actor/attribute-table-section.hbs" attGroup=data.attributeGroups.social atts=data.attributes.social}}
             {{> "systems/ambersteel/templates/actor/attribute-table-section.hbs" attGroup=data.attributeGroups.arcane atts=data.attributes.arcane}}
-            {{!-- Learning Skills --}}
-            {{> "systems/ambersteel/templates/actor/skill-table-section.hbs" name="ambersteel.labels.learningSkill" skills=data.learningSkills}}
-            <div class="flex">
-                <span class="flex-grow"></span>
-                <a class="item-create pad-sm" data-type="skill" data-is-learning=true title="{{localize ambersteel.labels.addSkill}}">
-                    <i class="fas fa-plus"></i>
-                </a>
-            </div>
         </div>
         <div>
+            {{!-- Learning Skills --}}
+            {{> "systems/ambersteel/templates/actor/skill-table-section.hbs" name="ambersteel.labels.learningSkill" skills=data.learningSkills isLearning=true}}
             {{!-- Known Skills --}}
-            {{> "systems/ambersteel/templates/actor/skill-table-section.hbs" name="ambersteel.labels.knownSkill" skills=data.skills}}
-            <div class="flex">
-                <span class="flex-grow"></span>
-                <a class="item-create pad-sm" data-type="skill" data-is-learning=false title="{{localize ambersteel.labels.addSkill}}">
-                    <i class="fas fa-plus"></i>
-                </a>
-            </div>
+            {{> "systems/ambersteel/templates/actor/skill-table-section.hbs" name="ambersteel.labels.knownSkill" skills=data.skills isLearning=false}}
         </div>
     </div>
 </section>
