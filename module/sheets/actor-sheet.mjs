@@ -18,6 +18,17 @@ export class AmbersteelActorSheet extends ActorSheet {
 
   /* -------------------------------------------- */
 
+  itemContextMenu = [
+    {
+      name: game.i18n.localize("ambersteel.labels.delete"),
+      icon: '<i class="fas fa-trash"></i>',
+      callback: el => {
+        const item = this.actor.getOwnedItem(el.data("item-id"));
+        item.delete();
+      }
+    }
+  ]
+
   /** @override */
   getData() {
     // Retrieve the data structure from the base sheet. You can inspect or log
@@ -113,6 +124,9 @@ export class AmbersteelActorSheet extends ActorSheet {
         li.addEventListener("dragstart", handler, false);
       });
     }
+
+    // Context menu.
+    new ContextMenu(html, ".skill-item", this.itemContextMenu);
     
     // Add Item
     html.find('.ambersteel-item-create').click(this._onItemCreate.bind(this));
