@@ -19,22 +19,22 @@
                 </th>
             </tr>
             {{#each atts as |att|}}
-            <tr>
+            <tr class="item" data-att-group-name="{{attGroup.name}}">
                 <td class="pad-sm fancy-font flex">
                     <span class="flex-grow">{{localize att.name}}</span>
                     <span>[{{localize att.abbreviation}}]</span>
                 </td>
                 <td class="pad-sm input-slim">
-                    <input name="att.value" type="number" value="{{att.value}}" />
+                    <input class="attribute-value inline-edit-attribute" name="att.data.value" type="number" value="{{att.data.value}}" />
                 </td>
                 <td class="pad-sm">
                     {{att.requiredSuccessses}} / {{att.requiredFailures}}
                 </td>
                 <td class="pad-sm input-slim">
-                    <input name="att.successes" type="number" value="{{att.successes}}" />
+                    <input name="att.data.successes" type="number" value="{{att.data.successes}}" />
                 </td>
                 <td class="pad-sm input-slim">
-                    <input name="att.failures" type="number" value="{{att.failures}}" />
+                    <input name="att.data.failures" type="number" value="{{att.data.failures}}" />
                 </td>
             </tr>
             {{/each}}

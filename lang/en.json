@@ -88,7 +88,16 @@
       "failureAbbreviation": "F",
       "learningSkill": "Learning Skills",
       "knownSkill": "Known Skills",
-      "addSkill": "Add Skill"
+      "addSkill": "Add Skill",
+      "buyFateCard": "Buy Fate Card"
+    },
+    "fateSystem": {
+      "miFP": "Minor Fate Points",
+      "maFP": "Major Fate Points",
+      "AFP": "Ambition Fate Points",
+      "miFPAbbreviation": "miFP",
+      "maFPAbbreviation": "maFP",
+      "AFPAbbreviation": "AFP"
     }
   }
 }

@@ -56,10 +56,12 @@ export class AmbersteelActorSheet extends ActorSheet {
     const possessions = [];
     const skills = [];
     const learningSkills = [];
+    const fateCards = [];
 
     // Iterate through items, allocating to containers
     for (let i of context.items) {
       i.img = i.img || DEFAULT_TOKEN;
+
       // Possessions
       if (i.type === 'item') {
         possessions.push(i);
@@ -72,12 +74,17 @@ export class AmbersteelActorSheet extends ActorSheet {
           skills.push(i);
         }
       }
+      // Fate Cards
+      if (i.type === 'fateCard') {
+        fateCards.push(i);
+      }
     }
 
     // Assign and return
     context.skills = skills;
     context.learningSkills = learningSkills;
     context.possessions = possessions;
+    context.fateCards = fateCards;
    }
 
   /* -------------------------------------------- */
@@ -117,6 +124,9 @@ export class AmbersteelActorSheet extends ActorSheet {
         li.addEventListener("dragstart", handler, false);
       });
     }
+
+    // Edit item.
+    html.find(".inline-edit").change(this._onInlineEdit.bind(this));
   }
 
   /**
@@ -139,11 +149,25 @@ export class AmbersteelActorSheet extends ActorSheet {
       type: type,
       data: data
     };
+    // Initialize name in data, if possible. 
+    if (data.name) {
+      data.name = name;
+    }
     // Remove the type from the dataset since it's in the itemData.type prop.
     delete itemData.data["type"];
 
     // Finally, create the item!
     return await Item.create(itemData, {parent: this.actor});
+  }
+
+  _onInlineEdit(event) {
+    event.preventDefault();
+    let element = event.currentTarget;
+    let itemId = element.closest(".item").dataset.itemId;
+    let item = this.actor.getOwnedItem(itemId);
+    let field = element.dataset.field;
+
+    return item.update({ [field]: element.value });
   }
 
   /**

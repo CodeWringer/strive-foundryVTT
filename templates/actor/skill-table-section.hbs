@@ -22,24 +22,30 @@
                 </th>
             </tr>
             {{#each skills as |skill|}}
-            <tr>
+            {{#log skill}}{{/log}}
+            <tr class="item" data-item-id="{{skill._id}}">
                 <td class="pad-sm fancy-font flex">
-                    {{localize skill.name}}
+                    <input class="skill-name inline-edit" data-field="data.name" name="skill.data.name" type="text" value="{{localize skill.data.name}}" />
                 </td>
                 <td class="pad-sm input-slim">
+                    <select>
+                        {{#each CONFIG.ambersteel.character.attributes as | name abbrev |}}
+                        <option data-attribute="{{name}}">{{localize abbrev}}</option>
+                        {{/each}}
+                    </select>
                     {{localize skill.attributeAbbreviation}}
                 </td>
                 <td class="pad-sm input-slim">
-                    <input name="skill.value" type="number" value="{{skill.value}}" />
+                    <input class="skill-value inline-edit" name="skill.data.value" data-field="data.value" type="number" value="{{skill.data.value}}" />
                 </td>
                 <td class="pad-sm">
                     {{skill.requiredSuccessses}} / {{skill.requiredFailures}}
                 </td>
                 <td class="pad-sm input-slim">
-                    <input name="skill.successes" type="number" value="{{skill.successes}}" />
+                    <input class="skill-successes inline-edit" name="skill.data.successes" data-field="data.successes" type="number" value="{{skill.data.successes}}" />
                 </td>
                 <td class="pad-sm input-slim">
-                    <input name="skill.failures" type="number" value="{{skill.failures}}" />
+                    <input class="skill-failures inline-edit" name="skill.data.failures" data-field="data.failures" type="number" value="{{skill.data.failures}}" />
                 </td>
             </tr>
             {{/each}}
@@ -47,7 +53,7 @@
                 <td style="display: table-cell;" colspan="6">
                     <div class="flex">
                         <span class="flex-grow"></span>
-                        <a class="item-create pad-sm" data-type="skill" data-is-learning="true" title="{{localize ambersteel.labels.addSkill}}">
+                        <a class="item-create pad-sm" data-type="skill" data-is-learning="{{isLearning}}" title="{{localize ambersteel.labels.addSkill}}">
                             <i class="fas fa-plus"></i>
                         </a>
                     </div>

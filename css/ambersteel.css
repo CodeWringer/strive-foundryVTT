@@ -9,6 +9,10 @@
   font-size: 13pt;
 }
 
+.primary-font {
+  font-family: "Roboto", sans-serif;
+}
+
 /* Global styles */
 .window-app {
   font-family: "Roboto", sans-serif;
@@ -511,4 +515,14 @@
   -ms-flex: 0 0 200px;
   flex: 0 0 200px;
   padding: 0 8px;
+}
+
+.boilerplate .fate-card {
+  width: 130px;
+  height: 260px;
+  margin: 5px;
+  padding: 5px;
+  border-radius: 3px;
+  border: 1px rgba(129, 129, 129, 0.22) solid;
+  background-color: rgba(0, 0, 0, 0.05);
 }

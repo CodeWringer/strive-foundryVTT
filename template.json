@@ -125,7 +125,7 @@
     }
   },
   "Item": {
-    "types": ["item", "spell", "skill"],
+    "types": ["item", "spell", "skill", "fateCard"],
     "templates": {
       "base": {
         "description": ""
@@ -144,6 +144,15 @@
       "successes": 0,
       "failures": 0,
       "isLearning": false
+    },
+    "fateCard": {
+      "templates": ["base"],
+      "name": "",
+      "cost": {
+        "miFP": 0,
+        "maFP": 0,
+        "AFP": 0
+      }
     },
     "item": {
       "templates": ["base"],

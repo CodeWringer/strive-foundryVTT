@@ -24,11 +24,17 @@ Hooks.once('init', async function() {
     AmbersteelItem
   };
 
-  // Define custom Document classes
+  // Set initiative formula. 
+  CONFIG.Combat.initiative = {
+    formula: "1d100",
+    decimals: 2
+  };
+
+  // Define custom Document classes. 
   CONFIG.Actor.documentClass = AmbersteelActor;
   CONFIG.Item.documentClass = AmbersteelItem;
 
-  // Register sheet application classes
+  // Register sheet application classes. 
   Actors.unregisterSheet("core", ActorSheet);
   Actors.registerSheet("ambersteel", AmbersteelActorSheet, { makeDefault: true });
   
@@ -65,6 +71,11 @@ Handlebars.registerHelper('times', function(n, content) {
   }
 
   return result;
+});
+
+Handlebars.registerHelper('log', function(js, content) {
+  console.log(js);
+  return "";
 });
 
 /* -------------------------------------------- */
