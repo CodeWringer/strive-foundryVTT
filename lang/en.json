@@ -89,6 +89,7 @@
       "learningSkill": "Learning Skills",
       "knownSkill": "Known Skills",
       "addSkill": "Add Skill",
+      "deleteSkill": "Delete Skill",
       "buyFateCard": "Buy Fate Card"
     },
     "fateSystem": {

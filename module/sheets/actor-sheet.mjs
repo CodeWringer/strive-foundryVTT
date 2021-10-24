@@ -103,18 +103,7 @@ export class AmbersteelActorSheet extends ActorSheet {
     // -------------------------------------------------------------
     // Everything below here is only needed if the sheet is editable
     if (!this.isEditable) return;
-
-    // Add Item
-    html.find('.item-create').click(this._onItemCreate.bind(this));
-
-    // Delete Item
-    html.find('.item-delete').click(ev => {
-      const li = $(ev.currentTarget).parents(".item");
-      const item = this.actor.items.get(li.data("itemId"));
-      item.delete();
-      li.slideUp(200, () => this.render(false));
-    });
-
+    
     // Drag events for macros.
     if (this.actor.isOwner) {
       let handler = ev => this._onDragStart(ev);
@@ -124,9 +113,18 @@ export class AmbersteelActorSheet extends ActorSheet {
         li.addEventListener("dragstart", handler, false);
       });
     }
+    
+    // Add Item
+    html.find('.ambersteel-item-create').click(this._onItemCreate.bind(this));
 
     // Edit item.
-    html.find(".inline-edit").change(this._onInlineEdit.bind(this));
+    html.find(".ambersteel-item-edit").change(this._onItemEdit.bind(this));
+
+    // Delete item. 
+    html.find(".ambersteel-item-delete").click(this._onItemDelete.bind(this));
+
+    // Show item sheet.
+    html.find(".ambersteel-item-show").click(this._onItemShow.bind(this));
   }
 
   /**
@@ -160,7 +158,7 @@ export class AmbersteelActorSheet extends ActorSheet {
     return await Item.create(itemData, {parent: this.actor});
   }
 
-  _onInlineEdit(event) {
+  _onItemEdit(event) {
     event.preventDefault();
     let element = event.currentTarget;
     let itemId = element.closest(".item").dataset.itemId;
@@ -168,6 +166,24 @@ export class AmbersteelActorSheet extends ActorSheet {
     let field = element.dataset.field;
 
     return item.update({ [field]: element.value });
+  }
+
+  _onItemDelete(event) {
+    event.preventDefault();
+    let element = event.currentTarget;
+    let itemId = element.closest(".item").dataset.itemId;
+
+    const item = this.actor.items.get(itemId);
+    return item.delete();
+  }
+
+  _onItemShow(event) {
+    event.preventDefault();
+    let element = event.currentTarget;
+    let itemId = element.closest(".item").dataset.itemId;
+    let item = this.actor.getOwnedItem(itemId);
+
+    item.sheet.render(true);
   }
 
   /**

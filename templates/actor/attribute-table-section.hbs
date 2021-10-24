@@ -25,16 +25,16 @@
                     <span>[{{localize att.abbreviation}}]</span>
                 </td>
                 <td class="pad-sm input-slim">
-                    <input class="attribute-value inline-edit-attribute" name="att.data.value" type="number" value="{{att.data.value}}" />
+                    <input class="attribute-value ambersteel-item-edit" name="att.data.value" type="number" value="{{att.data.value}}" />
                 </td>
                 <td class="pad-sm">
                     {{att.requiredSuccessses}} / {{att.requiredFailures}}
                 </td>
                 <td class="pad-sm input-slim">
-                    <input name="att.data.successes" type="number" value="{{att.data.successes}}" />
+                    <input class="attribute-successes ambersteel-item-edit" name="att.data.successes" type="number" value="{{att.data.successes}}" />
                 </td>
                 <td class="pad-sm input-slim">
-                    <input name="att.data.failures" type="number" value="{{att.data.failures}}" />
+                    <input class="attribute-failures ambersteel-item-edit" name="att.data.failures" type="number" value="{{att.data.failures}}" />
                 </td>
             </tr>
             {{/each}}
