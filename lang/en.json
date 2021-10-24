@@ -87,7 +87,8 @@
       "successAbbreviation": "S",
       "failureAbbreviation": "F",
       "learningSkill": "Learning Skills",
-      "knownSkill": "Known Skills"
+      "knownSkill": "Known Skills",
+      "addSkill": "Add Skill"
     }
   }
 }

@@ -125,7 +125,7 @@
     }
   },
   "Item": {
-    "types": ["generic", "item", "spell"],
+    "types": ["item", "spell", "skill"],
     "templates": {
       "base": {
         "description": ""
@@ -136,8 +136,14 @@
         "treatment": ""
       }
     },
-    "generic": {
-      "templates": ["base"]
+    "skill": {
+      "templates": ["base"],
+      "name": "",
+      "relatedAttribute": "",
+      "value": 0,
+      "successes": 0,
+      "failures": 0,
+      "isLearning": false
     },
     "item": {
       "templates": ["base"],

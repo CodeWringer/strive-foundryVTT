@@ -9,10 +9,22 @@
             {{> "systems/ambersteel/templates/actor/attribute-table-section.hbs" attGroup=data.attributeGroups.arcane atts=data.attributes.arcane}}
             {{!-- Learning Skills --}}
             {{> "systems/ambersteel/templates/actor/skill-table-section.hbs" name="ambersteel.labels.learningSkill" skills=data.learningSkills}}
+            <div class="flex">
+                <span class="flex-grow"></span>
+                <a class="item-create pad-sm" data-type="skill" data-is-learning=true title="{{localize ambersteel.labels.addSkill}}">
+                    <i class="fas fa-plus"></i>
+                </a>
+            </div>
         </div>
-        {{!-- Known Skills --}}
-        {{> "systems/ambersteel/templates/actor/skill-table-section.hbs" name="ambersteel.labels.knownSkill" skills=data.skills}}
         <div>
+            {{!-- Known Skills --}}
+            {{> "systems/ambersteel/templates/actor/skill-table-section.hbs" name="ambersteel.labels.knownSkill" skills=data.skills}}
+            <div class="flex">
+                <span class="flex-grow"></span>
+                <a class="item-create pad-sm" data-type="skill" data-is-learning=false title="{{localize ambersteel.labels.addSkill}}">
+                    <i class="fas fa-plus"></i>
+                </a>
+            </div>
         </div>
     </div>
 </section>
