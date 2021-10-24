@@ -21,8 +21,8 @@
   "gridUnits": "ft",
   "primaryTokenAttribute": null,
   "secondaryTokenAttribute": null,
-  "url": "",
-  "manifest": "",
+  "url": "https://github.com/CodeWringer/ambersteel-foundryVTT",
+  "manifest": "https://raw.githubusercontent.com/CodeWringer/ambersteel-foundryVTT/main/system.json",
   "download": "",
   "license": "LICENSE.txt"
 }
