@@ -57,6 +57,17 @@
       "willpower": "Will",
       "arcana": "Arc",
       "magicSense": "MS"
+    },
+    "biography": {
+      "origin": "Origin",
+      "youth": "Youth",
+      "lastFewYears": "The Last Few Years"
+    },
+    "personals": {
+      "species": "Species",
+      "culture": "Culture",
+      "sex": "Sex",
+      "age": "Age"
     }
   }
 }

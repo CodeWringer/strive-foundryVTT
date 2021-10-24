@@ -61,5 +61,16 @@ ambersteel.character = {
         willpower: "ambersteel.attributeAbbrevs.willpower",
         arcana: "ambersteel.attributeAbbrevs.arcana",
         magicSense: "ambersteel.attributeAbbrevs.magicSense"
+    },
+    biography: {
+        "origin": "ambersteel.biography.origin",
+        "youth": "ambersteel.biography.youth",
+        "lastFewYears": "ambersteel.biography.lastFewYears"
+    },
+    personals: {
+        "species": "ambersteel.personals.species",
+        "culture": "ambersteel.personals.culture",
+        "sex": "ambersteel.personals.sex",
+        "age": "ambersteel.personals.age"
     }
 }

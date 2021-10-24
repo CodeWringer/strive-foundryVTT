@@ -4,22 +4,22 @@
   <header class="sheet-header">
     <img class="profile-img" src="{{actor.img}}" data-edit="img" title="{{actor.name}}" height="100" width="100"/>
     <div class="header-fields">
-      <h1 class="charname"><input name="name" type="text" value="{{actor.name}}" placeholder="Name"/></h1>
+      <h1 class="charname blckchncy"><input name="name" type="text" value="{{actor.name}}" placeholder="Name"/></h1>
        {{> "systems/ambersteel/templates/actor/parts/actor-personals.hbs"}}
     </div>
   </header>
 
   {{!-- Sheet Tab Navigation --}}
-  <nav class="sheet-tabs tabs" data-group="primary">
+  <nav class="sheet-tabs line-height tabs" data-group="primary">
     {{!-- Default tab is specified in actor-sheet.mjs --}}
-    <a class="item" data-tab="basics">Basics</a>
+    <a class="item blckchncy" data-tab="basics">Basics</a>
     {{#if (eq actor.type "pc")}}
-    <a class="item" data-tab="beliefs">Beliefs</a>
-    <a class="item" data-tab="fate">Fate</a>
+    <a class="item blckchncy" data-tab="beliefs">Beliefs</a>
+    <a class="item blckchncy" data-tab="fate">Fate</a>
     {{/if}}
-    <a class="item" data-tab="health">Health</a>
-    <a class="item" data-tab="possessions">Possessions</a>
-    <a class="item" data-tab="biography">Biography</a>
+    <a class="item blckchncy" data-tab="health">Health</a>
+    <a class="item blckchncy" data-tab="possessions">Possessions</a>
+    <a class="item blckchncy" data-tab="biography">Biography</a>
   </nav>
 
   {{!-- Sheet Body --}}

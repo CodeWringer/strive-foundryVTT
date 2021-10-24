@@ -44,6 +44,13 @@
   height: 100%;
 }
 
+.sheet-block {
+  padding: $padding-sm;
+  border-radius: 3px;
+  border: 1px $c-border-light solid;
+  background-color: $c-bg-light;
+}
+
 .tox {
   .tox-editor-container {
     background: $c-white;
