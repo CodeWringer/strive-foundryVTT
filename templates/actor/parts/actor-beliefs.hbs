@@ -1,3 +1,26 @@
-<ol class="items-list">
-  {{!-- TODO --}}
-</ol>
+<section>
+  <div class="sheet-block">
+    <h3>
+      <label class="blckchncy" for="data.beliefSystem.ambition">{{localize "ambersteel.beliefSystem.ambition"}}</label>
+    </h3>
+    <input name="data.beliefSystem.ambition" type="text" value="{{data.beliefSystem.ambition}}" />
+  </div>
+  <div class="sheet-block">
+    <h3>
+      <label class="blckchncy" for="data.beliefSystem.beliefs">{{localize "ambersteel.beliefSystem.beliefs"}}</label>
+    </h3>
+    {{#each data.beliefSystem.beliefs as |text|}}
+    <input name="data.beliefSystem.beliefs" type="text" value="{{text}}" />
+    {{/each}}
+  </div>
+  <div class="sheet-block">
+    <h3>
+      <label class="blckchncy" for="data.beliefSystem.instincts">{{localize
+        "ambersteel.beliefSystem.instincts"}}</label>
+    </h3>
+        </h3>
+    {{#each data.beliefSystem.instincts as |text|}}
+    <input name="data.beliefSystem.instincts" type="text" value="{{text}}" />
+    {{/each}}
+  </div>
+</section>

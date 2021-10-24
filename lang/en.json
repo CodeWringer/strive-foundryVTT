@@ -68,6 +68,11 @@
       "culture": "Culture",
       "sex": "Sex",
       "age": "Age"
+    },
+    "beliefSystem": {
+      "ambition": "Ambition",
+      "beliefs": "Beliefs",
+      "instincts": "Instincts"
     }
   }
 }

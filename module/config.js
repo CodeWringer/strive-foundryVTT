@@ -72,5 +72,10 @@ ambersteel.character = {
         "culture": "ambersteel.personals.culture",
         "sex": "ambersteel.personals.sex",
         "age": "ambersteel.personals.age"
+    },
+    beliefSystem: {
+        "ambition": "ambersteel.beliefSystem.ambition",
+        "beliefs": "ambersteel.beliefSystem.beliefs",
+        "instincts": "ambersteel.beliefSystem.instincts"
     }
 }

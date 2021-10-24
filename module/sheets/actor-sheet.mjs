@@ -7,7 +7,7 @@ export class AmbersteelActorSheet extends ActorSheet {
       template: "systems/ambersteel/templates/actor/actor-character-sheet.hbs",
       width: 600,
       height: 600,
-      tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "features" }]
+      tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "basics" }]
     });
   }
 
@@ -25,6 +25,7 @@ export class AmbersteelActorSheet extends ActorSheet {
     // sheets are the actor object, the data object, whether or not it's
     // editable, the items array, and the effects array.
     const context = super.getData();
+    console.log(context);
 
     // Use a safe clone of the actor data for further operations.
     const actorData = context.actor.data;
@@ -35,6 +36,8 @@ export class AmbersteelActorSheet extends ActorSheet {
 
     // Add roll data for TinyMCE editors.
     context.rollData = context.actor.getRollData();
+
+    context.config = CONFIG.ambersteel;
 
     return context;
   }
