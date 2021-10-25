@@ -42,52 +42,64 @@ ambersteel.character = {
     },
     attributes: {
         agility: {
-            name: "ambersteel.attributes.agility",
-            abbrev: "ambersteel.attributeAbbreviations.agility"
+            name: "agility",
+            nameString: "ambersteel.attributes.agility",
+            abbrevString: "ambersteel.attributeAbbreviations.agility"
         },
         endurance: {
-            name: "ambersteel.attributes.endurance",
-            abbrev: "ambersteel.attributeAbbreviations.endurance"
+            name: "endurance",
+            nameString: "ambersteel.attributes.endurance",
+            abbrevString: "ambersteel.attributeAbbreviations.endurance"
         },
         perception: {
-            name: "ambersteel.attributes.perception",
-            abbrev: "ambersteel.attributeAbbreviations.perception"
+            name: "perception",
+            nameString: "ambersteel.attributes.perception",
+            abbrevString: "ambersteel.attributeAbbreviations.perception"
         },
         strength: {
-            name: "ambersteel.attributes.strength",
-            abbrev: "ambersteel.attributeAbbreviations.strength"
+            name: "strength",
+            nameString: "ambersteel.attributes.strength",
+            abbrevString: "ambersteel.attributeAbbreviations.strength"
         },
         toughness: {
-            name: "ambersteel.attributes.toughness",
-            abbrev: "ambersteel.attributeAbbreviations.toughness"
+            name: "toughness",
+            nameString: "ambersteel.attributes.toughness",
+            abbrevString: "ambersteel.attributeAbbreviations.toughness"
         },
         intelligence: {
-            name: "ambersteel.attributes.intelligence",
-            abbrev: "ambersteel.attributeAbbreviations.intelligence"
+            name: "intelligence",
+            nameString: "ambersteel.attributes.intelligence",
+            abbrevString: "ambersteel.attributeAbbreviations.intelligence"
         },
         wisdom: {
-            name: "ambersteel.attributes.wisdom",
-            abbrev: "ambersteel.attributeAbbreviations.wisdom"
+            name: "wisdom",
+            nameString: "ambersteel.attributes.wisdom",
+            abbrevString: "ambersteel.attributeAbbreviations.wisdom"
         },
         empathy: {
-            name: "ambersteel.attributes.empathy",
-            abbrev: "ambersteel.attributeAbbreviations.empathy"
+            name: "empathy",
+            nameString: "ambersteel.attributes.empathy",
+            abbrevString: "ambersteel.attributeAbbreviations.empathy"
         },
         oratory: {
-            name: "ambersteel.attributes.oratory",
-            abbrev: "ambersteel.attributeAbbreviations.oratory"
+            name: "oratory",
+            nameString: "ambersteel.attributes.oratory",
+            abbrevString: "ambersteel.attributeAbbreviations.oratory"
         },
         willpower: {
-            name: "ambersteel.attributes.willpower",
-            abbrev: "ambersteel.attributeAbbreviations.willpower"
+            name: "willpower",
+            nameString: "ambersteel.attributes.willpower",
+            abbrevString: "ambersteel.attributeAbbreviations.willpower"
         },
         arcana: {
-            name: "ambersteel.attributes.arcana",
-            abbrev: "ambersteel.attributeAbbreviations.arcana"
+            name: "arcana",
+            nameString: "ambersteel.attributes.arcana",
+            abbrevString: "ambersteel.attributeAbbreviations.arcana"
         },
         magicSense: {
-            name: "ambersteel.attributes.magicSense",
-            abbrev: "ambersteel.attributeAbbreviations.magicSense"
+            name: "magicSense",
+            nameString: "ambersteel.attributes.magicSense",
+            abbrevString: "ambersteel.attributeAbbreviations.magicSense"
         }
     },
     biography: {

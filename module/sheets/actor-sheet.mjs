@@ -3,10 +3,10 @@ export class AmbersteelActorSheet extends ActorSheet {
   /** @override */
   static get defaultOptions() {
     return mergeObject(super.defaultOptions, {
-      classes: ["boilerplate", "sheet", "actor"],
+      classes: ["ambersteel", "sheet", "actor"],
       template: "systems/ambersteel/templates/actor/actor-character-sheet.hbs",
-      width: 720,
-      height: 900,
+      width: 600,
+      height: 700,
       tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "attributes" }]
     });
   }
@@ -239,8 +239,14 @@ export class AmbersteelActorSheet extends ActorSheet {
     let itemId = element.closest(".item").dataset.itemId;
     let item = this.actor.items.get(itemId);
     let field = element.dataset.field;
+    let newValue = element.value;
 
-    return item.update({ [field]: element.value });
+    if (element.tagName.toLowerCase() == "select") {
+      let optionValue = element.options[element.selectedIndex].value;
+      newValue = optionValue;
+    }
+
+    return item.update({ [field]: newValue });
   }
 
   _onItemDelete(event) {

@@ -34,10 +34,12 @@
                     <input class="skill-name ambersteel-item-edit" data-field="data.name" name="skill.data.name" type="text" value="{{localize skill.data.name}}" />
                 </td>
                 <td class="skill-column-attribute">
-                    <select>
+                    <select class="ambersteel-item-edit" name="data.relatedAttribute" data-field="data.relatedAttribute">
+                        {{#select data.relatedAttribute}}
                         {{#each ../config.character.attributes as | att |}}
-                        <option data-attribute="{{att.name}}">{{localize att.abbrev}}</option>
+                        <option value="{{att.name}}">{{localize att.abbrevString}}</option>
                         {{/each}}
+                        {{/select}}
                     </select>
                 </td>
                 <td class="skill-column-level">
