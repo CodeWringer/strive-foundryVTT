@@ -58,9 +58,6 @@ export class AmbersteelActorSheet extends ActorSheet {
     // Derived attribute data. 
     this._prepareDerivedAttributeData(context);
 
-    // Add roll data for TinyMCE editors.
-    context.rollData = context.actor.getRollData();
-
     context.config = CONFIG.ambersteel;
 
     return context;
@@ -318,28 +315,24 @@ export class AmbersteelActorSheet extends ActorSheet {
   _onAttributeRoll(event) {
     event.preventDefault();
     const element = event.currentTarget;
-    const dataset = element.dataset;
+    const attItemElement = element.closest('.attribute-item');
+    const attName = attItemElement.dataset.attName;
+    const attGroupName = attItemElement.dataset.attGroupName;
+    const data = this.actor.data.data;
 
-    // Handle item rolls.
-    if (dataset.rollType) {
-      if (dataset.rollType == 'item') {
-        const itemId = element.closest('.item').dataset.itemId;
-        const item = this.actor.items.get(itemId);
-        if (item) return item.roll();
-      }
-    }
+    // Get attribute to roll. 
+    let attValue = data.attributes[attGroupName][attName].value;
+    // Get localized attribute name.
+    let attNameString = game.i18n.localize("ambersteel.attributes." + attName);
 
-    // Handle rolls that supply the formula directly.
-    if (dataset.roll) {
-      let label = dataset.label ? `[ability] ${dataset.label}` : '';
-      let roll = new Roll(dataset.roll, this.actor.getRollData()).roll();
-      roll.toMessage({
-        speaker: ChatMessage.getSpeaker({ actor: this.actor }),
-        flavor: label,
-        rollMode: game.settings.get('core', 'rollMode'),
-      });
-      return roll;
-    }
+    // Make the roll. 
+    let roll = new Roll(attValue + "d6", {}).roll();
+    roll.toMessage({
+      speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+      flavor: attNameString,
+      rollMode: game.settings.get('core', 'rollMode'),
+    });
+    return roll;
   }
 
 }
