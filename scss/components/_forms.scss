@@ -80,5 +80,14 @@
 }
 
 .input-slim {
-  max-width: 30px;
+  max-width: 40px;
+  width: 40px;
+}
+
+a.button {
+  padding: $padding-sm;
+}
+
+.resize-vertical {
+  resize: vertical;
 }

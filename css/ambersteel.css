@@ -334,7 +334,7 @@
 }
 
 .boilerplate .sheet-block {
-  padding: 5px;
+  padding: 2px;
   border-radius: 3px;
   border: 1px rgba(129, 129, 129, 0.22) solid;
   background-color: rgba(0, 0, 0, 0.05);
@@ -355,19 +355,28 @@
 }
 
 .boilerplate .pad-sm {
-  padding: 5px;
+  padding: 2px;
 }
 
 .boilerplate .pad-md {
-  padding: 10px;
+  padding: 5px;
 }
 
 .boilerplate .pad-lg {
-  padding: 20px;
+  padding: 10px;
 }
 
 .boilerplate .input-slim {
-  max-width: 30px;
+  max-width: 40px;
+  width: 40px;
+}
+
+.boilerplate a.button {
+  padding: 2px;
+}
+
+.boilerplate .resize-vertical {
+  resize: vertical;
 }
 
 .boilerplate .resource-label {
@@ -520,8 +529,8 @@
 .boilerplate .fate-card {
   width: 130px;
   height: 260px;
-  margin: 5px;
-  padding: 5px;
+  margin: 2px;
+  padding: 2px;
   border-radius: 3px;
   border: 1px rgba(129, 129, 129, 0.22) solid;
   background-color: rgba(0, 0, 0, 0.05);

@@ -20,12 +20,13 @@
                 <th class="pad-sm">
                     {{localize "ambersteel.labels.failureAbbreviation"}}
                 </th>
+                <th class="pad-sm"></th>
             </tr>
             {{#each skills as |skill|}}
             <tr class="item skill-item" data-item-id="{{skill._id}}">
                 <td class="pad-sm fancy-font flex">
-                    <a class="ambersteel-item-delete pad-sm" title="{{localize ambersteel.labels.deleteSkill}}">
-                        <i class="fas fa-trash"></i>
+                    <a class="ambersteel-item-roll pad-sm button" title="{{localize ambersteel.labels.roll}}">
+                        <i class="fas fa-dice-three"></i>
                     </a>
                     <input class="skill-name ambersteel-item-edit" data-field="data.name" name="skill.data.name" type="text" value="{{localize skill.data.name}}" />
                 </td>
@@ -49,10 +50,15 @@
                 <td class="pad-sm input-slim">
                     <input class="skill-failures ambersteel-item-edit" name="skill.data.failures" data-field="data.failures" type="number" value="{{skill.data.failures}}" />
                 </td>
+                <td>
+                    <a class="ambersteel-item-delete pad-sm" title="{{localize ambersteel.labels.deleteSkill}}">
+                        <i class="fas fa-trash"></i>
+                    </a>
+                </td>
             </tr>
             {{/each}}
             <tr>
-                <td style="display: table-cell;" colspan="6">
+                <td style="display: table-cell;" colspan="7">
                     <div class="flex">
                         <span class="flex-grow"></span>
                         <a class="ambersteel-item-create pad-sm" data-type="skill" data-is-learning="{{isLearning}}" title="{{localize ambersteel.labels.addSkill}}">
