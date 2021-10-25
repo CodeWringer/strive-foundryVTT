@@ -1,5 +1,5 @@
 <section>
-    <table class="attribute-table" data-att-group-name="{{attGroup.internalName}}">
+    <table class="attribute-table">
         <tbody>
             <tr class="fancy-font">
                 <th class="pad-sm">
@@ -19,7 +19,7 @@
                 </th>
             </tr>
             {{#each attGroup.attributes as | att |}}
-            <tr class="item attribute-item" data-att-name="{{att.internalName}}">
+            <tr class="item attribute-item" data-att-group-name="{{../attGroup.internalName}}" data-att-name="{{att.internalName}}">
                 <td class="pad-sm fancy-font flex">
                     <span class="flex-grow">{{localize att.name}}</span>
                     <span>[{{localize att.abbreviation}}]</span>

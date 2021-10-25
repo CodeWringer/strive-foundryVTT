@@ -258,7 +258,7 @@ export class AmbersteelActorSheet extends ActorSheet {
   _onAttributeEdit(event) {
     event.preventDefault();
     let element = event.currentTarget;
-    let attGroupName = element.closest(".attribute-table").dataset.attGroupName;
+    let attGroupName = element.closest(".attribute-item").dataset.attGroupName;
     let attName = element.closest(".attribute-item").dataset.attName;
     let field = element.dataset.field;
     // this.actor.data.data.attriabutes[attGroupName][attName][field]
