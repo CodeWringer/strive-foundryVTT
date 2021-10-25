@@ -2,7 +2,9 @@
     <table class="skill-table">
         <tbody>
             <tr class="fancy-font">
+                {{#if isOwner}}
                 <th class="skill-column-roll"></th>
+                {{/if}}
                 <th class="skill-column-name">
                     {{localize name}}
                 </th>
@@ -21,15 +23,19 @@
                 <th class="skill-column-failures">
                     {{localize "ambersteel.labels.failureAbbreviation"}}
                 </th>
+                {{#if isOwner}}
                 <th class="skill-column-delete"></th>
+                {{/if}}
             </tr>
             {{#each skills as |skill|}}
             <tr class="item skill-item" data-item-id="{{skill._id}}">
+                {{#if ../isOwner}}
                 <td class="skill-column-roll">
-                    <a class="ambersteel-item-roll pad-sm button" title="{{localize ambersteel.labels.roll}}">
+                    <a class="ambersteel-item-roll roll-button pad-sm button" title="{{localize ambersteel.labels.roll}}">
                         <i class="fas fa-dice-three"></i>
                     </a>
                 </td>
+                {{/if}}
                 <td class="fancy-font flex skill-column-name">
                     <input class="skill-name ambersteel-item-edit" data-field="data.name" name="skill.data.name" type="text" value="{{localize skill.data.name}}" />
                 </td>
@@ -43,24 +49,39 @@
                     </select>
                 </td>
                 <td class="skill-column-level">
+                    {{#if ../isOwner}}
                     <input class="skill-value ambersteel-item-edit" name="skill.data.value" data-field="data.value" type="number" value="{{skill.data.value}}" />
+                    {{else}}
+                    {{skill.data.value}}
+                    {{/if}}
                 </td>
                 <td class="skill-column-requirements">
                     {{skill.requiredSuccessses}} / {{skill.requiredFailures}}
                 </td>
                 <td class="skill-column-successes">
+                    {{#if ../isOwner}}
                     <input class="skill-successes ambersteel-item-edit" name="skill.data.successes" data-field="data.successes" type="number" value="{{skill.data.successes}}" />
+                    {{else}}
+                    {{skill.data.successes}}
+                    {{/if}}
                 </td>
                 <td class="skill-column-failures">
+                    {{#if ../isOwner}}
                     <input class="skill-failures ambersteel-item-edit" name="skill.data.failures" data-field="data.failures" type="number" value="{{skill.data.failures}}" />
+                    {{else}}
+                    {{skill.data.failures}}
+                    {{/if}}
                 </td>
+                {{#if ../isOwner}}
                 <td class="skill-column-delete">
                     <a class="ambersteel-item-delete pad-sm button" title="{{localize ambersteel.labels.deleteSkill}}">
                         <i class="fas fa-trash"></i>
                     </a>
                 </td>
+                {{/if}}
             </tr>
             {{/each}}
+            {{#if isOwner}}
             <tr>
                 <td style="display: table-cell;" colspan="100">
                     <div class="flex">
@@ -71,6 +92,7 @@
                     </div>
                 </td>
             </tr>
+            {{/if}}
         </tbody>
     </table>
 </section>

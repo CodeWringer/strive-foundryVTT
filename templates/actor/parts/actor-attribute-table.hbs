@@ -2,7 +2,9 @@
     <table class="attribute-table">
         <tbody>
             <tr class="fancy-font">
+                {{#if isOwner}}
                 <th class="attribute-column-roll"></th>
+                {{/if}}
                 <th class="attribute-column-name">
                     {{localize attGroup.name}}
                 </th>
@@ -22,11 +24,13 @@
             </tr>
             {{#each attGroup.attributes as | att |}}
             <tr class="item attribute-item" data-att-group-name="{{../attGroup.internalName}}" data-att-name="{{att.internalName}}">
+                {{#if ../isOwner}}
                 <td class="attribute-column-roll">
-                    <a class="ambersteel-attribute-roll pad-sm button" title="{{localize ambersteel.labels.roll}}">
+                    <a class="ambersteel-attribute-roll roll-button pad-sm button" title="{{localize ambersteel.labels.roll}}">
                         <i class="fas fa-dice-three"></i>
                     </a>
                 </td>
+                {{/if}}
                 <td class="attribute-column-name flex fancy-font">
                     {{localize att.name}}
                 </td>
@@ -34,16 +38,28 @@
                     [{{localize att.abbreviation}}]
                 </td>
                 <td class="attribute-column-level">
+                    {{#if ../isOwner}}
                     <input class="attribute-value ambersteel-attribute-edit" name="att.value" type="number" value="{{att.value}}" data-field="value" />
+                    {{else}}
+                    {{att.value}}
+                    {{/if}}
                 </td>
                 <td class="attribute-column-requirements">
                     {{att.requiredSuccessses}} / {{att.requiredFailures}}
                 </td>
                 <td class="attribute-column-successes">
+                    {{#if ../isOwner}}
                     <input class="attribute-successes ambersteel-attribute-edit" name="att.successes" type="number" value="{{att.successes}}" data-field="successes" />
+                    {{else}}
+                    {{att.successes}}
+                    {{/if}}
                 </td>
                 <td class="attribute-column-failures">
+                    {{#if ../isOwner}}
                     <input class="attribute-failures ambersteel-attribute-edit" name="att.failures" type="number" value="{{att.failures}}" data-field="failures" />
+                    {{else}}
+                    {{att.failures}}
+                    {{/if}}
                 </td>
             </tr>
             {{/each}}

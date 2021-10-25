@@ -163,12 +163,6 @@ export class AmbersteelActorSheet extends ActorSheet {
     // Show item sheet.
     html.find(".ambersteel-item-show").click(this._onItemShow.bind(this));
 
-    // Roll item. 
-    html.find(".ambersteel-item-roll").click(this._onItemRoll.bind(this));
-
-    // Roll attribute. 
-    html.find(".ambersteel-attribute-roll").click(this._onAttributeRoll.bind(this));
-
     // -------------------------------------------------------------
     // Everything below here is only needed if the sheet is editable
     if (!this.isEditable) return;
@@ -182,6 +176,12 @@ export class AmbersteelActorSheet extends ActorSheet {
         li.addEventListener("dragstart", handler, false);
       });
     }
+
+    // Roll item. 
+    html.find(".ambersteel-item-roll").click(this._onItemRoll.bind(this));
+
+    // Roll attribute. 
+    html.find(".ambersteel-attribute-roll").click(this._onAttributeRoll.bind(this));
 
     // Context menu.
     new ContextMenu(html, ".skill-item", this.itemContextMenu);

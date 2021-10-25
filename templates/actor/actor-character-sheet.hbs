@@ -12,7 +12,6 @@
   {{!-- Sheet Tab Navigation --}}
   <nav class="sheet-tabs line-height tabs" data-group="primary">
     {{!-- Default tab is specified in actor-sheet.mjs --}}
-    {{!-- <a class="item fancy-font" data-tab="basics">Basics</a> --}}
     <a class="item fancy-font" data-tab="attributes">{{localize "ambersteel.labels.tabAttributes"}}</a>
     <a class="item fancy-font" data-tab="skills">{{localize "ambersteel.labels.tabSkills"}}</a>
     {{#if (eq actor.type "pc")}}
@@ -26,11 +25,6 @@
 
   {{!-- Sheet Body --}}
   <section class="sheet-body">
-
-    {{!-- Basics Tab --}}
-    {{!-- <div class="tab basics" data-group="primary" data-tab="basics">
-       {{> "systems/ambersteel/templates/actor/parts/actor-basics.hbs"}}
-    </div> --}}
 
     {{!-- Attributes Tab --}}
     <div class="tab attributes" data-group="primary" data-tab="attributes">

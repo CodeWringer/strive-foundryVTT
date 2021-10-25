@@ -1,7 +1,7 @@
 <section>
     {{!-- Attributes --}}
-    {{> "systems/ambersteel/templates/actor/attribute-table-section.hbs" attGroup=attributeGroups.physical}}
-    {{> "systems/ambersteel/templates/actor/attribute-table-section.hbs" attGroup=attributeGroups.mental}}
-    {{> "systems/ambersteel/templates/actor/attribute-table-section.hbs" attGroup=attributeGroups.social}}
-    {{> "systems/ambersteel/templates/actor/attribute-table-section.hbs" attGroup=attributeGroups.arcane}}
+    {{> "systems/ambersteel/templates/actor/parts/actor-attribute-table.hbs" attGroup=attributeGroups.physical isOwner=owner}}
+    {{> "systems/ambersteel/templates/actor/parts/actor-attribute-table.hbs" attGroup=attributeGroups.mental isOwner=owner}}
+    {{> "systems/ambersteel/templates/actor/parts/actor-attribute-table.hbs" attGroup=attributeGroups.social isOwner=owner}}
+    {{> "systems/ambersteel/templates/actor/parts/actor-attribute-table.hbs" attGroup=attributeGroups.arcane isOwner=owner}}
 </section>
