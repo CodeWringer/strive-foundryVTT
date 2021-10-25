@@ -1,0 +1,6 @@
+<section>
+    {{!-- Learning Skills --}}
+    {{> "systems/ambersteel/templates/actor/skill-table-section.hbs" name="ambersteel.labels.learningSkill" skills=data.learningSkills isLearning=true}}
+    {{!-- Known Skills --}}
+    {{> "systems/ambersteel/templates/actor/skill-table-section.hbs" name="ambersteel.labels.knownSkill" skills=data.skills isLearning=false}}
+</section>

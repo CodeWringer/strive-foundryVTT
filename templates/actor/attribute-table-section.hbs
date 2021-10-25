@@ -2,41 +2,47 @@
     <table class="attribute-table">
         <tbody>
             <tr class="fancy-font">
-                <th class="pad-sm">
+                <th class="attribute-column-roll"></th>
+                <th class="attribute-column-name">
                     {{localize attGroup.name}}
                 </th>
-                <th class="pad-sm">
+                <th class="attribute-column-abbreviation"></th>
+                <th class="attribute-column-level">
                     {{localize "ambersteel.labels.level"}}
                 </th>
-                <th class="pad-sm">
+                <th class="attribute-column-requirements">
                     {{localize "ambersteel.labels.requiredSuccessFailureAbbreviation"}}
                 </th>
-                <th class="pad-sm">
+                <th class="attribute-column-successes">
                     {{localize "ambersteel.labels.successAbbreviation"}}
                 </th>
-                <th class="pad-sm">
+                <th class="attribute-column-failures">
                     {{localize "ambersteel.labels.failureAbbreviation"}}
                 </th>
             </tr>
             {{#each attGroup.attributes as | att |}}
             <tr class="item attribute-item" data-att-group-name="{{../attGroup.internalName}}" data-att-name="{{att.internalName}}">
-                <td class="pad-sm fancy-font flex">
+                <td class="attribute-column-roll">
                     <a class="ambersteel-item-roll pad-sm button" title="{{localize ambersteel.labels.roll}}">
                         <i class="fas fa-dice-three"></i>
                     </a>
-                    <span class="flex-grow">{{localize att.name}}</span>
-                    <span>[{{localize att.abbreviation}}]</span>
                 </td>
-                <td class="pad-sm input-slim">
+                <td class="attribute-column-name flex fancy-font">
+                    {{localize att.name}}
+                </td>
+                <td class="attribute-column-abbreviation fancy-font">
+                    [{{localize att.abbreviation}}]
+                </td>
+                <td class="attribute-column-level">
                     <input class="attribute-value ambersteel-attribute-edit" name="att.value" type="number" value="{{att.value}}" data-field="value" />
                 </td>
-                <td class="pad-sm">
+                <td class="attribute-column-requirements">
                     {{att.requiredSuccessses}} / {{att.requiredFailures}}
                 </td>
-                <td class="pad-sm input-slim">
+                <td class="attribute-column-successes">
                     <input class="attribute-successes ambersteel-attribute-edit" name="att.successes" type="number" value="{{att.successes}}" data-field="successes" />
                 </td>
-                <td class="pad-sm input-slim">
+                <td class="attribute-column-failures">
                     <input class="attribute-failures ambersteel-attribute-edit" name="att.failures" type="number" value="{{att.failures}}" data-field="failures" />
                 </td>
             </tr>

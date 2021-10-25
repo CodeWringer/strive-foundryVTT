@@ -93,7 +93,14 @@
       "buyFateCard": "Buy Fate Card",
       "add": "Add",
       "edit": "Edit",
-      "delete": "Delete"
+      "delete": "Delete",
+      "tabAttributes": "Attributes",
+      "tabSkills": "Skills",
+      "tabBeliefs": "Beliefs",
+      "tabFate": "Fate",
+      "tabHealth": "Health",
+      "tabPossessions": "Possessions",
+      "tabBiography": "Biography"
     },
     "fateSystem": {
       "miFP": "Minor Fate Points",

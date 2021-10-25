@@ -7,7 +7,7 @@ export class AmbersteelActorSheet extends ActorSheet {
       template: "systems/ambersteel/templates/actor/actor-character-sheet.hbs",
       width: 720,
       height: 900,
-      tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "basics" }]
+      tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "attributes" }]
     });
   }
 
@@ -166,6 +166,12 @@ export class AmbersteelActorSheet extends ActorSheet {
     // Show item sheet.
     html.find(".ambersteel-item-show").click(this._onItemShow.bind(this));
 
+    // Roll item. 
+    html.find(".ambersteel-item-roll").click(this._onItemRoll.bind(this));
+
+    // Roll attribute. 
+    html.find(".ambersteel-attribute-roll").click(this._onAttributeRoll.bind(this));
+
     // -------------------------------------------------------------
     // Everything below here is only needed if the sheet is editable
     if (!this.isEditable) return;
@@ -261,17 +267,49 @@ export class AmbersteelActorSheet extends ActorSheet {
     let attGroupName = element.closest(".attribute-item").dataset.attGroupName;
     let attName = element.closest(".attribute-item").dataset.attName;
     let field = element.dataset.field;
-    // this.actor.data.data.attriabutes[attGroupName][attName][field]
 
     return this.actor.update({ data: { attributes: { [attGroupName]: { [attName]: { [field]: element.value }}}}})
   }
 
   /**
-   * Handle clickable rolls.
-   * @param {Event} event   The originating click event
+   * Item roll handler. 
+   * @param {Event} event 
    * @private
    */
-  _onRoll(event) {
+  _onItemRoll(event) {
+    event.preventDefault();
+    let element = event.currentTarget;
+    let itemId = element.closest(".item").dataset.itemId;
+    let item = this.actor.items.get(itemId);
+
+    // // Handle item rolls.
+    // if (dataset.rollType) {
+    //   if (dataset.rollType == 'item') {
+    //     const itemId = element.closest('.item').dataset.itemId;
+    //     const item = this.actor.items.get(itemId);
+    //     if (item) return item.roll();
+    //   }
+    // }
+
+    // // Handle rolls that supply the formula directly.
+    // if (dataset.roll) {
+    //   let label = dataset.label ? `[ability] ${dataset.label}` : '';
+    //   let roll = new Roll(dataset.roll, this.actor.getRollData()).roll();
+    //   roll.toMessage({
+    //     speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+    //     flavor: label,
+    //     rollMode: game.settings.get('core', 'rollMode'),
+    //   });
+    //   return roll;
+    // }
+  }
+
+  /**
+   * Attribute roll handler. 
+   * @param {Event} event 
+   * @private
+   */
+  _onAttributeRoll(event) {
     event.preventDefault();
     const element = event.currentTarget;
     const dataset = element.dataset;

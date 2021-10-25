@@ -262,19 +262,11 @@
   text-align: center;
 }
 
-/* Styles limited to boilerplate sheets */
-.boilerplate {
-  /* ----------------------------------------- */
-  /*  Items Lists                              */
-  /* ----------------------------------------- */
-  /* Example style for Boilerplate (can be removed if not needed) */
-}
-
-.boilerplate .item-form {
+.item-form {
   font-family: "Roboto", sans-serif;
 }
 
-.boilerplate .sheet-header {
+.sheet-header {
   -webkit-box-flex: 0;
   -ms-flex: 0 auto;
   flex: 0 auto;
@@ -294,7 +286,7 @@
   margin-bottom: 10px;
 }
 
-.boilerplate .sheet-header .profile-img {
+.sheet-header .profile-img {
   -webkit-box-flex: 0;
   -ms-flex: 0 0 100px;
   flex: 0 0 100px;
@@ -302,88 +294,88 @@
   margin-right: 10px;
 }
 
-.boilerplate .sheet-header .header-fields {
+.sheet-header .header-fields {
   -webkit-box-flex: 1;
   -ms-flex: 1;
   flex: 1;
 }
 
-.boilerplate .sheet-header h1.charname {
+.sheet-header h1.charname {
   height: 50px;
   padding: 0px;
   margin: 5px 0;
   border-bottom: 0;
 }
 
-.boilerplate .sheet-header h1.charname input {
+.sheet-header h1.charname input {
   width: 100%;
   height: 100%;
   margin: 0;
 }
 
-.boilerplate .sheet-tabs {
+.sheet-tabs {
   -webkit-box-flex: 0;
   -ms-flex: 0;
   flex: 0;
 }
 
-.boilerplate .sheet-body,
-.boilerplate .sheet-body .tab,
-.boilerplate .sheet-body .tab .editor {
+.sheet-body,
+.sheet-body .tab,
+.sheet-body .tab .editor {
   height: 100%;
 }
 
-.boilerplate .sheet-block {
+.sheet-block {
   padding: 2px;
   border-radius: 3px;
   border: 1px rgba(129, 129, 129, 0.22) solid;
   background-color: rgba(0, 0, 0, 0.05);
 }
 
-.boilerplate .tox .tox-editor-container {
+.tox .tox-editor-container {
   background: #fff;
 }
 
-.boilerplate .tox .tox-edit-area {
+.tox .tox-edit-area {
   padding: 0 8px;
 }
 
-.boilerplate .line-height {
+.line-height {
   height: 30px;
   line-height: 1;
   font-size: 18px;
 }
 
-.boilerplate .pad-sm {
+.pad-sm {
   padding: 2px;
 }
 
-.boilerplate .pad-md {
+.pad-md {
   padding: 5px;
 }
 
-.boilerplate .pad-lg {
+.pad-lg {
   padding: 10px;
 }
 
-.boilerplate .input-slim {
+.input-slim {
   max-width: 40px;
   width: 40px;
 }
 
-.boilerplate a.button {
+a.button {
   padding: 2px;
 }
 
-.boilerplate .resize-vertical {
+.resize-vertical {
   resize: vertical;
 }
 
-.boilerplate .resource-label {
+.resource-label {
   font-weight: bold;
 }
 
-.boilerplate .items-header {
+.items-header {
   height: 28px;
   margin: 2px 0;
   padding: 0;
@@ -395,12 +387,12 @@
   font-weight: bold;
 }
 
-.boilerplate .items-header > * {
+.items-header > * {
   font-size: 14px;
   text-align: center;
 }
 
-.boilerplate .items-header .item-name {
+.items-header .item-name {
   font-weight: bold;
   padding-left: 5px;
   text-align: left;
@@ -409,7 +401,10 @@
   display: flex;
 }
 
-.boilerplate .items-list {
+/* ----------------------------------------- */
+/*  Items Lists                              */
+/* ----------------------------------------- */
+.items-list {
   list-style: none;
   margin: 0;
   padding: 0;
@@ -418,13 +413,13 @@
   color: #444;
 }
 
-.boilerplate .items-list .item-list {
+.items-list .item-list {
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
-.boilerplate .items-list .item-name {
+.items-list .item-name {
   -webkit-box-flex: 2;
   -ms-flex: 2;
   flex: 2;
@@ -440,13 +435,13 @@
   display: flex;
 }
 
-.boilerplate .items-list .item-name h3, .boilerplate .items-list .item-name h4 {
+.items-list .item-name h3, .items-list .item-name h4 {
   margin: 0;
   white-space: nowrap;
   overflow-x: hidden;
 }
 
-.boilerplate .items-list .item-controls {
+.items-list .item-controls {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -458,13 +453,13 @@
   justify-content: flex-end;
 }
 
-.boilerplate .items-list .item-controls a {
+.items-list .item-controls a {
   font-size: 12px;
   text-align: center;
   margin: 0 6px;
 }
 
-.boilerplate .items-list .item {
+.items-list .item {
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
@@ -472,15 +467,15 @@
   border-bottom: 1px solid #c9c7b8;
 }
 
-.boilerplate .items-list .item:last-child {
+.items-list .item:last-child {
   border-bottom: none;
 }
 
-.boilerplate .items-list .item .item-name {
+.items-list .item .item-name {
   color: #191813;
 }
 
-.boilerplate .items-list .item .item-name .item-image {
+.items-list .item .item-name .item-image {
   -webkit-box-flex: 0;
   -ms-flex: 0 0 30px;
   flex: 0 0 30px;
@@ -490,14 +485,14 @@
   margin-right: 5px;
 }
 
-.boilerplate .items-list .item-prop {
+.items-list .item-prop {
   text-align: center;
   border-left: 1px solid #c9c7b8;
   border-right: 1px solid #c9c7b8;
   font-size: 12px;
 }
 
-.boilerplate .items-list .items-header {
+.items-list .items-header {
   height: 28px;
   margin: 2px 0;
   padding: 0;
@@ -509,24 +504,25 @@
   font-weight: bold;
 }
 
-.boilerplate .items-list .items-header > * {
+.items-list .items-header > * {
   font-size: 12px;
   text-align: center;
 }
 
-.boilerplate .items-list .items-header .item-name {
+.items-list .items-header .item-name {
   padding-left: 5px;
   text-align: left;
 }
 
-.boilerplate .item-formula {
+/* Example style for Boilerplate (can be removed if not needed) */
+.item-formula {
   -webkit-box-flex: 0;
   -ms-flex: 0 0 200px;
   flex: 0 0 200px;
   padding: 0 8px;
 }
 
-.boilerplate .fate-card {
+.fate-card {
   width: 130px;
   height: 260px;
   margin: 2px;
@@ -534,4 +530,80 @@
   border-radius: 3px;
   border: 1px rgba(129, 129, 129, 0.22) solid;
   background-color: rgba(0, 0, 0, 0.05);
+}
+
+.attribute-column-roll {
+  max-width: 30px;
+  width: 30px;
+}
+
+.attribute-column-name {
+  -webkit-box-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+}
+
+.attribute-column-abbreviation {
+  max-width: 80px;
+  width: 80px;
+}
+
+.attribute-column-level {
+  max-width: 40px;
+  width: 40px;
+}
+
+.attribute-column-requirements {
+  max-width: 80px;
+  width: 80px;
+  text-align: center;
+}
+
+.attribute-column-successes, .attribute-column-failures {
+  max-width: 40px;
+  width: 40px;
+}
+
+.attribute-table th {
+  padding: 0 3px;
+}
+
+.skill-table th {
+  padding: 0 3px;
+}
+
+.skill-column-name {
+  -webkit-box-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+}
+
+.skill-column-roll, .skill-column-delete {
+  max-width: 30px;
+  width: 30px;
+}
+
+.skill-column-attribute {
+  max-width: 80px;
+  width: 80px;
+}
+
+.skill-column-attribute > select {
+  width: 100%;
+}
+
+.skill-column-level {
+  max-width: 40px;
+  width: 40px;
+}
+
+.skill-column-requirements {
+  max-width: 80px;
+  width: 80px;
+  text-align: center;
+}
+
+.skill-column-successes, .skill-column-failures {
+  max-width: 40px;
+  width: 40px;
 }

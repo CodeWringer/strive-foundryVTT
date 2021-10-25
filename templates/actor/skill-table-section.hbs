@@ -2,62 +2,65 @@
     <table class="skill-table">
         <tbody>
             <tr class="fancy-font">
-                <th class="pad-sm">
+                <th class="skill-column-roll"></th>
+                <th class="skill-column-name">
                     {{localize name}}
                 </th>
-                <th class="pad-sm">
+                <th class="skill-column-attribute">
                     {{localize "ambersteel.labels.attributeAbbreviation"}}
                 </th>
-                <th class="pad-sm">
+                <th class="skill-column-level">
                     {{localize "ambersteel.labels.level"}}
                 </th>
-                <th class="pad-sm">
+                <th class="skill-column-requirements">
                     {{localize "ambersteel.labels.requiredSuccessFailureAbbreviation"}}
                 </th>
-                <th class="pad-sm">
+                <th class="skill-column-successes">
                     {{localize "ambersteel.labels.successAbbreviation"}}
                 </th>
-                <th class="pad-sm">
+                <th class="skill-column-failures">
                     {{localize "ambersteel.labels.failureAbbreviation"}}
                 </th>
-                <th class="pad-sm"></th>
+                <th class="skill-column-delete"></th>
             </tr>
             {{#each skills as |skill|}}
             <tr class="item skill-item" data-item-id="{{skill._id}}">
-                <td class="pad-sm fancy-font flex">
+                <td class="skill-column-roll">
                     <a class="ambersteel-item-roll pad-sm button" title="{{localize ambersteel.labels.roll}}">
                         <i class="fas fa-dice-three"></i>
                     </a>
+                </td>
+                <td class="fancy-font flex skill-column-name">
                     <input class="skill-name ambersteel-item-edit" data-field="data.name" name="skill.data.name" type="text" value="{{localize skill.data.name}}" />
                 </td>
-                <td class="pad-sm">
+                <td class="skill-column-attribute">
                     <select>
                         {{#each ../config.character.attributes as | att |}}
                         <option data-attribute="{{att.name}}">{{localize att.abbrev}}</option>
                         {{/each}}
                     </select>
                 </td>
-                <td class="pad-sm input-slim">
+                <td class="skill-column-level">
                     <input class="skill-value ambersteel-item-edit" name="skill.data.value" data-field="data.value" type="number" value="{{skill.data.value}}" />
                 </td>
-                <td class="pad-sm">
+                <td class="skill-column-requirements">
                     {{skill.requiredSuccessses}} / {{skill.requiredFailures}}
                 </td>
-                <td class="pad-sm input-slim">
+                <td class="skill-column-successes">
                     <input class="skill-successes ambersteel-item-edit" name="skill.data.successes" data-field="data.successes" type="number" value="{{skill.data.successes}}" />
                 </td>
-                <td class="pad-sm input-slim">
+                <td class="skill-column-failures">
                     <input class="skill-failures ambersteel-item-edit" name="skill.data.failures" data-field="data.failures" type="number" value="{{skill.data.failures}}" />
                 </td>
-                <td>
-                    <a class="ambersteel-item-delete pad-sm" title="{{localize ambersteel.labels.deleteSkill}}">
+                <td class="skill-column-delete">
+                    <a class="ambersteel-item-delete pad-sm button" title="{{localize ambersteel.labels.deleteSkill}}">
                         <i class="fas fa-trash"></i>
                     </a>
                 </td>
             </tr>
             {{/each}}
             <tr>
-                <td style="display: table-cell;" colspan="7">
+                <td style="display: table-cell;" colspan="100">
                     <div class="flex">
                         <span class="flex-grow"></span>
                         <a class="ambersteel-item-create pad-sm" data-type="skill" data-is-learning="{{isLearning}}" title="{{localize ambersteel.labels.addSkill}}">
