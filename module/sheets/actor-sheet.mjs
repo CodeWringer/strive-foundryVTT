@@ -23,7 +23,7 @@ export class AmbersteelActorSheet extends ActorSheet {
       name: game.i18n.localize("ambersteel.labels.delete"),
       icon: '<i class="fas fa-trash"></i>',
       callback: el => {
-        const item = this.actor.getOwnedItem(el.data("item-id"));
+        const item = this.actor.items.get(el.data("item-id"));
         item.delete();
       }
     }
@@ -231,7 +231,7 @@ export class AmbersteelActorSheet extends ActorSheet {
     event.preventDefault();
     let element = event.currentTarget;
     let itemId = element.closest(".item").dataset.itemId;
-    let item = this.actor.getOwnedItem(itemId);
+    let item = this.actor.items.get(itemId);
     let field = element.dataset.field;
 
     return item.update({ [field]: element.value });
@@ -250,7 +250,7 @@ export class AmbersteelActorSheet extends ActorSheet {
     event.preventDefault();
     let element = event.currentTarget;
     let itemId = element.closest(".item").dataset.itemId;
-    let item = this.actor.getOwnedItem(itemId);
+    let item = this.actor.items.get(itemId);
 
     item.sheet.render(true);
   }
