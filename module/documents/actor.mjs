@@ -1,5 +1,4 @@
 /**
- * Extend the base Actor document by defining a custom roll data structure which is ideal for the Simple system.
  * @extends {Actor}
  */
 export class AmbersteelActor extends Actor {
@@ -33,52 +32,11 @@ export class AmbersteelActor extends Actor {
     const data = actorData.data;
     const flags = actorData.flags.boilerplate || {};
 
-    // Holds attribute group objects for easy access. 
-    data.attributeGroups = {}
-
-    // Initialize flag to indicate whether any magical attribute has a level > 0. 
-    data.isMagical = false;
-
-    for (let attGroup in data.attributes) {
-      if (!data.attributes.hasOwnProperty(attGroup)) continue;
-      
-      // Initialize attribute group object with meta-data. 
-      data.attributeGroups[attGroup] = {
-        name: "ambersteel.attributeGroups." + attGroup,
-        attributes: {}
-      }
-
-      let oAttGroup = data.attributes[attGroup]
-
-      for (let att in oAttGroup) {
-        if (!oAttGroup.hasOwnProperty(att)) continue;
-        
-        let oAtt = oAttGroup[att]
-
-        let attValue = oAtt.value + 1
-        oAtt.requiredSuccessses = attValue * attValue * 3
-        oAtt.requiredFailures = attValue * attValue * 4
-
-        oAtt.name = "ambersteel.attributes." + att
-        oAtt.abbreviation = "ambersteel.attributeAbbreviations." + att
-
-        // Add attribute object to attributeGroups for easy access.
-        data.attributeGroups[attGroup].attributes[att] = oAtt
-
-        // Characters with any magical ability are classified as magical.
-        if (oAtt.value > 0 && (att == "arcana" || att == "magicSense")) {
-          data.isMagical = true;
-        }
-      }
-    }
-
-    // Make separate methods for each Actor type (character, npc, etc.) to keep
-    // things organized.
     this._preparePCData(actorData);
   }
 
   /**
-   * Prepare Character type specific data
+   * Prepare PC type specific data
    */
   _preparePCData(actorData) {
     if (actorData.type !== 'pc') return;

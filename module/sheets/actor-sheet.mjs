@@ -47,13 +47,16 @@ export class AmbersteelActorSheet extends ActorSheet {
     context.data = actorData.data;
     context.flags = actorData.flags;
     
-    // Derived data. 
+    // Derived skill data. 
     for (let skill of actorData.data.skills) {
       this._prepareDerivedSkillData(skill);
     }
     for (let skill of actorData.data.learningSkills) {
       this._prepareDerivedSkillData(skill);
     }
+
+    // Derived attribute data. 
+    this._prepareDerivedAttributeData(context);
 
     // Add roll data for TinyMCE editors.
     context.rollData = context.actor.getRollData();
@@ -72,6 +75,42 @@ export class AmbersteelActorSheet extends ActorSheet {
       
       skill.requiredSuccessses = (skillValue + 1) * skillValue * 2
       skill.requiredFailures = (skillValue + 1) * skillValue * 3
+    }
+  }
+
+  _prepareDerivedAttributeData(data) {
+    // Holds attribute group objects for easy access. 
+    data.attributeGroups = {}
+
+    for (let attGroup in data.data.attributes) {
+      if (!data.data.attributes.hasOwnProperty(attGroup)) continue;
+
+      let oAttGroup = data.data.attributes[attGroup]
+      
+      // Initialize attribute group object with meta-data. 
+      data.attributeGroups[attGroup] = {
+        name: "ambersteel.attributeGroups." + attGroup,
+        internalName: attGroup,
+        attributes: {}
+      }
+
+      // Get derived attribute data. 
+      for (let att in oAttGroup) {
+        if (!oAttGroup.hasOwnProperty(att)) continue;
+        
+        let oAtt = oAttGroup[att]
+
+        let attValue = parseInt(oAtt.value)
+        oAtt.requiredSuccessses = (attValue + 1) * (attValue + 1) * 3
+        oAtt.requiredFailures = (attValue + 1) * (attValue + 1) * 4
+
+        oAtt.internalName = att
+        oAtt.name = "ambersteel.attributes." + att
+        oAtt.abbreviation = "ambersteel.attributeAbbreviations." + att
+
+        // Add attribute object to attributeGroups for easy access.
+        data.attributeGroups[attGroup].attributes[att] = oAtt
+      }
     }
   }
 
@@ -152,6 +191,9 @@ export class AmbersteelActorSheet extends ActorSheet {
 
     // Delete item. 
     html.find(".ambersteel-item-delete").click(this._onItemDelete.bind(this));
+
+    // Edit attribute.
+    html.find(".ambersteel-attribute-edit").change(this._onAttributeEdit.bind(this));
   }
 
   /**
@@ -211,6 +253,17 @@ export class AmbersteelActorSheet extends ActorSheet {
     let item = this.actor.getOwnedItem(itemId);
 
     item.sheet.render(true);
+  }
+
+  _onAttributeEdit(event) {
+    event.preventDefault();
+    let element = event.currentTarget;
+    let attGroupName = element.closest(".attribute-table").dataset.attGroupName;
+    let attName = element.closest(".attribute-item").dataset.attName;
+    let field = element.dataset.field;
+    // this.actor.data.data.attriabutes[attGroupName][attName][field]
+
+    return this.actor.update({ data: { attributes: { [attGroupName]: { [attName]: { [field]: element.value }}}}})
   }
 
   /**
