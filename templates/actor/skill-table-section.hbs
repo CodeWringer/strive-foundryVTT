@@ -30,13 +30,12 @@
                     </a>
                     <input class="skill-name ambersteel-item-edit" data-field="data.name" name="skill.data.name" type="text" value="{{localize skill.data.name}}" />
                 </td>
-                <td class="pad-sm input-slim">
+                <td class="pad-sm">
                     <select>
-                        {{#each CONFIG.ambersteel.character.attributes as | name abbrev |}}
-                        <option data-attribute="{{name}}">{{localize abbrev}}</option>
+                        {{#each ../config.character.attributes as | att |}}
+                        <option data-attribute="{{att.name}}">{{localize att.abbrev}}</option>
                         {{/each}}
                     </select>
-                    {{localize skill.attributeAbbreviation}}
                 </td>
                 <td class="pad-sm input-slim">
                     <input class="skill-value ambersteel-item-edit" name="skill.data.value" data-field="data.value" type="number" value="{{skill.data.value}}" />
