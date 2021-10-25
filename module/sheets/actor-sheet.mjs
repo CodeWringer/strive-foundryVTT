@@ -1,3 +1,5 @@
+import * as Dice from "../helpers/dice.mjs";
+
 export class AmbersteelActorSheet extends ActorSheet {
 
   /** @override */
@@ -40,12 +42,11 @@ export class AmbersteelActorSheet extends ActorSheet {
     // Use a safe clone of the actor data for further operations.
     const actorData = context.actor.data;
 
-    actorData.data.skills = context.items.filter(function(item) { return item.type == "skill" && item.data.isLearning == "false" });
-    actorData.data.learningSkills = context.items.filter(function(item) { return item.type == "skill" && item.data.isLearning == "true" });
-
     // Add the actor's data to context.data for easier access, as well as flags.
     context.data = actorData.data;
     context.flags = actorData.flags;
+
+    // this._prepareItems(context);
     
     // Derived skill data. 
     for (let skill of actorData.data.skills) {
@@ -64,15 +65,7 @@ export class AmbersteelActorSheet extends ActorSheet {
   }
 
   _prepareDerivedSkillData(skill) {
-    if (skill.data.value == 0) {
-      skill.requiredSuccessses = 10
-      skill.requiredFailures = 14
-    } else {
-      let skillValue = parseInt(skill.data.value)
-      
-      skill.requiredSuccessses = (skillValue + 1) * skillValue * 2
-      skill.requiredFailures = (skillValue + 1) * skillValue * 3
-    }
+    // TODO? Currently no data to derive...
   }
 
   _prepareDerivedAttributeData(data) {
@@ -86,24 +79,15 @@ export class AmbersteelActorSheet extends ActorSheet {
       
       // Initialize attribute group object with meta-data. 
       data.attributeGroups[attGroup] = {
-        name: "ambersteel.attributeGroups." + attGroup,
-        internalName: attGroup,
+        localizableName: "ambersteel.attributeGroups." + attGroup,
+        name: attGroup,
         attributes: {}
       }
 
-      // Get derived attribute data. 
       for (let att in oAttGroup) {
         if (!oAttGroup.hasOwnProperty(att)) continue;
         
         let oAtt = oAttGroup[att]
-
-        let attValue = parseInt(oAtt.value)
-        oAtt.requiredSuccessses = (attValue + 1) * (attValue + 1) * 3
-        oAtt.requiredFailures = (attValue + 1) * (attValue + 1) * 4
-
-        oAtt.internalName = att
-        oAtt.name = "ambersteel.attributes." + att
-        oAtt.abbreviation = "ambersteel.attributeAbbreviations." + att
 
         // Add attribute object to attributeGroups for easy access.
         data.attributeGroups[attGroup].attributes[att] = oAtt
@@ -285,26 +269,11 @@ export class AmbersteelActorSheet extends ActorSheet {
     let itemId = element.closest(".item").dataset.itemId;
     let item = this.actor.items.get(itemId);
 
-    // // Handle item rolls.
-    // if (dataset.rollType) {
-    //   if (dataset.rollType == 'item') {
-    //     const itemId = element.closest('.item').dataset.itemId;
-    //     const item = this.actor.items.get(itemId);
-    //     if (item) return item.roll();
-    //   }
-    // }
-
-    // // Handle rolls that supply the formula directly.
-    // if (dataset.roll) {
-    //   let label = dataset.label ? `[ability] ${dataset.label}` : '';
-    //   let roll = new Roll(dataset.roll, this.actor.getRollData()).roll();
-    //   roll.toMessage({
-    //     speaker: ChatMessage.getSpeaker({ actor: this.actor }),
-    //     flavor: label,
-    //     rollMode: game.settings.get('core', 'rollMode'),
-    //   });
-    //   return roll;
-    // }
+    Dice.rollDice({ 
+      actionName: event.currentTarget.dataset.actionName,
+      actionValue: event.currentTarget.dataset.actionValue, 
+      actor: this.actor  
+    });
   }
 
   /**
@@ -314,25 +283,11 @@ export class AmbersteelActorSheet extends ActorSheet {
    */
   _onAttributeRoll(event) {
     event.preventDefault();
-    const element = event.currentTarget;
-    const attItemElement = element.closest('.attribute-item');
-    const attName = attItemElement.dataset.attName;
-    const attGroupName = attItemElement.dataset.attGroupName;
-    const data = this.actor.data.data;
-
-    // Get attribute to roll. 
-    let attValue = data.attributes[attGroupName][attName].value;
-    // Get localized attribute name.
-    let attNameString = game.i18n.localize("ambersteel.attributes." + attName);
-
-    // Make the roll. 
-    let roll = new Roll(attValue + "d6", {}).roll();
-    roll.toMessage({
-      speaker: ChatMessage.getSpeaker({ actor: this.actor }),
-      flavor: attNameString,
-      rollMode: game.settings.get('core', 'rollMode'),
+    Dice.rollDice({ 
+      actionName: event.currentTarget.dataset.actionName,
+      actionValue: event.currentTarget.dataset.actionValue, 
+      actor: this.actor  
     });
-    return roll;
   }
 
 }

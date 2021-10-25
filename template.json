@@ -81,8 +81,6 @@
             }
           }
         },
-        "skills": [],
-        "learningSkills": [],
         "health": {
           "maxHP": 0,
           "HP": 0,

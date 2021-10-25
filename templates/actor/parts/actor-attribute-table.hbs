@@ -6,7 +6,7 @@
                 <th class="attribute-column-roll"></th>
                 {{/if}}
                 <th class="attribute-column-name">
-                    {{localize attGroup.name}}
+                    {{localize attGroup.localizableName}}
                 </th>
                 <th class="attribute-column-abbreviation"></th>
                 <th class="attribute-column-level">
@@ -23,16 +23,16 @@
                 </th>
             </tr>
             {{#each attGroup.attributes as | att |}}
-            <tr class="item attribute-item" data-att-group-name="{{../attGroup.internalName}}" data-att-name="{{att.internalName}}">
+            <tr class="item attribute-item" data-att-group-name="{{../attGroup.name}}" data-att-name="{{att.name}}">
                 {{#if ../isOwner}}
                 <td class="attribute-column-roll">
-                    <a class="ambersteel-attribute-roll roll-button pad-sm button" title="{{localize ambersteel.labels.roll}}">
+                    <a class="ambersteel-attribute-roll roll-button pad-sm button" data-action-value="{{att.value}}" data-action-name="{{localize att.localizableName}}" title="{{localize ambersteel.labels.roll}}">
                         <i class="fas fa-dice-three"></i>
                     </a>
                 </td>
                 {{/if}}
                 <td class="attribute-column-name flex fancy-font">
-                    {{localize att.name}}
+                    {{localize att.localizableName}}
                 </td>
                 <td class="attribute-column-abbreviation fancy-font">
                     [{{localize att.abbreviation}}]

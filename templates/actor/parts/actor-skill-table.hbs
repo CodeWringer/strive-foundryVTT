@@ -1,4 +1,5 @@
 <section>
+    {{#log skills}}{{/log}}
     <table class="skill-table">
         <tbody>
             <tr class="fancy-font">
@@ -27,11 +28,11 @@
                 <th class="skill-column-delete"></th>
                 {{/if}}
             </tr>
-            {{#each skills as |skill|}}
+            {{#each skills as | skill |}}
             <tr class="item skill-item" data-item-id="{{skill._id}}">
                 {{#if ../isOwner}}
                 <td class="skill-column-roll">
-                    <a class="ambersteel-item-roll roll-button pad-sm button" title="{{localize ambersteel.labels.roll}}">
+                    <a class="ambersteel-item-roll roll-button pad-sm button" data-action-value="{{skill.data.value}}" data-action-name="{{skill.data.name}}" title="{{localize ambersteel.labels.roll}}">
                         <i class="fas fa-dice-three"></i>
                     </a>
                 </td>
