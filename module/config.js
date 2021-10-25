@@ -43,51 +43,51 @@ ambersteel.character = {
     attributes: {
         agility: {
             name: "ambersteel.attributes.agility",
-            abbrev: "ambersteel.attributeAbbrevs.agility"
+            abbrev: "ambersteel.attributeAbbreviations.agility"
         },
         endurance: {
             name: "ambersteel.attributes.endurance",
-            abbrev: "ambersteel.attributeAbbrevs.endurance"
+            abbrev: "ambersteel.attributeAbbreviations.endurance"
         },
         perception: {
             name: "ambersteel.attributes.perception",
-            abbrev: "ambersteel.attributeAbbrevs.perception"
+            abbrev: "ambersteel.attributeAbbreviations.perception"
         },
         strength: {
             name: "ambersteel.attributes.strength",
-            abbrev: "ambersteel.attributeAbbrevs.strength"
+            abbrev: "ambersteel.attributeAbbreviations.strength"
         },
         toughness: {
             name: "ambersteel.attributes.toughness",
-            abbrev: "ambersteel.attributeAbbrevs.toughness"
+            abbrev: "ambersteel.attributeAbbreviations.toughness"
         },
         intelligence: {
             name: "ambersteel.attributes.intelligence",
-            abbrev: "ambersteel.attributeAbbrevs.intelligence"
+            abbrev: "ambersteel.attributeAbbreviations.intelligence"
         },
         wisdom: {
             name: "ambersteel.attributes.wisdom",
-            abbrev: "ambersteel.attributeAbbrevs.wisdom"
+            abbrev: "ambersteel.attributeAbbreviations.wisdom"
         },
         empathy: {
             name: "ambersteel.attributes.empathy",
-            abbrev: "ambersteel.attributeAbbrevs.empathy"
+            abbrev: "ambersteel.attributeAbbreviations.empathy"
         },
         oratory: {
             name: "ambersteel.attributes.oratory",
-            abbrev: "ambersteel.attributeAbbrevs.oratory"
+            abbrev: "ambersteel.attributeAbbreviations.oratory"
         },
         willpower: {
             name: "ambersteel.attributes.willpower",
-            abbrev: "ambersteel.attributeAbbrevs.willpower"
+            abbrev: "ambersteel.attributeAbbreviations.willpower"
         },
         arcana: {
             name: "ambersteel.attributes.arcana",
-            abbrev: "ambersteel.attributeAbbrevs.arcana"
+            abbrev: "ambersteel.attributeAbbreviations.arcana"
         },
         magicSense: {
             name: "ambersteel.attributes.magicSense",
-            abbrev: "ambersteel.attributeAbbrevs.magicSense"
+            abbrev: "ambersteel.attributeAbbreviations.magicSense"
         }
     },
     biography: {
