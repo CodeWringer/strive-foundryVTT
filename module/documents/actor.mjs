@@ -30,7 +30,7 @@ export class AmbersteelActor extends Actor {
   prepareDerivedData() {
     const actorData = this.data;
     const data = actorData.data;
-    const flags = actorData.flags.boilerplate || {};
+    const flags = actorData.flags.ambersteel || {};
 
     this._prepareAttributesData(actorData);
     this._prepareSkillsData(actorData);
