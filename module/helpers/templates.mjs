@@ -19,5 +19,7 @@
     "systems/ambersteel/templates/actor/parts/actor-health.hbs",
     "systems/ambersteel/templates/actor/parts/actor-possessions.hbs",
     "systems/ambersteel/templates/actor/parts/actor-biography.hbs",
+    // Dice.
+    "systems/ambersteel/templates/dice/roll.hbs",
   ]);
 };

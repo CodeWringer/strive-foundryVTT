@@ -283,8 +283,11 @@ export class AmbersteelActorSheet extends ActorSheet {
    */
   _onAttributeRoll(event) {
     event.preventDefault();
+    let attName = event.currentTarget.dataset.actionName;
+    let oAtt = this.actor._getAttributeForName(attName);
+    let localizedAttName = game.i18n.localize(oAtt.localizableName);
     Dice.rollDice({ 
-      actionName: event.currentTarget.dataset.actionName,
+      actionName: localizedAttName,
       actionValue: event.currentTarget.dataset.actionValue, 
       actor: this.actor  
     });

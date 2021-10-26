@@ -109,6 +109,12 @@
       "miFPAbbreviation": "miFP",
       "maFPAbbreviation": "maFP",
       "AFPAbbreviation": "AFP"
+    },
+    "roll": {
+      "success": "Success",
+      "failure": "Failure",
+      "degreeOfSuccess": "Degree of Success",
+      "degreeOfFailure": "Degree of Failure"
     }
   }
 }
