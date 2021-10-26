@@ -130,8 +130,10 @@ export class AmbersteelActor extends Actor {
    * @param attName {String} Internal name of an attribute, e.g. 'magicSense'. 
    */
   _getAttributeForName(attName) {
-    for (let attGroupName in this.data.attributes) {
-      let oAtt = this.data.attributes[attGroupName][attName];
+    const data = this.data.data;
+
+    for (let attGroupName in data.attributes) {
+      let oAtt = data.attributes[attGroupName][attName];
       if (oAtt) {
         return oAtt;
       }
