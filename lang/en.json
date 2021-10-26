@@ -114,7 +114,10 @@
       "success": "Success",
       "failure": "Failure",
       "degreeOfSuccess": "Degree of Success",
-      "degreeOfFailure": "Degree of Failure"
+      "degreeOfFailure": "Degree of Failure",
+      "numberOfDice": "Number of dice",
+      "obstacle": "Obstacle",
+      "obstacleAbbreviation": "Ob"
     }
   }
 }

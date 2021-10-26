@@ -1,0 +1,56 @@
+.dice-rolls-container {
+    overflow: hidden;
+}
+
+ol.dice-rolls {
+    list-style: none;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+li.die.d6.roll-obstacle {
+    width: auto;
+    padding: 0 3px;
+    background-color: transparent;
+}
+
+.dice-rolls li.roll {
+    position: relative;
+    width: 24px;
+    line-height: 24px;
+    float: left;
+    margin-right: 1px;
+    font-size: 16px;
+    color: #000;
+    background-color: rgba(0, 0, 0, 0.12);
+    border-radius: 3px;
+    font-weight: bold;
+    text-align: center;
+    margin: 2px;
+
+}
+li.roll.die.d6.roll-failure {
+    color: #712625;
+}
+li.roll.die.d6.roll-success {
+    color: #18520b;
+}
+
+.dice-result {
+    font-size: 1.1rem;
+    width: 100%;
+    display: block;
+    border-radius: 5px;
+    text-align: center;
+    
+    &.failure {
+        background-color: #8200002e;
+    }
+
+    &.success {
+        background-color: #0082072e;
+    }
+}

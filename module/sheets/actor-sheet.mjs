@@ -13,11 +13,6 @@ export class AmbersteelActorSheet extends ActorSheet {
     });
   }
 
-  /** @override */
-  get template() {
-    return `systems/ambersteel/templates/actor/actor-character-sheet.hbs`;
-  }
-
   /* -------------------------------------------- */
 
   itemContextMenu = [
@@ -46,26 +41,12 @@ export class AmbersteelActorSheet extends ActorSheet {
     context.data = actorData.data;
     context.flags = actorData.flags;
 
-    // this._prepareItems(context);
-    
-    // Derived skill data. 
-    for (let skill of actorData.data.skills) {
-      this._prepareDerivedSkillData(skill);
-    }
-    for (let skill of actorData.data.learningSkills) {
-      this._prepareDerivedSkillData(skill);
-    }
-
-    // Derived attribute data. 
+    this._prepareDerivedItemData(context);
     this._prepareDerivedAttributeData(context);
 
     context.config = CONFIG.ambersteel;
 
     return context;
-  }
-
-  _prepareDerivedSkillData(skill) {
-    // TODO? Currently no data to derive...
   }
 
   _prepareDerivedAttributeData(data) {
@@ -102,7 +83,7 @@ export class AmbersteelActorSheet extends ActorSheet {
    *
    * @return {undefined}
    */
-  _prepareItems(context) {
+  _prepareDerivedItemData(context) {
     // Initialize containers.
     const possessions = [];
     const skills = [];
@@ -114,7 +95,7 @@ export class AmbersteelActorSheet extends ActorSheet {
       i.img = i.img || DEFAULT_TOKEN;
 
       // Possessions
-      if (i.type === 'item') {
+      if (i.type === 'possession') {
         possessions.push(i);
       }
       // Skills
@@ -286,9 +267,16 @@ export class AmbersteelActorSheet extends ActorSheet {
     let attName = event.currentTarget.dataset.actionName;
     let oAtt = this.actor._getAttributeForName(attName);
     let localizedAttName = game.i18n.localize(oAtt.localizableName);
+
+    // TODO: Modal dialog to enter obstacle and bonus dice. 
+    // renderTemplate(pathToTemplate).then(html => { new Dialog({ title: "", content: html, buttons: { ... } }).render(true);
+
+    // Do roll and display result. 
     Dice.rollDice({ 
       actionName: localizedAttName,
       actionValue: event.currentTarget.dataset.actionValue, 
+      obstacle: 0,
+      bonusDice: 0,
       actor: this.actor  
     });
   }

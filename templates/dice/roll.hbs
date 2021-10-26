@@ -1,27 +1,28 @@
-<div class="dice-roll">
-    {{#if flavor}}
-    <div class="dice-flavor">{{flavor}}</div>
-    {{/if}}
-    <div class="dice-formula-basis">
-        {{#if obstacle}}
-        <div class="dice-obstacle">{{obstacle}}</div>
-        {{/if}}
-        <div class="dice-formula">{{formula}}</div>
+{{!-- Parameters:
+resultsForDisplay: [String],
+isSuccess: Boolean
+degree: [String|Number]
+numberOfDice: String|Number
+--}}
+<div>
+    <div class="dice-number">
+        {{localize "ambersteel.roll.numberOfDice"}}: {{numberOfDice}}
     </div>
-    <div class="dice-rolls">
+    <div class="dice-rolls-container">
         <ol class="dice-rolls">
-        {{#each results as | result |}}
-            <li class="roll">{{{die.number}}}</li>
+        {{#each resultsForDisplay as | resultForDisplay |}}
+            <li class="roll die d6 {{resultForDisplay.cssClass}}">{{resultForDisplay.content}}</li>
         {{/each}}
         </ol>
     </div>
-    <div class="dice-result">
-        <div class="dice-success">
-            {{#if isSuccess}}
-            <span>{{localize "ambersteel.roll.success"}}!</span>
-            {{else}}
-            <span>{{localize "ambersteel.roll.failure"}}!</span>
-            {{/if}}
+    <div class="dice-result-container">
+        {{#if isSuccess}}
+        <div class="dice-result success">
+        {{localize "ambersteel.roll.success"}}!
+        {{else}}
+        <div class="dice-result failure">
+        {{localize "ambersteel.roll.failure"}}!
+        {{/if}}
         </div>
         <div class="dice-degree">
             {{#if isSuccess}}
