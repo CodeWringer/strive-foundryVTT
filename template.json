@@ -140,8 +140,7 @@
       "relatedAttribute": "",
       "value": 0,
       "successes": 0,
-      "failures": 0,
-      "isLearning": false
+      "failures": 0
     },
     "fateCard": {
       "templates": ["base"],

@@ -9,9 +9,9 @@
         </div>
         <div>
             {{!-- Learning Skills --}}
-            {{> "systems/ambersteel/templates/actor/skill-table-section.hbs" name="ambersteel.labels.learningSkill" skills=data.learningSkills isLearning=true}}
+            {{> "systems/ambersteel/templates/actor/skill-table-section.hbs" name="ambersteel.labels.learningSkill" skills=data.learningSkills newItemValue="0"}}
             {{!-- Known Skills --}}
-            {{> "systems/ambersteel/templates/actor/skill-table-section.hbs" name="ambersteel.labels.knownSkill" skills=data.skills isLearning=false}}
+            {{> "systems/ambersteel/templates/actor/skill-table-section.hbs" name="ambersteel.labels.knownSkill" skills=data.skills newItemValue="1"}}
         </div>
     </div>
 </section>

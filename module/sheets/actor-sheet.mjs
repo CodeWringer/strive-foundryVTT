@@ -100,7 +100,7 @@ export class AmbersteelActorSheet extends ActorSheet {
       }
       // Skills
       else if (i.type === 'skill') {
-        if (i.isLearning) {
+        if (parseInt(i.value) == 0) {
           learningSkills.push(i);
         } else {
           skills.push(i);
@@ -263,8 +263,9 @@ export class AmbersteelActorSheet extends ActorSheet {
 
     // Determine number of dice to roll. 
     // If the skill is still being learned, use the related attribute value for the roll, instead. 
+    // Any skill with a level of 0 is one being learned. 
     let numberOfDice = parseInt(event.currentTarget.dataset.actionValue);
-    if (oSkill.data.data.isLearning == "true") {
+    if (parseInt(oSkill.data.data.value) == 0) {
       let relatedAttName = oSkill.data.data.relatedAttribute;
       let oAtt = this.actor._getAttributeForName(relatedAttName);
       numberOfDice = oAtt.value;

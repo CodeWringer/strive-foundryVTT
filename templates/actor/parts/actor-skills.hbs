@@ -1,6 +1,6 @@
 <section>
     {{!-- Learning Skills --}}
-    {{> "systems/ambersteel/templates/actor/components/component-skill-table.hbs" name="ambersteel.labels.learningSkill" skills=data.learningSkills isLearning=true isOwner=owner}}
+    {{> "systems/ambersteel/templates/actor/components/component-skill-table.hbs" name="ambersteel.labels.learningSkill" skills=data.learningSkills newItemValue="0" isOwner=owner}}
     {{!-- Known Skills --}}
-    {{> "systems/ambersteel/templates/actor/components/component-skill-table.hbs" name="ambersteel.labels.knownSkill" skills=data.skills isLearning=false isOwner=owner}}
+    {{> "systems/ambersteel/templates/actor/components/component-skill-table.hbs" name="ambersteel.labels.knownSkill" skills=data.skills newItemValue="1" isOwner=owner}}
 </section>

@@ -77,10 +77,10 @@ export class AmbersteelActor extends Actor {
    * @param actorData 
    */
   _prepareSkillsData(actorData) {
-    actorData.data.skills = (actorData.items.filter(function(item) { return item.data.type == "skill" && item.data.data.isLearning == "false" }))
+    actorData.data.skills = (actorData.items.filter(function(item) { return item.data.type == "skill" && parseInt(item.data.data.value) > 0 }))
     .map((item) => { return item.data });
 
-    actorData.data.learningSkills = (actorData.items.filter(function(item) { return item.data.type == "skill" && item.data.data.isLearning == "true" }))
+    actorData.data.learningSkills = (actorData.items.filter(function(item) { return item.data.type == "skill" && parseInt(item.data.data.value) == 0 }))
     .map((item) => { return item.data });
 
     for (let skill of actorData.data.skills) {
