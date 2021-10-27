@@ -129,8 +129,8 @@ export class AmbersteelActorSheet extends ActorSheet {
     html.find(".ambersteel-item-show").click(this._onItemShow.bind(this));
 
     // -------------------------------------------------------------
-    // Everything below here is only needed if the sheet is editable
-    if (!this.isEditable) return;
+    // Everything below here is only needed if the user is the owner or GM. 
+    if (!this.actor.isOwner) return;
     
     // Drag events for macros.
     if (this.actor.isOwner) {
@@ -142,11 +142,15 @@ export class AmbersteelActorSheet extends ActorSheet {
       });
     }
 
-    // Roll item. 
-    html.find(".ambersteel-item-roll").click(this._onItemRoll.bind(this));
+    // Roll skill. 
+    html.find(".ambersteel-skill-roll").click(this._onSkillRoll.bind(this));
 
     // Roll attribute. 
     html.find(".ambersteel-attribute-roll").click(this._onAttributeRoll.bind(this));
+
+    // -------------------------------------------------------------
+    // Everything below here is only needed if the sheet is editable. 
+    if (!this.isEditable) return;
 
     // Context menu.
     new ContextMenu(html, ".skill-item", this.itemContextMenu);
@@ -240,21 +244,48 @@ export class AmbersteelActorSheet extends ActorSheet {
   }
 
   /**
-   * Item roll handler. 
+   * Skill roll handler. 
    * @param {Event} event 
    * @private
    */
-  _onItemRoll(event) {
+  async _onSkillRoll(event) {
     event.preventDefault();
     let element = event.currentTarget;
-    let itemId = element.closest(".item").dataset.itemId;
-    let item = this.actor.items.get(itemId);
+    let dataset = element.closest(".item").dataset;
+    let itemId = dataset.itemId;
+    let oSkill = this.actor.items.get(itemId);
+    let localizedActionName = game.i18n.localize(event.currentTarget.dataset.actionName);
 
-    Dice.rollDice({ 
-      actionName: event.currentTarget.dataset.actionName,
-      actionValue: event.currentTarget.dataset.actionValue, 
+    // Modal dialog to enter obstacle and bonus dice. 
+    let rollInputData = await Dice.queryRollData();
+
+    if (!rollInputData.confirmed) return;
+
+    // Determine number of dice to roll. 
+    // If the skill is still being learned, use the related attribute value for the roll, instead. 
+    let numberOfDice = parseInt(event.currentTarget.dataset.actionValue);
+    if (oSkill.data.data.isLearning) {
+      let relatedAttName = oSkill.data.data.relatedAttribute;
+      let oAtt = this.actor._getAttributeForName(relatedAttName);
+      numberOfDice = oAtt.value;
+    }
+    
+    // Do roll. 
+    let result = await Dice.rollDice({
+      actionName: localizedActionName,
+      actionValue: numberOfDice, 
+      obstacle: rollInputData.obstacle,
+      bonusDice: rollInputData.bonusDice,
       actor: this.actor  
     });
+
+    // Note result towards skill progress. 
+    this.actor.progressSkill({ skillObject: oSkill, success: result.rollResults.isSuccess });
+
+    // TODO: Bug: updated actor.data is not updated on sheet
+
+    // Display roll result. 
+    Dice.sendDiceResultToChat({ renderedContent: result.renderedContent, flavor: result.flavor, actor: result.actor });
   }
 
   /**

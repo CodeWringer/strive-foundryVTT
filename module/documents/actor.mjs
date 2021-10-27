@@ -145,9 +145,16 @@ export class AmbersteelActor extends Actor {
    * @param opts {Object} Options object. 
    * @param opts.attName {String} Internal name of an attribute, e.g. 'magicSense'. 
    * @param opts.attObject {Object} Attribute object. Takes precedence over 'attName'. 
-   * @param opts.newValue {Number} Value to set the attribute to, e.g. 0. 
+   * @param opts.newValue {Number} Value to set the attribute to, e.g. 0. Default 0
    */
-  setAttributeLevel(opts = {attName: undefined, attObject: undefined, newValue: 0}) {
+  setAttributeLevel(opts = {attName: undefined, attObject: undefined, newValue: undefined}) {
+    opts = {
+      attName: undefined,
+      attObject: undefined,
+      newValue: 0,
+      ...opts
+    };
+
     let oAtt = opts.attObject ?? this._getAttributeForName(opts.attName);
     oAtt.value = newValue;
 
@@ -189,13 +196,67 @@ export class AmbersteelActor extends Actor {
   }
 
   /**
-   * Sets the level of a skill with the given id. 
-   * @param id {String} Id of a skill. 
-   * @param newValue {Number} Value to set the skill to, e.g. 0. 
+   * Returns a skill item of this actor with the given id. 
+   * @param id Id of a skill item. 
+   * @returns {Object} the skill item. 
    */
-  setSkillLevel(id, newValue = 0) {
-    for (let skill in this.data.skills) {
-      // TODO
+  _getSkillForId(id) {
+    return this.items.get(id);
+  }
+
+  /**
+   * Sets the level of a skill with the given id. 
+   * @param opts {Object} Options object. 
+   * @param opts.skillId {String} Id of the skill. 
+   * @param opts.attObject {Object} Skill item object. Takes precedence over 'skillId'. 
+   * @param opts.newValue {Number} Value to set the skill to, e.g. 0. Default 0
+   */
+  setSkillLevel(opts = {skillId: undefined, skillObject: undefined, newValue: undefined}) {
+    opts = {
+      skillId: undefined,
+      skillObject: undefined,
+      newValue: 0,
+      ...opts
+    };
+
+    let oSkill = opts.skillObject ?? this._getSkillForId(opts.skillId);
+    oSkill.value = newValue;
+
+    this._prepareSkillsData(this.data);
+  }
+
+  /**
+   * Adds success/failure progress to a skill. 
+   * 
+   * Also auto-levels up the skill, if opts.allowLevel is set to true. 
+   * @param opts {Object} Options object. 
+   * @param opts.skillId {String} Id of a skill item. 
+   * @param opts.skillObject {Object} Skill object. Takes precedence over 'skillId'. 
+   * @param opts.success {Boolean} If true, will add 1 success, else will add 1 failure. Default false
+   * @param opts.success {Boolean} If true, will auto-level up. Default true
+   */
+  progressSkill(opts = {skillId: undefined, skillObject: undefined, success: undefined, autoLevel: undefined}) {
+    opts = {
+      skillId: undefined,
+      skillObject: undefined,
+      success: false,
+      autoLevel: true,
+      ...opts
+    }
+    let oSkill = opts.skillObject ?? this._getSkillForId(opts.skillId);
+    let skillData = oSkill.data.data;
+
+    if (opts.success) {
+      skillData.successes = parseInt(skillData.successes) + 1;
+    } else {
+      skillData.failures = parseInt(skillData.failures) + 1;
+    }
+
+    if (opts.autoLevel) {
+      if (parseInt(skillData.successes) >= parseInt(skillData.requiredSuccessses)
+      && parseInt(skillData.failures) >= parseInt(skillData.requiredFailures)) {
+        skillData.value = parseInt(skillData.value) + 1;
+      }
     }
   }
 }
