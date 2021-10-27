@@ -264,7 +264,7 @@ export class AmbersteelActorSheet extends ActorSheet {
     // Determine number of dice to roll. 
     // If the skill is still being learned, use the related attribute value for the roll, instead. 
     let numberOfDice = parseInt(event.currentTarget.dataset.actionValue);
-    if (oSkill.data.data.isLearning) {
+    if (oSkill.data.data.isLearning == "true") {
       let relatedAttName = oSkill.data.data.relatedAttribute;
       let oAtt = this.actor._getAttributeForName(relatedAttName);
       numberOfDice = oAtt.value;
