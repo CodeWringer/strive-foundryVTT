@@ -262,7 +262,7 @@ export class AmbersteelActorSheet extends ActorSheet {
    * @param {Event} event 
    * @private
    */
-  _onAttributeRoll(event) {
+  async _onAttributeRoll(event) {
     event.preventDefault();
     let attName = event.currentTarget.dataset.actionName;
     let oAtt = this.actor._getAttributeForName(attName);
@@ -271,14 +271,22 @@ export class AmbersteelActorSheet extends ActorSheet {
     // TODO: Modal dialog to enter obstacle and bonus dice. 
     // renderTemplate(pathToTemplate).then(html => { new Dialog({ title: "", content: html, buttons: { ... } }).render(true);
 
-    // Do roll and display result. 
-    Dice.rollDice({ 
+    // Do roll. 
+    let result = await Dice.rollDice({
       actionName: localizedAttName,
       actionValue: event.currentTarget.dataset.actionValue, 
       obstacle: 0,
       bonusDice: 0,
       actor: this.actor  
     });
+
+    // Note result towards attribute progress. 
+    this.actor.progressAttribute({ attObject: oAtt, success: result.rollResults.isSuccess });
+
+    // TODO: Bug: updated actor.data is not updated on sheet
+
+    // Display roll result. 
+    Dice.sendDiceResultToChat({ renderedContent: result.renderedContent, flavor: result.flavor, actor: result.actor });
   }
 
 }

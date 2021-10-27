@@ -164,7 +164,14 @@ export class AmbersteelActor extends Actor {
    * @param opts.success {Boolean} If true, will add 1 success, else will add 1 failure. Default false
    * @param opts.success {Boolean} If true, will auto-level up. Default true
    */
-  progressAttribute(opts = {attName: undefined, attObject: undefined, success: false, autoLevel: true}) {
+  progressAttribute(opts = {attName: undefined, attObject: undefined, success: undefined, autoLevel: undefined}) {
+    opts = {
+      attName: undefined,
+      attObject: undefined,
+      success: false,
+      autoLevel: true,
+      ...opts
+    }
     let oAtt = opts.attObject ?? this._getAttributeForName(opts.attName);
 
     if (opts.success) {

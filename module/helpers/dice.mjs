@@ -1,3 +1,18 @@
+/**
+ * 
+ * @param ops 
+ * @returns {Object} An object with the following properties: 
+ * renderedContent {String} The fully rendered chat message html. 
+ * flavor {String} 
+ * actor {Object}
+ * rollResults {Object} An object with the following properties: 
+ * rollResults.numberOfDice {Number}
+ * rollResults.obstacle {Number}
+ * rollResults.positives {[Number]}
+ * rollResults.negatives {[Number]}
+ * rollResults.isSuccess {Boolean}
+ * rollResults.degree {Number}
+ */
 export async function rollDice(ops = {
     actionName: "",
     actionValue: 0,
@@ -52,22 +67,39 @@ export async function rollDice(ops = {
     let isSuccess = positives.length >= obstacle;
     let degree = isSuccess ? positives.length - obstacle : negatives.length - obstacle;
 
-    // Render the results. 
-    let renderedContent = await renderTemplate(messageTemplate, { 
+    let rollResults = {
         numberOfDice: numberOfDice,
         obstacle: obstacle,
         positives: positives,
         negatives: negatives,
-        resultsForDisplay: resultsForDisplay,
         isSuccess: isSuccess,
         degree: degree
+    };
+
+    // Render the results. 
+    let renderedContent = await renderTemplate(messageTemplate, {
+        ...rollResults, 
+        resultsForDisplay: resultsForDisplay,
     });
 
-     // Create a new chat message. 
-    return ChatMessage.create({
-        speaker: ChatMessage.getSpeaker({ actor: ops.actor }),
+    return {
+        renderedContent: renderedContent,
         flavor: ops.actionName,
-        content: renderedContent
+        actor: ops.actor,
+        rollResults: rollResults
+    }
+}
+
+/**
+ * Creates a new ChatMessage to display dice roll results. 
+ * @param args 
+ */
+export async function sendDiceResultToChat(args = { renderedContent: "", flavor: "", actor: {} }) {
+    return ChatMessage.create({
+        speaker: ChatMessage.getSpeaker({ actor: args.actor }),
+        flavor: args.flavor,
+        content: args.renderedContent,
+        sound: "../sounds/dice.wav"
     });
 }
 
