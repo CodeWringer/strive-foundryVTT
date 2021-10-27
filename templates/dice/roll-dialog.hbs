@@ -1,0 +1,16 @@
+{{!-- Parameters:
+obstacle {Number}
+bonusDice {Number}
+--}}
+<section>
+  <div class="flex sheet-block">
+    <div class="flex flex-column">
+      <label class="line-height fancy-font pad-sm" for="obstacle">{{localize "ambersteel.roll.obstacleAbbreviation"}}</label>
+      <label class="line-height fancy-font pad-sm" for="bonusDice">{{localize "ambersteel.roll.bonusDice"}}</label>
+    </div>
+    <div class="flex flex-column flex-grow">
+      <input class="line-height pad-sm obstacle" type="number" name="obstacle" value="{{obstacle}}" />
+      <input class="line-height pad-sm bonus-dice" type="number" name="bonusDice" value="{{bonusDice}}" />
+    </div>
+  </div>
+</section>

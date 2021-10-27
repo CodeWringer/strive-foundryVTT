@@ -268,15 +268,17 @@ export class AmbersteelActorSheet extends ActorSheet {
     let oAtt = this.actor._getAttributeForName(attName);
     let localizedAttName = game.i18n.localize(oAtt.localizableName);
 
-    // TODO: Modal dialog to enter obstacle and bonus dice. 
-    // renderTemplate(pathToTemplate).then(html => { new Dialog({ title: "", content: html, buttons: { ... } }).render(true);
+    // Modal dialog to enter obstacle and bonus dice. 
+    let rollInputData = await Dice.queryRollData();
+
+    if (!rollInputData.confirmed) return;
 
     // Do roll. 
     let result = await Dice.rollDice({
       actionName: localizedAttName,
       actionValue: event.currentTarget.dataset.actionValue, 
-      obstacle: 0,
-      bonusDice: 0,
+      obstacle: rollInputData.obstacle,
+      bonusDice: rollInputData.bonusDice,
       actor: this.actor  
     });
 

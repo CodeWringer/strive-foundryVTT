@@ -21,5 +21,6 @@
     "systems/ambersteel/templates/actor/parts/actor-biography.hbs",
     // Dice.
     "systems/ambersteel/templates/dice/roll.hbs",
+    "systems/ambersteel/templates/dice/roll-dialog.hbs",
   ]);
 };

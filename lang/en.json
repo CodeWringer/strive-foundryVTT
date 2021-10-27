@@ -100,7 +100,9 @@
       "tabFate": "Fate",
       "tabHealth": "Health",
       "tabPossessions": "Possessions",
-      "tabBiography": "Biography"
+      "tabBiography": "Biography",
+      "confirm": "Confirm",
+      "cancel": "Cancel"
     },
     "fateSystem": {
       "miFP": "Minor Fate Points",
@@ -117,7 +119,9 @@
       "degreeOfFailure": "Degree of Failure",
       "numberOfDice": "Number of dice",
       "obstacle": "Obstacle",
-      "obstacleAbbreviation": "Ob"
+      "obstacleAbbreviation": "Ob",
+      "bonusDice": "Bonus Dice",
+      "titleDialogQuery": "Enter obstacle and bonus dice for roll"
     }
   }
 }

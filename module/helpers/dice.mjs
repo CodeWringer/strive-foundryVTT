@@ -110,3 +110,53 @@ export async function sendDiceResultToChat(args = { renderedContent: "", flavor:
 export function isPositive(face) {
     return parseInt(face) === 6;
 }
+
+/**
+ * Shows a dialog to the user to enter an obstacle and bonus dice number. 
+ * @returns {Promise} Resolves, when the dialog is closed. 
+ */
+export async function queryRollData() {
+    const dialogTemplate = "systems/ambersteel/templates/dice/roll-dialog.hbs";
+
+    let dialogData = {
+        obstacle: 0,
+        bonusDice: 0,
+        confirmed: false
+    };
+
+    return new Promise(async (resolve, reject) => {
+
+        // Render template. 
+        let renderedContent = await renderTemplate(dialogTemplate, dialogData);
+
+        let dialog = new Dialog({
+            title: game.i18n.localize("ambersteel.roll.titleDialogQuery"),
+            content: renderedContent,
+            buttons: {
+                confirm: {
+                    icon: '<i class="fas fa-check"></i>',
+                    label: game.i18n.localize("ambersteel.labels.confirm"),
+                    callback: () => {
+                        dialogData.confirmed = true;
+                    }
+                },
+                cancel: {
+                    icon: '<i class="fas fa-times"></i>',
+                    label: game.i18n.localize("ambersteel.labels.cancel"),
+                    callback: () => {}
+                }
+            },
+            default: "confirm",
+            render: html => {},
+            close: html => {
+                resolve({
+                    obstacle: parseInt(html.find(".obstacle")[0].value),
+                    bonusDice: parseInt(html.find(".bonus-dice")[0].value),
+                    confirmed: dialogData.confirmed
+                });
+            }
+        });
+        dialog.render(true);
+
+    });
+}
