@@ -79,6 +79,12 @@ Handlebars.registerHelper('log', function(js, content) {
 });
 
 /* -------------------------------------------- */
+/*  Handlebars Partials                         */
+/* -------------------------------------------- */
+
+Handlebars.registerPartial('numberSpinner', `{{#> "systems/ambersteel/templates/actor/components/number-spinner.hbs"}}{{> @partial-block }}{{/"systems/ambersteel/templates/actor/components/number-spinner.hbs"}}`);
+
+/* -------------------------------------------- */
 /*  Ready Hook                                  */
 /* -------------------------------------------- */
 

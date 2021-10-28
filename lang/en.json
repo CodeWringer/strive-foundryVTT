@@ -102,7 +102,9 @@
       "tabPossessions": "Possessions",
       "tabBiography": "Biography",
       "confirm": "Confirm",
-      "cancel": "Cancel"
+      "cancel": "Cancel",
+      "increment": "Increment",
+      "decrement": "Decrement"
     },
     "fateSystem": {
       "miFP": "Minor Fate Points",

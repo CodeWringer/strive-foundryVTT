@@ -55,7 +55,9 @@ skills: [Object]
                 </td>
                 <td class="skill-column-level">
                     {{#if ../isOwner}}
-                    <input class="skill-value ambersteel-item-edit" name="skill.data.value" data-field="data.value" type="number" value="{{skill.data.value}}" />
+                    {{#> numberSpinner}}
+                    <input class="skill-value ambersteel-item-edit spinner" name="skill.data.value" data-field="data.value" type="number" value="{{skill.data.value}}" />
+                    {{/numberSpinner}}
                     {{else}}
                     {{skill.data.value}}
                     {{/if}}

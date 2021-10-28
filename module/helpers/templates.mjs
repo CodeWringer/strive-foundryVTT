@@ -5,10 +5,10 @@
  */
  export const preloadHandlebarsTemplates = async function() {
   return loadTemplates([
-
     // Components.
     "systems/ambersteel/templates/actor/components/component-attribute-table.hbs",
     "systems/ambersteel/templates/actor/components/component-skill-table.hbs",
+    "systems/ambersteel/templates/actor/components/number-spinner.hbs",
     // Actor partials.
     "systems/ambersteel/templates/actor/parts/actor-personals.hbs",
     "systems/ambersteel/templates/actor/parts/actor-basics.hbs",
