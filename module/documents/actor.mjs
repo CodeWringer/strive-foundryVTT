@@ -3,6 +3,24 @@
  */
 export class AmbersteelActor extends Actor {
 
+  /**
+   * Returns the array of skill items. 
+   */
+  get skills() {
+    return (this.data.items.filter(item => { 
+      return item.data.type == "skill" && parseInt(item.data.data.value) > 0 
+    })).map(it => it.data);
+  }
+
+  /**
+   * Returns the array of learning skill items. 
+   */
+  get learningSkills() {
+    return (this.data.items.filter(item => { 
+      return item.data.type == "skill" && parseInt(item.data.data.value) == 0 
+    })).map(it => it.data);
+  }
+
   /** @override */
   prepareData() {
     // Prepare data for the actor. Calling the super version of this executes
@@ -32,32 +50,32 @@ export class AmbersteelActor extends Actor {
     const data = actorData.data;
     const flags = actorData.flags.ambersteel || {};
 
-    this._prepareAttributesData(actorData);
-    this._prepareSkillsData(actorData);
+    this._prepareDerivedAttributesData(actorData);
+    this._prepareDerivedSkillsData(actorData);
     this._preparePCData(actorData);
   }
 
   /**
-   * Updates the given actorData.attributes with derived data. 
+   * Prepares derived data for all attributes. 
    * @param actorData 
    */
-  _prepareAttributesData(actorData) {
+  _prepareDerivedAttributesData(actorData) {
     for (let attGroupName in actorData.data.attributes) {
       let oAttGroup = actorData.data.attributes[attGroupName];
 
       for (let attName in oAttGroup) {
         let oAtt = oAttGroup[attName];
-        this._prepareAttributeData(oAtt, attName);
+        this._prepareDerivedAttributeData(oAtt, attName);
       }
     }
   }
 
   /**
-   * 
+   * Prepares derived data for a given attribute. 
    * @param oAtt {Object} The attribute object. 
    * @param attName {String} Internal name of the attribute, e.g. 'magicSense'. 
    */
-  _prepareAttributeData(oAtt, attName) {
+  _prepareDerivedAttributeData(oAtt, attName) {
     let attValue = parseInt(oAtt.value);
 
     // Calculate advancement requirements. 
@@ -73,39 +91,41 @@ export class AmbersteelActor extends Actor {
   }
 
   /**
-   * Updates the given actorData.skills with derived data. 
+   * Updates the given actorData with derived skill data. 
+   * Assigns items of type skill to the derived lists 'actorData.skills' and 'actorData.learningSkills'. 
    * @param actorData 
    */
-  _prepareSkillsData(actorData) {
-    actorData.data.skills = (actorData.items.filter(function(item) { return item.data.type == "skill" && parseInt(item.data.data.value) > 0 }))
-    .map((item) => { return item.data });
+  _prepareDerivedSkillsData(actorData) {
+    actorData.skills = (actorData.items.filter(function(item) { 
+      return item.data.type == "skill" && parseInt(item.data.data.value) > 0 
+    }));
+    actorData.learningSkills = (actorData.items.filter(function(item) { 
+      return item.data.type == "skill" && parseInt(item.data.data.value) == 0 
+    }));
 
-    actorData.data.learningSkills = (actorData.items.filter(function(item) { return item.data.type == "skill" && parseInt(item.data.data.value) == 0 }))
-    .map((item) => { return item.data });
-
-    for (let skill of actorData.data.skills) {
+    for (let skill of actorData.skills) {
       this._prepareDerivedSkillData(skill);
     }
-    for (let skill of actorData.data.learningSkills) {
+    for (let skill of actorData.learningSkills) {
       this._prepareDerivedSkillData(skill);
     }
   }
 
-  // TODO: Move to item.mjs?
   /**
    * 
    * @param oSkill {Object}
    */
   _prepareDerivedSkillData(oSkill) {
-    let skillValue = parseInt(oSkill.data.value)
+    let skillData = oSkill.data;
+    let skillValue = parseInt(skillData.data.value)
     
     // Calculate advancement requirements. 
     if (skillValue == 0) {
-      oSkill.requiredSuccessses = 10
-      oSkill.requiredFailures = 14
+      skillData.requiredSuccessses = 10
+      skillData.requiredFailures = 14
     } else {
-      oSkill.requiredSuccessses = (skillValue + 1) * skillValue * 2
-      oSkill.requiredFailures = (skillValue + 1) * skillValue * 3
+      skillData.requiredSuccessses = (skillValue + 1) * skillValue * 2
+      skillData.requiredFailures = (skillValue + 1) * skillValue * 3
     }
   }
 
@@ -159,7 +179,7 @@ export class AmbersteelActor extends Actor {
     let oAtt = opts.attObject ?? this._getAttributeForName(opts.attName);
     oAtt.value = newValue;
 
-    this._prepareAttributesData(this.data);
+    this._prepareDerivedAttributeData(oAtt, oAtt.name);
   }
 
   /**
@@ -192,6 +212,7 @@ export class AmbersteelActor extends Actor {
       if (parseInt(oAtt.successes) >= parseInt(oAtt.requiredSuccessses)
       && parseInt(oAtt.failures) >= parseInt(oAtt.requiredFailures)) {
         oAtt.value = parseInt(oAtt.value) + 1;
+        this._prepareDerivedAttributeData(oAtt, oAtt.name);
       }
     }
   }
@@ -223,7 +244,7 @@ export class AmbersteelActor extends Actor {
     let oSkill = opts.skillObject ?? this._getSkillForId(opts.skillId);
     oSkill.value = newValue;
 
-    this._prepareSkillsData(this.data);
+    this._prepareDerivedSkillsData(this.data);
   }
 
   /**
@@ -254,9 +275,10 @@ export class AmbersteelActor extends Actor {
     }
 
     if (opts.autoLevel) {
-      if (parseInt(skillData.successes) >= parseInt(skillData.requiredSuccessses)
-      && parseInt(skillData.failures) >= parseInt(skillData.requiredFailures)) {
+      if (parseInt(skillData.successes) >= parseInt(oSkill.data.requiredSuccessses)
+      && parseInt(skillData.failures) >= parseInt(oSkill.data.requiredFailures)) {
         skillData.value = parseInt(skillData.value) + 1;
+        this._prepareDerivedSkillsData(this.data);
       }
     }
   }

@@ -1,17 +1,30 @@
 {{!-- Requires parameters: 
-isOwner: Boolean
-newItemValue: {String|Number}
-skills: [Object]
- --}}
+isEditable: {Boolean},
+isLearningSkillsTable: {Boolean},
+skills: {[Object]} where Object = { 
+    id: {String},
+    name: {String},
+    value: {Number},
+    successes: {Number},
+    failures: {Number},
+    requiredSuccessses: {Number},
+    requiredFailures: {Number},
+    relatedAttribute: {String},
+}
+--}}
 <div>
     <table class="skill-table">
         <tbody>
             <tr class="fancy-font">
-                {{#if isOwner}}
-                <th class="skill-column-roll"></th>
+                {{#if isEditable}}
+                    <th class="skill-column-roll"></th>
                 {{/if}}
                 <th class="skill-column-name">
-                    {{localize name}}
+                    {{#if isLearningSkillsTable}}
+                        {{localize "ambersteel.labels.learningSkill"}}
+                    {{else}}
+                        {{localize "ambersteel.labels.knownSkill"}}
+                    {{/if}}
                 </th>
                 <th class="skill-column-attribute">
                     {{localize "ambersteel.labels.attributeAbbreviation"}}
@@ -28,25 +41,25 @@ skills: [Object]
                 <th class="skill-column-failures">
                     {{localize "ambersteel.labels.failureAbbreviation"}}
                 </th>
-                {{#if isOwner}}
-                <th class="skill-column-delete"></th>
+                {{#if isEditable}}
+                    <th class="skill-column-delete"></th>
                 {{/if}}
             </tr>
             {{#each skills as | skill |}}
-            <tr class="item skill-item" data-item-id="{{skill._id}}">
-                {{#if ../isOwner}}
-                <td class="skill-column-roll">
-                    <a class="ambersteel-skill-roll roll-button pad-sm button" data-action-value="{{skill.data.value}}" data-action-name="{{skill.data.name}}" title="{{localize ambersteel.labels.roll}}">
-                        <i class="fas fa-dice-three"></i>
-                    </a>
-                </td>
+            <tr class="item skill-item" data-item-id="{{skill.id}}">
+                {{#if ../isEditable}}
+                    <td class="skill-column-roll">
+                        <a class="ambersteel-skill-roll roll-button pad-sm button" data-action-value="{{skill.value}}" data-action-name="{{skill.name}}" title="{{localize ambersteel.labels.roll}}">
+                            <i class="fas fa-dice-three"></i>
+                        </a>
+                    </td>
                 {{/if}}
                 <td class="fancy-font flex skill-column-name">
-                    <input class="skill-name ambersteel-item-edit" data-field="data.name" name="skill.data.name" type="text" value="{{localize skill.data.name}}" />
+                    <input class="skill-name ambersteel-item-edit" name="skill.name" type="text" value="{{localize skill.name}}" data-field="name" />
                 </td>
                 <td class="skill-column-attribute">
-                    <select class="ambersteel-item-edit" name="data.relatedAttribute" data-field="data.relatedAttribute">
-                        {{#select data.relatedAttribute}}
+                    <select class="ambersteel-item-edit" name="skill.relatedAttribute" data-field="relatedAttribute">
+                        {{#select skill.relatedAttribute}}
                         {{#each ../config.character.attributes as | att |}}
                         <option value="{{att.name}}">{{localize att.abbrevString}}</option>
                         {{/each}}
@@ -54,55 +67,55 @@ skills: [Object]
                     </select>
                 </td>
                 <td class="skill-column-level">
-                    {{#if ../isOwner}}
-                    {{#> numberSpinner}}
-                    <input class="skill-value ambersteel-item-edit spinner" name="skill.data.value" data-field="data.value" type="number" value="{{skill.data.value}}" />
-                    {{/numberSpinner}}
+                    {{#if ../isEditable}}
+                        {{#> numberSpinner}}
+                        <input class="skill-value ambersteel-item-edit spinner" name="skill.value" type="number" value="{{skill.value}}" data-field="value" />
+                        {{/numberSpinner}}
                     {{else}}
-                    {{skill.data.value}}
+                        {{skill.value}}
                     {{/if}}
                 </td>
                 <td class="skill-column-requirements">
                     {{skill.requiredSuccessses}} / {{skill.requiredFailures}}
                 </td>
                 <td class="skill-column-successes">
-                    {{#if ../isOwner}}
-                    {{#> numberSpinner}}
-                    <input class="skill-successes ambersteel-item-edit" name="skill.data.successes" data-field="data.successes" type="number" value="{{skill.data.successes}}" />
-                    {{/numberSpinner}}
+                    {{#if ../isEditable}}
+                        {{#> numberSpinner}}
+                        <input class="skill-successes ambersteel-item-edit" name="skill.successes" type="number" value="{{skill.successes}}" data-field="successes" />
+                        {{/numberSpinner}}
                     {{else}}
-                    {{skill.data.successes}}
+                        {{skill.successes}}
                     {{/if}}
                 </td>
                 <td class="skill-column-failures">
-                    {{#if ../isOwner}}
-                    {{#> numberSpinner}}
-                    <input class="skill-failures ambersteel-item-edit" name="skill.data.failures" data-field="data.failures" type="number" value="{{skill.data.failures}}" />
-                    {{/numberSpinner}}
+                    {{#if ../isEditable}}
+                        {{#> numberSpinner}}
+                        <input class="skill-failures ambersteel-item-edit" name="skill.failures" type="number" value="{{skill.failures}}" data-field="failures" />
+                        {{/numberSpinner}}
                     {{else}}
-                    {{skill.data.failures}}
+                        {{skill.failures}}
                     {{/if}}
                 </td>
-                {{#if ../isOwner}}
-                <td class="skill-column-delete">
-                    <a class="ambersteel-item-delete pad-sm button" title="{{localize ambersteel.labels.deleteSkill}}">
-                        <i class="fas fa-trash"></i>
-                    </a>
-                </td>
+                {{#if ../isEditable}}
+                    <td class="skill-column-delete">
+                        <a class="ambersteel-item-delete pad-sm button" data-item-id="{{skill.id}}" title="{{localize ambersteel.labels.deleteSkill}}">
+                            <i class="fas fa-trash"></i>
+                        </a>
+                    </td>
                 {{/if}}
             </tr>
             {{/each}}
-            {{#if isOwner}}
-            <tr>
-                <td style="display: table-cell;" colspan="100">
-                    <div class="flex">
-                        <span class="flex-grow"></span>
-                        <a class="ambersteel-item-create pad-sm" data-type="skill" data-value="{{newItemValue}}" data-related-attribute="agility" title="{{localize ambersteel.labels.addSkill}}">
-                            <i class="fas fa-plus"></i>
-                        </a>
-                    </div>
-                </td>
-            </tr>
+            {{#if isEditable}}
+                <tr>
+                    <td style="display: table-cell;" colspan="100">
+                        <div class="flex">
+                            <span class="flex-grow"></span>
+                            <a class="ambersteel-item-create pad-sm" data-type="skill" data-value="{{#if isLearningSkillsTable}}0{{else}}1{{/if}}" data-related-attribute="agility" title="{{localize ambersteel.labels.addSkill}}">
+                                <i class="fas fa-plus"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
             {{/if}}
         </tbody>
     </table>

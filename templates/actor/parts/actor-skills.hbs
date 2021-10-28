@@ -1,6 +1,17 @@
+{{!-- Requires parameters:
+isEditable: {Boolean},
+learningSkills: {[Object]} where Object -> see component-skill-table.hbs,
+skills: {[Object]} where Object -> see component-skill-table.hbs
+--}}
 <section>
-    {{!-- Learning Skills --}}
-    {{> "systems/ambersteel/templates/actor/components/component-skill-table.hbs" name="ambersteel.labels.learningSkill" skills=data.learningSkills newItemValue="0" isOwner=owner}}
-    {{!-- Known Skills --}}
-    {{> "systems/ambersteel/templates/actor/components/component-skill-table.hbs" name="ambersteel.labels.knownSkill" skills=data.skills newItemValue="1" isOwner=owner}}
+  {{!-- Learning Skills --}}
+  {{> "systems/ambersteel/templates/actor/components/component-skill-table.hbs" 
+  isEditable=isEditable 
+  isLearningSkillsTable=true 
+  skills=learningSkills }}
+  {{!-- Known Skills --}}
+  {{> "systems/ambersteel/templates/actor/components/component-skill-table.hbs"
+  isEditable=isEditable 
+  isLearningSkillsTable=false 
+  skills=skills }}
 </section>

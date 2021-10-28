@@ -1,9 +1,23 @@
+{{!-- Requires parameters:
+isEditable: {Boolean},
+fateSystem: {Object} where Object = {
+  miFP: {Number},
+  maFP: {Number},
+  AFP: {Number},
+  cards: {[Object]} where Object = { 
+    id: {String},
+    localizableName: {String},
+    icon: {String},
+    localizableDescription: {String}
+  }
+}
+--}}
 <section>
   <div class="flex sheet-block">
     <div class="flex flex-column">
-      <label class="line-height fancy-font pad-sm" for="data.fateSystem.miFP">{{localize "ambersteel.fateSystem.miFP"}}</label>
-      <label class="line-height fancy-font pad-sm" for="data.fateSystem.maFP">{{localize "ambersteel.fateSystem.maFP"}}</label>
-      <label class="line-height fancy-font pad-sm" for="data.fateSystem.AFP">{{localize "ambersteel.fateSystem.AFP"}}</label>
+      <label class="line-height fancy-font pad-sm" for="fateSystem.miFP">{{localize "ambersteel.fateSystem.miFP"}}</label>
+      <label class="line-height fancy-font pad-sm" for="fateSystem.maFP">{{localize "ambersteel.fateSystem.maFP"}}</label>
+      <label class="line-height fancy-font pad-sm" for="fateSystem.AFP">{{localize "ambersteel.fateSystem.AFP"}}</label>
     </div>
     <div class="flex flex-column">
       <span class="line-height pad-sm primary-font">({{localize "ambersteel.fateSystem.miFPAbbreviation"}})</span>
@@ -11,18 +25,14 @@
       <span class="line-height pad-sm primary-font">({{localize "ambersteel.fateSystem.AFPAbbreviation"}})</span>
     </div>
     <div class="flex flex-column flex-grow">
-      <input class="line-height pad-sm" type="number" name="data.fateSystem.miFP" value="{{data.fateSystem.miFP}}" />
-      <input class="line-height pad-sm" type="number" name="data.fateSystem.maFP" value="{{data.fateSystem.maFP}}" />
-      <input class="line-height pad-sm" type="number" name="data.fateSystem.AFP" value="{{data.fateSystem.AFP}}" />
+      <input class="line-height pad-sm" type="number" name="fateSystem.miFP" value="{{fateSystem.miFP}}" />
+      <input class="line-height pad-sm" type="number" name="fateSystem.maFP" value="{{fateSystem.maFP}}" />
+      <input class="line-height pad-sm" type="number" name="fateSystem.AFP" value="{{fateSystem.AFP}}" />
     </div>
   </div>
   <div class="flex" style="flex-wrap: wrap;">
-  {{#times 5}}
-    <div class="fate-card">
-      <a class="item-create" data-type="fateCard" title="{{localize ambersteel.labels.buyFateCard}}">
-        <i class="fas fa-plus"></i>
-      </a>
-    </div>
-  {{/times}}
+  {{#each fateSystem.cards as | card |}}
+{{!-- TODO --}}
+  {{/each}}
   </div>
 </section>

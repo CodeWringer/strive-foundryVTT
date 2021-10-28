@@ -1,20 +1,40 @@
+{{!-- Requires parameters:
+isEditable: {Boolean},
+biography: {Object} where Object = {
+  origin: {String},
+  youth: {String},
+  lastFewYears: {String}
+}
+--}}
 <section>
   <div class="sheet-block">
     <h3>
-      <label class="fancy-font" for="data.biography.origin">{{localize "ambersteel.biography.origin"}}</label>
+      <label class="fancy-font" for="biography.origin">{{localize "ambersteel.biography.origin"}}</label>
     </h3>
-    <textarea class="resize-vertical" name="data.biography.origin">{{data.biography.origin}}</textarea>
+    {{#if isEditable}}
+      <textarea class="resize-vertical" name="biography.origin">{{biography.origin}}</textarea>
+    {{else}}
+      <span class="multiline">{{biography.origin}}</span>
+    {{/if}}
   </div>
   <div class="sheet-block">
     <h3>
-      <label class="fancy-font" for="data.biography.youth">{{localize "ambersteel.biography.youth"}}</label>
+      <label class="fancy-font" for="biography.youth">{{localize "ambersteel.biography.youth"}}</label>
     </h3>
-    <textarea class="resize-vertical" name="data.biography.youth">{{data.biography.youth}}</textarea>
+    {{#if isEditable}}
+      <textarea class="resize-vertical" name="biography.youth">{{biography.youth}}</textarea>
+    {{else}}
+      <span class="multiline">{{biography.youth}}</span>
+    {{/if}}
   </div>
   <div class="sheet-block">
     <h3>
-      <label class="fancy-font" for="data.biography.lastFewYears">{{localize "ambersteel.biography.lastFewYears"}}</label>
+      <label class="fancy-font" for="biography.lastFewYears">{{localize "ambersteel.biography.lastFewYears"}}</label>
     </h3>
-    <textarea class="resize-vertical" name="data.biography.lastFewYears">{{data.biography.lastFewYears}}</textarea>
+    {{#if isEditable}}
+      <textarea class="resize-vertical" name="biography.lastFewYears">{{biography.lastFewYears}}</textarea>
+    {{else}}
+      <span class="multiline">{{biography.lastFewYears}}</span>
+    {{/if}}
   </div>
 </section>

@@ -1,11 +1,29 @@
+{{!-- Requires context:
+isEditable: {Boolean},
+actor: {AmbersteelActor},
+data: {Object} where Object = {
+  person: {Object} where Object -> see parts/actor-personals.hbs,
+  attributeGroups: {Object} where Object -> see parts/actor-attributes.hbs,
+  learningSkills: {[Object]} where Object -> see components/component-skill-table.hbs,
+  skills: {[Object]} where Object -> see components/component-skill-table.hbs,
+  beliefSystem: {Object} where Object -> see parts/actor-beliefs.hbs,
+  fateSystem: {Object} where Object -> see parts/actor-fate.hbs,
+  biography: {Object} where Object -> see parts/actor-biography.hbs,
+}
+--}}
 <form class="{{cssClass}} {{actor.type}} flexcol" autocomplete="off">
 
   {{!-- Sheet Header --}}
   <header class="sheet-header">
-    <img class="profile-img" src="{{actor.img}}" data-edit="img" title="{{actor.name}}" height="100" width="100"/>
+    <img class="profile-img" src="{{actor.img}}" data-edit="img" title="{{actor.name}}" height="100" width="100" />
     <div class="header-fields">
-      <h1 class="charname fancy-font"><input name="name" type="text" value="{{actor.name}}" placeholder="Name"/></h1>
-       {{> "systems/ambersteel/templates/actor/parts/actor-personals.hbs"}}
+      <h1 class="charname fancy-font">
+        <input name="name" type="text" value="{{actor.name}}" placeholder="Name" />
+      </h1>
+      {{> "systems/ambersteel/templates/actor/parts/actor-personals.hbs" 
+      isEditable=isEditable 
+      person=data.person 
+      }}
     </div>
   </header>
 
@@ -28,41 +46,60 @@
 
     {{!-- Attributes Tab --}}
     <div class="tab attributes" data-group="primary" data-tab="attributes">
-       {{> "systems/ambersteel/templates/actor/parts/actor-attributes.hbs"}}
+      {{> "systems/ambersteel/templates/actor/parts/actor-attributes.hbs" 
+      isEditable=isEditable 
+      attributeGroups=data.attributeGroups 
+      }}
     </div>
 
     {{!-- Skills Tab --}}
     <div class="tab skills" data-group="primary" data-tab="skills">
-       {{> "systems/ambersteel/templates/actor/parts/actor-skills.hbs"}}
+      {{> "systems/ambersteel/templates/actor/parts/actor-skills.hbs" 
+      isEditable=isEditable 
+      learningSkills=data.learningSkills 
+      skills=data.skills 
+      }}
     </div>
 
     {{#if (eq actor.type "pc")}}
     {{!-- Beliefs Tab --}}
     <div class="tab beliefs" data-group="primary" data-tab="beliefs">
-       {{> "systems/ambersteel/templates/actor/parts/actor-beliefs.hbs"}}
+      {{> "systems/ambersteel/templates/actor/parts/actor-beliefs.hbs" 
+      isEditable=isEditable 
+      beliefSystem=data.beliefSystem 
+      }}
     </div>
 
     {{!-- Fate Tab --}}
     <div class="tab fate" data-group="primary" data-tab="fate">
-       {{> "systems/ambersteel/templates/actor/parts/actor-fate.hbs"}}
+      {{> "systems/ambersteel/templates/actor/parts/actor-fate.hbs" 
+      isEditable=isEditable 
+      fateSystem=data.fateSystem 
+      }}
     </div>
     {{/if}}
 
     {{!-- Health Tab --}}
     <div class="tab health" data-group="primary" data-tab="health">
-       {{> "systems/ambersteel/templates/actor/parts/actor-health.hbs"}}
+      {{> "systems/ambersteel/templates/actor/parts/actor-health.hbs" 
+      isEditable=isEditable 
+      }}
     </div>
 
     {{!-- Possessions Tab --}}
     <div class="tab possessions" data-group="primary" data-tab="possessions">
-       {{> "systems/ambersteel/templates/actor/parts/actor-possessions.hbs"}}
+      {{> "systems/ambersteel/templates/actor/parts/actor-possessions.hbs" 
+      isEditable=isEditable 
+      }}
     </div>
 
     {{!-- Biography Tab --}}
     <div class="tab biography" data-group="primary" data-tab="biography">
-       {{> "systems/ambersteel/templates/actor/parts/actor-biography.hbs"}}
+      {{> "systems/ambersteel/templates/actor/parts/actor-biography.hbs" 
+      isEditable=isEditable 
+      biography=data.biography 
+      }}
     </div>
 
   </section>
 </form>
-
