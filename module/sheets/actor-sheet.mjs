@@ -1,4 +1,5 @@
 import * as Dice from "../helpers/dice.mjs";
+import * as NumberSpinner from "../components/number-spinner.mjs";
 
 export class AmbersteelActorSheet extends ActorSheet {
 
@@ -166,6 +167,10 @@ export class AmbersteelActorSheet extends ActorSheet {
 
     // Edit attribute.
     html.find(".ambersteel-attribute-edit").change(this._onAttributeEdit.bind(this));
+
+    // Number-spinners.
+    html.find(".button-spinner-up").click(NumberSpinner.onClickNumberSpinnerUp.bind(this));
+    html.find(".button-spinner-down").click(NumberSpinner.onClickNumberSpinnerDown.bind(this));
   }
 
   /**
