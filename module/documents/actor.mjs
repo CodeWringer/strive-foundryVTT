@@ -84,27 +84,27 @@ export class AmbersteelActor extends Actor {
     .map((item) => { return item.data });
 
     for (let skill of actorData.data.skills) {
-      this._prepareDerivedSkillData(skill.data);
+      this._prepareDerivedSkillData(skill);
     }
     for (let skill of actorData.data.learningSkills) {
-      this._prepareDerivedSkillData(skill.data);
+      this._prepareDerivedSkillData(skill);
     }
   }
 
   /**
    * 
-   * @param skillData {Object}
+   * @param oSkill {Object}
    */
-  _prepareDerivedSkillData(skillData) {
-    let skillValue = parseInt(skillData.value)
+  _prepareDerivedSkillData(oSkill) {
+    let skillValue = parseInt(oSkill.data.value)
     
     // Calculate advancement requirements. 
     if (skillValue == 0) {
-      skillData.requiredSuccessses = 10
-      skillData.requiredFailures = 14
+      oSkill.requiredSuccessses = 10
+      oSkill.requiredFailures = 14
     } else {
-      skillData.requiredSuccessses = (skillValue + 1) * skillValue * 2
-      skillData.requiredFailures = (skillValue + 1) * skillValue * 3
+      oSkill.requiredSuccessses = (skillValue + 1) * skillValue * 2
+      oSkill.requiredFailures = (skillValue + 1) * skillValue * 3
     }
   }
 
