@@ -288,7 +288,8 @@ export class AmbersteelActorSheet extends ActorSheet {
     // Note result towards skill progress. 
     this.actor.progressSkill({ skillObject: oSkill, success: result.rollResults.isSuccess });
 
-    // TODO: Bug: updated actor.data is not updated on sheet
+    // Re-render the sheet to make the progress visible. 
+    this.render();
 
     // Display roll result. 
     Dice.sendDiceResultToChat({ renderedContent: result.renderedContent, flavor: result.flavor, actor: result.actor });
@@ -322,7 +323,8 @@ export class AmbersteelActorSheet extends ActorSheet {
     // Note result towards attribute progress. 
     this.actor.progressAttribute({ attObject: oAtt, success: result.rollResults.isSuccess });
 
-    // TODO: Bug: updated actor.data is not updated on sheet
+    // Re-render the sheet to make the progress visible. 
+    this.render();
 
     // Display roll result. 
     Dice.sendDiceResultToChat({ renderedContent: result.renderedContent, flavor: result.flavor, actor: result.actor });
