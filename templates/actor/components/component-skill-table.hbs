@@ -67,14 +67,18 @@ skills: [Object]
                 </td>
                 <td class="skill-column-successes">
                     {{#if ../isOwner}}
+                    {{#> numberSpinner}}
                     <input class="skill-successes ambersteel-item-edit" name="skill.data.successes" data-field="data.successes" type="number" value="{{skill.data.successes}}" />
+                    {{/numberSpinner}}
                     {{else}}
                     {{skill.data.successes}}
                     {{/if}}
                 </td>
                 <td class="skill-column-failures">
                     {{#if ../isOwner}}
+                    {{#> numberSpinner}}
                     <input class="skill-failures ambersteel-item-edit" name="skill.data.failures" data-field="data.failures" type="number" value="{{skill.data.failures}}" />
+                    {{/numberSpinner}}
                     {{else}}
                     {{skill.data.failures}}
                     {{/if}}

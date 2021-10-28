@@ -1,7 +1,12 @@
+$width-column-sm: 30px;
+$width-column-md: 50px;
+$width-column-lg: 60px;
+$width-column-xl: 80px;
+
 .attribute-column {
     &-roll {
-        max-width: 30px;
-        width: 30px;
+        max-width: $width-column-sm;
+        width: $width-column-sm;
         text-align: center;
     }
     
@@ -10,24 +15,24 @@
     }
 
     &-abbreviation {
-        max-width: 80px;
-        width: 80px;
+        max-width: $width-column-xl;
+        width: $width-column-xl;
     }
 
     &-level {
-        max-width: 40px;
-        width: 40px;
+        max-width: $width-column-md;
+        width: $width-column-md;
     }
 
     &-requirements {
-        max-width: 80px;
-        width: 80px;
+        max-width: $width-column-xl;
+        width: $width-column-xl;
         text-align: center;
     }
 
     &-successes, &-failures {
-        max-width: 40px;
-        width: 40px;
+        max-width: $width-column-md;
+        width: $width-column-md;
     }
 }
 
@@ -45,14 +50,14 @@
     }
     
     &-roll, &-delete {
-        max-width: 30px;
-        width: 30px;
+        max-width: $width-column-sm;
+        width: $width-column-sm;
         text-align: center;
     }
     
     &-attribute {
-        max-width: 80px;
-        width: 80px;
+        max-width: $width-column-xl;
+        width: $width-column-xl;
     
         & > select {
             width: 100%;
@@ -60,18 +65,18 @@
     }
     
     &-level {
-        max-width: 40px;
-        width: 40px;
+        max-width: $width-column-md;
+        width: $width-column-md;
     }
     
     &-requirements {
-        max-width: 80px;
-        width: 80px;
+        max-width: $width-column-xl;
+        width: $width-column-xl;
         text-align: center;
     }
     
     &-successes, &-failures {
-        max-width: 40px;
-        width: 40px;
+        max-width: $width-column-md;
+        width: $width-column-md;
     }
 }

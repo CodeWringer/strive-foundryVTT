@@ -604,8 +604,8 @@ a.button {
 }
 
 .attribute-column-level {
-  max-width: 40px;
-  width: 40px;
+  max-width: 50px;
+  width: 50px;
 }
 
 .attribute-column-requirements {
@@ -615,8 +615,8 @@ a.button {
 }
 
 .attribute-column-successes, .attribute-column-failures {
-  max-width: 40px;
-  width: 40px;
+  max-width: 50px;
+  width: 50px;
 }
 
 .attribute-table th {
@@ -649,8 +649,8 @@ a.button {
 }
 
 .skill-column-level {
-  max-width: 40px;
-  width: 40px;
+  max-width: 50px;
+  width: 50px;
 }
 
 .skill-column-requirements {
@@ -660,8 +660,8 @@ a.button {
 }
 
 .skill-column-successes, .skill-column-failures {
-  max-width: 40px;
-  width: 40px;
+  max-width: 50px;
+  width: 50px;
 }
 
 span.spinner-container {

@@ -43,7 +43,9 @@ attGroup: Object
                 </td>
                 <td class="attribute-column-level">
                     {{#if ../isOwner}}
+                    {{#> numberSpinner}}
                     <input class="attribute-value ambersteel-attribute-edit" name="att.value" type="number" value="{{att.value}}" data-field="value" />
+                    {{/numberSpinner}}
                     {{else}}
                     {{att.value}}
                     {{/if}}
@@ -53,14 +55,18 @@ attGroup: Object
                 </td>
                 <td class="attribute-column-successes">
                     {{#if ../isOwner}}
+                    {{#> numberSpinner}}
                     <input class="attribute-successes ambersteel-attribute-edit" name="att.successes" type="number" value="{{att.successes}}" data-field="successes" />
+                    {{/numberSpinner}}
                     {{else}}
                     {{att.successes}}
                     {{/if}}
                 </td>
                 <td class="attribute-column-failures">
                     {{#if ../isOwner}}
+                    {{#> numberSpinner}}
                     <input class="attribute-failures ambersteel-attribute-edit" name="att.failures" type="number" value="{{att.failures}}" data-field="failures" />
+                    {{/numberSpinner}}
                     {{else}}
                     {{att.failures}}
                     {{/if}}
