@@ -74,7 +74,7 @@ skills: {[Object]} where Object = {
                         <input class="skill-value ambersteel-item-edit spinner" name="" type="number" data-dtype="Number" min="0" step="1" value="{{data.value}}" data-field="data.value" />
                         {{/numberSpinner}}
                     {{else}}
-                        {{skill.value}}
+                        {{data.value}}
                     {{/if}}
                 </td>
                 <td class="skill-column-requirements">
@@ -86,7 +86,7 @@ skills: {[Object]} where Object = {
                         <input class="skill-successes ambersteel-item-edit" name="" type="number" data-dtype="Number" min="0" step="1" value="{{data.successes}}" data-field="data.successes" />
                         {{/numberSpinner}}
                     {{else}}
-                        {{skill.successes}}
+                        {{data.successes}}
                     {{/if}}
                 </td>
                 <td class="skill-column-failures">
@@ -95,7 +95,7 @@ skills: {[Object]} where Object = {
                         <input class="skill-failures ambersteel-item-edit" name="" type="number" data-dtype="Number" min="0" step="1" value="{{data.failures}}" data-field="data.failures" />
                         {{/numberSpinner}}
                     {{else}}
-                        {{skill.failures}}
+                        {{data.failures}}
                     {{/if}}
                 </td>
                 {{#if ../isEditable}}
