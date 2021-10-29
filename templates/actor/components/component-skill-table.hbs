@@ -60,8 +60,8 @@ skills: {[Object]} where Object = {
                     <input class="skill-name ambersteel-item-edit" name="" type="text" value="{{data.skillName}}" data-field="data.skillName" />
                 </td>
                 <td class="skill-column-attribute">
-                    <select class="ambersteel-item-edit" name="skill.relatedAttribute" data-field="relatedAttribute">
-                        {{#select skill.relatedAttribute}}
+                    <select class="ambersteel-item-edit" name="data.relatedAttribute" data-field="data.relatedAttribute">
+                        {{#select data.relatedAttribute}}
                         {{#each ../CONFIG.character.attributes as | att |}}
                         <option value="{{att.name}}">{{localize att.abbrevString}}</option>
                         {{/each}}
