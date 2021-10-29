@@ -16,16 +16,18 @@ export class AmbersteelActorSheet extends ActorSheet {
 
   /* -------------------------------------------- */
 
-  itemContextMenu = [
-    {
-      name: game.i18n.localize("ambersteel.labels.delete"),
-      icon: '<i class="fas fa-trash"></i>',
-      callback: el => {
-        const item = this.actor.items.get(el.data("item-id"));
-        item.delete();
+  static get itemContextMenu() { 
+    return [
+      {
+        name: game.i18n.localize("ambersteel.labels.delete"),
+        icon: '<i class="fas fa-trash"></i>',
+        callback: el => {
+          const item = this.actor.items.get(el.data("item-id"));
+          item.delete();
+        }
       }
-    }
-  ]
+    ];
+  }
 
   /** @override */
   getData() {
@@ -41,7 +43,7 @@ export class AmbersteelActorSheet extends ActorSheet {
     const actorData = context.actor.data.data;
 
     // Make data available in context. 
-    // context.data.person = actorData.person;
+    context.data.person = actorData.person;
     context.data.attributeGroups = this._getDerivedAttributeGroups(actorData.attributes);
     context.data.beliefSystem = actorData.beliefSystem;
     context.data.fateSystem = actorData.fateSystem;

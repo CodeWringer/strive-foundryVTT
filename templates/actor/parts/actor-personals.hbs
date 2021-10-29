@@ -1,10 +1,12 @@
 {{!-- Requires parameters:
 isEditable: {Boolean},
-person: {Object} where Object = {
-  species: {String}, 
-  culture: {String},
-  sex: {String},
-  age: {Number|String}
+data: {Object} where Object = {
+  person: {Object} where Object = {
+    species: {String}, 
+    culture: {String},
+    sex: {String},
+    age: {Number|String}
+  }
 }
 --}}
 <section>
@@ -15,11 +17,11 @@ person: {Object} where Object = {
     </div>
     <div class="flex flex-column flex-grow">
     {{#if isEditable}}
-      <input class="line-height pad-sm" type="text" name="person.species" value="{{person.species}}" />
-      <input class="line-height pad-sm" type="text" name="person.culture" value="{{person.culture}}" />
+      <input class="line-height pad-sm" type="text" name="data.person.species" value="{{data.person.species}}" />
+      <input class="line-height pad-sm" type="text" name="data.person.culture" value="{{data.person.culture}}" />
     {{else}}
-      <span class="line-height pad-sm">{{person.species}}</span>
-      <span class="line-height pad-sm">{{person.culture}}</span>
+      <span class="line-height pad-sm">{{data.person.species}}</span>
+      <span class="line-height pad-sm">{{data.person.culture}}</span>
     {{/if}}
     </div>
     <div class="flex flex-column">
@@ -28,11 +30,11 @@ person: {Object} where Object = {
     </div>
     <div class="flex flex-column flex-grow">
       {{#if isEditable}}
-        <input class="line-height pad-sm" type="text" name="person.sex" value="{{person.sex}}" />
-        <input class="line-height pad-sm" type="number" name="person.age" value="{{person.age}}" />
+        <input class="line-height pad-sm" type="text" name="data.person.sex" value="{{data.person.sex}}" />
+        <input class="line-height pad-sm" type="text" name="data.person.age" value="{{data.person.age}}" />
       {{else}}
-        <span class="line-height pad-sm">{{person.sex}}</span>
-        <span class="line-height pad-sm">{{person.age}}</span>
+        <span class="line-height pad-sm">{{data.person.sex}}</span>
+        <span class="line-height pad-sm">{{data.person.age}}</span>
       {{/if}}
     </div>
   </div>

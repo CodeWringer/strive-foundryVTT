@@ -1,23 +1,25 @@
 {{!-- Requires parameters:
 isEditable: {Boolean},
-fateSystem: {Object} where Object = {
-  miFP: {Number},
-  maFP: {Number},
-  AFP: {Number},
-  cards: {[Object]} where Object = { 
-    id: {String},
-    localizableName: {String},
-    icon: {String},
-    localizableDescription: {String}
+data: {Object} where Object = {
+  fateSystem: {Object} where Object = {
+    miFP: {Number},
+    maFP: {Number},
+    AFP: {Number},
+    cards: {[Object]} where Object = { 
+      id: {String},
+      localizableName: {String},
+      icon: {String},
+      localizableDescription: {String}
+    }
   }
 }
 --}}
 <section>
   <div class="flex sheet-block">
     <div class="flex flex-column">
-      <label class="line-height fancy-font pad-sm" for="fateSystem.miFP">{{localize "ambersteel.fateSystem.miFP"}}</label>
-      <label class="line-height fancy-font pad-sm" for="fateSystem.maFP">{{localize "ambersteel.fateSystem.maFP"}}</label>
-      <label class="line-height fancy-font pad-sm" for="fateSystem.AFP">{{localize "ambersteel.fateSystem.AFP"}}</label>
+      <label class="line-height fancy-font pad-sm" for="data.fateSystem.miFP">{{localize "ambersteel.fateSystem.miFP"}}</label>
+      <label class="line-height fancy-font pad-sm" for="data.fateSystem.maFP">{{localize "ambersteel.fateSystem.maFP"}}</label>
+      <label class="line-height fancy-font pad-sm" for="data.fateSystem.AFP">{{localize "ambersteel.fateSystem.AFP"}}</label>
     </div>
     <div class="flex flex-column">
       <span class="line-height pad-sm primary-font">({{localize "ambersteel.fateSystem.miFPAbbreviation"}})</span>
@@ -25,13 +27,25 @@ fateSystem: {Object} where Object = {
       <span class="line-height pad-sm primary-font">({{localize "ambersteel.fateSystem.AFPAbbreviation"}})</span>
     </div>
     <div class="flex flex-column flex-grow">
-      <input class="line-height pad-sm" type="number" name="fateSystem.miFP" value="{{fateSystem.miFP}}" />
-      <input class="line-height pad-sm" type="number" name="fateSystem.maFP" value="{{fateSystem.maFP}}" />
-      <input class="line-height pad-sm" type="number" name="fateSystem.AFP" value="{{fateSystem.AFP}}" />
+      {{#if isEditable}}
+        {{#> numberSpinner}}
+        <input class="line-height pad-sm" type="number" data-dtype="Number" min="0" step="1" name="data.fateSystem.miFP" value="{{data.fateSystem.miFP}}" />
+        {{/numberSpinner}}
+        {{#> numberSpinner}}
+        <input class="line-height pad-sm" type="number" data-dtype="Number" min="0" step="1" name="data.fateSystem.maFP" value="{{data.fateSystem.maFP}}" />
+        {{/numberSpinner}}
+        {{#> numberSpinner}}
+        <input class="line-height pad-sm" type="number" data-dtype="Number" min="0" step="1" name="data.fateSystem.AFP" value="{{data.fateSystem.AFP}}" />
+        {{/numberSpinner}}
+      {{else}}
+        <p>{{data.fateSystem.miFP}}</p>
+        <p>{{data.fateSystem.maFP}}</p>
+        <p>{{data.fateSystem.AFP}}</p>
+      {{/if}}
     </div>
   </div>
   <div class="flex" style="flex-wrap: wrap;">
-  {{#each fateSystem.cards as | card |}}
+  {{#each data.fateSystem.cards as | card |}}
 {{!-- TODO --}}
   {{/each}}
   </div>
