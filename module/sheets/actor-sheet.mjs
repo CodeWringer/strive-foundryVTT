@@ -48,9 +48,8 @@ export class AmbersteelActorSheet extends ActorSheet {
     context.data.beliefSystem = actorData.beliefSystem;
     context.data.fateSystem = actorData.fateSystem;
     context.data.biography = actorData.biography;
-    
-    context.data.learningSkills = context.actor.learningSkills;
-    context.data.skills = context.actor.skills;
+    context.data.learningSkills = actorData.learningSkills;
+    context.data.skills = actorData.skills;
 
     context.CONFIG = CONFIG.ambersteel;
 
@@ -250,7 +249,7 @@ export class AmbersteelActorSheet extends ActorSheet {
     });
 
     // Note result towards skill progress. 
-    this.actor.progressSkill({ skillObject: oSkill, success: result.rollResults.isSuccess });
+    this.actor.progressSkill(itemId, result.rollResults.isSuccess, false);
 
     // Re-render the sheet to make the progress visible. 
     this.render();
@@ -285,7 +284,7 @@ export class AmbersteelActorSheet extends ActorSheet {
     });
 
     // Note result towards attribute progress. 
-    this.actor.progressAttribute({ attObject: oAtt, success: result.rollResults.isSuccess });
+    this.actor.progressAttribute({ attObject: oAtt, success: result.rollResults.isSuccess, autoLevel: false });
 
     // Re-render the sheet to make the progress visible. 
     this.render();

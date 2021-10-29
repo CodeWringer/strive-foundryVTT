@@ -56,8 +56,8 @@ data: {Object} where Object = {
     <div class="tab skills" data-group="primary" data-tab="skills">
       {{> "systems/ambersteel/templates/actor/parts/actor-skills.hbs" 
       isEditable=isEditable 
-      learningSkills=data.learningSkills 
-      skills=data.skills 
+      learningSkills=data.data.learningSkills  
+      skills=data.data.skills 
       }}
     </div>
 
