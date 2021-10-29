@@ -1,16 +1,27 @@
 {{!-- Requires parameters: 
-isOwner: Boolean
-attGroup: Object
- --}}
+isEditable: Boolean,
+localizableAttributeGroupName: {String},
+attributeGroupName: {String},
+attributes: {[Object]} where Object = {
+    name: {String},
+    localizableName: {String},
+    localizableAbbreviation: {String},
+    value: {Number},
+    successes: {Number},
+    failures: {Number},
+    requiredSuccessses: {Number},
+    requiredFailures: {Number}
+}
+--}}
 <div>
     <table class="attribute-table">
         <tbody>
             <tr class="fancy-font">
-                {{#if isOwner}}
-                <th class="attribute-column-roll"></th>
+                {{#if isEditable}}
+                    <th class="attribute-column-roll"></th>
                 {{/if}}
                 <th class="attribute-column-name">
-                    {{localize attGroup.localizableName}}
+                    {{localize localizableAttributeGroupName}}
                 </th>
                 <th class="attribute-column-abbreviation"></th>
                 <th class="attribute-column-level">
@@ -26,14 +37,14 @@ attGroup: Object
                     {{localize "ambersteel.labels.failureAbbreviation"}}
                 </th>
             </tr>
-            {{#each attGroup.attributes as | att |}}
-            <tr class="item attribute-item" data-att-group-name="{{../attGroup.name}}" data-att-name="{{att.name}}">
-                {{#if ../isOwner}}
-                <td class="attribute-column-roll">
-                    <a class="ambersteel-attribute-roll roll-button pad-sm button" data-action-value="{{att.value}}" data-action-name="{{att.name}}" title="{{localize ambersteel.labels.roll}}">
-                        <i class="fas fa-dice-three"></i>
-                    </a>
-                </td>
+            {{#each attributes as | att |}}
+            <tr class="item attribute-item" data-att-group-name="{{../attributeGroupName}}" data-att-name="{{att.name}}">
+                {{#if ../isEditable}}
+                    <td class="attribute-column-roll">
+                        <a class="ambersteel-attribute-roll roll-button pad-sm button" data-action-value="{{att.value}}" data-action-name="{{att.name}}" title="{{localize ambersteel.labels.roll}}">
+                            <i class="fas fa-dice-three"></i>
+                        </a>
+                    </td>
                 {{/if}}
                 <td class="attribute-column-name flex fancy-font">
                     {{localize att.localizableName}}
@@ -42,33 +53,33 @@ attGroup: Object
                     [{{localize att.localizableAbbreviation}}]
                 </td>
                 <td class="attribute-column-level">
-                    {{#if ../isOwner}}
-                    {{#> numberSpinner}}
-                    <input class="attribute-value ambersteel-attribute-edit" name="att.value" type="number" value="{{att.value}}" data-field="value" />
-                    {{/numberSpinner}}
+                    {{#if ../isEditable}}
+                        {{#> numberSpinner}}
+                        <input class="attribute-value ambersteel-attribute-edit" name="att.value" type="number" data-dtype="Number" min="0" step="1" value="{{att.value}}" data-field="value" />
+                        {{/numberSpinner}}
                     {{else}}
-                    {{att.value}}
+                        {{att.value}}
                     {{/if}}
                 </td>
                 <td class="attribute-column-requirements">
                     {{att.requiredSuccessses}} / {{att.requiredFailures}}
                 </td>
                 <td class="attribute-column-successes">
-                    {{#if ../isOwner}}
-                    {{#> numberSpinner}}
-                    <input class="attribute-successes ambersteel-attribute-edit" name="att.successes" type="number" value="{{att.successes}}" data-field="successes" />
-                    {{/numberSpinner}}
+                    {{#if ../isEditable}}
+                        {{#> numberSpinner}}
+                        <input class="attribute-successes ambersteel-attribute-edit" name="att.successes" type="number" data-dtype="Number" min="0" step="1" value="{{att.successes}}" data-field="successes" />
+                        {{/numberSpinner}}
                     {{else}}
-                    {{att.successes}}
+                        {{att.successes}}
                     {{/if}}
                 </td>
                 <td class="attribute-column-failures">
-                    {{#if ../isOwner}}
-                    {{#> numberSpinner}}
-                    <input class="attribute-failures ambersteel-attribute-edit" name="att.failures" type="number" value="{{att.failures}}" data-field="failures" />
-                    {{/numberSpinner}}
+                    {{#if ../isEditable}}
+                        {{#> numberSpinner}}
+                        <input class="attribute-failures ambersteel-attribute-edit" name="att.failures" type="number" data-dtype="Number" min="0" step="1" value="{{att.failures}}" data-field="failures" />
+                        {{/numberSpinner}}
                     {{else}}
-                    {{att.failures}}
+                        {{att.failures}}
                     {{/if}}
                 </td>
             </tr>

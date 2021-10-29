@@ -4,7 +4,7 @@
     "templates": {
       "character": {
         "person": {
-          "name": "",
+          "personName": "",
           "age": 0,
           "species": "",
           "culture": "",
@@ -129,14 +129,14 @@
         "description": ""
       },
       "healthImpediment": {
-        "name": "",
+        "impedimentName": "",
         "description": "",
         "treatment": ""
       }
     },
     "skill": {
       "templates": ["base"],
-      "name": "",
+      "skillName": "",
       "relatedAttribute": "",
       "value": 0,
       "successes": 0,
@@ -144,7 +144,7 @@
     },
     "fateCard": {
       "templates": ["base"],
-      "name": "",
+      "fateCardName": "",
       "cost": {
         "miFP": 0,
         "maFP": 0,

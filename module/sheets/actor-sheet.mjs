@@ -16,109 +16,74 @@ export class AmbersteelActorSheet extends ActorSheet {
 
   /* -------------------------------------------- */
 
-  itemContextMenu = [
-    {
-      name: game.i18n.localize("ambersteel.labels.delete"),
-      icon: '<i class="fas fa-trash"></i>',
-      callback: el => {
-        const item = this.actor.items.get(el.data("item-id"));
-        item.delete();
+  static get itemContextMenu() { 
+    return [
+      {
+        name: game.i18n.localize("ambersteel.labels.delete"),
+        icon: '<i class="fas fa-trash"></i>',
+        callback: el => {
+          const item = this.actor.items.get(el.data("item-id"));
+          item.delete();
+        }
       }
-    }
-  ]
+    ];
+  }
 
   /** @override */
   getData() {
-    // Retrieve the data structure from the base sheet. You can inspect or log
-    // the context variable to see the structure, but some key properties for
-    // sheets are the actor object, the data object, whether or not it's
-    // editable, the items array, and the effects array.
+    // This is the data structure from the base sheet. It contains, among other 
+    // properties, the actor object, data object, whether it's editable, 
+    // the items array and the effects array. 
     const context = super.getData();
 
-    // Use a safe clone of the actor data for further operations.
-    const actorData = context.actor.data;
+    context.isEditable = context.editable;
 
-    // Add the actor's data to context.data for easier access, as well as flags.
-    context.data = actorData.data;
-    context.flags = actorData.flags;
+    // Use a safe clone of the actor data for further operations. 
+    // It is "safe", because behind the scenes, a getter returns a clone. 
+    const actorData = context.actor.data.data;
 
-    this._prepareDerivedItemData(context);
-    this._prepareDerivedAttributeData(context);
+    // Make data available in context. 
+    context.data.person = actorData.person;
+    context.data.attributeGroups = this._getDerivedAttributeGroups(actorData.attributes);
+    context.data.beliefSystem = actorData.beliefSystem;
+    context.data.fateSystem = actorData.fateSystem;
+    context.data.biography = actorData.biography;
+    context.data.learningSkills = actorData.learningSkills;
+    context.data.skills = actorData.skills;
 
-    context.config = CONFIG.ambersteel;
+    context.CONFIG = CONFIG.ambersteel;
 
     return context;
   }
 
-  _prepareDerivedAttributeData(data) {
+  /**
+   * 
+   * @param attributes {Object} The root attributes object. 
+   */
+  _getDerivedAttributeGroups(attributes) {
     // Holds attribute group objects for easy access. 
-    data.attributeGroups = {}
+    const attributeGroups = {};
 
-    for (let attGroup in data.data.attributes) {
-      if (!data.data.attributes.hasOwnProperty(attGroup)) continue;
+    for (const attGroupName in attributes) {
+      if (!attributes.hasOwnProperty(attGroupName)) continue;
 
-      let oAttGroup = data.data.attributes[attGroup]
+      const oAttGroup = attributes[attGroupName];
       
       // Initialize attribute group object with meta-data. 
-      data.attributeGroups[attGroup] = {
-        localizableName: "ambersteel.attributeGroups." + attGroup,
-        name: attGroup,
+      attributeGroups[attGroupName] = {
+        localizableName: "ambersteel.attributeGroups." + attGroupName,
+        name: attGroupName,
         attributes: {}
-      }
+      };
 
-      for (let att in oAttGroup) {
-        if (!oAttGroup.hasOwnProperty(att)) continue;
+      for (const attName in oAttGroup) {
+        if (!oAttGroup.hasOwnProperty(attName)) continue;
         
-        let oAtt = oAttGroup[att]
-
-        // Add attribute object to attributeGroups for easy access.
-        data.attributeGroups[attGroup].attributes[att] = oAtt
+        attributeGroups[attGroupName].attributes[attName] = oAttGroup[attName];
       }
     }
+    return attributeGroups;
   }
-
-  /**
-   * Organize and classify Items for Character sheets.
-   *
-   * @param {Object} actorData The actor to prepare.
-   *
-   * @return {undefined}
-   */
-  _prepareDerivedItemData(context) {
-    // Initialize containers.
-    const possessions = [];
-    const skills = [];
-    const learningSkills = [];
-    const fateCards = [];
-
-    // Iterate through items, allocating to containers
-    for (let i of context.items) {
-      i.img = i.img || DEFAULT_TOKEN;
-
-      // Possessions
-      if (i.type === 'possession') {
-        possessions.push(i);
-      }
-      // Skills
-      else if (i.type === 'skill') {
-        if (parseInt(i.value) == 0) {
-          learningSkills.push(i);
-        } else {
-          skills.push(i);
-        }
-      }
-      // Fate Cards
-      if (i.type === 'fateCard') {
-        fateCards.push(i);
-      }
-    }
-
-    // Assign and return
-    context.skills = skills;
-    context.learningSkills = learningSkills;
-    context.possessions = possessions;
-    context.fateCards = fateCards;
-   }
 
   /* -------------------------------------------- */
 
@@ -134,14 +99,12 @@ export class AmbersteelActorSheet extends ActorSheet {
     if (!this.actor.isOwner) return;
     
     // Drag events for macros.
-    if (this.actor.isOwner) {
-      let handler = ev => this._onDragStart(ev);
-      html.find('li.item').each((i, li) => {
-        if (li.classList.contains("inventory-header")) return;
-        li.setAttribute("draggable", true);
-        li.addEventListener("dragstart", handler, false);
-      });
-    }
+    let handler = ev => this._onDragStart(ev);
+    html.find('li.item').each((i, li) => {
+      if (li.classList.contains("inventory-header")) return;
+      li.setAttribute("draggable", true);
+      li.addEventListener("dragstart", handler, false);
+    });
 
     // Roll skill. 
     html.find(".ambersteel-skill-roll").click(this._onSkillRoll.bind(this));
@@ -286,7 +249,7 @@ export class AmbersteelActorSheet extends ActorSheet {
     });
 
     // Note result towards skill progress. 
-    this.actor.progressSkill({ skillObject: oSkill, success: result.rollResults.isSuccess });
+    this.actor.progressSkill(itemId, result.rollResults.isSuccess, false);
 
     // Re-render the sheet to make the progress visible. 
     this.render();
@@ -321,7 +284,7 @@ export class AmbersteelActorSheet extends ActorSheet {
     });
 
     // Note result towards attribute progress. 
-    this.actor.progressAttribute({ attObject: oAtt, success: result.rollResults.isSuccess });
+    this.actor.progressAttribute({ attObject: oAtt, success: result.rollResults.isSuccess, autoLevel: false });
 
     // Re-render the sheet to make the progress visible. 
     this.render();

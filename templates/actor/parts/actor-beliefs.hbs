@@ -1,26 +1,46 @@
+{{!-- Requires parameters:
+isEditable: {Boolean},
+data: {Object} where Object = {
+  beliefSystem: {Object} where Object = {
+    ambition: {String},
+    beliefs: {[String]},
+    instincts: {[String]}
+  }
+}
+--}}
 <section>
   <div class="sheet-block">
     <h3>
       <label class="fancy-font" for="data.beliefSystem.ambition">{{localize "ambersteel.beliefSystem.ambition"}}</label>
     </h3>
-    <input name="data.beliefSystem.ambition" type="text" value="{{data.beliefSystem.ambition}}" />
+    {{#if isEditable}}
+      <input name="data.beliefSystem.ambition" type="text" value="{{data.beliefSystem.ambition}}" />
+    {{else}}
+      {{data.beliefSystem.ambition}}
+    {{/if}}
   </div>
   <div class="sheet-block">
     <h3>
       <label class="fancy-font" for="data.beliefSystem.beliefs">{{localize "ambersteel.beliefSystem.beliefs"}}</label>
     </h3>
-    {{#each data.beliefSystem.beliefs as |text|}}
-    <input name="data.beliefSystem.beliefs" type="text" value="{{text}}" />
+    {{#each data.beliefSystem.beliefs as | belief |}}
+      {{#if ../isEditable}}
+        <input name="data.beliefSystem.beliefs" type="text" value="{{belief}}" />
+      {{else}}
+        {{belief}}
+      {{/if}}
     {{/each}}
   </div>
   <div class="sheet-block">
     <h3>
-      <label class="fancy-font" for="data.beliefSystem.instincts">{{localize
-        "ambersteel.beliefSystem.instincts"}}</label>
+      <label class="fancy-font" for="data.beliefSystem.instincts">{{localize "ambersteel.beliefSystem.instincts"}}</label>
     </h3>
-        </h3>
-    {{#each data.beliefSystem.instincts as |text|}}
-    <input name="data.beliefSystem.instincts" type="text" value="{{text}}" />
+    {{#each data.beliefSystem.instincts as | instinct |}}
+      {{#if ../isEditable}}
+        <input name="data.beliefSystem.instincts" type="text" value="{{instinct}}" />
+      {{else}}
+        {{instinct}}
+      {{/if}}
     {{/each}}
   </div>
 </section>
