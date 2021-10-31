@@ -4,11 +4,11 @@ This is the Ambersteel table-top role-playing game system for FoundryVTT.
 
 ## TODO
 * [X] Roll an attribute
-  * [ ] Auto-increment successes/failures
-  * [ ] Custom result display
-* [ ] Roll a skill
-  * [ ] Auto-increment successes/failures
-  * [ ] Custom result display
+  * [X] Auto-increment successes/failures
+  * [X] Custom result display
+* [X] Roll a skill
+  * [X] Auto-increment successes/failures
+  * [X] Custom result display
 * [ ] Auto-level-up attribute
   * [ ] Reset requirements
 * [ ] Auto-level-up skill

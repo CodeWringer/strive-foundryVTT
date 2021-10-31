@@ -40,6 +40,7 @@ export class AmbersteelActor extends Actor {
   /**
    * Prepares derived data for all attributes. 
    * @param actorData 
+   * @private
    */
   _prepareDerivedAttributesData(actorData) {
     for (const attGroupName in actorData.data.attributes) {
@@ -56,6 +57,7 @@ export class AmbersteelActor extends Actor {
    * Prepares derived data for a given attribute. 
    * @param oAtt {Object} The attribute object. 
    * @param attName {String} Internal name of the attribute, e.g. 'magicSense'. 
+   * @private
    */
   _prepareDerivedAttributeData(oAtt, attName) {
     const attValue = parseInt(oAtt.value);
@@ -76,6 +78,7 @@ export class AmbersteelActor extends Actor {
    * Updates the given actorData with derived skill data. 
    * Assigns items of type skill to the derived lists 'actorData.skills' and 'actorData.learningSkills'. 
    * @param actorData 
+   * @private
    */
   _prepareDerivedSkillsData(actorData) {
     const data = actorData.data;
@@ -98,6 +101,7 @@ export class AmbersteelActor extends Actor {
   /**
    * 
    * @param skillId {String} Id of a skill. 
+   * @private
    */
   _prepareDerivedSkillData(skillId) {
     const oSkill = this.items.get(skillId);
@@ -117,7 +121,9 @@ export class AmbersteelActor extends Actor {
   }
 
   /**
-   * Prepare PC type specific data
+   * Prepare PC type specific data. 
+   * @param actorData 'this.data'
+   * @private
    */
   _preparePCData(actorData) {
     if (actorData.type !== 'pc') return;
@@ -136,6 +142,8 @@ export class AmbersteelActor extends Actor {
   /**
    * 
    * @param attName {String} Internal name of an attribute, e.g. 'magicSense'. 
+   * @returns {Object} With properties 'object', 'name', 'groupName'
+   * @private
    */
   _getAttributeForName(attName) {
     const data = this.data.data;
@@ -143,63 +151,11 @@ export class AmbersteelActor extends Actor {
     for (let attGroupName in data.attributes) {
       let oAtt = data.attributes[attGroupName][attName];
       if (oAtt) {
-        return oAtt;
-      }
-    }
-  }
-
-  /**
-   * Sets the level of an attribute with the given name. 
-   * @param opts {Object} Options object. 
-   * @param opts.attName {String} Internal name of an attribute, e.g. 'magicSense'. 
-   * @param opts.attObject {Object} Attribute object. Takes precedence over 'attName'. 
-   * @param opts.newValue {Number} Value to set the attribute to, e.g. 0. Default 0
-   */
-  setAttributeLevel(opts = {attName: undefined, attObject: undefined, newValue: undefined}) {
-    opts = {
-      attName: undefined,
-      attObject: undefined,
-      newValue: 0,
-      ...opts
-    };
-
-    let oAtt = opts.attObject ?? this._getAttributeForName(opts.attName);
-    oAtt.value = newValue;
-
-    this._prepareDerivedAttributeData(oAtt, oAtt.name);
-  }
-
-  /**
-   * Adds success/failure progress to an attribute. 
-   * 
-   * Also auto-levels up the attribute, if opts.allowLevel is set to true. 
-   * @param opts {Object} Options object. 
-   * @param opts.attName {String} Internal name of an attribute, e.g. 'magicSense'. 
-   * @param opts.attObject {Object} Attribute object. Takes precedence over 'attName'. 
-   * @param opts.success {Boolean} If true, will add 1 success, else will add 1 failure. Default false
-   * @param opts.success {Boolean} If true, will auto-level up. Default true
-   */
-  progressAttribute(opts = {attName: undefined, attObject: undefined, success: undefined, autoLevel: undefined}) {
-    opts = {
-      attName: undefined,
-      attObject: undefined,
-      success: false,
-      autoLevel: true,
-      ...opts
-    }
-    const oAtt = opts.attObject ?? this._getAttributeForName(opts.attName);
-
-    if (opts.success) {
-      oAtt.successes = parseInt(oAtt.successes) + 1;
-    } else {
-      oAtt.failures = parseInt(oAtt.failures) + 1;
-    }
-
-    if (opts.autoLevel) {
-      if (parseInt(oAtt.successes) >= parseInt(oAtt.requiredSuccessses)
-      && parseInt(oAtt.failures) >= parseInt(oAtt.requiredFailures)) {
-        oAtt.value = parseInt(oAtt.value) + 1;
-        this._prepareDerivedAttributeData(oAtt, oAtt.name);
+        return {
+          object: oAtt,
+          name: attName,
+          groupName: attGroupName
+        };
       }
     }
   }
@@ -207,6 +163,74 @@ export class AmbersteelActor extends Actor {
   /**
    * Returns the requirements to the next level of the given level. 
    * @param level The level for which to return the requirements to the next level. 
+   * @private
+   */
+  _getAttributeRequirements(level = 0) {
+    return {
+      requiredSuccessses: (level + 1) * (level + 1) * 3,
+      requiredFailures: (level + 1) * (level + 1) * 4
+    }
+  }
+
+  /**
+   * Sets the level of the attribute with the given name. 
+   * @param attName {String} Internal name of an attribute, e.g. 'magicSense'. 
+   * @param newValue {Number} Value to set the attribute to, e.g. 0. Default 0
+   * @async
+   */
+  async setAttributeLevel(attName = undefined, newValue = 0) {
+    const oAttName = this._getAttributeForName(attName);
+    const req = this._getAttributeRequirements(newValue);
+    const propertyPath = `data.attributes.${oAttName.groupName}.${attName}`
+
+    await this.update({
+      [`${propertyPath}.value`]: newValue,
+      [`${propertyPath}.requiredSuccessses`]: req.requiredSuccessses,
+      [`${propertyPath}.requiredFailures`]: req.requiredFailures,
+      [`${propertyPath}.successes`]: 0,
+      [`${propertyPath}.failures`]: 0
+    });
+  }
+
+  /**
+   * Adds success/failure progress to an attribute. 
+   * 
+   * Also auto-levels up the attribute, if 'autoLevel' is set to true. 
+   * @param attName {String} Internal name of an attribute, e.g. 'magicSense'. 
+   * @param success {Boolean} If true, will add 1 success, else will add 1 failure. Default false
+   * @param autoLevel {Boolean} If true, will auto-level up. Default false
+   * @async
+   */
+  async progressAttribute(attName = undefined, success = false, autoLevel = false) {
+    const oAttName = this._getAttributeForName(attName);
+    const oAtt = oAttName.object;
+
+    const successes = parseInt(oAtt.successes);
+    const failures = parseInt(oAtt.failures);
+    const requiredSuccessses = parseInt(oAtt.requiredSuccessses);
+    const requiredFailures = parseInt(oAtt.requiredFailures);
+    const propertyPath = `data.attributes.${oAttName.groupName}.${attName}`
+
+    if (success) {
+      await this.update({ [`${propertyPath}.successes`]: successes + 1 });
+    } else {
+      await this.update({ [`${propertyPath}.failures`]: failures + 1 });
+    }
+
+    if (autoLevel) {
+      if (successes >= requiredSuccessses
+      && failures >= requiredFailures) {
+        const newLevel = parseInt(oAtt.value) + 1;
+        await this.setAttributeLevel(attName, newLevel);
+      }
+    }
+  }
+
+  /**
+   * Returns the requirements to the next level of the given level. 
+   * @param level The level for which to return the requirements to the next level. 
+   * @private
+   * @async
    */
   _getSkillRequirements(level = 0) {
     return {
@@ -219,6 +243,7 @@ export class AmbersteelActor extends Actor {
    * Sets the level of a skill with the given id. 
    * @param skillId {String} Id of the skill. 
    * @param newValue {Number} Value to set the skill to, e.g. 0. Default 0
+   * @async
    */
   async setSkillLevel(skillId = undefined, newValue = 0) {
     const oSkill = this.items.get(skillId);
@@ -236,12 +261,13 @@ export class AmbersteelActor extends Actor {
   /**
    * Adds success/failure progress to a skill. 
    * 
-   * Also auto-levels up the skill, if 'allowLevel' is set to true. 
+   * Also auto-levels up the skill, if 'autoLevel' is set to true. 
    * @param skillId {String} Id of a skill item. 
    * @param success {Boolean} If true, will add 1 success, else will add 1 failure. Default false
-   * @param success {Boolean} If true, will auto-level up. Default true
+   * @param autoLevel {Boolean} If true, will auto-level up. Default false
+   * @async
    */
-  async progressSkill(skillId = undefined, success = false, autoLevel = true) {
+  async progressSkill(skillId = undefined, success = false, autoLevel = false) {
     const oSkill = this.items.get(skillId);
     const skillData = oSkill.data.data;
 

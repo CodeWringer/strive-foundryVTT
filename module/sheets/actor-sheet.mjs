@@ -262,6 +262,7 @@ export class AmbersteelActorSheet extends ActorSheet {
    * Attribute roll handler. 
    * @param {Event} event 
    * @private
+   * @async
    */
   async _onAttributeRoll(event) {
     event.preventDefault();
@@ -284,7 +285,7 @@ export class AmbersteelActorSheet extends ActorSheet {
     });
 
     // Note result towards attribute progress. 
-    this.actor.progressAttribute({ attObject: oAtt, success: result.rollResults.isSuccess, autoLevel: false });
+    await this.actor.progressAttribute(attName, result.rollResults.isSuccess);
 
     // Re-render the sheet to make the progress visible. 
     this.render();
