@@ -35,71 +35,89 @@ ambersteel.shieldTypes = {
 
 ambersteel.character = {
     attributeGroups: {
-        physical: "ambersteel.attributeGroups.physical",
-        mental: "ambersteel.attributeGroups.mental",
-        social: "ambersteel.attributeGroups.social",
-        arcane: "ambersteel.attributeGroups.arcane"
-    },
-    attributes: {
-        agility: {
-            name: "agility",
-            nameString: "ambersteel.attributes.agility",
-            abbrevString: "ambersteel.attributeAbbreviations.agility"
+        physical: {
+            name: "physical",
+            localizableName: "ambersteel.attributeGroups.physical",
+            attributes: {
+                agility: {
+                    name: "agility",
+                    localizableName: "ambersteel.attributes.agility",
+                    localizableAbbreviation: "ambersteel.attributeAbbreviations.agility"
+                },
+                endurance: {
+                    name: "endurance",
+                    localizableName: "ambersteel.attributes.endurance",
+                    localizableAbbreviation: "ambersteel.attributeAbbreviations.endurance"
+                },
+                perception: {
+                    name: "perception",
+                    localizableName: "ambersteel.attributes.perception",
+                    localizableAbbreviation: "ambersteel.attributeAbbreviations.perception"
+                },
+                strength: {
+                    name: "strength",
+                    localizableName: "ambersteel.attributes.strength",
+                    localizableAbbreviation: "ambersteel.attributeAbbreviations.strength"
+                },
+                toughness: {
+                    name: "toughness",
+                    localizableName: "ambersteel.attributes.toughness",
+                    localizableAbbreviation: "ambersteel.attributeAbbreviations.toughness"
+                },
+            }
         },
-        endurance: {
-            name: "endurance",
-            nameString: "ambersteel.attributes.endurance",
-            abbrevString: "ambersteel.attributeAbbreviations.endurance"
+        mental: {
+            name: "mental",
+            localizableName: "ambersteel.attributeGroups.mental",
+            attributes: {
+                intelligence: {
+                    name: "intelligence",
+                    localizableName: "ambersteel.attributes.intelligence",
+                    localizableAbbreviation: "ambersteel.attributeAbbreviations.intelligence"
+                },
+                wisdom: {
+                    name: "wisdom",
+                    localizableName: "ambersteel.attributes.wisdom",
+                    localizableAbbreviation: "ambersteel.attributeAbbreviations.wisdom"
+                },
+            }
         },
-        perception: {
-            name: "perception",
-            nameString: "ambersteel.attributes.perception",
-            abbrevString: "ambersteel.attributeAbbreviations.perception"
+        social: {
+            name: "social",
+            localizableName: "ambersteel.attributeGroups.social",
+            attributes: {
+                empathy: {
+                    name: "empathy",
+                    localizableName: "ambersteel.attributes.empathy",
+                    localizableAbbreviation: "ambersteel.attributeAbbreviations.empathy"
+                },
+                oratory: {
+                    name: "oratory",
+                    localizableName: "ambersteel.attributes.oratory",
+                    localizableAbbreviation: "ambersteel.attributeAbbreviations.oratory"
+                },
+                willpower: {
+                    name: "willpower",
+                    localizableName: "ambersteel.attributes.willpower",
+                    localizableAbbreviation: "ambersteel.attributeAbbreviations.willpower"
+                },
+            }
         },
-        strength: {
-            name: "strength",
-            nameString: "ambersteel.attributes.strength",
-            abbrevString: "ambersteel.attributeAbbreviations.strength"
-        },
-        toughness: {
-            name: "toughness",
-            nameString: "ambersteel.attributes.toughness",
-            abbrevString: "ambersteel.attributeAbbreviations.toughness"
-        },
-        intelligence: {
-            name: "intelligence",
-            nameString: "ambersteel.attributes.intelligence",
-            abbrevString: "ambersteel.attributeAbbreviations.intelligence"
-        },
-        wisdom: {
-            name: "wisdom",
-            nameString: "ambersteel.attributes.wisdom",
-            abbrevString: "ambersteel.attributeAbbreviations.wisdom"
-        },
-        empathy: {
-            name: "empathy",
-            nameString: "ambersteel.attributes.empathy",
-            abbrevString: "ambersteel.attributeAbbreviations.empathy"
-        },
-        oratory: {
-            name: "oratory",
-            nameString: "ambersteel.attributes.oratory",
-            abbrevString: "ambersteel.attributeAbbreviations.oratory"
-        },
-        willpower: {
-            name: "willpower",
-            nameString: "ambersteel.attributes.willpower",
-            abbrevString: "ambersteel.attributeAbbreviations.willpower"
-        },
-        arcana: {
-            name: "arcana",
-            nameString: "ambersteel.attributes.arcana",
-            abbrevString: "ambersteel.attributeAbbreviations.arcana"
-        },
-        magicSense: {
-            name: "magicSense",
-            nameString: "ambersteel.attributes.magicSense",
-            abbrevString: "ambersteel.attributeAbbreviations.magicSense"
+        arcane: {
+            name: "arcane",
+            localizableName: "ambersteel.attributeGroups.arcane",
+            attributes: {
+                arcana: {
+                    name: "arcana",
+                    localizableName: "ambersteel.attributes.arcana",
+                    localizableAbbreviation: "ambersteel.attributeAbbreviations.arcana"
+                },
+                magicSense: {
+                    name: "magicSense",
+                    localizableName: "ambersteel.attributes.magicSense",
+                    localizableAbbreviation: "ambersteel.attributeAbbreviations.magicSense"
+                }
+            }
         }
     },
     biography: {
@@ -118,6 +136,21 @@ ambersteel.character = {
         beliefs: "ambersteel.beliefSystem.beliefs",
         instincts: "ambersteel.beliefSystem.instincts"
     }
+}
+
+ambersteel.character.attributes = {
+    agility: ambersteel.character.attributeGroups.physical.attributes.agility,
+    endurance: ambersteel.character.attributeGroups.physical.attributes.endurance,
+    perception: ambersteel.character.attributeGroups.physical.attributes.perception,
+    strength: ambersteel.character.attributeGroups.physical.attributes.strength,
+    toughness: ambersteel.character.attributeGroups.physical.attributes.toughness,
+    intelligence: ambersteel.character.attributeGroups.mental.attributes.intelligence,
+    wisdom: ambersteel.character.attributeGroups.mental.attributes.wisdom,
+    empathy: ambersteel.character.attributeGroups.social.attributes.empathy,
+    oratory: ambersteel.character.attributeGroups.social.attributes.oratory,
+    willpower: ambersteel.character.attributeGroups.social.attributes.willpower,
+    arcana: ambersteel.character.attributeGroups.arcane.attributes.arcana,
+    magicSense: ambersteel.character.attributeGroups.arcane.attributes.magicSense
 }
 
 ambersteel.labels = {
