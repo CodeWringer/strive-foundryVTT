@@ -35,6 +35,7 @@ export class AmbersteelActorSheet extends ActorSheet {
     // properties, the actor object, data object, whether it's editable, 
     // the items array and the effects array. 
     const context = super.getData();
+    context.CONFIG = CONFIG.ambersteel;
 
     context.isEditable = context.editable;
 
@@ -50,8 +51,6 @@ export class AmbersteelActorSheet extends ActorSheet {
     context.data.biography = actorData.biography;
     context.data.learningSkills = actorData.learningSkills;
     context.data.skills = actorData.skills;
-
-    context.CONFIG = CONFIG.ambersteel;
 
     return context;
   }

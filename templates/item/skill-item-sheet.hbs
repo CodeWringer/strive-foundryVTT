@@ -1,23 +1,62 @@
 {{!-- Requires context:
 isEditable: {Boolean},
+isExpanded: {Boolean},
 data: {Object} where Object = {
   groupName: {String},
-  skillName: {String},
   value: {Number},
   successes: {Number},
   failures: {Number},
+  relatedAttribute: {String},
   requiredSuccessses: {Number},
   requiredFailures: {Number},
-  abilities: {[Object]} where Object -> {
-    abilityName: {String},
-    description: {String}
-  }
+  abilities: {[Object]} where Object -> see item/parts/skill-ability-table.hbs
 }
 --}}
 <form class="{{cssClass}}" autocomplete="off">
   <header class="sheet-header">
-      <img src="{{item.img}}" data-edit="img" title="{{item.name}}" height="64" width="64"/>
-      <h1><input name="name" type="text" value="{{item.name}}" placeholder="{{ localize 'Name' }}"/></h1>
+    <img src="{{item.img}}" data-edit="img" title="{{item.name}}" height="64" width="64" />
+    <h1>
+      {{#if isEditable}}
+        <input name="name" type="text" value="{{item.name}}" placeholder="{{ localize 'Name' }}" />
+      {{else}}
+        {{item.name}}
+      {{/if}}
+    </h1>
   </header>
-  <textarea name="data.description">{{data.description}}</textarea>
+  <div class="flex sheet-block">
+    <div class="flex flex-column">
+      <label class="line-height fancy-font pad-sm" for="data.description">{{localize "ambersteel.labels.relatedAttribute"}}</label>
+      <label class="line-height fancy-font pad-sm" for="data.relatedAttribute">{{localize "ambersteel.labels.description"}}</label>
+    </div>
+    <div class="flex flex-column flex-grow">
+    {{#if isEditable}}
+      <select class="ambersteel-item-edit" name="data.relatedAttribute" data-field="data.relatedAttribute">
+        {{#select data.relatedAttribute}}
+        {{#each CONFIG.character.attributes as | att |}}
+        <option value="{{att.name}}">{{localize att.localizableAbbreviation}}</option>
+        {{/each}}
+        {{/select}}
+      </select>
+      <textarea class="resize-vertical" name="data.description">{{data.description}}</textarea>
+    {{else}}
+      <span class="line-height pad-sm">{{data.relatedAttribute}}</span>
+      <span class="line-height pad-sm">{{data.description}}</span>
+    {{/if}}
+  </div>
+  </div>
+  <div class="{{#if isExpanded}}{{else}}hidden{{/if}}">
+    {{> "systems/ambersteel/templates/item/parts/skill-ability-table.hbs" 
+    isEditable=isEditable 
+    abilities=abilities }}
+  </div>
+  <div>
+    <a class="ambersteel-expand-skill-ability-list full-button pad-sm button"
+      title="{{localize ambersteel.labels.expandSkillAbilityList}}">
+      {{#if isExpanded}}
+        <i class="fas fa-angle-double-up"></i>
+      {{else}}
+        <i class="fas fa-angle-double-down"></i>
+      {{/if}}
+    </a>
+  </div>
 </form>

@@ -18,6 +18,8 @@
     "systems/ambersteel/templates/actor/parts/actor-health.hbs",
     "systems/ambersteel/templates/actor/parts/actor-possessions.hbs",
     "systems/ambersteel/templates/actor/parts/actor-biography.hbs",
+    // Item partials.
+    "systems/ambersteel/templates/item/parts/skill-ability-table.hbs",
     // Dice.
     "systems/ambersteel/templates/dice/roll.hbs",
     "systems/ambersteel/templates/dice/roll-dialog.hbs",

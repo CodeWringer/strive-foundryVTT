@@ -1,3 +1,5 @@
+import * as Skill from '../utils/skill-utility.mjs';
+
 export class AmbersteelItemSheet extends ItemSheet {
 
   /** @override */
@@ -12,7 +14,14 @@ export class AmbersteelItemSheet extends ItemSheet {
 
   /** @override */
   get template() {
-    return "systems/ambersteel/templates/item/item-item-sheet.hbs";
+    const path = "systems/ambersteel/templates/item";
+    const type = this.item.data.type;
+
+    if (type != undefined && type != null && type != "") {
+      return `${path}/${type}-item-sheet.hbs`;
+    } else { // Fallback
+      return `${path}/item-item-sheet.hbs`;
+    }
   }
 
   /* -------------------------------------------- */
@@ -20,21 +29,22 @@ export class AmbersteelItemSheet extends ItemSheet {
   /** @override */
   getData() {
     // Retrieve base data structure.
-    const data = super.getData();
-    const itemData = data.item.data;
+    const context = super.getData();
+    const type = context.item.type;
+    const itemData = context.item.data;
+    context.CONFIG = CONFIG.ambersteel;
 
-    // Retrieve the roll data for TinyMCE editors.
-    data.rollData = {};
-    let actor = this.object?.parent ?? null;
-    if (actor) {
-      data.rollData = actor.getRollData();
-    }
+    context.isEditable = context.editable;
 
     // Add the actor's data to context.data for easier access, as well as flags.
-    data.data = itemData.data;
-    data.flags = itemData.flags;
+    context.data = itemData.data;
+    context.flags = itemData.flags;
 
-    return data;
+    if (type == "skill") {
+      Skill.prepareDerivedData(context);
+    }
+
+    return context;
   }
 
   /* -------------------------------------------- */

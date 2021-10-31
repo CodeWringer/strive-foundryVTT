@@ -3,11 +3,9 @@ import { ambersteel } from "./config.js"
 // Import document classes.
 import { AmbersteelActor } from "./documents/actor.mjs";
 import { AmbersteelItem } from "./documents/item.mjs";
-import { AmbersteelSkillItem } from "./documents/skill-item.mjs";
 // Import sheet classes.
 import { AmbersteelActorSheet } from "./sheets/actor-sheet.mjs";
 import { AmbersteelItemSheet } from "./sheets/item-sheet.mjs";
-import { AmbersteelSkillItemSheet } from "./sheets/skill-item-sheet.mjs";
 // Import helper/utility classes and constants.
 import { preloadHandlebarsTemplates } from "./helpers/templates.mjs";
 
@@ -23,8 +21,7 @@ Hooks.once('init', async function() {
   // accessible in global contexts.
   game.ambersteel = {
     AmbersteelActor,
-    AmbersteelItem,
-    AmbersteelSkillItem
+    AmbersteelItem
   };
 
   // Set initiative formula. 
@@ -43,8 +40,6 @@ Hooks.once('init', async function() {
   
   Items.unregisterSheet("core", ItemSheet);
   Items.registerSheet("ambersteel", AmbersteelItemSheet, { makeDefault: true });
-
-  Items.registerSheet("ambersteel", AmbersteelSkillItemSheet, { makeDefault: false });
 
   // Preload Handlebars templates.
   return preloadHandlebarsTemplates();

@@ -80,3 +80,13 @@ $width-column-xl: 80px;
         width: $width-column-md;
     }
 }
+
+section.skill-ability-list {
+    width: 80%;
+    margin: auto;
+}
+
+table.skill-ability-list {
+    margin: 0;
+    border: 0;
+}

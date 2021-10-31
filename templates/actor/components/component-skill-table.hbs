@@ -63,7 +63,7 @@ skills: {[Object]} where Object = {
                     <select class="ambersteel-item-edit" name="data.relatedAttribute" data-field="data.relatedAttribute">
                         {{#select data.relatedAttribute}}
                         {{#each ../CONFIG.character.attributes as | att |}}
-                        <option value="{{att.name}}">{{localize att.abbrevString}}</option>
+                        <option value="{{att.name}}">{{localize att.localizableAbbreviation}}</option>
                         {{/each}}
                         {{/select}}
                     </select>
@@ -105,6 +105,25 @@ skills: {[Object]} where Object = {
                         </a>
                     </td>
                 {{/if}}
+            </tr>
+            <tr>
+                <td style="display: table-cell;" colspan="100">
+                    <div class="{{#if data.isExpanded}}{{else}}hidden{{/if}}">
+                        {{> "systems/ambersteel/templates/item/parts/skill-ability-table.hbs" 
+                        isEditable=../isEditable 
+                        abilities=data.abilities }}
+                    </div>
+                    <div>
+                        <a class="ambersteel-expand-skill-ability-list full-button pad-sm button"
+                            title="{{localize ambersteel.labels.expandSkillAbilityList}}">
+                            {{#if data.isExpanded}}
+                            <i class="fas fa-angle-double-up"></i>
+                            {{else}}
+                            <i class="fas fa-angle-double-down"></i>
+                            {{/if}}
+                        </a>
+                    </div>
+                </td>
             </tr>
             {{/each}}
             {{#if isEditable}}

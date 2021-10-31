@@ -425,6 +425,15 @@ a.button {
   padding: 2px;
 }
 
+a.full-button {
+  padding: 2px;
+  width: 100%;
+  display: inline-block;
+  border: 1px solid rgba(129, 129, 129, 0.22);
+  border-radius: 3px;
+  text-align: center;
+}
+
 .resize-vertical {
   resize: vertical;
 }
@@ -662,6 +671,16 @@ a.button {
 .skill-column-successes, .skill-column-failures {
   max-width: 50px;
   width: 50px;
+}
+
+section.skill-ability-list {
+  width: 80%;
+  margin: auto;
+}
+
+table.skill-ability-list {
+  margin: 0;
+  border: 0;
 }
 
 span.spinner-container {

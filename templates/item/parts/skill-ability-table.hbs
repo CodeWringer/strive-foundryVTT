@@ -1,0 +1,76 @@
+{{!-- Required context:
+isEditable: {Boolean},
+abilities: {[Object]} where Object -> {
+  name: {String},
+  description: {String},
+  requiredLevel: {Number},
+  APCost: {Number},
+  condition: {String}
+}
+--}}
+<section class="skill-ability-list">
+  <table class="skill-ability-list">
+    <tr>
+      <th class="skill-ability-column-name"></th>
+      <th class="skill-ability-column-description"></th>
+      <th class="skill-ability-column-requirement"></th>
+      <th class="skill-ability-column-cost"></th>
+      <th class="skill-ability-column-condition"></th>
+    </tr>
+    <tbody>
+      {{#each abilities as |key ability|}}
+      <tr>
+        <td>
+          {{#if isEditable}}
+          <input class="ability-name" name="" type="text" value="{{ability.name}}" data-field="name" />
+          {{else}}
+          {{ability.name}}
+          {{/if}}
+        </td>
+        <td>
+          {{#if isEditable}}
+          <input class="ability-description" name="" type="text" value="{{ability.description}}"
+            data-field="description" />
+          {{else}}
+          {{ability.description}}
+          {{/if}}
+        </td>
+        <td>
+          {{#if isEditable}}
+          <input class="ability-requirement" name="" type="text" value="{{ability.requiredLevel}}"
+            data-field="requiredLevel" />
+          {{else}}
+          {{ability.requiredLevel}}
+          {{/if}}
+        </td>
+        <td>
+          {{#if isEditable}}
+          <input class="ability-cost" name="" type="text" value="{{ability.APCost}}" data-field="APCost" />
+          {{else}}
+          {{ability.APCost}}
+          {{/if}}
+        </td>
+        <td>
+          {{#if isEditable}}
+          <input class="ability-condition" name="" type="text" value="{{ability.condition}}" data-field="condition" />
+          {{else}}
+          {{ability.condition}}
+          {{/if}}
+        </td>
+      </tr>
+      {{/each}}
+      {{#if isEditable}}
+      <tr>
+        <td style="display: table-cell;" colspan="100">
+          <div class="flex">
+            <span class="flex-grow"></span>
+            <a class="ambersteel-skill-ability-create pad-sm" title="{{localize ambersteel.labels.addSkillAbility}}">
+              <i class="fas fa-plus"></i>
+            </a>
+          </div>
+        </td>
+      </tr>
+      {{/if}}
+    </tbody>
+  </table>
+</section>

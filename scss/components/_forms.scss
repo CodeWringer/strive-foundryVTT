@@ -87,6 +87,15 @@ a.button {
   padding: $padding-sm;
 }
 
+a.full-button {
+  padding: $padding-sm;
+  width: 100%;
+  display: inline-block;
+  border: 1px solid $c-border-light;
+  border-radius: 3px;
+  text-align: center;
+}
+
 .resize-vertical {
   resize: vertical;
 }

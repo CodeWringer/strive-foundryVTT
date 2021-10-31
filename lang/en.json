@@ -90,6 +90,8 @@
       "knownSkill": "Known Skills",
       "addSkill": "Add Skill",
       "deleteSkill": "Delete Skill",
+      "addSkillAbility": "Add Skill Ability",
+      "expandSkillAbilityList": "Expand Skill Ability List",
       "buyFateCard": "Buy Fate Card",
       "add": "Add",
       "edit": "Edit",
@@ -104,7 +106,9 @@
       "confirm": "Confirm",
       "cancel": "Cancel",
       "increment": "Increment",
-      "decrement": "Decrement"
+      "decrement": "Decrement",
+      "description": "Description",
+      "relatedAttribute": "Related Attribute"
     },
     "fateSystem": {
       "miFP": "Minor Fate Points",
