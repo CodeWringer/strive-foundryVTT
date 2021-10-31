@@ -1,3 +1,4 @@
+import * as Skill from '../utils/skill-utility.mjs';
 import * as Attribute from '../utils/attribute-utility.mjs';
 
 /**
@@ -115,7 +116,7 @@ export class AmbersteelActor extends Actor {
     skillData.failures = parseInt(skillData.failures ? skillData.failures : 0);
     skillData.relatedAttribute = skillData.relatedAttribute ? skillData.relatedAttribute : "agility";
     
-    const req = this._getSkillAdvancementRequirements(skillData.value);
+    const req = Skill.getAdvancementRequirements(skillData.value);
     skillData.requiredSuccessses = req.requiredSuccessses;
     skillData.requiredFailures = req.requiredFailures;
   }
@@ -212,36 +213,5 @@ export class AmbersteelActor extends Actor {
         await this.setAttributeLevel(attName, newLevel);
       }
     }
-  }
-
-  /**
-   * Returns the requirements to the next level of the given level. 
-   * @param level The level for which to return the requirements to the next level. 
-   * @private
-   */
-  _getSkillAdvancementRequirements(level = 0) {
-    return {
-      requiredSuccessses: (level == 0) ? 10 : (level + 1) * level * 2,
-      requiredFailures: (level == 0) ? 14 : (level + 1) * level * 3
-    }
-  }
-
-  /**
-   * Sets the level of a skill with the given id. 
-   * @param skillId {String} Id of the skill. 
-   * @param newValue {Number} Value to set the skill to, e.g. 0. Default 0
-   * @async
-   */
-  async setSkillLevel(skillId = undefined, newValue = 0) {
-    const oSkill = this.items.get(skillId);
-    const req = this._getSkillAdvancementRequirements(newValue);
-
-    await oSkill.update({ 
-      ["data.value"]: newValue,
-      ["data.requiredSuccessses"]: req.requiredSuccessses,
-      ["data.requiredFailures"]: req.requiredFailures,
-      ["data.successes"]: 0,
-      ["data.failures"]: 0
-    });
   }
 }
