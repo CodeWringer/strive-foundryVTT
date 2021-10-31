@@ -1,5 +1,12 @@
 /**
  * @extends {Actor}
+ * @property person {Object}
+ * @property attributeGroups: {Object}
+ * @property learningSkills: {[Object]}
+ * @property skills: {[Object]}
+ * @property beliefSystem: {Object}
+ * @property fateSystem: {Object}
+ * @property biography: {Object}
  */
 export class AmbersteelActor extends Actor {
 
@@ -115,7 +122,7 @@ export class AmbersteelActor extends Actor {
     skillData.failures = parseInt(skillData.failures ? skillData.failures : 0);
     skillData.relatedAttribute = skillData.relatedAttribute ? skillData.relatedAttribute : "agility";
     
-    const req = this._getSkillRequirements(skillData.value);
+    const req = this._getSkillAdvancementRequirements(skillData.value);
     skillData.requiredSuccessses = req.requiredSuccessses;
     skillData.requiredFailures = req.requiredFailures;
   }
@@ -165,7 +172,7 @@ export class AmbersteelActor extends Actor {
    * @param level The level for which to return the requirements to the next level. 
    * @private
    */
-  _getAttributeRequirements(level = 0) {
+  _getAttributeAdvancementRequirements(level = 0) {
     return {
       requiredSuccessses: (level + 1) * (level + 1) * 3,
       requiredFailures: (level + 1) * (level + 1) * 4
@@ -180,7 +187,7 @@ export class AmbersteelActor extends Actor {
    */
   async setAttributeLevel(attName = undefined, newValue = 0) {
     const oAttName = this._getAttributeForName(attName);
-    const req = this._getAttributeRequirements(newValue);
+    const req = this._getAttributeAdvancementRequirements(newValue);
     const propertyPath = `data.attributes.${oAttName.groupName}.${attName}`
 
     await this.update({
@@ -230,9 +237,8 @@ export class AmbersteelActor extends Actor {
    * Returns the requirements to the next level of the given level. 
    * @param level The level for which to return the requirements to the next level. 
    * @private
-   * @async
    */
-  _getSkillRequirements(level = 0) {
+  _getSkillAdvancementRequirements(level = 0) {
     return {
       requiredSuccessses: (level == 0) ? 10 : (level + 1) * level * 2,
       requiredFailures: (level == 0) ? 14 : (level + 1) * level * 3
@@ -247,7 +253,7 @@ export class AmbersteelActor extends Actor {
    */
   async setSkillLevel(skillId = undefined, newValue = 0) {
     const oSkill = this.items.get(skillId);
-    const req = this._getSkillRequirements(newValue);
+    const req = this._getSkillAdvancementRequirements(newValue);
 
     await oSkill.update({ 
       ["data.value"]: nextSkillValue,
