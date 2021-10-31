@@ -235,7 +235,7 @@ export class AmbersteelActorSheet extends ActorSheet {
     let numberOfDice = parseInt(event.currentTarget.dataset.actionValue);
     if (parseInt(oSkill.data.data.value) == 0) {
       let relatedAttName = oSkill.data.data.relatedAttribute;
-      let oAtt = this.actor._getAttributeForName(relatedAttName);
+      let oAtt = this.actor._getAttributeForName(relatedAttName).object;
       numberOfDice = oAtt.value;
     }
     
@@ -267,7 +267,7 @@ export class AmbersteelActorSheet extends ActorSheet {
   async _onAttributeRoll(event) {
     event.preventDefault();
     let attName = event.currentTarget.dataset.actionName;
-    let oAtt = this.actor._getAttributeForName(attName);
+    let oAtt = this.actor._getAttributeForName(attName).object;
     let localizedAttName = game.i18n.localize(oAtt.localizableName);
 
     // Modal dialog to enter obstacle and bonus dice. 
