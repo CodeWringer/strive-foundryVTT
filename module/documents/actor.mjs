@@ -12,10 +12,6 @@ export class AmbersteelActor extends Actor {
 
   /** @override */
   prepareData() {
-    // Prepare data for the actor. Calling the super version of this executes
-    // the following, in order: data reset (to clear active effects),
-    // prepareBaseData(), prepareEmbeddedDocuments() (including active effects),
-    // prepareDerivedData().
     super.prepareData();
   }
 
@@ -25,16 +21,10 @@ export class AmbersteelActor extends Actor {
     // documents or derived data.
   }
 
-  /**
-   * @override
-   * Augment the basic actor data with additional dynamic data. Typically,
-   * you'll want to handle most of your calculated/derived data in this step.
-   * Data calculated in this step should generally not exist in template.json
-   * (such as ability modifiers rather than ability scores) and should be
-   * available both inside and outside of character sheets (such as if an actor
-   * is queried and has a roll executed directly from it).
-   */
+  /** @override */
   prepareDerivedData() {
+    super.prepareDerivedData();
+
     const actorData = this.data;
     const data = actorData.data;
     const flags = actorData.flags.ambersteel || {};
@@ -208,7 +198,7 @@ export class AmbersteelActor extends Actor {
    * @param autoLevel {Boolean} If true, will auto-level up. Default false
    * @async
    */
-  async progressAttribute(attName = undefined, success = false, autoLevel = false) {
+  async addAttributeProgress(attName = undefined, success = false, autoLevel = false) {
     const oAttName = this._getAttributeForName(attName);
     const oAtt = oAttName.object;
 
@@ -256,7 +246,7 @@ export class AmbersteelActor extends Actor {
     const req = this._getSkillAdvancementRequirements(newValue);
 
     await oSkill.update({ 
-      ["data.value"]: nextSkillValue,
+      ["data.value"]: newValue,
       ["data.requiredSuccessses"]: req.requiredSuccessses,
       ["data.requiredFailures"]: req.requiredFailures,
       ["data.successes"]: 0,
@@ -273,7 +263,7 @@ export class AmbersteelActor extends Actor {
    * @param autoLevel {Boolean} If true, will auto-level up. Default false
    * @async
    */
-  async progressSkill(skillId = undefined, success = false, autoLevel = false) {
+  async addSkillProgress(skillId = undefined, success = false, autoLevel = false) {
     const oSkill = this.items.get(skillId);
     const skillData = oSkill.data.data;
 

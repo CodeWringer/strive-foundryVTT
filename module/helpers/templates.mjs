@@ -21,5 +21,9 @@
     // Dice.
     "systems/ambersteel/templates/dice/roll.hbs",
     "systems/ambersteel/templates/dice/roll-dialog.hbs",
+    // Sheets.
+    "systems/ambersteel/templates/actor/actor-character-sheet.hbs",
+    "systems/ambersteel/templates/item/item-item-sheet.hbs",
+    "systems/ambersteel/templates/item/skill-item-sheet.hbs",
   ]);
 };

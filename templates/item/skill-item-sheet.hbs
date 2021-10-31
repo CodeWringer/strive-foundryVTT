@@ -1,0 +1,23 @@
+{{!-- Requires context:
+isEditable: {Boolean},
+data: {Object} where Object = {
+  groupName: {String},
+  skillName: {String},
+  value: {Number},
+  successes: {Number},
+  failures: {Number},
+  requiredSuccessses: {Number},
+  requiredFailures: {Number},
+  abilities: {[Object]} where Object -> {
+    abilityName: {String},
+    description: {String}
+  }
+}
+--}}
+<form class="{{cssClass}}" autocomplete="off">
+  <header class="sheet-header">
+      <img src="{{item.img}}" data-edit="img" title="{{item.name}}" height="64" width="64"/>
+      <h1><input name="name" type="text" value="{{item.name}}" placeholder="{{ localize 'Name' }}"/></h1>
+  </header>
+  <textarea name="data.description">{{data.description}}</textarea>
+</form>

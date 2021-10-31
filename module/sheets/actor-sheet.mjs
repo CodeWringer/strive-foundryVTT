@@ -249,7 +249,7 @@ export class AmbersteelActorSheet extends ActorSheet {
     });
 
     // Note result towards skill progress. 
-    this.actor.progressSkill(itemId, result.rollResults.isSuccess, false);
+    this.actor.addSkillProgress(itemId, result.rollResults.isSuccess, false);
 
     // Re-render the sheet to make the progress visible. 
     this.render();
@@ -285,7 +285,7 @@ export class AmbersteelActorSheet extends ActorSheet {
     });
 
     // Note result towards attribute progress. 
-    await this.actor.progressAttribute(attName, result.rollResults.isSuccess);
+    await this.actor.addAttributeProgress(attName, result.rollResults.isSuccess);
 
     // Re-render the sheet to make the progress visible. 
     this.render();

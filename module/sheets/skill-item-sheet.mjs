@@ -1,18 +1,17 @@
-export class AmbersteelItemSheet extends ItemSheet {
+export class AmbersteelSkillItemSheet extends ItemSheet {
 
   /** @override */
   static get defaultOptions() {
     return mergeObject(super.defaultOptions, {
       classes: ["ambersteel", "sheet", "item"],
       width: 520,
-      height: 480,
-      tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "description" }]
+      height: 480
     });
   }
 
   /** @override */
   get template() {
-    return "systems/ambersteel/templates/item/item-item-sheet.hbs";
+    return "systems/ambersteel/templates/item/skill-item-sheet.hbs";
   }
 
   /* -------------------------------------------- */
@@ -22,13 +21,6 @@ export class AmbersteelItemSheet extends ItemSheet {
     // Retrieve base data structure.
     const data = super.getData();
     const itemData = data.item.data;
-
-    // Retrieve the roll data for TinyMCE editors.
-    data.rollData = {};
-    let actor = this.object?.parent ?? null;
-    if (actor) {
-      data.rollData = actor.getRollData();
-    }
 
     // Add the actor's data to context.data for easier access, as well as flags.
     data.data = itemData.data;
