@@ -1,3 +1,5 @@
+import * as Attribute from '../utils/attribute-utility.mjs';
+
 /**
  * @extends {Actor}
  * @property person {Object}
@@ -58,10 +60,11 @@ export class AmbersteelActor extends Actor {
    */
   _prepareDerivedAttributeData(oAtt, attName) {
     const attValue = parseInt(oAtt.value);
+    const req = Attribute.getAdvancementRequirements(attValue);
 
     // Calculate advancement requirements. 
-    oAtt.requiredSuccessses = (attValue + 1) * (attValue + 1) * 3;
-    oAtt.requiredFailures = (attValue + 1) * (attValue + 1) * 4;
+    oAtt.requiredSuccessses = req.requiredSuccessses;
+    oAtt.requiredFailures = req.requiredFailures;
 
     // Add internal name. 
     oAtt.name = attName;
@@ -158,18 +161,6 @@ export class AmbersteelActor extends Actor {
   }
 
   /**
-   * Returns the requirements to the next level of the given level. 
-   * @param level The level for which to return the requirements to the next level. 
-   * @private
-   */
-  _getAttributeAdvancementRequirements(level = 0) {
-    return {
-      requiredSuccessses: (level + 1) * (level + 1) * 3,
-      requiredFailures: (level + 1) * (level + 1) * 4
-    }
-  }
-
-  /**
    * Sets the level of the attribute with the given name. 
    * @param attName {String} Internal name of an attribute, e.g. 'magicSense'. 
    * @param newValue {Number} Value to set the attribute to, e.g. 0. Default 0
@@ -177,7 +168,7 @@ export class AmbersteelActor extends Actor {
    */
   async setAttributeLevel(attName = undefined, newValue = 0) {
     const oAttName = this._getAttributeForName(attName);
-    const req = this._getAttributeAdvancementRequirements(newValue);
+    const req = Attribute.getAdvancementRequirements(newValue);
     const propertyPath = `data.attributes.${oAttName.groupName}.${attName}`
 
     await this.update({
