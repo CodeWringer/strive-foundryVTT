@@ -1,5 +1,7 @@
 import * as Dice from "../helpers/dice.mjs";
 import * as NumberSpinner from "../components/number-spinner.mjs";
+import * as Skill from '../utils/skill-utility.mjs';
+import * as Attribute from '../utils/attribute-utility.mjs';
 
 export class AmbersteelActorSheet extends ActorSheet {
 
@@ -248,7 +250,7 @@ export class AmbersteelActorSheet extends ActorSheet {
     });
 
     // Note result towards skill progress. 
-    this.actor.addSkillProgress(itemId, result.rollResults.isSuccess, false);
+    Skill.addProgress(oSkill, result.rollResults.isSuccess, false);
 
     // Re-render the sheet to make the progress visible. 
     this.render();

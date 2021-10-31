@@ -244,37 +244,4 @@ export class AmbersteelActor extends Actor {
       ["data.failures"]: 0
     });
   }
-
-  /**
-   * Adds success/failure progress to a skill. 
-   * 
-   * Also auto-levels up the skill, if 'autoLevel' is set to true. 
-   * @param skillId {String} Id of a skill item. 
-   * @param success {Boolean} If true, will add 1 success, else will add 1 failure. Default false
-   * @param autoLevel {Boolean} If true, will auto-level up. Default false
-   * @async
-   */
-  async addSkillProgress(skillId = undefined, success = false, autoLevel = false) {
-    const oSkill = this.items.get(skillId);
-    const skillData = oSkill.data.data;
-
-    const successes = parseInt(skillData.successes);
-    const failures = parseInt(skillData.failures);
-    const requiredSuccessses = parseInt(skillData.requiredSuccessses);
-    const requiredFailures = parseInt(skillData.requiredFailures);
-
-    if (success) {
-      await oSkill.update({ ["data.successes"]: successes + 1 });
-    } else {
-      await oSkill.update({ ["data.failures"]: failures + 1 });
-    }
-
-    if (autoLevel) {
-      if (successes >= requiredSuccessses
-      && failures >= requiredFailures) {
-        const nextSkillValue = parseInt(skillData.value) + 1;
-        await this.setSkillLevel(nextSkillValue);
-      }
-    }
-  }
 }
