@@ -7,11 +7,61 @@ import { getAttributeGroupName } from './attribute-utility.mjs';
 export function prepareDerivedData(data) {
   const itemData = data.data;
 
-  data.isExpanded = false;
-  data.isExpandable = true;
+  itemData.isExpanded = itemData.isExpanded ?? false;
+  itemData.isExpandable = itemData.isExpandable ?? true;
 
   itemData.groupName = getAttributeGroupName(itemData.relatedAttribute);
+}
 
+export function activateListeners(html, owner) {
+  html.find(".ambersteel-expand-skill-ability-list").click(_onExpandSkillAbilityList.bind(owner));
+  html.find(".ambersteel-skill-ability-create").click(_onCreateSkillAbility.bind(owner));
+}
+
+/**
+ * Returns the item object with the given id. 
+ * @param owner Either an actor or an item sheet. 
+ * @param itemId Id of the item. 
+ */
+function _getSkillItem(owner, itemId) {
+  if (owner.actor && owner.actor.items) { // Actor sheet
+    return owner.actor.items.get(itemId);
+  } else { // Item sheet
+    return owner.item;
+  }
+}
+
+/**
+ * @param event 
+ * @private
+ * @async
+ */
+async function _onExpandSkillAbilityList(event) {
+  event.preventDefault();
+  const element = event.currentTarget;
+  const itemId = element.dataset.id;
+  const skillItem = _getSkillItem(this, itemId);
+  
+  await skillItem.update({ ["data.isExpanded"]: !skillItem.data.data.isExpanded });
+  this.render();
+}
+
+/**
+ * @param event 
+ * @private
+ * @async
+ */
+async function _onCreateSkillAbility(event) {
+  event.preventDefault();
+  const element = event.currentTarget;
+  const itemId = element.dataset.id;
+  const skillItem = _getSkillItem(this, itemId);
+
+  const abilities = skillItem.data.data.abilities.concat(
+    [new SkillAbility("New Skill Ability", "", 0, 0, "" )]
+  );
+  await skillItem.update({ ["data.abilities"]: abilities });
+  this.render();
 }
 
 /**
@@ -76,5 +126,15 @@ export async function addProgress(skillItem = undefined, success = false, autoLe
       const nextSkillValue = parseInt(skillData.value) + 1;
       await setLevel(nextSkillValue, resetProgress);
     }
+  }
+}
+
+export class SkillAbility {
+  constructor(name, description, requiredLevel, APCost, condition) {
+    this.name = name;
+    this.description = description;
+    this.requiredLevel = requiredLevel;
+    this.APCost = APCost;
+    this.condition = condition;
   }
 }

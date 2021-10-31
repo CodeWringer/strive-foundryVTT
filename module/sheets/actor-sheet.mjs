@@ -135,6 +135,9 @@ export class AmbersteelActorSheet extends ActorSheet {
     // Number-spinners.
     html.find(".button-spinner-up").click(NumberSpinner.onClickNumberSpinnerUp.bind(this));
     html.find(".button-spinner-down").click(NumberSpinner.onClickNumberSpinnerDown.bind(this));
+
+    // Skill specific listeners. 
+    Skill.activateListeners(html, this);
   }
 
   /**

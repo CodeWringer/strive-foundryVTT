@@ -1,6 +1,5 @@
 {{!-- Requires context:
 isEditable: {Boolean},
-isExpanded: {Boolean},
 data: {Object} where Object = {
   groupName: {String},
   value: {Number},
@@ -9,7 +8,8 @@ data: {Object} where Object = {
   relatedAttribute: {String},
   requiredSuccessses: {Number},
   requiredFailures: {Number},
-  abilities: {[Object]} where Object -> see item/parts/skill-ability-table.hbs
+  abilities: {[Object]} where Object -> see item/parts/skill-ability-table.hbs,
+  isExpanded: {Boolean},
 }
 --}}
 <form class="{{cssClass}}" autocomplete="off">
@@ -44,15 +44,16 @@ data: {Object} where Object = {
     {{/if}}
   </div>
   </div>
-  <div class="{{#if isExpanded}}{{else}}hidden{{/if}}">
+{{#log data}}{{/log}}
+  <div class="{{#if data.isExpanded}}{{else}}hidden{{/if}}">
     {{> "systems/ambersteel/templates/item/parts/skill-ability-table.hbs" 
     isEditable=isEditable 
-    abilities=abilities }}
+    abilities=data.abilities }}
   </div>
   <div>
     <a class="ambersteel-expand-skill-ability-list full-button pad-sm button"
       title="{{localize ambersteel.labels.expandSkillAbilityList}}">
-      {{#if isExpanded}}
+      {{#if data.isExpanded}}
         <i class="fas fa-angle-double-up"></i>
       {{else}}
         <i class="fas fa-angle-double-down"></i>

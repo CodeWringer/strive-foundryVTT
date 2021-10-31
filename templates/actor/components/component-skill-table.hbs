@@ -11,6 +11,7 @@ skills: {[Object]} where Object = {
         requiredSuccessses: {Number},
         requiredFailures: {Number},
         relatedAttribute: {String},
+        abilities: {[Object]} where Object -> see item/parts/skill-ability-table.hbs,
     }
 }
 --}}
@@ -108,14 +109,17 @@ skills: {[Object]} where Object = {
             </tr>
             <tr>
                 <td style="display: table-cell;" colspan="100">
+                    {{#log data}}{{/log}}
                     <div class="{{#if data.isExpanded}}{{else}}hidden{{/if}}">
                         {{> "systems/ambersteel/templates/item/parts/skill-ability-table.hbs" 
                         isEditable=../isEditable 
+                        skillItemId=data.id 
                         abilities=data.abilities }}
                     </div>
                     <div>
                         <a class="ambersteel-expand-skill-ability-list full-button pad-sm button"
-                            title="{{localize ambersteel.labels.expandSkillAbilityList}}">
+                           title="{{localize ambersteel.labels.expandSkillAbilityList}}"
+                           data-id="{{data.id}}">
                             {{#if data.isExpanded}}
                             <i class="fas fa-angle-double-up"></i>
                             {{else}}

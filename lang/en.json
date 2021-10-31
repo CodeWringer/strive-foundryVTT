@@ -91,6 +91,7 @@
       "addSkill": "Add Skill",
       "deleteSkill": "Delete Skill",
       "addSkillAbility": "Add Skill Ability",
+      "deleteSkillAbility": "Delete Skill Ability",
       "expandSkillAbilityList": "Expand Skill Ability List",
       "buyFateCard": "Buy Fate Card",
       "add": "Add",
@@ -108,7 +109,11 @@
       "increment": "Increment",
       "decrement": "Decrement",
       "description": "Description",
-      "relatedAttribute": "Related Attribute"
+      "relatedAttribute": "Related Attribute",
+      "name": "Name",
+      "skillAbilityRequirement": "At Level",
+      "apCost": "AP Cost",
+      "skillAbilityCondition": "Condition"
     },
     "fateSystem": {
       "miFP": "Minor Fate Points",
