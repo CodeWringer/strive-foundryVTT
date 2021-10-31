@@ -100,7 +100,7 @@ export class AmbersteelActorSheet extends ActorSheet {
     if (!this.actor.isOwner) return;
     
     // Drag events for macros.
-    let handler = ev => this._onDragStart(ev);
+    const handler = ev => this._onDragStart(ev);
     html.find('li.item').each((i, li) => {
       if (li.classList.contains("inventory-header")) return;
       li.setAttribute("draggable", true);
@@ -170,14 +170,14 @@ export class AmbersteelActorSheet extends ActorSheet {
 
   _onItemEdit(event) {
     event.preventDefault();
-    let element = event.currentTarget;
-    let itemId = element.closest(".item").dataset.itemId;
-    let item = this.actor.items.get(itemId);
-    let field = element.dataset.field;
+    const element = event.currentTarget;
+    const itemId = element.closest(".item").dataset.itemId;
+    const item = this.actor.items.get(itemId);
+    const field = element.dataset.field;
     let newValue = element.value;
 
     if (element.tagName.toLowerCase() == "select") {
-      let optionValue = element.options[element.selectedIndex].value;
+      const optionValue = element.options[element.selectedIndex].value;
       newValue = optionValue;
     }
 
@@ -186,28 +186,28 @@ export class AmbersteelActorSheet extends ActorSheet {
 
   _onItemDelete(event) {
     event.preventDefault();
-    let element = event.currentTarget;
-    let itemId = element.closest(".item").dataset.itemId;
-
+    const element = event.currentTarget;
+    const itemId = element.closest(".item").dataset.itemId;
     const item = this.actor.items.get(itemId);
+
     return item.delete();
   }
 
   _onItemShow(event) {
     event.preventDefault();
-    let element = event.currentTarget;
-    let itemId = element.closest(".item").dataset.itemId;
-    let item = this.actor.items.get(itemId);
+    const element = event.currentTarget;
+    const itemId = element.closest(".item").dataset.itemId;
+    const item = this.actor.items.get(itemId);
 
     item.sheet.render(true);
   }
 
   _onAttributeEdit(event) {
     event.preventDefault();
-    let element = event.currentTarget;
-    let attGroupName = element.closest(".attribute-item").dataset.attGroupName;
-    let attName = element.closest(".attribute-item").dataset.attName;
-    let field = element.dataset.field;
+    const element = event.currentTarget;
+    const attGroupName = element.closest(".attribute-item").dataset.attGroupName;
+    const attName = element.closest(".attribute-item").dataset.attName;
+    const field = element.dataset.field;
 
     return this.actor.update({ data: { attributes: { [attGroupName]: { [attName]: { [field]: element.value }}}}})
   }
@@ -219,14 +219,14 @@ export class AmbersteelActorSheet extends ActorSheet {
    */
   async _onSkillRoll(event) {
     event.preventDefault();
-    let element = event.currentTarget;
-    let dataset = element.closest(".item").dataset;
-    let itemId = dataset.itemId;
-    let oSkill = this.actor.items.get(itemId);
-    let localizedActionName = game.i18n.localize(event.currentTarget.dataset.actionName);
+    const element = event.currentTarget;
+    const dataset = element.closest(".item").dataset;
+    const itemId = dataset.itemId;
+    const oSkill = this.actor.items.get(itemId);
+    const localizedActionName = game.i18n.localize(event.currentTarget.dataset.actionName);
 
     // Modal dialog to enter obstacle and bonus dice. 
-    let rollInputData = await Dice.queryRollData();
+    const rollInputData = await Dice.queryRollData();
 
     if (!rollInputData.confirmed) return;
 
@@ -235,13 +235,13 @@ export class AmbersteelActorSheet extends ActorSheet {
     // Any skill with a level of 0 is one being learned. 
     let numberOfDice = parseInt(event.currentTarget.dataset.actionValue);
     if (parseInt(oSkill.data.data.value) == 0) {
-      let relatedAttName = oSkill.data.data.relatedAttribute;
-      let oAtt = this.actor._getAttributeForName(relatedAttName).object;
+      const relatedAttName = oSkill.data.data.relatedAttribute;
+      const oAtt = this.actor._getAttributeForName(relatedAttName).object;
       numberOfDice = oAtt.value;
     }
     
     // Do roll. 
-    let result = await Dice.rollDice({
+    const result = await Dice.rollDice({
       actionName: localizedActionName,
       actionValue: numberOfDice, 
       obstacle: rollInputData.obstacle,
@@ -267,17 +267,17 @@ export class AmbersteelActorSheet extends ActorSheet {
    */
   async _onAttributeRoll(event) {
     event.preventDefault();
-    let attName = event.currentTarget.dataset.actionName;
-    let oAtt = this.actor._getAttributeForName(attName).object;
-    let localizedAttName = game.i18n.localize(oAtt.localizableName);
+    const attName = event.currentTarget.dataset.actionName;
+    const oAtt = this.actor._getAttributeForName(attName).object;
+    const localizedAttName = game.i18n.localize(oAtt.localizableName);
 
     // Modal dialog to enter obstacle and bonus dice. 
-    let rollInputData = await Dice.queryRollData();
+    const rollInputData = await Dice.queryRollData();
 
     if (!rollInputData.confirmed) return;
 
     // Do roll. 
-    let result = await Dice.rollDice({
+    const result = await Dice.rollDice({
       actionName: localizedAttName,
       actionValue: event.currentTarget.dataset.actionValue, 
       obstacle: rollInputData.obstacle,
