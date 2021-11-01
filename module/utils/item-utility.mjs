@@ -1,3 +1,5 @@
+import * as SkillUtil from './skill-utility.mjs';
+
 /**
  * Prepares item data. 
  * @param data 'item.data'
@@ -115,6 +117,11 @@ async function _onItemCreate(event) {
   const header = event.currentTarget;
   const type = header.dataset.type;
   const data = duplicate(header.dataset);
+
+  // Modal dialog to enter obstacle and bonus dice. 
+  const skillAddData = await SkillUtil.querySkillAddData();
+
+  if (!skillAddData.confirmed) return;
 
   let imgPath = "icons/svg/item-bag.svg";
   if (type == "skill") {

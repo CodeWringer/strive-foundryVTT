@@ -113,7 +113,9 @@
       "name": "Name",
       "skillAbilityRequirement": "At Level",
       "apCost": "AP Cost",
-      "skillAbilityCondition": "Condition"
+      "skillAbilityCondition": "Condition",
+      "skill": "Skill",
+      "customSkill": "Custom Skill"
     },
     "fateSystem": {
       "miFP": "Minor Fate Points",
@@ -133,6 +135,9 @@
       "obstacleAbbreviation": "Ob",
       "bonusDice": "Bonus Dice",
       "titleDialogQuery": "Enter obstacle and bonus dice for roll"
+    },
+    "skill": {
+      "titleDialogQuery": "Select skill to add"
     }
   }
 }

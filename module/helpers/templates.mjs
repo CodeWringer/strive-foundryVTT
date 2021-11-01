@@ -22,10 +22,12 @@
     "systems/ambersteel/templates/item/parts/skill-ability-table.hbs",
     // Dice.
     "systems/ambersteel/templates/dice/roll.hbs",
-    "systems/ambersteel/templates/dice/roll-dialog.hbs",
     // Sheets.
     "systems/ambersteel/templates/actor/actor-character-sheet.hbs",
     "systems/ambersteel/templates/item/item-item-sheet.hbs",
     "systems/ambersteel/templates/item/skill-item-sheet.hbs",
+    // Dialogs.
+    "systems/ambersteel/templates/dice/roll-dialog.hbs",
+    "systems/ambersteel/templates/dialog/skill-add-dialog.hbs",
   ]);
 };
