@@ -109,7 +109,6 @@ export class AmbersteelActor extends Actor {
     const skillData = oSkill.data.data;
 
     skillData.id = oSkill.id;
-    skillData.skillName = skillData.skillName ? skillData.skillName : "";
     skillData.entityName = skillData.entityName ? skillData.entityName : oSkill.name;
     skillData.value = parseInt(skillData.value ? skillData.value : 0);
     skillData.successes = parseInt(skillData.successes ? skillData.successes : 0);

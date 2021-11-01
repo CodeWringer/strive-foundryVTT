@@ -136,7 +136,6 @@
     },
     "skill": {
       "templates": ["base"],
-      "skillName": "",
       "relatedAttribute": "",
       "value": 0,
       "successes": 0,

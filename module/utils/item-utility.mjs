@@ -66,22 +66,26 @@ async function _onItemEdit(event) {
   const parts = propertyPath.split(/\.|\[/);
   const lastPart = parts[parts.length - 1];
 
-  // example:
-  // obj = { a: { b: [{c: 42}] } }
-  // path: a.b[0].c
-  let prop = undefined;
-  const dataDelta = item.data[parts.shift()];
-  for (let part of parts) {
-    part = part.replace("]", "");
-
-    if (part == lastPart) {
-      prop ? prop[part] = newValue : dataDelta[part] = newValue;
-    } else {
-      prop = prop ? prop[part] : dataDelta[part];
+  if (parts.length == 1) {
+    await item.update({ [propertyPath]: newValue });
+  } else {
+    // example:
+    // obj = { a: { b: [{c: 42}] } }
+    // path: a.b[0].c
+    let prop = undefined;
+    const dataDelta = item.data[parts.shift()];
+    for (let part of parts) {
+      part = part.replace("]", "");
+  
+      if (part == lastPart) {
+        prop ? prop[part] = newValue : dataDelta[part] = newValue;
+      } else {
+        prop = prop ? prop[part] : dataDelta[part];
+      }
     }
+    await item.update({ data: dataDelta });
   }
 
-  await item.update({ data: dataDelta });
   this.render();
 }
 

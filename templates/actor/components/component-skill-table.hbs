@@ -1,10 +1,10 @@
 {{!-- Requires parameters: 
 isEditable: {Boolean},
 isLearningSkillsTable: {Boolean},
-skills: {[Object]} where Object = { 
+skills: {[Object]} where Object = {
+    name: {String},
     data: {Object} where Object ? {
         id: {String},
-        skillName: {String},
         value: {Number},
         successes: {Number},
         failures: {Number},
@@ -53,14 +53,14 @@ skills: {[Object]} where Object = {
                     {{#if ../isEditable}}
                         <td class="skill-column-roll">
                             <a class="ambersteel-skill-roll roll-button pad-sm button" data-action-value="{{data.value}}" 
-                                data-action-name="{{data.skillName}}" title="{{localize ambersteel.labels.roll}}">
+                                data-action-name="{{data.name}}" title="{{localize ambersteel.labels.roll}}">
                                 <i class="fas fa-dice-three"></i>
                             </a>
                         </td>
                     {{/if}}
                     <td class="fancy-font flex skill-column-name">
-                        <input class="skill-name ambersteel-item-edit" name="" type="text" value="{{data.skillName}}" 
-                            data-field="data.skillName" data-item-id="{{skill.data.id}}" />
+                        <input class="skill-name ambersteel-item-edit" name="" type="text" value="{{skill.name}}" 
+                            data-field="name" data-item-id="{{skill.data.id}}" />
                     </td>
                     <td class="skill-column-attribute">
                         <select class="ambersteel-item-edit" name="data.relatedAttribute" data-field="data.relatedAttribute" data-item-id="{{skill.data.id}}">
