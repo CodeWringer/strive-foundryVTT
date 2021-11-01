@@ -49,92 +49,99 @@ skills: {[Object]} where Object = {
                 {{/if}}
             </tr>
             {{#each skills as |skill key|}}
-            <tr class="item skill-item" data-item-id="{{skill.data.id}}">
-                {{#if ../isEditable}}
-                    <td class="skill-column-roll">
-                        <a class="ambersteel-skill-roll roll-button pad-sm button" data-action-value="{{data.value}}" data-action-name="{{data.skillName}}" title="{{localize ambersteel.labels.roll}}">
-                            <i class="fas fa-dice-three"></i>
-                        </a>
+{{#log skill}}{{/log}}
+                <tr class="item skill-item" data-item-id="{{skill.data.id}}">
+                    {{#if ../isEditable}}
+                        <td class="skill-column-roll">
+                            <a class="ambersteel-skill-roll roll-button pad-sm button" data-action-value="{{data.value}}" 
+                                data-action-name="{{data.skillName}}" title="{{localize ambersteel.labels.roll}}">
+                                <i class="fas fa-dice-three"></i>
+                            </a>
+                        </td>
+                    {{/if}}
+                    <td class="fancy-font flex skill-column-name">
+                        <input class="skill-name ambersteel-item-edit" name="" type="text" value="{{data.skillName}}" 
+                            data-field="data.skillName" data-item-id="{{skill.data.id}}" />
                     </td>
-                {{/if}}
-                <td class="fancy-font flex skill-column-name">
-                    <input class="skill-name ambersteel-item-edit" name="" type="text" value="{{data.skillName}}" data-field="data.skillName" />
-                </td>
-                <td class="skill-column-attribute">
-                    <select class="ambersteel-item-edit" name="data.relatedAttribute" data-field="data.relatedAttribute">
-                        {{#select data.relatedAttribute}}
-                        {{#each ../CONFIG.character.attributes as | att |}}
-                        <option value="{{att.name}}">{{localize att.localizableAbbreviation}}</option>
-                        {{/each}}
-                        {{/select}}
-                    </select>
-                </td>
-                <td class="skill-column-level">
-                    {{#if ../isEditable}}
-                        {{#> numberSpinner}}
-                        <input class="skill-value ambersteel-item-edit spinner" name="" type="number" data-dtype="Number" min="0" step="1" value="{{data.value}}" data-field="data.value" />
-                        {{/numberSpinner}}
-                    {{else}}
-                        {{data.value}}
-                    {{/if}}
-                </td>
-                <td class="skill-column-requirements">
-                    {{data.requiredSuccessses}} / {{data.requiredFailures}}
-                </td>
-                <td class="skill-column-successes">
-                    {{#if ../isEditable}}
-                        {{#> numberSpinner}}
-                        <input class="skill-successes ambersteel-item-edit" name="" type="number" data-dtype="Number" min="0" step="1" value="{{data.successes}}" data-field="data.successes" />
-                        {{/numberSpinner}}
-                    {{else}}
-                        {{data.successes}}
-                    {{/if}}
-                </td>
-                <td class="skill-column-failures">
-                    {{#if ../isEditable}}
-                        {{#> numberSpinner}}
-                        <input class="skill-failures ambersteel-item-edit" name="" type="number" data-dtype="Number" min="0" step="1" value="{{data.failures}}" data-field="data.failures" />
-                        {{/numberSpinner}}
-                    {{else}}
-                        {{data.failures}}
-                    {{/if}}
-                </td>
-                {{#if ../isEditable}}
-                    <td class="skill-column-delete">
-                        <a class="ambersteel-item-delete pad-sm button" data-item-id="{{skill.data.id}}" title="{{localize ambersteel.labels.deleteSkill}}">
-                            <i class="fas fa-trash"></i>
-                        </a>
+                    <td class="skill-column-attribute">
+                        <select class="ambersteel-item-edit" name="data.relatedAttribute" data-field="data.relatedAttribute" data-item-id="{{skill.data.id}}">
+                            {{#select data.relatedAttribute}}
+                            {{#each ../CONFIG.character.attributes as | att |}}
+                            <option value="{{att.name}}">{{localize att.localizableAbbreviation}}</option>
+                            {{/each}}
+                            {{/select}}
+                        </select>
                     </td>
-                {{/if}}
-            </tr>
-            <tr>
-                <td style="display: table-cell;" colspan="100">
-                    <div class="{{#if data.isExpanded}}{{else}}hidden{{/if}}">
-                        {{> "systems/ambersteel/templates/item/parts/skill-ability-table.hbs" 
-                        isEditable=../isEditable 
-                        skillItemId=skill.data.id 
-                        abilities=data.abilities }}
-                    </div>
-                    <div>
-                        <a class="ambersteel-expand-skill-ability-list full-button pad-sm button"
-                           title="{{localize ambersteel.labels.expandSkillAbilityList}}"
-                           data-id="{{skill.data.id}}">
-                            {{#if data.isExpanded}}
-                            <i class="fas fa-angle-double-up"></i>
-                            {{else}}
-                            <i class="fas fa-angle-double-down"></i>
-                            {{/if}}
-                        </a>
-                    </div>
-                </td>
-            </tr>
+                    <td class="skill-column-level">
+                        {{#if ../isEditable}}
+                            {{#> numberSpinner}}
+                            <input class="skill-value ambersteel-item-edit spinner" name="" type="number" data-dtype="Number" min="0" step="1" 
+                                value="{{data.value}}" data-field="data.value" data-item-id="{{skill.data.id}}" />
+                            {{/numberSpinner}}
+                        {{else}}
+                            {{data.value}}
+                        {{/if}}
+                    </td>
+                    <td class="skill-column-requirements">
+                        {{data.requiredSuccessses}} / {{data.requiredFailures}}
+                    </td>
+                    <td class="skill-column-successes">
+                        {{#if ../isEditable}}
+                            {{#> numberSpinner}}
+                            <input class="skill-successes ambersteel-item-edit" name="" type="number" data-dtype="Number" min="0" step="1" 
+                                value="{{data.successes}}" data-field="data.successes" data-item-id="{{skill.data.id}}" />
+                            {{/numberSpinner}}
+                        {{else}}
+                            {{data.successes}}
+                        {{/if}}
+                    </td>
+                    <td class="skill-column-failures">
+                        {{#if ../isEditable}}
+                            {{#> numberSpinner}}
+                            <input class="skill-failures ambersteel-item-edit" name="" type="number" data-dtype="Number" min="0" step="1" 
+                                value="{{data.failures}}" data-field="data.failures" data-item-id="{{skill.data.id}}" />
+                            {{/numberSpinner}}
+                        {{else}}
+                            {{data.failures}}
+                        {{/if}}
+                    </td>
+                    {{#if ../isEditable}}
+                        <td class="skill-column-delete">
+                            <a class="ambersteel-item-delete pad-sm button" data-item-id="{{skill.data.id}}" title="{{localize ambersteel.labels.deleteSkill}}">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </td>
+                    {{/if}}
+                </tr>
+                <tr>
+                    <td style="display: table-cell;" colspan="100">
+                        <div class="{{#if data.isExpanded}}{{else}}hidden{{/if}}">
+                            {{> "systems/ambersteel/templates/item/parts/skill-ability-table.hbs" 
+                            isEditable=../isEditable 
+                            skillItemId=skill.data.id 
+                            abilities=data.abilities }}
+                        </div>
+                        <div>
+                            <a class="ambersteel-expand-skill-ability-list full-button pad-sm button"
+                            title="{{localize ambersteel.labels.expandSkillAbilityList}}"
+                            data-item-id="{{skill.data.id}}">
+                                {{#if data.isExpanded}}
+                                <i class="fas fa-angle-double-up"></i>
+                                {{else}}
+                                <i class="fas fa-angle-double-down"></i>
+                                {{/if}}
+                            </a>
+                        </div>
+                    </td>
+                </tr>
             {{/each}}
             {{#if isEditable}}
                 <tr>
                     <td style="display: table-cell;" colspan="100">
                         <div class="flex">
                             <span class="flex-grow"></span>
-                            <a class="ambersteel-item-create pad-sm" data-type="skill" data-value="{{#if isLearningSkillsTable}}0{{else}}1{{/if}}" data-related-attribute="agility" title="{{localize ambersteel.labels.addSkill}}">
+                            <a class="ambersteel-item-create pad-sm" data-type="skill" data-value="{{#if isLearningSkillsTable}}0{{else}}1{{/if}}" 
+                                data-related-attribute="agility" title="{{localize ambersteel.labels.addSkill}}">
                                 <i class="fas fa-plus"></i>
                             </a>
                         </div>

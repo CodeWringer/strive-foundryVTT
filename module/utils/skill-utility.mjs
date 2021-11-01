@@ -43,7 +43,7 @@ export function activateListeners(html, owner, isOwner, isEditable) {
 async function _onExpandSkillAbilityList(event) {
   event.preventDefault();
   const element = event.currentTarget;
-  const itemId = element.dataset.id;
+  const itemId = element.dataset.itemId;
   const skillItem = getItem(this, itemId);
 
   await skillItem.update({ ["data.isExpanded"]: !skillItem.data.data.isExpanded });
@@ -58,7 +58,7 @@ async function _onExpandSkillAbilityList(event) {
 async function _onCreateSkillAbility(event) {
   event.preventDefault();
   const element = event.currentTarget;
-  const itemId = element.dataset.id;
+  const itemId = element.dataset.itemId;
   const skillItem = getItem(this, itemId);
 
   const abilities = skillItem.data.data.abilities.concat(
@@ -76,7 +76,7 @@ async function _onCreateSkillAbility(event) {
 async function _onDeleteSkillAbility(event) {
   event.preventDefault();
   const element = event.currentTarget;
-  const itemId = element.dataset.id;
+  const itemId = element.dataset.itemId;
   const index = parseInt(element.dataset.index);
   const skillItem = getItem(this, itemId);
   const dataAbilities = skillItem.data.data.abilities;
@@ -152,11 +152,11 @@ export async function addProgress(skillItem = undefined, success = false, autoLe
 }
 
 export class SkillAbility {
-  constructor(name, description, requiredLevel, APCost, condition) {
+  constructor(name, description, requiredLevel, apCost, condition) {
     this.name = name;
     this.description = description;
     this.requiredLevel = requiredLevel;
-    this.APCost = APCost;
+    this.apCost = apCost;
     this.condition = condition;
   }
 }

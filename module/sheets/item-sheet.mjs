@@ -1,4 +1,6 @@
-import * as Skill from '../utils/skill-utility.mjs';
+import * as NumberSpinner from "../components/number-spinner.mjs";
+import * as SkillUtil from '../utils/skill-utility.mjs';
+import * as ItemUtil from '../utils/item-utility.mjs';
 
 export class AmbersteelItemSheet extends ItemSheet {
 
@@ -41,7 +43,7 @@ export class AmbersteelItemSheet extends ItemSheet {
     context.flags = itemData.flags;
 
     if (type == "skill") {
-      Skill.prepareDerivedData(context);
+      SkillUtil.prepareDerivedData(context);
     }
 
     return context;
@@ -52,9 +54,14 @@ export class AmbersteelItemSheet extends ItemSheet {
   /** @override */
   activateListeners(html) {
     super.activateListeners(html);
+    const isOwner = this.item.isOwner;
+    const isEditable = this.isEditable;
 
-    if (!this.isEditable) return;
+    ItemUtil.activateListeners(html, this, isOwner, isEditable);
+    SkillUtil.activateListeners(html, this, isOwner, isEditable);
+    NumberSpinner.activateListeners(html, this, isOwner, isEditable);
 
-    Skill.activateListeners(html, this);
+    if (!isOwner) return;
+    if (!isEditable) return;
   }
 }

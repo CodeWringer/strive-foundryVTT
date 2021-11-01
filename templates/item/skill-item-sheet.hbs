@@ -45,8 +45,10 @@ data: {Object} where Object = {
   </div>
   </div>
   <div class="{{#if data.isExpanded}}{{else}}hidden{{/if}}">
+{{#log data}}{{/log}}
     {{> "systems/ambersteel/templates/item/parts/skill-ability-table.hbs" 
     isEditable=isEditable 
+    skillItemId=item.id 
     abilities=data.abilities }}
   </div>
   <div>

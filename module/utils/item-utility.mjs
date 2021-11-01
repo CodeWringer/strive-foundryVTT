@@ -3,7 +3,7 @@
  * @param data 'item.data'
  */
 export function prepareDerivedData(data) {
-//   const itemData = data.data;
+  //   const itemData = data.data;
 }
 
 /**
@@ -53,7 +53,7 @@ export function getItem(owner, itemId) {
 async function _onItemEdit(event) {
   event.preventDefault();
   const element = event.currentTarget;
-  const itemId = element.closest(".item").dataset.itemId;
+  const itemId = element.dataset.itemId;
   const item = getItem(this, itemId);
   const propertyPath = element.dataset.field;
   let newValue = element.value;
@@ -63,7 +63,25 @@ async function _onItemEdit(event) {
     newValue = optionValue;
   }
 
-  await item.update({ [propertyPath]: newValue });
+  const parts = propertyPath.split(/\.|\[/);
+  const lastPart = parts[parts.length - 1];
+
+  // example:
+  // obj = { a: { b: [{c: 42}] } }
+  // path: a.b[0].c
+  let prop = undefined;
+  const dataDelta = item.data[parts.shift()];
+  for (let part of parts) {
+    part = part.replace("]", "");
+
+    if (part == lastPart) {
+      prop ? prop[part] = newValue : dataDelta[part] = newValue;
+    } else {
+      prop = prop ? prop[part] : dataDelta[part];
+    }
+  }
+
+  await item.update({ data: dataDelta });
   this.render();
 }
 
@@ -76,7 +94,7 @@ async function _onItemEdit(event) {
 async function _onItemDelete(event) {
   event.preventDefault();
   const element = event.currentTarget;
-  const itemId = element.closest(".item").dataset.itemId;
+  const itemId = element.dataset.itemId;
   const item = getItem(this, itemId);
 
   await item.delete();
@@ -114,7 +132,7 @@ async function _onItemCreate(event) {
 async function _onItemShow(event) {
   event.preventDefault();
   const element = event.currentTarget;
-  const itemId = element.closest(".item").dataset.itemId;
+  const itemId = element.dataset.itemId;
   const item = getItem(this, itemId);
 
   item.sheet.render(true);
