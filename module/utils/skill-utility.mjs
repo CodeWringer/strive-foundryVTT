@@ -16,6 +16,7 @@ export function prepareDerivedData(data) {
 export function activateListeners(html, owner) {
   html.find(".ambersteel-expand-skill-ability-list").click(_onExpandSkillAbilityList.bind(owner));
   html.find(".ambersteel-skill-ability-create").click(_onCreateSkillAbility.bind(owner));
+  html.find(".ambersteel-skill-ability-delete").click(_onDeleteSkillAbility.bind(owner));
 }
 
 /**
@@ -60,6 +61,24 @@ async function _onCreateSkillAbility(event) {
   const abilities = skillItem.data.data.abilities.concat(
     [new SkillAbility("New Skill Ability", "", 0, 0, "" )]
   );
+  await skillItem.update({ ["data.abilities"]: abilities });
+  this.render();
+}
+
+/**
+ * @param event 
+ * @private
+ * @async
+ */
+async function _onDeleteSkillAbility(event) {
+  event.preventDefault();
+  const element = event.currentTarget;
+  const itemId = element.dataset.id;
+  const index = parseInt(element.dataset.index);
+  const skillItem = _getSkillItem(this, itemId);
+  const dataAbilities = skillItem.data.data.abilities;
+
+  const abilities = dataAbilities.slice(0, index).concat(dataAbilities.slice(index + 1));
   await skillItem.update({ ["data.abilities"]: abilities });
   this.render();
 }

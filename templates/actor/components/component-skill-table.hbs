@@ -101,7 +101,7 @@ skills: {[Object]} where Object = {
                 </td>
                 {{#if ../isEditable}}
                     <td class="skill-column-delete">
-                        <a class="ambersteel-item-delete pad-sm button" data-item-id="{{data.id}}" title="{{localize ambersteel.labels.deleteSkill}}">
+                        <a class="ambersteel-item-delete pad-sm button" data-item-id="{{skill.data.id}}" title="{{localize ambersteel.labels.deleteSkill}}">
                             <i class="fas fa-trash"></i>
                         </a>
                     </td>
@@ -112,13 +112,13 @@ skills: {[Object]} where Object = {
                     <div class="{{#if data.isExpanded}}{{else}}hidden{{/if}}">
                         {{> "systems/ambersteel/templates/item/parts/skill-ability-table.hbs" 
                         isEditable=../isEditable 
-                        skillItemId=data.id 
+                        skillItemId=skill.data.id 
                         abilities=data.abilities }}
                     </div>
                     <div>
                         <a class="ambersteel-expand-skill-ability-list full-button pad-sm button"
                            title="{{localize ambersteel.labels.expandSkillAbilityList}}"
-                           data-id="{{data.id}}">
+                           data-id="{{skill.data.id}}">
                             {{#if data.isExpanded}}
                             <i class="fas fa-angle-double-up"></i>
                             {{else}}

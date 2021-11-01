@@ -63,7 +63,7 @@ abilities: {[Object]} where Object -> {
         </td>
           {{#if ../isEditable}}
           <td class="skill-ability-column-delete">
-            <a class="ambersteel-skill-ability-delete pad-sm button" data-id="{{skillItemId}}" title="{{localize ambersteel.labels.deleteSkillAbility}}">
+            <a class="ambersteel-skill-ability-delete pad-sm button" data-id="{{../skillItemId}}" data-index="{{key}}" title="{{localize ambersteel.labels.deleteSkillAbility}}">
               <i class="fas fa-trash"></i>
             </a>
           </td>
