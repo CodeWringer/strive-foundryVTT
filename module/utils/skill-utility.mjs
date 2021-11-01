@@ -1,4 +1,5 @@
 import { getAttributeGroupName } from './attribute-utility.mjs';
+import { getItem } from './item-utility.mjs';
 
 /**
  * Prepares skill data on the given item data. 
@@ -13,23 +14,25 @@ export function prepareDerivedData(data) {
   itemData.groupName = getAttributeGroupName(itemData.relatedAttribute);
 }
 
-export function activateListeners(html, owner) {
-  html.find(".ambersteel-expand-skill-ability-list").click(_onExpandSkillAbilityList.bind(owner));
-  html.find(".ambersteel-skill-ability-create").click(_onCreateSkillAbility.bind(owner));
-  html.find(".ambersteel-skill-ability-delete").click(_onDeleteSkillAbility.bind(owner));
-}
-
 /**
- * Returns the item object with the given id. 
- * @param owner Either an actor or an item sheet. 
- * @param itemId Id of the item. 
+ * Registers events on elements of the given DOM. 
+ * @param html {Object} DOM of the sheet for which to register listeners. 
+ * @param owner {Object} DOM owner object. This should be an actor sheet object or item sheet object.
+ * @param isOwner {Boolean} If true, registers events that require owner permission. 
+ * @param isEditable {Boolean} If true, registers events that require editing permission. 
  */
-function _getSkillItem(owner, itemId) {
-  if (owner.actor && owner.actor.items) { // Actor sheet
-    return owner.actor.items.get(itemId);
-  } else { // Item sheet
-    return owner.item;
-  }
+export function activateListeners(html, owner, isOwner, isEditable) {
+  // Show skill abilities. 
+  html.find(".ambersteel-expand-skill-ability-list").click(_onExpandSkillAbilityList.bind(owner));
+
+  if (!isOwner) return;
+  if (!isEditable) return;
+
+  // Add skill ability. 
+  html.find(".ambersteel-skill-ability-create").click(_onCreateSkillAbility.bind(owner));
+
+  // Delete skill ability.
+  html.find(".ambersteel-skill-ability-delete").click(_onDeleteSkillAbility.bind(owner));
 }
 
 /**
@@ -41,8 +44,8 @@ async function _onExpandSkillAbilityList(event) {
   event.preventDefault();
   const element = event.currentTarget;
   const itemId = element.dataset.id;
-  const skillItem = _getSkillItem(this, itemId);
-  
+  const skillItem = getItem(this, itemId);
+
   await skillItem.update({ ["data.isExpanded"]: !skillItem.data.data.isExpanded });
   this.render();
 }
@@ -56,10 +59,10 @@ async function _onCreateSkillAbility(event) {
   event.preventDefault();
   const element = event.currentTarget;
   const itemId = element.dataset.id;
-  const skillItem = _getSkillItem(this, itemId);
+  const skillItem = getItem(this, itemId);
 
   const abilities = skillItem.data.data.abilities.concat(
-    [new SkillAbility("New Skill Ability", "", 0, 0, "" )]
+    [new SkillAbility("New Skill Ability", "", 0, 0, "")]
   );
   await skillItem.update({ ["data.abilities"]: abilities });
   this.render();
@@ -75,7 +78,7 @@ async function _onDeleteSkillAbility(event) {
   const element = event.currentTarget;
   const itemId = element.dataset.id;
   const index = parseInt(element.dataset.index);
-  const skillItem = _getSkillItem(this, itemId);
+  const skillItem = getItem(this, itemId);
   const dataAbilities = skillItem.data.data.abilities;
 
   const abilities = dataAbilities.slice(0, index).concat(dataAbilities.slice(index + 1));

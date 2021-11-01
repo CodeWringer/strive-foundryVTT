@@ -1,7 +1,8 @@
 import * as Dice from "../helpers/dice.mjs";
 import * as NumberSpinner from "../components/number-spinner.mjs";
-import * as Skill from '../utils/skill-utility.mjs';
-import * as Attribute from '../utils/attribute-utility.mjs';
+import * as SkillUtil from '../utils/skill-utility.mjs';
+import * as ItemUtil from '../utils/item-utility.mjs';
+import * as AttributeUtil from '../utils/attribute-utility.mjs';
 
 export class AmbersteelActorSheet extends ActorSheet {
 
@@ -91,13 +92,16 @@ export class AmbersteelActorSheet extends ActorSheet {
   /** @override */
   activateListeners(html) {
     super.activateListeners(html);
+    const isOwner = this.actor.isOwner;
+    const isEditable = this.isEditable;
 
-    // Show item sheet.
-    html.find(".ambersteel-item-show").click(this._onItemShow.bind(this));
-
+    ItemUtil.activateListeners(html, this, isOwner, isEditable);
+    SkillUtil.activateListeners(html, this, isOwner, isEditable);
+    NumberSpinner.activateListeners(html, this, isOwner, isEditable);
+    
     // -------------------------------------------------------------
     // Everything below here is only needed if the user is the owner or GM. 
-    if (!this.actor.isOwner) return;
+    if (!isOwner) return;
     
     // Drag events for macros.
     const handler = ev => this._onDragStart(ev);
@@ -115,94 +119,13 @@ export class AmbersteelActorSheet extends ActorSheet {
 
     // -------------------------------------------------------------
     // Everything below here is only needed if the sheet is editable. 
-    if (!this.isEditable) return;
+    if (!isEditable) return;
 
     // Context menu.
     new ContextMenu(html, ".skill-item", this.itemContextMenu);
     
-    // Add Item
-    html.find('.ambersteel-item-create').click(this._onItemCreate.bind(this));
-
-    // Edit item.
-    html.find(".ambersteel-item-edit").change(this._onItemEdit.bind(this));
-
-    // Delete item. 
-    html.find(".ambersteel-item-delete").click(this._onItemDelete.bind(this));
-
     // Edit attribute.
     html.find(".ambersteel-attribute-edit").change(this._onAttributeEdit.bind(this));
-
-    // Number-spinners.
-    html.find(".button-spinner-up").click(NumberSpinner.onClickNumberSpinnerUp.bind(this));
-    html.find(".button-spinner-down").click(NumberSpinner.onClickNumberSpinnerDown.bind(this));
-
-    // Skill specific listeners. 
-    Skill.activateListeners(html, this);
-  }
-
-  /**
-   * Handle creating a new Owned Item for the actor using initial data defined in the HTML dataset
-   * @param {Event} event   The originating click event
-   * @private
-   */
-  async _onItemCreate(event) {
-    event.preventDefault();
-    const header = event.currentTarget;
-    // Get the type of item to create.
-    const type = header.dataset.type;
-    // Grab any data associated with this control.
-    const data = duplicate(header.dataset);
-    // Initialize a default name.
-    const name = `New ${type.capitalize()}`;
-    // Prepare the item object.
-    const itemData = {
-      name: name,
-      type: type,
-      data: data
-    };
-    // Initialize name in data, if possible. 
-    if (data.name) {
-      data.name = name;
-    }
-    // Remove the type from the dataset since it's in the itemData.type prop.
-    delete itemData.data["type"];
-
-    // Finally, create the item!
-    return await Item.create(itemData, {parent: this.actor});
-  }
-
-  _onItemEdit(event) {
-    event.preventDefault();
-    const element = event.currentTarget;
-    const itemId = element.closest(".item").dataset.itemId;
-    const item = this.actor.items.get(itemId);
-    const field = element.dataset.field;
-    let newValue = element.value;
-
-    if (element.tagName.toLowerCase() == "select") {
-      const optionValue = element.options[element.selectedIndex].value;
-      newValue = optionValue;
-    }
-
-    return item.update({ [field]: newValue });
-  }
-
-  _onItemDelete(event) {
-    event.preventDefault();
-    const element = event.currentTarget;
-    const itemId = element.closest(".item").dataset.itemId;
-    const item = this.actor.items.get(itemId);
-
-    return item.delete();
-  }
-
-  _onItemShow(event) {
-    event.preventDefault();
-    const element = event.currentTarget;
-    const itemId = element.closest(".item").dataset.itemId;
-    const item = this.actor.items.get(itemId);
-
-    item.sheet.render(true);
   }
 
   _onAttributeEdit(event) {
@@ -253,7 +176,7 @@ export class AmbersteelActorSheet extends ActorSheet {
     });
 
     // Note result towards skill progress. 
-    Skill.addProgress(oSkill, result.rollResults.isSuccess, false);
+    SkillUtil.addProgress(oSkill, result.rollResults.isSuccess, false);
 
     // Re-render the sheet to make the progress visible. 
     this.render();
