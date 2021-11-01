@@ -11,20 +11,22 @@ abilities: {[Object]} where Object -> {
 --}}
 <section class="skill-ability-list">
   <table class="skill-ability-list">
-    <tr>
-      <th class="skill-ability-column-name">{{localize "ambersteel.labels.name"}}</th>
-      <th class="skill-ability-column-description">{{localize "ambersteel.labels.description"}}</th>
-      <th class="skill-ability-column-requirement">{{localize "ambersteel.labels.skillAbilityRequirement"}}</th>
-      <th class="skill-ability-column-cost">{{localize "ambersteel.labels.apCost"}}</th>
-      <th class="skill-ability-column-condition">{{localize "ambersteel.labels.skillAbilityCondition"}}</th>
-      {{#if isEditable}}
-        <th class="skill-ability-column-delete"></th>
-      {{/if}}
-    </tr>
+    <theader>
+      <tr>
+        <th class="skill-ability-column-name">{{localize "ambersteel.labels.name"}}</th>
+        <th class="skill-ability-column-description">{{localize "ambersteel.labels.description"}}</th>
+        <th class="skill-ability-column-requirement">{{localize "ambersteel.labels.skillAbilityRequirement"}}</th>
+        <th class="skill-ability-column-cost">{{localize "ambersteel.labels.apCost"}}</th>
+        <th class="skill-ability-column-condition">{{localize "ambersteel.labels.skillAbilityCondition"}}</th>
+        {{#if isEditable}}
+          <th class="skill-ability-column-delete"></th>
+        {{/if}}
+      </tr>
+    </theader>
     <tbody>
       {{#each abilities as |ability key|}}
       <tr>
-        <td>
+        <td class="skill-ability-column-name">
           {{#if ../isEditable}}
           <input class="ability-name ambersteel-item-edit" type="text" value="{{ability.name}}" 
             data-field="data.abilities[{{key}}].name" data-item-id="{{../skillItemId}}" />
@@ -32,7 +34,7 @@ abilities: {[Object]} where Object -> {
           {{ability.name}}
           {{/if}}
         </td>
-        <td>
+        <td class="skill-ability-column-description">
           {{#if ../isEditable}}
           <input class="ability-description ambersteel-item-edit" type="text" value="{{ability.description}}"
             data-field="data.abilities[{{key}}].description" data-item-id="{{../skillItemId}}" />
@@ -40,31 +42,35 @@ abilities: {[Object]} where Object -> {
           {{ability.description}}
           {{/if}}
         </td>
-        <td>
+        <td class="skill-ability-column-requirement">
           {{#if ../isEditable}}
-          <input class="ability-requirement ambersteel-item-edit" type="number" min="0" step="1" data-dtype="Number" value="{{ability.requiredLevel}}"
-            data-field="data.abilities[{{key}}].requiredLevel" data-item-id="{{../skillItemId}}" />
+            {{#> numberSpinner}}
+            <input class="ability-requirement ambersteel-item-edit" type="number" min="0" step="1" data-dtype="Number" value="{{ability.requiredLevel}}"
+              data-field="data.abilities[{{key}}].requiredLevel" data-item-id="{{../skillItemId}}" />
+            {{/numberSpinner}}
           {{else}}
-          {{ability.requiredLevel}}
+            {{ability.requiredLevel}}
           {{/if}}
         </td>
-        <td>
+        <td class="skill-ability-column-cost">
           {{#if ../isEditable}}
-          <input class="ability-cost ambersteel-item-edit" type="number" min="0" step="1" data-dtype="Number" value="{{ability.apCost}}" 
-            data-field="data.abilities[{{key}}].apCost" data-item-id="{{../skillItemId}}" />
+            {{#> numberSpinner}}
+            <input class="ability-cost ambersteel-item-edit" type="number" min="0" step="1" data-dtype="Number" value="{{ability.apCost}}" 
+              data-field="data.abilities[{{key}}].apCost" data-item-id="{{../skillItemId}}" />
+            {{/numberSpinner}}
           {{else}}
-          {{ability.apCost}}
+            {{ability.apCost}}
           {{/if}}
         </td>
-        <td>
+        <td class="skill-ability-column-condition">
           {{#if ../isEditable}}
-          <input class="ability-condition ambersteel-item-edit" type="text" value="{{ability.condition}}" 
-            data-field="data.abilities[{{key}}].condition" data-item-id="{{../skillItemId}}" />
+            <input class="ability-condition ambersteel-item-edit" type="text" value="{{ability.condition}}" 
+                   data-field="data.abilities[{{key}}].condition" data-item-id="{{../skillItemId}}" />
           {{else}}
-          {{ability.condition}}
+            {{ability.condition}}
           {{/if}}
         </td>
-          {{#if ../isEditable}}
+        {{#if ../isEditable}}
           <td class="skill-ability-column-delete">
             <a class="ambersteel-skill-ability-delete pad-sm button" data-item-id="{{../skillItemId}}" data-index="{{key}}" title="{{localize ambersteel.labels.deleteSkillAbility}}">
               <i class="fas fa-trash"></i>
@@ -74,18 +80,18 @@ abilities: {[Object]} where Object -> {
       </tr>
       {{/each}}
       {{#if isEditable}}
-      <tr>
-        <td style="display: table-cell;" colspan="100">
-          <div class="flex">
-            <span class="flex-grow"></span>
-            <a class="ambersteel-skill-ability-create pad-sm" 
-               title="{{localize ambersteel.labels.addSkillAbility}}"
-               data-item-id="{{skillItemId}}">
-              <i class="fas fa-plus"></i>
-            </a>
-          </div>
-        </td>
-      </tr>
+        <tr>
+          <td style="display: table-cell;" colspan="100">
+            <div class="flex">
+              <span class="flex-grow"></span>
+              <a class="ambersteel-skill-ability-create pad-sm" 
+                title="{{localize ambersteel.labels.addSkillAbility}}"
+                data-item-id="{{skillItemId}}">
+                <i class="fas fa-plus"></i>
+              </a>
+            </div>
+          </td>
+        </tr>
       {{/if}}
     </tbody>
   </table>

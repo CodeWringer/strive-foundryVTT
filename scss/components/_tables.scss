@@ -90,4 +90,14 @@ section.skill-ability-list {
 table.skill-ability-list {
     margin: 0;
     border: 0;
+
+    .skill-ability-column {
+        &-requirement {
+            width: $width-column-md;
+        }
+
+        &-cost {
+            width: $width-column-md;
+        }
+    }
 }

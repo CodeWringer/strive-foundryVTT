@@ -684,6 +684,14 @@ table.skill-ability-list {
   border: 0;
 }
 
+table.skill-ability-list .skill-ability-column-requirement {
+  width: 50px;
+}
+
+table.skill-ability-list .skill-ability-column-cost {
+  width: 50px;
+}
+
 span.spinner-container {
   display: -webkit-box;
   display: -ms-flexbox;
