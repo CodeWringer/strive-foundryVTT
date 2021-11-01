@@ -14,13 +14,15 @@ This is the Ambersteel table-top role-playing game system for FoundryVTT.
 * [ X Auto-level-up skill
   * [X] Reset requirements
   * [X] Auto-move from learning to known
-* [ ] Skills Item
+* [X] Skills Item
+* [X] Beliefs Tab
 * [ ] Fate Tab
   * [ ] Adding a fate card
     * [ ] Deduct cost
   * [ ] Playing/removing a fate card
   * [ ] Limit
 * [ ] Health Tab
+* [X] Biography Tab
 * [ ] Possessions Tab
 * [ ] Create list (compendium) of skills
 * [ ] Create list (compendium) of injuries
