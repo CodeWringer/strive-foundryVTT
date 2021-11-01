@@ -112,10 +112,16 @@ async function _onItemCreate(event) {
   const type = header.dataset.type;
   const data = duplicate(header.dataset);
 
+  let imgPath = "icons/svg/item-bag.svg";
+  if (type == "skill") {
+    imgPath = "icons/svg/book.svg";
+  }
+
   const itemData = {
     name: `New ${type.capitalize()}`,
     type: type,
-    data: data
+    data: data,
+    img: imgPath
   };
 
   // Remove the type from the dataset since it's already in the 'itemData.type' property.
