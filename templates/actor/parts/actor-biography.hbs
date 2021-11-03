@@ -4,10 +4,10 @@ data: {Object} where Object = {
   biography: {String}
 }
 --}}
-<section>
-  <div class="sheet-block">
+<section class="fill">
+  <div class="sheet-block fill">
     {{#if isEditable}}
-      <textarea class="resize-vertical" name="data.biography">{{data.biography}}</textarea>
+      <textarea class="resize-vertical biography" name="data.biography" spellcheck="false">{{data.biography}}</textarea>
     {{else}}
       <span class="multiline">{{data.biography}}</span>
     {{/if}}

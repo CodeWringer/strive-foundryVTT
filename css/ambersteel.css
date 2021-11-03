@@ -323,6 +323,7 @@ li.roll.die.d6.roll-success {
   background-color: #0082072e;
 }
 
+/* Components */
 .item-form {
   font-family: "Roboto", sans-serif;
 }
@@ -444,6 +445,16 @@ a.full-button {
 
 .hidden {
   display: none;
+}
+
+textarea {
+  font-size: 1rem;
+  font-family: "Roboto", sans-serif;
+}
+
+.fill {
+  width: 100%;
+  height: 100%;
 }
 
 .items-header {
@@ -586,13 +597,53 @@ a.full-button {
 }
 
 .fate-card {
-  width: 130px;
-  height: 260px;
+  width: 180px;
+  height: 300px;
   margin: 2px;
   padding: 2px;
-  border-radius: 3px;
-  border: 1px rgba(129, 129, 129, 0.22) solid;
+  border: 3px rgba(129, 129, 129, 0.45) solid;
   background-color: rgba(0, 0, 0, 0.05);
+  border-radius: 10px;
+}
+
+.fate-card textarea {
+  width: 100%;
+  height: 100%;
+  resize: none;
+  font-size: 1rem;
+}
+
+.fate-card-description {
+  height: 80%;
+}
+
+.fate-card-description textarea {
+  height: 100%;
+  resize: none;
+  margin: 0px;
+}
+
+.fate-card-name-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+a.ambersteel-fate-card-add {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+a.ambersteel-fate-card-add i {
+  width: 100%;
+  text-align: center;
+  font-size: 2rem;
 }
 
 .attribute-column-roll {
@@ -729,4 +780,9 @@ span.spinner-container input {
 a.button-spinner {
   height: 50%;
   padding: 0 2px;
+}
+
+textarea.biography {
+  height: 100%;
+  resize: none;
 }
