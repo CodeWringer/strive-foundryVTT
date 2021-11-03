@@ -202,9 +202,7 @@
   flex: 1;
 }
 
-.flex-group-center,
-.flex-group-left,
-.flex-group-right {
+.flex-group-center {
   -webkit-box-pack: center;
   -ms-flex-pack: center;
   justify-content: center;
@@ -459,6 +457,10 @@ textarea {
   height: 100%;
 }
 
+.multiline {
+  word-wrap: break-word;
+}
+
 .items-header {
   height: 28px;
   margin: 2px 0;
@@ -616,12 +618,14 @@ div.item-description textarea {
   border-bottom: 1px solid rgba(129, 129, 129, 0.45);
   background-color: rgba(0, 0, 0, 0.12);
   padding: 2px;
+  height: 52px;
 }
 
 .fate-card-footer {
   border-top: 1px solid rgba(129, 129, 129, 0.45);
   background-color: rgba(0, 0, 0, 0.12);
   padding: 2px;
+  height: 26px;
 }
 
 .fate-item-body-container {
@@ -641,8 +645,8 @@ div.item-description textarea {
 }
 
 .fate-card-description {
-  height: 80%;
-  overflow: scroll;
+  height: 75%;
+  overflow: hidden;
 }
 
 .fate-card-description > textarea {
@@ -674,6 +678,10 @@ span.fate-spinner-column-container {
 
 .fate-card-actor-container {
   width: 190px;
+}
+
+div.message-content .fate-card-description {
+  overflow-y: scroll;
 }
 
 .attribute-column-roll {

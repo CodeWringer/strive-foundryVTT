@@ -2,32 +2,44 @@
 isEditable: {Boolean},
 data: {Object} where Object = {
   name: {String},
-  description: {String}
-  id: {String},
-  img: {String},
-  name: {String}
+  _id: {String},
+  data: {Object} where Object = {
+    description: {String}
+  }
 },
+img: {String}
 --}}
 <section class="fate-card" data-item-id="{{data._id}}">
   <div class="flex flex-row fate-card-header">
-    <h3 class="flex-grow fancy-font">
+    <h3 class="flex-grow fancy-font multiline">
       {{data.name}}
     </h3>
-    <span>
-      <img name="img" src="{{img}}" title="{{data.name}}" height="26" width="26" />
-    </span>
+    <div class="flex flex-column">
+      <span>
+        <img name="img" src="{{img}}" title="{{data.name}}" height="26" width="26" />
+      </span>
+      {{#if isEditable}}
+        <span class="flex-group-right">
+          <a class="ambersteel-item-to-chat pad-sm button" data-item-id="{{data._id}}" title="{{localize ambersteel.labels.sendToChat}}">
+              <i class="fas fa-comments"></i>
+          </a>
+        </span>
+      {{/if}}
+    </div>
   </div>
   <div class="fate-card-description">
     {{#if isEditable}}
-      <textarea class="resize-vertical" name="data.description">{{data.data.description}}</textarea>
+      <textarea name="data.description">{{data.data.description}}</textarea>
     {{else}}
       <span class="multiline">{{data.data.description}}</span>
     {{/if}}
   </div>
   <div class="flex flex-row fate-card-footer">
-    <div class="flex-grow"></div>
-    <a class="ambersteel-item-delete pad-sm button" data-item-id="{{data._id}}" title="{{localize ambersteel.fateSystem.delete}}">
-        <i class="fas fa-trash"></i>
-    </a>
+    {{#if isEditable}}
+      <span class="flex-grow"></span>
+      <a class="ambersteel-item-delete pad-sm button" data-item-id="{{data._id}}" title="{{localize ambersteel.fateSystem.delete}}">
+          <i class="fas fa-trash"></i>
+      </a>
+    {{/if}}
   </div>
 </section>

@@ -5,7 +5,6 @@ import * as SkillUtil from './skill-utility.mjs';
  * @param data 'item.data'
  */
 export function prepareDerivedData(data) {
-  //   const itemData = data.data;
 }
 
 /**
@@ -30,6 +29,9 @@ export function activateListeners(html, owner, isOwner, isEditable) {
 
   // Delete item. 
   html.find(".ambersteel-item-delete").click(_onItemDelete.bind(owner));
+
+  // Delete item. 
+  html.find(".ambersteel-item-to-chat").click(_onItemSendToChat.bind(owner));
 }
 
 /**
@@ -155,4 +157,12 @@ async function _onItemShow(event) {
   const item = getItem(this, itemId);
 
   item.sheet.render(true);
+}
+
+function _onItemSendToChat(event) {
+  const element = event.currentTarget;
+  const itemId = element.dataset.itemId;
+  const item = getItem(this, itemId);
+
+  return item.sendToChat();
 }
