@@ -25,6 +25,18 @@ This is the Ambersteel table-top role-playing game system for FoundryVTT.
 * [X] Biography Tab
 * [ ] Possessions Tab
 * [ ] Create list (compendium) of skills
+  * [ ] Support adding skills from this list
+  * [ ] Differentiate skills - introduce two types: `preset` and `custom`
+    * [ ] Preset items cannot be edited
 * [ ] Create list (compendium) of injuries
+  * [ ] Support injuries from this list
+  * [ ] Differentiate injuries - introduce two types: `preset` and `custom`
+    * [ ] Preset items cannot be edited
 * [ ] Create list (compendium) of illnesses
+  * [ ] Support illnesses from this list
+  * [ ] Differentiate illnesses - introduce two types: `preset` and `custom`
+    * [ ] Preset items cannot be edited
 * [ ] Create list (compendium) of fate cards
+  * [ ] Support adding fate cards from this list
+  * [ ] Differentiate fate cards - introduce two types: `preset` and `custom`
+    * [ ] Preset items cannot be edited
