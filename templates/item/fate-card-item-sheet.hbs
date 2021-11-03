@@ -2,7 +2,12 @@
 isEditable: {Boolean},
 data: {Object} where Object = {
   localizableName: {String},
-  localizableDescription: {String}
+  localizableDescription: {String},
+  cost: {Object} where Object = {
+    miFP: {Number},
+    maFP: {Number},
+    AFP: {Number}
+  }
 },
 item: {Object} where Object -> {
   id: {String},
@@ -21,11 +26,45 @@ item: {Object} where Object -> {
       {{/if}}
     </h1>
   </header>
-  <div class="fate-card-description flex">
-    {{#if isEditable}}
-      <textarea name="data.description" spellcheck="false">{{data.description}}</textarea>
-    {{else}}
-      <span class="multiline flex-grow">{{data.description}}</span>
-    {{/if}}
+  <div class="flex flex-column fate-item-body-container">
+    <div class="sheet-block grid grid-2col">
+      {{!-- row 1 --}}
+      <span class="fancy-font line-height">
+        <label for="data.cost.miFP">{{localize "ambersteel.fateSystem.miFP"}}</label>
+        <span class="primary-font">[{{localize "ambersteel.fateSystem.miFPAbbreviation"}}]</span>
+      </span>
+      <span class="fate-spinner-column-container">
+        {{#> numberSpinner}}
+        <input type="number" data-dtype="Number" min="0" step="1" name="data.cost.miFP" value="{{data.cost.miFP}}" />
+        {{/numberSpinner}}
+      </span>
+      {{!-- row 2 --}}
+      <span class="fancy-font line-height">
+        <label for="data.cost.maFP">{{localize "ambersteel.fateSystem.maFP"}}</label>
+        <span class="primary-font">[{{localize "ambersteel.fateSystem.maFPAbbreviation"}}]</span>
+      </span>
+      <span class="fate-spinner-column-container">
+        {{#> numberSpinner}}
+        <input type="number" data-dtype="Number" min="0" step="1" name="data.cost.maFP" value="{{data.cost.maFP}}" />
+        {{/numberSpinner}}
+      </span>
+      {{!-- row 3 --}}
+      <span class="fancy-font line-height">
+        <label for="data.cost.AFP">{{localize "ambersteel.fateSystem.AFP"}}</label>
+        <span class="primary-font">[{{localize "ambersteel.fateSystem.AFPAbbreviation"}}]</span>
+      </span>
+      <span class="fate-spinner-column-container">
+        {{#> numberSpinner}}
+        <input type="number" data-dtype="Number" min="0" step="1" name="data.cost.AFP" value="{{data.cost.AFP}}" />
+        {{/numberSpinner}}
+      </span>
+    </div>
+    <div class="fate-card-description flex-grow">
+      {{#if isEditable}}
+        <textarea name="data.description" spellcheck="false">{{data.description}}</textarea>
+      {{else}}
+        <span class="multiline flex-grow">{{data.description}}</span>
+      {{/if}}
+    </div>
   </div>
 </form>

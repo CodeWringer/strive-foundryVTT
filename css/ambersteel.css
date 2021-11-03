@@ -176,10 +176,15 @@
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
+}
+
+.flex-row {
   -webkit-box-orient: horizontal;
   -webkit-box-direction: normal;
   -ms-flex-direction: row;
   flex-direction: row;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
 }
 
 .flex-column {
@@ -608,27 +613,14 @@ div.item-description textarea {
   border-radius: 10px;
 }
 
-.fate-card textarea {
-  width: 100%;
-  height: 100%;
-  resize: none;
-  font-size: 1rem;
-}
-
-.fate-card-description {
+.fate-item-body-container {
   height: 80%;
 }
 
-.fate-card-description textarea {
+.fate-card-description > textarea {
+  width: 100%;
   height: 100%;
   resize: none;
-  margin: 0px;
-}
-
-.fate-card-name-container {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
 }
 
 a.ambersteel-fate-card-add {
