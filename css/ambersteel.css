@@ -596,6 +596,16 @@ textarea {
   text-align: left;
 }
 
+div.item-description {
+  height: 80%;
+}
+
+div.item-description textarea {
+  height: 100%;
+  resize: none;
+  margin: 0px;
+}
+
 .fate-card {
   width: 180px;
   height: 300px;

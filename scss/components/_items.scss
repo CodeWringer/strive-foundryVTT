@@ -112,3 +112,14 @@
     }
   }
 }
+
+
+div.item-description {
+  height: 80%;
+
+  textarea {
+    height: 100%;
+    resize: none;
+    margin: 0px;
+  }
+}

@@ -23,7 +23,7 @@ item: {Object} where Object -> {
   </header>
     <div class="fate-card-description flex">
       {{#if isEditable}}
-        <textarea class="resize-vertical flex-grow" name="data.description" spellcheck="false">{{data.description}}</textarea>
+        <textarea name="data.description" spellcheck="false">{{data.description}}</textarea>
       {{else}}
         <span class="multiline flex-grow">{{data.description}}</span>
       {{/if}}
