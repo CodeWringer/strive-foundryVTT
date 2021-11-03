@@ -16,10 +16,10 @@ This is the Ambersteel table-top role-playing game system for FoundryVTT.
   * [X] Auto-move from learning to known
 * [X] Skills Item
 * [X] Beliefs Tab
-* [ ] Fate Tab
-  * [ ] Adding a fate card
+* [X] Fate Tab
+  * [X] Adding a fate card
     * [ ] Deduct cost
-  * [ ] Playing/removing a fate card
+  * [X] Removing a fate card
   * [ ] Limit
 * [ ] Health Tab
 * [X] Biography Tab
