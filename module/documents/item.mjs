@@ -1,9 +1,11 @@
-import * as FateUtil from '../utils/fate-utility.mjs';
+import FateCardItem from './subtypes/fate-card-item.mjs';
 
 /**
  * @extends {Item}
  */
 export class AmbersteelItem extends Item {
+  subType = undefined;
+
   prepareData() {
     super.prepareData();
     const type = this.data.type;
@@ -12,23 +14,13 @@ export class AmbersteelItem extends Item {
     if (type === "skill") {
       this.data.img = "icons/svg/book.svg";
     } else if (type ==="fate-card") {
-      this.data.img = "icons/svg/wing.svg";
-      this._getChatData = FateUtil.getFateChatData.bind(this);
+      this.subType = new FateCardItem(this);
+
+      this.data.img = this.subType.img;
     }
   }
 
-  async _getChatData() {
-    return { actor: undefined, flavor: undefined, renderedContent: "", sound: "../sounds/notify.wav" };
-  }
-
   async sendToChat() {
-    const chatData = await this._getChatData();
-
-    return ChatMessage.create({
-      speaker: ChatMessage.getSpeaker({ actor: chatData.actor }),
-      flavor: chatData.flavor,
-      content: chatData.renderedContent,
-      sound: chatData.sound
-    });
+    return this.subType.sendToChat();
   }
 }

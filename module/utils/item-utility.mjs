@@ -160,6 +160,7 @@ async function _onItemShow(event) {
 }
 
 function _onItemSendToChat(event) {
+  event.preventDefault();
   const element = event.currentTarget;
   const itemId = element.dataset.itemId;
   const item = getItem(this, itemId);
