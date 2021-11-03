@@ -1,0 +1,31 @@
+{{!-- Requires context:
+isEditable: {Boolean},
+data: {Object} where Object = {
+  localizableName: {String},
+  localizableDescription: {String}
+},
+item: {Object} where Object -> {
+  id: {String},
+  img: {String},
+  name: {String}
+}
+--}}
+<form class="{{cssClass}}" autocomplete="off">
+  <header class="sheet-header">
+    <img src="{{item.img}}" data-edit="img" title="{{item.name}}" height="64" width="64" />
+    <h1>
+      {{#if isEditable}}
+        <input name="name" type="text" value="{{item.name}}" placeholder="{{ localize 'Name' }}" />
+      {{else}}
+        {{item.name}}
+      {{/if}}
+    </h1>
+  </header>
+    <div class="fate-card-description flex">
+      {{#if isEditable}}
+        <textarea class="resize-vertical flex-grow" name="data.description" spellcheck="false">{{data.description}}</textarea>
+      {{else}}
+        <span class="multiline flex-grow">{{data.description}}</span>
+      {{/if}}
+  </div>
+</form>

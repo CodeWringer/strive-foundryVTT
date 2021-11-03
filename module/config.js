@@ -153,6 +153,10 @@ ambersteel.character.attributes = {
     magicSense: ambersteel.character.attributeGroups.arcane.attributes.magicSense
 }
 
+ambersteel.fateSystem = {
+    maxCards: 5
+}
+
 ambersteel.labels = {
     level: "ambersteel.labels.level",
     requiredSuccessFailureAbbreviation: "ambersteel.labels.requiredSuccessFailureAbbreviation",

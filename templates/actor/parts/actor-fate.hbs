@@ -5,15 +5,18 @@ data: {Object} where Object = {
     miFP: {Number},
     maFP: {Number},
     AFP: {Number},
+    remainingSlots: {Number},
     cards: {[Object]} where Object = { 
       id: {String},
+      img: {String},
+      name: {String}
       localizableName: {String},
-      icon: {String},
       localizableDescription: {String}
     }
   }
 }
 --}}
+{{#log data}}{{/log}}
 <section>
   <div class="flex sheet-block">
     <div class="flex flex-column">
@@ -45,8 +48,19 @@ data: {Object} where Object = {
     </div>
   </div>
   <div class="flex" style="flex-wrap: wrap;">
-  {{#each data.fateSystem.cards as | card |}}
-{{!-- TODO --}}
+  {{#each data.data.fateSystem.cards as |card key|}}
+  {{> "systems/ambersteel/templates/item/parts/fate-card.hbs"
+    isEditable=isEditable 
+    data=card.data
+  }}
   {{/each}}
+{{#log data.data.fateSystem}}{{/log}}
+  {{#times data.data.fateSystem.remainingSlots}}
+    <div class="fate-card">
+      <a class="ambersteel-fate-card-add pad-sm" title="{{localize ambersteel.fateSystem.add}}" >
+        <i class="fas fa-plus-square"></i>
+      </a>
+    </div>
+  {{/times}}
   </div>
 </section>

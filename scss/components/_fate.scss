@@ -1,9 +1,43 @@
 .fate-card {
-    width: 130px;
-    height: 260px;
+    width: 180px;
+    height: 300px;
     margin: $padding-sm;
     padding: $padding-sm;
-    border-radius: 3px;
-    border: 1px $c-border-light solid;
+    border: 3px $c-border-medium solid;
     background-color: $c-bg-light;
+    border-radius: 10px;
+
+    textarea {
+        width: 100%;
+        height: 100%;
+        resize: none;
+        font-size: 1rem;
+    }
+}
+
+.fate-card-description {
+    height: 80%;
+
+    textarea {
+        height: 100%;
+        resize: none;
+        margin: 0px;
+    }
+}
+
+.fate-card-name-container {
+    display: flex;
+}
+
+a.ambersteel-fate-card-add {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    
+    i {
+        width: 100%;
+        text-align: center;
+        font-size: 2rem;
+    }
 }

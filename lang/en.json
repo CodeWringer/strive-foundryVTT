@@ -123,7 +123,30 @@
       "AFP": "Ambition Fate Points",
       "miFPAbbreviation": "miFP",
       "maFPAbbreviation": "maFP",
-      "AFPAbbreviation": "AFP"
+      "AFPAbbreviation": "AFP",
+      "add": "Buy Fate Card",
+      "cardsNames": {
+        "singleReRoll": "Single Re-Roll",
+        "clotter": "Clotter",
+        "factCheck": "Fact Check",
+        "justFleshWound": "Just a Flesh-Wound",
+        "hastened": "Hastened",
+        "doubleTheFun": "Double the Fun",
+        "wrongdiagnosis": "Wrong Diagnosis",
+        "defyDeath": "Defy Death",
+        "yesMyLiege": "Yes, my liege"
+      },
+      "cardDescriptions" : {
+        "singleReRoll": "Re-Roll a single negative die.",
+        "clotter": "One active Inj. of choice is now patched up.",
+        "factCheck": "Change a minor plot point in a way your prefer. Work with your GM to make sure it fits the narrative, but they should respect your wish. This could be something like avoiding an NPC death or changing a fact about the plot.",
+        "justFleshWound": "Remove or avoid one non-permanent Inj. of choice.",
+        "hastened": "Gain +1 AP during your turn when in combat.",
+        "doubleTheFun": "Double the number of dice to roll on your next/current test.",
+        "wrongdiagnosis": "Remove or avoid one permanent Inj. of choice.",
+        "defyDeath": "Leap from death's door, remove 1 active Inj. of choice and be at 1 HP; Alternatively, avoid a narratively-driven death. The GM will decide the character's alternative fate. They could be captured, very badly injured or become indebted to someone or something.",
+        "yesMyLiege": "Work with your GM to create a follower/hireling who will now be at your command/employ."
+      }
     },
     "roll": {
       "success": "Success",

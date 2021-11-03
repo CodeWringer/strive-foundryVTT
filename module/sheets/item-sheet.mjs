@@ -1,6 +1,7 @@
 import * as NumberSpinner from "../components/number-spinner.mjs";
 import * as SkillUtil from '../utils/skill-utility.mjs';
 import * as ItemUtil from '../utils/item-utility.mjs';
+import * as FateUtil from '../utils/fate-utility.mjs';
 
 export class AmbersteelItemSheet extends ItemSheet {
 
@@ -42,8 +43,10 @@ export class AmbersteelItemSheet extends ItemSheet {
     context.data = itemData.data;
     context.flags = itemData.flags;
 
-    if (type == "skill") {
+    if (type === "skill") {
       SkillUtil.prepareDerivedData(context);
+    } else if (type === "fate-card") {
+      FateUtil.prepareDerivedItemData(context);
     }
 
     return context;

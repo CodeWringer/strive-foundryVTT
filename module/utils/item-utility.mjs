@@ -124,8 +124,10 @@ async function _onItemCreate(event) {
   if (!skillAddData.confirmed) return;
 
   let imgPath = "icons/svg/item-bag.svg";
-  if (type == "skill") {
+  if (type === "skill") {
     imgPath = "icons/svg/book.svg";
+  } else if (type === "fate-card") {
+    imgPath = "icons/svg/wing.svg";
   }
 
   const itemData = {

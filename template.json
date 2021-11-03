@@ -103,15 +103,13 @@
       "templates": ["character"],
       "beliefSystem": {
         "ambition": "",
-        "beliefs": [],
-        "instincts": []
+        "beliefs": ["", "", ""],
+        "instincts": ["", "", ""]
       },
       "fateSystem": {
         "miFP": 0,
         "maFP": 0,
-        "AFP": 0,
-        "maxFateCards": 5,
-        "fateCards": []
+        "AFP": 0
       }
     },
     "npc": {
@@ -119,7 +117,7 @@
     }
   },
   "Item": {
-    "types": ["item", "spell", "skill", "fateCard"],
+    "types": ["item", "spell", "skill", "fate-card"],
     "templates": {
       "base": {
         "description": ""
@@ -138,9 +136,8 @@
       "failures": 0,
       "abilities": []
     },
-    "fateCard": {
+    "fate-card": {
       "templates": ["base"],
-      "fateCardName": "",
       "cost": {
         "miFP": 0,
         "maFP": 0,

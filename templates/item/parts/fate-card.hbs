@@ -1,0 +1,28 @@
+{{!-- Requires context:
+isEditable: {Boolean},
+data: {Object} where Object = {
+  localizableName: {String},
+  localizableDescription: {String}
+  id: {String},
+  img: {String},
+  name: {String}
+},
+--}}
+{{#log data}}{{/log}}
+<section class="fate-card" data-item-id="{{data.id}}">
+  <div class="flex">
+    <h3 class="flex-column flex-grow">
+      <input name="name" type="text" value="{{item.name}}" placeholder="{{ localize 'Name' }}" />
+    </h3>
+    <span class="flex-column">
+      <img src="{{item.img}}" data-edit="img" title="{{item.name}}" height="26" width="26" />
+    </span>
+  </div>
+  <div class="fate-card-description">
+    {{#if isEditable}}
+      <textarea class="resize-vertical" name="data.description">{{data.description}}</textarea>
+    {{else}}
+      <span class="multiline">{{data.description}}</span>
+    {{/if}}
+  </div>
+</section>

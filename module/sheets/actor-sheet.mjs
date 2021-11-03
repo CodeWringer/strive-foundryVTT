@@ -3,6 +3,7 @@ import * as NumberSpinner from "../components/number-spinner.mjs";
 import * as SkillUtil from '../utils/skill-utility.mjs';
 import * as ItemUtil from '../utils/item-utility.mjs';
 import * as AttributeUtil from '../utils/attribute-utility.mjs';
+import * as FateUtil from '../utils/fate-utility.mjs';
 
 export class AmbersteelActorSheet extends ActorSheet {
 
@@ -54,6 +55,8 @@ export class AmbersteelActorSheet extends ActorSheet {
     context.data.biography = actorData.biography;
     context.data.learningSkills = actorData.learningSkills;
     context.data.skills = actorData.skills;
+
+    FateUtil.prepareDerivedActorData(context);
 
     return context;
   }
