@@ -1,5 +1,4 @@
 .fate-card {
-    width: 180px;
     height: 300px;
     margin: $padding-sm;
     border: 3px $c-border-medium solid;
@@ -60,4 +59,8 @@ a.ambersteel-fate-card-add {
 
 span.fate-spinner-column-container {
     max-width: 60px;
+}
+
+.fate-card-actor-container {
+    width: 190px;
 }

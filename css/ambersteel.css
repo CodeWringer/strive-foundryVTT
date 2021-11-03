@@ -604,7 +604,6 @@ div.item-description textarea {
 }
 
 .fate-card {
-  width: 180px;
   height: 300px;
   margin: 2px;
   border: 3px rgba(129, 129, 129, 0.45) solid;
@@ -671,6 +670,10 @@ a.ambersteel-fate-card-add i {
 
 span.fate-spinner-column-container {
   max-width: 60px;
+}
+
+.fate-card-actor-container {
+  width: 190px;
 }
 
 .attribute-column-roll {
