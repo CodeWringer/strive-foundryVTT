@@ -648,6 +648,10 @@ a.ambersteel-fate-card-add i {
   font-size: 2rem;
 }
 
+span.fate-spinner-column-container {
+  max-width: 60px;
+}
+
 .attribute-column-roll {
   max-width: 30px;
   width: 30px;

@@ -18,48 +18,51 @@ data: {Object} where Object = {
 --}}
 {{#log data}}{{/log}}
 <section>
-  <div class="flex sheet-block">
-    <div class="flex flex-column">
-      <label class="line-height fancy-font pad-sm" for="data.fateSystem.miFP">{{localize "ambersteel.fateSystem.miFP"}}</label>
-      <label class="line-height fancy-font pad-sm" for="data.fateSystem.maFP">{{localize "ambersteel.fateSystem.maFP"}}</label>
-      <label class="line-height fancy-font pad-sm" for="data.fateSystem.AFP">{{localize "ambersteel.fateSystem.AFP"}}</label>
-    </div>
-    <div class="flex flex-column">
-      <span class="line-height pad-sm primary-font">({{localize "ambersteel.fateSystem.miFPAbbreviation"}})</span>
-      <span class="line-height pad-sm primary-font">({{localize "ambersteel.fateSystem.maFPAbbreviation"}})</span>
-      <span class="line-height pad-sm primary-font">({{localize "ambersteel.fateSystem.AFPAbbreviation"}})</span>
-    </div>
-    <div class="flex flex-column flex-grow">
-      {{#if isEditable}}
-        {{#> numberSpinner}}
-        <input class="line-height pad-sm" type="number" data-dtype="Number" min="0" step="1" name="data.fateSystem.miFP" value="{{data.fateSystem.miFP}}" />
-        {{/numberSpinner}}
-        {{#> numberSpinner}}
-        <input class="line-height pad-sm" type="number" data-dtype="Number" min="0" step="1" name="data.fateSystem.maFP" value="{{data.fateSystem.maFP}}" />
-        {{/numberSpinner}}
-        {{#> numberSpinner}}
-        <input class="line-height pad-sm" type="number" data-dtype="Number" min="0" step="1" name="data.fateSystem.AFP" value="{{data.fateSystem.AFP}}" />
-        {{/numberSpinner}}
-      {{else}}
-        <p>{{data.fateSystem.miFP}}</p>
-        <p>{{data.fateSystem.maFP}}</p>
-        <p>{{data.fateSystem.AFP}}</p>
-      {{/if}}
-    </div>
+  <div class="sheet-block grid grid-2col flex-column">
+    {{!-- row 1 --}}
+    <span class="fancy-font line-height">
+      <label for="data.fateSystem.miFP">{{localize "ambersteel.fateSystem.miFP"}}</label>
+      <span class="primary-font">[{{localize "ambersteel.fateSystem.miFPAbbreviation"}}]</span>
+    </span>
+    <span class="fate-spinner-column-container">
+      {{#> numberSpinner}}
+      <input type="number" data-dtype="Number" min="0" step="1" name="data.fateSystem.miFP" value="{{data.fateSystem.miFP}}" />
+      {{/numberSpinner}}
+    </span>
+    {{!-- row 2 --}}
+    <span class="fancy-font line-height">
+      <label for="data.fateSystem.maFP">{{localize "ambersteel.fateSystem.maFP"}}</label>
+      <span class="primary-font">[{{localize "ambersteel.fateSystem.maFPAbbreviation"}}]</span>
+    </span>
+    <span class="fate-spinner-column-container">
+      {{#> numberSpinner}}
+      <input type="number" data-dtype="Number" min="0" step="1" name="data.fateSystem.maFP" value="{{data.fateSystem.maFP}}" />
+      {{/numberSpinner}}
+    </span>
+    {{!-- row 3 --}}
+    <span class="fancy-font line-height">
+      <label for="data.fateSystem.AFP">{{localize "ambersteel.fateSystem.AFP"}}</label>
+      <span class="primary-font">[{{localize "ambersteel.fateSystem.AFPAbbreviation"}}]</span>
+    </span>
+    <span class="fate-spinner-column-container">
+      {{#> numberSpinner}}
+      <input type="number" data-dtype="Number" min="0" step="1" name="data.fateSystem.AFP" value="{{data.fateSystem.AFP}}" />
+      {{/numberSpinner}}
+    </span>
   </div>
   <div class="flex" style="flex-wrap: wrap;">
-  {{#each data.data.fateSystem.cards as |card key|}}
-  {{> "systems/ambersteel/templates/item/parts/fate-card.hbs"
-    isEditable=isEditable 
-    data=card.data
-  }}
-  {{/each}}
-  {{#times data.data.fateSystem.remainingSlots}}
-    <div class="fate-card">
-      <a class="ambersteel-fate-card-add pad-sm" title="{{localize ambersteel.fateSystem.add}}" >
-        <i class="fas fa-plus-square"></i>
-      </a>
-    </div>
-  {{/times}}
+    {{#each data.data.fateSystem.cards as |card key|}}
+    {{> "systems/ambersteel/templates/item/parts/fate-card.hbs"
+      isEditable=isEditable 
+      data=card.data
+    }}
+    {{/each}}
+    {{#times data.data.fateSystem.remainingSlots}}
+      <div class="fate-card">
+        <a class="ambersteel-fate-card-add pad-sm" title="{{localize ambersteel.fateSystem.add}}" >
+          <i class="fas fa-plus-square"></i>
+        </a>
+      </div>
+    {{/times}}
   </div>
 </section>
