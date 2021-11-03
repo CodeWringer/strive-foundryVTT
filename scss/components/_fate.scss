@@ -2,17 +2,39 @@
     width: 180px;
     height: 300px;
     margin: $padding-sm;
-    padding: $padding-sm;
     border: 3px $c-border-medium solid;
     background-color: $c-bg-light;
     border-radius: 10px;
     overflow: hidden;
+
+    &-header {
+        border-bottom: 1px solid $c-border-medium;
+        background-color: $c-bg-dark;
+        padding: $padding-sm;
+    }
+
+    &-footer {
+        border-top: 1px solid $c-border-medium;
+        background-color: $c-bg-dark;
+        padding: $padding-sm;
+    }
 }
 
 .fate-item-body-container {
     height: 80%;
-
+    background-color: $c-bg-light;
 }
+
+.fate-card-item-description {
+    height: 80%;
+    overflow: hidden;
+    > textarea {
+        width: 100%;
+        height: 100%;
+        resize: none;
+    }
+}
+
 .fate-card-description {
     height: 80%;
     overflow: scroll;

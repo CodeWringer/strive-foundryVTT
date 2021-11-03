@@ -9,12 +9,12 @@ data: {Object} where Object = {
 },
 --}}
 <section class="fate-card" data-item-id="{{data._id}}">
-  <div class="flex flex-row">
-    <h3 class="flex-grow">
-      <input name="" type="text" value="{{data.name}}" placeholder="{{ localize 'Name' }}" />
+  <div class="flex flex-row fate-card-header">
+    <h3 class="flex-grow fancy-font">
+      {{data.name}}
     </h3>
     <span>
-      <img src="{{data.img}}" data-edit="img" title="{{data.name}}" height="26" width="26" />
+      <img name="img" src="{{img}}" title="{{data.name}}" height="26" width="26" />
     </span>
   </div>
   <div class="fate-card-description">
@@ -24,7 +24,7 @@ data: {Object} where Object = {
       <span class="multiline">{{data.data.description}}</span>
     {{/if}}
   </div>
-  <div class="fate-card-footer flex flex-row">
+  <div class="flex flex-row fate-card-footer">
     <div class="flex-grow"></div>
     <a class="ambersteel-item-delete pad-sm button" data-item-id="{{data._id}}" title="{{localize ambersteel.fateSystem.delete}}">
         <i class="fas fa-trash"></i>

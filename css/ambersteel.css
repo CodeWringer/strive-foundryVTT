@@ -607,15 +607,38 @@ div.item-description textarea {
   width: 180px;
   height: 300px;
   margin: 2px;
-  padding: 2px;
   border: 3px rgba(129, 129, 129, 0.45) solid;
   background-color: rgba(0, 0, 0, 0.05);
   border-radius: 10px;
   overflow: hidden;
 }
 
+.fate-card-header {
+  border-bottom: 1px solid rgba(129, 129, 129, 0.45);
+  background-color: rgba(0, 0, 0, 0.12);
+  padding: 2px;
+}
+
+.fate-card-footer {
+  border-top: 1px solid rgba(129, 129, 129, 0.45);
+  background-color: rgba(0, 0, 0, 0.12);
+  padding: 2px;
+}
+
 .fate-item-body-container {
   height: 80%;
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.fate-card-item-description {
+  height: 80%;
+  overflow: hidden;
+}
+
+.fate-card-item-description > textarea {
+  width: 100%;
+  height: 100%;
+  resize: none;
 }
 
 .fate-card-description {
