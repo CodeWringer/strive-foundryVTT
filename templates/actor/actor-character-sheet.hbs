@@ -17,8 +17,8 @@ data: {Object} where Object = {
   <header class="sheet-header">
     <img class="profile-img" src="{{actor.img}}" data-edit="img" title="{{actor.name}}" height="100" width="100" />
     <div class="header-fields">
-      <h1 class="charname fancy-font">
-        <input name="name" type="text" value="{{actor.name}}" placeholder="Name" />
+      <h1 class="header-name fancy-font">
+        <input name="header-name" type="text" value="{{actor.name}}" placeholder="Name" />
       </h1>
       {{> "systems/ambersteel/templates/actor/parts/actor-personals.hbs" 
       isEditable=isEditable 
