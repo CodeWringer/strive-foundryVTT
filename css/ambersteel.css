@@ -611,10 +611,16 @@ div.item-description textarea {
   border: 3px rgba(129, 129, 129, 0.45) solid;
   background-color: rgba(0, 0, 0, 0.05);
   border-radius: 10px;
+  overflow: hidden;
 }
 
 .fate-item-body-container {
   height: 80%;
+}
+
+.fate-card-description {
+  height: 80%;
+  overflow: scroll;
 }
 
 .fate-card-description > textarea {

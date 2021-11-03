@@ -11,6 +11,8 @@ data: {Object} where Object = {
   biography: {Object} where Object -> see parts/actor-biography.hbs,
 }
 --}}
+{{#log data}}{{/log}}
+{{#log actor}}{{/log}}
 <form class="{{cssClass}} {{actor.type}} flexcol" autocomplete="off">
 
   {{!-- Sheet Header --}}
@@ -18,7 +20,7 @@ data: {Object} where Object = {
     <img class="profile-img" src="{{actor.img}}" data-edit="img" title="{{actor.name}}" height="100" width="100" />
     <div class="header-fields">
       <h1 class="header-name fancy-font">
-        <input name="header-name" type="text" value="{{actor.name}}" placeholder="Name" />
+        <input class="header-name" name="name" type="text" value="{{actor.name}}" placeholder="Name" />
       </h1>
       {{> "systems/ambersteel/templates/actor/parts/actor-personals.hbs" 
       isEditable=isEditable 

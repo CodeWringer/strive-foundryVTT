@@ -6,16 +6,21 @@
     border: 3px $c-border-medium solid;
     background-color: $c-bg-light;
     border-radius: 10px;
+    overflow: hidden;
 }
 
 .fate-item-body-container {
     height: 80%;
 
 }
-.fate-card-description > textarea {
-    width: 100%;
-    height: 100%;
-    resize: none;
+.fate-card-description {
+    height: 80%;
+    overflow: scroll;
+    > textarea {
+        width: 100%;
+        height: 100%;
+        resize: none;
+    }
 }
 
 a.ambersteel-fate-card-add {

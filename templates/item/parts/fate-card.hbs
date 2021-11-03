@@ -1,28 +1,33 @@
 {{!-- Requires context:
 isEditable: {Boolean},
 data: {Object} where Object = {
-  localizableName: {String},
-  localizableDescription: {String}
+  name: {String},
+  description: {String}
   id: {String},
   img: {String},
   name: {String}
 },
 --}}
-{{#log data}}{{/log}}
-<section class="fate-card" data-item-id="{{data.id}}">
-  <div class="flex">
-    <h3 class="flex-column flex-grow">
-      <input name="name" type="text" value="{{item.name}}" placeholder="{{ localize 'Name' }}" />
+<section class="fate-card" data-item-id="{{data._id}}">
+  <div class="flex flex-row">
+    <h3 class="flex-grow">
+      <input name="" type="text" value="{{data.name}}" placeholder="{{ localize 'Name' }}" />
     </h3>
-    <span class="flex-column">
-      <img src="{{item.img}}" data-edit="img" title="{{item.name}}" height="26" width="26" />
+    <span>
+      <img src="{{data.img}}" data-edit="img" title="{{data.name}}" height="26" width="26" />
     </span>
   </div>
   <div class="fate-card-description">
     {{#if isEditable}}
-      <textarea class="resize-vertical" name="data.description">{{data.description}}</textarea>
+      <textarea class="resize-vertical" name="data.description">{{data.data.description}}</textarea>
     {{else}}
-      <span class="multiline">{{data.description}}</span>
+      <span class="multiline">{{data.data.description}}</span>
     {{/if}}
+  </div>
+  <div class="fate-card-footer flex flex-row">
+    <div class="flex-grow"></div>
+    <a class="ambersteel-item-delete pad-sm button" data-item-id="{{data._id}}" title="{{localize ambersteel.fateSystem.delete}}">
+        <i class="fas fa-trash"></i>
+    </a>
   </div>
 </section>

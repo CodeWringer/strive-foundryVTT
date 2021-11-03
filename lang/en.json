@@ -125,6 +125,7 @@
       "maFPAbbreviation": "maFP",
       "AFPAbbreviation": "AFP",
       "add": "Buy Fate Card",
+      "delete": "Delete Fate Card",
       "cardsNames": {
         "singleReRoll": "Single Re-Roll",
         "clotter": "Clotter",
