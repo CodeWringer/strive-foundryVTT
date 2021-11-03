@@ -1,11 +1,3 @@
-export function getDefaultOptions(defaultOptions) {
-  return {
-    ...defaultOptions,
-    width: 176,
-    height: 316
-  }
-}
-
 export function prepareDerivedItemData(data) {
   data.data.localizableName = "ambersteel.fateSystem.cardsNames." + data.name;
   data.data.localizableDescription = "ambersteel.fateSystem.cardDescriptions." + data.name;
