@@ -51,23 +51,20 @@ export default class BaseItemSheet {
    * @virtual
    */
   activateListeners(html, isOwner, isEditable) {
-    // Show item sheet.
-    html.find(".ambersteel-item-show").click(this._onItemShow.bind(owner));
-
     if (!isOwner) return;
     if (!isEditable) return;
 
     // Add Item
-    html.find('.ambersteel-item-create').click(this._onItemCreate.bind(owner));
+    html.find('.ambersteel-item-create').click(this._onItemCreate(event));
 
     // Edit item. 
-    html.find(".ambersteel-item-edit").change(this._onItemEdit.bind(owner));
+    html.find(".ambersteel-item-edit").change(this._onItemEdit(event));
 
     // Delete item. 
-    html.find(".ambersteel-item-delete").click(this._onItemDelete.bind(owner));
+    html.find(".ambersteel-item-delete").click(this._onItemDelete(event));
 
     // Delete item. 
-    html.find(".ambersteel-item-to-chat").click(this._onItemSendToChat.bind(owner));
+    html.find(".ambersteel-item-to-chat").click(this._onItemSendToChat(event));
   }
 
   /**
@@ -79,7 +76,6 @@ export default class BaseItemSheet {
   async _onItemEdit(event) {
     event.preventDefault();
     const element = event.currentTarget;
-    const itemId = element.dataset.itemId;
     const item = this.getItem();
     const propertyPath = element.dataset.field;
     let newValue = element.value;
@@ -123,8 +119,6 @@ export default class BaseItemSheet {
    */
   async _onItemDelete(event) {
     event.preventDefault();
-    const element = event.currentTarget;
-    const itemId = element.dataset.itemId;
     const item = this.getItem();
 
     await item.delete();
@@ -141,11 +135,6 @@ export default class BaseItemSheet {
     const header = event.currentTarget;
     const type = header.dataset.type;
     const data = duplicate(header.dataset);
-
-    // Modal dialog to enter obstacle and bonus dice. 
-    const skillAddData = await SkillUtil.querySkillAddData();
-
-    if (!skillAddData.confirmed) return;
 
     let imgPath = "icons/svg/item-bag.svg";
     if (type === "skill") {
@@ -170,26 +159,10 @@ export default class BaseItemSheet {
   /**
    * @param event 
    * @private
-   * @async
-   */
-  async _onItemShow(event) {
-    event.preventDefault();
-    const element = event.currentTarget;
-    const itemId = element.dataset.itemId;
-    const item = BaseItemSheet.getItem(this, itemId);
-
-    item.sheet.render(true);
-  }
-
-  /**
-   * @param event 
-   * @private
    */
   _onItemSendToChat(event) {
     event.preventDefault();
-    const element = event.currentTarget;
-    const itemId = element.dataset.itemId;
-    const item = BaseItemSheet.getItem(this, itemId);
+    const item = this.getItem();
 
     return item.sendToChat();
   }
