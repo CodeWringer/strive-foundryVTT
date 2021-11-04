@@ -180,7 +180,7 @@ export class AmbersteelActorSheet extends ActorSheet {
     SkillUtil.addProgress(oSkill, result.rollResults.isSuccess, false);
 
     // Re-render the sheet to make the progress visible. 
-    this.parent.render();
+    this.render();
 
     // Display roll result. 
     Dice.sendDiceResultToChat({ renderedContent: result.renderedContent, flavor: result.flavor, actor: result.actor });
@@ -216,7 +216,7 @@ export class AmbersteelActorSheet extends ActorSheet {
     await this.actor.addAttributeProgress(attName, result.rollResults.isSuccess);
 
     // Re-render the sheet to make the progress visible. 
-    this.parent.render();
+    this.render();
 
     // Display roll result. 
     Dice.sendDiceResultToChat({ renderedContent: result.renderedContent, flavor: result.flavor, actor: result.actor });
