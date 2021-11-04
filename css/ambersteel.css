@@ -461,6 +461,10 @@ textarea {
   word-wrap: break-word;
 }
 
+.ambersteel-item-to-chat-margin-right {
+  margin-right: 2%;
+}
+
 .items-header {
   height: 28px;
   margin: 2px 0;

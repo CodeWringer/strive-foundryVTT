@@ -1,5 +1,6 @@
 {{!-- Requires context:
 isEditable: {Boolean},
+isSendable: {Boolean},
 data: {Object} where Object = {
   localizableName: {String},
   localizableDescription: {String},
@@ -15,16 +16,30 @@ item: {Object} where Object -> {
   name: {String}
 }
 --}}
+{{#log isSendable}}{{/log}}
 <form class="{{cssClass}}" autocomplete="off">
   <header class="sheet-header">
-    <img src="{{item.img}}" data-edit="img" title="{{item.name}}" height="64" width="64" />
-    <h1 class="header-name">
-      {{#if isEditable}}
-        <input class="header-name" name="name" type="text" value="{{item.name}}" placeholder="{{ localize 'Name' }}" />
-      {{else}}
-        {{item.name}}
+    <div class="flex flex-column">
+      <div class="flex flex-row">
+        <img src="{{item.img}}" data-edit="img" title="{{item.name}}" height="64" width="64" />
+        <h1 class="header-name">
+          {{#if isEditable}}
+            <input class="header-name" name="name" type="text" value="{{item.name}}" placeholder="{{ localize 'Name' }}" />
+          {{else}}
+            {{item.name}}
+          {{/if}}
+        </h1>
+      </div>
+      {{#if isSendable}}
+        <div class="flex-group-right">
+          <span class="ambersteel-item-to-chat-margin-right">
+            <a class="ambersteel-item-to-chat pad-sm button" data-item-id="{{data._id}}" title="{{localize ambersteel.labels.sendToChat}}">
+              <i class="fas fa-comments"></i>
+            </a>
+          </span>
+        </div>
       {{/if}}
-    </h1>
+    </div>
   </header>
   <div class="flex flex-column fate-item-body-container">
     <div class="sheet-block grid grid-2col">

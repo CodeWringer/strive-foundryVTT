@@ -1,6 +1,7 @@
-export function prepareDerivedItemData(data) {
-  data.data.localizableName = "ambersteel.fateSystem.cardsNames." + data.name;
-  data.data.localizableDescription = "ambersteel.fateSystem.cardDescriptions." + data.name;
+export function prepareDerivedItemData(context) {
+  context.data.localizableName = "ambersteel.fateSystem.cardsNames." + context.name;
+  context.data.localizableDescription = "ambersteel.fateSystem.cardDescriptions." + context.name;
+  context.isSendable = true;
 }
 
 export function prepareDerivedActorData(context) {
@@ -37,7 +38,8 @@ export async function getFateChatData() {
       }
     },
     img: this.img,
-    isEditable: false
+    isEditable: false,
+    isSendable: false
   });
 
   return {
