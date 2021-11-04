@@ -1,5 +1,6 @@
 import { getAttributeGroupName } from './attribute-utility.mjs';
 import { getItem } from './item-utility.mjs';
+import SkillAbility from '../dto/skill-ability.mjs';
 
 /**
  * Prepares skill data on the given item data. 
@@ -148,16 +149,6 @@ export async function addProgress(skillItem = undefined, success = false, autoLe
       const nextSkillValue = parseInt(skillData.value) + 1;
       await setLevel(nextSkillValue, resetProgress);
     }
-  }
-}
-
-export class SkillAbility {
-  constructor(name, description, requiredLevel, apCost, condition) {
-    this.name = name;
-    this.description = description;
-    this.requiredLevel = requiredLevel;
-    this.apCost = apCost;
-    this.condition = condition;
   }
 }
 

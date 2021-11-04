@@ -1,4 +1,4 @@
-import PreparedChatData from '../../prepared-chat-data.mjs';
+import PreparedChatData from '../../dto/prepared-chat-data.mjs';
 
 export default class BaseItem {
   /**
