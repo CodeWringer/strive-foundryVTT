@@ -4,6 +4,12 @@ export default class FateCardItem extends BaseItem {
     /** @override */
     get img() { return "icons/svg/wing.svg"; }
 
+    /** @override */
+    prepareData() {
+      this.owner.data.img = this.img;
+    }
+
+    /** @override */
     async getChatData() {
         const messageBase = super.getChatData();
         const messageTemplate = "systems/ambersteel/templates/item/parts/fate-card.hbs";
