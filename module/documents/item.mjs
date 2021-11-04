@@ -11,6 +11,7 @@ export class AmbersteelItem extends Item {
    */
   subType = undefined;
 
+  /** @override */
   prepareData() {
     super.prepareData();
     const type = this.data.type;
@@ -24,6 +25,12 @@ export class AmbersteelItem extends Item {
     }
 
     this.subType.prepareData();
+  }
+
+  /** @override */
+  prepareDerivedData() {
+    super.prepareDerivedData();
+    this.subType.prepareDerivedData();
   }
 
   /**
