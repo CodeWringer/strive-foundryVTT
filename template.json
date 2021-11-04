@@ -117,15 +117,10 @@
     }
   },
   "Item": {
-    "types": ["item", "spell", "skill", "fate-card"],
+    "types": ["item", "skill", "fate-card"],
     "templates": {
       "base": {
         "description": ""
-      },
-      "healthImpediment": {
-        "impedimentName": "",
-        "description": "",
-        "treatment": ""
       }
     },
     "skill": {
@@ -147,18 +142,7 @@
     "item": {
       "templates": ["base"],
       "quantity": 1,
-      "weight": 0,
-      "formula": "d20 + @str.mod + ceil(@lvl / 2)"
-    },
-    "illness": {
-      "templates": ["healthImpediment"]
-    },
-    "injury": {
-      "templates": ["healthImpediment"]
-    },
-    "spell": {
-      "templates": ["base"],
-      "spellLevel": 1
+      "bulk": 1
     }
   }
 }
