@@ -55,16 +55,16 @@ export default class BaseItemSheet {
     if (!isEditable) return;
 
     // Add Item
-    html.find('.ambersteel-item-create').click(this._onItemCreate);
+    html.find('.ambersteel-item-create').click(this._onItemCreate.bind(this));
 
     // Edit item. 
-    html.find(".ambersteel-item-edit").change(this._onItemEdit);
+    html.find(".ambersteel-item-edit").change(this._onItemEdit.bind(this));
 
     // Delete item. 
-    html.find(".ambersteel-item-delete").click(this._onItemDelete);
+    html.find(".ambersteel-item-delete").click(this._onItemDelete.bind(this));
 
     // Delete item. 
-    html.find(".ambersteel-item-to-chat").click(this._onItemSendToChat);
+    html.find(".ambersteel-item-to-chat").click(this._onItemSendToChat.bind(this));
   }
 
   /**
@@ -89,7 +89,7 @@ export default class BaseItemSheet {
 
     await item.updateProperty(propertyPath, newValue);
 
-    this.render();
+    this.parent.render();
   }
 
   /**
