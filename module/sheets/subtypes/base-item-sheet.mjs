@@ -70,11 +70,11 @@ export default class BaseItemSheet {
     }
 
     /**
- * 
- * @param event 
- * @private
- * @async
- */
+     * 
+     * @param event 
+     * @private
+     * @async
+     */
     async _onItemEdit(event) {
         event.preventDefault();
         const element = event.currentTarget;
