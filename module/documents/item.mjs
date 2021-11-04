@@ -2,9 +2,6 @@ import BaseItem from './subtypes/base-item.mjs';
 import FateCardItem from './subtypes/fate-card-item.mjs';
 import SkillItem from './subtypes/skill-item.mjs';
 
-/**
- * @extends {Item}
- */
 export class AmbersteelItem extends Item {
   /**
    * @private
@@ -19,7 +16,7 @@ export class AmbersteelItem extends Item {
 
       if (type === "skill") {
         this._subType = new SkillItem(this);
-      } else if (type ==="fate-card") {
+      } else if (type === "fate-card") {
         this._subType = new FateCardItem(this);
       } else {
         this._subType = new BaseItem(this);
