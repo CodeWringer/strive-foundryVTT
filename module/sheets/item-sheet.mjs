@@ -1,9 +1,31 @@
 import * as NumberSpinner from "../components/number-spinner.mjs";
-import * as SkillUtil from '../utils/skill-utility.mjs';
-import * as ItemUtil from '../utils/item-utility.mjs';
-import * as FateUtil from '../utils/fate-utility.mjs';
+import BaseItemSheet from "./subtypes/base-item-sheet.mjs";
+import SkillItemSheet from "./subtypes/skill-item-sheet.mjs";
+import FateCardItemSheet from "./subtypes/fate-item-sheet.mjs";
 
 export class AmbersteelItemSheet extends ItemSheet {
+  /**
+   * @private
+   */
+  _subType = undefined;
+  /**
+   * Type-dependent object which pseudo-extends the logic of this object. 
+   */
+  get subType() {
+    if (!this._subType) {
+      const data = super.getData();
+      const type = data.item.type;
+
+      if (type === "skill") {
+        this._subType = new SkillItemSheet(this);
+      } else if (type === "fate-card") {
+        this._subType = new FateCardItemSheet(this);
+      } else {
+        this._subType = new BaseItemSheet(this);
+      }
+    }
+    return this._subType;
+  }
 
   /** @override */
   static get defaultOptions() {
@@ -15,56 +37,50 @@ export class AmbersteelItemSheet extends ItemSheet {
     });
   }
 
-  /** @override */
+  /**
+   * Returns the template path. 
+   * @returns {String} Path to the template. 
+   * @virtual
+   * @override
+   */
   get template() {
-    const path = "systems/ambersteel/templates/item";
-    const type = this.item.data.type;
-
-    if (type != undefined && type != null && type != "") {
-      return `${path}/${type}-item-sheet.hbs`;
-    } else { // Fallback
-      return `${path}/item-item-sheet.hbs`;
-    }
+    return this.subType.template;
   }
 
-  /* -------------------------------------------- */
-
-  /** @override */
+  /** 
+   * Returns an object that represents sheet and enriched item data. 
+   * 
+   * Enriched means, it contains derived data and convenience properties. 
+   * @returns {Object} The enriched context object. 
+   * @override 
+   */
   getData() {
-    // Retrieve base data structure.
     const context = super.getData();
-    const type = context.item.type;
-    const itemData = context.item.data;
+    
+    // Add the config to the context object as a convenience property. 
     context.CONFIG = CONFIG.ambersteel;
-
+    // In templates that implement it, this flag determines whether data on the sheet 
+    // can be edited. 
     context.isEditable = context.editable;
+    // In templates that implement it, this flag determines whether the sheet data can be 
+    // sent to the chat. 
+    context.isSendable = true;
 
-    // Add the actor's data to context.data for easier access, as well as flags.
-    context.data = itemData.data;
-    context.flags = itemData.flags;
-
-    if (type === "skill") {
-      SkillUtil.prepareDerivedData(context);
-    } else if (type === "fate-card") {
-      FateUtil.prepareDerivedItemData(context);
-    }
+    this.subType.prepareDerivedData(context);
 
     return context;
   }
-
-  /* -------------------------------------------- */
 
   /** @override */
   activateListeners(html) {
     super.activateListeners(html);
     const isOwner = this.item.isOwner;
     const isEditable = this.isEditable;
-
-    ItemUtil.activateListeners(html, this, isOwner, isEditable);
-    SkillUtil.activateListeners(html, this, isOwner, isEditable);
+    
+    // General listeners. 
     NumberSpinner.activateListeners(html, this, isOwner, isEditable);
 
-    if (!isOwner) return;
-    if (!isEditable) return;
+    // Subtype listeners. 
+    this.subType.activateListeners(html, isOwner, isEditable);
   }
 }
