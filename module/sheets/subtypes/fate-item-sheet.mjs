@@ -1,3 +1,5 @@
+import BaseItemSheet from "./base-item-sheet.mjs";
+
 export default class FateItemSheet extends BaseItemSheet {
   /** @override */
   get template() {

@@ -1,8 +1,6 @@
 import * as Dice from "../helpers/dice.mjs";
 import * as NumberSpinner from "../components/number-spinner.mjs";
 import * as SkillUtil from '../utils/skill-utility.mjs';
-import * as ItemUtil from '../utils/item-utility.mjs';
-import * as AttributeUtil from '../utils/attribute-utility.mjs';
 import * as FateUtil from '../utils/fate-utility.mjs';
 
 export class AmbersteelActorSheet extends ActorSheet {
@@ -98,8 +96,8 @@ export class AmbersteelActorSheet extends ActorSheet {
     const isOwner = this.actor.isOwner;
     const isEditable = this.isEditable;
 
-    ItemUtil.activateListeners(html, this, isOwner, isEditable);
-    SkillUtil.activateListeners(html, this, isOwner, isEditable);
+    // ItemUtil.activateListeners(html, this, isOwner, isEditable);
+    // SkillUtil.activateListeners(html, this, isOwner, isEditable);
     NumberSpinner.activateListeners(html, this, isOwner, isEditable);
     
     // -------------------------------------------------------------
