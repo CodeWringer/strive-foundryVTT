@@ -49,9 +49,9 @@ export async function addProgress(skillItem = undefined, success = false, autoLe
   const requiredFailures = parseInt(skillData.requiredFailures);
 
   if (success) {
-    await skillItem.update({ ["data.successes"]: successes + 1 });
+    await skillItem.updateProperty("data.successes", successes + 1);
   } else {
-    await skillItem.update({ ["data.failures"]: failures + 1 });
+    await skillItem.updateProperty("data.failures", failures + 1);
   }
 
   if (autoLevel) {

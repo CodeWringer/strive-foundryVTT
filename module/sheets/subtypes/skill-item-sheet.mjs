@@ -25,16 +25,16 @@ export default class SkillItemSheet extends BaseItemSheet {
     super.activateListeners(html, isOwner, isEditable);
 
     // Show skill abilities. 
-    html.find(".ambersteel-expand-skill-ability-list").click(this._onExpandSkillAbilityList(event));
+    html.find(".ambersteel-expand-skill-ability-list").click(this._onExpandSkillAbilityList);
 
     if (!isOwner) return;
     if (!isEditable) return;
 
     // Add skill ability. 
-    html.find(".ambersteel-skill-ability-create").click(this._onCreateSkillAbility(event));
+    html.find(".ambersteel-skill-ability-create").click(this._onCreateSkillAbility);
 
     // Delete skill ability.
-    html.find(".ambersteel-skill-ability-delete").click(this._onDeleteSkillAbility(event));
+    html.find(".ambersteel-skill-ability-delete").click(this._onDeleteSkillAbility);
   }
 
   /**
@@ -46,7 +46,7 @@ export default class SkillItemSheet extends BaseItemSheet {
     event.preventDefault();
 
     const skillItem = this.getItem();
-    await skillItem.updateProperty({ ["data.isExpanded"]: !skillItem.data.data.isExpanded });
+    await skillItem.updateProperty("data.isExpanded", !skillItem.data.data.isExpanded);
 
     this.render();
   }
@@ -63,7 +63,7 @@ export default class SkillItemSheet extends BaseItemSheet {
     const abilities = skillItem.data.data.abilities.concat(
       [new SkillAbility("New Skill Ability", "", 0, 0, "")]
     );
-    await skillItem.updateProperty({ ["data.abilities"]: abilities });
+    await skillItem.updateProperty("data.abilities", abilities);
 
     this.render();
   }
@@ -82,7 +82,7 @@ export default class SkillItemSheet extends BaseItemSheet {
     const dataAbilities = skillItem.data.data.abilities;
 
     const abilities = dataAbilities.slice(0, index).concat(dataAbilities.slice(index + 1));
-    await skillItem.updateProperty({ ["data.abilities"]: abilities });
+    await skillItem.updateProperty("data.abilities", abilities);
 
     this.render();
   }

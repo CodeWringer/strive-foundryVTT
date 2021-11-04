@@ -55,16 +55,16 @@ export default class BaseItemSheet {
     if (!isEditable) return;
 
     // Add Item
-    html.find('.ambersteel-item-create').click(this._onItemCreate(event));
+    html.find('.ambersteel-item-create').click(this._onItemCreate);
 
     // Edit item. 
-    html.find(".ambersteel-item-edit").change(this._onItemEdit(event));
+    html.find(".ambersteel-item-edit").change(this._onItemEdit);
 
     // Delete item. 
-    html.find(".ambersteel-item-delete").click(this._onItemDelete(event));
+    html.find(".ambersteel-item-delete").click(this._onItemDelete);
 
     // Delete item. 
-    html.find(".ambersteel-item-to-chat").click(this._onItemSendToChat(event));
+    html.find(".ambersteel-item-to-chat").click(this._onItemSendToChat);
   }
 
   /**
@@ -75,38 +75,19 @@ export default class BaseItemSheet {
    */
   async _onItemEdit(event) {
     event.preventDefault();
+
     const element = event.currentTarget;
     const item = this.getItem();
     const propertyPath = element.dataset.field;
-    let newValue = element.value;
 
+    // Determine new value
+    let newValue = element.value;
     if (element.tagName.toLowerCase() == "select") {
       const optionValue = element.options[element.selectedIndex].value;
       newValue = optionValue;
     }
 
-    const parts = propertyPath.split(/\.|\[/);
-    const lastPart = parts[parts.length - 1];
-
-    if (parts.length == 1) {
-      await item.update({ [propertyPath]: newValue });
-    } else {
-      // example:
-      // obj = { a: { b: [{c: 42}] } }
-      // path: a.b[0].c
-      let prop = undefined;
-      const dataDelta = item.data[parts.shift()];
-      for (let part of parts) {
-        part = part.replace("]", "");
-
-        if (part == lastPart) {
-          prop ? prop[part] = newValue : dataDelta[part] = newValue;
-        } else {
-          prop = prop ? prop[part] : dataDelta[part];
-        }
-      }
-      await item.update({ data: dataDelta });
-    }
+    await item.updateProperty(propertyPath, newValue);
 
     this.render();
   }
@@ -119,8 +100,8 @@ export default class BaseItemSheet {
    */
   async _onItemDelete(event) {
     event.preventDefault();
-    const item = this.getItem();
 
+    const item = this.getItem();
     await item.delete();
   }
 
@@ -132,6 +113,7 @@ export default class BaseItemSheet {
    */
   async _onItemCreate(event) {
     event.preventDefault();
+
     const header = event.currentTarget;
     const type = header.dataset.type;
     const data = duplicate(header.dataset);
@@ -149,7 +131,6 @@ export default class BaseItemSheet {
       data: data,
       img: imgPath
     };
-
     // Remove the type from the dataset since it's already in the 'itemData.type' property.
     delete itemData.data["type"];
 
@@ -162,8 +143,8 @@ export default class BaseItemSheet {
    */
   _onItemSendToChat(event) {
     event.preventDefault();
-    const item = this.getItem();
 
+    const item = this.getItem();
     return item.sendToChat();
   }
 }
