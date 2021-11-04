@@ -1,34 +1,40 @@
 import BaseItem from "./base-item.mjs";
 
 export default class FateCardItem extends BaseItem {
-    /** @override */
-    get img() { return "icons/svg/wing.svg"; }
+  /** @override */
+  get img() { return "icons/svg/wing.svg"; }
 
-    /** @override */
-    prepareData() {
-      this.owner.data.img = this.img;
-    }
+  /**
+   * Chat message template path. 
+   * @type {String}
+   */
+  get chatMessageTemplate() { return "systems/ambersteel/templates/item/parts/fate-card.hbs"; }
 
-    /** @override */
-    async getChatData() {
-        const messageBase = super.getChatData();
-        const messageTemplate = "systems/ambersteel/templates/item/parts/fate-card.hbs";
-        const renderedContent = await renderTemplate(messageTemplate, {
-            data: {
-                _id: this.owner.id,
-                name: this.owner.name,
-                data: {
-                    description: this.owner.data.data.description,
-                }
-            },
-            img: this.owner.img,
-            isEditable: false
-        });
+  /** @override */
+  prepareData() {
+    this.owner.data.img = this.img;
+  }
 
-        return {
-            ...messageBase,
-            flavor: game.i18n.localize("ambersteel.fateSystem.fateCard"),
-            renderedContent: renderedContent
+  /** @override */
+  async getChatData() {
+    const messageBase = super.getChatData();
+    const renderedContent = await renderTemplate(this.chatMessageTemplate, {
+      data: {
+        _id: this.owner.id,
+        name: this.owner.name,
+        data: {
+          description: this.owner.data.data.description,
         }
+      },
+      img: this.owner.img,
+      isEditable: false,
+      isSendable: false
+    });
+
+    return {
+      ...messageBase,
+      flavor: game.i18n.localize("ambersteel.fateSystem.fateCard"),
+      renderedContent: renderedContent
     }
+  }
 }

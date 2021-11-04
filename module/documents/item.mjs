@@ -35,8 +35,23 @@ export class AmbersteelItem extends Item {
 
   /**
    * Sends this item to chat. 
+   * @returns {Promise<any>} 
+   * @async
    */
   async sendToChat() {
     return this.subType.sendToChat();
+  }
+
+  /**
+   * Updates a property on this item, identified via the given path. 
+   * @param propertyPath {String} Path leading to the property to update, on this item. 
+   *        Array-accessing via brackets is supported. Property-accessing via brackets is *not* supported. 
+   *        E.g.: "data.attributes[0].value"
+   * @param newValue {any} The value to assign to the property. 
+   * @returns {Promise<Document>} The updated Document instance
+   * @async
+   */
+  async updateProperty(propertyPath, newValue) {
+    return this.subType.updateProperty(propertyPath, newValue);
   }
 }
