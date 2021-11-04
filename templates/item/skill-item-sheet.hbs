@@ -1,15 +1,24 @@
 {{!-- Requires context:
 isEditable: {Boolean},
-data: {Object} where Object = {
-  groupName: {String},
-  value: {Number},
-  successes: {Number},
-  failures: {Number},
-  relatedAttribute: {String},
-  requiredSuccessses: {Number},
-  requiredFailures: {Number},
-  abilities: {[Object]} where Object -> see item/parts/skill-ability-table.hbs,
-  isExpanded: {Boolean},
+isSendable: {Boolean},
+item: {Item} where Item = {
+  data: {ItemData} where ItemData = {
+    data: {Object} where Object = {
+      description: {String},
+      groupName: {String},
+      value: {Number},
+      successes: {Number},
+      failures: {Number},
+      relatedAttribute: {String},
+      requiredSuccessses: {Number},
+      requiredFailures: {Number},
+      abilities: {[Object]} where Object -> see item/parts/skill-ability-table.hbs,
+      isExpanded: {Boolean}
+    }
+  },
+  img: {String},
+  name: {String},
+  id: {String}
 }
 --}}
 <form class="{{cssClass}}" autocomplete="off">
@@ -31,29 +40,29 @@ data: {Object} where Object = {
     <div class="flex flex-column flex-grow">
     {{#if isEditable}}
       <select class="ambersteel-item-edit" name="data.relatedAttribute" data-field="data.relatedAttribute">
-        {{#select data.relatedAttribute}}
+        {{#select item.data.data.relatedAttribute}}
         {{#each CONFIG.character.attributes as | att |}}
         <option value="{{att.name}}">{{localize att.localizableAbbreviation}}</option>
         {{/each}}
         {{/select}}
       </select>
-      <textarea class="resize-vertical" name="data.description" spellcheck="false">{{data.description}}</textarea>
+      <textarea class="resize-vertical" name="data.description" spellcheck="false">{{item.data.data.description}}</textarea>
     {{else}}
-      <span class="line-height pad-sm">{{data.relatedAttribute}}</span>
-      <span class="line-height pad-sm">{{data.description}}</span>
+      <span class="line-height pad-sm">{{item.data.data.relatedAttribute}}</span>
+      <span class="line-height pad-sm">{{item.data.data.description}}</span>
     {{/if}}
   </div>
   </div>
-  <div class="{{#if data.isExpanded}}{{else}}hidden{{/if}}">
+  <div class="{{#if item.data.data.isExpanded}}{{else}}hidden{{/if}}">
     {{> "systems/ambersteel/templates/item/parts/skill-ability-table.hbs" 
     isEditable=isEditable 
     skillItemId=item.id 
-    abilities=data.abilities }}
+    abilities=item.data.data.abilities }}
   </div>
   <div>
     <a class="ambersteel-expand-skill-ability-list full-button pad-sm button"
       title="{{localize ambersteel.labels.expandSkillAbilityList}}">
-      {{#if data.isExpanded}}
+      {{#if item.data.data.isExpanded}}
         <i class="fas fa-angle-double-up"></i>
       {{else}}
         <i class="fas fa-angle-double-down"></i>

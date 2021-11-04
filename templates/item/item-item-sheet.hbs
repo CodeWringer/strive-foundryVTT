@@ -1,9 +1,15 @@
 {{!-- Requires context:
 isEditable: {Boolean},
-item: {Object} where Object -> {
-  id: {String},
+isSendable: {Boolean},
+item: {Item} where Item = {
+  data: {ItemData} where ItemData = {
+    data: {Object} where Object = {
+      description: {String}
+    }
+  },
   img: {String},
-  name: {String}
+  name: {String},
+  id: {String}
 }
 --}}
 <form class="{{cssClass}}" autocomplete="off">
@@ -20,9 +26,9 @@ item: {Object} where Object -> {
   </header>
   <div class="flex item-description">
     {{#if isEditable}}
-      <textarea name="data.description" spellcheck="false">{{data.description}}</textarea>
+      <textarea name="data.description" spellcheck="false">{{item.data.data.description}}</textarea>
     {{else}}
-      <span class="multiline flex-grow">{{data.description}}</span>
+      <span class="multiline flex-grow">{{item.data.data.description}}</span>
     {{/if}}
   </div>
 </form>
