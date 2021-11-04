@@ -6,6 +6,9 @@ import SkillItem from './subtypes/skill-item.mjs';
  * @extends {Item}
  */
 export class AmbersteelItem extends Item {
+  /**
+   * @private
+   */
   _subType = undefined;
   /**
    * Type-dependent object which pseudo-extends the logic of this object. 
