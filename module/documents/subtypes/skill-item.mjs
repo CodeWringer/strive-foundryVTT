@@ -12,7 +12,7 @@ export default class SkillItem extends BaseItem {
 
   /** @override */
   prepareData() {
-    this.owner.data.img = this.img;
+    this.parent.data.img = this.img;
   }
 
   /** @override */
@@ -20,13 +20,13 @@ export default class SkillItem extends BaseItem {
     const messageBase = super.getChatData();
     const renderedContent = await renderTemplate(this.chatMessageTemplate, {
       data: {
-        _id: this.owner.id,
-        name: this.owner.name,
+        _id: this.parent.id,
+        name: this.parent.name,
         data: {
-          description: this.owner.data.data.description,
+          description: this.parent.data.data.description,
         }
       },
-      img: this.owner.img,
+      img: this.parent.img,
       isEditable: false,
       isSendable: false
     });

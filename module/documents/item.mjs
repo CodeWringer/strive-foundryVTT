@@ -6,24 +6,28 @@ import SkillItem from './subtypes/skill-item.mjs';
  * @extends {Item}
  */
 export class AmbersteelItem extends Item {
+  _subType = undefined;
   /**
    * Type-dependent object which pseudo-extends the logic of this object. 
    */
-  subType = undefined;
+  get subType() {
+    if (!this._subType) {
+      const type = this.data.type;
+
+      if (type === "skill") {
+        this._subType = new SkillItem(this);
+      } else if (type ==="fate-card") {
+        this._subType = new FateCardItem(this);
+      } else {
+        this._subType = new BaseItem(this);
+      }
+    }
+    return this._subType;
+  }
 
   /** @override */
   prepareData() {
     super.prepareData();
-    const type = this.data.type;
-
-    if (type === "skill") {
-      this.subType = new SkillItem(this);
-    } else if (type ==="fate-card") {
-      this.subType = new FateCardItem(this);
-    } else {
-      this.subType = new BaseItem(this);
-    }
-
     this.subType.prepareData();
   }
 
