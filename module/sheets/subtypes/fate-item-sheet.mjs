@@ -6,6 +6,8 @@ export default class FateItemSheet extends BaseItemSheet {
 
   /** @override */
   prepareDerivedData(context) {
+    super.prepareDerivedData(context);
+    
     context.data.localizableName = "ambersteel.fateSystem.cardsNames." + context.name;
     context.data.localizableDescription = "ambersteel.fateSystem.cardDescriptions." + context.name;
   }
