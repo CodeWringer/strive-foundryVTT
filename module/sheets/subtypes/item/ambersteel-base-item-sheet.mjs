@@ -1,4 +1,6 @@
-export default class BaseItemSheet {
+import * as SheetUtil from '../../../utils/sheet-utility.mjs';
+
+export default class AmbersteelBaseItemSheet {
   /**
    * The owning ItemSheet object. 
    * @type {ItemSheet}
@@ -51,7 +53,13 @@ export default class BaseItemSheet {
    * @virtual
    */
   activateListeners(html, isOwner, isEditable) {
+    // -------------------------------------------------------------
     if (!isOwner) return;
+
+    // Send item to chat. 
+    html.find(".ambersteel-item-to-chat").click(this._onItemSendToChat.bind(this));
+
+    // -------------------------------------------------------------
     if (!isEditable) return;
 
     // Add Item
@@ -62,9 +70,6 @@ export default class BaseItemSheet {
 
     // Delete item. 
     html.find(".ambersteel-item-delete").click(this._onItemDelete.bind(this));
-
-    // Delete item. 
-    html.find(".ambersteel-item-to-chat").click(this._onItemSendToChat.bind(this));
   }
 
   /**
@@ -79,13 +84,7 @@ export default class BaseItemSheet {
     const element = event.currentTarget;
     const item = this.getItem();
     const propertyPath = element.dataset.field;
-
-    // Determine new value
-    let newValue = element.value;
-    if (element.tagName.toLowerCase() == "select") {
-      const optionValue = element.options[element.selectedIndex].value;
-      newValue = optionValue;
-    }
+    const newValue = SheetUtil.getElementValue(element);
 
     await item.updateProperty(propertyPath, newValue);
 

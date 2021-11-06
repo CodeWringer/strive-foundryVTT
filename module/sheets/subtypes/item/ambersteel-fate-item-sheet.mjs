@@ -1,6 +1,6 @@
-import BaseItemSheet from "./base-item-sheet.mjs";
+import AmbersteelBaseItemSheet from "./ambersteel-base-item-sheet.mjs";
 
-export default class FateItemSheet extends BaseItemSheet {
+export default class AmbersteelFateItemSheet extends AmbersteelBaseItemSheet {
   /** @override */
   get template() {
     return "systems/ambersteel/templates/item/fate-card-item-sheet.hbs";

@@ -1,8 +1,8 @@
-import { getAttributeGroupName } from '../../utils/attribute-utility.mjs';
-import SkillAbility from "../../dto/skill-ability.mjs";
-import BaseItemSheet from "./base-item-sheet.mjs";
+import { getAttributeGroupName } from '../../../utils/attribute-utility.mjs';
+import SkillAbility from "../../../dto/skill-ability.mjs";
+import AmbersteelBaseItemSheet from "./ambersteel-base-item-sheet.mjs";
 
-export default class SkillItemSheet extends BaseItemSheet {
+export default class AmbersteelSkillItemSheet extends AmbersteelBaseItemSheet {
   /** @override */
   get template() {
     return "systems/ambersteel/templates/item/skill-item-sheet.hbs";

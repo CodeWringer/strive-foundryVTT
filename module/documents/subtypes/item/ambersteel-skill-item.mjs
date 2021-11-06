@@ -1,6 +1,6 @@
-import BaseItem from "./base-item.mjs";
+import AmbersteelBaseItem from "./ambersteel-base-item.mjs";
 
-export default class SkillItem extends BaseItem {
+export default class AmbersteelSkillItem extends AmbersteelBaseItem {
   /** @override */
   get img() { return "icons/svg/book.svg"; }
 

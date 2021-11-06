@@ -1,6 +1,6 @@
-import BaseItem from './subtypes/base-item.mjs';
-import FateCardItem from './subtypes/fate-card-item.mjs';
-import SkillItem from './subtypes/skill-item.mjs';
+import AmbersteelBaseItem from './subtypes/item/ambersteel-base-item.mjs';
+import AmbersteelFateCardItem from './subtypes/item/ambersteel-fate-card-item.mjs';
+import AmbersteelSkillItem from './subtypes/item/ambersteel-skill-item.mjs';
 
 export class AmbersteelItem extends Item {
   /**
@@ -15,11 +15,13 @@ export class AmbersteelItem extends Item {
       const type = this.data.type;
 
       if (type === "skill") {
-        this._subType = new SkillItem(this);
+        this._subType = new AmbersteelSkillItem(this);
       } else if (type === "fate-card") {
-        this._subType = new FateCardItem(this);
+        this._subType = new AmbersteelFateCardItem(this);
+      } else if (type === "item") {
+        this._subType = new AmbersteelBaseItem(this);
       } else {
-        this._subType = new BaseItem(this);
+        throw `Item subtype ${type} is unrecognized!`
       }
     }
     return this._subType;
@@ -52,10 +54,9 @@ export class AmbersteelItem extends Item {
    *        Array-accessing via brackets is supported. Property-accessing via brackets is *not* supported. 
    *        E.g.: "data.attributes[0].value"
    * @param newValue {any} The value to assign to the property. 
-   * @returns {Promise<Document>} The updated Document instance
    * @async
    */
   async updateProperty(propertyPath, newValue) {
-    return this.subType.updateProperty(propertyPath, newValue);
+    await this.subType.updateProperty(propertyPath, newValue);
   }
 }

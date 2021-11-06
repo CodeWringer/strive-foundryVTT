@@ -1,6 +1,6 @@
-import PreparedChatData from '../../dto/prepared-chat-data.mjs';
+import PreparedChatData from '../../../dto/prepared-chat-data.mjs';
 
-export default class BaseItem {
+export default class AmbersteelBaseItem {
   /**
    * The owning Item object. 
    * @type {Item}
@@ -75,13 +75,13 @@ export default class BaseItem {
     });
   }
 
+  // TODO: Generalize -> move to "ambersteel-base-entity"?
   /**
    * Updates a property on the parent item, identified via the given path. 
    * @param propertyPath {String} Path leading to the property to update, on the parent item. 
    *        Array-accessing via brackets is supported. Property-accessing via brackets is *not* supported. 
    *        E.g.: "data.attributes[0].value"
    * @param newValue {any} The value to assign to the property. 
-   * @returns {Promise<Document>} The updated Document instance
    * @async
    * @protected
    */

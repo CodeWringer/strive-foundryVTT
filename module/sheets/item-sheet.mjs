@@ -1,7 +1,7 @@
 import * as NumberSpinner from "../components/number-spinner.mjs";
-import BaseItemSheet from "./subtypes/base-item-sheet.mjs";
-import SkillItemSheet from "./subtypes/skill-item-sheet.mjs";
-import FateCardItemSheet from "./subtypes/fate-item-sheet.mjs";
+import AmbersteelBaseItemSheet from "./subtypes/item/ambersteel-base-item-sheet.mjs";
+import AmbersteelSkillItemSheet from "./subtypes/item/ambersteel-skill-item-sheet.mjs";
+import AmbersteelFateCardItemSheet from "./subtypes/item/ambersteel-fate-item-sheet.mjs";
 
 export class AmbersteelItemSheet extends ItemSheet {
   /**
@@ -17,11 +17,13 @@ export class AmbersteelItemSheet extends ItemSheet {
       const type = data.item.type;
 
       if (type === "skill") {
-        this._subType = new SkillItemSheet(this);
+        this._subType = new AmbersteelSkillItemSheet(this);
       } else if (type === "fate-card") {
-        this._subType = new FateCardItemSheet(this);
+        this._subType = new AmbersteelFateCardItemSheet(this);
+      } else if (type === "item") {
+        this._subType = new AmbersteelBaseItemSheet(this);
       } else {
-        this._subType = new BaseItemSheet(this);
+        throw `ItemSheet subtype ${type} is unrecognized!`
       }
     }
     return this._subType;

@@ -1,6 +1,6 @@
-import BaseItem from "./base-item.mjs";
+import AmbersteelBaseItem from "./ambersteel-base-item.mjs";
 
-export default class FateCardItem extends BaseItem {
+export default class AmbersteelFateCardItem extends AmbersteelBaseItem {
   /** @override */
   get img() { return "icons/svg/wing.svg"; }
 
