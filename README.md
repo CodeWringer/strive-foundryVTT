@@ -16,15 +16,21 @@ This is the Ambersteel table-top role-playing game system for FoundryVTT.
   * [X] Auto-move from learning to known
 * [X] Skills Item
 * [X] Beliefs Tab
+* [X] Biography Tab
+* [ ] Shift-Click on roll-button -> Menu to allow limiting roll visibility
 * [X] Fate Tab
   * [X] Adding a fate card
     * [ ] Deduct cost
   * [X] Removing a fate card
   * [ ] Limit
 * [ ] Health Tab
-* [X] Biography Tab
 * [ ] Possessions Tab
-* [ ] Shift-Click on roll-button -> Menu to allow limiting roll visibility
+* [ ] Magic Tab
+  * [ ] Create spell item template
+  * [ ] List castable spells
+* [ ] GM Notes Tab
+  * Only visible to GM
+  * On PC and NPC types
 * [ ] Create list (compendium) of skills
   * [ ] Support adding skills from this list
   * [ ] Differentiate skills - introduce two types: `preset` and `custom`
