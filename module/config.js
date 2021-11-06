@@ -165,3 +165,9 @@ ambersteel.labels = {
     learningSkill: "ambersteel.labels.learningSkill",
     knownSkill: "ambersteel.labels.knownSkill",
 }
+
+ambersteel.visibilityModes = {
+    public: "ambersteel.messageVisibilityModes.public",
+    self: "ambersteel.messageVisibilityModes.self",
+    gm: "ambersteel.messageVisibilityModes.gm"
+}

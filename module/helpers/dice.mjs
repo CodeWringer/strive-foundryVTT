@@ -1,3 +1,5 @@
+import { getElementValue } from "../utils/sheet-utility.mjs";
+
 /**
  * 
  * @param ops 
@@ -28,9 +30,8 @@ export async function rollDice(ops = {
     // Ensure no negative number of dice to roll. 
     numberOfDice = numberOfDice >= 0 ? numberOfDice : 0;
     
-    // let roll = new Roll(formula, {}).evaluate();
     // Make the roll. 
-    let results = new Die({ faces: 6, number: numberOfDice }).evaluate().results;
+    const results = new Die({ faces: 6, number: numberOfDice }).evaluate().results;
 
     // Analyze results. 
     let positives = [];
@@ -77,7 +78,7 @@ export async function rollDice(ops = {
     };
 
     // Render the results. 
-    let renderedContent = await renderTemplate(messageTemplate, {
+    const renderedContent = await renderTemplate(messageTemplate, {
         ...rollResults, 
         resultsForDisplay: resultsForDisplay,
     });
@@ -94,13 +95,44 @@ export async function rollDice(ops = {
  * Creates a new ChatMessage to display dice roll results. 
  * @param args 
  */
-export async function sendDiceResultToChat(args = { renderedContent: "", flavor: "", actor: {} }) {
-    return ChatMessage.create({
-        speaker: ChatMessage.getSpeaker({ actor: args.actor }),
-        flavor: args.flavor,
-        content: args.renderedContent,
-        sound: "../sounds/dice.wav"
-    });
+export function sendDiceResultToChat(args = { 
+    renderedContent: "", 
+    flavor: "", 
+    actor: {},
+    visibilityMode: CONFIG.ambersteel.visibilityModes.public
+    }) {
+    const sound = "../sounds/dice.wav";
+    
+    if (args.visibilityMode === CONFIG.ambersteel.visibilityModes.self) {
+        throw "Not yet implemented";
+        const self = undefined;
+
+        ChatMessage.create({
+            user: self,
+            speaker: ChatMessage.getSpeaker({ actor: args.actor }),
+            flavor: args.flavor,
+            content: args.renderedContent,
+            sound: sound
+        });
+    } else if (args.visibilityMode === CONFIG.ambersteel.visibilityModes.gm) {
+        const gms = ChatMessage.getWhisperRecipients("GM");
+        for (const gm of gms) {
+            ChatMessage.create({
+                user: gm,
+                speaker: ChatMessage.getSpeaker({ actor: args.actor }),
+                flavor: args.flavor,
+                content: args.renderedContent,
+                sound: sound
+            });
+        }
+    } else {
+        ChatMessage.create({
+            speaker: ChatMessage.getSpeaker({ actor: args.actor }),
+            flavor: args.flavor,
+            content: args.renderedContent,
+            sound: sound
+        });
+    }
 }
 
 /**
@@ -121,7 +153,9 @@ export async function queryRollData() {
     let dialogData = {
         obstacle: 0,
         bonusDice: 0,
-        confirmed: false
+        confirmed: false,
+        visibilityMode: CONFIG.ambersteel.visibilityModes.public,
+        CONFIG: CONFIG
     };
 
     return new Promise(async (resolve, reject) => {
@@ -152,7 +186,8 @@ export async function queryRollData() {
                 resolve({
                     obstacle: parseInt(html.find(".obstacle")[0].value),
                     bonusDice: parseInt(html.find(".bonus-dice")[0].value),
-                    confirmed: dialogData.confirmed
+                    confirmed: dialogData.confirmed,
+                    visibilityMode: getElementValue(html.find(".visibility")[0])
                 });
             }
         });

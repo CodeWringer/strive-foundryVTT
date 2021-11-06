@@ -1,6 +1,7 @@
 {{!-- Parameters:
-obstacle {Number}
-bonusDice {Number}
+obstacle {Number},
+bonusDice {Number},
+visibilityMode {CONFIG.ambersteel.visibilityModes}
 --}}
 <section>
   <div class="flex sheet-block">
@@ -12,5 +13,16 @@ bonusDice {Number}
       <input class="line-height pad-sm obstacle" type="number" name="obstacle" value="{{obstacle}}" />
       <input class="line-height pad-sm bonus-dice" type="number" name="bonusDice" value="{{bonusDice}}" />
     </div>
+  </div>
+  <div class="flex sheet-block">
+    <label class="line-height fancy-font pad-sm" for="visibility">{{localize "ambersteel.labels.messageVisibility"}}</label>
+{{#log CONFIG}}{{/log}}
+    <select class="visibility" name="visibility">
+        {{#select visibility}}
+        {{#each CONFIG.ambersteel.visibilityModes as |mode key|}}
+        <option value="{{key}}">{{localize mode}}</option>
+        {{/each}}
+        {{/select}}
+    </select>
   </div>
 </section>

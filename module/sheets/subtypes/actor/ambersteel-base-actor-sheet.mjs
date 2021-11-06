@@ -358,7 +358,12 @@ export default class AmbersteelBaseActorSheet {
     this.parent.render();
 
     // Display roll result. 
-    Dice.sendDiceResultToChat({ renderedContent: result.renderedContent, flavor: result.flavor, actor: result.actor });
+    Dice.sendDiceResultToChat({ 
+      renderedContent: result.renderedContent, 
+      flavor: result.flavor, 
+      actor: result.actor,
+      visibilityMode: CONFIG.ambersteel.visibilityModes[rollInputData.visibilityMode]
+    });
   }
 
   /**
@@ -397,7 +402,12 @@ export default class AmbersteelBaseActorSheet {
     this.parent.render();
 
     // Display roll result. 
-    Dice.sendDiceResultToChat({ renderedContent: result.renderedContent, flavor: result.flavor, actor: result.actor });
+    Dice.sendDiceResultToChat({
+      renderedContent: result.renderedContent, 
+      flavor: result.flavor, 
+      actor: result.actor,
+      visibilityMode: CONFIG.ambersteel.visibilityModes[rollInputData.visibilityMode]
+    });
   }
 
   /**
