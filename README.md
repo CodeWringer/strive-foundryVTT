@@ -24,6 +24,7 @@ This is the Ambersteel table-top role-playing game system for FoundryVTT.
 * [ ] Health Tab
 * [X] Biography Tab
 * [ ] Possessions Tab
+* [ ] Shift-Click on roll-button -> Menu to allow limiting roll visibility
 * [ ] Create list (compendium) of skills
   * [ ] Support adding skills from this list
   * [ ] Differentiate skills - introduce two types: `preset` and `custom`
