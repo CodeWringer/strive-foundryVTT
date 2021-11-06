@@ -1,6 +1,7 @@
 import PreparedChatData from '../../../dto/prepared-chat-data.mjs';
 import * as AttributeUtil from '../../../utils/attribute-utility.mjs';
 import * as SkillUtil from '../../../utils/skill-utility.mjs';
+import * as UpdateUtil from "../../../utils/document-update-utility.mjs";
 
 export default class AmbersteelBaseActor {
   /**
@@ -165,42 +166,16 @@ export default class AmbersteelBaseActor {
     });
   }
 
-  // TODO: Generalize -> move to "ambersteel-base-entity"?
   /**
    * Updates a property on the parent Actor, identified via the given path. 
-   * @param propertyPath {String} Path leading to the property to update, on the parent Actor. 
+   * @param {String} propertyPath Path leading to the property to update, on the parent Actor. 
    *        Array-accessing via brackets is supported. Property-accessing via brackets is *not* supported. 
    *        E.g.: "data.attributes[0].value"
-   * @param newValue {any} The value to assign to the property. 
+   * @param {any} newValue The value to assign to the property. 
    * @async
    * @protected
    */
   async updateProperty(propertyPath, newValue) {
-    const parts = propertyPath.split(/\.|\[/);
-    const lastPart = parts[parts.length - 1];
-
-    if (parts.length == 1) {
-      // example:
-      // obj = { a: { b: [{c: 42}] } }
-      // path: "a"
-      await this.parent.update({ [propertyPath]: newValue });
-    } else {
-      // example:
-      // obj = { a: { b: [{c: 42}] } }
-      // path: "a.b[0].c"
-      let prop = undefined;
-      const dataDelta = this.parent.data[parts.shift()];
-
-      for (let part of parts) {
-        part = part.replace("]", "");
-
-        if (part == lastPart) {
-          prop ? prop[part] = newValue : dataDelta[part] = newValue;
-        } else {
-          prop = prop ? prop[part] : dataDelta[part];
-        }
-      }
-      await this.parent.update({ data: dataDelta });
-    }
+    await UpdateUtil.updateProperty(this.parent, propertyPath, newValue);
   }
 }
