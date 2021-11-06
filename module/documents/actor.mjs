@@ -1,4 +1,3 @@
-import * as Skill from '../utils/skill-utility.mjs';
 import * as Attribute from '../utils/attribute-utility.mjs';
 import AmbersteelPcActor from './subtypes/actor/ambersteel-pc-actor.mjs';
 import AmbersteelNpcActor from './subtypes/actor/ambersteel-npc-actor.mjs';
@@ -23,8 +22,7 @@ export class AmbersteelActor extends Actor {
    */
   get subType() {
     if (!this._subType) {
-      const data = super.getData();
-      const type = data.actor.type;
+      const type = this.type;
 
       // TODO: Generalize
       if (type === "pc") {
@@ -41,6 +39,7 @@ export class AmbersteelActor extends Actor {
   /** @override */
   prepareData() {
     super.prepareData();
+    this.subType.prepareData(this);
   }
 
   /** @override */
@@ -51,116 +50,7 @@ export class AmbersteelActor extends Actor {
   /** @override */
   prepareDerivedData() {
     super.prepareDerivedData();
-
-    const actorData = this.data;
-    const data = actorData.data;
-    const flags = actorData.flags.ambersteel || {};
-
-    this._prepareDerivedAttributesData(actorData);
-    this._prepareDerivedSkillsData(actorData);
-    this._preparePCData(actorData);
-  }
-
-  /**
-   * Prepares derived data for all attributes. 
-   * @param actorData 
-   * @private
-   */
-  _prepareDerivedAttributesData(actorData) {
-    for (const attGroupName in actorData.data.attributes) {
-      const oAttGroup = actorData.data.attributes[attGroupName];
-
-      for (const attName in oAttGroup) {
-        const oAtt = oAttGroup[attName];
-        this._prepareDerivedAttributeData(oAtt, attName);
-      }
-    }
-  }
-
-  /**
-   * Prepares derived data for a given attribute. 
-   * @param oAtt {Object} The attribute object. 
-   * @param attName {String} Internal name of the attribute, e.g. 'magicSense'. 
-   * @private
-   */
-  _prepareDerivedAttributeData(oAtt, attName) {
-    const attValue = parseInt(oAtt.value);
-    const req = Attribute.getAdvancementRequirements(attValue);
-
-    // Calculate advancement requirements. 
-    oAtt.requiredSuccessses = req.requiredSuccessses;
-    oAtt.requiredFailures = req.requiredFailures;
-
-    // Add internal name. 
-    oAtt.name = attName;
-
-    // Add localizable string. 
-    oAtt.localizableName = "ambersteel.attributes." + attName;
-    oAtt.localizableAbbreviation = "ambersteel.attributeAbbreviations." + attName;
-  }
-
-  /**
-   * Updates the given actorData with derived skill data. 
-   * Assigns items of type skill to the derived lists 'actorData.skills' and 'actorData.learningSkills'. 
-   * @param actorData 
-   * @private
-   */
-  _prepareDerivedSkillsData(actorData) {
-    const data = actorData.data;
-
-    data.skills = (actorData.items.filter(item => { 
-      return item.data.type == "skill" && parseInt(item.data.data.value) > 0 
-    })).map(it => it.data);
-    for (const oSkill of data.skills) {
-      this._prepareDerivedSkillData(oSkill._id);
-    };
-
-    data.learningSkills = (actorData.items.filter(item => { 
-      return item.data.type == "skill" && parseInt(item.data.data.value) == 0 
-    })).map(it => it.data);
-    for (const oSkill of data.learningSkills) {
-      this._prepareDerivedSkillData(oSkill._id);
-    };
-  }
-
-  /**
-   * 
-   * @param skillId {String} Id of a skill. 
-   * @private
-   */
-  _prepareDerivedSkillData(skillId) {
-    const oSkill = this.items.get(skillId);
-    const skillData = oSkill.data.data;
-
-    skillData.id = oSkill.id;
-    skillData.entityName = skillData.entityName ? skillData.entityName : oSkill.name;
-    skillData.value = parseInt(skillData.value ? skillData.value : 0);
-    skillData.successes = parseInt(skillData.successes ? skillData.successes : 0);
-    skillData.failures = parseInt(skillData.failures ? skillData.failures : 0);
-    skillData.relatedAttribute = skillData.relatedAttribute ? skillData.relatedAttribute : "agility";
-    
-    const req = Skill.getAdvancementRequirements(skillData.value);
-    skillData.requiredSuccessses = req.requiredSuccessses;
-    skillData.requiredFailures = req.requiredFailures;
-  }
-
-  /**
-   * Prepare PC type specific data. 
-   * @param actorData 'this.data'
-   * @private
-   */
-  _preparePCData(actorData) {
-    if (actorData.type !== 'pc') return;
-
-    // Ensure beliefs array has 3 items. 
-    while (actorData.data.beliefSystem.beliefs.length < 3) {
-      actorData.data.beliefSystem.beliefs.push("")
-    }
-
-    // Ensure instincts array has 3 items. 
-    while (actorData.data.beliefSystem.instincts.length < 3) {
-      actorData.data.beliefSystem.instincts.push("")
-    }
+    this.subType.prepareDerivedData(this);
   }
 
   /**
@@ -169,7 +59,7 @@ export class AmbersteelActor extends Actor {
    * @returns {Object} With properties 'object', 'name', 'groupName'
    * @private
    */
-  _getAttributeForName(attName) {
+  getAttributeForName(attName) {
     const data = this.data.data;
 
     for (let attGroupName in data.attributes) {
@@ -191,7 +81,7 @@ export class AmbersteelActor extends Actor {
    * @async
    */
   async setAttributeLevel(attName = undefined, newValue = 0) {
-    const oAttName = this._getAttributeForName(attName);
+    const oAttName = this.getAttributeForName(attName);
     const req = Attribute.getAdvancementRequirements(newValue);
     const propertyPath = `data.attributes.${oAttName.groupName}.${attName}`
 
@@ -214,7 +104,7 @@ export class AmbersteelActor extends Actor {
    * @async
    */
   async addAttributeProgress(attName = undefined, success = false, autoLevel = false) {
-    const oAttName = this._getAttributeForName(attName);
+    const oAttName = this.getAttributeForName(attName);
     const oAtt = oAttName.object;
 
     const successes = parseInt(oAtt.successes);

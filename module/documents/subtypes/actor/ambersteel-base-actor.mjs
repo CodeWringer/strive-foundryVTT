@@ -1,4 +1,6 @@
 import PreparedChatData from '../../../dto/prepared-chat-data.mjs';
+import * as AttributeUtil from '../../../utils/attribute-utility.mjs';
+import * as SkillUtil from '../../../utils/skill-utility.mjs';
 
 export default class AmbersteelBaseActor {
   /**
@@ -34,9 +36,10 @@ export default class AmbersteelBaseActor {
    * type should be the most complex a 'calculation' as it gets. 
    * 
    * Base data *is* persisted!
+   * @param {Actor} context
    * @virtual
    */
-  prepareData() { }
+  prepareData(context) { }
 
   /**
    * Prepare derived data for the Actor. 
@@ -47,7 +50,94 @@ export default class AmbersteelBaseActor {
    * Derived data is *not* persisted!
    * @virtual
    */
-  prepareDerivedData() { }
+  prepareDerivedData(context) {
+    this._prepareDerivedAttributesData(context);
+    this._prepareDerivedSkillsData(context);
+  }
+
+  /**
+   * Prepares derived data for all attributes. 
+   * @param context 
+   * @private
+   */
+  _prepareDerivedAttributesData(context) {
+    const actorData = context.data;
+    for (const attGroupName in actorData.data.attributes) {
+      const oAttGroup = actorData.data.attributes[attGroupName];
+
+      for (const attName in oAttGroup) {
+        const oAtt = oAttGroup[attName];
+        this._prepareDerivedAttributeData(oAtt, attName);
+      }
+    }
+  }
+
+  /**
+   * Prepares derived data for a given attribute. 
+   * @param oAtt {Object} The attribute object. 
+   * @param attName {String} Internal name of the attribute, e.g. 'magicSense'. 
+   * @private
+   */
+  _prepareDerivedAttributeData(oAtt, attName) {
+    const attValue = parseInt(oAtt.value);
+    const req = AttributeUtil.getAdvancementRequirements(attValue);
+
+    // Calculate advancement requirements. 
+    oAtt.requiredSuccessses = req.requiredSuccessses;
+    oAtt.requiredFailures = req.requiredFailures;
+
+    // Add internal name. 
+    oAtt.name = attName;
+
+    // Add localizable string. 
+    oAtt.localizableName = "ambersteel.attributes." + attName;
+    oAtt.localizableAbbreviation = "ambersteel.attributeAbbreviations." + attName;
+  }
+
+  /**
+ * Updates the given actorData with derived skill data. 
+ * Assigns items of type skill to the derived lists 'actorData.skills' and 'actorData.learningSkills'. 
+ * @param context 
+ * @private
+ */
+  _prepareDerivedSkillsData(context) {
+    const actorData = context.data.data;
+
+    actorData.skills = (this.parent.items.filter(item => {
+      return item.data.type == "skill" && parseInt(item.data.data.value) > 0
+    })).map(it => it.data);
+    for (const oSkill of actorData.skills) {
+      this._prepareDerivedSkillData(oSkill._id);
+    };
+
+    actorData.learningSkills = (this.parent.items.filter(item => {
+      return item.data.type == "skill" && parseInt(item.data.data.value) == 0
+    })).map(it => it.data);
+    for (const oSkill of actorData.learningSkills) {
+      this._prepareDerivedSkillData(oSkill._id);
+    };
+  }
+
+  /**
+   * 
+   * @param skillId {String} Id of a skill. 
+   * @private
+   */
+  _prepareDerivedSkillData(skillId) {
+    const oSkill = this.parent.items.get(skillId);
+    const skillData = oSkill.data.data;
+
+    skillData.id = oSkill.id;
+    skillData.entityName = skillData.entityName ? skillData.entityName : oSkill.name;
+    skillData.value = parseInt(skillData.value ? skillData.value : 0);
+    skillData.successes = parseInt(skillData.successes ? skillData.successes : 0);
+    skillData.failures = parseInt(skillData.failures ? skillData.failures : 0);
+    skillData.relatedAttribute = skillData.relatedAttribute ? skillData.relatedAttribute : "agility";
+
+    const req = SkillUtil.getAdvancementRequirements(skillData.value);
+    skillData.requiredSuccessses = req.requiredSuccessses;
+    skillData.requiredFailures = req.requiredFailures;
+  }
 
   /**
    * Base implementation of returning data for a chat message, based on this Actor. 
