@@ -176,8 +176,7 @@ export default class AmbersteelBaseActorSheet {
     html.find(".ambersteel-item-delete").click(this._onItemDelete.bind(this));
 
     // Edit attribute. 
-    // TODO: Generalize "ambersteel-attribute-edit" -> "ambersteel-actor-edit"
-    html.find(".ambersteel-attribute-edit").change(this._onAttributeEdit.bind(this));
+    html.find(".ambersteel-actor-edit").change(this._onActorEdit.bind(this));
 
     // Context menu.
     // TODO: Refactor -> item type specific?
@@ -298,14 +297,17 @@ export default class AmbersteelBaseActorSheet {
     await this.getActor().sendToChat();
   }
 
-  async _onAttributeEdit(event) {
+  /**
+   * @param event 
+   * @private
+   * @async
+   */
+  async _onActorEdit(event) {
     event.preventDefault();
     const element = event.currentTarget;
-    const attGroupName = element.closest(".attribute-item").dataset.attGroupName;
-    const attName = element.closest(".attribute-item").dataset.attName;
     const field = element.dataset.field;
 
-    await this.getActor().update({ data: { attributes: { [attGroupName]: { [attName]: { [field]: element.value }}}}})
+    await this.getActor().updateProperty(field, element.value);
   }
 
   /**

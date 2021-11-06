@@ -55,7 +55,8 @@ attributes: {[Object]} where Object = {
                 <td class="attribute-column-level">
                     {{#if ../isEditable}}
                         {{#> numberSpinner}}
-                        <input class="attribute-value ambersteel-attribute-edit" name="att.value" type="number" data-dtype="Number" min="0" step="1" value="{{att.value}}" data-field="value" />
+                        <input class="attribute-value ambersteel-actor-edit" name="att.value" type="number" data-dtype="Number" min="0" step="1" value="{{att.value}}" 
+                        data-field="data.attributes.{{../attributeGroupName}}.{{att.name}}.value" />
                         {{/numberSpinner}}
                     {{else}}
                         {{att.value}}
@@ -67,7 +68,8 @@ attributes: {[Object]} where Object = {
                 <td class="attribute-column-successes">
                     {{#if ../isEditable}}
                         {{#> numberSpinner}}
-                        <input class="attribute-successes ambersteel-attribute-edit" name="att.successes" type="number" data-dtype="Number" min="0" step="1" value="{{att.successes}}" data-field="successes" />
+                        <input class="attribute-successes ambersteel-actor-edit" name="att.successes" type="number" data-dtype="Number" min="0" step="1" value="{{att.successes}}" 
+                        data-field="data.attributes.{{../attributeGroupName}}.{{att.name}}.successes" />
                         {{/numberSpinner}}
                     {{else}}
                         {{att.successes}}
@@ -76,7 +78,8 @@ attributes: {[Object]} where Object = {
                 <td class="attribute-column-failures">
                     {{#if ../isEditable}}
                         {{#> numberSpinner}}
-                        <input class="attribute-failures ambersteel-attribute-edit" name="att.failures" type="number" data-dtype="Number" min="0" step="1" value="{{att.failures}}" data-field="failures" />
+                        <input class="attribute-failures ambersteel-actor-edit" name="att.failures" type="number" data-dtype="Number" min="0" step="1" value="{{att.failures}}" 
+                        data-field="data.attributes.{{../attributeGroupName}}.{{att.name}}.failures" />
                         {{/numberSpinner}}
                     {{else}}
                         {{att.failures}}
