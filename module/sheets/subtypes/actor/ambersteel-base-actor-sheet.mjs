@@ -1,5 +1,4 @@
 import * as Dice from "../../../helpers/dice.mjs";
-import * as SkillUtil from '../../../utils/skill-utility.mjs';
 import * as SheetUtil from '../../../utils/sheet-utility.mjs';
 
 export default class AmbersteelBaseActorSheet {
@@ -182,7 +181,7 @@ export default class AmbersteelBaseActorSheet {
 
     // Context menu.
     // TODO: Refactor -> item type specific?
-    new ContextMenu(html, ".skill-item", this.itemContextMenu);
+    new ContextMenu(html, ".skill-item", AmbersteelBaseActorSheet.itemContextMenu);
 
     // Add skill ability. 
     html.find(".ambersteel-skill-ability-create").click(this._onCreateSkillAbility.bind(this));
