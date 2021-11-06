@@ -9,8 +9,14 @@ bonusDice {Number}
       <label class="line-height fancy-font pad-sm" for="bonusDice">{{localize "ambersteel.roll.bonusDice"}}</label>
     </div>
     <div class="flex flex-column flex-grow">
-      <input class="line-height pad-sm obstacle" type="number" name="obstacle" value="{{obstacle}}" />
-      <input class="line-height pad-sm bonus-dice" type="number" name="bonusDice" value="{{bonusDice}}" />
+      {{#> numberSpinner}}
+      <input class="obstacle ambersteel-item-edit spinner" name="obstacle" type="number" data-dtype="Number" min="0" step="1" 
+        value="{{obstacle}}" data-field="obstacle" />
+      {{/numberSpinner}}
+      {{#> numberSpinner}}
+      <input class="bonus-dice ambersteel-item-edit spinner" name="bonusDice" type="number" data-dtype="Number" min="0" step="1"  
+        value="{{bonusDice}}" data-field="bonusDice" />
+      {{/numberSpinner}}
     </div>
   </div>
 </section>
