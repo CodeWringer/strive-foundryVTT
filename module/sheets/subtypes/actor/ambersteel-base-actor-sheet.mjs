@@ -72,7 +72,7 @@ export default class AmbersteelBaseActorSheet {
     // It is "safe", because behind the scenes, a getter returns a clone. 
     const actorData = context.actor.data.data;
 
-    // Make data available in context. 
+    // General derived data. 
     context.data.person = actorData.person;
     context.data.attributeGroups = this._getDerivedAttributeGroups(actorData.attributes);
     context.data.beliefSystem = actorData.beliefSystem;
@@ -80,6 +80,8 @@ export default class AmbersteelBaseActorSheet {
     context.data.biography = actorData.biography;
     context.data.learningSkills = actorData.learningSkills;
     context.data.skills = actorData.skills;
+
+    this._prepareFateSystemDerivedData(context);
   }
 
   /**
@@ -109,6 +111,20 @@ export default class AmbersteelBaseActorSheet {
       }
     }
     return attributeGroups;
+  }
+
+  /**
+   * Prepares fate system derived data for display on actor sheet. 
+   * @param context 
+   */
+  _prepareFateSystemDerivedData(context) {
+    const maxCards = CONFIG.ambersteel.fateSystem.maxCards;
+    const fateSystemData = context.data.data.fateSystem;
+  
+    fateSystemData.cards = (this.getActor().items.filter(item => {
+      return item.data.type === "fate-card"
+    })).map(it => it.data);
+    fateSystemData.remainingSlots = maxCards - fateSystemData.cards.length;
   }
 
   /**
