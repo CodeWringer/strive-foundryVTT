@@ -22,7 +22,6 @@ visibilityMode {CONFIG.ambersteel.visibilityModes}
   </div>
   <div class="flex sheet-block">
     <label class="line-height fancy-font pad-sm" for="visibility">{{localize "ambersteel.labels.messageVisibility"}}</label>
-{{#log CONFIG}}{{/log}}
     <select class="visibility" name="visibility">
         {{#select visibility}}
         {{#each CONFIG.ambersteel.visibilityModes as |mode key|}}
