@@ -81,6 +81,7 @@
       "instincts": "Instincts"
     },
     "labels": {
+      "attribute": "Attribute",
       "level": "Level",
       "attributeAbbreviation": "Attr.",
       "requiredSuccessFailureAbbreviation": "Req. S/F",

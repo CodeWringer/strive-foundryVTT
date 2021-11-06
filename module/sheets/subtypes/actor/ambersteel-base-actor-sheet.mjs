@@ -322,7 +322,8 @@ export default class AmbersteelBaseActorSheet {
     const dataset = element.closest(".item").dataset;
     const itemId = dataset.itemId;
     const oSkill = this.getItem(itemId);
-    const localizedActionName = game.i18n.localize(event.currentTarget.dataset.actionName);
+    let localizedSkillName = game.i18n.localize(event.currentTarget.dataset.actionName);
+    if (localizedSkillName.length == 0) localizedSkillName = oSkill.name;
 
     // Modal dialog to enter obstacle and bonus dice. 
     const rollInputData = await Dice.queryRollData();
@@ -338,6 +339,8 @@ export default class AmbersteelBaseActorSheet {
       const oAtt = this.getActor().getAttributeForName(relatedAttName).object;
       numberOfDice = oAtt.value;
     }
+
+    const localizedActionName = `${game.i18n.localize("ambersteel.labels.skill")}: ${localizedSkillName}`;
     
     // Do roll. 
     const result = await Dice.rollDice({
@@ -376,9 +379,11 @@ export default class AmbersteelBaseActorSheet {
 
     if (!rollInputData.confirmed) return;
 
+    const localizedActionName = `${game.i18n.localize("ambersteel.labels.attribute")}: ${localizedAttName}`;
+
     // Do roll. 
     const result = await Dice.rollDice({
-      actionName: localizedAttName,
+      actionName: localizedActionName,
       actionValue: event.currentTarget.dataset.actionValue, 
       obstacle: rollInputData.obstacle,
       bonusDice: rollInputData.bonusDice,

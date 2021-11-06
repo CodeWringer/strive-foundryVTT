@@ -12,6 +12,7 @@ skills: {[Object]} where Object = {
         requiredFailures: {Number},
         relatedAttribute: {String},
         abilities: {[Object]} where Object -> see item/parts/skill-ability-table.hbs,
+        localizableName: {String}
     }
 }
 --}}
@@ -53,7 +54,7 @@ skills: {[Object]} where Object = {
                     {{#if ../isEditable}}
                         <td class="skill-column-roll">
                             <a class="ambersteel-skill-roll roll-button pad-sm button" data-action-value="{{data.value}}" 
-                                data-action-name="{{data.name}}" title="{{localize ambersteel.labels.roll}}">
+                                data-action-name="{{data.localizableName}}" title="{{localize ambersteel.labels.roll}}">
                                 <i class="fas fa-dice-three"></i>
                             </a>
                         </td>
