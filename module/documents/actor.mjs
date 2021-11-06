@@ -1,5 +1,7 @@
 import * as Skill from '../utils/skill-utility.mjs';
 import * as Attribute from '../utils/attribute-utility.mjs';
+import AmbersteelPcActor from './subtypes/actor/ambersteel-pc-actor.mjs';
+import AmbersteelNpcActor from './subtypes/actor/ambersteel-npc-actor.mjs';
 
 /**
  * @extends {Actor}
@@ -12,6 +14,29 @@ import * as Attribute from '../utils/attribute-utility.mjs';
  * @property biography: {Object}
  */
 export class AmbersteelActor extends Actor {
+  /**
+   * @private
+   */
+  _subType = undefined;
+  /**
+   * Type-dependent object which pseudo-extends the logic of this object. 
+   */
+  get subType() {
+    if (!this._subType) {
+      const data = super.getData();
+      const type = data.actor.type;
+
+      // TODO: Generalize
+      if (type === "pc") {
+        this._subType = new AmbersteelPcActor(this);
+      } else if (type === "npc") {
+        this._subType = new AmbersteelNpcActor(this);
+      } else {
+        throw `Actor subtype ${type} is unrecognized!`
+      }
+    }
+    return this._subType;
+  }
 
   /** @override */
   prepareData() {
