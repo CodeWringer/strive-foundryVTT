@@ -1,22 +1,22 @@
 {{!-- Requires context:
 isEditable: {Boolean},
 isSendable: {Boolean},
-data: {Object} where Object = {
-  localizableName: {String},
-  localizableDescription: {String},
-  cost: {Object} where Object = {
-    miFP: {Number},
-    maFP: {Number},
-    AFP: {Number}
-  }
-},
-item: {Object} where Object -> {
-  id: {String},
+item: {Item} where Item = {
+  data: {ItemData} where ItemData = {
+    data: {Object} where Object = {
+      description: {String},
+      cost: {Object} where Object = {
+        miFP: {Number},
+        maFP: {Number},
+        AFP: {Number}
+      }
+    }
+  },
   img: {String},
-  name: {String}
+  name: {String},
+  id: {String}
 }
 --}}
-{{#log isSendable}}{{/log}}
 <form class="{{cssClass}}" autocomplete="off">
   <header class="sheet-header">
     <div class="flex flex-column">
@@ -33,7 +33,7 @@ item: {Object} where Object -> {
       {{#if isSendable}}
         <div class="flex-group-right">
           <span class="ambersteel-item-to-chat-margin-right">
-            <a class="ambersteel-item-to-chat pad-sm button" data-item-id="{{data._id}}" title="{{localize ambersteel.labels.sendToChat}}">
+            <a class="ambersteel-item-to-chat pad-sm button" data-item-id="{{item.id}}" title="{{localize ambersteel.labels.sendToChat}}">
               <i class="fas fa-comments"></i>
             </a>
           </span>
@@ -50,7 +50,7 @@ item: {Object} where Object -> {
       </span>
       <span class="fate-spinner-column-container">
         {{#> numberSpinner}}
-        <input type="number" data-dtype="Number" min="0" step="1" name="data.cost.miFP" value="{{data.cost.miFP}}" />
+        <input type="number" data-dtype="Number" min="0" step="1" name="data.cost.miFP" value="{{item.data.data.cost.miFP}}" />
         {{/numberSpinner}}
       </span>
       {{!-- row 2 --}}
@@ -60,7 +60,7 @@ item: {Object} where Object -> {
       </span>
       <span class="fate-spinner-column-container">
         {{#> numberSpinner}}
-        <input type="number" data-dtype="Number" min="0" step="1" name="data.cost.maFP" value="{{data.cost.maFP}}" />
+        <input type="number" data-dtype="Number" min="0" step="1" name="data.cost.maFP" value="{{item.data.data.cost.maFP}}" />
         {{/numberSpinner}}
       </span>
       {{!-- row 3 --}}
@@ -70,15 +70,15 @@ item: {Object} where Object -> {
       </span>
       <span class="fate-spinner-column-container">
         {{#> numberSpinner}}
-        <input type="number" data-dtype="Number" min="0" step="1" name="data.cost.AFP" value="{{data.cost.AFP}}" />
+        <input type="number" data-dtype="Number" min="0" step="1" name="data.cost.AFP" value="{{item.data.data.cost.AFP}}" />
         {{/numberSpinner}}
       </span>
     </div>
     <div class="fate-card-item-description flex-grow">
       {{#if isEditable}}
-        <textarea name="data.description" spellcheck="false">{{data.description}}</textarea>
+        <textarea name="data.description" spellcheck="false">{{item.data.data.description}}</textarea>
       {{else}}
-        <span class="multiline flex-grow">{{data.description}}</span>
+        <span class="multiline flex-grow">{{data.data.description}}</span>
       {{/if}}
     </div>
   </div>
