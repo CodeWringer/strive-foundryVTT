@@ -15,6 +15,7 @@ export class AmbersteelActorSheet extends ActorSheet {
       const data = super.getData();
       const type = data.actor.type;
 
+      // TODO: Generalize
       if (type === "pc") {
         this._subType = new AmbersteelPcActorSheet(this);
       } else if (type === "npc") {

@@ -14,6 +14,7 @@ export class AmbersteelItem extends Item {
     if (!this._subType) {
       const type = this.data.type;
 
+      // TODO: Generalize
       if (type === "skill") {
         this._subType = new AmbersteelSkillItem(this);
       } else if (type === "fate-card") {
