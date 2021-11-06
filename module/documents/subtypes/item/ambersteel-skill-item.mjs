@@ -1,4 +1,5 @@
 import AmbersteelBaseItem from "./ambersteel-base-item.mjs";
+import SkillAbility from "../../../dto/skill-ability.mjs";
 
 export default class AmbersteelSkillItem extends AmbersteelBaseItem {
   /** @override */
@@ -88,5 +89,40 @@ export default class AmbersteelSkillItem extends AmbersteelBaseItem {
         await this.setLevel(nextSkillValue, resetProgress);
       }
     }
+  }
+
+  /**
+   * Toggles the visibility of the skill ability list. 
+   * @param {Boolean} visible If true, will set the skill ability list to visible. 
+   */
+  async setSkillAbilityListVisible(visible) {
+    await this.updateProperty("data.isExpanded", visible);
+  }
+
+  /**
+   * Toggles the visibility of the skill ability list. 
+   */
+  async toggleSkillAbilityListVisible() {
+    await this.setSkillAbilityListVisible(!this.parent.data.data.isExpanded);
+  }
+
+  /**
+   * Adds a new skill ability. 
+   */
+  async createSkillAbility() {
+    const abilities = this.parent.data.data.abilities.concat(
+      [new SkillAbility("New Skill Ability", "", 0, 0, "")]
+    );
+    await this.updateProperty("data.abilities", abilities);
+  }
+
+  /**
+   * Deletes the skill ability at the given index. 
+   * @param index Index of the skill ability to delete. 
+   */
+  async deleteSkillAbilityAt(index) {
+    const dataAbilities = this.parent.data.data.abilities;
+    const abilities = dataAbilities.slice(0, index).concat(dataAbilities.slice(index + 1));
+    await this.updateProperty("data.abilities", abilities);
   }
 }

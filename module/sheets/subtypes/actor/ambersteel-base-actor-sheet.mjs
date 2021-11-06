@@ -138,6 +138,9 @@ export default class AmbersteelBaseActorSheet {
     // Show item sheet.
     html.find(".ambersteel-item-show").click(this._onItemShow.bind(this));
 
+    // Show skill abilities. 
+    html.find(".ambersteel-expand-skill-ability-list").click(this._onExpandSkillAbilityList.bind(this));
+
     // -------------------------------------------------------------
     if (!isOwner) return;
 
@@ -180,6 +183,12 @@ export default class AmbersteelBaseActorSheet {
     // Context menu.
     // TODO: Refactor -> item type specific?
     new ContextMenu(html, ".skill-item", this.itemContextMenu);
+
+    // Add skill ability. 
+    html.find(".ambersteel-skill-ability-create").click(this._onCreateSkillAbility.bind(this));
+
+    // Delete skill ability.
+    html.find(".ambersteel-skill-ability-delete").click(this._onDeleteSkillAbility.bind(this));
   }
 
   /**
@@ -383,5 +392,54 @@ export default class AmbersteelBaseActorSheet {
 
     // Display roll result. 
     Dice.sendDiceResultToChat({ renderedContent: result.renderedContent, flavor: result.flavor, actor: result.actor });
+  }
+
+  /**
+   * @param event 
+   * @private
+   * @async
+   */
+  async _onExpandSkillAbilityList(event) {
+    event.preventDefault();
+
+    const itemId = event.currentTarget.dataset.itemId;
+    const skillItem = this.getItem(itemId);
+    await skillItem.subType.toggleSkillAbilityListVisible();
+
+    this.parent.render();
+  }
+
+  /**
+   * @param event 
+   * @private
+   * @async
+   */
+  async _onCreateSkillAbility(event) {
+    event.preventDefault();
+    
+    const itemId = event.currentTarget.dataset.itemId;
+    const skillItem = this.getItem(itemId);
+    await skillItem.subType.createSkillAbility();
+
+    this.parent.render();
+  }
+
+  /**
+   * @param event 
+   * @private
+   * @async
+   */
+  async _onDeleteSkillAbility(event) {
+    event.preventDefault();
+
+    const dataset = event.currentTarget.dataset;
+
+    const itemId = dataset.itemId;
+    const skillItem = this.getItem(itemId);
+
+    const index = parseInt(dataset.index);
+    await skillItem.subType.deleteSkillAbilityAt(index);
+
+    this.parent.render();
   }
 }

@@ -1,5 +1,4 @@
 import { getAttributeGroupName } from '../../../utils/attribute-utility.mjs';
-import SkillAbility from "../../../dto/skill-ability.mjs";
 import AmbersteelBaseItemSheet from "./ambersteel-base-item-sheet.mjs";
 
 export default class AmbersteelSkillItemSheet extends AmbersteelBaseItemSheet {
@@ -36,18 +35,16 @@ export default class AmbersteelSkillItemSheet extends AmbersteelBaseItemSheet {
     // Delete skill ability.
     html.find(".ambersteel-skill-ability-delete").click(this._onDeleteSkillAbility.bind(this));
   }
-
+  
   /**
- * @param event 
- * @private
- * @async
- */
+   * @param event 
+   * @private
+   * @async
+   */
   async _onExpandSkillAbilityList(event) {
     event.preventDefault();
 
-    const skillItem = this.getItem();
-    await skillItem.updateProperty("data.isExpanded", !skillItem.data.data.isExpanded);
-
+    await this.toggleSkillAbilityListVisible();
     this.parent.render();
   }
 
@@ -59,12 +56,7 @@ export default class AmbersteelSkillItemSheet extends AmbersteelBaseItemSheet {
   async _onCreateSkillAbility(event) {
     event.preventDefault();
     
-    const skillItem = this.getItem();
-    const abilities = skillItem.data.data.abilities.concat(
-      [new SkillAbility("New Skill Ability", "", 0, 0, "")]
-    );
-    await skillItem.updateProperty("data.abilities", abilities);
-
+    await this.createSkillAbility();
     this.parent.render();
   }
 
@@ -78,12 +70,8 @@ export default class AmbersteelSkillItemSheet extends AmbersteelBaseItemSheet {
 
     const element = event.currentTarget;
     const index = parseInt(element.dataset.index);
-    const skillItem = this.getItem();
-    const dataAbilities = skillItem.data.data.abilities;
-
-    const abilities = dataAbilities.slice(0, index).concat(dataAbilities.slice(index + 1));
-    await skillItem.updateProperty("data.abilities", abilities);
-
+    
+    await this.deleteSkillAbilityAt(index);
     this.parent.render();
   }
 }
