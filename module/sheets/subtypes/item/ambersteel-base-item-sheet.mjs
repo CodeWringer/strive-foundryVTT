@@ -133,7 +133,7 @@ export default class AmbersteelBaseItemSheet {
     // Remove the type from the dataset since it's already in the 'itemData.type' property.
     delete itemData.data["type"];
 
-    return await Item.create(itemData, { parent: this.actor ?? this.parent });
+    return await Item.create(itemData, { parent: this.parent });
   }
 
   /**
