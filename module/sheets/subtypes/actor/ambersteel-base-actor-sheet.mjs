@@ -34,7 +34,7 @@ export default class AmbersteelBaseActorSheet {
         name: game.i18n.localize("ambersteel.labels.delete"),
         icon: '<i class="fas fa-trash"></i>',
         callback: el => {
-          const item = this.actor.items.get(el.data("item-id"));
+          const item = this.getItem(el.data("item-id"));
           item.delete();
         }
       }
@@ -256,7 +256,7 @@ export default class AmbersteelBaseActorSheet {
    * @private
    * @async
    */
-  async _onItemShow(event) {
+  _onItemShow(event) {
     event.preventDefault();
 
     const element = event.currentTarget;
@@ -270,34 +270,34 @@ export default class AmbersteelBaseActorSheet {
    * @param event 
    * @private
    */
-  _onItemSendToChat(event) {
+  async _onItemSendToChat(event) {
     event.preventDefault();
 
     const element = event.currentTarget;
     const itemId = element.dataset.itemId;
     const item = this.getItem(itemId);
 
-    return item.sendToChat();
+    await item.sendToChat();
   }
 
   /**
    * @param event 
    * @private
    */
-  _onActorSendToChat(event) {
+  async _onActorSendToChat(event) {
     event.preventDefault();
 
-    return this.getActor().sendToChat();
+    await this.getActor().sendToChat();
   }
 
-  _onAttributeEdit(event) {
+  async _onAttributeEdit(event) {
     event.preventDefault();
     const element = event.currentTarget;
     const attGroupName = element.closest(".attribute-item").dataset.attGroupName;
     const attName = element.closest(".attribute-item").dataset.attName;
     const field = element.dataset.field;
 
-    return this.actor.update({ data: { attributes: { [attGroupName]: { [attName]: { [field]: element.value }}}}})
+    await this.getActor().update({ data: { attributes: { [attGroupName]: { [attName]: { [field]: element.value }}}}})
   }
 
   /**
@@ -311,7 +311,7 @@ export default class AmbersteelBaseActorSheet {
     const element = event.currentTarget;
     const dataset = element.closest(".item").dataset;
     const itemId = dataset.itemId;
-    const oSkill = this.actor.items.get(itemId);
+    const oSkill = this.getItem(itemId);
     const localizedActionName = game.i18n.localize(event.currentTarget.dataset.actionName);
 
     // Modal dialog to enter obstacle and bonus dice. 
@@ -325,7 +325,7 @@ export default class AmbersteelBaseActorSheet {
     let numberOfDice = parseInt(event.currentTarget.dataset.actionValue);
     if (parseInt(oSkill.data.data.value) == 0) {
       const relatedAttName = oSkill.data.data.relatedAttribute;
-      const oAtt = this.actor._getAttributeForName(relatedAttName).object;
+      const oAtt = this.getActor()._getAttributeForName(relatedAttName).object;
       numberOfDice = oAtt.value;
     }
     
@@ -335,7 +335,7 @@ export default class AmbersteelBaseActorSheet {
       actionValue: numberOfDice, 
       obstacle: rollInputData.obstacle,
       bonusDice: rollInputData.bonusDice,
-      actor: this.actor  
+      actor: this.getActor()  
     });
 
     // Note result towards skill progress. 
@@ -358,7 +358,7 @@ export default class AmbersteelBaseActorSheet {
     event.preventDefault();
 
     const attName = event.currentTarget.dataset.actionName;
-    const oAtt = this.actor._getAttributeForName(attName).object;
+    const oAtt = this.getActor()._getAttributeForName(attName).object;
     const localizedAttName = game.i18n.localize(oAtt.localizableName);
 
     // Modal dialog to enter obstacle and bonus dice. 
@@ -372,11 +372,11 @@ export default class AmbersteelBaseActorSheet {
       actionValue: event.currentTarget.dataset.actionValue, 
       obstacle: rollInputData.obstacle,
       bonusDice: rollInputData.bonusDice,
-      actor: this.actor  
+      actor: this.getActor()  
     });
 
     // Note result towards attribute progress. 
-    await this.actor.addAttributeProgress(attName, result.rollResults.isSuccess);
+    await this.getActor().addAttributeProgress(attName, result.rollResults.isSuccess);
 
     // Re-render the sheet to make the progress visible. 
     this.parent.render();
