@@ -1,5 +1,6 @@
 import PreparedChatData from '../../../dto/prepared-chat-data.mjs';
 import * as UpdateUtil from "../../../utils/document-update-utility.mjs";
+import * as ChatUtil from "../../../utils/chat-utility.mjs";
 
 export default class AmbersteelBaseItem {
   /**
@@ -71,13 +72,7 @@ export default class AmbersteelBaseItem {
    */
   async sendToChat() {
     const chatData = await this.getChatData();
-
-    return ChatMessage.create({
-      speaker: ChatMessage.getSpeaker({ actor: chatData.actor }),
-      flavor: chatData.flavor,
-      content: chatData.renderedContent,
-      sound: chatData.sound
-    });
+    ChatUtil.sendToChat(chatData);
   }
 
   /**

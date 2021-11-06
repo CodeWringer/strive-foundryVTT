@@ -1,4 +1,5 @@
 import { getElementValue } from "../utils/sheet-utility.mjs";
+import * as ChatUtil from "../utils/chat-utility.mjs";
 
 /**
  * 
@@ -97,42 +98,18 @@ export async function rollDice(ops = {
  */
 export function sendDiceResultToChat(args = { 
     renderedContent: "", 
-    flavor: "", 
-    actor: {},
+    flavor: undefined, 
+    actor: undefined,
     visibilityMode: CONFIG.ambersteel.visibilityModes.public
     }) {
-    const sound = "../sounds/dice.wav";
-    
-    if (args.visibilityMode === CONFIG.ambersteel.visibilityModes.self) {
-        throw "Not yet implemented";
-        const self = undefined;
-
-        ChatMessage.create({
-            user: self,
-            speaker: ChatMessage.getSpeaker({ actor: args.actor }),
-            flavor: args.flavor,
-            content: args.renderedContent,
-            sound: sound
-        });
-    } else if (args.visibilityMode === CONFIG.ambersteel.visibilityModes.gm) {
-        const gms = ChatMessage.getWhisperRecipients("GM");
-        for (const gm of gms) {
-            ChatMessage.create({
-                user: gm,
-                speaker: ChatMessage.getSpeaker({ actor: args.actor }),
-                flavor: args.flavor,
-                content: args.renderedContent,
-                sound: sound
-            });
-        }
-    } else {
-        ChatMessage.create({
-            speaker: ChatMessage.getSpeaker({ actor: args.actor }),
-            flavor: args.flavor,
-            content: args.renderedContent,
-            sound: sound
-        });
-    }
+    ChatUtil.sendToChat({
+        speaker: undefined,
+        renderedContent: args.renderedContent,
+        flavor: args.flavor,
+        actor: args.actor,
+        sound: "../sounds/dice.wav",
+        visibilityMode: args.visibilityMode
+    });
 }
 
 /**
