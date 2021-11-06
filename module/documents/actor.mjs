@@ -24,7 +24,6 @@ export class AmbersteelActor extends Actor {
     if (!this._subType) {
       const type = this.type;
 
-      // TODO: Generalize
       if (type === "pc") {
         this._subType = new AmbersteelPcActor(this);
       } else if (type === "npc") {

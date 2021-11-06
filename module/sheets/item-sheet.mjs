@@ -16,7 +16,6 @@ export class AmbersteelItemSheet extends ItemSheet {
       const data = super.getData();
       const type = data.item.type;
 
-      // TODO: Generalize
       if (type === "skill") {
         this._subType = new AmbersteelSkillItemSheet(this);
       } else if (type === "fate-card") {
