@@ -11,7 +11,7 @@ This is the Ambersteel table-top role-playing game system for FoundryVTT.
   * [X] Custom result display
 * [X] Auto-level-up attribute
   * [X] Reset requirements
-* [ X Auto-level-up skill
+* [X] Auto-level-up skill
   * [X] Reset requirements
   * [X] Auto-move from learning to known
 * [X] Skills Item
