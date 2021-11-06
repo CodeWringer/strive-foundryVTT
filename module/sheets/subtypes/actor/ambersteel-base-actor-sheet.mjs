@@ -348,7 +348,7 @@ export default class AmbersteelBaseActorSheet {
     });
 
     // Note result towards skill progress. 
-    oSkill.subType.addProgress(result.rollResults.isSuccess, false);
+    oSkill.addProgress(result.rollResults.isSuccess, false);
 
     // Re-render the sheet to make the progress visible. 
     this.parent.render();
@@ -404,7 +404,7 @@ export default class AmbersteelBaseActorSheet {
 
     const itemId = event.currentTarget.dataset.itemId;
     const skillItem = this.getItem(itemId);
-    await skillItem.subType.toggleSkillAbilityListVisible();
+    await skillItem.toggleSkillAbilityListVisible();
 
     this.parent.render();
   }
@@ -419,7 +419,7 @@ export default class AmbersteelBaseActorSheet {
     
     const itemId = event.currentTarget.dataset.itemId;
     const skillItem = this.getItem(itemId);
-    await skillItem.subType.createSkillAbility();
+    await skillItem.createSkillAbility();
 
     this.parent.render();
   }
@@ -438,7 +438,7 @@ export default class AmbersteelBaseActorSheet {
     const skillItem = this.getItem(itemId);
 
     const index = parseInt(dataset.index);
-    await skillItem.subType.deleteSkillAbilityAt(index);
+    await skillItem.deleteSkillAbilityAt(index);
 
     this.parent.render();
   }
