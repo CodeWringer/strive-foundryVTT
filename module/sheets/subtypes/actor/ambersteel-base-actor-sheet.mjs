@@ -339,7 +339,7 @@ export default class AmbersteelBaseActorSheet {
     });
 
     // Note result towards skill progress. 
-    SkillUtil.addProgress(oSkill, result.rollResults.isSuccess, false);
+    oSkill.subType.addProgress(result.rollResults.isSuccess, false);
 
     // Re-render the sheet to make the progress visible. 
     this.parent.render();
