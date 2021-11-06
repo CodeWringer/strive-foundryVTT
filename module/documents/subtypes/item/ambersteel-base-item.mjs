@@ -15,6 +15,10 @@ export default class AmbersteelBaseItem {
       throw "Argument 'owner' must not be null or undefined!"
     }
     this.parent = parent;
+
+    this.parent.getChatData = this.getChatData.bind(this);
+    this.parent.sendToChat = this.sendToChat.bind(this);
+    this.parent.updateProperty = this.updateProperty.bind(this);
   }
 
   /**

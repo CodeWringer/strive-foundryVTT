@@ -2,6 +2,22 @@ import AmbersteelBaseItem from "./ambersteel-base-item.mjs";
 import SkillAbility from "../../../dto/skill-ability.mjs";
 
 export default class AmbersteelSkillItem extends AmbersteelBaseItem {
+  /**
+   * @param parent {Item} The owning Item. 
+   */
+  constructor(parent) {
+    super(parent);
+    
+    this.parent.chatMessageTemplate = this.chatMessageTemplate;
+    this.parent.getChatData = this.getChatData.bind(this);
+    this.parent.setLevel = this.setLevel.bind(this);
+    this.parent.addProgress = this.addProgress.bind(this);
+    this.parent.setSkillAbilityListVisible = this.setSkillAbilityListVisible.bind(this);
+    this.parent.toggleSkillAbilityListVisible = this.toggleSkillAbilityListVisible.bind(this);
+    this.parent.createSkillAbility = this.createSkillAbility.bind(this);
+    this.parent.deleteSkillAbilityAt = this.deleteSkillAbilityAt.bind(this);
+  }
+
   /** @override */
   get img() { return "icons/svg/book.svg"; }
 
