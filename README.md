@@ -18,12 +18,12 @@ This is the Ambersteel table-top role-playing game system for FoundryVTT.
 * [X] Beliefs Tab
 * [X] Biography Tab
 * [X] Shift-Click on sendToChat-button -> Menu to allow limiting chat message visibility
+* [X] GM Notes Tab
 * [X] Fate Tab
   * [X] Adding a fate card
     * [ ] Deduct cost
   * [X] Removing a fate card
   * [ ] Limit
-* [ ] GM Notes Tab
 * [ ] Health Tab
 * [ ] Possessions Tab
 * [ ] Magic Tab
