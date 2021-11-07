@@ -115,10 +115,18 @@ export function sendDiceResultToChat(args = {
 
 /**
  * Returns true, if the given face/number represents a positive (= success).
- * @param face A die face to check whether it represents a positive (= success).
+ * @param {String|Number} face A die face to check whether it represents a positive (= success).
  */
 export function isPositive(face) {
-    return parseInt(face) === 6;
+    return parseInt(face) === 6 || parseInt(face) === 5;
+}
+
+/**
+ * Returns true, if the given face/number represents a spell-backfire-causing negative. 
+ * @param {String|Number} face A die face to check whether it represents a spell-backfire-causing negative. 
+ */
+export function causesBackfire(face) {
+    return parseInt(face) === 1 || parseInt(face) === 2;
 }
 
 /**
