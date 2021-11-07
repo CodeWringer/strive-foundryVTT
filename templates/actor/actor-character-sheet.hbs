@@ -1,5 +1,6 @@
 {{!-- Requires context:
 isEditable: {Boolean},
+isGM: {Boolean},
 actor: {AmbersteelActor},
 data: {Object} where Object = {
   person: {Object} where Object -> see parts/actor-personals.hbs,
@@ -33,11 +34,14 @@ data: {Object} where Object = {
     <a class="item fancy-font" data-tab="attributes">{{localize "ambersteel.labels.tabAttributes"}}</a>
     <a class="item fancy-font" data-tab="skills">{{localize "ambersteel.labels.tabSkills"}}</a>
     {{#if (eq actor.type "pc")}}
-    <a class="item fancy-font" data-tab="beliefs-fate">{{localize "ambersteel.labels.tabBeliefsFate"}}</a>
+      <a class="item fancy-font" data-tab="beliefs-fate">{{localize "ambersteel.labels.tabBeliefsFate"}}</a>
     {{/if}}
     <a class="item fancy-font" data-tab="health">{{localize "ambersteel.labels.tabHealth"}}</a>
     <a class="item fancy-font" data-tab="possessions">{{localize "ambersteel.labels.tabPossessions"}}</a>
     <a class="item fancy-font" data-tab="biography">{{localize "ambersteel.labels.tabBiography"}}</a>
+    {{#if isGM}}
+      <a class="item fancy-font" data-tab="gm-notes">{{localize "ambersteel.labels.tabGmNotes"}}</a>
+    {{/if}}
   </nav>
 
   {{!-- Sheet Body --}}
@@ -62,13 +66,13 @@ data: {Object} where Object = {
 
     {{#if (eq actor.type "pc")}}
     {{!-- Beliefs&Fate Tab --}}
-    <div class="tab beliefs-fate" data-group="primary" data-tab="beliefs-fate">
-      {{> "systems/ambersteel/templates/actor/parts/actor-beliefs-fate.hbs" 
-      isEditable=isEditable 
-      beliefSystem=data.beliefSystem 
-      fateSystem=data.fateSystem 
-      }}
-    </div>
+      <div class="tab beliefs-fate" data-group="primary" data-tab="beliefs-fate">
+        {{> "systems/ambersteel/templates/actor/parts/actor-beliefs-fate.hbs" 
+        isEditable=isEditable 
+        beliefSystem=data.beliefSystem 
+        fateSystem=data.fateSystem 
+        }}
+      </div>
     {{/if}}
 
     {{!-- Health Tab --}}
@@ -92,6 +96,16 @@ data: {Object} where Object = {
       biography=data.biography 
       }}
     </div>
+
+    {{!-- GM Notes Tab --}}
+    {{#if isGM}}
+      <div class="tab gm-notes" data-group="primary" data-tab="gm-notes">
+        {{> "systems/ambersteel/templates/gm-notes.hbs" 
+        isEditable=isEditable 
+        gmNotes=data.gmNotes 
+        }}
+      </div>
+    {{/if}}
 
   </section>
 </form>

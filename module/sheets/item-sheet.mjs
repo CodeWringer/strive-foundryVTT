@@ -67,7 +67,9 @@ export class AmbersteelItemSheet extends ItemSheet {
     // In templates that implement it, this flag determines whether the sheet data can be 
     // sent to the chat. 
     context.isSendable = true;
-
+    // In templates that implement it, this flag indicates whether the current user is a GM. 
+    context.isGM = game.user.isGM;
+    
     this.subType.prepareDerivedData(context);
 
     return context;

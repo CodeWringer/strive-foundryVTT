@@ -32,5 +32,7 @@
     // Dialogs.
     "systems/ambersteel/templates/dice/roll-dialog.hbs",
     "systems/ambersteel/templates/dialog/skill-add-dialog.hbs",
+    // GM.
+    "systems/ambersteel/templates/gm-notes.hbs",
   ]);
 };

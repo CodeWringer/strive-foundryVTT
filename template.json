@@ -96,7 +96,8 @@
           "usedCapacity": 0,
           "items": []
         },
-        "biography": ""
+        "biography": "",
+        "gmNotes": ""
       }
     },
     "pc": {
@@ -120,7 +121,8 @@
     "types": ["item", "skill", "fate-card"],
     "templates": {
       "base": {
-        "description": ""
+        "description": "",
+        "gmNotes": ""
       }
     },
     "skill": {

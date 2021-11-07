@@ -1,0 +1,15 @@
+{{!-- Requires parameters:
+isEditable: {Boolean},
+data: {Object} where Object = {
+  gmNotes: {String}
+}
+--}}
+<section class="fill">
+  <div class="sheet-block fill">
+    {{#if isEditable}}
+      <textarea class="gm-notes" name="data.gmNotes" spellcheck="false">{{data.data.gmNotes}}</textarea>
+    {{else}}
+      <span class="multiline">{{data.data.gmNotes}}</span>
+    {{/if}}
+  </div>
+</section>

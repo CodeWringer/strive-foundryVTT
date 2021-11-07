@@ -833,3 +833,9 @@ textarea.biography {
   resize: none;
   overflow-x: hidden;
 }
+
+textarea.gm-notes {
+  height: 100%;
+  resize: none;
+  overflow-x: hidden;
+}

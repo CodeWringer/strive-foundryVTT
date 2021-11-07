@@ -72,14 +72,17 @@ export default class AmbersteelBaseActorSheet {
     // It is "safe", because behind the scenes, a getter returns a clone. 
     const actorData = context.actor.data.data;
 
+    context.data.data.attributeGroups = this._getDerivedAttributeGroups(actorData.attributes);
+
     // General derived data. 
+    // TODO: Remove 
     context.data.person = actorData.person;
-    context.data.attributeGroups = this._getDerivedAttributeGroups(actorData.attributes);
     context.data.beliefSystem = actorData.beliefSystem;
     context.data.fateSystem = actorData.fateSystem;
     context.data.biography = actorData.biography;
     context.data.learningSkills = actorData.learningSkills;
     context.data.skills = actorData.skills;
+    context.data.attributeGroups = context.data.data.attributeGroups;
   }
 
   /**
