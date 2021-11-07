@@ -144,10 +144,15 @@ export default class AmbersteelBaseItemSheet {
   async _onItemSendToChat(event) {
     event.preventDefault();
 
-    const dialogResult = await queryVisibilityMode();
-    if (dialogResult.confirmed) {
-      const item = this.getItem();
-      await item.sendToChat(dialogResult.visibilityMode);
+    const item = this.getItem();
+
+    if (keyboard.isDown("Shift")) {
+      await item.sendToChat(CONFIG.ambersteel.visibilityModes.public);
+    } else {
+      const dialogResult = await queryVisibilityMode();
+      if (dialogResult.confirmed) {
+        await item.sendToChat(dialogResult.visibilityMode);
+      }
     }
   }
 }
