@@ -23,12 +23,12 @@ This is the Ambersteel table-top role-playing game system for FoundryVTT.
     * [ ] Deduct cost
   * [X] Removing a fate card
   * [ ] Limit
+* [ ] GM Notes Tab
 * [ ] Health Tab
 * [ ] Possessions Tab
 * [ ] Magic Tab
   * [ ] Create spell item template
   * [ ] List castable spells
-* [ ] GM Notes Tab
   * Only visible to GM
   * On PC and NPC types
 * [ ] Create list (compendium) of skills
