@@ -157,15 +157,6 @@ ambersteel.fateSystem = {
     maxCards: 5
 }
 
-ambersteel.labels = {
-    level: "ambersteel.labels.level",
-    requiredSuccessFailureAbbreviation: "ambersteel.labels.requiredSuccessFailureAbbreviation",
-    successAbbreviation: "ambersteel.labels.successAbbreviation",
-    failureAbbreviation: "ambersteel.labels.failureAbbreviation",
-    learningSkill: "ambersteel.labels.learningSkill",
-    knownSkill: "ambersteel.labels.knownSkill",
-}
-
 ambersteel.visibilityModes = {
     public: "ambersteel.messageVisibilityModes.public",
     self: "ambersteel.messageVisibilityModes.self",
