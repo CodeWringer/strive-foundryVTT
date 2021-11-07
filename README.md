@@ -17,7 +17,7 @@ This is the Ambersteel table-top role-playing game system for FoundryVTT.
 * [X] Skills Item
 * [X] Beliefs Tab
 * [X] Biography Tab
-* [ ] Shift-Click on roll-button -> Menu to allow limiting roll visibility
+* [X] Shift-Click on sendToChat-button -> Menu to allow limiting chat message visibility
 * [X] Fate Tab
   * [X] Adding a fate card
     * [ ] Deduct cost
