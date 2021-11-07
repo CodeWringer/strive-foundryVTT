@@ -831,4 +831,5 @@ a.button-spinner {
 textarea.biography {
   height: 100%;
   resize: none;
+  overflow-x: hidden;
 }
