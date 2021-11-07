@@ -30,7 +30,7 @@ img: {String}
   </div>
   <div class="fate-card-description">
     {{#if isEditable}}
-      <textarea name="data.description">{{data.data.description}}</textarea>
+      <textarea name="data.description" spellcheck="false">{{data.data.description}}</textarea>
     {{else}}
       <span class="multiline">{{data.data.description}}</span>
     {{/if}}
