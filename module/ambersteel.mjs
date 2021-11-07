@@ -7,7 +7,7 @@ import { AmbersteelItem } from "./documents/item.mjs";
 import { AmbersteelActorSheet } from "./sheets/actor-sheet.mjs";
 import { AmbersteelItemSheet } from "./sheets/item-sheet.mjs";
 // Import helper/utility classes and constants.
-import { preloadHandlebarsTemplates } from "./helpers/templates.mjs";
+import { preloadHandlebarsTemplates } from "./templatePreloader.mjs";
 
 /* -------------------------------------------- */
 /*  Init Hook                                   */
