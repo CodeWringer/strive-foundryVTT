@@ -47,3 +47,4 @@ This is the Ambersteel table-top role-playing game system for FoundryVTT.
   * [ ] Support adding fate cards from this list
   * [ ] Differentiate fate cards - introduce two types: `preset` and `custom`
     * [ ] Preset items cannot be edited
+* [ ] Cleanup language file
