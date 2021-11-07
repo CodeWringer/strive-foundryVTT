@@ -15,6 +15,7 @@
     "systems/ambersteel/templates/actor/parts/actor-skills.hbs",
     "systems/ambersteel/templates/actor/parts/actor-beliefs.hbs",
     "systems/ambersteel/templates/actor/parts/actor-fate.hbs",
+    "systems/ambersteel/templates/actor/parts/actor-beliefs-fate.hbs",
     "systems/ambersteel/templates/actor/parts/actor-health.hbs",
     "systems/ambersteel/templates/actor/parts/actor-possessions.hbs",
     "systems/ambersteel/templates/actor/parts/actor-biography.hbs",

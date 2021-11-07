@@ -1,0 +1,15 @@
+{{!-- Requires parameters:
+isEditable: {Boolean},
+beliefSystem: {Object} where Object -> see "actor-beliefs.hbs",
+fateSystem: {Object} where Object -> see "actor-fate.hbs"
+--}}
+<section>
+{{> "systems/ambersteel/templates/actor/parts/actor-beliefs.hbs"
+isEditable=isEditable 
+beliefSystem=beliefSystem
+}}
+{{> "systems/ambersteel/templates/actor/parts/actor-fate.hbs"
+isEditable=isEditable 
+fateSystem=fateSystem
+}}
+</section>
