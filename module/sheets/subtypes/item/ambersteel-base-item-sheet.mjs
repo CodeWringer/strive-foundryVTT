@@ -1,4 +1,5 @@
 import * as SheetUtil from '../../../utils/sheet-utility.mjs';
+import { queryVisibilityMode } from "../../../utils/chat-utility.mjs";
 
 export default class AmbersteelBaseItemSheet {
   /**
@@ -140,10 +141,13 @@ export default class AmbersteelBaseItemSheet {
    * @param event 
    * @private
    */
-  _onItemSendToChat(event) {
+  async _onItemSendToChat(event) {
     event.preventDefault();
 
-    const item = this.getItem();
-    return item.sendToChat();
+    const dialogResult = await queryVisibilityMode();
+    if (dialogResult.confirmed) {
+      const item = this.getItem();
+      await item.sendToChat(dialogResult.visibilityMode);
+    }
   }
 }

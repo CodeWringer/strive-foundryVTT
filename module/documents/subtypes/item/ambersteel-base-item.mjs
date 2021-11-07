@@ -67,12 +67,16 @@ export default class AmbersteelBaseItem {
 
   /**
    * Base implementation of sending this item to the chat. 
+   * @param {CONFIG.ambersteel.visibilityModes} visibilityMode Determines the visibility of the chat message. 
    * @async
    * @virtual
    */
-  async sendToChat() {
+  async sendToChat(visibilityMode = CONFIG.ambersteel.visibilityModes.public) {
     const chatData = await this.getChatData();
-    ChatUtil.sendToChat(chatData);
+    ChatUtil.sendToChat({
+      visibilityMode: visibilityMode,
+      ...chatData
+    });
   }
 
   /**

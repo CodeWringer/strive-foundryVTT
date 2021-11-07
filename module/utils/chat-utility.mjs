@@ -1,3 +1,6 @@
+import { showDialog } from "./dialog-utility.mjs";
+import { getElementValue } from "./sheet-utility.mjs";
+
 /**
  * Creates a new ChatMessage to display the given contents
  * @param chatData 

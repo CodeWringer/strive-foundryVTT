@@ -126,25 +126,4 @@ export class AmbersteelActor extends Actor {
       }
     }
   }
-
-  /**
-   * Sends this Actor to chat. 
-   * @returns {Promise<any>} 
-   * @async
-   */
-  async sendToChat() {
-    return this.subType.sendToChat();
-  }
-
-  /**
-   * Updates a property on this Actor, identified via the given path. 
-   * @param propertyPath {String} Path leading to the property to update, on this Actor. 
-   *        Array-accessing via brackets is supported. Property-accessing via brackets is *not* supported. 
-   *        E.g.: "data.attributes[0].value"
-   * @param newValue {any} The value to assign to the property. 
-   * @async
-   */
-  async updateProperty(propertyPath, newValue) {
-    await this.subType.updateProperty(propertyPath, newValue);
-  }
 }

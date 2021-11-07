@@ -9,8 +9,8 @@ visibilityMode {CONFIG.ambersteel.visibilityModes}
     <div class="flex">
       <select class="visibilityMode flex-grow" name="visibilityMode">
         {{#select visibilityMode}}
-        {{#each CONFIG.ambersteel.visibilityModes as |mode key|}}
-        <option value="{{key}}">{{localize mode}}</option>
+        {{#each CONFIG.ambersteel.visibilityModes as | mode |}}
+        <option value="{{mode}}">{{localize mode}}</option>
         {{/each}}
         {{/select}}
       </select>

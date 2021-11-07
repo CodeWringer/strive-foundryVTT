@@ -1,5 +1,6 @@
 import * as Dice from "../../../helpers/dice.mjs";
 import * as SheetUtil from '../../../utils/sheet-utility.mjs';
+import { queryVisibilityMode } from "../../../utils/chat-utility.mjs";
 
 export default class AmbersteelBaseActorSheet {
   /**
@@ -280,11 +281,14 @@ export default class AmbersteelBaseActorSheet {
   async _onItemSendToChat(event) {
     event.preventDefault();
 
-    const element = event.currentTarget;
-    const itemId = element.dataset.itemId;
-    const item = this.getItem(itemId);
+    const dialogResult = await queryVisibilityMode();
+    if (dialogResult.confirmed) {
+      const element = event.currentTarget;
+      const itemId = element.dataset.itemId;
+      const item = this.getItem(itemId);
 
-    await item.sendToChat();
+      await item.sendToChat(dialogResult.visibilityMode);
+    }
   }
 
   /**
@@ -294,7 +298,10 @@ export default class AmbersteelBaseActorSheet {
   async _onActorSendToChat(event) {
     event.preventDefault();
 
-    await this.getActor().sendToChat();
+    const dialogResult = await queryVisibilityMode();
+    if (dialogResult.confirmed) {
+      await this.getActor().sendToChat(dialogResult.visibilityMode);
+    }
   }
 
   /**

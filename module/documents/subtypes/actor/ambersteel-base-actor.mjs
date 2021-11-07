@@ -19,6 +19,10 @@ export default class AmbersteelBaseActor {
       throw "Argument 'owner' must not be null or undefined!"
     }
     this.parent = parent;
+
+    this.parent.getChatData = this.getChatData.bind(this);
+    this.parent.sendToChat = this.sendToChat.bind(this);
+    this.parent.updateProperty = this.updateProperty.bind(this);
   }
 
   /**
@@ -153,12 +157,16 @@ export default class AmbersteelBaseActor {
 
   /**
    * Base implementation of sending this Actor to the chat. 
+   * @param {CONFIG.ambersteel.visibilityModes} visibilityMode Determines the visibility of the chat message. 
    * @async
    * @virtual
    */
-  async sendToChat() {
+  async sendToChat(visibilityMode = CONFIG.ambersteel.visibilityModes.public) {
     const chatData = await this.getChatData();
-    ChatUtil.sendToChat(chatData);
+    ChatUtil.sendToChat({
+      visibilityMode: visibilityMode,
+      ...chatData
+    });
   }
 
   /**
