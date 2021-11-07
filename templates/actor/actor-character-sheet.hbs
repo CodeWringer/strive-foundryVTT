@@ -93,7 +93,6 @@ data: {Object} where Object = {
     <div class="tab biography" data-group="primary" data-tab="biography">
       {{> "systems/ambersteel/templates/actor/parts/actor-biography.hbs" 
       isEditable=isEditable 
-      biography=data.biography 
       }}
     </div>
 
@@ -102,7 +101,6 @@ data: {Object} where Object = {
       <div class="tab gm-notes" data-group="primary" data-tab="gm-notes">
         {{> "systems/ambersteel/templates/gm-notes.hbs" 
         isEditable=isEditable 
-        gmNotes=data.gmNotes 
         }}
       </div>
     {{/if}}
