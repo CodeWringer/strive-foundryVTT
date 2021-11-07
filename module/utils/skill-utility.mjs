@@ -9,6 +9,7 @@ export function getAdvancementRequirements(level = 0) {
   }
 };
 
+// TODO: Refactor to use dialog-utility
 /**
 * Shows a dialog to the user to select a skill from the existing list of skills, 
 * or check a flag to add a custom skill.  
@@ -29,7 +30,7 @@ export async function querySkillAddData() {
     let renderedContent = await renderTemplate(dialogTemplate, dialogData);
 
     let dialog = new Dialog({
-      title: game.i18n.localize("ambersteel.skill.titleDialogQuery"),
+      title: game.i18n.localize("ambersteel.dialog.titleSkillAddQuery"),
       content: renderedContent,
       buttons: {
         confirm: {

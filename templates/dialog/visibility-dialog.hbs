@@ -1,0 +1,19 @@
+{{!-- Parameters:
+visibilityMode {CONFIG.ambersteel.visibilityModes}
+--}}
+<section class="visibility-mode-selection">
+  <div class="sheet-block grid grid-2col">
+    <div>
+      <label class="line-height fancy-font pad-sm" for="visibilityMode">{{localize "ambersteel.labels.messageVisibility"}}</label>
+    </div>
+    <div class="flex">
+      <select class="visibilityMode flex-grow" name="visibilityMode">
+        {{#select visibilityMode}}
+        {{#each CONFIG.ambersteel.visibilityModes as |mode key|}}
+        <option value="{{key}}">{{localize mode}}</option>
+        {{/each}}
+        {{/select}}
+      </select>
+    </div>
+  </div>
+</section>

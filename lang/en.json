@@ -161,16 +161,17 @@
       "numberOfDice": "Number of dice",
       "obstacle": "Obstacle",
       "obstacleAbbreviation": "Ob",
-      "bonusDice": "Bonus Dice",
-      "titleDialogQuery": "Enter obstacle and bonus dice for roll"
-    },
-    "skill": {
-      "titleDialogQuery": "Select skill to add"
+      "bonusDice": "Bonus Dice"
     },
     "messageVisibilityModes": {
       "public": "Public",
       "self": "Self",
       "gm": "GM"
+    },
+    "dialog": {
+      "titleVisibility": "Select Message Visibility",
+      "titleRollQuery": "Select Obstacle and Bonus Dice",
+      "titleSkillAddQuery": "Select Skill to Add"
     }
   }
 }
