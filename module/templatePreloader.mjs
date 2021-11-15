@@ -7,7 +7,6 @@
   return loadTemplates([
     // Components.
     "systems/ambersteel/templates/actor/components/number-spinner.hbs",
-    "systems/ambersteel/templates/components/skill-ability.hbs",
     // Actor partials.
     "systems/ambersteel/templates/actor/components/component-attribute-table.hbs",
     "systems/ambersteel/templates/actor/components/component-skill-table.hbs",
@@ -24,6 +23,7 @@
     // Item partials.
     "systems/ambersteel/templates/item/parts/skill-ability-table.hbs",
     "systems/ambersteel/templates/item/parts/fate-card.hbs",
+    "systems/ambersteel/templates/item/parts/skill-ability.hbs",
     // Dice.
     "systems/ambersteel/templates/dice/roll.hbs",
     // Sheets.

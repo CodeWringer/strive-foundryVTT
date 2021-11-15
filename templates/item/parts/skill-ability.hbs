@@ -7,9 +7,12 @@ skillAbility: {Object} where Object = {
   name: {String}
   description: {String}
   requiredLevel: {Number}
-  apCost: {Number}
-  condition: {String},
-  img: {String},
+  condition: {String}
+  img: {String}
+  apCost: {Number|undefined}
+  distance: {Number|undefined}
+  damage: {Number|undefined}
+  damageType: {CONFIG.ambersteel.damageTypes|undefined}
 }
 --}}
 <section class="skill-ability" data-item-id="{{parentItemId}}">

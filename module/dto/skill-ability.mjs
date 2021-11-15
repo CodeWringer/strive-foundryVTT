@@ -45,7 +45,7 @@ export default class SkillAbility {
    * Chat message template path. 
    * @type {String}
    */
-  static get chatMessageTemplate() { return "systems/ambersteel/templates/components/skill-ability.hbs"; }
+  static get chatMessageTemplate() { return "systems/ambersteel/templates/item/parts/skill-ability.hbs"; }
 
   /**
    * Returns prepared chat data for the given skill ability. 
@@ -70,11 +70,14 @@ export default class SkillAbility {
         description: localizedDesc,
         requiredLevel: args.skillAbility.requiredLevel,
         apCost: args.skillAbility.apCost,
-        condition: localizedCondition
+        condition: localizedCondition,
+        distance: args.skillAbility.distance,
+        damage: args.skillAbility.damage,
+        damageType: args.skillAbility.damageType
       },
       key: key,
-      isEditable: args.parentItem.isOwner,
-      isSendable: args.parentItem.isOwner
+      isEditable: false,
+      isSendable: false
     });
     return new PreparedChatData(renderedContent, args.actor, localizedName, "../sounds/notify.wav");
   }
