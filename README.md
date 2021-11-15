@@ -24,13 +24,12 @@ This is the Ambersteel table-top role-playing game system for FoundryVTT.
     * [ ] Deduct cost
   * [X] Removing a fate card
   * [ ] Limit
+* [ ] Rework skill table and skill ability table
+* [ ] Update attributes to current ruleset
+  * [ ] Remove "Magic Sense"
+  * [ ] Move "Arcana" to "Mental Attributes"
 * [ ] Health Tab
 * [ ] Possessions Tab
-* [ ] Magic Tab
-  * [ ] Create spell item template
-  * [ ] List castable spells
-  * Only visible to GM
-  * On PC and NPC types
 * [ ] Create list (compendium) of skills
   * [ ] Support adding skills from this list
   * [ ] Differentiate skills - introduce two types: `preset` and `custom`
@@ -48,3 +47,4 @@ This is the Ambersteel table-top role-playing game system for FoundryVTT.
   * [ ] Differentiate fate cards - introduce two types: `preset` and `custom`
     * [ ] Preset items cannot be edited
 * [ ] Cleanup language file
+* [ ] Deletion confirmation dialog
