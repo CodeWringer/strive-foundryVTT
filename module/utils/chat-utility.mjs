@@ -88,7 +88,7 @@ export function queryVisibilityMode() {
 export async function sendPropertyToChat(args = {obj, propertyPath, parent, actor, visibilityMode: CONFIG.ambersteel.visibilityModes.public}) {
   validateOrThrow(args, ["obj", "propertyPath", "parent"]);
 
-  const prop = getNestedPropertyValue(obj, propertyPath);
+  const prop = getNestedPropertyValue(args.obj, args.propertyPath);
   if (prop.type) {
     var args = { 
       parentItem: args.parent,

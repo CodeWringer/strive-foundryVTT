@@ -51,21 +51,21 @@ export default class SkillAbility {
    * Returns prepared chat data for the given skill ability. 
    * @param {Object} args Argument-holder object. 
    * @param {Object} args.skillAbility The skill ability object. 
-   * @param {Object} args.parentSkillItem The item that owns the skill ability. 
+   * @param {Object} args.parentItem The item that owns the skill ability. 
    * @param {Object} args.actor Optional. The actor that owns the parent item. 
    * @returns {PreparedChatData}
    * @virtual
    */
-  static async getChatData(args = {skillAbility, parentSkillItem, actor}) {
-    validateOrThrow(args, ["skillAbility", "parentSkillItem"]);
+  static async getChatData(args = {skillAbility, parentItem, actor}) {
+    validateOrThrow(args, ["skillAbility", "parentItem"]);
 
-    const key = parentSkillItem.data.data.skillAbilities.indexOf(skillAbility);
+    const key = args.parentItem.data.data.abilities.indexOf(args.skillAbility);
     const localizedName = game.i18n.localize(args.skillAbility.name);
     const localizedDesc = game.i18n.localize(args.skillAbility.description);
     const localizedCondition = game.i18n.localize(args.skillAbility.condition);
     const renderedContent = await renderTemplate(SkillAbility.chatMessageTemplate, {
       skillAbility: {
-        parentItemId: args.parentSkillItem.id,
+        parentItemId: args.parentItem.id,
         name: localizedName,
         description: localizedDesc,
         requiredLevel: args.skillAbility.requiredLevel,
@@ -73,8 +73,8 @@ export default class SkillAbility {
         condition: localizedCondition
       },
       key: key,
-      isEditable: args.parentSkillItem.isOwner,
-      isSendable: args.parentSkillItem.isOwner
+      isEditable: args.parentItem.isOwner,
+      isSendable: args.parentItem.isOwner
     });
     return new PreparedChatData(renderedContent, args.actor, localizedName, "../sounds/notify.wav");
   }
@@ -84,18 +84,18 @@ export default class SkillAbility {
    * @param {CONFIG.ambersteel.visibilityModes} visibilityMode Determines the visibility of the chat message. 
    * @param {Object} args Argument-holder object. 
    * @param {Object} args.skillAbility The skill ability object. 
-   * @param {Object} args.parentSkillItem The item that owns the skill ability. 
+   * @param {Object} args.parentItem The item that owns the skill ability. 
    * @param {Object} args.actor Optional. The actor that owns the parent item. 
    * @param {Object} args.visibilityMode Optional. Sets the visibility of the chat message. 
    * @async
    * @virtual
    */
-  static async sendToChat(args = {skillAbility, parentSkillItem, actor, visibilityMode: CONFIG.ambersteel.visibilityModes.public}) {
-    validateOrThrow(args, ["skillAbility", "parentSkillItem"]);
+  static async sendToChat(args = {skillAbility, parentItem, actor, visibilityMode: CONFIG.ambersteel.visibilityModes.public}) {
+    validateOrThrow(args, ["skillAbility", "parentItem"]);
 
     const chatData = await SkillAbility.getChatData(args);
     await ChatUtil.sendToChat({
-      visibilityMode: visibilityMode,
+      visibilityMode: args.visibilityMode,
       ...chatData
     });
   }

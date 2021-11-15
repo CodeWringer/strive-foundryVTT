@@ -177,7 +177,13 @@ export default class AmbersteelBaseActor {
    * @async
    */
   async sendPropertyToChat(propertyPath, visibilityMode = CONFIG.ambersteel.visibilityModes.public) {
-    await ChatUtil.sendPropertyToChat(this.parent, propertyPath, visibilityMode);
+    await ChatUtil.sendPropertyToChat({
+      obj: this.parent,
+      propertyPath: propertyPath,
+      parent: this.parent,
+      actor: this.parent.actor,
+      visibilityMode: visibilityMode
+    });
   }
 
   /**
