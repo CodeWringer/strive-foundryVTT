@@ -33,6 +33,17 @@ ambersteel.shieldTypes = {
     kiteShield: "ambersteel.shieldTypes.kiteShield"
 }
 
+ambersteel.damageTypes = {
+    burning: "ambersteel.damageTypes.burning",
+    freezing: "ambersteel.damageTypes.freezing",
+    slashing: "ambersteel.damageTypes.slashing",
+    piercing: "ambersteel.damageTypes.piercing",
+    bludgeoning: "ambersteel.damageTypes.bludgeoning",
+    crushing: "ambersteel.damageTypes.crushing",
+    poison: "ambersteel.damageTypes.poison",
+    acid: "ambersteel.damageTypes.acid",
+}
+
 ambersteel.character = {
     attributeGroups: {
         physical: {
