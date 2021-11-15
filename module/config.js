@@ -44,6 +44,12 @@ ambersteel.damageTypes = {
     acid: "ambersteel.damageTypes.acid",
 }
 
+ambersteel.attackTypes = {
+    singleTarget: "ambersteel.attackTypes.singleTarget",
+    areaOfEffect: "ambersteel.attackTypes.areaOfEffect",
+    multipleSingleTarget: "ambersteel.attackTypes.multipleSingleTarget",
+}
+
 ambersteel.character = {
     attributeGroups: {
         physical: {

@@ -23,7 +23,6 @@
     // Item partials.
     "systems/ambersteel/templates/item/parts/skill-ability-table.hbs",
     "systems/ambersteel/templates/item/parts/fate-card.hbs",
-    "systems/ambersteel/templates/item/parts/skill-ability.hbs",
     // Dice.
     "systems/ambersteel/templates/dice/roll.hbs",
     // Sheets.
@@ -36,5 +35,7 @@
     "systems/ambersteel/templates/dialog/skill-add-dialog.hbs",
     // GM.
     "systems/ambersteel/templates/gm-notes.hbs",
+    // Chat.
+    "systems/ambersteel/templates/chat/chat-skill-ability.hbs",
   ]);
 };

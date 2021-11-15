@@ -15,6 +15,7 @@ import PreparedChatData from './prepared-chat-data.mjs';
  * @property {Number|undefined} distance
  * @property {Number|undefined} damage
  * @property {CONFIG.ambersteel.damageTypes|undefined} damageType
+ * @property {CONFIG.ambersteel.attackTypes|undefined} attackType
  */
 export default class SkillAbility {
   constructor(args = {
@@ -26,7 +27,8 @@ export default class SkillAbility {
     apCost: 0,
     distance: 0,
     damage: 0,
-    damageType: CONFIG.ambersteel.damageTypes.slashing
+    damageType: CONFIG.ambersteel.damageTypes.slashing,
+    attackType: CONFIG.ambersteel.attackTypes.singleTarget,
   }) {
     this.type = "SkillAbility";
 
@@ -39,6 +41,7 @@ export default class SkillAbility {
     this.distance = args.distance;
     this.damage = args.damage;
     this.damageType = args.damageType;
+    this.attackType = args.attackType;
   }
 
   /**
@@ -65,7 +68,6 @@ export default class SkillAbility {
     const localizedCondition = game.i18n.localize(args.skillAbility.condition);
     const renderedContent = await renderTemplate(SkillAbility.chatMessageTemplate, {
       skillAbility: {
-        parentItemId: args.parentItem.id,
         name: localizedName,
         description: localizedDesc,
         requiredLevel: args.skillAbility.requiredLevel,
@@ -73,8 +75,10 @@ export default class SkillAbility {
         condition: localizedCondition,
         distance: args.skillAbility.distance,
         damage: args.skillAbility.damage,
-        damageType: args.skillAbility.damageType
+        damageType: args.skillAbility.damageType,
+        attackType: args.skillAbility.attackType,
       },
+      skillItemId: args.parentItem.id,
       key: key,
       isEditable: false,
       isSendable: false
