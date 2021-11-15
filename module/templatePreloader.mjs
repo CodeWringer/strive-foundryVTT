@@ -32,7 +32,7 @@
     "systems/ambersteel/templates/item/skill-item-sheet.hbs",
     "systems/ambersteel/templates/item/fate-card-item-sheet.hbs",
     // Dialogs.
-    "systems/ambersteel/templates/dice/roll-dialog.hbs",
+    "systems/ambersteel/templates/dialog/roll-dialog.hbs",
     "systems/ambersteel/templates/dialog/skill-add-dialog.hbs",
     // GM.
     "systems/ambersteel/templates/gm-notes.hbs",

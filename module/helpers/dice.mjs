@@ -134,7 +134,7 @@ export function causesBackfire(face) {
  * @returns {Promise} Resolves, when the dialog is closed. 
  */
 export async function queryRollData() {
-    const dialogTemplate = "systems/ambersteel/templates/dice/roll-dialog.hbs";
+    const dialogTemplate = "systems/ambersteel/templates/dialog/roll-dialog.hbs";
     const dialogData = {
         obstacle: 0,
         bonusDice: 0,
