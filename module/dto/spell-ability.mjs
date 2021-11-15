@@ -14,6 +14,7 @@ import PreparedChatData from './prepared-chat-data.mjs';
  * @property {String} condition
  * @property {String} img
  * @property {Number} damage
+ * @property {CONFIG.ambersteel.damageTypes} damageType
  */
 export default class SpellAbility {
   constructor(
@@ -24,7 +25,8 @@ export default class SpellAbility {
     distance, 
     condition, 
     img = "icons/svg/item-book.svg",
-    damage
+    damage,
+    damageType
     ) {
     this.type = "SpellAbility";
 
@@ -36,6 +38,7 @@ export default class SpellAbility {
     this.condition = condition;
     this.img = img;
     this.damage = damage;
+    this.damageType = damageType;
   }
 
   /**
