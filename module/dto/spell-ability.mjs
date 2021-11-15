@@ -6,17 +6,36 @@ import PreparedChatData from './prepared-chat-data.mjs';
  * Represents a spell ability. 
  * 
  * Is a child object of a skill item. 
+ * @property {String} name
+ * @property {String} description
+ * @property {Number} requiredLevel
+ * @property {Number} apCost
+ * @property {Number} distance
+ * @property {String} condition
+ * @property {String} img
+ * @property {Number} damage
  */
 export default class SpellAbility {
-  constructor(name, description, requiredLevel, apCost, condition, img = "icons/svg/item-book.svg") {
+  constructor(
+    name, 
+    description, 
+    requiredLevel, 
+    apCost, 
+    distance, 
+    condition, 
+    img = "icons/svg/item-book.svg",
+    damage
+    ) {
     this.type = "SpellAbility";
 
     this.name = name;
     this.description = description;
     this.requiredLevel = requiredLevel;
+    this.distance = distance;
     this.apCost = apCost;
     this.condition = condition;
     this.img = img;
+    this.damage = damage;
   }
 
   /**

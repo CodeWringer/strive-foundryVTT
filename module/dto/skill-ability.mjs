@@ -6,9 +6,22 @@ import PreparedChatData from './prepared-chat-data.mjs';
  * Represents a skill ability. 
  * 
  * Is a child object of a skill item. 
+ * @property {String} name
+ * @property {String} description
+ * @property {Number} requiredLevel
+ * @property {Number} apCost
+ * @property {String} condition
+ * @property {String} img
  */
 export default class SkillAbility {
-  constructor(name, description, requiredLevel, apCost, condition, img = "icons/svg/item-book.svg") {
+  constructor(
+    name, 
+    description, 
+    requiredLevel, 
+    apCost, 
+    condition, 
+    img = "icons/svg/item-book.svg"
+    ) {
     this.type = "SkillAbility";
 
     this.name = name;
