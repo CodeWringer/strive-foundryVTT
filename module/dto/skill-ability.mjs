@@ -23,10 +23,10 @@ export default class SkillAbility {
     requiredLevel: 0,
     condition: "",
     img: "icons/svg/item-book.svg",
-    apCost: undefined,
-    distance: undefined,
-    damage: undefined,
-    damageType: undefined
+    apCost: 0,
+    distance: 0,
+    damage: 0,
+    damageType: CONFIG.ambersteel.damageTypes.slashing
   }) {
     this.type = "SkillAbility";
 
