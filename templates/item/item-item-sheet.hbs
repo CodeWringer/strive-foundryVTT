@@ -14,15 +14,28 @@ item: {Item} where Item = {
 --}}
 <form class="{{cssClass}}" autocomplete="off">
   <header class="sheet-header">
-    {{#if isEditable}}
-      <img src="{{item.img}}" data-edit="img" title="{{item.name}}" height="64" width="64"/>
-      <h1 class="header-name">
-        <input class="header-name" name="name" type="text" value="{{item.name}}" placeholder="{{ localize 'Name' }}"/>
-      </h1>
-    {{else}}
-      <img src="{{item.img}}" title="{{item.name}}" height="64" width="64"/>
-      <h1>{{item.name}}</h1>
-    {{/if}}
+    <div class="flex flex-column flex-grow">
+      <div class="flex flex-row">
+        {{#if isEditable}}
+          <img src="{{item.img}}" data-edit="img" title="{{item.name}}" height="64" width="64"/>
+          <h1 class="header-name">
+            <input class="header-name" name="name" type="text" value="{{item.name}}" placeholder="{{ localize 'Name' }}"/>
+          </h1>
+        {{else}}
+          <img src="{{item.img}}" title="{{item.name}}" height="64" width="64"/>
+          <h1 class="flex flex-grow">{{item.name}}</h1>
+        {{/if}}
+      </div>
+      {{#if isSendable}}
+        <div class="flex-group-right">
+          <span class="ambersteel-item-to-chat-margin-right">
+            <a class="ambersteel-item-to-chat pad-sm button" data-item-id="{{item.id}}" title="{{localize ambersteel.labels.sendToChat}}">
+              <i class="fas fa-comments"></i>
+            </a>
+          </span>
+        </div>
+      {{/if}}
+    </div>
   </header>
   <div class="flex item-description">
     {{#if isEditable}}

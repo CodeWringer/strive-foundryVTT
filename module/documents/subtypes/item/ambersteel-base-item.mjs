@@ -31,6 +31,12 @@ export default class AmbersteelBaseItem {
    */
   get img() { return "icons/svg/item-bag.svg"; }
 
+    /**
+   * Chat message template path. 
+   * @type {String}
+   */
+  get chatMessageTemplate() { return "systems/ambersteel/templates/item/item-item-sheet.hbs"; }
+
   /**
    * Prepare base data for the item. 
    * 
@@ -60,10 +66,17 @@ export default class AmbersteelBaseItem {
    * Base implementation of returning data for a chat message, based on this item. 
    * @returns {PreparedChatData}
    * @virtual
+   * @async
    */
-  getChatData() {
+  async getChatData() {
     const actor = this.parent.parent;
-    return new PreparedChatData("", actor, undefined, "../sounds/notify.wav");
+    const renderedContent = await renderTemplate(this.chatMessageTemplate, {
+      item: this.parent,
+      isEditable: false,
+      isSendable: false
+    });
+
+    return new PreparedChatData(renderedContent, actor, "", "../sounds/notify.wav");
   }
 
   /**
