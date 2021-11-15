@@ -1,5 +1,4 @@
 import SkillAbility from "../dto/skill-ability.mjs";
-import SpellAbility from "../dto/spell-ability.mjs";
 import { showDialog } from "./dialog-utility.mjs";
 import { getNestedPropertyValue } from "./property-utility.mjs";
 import { getElementValue } from "./sheet-utility.mjs";
@@ -99,11 +98,6 @@ export async function sendPropertyToChat(args = {obj, propertyPath, parent, acto
     if (prop.type === "SkillAbility") {
       await SkillAbility.sendToChat({
         skillAbility: prop, 
-        ...args
-      });
-    } else if (prop.type === "SpellAbility") {
-      await SpellAbility.sendToChat({
-        spellAbility: prop,
         ...args
       });
     } else {
