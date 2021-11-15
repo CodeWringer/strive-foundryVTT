@@ -7,7 +7,8 @@
  */
 export function propertiesDefined(obj, props) {
     for (const prop of props) {
-        if (!obj[prop]) return false;
+        if (obj[prop] == undefined
+        || obj[prop] == null) return false;
     }
     return true;
 }
