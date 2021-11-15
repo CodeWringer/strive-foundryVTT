@@ -9,23 +9,23 @@ import PreparedChatData from './prepared-chat-data.mjs';
  * @property {String} name
  * @property {String} description
  * @property {Number} requiredLevel
- * @property {Number} apCost
  * @property {String} condition
  * @property {String} img
- * @property {Number} distance
- * @property {Number} damage
- * @property {CONFIG.ambersteel.damageTypes} damageType
+ * @property {Number|undefined} apCost
+ * @property {Number|undefined} distance
+ * @property {Number|undefined} damage
+ * @property {CONFIG.ambersteel.damageTypes|undefined} damageType
  */
 export default class SkillAbility {
   constructor(args = {
-    name: "New Skill Ability", 
-    description: "", 
-    requiredLevel: 0, 
-    apCost: 0, 
-    condition: "", 
+    name: "New Skill Ability",
+    description: "",
+    requiredLevel: 0,
+    condition: "",
     img: "icons/svg/item-book.svg",
-    distance: 0,
-    damage: 0,
+    apCost: undefined,
+    distance: undefined,
+    damage: undefined,
     damageType: undefined
   }) {
     this.type = "SkillAbility";
