@@ -86,7 +86,7 @@ export function queryVisibilityMode() {
  * @param {CONFIG.ambersteel.visibilityModes} args.visibilityMode Optional. Sets the visibility of the chat message. 
  * @async
  */
-export async function sendPropertyToChat(args = {obj, propertyPath, parent, actor, visibilityMode = CONFIG.ambersteel.visibilityModes.public}) {
+export async function sendPropertyToChat(args = {obj, propertyPath, parent, actor, visibilityMode: CONFIG.ambersteel.visibilityModes.public}) {
   validateOrThrow(args, ["obj", "propertyPath", "parent"]);
 
   const prop = getNestedPropertyValue(obj, propertyPath);

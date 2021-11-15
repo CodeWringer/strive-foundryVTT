@@ -1,5 +1,6 @@
 import * as SheetUtil from '../../../utils/sheet-utility.mjs';
 import { queryVisibilityMode } from "../../../utils/chat-utility.mjs";
+import { getNestedPropertyValue } from '../../../utils/property-utility.mjs';
 
 export default class AmbersteelBaseItemSheet {
   /**
@@ -59,6 +60,9 @@ export default class AmbersteelBaseItemSheet {
 
     // Send item to chat. 
     html.find(".ambersteel-item-to-chat").click(this._onItemSendToChat.bind(this));
+
+    // Send item property to chat.
+    html.find(".ambersteel-item-property-to-chat").click(this._onItemPropertySendToChat.bind(this));
 
     // -------------------------------------------------------------
     if (!isEditable) return;
@@ -152,6 +156,30 @@ export default class AmbersteelBaseItemSheet {
       const dialogResult = await queryVisibilityMode();
       if (dialogResult.confirmed) {
         await item.sendToChat(dialogResult.visibilityMode);
+      }
+    }
+  }
+
+  /**
+   * @param event 
+   * @private
+   */
+  async _onItemPropertySendToChat(event) {
+    event.preventDefault();
+
+    const item = this.getItem();
+    const propertyPath = event.currentTarget.dataset.property;
+    
+    if (keyboard.isDown("Shift")) {
+      await item.sendPropertyToChat(propertyPath, CONFIG.ambersteel.visibilityModes.public);
+    } else {
+      const dialogResult = await queryVisibilityMode();
+      if (dialogResult.confirmed) {
+        await item.sendPropertyToChat(propertyPath, {
+          parent: this.parent,
+          actor: this.parent.actor, 
+          visibilityMode: dialogResult.visibilityMode
+        });
       }
     }
   }

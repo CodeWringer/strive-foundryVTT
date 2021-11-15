@@ -739,7 +739,7 @@ div.message-content .fate-card-description {
   flex: 1;
 }
 
-.skill-column-roll, .skill-column-delete {
+.skill-column-roll, .skill-column-delete, .skill-column-button {
   max-width: 30px;
   width: 30px;
   text-align: center;
@@ -787,6 +787,12 @@ table.skill-ability-list .skill-ability-column-requirement {
 
 table.skill-ability-list .skill-ability-column-cost {
   width: 50px;
+}
+
+table.skill-ability-list .skill-ability-column-button {
+  max-width: 30px;
+  width: 30px;
+  text-align: center;
 }
 
 span.spinner-container {

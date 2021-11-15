@@ -1,0 +1,78 @@
+{{!-- Requires context:
+isEditable: {Boolean},
+isSendable: {Boolean},
+key: {Number},
+skillAbility: {Object} where Object = {
+  parentItemId: {String},
+  name: {String}
+  description: {String}
+  requiredLevel: {Number}
+  apCost: {Number}
+  condition: {String},
+  img: {String},
+}
+--}}
+<section class="spell-ability" data-item-id="{{parentItemId}}">
+  <div>
+    {{#if isSendable}}
+      <div class="spell-ability-col-button">
+        <a class="ambersteel-item-property-to-chat pad-sm button" data-item-id="{{parentItemId}}" data-property="data.data.abilities[{{key}}]" title="{{localize ambersteel.labels.sendToChat}}">
+          <i class="fas fa-comments"></i>
+        </a>
+      </div>
+    {{/if}}
+    <div class="spell-ability-col-name">
+      {{#if ../isEditable}}
+        <input class="ability-name ambersteel-item-edit" type="text" value="{{skillskillAbility.name}}" 
+          data-field="data.abilities[{{key}}].name" data-item-id="{{parentItemId}}" />
+      {{else}}
+        {{skillskillAbility.name}}
+      {{/if}}
+    </div>
+    <div class="spell-ability-col-description">
+      {{#if ../isEditable}}
+        <input class="ability-description ambersteel-item-edit" type="text" value="{{skillskillAbility.description}}"
+          data-field="data.abilities[{{key}}].description" data-item-id="{{parentItemId}}" />
+      {{else}}
+        {{skillskillAbility.description}}
+      {{/if}}
+    </div>
+    <div class="spell-ability-col-requirement">
+      {{#if ../isEditable}}
+        {{#> numberSpinner}}
+        <input class="ability-requirement ambersteel-item-edit" type="number" min="0" step="1" data-dtype="Number" value="{{skillAbility.requiredLevel}}"
+          data-field="data.abilities[{{key}}].requiredLevel" data-item-id="{{parentItemId}}" />
+        {{/numberSpinner}}
+      {{else}}
+        {{skillAbility.requiredLevel}}
+      {{/if}}
+    </div>
+    <div class="spell-ability-col-cost">
+      {{#if ../isEditable}}
+        {{#> numberSpinner}}
+        <input class="ability-cost ambersteel-item-edit" type="number" min="0" step="1" data-dtype="Number" value="{{skillAbility.apCost}}" 
+          data-field="data.abilities[{{key}}].apCost" data-item-id="{{parentItemId}}" />
+        {{/numberSpinner}}
+      {{else}}
+        {{skillAbility.apCost}}
+      {{/if}}
+    </div>
+    <div class="spell-ability-col-condition">
+      {{#if ../isEditable}}
+        <input class="ability-condition ambersteel-item-edit" type="text" value="{{skillAbility.condition}}" 
+          data-field="data.abilities[{{key}}].condition" data-item-id="{{parentItemId}}" />
+      {{else}}
+        {{skillAbility.condition}}
+      {{/if}}
+    </div>
+    <div class="spell-ability-col-delete">
+      {{#if ../isEditable}}
+        <td class="spell-ability-column-delete">
+          <a class="ambersteel-spell-ability-delete pad-sm button" data-item-id="{{parentItemId}}" data-index="{{key}}" title="{{localize ambersteel.labels.deleteSkillAbility}}">
+            <i class="fas fa-trash"></i>
+          </a>
+        </td>
+      {{/if}}
+    </div>
+  </div>
+</section>

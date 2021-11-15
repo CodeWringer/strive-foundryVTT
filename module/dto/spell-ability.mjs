@@ -68,7 +68,7 @@ export default class SpellAbility {
    * @async
    * @virtual
    */
-  static async sendToChat(args = {spellAbility, parentSkillItem, actor, visibilityMode = CONFIG.ambersteel.visibilityModes.public}) {
+  static async sendToChat(args = {spellAbility, parentSkillItem, actor, visibilityMode: CONFIG.ambersteel.visibilityModes.public}) {
     validateOrThrow(args, ["spellAbility", "parentSkillItem"]);
 
     const chatData = await spellAbility.getChatData(args);

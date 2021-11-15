@@ -68,7 +68,7 @@ export default class SkillAbility {
    * @async
    * @virtual
    */
-  static async sendToChat(args = {skillAbility, parentSkillItem, actor, visibilityMode = CONFIG.ambersteel.visibilityModes.public}) {
+  static async sendToChat(args = {skillAbility, parentSkillItem, actor, visibilityMode: CONFIG.ambersteel.visibilityModes.public}) {
     validateOrThrow(args, ["skillAbility", "parentSkillItem"]);
 
     const chatData = await SkillAbility.getChatData(args);

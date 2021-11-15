@@ -20,6 +20,7 @@ export default class AmbersteelBaseItem {
 
     this.parent.getChatData = this.getChatData.bind(this);
     this.parent.sendToChat = this.sendToChat.bind(this);
+    this.parent.sendPropertyToChat = this.sendPropertyToChat.bind(this);
     this.parent.updateProperty = this.updateProperty.bind(this);
   }
 
@@ -62,7 +63,7 @@ export default class AmbersteelBaseItem {
    */
   getChatData() {
     const actor = this.parent.parent;
-    return new PreparedChatData(actor, undefined, "", "../sounds/notify.wav");
+    return new PreparedChatData("", actor, undefined, "../sounds/notify.wav");
   }
 
   /**
@@ -77,6 +78,16 @@ export default class AmbersteelBaseItem {
       visibilityMode: visibilityMode,
       ...chatData
     });
+  }
+
+  /**
+   * Sends a property of this item to chat, based on the given property path. 
+   * @param {String} propertyPath 
+   * @param {CONFIG.ambersteel.visibilityModes} visibilityMode 
+   * @async
+   */
+  async sendPropertyToChat(propertyPath, visibilityMode = CONFIG.ambersteel.visibilityModes.public) {
+    await ChatUtil.sendPropertyToChat(this.parent, propertyPath, visibilityMode);
   }
 
   /**

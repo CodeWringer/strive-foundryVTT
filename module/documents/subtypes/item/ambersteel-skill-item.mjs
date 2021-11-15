@@ -127,7 +127,7 @@ export default class AmbersteelSkillItem extends AmbersteelBaseItem {
    */
   async createSkillAbility() {
     const abilities = this.parent.data.data.abilities.concat(
-      [new SkillAbility("New Skill Ability", "", 0, 0, "")]
+      [new SkillAbility("New Skill Ability", "", 0, 0, "", "")]
     );
     await this.updateProperty("data.abilities", abilities);
   }

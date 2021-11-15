@@ -49,7 +49,7 @@ $width-column-xl: 80px;
         flex: 1;
     }
     
-    &-roll, &-delete {
+    &-roll, &-delete, &-button {
         max-width: $width-column-sm;
         width: $width-column-sm;
         text-align: center;
@@ -98,6 +98,12 @@ table.skill-ability-list {
 
         &-cost {
             width: $width-column-md;
+        }
+
+        &-button {
+            max-width: $width-column-sm;
+            width: $width-column-sm;
+            text-align: center;
         }
     }
 }

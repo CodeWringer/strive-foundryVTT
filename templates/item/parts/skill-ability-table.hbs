@@ -14,19 +14,25 @@ abilities: {[SkillAbility]} where SkillAbility = {
   <table class="skill-ability-list">
     <theader>
       <tr>
+        <th class="skill-ability-column-button"></th>
         <th class="skill-ability-column-name">{{localize "ambersteel.labels.name"}}</th>
         <th class="skill-ability-column-description">{{localize "ambersteel.labels.description"}}</th>
         <th class="skill-ability-column-requirement">{{localize "ambersteel.labels.skillAbilityRequirement"}}</th>
         <th class="skill-ability-column-cost">{{localize "ambersteel.labels.apCost"}}</th>
         <th class="skill-ability-column-condition">{{localize "ambersteel.labels.skillAbilityCondition"}}</th>
         {{#if isEditable}}
-          <th class="skill-ability-column-delete"></th>
+          <th class="skill-ability-column-button"></th>
         {{/if}}
       </tr>
     </theader>
     <tbody>
       {{#each abilities as |ability key|}}
       <tr>
+        <td>
+          <a class="ambersteel-item-property-to-chat pad-sm button" data-item-id="{{../skillItemId}}" data-property="data.data.abilities[{{key}}]" title="{{localize ambersteel.labels.sendToChat}}">
+            <i class="fas fa-comments"></i>
+          </a>
+        </td>
         <td class="skill-ability-column-name">
           {{#if ../isEditable}}
           <input class="ability-name ambersteel-item-edit" type="text" value="{{ability.name}}" 
