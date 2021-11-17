@@ -1,4 +1,4 @@
-// Flexbox.
+// Layout styling. 
 .flex {
   display: flex;
 }
@@ -13,32 +13,17 @@
   flex-wrap: wrap;
 }
 
+.flex-between {
+  justify-content: space-between;
+}
+
+// Sizing styles. 
 .flex-grow {
   flex: 1;
 }
 
-.flex-group-center {
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
-
-.flex-group-left {
-  justify-content: flex-start;
-  text-align: left;
-}
-
-.flex-group-right {
-  justify-content: flex-end;
-  text-align: right;
-}
-
-.flexshrink {
+.flex-shrink {
   flex: 0;
-}
-
-.flex-between {
-  justify-content: space-between;
 }
 
 .flexlarge {
@@ -46,17 +31,20 @@
 }
 
 // Alignment styles.
-.align-left {
+.flex-children-left {
   justify-content: flex-start;
+  align-items: flex-start;
   text-align: left;
 }
 
-.align-right {
+.flex-children-right {
   justify-content: flex-end;
+  align-items: flex-end;
   text-align: right;
 }
 
-.align-center {
+.flex-children-center {
   justify-content: center;
+  align-items: center;
   text-align: center;
 }
