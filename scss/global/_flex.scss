@@ -1,23 +1,21 @@
-// Layout styling. 
+// Layout styles
 .flex {
   display: flex;
 }
 
 .flex-row {
   flex-direction: row;
-  flex-wrap: wrap;
 }
 
 .flex-column {
   flex-direction: column;
+}
+
+.flex-wrap {
   flex-wrap: wrap;
 }
 
-.flex-between {
-  justify-content: space-between;
-}
-
-// Sizing styles. 
+// Sizing styles
 .flex-grow {
   flex: 1;
 }
@@ -30,7 +28,7 @@
   flex: 2;
 }
 
-// Alignment styles.
+// Alignment styles
 .flex-left {
   justify-content: flex-start;
   align-items: flex-start;
@@ -47,4 +45,8 @@
   justify-content: center;
   align-items: center;
   text-align: center;
+}
+
+.flex-between {
+  justify-content: space-between;
 }

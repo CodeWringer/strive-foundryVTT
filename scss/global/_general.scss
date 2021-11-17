@@ -1,0 +1,57 @@
+.hidden {
+  display: none;
+}
+
+.multiline {
+  word-wrap: break-word;
+}
+
+.line-height {
+  height: $line-height;
+  line-height: 1;
+  font-size: $font-size-default;
+}
+
+// Padding styles
+.pad-sm {
+  padding: $padding-sm;
+}
+
+.pad-md {
+  padding: $padding-md;
+}
+
+.pad-lg {
+  padding: $padding-lg;
+}
+
+// General sizing styles
+.fill {
+  width: 100%;
+  height: 100%;
+}
+
+.width-xs {
+  max-width: $width-column-xs;
+  width: $width-column-xs;
+}
+
+.width-sm {
+  max-width: $width-column-sm;
+  width: $width-column-sm;
+}
+
+.width-md {
+  max-width: $width-column-md;
+  width: $width-column-md;
+}
+
+.width-lg {
+  max-width: $width-column-lg;
+  width: $width-column-lg;
+}
+
+.width-xl {
+  max-width: $width-column-xl;
+  width: $width-column-xl;
+}

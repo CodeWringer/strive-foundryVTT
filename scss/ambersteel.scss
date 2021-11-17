@@ -9,7 +9,6 @@
 // Import utilities.
 @import 'utils/typography';
 @import 'utils/colors';
-@import 'utils/mixins';
 @import 'utils/variables';
 
 /* Global styles */
@@ -17,6 +16,7 @@
 @import 'global/grid';
 @import 'global/flex';
 @import 'global/roll';
+@import 'global/general';
 
 /* Components */
 @import 'components/forms';
@@ -26,3 +26,4 @@
 @import 'components/spinner';
 @import 'components/biography';
 @import 'components/gm';
+@import 'components/list';

@@ -13,6 +13,10 @@
   font-family: "Roboto", sans-serif;
 }
 
+.secondary-font {
+  font-family: "Roboto", sans-serif;
+}
+
 /* Global styles */
 .window-app {
   font-family: "Roboto", sans-serif;
@@ -187,8 +191,6 @@ header.message-header span.flavor-text {
   -webkit-box-direction: normal;
   -ms-flex-direction: row;
   flex-direction: row;
-  -ms-flex-wrap: wrap;
-  flex-wrap: wrap;
 }
 
 .flex-column {
@@ -196,6 +198,9 @@ header.message-header span.flavor-text {
   -webkit-box-direction: normal;
   -ms-flex-direction: column;
   flex-direction: column;
+}
+
+.flex-wrap {
   -ms-flex-wrap: wrap;
   flex-wrap: wrap;
 }
@@ -206,7 +211,39 @@ header.message-header span.flavor-text {
   flex: 1;
 }
 
-.flex-group-center {
+.flex-shrink {
+  -webkit-box-flex: 0;
+  -ms-flex: 0;
+  flex: 0;
+}
+
+.flexlarge {
+  -webkit-box-flex: 2;
+  -ms-flex: 2;
+  flex: 2;
+}
+
+.flex-left {
+  -webkit-box-pack: start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+  -webkit-box-align: start;
+  -ms-flex-align: start;
+  align-items: flex-start;
+  text-align: left;
+}
+
+.flex-right {
+  -webkit-box-pack: end;
+  -ms-flex-pack: end;
+  justify-content: flex-end;
+  -webkit-box-align: end;
+  -ms-flex-align: end;
+  align-items: flex-end;
+  text-align: right;
+}
+
+.flex-center {
   -webkit-box-pack: center;
   -ms-flex-pack: center;
   justify-content: center;
@@ -216,57 +253,10 @@ header.message-header span.flavor-text {
   text-align: center;
 }
 
-.flex-group-left {
-  -webkit-box-pack: start;
-  -ms-flex-pack: start;
-  justify-content: flex-start;
-  text-align: left;
-}
-
-.flex-group-right {
-  -webkit-box-pack: end;
-  -ms-flex-pack: end;
-  justify-content: flex-end;
-  text-align: right;
-}
-
-.flexshrink {
-  -webkit-box-flex: 0;
-  -ms-flex: 0;
-  flex: 0;
-}
-
 .flex-between {
   -webkit-box-pack: justify;
   -ms-flex-pack: justify;
   justify-content: space-between;
-}
-
-.flexlarge {
-  -webkit-box-flex: 2;
-  -ms-flex: 2;
-  flex: 2;
-}
-
-.align-left {
-  -webkit-box-pack: start;
-  -ms-flex-pack: start;
-  justify-content: flex-start;
-  text-align: left;
-}
-
-.align-right {
-  -webkit-box-pack: end;
-  -ms-flex-pack: end;
-  justify-content: flex-end;
-  text-align: right;
-}
-
-.align-center {
-  -webkit-box-pack: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-  text-align: center;
 }
 
 .dice-rolls-container {
@@ -330,11 +320,63 @@ li.roll.die.d6.roll-success {
   background-color: #0082072e;
 }
 
-/* Components */
-.item-form {
-  font-family: "Roboto", sans-serif;
+.hidden {
+  display: none;
 }
 
+.multiline {
+  word-wrap: break-word;
+}
+
+.line-height {
+  height: 30px;
+  line-height: 1;
+  font-size: 18px;
+}
+
+.pad-sm {
+  padding: 2px;
+}
+
+.pad-md {
+  padding: 5px;
+}
+
+.pad-lg {
+  padding: 10px;
+}
+
+.fill {
+  width: 100%;
+  height: 100%;
+}
+
+.width-xs {
+  max-width: 20px;
+  width: 20px;
+}
+
+.width-sm {
+  max-width: 30px;
+  width: 30px;
+}
+
+.width-md {
+  max-width: 50px;
+  width: 50px;
+}
+
+.width-lg {
+  max-width: 60px;
+  width: 60px;
+}
+
+.width-xl {
+  max-width: 80px;
+  width: 80px;
+}
+
+/* Components */
 header.sheet-header {
   -webkit-box-flex: 0;
   -ms-flex: 0 auto;
@@ -395,60 +437,15 @@ h1.header-name input.header-name {
   background-color: rgba(0, 0, 0, 0.05);
 }
 
-.tox .tox-editor-container {
-  background: #fff;
-}
-
-.tox .tox-edit-area {
-  padding: 0 8px;
-}
-
-.line-height {
-  height: 30px;
-  line-height: 1;
-  font-size: 18px;
-}
-
-.pad-sm {
-  padding: 2px;
-}
-
-.pad-md {
-  padding: 5px;
-}
-
-.pad-lg {
-  padding: 10px;
-}
-
-.input-slim {
-  max-width: 40px;
-  width: 40px;
-}
-
 a.button {
-  padding: 2px;
-}
-
-a.full-button {
-  padding: 2px;
+  padding: 0;
+  margin: 0;
   width: 100%;
-  display: inline-block;
-  border: 1px solid rgba(129, 129, 129, 0.22);
-  border-radius: 3px;
-  text-align: center;
-}
-
-.resize-vertical {
-  resize: vertical;
+  height: 100%;
 }
 
 .roll-button {
   font-size: 1.2rem;
-}
-
-.hidden {
-  display: none;
 }
 
 textarea {
@@ -456,13 +453,8 @@ textarea {
   font-family: "Roboto", sans-serif;
 }
 
-.fill {
-  width: 100%;
-  height: 100%;
-}
-
-.multiline {
-  word-wrap: break-word;
+textarea.resize-vertical {
+  resize: vertical;
 }
 
 .ambersteel-item-to-chat-margin-right {
@@ -844,4 +836,11 @@ textarea.gm-notes {
   height: 100%;
   resize: none;
   overflow-x: hidden;
+}
+
+.unstyled-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: block;
 }
