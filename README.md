@@ -24,7 +24,11 @@ This is the Ambersteel table-top role-playing game system for FoundryVTT.
     * [ ] Deduct cost
   * [X] Removing a fate card
   * [ ] Limit
-* [ ] Rework skill table and skill ability table
+* [X] Rework skill ability table
+* [ ] Check if optional arguments work correctly (everywhere)
+* [ ] Extract button components
+* [ ] Check if every sendToChat call is correct
+* [ ] Rework skill table?
 * [ ] Update attributes to current ruleset
   * [ ] Remove "Magic Sense"
   * [ ] Move "Arcana" to "Mental Attributes"
