@@ -4,7 +4,7 @@ $font-fancy: 'Black-Chancery';
 
 .fancy-font {
     font-family: $font-fancy;
-    font-size: 13pt;
+    font-size: 1rem;
 }
 
 .primary-font {
@@ -13,4 +13,16 @@ $font-fancy: 'Black-Chancery';
 
 .secondary-font {
     font-family: $font-secondary;
+}
+
+.text-align {
+    &-l {
+        text-align: left;
+    }
+    &-r {
+        text-align: right;
+    }
+    &-c {
+        text-align: center;
+    }
 }

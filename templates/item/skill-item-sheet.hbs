@@ -59,8 +59,8 @@ item: {Item} where Item = {
     skillItemId=item.id 
     abilities=item.data.data.abilities }}
   </div>
-  <div>
-    <a class="ambersteel-expand-skill-ability-list full-button pad-sm button"
+  <div class="ambersteel-expand-skill-ability-list-container">
+    <a class="ambersteel-expand-skill-ability-list pad-sm button flex flex-center"
       title="{{localize ambersteel.labels.expandSkillAbilityList}}">
       {{#if item.data.data.isExpanded}}
         <i class="fas fa-angle-double-up"></i>

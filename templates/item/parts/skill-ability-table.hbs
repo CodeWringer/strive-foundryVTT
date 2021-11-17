@@ -10,115 +10,155 @@ abilities: {[SkillAbility]} where skillAbility: {Object} where Object = {
   img: {String}
   apCost: {Number|undefined}
   distance: {Number|undefined}
-  damage: {Number|undefined}
+  damageFormula: {String}
   damageType: {CONFIG.ambersteel.damageTypes|undefined}
 }
 --}}
 <section class="skill-ability-list">
-  <ol class="ambersteel-list-container">
-    <li class="ambersteel-list-row ambersteel-list-header">
-      <span class="ambersteel-list-column-button"></span>
-      <span class="ambersteel-list-column-name">{{localize "ambersteel.labels.name"}}</span>
-      <span class="ambersteel-list-column-requirement">{{localize "ambersteel.labels.requirement"}}</span>
-      <span class="ambersteel-list-column-cost">{{localize "ambersteel.labels.cost"}}</span>
-      <span class="ambersteel-list-column-distance">{{localize "ambersteel.labels.distance"}}</span>
-      <span class="ambersteel-list-column-damage">{{localize "ambersteel.labels.damage"}}</span>
-      <span class="ambersteel-list-column-attackType">{{localize "ambersteel.labels.attackType"}}</span>
-      <span class="ambersteel-list-column-condition">{{localize "ambersteel.labels.condition"}}</span>
-      {{#if isEditable}}
-        <span class="ambersteel-list-column-button"></span>
-      {{/if}}
-    </li>
+  <ol class="unstyled-list alternating-rows">
     {{#each abilities as |ability key|}}
-      <li class="ambersteel-list-row">
-        <div class="ambersteel-list-row-sub-row">
-          <span class="ambersteel-list-column-button">
-            <a class="ambersteel-item-property-to-chat pad-sm button" 
-              data-item-id="{{../skillItemId}}" 
-              data-property="data.data.abilities[{{key}}]" 
+      <li class="ambersteel-list-row sheet-block">
+        <div class="flex flex-row">
+          {{!-- Send to chat --}}
+          <span class="width-sm">
+            <a class="ambersteel-item-property-to-chat pad-sm button flex flex-center" 
+              data-item-id="{{../skillItemId}}" data-property="data.data.abilities[{{key}}]" 
               title="{{localize ambersteel.labels.sendToChat}}">
               <i class="fas fa-comments"></i>
             </a>
           </span>
-          <span class="ambersteel-list-column-name">
+          {{!-- Name --}}
+          <span class="ambersteel-list-column ambersteel-list-column-name flex flex-grow">
+            <label class="fancy-font pad-sm width-min-lg" for="data.abilities[{{key}}].name">{{localize "ambersteel.labels.name"}}</label>
             {{#if ../isEditable}}
-            <input class="ability-name ambersteel-item-edit" type="text" value="{{ability.name}}" 
+            <input id="data.abilities[{{key}}].name" class="ability-name ambersteel-item-edit flex-grow" type="text" value="{{ability.name}}" 
               data-field="data.abilities[{{key}}].name" data-item-id="{{../skillItemId}}" />
             {{else}}
               {{ability.name}}
             {{/if}}
           </span>
-          <span class="ambersteel-list-column-requirement">
-            {{#if ../isEditable}}
-              {{#> numberSpinner}}
-              <input class="ability-requirement ambersteel-item-edit" type="number" min="0" step="1" data-dtype="Number" value="{{ability.requiredLevel}}"
-                data-field="data.abilities[{{key}}].requiredLevel" data-item-id="{{../skillItemId}}" />
-              {{/numberSpinner}}
-            {{else}}
-              {{ability.requiredLevel}}
-            {{/if}}
-          </span>
-          <span class="ambersteel-list-column-cost">
-            {{#if ../isEditable}}
-              {{#> numberSpinner}}
-              <input class="ability-cost ambersteel-item-edit" type="number" min="0" step="1" data-dtype="Number" value="{{ability.apCost}}" 
-                data-field="data.abilities[{{key}}].apCost" data-item-id="{{../skillItemId}}" />
-              {{/numberSpinner}}
-            {{else}}
-              {{ability.apCost}}
-            {{/if}}
-          </span>
-          <span class="ambersteel-list-column-distance">
-            {{#if ../isEditable}}
-              {{#> numberSpinner}}
-              <input class="ability-distance ambersteel-item-edit" type="number" min="0" step="1" data-dtype="Number" value="{{ability.distance}}" 
-                data-field="data.abilities[{{key}}].distance" data-item-id="{{../skillItemId}}" />
-              {{/numberSpinner}}
-            {{else}}
-              {{ability.distance}}
-            {{/if}}
-          </span>
-          <span class="ambersteel-list-column-damage">
-            {{#if ../isEditable}}
-              {{#> numberSpinner}}
-              <input class="ability-damage ambersteel-item-edit" type="number" min="0" step="1" data-dtype="Number" value="{{ability.damage}}" 
-                data-field="data.abilities[{{key}}].damage" data-item-id="{{../skillItemId}}" />
-              {{/numberSpinner}}
-            {{else}}
-              {{ability.damage}}
-            {{/if}}
-          </span>
-          <span class="ambersteel-list-column-attackType">
-            {{#if ../isEditable}}
-              {{#> numberSpinner}}
-              <input class="ability-attackType ambersteel-item-edit" type="number" min="0" step="1" data-dtype="Number" value="{{ability.attackType}}" 
-                data-field="data.abilities[{{key}}].attackType" data-item-id="{{../skillItemId}}" />
-              {{/numberSpinner}}
-            {{else}}
-              {{ability.attackType}}
-            {{/if}}
-          </span>
-          <span class="ambersteel-list-column-condition">
-            {{#if ../isEditable}}
-              <input class="ability-condition ambersteel-item-edit" type="text" value="{{ability.condition}}" 
-                    data-field="data.abilities[{{key}}].condition" data-item-id="{{../skillItemId}}" />
-            {{else}}
-              {{ability.condition}}
-            {{/if}}
-          </span>
-          <span class="ambersteel-list-column-button">
-            <a class="ambersteel-skill-ability-delete pad-sm button" 
-              data-item-id="{{../skillItemId}}" 
-              data-index="{{key}}" 
+          {{!-- Delete --}}
+          <span class="width-sm">
+            <a class="ambersteel-skill-ability-delete pad-sm button flex flex-center" 
+              data-item-id="{{../skillItemId}}" data-index="{{key}}" 
               title="{{localize ambersteel.labels.deleteSkillAbility}}">
               <i class="fas fa-trash"></i>
             </a>
           </span>
         </div>
-        <div class="ambersteel-list-row-sub-row">
+        <div class="flex flex-row">
+          {{!-- At level --}}
+          <span class="flex flex-row">
+            <label class="fancy-font pad-sm width-min-xl text-align-r" for="data.abilities[{{key}}].requiredLevel">
+              {{localize "ambersteel.labels.skillAbilityRequirement"}}
+            </label>
+            <span class="width-md">
+              {{#if ../isEditable}}
+                {{#> numberSpinner}}
+                <input id="data.abilities[{{key}}].requiredLevel" class="ability-requirement ambersteel-item-edit" 
+                  type="number" min="0" step="1" data-dtype="Number" value="{{ability.requiredLevel}}"
+                  data-field="data.abilities[{{key}}].requiredLevel" data-item-id="{{../skillItemId}}" />
+                {{/numberSpinner}}
+              {{else}}
+                {{ability.requiredLevel}}
+              {{/if}}
+            </span>
+          </span>
+          {{!-- AP cost --}}
+          <span class="flex flex-row">
+            <label class="fancy-font pad-sm width-min-xl text-align-r" for="data.abilities[{{key}}].apCost">
+              {{localize "ambersteel.labels.apCost"}}
+            </label>
+            <span class="width-lg">
+              {{#if ../isEditable}}
+                {{#> numberSpinner}}
+                <input class="ability-cost ambersteel-item-edit" type="number" min="0" step="1" data-dtype="Number" value="{{ability.apCost}}" 
+                  data-field="data.abilities[{{key}}].apCost" data-item-id="{{../skillItemId}}" />
+                {{/numberSpinner}}
+              {{else}}
+                {{ability.apCost}}
+              {{/if}}
+            </span>
+          </span>
+          {{!-- Condition --}}
+          <span class="flex flex-row flex-grow">
+            <label class="fancy-font pad-sm width-min-xl text-align-r" for="data.abilities[{{key}}].condition">
+              {{localize "ambersteel.labels.skillAbilityCondition"}}
+            </label>
+            <span class="width-min-lg flex-grow">
+              {{#if ../isEditable}}
+                <input class="ability-condition ambersteel-item-edit" type="text" value="{{ability.condition}}" 
+                      data-field="data.abilities[{{key}}].condition" data-item-id="{{../skillItemId}}" />
+              {{else}}
+                {{ability.condition}}
+              {{/if}}
+            </span>
+          </span>
+        </div>
+        <div class="flex flex-row">
+          {{!-- Distance --}}
+          <span class="flex flex-row">
+            <label class="fancy-font pad-sm width-min-xl text-align-r" for="data.abilities[{{key}}].distance">
+              {{localize "ambersteel.labels.distance"}}
+            </label>
+            <span class="width-md">
+              {{#if ../isEditable}}
+                {{#> numberSpinner}}
+                <input class="ability-distance ambersteel-item-edit" type="number" min="0" step="1" data-dtype="Number" value="{{ability.distance}}" 
+                  data-field="data.abilities[{{key}}].distance" data-item-id="{{../skillItemId}}" />
+                {{/numberSpinner}}
+              {{else}}
+                {{ability.distance}}
+              {{/if}}
+            </span>
+          </span>
+          {{!-- Attack type --}}
+          <span class="flex flex-row">
+            <label class="fancy-font pad-sm width-min-xl text-align-r" for="data.abilities[{{key}}].attackType">
+              {{localize "ambersteel.labels.attackType"}}
+            </label>
+            <span class="width-lg">
+              {{#if ../isEditable}}
+                <select class="ambersteel-item-edit" data-field="data.abilities[{{key}}].attackType">
+                  {{#select skillAbility.attackType}}
+                  {{#each ../CONFIG.attackTypes as | attackType |}}
+                  <option value="{{attackType.name}}">{{localize attackType.localizableAbbreviation}}</option>
+                  {{/each}}
+                  {{/select}}
+                </select>
+              {{else}}
+                {{localize ability.attackType.localizableAbbreviation}}
+              {{/if}}
+            </span>
+          </span>
+          {{!-- Damage formula --}}
+          <span class="flex flex-row flex-grow">
+            <label class="fancy-font pad-sm width-min-xl text-align-r" for="data.abilities[{{key}}].damageFormula">
+              {{localize "ambersteel.labels.damage"}}
+            </label>
+            <span class="width-sm">
+              <a class="ambersteel-property-roll roll-button pad-sm button flex flex-center" 
+                data-item-id="{{../skillItemId}}" data-property="data.data.abilities[{{key}}].damageFormula" 
+                title="{{localize ambersteel.labels.roll}}">
+                <i class="fas fa-dice-three"></i>
+              </a>
+            </span>
+            <span class="width-md flex-grow">
+              {{#if ../isEditable}}
+                <input class="ability-damage ambersteel-item-edit" type="text" value="{{ability.damageFormula}}" 
+                  data-field="data.abilities[{{key}}].damageFormula" data-item-id="{{../skillItemId}}" />
+              {{else}}
+                {{ability.damageFormula}}
+              {{/if}}
+            </span>
+          </span>
+        </div>
+        {{!-- Description --}}
+        <div class="flex flex-row">
           {{#if ../isEditable}}
-          <input class="ability-description ambersteel-item-edit" type="text" value="{{ability.description}}"
-            data-field="data.abilities[{{key}}].description" data-item-id="{{../skillItemId}}" />
+          <textarea class="resize-vertical ability-description ambersteel-item-edit" 
+            spellcheck="false"
+            data-field="data.abilities[{{key}}].description" data-item-id="{{../skillItemId}}">{{ability.description}}</textarea>
           {{else}}
             {{ability.description}}
           {{/if}}
@@ -127,13 +167,16 @@ abilities: {[SkillAbility]} where skillAbility: {Object} where Object = {
     {{/each}}
     {{#if isEditable}}
       <li class="ambersteel-list-row ambersteel-list-footer">
-        <div class="flex">
+        <div class="fill flex flex-row">
           <span class="flex-grow"></span>
-          <a class="ambersteel-skill-ability-create pad-sm" 
-            title="{{localize ambersteel.labels.addSkillAbility}}"
-            data-item-id="{{skillItemId}}">
-            <i class="fas fa-plus"></i>
-          </a>
+          {{!-- Add skill ability --}}
+          <span class="width-sm">
+            <a class="ambersteel-skill-ability-create pad-sm button flex flex-center" 
+              title="{{localize ambersteel.labels.addSkillAbility}}"
+              data-item-id="{{skillItemId}}">
+              <i class="fas fa-plus"></i>
+            </a>
+          </span>
         </div>
       </li>
     {{/if}}

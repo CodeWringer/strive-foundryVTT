@@ -6,7 +6,11 @@ $border-groove: 2px groove #eeede0;
 
 $line-height: 30px;
 
-$font-size-default: 18px;
+$font-size-default: 1rem;
+$font-size-md: 1.1rem;
+$font-size-lg: 1.2rem;
+$font-size-xl: 1.4rem;
+$font-size-xxl: 1.6rem;
 
 // Column widths
 $width-column-xs: 20px;
@@ -14,3 +18,4 @@ $width-column-sm: 30px;
 $width-column-md: 50px;
 $width-column-lg: 60px;
 $width-column-xl: 80px;
+$width-column-xxl: 100px;

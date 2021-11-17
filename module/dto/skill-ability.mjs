@@ -13,7 +13,7 @@ import PreparedChatData from './prepared-chat-data.mjs';
  * @property {String} img
  * @property {Number|undefined} apCost
  * @property {Number|undefined} distance
- * @property {Number|undefined} damage
+ * @property {String} damageFormula
  * @property {CONFIG.ambersteel.damageTypes|undefined} damageType
  * @property {CONFIG.ambersteel.attackTypes|undefined} attackType
  */
@@ -26,7 +26,7 @@ export default class SkillAbility {
     img: "icons/svg/item-book.svg",
     apCost: 0,
     distance: 0,
-    damage: 0,
+    damageFormula: "1D6",
     damageType: CONFIG.ambersteel.damageTypes.slashing,
     attackType: CONFIG.ambersteel.attackTypes.singleTarget,
   }) {
@@ -39,7 +39,7 @@ export default class SkillAbility {
     this.condition = args.condition;
     this.img = args.img;
     this.distance = args.distance;
-    this.damage = args.damage;
+    this.damageFormula = args.damageFormula;
     this.damageType = args.damageType;
     this.attackType = args.attackType;
   }
@@ -48,7 +48,7 @@ export default class SkillAbility {
    * Chat message template path. 
    * @type {String}
    */
-  static get chatMessageTemplate() { return "systems/ambersteel/templates/item/parts/skill-ability.hbs"; }
+  static get chatMessageTemplate() { return "systems/ambersteel/templates/chat/chat-skill-ability.hbs"; }
 
   /**
    * Returns prepared chat data for the given skill ability. 
@@ -74,7 +74,7 @@ export default class SkillAbility {
         apCost: args.skillAbility.apCost,
         condition: localizedCondition,
         distance: args.skillAbility.distance,
-        damage: args.skillAbility.damage,
+        damageFormula: args.skillAbility.damageFormula,
         damageType: args.skillAbility.damageType,
         attackType: args.skillAbility.attackType,
       },

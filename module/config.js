@@ -45,9 +45,21 @@ ambersteel.damageTypes = {
 }
 
 ambersteel.attackTypes = {
-    singleTarget: "ambersteel.attackTypes.singleTarget",
-    areaOfEffect: "ambersteel.attackTypes.areaOfEffect",
-    multipleSingleTarget: "ambersteel.attackTypes.multipleSingleTarget",
+    singleTarget: {
+        name: "singleTarget",
+        localizableName: "ambersteel.attackTypes.singleTarget",
+        localizableAbbreviation: "ambersteel.attackTypes.singleTargetAbbreviation"
+    },
+    areaOfEffect: {
+        name: "areaOfEffect",
+        localizableName: "ambersteel.attackTypes.areaOfEffect",
+        localizableAbbreviation: "ambersteel.attackTypes.areaOfEffectAbbreviation"
+    },
+    multipleSingleTarget: {
+        name: "multipleSingleTarget",
+        localizableName: "ambersteel.attackTypes.multipleSingleTarget",
+        localizableAbbreviation: "ambersteel.attackTypes.multipleSingleTargetAbbreviation"
+    }
 }
 
 ambersteel.character = {

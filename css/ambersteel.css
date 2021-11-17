@@ -6,7 +6,7 @@
 
 .fancy-font {
   font-family: "Black-Chancery";
-  font-size: 13pt;
+  font-size: 1rem;
 }
 
 .primary-font {
@@ -15,6 +15,18 @@
 
 .secondary-font {
   font-family: "Roboto", sans-serif;
+}
+
+.text-align-l {
+  text-align: left;
+}
+
+.text-align-r {
+  text-align: right;
+}
+
+.text-align-c {
+  text-align: center;
 }
 
 /* Global styles */
@@ -230,7 +242,6 @@ header.message-header span.flavor-text {
   -webkit-box-align: start;
   -ms-flex-align: start;
   align-items: flex-start;
-  text-align: left;
 }
 
 .flex-right {
@@ -240,7 +251,6 @@ header.message-header span.flavor-text {
   -webkit-box-align: end;
   -ms-flex-align: end;
   align-items: flex-end;
-  text-align: right;
 }
 
 .flex-center {
@@ -250,7 +260,6 @@ header.message-header span.flavor-text {
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
-  text-align: center;
 }
 
 .flex-between {
@@ -331,7 +340,7 @@ li.roll.die.d6.roll-success {
 .line-height {
   height: 30px;
   line-height: 1;
-  font-size: 18px;
+  font-size: 1rem;
 }
 
 .pad-sm {
@@ -349,31 +358,80 @@ li.roll.die.d6.roll-success {
 .fill {
   width: 100%;
   height: 100%;
+  min-width: inherit;
+  min-height: inherit;
 }
 
 .width-xs {
-  max-width: 20px;
   width: 20px;
 }
 
 .width-sm {
-  max-width: 30px;
   width: 30px;
 }
 
 .width-md {
-  max-width: 50px;
   width: 50px;
 }
 
 .width-lg {
-  max-width: 60px;
   width: 60px;
 }
 
 .width-xl {
-  max-width: 80px;
   width: 80px;
+}
+
+.width-xxl {
+  width: 100px;
+}
+
+.width-min-xs {
+  min-width: 20px;
+}
+
+.width-min-sm {
+  min-width: 30px;
+}
+
+.width-min-md {
+  min-width: 50px;
+}
+
+.width-min-lg {
+  min-width: 60px;
+}
+
+.width-min-xl {
+  min-width: 80px;
+}
+
+.width-min-xxl {
+  min-width: 100px;
+}
+
+.width-max-xs {
+  max-width: 20px;
+}
+
+.width-max-sm {
+  max-width: 30px;
+}
+
+.width-max-md {
+  max-width: 50px;
+}
+
+.width-max-lg {
+  max-width: 60px;
+}
+
+.width-max-xl {
+  max-width: 80px;
+}
+
+.width-max-xxl {
+  max-width: 100px;
 }
 
 /* Components */
@@ -843,4 +901,35 @@ textarea.gm-notes {
   margin: 0;
   padding: 0;
   display: block;
+}
+
+.ambersteel-list-row {
+  margin-top: 2px;
+}
+
+.ambersteel-list-row.ambersteel-list-footer {
+  width: 100%;
+  display: block;
+  min-height: 26px;
+  margin-top: unset;
+}
+
+.alternating-rows > :nth-child(even) {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.alternating-rows > :nth-child(odd) {
+  background-color: rgba(0, 0, 0, 0.08);
+}
+
+.ambersteel-expand-skill-ability-list-container {
+  display: block;
+  width: 100%;
+  height: 26px;
+}
+
+a.ambersteel-expand-skill-ability-list {
+  border-radius: 3px;
+  border: 1px rgba(129, 129, 129, 0.22) solid;
+  background-color: rgba(0, 0, 0, 0.05);
 }

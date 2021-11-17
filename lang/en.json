@@ -118,7 +118,7 @@
       "skillAbilityCondition": "Condition",
       "distance": "Distance",
       "damage": "Damage",
-      "attackTypes": "Att. Type",
+      "attackType": "Att. Type",
       "skill": "Skill",
       "customSkill": "Custom Skill",
       "sendToChat": "Send to Chat",
@@ -176,6 +176,14 @@
       "titleVisibility": "Select Message Visibility",
       "titleRollQuery": "Select Obstacle and Bonus Dice",
       "titleSkillAddQuery": "Select Skill to Add"
+    },
+    "attackTypes": {
+      "singleTarget": "Single-Target",
+      "singleTargetAbbreviation": "ST",
+      "areaOfEffect": "Area-of-Effect",
+      "areaOfEffectAbbreviation": "AoE",
+      "multipleSingleTarget": "Multi-Single-Target",
+      "multipleSingleTargetAbbreviation": "MST"
     }
   }
 }
