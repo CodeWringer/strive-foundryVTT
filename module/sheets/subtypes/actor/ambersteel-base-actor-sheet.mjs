@@ -1,5 +1,6 @@
 import * as Dice from "../../../helpers/dice.mjs";
 import * as SheetUtil from '../../../utils/sheet-utility.mjs';
+import * as ChatUtil from '../../../utils/chat-utility.mjs';
 import { queryVisibilityMode } from "../../../utils/chat-utility.mjs";
 import { getNestedPropertyValue } from '../../../utils/property-utility.mjs';
 
@@ -155,6 +156,9 @@ export default class AmbersteelBaseActorSheet {
     // Roll attribute. 
     html.find(".ambersteel-attribute-roll").click(this._onAttributeRoll.bind(this));
 
+    // Roll property. 
+    html.find(".ambersteel-property-roll").click(this._onPropertyRoll.bind(this));
+
     // -------------------------------------------------------------
     if (!isEditable) return;
 
@@ -276,13 +280,9 @@ export default class AmbersteelBaseActorSheet {
     const itemId = element.dataset.itemId;
     const item = this.getItem(itemId);
 
-    if (keyboard.isDown("Shift")) {
-      await item.sendToChat(CONFIG.ambersteel.visibilityModes.public);
-    } else {
-      const dialogResult = await queryVisibilityMode();
-      if (dialogResult.confirmed) {
-        await item.sendToChat(dialogResult.visibilityMode);
-      }
+    const dialogResult = await queryVisibilityMode();
+    if (dialogResult.confirmed) {
+      await item.sendToChat(dialogResult.visibilityMode);
     }
   }
 
@@ -297,13 +297,9 @@ export default class AmbersteelBaseActorSheet {
     const item = this.getItem(itemId);
     const propertyPath = event.currentTarget.dataset.property;
     
-    if (keyboard.isDown("Shift")) {
-      await item.sendPropertyToChat(propertyPath, CONFIG.ambersteel.visibilityModes.public);
-    } else {
-      const dialogResult = await queryVisibilityMode();
-      if (dialogResult.confirmed) {
-        await item.sendPropertyToChat(propertyPath, dialogResult.visibilityMode);
-      }
+    const dialogResult = await queryVisibilityMode();
+    if (dialogResult.confirmed) {
+      await item.sendPropertyToChat(propertyPath, dialogResult.visibilityMode);
     }
   }
 
@@ -314,13 +310,9 @@ export default class AmbersteelBaseActorSheet {
   async _onActorSendToChat(event) {
     event.preventDefault();
 
-    if (keyboard.isDown("Shift")) {
-      await this.getActor().sendToChat(CONFIG.ambersteel.visibilityModes.public);
-    } else {
-      const dialogResult = await queryVisibilityMode();
-      if (dialogResult.confirmed) {
-        await this.getActor().sendToChat(dialogResult.visibilityMode);
-      }
+    const dialogResult = await queryVisibilityMode();
+    if (dialogResult.confirmed) {
+      await this.getActor().sendToChat(dialogResult.visibilityMode);
     }
   }
 
@@ -435,6 +427,41 @@ export default class AmbersteelBaseActorSheet {
       actor: result.actor,
       visibilityMode: CONFIG.ambersteel.visibilityModes[rollInputData.visibilityMode]
     });
+  }
+
+  /**
+   * @param event 
+   * @private
+   * @async
+   */
+  async _onPropertyRoll(event) {
+    event.preventDefault();
+
+    const actor = this.getActor();
+    const flavor = event.currentTarget.dataset.chatTitle;
+
+    let sourceObj = undefined;
+    const itemId = event.currentTarget.dataset.itemId;
+    if (itemId !== undefined && itemId !== null) {
+      sourceObj = this.getItem(itemId);
+    } else {
+      sourceObj = actor;
+    }
+    const propertyPath = event.currentTarget.dataset.property;
+    const propertyValue = getNestedPropertyValue(sourceObj, propertyPath);
+
+    const dialogResult = await queryVisibilityMode();
+    if (dialogResult.confirmed) {
+      const renderedContent = await new Roll(propertyValue).render();
+      ChatUtil.sendToChat({
+        speaker: undefined,
+        renderedContent: renderedContent,
+        flavor: flavor,
+        actor: actor,
+        sound: "../sounds/notify.wav",
+        visibilityMode: dialogResult.visibilityMode
+      })
+    }
   }
 
   /**

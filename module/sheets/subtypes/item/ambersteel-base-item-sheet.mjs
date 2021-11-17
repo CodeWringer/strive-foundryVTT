@@ -1,4 +1,5 @@
 import * as SheetUtil from '../../../utils/sheet-utility.mjs';
+import * as ChatUtil from '../../../utils/chat-utility.mjs';
 import { queryVisibilityMode } from "../../../utils/chat-utility.mjs";
 import { getNestedPropertyValue } from '../../../utils/property-utility.mjs';
 
@@ -64,6 +65,9 @@ export default class AmbersteelBaseItemSheet {
     // Send item property to chat.
     html.find(".ambersteel-item-property-to-chat").click(this._onItemPropertySendToChat.bind(this));
 
+    // Roll property. 
+    html.find(".ambersteel-property-roll").click(this._onPropertyRoll.bind(this));
+    
     // -------------------------------------------------------------
     if (!isEditable) return;
 
@@ -144,25 +148,23 @@ export default class AmbersteelBaseItemSheet {
   /**
    * @param event 
    * @private
+   * @async
    */
   async _onItemSendToChat(event) {
     event.preventDefault();
 
     const item = this.getItem();
 
-    if (keyboard.isDown("Shift")) {
-      await item.sendToChat(CONFIG.ambersteel.visibilityModes.public);
-    } else {
-      const dialogResult = await queryVisibilityMode();
-      if (dialogResult.confirmed) {
-        await item.sendToChat(dialogResult.visibilityMode);
-      }
+    const dialogResult = await queryVisibilityMode();
+    if (dialogResult.confirmed) {
+      await item.sendToChat(dialogResult.visibilityMode);
     }
   }
 
   /**
    * @param event 
    * @private
+   * @async
    */
   async _onItemPropertySendToChat(event) {
     event.preventDefault();
@@ -170,17 +172,41 @@ export default class AmbersteelBaseItemSheet {
     const item = this.getItem();
     const propertyPath = event.currentTarget.dataset.property;
     
-    if (keyboard.isDown("Shift")) {
-      await item.sendPropertyToChat(propertyPath, CONFIG.ambersteel.visibilityModes.public);
-    } else {
-      const dialogResult = await queryVisibilityMode();
-      if (dialogResult.confirmed) {
-        await item.sendPropertyToChat(propertyPath, {
-          parent: this.parent,
-          actor: this.parent.actor, 
-          visibilityMode: dialogResult.visibilityMode
-        });
-      }
+    const dialogResult = await queryVisibilityMode();
+    if (dialogResult.confirmed) {
+      await item.sendPropertyToChat(propertyPath, {
+        parent: this.parent,
+        actor: this.parent.actor, 
+        visibilityMode: dialogResult.visibilityMode
+      });
+    }
+  }
+
+  /**
+   * @param event 
+   * @private
+   * @async
+   */
+  async _onPropertyRoll(event) {
+    event.preventDefault();
+
+    const item = this.getItem();
+    const actor = item.parent;
+    const flavor = event.currentTarget.dataset.chatTitle;
+    const propertyPath = event.currentTarget.dataset.property;
+    const propertyValue = getNestedPropertyValue(item, propertyPath);
+
+    const dialogResult = await queryVisibilityMode();
+    if (dialogResult.confirmed) {
+      const renderedContent = await new Roll(propertyValue).render();
+      ChatUtil.sendToChat({
+        speaker: actor,
+        renderedContent: renderedContent,
+        flavor: flavor,
+        actor: actor,
+        sound: "../sounds/notify.wav",
+        visibilityMode: dialogResult.visibilityMode
+      })
     }
   }
 }

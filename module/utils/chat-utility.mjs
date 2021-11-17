@@ -60,19 +60,27 @@ export function sendToChat(chatData = {
  * @returns {Object} result
  * @returns {CONFIG.ambersteel.visibilityModes} result.visibilityMode
  * @returns {Boolean} result.confirmed
+ * @async
  */
-export function queryVisibilityMode() {
+export async function queryVisibilityMode() {
   const dialogTemplate = "systems/ambersteel/templates/dialog/visibility-dialog.hbs";
   const dialogData = {
     visibilityMode: CONFIG.ambersteel.visibilityModes.public
   };
 
   return new Promise(async (resolve, reject) => {
-    const result = await showDialog({ dialogTemplate: dialogTemplate, localizableTitle: "ambersteel.dialog.titleVisibility" }, dialogData);
-    resolve({
-      visibilityMode: getElementValue(result.html.find(".visibilityMode")[0]),
-      confirmed: result.confirmed
-    });
+    if (keyboard.isDown("Shift")) {
+      resolve({
+        visibilityMode: CONFIG.ambersteel.visibilityModes.public,
+        confirmed: true
+      });
+    } else {
+      const result = await showDialog({ dialogTemplate: dialogTemplate, localizableTitle: "ambersteel.dialog.titleVisibility" }, dialogData);
+      resolve({
+        visibilityMode: getElementValue(result.html.find(".visibilityMode")[0]),
+        confirmed: result.confirmed
+      });
+    }
   });
 }
 
