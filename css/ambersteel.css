@@ -500,10 +500,7 @@ a.button {
   margin: 0;
   width: 26px;
   height: 26px;
-}
-
-.roll-button {
-  font-size: 1.2rem;
+  font-size: 1rem;
 }
 
 textarea {
@@ -932,4 +929,5 @@ a.ambersteel-expand-skill-ability-list {
   border-radius: 3px;
   border: 1px rgba(129, 129, 129, 0.22) solid;
   background-color: rgba(0, 0, 0, 0.05);
+  font-size: 1.2rem;
 }

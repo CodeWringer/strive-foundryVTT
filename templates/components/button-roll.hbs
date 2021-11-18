@@ -1,0 +1,21 @@
+{{!-- Required parameters:
+type: {String} = "generic"|"dice-pool",
+ownerId: {String}
+ownerType: {String} = "actor|item"
+propertyPath: {String|undefined},
+chatTitle: {String|undefined},
+callback: {String|undefined}
+callbackData: {String|undefined}
+--}}
+<span class="width-sm">
+  <a class="ambersteel-{{type}}-roll pad-sm button flex flex-center" 
+    data-owner-id="{{ownerId}}"
+    data-owner-type="{{ownerType}}"
+    data-property="{{propertyPath}}"
+    data-chat-title="{{chatTitle}}"
+    data-callback="{{callback}}"
+    data-callback-data="{{callbackData}}"
+    title="{{localize ambersteel.labels.roll}}">
+    <i class="fas fa-dice-three"></i>
+  </a>
+</span>

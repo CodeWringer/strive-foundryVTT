@@ -1,3 +1,5 @@
+import DialogResult from '../dto/dialog-result.mjs';
+
 /**
  * Shows a dialog to the user and returns a promise with the result of the user interaction. 
  * @param {String} args.dialogTemplate Path to a hbs template. 
@@ -52,22 +54,4 @@ export async function showDialog(args = {}, dialogData) {
         });
         dialog.render(true);
     });
-}
-
-/**
- * @property {Boolean} confirmed If true, the user clicked the confirm button. 
- * @property {HTML} html The DOM of the dialog. Useful to filter for input elements and get their values. 
- */
-export class DialogResult {
-    confirmed = false;
-    html = undefined;
-
-    /**
-     * @param confirmed {Boolean} confirmed If true, the user clicked the confirm button. 
-     * @param html {HTML} html The DOM of the dialog. Useful to filter for input elements and get their values. 
-     */
-    constructor(confirmed, html) {
-        this.confirmed = confirmed;
-        this.html = html;
-    }
 }

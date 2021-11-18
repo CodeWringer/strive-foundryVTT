@@ -1,5 +1,8 @@
 {{!-- Requires parameters: 
 isEditable: {Boolean},
+isSendable: {Boolean},
+ownerId: {String},
+ownerType: {String} = "actor"|"item",
 isLearningSkillsTable: {Boolean},
 skills: {[Object]} where Object = {
     name: {String},
@@ -53,10 +56,27 @@ skills: {[Object]} where Object = {
                 <tr class="item skill-item" data-item-id="{{skill.data.id}}">
                     {{#if ../isEditable}}
                         <td class="skill-column-roll">
-                            <a class="ambersteel-skill-roll roll-button pad-sm button" data-action-value="{{data.value}}" 
-                                data-action-name="{{data.localizableName}}" title="{{localize ambersteel.labels.roll}}">
-                                <i class="fas fa-dice-three"></i>
-                            </a>
+                            {{#if ../isLearningSkillsTable}}
+                                {{> buttonRoll
+                                    type="dice-pool"
+                                    ownerId=../ownerId
+                                    ownerType=../ownerType
+                                    propertyPath=(concat "data.data.learningSkills[" key "].data.value")
+                                    chatTitle=skill.localizableName
+                                    callback="advanceSkillBasedOnRollResult"
+                                    callbackData=(concat key "|" ../isLearningSkillsTable)
+                                }}
+                            {{else}}
+                                {{> buttonRoll
+                                    type="dice-pool"
+                                    ownerId=../ownerId
+                                    ownerType=../ownerType
+                                    propertyPath=(concat "data.data.skills[" key "].data.value")
+                                    chatTitle=skill.localizableName
+                                    callback="advanceSkillBasedOnRollResult"
+                                    callbackData=(concat key "|" ../isLearningSkillsTable)
+                                }}
+                            {{/if}}
                         </td>
                     {{/if}}
                     <td class="fancy-font flex skill-column-name">
@@ -119,17 +139,7 @@ skills: {[Object]} where Object = {
                             skillItemId=skill.data.id 
                             abilities=data.abilities }}
                         </div>
-                        <div class="ambersteel-expand-skill-ability-list-container">
-                            <a class="ambersteel-expand-skill-ability-list pad-sm button flex flex-center"
-                            title="{{localize ambersteel.labels.expandSkillAbilityList}}"
-                            data-item-id="{{skill.data.id}}">
-                                {{#if data.isExpanded}}
-                                <i class="fas fa-angle-double-up"></i>
-                                {{else}}
-                                <i class="fas fa-angle-double-down"></i>
-                                {{/if}}
-                            </a>
-                        </div>
+                        {{> buttonToggleSkillAbilityList itemId=skill.data.id isToggled=data.isExpanded }}
                     </td>
                 </tr>
             {{/each}}

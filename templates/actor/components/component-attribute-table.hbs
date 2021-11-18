@@ -1,5 +1,8 @@
 {{!-- Requires parameters: 
 isEditable: Boolean,
+isSendable: {Boolean},
+ownerId: {String},
+ownerType: {String} = "actor"|"item",
 localizableAttributeGroupName: {String},
 attributeGroupName: {String},
 attributes: {[Object]} where Object = {
@@ -41,9 +44,15 @@ attributes: {[Object]} where Object = {
             <tr class="item attribute-item" data-att-group-name="{{../attributeGroupName}}" data-att-name="{{att.name}}">
                 {{#if ../isEditable}}
                     <td class="attribute-column-roll">
-                        <a class="ambersteel-attribute-roll roll-button pad-sm button" data-action-value="{{att.value}}" data-action-name="{{att.name}}" title="{{localize ambersteel.labels.roll}}">
-                            <i class="fas fa-dice-three"></i>
-                        </a>
+                        {{> buttonRoll
+                            type="dice-pool"
+                            ownerId=../ownerId
+                            ownerType=../ownerType
+                            propertyPath=(concat "data.data.attributes." ../attributeGroupName "." att.name ".value")
+                            chatTitle=(localize att.localizableName)
+                            callback="advanceAttributeBasedOnRollResult"
+                            callbackData=att.name
+                        }}
                     </td>
                 {{/if}}
                 <td class="attribute-column-name flex fancy-font">

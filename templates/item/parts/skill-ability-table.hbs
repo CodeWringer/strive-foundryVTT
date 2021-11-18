@@ -1,6 +1,8 @@
 {{!-- Required context:
 isEditable: {Boolean},
 isSendable: {Boolean},
+ownerId: {String},
+ownerType: {String} = "actor"|"item",
 skillItemId: {String},
 abilities: {[SkillAbility]} where skillAbility: {Object} where Object = {
   name: {String}
@@ -124,14 +126,13 @@ abilities: {[SkillAbility]} where skillAbility: {Object} where Object = {
             <label class="fancy-font pad-sm width-min-xl text-align-r" for="data.abilities[{{key}}].damageFormula">
               {{localize "ambersteel.labels.damage"}}
             </label>
-            <span class="width-sm">
-              <a class="ambersteel-property-roll roll-button pad-sm button flex flex-center" 
-                data-item-id="{{../skillItemId}}" data-property="data.data.abilities[{{key}}].damageFormula" 
-                data-chat-title="{{ability.name}}"
-                title="{{localize ambersteel.labels.roll}}">
-                <i class="fas fa-dice-three"></i>
-              </a>
-            </span>
+            {{> buttonRoll
+              type="generic"
+              ownerId=../ownerId
+              ownerType=../ownerType
+              propertyPath=(concat "data.data.abilities[" key "].damageFormula")
+              chatTitle=ability.name
+            }}
             <span class="width-md flex-grow">
               {{#if ../isEditable}}
                 <input class="ability-damage ambersteel-item-edit" type="text" value="{{ability.damageFormula}}" 

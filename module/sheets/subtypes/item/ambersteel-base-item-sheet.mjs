@@ -46,7 +46,10 @@ export default class AmbersteelBaseItemSheet {
    * 'item', 'CONFIG', 'isSendable' and 'isEditable'. 
    * @virtual
    */
-  prepareDerivedData(context) { }
+  prepareDerivedData(context) {
+    context.ownerId = context.item.id;
+    context.ownerType = "item";
+  }
 
   /**
    * Registers events on elements of the given DOM. 

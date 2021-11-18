@@ -1,8 +1,10 @@
-import * as Dice from "../../../utils/dice-utility.mjs";
 import * as SheetUtil from '../../../utils/sheet-utility.mjs';
-import * as ChatUtil from '../../../utils/chat-utility.mjs';
 import { queryVisibilityMode } from "../../../utils/chat-utility.mjs";
-import { getNestedPropertyValue } from '../../../utils/property-utility.mjs';
+import DicePoolResult from "../../../dto/dice-pool-result.mjs";
+import * as ButtonRoll from '../../../components/button-roll.mjs';
+import * as ButtonDelete from '../../../components/button-delete.mjs';
+import * as ButtonSendToChat from '../../../components/button-send-to-chat.mjs';
+import * as ButtonToggleSkillAbilityList from '../../../components/button-toggle-skill-ability-list.mjs';
 
 export default class AmbersteelBaseActorSheet {
   /**
@@ -85,6 +87,9 @@ export default class AmbersteelBaseActorSheet {
     context.data.learningSkills = actorData.learningSkills;
     context.data.skills = actorData.skills;
     context.data.attributeGroups = context.data.data.attributeGroups;
+
+    context.ownerId = context.actor.id;
+    context.ownerType = "actor";
   }
 
   /**
@@ -124,6 +129,11 @@ export default class AmbersteelBaseActorSheet {
    * @virtual
    */
   activateListeners(html, isOwner, isEditable) {
+    ButtonRoll.activateListeners(html, this, isOwner, isEditable);
+    // ButtonDelete.activateListeners(html, this, isOwner, isEditable);
+    // ButtonSendToChat.activateListeners(html, this, isOwner, isEditable);
+    // ButtonToggleSkillAbilityList.activateListeners(html, this, isOwner, isEditable);
+
     // Show item sheet.
     html.find(".ambersteel-item-show").click(this._onItemShow.bind(this));
 
@@ -149,15 +159,6 @@ export default class AmbersteelBaseActorSheet {
       li.setAttribute("draggable", true);
       li.addEventListener("dragstart", handler, false);
     });
-
-    // Roll skill. 
-    html.find(".ambersteel-skill-roll").click(this._onSkillRoll.bind(this));
-
-    // Roll attribute. 
-    html.find(".ambersteel-attribute-roll").click(this._onAttributeRoll.bind(this));
-
-    // Roll property. 
-    html.find(".ambersteel-property-roll").click(this._onPropertyRoll.bind(this));
 
     // -------------------------------------------------------------
     if (!isEditable) return;
@@ -327,140 +328,6 @@ export default class AmbersteelBaseActorSheet {
     const field = element.dataset.field;
 
     await this.getActor().updateProperty(field, element.value);
-  }
-
-  /**
-   * Skill roll handler. 
-   * @param {Event} event 
-   * @private
-   */
-  async _onSkillRoll(event) {
-    event.preventDefault();
-
-    const element = event.currentTarget;
-    const dataset = element.closest(".item").dataset;
-    const itemId = dataset.itemId;
-    const oSkill = this.getItem(itemId);
-    let localizedSkillName = game.i18n.localize(event.currentTarget.dataset.actionName);
-    if (localizedSkillName.length == 0) localizedSkillName = oSkill.name;
-
-    // Modal dialog to enter obstacle and bonus dice. 
-    const rollInputData = await Dice.queryRollData();
-
-    if (!rollInputData.confirmed) return;
-
-    // Determine number of dice to roll. 
-    // If the skill is still being learned, use the related attribute value for the roll, instead. 
-    // Any skill with a level of 0 is one being learned. 
-    let numberOfDice = parseInt(event.currentTarget.dataset.actionValue);
-    if (parseInt(oSkill.data.data.value) == 0) {
-      const relatedAttName = oSkill.data.data.relatedAttribute;
-      const oAtt = this.getActor().getAttributeForName(relatedAttName).object;
-      numberOfDice = oAtt.value;
-    }
-
-    const localizedActionName = `${game.i18n.localize("ambersteel.labels.skill")}: ${localizedSkillName}`;
-    
-    // Do roll. 
-    const result = await Dice.rollDice({
-      actionName: localizedActionName,
-      actionValue: numberOfDice, 
-      obstacle: rollInputData.obstacle,
-      bonusDice: rollInputData.bonusDice,
-      actor: this.getActor()  
-    });
-
-    // Note result towards skill progress. 
-    oSkill.addProgress(result.rollResults.isSuccess, false);
-
-    // Re-render the sheet to make the progress visible. 
-    this.parent.render();
-
-    // Display roll result. 
-    Dice.sendDiceResultToChat({ 
-      renderedContent: result.renderedContent, 
-      flavor: result.flavor, 
-      actor: result.actor,
-      visibilityMode: CONFIG.ambersteel.visibilityModes[rollInputData.visibilityMode]
-    });
-  }
-
-  /**
-   * Attribute roll handler. 
-   * @param {Event} event 
-   * @private
-   * @async
-   */
-  async _onAttributeRoll(event) {
-    event.preventDefault();
-
-    const attName = event.currentTarget.dataset.actionName;
-    const oAtt = this.getActor().getAttributeForName(attName).object;
-    const localizedAttName = game.i18n.localize(oAtt.localizableName);
-
-    // Modal dialog to enter obstacle and bonus dice. 
-    const rollInputData = await Dice.queryRollData();
-
-    if (!rollInputData.confirmed) return;
-
-    const localizedActionName = `${game.i18n.localize("ambersteel.labels.attribute")}: ${localizedAttName}`;
-
-    // Do roll. 
-    const result = await Dice.rollDice({
-      actionName: localizedActionName,
-      actionValue: event.currentTarget.dataset.actionValue, 
-      obstacle: rollInputData.obstacle,
-      bonusDice: rollInputData.bonusDice,
-      actor: this.getActor()  
-    });
-
-    // Note result towards attribute progress. 
-    await this.getActor().addAttributeProgress(attName, result.rollResults.isSuccess);
-
-    // Re-render the sheet to make the progress visible. 
-    this.parent.render();
-
-    // Display roll result. 
-    Dice.sendDiceResultToChat({
-      renderedContent: result.renderedContent, 
-      flavor: result.flavor, 
-      actor: result.actor,
-      visibilityMode: CONFIG.ambersteel.visibilityModes[rollInputData.visibilityMode]
-    });
-  }
-
-  /**
-   * @param event 
-   * @private
-   * @async
-   */
-  async _onPropertyRoll(event) {
-    event.preventDefault();
-
-    const actor = this.getActor();
-    const flavor = event.currentTarget.dataset.chatTitle;
-
-    let sourceObj = undefined;
-    const itemId = event.currentTarget.dataset.itemId;
-    if (itemId !== undefined && itemId !== null) {
-      sourceObj = this.getItem(itemId);
-    } else {
-      sourceObj = actor;
-    }
-    const propertyPath = event.currentTarget.dataset.property;
-    const propertyValue = getNestedPropertyValue(sourceObj, propertyPath);
-
-    const dialogResult = await queryVisibilityMode();
-    if (dialogResult.confirmed) {
-      const renderedContent = await new Roll(propertyValue).render();
-      ChatUtil.sendToChat({
-        renderedContent: renderedContent,
-        flavor: flavor,
-        actor: actor,
-        sound: "../sounds/dice.wav",
-        visibilityMode: dialogResult.visibilityMode
-      })
-    }
   }
 
   /**

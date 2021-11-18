@@ -24,6 +24,8 @@ export default class AmbersteelBaseActor {
     this.parent.sendToChat = this.sendToChat.bind(this);
     this.parent.sendPropertyToChat = this.sendPropertyToChat.bind(this);
     this.parent.updateProperty = this.updateProperty.bind(this);
+    this.parent.advanceSkillBasedOnRollResult = this.advanceSkillBasedOnRollResult.bind(this);
+    this.parent.advanceAttributeBasedOnRollResult = this.advanceAttributeBasedOnRollResult.bind(this);
   }
 
   /**
@@ -200,5 +202,108 @@ export default class AmbersteelBaseActor {
    */
   async updateProperty(propertyPath, newValue) {
     await UpdateUtil.updateProperty(this.parent, propertyPath, newValue);
+  }
+
+  /**
+   * Advances the skill 
+   * @param {DicePoolResult} rollResult 
+   * @param {String} keyAndIsLearning The index of the skill item in question separated from a boolean indicating 
+   * whether this is a learning skill. Format: "key|isLearningSkill"
+   * @async
+   */
+  async advanceSkillBasedOnRollResult(rollResult, keyAndIsLearning) {
+    const splits = keyAndIsLearning.split("|");
+    const key = parseInt(splits[0]);
+    const isLearningSkill = splits[1] === "true";
+
+
+    // const element = event.currentTarget;
+    // const dataset = element.closest(".item").dataset;
+    // const itemId = dataset.itemId;
+    // const oSkill = this.getItem(itemId);
+    // let localizedSkillName = game.i18n.localize(event.currentTarget.dataset.actionName);
+    // if (localizedSkillName.length == 0) localizedSkillName = oSkill.name;
+
+    // // Modal dialog to enter obstacle and bonus dice. 
+    // const rollInputData = await Dice.queryRollData();
+
+    // if (!rollInputData.confirmed) return;
+
+    // // Determine number of dice to roll. 
+    // // If the skill is still being learned, use the related attribute value for the roll, instead. 
+    // // Any skill with a level of 0 is one being learned. 
+    // let numberOfDice = parseInt(event.currentTarget.dataset.actionValue);
+    // if (parseInt(oSkill.data.data.value) == 0) {
+    //   const relatedAttName = oSkill.data.data.relatedAttribute;
+    //   const oAtt = this.getActor().getAttributeForName(relatedAttName).object;
+    //   numberOfDice = oAtt.value;
+    // }
+
+    // const localizedActionName = `${game.i18n.localize("ambersteel.labels.skill")}: ${localizedSkillName}`;
+    
+    // // Do roll. 
+    // const result = await Dice.rollDice({
+    //   actionName: localizedActionName,
+    //   actionValue: numberOfDice, 
+    //   obstacle: rollInputData.obstacle,
+    //   bonusDice: rollInputData.bonusDice,
+    //   actor: this.getActor()  
+    // });
+
+    // // Note result towards skill progress. 
+    // oSkill.addProgress(result.rollResults.isSuccess, false);
+
+    // // Re-render the sheet to make the progress visible. 
+    // this.parent.render();
+
+    // // Display roll result. 
+    // Dice.sendDiceResultToChat({ 
+    //   renderedContent: result.renderedContent, 
+    //   flavor: result.flavor, 
+    //   actor: result.actor,
+    //   visibilityMode: CONFIG.ambersteel.visibilityModes[rollInputData.visibilityMode]
+    // });
+  }
+
+  /**
+   * Attribute roll handler. 
+   * @param {DicePoolResult} rollResult 
+   * @param {String} attributeName The name of the attribute. 
+   * @async
+   */
+  async advanceAttributeBasedOnRollResult(rollResult, attributeName) {
+    const oAtt = this.parent.getAttributeForName(attributeName).object;
+
+    // const localizedAttName = game.i18n.localize(oAtt.localizableName);
+
+    // // Modal dialog to enter obstacle and bonus dice. 
+    // const rollInputData = await Dice.queryRollData();
+
+    // if (!rollInputData.confirmed) return;
+
+    // const localizedActionName = `${game.i18n.localize("ambersteel.labels.attribute")}: ${localizedAttName}`;
+
+    // // Do roll. 
+    // const result = await Dice.rollDice({
+    //   actionName: localizedActionName,
+    //   actionValue: event.currentTarget.dataset.actionValue, 
+    //   obstacle: rollInputData.obstacle,
+    //   bonusDice: rollInputData.bonusDice,
+    //   actor: this.getActor()  
+    // });
+
+    // // Note result towards attribute progress. 
+    // await this.getActor().addAttributeProgress(attName, result.rollResults.isSuccess);
+
+    // // Re-render the sheet to make the progress visible. 
+    // this.parent.render();
+
+    // // Display roll result. 
+    // Dice.sendDiceResultToChat({
+    //   renderedContent: result.renderedContent, 
+    //   flavor: result.flavor, 
+    //   actor: result.actor,
+    //   visibilityMode: CONFIG.ambersteel.visibilityModes[rollInputData.visibilityMode]
+    // });
   }
 }

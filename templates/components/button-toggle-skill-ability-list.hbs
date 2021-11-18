@@ -1,0 +1,15 @@
+{{!-- Required parameters:
+itemId: {String},
+isToggled: {Boolean}
+--}}
+<div class="ambersteel-expand-skill-ability-list-container">
+  <a class="ambersteel-expand-skill-ability-list pad-sm fill flex flex-center"
+    title="{{localize ambersteel.labels.expandSkillAbilityList}}"
+    data-item-id="{{itemId}}">
+    {{#if isToggled}}
+      <i class="fas fa-angle-double-up"></i>
+    {{else}}
+      <i class="fas fa-angle-double-down"></i>
+    {{/if}}
+  </a>
+</div>

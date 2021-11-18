@@ -1,15 +1,17 @@
 {{!-- Requires context:
 isEditable: {Boolean},
+isSendable: {Boolean},
 isGM: {Boolean},
-actor: {AmbersteelActor},
-data: {Object} where Object = {
-  person: {Object} where Object -> see parts/actor-personals.hbs,
-  attributeGroups: {Object} where Object -> see parts/actor-attributes.hbs,
-  learningSkills: {[Object]} where Object -> see components/component-skill-table.hbs,
-  skills: {[Object]} where Object -> see components/component-skill-table.hbs,
-  beliefSystem: {Object} where Object -> see parts/actor-beliefs.hbs,
-  fateSystem: {Object} where Object -> see parts/actor-fate.hbs,
-  biography: {Object} where Object -> see parts/actor-biography.hbs,
+data: {Object} = {
+  data: {Object} {
+    person: {Object} -> see parts/actor-personals.hbs,
+    attributeGroups: {Object} -> see parts/actor-attributes.hbs,
+    learningSkills: {[Object]} -> see components/component-skill-table.hbs,
+    skills: {[Object]} -> see components/component-skill-table.hbs,
+    beliefSystem: {Object} -> see parts/actor-beliefs.hbs,
+    fateSystem: {Object} -> see parts/actor-fate.hbs,
+    biography: {Object} -> see parts/actor-biography.hbs,
+  }
 }
 --}}
 <form class="{{cssClass}} {{actor.type}} flexcol" autocomplete="off">
@@ -21,10 +23,7 @@ data: {Object} where Object = {
       <h1 class="header-name fancy-font">
         <input class="header-name" name="name" type="text" value="{{actor.name}}" placeholder="Name" />
       </h1>
-      {{> "systems/ambersteel/templates/actor/parts/actor-personals.hbs" 
-      isEditable=isEditable 
-      person=data.person 
-      }}
+      {{> "systems/ambersteel/templates/actor/parts/actor-personals.hbs"}}
     </div>
   </header>
 

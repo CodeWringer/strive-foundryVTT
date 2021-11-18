@@ -4,22 +4,26 @@ import { getNestedPropertyValue } from "./property-utility.mjs";
 import { getElementValue } from "./sheet-utility.mjs";
 import { validateOrThrow } from "./validation-utility.mjs";
 
+const QUERY_VISIBILITY_MODE_DIALOG_TEMPLATE = "systems/ambersteel/templates/dialog/visibility-dialog.hbs";
+const CHAT_GENERIC_SOUND = "../sounds/notify.wav";
+
 /**
  * Creates a new ChatMessage, displaying the given contents. 
- * @param {Actor} chatData.speaker Optional. The actor to associate with the message. 
  * @param {String} chatData.renderedContent The rendered HTML of the chat message. 
+ * @param {Actor} chatData.speaker Optional. The actor to associate with the message. 
  * @param {String} chatData.flavor Optional. The flavor text / subtitle of the message. 
  * @param {Actor} chatData.actor Optional. The actor to associate with the message. 
- * @param {String} chatData.sound Optional. The sound to play when the message is sent. 
+ * @param {String} chatData.sound Optional. The sound to play when the message is sent. Default generic notify sound. 
  * @param {CONFIG.ambersteel.visibilityModes} chatData.visibilityMode Optional. Sets the visibility of the chat message. Default public. 
+ * @returns {Promise<any>}
  */
-export function sendToChat(chatData = {}) {
+export async function sendToChat(chatData = {}) {
   chatData = {
     speaker: undefined,
     renderedContent: undefined,
     flavor: undefined,
     actor: undefined,
-    sound: "../sounds/notify.wav",
+    sound: CHAT_GENERIC_SOUND,
     visibilityMode: CONFIG.ambersteel.visibilityModes.public,
     ...chatData
   };
@@ -29,8 +33,7 @@ export function sendToChat(chatData = {}) {
 
   if (chatData.visibilityMode === CONFIG.ambersteel.visibilityModes.self) {
     const self = game.user;
-
-    ChatMessage.create({
+    return ChatMessage.create({
       whisper: [self],
       speaker: speaker,
       flavor: chatData.flavor,
@@ -40,7 +43,7 @@ export function sendToChat(chatData = {}) {
   } else if (chatData.visibilityMode === CONFIG.ambersteel.visibilityModes.gm) {
     const gms = ChatMessage.getWhisperRecipients("GM");
     for (const gm of gms) {
-      ChatMessage.create({
+      return ChatMessage.create({
         whisper: [gm],
         speaker: speaker,
         flavor: chatData.flavor,
@@ -49,7 +52,7 @@ export function sendToChat(chatData = {}) {
       });
     }
   } else { // Public message. 
-    ChatMessage.create({
+    return ChatMessage.create({
       speaker: speaker,
       flavor: chatData.flavor,
       content: chatData.renderedContent,
@@ -59,13 +62,13 @@ export function sendToChat(chatData = {}) {
 }
 
 /**
+ * @returns {Promise<Object>}
  * @returns {Object} result
  * @returns {CONFIG.ambersteel.visibilityModes} result.visibilityMode
  * @returns {Boolean} result.confirmed
  * @async
  */
 export async function queryVisibilityMode() {
-  const dialogTemplate = "systems/ambersteel/templates/dialog/visibility-dialog.hbs";
   const dialogData = {
     visibilityMode: CONFIG.ambersteel.visibilityModes.public
   };
@@ -77,7 +80,7 @@ export async function queryVisibilityMode() {
         confirmed: true
       });
     } else {
-      const result = await showDialog({ dialogTemplate: dialogTemplate, localizableTitle: "ambersteel.dialog.titleVisibility" }, dialogData);
+      const result = await showDialog({ dialogTemplate: QUERY_VISIBILITY_MODE_DIALOG_TEMPLATE, localizableTitle: "ambersteel.dialog.titleVisibility" }, dialogData);
       resolve({
         visibilityMode: getElementValue(result.html.find(".visibilityMode")[0]),
         confirmed: result.confirmed
