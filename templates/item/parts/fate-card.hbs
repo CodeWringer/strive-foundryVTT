@@ -20,10 +20,8 @@ img: {String}
         <img name="img" src="{{img}}" title="{{data.name}}" height="26" width="26" />
       </span>
       {{#if isSendable}}
-        <span class="flex-group-right">
-          <a class="ambersteel-item-to-chat pad-sm button" data-item-id="{{data._id}}" title="{{localize ambersteel.labels.sendToChat}}">
-            <i class="fas fa-comments"></i>
-          </a>
+        <span class="flex flex-right">
+          {{> buttonSendToChat type="item" itemId=data._id }}
         </span>
       {{/if}}
     </div>
@@ -38,9 +36,7 @@ img: {String}
   <div class="flex flex-row fate-card-footer">
     {{#if isEditable}}
       <span class="flex-grow"></span>
-      <a class="ambersteel-item-delete pad-sm button" data-item-id="{{data._id}}" title="{{localize ambersteel.fateSystem.delete}}">
-          <i class="fas fa-trash"></i>
-      </a>
+      {{> buttonDelete type="item" itemId=data._id }}
     {{/if}}
   </div>
 </section>

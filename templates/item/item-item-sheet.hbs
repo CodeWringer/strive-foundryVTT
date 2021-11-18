@@ -27,13 +27,9 @@ item: {Item} where Item = {
         {{/if}}
       </div>
       {{#if isSendable}}
-        <div class="flex-group-right">
-          <span class="ambersteel-item-to-chat-margin-right">
-            <a class="ambersteel-item-to-chat pad-sm button" data-item-id="{{item.id}}" title="{{localize ambersteel.labels.sendToChat}}">
-              <i class="fas fa-comments"></i>
-            </a>
-          </span>
-        </div>
+        <span class="flex flex-right ambersteel-item-to-chat-margin-right">
+          {{> buttonSendToChat type="item" itemId=item.id }}
+        </span>
       {{/if}}
     </div>
   </header>

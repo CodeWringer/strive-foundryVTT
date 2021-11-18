@@ -107,9 +107,7 @@ skills: {[Object]} where Object = {
                     </td>
                     {{#if ../isEditable}}
                         <td class="skill-column-delete">
-                            <a class="ambersteel-item-delete pad-sm button" data-item-id="{{skill.data.id}}" title="{{localize ambersteel.labels.deleteSkill}}">
-                                <i class="fas fa-trash"></i>
-                            </a>
+                            {{> buttonDelete type="item" itemId=skill.data.id }}
                         </td>
                     {{/if}}
                 </tr>

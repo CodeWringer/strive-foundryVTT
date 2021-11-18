@@ -7,6 +7,8 @@
   return loadTemplates([
     // Components.
     "systems/ambersteel/templates/components/number-spinner.hbs",
+    "systems/ambersteel/templates/components/button-send-to-chat.hbs",
+    "systems/ambersteel/templates/components/button-delete.hbs",
     // Actor partials.
     "systems/ambersteel/templates/actor/components/component-attribute-table.hbs",
     "systems/ambersteel/templates/actor/components/component-skill-table.hbs",

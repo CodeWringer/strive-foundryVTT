@@ -1,0 +1,14 @@
+{{!-- Required parameters:
+type: {String} = "item"|"skill-ability",
+index: {Number|undefined},
+itemId: {String}
+--}}
+<span class="width-sm">
+  <a class="ambersteel-{{type}}-delete pad-sm button flex flex-center"
+    data-item-id="{{itemId}}"
+    data-index="{{index}}"
+    title="{{localize ambersteel.labels.delete}}"
+    >
+    <i class="fas fa-trash"></i>
+  </a>
+</span>

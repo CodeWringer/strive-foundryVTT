@@ -20,13 +20,7 @@ abilities: {[SkillAbility]} where skillAbility: {Object} where Object = {
       <li class="ambersteel-list-row sheet-block">
         <div class="flex flex-row">
           {{!-- Send to chat --}}
-          <span class="width-sm">
-            <a class="ambersteel-item-property-to-chat pad-sm button flex flex-center" 
-              data-item-id="{{../skillItemId}}" data-property="data.data.abilities[{{key}}]" 
-              title="{{localize ambersteel.labels.sendToChat}}">
-              <i class="fas fa-comments"></i>
-            </a>
-          </span>
+          {{> buttonSendToChat type="item-property" propertyPath=(concat "data.data.abilities[" key "]") itemId=../skillItemId }}
           {{!-- Name --}}
           <span class="ambersteel-list-column ambersteel-list-column-name flex flex-grow">
             <label class="fancy-font pad-sm width-min-lg" for="data.abilities[{{key}}].name">{{localize "ambersteel.labels.name"}}</label>
@@ -38,13 +32,7 @@ abilities: {[SkillAbility]} where skillAbility: {Object} where Object = {
             {{/if}}
           </span>
           {{!-- Delete --}}
-          <span class="width-sm">
-            <a class="ambersteel-skill-ability-delete pad-sm button flex flex-center" 
-              data-item-id="{{../skillItemId}}" data-index="{{key}}" 
-              title="{{localize ambersteel.labels.deleteSkillAbility}}">
-              <i class="fas fa-trash"></i>
-            </a>
-          </span>
+          {{> buttonDelete type="skill-ability" itemId=../skillItemId index=key }}
         </div>
         <div class="flex flex-row">
           {{!-- At level --}}
