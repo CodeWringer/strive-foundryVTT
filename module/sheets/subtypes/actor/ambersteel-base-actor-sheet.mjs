@@ -1,4 +1,4 @@
-import * as Dice from "../../../helpers/dice.mjs";
+import * as Dice from "../../../utils/dice-utility.mjs";
 import * as SheetUtil from '../../../utils/sheet-utility.mjs';
 import * as ChatUtil from '../../../utils/chat-utility.mjs';
 import { queryVisibilityMode } from "../../../utils/chat-utility.mjs";

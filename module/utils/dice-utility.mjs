@@ -1,7 +1,7 @@
-import { getElementValue } from "../utils/sheet-utility.mjs";
-import * as ChatUtil from "../utils/chat-utility.mjs";
-import { showDialog } from '../utils/dialog-utility.mjs';
-import { validateOrThrow } from "../utils/validation-utility.mjs";
+import { getElementValue } from "./sheet-utility.mjs";
+import * as ChatUtil from "./chat-utility.mjs";
+import { showDialog } from './dialog-utility.mjs';
+import { validateOrThrow } from "./validation-utility.mjs";
 
 /**
  * Rolls the given number of dice and returns the results of the roll, both in raw 
