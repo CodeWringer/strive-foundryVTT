@@ -2,6 +2,7 @@ import * as Dice from '../utils/dice-utility.mjs';
 import * as ChatUtil from '../utils/chat-utility.mjs';
 import { DICE_ROLL_SOUND } from '../utils/dice-utility.mjs';
 import { getNestedPropertyValue } from '../utils/property-utility.mjs';
+import { queryVisibilityMode } from '../utils/chat-utility.mjs';
 
 /**
  * Registers events on elements of the given DOM. 
@@ -87,7 +88,7 @@ async function _onGenericRoll(event) {
     });
 
     // Invoke callback. 
-    if (dataset.callback !== undefined && dataset.callback !== null) {
+    if (dataset.callback) {
       dataset.owner[dataset.callback](rollResult, dataset.callbackData);
     }
   }
@@ -122,7 +123,7 @@ async function _onDicePoolRoll(event) {
     });
 
     // Invoke callback. 
-    if (dataset.callback !== undefined && dataset.callback !== null) {
+    if (dataset.callback) {
       dataset.owner[dataset.callback](rollResult, dataset.callbackData);
     }
   }

@@ -216,6 +216,7 @@ export default class AmbersteelBaseActor {
     const key = parseInt(splits[0]);
     const isLearningSkill = splits[1] === "true";
 
+    // TODO
 
     // const element = event.currentTarget;
     // const dataset = element.closest(".item").dataset;
@@ -273,6 +274,8 @@ export default class AmbersteelBaseActor {
    */
   async advanceAttributeBasedOnRollResult(rollResult, attributeName) {
     const oAtt = this.parent.getAttributeForName(attributeName).object;
+    
+    // TODO
 
     // const localizedAttName = game.i18n.localize(oAtt.localizableName);
 

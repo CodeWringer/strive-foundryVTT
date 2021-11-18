@@ -133,6 +133,7 @@ export default class AmbersteelBaseActorSheet {
     // ButtonDelete.activateListeners(html, this, isOwner, isEditable);
     // ButtonSendToChat.activateListeners(html, this, isOwner, isEditable);
     // ButtonToggleSkillAbilityList.activateListeners(html, this, isOwner, isEditable);
+    // TODO
 
     // Show item sheet.
     html.find(".ambersteel-item-show").click(this._onItemShow.bind(this));
