@@ -454,11 +454,9 @@ export default class AmbersteelBaseActorSheet {
     if (dialogResult.confirmed) {
       const renderedContent = await new Roll(propertyValue).render();
       ChatUtil.sendToChat({
-        speaker: undefined,
         renderedContent: renderedContent,
         flavor: flavor,
         actor: actor,
-        sound: "../sounds/notify.wav",
         visibilityMode: dialogResult.visibilityMode
       })
     }

@@ -119,7 +119,6 @@ export function sendDiceResultToChat(args = {}) {
         ...args
     };
     ChatUtil.sendToChat({
-        speaker: undefined,
         renderedContent: args.renderedContent,
         flavor: args.flavor,
         actor: args.actor,
