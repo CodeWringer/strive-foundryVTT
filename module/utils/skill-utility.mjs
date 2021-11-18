@@ -1,3 +1,5 @@
+import { showDialog } from "./dialog-utility.mjs";
+
 /**
  * Returns the requirements to the next level of the given level. 
  * @param level The level for which to return the requirements to the next level. 
@@ -9,7 +11,6 @@ export function getAdvancementRequirements(level = 0) {
   }
 };
 
-// TODO: Refactor to use dialog-utility
 /**
 * Shows a dialog to the user to select a skill from the existing list of skills, 
 * or check a flag to add a custom skill.  
@@ -18,44 +19,16 @@ export function getAdvancementRequirements(level = 0) {
 export async function querySkillAddData() {
   const dialogTemplate = "systems/ambersteel/templates/dialog/skill-add-dialog.hbs";
 
-  let dialogData = {
+  const dialogData = {
     availableSkills: [],
     selected: "",
-    isCustomChecked: false,
-    confirmed: false
+    isCustomChecked: false
   };
 
-  return new Promise(async (resolve, reject) => {
-    // Render template. 
-    let renderedContent = await renderTemplate(dialogTemplate, dialogData);
-
-    let dialog = new Dialog({
-      title: game.i18n.localize("ambersteel.dialog.titleSkillAddQuery"),
-      content: renderedContent,
-      buttons: {
-        confirm: {
-          icon: '<i class="fas fa-check"></i>',
-          label: game.i18n.localize("ambersteel.labels.confirm"),
-          callback: () => {
-            dialogData.confirmed = true;
-          }
-        },
-        cancel: {
-          icon: '<i class="fas fa-times"></i>',
-          label: game.i18n.localize("ambersteel.labels.cancel"),
-          callback: () => { }
-        }
-      },
-      default: "confirm",
-      render: html => { },
-      close: html => {
-        resolve({
-          skill: html.find(".skill-select")[0].value,
-          customSkill: html.find(".ambersteel-checkbox")[0].value === "true",
-          confirmed: dialogData.confirmed
-        });
-      }
-    });
-    dialog.render(true);
-  });
+  return showDialog({ 
+      dialogTemplate: dialogTemplate, 
+      localizableTitle: "ambersteel.dialog.titleSkillAddQuery"
+    }, 
+    dialogData
+  );
 }

@@ -6,30 +6,33 @@ import PreparedChatData from './prepared-chat-data.mjs';
  * Represents a skill ability. 
  * 
  * Is a child object of a skill item. 
- * @property {String} name
- * @property {String} description
- * @property {Number} requiredLevel
- * @property {String} condition
- * @property {String} img
- * @property {Number|undefined} apCost
- * @property {Number|undefined} distance
- * @property {String} damageFormula
- * @property {CONFIG.ambersteel.damageTypes|undefined} damageType
- * @property {CONFIG.ambersteel.attackTypes|undefined} attackType
+ * @property {String} args.name
+ * @property {String} args.description
+ * @property {Number} args.requiredLevel
+ * @property {String} args.condition
+ * @property {String} args.img
+ * @property {Number|undefined} args.apCost
+ * @property {Number|undefined} args.distance
+ * @property {String} args.damageFormula
+ * @property {CONFIG.ambersteel.damageTypes|undefined} args.damageType
+ * @property {CONFIG.ambersteel.attackTypes|undefined} args.attackType
  */
 export default class SkillAbility {
-  constructor(args = {
-    name: "New Skill Ability",
-    description: "",
-    requiredLevel: 0,
-    condition: "",
-    img: "icons/svg/item-book.svg",
-    apCost: 0,
-    distance: 0,
-    damageFormula: "1D6",
-    damageType: CONFIG.ambersteel.damageTypes.slashing,
-    attackType: CONFIG.ambersteel.attackTypes.singleTarget,
-  }) {
+  constructor(args = {}) {
+    args = {
+      name: "New Skill Ability",
+      description: "",
+      requiredLevel: 0,
+      condition: "",
+      img: "icons/svg/item-book.svg",
+      apCost: 0,
+      distance: 0,
+      damageFormula: "1D6",
+      damageType: CONFIG.ambersteel.damageTypes.slashing,
+      attackType: CONFIG.ambersteel.attackTypes.singleTarget,
+      ...args
+    };
+
     this.type = "SkillAbility";
 
     this.name = args.name;
@@ -59,7 +62,13 @@ export default class SkillAbility {
    * @returns {PreparedChatData}
    * @virtual
    */
-  static async getChatData(args = {skillAbility, parentItem, actor}) {
+  static async getChatData(args = {}) {
+    args = { 
+      skillAbility: undefined,
+      parentItem: undefined,
+      actor: undefined,
+      ...args
+    };
     validateOrThrow(args, ["skillAbility", "parentItem"]);
 
     const key = args.parentItem.data.data.abilities.indexOf(args.skillAbility);
@@ -83,7 +92,12 @@ export default class SkillAbility {
       isEditable: false,
       isSendable: false
     });
-    return new PreparedChatData(renderedContent, args.actor, localizedName, "../sounds/notify.wav");
+    return new PreparedChatData({
+      renderedContent: renderedContent,
+      actor: args.actor,
+      flavor: localizedName,
+      sound: "../sounds/notify.wav"
+    });
   }
 
   /**
@@ -97,7 +111,14 @@ export default class SkillAbility {
    * @async
    * @virtual
    */
-  static async sendToChat(args = {skillAbility, parentItem, actor, visibilityMode: CONFIG.ambersteel.visibilityModes.public}) {
+  static async sendToChat(args = {}) {
+    args = {
+      skillAbility: undefined,
+      parentItem: undefined,
+      actor: undefined,
+      visibilityMode: CONFIG.ambersteel.visibilityModes.public,
+      ...args
+    };
     validateOrThrow(args, ["skillAbility", "parentItem"]);
 
     const chatData = await SkillAbility.getChatData(args);

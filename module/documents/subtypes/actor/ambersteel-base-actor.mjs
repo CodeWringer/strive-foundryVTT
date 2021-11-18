@@ -153,7 +153,10 @@ export default class AmbersteelBaseActor {
    */
   getChatData() {
     const actor = this.parent;
-    return new PreparedChatData("", actor, undefined, "../sounds/notify.wav");
+    return new PreparedChatData({
+      actor: actor,
+      sound: "../sounds/notify.wav"
+    });
   }
 
   /**

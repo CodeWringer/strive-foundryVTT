@@ -6,11 +6,14 @@
  * @returns {Promise<DialogResult>} Resolves, when the dialog is closed. 
  *          The returned object has the properties: 'confirmed' and 'html'. 
  *          The 'html' property allows filtering for values of input fields, for example.
+ * @async
  */
-export async function showDialog(args = {
-    dialogTemplate: undefined,
-    localizableTitle: ""
-}, dialogData) {
+export async function showDialog(args = {}, dialogData) {
+    args = {
+        dialogTemplate: undefined,
+        localizableTitle: "",
+        ...args
+    };
     const mergedDialogData = {
         confirmed: false,
         CONFIG: CONFIG,
@@ -19,9 +22,9 @@ export async function showDialog(args = {
 
     return new Promise(async (resolve, reject) => {
         // Render template. 
-        let renderedContent = await renderTemplate(args.dialogTemplate, mergedDialogData);
+        const renderedContent = await renderTemplate(args.dialogTemplate, mergedDialogData);
 
-        let dialog = new Dialog({
+        const dialog = new Dialog({
             title: game.i18n.localize(args.localizableTitle),
             content: renderedContent,
             buttons: {

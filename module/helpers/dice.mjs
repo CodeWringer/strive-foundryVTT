@@ -1,12 +1,18 @@
 import { getElementValue } from "../utils/sheet-utility.mjs";
 import * as ChatUtil from "../utils/chat-utility.mjs";
-import { showDialog, DialogResult } from '../utils/dialog-utility.mjs';
+import { showDialog } from '../utils/dialog-utility.mjs';
+import { validateOrThrow } from "../utils/validation-utility.mjs";
 
 /**
- * 
- * @param ops 
+ * Rolls the given number of dice and returns the results of the roll, both in raw 
+ * form and as rendered HTML. 
+ * @param {String|undefined} ops.actionName Optional. The subtitle to show in the chat message. 
+ * @param {Number} ops.actionValue The number of dice to roll. 
+ * @param {Number} ops.obstacle The obstacle to roll against. 
+ * @param {Number} ops.bonusDice An additional number of dice to roll. 
+ * @param {Actor|undefined} ops.actor Optional. The actor to associate with the chat message. 
  * @returns {Object} An object with the following properties: 
- * renderedContent {String} The fully rendered chat message html. 
+ * renderedContent {String} The fully rendered chat message HTML. 
  * flavor {String} 
  * actor {Object}
  * rollResults {Object} An object with the following properties: 
@@ -17,13 +23,16 @@ import { showDialog, DialogResult } from '../utils/dialog-utility.mjs';
  * rollResults.isSuccess {Boolean}
  * rollResults.degree {Number}
  */
-export async function rollDice(ops = {
-    actionName: "",
-    actionValue: 0,
-    obstacle: 0,
-    bonusDice: 0,
-    actor: {}
-}) {
+export async function rollDice(ops = {}) {
+    ops = {
+        actionName: undefined,
+        actionValue: 0,
+        obstacle: 0,
+        bonusDice: 0,
+        actor: undefined,
+        ...ops
+    };
+    validateOrThrow(ops, ["actionValue", "obstacle", "bonusDice"]);
     const messageTemplate = "systems/ambersteel/templates/dice/roll.hbs";
     const obstacle = parseInt(ops.obstacle);
 
@@ -95,14 +104,20 @@ export async function rollDice(ops = {
 
 /**
  * Creates a new ChatMessage to display dice roll results. 
- * @param args 
+ * @param {String} args.renderedContent The fully rendered chat message HTML. 
+ * @param {String} args.flavor Optional. The flavor text / subtitle of the message. 
+ * @param {String} args.actor Optional. The actor to associate with the message. 
+ * @param {String} args.visibilityMode Optional. Sets the visibility of the chat message. Default public. 
  */
-export function sendDiceResultToChat(args = { 
-    renderedContent: "", 
-    flavor: undefined, 
-    actor: undefined,
-    visibilityMode: CONFIG.ambersteel.visibilityModes.public
-    }) {
+export function sendDiceResultToChat(args = {}) {
+    validateOrThrow(args, ["renderedContent"]);
+    args = { 
+        renderedContent: "", 
+        flavor: undefined, 
+        actor: undefined,
+        visibilityMode: CONFIG.ambersteel.visibilityModes.public,
+        ...args
+    };
     ChatUtil.sendToChat({
         speaker: undefined,
         renderedContent: args.renderedContent,

@@ -11,16 +11,18 @@ import { validateOrThrow } from "./validation-utility.mjs";
  * @param {String} chatData.flavor Optional. The flavor text / subtitle of the message. 
  * @param {Actor} chatData.actor Optional. The actor to associate with the message. 
  * @param {String} chatData.sound Optional. The sound to play when the message is sent. 
- * @param {CONFIG.ambersteel.visibilityModes} chatData.visibilityMode Optional. Sets the visibility of the chat message. 
+ * @param {CONFIG.ambersteel.visibilityModes} chatData.visibilityMode Optional. Sets the visibility of the chat message. Default public. 
  */
-export function sendToChat(chatData = {
-  speaker: undefined,
-  renderedContent: undefined,
-  flavor: undefined,
-  actor: undefined,
-  sound: "../sounds/notify.wav",
-  visibilityMode: CONFIG.ambersteel.visibilityModes.public
-}) {
+export function sendToChat(chatData = {}) {
+  chatData = {
+    speaker: undefined,
+    renderedContent: undefined,
+    flavor: undefined,
+    actor: undefined,
+    sound: "../sounds/notify.wav",
+    visibilityMode: CONFIG.ambersteel.visibilityModes.public,
+    ...chatData
+  };
   validateOrThrow(chatData, ["renderedContent"])
 
   const speaker = chatData.speaker ?? ChatMessage.getSpeaker({ actor: chatData.actor });
@@ -93,7 +95,15 @@ export async function queryVisibilityMode() {
  * @param {CONFIG.ambersteel.visibilityModes} args.visibilityMode Optional. Sets the visibility of the chat message. 
  * @async
  */
-export async function sendPropertyToChat(args = {obj, propertyPath, parent, actor, visibilityMode: CONFIG.ambersteel.visibilityModes.public}) {
+export async function sendPropertyToChat(args = {}) {
+  args = {
+    obj: undefined,
+    propertyPath: undefined,
+    parent: undefined,
+    actor: undefined,
+    visibilityMode: CONFIG.ambersteel.visibilityModes.public,
+    ...args
+  };
   validateOrThrow(args, ["obj", "propertyPath", "parent"]);
 
   const prop = getNestedPropertyValue(args.obj, args.propertyPath);

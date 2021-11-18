@@ -21,7 +21,8 @@ export function propertiesDefined(obj, props) {
  * @throws An error, if any of the properties fail to validate. 
  */
 export function validateOrThrow(obj, props) {
-    if (!propertiesDefined(obj, props)) {
-        throw `Not all of the required properties are set! ${props}`;
+    for (const prop of props) {
+        if (obj[prop] == undefined
+        || obj[prop] == null) throw `Required parameter '${prop}' is undefined!`;
     }
 }

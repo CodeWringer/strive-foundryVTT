@@ -29,15 +29,23 @@ export default class PreparedChatData {
 
   /**
    * 
-   * @param renderedContent {String} The fully rendered HTML to display as the chat message. 
-   * @param actor {Actor|undefined} The actor who will act as the speaker (= sender) of the chat message. 
-   * @param flavor {String|undefined} The flavor to display above the rendered chat message. 
-   * @param sound {String|undefined} Path to a sound file to play, when the chat message is sent. 
+   * @param {String} renderedContent The fully rendered HTML to display as the chat message. 
+   * @param {Actor|undefined} actor The actor who will act as the speaker (= sender) of the chat message. 
+   * @param {String|undefined} flavor The flavor to display above the rendered chat message. 
+   * @param {String|undefined} sound Path to a sound file to play, when the chat message is sent. 
    */
-  constructor(renderedContent, actor = undefined, flavor = undefined, sound = undefined) {
-    this.renderedContent = renderedContent;
-    this.actor = actor;
-    this.flavor = flavor;
-    this.sound = sound;
+  constructor(args = {}) {
+    args = {
+      renderedContent: undefined, 
+      actor: undefined,
+      flavor: undefined,
+      sound: undefined,
+      ...args
+    };
+
+    this.renderedContent = args.renderedContent;
+    this.actor = args.actor;
+    this.flavor = args.flavor;
+    this.sound = args.sound;
   }
 }

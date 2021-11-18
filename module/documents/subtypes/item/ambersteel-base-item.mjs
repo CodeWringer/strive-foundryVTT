@@ -76,7 +76,11 @@ export default class AmbersteelBaseItem {
       isSendable: false
     });
 
-    return new PreparedChatData(renderedContent, actor, "", "../sounds/notify.wav");
+    return new PreparedChatData({
+      renderedContent: renderedContent,
+      actor: actor, 
+      sound: "../sounds/notify.wav"
+    });
   }
 
   /**

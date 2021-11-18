@@ -25,7 +25,7 @@ This is the Ambersteel table-top role-playing game system for FoundryVTT.
   * [X] Removing a fate card
   * [ ] Limit
 * [X] Rework skill ability table
-* [ ] Check if optional arguments work correctly (everywhere)
+* [X] Check if optional arguments work correctly (everywhere)
 * [ ] Extract button components
 * [ ] Check if every sendToChat call is correct
 * [ ] Rework skill table?
