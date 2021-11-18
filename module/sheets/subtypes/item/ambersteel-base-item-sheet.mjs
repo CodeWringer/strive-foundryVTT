@@ -204,6 +204,7 @@ export default class AmbersteelBaseItemSheet {
         renderedContent: renderedContent,
         flavor: flavor,
         actor: actor,
+        sound: "../sounds/dice.wav",
         visibilityMode: dialogResult.visibilityMode
       })
     }
