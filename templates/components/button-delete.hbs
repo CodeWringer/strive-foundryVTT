@@ -1,12 +1,20 @@
 {{!-- Required parameters:
-type: {String} = "item"|"skill-ability",
-index: {Number|undefined},
+ownerId: {String}
+ownerType: {String} = "actor|item"
+callback: {String|undefined}
+callbackData: {String|undefined}
+type: {String} = "item"|"skill-ability"
+index: {Number|undefined}
 itemId: {String}
 --}}
 <span class="width-sm">
   <a class="ambersteel-{{type}}-delete pad-sm button flex flex-center"
     data-item-id="{{itemId}}"
     data-index="{{index}}"
+    data-owner-id="{{ownerId}}"
+    data-owner-type="{{ownerType}}"
+    data-callback="{{callback}}"
+    data-callback-data="{{callbackData}}"
     title="{{localize ambersteel.labels.delete}}"
     >
     <i class="fas fa-trash"></i>

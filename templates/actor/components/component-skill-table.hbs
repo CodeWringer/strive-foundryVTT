@@ -139,7 +139,12 @@ skills: {[Object]} where Object = {
                             skillItemId=skill.data.id 
                             abilities=data.abilities }}
                         </div>
-                        {{> buttonToggleSkillAbilityList itemId=skill.data.id isToggled=data.isExpanded }}
+                        {{> buttonToggleSkillAbilityList 
+                            itemId=skill.data.id
+                            isToggled=data.isExpanded
+                            ownerId=../ownerId
+                            ownerType=../ownerType
+                        }}
                     </td>
                 </tr>
             {{/each}}

@@ -1,5 +1,6 @@
 import * as Dice from '../utils/dice-utility.mjs';
 import * as ChatUtil from '../utils/chat-utility.mjs';
+import * as ComponentUtil from './component-utility.mjs';
 import { DICE_ROLL_SOUND } from '../utils/dice-utility.mjs';
 import { getNestedPropertyValue } from '../utils/property-utility.mjs';
 import { queryVisibilityMode } from '../utils/chat-utility.mjs';
@@ -26,38 +27,11 @@ export function activateListeners(html, owner, isOwner, isEditable) {
 }
 
 function getDataSet(event) {
-  const dataset = event.currentTarget.dataset;
-
-  const ownerId = dataset.ownerId;
-  const ownerType = dataset.ownerType;
-  const chatTitle = dataset.chatTitle;
-  const callback = dataset.callback;
-  const callbackData = dataset.callbackData;
-  const propertyPath = dataset.property;
-
-  let owner = undefined
-  let actor = undefined
-  if (ownerType.toLowerCase() == "actor") {
-    owner = game.actors.get(ownerId);
-    actor = owner;
-  } else if (ownerType.toLowerCase() == "item") {
-    owner = game.items.get(ownerId);
-    actor = owner.parent;
-  } else {
-    throw `Unrecognized ownerType '${ownerType}'!`;
-  }
-  const propertyValue = getNestedPropertyValue(owner, propertyPath);
-
+  const dataset = ComponentUtil.getDataSet(event);
+  const propertyValue = getNestedPropertyValue(dataset.owner, dataset.property);
   return {
-    ownerId: ownerId,
-    ownerType: ownerType,
-    chatTitle: chatTitle,
-    callback: callback,
-    callbackData: callbackData,
-    propertyPath: propertyPath,
+    ...dataset,
     propertyValue: propertyValue,
-    owner: owner,
-    actor: actor
   }
 }
 

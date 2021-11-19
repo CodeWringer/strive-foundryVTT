@@ -1,3 +1,5 @@
+import * as ComponentUtil from './component-utility.mjs';
+
 /**
  * Registers events on elements of the given DOM. 
  * @param html {Object} DOM of the sheet for which to register listeners. 

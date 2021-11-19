@@ -1,5 +1,6 @@
 import { getAttributeGroupName } from '../../../utils/attribute-utility.mjs';
 import AmbersteelBaseItemSheet from "./ambersteel-base-item-sheet.mjs";
+import * as ButtonToggleSkillAbilityList from '../../../components/button-toggle-skill-ability-list.mjs';
 
 export default class AmbersteelSkillItemSheet extends AmbersteelBaseItemSheet {
   /** @override */
@@ -22,9 +23,7 @@ export default class AmbersteelSkillItemSheet extends AmbersteelBaseItemSheet {
   /** @override */
   activateListeners(html, isOwner, isEditable) {
     super.activateListeners(html, isOwner, isEditable);
-
-    // Show skill abilities. 
-    html.find(".ambersteel-expand-skill-ability-list").click(this._onExpandSkillAbilityList.bind(this));
+    ButtonToggleSkillAbilityList.activateListeners(html, this, isOwner, isEditable);
 
     if (!isOwner) return;
     if (!isEditable) return;
@@ -36,18 +35,6 @@ export default class AmbersteelSkillItemSheet extends AmbersteelBaseItemSheet {
     html.find(".ambersteel-skill-ability-delete").click(this._onDeleteSkillAbility.bind(this));
   }
   
-  /**
-   * @param event 
-   * @private
-   * @async
-   */
-  async _onExpandSkillAbilityList(event) {
-    event.preventDefault();
-
-    await this.getItem().toggleSkillAbilityListVisible();
-    this.parent.render();
-  }
-
   /**
    * @param event 
    * @private

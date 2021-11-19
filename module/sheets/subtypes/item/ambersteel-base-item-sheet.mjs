@@ -3,7 +3,6 @@ import { queryVisibilityMode } from "../../../utils/chat-utility.mjs";
 import * as ButtonRoll from '../../../components/button-roll.mjs';
 import * as ButtonDelete from '../../../components/button-delete.mjs';
 import * as ButtonSendToChat from '../../../components/button-send-to-chat.mjs';
-import * as ButtonToggleSkillAbilityList from '../../../components/button-toggle-skill-ability-list.mjs';
 
 export default class AmbersteelBaseItemSheet {
   /**
@@ -64,7 +63,6 @@ export default class AmbersteelBaseItemSheet {
     ButtonRoll.activateListeners(html, this, isOwner, isEditable);
     // ButtonDelete.activateListeners(html, this, isOwner, isEditable);
     // ButtonSendToChat.activateListeners(html, this, isOwner, isEditable);
-    ButtonToggleSkillAbilityList.activateListeners(html, this, isOwner, isEditable);
     // TODO
     
     // -------------------------------------------------------------

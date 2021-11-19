@@ -1,3 +1,5 @@
+import * as ComponentUtil from './component-utility.mjs';
+
 /**
  * Registers events on elements of the given DOM. 
  * @param html {Object} DOM of the sheet for which to register listeners. 
@@ -24,7 +26,14 @@ export function activateListeners(html, owner, isOwner, isEditable) {
 async function _onExpandSkillAbilityList(event) {
   event.preventDefault();
 
-  const itemId = event.currentTarget.dataset.itemId;
-  const skillItem = game.items.get(itemId);
+  const dataset = ComponentUtil.getDataSet(event);
+  const itemId = dataset.itemId;
+
+  let skillItem = undefined;
+  if (dataset.ownerType === 'actor') {
+    skillItem = dataset.owner.items.get(itemId);
+  } else if (dataset.ownerType === 'item') {
+    skillItem = dataset.owner;
+  }
   await skillItem.toggleSkillAbilityListVisible();
 }

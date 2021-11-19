@@ -1,12 +1,20 @@
 {{!-- Required parameters:
-type: {String} = "item"|"actor"|"item-property",
-propertyPath: {String},
+ownerId: {String}
+ownerType: {String} = "actor|item"
+callback: {String|undefined}
+callbackData: {String|undefined}
+type: {String} = "item"|"actor"|"item-property"
+propertyPath: {String}
 itemId: {String}
 --}}
 <span class="width-sm">
   <a class="ambersteel-{{type}}-to-chat pad-sm button flex flex-center"
     data-item-id="{{itemId}}"
     data-property="{{propertyPath}}"
+    data-owner-id="{{ownerId}}"
+    data-owner-type="{{ownerType}}"
+    data-callback="{{callback}}"
+    data-callback-data="{{callbackData}}"
     title="{{localize ambersteel.labels.sendToChat}}">
     <i class="fas fa-comments"></i>
   </a>

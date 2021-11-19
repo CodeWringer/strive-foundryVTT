@@ -68,5 +68,10 @@ item: {Item} where Item = {
     skillItemId=item.id 
     abilities=item.data.data.abilities }}
   </div>
-  {{> buttonToggleSkillAbilityList itemId=item.id isToggled=item.data.data.isExpanded }}
+  {{> buttonToggleSkillAbilityList
+    itemId=item.id
+    isToggled=item.data.data.isExpanded
+    ownerId=item.id
+    ownerType="item"
+  }}
 </form>
