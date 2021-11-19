@@ -15,3 +15,16 @@ export function activateListeners(html, owner, isOwner, isEditable) {
   // -------------------------------------------------------------
   if (!isEditable) return;
 }
+
+/**
+ * @param event 
+ * @private
+ * @async
+ */
+async function _onExpandSkillAbilityList(event) {
+  event.preventDefault();
+
+  const itemId = event.currentTarget.dataset.itemId;
+  const skillItem = game.items.get(itemId);
+  await skillItem.toggleSkillAbilityListVisible();
+}

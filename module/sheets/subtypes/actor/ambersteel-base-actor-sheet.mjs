@@ -132,14 +132,11 @@ export default class AmbersteelBaseActorSheet {
     ButtonRoll.activateListeners(html, this, isOwner, isEditable);
     // ButtonDelete.activateListeners(html, this, isOwner, isEditable);
     // ButtonSendToChat.activateListeners(html, this, isOwner, isEditable);
-    // ButtonToggleSkillAbilityList.activateListeners(html, this, isOwner, isEditable);
+    ButtonToggleSkillAbilityList.activateListeners(html, this, isOwner, isEditable);
     // TODO
 
     // Show item sheet.
     html.find(".ambersteel-item-show").click(this._onItemShow.bind(this));
-
-    // Show skill abilities. 
-    html.find(".ambersteel-expand-skill-ability-list").click(this._onExpandSkillAbilityList.bind(this));
 
     // -------------------------------------------------------------
     if (!isOwner) return;
@@ -329,21 +326,6 @@ export default class AmbersteelBaseActorSheet {
     const field = element.dataset.field;
 
     await this.getActor().updateProperty(field, element.value);
-  }
-
-  /**
-   * @param event 
-   * @private
-   * @async
-   */
-  async _onExpandSkillAbilityList(event) {
-    event.preventDefault();
-
-    const itemId = event.currentTarget.dataset.itemId;
-    const skillItem = this.getItem(itemId);
-    await skillItem.toggleSkillAbilityListVisible();
-
-    this.parent.render();
   }
 
   /**
