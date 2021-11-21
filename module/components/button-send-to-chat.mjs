@@ -35,6 +35,6 @@ async function _onSendToChat(event) {
 
   // Invoke callback. 
   if (dataset.callback) {
-    this[dataset.callback](dataset.callbackData);
+    who[dataset.callback](dataset.callbackData);
   }
 }

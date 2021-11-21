@@ -57,7 +57,7 @@ skills: {[Object]} = {
                             {{> buttonRoll
                                 type="dice-pool"
                                 itemId=skill.data.id
-                                chatTitle=skill.localizableName
+                                chatTitle=skill.name
                                 callback="advanceSkillBasedOnRollResult"
                                 callbackData=(concat key "|" ../isLearningSkillsTable)
                             }}

@@ -1,5 +1,6 @@
 import AmbersteelBaseItem from "./ambersteel-base-item.mjs";
 import SkillAbility from "../../../dto/skill-ability.mjs";
+import { getAttributeGroupName } from "../../../utils/attribute-utility.mjs";
 
 export default class AmbersteelSkillItem extends AmbersteelBaseItem {
   /**
@@ -16,6 +17,7 @@ export default class AmbersteelSkillItem extends AmbersteelBaseItem {
     this.parent.toggleSkillAbilityListVisible = this.toggleSkillAbilityListVisible.bind(this);
     this.parent.createSkillAbility = this.createSkillAbility.bind(this);
     this.parent.deleteSkillAbilityAt = this.deleteSkillAbilityAt.bind(this);
+    this.parent.getTotalValue = this.getTotalValue.bind(this);
   }
 
   /** @override */
@@ -140,5 +142,21 @@ export default class AmbersteelSkillItem extends AmbersteelBaseItem {
     const dataAbilities = this.parent.data.data.abilities;
     const abilities = dataAbilities.slice(0, index).concat(dataAbilities.slice(index + 1));
     await this.updateProperty("data.abilities", abilities);
+  }
+
+  /**
+   * Returns the number of dice available for a test of this skill. 
+   * @returns {Number} The number of dice available for the test. 
+   */
+  getTotalValue() {
+    const relatedAttributeName = this.parent.data.data.relatedAttribute;
+    const attGroupName = getAttributeGroupName(relatedAttributeName);
+    
+    const actor = this.parent.parent;
+    const relatedAttributeLevel = actor ? actor.data.data.attributes[attGroupName][relatedAttributeName].value : 0;
+
+    const skillLevel = this.parent.data.data.value;
+
+    return game.ambersteel.getSkillTestNumberOfDice(skillLevel, relatedAttributeLevel);
   }
 }

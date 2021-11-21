@@ -31,6 +31,6 @@ async function _onExpandSkillAbilityList(event) {
 
   // Invoke callback. 
   if (dataset.callback) {
-    this[dataset.callback](dataset.callbackData);
+    who[dataset.callback](dataset.callbackData);
   }
 }

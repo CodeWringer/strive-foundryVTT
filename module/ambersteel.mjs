@@ -20,7 +20,16 @@ Hooks.once('init', async function() {
   // Add system specific logic to global namespace. 
   game.ambersteel = {
     AmbersteelActor,
-    AmbersteelItem
+    AmbersteelItem,
+    /**
+     * Returns the number of dice for a skill test. 
+     * @param {Number} skillValue A skill level. 
+     * @param {Number} relatedAttributeValue Level of the skill related attribute. 
+     * @returns {Number} The number of D6 available for the test. 
+     */
+    getSkillTestNumberOfDice: function(skillLevel, relatedAttributeLevel) {
+      return skillLevel == 0 ? parseInt(Math.ceil(relatedAttributeLevel / 2)) : parseInt(Math.floor(relatedAttributeLevel / 2)) + skillLevel;
+    }
   };
 
   // Set initiative formula. 

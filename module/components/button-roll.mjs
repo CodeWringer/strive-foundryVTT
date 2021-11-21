@@ -2,6 +2,7 @@ import * as Dice from '../utils/dice-utility.mjs';
 import * as ChatUtil from '../utils/chat-utility.mjs';
 import { DICE_ROLL_SOUND } from '../utils/dice-utility.mjs';
 import { queryRollData } from '../utils/dice-utility.mjs';
+import { getNestedPropertyValue } from '../utils/property-utility.mjs';
 
 /**
  * Registers events on elements of the given DOM. 
@@ -32,14 +33,13 @@ async function _onRoll(event) {
   if (!dialogResult.confirmed) return;
   
   const dataset = event.currentTarget.dataset;
-
   const who = dataset.itemId ? this.getItem(dataset.itemId) : this.getContextEntity();
-  const propertyValue = who.getNestedPropertyValue(dataset.propertyPath);
-  
   const actor = this.getActor();
 
   let rollResult = undefined;
   if (dataset.type === 'generic') {
+    const propertyValue = getNestedPropertyValue(who, dataset.propertyPath);
+
     // Do roll. 
     const roll = new Roll(propertyValue);
     rollResult = await roll.evaluate({ async: true });
@@ -54,9 +54,18 @@ async function _onRoll(event) {
       visibilityMode: dialogResult.visibilityMode
     });
   } else if (dataset.type === 'dice-pool') {
+    let numberOfDice = 0;
+
+    if (dataset.propertyPath) {
+      numberOfDice = getNestedPropertyValue(who, dataset.propertyPath);
+    } else {
+      // NOTE: This will break, if 'who' is an Actor or not a skill-Item!
+      numberOfDice = who.getTotalValue();
+    }
+
     // Do roll. 
     rollResult = await Dice.rollDicePool({
-      numberOfDice: parseInt(propertyValue), 
+      numberOfDice: numberOfDice, 
       obstacle: dialogResult.obstacle,
       bonusDice: dialogResult.bonusDice,
     });
@@ -74,6 +83,6 @@ async function _onRoll(event) {
 
   // Invoke callback. 
   if (dataset.callback) {
-    this[dataset.callback](rollResult, dataset.callbackData);
+    who[dataset.callback](rollResult, dataset.callbackData);
   }
 }
