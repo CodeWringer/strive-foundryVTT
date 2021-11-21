@@ -18,6 +18,7 @@ export default class AmbersteelSkillItem extends AmbersteelBaseItem {
     this.parent.createSkillAbility = this.createSkillAbility.bind(this);
     this.parent.deleteSkillAbilityAt = this.deleteSkillAbilityAt.bind(this);
     this.parent.getTotalValue = this.getTotalValue.bind(this);
+    this.parent.advanceSkillBasedOnRollResult = this.advanceSkillBasedOnRollResult.bind(this);
   }
 
   /** @override */
@@ -158,5 +159,14 @@ export default class AmbersteelSkillItem extends AmbersteelBaseItem {
     const skillLevel = this.parent.data.data.value;
 
     return game.ambersteel.getSkillTestNumberOfDice(skillLevel, relatedAttributeLevel);
+  }
+
+  /**
+   * Advances the skill, based on the given {DicePoolResult}. 
+   * @param {DicePoolResult} rollResult 
+   * @async
+   */
+  async advanceSkillBasedOnRollResult(rollResult) {
+    this.parent.addProgress(rollResult.isSuccess, false);
   }
 }

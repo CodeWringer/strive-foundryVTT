@@ -59,7 +59,7 @@ skills: {[Object]} = {
                                 itemId=skill.data.id
                                 chatTitle=skill.name
                                 callback="advanceSkillBasedOnRollResult"
-                                callbackData=(concat key "|" ../isLearningSkillsTable)
+                                callbackData=skill.data.id
                             }}
                         </td>
                     {{/if}}

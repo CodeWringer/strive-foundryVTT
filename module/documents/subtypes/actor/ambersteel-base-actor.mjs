@@ -205,19 +205,13 @@ export default class AmbersteelBaseActor {
   }
 
   /**
-   * Advances the skill 
+   * Advances the skill, based on the given {DicePoolResult}. 
    * @param {DicePoolResult} rollResult 
-   * @param {String} keyAndIsLearning The index of the skill item in question separated from a boolean indicating 
-   * whether this is a learning skill. Format: "key|isLearningSkill"
+   * @param {String} itemId The id of the skill item to advance. 
    * @async
    */
-  async advanceSkillBasedOnRollResult(rollResult, keyAndIsLearning) {
-    const splits = keyAndIsLearning.split("|");
-    const key = parseInt(splits[0]);
-    const isLearningSkill = splits[1] === "true";
-    const oSkill = isLearningSkill ? this.parent.data.skills[key] : this.parent.data.learningSkills[key];
-
-    // Note result towards skill progress. 
+  async advanceSkillBasedOnRollResult(rollResult, itemId) {
+    const oSkill = this.parent.items.get(itemId);
     oSkill.addProgress(rollResult.isSuccess, false);
   }
 
@@ -228,7 +222,6 @@ export default class AmbersteelBaseActor {
    * @async
    */
   async advanceAttributeBasedOnRollResult(rollResult, attributeName) {
-    // Note result towards attribute progress. 
     await this.parent.addAttributeProgress(attributeName, rollResult.isSuccess);
   }
 }
