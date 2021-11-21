@@ -12,8 +12,15 @@ export function activateListeners(html, ownerSheet, isOwner, isEditable) {
   if (!isEditable) return;
 
   // Delete item. 
-  html.find(".ambersteel-item-delete").click(_onItemDelete.bind(ownerSheet));
+  html.find(".ambersteel-item-delete").click(_onDelete.bind(ownerSheet));
+}
 
-  // Delete skill ability.
-  html.find(".ambersteel-skill-ability-delete").click(_onDeleteSkillAbility.bind(ownerSheet));
+async function _onDelete(event) {
+  const dataset = event.currentTarget.element.dataset;
+  const who = dataset.itemId ? this.getItem(dataset.itemId) : this.getContextEntity();
+  if (dataset.propertyPath) {
+    await who.deleteByPropertyPath(dataset.propertyPath);
+  } else {
+    await who.delete();
+  }
 }

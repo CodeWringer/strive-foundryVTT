@@ -14,6 +14,8 @@ export default class RollDataQueryDialogResult {
       visibilityMode: CONFIG.ambersteel.visibilityModes.public,
       ...args
     };
+    this.type = "RollDataQueryDialogResult";
+
     this.obstacle = args.obstacle;
     this.bonusDice = args.bonusDice;
     this.confirmed = args.confirmed;

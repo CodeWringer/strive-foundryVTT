@@ -1,6 +1,7 @@
 import * as Attribute from '../utils/attribute-utility.mjs';
 import AmbersteelPcActor from './subtypes/actor/ambersteel-pc-actor.mjs';
 import AmbersteelNpcActor from './subtypes/actor/ambersteel-npc-actor.mjs';
+import { deleteByPropertyPath } from '../utils/document-update-utility.mjs';
 
 /**
  * @extends {Actor}
@@ -52,6 +53,7 @@ export class AmbersteelActor extends Actor {
     this.subType.prepareDerivedData(this);
   }
 
+  // TODO: Move to ambersteel-base-actor.mjs
   /**
    * 
    * @param attName {String} Internal name of an attribute, e.g. 'magicSense'. 
@@ -73,6 +75,7 @@ export class AmbersteelActor extends Actor {
     }
   }
 
+  // TODO: Move to ambersteel-base-actor.mjs
   /**
    * Sets the level of the attribute with the given name. 
    * @param attName {String} Internal name of an attribute, e.g. 'magicSense'. 
@@ -93,6 +96,7 @@ export class AmbersteelActor extends Actor {
     });
   }
 
+  // TODO: Move to ambersteel-base-actor.mjs
   /**
    * Adds success/failure progress to an attribute. 
    * 
@@ -125,5 +129,9 @@ export class AmbersteelActor extends Actor {
         await this.setAttributeLevel(attName, newLevel);
       }
     }
+  }
+
+  async deleteByPropertyPath(propertyPath) {
+    await deleteByPropertyPath(this, propertyPath);
   }
 }

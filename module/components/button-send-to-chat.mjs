@@ -25,10 +25,12 @@ async function _onSendToChat(event) {
   
   // Do action. 
   const dataset = event.currentTarget.element.dataset;
+  const who = dataset.itemId ? this.getItem(dataset.itemId) : this.getContextEntity();
+
   if (dataset.propertyPath) {
-    this.sendPropertyToChat(dataset.propertyPath, dialogResult.visibilityMode);
+    who.sendPropertyToChat(dataset.propertyPath, dialogResult.visibilityMode);
   } else {
-    this.sendToChat(dialogResult.visibilityMode);
+    who.sendToChat(dialogResult.visibilityMode);
   }
 
   // Invoke callback. 

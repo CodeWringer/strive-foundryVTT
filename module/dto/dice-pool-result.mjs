@@ -18,6 +18,8 @@ export default class DicePoolResult {
       degree: 0,
       ...args
     }
+    this.type = "DicePoolResult";
+
     this.numberOfDice = args.numberOfDice;
     this.obstacle = args.obstacle;
     this.positives = args.positives;

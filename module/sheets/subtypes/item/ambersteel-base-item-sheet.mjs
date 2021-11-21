@@ -1,5 +1,4 @@
 import * as SheetUtil from '../../../utils/sheet-utility.mjs';
-import { queryVisibilityMode } from "../../../utils/chat-utility.mjs";
 import * as ButtonRoll from '../../../components/button-roll.mjs';
 import * as ButtonDelete from '../../../components/button-delete.mjs';
 import * as ButtonSendToChat from '../../../components/button-send-to-chat.mjs';
@@ -19,6 +18,9 @@ export default class AmbersteelBaseItemSheet {
       throw "Argument 'owner' must not be null or undefined!"
     }
     this.parent = parent;
+    this.parent.getActor = this.getActor.bind(this);
+    this.parent.getItem = this.getItem.bind(this);
+    this.parent.getContextEntity = this.getContextEntity.bind(this);
   }
 
   /**
@@ -46,6 +48,14 @@ export default class AmbersteelBaseItemSheet {
   }
 
   /**
+   * Returns the current context object. 
+   * @returns {Actor|Item} The current context object. 
+   */
+  getContextEntity() {
+    return this.getItem();
+  }
+
+  /**
    * Extends the given context object with derived data. 
    * 
    * This is where any data should be added, which is only required to 
@@ -66,9 +76,8 @@ export default class AmbersteelBaseItemSheet {
    */
   activateListeners(html, isOwner, isEditable) {
     ButtonRoll.activateListeners(html, this, isOwner, isEditable);
-    // ButtonDelete.activateListeners(html, this, isOwner, isEditable);
+    ButtonDelete.activateListeners(html, this, isOwner, isEditable);
     ButtonSendToChat.activateListeners(html, this, isOwner, isEditable);
-    // TODO
     
     // -------------------------------------------------------------
     if (!isOwner) return;
@@ -81,29 +90,6 @@ export default class AmbersteelBaseItemSheet {
 
     // Edit item. 
     html.find(".ambersteel-item-edit").change(this._onItemEdit.bind(this));
-
-    // Delete item. 
-    html.find(".ambersteel-item-delete").click(this._onItemDelete.bind(this));
-  }
-
-  /**
-   * Send the associated item to chat. 
-   * @param {CONFIG.ambersteel.visibilityModes} visibilityMode Determines the visibility of the chat message. 
-   * @async
-   * @virtual
-   */
-  async sendToChat(visibilityMode = CONFIG.ambersteel.visibilityModes.public) {
-    this.getItem().sendToChat(visibilityMode);
-  }
-
-  /**
-   * Send a property of the associated item to chat. 
-   * @param {String} propertyPath 
-   * @param {CONFIG.ambersteel.visibilityModes} visibilityMode 
-   * @async
-   */
-  async sendPropertyToChat(propertyPath, visibilityMode = CONFIG.ambersteel.visibilityModes.public) {
-    this.getItem().sendPropertyToChat(propertyPath, visibilityMode);
   }
 
   /**
@@ -123,19 +109,6 @@ export default class AmbersteelBaseItemSheet {
     await item.updateProperty(propertyPath, newValue);
 
     this.parent.render();
-  }
-
-  /**
-   * 
-   * @param event 
-   * @private
-   * @async
-   */
-  async _onItemDelete(event) {
-    event.preventDefault();
-
-    const item = this.getItem();
-    await item.delete();
   }
 
   /**
@@ -168,5 +141,9 @@ export default class AmbersteelBaseItemSheet {
     delete itemData.data["type"];
 
     return await Item.create(itemData, { parent: this.parent });
+  }
+
+  async toggleSkillAbilityListVisible() {
+    return this.getItem().toggleSkillAbilityListVisible();
   }
 }

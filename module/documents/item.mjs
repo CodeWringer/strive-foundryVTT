@@ -1,3 +1,4 @@
+import { deleteByPropertyPath } from '../utils/document-update-utility.mjs';
 import AmbersteelBaseItem from './subtypes/item/ambersteel-base-item.mjs';
 import AmbersteelFateCardItem from './subtypes/item/ambersteel-fate-card-item.mjs';
 import AmbersteelSkillItem from './subtypes/item/ambersteel-skill-item.mjs';
@@ -37,5 +38,9 @@ export class AmbersteelItem extends Item {
   prepareDerivedData() {
     super.prepareDerivedData();
     this.subType.prepareDerivedData();
+  }
+
+  async deleteByPropertyPath(propertyPath) {
+    await deleteByPropertyPath(this, propertyPath);
   }
 }

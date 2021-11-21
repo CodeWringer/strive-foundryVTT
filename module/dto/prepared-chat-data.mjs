@@ -14,6 +14,8 @@ export default class PreparedChatData {
       sound: undefined,
       ...args
     };
+    this.type = "PreparedChatData";
+
     this.renderedContent = args.renderedContent;
     this.actor = args.actor;
     this.flavor = args.flavor;

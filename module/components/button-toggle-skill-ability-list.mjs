@@ -25,14 +25,10 @@ async function _onExpandSkillAbilityList(event) {
   event.preventDefault();
 
   const dataset = event.currentTarget.element.dataset;
-  // TODO
-  // const itemId = dataset.itemId;
+  await this.toggleSkillAbilityListVisible(dataset.itemId);
 
-  // let skillItem = undefined;
-  // if (dataset.ownerType === 'actor') {
-  //   skillItem = dataset.owner.items.get(itemId);
-  // } else if (dataset.ownerType === 'item') {
-  //   skillItem = dataset.owner;
-  // }
-  // await skillItem.toggleSkillAbilityListVisible();
+  // Invoke callback. 
+  if (dataset.callback) {
+    this[dataset.callback](dataset.callbackData);
+  }
 }

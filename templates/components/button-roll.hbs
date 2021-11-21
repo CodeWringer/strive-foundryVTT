@@ -1,12 +1,15 @@
 {{!-- Required parameters:
 type: {String} = "generic"|"dice-pool"
+itemId: {String|undefined}
 propertyPath: {String|undefined}
 chatTitle: {String|undefined}
 callback: {String|undefined}
 callbackData: {String|undefined}
 --}}
 <span class="width-sm">
-  <a class="ambersteel-{{type}}-roll pad-sm button flex flex-center" 
+  <a class="ambersteel-roll pad-sm button flex flex-center" 
+    data-type="{{type}}"
+    data-item-id="{{itemId}}"
     data-property-path="{{propertyPath}}"
     data-chat-title="{{chatTitle}}"
     data-callback="{{callback}}"

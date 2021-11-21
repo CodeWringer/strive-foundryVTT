@@ -1,7 +1,7 @@
 import * as Dice from '../utils/dice-utility.mjs';
 import * as ChatUtil from '../utils/chat-utility.mjs';
 import { DICE_ROLL_SOUND } from '../utils/dice-utility.mjs';
-import { queryVisibilityMode } from '../utils/chat-utility.mjs';
+import { queryRollData } from '../utils/dice-utility.mjs';
 
 /**
  * Registers events on elements of the given DOM. 
@@ -14,11 +14,7 @@ export function activateListeners(html, ownerSheet, isOwner, isEditable) {
   // -------------------------------------------------------------
   if (!isOwner) return;
 
-  // Generic roll. 
-  html.find(".ambersteel-generic-roll").click(_onGenericRoll.bind(ownerSheet));
-
-  // Dice-pool roll.
-  html.find(".ambersteel-dice-pool-roll").click(_onDicePoolRoll.bind(ownerSheet));
+  html.find(".ambersteel-roll").click(_onRoll.bind(ownerSheet));
 
   // -------------------------------------------------------------
   if (!isEditable) return;
@@ -29,63 +25,52 @@ export function activateListeners(html, ownerSheet, isOwner, isEditable) {
  * @private
  * @async
  */
-async function _onGenericRoll(event) {
+async function _onRoll(event) {
   event.preventDefault();
 
-  const dialogResult = await queryVisibilityMode();
+  const dialogResult = await queryRollData();
   if (!dialogResult.confirmed) return;
   
   const dataset = event.currentTarget.element.dataset;
-  const propertyValue = this.getNestedPropertyValue(dataset.propertyPath);
 
-  // Do roll. 
-  const roll = new Roll(propertyValue);
-  const rollResult = await roll.evaluate({ async: true });
+  const who = dataset.itemId ? this.getItem(dataset.itemId) : this.getContextEntity();
+  const propertyValue = who.getNestedPropertyValue(dataset.propertyPath);
+  
+  const actor = this.getActor();
 
-  // Display roll result. 
-  const renderedContent = await roll.render();
-  await ChatUtil.sendToChat({
-    renderedContent: renderedContent,
-    flavor: dataset.chatTitle,
-    actor: this.getActor(),
-    sound: DICE_ROLL_SOUND,
-    visibilityMode: dialogResult.visibilityMode
-  });
+  let rollResult = undefined;
+  if (dataset.type === 'generic') {
+    // Do roll. 
+    const roll = new Roll(propertyValue);
+    rollResult = await roll.evaluate({ async: true });
+  
+    // Display roll result. 
+    const renderedContent = await roll.render();
+    await ChatUtil.sendToChat({
+      renderedContent: renderedContent,
+      flavor: dataset.chatTitle,
+      actor: actor,
+      sound: DICE_ROLL_SOUND,
+      visibilityMode: dialogResult.visibilityMode
+    });
+  } else if (dataset.type === 'dice-pool') {
+    // Do roll. 
+    rollResult = await Dice.rollDicePool({
+      numberOfDice: parseInt(propertyValue), 
+      obstacle: dialogResult.obstacle,
+      bonusDice: dialogResult.bonusDice,
+    });
 
-  // Invoke callback. 
-  if (dataset.callback) {
-    this[dataset.callback](rollResult, dataset.callbackData);
+    // Display roll result. 
+    await Dice.sendDiceResultToChat({
+      rollResult: rollResult,
+      flavor: dataset.chatTitle,
+      actor: actor,
+      visibilityMode: dialogResult.visibilityMode
+    });
+  } else {
+    throw `Unrecognized roll type '${dataset.type}'`;
   }
-}
-
-/**
- * @param {Event} event 
- * @private
- * @async
- */
-async function _onDicePoolRoll(event) {
-  event.preventDefault();
-
-  const dialogResult = await Dice.queryRollData();
-  if (!dialogResult.confirmed) return;
-  
-  const dataset = event.currentTarget.element.dataset;
-  const propertyValue = this.getNestedPropertyValue(dataset.propertyPath);
-
-  // Do roll. 
-  const rollResult = await Dice.rollDicePool({
-    numberOfDice: propertyValue, 
-    obstacle: dialogResult.obstacle,
-    bonusDice: dialogResult.bonusDice,
-  });
-
-  // Display roll result. 
-  await Dice.sendDiceResultToChat({
-    rollResult: rollResult, 
-    flavor: dataset.chatTitle, 
-    actor: this.getActor(),
-    visibilityMode: dialogResult.visibilityMode
-  });
 
   // Invoke callback. 
   if (dataset.callback) {

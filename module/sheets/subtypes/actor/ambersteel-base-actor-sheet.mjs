@@ -1,6 +1,4 @@
 import * as SheetUtil from '../../../utils/sheet-utility.mjs';
-import { queryVisibilityMode } from "../../../utils/chat-utility.mjs";
-import DicePoolResult from "../../../dto/dice-pool-result.mjs";
 import * as ButtonRoll from '../../../components/button-roll.mjs';
 import * as ButtonDelete from '../../../components/button-delete.mjs';
 import * as ButtonSendToChat from '../../../components/button-send-to-chat.mjs';
@@ -21,6 +19,9 @@ export default class AmbersteelBaseActorSheet {
       throw "Argument 'owner' must not be null or undefined!"
     }
     this.parent = parent;
+    this.parent.getActor = this.getActor.bind(this);
+    this.parent.getItem = this.getItem.bind(this);
+    this.parent.getContextEntity = this.getContextEntity.bind(this);
   }
 
   /**
@@ -63,6 +64,14 @@ export default class AmbersteelBaseActorSheet {
   }
 
   /**
+   * Returns the current context object. 
+   * @returns {Actor|Item} The current context object. 
+   */
+  getContextEntity() {
+    return this.getActor();
+  }
+
+  /**
    * Extends the given context object with derived data. 
    * 
    * This is where any data should be added, which is only required to 
@@ -79,7 +88,7 @@ export default class AmbersteelBaseActorSheet {
     context.data.data.attributeGroups = this._getDerivedAttributeGroups(actorData.attributes);
 
     // General derived data. 
-    // TODO: Remove 
+    // TODO: Remove?
     context.data.person = actorData.person;
     context.data.beliefSystem = actorData.beliefSystem;
     context.data.fateSystem = actorData.fateSystem;
@@ -127,10 +136,9 @@ export default class AmbersteelBaseActorSheet {
    */
   activateListeners(html, isOwner, isEditable) {
     ButtonRoll.activateListeners(html, this, isOwner, isEditable);
-    // ButtonDelete.activateListeners(html, this, isOwner, isEditable);
+    ButtonDelete.activateListeners(html, this, isOwner, isEditable);
     ButtonSendToChat.activateListeners(html, this, isOwner, isEditable);
     ButtonToggleSkillAbilityList.activateListeners(html, this, isOwner, isEditable);
-    // TODO
 
     // Show item sheet.
     html.find(".ambersteel-item-show").click(this._onItemShow.bind(this));
@@ -155,9 +163,6 @@ export default class AmbersteelBaseActorSheet {
     // Edit item. 
     html.find(".ambersteel-item-edit").change(this._onItemEdit.bind(this));
 
-    // Delete item. 
-    html.find(".ambersteel-item-delete").click(this._onItemDelete.bind(this));
-
     // Edit attribute. 
     html.find(".ambersteel-actor-edit").change(this._onActorEdit.bind(this));
 
@@ -168,28 +173,9 @@ export default class AmbersteelBaseActorSheet {
     // Add skill ability. 
     html.find(".ambersteel-skill-ability-create").click(this._onCreateSkillAbility.bind(this));
 
+    // TODO: Remove
     // Delete skill ability.
-    html.find(".ambersteel-skill-ability-delete").click(this._onDeleteSkillAbility.bind(this));
-  }
-
-  /**
-   * Send the associated actor to chat. 
-   * @param {CONFIG.ambersteel.visibilityModes} visibilityMode Determines the visibility of the chat message. 
-   * @async
-   * @virtual
-   */
-  async sendToChat(visibilityMode = CONFIG.ambersteel.visibilityModes.public) {
-    this.getActor().sendToChat(visibilityMode);
-  }
-
-  /**
-   * Send a property of the associated actor to chat. 
-   * @param {String} propertyPath 
-   * @param {CONFIG.ambersteel.visibilityModes} visibilityMode 
-   * @async
-   */
-  async sendPropertyToChat(propertyPath, visibilityMode = CONFIG.ambersteel.visibilityModes.public) {
-    this.getActor().sendPropertyToChat(propertyPath, visibilityMode);
+    // html.find(".ambersteel-skill-ability-delete").click(this._onDeleteSkillAbility.bind(this));
   }
 
   /**
@@ -210,22 +196,6 @@ export default class AmbersteelBaseActorSheet {
     await item.updateProperty(propertyPath, newValue);
 
     this.parent.render();
-  }
-
-  /**
-   * 
-   * @param event 
-   * @private
-   * @async
-   */
-  async _onItemDelete(event) {
-    event.preventDefault();
-
-    const element = event.currentTarget;
-    const itemId = element.dataset.itemId;
-    const item = this.getItem(itemId);
-
-    await item.delete();
   }
 
   /**
@@ -321,5 +291,10 @@ export default class AmbersteelBaseActorSheet {
     await skillItem.deleteSkillAbilityAt(index);
 
     this.parent.render();
+  }
+
+  async toggleSkillAbilityListVisible(itemId) {
+    const item = this.getItem(itemId);
+    return item.toggleSkillAbilityListVisible();
   }
 }
