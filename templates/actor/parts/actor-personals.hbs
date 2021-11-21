@@ -19,13 +19,8 @@ data: {Object} = {
       <label class="line-height fancy-font pad-sm" for="person.sex">{{localize "ambersteel.personals.sex"}}</label>
     </div>
     <div class="flex flex-column flex-grow">
-    {{#if isEditable}}
-      <input class="line-height pad-sm" type="text" name="data.person.species" value="{{data.person.species}}" />
-      <input class="line-height pad-sm" type="text" name="data.person.culture" value="{{data.person.culture}}" />
-    {{else}}
-      <span class="line-height pad-sm">{{data.person.species}}</span>
-      <span class="line-height pad-sm">{{data.person.culture}}</span>
-    {{/if}}
+      {{> inputComponent type="single-line" propertyPath="data.data.person.species" isEditable=isEditable cssClass="line-height pad-sm" readOnlyCssClass="line-height pad-sm" }}
+      {{> inputComponent type="single-line" propertyPath="data.data.person.culture" isEditable=isEditable cssClass="line-height pad-sm" readOnlyCssClass="line-height pad-sm" }}
     </div>
     <div class="flex flex-column">
       <label class="line-height fancy-font pad-sm" for="person.culture">{{localize "ambersteel.personals.culture"}}</label>

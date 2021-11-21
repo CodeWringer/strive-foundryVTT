@@ -6,10 +6,9 @@
  * @returns {String} The value of the element. 
  */
 export function getElementValue(element) {
-    let newValue = element.value;
-    if (element.tagName.toLowerCase() == "select") {
-      const optionValue = element.options[element.selectedIndex].value;
-      newValue = optionValue;
-    }
-    return newValue;
+  if (element.tagName.toLowerCase() == "select") {
+    return element.options[element.selectedIndex].value;
+  } else {
+    return element.value;
+  }
 }

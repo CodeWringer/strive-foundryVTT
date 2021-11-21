@@ -11,6 +11,7 @@
     "systems/ambersteel/templates/components/button-send-to-chat.hbs",
     "systems/ambersteel/templates/components/button-toggle-skill-ability-list.hbs",
     "systems/ambersteel/templates/components/number-spinner.hbs",
+    "systems/ambersteel/templates/components/input.hbs",
     // Actor partials.
     "systems/ambersteel/templates/actor/components/component-attribute-table.hbs",
     "systems/ambersteel/templates/actor/components/component-skill-table.hbs",

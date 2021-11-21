@@ -34,10 +34,6 @@ item: {Item} = {
     </div>
   </header>
   <div class="flex item-description">
-    {{#if isEditable}}
-      <textarea name="data.description" spellcheck="false">{{item.data.data.description}}</textarea>
-    {{else}}
-      <span class="multiline flex-grow">{{item.data.data.description}}</span>
-    {{/if}}
+    {{> inputComponent type="multi-line" propertyPath="data.data.description" isEditable=isEditable readOnlyCssClass="multiline flex-grow"}}
   </div>
 </form>

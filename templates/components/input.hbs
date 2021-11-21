@@ -1,0 +1,64 @@
+{{!-- Required context:
+isEditable: {Boolean}
+itemId: {String|undefined}
+propertyPath: {String}
+type: {String} = "single-line|multi-line|drop-down|number"
+options: {Array<Object>|undefined} = {
+  name: {String}
+  localizable: {String}
+}
+cssClass: {String|undefined}
+readOnlyCssClass: {String|undefined}
+--}}
+{{#if isEditable}}
+  {{!-- Single-line input --}}
+  {{#if (eq type 'single-line')}}
+    <input class="ambersteel-edit {{cssClass}}"
+      data-item-id="{{itemId}}"
+      data-property-path="{{propertyPath}}"
+      type="text"
+      value="{{lookupValue this itemId propertyPath}}"
+    />
+  {{/if}}
+  {{!-- Drop-down --}}
+  {{#if (eq type 'drop-down')}}
+    <select class="ambersteel-edit {{cssClass}}"
+      data-item-id="{{itemId}}"
+      data-property-path="{{propertyPath}}"
+      value="{{lookupValue this itemId propertyPath}}"
+    >
+      {{#select propertyPath}}
+      {{#each options as |option index|}}
+      <option value="{{option.name}}">{{localize option.localizable}}</option>
+      {{/each}}
+      {{/select}}
+    </select>
+  {{/if}}
+  {{!-- Number-spinner --}}
+  {{#if (eq type 'number')}}
+    {{#> numberSpinner}}
+    <input class="ambersteel-edit spinner {{cssClass}}"
+      type="number"
+      data-dtype="Number"
+      min="0"
+      step="1"
+      data-item-id="{{itemId}}"
+      data-property-path="{{propertyPath}}"
+      value="{{lookupValue this itemId propertyPath}}"
+      />
+    {{/numberSpinner}}
+  {{/if}}
+  {{!-- Textarea --}}
+  {{#if (eq type 'multi-line')}}
+      <textarea class="ambersteel-edit {{cssClass}}"
+        spellcheck="false"
+        data-item-id="{{itemId}}"
+        data-property-path="{{propertyPath}}"
+      >{{lookupValue this itemId propertyPath}}</textarea>
+  {{/if}}
+{{else}}
+  {{!-- Display read-only value --}}
+  <span class="{{readOnlyCssClass}}">
+    {{lookupValue this itemId propertyPath}}
+  </span>
+{{/if}}

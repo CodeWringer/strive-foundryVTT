@@ -2,6 +2,7 @@ import * as SheetUtil from '../../../utils/sheet-utility.mjs';
 import * as ButtonRoll from '../../../components/button-roll.mjs';
 import * as ButtonDelete from '../../../components/button-delete.mjs';
 import * as ButtonSendToChat from '../../../components/button-send-to-chat.mjs';
+import * as InputComponent from '../../../components/input.mjs';
 
 export default class AmbersteelBaseItemSheet {
   /**
@@ -78,6 +79,7 @@ export default class AmbersteelBaseItemSheet {
     ButtonRoll.activateListeners(html, this, isOwner, isEditable);
     ButtonDelete.activateListeners(html, this, isOwner, isEditable);
     ButtonSendToChat.activateListeners(html, this, isOwner, isEditable);
+    InputComponent.activateListeners(html, this, isOwner, isEditable);
     
     // -------------------------------------------------------------
     if (!isOwner) return;
@@ -87,28 +89,6 @@ export default class AmbersteelBaseItemSheet {
 
     // Add Item
     html.find('.ambersteel-item-create').click(this._onItemCreate.bind(this));
-
-    // Edit item. 
-    html.find(".ambersteel-item-edit").change(this._onItemEdit.bind(this));
-  }
-
-  /**
-   * 
-   * @param event 
-   * @private
-   * @async
-   */
-  async _onItemEdit(event) {
-    event.preventDefault();
-
-    const element = event.currentTarget;
-    const item = this.getItem();
-    const propertyPath = element.dataset.field;
-    const newValue = SheetUtil.getElementValue(element);
-
-    await item.updateProperty(propertyPath, newValue);
-
-    this.parent.render();
   }
 
   /**

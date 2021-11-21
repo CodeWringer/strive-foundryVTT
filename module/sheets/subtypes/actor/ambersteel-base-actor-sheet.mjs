@@ -3,6 +3,7 @@ import * as ButtonRoll from '../../../components/button-roll.mjs';
 import * as ButtonDelete from '../../../components/button-delete.mjs';
 import * as ButtonSendToChat from '../../../components/button-send-to-chat.mjs';
 import * as ButtonToggleSkillAbilityList from '../../../components/button-toggle-skill-ability-list.mjs';
+import * as InputComponent from '../../../components/input.mjs';
 
 export default class AmbersteelBaseActorSheet {
   /**
@@ -139,6 +140,7 @@ export default class AmbersteelBaseActorSheet {
     ButtonDelete.activateListeners(html, this, isOwner, isEditable);
     ButtonSendToChat.activateListeners(html, this, isOwner, isEditable);
     ButtonToggleSkillAbilityList.activateListeners(html, this, isOwner, isEditable);
+    InputComponent.activateListeners(html, this, isOwner, isEditable);
 
     // Show item sheet.
     html.find(".ambersteel-item-show").click(this._onItemShow.bind(this));
@@ -160,38 +162,12 @@ export default class AmbersteelBaseActorSheet {
     // Add Item
     html.find('.ambersteel-item-create').click(this._onItemCreate.bind(this));
 
-    // Edit item. 
-    html.find(".ambersteel-item-edit").change(this._onItemEdit.bind(this));
-
-    // Edit attribute. 
-    html.find(".ambersteel-actor-edit").change(this._onActorEdit.bind(this));
-
     // Context menu.
     // TODO: Refactor -> item type specific?
     new ContextMenu(html, ".skill-item", AmbersteelBaseActorSheet.itemContextMenu);
 
     // Add skill ability. 
     html.find(".ambersteel-skill-ability-create").click(this._onCreateSkillAbility.bind(this));
-  }
-
-  /**
-   * 
-   * @param event 
-   * @private
-   * @async
-   */
-  async _onItemEdit(event) {
-    event.preventDefault();
-
-    const element = event.currentTarget;
-    const itemId = element.dataset.itemId;
-    const item = this.getItem(itemId);
-    const propertyPath = element.dataset.field;
-    const newValue = SheetUtil.getElementValue(element);
-
-    await item.updateProperty(propertyPath, newValue);
-
-    this.parent.render();
   }
 
   /**
@@ -240,19 +216,6 @@ export default class AmbersteelBaseActorSheet {
     const item = this.getItem(itemId);
 
     item.sheet.render(true);
-  }
-
-  /**
-   * @param event 
-   * @private
-   * @async
-   */
-  async _onActorEdit(event) {
-    event.preventDefault();
-    const element = event.currentTarget;
-    const field = element.dataset.field;
-
-    await this.getActor().updateProperty(field, element.value);
   }
 
   /**

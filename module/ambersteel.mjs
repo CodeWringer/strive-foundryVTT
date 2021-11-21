@@ -8,6 +8,7 @@ import { AmbersteelActorSheet } from "./sheets/actor-sheet.mjs";
 import { AmbersteelItemSheet } from "./sheets/item-sheet.mjs";
 // Import helper/utility classes and constants.
 import { preloadHandlebarsTemplates } from "./templatePreloader.mjs";
+import { getNestedPropertyValue } from "./utils/property-utility.mjs";
 
 /* -------------------------------------------- */
 /*  Init Hook                                   */
@@ -90,6 +91,20 @@ Handlebars.registerHelper('eq', function(a, b) {
   return a == b;
 });
 
+Handlebars.registerHelper('lookupValue', function(context, itemId, propertyPath) {
+  let propertyHolder = undefined;
+  if (context.item) {
+    propertyHolder = context.item;
+  } else if (context.actor) {
+    if (itemId) {
+      propertyHolder = context.actor.items.get(itemId);
+    } else {
+      propertyHolder = context.actor;
+    }
+  }
+  return getNestedPropertyValue(propertyHolder, propertyPath);
+});
+
 /* -------------------------------------------- */
 /*  Handlebars Partials                         */
 /* -------------------------------------------- */
@@ -99,6 +114,7 @@ Handlebars.registerPartial('buttonSendToChat', `{{#> "systems/ambersteel/templat
 Handlebars.registerPartial('buttonDelete', `{{#> "systems/ambersteel/templates/components/button-delete.hbs"}}{{/"systems/ambersteel/templates/components/button-delete.hbs"}}`);
 Handlebars.registerPartial('buttonRoll', `{{#> "systems/ambersteel/templates/components/button-roll.hbs"}}{{/"systems/ambersteel/templates/components/button-roll.hbs"}}`);
 Handlebars.registerPartial('buttonToggleSkillAbilityList', `{{#> "systems/ambersteel/templates/components/button-toggle-skill-ability-list.hbs"}}{{/"systems/ambersteel/templates/components/button-toggle-skill-ability-list.hbs"}}`);
+Handlebars.registerPartial('inputComponent', `{{#> "systems/ambersteel/templates/components/input.hbs"}}{{/"systems/ambersteel/templates/components/input.hbs"}}`);
 
 /* -------------------------------------------- */
 /*  Ready Hook                                  */
