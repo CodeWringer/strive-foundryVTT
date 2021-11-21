@@ -1,21 +1,21 @@
 /**
  * Registers events on elements of the given DOM. 
  * @param html {Object} DOM of the sheet for which to register listeners. 
- * @param owner {ActorSheet|ItemSheet} DOM owner object. This should be an actor sheet object or item sheet object.
+ * @param ownerSheet {ActorSheet|ItemSheet} DOM owner object. This should be an actor sheet object or item sheet object.
  * @param isOwner {Boolean} If true, registers events that require owner permission. 
  * @param isEditable {Boolean} If true, registers events that require editing permission. 
  */
-export function activateListeners(html, owner, isOwner, isEditable) {
+export function activateListeners(html, ownerSheet, isOwner, isEditable) {
     // -------------------------------------------------------------
     if (!isOwner) return;
     // -------------------------------------------------------------
     if (!isEditable) return;
 
     // Increment.
-    html.find(".button-spinner-up").click(_onClickNumberSpinnerUp.bind(owner));
+    html.find(".button-spinner-up").click(_onClickNumberSpinnerUp.bind(ownerSheet));
 
     // Decrement
-    html.find(".button-spinner-down").click(_onClickNumberSpinnerDown.bind(owner));
+    html.find(".button-spinner-down").click(_onClickNumberSpinnerDown.bind(ownerSheet));
 }
 
 /**

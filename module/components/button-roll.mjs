@@ -1,38 +1,27 @@
 import * as Dice from '../utils/dice-utility.mjs';
 import * as ChatUtil from '../utils/chat-utility.mjs';
-import * as ComponentUtil from './component-utility.mjs';
 import { DICE_ROLL_SOUND } from '../utils/dice-utility.mjs';
-import { getNestedPropertyValue } from '../utils/property-utility.mjs';
 import { queryVisibilityMode } from '../utils/chat-utility.mjs';
 
 /**
  * Registers events on elements of the given DOM. 
  * @param html {Object} DOM of the sheet for which to register listeners. 
- * @param owner {ActorSheet|ItemSheet} DOM owner object. This should be an actor sheet object or item sheet object.
+ * @param ownerSheet {ActorSheet|ItemSheet} DOM owner object. This should be an actor sheet object or item sheet object.
  * @param isOwner {Boolean} If true, registers events that require owner permission. 
  * @param isEditable {Boolean} If true, registers events that require editing permission. 
  */
-export function activateListeners(html, owner, isOwner, isEditable) {
+export function activateListeners(html, ownerSheet, isOwner, isEditable) {
   // -------------------------------------------------------------
   if (!isOwner) return;
 
   // Generic roll. 
-  html.find(".ambersteel-generic-roll").click(_onGenericRoll.bind(owner));
+  html.find(".ambersteel-generic-roll").click(_onGenericRoll.bind(ownerSheet));
 
   // Dice-pool roll.
-  html.find(".ambersteel-dice-pool-roll").click(_onDicePoolRoll.bind(owner));
+  html.find(".ambersteel-dice-pool-roll").click(_onDicePoolRoll.bind(ownerSheet));
 
   // -------------------------------------------------------------
   if (!isEditable) return;
-}
-
-function getDataSet(event) {
-  const dataset = ComponentUtil.getDataSet(event);
-  const propertyValue = getNestedPropertyValue(dataset.owner, dataset.property);
-  return {
-    ...dataset,
-    propertyValue: propertyValue,
-  }
 }
 
 /**
