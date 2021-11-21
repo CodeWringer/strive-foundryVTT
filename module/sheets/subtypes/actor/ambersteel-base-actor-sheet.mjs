@@ -172,10 +172,6 @@ export default class AmbersteelBaseActorSheet {
 
     // Add skill ability. 
     html.find(".ambersteel-skill-ability-create").click(this._onCreateSkillAbility.bind(this));
-
-    // TODO: Remove
-    // Delete skill ability.
-    // html.find(".ambersteel-skill-ability-delete").click(this._onDeleteSkillAbility.bind(this));
   }
 
   /**
@@ -270,25 +266,6 @@ export default class AmbersteelBaseActorSheet {
     const itemId = event.currentTarget.dataset.itemId;
     const skillItem = this.getItem(itemId);
     await skillItem.createSkillAbility();
-
-    this.parent.render();
-  }
-
-  /**
-   * @param event 
-   * @private
-   * @async
-   */
-  async _onDeleteSkillAbility(event) {
-    event.preventDefault();
-
-    const dataset = event.currentTarget.dataset;
-
-    const itemId = dataset.itemId;
-    const skillItem = this.getItem(itemId);
-
-    const index = parseInt(dataset.index);
-    await skillItem.deleteSkillAbilityAt(index);
 
     this.parent.render();
   }
