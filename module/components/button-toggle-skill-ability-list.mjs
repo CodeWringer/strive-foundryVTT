@@ -24,8 +24,10 @@ export function activateListeners(html, ownerSheet, isOwner, isEditable) {
 async function _onExpandSkillAbilityList(event) {
   event.preventDefault();
 
-  const dataset = event.currentTarget.element.dataset;
-  await this.toggleSkillAbilityListVisible(dataset.itemId);
+  // Do action. 
+  const dataset = event.currentTarget.dataset;
+  const who = dataset.itemId ? this.getItem(dataset.itemId) : this.getContextEntity();
+  await who.toggleSkillAbilityListVisible();
 
   // Invoke callback. 
   if (dataset.callback) {

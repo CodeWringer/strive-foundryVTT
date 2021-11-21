@@ -36,10 +36,7 @@ item: {Item} where Item = {
       </div>
       {{#if isSendable}}
         <span class="flex flex-right ambersteel-item-to-chat-margin-right">
-          {{> buttonSendToChat
-            type="item"
-            id=item.id
-          }}
+          {{> buttonSendToChat}}
         </span>
       {{/if}}
     </div>
@@ -72,8 +69,5 @@ item: {Item} where Item = {
       abilities=item.data.data.abilities
     }}
   </div>
-  {{> buttonToggleSkillAbilityList
-    itemId=item.id
-    isToggled=item.data.data.isExpanded
-  }}
+  {{> buttonToggleSkillAbilityList isToggled=item.data.data.isExpanded }}
 </form>

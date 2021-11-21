@@ -142,8 +142,4 @@ export default class AmbersteelBaseItemSheet {
 
     return await Item.create(itemData, { parent: this.parent });
   }
-
-  async toggleSkillAbilityListVisible() {
-    return this.getItem().toggleSkillAbilityListVisible();
-  }
 }

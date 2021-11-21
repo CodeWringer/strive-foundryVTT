@@ -24,7 +24,7 @@ async function _onSendToChat(event) {
   if (!dialogResult.confirmed) return;
   
   // Do action. 
-  const dataset = event.currentTarget.element.dataset;
+  const dataset = event.currentTarget.dataset;
   const who = dataset.itemId ? this.getItem(dataset.itemId) : this.getContextEntity();
 
   if (dataset.propertyPath) {

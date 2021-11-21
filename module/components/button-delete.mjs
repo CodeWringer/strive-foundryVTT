@@ -16,7 +16,7 @@ export function activateListeners(html, ownerSheet, isOwner, isEditable) {
 }
 
 async function _onDelete(event) {
-  const dataset = event.currentTarget.element.dataset;
+  const dataset = event.currentTarget.dataset;
   const who = dataset.itemId ? this.getItem(dataset.itemId) : this.getContextEntity();
   if (dataset.propertyPath) {
     await who.deleteByPropertyPath(dataset.propertyPath);

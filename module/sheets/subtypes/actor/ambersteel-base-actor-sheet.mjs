@@ -292,9 +292,4 @@ export default class AmbersteelBaseActorSheet {
 
     this.parent.render();
   }
-
-  async toggleSkillAbilityListVisible(itemId) {
-    const item = this.getItem(itemId);
-    return item.toggleSkillAbilityListVisible();
-  }
 }

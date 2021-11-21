@@ -1,6 +1,7 @@
 {{!-- Requires context:
 isEditable: {Boolean}
 isSendable: {Boolean}
+itemId: {String}
 --}}
 <section class="fate-card" data-item-id="{{data._id}}">
   <div class="flex flex-row fate-card-header">
@@ -13,7 +14,7 @@ isSendable: {Boolean}
       </span>
       {{#if isSendable}}
         <span class="flex flex-right">
-          {{> buttonSendToChat }}
+          {{> buttonSendToChat itemId=itemId}}
         </span>
       {{/if}}
     </div>
@@ -28,7 +29,7 @@ isSendable: {Boolean}
   <div class="flex flex-row fate-card-footer">
     {{#if isEditable}}
       <span class="flex-grow"></span>
-      {{> buttonDelete }}
+      {{> buttonDelete itemId=itemId }}
     {{/if}}
   </div>
 </section>

@@ -31,7 +31,7 @@ async function _onRoll(event) {
   const dialogResult = await queryRollData();
   if (!dialogResult.confirmed) return;
   
-  const dataset = event.currentTarget.element.dataset;
+  const dataset = event.currentTarget.dataset;
 
   const who = dataset.itemId ? this.getItem(dataset.itemId) : this.getContextEntity();
   const propertyValue = who.getNestedPropertyValue(dataset.propertyPath);

@@ -54,23 +54,13 @@ skills: {[Object]} = {
                 <tr class="item skill-item" data-item-id="{{skill.data.id}}">
                     {{#if ../isEditable}}
                         <td class="skill-column-roll">
-                            {{#if ../isLearningSkillsTable}}
-                                {{> buttonRoll
-                                    type="dice-pool"
-                                    propertyPath=(concat "data.data.learningSkills[" key "].data.value")
-                                    chatTitle=skill.localizableName
-                                    callback="advanceSkillBasedOnRollResult"
-                                    callbackData=(concat key "|" ../isLearningSkillsTable)
-                                }}
-                            {{else}}
-                                {{> buttonRoll
-                                    type="dice-pool"
-                                    propertyPath=(concat "data.data.skills[" key "].data.value")
-                                    chatTitle=skill.localizableName
-                                    callback="advanceSkillBasedOnRollResult"
-                                    callbackData=(concat key "|" ../isLearningSkillsTable)
-                                }}
-                            {{/if}}
+                            {{> buttonRoll
+                                type="dice-pool"
+                                itemId=skill.data.id
+                                chatTitle=skill.localizableName
+                                callback="advanceSkillBasedOnRollResult"
+                                callbackData=(concat key "|" ../isLearningSkillsTable)
+                            }}
                         </td>
                     {{/if}}
                     <td class="fancy-font flex skill-column-name">
@@ -121,7 +111,7 @@ skills: {[Object]} = {
                     </td>
                     {{#if ../isEditable}}
                         <td class="skill-column-delete">
-                            {{> buttonDelete type="item" itemId=skill.data.id }}
+                            {{> buttonDelete itemId=skill.data.id }}
                         </td>
                     {{/if}}
                 </tr>
@@ -129,16 +119,14 @@ skills: {[Object]} = {
                     <td style="display: table-cell;" colspan="100">
                         <div class="{{#if data.isExpanded}}{{else}}hidden{{/if}}">
                             {{> "systems/ambersteel/templates/item/parts/skill-ability-table.hbs" 
-                                isEditable=../isEditable 
+                                isEditable=../isEditable
                                 isSendable=../isSendable
-                                skillItemId=skill.data.id 
+                                skillItemId=skill.data.id
+                                itemId=skill.data.id
                                 abilities=data.abilities
                             }}
                         </div>
-                        {{> buttonToggleSkillAbilityList 
-                            itemId=skill.data.id
-                            isToggled=data.isExpanded
-                        }}
+                        {{> buttonToggleSkillAbilityList itemId=skill.data.id isToggled=data.isExpanded }}
                     </td>
                 </tr>
             {{/each}}

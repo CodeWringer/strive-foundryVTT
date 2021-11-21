@@ -28,11 +28,7 @@ item: {Item} = {
       </div>
       {{#if isSendable}}
         <span class="flex flex-right ambersteel-item-to-chat-margin-right">
-          {{> buttonSendToChat
-            type="item"
-            id=item.id
-            ownerType="undefined"
-          }}
+          {{> buttonSendToChat}}
         </span>
       {{/if}}
     </div>

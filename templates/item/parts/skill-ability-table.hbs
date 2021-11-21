@@ -2,6 +2,7 @@
 isEditable: {Boolean}
 isSendable: {Boolean}
 skillItemId: {String}
+itemId: {String}
 abilities: {[SkillAbility]} = {
   name: {String}
   description: {String}
@@ -20,7 +21,7 @@ abilities: {[SkillAbility]} = {
       <li class="ambersteel-list-row sheet-block">
         <div class="flex flex-row">
           {{!-- Send to chat --}}
-          {{> buttonSendToChat propertyPath=(concat "data.data.abilities[" key "]") }}
+          {{> buttonSendToChat itemId=../itemId propertyPath=(concat "data.data.abilities[" key "]") }}
           {{!-- Name --}}
           <span class="ambersteel-list-column ambersteel-list-column-name flex flex-grow">
             <label class="fancy-font pad-sm width-min-lg" for="data.abilities[{{key}}].name">{{localize "ambersteel.labels.name"}}</label>
@@ -32,7 +33,7 @@ abilities: {[SkillAbility]} = {
             {{/if}}
           </span>
           {{!-- Delete --}}
-          {{> buttonDelete }}
+          {{> buttonDelete itemId=../itemId propertyPath=(concat "data.data.abilities[" key "]") }}
         </div>
         <div class="flex flex-row">
           {{!-- At level --}}
@@ -126,6 +127,7 @@ abilities: {[SkillAbility]} = {
             </label>
             {{> buttonRoll
               type="generic"
+              itemId=../itemId
               propertyPath=(concat "data.data.abilities[" key "].damageFormula")
               chatTitle=ability.name
             }}
