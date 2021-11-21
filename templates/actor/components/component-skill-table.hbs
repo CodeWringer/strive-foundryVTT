@@ -1,20 +1,18 @@
 {{!-- Requires parameters: 
-isEditable: {Boolean},
-isSendable: {Boolean},
-ownerId: {String},
-ownerType: {String} = "actor"|"item",
-isLearningSkillsTable: {Boolean},
-skills: {[Object]} where Object = {
-    name: {String},
-    data: {Object} where Object ? {
-        id: {String},
-        value: {Number},
-        successes: {Number},
-        failures: {Number},
-        requiredSuccessses: {Number},
-        requiredFailures: {Number},
-        relatedAttribute: {String},
-        abilities: {[Object]} where Object -> see item/parts/skill-ability-table.hbs,
+isEditable: {Boolean}
+isSendable: {Boolean}
+isLearningSkillsTable: {Boolean}
+skills: {[Object]} = {
+    name: {String}
+    data: {Object} ? {
+        id: {String}
+        value: {Number}
+        successes: {Number}
+        failures: {Number}
+        requiredSuccessses: {Number}
+        requiredFailures: {Number}
+        relatedAttribute: {String}
+        abilities: {[Object]} -> see item/parts/skill-ability-table.hbs
         localizableName: {String}
     }
 }
@@ -59,8 +57,6 @@ skills: {[Object]} where Object = {
                             {{#if ../isLearningSkillsTable}}
                                 {{> buttonRoll
                                     type="dice-pool"
-                                    ownerId=../ownerId
-                                    ownerType=../ownerType
                                     propertyPath=(concat "data.data.learningSkills[" key "].data.value")
                                     chatTitle=skill.localizableName
                                     callback="advanceSkillBasedOnRollResult"
@@ -69,8 +65,6 @@ skills: {[Object]} where Object = {
                             {{else}}
                                 {{> buttonRoll
                                     type="dice-pool"
-                                    ownerId=../ownerId
-                                    ownerType=../ownerType
                                     propertyPath=(concat "data.data.skills[" key "].data.value")
                                     chatTitle=skill.localizableName
                                     callback="advanceSkillBasedOnRollResult"
@@ -135,15 +129,15 @@ skills: {[Object]} where Object = {
                     <td style="display: table-cell;" colspan="100">
                         <div class="{{#if data.isExpanded}}{{else}}hidden{{/if}}">
                             {{> "systems/ambersteel/templates/item/parts/skill-ability-table.hbs" 
-                            isEditable=../isEditable 
-                            skillItemId=skill.data.id 
-                            abilities=data.abilities }}
+                                isEditable=../isEditable 
+                                isSendable=../isSendable
+                                skillItemId=skill.data.id 
+                                abilities=data.abilities
+                            }}
                         </div>
                         {{> buttonToggleSkillAbilityList 
                             itemId=skill.data.id
                             isToggled=data.isExpanded
-                            ownerId=../ownerId
-                            ownerType=../ownerType
                         }}
                     </td>
                 </tr>

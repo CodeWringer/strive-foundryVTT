@@ -31,6 +31,13 @@ export default class AmbersteelBaseItemSheet {
   }
 
   /**
+   * @returns {Actor}
+   */
+  getActor() {
+    return this.getItem().parent;
+  }
+
+  /**
    * Returns the item object of the parent sheet. 
    * @returns {Item} The item object of the parent sheet. 
    */
@@ -48,8 +55,6 @@ export default class AmbersteelBaseItemSheet {
    * @virtual
    */
   prepareDerivedData(context) {
-    context.ownerId = context.item.id;
-    context.ownerType = "item";
   }
 
   /**
@@ -62,17 +67,11 @@ export default class AmbersteelBaseItemSheet {
   activateListeners(html, isOwner, isEditable) {
     ButtonRoll.activateListeners(html, this, isOwner, isEditable);
     // ButtonDelete.activateListeners(html, this, isOwner, isEditable);
-    // ButtonSendToChat.activateListeners(html, this, isOwner, isEditable);
+    ButtonSendToChat.activateListeners(html, this, isOwner, isEditable);
     // TODO
     
     // -------------------------------------------------------------
     if (!isOwner) return;
-
-    // Send item to chat. 
-    html.find(".ambersteel-item-to-chat").click(this._onItemSendToChat.bind(this));
-
-    // Send item property to chat.
-    html.find(".ambersteel-item-property-to-chat").click(this._onItemPropertySendToChat.bind(this));
 
     // -------------------------------------------------------------
     if (!isEditable) return;
@@ -85,6 +84,26 @@ export default class AmbersteelBaseItemSheet {
 
     // Delete item. 
     html.find(".ambersteel-item-delete").click(this._onItemDelete.bind(this));
+  }
+
+  /**
+   * Send the associated item to chat. 
+   * @param {CONFIG.ambersteel.visibilityModes} visibilityMode Determines the visibility of the chat message. 
+   * @async
+   * @virtual
+   */
+  async sendToChat(visibilityMode = CONFIG.ambersteel.visibilityModes.public) {
+    this.getItem().sendToChat(visibilityMode);
+  }
+
+  /**
+   * Send a property of the associated item to chat. 
+   * @param {String} propertyPath 
+   * @param {CONFIG.ambersteel.visibilityModes} visibilityMode 
+   * @async
+   */
+  async sendPropertyToChat(propertyPath, visibilityMode = CONFIG.ambersteel.visibilityModes.public) {
+    this.getItem().sendPropertyToChat(propertyPath, visibilityMode);
   }
 
   /**
@@ -149,42 +168,5 @@ export default class AmbersteelBaseItemSheet {
     delete itemData.data["type"];
 
     return await Item.create(itemData, { parent: this.parent });
-  }
-
-  /**
-   * @param event 
-   * @private
-   * @async
-   */
-  async _onItemSendToChat(event) {
-    event.preventDefault();
-
-    const item = this.getItem();
-
-    const dialogResult = await queryVisibilityMode();
-    if (dialogResult.confirmed) {
-      await item.sendToChat(dialogResult.visibilityMode);
-    }
-  }
-
-  /**
-   * @param event 
-   * @private
-   * @async
-   */
-  async _onItemPropertySendToChat(event) {
-    event.preventDefault();
-
-    const item = this.getItem();
-    const propertyPath = event.currentTarget.dataset.property;
-    
-    const dialogResult = await queryVisibilityMode();
-    if (dialogResult.confirmed) {
-      await item.sendPropertyToChat(propertyPath, {
-        parent: this.parent,
-        actor: this.parent.actor, 
-        visibilityMode: dialogResult.visibilityMode
-      });
-    }
   }
 }

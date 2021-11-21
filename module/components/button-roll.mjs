@@ -43,28 +43,29 @@ function getDataSet(event) {
 async function _onGenericRoll(event) {
   event.preventDefault();
 
-  const dataset = getDataSet(event);
-  
   const dialogResult = await queryVisibilityMode();
-  if (dialogResult.confirmed) {
-    // Do roll. 
-    const roll = new Roll(dataset.propertyValue);
-    const rollResult = await roll.evaluate({ async: true });
+  if (!dialogResult.confirmed) return;
+  
+  const dataset = event.currentTarget.element.dataset;
+  const propertyValue = this.getNestedPropertyValue(dataset.propertyPath);
 
-    // Display roll result. 
-    const renderedContent = await roll.render();
-    await ChatUtil.sendToChat({
-      renderedContent: renderedContent,
-      flavor: dataset.chatTitle,
-      actor: dataset.actor,
-      sound: DICE_ROLL_SOUND,
-      visibilityMode: dialogResult.visibilityMode
-    });
+  // Do roll. 
+  const roll = new Roll(propertyValue);
+  const rollResult = await roll.evaluate({ async: true });
 
-    // Invoke callback. 
-    if (dataset.callback) {
-      dataset.owner[dataset.callback](rollResult, dataset.callbackData);
-    }
+  // Display roll result. 
+  const renderedContent = await roll.render();
+  await ChatUtil.sendToChat({
+    renderedContent: renderedContent,
+    flavor: dataset.chatTitle,
+    actor: this.getActor(),
+    sound: DICE_ROLL_SOUND,
+    visibilityMode: dialogResult.visibilityMode
+  });
+
+  // Invoke callback. 
+  if (dataset.callback) {
+    this[dataset.callback](rollResult, dataset.callbackData);
   }
 }
 
@@ -76,29 +77,29 @@ async function _onGenericRoll(event) {
 async function _onDicePoolRoll(event) {
   event.preventDefault();
 
-  const dataset = getDataSet(event);
-  
-  // Modal dialog to enter obstacle and bonus dice. 
   const dialogResult = await Dice.queryRollData();
-  if (dialogResult.confirmed) {
-    // Do roll. 
-    const rollResult = await Dice.rollDicePool({
-      numberOfDice: dataset.propertyValue, 
-      obstacle: dialogResult.obstacle,
-      bonusDice: dialogResult.bonusDice,
-    });
+  if (!dialogResult.confirmed) return;
+  
+  const dataset = event.currentTarget.element.dataset;
+  const propertyValue = this.getNestedPropertyValue(dataset.propertyPath);
 
-    // Display roll result. 
-    await Dice.sendDiceResultToChat({
-      rollResult: rollResult, 
-      flavor: dataset.chatTitle, 
-      actor: dataset.actor,
-      visibilityMode: dialogResult.visibilityMode
-    });
+  // Do roll. 
+  const rollResult = await Dice.rollDicePool({
+    numberOfDice: propertyValue, 
+    obstacle: dialogResult.obstacle,
+    bonusDice: dialogResult.bonusDice,
+  });
 
-    // Invoke callback. 
-    if (dataset.callback) {
-      dataset.owner[dataset.callback](rollResult, dataset.callbackData);
-    }
+  // Display roll result. 
+  await Dice.sendDiceResultToChat({
+    rollResult: rollResult, 
+    flavor: dataset.chatTitle, 
+    actor: this.getActor(),
+    visibilityMode: dialogResult.visibilityMode
+  });
+
+  // Invoke callback. 
+  if (dataset.callback) {
+    this[dataset.callback](rollResult, dataset.callbackData);
   }
 }

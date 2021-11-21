@@ -1,17 +1,22 @@
 {{!-- Requires parameters:
-isEditable: {Boolean},
-learningSkills: {[Object]} where Object -> see component-skill-table.hbs,
-skills: {[Object]} where Object -> see component-skill-table.hbs
+isEditable: {Boolean}
+isSendable: {Boolean}
+learningSkills: {[Object]} -> see component-skill-table.hbs
+skills: {[Object]} -> see component-skill-table.hbs
 --}}
 <section>
   {{!-- Learning Skills --}}
   {{> "systems/ambersteel/templates/actor/components/component-skill-table.hbs" 
-  isEditable=isEditable 
-  isLearningSkillsTable=true 
-  skills=learningSkills }}
+    isEditable=isEditable
+    isSendable=isSendable
+    isLearningSkillsTable=true 
+    skills=learningSkills
+  }}
   {{!-- Known Skills --}}
   {{> "systems/ambersteel/templates/actor/components/component-skill-table.hbs"
-  isEditable=isEditable 
-  isLearningSkillsTable=false 
-  skills=skills }}
+    isEditable=isEditable
+    isSendable=isSendable
+    isLearningSkillsTable=false 
+    skills=skills
+  }}
 </section>

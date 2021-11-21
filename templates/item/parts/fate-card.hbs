@@ -1,14 +1,6 @@
 {{!-- Requires context:
-isEditable: {Boolean},
-isSendable: {Boolean},
-data: {Object} where Object = {
-  name: {String},
-  _id: {String},
-  data: {Object} where Object = {
-    description: {String}
-  }
-},
-img: {String}
+isEditable: {Boolean}
+isSendable: {Boolean}
 --}}
 <section class="fate-card" data-item-id="{{data._id}}">
   <div class="flex flex-row fate-card-header">
@@ -21,7 +13,7 @@ img: {String}
       </span>
       {{#if isSendable}}
         <span class="flex flex-right">
-          {{> buttonSendToChat type="item" itemId=data._id }}
+          {{> buttonSendToChat }}
         </span>
       {{/if}}
     </div>
@@ -36,7 +28,7 @@ img: {String}
   <div class="flex flex-row fate-card-footer">
     {{#if isEditable}}
       <span class="flex-grow"></span>
-      {{> buttonDelete type="item" itemId=data._id }}
+      {{> buttonDelete }}
     {{/if}}
   </div>
 </section>

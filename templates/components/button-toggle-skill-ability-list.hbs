@@ -1,17 +1,13 @@
 {{!-- Required parameters:
-ownerId: {String}
-ownerType: {String} = "actor|item"
+propertyPath: {String|undefined}
 callback: {String|undefined}
 callbackData: {String|undefined}
-itemId: {String}
 isToggled: {Boolean}
 --}}
 <div class="ambersteel-expand-skill-ability-list-container">
   <a class="ambersteel-expand-skill-ability-list pad-sm fill flex flex-center"
     title="{{localize ambersteel.labels.expandSkillAbilityList}}"
-    data-item-id="{{itemId}}"
-    data-owner-id="{{ownerId}}"
-    data-owner-type="{{ownerType}}"
+    data-property-path="{{propertyPath}}"
     data-callback="{{callback}}"
     data-callback-data="{{callbackData}}"
     >

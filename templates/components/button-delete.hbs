@@ -1,18 +1,11 @@
 {{!-- Required parameters:
-ownerId: {String}
-ownerType: {String} = "actor|item"
+propertyPath: {String|undefined}
 callback: {String|undefined}
 callbackData: {String|undefined}
-type: {String} = "item"|"skill-ability"
-index: {Number|undefined}
-itemId: {String}
 --}}
 <span class="width-sm">
-  <a class="ambersteel-{{type}}-delete pad-sm button flex flex-center"
-    data-item-id="{{itemId}}"
-    data-index="{{index}}"
-    data-owner-id="{{ownerId}}"
-    data-owner-type="{{ownerType}}"
+  <a class="ambersteel-delete pad-sm button flex flex-center"
+    data-property-path="{{propertyPath}}"
     data-callback="{{callback}}"
     data-callback-data="{{callbackData}}"
     title="{{localize ambersteel.labels.delete}}"

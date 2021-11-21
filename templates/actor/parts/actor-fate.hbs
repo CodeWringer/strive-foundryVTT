@@ -1,16 +1,17 @@
 {{!-- Requires parameters:
-isEditable: {Boolean},
-data: {Object} where Object = {
-  fateSystem: {Object} where Object = {
-    miFP: {Number},
-    maFP: {Number},
-    AFP: {Number},
+isEditable: {Boolean}
+isSendable: {Boolean}
+data: {Object} = {
+  fateSystem: {Object} = {
+    miFP: {Number}
+    maFP: {Number}
+    AFP: {Number}
     remainingSlots: {Number},
-    cards: {[Object]} where Object = { 
-      id: {String},
-      img: {String},
+    cards: {[Object]} = { 
+      id: {String}
+      img: {String}
       name: {String}
-      localizableName: {String},
+      localizableName: {String}
       localizableDescription: {String}
     }
   }
@@ -53,9 +54,9 @@ data: {Object} where Object = {
     {{#each data.data.fateSystem.cards as |card key|}}
     <div class="fate-card-actor-container">
       {{> "systems/ambersteel/templates/item/parts/fate-card.hbs"
-        isEditable=../isEditable 
-        isSendable=true 
-        data=card 
+        isEditable=../isEditable
+        isSendable=true
+        data=card
       }}
     </div>
     {{/each}}

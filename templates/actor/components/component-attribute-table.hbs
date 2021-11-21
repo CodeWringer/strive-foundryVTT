@@ -1,18 +1,16 @@
 {{!-- Requires parameters: 
-isEditable: Boolean,
-isSendable: {Boolean},
-ownerId: {String},
-ownerType: {String} = "actor"|"item",
-localizableAttributeGroupName: {String},
-attributeGroupName: {String},
-attributes: {[Object]} where Object = {
-    name: {String},
-    localizableName: {String},
-    localizableAbbreviation: {String},
-    value: {Number},
-    successes: {Number},
-    failures: {Number},
-    requiredSuccessses: {Number},
+isEditable: {Boolean}
+isSendable: {Boolean}
+localizableAttributeGroupName: {String}
+attributeGroupName: {String}
+attributes: {[Object]} = {
+    name: {String}
+    localizableName: {String}
+    localizableAbbreviation: {String}
+    value: {Number}
+    successes: {Number}
+    failures: {Number}
+    requiredSuccessses: {Number}
     requiredFailures: {Number}
 }
 --}}
@@ -46,8 +44,6 @@ attributes: {[Object]} where Object = {
                     <td class="attribute-column-roll">
                         {{> buttonRoll
                             type="dice-pool"
-                            ownerId=../ownerId
-                            ownerType=../ownerType
                             propertyPath=(concat "data.data.attributes." ../attributeGroupName "." att.name ".value")
                             chatTitle=(localize att.localizableName)
                             callback="advanceAttributeBasedOnRollResult"

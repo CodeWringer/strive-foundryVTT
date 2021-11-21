@@ -1,10 +1,8 @@
 {{!-- Required context:
-isEditable: {Boolean},
-isSendable: {Boolean},
-ownerId: {String},
-ownerType: {String} = "actor"|"item",
-skillItemId: {String},
-abilities: {[SkillAbility]} where skillAbility: {Object} where Object = {
+isEditable: {Boolean}
+isSendable: {Boolean}
+skillItemId: {String}
+abilities: {[SkillAbility]} = {
   name: {String}
   description: {String}
   requiredLevel: {Number}
@@ -22,7 +20,7 @@ abilities: {[SkillAbility]} where skillAbility: {Object} where Object = {
       <li class="ambersteel-list-row sheet-block">
         <div class="flex flex-row">
           {{!-- Send to chat --}}
-          {{> buttonSendToChat type="item-property" propertyPath=(concat "data.data.abilities[" key "]") itemId=../skillItemId }}
+          {{> buttonSendToChat propertyPath=(concat "data.data.abilities[" key "]") }}
           {{!-- Name --}}
           <span class="ambersteel-list-column ambersteel-list-column-name flex flex-grow">
             <label class="fancy-font pad-sm width-min-lg" for="data.abilities[{{key}}].name">{{localize "ambersteel.labels.name"}}</label>
@@ -34,7 +32,7 @@ abilities: {[SkillAbility]} where skillAbility: {Object} where Object = {
             {{/if}}
           </span>
           {{!-- Delete --}}
-          {{> buttonDelete type="skill-ability" itemId=../skillItemId index=key }}
+          {{> buttonDelete }}
         </div>
         <div class="flex flex-row">
           {{!-- At level --}}
@@ -128,8 +126,6 @@ abilities: {[SkillAbility]} where skillAbility: {Object} where Object = {
             </label>
             {{> buttonRoll
               type="generic"
-              ownerId=../ownerId
-              ownerType=../ownerType
               propertyPath=(concat "data.data.abilities[" key "].damageFormula")
               chatTitle=ability.name
             }}

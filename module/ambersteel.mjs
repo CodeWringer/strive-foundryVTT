@@ -14,11 +14,10 @@ import { preloadHandlebarsTemplates } from "./templatePreloader.mjs";
 /* -------------------------------------------- */
 
 Hooks.once('init', async function() {
-
+  // Add config and constants to global namespace. 
   CONFIG.ambersteel = ambersteel;
 
-  // Add utility classes to the global game object so that they're more easily
-  // accessible in global contexts.
+  // Add system specific logic to global namespace. 
   game.ambersteel = {
     AmbersteelActor,
     AmbersteelItem
@@ -98,4 +97,12 @@ Handlebars.registerPartial('buttonToggleSkillAbilityList', `{{#> "systems/ambers
 
 // Hooks.once("ready", async function() {
 // 
+// });
+
+// Hooks.on("createActor", async function(document, options, userId) {
+//   console.log("created!");
+// });
+
+// Hooks.on("deleteActor", async function(document, options, userId) {
+//   console.log("deleted!");
 // });

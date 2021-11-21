@@ -1,48 +1,57 @@
 {{!-- Requires parameters:
-isEditable: {Boolean},
-attributeGroups: {Object} where Object = {
-    physical: {Object} where Object = {
+isEditable: {Boolean}
+isSendable: {Boolean}
+attributeGroups: {Object} = {
+    physical: {Object} = {
         name: {String},
         localizableName: {String},
-        attributes: {[Object]} where Object -> see component-attribute-table.hbs
+        attributes: {[Object]} -> see component-attribute-table.hbs
     },
-    mental: {Object}: {Object} where Object = {
+    mental: {Object}: {Object} = {
         name: {String},
         localizableName: {String},
-        attributes: {[Object]} where Object -> see component-attribute-table.hbs
+        attributes: {[Object]} -> see component-attribute-table.hbs
     },
-    social: {Object}: {Object} where Object = {
+    social: {Object}: {Object} = {
         name: {String},
         localizableName: {String},
-        attributes: {[Object]} where Object -> see component-attribute-table.hbs
+        attributes: {[Object]} -> see component-attribute-table.hbs
     },
-    arcane: {Object}: {Object} where Object = {
+    arcane: {Object}: {Object} = {
         name: {String},
         localizableName: {String},
-        attributes: {[Object]} where Object -> see component-attribute-table.hbs
+        attributes: {[Object]} -> see component-attribute-table.hbs
     }
 }
 --}}
 <section>
     {{!-- Attributes --}}
     {{> "systems/ambersteel/templates/actor/components/component-attribute-table.hbs" 
-    isEditable=isEditable 
-    localizableAttributeGroupName=attributeGroups.physical.localizableName 
-    attributeGroupName=attributeGroups.physical.name 
-    attributes=attributeGroups.physical.attributes }}
+        isEditable=isEditable
+        isSendable=isSendable
+        localizableAttributeGroupName=attributeGroups.physical.localizableName
+        attributeGroupName=attributeGroups.physical.name
+        attributes=attributeGroups.physical.attributes
+    }}
     {{> "systems/ambersteel/templates/actor/components/component-attribute-table.hbs" 
-    isEditable=isEditable 
-    localizableAttributeGroupName=attributeGroups.mental.localizableName 
-    attributeGroupName=attributeGroups.mental.name 
-    attributes=attributeGroups.mental.attributes }}
+        isEditable=isEditable
+        isSendable=isSendable
+        localizableAttributeGroupName=attributeGroups.mental.localizableName 
+        attributeGroupName=attributeGroups.mental.name 
+        attributes=attributeGroups.mental.attributes
+    }}
     {{> "systems/ambersteel/templates/actor/components/component-attribute-table.hbs"
-    isEditable=isEditable 
-    localizableAttributeGroupName=attributeGroups.social.localizableName 
-    attributeGroupName=attributeGroups.social.name 
-    attributes=attributeGroups.social.attributes }}
+        isEditable=isEditable
+        isSendable=isSendable
+        localizableAttributeGroupName=attributeGroups.social.localizableName 
+        attributeGroupName=attributeGroups.social.name 
+        attributes=attributeGroups.social.attributes
+    }}
     {{> "systems/ambersteel/templates/actor/components/component-attribute-table.hbs"
-    isEditable=isEditable 
-    localizableAttributeGroupName=attributeGroups.arcane.localizableName 
-    attributeGroupName=attributeGroups.arcane.name 
-    attributes=attributeGroups.arcane.attributes }}
+        isEditable=isEditable
+        isSendable=isSendable
+        localizableAttributeGroupName=attributeGroups.arcane.localizableName 
+        attributeGroupName=attributeGroups.arcane.name 
+        attributes=attributeGroups.arcane.attributes
+    }}
 </section>

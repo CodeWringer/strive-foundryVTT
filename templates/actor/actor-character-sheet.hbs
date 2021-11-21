@@ -1,16 +1,18 @@
 {{!-- Requires context:
-isEditable: {Boolean},
-isSendable: {Boolean},
-isGM: {Boolean},
-data: {Object} = {
-  data: {Object} {
-    person: {Object} -> see parts/actor-personals.hbs,
-    attributeGroups: {Object} -> see parts/actor-attributes.hbs,
-    learningSkills: {[Object]} -> see components/component-skill-table.hbs,
-    skills: {[Object]} -> see components/component-skill-table.hbs,
-    beliefSystem: {Object} -> see parts/actor-beliefs.hbs,
-    fateSystem: {Object} -> see parts/actor-fate.hbs,
-    biography: {Object} -> see parts/actor-biography.hbs,
+isEditable: {Boolean}
+isSendable: {Boolean}
+isGM: {Boolean}
+actor: {Actor} = {
+  data: {Object} = {
+    data: {Object} {
+      person: {Object} -> see parts/actor-personals.hbs
+      attributeGroups: {Object} -> see parts/actor-attributes.hbs
+      learningSkills: {[Object]} -> see components/component-skill-table.hbs
+      skills: {[Object]} -> see components/component-skill-table.hbs
+      beliefSystem: {Object} -> see parts/actor-beliefs.hbs
+      fateSystem: {Object} -> see parts/actor-fate.hbs
+      biography: {Object} -> see parts/actor-biography.hbs
+    }
   }
 }
 --}}
@@ -50,24 +52,27 @@ data: {Object} = {
     {{!-- Attributes Tab --}}
     <div class="tab attributes" data-group="primary" data-tab="attributes">
       {{> "systems/ambersteel/templates/actor/parts/actor-attributes.hbs" 
-      isEditable=isEditable 
-      attributeGroups=data.attributeGroups 
+        isEditable=isEditable 
+        isSendable=isSendable
+        attributeGroups=data.attributeGroups 
       }}
     </div>
 
     {{!-- Skills Tab --}}
     <div class="tab skills" data-group="primary" data-tab="skills">
       {{> "systems/ambersteel/templates/actor/parts/actor-skills.hbs" 
-      isEditable=isEditable 
-      learningSkills=data.data.learningSkills  
-      skills=data.data.skills 
+        isEditable=isEditable 
+        isSendable=isSendable
+        learningSkills=data.data.learningSkills  
+        skills=data.data.skills 
       }}
     </div>
 
     {{!-- Magic Tab --}}
     <div class="tab magic" data-group="primary" data-tab="magic">
       {{> "systems/ambersteel/templates/actor/parts/actor-magic.hbs" 
-      isEditable=isEditable 
+        isEditable=isEditable 
+        isSendable=isSendable
       }}
     </div>
 
@@ -76,6 +81,7 @@ data: {Object} = {
       <div class="tab beliefs-fate" data-group="primary" data-tab="beliefs-fate">
         {{> "systems/ambersteel/templates/actor/parts/actor-beliefs-fate.hbs" 
         isEditable=isEditable 
+        isSendable=isSendable
         beliefSystem=data.beliefSystem 
         fateSystem=data.fateSystem 
         }}
@@ -85,21 +91,24 @@ data: {Object} = {
     {{!-- Health Tab --}}
     <div class="tab health" data-group="primary" data-tab="health">
       {{> "systems/ambersteel/templates/actor/parts/actor-health.hbs" 
-      isEditable=isEditable 
+        isEditable=isEditable 
+        isSendable=isSendable
       }}
     </div>
 
     {{!-- Possessions Tab --}}
     <div class="tab possessions" data-group="primary" data-tab="possessions">
       {{> "systems/ambersteel/templates/actor/parts/actor-possessions.hbs" 
-      isEditable=isEditable 
+        isEditable=isEditable 
+        isSendable=isSendable
       }}
     </div>
 
     {{!-- Biography Tab --}}
     <div class="tab biography" data-group="primary" data-tab="biography">
       {{> "systems/ambersteel/templates/actor/parts/actor-biography.hbs" 
-      isEditable=isEditable 
+        isEditable=isEditable 
+        isSendable=isSendable
       }}
     </div>
 
@@ -107,7 +116,8 @@ data: {Object} = {
     {{#if isGM}}
       <div class="tab gm-notes" data-group="primary" data-tab="gm-notes">
         {{> "systems/ambersteel/templates/gm-notes.hbs" 
-        isEditable=isEditable 
+          isEditable=isEditable 
+          isSendable=false
         }}
       </div>
     {{/if}}

@@ -36,7 +36,10 @@ item: {Item} where Item = {
       </div>
       {{#if isSendable}}
         <span class="flex flex-right ambersteel-item-to-chat-margin-right">
-          {{> buttonSendToChat type="item" itemId=item.id }}
+          {{> buttonSendToChat
+            type="item"
+            id=item.id
+          }}
         </span>
       {{/if}}
     </div>
@@ -64,14 +67,13 @@ item: {Item} where Item = {
   </div>
   <div class="{{#if item.data.data.isExpanded}}{{else}}hidden{{/if}}">
     {{> "systems/ambersteel/templates/item/parts/skill-ability-table.hbs" 
-    isEditable=isEditable 
-    skillItemId=item.id 
-    abilities=item.data.data.abilities }}
+      isEditable=isEditable 
+      skillItemId=item.id 
+      abilities=item.data.data.abilities
+    }}
   </div>
   {{> buttonToggleSkillAbilityList
     itemId=item.id
     isToggled=item.data.data.isExpanded
-    ownerId=item.id
-    ownerType="item"
   }}
 </form>

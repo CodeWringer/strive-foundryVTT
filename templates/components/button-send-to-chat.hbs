@@ -1,18 +1,11 @@
 {{!-- Required parameters:
-ownerId: {String}
-ownerType: {String} = "actor|item"
+propertyPath: {String|undefined}
 callback: {String|undefined}
 callbackData: {String|undefined}
-type: {String} = "item"|"actor"|"item-property"
-propertyPath: {String}
-itemId: {String}
 --}}
 <span class="width-sm">
-  <a class="ambersteel-{{type}}-to-chat pad-sm button flex flex-center"
-    data-item-id="{{itemId}}"
-    data-property="{{propertyPath}}"
-    data-owner-id="{{ownerId}}"
-    data-owner-type="{{ownerType}}"
+  <a class="ambersteel-send-to-chat pad-sm button flex flex-center"
+    data-property-path="{{propertyPath}}"
     data-callback="{{callback}}"
     data-callback-data="{{callbackData}}"
     title="{{localize ambersteel.labels.sendToChat}}">

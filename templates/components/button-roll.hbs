@@ -1,17 +1,13 @@
 {{!-- Required parameters:
-ownerId: {String}
-ownerType: {String} = "actor|item"
-callback: {String|undefined}
-callbackData: {String|undefined}
-chatTitle: {String|undefined}
 type: {String} = "generic"|"dice-pool"
 propertyPath: {String|undefined}
+chatTitle: {String|undefined}
+callback: {String|undefined}
+callbackData: {String|undefined}
 --}}
 <span class="width-sm">
   <a class="ambersteel-{{type}}-roll pad-sm button flex flex-center" 
-    data-owner-id="{{ownerId}}"
-    data-owner-type="{{ownerType}}"
-    data-property="{{propertyPath}}"
+    data-property-path="{{propertyPath}}"
     data-chat-title="{{chatTitle}}"
     data-callback="{{callback}}"
     data-callback-data="{{callbackData}}"
