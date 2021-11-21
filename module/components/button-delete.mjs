@@ -12,7 +12,7 @@ export function activateListeners(html, ownerSheet, isOwner, isEditable) {
   if (!isEditable) return;
 
   // Delete item. 
-  html.find(".ambersteel-item-delete").click(_onDelete.bind(ownerSheet));
+  html.find(".ambersteel-delete").click(_onDelete.bind(ownerSheet));
 }
 
 async function _onDelete(event) {
