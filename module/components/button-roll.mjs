@@ -57,7 +57,7 @@ async function _onRoll(event) {
     let numberOfDice = 0;
 
     if (dataset.propertyPath) {
-      numberOfDice = getNestedPropertyValue(who, dataset.propertyPath);
+      numberOfDice = parseInt(getNestedPropertyValue(who, dataset.propertyPath));
     } else {
       // NOTE: This will break, if 'who' is an Actor or not a skill-Item!
       numberOfDice = who.getTotalValue();
