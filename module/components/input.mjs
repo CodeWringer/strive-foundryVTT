@@ -9,6 +9,11 @@ import { selectItemByValue, getElementValue } from '../utils/sheet-utility.mjs';
  * @param isEditable {Boolean} If true, registers events that require editing permission. 
  */
 export function activateListeners(html, ownerSheet, isOwner, isEditable) {
+  if (ownerSheet === undefined) {
+    console.warn(`No 'ownerSheet' defined. Skipping 'activateListeners'.`);
+    return;
+  }
+
   for (const elem of html.find(".drop-down")) {
     const dataset = elem.dataset;
     const propertyHolder = dataset.itemId ? ownerSheet.getItem(dataset.itemId) : ownerSheet.getContextEntity();

@@ -1,4 +1,5 @@
 import DialogResult from '../dto/dialog-result.mjs';
+import * as NumberSpinner from '../components/number-spinner.mjs';
 
 /**
  * Shows a dialog to the user and returns a promise with the result of the user interaction. 
@@ -44,7 +45,9 @@ export async function showDialog(args = {}, dialogData) {
                 }
             },
             default: "cancel",
-            render: html => {},
+            render: html => {
+                NumberSpinner.activateListeners(html, this, true, true);
+            },
             close: html => {
                 resolve(new DialogResult(
                     mergedDialogData.confirmed,
