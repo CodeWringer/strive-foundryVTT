@@ -47,19 +47,13 @@ item: {Item} where Item = {
       <label class="line-height fancy-font pad-sm" for="data.relatedAttribute">{{localize "ambersteel.labels.description"}}</label>
     </div>
     <div class="flex flex-column flex-grow">
-    {{#if isEditable}}
-      <select class="ambersteel-item-edit" name="data.relatedAttribute" data-field="data.relatedAttribute">
-        {{#select item.data.data.relatedAttribute}}
-        {{#each CONFIG.character.attributes as | att |}}
-        <option value="{{att.name}}">{{localize att.localizableAbbreviation}}</option>
-        {{/each}}
-        {{/select}}
-      </select>
-      <textarea class="resize-vertical" name="data.description" spellcheck="false">{{item.data.data.description}}</textarea>
-    {{else}}
-      <span class="line-height pad-sm">{{item.data.data.relatedAttribute}}</span>
-      <span class="line-height pad-sm">{{item.data.data.description}}</span>
-    {{/if}}
+      {{> inputComponent type="drop-down" propertyPath="data.data.relatedAttribute" 
+        options=CONFIG.character.attributes
+        optionValueProperty="name"
+        optionDisplayProperty="localizableAbbreviation"
+        isEditable=isEditable
+      }}
+      {{> inputComponent type="multi-line" propertyPath="data.data.description" isEditable=isEditable readOnlyCssClass="multiline flex-grow"}}
   </div>
   </div>
   <div class="{{#if item.data.data.isExpanded}}{{else}}hidden{{/if}}">

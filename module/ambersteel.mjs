@@ -91,7 +91,7 @@ Handlebars.registerHelper('eq', function(a, b) {
   return a == b;
 });
 
-Handlebars.registerHelper('lookupValue', function(context, itemId, propertyPath) {
+Handlebars.registerHelper('lookupValue', function(context, propertyPath, itemId) {
   let propertyHolder = undefined;
   if (context.item) {
     propertyHolder = context.item;
@@ -101,6 +101,8 @@ Handlebars.registerHelper('lookupValue', function(context, itemId, propertyPath)
     } else {
       propertyHolder = context.actor;
     }
+  } else {
+    propertyHolder = context;
   }
   return getNestedPropertyValue(propertyHolder, propertyPath);
 });

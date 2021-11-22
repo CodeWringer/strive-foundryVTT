@@ -3,10 +3,9 @@ isEditable: {Boolean}
 itemId: {String|undefined}
 propertyPath: {String}
 type: {String} = "single-line|multi-line|drop-down|number"
-options: {Array<Object>|undefined} = {
-  name: {String}
-  localizable: {String}
-}
+options: {Array<Object>|undefined}
+optionValueProperty: {String|undefined}
+optionDisplayProperty: {String|undefined}
 cssClass: {String|undefined}
 readOnlyCssClass: {String|undefined}
 --}}
@@ -17,19 +16,18 @@ readOnlyCssClass: {String|undefined}
       data-item-id="{{itemId}}"
       data-property-path="{{propertyPath}}"
       type="text"
-      value="{{lookupValue this itemId propertyPath}}"
+      value="{{lookupValue this propertyPath itemId}}"
     />
   {{/if}}
   {{!-- Drop-down --}}
   {{#if (eq type 'drop-down')}}
-    <select class="ambersteel-edit {{cssClass}}"
+    <select class="ambersteel-edit drop-down {{cssClass}}"
       data-item-id="{{itemId}}"
       data-property-path="{{propertyPath}}"
-      value="{{lookupValue this itemId propertyPath}}"
     >
       {{#select propertyPath}}
       {{#each options as |option index|}}
-      <option value="{{option.name}}">{{localize option.localizable}}</option>
+      <option value="{{lookupValue option ../optionValueProperty}}">{{localize (lookupValue option ../optionDisplayProperty)}}</option>
       {{/each}}
       {{/select}}
     </select>
@@ -44,7 +42,7 @@ readOnlyCssClass: {String|undefined}
       step="1"
       data-item-id="{{itemId}}"
       data-property-path="{{propertyPath}}"
-      value="{{lookupValue this itemId propertyPath}}"
+      value="{{lookupValue this propertyPath itemId}}"
       />
     {{/numberSpinner}}
   {{/if}}
@@ -54,11 +52,11 @@ readOnlyCssClass: {String|undefined}
         spellcheck="false"
         data-item-id="{{itemId}}"
         data-property-path="{{propertyPath}}"
-      >{{lookupValue this itemId propertyPath}}</textarea>
+      >{{lookupValue this propertyPath itemId}}</textarea>
   {{/if}}
 {{else}}
   {{!-- Display read-only value --}}
   <span class="{{readOnlyCssClass}}">
-    {{lookupValue this itemId propertyPath}}
+    {{lookupValue this propertyPath itemId}}
   </span>
 {{/if}}
