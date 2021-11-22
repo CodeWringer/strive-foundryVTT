@@ -35,6 +35,7 @@ This is the Ambersteel table-top role-playing game system for FoundryVTT.
 * [ ] Health Tab
 * [ ] Possessions Tab
 * [ ] Refactor: Cleanup language file
+* [ ] Refactor: Turn skill and attribute tables into custom lists, instead
   * E.g.: calculating the number of successes/failures for a given level. 
 * [ ] Deletion confirmation dialog
 * [ ] Create list (compendium) of skills
