@@ -8,6 +8,7 @@ optionValueProperty: {String|undefined}
 optionDisplayProperty: {String|undefined}
 cssClass: {String|undefined}
 readOnlyCssClass: {String|undefined}
+contextOverride: {Any}
 --}}
 {{#if isEditable}}
   {{!-- Single-line input --}}
@@ -16,7 +17,7 @@ readOnlyCssClass: {String|undefined}
       data-item-id="{{itemId}}"
       data-property-path="{{propertyPath}}"
       type="text"
-      value="{{lookupValue this propertyPath itemId}}"
+      value="{{lookupValue (isDefined contextOverride this) propertyPath itemId}}"
     />
   {{/if}}
   {{!-- Drop-down --}}
@@ -42,7 +43,7 @@ readOnlyCssClass: {String|undefined}
       step="1"
       data-item-id="{{itemId}}"
       data-property-path="{{propertyPath}}"
-      value="{{lookupValue this propertyPath itemId}}"
+      value="{{lookupValue (isDefined contextOverride this) propertyPath itemId}}"
       />
     {{/numberSpinner}}
   {{/if}}
@@ -52,11 +53,11 @@ readOnlyCssClass: {String|undefined}
         spellcheck="false"
         data-item-id="{{itemId}}"
         data-property-path="{{propertyPath}}"
-      >{{lookupValue this propertyPath itemId}}</textarea>
+      >{{lookupValue (isDefined contextOverride this) propertyPath itemId}}</textarea>
   {{/if}}
 {{else}}
   {{!-- Display read-only value --}}
-  <span class="{{readOnlyCssClass}}">
-    {{lookupValue this propertyPath itemId}}
+  <span class="ambersteel-read-only {{readOnlyCssClass}}">
+    {{lookupValue (isDefined contextOverride this) propertyPath itemId}}
   </span>
 {{/if}}

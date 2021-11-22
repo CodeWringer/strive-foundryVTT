@@ -13,12 +13,28 @@
 export function getNestedPropertyValue(obj, path) {
   const properties = path.split(/\.|\[/);
 
-  function _get(obj, properties) {
+  function _get(obj, properties, originalObj) {
     if (!properties || properties.length === 0) return obj;
 
     const prop = properties.shift().replace("]", "");
-    return _get(obj[prop], properties);
+    if (!hasProperty(obj, prop)) {
+      console.warn(`Failed to get value of property at '${path}'! Original context object:`);
+      console.warn(originalObj);
+      return undefined;
+    } else {
+      return _get(obj[prop], properties, originalObj);
+    }
   }
 
-  return _get(obj, properties);
+  return _get(obj, properties, obj);
+}
+
+/**
+ * Returns true, if the given object contains a property with the given name. 
+ * @param {Object} obj 
+ * @param {String} prop 
+ * @returns {Boolean} True, if the given object has a property with the given name. 
+ */
+export function hasProperty(obj, prop) {
+  return prop in obj;
 }

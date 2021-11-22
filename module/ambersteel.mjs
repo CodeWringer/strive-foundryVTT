@@ -106,11 +106,27 @@ Handlebars.registerHelper('lookupValue', function(context, propertyPath, itemId)
     propertyHolder = context;
   }
   // Messy fix for context sometimes being a level deeper than it should. 
-  if (propertyPath.startsWith("data.data")
-    && !propertyHolder.data.data) {
-    propertyPath = propertyPath.replace("data.data", "data");
+  if (propertyPath.startsWith("data.data")) {
+    if (!hasProperty(propertyHolder, "data")) {
+      console.warn(`PropertyHolder doesn't have 'data' property!`);
+      console.warn(propertyHolder);
+      return undefined;
+    }
+    if (!hasProperty(propertyHolder.data, "data")) {
+      propertyPath = propertyPath.replace("data.data", "data");
+    }
   }
   return getNestedPropertyValue(propertyHolder, propertyPath);
+});
+
+Handlebars.registerHelper('isDefined', function() {
+  for (const arg in arguments) {
+    const argValue = arguments[arg];
+    if (argValue !== undefined) {
+      return argValue;
+    }
+  }
+  return undefined;
 });
 
 /* -------------------------------------------- */

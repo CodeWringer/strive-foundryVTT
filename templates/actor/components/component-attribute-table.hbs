@@ -48,6 +48,7 @@ attributes: {[Object]} = {
                             chatTitle=(localize att.localizableName)
                             callback="advanceAttributeBasedOnRollResult"
                             callbackData=att.name
+                            contextOverride=../this
                         }}
                     </td>
                 {{/if}}
@@ -58,37 +59,16 @@ attributes: {[Object]} = {
                     [{{localize att.localizableAbbreviation}}]
                 </td>
                 <td class="attribute-column-level">
-                    {{#if ../isEditable}}
-                        {{#> numberSpinner}}
-                        <input class="attribute-value ambersteel-actor-edit" name="att.value" type="number" data-dtype="Number" min="0" step="1" value="{{att.value}}" 
-                        data-field="data.attributes.{{../attributeGroupName}}.{{att.name}}.value" />
-                        {{/numberSpinner}}
-                    {{else}}
-                        {{att.value}}
-                    {{/if}}
+                    {{> inputComponent type="number" propertyPath=(concat "data.data.attributes." ../attributeGroupName "." att.name ".value") isEditable=../isEditable contextOverride=../this }}
                 </td>
                 <td class="attribute-column-requirements">
                     {{att.requiredSuccessses}} / {{att.requiredFailures}}
                 </td>
                 <td class="attribute-column-successes">
-                    {{#if ../isEditable}}
-                        {{#> numberSpinner}}
-                        <input class="attribute-successes ambersteel-actor-edit" name="att.successes" type="number" data-dtype="Number" min="0" step="1" value="{{att.successes}}" 
-                        data-field="data.attributes.{{../attributeGroupName}}.{{att.name}}.successes" />
-                        {{/numberSpinner}}
-                    {{else}}
-                        {{att.successes}}
-                    {{/if}}
+                    {{> inputComponent type="number" propertyPath=(concat "data.data.attributes." ../attributeGroupName "." att.name ".successes") isEditable=../isEditable contextOverride=../this }}
                 </td>
                 <td class="attribute-column-failures">
-                    {{#if ../isEditable}}
-                        {{#> numberSpinner}}
-                        <input class="attribute-failures ambersteel-actor-edit" name="att.failures" type="number" data-dtype="Number" min="0" step="1" value="{{att.failures}}" 
-                        data-field="data.attributes.{{../attributeGroupName}}.{{att.name}}.failures" />
-                        {{/numberSpinner}}
-                    {{else}}
-                        {{att.failures}}
-                    {{/if}}
+                    {{> inputComponent type="number" propertyPath=(concat "data.data.attributes." ../attributeGroupName "." att.name ".failures") isEditable=../isEditable contextOverride=../this }}
                 </td>
             </tr>
             {{/each}}
