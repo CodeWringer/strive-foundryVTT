@@ -47,7 +47,7 @@ export function rollDicePool(ops = {}) {
   const negatives = [];
   for (const result of results) {
     const face = result.result;
-    if (isPositive(face)) {
+    if (game.ambersteel.isPositive(face)) {
       positives.push(face);
     } else {
       negatives.push(face);
@@ -92,7 +92,7 @@ export async function sendDiceResultToChat(args = {}) {
   // This holds the results to display in the rendered template, including the obstacle value. 
   const resultsForDisplay = [];
   for (const face of combinedResults) {
-    if (isPositive(face)) {
+    if (game.ambersteel.isPositive(face)) {
       resultsForDisplay.push({ cssClass: "roll-success", content: face });
     } else {
       resultsForDisplay.push({ cssClass: "roll-failure", content: face });
@@ -119,24 +119,6 @@ export async function sendDiceResultToChat(args = {}) {
     sound: DICE_ROLL_SOUND,
     visibilityMode: args.visibilityMode
   });
-}
-
-/**
- * Returns true, if the given face/number represents a positive (= success).
- * @param {String|Number} face A die face to check whether it represents a positive (= success).
- * @returns {Boolean}
- */
-export function isPositive(face) {
-  return parseInt(face) === 6 || parseInt(face) === 5;
-}
-
-/**
- * Returns true, if the given face/number represents a spell-backfire-causing negative. 
- * @param {String|Number} face A die face to check whether it represents a spell-backfire-causing negative. 
- * @returns {Boolean}
- */
-export function causesBackfire(face) {
-  return parseInt(face) === 1 || parseInt(face) === 2;
 }
 
 /**

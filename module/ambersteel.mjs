@@ -78,6 +78,24 @@ Hooks.once('init', async function() {
           }
         }
       }
+    },
+    /**
+     * Returns true, if the given face/number represents a positive (= success).
+     * @param {String|Number} face A die face to check whether it represents a positive (= success).
+     * @returns {Boolean}
+     */
+    isPositive: function(face) {
+      const int = parseInt(face);
+      return int === 6 || int === 5;
+    },
+    /**
+     * Returns true, if the given face/number represents a spell-backfire-causing negative. 
+     * @param {String|Number} face A die face to check whether it represents a spell-backfire-causing negative. 
+     * @returns {Boolean}
+     */
+    causesBackfire: function(face) {
+      const int = parseInt(face);
+      return int === 1 || int === 2;
     }
   };
 
