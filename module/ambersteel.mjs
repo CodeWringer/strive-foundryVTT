@@ -1,5 +1,5 @@
 // Import main config.
-import { ambersteel } from "./config.js"
+import { ambersteel as ambersteelConfig } from "./config.js"
 // Import document classes.
 import { AmbersteelActor } from "./documents/actor.mjs";
 import { AmbersteelItem } from "./documents/item.mjs";
@@ -16,13 +16,22 @@ import { getNestedPropertyValue } from "./utils/property-utility.mjs";
 
 Hooks.once('init', async function() {
   // Add config and constants to global namespace. 
-  CONFIG.ambersteel = ambersteel;
+  CONFIG.ambersteel = ambersteelConfig;
 
   // Add system specific logic to global namespace. 
   game.ambersteel = {
     AmbersteelActor,
     AmbersteelItem,
+    /**
+     * The current public version of the system. 
+     * @type {Number}
+     */
     version: 0.1,
+    /**
+     * The global configuration and constants of the system. 
+     * @type {Object}
+     */
+    config: ambersteelConfig,
     /**
      * Returns the number of dice for a skill test. 
      * @param {Number} skillValue A skill level. 
@@ -81,11 +90,6 @@ Handlebars.registerHelper('times', function(n, content) {
   }
 
   return result;
-});
-
-Handlebars.registerHelper('log', function(js, content) {
-  console.log(js);
-  return "";
 });
 
 Handlebars.registerHelper('eq', function(a, b) {

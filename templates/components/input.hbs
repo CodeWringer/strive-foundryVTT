@@ -3,12 +3,14 @@ isEditable: {Boolean}
 itemId: {String|undefined}
 propertyPath: {String}
 type: {String} = "single-line|multi-line|drop-down|number"
+cssClass: {String|undefined}
+readOnlyCssClass: {String|undefined}
+name: {String|undefined}
+contextOverride: {Any}
+-- Drop-down only
 options: {Array<Object>|undefined}
 optionValueProperty: {String|undefined}
 optionDisplayProperty: {String|undefined}
-cssClass: {String|undefined}
-readOnlyCssClass: {String|undefined}
-contextOverride: {Any}
 --}}
 {{#if isEditable}}
   {{!-- Single-line input --}}
@@ -17,6 +19,7 @@ contextOverride: {Any}
       data-item-id="{{itemId}}"
       data-property-path="{{propertyPath}}"
       type="text"
+      name="{{name}}"
       value="{{lookupValue (isDefined contextOverride this) propertyPath itemId}}"
     />
   {{/if}}
@@ -25,6 +28,7 @@ contextOverride: {Any}
     <select class="ambersteel-edit drop-down {{cssClass}}"
       data-item-id="{{itemId}}"
       data-property-path="{{propertyPath}}"
+      name="{{name}}"
     >
       {{#select propertyPath}}
       {{#each options as |option index|}}
@@ -44,6 +48,7 @@ contextOverride: {Any}
       data-item-id="{{itemId}}"
       data-property-path="{{propertyPath}}"
       value="{{lookupValue (isDefined contextOverride this) propertyPath itemId}}"
+      name="{{name}}"
       />
     {{/numberSpinner}}
   {{/if}}
@@ -53,11 +58,12 @@ contextOverride: {Any}
         spellcheck="false"
         data-item-id="{{itemId}}"
         data-property-path="{{propertyPath}}"
+        name="{{name}}"
       >{{lookupValue (isDefined contextOverride this) propertyPath itemId}}</textarea>
   {{/if}}
 {{else}}
   {{!-- Display read-only value --}}
-  <span class="ambersteel-read-only {{readOnlyCssClass}}">
+  <span class="ambersteel-read-only {{readOnlyCssClass}}" name="{{name}}">
     {{lookupValue (isDefined contextOverride this) propertyPath itemId}}
   </span>
 {{/if}}

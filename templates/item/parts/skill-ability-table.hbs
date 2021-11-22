@@ -24,13 +24,8 @@ abilities: {[SkillAbility]} = {
           {{> buttonSendToChat itemId=../itemId propertyPath=(concat "data.data.abilities[" key "]") }}
           {{!-- Name --}}
           <span class="ambersteel-list-column ambersteel-list-column-name flex flex-grow">
-            <label class="fancy-font pad-sm width-min-lg" for="data.abilities[{{key}}].name">{{localize "ambersteel.labels.name"}}</label>
-            {{#if ../isEditable}}
-            <input id="data.abilities[{{key}}].name" class="ability-name ambersteel-item-edit flex-grow" type="text" value="{{ability.name}}" 
-              data-field="data.abilities[{{key}}].name" data-item-id="{{../skillItemId}}" />
-            {{else}}
-              {{ability.name}}
-            {{/if}}
+            <label class="fancy-font pad-sm width-min-lg" for="name[{{key}}]">{{localize "ambersteel.labels.name"}}</label>
+            {{> inputComponent type="single-line" name="name[{{key}}]" propertyPath=(concat "data.data.abilities[" key "].name") itemId=../skillItemId cssClass="flex-grow" isEditable=../isEditable contextOverride=../this }}
           </span>
           {{!-- Delete --}}
           {{> buttonDelete itemId=../itemId propertyPath=(concat "data.data.abilities[" key "]") }}
@@ -38,93 +33,48 @@ abilities: {[SkillAbility]} = {
         <div class="flex flex-row">
           {{!-- At level --}}
           <span class="flex flex-row">
-            <label class="fancy-font pad-sm width-min-xl text-align-r" for="data.abilities[{{key}}].requiredLevel">
-              {{localize "ambersteel.labels.skillAbilityRequirement"}}
-            </label>
+            <label class="fancy-font pad-sm width-min-xl text-align-r" for="requiredLevel[{{key}}]">{{localize "ambersteel.labels.skillAbilityRequirement"}}</label>
             <span class="width-md">
-              {{#if ../isEditable}}
-                {{#> numberSpinner}}
-                <input id="data.abilities[{{key}}].requiredLevel" class="ability-requirement ambersteel-item-edit" 
-                  type="number" min="0" step="1" data-dtype="Number" value="{{ability.requiredLevel}}"
-                  data-field="data.abilities[{{key}}].requiredLevel" data-item-id="{{../skillItemId}}" />
-                {{/numberSpinner}}
-              {{else}}
-                {{ability.requiredLevel}}
-              {{/if}}
+              {{> inputComponent type="number" name="requiredLevel[{{key}}]" propertyPath=(concat "data.data.abilities[" key "].requiredLevel") itemId=../skillItemId isEditable=../isEditable contextOverride=../this }}
             </span>
           </span>
           {{!-- AP cost --}}
           <span class="flex flex-row">
-            <label class="fancy-font pad-sm width-min-xl text-align-r" for="data.abilities[{{key}}].apCost">
-              {{localize "ambersteel.labels.apCost"}}
-            </label>
+            <label class="fancy-font pad-sm width-min-xl text-align-r" for="apCost[{{key}}]">{{localize "ambersteel.labels.apCost"}}</label>
             <span class="width-lg">
-              {{#if ../isEditable}}
-                {{#> numberSpinner}}
-                <input class="ability-cost ambersteel-item-edit" type="number" min="0" step="1" data-dtype="Number" value="{{ability.apCost}}" 
-                  data-field="data.abilities[{{key}}].apCost" data-item-id="{{../skillItemId}}" />
-                {{/numberSpinner}}
-              {{else}}
-                {{ability.apCost}}
-              {{/if}}
+              {{> inputComponent type="number" name="apCost[{{key}}]" propertyPath=(concat "data.data.abilities[" key "].apCost") itemId=../skillItemId isEditable=../isEditable contextOverride=../this }}
             </span>
           </span>
           {{!-- Condition --}}
           <span class="flex flex-row flex-grow">
-            <label class="fancy-font pad-sm width-min-xl text-align-r" for="data.abilities[{{key}}].condition">
-              {{localize "ambersteel.labels.skillAbilityCondition"}}
-            </label>
+            <label class="fancy-font pad-sm width-min-xl text-align-r" for="condition[{{key}}]">{{localize "ambersteel.labels.skillAbilityCondition"}}</label>
             <span class="width-min-lg flex-grow">
-              {{#if ../isEditable}}
-                <input class="ability-condition ambersteel-item-edit" type="text" value="{{ability.condition}}" 
-                      data-field="data.abilities[{{key}}].condition" data-item-id="{{../skillItemId}}" />
-              {{else}}
-                {{ability.condition}}
-              {{/if}}
+              {{> inputComponent type="single-line" name="condition[{{key}}]" propertyPath=(concat "data.data.abilities[" key "].condition") itemId=../skillItemId isEditable=../isEditable contextOverride=../this }}
             </span>
           </span>
         </div>
         <div class="flex flex-row">
           {{!-- Distance --}}
           <span class="flex flex-row">
-            <label class="fancy-font pad-sm width-min-xl text-align-r" for="data.abilities[{{key}}].distance">
-              {{localize "ambersteel.labels.distance"}}
-            </label>
+            <label class="fancy-font pad-sm width-min-xl text-align-r" for="distance[{{key}}]">{{localize "ambersteel.labels.distance"}}</label>
             <span class="width-md">
-              {{#if ../isEditable}}
-                {{#> numberSpinner}}
-                <input class="ability-distance ambersteel-item-edit" type="number" min="0" step="1" data-dtype="Number" value="{{ability.distance}}" 
-                  data-field="data.abilities[{{key}}].distance" data-item-id="{{../skillItemId}}" />
-                {{/numberSpinner}}
-              {{else}}
-                {{ability.distance}}
-              {{/if}}
+              {{> inputComponent type="number" name="distance[{{key}}]" propertyPath=(concat "data.data.abilities[" key "].distance") itemId=../skillItemId isEditable=../isEditable contextOverride=../this }}
             </span>
           </span>
           {{!-- Attack type --}}
           <span class="flex flex-row">
-            <label class="fancy-font pad-sm width-min-xl text-align-r" for="data.abilities[{{key}}].attackType">
-              {{localize "ambersteel.labels.attackType"}}
-            </label>
+            <label class="fancy-font pad-sm width-min-xl text-align-r" for="attackType[{{key}}]">{{localize "ambersteel.labels.attackType"}}</label>
             <span class="width-lg">
-              {{#if ../isEditable}}
-                <select class="ambersteel-item-edit" data-field="data.abilities[{{key}}].attackType">
-                  {{#select skillAbility.attackType}}
-                  {{#each ../CONFIG.attackTypes as | attackType |}}
-                  <option value="{{attackType.name}}">{{localize attackType.localizableAbbreviation}}</option>
-                  {{/each}}
-                  {{/select}}
-                </select>
-              {{else}}
-                {{localize ability.attackType.localizableAbbreviation}}
-              {{/if}}
+              {{log ../CONFIG}}
+              {{> inputComponent type="drop-down" name="attackType[{{key}}]" propertyPath=(concat "data.data.abilities[" key "].attackType") itemId=../skillItemId
+                options=../CONFIG.attackTypes optionValueProperty="name" optionDisplayProperty="localizableAbbreviation"
+                isEditable=../isEditable contextOverride=../this
+              }}
             </span>
           </span>
           {{!-- Damage formula --}}
           <span class="flex flex-row flex-grow">
-            <label class="fancy-font pad-sm width-min-xl text-align-r" for="data.abilities[{{key}}].damageFormula">
-              {{localize "ambersteel.labels.damage"}}
-            </label>
+            <label class="fancy-font pad-sm width-min-xl text-align-r" for="damageFormula[{{key}}]">{{localize "ambersteel.labels.damage"}}</label>
             {{> buttonRoll
               type="generic"
               itemId=../itemId
@@ -132,24 +82,13 @@ abilities: {[SkillAbility]} = {
               chatTitle=ability.name
             }}
             <span class="width-md flex-grow">
-              {{#if ../isEditable}}
-                <input class="ability-damage ambersteel-item-edit" type="text" value="{{ability.damageFormula}}" 
-                  data-field="data.abilities[{{key}}].damageFormula" data-item-id="{{../skillItemId}}" />
-              {{else}}
-                {{ability.damageFormula}}
-              {{/if}}
+              {{> inputComponent type="single-line" name="damageFormula[{{key}}]" propertyPath=(concat "data.data.abilities[" key "].damageFormula") itemId=../skillItemId isEditable=../isEditable contextOverride=../this }}
             </span>
           </span>
         </div>
         {{!-- Description --}}
         <div class="flex flex-row">
-          {{#if ../isEditable}}
-          <textarea class="resize-vertical ability-description ambersteel-item-edit" 
-            spellcheck="false"
-            data-field="data.abilities[{{key}}].description" data-item-id="{{../skillItemId}}">{{ability.description}}</textarea>
-          {{else}}
-            {{ability.description}}
-          {{/if}}
+          {{> inputComponent type="multi-line" name="description[{{key}}]" propertyPath=(concat "data.data.abilities[" key "].description") itemId=../skillItemId isEditable=../isEditable contextOverride=../this }}
         </div>
       </li>
     {{/each}}
