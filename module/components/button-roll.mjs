@@ -29,15 +29,15 @@ export function activateListeners(html, ownerSheet, isOwner, isEditable) {
 async function _onRoll(event) {
   event.preventDefault();
 
-  const dialogResult = await queryRollData();
-  if (!dialogResult.confirmed) return;
-  
   const dataset = event.currentTarget.dataset;
   const who = dataset.itemId ? this.getItem(dataset.itemId) : this.getContextEntity();
   const actor = this.getActor();
 
   let rollResult = undefined;
   if (dataset.type === 'generic') {
+    const dialogResult = await ChatUtil.queryVisibilityMode();
+    if (!dialogResult.confirmed) return;
+
     const propertyValue = getNestedPropertyValue(who, dataset.propertyPath);
 
     // Do roll. 
@@ -54,6 +54,9 @@ async function _onRoll(event) {
       visibilityMode: dialogResult.visibilityMode
     });
   } else if (dataset.type === 'dice-pool') {
+    const dialogResult = await queryRollData();
+    if (!dialogResult.confirmed) return;
+
     let numberOfDice = 0;
 
     if (dataset.propertyPath) {
