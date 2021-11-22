@@ -22,6 +22,7 @@ Hooks.once('init', async function() {
   game.ambersteel = {
     AmbersteelActor,
     AmbersteelItem,
+    version: 0.1,
     /**
      * Returns the number of dice for a skill test. 
      * @param {Number} skillValue A skill level. 
@@ -103,6 +104,11 @@ Handlebars.registerHelper('lookupValue', function(context, propertyPath, itemId)
     }
   } else {
     propertyHolder = context;
+  }
+  // Messy fix for context sometimes being a level deeper than it should. 
+  if (propertyPath.startsWith("data.data")
+    && !propertyHolder.data.data) {
+    propertyPath = propertyPath.replace("data.data", "data");
   }
   return getNestedPropertyValue(propertyHolder, propertyPath);
 });
