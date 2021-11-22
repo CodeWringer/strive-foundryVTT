@@ -30,18 +30,18 @@ actor: {Actor} = {
   </header>
 
   {{!-- Sheet Tab Navigation --}}
-  <nav class="sheet-tabs tabs" data-group="primary">
+  <nav class="sheet-tabs tabs flex flex-justify" id="nav-sheet-tabs" data-group="primary">
     {{!-- Default tab is specified in actor-sheet.mjs --}}
-    <a class="item fancy-font" data-tab="attributes">{{localize "ambersteel.labels.tabAttributes"}}</a>
-    <a class="item fancy-font" data-tab="skills">{{localize "ambersteel.labels.tabSkills"}}</a>
+    <a class="item fancy-font flex flex-center" data-tab="attributes"><div>{{localize "ambersteel.labels.tabAttributes"}}</div></a>
+    <a class="item fancy-font flex flex-center" data-tab="skills"><div>{{localize "ambersteel.labels.tabSkills"}}</div></a>
     {{#if (eq actor.type "pc")}}
-      <a class="item fancy-font" data-tab="beliefs-fate">{{localize "ambersteel.labels.tabBeliefsFate"}}</a>
+      <a class="item fancy-font flex flex-center" data-tab="beliefs-fate"><div>{{localize "ambersteel.labels.tabBeliefsFate"}}</div></a>
     {{/if}}
-    <a class="item fancy-font" data-tab="health">{{localize "ambersteel.labels.tabHealth"}}</a>
-    <a class="item fancy-font" data-tab="possessions">{{localize "ambersteel.labels.tabPossessions"}}</a>
-    <a class="item fancy-font" data-tab="biography">{{localize "ambersteel.labels.tabBiography"}}</a>
+    <a class="item fancy-font flex flex-center" data-tab="health"><div>{{localize "ambersteel.labels.tabHealth"}}</div></a>
+    <a class="item fancy-font flex flex-center" data-tab="possessions"><div>{{localize "ambersteel.labels.tabPossessions"}}</div></a>
+    <a class="item fancy-font flex flex-center" data-tab="biography"><div>{{localize "ambersteel.labels.tabBiography"}}</div></a>
     {{#if isGM}}
-      <a class="item fancy-font" data-tab="gm-notes">{{localize "ambersteel.labels.tabGmNotes"}}</a>
+      <a class="item fancy-font flex flex-center" data-tab="gm-notes"><div>{{localize "ambersteel.labels.tabGmNotes"}}</div></a>
     {{/if}}
   </nav>
 

@@ -28,8 +28,29 @@ h1.header-name {
   }
 }
 
-.sheet-tabs {
+// Tab styles
+
+nav#nav-sheet-tabs.sheet-tabs {
+  height: 32px;
+  min-height: 32px;
+  margin: 0;
   flex: 0;
+  border-top: 1px solid $c-border-beige-light;
+  border-bottom: 1px solid $c-border-beige-light;
+  line-height: unset;
+
+  > a.item {
+    margin: 0;
+    padding: 4px 0 0 0;
+
+    &.active {
+      border-left: 2px solid rgba(0,0,0,0.2);
+      border-top: 2px solid rgba(0,0,0,0.2);
+      border-right: 2px solid rgba(0,0,0,0.2);
+      border-radius: 10px 10px 0 0;
+      padding: 2px 0 0 0;
+    }
+  }
 }
 
 .sheet-body,
