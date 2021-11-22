@@ -953,6 +953,6 @@ textarea.gm-notes {
 a.ambersteel-expand-skill-ability-list {
   border-radius: 3px;
   border: 1px rgba(129, 129, 129, 0.22) solid;
-  background-color: rgba(0, 0, 0, 0.05);
+  background-color: rgba(0, 0, 0, 0.01);
   font-size: 1rem;
 }
