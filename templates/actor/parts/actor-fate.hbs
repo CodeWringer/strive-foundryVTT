@@ -25,7 +25,7 @@ data: {Object} = {
       <span class="primary-font">[{{localize "ambersteel.fateSystem.miFPAbbreviation"}}]</span>
     </span>
     <span class="fate-spinner-column-container">
-      {{> inputComponent type="number" name="miFP" propertyPath="data.data.fateSystem.miFP" isEditable=isEditable }}
+      {{> inputComponent type="number" min="0" name="miFP" propertyPath="data.data.fateSystem.miFP" isEditable=isEditable }}
     </span>
     {{!-- row 2 --}}
     <span class="fancy-font line-height">
@@ -33,7 +33,7 @@ data: {Object} = {
       <span class="primary-font">[{{localize "ambersteel.fateSystem.maFPAbbreviation"}}]</span>
     </span>
     <span class="fate-spinner-column-container">
-      {{> inputComponent type="number" name="maFP" propertyPath="data.data.fateSystem.maFP" isEditable=isEditable }}
+      {{> inputComponent type="number" min="0" name="maFP" propertyPath="data.data.fateSystem.maFP" isEditable=isEditable }}
     </span>
     {{!-- row 3 --}}
     <span class="fancy-font line-height">
@@ -41,7 +41,7 @@ data: {Object} = {
       <span class="primary-font">[{{localize "ambersteel.fateSystem.AFPAbbreviation"}}]</span>
     </span>
     <span class="fate-spinner-column-container">
-      {{> inputComponent type="number" name="AFP" propertyPath="data.data.fateSystem.AFP" isEditable=isEditable }}
+      {{> inputComponent type="number" min="0" name="AFP" propertyPath="data.data.fateSystem.AFP" isEditable=isEditable }}
     </span>
   </div>
   <div class="flex" style="flex-wrap: wrap;">

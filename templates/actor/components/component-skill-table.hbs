@@ -77,16 +77,16 @@ skills: {[Object]} = {
                         }}
                     </td>
                     <td class="skill-column-level">
-                        {{> inputComponent type="number" propertyPath="data.data.value" itemId=skill.data.id isEditable=../isEditable contextOverride=../this }}
+                        {{> inputComponent type="number" min="0" propertyPath="data.data.value" itemId=skill.data.id isEditable=../isEditable contextOverride=../this }}
                     </td>
                     <td class="skill-column-requirements">
                         {{data.requiredSuccessses}} / {{data.requiredFailures}}
                     </td>
                     <td class="skill-column-successes">
-                        {{> inputComponent type="number" propertyPath="data.data.successes" itemId=skill.data.id isEditable=../isEditable contextOverride=../this }}
+                        {{> inputComponent type="number" min="0" propertyPath="data.data.successes" itemId=skill.data.id isEditable=../isEditable contextOverride=../this }}
                     </td>
                     <td class="skill-column-failures">
-                        {{> inputComponent type="number" propertyPath="data.data.failures" itemId=skill.data.id isEditable=../isEditable contextOverride=../this }}
+                        {{> inputComponent type="number" min="0" propertyPath="data.data.failures" itemId=skill.data.id isEditable=../isEditable contextOverride=../this }}
                     </td>
                     {{#if ../isEditable}}
                         <td class="skill-column-delete">

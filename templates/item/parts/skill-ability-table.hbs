@@ -35,14 +35,14 @@ abilities: {[SkillAbility]} = {
           <span class="flex flex-row">
             <label class="fancy-font pad-sm width-min-xl text-align-r" for="requiredLevel[{{key}}]">{{localize "ambersteel.labels.skillAbilityRequirement"}}</label>
             <span class="width-md">
-              {{> inputComponent type="number" name=(concat "requiredLevel[" key "]") propertyPath=(concat "data.data.abilities[" key "].requiredLevel") itemId=../skillItemId isEditable=../isEditable contextOverride=../this }}
+              {{> inputComponent type="number" min="0" name=(concat "requiredLevel[" key "]") propertyPath=(concat "data.data.abilities[" key "].requiredLevel") itemId=../skillItemId isEditable=../isEditable contextOverride=../this }}
             </span>
           </span>
           {{!-- AP cost --}}
           <span class="flex flex-row">
             <label class="fancy-font pad-sm width-min-xl text-align-r" for="apCost[{{key}}]">{{localize "ambersteel.labels.apCost"}}</label>
             <span class="width-lg">
-              {{> inputComponent type="number" name=(concat "apCost[" key "]") propertyPath=(concat "data.data.abilities[" key "].apCost") itemId=../skillItemId isEditable=../isEditable contextOverride=../this }}
+              {{> inputComponent type="number" min="0" name=(concat "apCost[" key "]") propertyPath=(concat "data.data.abilities[" key "].apCost") itemId=../skillItemId isEditable=../isEditable contextOverride=../this }}
             </span>
           </span>
           {{!-- Condition --}}
@@ -58,7 +58,7 @@ abilities: {[SkillAbility]} = {
           <span class="flex flex-row">
             <label class="fancy-font pad-sm width-min-xl text-align-r" for="distance[{{key}}]">{{localize "ambersteel.labels.distance"}}</label>
             <span class="width-md">
-              {{> inputComponent type="number" name=(concat "distance[" key "]") propertyPath=(concat "data.data.abilities[" key "].distance") itemId=../skillItemId isEditable=../isEditable contextOverride=../this }}
+              {{> inputComponent type="number" min="0" name=(concat "distance[" key "]") propertyPath=(concat "data.data.abilities[" key "].distance") itemId=../skillItemId isEditable=../isEditable contextOverride=../this }}
             </span>
           </span>
           {{!-- Attack type --}}

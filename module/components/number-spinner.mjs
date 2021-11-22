@@ -6,16 +6,16 @@
  * @param isEditable {Boolean} If true, registers events that require editing permission. 
  */
 export function activateListeners(html, ownerSheet, isOwner, isEditable) {
-    // -------------------------------------------------------------
-    if (!isOwner) return;
-    // -------------------------------------------------------------
-    if (!isEditable) return;
+  // -------------------------------------------------------------
+  if (!isOwner) return;
+  // -------------------------------------------------------------
+  if (!isEditable) return;
 
-    // Increment.
-    html.find(".button-spinner-up").click(_onClickNumberSpinnerUp.bind(ownerSheet));
+  // Increment.
+  html.find(".button-spinner-up").click(_onClickNumberSpinnerUp.bind(ownerSheet));
 
-    // Decrement
-    html.find(".button-spinner-down").click(_onClickNumberSpinnerDown.bind(ownerSheet));
+  // Decrement
+  html.find(".button-spinner-down").click(_onClickNumberSpinnerDown.bind(ownerSheet));
 }
 
 /**
@@ -24,17 +24,12 @@ export function activateListeners(html, ownerSheet, isOwner, isEditable) {
  * @private
  */
 function _onClickNumberSpinnerUp(event) {
-    const dataset = event.currentTarget.dataset;
-    const step = dataset.step ? parseInt(dataset.step) : 1;
-    const max = dataset.max ? parseInt(dataset.max) : undefined;
+  const inputElement = event.currentTarget.closest("span.spinner-container").getElementsByTagName("input")[0];
+  
+  const step = inputElement.step ? parseInt(inputElement.step) : 1;
+  const newValue = parseInt(inputElement.value) + step;
 
-    const inputElement = event.currentTarget.closest("span.spinner-container").getElementsByTagName("input")[0];
-    const currentValue = parseInt(inputElement.value);
-
-    if (max != undefined && currentValue + step > max) return;
-
-    inputElement.value = currentValue + step;
-    inputElement.dispatchEvent(new Event("change"));
+  setNumber(inputElement, newValue);
 };
 
 /**
@@ -43,15 +38,21 @@ function _onClickNumberSpinnerUp(event) {
  * @private
  */
 function _onClickNumberSpinnerDown(event) {
-    const dataset = event.currentTarget.dataset;
-    const step = dataset.step ? parseInt(dataset.step) : 1;
-    const min = dataset.min ? parseInt(dataset.min) : undefined;
+  const inputElement = event.currentTarget.closest("span.spinner-container").getElementsByTagName("input")[0];
+  
+  const step = inputElement.step ? parseInt(inputElement.step) : 1;
+  const newValue = parseInt(inputElement.value) - step;
 
-    const inputElement = event.currentTarget.closest("span.spinner-container").getElementsByTagName("input")[0];
-    const currentValue = parseInt(inputElement.value);
-
-    if (min != undefined && currentValue - step < min) return;
-
-    inputElement.value = currentValue - step;
-    inputElement.dispatchEvent(new Event("change"));
+  setNumber(inputElement, newValue);
 };
+
+function setNumber(inputElement, newValue) {
+  const min = inputElement.min ? parseInt(inputElement.min) : undefined;
+  const max = inputElement.max ? parseInt(inputElement.max) : undefined;
+
+  if (min !== undefined && newValue < min) return;
+  if (max !== undefined && newValue > max) return;
+
+  inputElement.value = newValue;
+  inputElement.dispatchEvent(new Event("change"));
+}

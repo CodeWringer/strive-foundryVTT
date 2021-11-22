@@ -59,16 +59,16 @@ attributes: {[Object]} = {
                     [{{localize att.localizableAbbreviation}}]
                 </td>
                 <td class="attribute-column-level">
-                    {{> inputComponent type="number" propertyPath=(concat "data.data.attributes." ../attributeGroupName "." att.name ".value") isEditable=../isEditable contextOverride=../this }}
+                    {{> inputComponent type="number" min="1" propertyPath=(concat "data.data.attributes." ../attributeGroupName "." att.name ".value") isEditable=../isEditable contextOverride=../this }}
                 </td>
                 <td class="attribute-column-requirements">
                     {{att.requiredSuccessses}} / {{att.requiredFailures}}
                 </td>
                 <td class="attribute-column-successes">
-                    {{> inputComponent type="number" propertyPath=(concat "data.data.attributes." ../attributeGroupName "." att.name ".successes") isEditable=../isEditable contextOverride=../this }}
+                    {{> inputComponent type="number" min="0" propertyPath=(concat "data.data.attributes." ../attributeGroupName "." att.name ".successes") isEditable=../isEditable contextOverride=../this }}
                 </td>
                 <td class="attribute-column-failures">
-                    {{> inputComponent type="number" propertyPath=(concat "data.data.attributes." ../attributeGroupName "." att.name ".failures") isEditable=../isEditable contextOverride=../this }}
+                    {{> inputComponent type="number" min="0" propertyPath=(concat "data.data.attributes." ../attributeGroupName "." att.name ".failures") isEditable=../isEditable contextOverride=../this }}
                 </td>
             </tr>
             {{/each}}

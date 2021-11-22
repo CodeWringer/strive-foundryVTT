@@ -12,6 +12,10 @@ contextOverride: {Any}
 options: {Array<Object>|undefined}
 optionValueProperty: {String|undefined}
 optionDisplayProperty: {String|undefined}
+-- Number spinner only
+min: {Number|undefined}
+max: {Number|undefined}
+step: {Number|undefined}
 --}}
 {{#if isEditable}}
   {{!-- Single-line input --}}
@@ -46,8 +50,9 @@ optionDisplayProperty: {String|undefined}
     <input class="ambersteel-edit spinner {{cssClass}}"
       type="number"
       data-dtype="Number"
-      min="0"
-      step="1"
+      {{#if min}}min="{{min}}"{{/if}}
+      {{#if max}}max="{{max}}"{{/if}}
+      step="{{isDefined step 1}}"
       data-item-id="{{itemId}}"
       data-property-path="{{propertyPath}}"
       value="{{lookupValue (isDefined contextOverride this) propertyPath itemId}}"
