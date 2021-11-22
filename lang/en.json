@@ -125,6 +125,7 @@
       "messageVisibility": "Visibility"
     },
     "fateSystem": {
+      "fate": "Fate",
       "miFP": "Minor Fate Points",
       "maFP": "Major Fate Points",
       "AFP": "Ambition Fate Points",

@@ -5,11 +5,13 @@ beliefSystem: {Object} -> see "actor-beliefs.hbs",
 fateSystem: {Object} -> see "actor-fate.hbs"
 --}}
 <section>
+  <h2>{{localize "ambersteel.beliefSystem.beliefs"}}</h2>
   {{> "systems/ambersteel/templates/actor/parts/actor-beliefs.hbs"
     isEditable=isEditable
     isSendable=isSendable
     beliefSystem=beliefSystem
   }}
+  <h2>{{localize "ambersteel.fateSystem.fate"}}</h2>
   {{> "systems/ambersteel/templates/actor/parts/actor-fate.hbs"
     isEditable=isEditable
     isSendable=isSendable
