@@ -8,10 +8,6 @@ data: {Object} where Object = {
 --}}
 <section class="fill">
   <div class="sheet-block fill">
-    {{#if isEditable}}
-      <textarea class="gm-notes" name="data.gmNotes" spellcheck="false">{{data.data.gmNotes}}</textarea>
-    {{else}}
-      <span class="multiline">{{data.data.gmNotes}}</span>
-    {{/if}}
+    {{> inputComponent type="multi-line" name="gmNotes" propertyPath="data.data.gmNotes" cssClass="gm-notes" isEditable=isEditable }}
   </div>
 </section>
