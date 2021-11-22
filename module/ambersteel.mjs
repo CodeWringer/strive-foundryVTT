@@ -63,6 +63,21 @@ Hooks.once('init', async function() {
         requiredSuccessses: (level == 0) ? 10 : (level + 1) * level * 2,
         requiredFailures: (level == 0) ? 14 : (level + 1) * level * 3
       });
+    },
+    /**
+     * Returns the name of the attribute group containing the given attribute. 
+     * @param attributeName {String} Internal name of an attribute, e.g. 'arcana'. 
+     * @returns {String} Name of the attribute group, e. g. 'physical'. 
+     */
+    getAttributeGroupName: function(attributeName) {
+      const attGroups = CONFIG.ambersteel.character.attributeGroups;
+      for (const attGroupName in attGroups) {
+        for (const attName in attGroups[attGroupName].attributes) {
+          if (attName == attributeName) {
+            return attGroupName;
+          }
+        }
+      }
     }
   };
 

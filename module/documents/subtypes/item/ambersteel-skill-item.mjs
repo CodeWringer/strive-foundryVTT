@@ -1,6 +1,5 @@
 import AmbersteelBaseItem from "./ambersteel-base-item.mjs";
 import SkillAbility from "../../../dto/skill-ability.mjs";
-import { getAttributeGroupName } from "../../../utils/attribute-utility.mjs";
 
 export default class AmbersteelSkillItem extends AmbersteelBaseItem {
   /**
@@ -153,7 +152,7 @@ export default class AmbersteelSkillItem extends AmbersteelBaseItem {
    */
   getTotalValue() {
     const relatedAttributeName = this.parent.data.data.relatedAttribute;
-    const attGroupName = getAttributeGroupName(relatedAttributeName);
+    const attGroupName = game.ambersteel.getAttributeGroupName(relatedAttributeName);
     
     const actor = this.parent.parent;
     const relatedAttributeLevel = actor ? actor.data.data.attributes[attGroupName][relatedAttributeName].value : 0;

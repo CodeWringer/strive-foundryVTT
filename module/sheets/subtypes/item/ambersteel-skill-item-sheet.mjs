@@ -1,4 +1,3 @@
-import { getAttributeGroupName } from '../../../utils/attribute-utility.mjs';
 import AmbersteelBaseItemSheet from "./ambersteel-base-item-sheet.mjs";
 import * as ButtonToggleSkillAbilityList from '../../../components/button-toggle-skill-ability-list.mjs';
 
@@ -17,7 +16,7 @@ export default class AmbersteelSkillItemSheet extends AmbersteelBaseItemSheet {
     itemData.isExpanded = itemData.isExpanded ?? false;
     itemData.isExpandable = itemData.isExpandable ?? true;
 
-    itemData.groupName = getAttributeGroupName(itemData.relatedAttribute);
+    itemData.groupName = game.ambersteel.getAttributeGroupName(itemData.relatedAttribute);
   }
 
   /** @override */
