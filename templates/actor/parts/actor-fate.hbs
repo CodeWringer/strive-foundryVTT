@@ -21,33 +21,27 @@ data: {Object} = {
   <div class="sheet-block grid grid-2col flex-column">
     {{!-- row 1 --}}
     <span class="fancy-font line-height">
-      <label for="data.fateSystem.miFP">{{localize "ambersteel.fateSystem.miFP"}}</label>
+      <label for="miFP">{{localize "ambersteel.fateSystem.miFP"}}</label>
       <span class="primary-font">[{{localize "ambersteel.fateSystem.miFPAbbreviation"}}]</span>
     </span>
     <span class="fate-spinner-column-container">
-      {{#> numberSpinner}}
-      <input type="number" data-dtype="Number" min="0" step="1" name="data.fateSystem.miFP" value="{{data.fateSystem.miFP}}" />
-      {{/numberSpinner}}
+      {{> inputComponent type="number" name="miFP" propertyPath="data.data.fateSystem.miFP" isEditable=isEditable }}
     </span>
     {{!-- row 2 --}}
     <span class="fancy-font line-height">
-      <label for="data.fateSystem.maFP">{{localize "ambersteel.fateSystem.maFP"}}</label>
+      <label for="maFP">{{localize "ambersteel.fateSystem.maFP"}}</label>
       <span class="primary-font">[{{localize "ambersteel.fateSystem.maFPAbbreviation"}}]</span>
     </span>
     <span class="fate-spinner-column-container">
-      {{#> numberSpinner}}
-      <input type="number" data-dtype="Number" min="0" step="1" name="data.fateSystem.maFP" value="{{data.fateSystem.maFP}}" />
-      {{/numberSpinner}}
+      {{> inputComponent type="number" name="maFP" propertyPath="data.data.fateSystem.maFP" isEditable=isEditable }}
     </span>
     {{!-- row 3 --}}
     <span class="fancy-font line-height">
-      <label for="data.fateSystem.AFP">{{localize "ambersteel.fateSystem.AFP"}}</label>
+      <label for="AFP">{{localize "ambersteel.fateSystem.AFP"}}</label>
       <span class="primary-font">[{{localize "ambersteel.fateSystem.AFPAbbreviation"}}]</span>
     </span>
     <span class="fate-spinner-column-container">
-      {{#> numberSpinner}}
-      <input type="number" data-dtype="Number" min="0" step="1" name="data.fateSystem.AFP" value="{{data.fateSystem.AFP}}" />
-      {{/numberSpinner}}
+      {{> inputComponent type="number" name="AFP" propertyPath="data.data.fateSystem.AFP" isEditable=isEditable }}
     </span>
   </div>
   <div class="flex" style="flex-wrap: wrap;">

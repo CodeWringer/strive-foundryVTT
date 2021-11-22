@@ -7,10 +7,6 @@ data: {Object} where Object = {
 --}}
 <section class="fill">
   <div class="sheet-block fill">
-    {{#if isEditable}}
-      <textarea class="biography" name="data.biography" spellcheck="false">{{data.biography}}</textarea>
-    {{else}}
-      <span class="multiline">{{data.biography}}</span>
-    {{/if}}
+    {{> inputComponent type="multi-line" name="biography" propertyPath="data.data.biography" cssClass="biography" isEditable=isEditable }}
   </div>
 </section>

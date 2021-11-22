@@ -12,36 +12,24 @@ data: {Object} where Object = {
 <section>
   <div class="sheet-block">
     <h3>
-      <label class="fancy-font" for="data.beliefSystem.ambition">{{localize "ambersteel.beliefSystem.ambition"}}</label>
+      <label class="fancy-font">{{localize "ambersteel.beliefSystem.ambition"}}</label>
     </h3>
-    {{#if isEditable}}
-      <input name="data.beliefSystem.ambition" type="text" value="{{data.beliefSystem.ambition}}" />
-    {{else}}
-      {{data.beliefSystem.ambition}}
-    {{/if}}
+      {{> inputComponent type="single-line" name="ambition" propertyPath="data.data.beliefSystem.ambition" isEditable=isEditable }}
   </div>
   <div class="sheet-block">
     <h3>
-      <label class="fancy-font" for="data.beliefSystem.beliefs">{{localize "ambersteel.beliefSystem.beliefs"}}</label>
+      <label class="fancy-font">{{localize "ambersteel.beliefSystem.beliefs"}}</label>
     </h3>
-    {{#each data.beliefSystem.beliefs as | belief |}}
-      {{#if ../isEditable}}
-        <input name="data.beliefSystem.beliefs" type="text" value="{{belief}}" />
-      {{else}}
-        {{belief}}
-      {{/if}}
+    {{#each data.beliefSystem.beliefs as |belief key|}}
+      {{> inputComponent type="single-line" name=(concat "belief[" key "]") propertyPath=(concat "data.data.beliefSystem.beliefs[" key "]") isEditable=../isEditable contextOverride=../this }}
     {{/each}}
   </div>
   <div class="sheet-block">
     <h3>
-      <label class="fancy-font" for="data.beliefSystem.instincts">{{localize "ambersteel.beliefSystem.instincts"}}</label>
+      <label class="fancy-font">{{localize "ambersteel.beliefSystem.instincts"}}</label>
     </h3>
-    {{#each data.beliefSystem.instincts as | instinct |}}
-      {{#if ../isEditable}}
-        <input name="data.beliefSystem.instincts" type="text" value="{{instinct}}" />
-      {{else}}
-        {{instinct}}
-      {{/if}}
+    {{#each data.beliefSystem.instincts as |instinct key|}}
+      {{> inputComponent type="single-line" name=(concat "instinct[" key "]") propertyPath=(concat "data.data.beliefSystem.instincts[" key "]") isEditable=../isEditable contextOverride=../this }}
     {{/each}}
   </div>
 </section>
