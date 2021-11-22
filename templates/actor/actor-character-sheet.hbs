@@ -34,7 +34,6 @@ actor: {Actor} = {
     {{!-- Default tab is specified in actor-sheet.mjs --}}
     <a class="item fancy-font" data-tab="attributes">{{localize "ambersteel.labels.tabAttributes"}}</a>
     <a class="item fancy-font" data-tab="skills">{{localize "ambersteel.labels.tabSkills"}}</a>
-    <a class="item fancy-font" data-tab="magic">{{localize "ambersteel.labels.tabMagic"}}</a>
     {{#if (eq actor.type "pc")}}
       <a class="item fancy-font" data-tab="beliefs-fate">{{localize "ambersteel.labels.tabBeliefsFate"}}</a>
     {{/if}}
@@ -65,14 +64,6 @@ actor: {Actor} = {
         isSendable=isSendable
         learningSkills=data.data.learningSkills  
         skills=data.data.skills 
-      }}
-    </div>
-
-    {{!-- Magic Tab --}}
-    <div class="tab magic" data-group="primary" data-tab="magic">
-      {{> "systems/ambersteel/templates/actor/parts/actor-magic.hbs" 
-        isEditable=isEditable 
-        isSendable=isSendable
       }}
     </div>
 

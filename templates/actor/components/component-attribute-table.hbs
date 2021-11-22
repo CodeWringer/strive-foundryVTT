@@ -59,7 +59,7 @@ attributes: {[Object]} = {
                     [{{localize att.localizableAbbreviation}}]
                 </td>
                 <td class="attribute-column-level">
-                    {{> inputComponent type="number" min="1" propertyPath=(concat "data.data.attributes." ../attributeGroupName "." att.name ".value") isEditable=../isEditable contextOverride=../this }}
+                    {{> inputComponent type="number" min="0" propertyPath=(concat "data.data.attributes." ../attributeGroupName "." att.name ".value") isEditable=../isEditable contextOverride=../this }}
                 </td>
                 <td class="attribute-column-requirements">
                     {{att.requiredSuccessses}} / {{att.requiredFailures}}

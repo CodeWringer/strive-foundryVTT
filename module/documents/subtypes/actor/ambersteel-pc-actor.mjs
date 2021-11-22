@@ -8,6 +8,7 @@ export default class AmbersteelPcActor extends AmbersteelBaseActor {
    * @override
    */
   prepareData(context) {
+    super.prepareData(context);
     const actorData = context.data.data;
 
     // Ensure beliefs array has 3 items. 

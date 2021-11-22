@@ -49,6 +49,11 @@
               "value": 1,
               "successes": 0,
               "failures": 0
+            },
+            "arcana": {
+              "value": 0,
+              "successes": 0,
+              "failures": 0
             }
           },
           "social": {
@@ -64,18 +69,6 @@
             },
             "willpower": {
               "value": 1,
-              "successes": 0,
-              "failures": 0
-            }
-          },
-          "arcane": {
-            "arcana": {
-              "value": 0,
-              "successes": 0,
-              "failures": 0
-            },
-            "magicSense": {
-              "value": 0,
               "successes": 0,
               "failures": 0
             }

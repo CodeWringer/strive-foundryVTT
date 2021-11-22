@@ -44,13 +44,16 @@ Hooks.once('init', async function() {
     },
     /**
      * Returns the advancement requirements for the given level of an attribute. 
+     * 
+     * If level is equal to 0, will return undefined, instead of actual values. 
+     * This is deliberate, as an attribute at level 0 cannot be advanced (naturally).
      * @param {Number} level The level for which to get the advancement requirements. 
      * @returns {AdvancementRequirements}
      */
     getAttributeAdvancementRequirements: function(level = 0) {
       return new AdvancementRequirements({
-        requiredSuccessses: (level + 1) * (level + 1) * 3,
-        requiredFailures: (level + 1) * (level + 1) * 4
+        requiredSuccessses: (level == 0) ? undefined : (level + 1) * (level + 1) * 3,
+        requiredFailures: (level == 0) ? undefined : (level + 1) * (level + 1) * 4
       });
     },
     /**

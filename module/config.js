@@ -109,6 +109,11 @@ ambersteel.character = {
                     localizableName: "ambersteel.attributes.wisdom",
                     localizableAbbreviation: "ambersteel.attributeAbbreviations.wisdom"
                 },
+                arcana: {
+                    name: "arcana",
+                    localizableName: "ambersteel.attributes.arcana",
+                    localizableAbbreviation: "ambersteel.attributeAbbreviations.arcana"
+                },
             }
         },
         social: {
@@ -131,22 +136,6 @@ ambersteel.character = {
                     localizableAbbreviation: "ambersteel.attributeAbbreviations.willpower"
                 },
             }
-        },
-        arcane: {
-            name: "arcane",
-            localizableName: "ambersteel.attributeGroups.arcane",
-            attributes: {
-                arcana: {
-                    name: "arcana",
-                    localizableName: "ambersteel.attributes.arcana",
-                    localizableAbbreviation: "ambersteel.attributeAbbreviations.arcana"
-                },
-                magicSense: {
-                    name: "magicSense",
-                    localizableName: "ambersteel.attributes.magicSense",
-                    localizableAbbreviation: "ambersteel.attributeAbbreviations.magicSense"
-                }
-            }
         }
     },
     biography: {
@@ -165,21 +154,6 @@ ambersteel.character = {
         beliefs: "ambersteel.beliefSystem.beliefs",
         instincts: "ambersteel.beliefSystem.instincts"
     }
-}
-
-ambersteel.character.attributes = {
-    agility: ambersteel.character.attributeGroups.physical.attributes.agility,
-    endurance: ambersteel.character.attributeGroups.physical.attributes.endurance,
-    perception: ambersteel.character.attributeGroups.physical.attributes.perception,
-    strength: ambersteel.character.attributeGroups.physical.attributes.strength,
-    toughness: ambersteel.character.attributeGroups.physical.attributes.toughness,
-    intelligence: ambersteel.character.attributeGroups.mental.attributes.intelligence,
-    wisdom: ambersteel.character.attributeGroups.mental.attributes.wisdom,
-    empathy: ambersteel.character.attributeGroups.social.attributes.empathy,
-    oratory: ambersteel.character.attributeGroups.social.attributes.oratory,
-    willpower: ambersteel.character.attributeGroups.social.attributes.willpower,
-    arcana: ambersteel.character.attributeGroups.arcane.attributes.arcana,
-    magicSense: ambersteel.character.attributeGroups.arcane.attributes.magicSense
 }
 
 ambersteel.fateSystem = {

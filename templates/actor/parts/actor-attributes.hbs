@@ -3,23 +3,18 @@ isEditable: {Boolean}
 isSendable: {Boolean}
 attributeGroups: {Object} = {
     physical: {Object} = {
-        name: {String},
-        localizableName: {String},
+        name: {String}
+        localizableName: {String}
         attributes: {[Object]} -> see component-attribute-table.hbs
     },
     mental: {Object}: {Object} = {
-        name: {String},
-        localizableName: {String},
+        name: {String}
+        localizableName: {String}
         attributes: {[Object]} -> see component-attribute-table.hbs
     },
     social: {Object}: {Object} = {
-        name: {String},
-        localizableName: {String},
-        attributes: {[Object]} -> see component-attribute-table.hbs
-    },
-    arcane: {Object}: {Object} = {
-        name: {String},
-        localizableName: {String},
+        name: {String}
+        localizableName: {String}
         attributes: {[Object]} -> see component-attribute-table.hbs
     }
 }
@@ -46,12 +41,5 @@ attributeGroups: {Object} = {
         localizableAttributeGroupName=attributeGroups.social.localizableName 
         attributeGroupName=attributeGroups.social.name 
         attributes=attributeGroups.social.attributes
-    }}
-    {{> "systems/ambersteel/templates/actor/components/component-attribute-table.hbs"
-        isEditable=isEditable
-        isSendable=isSendable
-        localizableAttributeGroupName=attributeGroups.arcane.localizableName 
-        attributeGroupName=attributeGroups.arcane.name 
-        attributes=attributeGroups.arcane.attributes
     }}
 </section>

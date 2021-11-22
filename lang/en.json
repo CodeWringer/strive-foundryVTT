@@ -33,8 +33,7 @@
     "attributeGroups": {
       "physical": "Physical Attributes",
       "mental": "Mental Attributes",
-      "social": "Social Attributes",
-      "arcane": "Arcane Attributes"
+      "social": "Social Attributes"
     },
     "attributes": {
       "agility": "Agility",
@@ -47,8 +46,7 @@
       "empathy": "Empathy",
       "oratory": "Oratory",
       "willpower": "Willpower",
-      "arcana": "Arcana",
-      "magicSense": "Magic-Sense"
+      "arcana": "Arcana"
     },
     "attributeAbbreviations": {
       "agility": "Agi",
@@ -61,8 +59,7 @@
       "empathy": "Emp",
       "oratory": "Ora",
       "willpower": "Will",
-      "arcana": "Arc",
-      "magicSense": "MS"
+      "arcana": "Arc"
     },
     "biography": {
       "origin": "Origin",
