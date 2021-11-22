@@ -6,6 +6,7 @@ type: {String} = "single-line|multi-line|drop-down|number"
 cssClass: {String|undefined}
 readOnlyCssClass: {String|undefined}
 name: {String|undefined}
+placeholder: {String|undefined}
 contextOverride: {Any}
 -- Drop-down only
 options: {Array<Object>|undefined}
@@ -20,6 +21,7 @@ optionDisplayProperty: {String|undefined}
       data-property-path="{{propertyPath}}"
       type="text"
       name="{{name}}"
+      placeholder="{{placeholder}}"
       value="{{lookupValue (isDefined contextOverride this) propertyPath itemId}}"
     />
   {{/if}}
@@ -29,6 +31,7 @@ optionDisplayProperty: {String|undefined}
       data-item-id="{{itemId}}"
       data-property-path="{{propertyPath}}"
       name="{{name}}"
+      placeholder="{{placeholder}}"
     >
       {{#select propertyPath}}
       {{#each options as |option index|}}
@@ -49,6 +52,7 @@ optionDisplayProperty: {String|undefined}
       data-property-path="{{propertyPath}}"
       value="{{lookupValue (isDefined contextOverride this) propertyPath itemId}}"
       name="{{name}}"
+      placeholder="{{placeholder}}"
       />
     {{/numberSpinner}}
   {{/if}}
@@ -59,6 +63,7 @@ optionDisplayProperty: {String|undefined}
         data-item-id="{{itemId}}"
         data-property-path="{{propertyPath}}"
         name="{{name}}"
+        placeholder="{{placeholder}}"
       >{{lookupValue (isDefined contextOverride this) propertyPath itemId}}</textarea>
   {{/if}}
 {{else}}
