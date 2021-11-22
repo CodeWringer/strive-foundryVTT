@@ -1,4 +1,3 @@
-import * as Attribute from '../utils/attribute-utility.mjs';
 import AmbersteelPcActor from './subtypes/actor/ambersteel-pc-actor.mjs';
 import AmbersteelNpcActor from './subtypes/actor/ambersteel-npc-actor.mjs';
 import { deleteByPropertyPath } from '../utils/document-update-utility.mjs';
@@ -84,7 +83,7 @@ export class AmbersteelActor extends Actor {
    */
   async setAttributeLevel(attName = undefined, newValue = 0) {
     const oAttName = this.getAttributeForName(attName);
-    const req = Attribute.getAdvancementRequirements(newValue);
+    const req = game.ambersteel.getAttributeAdvancementRequirements(newValue);
     const propertyPath = `data.attributes.${oAttName.groupName}.${attName}`
 
     await this.update({

@@ -1,5 +1,4 @@
 import PreparedChatData from '../../../dto/prepared-chat-data.mjs';
-import * as AttributeUtil from '../../../utils/attribute-utility.mjs';
 import * as SkillUtil from '../../../utils/skill-utility.mjs';
 import * as UpdateUtil from "../../../utils/document-update-utility.mjs";
 import * as ChatUtil from "../../../utils/chat-utility.mjs";
@@ -89,7 +88,7 @@ export default class AmbersteelBaseActor {
    */
   _prepareDerivedAttributeData(oAtt, attName) {
     const attValue = parseInt(oAtt.value);
-    const req = AttributeUtil.getAdvancementRequirements(attValue);
+    const req = game.ambersteel.getAttributeAdvancementRequirements(attValue);
 
     // Calculate advancement requirements. 
     oAtt.requiredSuccessses = req.requiredSuccessses;
@@ -143,7 +142,7 @@ export default class AmbersteelBaseActor {
     skillData.failures = parseInt(skillData.failures ? skillData.failures : 0);
     skillData.relatedAttribute = skillData.relatedAttribute ? skillData.relatedAttribute : "agility";
 
-    const req = SkillUtil.getAdvancementRequirements(skillData.value);
+    const req = game.ambersteel.getSkillAdvancementRequirements(skillData.value);
     skillData.requiredSuccessses = req.requiredSuccessses;
     skillData.requiredFailures = req.requiredFailures;
   }

@@ -9,6 +9,7 @@ import { AmbersteelItemSheet } from "./sheets/item-sheet.mjs";
 // Import helper/utility classes and constants.
 import { preloadHandlebarsTemplates } from "./templatePreloader.mjs";
 import { getNestedPropertyValue } from "./utils/property-utility.mjs";
+import AdvancementRequirements from "./dto/advancement-requirement.mjs";
 
 /* -------------------------------------------- */
 /*  Init Hook                                   */
@@ -40,6 +41,28 @@ Hooks.once('init', async function() {
      */
     getSkillTestNumberOfDice: function(skillLevel, relatedAttributeLevel) {
       return skillLevel == 0 ? parseInt(Math.ceil(relatedAttributeLevel / 2)) : parseInt(Math.floor(relatedAttributeLevel / 2)) + skillLevel;
+    },
+    /**
+     * Returns the advancement requirements for the given level of an attribute. 
+     * @param {Number} level The level for which to get the advancement requirements. 
+     * @returns {AdvancementRequirements}
+     */
+    getAttributeAdvancementRequirements: function(level = 0) {
+      return new AdvancementRequirements({
+        requiredSuccessses: (level + 1) * (level + 1) * 3,
+        requiredFailures: (level + 1) * (level + 1) * 4
+      });
+    },
+    /**
+     * Returns the advancement requirements for the given level of a skill. 
+     * @param {Number} level The level for which to get the advancement requirements. 
+     * @returns {AdvancementRequirements}
+     */
+    getSkillAdvancementRequirements: function(level = 0) {
+      return new AdvancementRequirements({
+        requiredSuccessses: (level == 0) ? 10 : (level + 1) * level * 2,
+        requiredFailures: (level == 0) ? 14 : (level + 1) * level * 3
+      });
     }
   };
 

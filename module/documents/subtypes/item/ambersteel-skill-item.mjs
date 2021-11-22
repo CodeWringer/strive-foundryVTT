@@ -66,14 +66,16 @@ export default class AmbersteelSkillItem extends AmbersteelBaseItem {
    * @async
    */
   async setLevel(newLevel = 0, resetProgress = true) {
-    const req = getAdvancementRequirements(newLevel);
+    const req = game.ambersteel.getSkillAdvancementRequirements(newLevel);
 
     await this.parent.update({
-      ["data.value"]: newLevel,
-      ["data.requiredSuccessses"]: req.requiredSuccessses,
-      ["data.requiredFailures"]: req.requiredFailures,
-      ["data.successes"]: resetProgress ? 0 : skillItem.data.data.successes,
-      ["data.failures"]: resetProgress ? 0 : skillItem.data.data.failures
+      data: {
+        value: newLevel,
+        requiredSuccessses: req.requiredSuccessses,
+        requiredFailures: req.requiredFailures,
+        successes: resetProgress ? 0 : this.parent.data.data.successes,
+        failures: resetProgress ? 0 : this.parent.data.data.failures
+      }
     });
   };
 
