@@ -61,6 +61,8 @@ export class AmbersteelItemSheet extends ItemSheet {
     
     // Add the config to the context object as a convenience property. 
     context.CONFIG = CONFIG.ambersteel;
+    // Add the game to the context object as a convenience property. 
+    context.game = game;
     // In templates that implement it, this flag determines whether data on the sheet 
     // can be edited. 
     context.isEditable = context.editable;
