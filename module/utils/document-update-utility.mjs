@@ -14,7 +14,7 @@ import { getNestedPropertyValue } from "./property-utility.mjs";
  */
 export async function updateProperty(document,  propertyPath, newValue) {
   const parts = propertyPath.split(/\.|\[/g);
-  const lastPart = parts[parts.length - 1];
+  const lastPart = parts[parts.length - 1].replace("]", "");
 
   if (parts.length == 1) {
     // example:
