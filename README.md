@@ -28,11 +28,15 @@ This is the Ambersteel table-top role-playing game system for FoundryVTT.
 * [X] Check if optional arguments work correctly (everywhere)
 * [X] Check if every sendToChat call is correct
 * [X] Extract button components
+* [ ] Refactor: Move game-specific logic to game.ambersteel namespace. 
 * [ ] Update attributes to current ruleset
   * [ ] Remove "Magic Sense"
   * [ ] Move "Arcana" to "Mental Attributes"
 * [ ] Health Tab
 * [ ] Possessions Tab
+* [ ] Refactor: Cleanup language file
+  * E.g.: calculating the number of successes/failures for a given level. 
+* [ ] Deletion confirmation dialog
 * [ ] Create list (compendium) of skills
   * [ ] Support adding skills from this list
   * [ ] Differentiate skills - introduce two types: `preset` and `custom`
@@ -49,5 +53,5 @@ This is the Ambersteel table-top role-playing game system for FoundryVTT.
   * [ ] Support adding fate cards from this list
   * [ ] Differentiate fate cards - introduce two types: `preset` and `custom`
     * [ ] Preset items cannot be edited
-* [ ] Cleanup language file
-* [ ] Deletion confirmation dialog
+* [ ] Create rules compendium/journal for easy in-app lookup of the rules. 
+  * [ ] Add context-dependent help buttons which link to specific rule-sections. 
