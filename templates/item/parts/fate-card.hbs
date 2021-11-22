@@ -20,11 +20,7 @@ itemId: {String}
     </div>
   </div>
   <div class="fate-card-description">
-    {{#if isEditable}}
-      <textarea name="data.description" spellcheck="false">{{data.data.description}}</textarea>
-    {{else}}
-      <span class="multiline">{{data.data.description}}</span>
-    {{/if}}
+    {{> inputComponent type="multi-line" name="description" propertyPath="data.data.description" isEditable=isEditable }}
   </div>
   <div class="flex flex-row fate-card-footer">
     {{#if isEditable}}
