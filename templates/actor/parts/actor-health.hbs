@@ -24,13 +24,17 @@ data: {Object} = {
       {{!-- Col 1 --}}
       <div class="sheet-block">
         <div class="flex flex-row">
-          {{> inputLabel for="maxHP" text="ambersteel.labels.maxHP"}}
+          <div class="flex-grow">
+            {{> inputLabel for="maxHP" text="ambersteel.labels.maxHP"}}
+          </div>
           <span class="width-md">
             {{> inputComponent type="number" name="maxHP" propertyPath="data.data.health.maxHP" isEditable=false }}
           </span>
         </div>
         <div class="flex flex-row">
-          {{> inputLabel for="HP" text="ambersteel.labels.HP"}}
+          <div class="flex-grow">
+            {{> inputLabel for="HP" text="ambersteel.labels.HP"}}
+          </div>
           <span class="width-md">
             {{> inputComponent type="number" name="HP" propertyPath="data.data.health.HP" isEditable=isEditable }}
           </span>
@@ -39,13 +43,17 @@ data: {Object} = {
       {{!-- Col 2 --}}
       <div class="sheet-block">
         <div class="flex flex-row">
-          {{> inputLabel for="maxExhaustion" text="ambersteel.labels.maxExhaustion"}}
+          <div class="flex-grow">
+            {{> inputLabel for="maxExhaustion" text="ambersteel.labels.maxExhaustion"}}
+          </div>
           <span class="width-md">
             {{> inputComponent type="number" name="maxExhaustion" propertyPath="data.data.health.maxExhaustion" isEditable=false }}
           </span>
         </div>
         <div class="flex flex-row">
-          {{> inputLabel for="exhaustion" text="ambersteel.labels.exhaustion"}}
+          <div class="flex-grow">
+            {{> inputLabel for="exhaustion" text="ambersteel.labels.exhaustion"}}
+          </div>
           <span class="width-md">
             {{> inputComponent type="number" name="exhaustion" propertyPath="data.data.health.exhaustion" isEditable=isEditable }}
           </span>
@@ -56,7 +64,9 @@ data: {Object} = {
   <h2>{{localize "ambersteel.labels.injuries"}}</h2>
   <div class="sheet-block">
     <div class="flex flex-row">
-      {{> inputLabel for="maxInjuries" text="ambersteel.labels.maxInjuries"}}
+      <div class="flex-grow">
+        {{> inputLabel for="maxInjuries" text="ambersteel.labels.maxInjuries"}}
+      </div>
       <span class="width-md">
         {{> inputComponent type="number" name="maxInjuries" propertyPath="data.data.health.maxInjuries" isEditable=isEditable }}
       </span>
