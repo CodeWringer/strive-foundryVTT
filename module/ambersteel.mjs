@@ -202,6 +202,7 @@ Handlebars.registerPartial('buttonDelete', `{{#> "systems/ambersteel/templates/c
 Handlebars.registerPartial('buttonRoll', `{{#> "systems/ambersteel/templates/components/button-roll.hbs"}}{{/"systems/ambersteel/templates/components/button-roll.hbs"}}`);
 Handlebars.registerPartial('buttonToggleSkillAbilityList', `{{#> "systems/ambersteel/templates/components/button-toggle-skill-ability-list.hbs"}}{{/"systems/ambersteel/templates/components/button-toggle-skill-ability-list.hbs"}}`);
 Handlebars.registerPartial('inputComponent', `{{#> "systems/ambersteel/templates/components/input.hbs"}}{{/"systems/ambersteel/templates/components/input.hbs"}}`);
+Handlebars.registerPartial('inputLabel', `{{#> "systems/ambersteel/templates/components/input-label.hbs"}}{{/"systems/ambersteel/templates/components/input-label.hbs"}}`);
 
 /* -------------------------------------------- */
 /*  Ready Hook                                  */

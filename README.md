@@ -54,5 +54,7 @@ This is the Ambersteel table-top role-playing game system for FoundryVTT.
   * [ ] Support adding fate cards from this list
   * [ ] Differentiate fate cards - introduce two types: `preset` and `custom`
     * [ ] Preset items cannot be edited
+* [ ] Send actor to chat
+* [ ] Send skill to chat
 * [ ] Create rules compendium/journal for easy in-app lookup of the rules. 
   * [ ] Add context-dependent help buttons which link to specific rule-sections. 

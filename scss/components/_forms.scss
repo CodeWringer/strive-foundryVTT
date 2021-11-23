@@ -29,7 +29,6 @@ h1.header-name {
 }
 
 // Tab styles
-
 nav#nav-sheet-tabs.sheet-tabs {
   height: 32px;
   min-height: 32px;
@@ -88,4 +87,9 @@ textarea.resize-vertical {
 // Chat styles
 .ambersteel-item-to-chat-margin-right {
   margin-right: 2%;
+}
+
+.ambersteel-read-only {
+  background: repeating-linear-gradient(45deg, rgba(0,0,0,0.1), transparent, rgba(0,0,0,0.1) 10px);
+  border-radius: 3px;
 }

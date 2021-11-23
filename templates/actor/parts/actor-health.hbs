@@ -1,10 +1,75 @@
 {{!-- Requires parameters:
 isEditable: {Boolean}
 isSendable: {Boolean}
-data: {Object} where Object = {
-  TODO
+data: {Object} = {
+  data: {Object} = {
+    health: {Object} = {
+      maxHP: {Number}
+      HP: {Number}
+      maxInjuries: {Number}
+      maxExhaustion: {Number}
+      exhaustion: {Number}
+      injuries: {Array<Item>}
+      illnesses: {Array<Item>}
+    }
+  }
 }
 --}}
 <section>
-  {{!-- TODO --}}
+  <h2>{{localize "ambersteel.labels.healthStats"}}</h2>
+  {{!-- General health stats --}}
+  <div class="flex flex-column">
+  {{!-- Row 1 --}}
+    <div class="grid grid-2col">
+      {{!-- Col 1 --}}
+      <div class="sheet-block">
+        <div class="flex flex-row">
+          {{> inputLabel for="maxHP" text="ambersteel.labels.maxHP"}}
+          <span class="width-md">
+            {{> inputComponent type="number" name="maxHP" propertyPath="data.data.health.maxHP" isEditable=false }}
+          </span>
+        </div>
+        <div class="flex flex-row">
+          {{> inputLabel for="HP" text="ambersteel.labels.HP"}}
+          <span class="width-md">
+            {{> inputComponent type="number" name="HP" propertyPath="data.data.health.HP" isEditable=isEditable }}
+          </span>
+        </div>
+      </div>
+      {{!-- Col 2 --}}
+      <div class="sheet-block">
+        <div class="flex flex-row">
+          {{> inputLabel for="maxExhaustion" text="ambersteel.labels.maxExhaustion"}}
+          <span class="width-md">
+            {{> inputComponent type="number" name="maxExhaustion" propertyPath="data.data.health.maxExhaustion" isEditable=false }}
+          </span>
+        </div>
+        <div class="flex flex-row">
+          {{> inputLabel for="exhaustion" text="ambersteel.labels.exhaustion"}}
+          <span class="width-md">
+            {{> inputComponent type="number" name="exhaustion" propertyPath="data.data.health.exhaustion" isEditable=isEditable }}
+          </span>
+        </div>
+      </div>
+    </div>
+  {{!-- Injuries --}}
+  <h2>{{localize "ambersteel.labels.injuries"}}</h2>
+  <div class="sheet-block">
+    <div class="flex flex-row">
+      {{> inputLabel for="maxInjuries" text="ambersteel.labels.maxInjuries"}}
+      <span class="width-md">
+        {{> inputComponent type="number" name="maxInjuries" propertyPath="data.data.health.maxInjuries" isEditable=isEditable }}
+      </span>
+    </div>
+  </div>
+  <ol class="unstyled-list alternating-rows">
+    {{#each data.data.injuries as |injury key|}}
+    {{/each}}
+  </ol>
+  {{!-- Illnesses --}}
+  <h2>{{localize "ambersteel.labels.illnesses"}}</h2>
+  <ol class="unstyled-list alternating-rows">
+    {{#each data.data.illnesses as |illness key|}}
+    {{/each}}
+  </ol>
 </section>

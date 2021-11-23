@@ -78,11 +78,8 @@
           "maxHP": 0,
           "HP": 0,
           "maxInjuries": 0,
-          "injuries": [],
           "maxExhaustion": 0,
-          "exhaustion": 0,
-          "illness": null,
-          "statusEffect": ""
+          "exhaustion": 0
         },
         "possessions": {
           "carryingCapacity": 0,

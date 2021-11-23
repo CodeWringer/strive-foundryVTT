@@ -119,7 +119,15 @@
       "skill": "Skill",
       "customSkill": "Custom Skill",
       "sendToChat": "Send to Chat",
-      "messageVisibility": "Visibility"
+      "messageVisibility": "Visibility",
+      "healthStats": "General Health Stats",
+      "injuries": "Injuries",
+      "illnesses": "Illnesses",
+      "maxHP": "Max. HP",
+      "HP": "HP",
+      "maxExhaustion": "Max. Exhaustion",
+      "exhaustion": "Exhaustion",
+      "maxInjuries": "Max. Injuries"
     },
     "fateSystem": {
       "fate": "Fate",

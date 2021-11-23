@@ -268,6 +268,12 @@ header.message-header span.flavor-text {
   justify-content: space-between;
 }
 
+.flex-middle {
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
 .dice-rolls-container {
   overflow: hidden;
 }
@@ -343,6 +349,10 @@ li.roll.die.d6.roll-success {
   font-size: 1rem;
 }
 
+.pad-xs {
+  padding: 1px;
+}
+
 .pad-sm {
   padding: 2px;
 }
@@ -355,10 +365,36 @@ li.roll.die.d6.roll-success {
   padding: 10px;
 }
 
+.pad-r-xs {
+  padding: 0 1px 0 0;
+}
+
+.pad-r-sm {
+  padding: 0 2px 0 0;
+}
+
+.pad-r-md {
+  padding: 0 5px 0 0;
+}
+
+.pad-r-lg {
+  padding: 0 10px 0 0;
+}
+
 .fill {
   width: 100%;
   height: 100%;
   min-width: inherit;
+  min-height: inherit;
+}
+
+.width-fill {
+  width: 100%;
+  min-width: inherit;
+}
+
+.height-fill {
+  height: 100%;
   min-height: inherit;
 }
 
@@ -533,6 +569,12 @@ textarea.resize-vertical {
 
 .ambersteel-item-to-chat-margin-right {
   margin-right: 2%;
+}
+
+.ambersteel-read-only {
+  background: -o-repeating-linear-gradient(45deg, rgba(0, 0, 0, 0.1), transparent, rgba(0, 0, 0, 0.1) 10px);
+  background: repeating-linear-gradient(45deg, rgba(0, 0, 0, 0.1), transparent, rgba(0, 0, 0, 0.1) 10px);
+  border-radius: 3px;
 }
 
 .items-header {

@@ -73,7 +73,7 @@ step: {Number|undefined}
   {{/if}}
 {{else}}
   {{!-- Display read-only value --}}
-  <span class="ambersteel-read-only {{readOnlyCssClass}}" name="{{name}}">
+  <div class="ambersteel-read-only pad-sm fill {{readOnlyCssClass}}" name="{{name}}">
     {{lookupValue (isDefined contextOverride this) propertyPath itemId}}
-  </span>
+  </div>
 {{/if}}
