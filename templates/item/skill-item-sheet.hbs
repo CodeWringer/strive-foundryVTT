@@ -50,7 +50,7 @@ item: {Item} where Item = {
       {{> inputComponent type="drop-down" propertyPath="data.data.relatedAttribute" 
         options=CONFIG.character.attributes
         optionValueProperty="name"
-        optionDisplayProperty="localizableAbbreviation"
+        optionDisplayProperty="localizableName"
         isEditable=isEditable
       }}
       {{> inputComponent type="multi-line" propertyPath="data.data.description" isEditable=isEditable readOnlyCssClass="multiline flex-grow"}}
