@@ -116,6 +116,7 @@
       "distance": "Distance",
       "damage": "Damage",
       "attackType": "Att. Type",
+      "damageType": "Dmg. Type",
       "skill": "Skill",
       "customSkill": "Custom Skill",
       "sendToChat": "Send to Chat",
@@ -190,6 +191,24 @@
       "areaOfEffectAbbreviation": "AoE",
       "multipleSingleTarget": "Multi-Single-Target",
       "multipleSingleTargetAbbreviation": "MST"
+    },
+    "damageTypes": {
+      "burning": "Burning",
+      "burningAbbreviation": "Burn",
+      "freezing": "Freezing",
+      "freezingAbbreviation": "Freeze",
+      "slashing": "Slashing",
+      "slashingAbbreviation": "Slash",
+      "piercing": "Piercing",
+      "piercingAbbreviation": "Pierce",
+      "bludgeoning": "Bludgeoning",
+      "bludgeoningAbbreviation": "Bludgeon",
+      "crushing": "Crushing",
+      "crushingAbbreviation": "Crush",
+      "poison": "Poison",
+      "poisonAbbreviation": "Poison",
+      "acid": "Acid",
+      "acidAbbreviation": "Acid"
     }
   }
 }

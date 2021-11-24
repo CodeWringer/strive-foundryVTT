@@ -558,6 +558,11 @@ a.button {
   font-size: 1rem;
 }
 
+.square-button-light {
+  width: 26px;
+  height: 26px;
+}
+
 textarea {
   font-size: 1rem;
   font-family: "Roboto", sans-serif;
