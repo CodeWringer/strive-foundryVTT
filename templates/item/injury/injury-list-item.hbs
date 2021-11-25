@@ -48,11 +48,11 @@ item: {Item} = {
   {{!-- Spacer --}}
   <div class="width-xs"></div>
   {{!-- Time to heal --}}
-  <div class="flex flex-row">
+  <div class="flex flex-row flex-grow">
     <span class="width-min-xl">
       {{> inputLabel text="ambersteel.labels.timeToHeal" }}
     </span>
-    <span class="width-min-xl">
+    <span class="width-min-xl flex-grow">
       {{> inputComponent type="single-line" propertyPath="data.data.timeToHeal" itemId=itemId isEditable=isEditable }}
     </span>
   </div>
