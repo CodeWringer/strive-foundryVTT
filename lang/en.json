@@ -138,7 +138,9 @@
       "state": "State",
       "duration": "Duration",
       "treatment": "Treatment",
-      "treatmentSkill": "Treatment Skill"
+      "treatmentSkill": "Treatment Skill",
+      "none": "None",
+      "noneAbbreviation": "N/A"
     },
     "fateSystem": {
       "fate": "Fate",

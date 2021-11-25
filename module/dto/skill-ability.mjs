@@ -27,9 +27,9 @@ export default class SkillAbility {
       img: "icons/svg/item-book.svg",
       apCost: 0,
       distance: 0,
-      damageFormula: "1D6",
-      damageType: CONFIG.ambersteel.damageTypes.slashing,
-      attackType: CONFIG.ambersteel.attackTypes.singleTarget,
+      damageFormula: "",
+      damageType: CONFIG.ambersteel.damageTypes.none,
+      attackType: CONFIG.ambersteel.attackTypes.none,
       ...args
     };
 
