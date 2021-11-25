@@ -27,7 +27,7 @@ export default class AmbersteelSkillItem extends AmbersteelBaseItem {
    * Chat message template path. 
    * @type {String}
    */
-  get chatMessageTemplate() { return "systems/ambersteel/templates/item/skill-ability/skill-ability-chat-message.hbs"; }
+  get chatMessageTemplate() { return "systems/ambersteel/templates/item/skill/skill-chat-message.hbs"; }
 
   /** @override */
   prepareData() {
