@@ -1,3 +1,4 @@
+// Padding sizes
 $padding-xs: 1px;
 $padding-sm: 2px;
 $padding-md: 5px;
@@ -5,8 +6,9 @@ $padding-lg: 10px;
 
 $border-groove: 2px groove #eeede0;
 
-$line-height: 30px;
+$line-height: 26px;
 
+// Font sizes
 $font-size-default: 1rem;
 $font-size-md: 1.1rem;
 $font-size-lg: 1.2rem;
@@ -20,3 +22,10 @@ $width-column-md: 50px;
 $width-column-lg: 60px;
 $width-column-xl: 80px;
 $width-column-xxl: 100px;
+
+// Border-radius sizes
+$border-radius-xs: 0.1rem;
+$border-radius-sm: 0.2rem;
+$border-radius-md: 0.3rem;
+$border-radius-lg: 0.5rem;
+$border-radius-xl: 0.8rem;

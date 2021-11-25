@@ -344,7 +344,7 @@ li.roll.die.d6.roll-success {
 }
 
 .line-height {
-  height: 30px;
+  height: 26px;
   line-height: 1;
   font-size: 1rem;
 }
@@ -691,7 +691,13 @@ textarea.resize-vertical {
 .ambersteel-read-only {
   background: -o-repeating-linear-gradient(45deg, rgba(0, 0, 0, 0.1), transparent, rgba(0, 0, 0, 0.1) 10px);
   background: repeating-linear-gradient(45deg, rgba(0, 0, 0, 0.1), transparent, rgba(0, 0, 0, 0.1) 10px);
-  border-radius: 3px;
+  border-radius: 0.2rem;
+}
+
+img.header-image {
+  background: rgba(0, 0, 0, 0.08);
+  border-radius: 0.2rem;
+  border: 1px solid #b5b3a4;
 }
 
 .inline-img {

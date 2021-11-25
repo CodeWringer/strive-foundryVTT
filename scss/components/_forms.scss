@@ -96,7 +96,13 @@ textarea.resize-vertical {
 
 .ambersteel-read-only {
   background: repeating-linear-gradient(45deg, rgba(0,0,0,0.1), transparent, rgba(0,0,0,0.1) 10px);
-  border-radius: 3px;
+  border-radius: 0.2rem;
+}
+
+img.header-image {
+  background: $c-bg-medium;
+  border-radius: 0.2rem;
+  border: 1px solid $c-border-beige-light;
 }
 
 // Image styles
