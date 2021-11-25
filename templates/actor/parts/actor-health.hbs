@@ -66,7 +66,7 @@ actor: {Actor} = {
       </div>
     </div>
   {{!-- Injuries --}}
-  <h2>{{localize "ambersteel.labels.injuries"}}</h2>
+  <h2 class="flex flex-row">{{localize "ambersteel.labels.injuries"}}</h2>
   <div class="grid grid-2col">
     <div class="sheet-block">
       <div class="flex flex-row">
@@ -92,7 +92,7 @@ actor: {Actor} = {
   <ol class="unstyled-list alternating-rows">
     {{#each actor.injuries as |injury key|}}
       <li class="ambersteel-list-row sheet-block">
-        {{> "systems/ambersteel/templates/item/injury/injury-list-item.hbs" item=injury itemId=injury.id isEditable=../isEditable isSendable=../isSendable }}
+        {{> "systems/ambersteel/templates/item/injury/injury-list-item.hbs" item=injury itemId=injury.id isEditable=../isEditable isSendable=../isSendable CONFIG=../CONFIG }}
       </li>
     {{/each}}
     {{#if isEditable}}

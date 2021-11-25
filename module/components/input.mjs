@@ -14,11 +14,30 @@ export function activateListeners(html, ownerSheet, isOwner, isEditable) {
     return;
   }
 
+  // Ensure correct option of drop-down is set. 
   for (const elem of html.find(".drop-down")) {
     const dataset = elem.dataset;
     const propertyHolder = dataset.itemId ? ownerSheet.getItem(dataset.itemId) : ownerSheet.getContextEntity();
     const actualValue = getNestedPropertyValue(propertyHolder, dataset.propertyPath);
     selectItemByValue(elem, actualValue);
+  }
+
+  // Ensure correct option of radio-buttons is set.
+  for (const elem of html.find(".radio-button-group")) {
+    const dataset = elem.dataset;
+    const propertyHolder = dataset.itemId ? ownerSheet.getItem(dataset.itemId) : ownerSheet.getContextEntity();
+    const actualValue = getNestedPropertyValue(propertyHolder, dataset.propertyPath);
+
+    const buttons = Array.from(elem.children).map((value, index, Array) => value.getElementsByTagName("input")[0]);
+    for(const button of buttons) {
+      button.onchange = (event) => {
+        elem.value = event.currentTarget.value;
+      };
+      if (actualValue == button.value) {
+        button.checked = true;
+      }
+    }
+
   }
 
   // -------------------------------------------------------------

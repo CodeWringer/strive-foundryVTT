@@ -2,13 +2,13 @@
 isEditable: {Boolean}
 itemId: {String|undefined}
 propertyPath: {String}
-type: {String} = "single-line|multi-line|drop-down|number"
+type: {String} = "single-line|multi-line|drop-down|number|radio-buttons"
 cssClass: {String|undefined}
 readOnlyCssClass: {String|undefined}
-name: {String|undefined}
+name: {String|undefined} - Name is mandatory for "radio-buttons"
 placeholder: {String|undefined}
 contextOverride: {Any}
--- Drop-down only
+-- Drop-down and radio-buttons
 options: {Array<Object>|undefined}
 optionValueProperty: {String|undefined}
 optionDisplayProperty: {String|undefined}
@@ -20,7 +20,8 @@ step: {Number|undefined}
 {{#if isEditable}}
   {{!-- Single-line input --}}
   {{#if (eq type 'single-line')}}
-    <input class="ambersteel-edit {{cssClass}}"
+    <input 
+      class="ambersteel-edit {{cssClass}}"
       data-item-id="{{itemId}}"
       data-property-path="{{propertyPath}}"
       type="text"
@@ -31,7 +32,8 @@ step: {Number|undefined}
   {{/if}}
   {{!-- Drop-down --}}
   {{#if (eq type 'drop-down')}}
-    <select class="ambersteel-edit drop-down width-fill {{cssClass}}"
+    <select 
+      class="ambersteel-edit drop-down width-fill {{cssClass}}"
       data-item-id="{{itemId}}"
       data-property-path="{{propertyPath}}"
       name="{{name}}"
@@ -47,7 +49,8 @@ step: {Number|undefined}
   {{!-- Number-spinner --}}
   {{#if (eq type 'number')}}
     {{#> numberSpinner}}
-    <input class="ambersteel-edit spinner {{cssClass}}"
+    <input 
+      class="ambersteel-edit spinner {{cssClass}}"
       type="number"
       data-dtype="Number"
       {{#if min}}min="{{min}}"{{/if}}
@@ -63,13 +66,38 @@ step: {Number|undefined}
   {{/if}}
   {{!-- Textarea --}}
   {{#if (eq type 'multi-line')}}
-      <textarea class="ambersteel-edit {{cssClass}}"
-        spellcheck="false"
-        data-item-id="{{itemId}}"
-        data-property-path="{{propertyPath}}"
-        name="{{name}}"
-        placeholder="{{placeholder}}"
-      >{{lookupValue (isDefined contextOverride this) propertyPath itemId}}</textarea>
+    <textarea 
+      class="ambersteel-edit {{cssClass}}"
+      spellcheck="false"
+      data-item-id="{{itemId}}"
+      data-property-path="{{propertyPath}}"
+      name="{{name}}"
+      placeholder="{{placeholder}}"
+    >{{lookupValue (isDefined contextOverride this) propertyPath itemId}}</textarea>
+  {{/if}}
+  {{#if (eq type 'radio-buttons')}}
+    <div 
+      type="hidden"
+      class="radio-button-group ambersteel-edit {{cssClass}}" 
+      name="{{name}}" 
+      data-item-id="{{itemId}}" 
+      data-property-path="{{propertyPath}}"
+      value="{{lookupValue (isDefined contextOverride this) propertyPath itemId}}"
+    >
+      {{#each options as |option index|}}
+        <span class="radio-button-container">
+          <input 
+            type="radio" 
+            class="radio-button" 
+            name="{{../name}}" 
+            id="{{../name}}-{{lookupValue option ../optionValueProperty}}" 
+            value="{{lookupValue option ../optionValueProperty}}">
+          <label for="{{../name}}-{{lookupValue option ../optionValueProperty}}">
+            {{localize (lookupValue option ../optionDisplayProperty)}}
+          </label>
+        </span>
+      {{/each}}
+    </div>
   {{/if}}
 {{else}}
   {{!-- Display read-only value --}}

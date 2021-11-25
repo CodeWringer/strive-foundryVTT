@@ -7,7 +7,7 @@ item: {Item} = {
   data: {Object} = {
     data: {Object} = {
       description: {String}
-      state: {String} = "active"|"patchedUp"|"treated"
+      state: {CONFIG.injuryStates}
       timeToHeal: {String}
       limit: {Number}
     }
@@ -21,14 +21,48 @@ item: {Item} = {
     {{> buttonSendToChat itemId=itemId }}
     {{!-- Name --}}
     <span class="width-min-xl">
-      {{> inputLabel text="ambersteel.labels.name"}}
+      {{> inputLabel text="ambersteel.labels.injury"}}
     </span>
     {{> inputComponent type="single-line" propertyPath="name" itemId=itemId cssClass="flex-grow" isEditable=isEditable }}
   </div>
   {{!-- Delete --}}
   {{> buttonDelete itemId=itemId }}
 </div>
-{{!-- Row 2 --}}
+<div class="flex flex-row">
+  {{!-- Limit --}}
+  <div class="flex flex-row">
+    <span class="width-min-xl">
+      {{> inputLabel text="ambersteel.labels.limit" }}
+    </span>
+    <span class="width-md">
+      {{> inputComponent type="number" propertyPath="data.data.limit" min="0" itemId=itemId isEditable=isEditable }}
+    </span>
+  </div>
+  {{!-- Time to heal --}}
+  <div class="flex flex-row">
+    <span class="width-min-xl">
+      {{> inputLabel text="ambersteel.labels.timeToHeal" }}
+    </span>
+    <span class="width-min-xl">
+      {{> inputComponent type="single-line" propertyPath="data.data.timeToHeal" itemId=itemId isEditable=isEditable }}
+    </span>
+  </div>
+</div>
+{{!-- Row 3 --}}
+<div class="flex flex-row">
+  {{!-- State --}}
+  <div class="flex flex-row">
+    <span class="width-min-xl">
+      {{> inputLabel text="ambersteel.labels.state" }}
+    </span>
+    <span class="flex-grow">
+      {{> inputComponent type="radio-buttons" propertyPath="data.data.state" itemId=itemId name=(concat "state-" itemId) isEditable=isEditable 
+        options=CONFIG.injuryStates optionValueProperty="name" optionDisplayProperty="localizableName"
+      }}
+    </span>
+  </div>
+</div>
+{{!-- Row 4 --}}
 {{!-- Description --}}
 <div class="flex flex-row">
   {{> inputComponent type="multi-line" propertyPath="data.data.description" itemId=itemId isEditable=isEditable }}

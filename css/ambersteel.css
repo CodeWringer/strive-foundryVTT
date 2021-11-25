@@ -582,6 +582,11 @@ textarea.resize-vertical {
   border-radius: 3px;
 }
 
+.inline-img {
+  border: none;
+  display: inline-block;
+}
+
 .items-header {
   height: 28px;
   margin: 2px 0;

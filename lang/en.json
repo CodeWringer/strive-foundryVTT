@@ -124,14 +124,18 @@
       "sendToChat": "Send to Chat",
       "messageVisibility": "Visibility",
       "healthStats": "General Health Stats",
+      "injury": "Injury",
+      "maxInjuries": "Max. Injuries",
       "injuries": "Injuries",
       "illnesses": "Illnesses",
+      "illness": "Illness",
       "maxHP": "Max. HP",
       "HP": "HP",
       "maxExhaustion": "Max. Exhaustion",
       "exhaustion": "Exhaustion",
-      "maxInjuries": "Max. Injuries",
-      "injury": "Injury"
+      "limit": "Limit",
+      "timeToHeal": "Time to heal",
+      "state": "State"
     },
     "fateSystem": {
       "fate": "Fate",
@@ -212,6 +216,11 @@
       "poisonAbbreviation": "Poison",
       "acid": "Acid",
       "acidAbbreviation": "Acid"
+    },
+    "injuryStates": {
+      "active": "Active",
+      "patchedUp": "Patched Up",
+      "treated": "Treated"
     }
   }
 }

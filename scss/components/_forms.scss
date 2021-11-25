@@ -98,3 +98,9 @@ textarea.resize-vertical {
   background: repeating-linear-gradient(45deg, rgba(0,0,0,0.1), transparent, rgba(0,0,0,0.1) 10px);
   border-radius: 3px;
 }
+
+// Image styles
+.inline-img {
+  border: none;
+  display: inline-block;
+}

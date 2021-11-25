@@ -18,20 +18,20 @@ ambersteel.weaponTypes = {
     warBow: "ambersteel.attackTypes.warBow",
     crossbow: "ambersteel.attackTypes.crossbow",
     firearm: "ambersteel.attackTypes.firearm"
-}
+};
 
 ambersteel.armorTypes = {
     light: "ambersteel.armorTypes.light",
     medium: "ambersteel.armorTypes.medium",
     heavy: "ambersteel.armorTypes.heavy"
-}
+};
 
 ambersteel.shieldTypes = {
     buckler: "ambersteel.shieldTypes.buckler",
     roundShield: "ambersteel.shieldTypes.roundShield",
     heaterShield: "ambersteel.shieldTypes.heaterShield",
     kiteShield: "ambersteel.shieldTypes.kiteShield"
-}
+};
 
 ambersteel.damageTypes = {
     burning: {
@@ -74,7 +74,7 @@ ambersteel.damageTypes = {
         localizableName: "ambersteel.damageTypes.acid",
         localizableAbbreviation: "ambersteel.damageTypes.acidAbbreviation"
     },
-}
+};
 
 ambersteel.attackTypes = {
     singleTarget: {
@@ -92,7 +92,7 @@ ambersteel.attackTypes = {
         localizableName: "ambersteel.attackTypes.multipleSingleTarget",
         localizableAbbreviation: "ambersteel.attackTypes.multipleSingleTargetAbbreviation"
     }
-}
+};
 
 ambersteel.character = {
     attributes: {
@@ -168,7 +168,7 @@ ambersteel.character = {
         beliefs: "ambersteel.beliefSystem.beliefs",
         instincts: "ambersteel.beliefSystem.instincts"
     }
-}
+};
 
 ambersteel.character.attributeGroups = {
     physical: {
@@ -200,14 +200,29 @@ ambersteel.character.attributeGroups = {
             willpower: ambersteel.character.attributes.willpower,
         }
     }
-},
+};
 
 ambersteel.fateSystem = {
     maxCards: 5
-}
+};
 
 ambersteel.visibilityModes = {
     public: "ambersteel.messageVisibilityModes.public",
     self: "ambersteel.messageVisibilityModes.self",
     gm: "ambersteel.messageVisibilityModes.gm"
-}
+};
+
+ambersteel.injuryStates = {
+    active: {
+        name: "active",
+        localizableName: "ambersteel.injuryStates.active"
+    },
+    patchedUp: {
+        name: "patchedUp",
+        localizableName: "ambersteel.injuryStates.patchedUp"
+    },
+    treated: {
+        name: "treated",
+        localizableName: "ambersteel.injuryStates.treated"
+    }
+};
