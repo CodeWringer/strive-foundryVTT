@@ -1,0 +1,59 @@
+{{!-- Requires context:
+isEditable: {Boolean}
+isSendable: {Boolean}
+item: {Item} = {
+  id: {String}
+  name: {String}
+  img: {String}
+  data: {ItemData} = {
+    data: {Object} = {
+      description: {String}
+      cost: {Object} = {
+        miFP: {Number}
+        maFP: {Number}
+        AFP: {Number}
+      }
+    }
+  }
+}
+--}}
+<form class="flex flex-column {{cssClass}}" autocomplete="off">
+  <header class="sheet-header">
+    <div class="flex flex-column flex-grow">
+      <div class="flex flex-row">
+        <img class="header-image" src="{{item.img}}" data-edit="img" title="{{item.name}}" height="64" width="64" />
+        <h1 class="header-name">
+          {{> inputComponent type="single-line" propertyPath="name" isEditable=isEditable }}
+        </h1>
+        {{#if isSendable}}
+          <div class="flex flex-center">
+            {{> buttonSendToChat}}
+          </div>
+        {{/if}}
+      </div>
+    </div>
+  </header>
+  <div class="flex flex-column flex-grow">
+    {{!-- Row 1 --}}
+    <div class="sheet-block grid grid-3col margin-b-md">
+      {{> inputLabel text="ambersteel.fateSystem.miFP"}}
+      <div class="flex flex-middle">{{localize "ambersteel.fateSystem.miFPAbbreviation"}}</div>
+      {{> inputComponent type="number" min="0" name="miFP" propertyPath=(concat "data.data.cost.miFP") isEditable=isEditable }}
+    </div>
+    {{!-- Row 2 --}}
+    <div class="sheet-block grid grid-3col margin-b-md">
+      {{> inputLabel text="ambersteel.fateSystem.maFP"}}
+      <div class="flex flex-middle">{{localize "ambersteel.fateSystem.maFPAbbreviation"}}</div>
+      {{> inputComponent type="number" min="0" name="maFP" propertyPath=(concat "data.data.cost.maFP") isEditable=isEditable }}
+    </div>
+    {{!-- Row 3 --}}
+    <div class="sheet-block grid grid-3col margin-b-md">
+      {{> inputLabel text="ambersteel.fateSystem.AFP"}}
+      <div class="flex flex-middle">{{localize "ambersteel.fateSystem.AFPAbbreviation"}}</div>
+      {{> inputComponent type="number" min="0"name="AFP" propertyPath=(concat "data.data.cost.AFP") isEditable=isEditable }}
+    </div>
+    <div class="fate-card-item-description flex-grow">
+      {{> inputComponent type="multi-line" propertyPath="data.data.description" isEditable=isEditable readOnlyCssClass="multiline flex-grow"}}
+    </div>
+  </div>
+</form>

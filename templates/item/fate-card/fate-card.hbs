@@ -1,7 +1,21 @@
 {{!-- Requires context:
 isEditable: {Boolean}
 isSendable: {Boolean}
-itemId: {String}
+item: {Item} = {
+  id: {String}
+  name: {String}
+  img: {String}
+  data: {ItemData} = {
+    data: {Object} = {
+      description: {String}
+      cost: {Object} = {
+        miFP: {Number}
+        maFP: {Number}
+        AFP: {Number}
+      }
+    }
+  }
+}
 --}}
 <section class="fate-card" data-item-id="{{data._id}}">
   <div class="flex flex-row fate-card-header">
@@ -10,7 +24,7 @@ itemId: {String}
     </h3>
     <div class="flex flex-column">
       <span>
-        <img name="img" src="{{img}}" title="{{data.name}}" height="26" width="26" />
+        <img name="img" src="{{item.img}}" title="{{item.name}}" height="26" width="26" />
       </span>
       {{#if isSendable}}
         <span class="flex flex-right">

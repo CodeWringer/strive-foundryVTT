@@ -18,7 +18,7 @@ export default class AmbersteelFateCardItem extends AmbersteelBaseItem {
    * Chat message template path. 
    * @type {String}
    */
-  get chatMessageTemplate() { return "systems/ambersteel/templates/item/parts/fate-card.hbs"; }
+  get chatMessageTemplate() { return "systems/ambersteel/templates/item/fate-card/fate-card.hbs"; }
 
   /** @override */
   prepareData() {
@@ -29,16 +29,11 @@ export default class AmbersteelFateCardItem extends AmbersteelBaseItem {
   async getChatData() {
     const messageBase = super.getChatData();
     const renderedContent = await renderTemplate(this.chatMessageTemplate, {
-      data: {
-        _id: this.parent.id,
-        name: this.parent.name,
-        data: {
-          description: this.parent.data.data.description,
-        }
-      },
-      img: this.parent.img,
       isEditable: false,
-      isSendable: false
+      isSendable: false,
+      item: {
+        data: this.parent.data.data,
+      }
     });
 
     return {

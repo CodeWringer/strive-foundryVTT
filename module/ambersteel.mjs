@@ -24,11 +24,6 @@ Hooks.once('init', async function() {
     AmbersteelActor,
     AmbersteelItem,
     /**
-     * The current public version of the system. 
-     * @type {Number}
-     */
-    version: 0.1,
-    /**
      * The global configuration and constants of the system. 
      * @type {Object}
      */
