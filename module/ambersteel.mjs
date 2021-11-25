@@ -99,7 +99,36 @@ Hooks.once('init', async function() {
     causesBackfire: function(face) {
       const int = parseInt(face);
       return int === 1 || int === 2;
-    }
+    },
+    getCharacterMaximumHp: function(actor) {
+      const businessData = actor.data.data;
+      const injuryCount = actor.injuryCount;
+      return (businessData.attributes.physical.toughness.value * 2) - (injuryCount * 2);
+    },
+    getCharacterMaximumInjuries: function(actor) {
+      return Math.max(Math.floor(actor.data.data.attributes.physical.toughness.value / 2), 1);
+    },
+    getCharacterMaximumExhaustion: function(actor) {
+      return actor.data.data.attributes.physical.endurance.value * 2;
+    },
+    getCharacterMaximumInventory: function(actor) {
+      return actor.data.data.attributes.physical.strength.value * 3;
+    },
+    /**
+     * Returns true, if the given actor must do toughness tests, whenever they suffer an injury. 
+     * @param actor 
+     * @returns {Boolean} True, if any further injury requires a toughness test. 
+     */
+    isToughnessTestRequired: function(actor) {
+      const businessData = actor.data.data;
+      const maxInjuries = businessData.health.maxInjuries;
+      const injuryCount = actor.injuryCount;
+      if (injuryCount >= Math.ceil(maxInjuries / 2)) {
+        return true;
+      } else {
+        return false;
+      }
+    },
   };
 
   // Set initiative formula. 

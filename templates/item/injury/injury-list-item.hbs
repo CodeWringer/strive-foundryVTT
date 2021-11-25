@@ -1,0 +1,35 @@
+{{!-- Requires context:
+isEditable: {Boolean}
+isSendable: {Boolean}
+itemId: {String|undefined}
+item: {Item} = {
+  name: {String}
+  data: {Object} = {
+    data: {Object} = {
+      description: {String}
+      state: {String} = "active"|"patchedUp"|"treated"
+      timeToHeal: {String}
+      limit: {Number}
+    }
+  }
+}
+--}}
+{{!-- Row 1 --}}
+<div class="flex flex-row">
+  <div class="flex flex-grow">
+    {{!-- Send to chat --}}
+    {{> buttonSendToChat itemId=itemId }}
+    {{!-- Name --}}
+    <span class="width-min-xl">
+      {{> inputLabel for="name" text="ambersteel.labels.name"}}
+    </span>
+    {{> inputComponent type="single-line" name="name" propertyPath="name" itemId=itemId cssClass="flex-grow" isEditable=isEditable }}
+  </div>
+  {{!-- Delete --}}
+  {{> buttonDelete itemId=../itemId }}
+</div>
+{{!-- Row 5 --}}
+{{!-- Description --}}
+<div class="flex flex-row">
+  {{> inputComponent type="multi-line" name="description" propertyPath="data.data.description" itemId=itemId isEditable=isEditable }}
+</div>

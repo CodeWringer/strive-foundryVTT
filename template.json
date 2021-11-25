@@ -82,9 +82,7 @@
           "exhaustion": 0
         },
         "possessions": {
-          "carryingCapacity": 0,
-          "usedCapacity": 0,
-          "items": []
+          "carryingCapacity": 0
         },
         "biography": "",
         "gmNotes": ""
@@ -108,7 +106,7 @@
     }
   },
   "Item": {
-    "types": ["item", "skill", "fate-card"],
+    "types": ["item", "skill", "fate-card", "injury", "illness"],
     "templates": {
       "base": {
         "description": "",
@@ -135,6 +133,19 @@
       "templates": ["base"],
       "quantity": 1,
       "bulk": 1
+    },
+    "injury": {
+      "templates": ["base"],
+      "state": "active",
+      "timeToHeal": "",
+      "limit": 0
+    },
+    "illness": {
+      "templates": ["base"],
+      "duration": "",
+      "treatment": "",
+      "treatmentSkill": "medicine",
+      "timeToHeal": ""
     }
   }
 }

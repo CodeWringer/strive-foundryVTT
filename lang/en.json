@@ -86,13 +86,15 @@
       "failureAbbreviation": "F",
       "learningSkill": "Learning Skills",
       "knownSkill": "Known Skills",
+      "add": "Add",
       "addSkill": "Add Skill",
-      "deleteSkill": "Delete Skill",
       "addSkillAbility": "Add Skill Ability",
+      "addInjury": "Add Injury",
+      "addIllness": "Add Illness",
+      "deleteSkill": "Delete Skill",
       "deleteSkillAbility": "Delete Skill Ability",
       "expandSkillAbilityList": "Expand Skill Ability List",
       "buyFateCard": "Buy Fate Card",
-      "add": "Add",
       "edit": "Edit",
       "delete": "Delete",
       "tabAttributes": "Attributes",
@@ -128,7 +130,8 @@
       "HP": "HP",
       "maxExhaustion": "Max. Exhaustion",
       "exhaustion": "Exhaustion",
-      "maxInjuries": "Max. Injuries"
+      "maxInjuries": "Max. Injuries",
+      "injury": "Injury"
     },
     "fateSystem": {
       "fate": "Fate",

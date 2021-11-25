@@ -61,6 +61,7 @@ export default class AmbersteelBaseActor {
   prepareDerivedData(context) {
     this._prepareDerivedAttributesData(context);
     this._prepareDerivedSkillsData(context);
+    this._prepareDerivedHealthData(context);
   }
 
   /**
@@ -145,6 +146,13 @@ export default class AmbersteelBaseActor {
     const req = game.ambersteel.getSkillAdvancementRequirements(skillData.value);
     skillData.requiredSuccessses = req.requiredSuccessses;
     skillData.requiredFailures = req.requiredFailures;
+  }
+
+  _prepareDerivedHealthData(context) {
+    const businessData = context.data.data;
+    businessData.health.maxHP = game.ambersteel.getCharacterMaximumHp(context);
+    businessData.health.maxInjuries = game.ambersteel.getCharacterMaximumInjuries(context);
+    businessData.health.maxExhaustion = game.ambersteel.getCharacterMaximumExhaustion(context);
   }
 
   /**

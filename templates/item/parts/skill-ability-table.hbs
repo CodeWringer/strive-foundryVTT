@@ -19,6 +19,7 @@ abilities: {[SkillAbility]} = {
   <ol class="unstyled-list">
     {{#each abilities as |ability key|}}
       <li class="ambersteel-list-row sheet-block">
+        {{!-- Row 1 --}}
         <div class="flex flex-row">
           <div class="flex flex-grow">
             {{!-- Send to chat --}}
@@ -32,7 +33,7 @@ abilities: {[SkillAbility]} = {
           {{!-- Delete --}}
           {{> buttonDelete itemId=../itemId propertyPath=(concat "data.data.abilities[" key "]") }}
         </div>
-        {{!-- Row 1 --}}
+        {{!-- Row 2 --}}
         <div class="flex flex-row">
           <div class="flex flex-row">
             {{!-- At level --}}
@@ -51,7 +52,7 @@ abilities: {[SkillAbility]} = {
             {{> inputComponent type="single-line" name=(concat "condition[" key "]") propertyPath=(concat "data.data.abilities[" key "].condition") itemId=../skillItemId isEditable=../isEditable contextOverride=../this cssClass="flex-grow" }}
           </div>
         </div>
-        {{!-- Row 2 --}}
+        {{!-- Row 3 --}}
         <div class="flex flex-row">
           {{!-- Distance --}}
           <div class="width-min-xl">
@@ -78,7 +79,7 @@ abilities: {[SkillAbility]} = {
             }}
           </span>
         </div>
-        {{!-- Row 3 --}}
+        {{!-- Row 4 --}}
         <div class="flex flex-row">
           {{!-- Damage formula --}}
           <div class="width-min-xl">
@@ -104,7 +105,7 @@ abilities: {[SkillAbility]} = {
             }}
           </span>
         </div>
-        {{!-- Row 4 --}}
+        {{!-- Row 5 --}}
         {{!-- Description --}}
         <div class="flex flex-row">
           {{> inputComponent type="multi-line" name=(concat "description[" key "]") propertyPath=(concat "data.data.abilities[" key "].description") itemId=../skillItemId isEditable=../isEditable contextOverride=../this }}

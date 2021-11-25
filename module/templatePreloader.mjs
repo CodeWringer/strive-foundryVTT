@@ -43,5 +43,10 @@
     "systems/ambersteel/templates/gm-notes.hbs",
     // Chat.
     "systems/ambersteel/templates/chat/chat-skill-ability.hbs",
+    
+    // Injury
+    "systems/ambersteel/templates/item/injury/injury-chat-message.hbs",
+    "systems/ambersteel/templates/item/injury/injury-item-sheet.hbs",
+    "systems/ambersteel/templates/item/injury/injury-list-item.hbs",
   ]);
 };

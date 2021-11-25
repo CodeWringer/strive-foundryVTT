@@ -52,6 +52,28 @@ export class AmbersteelActor extends Actor {
     this.subType.prepareDerivedData(this);
   }
 
+  get injuries() {
+    const items = Array.from(this.items);
+      const result = [];
+      for (const item of items) {
+        if (item.type === "injury") result.push(item);
+      }
+      return result;
+  }
+
+  get injuryCount() { return this.injuries.length; }
+  
+  get illnesses() {
+    const items = Array.from(this.items);
+    const result = [];
+    for (const item of items) {
+      if (item.type === "illness") result.push(item);
+    }
+    return result;
+  }
+
+  get illnessCount() { return this.illnesses.length; }
+
   // TODO: Move to ambersteel-base-actor.mjs
   /**
    * 
