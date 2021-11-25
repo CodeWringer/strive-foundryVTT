@@ -1,4 +1,5 @@
 import * as SheetUtil from '../../../utils/sheet-utility.mjs';
+import * as ButtonAdd from '../../../components/button-add.mjs';
 import * as ButtonRoll from '../../../components/button-roll.mjs';
 import * as ButtonDelete from '../../../components/button-delete.mjs';
 import * as ButtonSendToChat from '../../../components/button-send-to-chat.mjs';
@@ -136,6 +137,7 @@ export default class AmbersteelBaseActorSheet {
    * @virtual
    */
   activateListeners(html, isOwner, isEditable) {
+    ButtonAdd.activateListeners(html, this, isOwner, isEditable);
     ButtonRoll.activateListeners(html, this, isOwner, isEditable);
     ButtonDelete.activateListeners(html, this, isOwner, isEditable);
     ButtonSendToChat.activateListeners(html, this, isOwner, isEditable);
@@ -159,48 +161,12 @@ export default class AmbersteelBaseActorSheet {
     // -------------------------------------------------------------
     if (!isEditable) return;
 
-    // Add Item
-    html.find('.ambersteel-item-create').click(this._onItemCreate.bind(this));
-
     // Context menu.
     // TODO: Refactor -> item type specific?
     new ContextMenu(html, ".skill-item", AmbersteelBaseActorSheet.itemContextMenu);
 
     // Add skill ability. 
     html.find(".ambersteel-skill-ability-create").click(this._onCreateSkillAbility.bind(this));
-  }
-
-  /**
-   * Handle creating a new Owned Item for the actor using initial data defined in the HTML dataset
-   * @param {Event} event   The originating click event
-   * @private
-   * @async
-   */
-  async _onItemCreate(event) {
-    event.preventDefault();
-
-    const header = event.currentTarget;
-    const type = header.dataset.type;
-    const data = duplicate(header.dataset);
-
-    let imgPath = "icons/svg/item-bag.svg";
-    if (type === "skill") {
-      imgPath = "icons/svg/book.svg";
-    } else if (type === "fate-card") {
-      imgPath = "icons/svg/wing.svg";
-    }
-
-    const itemData = {
-      name: `New ${type.capitalize()}`,
-      type: type,
-      data: data,
-      img: imgPath
-    };
-
-    // Remove the type from the dataset since it's already in the 'itemData.type' property.
-    delete itemData.data["type"];
-
-    return await Item.create(itemData, { parent: this.getActor() });
   }
 
   /**

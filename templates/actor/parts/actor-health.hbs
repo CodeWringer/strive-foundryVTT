@@ -101,11 +101,7 @@ actor: {Actor} = {
           <span class="flex-grow"></span>
           {{!-- Add injury --}}
           <span class="width-sm">
-            <a class="ambersteel-injury-create pad-sm button flex flex-center" 
-              title="{{localize ambersteel.labels.addInjury}}"
-              data-item-id="{{id}}">
-              <i class="fas fa-plus"></i>
-            </a>
+            {{> buttonAdd itemType="injury" }}
           </span>
         </div>
       </li>
@@ -139,10 +135,7 @@ actor: {Actor} = {
           <span class="flex-grow"></span>
           {{!-- Add illness --}}
           <span class="width-sm">
-            <a class="ambersteel-illness-create pad-sm button flex flex-center" 
-              title="{{localize ambersteel.labels.addIllness}}">
-              <i class="fas fa-plus"></i>
-            </a>
+            {{> buttonAdd itemType="illness" }}
           </span>
         </div>
       </li>

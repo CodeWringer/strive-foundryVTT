@@ -1,0 +1,13 @@
+{{!-- Required parameters:
+itemId: {String|undefined}
+itemType: {String|undefined} = "skill"|"fate-card"|"item"|"injury"|"illness"
+--}}
+<span class="square-button-light">
+  <a class="ambersteel-item-create pad-sm button flex flex-center" 
+    title="{{localize ambersteel.labels.add}}"
+    itemId="itemId"
+    data-type="{{itemType}}"
+  >
+    <i class="fas fa-plus"></i>
+  </a>
+</span>

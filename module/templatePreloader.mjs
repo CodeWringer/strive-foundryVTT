@@ -6,6 +6,7 @@
  export const preloadHandlebarsTemplates = async function() {
   return loadTemplates([
     // Components.
+    "systems/ambersteel/templates/components/button-add.hbs",
     "systems/ambersteel/templates/components/button-delete.hbs",
     "systems/ambersteel/templates/components/button-roll.hbs",
     "systems/ambersteel/templates/components/button-send-to-chat.hbs",

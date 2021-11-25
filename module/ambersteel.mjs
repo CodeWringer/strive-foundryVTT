@@ -228,6 +228,7 @@ Handlebars.registerHelper('isDefined', function() {
 Handlebars.registerPartial('numberSpinner', `{{#> "systems/ambersteel/templates/components/number-spinner.hbs"}}{{> @partial-block }}{{/"systems/ambersteel/templates/components/number-spinner.hbs"}}`);
 Handlebars.registerPartial('buttonSendToChat', `{{#> "systems/ambersteel/templates/components/button-send-to-chat.hbs"}}{{/"systems/ambersteel/templates/components/button-send-to-chat.hbs"}}`);
 Handlebars.registerPartial('buttonDelete', `{{#> "systems/ambersteel/templates/components/button-delete.hbs"}}{{/"systems/ambersteel/templates/components/button-delete.hbs"}}`);
+Handlebars.registerPartial('buttonAdd', `{{#> "systems/ambersteel/templates/components/button-add.hbs"}}{{/"systems/ambersteel/templates/components/button-add.hbs"}}`);
 Handlebars.registerPartial('buttonRoll', `{{#> "systems/ambersteel/templates/components/button-roll.hbs"}}{{/"systems/ambersteel/templates/components/button-roll.hbs"}}`);
 Handlebars.registerPartial('buttonToggleSkillAbilityList', `{{#> "systems/ambersteel/templates/components/button-toggle-skill-ability-list.hbs"}}{{/"systems/ambersteel/templates/components/button-toggle-skill-ability-list.hbs"}}`);
 Handlebars.registerPartial('inputComponent', `{{#> "systems/ambersteel/templates/components/input.hbs"}}{{/"systems/ambersteel/templates/components/input.hbs"}}`);
