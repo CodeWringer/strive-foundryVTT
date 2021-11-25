@@ -8,30 +8,63 @@ item: {Item} = {
     data: {Object} = {
       description: {String}
       state: {CONFIG.illnessStates}
-      timeToHeal: {String}
-      limit: {Number}
+      duration: {String}
+      treatment: {String}
+      treatmentSkill: {String}
     }
   }
 }
 --}}
-<form class="{{cssClass}}" autocomplete="off">
+<form class="flex flex-column {{cssClass}}" autocomplete="off">
   <header class="sheet-header">
     <div class="flex flex-column flex-grow">
       <div class="flex flex-row">
-        <img src="{{item.img}}" data-edit="img" title="{{item.name}}" height="64" width="64" />
+        <img class="header-image" src="{{item.img}}" data-edit="img" title="{{item.name}}" height="64" width="64" />
         <h1 class="header-name">
-          {{#if isEditable}}
-            <input class="header-name" name="name" type="text" value="{{item.name}}" placeholder="{{ localize 'Name' }}" />
-          {{else}}
-            {{item.name}}
-          {{/if}}
+          {{> inputComponent type="single-line" propertyPath="name" isEditable=isEditable }}
         </h1>
+        {{#if isSendable}}
+          <div class="flex flex-center">
+            {{> buttonSendToChat}}
+          </div>
+        {{/if}}
       </div>
-      {{#if isSendable}}
-        <span class="flex flex-right ambersteel-item-to-chat-margin-right">
-          {{> buttonSendToChat}}
-        </span>
-      {{/if}}
     </div>
   </header>
+  {{!-- Duration --}}
+  <div class="sheet-block flex flex-row margin-b-md">
+    <div class="width-min-xxl">
+      {{> inputLabel text="ambersteel.labels.duration"}}
+    </div>
+    <div class="flex-grow">
+      {{> inputComponent type="single-line" propertyPath="data.data.duration" isEditable=isEditable }}
+    </div>
+  </div>
+  {{!-- Treatment skill --}}
+  <div class="sheet-block flex flex-row margin-b-md">
+    <div class="width-min-xxl">
+      {{> inputLabel text="ambersteel.labels.treatmentSkill"}}
+    </div>
+    <div class="flex-grow">
+      {{> inputComponent type="single-line" propertyPath="data.data.treatmentSkill" isEditable=isEditable }}
+    </div>
+  </div>
+  {{!-- Treatment --}}
+  <div class="sheet-block flex flex-row margin-b-md">
+    <div class="width-min-xxl">
+      {{> inputLabel text="ambersteel.labels.treatment"}}
+    </div>
+    <div class="flex-grow">
+      {{> inputComponent type="single-line" propertyPath="data.data.treatment" isEditable=isEditable }}
+    </div>
+  </div>
+  {{!-- Description --}}
+  <div class="sheet-block flex flex-row flex-grow">
+    <div class="width-min-xxl">
+      {{> inputLabel text="ambersteel.labels.description"}}
+    </div>
+    <div class="flex-grow">
+      {{> inputComponent type="multi-line" propertyPath="data.data.description" isEditable=isEditable cssClass="resize-vertical fill" readOnlyCssClass="multiline"}}
+    </div>
+  </div>
 </form>

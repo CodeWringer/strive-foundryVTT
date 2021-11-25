@@ -23,8 +23,9 @@ item: {Item} = {
     <span class="width-min-xl">
       {{> inputLabel text="ambersteel.labels.injury"}}
     </span>
-    {{> inputComponent type="single-line" propertyPath="name" itemId=itemId cssClass="flex-grow" isEditable=isEditable }}
-    <div class="width-xs"></div>
+    <span class="flex-grow margin-r-md">
+      {{> inputComponent type="single-line" propertyPath="name" itemId=itemId isEditable=isEditable }}
+    </span>
     {{!-- State --}}
     {{> inputComponent type="radio-buttons" propertyPath="data.data.state" itemId=itemId name=(concat "state-" itemId) isEditable=isEditable 
       options=CONFIG.injuryStates optionValueProperty="name" optionDisplayProperty="localizableName"
@@ -33,6 +34,7 @@ item: {Item} = {
   {{!-- Delete --}}
   {{> buttonDelete itemId=itemId }}
 </div>
+{{!-- Row 2 --}}
 <div class="flex flex-row">
   {{!-- Limit --}}
   <div class="flex flex-row">
@@ -43,6 +45,7 @@ item: {Item} = {
       {{> inputComponent type="number" propertyPath="data.data.limit" min="0" itemId=itemId isEditable=isEditable }}
     </span>
   </div>
+  {{!-- Spacer --}}
   <div class="width-xs"></div>
   {{!-- Time to heal --}}
   <div class="flex flex-row">

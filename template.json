@@ -142,10 +142,10 @@
     },
     "illness": {
       "templates": ["base"],
+      "state": "active",
       "duration": "",
       "treatment": "",
-      "treatmentSkill": "medicine",
-      "timeToHeal": ""
+      "treatmentSkill": ""
     }
   }
 }

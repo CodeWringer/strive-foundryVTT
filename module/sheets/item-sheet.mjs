@@ -3,6 +3,7 @@ import AmbersteelBaseItemSheet from "./subtypes/item/ambersteel-base-item-sheet.
 import AmbersteelSkillItemSheet from "./subtypes/item/ambersteel-skill-item-sheet.mjs";
 import AmbersteelFateCardItemSheet from "./subtypes/item/ambersteel-fate-item-sheet.mjs";
 import AmbersteelInjuryItemSheet from "./subtypes/item/ambersteel-injury-item-sheet.mjs";
+import AmbersteelIllnessItemSheet from "./subtypes/item/ambersteel-illness-item-sheet.mjs";
 
 export class AmbersteelItemSheet extends ItemSheet {
   /**
@@ -25,6 +26,8 @@ export class AmbersteelItemSheet extends ItemSheet {
         this._subType = new AmbersteelBaseItemSheet(this);
       } else if (type === "injury") {
         this._subType = new AmbersteelInjuryItemSheet(this);
+      } else if (type === "illness") {
+        this._subType = new AmbersteelIllnessItemSheet(this);
       } else {
         throw `ItemSheet subtype ${type} is unrecognized!`
       }

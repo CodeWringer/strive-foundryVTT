@@ -135,7 +135,10 @@
       "exhaustion": "Exhaustion",
       "limit": "Limit",
       "timeToHeal": "Time to heal",
-      "state": "State"
+      "state": "State",
+      "duration": "Duration",
+      "treatment": "Treatment",
+      "treatmentSkill": "Treatment Skill"
     },
     "fateSystem": {
       "fate": "Fate",
@@ -220,6 +223,11 @@
     "injuryStates": {
       "active": "Active",
       "patchedUp": "Patched Up",
+      "treated": "Treated",
+      "permanent": "Permanent"
+    },
+    "illnessStates": {
+      "active": "Active",
       "treated": "Treated"
     }
   }
