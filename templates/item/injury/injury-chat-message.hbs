@@ -4,6 +4,7 @@ isSendable: {Boolean}
 item: {Item} = {
   id: {String}
   name: {String}
+  img: {String}
   data: {Object} = {
     data: {Object} = {
       description: {String}
@@ -15,5 +16,34 @@ item: {Item} = {
 }
 --}}
 <section>
-    {{!-- TODO --}}
+  <div class="flex flex-row">
+    <div class="flex flex-center">
+      <img class="inline-img" name="img" src="{{item.img}}" title="{{item.name}}" height="26" width="26" />
+    </div>
+    <h2 class="flex-grow">
+      {{item.name}}
+    </h2>
+  </div>
+  {{!-- Limit --}}
+  <div class="flex flex-row sheet-block margin-b-md">
+    <div class="width-min-xl fancy-font">
+      {{localize "ambersteel.labels.limit"}}
+    </div>
+    <div class="flex-grow">
+      {{item.data.data.limit}}
+    </div>
+  </div>
+  {{!-- Time to heal --}}
+  <div class="flex flex-row sheet-block margin-b-md">
+    <div class="width-min-xl fancy-font">
+      {{localize "ambersteel.labels.timeToHeal"}}
+    </div>
+    <div class="flex-grow">
+      {{item.data.data.timeToHeal}}
+    </div>
+  </div>
+  {{!-- Description --}}
+  <div class="sheet-block multiline">
+    {{item.data.data.description}}
+  </div>
 </section>
