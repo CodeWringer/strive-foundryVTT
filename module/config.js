@@ -226,3 +226,18 @@ ambersteel.injuryStates = {
         localizableName: "ambersteel.injuryStates.treated"
     }
 };
+
+ambersteel.illnessStates = {
+    active: {
+        name: "active",
+        localizableName: "ambersteel.illnessStates.active"
+    },
+    treated: {
+        name: "treated",
+        localizableName: "ambersteel.illnessStates.treated"
+    },
+    permanent: {
+        name: "permanent",
+        localizableName: "ambersteel.illnessStates.permanent"
+    }
+}

@@ -48,5 +48,10 @@
     "systems/ambersteel/templates/item/injury/injury-chat-message.hbs",
     "systems/ambersteel/templates/item/injury/injury-item-sheet.hbs",
     "systems/ambersteel/templates/item/injury/injury-list-item.hbs",
+
+    // Illness
+    "systems/ambersteel/templates/item/illness/illness-chat-message.hbs",
+    "systems/ambersteel/templates/item/illness/illness-item-sheet.hbs",
+    "systems/ambersteel/templates/item/illness/illness-list-item.hbs",
   ]);
 };

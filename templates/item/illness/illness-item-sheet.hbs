@@ -1,0 +1,37 @@
+{{!-- Requires context:
+isEditable: {Boolean}
+isSendable: {Boolean}
+item: {Item} = {
+  id: {String}
+  name: {String}
+  data: {Object} = {
+    data: {Object} = {
+      description: {String}
+      state: {CONFIG.illnessStates}
+      timeToHeal: {String}
+      limit: {Number}
+    }
+  }
+}
+--}}
+<form class="{{cssClass}}" autocomplete="off">
+  <header class="sheet-header">
+    <div class="flex flex-column flex-grow">
+      <div class="flex flex-row">
+        <img src="{{item.img}}" data-edit="img" title="{{item.name}}" height="64" width="64" />
+        <h1 class="header-name">
+          {{#if isEditable}}
+            <input class="header-name" name="name" type="text" value="{{item.name}}" placeholder="{{ localize 'Name' }}" />
+          {{else}}
+            {{item.name}}
+          {{/if}}
+        </h1>
+      </div>
+      {{#if isSendable}}
+        <span class="flex flex-right ambersteel-item-to-chat-margin-right">
+          {{> buttonSendToChat}}
+        </span>
+      {{/if}}
+    </div>
+  </header>
+</form>

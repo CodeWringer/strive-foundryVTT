@@ -7,7 +7,7 @@ item: {Item} = {
   data: {Object} = {
     data: {Object} = {
       description: {String}
-      state: {CONFIG.injuryStates}
+      state: {CONFIG.illnessStates}
       timeToHeal: {String}
       limit: {Number}
     }
@@ -21,38 +21,18 @@ item: {Item} = {
     {{> buttonSendToChat itemId=itemId }}
     {{!-- Name --}}
     <span class="width-min-xl">
-      {{> inputLabel text="ambersteel.labels.injury"}}
+      {{> inputLabel text="ambersteel.labels.illness"}}
     </span>
     {{> inputComponent type="single-line" propertyPath="name" itemId=itemId cssClass="flex-grow" isEditable=isEditable }}
-    <div class="width-xs"></div>
     {{!-- State --}}
     {{> inputComponent type="radio-buttons" propertyPath="data.data.state" itemId=itemId name=(concat "state-" itemId) isEditable=isEditable 
-      options=CONFIG.injuryStates optionValueProperty="name" optionDisplayProperty="localizableName"
+      options=CONFIG.illnessStates optionValueProperty="name" optionDisplayProperty="localizableName"
     }}
   </div>
   {{!-- Delete --}}
   {{> buttonDelete itemId=itemId }}
 </div>
 <div class="flex flex-row">
-  {{!-- Limit --}}
-  <div class="flex flex-row">
-    <span class="width-min-xl">
-      {{> inputLabel text="ambersteel.labels.limit" }}
-    </span>
-    <span class="width-md">
-      {{> inputComponent type="number" propertyPath="data.data.limit" min="0" itemId=itemId isEditable=isEditable }}
-    </span>
-  </div>
-  <div class="width-xs"></div>
-  {{!-- Time to heal --}}
-  <div class="flex flex-row">
-    <span class="width-min-xl">
-      {{> inputLabel text="ambersteel.labels.timeToHeal" }}
-    </span>
-    <span class="width-min-xl">
-      {{> inputComponent type="single-line" propertyPath="data.data.timeToHeal" itemId=itemId isEditable=isEditable }}
-    </span>
-  </div>
 </div>
 {{!-- Row 3 --}}
 {{!-- Description --}}

@@ -129,6 +129,9 @@ actor: {Actor} = {
   </div>
   <ol class="unstyled-list alternating-rows">
     {{#each actor.illnesses as |illness key|}}
+      <li class="ambersteel-list-row sheet-block">
+        {{> "systems/ambersteel/templates/item/illness/illness-list-item.hbs" item=illness itemId=illness.id isEditable=../isEditable isSendable=../isSendable CONFIG=../CONFIG }}
+      </li>
     {{/each}}
     {{#if isEditable}}
       <li class="ambersteel-list-row ambersteel-list-footer">

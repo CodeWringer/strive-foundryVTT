@@ -1,0 +1,28 @@
+.radio-button-group {
+    border: 1px solid $c-border-input;
+    border-radius: 3px;
+    height: 26px;
+    line-height: 26px;
+}
+
+.radio-button-container {
+    background: $c-bg-lighter;
+    > input {
+        display: none;
+    }
+    > label {
+        cursor: pointer;
+        padding: 0 6px;
+        border-right: 1px solid $c-border-input;
+        color: $c-text-disabled;
+        background: $c-bg-light;
+    }
+    &:last-child > label {
+        border-right: none;
+    }
+    &.active > label {
+        background: $c-bg-lightest;
+        text-shadow: 0 0 10px $c-text-highlight;
+        color: $c-text-normal;
+    }
+}

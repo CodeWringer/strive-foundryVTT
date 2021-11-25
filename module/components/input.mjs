@@ -23,21 +23,21 @@ export function activateListeners(html, ownerSheet, isOwner, isEditable) {
   }
 
   // Ensure correct option of radio-buttons is set.
-  for (const elem of html.find(".radio-button-group")) {
-    const dataset = elem.dataset;
+  for (const radioButtonGroup of html.find(".radio-button-group")) {
+    const dataset = radioButtonGroup.dataset;
     const propertyHolder = dataset.itemId ? ownerSheet.getItem(dataset.itemId) : ownerSheet.getContextEntity();
     const actualValue = getNestedPropertyValue(propertyHolder, dataset.propertyPath);
 
-    const buttons = Array.from(elem.children).map((value, index, Array) => value.getElementsByTagName("input")[0]);
-    for(const button of buttons) {
-      button.onchange = (event) => {
-        elem.value = event.currentTarget.value;
+    for (const radioButtonContainer of radioButtonGroup.children) {
+      const radioButton = radioButtonContainer.getElementsByTagName("input")[0];
+      radioButton.onchange = (event) => {
+        radioButtonGroup.value = event.currentTarget.value;
       };
-      if (actualValue == button.value) {
-        button.checked = true;
+      if (actualValue == radioButton.value) {
+        radioButton.checked = true;
+        radioButtonContainer.className = radioButtonContainer.className + " active";
       }
     }
-
   }
 
   // -------------------------------------------------------------

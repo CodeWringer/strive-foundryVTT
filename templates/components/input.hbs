@@ -78,24 +78,24 @@ step: {Number|undefined}
   {{#if (eq type 'radio-buttons')}}
     <div 
       type="hidden"
-      class="radio-button-group ambersteel-edit {{cssClass}}" 
+      class="radio-button-group ambersteel-edit flex flex-row {{cssClass}}" 
       name="{{name}}" 
       data-item-id="{{itemId}}" 
       data-property-path="{{propertyPath}}"
       value="{{lookupValue (isDefined contextOverride this) propertyPath itemId}}"
     >
       {{#each options as |option index|}}
-        <span class="radio-button-container">
+        <div class="radio-button-container flex flex-row">
           <input 
             type="radio" 
             class="radio-button" 
             name="{{../name}}" 
             id="{{../name}}-{{lookupValue option ../optionValueProperty}}" 
             value="{{lookupValue option ../optionValueProperty}}">
-          <label for="{{../name}}-{{lookupValue option ../optionValueProperty}}">
+          <label class="fancy-font" for="{{../name}}-{{lookupValue option ../optionValueProperty}}">
             {{localize (lookupValue option ../optionDisplayProperty)}}
           </label>
-        </span>
+        </div>
       {{/each}}
     </div>
   {{/if}}
