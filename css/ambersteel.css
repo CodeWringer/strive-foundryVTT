@@ -705,6 +705,10 @@ img.header-image {
   display: inline-block;
 }
 
+input[type="text"].input-width-override {
+  width: 100%;
+}
+
 .items-header {
   height: 28px;
   margin: 2px 0;

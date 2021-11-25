@@ -110,3 +110,8 @@ img.header-image {
   border: none;
   display: inline-block;
 }
+
+// Input overrides
+input[type="text"].input-width-override {
+  width: 100%;
+}
