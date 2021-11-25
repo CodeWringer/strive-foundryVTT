@@ -21,15 +21,15 @@ item: {Item} = {
     {{> buttonSendToChat itemId=itemId }}
     {{!-- Name --}}
     <span class="width-min-xl">
-      {{> inputLabel for="name" text="ambersteel.labels.name"}}
+      {{> inputLabel text="ambersteel.labels.name"}}
     </span>
-    {{> inputComponent type="single-line" name="name" propertyPath="name" itemId=itemId cssClass="flex-grow" isEditable=isEditable }}
+    {{> inputComponent type="single-line" propertyPath="name" itemId=itemId cssClass="flex-grow" isEditable=isEditable }}
   </div>
   {{!-- Delete --}}
-  {{> buttonDelete itemId=../itemId }}
+  {{> buttonDelete itemId=itemId }}
 </div>
-{{!-- Row 5 --}}
+{{!-- Row 2 --}}
 {{!-- Description --}}
 <div class="flex flex-row">
-  {{> inputComponent type="multi-line" name="description" propertyPath="data.data.description" itemId=itemId isEditable=isEditable }}
+  {{> inputComponent type="multi-line" propertyPath="data.data.description" itemId=itemId isEditable=isEditable }}
 </div>
