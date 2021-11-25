@@ -1,0 +1,49 @@
+{{!-- Requires context:
+isEditable: {Boolean}
+isSendable: {Boolean}
+item: {Item} = {
+  id: {String}
+  name: {String}
+  img: {String}
+  data: {ItemData} = {
+    data: {Object} = {
+      description: {String}
+      groupName: {String}
+      value: {Number}
+      successes: {Number}
+      failures: {Number}
+      relatedAttribute: {String}
+      requiredSuccessses: {Number}
+      requiredFailures: {Number}
+      abilities: {[Object]} -> see item/skill-ability/skill-ability-table.hbs,
+      isExpanded: {Boolean}
+    }
+  }
+}
+--}}
+{{!-- Row 1 --}}
+<div class="flex flex-row">
+  {{!-- TODO --}}
+  <div class="flex flex-grow">
+    {{!-- Send to chat --}}
+    {{> buttonSendToChat itemId=itemId }}
+    {{!-- Name --}}
+    <span class="width-min-xl">
+      {{> inputLabel text="ambersteel.labels.injury"}}
+    </span>
+    <span class="flex-grow margin-r-md">
+      {{> inputComponent type="single-line" propertyPath="name" itemId=itemId isEditable=isEditable }}
+    </span>
+    {{!-- State --}}
+    {{> inputComponent type="radio-buttons" propertyPath="data.data.state" itemId=itemId name=(concat "state-" itemId) isEditable=isEditable 
+      options=CONFIG.injuryStates optionValueProperty="name" optionDisplayProperty="localizableName"
+    }}
+  </div>
+  {{!-- Delete --}}
+  {{> buttonDelete itemId=itemId }}
+</div>
+{{!-- Row 3 --}}
+{{!-- Description --}}
+<div class="flex flex-row">
+  {{> inputComponent type="multi-line" propertyPath="data.data.description" itemId=itemId isEditable=isEditable }}
+</div>

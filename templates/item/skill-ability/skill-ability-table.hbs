@@ -35,8 +35,8 @@ abilities: {[SkillAbility]} = {
         </div>
         {{!-- Row 2 --}}
         <div class="flex flex-row">
+          {{!-- At level --}}
           <div class="flex flex-row">
-            {{!-- At level --}}
             <span class="width-min-xl">
               {{> inputLabel for=(concat "requiredLevel[" key "]") text="ambersteel.labels.skillAbilityRequirement"}}
             </span>
@@ -44,12 +44,14 @@ abilities: {[SkillAbility]} = {
               {{> inputComponent type="number" min="0" name=(concat "requiredLevel[" key "]") propertyPath=(concat "data.data.abilities[" key "].requiredLevel") itemId=../skillItemId isEditable=../isEditable contextOverride=../this }}
             </span>
           </div>
-          <div class="flex flex-row flex-grow">
-            {{!-- Condition --}}
-            <div class="width-min-xl">
-              {{> inputLabel for=(concat "condition[" key "]") text="ambersteel.labels.skillAbilityCondition"}}
-            </div>
-            {{> inputComponent type="single-line" name=(concat "condition[" key "]") propertyPath=(concat "data.data.abilities[" key "].condition") itemId=../skillItemId isEditable=../isEditable contextOverride=../this cssClass="flex-grow" }}
+          {{!-- Obstacle --}}
+          <div class="flex flex-row">
+            <span class="width-min-xl">
+              {{> inputLabel for=(concat "obstacle[" key "]") text="ambersteel.roll.obstacleAbbreviation"}}
+            </span>
+            <span class="width-xxl">
+              {{> inputComponent type="single-line" name=(concat "obstacle[" key "]") propertyPath=(concat "data.data.abilities[" key "].obstacle") itemId=../skillItemId isEditable=../isEditable contextOverride=../this }}
+            </span>
           </div>
         </div>
         {{!-- Row 3 --}}
@@ -91,7 +93,7 @@ abilities: {[SkillAbility]} = {
             propertyPath=(concat "data.data.abilities[" key "].damageFormula")
             chatTitle=ability.name
           }}
-          <span class="width-xxl">
+          <span class="width-min-xxl flex-grow">
             {{> inputComponent type="single-line" name=(concat "damageFormula[" key "]") propertyPath=(concat "data.data.abilities[" key "].damageFormula") itemId=../skillItemId isEditable=../isEditable contextOverride=../this }}
           </span>
           {{!-- Damage type --}}
@@ -106,6 +108,16 @@ abilities: {[SkillAbility]} = {
           </span>
         </div>
         {{!-- Row 5 --}}
+        <div class="flex flex-row flex-grow">
+          {{!-- Condition --}}
+          <div class="width-min-xl">
+            {{> inputLabel for=(concat "condition[" key "]") text="ambersteel.labels.skillAbilityCondition"}}
+          </div>
+          <div class="flex-grow">
+            {{> inputComponent type="single-line" name=(concat "condition[" key "]") propertyPath=(concat "data.data.abilities[" key "].condition") itemId=../skillItemId isEditable=../isEditable contextOverride=../this }}
+          </div>
+        </div>
+        {{!-- Row 6 --}}
         {{!-- Description --}}
         <div class="flex flex-row">
           {{> inputComponent type="multi-line" name=(concat "description[" key "]") propertyPath=(concat "data.data.abilities[" key "].description") itemId=../skillItemId isEditable=../isEditable contextOverride=../this }}

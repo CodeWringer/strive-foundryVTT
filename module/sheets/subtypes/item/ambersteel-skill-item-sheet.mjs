@@ -4,7 +4,7 @@ import * as ButtonToggleSkillAbilityList from '../../../components/button-toggle
 export default class AmbersteelSkillItemSheet extends AmbersteelBaseItemSheet {
   /** @override */
   get template() {
-    return "systems/ambersteel/templates/item/skill-item-sheet.hbs";
+    return "systems/ambersteel/templates/item/skill/skill-item-sheet.hbs";
   }
 
   /** @override */

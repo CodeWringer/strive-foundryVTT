@@ -5,7 +5,7 @@
  */
  export const preloadHandlebarsTemplates = async function() {
   return loadTemplates([
-    // Components.
+    // Components
     "systems/ambersteel/templates/components/button-add.hbs",
     "systems/ambersteel/templates/components/button-delete.hbs",
     "systems/ambersteel/templates/components/button-roll.hbs",
@@ -14,7 +14,7 @@
     "systems/ambersteel/templates/components/number-spinner.hbs",
     "systems/ambersteel/templates/components/input.hbs",
     "systems/ambersteel/templates/components/input-label.hbs",
-    // Actor partials.
+    // Actor partials
     "systems/ambersteel/templates/actor/components/component-attribute-table.hbs",
     "systems/ambersteel/templates/actor/components/component-skill-table.hbs",
     "systems/ambersteel/templates/actor/parts/actor-personals.hbs",
@@ -27,21 +27,26 @@
     "systems/ambersteel/templates/actor/parts/actor-health.hbs",
     "systems/ambersteel/templates/actor/parts/actor-possessions.hbs",
     "systems/ambersteel/templates/actor/parts/actor-biography.hbs",
-    // Item partials.
-    "systems/ambersteel/templates/item/parts/skill-ability-table.hbs",
-    // Dice.
+    // Dice
     "systems/ambersteel/templates/dice/roll.hbs",
-    // Sheets.
+    // Sheets
     "systems/ambersteel/templates/actor/actor-character-sheet.hbs",
     "systems/ambersteel/templates/item/item-item-sheet.hbs",
-    "systems/ambersteel/templates/item/skill-item-sheet.hbs",
-    // Dialogs.
+    // Dialogs
     "systems/ambersteel/templates/dialog/roll-dialog.hbs",
     "systems/ambersteel/templates/dialog/skill-add-dialog.hbs",
-    // GM.
+    // GM
     "systems/ambersteel/templates/gm-notes.hbs",
-    // Chat.
-    "systems/ambersteel/templates/chat/chat-skill-ability.hbs",
+    
+    // Skill
+    "systems/ambersteel/templates/item/skill/skill-item-sheet.hbs",
+    "systems/ambersteel/templates/item/skill/skill-chat-message.hbs",
+    "systems/ambersteel/templates/item/skill/skill-list-item.hbs",
+
+    // Skill ability
+    "systems/ambersteel/templates/item/skill-ability/skill-ability-table.hbs",
+    "systems/ambersteel/templates/item/skill-ability/skill-ability-list-item.hbs",
+    "systems/ambersteel/templates/item/skill-ability/skill-ability-chat-message.hbs",
 
     // Fate
     "systems/ambersteel/templates/item/fate-card/fate-card.hbs",

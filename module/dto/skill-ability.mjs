@@ -6,14 +6,15 @@ import PreparedChatData from './prepared-chat-data.mjs';
  * Represents a skill ability. 
  * 
  * Is a child object of a skill item. 
- * @property {String} args.name
- * @property {String} args.description
- * @property {Number} args.requiredLevel
- * @property {String} args.condition
- * @property {String} args.img
+ * @property {String|undefined} args.name
+ * @property {String|undefined} args.description
+ * @property {Number|undefined} args.requiredLevel
+ * @property {String|undefined} args.condition
+ * @property {String|undefined} args.img
  * @property {Number|undefined} args.apCost
  * @property {Number|undefined} args.distance
- * @property {String} args.damageFormula
+ * @property {String|undefined} args.damageFormula
+ * @property {String|undefined} args.obstacle
  * @property {CONFIG.ambersteel.damageTypes|undefined} args.damageType
  * @property {CONFIG.ambersteel.attackTypes|undefined} args.attackType
  */
@@ -28,6 +29,7 @@ export default class SkillAbility {
       apCost: 0,
       distance: 0,
       damageFormula: "",
+      obstacle: "0",
       damageType: CONFIG.ambersteel.damageTypes.none,
       attackType: CONFIG.ambersteel.attackTypes.none,
       ...args
@@ -43,6 +45,7 @@ export default class SkillAbility {
     this.img = args.img;
     this.distance = args.distance;
     this.damageFormula = args.damageFormula;
+    this.obstacle = args.obstacle;
     this.damageType = args.damageType;
     this.attackType = args.attackType;
   }
@@ -51,7 +54,7 @@ export default class SkillAbility {
    * Chat message template path. 
    * @type {String}
    */
-  static get chatMessageTemplate() { return "systems/ambersteel/templates/chat/chat-skill-ability.hbs"; }
+  static get chatMessageTemplate() { return "systems/ambersteel/templates/item/skill/skill-chat-message.hbs"; }
 
   /**
    * Returns prepared chat data for the given skill ability. 
@@ -84,6 +87,7 @@ export default class SkillAbility {
         condition: localizedCondition,
         distance: args.skillAbility.distance,
         damageFormula: args.skillAbility.damageFormula,
+        obstacle: args.skillAbility.obstacle,
         damageType: args.skillAbility.damageType,
         attackType: args.skillAbility.attackType,
       },

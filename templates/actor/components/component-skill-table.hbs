@@ -12,7 +12,7 @@ skills: {[Object]} = {
         requiredSuccessses: {Number}
         requiredFailures: {Number}
         relatedAttribute: {String}
-        abilities: {[Object]} -> see item/parts/skill-ability-table.hbs
+        abilities: {[Object]} -> see item/skill-ability/skill-ability-table.hbs
         localizableName: {String}
     }
 }
@@ -97,7 +97,7 @@ skills: {[Object]} = {
                 <tr>
                     <td style="display: table-cell;" colspan="100">
                         <div class="{{#if data.isExpanded}}{{else}}hidden{{/if}}">
-                            {{> "systems/ambersteel/templates/item/parts/skill-ability-table.hbs" 
+                            {{> "systems/ambersteel/templates/item/skill-ability/skill-ability-table.hbs" 
                                 isEditable=../isEditable
                                 isSendable=../isSendable
                                 skillItemId=skill.data.id
