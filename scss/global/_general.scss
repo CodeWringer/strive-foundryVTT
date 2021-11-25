@@ -27,21 +27,65 @@
     padding: $padding-lg;
   }
 
-  &-r-xs {
-    padding: 0 $padding-xs 0 0;
+  &-b {
+    &-xs {
+      padding-bottom: $padding-xs;
+    }
+    &-sm {
+      padding-bottom: $padding-sm;
+    }
+    &-md {
+      padding-bottom: $padding-md;
+    }
+    &-lg {
+      padding-bottom: $padding-lg;
+    }
   }
-  &-r-sm {
-    padding: 0 $padding-sm 0 0;
+  &-t {
+    &-xs {
+      padding-top: $padding-xs;
+    }
+    &-sm {
+      padding-top: $padding-sm;
+    }
+    &-md {
+      padding-top: $padding-md;
+    }
+    &-lg {
+      padding-top: $padding-lg;
+    }
   }
-  &-r-md {
-    padding: 0 $padding-md 0 0;
+  &-l {
+    &-xs {
+      padding-left: $padding-xs;
+    }
+    &-sm {
+      padding-left: $padding-sm;
+    }
+    &-md {
+      padding-left: $padding-md;
+    }
+    &-lg {
+      padding-left: $padding-lg;
+    }
   }
-  &-r-lg {
-    padding: 0 $padding-lg 0 0;
+  &-r {
+    &-xs {
+      padding-right: $padding-xs;
+    }
+    &-sm {
+      padding-right: $padding-sm;
+    }
+    &-md {
+      padding-right: $padding-md;
+    }
+    &-lg {
+      padding-right: $padding-lg;
+    }
   }
 }
 
-// General sizing styles
+// General sizing
 .fill {
   width: 100%;
   height: 100%;
@@ -59,6 +103,7 @@
   min-height: inherit;
 }
 
+// Specific widths
 .width {
   &-xs {
     width: $width-column-xs;
@@ -80,6 +125,7 @@
   }
 }
 
+// Minimum widths
 .width-min {
   &-xs {
     min-width: $width-column-xs;
@@ -101,6 +147,7 @@
   }
 }
 
+// Maximum widths
 .width-max {
   &-xs {
     max-width: $width-column-xs;
@@ -119,5 +166,65 @@
   }
   &-xxl {
     max-width: $width-column-xxl;
+  }
+}
+
+// Margins
+.margin {
+  &-t {
+    &-xs {
+      margin-top: $padding-xs;
+    }
+    &-sm {
+      margin-top: $padding-sm;
+    }
+    &-md {
+      margin-top: $padding-md;
+    }
+    &-lg {
+      margin-top: $padding-lg;
+    }
+  }
+  &-b {
+    &-xs {
+      margin-bottom: $padding-xs;
+    }
+    &-sm {
+      margin-bottom: $padding-sm;
+    }
+    &-md {
+      margin-bottom: $padding-md;
+    }
+    &-lg {
+      margin-bottom: $padding-lg;
+    }
+  }
+  &-l {
+    &-xs {
+      margin-left: $padding-xs;
+    }
+    &-sm {
+      margin-left: $padding-sm;
+    }
+    &-md {
+      margin-left: $padding-md;
+    }
+    &-lg {
+      margin-left: $padding-lg;
+    }
+  }
+  &-r {
+    &-xs {
+      margin-right: $padding-xs;
+    }
+    &-sm {
+      margin-right: $padding-sm;
+    }
+    &-md {
+      margin-right: $padding-md;
+    }
+    &-lg {
+      margin-right: $padding-lg;
+    }
   }
 }

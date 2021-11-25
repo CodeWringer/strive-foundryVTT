@@ -29,19 +29,14 @@ export default class AmbersteelInjuryItem extends AmbersteelBaseItem {
   async getChatData() {
     const messageBase = super.getChatData();
     const renderedContent = await renderTemplate(this.chatMessageTemplate, {
-      data: {
-        id: this.parent.id,
-        name: this.parent.name,
-        data: {
-          description: this.parent.data.data.description,
-          state: this.parent.data.data.state,
-          timeToHeal: this.parent.data.data.timeToHeal,
-          limit: this.parent.data.data.limit
-        }
-      },
+      id: this.parent.id,
+      name: this.parent.name,
       img: this.parent.img,
       isEditable: false,
-      isSendable: false
+      isSendable: false,
+      data: {
+        data: this.parent.data.data
+      }
     });
 
     return {

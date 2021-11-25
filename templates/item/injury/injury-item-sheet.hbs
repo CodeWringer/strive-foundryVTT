@@ -14,24 +14,47 @@ item: {Item} = {
   }
 }
 --}}
-<form class="{{cssClass}}" autocomplete="off">
+<form class="flex flex-column {{cssClass}}" autocomplete="off">
   <header class="sheet-header">
     <div class="flex flex-column flex-grow">
       <div class="flex flex-row">
         <img src="{{item.img}}" data-edit="img" title="{{item.name}}" height="64" width="64" />
         <h1 class="header-name">
-          {{#if isEditable}}
-            <input class="header-name" name="name" type="text" value="{{item.name}}" placeholder="{{ localize 'Name' }}" />
-          {{else}}
-            {{item.name}}
-          {{/if}}
+          {{> inputComponent type="single-line" propertyPath="name" isEditable=isEditable }}
         </h1>
+        {{#if isSendable}}
+          <div class="flex flex-center">
+            {{> buttonSendToChat}}
+          </div>
+        {{/if}}
       </div>
-      {{#if isSendable}}
-        <span class="flex flex-right ambersteel-item-to-chat-margin-right">
-          {{> buttonSendToChat}}
-        </span>
-      {{/if}}
     </div>
   </header>
+  {{!-- Limit --}}
+  <div class="sheet-block flex flex-row margin-b-md">
+    <div class="width-min-xxl">
+      {{> inputLabel text="ambersteel.labels.limit"}}
+    </div>
+    <div class="flex-grow">
+      {{> inputComponent type="number" propertyPath="data.data.limit" min="0" isEditable=isEditable }}
+    </div>
+  </div>
+  {{!-- Time to heal --}}
+  <div class="sheet-block flex flex-row margin-b-md">
+    <div class="width-min-xxl">
+      {{> inputLabel text="ambersteel.labels.timeToHeal"}}
+    </div>
+    <div class="flex-grow">
+      {{> inputComponent type="single-line" propertyPath="data.data.timeToHeal" isEditable=isEditable }}
+    </div>
+  </div>
+  {{!-- Description --}}
+  <div class="sheet-block flex flex-row flex-grow">
+    <div class="width-min-xxl">
+      {{> inputLabel text="ambersteel.labels.description"}}
+    </div>
+    <div class="flex-grow">
+      {{> inputComponent type="multi-line" propertyPath="data.data.description" placeholder=(localize "ambersteel.labels.description") isEditable=isEditable cssClass="resize-vertical fill" readOnlyCssClass="multiline"}}
+    </div>
+  </div>
 </form>
