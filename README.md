@@ -32,7 +32,7 @@ This is the Ambersteel table-top role-playing game system for FoundryVTT.
 * [X] Update attributes to current ruleset
   * [X] Remove "Magic Sense"
   * [X] Move "Arcana" to "Mental Attributes"
-* [ ] Health Tab
+* [X] Health Tab
 * [ ] Possessions Tab
 * [ ] Refactor: Cleanup language file
 * [ ] Refactor: Turn skill and attribute tables into custom lists, instead
