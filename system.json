@@ -9,7 +9,38 @@
   "esmodules": ["module/ambersteel.mjs"],
   "styles": ["css/ambersteel.css"],
   "scripts": [],
-  "packs": [],
+  "packs": [
+    {
+      "name": "fatecards",
+      "label": "Fate Cards",
+      "path": "packs/fate-cards.db",
+      "entity": "Item"
+    },
+    {
+      "name": "illnesses",
+      "label": "Illnessess",
+      "path": "packs/illnesses.db",
+      "entity": "Item"
+    },
+    {
+      "name": "injuries",
+      "label": "Injuries",
+      "path": "packs/injuries.db",
+      "entity": "Item"
+    },
+    {
+      "name": "skills",
+      "label": "Skills",
+      "path": "packs/skills.db",
+      "entity": "Item"
+    },
+    {
+      "name": "rolltables",
+      "label": "RollTables",
+      "path": "packs/rolltables.db",
+      "entity": "RollTable"
+    }
+  ],
   "languages": [
     {
       "lang": "en",
