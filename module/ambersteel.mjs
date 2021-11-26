@@ -180,6 +180,34 @@ Handlebars.registerHelper('eq', function(a, b) {
   return a == b;
 });
 
+Handlebars.registerHelper('ifThenElse', function(condition, thenValue, elseValue) {
+  if (condition) {
+    return thenValue;
+  } else {
+    return elseValue;
+  }
+});
+
+Handlebars.registerHelper('arrayFrom', function(arrayString) {
+  let cleaned = arrayString.trim()
+  cleaned = cleaned.substring(1, cleaned.length - 1);
+  const splits = cleaned.split(",");
+  const result = [];
+  for (const split of splits) {
+    const indexColon = split.indexOf(":");
+
+    if (indexColon < 0) {
+      result.push({ key: split.trim(), value: undefined });
+    } else {
+      result.push({ 
+        key: split.substring(0, indexColon).trim(),
+        value: split.substring(indexColon + 1).trim()
+      });
+    }
+  }
+  return result;
+});
+
 Handlebars.registerHelper('lookupValue', function(context, propertyPath, itemId) {
   let propertyHolder = undefined;
   if (context.item) {

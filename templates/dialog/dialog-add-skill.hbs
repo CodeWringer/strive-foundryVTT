@@ -1,0 +1,29 @@
+{{!-- Parameters:
+skills: {[Object]} = {
+  id: {String}
+  name: {String}
+  where: {String}
+}
+selected: {Object} = {
+  id: {String}
+  name: {String}
+  where: {String}
+}
+isCustomChecked: {Boolean}
+--}}
+<section>
+  <div class="grid grid-2col">
+    {{> inputLabel text=(localize "ambersteel.labels.skill") }}
+    <select class="ambersteel-skill-select" data-property-path="selected">
+      {{#select selected}}
+      {{#each skills as |skill key|}}
+      <option value="{{skill.id}}">{{skill.name}}</option>
+      {{/each}}
+      {{/select}}
+    </select>
+  </div>
+  <div class="grid grid-2col">
+    {{> inputLabel text=(localize "ambersteel.labels.custom") }}
+    <input class="ambersteel-checkbox ambersteel-is-custom" type="checkbox" data-dtype="boolean" value="{{isCustomChecked}}" data-property-path="isCustomChecked" />
+  </div>
+</section>

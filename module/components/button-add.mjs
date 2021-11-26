@@ -1,3 +1,5 @@
+import * as SkillAddDialog from '../dialog/dialog-skill-add.mjs';
+
 /**
  * Registers events on elements of the given DOM. 
  * @param html {Object} DOM of the sheet for which to register listeners. 
@@ -26,17 +28,46 @@ async function _onItemCreate(event) {
 
   const dataset = event.currentTarget.dataset;
   const type = dataset.type;
-  const data = duplicate(dataset);
+  const withDialog = dataset.withDialog === "true";
+  let createCustom = false;
+
+  if (withDialog) {
+    let dialogResult = undefined;
+    if (type == "skill") {
+      dialogResult = await SkillAddDialog.query();
+    } else {
+      console.warn(`Add dialog not defined for type '${type}'!`);
+      return;
+    }
+    if (!dialogResult.confirmed) return;
+    createCustom = dialogResult.isCustomChecked;
+  }
+
+  if (createCustom) {
+    const creationData = {
+      isCustom: true
+    };
+
+    const prefix = "creation";
+
+    for (const propertyName in dataset) {
+      if (propertyName.startsWith(prefix)) {
+        const propertyValue = dataset[propertyName];
+        let cleanedPropertyName = propertyName.substring(prefix.length);
+        cleanedPropertyName = cleanedPropertyName.substring(0, 1).toLowerCase() + cleanedPropertyName.substring(1);
+        creationData[cleanedPropertyName] = propertyValue;
+      }
+    }
+    
+    const itemData = {
+      name: `New ${type.capitalize()}`,
+      type: type,
+      data: creationData
+    };
+    const parent = dataset.itemId ? this.getItem(dataset.itemId) : this.getContextEntity();
   
-  const itemData = {
-    name: `New ${type.capitalize()}`,
-    type: type,
-    data: data
-  };
-  // Remove the type from the dataset since it's already in the 'itemData.type' property.
-  delete itemData.data["type"];
-
-  const parent = dataset.itemId ? this.getItem(dataset.itemId) : this.getContextEntity();
-
-  return await Item.create(itemData, { parent: parent });
+    return await Item.create(itemData, { parent: parent });
+  } else {
+    console.warn("Not implemented!");
+  }
 }

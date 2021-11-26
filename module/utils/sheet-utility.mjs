@@ -6,8 +6,10 @@
  * @returns {String} The value of the element. 
  */
 export function getElementValue(element) {
-  if (element.tagName.toLowerCase() == "select") {
+  if (element.tagName.toLowerCase() === "select") {
     return element.options[element.selectedIndex].value;
+  } else if (element.tagName.toLowerCase() === "input" && element.type === "checkbox") {
+    return element.checked;
   } else {
     return element.value;
   }

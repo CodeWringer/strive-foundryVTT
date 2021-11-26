@@ -116,10 +116,7 @@ skills: {[Object]} = {
                         <div class="flex">
                             <span class="flex-grow"></span>
                             <span class="width-sm">
-                                <a class="ambersteel-item-create pad-sm button flex flex-center" data-type="skill" data-value="{{#if isLearningSkillsTable}}0{{else}}1{{/if}}" 
-                                    data-related-attribute="agility" title="{{localize ambersteel.labels.addSkill}}">
-                                    <i class="fas fa-plus"></i>
-                                </a>
+                                {{> buttonAdd itemType="skill" withDialog="true" creationData=(concat "[value:"(ifThenElse isLearningSkillsTable "0" "1") ",related-attribute:agility]"  ) }}
                             </span>
                         </div>
                     </td>

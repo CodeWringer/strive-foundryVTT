@@ -120,7 +120,7 @@
       "attackType": "Att. Type",
       "damageType": "Dmg. Type",
       "skill": "Skill",
-      "customSkill": "Custom Skill",
+      "custom": "Custom",
       "sendToChat": "Send to Chat",
       "messageVisibility": "Visibility",
       "healthStats": "General Health Stats",
