@@ -1,10 +1,11 @@
 import AmbersteelBaseItemSheet from "./ambersteel-base-item-sheet.mjs";
 import * as ButtonToggleSkillAbilityList from '../../../components/button-toggle-skill-ability-list.mjs';
+import { TEMPLATES } from "../../../templatePreloader.mjs";
 
 export default class AmbersteelSkillItemSheet extends AmbersteelBaseItemSheet {
   /** @override */
   get template() {
-    return "systems/ambersteel/templates/item/skill/skill-item-sheet.hbs";
+    return TEMPLATES.SKILL_ITEM_SHEET;
   }
 
   /** @override */
@@ -43,7 +44,7 @@ export default class AmbersteelSkillItemSheet extends AmbersteelBaseItemSheet {
     event.preventDefault();
     
     await this.getItem().createSkillAbility();
-    this.parent.render();
+    // this.parent.render(); // TODO: Remove?
   }
 
   /**
@@ -58,6 +59,6 @@ export default class AmbersteelSkillItemSheet extends AmbersteelBaseItemSheet {
     const index = parseInt(element.dataset.index);
     
     await this.getItem().deleteSkillAbilityAt(index);
-    this.parent.render();
+    // this.parent.render(); // TODO: Remove?
   }
 }

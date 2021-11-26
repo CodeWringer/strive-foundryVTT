@@ -1,4 +1,5 @@
 import AmbersteelBaseItem from "./ambersteel-base-item.mjs";
+import { TEMPLATES } from "../../../templatePreloader.mjs";
 
 export default class AmbersteelFateCardItem extends AmbersteelBaseItem {
   /**
@@ -18,7 +19,7 @@ export default class AmbersteelFateCardItem extends AmbersteelBaseItem {
    * Chat message template path. 
    * @type {String}
    */
-  get chatMessageTemplate() { return "systems/ambersteel/templates/item/fate-card/fate-card.hbs"; }
+  get chatMessageTemplate() { return TEMPLATES.FATE_CARD; }
 
   /** @override */
   prepareData() {

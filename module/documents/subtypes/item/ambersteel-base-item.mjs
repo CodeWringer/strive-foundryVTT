@@ -1,6 +1,7 @@
 import PreparedChatData from '../../../dto/prepared-chat-data.mjs';
 import * as UpdateUtil from "../../../utils/document-update-utility.mjs";
 import * as ChatUtil from "../../../utils/chat-utility.mjs";
+import { TEMPLATES } from "../../../templatePreloader.mjs";
 
 export default class AmbersteelBaseItem {
   /**
@@ -35,7 +36,7 @@ export default class AmbersteelBaseItem {
    * Chat message template path. 
    * @type {String}
    */
-  get chatMessageTemplate() { return "systems/ambersteel/templates/item/item-item-sheet.hbs"; }
+  get chatMessageTemplate() { return TEMPLATES.ITEM_CHAT_MESSAGE; }
 
   /**
    * Prepare base data for the item. 

@@ -4,6 +4,7 @@ import * as ButtonRoll from '../../../components/button-roll.mjs';
 import * as ButtonDelete from '../../../components/button-delete.mjs';
 import * as ButtonSendToChat from '../../../components/button-send-to-chat.mjs';
 import * as InputComponent from '../../../components/input.mjs';
+import { TEMPLATES } from "../../../templatePreloader.mjs";
 
 export default class AmbersteelBaseItemSheet {
   /**
@@ -31,7 +32,7 @@ export default class AmbersteelBaseItemSheet {
    * @virtual
    */
   get template() { 
-    return "systems/ambersteel/templates/item/item-item-sheet.hbs"; 
+    return TEMPLATES.ITEM_SHEET; 
   }
 
   /**

@@ -5,6 +5,7 @@ import * as ButtonDelete from '../../../components/button-delete.mjs';
 import * as ButtonSendToChat from '../../../components/button-send-to-chat.mjs';
 import * as ButtonToggleSkillAbilityList from '../../../components/button-toggle-skill-ability-list.mjs';
 import * as InputComponent from '../../../components/input.mjs';
+import { TEMPLATES } from "../../../templatePreloader.mjs";
 
 export default class AmbersteelBaseActorSheet {
   /**
@@ -32,7 +33,7 @@ export default class AmbersteelBaseActorSheet {
    * @virtual
    */
   get template() { 
-    return "systems/ambersteel/templates/actor/actor-character-sheet.hbs"; 
+    return TEMPLATES.ACTOR_SHEET; 
   }
 
   static get itemContextMenu() { 

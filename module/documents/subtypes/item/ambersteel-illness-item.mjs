@@ -1,4 +1,5 @@
 import AmbersteelBaseItem from "./ambersteel-base-item.mjs";
+import { TEMPLATES } from "../../../templatePreloader.mjs";
 
 export default class AmbersteelIllnessItem extends AmbersteelBaseItem {
   /**
@@ -18,7 +19,7 @@ export default class AmbersteelIllnessItem extends AmbersteelBaseItem {
    * Chat message template path. 
    * @type {String}
    */
-  get chatMessageTemplate() { return "systems/ambersteel/templates/item/illness/illness-chat-message.hbs"; }
+  get chatMessageTemplate() { return TEMPLATES.ILLNESS_CHAT_MESSAGE; }
 
   /** @override */
   prepareData() {

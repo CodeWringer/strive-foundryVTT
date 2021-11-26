@@ -16,21 +16,16 @@ item: {Item} = {
   <header class="sheet-header">
     <div class="flex flex-column flex-grow">
       <div class="flex flex-row">
-        {{#if isEditable}}
-          <img src="{{item.img}}" data-edit="img" title="{{item.name}}" height="64" width="64"/>
-          <h1 class="header-name">
-            <input class="header-name" name="name" type="text" value="{{item.name}}" placeholder="{{ localize 'Name' }}"/>
-          </h1>
-        {{else}}
-          <img src="{{item.img}}" title="{{item.name}}" height="64" width="64"/>
-          <h1 class="flex flex-grow">{{item.name}}</h1>
+        <img class="header-image" src="{{item.img}}" data-edit="img" title="{{item.name}}" height="64" width="64" />
+        <h1 class="header-name">
+          {{> inputComponent type="single-line" propertyPath="name" isEditable=isEditable }}
+        </h1>
+        {{#if isSendable}}
+          <div class="flex flex-center">
+            {{> buttonSendToChat}}
+          </div>
         {{/if}}
       </div>
-      {{#if isSendable}}
-        <span class="flex flex-right ambersteel-item-to-chat-margin-right">
-          {{> buttonSendToChat}}
-        </span>
-      {{/if}}
     </div>
   </header>
   <div class="flex item-description">

@@ -10,6 +10,7 @@ import { AmbersteelItemSheet } from "./sheets/item-sheet.mjs";
 import { preloadHandlebarsTemplates } from "./templatePreloader.mjs";
 import { getNestedPropertyValue } from "./utils/property-utility.mjs";
 import AdvancementRequirements from "./dto/advancement-requirement.mjs";
+import { TEMPLATES } from "./templatePreloader.mjs";
 
 /* -------------------------------------------- */
 /*  Init Hook                                   */
@@ -220,14 +221,15 @@ Handlebars.registerHelper('isDefined', function() {
 /*  Handlebars Partials                         */
 /* -------------------------------------------- */
 
-Handlebars.registerPartial('numberSpinner', `{{#> "systems/ambersteel/templates/components/number-spinner.hbs"}}{{> @partial-block }}{{/"systems/ambersteel/templates/components/number-spinner.hbs"}}`);
-Handlebars.registerPartial('buttonSendToChat', `{{#> "systems/ambersteel/templates/components/button-send-to-chat.hbs"}}{{/"systems/ambersteel/templates/components/button-send-to-chat.hbs"}}`);
-Handlebars.registerPartial('buttonDelete', `{{#> "systems/ambersteel/templates/components/button-delete.hbs"}}{{/"systems/ambersteel/templates/components/button-delete.hbs"}}`);
-Handlebars.registerPartial('buttonAdd', `{{#> "systems/ambersteel/templates/components/button-add.hbs"}}{{/"systems/ambersteel/templates/components/button-add.hbs"}}`);
-Handlebars.registerPartial('buttonRoll', `{{#> "systems/ambersteel/templates/components/button-roll.hbs"}}{{/"systems/ambersteel/templates/components/button-roll.hbs"}}`);
-Handlebars.registerPartial('buttonToggleSkillAbilityList', `{{#> "systems/ambersteel/templates/components/button-toggle-skill-ability-list.hbs"}}{{/"systems/ambersteel/templates/components/button-toggle-skill-ability-list.hbs"}}`);
-Handlebars.registerPartial('inputComponent', `{{#> "systems/ambersteel/templates/components/input.hbs"}}{{/"systems/ambersteel/templates/components/input.hbs"}}`);
-Handlebars.registerPartial('inputLabel', `{{#> "systems/ambersteel/templates/components/input-label.hbs"}}{{/"systems/ambersteel/templates/components/input-label.hbs"}}`);
+// Components
+Handlebars.registerPartial('buttonAdd', `{{#> "${TEMPLATES.COMPONENT_BUTTON_ADD}"}}{{/"${TEMPLATES.COMPONENT_BUTTON_ADD}"}}`);
+Handlebars.registerPartial('buttonDelete', `{{#> "${TEMPLATES.COMPONENT_BUTTON_DELETE}"}}{{/"${TEMPLATES.COMPONENT_BUTTON_DELETE}"}}`);
+Handlebars.registerPartial('buttonRoll', `{{#> "${TEMPLATES.COMPONENT_BUTTON_ROLL}"}}{{/"${TEMPLATES.COMPONENT_BUTTON_ROLL}"}}`);
+Handlebars.registerPartial('buttonSendToChat', `{{#> "${TEMPLATES.COMPONENT_BUTTON_SEND_TO_CHAT}"}}{{/"${TEMPLATES.COMPONENT_BUTTON_SEND_TO_CHAT}"}}`);
+Handlebars.registerPartial('buttonToggleSkillAbilityList', `{{#> "${TEMPLATES.COMPONENT_BUTTON_TOGGLE_SKILL_ABILITY_LIST}"}}{{/"${TEMPLATES.COMPONENT_BUTTON_TOGGLE_SKILL_ABILITY_LIST}"}}`);
+Handlebars.registerPartial('numberSpinner', `{{#> "${TEMPLATES.COMPONENT_NUMBER_SPINNER}"}}{{> @partial-block }}{{/"${TEMPLATES.COMPONENT_NUMBER_SPINNER}"}}`);
+Handlebars.registerPartial('inputComponent', `{{#> "${TEMPLATES.COMPONENT_INPUT}"}}{{/"${TEMPLATES.COMPONENT_INPUT}"}}`);
+Handlebars.registerPartial('inputLabel', `{{#> "${TEMPLATES.COMPONENT_INPUT_LABEL}"}}{{/"${TEMPLATES.COMPONENT_INPUT_LABEL}"}}`);
 
 /* -------------------------------------------- */
 /*  Ready Hook                                  */

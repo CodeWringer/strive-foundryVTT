@@ -1,5 +1,6 @@
 import AmbersteelBaseItem from "./ambersteel-base-item.mjs";
 import SkillAbility from "../../../dto/skill-ability.mjs";
+import { TEMPLATES } from "../../../templatePreloader.mjs";
 
 export default class AmbersteelSkillItem extends AmbersteelBaseItem {
   /**
@@ -27,7 +28,7 @@ export default class AmbersteelSkillItem extends AmbersteelBaseItem {
    * Chat message template path. 
    * @type {String}
    */
-  get chatMessageTemplate() { return "systems/ambersteel/templates/item/skill/skill-chat-message.hbs"; }
+  get chatMessageTemplate() { return TEMPLATES.SKILL_ITEM_CHAT_MESSAGE; }
 
   /** @override */
   prepareData() {
