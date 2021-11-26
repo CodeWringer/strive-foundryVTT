@@ -11,7 +11,7 @@ export const TEMPLATES = {
   // GM
   COMPONENT_GM_NOTES: "systems/ambersteel/templates/gm-notes.hbs",
   // Dice
-  DICE_ROLL: "systems/ambersteel/templates/dice/roll.hbs",
+  DICE_ROLL_CHAT_MESSAGE: "systems/ambersteel/templates/dice/roll.hbs",
   // Dialogs
   DIALOG_ROLL: "systems/ambersteel/templates/dialog/roll-dialog.hbs",
   DIALOG_SKILL_ADD: "systems/ambersteel/templates/dialog/skill-add-dialog.hbs",

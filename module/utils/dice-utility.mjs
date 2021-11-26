@@ -4,12 +4,11 @@ import { showDialog } from './dialog-utility.mjs';
 import { validateOrThrow } from "./validation-utility.mjs";
 import DicePoolResult from "../dto/dice-pool-result.mjs";
 import RollDataQueryDialogResult from "../dto/roll-query-dialog-result.mjs";
+import { TEMPLATES } from "../templatePreloader.mjs";
 
 export const DICE_ROLL_SOUND = "../sounds/dice.wav";
 
-const MESSAGE_TEMPLATE = "systems/ambersteel/templates/dice/roll.hbs";
 const LOCALIZED_OBSTACLE_ABBREVIATION = "ambersteel.roll.obstacleAbbreviation";
-const QUERY_ROLL_DATA_DIALOG_TEMPLATE = "systems/ambersteel/templates/dialog/roll-dialog.hbs";
 
 /**
  * Rolls the given number of dice and returns the results of the roll, both in raw 
@@ -107,7 +106,7 @@ export async function sendDiceResultToChat(args = {}) {
   }
 
   // Render the results. 
-  const renderedContent = await renderTemplate(MESSAGE_TEMPLATE, {
+  const renderedContent = await renderTemplate(TEMPLATES.DICE_ROLL_CHAT_MESSAGE, {
     ...rollResult,
     resultsForDisplay: resultsForDisplay,
   });
@@ -134,7 +133,7 @@ export async function queryRollData() {
   };
 
   return new Promise(async (resolve, reject) => {
-    const result = await showDialog({ dialogTemplate: QUERY_ROLL_DATA_DIALOG_TEMPLATE, localizableTitle: "ambersteel.dialog.titleRollQuery" }, dialogData);
+    const result = await showDialog({ dialogTemplate: TEMPLATES.DIALOG_ROLL, localizableTitle: "ambersteel.dialog.titleRollQuery" }, dialogData);
     resolve(new RollDataQueryDialogResult({
       obstacle: parseInt(getElementValue(result.html.find(".obstacle")[0])),
       bonusDice: parseInt(getElementValue(result.html.find(".bonus-dice")[0])),
