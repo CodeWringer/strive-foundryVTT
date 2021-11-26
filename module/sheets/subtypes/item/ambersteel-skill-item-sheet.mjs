@@ -44,7 +44,6 @@ export default class AmbersteelSkillItemSheet extends AmbersteelBaseItemSheet {
     event.preventDefault();
     
     await this.getItem().createSkillAbility();
-    // this.parent.render(); // TODO: Remove?
   }
 
   /**
@@ -59,6 +58,5 @@ export default class AmbersteelSkillItemSheet extends AmbersteelBaseItemSheet {
     const index = parseInt(element.dataset.index);
     
     await this.getItem().deleteSkillAbilityAt(index);
-    // this.parent.render(); // TODO: Remove?
   }
 }
