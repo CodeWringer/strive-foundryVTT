@@ -38,16 +38,16 @@ export default class AmbersteelSkillItem extends AmbersteelBaseItem {
   async getChatData() {
     const messageBase = super.getChatData();
     const renderedContent = await renderTemplate(this.chatMessageTemplate, {
-      data: {
-        _id: this.parent.id,
-        name: this.parent.name,
-        data: {
-          description: this.parent.data.data.description,
-        }
-      },
-      img: this.parent.img,
       isEditable: false,
-      isSendable: false
+      isSendable: false,
+      item: {
+        id: this.parent.id,
+        name: this.parent.name,
+        img: this.parent.img,
+        data: {
+          data: this.parent.data.data
+        }
+      }
     });
 
     return {
