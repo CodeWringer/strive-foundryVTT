@@ -130,10 +130,17 @@ export default class AmbersteelSkillItem extends AmbersteelBaseItem {
 
   /**
    * Adds a new skill ability. 
+   * @param {Object} creationData Additional data to set on creation. 
    */
-  async createSkillAbility() {
+  async createSkillAbility(creationData) {
+    const newAbility = new SkillAbility();
+    
+    for (const propertyName in creationData) {
+      newAbility[propertyName] = creationData[propertyName];
+    }
+
     const abilities = this.parent.data.data.abilities.concat(
-      [new SkillAbility()]
+      [newAbility]
     );
     await this.updateProperty("data.abilities", abilities);
   }

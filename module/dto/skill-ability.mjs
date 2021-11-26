@@ -15,6 +15,7 @@ import PreparedChatData from './prepared-chat-data.mjs';
  * @property {Number|undefined} args.distance
  * @property {String|undefined} args.damageFormula
  * @property {String|undefined} args.obstacle
+ * @property {Boolean|undefined} args.isCustom
  * @property {CONFIG.ambersteel.damageTypes|undefined} args.damageType
  * @property {CONFIG.ambersteel.attackTypes|undefined} args.attackType
  */
@@ -30,6 +31,7 @@ export default class SkillAbility {
       distance: 0,
       damageFormula: "",
       obstacle: "0",
+      isCustom: false,
       damageType: CONFIG.ambersteel.damageTypes.none,
       attackType: CONFIG.ambersteel.attackTypes.none,
       ...args
@@ -46,6 +48,7 @@ export default class SkillAbility {
     this.distance = args.distance;
     this.damageFormula = args.damageFormula;
     this.obstacle = args.obstacle;
+    this.isCustom = args.isCustom;
     this.damageType = args.damageType;
     this.attackType = args.attackType;
   }
@@ -88,6 +91,7 @@ export default class SkillAbility {
         distance: args.skillAbility.distance,
         damageFormula: args.skillAbility.damageFormula,
         obstacle: args.skillAbility.obstacle,
+        isCustom: args.skillAbility.isCustom,
         damageType: args.skillAbility.damageType,
         attackType: args.skillAbility.attackType,
       },

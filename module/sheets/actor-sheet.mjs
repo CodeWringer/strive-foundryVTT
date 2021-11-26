@@ -60,14 +60,16 @@ export class AmbersteelActorSheet extends ActorSheet {
     context.CONFIG = CONFIG.ambersteel;
     // Add the game to the context object as a convenience property. 
     context.game = game;
+    // In templates that implement it, this flag indicates whether the current user is the owner of the sheet. 
+    context.isOwner = context.owner;
+    // In templates that implement it, this flag indicates whether the current user is a GM. 
+    context.isGM = game.user.isGM;
     // In templates that implement it, this flag determines whether data on the sheet 
     // can be edited. 
-    context.isEditable = context.editable;
+    context.isEditable = ((context.actor.data.data.isCustom && context.isOwner) || context.isGM) && context.editable;
     // In templates that implement it, this flag determines whether the sheet data can be 
     // sent to the chat. 
     context.isSendable = true;
-    // In templates that implement it, this flag indicates whether the current user is a GM. 
-    context.isGM = game.user.isGM;
 
     this.subType.prepareDerivedData(context);
 

@@ -2,18 +2,22 @@
 isEditable: {Boolean}
 isSendable: {Boolean}
 isLearningSkillsTable: {Boolean}
-skills: {[Object]} = {
+skills: {[Item]} = {
+    id: {String}
     name: {String}
-    data: {Object} ? {
-        id: {String}
-        value: {Number}
-        successes: {Number}
-        failures: {Number}
-        requiredSuccessses: {Number}
-        requiredFailures: {Number}
-        relatedAttribute: {String}
-        abilities: {[Object]} -> see item/skill-ability/skill-ability-table.hbs
-        localizableName: {String}
+    img: {String}
+    data: {Object} = {
+        data: {Object} = {
+            value: {Number}
+            successes: {Number}
+            failures: {Number}
+            requiredSuccessses: {Number}
+            requiredFailures: {Number}
+            relatedAttribute: {String}
+            abilities: {[Object]} -> see item/skill-ability/skill-ability-table.hbs
+            localizableName: {String}
+            isCustom: {Boolean}
+        }
     }
 }
 --}}
@@ -64,7 +68,7 @@ skills: {[Object]} = {
                         </td>
                     {{/if}}
                     <td class="fancy-font flex skill-column-name">
-                        {{> inputComponent type="single-line" propertyPath="name" itemId=skill.data.id isEditable=../isEditable contextOverride=../this }}
+                        {{> inputComponent type="single-line" propertyPath="name" itemId=skill.data.id isEditable=skill.data.data.isCustom contextOverride=../this }}
                     </td>
                     <td class="skill-column-attribute">
                         {{> inputComponent type="drop-down" propertyPath="data.data.relatedAttribute" 
@@ -72,7 +76,7 @@ skills: {[Object]} = {
                             options=../CONFIG.character.attributes
                             optionValueProperty="name"
                             optionDisplayProperty="localizableAbbreviation"
-                            isEditable=../isEditable
+                            isEditable=skill.data.data.isCustom
                             contextOverride=../this
                         }}
                     </td>

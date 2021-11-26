@@ -1,13 +1,13 @@
 {{!-- Required parameters:
 itemId: {String|undefined}
-itemType: {String|undefined} = "skill"|"fate-card"|"item"|"injury"|"illness"
+itemType: {String|undefined} = "skill"|"skill-ability"|"fate-card"|"item"|"injury"|"illness"
 withDialog: {Boolean}
 creationData: {String|undefined} e. g. "[value:0,related-attribute:agility]"
 --}}
 <span class="square-button-light">
   <a class="ambersteel-item-create pad-sm button flex flex-center" 
     title="{{localize ambersteel.labels.add}}"
-    itemId="{{itemId}}"
+    data-item-id="{{itemId}}"
     data-type="{{itemType}}"
     data-with-dialog="{{withDialog}}"
     {{#if creationData}}

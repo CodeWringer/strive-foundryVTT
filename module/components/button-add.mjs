@@ -29,15 +29,33 @@ async function _onItemCreate(event) {
 
   const dataset = event.currentTarget.dataset;
   const type = dataset.type;
-  const withDialog = dataset.withDialog === "true";
+
   let createCustom = false;
   let itemId = undefined;
 
+  // Special case, because skill abilities aren't actual items.
+  // TODO: Refactor skill abilities into proper items? Would need to work as items owned by items. 
+  if (type === "skill-ability") {
+    const item = dataset.itemId ? this.getItem(dataset.itemId) : this.getContextEntity();
+    if (item.type !== "skill") {
+      console.warn("Trying to add skill-ability to non-'skill'-type item!");
+      return;
+    }
+    const creationData = {
+      ...getCreationData(dataset),
+      isCustom: true
+    };
+    item.createSkillAbility(creationData);
+    return;
+  }
+
+  const withDialog = dataset.withDialog === "true";
   if (withDialog) {
     let dialogResult = undefined;
-    if (type == "skill") {
+    if (type === "skill") {
       dialogResult = await SkillAddDialog.query();
     } else {
+      // TODO: Dialogs for injury, illness, fate-card, item
       console.warn(`Add dialog not defined for type '${type}'!`);
       return;
     }
@@ -48,17 +66,9 @@ async function _onItemCreate(event) {
 
   const parent = dataset.itemId ? this.getItem(dataset.itemId) : this.getContextEntity();
   const creationData = {
+    ...getCreationData(dataset),
     isCustom: createCustom
   };
-  const prefix = "creation";
-  for (const propertyName in dataset) {
-    if (propertyName.startsWith(prefix)) {
-      const propertyValue = dataset[propertyName];
-      let cleanedPropertyName = propertyName.substring(prefix.length);
-      cleanedPropertyName = cleanedPropertyName.substring(0, 1).toLowerCase() + cleanedPropertyName.substring(1);
-      creationData[cleanedPropertyName] = propertyValue;
-    }
-  }
 
   if (createCustom) {
     const itemData = {
@@ -81,4 +91,18 @@ async function _onItemCreate(event) {
     
     return await Item.create(itemData, { parent: parent });
   }
+}
+
+function getCreationData(dataset) {
+  const creationData = Object.create(null);
+  const prefix = "creation";
+  for (const propertyName in dataset) {
+    if (propertyName.startsWith(prefix)) {
+      const propertyValue = dataset[propertyName];
+      let cleanedPropertyName = propertyName.substring(prefix.length);
+      cleanedPropertyName = cleanedPropertyName.substring(0, 1).toLowerCase() + cleanedPropertyName.substring(1);
+      creationData[cleanedPropertyName] = propertyValue;
+    }
+  }
+  return creationData;
 }
