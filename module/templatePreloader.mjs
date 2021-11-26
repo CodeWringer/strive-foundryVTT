@@ -14,7 +14,8 @@ export const TEMPLATES = {
   DICE_ROLL_CHAT_MESSAGE: "systems/ambersteel/templates/dice/roll.hbs",
   // Dialogs
   DIALOG_ROLL: "systems/ambersteel/templates/dialog/roll-dialog.hbs",
-  DIALOG_SKILL_ADD: "systems/ambersteel/templates/dialog/skill-add-dialog.hbs",
+  DIALOG_SKILL_ADD: "systems/ambersteel/templates/dialog/dialog-add-skill.hbs",
+  DIALOG_VISIBILITY: "systems/ambersteel/templates/dialog/dialog-visibility.hbs",
   // Actor
   ACTOR_SHEET: "systems/ambersteel/templates/actor/actor-character-sheet.hbs",
   ACTOR_ATTRIBUTE_TABLE: "systems/ambersteel/templates/actor/components/component-attribute-table.hbs",

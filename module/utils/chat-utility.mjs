@@ -3,8 +3,8 @@ import { showDialog } from "./dialog-utility.mjs";
 import { getNestedPropertyValue } from "./property-utility.mjs";
 import { getElementValue } from "./sheet-utility.mjs";
 import { validateOrThrow } from "./validation-utility.mjs";
+import { TEMPLATES } from "../templatePreloader.mjs";
 
-const QUERY_VISIBILITY_MODE_DIALOG_TEMPLATE = "systems/ambersteel/templates/dialog/visibility-dialog.hbs";
 const CHAT_GENERIC_SOUND = "../sounds/notify.wav";
 
 /**
@@ -80,7 +80,7 @@ export async function queryVisibilityMode() {
         confirmed: true
       });
     } else {
-      const result = await showDialog({ dialogTemplate: QUERY_VISIBILITY_MODE_DIALOG_TEMPLATE, localizableTitle: "ambersteel.dialog.titleVisibility" }, dialogData);
+      const result = await showDialog({ dialogTemplate: TEMPLATES.DIALOG_VISIBILITY, localizableTitle: "ambersteel.dialog.titleVisibility" }, dialogData);
       resolve({
         visibilityMode: getElementValue(result.html.find(".visibilityMode")[0]),
         confirmed: result.confirmed
