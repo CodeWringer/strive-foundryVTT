@@ -18,7 +18,17 @@ export async function showDialog() {
     const dialogResult = await DialogUtil.showDialog(
       {
         dialogTemplate: TEMPLATES.DIALOG_SKILL_ADD,
-        localizableTitle: "ambersteel.dialog.titleSkillAddQuery"
+        localizableTitle: "ambersteel.dialog.titleSkillAddQuery",
+        render: html => {
+          html.find(".ambersteel-is-custom").change(event => {
+            const select = html.find(".ambersteel-skill-select")[0];
+            if (getElementValue(event.currentTarget) === true) {
+              select.className = select.className + " ambersteel-read-only";
+            } else {
+              select.className = select.className.replace(" ambersteel-read-only", "");
+            }
+          });
+        }
       },
       {
         skills: skills

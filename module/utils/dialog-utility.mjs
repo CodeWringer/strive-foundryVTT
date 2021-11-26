@@ -15,6 +15,7 @@ export async function showDialog(args = {}, dialogData) {
     args = {
         dialogTemplate: undefined,
         localizableTitle: "",
+        render: html => {},
         ...args
     };
     const mergedDialogData = {
@@ -47,6 +48,7 @@ export async function showDialog(args = {}, dialogData) {
             default: "cancel",
             render: html => {
                 NumberSpinner.activateListeners(html, this, true, true);
+                args.render(html);
             },
             close: html => {
                 resolve(new DialogResult(
