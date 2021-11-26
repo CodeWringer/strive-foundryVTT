@@ -17,6 +17,7 @@ item: {Item} = {
       requiredFailures: {Number}
       abilities: {[Object]} -> see item/skill-ability/skill-ability-table.hbs,
       isExpanded: {Boolean}
+      category: {String}
     }
   }
 }
@@ -37,21 +38,39 @@ item: {Item} = {
       </div>
     </div>
   </header>
-  <div class="flex sheet-block">
-    <div class="flex flex-column">
-      <label class="line-height fancy-font pad-sm" for="data.description">{{localize "ambersteel.labels.relatedAttribute"}}</label>
-      <label class="line-height fancy-font pad-sm" for="data.relatedAttribute">{{localize "ambersteel.labels.description"}}</label>
+  {{!-- Related Attribute --}}
+  <div class="sheet-block flex flex-row margin-b-md">
+    <div class="width-min-xxl">
+      {{> inputLabel text="ambersteel.labels.relatedAttribute"}}
     </div>
-    <div class="flex flex-column flex-grow">
+    <div class="flex-grow">
       {{> inputComponent type="drop-down" propertyPath="data.data.relatedAttribute" 
         options=CONFIG.character.attributes
         optionValueProperty="name"
         optionDisplayProperty="localizableName"
         isEditable=isEditable
       }}
-      {{> inputComponent type="multi-line" propertyPath="data.data.description" isEditable=isEditable readOnlyCssClass="multiline flex-grow"}}
+    </div>
   </div>
+  {{!-- Category --}}
+  <div class="sheet-block flex flex-row margin-b-md">
+    <div class="width-min-xxl">
+      {{> inputLabel text="ambersteel.labels.category"}}
+    </div>
+    <div class="flex-grow">
+      {{> inputComponent type="single-line" propertyPath="data.data.category" isEditable=isEditable }}
+    </div>
   </div>
+  {{!-- Description --}}
+  <div class="sheet-block flex flex-row margin-b-md">
+    <div class="width-min-xxl">
+      {{> inputLabel text="ambersteel.labels.description"}}
+    </div>
+    <div class="flex-grow">
+      {{> inputComponent type="multi-line" propertyPath="data.data.description" placeholder=(localize "ambersteel.labels.description") isEditable=isEditable readOnlyCssClass="multiline"}}
+    </div>
+  </div>
+  {{!-- Skill Abilites --}}
   <div class="{{#if item.data.data.isExpanded}}{{else}}hidden{{/if}}">
     {{> "systems/ambersteel/templates/item/skill-ability/skill-ability-table.hbs" 
       isEditable=isEditable 

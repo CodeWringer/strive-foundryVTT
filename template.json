@@ -119,7 +119,8 @@
       "value": 0,
       "successes": 0,
       "failures": 0,
-      "abilities": []
+      "abilities": [],
+      "category": ""
     },
     "fate-card": {
       "templates": ["base"],

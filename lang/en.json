@@ -140,7 +140,8 @@
       "treatment": "Treatment",
       "treatmentSkill": "Treatment Skill",
       "none": "None",
-      "noneAbbreviation": "N/A"
+      "noneAbbreviation": "N/A",
+      "category": "Category"
     },
     "fateSystem": {
       "fate": "Fate",

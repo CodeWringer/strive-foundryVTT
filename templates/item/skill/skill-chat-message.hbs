@@ -31,7 +31,15 @@ item: {Item} = {
       {{item.name}}
     </h2>
   </div>
-{{!-- TODO --}}
+  {{!-- Category --}}
+  <div class="flex flex-row sheet-block margin-b-md">
+    <div class="width-min-xl fancy-font">
+      {{localize "ambersteel.labels.category"}}
+    </div>
+    <div class="flex-grow">
+      {{item.data.data.category}}
+    </div>
+  </div>
   {{!-- Description --}}
   <div class="sheet-block multiline">
     {{item.data.data.description}}
