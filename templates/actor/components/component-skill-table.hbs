@@ -102,7 +102,7 @@ skills: {[Item]} = {
                     <td style="display: table-cell;" colspan="100">
                         <div class="{{#if data.isExpanded}}{{else}}hidden{{/if}}">
                             {{> "systems/ambersteel/templates/item/skill-ability/skill-ability-table.hbs" 
-                                isEditable=../isEditable
+                                isEditable=skill.data.data.isCustom
                                 isSendable=../isSendable
                                 skillItemId=skill.data.id
                                 itemId=skill.data.id
