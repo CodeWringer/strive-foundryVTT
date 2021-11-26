@@ -71,6 +71,43 @@ export function getItemDeclarationsFrom(type, where = contentCollectionTypes.all
  * @param {contentCollectionTypes} where Specifies where to look for the item. 
  * @returns {Item|undefined} The item, if it could be retrieved. 
  */
-export function getItemFrom(id, where = contentCollectionTypes.all) {
-  // TODO
+export async function getItemFrom(id, where = contentCollectionTypes.all) {
+  // Look in world items. 
+  if (where === contentCollectionTypes.all || where === contentCollectionTypes.world) {
+    for (const item of game.items) {
+      if (item.id === id) {
+        return item;
+      }
+    }
+  }
+
+  // Look in compendiums. 
+  if (where === contentCollectionTypes.all || where === contentCollectionTypes.compendiums) {
+    for (const pack of game.packs) {
+      for (const entry of pack.index) {
+        if (entry._id === id) {
+          return await pack.getDocument(id);
+        }
+      }
+    }
+  }
+
+  // Look in module compendiums. 
+  if (where === contentCollectionTypes.all || where === contentCollectionTypes.modules) {
+    for (const module of game.modules) {
+      if (!module.packs) break;
+
+      for (const pack of module.packs) {
+        if (pack.metadata.name == type) {
+          for (const entry of pack.index) {
+            if (entry._id === id) {
+              return await pack.getDocument(id);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  return undefined;
 }

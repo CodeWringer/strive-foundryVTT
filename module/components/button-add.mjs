@@ -1,4 +1,5 @@
 import * as SkillAddDialog from '../dialog/dialog-skill-add.mjs';
+import { getItemFrom, contentCollectionTypes } from '../utils/content-utility.mjs';
 
 /**
  * Registers events on elements of the given DOM. 
@@ -30,6 +31,7 @@ async function _onItemCreate(event) {
   const type = dataset.type;
   const withDialog = dataset.withDialog === "true";
   let createCustom = false;
+  let itemId = undefined;
 
   if (withDialog) {
     let dialogResult = undefined;
@@ -41,33 +43,42 @@ async function _onItemCreate(event) {
     }
     if (!dialogResult.confirmed) return;
     createCustom = dialogResult.isCustomChecked;
+    itemId = dialogResult.selected;
+  }
+
+  const parent = dataset.itemId ? this.getItem(dataset.itemId) : this.getContextEntity();
+  const creationData = {
+    isCustom: createCustom
+  };
+  const prefix = "creation";
+  for (const propertyName in dataset) {
+    if (propertyName.startsWith(prefix)) {
+      const propertyValue = dataset[propertyName];
+      let cleanedPropertyName = propertyName.substring(prefix.length);
+      cleanedPropertyName = cleanedPropertyName.substring(0, 1).toLowerCase() + cleanedPropertyName.substring(1);
+      creationData[cleanedPropertyName] = propertyValue;
+    }
   }
 
   if (createCustom) {
-    const creationData = {
-      isCustom: true
-    };
-
-    const prefix = "creation";
-
-    for (const propertyName in dataset) {
-      if (propertyName.startsWith(prefix)) {
-        const propertyValue = dataset[propertyName];
-        let cleanedPropertyName = propertyName.substring(prefix.length);
-        cleanedPropertyName = cleanedPropertyName.substring(0, 1).toLowerCase() + cleanedPropertyName.substring(1);
-        creationData[cleanedPropertyName] = propertyValue;
-      }
-    }
-    
     const itemData = {
       name: `New ${type.capitalize()}`,
       type: type,
       data: creationData
     };
-    const parent = dataset.itemId ? this.getItem(dataset.itemId) : this.getContextEntity();
-  
+    
     return await Item.create(itemData, { parent: parent });
   } else {
-    console.warn("Not implemented!");
+    const item = await getItemFrom(itemId, contentCollectionTypes.all);
+    const itemData = {
+      name: item.name,
+      type: item.type,
+      data: {
+        ...item.data.data,
+        ...creationData
+      }
+    };
+    
+    return await Item.create(itemData, { parent: parent });
   }
 }

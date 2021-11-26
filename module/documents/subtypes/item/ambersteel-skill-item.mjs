@@ -33,6 +33,7 @@ export default class AmbersteelSkillItem extends AmbersteelBaseItem {
   /** @override */
   prepareData() {
     this.parent.data.img = this.img;
+    this.parent.data.data.relatedAttribute = this.parent.data.data.relatedAttribute ?? "agility";
   }
 
   /** @override */
