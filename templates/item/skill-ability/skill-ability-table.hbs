@@ -32,7 +32,9 @@ abilities: {[SkillAbility]} = {
             {{> inputComponent type="single-line" name=(concat "name[" key "]") propertyPath=(concat "data.data.abilities[" key "].name") itemId=../skillItemId cssClass="flex-grow" isEditable=(lookupValue ability "isCustom") contextOverride=../this }}
           </div>
           {{!-- Delete --}}
-          {{> buttonDelete itemId=../itemId propertyPath=(concat "data.data.abilities[" key "]") }}
+          {{#if isEditable}}
+            {{> buttonDelete itemId=../itemId propertyPath=(concat "data.data.abilities[" key "]") }}
+          {{/if}}
         </div>
         {{!-- Row 2 --}}
         <div class="flex flex-row">
