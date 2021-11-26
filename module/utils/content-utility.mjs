@@ -24,7 +24,7 @@ export class ItemEntry {
  * @param {contentCollectionTypes} where Specifies where to collect from. 
  * @returns {Array<ItemEntry>} A list of item metadata. 
  */
-export function getItemDeclarationsFrom(type, where = contentCollectionTypes.all) {
+export function getItemDeclarations(type, where = contentCollectionTypes.all) {
   const result = [];
 
   // Collect from compendiums. 

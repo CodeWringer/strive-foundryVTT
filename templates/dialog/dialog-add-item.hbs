@@ -1,5 +1,5 @@
 {{!-- Parameters:
-skills: {[Object]} = {
+itemDeclarations: {[Object]} = {
   id: {String}
   name: {String}
   where: {String}
@@ -10,14 +10,15 @@ selected: {Object} = {
   where: {String}
 }
 isCustomChecked: {Boolean}
+itemLabel: {String}
 --}}
 <section>
   <div class="grid grid-2col">
-    {{> inputLabel text=(localize "ambersteel.labels.skill") }}
-    <select class="ambersteel-skill-select" data-property-path="selected">
+    {{> inputLabel text=itemLabel }}
+    <select class="ambersteel-item-select" data-property-path="selected">
       {{#select selected}}
-      {{#each skills as |skill key|}}
-      <option value="{{skill.id}}">{{skill.name}}</option>
+      {{#each itemDeclarations as |itemDeclaration key|}}
+      <option value="{{itemDeclaration.id}}">{{itemDeclaration.name}}</option>
       {{/each}}
       {{/select}}
     </select>

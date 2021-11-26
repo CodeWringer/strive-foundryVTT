@@ -36,24 +36,27 @@ This is the Ambersteel table-top role-playing game system for FoundryVTT.
 * [ ] Possessions Tab
 * [ ] Refactor: Cleanup language file
 * [ ] Refactor: Turn skill and attribute tables into custom lists, instead
-  * E.g.: calculating the number of successes/failures for a given level. 
 * [ ] Deletion confirmation dialog
-* [ ] Create list (compendium) of skills
+* [X] Create list (compendium) of skills
   * [ ] Support adding skills from this list
-  * [ ] Differentiate skills - introduce two types: `preset` and `custom`
-    * [ ] Preset items cannot be edited
-* [ ] Create list (compendium) of injuries
+  * [X] Differentiate skills - introduce two types: `preset` and `custom`
+    * [X] Preset items cannot be edited
+    * [ ] Requires database update
+* [X] Create list (compendium) of injuries
   * [ ] Support injuries from this list
-  * [ ] Differentiate injuries - introduce two types: `preset` and `custom`
-    * [ ] Preset items cannot be edited
-* [ ] Create list (compendium) of illnesses
+  * [X] Differentiate injuries - introduce two types: `preset` and `custom`
+    * [X] Preset items cannot be edited
+    * [ ] Requires database update
+* [X] Create list (compendium) of illnesses
   * [ ] Support illnesses from this list
-  * [ ] Differentiate illnesses - introduce two types: `preset` and `custom`
-    * [ ] Preset items cannot be edited
-* [ ] Create list (compendium) of fate cards
+  * [X] Differentiate illnesses - introduce two types: `preset` and `custom`
+    * [X] Preset items cannot be edited
+    * [ ] Requires database update
+* [X] Create list (compendium) of fate cards
   * [ ] Support adding fate cards from this list
-  * [ ] Differentiate fate cards - introduce two types: `preset` and `custom`
-    * [ ] Preset items cannot be edited
+  * [X] Differentiate fate cards - introduce two types: `preset` and `custom`
+    * [X] Preset items cannot be edited
+    * [ ] Requires database update
 * [ ] Send actor to chat
 * [ ] Send skill to chat
 * [ ] Create rules compendium/journal for easy in-app lookup of the rules. 

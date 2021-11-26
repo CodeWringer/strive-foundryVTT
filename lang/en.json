@@ -141,7 +141,8 @@
       "treatmentSkill": "Treatment Skill",
       "none": "None",
       "noneAbbreviation": "N/A",
-      "category": "Category"
+      "category": "Category",
+      "item": "Item"
     },
     "fateSystem": {
       "fate": "Fate",
@@ -195,7 +196,11 @@
     "dialog": {
       "titleVisibility": "Select Message Visibility",
       "titleRollQuery": "Select Obstacle and Bonus Dice",
-      "titleSkillAddQuery": "Select Skill to Add"
+      "titleAddItemQuery": "Select Item to Add",
+      "titleSkillAddQuery": "Select Skill to Add",
+      "titleInjuryAddQuery": "Select Injury to Add",
+      "titleIllnessAddQuery": "Select Illness to Add",
+      "titleFateCardAddQuery": "Select Fate-Card to Add"
     },
     "attackTypes": {
       "singleTarget": "Single-Target",

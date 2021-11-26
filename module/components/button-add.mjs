@@ -1,4 +1,4 @@
-import * as SkillAddDialog from '../dialog/dialog-skill-add.mjs';
+import * as ItemAddDialog from '../dialog/dialog-item-add.mjs';
 import { getItemFrom, contentCollectionTypes } from '../utils/content-utility.mjs';
 
 /**
@@ -30,7 +30,7 @@ async function _onItemCreate(event) {
   const dataset = event.currentTarget.dataset;
   const type = dataset.type;
 
-  let createCustom = false;
+  let createCustom = true;
   let itemId = undefined;
 
   // Special case, because skill abilities aren't actual items.
@@ -53,9 +53,16 @@ async function _onItemCreate(event) {
   if (withDialog) {
     let dialogResult = undefined;
     if (type === "skill") {
-      dialogResult = await SkillAddDialog.query();
+      dialogResult = await ItemAddDialog.query("skill", "ambersteel.labels.skill", "ambersteel.dialog.titleSkillAddQuery");
+    } else if (type === "injury") {
+      dialogResult = await ItemAddDialog.query("injury", "ambersteel.labels.injury", "ambersteel.dialog.titleInjuryAddQuery");
+    } else if (type === "illness") {
+      dialogResult = await ItemAddDialog.query("illness", "ambersteel.labels.illness", "ambersteel.dialog.titleIllnessAddQuery");
+    } else if (type === "fate-card") {
+      dialogResult = await ItemAddDialog.query("fate-card", "ambersteel.labels.fateCard", "ambersteel.dialog.titleFateCardAddQuery");
+    } else if (type === "item") {
+      dialogResult = await ItemAddDialog.query("item", "ambersteel.labels.item", "ambersteel.dialog.titleAddItemQuery");
     } else {
-      // TODO: Dialogs for injury, illness, fate-card, item
       console.warn(`Add dialog not defined for type '${type}'!`);
       return;
     }
@@ -83,10 +90,10 @@ async function _onItemCreate(event) {
   } else {
     const item = await getItemFrom(itemId, contentCollectionTypes.all);
     const itemData = {
-      name: item.name,
-      type: item.type,
+      name: item ? item.name : `New ${type.capitalize()}`,
+      type: item ? item.type : type,
       data: {
-        ...item.data.data,
+        ...(item ? item.data.data : {}),
         ...creationData
       }
     };
