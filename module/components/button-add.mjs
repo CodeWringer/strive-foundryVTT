@@ -67,7 +67,9 @@ async function _onItemCreate(event) {
   const parent = dataset.itemId ? this.getItem(dataset.itemId) : this.getContextEntity();
   const creationData = {
     ...getCreationData(dataset),
-    isCustom: createCustom
+    data: {
+      isCustom: createCustom
+    }
   };
 
   if (createCustom) {
