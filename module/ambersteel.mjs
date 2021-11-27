@@ -180,6 +180,18 @@ Handlebars.registerHelper('eq', function(a, b) {
   return a == b;
 });
 
+Handlebars.registerHelper('neq', function(a, b) {
+  return a != b;
+});
+
+Handlebars.registerHelper('and', function(a, b) {
+  return a && b;
+});
+
+Handlebars.registerHelper('or', function(a, b) {
+  return a || b;
+});
+
 Handlebars.registerHelper('ifThenElse', function(condition, thenValue, elseValue) {
   if (condition) {
     return thenValue;
