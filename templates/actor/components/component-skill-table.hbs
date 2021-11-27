@@ -68,7 +68,7 @@ skills: {[Item]} = {
                         </td>
                     {{/if}}
                     <td class="fancy-font flex skill-column-name">
-                        {{> inputComponent type="single-line" propertyPath="name" itemId=skill.data.id isEditable=skill.data.data.isCustom contextOverride=../this }}
+                        {{> inputComponent type="single-line" propertyPath="name" itemId=skill.data.id isEditable=../isEditable contextOverride=../this }}
                     </td>
                     <td class="skill-column-attribute">
                         {{> inputComponent type="drop-down" propertyPath="data.data.relatedAttribute" 
@@ -76,7 +76,7 @@ skills: {[Item]} = {
                             options=../CONFIG.character.attributes
                             optionValueProperty="name"
                             optionDisplayProperty="localizableAbbreviation"
-                            isEditable=skill.data.data.isCustom
+                            isEditable=../isEditable
                             contextOverride=../this
                         }}
                     </td>
@@ -102,7 +102,7 @@ skills: {[Item]} = {
                     <td style="display: table-cell;" colspan="100">
                         <div class="{{#if data.isExpanded}}{{else}}hidden{{/if}}">
                             {{> "systems/ambersteel/templates/item/skill-ability/skill-ability-table.hbs" 
-                                isEditable=skill.data.data.isCustom
+                                isEditable=../isEditable
                                 isSendable=../isSendable
                                 skillItemId=skill.data.id
                                 itemId=skill.data.id
