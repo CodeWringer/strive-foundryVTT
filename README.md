@@ -38,22 +38,22 @@ This is the Ambersteel table-top role-playing game system for FoundryVTT.
 * [ ] Refactor: Turn skill and attribute tables into custom lists, instead
 * [ ] Deletion confirmation dialog
 * [X] Create list (compendium) of skills
-  * [ ] Support adding skills from this list
+  * [X] Support adding skills from this list
   * [X] Differentiate skills - introduce two types: `preset` and `custom`
     * [X] Preset items cannot be edited
     * [ ] Requires database update
 * [X] Create list (compendium) of injuries
-  * [ ] Support injuries from this list
+  * [X] Support injuries from this list
   * [X] Differentiate injuries - introduce two types: `preset` and `custom`
     * [X] Preset items cannot be edited
     * [ ] Requires database update
 * [X] Create list (compendium) of illnesses
-  * [ ] Support illnesses from this list
+  * [X] Support illnesses from this list
   * [X] Differentiate illnesses - introduce two types: `preset` and `custom`
     * [X] Preset items cannot be edited
     * [ ] Requires database update
 * [X] Create list (compendium) of fate cards
-  * [ ] Support adding fate cards from this list
+  * [X] Support adding fate cards from this list
   * [X] Differentiate fate cards - introduce two types: `preset` and `custom`
     * [X] Preset items cannot be edited
     * [ ] Requires database update
