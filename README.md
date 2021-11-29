@@ -33,7 +33,7 @@ This is the Ambersteel table-top role-playing game system for FoundryVTT.
   * [X] Remove "Magic Sense"
   * [X] Move "Arcana" to "Mental Attributes"
 * [X] Health Tab
-* [ ] Possessions Tab
+* [ ] Assets Tab
 * [ ] Refactor: Cleanup language file
 * [ ] Refactor: Turn skill and attribute tables into custom lists, instead
 * [ ] Deletion confirmation dialog
@@ -61,3 +61,9 @@ This is the Ambersteel table-top role-playing game system for FoundryVTT.
 * [ ] Send skill to chat
 * [ ] Create rules compendium/journal for easy in-app lookup of the rules. 
   * [ ] Add context-dependent help buttons which link to specific rule-sections. 
+* [ ] Add inline-rolling on sheets.
+  * A roll result then automatically replaces the button to roll. 
+* [ ] Better readability through styling. 
+* [ ] Add the ability to drop/pick up inventory items to/from chat. 
+  * [ ] Prompt player on sendToChat, if they want to allow the transfer of their item. 
+* [ ] Automatically apply/show the penalties of an injury/illness. 
