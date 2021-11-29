@@ -38,7 +38,7 @@ actor: {Actor} = {
       <a class="item fancy-font flex flex-center" data-tab="beliefs-fate"><div>{{localize "ambersteel.labels.tabBeliefsFate"}}</div></a>
     {{/if}}
     <a class="item fancy-font flex flex-center" data-tab="health"><div>{{localize "ambersteel.labels.tabHealth"}}</div></a>
-    <a class="item fancy-font flex flex-center" data-tab="possessions"><div>{{localize "ambersteel.labels.tabPossessions"}}</div></a>
+    <a class="item fancy-font flex flex-center" data-tab="assets"><div>{{localize "ambersteel.labels.tabAssets"}}</div></a>
     <a class="item fancy-font flex flex-center" data-tab="biography"><div>{{localize "ambersteel.labels.tabBiography"}}</div></a>
     {{#if isGM}}
       <a class="item fancy-font flex flex-center" data-tab="gm-notes"><div>{{localize "ambersteel.labels.tabGmNotes"}}</div></a>
@@ -87,9 +87,9 @@ actor: {Actor} = {
       }}
     </div>
 
-    {{!-- Possessions Tab --}}
-    <div class="tab possessions" data-group="primary" data-tab="possessions">
-      {{> "systems/ambersteel/templates/actor/parts/actor-possessions.hbs" 
+    {{!-- Assets Tab --}}
+    <div class="tab assets" data-group="primary" data-tab="assets">
+      {{> "systems/ambersteel/templates/actor/parts/actor-assets.hbs" 
         isEditable=isEditable 
         isSendable=isSendable
       }}

@@ -27,7 +27,7 @@ export const TEMPLATES = {
   ACTOR_FATE: "systems/ambersteel/templates/actor/parts/actor-fate.hbs",
   ACTOR_BELIEFS_FATE: "systems/ambersteel/templates/actor/parts/actor-beliefs-fate.hbs",
   ACTOR_HEALTH: "systems/ambersteel/templates/actor/parts/actor-health.hbs",
-  ACTOR_POSSESSIONS: "systems/ambersteel/templates/actor/parts/actor-possessions.hbs",
+  ACTOR_ASSETS: "systems/ambersteel/templates/actor/parts/actor-assets.hbs",
   ACTOR_BIOGRAPHY: "systems/ambersteel/templates/actor/parts/actor-biography.hbs",
   // Item
   ITEM_SHEET: "systems/ambersteel/templates/item/item-item-sheet.hbs",
