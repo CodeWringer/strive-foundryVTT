@@ -6,6 +6,7 @@ import * as ButtonSendToChat from '../../../components/button-send-to-chat.mjs';
 import * as ButtonToggleSkillAbilityList from '../../../components/button-toggle-skill-ability-list.mjs';
 import * as InputComponent from '../../../components/input.mjs';
 import { TEMPLATES } from "../../../templatePreloader.mjs";
+import * as ItemGrid from "../../../components/item-grid.mjs";
 
 export default class AmbersteelBaseActorSheet {
   /**
@@ -147,6 +148,8 @@ export default class AmbersteelBaseActorSheet {
 
     // Show item sheet.
     html.find(".ambersteel-item-show").click(this._onItemShow.bind(this));
+
+    ItemGrid.setupGrid(html, "possessions-canvas", this.getActor());
 
     // -------------------------------------------------------------
     if (!isOwner) return;

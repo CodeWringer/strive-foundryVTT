@@ -125,6 +125,8 @@
       "messageVisibility": "Visibility",
       "healthStats": "General Health Stats",
       "assetsStats": "General Assets Stats",
+      "assetsOnPerson": "Possessions (on person)",
+      "assetsRemote": "Property",
       "injury": "Injury",
       "maxInjuries": "Max. Injuries",
       "injuries": "Injuries",
@@ -143,7 +145,13 @@
       "none": "None",
       "noneAbbreviation": "N/A",
       "category": "Category",
-      "item": "Item"
+      "item": "Item",
+      "bulk": "Bulk",
+      "shape": "Shape",
+      "quantity": "Quantity",
+      "maxQuantity": "Max. Quantity",
+      "carryingCapacity": "Carrying Capacity (in bulk)",
+      "usedCarryingCapacity": "Used carrying capacity (in bulk)"
     },
     "fateSystem": {
       "fate": "Fate",
@@ -238,6 +246,10 @@
     "illnessStates": {
       "active": "Active",
       "treated": "Treated"
+    },
+    "itemShapes": {
+      "straight": "Straight",
+      "square": "Square"
     }
   }
 }

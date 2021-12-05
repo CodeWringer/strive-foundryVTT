@@ -1,6 +1,7 @@
 import AmbersteelPcActor from './subtypes/actor/ambersteel-pc-actor.mjs';
 import AmbersteelNpcActor from './subtypes/actor/ambersteel-npc-actor.mjs';
 import { deleteByPropertyPath } from '../utils/document-update-utility.mjs';
+import InventoryIndex from '../dto/inventory-index.mjs';
 
 /**
  * @extends {Actor}
@@ -52,27 +53,89 @@ export class AmbersteelActor extends Actor {
     this.subType.prepareDerivedData(this);
   }
 
-  get injuries() {
-    const items = Array.from(this.items);
-      const result = [];
-      for (const item of items) {
-        if (item.type === "injury") result.push(item);
-      }
-      return result;
-  }
-
-  get injuryCount() { return this.injuries.length; }
-  
-  get illnesses() {
+  /**
+   * Returns items of this actor, filtered by the given type. 
+   * @param {String} type The exact type to filter by. 
+   * @returns {Array<Item>} Items of the given type, of this actor. 
+   */
+  getItemsByType(type) {
     const items = Array.from(this.items);
     const result = [];
     for (const item of items) {
-      if (item.type === "illness") result.push(item);
+      if (item.type === type) result.push(item);
     }
     return result;
   }
 
+  /**
+   * @returns {Array<Item>} A list of "injury" type items that represent injuries of 
+   * this character. 
+   */
+  get injuries() { return this.getItemsByType("injury"); }
+  get injuryCount() { return this.injuries.length; }
+  
+  /**
+   * @returns {Array<Item>} A list of "illness" type items that represent illnesses of 
+   * this character. 
+   */
+  get illnesses() { return this.getItemsByType("illness"); }
   get illnessCount() { return this.illnesses.length; }
+  
+  /**
+   * @returns {Array<Item>} A list of "item" type items that represent things owned 
+   * by this character, and currently on their person. 
+   */
+  get possessions() { 
+    const items = Array.from(this.items);
+    const result = [];
+    for (const item of items) {
+      if (item.type === "item" && item.data.data.isOnPerson) result.push(item);
+    }
+    return result;
+  }
+  get possessionsCount() { return this.possessions.length; }
+
+  /**
+   * Returns the metadata of possessions on the item grid. 
+   * @returns {Array<InventoryIndex>} A list of item metadata. 
+   */
+  get possessionsIndices() {
+    return this.data.data.assets.inventory;
+  }
+
+  /**
+   * Returns the total bulk (= carrying capacity) of this character. 
+   * @returns {Number} The total bulk (= carrying capacity) of this character. 
+   */
+  get maxBulk() {
+    return game.ambersteel.getCharacterMaximumInventory(this);
+  }
+
+  /**
+   * Returns the total used bulk (= used carrying capacity) of this character. 
+   * @returns {Number} The total used bulk (= used carrying capacity) of this character. 
+   */
+  get totalBulk() {
+    let total = 0;
+    for (const possession of this.possessions) {
+      total += possession.data.data.bulk;
+    }
+    return total;
+  }
+
+  /**
+   * @returns {Array<Item>} A list of "item" type items that represent things owned 
+   * by this character, but not on their person. 
+   */
+  get propertyItems() { 
+    const items = Array.from(this.items);
+    const result = [];
+    for (const item of items) {
+      if (item.type === "item" && !item.data.data.isOnPerson) result.push(item);
+    }
+    return result;
+  }
+  get propertyItemCount() { return this.propertyItems.length; }
 
   // TODO: Move to ambersteel-base-actor.mjs
   /**
@@ -154,5 +217,50 @@ export class AmbersteelActor extends Actor {
 
   async deleteByPropertyPath(propertyPath) {
     await deleteByPropertyPath(this, propertyPath);
+  }
+
+  /** 
+   * @override 
+   */
+  _preCreateEmbeddedDocuments(embeddedName, result, options, userId) {
+    const items = result.filter(it => it.type === "item");
+    const ailments = result.filter(it => it.type === "injury" || it.type === "illness");
+    
+    return super._preCreateEmbeddedDocuments(embeddedName, result, options, userId);
+  }
+  
+  /** 
+   * @override 
+   */
+  async _preUpdateEmbeddedDocuments(embeddedName, result, options, userId) {
+    for (const dataDelta of result) {
+      const id = dataDelta._id;
+      const updatedItem = this.items.get(id);
+  
+      if (updatedItem.type === "item") {
+        // TODO
+      } else if (updatedItem.type === "injury" || updatedItem.type === "illness") {
+        // TODO
+      }
+    }
+    
+    return super._preUpdateEmbeddedDocuments(embeddedName, result, options, userId);
+  }
+  
+  /** 
+   * @override 
+   */
+  _preDeleteEmbeddedDocuments(embeddedName, result, options, userId) {
+    for (const id of result) {
+      const itemToDelete = this.items.get(id);
+
+      if (itemToDelete.type === "item") {
+        // TODO
+      } else if (itemToDelete.type === "injury" || itemToDelete.type === "illness") {
+        // TODO
+      }
+    }
+
+    return super._preDeleteEmbeddedDocuments(embeddedName, result, options, userId);
   }
 }

@@ -251,3 +251,19 @@ ambersteel.illnessStates = {
         localizableName: "ambersteel.illnessStates.treated"
     }
 }
+
+ambersteel.itemShapes = {
+    straight: {
+        name: "straight",
+        localizableName: "ambersteel.itemShapes.straight"
+    },
+    square: {
+        name: "square",
+        localizableName: "ambersteel.itemShapes.square"
+    }
+}
+
+ambersteel.itemOrientations = {
+    vertical: 0,
+    horizontal: 1
+}

@@ -82,7 +82,7 @@
           "exhaustion": 0
         },
         "assets": {
-          "carryingCapacity": 0
+          "inventory": []
         },
         "biography": "",
         "gmNotes": ""
@@ -134,7 +134,10 @@
     "item": {
       "templates": ["base"],
       "quantity": 1,
-      "bulk": 1
+      "maxQuantity": 1,
+      "bulk": 1,
+      "shape": "straight",
+      "isOnPerson": false
     },
     "injury": {
       "templates": ["base"],

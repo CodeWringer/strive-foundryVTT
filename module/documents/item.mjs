@@ -1,8 +1,8 @@
 import { deleteByPropertyPath } from '../utils/document-update-utility.mjs';
-import AmbersteelBaseItem from './subtypes/item/ambersteel-base-item.mjs';
 import AmbersteelFateCardItem from './subtypes/item/ambersteel-fate-card-item.mjs';
 import AmbersteelIllnessItem from './subtypes/item/ambersteel-illness-item.mjs';
 import AmbersteelInjuryItem from './subtypes/item/ambersteel-injury-item.mjs';
+import AmbersteelItemItem from './subtypes/item/ambersteel-item-item.mjs';
 import AmbersteelSkillItem from './subtypes/item/ambersteel-skill-item.mjs';
 
 export class AmbersteelItem extends Item {
@@ -22,7 +22,7 @@ export class AmbersteelItem extends Item {
       } else if (type === "fate-card") {
         this._subType = new AmbersteelFateCardItem(this);
       } else if (type === "item") {
-        this._subType = new AmbersteelBaseItem(this);
+        this._subType = new AmbersteelItemItem(this);
       } else if (type === "injury") {
         this._subType = new AmbersteelInjuryItem(this);
       } else if (type === "illness") {
