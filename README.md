@@ -21,7 +21,8 @@ This is the Ambersteel table-top role-playing game system for FoundryVTT.
 * [X] GM Notes Tab
 * [X] Fate Tab
   * [X] Adding a fate card
-    * [ ] Deduct cost
+    * [ ] Show cost on selection dialog. 
+    * [ ] Deduct cost when added. 
   * [X] Removing a fate card
   * [ ] Limit
 * [X] Rework skill ability table
@@ -34,9 +35,19 @@ This is the Ambersteel table-top role-playing game system for FoundryVTT.
   * [X] Move "Arcana" to "Mental Attributes"
 * [X] Health Tab
 * [ ] Assets Tab
+  * [ ] Item slot system
+    * [ ] Automatically fit new items onto the grid. 
+    * [ ] Reject items that cannot be fit onto the grid. 
+    * [ ] Allow moving and rotating items on the grid. 
+    * [ ] Allow removing items from the grid. 
+  * [ ] Owned assets (not on person)
+    * [ ] As a list
+    * [ ] Adding
+    * [ ] Removing
+    * [ ] Updating
 * [ ] Refactor: Cleanup language file
 * [ ] Refactor: Turn skill and attribute tables into custom lists, instead
-* [ ] Deletion confirmation dialog
+* [X] Deletion confirmation dialog
 * [X] Create list (compendium) of skills
   * [X] Support adding skills from this list
   * [X] Differentiate skills - introduce two types: `preset` and `custom`
@@ -63,7 +74,8 @@ This is the Ambersteel table-top role-playing game system for FoundryVTT.
   * [ ] Add context-dependent help buttons which link to specific rule-sections. 
 * [ ] Add inline-rolling on sheets.
   * A roll result then automatically replaces the button to roll. 
-* [ ] Better readability through styling. 
+* [X] Better readability through styling. 
 * [ ] Add the ability to drop/pick up inventory items to/from chat. 
   * [ ] Prompt player on sendToChat, if they want to allow the transfer of their item. 
 * [ ] Automatically apply/show the penalties of an injury/illness. 
+* [ ] Display hint for toughness test required on half of max injuries. 
