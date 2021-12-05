@@ -201,7 +201,16 @@
       "titleSkillAddQuery": "Select Skill to Add",
       "titleInjuryAddQuery": "Select Injury to Add",
       "titleIllnessAddQuery": "Select Illness to Add",
-      "titleFateCardAddQuery": "Select Fate-Card to Add"
+      "titleFateCardAddQuery": "Select Fate-Card to Add",
+      "titleConfirmDeletionQuery": "Confirm Deletion",
+      "titleConfirmDeletiongSkillQuery": "Confirm Deletion of Skill",
+      "titleConfirmDeletionLearningSkillQuery": "Confirm Deletion of Learning Skill",
+      "titleConfirmDeletionSkillAbilityQuery": "Confirm Deletion of Skill Ability",
+      "titleConfirmDeletionInjuryQuery": "Confirm Deletion of Injury",
+      "titleConfirmDeletionIllnessQuery": "Confirm Deletion of Illness",
+      "titleConfirmDeletionFateCardQuery": "Confirm Deletion of Fate-Card",
+      "titleConfirmDeletionPossessionQuery": "Confirm Deletion of Possession",
+      "titleConfirmDeletionPropertyQuery": "Confirm Deletion of Property"
     },
     "attackTypes": {
       "singleTarget": "Single-Target",

@@ -94,7 +94,7 @@ skills: {[Item]} = {
                     </td>
                     {{#if ../isEditable}}
                         <td class="skill-column-delete">
-                            {{> buttonDelete itemId=skill.data.id }}
+                            {{> buttonDelete itemId=skill.data.id promptConfirm=true promptLocalizableTitle=(ifThenElse ../isLearningSkillsTable "ambersteel.dialog.titleConfirmDeletionLearningSkillQuery" "ambersteel.dialog.titleConfirmDeletiongSkillQuery") }}
                         </td>
                     {{/if}}
                 </tr>

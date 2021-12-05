@@ -32,8 +32,8 @@ abilities: {[SkillAbility]} = {
             {{> inputComponent type="single-line" name=(concat "name[" key "]") propertyPath=(concat "data.data.abilities[" key "].name") itemId=../skillItemId cssClass="flex-grow" isEditable=../isEditable contextOverride=../this }}
           </div>
           {{!-- Delete --}}
-          {{#if isEditable}}
-            {{> buttonDelete itemId=../itemId propertyPath=(concat "data.data.abilities[" key "]") }}
+          {{#if ../isEditable}}
+            {{> buttonDelete itemId=../itemId propertyPath=(concat "data.data.abilities[" key "]") promptConfirm=true promptLocalizableTitle="ambersteel.dialog.titleConfirmDeletionSkillAbilityQuery" }}
           {{/if}}
         </div>
         {{!-- Row 2 --}}

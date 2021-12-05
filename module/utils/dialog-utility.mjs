@@ -63,3 +63,47 @@ export async function showDialog(args = {}, dialogData) {
         dialog.render(true);
     });
 }
+
+/**
+ * Shows a confirmation dialog. 
+ * @param {String} args.localizableTitle Localization string for the dialog title. 
+ * @returns {Promise<Boolean>} Resolves, when the dialog is closed. 
+ *          Is true, when the dialog was closed with confirmation. 
+ * @async
+ */
+export async function showConfirmationDialog(args = {}) {
+    args = {
+        localizableTitle: "",
+        ...args
+    };
+    const mergedDialogData = {
+        confirmed: false
+    };
+
+    return new Promise(async (resolve, reject) => {
+        const dialog = new Dialog({
+            title: game.i18n.localize(args.localizableTitle),
+            content: "",
+            buttons: {
+                confirm: {
+                    icon: '<i class="fas fa-check"></i>',
+                    label: game.i18n.localize("ambersteel.labels.confirm"),
+                    callback: () => {
+                        mergedDialogData.confirmed = true;
+                    }
+                },
+                cancel: {
+                    icon: '<i class="fas fa-times"></i>',
+                    label: game.i18n.localize("ambersteel.labels.cancel"),
+                    callback: () => {}
+                }
+            },
+            default: "cancel",
+            render: html => {},
+            close: html => {
+                resolve(mergedDialogData.confirmed);
+            }
+        });
+        dialog.render(true);
+    });
+}
