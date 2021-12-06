@@ -25,6 +25,8 @@ export class ItemEntry {
   }
 }
 
+/************ Returning document declarations ************/
+
 /**
  * Returns all item declarations of the given type from the specified source. 
  * @param {String} type Item type to search for. E. g. "skill" or "fate-card"
@@ -73,6 +75,19 @@ export function getItemDeclarations(type, where = contentCollectionTypes.all) {
   return result;
 }
 
+/************ Returning documents ************/
+
+/**
+ * Returns a document with the given id. 
+ * @param {String} id Id of the document to retrieve. 
+ * @param {contentCollectionTypes} where Specifies where to search for the document. 
+ * @returns {Promise<Document|undefined>} The document, if it could be retrieved. 
+ * @async
+ */
+export async function findDocument(id, where = contentCollectionTypes.all) {
+  return await _getDocumentFrom(id, where);
+}
+
 /**
  * Returns an item with the given id. 
  * @param {String} id Id of the item to retrieve. 
@@ -80,30 +95,8 @@ export function getItemDeclarations(type, where = contentCollectionTypes.all) {
  * @returns {Promise<Item|undefined>} The item, if it could be retrieved. 
  * @async
  */
-export async function getItemFrom(id, where = contentCollectionTypes.all) {
-  return new Promise(async (resolve, reject) => {
-    // Search in world items. 
-    if (where === contentCollectionTypes.all || where === contentCollectionTypes.world) {
-      for (const item of game.items) {
-        if (item.id === id) {
-          resolve(item);
-          return;
-        }
-      }
-    }
-  
-    // Search in compendia. 
-    if (where === contentCollectionTypes.all || where === contentCollectionTypes.compendia) {
-      resolve(await getDocumentFromCompendia(id));
-    }
-  
-    // Search in module compendia. 
-    if (where === contentCollectionTypes.all || where === contentCollectionTypes.modules) {
-      resolve(await getDocumentFromModuleCompendia(id));
-    }
-  
-    resolve(undefined);
-  });
+export async function findItem(id, where = contentCollectionTypes.all) {
+  return await _getDocumentFrom(id, where, [game.items]);
 }
 
 /**
@@ -113,26 +106,65 @@ export async function getItemFrom(id, where = contentCollectionTypes.all) {
  * @returns {Promise<Actor|undefined>} The actor, if it could be retrieved. 
  * @async
  */
-export async function getActorFrom(id, where = contentCollectionTypes.all) {
+export async function findActor(id, where = contentCollectionTypes.all) {
+  return await _getDocumentFrom(id, where, [game.actors]);
+}
+
+/**
+ * Returns a journal entry with the given id. 
+ * @param {String} id Id of the journal entry to retrieve. 
+ * @param {contentCollectionTypes} where Specifies where to search for the journal entry. 
+ * @returns {Promise<JournalEntry|undefined>} The journal entry, if it could be retrieved. 
+ * @async
+ */
+export async function findJournal(id, where = contentCollectionTypes.all) {
+  return await _getDocumentFrom(id, where, [game.journal]);
+}
+
+/**
+ * Returns a roll table with the given id. 
+ * @param {String} id Id of the roll table to retrieve. 
+ * @param {contentCollectionTypes} where Specifies where to search for the roll table. 
+ * @returns {Promise<RollTable|undefined>} The roll table, if it could be retrieved. 
+ * @async
+ */
+export async function findRollTable(id, where = contentCollectionTypes.all) {
+  return await _getDocumentFrom(id, where, [game.tables]);
+}
+
+/**
+ * Returns a document with the given id. 
+ * 
+ * This is the internal version of the getDocumentFrom function, wich allows 
+ * filtering the world collections to search. 
+ * @param {String} id Id of the document to retrieve. 
+ * @param {contentCollectionTypes} where Specifies where to search for the document. 
+ * @returns {Promise<Document|undefined>} The document, if it could be retrieved. 
+ * @async
+ * @private
+ */
+async function _getDocumentFrom(id, where = contentCollectionTypes.all, worldCollections = [game.items, game.actors, game.journal, game.tables]) {
   return new Promise(async (resolve, reject) => {
-    // Search in world actors. 
+    // Search in world items. 
     if (where === contentCollectionTypes.all || where === contentCollectionTypes.world) {
-      for (const actor of game.actors) {
-        if (actor.id === id) {
-          resolve(actor);
-          return;
+      for (const worldCollection of worldCollections) {
+        for (const entry of worldCollection) {
+          if (entry.id === id) {
+            resolve(entry);
+            return;
+          }
         }
       }
     }
-
+  
     // Search in compendia. 
     if (where === contentCollectionTypes.all || where === contentCollectionTypes.compendia) {
-      resolve(await getDocumentFromCompendia(id));
+      resolve(await _getDocumentFromCompendia(id));
     }
-
+  
     // Search in module compendia. 
     if (where === contentCollectionTypes.all || where === contentCollectionTypes.modules) {
-      resolve(await getDocumentFromModuleCompendia(id));
+      resolve(await _getDocumentFromModuleCompendia(id));
     }
   
     resolve(undefined);
@@ -144,8 +176,9 @@ export async function getActorFrom(id, where = contentCollectionTypes.all) {
  * @param id Id of the document to retrieve. 
  * @returns {Document|undefined}
  * @async
+ * @private
  */
-export async function getDocumentFromCompendia(id) {
+async function _getDocumentFromCompendia(id) {
   for (const pack of game.packs) {
     for (const entry of pack.index) {
       if (entry._id === id) {
@@ -162,8 +195,9 @@ export async function getDocumentFromCompendia(id) {
  * @param id Id of the document to retrieve. 
  * @returns {Document|undefined}
  * @async
+ * @private
  */
-export async function getDocumentFromModuleCompendia(id) {
+async function _getDocumentFromModuleCompendia(id) {
   for (const module of game.modules) {
     if (!module.packs) continue;
 
