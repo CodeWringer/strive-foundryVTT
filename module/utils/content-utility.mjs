@@ -145,72 +145,86 @@ export async function findRollTable(id, where = contentCollectionTypes.all) {
  */
 async function _getDocumentFrom(id, where = contentCollectionTypes.all, worldCollections = [game.items, game.actors, game.journal, game.tables]) {
   return new Promise(async (resolve, reject) => {
+    let result = undefined;
+
     // Search in world items. 
     if (where === contentCollectionTypes.all || where === contentCollectionTypes.world) {
       for (const worldCollection of worldCollections) {
         for (const entry of worldCollection) {
-          if (entry.id === id) {
-            resolve(entry);
-            return;
+          if (entry.id === id || entry.name === id) {
+            result = entry;
           }
         }
       }
     }
   
     // Search in compendia. 
-    if (where === contentCollectionTypes.all || where === contentCollectionTypes.compendia) {
-      resolve(await _getDocumentFromCompendia(id));
+    if (result === undefined) {
+      if (where === contentCollectionTypes.all || where === contentCollectionTypes.compendia) {
+        result = await _getDocumentFromCompendia(id);
+      }
     }
-  
+    
     // Search in module compendia. 
-    if (where === contentCollectionTypes.all || where === contentCollectionTypes.modules) {
-      resolve(await _getDocumentFromModuleCompendia(id));
+    if (result === undefined) {
+      if (where === contentCollectionTypes.all || where === contentCollectionTypes.modules) {
+        result = await _getDocumentFromModuleCompendia(id);
+      }
     }
   
-    resolve(undefined);
+    if (result === undefined) {
+      console.warn(`Failed to retrieve document with id '${id}'`);
+    }
+    resolve(result);
   });
 }
 
 /**
  * Returns a document with the given id from compendia. 
  * @param id Id of the document to retrieve. 
- * @returns {Document|undefined}
+ * @returns {Promise<Document|undefined>}
  * @async
  * @private
  */
 async function _getDocumentFromCompendia(id) {
-  for (const pack of game.packs) {
-    for (const entry of pack.index) {
-      if (entry._id === id) {
-        return await pack.getDocument(id);
+  return new Promise(async (resolve, reject) => {
+    let result = undefined;
+
+    for (const pack of game.packs) {
+      for (const entry of pack.index) {
+        if (entry._id === id || entry.name === id) {
+          result = await pack.getDocument(entry._id);
+        }
       }
     }
-  }
-  console.warn(`No document with id '${id}' could be retrieved from compendia`);
-  return undefined;
+    resolve(result);
+  });
 }
 
 /**
  * Returns a document with the given id from module compendia. 
  * @param id Id of the document to retrieve. 
- * @returns {Document|undefined}
+ * @returns {Promise<Document|undefined>}
  * @async
  * @private
  */
 async function _getDocumentFromModuleCompendia(id) {
-  for (const module of game.modules) {
-    if (!module.packs) continue;
+  return new Promise(async (resolve, reject) => {
+    let result = undefined;
 
-    for (const pack of module.packs) {
-      if (pack.metadata.name == type) {
-        for (const entry of pack.index) {
-          if (entry._id === id) {
-            return await pack.getDocument(id);
+    for (const module of game.modules) {
+      if (!module.packs) continue;
+
+      for (const pack of module.packs) {
+        if (pack.metadata.name == type) {
+          for (const entry of pack.index) {
+            if (entry._id === id || entry.name === id) {
+              result = await pack.getDocument(entry._id);
+            }
           }
         }
       }
     }
-  }
-  console.warn(`No document with id '${id}' could be retrieved from module compendia`);
-  return undefined;
+    resolve(result);
+  });
 }
