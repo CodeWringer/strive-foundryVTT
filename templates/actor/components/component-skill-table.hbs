@@ -29,6 +29,7 @@ skills: {[Item]} = {
                     <th class="skill-column-roll"></th>
                 {{/if}}
                 <th class="skill-column-roll"></th>
+                <th class="skill-column-roll"></th>
                 <th class="skill-column-name">
                     {{#if isLearningSkillsTable}}
                         {{localize "ambersteel.labels.learningSkill"}}
@@ -70,6 +71,9 @@ skills: {[Item]} = {
                     {{/if}}
                     <td>
                         {{> buttonSendToChat itemId=skill.data.id }}
+                    </td>
+                    <td>
+                        {{> buttonOpenSheet id=skill.name }}
                     </td>
                     <td class="fancy-font flex skill-column-name">
                         {{> inputComponent type="single-line" propertyPath="name" itemId=skill.data.id isEditable=../isEditable contextOverride=../this }}
