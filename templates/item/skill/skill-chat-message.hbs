@@ -17,6 +17,7 @@ item: {Item} = {
       requiredFailures: {Number}
       abilities: {[Object]} -> see item/skill-ability/skill-ability-table.hbs,
       isExpanded: {Boolean}
+      category: {String}
     }
   }
 }
@@ -40,6 +41,8 @@ item: {Item} = {
       {{item.data.data.category}}
     </div>
   </div>
+  {{!-- Skill abilities --}}
+  {{!-- TODO --}}
   {{!-- Description --}}
   <div class="sheet-block multiline">
     {{item.data.data.description}}

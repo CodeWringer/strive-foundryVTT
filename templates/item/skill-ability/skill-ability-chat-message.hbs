@@ -1,1 +1,85 @@
-{{!-- TODO --}}
+{{!-- Required context:
+isEditable: {Boolean}
+isSendable: {Boolean}
+skillAbility: {SkillAbility} = {
+  name: {String}
+  description: {String}
+  requiredLevel: {Number}
+  condition: {String}
+  img: {String}
+  apCost: {Number|undefined}
+  distance: {Number|undefined}
+  damageFormula: {String}
+  damageType: {CONFIG.ambersteel.damageTypes|undefined}
+  isCustom: {Boolean}
+}
+--}}
+<section>
+  {{!-- Header --}}
+  <div class="flex flex-row">
+    <div class="flex flex-center">
+      <img class="inline-img header-image margin-r-sm" name="img" src="{{skillAbility.img}}" title="{{skillAbility.name}}" height="35" width="35" />
+    </div>
+    <h2 class="flex-grow">
+      {{skillAbility.name}}
+    </h2>
+  </div>
+  {{!-- Required level --}}
+  <div class="flex flex-row sheet-block margin-b-md">
+    <div class="width-min-xl fancy-font">
+      {{localize "ambersteel.labels.skillAbilityRequirement"}}
+    </div>
+    <div class="flex-grow">
+      {{skillAbility.requiredLevel}}
+    </div>
+  </div>
+  {{!-- Condition --}}
+  <div class="flex flex-row sheet-block margin-b-md">
+    <div class="width-min-xl fancy-font">
+      {{localize "ambersteel.labels.skillAbilityCondition"}}
+    </div>
+    <div class="flex-grow">
+      {{skillAbility.condition}}
+    </div>
+  </div>
+  {{!-- apCost --}}
+  <div class="flex flex-row sheet-block margin-b-md">
+    <div class="width-min-xl fancy-font">
+      {{localize "ambersteel.labels.apCost"}}
+    </div>
+    <div class="flex-grow">
+      {{skillAbility.apCost}}
+    </div>
+  </div>
+  {{!-- distance --}}
+  <div class="flex flex-row sheet-block margin-b-md">
+    <div class="width-min-xl fancy-font">
+      {{localize "ambersteel.labels.distance"}}
+    </div>
+    <div class="flex-grow">
+      {{skillAbility.distance}}
+    </div>
+  </div>
+  {{!-- damageFormula --}}
+  <div class="flex flex-row sheet-block margin-b-md">
+    <div class="width-min-xl fancy-font">
+      {{localize "ambersteel.labels.damage"}}
+    </div>
+    <div class="flex-grow">
+      {{skillAbility.damageFormula}}
+    </div>
+  </div>
+  {{!-- damageType --}}
+  <div class="flex flex-row sheet-block margin-b-md">
+    <div class="width-min-xl fancy-font">
+      {{localize "ambersteel.labels.damageType"}}
+    </div>
+    <div class="flex-grow">
+      {{skillAbility.damageType}}
+    </div>
+  </div>
+  {{!-- Description --}}
+  <div class="sheet-block multiline">
+    {{skillAbility.description}}
+  </div>
+</section>
