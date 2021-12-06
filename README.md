@@ -72,7 +72,7 @@ This is the Ambersteel table-top role-playing game system for FoundryVTT.
     * [ ] Requires database update
 * [ ] Send actor to chat. 
 * [ ] Send skill to chat. 
-* [ ] Info button to open an item sheet from an actor sheet. 
+* [X] Info button to open an item sheet from an actor sheet. 
 * [ ] Create rules compendium/journal for easy in-app lookup of the rules. 
   * [ ] Add context-dependent help buttons which link to specific rule-sections. 
 * [ ] Add inline-rolling on sheets.
