@@ -45,6 +45,8 @@ This is the Ambersteel table-top role-playing game system for FoundryVTT.
     * [ ] Adding
     * [ ] Removing
     * [ ] Updating
+  * [ ] Add the ability to drop/pick up inventory items to/from chat. 
+    * [ ] Prompt player on sendToChat, if they want to allow the transfer of their item. 
 * [ ] Refactor: Cleanup language file
 * [ ] Refactor: Turn skill and attribute tables into custom lists, instead
 * [X] Deletion confirmation dialog
@@ -68,14 +70,14 @@ This is the Ambersteel table-top role-playing game system for FoundryVTT.
   * [X] Differentiate fate cards - introduce two types: `preset` and `custom`
     * [X] Preset items cannot be edited
     * [ ] Requires database update
-* [ ] Send actor to chat
-* [ ] Send skill to chat
+* [ ] Send actor to chat. 
+* [ ] Send skill to chat. 
+* [ ] Info button to open an item sheet from an actor sheet. 
 * [ ] Create rules compendium/journal for easy in-app lookup of the rules. 
   * [ ] Add context-dependent help buttons which link to specific rule-sections. 
 * [ ] Add inline-rolling on sheets.
   * A roll result then automatically replaces the button to roll. 
 * [X] Better readability through styling. 
-* [ ] Add the ability to drop/pick up inventory items to/from chat. 
-  * [ ] Prompt player on sendToChat, if they want to allow the transfer of their item. 
 * [ ] Automatically apply/show the penalties of an injury/illness. 
 * [ ] Display hint for toughness test required on half of max injuries. 
+* [ ] Whether a skill ability list is expanded should no longer be stored on the item.data. 
