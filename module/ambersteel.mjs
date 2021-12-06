@@ -270,6 +270,7 @@ Handlebars.registerPartial('buttonToggleSkillAbilityList', `{{#> "${TEMPLATES.CO
 Handlebars.registerPartial('numberSpinner', `{{#> "${TEMPLATES.COMPONENT_NUMBER_SPINNER}"}}{{> @partial-block }}{{/"${TEMPLATES.COMPONENT_NUMBER_SPINNER}"}}`);
 Handlebars.registerPartial('inputComponent', `{{#> "${TEMPLATES.COMPONENT_INPUT}"}}{{/"${TEMPLATES.COMPONENT_INPUT}"}}`);
 Handlebars.registerPartial('inputLabel', `{{#> "${TEMPLATES.COMPONENT_INPUT_LABEL}"}}{{/"${TEMPLATES.COMPONENT_INPUT_LABEL}"}}`);
+Handlebars.registerPartial('buttonOpenSheet', `{{#> "${TEMPLATES.COMPONENT_BUTTON_OPEN_SHEET}"}}{{/"${TEMPLATES.COMPONENT_BUTTON_OPEN_SHEET}"}}`);
 
 /* -------------------------------------------- */
 /*  Ready Hook                                  */
