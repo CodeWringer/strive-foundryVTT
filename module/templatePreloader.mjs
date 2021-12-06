@@ -1,8 +1,9 @@
 export const TEMPLATES = {
   // Components
   COMPONENT_BUTTON_ADD: "systems/ambersteel/templates/components/button-add.hbs",
-  COMPONENT_BUTTON_DELETE: "systems/ambersteel/templates/components/button-delete.hbs",
   COMPONENT_BUTTON_ROLL: "systems/ambersteel/templates/components/button-roll.hbs",
+  COMPONENT_BUTTON_DELETE: "systems/ambersteel/templates/components/button-delete.hbs",
+  COMPONENT_BUTTON_OPEN_SHEET: "systems/ambersteel/templates/components/button-open-sheet.hbs",
   COMPONENT_BUTTON_SEND_TO_CHAT: "systems/ambersteel/templates/components/button-send-to-chat.hbs",
   COMPONENT_TOGGLE_SKILL_ABILITY_LIST: "systems/ambersteel/templates/components/button-toggle-skill-ability-list.hbs",
   COMPONENT_NUMBER_SPINNER: "systems/ambersteel/templates/components/number-spinner.hbs",
