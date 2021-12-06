@@ -82,6 +82,7 @@
       "level": "Level",
       "attributeAbbreviation": "Attr.",
       "requiredSuccessFailureAbbreviation": "Req. S/F",
+      "successFailureAbbreviation": "S/F",
       "successAbbreviation": "S",
       "failureAbbreviation": "F",
       "learningSkill": "Learning Skills",
