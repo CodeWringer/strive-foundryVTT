@@ -47,6 +47,7 @@ This is the Ambersteel table-top role-playing game system for FoundryVTT.
     * [ ] Updating
   * [ ] Add the ability to drop/pick up inventory items to/from chat. 
     * [ ] Prompt player on sendToChat, if they want to allow the transfer of their item. 
+* [ ] Refactor: Toggle of skill ability list musn't update the item in order to show/hide the list!
 * [ ] Refactor: Cleanup language file
 * [ ] Refactor: Turn skill and attribute tables into custom lists, instead
 * [X] Deletion confirmation dialog
