@@ -11,6 +11,7 @@ import { preloadHandlebarsTemplates } from "./templatePreloader.mjs";
 import { getNestedPropertyValue } from "./utils/property-utility.mjs";
 import AdvancementRequirements from "./dto/advancement-requirement.mjs";
 import { TEMPLATES } from "./templatePreloader.mjs";
+import { migrateAsPossible } from "./migrators/migrator-initiator.mjs";
 
 /* -------------------------------------------- */
 /*  Init Hook                                   */
@@ -276,9 +277,9 @@ Handlebars.registerPartial('buttonToggleVisibility', `{{#> "${TEMPLATES.COMPONEN
 /*  Ready Hook                                  */
 /* -------------------------------------------- */
 
-// Hooks.once("ready", async function() {
-// 
-// });
+Hooks.once("ready", async function() {
+  migrateAsPossible();
+});
 
 // Hooks.on("createActor", async function(document, options, userId) {
 //   console.log("created!");
