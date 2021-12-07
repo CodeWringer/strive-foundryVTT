@@ -108,17 +108,14 @@ skills: {[Item]} = {
                 </tr>
                 <tr>
                     <td style="display: table-cell;" colspan="100">
-                        <div class="{{#if data.isExpanded}}{{else}}hidden{{/if}}">
-                            {{> "systems/ambersteel/templates/item/skill-ability/skill-ability-table.hbs" 
-                                isEditable=../isEditable
-                                isSendable=../isSendable
-                                skillItemId=skill.data.id
-                                itemId=skill.data.id
-                                abilities=data.abilities
-                                CONFIG=../CONFIG
-                            }}
-                        </div>
-                        {{> buttonToggleSkillAbilityList itemId=skill.data.id isToggled=data.isExpanded }}
+                        {{> "systems/ambersteel/templates/item/skill-ability/skill-ability-table.hbs" 
+                            isEditable=../isEditable
+                            isSendable=../isSendable
+                            skillItemId=skill.data.id
+                            itemId=skill.data.id
+                            abilities=data.abilities
+                            CONFIG=../CONFIG
+                        }}
                     </td>
                 </tr>
             {{/each}}

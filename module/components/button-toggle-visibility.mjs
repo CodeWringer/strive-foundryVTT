@@ -7,7 +7,7 @@
  */
 export function activateListeners(html, ownerSheet, isOwner, isEditable) {
   // Toggle skill ability list visibility. 
-  html.find(".ambersteel-expand-skill-ability-list").click(_onExpandSkillAbilityList.bind(ownerSheet));
+  html.find(".ambersteel-toggle-visibility").click(_onClickToggleVisibility.bind(ownerSheet));
 
   // -------------------------------------------------------------
   if (!isOwner) return;
@@ -21,16 +21,15 @@ export function activateListeners(html, ownerSheet, isOwner, isEditable) {
  * @private
  * @async
  */
-async function _onExpandSkillAbilityList(event) {
+async function _onClickToggleVisibility(event) {
   event.preventDefault();
 
   // Do action. 
-  const dataset = event.currentTarget.dataset;
-  const who = dataset.itemId ? this.getItem(dataset.itemId) : this.getContextEntity();
-  await who.toggleSkillAbilityListVisible();
+  const visGroup = event.currentTarget.dataset.visGroup;
 
-  // Invoke callback. 
-  if (dataset.callback) {
-    who[dataset.callback](dataset.callbackData);
+  const elements = document.querySelectorAll("[data-vis-group='" + visGroup + "']");
+
+  for(const element of elements) {
+    element.classList.toggle("hidden");
   }
 }

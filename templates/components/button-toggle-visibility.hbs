@@ -1,0 +1,13 @@
+{{!-- Required parameters:
+visGroup: {String}
+cssClass: {String|undefined}
+--}}
+{{!-- 
+When clicked, this will toggle the "hidden" class on ALL elements with the attribute 
+data-vis-group="<visGroup>"
+--}}
+<a class="ambersteel-toggle-visibility fill {{cssClass}}"
+  data-vis-group="{{visGroup}}"
+  >
+  {{> @partial-block }}
+</a>

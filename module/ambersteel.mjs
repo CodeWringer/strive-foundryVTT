@@ -266,11 +266,11 @@ Handlebars.registerPartial('buttonAdd', `{{#> "${TEMPLATES.COMPONENT_BUTTON_ADD}
 Handlebars.registerPartial('buttonDelete', `{{#> "${TEMPLATES.COMPONENT_BUTTON_DELETE}"}}{{/"${TEMPLATES.COMPONENT_BUTTON_DELETE}"}}`);
 Handlebars.registerPartial('buttonRoll', `{{#> "${TEMPLATES.COMPONENT_BUTTON_ROLL}"}}{{/"${TEMPLATES.COMPONENT_BUTTON_ROLL}"}}`);
 Handlebars.registerPartial('buttonSendToChat', `{{#> "${TEMPLATES.COMPONENT_BUTTON_SEND_TO_CHAT}"}}{{/"${TEMPLATES.COMPONENT_BUTTON_SEND_TO_CHAT}"}}`);
-Handlebars.registerPartial('buttonToggleSkillAbilityList', `{{#> "${TEMPLATES.COMPONENT_TOGGLE_SKILL_ABILITY_LIST}"}}{{/"${TEMPLATES.COMPONENT_TOGGLE_SKILL_ABILITY_LIST}"}}`);
 Handlebars.registerPartial('numberSpinner', `{{#> "${TEMPLATES.COMPONENT_NUMBER_SPINNER}"}}{{> @partial-block }}{{/"${TEMPLATES.COMPONENT_NUMBER_SPINNER}"}}`);
 Handlebars.registerPartial('inputComponent', `{{#> "${TEMPLATES.COMPONENT_INPUT}"}}{{/"${TEMPLATES.COMPONENT_INPUT}"}}`);
 Handlebars.registerPartial('inputLabel', `{{#> "${TEMPLATES.COMPONENT_INPUT_LABEL}"}}{{/"${TEMPLATES.COMPONENT_INPUT_LABEL}"}}`);
 Handlebars.registerPartial('buttonOpenSheet', `{{#> "${TEMPLATES.COMPONENT_BUTTON_OPEN_SHEET}"}}{{/"${TEMPLATES.COMPONENT_BUTTON_OPEN_SHEET}"}}`);
+Handlebars.registerPartial('buttonToggleVisibility', `{{#> "${TEMPLATES.COMPONENT_TOGGLE_VISIBILITY}"}}{{> @partial-block }}{{/"${TEMPLATES.COMPONENT_TOGGLE_VISIBILITY}"}}`);
 
 /* -------------------------------------------- */
 /*  Ready Hook                                  */

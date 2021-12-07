@@ -3,7 +3,7 @@ import * as ButtonAdd from '../../../components/button-add.mjs';
 import * as ButtonRoll from '../../../components/button-roll.mjs';
 import * as ButtonDelete from '../../../components/button-delete.mjs';
 import * as ButtonSendToChat from '../../../components/button-send-to-chat.mjs';
-import * as ButtonToggleSkillAbilityList from '../../../components/button-toggle-skill-ability-list.mjs';
+import * as ButtonToggleVisibility from '../../../components/button-toggle-visibility.mjs';
 import * as InputComponent from '../../../components/input.mjs';
 import * as OpenSheet from '../../../components/button-open-sheet.mjs';
 import { TEMPLATES } from "../../../templatePreloader.mjs";
@@ -143,9 +143,9 @@ export default class AmbersteelBaseActorSheet {
     ButtonRoll.activateListeners(html, this, isOwner, isEditable);
     ButtonDelete.activateListeners(html, this, isOwner, isEditable);
     ButtonSendToChat.activateListeners(html, this, isOwner, isEditable);
-    ButtonToggleSkillAbilityList.activateListeners(html, this, isOwner, isEditable);
     InputComponent.activateListeners(html, this, isOwner, isEditable);
     OpenSheet.activateListeners(html, this, isOwner, isEditable);
+    ButtonToggleVisibility.activateListeners(html, this, isOwner, isEditable);
 
     // -------------------------------------------------------------
     if (!isOwner) return;
