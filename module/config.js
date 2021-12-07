@@ -250,4 +250,4 @@ ambersteel.illnessStates = {
         name: "treated",
         localizableName: "ambersteel.illnessStates.treated"
     }
-}
+};
