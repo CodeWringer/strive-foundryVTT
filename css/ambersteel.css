@@ -700,15 +700,20 @@ textarea.resize-vertical {
   resize: vertical;
 }
 
+textarea.ambersteel-edit {
+  border-color: #7a7971;
+}
+
 .ambersteel-item-to-chat-margin-right {
   margin-right: 2%;
 }
 
 .ambersteel-read-only {
-  background: -o-repeating-linear-gradient(45deg, rgba(0, 0, 0, 0.1), transparent, rgba(0, 0, 0, 0.1) 10px);
-  background: repeating-linear-gradient(45deg, rgba(0, 0, 0, 0.1), transparent, rgba(0, 0, 0, 0.1) 10px);
+  background: -o-repeating-linear-gradient(45deg, rgba(0, 0, 0, 0.07), transparent, rgba(0, 0, 0, 0.07) 10px);
+  background: repeating-linear-gradient(45deg, rgba(0, 0, 0, 0.07), transparent, rgba(0, 0, 0, 0.07) 10px);
   border-radius: 0.2rem;
   font-weight: bold;
+  border: 1px solid #b5b3a4;
 }
 
 img.header-image {
