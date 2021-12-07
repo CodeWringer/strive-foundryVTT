@@ -85,7 +85,8 @@
           "carryingCapacity": 0
         },
         "biography": "",
-        "gmNotes": ""
+        "gmNotes": "",
+        "isCustom": false
       }
     },
     "pc": {
