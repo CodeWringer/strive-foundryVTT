@@ -13,8 +13,6 @@ export default class AmbersteelSkillItem extends AmbersteelBaseItem {
     this.parent.getChatData = this.getChatData.bind(this);
     this.parent.setLevel = this.setLevel.bind(this);
     this.parent.addProgress = this.addProgress.bind(this);
-    this.parent.setSkillAbilityListVisible = this.setSkillAbilityListVisible.bind(this);
-    this.parent.toggleSkillAbilityListVisible = this.toggleSkillAbilityListVisible.bind(this);
     this.parent.createSkillAbility = this.createSkillAbility.bind(this);
     this.parent.deleteSkillAbilityAt = this.deleteSkillAbilityAt.bind(this);
     this.parent.getTotalValue = this.getTotalValue.bind(this);
@@ -111,21 +109,6 @@ export default class AmbersteelSkillItem extends AmbersteelBaseItem {
         await this.setLevel(nextSkillValue, resetProgress);
       }
     }
-  }
-
-  /**
-   * Toggles the visibility of the skill ability list. 
-   * @param {Boolean} visible If true, will set the skill ability list to visible. 
-   */
-  async setSkillAbilityListVisible(visible) {
-    await this.updateProperty("data.isExpanded", visible);
-  }
-
-  /**
-   * Toggles the visibility of the skill ability list. 
-   */
-  async toggleSkillAbilityListVisible() {
-    await this.setSkillAbilityListVisible(!this.parent.data.data.isExpanded);
   }
 
   /**

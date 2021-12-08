@@ -15,7 +15,6 @@ header.sheet-header {
   .header-fields {
     flex: 1;
   }
-
 }
 
 h1.header-name {
@@ -74,9 +73,25 @@ a.button {
   font-size: 1rem;
 }
 
+.button-full {
+  padding: 0;
+  margin: 0;
+  min-height: $line-height;
+  min-width: $line-height;
+  font-size: 1rem;
+  border-radius: 3px;
+  border: 1px $c-border-light solid;
+  background-color: $c-bg-lightest;
+}
+
 .square-button-light {
   width: 26px;
   height: 26px;
+}
+
+.ambersteel-toggle-visibility {
+  display: block;
+  font-size: 1rem;
 }
 
 // Textarea styles
@@ -89,14 +104,21 @@ textarea.resize-vertical {
   resize: vertical;
 }
 
+// Override default style
+textarea.ambersteel-edit {
+  border-color: $c-border-input;
+}
+
 // Chat styles
 .ambersteel-item-to-chat-margin-right {
   margin-right: 2%;
 }
 
 .ambersteel-read-only {
-  background: repeating-linear-gradient(45deg, rgba(0,0,0,0.1), transparent, rgba(0,0,0,0.1) 10px);
+  background: repeating-linear-gradient(45deg, rgba(0,0,0,0.07), transparent, rgba(0,0,0,0.07) 10px);
   border-radius: 0.2rem;
+  font-weight: bold;
+  border: 1px solid $c-border-beige-light;
 }
 
 img.header-image {

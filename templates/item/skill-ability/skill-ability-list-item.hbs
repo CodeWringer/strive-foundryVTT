@@ -15,7 +15,6 @@ skillAbility = {
   damageType: {CONFIG.ambersteel.damageTypes|undefined}
 }
 --}}
-{{!-- TODO --}}
 {{!-- Row 1 --}}
 <div class="flex flex-row">
   <div class="flex flex-grow">
@@ -28,7 +27,7 @@ skillAbility = {
     {{> inputComponent type="single-line" name=(concat "name[" key "]") propertyPath=(concat "data.data.abilities[" key "].name") itemId=../skillItemId cssClass="flex-grow" isEditable=../isEditable contextOverride=../this }}
   </div>
   {{!-- Delete --}}
-  {{> buttonDelete itemId=itemId propertyPath=(concat "data.data.abilities[" key "]") }}
+  {{> buttonDelete itemId=itemId propertyPath=(concat "data.data.abilities[" key "]") promptConfirm=true promptLocalizableTitle="ambersteel.dialog.titleConfirmDeletionSkillAbilityQuery" }}
 </div>
 {{!-- Row 2 --}}
 <div class="flex flex-row">

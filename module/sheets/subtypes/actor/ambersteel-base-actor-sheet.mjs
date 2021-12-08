@@ -3,8 +3,9 @@ import * as ButtonAdd from '../../../components/button-add.mjs';
 import * as ButtonRoll from '../../../components/button-roll.mjs';
 import * as ButtonDelete from '../../../components/button-delete.mjs';
 import * as ButtonSendToChat from '../../../components/button-send-to-chat.mjs';
-import * as ButtonToggleSkillAbilityList from '../../../components/button-toggle-skill-ability-list.mjs';
+import * as ButtonToggleVisibility from '../../../components/button-toggle-visibility.mjs';
 import * as InputComponent from '../../../components/input.mjs';
+import * as OpenSheet from '../../../components/button-open-sheet.mjs';
 import { TEMPLATES } from "../../../templatePreloader.mjs";
 import * as ItemGrid from "../../../components/item-grid.mjs";
 
@@ -143,11 +144,9 @@ export default class AmbersteelBaseActorSheet {
     ButtonRoll.activateListeners(html, this, isOwner, isEditable);
     ButtonDelete.activateListeners(html, this, isOwner, isEditable);
     ButtonSendToChat.activateListeners(html, this, isOwner, isEditable);
-    ButtonToggleSkillAbilityList.activateListeners(html, this, isOwner, isEditable);
     InputComponent.activateListeners(html, this, isOwner, isEditable);
-
-    // Show item sheet.
-    html.find(".ambersteel-item-show").click(this._onItemShow.bind(this));
+    OpenSheet.activateListeners(html, this, isOwner, isEditable);
+    ButtonToggleVisibility.activateListeners(html, this, isOwner, isEditable);
 
     ItemGrid.setupGrid(html, "possessions-canvas", this.getActor());
 
@@ -171,21 +170,6 @@ export default class AmbersteelBaseActorSheet {
 
     // Add skill ability. 
     html.find(".ambersteel-skill-ability-create").click(this._onCreateSkillAbility.bind(this));
-  }
-
-  /**
-   * @param event 
-   * @private
-   * @async
-   */
-  _onItemShow(event) {
-    event.preventDefault();
-
-    const element = event.currentTarget;
-    const itemId = element.dataset.itemId;
-    const item = this.getItem(itemId);
-
-    item.sheet.render(true);
   }
 
   /**

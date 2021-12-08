@@ -1,3 +1,5 @@
+import { showConfirmationDialog } from "../utils/dialog-utility.mjs";
+
 /**
  * Registers events on elements of the given DOM. 
  * @param html {Object} DOM of the sheet for which to register listeners. 
@@ -17,6 +19,16 @@ export function activateListeners(html, ownerSheet, isOwner, isEditable) {
 
 async function _onDelete(event) {
   const dataset = event.currentTarget.dataset;
+
+  if (dataset.promptConfirm) {
+    if (!keyboard.isDown("Shift")) {
+      const dialogResult = await showConfirmationDialog({
+        localizableTitle: dataset.promptTitle ?? "ambersteel.dialog.titleConfirmDeletionQuery"
+      });
+      if (!dialogResult) return;
+    }
+  }
+
   const who = dataset.itemId ? this.getItem(dataset.itemId) : this.getContextEntity();
   if (dataset.propertyPath) {
     await who.deleteByPropertyPath(dataset.propertyPath);

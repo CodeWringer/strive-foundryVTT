@@ -16,7 +16,6 @@ item: {Item} = {
       requiredSuccessses: {Number}
       requiredFailures: {Number}
       abilities: {[Object]} -> see item/skill-ability/skill-ability-table.hbs,
-      isExpanded: {Boolean}
       category: {String}
     }
   }
@@ -71,12 +70,12 @@ item: {Item} = {
     </div>
   </div>
   {{!-- Skill Abilites --}}
-  <div class="{{#if item.data.data.isExpanded}}{{else}}hidden{{/if}}">
+  {{#if (or (eq isEditable true) (neq item.data.data.abilities.length 0)) }}
     {{> "systems/ambersteel/templates/item/skill-ability/skill-ability-table.hbs" 
       isEditable=isEditable 
       skillItemId=item.id 
       abilities=item.data.data.abilities
+      skillAbilitiesInitiallyVisible=true
     }}
-  </div>
-  {{> buttonToggleSkillAbilityList isToggled=item.data.data.isExpanded }}
+  {{/if}}
 </form>

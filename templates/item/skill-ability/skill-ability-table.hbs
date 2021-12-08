@@ -1,6 +1,7 @@
 {{!-- Required context:
 isEditable: {Boolean}
 isSendable: {Boolean}
+skillAbilitiesInitiallyVisible: {Boolean}
 skillItemId: {String}
 itemId: {String}
 abilities: {[SkillAbility]} = {
@@ -17,7 +18,7 @@ abilities: {[SkillAbility]} = {
 }
 --}}
 <section class="skill-ability-list">
-  <ol class="unstyled-list">
+  <ol class="unstyled-list {{#if skillAbilitiesInitiallyVisible}}{{else}}hidden{{/if}}" data-vis-group="{{skillItemId}}">
     {{#each abilities as |ability key|}}
       <li class="ambersteel-list-row sheet-block">
         {{!-- Row 1 --}}
@@ -32,8 +33,8 @@ abilities: {[SkillAbility]} = {
             {{> inputComponent type="single-line" name=(concat "name[" key "]") propertyPath=(concat "data.data.abilities[" key "].name") itemId=../skillItemId cssClass="flex-grow" isEditable=../isEditable contextOverride=../this }}
           </div>
           {{!-- Delete --}}
-          {{#if isEditable}}
-            {{> buttonDelete itemId=../itemId propertyPath=(concat "data.data.abilities[" key "]") }}
+          {{#if ../isEditable}}
+            {{> buttonDelete itemId=../itemId propertyPath=(concat "data.data.abilities[" key "]") promptConfirm=true promptLocalizableTitle="ambersteel.dialog.titleConfirmDeletionSkillAbilityQuery" }}
           {{/if}}
         </div>
         {{!-- Row 2 --}}
@@ -139,4 +140,24 @@ abilities: {[SkillAbility]} = {
       </li>
     {{/if}}
   </ol>
+  {{#> buttonToggleVisibility 
+    visGroup=skillItemId
+    cssClass=(ifThenElse skillAbilitiesInitiallyVisible "hidden" "") 
+  }}
+    <div class="flex flex-center fill button-full">
+        <span class="square-button-light flex flex-center">
+            <i class="fas fa-angle-double-down"></i>
+        </span>
+    </div>
+  {{/buttonToggleVisibility}}
+  {{#> buttonToggleVisibility 
+    visGroup=skillItemId
+    cssClass=(ifThenElse skillAbilitiesInitiallyVisible "" "hidden") 
+  }}
+    <div class="flex flex-center fill button-full">
+        <span class="square-button-light flex flex-center">
+            <i class="fas fa-angle-double-up"></i>
+        </span>
+    </div>
+  {{/buttonToggleVisibility}}
 </section>

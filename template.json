@@ -85,7 +85,8 @@
           "inventory": []
         },
         "biography": "",
-        "gmNotes": ""
+        "gmNotes": "",
+        "isCustom": false
       }
     },
     "pc": {

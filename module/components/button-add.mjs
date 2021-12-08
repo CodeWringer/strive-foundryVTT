@@ -1,5 +1,5 @@
 import * as ItemAddDialog from '../dialog/dialog-item-add.mjs';
-import { getItemFrom, contentCollectionTypes } from '../utils/content-utility.mjs';
+import { findItem, contentCollectionTypes } from '../utils/content-utility.mjs';
 
 /**
  * Registers events on elements of the given DOM. 
@@ -86,7 +86,7 @@ async function _onItemCreate(event) {
     
     return await Item.create(itemData, { parent: parent });
   } else {
-    const item = await getItemFrom(itemId, contentCollectionTypes.all);
+    const item = await findItem(itemId, contentCollectionTypes.all);
     const itemData = {
       name: item ? item.name : `New ${type.capitalize()}`,
       type: item ? item.type : type,

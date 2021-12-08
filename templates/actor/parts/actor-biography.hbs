@@ -7,6 +7,6 @@ data: {Object} where Object = {
 --}}
 <section class="fill">
   <div class="sheet-block fill">
-    {{> inputComponent type="multi-line" name="biography" propertyPath="data.data.biography" cssClass="biography" isEditable=isEditable }}
+    {{editor content=data.data.biography target="data.biography" button=true editable=isEditable owner=owner}}
   </div>
 </section>

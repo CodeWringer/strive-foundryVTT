@@ -1,11 +1,15 @@
 {{!-- Required parameters:
 itemId: {String|undefined}
 propertyPath: {String|undefined}
+promptConfirm: {Boolean|undefined}
+promptLocalizableTitle: {String|undefined}
 --}}
 <span class="square-button-light">
   <a class="ambersteel-delete pad-sm button flex flex-center"
     data-item-id="{{itemId}}"
     data-property-path="{{propertyPath}}"
+    data-prompt-confirm="{{promptConfirm}}"
+    data-prompt-title="{{promptLocalizableTitle}}"
     title="{{localize ambersteel.labels.delete}}"
     >
     <i class="fas fa-trash"></i>

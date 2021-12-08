@@ -28,6 +28,8 @@ skills: {[Item]} = {
                 {{#if isEditable}}
                     <th class="skill-column-roll"></th>
                 {{/if}}
+                <th class="skill-column-roll"></th>
+                <th class="skill-column-roll"></th>
                 <th class="skill-column-name">
                     {{#if isLearningSkillsTable}}
                         {{localize "ambersteel.labels.learningSkill"}}
@@ -67,6 +69,12 @@ skills: {[Item]} = {
                             }}
                         </td>
                     {{/if}}
+                    <td>
+                        {{> buttonSendToChat itemId=skill.data.id }}
+                    </td>
+                    <td>
+                        {{> buttonOpenSheet id=skill.name }}
+                    </td>
                     <td class="fancy-font flex skill-column-name">
                         {{> inputComponent type="single-line" propertyPath="name" itemId=skill.data.id isEditable=../isEditable contextOverride=../this }}
                     </td>
@@ -94,23 +102,20 @@ skills: {[Item]} = {
                     </td>
                     {{#if ../isEditable}}
                         <td class="skill-column-delete">
-                            {{> buttonDelete itemId=skill.data.id }}
+                            {{> buttonDelete itemId=skill.data.id promptConfirm=true promptLocalizableTitle=(ifThenElse ../isLearningSkillsTable "ambersteel.dialog.titleConfirmDeletionLearningSkillQuery" "ambersteel.dialog.titleConfirmDeletiongSkillQuery") }}
                         </td>
                     {{/if}}
                 </tr>
                 <tr>
                     <td style="display: table-cell;" colspan="100">
-                        <div class="{{#if data.isExpanded}}{{else}}hidden{{/if}}">
-                            {{> "systems/ambersteel/templates/item/skill-ability/skill-ability-table.hbs" 
-                                isEditable=../isEditable
-                                isSendable=../isSendable
-                                skillItemId=skill.data.id
-                                itemId=skill.data.id
-                                abilities=data.abilities
-                                CONFIG=../CONFIG
-                            }}
-                        </div>
-                        {{> buttonToggleSkillAbilityList itemId=skill.data.id isToggled=data.isExpanded }}
+                        {{> "systems/ambersteel/templates/item/skill-ability/skill-ability-table.hbs" 
+                            isEditable=../isEditable
+                            isSendable=../isSendable
+                            skillItemId=skill.data.id
+                            itemId=skill.data.id
+                            abilities=data.abilities
+                            CONFIG=../CONFIG
+                        }}
                     </td>
                 </tr>
             {{/each}}

@@ -1,36 +1,39 @@
+import { findDocument } from "../utils/content-utility.mjs";
+
 /**
  * Registers events on elements of the given DOM. 
  * @param html {Object} DOM of the sheet for which to register listeners. 
- * @param ownerSheet {ActorSheet|ItemSheet} DOM owner object. This should be an actor sheet object or item sheet object.
+ * @param ownerSheet {Any} Unused. Only exists for the sake of convention. 
  * @param isOwner {Boolean} If true, registers events that require owner permission. 
  * @param isEditable {Boolean} If true, registers events that require editing permission. 
  */
 export function activateListeners(html, ownerSheet, isOwner, isEditable) {
-  // Toggle skill ability list visibility. 
-  html.find(".ambersteel-expand-skill-ability-list").click(_onExpandSkillAbilityList.bind(ownerSheet));
-
   // -------------------------------------------------------------
   if (!isOwner) return;
-
   // -------------------------------------------------------------
   if (!isEditable) return;
+
+  // No binding necessary, as the DOM is the only required context. 
+  html.find(".ambersteel-open-sheet").click(_onClickOpenSheet);
 }
 
 /**
  * @param event 
- * @private
  * @async
+ * @private
  */
-async function _onExpandSkillAbilityList(event) {
+async function _onClickOpenSheet(event) {
   event.preventDefault();
-
-  // Do action. 
+  
   const dataset = event.currentTarget.dataset;
-  const who = dataset.itemId ? this.getItem(dataset.itemId) : this.getContextEntity();
-  await who.toggleSkillAbilityListVisible();
-
-  // Invoke callback. 
-  if (dataset.callback) {
-    who[dataset.callback](dataset.callbackData);
+  
+  if (dataset.itemId) {
+    const parent = await findDocument(dataset.id);
+    const item = parent.items.get(dataset.itemId);
+    item.sheet.render(true);
+  } else {
+    const toShow = await findDocument(dataset.id);
+    if (!toShow) return;
+    toShow.sheet.render(true);
   }
-}
+};

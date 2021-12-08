@@ -1,5 +1,4 @@
 import AmbersteelBaseItemSheet from "./ambersteel-base-item-sheet.mjs";
-import * as ButtonToggleSkillAbilityList from '../../../components/button-toggle-skill-ability-list.mjs';
 import { TEMPLATES } from "../../../templatePreloader.mjs";
 
 export default class AmbersteelSkillItemSheet extends AmbersteelBaseItemSheet {
@@ -13,17 +12,12 @@ export default class AmbersteelSkillItemSheet extends AmbersteelBaseItemSheet {
     super.prepareDerivedData(context);
 
     const itemData = context.data.data;
-
-    itemData.isExpanded = itemData.isExpanded ?? false;
-    itemData.isExpandable = itemData.isExpandable ?? true;
-
     itemData.groupName = game.ambersteel.getAttributeGroupName(itemData.relatedAttribute);
   }
 
   /** @override */
   activateListeners(html, isOwner, isEditable) {
     super.activateListeners(html, isOwner, isEditable);
-    ButtonToggleSkillAbilityList.activateListeners(html, this, isOwner, isEditable);
 
     if (!isOwner) return;
     if (!isEditable) return;

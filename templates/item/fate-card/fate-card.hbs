@@ -39,7 +39,7 @@ item: {Item} = {
   <div class="flex flex-row fate-card-footer">
     {{#if isEditable}}
       <span class="flex-grow"></span>
-      {{> buttonDelete itemId=itemId }}
+      {{> buttonDelete itemId=itemId promptConfirm=true promptLocalizableTitle="ambersteel.dialog.titleConfirmDeletionFateCardQuery" }}
     {{/if}}
   </div>
 </section>
