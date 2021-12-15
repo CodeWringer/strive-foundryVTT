@@ -148,7 +148,7 @@ export default class AmbersteelBaseActorSheet {
     OpenSheet.activateListeners(html, this, isOwner, isEditable);
     ButtonToggleVisibility.activateListeners(html, this, isOwner, isEditable);
 
-    ItemGrid.setupGrid(html, "possessions-canvas", this.getActor());
+    ItemGrid.setupPossessionGrid(html, "possessions-canvas", this.getActor());
 
     // -------------------------------------------------------------
     if (!isOwner) return;
