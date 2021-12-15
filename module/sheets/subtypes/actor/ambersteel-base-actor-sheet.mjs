@@ -7,7 +7,7 @@ import * as ButtonToggleVisibility from '../../../components/button-toggle-visib
 import * as InputComponent from '../../../components/input.mjs';
 import * as OpenSheet from '../../../components/button-open-sheet.mjs';
 import { TEMPLATES } from "../../../templatePreloader.mjs";
-import * as ItemGrid from "../../../components/item-grid.mjs";
+import { ItemGrid } from "../../../components/item-grid.mjs";
 
 export default class AmbersteelBaseActorSheet {
   /**
@@ -15,6 +15,12 @@ export default class AmbersteelBaseActorSheet {
    * @type {ActorSheet}
    */
   parent = undefined;
+
+  /**
+   * The possessions item grid.
+   * @type {ItemGrid}
+   */
+  possessionGrid = undefined;
 
   /**
    * @param parent {ActorSheet} The owning ActorSheet. 
@@ -148,7 +154,8 @@ export default class AmbersteelBaseActorSheet {
     OpenSheet.activateListeners(html, this, isOwner, isEditable);
     ButtonToggleVisibility.activateListeners(html, this, isOwner, isEditable);
 
-    ItemGrid.setupPossessionGrid(html, "possessions-canvas", this.getActor());
+    if (this.possessionGrid !== undefined) { this.possessionGrid.tearDown(); }
+    this.possessionGrid = new ItemGrid(html, "possessions-canvas", this);
 
     // -------------------------------------------------------------
     if (!isOwner) return;
