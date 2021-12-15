@@ -1,9 +1,12 @@
 import { createUUID } from 'uuid-utility.mjs';
 
 /**
- * @property {String} id
- * @property {Boolean} isOnce
- * @property {Function} callback
+ * Internal listener representing object. 
+ * @property {String} id ID of this listener. 
+ *           Used for removing this listener. 
+ * @property {Boolean} isOnce If true, will only ever be called once and then removed. 
+ * @property {Function} callback The function to call when the associated event is emitted. 
+ * @private
  */
 class Listener {
   constructor(id, isOnce, callback) {
@@ -59,9 +62,9 @@ export class EventEmitter {
    */
   off(callbackId) {
     for (const [event, listeners] of this._events) {
-      for (const listener of listeners) {
-        if (listener.id === callbackId) {
-          // TODO
+      for (let i = 0; i < listeners.length; i++) {
+        if (listeners[i].id === callbackId) {
+          listeners.splice(i, 1);
           return;
         }
       }
@@ -73,7 +76,7 @@ export class EventEmitter {
    * @param {String} event The event to un-register all callbacks from. 
    */
   allOff(event) {
-    
+    this._events.set(event, []);
   }
 
   /**
