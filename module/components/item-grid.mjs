@@ -2,15 +2,6 @@ import { AmbersteelActor } from "../documents/actor.mjs";
 import { ActorEvents } from "../documents/actor.mjs";
 import AmbersteelBaseActorSheet from "../sheets/subtypes/actor/ambersteel-base-actor-sheet.mjs";
 
-/* TODO: Test and check if this is a global singleton, which would cause problems 
-*  if multiple actor sheets were open at the same time. 
-*  Test case: 
-* - Open two actor sheets, remember which one was added last. 
-* - Switch to assets tab on both. 
-* - Add possession to first actor sheet that was openend. 
-* - If the possession is added to the last opened sheet, there is a singleton problem. 
-*/
-
 const WIDTH = 550;
 const MAX_COLUMNS = 6;
 const TILE_SIZE = Math.floor(WIDTH / MAX_COLUMNS);
