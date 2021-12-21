@@ -6,6 +6,10 @@ import LayoutContainer from "./layout-container.mjs";
  * Child width will be stretched to match the container's width.
  */
 export default class VerticalLayoutContainer extends LayoutContainer {
+  constructor() {
+    super();
+  }
+
   refreshLayout() {
     const fillChildren = [];
 

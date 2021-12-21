@@ -1,4 +1,4 @@
-import { createUUID } from "../utils/uuid-utility.mjs";
+import Containable from "./containable.mjs";
 
 // TODO: Scrollbar when content exceeds height?
 // TODO: Scrollbar when content exceeds width?
@@ -10,26 +10,12 @@ import { createUUID } from "../utils/uuid-utility.mjs";
  * don't have any layout-logic. 
  * @abstract
  */
-export default class LayoutContainer {
-  /**
-   * Internal id of the container. 
-   * @type {String}
-   * @private
-   */
-  _id = createUUID();
-
+export default class LayoutContainer extends Containable {
   /**
    * The wrapped {PIXI.Container}. 
    * @type {PIXI.Container}
    */
-  container = new PIXI.Container();
-
-  /**
-   * @type {LayoutContainer}
-   * @private
-   */
-  _parent = undefined;
-  get parent() { return this._parent; }
+  pixiContainer = new PIXI.Container();
 
   /**
    * @type {Array<LayoutContainer>}
@@ -37,58 +23,54 @@ export default class LayoutContainer {
    */
   _children = [];
   get children() { return this._children; }
-
-  /**
-   * @type {Number}
-   * @private
-   */
-  _x = 0;
+  
+  /** @override */
   get x() { return this._x; }
+  /** @override */
   set x(value) {
     this._x = value;
-    this.container.x = value;
+    this.pixiContainer.x = value;
   }
-
-  _y = 0;
+  
+  /** @override */
   get y() { return this._y; }
+  /** @override */
   set y(value) {
     this._y = value;
-    this.container.y = value;
+    this.pixiContainer.y = value;
   }
 
-  _w = 0;
+  /** @override */
   get width() { return this._w; }
+  /** @override */
   set width(value) {
     this._w = value;
-    this.container.width = value;
+    this.pixiContainer.width = value;
     this.refreshLayout();
   }
-
-  _h = 0;
+  
+  /** @override */
   get height() { return this._h; }
+  /** @override */
   set height(value) {
     this._h = value;
-    this.container.height = value;
+    this.pixiContainer.height = value;
     this.refreshLayout();
   }
 
-  _fill = false;
-  /**
-   * Indicates whether this {LayoutContainer} should fill the remaining space 
-   * of its parent. 
-   * @type {Boolean}
-   */
-  get fill() { return this._fill; }
-  /**
-   * @param {Boolean} value Sets whether this {LayoutContainer} should fill the remaining space 
-   * of its parent. 
-   */
-  set fill(value) {
-    this._fill = value;
-    
-    if (this.parent === undefined) return;
+  get contentBounds() {
+    const dimensions = { width: 0, height: 0 };
 
-    this.parent.refreshLayout();
+    for (const child of this.children) {
+      dimensions.width = Math.max(dimensions.width, child.width);
+      dimensions.height = Math.max(dimensions.height, child.height);
+    }
+
+    return dimensions;
+  }
+
+  constructor() {
+    super();
   }
 
   hasChild(child) {
@@ -108,9 +90,12 @@ export default class LayoutContainer {
     if (this.hasChild(child)) return false;
     
     this._children.push(child);
-    this.container.addChild(child.container);
     child._parent = this;
-
+    if (child.pixiContainer !== undefined) {
+      this.pixiContainer.addChild(child.pixiContainer);
+    } else if (child.wrapped !== undefined) {
+      this.pixiContainer.addChild(child.wrapped);
+    }
 
     this.refreshLayout();
 
@@ -121,7 +106,13 @@ export default class LayoutContainer {
     if (this.hasChild(child)) return false;
 
     this.children.splice(index, 0, child);
-    
+    child._parent = this;
+    if (child.pixiContainer !== undefined) {
+      this.pixiContainer.addChild(child.pixiContainer);
+    } else if (child.wrapped !== undefined) {
+      this.pixiContainer.addChild(child.wrapped);
+    }
+
     this.refreshLayout();
     
     return true;
@@ -133,7 +124,11 @@ export default class LayoutContainer {
 
     this.children.splice(index, 1);
     child.parent = undefined;
-    this.container.removeChild(child.container);
+    if (child.pixiContainer !== undefined) {
+      this.pixiContainer.removeChild(child.pixiContainer);
+    } else if (child.wrapped !== undefined) {
+      this.pixiContainer.removeChild(child.wrapped);
+    }
 
     this.refreshLayout();
 
@@ -142,8 +137,12 @@ export default class LayoutContainer {
   
   clearChildren() {
     for (const child of this.children) {
-      this.container.removeChild(child.container);
       child.parent = undefined;
+      if (child.pixiContainer !== undefined) {
+        this.pixiContainer.removeChild(child.pixiContainer);
+      } else if (child.wrapped !== undefined) {
+        this.pixiContainer.removeChild(child.wrapped);
+      }
     }
     this._children = [];
   }
@@ -152,13 +151,14 @@ export default class LayoutContainer {
     if (this.parent !== undefined) {
       this.parent.removeChild(this);
     }
-    this.container.destroy();
+    this.clearChildren();
+    this.pixiContainer.destroy();
   }
 
   /**
    * Layouts the children according to the layout scheme of this {LayoutContainer}. 
    * Must be implemented by inheriting types. 
-   * @virtual
+   * @abstract
    */
   refreshLayout() {
     console.warn("Not implemented");

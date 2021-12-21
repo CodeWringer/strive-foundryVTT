@@ -3,6 +3,9 @@ import { ActorEvents } from "../documents/actor.mjs";
 import AmbersteelItemItem from "../documents/subtypes/item/ambersteel-item-item.mjs";
 import InventoryIndex from "../dto/inventory-index.mjs";
 import CenterLayoutContainer from "../pixi/center-layout-container.mjs";
+import DisplayObjectWrap from "../pixi/display-object-wrap.mjs";
+import HorizontalLayoutContainer from "../pixi/horizontal-layout-container.mjs";
+import Spacer from "../pixi/spacer.mjs";
 import VerticalLayoutContainer from "../pixi/vertical-layout-container.mjs";
 import AmbersteelBaseActorSheet from "../sheets/subtypes/actor/ambersteel-base-actor-sheet.mjs";
 
@@ -13,7 +16,7 @@ const TILE_SIZE = Math.floor(WIDTH / MAX_COLUMNS);
 const PATH_TEXTURE_SLOT = "systems/ambersteel/images/box.png";
 const PATH_BULK = "systems/ambersteel/images/weight-hanging-solid.svg";
 const PATH_QUANTITY = "systems/ambersteel/images/hashtag-solid.svg";
-const PATH_SEND_TO_CHAT = "systems/ambersteel/images/dice-three-solid.svg";
+const PATH_SEND_TO_CHAT = "systems/ambersteel/images/comments-solid.svg";
 const PATH_DELETE = "systems/ambersteel/images/trash-solid.svg";
 const PATH_OPEN_SHEET = "systems/ambersteel/images/external-link-alt-solid.svg";
 
@@ -91,10 +94,10 @@ export class ItemGrid {
    */
   _stage = undefined;
   /**
-   * @type {CenterLayoutContainer}
+   * @type {PIXI.Container}
    * @private
    */
-  _rootContainer = new CenterLayoutContainer();
+  _rootContainer = new PIXI.Container();
   /**
    * Contains the sprites that represent the slot grid. 
    * @type {Array<PIXI.Sprite>}
@@ -158,7 +161,7 @@ export class ItemGrid {
     canvasElement.appendChild(this._pixiApp.view);
     this._stage = this._pixiApp.stage;
   
-    this._stage.addChild(this._rootContainer.container);
+    this._stage.addChild(this._rootContainer);
   
     this._setupTiles();
   
@@ -204,7 +207,7 @@ export class ItemGrid {
       spriteItemSlot.y = y * TILE_SIZE;
       spriteItemSlot.alpha = 0.5;
       this._spriteInstancesGrid.push(spriteItemSlot);
-      this._rootContainer.container.addChild(spriteItemSlot);
+      this._rootContainer.addChild(spriteItemSlot);
   
       x++;
       if (x == MAX_COLUMNS) {
@@ -223,10 +226,10 @@ export class ItemGrid {
   _setupItemsOnGrid(indices, items) {
     for (const index of indices) {
       const item = items.find((element) => { return element.id === index.id; });
-      const itemOnGrid = new ItemOnGrid(item);
+      const itemOnGrid = new ItemOnGrid(item, { width: TILE_SIZE, height: TILE_SIZE });
       this._itemsOnGrid.push(itemOnGrid);
 
-      this._rootContainer.addChild(itemOnGrid.rootContainer);
+      this._rootContainer.addChild(itemOnGrid.rootContainer.pixiContainer);
       itemOnGrid.x = index.x * TILE_SIZE;
       itemOnGrid.y = index.y * TILE_SIZE;
     }
@@ -284,66 +287,91 @@ class ItemOnGrid {
   _shape = { width: 1, height: 1 };
 
   /**
-   * Actual content container. 
-   * @type {PIXI.Container}
    * @private
    */
   _contentContainer = new VerticalLayoutContainer();
-  
+
   /**
    * Root Container which encompasses the entire item on grid. 
-   * @type {PIXI.Container}
+   * @type {CenterLayoutContainer}
    */
-  rootContainer = new CenterLayoutContainer(6, 6);
+  rootContainer = new CenterLayoutContainer(8, 8);
 
-  get x() { return this._rootRect.x; }
-  set x(value) {
-    this._rootRect.x = value;
-    this.rootContainer.x = value;
-  }
+  get x() { return this.rootContainer.x; }
+  set x(value) { this.rootContainer.x = value; }
 
-  get y() { return this._rootRect.y; }
-  set y(value) {
-    this._rootRect.y = value;
-    this.rootContainer.y = value;
-  }
+  get y() { return this.rootContainer.y; }
+  set y(value) { this.rootContainer.y = value; }
 
-  get width() { return this._rootRect.width; }
-  set width(value) {
-    this._rootRect.width = value;
-    this.rootContainer.width = value;
-  }
+  get width() { return this.rootContainer.width; }
+  set width(value) { this.rootContainer.width = value; }
 
-  get height() { return this._rootRect.height; }
-  set height(value) {
-    this._rootRect.height = value;
-    this.rootContainer.height = value;
-  }
+  get height() { return this.rootContainer.height; }
+  set height(value) { this.rootContainer.height = value; }
 
-  constructor(item) {
+  constructor(item, tileSize) {
     this._item = item;
     this._shape = item.data.data.shape;
+    
+    this.width = this._shape.width * tileSize.width;
+    this.height = this._shape.height * tileSize.height;
 
-    this._rootRect = new PIXI.Rectangle(
-      0, 
-      0, 
-      this._shape.width * TILE_SIZE, 
-      this._shape.height * TILE_SIZE
-    );
-
-    /*
     // Background sprite.
     this._spriteBackground = new PIXI.Sprite.from(TEXTURES.ITEM_SLOT);
-    this.rootContainer.addChild(this._spriteBackground);
-    this._spriteBackground.width = this._rootRect.width;
-    this._spriteBackground.height = this._rootRect.height;
-    
-    // Content container. 
+    this._spriteBackground.width = this.rootContainer.width;
+    this._spriteBackground.height = this.rootContainer.height;
+    this.rootContainer.pixiContainer.addChild(this._spriteBackground);
+
+    this._contentContainer.fill = true;
     this.rootContainer.addChild(this._contentContainer);
 
-    this._contentContainer.x = this._contentRect.x;
-    this._contentContainer.y = this._contentRect.y;
+    const HEADER_HEIGHT = 16;
 
+    this._headerContainer = new HorizontalLayoutContainer();
+    this._headerContainer.height = HEADER_HEIGHT;
+    this._contentContainer.addChild(this._headerContainer);
+
+    // SendToChat button. 
+    this._containerSendToChat = new CenterLayoutContainer();
+    this._containerSendToChat.width = HEADER_HEIGHT;
+    
+    this._spriteSendToChat = new DisplayObjectWrap(new PIXI.Sprite.from(TEXTURES.SEND_TO_CHAT));
+    this._spriteSendToChat.fill = true;
+    this._containerSendToChat.addChild(this._spriteSendToChat);
+
+    this._headerContainer.addChild(this._containerSendToChat);
+    
+    // Spacer between SendToChat and OpenSheet. 
+    const headerButtonsSpacer1 = new Spacer();
+    headerButtonsSpacer1.width = 6;
+    this._headerContainer.addChild(headerButtonsSpacer1);
+
+    // OpenSheet button. 
+    this._containerOpenSheet = new CenterLayoutContainer();
+    this._containerOpenSheet.width = HEADER_HEIGHT;
+    
+    this._spriteOpenSheet = new DisplayObjectWrap(new PIXI.Sprite.from(TEXTURES.OPEN_SHEET));
+    this._spriteOpenSheet.fill = true;
+    this._containerOpenSheet.addChild(this._spriteOpenSheet);
+
+    this._headerContainer.addChild(this._containerOpenSheet);
+    
+    // Header spacer. 
+    const headerSpacer2 = new Spacer();
+    headerSpacer2.fill = true;
+    this._headerContainer.addChild(headerSpacer2);
+
+    // Delete/Remove button.
+    this._containerDelete = new CenterLayoutContainer();
+    this._containerDelete.width = HEADER_HEIGHT;
+    
+    this._spriteDelete = new DisplayObjectWrap(new PIXI.Sprite.from(TEXTURES.DELETE));
+    this._spriteDelete.fill = true;
+    this._containerDelete.addChild(this._spriteDelete);
+
+    this._headerContainer.addChild(this._containerDelete);
+
+    /*
     // Icon sprite. 
     this._spriteIcon = new PIXI.Sprite.from(TEXTURES.BULK);
     this._contentContainer.addChild(this._spriteIcon);
@@ -389,21 +417,6 @@ class ItemOnGrid {
     this._containerBulk.x = this._contentRect.width - sizeBulk;
     this._containerBulk.y = this._textName.y - rectBulk.height;
     
-    // Delete/Remove button.
-    this._containerDelete = new PIXI.Container();
-    this._contentContainer.addChild(this._containerDelete);
-    
-    this._spriteDelete = new PIXI.Sprite.from(TEXTURES.DELETE);
-    this._spriteDelete.width = 14;
-    this._spriteDelete.height = 16;
-    this._containerDelete.addChild(this._spriteDelete);
-
-    this._containerDelete.x = this._contentRect.width - this._spriteDelete.width;
-
-    // SendToChat button. 
-
-    // OpenSheet button. 
-
     // Icon Sprite size.
     const spriteIconSize = getProportionalMaxSize(
       this._spriteIcon.width, 
@@ -411,8 +424,8 @@ class ItemOnGrid {
       this._contentRect.width, 
       this._contentRect.height - this._textName.height, 
     );
-    this._spriteIcon.width = spriteIconSize.w;
-    this._spriteIcon.height = spriteIconSize.h;
+    this._spriteIcon.width = spriteIconSize.width;
+    this._spriteIcon.height = spriteIconSize.height;
     centerOn(this._spriteIcon, this._contentRect, true);
     */
   }

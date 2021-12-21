@@ -38,14 +38,14 @@ export function centerOnY(displayObject, rectangle, isRelative = false) {
 }
 
 /**
- * @param {Number} w 
- * @param {Number} h 
- * @param {Number} maxW 
- * @param {Number} maxH 
+ * @param {Number} width 
+ * @param {Number} height 
+ * @param {Number} maxWidth 
+ * @param {Number} maxHeight 
  * @returns {Object} { w: {Number}, h: {Number} }
  */
-export function getProportionalMaxSize(w, h, maxW, maxH) {
-  const delta = { w: maxW - w, h: maxH - h };
+export function getProportionalMaxSize(width, height, maxWidth, maxHeight) {
+  const delta = { w: maxWidth - width, h: maxHeight - height };
   const deltaMin = Math.min(delta.w, delta.h);
-  return { w: w + deltaMin, h: h + deltaMin };
+  return { width: width + deltaMin, height: height + deltaMin };
 }
