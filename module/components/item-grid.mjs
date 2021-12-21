@@ -2,6 +2,7 @@ import { AmbersteelActor } from "../documents/actor.mjs";
 import { ActorEvents } from "../documents/actor.mjs";
 import AmbersteelItemItem from "../documents/subtypes/item/ambersteel-item-item.mjs";
 import InventoryIndex from "../dto/inventory-index.mjs";
+import { centerOn, getProportionalMaxSize } from "../pixi/pixi-utility.mjs";
 import AmbersteelBaseActorSheet from "../sheets/subtypes/actor/ambersteel-base-actor-sheet.mjs";
 
 const WIDTH = 550;
@@ -294,18 +295,18 @@ class ItemOnGrid {
 
   /**
    * Bounding rectangle. 
-   * @type {Rectangle}
+   * @type {PIXI.Rectangle}
    * @private
    */
-  _rootRect = new Rectangle();
+  _rootRect = new PIXI.Rectangle();
 
   /**
    * Bounding rectangle of the padded content. 
    * Relative to {self._rootRect}. 
-   * @type {Rectangle}
+   * @type {PIXI.Rectangle}
    * @private
    */
-  _contentRect = new Rectangle();
+  _contentRect = new PIXI.Rectangle();
   
   /**
    * Actual content container. 
@@ -350,24 +351,24 @@ class ItemOnGrid {
     this._item = item;
     this._shape = item.data.data.shape;
 
-    this._rootRect = new Rectangle(
+    this._rootRect = new PIXI.Rectangle(
       0, 
       0, 
       this._shape.width * TILE_SIZE, 
       this._shape.height * TILE_SIZE
     );
-    this._contentRect = new Rectangle(
+    this._contentRect = new PIXI.Rectangle(
       PADDING.x, 
       PADDING.y, 
-      this._rootRect.w - (PADDING.x * 2), 
-      this._rootRect.h - (PADDING.y * 2)
+      this._rootRect.width - (PADDING.x * 2), 
+      this._rootRect.height - (PADDING.y * 2)
     );
 
     // Background sprite.
     this._spriteBackground = new PIXI.Sprite.from(TEXTURES.ITEM_SLOT);
     this.rootContainer.addChild(this._spriteBackground);
-    this._spriteBackground.width = this._rootRect.w;
-    this._spriteBackground.height = this._rootRect.h;
+    this._spriteBackground.width = this._rootRect.width;
+    this._spriteBackground.height = this._rootRect.height;
     
     // Content container. 
     this.rootContainer.addChild(this._contentContainer);
@@ -383,8 +384,8 @@ class ItemOnGrid {
     // Name.
     this._textName = new PIXI.Text(item.name, TEXT_SETTINGS);
     this._contentContainer.addChild(this._textName);
-    this._textName.x = (this._contentRect.w / 2) - (this._textName.width / 2);
-    this._textName.y = this._contentRect.h - this._textName.height;
+    this._textName.x = (this._contentRect.width / 2) - (this._textName.width / 2);
+    this._textName.y = this._contentRect.height - this._textName.height;
     
     // Quantity.
     this._containerQuantity = new PIXI.Container();
@@ -405,7 +406,7 @@ class ItemOnGrid {
     this._containerBulk = new PIXI.Container();
     this._contentContainer.addChild(this._containerBulk);
     const sizeBulk = 24;
-    const rectBulk = new Rectangle(this._contentRect.w - sizeBulk, this._contentRect.h - sizeBulk, sizeBulk, sizeBulk);
+    const rectBulk = new PIXI.Rectangle(this._contentRect.width - sizeBulk, this._contentRect.height - sizeBulk, sizeBulk, sizeBulk);
 
     this._spriteBulk = new PIXI.Sprite.from(TEXTURES.BULK);
     this._containerBulk.addChild(this._spriteBulk);
@@ -417,7 +418,7 @@ class ItemOnGrid {
     centerOn(this._textBulk, rectBulk, true);
     this._textBulk.y = this._textBulk.y + 3;
     
-    this._containerBulk.x = this._contentRect.w - sizeBulk;
+    this._containerBulk.x = this._contentRect.width - sizeBulk;
     this._containerBulk.y = this._textName.y - rectBulk.height;
     
     // Delete/Remove button.
@@ -429,7 +430,7 @@ class ItemOnGrid {
     this._spriteDelete.height = 16;
     this._containerDelete.addChild(this._spriteDelete);
 
-    this._containerDelete.x = this._contentRect.w - this._spriteDelete.width;
+    this._containerDelete.x = this._contentRect.width - this._spriteDelete.width;
 
     // SendToChat button. 
 
@@ -439,8 +440,8 @@ class ItemOnGrid {
     const spriteIconSize = getProportionalMaxSize(
       this._spriteIcon.width, 
       this._spriteIcon.height, 
-      this._contentRect.w, 
-      this._contentRect.h - this._textName.height, 
+      this._contentRect.width, 
+      this._contentRect.height - this._textName.height, 
     );
     this._spriteIcon.width = spriteIconSize.w;
     this._spriteIcon.height = spriteIconSize.h;
@@ -452,111 +453,5 @@ class ItemOnGrid {
    */
   rotate() {
     console.warn("Not implemented");
-  }
-}
-
-/**
- * Centers the given PIXI.DisplayObject on the given bounds rectangle. 
- * @param {PIXI.DisplayObject} displayObject A Sprite to center. 
- * @param {Rectangle} rectangle A rectangle that represents the bounds to center on. 
- * @param {Boolean} isRelative If true, will return a relative offset to the rectangle. 
- */
-function centerOn(displayObject, rectangle, isRelative = false) {
-  centerOnX(displayObject, rectangle, isRelative);
-  centerOnY(displayObject, rectangle, isRelative);
-}
-
-/**
- * Horizontally centers the given PIXI.DisplayObject on the given bounds rectangle. 
- * @param {PIXI.DisplayObject} displayObject A Sprite to center. 
- * @param {Rectangle} rectangle A rectangle that represents the bounds to center on. 
- * @param {Boolean} isRelative If true, will return a relative offset to the rectangle. 
- */
-function centerOnX(displayObject, rectangle, isRelative = false) {
-  displayObject.x = (rectangle.w / 2) - (displayObject.width / 2);
-
-  if (!isRelative) {
-    displayObject.x = displayObject.x + rectangle.x;
-  }
-}
-
-/**
- * Horizontally centers the given PIXI.DisplayObject on the given bounds rectangle. 
- * @param {PIXI.DisplayObject} displayObject A Sprite to center. 
- * @param {Rectangle} rectangle A rectangle that represents the bounds to center on. 
- * @param {Boolean} isRelative If true, will return a relative offset to the rectangle. 
- */
-function centerOnY(displayObject, rectangle, isRelative = false) {
-  displayObject.y = (rectangle.h / 2) - (displayObject.height / 2);
-
-  if (!isRelative) {
-    displayObject.y = displayObject.y + rectangle.y;
-  }
-}
-
-/**
- * @param {Number} w 
- * @param {Number} h 
- * @param {Number} maxW 
- * @param {Number} maxH 
- * @returns {Object} { w: {Number}, h: {Number} }
- */
-function getProportionalMaxSize(w, h, maxW, maxH) {
-  const delta = { w: maxW - w, h: maxH - h };
-  const deltaMin = Math.min(delta.w, delta.h);
-  return { w: w + deltaMin, h: h + deltaMin };
-}
-
-class Rectangle {
-  constructor(x = 0, y = 0, w = 0, h = 0) {
-    this.x = x;
-    this.y = y;
-    this.w = w;
-    this.h = h;
-  }
-
-  get width() { return this.w; }
-  set width(value) { this.w = value; }
-  
-  get height() { return this.h; }
-  set height(value) { this.h = value; }
-
-  get position() { return { x: this.x, y: this.y }; }
-  get size() { return { w: this.w, h: this.h }; }
-
-  get right() { return this.x + this.w; }
-  /**
-   * Shifts the right edge, while leaving the left edge where it is. 
-   */
-  set right(value) {
-    this.w = Math.max(this.left, value) - this.left;
-  }
-  
-  get left() { return this.x; }
-  /**
-   * Shifts the left edge, while leaving the right edge where it is. 
-   */
-  set left(value) {
-    const oldRight = this.right; 
-    this.x = value;
-    this.w = Math.max(0, oldRight - this.x);
-  }
-  
-  get top() { return this.y; }
-  /**
-   * Shifts the top edge, while leaving the bottom edge where it is. 
-   */
-  set top(value) {
-    const oldBottom = this.bottom; 
-    this.y = value;
-    this.h = Math.max(0, oldBottom - this.y);
-  }
-  
-  get bottom() { return this.y + this.h; }
-  /**
-   * Shifts the bottom edge, while leaving the top edge where it is. 
-   */
-  set bottom(value) {
-    this.h = Math.max(this.top, value) - this.top;
   }
 }
