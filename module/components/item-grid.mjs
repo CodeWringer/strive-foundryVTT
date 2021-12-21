@@ -1,31 +1,43 @@
 import { AmbersteelActor } from "../documents/actor.mjs";
 import { ActorEvents } from "../documents/actor.mjs";
+import AmbersteelItemItem from "../documents/subtypes/item/ambersteel-item-item.mjs";
 import InventoryIndex from "../dto/inventory-index.mjs";
 import AmbersteelBaseActorSheet from "../sheets/subtypes/actor/ambersteel-base-actor-sheet.mjs";
 
 const WIDTH = 550;
 const MAX_COLUMNS = 4;
 const TILE_SIZE = Math.floor(WIDTH / MAX_COLUMNS);
-const PATH_TEXTURE_ITEM_SLOT = "systems/ambersteel/images/box.png";
-const PATH_TEXTURE_ITEM_BULK = "systems/ambersteel/images/weight-hanging-solid.svg";
 
-const _loader = new PIXI.Loader();
-const _textures = {};
+const PATH_TEXTURE_SLOT = "systems/ambersteel/images/box.png";
+const PATH_BULK = "systems/ambersteel/images/weight-hanging-solid.svg";
+const PATH_QUANTITY = "systems/ambersteel/images/hashtag-solid.svg";
+const PATH_SEND_TO_CHAT = "systems/ambersteel/images/dice-three-solid.svg";
+const PATH_DELETE = "systems/ambersteel/images/trash-solid.svg";
+const PATH_OPEN_SHEET = "systems/ambersteel/images/external-link-alt-solid.svg";
 
-_loader.add("itemSlot", PATH_TEXTURE_ITEM_SLOT);
-_loader.add("itemBulk", PATH_TEXTURE_ITEM_BULK);
+const LOADER = new PIXI.Loader();
+const TEXTURES = {};
 
-_loader.load((loader, resources) => {
-  _textures.TEXTURE_ITEM_SLOT = resources.itemSlot.texture,
-  _textures.TEXTURE_ITEM_BULK = resources.itemBulk.texture
+LOADER.add("itemSlot", PATH_TEXTURE_SLOT);
+LOADER.add("itemBulk", PATH_BULK);
+LOADER.add("itemQuantity", PATH_QUANTITY);
+LOADER.add("itemSendToChat", PATH_SEND_TO_CHAT);
+LOADER.add("itemDelete", PATH_DELETE);
+LOADER.add("itemOpenSheet", PATH_OPEN_SHEET);
+
+LOADER.load((loader, resources) => {
+  TEXTURES.ITEM_SLOT = resources.itemSlot.texture,
+  TEXTURES.BULK = resources.itemBulk.texture,
+  TEXTURES.QUANTITY = resources.itemQuantity.texture,
+  TEXTURES.SEND_TO_CHAT = resources.itemSendToChat.texture,
+  TEXTURES.DELETE = resources.itemDelete.texture,
+  TEXTURES.OPEN_SHEET = resources.itemOpenSheet.texture
 });
 
 const FONT_FAMILY = "Black-Chancery";
 
-const TEXT_SETTINGS_TITLE = {fontFamily : FONT_FAMILY, fontSize: 18, fill : 0x191813, align : 'center'};
-const TEXT_SETTINGS_NORMAL = {fontFamily : FONT_FAMILY, fontSize: 14, fill : 0x191813, align : 'center'};
-const TEXT_SETTINGS_INVERSE = {fontFamily : FONT_FAMILY, fontSize: 14, fill : 0xffffff, align : 'center'};
-const TEXT_SETTINGS_INVERSE_TITLE = {fontFamily : FONT_FAMILY, fontSize: 18, fill : 0xffffff, align : 'center'};
+const TEXT_SETTINGS = {fontFamily : FONT_FAMILY, fontSize: 18, fontWeight: "bolder", fill : 0x191813, align : 'center'};
+const TEXT_SETTINGS_INVERSE = {fontFamily : FONT_FAMILY, fontSize: 18, fontWeight: "bolder", fill : 0xffffff, align : 'center'};
 
 const PADDING = { x: 6, y: 6 };
 
@@ -70,33 +82,40 @@ export class ItemGrid {
 
   /**
    * @type {PIXI.App}
+   * @private
    */
   _pixiApp = undefined;
   /**
    * @type {PIXI.Stage}
+   * @private
    */
   _stage = undefined;
   /**
    * @type {PIXI.Container}
+   * @private
    */
   _rootContainer = undefined;
   /**
    * Contains the sprites that represent the slot grid. 
    * @type {Array<PIXI.Sprite>}
+   * @private
    */
   _spriteInstancesGrid = [];
   /**
    * Contains the item root containers. 
    * @type {Array<PIXI.Container>}
+   * @private
    */
   _itemsOnGrid = [];
-
+  
   /**
    * @type {AmbersteelBaseActorSheet}
+   * @private
    */
   _actorSheet = undefined;
   /**
    * @type {AmbersteelActor}
+   * @private
    */
   _actor = undefined;
 
@@ -181,7 +200,7 @@ export class ItemGrid {
     let y = 0;
   
     for (let i = 0; i < this.tileCount; i++) {
-      const spriteItemSlot = PIXI.Sprite.from(_textures.TEXTURE_ITEM_SLOT);
+      const spriteItemSlot = PIXI.Sprite.from(TEXTURES.ITEM_SLOT);
       spriteItemSlot.width = TILE_SIZE;
       spriteItemSlot.height = TILE_SIZE;
       spriteItemSlot.x = x * TILE_SIZE;
@@ -205,87 +224,17 @@ export class ItemGrid {
    * @private
    */
   _setupItemsOnGrid(indices, items) {
-    // TODO: Place every possession on the grid. 
     for (const index of indices) {
       const item = items.find((element) => { return element.id === index.id; });
-      const itemOnGrid = this._setupItem(item);
+      const itemOnGrid = new ItemOnGrid(this._pixiApp, item);
       this._itemsOnGrid.push(itemOnGrid);
 
-      this._rootContainer.addChild(itemOnGrid);
+      this._rootContainer.addChild(itemOnGrid.rootContainer);
       itemOnGrid.x = index.x * TILE_SIZE;
       itemOnGrid.y = index.y * TILE_SIZE;
     }
   }
 
-  _setupItem(item) {
-    const rootContainer = new PIXI.Container();
-    const shape = item.data.data.shape;
-
-    const rootSize = { w: shape.width * TILE_SIZE, h: shape.height * TILE_SIZE };
-    const contentBox = { 
-      x: PADDING.x,
-      y: PADDING.y,
-      w: rootSize.w - (PADDING.x * 2), 
-      h: rootSize.h - (PADDING.y * 2) 
-    };
-
-    // Background sprite.
-    const spriteBackground = new PIXI.Sprite.from(_textures.TEXTURE_ITEM_SLOT);
-    rootContainer.addChild(spriteBackground);
-
-    spriteBackground.width = rootSize.w;
-    spriteBackground.height = rootSize.h;
-    
-    // Content container. 
-    const contentContainer = new PIXI.Container();
-    rootContainer.addChild(contentContainer);
-
-    contentContainer.x = contentBox.x;
-    contentContainer.y = contentBox.y;
-
-    // Icon sprite. 
-    const spriteIcon = new PIXI.Sprite.from(_textures.TEXTURE_ITEM_BULK);
-    // container.addChild(spriteIcon);
-
-    // Name.
-    const textName = new PIXI.Text(item.name, TEXT_SETTINGS_TITLE);
-    contentContainer.addChild(textName);
-    textName.x = (contentBox.w / 2) - (textName.width / 2);
-    textName.y = contentBox.h - textName.height;
-    
-    // Quantity.
-    
-
-    // Bulk.
-    const containerBulk = new PIXI.Container();
-    const sizeBulk = 24;
-    const rectBulk = new Rectangle(contentBox.w - sizeBulk, contentBox.h - sizeBulk, sizeBulk, sizeBulk);
-
-    const spriteBulk = new PIXI.Sprite.from(_textures.TEXTURE_ITEM_BULK);
-    spriteBulk.width = sizeBulk;
-    spriteBulk.height = sizeBulk;
-    containerBulk.addChild(spriteBulk);
-
-    const textBulk = new PIXI.Text(item.data.data.bulk, TEXT_SETTINGS_INVERSE_TITLE);
-    containerBulk.addChild(textBulk);
-    centerOn(textBulk, rectBulk, true);
-    textBulk.y = textBulk.y + 3;
-
-    contentContainer.addChild(containerBulk);
-    containerBulk.x = contentBox.w - sizeBulk;
-
-    // Delete/Remove button.
-
-    // SendToChat button. 
-
-    // OpenSheet button. 
-
-    // Calculate size, based on children's bounds. 
-    contentContainer.calculateBounds();
-
-    return rootContainer;
-  }
-  
   /**
    * Sets up interactivity. 
    * @private
@@ -320,6 +269,189 @@ export class ItemGrid {
     for (const eventListener in this._eventListeners) {
       this._actor.off(eventListener);
     }
+  }
+}
+
+// TODO: Implement proper layouting-logic or figure out how to make yoga layout for PixiJS work. 
+class ItemOnGrid {
+  /**
+   * @type {PIXI.Application}
+   * @private
+   */
+  _pixiApp = undefined;
+
+  /**
+   * @type {AmbersteelItemItem}
+   * @private
+   */
+  _item = undefined;
+  
+  /**
+   * @type {Object}
+   * @private
+   */
+  _shape = { width: 1, height: 1 };
+
+  /**
+   * Bounding rectangle. 
+   * @type {Rectangle}
+   * @private
+   */
+  _rootRect = new Rectangle();
+
+  /**
+   * Bounding rectangle of the padded content. 
+   * Relative to {self._rootRect}. 
+   * @type {Rectangle}
+   * @private
+   */
+  _contentRect = new Rectangle();
+  
+  /**
+   * Actual content container. 
+   * Has padding. 
+   * @type {PIXI.Container}
+   * @private
+   */
+  _contentContainer = new PIXI.Container();
+  
+  /**
+   * Root Container which encompasses the entire item on grid. 
+   * @type {PIXI.Container}
+   */
+  rootContainer = new PIXI.Container();
+
+  get x() { return this._rootRect.x; }
+  set x(value) {
+    this._rootRect.x = value;
+    this.rootContainer.x = value;
+  }
+
+  get y() { return this._rootRect.y; }
+  set y(value) {
+    this._rootRect.y = value;
+    this.rootContainer.y = value;
+  }
+
+  get width() { return this._rootRect.width; }
+  set width(value) {
+    this._rootRect.width = value;
+    this.rootContainer.width = value;
+  }
+
+  get height() { return this._rootRect.height; }
+  set height(value) {
+    this._rootRect.height = value;
+    this.rootContainer.height = value;
+  }
+
+  constructor(pixiApp, item) {
+    this._pixiApp = pixiApp;
+    this._item = item;
+    this._shape = item.data.data.shape;
+
+    this._rootRect = new Rectangle(
+      0, 
+      0, 
+      this._shape.width * TILE_SIZE, 
+      this._shape.height * TILE_SIZE
+    );
+    this._contentRect = new Rectangle(
+      PADDING.x, 
+      PADDING.y, 
+      this._rootRect.w - (PADDING.x * 2), 
+      this._rootRect.h - (PADDING.y * 2)
+    );
+
+    // Background sprite.
+    this._spriteBackground = new PIXI.Sprite.from(TEXTURES.ITEM_SLOT);
+    this.rootContainer.addChild(this._spriteBackground);
+    this._spriteBackground.width = this._rootRect.w;
+    this._spriteBackground.height = this._rootRect.h;
+    
+    // Content container. 
+    this.rootContainer.addChild(this._contentContainer);
+
+    this._contentContainer.x = this._contentRect.x;
+    this._contentContainer.y = this._contentRect.y;
+
+    // Icon sprite. 
+    this._spriteIcon = new PIXI.Sprite.from(TEXTURES.BULK);
+    this._contentContainer.addChild(this._spriteIcon);
+    this._spriteIcon.alpha = 0.5;
+
+    // Name.
+    this._textName = new PIXI.Text(item.name, TEXT_SETTINGS);
+    this._contentContainer.addChild(this._textName);
+    this._textName.x = (this._contentRect.w / 2) - (this._textName.width / 2);
+    this._textName.y = this._contentRect.h - this._textName.height;
+    
+    // Quantity.
+    this._containerQuantity = new PIXI.Container();
+    this._contentContainer.addChild(this._containerQuantity);
+    
+    this._spriteQuantity = new PIXI.Sprite.from(TEXTURES.QUANTITY);
+    this._containerQuantity.addChild(this._spriteQuantity);
+    this._spriteQuantity.width = 14;
+    this._spriteQuantity.height = 16;
+    
+    this._textQuantity = new PIXI.Text(item.data.data.quantity, TEXT_SETTINGS);
+    this._containerQuantity.addChild(this._textQuantity);
+    this._textQuantity.x = this._spriteQuantity.x + this._spriteQuantity.width + 3;
+
+    this._containerQuantity.y = this._textName.y - this._containerQuantity.height;
+
+    // Bulk.
+    this._containerBulk = new PIXI.Container();
+    this._contentContainer.addChild(this._containerBulk);
+    const sizeBulk = 24;
+    const rectBulk = new Rectangle(this._contentRect.w - sizeBulk, this._contentRect.h - sizeBulk, sizeBulk, sizeBulk);
+
+    this._spriteBulk = new PIXI.Sprite.from(TEXTURES.BULK);
+    this._containerBulk.addChild(this._spriteBulk);
+    this._spriteBulk.width = sizeBulk;
+    this._spriteBulk.height = sizeBulk;
+    
+    this._textBulk = new PIXI.Text(item.data.data.bulk, TEXT_SETTINGS_INVERSE);
+    this._containerBulk.addChild(this._textBulk);
+    centerOn(this._textBulk, rectBulk, true);
+    this._textBulk.y = this._textBulk.y + 3;
+    
+    this._containerBulk.x = this._contentRect.w - sizeBulk;
+    this._containerBulk.y = this._textName.y - rectBulk.height;
+    
+    // Delete/Remove button.
+    this._containerDelete = new PIXI.Container();
+    this._contentContainer.addChild(this._containerDelete);
+    
+    this._spriteDelete = new PIXI.Sprite.from(TEXTURES.DELETE);
+    this._spriteDelete.width = 14;
+    this._spriteDelete.height = 16;
+    this._containerDelete.addChild(this._spriteDelete);
+
+    this._containerDelete.x = this._contentRect.w - this._spriteDelete.width;
+
+    // SendToChat button. 
+
+    // OpenSheet button. 
+
+    // Icon Sprite size.
+    const spriteIconSize = getProportionalMaxSize(
+      this._spriteIcon.width, 
+      this._spriteIcon.height, 
+      this._contentRect.w, 
+      this._contentRect.h - this._textName.height, 
+    );
+    this._spriteIcon.width = spriteIconSize.w;
+    this._spriteIcon.height = spriteIconSize.h;
+    centerOn(this._spriteIcon, this._contentRect, true);
+  }
+
+  /**
+   * Toggles between the vertical and horizontal orientation. 
+   */
+  rotate() {
+    console.warn("Not implemented");
   }
 }
 
@@ -362,8 +494,21 @@ function centerOnY(displayObject, rectangle, isRelative = false) {
   }
 }
 
+/**
+ * @param {Number} w 
+ * @param {Number} h 
+ * @param {Number} maxW 
+ * @param {Number} maxH 
+ * @returns {Object} { w: {Number}, h: {Number} }
+ */
+function getProportionalMaxSize(w, h, maxW, maxH) {
+  const delta = { w: maxW - w, h: maxH - h };
+  const deltaMin = Math.min(delta.w, delta.h);
+  return { w: w + deltaMin, h: h + deltaMin };
+}
+
 class Rectangle {
-  constructor(x, y, w, h) {
+  constructor(x = 0, y = 0, w = 0, h = 0) {
     this.x = x;
     this.y = y;
     this.w = w;
@@ -371,7 +516,47 @@ class Rectangle {
   }
 
   get width() { return this.w; }
+  set width(value) { this.w = value; }
+  
   get height() { return this.h; }
+  set height(value) { this.h = value; }
+
   get position() { return { x: this.x, y: this.y }; }
   get size() { return { w: this.w, h: this.h }; }
+
+  get right() { return this.x + this.w; }
+  /**
+   * Shifts the right edge, while leaving the left edge where it is. 
+   */
+  set right(value) {
+    this.w = Math.max(this.left, value) - this.left;
+  }
+  
+  get left() { return this.x; }
+  /**
+   * Shifts the left edge, while leaving the right edge where it is. 
+   */
+  set left(value) {
+    const oldRight = this.right; 
+    this.x = value;
+    this.w = Math.max(0, oldRight - this.x);
+  }
+  
+  get top() { return this.y; }
+  /**
+   * Shifts the top edge, while leaving the bottom edge where it is. 
+   */
+  set top(value) {
+    const oldBottom = this.bottom; 
+    this.y = value;
+    this.h = Math.max(0, oldBottom - this.y);
+  }
+  
+  get bottom() { return this.y + this.h; }
+  /**
+   * Shifts the bottom edge, while leaving the top edge where it is. 
+   */
+  set bottom(value) {
+    this.h = Math.max(this.top, value) - this.top;
+  }
 }

@@ -7,3 +7,8 @@ This is the Ambersteel table-top role-playing game system for FoundryVTT.
   * https://fontawesome.com/license#license
   * Assets:
     * weight-hanging (unaltered)
+    * trash-solid (unaltered)
+    * external-link-alt-solid (unaltered)
+    * comments-solid (unaltered)
+    * dice-three-solid (unaltered)
+    * hashtag-solid (unaltered)
