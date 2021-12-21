@@ -136,8 +136,10 @@
       "templates": ["base"],
       "quantity": 1,
       "maxQuantity": 1,
-      "bulk": 1,
-      "shape": "straight",
+      "shape": {
+        "width": 1,
+        "height": 1
+      },
       "isOnPerson": false
     },
     "injury": {

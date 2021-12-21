@@ -11,19 +11,29 @@ export default class AmbersteelItemItem extends AmbersteelBaseItem {
     this.parent.chatMessageTemplate = this.chatMessageTemplate;
     this.parent.getChatData = this.getChatData.bind(this);
   }
-
+  
   /** @override */
   get img() { return "icons/svg/item-bag.svg"; }
-
+  
   /**
    * Chat message template path. 
    * @type {String}
    */
   get chatMessageTemplate() { return TEMPLATES.ITEM_CHAT_MESSAGE; }
-
+  
   /** @override */
   prepareData() {
     this.parent.data.img = this.img;
+  }
+  
+  prepareDerivedData() {
+    // Derive bulk from shape. 
+    const shape = this.parent.data.data.shape;
+    if (shape === undefined) {
+      console.warn("Shape on item undefined! Using fallback '{ width: 1, height: 1 }'");
+      shape = { width: 1, height: 1 };
+    }
+    this.parent.data.data.bulk = shape.width * shape.height;
   }
 
   /** @override */
