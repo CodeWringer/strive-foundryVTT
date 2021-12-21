@@ -227,7 +227,7 @@ export class ItemGrid {
   _setupItemsOnGrid(indices, items) {
     for (const index of indices) {
       const item = items.find((element) => { return element.id === index.id; });
-      const itemOnGrid = new ItemOnGrid(this._pixiApp, item);
+      const itemOnGrid = new ItemOnGrid(item);
       this._itemsOnGrid.push(itemOnGrid);
 
       this._rootContainer.addChild(itemOnGrid.rootContainer);
@@ -275,12 +275,6 @@ export class ItemGrid {
 
 // TODO: Implement proper layouting-logic or figure out how to make yoga layout for PixiJS work. 
 class ItemOnGrid {
-  /**
-   * @type {PIXI.Application}
-   * @private
-   */
-  _pixiApp = undefined;
-
   /**
    * @type {AmbersteelItemItem}
    * @private
@@ -346,8 +340,7 @@ class ItemOnGrid {
     this.rootContainer.height = value;
   }
 
-  constructor(pixiApp, item) {
-    this._pixiApp = pixiApp;
+  constructor(item) {
     this._item = item;
     this._shape = item.data.data.shape;
 
