@@ -18,6 +18,12 @@ export default class CenterLayoutContainer extends LayoutContainer {
     this.refreshLayout();
   }
 
+  constructor(paddingX, paddingY) {
+    super();
+    
+    this.padding = { x: paddingX, y: paddingY };
+  }
+
   refreshLayout() {
     for (const child of this.children) {
       if (child.fill === true) {

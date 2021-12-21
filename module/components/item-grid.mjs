@@ -2,7 +2,8 @@ import { AmbersteelActor } from "../documents/actor.mjs";
 import { ActorEvents } from "../documents/actor.mjs";
 import AmbersteelItemItem from "../documents/subtypes/item/ambersteel-item-item.mjs";
 import InventoryIndex from "../dto/inventory-index.mjs";
-import { centerOn, getProportionalMaxSize } from "../pixi/pixi-utility.mjs";
+import CenterLayoutContainer from "../pixi/center-layout-container.mjs";
+import VerticalLayoutContainer from "../pixi/vertical-layout-container.mjs";
 import AmbersteelBaseActorSheet from "../sheets/subtypes/actor/ambersteel-base-actor-sheet.mjs";
 
 const WIDTH = 550;
@@ -39,8 +40,6 @@ const FONT_FAMILY = "Black-Chancery";
 
 const TEXT_SETTINGS = {fontFamily : FONT_FAMILY, fontSize: 18, fontWeight: "bolder", fill : 0x191813, align : 'center'};
 const TEXT_SETTINGS_INVERSE = {fontFamily : FONT_FAMILY, fontSize: 18, fontWeight: "bolder", fill : 0xffffff, align : 'center'};
-
-const PADDING = { x: 6, y: 6 };
 
 function MOCK_ACTOR_SHEET() { return {
   getActor() { return this.actor; },
@@ -92,10 +91,10 @@ export class ItemGrid {
    */
   _stage = undefined;
   /**
-   * @type {PIXI.Container}
+   * @type {CenterLayoutContainer}
    * @private
    */
-  _rootContainer = undefined;
+  _rootContainer = new CenterLayoutContainer();
   /**
    * Contains the sprites that represent the slot grid. 
    * @type {Array<PIXI.Sprite>}
@@ -159,15 +158,12 @@ export class ItemGrid {
     canvasElement.appendChild(this._pixiApp.view);
     this._stage = this._pixiApp.stage;
   
-    this._rootContainer = new PIXI.Container();
-    this._stage.addChild(this._rootContainer);
+    this._stage.addChild(this._rootContainer.container);
   
     this._setupTiles();
   
-    // TODO: Must work with actor.data.data.assets.inventory, which is a list of {InventoryIndex}
-
-    const indices = this._actor.data.data.assets.inventory;
-    const items = this._actor.possessions;
+    const indices = this._actor.data.data.assets.inventory; // A list of {InventoryIndex}
+    const items = this._actor.possessions; // A list of {AmbersteelItemItem}
     this._setupItemsOnGrid(indices, items);
     
     this._setupInteractivity();
@@ -208,7 +204,7 @@ export class ItemGrid {
       spriteItemSlot.y = y * TILE_SIZE;
       spriteItemSlot.alpha = 0.5;
       this._spriteInstancesGrid.push(spriteItemSlot);
-      this._rootContainer.addChild(spriteItemSlot);
+      this._rootContainer.container.addChild(spriteItemSlot);
   
       x++;
       if (x == MAX_COLUMNS) {
@@ -288,33 +284,17 @@ class ItemOnGrid {
   _shape = { width: 1, height: 1 };
 
   /**
-   * Bounding rectangle. 
-   * @type {PIXI.Rectangle}
-   * @private
-   */
-  _rootRect = new PIXI.Rectangle();
-
-  /**
-   * Bounding rectangle of the padded content. 
-   * Relative to {self._rootRect}. 
-   * @type {PIXI.Rectangle}
-   * @private
-   */
-  _contentRect = new PIXI.Rectangle();
-  
-  /**
    * Actual content container. 
-   * Has padding. 
    * @type {PIXI.Container}
    * @private
    */
-  _contentContainer = new PIXI.Container();
+  _contentContainer = new VerticalLayoutContainer();
   
   /**
    * Root Container which encompasses the entire item on grid. 
    * @type {PIXI.Container}
    */
-  rootContainer = new PIXI.Container();
+  rootContainer = new CenterLayoutContainer(6, 6);
 
   get x() { return this._rootRect.x; }
   set x(value) {
@@ -350,13 +330,8 @@ class ItemOnGrid {
       this._shape.width * TILE_SIZE, 
       this._shape.height * TILE_SIZE
     );
-    this._contentRect = new PIXI.Rectangle(
-      PADDING.x, 
-      PADDING.y, 
-      this._rootRect.width - (PADDING.x * 2), 
-      this._rootRect.height - (PADDING.y * 2)
-    );
 
+    /*
     // Background sprite.
     this._spriteBackground = new PIXI.Sprite.from(TEXTURES.ITEM_SLOT);
     this.rootContainer.addChild(this._spriteBackground);
@@ -439,6 +414,7 @@ class ItemOnGrid {
     this._spriteIcon.width = spriteIconSize.w;
     this._spriteIcon.height = spriteIconSize.h;
     centerOn(this._spriteIcon, this._contentRect, true);
+    */
   }
 
   /**

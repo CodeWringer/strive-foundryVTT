@@ -61,6 +61,7 @@ export default class LayoutContainer {
   set width(value) {
     this._w = value;
     this.container.width = value;
+    this.refreshLayout();
   }
 
   _h = 0;
@@ -68,6 +69,7 @@ export default class LayoutContainer {
   set height(value) {
     this._h = value;
     this.container.height = value;
+    this.refreshLayout();
   }
 
   _fill = false;
