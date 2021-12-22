@@ -229,7 +229,7 @@ export class ItemGrid {
       const itemOnGrid = new ItemOnGrid(item, { width: TILE_SIZE, height: TILE_SIZE });
       this._itemsOnGrid.push(itemOnGrid);
 
-      this._rootContainer.addChild(itemOnGrid.rootContainer.pixiContainer);
+      this._rootContainer.addChild(itemOnGrid.rootContainer.wrapped);
       itemOnGrid.x = index.x * TILE_SIZE;
       itemOnGrid.y = index.y * TILE_SIZE;
     }
@@ -336,7 +336,7 @@ class ItemOnGrid {
     this._spriteBackground = new PIXI.Sprite.from(TEXTURES.ITEM_SLOT);
     this._spriteBackground.width = this.rootContainer.width;
     this._spriteBackground.height = this.rootContainer.height;
-    this.rootContainer.pixiContainer.addChild(this._spriteBackground);
+    this.rootContainer.wrapped.addChild(this._spriteBackground);
 
     this._contentContainer.fill = true;
     this.rootContainer.addChild(this._contentContainer);
@@ -406,11 +406,11 @@ class ItemOnGrid {
     // Quantity.
     this._containerQuantity = new HorizontalLayoutContainer();
     this._containerQuantity.height = META_HEIGHT;
-    this._containerQuantity.width = 50;
+    this._containerQuantity.width = META_HEIGHT + 6 + META_HEIGHT;
     this._containerMeta.addChild(this._containerQuantity);
     
     const containerQuantityImage = new CenterLayoutContainer();
-    containerQuantityImage.height = META_HEIGHT;
+    containerQuantityImage.width = META_HEIGHT;
     this._containerQuantity.addChild(containerQuantityImage);
 
     this._spriteQuantity = new DisplayObjectWrap(new PIXI.Sprite.from(TEXTURES.QUANTITY));
@@ -430,7 +430,7 @@ class ItemOnGrid {
 
     // Bulk.
     this._containerBulk = new CenterLayoutContainer();
-    this._containerBulk.height = META_HEIGHT;
+    this._containerBulk.width = META_HEIGHT;
     this._containerMeta.addChild(this._containerBulk);
 
     this._spriteBulk = new DisplayObjectWrap(new PIXI.Sprite.from(TEXTURES.BULK));
