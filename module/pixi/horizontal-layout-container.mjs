@@ -38,6 +38,10 @@ export default class HorizontalLayoutContainer extends LayoutContainer {
       } else {
         x += child.width;
       }
+
+      if (child.refreshLayout !== undefined) {
+        child.refreshLayout();
+      }
     }
   }
 }

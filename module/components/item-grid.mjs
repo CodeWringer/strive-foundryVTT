@@ -384,7 +384,6 @@ class ItemOnGrid {
     this._containerDelete.width = HEADER_HEIGHT;
     
     this._spriteDelete = new DisplayObjectWrap(new PIXI.Sprite.from(TEXTURES.DELETE));
-    this._spriteDelete.fill = true;
     this._containerDelete.addChild(this._spriteDelete);
 
     this._containerHeader.addChild(this._containerDelete);
@@ -392,11 +391,9 @@ class ItemOnGrid {
     // ICON
     this._containerIcon = new CenterLayoutContainer();
     this._containerIcon.fill = true;
-    this._containerIcon.proportionalFill = true;
 
     this._spriteIcon = new DisplayObjectWrap(new PIXI.Sprite.from(TEXTURES.BULK));
     this._spriteIcon.alpha = 0.5;
-    this._spriteIcon.fill = true;
     this._containerIcon.addChild(this._spriteIcon);
 
     this._contentContainer.addChild(this._containerIcon);

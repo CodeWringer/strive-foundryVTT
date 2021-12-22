@@ -19,14 +19,13 @@ export default class CenterLayoutContainer extends LayoutContainer {
     this.refreshLayout();
   }
 
-  /**
-   * @private
-   */
-  _proportionalFill = false;
-  get proportionalFill() { return this._proportionalFill; }
-  set proportionalFill(value) {
-    this._proportionalFill = value;
-    this.refreshLayout();
+  get contentRectangle() {
+    return new PIXI.Rectangle(
+      this.padding.x,
+      this.padding.y,
+      this.width - (this.padding.x * 2),
+      this.height - (this.padding.y * 2)
+    )
   }
 
   constructor(paddingX = 0, paddingY = 0) {
@@ -36,18 +35,25 @@ export default class CenterLayoutContainer extends LayoutContainer {
   }
 
   refreshLayout() {
+    const contentRectangle = this.contentRectangle;
+
     for (const child of this.children) {
       if (child.fill === true) {
-        const maxDimensions = { width: this.width - (this.padding.x * 2), height: this.height - (this.padding.y * 2) };
-        const dimensions = this.proportionalFill ? getProportionalMaxSize(child.width, child.height, maxDimensions.width, maxDimensions.height) : maxDimensions;
-
-        child.x = this.padding.x;
-        child.y = this.padding.y;
+        child.x = contentRectangle.x;
+        child.y = contentRectangle.y;
+        child.width = contentRectangle.width;
+        child.height = contentRectangle.height;
+      } else {
+        const dimensions = getProportionalMaxSize(child.width, child.height, contentRectangle.width, contentRectangle.height);
         child.width = dimensions.width;
         child.height = dimensions.height;
-      } else {
-        child.x = (this.width / 2) - (child.width / 2);
-        child.y = (this.height / 2) - (child.height / 2);
+
+        child.x = contentRectangle.x + (contentRectangle.width / 2) - (child.width / 2);
+        child.y = contentRectangle.y + (contentRectangle.height / 2) - (child.height / 2);
+      }
+
+      if (child.refreshLayout !== undefined) {
+        child.refreshLayout();
       }
     }
   }

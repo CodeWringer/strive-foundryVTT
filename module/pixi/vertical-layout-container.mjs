@@ -38,6 +38,10 @@ export default class VerticalLayoutContainer extends LayoutContainer {
       } else {
         y += child.height;
       }
+
+      if (child.refreshLayout !== undefined) {
+        child.refreshLayout();
+      }
     }
   }
 }
