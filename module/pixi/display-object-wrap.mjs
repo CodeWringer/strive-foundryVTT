@@ -8,36 +8,27 @@ export default class DisplayObjectWrap extends Containable {
   _toWrap = undefined;
   get wrapped() { return this._toWrap; }
 
-  get x() { return this._toWrap !== undefined ? this._toWrap.x : this._x; }
-  set x(value) {
-    if (this._toWrap !== undefined) {
-      this._toWrap.x = value;
-    }
-  }
+  get x() { return this.wrapped.x; }
+  set x(value) { this.wrapped.x = value; }
   
-  get y() { return this._toWrap !== undefined ? this._toWrap.y : this._y; }
-  set y(value) {
-    if (this._toWrap !== undefined) {
-      this._toWrap.y = value;
-    }
-  }
+  get y() { return this.wrapped.y; }
+  set y(value) { this.wrapped.y = value; }
   
-  get width() { return this._toWrap !== undefined ? this._toWrap.width : this._w; }
-  set width(value) {
-    if (this._toWrap !== undefined) {
-      this._toWrap.width = value;
-    }
-  }
+  get width() { return this.wrapped.width; }
+  set width(value) { this.wrapped.width = value; }
   
-  get height() { return this._toWrap !== undefined ? this._toWrap.height : this._h; }
-  set height(value) {
-    if (this._toWrap !== undefined) {
-      this._toWrap.height = value;
-    }
-  }
+  get height() { return this.wrapped.height; }
+  set height(value) { this.wrapped.height = value; }
+
+  get alpha() { return this.wrapped.alpha; }
+  set alpha(value) { this.wrapped.alpha = value; }
 
   constructor(toWrap) {
     super();
+
+    if (toWrap === undefined) {
+      throw "Parameter 'toWrap' must be defined!"
+    }
 
     this._toWrap = toWrap;
   }

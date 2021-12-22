@@ -240,6 +240,15 @@ export class ItemGrid {
    * @private
    */
   _setupInteractivity() {
+    this._stage.interactive = true;
+    this._stage.buttonMode = true;
+    this._stage.on("pointerdown", () => {
+      console.log("clicked!");
+      for (const itemOnGrid of this._itemsOnGrid) {
+        itemOnGrid.showDebug = !itemOnGrid.showDebug;
+      }
+    });
+
     this._pixiApp.ticker.add((delta) => {
       // TODO: Test events for items on grid. 
       // TODO: Item hover. 
@@ -309,6 +318,13 @@ class ItemOnGrid {
   get height() { return this.rootContainer.height; }
   set height(value) { this.rootContainer.height = value; }
 
+  _showDebug = false;
+  get showDebug() { return this._showDebug; }
+  set showDebug(value) {
+    this._showDebug = value;
+    this.rootContainer.showDebug = value;
+  }
+
   constructor(item, tileSize) {
     this._item = item;
     this._shape = item.data.data.shape;
@@ -325,11 +341,13 @@ class ItemOnGrid {
     this._contentContainer.fill = true;
     this.rootContainer.addChild(this._contentContainer);
 
+    // HEADER
+
     const HEADER_HEIGHT = 16;
 
-    this._headerContainer = new HorizontalLayoutContainer();
-    this._headerContainer.height = HEADER_HEIGHT;
-    this._contentContainer.addChild(this._headerContainer);
+    this._containerHeader = new HorizontalLayoutContainer();
+    this._containerHeader.height = HEADER_HEIGHT;
+    this._contentContainer.addChild(this._containerHeader);
 
     // SendToChat button. 
     this._containerSendToChat = new CenterLayoutContainer();
@@ -339,12 +357,12 @@ class ItemOnGrid {
     this._spriteSendToChat.fill = true;
     this._containerSendToChat.addChild(this._spriteSendToChat);
 
-    this._headerContainer.addChild(this._containerSendToChat);
+    this._containerHeader.addChild(this._containerSendToChat);
     
     // Spacer between SendToChat and OpenSheet. 
     const headerButtonsSpacer1 = new Spacer();
     headerButtonsSpacer1.width = 6;
-    this._headerContainer.addChild(headerButtonsSpacer1);
+    this._containerHeader.addChild(headerButtonsSpacer1);
 
     // OpenSheet button. 
     this._containerOpenSheet = new CenterLayoutContainer();
@@ -354,12 +372,12 @@ class ItemOnGrid {
     this._spriteOpenSheet.fill = true;
     this._containerOpenSheet.addChild(this._spriteOpenSheet);
 
-    this._headerContainer.addChild(this._containerOpenSheet);
+    this._containerHeader.addChild(this._containerOpenSheet);
     
     // Header spacer. 
     const headerSpacer2 = new Spacer();
     headerSpacer2.fill = true;
-    this._headerContainer.addChild(headerSpacer2);
+    this._containerHeader.addChild(headerSpacer2);
 
     // Delete/Remove button.
     this._containerDelete = new CenterLayoutContainer();
@@ -369,13 +387,23 @@ class ItemOnGrid {
     this._spriteDelete.fill = true;
     this._containerDelete.addChild(this._spriteDelete);
 
-    this._headerContainer.addChild(this._containerDelete);
+    this._containerHeader.addChild(this._containerDelete);
+
+    // ICON
+    this._containerIcon = new CenterLayoutContainer();
+    this._containerIcon.fill = true;
+    this._containerIcon.proportionalFill = true;
+
+    this._spriteIcon = new DisplayObjectWrap(new PIXI.Sprite.from(TEXTURES.BULK));
+    this._spriteIcon.alpha = 0.5;
+    this._spriteIcon.fill = true;
+    this._containerIcon.addChild(this._spriteIcon);
+
+    this._contentContainer.addChild(this._containerIcon);
+
 
     /*
     // Icon sprite. 
-    this._spriteIcon = new PIXI.Sprite.from(TEXTURES.BULK);
-    this._contentContainer.addChild(this._spriteIcon);
-    this._spriteIcon.alpha = 0.5;
 
     // Name.
     this._textName = new PIXI.Text(item.name, TEXT_SETTINGS);

@@ -69,6 +69,33 @@ export default class LayoutContainer extends Containable {
     return dimensions;
   }
 
+  /**
+   * @type {PIXI.Graphics}
+   */
+  _debugGraphics = undefined;
+
+  get showDebug() { return this._debugGraphics !== undefined; }
+  set showDebug(value) {
+    if (value === true && this.showDebug !== true) {
+      this._debugGraphics = new PIXI.Graphics();
+      this._debugGraphics.lineStyle(2, 0xFF0000, 0.4, 0.0);
+      this._debugGraphics.drawRect(0, 0, this.width, this.height);
+      this.pixiContainer.addChild(this._debugGraphics);
+    } else if (this._debugGraphics !== undefined) {
+      this.pixiContainer.removeChild(this._debugGraphics);
+      this._debugGraphics.destroy();
+      this._debugGraphics = undefined;
+    }
+    for (const child of this.children) {
+      if (child.showDebug !== undefined) {
+        child.showDebug = value;
+      } else if (this._debugGraphics !== undefined) {
+        this._debugGraphics.lineStyle(2, 0x0000FF, 0.4, 0.0);
+        this._debugGraphics.drawRect(child.x, child.y, child.width, child.height);
+      }
+    }
+  }
+
   constructor() {
     super();
   }
