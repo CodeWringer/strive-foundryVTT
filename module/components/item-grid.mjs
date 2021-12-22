@@ -354,7 +354,6 @@ class ItemOnGrid {
     this._containerSendToChat.width = HEADER_HEIGHT;
     
     this._spriteSendToChat = new DisplayObjectWrap(new PIXI.Sprite.from(TEXTURES.SEND_TO_CHAT));
-    this._spriteSendToChat.fill = true;
     this._containerSendToChat.addChild(this._spriteSendToChat);
 
     this._containerHeader.addChild(this._containerSendToChat);
@@ -369,7 +368,6 @@ class ItemOnGrid {
     this._containerOpenSheet.width = HEADER_HEIGHT;
     
     this._spriteOpenSheet = new DisplayObjectWrap(new PIXI.Sprite.from(TEXTURES.OPEN_SHEET));
-    this._spriteOpenSheet.fill = true;
     this._containerOpenSheet.addChild(this._spriteOpenSheet);
 
     this._containerHeader.addChild(this._containerOpenSheet);

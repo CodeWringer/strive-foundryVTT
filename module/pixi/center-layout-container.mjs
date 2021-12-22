@@ -44,10 +44,26 @@ export default class CenterLayoutContainer extends LayoutContainer {
         child.width = contentRectangle.width;
         child.height = contentRectangle.height;
       } else {
-        const dimensions = getProportionalMaxSize(child.width, child.height, contentRectangle.width, contentRectangle.height);
+        const childDimensions = { width: child.width, height: child.height };
+        if (child.wrapped !== undefined) {
+          if (child.wrapped.texture !== undefined) {
+            childDimensions.width = child.wrapped.texture.width;
+            childDimensions.height = child.wrapped.texture.height;
+          }
+        }
+
+        const dimensions = getProportionalMaxSize(
+          childDimensions.width, 
+          childDimensions.height, 
+          contentRectangle.width, 
+          contentRectangle.height
+        );
         child.width = dimensions.width;
         child.height = dimensions.height;
 
+        // Set local position of the child. This centers the child. 
+        // Setting the local position of the child must happen after updating its dimensions, 
+        // otherwise outdated dimensions would be used. 
         child.x = contentRectangle.x + (contentRectangle.width / 2) - (child.width / 2);
         child.y = contentRectangle.y + (contentRectangle.height / 2) - (child.height / 2);
       }

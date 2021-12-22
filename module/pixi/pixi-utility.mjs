@@ -45,7 +45,15 @@ export function centerOnY(displayObject, rectangle, isRelative = false) {
  * @returns {Object} { w: {Number}, h: {Number} }
  */
 export function getProportionalMaxSize(width, height, maxWidth, maxHeight) {
-  const delta = { w: maxWidth - width, h: maxHeight - height };
-  const deltaMin = Math.min(delta.w, delta.h);
-  return { width: Math.max(0, width + deltaMin), height: Math.max(0, height + deltaMin) };
+  const deltaW = maxWidth - width;
+  const deltaH = maxHeight - height;
+
+  let ratio = 0.0;
+  if (deltaW < deltaH) {
+    ratio = maxWidth / width;
+  } else {
+    ratio = maxHeight / height;
+  }
+
+  return { width: width * ratio, height: height * ratio };
 }
