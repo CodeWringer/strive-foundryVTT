@@ -1,4 +1,5 @@
 import Containable from "./containable.mjs";
+import { DebugDrawStrategy } from "./containable.mjs";
 
 export default class DisplayObjectWrap extends Containable {
   /**
@@ -23,13 +24,29 @@ export default class DisplayObjectWrap extends Containable {
   get alpha() { return this.wrapped.alpha; }
   set alpha(value) { this.wrapped.alpha = value; }
 
-  constructor(toWrap) {
-    super();
+  constructor(toWrap, pixiApp) {
+    super(pixiApp);
 
     if (toWrap === undefined) {
       throw "Parameter 'toWrap' must be defined!"
     }
 
     this._toWrap = toWrap;
+    this._debugDrawStrategy = new DisplayObjectWrapDebugDrawStrategy(pixiApp, this);
+  }
+}
+
+export class DisplayObjectWrapDebugDrawStrategy extends DebugDrawStrategy {
+  constructor(pixiApp, containable) {
+    super(pixiApp, containable);
+    this._lineStyle.color = 0x0000FF;
+  }
+
+  show() {
+    super.show();
+  }
+  
+  hide() {
+    super.hide();
   }
 }

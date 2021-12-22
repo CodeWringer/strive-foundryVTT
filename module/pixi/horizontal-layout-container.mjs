@@ -6,8 +6,8 @@ import LayoutContainer from "./layout-container.mjs";
  * Child height will be stretched to match the container's height.
  */
 export default class HorizontalLayoutContainer extends LayoutContainer {
-  constructor() {
-    super();
+  constructor(pixiApp) {
+    super(pixiApp);
   }
   
   refreshLayout() {

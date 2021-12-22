@@ -28,10 +28,8 @@ export default class CenterLayoutContainer extends LayoutContainer {
     )
   }
 
-  constructor(paddingX = 0, paddingY = 0) {
-    super();
-
-    this.padding = { x: paddingX, y: paddingY };
+  constructor(pixiApp) {
+    super(pixiApp);
   }
 
   refreshLayout() {

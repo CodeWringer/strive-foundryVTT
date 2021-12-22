@@ -226,7 +226,7 @@ export class ItemGrid {
   _setupItemsOnGrid(indices, items) {
     for (const index of indices) {
       const item = items.find((element) => { return element.id === index.id; });
-      const itemOnGrid = new ItemOnGrid(item, { width: TILE_SIZE, height: TILE_SIZE });
+      const itemOnGrid = new ItemOnGrid(item, { width: TILE_SIZE, height: TILE_SIZE }, this._pixiApp);
       this._itemsOnGrid.push(itemOnGrid);
 
       this._rootContainer.addChild(itemOnGrid.rootContainer.wrapped);
@@ -296,15 +296,16 @@ class ItemOnGrid {
   _shape = { width: 1, height: 1 };
 
   /**
+   * @type {CenterLayoutContainer}
    * @private
    */
-  _contentContainer = new VerticalLayoutContainer();
+  _contentContainer = undefined;
 
   /**
    * Root Container which encompasses the entire item on grid. 
    * @type {CenterLayoutContainer}
    */
-  rootContainer = new CenterLayoutContainer(8, 8);
+  rootContainer = undefined;
 
   get x() { return this.rootContainer.x; }
   set x(value) { this.rootContainer.x = value; }
@@ -322,15 +323,21 @@ class ItemOnGrid {
   get showDebug() { return this._showDebug; }
   set showDebug(value) {
     this._showDebug = value;
-    this.rootContainer.showDebug = value;
+    this.rootContainer.drawDebug = value;
   }
 
-  constructor(item, tileSize) {
+  constructor(item, tileSize, pixiApp) {
     this._item = item;
     this._shape = item.data.data.shape;
+
+    this.rootContainer = new CenterLayoutContainer(pixiApp);
+    this._contentContainer = new VerticalLayoutContainer(pixiApp);
     
     this.width = this._shape.width * tileSize.width;
     this.height = this._shape.height * tileSize.height;
+
+    this.rootContainer.padding.x = 8;
+    this.rootContainer.padding.y = 8;
 
     // Background sprite.
     this._spriteBackground = new PIXI.Sprite.from(TEXTURES.ITEM_SLOT);
@@ -345,52 +352,52 @@ class ItemOnGrid {
 
     const HEADER_HEIGHT = 16;
 
-    this._containerHeader = new HorizontalLayoutContainer();
+    this._containerHeader = new HorizontalLayoutContainer(pixiApp);
     this._containerHeader.height = HEADER_HEIGHT;
     this._contentContainer.addChild(this._containerHeader);
 
     // SendToChat button. 
-    this._containerSendToChat = new CenterLayoutContainer();
+    this._containerSendToChat = new CenterLayoutContainer(pixiApp);
     this._containerSendToChat.width = HEADER_HEIGHT;
     
-    this._spriteSendToChat = new DisplayObjectWrap(new PIXI.Sprite.from(TEXTURES.SEND_TO_CHAT));
+    this._spriteSendToChat = new DisplayObjectWrap(new PIXI.Sprite.from(TEXTURES.SEND_TO_CHAT), pixiApp);
     this._containerSendToChat.addChild(this._spriteSendToChat);
 
     this._containerHeader.addChild(this._containerSendToChat);
     
     // Spacer between SendToChat and OpenSheet. 
-    const headerButtonsSpacer1 = new Containable();
+    const headerButtonsSpacer1 = new Containable(pixiApp);
     headerButtonsSpacer1.width = 6;
     this._containerHeader.addChild(headerButtonsSpacer1);
 
     // OpenSheet button. 
-    this._containerOpenSheet = new CenterLayoutContainer();
+    this._containerOpenSheet = new CenterLayoutContainer(pixiApp);
     this._containerOpenSheet.width = HEADER_HEIGHT;
     
-    this._spriteOpenSheet = new DisplayObjectWrap(new PIXI.Sprite.from(TEXTURES.OPEN_SHEET));
+    this._spriteOpenSheet = new DisplayObjectWrap(new PIXI.Sprite.from(TEXTURES.OPEN_SHEET), pixiApp);
     this._containerOpenSheet.addChild(this._spriteOpenSheet);
 
     this._containerHeader.addChild(this._containerOpenSheet);
     
     // Header spacer. 
-    const headerSpacer2 = new Containable();
+    const headerSpacer2 = new Containable(pixiApp);
     headerSpacer2.fill = true;
     this._containerHeader.addChild(headerSpacer2);
 
     // Delete/Remove button.
-    this._containerDelete = new CenterLayoutContainer();
+    this._containerDelete = new CenterLayoutContainer(pixiApp);
     this._containerDelete.width = 14;
     
-    this._spriteDelete = new DisplayObjectWrap(new PIXI.Sprite.from(TEXTURES.DELETE));
+    this._spriteDelete = new DisplayObjectWrap(new PIXI.Sprite.from(TEXTURES.DELETE), pixiApp);
     this._containerDelete.addChild(this._spriteDelete);
 
     this._containerHeader.addChild(this._containerDelete);
 
     // ICON
-    this._containerIcon = new CenterLayoutContainer();
+    this._containerIcon = new CenterLayoutContainer(pixiApp);
     this._containerIcon.fill = true;
 
-    this._spriteIcon = new DisplayObjectWrap(new PIXI.Sprite.from(TEXTURES.BULK));
+    this._spriteIcon = new DisplayObjectWrap(new PIXI.Sprite.from(TEXTURES.BULK), pixiApp);
     this._spriteIcon.alpha = 0.5;
     this._containerIcon.addChild(this._spriteIcon);
 
@@ -399,55 +406,55 @@ class ItemOnGrid {
     // META
     const META_HEIGHT = 18;
 
-    this._containerMeta = new HorizontalLayoutContainer();
+    this._containerMeta = new HorizontalLayoutContainer(pixiApp);
     this._containerMeta.height = META_HEIGHT;
     this._contentContainer.addChild(this._containerMeta);
 
     // Quantity.
-    this._containerQuantity = new HorizontalLayoutContainer();
+    this._containerQuantity = new HorizontalLayoutContainer(pixiApp);
     this._containerQuantity.height = META_HEIGHT;
     this._containerQuantity.width = META_HEIGHT + 6 + META_HEIGHT;
     this._containerMeta.addChild(this._containerQuantity);
     
-    const containerQuantityImage = new CenterLayoutContainer();
+    const containerQuantityImage = new CenterLayoutContainer(pixiApp);
     containerQuantityImage.width = META_HEIGHT;
     this._containerQuantity.addChild(containerQuantityImage);
 
-    this._spriteQuantity = new DisplayObjectWrap(new PIXI.Sprite.from(TEXTURES.QUANTITY));
+    this._spriteQuantity = new DisplayObjectWrap(new PIXI.Sprite.from(TEXTURES.QUANTITY), pixiApp);
     containerQuantityImage.addChild(this._spriteQuantity);
 
-    const quantitySpacer = new Containable();
+    const quantitySpacer = new Containable(pixiApp);
     quantitySpacer.width = 6;
     this._containerQuantity.addChild(quantitySpacer);
     
-    this._textQuantity = new DisplayObjectWrap(new PIXI.Text(item.data.data.quantity, TEXT_SETTINGS));
+    this._textQuantity = new DisplayObjectWrap(new PIXI.Text(item.data.data.quantity, TEXT_SETTINGS), pixiApp);
     this._containerQuantity.addChild(this._textQuantity);
 
     // Spacer.
-    const metaSpacer = new Containable();
+    const metaSpacer = new Containable(pixiApp);
     metaSpacer.fill = true;
     this._containerMeta.addChild(metaSpacer);
 
     // Bulk.
-    this._containerBulk = new CenterLayoutContainer();
+    this._containerBulk = new CenterLayoutContainer(pixiApp);
     this._containerBulk.width = META_HEIGHT;
     this._containerMeta.addChild(this._containerBulk);
 
-    this._spriteBulk = new DisplayObjectWrap(new PIXI.Sprite.from(TEXTURES.BULK));
+    this._spriteBulk = new DisplayObjectWrap(new PIXI.Sprite.from(TEXTURES.BULK), pixiApp);
     this._containerBulk.addChild(this._spriteBulk);
     
-    this._textBulk = new DisplayObjectWrap(new PIXI.Text(item.data.data.bulk, TEXT_SETTINGS_INVERSE));
+    this._textBulk = new DisplayObjectWrap(new PIXI.Text(item.data.data.bulk, TEXT_SETTINGS_INVERSE), pixiApp);
     this._containerBulk.addChild(this._textBulk);
 
     // FOOTER
     const FOOTER_HEIGHT = 20;
 
-    this._contentFooter = new CenterLayoutContainer();
+    this._contentFooter = new CenterLayoutContainer(pixiApp);
     this._contentFooter.height = FOOTER_HEIGHT;
     this._contentContainer.addChild(this._contentFooter);
 
     // Title
-    this._textName = new DisplayObjectWrap(new PIXI.Text(item.name, TEXT_SETTINGS));
+    this._textName = new DisplayObjectWrap(new PIXI.Text(item.name, TEXT_SETTINGS), pixiApp);
     this._contentFooter.addChild(this._textName);
   }
 

@@ -1,4 +1,5 @@
 import Containable from "./containable.mjs";
+import { DebugDrawStrategy } from "./containable.mjs";
 
 // TODO: Scrollbar when content exceeds height?
 // TODO: Scrollbar when content exceeds width?
@@ -123,35 +124,9 @@ export default class LayoutContainer extends Containable {
   get alpha() { return this.wrapped.alpha; }
   set alpha(value) { this.wrapped.alpha = value; }
 
-  /**
-   * @type {PIXI.Graphics}
-   */
-  _debugGraphics = undefined;
-
-  get showDebug() { return this._debugGraphics !== undefined; }
-  set showDebug(value) {
-    if (value === true && this.showDebug !== true) {
-      this._debugGraphics = new PIXI.Graphics();
-      this._debugGraphics.lineStyle(2, 0xFF0000, 0.4, 0.0);
-      this._debugGraphics.drawRect(0, 0, this.width, this.height);
-      this.wrapped.addChild(this._debugGraphics);
-    } else if (this._debugGraphics !== undefined) {
-      this.wrapped.removeChild(this._debugGraphics);
-      this._debugGraphics.destroy();
-      this._debugGraphics = undefined;
-    }
-    for (const child of this.children) {
-      if (child.showDebug !== undefined) {
-        child.showDebug = value;
-      } else if (this._debugGraphics !== undefined) {
-        this._debugGraphics.lineStyle(2, 0x0000FF, 0.4, 0.0);
-        this._debugGraphics.drawRect(child.x, child.y, child.width, child.height);
-      }
-    }
-  }
-
-  constructor() {
-    super();
+  constructor(pixiApp) {
+    super(pixiApp);
+    this._debugDrawStrategy = new LayoutContainerDebugDrawStrategy(pixiApp, this);
   }
 
   hasChild(child) {
@@ -240,5 +215,27 @@ export default class LayoutContainer extends Containable {
    */
   refreshLayout() {
     console.warn("Not implemented");
+  }
+}
+
+export class LayoutContainerDebugDrawStrategy extends DebugDrawStrategy {
+  constructor(pixiApp, containable) {
+    super(pixiApp, containable);
+  }
+
+  show() {
+    super.show();
+
+    for (const child of this._containable.children) {
+      child.drawDebug = true;
+    }
+  }
+  
+  hide() {
+    super.hide();
+
+    for (const child of this._containable.children) {
+      child.drawDebug = false;
+    }
   }
 }
