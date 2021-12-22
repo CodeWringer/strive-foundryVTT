@@ -3,9 +3,9 @@ import { ActorEvents } from "../documents/actor.mjs";
 import AmbersteelItemItem from "../documents/subtypes/item/ambersteel-item-item.mjs";
 import InventoryIndex from "../dto/inventory-index.mjs";
 import CenterLayoutContainer from "../pixi/center-layout-container.mjs";
+import Containable from "../pixi/containable.mjs";
 import DisplayObjectWrap from "../pixi/display-object-wrap.mjs";
 import HorizontalLayoutContainer from "../pixi/horizontal-layout-container.mjs";
-import Spacer from "../pixi/spacer.mjs";
 import VerticalLayoutContainer from "../pixi/vertical-layout-container.mjs";
 import AmbersteelBaseActorSheet from "../sheets/subtypes/actor/ambersteel-base-actor-sheet.mjs";
 
@@ -359,7 +359,7 @@ class ItemOnGrid {
     this._containerHeader.addChild(this._containerSendToChat);
     
     // Spacer between SendToChat and OpenSheet. 
-    const headerButtonsSpacer1 = new Spacer();
+    const headerButtonsSpacer1 = new Containable();
     headerButtonsSpacer1.width = 6;
     this._containerHeader.addChild(headerButtonsSpacer1);
 
@@ -373,7 +373,7 @@ class ItemOnGrid {
     this._containerHeader.addChild(this._containerOpenSheet);
     
     // Header spacer. 
-    const headerSpacer2 = new Spacer();
+    const headerSpacer2 = new Containable();
     headerSpacer2.fill = true;
     this._containerHeader.addChild(headerSpacer2);
 
@@ -416,7 +416,7 @@ class ItemOnGrid {
     this._spriteQuantity = new DisplayObjectWrap(new PIXI.Sprite.from(TEXTURES.QUANTITY));
     containerQuantityImage.addChild(this._spriteQuantity);
 
-    const quantitySpacer = new Spacer();
+    const quantitySpacer = new Containable();
     quantitySpacer.width = 6;
     this._containerQuantity.addChild(quantitySpacer);
     
@@ -424,7 +424,7 @@ class ItemOnGrid {
     this._containerQuantity.addChild(this._textQuantity);
 
     // Spacer.
-    const metaSpacer = new Spacer();
+    const metaSpacer = new Containable();
     metaSpacer.fill = true;
     this._containerMeta.addChild(metaSpacer);
 
