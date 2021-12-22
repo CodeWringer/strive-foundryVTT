@@ -379,7 +379,7 @@ class ItemOnGrid {
 
     // Delete/Remove button.
     this._containerDelete = new CenterLayoutContainer();
-    this._containerDelete.width = HEADER_HEIGHT;
+    this._containerDelete.width = 14;
     
     this._spriteDelete = new DisplayObjectWrap(new PIXI.Sprite.from(TEXTURES.DELETE));
     this._containerDelete.addChild(this._spriteDelete);
