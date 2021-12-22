@@ -45,7 +45,6 @@ export default class LayoutContainer extends Containable {
   /** @override */
   set width(value) {
     this._w = value;
-    this.pixiContainer.width = value;
     this.refreshLayout();
   }
   
@@ -54,7 +53,6 @@ export default class LayoutContainer extends Containable {
   /** @override */
   set height(value) {
     this._h = value;
-    this.pixiContainer.height = value;
     this.refreshLayout();
   }
 

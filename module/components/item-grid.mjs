@@ -396,61 +396,59 @@ class ItemOnGrid {
 
     this._contentContainer.addChild(this._containerIcon);
 
+    // META
+    const META_HEIGHT = 18;
 
-    /*
-    // Icon sprite. 
+    this._containerMeta = new HorizontalLayoutContainer();
+    this._containerMeta.height = META_HEIGHT;
+    this._contentContainer.addChild(this._containerMeta);
 
-    // Name.
-    this._textName = new PIXI.Text(item.name, TEXT_SETTINGS);
-    this._contentContainer.addChild(this._textName);
-    this._textName.x = (this._contentRect.width / 2) - (this._textName.width / 2);
-    this._textName.y = this._contentRect.height - this._textName.height;
-    
     // Quantity.
-    this._containerQuantity = new PIXI.Container();
-    this._contentContainer.addChild(this._containerQuantity);
+    this._containerQuantity = new HorizontalLayoutContainer();
+    this._containerQuantity.height = META_HEIGHT;
+    this._containerQuantity.width = 50;
+    this._containerMeta.addChild(this._containerQuantity);
     
-    this._spriteQuantity = new PIXI.Sprite.from(TEXTURES.QUANTITY);
-    this._containerQuantity.addChild(this._spriteQuantity);
-    this._spriteQuantity.width = 14;
-    this._spriteQuantity.height = 16;
-    
-    this._textQuantity = new PIXI.Text(item.data.data.quantity, TEXT_SETTINGS);
-    this._containerQuantity.addChild(this._textQuantity);
-    this._textQuantity.x = this._spriteQuantity.x + this._spriteQuantity.width + 3;
+    const containerQuantityImage = new CenterLayoutContainer();
+    containerQuantityImage.height = META_HEIGHT;
+    this._containerQuantity.addChild(containerQuantityImage);
 
-    this._containerQuantity.y = this._textName.y - this._containerQuantity.height;
+    this._spriteQuantity = new DisplayObjectWrap(new PIXI.Sprite.from(TEXTURES.QUANTITY));
+    containerQuantityImage.addChild(this._spriteQuantity);
+
+    const quantitySpacer = new Spacer();
+    quantitySpacer.width = 6;
+    this._containerQuantity.addChild(quantitySpacer);
+    
+    this._textQuantity = new DisplayObjectWrap(new PIXI.Text(item.data.data.quantity, TEXT_SETTINGS));
+    this._containerQuantity.addChild(this._textQuantity);
+
+    // Spacer.
+    const metaSpacer = new Spacer();
+    metaSpacer.fill = true;
+    this._containerMeta.addChild(metaSpacer);
 
     // Bulk.
-    this._containerBulk = new PIXI.Container();
-    this._contentContainer.addChild(this._containerBulk);
-    const sizeBulk = 24;
-    const rectBulk = new PIXI.Rectangle(this._contentRect.width - sizeBulk, this._contentRect.height - sizeBulk, sizeBulk, sizeBulk);
+    this._containerBulk = new CenterLayoutContainer();
+    this._containerBulk.height = META_HEIGHT;
+    this._containerMeta.addChild(this._containerBulk);
 
-    this._spriteBulk = new PIXI.Sprite.from(TEXTURES.BULK);
+    this._spriteBulk = new DisplayObjectWrap(new PIXI.Sprite.from(TEXTURES.BULK));
     this._containerBulk.addChild(this._spriteBulk);
-    this._spriteBulk.width = sizeBulk;
-    this._spriteBulk.height = sizeBulk;
     
-    this._textBulk = new PIXI.Text(item.data.data.bulk, TEXT_SETTINGS_INVERSE);
+    this._textBulk = new DisplayObjectWrap(new PIXI.Text(item.data.data.bulk, TEXT_SETTINGS_INVERSE));
     this._containerBulk.addChild(this._textBulk);
-    centerOn(this._textBulk, rectBulk, true);
-    this._textBulk.y = this._textBulk.y + 3;
-    
-    this._containerBulk.x = this._contentRect.width - sizeBulk;
-    this._containerBulk.y = this._textName.y - rectBulk.height;
-    
-    // Icon Sprite size.
-    const spriteIconSize = getProportionalMaxSize(
-      this._spriteIcon.width, 
-      this._spriteIcon.height, 
-      this._contentRect.width, 
-      this._contentRect.height - this._textName.height, 
-    );
-    this._spriteIcon.width = spriteIconSize.width;
-    this._spriteIcon.height = spriteIconSize.height;
-    centerOn(this._spriteIcon, this._contentRect, true);
-    */
+
+    // FOOTER
+    const FOOTER_HEIGHT = 20;
+
+    this._contentFooter = new CenterLayoutContainer();
+    this._contentFooter.height = FOOTER_HEIGHT;
+    this._contentContainer.addChild(this._contentFooter);
+
+    // Title
+    this._textName = new DisplayObjectWrap(new PIXI.Text(item.name, TEXT_SETTINGS));
+    this._contentFooter.addChild(this._textName);
   }
 
   /**
