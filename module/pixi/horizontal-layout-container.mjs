@@ -9,7 +9,7 @@ export default class HorizontalLayoutContainer extends LayoutContainer {
   constructor() {
     super();
   }
-
+  
   refreshLayout() {
     let numberOfFillChildren = 0;
     let childrenSummedWidth = 0;
