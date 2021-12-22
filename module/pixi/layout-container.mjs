@@ -15,7 +15,7 @@ export default class LayoutContainer extends Containable {
    * The wrapped {PIXI.Container}. 
    * @type {PIXI.Container}
    */
-  pixiContainer = new PIXI.Container();
+  wrapped = new PIXI.Container();
 
   /**
    * @type {Array<LayoutContainer>}
@@ -24,48 +24,104 @@ export default class LayoutContainer extends Containable {
   _children = [];
   get children() { return this._children; }
   
-  /** @override */
   get x() { return this._x; }
-  /** @override */
   set x(value) {
     this._x = value;
-    this.pixiContainer.x = value;
+    this.wrapped.x = value;
   }
   
-  /** @override */
   get y() { return this._y; }
-  /** @override */
   set y(value) {
     this._y = value;
-    this.pixiContainer.y = value;
+    this.wrapped.y = value;
   }
 
-  /** @override */
+  _minWidth = undefined;
+  get minWidth() { return this._minWidth; }
+  set minWidth(value) {
+    if (value !== undefined) {
+      value = Math.max(0, value);
+
+      if (this._maxWidth !== undefined) {
+        this._maxWidth = Math.max(value, this._maxWidth);
+      }
+    }
+    this._minWidth = value;
+
+    this.refreshLayout();
+    if (this.parent !== undefined) {
+      this.parent.refreshLayout();
+    }
+  }
+  
+  _maxWidth = undefined;
+  get maxWidth() { return this._maxWidth; }
+  set maxWidth(value) {
+    if (value !== undefined) {
+      if (this.minWidth !== undefined) {
+        value = Math.max(this.minWidth, value);
+      } else {
+        value = Math.max(0, value);
+      }
+    }
+    this._maxWidth = value;
+
+    this.refreshLayout();
+    if (this.parent !== undefined) {
+      this.parent.refreshLayout();
+    }
+  }
+  
+  _minHeight = undefined;
+  get minHeight() { return this._minHeight; }
+  set minHeight(value) {
+    if (value !== undefined) {
+      value = Math.max(0, value);
+
+      if (this._maxHeight !== undefined) {
+        this._maxHeight = Math.max(value, this._maxHeight);
+      }
+    }
+    this._minHeight = value;
+
+    this.refreshLayout();
+    if (this.parent !== undefined) {
+      this.parent.refreshLayout();
+    }
+  }
+  
+  _maxHeight = undefined;
+  get maxHeight() { return this._maxHeight; }
+  set maxHeight(value) {
+    if (value !== undefined) {
+      if (this.minHeight !== undefined) {
+        value = Math.max(this.minHeight, value);
+      } else {
+        value = Math.max(0, value);
+      }
+    }
+    this._maxHeight = value;
+
+    this.refreshLayout();
+    if (this.parent !== undefined) {
+      this.parent.refreshLayout();
+    }
+  }
+
   get width() { return this._w; }
-  /** @override */
   set width(value) {
     this._w = value;
     this.refreshLayout();
   }
-  
-  /** @override */
+
   get height() { return this._h; }
-  /** @override */
   set height(value) {
     this._h = value;
     this.refreshLayout();
   }
 
-  get contentBounds() {
-    const dimensions = { width: 0, height: 0 };
-
-    for (const child of this.children) {
-      dimensions.width = Math.max(dimensions.width, child.width);
-      dimensions.height = Math.max(dimensions.height, child.height);
-    }
-
-    return dimensions;
-  }
+  get alpha() { return this.wrapped.alpha; }
+  set alpha(value) { this.wrapped.alpha = value; }
 
   /**
    * @type {PIXI.Graphics}
@@ -78,9 +134,9 @@ export default class LayoutContainer extends Containable {
       this._debugGraphics = new PIXI.Graphics();
       this._debugGraphics.lineStyle(2, 0xFF0000, 0.4, 0.0);
       this._debugGraphics.drawRect(0, 0, this.width, this.height);
-      this.pixiContainer.addChild(this._debugGraphics);
+      this.wrapped.addChild(this._debugGraphics);
     } else if (this._debugGraphics !== undefined) {
-      this.pixiContainer.removeChild(this._debugGraphics);
+      this.wrapped.removeChild(this._debugGraphics);
       this._debugGraphics.destroy();
       this._debugGraphics = undefined;
     }
@@ -116,10 +172,9 @@ export default class LayoutContainer extends Containable {
     
     this._children.push(child);
     child._parent = this;
-    if (child.pixiContainer !== undefined) {
-      this.pixiContainer.addChild(child.pixiContainer);
-    } else if (child.wrapped !== undefined) {
-      this.pixiContainer.addChild(child.wrapped);
+
+    if (child.wrapped !== undefined) {
+      this.wrapped.addChild(child.wrapped);
     }
 
     this.refreshLayout();
@@ -132,10 +187,9 @@ export default class LayoutContainer extends Containable {
 
     this.children.splice(index, 0, child);
     child._parent = this;
-    if (child.pixiContainer !== undefined) {
-      this.pixiContainer.addChild(child.pixiContainer);
-    } else if (child.wrapped !== undefined) {
-      this.pixiContainer.addChild(child.wrapped);
+
+    if (child.wrapped !== undefined) {
+      this.wrapped.addChild(child.wrapped);
     }
 
     this.refreshLayout();
@@ -149,10 +203,9 @@ export default class LayoutContainer extends Containable {
 
     this.children.splice(index, 1);
     child.parent = undefined;
-    if (child.pixiContainer !== undefined) {
-      this.pixiContainer.removeChild(child.pixiContainer);
-    } else if (child.wrapped !== undefined) {
-      this.pixiContainer.removeChild(child.wrapped);
+
+    if (child.wrapped !== undefined) {
+      this.wrapped.removeChild(child.wrapped);
     }
 
     this.refreshLayout();
@@ -163,10 +216,9 @@ export default class LayoutContainer extends Containable {
   clearChildren() {
     for (const child of this.children) {
       child.parent = undefined;
-      if (child.pixiContainer !== undefined) {
-        this.pixiContainer.removeChild(child.pixiContainer);
-      } else if (child.wrapped !== undefined) {
-        this.pixiContainer.removeChild(child.wrapped);
+      
+      if (child.wrapped !== undefined) {
+        this.wrapped.removeChild(child.wrapped);
       }
     }
     this._children = [];
@@ -177,7 +229,8 @@ export default class LayoutContainer extends Containable {
       this.parent.removeChild(this);
     }
     this.clearChildren();
-    this.pixiContainer.destroy();
+    this.wrapped.destroy();
+    this.wrapped = undefined;
   }
 
   /**
