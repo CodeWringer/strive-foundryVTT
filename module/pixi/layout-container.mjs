@@ -200,6 +200,8 @@ export default class LayoutContainer extends Containable {
   }
 
   destroy() {
+    this.debugDraw = false;
+    
     if (this.parent !== undefined) {
       this.parent.removeChild(this);
     }

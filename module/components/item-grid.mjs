@@ -6,6 +6,7 @@ import CenterLayoutContainer from "../pixi/center-layout-container.mjs";
 import Containable from "../pixi/containable.mjs";
 import DisplayObjectWrap from "../pixi/display-object-wrap.mjs";
 import HorizontalLayoutContainer from "../pixi/horizontal-layout-container.mjs";
+import MarginLayoutContainer from "../pixi/margin-layout-container.mjs";
 import VerticalLayoutContainer from "../pixi/vertical-layout-container.mjs";
 import AmbersteelBaseActorSheet from "../sheets/subtypes/actor/ambersteel-base-actor-sheet.mjs";
 
@@ -296,7 +297,7 @@ class ItemOnGrid {
   _shape = { width: 1, height: 1 };
 
   /**
-   * @type {CenterLayoutContainer}
+   * @type {VerticalLayoutContainer}
    * @private
    */
   _contentContainer = undefined;
@@ -329,24 +330,31 @@ class ItemOnGrid {
   constructor(item, tileSize, pixiApp) {
     this._item = item;
     this._shape = item.data.data.shape;
-
-    this.rootContainer = new CenterLayoutContainer(pixiApp);
-    this._contentContainer = new VerticalLayoutContainer(pixiApp);
     
+    // Root container. 
+    this.rootContainer = new CenterLayoutContainer(pixiApp);
+    // These actually implicitly set the rootContainer's dimensions.
     this.width = this._shape.width * tileSize.width;
     this.height = this._shape.height * tileSize.height;
 
-    this.rootContainer.padding.x = 8;
-    this.rootContainer.padding.y = 8;
-
     // Background sprite.
-    this._spriteBackground = new PIXI.Sprite.from(TEXTURES.ITEM_SLOT);
-    this._spriteBackground.width = this.rootContainer.width;
-    this._spriteBackground.height = this.rootContainer.height;
-    this.rootContainer.wrapped.addChild(this._spriteBackground);
+    this._spriteBackground = new DisplayObjectWrap(new PIXI.Sprite.from(TEXTURES.ITEM_SLOT), pixiApp);
+    this._spriteBackground.fill = true;
+    this.rootContainer.addChild(this._spriteBackground);
 
+    // Content margin container. 
+    this._rootContainerMargin = new MarginLayoutContainer(pixiApp);
+    this._rootContainerMargin.padding.left = 8;
+    this._rootContainerMargin.padding.right = 8;
+    this._rootContainerMargin.padding.top = 8;
+    this._rootContainerMargin.padding.bottom = 8;
+    this._rootContainerMargin.fill = true;
+    this.rootContainer.addChild(this._rootContainerMargin);
+
+    // Content container. 
+    this._contentContainer = new VerticalLayoutContainer(pixiApp);
     this._contentContainer.fill = true;
-    this.rootContainer.addChild(this._contentContainer);
+    this._rootContainerMargin.addChild(this._contentContainer);
 
     // HEADER
 
@@ -442,9 +450,18 @@ class ItemOnGrid {
 
     this._spriteBulk = new DisplayObjectWrap(new PIXI.Sprite.from(TEXTURES.BULK), pixiApp);
     this._containerBulk.addChild(this._spriteBulk);
-    
+
+    const textBulkContainer = new MarginLayoutContainer(pixiApp);
+    textBulkContainer.fill = true;
+    textBulkContainer.padding.top = 3; // TODO: Make this scale well. 
+    this._containerBulk.addChild(textBulkContainer);
+
+    const textBulkContainer2 = new CenterLayoutContainer(pixiApp);
+    textBulkContainer.fill = true;
+    textBulkContainer.addChild(textBulkContainer2);
+
     this._textBulk = new DisplayObjectWrap(new PIXI.Text(item.data.data.bulk, TEXT_SETTINGS_INVERSE), pixiApp);
-    this._containerBulk.addChild(this._textBulk);
+    textBulkContainer2.addChild(this._textBulk);
 
     // FOOTER
     const FOOTER_HEIGHT = 20;

@@ -97,6 +97,10 @@ export default class Containable {
 
     return coordinates;
   }
+
+  destroy() {
+    this.debugDraw = false;
+  }
 }
 
 export class DebugDrawStrategy {
