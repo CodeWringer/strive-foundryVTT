@@ -11,21 +11,16 @@ export default class HorizontalLayoutContainer extends LayoutContainer {
   }
 
   refreshLayout() {
-    const fillChildren = [];
-
-    const children = [];
+    let numberOfFillChildren = 0;
     let childrenSummedWidth = 0;
-    
     for (const child of this.children) {
       if (child.fill === true) {
-        fillChildren.push(child);
+        numberOfFillChildren++;
       } else {
-        children.push(child);
         childrenSummedWidth += child.width;
       }
     }
-
-    const fillChildrenWidth = Math.max(0, (this.width - childrenSummedWidth) / fillChildren.length);
+    const fillChildrenWidth = Math.max(0, (this.width - childrenSummedWidth) / numberOfFillChildren);
 
     let x = 0;
     for (const child of this.children) {
@@ -33,8 +28,8 @@ export default class HorizontalLayoutContainer extends LayoutContainer {
       child.height = this.height;
 
       if (child.fill === true) {
-        x += fillChildrenWidth;
         child.width = fillChildrenWidth;
+        x += fillChildrenWidth;
       } else {
         x += child.width;
       }
