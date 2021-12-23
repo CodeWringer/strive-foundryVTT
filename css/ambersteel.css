@@ -582,6 +582,23 @@ li.roll.die.d6.roll-success {
   margin-right: 10px;
 }
 
+.ambersteel-icon {
+  -webkit-filter: brightness(0);
+  filter: brightness(0);
+}
+
+.ambersteel-icon:hover {
+  -webkit-filter: brightness(0) drop-shadow(0 0 4px #FF0000);
+  filter: brightness(0) drop-shadow(0 0 4px #FF0000);
+}
+
+.ico-take-item {
+  background: url("/systems/ambersteel/images/take-item.svg");
+  background-size: cover;
+  width: 24px;
+  height: 24px;
+}
+
 /* Components */
 header.sheet-header {
   -webkit-box-flex: 0;

@@ -9,6 +9,7 @@ export const TEMPLATES = {
   COMPONENT_NUMBER_SPINNER: "systems/ambersteel/templates/components/number-spinner.hbs",
   COMPONENT_INPUT: "systems/ambersteel/templates/components/input.hbs",
   COMPONENT_INPUT_LABEL: "systems/ambersteel/templates/components/input-label.hbs",
+  COMPONENT_BUTTON_TAKE_ITEM: "systems/ambersteel/templates/components/button-take-item.hbs",
   // GM
   COMPONENT_GM_NOTES: "systems/ambersteel/templates/gm-notes.hbs",
   // Dice

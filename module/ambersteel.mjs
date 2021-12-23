@@ -271,6 +271,7 @@ Handlebars.registerPartial('inputComponent', `{{#> "${TEMPLATES.COMPONENT_INPUT}
 Handlebars.registerPartial('inputLabel', `{{#> "${TEMPLATES.COMPONENT_INPUT_LABEL}"}}{{/"${TEMPLATES.COMPONENT_INPUT_LABEL}"}}`);
 Handlebars.registerPartial('buttonOpenSheet', `{{#> "${TEMPLATES.COMPONENT_BUTTON_OPEN_SHEET}"}}{{/"${TEMPLATES.COMPONENT_BUTTON_OPEN_SHEET}"}}`);
 Handlebars.registerPartial('buttonToggleVisibility', `{{#> "${TEMPLATES.COMPONENT_TOGGLE_VISIBILITY}"}}{{> @partial-block }}{{/"${TEMPLATES.COMPONENT_TOGGLE_VISIBILITY}"}}`);
+Handlebars.registerPartial('buttonTakeItem', `{{#> "${TEMPLATES.COMPONENT_BUTTON_TAKE_ITEM}"}}{{/"${TEMPLATES.COMPONENT_BUTTON_TAKE_ITEM}"}}`);
 
 /* -------------------------------------------- */
 /*  Ready Hook                                  */
