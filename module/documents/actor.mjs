@@ -270,7 +270,7 @@ export class AmbersteelActor extends Actor {
     const ailments = result.filter(it => it.type === "injury" || it.type === "illness");
 
     for (const item of items) {
-      if (item.data.data.isOnPerson) {
+      if (item.data.isOnPerson) {
         this._eventEmitter.emit(ActorEvents.possessionAdded, item);
       }
     }
