@@ -7,7 +7,7 @@ import * as ButtonToggleVisibility from '../../../components/button-toggle-visib
 import * as InputComponent from '../../../components/input.mjs';
 import * as OpenSheet from '../../../components/button-open-sheet.mjs';
 import { TEMPLATES } from "../../../templatePreloader.mjs";
-import { ItemGrid } from "../../../components/item-grid.mjs";
+import { ItemGrid } from "../../../components/item-grid/item-grid.mjs";
 
 export default class AmbersteelBaseActorSheet {
   /**

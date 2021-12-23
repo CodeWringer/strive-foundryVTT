@@ -93,4 +93,17 @@ export class EventEmitter {
       callback(arguments);
     }
   }
+
+  /**
+   * Creates aliases for the methods of this object on a given object. 
+   * So that calling 'object.on()' will actually call this 'on()'. 
+   * @param {Object} object 
+   */
+  bind(object) {
+    object.on = this.on.bind(this);
+    object.once = this.once.bind(this);
+    object.off = this.off.bind(this);
+    object.allOff = this.allOff.bind(this);
+    object.emit = this.emit.bind(this);
+  }
 }
