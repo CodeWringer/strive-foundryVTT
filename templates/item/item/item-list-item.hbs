@@ -13,8 +13,11 @@ item: {Item} = {
       isCustom: {Boolean}
       quantity: {Number}
       maxQuantity: {Number}
-      bulk: {Number}
-      shape: {String} = "straight"|"square"
+      bulk: {Number} - Derived!
+      shape: {Object} = {
+        width: {Number}
+        height: {Number}
+      }
       isOnPerson: {Boolean}
     }
   }
@@ -38,23 +41,12 @@ item: {Item} = {
 </div>
 {{!-- Row 2 --}}
 <div class="flex flex-row">
-  {{!-- Bulk --}}
-  <div class="flex flex-row">
-    <span class="width-min-xl">
-      {{> inputLabel text="ambersteel.labels.bulk" }}
-    </span>
-    <span class="width-md">
-      {{> inputComponent type="number" propertyPath="data.data.bulk" min="1" itemId=itemId isEditable=isEditable }}
-    </span>
-  </div>
-  {{!-- Spacer --}}
-  <div class="width-xs"></div>
   {{!-- Quantity --}}
-  <div class="flex flex-row flex-grow">
+  <div class="flex flex-row">
     <span class="width-min-xl">
       {{> inputLabel text="ambersteel.labels.quantity" }}
     </span>
-    <span class="width-min-xl flex-grow">
+    <span class="width-md">
       {{> inputComponent type="number" propertyPath="data.data.quantity" min="1" max=(lookupValue this "data.data.maxQuantity" itemId) itemId=itemId isEditable=isEditable }}
     </span>
   </div>
@@ -65,12 +57,46 @@ item: {Item} = {
     <span class="width-min-xl">
       {{> inputLabel text="ambersteel.labels.maxQuantity" }}
     </span>
-    <span class="width-min-xl flex-grow">
+    <span class="width-md">
       {{> inputComponent type="number" propertyPath="data.data.maxQuantity" min="1" itemId=itemId isEditable=isEditable }}
     </span>
   </div>
 </div>
 {{!-- Row 3 --}}
+<div class="flex flex-row">
+  {{!-- Shape.width --}}
+  <div class="flex flex-row">
+    <span class="width-min-xl">
+      {{> inputLabel text="ambersteel.labels.shapeWidth" }}
+    </span>
+    <span class="width-md">
+      {{> inputComponent type="number" propertyPath="data.data.shape.width" min="1" itemId=itemId isEditable=isEditable }}
+    </span>
+  </div>
+  {{!-- Spacer --}}
+  <div class="width-xs"></div>
+  {{!-- Shape.width --}}
+  <div class="flex flex-row">
+    <span class="width-min-xl">
+      {{> inputLabel text="ambersteel.labels.shapeHeight" }}
+    </span>
+    <span class="width-md">
+      {{> inputComponent type="number" propertyPath="data.data.shape.height" min="1" itemId=itemId isEditable=isEditable }}
+    </span>
+  </div>
+  {{!-- Spacer --}}
+  <div class="width-xs"></div>
+  {{!-- Bulk - read only! --}}
+  <div class="flex flex-row">
+    <span class="width-min-xl">
+      {{> inputLabel text="ambersteel.labels.bulk" }}
+    </span>
+    <span class="width-md">
+      {{> inputComponent type="number" propertyPath="data.data.bulk" itemId=itemId isEditable=false }}
+    </span>
+  </div>
+</div>
+{{!-- Row 4 --}}
 {{!-- Description --}}
 <div class="flex flex-row">
   {{> inputComponent type="multi-line" propertyPath="data.data.description" itemId=itemId isEditable=isEditable }}

@@ -12,8 +12,11 @@ item: {Item} = {
       isCustom: {Boolean}
       quantity: {Number}
       maxQuantity: {Number}
-      bulk: {Number}
-      shape: {String} = "straight"|"square"
+      bulk: {Number} - Derived!
+      shape: {Object} = {
+        width: {Number}
+        height: {Number}
+      }
       isOnPerson: {Boolean}
     }
   }

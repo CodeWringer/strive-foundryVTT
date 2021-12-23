@@ -12,8 +12,11 @@ item: {Item} = {
       isCustom: {Boolean}
       quantity: {Number}
       maxQuantity: {Number}
-      bulk: {Number}
-      shape: {String} = "straight"|"square"
+      bulk: {Number} - Derived!
+      shape: {Object} = {
+        width: {Number}
+        height: {Number}
+      }
       isOnPerson: {Boolean}
     }
   }
@@ -35,15 +38,6 @@ item: {Item} = {
       </div>
     </div>
   </header>
-  {{!-- Bulk --}}
-  <div class="sheet-block flex flex-row margin-b-md">
-    <div class="width-min-xxl">
-      {{> inputLabel text="ambersteel.labels.bulk"}}
-    </div>
-    <div class="flex-grow">
-      {{> inputComponent type="number" propertyPath="data.data.bulk" min="1" isEditable=isEditable }}
-    </div>
-  </div>
   {{!-- Quantity --}}
   <div class="sheet-block flex flex-row margin-b-md">
     <div class="width-min-xxl">
@@ -62,16 +56,32 @@ item: {Item} = {
       {{> inputComponent type="number" propertyPath="data.data.maxQuantity" min="1" isEditable=isEditable }}
     </div>
   </div>
-  {{!-- Shape --}}
+  {{!-- SHAPE --}}
+  {{!-- Width --}}
   <div class="sheet-block flex flex-row margin-b-md">
     <div class="width-min-xxl">
-      {{> inputLabel text="ambersteel.labels.shape"}}
+      {{> inputLabel text="ambersteel.labels.shapeWidth"}}
     </div>
     <div class="flex-grow">
-      {{> inputComponent type="drop-down" propertyPath="data.data.shape"
-        options=CONFIG.itemShapes optionValueProperty="name" optionDisplayProperty="localizableName"
-        isEditable=isEditable
-      }}
+      {{> inputComponent type="number" propertyPath="data.data.shape.width" min="1" isEditable=isEditable }}
+    </div>
+  </div>
+  {{!-- Height --}}
+  <div class="sheet-block flex flex-row margin-b-md">
+    <div class="width-min-xxl">
+      {{> inputLabel text="ambersteel.labels.shapeHeight"}}
+    </div>
+    <div class="flex-grow">
+      {{> inputComponent type="number" propertyPath="data.data.shape.height" min="1" isEditable=isEditable }}
+    </div>
+  </div>
+  {{!-- Bulk - read only! --}}
+  <div class="sheet-block flex flex-row margin-b-md">
+    <div class="width-min-xxl">
+      {{> inputLabel text="ambersteel.labels.bulk"}}
+    </div>
+    <div class="flex-grow">
+      {{> inputComponent type="number" propertyPath="data.data.bulk" isEditable=false }}
     </div>
   </div>
   {{!-- Description --}}
