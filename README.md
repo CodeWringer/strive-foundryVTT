@@ -12,3 +12,4 @@ This is the Ambersteel table-top role-playing game system for FoundryVTT.
     * comments-solid (unaltered)
     * dice-three-solid (unaltered)
     * hashtag-solid (unaltered)
+    * hand-holding-solid (altered)
