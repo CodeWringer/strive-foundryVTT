@@ -152,7 +152,9 @@
       "maxQuantity": "Max. Quantity",
       "carryingCapacity": "Carrying Capacity (in bulk)",
       "usedCarryingCapacity": "Used carrying capacity (in bulk)",
-      "openSheet": "Open Sheet"
+      "openSheet": "Open Sheet",
+      "shapeWidth": "Width",
+      "shapeHeight": "Height"
     },
     "fateSystem": {
       "fate": "Fate",
@@ -256,10 +258,6 @@
     "illnessStates": {
       "active": "Active",
       "treated": "Treated"
-    },
-    "itemShapes": {
-      "straight": "Straight",
-      "square": "Square"
     }
   }
 }
