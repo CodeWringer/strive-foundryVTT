@@ -4,6 +4,7 @@ const PATH_QUANTITY = "systems/ambersteel/images/hashtag-solid.svg";
 const PATH_SEND_TO_CHAT = "systems/ambersteel/images/comments-solid.svg";
 const PATH_DELETE = "systems/ambersteel/images/trash-solid.svg";
 const PATH_OPEN_SHEET = "systems/ambersteel/images/external-link-alt-solid.svg";
+const PATH_CROSS = "systems/ambersteel/images/times-circle-solid.svg";
 
 const LOADER = new PIXI.Loader();
 export const TEXTURES = {};
@@ -14,6 +15,7 @@ LOADER.add("itemQuantity", PATH_QUANTITY);
 LOADER.add("itemSendToChat", PATH_SEND_TO_CHAT);
 LOADER.add("itemDelete", PATH_DELETE);
 LOADER.add("itemOpenSheet", PATH_OPEN_SHEET);
+LOADER.add("cross", PATH_CROSS);
 
 LOADER.load((loader, resources) => {
   TEXTURES.ITEM_SLOT = resources.itemSlot.texture,
@@ -21,5 +23,6 @@ LOADER.load((loader, resources) => {
   TEXTURES.QUANTITY = resources.itemQuantity.texture,
   TEXTURES.SEND_TO_CHAT = resources.itemSendToChat.texture,
   TEXTURES.DELETE = resources.itemDelete.texture,
-  TEXTURES.OPEN_SHEET = resources.itemOpenSheet.texture
+  TEXTURES.OPEN_SHEET = resources.itemOpenSheet.texture,
+  TEXTURES.CROSS = resources.cross.texture
 });

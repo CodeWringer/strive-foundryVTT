@@ -1,4 +1,5 @@
 import { PositionInterpolator } from "../../pixi/interpolation/position-interpolator.mjs";
+import { TEXTURES } from "./texture-preloader.mjs";
 
 /**
  * Represents the indicator of a dragging target location. 
@@ -22,6 +23,18 @@ export class DragIndicator {
    * @private
    */
   _graphics = undefined;
+  
+  /**
+   * @type {PIXI.Sprite}
+   * @private
+   */
+  _spriteCross = undefined;
+
+  /**
+   * @type {PIXI.Container}
+   * @private
+   */
+  _container = undefined;
   
   /**
    * The grid coordinates (not pixel coordinates) the indicator should be placed at, initially. 
@@ -114,9 +127,9 @@ export class DragIndicator {
     if (value !== this.show) {
       if (value === true) {
         this._redraw();
-        this._stage.addChild(this._graphics);
+        this._stage.addChild(this._container);
       } else {
-        this._stage.removeChild(this._graphics);
+        this._stage.removeChild(this._container);
       }
     }
     this._show = value;
@@ -151,8 +164,13 @@ export class DragIndicator {
     this._stage = this._pixiApp.stage;
     this._tileSize = tileSize;
     this._graphics = new PIXI.Graphics();
+    this._container = new PIXI.Container();
+    this._container.addChild(this._graphics);
+    this._spriteCross = new PIXI.Sprite.from(TEXTURES.CROSS);
+    this._spriteCross.width = tileSize / 1.5;
+    this._spriteCross.height = tileSize / 1.5;
 
-    this._interpolator = new PositionInterpolator(this._graphics, pixiApp, { x: 0, y: 0 }, { x: 0, y: 0 }, 150);
+    this._interpolator = new PositionInterpolator(this._container, pixiApp, { x: 0, y: 0 }, { x: 0, y: 0 }, 150);
   }
 
   destroy() {
@@ -160,6 +178,9 @@ export class DragIndicator {
 
     this._graphics.destroy();
     this._graphics = undefined;
+    
+    this._container.destroy();
+    this._container = undefined;
 
     this._interpolator.destroy();
     this._interpolator = undefined;
@@ -227,11 +248,17 @@ export class DragIndicator {
       this._graphics.lineStyle(this._lineStyleInvalid.width, this._lineStyleInvalid.color, this._lineStyleInvalid.alpha, this._lineStyleInvalid.alignment);
     }
 
-    this._graphics.drawRect(
-      0,
-      0,
-      this._sizeOnGrid.width * this._tileSize,
-      this._sizeOnGrid.height * this._tileSize
-    );
+    const width = this._sizeOnGrid.width * this._tileSize;
+    const height = this._sizeOnGrid.height * this._tileSize;
+
+    this._graphics.drawRect(0, 0, width, height);
+
+    if (this.valid === false) {
+      this._spriteCross.x = (width / 2) - (this._spriteCross.width / 2);
+      this._spriteCross.y = (height / 2) - (this._spriteCross.height / 2);
+      this._container.addChild(this._spriteCross);
+    } else {
+      this._container.removeChild(this._spriteCross);
+    }
   }
 }
