@@ -107,6 +107,7 @@
       "tabGmNotes": "GM",
       "confirm": "Confirm",
       "cancel": "Cancel",
+      "ok": "OK",
       "increment": "Increment",
       "decrement": "Decrement",
       "description": "Description",
@@ -222,7 +223,9 @@
       "titleConfirmDeletionIllnessQuery": "Confirm Deletion of Illness",
       "titleConfirmDeletionFateCardQuery": "Confirm Deletion of Fate-Card",
       "titleConfirmDeletionPossessionQuery": "Confirm Deletion of Possession",
-      "titleConfirmDeletionPropertyQuery": "Confirm Deletion of Property"
+      "titleConfirmDeletionPropertyQuery": "Confirm Deletion of Property",
+      "titleInventoryFull": "Inventory full",
+      "contentInventoryFull": "There is not enough room on the item grid to add the item to it."
     },
     "attackTypes": {
       "singleTarget": "Single-Target",

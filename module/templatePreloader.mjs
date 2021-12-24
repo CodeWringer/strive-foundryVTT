@@ -18,6 +18,7 @@ export const TEMPLATES = {
   DIALOG_ROLL: "systems/ambersteel/templates/dialog/roll-dialog.hbs",
   DIALOG_ITEM_ADD: "systems/ambersteel/templates/dialog/dialog-add-item.hbs",
   DIALOG_VISIBILITY: "systems/ambersteel/templates/dialog/dialog-visibility.hbs",
+  DIALOG_PLAIN: "systems/ambersteel/templates/dialog/dialog-plain.hbs",
   // Actor
   ACTOR_SHEET: "systems/ambersteel/templates/actor/actor-character-sheet.hbs",
   ACTOR_ATTRIBUTE_TABLE: "systems/ambersteel/templates/actor/components/component-attribute-table.hbs",

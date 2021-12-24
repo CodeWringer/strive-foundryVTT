@@ -25,6 +25,7 @@ export default class AmbersteelBaseActor {
     this.parent.updateProperty = this.updateProperty.bind(this);
     this.parent.advanceSkillBasedOnRollResult = this.advanceSkillBasedOnRollResult.bind(this);
     this.parent.advanceAttributeBasedOnRollResult = this.advanceAttributeBasedOnRollResult.bind(this);
+    this.parent.canItemFitOnGrid = this.canItemFitOnGrid.bind(this);
   }
 
   /**
@@ -230,5 +231,16 @@ export default class AmbersteelBaseActor {
    */
   async advanceAttributeBasedOnRollResult(rollResult, attributeName) {
     await this.parent.addAttributeProgress(attributeName, rollResult.isSuccess);
+  }
+
+  /**
+   * Tests if the given item could fit on the item grid and returns the result, 
+   * also contains the grid coordinates and orientation of where it would fit. 
+   * @param {AmbersteelItemItem} item 
+   * @returns {Object} { result: {Boolean}, x: {Number} y: {Number}, orientation: {CONFIG.itemOrientations} }
+   */
+  canItemFitOnGrid(item) {
+    return { result: false, x: -1, y: -1, orientation: undefined }
+    // TODO
   }
 }

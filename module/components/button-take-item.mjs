@@ -1,3 +1,4 @@
+import { showPlainDialog } from "../utils/dialog-utility.mjs";
 import { updateProperty } from "../utils/document-update-utility.mjs";
 
 /**
@@ -45,12 +46,28 @@ async function _onTakeItem(event) {
       if (parent !== undefined && parent !== null) {
         parent.items.remove(item);
       }
-  
+
+      // Test if the item can fit on the item grid. 
+      const canItemFit = actor.canItemFitOnGrid(item);
+      if (canItemFit.result !== true) {
+        item.updateProperty("data.isOnPerson", false);
+      }
+      
       // Add the item to the current user's character. 
       actor.items.add(item);
     } else {
-      // The item is already on the actor and only has to be set to be on person. 
-      updateProperty(item, "data.isOnPerson", true);
+      // Test if the item can fit on the item grid. 
+      const canItemFit = actor.canItemFitOnGrid(item);
+      if (canItemFit.result === true) {
+        // The item is already on the actor and only has to be set to be on person. 
+        item.updateProperty("data.isOnPerson", true);
+      } else {
+        // Display an error message for the user, which clarifies there is not enough free space in inventory. 
+        showPlainDialog({
+          localizableTitle: game.i18n.localize("ambersteel.dialog.titleInventoryFull"),
+          localizedContent: game.i18n.localize("ambersteel.dialog.contentInventoryFull")
+        });
+      }
     }
   } else {
     // Currently in the context of a GM. 

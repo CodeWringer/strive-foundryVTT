@@ -89,9 +89,6 @@ export class ItemOnGrid {
   _rectangle = undefined;
   get rectangle() { return this._rectangle; }
 
-  _gridX = 0;
-  _gridY = 0;
-  
   get x() { return this.rootContainer.x; }
   set x(value) {
     this.rootContainer.x = value;

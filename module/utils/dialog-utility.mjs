@@ -1,5 +1,6 @@
 import DialogResult from '../dto/dialog-result.mjs';
 import * as NumberSpinner from '../components/number-spinner.mjs';
+import { TEMPLATES } from '../templatePreloader.mjs';
 
 /**
  * Shows a dialog to the user and returns a promise with the result of the user interaction. 
@@ -102,6 +103,43 @@ export async function showConfirmationDialog(args = {}) {
             render: html => {},
             close: html => {
                 resolve(mergedDialogData.confirmed);
+            }
+        });
+        dialog.render(true);
+    });
+}
+
+/**
+ * Shows a dialog that contains a paragraph of text. 
+ * 
+ * Has a single "ok" button. 
+ * @param {Object} args { localizableTitle: {String}, localizedContent: {String} }
+ */
+export async function showPlainDialog(args = {}) {
+    args = {
+        localizableTitle: "",
+        localizedContent: "",
+        ...args
+    };
+
+    return new Promise(async (resolve, reject) => {
+        // Render template. 
+        const renderedContent = await renderTemplate(TEMPLATES.DIALOG_PLAIN, args);
+
+        const dialog = new Dialog({
+            title: game.i18n.localize(args.localizableTitle),
+            content: renderedContent,
+            buttons: {
+                ok: {
+                    icon: '<i class="fas fa-check"></i>',
+                    label: game.i18n.localize("ambersteel.labels.ok"),
+                    callback: () => {}
+                }
+            },
+            default: "ok",
+            render: html => {},
+            close: html => {
+                resolve();
             }
         });
         dialog.render(true);

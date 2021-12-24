@@ -5,6 +5,7 @@ import AmbersteelBaseActorSheet from "../../sheets/subtypes/actor/ambersteel-bas
 import { TEXTURES } from "./texture-preloader.mjs";
 import { ItemOnGrid } from "./item-on-grid.mjs";
 import { DragIndicator } from "./drag-indicator.mjs";
+import { off } from "gulp";
 
 const WIDTH = 550; // This magic constant is based on the assumption that the actor sheet is about 560px wide. 
 const MAX_COLUMNS = 4;
@@ -16,7 +17,7 @@ function MOCK_ACTOR_SHEET() { return {
     possessions: [
       { id: "Ab1", name: "Crowns", img: "icons/svg/item-bag.svg", data: { data: { description: "That which greases palms.", gmNotes: "", isCustom: false, quantity: 1, maxQuantity: 100, bulk: 1, shape: { width: 1, height: 1 }, isOnPerson: true } } },
       { id: "Ab2", name: "Longsword", img: "icons/svg/item-bag.svg", data: { data: { description: "This is a two-handed bladed weapon.", gmNotes: "", isCustom: false, quantity: 1, maxQuantity: undefined, bulk: 2, shape: { width: 1, height: 2 }, isOnPerson: true } } },
-      { id: "Ab3", name: "Axe", img: "icons/svg/item-bag.svg", data: { data: { description: "This is a two-handed bladed weapon.", gmNotes: "", isCustom: false, quantity: 1, maxQuantity: undefined, bulk: 2, shape: { width: 2, height: 1 }, isOnPerson: true } } },
+      { id: "Ab3", name: "Axe", img: "icons/svg/item-bag.svg", data: { data: { description: "This is a two-handed bladed weapon.", gmNotes: "", isCustom: false, quantity: 1, maxQuantity: undefined, bulk: 2, shape: { width: 1, height: 2 }, isOnPerson: true } } },
     ],
     maxBulk: 9,
     on() {},
@@ -33,7 +34,8 @@ function MOCK_ACTOR_SHEET() { return {
           ]
         }
       }
-    }
+    },
+    updateProperty(propertyPath, newValue) {}
   }
 }};
 
@@ -297,7 +299,6 @@ export class ItemGrid {
    */
   _setupInteractivity() {
     // TODO: Test events for items on grid. 
-    // TODO: Item hover. 
     // TODO: Item dragging on grid. 
     // TODO: Interactivity on item:
       // - sendToChat
@@ -341,9 +342,30 @@ export class ItemGrid {
         const gridCoords = this._getGridCoordsAt(coords.x, coords.y);
 
         // Either apply or reject item move change. 
-        if (this._canItemBeMovedTo(this._dragItem, gridCoords.x, gridCoords.y).result === true) {
-          // TODO: Apply move change. 
-          // TODO: Consider the possibility of swapping two items. 
+        const canItemBeMovedTo = this._canItemBeMovedTo(this._dragItem, gridCoords.x, gridCoords.y);1
+        if (canItemBeMovedTo.result === true) {
+          const inventory = this._actor.data.data.assets.inventory;
+          const index = inventory.find((element) => { return element.id === this._dragItem.item.id; });
+
+          if (canItemBeMovedTo.itemsToSwitch.length === 0) {
+            index.x = gridCoords.x;
+            index.y = gridCoords.y;
+          } else {
+            // Swap items.
+            for (const itemToSwitch of canItemBeMovedTo.itemsToSwitch) {
+              const indexItemToSwitch = inventory.find((element) => { return element.id === itemToSwitch.item.id; })
+              const offset = {
+                x: gridCoords.x - indexItemToSwitch.x,
+                y: gridCoords.y - indexItemToSwitch.y,
+              };
+              indexItemToSwitch.x = index.x + offset.x;
+              indexItemToSwitch.y = index.y + offset.y;
+            }
+            
+            index.x = gridCoords.x;
+            index.y = gridCoords.y;
+          }
+          this._actor.updateProperty("data.assets.inventory", inventory);
         }
 
         // Unset currently dragged item. 
