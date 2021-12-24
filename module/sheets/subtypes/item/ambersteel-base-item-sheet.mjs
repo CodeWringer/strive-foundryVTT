@@ -2,6 +2,7 @@ import * as SheetUtil from '../../../utils/sheet-utility.mjs';
 import * as ButtonAdd from '../../../components/button-add.mjs';
 import * as ButtonRoll from '../../../components/button-roll.mjs';
 import * as ButtonDelete from '../../../components/button-delete.mjs';
+import * as ButtonTakeItem from '../../../components/button-take-item.mjs';
 import * as ButtonSendToChat from '../../../components/button-send-to-chat.mjs';
 import * as ButtonToggleVisibility from '../../../components/button-toggle-visibility.mjs';
 import * as InputComponent from '../../../components/input.mjs';
@@ -87,6 +88,7 @@ export default class AmbersteelBaseItemSheet {
     InputComponent.activateListeners(html, this, isOwner, isEditable);
     OpenSheet.activateListeners(html, this, isOwner, isEditable);
     ButtonToggleVisibility.activateListeners(html, this, isOwner, isEditable);
+    ButtonTakeItem.activateListeners(html, this, isOwner, isEditable);
     
     // -------------------------------------------------------------
     if (!isOwner) return;
