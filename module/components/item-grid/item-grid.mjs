@@ -93,6 +93,12 @@ export class ItemGrid {
    * @private
    */
   _items = [];
+
+  /**
+   * @type {Array<Array<InventoryIndex | null>>}
+   * @private
+   */
+  _grid = undefined;
   
   /**
    * @type {AmbersteelBaseActorSheet}
@@ -241,6 +247,8 @@ export class ItemGrid {
   _setupTiles() {
     let x = 0;
     let y = 0;
+
+    this._grid = [];
   
     for (let i = 0; i < this.tileCount; i++) {
       const spriteItemSlot = PIXI.Sprite.from(TEXTURES.ITEM_SLOT);
@@ -251,6 +259,11 @@ export class ItemGrid {
       spriteItemSlot.alpha = 0.5;
       this._spriteInstancesGrid.push(spriteItemSlot);
       this._rootContainer.addChild(spriteItemSlot);
+
+      while (this._grid.length <= x) {
+        this._grid.push([]);
+      }
+      this._grid[x].push(null);
   
       x++;
       if (x == MAX_COLUMNS) {
@@ -315,7 +328,7 @@ export class ItemGrid {
         this._dragIndicator.setInitialTo(itemOnGrid.index.x, itemOnGrid.index.y);
         this._dragIndicator.setTargetTo(itemOnGrid.index.x, itemOnGrid.index.y);
         this._dragIndicator.show = true;
-        this._dragIndicator.valid = this._canItemBeMovedTo(itemOnGrid.index.x, itemOnGrid.index.y);
+        this._dragIndicator.valid = this._canItemBeMovedTo(itemOnGrid, itemOnGrid.index.x, itemOnGrid.index.y).result;
       }
     });
 
@@ -328,7 +341,7 @@ export class ItemGrid {
         const gridCoords = this._getGridCoordsAt(coords.x, coords.y);
 
         // Either apply or reject item move change. 
-        if (this._canItemBeMovedTo(gridCoords.x, gridCoords.y) === true) {
+        if (this._canItemBeMovedTo(this._dragItem, gridCoords.x, gridCoords.y).result === true) {
           // TODO: Apply move change. 
           // TODO: Consider the possibility of swapping two items. 
         }
@@ -367,7 +380,7 @@ export class ItemGrid {
         this._determineCursor(coords.x, coords.y);
       } else {
         const gridCoords = this._getGridCoordsAt(coords.x, coords.y);
-        const canItemBeMovedTo = this._canItemBeMovedTo(this._dragItem, gridCoords.x, gridCoords.y);
+        const canItemBeMovedTo = this._canItemBeMovedTo(this._dragItem, gridCoords.x, gridCoords.y).result;
 
         if (canItemBeMovedTo === true) {
           this._dragIndicator.valid = true;
@@ -457,11 +470,68 @@ export class ItemGrid {
    * @param {ItemOnGrid} itemOnGrid The item to test. 
    * @param {Number} gridX X coordinate, in grid coordinates. 
    * @param {Number} gridY Y coordinate, in grid coordinates. 
-   * @returns {Boolean} True, if
+   * @returns {Object} { result: {Boolean}, itemsToSwitch: {Array<ItemOnGrid>} }
    */
   _canItemBeMovedTo(itemOnGrid, gridX, gridY) {
-    // TODO
-    return false;
+    const emptyResult = { result: false, itemsToSwitch: [] };
+    // Test if over self. 
+    // If so, no need for further checks. The item can remain where it is currently at. 
+    if (gridX === itemOnGrid.index.x && gridY === itemOnGrid.index.y) return emptyResult;
+
+    // Test if target exceeds grid size. 
+    for (let x = 0; x < itemOnGrid.shape.width; x++) {
+      if (this._grid.length <= (gridX + x)) return emptyResult;
+
+      const bottom = gridY + (itemOnGrid.shape.height - 1);
+      if (bottom >= this._grid[gridX + x].length) return emptyResult;
+    }
+
+    // Test if there is overlap with other items on grid. 
+    const overlappedItems = this._getItemsOnGridWithin(gridX, gridY, itemOnGrid.shape.width, itemOnGrid.shape.height);
+    // Test if the overlapping items can be swapped. 
+    for (const overlappedItem of overlappedItems) {
+      if (overlappedItem.isPartial === true) return emptyResult;
+    }
+
+    return { result: true, itemsToSwitch: overlappedItems };
+  }
+  
+  /**
+   * Returns all items on grid that can be at least partially contained by a 
+   * rectangle spanning the given dimensions, at the given position. 
+   * @param {Number} gridX In grid coordinates. 
+   * @param {Number} gridY In grid coordinates. 
+   * @param {Number} gridWidth In grid coordinates. 
+   * @param {Number} gridHeight In grid coordinates. 
+   * @returns {Object} { item: {ItemOnGrid}, isPartial: {Boolean} }
+   */
+  _getItemsOnGridWithin(gridX, gridY, gridWidth, gridHeight) {
+    const result = [];
+    const right = gridX + gridWidth - 1;
+    const bottom = gridY + gridHeight - 1;
+
+    for (const itemOnGrid of this._itemsOnGrid) {
+      const itemRight = itemOnGrid.index.x + itemOnGrid.shape.width - 1;
+      const itemBottom = itemOnGrid.index.y + itemOnGrid.shape.height - 1;
+
+      if (itemOnGrid.index.x > right) continue;
+      if (itemOnGrid.index.y > bottom) continue;
+      if (itemRight < gridX) continue;
+      if (itemBottom < gridY) continue;
+
+      let isPartial = false;
+
+      if (itemOnGrid.index.x < gridX || itemRight > right) {
+        isPartial = true;
+      }
+      if (itemOnGrid.index.y < gridY || itemBottom > bottom) {
+        isPartial = true;
+      }
+
+      result.push({ item: itemOnGrid, isPartial: isPartial });
+    }
+
+    return result;
   }
 
   /**
