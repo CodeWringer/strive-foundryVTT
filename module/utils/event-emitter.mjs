@@ -86,7 +86,7 @@ export class EventEmitter {
    */
   emit(event) {
     const listeners = this._events.get(event);
-    if (typeof(listeners) === undefined || typeof(listeners) === null) return;
+    if (listeners === undefined) return;
 
     const callbacks = listeners.values();
     for (const callback of callbacks) {

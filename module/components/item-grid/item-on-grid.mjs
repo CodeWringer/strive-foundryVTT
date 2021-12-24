@@ -1,4 +1,5 @@
 import AmbersteelItemItem from "../../documents/subtypes/item/ambersteel-item-item.mjs";
+import InventoryIndex from "../../dto/inventory-index.mjs";
 import CenterLayoutContainer from "../../pixi/center-layout-container.mjs";
 import Containable from "../../pixi/containable.mjs";
 import DisplayObjectWrap from "../../pixi/display-object-wrap.mjs";
@@ -15,20 +16,8 @@ const TEXT_SETTINGS_INVERSE = {fontFamily : FONT_FAMILY, fontSize: 18, fontWeigh
 // TODO: Implement proper layouting-logic or figure out how to make yoga layout for PixiJS work. 
 export class ItemOnGrid {
   /**
-   * @type {AmbersteelItemItem}
-   * @private
-   */
-  _item = undefined;
-  
-  /**
-   * @type {Object}
-   * @private
-   */
-  _shape = { width: 1, height: 1 };
-
-  /**
-   * @private
    * @type {Number}
+   * @private
    */
   _tileSize = 0;
 
@@ -63,33 +52,100 @@ export class ItemOnGrid {
    */
   rootContainer = undefined;
 
+  /**
+   * @type {AmbersteelItemItem}
+   * @private
+   */
+  _item = undefined;
+  /**
+   * @type {AmbersteelItemItem}
+   */
+  get item() { return this._item; }
+
+  /**
+   * @type {InventoryIndex}
+   * @private
+   */
+  _index = undefined;
+  /**
+   * @type {InventoryIndex}
+   */
+  get index() { return this._index; }
+  
+  /**
+   * @type {Object} { width: {Number}, height: {Number} }
+   * @private
+   */
+  _shape = { width: 1, height: 1 };
+  /**
+   * @type {Object} { width: {Number}, height: {Number} }
+   */
+  get shape() { return this._shape; }
+
+  /**
+   * @type {PIXI.Rectangle}
+   * @private
+   */
+  _rectangle = undefined;
+  get rectangle() { return this._rectangle; }
+
+  _gridX = 0;
+  _gridY = 0;
+  
   get x() { return this.rootContainer.x; }
-  set x(value) { this.rootContainer.x = value; }
+  set x(value) {
+    this.rootContainer.x = value;
+    this._rectangle.x = value;
+  }
 
   get y() { return this.rootContainer.y; }
-  set y(value) { this.rootContainer.y = value; }
+  set y(value) {
+    this.rootContainer.y = value;
+    this._rectangle.y = value;
+  }
 
   get width() { return this.rootContainer.width; }
-  set width(value) { this.rootContainer.width = value; }
+  set width(value) {
+    this.rootContainer.width = value;
+    this._rectangle.width = value;
+  }
 
   get height() { return this.rootContainer.height; }
-  set height(value) { this.rootContainer.height = value; }
+  set height(value) {
+    this.rootContainer.height = value;
+    this._rectangle.height = value;
+  }
 
-  _showDebug = false;
-  get showDebug() { return this._showDebug; }
-  set showDebug(value) {
-    this._showDebug = value;
+  _drawDebug = false;
+  get drawDebug() { return this._drawDebug; }
+  set drawDebug(value) {
+    this._drawDebug = value;
     this.rootContainer.drawDebug = value;
   }
 
-  constructor(item, tileSize, pixiApp) {
+  get tint() { return this._spriteBackground.tint; }
+  set tint(value) { this._spriteBackground.tint = value; }
+
+  constructor(item, index, tileSize, pixiApp) {
     this._item = item;
+    this._index = index;
     this._shape = item.data.data.shape;
     this._tileSize = tileSize;
     this._pixiApp = pixiApp;
-
+    this._rectangle = new PIXI.Rectangle(0, 0, 0, 0);
+    
     this._eventEmitter = new EventEmitter();
     this._eventEmitter.bind(this);
+    
+    // Set up root container and determine dimensions. 
+    this.rootContainer = new CenterLayoutContainer(this._pixiApp);
+    
+    // These actually implicitly set the rootContainer's dimensions.
+    this.width = this._shape.width * this._tileSize.width;
+    this.height = this._shape.height * this._tileSize.height;
+
+    this._rectangle.width = this.width;
+    this._rectangle.height = this.height;
     
     this._setupElements();
     this._setupInteractivity();
@@ -103,18 +159,12 @@ export class ItemOnGrid {
   }
 
   delete() {
-    this.showDebug = false;
+    this.drawDebug = false;
     this.rootContainer.destroy();
     this._item.delete();
   }
 
   _setupElements() {
-    // Root container. 
-    this.rootContainer = new CenterLayoutContainer(this._pixiApp);
-    // These actually implicitly set the rootContainer's dimensions.
-    this.width = this._shape.width * this._tileSize.width;
-    this.height = this._shape.height * this._tileSize.height;
-
     // Background sprite.
     this._spriteBackground = new DisplayObjectWrap(new PIXI.Sprite.from(TEXTURES.ITEM_SLOT), this._pixiApp);
     this._spriteBackground.fill = true;
@@ -265,7 +315,10 @@ export class ItemOnGrid {
       thiz.delete();
     });
     this._spriteDelete.wrapped.on("pointerover", (event) => {
-
+      console.log("_spriteDelete pointerover");
+    });
+    this._spriteDelete.wrapped.on("pointerout", (event) => {
+      console.log("_spriteDelete pointerout");
     });
   }
 }

@@ -4,6 +4,7 @@ import InventoryIndex from "../../dto/inventory-index.mjs";
 import AmbersteelBaseActorSheet from "../../sheets/subtypes/actor/ambersteel-base-actor-sheet.mjs";
 import { TEXTURES } from "./texture-preloader.mjs";
 import { ItemOnGrid } from "./item-on-grid.mjs";
+import { DragIndicator } from "./drag-indicator.mjs";
 
 const WIDTH = 550; // This magic constant is based on the assumption that the actor sheet is about 560px wide. 
 const MAX_COLUMNS = 4;
@@ -15,7 +16,7 @@ function MOCK_ACTOR_SHEET() { return {
     possessions: [
       { id: "Ab1", name: "Crowns", img: "icons/svg/item-bag.svg", data: { data: { description: "That which greases palms.", gmNotes: "", isCustom: false, quantity: 1, maxQuantity: 100, bulk: 1, shape: { width: 1, height: 1 }, isOnPerson: true } } },
       { id: "Ab2", name: "Longsword", img: "icons/svg/item-bag.svg", data: { data: { description: "This is a two-handed bladed weapon.", gmNotes: "", isCustom: false, quantity: 1, maxQuantity: undefined, bulk: 2, shape: { width: 1, height: 2 }, isOnPerson: true } } },
-      { id: "Ab3", name: "Axe", img: "icons/svg/item-bag.svg", data: { data: { description: "This is a two-handed bladed weapon.", gmNotes: "", isCustom: false, quantity: 1, maxQuantity: undefined, bulk: 2, shape: { width: 1, height: 2 }, isOnPerson: true } } },
+      { id: "Ab3", name: "Axe", img: "icons/svg/item-bag.svg", data: { data: { description: "This is a two-handed bladed weapon.", gmNotes: "", isCustom: false, quantity: 1, maxQuantity: undefined, bulk: 2, shape: { width: 2, height: 1 }, isOnPerson: true } } },
     ],
     maxBulk: 9,
     on() {},
@@ -38,7 +39,6 @@ function MOCK_ACTOR_SHEET() { return {
 
 /**
  * Represents an item grid (of possessions). 
- * @property {Number} tileCount Total number of tiles on grid. 
  */
 export class ItemGrid {
   /**
@@ -47,6 +47,12 @@ export class ItemGrid {
    * @private
    */
   _eventListeners = {};
+
+  /**
+   * @type {HTMLElement}
+   * @private
+   */
+  _canvasElement = undefined;
 
   /**
    * @type {PIXI.App}
@@ -75,6 +81,18 @@ export class ItemGrid {
    * @private
    */
   _itemsOnGrid = [];
+
+  /**
+   * @type {Array<InventoryIndex>}
+   * @private
+   */
+  _indices = [];
+
+  /**
+   * @type {Array<AmbersteelItemItem>}
+   * @private
+   */
+  _items = [];
   
   /**
    * @type {AmbersteelBaseActorSheet}
@@ -86,12 +104,65 @@ export class ItemGrid {
    * @private
    */
   _actor = undefined;
+  
+  /**
+   * @type {ItemOnGrid}
+   * @private
+   */
+  _dragItem = undefined;
+
+  /**
+   * @type {DragIndicator}
+   * @private
+   */
+  _dragIndicator = undefined;
 
   /**
    * Total number of tiles on grid. 
    * @type {Number}
    */
   tileCount = 0;
+
+  /**
+   * If set to true, will draw debug info. 
+   * @type {Boolean}
+   * @private
+   */
+  _drawDebug = false;
+  get drawDebug() { return this._drawDebug; }
+  set drawDebug(value) {
+    this._drawDebug = value;
+    for (const itemOnGrid of this._itemsOnGrid) {
+      itemOnGrid.drawDebug = !itemOnGrid.drawDebug;
+    }
+  }
+  
+  /**
+   * If not undefined, the currently being dragged item. 
+   * @type {ItemOnGrid|undefined}
+   * @private
+   */
+  _hoverItem = undefined;
+  get hoverItem() { return this._hoverItem; }
+  set hoverItem(value) {
+    if (value != this.hoverItem) {
+      if (this.hoverItem !== undefined) {
+        this.hoverItem.tint = 0xFFFFFF; // Removes any highlighting. 
+      }
+    }
+
+    this._hoverItem = value;
+
+    if (this.hoverItem != undefined) {
+      this.hoverItem.tint = 0xfcecde; // Sets a highlight. TODO: Make prettier than a tint. 
+    }
+  }
+
+  _isEditable = true;
+  get isEditable() { return this._isEditable; }
+  set isEditable(value) {
+    this._isEditable = value;
+  }
 
   /**
    * 
@@ -110,9 +181,9 @@ export class ItemGrid {
     this._registerEvents(this._actor);
     
     // Setup HTML canvas element. 
-    const canvasElement = html.find("#" + canvasElementId)[0];
+    this._canvasElement = html.find("#" + canvasElementId)[0];
     const height = Math.ceil(this.tileCount / MAX_COLUMNS) * TILE_SIZE;
-    canvasElement.style.height = height;
+    this._canvasElement.style.height = height;
   
     // Setup Pixi app. 
     this._pixiApp = new PIXI.Application({
@@ -123,17 +194,20 @@ export class ItemGrid {
       height: height
     });
 
-    canvasElement.appendChild(this._pixiApp.view);
+    this._canvasElement.appendChild(this._pixiApp.view);
     this._stage = this._pixiApp.stage;
   
     this._rootContainer = new PIXI.Container();
     this._stage.addChild(this._rootContainer);
   
+    // Setup drag indicator. 
+    this._dragIndicator = new DragIndicator(this._pixiApp, TILE_SIZE);
+
     this._setupTiles();
   
-    const indices = this._actor.data.data.assets.inventory; // A list of {InventoryIndex}
-    const items = this._actor.possessions; // A list of {AmbersteelItemItem}
-    this._setupItemsOnGrid(indices, items);
+    this._indices = this._actor.data.data.assets.inventory; // A list of {InventoryIndex}
+    this._items = this._actor.possessions; // A list of {AmbersteelItemItem}
+    this._setupItemsOnGrid(this._indices, this._items);
     
     this._setupInteractivity();
   }
@@ -195,7 +269,7 @@ export class ItemGrid {
   _setupItemsOnGrid(indices, items) {
     for (const index of indices) {
       const item = items.find((element) => { return element.id === index.id; });
-      const itemOnGrid = new ItemOnGrid(item, { width: TILE_SIZE, height: TILE_SIZE }, this._pixiApp);
+      const itemOnGrid = new ItemOnGrid(item, index, { width: TILE_SIZE, height: TILE_SIZE }, this._pixiApp);
       this._itemsOnGrid.push(itemOnGrid);
 
       this._rootContainer.addChild(itemOnGrid.rootContainer.wrapped);
@@ -209,29 +283,102 @@ export class ItemGrid {
    * @private
    */
   _setupInteractivity() {
+    // TODO: Test events for items on grid. 
+    // TODO: Item hover. 
+    // TODO: Item dragging on grid. 
+    // TODO: Interactivity on item:
+      // - sendToChat
+      // - delete
+      // - update property (this might be a bit too much work - probably requires 
+      // custom implementation of input field, but as an object on canvas)
+
     this._stage.interactive = true;
-    this._stage.on("pointerdown", () => {
-      console.log("clicked!");
-      for (const itemOnGrid of this._itemsOnGrid) {
-        itemOnGrid.showDebug = !itemOnGrid.showDebug;
+    this._stage.interactiveChildren = true;
+    this._stage.on("pointerdown", (event) => {
+      const coords = { x: event.data.global.x, y: event.data.global.y };
+      const itemOnGrid = this._getItemAt(coords.x, coords.y);
+      const button = this._getButtonAt(coords.x, coords.y);
+
+      if (button !== undefined) {
+        if (button.requiresEditPermission === true && this.isEditable !== true) return;
+
+        // TODO: Click button. 
+      } else if (itemOnGrid !== undefined) {
+        if (this.isEditable !== true) return;
+
+        // Start dragging. 
+        this._canvasElement.style.cursor = "grabbing";
+
+        this.hoverItem = itemOnGrid;
+        this._dragItem = itemOnGrid;
+        this._dragIndicator.setSize(itemOnGrid.index.w, itemOnGrid.index.h);
+        this._dragIndicator.setInitialTo(itemOnGrid.index.x, itemOnGrid.index.y);
+        this._dragIndicator.setTargetTo(itemOnGrid.index.x, itemOnGrid.index.y);
+        this._dragIndicator.show = true;
       }
     });
-    this._stage.on("pointermove", (event) => {
-      console.log(event);
+
+    this._stage.on("pointerup", (event) => {
+      if (this.isEditable !== true) return;
+
+      const coords = { x: event.data.global.x, y: event.data.global.y };
+
+      if (this._dragItem !== undefined) {
+        const gridCoords = this._getGridCoordsAt(coords.x, coords.y);
+
+        // Either apply or reject item move change. 
+        if (this._canItemBeMovedTo(gridCoords.x, gridCoords.y) === true) {
+          // TODO: Apply move change. 
+          // TODO: Consider the possibility of swapping two items. 
+        }
+
+        // Unset currently dragged item. 
+        this._dragItem = undefined;
+        this._dragIndicator.valid = true;
+        this._dragIndicator.show = false;
+      }
+      
+      this._determineCursor(coords.x, coords.y);
     });
 
-    this._pixiApp.ticker.add((delta) => {
-      // TODO: Test events for items on grid. 
-      // TODO: Item hover. 
-      // TODO: Item dragging on grid. 
-      // TODO: Interactivity on item:
-        // - sendToChat
-        // - delete
-        // - update property (this might be a bit too much work - probably requires 
-        // custom implementation of input field, but as an object on canvas)
+    this._captureCursor = false;
+    
+    this._stage.on("pointerover", (event) => {
+      this._captureCursor = true;
+    });
+
+    this._stage.on("pointerout", (event) => {
+      this._captureCursor = false;
+
+      if (this._dragItem === undefined) {
+        // Unset current hover item. 
+        this.hoverItem = undefined;
+      }
+    });
+
+    this._stage.on("pointermove", (event) => {
+      if (this._captureCursor !== true) return;
+      const coords = { x: event.data.global.x, y: event.data.global.y };
+
+      if (this._dragItem === undefined) {
+        const itemOnGrid = this._getItemAt(coords.x, coords.y);
+  
+        this.hoverItem = itemOnGrid;
+        this._determineCursor(coords.x, coords.y);
+      } else {
+        const gridCoords = this._getGridCoordsAt(coords.x, coords.y);
+
+        if (this._canItemBeMovedTo(this._dragItem, gridCoords.x, gridCoords.y) === true) {
+          this._dragIndicator.valid = true;
+        } else {
+          this._dragIndicator.valid = false;
+        }
+        
+        this._dragIndicator.setTargetTo(gridCoords.x, gridCoords.y);
+      }
     });
   }
-  
+
   /**
    * Clean-up of the item grid. 
    */
@@ -249,6 +396,8 @@ export class ItemGrid {
     this._actor = undefined;
     this._spriteInstancesGrid = [];
     this._itemsOnGrid = [];
+
+    this._dragIndicator.destroy();
   }
   
   /**
@@ -258,6 +407,81 @@ export class ItemGrid {
   _unregisterEvents() {
     for (const eventListener in this._eventListeners) {
       this._actor.off(eventListener);
+    }
+  }
+
+  /**
+   * Returns the item whose bounding rectangle contains the given pixel coordinates. 
+   * @param {Number} pixelX X pixel coordinate. 
+   * @param {Number} pixelY Y pixel coordinate. 
+   * @returns {ItemOnGrid}
+   */
+  _getItemAt(pixelX, pixelY) {
+    for (const itemOnGrid of this._itemsOnGrid) {
+      if (itemOnGrid.rectangle.contains(pixelX, pixelY) === true) {
+        return itemOnGrid;
+      }
+    }
+    return undefined;
+  }
+
+  /**
+   * Returns the button whose bounding rectangle contains the given pixel coordinates. 
+   * @param {Number} pixelX X pixel coordinate. 
+   * @param {Number} pixelY Y pixel coordinate. 
+   * @returns 
+   */
+  _getButtonAt(pixelX, pixelY) {
+    // TODO
+    return undefined;
+  }
+
+  /**
+   * Returns the grid coordinates containing the given pixel coordinates. 
+   * @param {Number} pixelX X coordinate, in pixels. 
+   * @param {Number} pixelY Y coordinate, in pixels. 
+   * @returns {Object} { x: {Number}, y: {Number} } Grid coordinates
+   */
+  _getGridCoordsAt(pixelX, pixelY) {
+    return {
+      x: Math.floor(pixelX / TILE_SIZE),
+      y: Math.floor(pixelY / TILE_SIZE)
+    }
+  }
+
+  /**
+   * Tests if the given item could be moved to the given index on the item grid. 
+   * 
+   * Takes item slot (grid) coordinates, **not** pixel coordinates!
+   * @param {ItemOnGrid} itemOnGrid The item to test. 
+   * @param {Number} gridX X coordinate, in grid coordinates. 
+   * @param {Number} gridY Y coordinate, in grid coordinates. 
+   * @returns {Boolean} True, if
+   */
+  _canItemBeMovedTo(itemOnGrid, gridX, gridY) {
+    // TODO
+    return false;
+  }
+
+  /**
+   * Sets the cursor's appearance, based on the context-dependent interaction 
+   * possible at the given pixel coordinates. 
+   * @param {Number} pixelX X coordinate, in pixels. 
+   * @param {Number} pixelY Y coordinate, in pixels. 
+   */
+  _determineCursor(pixelX, pixelY) {
+    const itemOnGrid = this._getItemAt(pixelX, pixelY);
+    const button = this._getButtonAt(pixelX, pixelY);
+    
+    if (button !== undefined) {
+      // Show clicking is possible. 
+      this._canvasElement.style.cursor = "pointer";
+    } else if (itemOnGrid !== undefined) {
+      // Show grabbing is possible. 
+      this._canvasElement.style.cursor = "grab";
+    } else {
+      // No interaction possible at current pixel coordinates. 
+      this._canvasElement.style.cursor = "default";
     }
   }
 }
