@@ -315,6 +315,7 @@ export class ItemGrid {
         this._dragIndicator.setInitialTo(itemOnGrid.index.x, itemOnGrid.index.y);
         this._dragIndicator.setTargetTo(itemOnGrid.index.x, itemOnGrid.index.y);
         this._dragIndicator.show = true;
+        this._dragIndicator.valid = this._canItemBeMovedTo(itemOnGrid.index.x, itemOnGrid.index.y);
       }
     });
 
@@ -334,7 +335,6 @@ export class ItemGrid {
 
         // Unset currently dragged item. 
         this._dragItem = undefined;
-        this._dragIndicator.valid = true;
         this._dragIndicator.show = false;
       }
       
@@ -367,8 +367,9 @@ export class ItemGrid {
         this._determineCursor(coords.x, coords.y);
       } else {
         const gridCoords = this._getGridCoordsAt(coords.x, coords.y);
+        const canItemBeMovedTo = this._canItemBeMovedTo(this._dragItem, gridCoords.x, gridCoords.y);
 
-        if (this._canItemBeMovedTo(this._dragItem, gridCoords.x, gridCoords.y) === true) {
+        if (canItemBeMovedTo === true) {
           this._dragIndicator.valid = true;
         } else {
           this._dragIndicator.valid = false;

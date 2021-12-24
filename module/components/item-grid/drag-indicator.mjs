@@ -153,10 +153,11 @@ export class DragIndicator {
    * @param {Boolean} value Whether to show as "valid". 
    */
   set valid(value) {
-    if (value !== this.valid) {
+    const oldValue = this._valid;
+    this._valid = value;
+    if (value != oldValue) {
       this._redraw();
     }
-    this._valid = value;
   }
 
   constructor(pixiApp, tileSize) {
@@ -171,6 +172,7 @@ export class DragIndicator {
     this._spriteCross.height = tileSize / 1.5;
 
     this._interpolator = new PositionInterpolator(this._container, pixiApp, { x: 0, y: 0 }, { x: 0, y: 0 }, 150);
+    this.valid = false;
   }
 
   destroy() {
