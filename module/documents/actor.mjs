@@ -288,7 +288,9 @@ export class AmbersteelActor extends Actor {
   
       if (updatedItem.type === "item") {
         if (updatedItem.data.data.isOnPerson) {
-          if (!this.possessions.contains(updatedItem)) {
+          const existing = this.possessions.find((element) => { return element.id === updatedItem.id; });
+
+          if (existing !== undefined) {
             // Possession is not yet in the possessions list -> is about 
             // to be added. 
             this._eventEmitter.emit(ActorEvents.possessionAdded, updatedItem);
