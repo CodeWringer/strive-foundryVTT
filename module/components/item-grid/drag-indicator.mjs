@@ -185,8 +185,6 @@ export class DragIndicator {
    * @param {Number} gridY Y coordinate, in grid coordinates.
    */
   setInitialTo(gridX, gridY) {
-    if (this._initialOnGrid.x === gridX && this._initialOnGrid.y === gridY) return;
-
     this._initialOnGrid.x = gridX;
     this._initialOnGrid.y = gridY;
 
