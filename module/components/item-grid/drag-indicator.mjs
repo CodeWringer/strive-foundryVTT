@@ -241,6 +241,16 @@ export class DragIndicator {
     }
   }
 
+  /**
+   * Rotates the target indicator. 
+   */
+  rotate() {
+    const width = this._sizeOnGrid.width;
+    this._sizeOnGrid.width = this._sizeOnGrid.height;
+    this._sizeOnGrid.height = width;
+    this._redraw();
+  }
+
   _redraw() {
     this._graphics.clear();
 

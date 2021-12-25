@@ -81,6 +81,18 @@ export class ItemOnGrid {
    * @type {Object} { width: {Number}, height: {Number} }
    */
   get shape() { return this._shape; }
+  
+  /**
+   * Returns the wdith and height of the item, with respect to its current orientation. 
+   * @type {Object} { width: {Number}, height: {Number} }
+   */
+  get orientedShape() {
+    if (this.index.orientation === game.ambersteel.config.itemOrientations.vertical) {
+      return this._shape;
+    } else if (this.index.orientation === game.ambersteel.config.itemOrientations.horizontal) {
+      return { width: this._shape.height, height: this._shape.width };
+    }
+  }
 
   /**
    * @type {PIXI.Rectangle}
@@ -145,14 +157,17 @@ export class ItemOnGrid {
     this._rectangle.height = this.height;
     
     this._setupElements();
-    this._setupInteractivity();
   }
 
   /**
    * Toggles between the vertical and horizontal orientation. 
    */
   rotate() {
-    console.warn("Not implemented");
+    if (this.index.orientation === game.ambersteel.config.itemOrientations.vertical) {
+      this.index.orientation = game.ambersteel.config.itemOrientations.horizontal;
+    } else if (this.index.orientation === game.ambersteel.config.itemOrientations.horizontal) {
+      this.index.orientation = game.ambersteel.config.itemOrientations.vertical;
+    }
   }
 
   delete() {
@@ -298,24 +313,5 @@ export class ItemOnGrid {
     // Title
     this._textName = new DisplayObjectWrap(new PIXI.Text(this._item.name, TEXT_SETTINGS), this._pixiApp);
     this._contentFooter.addChild(this._textName);
-  }
-
-  _setupInteractivity() {
-    this._spriteDelete.buttonMode = true;
-    this._spriteDelete.interactive = true;
-    const thiz = this;
-    this._spriteDelete.wrapped.on("pointerdown", (event) => {
-      thiz._focused = thiz._spriteDelete;
-    });
-    this._spriteDelete.wrapped.on("pointerup", (event) => {
-      if (thiz._focused != thiz._spriteDelete) return;
-      thiz.delete();
-    });
-    this._spriteDelete.wrapped.on("pointerover", (event) => {
-      console.log("_spriteDelete pointerover");
-    });
-    this._spriteDelete.wrapped.on("pointerout", (event) => {
-      console.log("_spriteDelete pointerout");
-    });
   }
 }

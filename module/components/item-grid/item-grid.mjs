@@ -5,7 +5,6 @@ import AmbersteelBaseActorSheet from "../../sheets/subtypes/actor/ambersteel-bas
 import { TEXTURES } from "./texture-preloader.mjs";
 import { ItemOnGrid } from "./item-on-grid.mjs";
 import { DragIndicator } from "./drag-indicator.mjs";
-import { off } from "gulp";
 
 const WIDTH = 550; // This magic constant is based on the assumption that the actor sheet is about 560px wide. 
 const MAX_COLUMNS = 4;
@@ -124,6 +123,13 @@ export class ItemGrid {
    * @private
    */
   _dragIndicator = undefined;
+
+  /**
+   * If not undefined, this is the targtet orientation for a dragged item. 
+   * @type {CONFIG.itemOrientations | undefined}
+   * @private
+   */
+  _dragItemOrientation = undefined;
 
   /**
    * Total number of tiles on grid. 
@@ -306,6 +312,21 @@ export class ItemGrid {
       // - update property (this might be a bit too much work - probably requires 
       // custom implementation of input field, but as an object on canvas)
 
+    window.addEventListener('keypress', (e) => {
+      if (e.code != "KeyR") return; // TODO: Add this to FoundryVTT's key map somehow. 
+
+      if (this._dragItem !== undefined) {
+        this._dragIndicator.rotate();
+        if (this._dragItemOrientation === game.ambersteel.config.itemOrientations.vertical) {
+          this._dragItemOrientation = game.ambersteel.config.itemOrientations.horizontal;
+        } else if (this._dragItemOrientation === game.ambersteel.config.itemOrientations.horizontal) {
+          this._dragItemOrientation = game.ambersteel.config.itemOrientations.vertical;
+        }
+        this._dragIndicator.valid = this._canItemBeMovedTo(this._dragItem, this._dragIndicator.targetOnGrid.x, this._dragIndicator.targetOnGrid.y, this._dragItemOrientation).result;
+      }
+    });
+
+
     this._stage.interactive = true;
     this._stage.interactiveChildren = true;
     this._stage.on("pointerdown", (event) => {
@@ -325,11 +346,14 @@ export class ItemGrid {
 
         this.hoverItem = itemOnGrid;
         this._dragItem = itemOnGrid;
+
+        this._dragItemOrientation = this._dragItem.index.orientation;
+
         this._dragIndicator.setSize(itemOnGrid.index.w, itemOnGrid.index.h);
         this._dragIndicator.setInitialTo(itemOnGrid.index.x, itemOnGrid.index.y);
         this._dragIndicator.setTargetTo(itemOnGrid.index.x, itemOnGrid.index.y);
         this._dragIndicator.show = true;
-        this._dragIndicator.valid = this._canItemBeMovedTo(itemOnGrid, itemOnGrid.index.x, itemOnGrid.index.y).result;
+        this._dragIndicator.valid = this._canItemBeMovedTo(itemOnGrid, itemOnGrid.index.x, itemOnGrid.index.y, this._dragItemOrientation).result;
       }
     });
 
@@ -341,19 +365,17 @@ export class ItemGrid {
       if (this._dragItem !== undefined) {
         const gridCoords = this._getGridCoordsAt(coords.x, coords.y);
 
+        // TODO: Either apply or reject rotation change.
         // Either apply or reject item move change. 
-        const canItemBeMovedTo = this._canItemBeMovedTo(this._dragItem, gridCoords.x, gridCoords.y);1
+        const canItemBeMovedTo = this._canItemBeMovedTo(this._dragItem, gridCoords.x, gridCoords.y, this._dragItemOrientation);
         if (canItemBeMovedTo.result === true) {
           const inventory = this._actor.data.data.assets.inventory;
           const index = inventory.find((element) => { return element.id === this._dragItem.item.id; });
 
-          if (canItemBeMovedTo.itemsToSwitch.length === 0) {
-            index.x = gridCoords.x;
-            index.y = gridCoords.y;
-          } else {
+          if (canItemBeMovedTo.itemsToSwitch.length > 0) {
             // Swap items.
             for (const itemToSwitch of canItemBeMovedTo.itemsToSwitch) {
-              const indexItemToSwitch = inventory.find((element) => { return element.id === itemToSwitch.item.id; })
+              const indexItemToSwitch = inventory.find((element) => { return element.id === itemToSwitch.item.item.id; })
               const offset = {
                 x: gridCoords.x - indexItemToSwitch.x,
                 y: gridCoords.y - indexItemToSwitch.y,
@@ -361,10 +383,11 @@ export class ItemGrid {
               indexItemToSwitch.x = index.x + offset.x;
               indexItemToSwitch.y = index.y + offset.y;
             }
-            
-            index.x = gridCoords.x;
-            index.y = gridCoords.y;
           }
+          
+          index.x = gridCoords.x;
+          index.y = gridCoords.y;
+
           this._actor.updateProperty("data.assets.inventory", inventory);
         }
 
@@ -402,7 +425,7 @@ export class ItemGrid {
         this._determineCursor(coords.x, coords.y);
       } else {
         const gridCoords = this._getGridCoordsAt(coords.x, coords.y);
-        const canItemBeMovedTo = this._canItemBeMovedTo(this._dragItem, gridCoords.x, gridCoords.y).result;
+        const canItemBeMovedTo = this._canItemBeMovedTo(this._dragItem, gridCoords.x, gridCoords.y, this._dragItemOrientation).result;
 
         if (canItemBeMovedTo === true) {
           this._dragIndicator.valid = true;
@@ -492,27 +515,35 @@ export class ItemGrid {
    * @param {ItemOnGrid} itemOnGrid The item to test. 
    * @param {Number} gridX X coordinate, in grid coordinates. 
    * @param {Number} gridY Y coordinate, in grid coordinates. 
+   * @param {CONFIG.itemOrientations} orientation The desired (target) orientation at the given coordinates. 
    * @returns {Object} { result: {Boolean}, itemsToSwitch: {Array<ItemOnGrid>} }
    */
-  _canItemBeMovedTo(itemOnGrid, gridX, gridY) {
-    const emptyResult = { result: false, itemsToSwitch: [] };
+  _canItemBeMovedTo(itemOnGrid, gridX, gridY, orientation) {
+    // Consider rotation during checks. 
+    const sizeOnGrid = orientation === game.ambersteel.config.itemOrientations.vertical ? 
+    { width: itemOnGrid.shape.width, height: itemOnGrid.shape.height } : 
+    { width: itemOnGrid.shape.height, height: itemOnGrid.shape.width };
+
+    const emptyFailure = { result: false, itemsToSwitch: [] };
+    const emptySuccess = { result: true, itemsToSwitch: [] };
     // Test if over self. 
     // If so, no need for further checks. The item can remain where it is currently at. 
-    if (gridX === itemOnGrid.index.x && gridY === itemOnGrid.index.y) return emptyResult;
+    if (gridX === itemOnGrid.index.x && gridY === itemOnGrid.index.y) return emptySuccess;
 
     // Test if target exceeds grid size. 
-    for (let x = 0; x < itemOnGrid.shape.width; x++) {
-      if (this._grid.length <= (gridX + x)) return emptyResult;
+    for (let x = 0; x < sizeOnGrid.width; x++) {
+      if (this._grid.length <= (gridX + x)) return emptyFailure;
 
-      const bottom = gridY + (itemOnGrid.shape.height - 1);
-      if (bottom >= this._grid[gridX + x].length) return emptyResult;
+      const bottom = gridY + (sizeOnGrid.height - 1);
+      if (bottom >= this._grid[gridX + x].length) return emptyFailure;
     }
 
     // Test if there is overlap with other items on grid. 
-    const overlappedItems = this._getItemsOnGridWithin(gridX, gridY, itemOnGrid.shape.width, itemOnGrid.shape.height);
+    const overlappedItems = this._getItemsOnGridWithin(gridX, gridY, sizeOnGrid.width, sizeOnGrid.height);
     // Test if the overlapping items can be swapped. 
     for (const overlappedItem of overlappedItems) {
-      if (overlappedItem.isPartial === true) return emptyResult;
+      if (overlappedItem.item.item.id === itemOnGrid.item.id) continue;
+      if (overlappedItem.isPartial === true) return emptyFailure;
     }
 
     return { result: true, itemsToSwitch: overlappedItems };
@@ -533,8 +564,8 @@ export class ItemGrid {
     const bottom = gridY + gridHeight - 1;
 
     for (const itemOnGrid of this._itemsOnGrid) {
-      const itemRight = itemOnGrid.index.x + itemOnGrid.shape.width - 1;
-      const itemBottom = itemOnGrid.index.y + itemOnGrid.shape.height - 1;
+      const itemRight = itemOnGrid.index.x + itemOnGrid.orientedShape.width - 1;
+      const itemBottom = itemOnGrid.index.y + itemOnGrid.orientedShape.height - 1;
 
       if (itemOnGrid.index.x > right) continue;
       if (itemOnGrid.index.y > bottom) continue;
