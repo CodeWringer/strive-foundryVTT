@@ -16,8 +16,13 @@ export default class CenterLayoutContainer extends LayoutContainer {
   refreshLayout() {
     for (const child of this.children) {
       if (child.fill === true) {
-        child.x = 0;
-        child.y = 0;
+        if (child.wrapped.anchor === undefined) {
+          child.x = child.width;
+          child.y = child.height;
+        } else {
+          child.x = child.width * child.wrapped.anchor.x;
+          child.y = child.height * child.wrapped.anchor.y;
+        }
         child.width = this.width;
         child.height = this.height;
       } else {
@@ -41,8 +46,13 @@ export default class CenterLayoutContainer extends LayoutContainer {
         // Set local position of the child. This centers the child. 
         // Setting the local position of the child must happen after updating its dimensions, 
         // otherwise outdated dimensions would be used. 
-        child.x = (this.width / 2) - (child.width / 2);
-        child.y = (this.height / 2) - (child.height / 2);
+        if (child.wrapped.anchor === undefined) {
+          child.x = (this.width / 2) - (child.width / 2);
+          child.y = (this.height / 2) - (child.height / 2);
+        } else {
+          child.x = (this.width / 2) - (child.width / 2) + (child.width * child.wrapped.anchor.x);
+          child.y = (this.height / 2) - (child.height / 2) + (child.height * child.wrapped.anchor.y);
+        }
       }
 
       if (child.refreshLayout !== undefined) {

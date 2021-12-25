@@ -150,8 +150,8 @@ export class ItemOnGrid {
     this.rootContainer = new CenterLayoutContainer(this._pixiApp);
     
     // These actually implicitly set the rootContainer's dimensions.
-    this.width = this._shape.width * this._tileSize.width;
-    this.height = this._shape.height * this._tileSize.height;
+    this.width = this.orientedShape.width * this._tileSize.width;
+    this.height = this.orientedShape.height * this._tileSize.height;
 
     this._rectangle.width = this.width;
     this._rectangle.height = this.height;
@@ -178,6 +178,8 @@ export class ItemOnGrid {
 
   _setupElements() {
     // Background sprite.
+    // TODO: Make this work differently, perhaps more like a sprite grid, 
+    // which uses individual sprites for the corners and walls. 
     this._spriteBackground = new DisplayObjectWrap(new PIXI.Sprite.from(TEXTURES.ITEM_SLOT), this._pixiApp);
     this._spriteBackground.fill = true;
     this.rootContainer.addChild(this._spriteBackground);
@@ -247,6 +249,8 @@ export class ItemOnGrid {
 
     this._spriteIcon = new DisplayObjectWrap(new PIXI.Sprite.from(TEXTURES.BULK), this._pixiApp);
     this._spriteIcon.alpha = 0.5;
+    this._spriteIcon.wrapped.anchor.set(0.5);
+    this._spriteIcon.wrapped.angle = this.index.orientation === game.ambersteel.config.itemOrientations.vertical ? 0 : 270;
     this._containerIcon.addChild(this._spriteIcon);
 
     this._contentContainer.addChild(this._containerIcon);
@@ -284,24 +288,25 @@ export class ItemOnGrid {
     this._containerMeta.addChild(metaSpacer);
 
     // Bulk.
+    this._textBulk = new DisplayObjectWrap(new PIXI.Text(this._item.data.data.bulk, TEXT_SETTINGS_INVERSE), this._pixiApp);
+    
+    const containerBulkText = new CenterLayoutContainer(this._pixiApp);
+    containerBulkText.fill = true;
+    containerBulkText.addChild(this._textBulk);
+    
+    const marginBulkTextContainer = new MarginLayoutContainer(this._pixiApp);
+    marginBulkTextContainer.fill = true;
+    marginBulkTextContainer.padding.top = 3; // TODO: Make this scale well. 
+    marginBulkTextContainer.addChild(containerBulkText);
+    
+    this._spriteBulk = new DisplayObjectWrap(new PIXI.Sprite.from(TEXTURES.BULK), this._pixiApp);
+    
     this._containerBulk = new CenterLayoutContainer(this._pixiApp);
     this._containerBulk.width = META_HEIGHT;
-    this._containerMeta.addChild(this._containerBulk);
-
-    this._spriteBulk = new DisplayObjectWrap(new PIXI.Sprite.from(TEXTURES.BULK), this._pixiApp);
     this._containerBulk.addChild(this._spriteBulk);
+    this._containerBulk.addChild(marginBulkTextContainer);
 
-    const textBulkContainer = new MarginLayoutContainer(this._pixiApp);
-    textBulkContainer.fill = true;
-    textBulkContainer.padding.top = 3; // TODO: Make this scale well. 
-    this._containerBulk.addChild(textBulkContainer);
-
-    const textBulkContainer2 = new CenterLayoutContainer(this._pixiApp);
-    textBulkContainer.fill = true;
-    textBulkContainer.addChild(textBulkContainer2);
-
-    this._textBulk = new DisplayObjectWrap(new PIXI.Text(this._item.data.data.bulk, TEXT_SETTINGS_INVERSE), this._pixiApp);
-    textBulkContainer2.addChild(this._textBulk);
+    this._containerMeta.addChild(this._containerBulk);
 
     // FOOTER
     const FOOTER_HEIGHT = 20;
