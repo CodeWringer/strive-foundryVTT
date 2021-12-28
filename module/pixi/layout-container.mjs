@@ -37,77 +37,78 @@ export default class LayoutContainer extends Containable {
     this.wrapped.y = value;
   }
 
-  _minWidth = undefined;
-  get minWidth() { return this._minWidth; }
-  set minWidth(value) {
-    if (value !== undefined) {
-      value = Math.max(0, value);
+  // TODO: Implement a means of defining min and max dimensions. 
+  // _minWidth = undefined;
+  // get minWidth() { return this._minWidth; }
+  // set minWidth(value) {
+  //   if (value !== undefined) {
+  //     value = Math.max(0, value);
 
-      if (this._maxWidth !== undefined) {
-        this._maxWidth = Math.max(value, this._maxWidth);
-      }
-    }
-    this._minWidth = value;
+  //     if (this._maxWidth !== undefined) {
+  //       this._maxWidth = Math.max(value, this._maxWidth);
+  //     }
+  //   }
+  //   this._minWidth = value;
 
-    this.refreshLayout();
-    if (this.parent !== undefined) {
-      this.parent.refreshLayout();
-    }
-  }
+  //   this.refreshLayout();
+  //   if (this.parent !== undefined) {
+  //     this.parent.refreshLayout();
+  //   }
+  // }
   
-  _maxWidth = undefined;
-  get maxWidth() { return this._maxWidth; }
-  set maxWidth(value) {
-    if (value !== undefined) {
-      if (this.minWidth !== undefined) {
-        value = Math.max(this.minWidth, value);
-      } else {
-        value = Math.max(0, value);
-      }
-    }
-    this._maxWidth = value;
+  // _maxWidth = undefined;
+  // get maxWidth() { return this._maxWidth; }
+  // set maxWidth(value) {
+  //   if (value !== undefined) {
+  //     if (this.minWidth !== undefined) {
+  //       value = Math.max(this.minWidth, value);
+  //     } else {
+  //       value = Math.max(0, value);
+  //     }
+  //   }
+  //   this._maxWidth = value;
 
-    this.refreshLayout();
-    if (this.parent !== undefined) {
-      this.parent.refreshLayout();
-    }
-  }
+  //   this.refreshLayout();
+  //   if (this.parent !== undefined) {
+  //     this.parent.refreshLayout();
+  //   }
+  // }
   
-  _minHeight = undefined;
-  get minHeight() { return this._minHeight; }
-  set minHeight(value) {
-    if (value !== undefined) {
-      value = Math.max(0, value);
+  // _minHeight = undefined;
+  // get minHeight() { return this._minHeight; }
+  // set minHeight(value) {
+  //   if (value !== undefined) {
+  //     value = Math.max(0, value);
 
-      if (this._maxHeight !== undefined) {
-        this._maxHeight = Math.max(value, this._maxHeight);
-      }
-    }
-    this._minHeight = value;
+  //     if (this._maxHeight !== undefined) {
+  //       this._maxHeight = Math.max(value, this._maxHeight);
+  //     }
+  //   }
+  //   this._minHeight = value;
 
-    this.refreshLayout();
-    if (this.parent !== undefined) {
-      this.parent.refreshLayout();
-    }
-  }
+  //   this.refreshLayout();
+  //   if (this.parent !== undefined) {
+  //     this.parent.refreshLayout();
+  //   }
+  // }
   
-  _maxHeight = undefined;
-  get maxHeight() { return this._maxHeight; }
-  set maxHeight(value) {
-    if (value !== undefined) {
-      if (this.minHeight !== undefined) {
-        value = Math.max(this.minHeight, value);
-      } else {
-        value = Math.max(0, value);
-      }
-    }
-    this._maxHeight = value;
+  // _maxHeight = undefined;
+  // get maxHeight() { return this._maxHeight; }
+  // set maxHeight(value) {
+  //   if (value !== undefined) {
+  //     if (this.minHeight !== undefined) {
+  //       value = Math.max(this.minHeight, value);
+  //     } else {
+  //       value = Math.max(0, value);
+  //     }
+  //   }
+  //   this._maxHeight = value;
 
-    this.refreshLayout();
-    if (this.parent !== undefined) {
-      this.parent.refreshLayout();
-    }
-  }
+  //   this.refreshLayout();
+  //   if (this.parent !== undefined) {
+  //     this.parent.refreshLayout();
+  //   }
+  // }
 
   get width() { return this._w; }
   set width(value) {

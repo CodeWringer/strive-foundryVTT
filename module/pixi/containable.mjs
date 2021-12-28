@@ -86,6 +86,10 @@ export default class Containable {
     this._debugDrawStrategy = new DebugDrawStrategy(pixiApp, this);
   }
 
+  /**
+   * Returns the global pixel coordinates of this {Containable}. 
+   * @returns {PIXI.Rectangle}
+   */
   getGlobalCoordinates() {
     const coordinates = { x: this.x, y: this.y };
 
@@ -98,6 +102,18 @@ export default class Containable {
     return coordinates;
   }
 
+  /**
+   * Returns the global bounds of this {Containable}. 
+   * @returns {PIXI.Rectangle}
+   */
+  getGlobalBounds() {
+    const coordinates = this.getGlobalCoordinates();
+    return new PIXI.Rectangle(coordinates.x, coordinates.y, this.width, this.height);
+  }
+
+  /**
+   * Destroys this {Containable}. 
+   */
   destroy() {
     this.debugDraw = false;
   }

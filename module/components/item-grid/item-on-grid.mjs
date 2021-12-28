@@ -8,6 +8,7 @@ import MarginLayoutContainer from "../../pixi/margin-layout-container.mjs";
 import VerticalLayoutContainer from "../../pixi/vertical-layout-container.mjs";
 import { EventEmitter } from "../../utils/event-emitter.mjs";
 import { TEXTURES } from "./texture-preloader.mjs";
+import { queryVisibilityMode } from '../../utils/chat-utility.mjs';
 
 const FONT_FAMILY = "Black-Chancery";
 const TEXT_SETTINGS = {fontFamily : FONT_FAMILY, fontSize: 18, fontWeight: "bolder", fill : 0x191813, align : 'center'};
@@ -81,6 +82,13 @@ export class ItemOnGrid {
    * @type {Object} { width: {Number}, height: {Number} }
    */
   get shape() { return this._shape; }
+
+  /**
+   * A list of clickable buttons and their callbacks. 
+   * @type {Array<ItemGridButtonMapButton>}
+   * @private
+   */
+  _buttons = [];
   
   /**
    * Returns the wdith and height of the item, with respect to its current orientation. 
@@ -177,6 +185,8 @@ export class ItemOnGrid {
   }
 
   _setupElements() {
+    const itemOnGrid = this;
+
     // Background sprite.
     // TODO: Make this work differently, perhaps more like a sprite grid, 
     // which uses individual sprites for the corners and walls. 
@@ -214,6 +224,17 @@ export class ItemOnGrid {
     this._containerSendToChat.addChild(this._spriteSendToChat);
 
     this._containerHeader.addChild(this._containerSendToChat);
+
+    this._buttons.push(new ItemGridButtonMapButton(
+      this._containerSendToChat,
+      false,
+      async () => {
+        const dialogResult = await queryVisibilityMode();
+        if (!dialogResult.confirmed) return;
+  
+        itemOnGrid.item.sendToChat(dialogResult.visibilityMode);
+      }
+    ));
     
     // Spacer between SendToChat and OpenSheet. 
     const headerButtonsSpacer1 = new Containable(this._pixiApp);
@@ -318,5 +339,54 @@ export class ItemOnGrid {
     // Title
     this._textName = new DisplayObjectWrap(new PIXI.Text(this._item.name, TEXT_SETTINGS), this._pixiApp);
     this._contentFooter.addChild(this._textName);
+  }
+
+  /**
+   * Either returns the button containing the given pixel coordinates, 
+   * or undefined, if there is no button at the given pixel coordinates. 
+   * @param {Number} x Pixel coordinate. 
+   * @param {Number} y Pixel coordinate. 
+   * @returns {ItemGridButtonMapButton} 
+   */
+  getButtonAt(x, y) {
+    for (const _button of this._buttons) {
+      const bounds = _button.wrapped.getGlobalBounds();
+      if (bounds.contains(x, y) === true) {
+        return _button;
+      }
+    }
+    return undefined;
+  }
+}
+
+export class ItemGridButtonMapButton {
+  /**
+   * @type {DisplayObjectWrap | LayoutContainer}
+   * @private
+   */
+  _wrapped = undefined;
+  get wrapped() { return this._wrapped; }
+
+  /**
+   * @type {Function}
+   * @async
+   * @private
+   */
+  _callback = async () => {};
+  get callback() { return this._callback; }
+
+  /**
+   * If true, this button should only be clickable (and visible), 
+   * if the current user has editing permissions. 
+   * @type {Boolean}
+   * @private
+   */
+  _requiresEditPermission = false;
+  get requiresEditPermission() { return this._requiresEditPermission; }
+
+  constructor(sprite, requiresEditPermission, callback) {
+    this._wrapped = sprite;
+    this._requiresEditPermission = requiresEditPermission;
+    this._callback = callback;
   }
 }

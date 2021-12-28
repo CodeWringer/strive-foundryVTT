@@ -336,8 +336,7 @@ export class ItemGrid {
 
       if (button !== undefined) {
         if (button.requiresEditPermission === true && this.isEditable !== true) return;
-
-        // TODO: Click button. 
+        button.callback();
       } else if (itemOnGrid !== undefined) {
         if (this.isEditable !== true) return;
 
@@ -366,6 +365,8 @@ export class ItemGrid {
         const gridCoords = this._getGridCoordsAt(coords.x, coords.y);
 
         // TODO: Either apply or reject rotation change.
+
+
         // Either apply or reject item move change. 
         const canItemBeMovedTo = this._canItemBeMovedTo(this._dragItem, gridCoords.x, gridCoords.y, this._dragItemOrientation);
         if (canItemBeMovedTo.result === true) {
@@ -491,7 +492,12 @@ export class ItemGrid {
    * @returns 
    */
   _getButtonAt(pixelX, pixelY) {
-    // TODO
+    for (const itemOnGrid of this._itemsOnGrid) {
+      const button = itemOnGrid.getButtonAt(pixelX, pixelY);
+      if (button !== undefined) {
+        return button;
+      }
+    }
     return undefined;
   }
 
