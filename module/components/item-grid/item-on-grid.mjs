@@ -97,11 +97,17 @@ export class ItemOnGrid {
    */
   get orientedShape() {
     if (this.index.orientation === game.ambersteel.config.itemOrientations.vertical) {
-      return this._shape;
+      return { width: this._shape.width, height: this._shape.height };
     } else if (this.index.orientation === game.ambersteel.config.itemOrientations.horizontal) {
       return { width: this._shape.height, height: this._shape.width };
     }
   }
+
+  /**
+   * Returns the current orientation of the item. 
+   * @type {CONFIG.itemOrientations}
+   */
+  get orientation() { return this.index.orientation; }
 
   /**
    * @type {PIXI.Rectangle}
