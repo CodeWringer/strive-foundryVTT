@@ -7,7 +7,7 @@ import HorizontalLayoutContainer from "../../pixi/horizontal-layout-container.mj
 import MarginLayoutContainer from "../../pixi/margin-layout-container.mjs";
 import VerticalLayoutContainer from "../../pixi/vertical-layout-container.mjs";
 import { EventEmitter } from "../../utils/event-emitter.mjs";
-import { TEXTURES } from "./texture-preloader.mjs";
+import { TEXTURES } from "../../pixi/texture-preloader.mjs";
 import { queryVisibilityMode } from '../../utils/chat-utility.mjs';
 import { Button } from "../../pixi/button.mjs";
 import { findDocument } from "../../utils/content-utility.mjs";
@@ -298,7 +298,8 @@ export class ItemOnGrid {
     quantitySpacer.width = 3;
     this._containerQuantity.addChild(quantitySpacer);
     
-    this._textQuantity = new DisplayObjectWrap(new PIXI.Text(this._item.data.data.quantity, TEXT_SETTINGS), this._pixiApp);
+    const quantityText = this._item.data.data.maxQuantity > 1 ? `${this._item.data.data.quantity} / ${this._item.data.data.maxQuantity}` : this._item.data.data.quantity;
+    this._textQuantity = new DisplayObjectWrap(new PIXI.Text(quantityText, TEXT_SETTINGS), this._pixiApp);
     this._containerQuantity.addChild(this._textQuantity);
 
     // Spacer.

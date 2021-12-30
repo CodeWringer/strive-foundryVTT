@@ -1,5 +1,5 @@
 import { PositionInterpolator } from "../../pixi/interpolation/position-interpolator.mjs";
-import { TEXTURES } from "./texture-preloader.mjs";
+import { TEXTURES } from "../../pixi/texture-preloader.mjs";
 
 /**
  * Represents the indicator of a dragging target location. 
