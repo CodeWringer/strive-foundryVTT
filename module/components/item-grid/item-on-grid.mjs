@@ -229,11 +229,11 @@ export class ItemOnGrid {
     this._buttonSendToChat.height = HEADER_HEIGHT;
     this._containerHeader.addChild(this._buttonSendToChat);
     
-    // Spacer between SendToChat and OpenSheet. 
+    // Spacer. 
     const headerButtonsSpacer1 = new Containable(this._pixiApp);
     headerButtonsSpacer1.width = 6;
     this._containerHeader.addChild(headerButtonsSpacer1);
-
+    
     // OpenSheet button. 
     this._buttonOpenSheet = new Button(this._pixiApp, TEXTURES.OPEN_SHEET, async () => {
       const item = await findDocument(itemOnGrid.item.id);
@@ -244,6 +244,20 @@ export class ItemOnGrid {
     this._buttonOpenSheet.width = HEADER_HEIGHT;
     this._buttonOpenSheet.height = HEADER_HEIGHT;
     this._containerHeader.addChild(this._buttonOpenSheet);
+
+    // Spacer. 
+    const headerButtonsSpacer2 = new Containable(this._pixiApp);
+    headerButtonsSpacer2.width = 6;
+    this._containerHeader.addChild(headerButtonsSpacer2);
+    
+    // Move to property button. 
+    this._buttonMoveItemToProperty = new Button(this._pixiApp, TEXTURES.HAND_HOLD_ITEM_DOWN, async () => {
+      itemOnGrid.item.updateProperty("data.isOnPerson", false);
+    });
+    this._buttons.push(this._buttonMoveItemToProperty);
+    this._buttonMoveItemToProperty.width = HEADER_HEIGHT;
+    this._buttonMoveItemToProperty.height = HEADER_HEIGHT;
+    this._containerHeader.addChild(this._buttonMoveItemToProperty);
     
     // Header spacer. 
     const headerSpacer2 = new Containable(this._pixiApp);
