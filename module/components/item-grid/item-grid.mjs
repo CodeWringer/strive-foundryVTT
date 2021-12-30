@@ -346,14 +346,6 @@ export class ItemGrid {
    * @private
    */
   _setupInteractivity() {
-    // TODO: Test events for items on grid. 
-    // TODO: Item dragging on grid. 
-    // TODO: Interactivity on item:
-      // - [X] sendToChat
-      // - [X] delete
-      // - [ ] update property (this might be a bit too much work - probably requires 
-      // custom implementation of input field, but as an object on canvas)
-
     window.addEventListener('keypress', (e) => {
       if (e.code != "KeyR") return; // TODO: Add this to FoundryVTT's key map somehow. 
 
@@ -368,9 +360,10 @@ export class ItemGrid {
       }
     });
 
-
+    // Make PIXI stage capture pointer (mouse or touch) events. 
     this._stage.interactive = true;
     this._stage.interactiveChildren = true;
+
     this._stage.on("pointerdown", (event) => {
       const coords = { x: event.data.global.x, y: event.data.global.y };
       const itemOnGrid = this._getItemAt(coords.x, coords.y);
@@ -406,10 +399,7 @@ export class ItemGrid {
       if (this._dragItem !== undefined) {
         const gridCoords = this._getGridCoordsAt(coords.x, coords.y);
 
-        // TODO: Either apply or reject rotation change.
-
-
-        // Either apply or reject item move change. 
+        // Either apply or reject item move and rotation change. 
         const canItemBeMovedTo = this._canItemBeMovedTo(this._dragItem, gridCoords.x, gridCoords.y, this._dragItemOrientation);
         if (canItemBeMovedTo.result === true) {
           const inventory = this._actor.data.data.assets.inventory;
@@ -430,6 +420,14 @@ export class ItemGrid {
           
           index.x = gridCoords.x;
           index.y = gridCoords.y;
+          index.orientation = this._dragItemOrientation;
+          if (index.orientation === game.ambersteel.config.itemOrientations.vertical) {
+            index.w = this._dragItem.shape.width;
+            index.h = this._dragItem.shape.height;
+          } else if (index.orientation === game.ambersteel.config.itemOrientations.horizontal) {
+            index.w = this._dragItem.shape.height;
+            index.h = this._dragItem.shape.width;
+          }
 
           this._actor.updateProperty("data.assets.inventory", inventory);
         }
@@ -579,9 +577,13 @@ export class ItemGrid {
 
     const emptyFailure = { result: false, itemsToSwitch: [] };
     const emptySuccess = { result: true, itemsToSwitch: [] };
-    // Test if over self. 
+    // Test if over self and with unchanged orientation. 
     // If so, no need for further checks. The item can remain where it is currently at. 
-    if (gridX === itemOnGrid.index.x && gridY === itemOnGrid.index.y) return emptySuccess;
+    if (gridX === itemOnGrid.index.x 
+      && gridY === itemOnGrid.index.y
+      && orientation === itemOnGrid.orientation) {
+      return emptySuccess;
+    }
 
     // Test if target exceeds grid size. 
     for (let x = 0; x < sizeOnGrid.width; x++) {
