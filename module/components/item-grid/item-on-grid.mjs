@@ -242,9 +242,7 @@ export class ItemOnGrid {
     
     // OpenSheet button. 
     this._buttonOpenSheet = new Button(this._pixiApp, TEXTURES.OPEN_SHEET, async () => {
-      const item = await findDocument(itemOnGrid.item.id);
-      if (item === undefined) return;
-      item.sheet.render(true);
+      this.item.sheet.render(true);
     });
     this._buttons.push(this._buttonOpenSheet);
     this._buttonOpenSheet.width = HEADER_HEIGHT;
