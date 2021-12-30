@@ -298,7 +298,7 @@ export class ItemOnGrid {
     quantitySpacer.width = 3;
     this._containerQuantity.addChild(quantitySpacer);
     
-    const quantityText = this._item.data.data.maxQuantity > 1 ? `${this._item.data.data.quantity} / ${this._item.data.data.maxQuantity}` : this._item.data.data.quantity;
+    const quantityText = this._item.data.data.maxQuantity > 1 ? `${this._item.data.data.quantity}/${this._item.data.data.maxQuantity}` : this._item.data.data.quantity;
     this._textQuantity = new DisplayObjectWrap(new PIXI.Text(quantityText, TEXT_SETTINGS), this._pixiApp);
     this._containerQuantity.addChild(this._textQuantity);
 
@@ -310,7 +310,7 @@ export class ItemOnGrid {
     // Bulk.
     this._containerBulk = new HorizontalLayoutContainer(this._pixiApp);
     this._containerBulk.height = META_HEIGHT;
-    this._containerBulk.width = META_HEIGHT + 3 + META_HEIGHT;
+    this._containerBulk.width = META_HEIGHT * 1.5 + 3;
     this._containerMeta.addChild(this._containerBulk);
 
     const containerBulkImage = new CenterLayoutContainer(this._pixiApp);
