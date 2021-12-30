@@ -44,8 +44,8 @@ export class Button extends Containable {
    * @default 4
    * @private
    */
-  _hoverExtraSize = 4;
-  get hoverExtraSize() { return this._hoverExtraSize; }
+  _hoverPadding = 4;
+  get hoverPadding() { return this._hoverPadding; }
 
   get x() { return this._wrapped.x; }
   set x(value) { this._wrapped.x = value; }
@@ -53,25 +53,35 @@ export class Button extends Containable {
   get y() { return this._wrapped.y; }
   set y(value) { this._wrapped.y = value; }
 
-  get width() { return this._w; }
+  get width() { return this._w + this._padding.x; }
   set width(value) {
     this._w = value;
     this._spriteIcon.width = value;
     this._spriteIcon.x = this._w / 2;
     
-    this._spriteHover.width = value + this._hoverExtraSize;
+    this._spriteHover.width = value + this._hoverPadding;
     this._spriteHover.x = this._w / 2;
   }
 
-  get height() { return this._h; }
+  get height() { return this._h + this._padding.y; }
   set height(value) {
     this._h = value;
     this._spriteIcon.height = value;
     this._spriteIcon.y = this._h / 2;
     
-    this._spriteHover.height = value + this._hoverExtraSize;
+    this._spriteHover.height = value + this._hoverPadding;
     this._spriteHover.y = this._h / 2;
   }
+
+  /**
+   * Pads the width of this button, increasing the clickable area 
+   * without affecting the dimensions of the sprites. 
+   * @type {Object} { x: {Number}, y: {Number} }
+   * @private
+   */
+  _padding = { x: 0, y: 0 };
+  get padding() { return this._padding; }
+  set padding(value) { this._padding = value; }
 
   /**
    * @type {Function}

@@ -257,6 +257,7 @@ export class ItemOnGrid {
     this._buttons.push(this._buttonDelete);
     this._buttonDelete.width = 14;
     this._buttonDelete.height = HEADER_HEIGHT;
+    this._buttonDelete.padding.x = HEADER_HEIGHT - 14;
     this._containerHeader.addChild(this._buttonDelete);
 
     // ICON
