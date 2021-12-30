@@ -7,10 +7,6 @@ import { ItemOnGrid } from "./item-on-grid.mjs";
 import { DragIndicator } from "./drag-indicator.mjs";
 import { Button } from "../../pixi/button.mjs";
 
-const WIDTH = 550; // This magic constant is based on the assumption that the actor sheet is about 560px wide. 
-const MAX_COLUMNS = 4;
-const TILE_SIZE = Math.floor(WIDTH / MAX_COLUMNS);
-
 function MOCK_ACTOR_SHEET() { return {
   getActor() { return this.actor; },
   actor: {
@@ -133,6 +129,29 @@ export class ItemGrid {
   _dragItemOrientation = undefined;
 
   /**
+   * Width of the canvas element in pixels. 
+   * @type {Number}
+   * @private
+   */
+  _width = 0;
+
+  /**
+   * Maximum number of columns this item grid can hold. 
+   * @type {Number}
+   * @default 4
+   * @private
+   */
+  _maxColumns = 4;
+
+  /**
+   * Size of a tile on the grid, in pixels. 
+   * @type {Number}
+   * @default 128
+   * @private
+   */
+  _tileSize = 128;
+
+  /**
    * Total number of tiles on grid. 
    * @type {Number}
    */
@@ -204,10 +223,12 @@ export class ItemGrid {
    * @param {HTMLElement} html 
    * @param {String} canvasElementId 
    * @param {AmbersteelBaseActorSheet} actorSheet 
-   * @param {Boolean} mock
    */
-  constructor(html, canvasElementId, actorSheet, mock = true) {
-    const usedActorSheet = mock ? MOCK_ACTOR_SHEET() : actorSheet;
+  constructor(html, canvasElementId, actorSheet, width, maxColumns = 4, tileSize = 128) {
+    const usedActorSheet = actorSheet;
+    this._width = width;
+    this._maxColumns = maxColumns;
+    this._tileSize = tileSize;
 
     this._actorSheet = usedActorSheet;
     this._actor = this._actorSheet.getActor();
@@ -217,7 +238,7 @@ export class ItemGrid {
     
     // Setup HTML canvas element. 
     this._canvasElement = html.find("#" + canvasElementId)[0];
-    const height = Math.ceil(this.tileCount / MAX_COLUMNS) * TILE_SIZE;
+    const height = Math.ceil(this.tileCount / this._maxColumns) * this._tileSize;
     this._canvasElement.style.height = height;
   
     // Setup Pixi app. 
@@ -225,7 +246,7 @@ export class ItemGrid {
       resolution: window.devicePixelRatio || 1,
       autoDensity: true,
       backgroundAlpha: 0,
-      width: WIDTH,
+      width: this._width,
       height: height
     });
 
@@ -236,7 +257,7 @@ export class ItemGrid {
     this._stage.addChild(this._rootContainer);
   
     // Setup drag indicator. 
-    this._dragIndicator = new DragIndicator(this._pixiApp, TILE_SIZE);
+    this._dragIndicator = new DragIndicator(this._pixiApp, this._tileSize);
 
     this._setupTiles();
   
@@ -281,10 +302,10 @@ export class ItemGrid {
   
     for (let i = 0; i < this.tileCount; i++) {
       const spriteItemSlot = PIXI.Sprite.from(TEXTURES.ITEM_SLOT);
-      spriteItemSlot.width = TILE_SIZE;
-      spriteItemSlot.height = TILE_SIZE;
-      spriteItemSlot.x = x * TILE_SIZE;
-      spriteItemSlot.y = y * TILE_SIZE;
+      spriteItemSlot.width = this._tileSize;
+      spriteItemSlot.height = this._tileSize;
+      spriteItemSlot.x = x * this._tileSize;
+      spriteItemSlot.y = y * this._tileSize;
       spriteItemSlot.alpha = 0.5;
       this._spriteInstancesGrid.push(spriteItemSlot);
       this._rootContainer.addChild(spriteItemSlot);
@@ -295,7 +316,7 @@ export class ItemGrid {
       this._grid[x].push(null);
   
       x++;
-      if (x == MAX_COLUMNS) {
+      if (x == this._maxColumns) {
         x = 0;
         y++;
       }
@@ -311,12 +332,12 @@ export class ItemGrid {
   _setupItemsOnGrid(indices, items) {
     for (const index of indices) {
       const item = items.find((element) => { return element.id === index.id; });
-      const itemOnGrid = new ItemOnGrid(item, index, { width: TILE_SIZE, height: TILE_SIZE }, this._pixiApp);
+      const itemOnGrid = new ItemOnGrid(item, index, { width: this._tileSize, height: this._tileSize }, this._pixiApp);
       this._itemsOnGrid.push(itemOnGrid);
 
       this._rootContainer.addChild(itemOnGrid.rootContainer.wrapped);
-      itemOnGrid.x = index.x * TILE_SIZE;
-      itemOnGrid.y = index.y * TILE_SIZE;
+      itemOnGrid.x = index.x * this._tileSize;
+      itemOnGrid.y = index.y * this._tileSize;
     }
   }
 
@@ -535,8 +556,8 @@ export class ItemGrid {
    */
   _getGridCoordsAt(pixelX, pixelY) {
     return {
-      x: Math.floor(pixelX / TILE_SIZE),
-      y: Math.floor(pixelY / TILE_SIZE)
+      x: Math.floor(pixelX / this._tileSize),
+      y: Math.floor(pixelY / this._tileSize)
     }
   }
 

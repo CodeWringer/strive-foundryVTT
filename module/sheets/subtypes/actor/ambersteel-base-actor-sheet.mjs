@@ -157,7 +157,10 @@ export default class AmbersteelBaseActorSheet {
     ButtonTakeItem.activateListeners(html, this, isOwner, isEditable);
 
     if (this.possessionGrid !== undefined) { this.possessionGrid.tearDown(); }
-    this.possessionGrid = new ItemGrid(html, "possessions-canvas", this);
+    const gridWidth = 550; // This magic constant is based on the assumption that the actor sheet is about 560px wide. 
+    const maxColumns = 4;
+    const tileSize = Math.floor(gridWidth / maxColumns);
+    this.possessionGrid = new ItemGrid(html, "possessions-canvas", this, gridWidth, maxColumns, tileSize);
 
     // -------------------------------------------------------------
     if (!isOwner) return;
