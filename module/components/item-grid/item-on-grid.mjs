@@ -16,7 +16,6 @@ const FONT_FAMILY = "Black-Chancery";
 const TEXT_SETTINGS = {fontFamily : FONT_FAMILY, fontSize: 18, fontWeight: "bolder", fill : 0x191813, align : 'center'};
 const TEXT_SETTINGS_INVERSE = {fontFamily : FONT_FAMILY, fontSize: 18, fontWeight: "bolder", fill : 0xffffff, align : 'center'};
 
-// TODO: Implement proper layouting-logic or figure out how to make yoga layout for PixiJS work. 
 export class ItemOnGrid {
   /**
    * @type {Number}
