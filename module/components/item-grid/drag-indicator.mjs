@@ -170,6 +170,7 @@ export class DragIndicator {
     this._spriteCross = new PIXI.Sprite.from(TEXTURES.CROSS);
     this._spriteCross.width = tileSize / 1.5;
     this._spriteCross.height = tileSize / 1.5;
+    this._spriteCross.tint = 0x000000;
 
     this._interpolator = new PositionInterpolator(this._container, pixiApp, { x: 0, y: 0 }, { x: 0, y: 0 }, 150);
     this.valid = false;
