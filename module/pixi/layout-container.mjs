@@ -125,6 +125,9 @@ export default class LayoutContainer extends Containable {
   get alpha() { return this.wrapped.alpha; }
   set alpha(value) { this.wrapped.alpha = value; }
 
+  get tint() { return this.wrapped.tint; }
+  set tint(value) { this.wrapped.tint = value; }
+
   constructor(pixiApp) {
     super(pixiApp);
     this._debugDrawStrategy = new LayoutContainerDebugDrawStrategy(pixiApp, this);

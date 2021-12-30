@@ -5,6 +5,7 @@ import AmbersteelBaseActorSheet from "../../sheets/subtypes/actor/ambersteel-bas
 import { TEXTURES } from "./texture-preloader.mjs";
 import { ItemOnGrid } from "./item-on-grid.mjs";
 import { DragIndicator } from "./drag-indicator.mjs";
+import { Button } from "../../pixi/button.mjs";
 
 const WIDTH = 550; // This magic constant is based on the assumption that the actor sheet is about 560px wide. 
 const MAX_COLUMNS = 4;
@@ -167,8 +168,28 @@ export class ItemGrid {
 
     this._hoverItem = value;
 
-    if (this.hoverItem != undefined) {
+    if (this.hoverItem !== undefined) {
       this.hoverItem.tint = 0xfcecde; // Sets a highlight. TODO: Make prettier than a tint. 
+    }
+  }
+
+  /**
+   * @type {Button}
+   * @private
+   */
+  _hoverButton = undefined;
+  get hoverButton() { return this._hoverButton; }
+  set hoverButton(value) {
+    if (value != this._hoverButton) {
+      if (this.hoverButton !== undefined) {
+        this._hoverButton.showHover = false;
+      }
+    }
+    
+    this._hoverButton = value;
+    
+    if (this._hoverButton !== undefined) {
+      this._hoverButton.showHover = true;
     }
   }
 
@@ -307,9 +328,9 @@ export class ItemGrid {
     // TODO: Test events for items on grid. 
     // TODO: Item dragging on grid. 
     // TODO: Interactivity on item:
-      // - sendToChat
-      // - delete
-      // - update property (this might be a bit too much work - probably requires 
+      // - [X] sendToChat
+      // - [X] delete
+      // - [ ] update property (this might be a bit too much work - probably requires 
       // custom implementation of input field, but as an object on canvas)
 
     window.addEventListener('keypress', (e) => {
@@ -412,6 +433,8 @@ export class ItemGrid {
       if (this._dragItem === undefined) {
         // Unset current hover item. 
         this.hoverItem = undefined;
+        // Unset current hover button. 
+        this.hoverButton = undefined;
       }
     });
 
@@ -421,8 +444,11 @@ export class ItemGrid {
 
       if (this._dragItem === undefined) {
         const itemOnGrid = this._getItemAt(coords.x, coords.y);
-  
+        const button = this._getButtonAt(coords.x, coords.y);
+        
         this.hoverItem = itemOnGrid;
+        this.hoverButton = button;
+        
         this._determineCursor(coords.x, coords.y);
       } else {
         const gridCoords = this._getGridCoordsAt(coords.x, coords.y);

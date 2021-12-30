@@ -9,6 +9,8 @@ import VerticalLayoutContainer from "../../pixi/vertical-layout-container.mjs";
 import { EventEmitter } from "../../utils/event-emitter.mjs";
 import { TEXTURES } from "./texture-preloader.mjs";
 import { queryVisibilityMode } from '../../utils/chat-utility.mjs';
+import { Button } from "../../pixi/button.mjs";
+import { findDocument } from "../../utils/content-utility.mjs";
 
 const FONT_FAMILY = "Black-Chancery";
 const TEXT_SETTINGS = {fontFamily : FONT_FAMILY, fontSize: 18, fontWeight: "bolder", fill : 0x191813, align : 'center'};
@@ -85,7 +87,7 @@ export class ItemOnGrid {
 
   /**
    * A list of clickable buttons and their callbacks. 
-   * @type {Array<ItemGridButtonMapButton>}
+   * @type {Array<Button>}
    * @private
    */
   _buttons = [];
@@ -217,24 +219,16 @@ export class ItemOnGrid {
     this._contentContainer.addChild(this._containerHeader);
 
     // SendToChat button. 
-    this._containerSendToChat = new CenterLayoutContainer(this._pixiApp);
-    this._containerSendToChat.width = HEADER_HEIGHT;
-    
-    this._spriteSendToChat = new DisplayObjectWrap(new PIXI.Sprite.from(TEXTURES.SEND_TO_CHAT), this._pixiApp);
-    this._containerSendToChat.addChild(this._spriteSendToChat);
+    this._buttonSendToChat = new Button(this._pixiApp, TEXTURES.SEND_TO_CHAT, async () => {
+      const dialogResult = await queryVisibilityMode();
+      if (!dialogResult.confirmed) return;
 
-    this._containerHeader.addChild(this._containerSendToChat);
-
-    this._buttons.push(new ItemGridButtonMapButton(
-      this._containerSendToChat,
-      false,
-      async () => {
-        const dialogResult = await queryVisibilityMode();
-        if (!dialogResult.confirmed) return;
-  
-        itemOnGrid.item.sendToChat(dialogResult.visibilityMode);
-      }
-    ));
+      itemOnGrid.item.sendToChat(dialogResult.visibilityMode);
+    });
+    this._buttons.push(this._buttonSendToChat);
+    this._buttonSendToChat.width = HEADER_HEIGHT;
+    this._buttonSendToChat.height = HEADER_HEIGHT;
+    this._containerHeader.addChild(this._buttonSendToChat);
     
     // Spacer between SendToChat and OpenSheet. 
     const headerButtonsSpacer1 = new Containable(this._pixiApp);
@@ -242,13 +236,15 @@ export class ItemOnGrid {
     this._containerHeader.addChild(headerButtonsSpacer1);
 
     // OpenSheet button. 
-    this._containerOpenSheet = new CenterLayoutContainer(this._pixiApp);
-    this._containerOpenSheet.width = HEADER_HEIGHT;
-    
-    this._spriteOpenSheet = new DisplayObjectWrap(new PIXI.Sprite.from(TEXTURES.OPEN_SHEET), this._pixiApp);
-    this._containerOpenSheet.addChild(this._spriteOpenSheet);
-
-    this._containerHeader.addChild(this._containerOpenSheet);
+    this._buttonOpenSheet = new Button(this._pixiApp, TEXTURES.OPEN_SHEET, async () => {
+      const item = await findDocument(itemOnGrid.item.id);
+      if (item === undefined) return;
+      item.sheet.render(true);
+    });
+    this._buttons.push(this._buttonOpenSheet);
+    this._buttonOpenSheet.width = HEADER_HEIGHT;
+    this._buttonOpenSheet.height = HEADER_HEIGHT;
+    this._containerHeader.addChild(this._buttonOpenSheet);
     
     // Header spacer. 
     const headerSpacer2 = new Containable(this._pixiApp);
@@ -256,13 +252,13 @@ export class ItemOnGrid {
     this._containerHeader.addChild(headerSpacer2);
 
     // Delete/Remove button.
-    this._containerDelete = new CenterLayoutContainer(this._pixiApp);
-    this._containerDelete.width = 14;
-    
-    this._spriteDelete = new DisplayObjectWrap(new PIXI.Sprite.from(TEXTURES.DELETE), this._pixiApp);
-    this._containerDelete.addChild(this._spriteDelete);
-
-    this._containerHeader.addChild(this._containerDelete);
+    this._buttonDelete = new Button(this._pixiApp, TEXTURES.DELETE, async () => {
+      itemOnGrid.item.delete();
+    });
+    this._buttons.push(this._buttonDelete);
+    this._buttonDelete.width = 14;
+    this._buttonDelete.height = HEADER_HEIGHT;
+    this._containerHeader.addChild(this._buttonDelete);
 
     // ICON
     this._containerIcon = new CenterLayoutContainer(this._pixiApp);
@@ -270,6 +266,7 @@ export class ItemOnGrid {
 
     this._spriteIcon = new DisplayObjectWrap(new PIXI.Sprite.from(TEXTURES.BULK), this._pixiApp);
     this._spriteIcon.alpha = 0.5;
+    this._spriteIcon.tint = 0x565656;
     this._spriteIcon.wrapped.anchor.set(0.5);
     this._spriteIcon.wrapped.angle = this.index.orientation === game.ambersteel.config.itemOrientations.vertical ? 0 : 270;
     this._containerIcon.addChild(this._spriteIcon);
@@ -286,7 +283,7 @@ export class ItemOnGrid {
     // Quantity.
     this._containerQuantity = new HorizontalLayoutContainer(this._pixiApp);
     this._containerQuantity.height = META_HEIGHT;
-    this._containerQuantity.width = META_HEIGHT + 6 + META_HEIGHT;
+    this._containerQuantity.width = META_HEIGHT + 3 + META_HEIGHT;
     this._containerMeta.addChild(this._containerQuantity);
     
     const containerQuantityImage = new CenterLayoutContainer(this._pixiApp);
@@ -294,10 +291,11 @@ export class ItemOnGrid {
     this._containerQuantity.addChild(containerQuantityImage);
 
     this._spriteQuantity = new DisplayObjectWrap(new PIXI.Sprite.from(TEXTURES.QUANTITY), this._pixiApp);
+    this._spriteQuantity.tint = 0x000000;
     containerQuantityImage.addChild(this._spriteQuantity);
 
     const quantitySpacer = new Containable(this._pixiApp);
-    quantitySpacer.width = 6;
+    quantitySpacer.width = 3;
     this._containerQuantity.addChild(quantitySpacer);
     
     this._textQuantity = new DisplayObjectWrap(new PIXI.Text(this._item.data.data.quantity, TEXT_SETTINGS), this._pixiApp);
@@ -309,25 +307,25 @@ export class ItemOnGrid {
     this._containerMeta.addChild(metaSpacer);
 
     // Bulk.
-    this._textBulk = new DisplayObjectWrap(new PIXI.Text(this._item.data.data.bulk, TEXT_SETTINGS_INVERSE), this._pixiApp);
-    
-    const containerBulkText = new CenterLayoutContainer(this._pixiApp);
-    containerBulkText.fill = true;
-    containerBulkText.addChild(this._textBulk);
-    
-    const marginBulkTextContainer = new MarginLayoutContainer(this._pixiApp);
-    marginBulkTextContainer.fill = true;
-    marginBulkTextContainer.padding.top = 3; // TODO: Make this scale well. 
-    marginBulkTextContainer.addChild(containerBulkText);
-    
-    this._spriteBulk = new DisplayObjectWrap(new PIXI.Sprite.from(TEXTURES.BULK), this._pixiApp);
-    
-    this._containerBulk = new CenterLayoutContainer(this._pixiApp);
-    this._containerBulk.width = META_HEIGHT;
-    this._containerBulk.addChild(this._spriteBulk);
-    this._containerBulk.addChild(marginBulkTextContainer);
-
+    this._containerBulk = new HorizontalLayoutContainer(this._pixiApp);
+    this._containerBulk.height = META_HEIGHT;
+    this._containerBulk.width = META_HEIGHT + 3 + META_HEIGHT;
     this._containerMeta.addChild(this._containerBulk);
+
+    const containerBulkImage = new CenterLayoutContainer(this._pixiApp);
+    containerBulkImage.width = META_HEIGHT;
+    this._containerBulk.addChild(containerBulkImage);
+
+    this._spriteBulk = new DisplayObjectWrap(new PIXI.Sprite.from(TEXTURES.BULK), this._pixiApp);
+    this._spriteBulk.tint = 0x000000;
+    containerBulkImage.addChild(this._spriteBulk);
+
+    const bulkSpacer = new Containable(this._pixiApp);
+    bulkSpacer.width = 3;
+    this._containerBulk.addChild(bulkSpacer);
+    
+    this._textBulk = new DisplayObjectWrap(new PIXI.Text(this._item.data.data.bulk, TEXT_SETTINGS), this._pixiApp);
+    this._containerBulk.addChild(this._textBulk);
 
     // FOOTER
     const FOOTER_HEIGHT = 20;
@@ -346,47 +344,15 @@ export class ItemOnGrid {
    * or undefined, if there is no button at the given pixel coordinates. 
    * @param {Number} x Pixel coordinate. 
    * @param {Number} y Pixel coordinate. 
-   * @returns {ItemGridButtonMapButton} 
+   * @returns {Button} 
    */
   getButtonAt(x, y) {
     for (const _button of this._buttons) {
-      const bounds = _button.wrapped.getGlobalBounds();
+      const bounds = _button.getGlobalBounds();
       if (bounds.contains(x, y) === true) {
         return _button;
       }
     }
     return undefined;
-  }
-}
-
-export class ItemGridButtonMapButton {
-  /**
-   * @type {DisplayObjectWrap | LayoutContainer}
-   * @private
-   */
-  _wrapped = undefined;
-  get wrapped() { return this._wrapped; }
-
-  /**
-   * @type {Function}
-   * @async
-   * @private
-   */
-  _callback = async () => {};
-  get callback() { return this._callback; }
-
-  /**
-   * If true, this button should only be clickable (and visible), 
-   * if the current user has editing permissions. 
-   * @type {Boolean}
-   * @private
-   */
-  _requiresEditPermission = false;
-  get requiresEditPermission() { return this._requiresEditPermission; }
-
-  constructor(sprite, requiresEditPermission, callback) {
-    this._wrapped = sprite;
-    this._requiresEditPermission = requiresEditPermission;
-    this._callback = callback;
   }
 }
