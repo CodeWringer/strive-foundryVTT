@@ -158,9 +158,9 @@ export default class AmbersteelBaseActorSheet {
 
     if (this.possessionGrid !== undefined) { this.possessionGrid.tearDown(); }
     const gridWidth = 550; // This magic constant is based on the assumption that the actor sheet is about 560px wide. 
-    const maxColumns = 4;
-    const tileSize = Math.floor(gridWidth / maxColumns);
-    this.possessionGrid = new ItemGrid(html, "possessions-canvas", this, gridWidth, maxColumns, tileSize);
+    const columnCount = this.getActor().data.data.assets.grid.length;
+    const tileSize = Math.floor(gridWidth / columnCount);
+    this.possessionGrid = new ItemGrid(html, "possessions-canvas", this, gridWidth, tileSize);
 
     // -------------------------------------------------------------
     if (!isOwner) return;

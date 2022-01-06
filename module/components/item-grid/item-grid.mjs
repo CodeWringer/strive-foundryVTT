@@ -138,10 +138,9 @@ export class ItemGrid {
   /**
    * Maximum number of columns this item grid can hold. 
    * @type {Number}
-   * @default 4
    * @private
    */
-  _maxColumns = 4;
+  _columnCount = 0;
 
   /**
    * Size of a tile on the grid, in pixels. 
@@ -224,21 +223,23 @@ export class ItemGrid {
    * @param {String} canvasElementId 
    * @param {AmbersteelBaseActorSheet} actorSheet 
    */
-  constructor(html, canvasElementId, actorSheet, width, maxColumns = 4, tileSize = 128) {
-    const usedActorSheet = actorSheet;
+  constructor(html, canvasElementId, actorSheet, width, tileSize = 128) {
     this._width = width;
-    this._maxColumns = maxColumns;
     this._tileSize = tileSize;
-
+    
+    const usedActorSheet = actorSheet;
     this._actorSheet = usedActorSheet;
     this._actor = this._actorSheet.getActor();
-    this.tileCount = this._actor.maxBulk;
+
+    this._grid = this._actor.data.data.assets.grid;
+    this._columnCount = this._grid.length;
+    this.tileCount = this._actor.data.data.assets.maxBulk;
 
     this._registerEvents(this._actor);
     
     // Setup HTML canvas element. 
     this._canvasElement = html.find("#" + canvasElementId)[0];
-    const height = Math.ceil(this.tileCount / this._maxColumns) * this._tileSize;
+    const height = Math.ceil(this.tileCount / this._columnCount) * this._tileSize;
     this._canvasElement.style.height = height;
   
     // Setup Pixi app. 
@@ -259,7 +260,7 @@ export class ItemGrid {
     // Setup drag indicator. 
     this._dragIndicator = new DragIndicator(this._pixiApp, this._tileSize);
 
-    this._setupTiles();
+    this._setupTiles(this._grid, this._tileSize);
   
     this._indices = this._actor.data.data.assets.gridIndices; // A list of {InventoryIndex}
     this._items = this._actor.possessions; // A list of {AmbersteelItemItem}
@@ -292,33 +293,23 @@ export class ItemGrid {
   
   /**
    * Sets up the grid background tiles. 
+   * @param {Array<Array<InventoryIndex | null>>} grid
+   * @param {Number} tileSize Size of a tile, in pixels. 
    * @private
    */
-  _setupTiles() {
-    let x = 0;
-    let y = 0;
-
-    this._grid = [];
-  
-    for (let i = 0; i < this.tileCount; i++) {
-      const spriteItemSlot = PIXI.Sprite.from(TEXTURES.ITEM_SLOT);
-      spriteItemSlot.width = this._tileSize;
-      spriteItemSlot.height = this._tileSize;
-      spriteItemSlot.x = x * this._tileSize;
-      spriteItemSlot.y = y * this._tileSize;
-      spriteItemSlot.alpha = 0.5;
-      this._spriteInstancesGrid.push(spriteItemSlot);
-      this._rootContainer.addChild(spriteItemSlot);
-
-      while (this._grid.length <= x) {
-        this._grid.push([]);
-      }
-      this._grid[x].push(null);
-  
-      x++;
-      if (x == this._maxColumns) {
-        x = 0;
-        y++;
+  _setupTiles(grid, tileSize) {
+    const columnCount = grid.length;
+    for (let x = 0; x < columnCount; x++) {
+      const rowCount = grid[x].length;
+      for (let y = 0; y < rowCount; y++) {
+        const spriteItemSlot = PIXI.Sprite.from(TEXTURES.ITEM_SLOT);
+        spriteItemSlot.width = tileSize;
+        spriteItemSlot.height = tileSize;
+        spriteItemSlot.x = x * tileSize;
+        spriteItemSlot.y = y * tileSize;
+        spriteItemSlot.alpha = 0.5;
+        this._spriteInstancesGrid.push(spriteItemSlot);
+        this._rootContainer.addChild(spriteItemSlot);
       }
     }
   }
