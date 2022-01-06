@@ -83,20 +83,33 @@ export class AmbersteelActor extends Actor {
   /**
    * @returns {Array<Item>} A list of "injury" type items that represent injuries of 
    * this character. 
+   * @readonly
    */
   get injuries() { return this.getItemsByType("injury"); }
+  // TODO: Remove
+  /**
+   * @type {Number}
+   * @readonly
+   */
   get injuryCount() { return this.injuries.length; }
   
   /**
    * @returns {Array<Item>} A list of "illness" type items that represent illnesses of 
    * this character. 
+   * @readonly
    */
   get illnesses() { return this.getItemsByType("illness"); }
+  // TODO: Remove
+  /**
+   * @type {Number}
+   * @readonly
+   */
   get illnessCount() { return this.illnesses.length; }
   
   /**
-   * @returns {Array<Item>} A list of "item" type items that represent things owned 
+   * @type {Array<AmbersteelItemItem>} A list of "item" type items that represent things owned 
    * by this character, and currently on their person. 
+   * @readonly
    */
   get possessions() { 
     const items = Array.from(this.items);
@@ -106,24 +119,39 @@ export class AmbersteelActor extends Actor {
     }
     return result;
   }
+  // TODO: Remove
+  /**
+   * @type {Number}
+   * @readonly
+   */
   get possessionsCount() { return this.possessions.length; }
 
+  // TODO: Remove
   /**
-   * Returns the metadata of possessions on the item grid. 
-   * @returns {Array<InventoryIndex>} A list of item metadata. 
+   * Two-dimensional array, which represents the item grid. 
+   * @type {Array<Array<InventoryIndex | null>>}
+   * @readonly
    */
-  get possessionsIndices() {
-    return this.data.data.assets.inventory;
-  }
+  get itemGrid() { return this.data.data.assets.grid; }
+  
+  // TODO: Remove
+  /**
+   * List of {InventoryIndex}. 
+   * @type {Array<InventoryIndex>}
+   * @readonly
+   */
+  get itemGridIndices() { return this.data.data.assets.gridIndices; }
 
+  // TODO: Remove
   /**
    * Returns the total bulk (= carrying capacity) of this character. 
    * @returns {Number} The total bulk (= carrying capacity) of this character. 
    */
   get maxBulk() {
-    return game.ambersteel.getCharacterMaximumInventory(this);
+    return this.data.data.assets.maxBulk;
   }
 
+  // TODO: Move to derived data
   /**
    * Returns the total used bulk (= used carrying capacity) of this character. 
    * @returns {Number} The total used bulk (= used carrying capacity) of this character. 
@@ -148,6 +176,7 @@ export class AmbersteelActor extends Actor {
     }
     return result;
   }
+  // TODO: Remove
   get propertyItemCount() { return this.propertyItems.length; }
 
   // TODO: Move to ambersteel-base-actor.mjs

@@ -261,7 +261,7 @@ export class ItemGrid {
 
     this._setupTiles();
   
-    this._indices = this._actor.data.data.assets.inventory; // A list of {InventoryIndex}
+    this._indices = this._actor.data.data.assets.gridIndices; // A list of {InventoryIndex}
     this._items = this._actor.possessions; // A list of {AmbersteelItemItem}
     this._setupItemsOnGrid(this._indices, this._items);
     

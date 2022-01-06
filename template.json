@@ -82,7 +82,8 @@
           "exhaustion": 0
         },
         "assets": {
-          "inventory": []
+          "grid": [],
+          "gridIndices": []
         },
         "biography": "",
         "gmNotes": "",

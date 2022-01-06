@@ -10,7 +10,6 @@ import { EventEmitter } from "../../utils/event-emitter.mjs";
 import { TEXTURES } from "../../pixi/texture-preloader.mjs";
 import { queryVisibilityMode } from '../../utils/chat-utility.mjs';
 import { Button } from "../../pixi/button.mjs";
-import { findDocument } from "../../utils/content-utility.mjs";
 
 const FONT_FAMILY = "Black-Chancery";
 const TEXT_SETTINGS = {fontFamily : FONT_FAMILY, fontSize: 18, fontWeight: "bolder", fill : 0x191813, align : 'center'};
