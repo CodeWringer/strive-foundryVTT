@@ -7,8 +7,6 @@ grid: {Array<Object>} = {
 gridRows: {Number}
 actor: {Actor} = {
   id: {String}
-  maxBulk: {Number}
-  totalBulk: {Number}
   possessions: {Array<Item>} = {
     id: {String}
     name: {String}
@@ -26,21 +24,14 @@ actor: {Actor} = {
       }
     }
   }
-  possessionsCount: {Number}
   propertyItems: {Array<Item>} -> see possessions
-  propertyItemCount: {Number}
   data: {Object} = {
     data: {Object} = {
       assets: {Object} = {
-        inventory: {Array<InventoryIndex>} = {
-          x: {Number}
-          y: {Number}
-          w: {Number}
-          h: {Number}
-          name: {String} - Item name, e. g. "Greatsword"
-          id: {String} - Item id
-          img: {String}
-        }
+        gridIndices: {Array<InventoryIndex>},
+        grid: {Array<Array<InventoryIndex | null>>}
+        maxBulk: {Number},
+        totalBulk: {Number}
       }
     }
   }
@@ -56,7 +47,9 @@ actor: {Actor} = {
           {{> inputLabel for="carryingCapacity" text="ambersteel.labels.carryingCapacity"}}
         </div>
         <span class="width-md">
-          {{> inputComponent type="number" name="carryingCapacity" propertyPath="maxBulk" isEditable=false }}
+          <div class="ambersteel-read-only pad-sm fill">
+            {{actor.data.data.assets.maxBulk}}
+          </div>
         </span>
       </div>
     </div>
@@ -66,7 +59,7 @@ actor: {Actor} = {
           {{> inputLabel for="totalBulk" text="ambersteel.labels.usedCarryingCapacity"}}
         </div>
         <span class="width-md">
-          {{> inputComponent type="number" name="totalBulk" propertyPath="totalBulk" isEditable=false }}
+          {{> inputComponent type="number" name="totalBulk" propertyPath="data.data.assets.totalBulk" isEditable=false }}
         </span>
       </div>
     </div>

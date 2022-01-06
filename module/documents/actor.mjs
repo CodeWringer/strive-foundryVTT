@@ -86,12 +86,6 @@ export class AmbersteelActor extends Actor {
    * @readonly
    */
   get injuries() { return this.getItemsByType("injury"); }
-  // TODO: Remove
-  /**
-   * @type {Number}
-   * @readonly
-   */
-  get injuryCount() { return this.injuries.length; }
   
   /**
    * @returns {Array<Item>} A list of "illness" type items that represent illnesses of 
@@ -99,12 +93,6 @@ export class AmbersteelActor extends Actor {
    * @readonly
    */
   get illnesses() { return this.getItemsByType("illness"); }
-  // TODO: Remove
-  /**
-   * @type {Number}
-   * @readonly
-   */
-  get illnessCount() { return this.illnesses.length; }
   
   /**
    * @type {Array<AmbersteelItemItem>} A list of "item" type items that represent things owned 
@@ -119,12 +107,6 @@ export class AmbersteelActor extends Actor {
     }
     return result;
   }
-  // TODO: Remove
-  /**
-   * @type {Number}
-   * @readonly
-   */
-  get possessionsCount() { return this.possessions.length; }
 
   // TODO: Remove
   /**
@@ -142,28 +124,6 @@ export class AmbersteelActor extends Actor {
    */
   get itemGridIndices() { return this.data.data.assets.gridIndices; }
 
-  // TODO: Remove
-  /**
-   * Returns the total bulk (= carrying capacity) of this character. 
-   * @returns {Number} The total bulk (= carrying capacity) of this character. 
-   */
-  get maxBulk() {
-    return this.data.data.assets.maxBulk;
-  }
-
-  // TODO: Move to derived data
-  /**
-   * Returns the total used bulk (= used carrying capacity) of this character. 
-   * @returns {Number} The total used bulk (= used carrying capacity) of this character. 
-   */
-  get totalBulk() {
-    let total = 0;
-    for (const possession of this.possessions) {
-      total += possession.data.data.bulk;
-    }
-    return total;
-  }
-
   /**
    * @returns {Array<Item>} A list of "item" type items that represent things owned 
    * by this character, but not on their person. 
@@ -176,8 +136,6 @@ export class AmbersteelActor extends Actor {
     }
     return result;
   }
-  // TODO: Remove
-  get propertyItemCount() { return this.propertyItems.length; }
 
   // TODO: Move to ambersteel-base-actor.mjs
   /**

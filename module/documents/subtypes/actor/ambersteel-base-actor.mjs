@@ -77,10 +77,17 @@ export default class AmbersteelBaseActor {
    * undefined and have meaningful values. 
    * 
    * Derived data is *not* persisted!
+   * @param {AmbersteelActor} context
    * @virtual
    */
   prepareDerivedData(context) {
     context.data.data.assets.maxBulk = game.ambersteel.getCharacterMaximumInventory(this.parent);
+
+    let totalBulk = 0;
+    for (const possession of context.possessions) {
+      totalBulk += possession.data.data.bulk;
+    }
+    context.data.data.assets.totalBulk = totalBulk;
     
     this._prepareDerivedAttributesData(context);
     this._prepareDerivedSkillsData(context);
