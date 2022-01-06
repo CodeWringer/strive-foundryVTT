@@ -336,20 +336,20 @@ export default class AmbersteelBaseActor {
   /**
    * Returns all items on grid that can be at least partially contained by a 
    * rectangle spanning the given dimensions, at the given position. 
-   * @param {Number} gridX In grid coordinates. 
-   * @param {Number} gridY In grid coordinates. 
-   * @param {Number} gridWidth In grid coordinates. 
-   * @param {Number} gridHeight In grid coordinates. 
+   * @param {Number} x In grid coordinates. 
+   * @param {Number} y In grid coordinates. 
+   * @param {Number} width In grid coordinates. 
+   * @param {Number} height In grid coordinates. 
    * @returns {Array<GridOverlapTestResult>}
    */
-  getItemsOnGridWithin(gridX, gridY, gridWidth, gridHeight) {
+  getItemsOnGridWithin(x, y, width, height) {
     const result = [];
 
-    const right = gridX + gridWidth - 1;
-    const bottom = gridY + gridHeight - 1;
+    const right = x + width - 1;
+    const bottom = y + height - 1;
 
-    for (let x = gridX; x <= right; x++) {
-      for (let y = gridY; y <= bottom; y++) {
+    for (let x = x; x <= right; x++) {
+      for (let y = y; y <= bottom; y++) {
         const itemOnGrid = this.itemGrid[x][y];
         if (itemOnGrid !== null) {
           const itemRight = itemOnGrid.x + itemOnGrid.w - 1;
@@ -359,8 +359,8 @@ export default class AmbersteelBaseActor {
           const duplicate = result.find((element) => { return element.id === itemOnGrid.id; });
           if (duplicate !== undefined) continue;
 
-          const isPartial = ((itemOnGrid.x < gridX) || (itemRight > right) 
-            || itemOnGrid.y < gridY || itemBottom > bottom);
+          const isPartial = ((itemOnGrid.x < x) || (itemRight > right) 
+            || itemOnGrid.y < y || itemBottom > bottom);
 
           result.push(new GridOverlapTestResult(itemOnGrid, isPartial));
         }

@@ -226,7 +226,7 @@ export class ItemGrid {
   constructor(html, canvasElementId, actorSheet, width, tileSize = 128) {
     this._width = width;
     this._tileSize = tileSize;
-    
+
     const usedActorSheet = actorSheet;
     this._actorSheet = usedActorSheet;
     this._actor = this._actorSheet.getActor();
@@ -585,7 +585,7 @@ export class ItemGrid {
     }
 
     // Test if there is overlap with other items on grid. 
-    const overlappedItems = this._getItemsOnGridWithin(gridX, gridY, sizeOnGrid.width, sizeOnGrid.height);
+    const overlappedItems = this_actor.getItemsOnGridWithin(gridX, gridY, sizeOnGrid.width, sizeOnGrid.height);
     // Test if the overlapping items can be swapped. 
     for (const overlappedItem of overlappedItems) {
       if (overlappedItem.item.item.id === itemOnGrid.item.id) continue;
@@ -595,44 +595,6 @@ export class ItemGrid {
     return { result: true, itemsToSwitch: overlappedItems };
   }
   
-  /**
-   * Returns all items on grid that can be at least partially contained by a 
-   * rectangle spanning the given dimensions, at the given position. 
-   * @param {Number} gridX In grid coordinates. 
-   * @param {Number} gridY In grid coordinates. 
-   * @param {Number} gridWidth In grid coordinates. 
-   * @param {Number} gridHeight In grid coordinates. 
-   * @returns {Object} { item: {ItemOnGrid}, isPartial: {Boolean} }
-   */
-  _getItemsOnGridWithin(gridX, gridY, gridWidth, gridHeight) {
-    const result = [];
-    const right = gridX + gridWidth - 1;
-    const bottom = gridY + gridHeight - 1;
-
-    for (const itemOnGrid of this._itemsOnGrid) {
-      const itemRight = itemOnGrid.index.x + itemOnGrid.orientedShape.width - 1;
-      const itemBottom = itemOnGrid.index.y + itemOnGrid.orientedShape.height - 1;
-
-      if (itemOnGrid.index.x > right) continue;
-      if (itemOnGrid.index.y > bottom) continue;
-      if (itemRight < gridX) continue;
-      if (itemBottom < gridY) continue;
-
-      let isPartial = false;
-
-      if (itemOnGrid.index.x < gridX || itemRight > right) {
-        isPartial = true;
-      }
-      if (itemOnGrid.index.y < gridY || itemBottom > bottom) {
-        isPartial = true;
-      }
-
-      result.push({ item: itemOnGrid, isPartial: isPartial });
-    }
-
-    return result;
-  }
-
   /**
    * Sets the cursor's appearance, based on the context-dependent interaction 
    * possible at the given pixel coordinates. 
