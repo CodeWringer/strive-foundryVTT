@@ -8,7 +8,7 @@ import * as ButtonToggleVisibility from '../../../components/button-toggle-visib
 import * as InputComponent from '../../../components/input.mjs';
 import * as OpenSheet from '../../../components/button-open-sheet.mjs';
 import { TEMPLATES } from "../../../templatePreloader.mjs";
-import { ItemGrid } from "../../../components/item-grid/item-grid.mjs";
+import { ItemGridView } from "../../../components/item-grid/item-grid-view.mjs";
 
 export default class AmbersteelBaseActorSheet {
   /**
@@ -19,7 +19,7 @@ export default class AmbersteelBaseActorSheet {
 
   /**
    * The possessions item grid.
-   * @type {ItemGrid}
+   * @type {ItemGridView}
    */
   possessionGrid = undefined;
 
@@ -160,7 +160,7 @@ export default class AmbersteelBaseActorSheet {
     const gridWidth = 550; // This magic constant is based on the assumption that the actor sheet is about 560px wide. 
     const columnCount = this.getActor().data.data.assets.grid.length;
     const tileSize = Math.floor(gridWidth / columnCount);
-    this.possessionGrid = new ItemGrid(html, "possessions-canvas", this, gridWidth, tileSize);
+    this.possessionGrid = new ItemGridView(html, "possessions-canvas", this, gridWidth, tileSize);
 
     // -------------------------------------------------------------
     if (!isOwner) return;

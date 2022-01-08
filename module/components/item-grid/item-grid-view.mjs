@@ -38,7 +38,7 @@ function MOCK_ACTOR_SHEET() { return {
 /**
  * Represents an item grid (of possessions). 
  */
-export class ItemGrid {
+export class ItemGridView {
   /**
    * List of registered event listeners.
    * @type {Object}
