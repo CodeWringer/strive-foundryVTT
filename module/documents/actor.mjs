@@ -99,13 +99,9 @@ export class AmbersteelActor extends Actor {
    * by this character, and currently on their person. 
    * @readonly
    */
-  get possessions() { 
+  get possessions() {
     const items = Array.from(this.items);
-    const result = [];
-    for (const item of items) {
-      if (item.type === "item" && item.data.data.isOnPerson) result.push(item);
-    }
-    return result;
+    return items.filter((item) => { return item.type === "item" && item.data.data.isOnPerson; });
   }
 
   // TODO: Remove
@@ -130,11 +126,7 @@ export class AmbersteelActor extends Actor {
    */
   get propertyItems() { 
     const items = Array.from(this.items);
-    const result = [];
-    for (const item of items) {
-      if (item.type === "item" && !item.data.data.isOnPerson) result.push(item);
-    }
-    return result;
+    return items.filter((item) => { return item.type === "item" && !item.data.data.isOnPerson; });
   }
 
   // TODO: Move to ambersteel-base-actor.mjs
