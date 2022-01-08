@@ -22,8 +22,12 @@ export default class AmbersteelItemItem extends AmbersteelBaseItem {
   get chatMessageTemplate() { return TEMPLATES.ITEM_CHAT_MESSAGE; }
   
   /** @override */
-  prepareData() {
-    this.parent.data.img = this.img;
+  prepareData(context) {
+    context.data.img = this.img;
+
+    // Ensure number data type. 
+    context.data.data.shape.width = parseInt(context.data.data.shape.width);
+    context.data.data.shape.height = parseInt(context.data.data.shape.height);
   }
   
   prepareDerivedData() {

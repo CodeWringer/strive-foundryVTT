@@ -37,7 +37,7 @@ export class AmbersteelItem extends Item {
   /** @override */
   prepareData() {
     super.prepareData();
-    this.subType.prepareData();
+    this.subType.prepareData(this);
   }
 
   /** @override */
