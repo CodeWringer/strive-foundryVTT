@@ -5,6 +5,7 @@ import { TEXTURES } from "../../pixi/texture-preloader.mjs";
 import { ItemOnGrid } from "./item-on-grid.mjs";
 import { DragIndicator } from "./drag-indicator.mjs";
 import { Button } from "../../pixi/button.mjs";
+import { ItemGrid } from "./item-grid.mjs";
 
 /**
  * Represents an item grid (of possessions). 
@@ -45,22 +46,16 @@ export class ItemGridView {
   _itemsOnGrid = [];
 
   /**
-   * @type {Array<InventoryIndex>}
-   * @private
-   */
-  _indices = [];
-
-  /**
    * @type {Array<AmbersteelItemItem>}
    * @private
    */
   _items = [];
 
   /**
-   * @type {Array<Array<InventoryIndex | null>>}
+   * @type {ItemGrid}
    * @private
    */
-  _grid = undefined;
+  _itemGrid = undefined;
   
   /**
    * @type {AmbersteelBaseActorSheet}
@@ -195,8 +190,8 @@ export class ItemGridView {
     this._actorSheet = usedActorSheet;
     this._actor = this._actorSheet.getActor();
 
-    this._grid = this._actor.data.data.assets.grid;
-    this._columnCount = this._grid.length;
+    this._itemGrid = this._actor.itemGrid;
+    this._columnCount = this._itemGrid.columnCount;
     this.tileCount = this._actor.data.data.assets.maxBulk;
 
     // Setup HTML canvas element. 
@@ -222,7 +217,7 @@ export class ItemGridView {
     // Setup drag indicator. 
     this._dragIndicator = new DragIndicator(this._pixiApp, this._tileSize);
 
-    this._setupTiles(this._grid, this._tileSize);
+    this._setupTiles(this._itemGrid.grid, this._tileSize);
   
     this._indices = this._actor.data.data.assets.gridIndices; // A list of {InventoryIndex}
     this._items = this._actor.possessions; // A list of {AmbersteelItemItem}
@@ -263,7 +258,7 @@ export class ItemGridView {
   _setupItemsOnGrid(indices, items) {
     for (const index of indices) {
       const item = items.find((element) => { return element.id === index.id; });
-      const itemOnGrid = new ItemOnGrid(item, index, { width: this._tileSize, height: this._tileSize }, this._pixiApp);
+      const itemOnGrid = new ItemOnGrid(item, index, { width: this._tileSize, height: this._tileSize }, this._pixiApp, this);
       this._itemsOnGrid.push(itemOnGrid);
 
       this._rootContainer.addChild(itemOnGrid.rootContainer.wrapped);
@@ -506,10 +501,11 @@ export class ItemGridView {
 
     // Test if target exceeds grid size. 
     for (let x = 0; x < sizeOnGrid.width; x++) {
-      if (this._grid.length <= (gridX + x)) return emptyFailure;
+      if (this._itemGrid.columnCount <= (gridX + x)) return emptyFailure;
 
       const bottom = gridY + (sizeOnGrid.height - 1);
-      if (bottom >= this._grid[gridX + x].length) return emptyFailure;
+      const rowCount = this._itemGrid.grid[gridX + x].length;
+      if (bottom >= rowCount) return emptyFailure;
     }
 
     // Test if there is overlap with other items on grid. 

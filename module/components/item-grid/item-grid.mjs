@@ -61,7 +61,7 @@ export class ItemGrid {
    * @param {Number} capacity Number of slots (tiles) the item grid will have. 
    */
   constructor(columnCount, capacity) {
-    this._columnCount = Math.min(columnCount, capacity);
+    this._columnCount = columnCount;
     this._capactiy = capacity;
 
     // This builds the two-dimensional array sequentially, 
@@ -91,7 +91,7 @@ export class ItemGrid {
     const grid = actor.data.data.assets.grid;
     const capacity = actor.data.data.assets.maxBulk;
     // The column count will 0 for unitialized grids, which haven't yet been persisted to the db. 
-    const columnCount = grid.length > 0 ? grid.length : COLUMN_COUNT;
+    const columnCount = COLUMN_COUNT;
 
     const itemGrid = new ItemGrid(columnCount, capacity);
 
@@ -100,7 +100,7 @@ export class ItemGrid {
     for (const index of indices) {
       const item = actor.items.get(index.id);
       // Assuming the grid is well-formed, we don't have to do any validation. 
-      itemGrid._set(item, index.x, index.y, index.orientation);
+      itemGrid._addAt(item, index.x, index.y, index.orientation);
     }
 
     // Place new items on grid. 
@@ -129,7 +129,7 @@ export class ItemGrid {
    * @param {CONFIG.itemOrientations} orientation 
    * @private
    */
-  _set(item, x, y, orientation) {
+  _addAt(item, x, y, orientation) {
     const shape = this._getOrientedShape(item.data.data.shape, orientation);
 
     // Add to indices. 
@@ -163,15 +163,14 @@ export class ItemGrid {
    * @param {Number} y 
    * @param {CONFIG.itemOrientations} orientation 
    */
-  set(item, x, y, orientation = undefined) {
+  addAt(item, x, y, orientation = undefined) {
     const fit = this.canItemFitOnGridAt(item, x, y, orientation);
     if (fit.result !== true) {
       throw `Couldn't place item on grid at: x: ${x}, y: ${y}, orientation: ${orientation}`;
     }
 
     const shape = this._getOrientedShape(item.data.data.shape, orientation);
-    
-    this._set(item, x, y, shape.width, shape.height, fit.orientation);
+    this._addAt(item, x, y, shape.width, shape.height, fit.orientation);
   }
   
   /**
@@ -189,8 +188,34 @@ export class ItemGrid {
     }
     
     const shape = this._getOrientedShape(item.data.data.shape, orientation);
+    this._addAt(item, fit.x, fit.y, shape.width, shape.height, fit.orientation);
+  }
+  
+  /**
+   * Removes the given item from the grid, if possible. 
+   * @param {AmbersteelItemItem} item 
+   */
+  remove(item) {
+    const itemIndex = this.getIndexOf(item);
 
-    this._set(item, fit.x, fit.y, shape.width, shape.height, fit.orientation);
+    if (itemIndex === undefined) {
+      console.warn(`Item '${item.id}' could not be removed, because it had no index!`);
+      return;
+    }
+
+    // Remove from index. 
+    const index = this._indices.indexOf(itemIndex);
+    this._indices.splice(index, 1);
+
+    // Remove from grid. 
+    const right = x + shape.width - 1;
+    const bottom = y + shape.height - 1;
+    
+    for (let iX = x; iX <= right; iX++) {
+      for (let iY = y; iY <= bottom; iY++) {
+        this._grid[iX][iY] = null;
+      }
+    }
   }
 
   /**
@@ -199,12 +224,20 @@ export class ItemGrid {
    * @returns {Boolean} True, if the given item is already contained on grid.
    */
   contains(item) {
+    return this.getIndexOf(item) !== undefined;
+  }
+  
+  /**
+   * @param {AmbersteelItemItem} item The item to test. 
+   * @returns {InventoryIndex | undefined}
+   */
+  getIndexOf(item) {
     for (const index of this._indices) {
       if (index.id === item.id) {
-        return true;
+        return index;
       }
     }
-    return false;
+    return undefined;
   }
 
   /**

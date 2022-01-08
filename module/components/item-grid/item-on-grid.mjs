@@ -41,11 +41,10 @@ export class ItemOnGrid {
   _eventEmitter = undefined;
 
   /**
-   * The currently focused element. 
-   * @type {PIXI.DisplayObject|PIXI.Container|undefined}
+   * @type {ItemGridView}
    * @private
    */
-  _focused = undefined;
+  _itemGridView = undefined;
 
   /**
    * Root Container which encompasses the entire item on grid. 
@@ -149,12 +148,21 @@ export class ItemOnGrid {
   get tint() { return this._spriteBackground.tint; }
   set tint(value) { this._spriteBackground.tint = value; }
 
-  constructor(item, index, tileSize, pixiApp) {
+  /**
+   * 
+   * @param {AmbersteelItemItem} item 
+   * @param {InventoryIndex} index 
+   * @param {Number} tileSize 
+   * @param {PIXI.Application} pixiApp 
+   * @param {ItemGridView} itemGridView 
+   */
+  constructor(item, index, tileSize, pixiApp, itemGridView) {
     this._item = item;
     this._index = index;
     this._shape = item.data.data.shape;
     this._tileSize = tileSize;
     this._pixiApp = pixiApp;
+    this._itemGridView = itemGridView;
     this._rectangle = new PIXI.Rectangle(0, 0, 0, 0);
     
     this._eventEmitter = new EventEmitter();
