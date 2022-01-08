@@ -1,5 +1,4 @@
 import { AmbersteelActor } from "../../documents/actor.mjs";
-import { ActorEvents } from "../../documents/actor.mjs";
 import InventoryIndex from "../../dto/inventory-index.mjs";
 import AmbersteelBaseActorSheet from "../../sheets/subtypes/actor/ambersteel-base-actor-sheet.mjs";
 import { TEXTURES } from "../../pixi/texture-preloader.mjs";
@@ -11,13 +10,6 @@ import { Button } from "../../pixi/button.mjs";
  * Represents an item grid (of possessions). 
  */
 export class ItemGridView {
-  /**
-   * List of registered event listeners.
-   * @type {Object}
-   * @private
-   */
-  _eventListeners = {};
-
   /**
    * @type {HTMLElement}
    * @private
@@ -207,8 +199,6 @@ export class ItemGridView {
     this._columnCount = this._grid.length;
     this.tileCount = this._actor.data.data.assets.maxBulk;
 
-    this._registerEvents(this._actor);
-    
     // Setup HTML canvas element. 
     this._canvasElement = html.find("#" + canvasElementId)[0];
     const height = Math.ceil(this.tileCount / this._columnCount) * this._tileSize;
@@ -239,28 +229,6 @@ export class ItemGridView {
     this._setupItemsOnGrid(this._indices, this._items);
     
     this._setupInteractivity();
-  }
-  
-  // TODO: Custom events might not be necessary, after all. Since adding or removing updates the 
-  // actor in question, it re-renders the actor sheet and thus updates the item grid. 
-  // Moving items around might also cause an automatic re-render. 
-  /**
-   * Registers event listeners. 
-   * @private
-   */
-  _registerEvents() {
-    this._eventListeners.possessionAdded = this._actor.on(ActorEvents.possessionAdded, (item) => {
-      // TODO: Add to grid. 
-    });
-    this._eventListeners.possessionRemoved = this._actor.on(ActorEvents.possessionRemoved, (item) => {
-      // TODO: Remove from grid. 
-    });
-    this._eventListeners.possessionUpdated = this._actor.on(ActorEvents.possessionUpdated, (item) => {
-      /* TODO: Update item on grid.
-      * If *any* of visble the properties of the item changed, 
-      * that change has to be applied to the object on canvas, as well. 
-      */
-    });
   }
   
   /**
@@ -451,8 +419,6 @@ export class ItemGridView {
    * Clean-up of the item grid. 
    */
   tearDown() {
-    this._unregisterEvents();
-  
     // Tear down pixiApp
     this._stage = undefined;
     this._pixiApp.destroy();
@@ -468,16 +434,6 @@ export class ItemGridView {
     this._dragIndicator.destroy();
   }
   
-  /**
-   * Un-registers all event listeners. 
-   * @private
-   */
-  _unregisterEvents() {
-    for (const eventListener in this._eventListeners) {
-      this._actor.off(eventListener);
-    }
-  }
-
   /**
    * Returns the item whose bounding rectangle contains the given pixel coordinates. 
    * @param {Number} pixelX X pixel coordinate. 
