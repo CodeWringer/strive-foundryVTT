@@ -130,18 +130,19 @@ export class ItemGrid {
    * @private
    */
   _set(item, x, y, orientation) {
-    const shape = item.data.data.shape;
-    const width = orientation === game.ambersteel.config.itemOrientations.vertical ? shape.width : shape.height;
-    const height = orientation === game.ambersteel.config.itemOrientations.vertical ? shape.height : shape.width;
+    const shape = this._getOrientedShape(item.data.data.shape, orientation);
 
     // Add to indices. 
-    const itemIndex = new InventoryIndex({ x: x, y: y, w: width, h: height, id: item.id, orientation: orientation });
+    const itemIndex = new InventoryIndex({ x: x, y: y, w: shape.width, h: shape.height, id: item.id, orientation: orientation });
     this._indices.push(itemIndex);
     
     // Add to grid. 
-    for (let x = fit.x; x < fit.x + width - 1; x++) {
-      for (let y = fit.y; y < fit.y + height - 1; y++) {
-        this._grid[x][y] = itemIndex;
+    const right = x + shape.width - 1;
+    const bottom = y + shape.height - 1;
+    
+    for (let iX = x; iX <= right; iX++) {
+      for (let iY = y; iY <= bottom; iY++) {
+        this._grid[iX][iY] = itemIndex;
       }
     }
   }
@@ -182,7 +183,7 @@ export class ItemGrid {
    * to fit it on grid. If defined, will only use that orientation. 
    */
   add(item, orientation = undefined) {
-    const fit = context.canItemFitOnGrid(item, orientation);
+    const fit = this.canItemFitOnGrid(item, orientation);
     if (fit.result !== true) {
       throw `Couldn't fit item on grid with orientation: ${orientation}`;
     }
@@ -209,16 +210,29 @@ export class ItemGrid {
   /**
    * Updates the given actor's item grid based on this {ItemGrid}. 
    * @param {AmbersteelActor} actor 
+   * @param {Boolean} update If true, will push the changes to the db. Default true. 
    */
-  synchronizeTo(actor) {
-    actor.update({
-      data: {
-        assets: {
-          grid: this._grid,
-          gridIndices: this._indices
+  synchronizeTo(actor, update = true) {
+    if (update === true) {
+      actor.update({
+        data: {
+          assets: {
+            grid: this._grid,
+            gridIndices: this._indices
+          }
         }
-      }
-    });
+      });
+    } else {
+      // This data will *not* be persisted!
+      // When an actor is initialized, its grid may be empty. This is the case with new actors. 
+      // The ItemGrid and ItemGridView classes expect an initialized grid, however. 
+      // In that case, the empty grid will be initialized, so it has the correct number of 
+      // columns and rows. 
+      // Since updating an actor's db entry causes it to be re-rendered, this causes an 
+      // unnecessary chain-reaction of initializations to occur twice. 
+      actor.data.data.assets.grid = this._grid;
+      actor.data.data.assets.gridIndices = this._indices;
+    }
   }
 
   /**
@@ -265,18 +279,21 @@ export class ItemGrid {
   canItemFitOnGridAt(item, x, y, orientation) {
     const shape = this._getOrientedShape(item.data.data.shape, orientation);
     const failureResult = new GridCapacityTestResult(false, undefined, undefined, undefined);
+
+    const rowCount = this._grid[x].length;
     
     // Test for bounds of grid.
-    if (x + shape.width - 1 >= columnCount) return failureResult;
+    if (x + shape.width - 1 >= this._columnCount) return failureResult;
     if (y + shape.height - 1 >= rowCount) return failureResult;
     
     // Test for overlap. 
-    let overlappedItems = this.getItemsOnGridWithin(x, y, shape.width, shape.height);
+    const overlappedItems = this.getItemsOnGridWithin(x, y, shape.width, shape.height);
     if (overlappedItems.length === 0) {
+      // Success
       return new GridCapacityTestResult(true, x, y, orientation);
     }
 
-    failureResult;
+    return failureResult;
   }
 
   /**
@@ -294,9 +311,9 @@ export class ItemGrid {
     const right = x + width - 1;
     const bottom = y + height - 1;
 
-    for (let x = x; x <= right; x++) {
-      for (let y = y; y <= bottom; y++) {
-        const itemOnGrid = this._grid[x][y];
+    for (let iX = x; iX <= right; iX++) {
+      for (let iY = y; iY <= bottom; iY++) {
+        const itemOnGrid = this._grid[iX][iY];
         if (itemOnGrid !== null) {
           const itemRight = itemOnGrid.x + itemOnGrid.w - 1;
           const itemBottom = itemOnGrid.y + itemOnGrid.h - 1;
@@ -305,8 +322,8 @@ export class ItemGrid {
           const duplicate = result.find((element) => { return element.id === itemOnGrid.id; });
           if (duplicate !== undefined) continue;
 
-          const isPartial = ((itemOnGrid.x < x) || (itemRight > right) 
-            || itemOnGrid.y < y || itemBottom > bottom);
+          const isPartial = ((itemOnGrid.x < iX) || (itemRight > right) 
+            || itemOnGrid.y < iY || itemBottom > bottom);
 
           result.push(new GridOverlapTestResult(itemOnGrid, isPartial));
         }

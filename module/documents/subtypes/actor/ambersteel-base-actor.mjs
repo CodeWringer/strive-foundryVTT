@@ -83,6 +83,7 @@ export default class AmbersteelBaseActor {
     // Initialize item grid. 
     this._itemGrid = ItemGrid.from(context);
     context.itemGrid = this.itemGrid;
+    this._itemGrid.synchronizeTo(context, false);
     
     this._prepareDerivedAttributesData(context);
     this._prepareDerivedSkillsData(context);
