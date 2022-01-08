@@ -63,10 +63,29 @@ export default class AmbersteelBaseActor {
 
     // Initialize item grid. 
     if (itemGrid.length === 0) {
-      const newGrid = this._getNewItemGrid(ITEM_GRID_COLUMN_COUNT, maxBulk);
-      context.data.data.assets.grid = newGrid;
+      const itemGrid = this._getNewItemGrid(ITEM_GRID_COLUMN_COUNT, maxBulk);
 
       context.data.data.assets.gridIndices = [];
+
+      // Ensure items are placed on grid, if possible. 
+      const possessions = context.possessions;
+      for (const item of possessions) {
+        const fit = context.canItemFitOnGrid(item);
+        if (fit.result === true) {
+          const width = fit.orientation === game.ambersteel.config.itemOrientations.vertical ? item.shape.width : item.shape.height;
+          const height = fit.orientation === game.ambersteel.config.itemOrientations.vertical ? item.shape.height : item.shape.width;
+
+          const itemIndex = new InventoryIndex({ x: fit.x, y: fit.y, w: width, h: height });
+          context.data.data.assets.gridIndices.push(itemIndex);
+          
+          for (let x = fit.x; x < fit.x + width - 1; x++) {
+            for (let y = fit.y; y < fit.y + height - 1; y++) {
+              itemGrid[x][y] = itemIndex;
+            }
+          }
+        }
+      }
+      context.data.data.assets.grid = itemGrid;
     }
   }
 
