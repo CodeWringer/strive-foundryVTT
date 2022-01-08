@@ -2,7 +2,6 @@ import PreparedChatData from '../../../dto/prepared-chat-data.mjs';
 import * as UpdateUtil from "../../../utils/document-update-utility.mjs";
 import * as ChatUtil from "../../../utils/chat-utility.mjs";
 import { TEMPLATES } from "../../../templatePreloader.mjs";
-import { AmbersteelItem } from '../../item.mjs';
 
 export default class AmbersteelBaseItem {
   /**

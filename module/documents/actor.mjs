@@ -1,7 +1,6 @@
 import AmbersteelPcActor from './subtypes/actor/ambersteel-pc-actor.mjs';
 import AmbersteelNpcActor from './subtypes/actor/ambersteel-npc-actor.mjs';
 import { deleteByPropertyPath } from '../utils/document-update-utility.mjs';
-import InventoryIndex from '../dto/inventory-index.mjs';
 import { EventEmitter } from '../utils/event-emitter.mjs';
 
 export const ActorEvents = {
@@ -103,22 +102,6 @@ export class AmbersteelActor extends Actor {
     const items = Array.from(this.items);
     return items.filter((item) => { return item.type === "item" && item.data.data.isOnPerson; });
   }
-
-  // TODO: Remove
-  /**
-   * Two-dimensional array, which represents the item grid. 
-   * @type {Array<Array<InventoryIndex | null>>}
-   * @readonly
-   */
-  get itemGrid() { return this.data.data.assets.grid; }
-  
-  // TODO: Remove
-  /**
-   * List of {InventoryIndex}. 
-   * @type {Array<InventoryIndex>}
-   * @readonly
-   */
-  get itemGridIndices() { return this.data.data.assets.gridIndices; }
 
   /**
    * @returns {Array<Item>} A list of "item" type items that represent things owned 

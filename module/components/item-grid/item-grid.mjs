@@ -37,12 +37,12 @@ export class ItemGrid {
    * @type {Number}
    * @private
    */
-  _columns = 0;
+  _columnCount = 0;
   /**
    * @type {Number}
    * @readonly
    */
-  get columns() { return this._columns; }
+  get columnCount() { return this._columnCount; }
   
   /**
    * @type {Number}
@@ -61,7 +61,7 @@ export class ItemGrid {
    * @param {Number} capacity Number of slots (tiles) the item grid will have. 
    */
   constructor(columnCount, capacity) {
-    this._columns = columnCount;
+    this._columnCount = Math.min(columnCount, capacity);
     this._capactiy = capacity;
 
     // This builds the two-dimensional array sequentially, 
@@ -76,7 +76,7 @@ export class ItemGrid {
       this._grid[x].push(null);
   
       x++;
-      if (x == columnCount) {
+      if (x == this._columnCount) {
         x = 0;
       }
     }
@@ -230,7 +230,7 @@ export class ItemGrid {
    * @returns {GridCapacityTestResult}
    */
   canItemFitOnGrid(item, orientation = undefined) {
-    const columnCount = this._columns;
+    const columnCount = this._columnCount;
     
     for (let x = 0; x < columnCount; x++) {
       const rowCount = this._grid[x].length;

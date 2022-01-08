@@ -35,8 +35,6 @@ export default class AmbersteelBaseActor {
     this.parent.updateProperty = this.updateProperty.bind(this);
     this.parent.advanceSkillBasedOnRollResult = this.advanceSkillBasedOnRollResult.bind(this);
     this.parent.advanceAttributeBasedOnRollResult = this.advanceAttributeBasedOnRollResult.bind(this);
-    this.parent.canItemFitOnGrid = this.canItemFitOnGrid.bind(this);
-    this.parent.getItemsOnGridWithin = this.getItemsOnGridWithin.bind(this);
 
     this.parent.itemGrid = this.itemGrid;
   }
@@ -84,7 +82,7 @@ export default class AmbersteelBaseActor {
 
     // Initialize item grid. 
     this._itemGrid = ItemGrid.from(context);
-    this.parent.itemGrid = this.itemGrid;
+    context.itemGrid = this.itemGrid;
     
     this._prepareDerivedAttributesData(context);
     this._prepareDerivedSkillsData(context);
