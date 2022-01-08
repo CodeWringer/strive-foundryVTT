@@ -229,7 +229,7 @@ export class ItemGrid {
       // In that case, the empty grid will be initialized, so it has the correct number of 
       // columns and rows. 
       // Since updating an actor's db entry causes it to be re-rendered, this causes an 
-      // unnecessary chain-reaction of initializations to occur twice. 
+      // unnecessary chain-reaction of initializations to occur, which would result in infinite recursion. 
       actor.data.data.assets.grid = this._grid;
       actor.data.data.assets.gridIndices = this._indices;
     }
