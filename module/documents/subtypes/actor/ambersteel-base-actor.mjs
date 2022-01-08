@@ -1,9 +1,7 @@
 import PreparedChatData from '../../../dto/prepared-chat-data.mjs';
 import * as UpdateUtil from "../../../utils/document-update-utility.mjs";
 import * as ChatUtil from "../../../utils/chat-utility.mjs";
-import InventoryIndex from '../../../dto/inventory-index.mjs';
-
-const ITEM_GRID_COLUMN_COUNT = 4;
+import { ItemGrid } from "../../../components/item-grid/item-grid.mjs";
 
 export default class AmbersteelBaseActor {
   /**
@@ -13,10 +11,14 @@ export default class AmbersteelBaseActor {
   parent = undefined;
 
   /**
-   * Two-dimensional array, which represents the item grid. 
-   * @type {Array<Array<InventoryIndex | null>>}
+   * @type {ItemGrid}
+   * @private
    */
-  get itemGrid() { return this.parent.itemGrid; }
+  _itemGrid = undefined;
+  /**
+   * @type {ItemGrid}
+   */
+  get itemGrid() { return this._itemGrid; }
 
   /**
    * @param parent {Actor} The owning Actor. 
@@ -35,6 +37,8 @@ export default class AmbersteelBaseActor {
     this.parent.advanceAttributeBasedOnRollResult = this.advanceAttributeBasedOnRollResult.bind(this);
     this.parent.canItemFitOnGrid = this.canItemFitOnGrid.bind(this);
     this.parent.getItemsOnGridWithin = this.getItemsOnGridWithin.bind(this);
+
+    this.parent.itemGrid = this.itemGrid;
   }
 
   /**
@@ -57,37 +61,7 @@ export default class AmbersteelBaseActor {
    * @param {Actor} context
    * @virtual
    */
-  prepareData(context) {
-    const itemGrid = context.data.data.assets.grid;
-    const maxBulk = context.data.data.assets.maxBulk;
-
-    // Initialize item grid. 
-    if (itemGrid.length === 0) {
-      const itemGrid = this._getNewItemGrid(ITEM_GRID_COLUMN_COUNT, maxBulk);
-
-      context.data.data.assets.gridIndices = [];
-
-      // Ensure items are placed on grid, if possible. 
-      const possessions = context.possessions;
-      for (const item of possessions) {
-        const fit = context.canItemFitOnGrid(item);
-        if (fit.result === true) {
-          const width = fit.orientation === game.ambersteel.config.itemOrientations.vertical ? item.shape.width : item.shape.height;
-          const height = fit.orientation === game.ambersteel.config.itemOrientations.vertical ? item.shape.height : item.shape.width;
-
-          const itemIndex = new InventoryIndex({ x: fit.x, y: fit.y, w: width, h: height });
-          context.data.data.assets.gridIndices.push(itemIndex);
-          
-          for (let x = fit.x; x < fit.x + width - 1; x++) {
-            for (let y = fit.y; y < fit.y + height - 1; y++) {
-              itemGrid[x][y] = itemIndex;
-            }
-          }
-        }
-      }
-      context.data.data.assets.grid = itemGrid;
-    }
-  }
+  prepareData(context) {}
 
   /**
    * Prepare derived data for the Actor. 
@@ -102,11 +76,15 @@ export default class AmbersteelBaseActor {
   prepareDerivedData(context) {
     context.data.data.assets.maxBulk = game.ambersteel.getCharacterMaximumInventory(this.parent);
 
-    let totalBulk = 0;
+    let usedBulk = 0;
     for (const possession of context.possessions) {
-      totalBulk += possession.data.data.bulk;
+      usedBulk += possession.data.data.bulk;
     }
-    context.data.data.assets.totalBulk = totalBulk;
+    context.data.data.assets.totalBulk = usedBulk;
+
+    // Initialize item grid. 
+    this._itemGrid = ItemGrid.from(context);
+    this.parent.itemGrid = this.itemGrid;
     
     this._prepareDerivedAttributesData(context);
     this._prepareDerivedSkillsData(context);
@@ -279,145 +257,5 @@ export default class AmbersteelBaseActor {
    */
   async advanceAttributeBasedOnRollResult(rollResult, attributeName) {
     await this.parent.addAttributeProgress(attributeName, rollResult.isSuccess);
-  }
-
-  /**
-   * Returns a new, blank item grid with the given number of columns. 
-   * @param {Number} columnCount Number of columns the grid will have. 
-   * @param {Number} capacity Number of slots (tiles) the item grid will have. 
-   * @returns {Array<Array<InventoryIndex | null>>}
-   * @private
-   */
-  _getNewItemGrid(columnCount, capacity) {
-    // This function builds a two-dimensional array sequentially, 
-    // row by row. 
-
-    let x = 0; // Current column
-
-    const result = [];
-  
-    for (let i = 0; i < capacity; i++) {
-      while (result.length <= x) {
-        result.push([]);
-      }
-      result[x].push(null);
-  
-      x++;
-      if (x == columnCount) {
-        x = 0;
-      }
-    }
-
-    return result;
-  }
-
-  /**
-   * Tests if the given item could fit on the item grid and returns the result, 
-   * also contains the grid coordinates and orientation of where it would fit. 
-   * @param {AmbersteelItemItem} item 
-   * @returns {GridCapacityTestResult}
-   */
-  canItemFitOnGrid(item) {
-    const itemGrid = this.itemGrid;
-    const columnCount = itemGrid.length;
-
-    const shape = item.data.data.shape;
-
-    for (let x = 0; x < columnCount; x++) {
-      const rowCount = itemGrid[x].length;
-      for (let y = 0; y < rowCount; y++) {
-        // Test default (vertical) orientation. 
-        // Test for bounds of grid. 
-        if (x + shape.width - 1 >= columnCount) continue;
-        if (y + shape.height - 1 >= rowCount) continue;
-        
-        let overlappedItems = this.getItemsOnGridWithin(x, y, shape.width, shape.height);
-        
-        if (overlappedItems.length === 0) {
-          return new GridCapacityTestResult(true, x, y, game.ambersteel.config.itemOrientations.vertical);
-        }
-        
-        // Test rotated (horizontal) orientation. 
-        // Test for bounds of grid. 
-        if (x + shape.height - 1 >= columnCount) continue;
-        if (y + shape.width - 1 >= rowCount) continue;
-        
-        overlappedItems = this.getItemsOnGridWithin(x, y, shape.height, shape.width);
-        if (overlappedItems.length === 0) {
-          return new GridCapacityTestResult(true, x, y, game.ambersteel.config.itemOrientations.horizontal);
-        }
-      }
-    }
-
-    return new GridCapacityTestResult(false, undefined, undefined, undefined);
-  }
-
-  /**
-   * Returns all items on grid that can be at least partially contained by a 
-   * rectangle spanning the given dimensions, at the given position. 
-   * @param {Number} x In grid coordinates. 
-   * @param {Number} y In grid coordinates. 
-   * @param {Number} width In grid coordinates. 
-   * @param {Number} height In grid coordinates. 
-   * @returns {Array<GridOverlapTestResult>}
-   */
-  getItemsOnGridWithin(x, y, width, height) {
-    const result = [];
-
-    const right = x + width - 1;
-    const bottom = y + height - 1;
-
-    for (let x = x; x <= right; x++) {
-      for (let y = y; y <= bottom; y++) {
-        const itemOnGrid = this.itemGrid[x][y];
-        if (itemOnGrid !== null) {
-          const itemRight = itemOnGrid.x + itemOnGrid.w - 1;
-          const itemBottom = itemOnGrid.y + itemOnGrid.h - 1;
-
-          // Ensure no duplicate entries. 
-          const duplicate = result.find((element) => { return element.id === itemOnGrid.id; });
-          if (duplicate !== undefined) continue;
-
-          const isPartial = ((itemOnGrid.x < x) || (itemRight > right) 
-            || itemOnGrid.y < y || itemBottom > bottom);
-
-          result.push(new GridOverlapTestResult(itemOnGrid, isPartial));
-        }
-      }
-    }
-
-    return result;
-  }
-}
-
-/**
- * Represents the result of a test whether an item can fit on the item grid. 
- */
-export class GridCapacityTestResult {
-  /**
-   * @param {Boolean} result True, if the item can fit. 
-   * @param {Number} x Column on grid where the item can fit. 
-   * @param {Number} y Row on grid where the itme can fit. 
-   * @param {CONFIG.itemOrientations} orientation Which orientation the item must be in to be able to fit. 
-   */
-  constructor(result, x, y, orientation) {
-    this.result = result;
-    this.x = x;
-    this.y = y;
-    this.orientation = orientation;
-  }
-}
-
-/**
- * Represents the result of a test which items on the grid overlap a given region on the grid. 
- */
-export class GridOverlapTestResult {
-  /**
-   * @param {InventoryIndex} item The item overlapped by the region on grid. 
-   * @param {Boolean} isPartial If true, the item in question is only partially contained. 
-   */
-  constructor(item, isPartial) {
-    this.item = item;
-    this.isPartial = isPartial;
   }
 }
