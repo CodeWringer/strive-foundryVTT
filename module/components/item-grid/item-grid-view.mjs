@@ -328,13 +328,13 @@ export class ItemGridView {
         // Either apply or reject item move and rotation change. 
         const canItemBeMovedTo = this._canItemBeMovedTo(this._dragItem, gridCoords.x, gridCoords.y, this._dragItemOrientation);
         if (canItemBeMovedTo.result === true) {
-          const inventory = this._actor.data.data.assets.inventory;
-          const index = inventory.find((element) => { return element.id === this._dragItem.item.id; });
+          const gridIndices = this._actor.data.data.assets.gridIndices;
+          const index = gridIndices.find((element) => { return element.id === this._dragItem.item.id; });
 
           if (canItemBeMovedTo.itemsToSwitch.length > 0) {
             // Swap items.
             for (const itemToSwitch of canItemBeMovedTo.itemsToSwitch) {
-              const indexItemToSwitch = inventory.find((element) => { return element.id === itemToSwitch.item.item.id; })
+              const indexItemToSwitch = gridIndices.find((element) => { return element.id === itemToSwitch.item.item.id; })
               const offset = {
                 x: gridCoords.x - indexItemToSwitch.x,
                 y: gridCoords.y - indexItemToSwitch.y,
@@ -355,7 +355,7 @@ export class ItemGridView {
             index.h = this._dragItem.shape.width;
           }
 
-          this._actor.updateProperty("data.assets.inventory", inventory);
+          this._actor.updateProperty("data.assets.gridIndices", gridIndices);
         }
 
         // Unset currently dragged item. 
@@ -509,10 +509,10 @@ export class ItemGridView {
     }
 
     // Test if there is overlap with other items on grid. 
-    const overlappedItems = this_actor.getItemsOnGridWithin(gridX, gridY, sizeOnGrid.width, sizeOnGrid.height);
+    const overlappedItems = this._itemGrid.getItemsOnGridWithin(gridX, gridY, sizeOnGrid.width, sizeOnGrid.height);
     // Test if the overlapping items can be swapped. 
     for (const overlappedItem of overlappedItems) {
-      if (overlappedItem.item.item.id === itemOnGrid.item.id) continue;
+      if (overlappedItem.item.id === itemOnGrid.item.id) continue;
       if (overlappedItem.isPartial === true) return emptyFailure;
     }
 
