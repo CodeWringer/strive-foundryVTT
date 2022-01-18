@@ -162,13 +162,14 @@ export class ItemGrid {
    * @param {Number} x 
    * @param {Number} y 
    * @param {CONFIG.itemOrientations} orientation 
+   * @throws If the item couldn't be placed at the given coordinates. 
    */
   addAt(item, x, y, orientation = undefined) {
     const fit = this.canItemFitOnGridAt(item, x, y, orientation);
     if (fit.result !== true) {
       throw `Couldn't place item on grid at: x: ${x}, y: ${y}, orientation: ${orientation}`;
     }
-
+    
     const shape = this._getOrientedShape(item.data.data.shape, orientation);
     this._addAt(item, x, y, shape.width, shape.height, fit.orientation);
   }
@@ -180,6 +181,7 @@ export class ItemGrid {
    * @param {AmbersteelItemItem} item 
    * @param {CONFIG.itemOrientations} orientation Optional. If left undefined, will rotate the item as needed 
    * to fit it on grid. If defined, will only use that orientation. 
+   * @throws If the item couldn't be placed anywhere on the grid. 
    */
   add(item, orientation = undefined) {
     const fit = this.canItemFitOnGrid(item, orientation);
