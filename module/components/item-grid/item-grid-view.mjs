@@ -2,7 +2,7 @@ import { AmbersteelActor } from "../../documents/actor.mjs";
 import InventoryIndex from "../../dto/inventory-index.mjs";
 import AmbersteelBaseActorSheet from "../../sheets/subtypes/actor/ambersteel-base-actor-sheet.mjs";
 import { TEXTURES } from "../../pixi/texture-preloader.mjs";
-import { ItemOnGridView } from "./item-on-grid.mjs";
+import { ItemOnGridView } from "./item-on-grid-view.mjs";
 import { DragIndicator } from "./drag-indicator.mjs";
 import { Button } from "../../pixi/button.mjs";
 import { ItemGrid } from "./item-grid.mjs";
