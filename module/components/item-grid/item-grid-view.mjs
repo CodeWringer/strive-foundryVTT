@@ -110,12 +110,6 @@ export class ItemGridView {
   _tileSize = 128;
 
   /**
-   * Total number of tiles on grid. 
-   * @type {Number}
-   */
-  tileCount = 0;
-
-  /**
    * If set to true, will draw debug info. 
    * @type {Boolean}
    * @private
@@ -192,11 +186,10 @@ export class ItemGridView {
 
     this._itemGrid = this._actor.itemGrid;
     this._columnCount = this._itemGrid.columnCount;
-    this.tileCount = this._actor.data.data.assets.maxBulk;
 
     // Setup HTML canvas element. 
     this._canvasElement = html.find("#" + canvasElementId)[0];
-    const height = Math.ceil(this.tileCount / this._columnCount) * this._tileSize;
+    const height = Math.ceil(this._itemGrid.capacity / this._columnCount) * this._tileSize;
     this._canvasElement.style.height = height;
   
     // Setup Pixi app. 
