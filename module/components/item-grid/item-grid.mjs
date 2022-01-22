@@ -197,8 +197,7 @@ export class ItemGrid {
       return false;
     }
     
-    const shape = this._getOrientedShape(item.data.data.shape, orientation);
-    this._addAt(item, x, y, shape.width, shape.height, canItFit.orientation);
+    this._addAt(item, x, y, canItFit.orientation);
 
     return true;
   }
@@ -220,8 +219,7 @@ export class ItemGrid {
       return false;
     }
     
-    const shape = this._getOrientedShape(item.data.data.shape, orientation);
-    this._addAt(item, canItFit.x, canItFit.y, shape.width, shape.height, canItFit.orientation);
+    this._addAt(item, canItFit.x, canItFit.y, canItFit.orientation);
 
     return true;
   }
@@ -264,12 +262,21 @@ export class ItemGrid {
    * @returns {Boolean} 'true', if the given item could be moved, otherwise, 'false'. 
    */
   move(item, x, y, orientation) {
+    if (this.contains(item) !== true) {
+      // Cannot move an item that isn't even on the grid. 
+      return false;
+    }
+
     const canItFit = this.canItemFitOnGridAt(item, x, y, orientation);
     if (canItFit.result !== true) {
       return false;
     }
 
-    // Move the item. 
+    // Remove from previous location. 
+    this.remove(item);
+
+    // Add to new location. 
+    this._addAt(item, x, y, orientation);
 
     return true;
   }
