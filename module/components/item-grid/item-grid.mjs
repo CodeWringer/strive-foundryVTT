@@ -185,48 +185,45 @@ export class ItemGrid {
    * @param {Number} x Column index on grid. 
    * @param {Number} y Row index on grid. 
    * @param {CONFIG.itemOrientations} orientation Target orientation of the item. 
-   * @returns {GridCapacityTestResult}
+   * @returns {Boolean} 'true', if the item could be added, otherwise, 'false'.
    */
   addAt(item, x, y, orientation) {
     if (this.contains(item)) {
-      return new GridCapacityTestResult(false, undefined, undefined, undefined);
+      return false;
     }
 
     const canItFit = this.canItemFitOnGridAt(item, x, y, orientation);
     if (canItFit.result !== true) {
-      return canItFit;
+      return false;
     }
     
     const shape = this._getOrientedShape(item.data.data.shape, orientation);
     this._addAt(item, x, y, shape.width, shape.height, canItFit.orientation);
 
-    return canItFit;
+    return true;
   }
   
   /**
    * Adds the given item to the next free slot on the grid, with the given orientation, if possible. 
-   * 
-   * Returns a {GridCapacityTestResult}, whose property 'result' 
-   * has the value 'true', if the item could be added, otherwise, 'false'.
    * @param {AmbersteelItemItem} item 
    * @param {CONFIG.itemOrientations} orientation Optional. If left undefined, will rotate the item as needed 
    * to fit it on grid. If defined, will only use that orientation. 
-   * @returns {GridCapacityTestResult} 
+   * @returns {Boolean} 'true', if the item could be added, otherwise, 'false'.
    */
   add(item, orientation = undefined) {
     if (this.contains(item)) {
-      return new GridCapacityTestResult(false, undefined, undefined, undefined);
+      return false;
     }
 
     const canItFit = this.canItemFitOnGrid(item, orientation);
     if (canItFit.result !== true) {
-      return canItFit;
+      return false;
     }
     
     const shape = this._getOrientedShape(item.data.data.shape, orientation);
     this._addAt(item, canItFit.x, canItFit.y, shape.width, shape.height, canItFit.orientation);
 
-    return canItFit;
+    return true;
   }
   
   /**
@@ -263,11 +260,18 @@ export class ItemGrid {
    * @param {AmbersteelItemItem} item The item to move. 
    * @param {Number} x Column index on grid. 
    * @param {Number} y Row index on grid. 
-   * @param orientation 
-   * @returns {}
+   * @param orientation Target orientation of the item on grid. 
+   * @returns {Boolean} 'true', if the given item could be moved, otherwise, 'false'. 
    */
   move(item, x, y, orientation) {
-    // TODO
+    const canItFit = this.canItemFitOnGridAt(item, x, y, orientation);
+    if (canItFit.result !== true) {
+      return false;
+    }
+
+    // Move the item. 
+
+    return true;
   }
 
   /**
