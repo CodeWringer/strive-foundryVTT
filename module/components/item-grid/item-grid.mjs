@@ -139,7 +139,7 @@ export class ItemGrid {
     // The item grid to return. 
     const itemGrid = new ItemGrid(columnCount, capacity, document);
     // Any items that can not fit on grid, will be added to this list. 
-    const itemsToDrop = [];
+    const itemsDropped = [];
 
     // Place existing items on grid.  
     const indices = document.data.data.assets.gridIndices;
@@ -149,7 +149,7 @@ export class ItemGrid {
       // Try to add the item, at its original location. 
       const canItFit = itemGrid.addAt(item, index.x, index.y, index.orientation);
       if (canItFit.result !== true) {
-        itemsToDrop.push(item);
+        itemsDropped.push(item);
       }
     }
 
@@ -162,7 +162,7 @@ export class ItemGrid {
 
       const canItFit = itemGrid.add(item);
       if (canItFit.result !== true) {
-        itemsToDrop.push(item);
+        itemsDropped.push(item);
       }
     }
 
