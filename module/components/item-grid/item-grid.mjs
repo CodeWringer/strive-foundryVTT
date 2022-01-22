@@ -77,15 +77,36 @@ export class ItemGrid {
    * @readonly
    */
   get capacity() { return this._capactiy; }
+  
+  /**
+   * The owning document. 
+   * 
+   * This is also the document to synchronize changes to. 
+   * 
+   * For internal use, only!
+   * @type {AmbersteelActor | AmbersteelItem}
+   * @private
+   */
+  _owner = undefined;
+  /**
+   * The owning document. 
+   * 
+   * This is also the document to synchronize changes to. 
+   * @type {AmbersteelActor | AmbersteelItem}
+   * @private
+   */
+  get owner() { return this._owner; }
 
   /**
    * Instantiates an empty item grid. 
    * @param {Number} columnCount Number of columns the grid will have, at most. 
    * @param {Number} capacity Number of slots (tiles) the item grid will have. 
+   * @param {AmbersteelActor | AmbersteelItem} owner The document whose {ItemGrid} this is. 
    */
-  constructor(columnCount, capacity) {
+  constructor(columnCount, capacity, owner) {
     this._columnCount = columnCount;
     this._capactiy = capacity;
+    this._owner = owner;
 
     // This builds the two-dimensional array sequentially, 
     // row by row. 
@@ -116,7 +137,7 @@ export class ItemGrid {
     const capacity = document.data.data.assets.maxBulk;
     const columnCount = COLUMN_COUNT;
     // The item grid to return. 
-    const itemGrid = new ItemGrid(columnCount, capacity);
+    const itemGrid = new ItemGrid(columnCount, capacity, document);
     // Any items that can not fit on grid, will be added to this list. 
     const itemsToDrop = [];
 
@@ -152,10 +173,12 @@ export class ItemGrid {
    * Updates the given actor's or item's item grid based on this {ItemGrid}. 
    * @param {AmbersteelActor | AmbersteelItem} document 
    * @param {Boolean} update If true, will push the changes to the db. Default true. 
+   * @async
+   * @returns {Promise<undefined>}
    */
-  synchronizeTo(document, update = true) {
+  async synchronizeTo(document, update = true) {
     if (update === true) {
-      document.update({
+      return document.update({
         data: {
           assets: {
             grid: this._grid,
@@ -164,16 +187,30 @@ export class ItemGrid {
         }
       });
     } else {
-      // This data will *not* be persisted!
-      // When an actor is initialized, its grid may be empty. This is the case with new actors. 
-      // The ItemGrid and ItemGridView classes expect an initialized grid, however. 
-      // In that case, the empty grid will be initialized, so it has the correct number of 
-      // columns and rows. 
-      // Since updating an actor's db entry causes it to be re-rendered, this causes an 
-      // unnecessary chain-reaction of initializations to occur, which would result in infinite recursion. 
-      document.data.data.assets.grid = this._grid;
-      document.data.data.assets.gridIndices = this._indices;
+      return new Promise((resolve, reject) => {
+        // This data will *not* be persisted!
+        // When a document is initialized, its grid may be empty. This is the case with new documents. 
+        // The ItemGrid and ItemGridView classes expect an initialized grid, however. 
+        // In that case, the empty grid will be initialized, so it has the correct number of 
+        // columns and rows. 
+        // Since updating an document's db entry causes it to be re-rendered, this causes an 
+        // unnecessary chain-reaction of initializations to occur, which would result in infinite recursion. 
+        document.data.data.assets.grid = this._grid;
+        document.data.data.assets.gridIndices = this._indices;
+
+        resolve();
+      });
     }
+  }
+
+  /**
+   * Updates the owning actor's or item's item grid based on this {ItemGrid}. 
+   * @param {Boolean} update If true, will push the changes to the db. Default true. 
+   * @async
+   * @returns {Promise<undefined>}
+   */
+  async synchronize(update = true) {
+    return this.synchronizeTo(this._owner, update);
   }
   
   /**
