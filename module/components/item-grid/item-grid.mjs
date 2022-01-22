@@ -216,8 +216,7 @@ export class ItemGrid {
   /**
    * Places an item at the given position, with the given orientation, if possible. 
    * 
-   * Returns a {GridCapacityTestResult}, whose property 'result' 
-   * has the value 'true', if the item could be added, otherwise, 'false'.
+   * NOTE: Callers of this function must, in order to persist the change to the db, also call 'synchronize'!
    * @param {AmbersteelItemItem} item The item to place on grid. 
    * @param {Number} x Column index on grid. 
    * @param {Number} y Row index on grid. 
@@ -241,6 +240,8 @@ export class ItemGrid {
   
   /**
    * Adds the given item to the next free slot on the grid, with the given orientation, if possible. 
+   * 
+   * NOTE: Callers of this function must, in order to persist the change to the db, also call 'synchronize'!
    * @param {AmbersteelItemItem} item 
    * @param {CONFIG.itemOrientations} orientation Optional. If left undefined, will rotate the item as needed 
    * to fit it on grid. If defined, will only use that orientation. 
@@ -263,6 +264,8 @@ export class ItemGrid {
   
   /**
    * Removes the given item from the grid, if possible. 
+   * 
+   * NOTE: Callers of this function must, in order to persist the change to the db, also call 'synchronize'!
    * @param {AmbersteelItemItem} item 
    * @returns {Boolean} True, if the given item could be removed. 
    */
@@ -292,6 +295,8 @@ export class ItemGrid {
 
   /**
    * Moves the given item, if it is on grid, to the given coordinates and rotation. 
+   * 
+   * NOTE: Callers of this function must, in order to persist the change to the db, also call 'synchronize'!
    * @param {AmbersteelItemItem} item The item to move. 
    * @param {Number} x Column index on grid. 
    * @param {Number} y Row index on grid. 
