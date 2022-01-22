@@ -67,6 +67,7 @@ export async function showDialog(args = {}, dialogData) {
 
 /**
  * Shows a confirmation dialog. 
+ * @param {Object} args Optional arguments to pass to the rendering function. 
  * @param {String} args.localizableTitle Localization string for the dialog title. 
  * @returns {Promise<Boolean>} Resolves, when the dialog is closed. 
  *          Is true, when the dialog was closed with confirmation. 
@@ -112,8 +113,10 @@ export async function showConfirmationDialog(args = {}) {
 /**
  * Shows a dialog that contains a paragraph of text. 
  * 
- * Has a single "ok" button. 
- * @param {Object} args { localizableTitle: {String}, localizedContent: {String} }
+ * Offers a single confirmation button. 
+ * @param {Object} args Optional arguments to pass to the rendering function. 
+ * @param {String} args.localizableTitle
+ * @param {String} args.localizedContent
  */
 export async function showPlainDialog(args = {}) {
     args = {
