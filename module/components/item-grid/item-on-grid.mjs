@@ -15,7 +15,7 @@ const FONT_FAMILY = "Black-Chancery";
 const TEXT_SETTINGS = {fontFamily : FONT_FAMILY, fontSize: 18, fontWeight: "bolder", fill : 0x191813, align : 'center'};
 const TEXT_SETTINGS_INVERSE = {fontFamily : FONT_FAMILY, fontSize: 18, fontWeight: "bolder", fill : 0xffffff, align : 'center'};
 
-export class ItemOnGrid {
+export class ItemOnGridView {
   /**
    * @type {Number}
    * @private

@@ -2,7 +2,7 @@ import { AmbersteelActor } from "../../documents/actor.mjs";
 import InventoryIndex from "../../dto/inventory-index.mjs";
 import AmbersteelBaseActorSheet from "../../sheets/subtypes/actor/ambersteel-base-actor-sheet.mjs";
 import { TEXTURES } from "../../pixi/texture-preloader.mjs";
-import { ItemOnGrid } from "./item-on-grid.mjs";
+import { ItemOnGridView } from "./item-on-grid.mjs";
 import { DragIndicator } from "./drag-indicator.mjs";
 import { Button } from "../../pixi/button.mjs";
 import { ItemGrid } from "./item-grid.mjs";
@@ -69,7 +69,7 @@ export class ItemGridView {
   _actor = undefined;
   
   /**
-   * @type {ItemOnGrid}
+   * @type {ItemOnGridView}
    * @private
    */
   _dragItem = undefined;
@@ -131,7 +131,7 @@ export class ItemGridView {
   
   /**
    * If not undefined, the currently being dragged item. 
-   * @type {ItemOnGrid|undefined}
+   * @type {ItemOnGridView|undefined}
    * @private
    */
   _hoverItem = undefined;
@@ -258,7 +258,7 @@ export class ItemGridView {
   _setupItemsOnGrid(indices, items) {
     for (const index of indices) {
       const item = items.find((element) => { return element.id === index.id; });
-      const itemOnGrid = new ItemOnGrid(item, index, { width: this._tileSize, height: this._tileSize }, this._pixiApp, this);
+      const itemOnGrid = new ItemOnGridView(item, index, { width: this._tileSize, height: this._tileSize }, this._pixiApp, this);
       this._itemsOnGrid.push(itemOnGrid);
 
       this._rootContainer.addChild(itemOnGrid.rootContainer.wrapped);
@@ -433,7 +433,7 @@ export class ItemGridView {
    * Returns the item whose bounding rectangle contains the given pixel coordinates. 
    * @param {Number} pixelX X pixel coordinate. 
    * @param {Number} pixelY Y pixel coordinate. 
-   * @returns {ItemOnGrid}
+   * @returns {ItemOnGridView}
    */
   _getItemAt(pixelX, pixelY) {
     for (const itemOnGrid of this._itemsOnGrid) {
@@ -477,11 +477,11 @@ export class ItemGridView {
    * Tests if the given item could be moved to the given index on the item grid. 
    * 
    * Takes item slot (grid) coordinates, **not** pixel coordinates!
-   * @param {ItemOnGrid} itemOnGrid The item to test. 
+   * @param {ItemOnGridView} itemOnGrid The item to test. 
    * @param {Number} gridX X coordinate, in grid coordinates. 
    * @param {Number} gridY Y coordinate, in grid coordinates. 
    * @param {CONFIG.itemOrientations} orientation The desired (target) orientation at the given coordinates. 
-   * @returns {Object} { result: {Boolean}, itemsToSwitch: {Array<ItemOnGrid>} }
+   * @returns {Object} { result: {Boolean}, itemsToSwitch: {Array<ItemOnGridView>} }
    */
   _canItemBeMovedTo(itemOnGrid, gridX, gridY, orientation) {
     // Consider rotation during checks. 
