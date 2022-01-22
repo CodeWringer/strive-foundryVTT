@@ -4,26 +4,39 @@ import InventoryIndex from "../../dto/inventory-index.mjs";
 
 /**
  * Default column count used to initialize new a item grid. 
+ * 
+ * There is currently no means of deriving a column count, 
+ * therefore all {ItemGrid}s will have this number of columns. 
  * @type {Number}
- * @constant
+ * @constant 4
  */
 export const COLUMN_COUNT = 4;
 
+/**
+ * Represents an item grid. 
+ */
 export class ItemGrid {
   /**
+   * Array of {InventoryIndex} entries. 
+   * 
+   * For internal use, only!
    * @type {Array<InventoryIndex>}
    * @private
    */
   _indices = [];
   /**
+   * Array of {InventoryIndex} entries. 
    * @type {Array<InventoryIndex>}
    * @readonly
    */
   get indices() { return this._indices; }
-
+  
   /**
    * Two-dimensional array, which represents the item grid. 
+   * 
+   * For internal use, only!
    * @type {Array<Array<InventoryIndex | null>>}
+   * @private
    */
   _grid = [];
   /**
@@ -32,24 +45,34 @@ export class ItemGrid {
    * @readonly
    */
   get grid() { return this._grid; }
-
+  
   /**
+   * The maximum number of columns of the grid. 
+   * 
+   * For internal use, only!
    * @type {Number}
    * @private
    */
   _columnCount = 0;
   /**
+   * The maximum number of columns of the grid. 
+   * 
+   * The actual column count also depends on {capacity}. 
    * @type {Number}
    * @readonly
    */
   get columnCount() { return this._columnCount; }
   
   /**
+   * The number of item slots available on grid. 
+   * 
+   * For internal use, only!
    * @type {Number}
    * @private
    */
   _capactiy = 0;
   /**
+   * The number of item slots available on grid. 
    * @type {Number}
    * @readonly
    */
@@ -57,7 +80,7 @@ export class ItemGrid {
 
   /**
    * Instantiates an empty item grid. 
-   * @param {Number} columnCount Number of columns the grid will have. 
+   * @param {Number} columnCount Number of columns the grid will have, at most. 
    * @param {Number} capacity Number of slots (tiles) the item grid will have. 
    */
   constructor(columnCount, capacity) {
@@ -83,126 +106,139 @@ export class ItemGrid {
   }
 
   /**
-   * Returns a new {ItemGrid}, based on the given actor's {data.data.assets.grid} and {data.data.assets.gridIndices}.
-   * @param {AmbersteelActor} actor 
-   * @returns {ItemGrid}
+   * Returns a new {ItemGrid}, based on the given actor's or item's 
+   * {data.data.assets.grid} and {data.data.assets.gridIndices}.
+   * @param {AmbersteelActor | AmbersteelItem} document The actor or item from whose data to build an {ItemGrid}. 
+   * @returns {ItemGridLoadResult}
    */
-  static from(actor) {
-    const grid = actor.data.data.assets.grid;
-    const capacity = actor.data.data.assets.maxBulk;
-    // The column count will 0 for unitialized grids, which haven't yet been persisted to the db. 
+  static from(document) {
+    // get the capacity (= item slot count) from the given document. 
+    const capacity = document.data.data.assets.maxBulk;
     const columnCount = COLUMN_COUNT;
-
+    // The item grid to return. 
     const itemGrid = new ItemGrid(columnCount, capacity);
+    // Any items that can not fit on grid, will be added to this list. 
+    const itemsToDrop = [];
 
     // Place existing items on grid.  
-    const indices = actor.data.data.assets.gridIndices;
+    const indices = document.data.data.assets.gridIndices;
     for (const index of indices) {
-      const item = actor.items.get(index.id);
-      // Assuming the grid is well-formed, we don't have to do any validation. 
-      itemGrid._addAt(item, index.x, index.y, index.orientation);
-    }
-
-    // Place new items on grid. 
-    const items = actor.possessions;
-    for (const item of items) {
-      if (itemGrid.contains(item)) continue;
-
-      try {
-        itemGrid.add(item);
-      } catch (error) {
-        console.warn(error);
-        // TODO: Show warning pop-up?
+      // Get the item from the context document. 
+      const item = document.items.get(index.id);
+      // Try to add the item, at its original location. 
+      const canItFit = itemGrid.addAt(item, index.x, index.y, index.orientation);
+      if (canItFit.result !== true) {
+        itemsToDrop.push(item);
       }
     }
 
-    return itemGrid;
+    // Place new items on grid. 
+    const items = document.possessions;
+    for (const item of items) {
+      // Prevent adding the same item multiple times. Shouldn't be necessary, but in case 
+      // it is, this should prevent headaches. 
+      if (itemGrid.contains(item)) continue;
+
+      const canItFit = itemGrid.add(item);
+      if (canItFit.result !== true) {
+        itemsToDrop.push(item);
+      }
+    }
+
+    return new ItemGridLoadResult(itemGrid, itemsDropped);
+  }
+
+  /**
+   * Updates the given actor's or item's item grid based on this {ItemGrid}. 
+   * @param {AmbersteelActor | AmbersteelItem} document 
+   * @param {Boolean} update If true, will push the changes to the db. Default true. 
+   */
+  synchronizeTo(document, update = true) {
+    if (update === true) {
+      document.update({
+        data: {
+          assets: {
+            grid: this._grid,
+            gridIndices: this._indices
+          }
+        }
+      });
+    } else {
+      // This data will *not* be persisted!
+      // When an actor is initialized, its grid may be empty. This is the case with new actors. 
+      // The ItemGrid and ItemGridView classes expect an initialized grid, however. 
+      // In that case, the empty grid will be initialized, so it has the correct number of 
+      // columns and rows. 
+      // Since updating an actor's db entry causes it to be re-rendered, this causes an 
+      // unnecessary chain-reaction of initializations to occur, which would result in infinite recursion. 
+      document.data.data.assets.grid = this._grid;
+      document.data.data.assets.gridIndices = this._indices;
+    }
   }
   
   /**
    * Places an item at the given position, with the given orientation, if possible. 
    * 
-   * Warning: will override any potentially overlapped items!
-   * @param {AmbersteelItemItem} item 
-   * @param {Number} x 
-   * @param {Number} y 
-   * @param {CONFIG.itemOrientations} orientation 
-   * @private
+   * Returns a {GridCapacityTestResult}, whose property 'result' 
+   * has the value 'true', if the item could be added, otherwise, 'false'.
+   * @param {AmbersteelItemItem} item The item to place on grid. 
+   * @param {Number} x Column index on grid. 
+   * @param {Number} y Row index on grid. 
+   * @param {CONFIG.itemOrientations} orientation Target orientation of the item. 
+   * @returns {GridCapacityTestResult}
    */
-  _addAt(item, x, y, orientation) {
-    const shape = this._getOrientedShape(item.data.data.shape, orientation);
-
-    // Add to indices. 
-    const itemIndex = new InventoryIndex({ x: x, y: y, w: shape.width, h: shape.height, id: item.id, orientation: orientation });
-    this._indices.push(itemIndex);
-    
-    // Add to grid. 
-    const right = x + shape.width - 1;
-    const bottom = y + shape.height - 1;
-    
-    for (let iX = x; iX <= right; iX++) {
-      for (let iY = y; iY <= bottom; iY++) {
-        this._grid[iX][iY] = itemIndex;
-      }
+  addAt(item, x, y, orientation) {
+    if (this.contains(item)) {
+      return new GridCapacityTestResult(false, undefined, undefined, undefined);
     }
-  }
 
-  _getOrientedShape(shape, orientation = undefined) {
-    return {
-      width: orientation === game.ambersteel.config.itemOrientations.horizontal ? shape.height : shape.width,
-      height: orientation === game.ambersteel.config.itemOrientations.horizontal ? shape.width : shape.height
-    };
-  }
-
-  /**
-   * Places an item at the given position, with the given orientation, if possible. 
-   * 
-   * Throws an error, if the item couldn't be placed. 
-   * @param {AmbersteelItemItem} item 
-   * @param {Number} x 
-   * @param {Number} y 
-   * @param {CONFIG.itemOrientations} orientation 
-   * @throws If the item couldn't be placed at the given coordinates. 
-   */
-  addAt(item, x, y, orientation = undefined) {
-    const fit = this.canItemFitOnGridAt(item, x, y, orientation);
-    if (fit.result !== true) {
-      throw `Couldn't place item on grid at: x: ${x}, y: ${y}, orientation: ${orientation}`;
+    const canItFit = this.canItemFitOnGridAt(item, x, y, orientation);
+    if (canItFit.result !== true) {
+      return canItFit;
     }
     
     const shape = this._getOrientedShape(item.data.data.shape, orientation);
-    this._addAt(item, x, y, shape.width, shape.height, fit.orientation);
+    this._addAt(item, x, y, shape.width, shape.height, canItFit.orientation);
+
+    return canItFit;
   }
   
   /**
    * Adds the given item to the next free slot on the grid, with the given orientation, if possible. 
    * 
-   * Throws an error, if the item couldn't be placed. 
+   * Returns a {GridCapacityTestResult}, whose property 'result' 
+   * has the value 'true', if the item could be added, otherwise, 'false'.
    * @param {AmbersteelItemItem} item 
    * @param {CONFIG.itemOrientations} orientation Optional. If left undefined, will rotate the item as needed 
    * to fit it on grid. If defined, will only use that orientation. 
-   * @throws If the item couldn't be placed anywhere on the grid. 
+   * @returns {GridCapacityTestResult} 
    */
   add(item, orientation = undefined) {
-    const fit = this.canItemFitOnGrid(item, orientation);
-    if (fit.result !== true) {
-      throw `Couldn't fit item on grid with orientation: ${orientation}`;
+    if (this.contains(item)) {
+      return new GridCapacityTestResult(false, undefined, undefined, undefined);
+    }
+
+    const canItFit = this.canItemFitOnGrid(item, orientation);
+    if (canItFit.result !== true) {
+      return canItFit;
     }
     
     const shape = this._getOrientedShape(item.data.data.shape, orientation);
-    this._addAt(item, fit.x, fit.y, shape.width, shape.height, fit.orientation);
+    this._addAt(item, canItFit.x, canItFit.y, shape.width, shape.height, canItFit.orientation);
+
+    return canItFit;
   }
   
   /**
    * Removes the given item from the grid, if possible. 
    * @param {AmbersteelItemItem} item 
+   * @returns {Boolean} True, if the given item could be removed. 
    */
   remove(item) {
     const itemIndex = this.getIndexOf(item);
 
     if (itemIndex === undefined) {
-      console.warn(`Item '${item.id}' could not be removed, because it had no index!`);
-      return;
+      return false;
     }
 
     // Remove from index. 
@@ -218,6 +254,20 @@ export class ItemGrid {
         this._grid[iX][iY] = null;
       }
     }
+
+    return true;
+  }
+
+  /**
+   * Moves the given item, if it is on grid, to the given coordinates and rotation. 
+   * @param {AmbersteelItemItem} item The item to move. 
+   * @param {Number} x Column index on grid. 
+   * @param {Number} y Row index on grid. 
+   * @param orientation 
+   * @returns {}
+   */
+  move(item, x, y, orientation) {
+    // TODO
   }
 
   /**
@@ -240,34 +290,6 @@ export class ItemGrid {
       }
     }
     return undefined;
-  }
-
-  /**
-   * Updates the given actor's item grid based on this {ItemGrid}. 
-   * @param {AmbersteelActor} actor 
-   * @param {Boolean} update If true, will push the changes to the db. Default true. 
-   */
-  synchronizeTo(actor, update = true) {
-    if (update === true) {
-      actor.update({
-        data: {
-          assets: {
-            grid: this._grid,
-            gridIndices: this._indices
-          }
-        }
-      });
-    } else {
-      // This data will *not* be persisted!
-      // When an actor is initialized, its grid may be empty. This is the case with new actors. 
-      // The ItemGrid and ItemGridView classes expect an initialized grid, however. 
-      // In that case, the empty grid will be initialized, so it has the correct number of 
-      // columns and rows. 
-      // Since updating an actor's db entry causes it to be re-rendered, this causes an 
-      // unnecessary chain-reaction of initializations to occur, which would result in infinite recursion. 
-      actor.data.data.assets.grid = this._grid;
-      actor.data.data.assets.gridIndices = this._indices;
-    }
   }
 
   /**
@@ -367,6 +389,48 @@ export class ItemGrid {
 
     return result;
   }
+
+  /**
+   * Places an item at the given position, with the given orientation, if possible. 
+   * 
+   * Warning: will override any potentially overlapped items! Intended for internal use, only!
+   * @param {AmbersteelItemItem} item 
+   * @param {Number} x 
+   * @param {Number} y 
+   * @param {CONFIG.itemOrientations} orientation 
+   * @private
+   */
+  _addAt(item, x, y, orientation) {
+    const shape = this._getOrientedShape(item.data.data.shape, orientation);
+
+    // Add to indices. 
+    const itemIndex = new InventoryIndex({ x: x, y: y, w: shape.width, h: shape.height, id: item.id, orientation: orientation });
+    this._indices.push(itemIndex);
+    
+    // Add to grid. 
+    const right = x + shape.width - 1;
+    const bottom = y + shape.height - 1;
+    
+    for (let iX = x; iX <= right; iX++) {
+      for (let iY = y; iY <= bottom; iY++) {
+        this._grid[iX][iY] = itemIndex;
+      }
+    }
+  }
+
+  /**
+   * Returns a shape, based on the given shape and orientation. 
+   * 
+   * The given shape is not modified, in any way, during this operation. 
+   * @param {Object} shape 
+   * @param {CONFIG.itemOrientations} orientation 
+   */
+  _getOrientedShape(shape, orientation = undefined) {
+    return {
+      width: orientation === game.ambersteel.config.itemOrientations.horizontal ? shape.height : shape.width,
+      height: orientation === game.ambersteel.config.itemOrientations.horizontal ? shape.width : shape.height
+    };
+  }
 }
 
 /**
@@ -398,5 +462,20 @@ export class GridOverlapTestResult {
   constructor(item, isPartial) {
     this.item = item;
     this.isPartial = isPartial;
+  }
+}
+
+/**
+ * Represents the result of loading (creating) an {ItemGrid}, based on an {AmbersteelActor}'s or 
+ * {AmbersteelItem}'s data. 
+ */
+export class ItemGridLoadResult {
+  /**
+   * @param {ItemGrid} itemGrid The loaded and instantiated {ItemGrid}. 
+   * @param {Array<AmbersteelItemItem>} itemsDropped A list of items which couldn't be fit onto the grid. 
+   */
+  constructor(itemGrid, itemsDropped) {
+    this.itemGrid = itemGrid;
+    this.itemsDropped = itemsDropped;
   }
 }

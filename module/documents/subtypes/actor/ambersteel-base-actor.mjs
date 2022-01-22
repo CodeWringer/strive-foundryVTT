@@ -2,6 +2,7 @@ import PreparedChatData from '../../../dto/prepared-chat-data.mjs';
 import * as UpdateUtil from "../../../utils/document-update-utility.mjs";
 import * as ChatUtil from "../../../utils/chat-utility.mjs";
 import { ItemGrid } from "../../../components/item-grid/item-grid.mjs";
+import { showPlainDialog } from '../../../utils/dialog-utility.mjs';
 
 export default class AmbersteelBaseActor {
   /**
@@ -81,9 +82,25 @@ export default class AmbersteelBaseActor {
     context.data.data.assets.totalBulk = usedBulk;
 
     // Initialize item grid. 
-    this._itemGrid = ItemGrid.from(context);
+    const itemGridLoadResult = ItemGrid.from(context);
+    this._itemGrid = itemGridLoadResult.itemGrid;
     context.itemGrid = this.itemGrid;
+    // Write the {ItemGrid} to the context document, without triggering a db update. 
+    // This prevents infinite recursion, as a db update would cause the document to be 
+    // reloaded, thus executing 'prepareDerivedData' again and then this line would 
+    // cause another reload, and so on.
     this._itemGrid.synchronizeTo(context, false);
+    
+    for (const item of itemGridLoadResult.itemsDropped) {
+      // Move item to property (= drop from person). 
+      item.updateProperty("data.data.isOnPerson", false);
+    }
+    // Display a warning dialog. 
+    showPlainDialog({
+      localizableTitle: "ambersteel.dialog.titleItemsDropped",
+      localizedContent: game.i18n.localize("ambersteel.dialog.contentItemsDropped\n") 
+        + itemGridLoadResult.itemsDropped.join(",\n")
+    });
     
     this._prepareDerivedAttributesData(context);
     this._prepareDerivedSkillsData(context);
