@@ -319,7 +319,7 @@ export class ItemGrid {
    * @param {AmbersteelItemItem} item The item to move. 
    * @param {Number} x Column index on grid. 
    * @param {Number} y Row index on grid. 
-   * @param orientation Target orientation of the item on grid. 
+   * @param {CONFIG.itemOrientations} orientation Target orientation of the item on grid. 
    * @returns {Boolean} 'true', if the given item could be moved, otherwise, 'false'. 
    */
   move(item, x, y, orientation) {
@@ -338,6 +338,47 @@ export class ItemGrid {
 
     // Add to new location. 
     this._addAt(item, x, y, orientation);
+    
+    return true;
+  }
+  
+  /**
+   * Rotates the given item in-place, if it is on grid. 
+   * 
+   * Optionally, the item orientation can be set to a given orientation. 
+   * 
+   * NOTE: Callers of this function must, in order to persist the change to the db, also call 'synchronize'!
+   * @param {AmbersteelItemItem} item 
+   * @param {CONFIG.itemOrientations} orientation Optional. If not undefined, this is the target orientation. 
+   * If undefined, will toggle from 'horizontal' to 'vertical', or vice-versa. 
+   * @returns {Boolean} 'true', if the given item could be rotated, otherwise, 'false'. 
+   */
+  rotate(item, orientation = undefined) {
+    if (this.contains(item) !== true) {
+      // Cannot move an item that isn't even on the grid. 
+      return false;
+    }
+    
+    const index = this.getIndexOf(item);
+    
+    if (orientation === undefined) {
+      if (index.orientation === game.ambersteel.config.itemOrientations.vertical) {
+        orientation = game.ambersteel.config.itemOrientations.horizontal;
+      } else if (index.orientation === game.ambersteel.config.itemOrientations.horizontal) {
+        orientation = game.ambersteel.config.itemOrientations.vertical;
+      }
+    }
+    
+    const canItFit = this.canItemFitOnGridAt(item, index.x, index.y, orientation);
+    if (canItFit.result !== true) {
+      return false;
+    }
+    
+    // Remove from previous location. 
+    this.remove(item);
+  
+    // Add to new location. 
+    this._addAt(item, index.x, index.y, orientation);
 
     return true;
   }
