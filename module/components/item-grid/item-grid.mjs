@@ -243,7 +243,7 @@ export class ItemGrid {
       return false;
     }
 
-    const canItFit = this.canItemFitOnGridAt(item, x, y, orientation);
+    const canItFit = this.canItemFitOnGridAt(item, x, y, orientation, false);
     if (canItFit.result !== true) {
       return false;
     }
@@ -328,15 +328,17 @@ export class ItemGrid {
       return false;
     }
 
-    const canItFit = this.canItemFitOnGridAt(item, x, y, orientation);
+    const canItFit = this.canItemFitOnGridAt(item, x, y, orientation, false);
     if (canItFit.result !== true) {
       return false;
     }
 
-    // Remove from previous location. 
+    // Remove given item from previous location. 
     this.remove(item);
+    
+    // TODO: Handle switching locations of overlapped items. 
 
-    // Add to new location. 
+    // Add given item to new location. 
     this._addAt(item, x, y, orientation);
     
     return true;
@@ -369,13 +371,15 @@ export class ItemGrid {
       }
     }
     
-    const canItFit = this.canItemFitOnGridAt(item, index.x, index.y, orientation);
+    const canItFit = this.canItemFitOnGridAt(item, index.x, index.y, orientation, false);
     if (canItFit.result !== true) {
       return false;
     }
     
     // Remove from previous location. 
     this.remove(item);
+
+    // TODO: Handle switching locations of overlapped items. 
   
     // Add to new location. 
     this._addAt(item, index.x, index.y, orientation);
@@ -411,9 +415,15 @@ export class ItemGrid {
    * @param {AmbersteelItemItem} item 
    * @param {CONFIG.itemOrientations} orientation Optional. If not undefined, will only test with that specific 
    * orientation. If left undefined, will test every possible orientation in succession. 
-   * @returns {GridCapacityTestResult}
+   * @returns {GridPlacementTestResult}
    */
   canItemFitOnGrid(item, orientation = undefined) {
+    // If the item is already on grid, we can return early. 
+    const index = this.getIndexOf(item);
+    if (index !== undefined) {
+      return new GridPlacementTestResult(true, index.x, index.y, index.orientation, []);
+    }
+
     const columnCount = this._columnCount;
     
     for (let x = 0; x < columnCount; x++) {
@@ -421,34 +431,42 @@ export class ItemGrid {
       for (let y = 0; y < rowCount; y++) {
         if (orientation !== undefined) {
           // Test with given orientation. 
-          const result = this.canItemFitOnGridAt(item, x, y, orientation);
+          const result = this.canItemFitOnGridAt(item, x, y, orientation, false);
           if (result.result === true) return result;
         } else {
           // Test with default (vertical) orientation. 
-          let result = this.canItemFitOnGridAt(item, x, y, game.ambersteel.config.itemOrientations.vertical);
+          let result = this.canItemFitOnGridAt(item, x, y, game.ambersteel.config.itemOrientations.vertical, false);
           if (result.result === true) return result;
           
           // Test with rotated (horizontal) orientation. 
-          result = this.canItemFitOnGridAt(item, x, y, game.ambersteel.config.itemOrientations.horizontal);
+          result = this.canItemFitOnGridAt(item, x, y, game.ambersteel.config.itemOrientations.horizontal, false);
           if (result.result === true) return result;
         }
       }
     }
     
-    return new GridCapacityTestResult(false, undefined, undefined, undefined);
+    return new GridPlacementTestResult(false, undefined, undefined, undefined, []);
   }
-  
   
   /**
    * Tests if the given item could fit on the item grid at the given coordinates and returns the result, 
    * which contains the grid coordinates and orientation of where it would fit. 
    * @param {AmbersteelItemItem} item 
    * @param {CONFIG.itemOrientations} orientation
-   * @returns {GridCapacityTestResult}
+   * @param {Boolean} allowOverlap Optional. If true, allows for item overlap (must be fully enveloped). Default 'false'
+   * @returns {GridPlacementTestResult}
    */
-  canItemFitOnGridAt(item, x, y, orientation) {
+  canItemFitOnGridAt(item, x, y, orientation, allowOverlap = false) {
+    // Test if unchanged location and orientation. 
+    const index = this.getIndexOf(item);
+    if (index !== undefined) {
+      if (index.x === x && index.y === y && index.orientation === orientation) {
+        return new GridPlacementTestResult(true, index.x, index.y, index.orientation, []);
+      }
+    }
+
     const shape = this._getOrientedShape(item.data.data.shape, orientation);
-    const failureResult = new GridCapacityTestResult(false, undefined, undefined, undefined);
+    const failureResult = new GridPlacementTestResult(false, undefined, undefined, undefined, []);
 
     const rowCount = this._grid[x].length;
     
@@ -458,9 +476,16 @@ export class ItemGrid {
     
     // Test for overlap. 
     const overlappedItems = this.getItemsOnGridWithin(x, y, shape.width, shape.height);
-    if (overlappedItems.length === 0) {
-      // Success
-      return new GridCapacityTestResult(true, x, y, orientation);
+
+    if (allowOverlap !== true && overlappedItems.length !== 0) {
+      return failureResult;
+    }
+
+    const anyPartial = overlappedItems.find(element => element.isPartial === true);
+    if (anyPartial === undefined) {
+      // Test if all of the overlapped items are completely enveloped. 
+      // If so, their positions could be switched with that of the tested item. 
+      return new GridPlacementTestResult(true, x, y, orientation, overlappedItems);
     }
 
     return failureResult;
@@ -552,18 +577,22 @@ export class ItemGrid {
 /**
  * Represents the result of a test whether an item can fit on the item grid. 
  */
-export class GridCapacityTestResult {
+export class GridPlacementTestResult {
   /**
    * @param {Boolean} result True, if the item can fit. 
    * @param {Number} x Column on grid where the item can fit. 
    * @param {Number} y Row on grid where the itme can fit. 
    * @param {CONFIG.itemOrientations} orientation Which orientation the item must be in to be able to fit. 
+   * @param {Array<GridOverlapTestResult>} overlapped An array of overlapped items. 
+   * In case of {result} being 'true', the overlapped items are completely enveloped. 
+   * In case of {result} being 'false, at least one overlapped item isn't completely enveloped. 
    */
-  constructor(result, x, y, orientation) {
+  constructor(result, x, y, orientation, overlapped = []) {
     this.result = result;
     this.x = x;
     this.y = y;
     this.orientation = orientation;
+    this.overlapped = overlapped;
   }
 }
 

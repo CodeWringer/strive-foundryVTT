@@ -160,6 +160,11 @@ export class DragIndicator {
     }
   }
 
+  /**
+   * @type {CONFIG.itemOrientations}
+   */
+  orientation = undefined;
+
   constructor(pixiApp, tileSize) {
     this._pixiApp = pixiApp;
     this._stage = this._pixiApp.stage;
@@ -195,10 +200,12 @@ export class DragIndicator {
    * Changes will **not** be respected, while the indicator is shown. 
    * @param {Number} width Width of the indicator, in grid coordinates. 
    * @param {Number} height Height of the indicator, in grid coordinates. 
+   * @param {CONFIG.itemOrientations} orientation The orientation that the given dimensions represents. 
    */
-  setSize(width, height) {
+  setSize(width, height, orientation) {
     this._sizeOnGrid.width = width;
     this._sizeOnGrid.height = height;
+    this.orientation = orientation;
   }
 
   /**
@@ -246,9 +253,16 @@ export class DragIndicator {
    * Rotates the target indicator. 
    */
   rotate() {
+    if (this.orientation === game.ambersteel.config.itemOrientations.vertical) {
+      this.orientation = game.ambersteel.config.itemOrientations.horizontal;
+    } else if (this.orientation === game.ambersteel.config.itemOrientations.horizontal) {
+      this.orientation = game.ambersteel.config.itemOrientations.vertical;
+    }
+
     const width = this._sizeOnGrid.width;
     this._sizeOnGrid.width = this._sizeOnGrid.height;
     this._sizeOnGrid.height = width;
+
     this._redraw();
   }
 

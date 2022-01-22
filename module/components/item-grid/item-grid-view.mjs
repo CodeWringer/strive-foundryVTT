@@ -12,6 +12,7 @@ import { ItemGrid } from "./item-grid.mjs";
  */
 export class ItemGridView {
   /**
+   * This is the element of the DOM that will be "hijacked" to display the {ItemGridView}. 
    * @type {HTMLElement}
    * @private
    */
@@ -46,12 +47,7 @@ export class ItemGridView {
   _itemsOnGrid = [];
 
   /**
-   * @type {Array<AmbersteelItemItem>}
-   * @private
-   */
-  _items = [];
-
-  /**
+   * The underlying {ItemGrid} instance that this is a view on. 
    * @type {ItemGrid}
    * @private
    */
@@ -73,19 +69,11 @@ export class ItemGridView {
    * @private
    */
   _dragItem = undefined;
-
   /**
    * @type {DragIndicator}
    * @private
    */
   _dragIndicator = undefined;
-
-  /**
-   * If not undefined, this is the targtet orientation for a dragged item. 
-   * @type {CONFIG.itemOrientations | undefined}
-   * @private
-   */
-  _dragItemOrientation = undefined;
 
   /**
    * Width of the canvas element in pixels. 
@@ -95,19 +83,19 @@ export class ItemGridView {
   _width = 0;
 
   /**
-   * Maximum number of columns this item grid can hold. 
-   * @type {Number}
-   * @private
-   */
-  _columnCount = 0;
-
-  /**
    * Size of a tile on the grid, in pixels. 
    * @type {Number}
    * @default 128
    * @private
    */
   _tileSize = 128;
+
+  /**
+   * If true, is capturing pointer (mouse and touch) events. 
+   * @type {Boolean}
+   * @private
+   */
+  _captureCursor = false;
 
   /**
    * If set to true, will draw debug info. 
@@ -185,11 +173,10 @@ export class ItemGridView {
     this._actor = this._actorSheet.getActor();
 
     this._itemGrid = this._actor.itemGrid;
-    this._columnCount = this._itemGrid.columnCount;
 
     // Setup HTML canvas element. 
     this._canvasElement = html.find("#" + canvasElementId)[0];
-    const height = Math.ceil(this._itemGrid.capacity / this._columnCount) * this._tileSize;
+    const height = Math.ceil(this._itemGrid.capacity / this._itemGrid.columnCount) * this._tileSize;
     this._canvasElement.style.height = height;
   
     // Setup Pixi app. 
@@ -211,11 +198,7 @@ export class ItemGridView {
     this._dragIndicator = new DragIndicator(this._pixiApp, this._tileSize);
 
     this._setupTiles(this._itemGrid.grid, this._tileSize);
-  
-    this._indices = this._actor.data.data.assets.gridIndices; // A list of {InventoryIndex}
-    this._items = this._actor.possessions; // A list of {AmbersteelItemItem}
-    this._setupItemsOnGrid(this._indices, this._items);
-    
+    this._setupItemsOnGrid(this._itemGrid.indices, this._itemGrid.items);
     this._setupInteractivity();
   }
   
@@ -251,7 +234,7 @@ export class ItemGridView {
   _setupItemsOnGrid(indices, items) {
     for (const index of indices) {
       const item = items.find((element) => { return element.id === index.id; });
-      const itemOnGrid = new ItemOnGridView(item, index, { width: this._tileSize, height: this._tileSize }, this._pixiApp, this);
+      const itemOnGrid = new ItemOnGridView(item, index, { width: this._tileSize, height: this._tileSize }, this);
       this._itemsOnGrid.push(itemOnGrid);
 
       this._rootContainer.addChild(itemOnGrid.rootContainer.wrapped);
@@ -270,12 +253,12 @@ export class ItemGridView {
 
       if (this._dragItem !== undefined) {
         this._dragIndicator.rotate();
-        if (this._dragItemOrientation === game.ambersteel.config.itemOrientations.vertical) {
-          this._dragItemOrientation = game.ambersteel.config.itemOrientations.horizontal;
-        } else if (this._dragItemOrientation === game.ambersteel.config.itemOrientations.horizontal) {
-          this._dragItemOrientation = game.ambersteel.config.itemOrientations.vertical;
-        }
-        this._dragIndicator.valid = this._canItemBeMovedTo(this._dragItem, this._dragIndicator.targetOnGrid.x, this._dragIndicator.targetOnGrid.y, this._dragItemOrientation).result;
+        this._dragIndicator.valid = this._itemGrid.canItemFitOnGridAt(
+          this._dragItem,
+          this._dragIndicator.targetOnGrid.x,
+          this._dragIndicator.targetOnGrid.y,
+          this._dragIndicator.orientation
+        ).result;
       }
     });
 
@@ -285,7 +268,7 @@ export class ItemGridView {
 
     this._stage.on("pointerdown", (event) => {
       const coords = { x: event.data.global.x, y: event.data.global.y };
-      const itemOnGrid = this._getItemAt(coords.x, coords.y);
+      const itemOnGrid = this.getItemAt(coords.x, coords.y);
       const button = this._getButtonAt(coords.x, coords.y);
 
       if (button !== undefined) {
@@ -295,18 +278,22 @@ export class ItemGridView {
         if (this.isEditable !== true) return;
 
         // Start dragging. 
+
         this._canvasElement.style.cursor = "grabbing";
 
         this.hoverItem = itemOnGrid;
         this._dragItem = itemOnGrid;
 
-        this._dragItemOrientation = this._dragItem.index.orientation;
-
-        this._dragIndicator.setSize(itemOnGrid.index.w, itemOnGrid.index.h);
+        this._dragIndicator.setSize(itemOnGrid.index.w, itemOnGrid.index.h, this._dragItem.index.orientation);
         this._dragIndicator.setInitialTo(itemOnGrid.index.x, itemOnGrid.index.y);
         this._dragIndicator.setTargetTo(itemOnGrid.index.x, itemOnGrid.index.y);
         this._dragIndicator.show = true;
-        this._dragIndicator.valid = this._canItemBeMovedTo(itemOnGrid, itemOnGrid.index.x, itemOnGrid.index.y, this._dragItemOrientation).result;
+        this._dragIndicator.valid = this._itemGrid.canItemFitOnGridAt(
+          itemOnGrid,
+          itemOnGrid.index.x,
+          itemOnGrid.index.y,
+          this._dragIndicator.orientation
+        ).result;
       }
     });
 
@@ -316,50 +303,28 @@ export class ItemGridView {
       const coords = { x: event.data.global.x, y: event.data.global.y };
 
       if (this._dragItem !== undefined) {
-        const gridCoords = this._getGridCoordsAt(coords.x, coords.y);
+        const gridCoords = this.getGridCoordsAt(coords.x, coords.y);
 
-        // Either apply or reject item move and rotation change. 
-        const canItemBeMovedTo = this._canItemBeMovedTo(this._dragItem, gridCoords.x, gridCoords.y, this._dragItemOrientation);
+        const canItemBeMovedTo = this._itemGrid.canItemFitOnGridAt(
+          this._dragItem,
+          gridCoords.x,
+          gridCoords.y,
+          this._dragIndicator.orientation
+        );
         if (canItemBeMovedTo.result === true) {
-          const gridIndices = this._actor.data.data.assets.gridIndices;
-          const index = gridIndices.find((element) => { return element.id === this._dragItem.item.id; });
-
-          if (canItemBeMovedTo.itemsToSwitch.length > 0) {
-            // Swap items.
-            for (const itemToSwitch of canItemBeMovedTo.itemsToSwitch) {
-              const indexItemToSwitch = gridIndices.find((element) => { return element.id === itemToSwitch.item.item.id; })
-              const offset = {
-                x: gridCoords.x - indexItemToSwitch.x,
-                y: gridCoords.y - indexItemToSwitch.y,
-              };
-              indexItemToSwitch.x = index.x + offset.x;
-              indexItemToSwitch.y = index.y + offset.y;
-            }
-          }
-          
-          index.x = gridCoords.x;
-          index.y = gridCoords.y;
-          index.orientation = this._dragItemOrientation;
-          if (index.orientation === game.ambersteel.config.itemOrientations.vertical) {
-            index.w = this._dragItem.shape.width;
-            index.h = this._dragItem.shape.height;
-          } else if (index.orientation === game.ambersteel.config.itemOrientations.horizontal) {
-            index.w = this._dragItem.shape.height;
-            index.h = this._dragItem.shape.width;
-          }
-
-          this._actor.updateProperty("data.assets.gridIndices", gridIndices);
+          // Move (and rotate) item. 
+          this._itemGrid.move(this._dragItem.item, gridCoords.x, gridCoords.y, this._dragIndicator.orientation);
+          this._itemGrid.synchronize();
         }
 
         // Unset currently dragged item. 
         this._dragItem = undefined;
+        // Hide drag indicator. 
         this._dragIndicator.show = false;
       }
       
       this._determineCursor(coords.x, coords.y);
     });
-
-    this._captureCursor = false;
     
     this._stage.on("pointerover", (event) => {
       this._captureCursor = true;
@@ -381,7 +346,7 @@ export class ItemGridView {
       const coords = { x: event.data.global.x, y: event.data.global.y };
 
       if (this._dragItem === undefined) {
-        const itemOnGrid = this._getItemAt(coords.x, coords.y);
+        const itemOnGrid = this.getItemAt(coords.x, coords.y);
         const button = this._getButtonAt(coords.x, coords.y);
         
         this.hoverItem = itemOnGrid;
@@ -389,15 +354,14 @@ export class ItemGridView {
         
         this._determineCursor(coords.x, coords.y);
       } else {
-        const gridCoords = this._getGridCoordsAt(coords.x, coords.y);
-        const canItemBeMovedTo = this._canItemBeMovedTo(this._dragItem, gridCoords.x, gridCoords.y, this._dragItemOrientation).result;
+        const gridCoords = this.getGridCoordsAt(coords.x, coords.y);
+        this._dragIndicator.valid = this._itemGrid.canItemFitOnGridAt(
+          this._dragItem,
+          gridCoords.x,
+          gridCoords.y,
+          this._dragIndicator.orientation
+        ).result;
 
-        if (canItemBeMovedTo === true) {
-          this._dragIndicator.valid = true;
-        } else {
-          this._dragIndicator.valid = false;
-        }
-        
         this._dragIndicator.setTargetTo(gridCoords.x, gridCoords.y);
       }
     });
@@ -421,14 +385,27 @@ export class ItemGridView {
 
     this._dragIndicator.destroy();
   }
+
+  /**
+   * Returns the grid coordinates containing the given pixel coordinates. 
+   * @param {Number} pixelX X coordinate, in pixels. 
+   * @param {Number} pixelY Y coordinate, in pixels. 
+   * @returns {Object} { x: {Number}, y: {Number} } Grid coordinates
+   */
+  getGridCoordsAt(pixelX, pixelY) {
+    return {
+      x: Math.floor(pixelX / this._tileSize),
+      y: Math.floor(pixelY / this._tileSize)
+    }
+  }
   
   /**
    * Returns the item whose bounding rectangle contains the given pixel coordinates. 
    * @param {Number} pixelX X pixel coordinate. 
    * @param {Number} pixelY Y pixel coordinate. 
-   * @returns {ItemOnGridView}
+   * @returns {ItemOnGridView | undefined}
    */
-  _getItemAt(pixelX, pixelY) {
+  getItemAt(pixelX, pixelY) {
     for (const itemOnGrid of this._itemsOnGrid) {
       if (itemOnGrid.rectangle.contains(pixelX, pixelY) === true) {
         return itemOnGrid;
@@ -441,7 +418,8 @@ export class ItemGridView {
    * Returns the button whose bounding rectangle contains the given pixel coordinates. 
    * @param {Number} pixelX X pixel coordinate. 
    * @param {Number} pixelY Y pixel coordinate. 
-   * @returns 
+   * @returns {Button | undefined}
+   * @private
    */
   _getButtonAt(pixelX, pixelY) {
     for (const itemOnGrid of this._itemsOnGrid) {
@@ -454,72 +432,14 @@ export class ItemGridView {
   }
 
   /**
-   * Returns the grid coordinates containing the given pixel coordinates. 
-   * @param {Number} pixelX X coordinate, in pixels. 
-   * @param {Number} pixelY Y coordinate, in pixels. 
-   * @returns {Object} { x: {Number}, y: {Number} } Grid coordinates
-   */
-  _getGridCoordsAt(pixelX, pixelY) {
-    return {
-      x: Math.floor(pixelX / this._tileSize),
-      y: Math.floor(pixelY / this._tileSize)
-    }
-  }
-
-  /**
-   * Tests if the given item could be moved to the given index on the item grid. 
-   * 
-   * Takes item slot (grid) coordinates, **not** pixel coordinates!
-   * @param {ItemOnGridView} itemOnGrid The item to test. 
-   * @param {Number} gridX X coordinate, in grid coordinates. 
-   * @param {Number} gridY Y coordinate, in grid coordinates. 
-   * @param {CONFIG.itemOrientations} orientation The desired (target) orientation at the given coordinates. 
-   * @returns {Object} { result: {Boolean}, itemsToSwitch: {Array<ItemOnGridView>} }
-   */
-  _canItemBeMovedTo(itemOnGrid, gridX, gridY, orientation) {
-    // Consider rotation during checks. 
-    const sizeOnGrid = orientation === game.ambersteel.config.itemOrientations.vertical ? 
-    { width: itemOnGrid.shape.width, height: itemOnGrid.shape.height } : 
-    { width: itemOnGrid.shape.height, height: itemOnGrid.shape.width };
-
-    const emptyFailure = { result: false, itemsToSwitch: [] };
-    const emptySuccess = { result: true, itemsToSwitch: [] };
-    // Test if over self and with unchanged orientation. 
-    // If so, no need for further checks. The item can remain where it is currently at. 
-    if (gridX === itemOnGrid.index.x 
-      && gridY === itemOnGrid.index.y
-      && orientation === itemOnGrid.orientation) {
-      return emptySuccess;
-    }
-
-    // Test if target exceeds grid size. 
-    for (let x = 0; x < sizeOnGrid.width; x++) {
-      if (this._itemGrid.columnCount <= (gridX + x)) return emptyFailure;
-
-      const bottom = gridY + (sizeOnGrid.height - 1);
-      const rowCount = this._itemGrid.grid[gridX + x].length;
-      if (bottom >= rowCount) return emptyFailure;
-    }
-
-    // Test if there is overlap with other items on grid. 
-    const overlappedItems = this._itemGrid.getItemsOnGridWithin(gridX, gridY, sizeOnGrid.width, sizeOnGrid.height);
-    // Test if the overlapping items can be swapped. 
-    for (const overlappedItem of overlappedItems) {
-      if (overlappedItem.item.id === itemOnGrid.item.id) continue;
-      if (overlappedItem.isPartial === true) return emptyFailure;
-    }
-
-    return { result: true, itemsToSwitch: overlappedItems };
-  }
-  
-  /**
    * Sets the cursor's appearance, based on the context-dependent interaction 
    * possible at the given pixel coordinates. 
    * @param {Number} pixelX X coordinate, in pixels. 
    * @param {Number} pixelY Y coordinate, in pixels. 
+   * @private
    */
   _determineCursor(pixelX, pixelY) {
-    const itemOnGrid = this._getItemAt(pixelX, pixelY);
+    const itemOnGrid = this.getItemAt(pixelX, pixelY);
     const button = this._getButtonAt(pixelX, pixelY);
     
     if (button !== undefined) {

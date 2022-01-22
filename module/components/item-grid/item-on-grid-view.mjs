@@ -17,16 +17,10 @@ const TEXT_SETTINGS_INVERSE = {fontFamily : FONT_FAMILY, fontSize: 18, fontWeigh
 
 export class ItemOnGridView {
   /**
-   * @type {Number}
+   * @type {Object} { width: {Number}, height: {Number} }
    * @private
    */
-  _tileSize = 0;
-
-  /**
-   * @type {PIXI.Application}
-   * @private
-   */
-  _pixiApp = undefined;
+  _tileSize = { width: 0, height: 0 };
 
   /**
    * @type {VerticalLayoutContainer}
@@ -35,16 +29,10 @@ export class ItemOnGridView {
   _contentContainer = undefined;
 
   /**
-   * @type {EventEmitter}
-   * @private
-   */
-  _eventEmitter = undefined;
-
-  /**
    * @type {ItemGridView}
    * @private
    */
-  _itemGridView = undefined;
+  _parent = undefined;
 
   /**
    * Root Container which encompasses the entire item on grid. 
@@ -152,24 +140,19 @@ export class ItemOnGridView {
    * 
    * @param {AmbersteelItemItem} item 
    * @param {InventoryIndex} index 
-   * @param {Number} tileSize 
-   * @param {PIXI.Application} pixiApp 
+   * @param {Object} tileSize { width: {Number}, height: {Number} }
    * @param {ItemGridView} itemGridView 
    */
-  constructor(item, index, tileSize, pixiApp, itemGridView) {
+  constructor(item, index, tileSize, itemGridView) {
     this._item = item;
     this._index = index;
     this._shape = item.data.data.shape;
     this._tileSize = tileSize;
-    this._pixiApp = pixiApp;
-    this._itemGridView = itemGridView;
+    this._parent = itemGridView;
     this._rectangle = new PIXI.Rectangle(0, 0, 0, 0);
     
-    this._eventEmitter = new EventEmitter();
-    this._eventEmitter.bind(this);
-    
     // Set up root container and determine dimensions. 
-    this.rootContainer = new CenterLayoutContainer(this._pixiApp);
+    this.rootContainer = new CenterLayoutContainer(this._parent._pixiApp);
     
     // These actually implicitly set the rootContainer's dimensions.
     this.width = this.orientedShape.width * this._tileSize.width;
@@ -182,34 +165,51 @@ export class ItemOnGridView {
   }
 
   /**
-   * Toggles between the vertical and horizontal orientation. 
+   * Tears down this {ItemOnGridView}. 
+   * 
+   * NOTE: Callers mustn't use this instance any further, after this method has been called!
    */
-  rotate() {
-    if (this.index.orientation === game.ambersteel.config.itemOrientations.vertical) {
-      this.index.orientation = game.ambersteel.config.itemOrientations.horizontal;
-    } else if (this.index.orientation === game.ambersteel.config.itemOrientations.horizontal) {
-      this.index.orientation = game.ambersteel.config.itemOrientations.vertical;
-    }
-  }
-
   delete() {
     this.drawDebug = false;
     this.rootContainer.destroy();
     this._item.delete();
   }
+  
+  /**
+   * Either returns the button containing the given pixel coordinates, 
+   * or undefined, if there is no button at the given pixel coordinates. 
+   * @param {Number} x Pixel coordinate. 
+   * @param {Number} y Pixel coordinate. 
+   * @returns {Button | undefined} A {Button}, or {undefined}. 
+   */
+  getButtonAt(x, y) {
+    for (const _button of this._buttons) {
+      const bounds = _button.getGlobalBounds();
+      if (bounds.contains(x, y) === true) {
+        return _button;
+      }
+    }
+    return undefined;
+  }
 
+  /**
+   * Sets up all graphical elements (sprites), as well as clickable {Button}s. 
+   * @private
+   */
   _setupElements() {
     const itemOnGrid = this;
+
+    const pixiApp = this._parent._pixiApp;
 
     // Background sprite.
     // TODO: Make this work differently, perhaps more like a sprite grid, 
     // which uses individual sprites for the corners and walls. 
-    this._spriteBackground = new DisplayObjectWrap(new PIXI.Sprite.from(TEXTURES.ITEM_SLOT), this._pixiApp);
+    this._spriteBackground = new DisplayObjectWrap(new PIXI.Sprite.from(TEXTURES.ITEM_SLOT), pixiApp);
     this._spriteBackground.fill = true;
     this.rootContainer.addChild(this._spriteBackground);
 
     // Content margin container. 
-    this._rootContainerMargin = new MarginLayoutContainer(this._pixiApp);
+    this._rootContainerMargin = new MarginLayoutContainer(pixiApp);
     this._rootContainerMargin.padding.left = 8;
     this._rootContainerMargin.padding.right = 8;
     this._rootContainerMargin.padding.top = 8;
@@ -218,7 +218,7 @@ export class ItemOnGridView {
     this.rootContainer.addChild(this._rootContainerMargin);
 
     // Content container. 
-    this._contentContainer = new VerticalLayoutContainer(this._pixiApp);
+    this._contentContainer = new VerticalLayoutContainer(pixiApp);
     this._contentContainer.fill = true;
     this._rootContainerMargin.addChild(this._contentContainer);
 
@@ -226,12 +226,12 @@ export class ItemOnGridView {
 
     const HEADER_HEIGHT = 16;
 
-    this._containerHeader = new HorizontalLayoutContainer(this._pixiApp);
+    this._containerHeader = new HorizontalLayoutContainer(pixiApp);
     this._containerHeader.height = HEADER_HEIGHT;
     this._contentContainer.addChild(this._containerHeader);
 
     // SendToChat button. 
-    this._buttonSendToChat = new Button(this._pixiApp, TEXTURES.SEND_TO_CHAT, async () => {
+    this._buttonSendToChat = new Button(pixiApp, TEXTURES.SEND_TO_CHAT, async () => {
       const dialogResult = await queryVisibilityMode();
       if (!dialogResult.confirmed) return;
 
@@ -243,12 +243,12 @@ export class ItemOnGridView {
     this._containerHeader.addChild(this._buttonSendToChat);
     
     // Spacer. 
-    const headerButtonsSpacer1 = new Containable(this._pixiApp);
+    const headerButtonsSpacer1 = new Containable(pixiApp);
     headerButtonsSpacer1.width = 6;
     this._containerHeader.addChild(headerButtonsSpacer1);
     
     // OpenSheet button. 
-    this._buttonOpenSheet = new Button(this._pixiApp, TEXTURES.OPEN_SHEET, async () => {
+    this._buttonOpenSheet = new Button(pixiApp, TEXTURES.OPEN_SHEET, async () => {
       this.item.sheet.render(true);
     });
     this._buttons.push(this._buttonOpenSheet);
@@ -257,12 +257,12 @@ export class ItemOnGridView {
     this._containerHeader.addChild(this._buttonOpenSheet);
 
     // Spacer. 
-    const headerButtonsSpacer2 = new Containable(this._pixiApp);
+    const headerButtonsSpacer2 = new Containable(pixiApp);
     headerButtonsSpacer2.width = 6;
     this._containerHeader.addChild(headerButtonsSpacer2);
     
     // Move to property button. 
-    this._buttonMoveItemToProperty = new Button(this._pixiApp, TEXTURES.HAND_HOLD_ITEM_DOWN, async () => {
+    this._buttonMoveItemToProperty = new Button(pixiApp, TEXTURES.HAND_HOLD_ITEM_DOWN, async () => {
       itemOnGrid.item.updateProperty("data.isOnPerson", false);
     });
     this._buttons.push(this._buttonMoveItemToProperty);
@@ -271,12 +271,12 @@ export class ItemOnGridView {
     this._containerHeader.addChild(this._buttonMoveItemToProperty);
     
     // Header spacer. 
-    const headerSpacer2 = new Containable(this._pixiApp);
+    const headerSpacer2 = new Containable(pixiApp);
     headerSpacer2.fill = true;
     this._containerHeader.addChild(headerSpacer2);
 
     // Delete/Remove button.
-    this._buttonDelete = new Button(this._pixiApp, TEXTURES.DELETE, async () => {
+    this._buttonDelete = new Button(pixiApp, TEXTURES.DELETE, async () => {
       itemOnGrid.item.delete();
     });
     this._buttons.push(this._buttonDelete);
@@ -286,10 +286,10 @@ export class ItemOnGridView {
     this._containerHeader.addChild(this._buttonDelete);
 
     // ICON
-    this._containerIcon = new CenterLayoutContainer(this._pixiApp);
+    this._containerIcon = new CenterLayoutContainer(pixiApp);
     this._containerIcon.fill = true;
 
-    this._spriteIcon = new DisplayObjectWrap(new PIXI.Sprite.from(TEXTURES.BULK), this._pixiApp);
+    this._spriteIcon = new DisplayObjectWrap(new PIXI.Sprite.from(TEXTURES.BULK), pixiApp);
     this._spriteIcon.alpha = 0.5;
     this._spriteIcon.tint = 0x565656;
     this._spriteIcon.wrapped.anchor.set(0.5);
@@ -301,84 +301,67 @@ export class ItemOnGridView {
     // META
     const META_HEIGHT = 18;
 
-    this._containerMeta = new HorizontalLayoutContainer(this._pixiApp);
+    this._containerMeta = new HorizontalLayoutContainer(pixiApp);
     this._containerMeta.height = META_HEIGHT;
     this._contentContainer.addChild(this._containerMeta);
 
     // Quantity.
-    this._containerQuantity = new HorizontalLayoutContainer(this._pixiApp);
+    this._containerQuantity = new HorizontalLayoutContainer(pixiApp);
     this._containerQuantity.height = META_HEIGHT;
     this._containerQuantity.width = META_HEIGHT + 3 + META_HEIGHT;
     this._containerMeta.addChild(this._containerQuantity);
     
-    const containerQuantityImage = new CenterLayoutContainer(this._pixiApp);
+    const containerQuantityImage = new CenterLayoutContainer(pixiApp);
     containerQuantityImage.width = META_HEIGHT;
     this._containerQuantity.addChild(containerQuantityImage);
 
-    this._spriteQuantity = new DisplayObjectWrap(new PIXI.Sprite.from(TEXTURES.QUANTITY), this._pixiApp);
+    this._spriteQuantity = new DisplayObjectWrap(new PIXI.Sprite.from(TEXTURES.QUANTITY), pixiApp);
     this._spriteQuantity.tint = 0x000000;
     containerQuantityImage.addChild(this._spriteQuantity);
 
-    const quantitySpacer = new Containable(this._pixiApp);
+    const quantitySpacer = new Containable(pixiApp);
     quantitySpacer.width = 3;
     this._containerQuantity.addChild(quantitySpacer);
     
     const quantityText = this._item.data.data.maxQuantity > 1 ? `${this._item.data.data.quantity}/${this._item.data.data.maxQuantity}` : this._item.data.data.quantity;
-    this._textQuantity = new DisplayObjectWrap(new PIXI.Text(quantityText, TEXT_SETTINGS), this._pixiApp);
+    this._textQuantity = new DisplayObjectWrap(new PIXI.Text(quantityText, TEXT_SETTINGS), pixiApp);
     this._containerQuantity.addChild(this._textQuantity);
 
     // Spacer.
-    const metaSpacer = new Containable(this._pixiApp);
+    const metaSpacer = new Containable(pixiApp);
     metaSpacer.fill = true;
     this._containerMeta.addChild(metaSpacer);
 
     // Bulk.
-    this._containerBulk = new HorizontalLayoutContainer(this._pixiApp);
+    this._containerBulk = new HorizontalLayoutContainer(pixiApp);
     this._containerBulk.height = META_HEIGHT;
     this._containerBulk.width = META_HEIGHT * 1.5 + 3;
     this._containerMeta.addChild(this._containerBulk);
 
-    const containerBulkImage = new CenterLayoutContainer(this._pixiApp);
+    const containerBulkImage = new CenterLayoutContainer(pixiApp);
     containerBulkImage.width = META_HEIGHT;
     this._containerBulk.addChild(containerBulkImage);
 
-    this._spriteBulk = new DisplayObjectWrap(new PIXI.Sprite.from(TEXTURES.BULK), this._pixiApp);
+    this._spriteBulk = new DisplayObjectWrap(new PIXI.Sprite.from(TEXTURES.BULK), pixiApp);
     this._spriteBulk.tint = 0x000000;
     containerBulkImage.addChild(this._spriteBulk);
 
-    const bulkSpacer = new Containable(this._pixiApp);
+    const bulkSpacer = new Containable(pixiApp);
     bulkSpacer.width = 3;
     this._containerBulk.addChild(bulkSpacer);
     
-    this._textBulk = new DisplayObjectWrap(new PIXI.Text(this._item.data.data.bulk, TEXT_SETTINGS), this._pixiApp);
+    this._textBulk = new DisplayObjectWrap(new PIXI.Text(this._item.data.data.bulk, TEXT_SETTINGS), pixiApp);
     this._containerBulk.addChild(this._textBulk);
 
     // FOOTER
     const FOOTER_HEIGHT = 20;
 
-    this._contentFooter = new CenterLayoutContainer(this._pixiApp);
+    this._contentFooter = new CenterLayoutContainer(pixiApp);
     this._contentFooter.height = FOOTER_HEIGHT;
     this._contentContainer.addChild(this._contentFooter);
 
     // Title
-    this._textName = new DisplayObjectWrap(new PIXI.Text(this._item.name, TEXT_SETTINGS), this._pixiApp);
+    this._textName = new DisplayObjectWrap(new PIXI.Text(this._item.name, TEXT_SETTINGS), pixiApp);
     this._contentFooter.addChild(this._textName);
-  }
-
-  /**
-   * Either returns the button containing the given pixel coordinates, 
-   * or undefined, if there is no button at the given pixel coordinates. 
-   * @param {Number} x Pixel coordinate. 
-   * @param {Number} y Pixel coordinate. 
-   * @returns {Button} 
-   */
-  getButtonAt(x, y) {
-    for (const _button of this._buttons) {
-      const bounds = _button.getGlobalBounds();
-      if (bounds.contains(x, y) === true) {
-        return _button;
-      }
-    }
-    return undefined;
   }
 }
