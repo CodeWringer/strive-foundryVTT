@@ -30,6 +30,21 @@ export class ItemGrid {
    * @readonly
    */
   get indices() { return this._indices; }
+
+  /**
+   * Array of {AmbersteelItemItem} entries. 
+   * 
+   * For internal use, only!
+   * @type {Array<AmbersteelItemItem>}
+   * @private
+   */
+  _items = [];
+  /**
+   * Array of {AmbersteelItemItem} entries. 
+   * @type {Array<AmbersteelItemItem>}
+   * @readonly
+   */
+  get items() { return this._items; }
   
   /**
    * Two-dimensional array, which represents the item grid. 
@@ -290,6 +305,10 @@ export class ItemGrid {
       }
     }
 
+    // Remove from list.
+    const indexItem = this._items.indexOf(item);
+    this._items.splice(indexItem, 1);
+
     return true;
   }
 
@@ -469,6 +488,9 @@ export class ItemGrid {
         this._grid[iX][iY] = itemIndex;
       }
     }
+
+    // Add to list.
+    this._items.push(item);
   }
 
   /**
