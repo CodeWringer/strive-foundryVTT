@@ -91,16 +91,19 @@ export default class AmbersteelBaseActor {
     // cause another reload, and so on.
     this._itemGrid.synchronizeTo(context, false);
     
-    for (const item of itemGridLoadResult.itemsDropped) {
-      // Move item to property (= drop from person). 
-      item.updateProperty("data.data.isOnPerson", false);
+    if (itemGridLoadResult.itemsDropped.length > 0) {
+      for (const item of itemGridLoadResult.itemsDropped) {
+        // Move item to property (= drop from person). 
+        item.updateProperty("data.data.isOnPerson", false);
+      }
+      // Display a warning dialog. 
+      showPlainDialog({
+        localizableTitle: "ambersteel.dialog.titleItemsDropped",
+        localizedContent: game.i18n.localize("ambersteel.dialog.contentItemsDropped")
+          + "\n"
+          + itemGridLoadResult.itemsDropped.join(",\n")
+      });
     }
-    // Display a warning dialog. 
-    showPlainDialog({
-      localizableTitle: "ambersteel.dialog.titleItemsDropped",
-      localizedContent: game.i18n.localize("ambersteel.dialog.contentItemsDropped\n") 
-        + itemGridLoadResult.itemsDropped.join(",\n")
-    });
     
     this._prepareDerivedAttributesData(context);
     this._prepareDerivedSkillsData(context);
