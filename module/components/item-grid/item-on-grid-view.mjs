@@ -197,7 +197,7 @@ export class ItemOnGridView {
    * @private
    */
   _setupElements() {
-    const itemOnGrid = this;
+    const thiz = this;
 
     const pixiApp = this._parent._pixiApp;
 
@@ -235,7 +235,7 @@ export class ItemOnGridView {
       const dialogResult = await queryVisibilityMode();
       if (!dialogResult.confirmed) return;
 
-      itemOnGrid.item.sendToChat(dialogResult.visibilityMode);
+      thiz.item.sendToChat(dialogResult.visibilityMode);
     });
     this._buttons.push(this._buttonSendToChat);
     this._buttonSendToChat.width = HEADER_HEIGHT;
@@ -263,7 +263,9 @@ export class ItemOnGridView {
     
     // Move to property button. 
     this._buttonMoveItemToProperty = new Button(pixiApp, TEXTURES.HAND_HOLD_ITEM_DOWN, async () => {
-      itemOnGrid.item.updateProperty("data.isOnPerson", false);
+      thiz.item.updateProperty("data.isOnPerson", false);
+      thiz._parent._itemGrid.remove(thiz.item);
+      thiz._parent._itemGrid.synchronize();
     });
     this._buttons.push(this._buttonMoveItemToProperty);
     this._buttonMoveItemToProperty.width = HEADER_HEIGHT;
@@ -277,7 +279,7 @@ export class ItemOnGridView {
 
     // Delete/Remove button.
     this._buttonDelete = new Button(pixiApp, TEXTURES.DELETE, async () => {
-      itemOnGrid.item.delete();
+      thiz.item.delete();
     });
     this._buttons.push(this._buttonDelete);
     this._buttonDelete.width = 14;
