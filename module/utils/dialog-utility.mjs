@@ -117,6 +117,8 @@ export async function showConfirmationDialog(args = {}) {
  * @param {Object} args Optional arguments to pass to the rendering function. 
  * @param {String} args.localizableTitle
  * @param {String} args.localizedContent
+ * @returns {Promise<void>} Resolves, when the dialog is closed. 
+ * @async
  */
 export async function showPlainDialog(args = {}) {
     args = {
@@ -147,4 +149,45 @@ export async function showPlainDialog(args = {}) {
         });
         dialog.render(true);
     });
+}
+
+/**
+ * Shows a dialog that contains a paragraph of text. 
+ * 
+ * Offers a single confirmation button. 
+ * @param {Object} args Optional arguments to pass to the rendering function. 
+ * @param {String} args.localizableTitle
+ * @param {String} args.localizableLabel
+ * @param {Array<Object>} args.options An array of objects to offer for selection. 
+ * Important note: The objects *must* have an 'id' and 'name' property!
+ * @param {Object | undefined} args.selected Optional. The 
+ * @returns {Promise<Object>} = {
+ * selected: {String} Id of the selected item,
+ * confirmed: {Boolean}
+ * }
+ * @async
+ */
+export async function showSelectionDialog(args = {}) {
+    args = {
+        localizableTitle: "",
+        localizableLabel: "",
+        options: [],
+        selected: undefined,
+        ...args
+    };
+
+    return new Promise(async (resolve, reject) => {
+        const dialogResult = await DialogUtil.showDialog(
+          {
+            dialogTemplate: TEMPLATES.DIALOG_SELECT,
+            localizableTitle: args.localizableTitle,
+            render: html => {}
+          },
+          args
+        );
+        resolve({
+          selected: getElementValue(dialogResult.html.find(".ambersteel-item-select")[0]),
+          confirmed: dialogResult.confirmed
+        });
+      });
 }

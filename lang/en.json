@@ -226,6 +226,7 @@
       "titleConfirmDeletionPropertyQuery": "Confirm Deletion of Property",
       "titleInventoryFull": "Inventory full",
       "titleItemsDropped": "Items dropped",
+      "titleSelect": "Select",
       "contentItemsDropped": "The following items had to be dropped from the item grid:",
       "contentInventoryFull": "There is not enough room on the item grid to add the item to it."
     },
