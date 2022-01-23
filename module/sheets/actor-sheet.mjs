@@ -1,4 +1,3 @@
-import * as NumberSpinner from "../components/number-spinner.mjs";
 import AmbersteelNpcActorSheet from "./subtypes/actor/ambersteel-npc-actor-sheet.mjs";
 import AmbersteelPcActorSheet from "./subtypes/actor/ambersteel-pc-actor-sheet.mjs";
 
@@ -81,9 +80,6 @@ export class AmbersteelActorSheet extends ActorSheet {
     super.activateListeners(html);
     const isOwner = this.actor.isOwner;
     const isEditable = this.isEditable;
-
-    // General listeners. 
-    NumberSpinner.activateListeners(html, this, isOwner, isEditable);
 
     // Subtype listeners. 
     this.subType.activateListeners(html, isOwner, isEditable);
