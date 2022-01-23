@@ -1,5 +1,7 @@
+import { showSelectionDialog } from "../utils/dialog-utility.mjs";
 import { showPlainDialog } from "../utils/dialog-utility.mjs";
 import { updateProperty } from "../utils/document-update-utility.mjs";
+import { findItem, contentCollectionTypes } from "../utils/content-utility.mjs";
 
 /**
  * Registers events on elements of the given DOM. 
@@ -23,55 +25,63 @@ async function _onTakeItem(event) {
 
   const dataset = event.currentTarget.dataset;
   const itemId = dataset.itemId;
+  const sourceType = dataset.sourceType;
+  const sourceId = dataset.sourceId;
 
   const currentUser = game.user;
-  const contextActor = this.getActor();
+  let contextActor = this.getActor();
+  let item = undefined;
 
   if (contextActor !== undefined) {
     // Currently in the context of an actor sheet. 
+    // This means the item was probably "picked up" from the list of property (belongings not on person).
 
-    const item = this.getItem(itemId);
-    updateProperty(item, "data.isOnPerson", true);
-  } else if (currentUser.isGM !== true) {
-    // Currently in the context of a chat message or item sheet (or anywhere else). 
-
-    const actor = game.actors.getName(game.user.charname);
-    const item = actor.items.get(itemId);
-
-    if (item === undefined) {
-      // The item is not yet on the actor. 
-  
-      // Remove the item from its current parent, if it has one. 
-      const parent = item.parent;
-      if (parent !== undefined && parent !== null) {
-        parent.items.remove(item);
-      }
-
-      // Test if the item can fit on the item grid. 
-      const canItemFit = actor.canItemFitOnGrid(item);
-      if (canItemFit.result !== true) {
-        item.updateProperty("data.isOnPerson", false);
-      }
-      
-      // Add the item to the current user's character. 
-      actor.items.add(item);
-    } else {
-      // Test if the item can fit on the item grid. 
-      const canItemFit = actor.canItemFitOnGrid(item);
-      if (canItemFit.result === true) {
-        // The item is already on the actor and only has to be set to be on person. 
-        item.updateProperty("data.isOnPerson", true);
-      } else {
-        // Display an error message for the user, which clarifies there is not enough free space in inventory. 
-        showPlainDialog({
-          localizableTitle: game.i18n.localize("ambersteel.dialog.titleInventoryFull"),
-          localizedContent: game.i18n.localize("ambersteel.dialog.contentInventoryFull")
-        });
-      }
-    }
+    item = this.getItem(itemId);
   } else {
-    // Currently in the context of a GM. 
+    // Currently in the context of a chat message or item sheet (or anywhere else). 
+    // For this to work, the HTML button element *must* have a 'dataset-source-type' and a 'dataset-source-id' attribute. 
+    // Allowed 'sourceTypes' are: 'actor', 'world', 'compendium'
 
-    // TODO: Show dialog prompt to select the character to put the item on. 
+    if (sourceType !== undefined || sourceId !== undefined) return;
+
+    if (sourceType === "actor") {
+      const sourceActor = game.actors.get(sourceId);
+      item = sourceActor.items.get(sourceId);
+    } else if (sourceType === "world") {
+      item = game.items.get(sourceId);
+    } else if (sourceType === "compendium") {
+      item = await findItem(sourceId, contentCollectionTypes.compendia);
+    }
+
+    if (currentUser.isGM === true) {
+      // Show dialog prompt to select the actor to put the item on. 
+      const dialogResult = await showSelectionDialog({
+        localizableTitle: "ambersteel.dialog.titleSelect",
+        localizableLabel: "ambersteel.labels.actor",
+        options: game.actors
+      });
+  
+      if (dialogResult.confirmed !== true) return;
+  
+      contextActor = game.actors.get(dialogResult.selected);
+    } else {
+      contextActor = game.actors.getName(game.user.charname);
+    }
+  }
+
+  if (item === undefined) {
+    console.warn(`Failed to get item with id '${sourceId}'! Cannot add to item grid!`);
+    return;
+  }
+
+  const addResult = contextActor.itemGrid.add(item);
+  if (addResult === true) {
+    updateProperty(item, "data.data.isOnPerson", true);
+    contextActor.itemGrid.synchronize();
+  } else {
+    showPlainDialog({
+      localizableTitle: game.i18n.localize("ambersteel.dialog.titleInventoryFull"),
+      localizedContent: game.i18n.localize("ambersteel.dialog.contentInventoryFull")
+    });
   }
 }
