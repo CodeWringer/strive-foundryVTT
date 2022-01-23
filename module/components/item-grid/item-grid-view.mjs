@@ -373,7 +373,9 @@ export class ItemGridView {
   tearDown() {
     // Tear down pixiApp
     this._stage = undefined;
-    this._pixiApp.destroy();
+    if (this._pixiApp !== undefined) {
+      this._pixiApp.destroy();
+    }
     this._pixiApp = undefined;
     this._rootContainer = undefined;
 
@@ -383,7 +385,9 @@ export class ItemGridView {
     this._spriteInstancesGrid = [];
     this._itemsOnGrid = [];
 
-    this._dragIndicator.destroy();
+    if (this._dragIndicator !== undefined) {
+      this._dragIndicator.destroy();
+    }
   }
 
   /**
