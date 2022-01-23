@@ -468,26 +468,38 @@ export class ItemGrid {
       }
     }
 
-    const shape = this._getOrientedShape(item.data.data.shape, orientation);
     const failureResult = new GridPlacementTestResult(false, undefined, undefined, undefined, []);
+    const shape = this._getOrientedShape(item.data.data.shape, orientation);
+    const right = x + shape.width - 1;
+    const bottom = y + shape.height - 1;
 
-    const rowCount = this._grid[x].length;
-    
     // Test for bounds of grid.
-    if (x + shape.width - 1 >= this._columnCount) return failureResult;
-    if (y + shape.height - 1 >= rowCount) return failureResult;
+    if (right >= this._columnCount) return failureResult;
+
+    for (let iX = x; iX <= right; iX++) {
+      const rowCount = this._grid[iX].length;
+      if (bottom >= rowCount) return failureResult;
+    }
     
     // Test for overlap. 
     const overlappedItems = this.getItemsOnGridWithin(x, y, shape.width, shape.height);
 
-    if (allowOverlap !== true && overlappedItems.length !== 0) {
+    // Remove self from overlapped items. 
+    for (let i = 0; i < overlappedItems.length; i++) {
+      if (overlappedItems[i].item.id === item.id) {
+        overlappedItems.splice(i, 1);
+        break;
+      }
+    }
+
+    if (allowOverlap !== true && overlappedItems.length > 0) {
       return failureResult;
     }
 
+    // Test if all of the overlapped items are completely enveloped. 
+    // If so, their positions could be switched with that of the tested item. 
     const anyPartial = overlappedItems.find(element => element.isPartial === true);
     if (anyPartial === undefined) {
-      // Test if all of the overlapped items are completely enveloped. 
-      // If so, their positions could be switched with that of the tested item. 
       return new GridPlacementTestResult(true, x, y, orientation, overlappedItems);
     }
 
