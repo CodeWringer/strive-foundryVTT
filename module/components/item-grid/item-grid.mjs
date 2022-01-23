@@ -512,7 +512,7 @@ export class ItemGrid {
     for (let iX = x; iX <= right; iX++) {
       for (let iY = y; iY <= bottom; iY++) {
         const itemOnGrid = this._grid[iX][iY];
-        if (itemOnGrid !== null) {
+        if (itemOnGrid !== null && itemOnGrid !== undefined) {
           const itemRight = itemOnGrid.x + itemOnGrid.w - 1;
           const itemBottom = itemOnGrid.y + itemOnGrid.h - 1;
 
