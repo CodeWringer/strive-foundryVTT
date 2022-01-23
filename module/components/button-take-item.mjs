@@ -29,47 +29,25 @@ async function _onTakeItem(event) {
   const sourceId = dataset.sourceId;
 
   const currentUser = game.user;
-  let contextActor = undefined;
+  let actor = undefined;
   let item = undefined;
 
   if (this !== undefined && this.getActor) {
     // Currently in the context of an actor sheet. 
     // This means the item was probably "picked up" from the list of property (belongings not on person).
 
-    contextActor = this.getActor();
+    actor = this.getActor();
     item = this.getItem(itemId);
   } else {
     // Currently in the context of a chat message or item sheet (or anywhere else). 
     // For this to work, the HTML button element *must* have a 'dataset-source-type' and a 'dataset-source-id' attribute. 
     // Allowed 'sourceTypes' are: 'actor', 'world', 'compendium'
 
-    if (sourceType === undefined) return;
+    // TODO: Add a copy to the property (not on person) list of target. 
 
-    if (sourceType === "actor") {
-      // The assumption here is that the actor is owned by the world and isn't 
-      // nested in a compendium. 
-      const sourceActor = game.actors.get(sourceId);
-      item = sourceActor.items.get(itemId);
-    } else if (sourceType === "world") {
-      item = game.items.get(itemId);
-    } else if (sourceType === "compendium") {
-      item = await findItem(itemId, contentCollectionTypes.compendia);
-    }
+    // TODO: Remove from source. 
 
-    if (currentUser.isGM === true) {
-      // Show dialog prompt to select the actor to put the item on. 
-      const dialogResult = await showSelectionDialog({
-        localizableTitle: "ambersteel.dialog.titleSelect",
-        localizableLabel: "ambersteel.labels.actor",
-        options: game.actors
-      });
-  
-      if (dialogResult.confirmed !== true) return;
-  
-      contextActor = game.actors.get(dialogResult.selected);
-    } else {
-      contextActor = game.actors.getName(game.user.charname);
-    }
+    // TODO: Try to move the item to the item grid. 
   }
 
   if (item === undefined) {
@@ -77,30 +55,33 @@ async function _onTakeItem(event) {
     return;
   }
 
-  // TODO: Figure out the 'proper' way to move an item from world/actor to actor. 
-  /*
-  const addResult = contextActor.itemGrid.add(item);
+  const addResult = actor.itemGrid.add(item);
   if (addResult === true) {
-    // Remove from source. 
-    if (sourceType === "actor") {
-      // The assumption here is that the actor is owned by the world and isn't 
-      // nested in a compendium. 
-      const sourceActor = game.actors.get(sourceId);
-      sourceActor.itemGrid.remove(item);
-      sourceActor.items.delete(itemId);
-      sourceActor.itemGrid.synchronize();
-    } else if (sourceType === "world") {
-      game.items.delete(itemId);
-    }
-
-    // Add to selected actor. 
     updateProperty(item, "data.data.isOnPerson", true);
-    contextActor.itemGrid.synchronize();
+    actor.itemGrid.synchronize();
   } else {
     showPlainDialog({
       localizableTitle: game.i18n.localize("ambersteel.dialog.titleInventoryFull"),
       localizedContent: game.i18n.localize("ambersteel.dialog.contentInventoryFull")
     });
   }
-  */
 }
+
+// if (sourceType === "actor") {
+//   // The assumption here is that the source actor is owned by the world and isn't 
+//   // nested in a compendium. 
+
+//   // TODO: Add (a copy) to target actor. 
+
+//   // Remove from source actor. 
+//   const sourceActor = game.actors.get(sourceId);
+//   sourceActor.itemGrid.remove(item);
+//   sourceActor.items.delete(itemId);
+//   sourceActor.itemGrid.synchronize();
+// } else if (sourceType === "world") {
+//   // TODO: Add (a copy) to target actor. 
+
+  
+//   // Remove from world. 
+//   item.delete();
+// }
