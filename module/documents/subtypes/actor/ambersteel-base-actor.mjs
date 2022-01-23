@@ -72,7 +72,7 @@ export default class AmbersteelBaseActor {
    * @param {AmbersteelActor} context
    * @virtual
    */
-  async prepareDerivedData(context) {
+  prepareDerivedData(context) {
     context.data.data.assets.maxBulk = game.ambersteel.getCharacterMaximumInventory(this.parent);
 
     let usedBulk = 0;
@@ -89,7 +89,7 @@ export default class AmbersteelBaseActor {
     // This prevents infinite recursion, as a db update would cause the document to be 
     // reloaded, thus executing 'prepareDerivedData' again and then this line would 
     // cause another reload, and so on.
-    await this._itemGrid.synchronizeTo(context, false);
+    this._itemGrid.synchronizeTo(context, false);
     
     if (itemGridLoadResult.itemsDropped.length > 0) {
       for (const item of itemGridLoadResult.itemsDropped) {
@@ -150,11 +150,11 @@ export default class AmbersteelBaseActor {
   }
 
   /**
- * Updates the given actorData with derived skill data. 
- * Assigns items of type skill to the derived lists 'actorData.skills' and 'actorData.learningSkills'. 
- * @param context 
- * @private
- */
+   * Updates the given actorData with derived skill data. 
+   * Assigns items of type skill to the derived lists 'actorData.skills' and 'actorData.learningSkills'. 
+   * @param context 
+   * @private
+   */
   _prepareDerivedSkillsData(context) {
     const actorData = context.data.data;
 
