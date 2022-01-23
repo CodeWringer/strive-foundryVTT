@@ -279,6 +279,8 @@ export class ItemOnGridView {
 
     // Delete/Remove button.
     this._buttonDelete = new Button(pixiApp, TEXTURES.DELETE, async () => {
+      thiz._parent._itemGrid.remove(thiz.item);
+      thiz._parent._itemGrid.synchronize();
       thiz.item.delete();
     });
     this._buttons.push(this._buttonDelete);
