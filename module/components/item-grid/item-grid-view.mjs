@@ -289,7 +289,7 @@ export class ItemGridView {
         this._dragIndicator.setTargetTo(itemOnGrid.index.x, itemOnGrid.index.y);
         this._dragIndicator.show = true;
         this._dragIndicator.valid = this._itemGrid.canItemFitOnGridAt(
-          itemOnGrid,
+          itemOnGrid.item,
           itemOnGrid.index.x,
           itemOnGrid.index.y,
           this._dragIndicator.orientation
@@ -306,7 +306,7 @@ export class ItemGridView {
         const gridCoords = this.getGridCoordsAt(coords.x, coords.y);
 
         const canItemBeMovedTo = this._itemGrid.canItemFitOnGridAt(
-          this._dragItem,
+          this._dragItem.item,
           gridCoords.x,
           gridCoords.y,
           this._dragIndicator.orientation
@@ -356,7 +356,7 @@ export class ItemGridView {
       } else {
         const gridCoords = this.getGridCoordsAt(coords.x, coords.y);
         this._dragIndicator.valid = this._itemGrid.canItemFitOnGridAt(
-          this._dragItem,
+          this._dragItem.item,
           gridCoords.x,
           gridCoords.y,
           this._dragIndicator.orientation

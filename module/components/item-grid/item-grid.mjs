@@ -296,6 +296,9 @@ export class ItemGrid {
     this._indices.splice(index, 1);
 
     // Remove from grid. 
+    const x = itemIndex.x;
+    const y = itemIndex.y;
+    const shape = item.data.data.shape;
     const right = x + shape.width - 1;
     const bottom = y + shape.height - 1;
     
