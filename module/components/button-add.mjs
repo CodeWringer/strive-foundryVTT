@@ -19,11 +19,11 @@ export function activateListeners(html, ownerSheet, isOwner, isEditable) {
 }
 
 /**
-   * Handle creating a new Owned Item for the actor using initial data defined in the HTML dataset
-   * @param {Event} event   The originating click event
-   * @private
-   * @async
-   */
+ * Handle creating a new Owned Item for the actor using initial data defined in the HTML dataset
+ * @param {Event} event   The originating click event
+ * @private
+ * @async
+ */
 async function _onItemCreate(event) {
   event.preventDefault();
 
