@@ -254,7 +254,7 @@ export class ItemGridView {
       if (this._dragItem !== undefined) {
         this._dragIndicator.rotate();
         this._dragIndicator.valid = this._itemGrid.canItemFitOnGridAt(
-          this._dragItem,
+          this._dragItem.item,
           this._dragIndicator.targetOnGrid.x,
           this._dragIndicator.targetOnGrid.y,
           this._dragIndicator.orientation
