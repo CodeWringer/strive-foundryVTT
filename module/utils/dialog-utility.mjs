@@ -1,6 +1,7 @@
 import DialogResult from '../dto/dialog-result.mjs';
 import * as NumberSpinner from '../components/number-spinner.mjs';
 import { TEMPLATES } from '../templatePreloader.mjs';
+import { getElementValue } from './sheet-utility.mjs';
 
 /**
  * Shows a dialog to the user and returns a promise with the result of the user interaction. 
@@ -177,7 +178,7 @@ export async function showSelectionDialog(args = {}) {
     };
 
     return new Promise(async (resolve, reject) => {
-        const dialogResult = await DialogUtil.showDialog(
+        const dialogResult = await showDialog(
           {
             dialogTemplate: TEMPLATES.DIALOG_SELECT,
             localizableTitle: args.localizableTitle,
