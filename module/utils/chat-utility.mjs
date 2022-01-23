@@ -74,7 +74,7 @@ export async function queryVisibilityMode() {
   };
 
   return new Promise(async (resolve, reject) => {
-    if (keyboard.isDown("Shift")) {
+    if (game.keyboard.downKeys.has("SHIFT")) {
       resolve({
         visibilityMode: CONFIG.ambersteel.visibilityModes.public,
         confirmed: true
