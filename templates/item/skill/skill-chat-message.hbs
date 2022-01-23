@@ -40,8 +40,17 @@ item: {Item} = {
       {{item.data.data.category}}
     </div>
   </div>
-  {{!-- Skill abilities --}}
-  {{!-- TODO --}}
+  {{!-- Skill Abilites --}}
+  {{#if (neq item.data.data.abilities.length 0) }}
+    {{> "systems/ambersteel/templates/item/skill-ability/skill-ability-table.hbs" 
+      isEditable=false 
+      isSendable=false 
+      skillItem=item 
+      abilities=item.data.data.abilities 
+      skillAbilitiesInitiallyVisible=false 
+      oneColumn=true 
+    }}
+  {{/if}}
   {{!-- Description --}}
   <div class="sheet-block multiline">
     {{item.data.data.description}}
