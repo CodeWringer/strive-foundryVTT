@@ -43,6 +43,24 @@ export default class AmbersteelItemItem extends AmbersteelBaseItem {
   /** @override */
   async getChatData() {
     const messageBase = super.getChatData();
+
+    let sourceType = undefined;
+    let sourceId = undefined;
+
+    if (this.parent.parent !== undefined && this.parent.parent !== null) {
+      // An actor is the owner. 
+      sourceType = "actor";
+      sourceId = this.parent.parent.id;
+    } else if (this.parent.pack !== undefined && this.parent.pack !== null) {
+      // A compendium pack is the owner.
+      sourceType = "compendium";
+    } else {
+      // If neither an actor, nor a compendium own the item, then it must be owned by the world. 
+      sourceType = "world"; 
+    }
+
+    const allowPickup = false; // TODO: The user must be able to select who gets to pick this item up. 
+
     const renderedContent = await renderTemplate(this.chatMessageTemplate, {
       isEditable: false,
       isSendable: false,
@@ -53,7 +71,10 @@ export default class AmbersteelItemItem extends AmbersteelBaseItem {
         data: {
           data: this.parent.data.data
         }
-      }
+      },
+      sourceType: sourceType,
+      sourceId: sourceId,
+      allowPickup: allowPickup
     });
 
     return {

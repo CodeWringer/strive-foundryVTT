@@ -1,9 +1,13 @@
 {{!-- Required parameters:
 itemId: {String|undefined}
+sourceType: {String} = "actor"|"world"|"compendium"
+sourceId: {String}
 --}}
 <span class="square-button-light">
-  <a class="ambersteel-take-item pad-sm button flex flex-center"
-    data-item-id="{{itemId}}"
+  <a class="ambersteel-take-item pad-sm button flex flex-center" 
+    data-item-id="{{itemId}}" 
+    data-source-type="{{sourceType}}" 
+    data-source-id="{{sourceId}}" 
     title="{{localize ambersteel.labels.takeToPerson}}">
     <i class="ambersteel-icon ico-take-item"></i>
   </a>

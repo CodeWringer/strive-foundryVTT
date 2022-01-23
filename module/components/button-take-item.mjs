@@ -29,20 +29,21 @@ async function _onTakeItem(event) {
   const sourceId = dataset.sourceId;
 
   const currentUser = game.user;
-  let contextActor = this.getActor();
+  let contextActor = undefined;
   let item = undefined;
 
-  if (contextActor !== undefined) {
+  if (this !== undefined && this.getActor) {
     // Currently in the context of an actor sheet. 
     // This means the item was probably "picked up" from the list of property (belongings not on person).
 
+    contextActor = this.getActor();
     item = this.getItem(itemId);
   } else {
     // Currently in the context of a chat message or item sheet (or anywhere else). 
     // For this to work, the HTML button element *must* have a 'dataset-source-type' and a 'dataset-source-id' attribute. 
     // Allowed 'sourceTypes' are: 'actor', 'world', 'compendium'
 
-    if (sourceType !== undefined || sourceId !== undefined) return;
+    if (sourceType === undefined) return;
 
     if (sourceType === "actor") {
       // The assumption here is that the actor is owned by the world and isn't 
@@ -76,8 +77,23 @@ async function _onTakeItem(event) {
     return;
   }
 
+  // TODO: Figure out the 'proper' way to move an item from world/actor to actor. 
+  /*
   const addResult = contextActor.itemGrid.add(item);
   if (addResult === true) {
+    // Remove from source. 
+    if (sourceType === "actor") {
+      // The assumption here is that the actor is owned by the world and isn't 
+      // nested in a compendium. 
+      const sourceActor = game.actors.get(sourceId);
+      sourceActor.itemGrid.remove(item);
+      sourceActor.items.delete(itemId);
+      sourceActor.itemGrid.synchronize();
+    } else if (sourceType === "world") {
+      game.items.delete(itemId);
+    }
+
+    // Add to selected actor. 
     updateProperty(item, "data.data.isOnPerson", true);
     contextActor.itemGrid.synchronize();
   } else {
@@ -86,4 +102,5 @@ async function _onTakeItem(event) {
       localizedContent: game.i18n.localize("ambersteel.dialog.contentInventoryFull")
     });
   }
+  */
 }
