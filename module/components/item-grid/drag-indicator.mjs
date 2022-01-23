@@ -184,13 +184,19 @@ export class DragIndicator {
   destroy() {
     this.show = false;
 
-    this._graphics.destroy();
+    if (this._graphics !== undefined) {
+      this._graphics.destroy();
+    }
     this._graphics = undefined;
-    
-    this._container.destroy();
+
+    if (this._container !== undefined) {
+      this._container.destroy();
+    }
     this._container = undefined;
 
-    this._interpolator.destroy();
+    if (this._interpolator !== undefined) {
+      this._interpolator.destroy();
+    }
     this._interpolator = undefined;
   }
 
