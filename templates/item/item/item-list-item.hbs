@@ -29,9 +29,9 @@ item: {Item} = {
     {{!-- Send to chat --}}
     {{> buttonSendToChat itemId=itemId }}
     {{!-- Pick up --}}
-    {{#if (eq (lookupValue item "data.data.isOnPerson" itemId) "false")}}
-    {{/if}}
+    {{#if (eq (lookupValue item "data.data.isOnPerson" itemId) false)}}
       {{> buttonTakeItem itemId=itemId}}
+    {{/if}}
     {{!-- Name --}}
     <span class="width-min-xl">
       {{> inputLabel text="ambersteel.labels.item"}}
