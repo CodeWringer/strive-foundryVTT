@@ -26,7 +26,9 @@ visGroupId: {String}
         <div class="flex flex-row">
           <div class="flex flex-grow">
             {{!-- Send to chat --}}
-            {{> buttonSendToChat itemId=../itemId propertyPath=(concat "data.data.abilities[" key "]") }}
+            {{#if isSendable}}
+              {{> buttonSendToChat itemId=../itemId propertyPath=(concat "data.data.abilities[" key "]") }}
+            {{/if}}
             {{!-- Name --}}
             <span class="width-min-xl">
               {{> inputLabel for=(concat "name[" key "]") text="ambersteel.labels.name"}}
