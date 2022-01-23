@@ -12,6 +12,8 @@ import { getNestedPropertyValue } from "./utils/property-utility.mjs";
 import AdvancementRequirements from "./dto/advancement-requirement.mjs";
 import { TEMPLATES } from "./templatePreloader.mjs";
 
+import * as ListenerUtil from "./utils/listeners-utility.mjs";
+
 /* -------------------------------------------- */
 /*  Init Hook                                   */
 /* -------------------------------------------- */
@@ -288,3 +290,9 @@ Handlebars.registerPartial('buttonTakeItem', `{{#> "${TEMPLATES.COMPONENT_BUTTON
 // Hooks.on("deleteActor", async function(document, options, userId) {
 //   console.log("deleted!");
 // });
+
+Hooks.on("renderChatMessage", async function(message, html, data) {
+  const isEditable = data.author.isGM;
+  const isOwner = data.author.isOwner;
+  ListenerUtil.activateListeners(html, undefined, isOwner, isEditable);
+});
