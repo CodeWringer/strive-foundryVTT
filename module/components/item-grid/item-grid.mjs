@@ -163,7 +163,7 @@ export class ItemGrid {
       const item = document.items.get(index.id);
       // Try to add the item, at its original location. 
       const canItFit = itemGrid.addAt(item, index.x, index.y, index.orientation);
-      if (canItFit.result !== true) {
+      if (canItFit !== true) {
         itemsDropped.push(item);
       }
     }
@@ -176,7 +176,7 @@ export class ItemGrid {
       if (itemGrid.contains(item)) continue;
 
       const canItFit = itemGrid.add(item);
-      if (canItFit.result !== true) {
+      if (canItFit !== true) {
         itemsDropped.push(item);
       }
     }
