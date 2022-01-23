@@ -74,8 +74,9 @@ item: {Item} = {
     {{> "systems/ambersteel/templates/item/skill-ability/skill-ability-table.hbs" 
       isEditable=isEditable 
       skillItemId=item.id 
-      abilities=item.data.data.abilities
-      skillAbilitiesInitiallyVisible=true
+      abilities=item.data.data.abilities 
+      skillAbilitiesInitiallyVisible=true 
+      visGroupId=(generateId) 
     }}
   {{/if}}
 </form>

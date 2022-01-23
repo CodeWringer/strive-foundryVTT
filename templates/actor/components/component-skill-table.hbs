@@ -109,12 +109,13 @@ skills: {[Item]} = {
                 <tr>
                     <td style="display: table-cell;" colspan="100">
                         {{> "systems/ambersteel/templates/item/skill-ability/skill-ability-table.hbs" 
-                            isEditable=../isEditable
-                            isSendable=../isSendable
-                            skillItemId=skill.data.id
-                            itemId=skill.data.id
-                            abilities=data.abilities
-                            CONFIG=../CONFIG
+                            isEditable=../isEditable 
+                            isSendable=../isSendable 
+                            skillItemId=skill.data.id 
+                            itemId=skill.data.id 
+                            abilities=data.abilities 
+                            CONFIG=../CONFIG 
+                            visGroupId=(generateId)
                         }}
                     </td>
                 </tr>
