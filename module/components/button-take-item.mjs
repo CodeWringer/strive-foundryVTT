@@ -45,12 +45,14 @@ async function _onTakeItem(event) {
     if (sourceType !== undefined || sourceId !== undefined) return;
 
     if (sourceType === "actor") {
+      // The assumption here is that the actor is owned by the world and isn't 
+      // nested in a compendium. 
       const sourceActor = game.actors.get(sourceId);
-      item = sourceActor.items.get(sourceId);
+      item = sourceActor.items.get(itemId);
     } else if (sourceType === "world") {
-      item = game.items.get(sourceId);
+      item = game.items.get(itemId);
     } else if (sourceType === "compendium") {
-      item = await findItem(sourceId, contentCollectionTypes.compendia);
+      item = await findItem(itemId, contentCollectionTypes.compendia);
     }
 
     if (currentUser.isGM === true) {
