@@ -100,14 +100,30 @@ async function _onItemCreate(event) {
   }
 }
 
+const regexpFloat = /\d+\.\d+/;
+const regexpInt = /\d+/;
+
 function getCreationData(dataset) {
   const creationData = Object.create(null);
   const prefix = "creation";
   for (const propertyName in dataset) {
     if (propertyName.startsWith(prefix)) {
-      const propertyValue = dataset[propertyName];
+      let propertyValue = dataset[propertyName];
       let cleanedPropertyName = propertyName.substring(prefix.length);
       cleanedPropertyName = cleanedPropertyName.substring(0, 1).toLowerCase() + cleanedPropertyName.substring(1);
+
+      // Type coercion...
+      const matchFloat = propertyValue.match(regexpFloat);
+      const matchInt = propertyValue.match(regexpInt);
+
+      if (propertyValue === "true" || propertyValue === "false") {
+        propertyValue = propertyValue === "true";
+      } else if (matchFloat[0].length === propertyValue.length) {
+        propertyValue = parseFloat(propertyValue);
+      } else if (matchInt[0].length === propertyValue.length) {
+        propertyValue = parseInt(propertyValue);
+      }
+
       creationData[cleanedPropertyName] = propertyValue;
     }
   }
