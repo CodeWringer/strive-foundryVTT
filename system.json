@@ -2,7 +2,7 @@
   "name": "ambersteel",
   "title": "Ambersteel",
   "description": "The Ambersteel system for FoundryVTT",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "minimumCoreVersion": "0.9.242",
   "compatibleCoreVersion": "9",
   "author": "Nicolas Haase",
