@@ -427,7 +427,7 @@ export class ItemGrid {
       return new GridPlacementTestResult(true, index.x, index.y, index.orientation, []);
     }
 
-    const columnCount = this._columnCount;
+    const columnCount = Math.min(this._columnCount, this._capactiy);
     
     for (let x = 0; x < columnCount; x++) {
       const rowCount = this._grid[x].length;
@@ -474,7 +474,8 @@ export class ItemGrid {
     const bottom = y + shape.height - 1;
 
     // Test for bounds of grid.
-    if (right >= this._columnCount) return failureResult;
+    const columnCount = Math.min(this._columnCount, this._capactiy);
+    if (right >= columnCount) return failureResult;
 
     for (let iX = x; iX <= right; iX++) {
       const rowCount = this._grid[iX].length;
