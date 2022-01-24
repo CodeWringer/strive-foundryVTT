@@ -53,7 +53,7 @@ item: {Item} = {
       {{> inputComponent type="number" min="0"name="AFP" propertyPath=(concat "data.data.cost.AFP") isEditable=isEditable }}
     </div>
     <div class="fate-card-item-description flex-grow">
-      {{> inputComponent type="multi-line" propertyPath="data.data.description" isEditable=isEditable readOnlyCssClass="multiline flex-grow"}}
+      {{> inputComponent type="multi-line" propertyPath="data.data.description" isEditable=isEditable readOnlyCssClass="multiline flex-grow" allowResize=true }}
     </div>
   </div>
 </form>

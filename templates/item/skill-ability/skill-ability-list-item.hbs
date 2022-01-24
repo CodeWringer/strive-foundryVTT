@@ -121,5 +121,5 @@ skillAbility = {
 {{!-- Row 6 --}}
 {{!-- Description --}}
 <div class="flex flex-row">
-  {{> inputComponent type="multi-line" name=(concat "description[" key "]") propertyPath=(concat "data.data.abilities[" key "].description") itemId=skillItem.id isEditable=isEditable contextOverride=skillItem }}
+  {{> inputComponent type="multi-line" name=(concat "description[" key "]") propertyPath=(concat "data.data.abilities[" key "].description") itemId=skillItem.id isEditable=isEditable contextOverride=skillItem allowResize=true }}
 </div>

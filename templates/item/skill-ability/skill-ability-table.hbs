@@ -135,7 +135,7 @@ oneColumn: {Boolean}
           {{!-- Row 6 --}}
           {{!-- Description --}}
           <div class="flex flex-row">
-            {{> inputComponent type="multi-line" name=(concat "description[" key "]") propertyPath=(concat "data.data.abilities[" key "].description") itemId=../skillItemId isEditable=../isEditable contextOverride=../this }}
+            {{> inputComponent type="multi-line" name=(concat "description[" key "]") propertyPath=(concat "data.data.abilities[" key "].description") itemId=../skillItemId isEditable=../isEditable contextOverride=../this allowResize=true }}
           </div>
         {{/if}}
       </li>

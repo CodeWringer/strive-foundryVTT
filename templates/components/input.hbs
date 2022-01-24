@@ -16,6 +16,8 @@ optionDisplayProperty: {String|undefined}
 min: {Number|undefined}
 max: {Number|undefined}
 step: {Number|undefined}
+-- Textarea only
+allowResize: {Boolean}
 --}}
 {{!-- Single-line input --}}
 {{#if (eq type 'single-line')}}
@@ -92,7 +94,7 @@ step: {Number|undefined}
 {{#if (eq type 'multi-line')}}
   {{#if isEditable}}
     <textarea 
-      class="ambersteel-edit resize-vertical {{cssClass}}"
+      class="ambersteel-edit {{#if allowResize}}resize-vertical{{else}}resize-none{{/if}} {{cssClass}}"
       spellcheck="false"
       data-item-id="{{itemId}}"
       data-property-path="{{propertyPath}}"

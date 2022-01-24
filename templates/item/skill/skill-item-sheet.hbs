@@ -66,7 +66,7 @@ item: {Item} = {
       {{> inputLabel text="ambersteel.labels.description"}}
     </div>
     <div class="flex-grow">
-      {{> inputComponent type="multi-line" propertyPath="data.data.description" placeholder=(localize "ambersteel.labels.description") isEditable=isEditable readOnlyCssClass="multiline"}}
+      {{> inputComponent type="multi-line" propertyPath="data.data.description" placeholder=(localize "ambersteel.labels.description") isEditable=isEditable readOnlyCssClass="multiline" allowResize=true }}
     </div>
   </div>
   {{!-- Skill Abilites --}}

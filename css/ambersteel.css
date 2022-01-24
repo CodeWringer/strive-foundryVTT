@@ -745,6 +745,10 @@ textarea.resize-vertical {
   resize: vertical;
 }
 
+textarea.resize-none {
+  resize: none;
+}
+
 textarea.ambersteel-edit {
   border-color: #7a7971;
 }

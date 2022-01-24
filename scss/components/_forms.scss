@@ -111,6 +111,9 @@ textarea {
 textarea.resize-vertical {
   resize: vertical;
 }
+textarea.resize-none {
+  resize: none;
+}
 
 // Override default style
 textarea.ambersteel-edit {
