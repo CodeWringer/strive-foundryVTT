@@ -67,7 +67,7 @@ async function _onItemCreate(event) {
       return;
     }
     if (!dialogResult.confirmed) return;
-    createCustom = dialogResult.isCustomChecked;
+    createCustom = dialogResult.isCustomChecked === true;
     itemId = dialogResult.selected;
   }
 
