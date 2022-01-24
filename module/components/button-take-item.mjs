@@ -40,10 +40,8 @@ async function _onTakeItem(event) {
     item = this.getItem(itemId);
   } else {
     // Currently in the context of a chat message or item sheet (or anywhere else). 
-    // For this to work, the HTML button element *must* have a 'dataset-source-type' and a 'dataset-source-id' attribute. 
-    // Allowed 'sourceTypes' are: 'actor', 'world', 'compendium'
 
-    // TODO: Add a copy to the property (not on person) list of target. 
+    // TODO: Add a copy of the item to the target. 
 
     // TODO: Remove from source. 
 
@@ -66,22 +64,3 @@ async function _onTakeItem(event) {
     });
   }
 }
-
-// if (sourceType === "actor") {
-//   // The assumption here is that the source actor is owned by the world and isn't 
-//   // nested in a compendium. 
-
-//   // TODO: Add (a copy) to target actor. 
-
-//   // Remove from source actor. 
-//   const sourceActor = game.actors.get(sourceId);
-//   sourceActor.itemGrid.remove(item);
-//   sourceActor.items.delete(itemId);
-//   sourceActor.itemGrid.synchronize();
-// } else if (sourceType === "world") {
-//   // TODO: Add (a copy) to target actor. 
-
-  
-//   // Remove from world. 
-//   item.delete();
-// }
