@@ -1,10 +1,12 @@
 {{!-- Required parameters:
-itemId: {String|undefined}
-itemType: {String|undefined} = "skill"|"skill-ability"|"fate-card"|"item"|"injury"|"illness"
 withDialog: {Boolean}
-creationData: {String|undefined} e. g. "[value:0,related-attribute:agility]"
+itemId: {String | undefined}
+itemType: {String | undefined} = "skill"|"skill-ability"|"fate-card"|"item"|"injury"|"illness"
+creationData: {String | undefined} e. g. "[value:0,related-attribute:agility]"
+cssClass: {String | undefined}
+fill: {Boolean | undefined}
 --}}
-<span class="square-button-light">
+<span class="{{#if fill}}fill-button-light{{else}}square-button-light{{/if}} {{#if cssClass}}{{cssClass}}{{else}}font-size-default{{/if}}">
   <a class="ambersteel-item-create pad-sm button flex flex-center" 
     title="{{localize ambersteel.labels.add}}"
     data-item-id="{{itemId}}"

@@ -5,8 +5,9 @@ propertyPath: {String|undefined}
 chatTitle: {String|undefined}
 callback: {String|undefined}
 callbackData: {String|undefined}
+cssClass: {String | undefined}
 --}}
-<span class="square-button-light">
+<span class="{{#if fill}}fill-button-light{{else}}square-button-light{{/if}} {{#if cssClass}}{{cssClass}}{{else}}font-size-default{{/if}}">
   <a class="ambersteel-roll pad-sm button flex flex-center" 
     data-type="{{type}}"
     data-item-id="{{itemId}}"

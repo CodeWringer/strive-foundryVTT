@@ -2,8 +2,9 @@
 itemId: {String|undefined}
 sourceType: {String} = "actor"|"world"|"compendium"
 sourceId: {String}
+cssClass: {String | undefined}
 --}}
-<span class="square-button-light">
+<span class="{{#if fill}}fill-button-light{{else}}square-button-light{{/if}} {{#if cssClass}}{{cssClass}}{{else}}font-size-default{{/if}}">
   <a class="ambersteel-take-item pad-sm button flex flex-center" 
     data-item-id="{{itemId}}" 
     data-source-type="{{sourceType}}" 

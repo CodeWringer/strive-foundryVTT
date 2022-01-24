@@ -154,22 +154,14 @@ oneColumn: {Boolean}
   </ol>
   {{#> buttonToggleVisibility 
     visGroup=visGroupId
-    cssClass=(ifThenElse skillAbilitiesInitiallyVisible "hidden" "") 
+    cssClass=(ifThenElse skillAbilitiesInitiallyVisible "hidden" "")
   }}
-    <div class="flex flex-center fill button-full">
-        <span class="square-button-light flex flex-center">
-            <i class="fas fa-angle-double-down"></i>
-        </span>
-    </div>
+    <i class="fas fa-angle-double-down"></i>
   {{/buttonToggleVisibility}}
   {{#> buttonToggleVisibility 
     visGroup=visGroupId
-    cssClass=(ifThenElse skillAbilitiesInitiallyVisible "" "hidden") 
+    cssClass=(ifThenElse skillAbilitiesInitiallyVisible "" "hidden")
   }}
-    <div class="flex flex-center fill button-full">
-        <span class="square-button-light flex flex-center">
-            <i class="fas fa-angle-double-up"></i>
-        </span>
-    </div>
+    <i class="fas fa-angle-double-up"></i>
   {{/buttonToggleVisibility}}
 </section>
