@@ -48,10 +48,9 @@ data: {Object} = {
     {{#each data.data.fateSystem.cards as |card key|}}
     <div class="fate-card-actor-container">
       {{> "systems/ambersteel/templates/item/fate-card/fate-card.hbs"
-        isEditable=../isEditable
-        isSendable=true
-        data=card
-        itemId=card._id
+        isEditable=../isEditable 
+        isSendable=../isSendable 
+        item=card 
       }}
     </div>
     {{/each}}
