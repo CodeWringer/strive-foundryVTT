@@ -1,7 +1,7 @@
 {
   "name": "ambersteel",
   "version": "1.0.0",
-  "description": "CSS compiler for the Ambersteel system",
+  "description": "Ambersteel FoundryVTT development environment",
   "scripts": {
     "build": "gulp build",
     "compile": "gulp css",
@@ -19,5 +19,8 @@
     "gulp-autoprefixer": "^7.0.1",
     "gulp-sass": "^4.1.0",
     "gulp-sourcemaps": "^2.6.5"
+  },
+  "devDependencies": {
+    "fs-extra": "^10.0.0"
   }
 }

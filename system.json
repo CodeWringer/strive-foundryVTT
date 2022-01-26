@@ -53,7 +53,7 @@
   "primaryTokenAttribute": null,
   "secondaryTokenAttribute": null,
   "url": "https://github.com/CodeWringer/ambersteel-foundryVTT",
-  "manifest": "https://raw.githubusercontent.com/CodeWringer/ambersteel-foundryVTT/main/system.json",
+  "manifest": "https://github.com/CodeWringer/ambersteel-foundryVTT/releases/latest/download/system.json",
   "download": "",
   "license": "LICENSE.txt"
 }

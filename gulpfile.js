@@ -1,7 +1,8 @@
 const gulp = require('gulp');
 const prefix = require('gulp-autoprefixer');
-const sourcemaps = require('gulp-sourcemaps');
 const sass = require('gulp-sass');
+const fs = require('fs-extra');
+const pathUtil = require('path');
 
 /* ----------------------------------------- */
 /*  Compile Sass
@@ -40,6 +41,56 @@ function watchUpdates() {
 }
 
 /* ----------------------------------------- */
+/*  Build
+/* ----------------------------------------- */
+const BUILD_DIR_NAME = pathUtil.join(".", "build");
+
+async function cleanBuildDir() {
+  console.log(`Emptying build dir "${BUILD_DIR_NAME}"`);
+  try {
+    await fs.emptyDir(BUILD_DIR_NAME);
+  } catch (err) {
+    console.error(err)
+  }
+  return Promise.resolve();
+}
+
+const copyExcludes = [
+  ".git",
+  "build",
+  "scss",
+  "node_modules",
+  ".gitignore",
+  ".npmignore",
+  "package-lock.json",
+  "package.json",
+  "workspace.code-workspace",
+  "gulpfile.js"
+];
+async function copyFiles() {
+  return new Promise(resolve => {
+    const paths = fs.readdirSync('./');
+  
+    for (const path of paths) {
+      if (isExcluded(path)) continue;
+
+      const destPath = pathUtil.join(".", BUILD_DIR_NAME, path);
+      console.log(`Copying '${path}' to '${destPath}'`);
+      fs.copySync(path, destPath, false);
+    }
+    resolve();
+  });
+}
+
+function isExcluded(path) {
+  for (const copyExclude of copyExcludes) {
+    // if (path.startsWith(copyExclude)) return true;
+    if (new RegExp(copyExclude).test(path)) return true;
+  }
+  return false;
+}
+
+/* ----------------------------------------- */
 /*  Export Tasks
 /* ----------------------------------------- */
 
@@ -48,6 +99,8 @@ exports.default = gulp.series(
   watchUpdates
 );
 exports.build = gulp.series(
-  compileScss
+  compileScss,
+  cleanBuildDir,
+  copyFiles
 );
 exports.css = css;
