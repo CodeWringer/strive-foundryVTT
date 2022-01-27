@@ -159,8 +159,6 @@ function zipRecursively(zip, srcPath, dstPath = undefined) {
   if (fs.statSync(srcPath).isDirectory()) {
     console.log(`Zipping directory '${srcPath}' to '${zipDestPath}'`);
     
-    // const zippedDir = zip.folder(zipDestPath);
-    
     const srcSubNames = fs.readdirSync(srcPath);
     for (const srcSubName of srcSubNames) {
       const srcSubPath = pathUtil.join(srcPath, srcSubName);
