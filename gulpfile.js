@@ -3,6 +3,7 @@ const prefix = require('gulp-autoprefixer');
 const sass = require('gulp-sass');
 const fs = require('fs-extra');
 const pathUtil = require('path');
+require('node-zip');
 
 /* ----------------------------------------- */
 /*  Compile Sass
@@ -43,21 +44,62 @@ function watchUpdates() {
 /* ----------------------------------------- */
 /*  Build
 /* ----------------------------------------- */
-const BUILD_DIR_NAME = pathUtil.join(".", "build");
+const BUILD_DIR_NAME = "build";
+const TEMP_DIR_NAME = "__temp";
+const MANIFEST_NAME = "system";
+
+const MANIFEST_NAME_WITH_EXTENSION = `${MANIFEST_NAME}.json`;
+const BUILD_DIR_PATH = pathUtil.join(".", BUILD_DIR_NAME);
+const TEMP_DIR_PATH = pathUtil.join(".", BUILD_DIR_NAME, TEMP_DIR_NAME);
 
 async function cleanBuildDir() {
-  console.log(`Emptying build dir "${BUILD_DIR_NAME}"`);
+  console.log(`Emptying build dir "${BUILD_DIR_PATH}"`);
   try {
-    await fs.emptyDir(BUILD_DIR_NAME);
+    await fs.emptyDir(BUILD_DIR_PATH);
   } catch (err) {
     console.error(err)
   }
   return Promise.resolve();
 }
 
+async function cleanBuildDirAfterwards() {
+  console.log(`Finalizing build dir "${BUILD_DIR_PATH}"`);
+  return new Promise(async (resolve, reject) => {
+    const pathsInBuildDir = fs.readdirSync(BUILD_DIR_PATH);
+    for (const path of pathsInBuildDir) {
+      if (new RegExp(TEMP_DIR_NAME).test(path)) continue;
+
+      const fullPath = pathUtil.join(BUILD_DIR_PATH, path);
+      await fs.remove(fullPath);
+    }
+
+    const pathsInDistDir = fs.readdirSync(TEMP_DIR_PATH);
+    for (const path of pathsInDistDir) {
+      const fullPathSrc = pathUtil.join(TEMP_DIR_PATH, path);
+      const fullPathDst = pathUtil.join(BUILD_DIR_PATH, path);
+      await fs.move(fullPathSrc, fullPathDst);
+    }
+
+    await fs.remove(TEMP_DIR_PATH);
+
+    resolve();
+  });
+}
+
+async function ensureBuildDir() {
+  console.log(`Ensuring build dir '${BUILD_DIR_PATH}'`);
+  await fs.ensureDir(BUILD_DIR_PATH);
+}
+
+async function ensureTempDir() {
+  console.log(`Ensuring temp dir '${TEMP_DIR_PATH}'`);
+  await fs.ensureDir(TEMP_DIR_PATH);
+}
+
 const copyExcludes = [
   ".git",
   "build",
+  "dist",
   "scss",
   "node_modules",
   ".gitignore",
@@ -67,14 +109,14 @@ const copyExcludes = [
   "workspace.code-workspace",
   "gulpfile.js"
 ];
-async function copyFiles() {
-  return new Promise(resolve => {
+async function copyFilesToBuild() {
+  return new Promise((resolve, reject) => {
     const paths = fs.readdirSync('./');
   
     for (const path of paths) {
       if (isExcluded(path)) continue;
 
-      const destPath = pathUtil.join(".", BUILD_DIR_NAME, path);
+      const destPath = pathUtil.join(BUILD_DIR_PATH, path);
       console.log(`Copying '${path}' to '${destPath}'`);
       fs.copySync(path, destPath, false);
     }
@@ -84,10 +126,59 @@ async function copyFiles() {
 
 function isExcluded(path) {
   for (const copyExclude of copyExcludes) {
-    // if (path.startsWith(copyExclude)) return true;
     if (new RegExp(copyExclude).test(path)) return true;
   }
   return false;
+}
+
+function zipFilesToTempSync() {
+  return new Promise(resolve => {
+    const pathToZip = BUILD_DIR_PATH;
+    const zipInstance = new JSZip();
+  
+    const paths = fs.readdirSync(pathToZip);
+    for (const dstPath of paths) {
+      if (new RegExp(TEMP_DIR_NAME).test(dstPath)) continue;
+      
+      const srcPath = pathUtil.join(pathToZip, dstPath);
+      zipRecursively(zipInstance, srcPath, dstPath);
+    }
+  
+    const data = zipInstance.generate({ base64: false, compression: 'DEFLATE' });
+    const fullPathZipDest = pathUtil.join(TEMP_DIR_PATH, `${MANIFEST_NAME}.zip`);
+    console.log(`Writing zip to '${fullPathZipDest}'`);
+    fs.writeFileSync(fullPathZipDest, data, 'binary');
+
+    resolve();
+  });
+}
+
+function zipRecursively(zip, srcPath, dstPath = undefined) {
+  const zipDestPath = dstPath === undefined ? srcPath : dstPath;
+
+  if (fs.statSync(srcPath).isDirectory()) {
+    console.log(`Zipping directory '${srcPath}' to '${zipDestPath}'`);
+    
+    // const zippedDir = zip.folder(zipDestPath);
+    
+    const srcSubNames = fs.readdirSync(srcPath);
+    for (const srcSubName of srcSubNames) {
+      const srcSubPath = pathUtil.join(srcPath, srcSubName);
+      const dstSubPath = pathUtil.join(dstPath, srcSubName);
+      console.log(`Recursing '${srcSubPath}' to '${dstSubPath}'`);
+      zipRecursively(zip, srcSubPath, dstSubPath);
+    }
+  } else {
+    console.log(`Zipping file '${srcPath}' to '${zipDestPath}'`);
+    zip.file(zipDestPath, fs.readFileSync(srcPath));
+  }
+}
+
+async function copyManifestToTemp() {
+  const srcManifest = pathUtil.join(BUILD_DIR_PATH, MANIFEST_NAME_WITH_EXTENSION);
+  const dstManifest = pathUtil.join(TEMP_DIR_PATH, MANIFEST_NAME_WITH_EXTENSION);
+  console.log(`Copying manifest from '${srcManifest}' to '${dstManifest}'`);
+  await fs.copy(srcManifest, dstManifest);
 }
 
 /* ----------------------------------------- */
@@ -100,7 +191,12 @@ exports.default = gulp.series(
 );
 exports.build = gulp.series(
   compileScss,
+  ensureBuildDir,
   cleanBuildDir,
-  copyFiles
+  copyFilesToBuild,
+  ensureTempDir,
+  zipFilesToTempSync,
+  copyManifestToTemp,
+  cleanBuildDirAfterwards
 );
 exports.css = css;
