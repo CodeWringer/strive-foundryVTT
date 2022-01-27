@@ -1,7 +1,7 @@
 {
   "name": "ambersteel",
   "version": "1.0.0",
-  "description": "CSS compiler for the Ambersteel system",
+  "description": "Ambersteel FoundryVTT system",
   "scripts": {
     "build": "gulp build",
     "compile": "gulp css",
@@ -11,7 +11,7 @@
   "browserslist": [
     "last 3 versions"
   ],
-  "author": "John Doe",
+  "author": "Nicolas Haase",
   "license": "MIT",
   "private": true,
   "dependencies": {
