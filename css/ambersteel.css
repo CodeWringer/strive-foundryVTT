@@ -767,6 +767,7 @@ textarea.ambersteel-edit {
   font-weight: bold;
   border: 1px solid #b5b3a4;
   color: #525252;
+  min-height: 26px;
 }
 
 img.header-image {
