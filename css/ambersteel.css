@@ -665,12 +665,14 @@ nav#nav-sheet-tabs.sheet-tabs {
   height: 32px;
   min-height: 32px;
   margin: 0;
+  padding: 0;
   -webkit-box-flex: 0;
   -ms-flex: 0;
   flex: 0;
   border-top: 1px solid #b5b3a4;
   border-bottom: 1px solid #b5b3a4;
   line-height: unset;
+  background-color: rgba(0, 0, 0, 0.065);
 }
 
 nav#nav-sheet-tabs.sheet-tabs > a.item {
@@ -684,6 +686,7 @@ nav#nav-sheet-tabs.sheet-tabs > a.item.active {
   border-right: 2px solid rgba(0, 0, 0, 0.2);
   border-radius: 10px 10px 0 0;
   padding: 2px 0 0 0;
+  background-color: rgba(255, 255, 255, 0.2);
 }
 
 .sheet-body,
