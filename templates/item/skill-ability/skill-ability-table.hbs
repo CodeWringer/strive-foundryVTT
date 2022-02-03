@@ -1,27 +1,39 @@
 {{!-- Required context:
 isEditable: {Boolean}
 isSendable: {Boolean}
-skillAbilitiesInitiallyVisible: {Boolean}
-skillItemId: {String}
-itemId: {String}
-abilities: {[SkillAbility]} = {
-  name: {String}
-  description: {String}
-  requiredLevel: {Number}
-  condition: {String}
-  img: {String}
-  apCost: {Number|undefined}
-  distance: {Number|undefined}
-  damageFormula: {String}
-  damageType: {CONFIG.ambersteel.damageTypes|undefined}
-  isCustom: {Boolean}
+item: {Item} = {
+  data: {Object} = {
+    id: {String}
+    name: {String}
+    img: {String}
+    data: {Object} = {
+      relatedAttribute: {String}
+      value: {Number}
+      successes: {Number}
+      failures: {Number}
+      abilities: {[SkillAbility]} = {
+        name: {String}
+        description: {String}
+        requiredLevel: {Number}
+        condition: {String}
+        img: {String}
+        apCost: {Number|undefined}
+        distance: {Number|undefined}
+        damageFormula: {String}
+        damageType: {CONFIG.ambersteel.damageTypes|undefined}
+        isCustom: {Boolean}
+      }
+      category: {Number}
+    }
+  }
 }
+skillAbilitiesInitiallyVisible: {Boolean}
 visGroupId: {String}
 oneColumn: {Boolean}
 --}}
 <section class="skill-ability-list">
   <ol class="unstyled-list {{#if skillAbilitiesInitiallyVisible}}{{else}}hidden{{/if}}" data-vis-group="{{visGroupId}}">
-    {{#each abilities as |ability key|}}
+    {{#each item.data.abilities as |ability key|}}
       <li class="ambersteel-list-row sheet-block">
         {{#if ../oneColumn}}
         {{> "systems/ambersteel/templates/item/skill-ability/skill-ability-chat-message.hbs" 
@@ -35,17 +47,17 @@ oneColumn: {Boolean}
             <div class="flex flex-grow">
               {{!-- Send to chat --}}
               {{#if ../isSendable}}
-                {{> buttonSendToChat itemId=../itemId propertyPath=(concat "data.data.abilities[" key "]") }}
+                {{> buttonSendToChat itemId=../item.data.id propertyPath=(concat "data.data.abilities[" key "]") }}
               {{/if}}
               {{!-- Name --}}
               <span class="width-min-xl">
                 {{> inputLabel for=(concat "name[" key "]") text="ambersteel.labels.name"}}
               </span>
-              {{> inputComponent type="single-line" name=(concat "name[" key "]") propertyPath=(concat "data.data.abilities[" key "].name") itemId=../skillItemId cssClass="flex-grow" isEditable=../isEditable contextOverride=../this }}
+              {{> inputComponent type="single-line" name=(concat "name[" key "]") propertyPath=(concat "data.data.abilities[" key "].name") itemId=../item.data.id cssClass="flex-grow" isEditable=../isEditable contextOverride=../this }}
             </div>
             {{!-- Delete --}}
             {{#if ../isEditable}}
-              {{> buttonDelete itemId=../itemId propertyPath=(concat "data.data.abilities[" key "]") promptConfirm=true promptLocalizableTitle="ambersteel.dialog.titleConfirmDeletionSkillAbilityQuery" }}
+              {{> buttonDelete itemId=../item.data.id propertyPath=(concat "data.data.abilities[" key "]") promptConfirm=true promptLocalizableTitle="ambersteel.dialog.titleConfirmDeletionSkillAbilityQuery" }}
             {{/if}}
           </div>
           {{!-- Row 2 --}}
@@ -56,7 +68,7 @@ oneColumn: {Boolean}
                 {{> inputLabel for=(concat "requiredLevel[" key "]") text="ambersteel.labels.skillAbilityRequirement"}}
               </span>
               <span class="width-md">
-                {{> inputComponent type="number" min="0" name=(concat "requiredLevel[" key "]") propertyPath=(concat "data.data.abilities[" key "].requiredLevel") itemId=../skillItemId isEditable=../isEditable contextOverride=../this }}
+                {{> inputComponent type="number" min="0" name=(concat "requiredLevel[" key "]") propertyPath=(concat "data.data.abilities[" key "].requiredLevel") itemId=../item.data.id isEditable=../isEditable contextOverride=../this }}
               </span>
             </div>
             {{!-- Obstacle --}}
@@ -65,7 +77,7 @@ oneColumn: {Boolean}
                 {{> inputLabel for=(concat "obstacle[" key "]") text="ambersteel.roll.obstacleAbbreviation"}}
               </span>
               <span class="width-xxl">
-                {{> inputComponent type="single-line" name=(concat "obstacle[" key "]") propertyPath=(concat "data.data.abilities[" key "].obstacle") itemId=../skillItemId isEditable=../isEditable contextOverride=../this }}
+                {{> inputComponent type="single-line" name=(concat "obstacle[" key "]") propertyPath=(concat "data.data.abilities[" key "].obstacle") itemId=../item.data.id isEditable=../isEditable contextOverride=../this }}
               </span>
             </div>
           </div>
@@ -76,23 +88,29 @@ oneColumn: {Boolean}
               {{> inputLabel for=(concat "distance[" key "]") text="ambersteel.labels.distance"}}
             </div>
             <span class="width-md">
-              {{> inputComponent type="number" min="0" name=(concat "distance[" key "]") propertyPath=(concat "data.data.abilities[" key "].distance") itemId=../skillItemId isEditable=../isEditable contextOverride=../this }}
+              {{> inputComponent type="number" min="0" name=(concat "distance[" key "]") propertyPath=(concat "data.data.abilities[" key "].distance") itemId=../item.data.id isEditable=../isEditable contextOverride=../this }}
             </span>
             {{!-- AP cost --}}
             <div class="width-min-xl">
               {{> inputLabel for=(concat "apCost[" key "]") text="ambersteel.labels.apCost"}}
             </div>
             <span class="width-md">
-              {{> inputComponent type="number" min="0" name=(concat "apCost[" key "]") propertyPath=(concat "data.data.abilities[" key "].apCost") itemId=../skillItemId isEditable=../isEditable contextOverride=../this }}
+              {{> inputComponent type="number" min="0" name=(concat "apCost[" key "]") propertyPath=(concat "data.data.abilities[" key "].apCost") itemId=../item.data.id isEditable=../isEditable contextOverride=../this }}
             </span>
             {{!-- Attack type --}}
             <div class="width-min-xl">
               {{> inputLabel for=(concat "attackType[" key "]") text="ambersteel.labels.attackType"}}
             </div>
             <span class="width-min-lg">
-              {{> inputComponent type="drop-down" name=(concat "attackType[" key "]") propertyPath=(concat "data.data.abilities[" key "].attackType") itemId=../skillItemId
-                options=../CONFIG.attackTypes optionValueProperty="name" optionDisplayProperty="localizableAbbreviation"
-                isEditable=../isEditable contextOverride=../this
+              {{> inputComponent type="drop-down" 
+                name=(concat "attackType[" key "]") 
+                propertyPath=(concat "data.data.abilities[" key "].attackType") 
+                itemId=../item.data.id 
+                options=../CONFIG.attackTypes 
+                optionValueProperty="name" 
+                optionDisplayProperty="localizableAbbreviation" 
+                isEditable=../isEditable 
+                contextOverride=../item 
               }}
             </span>
           </div>
@@ -104,21 +122,27 @@ oneColumn: {Boolean}
             </div>
             {{> buttonRoll
               type="generic"
-              itemId=../itemId
+              itemId=../item.data.id
               propertyPath=(concat "data.data.abilities[" key "].damageFormula")
               chatTitle=ability.name
             }}
             <span class="width-min-xxl flex-grow">
-              {{> inputComponent type="single-line" name=(concat "damageFormula[" key "]") propertyPath=(concat "data.data.abilities[" key "].damageFormula") itemId=../skillItemId isEditable=../isEditable contextOverride=../this }}
+              {{> inputComponent type="single-line" name=(concat "damageFormula[" key "]") propertyPath=(concat "data.data.abilities[" key "].damageFormula") itemId=../item.data.id isEditable=../isEditable contextOverride=../this }}
             </span>
             {{!-- Damage type --}}
             <div class="width-min-xxl">
               {{> inputLabel for=(concat "damageType[" key "]") text="ambersteel.labels.damageType"}}
             </div>
             <span class="width-xxl">
-              {{> inputComponent type="drop-down" name=(concat "damageType[" key "]") propertyPath=(concat "data.data.abilities[" key "].damageType") itemId=../skillItemId
-                options=../CONFIG.damageTypes optionValueProperty="name" optionDisplayProperty="localizableAbbreviation"
-                isEditable=../isEditable contextOverride=../this
+              {{> inputComponent type="drop-down" 
+                name=(concat "damageType[" key "]") 
+                propertyPath=(concat "data.data.abilities[" key "].damageType") 
+                itemId=../item.data.id 
+                options=../CONFIG.damageTypes 
+                optionValueProperty="name" 
+                optionDisplayProperty="localizableAbbreviation" 
+                isEditable=../isEditable 
+                contextOverride=../item 
               }}
             </span>
           </div>
@@ -129,13 +153,13 @@ oneColumn: {Boolean}
               {{> inputLabel for=(concat "condition[" key "]") text="ambersteel.labels.skillAbilityCondition"}}
             </div>
             <div class="flex-grow">
-              {{> inputComponent type="single-line" name=(concat "condition[" key "]") propertyPath=(concat "data.data.abilities[" key "].condition") itemId=../skillItemId isEditable=../isEditable contextOverride=../this }}
+              {{> inputComponent type="single-line" name=(concat "condition[" key "]") propertyPath=(concat "data.data.abilities[" key "].condition") itemId=../item.data.id isEditable=../isEditable contextOverride=../this }}
             </div>
           </div>
           {{!-- Row 6 --}}
           {{!-- Description --}}
           <div class="flex flex-row">
-            {{> inputComponent type="multi-line" name=(concat "description[" key "]") propertyPath=(concat "data.data.abilities[" key "].description") itemId=../skillItemId isEditable=../isEditable contextOverride=../this allowResize=true }}
+            {{> inputComponent type="multi-line" name=(concat "description[" key "]") propertyPath=(concat "data.data.abilities[" key "].description") itemId=../item.data.id isEditable=../isEditable contextOverride=../this allowResize=true }}
           </div>
         {{/if}}
       </li>
@@ -146,7 +170,7 @@ oneColumn: {Boolean}
           <span class="flex-grow"></span>
           {{!-- Add skill ability --}}
           <span class="width-sm">
-            {{> buttonAdd itemType="skill-ability" itemId=skillItemId }}
+            {{> buttonAdd itemType="skill-ability" itemId=item.data.id }}
           </span>
         </div>
       </li>
