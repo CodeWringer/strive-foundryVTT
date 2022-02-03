@@ -80,12 +80,11 @@ skills: {[Item]} = {
                     </td>
                     <td class="skill-column-attribute">
                         {{> inputComponent type="drop-down" propertyPath="data.data.relatedAttribute" 
-                            itemId=skill.data.id
                             options=../CONFIG.character.attributes
                             optionValueProperty="name"
                             optionDisplayProperty="localizableAbbreviation"
                             isEditable=../isEditable
-                            contextOverride=../this
+                            contextOverride=skill
                         }}
                     </td>
                     <td class="skill-column-level">
