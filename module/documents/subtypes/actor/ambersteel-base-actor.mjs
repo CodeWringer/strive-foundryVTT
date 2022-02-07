@@ -85,6 +85,7 @@ export default class AmbersteelBaseActor {
    * Initializes the item grid. 
    * @param {AmbersteelActor} context 
    * @private
+   * @async
    */
   async _initializeItemGrid(context) {
     const itemGridLoadResult = ItemGrid.from(context);
@@ -190,7 +191,7 @@ export default class AmbersteelBaseActor {
   }
 
   /**
-   * 
+   * Pepares derived skill data. 
    * @param skillId {String} Id of a skill. 
    * @private
    */
@@ -210,6 +211,12 @@ export default class AmbersteelBaseActor {
     skillData.requiredFailures = req.requiredFailures;
   }
 
+  /**
+   * Prepares derived health data. 
+   * @param {AmbersteelActor} context 
+   * @private
+   * @async
+   */
   _prepareDerivedHealthData(context) {
     const businessData = context.data.data;
     businessData.health.maxHP = game.ambersteel.getCharacterMaximumHp(context);
