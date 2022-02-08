@@ -265,7 +265,7 @@ Handlebars.registerHelper('lookupValue', function(context, propertyPath, itemId)
   // Messy fix for context sometimes being a level deeper than it should. 
   if (propertyPath.startsWith("data.data")) {
     if (!hasProperty(propertyHolder, "data")) {
-      game.ambersteel.logger.logWarn(`PropertyHolder doesn't have 'data' property!`, propertyHolder);
+      game.ambersteel.logger.logWarn(`[lookupValue] PropertyHolder doesn't have 'data' property!`, propertyHolder);
       return undefined;
     }
     if (!hasProperty(propertyHolder.data, "data")) {
