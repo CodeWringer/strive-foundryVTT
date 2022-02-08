@@ -17,10 +17,10 @@ export class ConsoleLoggingStrategy extends BaseLoggingStrategy {
         }
         break;
       case LogLevels.WARN:
+        console.warn(message);
         if (context !== undefined) {
-          console.warn(message);
+          console.warn(context);
         }
-        console.warn(context);
         break;
       case LogLevels.ERROR:
         console.error(message);
@@ -29,7 +29,7 @@ export class ConsoleLoggingStrategy extends BaseLoggingStrategy {
         }
         break;
       default:
-        throw `Invalid log level '${level}'`
+        throw new Error(`Invalid log level '${level}'`);
     }
   }
 }

@@ -10,7 +10,7 @@ export class BaseLoggingStrategy {
    * @param {Any} context Optional. A context object to also write to the log. 
    */
   log(level, message, context) {
-    /* Concrete logging implementation required in implementing types. */
+    // Concrete logging implementation required in implementing types.
   }
 
   /**
@@ -54,8 +54,8 @@ export class BaseLoggingStrategy {
  * Enum of available log levels. 
  */
 export const LogLevels = {
-  VERBOSE = 0,
-  DEBUG = 1,
-  WARN = 2,
-  ERROR = 3
+  VERBOSE: 0,
+  DEBUG: 1,
+  WARN: 2,
+  ERROR: 3
 }
