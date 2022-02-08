@@ -130,9 +130,23 @@ Hooks.once('init', async function() {
         return false;
       }
     },
+    /**
+     * 
+     * @type {BaseLoggingStrategy}
+     */
     logger: new BaseLoggingStrategy(),
+    /**
+     * @type {Boolean}
+     * @private
+     */
     _debug: false,
+    /**
+     * @type {Boolean}
+     */
     get debug() { return this._debug },
+    /**
+     * @param {Boolean} value
+     */
     set debug(value) {
       this._debug = value;
       if (value === true) {
