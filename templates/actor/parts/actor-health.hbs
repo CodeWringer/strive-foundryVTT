@@ -4,9 +4,7 @@ isSendable: {Boolean}
 actor: {Actor} = {
   id: {String}
   injuries: {Array<Item>}
-  injuryCount: {Number}
   illnesses: {Array<Item>}
-  illnessCount: {Number}
   data: {Object} = {
     data: {Object} = {
       health: {Object} = {
@@ -81,10 +79,12 @@ actor: {Actor} = {
     <div class="sheet-block">
       <div class="flex flex-row">
         <div class="flex-grow">
-          {{> inputLabel for="injuryCount" text="ambersteel.labels.injuries"}}
+          {{> inputLabel text="ambersteel.labels.injuries"}}
         </div>
         <span class="width-md">
-          {{> inputComponent type="number" name="injuryCount" propertyPath="injuryCount" isEditable=false }}
+          <div class="ambersteel-read-only pad-sm fill">
+            {{actor.injuries.length}}
+          </div>
         </span>
       </div>
     </div>
@@ -115,10 +115,12 @@ actor: {Actor} = {
     <div class="sheet-block">
       <div class="flex flex-row">
         <div class="flex-grow">
-          {{> inputLabel for="illnessCount" text="ambersteel.labels.illnesses"}}
+          {{> inputLabel text="ambersteel.labels.illnesses"}}
         </div>
         <span class="width-md">
-          {{> inputComponent type="number" name="illnessCount" propertyPath="illnessCount" isEditable=false }}
+          <div class="ambersteel-read-only pad-sm fill">
+            {{actor.illnesses.length}}
+          </div>
         </span>
       </div>
     </div>

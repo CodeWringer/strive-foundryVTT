@@ -1,6 +1,7 @@
 import AmbersteelBaseItem from "./ambersteel-base-item.mjs";
 import SkillAbility from "../../../dto/skill-ability.mjs";
 import { TEMPLATES } from "../../../templatePreloader.mjs";
+import { createUUID } from "../../../utils/uuid-utility.mjs";
 
 export default class AmbersteelSkillItem extends AmbersteelBaseItem {
   /**
@@ -47,7 +48,8 @@ export default class AmbersteelSkillItem extends AmbersteelBaseItem {
         data: {
           data: this.parent.data.data
         }
-      }
+      },
+      visGroupId: createUUID()
     });
 
     return {

@@ -228,3 +228,21 @@
     }
   }
 }
+
+.font-size {
+  &-default {
+    font-size: $font-size-default;
+  }
+  &-md {
+    font-size: $font-size-md;
+  }
+  &-lg {
+    font-size: $font-size-lg;
+  }
+  &-xl {
+    font-size: $font-size-xl;
+  }
+  &-xxl {
+    font-size: $font-size-xxl;
+  }
+}

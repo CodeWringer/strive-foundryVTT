@@ -3,8 +3,9 @@ itemId: {String|undefined}
 propertyPath: {String|undefined}
 callback: {String|undefined}
 callbackData: {String|undefined}
+cssClass: {String | undefined}
 --}}
-<span class="square-button-light">
+<span class="{{#if fill}}fill-button-light{{else}}square-button-light{{/if}} {{#if cssClass}}{{cssClass}}{{else}}font-size-default{{/if}}">
   <a class="ambersteel-send-to-chat pad-sm button flex flex-center"
     data-item-id="{{itemId}}"
     data-property-path="{{propertyPath}}"

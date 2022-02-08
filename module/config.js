@@ -251,3 +251,8 @@ ambersteel.illnessStates = {
         localizableName: "ambersteel.illnessStates.treated"
     }
 };
+
+ambersteel.itemOrientations = {
+    vertical: 0,
+    horizontal: 1
+};

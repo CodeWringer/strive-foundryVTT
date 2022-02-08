@@ -17,29 +17,32 @@ item: {Item} = {
   }
 }
 --}}
-<section class="fate-card" data-item-id="{{data._id}}">
-  <div class="flex flex-row fate-card-header">
-    <h3 class="flex-grow fancy-font multiline">
-      {{data.name}}
-    </h3>
-    <div class="flex flex-column">
-      <span>
-        <img name="img" src="{{item.img}}" title="{{item.name}}" height="26" width="26" />
-      </span>
-      {{#if isSendable}}
-        <span class="flex flex-right">
-          {{> buttonSendToChat itemId=itemId}}
-        </span>
-      {{/if}}
+<section class="flex flex-column fate-card" data-item-id="{{item._id}}">
+  {{!-- Header --}}
+  <div class="flex flex-column pad-md">
+    <div class="flex flex-row">
+      <img class="header-image" src="{{item.img}}" data-edit="img" title="{{item.name}}" height="26" width="26" />
+      <h3 class="header-name flex-grow" style="margin: 0;">
+        {{> inputComponent type="single-line" itemId=item._id propertyPath="name" isEditable=isEditable }}
+      </h3>
     </div>
   </div>
-  <div class="fate-card-description">
-    {{> inputComponent type="multi-line" name="description" propertyPath="data.data.description" isEditable=isEditable }}
-  </div>
-  <div class="flex flex-row fate-card-footer">
-    {{#if isEditable}}
-      <span class="flex-grow"></span>
-      {{> buttonDelete itemId=itemId promptConfirm=true promptLocalizableTitle="ambersteel.dialog.titleConfirmDeletionFateCardQuery" }}
-    {{/if}}
+  {{!-- Buttons below header --}}
+  {{#if (or isSendable isEditable)}}
+    <div class="flex flex-row pad-md">
+      {{#if isSendable}}
+        <div class="flex flex-center">
+          {{> buttonSendToChat itemId=item._id }}
+        </div>
+      {{/if}}
+      <div class="flex-grow"></div>
+      {{#if isEditable}}
+        {{> buttonDelete itemId=item._id promptConfirm=true promptLocalizableTitle="ambersteel.dialog.titleConfirmDeletionFateCardQuery" }}
+      {{/if}}
+    </div>
+  {{/if}}
+  {{!-- Description --}}
+  <div class="flex flex-grow">
+    {{> inputComponent type="multi-line" name="description" itemId=item._id propertyPath="data.data.description" isEditable=isEditable allowResize=false allowResize=true }}
   </div>
 </section>

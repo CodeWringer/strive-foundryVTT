@@ -32,16 +32,16 @@ actor: {Actor} = {
   {{!-- Sheet Tab Navigation --}}
   <nav class="sheet-tabs tabs flex flex-justify" id="nav-sheet-tabs" data-group="primary">
     {{!-- Default tab is specified in actor-sheet.mjs --}}
-    <a class="item fancy-font flex flex-center" data-tab="attributes"><div>{{localize "ambersteel.labels.tabAttributes"}}</div></a>
-    <a class="item fancy-font flex flex-center" data-tab="skills"><div>{{localize "ambersteel.labels.tabSkills"}}</div></a>
+    <a class="item fancy-font flex flex-center flex-grow" data-tab="attributes"><div>{{localize "ambersteel.labels.tabAttributes"}}</div></a>
+    <a class="item fancy-font flex flex-center flex-grow" data-tab="skills"><div>{{localize "ambersteel.labels.tabSkills"}}</div></a>
     {{#if (eq actor.type "pc")}}
-      <a class="item fancy-font flex flex-center" data-tab="beliefs-fate"><div>{{localize "ambersteel.labels.tabBeliefsFate"}}</div></a>
+      <a class="item fancy-font flex flex-center flex-grow" data-tab="beliefs-fate"><div>{{localize "ambersteel.labels.tabBeliefsFate"}}</div></a>
     {{/if}}
-    <a class="item fancy-font flex flex-center" data-tab="health"><div>{{localize "ambersteel.labels.tabHealth"}}</div></a>
-    <a class="item fancy-font flex flex-center" data-tab="assets"><div>{{localize "ambersteel.labels.tabAssets"}}</div></a>
-    <a class="item fancy-font flex flex-center" data-tab="biography"><div>{{localize "ambersteel.labels.tabBiography"}}</div></a>
+    <a class="item fancy-font flex flex-center flex-grow" data-tab="health"><div>{{localize "ambersteel.labels.tabHealth"}}</div></a>
+    <a class="item fancy-font flex flex-center flex-grow" data-tab="assets"><div>{{localize "ambersteel.labels.tabAssets"}}</div></a>
+    <a class="item fancy-font flex flex-center flex-grow" data-tab="biography"><div>{{localize "ambersteel.labels.tabBiography"}}</div></a>
     {{#if isGM}}
-      <a class="item fancy-font flex flex-center" data-tab="gm-notes"><div>{{localize "ambersteel.labels.tabGmNotes"}}</div></a>
+      <a class="item fancy-font flex flex-center flex-grow" data-tab="gm-notes"><div>{{localize "ambersteel.labels.tabGmNotes"}}</div></a>
     {{/if}}
   </nav>
 

@@ -42,7 +42,7 @@ export function getItemDeclarations(type, where = contentCollectionTypes.all) {
     for (const pack of game.packs) {
       for (const entry of pack.index) {
         if (entry.type == type) {
-          result.push(new ItemEntry(entry._id, entry.name, contentCollectionTypes.compendia));
+          result.push(new ItemEntry(getId(entry), entry.name, contentCollectionTypes.compendia));
         }
       }
     }
@@ -56,7 +56,7 @@ export function getItemDeclarations(type, where = contentCollectionTypes.all) {
       for (const pack of module.packs) {
         if (pack.metadata.name == type) {
           for (const entry of pack.index) {
-            result.push(new ItemEntry(entry._id, entry.name, contentCollectionTypes.modules));
+            result.push(new ItemEntry(getId(entry), entry.name, contentCollectionTypes.modules));
           }
         }
       }
@@ -65,9 +65,9 @@ export function getItemDeclarations(type, where = contentCollectionTypes.all) {
 
   // Collect from world items. 
   if (where === contentCollectionTypes.all || where === contentCollectionTypes.world) {
-    for (const item of game.items) {
-      if (item.type === type) {
-        result.push(new ItemEntry(item._id, item.name, contentCollectionTypes.world));
+    for (const entry of game.items) {
+      if (entry.type === type) {
+        result.push(new ItemEntry(getId(entry), entry.name, contentCollectionTypes.world));
       }
     }
   }
@@ -151,7 +151,7 @@ async function _getDocumentFrom(id, where = contentCollectionTypes.all, worldCol
     if (where === contentCollectionTypes.all || where === contentCollectionTypes.world) {
       for (const worldCollection of worldCollections) {
         for (const entry of worldCollection) {
-          if (entry.id === id || entry.name === id) {
+          if (getId(entry) === id || entry.name === id) {
             result = entry;
           }
         }
@@ -192,8 +192,8 @@ async function _getDocumentFromCompendia(id) {
 
     for (const pack of game.packs) {
       for (const entry of pack.index) {
-        if (entry._id === id || entry.name === id) {
-          result = await pack.getDocument(entry._id);
+        if (getId(entry) === id || entry.name === id) {
+          result = await pack.getDocument(getId(entry));
         }
       }
     }
@@ -218,8 +218,8 @@ async function _getDocumentFromModuleCompendia(id) {
       for (const pack of module.packs) {
         if (pack.metadata.name == type) {
           for (const entry of pack.index) {
-            if (entry._id === id || entry.name === id) {
-              result = await pack.getDocument(entry._id);
+            if (getId(entry) === id || entry.name === id) {
+              result = await pack.getDocument(getId(entry));
             }
           }
         }
@@ -227,4 +227,16 @@ async function _getDocumentFromModuleCompendia(id) {
     }
     resolve(result);
   });
+}
+
+function getId(item) {
+  if (item.id !== undefined) {
+    return item.id;
+  } else if (item._id !== undefined) {
+    return item._id;
+  } else {
+    console.warn('Failed to get id from given item:');
+    console.warn(item);
+    return undefined;
+  }
 }

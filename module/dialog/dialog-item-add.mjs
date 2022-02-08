@@ -62,7 +62,7 @@ export async function showDialog(itemType, localizableItemLabel = LOCALIZABLE_IT
  */
 export async function query(itemType, localizableItemLabel = LOCALIZABLE_ITEM_LABEL, localizableTitle = LOCALIZABLE_TITLE) {
   return new Promise(async (resolve, reject) => {
-    if (keyboard.isDown("Shift")) {
+    if (game.keyboard.downKeys.has("SHIFT")) {
       resolve({
         selected: undefined,
         isCustomChecked: true,

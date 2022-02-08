@@ -32,10 +32,12 @@ nav#nav-sheet-tabs.sheet-tabs {
   height: 32px;
   min-height: 32px;
   margin: 0;
+  padding: 0;
   flex: 0;
   border-top: 1px solid $c-border-beige-light;
   border-bottom: 1px solid $c-border-beige-light;
   line-height: unset;
+  background-color: rgba(0, 0, 0, 0.065);
 
   > a.item {
     margin: 0;
@@ -47,6 +49,7 @@ nav#nav-sheet-tabs.sheet-tabs {
       border-right: 2px solid rgba(0,0,0,0.2);
       border-radius: 10px 10px 0 0;
       padding: 2px 0 0 0;
+      background-color: rgba(255, 255, 255, 0.2);
     }
   }
 }
@@ -65,14 +68,6 @@ nav#nav-sheet-tabs.sheet-tabs {
 }
 
 // Button styles
-a.button {
-  padding: 0;
-  margin: 0;
-  width: 26px;
-  height: 26px;
-  font-size: 1rem;
-}
-
 .button-full {
   padding: 0;
   margin: 0;
@@ -87,11 +82,27 @@ a.button {
 .square-button-light {
   width: 26px;
   height: 26px;
+  display: block;
+
+  > a.button {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+  }
 }
 
-.ambersteel-toggle-visibility {
+.fill-button-light {
+  width: 100%;
+  height: 100%;
   display: block;
-  font-size: 1rem;
+
+  > a.button {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+  }
 }
 
 // Textarea styles
@@ -102,6 +113,9 @@ textarea {
 
 textarea.resize-vertical {
   resize: vertical;
+}
+textarea.resize-none {
+  resize: none;
 }
 
 // Override default style
@@ -119,6 +133,8 @@ textarea.ambersteel-edit {
   border-radius: 0.2rem;
   font-weight: bold;
   border: 1px solid $c-border-beige-light;
+  color: $c-text-read-only;
+  min-height: 26px;
 }
 
 img.header-image {

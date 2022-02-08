@@ -1,12 +1,6 @@
-import * as SheetUtil from '../../../utils/sheet-utility.mjs';
-import * as ButtonAdd from '../../../components/button-add.mjs';
-import * as ButtonRoll from '../../../components/button-roll.mjs';
-import * as ButtonDelete from '../../../components/button-delete.mjs';
-import * as ButtonSendToChat from '../../../components/button-send-to-chat.mjs';
-import * as ButtonToggleVisibility from '../../../components/button-toggle-visibility.mjs';
-import * as InputComponent from '../../../components/input.mjs';
-import * as OpenSheet from '../../../components/button-open-sheet.mjs';
 import { TEMPLATES } from "../../../templatePreloader.mjs";
+import { ItemGridView } from "../../../components/item-grid/item-grid-view.mjs";
+import * as ListenerUtil from "../../../utils/listeners-utility.mjs";
 
 export default class AmbersteelBaseActorSheet {
   /**
@@ -14,6 +8,12 @@ export default class AmbersteelBaseActorSheet {
    * @type {ActorSheet}
    */
   parent = undefined;
+
+  /**
+   * The possessions item grid.
+   * @type {ItemGridView}
+   */
+  possessionGrid = undefined;
 
   /**
    * @param parent {ActorSheet} The owning ActorSheet. 
@@ -139,13 +139,14 @@ export default class AmbersteelBaseActorSheet {
    * @virtual
    */
   activateListeners(html, isOwner, isEditable) {
-    ButtonAdd.activateListeners(html, this, isOwner, isEditable);
-    ButtonRoll.activateListeners(html, this, isOwner, isEditable);
-    ButtonDelete.activateListeners(html, this, isOwner, isEditable);
-    ButtonSendToChat.activateListeners(html, this, isOwner, isEditable);
-    InputComponent.activateListeners(html, this, isOwner, isEditable);
-    OpenSheet.activateListeners(html, this, isOwner, isEditable);
-    ButtonToggleVisibility.activateListeners(html, this, isOwner, isEditable);
+    ListenerUtil.activateListeners(html, this, isOwner, isEditable);
+
+    // TODO: This should not be here. This should only happen once, during actor (re-)initialization. 
+    if (this.possessionGrid !== undefined) { this.possessionGrid.tearDown(); }
+    const gridWidth = 550; // This magic constant is based on the assumption that the actor sheet is about 560px wide. 
+    const columnCount = this.getActor().data.data.assets.grid.length;
+    const tileSize = Math.floor(gridWidth / columnCount);
+    this.possessionGrid = new ItemGridView(html, "possessions-canvas", this, gridWidth, tileSize);
 
     // -------------------------------------------------------------
     if (!isOwner) return;

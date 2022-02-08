@@ -6,23 +6,20 @@ skillAbility: {SkillAbility} = {
   description: {String}
   requiredLevel: {Number}
   condition: {String}
-  img: {String}
   apCost: {Number|undefined}
   distance: {Number|undefined}
   damageFormula: {String}
-  damageType: {CONFIG.ambersteel.damageTypes|undefined}
+  damageType: {CONFIG.ambersteel.damageTypes}
+  attackType: {CONFIG.ambersteel.attackTypes}
   isCustom: {Boolean}
 }
 --}}
 <section>
   {{!-- Header --}}
   <div class="flex flex-row">
-    <div class="flex flex-center">
-      <img class="inline-img header-image margin-r-sm" name="img" src="{{skillAbility.img}}" title="{{skillAbility.name}}" height="35" width="35" />
-    </div>
-    <h2 class="flex-grow">
+    <h3 class="flex-grow">
       {{skillAbility.name}}
-    </h2>
+    </h3>
   </div>
   {{!-- Required level --}}
   <div class="flex flex-row sheet-block margin-b-md">
@@ -51,6 +48,15 @@ skillAbility: {SkillAbility} = {
       {{skillAbility.apCost}}
     </div>
   </div>
+  {{!-- attackType --}}
+  <div class="flex flex-row sheet-block margin-b-md">
+    <div class="width-min-xl fancy-font">
+      {{localize "ambersteel.labels.attackType"}}
+    </div>
+    <div class="flex-grow">
+      {{localize skillAbility.attackType.localizableName}}
+    </div>
+  </div>
   {{!-- distance --}}
   <div class="flex flex-row sheet-block margin-b-md">
     <div class="width-min-xl fancy-font">
@@ -75,7 +81,7 @@ skillAbility: {SkillAbility} = {
       {{localize "ambersteel.labels.damageType"}}
     </div>
     <div class="flex-grow">
-      {{skillAbility.damageType}}
+      {{localize skillAbility.damageType.localizableName}}
     </div>
   </div>
   {{!-- Description --}}

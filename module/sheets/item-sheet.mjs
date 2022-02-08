@@ -1,4 +1,3 @@
-import * as NumberSpinner from "../components/number-spinner.mjs";
 import AmbersteelBaseItemSheet from "./subtypes/item/ambersteel-base-item-sheet.mjs";
 import AmbersteelSkillItemSheet from "./subtypes/item/ambersteel-skill-item-sheet.mjs";
 import AmbersteelFateCardItemSheet from "./subtypes/item/ambersteel-fate-item-sheet.mjs";
@@ -91,9 +90,6 @@ export class AmbersteelItemSheet extends ItemSheet {
     const isOwner = this.item.isOwner;
     const isEditable = this.isEditable;
     
-    // General listeners. 
-    NumberSpinner.activateListeners(html, this, isOwner, isEditable);
-
     // Subtype listeners. 
     this.subType.activateListeners(html, isOwner, isEditable);
   }

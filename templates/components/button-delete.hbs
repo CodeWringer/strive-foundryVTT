@@ -3,8 +3,9 @@ itemId: {String|undefined}
 propertyPath: {String|undefined}
 promptConfirm: {Boolean|undefined}
 promptLocalizableTitle: {String|undefined}
+cssClass: {String | undefined}
 --}}
-<span class="square-button-light">
+<span class="{{#if fill}}fill-button-light{{else}}square-button-light{{/if}} {{#if cssClass}}{{cssClass}}{{else}}font-size-default{{/if}}">
   <a class="ambersteel-delete pad-sm button flex flex-center"
     data-item-id="{{itemId}}"
     data-property-path="{{propertyPath}}"

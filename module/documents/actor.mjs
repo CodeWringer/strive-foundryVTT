@@ -1,6 +1,7 @@
 import AmbersteelPcActor from './subtypes/actor/ambersteel-pc-actor.mjs';
 import AmbersteelNpcActor from './subtypes/actor/ambersteel-npc-actor.mjs';
 import { deleteByPropertyPath } from '../utils/document-update-utility.mjs';
+import { EventEmitter } from '../utils/event-emitter.mjs';
 
 /**
  * @extends {Actor}
@@ -52,27 +53,52 @@ export class AmbersteelActor extends Actor {
     this.subType.prepareDerivedData(this);
   }
 
-  get injuries() {
-    const items = Array.from(this.items);
-      const result = [];
-      for (const item of items) {
-        if (item.type === "injury") result.push(item);
-      }
-      return result;
-  }
-
-  get injuryCount() { return this.injuries.length; }
-  
-  get illnesses() {
+  /**
+   * Returns items of this actor, filtered by the given type. 
+   * @param {String} type The exact type to filter by. 
+   * @returns {Array<Item>} Items of the given type, of this actor. 
+   */
+  getItemsByType(type) {
     const items = Array.from(this.items);
     const result = [];
     for (const item of items) {
-      if (item.type === "illness") result.push(item);
+      if (item.type === type) result.push(item);
     }
     return result;
   }
 
-  get illnessCount() { return this.illnesses.length; }
+  /**
+   * @returns {Array<Item>} A list of "injury" type items that represent injuries of 
+   * this character. 
+   * @readonly
+   */
+  get injuries() { return this.getItemsByType("injury"); }
+  
+  /**
+   * @returns {Array<Item>} A list of "illness" type items that represent illnesses of 
+   * this character. 
+   * @readonly
+   */
+  get illnesses() { return this.getItemsByType("illness"); }
+  
+  /**
+   * @type {Array<AmbersteelItemItem>} A list of "item" type items that represent things owned 
+   * by this character, and currently on their person. 
+   * @readonly
+   */
+  get possessions() {
+    const items = Array.from(this.items);
+    return items.filter((item) => { return item.type === "item" && item.data.data.isOnPerson; });
+  }
+
+  /**
+   * @returns {Array<Item>} A list of "item" type items that represent things owned 
+   * by this character, but not on their person. 
+   */
+  get propertyItems() { 
+    const items = Array.from(this.items);
+    return items.filter((item) => { return item.type === "item" && !item.data.data.isOnPerson; });
+  }
 
   // TODO: Move to ambersteel-base-actor.mjs
   /**
@@ -154,5 +180,33 @@ export class AmbersteelActor extends Actor {
 
   async deleteByPropertyPath(propertyPath) {
     await deleteByPropertyPath(this, propertyPath);
+  }
+
+  /** 
+   * @override 
+   */
+  _preCreateEmbeddedDocuments(embeddedName, result, options, userId) {
+    return super._preCreateEmbeddedDocuments(embeddedName, result, options, userId);
+  }
+  
+  /** 
+   * @override 
+   */
+  async _preUpdateEmbeddedDocuments(embeddedName, result, options, userId) {
+    return super._preUpdateEmbeddedDocuments(embeddedName, result, options, userId);
+  }
+  
+  /** 
+   * @override 
+   */
+  async _onUpdateEmbeddedDocuments(embeddedName, args) {
+    return super._onUpdateEmbeddedDocuments(embeddedName, args);
+  }
+
+  /** 
+   * @override 
+   */
+  _preDeleteEmbeddedDocuments(embeddedName, result, options, userId) {
+    return super._preDeleteEmbeddedDocuments(embeddedName, result, options, userId);
   }
 }

@@ -9,6 +9,7 @@ export const TEMPLATES = {
   COMPONENT_NUMBER_SPINNER: "systems/ambersteel/templates/components/number-spinner.hbs",
   COMPONENT_INPUT: "systems/ambersteel/templates/components/input.hbs",
   COMPONENT_INPUT_LABEL: "systems/ambersteel/templates/components/input-label.hbs",
+  COMPONENT_BUTTON_TAKE_ITEM: "systems/ambersteel/templates/components/button-take-item.hbs",
   // GM
   COMPONENT_GM_NOTES: "systems/ambersteel/templates/gm-notes.hbs",
   // Dice
@@ -17,6 +18,8 @@ export const TEMPLATES = {
   DIALOG_ROLL: "systems/ambersteel/templates/dialog/roll-dialog.hbs",
   DIALOG_ITEM_ADD: "systems/ambersteel/templates/dialog/dialog-add-item.hbs",
   DIALOG_VISIBILITY: "systems/ambersteel/templates/dialog/dialog-visibility.hbs",
+  DIALOG_PLAIN: "systems/ambersteel/templates/dialog/dialog-plain.hbs",
+  DIALOG_SELECT: "systems/ambersteel/templates/dialog/dialog-select.hbs",
   // Actor
   ACTOR_SHEET: "systems/ambersteel/templates/actor/actor-character-sheet.hbs",
   ACTOR_ATTRIBUTE_TABLE: "systems/ambersteel/templates/actor/components/component-attribute-table.hbs",
@@ -31,8 +34,9 @@ export const TEMPLATES = {
   ACTOR_ASSETS: "systems/ambersteel/templates/actor/parts/actor-assets.hbs",
   ACTOR_BIOGRAPHY: "systems/ambersteel/templates/actor/parts/actor-biography.hbs",
   // Item
-  ITEM_SHEET: "systems/ambersteel/templates/item/item-item-sheet.hbs",
-  ITEM_CHAT_MESSAGE: "systems/ambersteel/templates/item/item-item-chat-message.hbs",
+  ITEM_SHEET: "systems/ambersteel/templates/item/item/item-item-sheet.hbs",
+  ITEM_CHAT_MESSAGE: "systems/ambersteel/templates/item/item/item-item-chat-message.hbs",
+  ITEM_LIST_ITEM: "systems/ambersteel/templates/item/item/item-list-item.hbs",
   // Skill
   SKILL_ITEM_SHEET: "systems/ambersteel/templates/item/skill/skill-item-sheet.hbs",
   SKILL_ITEM_CHAT_MESSAGE: "systems/ambersteel/templates/item/skill/skill-chat-message.hbs",

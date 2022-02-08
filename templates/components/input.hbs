@@ -16,10 +16,12 @@ optionDisplayProperty: {String|undefined}
 min: {Number|undefined}
 max: {Number|undefined}
 step: {Number|undefined}
+-- Textarea only
+allowResize: {Boolean}
 --}}
-{{#if isEditable}}
-  {{!-- Single-line input --}}
-  {{#if (eq type 'single-line')}}
+{{!-- Single-line input --}}
+{{#if (eq type 'single-line')}}
+  {{#if isEditable}}
     <input 
       class="ambersteel-edit input-width-override {{cssClass}}"
       data-item-id="{{itemId}}"
@@ -29,25 +31,43 @@ step: {Number|undefined}
       placeholder="{{placeholder}}"
       value="{{lookupValue (isDefined contextOverride this) propertyPath itemId}}"
     />
+  {{else}}
+    {{!-- Display read-only value --}}
+    <div class="ambersteel-read-only pad-sm fill {{readOnlyCssClass}}" name="{{name}}">
+      {{localize (lookupValue (isDefined contextOverride this) propertyPath itemId)}}
+    </div>
   {{/if}}
-  {{!-- Drop-down --}}
-  {{#if (eq type 'drop-down')}}
-    <select 
-      class="ambersteel-edit drop-down width-fill {{cssClass}}"
-      data-item-id="{{itemId}}"
-      data-property-path="{{propertyPath}}"
-      name="{{name}}"
-      placeholder="{{placeholder}}"
-    >
-      {{#select propertyPath}}
-      {{#each options as |option index|}}
+{{/if}}
+{{!-- Drop-down --}}
+{{#if (eq type 'drop-down')}}
+  {{#if isEditable}}
+  <select 
+    class="ambersteel-edit drop-down width-fill {{cssClass}}"
+    data-item-id="{{itemId}}"
+    data-property-path="{{propertyPath}}"
+    name="{{name}}"
+    placeholder="{{placeholder}}"
+  >
+    {{#select propertyPath}}
+    {{#each options as |option index|}}
       <option value="{{lookupValue option ../optionValueProperty}}">{{localize (lookupValue option ../optionDisplayProperty)}}</option>
+    {{/each}}
+    {{/select}}
+  </select>
+  {{else}}
+    {{!-- Display read-only value --}}
+    <div class="ambersteel-read-only pad-sm fill {{readOnlyCssClass}}" name="{{name}}">
+      {{#each options as |option index|}}
+        {{#if (eq (lookupValue (isDefined ../contextOverride ../this) ../propertyPath itemId) (lookupValue option ../optionValueProperty))}}
+          {{localize (lookupValue option ../optionDisplayProperty)}}
+        {{/if}}
       {{/each}}
-      {{/select}}
-    </select>
+    </div>
   {{/if}}
-  {{!-- Number-spinner --}}
-  {{#if (eq type 'number')}}
+{{/if}}
+{{!-- Number-spinner --}}
+{{#if (eq type 'number')}}
+  {{#if isEditable}}
     {{#> numberSpinner}}
     <input 
       class="ambersteel-edit spinner {{cssClass}}"
@@ -63,19 +83,33 @@ step: {Number|undefined}
       placeholder="{{placeholder}}"
       />
     {{/numberSpinner}}
+  {{else}}
+    {{!-- Display read-only value --}}
+    <div class="ambersteel-read-only pad-sm fill {{readOnlyCssClass}}" name="{{name}}">
+      {{lookupValue (isDefined contextOverride this) propertyPath itemId}}
+    </div>
   {{/if}}
-  {{!-- Textarea --}}
-  {{#if (eq type 'multi-line')}}
+{{/if}}
+{{!-- Textarea --}}
+{{#if (eq type 'multi-line')}}
+  {{#if isEditable}}
     <textarea 
-      class="ambersteel-edit resize-vertical {{cssClass}}"
+      class="ambersteel-edit {{#if allowResize}}resize-vertical{{else}}resize-none{{/if}} {{cssClass}}"
       spellcheck="false"
       data-item-id="{{itemId}}"
       data-property-path="{{propertyPath}}"
       name="{{name}}"
       placeholder="{{placeholder}}"
     >{{lookupValue (isDefined contextOverride this) propertyPath itemId}}</textarea>
+  {{else}}
+    {{!-- Display read-only value --}}
+    <div class="ambersteel-read-only pad-sm fill {{readOnlyCssClass}}" name="{{name}}">
+      {{localize (lookupValue (isDefined contextOverride this) propertyPath itemId)}}
+    </div>
   {{/if}}
-  {{#if (eq type 'radio-buttons')}}
+{{/if}}
+{{#if (eq type 'radio-buttons')}}
+  {{#if isEditable}}
     <div 
       type="hidden"
       class="radio-button-group ambersteel-edit flex flex-row {{cssClass}}" 
@@ -98,10 +132,14 @@ step: {Number|undefined}
         </div>
       {{/each}}
     </div>
+  {{else}}
+    {{!-- Display read-only value --}}
+    <div class="ambersteel-read-only pad-sm fill {{readOnlyCssClass}}" name="{{name}}">
+      {{#each options as |option index|}}
+        {{#if (eq (lookupValue (isDefined ../contextOverride ../this) ../propertyPath itemId) (lookupValue option ../optionValueProperty))}}
+          {{localize (lookupValue option ../optionDisplayProperty)}}
+        {{/if}}
+      {{/each}}
+    </div>
   {{/if}}
-{{else}}
-  {{!-- Display read-only value --}}
-  <div class="ambersteel-read-only pad-sm fill {{readOnlyCssClass}}" name="{{name}}">
-    {{lookupValue (isDefined contextOverride this) propertyPath itemId}}
-  </div>
 {{/if}}

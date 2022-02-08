@@ -32,9 +32,7 @@ export default class AmbersteelFateCardItem extends AmbersteelBaseItem {
     const renderedContent = await renderTemplate(this.chatMessageTemplate, {
       isEditable: false,
       isSendable: false,
-      item: {
-        data: this.parent.data.data,
-      }
+      item: this.parent
     });
 
     return {

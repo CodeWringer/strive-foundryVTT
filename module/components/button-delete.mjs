@@ -21,7 +21,7 @@ async function _onDelete(event) {
   const dataset = event.currentTarget.dataset;
 
   if (dataset.promptConfirm) {
-    if (!keyboard.isDown("Shift")) {
+    if (!game.keyboard.downKeys.has("SHIFT")) {
       const dialogResult = await showConfirmationDialog({
         localizableTitle: dataset.promptTitle ?? "ambersteel.dialog.titleConfirmDeletionQuery"
       });

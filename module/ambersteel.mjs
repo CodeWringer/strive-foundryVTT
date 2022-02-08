@@ -11,6 +11,8 @@ import { preloadHandlebarsTemplates } from "./templatePreloader.mjs";
 import { getNestedPropertyValue } from "./utils/property-utility.mjs";
 import AdvancementRequirements from "./dto/advancement-requirement.mjs";
 import { TEMPLATES } from "./templatePreloader.mjs";
+import { createUUID } from './utils/uuid-utility.mjs';
+import * as ListenerUtil from "./utils/listeners-utility.mjs";
 
 /* -------------------------------------------- */
 /*  Init Hook                                   */
@@ -98,7 +100,7 @@ Hooks.once('init', async function() {
     },
     getCharacterMaximumHp: function(actor) {
       const businessData = actor.data.data;
-      const injuryCount = actor.injuryCount;
+      const injuryCount = actor.injuries.length;
       return (businessData.attributes.physical.toughness.value * 2) - (injuryCount * 2);
     },
     getCharacterMaximumInjuries: function(actor) {
@@ -118,7 +120,7 @@ Hooks.once('init', async function() {
     isToughnessTestRequired: function(actor) {
       const businessData = actor.data.data;
       const maxInjuries = businessData.health.maxInjuries;
-      const injuryCount = actor.injuryCount;
+      const injuryCount = actor.injuries.length;
       if (injuryCount >= Math.ceil(maxInjuries / 2)) {
         return true;
       } else {
@@ -257,6 +259,10 @@ Handlebars.registerHelper('isDefined', function() {
   return undefined;
 });
 
+Handlebars.registerHelper('generateId', function() {
+  return createUUID();
+});
+
 /* -------------------------------------------- */
 /*  Handlebars Partials                         */
 /* -------------------------------------------- */
@@ -271,6 +277,7 @@ Handlebars.registerPartial('inputComponent', `{{#> "${TEMPLATES.COMPONENT_INPUT}
 Handlebars.registerPartial('inputLabel', `{{#> "${TEMPLATES.COMPONENT_INPUT_LABEL}"}}{{/"${TEMPLATES.COMPONENT_INPUT_LABEL}"}}`);
 Handlebars.registerPartial('buttonOpenSheet', `{{#> "${TEMPLATES.COMPONENT_BUTTON_OPEN_SHEET}"}}{{/"${TEMPLATES.COMPONENT_BUTTON_OPEN_SHEET}"}}`);
 Handlebars.registerPartial('buttonToggleVisibility', `{{#> "${TEMPLATES.COMPONENT_TOGGLE_VISIBILITY}"}}{{> @partial-block }}{{/"${TEMPLATES.COMPONENT_TOGGLE_VISIBILITY}"}}`);
+Handlebars.registerPartial('buttonTakeItem', `{{#> "${TEMPLATES.COMPONENT_BUTTON_TAKE_ITEM}"}}{{/"${TEMPLATES.COMPONENT_BUTTON_TAKE_ITEM}"}}`);
 
 /* -------------------------------------------- */
 /*  Ready Hook                                  */
@@ -287,3 +294,9 @@ Handlebars.registerPartial('buttonToggleVisibility', `{{#> "${TEMPLATES.COMPONEN
 // Hooks.on("deleteActor", async function(document, options, userId) {
 //   console.log("deleted!");
 // });
+
+Hooks.on("renderChatMessage", async function(message, html, data) {
+  const isEditable = data.author.isGM;
+  const isOwner = data.author.isOwner;
+  ListenerUtil.activateListeners(html, undefined, isOwner, isEditable);
+});

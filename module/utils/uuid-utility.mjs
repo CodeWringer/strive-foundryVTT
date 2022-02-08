@@ -6,6 +6,8 @@ const properFormat = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx';
 
 /**
  * A shortened UUID format. 
+ * Technically, this isn't a UUID, at all. But it's still useful 
+ * for when the proper format would be overkill. 
  * @type {String}
  */
 const simpleFormat = 'xxxxxxxxxxxxxxxx';

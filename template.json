@@ -82,7 +82,8 @@
           "exhaustion": 0
         },
         "assets": {
-          "carryingCapacity": 0
+          "grid": [],
+          "gridIndices": []
         },
         "biography": "",
         "gmNotes": "",
@@ -135,7 +136,12 @@
     "item": {
       "templates": ["base"],
       "quantity": 1,
-      "bulk": 1
+      "maxQuantity": 1,
+      "shape": {
+        "width": 1,
+        "height": 1
+      },
+      "isOnPerson": false
     },
     "injury": {
       "templates": ["base"],

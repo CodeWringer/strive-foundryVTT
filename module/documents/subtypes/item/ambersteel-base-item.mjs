@@ -48,9 +48,10 @@ export default class AmbersteelBaseItem {
    * type should be the most complex a 'calculation' as it gets. 
    * 
    * Base data *is* persisted!
+   * @param {AmbersteelItem} context
    * @virtual
    */
-  prepareData() { }
+  prepareData(context) { }
 
   /**
    * Prepare derived data for the item. 

@@ -84,6 +84,7 @@ export default class SkillAbility {
     const renderedContent = await renderTemplate(SkillAbility.chatMessageTemplate, {
       skillAbility: {
         name: localizedName,
+        img: args.skillAbility.img,
         description: localizedDesc,
         requiredLevel: args.skillAbility.requiredLevel,
         apCost: args.skillAbility.apCost,

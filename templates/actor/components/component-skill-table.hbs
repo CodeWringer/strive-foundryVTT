@@ -80,12 +80,11 @@ skills: {[Item]} = {
                     </td>
                     <td class="skill-column-attribute">
                         {{> inputComponent type="drop-down" propertyPath="data.data.relatedAttribute" 
-                            itemId=skill.data.id
                             options=../CONFIG.character.attributes
                             optionValueProperty="name"
                             optionDisplayProperty="localizableAbbreviation"
                             isEditable=../isEditable
-                            contextOverride=../this
+                            contextOverride=skill
                         }}
                     </td>
                     <td class="skill-column-level">
@@ -109,12 +108,11 @@ skills: {[Item]} = {
                 <tr>
                     <td style="display: table-cell;" colspan="100">
                         {{> "systems/ambersteel/templates/item/skill-ability/skill-ability-table.hbs" 
-                            isEditable=../isEditable
-                            isSendable=../isSendable
-                            skillItemId=skill.data.id
-                            itemId=skill.data.id
-                            abilities=data.abilities
-                            CONFIG=../CONFIG
+                            isEditable=../isEditable 
+                            isSendable=../isSendable 
+                            CONFIG=../CONFIG 
+                            item=skill
+                            visGroupId=(generateId)
                         }}
                     </td>
                 </tr>

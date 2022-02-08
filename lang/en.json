@@ -78,6 +78,7 @@
       "instincts": "Instincts"
     },
     "labels": {
+      "actor": "Actor",
       "attribute": "Attribute",
       "level": "Level",
       "attributeAbbreviation": "Attr.",
@@ -107,6 +108,7 @@
       "tabGmNotes": "GM",
       "confirm": "Confirm",
       "cancel": "Cancel",
+      "ok": "OK",
       "increment": "Increment",
       "decrement": "Decrement",
       "description": "Description",
@@ -122,9 +124,12 @@
       "skill": "Skill",
       "custom": "Custom",
       "sendToChat": "Send to Chat",
+      "takeToPerson": "Take (to person)",
       "messageVisibility": "Visibility",
       "healthStats": "General Health Stats",
       "assetsStats": "General Assets Stats",
+      "assetsOnPerson": "Possessions (on person)",
+      "assetsRemote": "Property",
       "injury": "Injury",
       "maxInjuries": "Max. Injuries",
       "injuries": "Injuries",
@@ -144,7 +149,15 @@
       "noneAbbreviation": "N/A",
       "category": "Category",
       "item": "Item",
-      "openSheet": "Open Sheet"
+      "bulk": "Bulk",
+      "shape": "Shape",
+      "quantity": "Quantity",
+      "maxQuantity": "Max. Quantity",
+      "carryingCapacity": "Carrying Capacity (in bulk)",
+      "usedCarryingCapacity": "Used carrying capacity (in bulk)",
+      "openSheet": "Open Sheet",
+      "shapeWidth": "Width",
+      "shapeHeight": "Height"
     },
     "fateSystem": {
       "fate": "Fate",
@@ -211,7 +224,12 @@
       "titleConfirmDeletionIllnessQuery": "Confirm Deletion of Illness",
       "titleConfirmDeletionFateCardQuery": "Confirm Deletion of Fate-Card",
       "titleConfirmDeletionPossessionQuery": "Confirm Deletion of Possession",
-      "titleConfirmDeletionPropertyQuery": "Confirm Deletion of Property"
+      "titleConfirmDeletionPropertyQuery": "Confirm Deletion of Property",
+      "titleInventoryFull": "Inventory full",
+      "titleItemsDropped": "Items dropped",
+      "titleSelect": "Select",
+      "contentItemsDropped": "The following items had to be dropped from the item grid:",
+      "contentInventoryFull": "There is not enough room on the item grid to add the item to it."
     },
     "attackTypes": {
       "singleTarget": "Single-Target",
