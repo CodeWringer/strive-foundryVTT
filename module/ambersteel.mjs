@@ -135,7 +135,7 @@ Hooks.once('init', async function() {
      * 
      * @type {BaseLoggingStrategy}
      */
-    logger: new ConsoleLoggingStrategy(),
+    logger: new ConsoleLoggingStrategy(LogLevels.DEBUG),
     /**
      * @type {Boolean}
      * @private
@@ -151,7 +151,7 @@ Hooks.once('init', async function() {
     set debug(value) {
       this._debug = value;
       if (value === true) {
-        this.logger = new ConsoleLoggingStrategy();
+        this.logger = new ConsoleLoggingStrategy(LogLevels.DEBUG);
       }
     },
   };

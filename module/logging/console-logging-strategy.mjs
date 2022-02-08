@@ -1,6 +1,10 @@
 import { BaseLoggingStrategy, LogLevels } from "./base-logging-strategy.mjs";
 
 export class ConsoleLoggingStrategy extends BaseLoggingStrategy {
+  constructor(logLevel = LogLevels.VERBOSE) {
+    this.logLevel = logLevel;
+  }
+
   /**
    * Writes the given message to the log, at the given log level. 
    * @param {LogLevels} level The logging level. 

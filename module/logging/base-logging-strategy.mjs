@@ -9,6 +9,10 @@ export class BaseLoggingStrategy {
    */
   logLevel = LogLevels.VERBOSE;
 
+  constructor(logLevel = LogLevels.VERBOSE) {
+    this.logLevel = logLevel;
+  }
+  
   /**
    * Writes the given message to the log, at the given log level. 
    * @param {LogLevels} level The logging level. 
