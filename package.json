@@ -6,12 +6,13 @@
     "build": "gulp build",
     "compile": "gulp css",
     "watch": "gulp",
-    "gulp": "gulp"
+    "gulp": "gulp",
+    "test": "mocha ./module/test/"
   },
   "browserslist": [
     "last 3 versions"
   ],
-  "author": "John Doe",
+  "author": "Nicolas Haase",
   "license": "MIT",
   "private": true,
   "dependencies": {
@@ -22,6 +23,7 @@
   },
   "devDependencies": {
     "fs-extra": "^10.0.0",
-    "node-zip": "^1.1.1"
+    "node-zip": "^1.1.1",
+    "mocha": "^9.1.3"
   }
 }

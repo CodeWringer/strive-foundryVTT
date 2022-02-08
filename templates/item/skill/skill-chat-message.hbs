@@ -45,8 +45,8 @@ item: {Item} = {
     {{> "systems/ambersteel/templates/item/skill-ability/skill-ability-table.hbs" 
       isEditable=false 
       isSendable=false 
-      skillItem=item 
-      abilities=item.data.data.abilities 
+      CONFIG=CONFIG 
+      item=item
       skillAbilitiesInitiallyVisible=false 
       visGroupId=(generateId) 
       oneColumn=true 

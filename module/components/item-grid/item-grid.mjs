@@ -171,6 +171,8 @@ export class ItemGrid {
     // Place new items on grid. 
     const items = document.possessions;
     for (const item of items) {
+      // Skip any items that were dropped. 
+      if (itemsDropped.find(it => { return it.id === item.id }) !== undefined) continue;
       // Prevent adding the same item multiple times. Shouldn't be necessary, but in case 
       // it is, this should prevent headaches. 
       if (itemGrid.contains(item)) continue;

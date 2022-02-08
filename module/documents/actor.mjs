@@ -3,12 +3,6 @@ import AmbersteelNpcActor from './subtypes/actor/ambersteel-npc-actor.mjs';
 import { deleteByPropertyPath } from '../utils/document-update-utility.mjs';
 import { EventEmitter } from '../utils/event-emitter.mjs';
 
-export const ActorEvents = {
-  possessionAdded: "possession-added",
-  possessionRemoved: "possession-removed",
-  possessionUpdated: "possession-updated"
-}
-
 /**
  * @extends {Actor}
  * @property person {Object}
@@ -41,12 +35,6 @@ export class AmbersteelActor extends Actor {
     }
     return this._subType;
   }
-
-  /**
-   * Central event aggregator. 
-   * @see {ActorEvents} for a list of emitted events. 
-   */
-  _eventEmitter = new EventEmitter();
 
   /** @override */
   prepareData() {
@@ -194,49 +182,10 @@ export class AmbersteelActor extends Actor {
     await deleteByPropertyPath(this, propertyPath);
   }
 
-  /**
-   * Registers an event listener for the given event, which will fire every time the event is emitted. 
-   * @param {ActorEvents} event The type of event to register. 
-   * @param {Function} callback Gets called whenever the event is emitted. 
-   * @returns {Any} An identifier that can be used to unregister the just registered 
-   * event listener, with the 'off'-method. 
-   */
-  on(event, callback) {
-    return this._eventEmitter.on(event, callback);
-  }
-  
-  /**
-   * Registers an event listener for the given event, which will fire only once. 
-   * @param {ActorEvents} event The type of event to register. 
-   * @param {Function} callback Gets called whenever the event is emitted. 
-   * @returns {Any} An identifier that can be used to unregister the just registered 
-   * event listener, with the 'off'-method. 
-   */
-  once(event, callback) {
-    return this._eventEmitter.once(event, callback);
-  }
-
-  /**
-   * Unregisters an event listener, based on the given identifier. 
-   * @param eventIdentifier An event identifier. 
-   */
-  off(eventIdentifier) {
-    this._eventEmitter.off(eventIdentifier)
-  }
-
   /** 
    * @override 
    */
   _preCreateEmbeddedDocuments(embeddedName, result, options, userId) {
-    const items = result.filter(it => it.type === "item");
-    const ailments = result.filter(it => it.type === "injury" || it.type === "illness");
-
-    for (const item of items) {
-      if (item.data.isOnPerson) {
-        this._eventEmitter.emit(ActorEvents.possessionAdded, item);
-      }
-    }
-    
     return super._preCreateEmbeddedDocuments(embeddedName, result, options, userId);
   }
   
@@ -244,46 +193,20 @@ export class AmbersteelActor extends Actor {
    * @override 
    */
   async _preUpdateEmbeddedDocuments(embeddedName, result, options, userId) {
-    for (const dataDelta of result) {
-      const id = dataDelta._id;
-      const updatedItem = this.items.get(id);
-  
-      if (updatedItem.type === "item") {
-        if (updatedItem.data.data.isOnPerson) {
-          const existing = this.possessions.find((element) => { return element.id === updatedItem.id; });
-
-          if (existing !== undefined) {
-            // Possession is not yet in the possessions list -> is about 
-            // to be added. 
-            this._eventEmitter.emit(ActorEvents.possessionAdded, updatedItem);
-          } else {
-            this._eventEmitter.emit(ActorEvents.possessionUpdated, updatedItem);
-          }
-        }
-      } else if (updatedItem.type === "injury" || updatedItem.type === "illness") {
-        // TODO
-      }
-    }
-    
     return super._preUpdateEmbeddedDocuments(embeddedName, result, options, userId);
   }
   
   /** 
    * @override 
    */
+  async _onUpdateEmbeddedDocuments(embeddedName, args) {
+    return super._onUpdateEmbeddedDocuments(embeddedName, args);
+  }
+
+  /** 
+   * @override 
+   */
   _preDeleteEmbeddedDocuments(embeddedName, result, options, userId) {
-    for (const id of result) {
-      const itemToDelete = this.items.get(id);
-
-      if (itemToDelete.type === "item") {
-        if (itemToDelete.data.data.isOnPerson) {
-          this._eventEmitter.emit(ActorEvents.possessionRemoved, itemToDelete);
-        }
-      } else if (itemToDelete.type === "injury" || itemToDelete.type === "illness") {
-        // TODO
-      }
-    }
-
     return super._preDeleteEmbeddedDocuments(embeddedName, result, options, userId);
   }
 }

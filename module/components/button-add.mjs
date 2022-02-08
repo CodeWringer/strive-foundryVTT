@@ -118,9 +118,9 @@ function getCreationData(dataset) {
 
       if (propertyValue === "true" || propertyValue === "false") {
         propertyValue = propertyValue === "true";
-      } else if (matchFloat[0].length === propertyValue.length) {
+      } else if (matchFloat !== null && matchFloat[0].length === propertyValue.length) {
         propertyValue = parseFloat(propertyValue);
-      } else if (matchInt[0].length === propertyValue.length) {
+      } else if (matchInt !== null && matchInt[0].length === propertyValue.length) {
         propertyValue = parseInt(propertyValue);
       }
 

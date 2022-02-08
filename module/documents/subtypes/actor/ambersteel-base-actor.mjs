@@ -74,45 +74,62 @@ export default class AmbersteelBaseActor {
    */
   prepareDerivedData(context) {
     context.data.data.assets.maxBulk = game.ambersteel.getCharacterMaximumInventory(this.parent);
-
-    let usedBulk = 0;
-    for (const possession of context.possessions) {
-      usedBulk += possession.data.data.bulk;
-    }
-    context.data.data.assets.totalBulk = usedBulk;
-
-    // Initialize item grid. 
-    const itemGridLoadResult = ItemGrid.from(context);
-    this._itemGrid = itemGridLoadResult.itemGrid;
-    context.itemGrid = this.itemGrid;
-    // Write the {ItemGrid} to the context document, without triggering a db update. 
-    // This prevents infinite recursion, as a db update would cause the document to be 
-    // reloaded, thus executing 'prepareDerivedData' again and then this line would 
-    // cause another reload, and so on.
-    this._itemGrid.synchronizeTo(context, false);
-    
-    if (itemGridLoadResult.itemsDropped.length > 0) {
-      for (const item of itemGridLoadResult.itemsDropped) {
-        // Move item to property (= drop from person). 
-        item.updateProperty("data.data.isOnPerson", false);
-      }
-      // Display a warning dialog. 
-      showPlainDialog({
-        localizableTitle: "ambersteel.dialog.titleItemsDropped",
-        localizedContent: game.i18n.localize("ambersteel.dialog.contentItemsDropped")
-          + "\n"
-          + itemGridLoadResult.itemsDropped.join(",\n")
-      });
-    }
-    
+    context.data.data.assets.totalBulk = this._calculateUsedBulk(context);
+    this._initializeItemGrid(context);
     this._prepareDerivedAttributesData(context);
     this._prepareDerivedSkillsData(context);
     this._prepareDerivedHealthData(context);
   }
 
   /**
+   * Initializes the item grid. 
+   * @param {AmbersteelActor} context 
+   * @private
+   * @async
+   */
+  async _initializeItemGrid(context) {
+    const itemGridLoadResult = ItemGrid.from(context);
+    this._itemGrid = itemGridLoadResult.itemGrid;
+    context.itemGrid = this.itemGrid;
+    
+    if (itemGridLoadResult.itemsDropped.length > 0) {
+      for (const item of itemGridLoadResult.itemsDropped) {
+        // Move item to property (= drop from person). 
+        item.updateProperty("data.data.isOnPerson", false);
+      }
+      
+      // Display a warning dialog. 
+      showPlainDialog({
+        localizableTitle: "ambersteel.dialog.titleItemsDropped",
+        localizedContent: game.i18n.localize("ambersteel.dialog.contentItemsDropped")
+        + "\n"
+        + itemGridLoadResult.itemsDropped.map(it => it.name).join(",\n")
+      });
+    }
+
+    // Write the {ItemGrid} to the context document, without triggering a db update. 
+    // This prevents infinite recursion, as a db update would cause the document to be 
+    // reloaded, thus executing all initialization code again. 
+    await this._itemGrid.synchronizeTo(context, false);
+  }
+
+  /**
+   * Returns the currently used bulk. 
+   * @param {AmbersteelActor} context 
+   * @returns {Number} The currently used bulk. 
+   * @private
+   */
+  _calculateUsedBulk(context) {
+    let usedBulk = 0;
+    for (const possession of context.possessions) {
+      usedBulk += possession.data.data.bulk;
+    }
+    return usedBulk;
+  }
+
+  /**
    * Prepares derived data for all attributes. 
-   * @param context 
+   * @param {AmbersteelActor} context 
    * @private
    */
   _prepareDerivedAttributesData(context) {
@@ -152,7 +169,7 @@ export default class AmbersteelBaseActor {
   /**
    * Updates the given actorData with derived skill data. 
    * Assigns items of type skill to the derived lists 'actorData.skills' and 'actorData.learningSkills'. 
-   * @param context 
+   * @param {AmbersteelActor} context 
    * @private
    */
   _prepareDerivedSkillsData(context) {
@@ -174,7 +191,7 @@ export default class AmbersteelBaseActor {
   }
 
   /**
-   * 
+   * Pepares derived skill data. 
    * @param skillId {String} Id of a skill. 
    * @private
    */
@@ -194,6 +211,12 @@ export default class AmbersteelBaseActor {
     skillData.requiredFailures = req.requiredFailures;
   }
 
+  /**
+   * Prepares derived health data. 
+   * @param {AmbersteelActor} context 
+   * @private
+   * @async
+   */
   _prepareDerivedHealthData(context) {
     const businessData = context.data.data;
     businessData.health.maxHP = game.ambersteel.getCharacterMaximumHp(context);

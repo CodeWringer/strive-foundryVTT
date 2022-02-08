@@ -42,7 +42,7 @@ export function getItemDeclarations(type, where = contentCollectionTypes.all) {
     for (const pack of game.packs) {
       for (const entry of pack.index) {
         if (entry.type == type) {
-          result.push(new ItemEntry(getId(item), entry.name, contentCollectionTypes.compendia));
+          result.push(new ItemEntry(getId(entry), entry.name, contentCollectionTypes.compendia));
         }
       }
     }
@@ -56,7 +56,7 @@ export function getItemDeclarations(type, where = contentCollectionTypes.all) {
       for (const pack of module.packs) {
         if (pack.metadata.name == type) {
           for (const entry of pack.index) {
-            result.push(new ItemEntry(getId(item), entry.name, contentCollectionTypes.modules));
+            result.push(new ItemEntry(getId(entry), entry.name, contentCollectionTypes.modules));
           }
         }
       }
@@ -65,9 +65,9 @@ export function getItemDeclarations(type, where = contentCollectionTypes.all) {
 
   // Collect from world items. 
   if (where === contentCollectionTypes.all || where === contentCollectionTypes.world) {
-    for (const item of game.items) {
-      if (item.type === type) {
-        result.push(new ItemEntry(getId(item), item.name, contentCollectionTypes.world));
+    for (const entry of game.items) {
+      if (entry.type === type) {
+        result.push(new ItemEntry(getId(entry), entry.name, contentCollectionTypes.world));
       }
     }
   }

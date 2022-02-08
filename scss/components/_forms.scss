@@ -32,10 +32,12 @@ nav#nav-sheet-tabs.sheet-tabs {
   height: 32px;
   min-height: 32px;
   margin: 0;
+  padding: 0;
   flex: 0;
   border-top: 1px solid $c-border-beige-light;
   border-bottom: 1px solid $c-border-beige-light;
   line-height: unset;
+  background-color: rgba(0, 0, 0, 0.065);
 
   > a.item {
     margin: 0;
@@ -47,6 +49,7 @@ nav#nav-sheet-tabs.sheet-tabs {
       border-right: 2px solid rgba(0,0,0,0.2);
       border-radius: 10px 10px 0 0;
       padding: 2px 0 0 0;
+      background-color: rgba(255, 255, 255, 0.2);
     }
   }
 }
@@ -131,6 +134,7 @@ textarea.ambersteel-edit {
   font-weight: bold;
   border: 1px solid $c-border-beige-light;
   color: $c-text-read-only;
+  min-height: 26px;
 }
 
 img.header-image {
