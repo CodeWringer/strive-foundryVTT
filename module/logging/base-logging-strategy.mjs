@@ -19,7 +19,7 @@ export class BaseLoggingStrategy {
    * @param {Any} context Optional. A context object to also write to the log. 
    */
   logVerbose(message, context) {
-    this.log(LogLevels.VERBOSE, message, context);
+    this.log(LogLevels.VERBOSE, `[VERBOSE] message`, context);
   }
 
   /**
@@ -28,7 +28,7 @@ export class BaseLoggingStrategy {
    * @param {Any} context Optional. A context object to also write to the log. 
    */
   logDebug(message, context) {
-    this.log(LogLevels.DEBUG, message, context);
+    this.log(LogLevels.DEBUG, `[DEBUG] message`, context);
   }
 
   /**
@@ -37,7 +37,7 @@ export class BaseLoggingStrategy {
    * @param {Any} context Optional. A context object to also write to the log. 
    */
   logWarn(message, context) {
-    this.log(LogLevels.WARN, message, context);
+    this.log(LogLevels.WARN, `[WARN] message`, context);
   }
 
   /**
@@ -46,7 +46,7 @@ export class BaseLoggingStrategy {
    * @param {Any} context Optional. A context object to also write to the log. 
    */
   logError(message, context) {
-    this.log(LogLevels.ERROR, message, context);
+    this.log(LogLevels.ERROR, `[ERROR] message`, context);
   }
 }
 
