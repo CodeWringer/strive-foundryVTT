@@ -8,28 +8,50 @@ export class ConsoleLoggingStrategy extends BaseLoggingStrategy {
    * @param {Any} context Optional. A context object to also write to the log. 
    */
   log(level, message, context = undefined) {
-    switch (level) {
-      case LogLevels.VERBOSE:
-      case LogLevels.DEBUG:
-        console.log(message);
-        if (context !== undefined) {
-          console.log(context);
-        }
-        break;
-      case LogLevels.WARN:
-        console.warn(message);
-        if (context !== undefined) {
-          console.warn(context);
-        }
-        break;
-      case LogLevels.ERROR:
-        console.error(message);
-        if (context !== undefined) {
-          console.error(context);
-        }
-        break;
-      default:
-        throw new Error(`Invalid log level '${level}'`);
+    if (this.logLevel >= LogLevels.VERBOSE && level == LogLevels.VERBOSE) {
+      this._log(message, context);
+    } else if (this.logLevel >= LogLevels.DEBUG && level == LogLevels.DEBUG) {
+      this._log(message, context);
+    } else if (this.logLevel >= LogLevels.WARN && level == LogLevels.WARN) {
+      this._warn(message, context);
+    } else if (this.logLevel >= LogLevels.ERROR && level == LogLevels.ERROR) {
+      this._error(message, context);
+    }
+  }
+
+  /**
+   * @param message 
+   * @param context 
+   * @private
+   */
+  _log(message, context) {
+    console.log(message);
+    if (context !== undefined) {
+      console.log(context);
+    }
+  }
+
+  /**
+   * @param message 
+   * @param context 
+   * @private
+   */
+  _warn(message, context) {
+    console.warn(message);
+    if (context !== undefined) {
+      console.warn(context);
+    }
+  }
+
+  /**
+   * @param message 
+   * @param context 
+   * @private
+   */
+  _error(message, context) {
+    console.error(message);
+    if (context !== undefined) {
+      console.error(context);
     }
   }
 }

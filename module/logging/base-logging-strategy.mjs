@@ -4,6 +4,12 @@
  */
 export class BaseLoggingStrategy {
   /**
+   * The current log level. Only messages that are at least this specific will be written to the log. 
+   * @type {LogLevels}
+   */
+  logLevel = LogLevels.VERBOSE;
+
+  /**
    * Writes the given message to the log, at the given log level. 
    * @param {LogLevels} level The logging level. 
    * @param {String} message A message to write to the log. 
@@ -19,7 +25,7 @@ export class BaseLoggingStrategy {
    * @param {Any} context Optional. A context object to also write to the log. 
    */
   logVerbose(message, context) {
-    this.log(LogLevels.VERBOSE, `[VERBOSE] message`, context);
+    this.log(LogLevels.VERBOSE, `[VERBOSE] ${message}`, context);
   }
 
   /**
@@ -28,7 +34,7 @@ export class BaseLoggingStrategy {
    * @param {Any} context Optional. A context object to also write to the log. 
    */
   logDebug(message, context) {
-    this.log(LogLevels.DEBUG, `[DEBUG] message`, context);
+    this.log(LogLevels.DEBUG, `[DEBUG] ${message}`, context);
   }
 
   /**
@@ -37,7 +43,7 @@ export class BaseLoggingStrategy {
    * @param {Any} context Optional. A context object to also write to the log. 
    */
   logWarn(message, context) {
-    this.log(LogLevels.WARN, `[WARN] message`, context);
+    this.log(LogLevels.WARN, `[WARN] ${message}`, context);
   }
 
   /**
@@ -46,7 +52,7 @@ export class BaseLoggingStrategy {
    * @param {Any} context Optional. A context object to also write to the log. 
    */
   logError(message, context) {
-    this.log(LogLevels.ERROR, `[ERROR] message`, context);
+    this.log(LogLevels.ERROR, `[ERROR] ${message}`, context);
   }
 }
 
