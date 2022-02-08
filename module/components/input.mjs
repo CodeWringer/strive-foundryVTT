@@ -10,7 +10,7 @@ import { selectItemByValue, getElementValue } from '../utils/sheet-utility.mjs';
  */
 export function activateListeners(html, ownerSheet, isOwner, isEditable) {
   if (ownerSheet === undefined) {
-    console.warn(`No 'ownerSheet' defined. Skipping 'activateListeners'.`);
+    game.ambersteel.logger.logWarn(`No 'ownerSheet' defined. Skipping 'activateListeners'.`);
     return;
   }
 

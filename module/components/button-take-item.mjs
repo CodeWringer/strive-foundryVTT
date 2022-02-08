@@ -49,7 +49,7 @@ async function _onTakeItem(event) {
   }
 
   if (item === undefined) {
-    console.warn(`Failed to get item with id '${sourceId}'! Cannot add to item grid!`);
+    game.ambersteel.logger.logWarn(`Failed to get item with id '${sourceId}'! Cannot add to item grid!`);
     return;
   }
 
