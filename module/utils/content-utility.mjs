@@ -173,7 +173,7 @@ async function _getDocumentFrom(id, where = contentCollectionTypes.all, worldCol
     }
   
     if (result === undefined) {
-      console.warn(`Failed to retrieve document with id '${id}'`);
+      game.ambersteel.logger.logWarn(`Failed to retrieve document with id '${id}'`);
     }
     resolve(result);
   });
@@ -235,8 +235,7 @@ function getId(item) {
   } else if (item._id !== undefined) {
     return item._id;
   } else {
-    console.warn('Failed to get id from given item:');
-    console.warn(item);
+    game.ambersteel.logger.logWarn('Failed to get id from given item:', item);
     return undefined;
   }
 }

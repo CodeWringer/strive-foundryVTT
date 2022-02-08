@@ -18,8 +18,7 @@ export function getNestedPropertyValue(obj, path) {
 
     const prop = properties.shift().replace("]", "");
     if (!hasProperty(obj, prop)) {
-      console.warn(`Failed to get value of property at '${path}'! Original context object:`);
-      console.warn(originalObj);
+      game.ambersteel.logger.logWarn(`Failed to get value of property at '${path}'! Original context object:`, originalObj);
       return undefined;
     } else {
       return _get(obj[prop], properties, originalObj);

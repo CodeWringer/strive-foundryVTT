@@ -13,6 +13,9 @@ import AdvancementRequirements from "./dto/advancement-requirement.mjs";
 import { TEMPLATES } from "./templatePreloader.mjs";
 import { createUUID } from './utils/uuid-utility.mjs';
 import * as ListenerUtil from "./utils/listeners-utility.mjs";
+// Import logging classes. 
+import { BaseLoggingStrategy } from "./logging/base-logging-strategy.mjs";
+import { ConsoleLoggingStrategy } from "./logging/console-logging-strategy.mjs";
 
 /* -------------------------------------------- */
 /*  Init Hook                                   */
@@ -127,6 +130,30 @@ Hooks.once('init', async function() {
         return false;
       }
     },
+    // TODO: #29 Make debug dependent on build settings. 
+    /**
+     * 
+     * @type {BaseLoggingStrategy}
+     */
+    logger: new ConsoleLoggingStrategy(LogLevels.DEBUG),
+    /**
+     * @type {Boolean}
+     * @private
+     */
+    _debug: true,
+    /**
+     * @type {Boolean}
+     */
+    get debug() { return this._debug },
+    /**
+     * @param {Boolean} value
+     */
+    set debug(value) {
+      this._debug = value;
+      if (value === true) {
+        this.logger = new ConsoleLoggingStrategy(LogLevels.DEBUG);
+      }
+    },
   };
 
   // Set initiative formula. 
@@ -238,8 +265,7 @@ Handlebars.registerHelper('lookupValue', function(context, propertyPath, itemId)
   // Messy fix for context sometimes being a level deeper than it should. 
   if (propertyPath.startsWith("data.data")) {
     if (!hasProperty(propertyHolder, "data")) {
-      console.warn(`PropertyHolder doesn't have 'data' property!`);
-      console.warn(propertyHolder);
+      game.ambersteel.logger.logWarn(`[lookupValue] PropertyHolder doesn't have 'data' property!`, propertyHolder);
       return undefined;
     }
     if (!hasProperty(propertyHolder.data, "data")) {

@@ -38,7 +38,7 @@ async function _onItemCreate(event) {
   if (type === "skill-ability") {
     const item = dataset.itemId ? this.getItem(dataset.itemId) : this.getContextEntity();
     if (item.type !== "skill") {
-      console.warn("Trying to add skill-ability to non-'skill'-type item!");
+      game.ambersteel.logger.logWarn("Trying to add skill-ability to non-'skill'-type item!");
       return;
     }
     const creationData = {
@@ -63,7 +63,7 @@ async function _onItemCreate(event) {
     } else if (type === "item") {
       dialogResult = await ItemAddDialog.query("item", "ambersteel.labels.item", "ambersteel.dialog.titleAddItemQuery");
     } else {
-      console.warn(`Add dialog not defined for type '${type}'!`);
+      game.ambersteel.logger.logWarn(`Add dialog not defined for type '${type}'!`);
       return;
     }
     if (!dialogResult.confirmed) return;

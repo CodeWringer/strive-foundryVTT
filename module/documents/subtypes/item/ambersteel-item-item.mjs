@@ -34,7 +34,7 @@ export default class AmbersteelItemItem extends AmbersteelBaseItem {
     // Derive bulk from shape. 
     const shape = this.parent.data.data.shape;
     if (shape === undefined) {
-      console.warn("Shape on item undefined! Using fallback '{ width: 1, height: 1 }'");
+      game.ambersteel.logger.logWarn("Shape on item undefined! Using fallback '{ width: 1, height: 1 }'");
       shape = { width: 1, height: 1 };
     }
     this.parent.data.data.bulk = shape.width * shape.height;
