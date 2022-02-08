@@ -130,16 +130,17 @@ Hooks.once('init', async function() {
         return false;
       }
     },
+    // TODO: Make debug dependent on build settings. 
     /**
      * 
      * @type {BaseLoggingStrategy}
      */
-    logger: new BaseLoggingStrategy(),
+    logger: new ConsoleLoggingStrategy(),
     /**
      * @type {Boolean}
      * @private
      */
-    _debug: false,
+    _debug: true,
     /**
      * @type {Boolean}
      */
