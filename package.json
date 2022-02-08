@@ -1,7 +1,7 @@
 {
   "name": "ambersteel",
   "version": "1.0.0",
-  "description": "Ambersteel FoundryVTT system",
+  "description": "Ambersteel FoundryVTT development environment",
   "scripts": {
     "build": "gulp build",
     "compile": "gulp css",
@@ -22,6 +22,8 @@
     "gulp-sourcemaps": "^2.6.5"
   },
   "devDependencies": {
+    "fs-extra": "^10.0.0",
+    "node-zip": "^1.1.1",
     "mocha": "^9.1.3"
   }
 }
