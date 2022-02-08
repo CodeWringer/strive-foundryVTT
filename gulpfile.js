@@ -101,6 +101,7 @@ const copyExcludes = [
   "build",
   "dist",
   "scss",
+  "test",
   "node_modules",
   ".gitignore",
   ".npmignore",
