@@ -1,4 +1,51 @@
 /**
+ * @param obj 
+ * @param properties 
+ * @param originalObj 
+ * @private
+ */
+function _get(obj, properties, originalObj) {
+  if (!properties || properties.length === 0) return obj;
+
+  const prop = properties.shift();
+  if (hasProperty(obj, prop) !== true && Array.isArray(obj) !== true) {
+		const msg = `Failed to get value of property at '${prop}'! Original context object:`;
+		throw new Error(`InvalidStateException: ${msg}`);
+  } else {
+    return _get(obj[prop], properties, originalObj);
+  }
+}
+
+/**
+ * Breaks down the given property path (e. g. "a.b[4].c") into an array of its elements (e. g. ["a", "b", 4, "c"]) 
+ * and returns that array. 
+ * @param {String} propertyPath A property path to break down. 
+ * @returns {Array<String | Number>} An array of separated property path elements. 
+ * @private
+ */
+export function splitPropertyPath(propertyPath) {
+  let elements = propertyPath.split(/\.|\[/);
+	const regexpInt = /\d+/;
+
+	// Clean up elements of the property path. 
+	for (let i = 0; i < elements.length; i++) {
+		// This removes the brackets from an element. E. g. "[4]" -> "4"
+		let element = elements[i].replace("[", "").replace("]", "");
+
+		// Int type coercion, if possible. 
+		const matchInt = element.match(regexpInt);
+		if (matchInt !== null && matchInt[0].length === element.length) {
+			element = parseInt(element);
+		}
+
+		// Override the existing element with the cleaned up version. 
+		elements[i] = element;
+	}
+
+	return elements;
+}
+
+/**
  * Returns the value of a nested property. 
  * 
  * Supports array-access-notation. Does not support accessing properties via '[<propName>]'.
@@ -11,21 +58,33 @@
  * otherwise, returns the value of the property. 
  */
 export function getNestedPropertyValue(obj, path) {
-  const properties = path.split(/\.|\[/);
+  const propertyPath = splitPropertyPath(path);
 
-  function _get(obj, properties, originalObj) {
-    if (!properties || properties.length === 0) return obj;
+  return _get(obj, propertyPath, obj);
+}
 
-    const prop = properties.shift().replace("]", "");
-    if (!hasProperty(obj, prop)) {
-      game.ambersteel.logger.logWarn(`Failed to get value of property at '${path}'! Original context object:`, originalObj);
-      return undefined;
-    } else {
-      return _get(obj[prop], properties, originalObj);
-    }
-  }
+/**
+ * Sets the value of a nested property. 
+ * 
+ * Supports array-access-notation. Does not support accessing properties via '[<propName>]'.
+ * @param {Object} obj The object whose nested property is to be returned. 
+ * @param {String} path The property path. 
+ *        Separate properties with dot-notation. 
+ *        Access arrays with bracket-notation. 
+ *        E. g. "abilities[4].name"
+ * @param {Any} value The value to set. 
+ */
+export function setNestedPropertyValue(obj, path, value) {
+  const propertyPath = splitPropertyPath(path);
+	const propertyToSet = propertyPath.pop();
 
-  return _get(obj, properties, obj);
+	if (propertyToSet === undefined) {
+		const msg = `Failed to set value of property at '${path}'! Original context object:`;
+		throw new Error(`InvalidParameterException: ${msg}`);
+	}
+
+  const propertyOwner = _get(obj, propertyPath, obj);
+	propertyOwner[propertyToSet] = value;
 }
 
 /**
