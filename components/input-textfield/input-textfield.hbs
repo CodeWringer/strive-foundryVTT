@@ -1,0 +1,20 @@
+{{!-- Required context:
+vm: {InputTextFieldViewModel}
+cssClass: {String|undefined}
+readOnlyCssClass: {String|undefined}
+--}}
+{{#if isEditable}}
+  <input 
+    class="ambersteel-edit input-width-override {{cssClass}}"
+    data-property-path="{{propertyPath}}"
+    type="text"
+    name="{{name}}"
+    placeholder="{{placeholder}}"
+    value="{{lookupValue (isDefined contextOverride this) propertyPath itemId}}"
+  />
+{{else}}
+  {{!-- Display read-only value --}}
+  <div class="ambersteel-read-only pad-sm fill {{readOnlyCssClass}}" name="{{name}}">
+    {{localize (lookupValue (isDefined contextOverride this) propertyPath itemId)}}
+  </div>
+{{/if}}
