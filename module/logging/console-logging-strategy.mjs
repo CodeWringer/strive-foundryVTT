@@ -2,7 +2,7 @@ import { BaseLoggingStrategy, LogLevels } from "./base-logging-strategy.mjs";
 
 export class ConsoleLoggingStrategy extends BaseLoggingStrategy {
   constructor(logLevel = LogLevels.VERBOSE) {
-    this.logLevel = logLevel;
+    super(logLevel);
   }
 
   /**
