@@ -48,12 +48,12 @@ export class ConsoleLoggingStrategy extends BaseLoggingStrategy {
   }
 
   /**
-   * @param message 
+   * @param {Error | String} error 
    * @param context 
    * @private
    */
-  _error(message, context) {
-    console.error(message);
+  _error(error, context) {
+    console.error(error.message ?? error);
     if (context !== undefined) {
       console.error(context);
     }

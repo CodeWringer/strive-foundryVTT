@@ -18,8 +18,12 @@ export function activateListeners(html, ownerSheet, isOwner, isEditable) {
   for (const elem of html.find(".drop-down")) {
     const dataset = elem.dataset;
     const propertyHolder = dataset.itemId ? ownerSheet.getItem(dataset.itemId) : ownerSheet.getContextEntity();
-    const actualValue = getNestedPropertyValue(propertyHolder, dataset.propertyPath);
-    selectItemByValue(elem, actualValue);
+    try {
+      const actualValue = getNestedPropertyValue(propertyHolder, dataset.propertyPath);
+      selectItemByValue(elem, actualValue);
+    } catch (error) {
+      game.ambersteel.logger.logError(error);
+    }
   }
 
   // Ensure correct option of radio-buttons is set.
