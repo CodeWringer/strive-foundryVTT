@@ -52,9 +52,6 @@ export class BaseLoggingStrategy {
    */
   logError(error) {
     this.log(LogLevels.ERROR, `[ERROR] ${error.message ?? error}`);
-    if (error.innerError !== undefined) {
-      this.log(LogLevels.ERROR, error.innerError);
-    }
   }
 }
 
