@@ -16,6 +16,8 @@ import * as ListenerUtil from "./utils/listeners-utility.mjs";
 // Import logging classes. 
 import { BaseLoggingStrategy, LogLevels } from "./logging/base-logging-strategy.mjs";
 import { ConsoleLoggingStrategy } from "./logging/console-logging-strategy.mjs";
+// Import view models. 
+import InputTextFieldViewModel from './../components/input-textfield/input-textfield-viewmodel.mjs';
 
 /* -------------------------------------------- */
 /*  Init Hook                                   */
@@ -287,6 +289,17 @@ Handlebars.registerHelper('isDefined', function() {
 
 Handlebars.registerHelper('generateId', function() {
   return createUUID();
+});
+
+Handlebars.registerHelper('createInputTextFieldViewModel', function(isEditable, isSendable, propertyOwner, propertyPath, placeholder, value) {
+  return new InputTextFieldViewModel({
+    isEditable: isEditable,
+    isSendable: isSendable,
+    propertyOwner: propertyOwner,
+    propertyPath: propertyPath,
+    placeholder: placeholder,
+    value: value
+  });
 });
 
 /* -------------------------------------------- */

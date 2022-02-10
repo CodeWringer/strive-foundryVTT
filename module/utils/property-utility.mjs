@@ -1,10 +1,9 @@
 /**
  * @param obj 
  * @param properties 
- * @param originalObj 
  * @private
  */
-function _get(obj, properties, originalObj) {
+function _get(obj, properties) {
   if (!properties || properties.length === 0) return obj;
 
   const prop = properties.shift();
@@ -12,7 +11,7 @@ function _get(obj, properties, originalObj) {
 		const msg = `Failed to get value of property at '${prop}'! Original context object:`;
 		throw new Error(`InvalidStateException: ${msg}`);
   } else {
-    return _get(obj[prop], properties, originalObj);
+    return _get(obj[prop], properties);
   }
 }
 
@@ -60,7 +59,11 @@ export function splitPropertyPath(propertyPath) {
 export function getNestedPropertyValue(obj, path) {
   const propertyPath = splitPropertyPath(path);
 
-  return _get(obj, propertyPath, obj);
+	try {
+		return _get(obj, propertyPath);
+	} catch(error) {
+		throw new Error(`Failed to get nested property value: { path: ${path} }`, { cause: error });
+	}
 }
 
 /**
@@ -83,8 +86,12 @@ export function setNestedPropertyValue(obj, path, value) {
 		throw new Error(`InvalidParameterException: ${msg}`);
 	}
 
-  const propertyOwner = _get(obj, propertyPath, obj);
-	propertyOwner[propertyToSet] = value;
+	try {
+		const propertyOwner = _get(obj, propertyPath);
+		propertyOwner[propertyToSet] = value;
+	} catch (error) {
+		throw new Error(`Failed to set nested property value: { path: ${path}, value: ${value} }`, { cause: error });
+	}
 }
 
 /**

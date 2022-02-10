@@ -29,6 +29,8 @@ actor: {Actor} = {
     </div>
   </header>
 
+  {{> inputTextField vm=(createInputTextFieldViewModel isEditable isSendable actor "data.data.person.species") }}
+
   {{!-- Sheet Tab Navigation --}}
   <nav class="sheet-tabs tabs flex flex-justify" id="nav-sheet-tabs" data-group="primary">
     {{!-- Default tab is specified in actor-sheet.mjs --}}

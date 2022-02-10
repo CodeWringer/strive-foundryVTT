@@ -1,5 +1,5 @@
 import { TEMPLATES } from "../../module/templatePreloader.mjs";
-import ViewModel from "../viewmodel.mjs";
+import InputViewModel from "../input-viewmodel.mjs";
 
 /**
  * --- Inherited from ViewModel
@@ -19,13 +19,15 @@ import ViewModel from "../viewmodel.mjs";
  * 
  * @property {String} placeholder Optional. A placeholder text to display while the textfield is empty. 
  */
-export default class InputTextFieldViewModel extends ViewModel {
+export default class InputTextFieldViewModel extends InputViewModel {
   static get template() { return TEMPLATES.COMPONENT_INPUT_TEXTFIELD; }
 
-  constructor(args = {
-    placeholder: "",
-  }) {
+  constructor(args = {}) {
     super(args);
+    args = {
+      placeholder: "",
+      ...args,
+    }
     this.placeholder = this.placeholder;
   }
 }

@@ -16,22 +16,31 @@ import { setNestedPropertyValue, getNestedPropertyValue } from "../module/utils/
  * @property {Any} value Gets or sets the looked up value. 
  */
 export default class InputViewModel extends ViewModel {
-  constructor(args = {
-    propertyPath: undefined,
-    propertyOwner: undefined,
-  }) {
+  constructor(args = {}) {
     super(args);
+    args = {
+      propertyPath: undefined,
+      propertyOwner: undefined,
+      ...args,
+    }
     this.propertyPath = args.propertyPath;
     this.propertyOwner = args.propertyOwner;
   }
 
   get value() { return getNestedPropertyValue(this.propertyOwner, this.propertyPath); }
-  async set value(newValue) {
-    if (this.propertyOwner.updateProperty !== undefined) {
-      await this.propertyOwner.updateProperty(this.propertyPath, newValue);
-    } else {
-      setNestedPropertyValue(this.propertyOwner, this.propertyPath, newValue);
-    }
+  set value(newValue) {
+    return new Promise((resolve, reject) => {
+      try {
+        if (this.propertyOwner.updateProperty !== undefined) {
+          this.propertyOwner.updateProperty(this.propertyPath, newValue).then(resolve());
+        } else {
+          setNestedPropertyValue(this.propertyOwner, this.propertyPath, newValue);
+          resolve();
+        }
+      } catch (error) {
+        reject(error);
+      }
+    });
   }
 
   /**

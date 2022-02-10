@@ -1,4 +1,4 @@
-import { createUUID } from "../../module/utils/uuid-utility.mjs";
+import { createUUID } from "../module/utils/uuid-utility.mjs";
 
 /**
  * @property {Boolean} isEditable If true, input(s) will be in edit mode. If false, input(s) will be in read-only mode.
@@ -7,13 +7,15 @@ import { createUUID } from "../../module/utils/uuid-utility.mjs";
  * @property {String} template Static. Returns the template this ViewModel is intended for. 
  */
 export default class ViewModel {
-  static get template() { game.ambersteel.logError("Not implemented!"); }
+  static get template() { throw new Error("NotImplementedException") }
 
-  constructor(args = {
-    isEditable: false,
-    isSendable: false,
-    id = createUUID()
-  }) {
+  constructor(args = {}) {
+    args = {
+      isEditable: false,
+      isSendable: false,
+      id: createUUID(),
+      ...args,
+    }
     this.isEditable = args.isEditable;
     this.isSendable = args.isSendable;
     this.id = args.id;
