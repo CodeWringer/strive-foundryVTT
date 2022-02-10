@@ -14,7 +14,7 @@ import { TEMPLATES } from "./templatePreloader.mjs";
 import { createUUID } from './utils/uuid-utility.mjs';
 import * as ListenerUtil from "./utils/listeners-utility.mjs";
 // Import logging classes. 
-import { BaseLoggingStrategy } from "./logging/base-logging-strategy.mjs";
+import { BaseLoggingStrategy, LogLevels } from "./logging/base-logging-strategy.mjs";
 import { ConsoleLoggingStrategy } from "./logging/console-logging-strategy.mjs";
 
 /* -------------------------------------------- */
@@ -300,6 +300,7 @@ Handlebars.registerPartial('buttonRoll', `{{#> "${TEMPLATES.COMPONENT_BUTTON_ROL
 Handlebars.registerPartial('buttonSendToChat', `{{#> "${TEMPLATES.COMPONENT_BUTTON_SEND_TO_CHAT}"}}{{/"${TEMPLATES.COMPONENT_BUTTON_SEND_TO_CHAT}"}}`);
 Handlebars.registerPartial('numberSpinner', `{{#> "${TEMPLATES.COMPONENT_NUMBER_SPINNER}"}}{{> @partial-block }}{{/"${TEMPLATES.COMPONENT_NUMBER_SPINNER}"}}`);
 Handlebars.registerPartial('inputComponent', `{{#> "${TEMPLATES.COMPONENT_INPUT}"}}{{/"${TEMPLATES.COMPONENT_INPUT}"}}`);
+Handlebars.registerPartial('inputTextField', `{{#> "${TEMPLATES.COMPONENT_INPUT_TEXTFIELD}"}}{{/"${TEMPLATES.COMPONENT_INPUT_TEXTFIELD}"}}`);
 Handlebars.registerPartial('inputLabel', `{{#> "${TEMPLATES.COMPONENT_INPUT_LABEL}"}}{{/"${TEMPLATES.COMPONENT_INPUT_LABEL}"}}`);
 Handlebars.registerPartial('buttonOpenSheet', `{{#> "${TEMPLATES.COMPONENT_BUTTON_OPEN_SHEET}"}}{{/"${TEMPLATES.COMPONENT_BUTTON_OPEN_SHEET}"}}`);
 Handlebars.registerPartial('buttonToggleVisibility', `{{#> "${TEMPLATES.COMPONENT_TOGGLE_VISIBILITY}"}}{{> @partial-block }}{{/"${TEMPLATES.COMPONENT_TOGGLE_VISIBILITY}"}}`);
