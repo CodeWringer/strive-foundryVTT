@@ -2,10 +2,15 @@ import ViewModel from "./viewmodel.mjs";
 import { setNestedPropertyValue, getNestedPropertyValue } from "../module/utils/property-utility.mjs";
 
 /**
+ * --- Inherited from ViewModel
+ * 
  * @property {Boolean} isEditable If true, input(s) will be in edit mode. If false, input(s) will be in read-only mode.
  * @property {Boolean} isSendable If true, the object can be sent to chat. 
  * @property {String} id Optional. Id used for the HTML element's id and name attributes. 
  * @property {String} template Static. Returns the template this ViewModel is intended for. 
+ * 
+ * --- Own properties
+ * 
  * @property {String} propertyPath The path used to look up the value. 
  * @property {Object} propertyOwner An object on which to to look up the value. 
  * @property {Any} value Gets or sets the looked up value. 
@@ -41,7 +46,9 @@ export default class InputViewModel extends ViewModel {
     // -------------------------------------------------------------
     if (!isEditable) return;
 
-    html.find(".ambersteel-edit").change(this._onEdit.bind(this));
+    // html.getElementById(this.id).change(this._onEdit.bind(this));
+    // html.find(".ambersteel-edit").change(this._onEdit.bind(this));
+    html.find(`#${this.id}`).change(this._onEdit.bind(this));
   }
   
   /**
