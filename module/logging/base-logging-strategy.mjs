@@ -52,11 +52,11 @@ export class BaseLoggingStrategy {
 
   /**
    * Writes the given message to the log, at error log level. 
-   * @param {String} message A message to write to the log. 
+   * @param {Error | String} error An error (message) to write to the log. 
    * @param {Any} context Optional. A context object to also write to the log. 
    */
-  logError(message, context) {
-    this.log(LogLevels.ERROR, `[ERROR] ${message}`, context);
+  logError(error, context) {
+    this.log(LogLevels.ERROR, `[ERROR] ${error}`, context);
   }
 }
 
@@ -64,8 +64,8 @@ export class BaseLoggingStrategy {
  * Enum of available log levels. 
  */
 export const LogLevels = {
-  VERBOSE: 0,
-  DEBUG: 1,
-  WARN: 2,
-  ERROR: 3
+  ERROR: 0,
+  WARN: 1,
+  DEBUG: 2,
+  VERBOSE: 3
 }
