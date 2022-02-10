@@ -17,46 +17,44 @@ export class BaseLoggingStrategy {
    * Writes the given message to the log, at the given log level. 
    * @param {LogLevels} level The logging level. 
    * @param {String} message A message to write to the log. 
-   * @param {Any} context Optional. A context object to also write to the log. 
    */
-  log(level, message, context) {
+  log(level, message) {
     // Concrete logging implementation required in implementing types.
   }
 
   /**
    * Writes the given message to the log, at verbose log level. 
    * @param {String} message A message to write to the log. 
-   * @param {Any} context Optional. A context object to also write to the log. 
    */
-  logVerbose(message, context) {
-    this.log(LogLevels.VERBOSE, `[VERBOSE] ${message}`, context);
+  logVerbose(message) {
+    this.log(LogLevels.VERBOSE, `[VERBOSE] ${message}`);
   }
 
   /**
    * Writes the given message to the log, at debug log level. 
    * @param {String} message A message to write to the log. 
-   * @param {Any} context Optional. A context object to also write to the log. 
    */
-  logDebug(message, context) {
-    this.log(LogLevels.DEBUG, `[DEBUG] ${message}`, context);
+  logDebug(message) {
+    this.log(LogLevels.DEBUG, `[DEBUG] ${message}`);
   }
 
   /**
    * Writes the given message to the log, at warn log level. 
    * @param {String} message A message to write to the log. 
-   * @param {Any} context Optional. A context object to also write to the log. 
    */
-  logWarn(message, context) {
-    this.log(LogLevels.WARN, `[WARN] ${message}`, context);
+  logWarn(message) {
+    this.log(LogLevels.WARN, `[WARN] ${message}`);
   }
 
   /**
    * Writes the given message to the log, at error log level. 
    * @param {Error | String} error An error (message) to write to the log. 
-   * @param {Any} context Optional. A context object to also write to the log. 
    */
-  logError(error, context) {
-    this.log(LogLevels.ERROR, `[ERROR] ${error}`, context);
+  logError(error) {
+    this.log(LogLevels.ERROR, `[ERROR] ${error.message ?? error}`);
+    if (error.innerError !== undefined) {
+      this.log(LogLevels.ERROR, error.innerError);
+    }
   }
 }
 
