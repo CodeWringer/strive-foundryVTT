@@ -56,5 +56,14 @@ describe('ConsoleLoggingStrategy', function() {
       logger.logError("Error");
       logger._error.should.be.calledOnce();
     });
+
+    it('should succeed with error object', function() {
+      const logger = new ConsoleLoggingStrategy();
+      logger.logLevel = LogLevels.ERROR;
+    
+      sinon.spy(logger, "_error");
+      logger.logError(new Error("Error"));
+      logger._error.should.be.calledOnce();
+    });
   });
 });
