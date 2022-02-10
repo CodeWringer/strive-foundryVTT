@@ -1,5 +1,4 @@
 import { TEMPLATES } from "../../module/templatePreloader.mjs";
-import { getNestedPropertyValue } from "../../module/utils/property-utility.mjs";
 import ViewModel from "../viewmodel.mjs";
 
 /**
@@ -9,28 +8,16 @@ import ViewModel from "../viewmodel.mjs";
  * @property {String} template Static. Returns the template this ViewModel is intended for. 
  * @property {String} propertyPath The path used to look up the value. 
  * @property {Object} propertyOwner An object on which to to look up the value. 
+ * @property {Any} value Gets or sets the looked up value. 
  * @property {String} placeholder Optional. A placeholder text to display while the textfield is empty. 
  */
 export default class InputTextFieldViewModel extends ViewModel {
   static get template() { return TEMPLATES.COMPONENT_INPUT_TEXTFIELD; }
 
   constructor(args = {
-    propertyPath: undefined,
-    propertyOwner: undefined,
     placeholder: "",
   }) {
     super(args);
-    this.propertyPath = args.propertyPath;
-    this.propertyOwner = args.propertyOwner;
     this.placeholder = this.placeholder;
-  }
-
-  get value() { return getNestedPropertyValue(this.propertyOwner, this.propertyPath); }
-  async set value(newValue) {
-    if (this.propertyOwner.updateProperty !== undefined) {
-      await this.propertyOwner.updateProperty(this.propertyPath, newValue);
-    } else {
-      
-    }
   }
 }

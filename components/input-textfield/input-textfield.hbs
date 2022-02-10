@@ -3,18 +3,23 @@ vm: {InputTextFieldViewModel}
 cssClass: {String|undefined}
 readOnlyCssClass: {String|undefined}
 --}}
-{{#if isEditable}}
+{{#if vm.isEditable}}
   <input 
     class="ambersteel-edit input-width-override {{cssClass}}"
-    data-property-path="{{propertyPath}}"
+    data-property-path="{{vm.propertyPath}}"
     type="text"
-    name="{{name}}"
-    placeholder="{{placeholder}}"
-    value="{{lookupValue (isDefined contextOverride this) propertyPath itemId}}"
+    name="{{vm.id}}"
+    id="{{vm.id}}"
+    placeholder="{{vm.placeholder}}"
+    value="{{vm.value}}"
   />
 {{else}}
   {{!-- Display read-only value --}}
-  <div class="ambersteel-read-only pad-sm fill {{readOnlyCssClass}}" name="{{name}}">
-    {{localize (lookupValue (isDefined contextOverride this) propertyPath itemId)}}
+  <div 
+    class="ambersteel-read-only pad-sm fill {{readOnlyCssClass}}" 
+    name="{{vm.id}}"
+    id="{{vm.id}}"
+  >
+    {{localize vm.value}}
   </div>
 {{/if}}
