@@ -118,17 +118,14 @@ textarea.resize-none {
   resize: none;
 }
 
-// Override default style
-textarea.ambersteel-edit {
+// Input styles
+
+// Default textarea override
+textarea.custom-edit {
   border-color: $c-border-input;
 }
 
-// Chat styles
-.ambersteel-item-to-chat-margin-right {
-  margin-right: 2%;
-}
-
-.ambersteel-read-only {
+.custom-read-only {
   background: repeating-linear-gradient(45deg, rgba(0,0,0,0.07), transparent, rgba(0,0,0,0.07) 10px);
   border-radius: 0.2rem;
   font-weight: bold;
@@ -137,19 +134,25 @@ textarea.ambersteel-edit {
   min-height: 26px;
 }
 
+// Default width override
+input[type="text"].input-width-override {
+  width: 100%;
+}
+
+// Chat styles
+.ambersteel-item-to-chat-margin-right {
+  margin-right: 2%;
+}
+
+// Image styles
+
 img.header-image {
   background: $c-bg-medium;
   border-radius: 0.2rem;
   border: 1px solid $c-border-beige-light;
 }
 
-// Image styles
 .inline-img {
   border: none;
   display: inline-block;
-}
-
-// Input overrides
-input[type="text"].input-width-override {
-  width: 100%;
 }

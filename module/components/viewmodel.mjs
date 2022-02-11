@@ -1,4 +1,4 @@
-import { createUUID } from "../module/utils/uuid-utility.mjs";
+import { createUUID } from "../utils/uuid-utility.mjs";
 
 /**
  * @property {Boolean} isEditable If true, input(s) will be in edit mode. If false, input(s) will be in read-only mode.

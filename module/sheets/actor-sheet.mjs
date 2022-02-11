@@ -1,5 +1,7 @@
+import SheetViewModelCollection from "./sheet-viewmodel-collection.mjs";
 import AmbersteelNpcActorSheet from "./subtypes/actor/ambersteel-npc-actor-sheet.mjs";
 import AmbersteelPcActorSheet from "./subtypes/actor/ambersteel-pc-actor-sheet.mjs";
+import * as SheetUtil from "../utils/sheet-utility.mjs";
 
 export class AmbersteelActorSheet extends ActorSheet {
   /**
@@ -25,7 +27,12 @@ export class AmbersteelActorSheet extends ActorSheet {
     return this._subType;
   }
 
-  /** @override */
+  /**
+   * @returns {Object}
+   * @override
+   * @virtual
+   * @see https://foundryvtt.com/api/ActorSheet.html#.defaultOptions
+   */
   static get defaultOptions() {
     return mergeObject(super.defaultOptions, {
       classes: ["ambersteel", "sheet", "actor"],
@@ -40,9 +47,24 @@ export class AmbersteelActorSheet extends ActorSheet {
    * @returns {String} Path to the template. 
    * @virtual
    * @override
+   * @see https://foundryvtt.com/api/DocumentSheet.html#template
    */
   get template() {
     return this.subType.template;
+  }
+
+  /**
+   * @type {SheetViewModelCollection}
+   * @private
+   */
+  _viewModels = undefined;
+  /**
+   * @returns {SheetViewModelCollection}
+   */
+  get viewModels() { return this._viewModels; }
+
+  constructor() {
+    this.viewModels = new SheetViewModelCollection(this);
   }
 
   /** 
@@ -51,6 +73,7 @@ export class AmbersteelActorSheet extends ActorSheet {
    * Enriched means, it contains derived data and convenience properties. 
    * @returns {Object} The enriched context object. 
    * @override 
+   * @see https://foundryvtt.com/api/FormApplication.html#getData
    */
   getData() {
     const context = super.getData();
@@ -75,13 +98,37 @@ export class AmbersteelActorSheet extends ActorSheet {
     return context;
   }
 
-  /** @override */
+  /**
+   * @override
+   * @see https://foundryvtt.com/api/FormApplication.html#activateListeners
+   */
   activateListeners(html) {
     super.activateListeners(html);
-    const isOwner = this.actor.isOwner;
-    const isEditable = this.isEditable;
 
+    // Activate view model bound event listeners. 
+    SheetUtil.activateListeners(html, this);
+
+    // TOOD: Remove?
     // Subtype listeners. 
-    this.subType.activateListeners(html, isOwner, isEditable);
+    // this.subType.activateListeners(html, isOwner, isEditable, isSendable);
+  }
+
+  /**
+   * @param force 
+   * @param options 
+   * @override
+   * @see https://foundryvtt.com/api/ActorSheet.html#render
+   */
+  render(force, options) {
+    super.render(force, options);
+  }
+
+  /**
+   * @override
+   * @see https://foundryvtt.com/api/FormApplication.html#close
+   */
+  async close() {
+    this.viewModels.clear();
+    return super.close();
   }
 }

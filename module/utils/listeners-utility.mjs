@@ -7,6 +7,7 @@ import * as ButtonTakeItem from '../components/button-take-item.mjs';
 import * as ButtonToggleVisibility from '../components/button-toggle-visibility.mjs';
 import * as ComponentInput from '../components/input.mjs';
 import * as ComponentNumberSpinner from '../components/number-spinner.mjs';
+import * as InputComponent from "../components/input-viewmodel.mjs";
 
 /**
  * The global singleton that holds all the DOM event register functions. 
@@ -22,7 +23,8 @@ const listeners = [
   ButtonTakeItem.activateListeners,
   ButtonToggleVisibility.activateListeners,
   ComponentInput.activateListeners,
-  ComponentNumberSpinner.activateListeners
+  ComponentNumberSpinner.activateListeners,
+  InputComponent.activateListeners
 ];
 
 /**

@@ -1,5 +1,6 @@
 import ViewModel from "./viewmodel.mjs";
-import { setNestedPropertyValue, getNestedPropertyValue } from "../module/utils/property-utility.mjs";
+import { setNestedPropertyValue, getNestedPropertyValue } from "../utils/property-utility.mjs";
+import { getElementValue } from "../utils/sheet-utility.mjs";
 
 /**
  * --- Inherited from ViewModel
@@ -27,7 +28,13 @@ export default class InputViewModel extends ViewModel {
     this.propertyOwner = args.propertyOwner;
   }
 
+  /**
+   * @type {Any}
+   */
   get value() { return getNestedPropertyValue(this.propertyOwner, this.propertyPath); }
+  /**
+   * @param {Any} newValue
+   */
   set value(newValue) {
     return new Promise((resolve, reject) => {
       try {
@@ -45,27 +52,27 @@ export default class InputViewModel extends ViewModel {
 
   /**
    * Registers events on elements of the given DOM. 
-   * @param html {Object} DOM of the sheet for which to register listeners. 
-   * @param isOwner {Boolean} If true, registers events that require owner permission. 
-   * @param isEditable {Boolean} If true, registers events that require editing permission. 
+   * @param {Object} html DOM of the sheet for which to register listeners. 
+   * @param {Boolean} isOwner If true, registers events that require owner permission. 
+   * @param {Boolean} isEditable If true, registers events that require editing permission. 
+   * @param {Boolean} isSendable If true, registers events that require sendToChat permission. 
    */
-  activateListeners(html, isOwner, isEditable) {
+  activateListeners(html, isOwner, isEditable, isSendable) {
     // -------------------------------------------------------------
     if (!isOwner) return;
     // -------------------------------------------------------------
     if (!isEditable) return;
 
-    // html.getElementById(this.id).change(this._onEdit.bind(this));
-    // html.find(".ambersteel-edit").change(this._onEdit.bind(this));
-    html.find(`#${this.id}`).change(this._onEdit.bind(this));
+    html.find(`.custom-edit#${this.id}`).change(this._onEdit.bind(this));
   }
-  
+
   /**
    * @param event 
    * @private
+   * @async
    */
   async _onEdit(event) {
     const newValue = getElementValue(event.currentTarget);
-    this.value = newValue;
+    this.value = await newValue;
   }
 }

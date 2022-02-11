@@ -5,7 +5,7 @@ readOnlyCssClass: {String|undefined}
 --}}
 {{#if vm.isEditable}}
   <input 
-    class="ambersteel-edit input-width-override {{cssClass}}"
+    class="custom-edit input-width-override {{cssClass}}"
     data-property-path="{{vm.propertyPath}}"
     type="text"
     name="{{vm.id}}"
@@ -16,7 +16,7 @@ readOnlyCssClass: {String|undefined}
 {{else}}
   {{!-- Display read-only value --}}
   <div 
-    class="ambersteel-read-only pad-sm fill {{readOnlyCssClass}}" 
+    class="custom-read-only pad-sm fill {{readOnlyCssClass}}" 
     name="{{vm.id}}"
     id="{{vm.id}}"
   >

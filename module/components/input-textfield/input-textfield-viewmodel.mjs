@@ -1,4 +1,4 @@
-import { TEMPLATES } from "../../module/templatePreloader.mjs";
+import { TEMPLATES } from "../../templatePreloader.mjs";
 import InputViewModel from "../input-viewmodel.mjs";
 
 /**

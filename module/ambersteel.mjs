@@ -17,7 +17,8 @@ import * as ListenerUtil from "./utils/listeners-utility.mjs";
 import { BaseLoggingStrategy, LogLevels } from "./logging/base-logging-strategy.mjs";
 import { ConsoleLoggingStrategy } from "./logging/console-logging-strategy.mjs";
 // Import view models. 
-import InputTextFieldViewModel from './../components/input-textfield/input-textfield-viewmodel.mjs';
+import ViewModelCollection from './utils/viewmodel-collection.mjs';
+import InputTextFieldViewModel from './components/input-textfield/input-textfield-viewmodel.mjs';
 
 /* -------------------------------------------- */
 /*  Init Hook                                   */
@@ -156,6 +157,7 @@ Hooks.once('init', async function() {
         this.logger = new ConsoleLoggingStrategy(LogLevels.DEBUG);
       }
     },
+    viewModels: new ViewModelCollection()
   };
 
   // Set initiative formula. 
@@ -292,7 +294,7 @@ Handlebars.registerHelper('generateId', function() {
 });
 
 Handlebars.registerHelper('createInputTextFieldViewModel', function(isEditable, isSendable, propertyOwner, propertyPath, placeholder, value) {
-  return new InputTextFieldViewModel({
+  const vm = new InputTextFieldViewModel({
     isEditable: isEditable,
     isSendable: isSendable,
     propertyOwner: propertyOwner,
@@ -300,6 +302,11 @@ Handlebars.registerHelper('createInputTextFieldViewModel', function(isEditable, 
     placeholder: placeholder,
     value: value
   });
+
+  // Add new view model instance to global collection. 
+  game.ambersteel.viewModels.set(vm.id, vm);
+
+  return vm;
 });
 
 /* -------------------------------------------- */
@@ -320,7 +327,7 @@ Handlebars.registerPartial('buttonToggleVisibility', `{{#> "${TEMPLATES.COMPONEN
 Handlebars.registerPartial('buttonTakeItem', `{{#> "${TEMPLATES.COMPONENT_BUTTON_TAKE_ITEM}"}}{{/"${TEMPLATES.COMPONENT_BUTTON_TAKE_ITEM}"}}`);
 
 /* -------------------------------------------- */
-/*  Ready Hook                                  */
+/*  Hooks                                       */
 /* -------------------------------------------- */
 
 // Hooks.once("ready", async function() {
