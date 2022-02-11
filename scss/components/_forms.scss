@@ -121,11 +121,11 @@ textarea.resize-none {
 // Input styles
 
 // Default textarea override
-textarea.custom-edit {
+textarea.custom-system-edit {
   border-color: $c-border-input;
 }
 
-.custom-read-only {
+.custom-system-read-only {
   background: repeating-linear-gradient(45deg, rgba(0,0,0,0.07), transparent, rgba(0,0,0,0.07) 10px);
   border-radius: 0.2rem;
   font-weight: bold;

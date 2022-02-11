@@ -35,8 +35,8 @@ export function selectItemByValue(selectElement, valueToSelect){
  * @param {HTMLElement | JQuery} html 
  */
 export function getAllInputs(html) {
-  const cssClassEdits = "custom-edit";
-  const cssClassReadOnlys = "custom-read-only";
+  const cssClassEdits = "custom-system-edit";
+  const cssClassReadOnlys = "custom-system-read-only";
 
   // TODO: This probably won't work with a HTMLElement. Make it work. 
   const edits = html.find(cssClassEdits);
@@ -57,7 +57,7 @@ export function activateListeners(html, ownerSheet) {
 
   // Pull view models from global collection and hook up event listeners. 
   if (ownerSheet.viewModels !== undefined) {
-    // Get all elements from the given DOM which have one of the following css classes: "custom-edit" or "custom-read-only"
+    // Get all elements from the given DOM which have one of the following css classes: "custom-system-edit" or "custom-system-read-only"
     const inputs = SheetUtil.getAllInputs(html);
     for (const input of inputs) {
       const id = input.id;

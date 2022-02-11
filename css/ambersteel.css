@@ -752,11 +752,11 @@ textarea.resize-none {
   resize: none;
 }
 
-textarea.custom-edit {
+textarea.custom-system-edit {
   border-color: #7a7971;
 }
 
-.custom-read-only {
+.custom-system-read-only {
   background: -o-repeating-linear-gradient(45deg, rgba(0, 0, 0, 0.07), transparent, rgba(0, 0, 0, 0.07) 10px);
   background: repeating-linear-gradient(45deg, rgba(0, 0, 0, 0.07), transparent, rgba(0, 0, 0, 0.07) 10px);
   border-radius: 0.2rem;

@@ -63,7 +63,7 @@ export default class InputViewModel extends ViewModel {
     // -------------------------------------------------------------
     if (!isEditable) return;
 
-    html.find(`.custom-edit#${this.id}`).change(this._onEdit.bind(this));
+    html.find(`.custom-system-edit#${this.id}`).change(this._onEdit.bind(this));
   }
 
   /**
