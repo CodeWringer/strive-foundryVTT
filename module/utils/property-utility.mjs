@@ -76,21 +76,47 @@ export function getNestedPropertyValue(obj, path) {
  *        Access arrays with bracket-notation. 
  *        E. g. "abilities[4].name"
  * @param {Any} value The value to set. 
+ * @throws {Error} InvalidParameterException If the given path doesn't resolve to a property. 
+ * @throws {Error} UnknownException If updating the property failed. 
  */
 export function setNestedPropertyValue(obj, path, value) {
   const propertyPath = splitPropertyPath(path);
 	const propertyToSet = propertyPath.pop();
 
 	if (propertyToSet === undefined) {
-		const msg = `Failed to set value of property at '${path}'! Original context object:`;
-		throw new Error(`InvalidParameterException: ${msg}`);
+		throw new Error(`InvalidParameterException: Failed to set value of property at '${path}'!`);
 	}
 
 	try {
 		const propertyOwner = _get(obj, propertyPath);
 		propertyOwner[propertyToSet] = value;
 	} catch (error) {
-		throw new Error(`Failed to set nested property value: { path: ${path}, value: ${value} }`, { cause: error });
+		throw new Error(`UnknownException: Failed to set nested property value: { path: ${path}, value: ${value} }`, { cause: error });
+	}
+}
+
+/**
+ * Deletes a nested property. 
+ * 
+ * Supports array-access-notation. Does not support accessing properties via '[<propName>]'.
+ * @param {Object} obj 
+ * @param {String} path 
+ * @throws {Error} InvalidParameterException If the given path doesn't resolve to a property. 
+ * @throws {Error} UnknownException If deleting the property failed. 
+ */
+export function deleteNestedProperty(obj, path) {
+  const propertyPath = splitPropertyPath(path);
+	const propertyToDelete = propertyPath.pop();
+
+	if (propertyToDelete === undefined) {
+		throw new Error(`InvalidParameterException: Failed to delete property at '${path}'!`);
+	}
+
+	try {
+		const propertyOwner = _get(obj, propertyPath);
+		delete propertyOwner[propertyToSet];
+	} catch (error) {
+		throw new Error(`UnknownException: Failed to delete nested property: { path: ${path} }`, { cause: error });
 	}
 }
 
