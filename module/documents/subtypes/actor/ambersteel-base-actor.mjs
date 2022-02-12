@@ -177,16 +177,16 @@ export default class AmbersteelBaseActor {
 
     actorData.skills = (this.parent.items.filter(item => {
       return item.data.type == "skill" && parseInt(item.data.data.value) > 0
-    })).map(it => it.data);
+    }));
     for (const oSkill of actorData.skills) {
-      this._prepareDerivedSkillData(oSkill._id);
+      this._prepareDerivedSkillData(oSkill.id);
     };
 
     actorData.learningSkills = (this.parent.items.filter(item => {
       return item.data.type == "skill" && parseInt(item.data.data.value) == 0
-    })).map(it => it.data);
+    }));
     for (const oSkill of actorData.learningSkills) {
-      this._prepareDerivedSkillData(oSkill._id);
+      this._prepareDerivedSkillData(oSkill.id);
     };
   }
 
