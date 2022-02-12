@@ -42,6 +42,11 @@ export default class ViewModel {
    */
   get isSendable() { return this._isSendable; }
 
+  /**
+   * @param {Boolean | undefined} args.isEditable 
+   * @param {Boolean | undefined} args.isSendable 
+   * @param {String | undefined} args.id
+   */
   constructor(args = {}) {
     args = {
       isEditable: false,

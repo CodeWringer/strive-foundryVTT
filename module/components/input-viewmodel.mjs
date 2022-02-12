@@ -78,6 +78,13 @@ export default class InputViewModel extends ViewModel {
    */
   get owningSheet() { return this._owningSheet; }
 
+  /**
+   * @param {Boolean | undefined} args.isEditable 
+   * @param {Boolean | undefined} args.isSendable 
+   * @param {String | undefined} args.id
+   * @param {String} args.propertyPath
+   * @param {Object} args.propertyOwner
+   */
   constructor(args = {}) {
     super(args);
     args = {
