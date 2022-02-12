@@ -59,7 +59,7 @@ export function getAllInputs(html) {
  * @param {DocumentSheet} ownerSheet The {DocumentSheet} whose rendered HTML is passed. 
  */
 export function activateListeners(html, ownerSheet) {
-  const isOwner = ownerSheet.actor.isOwner;
+  const isOwner = (ownerSheet.actor ?? ownerSheet.item).isOwner;
   const isEditable = ownerSheet.isEditable;
   const isSendable = isOwner;
 
