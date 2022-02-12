@@ -13,12 +13,17 @@ import AdvancementRequirements from "./dto/advancement-requirement.mjs";
 import { TEMPLATES } from "./templatePreloader.mjs";
 import { createUUID } from './utils/uuid-utility.mjs';
 import * as ListenerUtil from "./utils/listeners-utility.mjs";
+import ChoiceOption from "./dto/choice-option.mjs";
 // Import logging classes. 
 import { BaseLoggingStrategy, LogLevels } from "./logging/base-logging-strategy.mjs";
 import { ConsoleLoggingStrategy } from "./logging/console-logging-strategy.mjs";
 // Import view models. 
 import ViewModelCollection from './utils/viewmodel-collection.mjs';
 import InputTextFieldViewModel from './components/input-textfield/input-textfield-viewmodel.mjs';
+import InputDropDownViewModel from './components/input-dropdown/input-dropdown-viewmodel.mjs';
+import InputNumberSpinnerViewModel from './components/input-number-spinner/input-number-spinner-viewmodel.mjs';
+import InputTextareaViewModel from './components/input-textarea/input-textarea-viewmodel.mjs';
+import InputRadioButtonGroupViewModel from './components/input-radio-button-group/input-radio-button-group-viewmodel.mjs';
 
 /* -------------------------------------------- */
 /*  Init Hook                                   */
@@ -157,7 +162,30 @@ Hooks.once('init', async function() {
         this.logger = new ConsoleLoggingStrategy(LogLevels.DEBUG);
       }
     },
-    viewModels: new ViewModelCollection()
+    /**
+     * The global collection of view models. 
+     * 
+     * Any newly instantiated view models will be added to this list. Then, during their activateListeners-call, 
+     * they'll pull (remove) themselves from this list and add themselves to their corresponding owner. 
+     * An owner could be an {ActorSheet} or {ItemSheet}. 
+     * @type {ViewModelCollection}
+     */
+    viewModels: new ViewModelCollection(),
+    /**
+     * Returns an array of {ChoiceOption}s for use in a drop-down input. 
+     * @returns {Array<ChoiceOption>}
+     */
+    getAttributeOptions() {
+      const result = [];
+
+      for (const attributeName in ambersteelConfig.character.attributes) {
+        const attribute = ambersteelConfig.character.attributes[attributeName];
+        const localizedName = game.i18n.localize(attribute.localizableName);
+        result.push(new ChoiceOption(attribute.name, localizedName));
+      }
+
+      return result;
+    }
   };
 
   // Set initiative formula. 
@@ -293,14 +321,79 @@ Handlebars.registerHelper('generateId', function() {
   return createUUID();
 });
 
-Handlebars.registerHelper('createInputTextFieldViewModel', function(isEditable, isSendable, propertyOwner, propertyPath, placeholder, value) {
+// ---- ViewModel creation helpers
+
+Handlebars.registerHelper('createInputTextFieldViewModel', function(isEditable, isSendable, propertyOwner, propertyPath, localizablePlaceholder) {
   const vm = new InputTextFieldViewModel({
     isEditable: isEditable,
     isSendable: isSendable,
     propertyOwner: propertyOwner,
     propertyPath: propertyPath,
-    placeholder: placeholder,
-    value: value
+    placeholder: game.i18n.localize(localizablePlaceholder)
+  });
+
+  // Add new view model instance to global collection. 
+  game.ambersteel.viewModels.set(vm.id, vm);
+
+  return vm;
+});
+
+Handlebars.registerHelper('createInputDropDownViewModel', function(isEditable, isSendable, propertyOwner, propertyPath, options) {
+  const vm = new InputDropDownViewModel({
+    isEditable: isEditable,
+    isSendable: isSendable,
+    propertyOwner: propertyOwner,
+    propertyPath: propertyPath,
+    options: options
+  });
+
+  // Add new view model instance to global collection. 
+  game.ambersteel.viewModels.set(vm.id, vm);
+
+  return vm;
+});
+
+Handlebars.registerHelper('createInputNumberSpinnerViewModel', function(isEditable, isSendable, propertyOwner, propertyPath, step, min, max) {
+  const vm = new InputNumberSpinnerViewModel({
+    isEditable: isEditable,
+    isSendable: isSendable,
+    propertyOwner: propertyOwner,
+    propertyPath: propertyPath,
+    step: step,
+    min: min,
+    max: max
+  });
+
+  // Add new view model instance to global collection. 
+  game.ambersteel.viewModels.set(vm.id, vm);
+
+  return vm;
+});
+
+Handlebars.registerHelper('createInputTextareaViewModel', function(isEditable, isSendable, propertyOwner, propertyPath, placeholder, allowResize, spellcheck) {
+  const vm = new InputTextareaViewModel({
+    isEditable: isEditable,
+    isSendable: isSendable,
+    propertyOwner: propertyOwner,
+    propertyPath: propertyPath,
+    allowResize: allowResize,
+    spellcheck: spellcheck,
+    placeholder: placeholder
+  });
+
+  // Add new view model instance to global collection. 
+  game.ambersteel.viewModels.set(vm.id, vm);
+
+  return vm;
+});
+
+Handlebars.registerHelper('createInputRadioButtonGroupViewModel', function(isEditable, isSendable, propertyOwner, propertyPath, options) {
+  const vm = new InputRadioButtonGroupViewModel({
+    isEditable: isEditable,
+    isSendable: isSendable,
+    propertyOwner: propertyOwner,
+    propertyPath: propertyPath,
+    options: options
   });
 
   // Add new view model instance to global collection. 
@@ -313,18 +406,22 @@ Handlebars.registerHelper('createInputTextFieldViewModel', function(isEditable, 
 /*  Handlebars Partials                         */
 /* -------------------------------------------- */
 
-// Components
+// Button components
 Handlebars.registerPartial('buttonAdd', `{{#> "${TEMPLATES.COMPONENT_BUTTON_ADD}"}}{{/"${TEMPLATES.COMPONENT_BUTTON_ADD}"}}`);
 Handlebars.registerPartial('buttonDelete', `{{#> "${TEMPLATES.COMPONENT_BUTTON_DELETE}"}}{{/"${TEMPLATES.COMPONENT_BUTTON_DELETE}"}}`);
 Handlebars.registerPartial('buttonRoll', `{{#> "${TEMPLATES.COMPONENT_BUTTON_ROLL}"}}{{/"${TEMPLATES.COMPONENT_BUTTON_ROLL}"}}`);
 Handlebars.registerPartial('buttonSendToChat', `{{#> "${TEMPLATES.COMPONENT_BUTTON_SEND_TO_CHAT}"}}{{/"${TEMPLATES.COMPONENT_BUTTON_SEND_TO_CHAT}"}}`);
-Handlebars.registerPartial('numberSpinner', `{{#> "${TEMPLATES.COMPONENT_NUMBER_SPINNER}"}}{{> @partial-block }}{{/"${TEMPLATES.COMPONENT_NUMBER_SPINNER}"}}`);
-Handlebars.registerPartial('inputComponent', `{{#> "${TEMPLATES.COMPONENT_INPUT}"}}{{/"${TEMPLATES.COMPONENT_INPUT}"}}`);
-Handlebars.registerPartial('inputTextField', `{{#> "${TEMPLATES.COMPONENT_INPUT_TEXTFIELD}"}}{{/"${TEMPLATES.COMPONENT_INPUT_TEXTFIELD}"}}`);
-Handlebars.registerPartial('inputLabel', `{{#> "${TEMPLATES.COMPONENT_INPUT_LABEL}"}}{{/"${TEMPLATES.COMPONENT_INPUT_LABEL}"}}`);
 Handlebars.registerPartial('buttonOpenSheet', `{{#> "${TEMPLATES.COMPONENT_BUTTON_OPEN_SHEET}"}}{{/"${TEMPLATES.COMPONENT_BUTTON_OPEN_SHEET}"}}`);
 Handlebars.registerPartial('buttonToggleVisibility', `{{#> "${TEMPLATES.COMPONENT_TOGGLE_VISIBILITY}"}}{{> @partial-block }}{{/"${TEMPLATES.COMPONENT_TOGGLE_VISIBILITY}"}}`);
 Handlebars.registerPartial('buttonTakeItem', `{{#> "${TEMPLATES.COMPONENT_BUTTON_TAKE_ITEM}"}}{{/"${TEMPLATES.COMPONENT_BUTTON_TAKE_ITEM}"}}`);
+
+// Input components
+Handlebars.registerPartial('inputTextField', `{{#> "${TEMPLATES.COMPONENT_INPUT_TEXTFIELD}"}}{{/"${TEMPLATES.COMPONENT_INPUT_TEXTFIELD}"}}`);
+Handlebars.registerPartial('inputDropDown', `{{#> "${TEMPLATES.COMPONENT_INPUT_DROPDOWN}"}}{{/"${TEMPLATES.COMPONENT_INPUT_DROPDOWN}"}}`);
+Handlebars.registerPartial('inputNumberSpinner', `{{#> "${TEMPLATES.COMPONENT_INPUT_NUMBER_SPINNER}"}}{{/"${TEMPLATES.COMPONENT_INPUT_NUMBER_SPINNER}"}}`);
+Handlebars.registerPartial('inputTextarea', `{{#> "${TEMPLATES.COMPONENT_INPUT_TEXTAREA}"}}{{/"${TEMPLATES.COMPONENT_INPUT_TEXTAREA}"}}`);
+Handlebars.registerPartial('inputRadioButtonGroup', `{{#> "${TEMPLATES.COMPONENT_INPUT_RADIO_BUTTON_GROUP}"}}{{/"${TEMPLATES.COMPONENT_INPUT_RADIO_BUTTON_GROUP}"}}`);
+Handlebars.registerPartial('inputLabel', `{{#> "${TEMPLATES.COMPONENT_INPUT_LABEL}"}}{{/"${TEMPLATES.COMPONENT_INPUT_LABEL}"}}`);
 
 /* -------------------------------------------- */
 /*  Hooks                                       */

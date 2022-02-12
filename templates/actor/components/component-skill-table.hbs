@@ -79,13 +79,7 @@ skills: {[Item]} = {
                         {{> inputComponent type="single-line" propertyPath="name" itemId=skill.data.id isEditable=../isEditable contextOverride=../this }}
                     </td>
                     <td class="skill-column-attribute">
-                        {{> inputComponent type="drop-down" propertyPath="data.data.relatedAttribute" 
-                            options=../CONFIG.character.attributes
-                            optionValueProperty="name"
-                            optionDisplayProperty="localizableAbbreviation"
-                            isEditable=../isEditable
-                            contextOverride=skill
-                        }}
+                        {{> inputDropDown vm=(createInputDropDownViewModel ../isEditable ../isSendable skill "data.data.relatedAttribute" (../game.ambersteel.getAttributeOptions)) }}
                     </td>
                     <td class="skill-column-level">
                         {{> inputComponent type="number" min="0" propertyPath="data.data.value" itemId=skill.data.id isEditable=../isEditable contextOverride=../this }}

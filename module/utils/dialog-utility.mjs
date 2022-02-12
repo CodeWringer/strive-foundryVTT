@@ -1,5 +1,5 @@
 import DialogResult from '../dto/dialog-result.mjs';
-import * as NumberSpinner from '../components/number-spinner.mjs';
+import * as ListenerUtil from '../utils/listeners-utility.mjs';
 import { TEMPLATES } from '../templatePreloader.mjs';
 import { getElementValue } from './sheet-utility.mjs';
 
@@ -52,7 +52,7 @@ export async function showDialog(args = {}, dialogData) {
             },
             default: "cancel",
             render: html => {
-                NumberSpinner.activateListeners(html, this, true, true);
+                ListenerUtil.activateListeners(html, this, true, true);
                 args.render(html);
             },
             close: html => {

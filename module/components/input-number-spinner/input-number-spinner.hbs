@@ -1,0 +1,38 @@
+{{!-- Required context:
+vm: {InputNumberSpinnerViewModel}
+cssClass: {String | undefined}
+readOnlyCssClass: {String | undefined}
+--}}
+{{#if vm.isEditable}}
+<span class="spinner-container">
+  <input 
+    class="custom-system-edit spinner {{cssClass}}"
+    data-property-path="{{vm.propertyPath}}"
+    type="number"
+    data-dtype="Number"
+    name="{{vm.id}}"
+    id="{{vm.id}}"
+    value="{{vm.value}}"
+    {{#if vm.hasMin}}min="{{vm.min}}"{{/if}}
+    {{#if vm.hasMax}}max="{{vm.max}}"{{/if}}
+    step="{{vm.step}}"
+  />
+  <div class="spinner-button-container">
+      <a class="button-spinner button-spinner-up" title="{{localize ambersteel.labels.increment}}">
+          <i class="fas fa-caret-up"></i>
+      </a>
+      <a class="button-spinner button-spinner-down" title="{{localize ambersteel.labels.decrement}}">
+          <i class="fas fa-caret-down"></i>
+      </a>
+  </div>
+</span>
+{{else}}
+  {{!-- Display read-only value --}}
+  <div 
+    class="custom-system-read-only pad-sm fill {{readOnlyCssClass}}" 
+    name="{{vm.id}}"
+    id="{{vm.id}}"
+  >
+    {{vm.value}}
+  </div>
+{{/if}}

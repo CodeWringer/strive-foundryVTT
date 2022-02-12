@@ -1,0 +1,24 @@
+{{!-- Required context:
+vm: {InputTextareaViewModel}
+cssClass: {String | undefined}
+readOnlyCssClass: {String | undefined}
+--}}
+{{#if vm.isEditable}}
+  <textarea 
+    class="custom-system-edit {{#if vm.allowResize}}resize-vertical{{else}}resize-none{{/if}} {{cssClass}}"
+    spellcheck="{{vm.spellcheck}}"
+    data-property-path="{{vm.propertyPath}}"
+    name="{{vm.id}}"
+    id="{{vm.id}}"
+    placeholder="{{vm.placeholder}}"
+  >{{vm.value}}</textarea>
+{{else}}
+  {{!-- Display read-only value --}}
+  <div 
+    class="custom-system-read-only pad-sm fill {{readOnlyCssClass}}" 
+    name="{{vm.id}}"
+    id="{{vm.id}}"
+  >
+    {{localize vm.value}}
+  </div>
+{{/if}}

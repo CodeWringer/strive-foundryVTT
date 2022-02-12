@@ -6,9 +6,11 @@ export const TEMPLATES = {
   COMPONENT_TOGGLE_VISIBILITY: "systems/ambersteel/templates/components/button-toggle-visibility.hbs",
   COMPONENT_BUTTON_OPEN_SHEET: "systems/ambersteel/templates/components/button-open-sheet.hbs",
   COMPONENT_BUTTON_SEND_TO_CHAT: "systems/ambersteel/templates/components/button-send-to-chat.hbs",
-  COMPONENT_NUMBER_SPINNER: "systems/ambersteel/templates/components/number-spinner.hbs",
-  COMPONENT_INPUT: "systems/ambersteel/templates/components/input.hbs",
   COMPONENT_INPUT_TEXTFIELD: "systems/ambersteel/module/components/input-textfield/input-textfield.hbs",
+  COMPONENT_INPUT_DROPDOWN: "systems/ambersteel/module/components/input-dropdown/input-dropdown.hbs",
+  COMPONENT_INPUT_NUMBER_SPINNER: "systems/ambersteel/module/components/input-number-spinner/input-number-spinner.hbs",
+  COMPONENT_INPUT_TEXTAREA: "systems/ambersteel/module/components/input-textarea/input-textarea.hbs",
+  COMPONENT_INPUT_RADIO_BUTTON_GROUP: "systems/ambersteel/module/components/input-radio-button-group/input-radio-button-group.hbs",
   COMPONENT_INPUT_LABEL: "systems/ambersteel/templates/components/input-label.hbs",
   COMPONENT_BUTTON_TAKE_ITEM: "systems/ambersteel/templates/components/button-take-item.hbs",
   // GM

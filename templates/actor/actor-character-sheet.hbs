@@ -23,13 +23,11 @@ actor: {Actor} = {
     <img class="profile-img" src="{{actor.img}}" data-edit="img" title="{{actor.name}}" height="100" width="100" />
     <div class="header-fields">
       <h1 class="header-name fancy-font">
-        {{> inputComponent type="single-line" propertyPath="name" placeholder=(localize "ambersteel.labels.name") isEditable=isEditable }}
+        {{> inputTextField vm=(createInputTextFieldViewModel isEditable isSendable actor "name" "ambersteel.labels.name") }}
       </h1>
-      {{> "systems/ambersteel/templates/actor/parts/actor-personals.hbs"}}
+      {{> "systems/ambersteel/templates/actor/parts/actor-personals.hbs" isEditable=isEditable isSendable=isSendable actor=actor }}
     </div>
   </header>
-
-  {{> inputTextField vm=(createInputTextFieldViewModel isEditable isSendable actor "data.data.person.species") }}
 
   {{!-- Sheet Tab Navigation --}}
   <nav class="sheet-tabs tabs flex flex-justify" id="nav-sheet-tabs" data-group="primary">
@@ -55,7 +53,7 @@ actor: {Actor} = {
       {{> "systems/ambersteel/templates/actor/parts/actor-attributes.hbs" 
         isEditable=isEditable 
         isSendable=isSendable
-        attributeGroups=data.attributeGroups 
+        attributeGroups=actor.data.attributeGroups 
       }}
     </div>
 
@@ -64,8 +62,8 @@ actor: {Actor} = {
       {{> "systems/ambersteel/templates/actor/parts/actor-skills.hbs" 
         isEditable=isEditable 
         isSendable=isSendable
-        learningSkills=data.data.learningSkills  
-        skills=data.data.skills 
+        learningSkills=actor.data.data.learningSkills  
+        skills=actor.data.data.skills 
       }}
     </div>
 
@@ -75,8 +73,8 @@ actor: {Actor} = {
         {{> "systems/ambersteel/templates/actor/parts/actor-beliefs-fate.hbs" 
           isEditable=isEditable 
           isSendable=isSendable
-          beliefSystem=data.beliefSystem 
-          fateSystem=data.fateSystem 
+          beliefSystem=actor.data.beliefSystem 
+          fateSystem=actor.data.fateSystem 
         }}
       </div>
     {{/if}}

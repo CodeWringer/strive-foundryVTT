@@ -1,0 +1,40 @@
+{{!-- Required context:
+vm: {InputRadioButtonGroupViewModel}
+cssClass: {String | undefined}
+readOnlyCssClass: {String | undefined}
+--}}
+{{#if vm.isEditable}}
+  <div 
+    type="hidden"
+    class="custom-system-edit radio-button-group flex flex-row {{cssClass}}" 
+    data-property-path="{{vm.propertyPath}}"
+    name="{{vm.id}}"
+    id="{{vm.id}}"
+    data-property-path="{{vm.placeholder}}"
+    value="{{vm.value}}"
+  >
+    {{#each vm.options as |option index|}}
+      <div class="radio-button-container flex flex-row">
+        <input 
+          type="radio" 
+          class="radio-button" 
+          name="{{../vm.id}}" 
+          id="{{../vm.id}}-{{option.value}}" 
+          value="{{option.value}}"
+        >
+        <label class="fancy-font" for="{{../vm.id}}-{{option.value}}">
+          {{option.localizedValue}}
+        </label>
+      </div>
+    {{/each}}
+  </div>
+{{else}}
+  {{!-- Display read-only value --}}
+  <div 
+    class="custom-system-read-only pad-sm fill {{readOnlyCssClass}}" 
+    name="{{vm.id}}"
+    id="{{vm.id}}"
+  >
+    {{localize vm.localizedValue}}
+  </div>
+{{/if}}

@@ -5,8 +5,6 @@ import * as ButtonRoll from '../components/button-roll.mjs';
 import * as ButtonSendToChat from '../components/button-send-to-chat.mjs';
 import * as ButtonTakeItem from '../components/button-take-item.mjs';
 import * as ButtonToggleVisibility from '../components/button-toggle-visibility.mjs';
-import * as ComponentInput from '../components/input.mjs';
-import * as ComponentNumberSpinner from '../components/number-spinner.mjs';
 
 /**
  * The global singleton that holds all the DOM event register functions. 
@@ -21,8 +19,6 @@ const listeners = [
   ButtonSendToChat.activateListeners,
   ButtonTakeItem.activateListeners,
   ButtonToggleVisibility.activateListeners,
-  ComponentInput.activateListeners,
-  ComponentNumberSpinner.activateListeners
 ];
 
 /**
