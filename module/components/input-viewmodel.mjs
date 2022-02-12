@@ -15,18 +15,22 @@ import { getElementValue } from "../utils/sheet-utility.mjs";
  * @property {String} propertyPath The path used to look up the value. 
  * @property {Object} propertyOwner An object on which to to look up the value. 
  * @property {Any} value Gets or sets the looked up value. 
+ * @property {DocumentSheet | undefined} owningSheet Gets the owning {DocumentSheet} instance. 
+ * For example, could be an instance of {ActorSheet} or {ItemSheet}. 
  */
 export default class InputViewModel extends ViewModel {
-  constructor(args = {}) {
-    super(args);
-    args = {
-      propertyPath: undefined,
-      propertyOwner: undefined,
-      ...args,
-    }
-    this.propertyPath = args.propertyPath;
-    this.propertyOwner = args.propertyOwner;
-  }
+  /**
+   * Constant that defines the css class to look for when identifying edit input elements. 
+   * @static
+   * @readonly
+   */
+  static SELECTOR_EDIT = "custom-system-edit";
+  /**
+   * Constant that defines the css class to look for when identifying read-only input elements. 
+   * @static
+   * @readonly
+   */
+  static SELECTOR_READ = "custom-system-read-only";
 
   /**
    * @type {Any}
@@ -39,7 +43,8 @@ export default class InputViewModel extends ViewModel {
     return new Promise((resolve, reject) => {
       try {
         if (this.propertyOwner.updateProperty !== undefined) {
-          this.propertyOwner.updateProperty(this.propertyPath, newValue).then(resolve());
+          this.propertyOwner.updateProperty(this.propertyPath, newValue)
+            .then(resolve());
         } else {
           setNestedPropertyValue(this.propertyOwner, this.propertyPath, newValue);
           resolve();
@@ -51,19 +56,64 @@ export default class InputViewModel extends ViewModel {
   }
 
   /**
+   * @type {JQuery | HTMLElement}
+   * @private
+   */
+  _element = undefined;
+  /**
+   * Returns the HTMLElement that is associated with this view model. 
+   * @type {JQuery | HTMLElement}
+   * @readonly
+   */
+  get element() { return this._element; }
+
+  /**
+   * @type {DocumentSheet | undefined}
+   * @private
+   */
+  _owningSheet = undefined;
+  /**
+   * @type {DocumentSheet | undefined}
+   * @readonly
+   */
+  get owningSheet() { return this._owningSheet; }
+
+  constructor(args = {}) {
+    super(args);
+    args = {
+      propertyPath: undefined,
+      propertyOwner: undefined,
+      ...args,
+    }
+    this.propertyPath = args.propertyPath;
+    this.propertyOwner = args.propertyOwner;
+  }
+
+  /**
    * Registers events on elements of the given DOM. 
    * @param {Object} html DOM of the sheet for which to register listeners. 
    * @param {Boolean} isOwner If true, registers events that require owner permission. 
    * @param {Boolean} isEditable If true, registers events that require editing permission. 
    * @param {Boolean} isSendable If true, registers events that require sendToChat permission. 
+   * @throws {Error} NullPointerException Thrown if the input element could not be found. 
    */
   activateListeners(html, isOwner, isEditable, isSendable) {
+    this._element = html.find(`.${SELECTOR_EDIT}#${this.id}`);
+    
+    if (this._element === undefined || this._element === null) {
+      this._element = html.find(`.${SELECTOR_READ}#${this.id}`);
+    }
+    
+    if (this._element === undefined || this._element === null) {
+      throw new Error(`NullPointerException: Failed to get input element with id '${this.id}'`);
+    }
+
     // -------------------------------------------------------------
     if (!isOwner) return;
     // -------------------------------------------------------------
     if (!isEditable) return;
 
-    html.find(`.custom-system-edit#${this.id}`).change(this._onEdit.bind(this));
+    this.element.change(this._onEdit.bind(this));
   }
 
   /**
@@ -73,6 +123,6 @@ export default class InputViewModel extends ViewModel {
    */
   async _onEdit(event) {
     const newValue = getElementValue(event.currentTarget);
-    this.value = await newValue;
+    this.value = newValue;
   }
 }
