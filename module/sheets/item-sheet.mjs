@@ -99,20 +99,6 @@ export class AmbersteelItemSheet extends ItemSheet {
 
     // Activate view model bound event listeners. 
     SheetUtil.activateListeners(html, this);
-
-    // TOOD: Remove?
-    // Subtype listeners. 
-    // this.subType.activateListeners(html, isOwner, isEditable);
-  }
-
-  /**
-   * @param force 
-   * @param options 
-   * @override
-   * @see https://foundryvtt.com/api/ItemSheet.html#render
-   */
-  render(force, options) {
-    super.render(force, options);
   }
 
   /**

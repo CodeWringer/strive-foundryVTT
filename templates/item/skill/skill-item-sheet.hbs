@@ -27,7 +27,7 @@ item: {Item} = {
       <div class="flex flex-row">
         <img class="header-image" src="{{item.img}}" data-edit="img" title="{{item.name}}" height="64" width="64" />
         <h1 class="header-name">
-          {{> inputComponent type="single-line" propertyPath="name" isEditable=isEditable }}
+          {{> inputTextField vm=(createInputTextFieldViewModel isEditable isSendable item "name" "ambersteel.labels.name") }}
         </h1>
         {{#if isSendable}}
           <div class="flex flex-center">
@@ -43,12 +43,7 @@ item: {Item} = {
       {{> inputLabel text="ambersteel.labels.relatedAttribute"}}
     </div>
     <div class="flex-grow">
-      {{> inputComponent type="drop-down" propertyPath="data.data.relatedAttribute" 
-        options=CONFIG.character.attributes
-        optionValueProperty="name"
-        optionDisplayProperty="localizableName"
-        isEditable=isEditable
-      }}
+      {{> inputDropDown vm=(createInputDropDownViewModel isEditable isSendable item "data.data.relatedAttribute" (game.ambersteel.getAttributeOptions)) }}
     </div>
   </div>
   {{!-- Category --}}
@@ -57,16 +52,16 @@ item: {Item} = {
       {{> inputLabel text="ambersteel.labels.category"}}
     </div>
     <div class="flex-grow">
-      {{> inputComponent type="single-line" propertyPath="data.data.category" isEditable=isEditable }}
+      {{> inputTextField vm=(createInputTextFieldViewModel isEditable isSendable item "data.data.category" "") }}
     </div>
   </div>
   {{!-- Description --}}
   <div class="sheet-block flex flex-row margin-b-md">
     <div class="width-min-xxl">
-      {{> inputLabel text="ambersteel.labels.description"}}
+      {{> inputLabel text=(localize "ambersteel.labels.description")}}
     </div>
     <div class="flex-grow">
-      {{> inputComponent type="multi-line" propertyPath="data.data.description" placeholder=(localize "ambersteel.labels.description") isEditable=isEditable readOnlyCssClass="multiline" allowResize=true }}
+      {{> inputTextarea vm=(createInputTextareaViewModel isEditable isSendable item "data.data.description" (localize "ambersteel.labels.description") true false) cssClass="fill" }}
     </div>
   </div>
   {{!-- Skill Abilites --}}
@@ -77,6 +72,7 @@ item: {Item} = {
       abilities=item.data.data.abilities 
       skillAbilitiesInitiallyVisible=true 
       visGroupId=(generateId) 
+      item=item
     }}
   {{/if}}
 </form>

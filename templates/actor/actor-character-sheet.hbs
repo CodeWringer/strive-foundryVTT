@@ -53,6 +53,7 @@ actor: {Actor} = {
       {{> "systems/ambersteel/templates/actor/parts/actor-attributes.hbs" 
         isEditable=isEditable 
         isSendable=isSendable
+        actor=actor 
         attributeGroups=actor.data.attributeGroups 
       }}
     </div>
@@ -62,6 +63,7 @@ actor: {Actor} = {
       {{> "systems/ambersteel/templates/actor/parts/actor-skills.hbs" 
         isEditable=isEditable 
         isSendable=isSendable
+        actor=actor 
         learningSkills=actor.data.data.learningSkills  
         skills=actor.data.data.skills 
       }}
@@ -73,6 +75,7 @@ actor: {Actor} = {
         {{> "systems/ambersteel/templates/actor/parts/actor-beliefs-fate.hbs" 
           isEditable=isEditable 
           isSendable=isSendable
+          actor=actor 
           beliefSystem=actor.data.beliefSystem 
           fateSystem=actor.data.fateSystem 
         }}
@@ -84,6 +87,7 @@ actor: {Actor} = {
       {{> "systems/ambersteel/templates/actor/parts/actor-health.hbs" 
         isEditable=isEditable 
         isSendable=isSendable
+        actor=actor 
       }}
     </div>
 
@@ -92,6 +96,7 @@ actor: {Actor} = {
       {{> "systems/ambersteel/templates/actor/parts/actor-assets.hbs" 
         isEditable=isEditable 
         isSendable=isSendable
+        actor=actor 
       }}
     </div>
 
@@ -100,6 +105,7 @@ actor: {Actor} = {
       {{> "systems/ambersteel/templates/actor/parts/actor-biography.hbs" 
         isEditable=isEditable 
         isSendable=isSendable
+        actor=actor 
       }}
     </div>
 
@@ -109,6 +115,7 @@ actor: {Actor} = {
         {{> "systems/ambersteel/templates/gm-notes.hbs" 
           isEditable=isEditable 
           isSendable=false
+          actor=actor 
         }}
       </div>
     {{/if}}

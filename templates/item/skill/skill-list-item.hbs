@@ -31,12 +31,9 @@ item: {Item} = {
       {{> inputLabel text="ambersteel.labels.injury"}}
     </span>
     <span class="flex-grow margin-r-md">
-      {{> inputComponent type="single-line" propertyPath="name" itemId=itemId isEditable=isEditable }}
+      {{> inputTextField vm=(createInputTextFieldViewModel isEditable isSendable item "name" "ambersteel.labels.name") }}
     </span>
     {{!-- State --}}
-    {{> inputComponent type="radio-buttons" propertyPath="data.data.state" itemId=itemId name=(concat "state-" itemId) isEditable=isEditable 
-      options=CONFIG.injuryStates optionValueProperty="name" optionDisplayProperty="localizableName"
-    }}
   </div>
   {{!-- Delete --}}
   {{> buttonDelete itemId=itemId promptConfirm=true promptLocalizableTitle="ambersteel.dialog.titleConfirmDeletiongSkillQuery" }}
@@ -44,5 +41,5 @@ item: {Item} = {
 {{!-- Row 3 --}}
 {{!-- Description --}}
 <div class="flex flex-row">
-  {{> inputComponent type="multi-line" propertyPath="data.data.description" itemId=itemId isEditable=isEditable allowResize=true }}
+  {{> inputTextarea vm=(createInputTextareaViewModel isEditable isSendable item "data.data.description" (localize "ambersteel.labels.description") true false) cssClass="fill" }}
 </div>

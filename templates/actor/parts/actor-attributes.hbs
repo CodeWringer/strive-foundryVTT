@@ -1,6 +1,7 @@
 {{!-- Requires parameters:
 isEditable: {Boolean}
 isSendable: {Boolean}
+actor: {Object}
 attributeGroups: {Object} = {
     physical: {Object} = {
         name: {String}
@@ -26,20 +27,23 @@ attributeGroups: {Object} = {
         isSendable=isSendable
         localizableAttributeGroupName=attributeGroups.physical.localizableName
         attributeGroupName=attributeGroups.physical.name
-        attributes=attributeGroups.physical.attributes
+        attributes=attributeGroups.physical.attributes 
+        actor=actor
     }}
     {{> "systems/ambersteel/templates/actor/components/component-attribute-table.hbs" 
         isEditable=isEditable
         isSendable=isSendable
         localizableAttributeGroupName=attributeGroups.mental.localizableName 
         attributeGroupName=attributeGroups.mental.name 
-        attributes=attributeGroups.mental.attributes
+        attributes=attributeGroups.mental.attributes 
+        actor=actor
     }}
     {{> "systems/ambersteel/templates/actor/components/component-attribute-table.hbs"
         isEditable=isEditable
         isSendable=isSendable
         localizableAttributeGroupName=attributeGroups.social.localizableName 
         attributeGroupName=attributeGroups.social.name 
-        attributes=attributeGroups.social.attributes
+        attributes=attributeGroups.social.attributes 
+        actor=actor
     }}
 </section>

@@ -28,7 +28,7 @@ item: {Item} = {
       <div class="flex flex-row">
         <img class="header-image" src="{{item.img}}" data-edit="img" title="{{item.name}}" height="64" width="64" />
         <h1 class="header-name">
-          {{> inputComponent type="single-line" propertyPath="name" isEditable=isEditable }}
+          {{> inputTextField vm=(createInputTextFieldViewModel isEditable isSendable item "name" "ambersteel.labels.name") }}
         </h1>
         {{#if isSendable}}
           <div class="flex flex-center">
@@ -44,7 +44,7 @@ item: {Item} = {
       {{> inputLabel text="ambersteel.labels.quantity"}}
     </div>
     <div class="flex-grow">
-      {{> inputComponent type="number" propertyPath="data.data.quantity" min="1" max=(lookupValue item "data.data.maxQuantity") isEditable=isEditable }}
+      {{> inputNumberSpinner vm=(createInputNumberSpinnerViewModel isEditable isSendable item "data.data.quantity" 1 1 undefined) }}
     </div>
   </div>
   {{!-- Max quantity --}}
@@ -53,7 +53,7 @@ item: {Item} = {
       {{> inputLabel text="ambersteel.labels.maxQuantity"}}
     </div>
     <div class="flex-grow">
-      {{> inputComponent type="number" propertyPath="data.data.maxQuantity" min="1" isEditable=isEditable }}
+      {{> inputNumberSpinner vm=(createInputNumberSpinnerViewModel isEditable isSendable item "data.data.maxQuantity" 1 1 undefined) }}
     </div>
   </div>
   {{!-- SHAPE --}}
@@ -63,7 +63,7 @@ item: {Item} = {
       {{> inputLabel text="ambersteel.labels.shapeWidth"}}
     </div>
     <div class="flex-grow">
-      {{> inputComponent type="number" propertyPath="data.data.shape.width" min="1" isEditable=isEditable }}
+      {{> inputNumberSpinner vm=(createInputNumberSpinnerViewModel isEditable isSendable item "data.data.shape.width" 1 1 undefined) }}
     </div>
   </div>
   {{!-- Height --}}
@@ -72,7 +72,7 @@ item: {Item} = {
       {{> inputLabel text="ambersteel.labels.shapeHeight"}}
     </div>
     <div class="flex-grow">
-      {{> inputComponent type="number" propertyPath="data.data.shape.height" min="1" isEditable=isEditable }}
+      {{> inputNumberSpinner vm=(createInputNumberSpinnerViewModel isEditable isSendable item "data.data.shape.height" 1 1 undefined) }}
     </div>
   </div>
   {{!-- Bulk - read only! --}}
@@ -81,16 +81,16 @@ item: {Item} = {
       {{> inputLabel text="ambersteel.labels.bulk"}}
     </div>
     <div class="flex-grow">
-      {{> inputComponent type="number" propertyPath="data.data.bulk" isEditable=false }}
+      {{> inputNumberSpinner vm=(createInputNumberSpinnerViewModel false isSendable item "data.data.bulk" 1 undefined undefined) }}
     </div>
   </div>
   {{!-- Description --}}
   <div class="sheet-block flex flex-row flex-grow">
     <div class="width-min-xxl">
-      {{> inputLabel text="ambersteel.labels.description"}}
+      {{> inputLabel text=(localize "ambersteel.labels.description")}}
     </div>
     <div class="flex-grow">
-      {{> inputComponent type="multi-line" propertyPath="data.data.description" placeholder=(localize "ambersteel.labels.description") isEditable=isEditable cssClass="resize-vertical fill" readOnlyCssClass="multiline" allowResize=true }}
+      {{> inputTextarea vm=(createInputTextareaViewModel isEditable isSendable item "data.data.description" (localize "ambersteel.labels.description") true false) cssClass="fill" }}
     </div>
   </div>
 </form>

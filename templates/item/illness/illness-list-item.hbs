@@ -25,12 +25,10 @@ item: {Item} = {
       {{> inputLabel text="ambersteel.labels.illness"}}
     </span>
     <span class="flex-grow margin-r-md">
-      {{> inputComponent type="single-line" propertyPath="name" itemId=itemId isEditable=isEditable }}
+      {{> inputTextField vm=(createInputTextFieldViewModel isEditable isSendable item "name" "ambersteel.labels.name") }}
     </span>
     {{!-- State --}}
-    {{> inputComponent type="radio-buttons" propertyPath="data.data.state" itemId=itemId name=(concat "state-" itemId) isEditable=isEditable 
-      options=CONFIG.illnessStates optionValueProperty="name" optionDisplayProperty="localizableName"
-    }}
+    {{> inputRadioButtonGroup vm=(createInputRadioButtonGroupViewModel isEditable isSendable item "data.data.state" (game.ambersteel.getIllnessOptions)) }}
   </div>
   {{!-- Delete --}}
   {{> buttonDelete itemId=itemId promptConfirm=true promptLocalizableTitle="ambersteel.dialog.titleConfirmDeletionIllnessQuery" }}
@@ -44,7 +42,7 @@ item: {Item} = {
     {{> inputLabel text="ambersteel.labels.treatmentSkill" }}
   </span>
   <span class="width-xl">
-    {{> inputComponent type="single-line" propertyPath="data.data.treatmentSkill" itemId=itemId isEditable=isEditable }}
+    {{> inputTextField vm=(createInputTextFieldViewModel isEditable isSendable item "data.data.treatmentSkill" "") }}
   </span>
   {{!-- Spacer --}}
   <div class="width-xs"></div>
@@ -53,7 +51,7 @@ item: {Item} = {
     {{> inputLabel text="ambersteel.labels.duration" }}
   </span>
   <span class="flex-grow">
-    {{> inputComponent type="single-line" propertyPath="data.data.duration" itemId=itemId isEditable=isEditable }}
+    {{> inputTextField vm=(createInputTextFieldViewModel isEditable isSendable item "data.data.duration" "") }}
   </span>
 </div>
 {{!-- Spacer --}}
@@ -64,11 +62,11 @@ item: {Item} = {
     {{> inputLabel text="ambersteel.labels.treatment" }}
   </span>
   <span class="flex-grow">
-    {{> inputComponent type="single-line" propertyPath="data.data.treatment" itemId=itemId isEditable=isEditable }}
+    {{> inputTextField vm=(createInputTextFieldViewModel isEditable isSendable item "data.data.treatment" "") }}
   </span>
 </div>
 {{!-- Row 3 --}}
 {{!-- Description --}}
 <div class="flex flex-row">
-  {{> inputComponent type="multi-line" propertyPath="data.data.description" itemId=itemId isEditable=isEditable allowResize=true }}
+  {{> inputTextarea vm=(createInputTextareaViewModel isEditable isSendable item "data.data.description" (localize "ambersteel.labels.description") true false) }}
 </div>

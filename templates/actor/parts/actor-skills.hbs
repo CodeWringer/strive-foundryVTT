@@ -3,6 +3,7 @@ isEditable: {Boolean}
 isSendable: {Boolean}
 learningSkills: {[Object]} -> see component-skill-table.hbs
 skills: {[Object]} -> see component-skill-table.hbs
+actor: {AmbersteelActor}
 --}}
 <section>
   {{!-- Learning Skills --}}
@@ -11,6 +12,7 @@ skills: {[Object]} -> see component-skill-table.hbs
     isSendable=isSendable
     isLearningSkillsTable=true 
     skills=learningSkills
+    actor=actor
   }}
   {{!-- Known Skills --}}
   {{> "systems/ambersteel/templates/actor/components/component-skill-table.hbs"
@@ -18,5 +20,6 @@ skills: {[Object]} -> see component-skill-table.hbs
     isSendable=isSendable
     isLearningSkillsTable=false 
     skills=skills
+    actor=actor
   }}
 </section>

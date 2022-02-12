@@ -3,15 +3,21 @@ isEditable: {Boolean}
 isSendable: {Boolean}
 localizableAttributeGroupName: {String}
 attributeGroupName: {String}
-attributes: {[Object]} = {
-    name: {String}
-    localizableName: {String}
-    localizableAbbreviation: {String}
-    value: {Number}
-    successes: {Number}
-    failures: {Number}
-    requiredSuccessses: {Number}
-    requiredFailures: {Number}
+actor: {Object} = {
+    data: {Object} = {
+        data: {Object} = {
+            attributes: {[Object]} = {
+                name: {String}
+                localizableName: {String}
+                localizableAbbreviation: {String}
+                value: {Number}
+                successes: {Number}
+                failures: {Number}
+                requiredSuccessses: {Number}
+                requiredFailures: {Number}
+            }
+        }
+    }
 }
 --}}
 <div>
@@ -59,16 +65,16 @@ attributes: {[Object]} = {
                     [{{localize att.localizableAbbreviation}}]
                 </td>
                 <td class="attribute-column-level">
-                    {{> inputComponent type="number" min="0" propertyPath=(concat "data.data.attributes." ../attributeGroupName "." att.name ".value") isEditable=../isEditable contextOverride=../this }}
+                    {{> inputNumberSpinner vm=(createInputNumberSpinnerViewModel ../isEditable ../isSendable ../actor (concat "data.data.attributes." ../attributeGroupName "." att.name ".value") 1 0 undefined) }}
                 </td>
                 <td class="attribute-column-requirements">
                     {{att.requiredSuccessses}} / {{att.requiredFailures}}
                 </td>
                 <td class="attribute-column-successes">
-                    {{> inputComponent type="number" min="0" propertyPath=(concat "data.data.attributes." ../attributeGroupName "." att.name ".successes") isEditable=../isEditable contextOverride=../this }}
+                    {{> inputNumberSpinner vm=(createInputNumberSpinnerViewModel ../isEditable ../isSendable ../actor (concat "data.data.attributes." ../attributeGroupName "." att.name ".successes") 1 0 undefined) }}
                 </td>
                 <td class="attribute-column-failures">
-                    {{> inputComponent type="number" min="0" propertyPath=(concat "data.data.attributes." ../attributeGroupName "." att.name ".failures") isEditable=../isEditable contextOverride=../this }}
+                    {{> inputNumberSpinner vm=(createInputNumberSpinnerViewModel ../isEditable ../isSendable ../actor (concat "data.data.attributes." ../attributeGroupName "." att.name ".failures") 1 0 undefined) }}
                 </td>
             </tr>
             {{/each}}

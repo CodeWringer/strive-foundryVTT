@@ -1,11 +1,13 @@
 {{!-- Requires parameters:
 isEditable: {Boolean}
 isSendable: {Boolean}
-data: {Object} where Object = {
-  beliefSystem: {Object} where Object = {
-    ambition: {String},
-    beliefs: {[String]},
-    instincts: {[String]}
+actor: {Object} = {
+  data: {Object} where Object = {
+    beliefSystem: {Object} where Object = {
+      ambition: {String},
+      beliefs: {[String]},
+      instincts: {[String]}
+    }
   }
 }
 --}}
@@ -14,14 +16,14 @@ data: {Object} where Object = {
     <h3>
       <label class="fancy-font">{{localize "ambersteel.beliefSystem.ambition"}}</label>
     </h3>
-      {{> inputComponent type="single-line" name="ambition" propertyPath="data.data.beliefSystem.ambition" isEditable=isEditable }}
+      {{> inputTextField vm=(createInputTextFieldViewModel isEditable isSendable actor "data.data.beliefSystem.ambition" "") }}
   </div>
   <div class="sheet-block">
     <h3>
       <label class="fancy-font">{{localize "ambersteel.beliefSystem.beliefs"}}</label>
     </h3>
     {{#each data.beliefSystem.beliefs as |belief key|}}
-      {{> inputComponent type="single-line" name=(concat "belief[" key "]") propertyPath=(concat "data.data.beliefSystem.beliefs[" key "]") isEditable=../isEditable contextOverride=../this }}
+      {{> inputTextField vm=(createInputTextFieldViewModel ../isEditable ../isSendable ../actor (concat "data.data.beliefSystem.beliefs[" key "]") "") }}
     {{/each}}
   </div>
   <div class="sheet-block">
@@ -29,7 +31,7 @@ data: {Object} where Object = {
       <label class="fancy-font">{{localize "ambersteel.beliefSystem.instincts"}}</label>
     </h3>
     {{#each data.beliefSystem.instincts as |instinct key|}}
-      {{> inputComponent type="single-line" name=(concat "instinct[" key "]") propertyPath=(concat "data.data.beliefSystem.instincts[" key "]") isEditable=../isEditable contextOverride=../this }}
+      {{> inputTextField vm=(createInputTextFieldViewModel ../isEditable ../isSendable ../actor (concat "data.data.beliefSystem.instincts[" key "]") "") }}
     {{/each}}
   </div>
 </section>

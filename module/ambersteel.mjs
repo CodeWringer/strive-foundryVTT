@@ -172,20 +172,84 @@ Hooks.once('init', async function() {
      */
     viewModels: new ViewModelCollection(),
     /**
-     * Returns an array of {ChoiceOption}s for use in a drop-down input. 
+     * Returns an array of {ChoiceOption}s. 
+     * @param {Object} Any CONFIG property. 
      * @returns {Array<ChoiceOption>}
      */
-    getAttributeOptions() {
+    getOptionsFromConfig: function(configObject) {
       const result = [];
 
-      for (const attributeName in ambersteelConfig.character.attributes) {
-        const attribute = ambersteelConfig.character.attributes[attributeName];
-        const localizedName = game.i18n.localize(attribute.localizableName);
-        result.push(new ChoiceOption(attribute.name, localizedName));
+      for (const entryName in configObject) {
+        const entry = configObject[entryName];
+        const localizedName = game.i18n.localize(entry.localizableName);
+        result.push(new ChoiceOption(entry.name, localizedName));
       }
 
       return result;
-    }
+    },
+    /**
+     * Returns an array of {ChoiceOption}s. 
+     * @returns {Array<ChoiceOption>}
+     */
+    getAttributeOptions: function() {
+      return game.ambersteel.getOptionsFromConfig(ambersteelConfig.character.attributes);
+    },
+    /**
+     * Returns an array of {ChoiceOption}s. 
+     * @returns {Array<ChoiceOption>}
+     */
+    getInjuryOptions: function() {
+      return game.ambersteel.getOptionsFromConfig(ambersteelConfig.injuryStates);
+    },
+    /**
+     * Returns an array of {ChoiceOption}s. 
+     * @returns {Array<ChoiceOption>}
+     */
+    getIllnessOptions: function() {
+      return game.ambersteel.getOptionsFromConfig(ambersteelConfig.illnessStates);
+    },
+    /**
+     * Returns an array of {ChoiceOption}s. 
+     * @returns {Array<ChoiceOption>}
+     */
+    getDamageTypeOptions: function() {
+      return game.ambersteel.getOptionsFromConfig(ambersteelConfig.damageTypes);
+    },
+    /**
+     * Returns an array of {ChoiceOption}s. 
+     * @returns {Array<ChoiceOption>}
+     */
+    getAttackTypeOptions: function() {
+      return game.ambersteel.getOptionsFromConfig(ambersteelConfig.attackTypes);
+    },
+    /**
+     * Returns an array of {ChoiceOption}s. 
+     * @returns {Array<ChoiceOption>}
+     */
+    getShieldTypeOptions: function() {
+      return game.ambersteel.getOptionsFromConfig(ambersteelConfig.shieldTypes);
+    },
+    /**
+     * Returns an array of {ChoiceOption}s. 
+     * @returns {Array<ChoiceOption>}
+     */
+    getArmorTypeOptions: function() {
+      return game.ambersteel.getOptionsFromConfig(ambersteelConfig.armorTypes);
+    },
+    /**
+     * Returns an array of {ChoiceOption}s. 
+     * @returns {Array<ChoiceOption>}
+     */
+    getWeaponTypeOptions: function() {
+      return game.ambersteel.getOptionsFromConfig(ambersteelConfig.weaponTypes);
+    },
+    /**
+     * Returns an array of {ChoiceOption}s. 
+     * @returns {Array<ChoiceOption>}
+     */
+    getVisibilityOptions: function() {
+      return game.ambersteel.getOptionsFromConfig(ambersteelConfig.visibilityModes);
+    },
   };
 
   // Set initiative formula. 

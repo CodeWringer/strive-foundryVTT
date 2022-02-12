@@ -20,7 +20,7 @@ item: {Item} = {
       <div class="flex flex-row">
         <img class="header-image" src="{{item.img}}" data-edit="img" title="{{item.name}}" height="64" width="64" />
         <h1 class="header-name">
-          {{> inputComponent type="single-line" propertyPath="name" isEditable=isEditable }}
+          {{> inputTextField vm=(createInputTextFieldViewModel isEditable isSendable item "name" "ambersteel.labels.name") }}
         </h1>
         {{#if isSendable}}
           <div class="flex flex-center">
@@ -36,7 +36,7 @@ item: {Item} = {
       {{> inputLabel text="ambersteel.labels.limit"}}
     </div>
     <div class="flex-grow">
-      {{> inputComponent type="number" propertyPath="data.data.limit" min="0" isEditable=isEditable }}
+      {{> inputNumberSpinner vm=(createInputNumberSpinnerViewModel isEditable isSendable item "data.data.limit" 1 0 undefined) }}
     </div>
   </div>
   {{!-- Time to heal --}}
@@ -45,16 +45,16 @@ item: {Item} = {
       {{> inputLabel text="ambersteel.labels.timeToHeal"}}
     </div>
     <div class="flex-grow">
-      {{> inputComponent type="single-line" propertyPath="data.data.timeToHeal" isEditable=isEditable }}
+      {{> inputTextField vm=(createInputTextFieldViewModel isEditable isSendable item "data.data.timeToHeal" "") }}
     </div>
   </div>
   {{!-- Description --}}
   <div class="sheet-block flex flex-row flex-grow">
     <div class="width-min-xxl">
-      {{> inputLabel text="ambersteel.labels.description"}}
+      {{> inputLabel text=(localize "ambersteel.labels.description")}}
     </div>
     <div class="flex-grow">
-      {{> inputComponent type="multi-line" propertyPath="data.data.description" placeholder=(localize "ambersteel.labels.description") isEditable=isEditable cssClass="resize-vertical fill" readOnlyCssClass="multiline" allowResize=true }}
+      {{> inputTextarea vm=(createInputTextareaViewModel isEditable isSendable item "data.data.description" (localize "ambersteel.labels.description") true false) cssClass="fill" }}
     </div>
   </div>
 </form>

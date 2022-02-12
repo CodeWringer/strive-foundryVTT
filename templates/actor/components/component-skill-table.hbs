@@ -76,22 +76,22 @@ skills: {[Item]} = {
                         {{> buttonOpenSheet id=skill.name }}
                     </td>
                     <td class="fancy-font flex skill-column-name">
-                        {{> inputComponent type="single-line" propertyPath="name" itemId=skill.data.id isEditable=../isEditable contextOverride=../this }}
+                        {{> inputTextField vm=(createInputTextFieldViewModel ../isEditable ../isSendable skill "name" "ambersteel.labels.name") }}
                     </td>
                     <td class="skill-column-attribute">
                         {{> inputDropDown vm=(createInputDropDownViewModel ../isEditable ../isSendable skill "data.data.relatedAttribute" (../game.ambersteel.getAttributeOptions)) }}
                     </td>
                     <td class="skill-column-level">
-                        {{> inputComponent type="number" min="0" propertyPath="data.data.value" itemId=skill.data.id isEditable=../isEditable contextOverride=../this }}
+                        {{> inputNumberSpinner vm=(createInputNumberSpinnerViewModel ../isEditable ../isSendable skill "data.data.value" 1 0 undefined) }}
                     </td>
                     <td class="skill-column-requirements">
                         {{data.requiredSuccessses}} / {{data.requiredFailures}}
                     </td>
                     <td class="skill-column-successes">
-                        {{> inputComponent type="number" min="0" propertyPath="data.data.successes" itemId=skill.data.id isEditable=../isEditable contextOverride=../this }}
+                        {{> inputNumberSpinner vm=(createInputNumberSpinnerViewModel ../isEditable ../isSendable skill "data.data.successes" 1 0 undefined) }}
                     </td>
                     <td class="skill-column-failures">
-                        {{> inputComponent type="number" min="0" propertyPath="data.data.failures" itemId=skill.data.id isEditable=../isEditable contextOverride=../this }}
+                        {{> inputNumberSpinner vm=(createInputNumberSpinnerViewModel ../isEditable ../isSendable skill "data.data.failures" 1 0 undefined) }}
                     </td>
                     {{#if ../isEditable}}
                         <td class="skill-column-delete">

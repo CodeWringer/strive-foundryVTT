@@ -1,6 +1,5 @@
 import { TEMPLATES } from "../../templatePreloader.mjs";
 import InputViewModel from "../input-viewmodel.mjs";
-import { selectItemByValue } from "../../utils/sheet-utility.mjs";
 
 /**
  * --- Inherited from ViewModel
@@ -63,7 +62,15 @@ export default class InputDropDownViewModel extends InputViewModel {
 
     // Ensure correct option of drop-down is set. 
     try {
-      selectItemByValue(this.element, this.value);
+      const optionElements = this.element.find('option');
+      const value = this.value;
+      for(let i = 0; i < optionElements.length; i++) {
+        const optionElement = optionElements[i];
+        if (optionElement.value === value) {
+          this.element[0].selectedIndex = i;
+          break;
+        }
+      }
     } catch (error) {
       throw new Error("UnknownException: Failed to set the current drop-down option", { cause: error });
     }

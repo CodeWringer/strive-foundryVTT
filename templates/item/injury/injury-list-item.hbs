@@ -24,12 +24,10 @@ item: {Item} = {
       {{> inputLabel text="ambersteel.labels.injury"}}
     </span>
     <span class="flex-grow margin-r-md">
-      {{> inputComponent type="single-line" propertyPath="name" itemId=itemId isEditable=isEditable }}
+      {{> inputTextField vm=(createInputTextFieldViewModel isEditable isSendable item "name" "ambersteel.labels.name") }}
     </span>
     {{!-- State --}}
-    {{> inputComponent type="radio-buttons" propertyPath="data.data.state" itemId=itemId name=(concat "state-" itemId) isEditable=isEditable 
-      options=CONFIG.injuryStates optionValueProperty="name" optionDisplayProperty="localizableName"
-    }}
+    {{> inputRadioButtonGroup vm=(createInputRadioButtonGroupViewModel isEditable isSendable item "data.data.state" (game.ambersteel.getInjuryOptions)) }}
   </div>
   {{!-- Delete --}}
   {{> buttonDelete itemId=itemId promptConfirm=true promptLocalizableTitle="ambersteel.dialog.titleConfirmDeletionInjuryQuery" }}
@@ -42,7 +40,7 @@ item: {Item} = {
       {{> inputLabel text="ambersteel.labels.limit" }}
     </span>
     <span class="width-md">
-      {{> inputComponent type="number" propertyPath="data.data.limit" min="0" itemId=itemId isEditable=isEditable }}
+      {{> inputNumberSpinner vm=(createInputNumberSpinnerViewModel isEditable isSendable item "data.data.limit" 1 0 undefined) }}
     </span>
   </div>
   {{!-- Spacer --}}
@@ -53,12 +51,12 @@ item: {Item} = {
       {{> inputLabel text="ambersteel.labels.timeToHeal" }}
     </span>
     <span class="width-min-xl flex-grow">
-      {{> inputComponent type="single-line" propertyPath="data.data.timeToHeal" itemId=itemId isEditable=isEditable }}
+      {{> inputTextField vm=(createInputTextFieldViewModel isEditable isSendable item "data.data.timeToHeal" "") }}
     </span>
   </div>
 </div>
 {{!-- Row 3 --}}
 {{!-- Description --}}
 <div class="flex flex-row">
-  {{> inputComponent type="multi-line" propertyPath="data.data.description" itemId=itemId isEditable=isEditable allowResize=true }}
+  {{> inputTextarea vm=(createInputTextareaViewModel isEditable isSendable item "data.data.description" (localize "ambersteel.labels.description") true false) }}
 </div>

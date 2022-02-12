@@ -1,18 +1,22 @@
 {{!-- Requires parameters:
 isEditable: {Boolean}
 isSendable: {Boolean}
-data: {Object} = {
-  fateSystem: {Object} = {
-    miFP: {Number}
-    maFP: {Number}
-    AFP: {Number}
-    remainingSlots: {Number},
-    cards: {[Object]} = { 
-      id: {String}
-      img: {String}
-      name: {String}
-      localizableName: {String}
-      localizableDescription: {String}
+actor: {Object} = {
+  data: {Object} = {
+    data: {Object} = {
+      fateSystem: {Object} = {
+        miFP: {Number}
+        maFP: {Number}
+        AFP: {Number}
+        remainingSlots: {Number},
+        cards: {[Object]} = { 
+          id: {String}
+          img: {String}
+          name: {String}
+          localizableName: {String}
+          localizableDescription: {String}
+        }
+      }
     }
   }
 }
@@ -25,7 +29,7 @@ data: {Object} = {
       <span class="primary-font">[{{localize "ambersteel.fateSystem.miFPAbbreviation"}}]</span>
     </span>
     <span class="fate-spinner-column-container">
-      {{> inputComponent type="number" min="0" name="miFP" propertyPath="data.data.fateSystem.miFP" isEditable=isEditable }}
+      {{> inputNumberSpinner vm=(createInputNumberSpinnerViewModel isEditable isSendable actor "data.data.fateSystem.miFP" 1 0 undefined) }}
     </span>
     {{!-- row 2 --}}
     <span class="fancy-font line-height">
@@ -33,7 +37,7 @@ data: {Object} = {
       <span class="primary-font">[{{localize "ambersteel.fateSystem.maFPAbbreviation"}}]</span>
     </span>
     <span class="fate-spinner-column-container">
-      {{> inputComponent type="number" min="0" name="maFP" propertyPath="data.data.fateSystem.maFP" isEditable=isEditable }}
+      {{> inputNumberSpinner vm=(createInputNumberSpinnerViewModel isEditable isSendable actor "data.data.fateSystem.maFP" 1 0 undefined) }}
     </span>
     {{!-- row 3 --}}
     <span class="fancy-font line-height">
@@ -41,7 +45,7 @@ data: {Object} = {
       <span class="primary-font">[{{localize "ambersteel.fateSystem.AFPAbbreviation"}}]</span>
     </span>
     <span class="fate-spinner-column-container">
-      {{> inputComponent type="number" min="0" name="AFP" propertyPath="data.data.fateSystem.AFP" isEditable=isEditable }}
+      {{> inputNumberSpinner vm=(createInputNumberSpinnerViewModel isEditable isSendable actor "data.data.fateSystem.AFP" 1 0 undefined) }}
     </span>
   </div>
   <div class="flex" style="flex-wrap: wrap;">
