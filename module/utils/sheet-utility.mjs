@@ -38,11 +38,19 @@ export function getAllInputs(html) {
   const cssClassEdits = "custom-system-edit";
   const cssClassReadOnlys = "custom-system-read-only";
 
-  // TODO: This probably won't work with a HTMLElement. Make it work. 
-  const edits = html.find(cssClassEdits);
-  const readOnlys = html.find(cssClassReadOnlys);
+  // This returns JQuery objects. 
+  const edits = html.find(`.${cssClassEdits}`);
+  const readOnlys = html.find(`.${cssClassReadOnlys}`);
 
-  return edits.concat(readOnlys);
+  const result = [];
+  for (const elem of edits) {
+    result.push(elem);
+  }
+  for (const elem of readOnlys) {
+    result.push(elem);
+  }
+
+  return result;
 }
 
 /**
@@ -58,7 +66,7 @@ export function activateListeners(html, ownerSheet) {
   // Pull view models from global collection and hook up event listeners. 
   if (ownerSheet.viewModels !== undefined) {
     // Get all elements from the given DOM which have one of the following css classes: "custom-system-edit" or "custom-system-read-only"
-    const inputs = SheetUtil.getAllInputs(html);
+    const inputs = getAllInputs(html);
     for (const input of inputs) {
       const id = input.id;
       if (id === undefined) throw new Error("NullPointerException: id of input element mustn't be undefined!");

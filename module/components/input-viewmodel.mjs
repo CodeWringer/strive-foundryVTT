@@ -105,10 +105,10 @@ export default class InputViewModel extends ViewModel {
    * @throws {Error} NullPointerException Thrown if the input element could not be found. 
    */
   activateListeners(html, isOwner, isEditable, isSendable) {
-    this._element = html.find(`.${SELECTOR_EDIT}#${this.id}`);
+    this._element = html.find(`.${InputViewModel.SELECTOR_EDIT}#${this.id}`);
     
     if (this._element === undefined || this._element === null) {
-      this._element = html.find(`.${SELECTOR_READ}#${this.id}`);
+      this._element = html.find(`.${InputViewModel.SELECTOR_READ}#${this.id}`);
     }
     
     if (this._element === undefined || this._element === null) {

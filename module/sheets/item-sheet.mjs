@@ -66,15 +66,11 @@ export class AmbersteelItemSheet extends ItemSheet {
    * @type {SheetViewModelCollection}
    * @private
    */
-  _viewModels = undefined;
+  _viewModels = new SheetViewModelCollection(this);
   /**
    * @returns {SheetViewModelCollection}
    */
   get viewModels() { return this._viewModels; }
-
-  constructor() {
-    this.viewModels = new SheetViewModelCollection(this);
-  }
 
   /** 
    * Returns an object that represents sheet and enriched item data. 

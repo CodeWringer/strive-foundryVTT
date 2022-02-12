@@ -12,6 +12,7 @@ export default class SheetViewModelCollection extends ViewModelCollection {
   get parent() { return this._parent; }
 
   constructor(parent) {
+    super();
     this._parent = parent;
   }
 
