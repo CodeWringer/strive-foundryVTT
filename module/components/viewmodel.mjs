@@ -9,6 +9,39 @@ import { createUUID } from "../utils/uuid-utility.mjs";
 export default class ViewModel {
   static get template() { throw new Error("NotImplementedException") }
 
+  /**
+   * @type {String}
+   * @private
+   */
+  _id = undefined;
+  /**
+   * @type {String}
+   * @readonly
+   */
+  get id() { return this._id; }
+
+  /**
+   * @type {Boolean}
+   * @private
+   */
+  _isEditable = false;
+  /**
+   * @type {Boolean}
+   * @readonly
+   */
+  get isEditable() { return this._isEditable; }
+
+  /**
+   * @type {Boolean}
+   * @private
+   */
+  _isSendable = false;
+  /**
+   * @type {Boolean}
+   * @readonly
+   */
+  get isSendable() { return this._isSendable; }
+
   constructor(args = {}) {
     args = {
       isEditable: false,
@@ -16,8 +49,8 @@ export default class ViewModel {
       id: createUUID(),
       ...args,
     }
-    this.isEditable = args.isEditable;
-    this.isSendable = args.isSendable;
-    this.id = args.id;
+    this._isEditable = args.isEditable;
+    this._isSendable = args.isSendable;
+    this._id = args.id;
   }
 }
