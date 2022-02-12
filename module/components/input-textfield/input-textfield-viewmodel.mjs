@@ -17,10 +17,21 @@ import InputViewModel from "../input-viewmodel.mjs";
  * 
  * --- Own properties
  * 
- * @property {String} placeholder Optional. A placeholder text to display while the textfield is empty. 
+ * @property {String} placeholder Gets a placeholder text to display while the textfield is empty. 
  */
 export default class InputTextFieldViewModel extends InputViewModel {
   static get template() { return TEMPLATES.COMPONENT_INPUT_TEXTFIELD; }
+
+  /**
+   * @type {String}
+   * @private
+   */
+  _placeholder = "";
+  /**
+   * @type {String}
+   * @readonly
+   */
+  get placeholder() { return this._placeholder; }
 
   constructor(args = {}) {
     super(args);
@@ -28,6 +39,6 @@ export default class InputTextFieldViewModel extends InputViewModel {
       placeholder: "",
       ...args,
     }
-    this.placeholder = this.placeholder;
+    this._placeholder = this.placeholder;
   }
 }
