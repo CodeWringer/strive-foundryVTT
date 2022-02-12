@@ -100,7 +100,6 @@ export class AmbersteelActor extends Actor {
     return items.filter((item) => { return item.type === "item" && !item.data.data.isOnPerson; });
   }
 
-  // TODO: Move to ambersteel-base-actor.mjs
   /**
    * 
    * @param attName {String} Internal name of an attribute, e.g. 'magicSense'. 
@@ -122,7 +121,6 @@ export class AmbersteelActor extends Actor {
     }
   }
 
-  // TODO: Move to ambersteel-base-actor.mjs
   /**
    * Sets the level of the attribute with the given name. 
    * @param attName {String} Internal name of an attribute, e.g. 'magicSense'. 
@@ -143,7 +141,6 @@ export class AmbersteelActor extends Actor {
     });
   }
 
-  // TODO: Move to ambersteel-base-actor.mjs
   /**
    * Adds success/failure progress to an attribute. 
    * 
@@ -180,33 +177,5 @@ export class AmbersteelActor extends Actor {
 
   async deleteByPropertyPath(propertyPath) {
     await deleteByPropertyPath(this, propertyPath);
-  }
-
-  /** 
-   * @override 
-   */
-  _preCreateEmbeddedDocuments(embeddedName, result, options, userId) {
-    return super._preCreateEmbeddedDocuments(embeddedName, result, options, userId);
-  }
-  
-  /** 
-   * @override 
-   */
-  async _preUpdateEmbeddedDocuments(embeddedName, result, options, userId) {
-    return super._preUpdateEmbeddedDocuments(embeddedName, result, options, userId);
-  }
-  
-  /** 
-   * @override 
-   */
-  async _onUpdateEmbeddedDocuments(embeddedName, args) {
-    return super._onUpdateEmbeddedDocuments(embeddedName, args);
-  }
-
-  /** 
-   * @override 
-   */
-  _preDeleteEmbeddedDocuments(embeddedName, result, options, userId) {
-    return super._preDeleteEmbeddedDocuments(embeddedName, result, options, userId);
   }
 }
