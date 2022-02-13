@@ -92,7 +92,7 @@ actor: {Actor} = {
   <ol class="unstyled-list alternating-rows">
     {{#each actor.injuries as |injury key|}}
       <li class="ambersteel-list-row sheet-block">
-        {{> "systems/ambersteel/templates/item/injury/injury-list-item.hbs" item=injury itemId=injury.id isEditable=../isEditable isSendable=../isSendable CONFIG=../CONFIG }}
+        {{> "systems/ambersteel/templates/item/injury/injury-list-item.hbs" item=injury itemId=injury.id isEditable=../isEditable isSendable=../isSendable CONFIG=../CONFIG game=../game }}
       </li>
     {{/each}}
     {{#if isEditable}}
@@ -128,7 +128,7 @@ actor: {Actor} = {
   <ol class="unstyled-list alternating-rows">
     {{#each actor.illnesses as |illness key|}}
       <li class="ambersteel-list-row sheet-block">
-        {{> "systems/ambersteel/templates/item/illness/illness-list-item.hbs" item=illness itemId=illness.id isEditable=../isEditable isSendable=../isSendable CONFIG=../CONFIG }}
+        {{> "systems/ambersteel/templates/item/illness/illness-list-item.hbs" item=illness itemId=illness.id isEditable=../isEditable isSendable=../isSendable CONFIG=../CONFIG game=../game }}
       </li>
     {{/each}}
     {{#if isEditable}}

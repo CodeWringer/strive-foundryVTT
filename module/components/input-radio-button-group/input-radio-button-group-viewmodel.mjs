@@ -25,6 +25,7 @@ import { selectItemByValue } from "../../utils/sheet-utility.mjs";
  */
 export default class InputRadioButtonGroupViewModel extends InputViewModel {
   static get template() { return TEMPLATES.COMPONENT_INPUT_RADIO_BUTTON_GROUP; }
+  static get activeCssClass() { return "active" }
 
   get selected() {
     return this.options.find(option => option.value === this.value);
@@ -33,6 +34,17 @@ export default class InputRadioButtonGroupViewModel extends InputViewModel {
   get localizedValue() {
     return this.selected.localizedValue;
   }
+
+  /**
+   * @type {HTMLElement}
+   * @private
+   */
+  _lastChecked = undefined;
+  /**
+   * @type {HTMLElement}
+   * @readonly
+   */
+  get lastChecked() { return this._lastChecked; }
 
   /**
    * @param {Boolean | undefined} args.isEditable 
@@ -72,13 +84,43 @@ export default class InputRadioButtonGroupViewModel extends InputViewModel {
       // Hook up events on radio button options. 
       radioButton.onchange = (event) => {
         this.value = event.currentTarget.value;
+        this._setChecked(event.currentTarget);
+
+        if (this._lastChecked !== undefined) {
+          this._setUnchecked(this._lastChecked);
+        }
+        this._lastChecked = event.currentTarget;
       };
       
       // Ensure correct option of radio-buttons is set.
       if (this.value == radioButton.value) {
-        radioButton.checked = true;
-        radioButtonContainer.className = radioButtonContainer.className + " active";
+        this._setChecked(radioButton);
+
+        if (this._lastChecked !== undefined) {
+          this._setUnchecked(this._lastChecked);
+        }
+        this._lastChecked = radioButton;
       }
     }
+  }
+
+  /**
+   * @param {HTMLElement} radioButton 
+   * @private
+   */
+  _setChecked(radioButton) {
+    radioButton.checked = true;
+    const parent = this.element.find('#' + radioButton.id).parent();
+    parent.addClass(InputRadioButtonGroupViewModel.activeCssClass);
+  }
+  
+  /**
+   * @param {HTMLElement} radioButton 
+   * @private
+   */
+  _setUnchecked(radioButton) {
+    radioButton.checked = false;
+    const parent = this.element.find('#' + radioButton.id).parent();
+    parent.removeClass(InputRadioButtonGroupViewModel.activeCssClass);
   }
 }
