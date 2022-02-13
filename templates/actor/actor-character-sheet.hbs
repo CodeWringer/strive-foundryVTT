@@ -1,17 +1,18 @@
 {{!-- Requires context:
 isEditable: {Boolean}
 isSendable: {Boolean}
+isOwner: {Boolean}
 isGM: {Boolean}
 actor: {Actor} = {
   data: {Object} = {
     data: {Object} {
-      person: {Object} -> see parts/actor-personals.hbs
-      attributeGroups: {Object} -> see parts/actor-attributes.hbs
-      learningSkills: {[Object]} -> see components/component-skill-table.hbs
-      skills: {[Object]} -> see components/component-skill-table.hbs
-      beliefSystem: {Object} -> see parts/actor-beliefs.hbs
-      fateSystem: {Object} -> see parts/actor-fate.hbs
-      biography: {Object} -> see parts/actor-biography.hbs
+      person: {Object}
+      attributeGroups: {Object}
+      learningSkills: {[Object]}
+      skills: {[Object]}
+      beliefSystem: {Object}
+      fateSystem: {Object}
+      biography: {Object}
     }
   }
 }
@@ -25,7 +26,7 @@ actor: {Actor} = {
       <h1 class="header-name fancy-font">
         {{> inputTextField vm=(createInputTextFieldViewModel isEditable isSendable actor "name" "ambersteel.labels.name") }}
       </h1>
-      {{> "systems/ambersteel/templates/actor/parts/actor-personals.hbs" isEditable=isEditable isSendable=isSendable actor=actor }}
+      {{> "systems/ambersteel/templates/actor/parts/actor-personals.hbs" isEditable=isEditable isSendable=isSendable isOwner=isOwner isGM=isGM actor=actor }}
     </div>
   </header>
 
@@ -54,7 +55,6 @@ actor: {Actor} = {
         isEditable=isEditable 
         isSendable=isSendable
         actor=actor 
-        attributeGroups=actor.data.attributeGroups 
       }}
     </div>
 

@@ -1,24 +1,10 @@
 {{!-- Requires parameters: 
 isEditable: {Boolean}
 isSendable: {Boolean}
-localizableAttributeGroupName: {String}
-attributeGroupName: {String}
-actor: {Object} = {
-    data: {Object} = {
-        data: {Object} = {
-            attributes: {[Object]} = {
-                name: {String}
-                localizableName: {String}
-                localizableAbbreviation: {String}
-                value: {Number}
-                successes: {Number}
-                failures: {Number}
-                requiredSuccessses: {Number}
-                requiredFailures: {Number}
-            }
-        }
-    }
-}
+isOwner: {Boolean}
+isGM: {Boolean}
+actor: {Object}
+attributeGroup: {Object}
 --}}
 <div>
     <table class="attribute-table">
@@ -28,7 +14,7 @@ actor: {Object} = {
                     <th class="attribute-column-roll"></th>
                 {{/if}}
                 <th class="attribute-column-name">
-                    {{localize localizableAttributeGroupName}}
+                    {{localize attributeGroup.localizableName}}
                 </th>
                 <th class="attribute-column-abbreviation"></th>
                 <th class="attribute-column-level">
@@ -44,17 +30,17 @@ actor: {Object} = {
                     {{localize "ambersteel.labels.failureAbbreviation"}}
                 </th>
             </tr>
-            {{#each attributes as | att |}}
-            <tr class="item attribute-item" data-att-group-name="{{../attributeGroupName}}" data-att-name="{{att.name}}">
+            {{#each attributeGroup.attributes as |att index|}}
+            <tr class="item attribute-item" data-att-group-name="{{../attributeGroup.name}}" data-att-name="{{att.name}}">
                 {{#if ../isEditable}}
                     <td class="attribute-column-roll">
                         {{> buttonRoll
                             type="dice-pool"
-                            propertyPath=(concat "data.data.attributes." ../attributeGroupName "." att.name ".value")
+                            propertyPath=(concat "data.data.attributes." ../attributeGroup.name "." att.name ".value")
                             chatTitle=(localize att.localizableName)
                             callback="advanceAttributeBasedOnRollResult"
                             callbackData=att.name
-                            contextOverride=../this
+                            contextOverride=../actor
                         }}
                     </td>
                 {{/if}}
@@ -65,16 +51,16 @@ actor: {Object} = {
                     [{{localize att.localizableAbbreviation}}]
                 </td>
                 <td class="attribute-column-level">
-                    {{> inputNumberSpinner vm=(createInputNumberSpinnerViewModel ../isEditable ../isSendable ../actor (concat "data.data.attributes." ../attributeGroupName "." att.name ".value") 1 0 undefined) }}
+                    {{> inputNumberSpinner vm=(createInputNumberSpinnerViewModel ../isEditable ../isSendable ../actor (concat "data.data.attributes." ../attributeGroup.name "." att.name ".value") 1 0 undefined) }}
                 </td>
                 <td class="attribute-column-requirements">
                     {{att.requiredSuccessses}} / {{att.requiredFailures}}
                 </td>
                 <td class="attribute-column-successes">
-                    {{> inputNumberSpinner vm=(createInputNumberSpinnerViewModel ../isEditable ../isSendable ../actor (concat "data.data.attributes." ../attributeGroupName "." att.name ".successes") 1 0 undefined) }}
+                    {{> inputNumberSpinner vm=(createInputNumberSpinnerViewModel ../isEditable ../isSendable ../actor (concat "data.data.attributes." ../attributeGroup.name "." att.name ".successes") 1 0 undefined) }}
                 </td>
                 <td class="attribute-column-failures">
-                    {{> inputNumberSpinner vm=(createInputNumberSpinnerViewModel ../isEditable ../isSendable ../actor (concat "data.data.attributes." ../attributeGroupName "." att.name ".failures") 1 0 undefined) }}
+                    {{> inputNumberSpinner vm=(createInputNumberSpinnerViewModel ../isEditable ../isSendable ../actor (concat "data.data.attributes." ../attributeGroup.name "." att.name ".failures") 1 0 undefined) }}
                 </td>
             </tr>
             {{/each}}

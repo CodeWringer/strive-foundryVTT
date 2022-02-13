@@ -129,19 +129,71 @@ export default class AmbersteelBaseActor {
 
   /**
    * Prepares derived data for all attributes. 
+   * 
+   * This will adjust actor.data.data to the following result:
+   * actor.data.data = {
+   *   attributeGroups: {Array<Object>} = same as physical,
+   *   attributes: {Object} = {
+   *     physical: {Object} = {
+   *       name: {String},
+   *       localizableName: {String},
+   *       localizableAbbreviation: {String},
+   *       attributes: {Array<Object>} = {
+   *         value: {Number},
+   *         successes: {Number},
+   *         failures: {Number},
+   *         requiredSuccessses: {Number},
+   *         requiredFailures: {Number},
+   *         name: {String},
+   *         localizableName: {String},
+   *         localizableAbbreviation: {String}
+   *       }
+   *     },
+   *     mental: {Object} = same as physical
+   *     social: {Object} = same as physical
+   *   }
+   * }
+   * 
    * @param {AmbersteelActor} context 
    * @private
    */
   _prepareDerivedAttributesData(context) {
-    const actorData = context.data;
-    for (const attGroupName in actorData.data.attributes) {
-      const oAttGroup = actorData.data.attributes[attGroupName];
+    const actorData = context.data.data;
 
-      for (const attName in oAttGroup) {
+    // The names of the attribute groups to iterate. "physical", "mental" and "social"
+    const attributeGroupNames = actorData.attributeGroupNames ?? this._getAttributeGroupNames(context);
+    if (actorData.attributeGroupNames === undefined) {
+      actorData.attributeGroupNames = attributeGroupNames;
+    }
+    
+    const attributeGroups = [];
+    for (const attGroup of attributeGroupNames) {
+      const attGroupName = attGroup.name;
+      const oAttGroup = actorData.attributes[attGroupName];
+      
+      // The names of the attributes to iterate. E. g. "agility" or "willpower"
+      const attributeNames = attGroup.attributeNames;
+      
+      // Prepare attributes of group. 
+      const attributes = [];
+      for (const attName of attributeNames) {
         const oAtt = oAttGroup[attName];
         this._prepareDerivedAttributeData(oAtt, attName);
+        attributes.push(oAtt);
       }
+
+      // Add internal name. 
+      oAttGroup.name = attGroupName;
+      // Add localization keys. 
+      oAttGroup.localizableName = `ambersteel.attributeGroups.${attGroupName}`;
+      oAttGroup.localizableAbbreviation = `ambersteel.attributeGroupAbbreviations.${attGroupName}`;
+      // Add attributes of group for easy access. 
+      oAttGroup.attributes = attributes;
+
+      attributeGroups.push(oAttGroup);
     }
+    // Add attribute groups for easy access. 
+    actorData.attributeGroups = attributeGroups;
   }
 
   /**
@@ -161,9 +213,30 @@ export default class AmbersteelBaseActor {
     // Add internal name. 
     oAtt.name = attName;
 
-    // Add localizable string. 
-    oAtt.localizableName = "ambersteel.attributes." + attName;
-    oAtt.localizableAbbreviation = "ambersteel.attributeAbbreviations." + attName;
+    // Add localization keys. 
+    oAtt.localizableName = `ambersteel.attributes.${attName}`;
+    oAtt.localizableAbbreviation = `ambersteel.attributeAbbreviations.${attName}`;
+  }
+
+  /**
+   * @param {Document} context 
+   * @returns {Array<Object>} { name: {String}, attributeNames: {Array<String>} }
+   * @private
+   */
+  _getAttributeGroupNames(context) {
+    const result = [];
+
+    for (const attributeGroupName in context.data.data.attributes) {
+      const attributeNames = [];
+      for (const attributeName in context.data.data.attributes[attributeGroupName]) {
+        attributeNames.push(attributeName);
+      }
+
+      const obj = { name: attributeGroupName, attributeNames: attributeNames };
+      result.push(obj);
+    }
+
+    return result;
   }
 
   /**

@@ -35,6 +35,11 @@
       "mental": "Mental Attributes",
       "social": "Social Attributes"
     },
+    "attributeGroupAbbreviations": {
+      "physical": "Physical",
+      "mental": "Mental",
+      "social": "Social"
+    },
     "attributes": {
       "agility": "Agility",
       "endurance": "Endurance",

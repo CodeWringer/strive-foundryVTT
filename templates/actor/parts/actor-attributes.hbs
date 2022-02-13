@@ -1,49 +1,34 @@
 {{!-- Requires parameters:
 isEditable: {Boolean}
 isSendable: {Boolean}
+isOwner: {Boolean}
+isGM: {Boolean}
 actor: {Object}
-attributeGroups: {Object} = {
-    physical: {Object} = {
-        name: {String}
-        localizableName: {String}
-        attributes: {[Object]} -> see component-attribute-table.hbs
-    },
-    mental: {Object}: {Object} = {
-        name: {String}
-        localizableName: {String}
-        attributes: {[Object]} -> see component-attribute-table.hbs
-    },
-    social: {Object}: {Object} = {
-        name: {String}
-        localizableName: {String}
-        attributes: {[Object]} -> see component-attribute-table.hbs
-    }
-}
 --}}
 <section>
     {{!-- Attributes --}}
     {{> "systems/ambersteel/templates/actor/components/component-attribute-table.hbs" 
         isEditable=isEditable
         isSendable=isSendable
-        localizableAttributeGroupName=attributeGroups.physical.localizableName
-        attributeGroupName=attributeGroups.physical.name
-        attributes=attributeGroups.physical.attributes 
+        isOwner=isOwner
+        isGM=isGM
         actor=actor
+        attributeGroup=actor.data.data.attributes.physical
     }}
     {{> "systems/ambersteel/templates/actor/components/component-attribute-table.hbs" 
         isEditable=isEditable
         isSendable=isSendable
-        localizableAttributeGroupName=attributeGroups.mental.localizableName 
-        attributeGroupName=attributeGroups.mental.name 
-        attributes=attributeGroups.mental.attributes 
+        isOwner=isOwner
+        isGM=isGM
         actor=actor
+        attributeGroup=actor.data.data.attributes.mental
     }}
     {{> "systems/ambersteel/templates/actor/components/component-attribute-table.hbs"
         isEditable=isEditable
         isSendable=isSendable
-        localizableAttributeGroupName=attributeGroups.social.localizableName 
-        attributeGroupName=attributeGroups.social.name 
-        attributes=attributeGroups.social.attributes 
+        isOwner=isOwner
+        isGM=isGM
         actor=actor
+        attributeGroup=actor.data.data.attributes.social
     }}
 </section>
