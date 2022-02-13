@@ -1,7 +1,6 @@
 import AmbersteelPcActor from './subtypes/actor/ambersteel-pc-actor.mjs';
 import AmbersteelNpcActor from './subtypes/actor/ambersteel-npc-actor.mjs';
 import { deleteByPropertyPath } from '../utils/document-update-utility.mjs';
-import { EventEmitter } from '../utils/event-emitter.mjs';
 
 /**
  * @extends {Actor}
