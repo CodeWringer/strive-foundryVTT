@@ -4,13 +4,11 @@ import { deleteByPropertyPath } from '../utils/document-update-utility.mjs';
 
 /**
  * @extends {Actor}
- * @property person {Object}
- * @property attributeGroups: {Object}
- * @property learningSkills: {[Object]}
- * @property skills: {[Object]}
- * @property beliefSystem: {Object}
- * @property fateSystem: {Object}
- * @property biography: {Object}
+ * @property {Array<Item>} injuries
+ * @property {Array<Item>} illnesses
+ * @property {Array<Item>} possessions
+ * @property {Array<Item>} propertyItems
+ * @property {Array<Item>} fateCards
  */
 export class AmbersteelActor extends Actor {
   /**
