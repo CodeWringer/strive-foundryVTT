@@ -1,25 +1,9 @@
 {{!-- Requires parameters:
 isEditable: {Boolean}
 isSendable: {Boolean}
-actor: {Object} = {
-  data: {Object} = {
-    data: {Object} = {
-      fateSystem: {Object} = {
-        miFP: {Number}
-        maFP: {Number}
-        AFP: {Number}
-        remainingSlots: {Number},
-        cards: {[Object]} = { 
-          id: {String}
-          img: {String}
-          name: {String}
-          localizableName: {String}
-          localizableDescription: {String}
-        }
-      }
-    }
-  }
-}
+isOwner: {Boolean}
+isGM: {Boolean}
+actor: {Object}
 --}}
 <section>
   <div class="sheet-block grid grid-2col flex-column">
@@ -49,16 +33,18 @@ actor: {Object} = {
     </span>
   </div>
   <div class="flex" style="flex-wrap: wrap;">
-    {{#each data.data.fateSystem.cards as |card key|}}
+    {{#each actor.fateCards as |card key|}}
     <div class="fate-card-actor-container">
       {{> "systems/ambersteel/templates/item/fate-card/fate-card.hbs"
         isEditable=../isEditable 
         isSendable=../isSendable 
+        isOwner=../isOwner
+        isGM=../isGM
         item=card 
       }}
     </div>
     {{/each}}
-    {{#times data.data.fateSystem.remainingSlots}}
+    {{#times actor.data.data.fateSystem.remainingSlots}}
       <div class="fate-card-actor-container">
         <div class="fate-card">
           {{> buttonAdd itemType="fate-card" withDialog="true" fill=true cssClass="font-size-xxl" }}

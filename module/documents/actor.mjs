@@ -100,6 +100,13 @@ export class AmbersteelActor extends Actor {
   }
 
   /**
+   * @returns {Array<Item>} A list of "fate-card" type items that represent fate-cards of 
+   * this character. 
+   * @readonly
+   */
+  get fateCards() { return this.getItemsByType("fate-card"); }
+
+  /**
    * 
    * @param attName {String} Internal name of an attribute, e.g. 'magicSense'. 
    * @returns {Object} With properties 'object', 'name', 'groupName'

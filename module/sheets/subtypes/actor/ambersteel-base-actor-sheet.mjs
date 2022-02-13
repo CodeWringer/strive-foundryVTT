@@ -37,6 +37,9 @@ export default class AmbersteelBaseActorSheet {
     return TEMPLATES.ACTOR_SHEET; 
   }
 
+  /**
+   * @override
+   */
   static get itemContextMenu() { 
     return [
       {
@@ -89,8 +92,6 @@ export default class AmbersteelBaseActorSheet {
     // It is "safe", because behind the scenes, a getter returns a clone. 
     const actorData = context.actor.data.data;
 
-    context.data.data.attributeGroups = this._getDerivedAttributeGroups(actorData.attributes);
-
     // General derived data. 
     // TODO: Remove?
     context.data.person = actorData.person;
@@ -100,35 +101,6 @@ export default class AmbersteelBaseActorSheet {
     context.data.learningSkills = actorData.learningSkills;
     context.data.skills = actorData.skills;
     context.data.attributeGroups = context.data.data.attributeGroups;
-  }
-
-  /**
-   * 
-   * @param attributes {Object} The root attributes object. 
-   */
-  _getDerivedAttributeGroups(attributes) {
-    // Holds attribute group objects for easy access. 
-    const attributeGroups = {};
-
-    for (const attGroupName in attributes) {
-      if (!attributes.hasOwnProperty(attGroupName)) continue;
-
-      const oAttGroup = attributes[attGroupName];
-      
-      // Initialize attribute group object with meta-data. 
-      attributeGroups[attGroupName] = {
-        localizableName: "ambersteel.attributeGroups." + attGroupName,
-        name: attGroupName,
-        attributes: {}
-      };
-
-      for (const attName in oAttGroup) {
-        if (!oAttGroup.hasOwnProperty(attName)) continue;
-        
-        attributeGroups[attGroupName].attributes[attName] = oAttGroup[attName];
-      }
-    }
-    return attributeGroups;
   }
 
   /**
