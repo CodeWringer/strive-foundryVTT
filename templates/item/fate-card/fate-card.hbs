@@ -23,7 +23,7 @@ item: {Item} = {
     <div class="flex flex-row">
       <img class="header-image" src="{{item.img}}" data-edit="img" title="{{item.name}}" height="26" width="26" />
       <h3 class="header-name flex-grow" style="margin: 0;">
-        {{> inputTextField vm=(createInputTextFieldViewModel isEditable isSendable item "name" "ambersteel.labels.name") }}
+        {{> inputTextField isEditable=isEditable propertyOwner=item propertyPath="name" placeholder="ambersteel.labels.name" }}
       </h3>
     </div>
   </div>
@@ -43,6 +43,6 @@ item: {Item} = {
   {{/if}}
   {{!-- Description --}}
   <div class="flex flex-grow">
-    {{> inputTextarea vm=(createInputTextareaViewModel isEditable isSendable item "data.data.description" (localize "ambersteel.labels.description") false false) }}
+    {{> inputTextarea isEditable=isEditable propertyOwner=item propertyPath="data.data.description" placeholder=(localize "ambersteel.labels.description") }}
   </div>
 </section>

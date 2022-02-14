@@ -21,16 +21,16 @@ actor: {AmbersteelActor}  = {
       <label class="line-height fancy-font pad-sm" for="person.sex">{{localize "ambersteel.personals.sex"}}</label>
     </div>
     <div class="flex flex-column flex-grow">
-      {{> inputTextField vm=(createInputTextFieldViewModel isEditable isSendable actor "data.data.person.species" "") cssClass="line-height pad-sm" readOnlyCssClass="line-height pad-sm" }}
-      {{> inputTextField vm=(createInputTextFieldViewModel isEditable isSendable actor "data.data.person.culture" "") cssClass="line-height pad-sm" readOnlyCssClass="line-height pad-sm" }}
+      {{> inputTextField isEditable=isEditable propertyOwner=actor propertyPath="data.data.person.species" cssClass="line-height pad-sm" readOnlyCssClass="line-height pad-sm" }}
+      {{> inputTextField isEditable=isEditable propertyOwner=actor propertyPath="data.data.person.culture" cssClass="line-height pad-sm" readOnlyCssClass="line-height pad-sm" }}
     </div>
     <div class="flex flex-column">
       <label class="line-height fancy-font pad-sm" for="person.culture">{{localize "ambersteel.personals.culture"}}</label>
       <label class="line-height fancy-font pad-sm" for="person.age">{{localize "ambersteel.personals.age"}}</label>
     </div>
     <div class="flex flex-column flex-grow">
-      {{> inputTextField vm=(createInputTextFieldViewModel isEditable isSendable actor "data.data.person.sex" "") cssClass="line-height pad-sm" readOnlyCssClass="line-height pad-sm" }}
-      {{> inputTextField vm=(createInputTextFieldViewModel isEditable isSendable actor "data.data.person.age" "") cssClass="line-height pad-sm" readOnlyCssClass="line-height pad-sm" }}
+      {{> inputTextField isEditable=isEditable propertyOwner=actor propertyPath="data.data.person.sex" cssClass="line-height pad-sm" readOnlyCssClass="line-height pad-sm" }}
+      {{> inputTextField isEditable=isEditable propertyOwner=actor propertyPath="data.data.person.age" cssClass="line-height pad-sm" readOnlyCssClass="line-height pad-sm" }}
     </div>
   </div>
 </section>

@@ -24,7 +24,7 @@ actor: {Actor} = {
     <img class="profile-img" src="{{actor.img}}" data-edit="img" title="{{actor.name}}" height="100" width="100" />
     <div class="header-fields">
       <h1 class="header-name fancy-font">
-        {{> inputTextField vm=(createInputTextFieldViewModel isEditable isSendable actor "name" "ambersteel.labels.name") }}
+        {{> inputTextField isEditable=isEditable propertyOwner=actor propertyPath="name" placeholder="ambersteel.labels.name" }}
       </h1>
       {{> "systems/ambersteel/templates/actor/parts/actor-personals.hbs" isEditable=isEditable isSendable=isSendable isOwner=isOwner isGM=isGM actor=actor }}
     </div>

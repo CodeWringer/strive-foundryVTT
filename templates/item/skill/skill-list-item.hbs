@@ -31,7 +31,7 @@ item: {Item} = {
       {{> inputLabel text="ambersteel.labels.injury"}}
     </span>
     <span class="flex-grow margin-r-md">
-      {{> inputTextField vm=(createInputTextFieldViewModel isEditable isSendable item "name" "ambersteel.labels.name") }}
+      {{> inputTextField isEditable=isEditable propertyOwner=item propertyPath="name" placeholder="ambersteel.labels.name" }}
     </span>
     {{!-- State --}}
   </div>
@@ -41,5 +41,5 @@ item: {Item} = {
 {{!-- Row 3 --}}
 {{!-- Description --}}
 <div class="flex flex-row">
-  {{> inputTextarea vm=(createInputTextareaViewModel isEditable isSendable item "data.data.description" (localize "ambersteel.labels.description") true false) cssClass="fill" }}
+  {{> inputTextarea isEditable=isEditable propertyOwner=item propertyPath="data.data.description" placeholder=(localize "ambersteel.labels.description") allowResize=true cssClass="fill" }}
 </div>

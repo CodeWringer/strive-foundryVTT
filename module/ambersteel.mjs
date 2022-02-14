@@ -385,87 +385,6 @@ Handlebars.registerHelper('generateId', function() {
   return createUUID();
 });
 
-// ---- ViewModel creation helpers
-
-Handlebars.registerHelper('createInputTextFieldViewModel', function(isEditable, isSendable, propertyOwner, propertyPath, localizablePlaceholder) {
-  const vm = new InputTextFieldViewModel({
-    isEditable: isEditable,
-    isSendable: isSendable,
-    propertyOwner: propertyOwner,
-    propertyPath: propertyPath,
-    placeholder: game.i18n.localize(localizablePlaceholder)
-  });
-
-  // Add new view model instance to global collection. 
-  game.ambersteel.viewModels.set(vm.id, vm);
-
-  return vm;
-});
-
-Handlebars.registerHelper('createInputDropDownViewModel', function(isEditable, isSendable, propertyOwner, propertyPath, options) {
-  const vm = new InputDropDownViewModel({
-    isEditable: isEditable,
-    isSendable: isSendable,
-    propertyOwner: propertyOwner,
-    propertyPath: propertyPath,
-    options: options
-  });
-
-  // Add new view model instance to global collection. 
-  game.ambersteel.viewModels.set(vm.id, vm);
-
-  return vm;
-});
-
-Handlebars.registerHelper('createInputNumberSpinnerViewModel', function(isEditable, isSendable, propertyOwner, propertyPath, step, min, max) {
-  const vm = new InputNumberSpinnerViewModel({
-    isEditable: isEditable,
-    isSendable: isSendable,
-    propertyOwner: propertyOwner,
-    propertyPath: propertyPath,
-    step: step,
-    min: min,
-    max: max
-  });
-
-  // Add new view model instance to global collection. 
-  game.ambersteel.viewModels.set(vm.id, vm);
-
-  return vm;
-});
-
-Handlebars.registerHelper('createInputTextareaViewModel', function(isEditable, isSendable, propertyOwner, propertyPath, placeholder, allowResize, spellcheck) {
-  const vm = new InputTextareaViewModel({
-    isEditable: isEditable,
-    isSendable: isSendable,
-    propertyOwner: propertyOwner,
-    propertyPath: propertyPath,
-    allowResize: allowResize,
-    spellcheck: spellcheck,
-    placeholder: placeholder
-  });
-
-  // Add new view model instance to global collection. 
-  game.ambersteel.viewModels.set(vm.id, vm);
-
-  return vm;
-});
-
-Handlebars.registerHelper('createInputRadioButtonGroupViewModel', function(isEditable, isSendable, propertyOwner, propertyPath, options) {
-  const vm = new InputRadioButtonGroupViewModel({
-    isEditable: isEditable,
-    isSendable: isSendable,
-    propertyOwner: propertyOwner,
-    propertyPath: propertyPath,
-    options: options
-  });
-
-  // Add new view model instance to global collection. 
-  game.ambersteel.viewModels.set(vm.id, vm);
-
-  return vm;
-});
-
 /* -------------------------------------------- */
 /*  Handlebars Partials                         */
 /* -------------------------------------------- */
@@ -480,11 +399,6 @@ Handlebars.registerPartial('buttonToggleVisibility', `{{#> "${TEMPLATES.COMPONEN
 Handlebars.registerPartial('buttonTakeItem', `{{#> "${TEMPLATES.COMPONENT_BUTTON_TAKE_ITEM}"}}{{/"${TEMPLATES.COMPONENT_BUTTON_TAKE_ITEM}"}}`);
 
 // Input components
-Handlebars.registerPartial('inputTextField', `{{#> "${TEMPLATES.COMPONENT_INPUT_TEXTFIELD}"}}{{/"${TEMPLATES.COMPONENT_INPUT_TEXTFIELD}"}}`);
-Handlebars.registerPartial('inputDropDown', `{{#> "${TEMPLATES.COMPONENT_INPUT_DROPDOWN}"}}{{/"${TEMPLATES.COMPONENT_INPUT_DROPDOWN}"}}`);
-Handlebars.registerPartial('inputNumberSpinner', `{{#> "${TEMPLATES.COMPONENT_INPUT_NUMBER_SPINNER}"}}{{/"${TEMPLATES.COMPONENT_INPUT_NUMBER_SPINNER}"}}`);
-Handlebars.registerPartial('inputTextarea', `{{#> "${TEMPLATES.COMPONENT_INPUT_TEXTAREA}"}}{{/"${TEMPLATES.COMPONENT_INPUT_TEXTAREA}"}}`);
-Handlebars.registerPartial('inputRadioButtonGroup', `{{#> "${TEMPLATES.COMPONENT_INPUT_RADIO_BUTTON_GROUP}"}}{{/"${TEMPLATES.COMPONENT_INPUT_RADIO_BUTTON_GROUP}"}}`);
 Handlebars.registerPartial('inputLabel', `{{#> "${TEMPLATES.COMPONENT_INPUT_LABEL}"}}{{/"${TEMPLATES.COMPONENT_INPUT_LABEL}"}}`);
 
 /* -------------------------------------------- */

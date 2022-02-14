@@ -20,7 +20,7 @@ item: {Item} = {
       <div class="flex flex-row">
         <img class="header-image" src="{{item.img}}" data-edit="img" title="{{item.name}}" height="64" width="64" />
         <h1 class="header-name">
-          {{> inputTextField vm=(createInputTextFieldViewModel isEditable isSendable item "name" "ambersteel.labels.name") }}
+          {{> inputTextField isEditable=isEditable propertyOwner=item propertyPath="name" placeholder="ambersteel.labels.name" }}
         </h1>
         {{#if isSendable}}
           <div class="flex flex-center">
@@ -36,7 +36,7 @@ item: {Item} = {
       {{> inputLabel text="ambersteel.labels.limit"}}
     </div>
     <div class="flex-grow">
-      {{> inputNumberSpinner vm=(createInputNumberSpinnerViewModel isEditable isSendable item "data.data.limit" 1 0 undefined) }}
+      {{> inputNumberSpinner isEditable=isEditable propertyOwner=item propertyPath="data.data.limit" min=0 }}
     </div>
   </div>
   {{!-- Time to heal --}}
@@ -45,7 +45,7 @@ item: {Item} = {
       {{> inputLabel text="ambersteel.labels.timeToHeal"}}
     </div>
     <div class="flex-grow">
-      {{> inputTextField vm=(createInputTextFieldViewModel isEditable isSendable item "data.data.timeToHeal" "") }}
+      {{> inputTextField isEditable=isEditable propertyOwner=item propertyPath="data.data.timeToHeal" }}
     </div>
   </div>
   {{!-- Description --}}
@@ -54,7 +54,7 @@ item: {Item} = {
       {{> inputLabel text=(localize "ambersteel.labels.description")}}
     </div>
     <div class="flex-grow">
-      {{> inputTextarea vm=(createInputTextareaViewModel isEditable isSendable item "data.data.description" (localize "ambersteel.labels.description") true false) cssClass="fill" }}
+      {{> inputTextarea isEditable=isEditable propertyOwner=item propertyPath="data.data.description" placeholder=(localize "ambersteel.labels.description") allowResize=true cssClass="fill" }}
     </div>
   </div>
 </form>

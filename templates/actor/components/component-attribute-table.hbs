@@ -51,16 +51,16 @@ attributeGroup: {Object}
                     [{{localize att.localizableAbbreviation}}]
                 </td>
                 <td class="attribute-column-level">
-                    {{> inputNumberSpinner vm=(createInputNumberSpinnerViewModel ../isEditable ../isSendable ../actor (concat "data.data.attributes." ../attributeGroup.name "." att.name ".value") 1 0 undefined) }}
+                    {{> inputNumberSpinner isEditable=../isEditable propertyOwner=../actor propertyPath=(concat "data.data.attributes." ../attributeGroup.name "." att.name ".value") min=0 }}
                 </td>
                 <td class="attribute-column-requirements">
                     {{att.requiredSuccessses}} / {{att.requiredFailures}}
                 </td>
                 <td class="attribute-column-successes">
-                    {{> inputNumberSpinner vm=(createInputNumberSpinnerViewModel ../isEditable ../isSendable ../actor (concat "data.data.attributes." ../attributeGroup.name "." att.name ".successes") 1 0 undefined) }}
+                    {{> inputNumberSpinner isEditable=../isEditable propertyOwner=../actor propertyPath=(concat "data.data.attributes." ../attributeGroup.name "." att.name ".successes") min=0 }}
                 </td>
                 <td class="attribute-column-failures">
-                    {{> inputNumberSpinner vm=(createInputNumberSpinnerViewModel ../isEditable ../isSendable ../actor (concat "data.data.attributes." ../attributeGroup.name "." att.name ".failures") 1 0 undefined) }}
+                    {{> inputNumberSpinner isEditable=../isEditable propertyOwner=../actor propertyPath=(concat "data.data.attributes." ../attributeGroup.name "." att.name ".failures") min=0 }}
                 </td>
             </tr>
             {{/each}}

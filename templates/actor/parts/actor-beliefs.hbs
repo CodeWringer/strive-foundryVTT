@@ -10,14 +10,14 @@ actor: {Object}
     <h3>
       <label class="fancy-font">{{localize "ambersteel.beliefSystem.ambition"}}</label>
     </h3>
-      {{> inputTextField vm=(createInputTextFieldViewModel isEditable isSendable actor "data.data.beliefSystem.ambition" "") }}
+      {{> inputTextField isEditable=isEditable propertyOwner=actor propertyPath="data.data.beliefSystem.ambition" }}
   </div>
   <div class="sheet-block">
     <h3>
       <label class="fancy-font">{{localize "ambersteel.beliefSystem.beliefs"}}</label>
     </h3>
     {{#each actor.data.data.beliefSystem.beliefs as |belief index|}}
-      {{> inputTextField vm=(createInputTextFieldViewModel ../isEditable ../isSendable ../actor (concat "data.data.beliefSystem.beliefs[" index "]") "") }}
+      {{> inputTextField isEditable=../isEditable propertyOwner=../actor propertyPath=(concat "data.data.beliefSystem.beliefs[" index "]") }}
     {{/each}}
   </div>
   <div class="sheet-block">
@@ -25,7 +25,7 @@ actor: {Object}
       <label class="fancy-font">{{localize "ambersteel.beliefSystem.instincts"}}</label>
     </h3>
     {{#each actor.data.data.beliefSystem.instincts as |instinct index|}}
-      {{> inputTextField vm=(createInputTextFieldViewModel ../isEditable ../isSendable ../actor (concat "data.data.beliefSystem.instincts[" index "]") "") }}
+      {{> inputTextField isEditable=../isEditable propertyOwner=../actor propertyPath=(concat "data.data.beliefSystem.instincts[" index "]") }}
     {{/each}}
   </div>
 </section>

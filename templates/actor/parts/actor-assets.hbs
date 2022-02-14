@@ -59,7 +59,7 @@ actor: {Actor} = {
           {{> inputLabel for="totalBulk" text="ambersteel.labels.usedCarryingCapacity"}}
         </div>
         <span class="width-md">
-          {{> inputNumberSpinner vm=(createInputNumberSpinnerViewModel false isSendable actor "data.data.assets.totalBulk" 1 undefined undefined) }}
+          {{> inputNumberSpinner isEditable=false propertyOwner=actor propertyPath="data.data.assets.totalBulk" }}
         </span>
       </div>
     </div>

@@ -27,7 +27,7 @@ item: {Item} = {
       <div class="flex flex-row">
         <img class="header-image" src="{{item.img}}" data-edit="img" title="{{item.name}}" height="64" width="64" />
         <h1 class="header-name">
-          {{> inputTextField vm=(createInputTextFieldViewModel isEditable isSendable item "name" "ambersteel.labels.name") }}
+          {{> inputTextField isEditable=isEditable propertyOwner=item propertyPath="name" placeholder="ambersteel.labels.name" }}
         </h1>
         {{#if isSendable}}
           <div class="flex flex-center">
@@ -43,7 +43,7 @@ item: {Item} = {
       {{> inputLabel text="ambersteel.labels.relatedAttribute"}}
     </div>
     <div class="flex-grow">
-      {{> inputDropDown vm=(createInputDropDownViewModel isEditable isSendable item "data.data.relatedAttribute" (game.ambersteel.getAttributeOptions)) }}
+      {{> inputDropDown isEditable=isEditable propertyOwner=item propertyPath="data.data.relatedAttribute" options=(game.ambersteel.getAttributeOptions) }}
     </div>
   </div>
   {{!-- Category --}}
@@ -52,7 +52,7 @@ item: {Item} = {
       {{> inputLabel text="ambersteel.labels.category"}}
     </div>
     <div class="flex-grow">
-      {{> inputTextField vm=(createInputTextFieldViewModel isEditable isSendable item "data.data.category" "") }}
+      {{> inputTextField isEditable=isEditable propertyOwner=item propertyPath="data.data.category" }}
     </div>
   </div>
   {{!-- Description --}}
@@ -61,7 +61,7 @@ item: {Item} = {
       {{> inputLabel text=(localize "ambersteel.labels.description")}}
     </div>
     <div class="flex-grow">
-      {{> inputTextarea vm=(createInputTextareaViewModel isEditable isSendable item "data.data.description" (localize "ambersteel.labels.description") true false) cssClass="fill" }}
+      {{> inputTextarea isEditable=isEditable propertyOwner=item propertyPath="data.data.description" placeholder=(localize "ambersteel.labels.description") allowResize=true cssClass="fill" }}
     </div>
   </div>
   {{!-- Skill Abilites --}}

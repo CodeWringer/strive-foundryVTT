@@ -25,10 +25,10 @@ item: {Item} = {
       {{> inputLabel text="ambersteel.labels.illness"}}
     </span>
     <span class="flex-grow margin-r-md">
-      {{> inputTextField vm=(createInputTextFieldViewModel isEditable isSendable item "name" "ambersteel.labels.name") }}
+      {{> inputTextField isEditable=isEditable propertyOwner=item propertyPath="name" placeholder="ambersteel.labels.name" }}
     </span>
     {{!-- State --}}
-    {{> inputRadioButtonGroup vm=(createInputRadioButtonGroupViewModel isEditable isSendable item "data.data.state" (game.ambersteel.getIllnessOptions)) }}
+    {{> inputRadioButtonGroup isEditable=isEditable propertyOwner=item propertyPath="data.data.state" options=(game.ambersteel.getIllnessOptions) }}
   </div>
   {{!-- Delete --}}
   {{> buttonDelete itemId=itemId promptConfirm=true promptLocalizableTitle="ambersteel.dialog.titleConfirmDeletionIllnessQuery" }}
@@ -42,7 +42,7 @@ item: {Item} = {
     {{> inputLabel text="ambersteel.labels.treatmentSkill" }}
   </span>
   <span class="width-xl">
-    {{> inputTextField vm=(createInputTextFieldViewModel isEditable isSendable item "data.data.treatmentSkill" "") }}
+    {{> inputTextField isEditable=isEditable propertyOwner=item propertyPath="data.data.treatmentSkill" }}
   </span>
   {{!-- Spacer --}}
   <div class="width-xs"></div>
@@ -51,7 +51,7 @@ item: {Item} = {
     {{> inputLabel text="ambersteel.labels.duration" }}
   </span>
   <span class="flex-grow">
-    {{> inputTextField vm=(createInputTextFieldViewModel isEditable isSendable item "data.data.duration" "") }}
+    {{> inputTextField isEditable=isEditable propertyOwner=item propertyPath="data.data.duration" }}
   </span>
 </div>
 {{!-- Spacer --}}
@@ -62,11 +62,11 @@ item: {Item} = {
     {{> inputLabel text="ambersteel.labels.treatment" }}
   </span>
   <span class="flex-grow">
-    {{> inputTextField vm=(createInputTextFieldViewModel isEditable isSendable item "data.data.treatment" "") }}
+    {{> inputTextField isEditable=isEditable propertyOwner=item propertyPath="data.data.treatment" }}
   </span>
 </div>
 {{!-- Row 3 --}}
 {{!-- Description --}}
 <div class="flex flex-row">
-  {{> inputTextarea vm=(createInputTextareaViewModel isEditable isSendable item "data.data.description" (localize "ambersteel.labels.description") true false) }}
+  {{> inputTextarea isEditable=isEditable propertyOwner=item propertyPath="data.data.description" placeholder=(localize "ambersteel.labels.description") allowResize=true }}
 </div>

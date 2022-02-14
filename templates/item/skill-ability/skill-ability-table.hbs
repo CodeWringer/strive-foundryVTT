@@ -53,7 +53,7 @@ oneColumn: {Boolean}
               <span class="width-min-xl">
                 {{> inputLabel for=(concat "name[" key "]") text="ambersteel.labels.name"}}
               </span>
-              {{> inputTextField vm=(createInputTextFieldViewModel ../isEditable ../isSendable ../item (concat "data.data.abilities[" key "].name") "ambersteel.labels.name") }}
+              {{> inputTextField isEditable=../isEditable propertyOwner=../item propertyPath=(concat "data.data.abilities[" key "].name") placeholder="ambersteel.labels.name" }}
             </div>
             {{!-- Delete --}}
             {{#if ../isEditable}}
@@ -68,7 +68,7 @@ oneColumn: {Boolean}
                 {{> inputLabel for=(concat "requiredLevel[" key "]") text="ambersteel.labels.skillAbilityRequirement"}}
               </span>
               <span class="width-md">
-                {{> inputNumberSpinner vm=(createInputNumberSpinnerViewModel ../isEditable ../isSendable ../item (concat "data.data.abilities[" key "].requiredLevel") 1 0 undefined) }}
+                {{> inputNumberSpinner isEditable=../isEditable propertyOwner=../item propertyPath=(concat "data.data.abilities[" key "].requiredLevel") min=0 }}
               </span>
             </div>
             {{!-- Obstacle --}}
@@ -77,7 +77,7 @@ oneColumn: {Boolean}
                 {{> inputLabel for=(concat "obstacle[" key "]") text="ambersteel.roll.obstacleAbbreviation"}}
               </span>
               <span class="width-xxl">
-                {{> inputTextField vm=(createInputTextFieldViewModel ../isEditable ../isSendable ../item (concat "data.data.abilities[" key "].obstacle") "") }}
+                {{> inputTextField isEditable=../isEditable propertyOwner=../item propertyPath=(concat "data.data.abilities[" key "].obstacle") }}
               </span>
             </div>
           </div>
@@ -88,21 +88,21 @@ oneColumn: {Boolean}
               {{> inputLabel for=(concat "distance[" key "]") text="ambersteel.labels.distance"}}
             </div>
             <span class="width-md">
-              {{> inputNumberSpinner vm=(createInputNumberSpinnerViewModel ../isEditable ../isSendable ../item (concat "data.data.abilities[" key "].distance") 1 0 undefined) }}
+              {{> inputNumberSpinner isEditable=../isEditable propertyOwner=../item propertyPath=(concat "data.data.abilities[" key "].distance") min=0 }}
             </span>
             {{!-- AP cost --}}
             <div class="width-min-xl">
               {{> inputLabel for=(concat "apCost[" key "]") text="ambersteel.labels.apCost"}}
             </div>
             <span class="width-md">
-              {{> inputNumberSpinner vm=(createInputNumberSpinnerViewModel ../isEditable ../isSendable ../item (concat "data.data.abilities[" key "].apCost") 1 0 undefined) }}
+              {{> inputNumberSpinner isEditable=../isEditable propertyOwner=../item propertyPath=(concat "data.data.abilities[" key "].apCost") min=0 }}
             </span>
             {{!-- Attack type --}}
             <div class="width-min-xl">
               {{> inputLabel for=(concat "attackType[" key "]") text="ambersteel.labels.attackType"}}
             </div>
             <span class="width-min-lg">
-              {{> inputDropDown vm=(createInputDropDownViewModel ../isEditable ../isSendable ../item (concat "data.data.abilities[" key "].attackType") (game.ambersteel.getAttackTypeOptions)) }}
+              {{> inputDropDown isEditable=../isEditable propertyOwner=../item propertyPath=(concat "data.data.abilities[" key "].attackType") options=(game.ambersteel.getAttackTypeOptions) }}
             </span>
           </div>
           {{!-- Row 4 --}}
@@ -118,14 +118,14 @@ oneColumn: {Boolean}
               chatTitle=ability.name
             }}
             <span class="width-min-xxl flex-grow">
-              {{> inputTextField vm=(createInputTextFieldViewModel ../isEditable ../isSendable ../item (concat "data.data.abilities[" key "].damageFormula") "") }}
+              {{> inputTextField isEditable=../isEditable propertyOwner=../item propertyPath=(concat "data.data.abilities[" key "].damageFormula") }}
             </span>
             {{!-- Damage type --}}
             <div class="width-min-xxl">
               {{> inputLabel for=(concat "damageType[" key "]") text="ambersteel.labels.damageType"}}
             </div>
             <span class="width-xxl">
-              {{> inputDropDown vm=(createInputDropDownViewModel ../isEditable ../isSendable ../item (concat "data.data.abilities[" key "].damageType") (game.ambersteel.getDamageTypeOptions)) }}
+              {{> inputDropDown isEditable=../isEditable propertyOwner=../item propertyPath=(concat "data.data.abilities[" key "].damageType") options=(game.ambersteel.getDamageTypeOptions) }}
             </span>
           </div>
           {{!-- Row 5 --}}
@@ -135,13 +135,13 @@ oneColumn: {Boolean}
               {{> inputLabel for=(concat "condition[" key "]") text="ambersteel.labels.skillAbilityCondition"}}
             </div>
             <div class="flex-grow">
-              {{> inputTextField vm=(createInputTextFieldViewModel ../isEditable ../isSendable ../item (concat "data.data.abilities[" key "].condition") "") }}
+              {{> inputTextField isEditable=../isEditable propertyOwner=../item propertyPath=(concat "data.data.abilities[" key "].condition") }}
             </div>
           </div>
           {{!-- Row 6 --}}
           {{!-- Description --}}
           <div class="flex flex-row">
-            {{> inputTextarea vm=(createInputTextareaViewModel ../isEditable ../isSendable ../item (concat "data.data.abilities[" key "].description") (localize "ambersteel.labels.description") true false) cssClass="fill" }}
+            {{> inputTextarea isEditable=../isEditable propertyOwner=../item propertyPath=(concat "data.data.abilities[" key "].description") placeholder=(localize "ambersteel.labels.description") allowResize=true cssClass="fill" }}
           </div>
         {{/if}}
       </li>

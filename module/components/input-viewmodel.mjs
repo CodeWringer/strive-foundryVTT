@@ -6,7 +6,6 @@ import { getElementValue } from "../utils/sheet-utility.mjs";
  * --- Inherited from ViewModel
  * 
  * @property {Boolean} isEditable If true, input(s) will be in edit mode. If false, input(s) will be in read-only mode.
- * @property {Boolean} isSendable If true, the object can be sent to chat. 
  * @property {String} id Optional. Id used for the HTML element's id and name attributes. 
  * @property {String} template Static. Returns the template this ViewModel is intended for. 
  * 
@@ -80,7 +79,6 @@ export default class InputViewModel extends ViewModel {
 
   /**
    * @param {Boolean | undefined} args.isEditable 
-   * @param {Boolean | undefined} args.isSendable 
    * @param {String | undefined} args.id
    * @param {String} args.propertyPath
    * @param {Object} args.propertyOwner
@@ -101,10 +99,9 @@ export default class InputViewModel extends ViewModel {
    * @param {Object} html DOM of the sheet for which to register listeners. 
    * @param {Boolean} isOwner If true, registers events that require owner permission. 
    * @param {Boolean} isEditable If true, registers events that require editing permission. 
-   * @param {Boolean} isSendable If true, registers events that require sendToChat permission. 
    * @throws {Error} NullPointerException Thrown if the input element could not be found. 
    */
-  activateListeners(html, isOwner, isEditable, isSendable) {
+  activateListeners(html, isOwner, isEditable) {
     this._element = html.find(`.${InputViewModel.SELECTOR_EDIT}#${this.id}`);
     
     if (this._element === undefined || this._element === null) {

@@ -5,7 +5,6 @@ import InputViewModel from "../input-viewmodel.mjs";
  * --- Inherited from ViewModel
  * 
  * @property {Boolean} isEditable If true, input(s) will be in edit mode. If false, input(s) will be in read-only mode.
- * @property {Boolean} isSendable If true, the object can be sent to chat. 
  * @property {String} id Optional. Id used for the HTML element's id and name attributes. 
  * @property {String} template Static. Returns the template this ViewModel is intended for. 
  * 
@@ -35,7 +34,6 @@ export default class InputTextFieldViewModel extends InputViewModel {
 
   /**
    * @param {Boolean | undefined} args.isEditable 
-   * @param {Boolean | undefined} args.isSendable 
    * @param {String | undefined} args.id
    * @param {String} args.propertyPath
    * @param {Object} args.propertyOwner
@@ -50,3 +48,19 @@ export default class InputTextFieldViewModel extends InputViewModel {
     this._placeholder = args.placeholder;
   }
 }
+
+Handlebars.registerHelper('createInputTextFieldViewModel', function(isEditable, propertyOwner, propertyPath, localizablePlaceholder) {
+  const vm = new InputTextFieldViewModel({
+    isEditable: isEditable,
+    propertyOwner: propertyOwner,
+    propertyPath: propertyPath,
+    placeholder: game.i18n.localize(localizablePlaceholder)
+  });
+  
+  // Add new view model instance to global collection. 
+  game.ambersteel.viewModels.set(vm.id, vm);
+  
+  return vm;
+});
+Handlebars.registerPartial('_inputTextField', `{{#> "${TEMPLATES.COMPONENT_INPUT_TEXTFIELD}"}}{{/"${TEMPLATES.COMPONENT_INPUT_TEXTFIELD}"}}`);
+Handlebars.registerPartial('inputTextField', `{{> _inputTextField vm=(createInputTextFieldViewModel isEditable propertyOwner propertyPath placeholder) cssClass=(isDefined cssClass "") readOnlyCssClass=(isDefined readOnlyCssClass "") }}`);

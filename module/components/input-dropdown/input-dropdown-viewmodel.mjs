@@ -5,7 +5,6 @@ import InputViewModel from "../input-viewmodel.mjs";
  * --- Inherited from ViewModel
  * 
  * @property {Boolean} isEditable If true, input(s) will be in edit mode. If false, input(s) will be in read-only mode.
- * @property {Boolean} isSendable If true, the object can be sent to chat. 
  * @property {String} id Optional. Id used for the HTML element's id and name attributes. 
  * @property {String} template Static. Returns the template this ViewModel is intended for. 
  * 
@@ -35,7 +34,6 @@ export default class InputDropDownViewModel extends InputViewModel {
 
   /**
    * @param {Boolean | undefined} args.isEditable 
-   * @param {Boolean | undefined} args.isSendable 
    * @param {String | undefined} args.id
    * @param {String} args.propertyPath
    * @param {Object} args.propertyOwner
@@ -55,8 +53,8 @@ export default class InputDropDownViewModel extends InputViewModel {
    * @see "module\components\input-viewmodel.mjs"
    * @throws {Error} UnknownException Thrown if the current option could not be set correctly. 
    */
-  activateListeners(html, isOwner, isEditable, isSendable) {
-    super.activateListeners(html, isOwner, isEditable, isSendable);
+  activateListeners(html, isOwner, isEditable) {
+    super.activateListeners(html, isOwner, isEditable);
 
     if (isEditable !== true) return;
 
@@ -76,3 +74,19 @@ export default class InputDropDownViewModel extends InputViewModel {
     }
   }
 }
+
+Handlebars.registerHelper('createInputDropDownViewModel', function(isEditable, propertyOwner, propertyPath, options) {
+  const vm = new InputDropDownViewModel({
+    isEditable: isEditable,
+    propertyOwner: propertyOwner,
+    propertyPath: propertyPath,
+    options: options
+  });
+
+  // Add new view model instance to global collection. 
+  game.ambersteel.viewModels.set(vm.id, vm);
+
+  return vm;
+});
+Handlebars.registerPartial('_inputDropDown', `{{#> "${TEMPLATES.COMPONENT_INPUT_DROPDOWN}"}}{{/"${TEMPLATES.COMPONENT_INPUT_DROPDOWN}"}}`);
+Handlebars.registerPartial('inputDropDown', `{{> _inputDropDown vm=(createInputDropDownViewModel isEditable propertyOwner propertyPath options) cssClass=(isDefined cssClass "") readOnlyCssClass=(isDefined readOnlyCssClass "") }}`);
