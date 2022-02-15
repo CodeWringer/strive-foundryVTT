@@ -17,13 +17,14 @@ import ChoiceOption from "./dto/choice-option.mjs";
 // Import logging classes. 
 import { BaseLoggingStrategy, LogLevels } from "./logging/base-logging-strategy.mjs";
 import { ConsoleLoggingStrategy } from "./logging/console-logging-strategy.mjs";
-// Import view models. 
+// Import components. 
 import ViewModelCollection from './utils/viewmodel-collection.mjs';
-import InputTextFieldViewModel from './components/input-textfield/input-textfield-viewmodel.mjs';
-import InputDropDownViewModel from './components/input-dropdown/input-dropdown-viewmodel.mjs';
-import InputNumberSpinnerViewModel from './components/input-number-spinner/input-number-spinner-viewmodel.mjs';
-import InputTextareaViewModel from './components/input-textarea/input-textarea-viewmodel.mjs';
-import InputRadioButtonGroupViewModel from './components/input-radio-button-group/input-radio-button-group-viewmodel.mjs';
+import './components/input-textfield/input-textfield-viewmodel.mjs';
+import './components/input-dropdown/input-dropdown-viewmodel.mjs';
+import './components/input-number-spinner/input-number-spinner-viewmodel.mjs';
+import './components/input-textarea/input-textarea-viewmodel.mjs';
+import './components/input-radio-button-group/input-radio-button-group-viewmodel.mjs';
+import './components/item-grid/item-grid-view-viewmodel.mjs';
 
 /* -------------------------------------------- */
 /*  Init Hook                                   */
