@@ -1,5 +1,4 @@
 import { TEMPLATES } from "../../../templatePreloader.mjs";
-import { ItemGridView } from "../../../components/item-grid/item-grid-view.mjs";
 import * as ListenerUtil from "../../../utils/listeners-utility.mjs";
 
 export default class AmbersteelBaseActorSheet {
@@ -8,12 +7,6 @@ export default class AmbersteelBaseActorSheet {
    * @type {ActorSheet}
    */
   parent = undefined;
-
-  /**
-   * The possessions item grid.
-   * @type {ItemGridView}
-   */
-  possessionGrid = undefined;
 
   /**
    * @param parent {ActorSheet} The owning ActorSheet. 
@@ -112,13 +105,6 @@ export default class AmbersteelBaseActorSheet {
    */
   activateListeners(html, isOwner, isEditable) {
     ListenerUtil.activateListeners(html, this, isOwner, isEditable);
-
-    // TODO: This should not be here. This should only happen once, during actor (re-)initialization. 
-    if (this.possessionGrid !== undefined) { this.possessionGrid.tearDown(); }
-    const gridWidth = 550; // This magic constant is based on the assumption that the actor sheet is about 560px wide. 
-    const columnCount = this.getActor().data.data.assets.grid.length;
-    const tileSize = Math.floor(gridWidth / columnCount);
-    this.possessionGrid = new ItemGridView(html, "possessions-canvas", this, gridWidth, tileSize);
 
     // -------------------------------------------------------------
     if (!isOwner) return;

@@ -54,11 +54,6 @@ export class ItemGridView {
   _itemGrid = undefined;
   
   /**
-   * @type {AmbersteelBaseActorSheet}
-   * @private
-   */
-  _actorSheet = undefined;
-  /**
    * @type {AmbersteelActor}
    * @private
    */
@@ -162,16 +157,12 @@ export class ItemGridView {
    * 
    * @param {HTMLElement} html 
    * @param {String} canvasElementId 
-   * @param {AmbersteelBaseActorSheet} actorSheet 
+   * @param {Actor} actor 
    */
-  constructor(html, canvasElementId, actorSheet, width, tileSize = 128) {
+  constructor(html, canvasElementId, actor, width, tileSize = 128) {
     this._width = width;
     this._tileSize = tileSize;
-
-    const usedActorSheet = actorSheet;
-    this._actorSheet = usedActorSheet;
-    this._actor = this._actorSheet.getActor();
-
+    this._actor = actor;
     this._itemGrid = this._actor.itemGrid;
 
     // Setup HTML canvas element. 
@@ -370,7 +361,7 @@ export class ItemGridView {
   /**
    * Clean-up of the item grid. 
    */
-  tearDown() {
+  dispose() {
     // Tear down pixiApp
     this._stage = undefined;
     if (this._pixiApp !== undefined) {
@@ -380,7 +371,6 @@ export class ItemGridView {
     this._rootContainer = undefined;
 
     // Unset variables (probably unnecessary, but better to be on the safe side). 
-    this._actorSheet = undefined;
     this._actor = undefined;
     this._spriteInstancesGrid = [];
     this._itemsOnGrid = [];

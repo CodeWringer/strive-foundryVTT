@@ -64,7 +64,7 @@ actor: {Actor} = {
       </div>
     </div>
   </div>
-  <div class="flex flex-center" id="possessions-canvas"></div>
+  {{> itemGridView isEditable=isEditable propertyOwner=actor propertyPath="data.data.assets" }}
   {{!-- Remote assets --}}
   <h2>{{localize "ambersteel.labels.assetsRemote"}}</h2>
   <ol class="unstyled-list alternating-rows">
