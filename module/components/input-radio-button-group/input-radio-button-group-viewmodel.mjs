@@ -54,11 +54,7 @@ export default class InputRadioButtonGroupViewModel extends InputViewModel {
    */
   constructor(args = {}) {
     super(args);
-    args = {
-      options: [],
-      ...args,
-    }
-    this.options = args.options;
+    this.options = args.options ?? [];
   }
 
   /**
