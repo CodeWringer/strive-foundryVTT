@@ -97,6 +97,14 @@ export class AmbersteelActorSheet extends ActorSheet {
    * @see https://foundryvtt.com/api/FormApplication.html#close
    */
   async close() {
+    // Ensure dispose is called on view models, if they support it. 
+    const vms = this.viewModels.getAll();
+    for (const vm of vms) {
+      if (vm.dispose !== undefined) {
+        vm.dispose();
+      }
+    }
+
     this.viewModels.clear();
     return super.close();
   }
