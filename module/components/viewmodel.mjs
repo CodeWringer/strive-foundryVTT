@@ -37,13 +37,8 @@ export default class ViewModel {
    * @param {String | undefined} args.id
    */
   constructor(args = {}) {
-    args = {
-      isEditable: false,
-      id: createUUID(),
-      ...args,
-    }
-    this._isEditable = args.isEditable;
-    this._id = args.id;
+    this._isEditable = args.isEditable ?? false;
+    this._id = args.id ?? createUUID();
   }
 
   /**

@@ -50,15 +50,9 @@ export default class InputNumberSpinnerViewModel extends InputViewModel {
    */
   constructor(args = {}) {
     super(args);
-    args = {
-      min: undefined,
-      max: undefined,
-      step: 1,
-      ...args,
-    }
-    this.min = args.min;
-    this.max = args.max;
-    this.step = args.step;
+    this.min = args.min ?? undefined;
+    this.max = args.max ?? undefined;
+    this.step = args.step ?? 1;
   }
 
   /**

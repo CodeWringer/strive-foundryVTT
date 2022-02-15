@@ -85,13 +85,8 @@ export default class InputViewModel extends ViewModel {
    */
   constructor(args = {}) {
     super(args);
-    args = {
-      propertyPath: undefined,
-      propertyOwner: undefined,
-      ...args,
-    }
-    this.propertyPath = args.propertyPath;
-    this.propertyOwner = args.propertyOwner;
+    this.propertyPath = args.propertyPath ?? undefined;
+    this.propertyOwner = args.propertyOwner ?? undefined;
   }
 
   /**

@@ -35,15 +35,9 @@ export default class InputTextareaViewModel extends InputViewModel {
    */
   constructor(args = {}) {
     super(args);
-    args = {
-      allowResize: false,
-      spellcheck: false,
-      placeholder: "",
-      ...args,
-    }
-    this.allowResize = args.allowResize;
-    this.spellcheck = args.spellcheck;
-    this.placeholder = args.placeholder;
+    this.allowResize = args.allowResize ?? false;
+    this.spellcheck = args.spellcheck ?? false;
+    this.placeholder = args.placeholder ?? "";
   }
 }
 

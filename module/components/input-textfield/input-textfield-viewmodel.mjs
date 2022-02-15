@@ -41,11 +41,7 @@ export default class InputTextFieldViewModel extends InputViewModel {
    */
   constructor(args = {}) {
     super(args);
-    args = {
-      placeholder: "",
-      ...args,
-    }
-    this._placeholder = args.placeholder;
+    this._placeholder = args.placeholder ?? "";
   }
 }
 
