@@ -1,12 +1,19 @@
 /**
  * Represents a collection of {ViewModel} objects. 
+ * @see {ViewModel}
+ * 
+ * @property {Object} viewModels Represents a map of view model ids to their instances. 
  */
 export default class ViewModelCollection {
   /**
    * @type {Object}
    * @private
    */
-  _viewModels = Object.create(null);
+  _viewModels = Object.create(null); // Intentionally created with null as its prototype. It's only ever supposed to be a "dumb" map of objects. 
+  /**
+   * @type {Object}
+   * @readonly
+   */
   get viewModels() { return this._viewModels; }
 
   /**
@@ -51,6 +58,7 @@ export default class ViewModelCollection {
    * Clears all saved view models. 
    */
   clear() {
+    // Completely throw away the view models object and then re-create it. 
     delete this._viewModels;
     this._viewModels = Object.create(null);
   }
