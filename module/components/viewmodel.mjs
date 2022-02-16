@@ -73,6 +73,6 @@ export default class ViewModel {
    * @private
    */
   isObject(obj) {
-      return Object.prototype.toString.call(obj) === '[object Object]';
+    return Object.prototype.toString.call(obj) === '[object Object]';
   };
 }

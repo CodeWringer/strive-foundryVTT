@@ -11,10 +11,10 @@ import { getElementValue } from "../utils/sheet-utility.mjs";
  * 
  * --- Own properties
  * 
+ * @property {JQuery | HTMLElement} element The button element on the DOM. 
  * @property {String} propertyPath The path used to look up the value. 
  * @property {Object} propertyOwner An object on which to to look up the value. 
  * @property {Any} value Gets or sets the looked up value. 
- * @property {DocumentSheet | undefined} owningSheet Gets the owning {DocumentSheet} instance. 
  * For example, could be an instance of {ActorSheet} or {ItemSheet}. 
  */
 export default class InputViewModel extends ViewModel {
@@ -65,17 +65,6 @@ export default class InputViewModel extends ViewModel {
    * @readonly
    */
   get element() { return this._element; }
-
-  /**
-   * @type {DocumentSheet | undefined}
-   * @private
-   */
-  _owningSheet = undefined;
-  /**
-   * @type {DocumentSheet | undefined}
-   * @readonly
-   */
-  get owningSheet() { return this._owningSheet; }
 
   /**
    * @param {Boolean | undefined} args.isEditable 

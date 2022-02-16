@@ -11,6 +11,7 @@ import { selectItemByValue } from "../../utils/sheet-utility.mjs";
  * 
  * --- Inherited from InputViewModel
  * 
+ * @property {JQuery | HTMLElement} element The button element on the DOM. 
  * @property {String} propertyPath The path used to look up the value. 
  * @property {Object} propertyOwner An object on which to to look up the value. 
  * @property {Any} value Gets or sets the looked up value. 

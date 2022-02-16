@@ -14,11 +14,11 @@ import { TEMPLATES } from "./templatePreloader.mjs";
 import { createUUID } from './utils/uuid-utility.mjs';
 import * as ListenerUtil from "./utils/listeners-utility.mjs";
 import ChoiceOption from "./dto/choice-option.mjs";
+import ViewModelCollection from './utils/viewmodel-collection.mjs';
 // Import logging classes. 
 import { BaseLoggingStrategy, LogLevels } from "./logging/base-logging-strategy.mjs";
 import { ConsoleLoggingStrategy } from "./logging/console-logging-strategy.mjs";
 // Import components. 
-import ViewModelCollection from './utils/viewmodel-collection.mjs';
 import './components/input-textfield/input-textfield-viewmodel.mjs';
 import './components/input-dropdown/input-dropdown-viewmodel.mjs';
 import './components/input-number-spinner/input-number-spinner-viewmodel.mjs';
