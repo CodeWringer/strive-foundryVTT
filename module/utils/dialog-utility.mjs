@@ -1,5 +1,4 @@
 import DialogResult from '../dto/dialog-result.mjs';
-import * as ListenerUtil from '../utils/listeners-utility.mjs';
 import { TEMPLATES } from '../templatePreloader.mjs';
 import { getElementValue } from './sheet-utility.mjs';
 
@@ -52,7 +51,7 @@ export async function showDialog(args = {}, dialogData) {
             },
             default: "cancel",
             render: html => {
-                ListenerUtil.activateListeners(html, this, true, true);
+                // TODO: Activate DOM event listeners using the view model system. 
                 args.render(html);
             },
             close: html => {
