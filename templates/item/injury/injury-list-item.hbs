@@ -30,7 +30,7 @@ item: {Item} = {
     {{> inputRadioButtonGroup isEditable=isEditable propertyOwner=item propertyPath="data.data.state" options=(game.ambersteel.getInjuryOptions) }}
   </div>
   {{!-- Delete --}}
-  {{> buttonDelete itemId=itemId promptConfirm=true promptLocalizableTitle="ambersteel.dialog.titleConfirmDeletionInjuryQuery" }}
+  {{> buttonDelete isEditable=isEditable target=item withDialog=true }}
 </div>
 {{!-- Row 2 --}}
 <div class="flex flex-row">

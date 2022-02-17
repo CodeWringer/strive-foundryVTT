@@ -37,7 +37,7 @@ item: {Item} = {
       {{/if}}
       <div class="flex-grow"></div>
       {{#if isEditable}}
-        {{> buttonDelete itemId=item._id promptConfirm=true promptLocalizableTitle="ambersteel.dialog.titleConfirmDeletionFateCardQuery" }}
+        {{> buttonDelete isEditable=isEditable target=item withDialog=true }}
       {{/if}}
     </div>
   {{/if}}

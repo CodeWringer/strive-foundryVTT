@@ -57,7 +57,7 @@ oneColumn: {Boolean}
             </div>
             {{!-- Delete --}}
             {{#if ../isEditable}}
-              {{> buttonDelete itemId=../item.data.id propertyPath=(concat "data.data.abilities[" key "]") promptConfirm=true promptLocalizableTitle="ambersteel.dialog.titleConfirmDeletionSkillAbilityQuery" }}
+              {{> buttonDelete isEditable=../isEditable target=../item propertyPath=(concat "data.data.abilities[" key "]") withDialog=true }}
             {{/if}}
           </div>
           {{!-- Row 2 --}}

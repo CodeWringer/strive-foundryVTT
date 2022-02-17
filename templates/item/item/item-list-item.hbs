@@ -41,7 +41,7 @@ item: {Item} = {
     </span>
   </div>
   {{!-- Delete --}}
-  {{> buttonDelete itemId=itemId }}
+  {{> buttonDelete isEditable=isEditable target=item withDialog=false }}
 </div>
 {{!-- Row 2 --}}
 <div class="flex flex-row">

@@ -96,7 +96,7 @@ actor: {AmbersteelActor}
                     </td>
                     {{#if ../isEditable}}
                         <td class="skill-column-delete">
-                            {{> buttonDelete itemId=skill.data.id promptConfirm=true promptLocalizableTitle=(ifThenElse ../isLearningSkillsTable "ambersteel.dialog.titleConfirmDeletionLearningSkillQuery" "ambersteel.dialog.titleConfirmDeletiongSkillQuery") }}
+                            {{> buttonDelete isEditable=../isEditable target=skill withDialog=true }}
                         </td>
                     {{/if}}
                 </tr>

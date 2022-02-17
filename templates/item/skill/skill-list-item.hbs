@@ -36,7 +36,7 @@ item: {Item} = {
     {{!-- State --}}
   </div>
   {{!-- Delete --}}
-  {{> buttonDelete itemId=itemId promptConfirm=true promptLocalizableTitle="ambersteel.dialog.titleConfirmDeletiongSkillQuery" }}
+  {{> buttonDelete isEditable=isEditable target=item withDialog=true }}
 </div>
 {{!-- Row 3 --}}
 {{!-- Description --}}
