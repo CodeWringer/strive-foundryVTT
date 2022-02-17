@@ -152,7 +152,7 @@ oneColumn: {Boolean}
           <span class="flex-grow"></span>
           {{!-- Add skill ability --}}
           <span class="width-sm">
-            {{> buttonAdd itemType="skill-ability" itemId=item.data.id }}
+            {{> buttonAdd isEditable=isEditable target=item creationType="skill-ability" withDialog=false }}
           </span>
         </div>
       </li>

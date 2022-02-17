@@ -15,6 +15,7 @@ export const TEMPLATES = {
   COMPONENT_INPUT_ITEM_GRID_VIEW: "systems/ambersteel/module/components/item-grid/item-grid-view.hbs",
   COMPONENT_BUTTON: "systems/ambersteel/module/components/button/button.hbs",
   COMPONENT_BUTTON_TAKE_ITEM: "systems/ambersteel/templates/components/button-take-item.hbs",
+  COMPONENT_BUTTON_ADD: "systems/ambersteel/module/components/button-add/button-add.hbs",
   // GM
   COMPONENT_GM_NOTES: "systems/ambersteel/templates/gm-notes.hbs",
   // Dice

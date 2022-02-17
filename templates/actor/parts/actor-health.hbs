@@ -101,7 +101,7 @@ actor: {Actor} = {
           <span class="flex-grow"></span>
           {{!-- Add injury --}}
           <span class="width-sm">
-            {{> buttonAdd itemType="injury" withDialog="true" }}
+            {{> buttonAdd isEditable=isEditable target=actor creationType="injury" withDialog=true }}
           </span>
         </div>
       </li>
@@ -137,7 +137,7 @@ actor: {Actor} = {
           <span class="flex-grow"></span>
           {{!-- Add illness --}}
           <span class="width-sm">
-            {{> buttonAdd itemType="illness" withDialog="true" }}
+            {{> buttonAdd isEditable=isEditable target=actor creationType="illness" withDialog=true }}
           </span>
         </div>
       </li>
