@@ -1,5 +1,4 @@
 import { TEMPLATES } from "../../../templatePreloader.mjs";
-import * as ListenerUtil from "../../../utils/listeners-utility.mjs";
 
 export default class AmbersteelBaseItemSheet {
   /**
@@ -62,8 +61,7 @@ export default class AmbersteelBaseItemSheet {
    * 'item', 'CONFIG', 'isSendable' and 'isEditable'. 
    * @virtual
    */
-  prepareDerivedData(context) {
-  }
+  prepareDerivedData(context) {}
 
   /**
    * Registers events on elements of the given DOM. 
@@ -72,13 +70,5 @@ export default class AmbersteelBaseItemSheet {
    * @param isEditable {Boolean} If true, registers events that require editing permission. 
    * @virtual
    */
-  activateListeners(html, isOwner, isEditable) {
-    ListenerUtil.activateListeners(html, this, isOwner, isEditable);
-
-    // -------------------------------------------------------------
-    if (!isOwner) return;
-
-    // -------------------------------------------------------------
-    if (!isEditable) return;
-  }
+  activateListeners(html, isOwner, isEditable) {}
 }
