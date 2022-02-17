@@ -422,5 +422,7 @@ Handlebars.registerPartial('inputLabel', `{{#> "${TEMPLATES.COMPONENT_INPUT_LABE
 Hooks.on("renderChatMessage", async function(message, html, data) {
   const isEditable = data.author.isGM;
   const isOwner = data.author.isOwner;
-  ListenerUtil.activateListeners(html, undefined, isOwner, isEditable);
+
+  // TODO: Incorporate view model system, instead. 
+  // ListenerUtil.activateListeners(html, undefined, isOwner, isEditable);
 });

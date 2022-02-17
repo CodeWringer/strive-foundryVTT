@@ -97,8 +97,11 @@ export class AmbersteelItemSheet extends ItemSheet {
   activateListeners(html) {
     super.activateListeners(html);
 
+    const isOwner = (this.actor ?? this.item).isOwner;
+    const isEditable = this.isEditable;
+
     // Activate view model bound event listeners. 
-    SheetUtil.activateListeners(html, this);
+    this.viewModels.activateListeners(html, isOwner, isEditable);
   }
 
   /**
