@@ -74,7 +74,7 @@ actor: {AmbersteelActor}
                         {{> buttonSendToChat itemId=skill.data.id }}
                     </td>
                     <td>
-                        {{> buttonOpenSheet id=skill.name }}
+                        {{> buttonOpenSheet isEditable=../isEditable target=skill.name }}
                     </td>
                     <td class="fancy-font flex skill-column-name">
                         {{> inputTextField isEditable=../isEditable propertyOwner=skill propertyPath="name" placeholder="ambersteel.labels.name" }}

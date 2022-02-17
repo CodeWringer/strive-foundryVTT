@@ -2,7 +2,6 @@ export const TEMPLATES = {
   // Components
   COMPONENT_BUTTON_ROLL: "systems/ambersteel/templates/components/button-roll.hbs",
   COMPONENT_TOGGLE_VISIBILITY: "systems/ambersteel/templates/components/button-toggle-visibility.hbs",
-  COMPONENT_BUTTON_OPEN_SHEET: "systems/ambersteel/templates/components/button-open-sheet.hbs",
   COMPONENT_BUTTON_SEND_TO_CHAT: "systems/ambersteel/templates/components/button-send-to-chat.hbs",
   COMPONENT_INPUT_TEXTFIELD: "systems/ambersteel/module/components/input-textfield/input-textfield.hbs",
   COMPONENT_INPUT_DROPDOWN: "systems/ambersteel/module/components/input-dropdown/input-dropdown.hbs",
@@ -15,6 +14,7 @@ export const TEMPLATES = {
   COMPONENT_BUTTON_TAKE_ITEM: "systems/ambersteel/templates/components/button-take-item.hbs",
   COMPONENT_BUTTON_ADD: "systems/ambersteel/module/components/button-add/button-add.hbs",
   COMPONENT_BUTTON_DELETE: "systems/ambersteel/module/components/button-delete/button-delete.hbs",
+  COMPONENT_BUTTON_OPEN_SHEET: "systems/ambersteel/module/components/button-open-sheet/button-open-sheet.hbs",
   // GM
   COMPONENT_GM_NOTES: "systems/ambersteel/templates/gm-notes.hbs",
   // Dice
