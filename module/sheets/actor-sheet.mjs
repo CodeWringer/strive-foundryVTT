@@ -1,4 +1,4 @@
-import SheetViewModelCollection from "./sheet-viewmodel-collection.mjs";
+import ViewModelCollection from "../utils/viewmodel-collection.mjs";
 import AmbersteelNpcActorSheet from "./subtypes/actor/ambersteel-npc-actor-sheet.mjs";
 import AmbersteelPcActorSheet from "./subtypes/actor/ambersteel-pc-actor-sheet.mjs";
 import * as SheetUtil from "../utils/sheet-utility.mjs";
@@ -70,12 +70,12 @@ export class AmbersteelActorSheet extends ActorSheet {
   }
 
   /**
-   * @type {SheetViewModelCollection}
+   * @type {ViewModelCollection}
    * @private
    */
-  _viewModels = new SheetViewModelCollection(this);
+  _viewModels = new ViewModelCollection();
   /**
-   * @returns {SheetViewModelCollection}
+   * @returns {ViewModelCollection}
    */
   get viewModels() { return this._viewModels; }
 
@@ -137,15 +137,7 @@ export class AmbersteelActorSheet extends ActorSheet {
    * @see https://foundryvtt.com/api/FormApplication.html#close
    */
   async close() {
-    // Ensure dispose is called on view models, if they support it. 
-    const vms = this.viewModels.getAll();
-    for (const vm of vms) {
-      if (vm.dispose !== undefined) {
-        vm.dispose();
-      }
-    }
-
-    this.viewModels.clear();
+    this.viewModels.dispose();
     return super.close();
   }
 

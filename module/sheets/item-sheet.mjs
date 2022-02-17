@@ -1,4 +1,4 @@
-import SheetViewModelCollection from "./sheet-viewmodel-collection.mjs";
+import ViewModelCollection from "../utils/viewmodel-collection.mjs";
 import AmbersteelBaseItemSheet from "./subtypes/item/ambersteel-base-item-sheet.mjs";
 import AmbersteelSkillItemSheet from "./subtypes/item/ambersteel-skill-item-sheet.mjs";
 import AmbersteelFateCardItemSheet from "./subtypes/item/ambersteel-fate-item-sheet.mjs";
@@ -63,12 +63,12 @@ export class AmbersteelItemSheet extends ItemSheet {
   }
 
   /**
-   * @type {SheetViewModelCollection}
+   * @type {ViewModelCollection}
    * @private
    */
-  _viewModels = new SheetViewModelCollection(this);
+  _viewModels = new ViewModelCollection(this);
   /**
-   * @returns {SheetViewModelCollection}
+   * @returns {ViewModelCollection}
    */
   get viewModels() { return this._viewModels; }
 
@@ -114,15 +114,7 @@ export class AmbersteelItemSheet extends ItemSheet {
    * @see https://foundryvtt.com/api/FormApplication.html#close
    */
   async close() {
-    // Ensure dispose is called on view models, if they support it. 
-    const vms = this.viewModels.getAll();
-    for (const vm of vms) {
-      if (vm.dispose !== undefined) {
-        vm.dispose();
-      }
-    }
-        
-    this.viewModels.clear();
+    this.viewModels.dispose();
     return super.close();
   }
 }
