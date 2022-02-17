@@ -6,7 +6,7 @@ import InputViewModel from "../input-viewmodel.mjs";
  * 
  * @property {Boolean} isEditable If true, input(s) will be in edit mode. If false, input(s) will be in read-only mode.
  * @property {String} id Optional. Id used for the HTML element's id and name attributes. 
- * @property {String} template Static. Returns the template this ViewModel is intended for. 
+ * @property {String} TEMPLATE Static. Returns the template this ViewModel is intended for. 
  * 
  * --- Inherited from InputViewModel
  * 
@@ -23,7 +23,7 @@ import InputViewModel from "../input-viewmodel.mjs";
  * 
  */
 export default class InputDropDownViewModel extends InputViewModel {
-  static get template() { return TEMPLATES.COMPONENT_INPUT_DROPDOWN; }
+  static get TEMPLATE() { return TEMPLATES.COMPONENT_INPUT_DROPDOWN; }
 
   get selected() {
     return this.options.find(option => option.value === this.value);
@@ -85,5 +85,5 @@ Handlebars.registerHelper('createInputDropDownViewModel', function(isEditable, p
 
   return vm;
 });
-Handlebars.registerPartial('_inputDropDown', `{{#> "${TEMPLATES.COMPONENT_INPUT_DROPDOWN}"}}{{/"${TEMPLATES.COMPONENT_INPUT_DROPDOWN}"}}`);
+Handlebars.registerPartial('_inputDropDown', `{{#> "${InputDropDownViewModel.TEMPLATE}"}}{{/"${InputDropDownViewModel.TEMPLATE}"}}`);
 Handlebars.registerPartial('inputDropDown', `{{> _inputDropDown vm=(createInputDropDownViewModel isEditable propertyOwner propertyPath options) cssClass=(isDefined cssClass "") readOnlyCssClass=(isDefined readOnlyCssClass "") }}`);
