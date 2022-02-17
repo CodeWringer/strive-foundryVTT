@@ -1,6 +1,5 @@
 export const TEMPLATES = {
   // Components
-  COMPONENT_BUTTON_ADD: "systems/ambersteel/templates/components/button-add.hbs",
   COMPONENT_BUTTON_ROLL: "systems/ambersteel/templates/components/button-roll.hbs",
   COMPONENT_BUTTON_DELETE: "systems/ambersteel/templates/components/button-delete.hbs",
   COMPONENT_TOGGLE_VISIBILITY: "systems/ambersteel/templates/components/button-toggle-visibility.hbs",

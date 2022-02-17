@@ -1,4 +1,3 @@
-import * as ButtonAdd from '../components/button-add.mjs';
 import * as buttonDelete from '../components/button-delete.mjs';
 import * as ButtonOpenSheet from '../components/button-open-sheet.mjs';
 import * as ButtonRoll from '../components/button-roll.mjs';
@@ -12,7 +11,6 @@ import * as ButtonToggleVisibility from '../components/button-toggle-visibility.
  * @protected
  */
 const listeners = [
-  ButtonAdd.activateListeners,
   buttonDelete.activateListeners,
   ButtonOpenSheet.activateListeners,
   ButtonRoll.activateListeners,
