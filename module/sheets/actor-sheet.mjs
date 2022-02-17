@@ -5,6 +5,22 @@ import * as SheetUtil from "../utils/sheet-utility.mjs";
 
 export class AmbersteelActorSheet extends ActorSheet {
   /**
+   * @override
+   */
+  static get itemContextMenu() { 
+    return [
+      {
+        name: game.i18n.localize("ambersteel.labels.delete"),
+        icon: '<i class="fas fa-trash"></i>',
+        callback: el => {
+          const item = this.getItem(el.data("item-id"));
+          item.delete();
+        }
+      }
+    ];
+  }
+
+  /**
    * @private
    */
   _subType = undefined;
@@ -93,6 +109,27 @@ export class AmbersteelActorSheet extends ActorSheet {
 
     // Activate view model bound event listeners. 
     this.viewModels.activateListeners(html, isOwner, isEditable);
+
+    // -------------------------------------------------------------
+    if (!isOwner) return;
+
+    // Drag events for macros.
+    const handler = ev => this._onDragStart(ev);
+    html.find('li.item').each((i, li) => {
+      if (li.classList.contains("inventory-header")) return;
+      li.setAttribute("draggable", true);
+      li.addEventListener("dragstart", handler, false);
+    });
+
+    // -------------------------------------------------------------
+    if (!isEditable) return;
+
+    // Context menu.
+    // TODO: Refactor -> item type specific?
+    new ContextMenu(html, ".skill-item", AmbersteelActorSheet.itemContextMenu);
+
+    // Add skill ability. 
+    html.find(".ambersteel-skill-ability-create").click(this._onCreateSkillAbility.bind(this));
   }
 
   /**
@@ -110,5 +147,20 @@ export class AmbersteelActorSheet extends ActorSheet {
 
     this.viewModels.clear();
     return super.close();
+  }
+
+  /**
+   * @param event 
+   * @private
+   * @async
+   */
+  async _onCreateSkillAbility(event) {
+    event.preventDefault();
+    
+    const itemId = event.currentTarget.dataset.itemId;
+    const skillItem = this.getItem(itemId);
+    await skillItem.createSkillAbility();
+
+    this.parent.render();
   }
 }

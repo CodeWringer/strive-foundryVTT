@@ -1,5 +1,4 @@
 import { TEMPLATES } from "../../../templatePreloader.mjs";
-import * as ListenerUtil from "../../../utils/listeners-utility.mjs";
 
 export default class AmbersteelBaseActorSheet {
   /**
@@ -28,22 +27,6 @@ export default class AmbersteelBaseActorSheet {
    */
   get template() { 
     return TEMPLATES.ACTOR_SHEET; 
-  }
-
-  /**
-   * @override
-   */
-  static get itemContextMenu() { 
-    return [
-      {
-        name: game.i18n.localize("ambersteel.labels.delete"),
-        icon: '<i class="fas fa-trash"></i>',
-        callback: el => {
-          const item = this.getItem(el.data("item-id"));
-          item.delete();
-        }
-      }
-    ];
   }
 
   /**
@@ -94,52 +77,5 @@ export default class AmbersteelBaseActorSheet {
     context.data.learningSkills = actorData.learningSkills;
     context.data.skills = actorData.skills;
     context.data.attributeGroups = context.data.data.attributeGroups;
-  }
-
-  /**
-   * Registers events on elements of the given DOM. 
-   * @param html {Object} DOM of the sheet for which to register listeners. 
-   * @param isOwner {Boolean} If true, registers events that require owner permission. 
-   * @param isEditable {Boolean} If true, registers events that require editing permission. 
-   * @virtual
-   */
-  activateListeners(html, isOwner, isEditable) {
-    ListenerUtil.activateListeners(html, this, isOwner, isEditable);
-
-    // -------------------------------------------------------------
-    if (!isOwner) return;
-
-    // Drag events for macros.
-    const handler = ev => this._onDragStart(ev);
-    html.find('li.item').each((i, li) => {
-      if (li.classList.contains("inventory-header")) return;
-      li.setAttribute("draggable", true);
-      li.addEventListener("dragstart", handler, false);
-    });
-
-    // -------------------------------------------------------------
-    if (!isEditable) return;
-
-    // Context menu.
-    // TODO: Refactor -> item type specific?
-    new ContextMenu(html, ".skill-item", AmbersteelBaseActorSheet.itemContextMenu);
-
-    // Add skill ability. 
-    html.find(".ambersteel-skill-ability-create").click(this._onCreateSkillAbility.bind(this));
-  }
-
-  /**
-   * @param event 
-   * @private
-   * @async
-   */
-  async _onCreateSkillAbility(event) {
-    event.preventDefault();
-    
-    const itemId = event.currentTarget.dataset.itemId;
-    const skillItem = this.getItem(itemId);
-    await skillItem.createSkillAbility();
-
-    this.parent.render();
   }
 }

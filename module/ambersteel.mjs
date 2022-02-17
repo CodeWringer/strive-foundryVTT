@@ -12,7 +12,6 @@ import { getNestedPropertyValue } from "./utils/property-utility.mjs";
 import AdvancementRequirements from "./dto/advancement-requirement.mjs";
 import { TEMPLATES } from "./templatePreloader.mjs";
 import { createUUID } from './utils/uuid-utility.mjs';
-import * as ListenerUtil from "./utils/listeners-utility.mjs";
 import ChoiceOption from "./dto/choice-option.mjs";
 import ViewModelCollection from './utils/viewmodel-collection.mjs';
 // Import logging classes. 
