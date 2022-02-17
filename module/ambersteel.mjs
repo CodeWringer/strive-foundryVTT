@@ -25,6 +25,7 @@ import './components/input-number-spinner/input-number-spinner-viewmodel.mjs';
 import './components/input-textarea/input-textarea-viewmodel.mjs';
 import './components/input-radio-button-group/input-radio-button-group-viewmodel.mjs';
 import './components/item-grid/item-grid-view-viewmodel.mjs';
+import './components/button/button-viewmodel.mjs';
 
 /* -------------------------------------------- */
 /*  Init Hook                                   */
