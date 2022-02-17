@@ -30,8 +30,8 @@ export default class ButtonAddViewModel extends ButtonViewModel {
    * @param {Boolean | undefined} args.isEditable 
    * @param {String | undefined} args.id
    * @param {Object} args.target The target object to affect.  
-   * @property {String} args.creationType = "skill"|"skill-ability"|"fate-card"|"item"|"injury"|"illness"
-   * @property {Boolean | undefined} args.withDialog If true, will prompt the user to make a selection with a dialog. 
+   * @param {String} args.creationType = "skill"|"skill-ability"|"fate-card"|"item"|"injury"|"illness"
+   * @param {Boolean | undefined} args.withDialog If true, will prompt the user to make a selection with a dialog. 
    * @param {Object | String | undefined} args.creationData Data to pass to the item creation function. 
    */
   constructor(args = {}) {
