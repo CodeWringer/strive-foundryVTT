@@ -3,10 +3,10 @@ import { createUUID } from "../utils/uuid-utility.mjs";
 /**
  * @property {Boolean} isEditable If true, input(s) will be in edit mode. If false, input(s) will be in read-only mode.
  * @property {String} id Optional. Id used for the HTML element's id and name attributes. 
- * @property {String} template Static. Returns the template this ViewModel is intended for. 
+ * @property {String} TEMPLATE Static. Returns the template this ViewModel is intended for. 
  */
 export default class ViewModel {
-  static get template() { throw new Error("NotImplementedException") }
+  static get TEMPLATE() { throw new Error("NotImplementedException"); }
 
   /**
    * @type {String}

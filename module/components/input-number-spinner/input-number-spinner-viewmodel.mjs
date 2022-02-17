@@ -6,7 +6,7 @@ import InputViewModel from "../input-viewmodel.mjs";
  * 
  * @property {Boolean} isEditable If true, input(s) will be in edit mode. If false, input(s) will be in read-only mode.
  * @property {String} id Optional. Id used for the HTML element's id and name attributes. 
- * @property {String} template Static. Returns the template this ViewModel is intended for. 
+ * @property {String} TEMPLATE Static. Returns the template this ViewModel is intended for. 
  * 
  * --- Inherited from InputViewModel
  * 
@@ -25,7 +25,7 @@ import InputViewModel from "../input-viewmodel.mjs";
  * 
  */
 export default class InputNumberSpinnerViewModel extends InputViewModel {
-  static get template() { return TEMPLATES.COMPONENT_INPUT_NUMBER_SPINNER; }
+  static get TEMPLATE() { return TEMPLATES.COMPONENT_INPUT_NUMBER_SPINNER; }
 
   /**
    * Returns true, if the minimum value is defined. 
@@ -98,5 +98,5 @@ Handlebars.registerHelper('createInputNumberSpinnerViewModel', function(isEditab
 
   return vm;
 });
-Handlebars.registerPartial('_inputNumberSpinner', `{{#> "${TEMPLATES.COMPONENT_INPUT_NUMBER_SPINNER}"}}{{/"${TEMPLATES.COMPONENT_INPUT_NUMBER_SPINNER}"}}`);
+Handlebars.registerPartial('_inputNumberSpinner', `{{#> "${InputNumberSpinnerViewModel.TEMPLATE}"}}{{/"${InputNumberSpinnerViewModel.TEMPLATE}"}}`);
 Handlebars.registerPartial('inputNumberSpinner', `{{> _inputNumberSpinner vm=(createInputNumberSpinnerViewModel isEditable propertyOwner propertyPath (isDefined step 1) min max) cssClass=(isDefined cssClass "") readOnlyCssClass=(isDefined readOnlyCssClass "") }}`);

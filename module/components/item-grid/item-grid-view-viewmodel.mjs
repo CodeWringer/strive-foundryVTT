@@ -7,7 +7,7 @@ import { ItemGridView } from "./item-grid-view.mjs";
  * 
  * @property {Boolean} isEditable If true, input(s) will be in edit mode. If false, input(s) will be in read-only mode.
  * @property {String} id Optional. Id used for the HTML element's id and name attributes. 
- * @property {String} template Static. Returns the template this ViewModel is intended for. 
+ * @property {String} TEMPLATE Static. Returns the template this ViewModel is intended for. 
  * 
  * --- Inherited from InputViewModel
  * 
@@ -22,6 +22,8 @@ import { ItemGridView } from "./item-grid-view.mjs";
  * @property {Number} gridWidth 
  */
 export default class ItemGridViewViewModel extends InputViewModel {
+  static get TEMPLATE() { return TEMPLATES.COMPONENT_INPUT_ITEM_GRID_VIEW; }
+
   /**
    * The possessions item grid.
    * @type {ItemGridView}
@@ -95,5 +97,5 @@ Handlebars.registerHelper('createItemGridViewViewModel', function(isEditable, pr
   
   return vm;
 });
-Handlebars.registerPartial('_itemGridView', `{{#> "${TEMPLATES.COMPONENT_INPUT_ITEM_GRID_VIEW}"}}{{/"${TEMPLATES.COMPONENT_INPUT_ITEM_GRID_VIEW}"}}`);
+Handlebars.registerPartial('_itemGridView', `{{#> "${ItemGridViewViewModel.TEMPLATE}"}}{{/"${ItemGridViewViewModel.TEMPLATE}"}}`);
 Handlebars.registerPartial('itemGridView', `{{> _itemGridView vm=(createItemGridViewViewModel isEditable propertyOwner propertyPath gridWidth) }}`);

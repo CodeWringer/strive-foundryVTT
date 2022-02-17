@@ -6,7 +6,7 @@ import InputViewModel from "../input-viewmodel.mjs";
  * 
  * @property {Boolean} isEditable If true, input(s) will be in edit mode. If false, input(s) will be in read-only mode.
  * @property {String} id Optional. Id used for the HTML element's id and name attributes. 
- * @property {String} template Static. Returns the template this ViewModel is intended for. 
+ * @property {String} TEMPLATE Static. Returns the template this ViewModel is intended for. 
  * 
  * --- Inherited from InputViewModel
  * 
@@ -23,7 +23,7 @@ import InputViewModel from "../input-viewmodel.mjs";
  * 
  */
 export default class InputTextareaViewModel extends InputViewModel {
-  static get template() { return TEMPLATES.COMPONENT_INPUT_TEXTAREA; }
+  static get TEMPLATE() { return TEMPLATES.COMPONENT_INPUT_TEXTAREA; }
 
   /**
    * @param {Boolean | undefined} args.isEditable 
@@ -57,5 +57,5 @@ Handlebars.registerHelper('createInputTextareaViewModel', function(isEditable, p
 
   return vm;
 });
-Handlebars.registerPartial('_inputTextarea', `{{#> "${TEMPLATES.COMPONENT_INPUT_TEXTAREA}"}}{{/"${TEMPLATES.COMPONENT_INPUT_TEXTAREA}"}}`);
+Handlebars.registerPartial('_inputTextarea', `{{#> "${InputTextareaViewModel.TEMPLATE}"}}{{/"${InputTextareaViewModel.TEMPLATE}"}}`);
 Handlebars.registerPartial('inputTextarea', `{{> _inputTextarea vm=(createInputTextareaViewModel isEditable propertyOwner propertyPath (isDefined allowResize false) (isDefined spellcheck false) (isDefined placeholder "")) cssClass=(isDefined cssClass "") readOnlyCssClass=(isDefined readOnlyCssClass "") }}`);

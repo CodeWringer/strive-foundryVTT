@@ -6,7 +6,7 @@ import InputViewModel from "../input-viewmodel.mjs";
  * 
  * @property {Boolean} isEditable If true, input(s) will be in edit mode. If false, input(s) will be in read-only mode.
  * @property {String} id Optional. Id used for the HTML element's id and name attributes. 
- * @property {String} template Static. Returns the template this ViewModel is intended for. 
+ * @property {String} TEMPLATE Static. Returns the template this ViewModel is intended for. 
  * 
  * --- Inherited from InputViewModel
  * 
@@ -20,7 +20,7 @@ import InputViewModel from "../input-viewmodel.mjs";
  * @property {String} placeholder Gets a placeholder text to display while the textfield is empty. 
  */
 export default class InputTextFieldViewModel extends InputViewModel {
-  static get template() { return TEMPLATES.COMPONENT_INPUT_TEXTFIELD; }
+  static get TEMPLATE() { return TEMPLATES.COMPONENT_INPUT_TEXTFIELD; }
 
   /**
    * @type {String}
@@ -59,5 +59,5 @@ Handlebars.registerHelper('createInputTextFieldViewModel', function(isEditable, 
   
   return vm;
 });
-Handlebars.registerPartial('_inputTextField', `{{#> "${TEMPLATES.COMPONENT_INPUT_TEXTFIELD}"}}{{/"${TEMPLATES.COMPONENT_INPUT_TEXTFIELD}"}}`);
+Handlebars.registerPartial('_inputTextField', `{{#> "${InputTextFieldViewModel.TEMPLATE}"}}{{/"${InputTextFieldViewModel.TEMPLATE}"}}`);
 Handlebars.registerPartial('inputTextField', `{{> _inputTextField vm=(createInputTextFieldViewModel isEditable propertyOwner propertyPath placeholder) cssClass=(isDefined cssClass "") readOnlyCssClass=(isDefined readOnlyCssClass "") }}`);
