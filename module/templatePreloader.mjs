@@ -20,7 +20,7 @@ export const TEMPLATES = {
   // Dice
   DICE_ROLL_CHAT_MESSAGE: "systems/ambersteel/templates/dice/roll.hbs",
   // Dialogs
-  DIALOG_ROLL: "systems/ambersteel/templates/dialog/roll-dialog.hbs",
+  DIALOG_ROLL: "systems/ambersteel/templates/dialog/dialog-roll.hbs",
   DIALOG_ITEM_ADD: "systems/ambersteel/templates/dialog/dialog-add-item.hbs",
   DIALOG_VISIBILITY: "systems/ambersteel/templates/dialog/dialog-visibility.hbs",
   DIALOG_PLAIN: "systems/ambersteel/templates/dialog/dialog-plain.hbs",
