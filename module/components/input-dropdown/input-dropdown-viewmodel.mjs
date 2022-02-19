@@ -30,7 +30,11 @@ export default class InputDropDownViewModel extends InputViewModel {
   }
 
   get localizedValue() {
-    return this.selected.localizedValue;
+    if (this.selected !== undefined) {
+      return this.selected.localizedValue;
+    } else {
+      return "";
+    }
   }
 
   /**
