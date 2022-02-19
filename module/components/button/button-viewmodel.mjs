@@ -131,10 +131,10 @@ export default class ButtonViewModel extends ViewModel {
    * @private
    * @async
    */
-  async _onClick(event) {
+  async _onClick(html, isOwner, isEditable, event) {
     event.preventDefault();
 
-    await this.onClick();
+    await this.onClick(html, isOwner, isEditable);
     await this.callback(this._callbackData);
   }
 }
