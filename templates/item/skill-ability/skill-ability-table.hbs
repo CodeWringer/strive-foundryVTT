@@ -160,16 +160,26 @@ actor: {Actor | undefined}
       </li>
     {{/if}}
   </ol>
+  <div class="line-height">
+    {{#> buttonToggleVisibility 
   {{#> buttonToggleVisibility 
-    visGroup=visGroupId
-    cssClass=(ifThenElse skillAbilitiesInitiallyVisible "hidden" "")
-  }}
-    <i class="fas fa-angle-double-down"></i>
-  {{/buttonToggleVisibility}}
+    {{#> buttonToggleVisibility 
+      visGroup=visGroupId
+      cssClass=(ifThenElse skillAbilitiesInitiallyVisible "hidden" "")
+      fill=true 
+      toggleSelf=true 
+    }}
+      <i class="fas fa-angle-double-down"></i>
+    {{/buttonToggleVisibility}}
+    {{#> buttonToggleVisibility 
   {{#> buttonToggleVisibility 
-    visGroup=visGroupId
-    cssClass=(ifThenElse skillAbilitiesInitiallyVisible "" "hidden")
-  }}
-    <i class="fas fa-angle-double-up"></i>
-  {{/buttonToggleVisibility}}
+    {{#> buttonToggleVisibility 
+      visGroup=visGroupId
+      cssClass=(ifThenElse skillAbilitiesInitiallyVisible "" "hidden")
+      fill=true 
+      toggleSelf=true 
+    }}
+      <i class="fas fa-angle-double-up"></i>
+    {{/buttonToggleVisibility}}
+  </div>
 </section>

@@ -130,6 +130,7 @@
       "custom": "Custom",
       "sendToChat": "Send to Chat",
       "takeToPerson": "Take (to person)",
+      "toggleVisibility": "Toggle visibility",
       "messageVisibility": "Visibility",
       "healthStats": "General Health Stats",
       "assetsStats": "General Assets Stats",
