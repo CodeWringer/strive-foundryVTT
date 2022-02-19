@@ -87,7 +87,7 @@ export default class ButtonSendToChatViewModel extends ButtonViewModel {
     
     if (this.propertyPath !== undefined) {
       if (this.target.sendPropertyToChat !== undefined) {
-        this.target.sendPropertyToChat(dataset.propertyPath, dialogResult.visibilityMode);
+        this.target.sendPropertyToChat(this.propertyPath, dialogResult.visibilityMode);
       } else {
         ChatUtil.sendPropertyToChat({
           obj: this.target,
