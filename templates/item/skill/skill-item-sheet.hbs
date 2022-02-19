@@ -69,6 +69,7 @@ actor: {Actor | undefined}
   {{#if (or (eq isEditable true) (neq item.data.data.abilities.length 0)) }}
     {{> "systems/ambersteel/templates/item/skill-ability/skill-ability-table.hbs" 
       isEditable=isEditable 
+      isSendable=isSendable 
       skillAbilitiesInitiallyVisible=true 
       visGroupId=(generateId) 
       item=item 

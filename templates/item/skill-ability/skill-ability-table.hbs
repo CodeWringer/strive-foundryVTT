@@ -103,7 +103,7 @@ actor: {Actor | undefined}
               {{> inputLabel for=(concat "attackType[" key "]") text="ambersteel.labels.attackType"}}
             </div>
             <span class="width-min-lg">
-              {{> inputDropDown isEditable=../isEditable propertyOwner=../item propertyPath=(concat "data.data.abilities[" key "].attackType") options=(game.ambersteel.getAttackTypeOptions) }}
+              {{> inputDropDown isEditable=../isEditable propertyOwner=../item propertyPath=(concat "data.data.abilities[" key "].attackType") options=(../game.ambersteel.getAttackTypeOptions) }}
             </span>
           </div>
           {{!-- Row 4 --}}
@@ -127,7 +127,7 @@ actor: {Actor | undefined}
               {{> inputLabel for=(concat "damageType[" key "]") text="ambersteel.labels.damageType"}}
             </div>
             <span class="width-xxl">
-              {{> inputDropDown isEditable=../isEditable propertyOwner=../item propertyPath=(concat "data.data.abilities[" key "].damageType") options=(game.ambersteel.getDamageTypeOptions) }}
+              {{> inputDropDown isEditable=../isEditable propertyOwner=../item propertyPath=(concat "data.data.abilities[" key "].damageType") options=(../game.ambersteel.getDamageTypeOptions) }}
             </span>
           </div>
           {{!-- Row 5 --}}
