@@ -34,7 +34,7 @@ actor: {Actor | undefined}
 --}}
 <section class="skill-ability-list">
   <ol class="unstyled-list {{#if skillAbilitiesInitiallyVisible}}{{else}}hidden{{/if}}" data-vis-group="{{visGroupId}}">
-    {{#each item.data.abilities as |ability key|}}
+    {{#each item.data.data.abilities as |ability key|}}
       <li class="ambersteel-list-row sheet-block">
         {{#if ../oneColumn}}
           {{> "systems/ambersteel/templates/item/skill-ability/skill-ability-chat-message.hbs" 
@@ -162,8 +162,6 @@ actor: {Actor | undefined}
   </ol>
   <div class="line-height">
     {{#> buttonToggleVisibility 
-  {{#> buttonToggleVisibility 
-    {{#> buttonToggleVisibility 
       visGroup=visGroupId
       cssClass=(ifThenElse skillAbilitiesInitiallyVisible "hidden" "")
       fill=true 
@@ -171,8 +169,6 @@ actor: {Actor | undefined}
     }}
       <i class="fas fa-angle-double-down"></i>
     {{/buttonToggleVisibility}}
-    {{#> buttonToggleVisibility 
-  {{#> buttonToggleVisibility 
     {{#> buttonToggleVisibility 
       visGroup=visGroupId
       cssClass=(ifThenElse skillAbilitiesInitiallyVisible "" "hidden")
