@@ -18,15 +18,21 @@ export function getElementValue(element) {
 /**
  * Sets the option-element of the given select-element to be selected, 
  * whose value is equal to the given value. 
- * @param selectElement A HTML select-element. 
- * @param valueToSelect The value of the element to set as selected.
+ * @param {JQuery} selectElement A HTML select-element. 
+ * @param {Any} valueToSelect The value of the element to set as selected.
  */
-export function selectItemByValue(selectElement, valueToSelect){
-  for(var i = 0; i < selectElement.options.length; i++) {
-    if (selectElement.options[i].value === valueToSelect) {
-      selectElement.selectedIndex = i;
-      break;
+export function setSelectedOptionByValue(selectElement, valueToSelect){
+  try {
+    const optionElements = selectElement.find('option');
+    for(let i = 0; i < optionElements.length; i++) {
+      const optionElement = optionElements[i];
+      if (optionElement.value == valueToSelect) {
+        selectElement[0].selectedIndex = i;
+        break;
+      }
     }
+  } catch (error) {
+    throw new Error("UnknownException: Failed to set the current drop-down option", { cause: error });
   }
 }
 

@@ -1,6 +1,6 @@
 import DialogResult from '../dto/dialog-result.mjs';
 import { TEMPLATES } from '../templatePreloader.mjs';
-import { getElementValue } from './sheet-utility.mjs';
+import { getElementValue, setSelectedOptionByValue} from './sheet-utility.mjs';
 
 /**
  * Shows a dialog to the user and returns a promise with the result of the user interaction. 
@@ -158,9 +158,8 @@ export async function showPlainDialog(args = {}) {
  * @param {Object} args Optional arguments to pass to the rendering function. 
  * @param {String} args.localizableTitle
  * @param {String} args.localizableLabel
- * @param {Array<Object>} args.options An array of objects to offer for selection. 
- * Important note: The objects *must* have an 'id' and 'name' property!
- * @param {Object | undefined} args.selected Optional. The 
+ * @param {Array<ChoiceOption>} args.options An array of choices to offer for selection. 
+ * @param {Any} args.selected Optional. The value to pre-select when the dialog is rendered. 
  * @returns {Promise<Object>} = {
  * selected: {String} Id of the selected item,
  * confirmed: {Boolean}
@@ -169,7 +168,7 @@ export async function showPlainDialog(args = {}) {
  */
 export async function showSelectionDialog(args = {}) {
     args = {
-        localizableTitle: "",
+        localizableTitle: "ambersteel.dialog.titleSelect",
         localizableLabel: "",
         options: [],
         selected: undefined,
@@ -181,13 +180,18 @@ export async function showSelectionDialog(args = {}) {
           {
             dialogTemplate: TEMPLATES.DIALOG_SELECT,
             localizableTitle: args.localizableTitle,
-            render: html => {}
+            render: html => {
+                if (args.selected !== undefined) {
+                    const selectElement = html.find("#selection");
+                    setSelectedOptionByValue(selectElement, args.selected);
+                }
+            }
           },
           args
         );
         resolve({
-          selected: getElementValue(dialogResult.html.find(".ambersteel-item-select")[0]),
-          confirmed: dialogResult.confirmed
+            selected: getElementValue(dialogResult.html.find(".ambersteel-item-select")[0]),
+            confirmed: dialogResult.confirmed
         });
-      });
+    });
 }
