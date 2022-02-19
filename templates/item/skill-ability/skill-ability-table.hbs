@@ -30,6 +30,7 @@ item: {Item} = {
 skillAbilitiesInitiallyVisible: {Boolean}
 visGroupId: {String}
 oneColumn: {Boolean}
+actor: {Actor | undefined}
 --}}
 <section class="skill-ability-list">
   <ol class="unstyled-list {{#if skillAbilitiesInitiallyVisible}}{{else}}hidden{{/if}}" data-vis-group="{{visGroupId}}">
@@ -111,11 +112,13 @@ oneColumn: {Boolean}
             <div class="width-min-xl">
               {{> inputLabel for=(concat "damageFormula[" key "]") text="ambersteel.labels.damage"}}
             </div>
-            {{> buttonRoll
-              type="generic"
-              itemId=../item.data.id
-              propertyPath=(concat "data.data.abilities[" key "].damageFormula")
-              chatTitle=ability.name
+            {{> buttonRoll 
+                isEditable=../isEditable 
+                target=../item 
+                propertyPath=(concat "data.data.abilities[" key "].damageFormula")
+                chatTitle=ability.name
+                rollType="generic" 
+                actor=../actor 
             }}
             <span class="width-min-xxl flex-grow">
               {{> inputTextField isEditable=../isEditable propertyOwner=../item propertyPath=(concat "data.data.abilities[" key "].damageFormula") }}

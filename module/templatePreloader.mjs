@@ -15,6 +15,7 @@ export const TEMPLATES = {
   COMPONENT_BUTTON_ADD: "systems/ambersteel/module/components/button-add/button-add.hbs",
   COMPONENT_BUTTON_DELETE: "systems/ambersteel/module/components/button-delete/button-delete.hbs",
   COMPONENT_BUTTON_OPEN_SHEET: "systems/ambersteel/module/components/button-open-sheet/button-open-sheet.hbs",
+  COMPONENT_BUTTON_ROLL: "systems/ambersteel/module/components/button-roll/button-roll.hbs",
   // GM
   COMPONENT_GM_NOTES: "systems/ambersteel/templates/gm-notes.hbs",
   // Dice

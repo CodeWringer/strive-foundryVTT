@@ -34,13 +34,15 @@ attributeGroup: {Object}
             <tr class="item attribute-item" data-att-group-name="{{../attributeGroup.name}}" data-att-name="{{att.name}}">
                 {{#if ../isEditable}}
                     <td class="attribute-column-roll">
-                        {{> buttonRoll
-                            type="dice-pool"
-                            propertyPath=(concat "data.data.attributes." ../attributeGroup.name "." att.name ".value")
-                            chatTitle=(localize att.localizableName)
-                            callback="advanceAttributeBasedOnRollResult"
-                            callbackData=att.name
-                            contextOverride=../actor
+                        {{> buttonRoll 
+                            isEditable=../isEditable 
+                            target=../actor 
+                            propertyPath=(concat "data.data.attributes." ../attributeGroup.name "." att.name ".value") 
+                            chatTitle=(localize att.localizableName) 
+                            rollType="dice-pool" 
+                            callback="advanceAttributeBasedOnRollResult" 
+                            callbackData=att.name 
+                            actor=../actor 
                         }}
                     </td>
                 {{/if}}

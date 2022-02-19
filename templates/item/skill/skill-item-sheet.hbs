@@ -20,6 +20,7 @@ item: {Item} = {
     }
   }
 }
+actor: {Actor | undefined}
 --}}
 <form class="{{cssClass}}" autocomplete="off">
   <header class="sheet-header">
@@ -68,11 +69,10 @@ item: {Item} = {
   {{#if (or (eq isEditable true) (neq item.data.data.abilities.length 0)) }}
     {{> "systems/ambersteel/templates/item/skill-ability/skill-ability-table.hbs" 
       isEditable=isEditable 
-      skillItemId=item.id 
-      abilities=item.data.data.abilities 
       skillAbilitiesInitiallyVisible=true 
       visGroupId=(generateId) 
-      item=item
+      item=item 
+      actor=actor 
     }}
   {{/if}}
 </form>

@@ -337,3 +337,14 @@ ambersteel.itemOrientations = {
     vertical: 0,
     horizontal: 1
 };
+
+ambersteel.rollTypes = {
+    /**
+     * A generic roll, using Foundry's default system. 
+     */
+    generic: "generic",
+    /**
+     * An Ambersteel dice-pool roll. 
+     */
+    dicePool: "dice-pool",
+}

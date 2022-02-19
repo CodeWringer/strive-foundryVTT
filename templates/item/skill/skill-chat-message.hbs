@@ -20,6 +20,7 @@ item: {Item} = {
     }
   }
 }
+actor: {Actor | undefined}
 --}}
 <section>
   {{!-- Header --}}
@@ -50,6 +51,7 @@ item: {Item} = {
       skillAbilitiesInitiallyVisible=false 
       visGroupId=(generateId) 
       oneColumn=true 
+      actor=actor 
     }}
   {{/if}}
   {{!-- Description --}}

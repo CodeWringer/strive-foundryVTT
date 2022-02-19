@@ -16,7 +16,6 @@ export default class AmbersteelSkillItem extends AmbersteelBaseItem {
     this.parent.addProgress = this.addProgress.bind(this);
     this.parent.createSkillAbility = this.createSkillAbility.bind(this);
     this.parent.deleteSkillAbilityAt = this.deleteSkillAbilityAt.bind(this);
-    this.parent.getTotalValue = this.getTotalValue.bind(this);
     this.parent.advanceSkillBasedOnRollResult = this.advanceSkillBasedOnRollResult.bind(this);
   }
 
@@ -33,6 +32,19 @@ export default class AmbersteelSkillItem extends AmbersteelBaseItem {
   prepareData() {
     this.parent.data.img = this.img;
     this.parent.data.data.relatedAttribute = this.parent.data.data.relatedAttribute ?? "agility";
+  }
+  
+  /**
+   * @override
+   * @see {AmbersteelBaseItem.prepareDerivedData}
+   */
+  prepareDerivedData() {
+    const thiz = this;
+
+    this.parent.data.data = {
+      ...this.parent.data.data,
+      get totalValue() { return thiz._getTotalValue() }
+    };
   }
 
   /** @override */
@@ -139,12 +151,22 @@ export default class AmbersteelSkillItem extends AmbersteelBaseItem {
     const abilities = dataAbilities.slice(0, index).concat(dataAbilities.slice(index + 1));
     await this.updateProperty("data.abilities", abilities);
   }
+  
+  /**
+   * Advances the skill, based on the given {DicePoolResult}. 
+   * @param {DicePoolResult} rollResult 
+   * @async
+   */
+  async advanceSkillBasedOnRollResult(rollResult) {
+    this.parent.addProgress(rollResult.isSuccess, false);
+  }
 
   /**
    * Returns the number of dice available for a test of this skill. 
    * @returns {Number} The number of dice available for the test. 
+   * @private
    */
-  getTotalValue() {
+  _getTotalValue() {
     const relatedAttributeName = this.parent.data.data.relatedAttribute;
     const attGroupName = game.ambersteel.getAttributeGroupName(relatedAttributeName);
     
@@ -154,14 +176,5 @@ export default class AmbersteelSkillItem extends AmbersteelBaseItem {
     const skillLevel = this.parent.data.data.value;
 
     return game.ambersteel.getSkillTestNumberOfDice(skillLevel, relatedAttributeLevel);
-  }
-
-  /**
-   * Advances the skill, based on the given {DicePoolResult}. 
-   * @param {DicePoolResult} rollResult 
-   * @async
-   */
-  async advanceSkillBasedOnRollResult(rollResult) {
-    this.parent.addProgress(rollResult.isSuccess, false);
   }
 }

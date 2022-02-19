@@ -61,12 +61,15 @@ actor: {AmbersteelActor}
                 <tr class="item skill-item" data-item-id="{{skill.data.id}}">
                     {{#if ../isEditable}}
                         <td class="skill-column-roll">
-                            {{> buttonRoll
-                                type="dice-pool"
-                                itemId=skill.data.id
-                                chatTitle=skill.name
-                                callback="advanceSkillBasedOnRollResult"
-                                callbackData=skill.data.id
+                            {{> buttonRoll 
+                                isEditable=../isEditable 
+                                target=skill 
+                                propertyPath="data.data.totalValue" 
+                                chatTitle=skill.name 
+                                rollType="dice-pool" 
+                                callback="advanceSkillBasedOnRollResult" 
+                                callbackData=skill.id 
+                                actor=../actor 
                             }}
                         </td>
                     {{/if}}
