@@ -181,4 +181,4 @@ Handlebars.registerHelper('createButtonAddViewModel', function(isEditable, targe
   return vm;
 });
 Handlebars.registerPartial('_buttonAdd', `{{#> "${ButtonAddViewModel.TEMPLATE}"}}{{/"${ButtonAddViewModel.TEMPLATE}"}}`);
-Handlebars.registerPartial('buttonAdd', `{{> _buttonAdd vm=(createButtonAddViewModel isEditable target creationType withDialog creationData) cssClass=(isDefined cssClass "") readOnlyCssClass=(isDefined readOnlyCssClass "") }}`);
+Handlebars.registerPartial('buttonAdd', `{{> _buttonAdd vm=(createButtonAddViewModel isEditable target creationType withDialog creationData) cssClass=(isDefined cssClass "") }}`);

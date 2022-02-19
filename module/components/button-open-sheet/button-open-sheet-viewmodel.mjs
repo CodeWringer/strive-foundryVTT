@@ -58,4 +58,4 @@ Handlebars.registerHelper('createButtonOpenSheetViewModel', function(isEditable,
   return vm;
 });
 Handlebars.registerPartial('_buttonOpenSheet', `{{#> "${ButtonOpenSheetViewModel.TEMPLATE}"}}{{/"${ButtonOpenSheetViewModel.TEMPLATE}"}}`);
-Handlebars.registerPartial('buttonOpenSheet', `{{> _buttonOpenSheet vm=(createButtonOpenSheetViewModel isEditable target) cssClass=(isDefined cssClass "") readOnlyCssClass=(isDefined readOnlyCssClass "") }}`);
+Handlebars.registerPartial('buttonOpenSheet', `{{> _buttonOpenSheet vm=(createButtonOpenSheetViewModel isEditable target) cssClass=(isDefined cssClass "") }}`);

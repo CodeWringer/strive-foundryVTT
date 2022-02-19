@@ -79,4 +79,4 @@ Handlebars.registerHelper('createButtonDeleteViewModel', function(isEditable, ta
   return vm;
 });
 Handlebars.registerPartial('_buttonDelete', `{{#> "${ButtonDeleteViewModel.TEMPLATE}"}}{{/"${ButtonDeleteViewModel.TEMPLATE}"}}`);
-Handlebars.registerPartial('buttonDelete', `{{> _buttonDelete vm=(createButtonDeleteViewModel isEditable target propertyPath withDialog) cssClass=(isDefined cssClass "") readOnlyCssClass=(isDefined readOnlyCssClass "") }}`);
+Handlebars.registerPartial('buttonDelete', `{{> _buttonDelete vm=(createButtonDeleteViewModel isEditable target propertyPath withDialog) cssClass=(isDefined cssClass "") }}`);
