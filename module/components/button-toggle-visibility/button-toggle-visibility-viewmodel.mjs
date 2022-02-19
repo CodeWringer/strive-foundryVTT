@@ -48,7 +48,7 @@ export default class ButtonToggleVisibilityViewModel extends ButtonViewModel {
 
   /**
    * @param {String | undefined} args.id
-   * @param {Object  undefined} args.target The target object to affect.  
+   * @param {Object | undefined} args.target The target object to affect.  
    * @param {Function | undefined} args.callback Defines an asynchronous callback that is invoked upon completion of the button's own callback. 
    * @param {Any} args.callbackData Defines any data to pass to the completion callback. 
    * 
