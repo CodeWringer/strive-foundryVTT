@@ -30,6 +30,9 @@ export default class ButtonAddViewModel extends ButtonViewModel {
    * @param {Boolean | undefined} args.isEditable 
    * @param {String | undefined} args.id
    * @param {Object} args.target The target object to affect.  
+   * @param {Function | undefined} args.callback Defines an asynchronous callback that is invoked upon completion of the button's own callback. 
+   * @param {Any} args.callbackData Defines any data to pass to the completion callback. 
+   * 
    * @param {String} args.creationType = "skill"|"skill-ability"|"fate-card"|"item"|"injury"|"illness"
    * @param {Boolean | undefined} args.withDialog If true, will prompt the user to make a selection with a dialog. 
    * @param {Object | String | undefined} args.creationData Data to pass to the item creation function. 
@@ -47,12 +50,14 @@ export default class ButtonAddViewModel extends ButtonViewModel {
 
   /**
    * Handle creating a new Owned Item for the actor using initial data defined in the HTML dataset
+   * @override
+   * @see {ButtonViewModel.onClick}
    * @async
    * @throws {Error} NullPointerException - Thrown, if 'target', 'target.type' or 'creationType' is undefined. 
    * @throws {Error} InvalidArgumentException - Thrown, if trying to add a skill-ability to a non-skill-item. 
    * @throws {Error} InvalidArgumentException - Thrown, if 'creationType' is unrecognized. 
    */
-  async callback() {
+  async onclick() {
     if (this.target === undefined || this.target.type === undefined) {
       throw new Error("NullPointerException: 'target' or 'target.type' is undefined");
     }
@@ -166,13 +171,15 @@ export default class ButtonAddViewModel extends ButtonViewModel {
   }
 }
 
-Handlebars.registerHelper('createButtonAddViewModel', function(isEditable, target, creationType, withDialog, creationData) {
+Handlebars.registerHelper('createButtonAddViewModel', function(isEditable, target, creationType, withDialog, creationData, callback, callbackData) {
   const vm = new ButtonAddViewModel({
     isEditable: isEditable,
     target: target,
     creationType: creationType,
     withDialog: withDialog,
     creationData: creationData,
+    callback: callback,
+    callbackData: callbackData,
   });
   
   // Add new view model instance to global collection. 
@@ -181,4 +188,4 @@ Handlebars.registerHelper('createButtonAddViewModel', function(isEditable, targe
   return vm;
 });
 Handlebars.registerPartial('_buttonAdd', `{{#> "${ButtonAddViewModel.TEMPLATE}"}}{{/"${ButtonAddViewModel.TEMPLATE}"}}`);
-Handlebars.registerPartial('buttonAdd', `{{> _buttonAdd vm=(createButtonAddViewModel isEditable target creationType withDialog creationData) cssClass=(isDefined cssClass "") }}`);
+Handlebars.registerPartial('buttonAdd', `{{> _buttonAdd vm=(createButtonAddViewModel isEditable target creationType withDialog creationData callback callbackData) cssClass=(isDefined cssClass "") }}`);

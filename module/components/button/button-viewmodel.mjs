@@ -12,6 +12,8 @@ import ViewModel from "../viewmodel.mjs";
  * 
  * @property {JQuery | HTMLElement} element The button element on the DOM. 
  * @property {Object} target The target object to affect.  
+ * @property {Function} callback An asynchronous callback that is invoked upon completion of the button's own callback. 
+ * @property {Any} callbackData Any data to pass to the completion callback. 
  */
 export default class ButtonViewModel extends ViewModel {
   static get TEMPLATE() { return TEMPLATES.COMPONENT_BUTTON; }
@@ -47,14 +49,52 @@ export default class ButtonViewModel extends ViewModel {
   get target() { return this._target; }
 
   /**
+   * Defines an asynchronous callback that is invoked upon completion of the button's own callback. 
+   * @type {Function}
+   */
+  callback = undefined;
+
+  /**
+   * @type {Any}
+   * @private
+   */
+  _callbackData = undefined;
+  /**
+   * Defines any data to pass to the completion callback. 
+   * @type {Any}
+   * @readonly
+   */
+  get completionCallbackData() { return this._callbackData; }
+
+  /**
    * @param {Boolean | undefined} args.isEditable 
    * @param {String | undefined} args.id
+   * 
    * @param {Object} args.target The target object to affect.  
    * For example, could be an instance of {ActorSheet} or {ItemSheet}. 
+   * @param {Function | String | undefined} args.callback Defines an asynchronous callback that is invoked upon completion of the button's own callback. 
+   * @param {Any} args.callbackData Defines any data to pass to the completion callback. 
    */
   constructor(args = {}) {
     super(args);
     this._target = args.target;
+    this.callback = this._getCallback(args.callback);
+    this._callbackData = args.callbackData;
+  }
+
+  /**
+   * @param {Function | String | undefined} callback 
+   * @private
+   * @returns {Function}
+   */
+  _getCallback(callback) {
+    if (typeof(callback) === "string") {
+      return this.target[callback];
+    } else if (callback === undefined) {
+      return (async (args) => {});
+    } else {
+      return callback;
+    }
   }
 
   /**
@@ -86,7 +126,7 @@ export default class ButtonViewModel extends ViewModel {
    * @abstract
    * @async
    */
-  async callback() {
+  async onClick() {
     throw new Error("NotImplementedException");
   }
 
@@ -96,8 +136,10 @@ export default class ButtonViewModel extends ViewModel {
    * @async
    */
   async _onClick(event) {
-    // Invoke callback with event args and a reference to 'this' (= the view model). 
-    await this.callback();
+    event.preventDefault();
+
+    await this.onClick();
+    await this.callback(this._callbackData);
   }
 }
 
