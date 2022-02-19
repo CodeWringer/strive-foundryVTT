@@ -73,7 +73,7 @@ export class AmbersteelActorSheet extends ActorSheet {
    * @type {ViewModelCollection}
    * @private
    */
-  _viewModels = new ViewModelCollection();
+  _viewModels = undefined;
   /**
    * @returns {ViewModelCollection}
    */
@@ -108,6 +108,7 @@ export class AmbersteelActorSheet extends ActorSheet {
     const isEditable = this.isEditable;
 
     // Activate view model bound event listeners. 
+    this._viewModels = new ViewModelCollection();
     this.viewModels.activateListeners(html, isOwner, isEditable);
 
     // -------------------------------------------------------------

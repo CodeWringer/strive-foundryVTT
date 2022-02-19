@@ -66,7 +66,7 @@ export class AmbersteelItemSheet extends ItemSheet {
    * @type {ViewModelCollection}
    * @private
    */
-  _viewModels = new ViewModelCollection(this);
+  _viewModels = undefined;
   /**
    * @returns {ViewModelCollection}
    */
@@ -101,6 +101,7 @@ export class AmbersteelItemSheet extends ItemSheet {
     const isEditable = this.isEditable;
 
     // Activate view model bound event listeners. 
+    this._viewModels = new ViewModelCollection();
     this.viewModels.activateListeners(html, isOwner, isEditable);
 
     // -------------------------------------------------------------
