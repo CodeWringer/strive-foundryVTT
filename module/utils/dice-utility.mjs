@@ -8,7 +8,7 @@ import { TEMPLATES } from "../templatePreloader.mjs";
 
 export const DICE_ROLL_SOUND = "../sounds/dice.wav";
 
-const LOCALIZED_OBSTACLE_ABBREVIATION = "ambersteel.roll.obstacleAbbreviation";
+export const LOCALIZABLE_OBSTACLE_ABBREVIATION = "ambersteel.roll.obstacleAbbreviation";
 
 /**
  * Rolls the given number of dice and returns the results of the roll, both in raw 
@@ -98,7 +98,7 @@ export async function sendDiceResultToChat(args = {}) {
     }
   }
   // Insert obstacle threshold. 
-  const obstacleForDisplay = { cssClass: "roll-obstacle", content: `${game.i18n.localize(LOCALIZED_OBSTACLE_ABBREVIATION)} ${rollResult.obstacle}` }
+  const obstacleForDisplay = { cssClass: "roll-obstacle", content: `${game.i18n.localize(LOCALIZABLE_OBSTACLE_ABBREVIATION)} ${rollResult.obstacle}` }
   if (rollResult.obstacle >= resultsForDisplay.length) { // Obstacle greater than number of dice rolled. 
     resultsForDisplay.push(obstacleForDisplay);
   } else { // Obstacle less than or equal to number of dice rolled. 
@@ -126,10 +126,18 @@ export async function sendDiceResultToChat(args = {}) {
  * @async
  */
 export async function queryRollData() {
+
+  const visibilityModes = [];
+  for (const visibilityModeName in CONFIG.ambersteel.visibilityModes) {
+    const visibilityMode = CONFIG.ambersteel.visibilityModes[visibilityModeName];
+    visibilityModes.push(visibilityMode);
+  }
+
   const dialogData = {
     obstacle: 0,
     bonusDice: 0,
-    visibilityMode: CONFIG.ambersteel.visibilityModes.public
+    visibilityMode: visibilityModes[0],
+    visibilityModes: visibilityModes,
   };
 
   return new Promise(async (resolve, reject) => {
