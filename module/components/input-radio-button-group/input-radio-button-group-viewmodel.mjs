@@ -1,6 +1,5 @@
 import { TEMPLATES } from "../../templatePreloader.mjs";
 import InputViewModel from "../input-viewmodel.mjs";
-import { selectItemByValue } from "../../utils/sheet-utility.mjs";
 
 /**
  * --- Inherited from ViewModel
