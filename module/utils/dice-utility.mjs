@@ -126,12 +126,7 @@ export async function sendDiceResultToChat(args = {}) {
  * @async
  */
 export async function queryRollData() {
-
-  const visibilityModes = [];
-  for (const visibilityModeName in CONFIG.ambersteel.visibilityModes) {
-    const visibilityMode = CONFIG.ambersteel.visibilityModes[visibilityModeName];
-    visibilityModes.push(visibilityMode);
-  }
+  const visibilityModes = ChatUtil.getVisibilityModes(CONFIG);
 
   const dialogData = {
     obstacle: 0,
@@ -142,10 +137,17 @@ export async function queryRollData() {
 
   return new Promise(async (resolve, reject) => {
     const result = await showDialog({ dialogTemplate: TEMPLATES.DIALOG_ROLL, localizableTitle: "ambersteel.dialog.titleRollQuery" }, dialogData);
+    
+    const obstacle = parseInt(getElementValue(result.html.find(".obstacle")[0]));
+    const bonusDice = parseInt(getElementValue(result.html.find(".bonus-dice")[0]));
+
+    const visibilityModeKey = parseInt(getElementValue(result.html.find(".visibilityMode")[0]));
+    const visibilityMode = visibilityModes[visibilityModeKey];
+
     resolve(new RollDataQueryDialogResult({
-      obstacle: parseInt(getElementValue(result.html.find(".obstacle")[0])),
-      bonusDice: parseInt(getElementValue(result.html.find(".bonus-dice")[0])),
-      visibilityMode: getElementValue(result.html.find(".visibilityMode")[0]),
+      obstacle: obstacle,
+      bonusDice: bonusDice,
+      visibilityMode: visibilityMode,
       confirmed: result.confirmed
     }));
   });
