@@ -57,7 +57,7 @@ export default class ButtonAddViewModel extends ButtonViewModel {
    * @throws {Error} InvalidArgumentException - Thrown, if trying to add a skill-ability to a non-skill-item. 
    * @throws {Error} InvalidArgumentException - Thrown, if 'creationType' is unrecognized. 
    */
-  async onclick() {
+  async onClick() {
     if (this.target === undefined || this.target.type === undefined) {
       throw new Error("NullPointerException: 'target' or 'target.type' is undefined");
     }

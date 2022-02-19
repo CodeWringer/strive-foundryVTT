@@ -39,7 +39,7 @@ export default class ButtonOpenSheetViewModel extends ButtonViewModel {
    * @throws {Error} NullPointerException - Thrown, if 'target' is undefined. 
    * @throws {Error} NullPointerException - Thrown, if trying to delete by property path and 'target.deleteByPropertyPath' is undefined. 
    */
-  async onclick() {
+  async onClick() {
     if (this.target === undefined) {
       throw new Error("NullPointerException: 'target' or 'target.type' is undefined");
     }
