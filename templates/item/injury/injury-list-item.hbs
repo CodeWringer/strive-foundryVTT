@@ -18,7 +18,7 @@ item: {Item} = {
 <div class="flex flex-row">
   <div class="flex flex-grow">
     {{!-- Send to chat --}}
-    {{> buttonSendToChat isEditable=isEditable target=item }}
+    {{> buttonSendToChat target=item }}
     {{!-- Name --}}
     <span class="width-min-xl">
       {{> inputLabel text="ambersteel.labels.injury"}}
@@ -30,7 +30,7 @@ item: {Item} = {
     {{> inputRadioButtonGroup isEditable=isEditable propertyOwner=item propertyPath="data.data.state" options=(game.ambersteel.getInjuryOptions) }}
   </div>
   {{!-- Delete --}}
-  {{> buttonDelete isEditable=isEditable target=item withDialog=true }}
+  {{> buttonDelete target=item withDialog=true }}
 </div>
 {{!-- Row 2 --}}
 <div class="flex flex-row">

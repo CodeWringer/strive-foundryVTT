@@ -7,7 +7,6 @@ import { findItem, contentCollectionTypes } from '../../utils/content-utility.mj
  * --- Inherited from ViewModel
  * 
  * @property {JQuery | HTMLElement} element The button element on the DOM. 
- * @property {Boolean} isEditable If true, input(s) will be in edit mode. If false, input(s) will be in read-only mode.
  * @property {String} id Optional. Id used for the HTML element's id and name attributes. 
  * @property {String} TEMPLATE Static. Returns the template this ViewModel is intended for. 
  * 
@@ -27,7 +26,6 @@ export default class ButtonAddViewModel extends ButtonViewModel {
   static get TEMPLATE() { return TEMPLATES.COMPONENT_BUTTON_ADD; }
   
   /**
-   * @param {Boolean | undefined} args.isEditable 
    * @param {String | undefined} args.id
    * @param {Object} args.target The target object to affect.  
    * @param {Function | undefined} args.callback Defines an asynchronous callback that is invoked upon completion of the button's own callback. 
@@ -57,7 +55,9 @@ export default class ButtonAddViewModel extends ButtonViewModel {
    * @throws {Error} InvalidArgumentException - Thrown, if trying to add a skill-ability to a non-skill-item. 
    * @throws {Error} InvalidArgumentException - Thrown, if 'creationType' is unrecognized. 
    */
-  async onClick() {
+  async onClick(html, isOwner, isEditable) {
+    if (isEditable !== true) return;
+
     if (this.target === undefined || this.target.type === undefined) {
       throw new Error("NullPointerException: 'target' or 'target.type' is undefined");
     }
@@ -171,9 +171,8 @@ export default class ButtonAddViewModel extends ButtonViewModel {
   }
 }
 
-Handlebars.registerHelper('createButtonAddViewModel', function(isEditable, target, creationType, withDialog, creationData, callback, callbackData) {
+Handlebars.registerHelper('createButtonAddViewModel', function(target, creationType, withDialog, creationData, callback, callbackData) {
   const vm = new ButtonAddViewModel({
-    isEditable: isEditable,
     target: target,
     creationType: creationType,
     withDialog: withDialog,
@@ -188,4 +187,4 @@ Handlebars.registerHelper('createButtonAddViewModel', function(isEditable, targe
   return vm;
 });
 Handlebars.registerPartial('_buttonAdd', `{{#> "${ButtonAddViewModel.TEMPLATE}"}}{{/"${ButtonAddViewModel.TEMPLATE}"}}`);
-Handlebars.registerPartial('buttonAdd', `{{> _buttonAdd vm=(createButtonAddViewModel isEditable target creationType withDialog creationData callback callbackData) cssClass=(isDefined cssClass "") }}`);
+Handlebars.registerPartial('buttonAdd', `{{> _buttonAdd vm=(createButtonAddViewModel target creationType withDialog creationData callback callbackData) cssClass=(isDefined cssClass "") }}`);

@@ -62,7 +62,6 @@ actor: {AmbersteelActor}
                     {{#if ../isEditable}}
                         <td class="skill-column-roll">
                             {{> buttonRoll 
-                                isEditable=../isEditable 
                                 target=skill 
                                 propertyPath="data.data.totalValue" 
                                 chatTitle=skill.name 
@@ -74,10 +73,10 @@ actor: {AmbersteelActor}
                         </td>
                     {{/if}}
                     <td>
-                        {{> buttonSendToChat isEditable=../isEditable target=skill }}
+                        {{> buttonSendToChat target=skill }}
                     </td>
                     <td>
-                        {{> buttonOpenSheet isEditable=../isEditable target=skill.name }}
+                        {{> buttonOpenSheet target=skill.name }}
                     </td>
                     <td class="fancy-font flex skill-column-name">
                         {{> inputTextField isEditable=../isEditable propertyOwner=skill propertyPath="name" placeholder="ambersteel.labels.name" }}
@@ -99,7 +98,7 @@ actor: {AmbersteelActor}
                     </td>
                     {{#if ../isEditable}}
                         <td class="skill-column-delete">
-                            {{> buttonDelete isEditable=../isEditable target=skill withDialog=true }}
+                            {{> buttonDelete target=skill withDialog=true }}
                         </td>
                     {{/if}}
                 </tr>
@@ -121,7 +120,7 @@ actor: {AmbersteelActor}
                         <div class="flex">
                             <span class="flex-grow"></span>
                             <span class="width-sm">
-                                {{> buttonAdd isEditable=isEditable target=actor creationType="skill" withDialog=true creationData=(concat "[value:"(ifThenElse isLearningSkillsTable "0" "1") "]" ) }}
+                                {{> buttonAdd target=actor creationType="skill" withDialog=true creationData=(concat "[value:"(ifThenElse isLearningSkillsTable "0" "1") "]" ) }}
                             </span>
                         </div>
                     </td>

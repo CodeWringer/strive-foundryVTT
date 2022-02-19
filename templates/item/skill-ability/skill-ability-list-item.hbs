@@ -21,7 +21,7 @@ actor: {Actor | undefined}
   <div class="flex flex-grow">
     {{!-- Send to chat --}}
     {{#if isSendable}}
-      {{> buttonSendToChat isEditable=isEditable target=item propertyPath=(concat "data.data.abilities[" key "]") }}
+      {{> buttonSendToChat target=item propertyPath=(concat "data.data.abilities[" key "]") }}
     {{/if}}
     {{!-- Name --}}
     <span class="width-min-xl">
@@ -31,7 +31,7 @@ actor: {Actor | undefined}
   </div>
   {{!-- Delete --}}
   {{#if isEditable}}
-    {{> buttonDelete isEditable=isEditable target=item propertyPath=(concat "data.data.abilities[" key "]") withDialog=true }}
+    {{> buttonDelete target=item propertyPath=(concat "data.data.abilities[" key "]") withDialog=true }}
   {{/if}}
 </div>
 {{!-- Row 2 --}}
@@ -86,7 +86,6 @@ actor: {Actor | undefined}
     {{> inputLabel for=(concat "damageFormula[" key "]") text="ambersteel.labels.damage"}}
   </div>
   {{> buttonRoll 
-      isEditable=isEditable 
       target=item 
       propertyPath=(concat "data.data.abilities[" key "].damageFormula") 
       chatTitle=ability.name

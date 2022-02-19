@@ -6,7 +6,6 @@ import { showConfirmationDialog } from "../../utils/dialog-utility.mjs";
  * --- Inherited from ViewModel
  * 
  * @property {JQuery | HTMLElement} element The button element on the DOM. 
- * @property {Boolean} isEditable If true, input(s) will be in edit mode. If false, input(s) will be in read-only mode.
  * @property {String} id Optional. Id used for the HTML element's id and name attributes. 
  * @property {String} TEMPLATE Static. Returns the template this ViewModel is intended for. 
  * 
@@ -25,7 +24,6 @@ export default class ButtonDeleteViewModel extends ButtonViewModel {
   static get TEMPLATE() { return TEMPLATES.COMPONENT_BUTTON_DELETE; }
   
   /**
-   * @param {Boolean | undefined} args.isEditable 
    * @param {String | undefined} args.id
    * @param {Object} args.target The target object to affect.  
    * @param {Function | undefined} args.callback Defines an asynchronous callback that is invoked upon completion of the button's own callback. 
@@ -47,7 +45,9 @@ export default class ButtonDeleteViewModel extends ButtonViewModel {
    * @throws {Error} NullPointerException - Thrown, if 'target' is undefined. 
    * @throws {Error} NullPointerException - Thrown, if trying to delete by property path and 'target.deleteByPropertyPath' is undefined. 
    */
-  async onClick() {
+  async onClick(html, isOwner, isEditable) {
+    if (isEditable !== true) return;
+
     if (this.target === undefined) {
       throw new Error("NullPointerException: 'target' or 'target.type' is undefined");
     }
@@ -70,9 +70,8 @@ export default class ButtonDeleteViewModel extends ButtonViewModel {
   }
 }
 
-Handlebars.registerHelper('createButtonDeleteViewModel', function(isEditable, target, propertyPath, withDialog, callback, callbackData) {
+Handlebars.registerHelper('createButtonDeleteViewModel', function(target, propertyPath, withDialog, callback, callbackData) {
   const vm = new ButtonDeleteViewModel({
-    isEditable: isEditable,
     target: target,
     withDialog: withDialog,
     propertyPath: propertyPath,
@@ -86,4 +85,4 @@ Handlebars.registerHelper('createButtonDeleteViewModel', function(isEditable, ta
   return vm;
 });
 Handlebars.registerPartial('_buttonDelete', `{{#> "${ButtonDeleteViewModel.TEMPLATE}"}}{{/"${ButtonDeleteViewModel.TEMPLATE}"}}`);
-Handlebars.registerPartial('buttonDelete', `{{> _buttonDelete vm=(createButtonDeleteViewModel isEditable target propertyPath withDialog callback callbackData) cssClass=(isDefined cssClass "") }}`);
+Handlebars.registerPartial('buttonDelete', `{{> _buttonDelete vm=(createButtonDeleteViewModel target propertyPath withDialog callback callbackData) cssClass=(isDefined cssClass "") }}`);

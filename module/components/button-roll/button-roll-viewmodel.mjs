@@ -8,7 +8,6 @@ import ButtonViewModel from "../button/button-viewmodel.mjs";
  * --- Inherited from ViewModel
  * 
  * @property {JQuery | HTMLElement} element The button element on the DOM. 
- * @property {Boolean} isEditable If true, input(s) will be in edit mode. If false, input(s) will be in read-only mode.
  * @property {String} id Optional. Id used for the HTML element's id and name attributes. 
  * @property {String} TEMPLATE Static. Returns the template this ViewModel is intended for. 
  * 
@@ -85,7 +84,6 @@ export default class ButtonRollViewModel extends ButtonViewModel {
   get lastRollResult() { return this._lastRollResult; }
 
   /**
-   * @param {Boolean | undefined} args.isEditable 
    * @param {String | undefined} args.id
    * @param {Object} args.target The target object to affect.  
    * @param {Function | undefined} args.callback Defines an asynchronous callback that is invoked upon completion of the button's own callback. 
@@ -116,7 +114,9 @@ export default class ButtonRollViewModel extends ButtonViewModel {
    * @async
    * @throws {Error} InvalidStateException - Thrown if the rollType is unrecognized. 
    */
-  async onClick() {
+  async onClick(html, isOwner, isEditable) {
+    if (isOwner !== true) return;
+
     if (this.rollType === game.ambersteel.config.rollTypes.generic) {
       const dialogResult = await ChatUtil.queryVisibilityMode();
       if (!dialogResult.confirmed) return;
@@ -164,9 +164,8 @@ export default class ButtonRollViewModel extends ButtonViewModel {
   }
 }
 
-Handlebars.registerHelper('createButtonRollViewModel', function(isEditable, target, propertyPath, rollType, chatTitle, actor, callback, callbackData) {
+Handlebars.registerHelper('createButtonRollViewModel', function(target, propertyPath, rollType, chatTitle, actor, callback, callbackData) {
   const vm = new ButtonRollViewModel({
-    isEditable: isEditable,
     target: target,
     propertyPath: propertyPath,
     rollType: rollType,
@@ -182,4 +181,4 @@ Handlebars.registerHelper('createButtonRollViewModel', function(isEditable, targ
   return vm;
 });
 Handlebars.registerPartial('_buttonRoll', `{{#> "${ButtonRollViewModel.TEMPLATE}"}}{{/"${ButtonRollViewModel.TEMPLATE}"}}`);
-Handlebars.registerPartial('buttonRoll', `{{> _buttonRoll vm=(createButtonRollViewModel isEditable target propertyPath rollType chatTitle actor callback callbackData) cssClass=(isDefined cssClass "") }}`);
+Handlebars.registerPartial('buttonRoll', `{{> _buttonRoll vm=(createButtonRollViewModel target propertyPath rollType chatTitle actor callback callbackData) cssClass=(isDefined cssClass "") }}`);

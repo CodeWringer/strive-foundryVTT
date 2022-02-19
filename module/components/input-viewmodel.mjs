@@ -5,12 +5,12 @@ import { getElementValue } from "../utils/sheet-utility.mjs";
 /**
  * --- Inherited from ViewModel
  * 
- * @property {Boolean} isEditable If true, input(s) will be in edit mode. If false, input(s) will be in read-only mode.
  * @property {String} id Optional. Id used for the HTML element's id and name attributes. 
  * @property {String} TEMPLATE Static. Returns the template this ViewModel is intended for. 
  * 
  * --- Own properties
  * 
+ * @property {Boolean} isEditable If true, input(s) will be in edit mode. If false, input(s) will be in read-only mode.
  * @property {JQuery | HTMLElement} element The button element on the DOM. 
  * @property {String} propertyPath The path used to look up the value. 
  * @property {Object} propertyOwner An object on which to to look up the value. 
@@ -30,6 +30,18 @@ export default class InputViewModel extends ViewModel {
    * @readonly
    */
   static SELECTOR_READ = "custom-system-read-only";
+
+  /**
+   * @type {Boolean}
+   * @private
+   */
+  _isEditable = false;
+  /**
+   * @type {Boolean}
+   * @readonly
+   * @throws {Error} DisposedAccessViolation Thrown if the object has been disposed. 
+   */
+  get isEditable() { return this._isEditable; }
 
   /**
    * @type {Any}
@@ -67,13 +79,15 @@ export default class InputViewModel extends ViewModel {
   get element() { return this._element; }
 
   /**
-   * @param {Boolean | undefined} args.isEditable 
    * @param {String | undefined} args.id
+   * 
+   * @param {Boolean | undefined} args.isEditable 
    * @param {String} args.propertyPath
    * @param {Object} args.propertyOwner
    */
   constructor(args = {}) {
     super(args);
+    this._isEditable = args.isEditable ?? false;
     this.propertyPath = args.propertyPath ?? undefined;
     this.propertyOwner = args.propertyOwner ?? undefined;
   }

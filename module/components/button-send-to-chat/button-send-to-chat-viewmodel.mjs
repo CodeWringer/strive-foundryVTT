@@ -7,7 +7,6 @@ import ButtonViewModel from "../button/button-viewmodel.mjs";
  * --- Inherited from ViewModel
  * 
  * @property {JQuery | HTMLElement} element The button element on the DOM. 
- * @property {Boolean} isEditable If true, input(s) will be in edit mode. If false, input(s) will be in read-only mode.
  * @property {String} id Optional. Id used for the HTML element's id and name attributes. 
  * @property {String} TEMPLATE Static. Returns the template this ViewModel is intended for. 
  * 
@@ -59,7 +58,6 @@ export default class ButtonSendToChatViewModel extends ButtonViewModel {
   get actor() { return this._actor; }
 
   /**
-   * @param {Boolean | undefined} args.isEditable 
    * @param {String | undefined} args.id
    * @param {Object} args.target The target object to affect.  
    * @param {Function | undefined} args.callback Defines an asynchronous callback that is invoked upon completion of the button's own callback. 
@@ -81,7 +79,9 @@ export default class ButtonSendToChatViewModel extends ButtonViewModel {
    * @see {ButtonViewModel.onClick}
    * @async
    */
-  async onClick() {
+  async onClick(html, isOwner, isEditable) {
+    if (isOwner !== true) return;
+
     const dialogResult = await ChatUtil.queryVisibilityMode();
     if (!dialogResult.confirmed) return;
     
@@ -113,9 +113,8 @@ export default class ButtonSendToChatViewModel extends ButtonViewModel {
   }
 }
 
-Handlebars.registerHelper('createButtonSendToChatViewModel', function(isEditable, target, propertyPath, chatTitle, actor, callback, callbackData) {
+Handlebars.registerHelper('createButtonSendToChatViewModel', function(target, propertyPath, chatTitle, actor, callback, callbackData) {
   const vm = new ButtonSendToChatViewModel({
-    isEditable: isEditable,
     target: target,
     propertyPath: propertyPath,
     chatTitle: chatTitle,
@@ -130,4 +129,4 @@ Handlebars.registerHelper('createButtonSendToChatViewModel', function(isEditable
   return vm;
 });
 Handlebars.registerPartial('_buttonSendToChat', `{{#> "${ButtonSendToChatViewModel.TEMPLATE}"}}{{/"${ButtonSendToChatViewModel.TEMPLATE}"}}`);
-Handlebars.registerPartial('buttonSendToChat', `{{> _buttonSendToChat vm=(createButtonSendToChatViewModel isEditable target propertyPath chatTitle actor callback callbackData) cssClass=(isDefined cssClass "") }}`);
+Handlebars.registerPartial('buttonSendToChat', `{{> _buttonSendToChat vm=(createButtonSendToChatViewModel target propertyPath chatTitle actor callback callbackData) cssClass=(isDefined cssClass "") }}`);

@@ -4,7 +4,6 @@ import ViewModel from "../viewmodel.mjs";
 /**
  * --- Inherited from ViewModel
  * 
- * @property {Boolean} isEditable If true, input(s) will be in edit mode. If false, input(s) will be in read-only mode.
  * @property {String} id Optional. Id used for the HTML element's id and name attributes. 
  * @property {String} TEMPLATE Static. Returns the template this ViewModel is intended for. 
  * 
@@ -67,7 +66,6 @@ export default class ButtonViewModel extends ViewModel {
   get completionCallbackData() { return this._callbackData; }
 
   /**
-   * @param {Boolean | undefined} args.isEditable 
    * @param {String | undefined} args.id
    * 
    * @param {Object} args.target The target object to affect.  
@@ -111,22 +109,20 @@ export default class ButtonViewModel extends ViewModel {
       throw new Error(`NullPointerException: Failed to get input element with id '${this.id}'`);
     }
 
-    // -------------------------------------------------------------
-    if (!isOwner) return;
-    // -------------------------------------------------------------
-    if (!isEditable) return;
-
-    this.element.click(this._onClick.bind(this));
+    this.element.click(this._onClick.bind(this, html, isOwner, isEditable));
   }
 
   /**
    * Callback function, which is invoked when the user clicks on the button. 
    * 
    * Must be overridden by inheriting types!
+   * @param {Object} html DOM of the sheet for which to register listeners. 
+   * @param {Boolean} isOwner If true, registers events that require owner permission. 
+   * @param {Boolean} isEditable If true, registers events that require editing permission. 
    * @abstract
    * @async
    */
-  async onClick() {
+  async onClick(html, isOwner, isEditable) {
     throw new Error("NotImplementedException");
   }
 

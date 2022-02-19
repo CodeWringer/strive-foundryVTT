@@ -6,7 +6,6 @@ import ButtonViewModel from "../button/button-viewmodel.mjs";
  * --- Inherited from ViewModel
  * 
  * @property {JQuery | HTMLElement} element The button element on the DOM. 
- * @property {Boolean} isEditable If true, input(s) will be in edit mode. If false, input(s) will be in read-only mode.
  * @property {String} id Optional. Id used for the HTML element's id and name attributes. 
  * @property {String} TEMPLATE Static. Returns the template this ViewModel is intended for. 
  * 
@@ -22,7 +21,6 @@ export default class ButtonOpenSheetViewModel extends ButtonViewModel {
   static get TEMPLATE() { return TEMPLATES.COMPONENT_BUTTON_OPEN_SHEET; }
   
   /**
-   * @param {Boolean | undefined} args.isEditable 
    * @param {String | undefined} args.id
    * @param {Object} args.target The target object to affect.  
    * @param {Function | undefined} args.callback Defines an asynchronous callback that is invoked upon completion of the button's own callback. 
@@ -39,7 +37,9 @@ export default class ButtonOpenSheetViewModel extends ButtonViewModel {
    * @throws {Error} NullPointerException - Thrown, if 'target' is undefined. 
    * @throws {Error} NullPointerException - Thrown, if trying to delete by property path and 'target.deleteByPropertyPath' is undefined. 
    */
-  async onClick() {
+  async onClick(html, isOwner, isEditable) {
+    if (isOwner !== true) return;
+
     if (this.target === undefined) {
       throw new Error("NullPointerException: 'target' or 'target.type' is undefined");
     }
@@ -50,9 +50,8 @@ export default class ButtonOpenSheetViewModel extends ButtonViewModel {
   }
 }
 
-Handlebars.registerHelper('createButtonOpenSheetViewModel', function(isEditable, target, callback, callbackData) {
+Handlebars.registerHelper('createButtonOpenSheetViewModel', function(target, callback, callbackData) {
   const vm = new ButtonOpenSheetViewModel({
-    isEditable: isEditable,
     target: target,
     callback: callback,
     callbackData: callbackData,
@@ -64,4 +63,4 @@ Handlebars.registerHelper('createButtonOpenSheetViewModel', function(isEditable,
   return vm;
 });
 Handlebars.registerPartial('_buttonOpenSheet', `{{#> "${ButtonOpenSheetViewModel.TEMPLATE}"}}{{/"${ButtonOpenSheetViewModel.TEMPLATE}"}}`);
-Handlebars.registerPartial('buttonOpenSheet', `{{> _buttonOpenSheet vm=(createButtonOpenSheetViewModel isEditable target callback callbackData) cssClass=(isDefined cssClass "") }}`);
+Handlebars.registerPartial('buttonOpenSheet', `{{> _buttonOpenSheet vm=(createButtonOpenSheetViewModel target callback callbackData) cssClass=(isDefined cssClass "") }}`);

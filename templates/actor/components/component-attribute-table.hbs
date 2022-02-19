@@ -35,7 +35,6 @@ attributeGroup: {Object}
                 {{#if ../isEditable}}
                     <td class="attribute-column-roll">
                         {{> buttonRoll 
-                            isEditable=../isEditable 
                             target=../actor 
                             propertyPath=(concat "data.data.attributes." ../attributeGroup.name "." att.name ".value") 
                             chatTitle=(localize att.localizableName) 
