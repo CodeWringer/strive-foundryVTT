@@ -74,7 +74,7 @@ actor: {AmbersteelActor}
                         </td>
                     {{/if}}
                     <td>
-                        {{> buttonSendToChat itemId=skill.data.id }}
+                        {{> buttonSendToChat isEditable=../isEditable target=skill }}
                     </td>
                     <td>
                         {{> buttonOpenSheet isEditable=../isEditable target=skill.name }}

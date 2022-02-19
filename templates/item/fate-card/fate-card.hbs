@@ -32,7 +32,7 @@ item: {Item} = {
     <div class="flex flex-row pad-md">
       {{#if isSendable}}
         <div class="flex flex-center">
-          {{> buttonSendToChat itemId=item._id }}
+          {{> buttonSendToChat isEditable=isEditable target=item }}
         </div>
       {{/if}}
       <div class="flex-grow"></div>

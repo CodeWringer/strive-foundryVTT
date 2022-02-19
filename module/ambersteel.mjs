@@ -29,6 +29,7 @@ import './components/button-add/button-add-viewmodel.mjs';
 import './components/button-delete/button-delete-viewmodel.mjs';
 import './components/button-open-sheet/button-open-sheet-viewmodel.mjs';
 import './components/button-roll/button-roll-viewmodel.mjs';
+import './components/button-send-to-chat/button-send-to-chat-viewmodel.mjs';
 
 /* -------------------------------------------- */
 /*  Init Hook                                   */
@@ -395,7 +396,6 @@ Handlebars.registerHelper('generateId', function() {
 /* -------------------------------------------- */
 
 // Button components
-Handlebars.registerPartial('buttonSendToChat', `TODO: REMOVE`);
 Handlebars.registerPartial('buttonToggleVisibility', `TODO: REMOVE`);
 Handlebars.registerPartial('buttonTakeItem', `TODO: REMOVE`);
 

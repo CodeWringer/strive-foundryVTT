@@ -48,7 +48,7 @@ actor: {Actor | undefined}
             <div class="flex flex-grow">
               {{!-- Send to chat --}}
               {{#if ../isSendable}}
-                {{> buttonSendToChat itemId=../item.data.id propertyPath=(concat "data.data.abilities[" key "]") }}
+                {{> buttonSendToChat isEditable=isEditable target=../item propertyPath=(concat "data.data.abilities[" key "]") }}
               {{/if}}
               {{!-- Name --}}
               <span class="width-min-xl">

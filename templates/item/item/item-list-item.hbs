@@ -27,7 +27,7 @@ item: {Item} = {
 <div class="flex flex-row">
   <div class="flex flex-grow">
     {{!-- Send to chat --}}
-    {{> buttonSendToChat itemId=itemId }}
+    {{> buttonSendToChat isEditable=isEditable target=item }}
     {{!-- Pick up --}}
     {{#if (eq (lookupValue item "data.data.isOnPerson" itemId) false)}}
       {{> buttonTakeItem itemId=itemId}}
