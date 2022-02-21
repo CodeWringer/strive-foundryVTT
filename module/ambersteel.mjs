@@ -31,6 +31,7 @@ import './components/button-open-sheet/button-open-sheet-viewmodel.mjs';
 import './components/button-roll/button-roll-viewmodel.mjs';
 import './components/button-send-to-chat/button-send-to-chat-viewmodel.mjs';
 import './components/button-toggle-visibility/button-toggle-visibility-viewmodel.mjs';
+import './components/button-take-item/button-take-item-viewmodel.mjs';
 
 /* -------------------------------------------- */
 /*  Init Hook                                   */
@@ -395,9 +396,6 @@ Handlebars.registerHelper('generateId', function() {
 /* -------------------------------------------- */
 /*  Handlebars Partials                         */
 /* -------------------------------------------- */
-
-// Button components
-Handlebars.registerPartial('buttonTakeItem', `TODO: REMOVE`);
 
 // Input components
 Handlebars.registerPartial('inputLabel', `{{#> "${TEMPLATES.COMPONENT_INPUT_LABEL}"}}{{/"${TEMPLATES.COMPONENT_INPUT_LABEL}"}}`);
