@@ -27,21 +27,19 @@ item: {Item} = {
 <div class="flex flex-row">
   <div class="flex flex-grow">
     {{!-- Send to chat --}}
-    {{> buttonSendToChat itemId=itemId }}
+    {{> buttonSendToChat target=item }}
     {{!-- Pick up --}}
-    {{#if (eq (lookupValue item "data.data.isOnPerson" itemId) false)}}
-      {{> buttonTakeItem itemId=itemId}}
-    {{/if}}
+    {{> buttonTakeItem target=item contextType="list-item" }}
     {{!-- Name --}}
     <span class="width-min-xl">
       {{> inputLabel text="ambersteel.labels.item"}}
     </span>
     <span class="flex-grow margin-r-md">
-      {{> inputComponent type="single-line" propertyPath="name" itemId=itemId isEditable=isEditable }}
+      {{> inputTextField isEditable=isEditable propertyOwner=item propertyPath="name" placeholder="ambersteel.labels.name" }}
     </span>
   </div>
   {{!-- Delete --}}
-  {{> buttonDelete itemId=itemId }}
+  {{> buttonDelete target=item withDialog=false }}
 </div>
 {{!-- Row 2 --}}
 <div class="flex flex-row">
@@ -51,7 +49,7 @@ item: {Item} = {
       {{> inputLabel text="ambersteel.labels.quantity" }}
     </span>
     <span class="width-md">
-      {{> inputComponent type="number" propertyPath="data.data.quantity" min="1" max=(lookupValue this "data.data.maxQuantity" itemId) itemId=itemId isEditable=isEditable }}
+      {{> inputNumberSpinner isEditable=isEditable propertyOwner=item propertyPath="data.data.quantity" min=1 }}
     </span>
   </div>
   {{!-- Spacer --}}
@@ -62,7 +60,7 @@ item: {Item} = {
       {{> inputLabel text="ambersteel.labels.maxQuantity" }}
     </span>
     <span class="width-md">
-      {{> inputComponent type="number" propertyPath="data.data.maxQuantity" min="1" itemId=itemId isEditable=isEditable }}
+      {{> inputNumberSpinner isEditable=isEditable propertyOwner=item propertyPath="data.data.maxQuantity" min=1 }}
     </span>
   </div>
 </div>
@@ -74,7 +72,7 @@ item: {Item} = {
       {{> inputLabel text="ambersteel.labels.shapeWidth" }}
     </span>
     <span class="width-md">
-      {{> inputComponent type="number" propertyPath="data.data.shape.width" min="1" itemId=itemId isEditable=isEditable }}
+      {{> inputNumberSpinner isEditable=isEditable propertyOwner=item propertyPath="data.data.shape.width" min=1 }}
     </span>
   </div>
   {{!-- Spacer --}}
@@ -85,7 +83,7 @@ item: {Item} = {
       {{> inputLabel text="ambersteel.labels.shapeHeight" }}
     </span>
     <span class="width-md">
-      {{> inputComponent type="number" propertyPath="data.data.shape.height" min="1" itemId=itemId isEditable=isEditable }}
+      {{> inputNumberSpinner isEditable=isEditable propertyOwner=item propertyPath="data.data.shape.height" min=1 }}
     </span>
   </div>
   {{!-- Spacer --}}
@@ -96,12 +94,12 @@ item: {Item} = {
       {{> inputLabel text="ambersteel.labels.bulk" }}
     </span>
     <span class="width-md">
-      {{> inputComponent type="number" propertyPath="data.data.bulk" itemId=itemId isEditable=false }}
+      {{> inputNumberSpinner isEditable=false propertyOwner=item propertyPath="data.data.bulk" }}
     </span>
   </div>
 </div>
 {{!-- Row 4 --}}
 {{!-- Description --}}
 <div class="flex flex-row">
-  {{> inputComponent type="multi-line" propertyPath="data.data.description" itemId=itemId isEditable=isEditable allowResize=true }}
+  {{> inputTextarea isEditable=isEditable propertyOwner=item propertyPath="data.data.description" placeholder=(localize "ambersteel.labels.description") allowResize=true cssClass="fill" }}
 </div>

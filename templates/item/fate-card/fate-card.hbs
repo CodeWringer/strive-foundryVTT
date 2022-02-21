@@ -23,7 +23,7 @@ item: {Item} = {
     <div class="flex flex-row">
       <img class="header-image" src="{{item.img}}" data-edit="img" title="{{item.name}}" height="26" width="26" />
       <h3 class="header-name flex-grow" style="margin: 0;">
-        {{> inputComponent type="single-line" itemId=item._id propertyPath="name" isEditable=isEditable }}
+        {{> inputTextField isEditable=isEditable propertyOwner=item propertyPath="name" placeholder="ambersteel.labels.name" }}
       </h3>
     </div>
   </div>
@@ -32,17 +32,17 @@ item: {Item} = {
     <div class="flex flex-row pad-md">
       {{#if isSendable}}
         <div class="flex flex-center">
-          {{> buttonSendToChat itemId=item._id }}
+          {{> buttonSendToChat target=item }}
         </div>
       {{/if}}
       <div class="flex-grow"></div>
       {{#if isEditable}}
-        {{> buttonDelete itemId=item._id promptConfirm=true promptLocalizableTitle="ambersteel.dialog.titleConfirmDeletionFateCardQuery" }}
+        {{> buttonDelete target=item withDialog=true }}
       {{/if}}
     </div>
   {{/if}}
   {{!-- Description --}}
   <div class="flex flex-grow">
-    {{> inputComponent type="multi-line" name="description" itemId=item._id propertyPath="data.data.description" isEditable=isEditable allowResize=false allowResize=true }}
+    {{> inputTextarea isEditable=isEditable propertyOwner=item propertyPath="data.data.description" placeholder=(localize "ambersteel.labels.description") }}
   </div>
 </section>

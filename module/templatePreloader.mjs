@@ -1,26 +1,33 @@
 export const TEMPLATES = {
-  // Components
-  COMPONENT_BUTTON_ADD: "systems/ambersteel/templates/components/button-add.hbs",
-  COMPONENT_BUTTON_ROLL: "systems/ambersteel/templates/components/button-roll.hbs",
-  COMPONENT_BUTTON_DELETE: "systems/ambersteel/templates/components/button-delete.hbs",
-  COMPONENT_TOGGLE_VISIBILITY: "systems/ambersteel/templates/components/button-toggle-visibility.hbs",
-  COMPONENT_BUTTON_OPEN_SHEET: "systems/ambersteel/templates/components/button-open-sheet.hbs",
-  COMPONENT_BUTTON_SEND_TO_CHAT: "systems/ambersteel/templates/components/button-send-to-chat.hbs",
-  COMPONENT_NUMBER_SPINNER: "systems/ambersteel/templates/components/number-spinner.hbs",
-  COMPONENT_INPUT: "systems/ambersteel/templates/components/input.hbs",
+  // --- Components
+  // Inputs
+  COMPONENT_INPUT_TEXTFIELD: "systems/ambersteel/module/components/input-textfield/input-textfield.hbs",
+  COMPONENT_INPUT_DROPDOWN: "systems/ambersteel/module/components/input-dropdown/input-dropdown.hbs",
+  COMPONENT_INPUT_NUMBER_SPINNER: "systems/ambersteel/module/components/input-number-spinner/input-number-spinner.hbs",
+  COMPONENT_INPUT_TEXTAREA: "systems/ambersteel/module/components/input-textarea/input-textarea.hbs",
+  COMPONENT_INPUT_RADIO_BUTTON_GROUP: "systems/ambersteel/module/components/input-radio-button-group/input-radio-button-group.hbs",
   COMPONENT_INPUT_LABEL: "systems/ambersteel/templates/components/input-label.hbs",
-  COMPONENT_BUTTON_TAKE_ITEM: "systems/ambersteel/templates/components/button-take-item.hbs",
+  COMPONENT_INPUT_ITEM_GRID_VIEW: "systems/ambersteel/module/components/item-grid/item-grid-view.hbs",
+  // Buttons
+  COMPONENT_BUTTON: "systems/ambersteel/module/components/button/button.hbs",
+  COMPONENT_BUTTON_ADD: "systems/ambersteel/module/components/button-add/button-add.hbs",
+  COMPONENT_BUTTON_DELETE: "systems/ambersteel/module/components/button-delete/button-delete.hbs",
+  COMPONENT_BUTTON_OPEN_SHEET: "systems/ambersteel/module/components/button-open-sheet/button-open-sheet.hbs",
+  COMPONENT_BUTTON_ROLL: "systems/ambersteel/module/components/button-roll/button-roll.hbs",
+  COMPONENT_BUTTON_SEND_TO_CHAT: "systems/ambersteel/module/components/button-send-to-chat/button-send-to-chat.hbs",
+  COMPONENT_BUTTON_TOGGLE_VISIBILITY: "systems/ambersteel/module/components/button-toggle-visibility/button-toggle-visibility.hbs",
+  COMPONENT_BUTTON_TAKE_ITEM: "systems/ambersteel/module/components/button-take-item/button-take-item.hbs",
   // GM
   COMPONENT_GM_NOTES: "systems/ambersteel/templates/gm-notes.hbs",
   // Dice
   DICE_ROLL_CHAT_MESSAGE: "systems/ambersteel/templates/dice/roll.hbs",
-  // Dialogs
-  DIALOG_ROLL: "systems/ambersteel/templates/dialog/roll-dialog.hbs",
+  // --- Dialogs
+  DIALOG_ROLL: "systems/ambersteel/templates/dialog/dialog-roll.hbs",
   DIALOG_ITEM_ADD: "systems/ambersteel/templates/dialog/dialog-add-item.hbs",
   DIALOG_VISIBILITY: "systems/ambersteel/templates/dialog/dialog-visibility.hbs",
   DIALOG_PLAIN: "systems/ambersteel/templates/dialog/dialog-plain.hbs",
   DIALOG_SELECT: "systems/ambersteel/templates/dialog/dialog-select.hbs",
-  // Actor
+  // --- Actor
   ACTOR_SHEET: "systems/ambersteel/templates/actor/actor-character-sheet.hbs",
   ACTOR_ATTRIBUTE_TABLE: "systems/ambersteel/templates/actor/components/component-attribute-table.hbs",
   ACTOR_SKILL_TABLE: "systems/ambersteel/templates/actor/components/component-skill-table.hbs",
@@ -33,7 +40,7 @@ export const TEMPLATES = {
   ACTOR_HEALTH: "systems/ambersteel/templates/actor/parts/actor-health.hbs",
   ACTOR_ASSETS: "systems/ambersteel/templates/actor/parts/actor-assets.hbs",
   ACTOR_BIOGRAPHY: "systems/ambersteel/templates/actor/parts/actor-biography.hbs",
-  // Item
+  // --- Item
   ITEM_SHEET: "systems/ambersteel/templates/item/item/item-item-sheet.hbs",
   ITEM_CHAT_MESSAGE: "systems/ambersteel/templates/item/item/item-item-chat-message.hbs",
   ITEM_LIST_ITEM: "systems/ambersteel/templates/item/item/item-list-item.hbs",

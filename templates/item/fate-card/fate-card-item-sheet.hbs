@@ -23,11 +23,11 @@ item: {Item} = {
       <div class="flex flex-row">
         <img class="header-image" src="{{item.img}}" data-edit="img" title="{{item.name}}" height="64" width="64" />
         <h1 class="header-name">
-          {{> inputComponent type="single-line" propertyPath="name" isEditable=isEditable }}
+          {{> inputTextField isEditable=isEditable propertyOwner=item propertyPath="name" placeholder="ambersteel.labels.name" }}
         </h1>
         {{#if isSendable}}
           <div class="flex flex-center">
-            {{> buttonSendToChat}}
+            {{> buttonSendToChat target=item }}
           </div>
         {{/if}}
       </div>
@@ -38,22 +38,22 @@ item: {Item} = {
     <div class="sheet-block grid grid-3col margin-b-md">
       {{> inputLabel text="ambersteel.fateSystem.miFP"}}
       <div class="flex flex-middle">{{localize "ambersteel.fateSystem.miFPAbbreviation"}}</div>
-      {{> inputComponent type="number" min="0" name="miFP" propertyPath=(concat "data.data.cost.miFP") isEditable=isEditable }}
+      {{> inputNumberSpinner isEditable=isEditable propertyOwner=item propertyPath="data.data.cost.miFP" min=0 }}
     </div>
     {{!-- Row 2 --}}
     <div class="sheet-block grid grid-3col margin-b-md">
       {{> inputLabel text="ambersteel.fateSystem.maFP"}}
       <div class="flex flex-middle">{{localize "ambersteel.fateSystem.maFPAbbreviation"}}</div>
-      {{> inputComponent type="number" min="0" name="maFP" propertyPath=(concat "data.data.cost.maFP") isEditable=isEditable }}
+      {{> inputNumberSpinner isEditable=isEditable propertyOwner=item propertyPath="data.data.cost.maFP" min=0 }}
     </div>
     {{!-- Row 3 --}}
     <div class="sheet-block grid grid-3col margin-b-md">
       {{> inputLabel text="ambersteel.fateSystem.AFP"}}
       <div class="flex flex-middle">{{localize "ambersteel.fateSystem.AFPAbbreviation"}}</div>
-      {{> inputComponent type="number" min="0"name="AFP" propertyPath=(concat "data.data.cost.AFP") isEditable=isEditable }}
+      {{> inputNumberSpinner isEditable=isEditable propertyOwner=item propertyPath="data.data.cost.AFP" min=0 }}
     </div>
     <div class="fate-card-item-description flex-grow">
-      {{> inputComponent type="multi-line" propertyPath="data.data.description" isEditable=isEditable readOnlyCssClass="multiline flex-grow" allowResize=true }}
+      {{> inputTextarea isEditable=isEditable propertyOwner=item propertyPath="data.data.description" placeholder=(localize "ambersteel.labels.description") allowResize=true cssClass="fill" }}
     </div>
   </div>
 </form>

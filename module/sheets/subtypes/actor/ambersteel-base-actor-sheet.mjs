@@ -1,6 +1,4 @@
 import { TEMPLATES } from "../../../templatePreloader.mjs";
-import { ItemGridView } from "../../../components/item-grid/item-grid-view.mjs";
-import * as ListenerUtil from "../../../utils/listeners-utility.mjs";
 
 export default class AmbersteelBaseActorSheet {
   /**
@@ -8,12 +6,6 @@ export default class AmbersteelBaseActorSheet {
    * @type {ActorSheet}
    */
   parent = undefined;
-
-  /**
-   * The possessions item grid.
-   * @type {ItemGridView}
-   */
-  possessionGrid = undefined;
 
   /**
    * @param parent {ActorSheet} The owning ActorSheet. 
@@ -35,19 +27,6 @@ export default class AmbersteelBaseActorSheet {
    */
   get template() { 
     return TEMPLATES.ACTOR_SHEET; 
-  }
-
-  static get itemContextMenu() { 
-    return [
-      {
-        name: game.i18n.localize("ambersteel.labels.delete"),
-        icon: '<i class="fas fa-trash"></i>',
-        callback: el => {
-          const item = this.getItem(el.data("item-id"));
-          item.delete();
-        }
-      }
-    ];
   }
 
   /**
@@ -89,8 +68,6 @@ export default class AmbersteelBaseActorSheet {
     // It is "safe", because behind the scenes, a getter returns a clone. 
     const actorData = context.actor.data.data;
 
-    context.data.data.attributeGroups = this._getDerivedAttributeGroups(actorData.attributes);
-
     // General derived data. 
     // TODO: Remove?
     context.data.person = actorData.person;
@@ -100,88 +77,5 @@ export default class AmbersteelBaseActorSheet {
     context.data.learningSkills = actorData.learningSkills;
     context.data.skills = actorData.skills;
     context.data.attributeGroups = context.data.data.attributeGroups;
-  }
-
-  /**
-   * 
-   * @param attributes {Object} The root attributes object. 
-   */
-  _getDerivedAttributeGroups(attributes) {
-    // Holds attribute group objects for easy access. 
-    const attributeGroups = {};
-
-    for (const attGroupName in attributes) {
-      if (!attributes.hasOwnProperty(attGroupName)) continue;
-
-      const oAttGroup = attributes[attGroupName];
-      
-      // Initialize attribute group object with meta-data. 
-      attributeGroups[attGroupName] = {
-        localizableName: "ambersteel.attributeGroups." + attGroupName,
-        name: attGroupName,
-        attributes: {}
-      };
-
-      for (const attName in oAttGroup) {
-        if (!oAttGroup.hasOwnProperty(attName)) continue;
-        
-        attributeGroups[attGroupName].attributes[attName] = oAttGroup[attName];
-      }
-    }
-    return attributeGroups;
-  }
-
-  /**
-   * Registers events on elements of the given DOM. 
-   * @param html {Object} DOM of the sheet for which to register listeners. 
-   * @param isOwner {Boolean} If true, registers events that require owner permission. 
-   * @param isEditable {Boolean} If true, registers events that require editing permission. 
-   * @virtual
-   */
-  activateListeners(html, isOwner, isEditable) {
-    ListenerUtil.activateListeners(html, this, isOwner, isEditable);
-
-    // TODO: This should not be here. This should only happen once, during actor (re-)initialization. 
-    if (this.possessionGrid !== undefined) { this.possessionGrid.tearDown(); }
-    const gridWidth = 550; // This magic constant is based on the assumption that the actor sheet is about 560px wide. 
-    const columnCount = this.getActor().data.data.assets.grid.length;
-    const tileSize = Math.floor(gridWidth / columnCount);
-    this.possessionGrid = new ItemGridView(html, "possessions-canvas", this, gridWidth, tileSize);
-
-    // -------------------------------------------------------------
-    if (!isOwner) return;
-
-    // Drag events for macros.
-    const handler = ev => this._onDragStart(ev);
-    html.find('li.item').each((i, li) => {
-      if (li.classList.contains("inventory-header")) return;
-      li.setAttribute("draggable", true);
-      li.addEventListener("dragstart", handler, false);
-    });
-
-    // -------------------------------------------------------------
-    if (!isEditable) return;
-
-    // Context menu.
-    // TODO: Refactor -> item type specific?
-    new ContextMenu(html, ".skill-item", AmbersteelBaseActorSheet.itemContextMenu);
-
-    // Add skill ability. 
-    html.find(".ambersteel-skill-ability-create").click(this._onCreateSkillAbility.bind(this));
-  }
-
-  /**
-   * @param event 
-   * @private
-   * @async
-   */
-  async _onCreateSkillAbility(event) {
-    event.preventDefault();
-    
-    const itemId = event.currentTarget.dataset.itemId;
-    const skillItem = this.getItem(itemId);
-    await skillItem.createSkillAbility();
-
-    this.parent.render();
   }
 }

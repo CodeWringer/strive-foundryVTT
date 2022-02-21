@@ -59,12 +59,12 @@ actor: {Actor} = {
           {{> inputLabel for="totalBulk" text="ambersteel.labels.usedCarryingCapacity"}}
         </div>
         <span class="width-md">
-          {{> inputComponent type="number" name="totalBulk" propertyPath="data.data.assets.totalBulk" isEditable=false }}
+          {{> inputNumberSpinner isEditable=false propertyOwner=actor propertyPath="data.data.assets.totalBulk" }}
         </span>
       </div>
     </div>
   </div>
-  <div class="flex flex-center" id="possessions-canvas"></div>
+  {{> itemGridView isEditable=isEditable propertyOwner=actor propertyPath="data.data.assets" }}
   {{!-- Remote assets --}}
   <h2>{{localize "ambersteel.labels.assetsRemote"}}</h2>
   <ol class="unstyled-list alternating-rows">
@@ -79,7 +79,7 @@ actor: {Actor} = {
           <span class="flex-grow"></span>
           {{!-- Add property --}}
           <span class="width-sm">
-            {{> buttonAdd itemType="item" withDialog="true" creationData="[is-on-person:false]" }}
+            {{> buttonAdd target=actor creationType="item" withDialog=true }}
           </span>
         </div>
       </li>

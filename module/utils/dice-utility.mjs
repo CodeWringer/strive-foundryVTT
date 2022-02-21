@@ -8,7 +8,7 @@ import { TEMPLATES } from "../templatePreloader.mjs";
 
 export const DICE_ROLL_SOUND = "../sounds/dice.wav";
 
-const LOCALIZED_OBSTACLE_ABBREVIATION = "ambersteel.roll.obstacleAbbreviation";
+export const LOCALIZABLE_OBSTACLE_ABBREVIATION = "ambersteel.roll.obstacleAbbreviation";
 
 /**
  * Rolls the given number of dice and returns the results of the roll, both in raw 
@@ -98,7 +98,7 @@ export async function sendDiceResultToChat(args = {}) {
     }
   }
   // Insert obstacle threshold. 
-  const obstacleForDisplay = { cssClass: "roll-obstacle", content: `${game.i18n.localize(LOCALIZED_OBSTACLE_ABBREVIATION)} ${rollResult.obstacle}` }
+  const obstacleForDisplay = { cssClass: "roll-obstacle", content: `${game.i18n.localize(LOCALIZABLE_OBSTACLE_ABBREVIATION)} ${rollResult.obstacle}` }
   if (rollResult.obstacle >= resultsForDisplay.length) { // Obstacle greater than number of dice rolled. 
     resultsForDisplay.push(obstacleForDisplay);
   } else { // Obstacle less than or equal to number of dice rolled. 
@@ -126,18 +126,28 @@ export async function sendDiceResultToChat(args = {}) {
  * @async
  */
 export async function queryRollData() {
+  const visibilityModes = ChatUtil.getVisibilityModes(CONFIG);
+
   const dialogData = {
     obstacle: 0,
     bonusDice: 0,
-    visibilityMode: CONFIG.ambersteel.visibilityModes.public
+    visibilityMode: visibilityModes[0],
+    visibilityModes: visibilityModes,
   };
 
   return new Promise(async (resolve, reject) => {
     const result = await showDialog({ dialogTemplate: TEMPLATES.DIALOG_ROLL, localizableTitle: "ambersteel.dialog.titleRollQuery" }, dialogData);
+    
+    const obstacle = parseInt(getElementValue(result.html.find(".obstacle")[0]));
+    const bonusDice = parseInt(getElementValue(result.html.find(".bonus-dice")[0]));
+
+    const visibilityModeKey = parseInt(getElementValue(result.html.find(".visibilityMode")[0]));
+    const visibilityMode = visibilityModes[visibilityModeKey];
+
     resolve(new RollDataQueryDialogResult({
-      obstacle: parseInt(getElementValue(result.html.find(".obstacle")[0])),
-      bonusDice: parseInt(getElementValue(result.html.find(".bonus-dice")[0])),
-      visibilityMode: getElementValue(result.html.find(".visibilityMode")[0]),
+      obstacle: obstacle,
+      bonusDice: bonusDice,
+      visibilityMode: visibilityMode,
       confirmed: result.confirmed
     }));
   });

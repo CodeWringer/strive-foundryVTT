@@ -20,6 +20,7 @@ skills: {[Item]} = {
         }
     }
 }
+actor: {AmbersteelActor}
 --}}
 <div>
     <table class="skill-table">
@@ -60,48 +61,44 @@ skills: {[Item]} = {
                 <tr class="item skill-item" data-item-id="{{skill.data.id}}">
                     {{#if ../isEditable}}
                         <td class="skill-column-roll">
-                            {{> buttonRoll
-                                type="dice-pool"
-                                itemId=skill.data.id
-                                chatTitle=skill.name
-                                callback="advanceSkillBasedOnRollResult"
-                                callbackData=skill.data.id
+                            {{> buttonRoll 
+                                target=skill 
+                                propertyPath="data.data.totalValue" 
+                                chatTitle=skill.name 
+                                rollType="dice-pool" 
+                                callback="advanceSkillBasedOnRollResult" 
+                                callbackData=skill.id 
+                                actor=../actor 
                             }}
                         </td>
                     {{/if}}
                     <td>
-                        {{> buttonSendToChat itemId=skill.data.id }}
+                        {{> buttonSendToChat target=skill }}
                     </td>
                     <td>
-                        {{> buttonOpenSheet id=skill.name }}
+                        {{> buttonOpenSheet target=skill.name }}
                     </td>
                     <td class="fancy-font flex skill-column-name">
-                        {{> inputComponent type="single-line" propertyPath="name" itemId=skill.data.id isEditable=../isEditable contextOverride=../this }}
+                        {{> inputTextField isEditable=../isEditable propertyOwner=skill propertyPath="name" placeholder="ambersteel.labels.name" }}
                     </td>
                     <td class="skill-column-attribute">
-                        {{> inputComponent type="drop-down" propertyPath="data.data.relatedAttribute" 
-                            options=../CONFIG.character.attributes
-                            optionValueProperty="name"
-                            optionDisplayProperty="localizableAbbreviation"
-                            isEditable=../isEditable
-                            contextOverride=skill
-                        }}
+                        {{> inputDropDown isEditable=../isEditable propertyOwner=skill propertyPath="data.data.relatedAttribute" options=(../game.ambersteel.getAttributeOptions) }}
                     </td>
                     <td class="skill-column-level">
-                        {{> inputComponent type="number" min="0" propertyPath="data.data.value" itemId=skill.data.id isEditable=../isEditable contextOverride=../this }}
+                        {{> inputNumberSpinner isEditable=../isEditable propertyOwner=skill propertyPath="data.data.value" min=0 }}
                     </td>
                     <td class="skill-column-requirements">
                         {{data.requiredSuccessses}} / {{data.requiredFailures}}
                     </td>
                     <td class="skill-column-successes">
-                        {{> inputComponent type="number" min="0" propertyPath="data.data.successes" itemId=skill.data.id isEditable=../isEditable contextOverride=../this }}
+                        {{> inputNumberSpinner isEditable=../isEditable propertyOwner=skill propertyPath="data.data.successes" min=0 }}
                     </td>
                     <td class="skill-column-failures">
-                        {{> inputComponent type="number" min="0" propertyPath="data.data.failures" itemId=skill.data.id isEditable=../isEditable contextOverride=../this }}
+                        {{> inputNumberSpinner isEditable=../isEditable propertyOwner=skill propertyPath="data.data.failures" min=0 }}
                     </td>
                     {{#if ../isEditable}}
                         <td class="skill-column-delete">
-                            {{> buttonDelete itemId=skill.data.id promptConfirm=true promptLocalizableTitle=(ifThenElse ../isLearningSkillsTable "ambersteel.dialog.titleConfirmDeletionLearningSkillQuery" "ambersteel.dialog.titleConfirmDeletiongSkillQuery") }}
+                            {{> buttonDelete target=skill withDialog=true }}
                         </td>
                     {{/if}}
                 </tr>
@@ -111,6 +108,7 @@ skills: {[Item]} = {
                             isEditable=../isEditable 
                             isSendable=../isSendable 
                             CONFIG=../CONFIG 
+                            game=../game 
                             item=skill
                             visGroupId=(generateId)
                         }}
@@ -123,7 +121,7 @@ skills: {[Item]} = {
                         <div class="flex">
                             <span class="flex-grow"></span>
                             <span class="width-sm">
-                                {{> buttonAdd itemType="skill" withDialog="true" creationData=(concat "[value:"(ifThenElse isLearningSkillsTable "0" "1") "]" ) }}
+                                {{> buttonAdd target=actor creationType="skill" withDialog=true creationData=(concat "[value:"(ifThenElse isLearningSkillsTable "0" "1") "]" ) }}
                             </span>
                         </div>
                     </td>

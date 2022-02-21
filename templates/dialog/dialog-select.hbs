@@ -1,9 +1,6 @@
 {{!-- Parameters:
 localizableLabel: {String}
-options: {Array<Object>} = {
-  id: {String}
-  name: {String}
-}
+options: {Array<ChoiceOption>}
 selected: Object
 --}}
 <section class="selection">
@@ -15,7 +12,7 @@ selected: Object
       <select id="selection" class="ambersteel-item-select" data-property-path="selected">
         {{#select selected}}
         {{#each options as |option key|}}
-        <option value="{{option.id}}">{{option.name}}</option>
+        <option value="{{option.value}}">{{option.localizedValue}}</option>
         {{/each}}
         {{/select}}
       </select>

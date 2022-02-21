@@ -28,14 +28,15 @@ item: {Item} = {
       <div class="flex flex-row">
         <img class="header-image" src="{{item.img}}" data-edit="img" title="{{item.name}}" height="64" width="64" />
         <h1 class="header-name">
-          {{> inputComponent type="single-line" propertyPath="name" isEditable=isEditable }}
+          {{> inputTextField isEditable=isEditable propertyOwner=item propertyPath="name" placeholder="ambersteel.labels.name" }}
         </h1>
         {{#if isSendable}}
           <div class="flex flex-center">
-            {{> buttonSendToChat itemId=item.id }}
+            {{> buttonSendToChat target=item }}
           </div>
         {{/if}}
       </div>
+      {{> buttonTakeItem target=item contextType="item-sheet" }}
     </div>
   </header>
   {{!-- Quantity --}}
@@ -44,7 +45,7 @@ item: {Item} = {
       {{> inputLabel text="ambersteel.labels.quantity"}}
     </div>
     <div class="flex-grow">
-      {{> inputComponent type="number" propertyPath="data.data.quantity" min="1" max=(lookupValue item "data.data.maxQuantity") isEditable=isEditable }}
+      {{> inputNumberSpinner isEditable=isEditable propertyOwner=item propertyPath="data.data.quantity" min=1 }}
     </div>
   </div>
   {{!-- Max quantity --}}
@@ -53,7 +54,7 @@ item: {Item} = {
       {{> inputLabel text="ambersteel.labels.maxQuantity"}}
     </div>
     <div class="flex-grow">
-      {{> inputComponent type="number" propertyPath="data.data.maxQuantity" min="1" isEditable=isEditable }}
+      {{> inputNumberSpinner isEditable=isEditable propertyOwner=item propertyPath="data.data.maxQuantity" min=1 }}
     </div>
   </div>
   {{!-- SHAPE --}}
@@ -63,7 +64,7 @@ item: {Item} = {
       {{> inputLabel text="ambersteel.labels.shapeWidth"}}
     </div>
     <div class="flex-grow">
-      {{> inputComponent type="number" propertyPath="data.data.shape.width" min="1" isEditable=isEditable }}
+      {{> inputNumberSpinner isEditable=isEditable propertyOwner=item propertyPath="data.data.shape.width" min=1 }}
     </div>
   </div>
   {{!-- Height --}}
@@ -72,7 +73,7 @@ item: {Item} = {
       {{> inputLabel text="ambersteel.labels.shapeHeight"}}
     </div>
     <div class="flex-grow">
-      {{> inputComponent type="number" propertyPath="data.data.shape.height" min="1" isEditable=isEditable }}
+      {{> inputNumberSpinner isEditable=isEditable propertyOwner=item propertyPath="data.data.shape.height" min=1 }}
     </div>
   </div>
   {{!-- Bulk - read only! --}}
@@ -81,16 +82,16 @@ item: {Item} = {
       {{> inputLabel text="ambersteel.labels.bulk"}}
     </div>
     <div class="flex-grow">
-      {{> inputComponent type="number" propertyPath="data.data.bulk" isEditable=false }}
+      {{> inputNumberSpinner isEditable=false propertyOwner=item propertyPath="data.data.bulk" }}
     </div>
   </div>
   {{!-- Description --}}
   <div class="sheet-block flex flex-row flex-grow">
     <div class="width-min-xxl">
-      {{> inputLabel text="ambersteel.labels.description"}}
+      {{> inputLabel text=(localize "ambersteel.labels.description")}}
     </div>
     <div class="flex-grow">
-      {{> inputComponent type="multi-line" propertyPath="data.data.description" placeholder=(localize "ambersteel.labels.description") isEditable=isEditable cssClass="resize-vertical fill" readOnlyCssClass="multiline" allowResize=true }}
+      {{> inputTextarea isEditable=isEditable propertyOwner=item propertyPath="data.data.description" placeholder=(localize "ambersteel.labels.description") allowResize=true cssClass="fill" }}
     </div>
   </div>
 </form>

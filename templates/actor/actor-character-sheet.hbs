@@ -1,17 +1,18 @@
 {{!-- Requires context:
 isEditable: {Boolean}
 isSendable: {Boolean}
+isOwner: {Boolean}
 isGM: {Boolean}
 actor: {Actor} = {
   data: {Object} = {
     data: {Object} {
-      person: {Object} -> see parts/actor-personals.hbs
-      attributeGroups: {Object} -> see parts/actor-attributes.hbs
-      learningSkills: {[Object]} -> see components/component-skill-table.hbs
-      skills: {[Object]} -> see components/component-skill-table.hbs
-      beliefSystem: {Object} -> see parts/actor-beliefs.hbs
-      fateSystem: {Object} -> see parts/actor-fate.hbs
-      biography: {Object} -> see parts/actor-biography.hbs
+      person: {Object}
+      attributeGroups: {Object}
+      learningSkills: {[Object]}
+      skills: {[Object]}
+      beliefSystem: {Object}
+      fateSystem: {Object}
+      biography: {Object}
     }
   }
 }
@@ -23,9 +24,9 @@ actor: {Actor} = {
     <img class="profile-img" src="{{actor.img}}" data-edit="img" title="{{actor.name}}" height="100" width="100" />
     <div class="header-fields">
       <h1 class="header-name fancy-font">
-        {{> inputComponent type="single-line" propertyPath="name" placeholder=(localize "ambersteel.labels.name") isEditable=isEditable }}
+        {{> inputTextField isEditable=isEditable propertyOwner=actor propertyPath="name" placeholder="ambersteel.labels.name" }}
       </h1>
-      {{> "systems/ambersteel/templates/actor/parts/actor-personals.hbs"}}
+      {{> "systems/ambersteel/templates/actor/parts/actor-personals.hbs" isEditable=isEditable isSendable=isSendable isOwner=isOwner isGM=isGM actor=actor }}
     </div>
   </header>
 
@@ -53,7 +54,9 @@ actor: {Actor} = {
       {{> "systems/ambersteel/templates/actor/parts/actor-attributes.hbs" 
         isEditable=isEditable 
         isSendable=isSendable
-        attributeGroups=data.attributeGroups 
+        isOwner=isOwner
+        isGM=isGM
+        actor=actor 
       }}
     </div>
 
@@ -62,8 +65,11 @@ actor: {Actor} = {
       {{> "systems/ambersteel/templates/actor/parts/actor-skills.hbs" 
         isEditable=isEditable 
         isSendable=isSendable
-        learningSkills=data.data.learningSkills  
-        skills=data.data.skills 
+        isOwner=isOwner
+        isGM=isGM
+        actor=actor 
+        learningSkills=actor.data.data.learningSkills  
+        skills=actor.data.data.skills 
       }}
     </div>
 
@@ -73,8 +79,9 @@ actor: {Actor} = {
         {{> "systems/ambersteel/templates/actor/parts/actor-beliefs-fate.hbs" 
           isEditable=isEditable 
           isSendable=isSendable
-          beliefSystem=data.beliefSystem 
-          fateSystem=data.fateSystem 
+          isOwner=isOwner
+          isGM=isGM
+          actor=actor 
         }}
       </div>
     {{/if}}
@@ -84,6 +91,9 @@ actor: {Actor} = {
       {{> "systems/ambersteel/templates/actor/parts/actor-health.hbs" 
         isEditable=isEditable 
         isSendable=isSendable
+        isOwner=isOwner
+        isGM=isGM
+        actor=actor 
       }}
     </div>
 
@@ -92,6 +102,9 @@ actor: {Actor} = {
       {{> "systems/ambersteel/templates/actor/parts/actor-assets.hbs" 
         isEditable=isEditable 
         isSendable=isSendable
+        isOwner=isOwner
+        isGM=isGM
+        actor=actor 
       }}
     </div>
 
@@ -100,6 +113,9 @@ actor: {Actor} = {
       {{> "systems/ambersteel/templates/actor/parts/actor-biography.hbs" 
         isEditable=isEditable 
         isSendable=isSendable
+        isOwner=isOwner
+        isGM=isGM
+        actor=actor 
       }}
     </div>
 
@@ -109,6 +125,9 @@ actor: {Actor} = {
         {{> "systems/ambersteel/templates/gm-notes.hbs" 
           isEditable=isEditable 
           isSendable=false
+          isOwner=isOwner
+          isGM=isGM
+          actor=actor 
         }}
       </div>
     {{/if}}

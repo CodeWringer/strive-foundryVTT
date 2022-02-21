@@ -21,8 +21,6 @@ item: {Item} = {
     }
   }
 }
-sourceType: {String} = "actor"|"world"|"compendium"
-sourceId: {String}
 allowPickup: {Boolean}
 --}}
 <section>
@@ -30,7 +28,7 @@ allowPickup: {Boolean}
   <div class="flex flex-row">
     <div class="flex flex-center">
       {{#if allowPickup}}
-        {{> buttonTakeItem itemId=item.id sourceType=sourceType sourceId=sourceId}}
+        {{> buttonTakeItem target=item contextType="chat-message" }}
       {{/if}}
     </div>
     <div class="flex flex-center">

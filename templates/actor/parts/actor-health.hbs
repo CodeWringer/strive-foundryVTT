@@ -31,7 +31,7 @@ actor: {Actor} = {
             {{> inputLabel for="maxHP" text="ambersteel.labels.maxHP"}}
           </div>
           <span class="width-md">
-            {{> inputComponent type="number" name="maxHP" propertyPath="data.data.health.maxHP" isEditable=false }}
+            {{> inputNumberSpinner isEditable=false propertyOwner=actor propertyPath="data.data.health.maxHP" }}
           </span>
         </div>
         <div class="flex flex-row">
@@ -39,7 +39,7 @@ actor: {Actor} = {
             {{> inputLabel for="HP" text="ambersteel.labels.HP"}}
           </div>
           <span class="width-md">
-            {{> inputComponent type="number" name="HP" propertyPath="data.data.health.HP" isEditable=isEditable }}
+            {{> inputNumberSpinner isEditable=isEditable propertyOwner=actor propertyPath="data.data.health.HP" }}
           </span>
         </div>
       </div>
@@ -50,7 +50,7 @@ actor: {Actor} = {
             {{> inputLabel for="maxExhaustion" text="ambersteel.labels.maxExhaustion"}}
           </div>
           <span class="width-md">
-            {{> inputComponent type="number" name="maxExhaustion" propertyPath="data.data.health.maxExhaustion" isEditable=false }}
+            {{> inputNumberSpinner isEditable=false propertyOwner=actor propertyPath="data.data.health.maxExhaustion" min=0 }}
           </span>
         </div>
         <div class="flex flex-row">
@@ -58,7 +58,7 @@ actor: {Actor} = {
             {{> inputLabel for="exhaustion" text="ambersteel.labels.exhaustion"}}
           </div>
           <span class="width-md">
-            {{> inputComponent type="number" name="exhaustion" propertyPath="data.data.health.exhaustion" isEditable=isEditable }}
+            {{> inputNumberSpinner isEditable=isEditable propertyOwner=actor propertyPath="data.data.health.exhaustion" min=0 }}
           </span>
         </div>
       </div>
@@ -72,7 +72,7 @@ actor: {Actor} = {
           {{> inputLabel for="maxInjuries" text="ambersteel.labels.maxInjuries"}}
         </div>
         <span class="width-md">
-          {{> inputComponent type="number" name="maxInjuries" propertyPath="data.data.health.maxInjuries" isEditable=false }}
+          {{> inputNumberSpinner isEditable=false propertyOwner=actor propertyPath="data.data.health.maxInjuries" min=0 }}
         </span>
       </div>
     </div>
@@ -92,7 +92,7 @@ actor: {Actor} = {
   <ol class="unstyled-list alternating-rows">
     {{#each actor.injuries as |injury key|}}
       <li class="ambersteel-list-row sheet-block">
-        {{> "systems/ambersteel/templates/item/injury/injury-list-item.hbs" item=injury itemId=injury.id isEditable=../isEditable isSendable=../isSendable CONFIG=../CONFIG }}
+        {{> "systems/ambersteel/templates/item/injury/injury-list-item.hbs" item=injury itemId=injury.id isEditable=../isEditable isSendable=../isSendable CONFIG=../CONFIG game=../game }}
       </li>
     {{/each}}
     {{#if isEditable}}
@@ -101,7 +101,7 @@ actor: {Actor} = {
           <span class="flex-grow"></span>
           {{!-- Add injury --}}
           <span class="width-sm">
-            {{> buttonAdd itemType="injury" withDialog="true" }}
+            {{> buttonAdd target=actor creationType="injury" withDialog=true }}
           </span>
         </div>
       </li>
@@ -128,7 +128,7 @@ actor: {Actor} = {
   <ol class="unstyled-list alternating-rows">
     {{#each actor.illnesses as |illness key|}}
       <li class="ambersteel-list-row sheet-block">
-        {{> "systems/ambersteel/templates/item/illness/illness-list-item.hbs" item=illness itemId=illness.id isEditable=../isEditable isSendable=../isSendable CONFIG=../CONFIG }}
+        {{> "systems/ambersteel/templates/item/illness/illness-list-item.hbs" item=illness itemId=illness.id isEditable=../isEditable isSendable=../isSendable CONFIG=../CONFIG game=../game }}
       </li>
     {{/each}}
     {{#if isEditable}}
@@ -137,7 +137,7 @@ actor: {Actor} = {
           <span class="flex-grow"></span>
           {{!-- Add illness --}}
           <span class="width-sm">
-            {{> buttonAdd itemType="illness" withDialog="true" }}
+            {{> buttonAdd target=actor creationType="illness" withDialog=true }}
           </span>
         </div>
       </li>

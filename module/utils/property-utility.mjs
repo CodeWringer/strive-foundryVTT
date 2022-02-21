@@ -1,10 +1,9 @@
 /**
  * @param obj 
  * @param properties 
- * @param originalObj 
  * @private
  */
-function _get(obj, properties, originalObj) {
+function _get(obj, properties) {
   if (!properties || properties.length === 0) return obj;
 
   const prop = properties.shift();
@@ -12,7 +11,7 @@ function _get(obj, properties, originalObj) {
 		const msg = `Failed to get value of property at '${prop}'! Original context object:`;
 		throw new Error(`InvalidStateException: ${msg}`);
   } else {
-    return _get(obj[prop], properties, originalObj);
+    return _get(obj[prop], properties);
   }
 }
 
@@ -60,7 +59,11 @@ export function splitPropertyPath(propertyPath) {
 export function getNestedPropertyValue(obj, path) {
   const propertyPath = splitPropertyPath(path);
 
-  return _get(obj, propertyPath, obj);
+	try {
+		return _get(obj, propertyPath);
+	} catch(error) {
+		throw new Error(`Failed to get nested property value: { path: ${path} }`, { cause: error });
+	}
 }
 
 /**
@@ -73,18 +76,48 @@ export function getNestedPropertyValue(obj, path) {
  *        Access arrays with bracket-notation. 
  *        E. g. "abilities[4].name"
  * @param {Any} value The value to set. 
+ * @throws {Error} InvalidParameterException If the given path doesn't resolve to a property. 
+ * @throws {Error} UnknownException If updating the property failed. 
  */
 export function setNestedPropertyValue(obj, path, value) {
   const propertyPath = splitPropertyPath(path);
 	const propertyToSet = propertyPath.pop();
 
 	if (propertyToSet === undefined) {
-		const msg = `Failed to set value of property at '${path}'! Original context object:`;
-		throw new Error(`InvalidParameterException: ${msg}`);
+		throw new Error(`InvalidParameterException: Failed to set value of property at '${path}'!`);
 	}
 
-  const propertyOwner = _get(obj, propertyPath, obj);
-	propertyOwner[propertyToSet] = value;
+	try {
+		const propertyOwner = _get(obj, propertyPath);
+		propertyOwner[propertyToSet] = value;
+	} catch (error) {
+		throw new Error(`UnknownException: Failed to set nested property value: { path: ${path}, value: ${value} }`, { cause: error });
+	}
+}
+
+/**
+ * Deletes a nested property. 
+ * 
+ * Supports array-access-notation. Does not support accessing properties via '[<propName>]'.
+ * @param {Object} obj 
+ * @param {String} path 
+ * @throws {Error} InvalidParameterException If the given path doesn't resolve to a property. 
+ * @throws {Error} UnknownException If deleting the property failed. 
+ */
+export function deleteNestedProperty(obj, path) {
+  const propertyPath = splitPropertyPath(path);
+	const propertyToDelete = propertyPath.pop();
+
+	if (propertyToDelete === undefined) {
+		throw new Error(`InvalidParameterException: Failed to delete property at '${path}'!`);
+	}
+
+	try {
+		const propertyOwner = _get(obj, propertyPath);
+		delete propertyOwner[propertyToSet];
+	} catch (error) {
+		throw new Error(`UnknownException: Failed to delete nested property: { path: ${path} }`, { cause: error });
+	}
 }
 
 /**

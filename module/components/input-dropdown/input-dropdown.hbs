@@ -1,0 +1,29 @@
+{{!-- Required context:
+vm: {InputDropDownViewModel}
+cssClass: {String | undefined}
+readOnlyCssClass: {String | undefined}
+--}}
+{{#if vm.isEditable}}
+  <select 
+    class="custom-system-edit drop-down width-fill {{cssClass}}"
+    data-property-path="{{vm.propertyPath}}"
+    name="{{vm.id}}"
+    id="{{vm.id}}"
+    value="{{vm.value}}"
+  >
+  {{#select vm.propertyPath}}
+    {{#each vm.options as |option index|}}
+      <option value="{{option.value}}">{{option.localizedValue}}</option>
+    {{/each}}
+  {{/select}}
+</select>
+{{else}}
+  {{!-- Display read-only value --}}
+  <div 
+    class="custom-system-read-only pad-sm fill {{readOnlyCssClass}}" 
+    name="{{vm.id}}"
+    id="{{vm.id}}"
+  >
+    {{localize vm.localizedValue}}
+  </div>
+{{/if}}

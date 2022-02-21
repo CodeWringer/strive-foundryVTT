@@ -1,0 +1,25 @@
+{{!-- Required context:
+vm: {InputTextFieldViewModel}
+cssClass: {String | undefined}
+readOnlyCssClass: {String | undefined}
+--}}
+{{#if vm.isEditable}}
+  <input 
+    class="custom-system-edit input-width-override {{cssClass}}"
+    data-property-path="{{vm.propertyPath}}"
+    type="text"
+    name="{{vm.id}}"
+    id="{{vm.id}}"
+    placeholder="{{vm.placeholder}}"
+    value="{{vm.value}}"
+  />
+{{else}}
+  {{!-- Display read-only value --}}
+  <div 
+    class="custom-system-read-only pad-sm fill {{readOnlyCssClass}}" 
+    name="{{vm.id}}"
+    id="{{vm.id}}"
+  >
+    {{localize vm.value}}
+  </div>
+{{/if}}

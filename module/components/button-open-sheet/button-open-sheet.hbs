@@ -1,0 +1,13 @@
+{{!-- Required context:
+vm: {ButtonOpenSheetViewModel}
+cssClass: {String | undefined}
+fill: {Boolean | undefined}
+--}}
+<span class="{{#if fill}}fill-button-light{{else}}square-button-light{{/if}} {{#if cssClass}}{{cssClass}}{{else}}font-size-default{{/if}}">
+  <a class="custom-system-button pad-sm button flex flex-center" 
+    title="{{localize ambersteel.labels.openSheet}}"
+    id="{{vm.id}}"
+  >
+    <i class="fas fa-external-link-alt"></i>
+  </a>
+</span>

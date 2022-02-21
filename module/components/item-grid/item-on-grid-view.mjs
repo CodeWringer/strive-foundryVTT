@@ -6,7 +6,6 @@ import DisplayObjectWrap from "../../pixi/display-object-wrap.mjs";
 import HorizontalLayoutContainer from "../../pixi/horizontal-layout-container.mjs";
 import MarginLayoutContainer from "../../pixi/margin-layout-container.mjs";
 import VerticalLayoutContainer from "../../pixi/vertical-layout-container.mjs";
-import { EventEmitter } from "../../utils/event-emitter.mjs";
 import { TEXTURES } from "../../pixi/texture-preloader.mjs";
 import { queryVisibilityMode } from '../../utils/chat-utility.mjs';
 import { Button } from "../../pixi/button.mjs";

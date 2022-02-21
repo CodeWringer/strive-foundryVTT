@@ -1,8 +1,10 @@
+import ViewModelCollection from "../utils/viewmodel-collection.mjs";
 import AmbersteelBaseItemSheet from "./subtypes/item/ambersteel-base-item-sheet.mjs";
 import AmbersteelSkillItemSheet from "./subtypes/item/ambersteel-skill-item-sheet.mjs";
 import AmbersteelFateCardItemSheet from "./subtypes/item/ambersteel-fate-item-sheet.mjs";
 import AmbersteelInjuryItemSheet from "./subtypes/item/ambersteel-injury-item-sheet.mjs";
 import AmbersteelIllnessItemSheet from "./subtypes/item/ambersteel-illness-item-sheet.mjs";
+import * as SheetUtil from "../utils/sheet-utility.mjs";
 
 export class AmbersteelItemSheet extends ItemSheet {
   /**
@@ -34,7 +36,12 @@ export class AmbersteelItemSheet extends ItemSheet {
     return this._subType;
   }
 
-  /** @override */
+  /**
+   * @returns {Object}
+   * @override
+   * @virtual
+   * @see https://foundryvtt.com/api/ItemSheet.html#.defaultOptions
+   */
   static get defaultOptions() {
     return mergeObject(super.defaultOptions, {
       classes: ["ambersteel", "sheet", "item"],
@@ -49,10 +56,21 @@ export class AmbersteelItemSheet extends ItemSheet {
    * @returns {String} Path to the template. 
    * @virtual
    * @override
+   * @see https://foundryvtt.com/api/DocumentSheet.html#template
    */
   get template() {
     return this.subType.template;
   }
+
+  /**
+   * @type {ViewModelCollection}
+   * @private
+   */
+  _viewModels = undefined;
+  /**
+   * @returns {ViewModelCollection}
+   */
+  get viewModels() { return this._viewModels; }
 
   /** 
    * Returns an object that represents sheet and enriched item data. 
@@ -60,37 +78,44 @@ export class AmbersteelItemSheet extends ItemSheet {
    * Enriched means, it contains derived data and convenience properties. 
    * @returns {Object} The enriched context object. 
    * @override 
+   * @see https://foundryvtt.com/api/FormApplicatiocn.html#getData
    */
   getData() {
     const context = super.getData();
-    
-    // Add the config to the context object as a convenience property. 
-    context.CONFIG = CONFIG.ambersteel;
-    // Add the game to the context object as a convenience property. 
-    context.game = game;
-    // In templates that implement it, this flag indicates whether the current user is the owner of the sheet. 
-    context.isOwner = context.owner;
-    // In templates that implement it, this flag indicates whether the current user is a GM. 
-    context.isGM = game.user.isGM;
-    // In templates that implement it, this flag determines whether data on the sheet 
-    // can be edited. 
-    context.isEditable = ((context.item.data.data.isCustom && context.isOwner) || context.isGM) && context.editable;
-    // In templates that implement it, this flag determines whether the sheet data can be 
-    // sent to the chat. 
-    context.isSendable = true;
-    
+
+    SheetUtil.enrichData(context);
+
     this.subType.prepareDerivedData(context);
 
     return context;
   }
 
-  /** @override */
+  /**
+   * @override
+   * @see https://foundryvtt.com/api/FormApplication.html#activateListeners
+   */
   activateListeners(html) {
     super.activateListeners(html);
-    const isOwner = this.item.isOwner;
+
+    const isOwner = (this.actor ?? this.item).isOwner;
     const isEditable = this.isEditable;
-    
-    // Subtype listeners. 
-    this.subType.activateListeners(html, isOwner, isEditable);
+
+    // Activate view model bound event listeners. 
+    this._viewModels = new ViewModelCollection();
+    this.viewModels.activateListeners(html, isOwner, isEditable);
+
+    // -------------------------------------------------------------
+    if (!isOwner) return;
+    // -------------------------------------------------------------
+    if (!isEditable) return;
+  }
+
+  /**
+   * @override
+   * @see https://foundryvtt.com/api/FormApplication.html#close
+   */
+  async close() {
+    this.viewModels.dispose();
+    return super.close();
   }
 }

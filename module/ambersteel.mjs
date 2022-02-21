@@ -12,10 +12,26 @@ import { getNestedPropertyValue } from "./utils/property-utility.mjs";
 import AdvancementRequirements from "./dto/advancement-requirement.mjs";
 import { TEMPLATES } from "./templatePreloader.mjs";
 import { createUUID } from './utils/uuid-utility.mjs';
-import * as ListenerUtil from "./utils/listeners-utility.mjs";
+import ChoiceOption from "./dto/choice-option.mjs";
+import ViewModelCollection from './utils/viewmodel-collection.mjs';
 // Import logging classes. 
 import { BaseLoggingStrategy, LogLevels } from "./logging/base-logging-strategy.mjs";
 import { ConsoleLoggingStrategy } from "./logging/console-logging-strategy.mjs";
+// Import components. 
+import './components/input-textfield/input-textfield-viewmodel.mjs';
+import './components/input-dropdown/input-dropdown-viewmodel.mjs';
+import './components/input-number-spinner/input-number-spinner-viewmodel.mjs';
+import './components/input-textarea/input-textarea-viewmodel.mjs';
+import './components/input-radio-button-group/input-radio-button-group-viewmodel.mjs';
+import './components/item-grid/item-grid-view-viewmodel.mjs';
+import './components/button/button-viewmodel.mjs';
+import './components/button-add/button-add-viewmodel.mjs';
+import './components/button-delete/button-delete-viewmodel.mjs';
+import './components/button-open-sheet/button-open-sheet-viewmodel.mjs';
+import './components/button-roll/button-roll-viewmodel.mjs';
+import './components/button-send-to-chat/button-send-to-chat-viewmodel.mjs';
+import './components/button-toggle-visibility/button-toggle-visibility-viewmodel.mjs';
+import './components/button-take-item/button-take-item-viewmodel.mjs';
 
 /* -------------------------------------------- */
 /*  Init Hook                                   */
@@ -153,6 +169,94 @@ Hooks.once('init', async function() {
       if (value === true) {
         this.logger = new ConsoleLoggingStrategy(LogLevels.DEBUG);
       }
+    },
+    /**
+     * The global collection of view models. 
+     * 
+     * Any newly instantiated view models will be added to this list. Then, during their activateListeners-call, 
+     * they'll pull (remove) themselves from this list and add themselves to their corresponding owner. 
+     * An owner could be an {ActorSheet} or {ItemSheet}. 
+     * @type {ViewModelCollection}
+     */
+    viewModels: new ViewModelCollection(),
+    /**
+     * Returns an array of {ChoiceOption}s. 
+     * @param {Object} Any CONFIG property. 
+     * @returns {Array<ChoiceOption>}
+     */
+    getOptionsFromConfig: function(configObject) {
+      const result = [];
+
+      for (const entryName in configObject) {
+        const entry = configObject[entryName];
+        const localizedName = game.i18n.localize(entry.localizableName);
+        result.push(new ChoiceOption(entry.name, localizedName));
+      }
+
+      return result;
+    },
+    /**
+     * Returns an array of {ChoiceOption}s. 
+     * @returns {Array<ChoiceOption>}
+     */
+    getAttributeOptions: function() {
+      return game.ambersteel.getOptionsFromConfig(ambersteelConfig.character.attributes);
+    },
+    /**
+     * Returns an array of {ChoiceOption}s. 
+     * @returns {Array<ChoiceOption>}
+     */
+    getInjuryOptions: function() {
+      return game.ambersteel.getOptionsFromConfig(ambersteelConfig.injuryStates);
+    },
+    /**
+     * Returns an array of {ChoiceOption}s. 
+     * @returns {Array<ChoiceOption>}
+     */
+    getIllnessOptions: function() {
+      return game.ambersteel.getOptionsFromConfig(ambersteelConfig.illnessStates);
+    },
+    /**
+     * Returns an array of {ChoiceOption}s. 
+     * @returns {Array<ChoiceOption>}
+     */
+    getDamageTypeOptions: function() {
+      return game.ambersteel.getOptionsFromConfig(ambersteelConfig.damageTypes);
+    },
+    /**
+     * Returns an array of {ChoiceOption}s. 
+     * @returns {Array<ChoiceOption>}
+     */
+    getAttackTypeOptions: function() {
+      return game.ambersteel.getOptionsFromConfig(ambersteelConfig.attackTypes);
+    },
+    /**
+     * Returns an array of {ChoiceOption}s. 
+     * @returns {Array<ChoiceOption>}
+     */
+    getShieldTypeOptions: function() {
+      return game.ambersteel.getOptionsFromConfig(ambersteelConfig.shieldTypes);
+    },
+    /**
+     * Returns an array of {ChoiceOption}s. 
+     * @returns {Array<ChoiceOption>}
+     */
+    getArmorTypeOptions: function() {
+      return game.ambersteel.getOptionsFromConfig(ambersteelConfig.armorTypes);
+    },
+    /**
+     * Returns an array of {ChoiceOption}s. 
+     * @returns {Array<ChoiceOption>}
+     */
+    getWeaponTypeOptions: function() {
+      return game.ambersteel.getOptionsFromConfig(ambersteelConfig.weaponTypes);
+    },
+    /**
+     * Returns an array of {ChoiceOption}s. 
+     * @returns {Array<ChoiceOption>}
+     */
+    getVisibilityOptions: function() {
+      return game.ambersteel.getOptionsFromConfig(ambersteelConfig.visibilityModes);
     },
   };
 
@@ -293,21 +397,11 @@ Handlebars.registerHelper('generateId', function() {
 /*  Handlebars Partials                         */
 /* -------------------------------------------- */
 
-// Components
-Handlebars.registerPartial('buttonAdd', `{{#> "${TEMPLATES.COMPONENT_BUTTON_ADD}"}}{{/"${TEMPLATES.COMPONENT_BUTTON_ADD}"}}`);
-Handlebars.registerPartial('buttonDelete', `{{#> "${TEMPLATES.COMPONENT_BUTTON_DELETE}"}}{{/"${TEMPLATES.COMPONENT_BUTTON_DELETE}"}}`);
-Handlebars.registerPartial('buttonRoll', `{{#> "${TEMPLATES.COMPONENT_BUTTON_ROLL}"}}{{/"${TEMPLATES.COMPONENT_BUTTON_ROLL}"}}`);
-Handlebars.registerPartial('buttonSendToChat', `{{#> "${TEMPLATES.COMPONENT_BUTTON_SEND_TO_CHAT}"}}{{/"${TEMPLATES.COMPONENT_BUTTON_SEND_TO_CHAT}"}}`);
-Handlebars.registerPartial('numberSpinner', `{{#> "${TEMPLATES.COMPONENT_NUMBER_SPINNER}"}}{{> @partial-block }}{{/"${TEMPLATES.COMPONENT_NUMBER_SPINNER}"}}`);
-Handlebars.registerPartial('inputComponent', `{{#> "${TEMPLATES.COMPONENT_INPUT}"}}{{/"${TEMPLATES.COMPONENT_INPUT}"}}`);
-Handlebars.registerPartial('inputTextField', `{{#> "${TEMPLATES.COMPONENT_INPUT_TEXTFIELD}"}}{{/"${TEMPLATES.COMPONENT_INPUT_TEXTFIELD}"}}`);
+// Input components
 Handlebars.registerPartial('inputLabel', `{{#> "${TEMPLATES.COMPONENT_INPUT_LABEL}"}}{{/"${TEMPLATES.COMPONENT_INPUT_LABEL}"}}`);
-Handlebars.registerPartial('buttonOpenSheet', `{{#> "${TEMPLATES.COMPONENT_BUTTON_OPEN_SHEET}"}}{{/"${TEMPLATES.COMPONENT_BUTTON_OPEN_SHEET}"}}`);
-Handlebars.registerPartial('buttonToggleVisibility', `{{#> "${TEMPLATES.COMPONENT_TOGGLE_VISIBILITY}"}}{{> @partial-block }}{{/"${TEMPLATES.COMPONENT_TOGGLE_VISIBILITY}"}}`);
-Handlebars.registerPartial('buttonTakeItem', `{{#> "${TEMPLATES.COMPONENT_BUTTON_TAKE_ITEM}"}}{{/"${TEMPLATES.COMPONENT_BUTTON_TAKE_ITEM}"}}`);
 
 /* -------------------------------------------- */
-/*  Ready Hook                                  */
+/*  Hooks                                       */
 /* -------------------------------------------- */
 
 // Hooks.once("ready", async function() {
@@ -325,5 +419,7 @@ Handlebars.registerPartial('buttonTakeItem', `{{#> "${TEMPLATES.COMPONENT_BUTTON
 Hooks.on("renderChatMessage", async function(message, html, data) {
   const isEditable = data.author.isGM;
   const isOwner = data.author.isOwner;
-  ListenerUtil.activateListeners(html, undefined, isOwner, isEditable);
+
+  // TODO: Incorporate view model system, instead. 
+  // ListenerUtil.activateListeners(html, undefined, isOwner, isEditable);
 });

@@ -1,0 +1,17 @@
+{{!-- Required context:
+vm: {ButtonToggleVisibilityViewModel}
+cssClass: {String | undefined}
+fill: {Boolean | undefined}
+--}}
+<span class="{{#if fill}}fill-button-light{{else}}square-button-light{{/if}} {{#if cssClass}}{{cssClass}}{{else}}font-size-default{{/if}}"
+  {{#if vm.toggleSelf}}
+  data-vis-group="{{vm.visGroup}}"
+  {{/if}}
+  >
+  <a class="custom-system-button pad-sm button flex flex-center" 
+    title="{{localize ambersteel.labels.toggleVisibility}}"
+    id="{{vm.id}}"
+  >
+    {{> @partial-block }}
+  </a>
+</span>

@@ -35,6 +35,11 @@
       "mental": "Mental Attributes",
       "social": "Social Attributes"
     },
+    "attributeGroupAbbreviations": {
+      "physical": "Physical",
+      "mental": "Mental",
+      "social": "Social"
+    },
     "attributes": {
       "agility": "Agility",
       "endurance": "Endurance",
@@ -125,6 +130,7 @@
       "custom": "Custom",
       "sendToChat": "Send to Chat",
       "takeToPerson": "Take (to person)",
+      "toggleVisibility": "Toggle visibility",
       "messageVisibility": "Visibility",
       "healthStats": "General Health Stats",
       "assetsStats": "General Assets Stats",

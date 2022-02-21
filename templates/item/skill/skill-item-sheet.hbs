@@ -20,6 +20,7 @@ item: {Item} = {
     }
   }
 }
+actor: {Actor | undefined}
 --}}
 <form class="{{cssClass}}" autocomplete="off">
   <header class="sheet-header">
@@ -27,11 +28,11 @@ item: {Item} = {
       <div class="flex flex-row">
         <img class="header-image" src="{{item.img}}" data-edit="img" title="{{item.name}}" height="64" width="64" />
         <h1 class="header-name">
-          {{> inputComponent type="single-line" propertyPath="name" isEditable=isEditable }}
+          {{> inputTextField isEditable=isEditable propertyOwner=item propertyPath="name" placeholder="ambersteel.labels.name" }}
         </h1>
         {{#if isSendable}}
           <div class="flex flex-center">
-            {{> buttonSendToChat}}
+            {{> buttonSendToChat target=item }}
           </div>
         {{/if}}
       </div>
@@ -43,12 +44,7 @@ item: {Item} = {
       {{> inputLabel text="ambersteel.labels.relatedAttribute"}}
     </div>
     <div class="flex-grow">
-      {{> inputComponent type="drop-down" propertyPath="data.data.relatedAttribute" 
-        options=CONFIG.character.attributes
-        optionValueProperty="name"
-        optionDisplayProperty="localizableName"
-        isEditable=isEditable
-      }}
+      {{> inputDropDown isEditable=isEditable propertyOwner=item propertyPath="data.data.relatedAttribute" options=(game.ambersteel.getAttributeOptions) }}
     </div>
   </div>
   {{!-- Category --}}
@@ -57,26 +53,27 @@ item: {Item} = {
       {{> inputLabel text="ambersteel.labels.category"}}
     </div>
     <div class="flex-grow">
-      {{> inputComponent type="single-line" propertyPath="data.data.category" isEditable=isEditable }}
+      {{> inputTextField isEditable=isEditable propertyOwner=item propertyPath="data.data.category" }}
     </div>
   </div>
   {{!-- Description --}}
   <div class="sheet-block flex flex-row margin-b-md">
     <div class="width-min-xxl">
-      {{> inputLabel text="ambersteel.labels.description"}}
+      {{> inputLabel text=(localize "ambersteel.labels.description")}}
     </div>
     <div class="flex-grow">
-      {{> inputComponent type="multi-line" propertyPath="data.data.description" placeholder=(localize "ambersteel.labels.description") isEditable=isEditable readOnlyCssClass="multiline" allowResize=true }}
+      {{> inputTextarea isEditable=isEditable propertyOwner=item propertyPath="data.data.description" placeholder=(localize "ambersteel.labels.description") allowResize=true cssClass="fill" }}
     </div>
   </div>
   {{!-- Skill Abilites --}}
   {{#if (or (eq isEditable true) (neq item.data.data.abilities.length 0)) }}
     {{> "systems/ambersteel/templates/item/skill-ability/skill-ability-table.hbs" 
       isEditable=isEditable 
-      skillItemId=item.id 
-      abilities=item.data.data.abilities 
+      isSendable=isSendable 
       skillAbilitiesInitiallyVisible=true 
       visGroupId=(generateId) 
+      item=item 
+      actor=actor 
     }}
   {{/if}}
 </form>

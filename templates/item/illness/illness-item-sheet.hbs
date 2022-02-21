@@ -21,11 +21,11 @@ item: {Item} = {
       <div class="flex flex-row">
         <img class="header-image" src="{{item.img}}" data-edit="img" title="{{item.name}}" height="64" width="64" />
         <h1 class="header-name">
-          {{> inputComponent type="single-line" propertyPath="name" isEditable=isEditable }}
+          {{> inputTextField isEditable=isEditable propertyOwner=item propertyPath="name" placeholder="ambersteel.labels.name" }}
         </h1>
         {{#if isSendable}}
           <div class="flex flex-center">
-            {{> buttonSendToChat}}
+            {{> buttonSendToChat target=item }}
           </div>
         {{/if}}
       </div>
@@ -37,7 +37,7 @@ item: {Item} = {
       {{> inputLabel text="ambersteel.labels.duration"}}
     </div>
     <div class="flex-grow">
-      {{> inputComponent type="single-line" propertyPath="data.data.duration" isEditable=isEditable }}
+      {{> inputTextField isEditable=isEditable propertyOwner=item propertyPath="data.data.duration" }}
     </div>
   </div>
   {{!-- Treatment skill --}}
@@ -46,7 +46,7 @@ item: {Item} = {
       {{> inputLabel text="ambersteel.labels.treatmentSkill"}}
     </div>
     <div class="flex-grow">
-      {{> inputComponent type="single-line" propertyPath="data.data.treatmentSkill" isEditable=isEditable }}
+      {{> inputTextField isEditable=isEditable propertyOwner=item propertyPath="data.data.treatmentSkill" }}
     </div>
   </div>
   {{!-- Treatment --}}
@@ -55,16 +55,16 @@ item: {Item} = {
       {{> inputLabel text="ambersteel.labels.treatment"}}
     </div>
     <div class="flex-grow">
-      {{> inputComponent type="single-line" propertyPath="data.data.treatment" isEditable=isEditable }}
+      {{> inputTextField isEditable=isEditable propertyOwner=item propertyPath="data.data.treatment" }}
     </div>
   </div>
   {{!-- Description --}}
   <div class="sheet-block flex flex-row flex-grow">
     <div class="width-min-xxl">
-      {{> inputLabel text="ambersteel.labels.description"}}
+      {{> inputLabel text=(localize "ambersteel.labels.description")}}
     </div>
     <div class="flex-grow">
-      {{> inputComponent type="multi-line" propertyPath="data.data.description" isEditable=isEditable cssClass="resize-vertical fill" readOnlyCssClass="multiline" allowResize=true }}
+      {{> inputTextarea isEditable=isEditable propertyOwner=item propertyPath="data.data.description" placeholder=(localize "ambersteel.labels.description") allowResize=true cssClass="fill" }}
     </div>
   </div>
 </form>

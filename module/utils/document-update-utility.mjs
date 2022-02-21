@@ -12,7 +12,7 @@ import { getNestedPropertyValue } from "./property-utility.mjs";
  * @async
  * @protected
  */
-export async function updateProperty(document,  propertyPath, newValue) {
+export async function updateProperty(document, propertyPath, newValue) {
   const parts = propertyPath.split(/\.|\[/g);
   const lastPart = parts[parts.length - 1].replace("]", "");
 
@@ -43,7 +43,7 @@ export async function updateProperty(document,  propertyPath, newValue) {
 
 /**
  * 
- * @param {Actor|Item} document An Actor or Item document. 
+ * @param {Document} document A Foundry {Document}. 
  * @param {String} propertyPath Path leading to the property to delete, on the given document entity. 
  *        Array-accessing via brackets is supported. Property-accessing via brackets is *not* supported. 
  *        E.g.: "data.attributes[0].value" 
@@ -62,17 +62,10 @@ export async function deleteByPropertyPath(document, propertyPath) {
 
     await updateProperty(document, arrayPropertyPath, array);
   } else { // Delete property from object. 
-    let parts = propertyPath.split(/\./g);
-    const propName = parts[parts.length - 1];
-    parts = parts.slice(0, parts.length - 1);
+    const parts = propertyPath.split(/\./g);
+    parts[parts.length - 1] = `-=${parts[parts.length - 1]}`; // The '-=' is what makes Foundry want to actually delete the property. 
     const parentPropertyPath = parts.join(".");
-    
-    if (parts.length == 0) { // Delete property on document itself. 
-      throw `Not implemented!`; // TODO: Is this even possible?
-    } else { // Delete property on property of document. 
-      const propertyParent = getNestedPropertyValue(document, parentPropertyPath);
-      delete propertyParent[propName];
-      await updateProperty(document, parentPropertyPath, propertyParent);
-    }
+
+    await updateProperty(document, parentPropertyPath, null); // Null must be given as the value for a property to be deleted. 
   }
 }
