@@ -180,6 +180,11 @@ Hooks.once('init', async function() {
      */
     viewModels: new ViewModelCollection(),
     /**
+     * 
+     * @type {Map<String, Object>}
+     */
+    viewStates: new Map(),
+    /**
      * Returns an array of {ChoiceOption}s. 
      * @param {Object} Any CONFIG property. 
      * @returns {Array<ChoiceOption>}
