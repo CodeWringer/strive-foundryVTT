@@ -58,4 +58,4 @@ Handlebars.registerHelper('createInputTextareaViewModel', function(isEditable, p
   return vm;
 });
 Handlebars.registerPartial('_inputTextarea', `{{#> "${InputTextareaViewModel.TEMPLATE}"}}{{/"${InputTextareaViewModel.TEMPLATE}"}}`);
-Handlebars.registerPartial('inputTextarea', `{{> _inputTextarea vm=(createInputTextareaViewModel isEditable propertyOwner propertyPath (isDefined allowResize false) (isDefined spellcheck false) (isDefined placeholder "")) cssClass=(isDefined cssClass "") readOnlyCssClass=(isDefined readOnlyCssClass "") }}`);
+Handlebars.registerPartial('inputTextarea', `{{> _inputTextarea vm=(createInputTextareaViewModel isEditable propertyOwner propertyPath placeholder allowResize spellcheck) cssClass=(isDefined cssClass "") readOnlyCssClass=(isDefined readOnlyCssClass "") }}`);
