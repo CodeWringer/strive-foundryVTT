@@ -8,7 +8,7 @@ import { AmbersteelActorSheet } from "./sheets/actor-sheet.mjs";
 import { AmbersteelItemSheet } from "./sheets/item-sheet.mjs";
 // Import helper/utility classes and constants.
 import { preloadHandlebarsTemplates } from "./templatePreloader.mjs";
-import { getNestedPropertyValue } from "./utils/property-utility.mjs";
+import { getNestedPropertyValue, ensureNestedProperty } from "./utils/property-utility.mjs";
 import AdvancementRequirements from "./dto/advancement-requirement.mjs";
 import { TEMPLATES } from "./templatePreloader.mjs";
 import { createUUID } from './utils/uuid-utility.mjs';
@@ -391,6 +391,14 @@ Handlebars.registerHelper('isDefined', function() {
 
 Handlebars.registerHelper('generateId', function() {
   return createUUID();
+});
+
+// If the given 'obj' has a property found via the given 'propertyPath', its value will be returned. 
+// Otherwise, if the property doesn't yet exist, it will be created and its value 
+// set to the given 'defaultValue'. 
+Handlebars.registerHelper('getEnsured', function(obj, propertyPath, defaultValue) {
+  ensureNestedProperty(obj, propertyPath, defaultValue);
+  return getNestedPropertyValue(obj, propertyPath);
 });
 
 /* -------------------------------------------- */
