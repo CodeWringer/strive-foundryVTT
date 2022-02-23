@@ -129,3 +129,30 @@ export function deleteNestedProperty(obj, path) {
 export function hasProperty(obj, prop) {
   return prop in obj;
 }
+
+/**
+ * Ensures a nested property at the given path exists. 
+ * 
+ * Will create new properties of type object on the given object, as necessary. 
+ * 
+ * Sets the last property's value to the given value. 
+ * @param {Object} obj 
+ * @param {String} propertyPath 
+ * @param {Any} value 
+ */
+export function ensureNestedProperty(obj, propertyPath, value) {
+  const pathElements = splitPropertyPath(propertyPath);
+	const lastElement = pathElements.pop();
+
+	let currentObject = obj;
+	for (const pathElement of pathElements) {
+		if (currentObject[pathElement] === undefined) {
+			currentObject[pathElement] = {}
+		}
+		currentObject = currentObject[pathElement];
+	}
+
+	if (currentObject[lastElement] === undefined) {
+		currentObject[lastElement] = value;
+	}
+}

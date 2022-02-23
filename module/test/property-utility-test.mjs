@@ -118,4 +118,69 @@ describe('property-utility', function() {
       PropertyUtility.hasProperty(obj, "c").should.be.equal(false);
     });
   });
+
+  describe('ensureNestedProperty', function() {
+    it('successfully ensures a property at path a.b.c exists and has value 5', function() {
+      // Given 
+      const expectedValue = 5;
+      const obj = {}
+      // When
+      PropertyUtility.ensureNestedProperty(obj, "a.b.c", expectedValue);
+      // Then
+      obj.a.b.c.should.be.equal(expectedValue);
+    });
+
+    it('successfully returns an existing property at path a.b.c and has value 5', function() {
+      // Given 
+      const expectedValue = 5;
+      const obj = {
+        a: {
+          b: {
+            c: expectedValue
+          }
+        }
+      }
+      // When
+      PropertyUtility.ensureNestedProperty(obj, "a.b.c", expectedValue);
+      // Then
+      obj.a.b.c.should.be.equal(expectedValue);
+    });
+
+    it('successfully ensures a property at path a exists and has value 5', function() {
+      // Given 
+      const expectedValue = 5;
+      const obj = {}
+      // When
+      PropertyUtility.ensureNestedProperty(obj, "a", expectedValue);
+      // Then
+      obj.a.should.be.equal(expectedValue);
+    });
+
+    it('successfully returns an existing property at path a and has value 5', function() {
+      // Given 
+      const expectedValue = 5;
+      const obj = {
+        a: expectedValue
+      }
+      // When
+      PropertyUtility.ensureNestedProperty(obj, "a", expectedValue);
+      // Then
+      obj.a.should.be.equal(expectedValue);
+    });
+
+    it('does not change an existing value', function() {
+      // Given 
+      const expectedValue = 5;
+      const differentValue = 1;
+      const obj = {
+        a: {
+          b: expectedValue
+        }
+      }
+      // When
+      PropertyUtility.ensureNestedProperty(obj, "a.b", differentValue);
+      // Then
+      obj.a.b.should.be.equal(expectedValue);
+    });
+  });
 });
