@@ -72,16 +72,35 @@ export class AmbersteelItemSheet extends ItemSheet {
    */
   get viewModels() { return this._viewModels; }
 
+  /**
+   * An object representing a map of view states. Any view models this collection contains can store their view state in this 
+   * map. The map will be persisted (for the current session) on a global object. 
+   * @type {Object}
+   * @private
+   */
+  viewState = undefined;
+
   /** 
    * Returns an object that represents sheet and enriched item data. 
    * 
    * Enriched means, it contains derived data and convenience properties. 
+   * 
+   * This method is called *before* the sheet is rendered. 
    * @returns {Object} The enriched context object. 
    * @override 
    * @see https://foundryvtt.com/api/FormApplicatiocn.html#getData
    */
   getData() {
     const context = super.getData();
+
+    // Prepare view model collection. 
+    this._viewModels = new ViewModelCollection();
+
+    // Fetch view state from global collection. 
+    const key = this.item.id;
+    this.viewState = this._getViewState(key);
+    // Make view state easily accessible. 
+    context.viewState = this.viewState;
 
     SheetUtil.enrichData(context);
 
@@ -91,8 +110,28 @@ export class AmbersteelItemSheet extends ItemSheet {
   }
 
   /**
+   * Ensures a view state for this sheet instance exists and then returns it. 
+   * @param {String} key 
+   * @param {Map<String, Object>} globalViewStates 
+   * @returns {Object}
+   * @private
+   */
+  _getViewState(key, globalViewStates = game.ambersteel.viewStates) {
+    let viewState = globalViewStates.get(key);
+    if (viewState !== undefined) {
+      viewState = viewState;
+    } else {
+      viewState = Object.create(null);
+      globalViewStates.set(key, viewState);
+    }
+    return viewState;
+  }
+
+  /**
    * @override
    * @see https://foundryvtt.com/api/FormApplication.html#activateListeners
+   * 
+   * This method is called *after* the sheet is rendered. 
    */
   activateListeners(html) {
     super.activateListeners(html);
@@ -101,7 +140,6 @@ export class AmbersteelItemSheet extends ItemSheet {
     const isEditable = this.isEditable;
 
     // Activate view model bound event listeners. 
-    this._viewModels = new ViewModelCollection();
     this.viewModels.activateListeners(html, isOwner, isEditable);
 
     // -------------------------------------------------------------
