@@ -8,7 +8,7 @@ import { AmbersteelActorSheet } from "./sheets/actor-sheet.mjs";
 import { AmbersteelItemSheet } from "./sheets/item-sheet.mjs";
 // Import helper/utility classes and constants.
 import { preloadHandlebarsTemplates } from "./templatePreloader.mjs";
-import { getNestedPropertyValue, ensureNestedProperty } from "./utils/property-utility.mjs";
+import { getNestedPropertyValue, ensureNestedProperty, setNestedPropertyValue } from "./utils/property-utility.mjs";
 import AdvancementRequirements from "./dto/advancement-requirement.mjs";
 import { TEMPLATES } from "./templatePreloader.mjs";
 import { createUUID } from './utils/uuid-utility.mjs';
@@ -330,6 +330,14 @@ Handlebars.registerHelper('or', function(a, b) {
   return a || b;
 });
 
+Handlebars.registerHelper('not', function(a) {
+  return !a;
+});
+
+Handlebars.registerHelper('obj', function(a) {
+  return {};
+});
+
 Handlebars.registerHelper('ifThenElse', function(condition, thenValue, elseValue) {
   if (condition) {
     return thenValue;
@@ -404,6 +412,24 @@ Handlebars.registerHelper('generateId', function() {
 Handlebars.registerHelper('getEnsured', function(obj, propertyPath, defaultValue) {
   ensureNestedProperty(obj, propertyPath, defaultValue);
   return getNestedPropertyValue(obj, propertyPath);
+});
+
+// Returns an invocable function that, once invoked, will set the given object's 
+// property, identified by the given path, to the given value. 
+// The returned function need only be invoked. No arguments need to be passed. 
+Handlebars.registerHelper('setCallback', function(obj, propertyPath, value) {
+  // This defines the actual callback function. 
+  const f = (obj, propertyPath, value) => {
+    ensureNestedProperty(obj, propertyPath, value);
+    setNestedPropertyValue(obj, propertyPath, value);
+  };
+  // This wraps a concrete call to the callback function in an 
+  // instance of an anonymous function. This is necessary to prevent 
+  // the actual callback function to be invoked prematurely and 
+  // wraps the given arguments in a concrete call. 
+  // This means that the returned function need only be invoked 
+  // as any other function without arguments. 
+  return () => { f(obj, propertyPath, value) };
 });
 
 /* -------------------------------------------- */
