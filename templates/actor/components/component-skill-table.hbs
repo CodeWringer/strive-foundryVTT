@@ -21,6 +21,7 @@ skills: {[Item]} = {
     }
 }
 actor: {AmbersteelActor}
+viewState: {Object}
 --}}
 <div>
     <table class="skill-table">
@@ -111,6 +112,7 @@ actor: {AmbersteelActor}
                             game=../game 
                             item=skill
                             visGroupId=(generateId)
+                            viewState=(getEnsured ../viewState skill.id (obj))
                         }}
                     </td>
                 </tr>

@@ -31,9 +31,12 @@ skillAbilitiesInitiallyVisible: {Boolean}
 visGroupId: {String}
 oneColumn: {Boolean}
 actor: {Actor | undefined}
+viewState: {Object}
 --}}
 <section class="skill-ability-list">
-  <ol class="unstyled-list {{#if skillAbilitiesInitiallyVisible}}{{else}}hidden{{/if}}" data-vis-group="{{visGroupId}}">
+  <ol class="unstyled-list {{#if (getEnsured viewState "skillAbilitiesInitiallyVisible" false)}}{{else}}hidden{{/if}}" 
+    data-vis-group="{{visGroupId}}"
+  >
     {{#each item.data.data.abilities as |ability key|}}
       <li class="ambersteel-list-row sheet-block">
         {{#if ../oneColumn}}
@@ -163,17 +166,19 @@ actor: {Actor | undefined}
   <div class="line-height">
     {{#> buttonToggleVisibility 
       visGroup=visGroupId
-      cssClass=(ifThenElse skillAbilitiesInitiallyVisible "hidden" "")
+      cssClass=(ifThenElse viewState.skillAbilitiesInitiallyVisible "hidden" "")
       fill=true 
       toggleSelf=true 
+      callback=(setCallback viewState "skillAbilitiesInitiallyVisible" (not viewState.skillAbilitiesInitiallyVisible)) 
     }}
       <i class="fas fa-angle-double-down"></i>
     {{/buttonToggleVisibility}}
     {{#> buttonToggleVisibility 
       visGroup=visGroupId
-      cssClass=(ifThenElse skillAbilitiesInitiallyVisible "" "hidden")
+      cssClass=(ifThenElse viewState.skillAbilitiesInitiallyVisible "" "hidden")
       fill=true 
       toggleSelf=true 
+      callback=(setCallback viewState "skillAbilitiesInitiallyVisible" (not viewState.skillAbilitiesInitiallyVisible)) 
     }}
       <i class="fas fa-angle-double-up"></i>
     {{/buttonToggleVisibility}}

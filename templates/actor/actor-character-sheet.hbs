@@ -16,6 +16,7 @@ actor: {Actor} = {
     }
   }
 }
+viewState: {Object}
 --}}
 <form class="{{cssClass}} {{actor.type}} flexcol" autocomplete="off">
 
@@ -70,6 +71,7 @@ actor: {Actor} = {
         actor=actor 
         learningSkills=actor.data.data.learningSkills  
         skills=actor.data.data.skills 
+        viewState=(getEnsured viewState "skills" (obj))
       }}
     </div>
 
