@@ -97,7 +97,7 @@ export default class InputViewModel extends ViewModel {
    * @param {Object} html DOM of the sheet for which to register listeners. 
    * @param {Boolean} isOwner If true, registers events that require owner permission. 
    * @param {Boolean} isEditable If true, registers events that require editing permission. 
-   * @throws {Error} NullPointerException Thrown if the input element could not be found. 
+   * @throws {Error} NullPointerException - Thrown if the input element could not be found. 
    */
   activateListeners(html, isOwner, isEditable) {
     this._element = html.find(`.${InputViewModel.SELECTOR_EDIT}#${this.id}`);
