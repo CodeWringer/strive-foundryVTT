@@ -1,33 +1,16 @@
 {{!-- Requires context:
-isEditable: {Boolean}
-isSendable: {Boolean}
-isOwner: {Boolean}
-isGM: {Boolean}
-actor: {Actor} = {
-  data: {Object} = {
-    data: {Object} {
-      person: {Object}
-      attributeGroups: {Object}
-      learningSkills: {[Object]}
-      skills: {[Object]}
-      beliefSystem: {Object}
-      fateSystem: {Object}
-      biography: {Object}
-    }
-  }
-}
-viewState: {Object}
+viewModel: {ActorSheetViewModel}
 --}}
-<form class="{{cssClass}} {{actor.type}} flexcol" autocomplete="off">
+<form class="{{cssClass}} {{viewModel.actor.type}} flexcol" autocomplete="off">
 
   {{!-- Sheet Header --}}
   <header class="sheet-header">
-    <img class="profile-img" src="{{actor.img}}" data-edit="img" title="{{actor.name}}" height="100" width="100" />
+    <img class="profile-img" src="{{viewModel.actor.img}}" data-edit="img" title="{{viewModel.actor.name}}" height="100" width="100" />
     <div class="header-fields">
       <h1 class="header-name fancy-font">
-        {{> inputTextField isEditable=isEditable propertyOwner=actor propertyPath="name" placeholder="ambersteel.labels.name" }}
+        {{> inputTextField isEditable=viewModel.isEditable propertyOwner=viewModel.actor propertyPath="name" placeholder="ambersteel.labels.name" }}
       </h1>
-      {{> "systems/ambersteel/templates/actor/parts/actor-personals.hbs" isEditable=isEditable isSendable=isSendable isOwner=isOwner isGM=isGM actor=actor }}
+      {{> "systems/ambersteel/templates/actor/parts/actor-personals.hbs" viewModel=viewModel.personalsViewModel }}
     </div>
   </header>
 
@@ -36,13 +19,13 @@ viewState: {Object}
     {{!-- Default tab is specified in actor-sheet.mjs --}}
     <a class="item fancy-font flex flex-center flex-grow" data-tab="attributes"><div>{{localize "ambersteel.labels.tabAttributes"}}</div></a>
     <a class="item fancy-font flex flex-center flex-grow" data-tab="skills"><div>{{localize "ambersteel.labels.tabSkills"}}</div></a>
-    {{#if (eq actor.type "pc")}}
+    {{#if viewModel.isPC }}
       <a class="item fancy-font flex flex-center flex-grow" data-tab="beliefs-fate"><div>{{localize "ambersteel.labels.tabBeliefsFate"}}</div></a>
     {{/if}}
     <a class="item fancy-font flex flex-center flex-grow" data-tab="health"><div>{{localize "ambersteel.labels.tabHealth"}}</div></a>
     <a class="item fancy-font flex flex-center flex-grow" data-tab="assets"><div>{{localize "ambersteel.labels.tabAssets"}}</div></a>
     <a class="item fancy-font flex flex-center flex-grow" data-tab="biography"><div>{{localize "ambersteel.labels.tabBiography"}}</div></a>
-    {{#if isGM}}
+    {{#if viewModel.isGM }}
       <a class="item fancy-font flex flex-center flex-grow" data-tab="gm-notes"><div>{{localize "ambersteel.labels.tabGmNotes"}}</div></a>
     {{/if}}
   </nav>
@@ -52,85 +35,40 @@ viewState: {Object}
 
     {{!-- Attributes Tab --}}
     <div class="tab attributes" data-group="primary" data-tab="attributes">
-      {{> "systems/ambersteel/templates/actor/parts/actor-attributes.hbs" 
-        isEditable=isEditable 
-        isSendable=isSendable
-        isOwner=isOwner
-        isGM=isGM
-        actor=actor 
-      }}
+      {{> "systems/ambersteel/templates/actor/parts/actor-attributes.hbs" viewModel=viewModel.attributesViewModel }}
     </div>
 
     {{!-- Skills Tab --}}
     <div class="tab skills" data-group="primary" data-tab="skills">
-      {{> "systems/ambersteel/templates/actor/parts/actor-skills.hbs" 
-        isEditable=isEditable 
-        isSendable=isSendable
-        isOwner=isOwner
-        isGM=isGM
-        actor=actor 
-        learningSkills=actor.data.data.learningSkills  
-        skills=actor.data.data.skills 
-        viewState=(getEnsured viewState "skills" (obj))
-      }}
+      {{> "systems/ambersteel/templates/actor/parts/actor-skills.hbs" viewModel=viewModel.skillsViewModel }}
     </div>
 
-    {{#if (eq actor.type "pc")}}
+    {{#if viewModel.isPC }}
     {{!-- Beliefs&Fate Tab --}}
       <div class="tab beliefs-fate" data-group="primary" data-tab="beliefs-fate">
-        {{> "systems/ambersteel/templates/actor/parts/actor-beliefs-fate.hbs" 
-          isEditable=isEditable 
-          isSendable=isSendable
-          isOwner=isOwner
-          isGM=isGM
-          actor=actor 
-        }}
+        {{> "systems/ambersteel/templates/actor/parts/actor-beliefs-fate.hbs" viewModel=viewModel.beliefsFateViewModel }}
       </div>
     {{/if}}
 
     {{!-- Health Tab --}}
     <div class="tab health" data-group="primary" data-tab="health">
-      {{> "systems/ambersteel/templates/actor/parts/actor-health.hbs" 
-        isEditable=isEditable 
-        isSendable=isSendable
-        isOwner=isOwner
-        isGM=isGM
-        actor=actor 
-      }}
+      {{> "systems/ambersteel/templates/actor/parts/actor-health.hbs" viewModel=viewModel.healthViewModel }}
     </div>
 
     {{!-- Assets Tab --}}
     <div class="tab assets" data-group="primary" data-tab="assets">
-      {{> "systems/ambersteel/templates/actor/parts/actor-assets.hbs" 
-        isEditable=isEditable 
-        isSendable=isSendable
-        isOwner=isOwner
-        isGM=isGM
-        actor=actor 
-      }}
+      {{> "systems/ambersteel/templates/actor/parts/actor-assets.hbs" viewModel=viewModel.assetsViewModel }}
     </div>
 
     {{!-- Biography Tab --}}
     <div class="tab biography" data-group="primary" data-tab="biography">
-      {{> "systems/ambersteel/templates/actor/parts/actor-biography.hbs" 
-        isEditable=isEditable 
-        isSendable=isSendable
-        isOwner=isOwner
-        isGM=isGM
-        actor=actor 
-      }}
+      {{> "systems/ambersteel/templates/actor/parts/actor-biography.hbs" viewModel=viewModel.biographyViewModel }}
     </div>
 
     {{!-- GM Notes Tab --}}
-    {{#if isGM}}
+    {{#if viewModel.isGM }}
       <div class="tab gm-notes" data-group="primary" data-tab="gm-notes">
-        {{> "systems/ambersteel/templates/gm-notes.hbs" 
-          isEditable=isEditable 
-          isSendable=false
-          isOwner=isOwner
-          isGM=isGM
-          actor=actor 
-        }}
+        {{> "systems/ambersteel/templates/gm-notes.hbs" viewModel=viewModel.gmNotesViewModel }}
       </div>
     {{/if}}
 

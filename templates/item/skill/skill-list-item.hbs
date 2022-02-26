@@ -1,46 +1,26 @@
 {{!-- Requires context:
-isEditable: {Boolean}
-isSendable: {Boolean}
-item: {Item} = {
-  id: {String}
-  name: {String}
-  img: {String}
-  data: {ItemData} = {
-    data: {Object} = {
-      description: {String}
-      groupName: {String}
-      value: {Number}
-      successes: {Number}
-      failures: {Number}
-      relatedAttribute: {String}
-      requiredSuccessses: {Number}
-      requiredFailures: {Number}
-      abilities: {[Object]} -> see item/skill-ability/skill-ability-table.hbs,
-    }
-  }
-}
-actor: {Actor | undefined}
+viewModel: {SkillListItemViewModel}
 --}}
 {{!-- Row 1 --}}
 <div class="flex flex-row">
   {{!-- TODO --}}
   <div class="flex flex-grow">
     {{!-- Send to chat --}}
-    {{> buttonSendToChat target=item }}
+    {{> buttonSendToChat target=viewModel.item }}
     {{!-- Name --}}
     <span class="width-min-xl">
       {{> inputLabel text="ambersteel.labels.injury"}}
     </span>
     <span class="flex-grow margin-r-md">
-      {{> inputTextField isEditable=isEditable propertyOwner=item propertyPath="name" placeholder="ambersteel.labels.name" }}
+      {{> inputTextField isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath="name" placeholder="ambersteel.labels.name" }}
     </span>
     {{!-- State --}}
   </div>
   {{!-- Delete --}}
-  {{> buttonDelete target=item withDialog=true }}
+  {{> buttonDelete target=viewModel.item withDialog=true }}
 </div>
 {{!-- Row 3 --}}
 {{!-- Description --}}
 <div class="flex flex-row">
-  {{> inputTextarea isEditable=isEditable propertyOwner=item propertyPath="data.data.description" placeholder="ambersteel.labels.description" allowResize=true cssClass="fill" }}
+  {{> inputTextarea isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath="data.data.description" placeholder="ambersteel.labels.description" allowResize=true cssClass="fill" }}
 </div>

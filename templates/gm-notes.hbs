@@ -1,13 +1,8 @@
 {{!-- Requires parameters:
-isEditable: {Boolean},
-data: {Object} where Object = {
-  data: {Object} where Object = {
-    gmNotes: {String}
-  }
-}
+viewModel: {GmNotesViewModel}
 --}}
 <section class="fill">
   <div class="sheet-block fill">
-    {{editor content=data.data.gmNotes target="data.gmNotes" button=true editable=isEditable owner=owner}}
+    {{editor content=viewModel.document.data.data.gmNotes target="data.gmNotes" button=true editable=viewModel.isEditable owner=viewModel.isOwner}}
   </div>
 </section>

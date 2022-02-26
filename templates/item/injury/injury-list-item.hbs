@@ -1,36 +1,23 @@
 {{!-- Requires context:
-isEditable: {Boolean}
-isSendable: {Boolean}
-itemId: {String|undefined}
-item: {Item} = {
-  name: {String}
-  data: {Object} = {
-    data: {Object} = {
-      description: {String}
-      state: {CONFIG.injuryStates}
-      timeToHeal: {String}
-      limit: {Number}
-    }
-  }
-}
+viewModel: {InjuryListItemViewModel}
 --}}
 {{!-- Row 1 --}}
 <div class="flex flex-row">
   <div class="flex flex-grow">
     {{!-- Send to chat --}}
-    {{> buttonSendToChat target=item }}
+    {{> buttonSendToChat target=viewModel.item }}
     {{!-- Name --}}
     <span class="width-min-xl">
       {{> inputLabel text="ambersteel.labels.injury"}}
     </span>
     <span class="flex-grow margin-r-md">
-      {{> inputTextField isEditable=isEditable propertyOwner=item propertyPath="name" placeholder="ambersteel.labels.name" }}
+      {{> inputTextField isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath="name" placeholder="ambersteel.labels.name" }}
     </span>
     {{!-- State --}}
-    {{> inputRadioButtonGroup isEditable=isEditable propertyOwner=item propertyPath="data.data.state" options=(game.ambersteel.getInjuryOptions) }}
+    {{> inputRadioButtonGroup isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath="data.data.state" options=viewModel.stateOptions }}
   </div>
   {{!-- Delete --}}
-  {{> buttonDelete target=item withDialog=true }}
+  {{> buttonDelete target=viewModel.item withDialog=true }}
 </div>
 {{!-- Row 2 --}}
 <div class="flex flex-row">
@@ -40,7 +27,7 @@ item: {Item} = {
       {{> inputLabel text="ambersteel.labels.limit" }}
     </span>
     <span class="width-md">
-      {{> inputNumberSpinner isEditable=isEditable propertyOwner=item propertyPath="data.data.limit" min=0 }}
+      {{> inputNumberSpinner isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath="data.data.limit" min=0 }}
     </span>
   </div>
   {{!-- Spacer --}}
@@ -51,12 +38,12 @@ item: {Item} = {
       {{> inputLabel text="ambersteel.labels.timeToHeal" }}
     </span>
     <span class="width-min-xl flex-grow">
-      {{> inputTextField isEditable=isEditable propertyOwner=item propertyPath="data.data.timeToHeal" }}
+      {{> inputTextField isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath="data.data.timeToHeal" }}
     </span>
   </div>
 </div>
 {{!-- Row 3 --}}
 {{!-- Description --}}
 <div class="flex flex-row">
-  {{> inputTextarea isEditable=isEditable propertyOwner=item propertyPath="data.data.description" placeholder="ambersteel.labels.description" allowResize=true }}
+  {{> inputTextarea isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath="data.data.description" placeholder="ambersteel.labels.description" allowResize=true }}
 </div>

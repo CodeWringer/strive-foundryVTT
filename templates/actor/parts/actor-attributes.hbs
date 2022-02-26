@@ -1,34 +1,9 @@
 {{!-- Requires parameters:
-isEditable: {Boolean}
-isSendable: {Boolean}
-isOwner: {Boolean}
-isGM: {Boolean}
-actor: {Object}
+viewModel: {ActorAttributesViewModel}
 --}}
 <section>
     {{!-- Attributes --}}
-    {{> "systems/ambersteel/templates/actor/components/component-attribute-table.hbs" 
-        isEditable=isEditable
-        isSendable=isSendable
-        isOwner=isOwner
-        isGM=isGM
-        actor=actor
-        attributeGroup=actor.data.data.attributes.physical
-    }}
-    {{> "systems/ambersteel/templates/actor/components/component-attribute-table.hbs" 
-        isEditable=isEditable
-        isSendable=isSendable
-        isOwner=isOwner
-        isGM=isGM
-        actor=actor
-        attributeGroup=actor.data.data.attributes.mental
-    }}
-    {{> "systems/ambersteel/templates/actor/components/component-attribute-table.hbs"
-        isEditable=isEditable
-        isSendable=isSendable
-        isOwner=isOwner
-        isGM=isGM
-        actor=actor
-        attributeGroup=actor.data.data.attributes.social
-    }}
+    {{> "systems/ambersteel/templates/actor/components/component-attribute-table.hbs" viewModel=viewModel.attributesPhysicalViewModel }}
+    {{> "systems/ambersteel/templates/actor/components/component-attribute-table.hbs" viewModel=viewModel.attributesMentalViewModel }}
+    {{> "systems/ambersteel/templates/actor/components/component-attribute-table.hbs" viewModel=viewModel.attributesSocialViewModel }}
 </section>

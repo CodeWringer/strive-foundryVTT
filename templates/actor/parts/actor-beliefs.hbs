@@ -1,31 +1,27 @@
 {{!-- Requires parameters:
-isEditable: {Boolean}
-isSendable: {Boolean}
-isOwner: {Boolean}
-isGM: {Boolean}
-actor: {Object}
+viewModel: {ActorBeliefsViewModel}
 --}}
 <section>
   <div class="sheet-block">
     <h3>
       <label class="fancy-font">{{localize "ambersteel.beliefSystem.ambition"}}</label>
     </h3>
-      {{> inputTextField isEditable=isEditable propertyOwner=actor propertyPath="data.data.beliefSystem.ambition" }}
+      {{> inputTextField isEditable=viewModel.isEditable propertyOwner=viewModel.actor propertyPath="data.data.beliefSystem.ambition" }}
   </div>
   <div class="sheet-block">
     <h3>
       <label class="fancy-font">{{localize "ambersteel.beliefSystem.beliefs"}}</label>
     </h3>
-    {{#each actor.data.data.beliefSystem.beliefs as |belief index|}}
-      {{> inputTextField isEditable=../isEditable propertyOwner=../actor propertyPath=(concat "data.data.beliefSystem.beliefs[" index "]") }}
+    {{#each viewModel.beliefs as |belief index|}}
+      {{> inputTextField isEditable=../viewModel.isEditable propertyOwner=../viewModel.actor propertyPath=(concat "data.data.beliefSystem.beliefs[" index "]") }}
     {{/each}}
   </div>
   <div class="sheet-block">
     <h3>
       <label class="fancy-font">{{localize "ambersteel.beliefSystem.instincts"}}</label>
     </h3>
-    {{#each actor.data.data.beliefSystem.instincts as |instinct index|}}
-      {{> inputTextField isEditable=../isEditable propertyOwner=../actor propertyPath=(concat "data.data.beliefSystem.instincts[" index "]") }}
+    {{#each viewModel.instincts as |instinct index|}}
+      {{> inputTextField isEditable=../viewModel.isEditable propertyOwner=../viewModel.actor propertyPath=(concat "data.data.beliefSystem.instincts[" index "]") }}
     {{/each}}
   </div>
 </section>

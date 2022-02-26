@@ -29,135 +29,27 @@ item: {Item} = {
 }
 skillAbilitiesInitiallyVisible: {Boolean}
 visGroupId: {String}
-oneColumn: {Boolean}
-actor: {Actor | undefined}
-viewState: {Object}
+viewModel: {SkillAbilityTableViewModel}
 --}}
 <section class="skill-ability-list">
-  <ol class="unstyled-list {{#if (getEnsured viewState "skillAbilitiesInitiallyVisible" false)}}{{else}}hidden{{/if}}" 
-    data-vis-group="{{visGroupId}}"
+  <ol class="unstyled-list {{#if viewModel.skillAbilitiesInitiallyVisible}}{{else}}hidden{{/if}}" 
+    data-vis-group="{{viewModel.visGroupId}}"
   >
-    {{#each item.data.data.abilities as |ability key|}}
+    {{#each viewModel.abilities as |abilityViewModel key|}}
       <li class="ambersteel-list-row sheet-block">
-        {{#if ../oneColumn}}
-          {{> "systems/ambersteel/templates/item/skill-ability/skill-ability-chat-message.hbs" 
-            isEditable=../isEditable 
-            isSendable=../isSendable 
-            skillAbility=ability
-          }}
+        {{#if ../viewModel.oneColumn}}
+          {{> "systems/ambersteel/templates/item/skill-ability/skill-ability-chat-message.hbs" viewModel=abilityViewModel }}
         {{else}}
-          {{!-- Row 1 --}}
-          <div class="flex flex-row">
-            <div class="flex flex-grow">
-              {{!-- Send to chat --}}
-              {{#if ../isSendable}}
-                {{> buttonSendToChat target=../item propertyPath=(concat "data.data.abilities[" key "]") }}
-              {{/if}}
-              {{!-- Name --}}
-              <span class="width-min-xl">
-                {{> inputLabel for=(concat "name[" key "]") text="ambersteel.labels.name"}}
-              </span>
-              {{> inputTextField isEditable=../isEditable propertyOwner=../item propertyPath=(concat "data.data.abilities[" key "].name") placeholder="ambersteel.labels.name" }}
-            </div>
-            {{!-- Delete --}}
-            {{#if ../isEditable}}
-              {{> buttonDelete target=../item propertyPath=(concat "data.data.abilities[" key "]") withDialog=true }}
-            {{/if}}
-          </div>
-          {{!-- Row 2 --}}
-          <div class="flex flex-row">
-            {{!-- At level --}}
-            <div class="flex flex-row">
-              <span class="width-min-xl">
-                {{> inputLabel for=(concat "requiredLevel[" key "]") text="ambersteel.labels.skillAbilityRequirement"}}
-              </span>
-              <span class="width-md">
-                {{> inputNumberSpinner isEditable=../isEditable propertyOwner=../item propertyPath=(concat "data.data.abilities[" key "].requiredLevel") min=0 }}
-              </span>
-            </div>
-            {{!-- Obstacle --}}
-            <div class="flex flex-row">
-              <span class="width-min-xl">
-                {{> inputLabel for=(concat "obstacle[" key "]") text="ambersteel.roll.obstacleAbbreviation"}}
-              </span>
-              <span class="width-xxl">
-                {{> inputTextField isEditable=../isEditable propertyOwner=../item propertyPath=(concat "data.data.abilities[" key "].obstacle") }}
-              </span>
-            </div>
-          </div>
-          {{!-- Row 3 --}}
-          <div class="flex flex-row">
-            {{!-- Distance --}}
-            <div class="width-min-xl">
-              {{> inputLabel for=(concat "distance[" key "]") text="ambersteel.labels.distance"}}
-            </div>
-            <span class="width-md">
-              {{> inputNumberSpinner isEditable=../isEditable propertyOwner=../item propertyPath=(concat "data.data.abilities[" key "].distance") min=0 }}
-            </span>
-            {{!-- AP cost --}}
-            <div class="width-min-xl">
-              {{> inputLabel for=(concat "apCost[" key "]") text="ambersteel.labels.apCost"}}
-            </div>
-            <span class="width-md">
-              {{> inputNumberSpinner isEditable=../isEditable propertyOwner=../item propertyPath=(concat "data.data.abilities[" key "].apCost") min=0 }}
-            </span>
-            {{!-- Attack type --}}
-            <div class="width-min-xl">
-              {{> inputLabel for=(concat "attackType[" key "]") text="ambersteel.labels.attackType"}}
-            </div>
-            <span class="width-min-lg">
-              {{> inputDropDown isEditable=../isEditable propertyOwner=../item propertyPath=(concat "data.data.abilities[" key "].attackType") options=(../game.ambersteel.getAttackTypeOptions) }}
-            </span>
-          </div>
-          {{!-- Row 4 --}}
-          <div class="flex flex-row">
-            {{!-- Damage formula --}}
-            <div class="width-min-xl">
-              {{> inputLabel for=(concat "damageFormula[" key "]") text="ambersteel.labels.damage"}}
-            </div>
-            {{> buttonRoll 
-                target=../item 
-                propertyPath=(concat "data.data.abilities[" key "].damageFormula")
-                chatTitle=ability.name
-                rollType="generic" 
-                actor=../actor 
-            }}
-            <span class="width-min-xxl flex-grow">
-              {{> inputTextField isEditable=../isEditable propertyOwner=../item propertyPath=(concat "data.data.abilities[" key "].damageFormula") }}
-            </span>
-            {{!-- Damage type --}}
-            <div class="width-min-xxl">
-              {{> inputLabel for=(concat "damageType[" key "]") text="ambersteel.labels.damageType"}}
-            </div>
-            <span class="width-xxl">
-              {{> inputDropDown isEditable=../isEditable propertyOwner=../item propertyPath=(concat "data.data.abilities[" key "].damageType") options=(../game.ambersteel.getDamageTypeOptions) }}
-            </span>
-          </div>
-          {{!-- Row 5 --}}
-          <div class="flex flex-row flex-grow">
-            {{!-- Condition --}}
-            <div class="width-min-xl">
-              {{> inputLabel for=(concat "condition[" key "]") text="ambersteel.labels.skillAbilityCondition"}}
-            </div>
-            <div class="flex-grow">
-              {{> inputTextField isEditable=../isEditable propertyOwner=../item propertyPath=(concat "data.data.abilities[" key "].condition") }}
-            </div>
-          </div>
-          {{!-- Row 6 --}}
-          {{!-- Description --}}
-          <div class="flex flex-row">
-            {{> inputTextarea isEditable=../isEditable propertyOwner=../item propertyPath=(concat "data.data.abilities[" key "].description") placeholder="ambersteel.labels.description" allowResize=true cssClass="fill" }}
-          </div>
-        {{/if}}
+          {{> "systems/ambersteel/templates/item/skill-ability/skill-ability-list-item.hbs" viewModel=abilityViewModel }}
       </li>
     {{/each}}
-    {{#if isEditable}}
+    {{#if viewModel.isEditable}}
       <li class="ambersteel-list-row ambersteel-list-footer">
         <div class="fill flex flex-row">
           <span class="flex-grow"></span>
           {{!-- Add skill ability --}}
           <span class="width-sm">
-            {{> buttonAdd target=item creationType="skill-ability" withDialog=false }}
+            {{> buttonAdd target=viewModel.item creationType="skill-ability" withDialog=false }}
           </span>
         </div>
       </li>
@@ -165,20 +57,20 @@ viewState: {Object}
   </ol>
   <div class="line-height">
     {{#> buttonToggleVisibility 
-      visGroup=visGroupId
-      cssClass=(ifThenElse viewState.skillAbilitiesInitiallyVisible "hidden" "")
+      visGroup=viewModel.visGroupId
+      cssClass=(ifThenElse viewModel.skillAbilitiesInitiallyVisible "hidden" "")
       fill=true 
       toggleSelf=true 
-      callback=(setCallback viewState "skillAbilitiesInitiallyVisible" (not viewState.skillAbilitiesInitiallyVisible)) 
+      callback=(setCallback viewModel "skillAbilitiesInitiallyVisible" (not viewModel.skillAbilitiesInitiallyVisible)) 
     }}
       <i class="fas fa-angle-double-down"></i>
     {{/buttonToggleVisibility}}
     {{#> buttonToggleVisibility 
-      visGroup=visGroupId
-      cssClass=(ifThenElse viewState.skillAbilitiesInitiallyVisible "" "hidden")
+      visGroup=viewModel.visGroupId
+      cssClass=(ifThenElse viewModel.skillAbilitiesInitiallyVisible "" "hidden")
       fill=true 
       toggleSelf=true 
-      callback=(setCallback viewState "skillAbilitiesInitiallyVisible" (not viewState.skillAbilitiesInitiallyVisible)) 
+      callback=(setCallback viewModel "skillAbilitiesInitiallyVisible" (not viewModel.skillAbilitiesInitiallyVisible)) 
     }}
       <i class="fas fa-angle-double-up"></i>
     {{/buttonToggleVisibility}}

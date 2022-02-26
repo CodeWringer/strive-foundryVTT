@@ -101,7 +101,7 @@ export class AmbersteelActorSheet extends ActorSheet {
     const context = super.getData();
 
     // Prepare view model collection. 
-    this._viewModels = new ViewModelCollection();
+    this._viewModels = this._viewModels ?? new ViewModelCollection();
 
     // Fetch view state from global collection. 
     const key = this.actor.id;

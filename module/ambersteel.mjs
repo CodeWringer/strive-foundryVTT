@@ -32,6 +32,11 @@ import './components/button-roll/button-roll-viewmodel.mjs';
 import './components/button-send-to-chat/button-send-to-chat-viewmodel.mjs';
 import './components/button-toggle-visibility/button-toggle-visibility-viewmodel.mjs';
 import './components/button-take-item/button-take-item-viewmodel.mjs';
+// Import ui view models. 
+import '../templates/sheet-viewmodel.mjs';
+import '../templates/gm-notes-viewmodel.mjs';
+import '../templates/actor/actor-sheet-viewmodel.mjs';
+import '../templates/actor/components/attribute-table-viewmodel.mjs';
 
 /* -------------------------------------------- */
 /*  Init Hook                                   */

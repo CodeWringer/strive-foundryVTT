@@ -1,25 +1,9 @@
 {{!-- Requires parameters:
-isEditable: {Boolean}
-isSendable: {Boolean}
-isOwner: {Boolean}
-isGM: {Boolean}
-actor: {Object}
+viewModel: {ActorBeliefsFateViewModel}
 --}}
 <section>
   <h2>{{localize "ambersteel.beliefSystem.beliefs"}}</h2>
-  {{> "systems/ambersteel/templates/actor/parts/actor-beliefs.hbs"
-    isEditable=isEditable
-    isSendable=isSendable
-    isOwner=isOwner
-    isGM=isGM
-    actor=actor
-  }}
+  {{> "systems/ambersteel/templates/actor/parts/actor-beliefs.hbs" viewModel=viewModel.beliefsViewModel }}
   <h2>{{localize "ambersteel.fateSystem.fate"}}</h2>
-  {{> "systems/ambersteel/templates/actor/parts/actor-fate.hbs"
-    isEditable=isEditable
-    isSendable=isSendable
-    isOwner=isOwner
-    isGM=isGM
-    actor=actor
-  }}
+  {{> "systems/ambersteel/templates/actor/parts/actor-fate.hbs" viewModel=viewModel.fateViewModel }}
 </section>

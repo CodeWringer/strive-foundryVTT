@@ -1,9 +1,5 @@
 {{!-- Requires parameters:
-isEditable: {Boolean}
-isSendable: {Boolean}
-isOwner: {Boolean}
-isGM: {Boolean}
-actor: {Object}
+viewModel: {ActorFateViewModel}
 --}}
 <section>
   <div class="sheet-block grid grid-2col flex-column">
@@ -13,7 +9,7 @@ actor: {Object}
       <span class="primary-font">[{{localize "ambersteel.fateSystem.miFPAbbreviation"}}]</span>
     </span>
     <span class="fate-spinner-column-container">
-      {{> inputNumberSpinner isEditable=isEditable propertyOwner=actor propertyPath="data.data.fateSystem.miFP" min=0 }}
+      {{> inputNumberSpinner isEditable=viewModel.isEditable propertyOwner=viewModel.actor propertyPath="data.data.fateSystem.miFP" min=0 }}
     </span>
     {{!-- row 2 --}}
     <span class="fancy-font line-height">
@@ -21,7 +17,7 @@ actor: {Object}
       <span class="primary-font">[{{localize "ambersteel.fateSystem.maFPAbbreviation"}}]</span>
     </span>
     <span class="fate-spinner-column-container">
-      {{> inputNumberSpinner isEditable=isEditable propertyOwner=actor propertyPath="data.data.fateSystem.maFP" min=0 }}
+      {{> inputNumberSpinner isEditable=viewModel.isEditable propertyOwner=viewModel.actor propertyPath="data.data.fateSystem.maFP" min=0 }}
     </span>
     {{!-- row 3 --}}
     <span class="fancy-font line-height">
@@ -29,25 +25,19 @@ actor: {Object}
       <span class="primary-font">[{{localize "ambersteel.fateSystem.AFPAbbreviation"}}]</span>
     </span>
     <span class="fate-spinner-column-container">
-      {{> inputNumberSpinner isEditable=isEditable propertyOwner=actor propertyPath="data.data.fateSystem.AFP" min=0 }}
+      {{> inputNumberSpinner isEditable=viewModel.isEditable propertyOwner=viewModel.actor propertyPath="data.data.fateSystem.AFP" min=0 }}
     </span>
   </div>
   <div class="flex" style="flex-wrap: wrap;">
-    {{#each actor.fateCards as |card key|}}
+    {{#each viewModel.fateCards as |cardViewModel key|}}
     <div class="fate-card-actor-container">
-      {{> "systems/ambersteel/templates/item/fate-card/fate-card.hbs"
-        isEditable=../isEditable 
-        isSendable=../isSendable 
-        isOwner=../isOwner
-        isGM=../isGM
-        item=card 
-      }}
+      {{> "systems/ambersteel/templates/item/fate-card/fate-card.hbs" viewModel=cardViewModel }}
     </div>
     {{/each}}
-    {{#times actor.data.data.fateSystem.remainingSlots}}
+    {{#times viewModel.remainingSlots}}
       <div class="fate-card-actor-container">
         <div class="fate-card">
-          {{> buttonAdd target=../actor creationType="fate-card" withDialog=true fill=true cssClass="font-size-xxl" }}
+          {{> buttonAdd target=../viewModel.actor creationType="fate-card" withDialog=true fill=true cssClass="font-size-xxl" }}
         </div>
       </div>
     {{/times}}
