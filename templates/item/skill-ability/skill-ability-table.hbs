@@ -41,6 +41,7 @@ viewModel: {SkillAbilityTableViewModel}
           {{> "systems/ambersteel/templates/item/skill-ability/skill-ability-chat-message.hbs" viewModel=abilityViewModel }}
         {{else}}
           {{> "systems/ambersteel/templates/item/skill-ability/skill-ability-list-item.hbs" viewModel=abilityViewModel }}
+        {{/if}}
       </li>
     {{/each}}
     {{#if viewModel.isEditable}}
