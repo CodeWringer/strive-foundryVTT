@@ -103,7 +103,7 @@ export class AmbersteelActorSheet extends ActorSheet {
 
     // Prepare view model. 
     this._viewModel = this.subType.getViewModel(context);
-    const viewState = this._getViewState(this.item.id);
+    const viewState = this._getViewState(this.actor.id);
     if (viewState !== undefined) {
       this._viewModel.applyViewState(viewState);
     }
