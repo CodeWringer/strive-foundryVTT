@@ -1,4 +1,4 @@
-import ViewModel from "../../module/components/viewmodel.mjs";
+import ViewModel from "../module/components/viewmodel.mjs";
 
 export default class SheetViewModel extends ViewModel {
   /**

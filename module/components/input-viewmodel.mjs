@@ -3,6 +3,17 @@ import { setNestedPropertyValue, getNestedPropertyValue } from "../utils/propert
 import { getElementValue } from "../utils/sheet-utility.mjs";
 
 /**
+ * Constant that defines the css class to look for when identifying input elements for editing. 
+ * @constant
+ */
+export const SELECTOR_EDIT = "custom-system-edit";
+/**
+ * Constant that defines the css class to look for when identifying input elements for display. 
+ * @constant
+ */
+export const SELECTOR_READ = "custom-system-read-only";
+
+/**
  * --- Inherited from ViewModel
  * 
  * @property {String} id Optional. Id used for the HTML element's id and name attributes. 
@@ -18,19 +29,6 @@ import { getElementValue } from "../utils/sheet-utility.mjs";
  * For example, could be an instance of {ActorSheet} or {ItemSheet}. 
  */
 export default class InputViewModel extends ViewModel {
-  /**
-   * Constant that defines the css class to look for when identifying edit input elements. 
-   * @static
-   * @readonly
-   */
-  static SELECTOR_EDIT = "custom-system-edit";
-  /**
-   * Constant that defines the css class to look for when identifying read-only input elements. 
-   * @static
-   * @readonly
-   */
-  static SELECTOR_READ = "custom-system-read-only";
-
   /**
    * @type {Boolean}
    * @private
@@ -94,10 +92,10 @@ export default class InputViewModel extends ViewModel {
 
   /** @override */
   activateListeners(html, isOwner, isEditable) {
-    this._element = html.find(`.${InputViewModel.SELECTOR_EDIT}#${this.id}`);
+    this._element = html.find(`.${SELECTOR_EDIT}#${this.id}`);
     
     if (this._element === undefined || this._element === null) {
-      this._element = html.find(`.${InputViewModel.SELECTOR_READ}#${this.id}`);
+      this._element = html.find(`.${SELECTOR_READ}#${this.id}`);
     }
     
     if (this._element === undefined || this._element === null) {

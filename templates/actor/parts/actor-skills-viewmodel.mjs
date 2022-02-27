@@ -1,7 +1,6 @@
-import ViewModel from "../../module/components/viewmodel.mjs";
-import { TEMPLATES } from "../../templatePreloader.mjs";
+import { TEMPLATES } from "../../../module/templatePreloader.mjs";
+import SheetViewModel from "../../sheet-viewmodel.mjs";
 import SkillTableViewModel from "../components/component-skill-table-viewmodel.mjs";
-import SheetViewModel from "../sheet-viewmodel.mjs";
 
 export default class ActorSkillsViewModel extends SheetViewModel {
   /** @override */

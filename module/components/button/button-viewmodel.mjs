@@ -2,6 +2,12 @@ import { TEMPLATES } from "../../templatePreloader.mjs";
 import ViewModel from "../viewmodel.mjs";
 
 /**
+ * Constant that defines the css class to look for when identifying button elements. 
+ * @constant
+ */
+export const SELECTOR_BUTTON = "custom-system-button";
+
+/**
  * --- Inherited from ViewModel
  * 
  * @property {String} id Optional. Id used for the HTML element's id and name attributes. 
@@ -16,13 +22,6 @@ import ViewModel from "../viewmodel.mjs";
  */
 export default class ButtonViewModel extends ViewModel {
   static get TEMPLATE() { return TEMPLATES.COMPONENT_BUTTON; }
-
-  /**
-   * Constant that defines the css class to look for when identifying button elements. 
-   * @static
-   * @readonly
-   */
-  static SELECTOR_BUTTON = "custom-system-button";
 
   /**
    * @type {JQuery | HTMLElement}

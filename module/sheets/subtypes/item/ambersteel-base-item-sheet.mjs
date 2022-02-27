@@ -1,3 +1,4 @@
+import ItemItemSheetViewModel from "../../../../templates/item/item/item-item-sheet-viewmodel.mjs";
 import { TEMPLATES } from "../../../templatePreloader.mjs";
 
 export default class AmbersteelBaseItemSheet {
@@ -62,15 +63,6 @@ export default class AmbersteelBaseItemSheet {
    * @virtual
    */
   prepareDerivedData(context) {}
-
-  /**
-   * Registers events on elements of the given DOM. 
-   * @param html {Object} DOM of the sheet for which to register listeners. 
-   * @param isOwner {Boolean} If true, registers events that require owner permission. 
-   * @param isEditable {Boolean} If true, registers events that require editing permission. 
-   * @virtual
-   */
-  activateListeners(html, isOwner, isEditable) {}
 
   getViewModel(context) {
     return new ItemItemSheetViewModel({

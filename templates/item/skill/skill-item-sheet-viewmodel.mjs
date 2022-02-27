@@ -1,5 +1,5 @@
-import ViewModel from "../../module/components/viewmodel.mjs";
-import SheetViewModel from "../sheet-viewmodel.mjs";
+import { TEMPLATES } from "../../../module/templatePreloader.mjs";
+import SheetViewModel from "../../sheet-viewmodel.mjs";
 import SkillAbilityTableViewModel from "../skill-ability/skill-ability-table-viewmodel.mjs";
 
 export default class SkillItemSheetViewModel extends SheetViewModel {

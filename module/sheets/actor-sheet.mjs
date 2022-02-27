@@ -1,6 +1,7 @@
 import AmbersteelNpcActorSheet from "./subtypes/actor/ambersteel-npc-actor-sheet.mjs";
 import AmbersteelPcActorSheet from "./subtypes/actor/ambersteel-pc-actor-sheet.mjs";
 import * as SheetUtil from "../utils/sheet-utility.mjs";
+import ViewModelCollection from "../utils/viewmodel-collection.mjs";
 
 export class AmbersteelActorSheet extends ActorSheet {
   /**
@@ -79,6 +80,13 @@ export class AmbersteelActorSheet extends ActorSheet {
    */
   get viewModel() { return this._viewModel; }
 
+  /**
+   * @private
+   * @todo Remove and properly integrate inputs and buttons into the "new" view model system. 
+   * @type {ViewModelCollection}
+   */
+  _inputsAndButtons = undefined;
+
   /** 
    * Returns an object that represents sheet and enriched actor data. 
    * 
@@ -94,8 +102,9 @@ export class AmbersteelActorSheet extends ActorSheet {
     SheetUtil.enrichData(context);
 
     // Prepare view model. 
-    this.viewModel = this.subType.getViewModel(context);
-    this.viewModel.applyViewState(this._getViewState(this.actor.id));
+    this._viewModel = this.subType.getViewModel(context);
+    this._viewModel.applyViewState(this._getViewState(this.actor.id));
+    this._inputsAndButtons = new ViewModelCollection();
 
     this.subType.prepareDerivedData(context);
 
@@ -137,6 +146,8 @@ export class AmbersteelActorSheet extends ActorSheet {
 
     // Activate view model bound event listeners. 
     this.viewModel.activateListeners(html, isOwner, isEditable);
+    this._inputsAndButtons.activateListeners(html, isOwner, isEditable);
+    this._inputsAndButtons.dispose();
 
     // -------------------------------------------------------------
     if (!isOwner) return;

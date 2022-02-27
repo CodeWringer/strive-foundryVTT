@@ -1,4 +1,4 @@
-import ViewModel from "../../module/components/viewmodel.mjs";
+import { TEMPLATES } from "../../../module/templatePreloader.mjs";
 import FateCardViewModel from "./fate-card-viewmodel.mjs";
 
 export default class FateCardItemSheetViewModel extends FateCardViewModel {

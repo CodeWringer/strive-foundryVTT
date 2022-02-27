@@ -1,4 +1,4 @@
-import ViewModel from "../../module/components/viewmodel.mjs";
+import { TEMPLATES } from "../../../module/templatePreloader.mjs";
 import IllnessViewModel from "./illness-viewmodel.mjs";
 
 export default class IllnessListItemViewModel extends IllnessViewModel {

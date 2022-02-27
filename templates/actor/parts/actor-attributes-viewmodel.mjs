@@ -1,7 +1,6 @@
-import { TEMPLATES } from "../../templatePreloader.mjs";
-import ViewModel from "../../module/components/viewmodel.mjs";
-import SheetViewModel from "../sheet-viewmodel.mjs";
 import AttributeTableViewModel from "../components/component-attribute-table-viewmodel.mjs";
+import { TEMPLATES } from "../../../module/templatePreloader.mjs";
+import SheetViewModel from "../../sheet-viewmodel.mjs";
 
 export default class ActorAttributesViewModel extends SheetViewModel {
   /** @override */

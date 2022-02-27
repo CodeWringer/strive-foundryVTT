@@ -1,4 +1,4 @@
-import ViewModel from "../../module/components/viewmodel.mjs";
+import { TEMPLATES } from "../../../module/templatePreloader.mjs";
 import ItemViewModel from "./item-viewmodel.mjs";
 
 export default class ItemItemSheetViewModel extends ItemViewModel {

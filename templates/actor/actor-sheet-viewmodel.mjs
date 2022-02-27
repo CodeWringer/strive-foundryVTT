@@ -1,5 +1,5 @@
 import ViewModel from "../../module/components/viewmodel.mjs";
-import { TEMPLATES } from "../../templatePreloader.mjs";
+import { TEMPLATES } from "../../module/templatePreloader.mjs";
 import GmNotesViewModel from "../gm-notes-viewmodel.mjs";
 import SheetViewModel from "../sheet-viewmodel.mjs";
 import ActorAssetsViewModel from "./parts/actor-assets-viewmodel.mjs";

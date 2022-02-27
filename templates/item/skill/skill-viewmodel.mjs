@@ -1,5 +1,4 @@
-import ViewModel from "../../module/components/viewmodel.mjs";
-import SheetViewModel from "../sheet-viewmodel.mjs";
+import SheetViewModel from "../../sheet-viewmodel.mjs";
 
 export default class SkillViewModel extends SheetViewModel {
   /**

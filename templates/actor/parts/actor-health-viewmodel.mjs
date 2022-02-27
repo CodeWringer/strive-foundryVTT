@@ -1,8 +1,7 @@
+import { TEMPLATES } from "../../../module/templatePreloader.mjs";
 import IllnessViewModel from "../../item/illness/illness-viewmodel.mjs";
 import InjuryViewModel from "../../item/injury/injury-viewmodel.mjs";
-import ViewModel from "../../module/components/viewmodel.mjs";
-import { TEMPLATES } from "../../templatePreloader.mjs";
-import SheetViewModel from "../sheet-viewmodel.mjs";
+import SheetViewModel from "../../sheet-viewmodel.mjs";
 
 export default class ActorHealthViewModel extends SheetViewModel {
   /** @override */

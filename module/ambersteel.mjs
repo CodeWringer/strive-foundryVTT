@@ -13,10 +13,13 @@ import AdvancementRequirements from "./dto/advancement-requirement.mjs";
 import { TEMPLATES } from "./templatePreloader.mjs";
 import { createUUID } from './utils/uuid-utility.mjs';
 import ChoiceOption from "./dto/choice-option.mjs";
-import ViewModelCollection from './utils/viewmodel-collection.mjs';
 // Import logging classes. 
 import { BaseLoggingStrategy, LogLevels } from "./logging/base-logging-strategy.mjs";
 import { ConsoleLoggingStrategy } from "./logging/console-logging-strategy.mjs";
+// Import view models. 
+import './components/viewmodel.mjs';
+import '../templates/sheet-viewmodel.mjs';
+import ViewModelCollection from './utils/viewmodel-collection.mjs';
 // Import components. 
 import './components/input-textfield/input-textfield-viewmodel.mjs';
 import './components/input-dropdown/input-dropdown-viewmodel.mjs';
@@ -33,7 +36,6 @@ import './components/button-send-to-chat/button-send-to-chat-viewmodel.mjs';
 import './components/button-toggle-visibility/button-toggle-visibility-viewmodel.mjs';
 import './components/button-take-item/button-take-item-viewmodel.mjs';
 // Import ui view models. 
-import '../templates/sheet-viewmodel.mjs';
 import '../templates/gm-notes-viewmodel.mjs';
 import '../templates/actor/actor-sheet-viewmodel.mjs';
 import '../templates/actor/components/component-attribute-table-viewmodel.mjs';

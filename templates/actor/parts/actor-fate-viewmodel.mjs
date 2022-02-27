@@ -1,7 +1,6 @@
-import { TEMPLATES } from "../../templatePreloader.mjs";
-import ViewModel from "../../module/components/viewmodel.mjs";
-import SheetViewModel from "../sheet-viewmodel.mjs";
 import FateCardViewModel from "../../item/fate-card/fate-card-viewmodel.mjs";
+import { TEMPLATES } from "../../../module/templatePreloader.mjs";
+import SheetViewModel from "../../sheet-viewmodel.mjs";
 
 export default class ActorFateViewModel extends SheetViewModel {
   /** @override */
