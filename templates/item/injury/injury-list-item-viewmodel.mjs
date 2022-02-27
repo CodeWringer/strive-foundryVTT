@@ -1,7 +1,7 @@
 import { TEMPLATES } from "../../../module/templatePreloader.mjs";
-import SheetViewModel from "../../sheet-viewmodel.mjs";
+import InjuryViewModel from "./injury-viewmodel.mjs";
 
-export default class InjuryListItemViewModel extends SheetViewModel {
+export default class InjuryListItemViewModel extends InjuryViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.INJURY_LIST_ITEM; }
 
