@@ -55,8 +55,8 @@ export default class AmbersteelSkillItem extends AmbersteelBaseItem {
       viewModel: new SkillChatMessageViewModel({
         isEditable: false,
         isSendable: false,
-        isOwner: false,
-        isGM: false,
+        isOwner: this.parent.owner,
+        isGM: game.user.isGM,
         item: this.parent,
         actor: this.parent.parent,
         visGroupId: createUUID(),
