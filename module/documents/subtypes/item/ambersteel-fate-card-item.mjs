@@ -1,6 +1,6 @@
 import AmbersteelBaseItem from "./ambersteel-base-item.mjs";
 import { TEMPLATES } from "../../../templatePreloader.mjs";
-import FateCardItemSheetViewModel from "../../../../templates/item/fate-card/fate-card-item-sheet-viewmodel.mjs";
+import FateCardViewModel from "../../../../templates/item/fate-card/fate-card-viewmodel.mjs";
 
 export default class AmbersteelFateCardItem extends AmbersteelBaseItem {
   /**
@@ -31,7 +31,7 @@ export default class AmbersteelFateCardItem extends AmbersteelBaseItem {
   async getChatData() {
     const messageBase = super.getChatData();
     const renderedContent = await renderTemplate(this.chatMessageTemplate, {
-      viewModel: new FateCardItemSheetViewModel({
+      viewModel: new FateCardViewModel({
         isEditable: false,
         isSendable: false,
         isOwner: this.parent.owner,
