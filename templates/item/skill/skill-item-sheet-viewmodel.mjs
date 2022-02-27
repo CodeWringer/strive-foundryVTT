@@ -37,6 +37,11 @@ export default class SkillItemSheetViewModel extends SkillViewModel {
     // Child view models. 
     const thiz = this;
 
-    this.skillAbilityTableViewModel = new SkillAbilityTableViewModel({ ...args, id: thiz.skillAbilityTableId, parent: thiz });
+    this.skillAbilityTableViewModel = new SkillAbilityTableViewModel({
+      ...args,
+      id: thiz.skillAbilityTableId,
+      parent: thiz,
+      skillAbilitiesInitiallyVisible: true,
+    });
   }
 }

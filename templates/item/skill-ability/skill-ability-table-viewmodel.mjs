@@ -8,28 +8,38 @@ export default class SkillAbilityTableViewModel extends SheetViewModel {
 
   /**
    * @type {Item}
+   * @readonly
    */
   item = undefined;
-
-  _skillAbilitiesInitiallyVisible = false
-  get skillAbilitiesInitiallyVisible() { return this._skillAbilitiesInitiallyVisible; }
-  set skillAbilitiesInitiallyVisible(value) { this._skillAbilitiesInitiallyVisible = value; }
   
   /**
    * @type {Boolean}
+   * @readonly
    */
-  _oneColumn = false;
-  get oneColumn() { return this._oneColumn; }
-  set oneColumn(value) { this._oneColumn = value; }
+  skillAbilitiesInitiallyVisible = false
+  
+  /**
+   * @type {Boolean}
+   * @readonly
+   */
+  oneColumn = false;
   
   /**
    * @type {String}
+   * @readonly
    */
-  _visGroupId = undefined;
-  get visGroupId() { return this._visGroupId; }
-  set visGroupId(value) { this._visGroupId = value; }
-
+  visGroupId = undefined;
+  
+  /**
+   * @type {Array<ChoiceOption>}
+   * @readonly
+   */
   get attackTypeOptions() { return game.ambersteel.getAttackTypeOptions(); }
+
+  /**
+   * @type {Array<ChoiceOption>}
+   * @readonly
+   */
   get damageTypeOptions() { return game.ambersteel.getDamageTypeOptions(); }
 
   /**
@@ -37,9 +47,10 @@ export default class SkillAbilityTableViewModel extends SheetViewModel {
    * @readonly
    */
   abilities = [];
-
+  
   /**
    * @type {Actor | undefined}
+   * @readonly
    */
   actor = undefined;
 
@@ -58,15 +69,17 @@ export default class SkillAbilityTableViewModel extends SheetViewModel {
    * @param {Boolean} oneColumn
    * @param {String} visGroupId
    * @param {Actor | undefined} actor
+   * @param {Boolean | undefined} skillAbilitiesInitiallyVisible
    */
   constructor(args = {}) {
     super(args);
 
     // Own properties.
     this.item = args.item;
-    this._oneColumn = args.oneColumn;
-    this._visGroupId = args.visGroupId;
+    this.oneColumn = args.oneColumn;
+    this.visGroupId = args.visGroupId;
     this.actor = args.actor;
+    this.skillAbilitiesInitiallyVisible = args.skillAbilitiesInitiallyVisible ?? false;
 
     // Child view models. 
     const thiz = this;

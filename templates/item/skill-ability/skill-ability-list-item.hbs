@@ -27,7 +27,7 @@ viewModel: {SkillAbilityListItemViewModel}
       {{> inputLabel text="ambersteel.labels.skillAbilityRequirement"}}
     </span>
     <span class="width-md">
-      {{> inputNumberSpinner isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath=(concat "data.data.abilities[" viewmodel.index "].requiredLevel") min=0 contextTemplate="skill-ability-list-item" }}
+      {{> inputNumberSpinner isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath=(concat "data.data.abilities[" viewModel.index "].requiredLevel") min=0 contextTemplate="skill-ability-list-item" }}
     </span>
   </div>
   {{!-- Obstacle --}}
@@ -36,7 +36,7 @@ viewModel: {SkillAbilityListItemViewModel}
       {{> inputLabel text="ambersteel.roll.obstacleAbbreviation"}}
     </span>
     <span class="width-xxl">
-      {{> inputTextField isEditable=viewModel.isEditable propertyOwner=viewModel.Item propertyPath=(concat "data.data.abilities[" viewmodel.index "].obstacle") contextTemplate="skill-ability-list-item" }}
+      {{> inputTextField isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath=(concat "data.data.abilities[" viewModel.index "].obstacle") contextTemplate="skill-ability-list-item" }}
     </span>
   </div>
 </div>
@@ -47,21 +47,21 @@ viewModel: {SkillAbilityListItemViewModel}
     {{> inputLabel text="ambersteel.labels.distance"}}
   </div>
   <span class="width-md">
-    {{> inputNumberSpinner isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath=(concat "data.data.abilities[" viewmodel.index "].distance") min=0 contextTemplate="skill-ability-list-item" }}
+    {{> inputNumberSpinner isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath=(concat "data.data.abilities[" viewModel.index "].distance") min=0 contextTemplate="skill-ability-list-item" }}
   </span>
   {{!-- AP cost --}}
   <div class="width-min-xl">
     {{> inputLabel text="ambersteel.labels.apCost"}}
   </div>
   <span class="width-md">
-    {{> inputNumberSpinner isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath=(concat "data.data.abilities[" viewmodel.index "].apCost") min=0 contextTemplate="skill-ability-list-item" }}
+    {{> inputNumberSpinner isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath=(concat "data.data.abilities[" viewModel.index "].apCost") min=0 contextTemplate="skill-ability-list-item" }}
   </span>
   {{!-- Attack type --}}
   <div class="width-min-xl">
     {{> inputLabel text="ambersteel.labels.attackType"}}
   </div>
   <span class="width-min-lg">
-    {{> inputDropDown isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath=(concat "data.data.abilities[" viewmodel.index "].attackType") options=viewModel.attackTypeOptions contextTemplate="skill-ability-list-item" }}
+    {{> inputDropDown isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath=(concat "data.data.abilities[" viewModel.index "].attackType") options=viewModel.attackTypeOptions contextTemplate="skill-ability-list-item" }}
   </span>
 </div>
 {{!-- Row 4 --}}
@@ -72,20 +72,20 @@ viewModel: {SkillAbilityListItemViewModel}
   </div>
   {{> buttonRoll 
       target=viewModel.item 
-      propertyPath=(concat "data.data.abilities[" viewmodel.index "].damageFormula") 
+      propertyPath=(concat "data.data.abilities[" viewModel.index "].damageFormula") 
       chatTitle=viewModel.skillAbility.name
       rollType="generic" 
       actor=viewModel.actor 
   }}
   <span class="width-min-xxl flex-grow">
-    {{> inputTextField isEditable=viewModel.isEditable propertyOwner=viewModel.Item propertyPath=(concat "data.data.abilities[" viewmodel.index "].damageFormula") contextTemplate="skill-ability-list-item" }}
+    {{> inputTextField isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath=(concat "data.data.abilities[" viewModel.index "].damageFormula") contextTemplate="skill-ability-list-item" }}
   </span>
   {{!-- Damage type --}}
   <div class="width-min-xxl">
     {{> inputLabel text="ambersteel.labels.damageType"}}
   </div>
   <span class="width-xxl">
-    {{> inputDropDown isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath=(concat "data.data.abilities[" viewmodel.index "].damageType") options=viewModel.damageTypeOptions contextTemplate="skill-ability-list-item" }}
+    {{> inputDropDown isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath=(concat "data.data.abilities[" viewModel.index "].damageType") options=viewModel.damageTypeOptions contextTemplate="skill-ability-list-item" }}
   </span>
 </div>
 {{!-- Row 5 --}}
@@ -95,11 +95,11 @@ viewModel: {SkillAbilityListItemViewModel}
     {{> inputLabel text="ambersteel.labels.skillAbilityCondition"}}
   </div>
   <div class="flex-grow">
-    {{> inputTextField isEditable=viewModel.isEditable propertyOwner=viewModel.Item propertyPath=(concat "data.data.abilities[" viewmodel.index "].condition") contextTemplate="skill-ability-list-item" }}
+    {{> inputTextField isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath=(concat "data.data.abilities[" viewModel.index "].condition") contextTemplate="skill-ability-list-item" }}
   </div>
 </div>
 {{!-- Row 6 --}}
 {{!-- Description --}}
 <div class="flex flex-row">
-  {{> inputTextarea isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath=(concat "data.data.abilities[" viewmodel.index "].description") placeholder="ambersteel.labels.description" allowResize=true cssClass="fill" contextTemplate="skill-ability-list-item" }}
+  {{> inputTextarea isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath=(concat "data.data.abilities[" viewModel.index "].description") placeholder="ambersteel.labels.description" allowResize=true cssClass="fill" contextTemplate="skill-ability-list-item" }}
 </div>
