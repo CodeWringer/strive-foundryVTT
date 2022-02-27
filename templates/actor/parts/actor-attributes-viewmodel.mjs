@@ -13,13 +13,13 @@ export default class ActorAttributesViewModel extends SheetViewModel {
   actor = undefined;
   
   attributesPhysicalViewModel = undefined;
-  get attributesPhysicalViewModelId() { return "attributes-physical"; }
+  get attributesPhysicalViewModelId() { return "child-attributes-physical-viewmodel"; }
 
   attributesMentalViewModel = undefined;
-  get attributesMentalViewModelId() { return "attributes-mental"; }
+  get attributesMentalViewModelId() { return "child-attributes-mental-viewmodel"; }
 
   attributesSocialViewModel = undefined;
-  get attributesSocialViewModelId() { return "attributes-social"; }
+  get attributesSocialViewModelId() { return "child-attributes-social-viewmodel"; }
 
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 

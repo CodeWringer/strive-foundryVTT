@@ -9,10 +9,10 @@ export default class ActorBeliefsFateViewModel extends SheetViewModel {
   static get TEMPLATE() { return TEMPLATES.ACTOR_BELIEFS_FATE; }
 
   beliefsViewModel = undefined;
-  get beliefsViewModelId() { return "beliefsViewModel"; }
+  get beliefsViewModelId() { return "child-beliefs-view-model"; }
 
   fateViewModel = undefined;
-  get fateViewModelId() { return "fateViewModel"; }
+  get fateViewModelId() { return "child-fate-view-model"; }
 
   /**
    * @type {Actor}

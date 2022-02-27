@@ -23,7 +23,7 @@ export default class ActorSkillsViewModel extends SheetViewModel {
    * @type {String}
    * @readonly
    */
-  get learningSkillsViewModelId() { return "learning-skills"; }
+  get learningSkillsViewModelId() { return "child-learning-skills-viewmodel"; }
   
   /**
    * @type {SkillTableViewModel}
@@ -33,7 +33,7 @@ export default class ActorSkillsViewModel extends SheetViewModel {
    * @type {String}
    * @readonly
    */
-  get skillsViewModelId() { return "skills"; }
+  get skillsViewModelId() { return "child-skills-viewmodel"; }
 
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 

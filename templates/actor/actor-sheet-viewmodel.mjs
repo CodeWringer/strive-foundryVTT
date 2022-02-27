@@ -27,28 +27,28 @@ export default class ActorSheetViewModel extends SheetViewModel {
   get isPC() { return this.actor.type === "pc"; }
 
   personalsViewModel = undefined;
-  get personalsId() { return "personals"; }
+  get personalsId() { return "child-personals-viewmodel"; }
   
   attributesViewModel = undefined;
-  get attributesId() { return "attributes"; }
+  get attributesId() { return "child-attributes-viewmodel"; }
   
   skillsViewModel = undefined;
-  get skillsId() { return "skill"; }
+  get skillsId() { return "child-skill-viewmodel"; }
   
   beliefsFateViewModel = undefined;
-  get beliefsFateId() { return "beliefs-fate"; }
+  get beliefsFateId() { return "child-beliefs-fate-viewmodel"; }
   
   healthViewModel = undefined;
-  get healthId() { return "health"; }
+  get healthId() { return "child-health-viewmodel"; }
   
   assetsViewModel = undefined;
-  get assetsId() { return "assets"; }
+  get assetsId() { return "child-assets-viewmodel"; }
   
   biographyViewModel = undefined;
-  get biographyId() { return "biography"; }
+  get biographyId() { return "child-biography-viewmodel"; }
   
   gmNotesViewModel = undefined;
-  get gmNotesId() { return "gm-notes"; }
+  get gmNotesId() { return "child-gm-notes-viewmodel"; }
 
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
