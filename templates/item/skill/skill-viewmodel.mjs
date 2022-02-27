@@ -1,10 +1,18 @@
+import { createUUID } from "../../../module/utils/uuid-utility.mjs";
 import SheetViewModel from "../../sheet-viewmodel.mjs";
 
 export default class SkillViewModel extends SheetViewModel {
   /**
    * @type {Item}
+   * @readonly
    */
   item = undefined;
+
+  /**
+   * @type {String}
+   * @readonly
+   */
+  visGroupId = undefined;
 
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
@@ -18,11 +26,13 @@ export default class SkillViewModel extends SheetViewModel {
    * @param {Boolean} isGM If true, the current user is a GM. 
    * 
    * @param {Item} item
+   * @param {String | undefined} visGroupId
    */
   constructor(args = {}) {
     super(args);
 
     // Own properties.
     this.item = args.item;
+    this.visGroupId = args.visGroupId ?? createUUID();
   }
 }

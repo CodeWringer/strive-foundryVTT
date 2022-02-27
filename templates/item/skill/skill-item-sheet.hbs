@@ -46,6 +46,6 @@ viewModel: {SkillItemSheetViewModel}
   </div>
   {{!-- Skill Abilites --}}
   {{#if viewModel.isSkillAbilityListVisible }}
-    {{> "systems/ambersteel/templates/item/skill-ability/skill-ability-table.hbs" viewModel=skillAbilityTableViewModel }}
+    {{> "systems/ambersteel/templates/item/skill-ability/skill-ability-table.hbs" viewModel=viewModel.skillAbilityTableViewModel }}
   {{/if}}
 </form>

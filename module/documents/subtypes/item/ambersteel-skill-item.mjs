@@ -2,6 +2,7 @@ import AmbersteelBaseItem from "./ambersteel-base-item.mjs";
 import SkillAbility from "../../../dto/skill-ability.mjs";
 import { TEMPLATES } from "../../../templatePreloader.mjs";
 import { createUUID } from "../../../utils/uuid-utility.mjs";
+import SkillChatMessageViewModel from "../../../../templates/item/skill/skill-chat-message-viewmodel.mjs";
 
 export default class AmbersteelSkillItem extends AmbersteelBaseItem {
   /**
@@ -51,17 +52,15 @@ export default class AmbersteelSkillItem extends AmbersteelBaseItem {
   async getChatData() {
     const messageBase = super.getChatData();
     const renderedContent = await renderTemplate(this.chatMessageTemplate, {
-      isEditable: false,
-      isSendable: false,
-      item: {
-        id: this.parent.id,
-        name: this.parent.name,
-        img: this.parent.img,
-        data: {
-          data: this.parent.data.data
-        }
-      },
-      visGroupId: createUUID()
+      viewModel: new SkillChatMessageViewModel({
+        isEditable: false,
+        isSendable: false,
+        isOwner: false,
+        isGM: false,
+        item: this.parent,
+        actor: this.parent.parent,
+        visGroupId: createUUID(),
+      })
     });
 
     return {

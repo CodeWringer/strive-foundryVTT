@@ -18,6 +18,7 @@ export default class SkillListItemViewModel extends SkillViewModel {
    * 
    * @param {Item} item
    * @param {Actor | undefined} actor If not undefined, this is the actor that owns the item. 
+   * @param {String | undefined} visGroupId
    */
   constructor(args = {}) {
     super(args);

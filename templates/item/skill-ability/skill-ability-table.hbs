@@ -1,34 +1,4 @@
 {{!-- Required context:
-isEditable: {Boolean}
-isSendable: {Boolean}
-item: {Item} = {
-  data: {Object} = {
-    id: {String}
-    name: {String}
-    img: {String}
-    data: {Object} = {
-      relatedAttribute: {String}
-      value: {Number}
-      successes: {Number}
-      failures: {Number}
-      abilities: {[SkillAbility]} = {
-        name: {String}
-        description: {String}
-        requiredLevel: {Number}
-        condition: {String}
-        img: {String}
-        apCost: {Number|undefined}
-        distance: {Number|undefined}
-        damageFormula: {String}
-        damageType: {CONFIG.ambersteel.damageTypes|undefined}
-        isCustom: {Boolean}
-      }
-      category: {Number}
-    }
-  }
-}
-skillAbilitiesInitiallyVisible: {Boolean}
-visGroupId: {String}
 viewModel: {SkillAbilityTableViewModel}
 --}}
 <section class="skill-ability-list">
