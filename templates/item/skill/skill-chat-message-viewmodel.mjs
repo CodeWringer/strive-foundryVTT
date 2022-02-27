@@ -35,6 +35,5 @@ export default class SkillChatMessageViewModel extends SkillViewModel {
     const thiz = this;
 
     this.skillAbilityTableViewModel = new SkillAbilityTableViewModel({ ...args, id: thiz.skillAbilityTableId, parent: thiz });
-    this.children.push(this.skillAbilityTableViewModel);
   }
 }

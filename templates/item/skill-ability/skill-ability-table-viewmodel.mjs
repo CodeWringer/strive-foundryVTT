@@ -80,7 +80,6 @@ export default class SkillAbilityTableViewModel extends SheetViewModel {
         skillAbility: skillAbility, 
         parent: thiz,
       });
-      this.children.push(vm);
       this.abilities.push(vm);
     }
   }
