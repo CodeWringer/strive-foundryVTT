@@ -152,7 +152,6 @@ export class AmbersteelActorSheet extends ActorSheet {
     // Activate view model bound event listeners. 
     this.viewModel.activateListeners(html, isOwner, isEditable);
     this._inputsAndButtons.activateListeners(html, isOwner, isEditable);
-    this._inputsAndButtons.dispose();
 
     // -------------------------------------------------------------
     if (!isOwner) return;
@@ -181,8 +180,17 @@ export class AmbersteelActorSheet extends ActorSheet {
    * @see https://foundryvtt.com/api/FormApplication.html#close
    */
   async close() {
-    this._setViewState(this.actor.id);
-    this.viewModel.dispose();
+    if (this._viewModel !== undefined && this._viewModel !== null) {
+      this._setViewState(this._getViewStateId());
+      try {
+        this._viewModel.dispose();
+      } catch (e) {
+        game.ambersteel.logger.logWarn(e);
+      }
+    }
+    this._viewModel = null;
+
+    this._inputsAndButtons.dispose();
 
     return super.close();
   }
@@ -200,5 +208,13 @@ export class AmbersteelActorSheet extends ActorSheet {
     await skillItem.createSkillAbility();
 
     this.parent.render();
+  }
+
+  /**
+   * @returns {String}
+   * @private
+   */
+  _getViewStateId() {
+    return this.actor.id;
   }
 }

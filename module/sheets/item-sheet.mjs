@@ -157,10 +157,26 @@ export class AmbersteelItemSheet extends ItemSheet {
    * @see https://foundryvtt.com/api/FormApplication.html#close
    */
   async close() {
-    this._setViewState(this.item.id);
-    this.viewModel.dispose();
+    if (this._viewModel !== undefined && this._viewModel !== null) {
+      this._setViewState(this._getViewStateId());
+      try {
+        this._viewModel.dispose();
+      } catch (e) {
+        game.ambersteel.logger.logWarn(e);
+      }
+    }
+    this._viewModel = null;
+
     this._inputsAndButtons.dispose();
 
     return super.close();
+  }
+
+  /**
+   * @returns {String}
+   * @private
+   */
+  _getViewStateId() {
+    return this.item.id;
   }
 }

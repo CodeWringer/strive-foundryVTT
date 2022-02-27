@@ -1,6 +1,8 @@
 import { createUUID } from "../utils/uuid-utility.mjs";
 import * as PropertyUtil from "../utils/property-utility.mjs";
 
+export const DisposedAccessViolation = new Error("DisposedAccessViolation: The object has been disposed and its members can no longer be accessed");
+
 /**
  * @summary
  * Represents the base type for view models. 
@@ -141,8 +143,12 @@ export default class ViewModel {
       // Set property to null, thus 'hopefully' freeing its referenced value up for garbage collection. 
       this[propertyName] = null;
     }
-    // Ensure dispose cannot be called again. 
-    this.dispose = undefined;
+    // Ensure methods cannot be called again. 
+    this.dispose = () => { throw DisposedAccessViolation };
+    this.toViewState = () => { throw DisposedAccessViolation; };
+    this.applyViewState = () => { throw DisposedAccessViolation; };
+    this.isObject = () => { throw DisposedAccessViolation; };
+    this.activateListeners = () => { throw DisposedAccessViolation; };
   }
 
   /**
