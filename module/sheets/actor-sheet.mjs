@@ -104,6 +104,8 @@ export class AmbersteelActorSheet extends ActorSheet {
     // Prepare view model. 
     this._viewModel = this.subType.getViewModel(context);
     this._viewModel.applyViewState(this._getViewState(this.actor.id));
+    context.viewModel = this._viewModel;
+    
     this._inputsAndButtons = new ViewModelCollection();
 
     this.subType.prepareDerivedData(context);

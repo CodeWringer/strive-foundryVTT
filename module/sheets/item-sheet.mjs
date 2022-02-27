@@ -97,6 +97,8 @@ export class AmbersteelItemSheet extends ItemSheet {
     // Prepare view model. 
     this._viewModel = this.subType.getViewModel(context);
     this._viewModel.applyViewState(this._getViewState(this.item.id));
+    context.viewModel = this._viewModel;
+    
     this._inputsAndButtons = new ViewModelCollection();
 
     this.subType.prepareDerivedData(context);
