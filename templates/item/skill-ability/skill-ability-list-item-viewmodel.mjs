@@ -7,18 +7,27 @@ export default class SkillAbilityListItemViewModel extends SheetViewModel {
 
   /**
    * @type {Item}
+   * @readonly
    */
   item = undefined;
 
   /**
    * @type {SkillAbility}
+   * @readonly
    */
   skillAbility = undefined;
 
   /**
    * @type {Actor}
+   * @readonly
    */
   actor = undefined;
+
+  /**
+   * @type {Number}
+   * @readonly
+   */
+  index = -1;
 
   get attackTypeOptions() { return game.ambersteel.getAttackTypeOptions(); }
   get damageTypeOptions() { return game.ambersteel.getDamageTypeOptions(); }
@@ -37,6 +46,7 @@ export default class SkillAbilityListItemViewModel extends SheetViewModel {
    * @param {Item} item
    * @param {SkillAbility} skillAbility
    * @param {Actor} actor
+   * @param {Number} index
    */
   constructor(args = {}) {
     super(args);
@@ -45,5 +55,6 @@ export default class SkillAbilityListItemViewModel extends SheetViewModel {
     this.item = args.item;
     this.skillAbility = args.skillAbility;
     this.actor = args.actor;
+    this.index = args.index;
   }
 }

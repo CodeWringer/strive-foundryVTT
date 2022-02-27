@@ -79,6 +79,7 @@ export default class SkillAbilityTableViewModel extends SheetViewModel {
         id: `ability[${i}]`, 
         skillAbility: skillAbility, 
         parent: thiz,
+        index: i,
       });
       this.abilities.push(vm);
     }
