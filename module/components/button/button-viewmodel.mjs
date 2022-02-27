@@ -96,7 +96,7 @@ export default class ButtonViewModel extends ViewModel {
 
   /** @override */
   activateListeners(html, isOwner, isEditable) {
-    this._element = html.find(`.${ButtonViewModel.SELECTOR_BUTTON}#${this.id}`);
+    this._element = html.find(`.${SELECTOR_BUTTON}#${this.id}`);
     
     if (this._element === undefined || this._element === null) {
       throw new Error(`NullPointerException: Failed to get input element with id '${this.id}'`);
