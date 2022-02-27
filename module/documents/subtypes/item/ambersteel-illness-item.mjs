@@ -1,5 +1,6 @@
 import AmbersteelBaseItem from "./ambersteel-base-item.mjs";
 import { TEMPLATES } from "../../../templatePreloader.mjs";
+import IllnessChatMessageViewModel from "../../../../templates/item/illness/illness-chat-message-viewmodel.mjs";
 
 export default class AmbersteelIllnessItem extends AmbersteelBaseItem {
   /**
@@ -30,16 +31,13 @@ export default class AmbersteelIllnessItem extends AmbersteelBaseItem {
   async getChatData() {
     const messageBase = super.getChatData();
     const renderedContent = await renderTemplate(this.chatMessageTemplate, {
-      isEditable: false,
-      isSendable: false,
-      item: {
-        id: this.parent.id,
-        name: this.parent.name,
-        img: this.parent.img,
-        data: {
-          data: this.parent.data.data
-        }
-      }
+      viewModel: new IllnessChatMessageViewModel({
+        isEditable: false,
+        isSendable: false,
+        isOwner: this.parent.owner,
+        isGM: game.user.isGM,
+        item: this.parent,
+      })
     });
 
     return {
