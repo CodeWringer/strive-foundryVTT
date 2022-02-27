@@ -55,18 +55,18 @@ export default class SheetViewModel extends ViewModel {
    * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 
    * is expected to be associated with an actor sheet or item sheet or journal entry or chat message and so on.
    * 
-   * @param {Boolean} isEditable If true, the sheet is editable. 
-   * @param {Boolean} isSendable If true, the document represented by the sheet can be sent to chat. 
-   * @param {Boolean} isOwner If true, the current user is the owner of the represented document. 
-   * @param {Boolean} isGM If true, the current user is a GM. 
+   * @param {Boolean | undefined} isEditable If true, the sheet is editable. 
+   * @param {Boolean | undefined} isSendable If true, the document represented by the sheet can be sent to chat. 
+   * @param {Boolean | undefined} isOwner If true, the current user is the owner of the represented document. 
+   * @param {Boolean | undefined} isGM If true, the current user is a GM. 
    */
   constructor(args = {}) {
     super(args);
 
-    this._isEditable = args.isEditable;
-    this._isSendable = args.isSendable;
-    this._isOwner = args.isOwner;
-    this._isGM = args.isGM;
+    this._isEditable = args.isEditable ?? false;
+    this._isSendable = args.isSendable ?? false;
+    this._isOwner = args.isOwner ?? false;
+    this._isGM = args.isGM ?? false;
   }
 
   /** @override */

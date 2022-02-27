@@ -18,11 +18,11 @@ export function propertiesDefined(obj, props) {
  * whose value is null or undefined. 
  * @param {Object} obj The object whose properties will be validated. 
  * @param {Array<String>} props An array of properties whose value must not be null or undefined. 
- * @throws An error, if any of the properties fail to validate. 
+ * @throws {Error} ArgumentException - Thrown, if any of the properties fail to validate. 
  */
 export function validateOrThrow(obj, props) {
     for (const prop of props) {
         if (obj[prop] == undefined
-        || obj[prop] == null) throw `Required parameter '${prop}' is undefined!`;
+        || obj[prop] == null) throw new Error(`ArgumentException: Required parameter '${prop}' is undefined!`);
     }
 }

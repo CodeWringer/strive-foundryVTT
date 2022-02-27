@@ -1,4 +1,5 @@
 import { TEMPLATES } from "../../../module/templatePreloader.mjs";
+import { validateOrThrow } from "../../../module/utils/validation-utility.mjs";
 import ItemViewModel from "./item-viewmodel.mjs";
 
 export default class ItemChatMessageViewModel extends ItemViewModel {
@@ -29,20 +30,22 @@ export default class ItemChatMessageViewModel extends ItemViewModel {
    * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 
    * is expected to be associated with an actor sheet or item sheet or journal entry or chat message and so on.
    * 
-   * @param {Boolean} isEditable If true, the sheet is editable. 
-   * @param {Boolean} isSendable If true, the document represented by the sheet can be sent to chat. 
-   * @param {Boolean} isOwner If true, the current user is the owner of the represented document. 
-   * @param {Boolean} isGM If true, the current user is a GM. 
+   * @param {Boolean | undefined} isEditable If true, the sheet is editable. 
+   * @param {Boolean | undefined} isSendable If true, the document represented by the sheet can be sent to chat. 
+   * @param {Boolean | undefined} isOwner If true, the current user is the owner of the represented document. 
+   * @param {Boolean | undefined} isGM If true, the current user is a GM. 
    * 
    * @param {Item} item
    * 
-   * @param {Boolean} allowPickup
+   * @param {Boolean | undefined} allowPickup
    * @param {String} sourceType
    * @param {String} sourceId
    */
   constructor(args = {}) {
     super(args);
-    this.allowPickup = args.allowPickup;
+    validateOrThrow(args, ["sourceType", "sourceId"]);
+
+    this.allowPickup = args.allowPickup ?? false;
     this.sourceType = args.sourceType;
     this.sourceId = args.sourceId;
   }
