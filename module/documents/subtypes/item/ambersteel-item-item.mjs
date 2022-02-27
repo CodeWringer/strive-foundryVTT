@@ -1,5 +1,6 @@
 import AmbersteelBaseItem from "./ambersteel-base-item.mjs";
 import { TEMPLATES } from "../../../templatePreloader.mjs";
+import ItemChatMessageViewModel from "../../../../templates/item/item/item-chat-message-viewmodel.mjs";
 
 export default class AmbersteelItemItem extends AmbersteelBaseItem {
   /**
@@ -62,19 +63,17 @@ export default class AmbersteelItemItem extends AmbersteelBaseItem {
     const allowPickup = false; // TODO: The user must be able to select who gets to pick this item up. 
 
     const renderedContent = await renderTemplate(this.chatMessageTemplate, {
-      isEditable: false,
-      isSendable: false,
-      item: {
-        id: this.parent.id,
-        name: this.parent.name,
-        img: this.parent.img,
-        data: {
-          data: this.parent.data.data
-        }
-      },
-      sourceType: sourceType,
-      sourceId: sourceId,
-      allowPickup: allowPickup
+      viewModel: new ItemChatMessageViewModel({
+        isEditable: false,
+        isSendable: false,
+        isOwner: false,
+        isGM: false,
+        item: this.parent,
+        actor: this.parent.parent,
+        sourceType: sourceType,
+        sourceId: sourceId,
+        allowPickup: allowPickup
+      }),
     });
 
     return {
