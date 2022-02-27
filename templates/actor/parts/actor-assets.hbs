@@ -34,7 +34,7 @@ viewModel: {ActorAssetsViewModel}
   <ol class="unstyled-list alternating-rows">
     {{#each viewModel.itemViewModels as |vm key|}}
       <li class="ambersteel-list-row sheet-block">
-        {{> "systems/ambersteel/templates/item/item/item-list-item.hbs" vm }}
+        {{> "systems/ambersteel/templates/item/item/item-list-item.hbs" viewModel=vm }}
       </li>
     {{/each}}
     {{#if isEditable}}
