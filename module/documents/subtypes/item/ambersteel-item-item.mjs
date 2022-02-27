@@ -66,8 +66,8 @@ export default class AmbersteelItemItem extends AmbersteelBaseItem {
       viewModel: new ItemChatMessageViewModel({
         isEditable: false,
         isSendable: false,
-        isOwner: false,
-        isGM: false,
+        isOwner: this.parent.owner,
+        isGM: game.user.isGM,
         item: this.parent,
         actor: this.parent.parent,
         sourceType: sourceType,
