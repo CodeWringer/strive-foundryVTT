@@ -1,6 +1,7 @@
 import SkillAbilityTableViewModel from "../../item/skill-ability/skill-ability-table-viewmodel.mjs";
 import { TEMPLATES } from "../../../module/templatePreloader.mjs";
 import SheetViewModel from "../../sheet-viewmodel.mjs";
+import { createUUID } from "../../../module/utils/uuid-utility.mjs";
 
 export default class SkillTableViewModel extends SheetViewModel {
   /** @override */
@@ -33,10 +34,9 @@ export default class SkillTableViewModel extends SheetViewModel {
   get attributeOptions() { return game.ambersteel.getAttributeOptions(); }
 
   /**
-   * @type {SkillAbilityTableViewModel}
+   * @type {Map<String, SkillAbilityTableViewModel>}
    */
-  skillAbilityTableViewModel = undefined;
-  get skillAbilityTableViewModelId() { return "skill-abilities" };
+  skillAbilityTableViewModels = Object.create(null);
   
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
@@ -62,6 +62,17 @@ export default class SkillTableViewModel extends SheetViewModel {
     // Child view models. 
     const thiz = this;
 
-    this.skillAbilityTableViewModel = new SkillAbilityTableViewModel({ ...args, id: thiz.skillAbilityTableViewModelId, parent: thiz });
+    for (const skill of this.skills) {
+      const vm = new SkillAbilityTableViewModel({
+        ...args,
+        id: "skill-abilities",
+        parent: thiz,
+        item: skill,
+        _oneColumn: false,
+        _visGroupId: createUUID(),
+        actor: thiz.actor,
+      });
+      this.skillAbilityTableViewModels[skill.id] = vm;
+    }
   }
 }
