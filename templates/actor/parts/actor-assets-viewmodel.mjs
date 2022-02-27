@@ -1,4 +1,5 @@
 import { TEMPLATES } from "../../../module/templatePreloader.mjs";
+import ItemListItemViewModel from "../../item/item/item-list-item-viewmodel.mjs";
 import SheetViewModel from "../../sheet-viewmodel.mjs";
 
 export default class ActorAssetsViewModel extends SheetViewModel {
@@ -9,6 +10,11 @@ export default class ActorAssetsViewModel extends SheetViewModel {
    * @type {Actor}
    */
   actor = undefined;
+
+  /**
+   * @type {Object}
+   */
+  itemViewModels = Object.create(null);
   
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
@@ -28,5 +34,17 @@ export default class ActorAssetsViewModel extends SheetViewModel {
 
     // Own properties.
     this.actor = args.actor;
+
+    // Child view models.
+    const thiz = this;
+
+    for (const item of this.actor.propertyItems) {
+      this.itemViewModels[item.id] = new ItemListItemViewModel({
+        ...args,
+        id: item.id,
+        parent: thiz,
+        item: item,
+      });
+    }
   }
 }

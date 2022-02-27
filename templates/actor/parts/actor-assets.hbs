@@ -32,9 +32,9 @@ viewModel: {ActorAssetsViewModel}
   {{!-- Remote assets --}}
   <h2>{{localize "ambersteel.labels.assetsRemote"}}</h2>
   <ol class="unstyled-list alternating-rows">
-    {{#each actor.propertyItems as |propertyItem key|}}
+    {{#each viewModel.itemViewModels as |vm key|}}
       <li class="ambersteel-list-row sheet-block">
-        {{> "systems/ambersteel/templates/item/item/item-list-item.hbs" item=propertyItem itemId=propertyItem.id isEditable=../isEditable isSendable=../isSendable CONFIG=../CONFIG }}
+        {{> "systems/ambersteel/templates/item/item/item-list-item.hbs" vm }}
       </li>
     {{/each}}
     {{#if isEditable}}
