@@ -19,7 +19,7 @@ export default class SkillAbilityListItemViewModel extends SheetViewModel {
   skillAbility = undefined;
 
   /**
-   * @type {Actor}
+   * @type {Actor | undefined}
    * @readonly
    */
   actor = undefined;
@@ -46,12 +46,12 @@ export default class SkillAbilityListItemViewModel extends SheetViewModel {
    * 
    * @param {Item} item
    * @param {SkillAbility} skillAbility
-   * @param {Actor} actor
+   * @param {Actor | undefined} actor
    * @param {Number} index
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["item", "skillAbility", "actor", "index"]);
+    validateOrThrow(args, ["item", "skillAbility", "index"]);
 
     // Own properties.
     this.item = args.item;
