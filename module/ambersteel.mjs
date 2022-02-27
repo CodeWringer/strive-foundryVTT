@@ -383,30 +383,8 @@ Handlebars.registerHelper('arrayFrom', function(arrayString) {
   return result;
 });
 
-Handlebars.registerHelper('lookupValue', function(context, propertyPath, itemId) {
-  let propertyHolder = undefined;
-  if (context.item) {
-    propertyHolder = context.item;
-  } else if (context.actor) {
-    if (itemId) {
-      propertyHolder = context.actor.items.get(itemId);
-    } else {
-      propertyHolder = context.actor;
-    }
-  } else {
-    propertyHolder = context;
-  }
-  // Messy fix for context sometimes being a level deeper than it should. 
-  if (propertyPath.startsWith("data.data")) {
-    if (!hasProperty(propertyHolder, "data")) {
-      game.ambersteel.logger.logWarn(`[lookupValue] PropertyHolder doesn't have 'data' property!`, propertyHolder);
-      return undefined;
-    }
-    if (!hasProperty(propertyHolder.data, "data")) {
-      propertyPath = propertyPath.replace("data.data", "data");
-    }
-  }
-  return getNestedPropertyValue(propertyHolder, propertyPath);
+Handlebars.registerHelper('getValue', function(context, propertyPath) {
+  return getNestedPropertyValue(context, propertyPath);
 });
 
 Handlebars.registerHelper('isDefined', function() {
