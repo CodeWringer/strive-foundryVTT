@@ -76,11 +76,6 @@ export default class ViewModel {
   get id() { return this._id; }
 
   /**
-   * @type {ViewModel | undefined}
-   * @private
-   */
-  _parent = undefined;
-  /**
    * Parent ViewModel instance of this instance. 
    * 
    * If undefined, then this ViewModel instance may be regarded as a "root" level instance. A root level instance 
@@ -88,19 +83,14 @@ export default class ViewModel {
    * @type {ViewModel | undefined}
    * @readonly
    */
-  get parent() { return this._parent; }
+  parent = undefined;
 
-  /**
-   * @type {Array<ViewModel>}
-   * @private
-   */
-  _children = [];
   /**
    * An array of the child view models of this view model. 
    * @type {Array<ViewModel>}
    * @readonly
    */
-  get children() { return this._children; }
+  children = [];
 
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
@@ -110,10 +100,10 @@ export default class ViewModel {
    */
   constructor(args = {}) {
     this._id = args.id ?? createUUID();
-    this._parent = args.parent;
+    this.parent = args.parent;
 
-    if (this._parent !== undefined) {
-      this._parent.children.push(this);
+    if (this.parent !== undefined) {
+      this.parent.children.push(this);
     }
   }
 
@@ -161,7 +151,7 @@ export default class ViewModel {
       viewState[propertyName] = this[propertyName];
     }
 
-    for (const child of this._children) {
+    for (const child of this.children) {
       viewState[child.id] = child.toViewState();
     }
     
@@ -180,7 +170,7 @@ export default class ViewModel {
       this[propertyName] = viewState[propertyName];
     }
 
-    for (const child of this._children) {
+    for (const child of this.children) {
       child.applyViewState(viewState[child.id]);
     }
   }
