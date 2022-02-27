@@ -92,13 +92,7 @@ export default class InputViewModel extends ViewModel {
     this.propertyOwner = args.propertyOwner ?? undefined;
   }
 
-  /**
-   * Registers events on elements of the given DOM. 
-   * @param {Object} html DOM of the sheet for which to register listeners. 
-   * @param {Boolean} isOwner If true, registers events that require owner permission. 
-   * @param {Boolean} isEditable If true, registers events that require editing permission. 
-   * @throws {Error} NullPointerException - Thrown if the input element could not be found. 
-   */
+  /** @override */
   activateListeners(html, isOwner, isEditable) {
     this._element = html.find(`.${InputViewModel.SELECTOR_EDIT}#${this.id}`);
     

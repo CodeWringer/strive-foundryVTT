@@ -1,5 +1,6 @@
 import ViewModel from "../../module/components/viewmodel.mjs";
 import { TEMPLATES } from "../../templatePreloader.mjs";
+import SkillTableViewModel from "../components/component-skill-table-viewmodel.mjs";
 import SheetViewModel from "../sheet-viewmodel.mjs";
 
 export default class ActorSkillsViewModel extends SheetViewModel {
@@ -13,6 +14,26 @@ export default class ActorSkillsViewModel extends SheetViewModel {
 
   get learningSkills() { return this.actor.data.data.learningSkills; }
   get skills() { return this.actor.data.data.skills; }
+  
+  /**
+   * @type {SkillTableViewModel}
+   */
+  learningSkillsViewModel = undefined;
+  /**
+   * @type {String}
+   * @readonly
+   */
+  get learningSkillsViewModelId() { return "learning-skills"; }
+  
+  /**
+   * @type {SkillTableViewModel}
+   */
+  skillsViewModel = undefined;
+  /**
+   * @type {String}
+   * @readonly
+   */
+  get skillsViewModelId() { return "skills"; }
 
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
@@ -32,5 +53,11 @@ export default class ActorSkillsViewModel extends SheetViewModel {
 
     // Own properties.
     this.actor = args.actor;
+
+    // Child view models. 
+    const thiz = this;
+
+    this.learningSkillsViewModel = new SkillTableViewModel({ ...args, id: this.learningSkillsViewModelId, parent: thiz, isLearningSkillsTable: true });
+    this.skillsViewModel = new SkillTableViewModel({ ...args, id: this.skillsViewModelId, parent: thiz, isLearningSkillsTable: false });
   }
 }

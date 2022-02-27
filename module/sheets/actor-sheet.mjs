@@ -70,22 +70,15 @@ export class AmbersteelActorSheet extends ActorSheet {
   }
 
   /**
-   * @type {ViewModelCollection}
+   * @type {ViewModel}
    * @private
    */
-  _viewModels = undefined;
+  _viewModel = undefined;
   /**
-   * @returns {ViewModelCollection}
+   * @type {ViewModel}
+   * @readonly
    */
-  get viewModels() { return this._viewModels; }
-
-  /**
-   * An object representing a map of view states. Any view models this collection contains can store their view state in this 
-   * map. The map will be persisted (for the current session) on a global object. 
-   * @type {Object}
-   * @private
-   */
-  viewState = undefined;
+  get viewModel() { return this._viewModel; }
 
   /** 
    * Returns an object that represents sheet and enriched actor data. 
@@ -99,17 +92,11 @@ export class AmbersteelActorSheet extends ActorSheet {
    */
   getData() {
     const context = super.getData();
-
-    // Prepare view model collection. 
-    this._viewModels = this._viewModels ?? new ViewModelCollection();
-
-    // Fetch view state from global collection. 
-    const key = this.actor.id;
-    this.viewState = this._getViewState(key);
-    // Make view state easily accessible. 
-    context.viewState = this.viewState;
-
     SheetUtil.enrichData(context);
+
+    // Prepare view model. 
+    this.viewModel = this.subType.getViewModel(context);
+    this.viewModel.applyViewState(this._getViewState(this.actor.id));
 
     this.subType.prepareDerivedData(context);
 
@@ -117,21 +104,24 @@ export class AmbersteelActorSheet extends ActorSheet {
   }
 
   /**
-   * Ensures a view state for this sheet instance exists and then returns it. 
+   * Returns the view state. 
    * @param {String} key 
    * @param {Map<String, Object>} globalViewStates 
    * @returns {Object}
    * @private
    */
   _getViewState(key, globalViewStates = game.ambersteel.viewStates) {
-    let viewState = globalViewStates.get(key);
-    if (viewState !== undefined) {
-      viewState = viewState;
-    } else {
-      viewState = Object.create(null);
-      globalViewStates.set(key, viewState);
-    }
-    return viewState;
+    return globalViewStates.get(key) ?? Object.create(null);
+  }
+
+  /**
+   * Stores the current view state. 
+   * @param {String} key 
+   * @param {Map<String, Object>} globalViewStates 
+   * @private
+   */
+  _setViewState(key, globalViewStates = game.ambersteel.viewStates) {
+    globalViewStates.set(key, this.viewModel.toViewState());
   }
 
   /**
@@ -147,7 +137,7 @@ export class AmbersteelActorSheet extends ActorSheet {
     const isEditable = this.isEditable;
 
     // Activate view model bound event listeners. 
-    this.viewModels.activateListeners(html, isOwner, isEditable);
+    this.viewModel.activateListeners(html, isOwner, isEditable);
 
     // -------------------------------------------------------------
     if (!isOwner) return;
@@ -176,7 +166,9 @@ export class AmbersteelActorSheet extends ActorSheet {
    * @see https://foundryvtt.com/api/FormApplication.html#close
    */
   async close() {
-    this.viewModels.dispose();
+    this._setViewState(this.actor.id);
+    this.viewModel.dispose();
+
     return super.close();
   }
 

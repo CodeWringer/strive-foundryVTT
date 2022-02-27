@@ -1,20 +1,15 @@
 {{!-- Requires parameters: 
-isEditable: {Boolean}
-isSendable: {Boolean}
-isOwner: {Boolean}
-isGM: {Boolean}
-actor: {Object}
-attributeGroup: {Object}
+viewModel: {AttributeTableViewModel}
 --}}
 <div>
     <table class="attribute-table">
         <tbody>
             <tr class="fancy-font header-row">
-                {{#if isEditable}}
+                {{#if viewModel.isEditable}}
                     <th class="attribute-column-roll"></th>
                 {{/if}}
                 <th class="attribute-column-name">
-                    {{localize attributeGroup.localizableName}}
+                    {{localize viewModel.localizableAttributeGroupName}}
                 </th>
                 <th class="attribute-column-abbreviation"></th>
                 <th class="attribute-column-level">
@@ -30,18 +25,18 @@ attributeGroup: {Object}
                     {{localize "ambersteel.labels.failureAbbreviation"}}
                 </th>
             </tr>
-            {{#each attributeGroup.attributes as |att index|}}
-            <tr class="item attribute-item" data-att-group-name="{{../attributeGroup.name}}" data-att-name="{{att.name}}">
-                {{#if ../isEditable}}
+            {{#each viewModel.attributes as |att index|}}
+            <tr class="item attribute-item" data-att-group-name="{{../viewModel.attributeGroupName}}" data-att-name="{{att.name}}">
+                {{#if ../viewModel.isEditable}}
                     <td class="attribute-column-roll">
                         {{> buttonRoll 
-                            target=../actor 
-                            propertyPath=(concat "data.data.attributes." ../attributeGroup.name "." att.name ".value") 
+                            target=../viewModel.actor 
+                            propertyPath=(concat "data.data.attributes." ../viewModel.attributeGroupName "." att.name ".value") 
                             chatTitle=(localize att.localizableName) 
                             rollType="dice-pool" 
                             callback="advanceAttributeBasedOnRollResult" 
                             callbackData=att.name 
-                            actor=../actor 
+                            actor=../viewModel.actor 
                         }}
                     </td>
                 {{/if}}
@@ -52,16 +47,16 @@ attributeGroup: {Object}
                     [{{localize att.localizableAbbreviation}}]
                 </td>
                 <td class="attribute-column-level">
-                    {{> inputNumberSpinner isEditable=../isEditable propertyOwner=../actor propertyPath=(concat "data.data.attributes." ../attributeGroup.name "." att.name ".value") min=0 }}
+                    {{> inputNumberSpinner isEditable=../viewModel.isEditable propertyOwner=../viewModel.actor propertyPath=(concat "data.data.attributes." ../viewModel.attributeGroupName "." att.name ".value") min=0 }}
                 </td>
                 <td class="attribute-column-requirements">
                     {{att.requiredSuccessses}} / {{att.requiredFailures}}
                 </td>
                 <td class="attribute-column-successes">
-                    {{> inputNumberSpinner isEditable=../isEditable propertyOwner=../actor propertyPath=(concat "data.data.attributes." ../attributeGroup.name "." att.name ".successes") min=0 }}
+                    {{> inputNumberSpinner isEditable=../viewModel.isEditable propertyOwner=../viewModel.actor propertyPath=(concat "data.data.attributes." ../viewModel.attributeGroupName "." att.name ".successes") min=0 }}
                 </td>
                 <td class="attribute-column-failures">
-                    {{> inputNumberSpinner isEditable=../isEditable propertyOwner=../actor propertyPath=(concat "data.data.attributes." ../attributeGroup.name "." att.name ".failures") min=0 }}
+                    {{> inputNumberSpinner isEditable=../viewModel.isEditable propertyOwner=../viewModel.actor propertyPath=(concat "data.data.attributes." ../viewModel.attributeGroupName "." att.name ".failures") min=0 }}
                 </td>
             </tr>
             {{/each}}

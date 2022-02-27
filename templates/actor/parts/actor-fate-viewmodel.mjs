@@ -50,7 +50,6 @@ export default class ActorFateViewModel extends SheetViewModel {
 
     for (const fateCard of this.actor.fateCards) {
       const vm = new FateCardViewModel({ ...args, id: fateCard.id, parent: thiz });
-      this.children.push(vm);
       this.fateCards.push(vm);
     }
   }

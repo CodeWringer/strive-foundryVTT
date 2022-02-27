@@ -1,24 +1,44 @@
 import { TEMPLATES } from "../../templatePreloader.mjs";
 import ViewModel from "../../module/components/viewmodel.mjs";
 import SheetViewModel from "../sheet-viewmodel.mjs";
-import ActorBeliefsViewModel from "./actor-beliefs-viewmodel.mjs";
-import ActorFateViewModel from "./actor-fate-viewmodel.mjs";
+import SkillAbilityTableViewModel from "../../item/skill-ability/skill-ability-table-viewmodel.mjs";
 
-export default class ActorBeliefsFateViewModel extends SheetViewModel {
+export default class SkillTableViewModel extends SheetViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.ACTOR_BELIEFS_FATE; }
-
-  beliefsViewModel = undefined;
-  get beliefsViewModelId() { return "beliefsViewModel"; }
-
-  fateViewModel = undefined;
-  get fateViewModelId() { return "fateViewModel"; }
+  static get TEMPLATE() { return TEMPLATES.ACTOR_SKILL_TABLE; }
 
   /**
    * @type {Actor}
    */
   actor = undefined;
 
+  /**
+   * @type {Boolean}
+   */
+  isLearningSkillsTable = false;
+
+  /**
+   * @type {Array<Item>}
+   */
+  get skills() {
+    if (this.isLearningSkillsTable) {
+      return this.actor.data.data.learningSkills;
+    } else {
+      return this.actor.data.data.skills;
+    }
+  }
+
+  /**
+   * @type {Array<ChoiceOption>}
+   */
+  get attributeOptions() { return game.ambersteel.getAttributeOptions(); }
+
+  /**
+   * @type {SkillAbilityTableViewModel}
+   */
+  skillAbilityTableViewModel = undefined;
+  get skillAbilityTableViewModelId() { return "skill-abilities" };
+  
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
    * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 
@@ -31,17 +51,18 @@ export default class ActorBeliefsFateViewModel extends SheetViewModel {
    * @param {Boolean} isGM If true, the current user is a GM. 
    * 
    * @param {Actor} actor
+   * @param {Boolean} isLearningSkillsTable
    */
   constructor(args = {}) {
     super(args);
 
     // Own properties.
     this.actor = args.actor;
+    this.isLearningSkillsTable = args.isLearningSkillsTable;
 
     // Child view models. 
     const thiz = this;
 
-    this.beliefsViewModel = new ActorBeliefsViewModel({ ...args, id: thiz.beliefsViewModelId, parent: thiz });
-    this.fateViewModel = new ActorFateViewModel({ ...args, id: thiz.fateViewModelId, parent: thiz });
+    this.skillAbilityTableViewModel = new SkillAbilityTableViewModel({ ...args, id: thiz.skillAbilityTableViewModelId, parent: thiz });
   }
 }

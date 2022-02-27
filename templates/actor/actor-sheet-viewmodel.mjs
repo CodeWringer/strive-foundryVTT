@@ -68,33 +68,10 @@ export default class ActorSheetViewModel extends SheetViewModel {
     const thiz = this;
 
     this.personalsViewModel = new ActorPersonalsViewModel({ ...args, id: thiz.personalsId, parent: thiz });
-    this.children.push(this.personalsViewModel);
-    
     this.skillsViewModel = new ActorSkillsViewModel({ ...args, id: thiz.skillsId, parent: thiz });
-    this.children.push(this.skillsViewModel);
-    
     this.healthViewModel = new ActorHealthViewModel({ ...args, id: thiz.healthId, parent: thiz });
-    this.children.push(this.healthViewModel);
-    
     this.assetsViewModel = new ActorAssetsViewModel({ ...args, id: thiz.assetsId, parent: thiz });
-    this.children.push(this.assetsViewModel);
-    
     this.biographyViewModel = new ActorBiographyViewModel({ ...args, id: thiz.biographyId, parent: thiz });
-    this.children.push(this.biographyViewModel);
-    
     this.gmNotesViewModel = new GmNotesViewModel({ ...args, id: thiz.biographyId, document: thiz.actor, parent: thiz });
-    this.children.push(this.gmNotesViewModel);
-  }
-
-  /** @override */
-  toViewState() {
-    const viewState = super.toViewState();
-
-    return viewState;
-  }
-
-  /** @override */
-  applyViewState(viewState) {
-    super.applyViewState(viewState);
   }
 }

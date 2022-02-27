@@ -15,6 +15,16 @@ export default class AttributeTableViewModel extends SheetViewModel {
    * @type {Array<Object>}
    */
   attributes = [];
+
+  /**
+   * @type {String}
+   */
+  attributeGroupName = undefined;
+
+  /**
+   * @type {String}
+   */
+  localizableAttributeGroupName = undefined;
   
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
@@ -29,6 +39,8 @@ export default class AttributeTableViewModel extends SheetViewModel {
    * 
    * @param {Actor} actor
    * @param {Array<Object>} attributes
+   * @param {String} attributeGroupName
+   * @param {String} localizableAttributeGroupName
    */
   constructor(args = {}) {
     super(args);
@@ -36,7 +48,9 @@ export default class AttributeTableViewModel extends SheetViewModel {
     // Own properties.
     this.actor = args.actor;
     this.attributes = args.attributes;
-
+    this.attributeGroupName = args.attributeGroupName;
+    this.localizableAttributeGroupName = args.localizableAttributeGroupName;
+    
     // Child view models. 
     const thiz = this;
   }

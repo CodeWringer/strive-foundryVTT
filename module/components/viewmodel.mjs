@@ -111,6 +111,10 @@ export default class ViewModel {
   constructor(args = {}) {
     this._id = args.id ?? createUUID();
     this._parent = args.parent;
+
+    if (this._parent !== undefined) {
+      this._parent.children.push(this);
+    }
   }
 
   /**
@@ -190,4 +194,17 @@ export default class ViewModel {
   isObject(obj) {
     return Object.prototype.toString.call(obj) === '[object Object]';
   };
+
+  /**
+   * Registers events on elements of the given DOM. 
+   * @param {Object} html DOM of the sheet for which to register listeners. 
+   * @param {Boolean} isOwner If true, registers events that require owner permission. 
+   * @param {Boolean} isEditable If true, registers events that require editing permission. 
+   * @throws {Error} NullPointerException - Thrown if the input element could not be found. 
+   */
+  activateListeners(html, isOwner, isEditable) {
+    for (const child of this.children) {
+      child.activateListeners(html, isOwner, isEditable);
+    }
+  }
 }

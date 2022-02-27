@@ -36,7 +36,17 @@ import './components/button-take-item/button-take-item-viewmodel.mjs';
 import '../templates/sheet-viewmodel.mjs';
 import '../templates/gm-notes-viewmodel.mjs';
 import '../templates/actor/actor-sheet-viewmodel.mjs';
-import '../templates/actor/components/attribute-table-viewmodel.mjs';
+import '../templates/actor/components/component-attribute-table-viewmodel.mjs';
+import '../templates/actor/components/component-skill-table-viewmodel.mjs';
+import '../templates/actor/parts/actor-assets-viewmodel.mjs';
+import '../templates/actor/parts/actor-attributes-viewmodel.mjs';
+import '../templates/actor/parts/actor-beliefs-fate-viewmodel.mjs';
+import '../templates/actor/parts/actor-beliefs-viewmodel.mjs';
+import '../templates/actor/parts/actor-biography-viewmodel.mjs';
+import '../templates/actor/parts/actor-fate-viewmodel.mjs';
+import '../templates/actor/parts/actor-health-viewmodel.mjs';
+import '../templates/actor/parts/actor-personals-viewmodel.mjs';
+import '../templates/actor/parts/actor-skills-viewmodel.mjs';
 
 /* -------------------------------------------- */
 /*  Init Hook                                   */

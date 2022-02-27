@@ -3,7 +3,7 @@ viewModel: {ActorSkillsViewModel}
 --}}
 <section>
   {{!-- Learning Skills --}}
-  {{> "systems/ambersteel/templates/actor/components/component-skill-table.hbs" viewModel=viewModel.learningSkills }}
+  {{> "systems/ambersteel/templates/actor/components/component-skill-table.hbs" viewModel=viewModel.learningSkillsViewModel }}
   {{!-- Known Skills --}}
-  {{> "systems/ambersteel/templates/actor/components/component-skill-table.hbs" viewModel=viewModel.skills }}
+  {{> "systems/ambersteel/templates/actor/components/component-skill-table.hbs" viewModel=viewModel.skillsViewModel }}
 </section>

@@ -1,39 +1,17 @@
 {{!-- Requires parameters: 
-isEditable: {Boolean}
-isSendable: {Boolean}
-isLearningSkillsTable: {Boolean}
-skills: {[Item]} = {
-    id: {String}
-    name: {String}
-    img: {String}
-    data: {Object} = {
-        data: {Object} = {
-            value: {Number}
-            successes: {Number}
-            failures: {Number}
-            requiredSuccessses: {Number}
-            requiredFailures: {Number}
-            relatedAttribute: {String}
-            abilities: {[Object]} -> see item/skill-ability/skill-ability-table.hbs
-            localizableName: {String}
-            isCustom: {Boolean}
-        }
-    }
-}
-actor: {AmbersteelActor}
-viewState: {Object}
+viewModel: {SkillTableViewModel}
 --}}
 <div>
     <table class="skill-table">
         <tbody>
             <tr class="fancy-font header-row">
-                {{#if isEditable}}
+                {{#if viewModel.isEditable}}
                     <th class="skill-column-roll"></th>
                 {{/if}}
                 <th class="skill-column-roll"></th>
                 <th class="skill-column-roll"></th>
                 <th class="skill-column-name">
-                    {{#if isLearningSkillsTable}}
+                    {{#if viewModel.isLearningSkillsTable}}
                         {{localize "ambersteel.labels.learningSkill"}}
                     {{else}}
                         {{localize "ambersteel.labels.knownSkill"}}
@@ -54,11 +32,11 @@ viewState: {Object}
                 <th class="skill-column-failures">
                     {{localize "ambersteel.labels.failureAbbreviation"}}
                 </th>
-                {{#if isEditable}}
+                {{#if viewModel.isEditable}}
                     <th class="skill-column-delete"></th>
                 {{/if}}
             </tr>
-            {{#each skills as |skill key|}}
+            {{#each viewModel.skills as |skill key|}}
                 <tr class="item skill-item" data-item-id="{{skill.data.id}}">
                     {{#if ../isEditable}}
                         <td class="skill-column-roll">
@@ -69,7 +47,7 @@ viewState: {Object}
                                 rollType="dice-pool" 
                                 callback="advanceSkillBasedOnRollResult" 
                                 callbackData=skill.id 
-                                actor=../actor 
+                                actor=../viewModel.actor 
                             }}
                         </td>
                     {{/if}}
@@ -80,24 +58,24 @@ viewState: {Object}
                         {{> buttonOpenSheet target=skill.name }}
                     </td>
                     <td class="fancy-font flex skill-column-name">
-                        {{> inputTextField isEditable=../isEditable propertyOwner=skill propertyPath="name" placeholder="ambersteel.labels.name" }}
+                        {{> inputTextField isEditable=../viewModel.isEditable propertyOwner=skill propertyPath="name" placeholder="ambersteel.labels.name" }}
                     </td>
                     <td class="skill-column-attribute">
-                        {{> inputDropDown isEditable=../isEditable propertyOwner=skill propertyPath="data.data.relatedAttribute" options=(../game.ambersteel.getAttributeOptions) }}
+                        {{> inputDropDown isEditable=../viewModel.isEditable propertyOwner=skill propertyPath="data.data.relatedAttribute" options=viewModel.attributeOptions }}
                     </td>
                     <td class="skill-column-level">
-                        {{> inputNumberSpinner isEditable=../isEditable propertyOwner=skill propertyPath="data.data.value" min=0 }}
+                        {{> inputNumberSpinner isEditable=../viewModel.isEditable propertyOwner=skill propertyPath="data.data.value" min=0 }}
                     </td>
                     <td class="skill-column-requirements">
-                        {{data.requiredSuccessses}} / {{data.requiredFailures}}
+                        {{skill.data.data.requiredSuccessses}} / {{skill.data.data.requiredFailures}}
                     </td>
                     <td class="skill-column-successes">
-                        {{> inputNumberSpinner isEditable=../isEditable propertyOwner=skill propertyPath="data.data.successes" min=0 }}
+                        {{> inputNumberSpinner isEditable=../viewModel.isEditable propertyOwner=skill propertyPath="data.data.successes" min=0 }}
                     </td>
                     <td class="skill-column-failures">
-                        {{> inputNumberSpinner isEditable=../isEditable propertyOwner=skill propertyPath="data.data.failures" min=0 }}
+                        {{> inputNumberSpinner isEditable=../viewModel.isEditable propertyOwner=skill propertyPath="data.data.failures" min=0 }}
                     </td>
-                    {{#if ../isEditable}}
+                    {{#if ../viewModel.isEditable}}
                         <td class="skill-column-delete">
                             {{> buttonDelete target=skill withDialog=true }}
                         </td>
@@ -105,25 +83,17 @@ viewState: {Object}
                 </tr>
                 <tr>
                     <td style="display: table-cell;" colspan="100">
-                        {{> "systems/ambersteel/templates/item/skill-ability/skill-ability-table.hbs" 
-                            isEditable=../isEditable 
-                            isSendable=../isSendable 
-                            CONFIG=../CONFIG 
-                            game=../game 
-                            item=skill
-                            visGroupId=(generateId)
-                            viewState=(getEnsured ../viewState skill.id (obj))
-                        }}
+                        {{> "systems/ambersteel/templates/item/skill-ability/skill-ability-table.hbs" viewModel=viewModel.skillAbilityTableViewModel }}
                     </td>
                 </tr>
             {{/each}}
-            {{#if isEditable}}
+            {{#if viewModel.isEditable}}
                 <tr>
                     <td style="display: table-cell;" colspan="100">
                         <div class="flex">
                             <span class="flex-grow"></span>
                             <span class="width-sm">
-                                {{> buttonAdd target=actor creationType="skill" withDialog=true creationData=(concat "[value:"(ifThenElse isLearningSkillsTable "0" "1") "]" ) }}
+                                {{> buttonAdd target=viewModel.actor creationType="skill" withDialog=true creationData=(concat "[value:"(ifThenElse viewModel.isLearningSkillsTable "0" "1") "]" ) }}
                             </span>
                         </div>
                     </td>

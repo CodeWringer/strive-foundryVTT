@@ -30,7 +30,7 @@ export default class AmbersteelBaseItemSheet {
   }
 
   /**
-   * @returns {Actor}
+   * @returns {Actor | undefined}
    */
   getActor() {
     return this.getItem().parent;
@@ -71,4 +71,15 @@ export default class AmbersteelBaseItemSheet {
    * @virtual
    */
   activateListeners(html, isOwner, isEditable) {}
+
+  getViewModel(context) {
+    return new ItemItemSheetViewModel({
+      id: this.getItem().id,
+      isEditable: context.isEditable,
+      isSendable: context.isSendable,
+      isOwner: context.isOwner,
+      isGM: context.isGM,
+      item: this.getItem(),
+    });
+  }
 }

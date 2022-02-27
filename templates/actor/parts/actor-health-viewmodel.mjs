@@ -61,13 +61,11 @@ export default class ActorHealthViewModel extends SheetViewModel {
 
     for (const illness of this.actor.illnesses) {
       const illnessViewModel = new IllnessViewModel({ ...args, id: illness.id, parent: thiz });
-      this.children.push(illnessViewModel);
       this.illnesses.push(illnessViewModel);
     }
 
     for (const injury of this.actor.injuries) {
       const injuryViewModel = new InjuryViewModel({ ...args, id: injury.id, parent: thiz });
-      this.children.push(injuryViewModel);
       this.injuries.push(injuryViewModel);
     }
   }

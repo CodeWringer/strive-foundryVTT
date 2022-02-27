@@ -1,6 +1,7 @@
 import { TEMPLATES } from "../../templatePreloader.mjs";
 import ViewModel from "../../module/components/viewmodel.mjs";
 import SheetViewModel from "../sheet-viewmodel.mjs";
+import AttributeTableViewModel from "../components/component-attribute-table-viewmodel.mjs";
 
 export default class ActorAttributesViewModel extends SheetViewModel {
   /** @override */
@@ -12,10 +13,13 @@ export default class ActorAttributesViewModel extends SheetViewModel {
   actor = undefined;
   
   attributesPhysicalViewModel = undefined;
+  get attributesPhysicalViewModelId() { return "attributes-physical"; }
 
   attributesMentalViewModel = undefined;
+  get attributesMentalViewModelId() { return "attributes-mental"; }
 
   attributesSocialViewModel = undefined;
+  get attributesSocialViewModelId() { return "attributes-social"; }
 
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
@@ -39,13 +43,29 @@ export default class ActorAttributesViewModel extends SheetViewModel {
     // Child view models. 
     const thiz = this;
 
-    this.attributesPhysicalViewModel = new AttributeTableViewModel({ ...args, id: "attributes-physical", attributes: actor.data.data.attributes.physical, parent: thiz });
-    this.children.push(this.attributesPhysicalViewModel);
-
-    this.attributesMentalViewModel = new AttributeTableViewModel({ ...args, id: "attributes-mental", attributes: actor.data.data.attributes.mental, parent: thiz });
-    this.children.push(this.attributesMentalViewModel);
-
-    this.attributesSocialViewModel = new AttributeTableViewModel({ ...args, id: "attributes-social", attributes: actor.data.data.attributes.social, parent: thiz });
-    this.children.push(this.attributesSocialViewModel);
+    this.attributesPhysicalViewModel = new AttributeTableViewModel({
+      ...args, 
+      id: thiz.attributesPhysicalViewModelId,
+      attributes: thiz.actor.data.data.attributes.physical.attributes,
+      attributeGroupName: thiz.actor.data.data.attributes.physical.name,
+      localizableAttributeGroupName: thiz.actor.data.data.attributes.physical.localizableName,
+      parent: thiz,
+    });
+    this.attributesMentalViewModel = new AttributeTableViewModel({
+      ...args, 
+      id: thiz.attributesMentalViewModelId,
+      attributes: thiz.actor.data.data.attributes.mental.attributes,
+      attributeGroupName: thiz.actor.data.data.attributes.mental.name,
+      localizableAttributeGroupName: thiz.actor.data.data.attributes.mental.localizableName,
+      parent: thiz,
+    });
+    this.attributesSocialViewModel = new AttributeTableViewModel({
+      ...args, 
+      id: thiz.attributesSocialViewModelId,
+      attributes: thiz.actor.data.data.attributes.social.attributes,
+      attributeGroupName: thiz.actor.data.data.attributes.social.name,
+      localizableAttributeGroupName: thiz.actor.data.data.attributes.social.localizableName,
+      parent: thiz,
+    });
   }
 }
