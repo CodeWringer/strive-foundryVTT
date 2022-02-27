@@ -4,7 +4,9 @@ import GmNotesViewModel from "../gm-notes-viewmodel.mjs";
 import SheetViewModel from "../sheet-viewmodel.mjs";
 import ActorAssetsViewModel from "./parts/actor-assets-viewmodel.mjs";
 import ActorBiographyViewModel from "./parts/actor-biography-viewmodel.mjs";
+import ActorHealthViewModel from "./parts/actor-health-viewmodel.mjs";
 import ActorPersonalsViewModel from "./parts/actor-personals-viewmodel.mjs";
+import ActorSkillsViewModel from "./parts/actor-skills-viewmodel.mjs";
 
 export default class ActorSheetViewModel extends SheetViewModel {
   /** @override */
