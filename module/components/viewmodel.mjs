@@ -152,23 +152,23 @@ export default class ViewModel {
   }
 
   /**
+   * @summary
    * Returns an object that represents the current view state. 
    * 
-   * This will also contain the view states of any child view models. These sub-view-states 
-   * are stored hierarchically. 
+   * @description
+   * By default, the returned object will *only* contain the view states of the child view models. 
    * 
-   * Only stores internal values! E. g. "_isVisible" instead of "isVisible". 
+   * This means that types which extend {ViewModel} *must* override this method, if they mean to store 
+   * any variables which should be retrievable. 
+   * 
+   * Making the storing of variables an explicit task avoids cluttering up the view state objects with 
+   * unnecessary data and also makes debugging easier, as view state objects become more manageable, 
+   * the fewer properties they contain. 
    * @returns {Object} An object that represents the current view state. 
    * @virtual
    */
   toViewState() {
     const viewState = Object.create(null);
-
-    for(const propertyName in this) {
-      if (propertyName.startsWith("_") !== true) continue;
-
-      viewState[propertyName] = this[propertyName];
-    }
 
     for (const child of this.children) {
       viewState[child.id] = child.toViewState();
@@ -178,7 +178,16 @@ export default class ViewModel {
   }
   
   /**
+   * @summary
    * Applies the given view state, overriding any current values. 
+   * 
+   * @description
+   * This method looks for any properties whose names match in the given view state object and this current 
+   * view state instance. It will then apply the value from the property on the view state to this property 
+   * with the same name on this view model instance. 
+   * 
+   * This means that types which extend {ViewModel} needn't override this method, unless if they have specific 
+   * functionality that they need. 
    * @param {Object} viewState The view state to apply. 
    * @virtual
    */

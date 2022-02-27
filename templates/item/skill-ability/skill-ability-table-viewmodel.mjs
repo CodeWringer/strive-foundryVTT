@@ -1,4 +1,5 @@
 import { TEMPLATES } from "../../../module/templatePreloader.mjs";
+import { createUUID } from "../../../module/utils/uuid-utility.mjs";
 import SheetViewModel from "../../sheet-viewmodel.mjs";
 import SkillAbilityListItemViewModel from "./skill-ability-list-item-viewmodel.mjs";
 
@@ -67,7 +68,7 @@ export default class SkillAbilityTableViewModel extends SheetViewModel {
    * 
    * @param {Item} item
    * @param {Boolean} oneColumn
-   * @param {String} visGroupId
+   * @param {String | undefined} visGroupId
    * @param {Actor | undefined} actor
    * @param {Boolean | undefined} skillAbilitiesInitiallyVisible
    */
@@ -77,7 +78,7 @@ export default class SkillAbilityTableViewModel extends SheetViewModel {
     // Own properties.
     this.item = args.item;
     this.oneColumn = args.oneColumn;
-    this.visGroupId = args.visGroupId;
+    this.visGroupId = args.visGroupId ?? createUUID();
     this.actor = args.actor;
     this.skillAbilitiesInitiallyVisible = args.skillAbilitiesInitiallyVisible ?? false;
 
@@ -96,5 +97,14 @@ export default class SkillAbilityTableViewModel extends SheetViewModel {
       });
       this.abilities.push(vm);
     }
+  }
+
+  /** @override */
+  toViewState() {
+    const viewState = super.toViewState();
+
+    viewState.skillAbilitiesInitiallyVisible = this.skillAbilitiesInitiallyVisible;
+
+    return viewState;
   }
 }
