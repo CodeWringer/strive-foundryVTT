@@ -1,4 +1,3 @@
-import ViewModelCollection from "../utils/viewmodel-collection.mjs";
 import AmbersteelNpcActorSheet from "./subtypes/actor/ambersteel-npc-actor-sheet.mjs";
 import AmbersteelPcActorSheet from "./subtypes/actor/ambersteel-pc-actor-sheet.mjs";
 import * as SheetUtil from "../utils/sheet-utility.mjs";
