@@ -8,12 +8,27 @@ export default class SkillItemSheetViewModel extends SkillViewModel {
 
   /**
    * @type {Array<ChoiceOption>}
+   * @readonly
    */
   get attributeOptions() { return game.ambersteel.getAttributeOptions; }
 
+  /**
+   * @type {SkillAbilityTableViewModel}
+   * @readonly
+   */
   skillAbilityTableViewModel = undefined;
-  get skillAbilityTableId() { return "skill-ability-table"; }
 
+  /**
+   * @type {String}
+   * @readonly
+   */
+  get skillAbilityTableId() { return "skill-ability-table"; }
+  
+  /**
+   * Returns true, if the skill ability list should be visible. 
+   * @type {Boolean}
+   * @readonly
+   */
   get isSkillAbilityListVisible() { return (this.isEditable === true) || this.item.data.data.abilities.length !== 0 }
 
   /**
