@@ -71,7 +71,6 @@ export default class ViewModel {
    * Id used for the HTML element's id and name attributes. 
    * @type {String}
    * @readonly
-   * @throws {Error} DisposedAccessViolation Thrown if the object has been disposed. 
    */
   get id() { return this._id; }
 
@@ -114,22 +113,36 @@ export default class ViewModel {
    * @virtual
    */
   dispose() {
-    const errorToThrowOnAccess = new Error("DisposedAccessViolation: The object has been disposed. Its members can no longer be accessed!");
+    // First of all, dispose of children. 
+    if (this.children !== undefined && this.children !== null) {
+      while (this.children.length > 0) {
+        const child = this.children[0];
+        child.dispose();
+        this.children.splice(0, 1);
+      }
+    }
+    this.children = null; // *Should* be unnecessary, but better safe than sorry...
 
+    // Remove from parent, if possible. 
+    if (this.parent !== undefined && this.parent !== null) {
+      const index = this.parent.children.indexOf(this);
+      if (index >= 0) {
+        this.parent.children.splice(index, 1);
+      }
+    }
+    this.parent = null; // *Should* be unnecessary, but better safe than sorry...
+
+    // Set properties of this view model to null. 
     for (const propertyName in this) {
-      // First call a potentially defined dispose method on the property to be disposed. 
+      // Call dispose on any property that supports it. 
       if (this.isObject(this[propertyName]) && this[propertyName].dispose !== undefined) {
         this[propertyName].dispose();
       }
-
-      if (propertyName.startsWith("_") === true) {
-        // Private variable values are set to null. 
-        this[propertyName] = null;
-      } else {
-        // Accessors and methods are all overriden to throw an error. 
-        this[propertyName] = () => { throw errorToThrowOnAccess; };
-      }
+      // Set property to null, thus 'hopefully' freeing its referenced value up for garbage collection. 
+      this[propertyName] = null;
     }
+    // Ensure dispose cannot be called again. 
+    this.dispose = undefined;
   }
 
   /**
