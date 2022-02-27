@@ -1,8 +1,8 @@
 import { TEMPLATES } from "../../../module/templatePreloader.mjs";
-import SheetViewModel from "../../sheet-viewmodel.mjs";
 import SkillAbilityTableViewModel from "../skill-ability/skill-ability-table-viewmodel.mjs";
+import SkillViewModel from "./skill-viewmodel.mjs";
 
-export default class SkillChatMessageViewModel extends SheetViewModel {
+export default class SkillChatMessageViewModel extends SkillViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.SKILL_ITEM_CHAT_MESSAGE; }
 

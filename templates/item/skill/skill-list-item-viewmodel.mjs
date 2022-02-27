@@ -1,7 +1,7 @@
 import { TEMPLATES } from "../../../module/templatePreloader.mjs";
-import SheetViewModel from "../../sheet-viewmodel.mjs";
+import SkillViewModel from "./skill-viewmodel.mjs";
 
-export default class SkillListItemViewModel extends SheetViewModel {
+export default class SkillListItemViewModel extends SkillViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.SKILL_LIST_ITEM; }
 
