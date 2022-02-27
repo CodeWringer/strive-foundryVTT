@@ -3,6 +3,7 @@ import { TEMPLATES } from "../../module/templatePreloader.mjs";
 import GmNotesViewModel from "../gm-notes-viewmodel.mjs";
 import SheetViewModel from "../sheet-viewmodel.mjs";
 import ActorAssetsViewModel from "./parts/actor-assets-viewmodel.mjs";
+import ActorBeliefsFateViewModel from "./parts/actor-beliefs-fate-viewmodel.mjs";
 import ActorBiographyViewModel from "./parts/actor-biography-viewmodel.mjs";
 import ActorHealthViewModel from "./parts/actor-health-viewmodel.mjs";
 import ActorPersonalsViewModel from "./parts/actor-personals-viewmodel.mjs";
@@ -71,6 +72,7 @@ export default class ActorSheetViewModel extends SheetViewModel {
 
     this.personalsViewModel = new ActorPersonalsViewModel({ ...args, id: thiz.personalsId, parent: thiz });
     this.skillsViewModel = new ActorSkillsViewModel({ ...args, id: thiz.skillsId, parent: thiz });
+    this.beliefsFateViewModel = new ActorBeliefsFateViewModel({ ...args, id: thiz.beliefsFateId, parent: thiz });
     this.healthViewModel = new ActorHealthViewModel({ ...args, id: thiz.healthId, parent: thiz });
     this.assetsViewModel = new ActorAssetsViewModel({ ...args, id: thiz.assetsId, parent: thiz });
     this.biographyViewModel = new ActorBiographyViewModel({ ...args, id: thiz.biographyId, parent: thiz });
