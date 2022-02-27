@@ -7,7 +7,7 @@ viewModel: {FateCardViewModel}
     <div class="flex flex-row">
       <img class="header-image" src="{{viewModel.item.img}}" data-edit="img" title="{{viewModel.item.name}}" height="26" width="26" />
       <h3 class="header-name flex-grow" style="margin: 0;">
-        {{> inputTextField isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath="name" placeholder="ambersteel.labels.name" }}
+        {{> inputTextField isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath="name" placeholder="ambersteel.labels.name" contextTemplate="fate-card" }}
       </h3>
     </div>
   </div>
@@ -27,6 +27,6 @@ viewModel: {FateCardViewModel}
   {{/if}}
   {{!-- Description --}}
   <div class="flex flex-grow">
-    {{> inputTextarea isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath="data.data.description" placeholder="ambersteel.labels.description" }}
+    {{> inputTextarea isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath="data.data.description" placeholder="ambersteel.labels.description" contextTemplate="fate-card" }}
   </div>
 </section>

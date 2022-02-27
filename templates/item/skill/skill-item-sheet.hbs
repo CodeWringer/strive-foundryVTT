@@ -7,7 +7,7 @@ viewModel: {SkillItemSheetViewModel}
       <div class="flex flex-row">
         <img class="header-image" src="{{viewModel.item.img}}" data-edit="img" title="{{viewModel.item.name}}" height="64" width="64" />
         <h1 class="header-name">
-          {{> inputTextField isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath="name" placeholder="ambersteel.labels.name" }}
+          {{> inputTextField isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath="name" placeholder="ambersteel.labels.name" contextTemplate="skill-item-sheet" }}
         </h1>
         {{#if viewModel.isSendable}}
           <div class="flex flex-center">
@@ -23,7 +23,7 @@ viewModel: {SkillItemSheetViewModel}
       {{> inputLabel text="ambersteel.labels.relatedAttribute"}}
     </div>
     <div class="flex-grow">
-      {{> inputDropDown isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath="data.data.relatedAttribute" options=viewModel.attributeOptions }}
+      {{> inputDropDown isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath="data.data.relatedAttribute" options=viewModel.attributeOptions contextTemplate="skill-item-sheet" }}
     </div>
   </div>
   {{!-- Category --}}
@@ -32,7 +32,7 @@ viewModel: {SkillItemSheetViewModel}
       {{> inputLabel text="ambersteel.labels.category"}}
     </div>
     <div class="flex-grow">
-      {{> inputTextField isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath="data.data.category" }}
+      {{> inputTextField isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath="data.data.category" contextTemplate="skill-item-sheet" }}
     </div>
   </div>
   {{!-- Description --}}
@@ -41,7 +41,7 @@ viewModel: {SkillItemSheetViewModel}
       {{> inputLabel text=(localize "ambersteel.labels.description")}}
     </div>
     <div class="flex-grow">
-      {{> inputTextarea isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath="data.data.description" placeholder="ambersteel.labels.description" allowResize=true cssClass="fill" }}
+      {{> inputTextarea isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath="data.data.description" placeholder="ambersteel.labels.description" allowResize=true cssClass="fill" contextTemplate="skill-item-sheet" }}
     </div>
   </div>
   {{!-- Skill Abilites --}}

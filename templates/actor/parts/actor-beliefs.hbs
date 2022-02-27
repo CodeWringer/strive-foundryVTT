@@ -6,14 +6,14 @@ viewModel: {ActorBeliefsViewModel}
     <h3>
       <label class="fancy-font">{{localize "ambersteel.beliefSystem.ambition"}}</label>
     </h3>
-      {{> inputTextField isEditable=viewModel.isEditable propertyOwner=viewModel.actor propertyPath="data.data.beliefSystem.ambition" }}
+      {{> inputTextField isEditable=viewModel.isEditable propertyOwner=viewModel.actor propertyPath="data.data.beliefSystem.ambition" contextTemplate="actor-beliefs" }}
   </div>
   <div class="sheet-block">
     <h3>
       <label class="fancy-font">{{localize "ambersteel.beliefSystem.beliefs"}}</label>
     </h3>
     {{#each viewModel.beliefs as |belief index|}}
-      {{> inputTextField isEditable=../viewModel.isEditable propertyOwner=../viewModel.actor propertyPath=(concat "data.data.beliefSystem.beliefs[" index "]") }}
+      {{> inputTextField isEditable=../viewModel.isEditable propertyOwner=../viewModel.actor propertyPath=(concat "data.data.beliefSystem.beliefs[" index "]") contextTemplate="actor-beliefs" }}
     {{/each}}
   </div>
   <div class="sheet-block">
@@ -21,7 +21,7 @@ viewModel: {ActorBeliefsViewModel}
       <label class="fancy-font">{{localize "ambersteel.beliefSystem.instincts"}}</label>
     </h3>
     {{#each viewModel.instincts as |instinct index|}}
-      {{> inputTextField isEditable=../viewModel.isEditable propertyOwner=../viewModel.actor propertyPath=(concat "data.data.beliefSystem.instincts[" index "]") }}
+      {{> inputTextField isEditable=../viewModel.isEditable propertyOwner=../viewModel.actor propertyPath=(concat "data.data.beliefSystem.instincts[" index "]") contextTemplate="actor-beliefs" }}
     {{/each}}
   </div>
 </section>

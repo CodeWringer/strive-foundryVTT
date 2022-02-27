@@ -38,10 +38,13 @@ export default class InputDropDownViewModel extends InputViewModel {
   }
 
   /**
-   * @param {Boolean | undefined} args.isEditable 
    * @param {String | undefined} args.id
+   * 
+   * @param {Boolean | undefined} args.isEditable 
    * @param {String} args.propertyPath
    * @param {Object} args.propertyOwner
+   * @param {String | undefined} contextTemplate
+   * 
    * @param {Array<ChoiceOption>} args.options
    */
   constructor(args = {}) {
@@ -76,12 +79,13 @@ export default class InputDropDownViewModel extends InputViewModel {
   }
 }
 
-Handlebars.registerHelper('createInputDropDownViewModel', function(isEditable, propertyOwner, propertyPath, options) {
+Handlebars.registerHelper('createInputDropDownViewModel', function(isEditable, propertyOwner, propertyPath, options, contextTemplate) {
   const vm = new InputDropDownViewModel({
     isEditable: isEditable,
     propertyOwner: propertyOwner,
     propertyPath: propertyPath,
-    options: options
+    options: options,
+    contextTemplate: contextTemplate,
   });
 
   // Add new view model instance to global collection. 
@@ -90,4 +94,4 @@ Handlebars.registerHelper('createInputDropDownViewModel', function(isEditable, p
   return vm;
 });
 Handlebars.registerPartial('_inputDropDown', `{{#> "${InputDropDownViewModel.TEMPLATE}"}}{{/"${InputDropDownViewModel.TEMPLATE}"}}`);
-Handlebars.registerPartial('inputDropDown', `{{> _inputDropDown vm=(createInputDropDownViewModel isEditable propertyOwner propertyPath options) cssClass=(isDefined cssClass "") readOnlyCssClass=(isDefined readOnlyCssClass "") }}`);
+Handlebars.registerPartial('inputDropDown', `{{> _inputDropDown vm=(createInputDropDownViewModel isEditable propertyOwner propertyPath options contextTemplate) cssClass=(isDefined cssClass "") readOnlyCssClass=(isDefined readOnlyCssClass "") }}`);

@@ -8,7 +8,7 @@ viewModel: {ActorSheetViewModel}
     <img class="profile-img" src="{{viewModel.actor.img}}" data-edit="img" title="{{viewModel.actor.name}}" height="100" width="100" />
     <div class="header-fields">
       <h1 class="header-name fancy-font">
-        {{> inputTextField isEditable=viewModel.isEditable propertyOwner=viewModel.actor propertyPath="name" placeholder="ambersteel.labels.name" }}
+        {{> inputTextField isEditable=viewModel.isEditable propertyOwner=viewModel.actor propertyPath="name" placeholder="ambersteel.labels.name" contextTemplate="actor-character-sheet" }}
       </h1>
       {{> "systems/ambersteel/templates/actor/parts/actor-personals.hbs" viewModel=viewModel.personalsViewModel }}
     </div>

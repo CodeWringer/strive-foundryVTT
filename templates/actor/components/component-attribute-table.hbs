@@ -47,16 +47,16 @@ viewModel: {AttributeTableViewModel}
                     [{{localize att.localizableAbbreviation}}]
                 </td>
                 <td class="attribute-column-level">
-                    {{> inputNumberSpinner isEditable=../viewModel.isEditable propertyOwner=../viewModel.actor propertyPath=(concat "data.data.attributes." ../viewModel.attributeGroupName "." att.name ".value") min=0 }}
+                    {{> inputNumberSpinner isEditable=../viewModel.isEditable propertyOwner=../viewModel.actor propertyPath=(concat "data.data.attributes." ../viewModel.attributeGroupName "." att.name ".value") min=0 contextTemplate="component-attribute-table" }}
                 </td>
                 <td class="attribute-column-requirements">
                     {{att.requiredSuccessses}} / {{att.requiredFailures}}
                 </td>
                 <td class="attribute-column-successes">
-                    {{> inputNumberSpinner isEditable=../viewModel.isEditable propertyOwner=../viewModel.actor propertyPath=(concat "data.data.attributes." ../viewModel.attributeGroupName "." att.name ".successes") min=0 }}
+                    {{> inputNumberSpinner isEditable=../viewModel.isEditable propertyOwner=../viewModel.actor propertyPath=(concat "data.data.attributes." ../viewModel.attributeGroupName "." att.name ".successes") min=0 contextTemplate="component-attribute-table" }}
                 </td>
                 <td class="attribute-column-failures">
-                    {{> inputNumberSpinner isEditable=../viewModel.isEditable propertyOwner=../viewModel.actor propertyPath=(concat "data.data.attributes." ../viewModel.attributeGroupName "." att.name ".failures") min=0 }}
+                    {{> inputNumberSpinner isEditable=../viewModel.isEditable propertyOwner=../viewModel.actor propertyPath=(concat "data.data.attributes." ../viewModel.attributeGroupName "." att.name ".failures") min=0 contextTemplate="component-attribute-table" }}
                 </td>
             </tr>
             {{/each}}

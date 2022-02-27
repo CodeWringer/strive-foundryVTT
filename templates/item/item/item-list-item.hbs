@@ -13,7 +13,7 @@ viewModel: {ItemListItemViewModel}
       {{> inputLabel text="ambersteel.labels.item"}}
     </span>
     <span class="flex-grow margin-r-md">
-      {{> inputTextField isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath="name" placeholder="ambersteel.labels.name" }}
+      {{> inputTextField isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath="name" placeholder="ambersteel.labels.name" contextTemplate="item-list-item" }}
     </span>
   </div>
   {{!-- Delete --}}
@@ -27,7 +27,7 @@ viewModel: {ItemListItemViewModel}
       {{> inputLabel text="ambersteel.labels.quantity" }}
     </span>
     <span class="width-md">
-      {{> inputNumberSpinner isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath="data.data.quantity" min=1 }}
+      {{> inputNumberSpinner isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath="data.data.quantity" min=1 contextTemplate="item-list-item" }}
     </span>
   </div>
   {{!-- Spacer --}}
@@ -38,7 +38,7 @@ viewModel: {ItemListItemViewModel}
       {{> inputLabel text="ambersteel.labels.maxQuantity" }}
     </span>
     <span class="width-md">
-      {{> inputNumberSpinner isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath="data.data.maxQuantity" min=1 }}
+      {{> inputNumberSpinner isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath="data.data.maxQuantity" min=1 contextTemplate="item-list-item" }}
     </span>
   </div>
 </div>
@@ -50,7 +50,7 @@ viewModel: {ItemListItemViewModel}
       {{> inputLabel text="ambersteel.labels.shapeWidth" }}
     </span>
     <span class="width-md">
-      {{> inputNumberSpinner isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath="data.data.shape.width" min=1 }}
+      {{> inputNumberSpinner isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath="data.data.shape.width" min=1 contextTemplate="item-list-item" }}
     </span>
   </div>
   {{!-- Spacer --}}
@@ -61,7 +61,7 @@ viewModel: {ItemListItemViewModel}
       {{> inputLabel text="ambersteel.labels.shapeHeight" }}
     </span>
     <span class="width-md">
-      {{> inputNumberSpinner isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath="data.data.shape.height" min=1 }}
+      {{> inputNumberSpinner isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath="data.data.shape.height" min=1 contextTemplate="item-list-item" }}
     </span>
   </div>
   {{!-- Spacer --}}
@@ -72,12 +72,12 @@ viewModel: {ItemListItemViewModel}
       {{> inputLabel text="ambersteel.labels.bulk" }}
     </span>
     <span class="width-md">
-      {{> inputNumberSpinner isEditable=false propertyOwner=viewModel.item propertyPath="data.data.bulk" }}
+      {{> inputNumberSpinner isEditable=false propertyOwner=viewModel.item propertyPath="data.data.bulk" contextTemplate="item-list-item" }}
     </span>
   </div>
 </div>
 {{!-- Row 4 --}}
 {{!-- Description --}}
 <div class="flex flex-row">
-  {{> inputTextarea isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath="data.data.description" placeholder="ambersteel.labels.description" allowResize=true cssClass="fill" }}
+  {{> inputTextarea isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath="data.data.description" placeholder="ambersteel.labels.description" allowResize=true cssClass="fill" contextTemplate="item-list-item" }}
 </div>

@@ -58,22 +58,22 @@ viewModel: {SkillTableViewModel}
                         {{> buttonOpenSheet target=skill.name }}
                     </td>
                     <td class="fancy-font flex skill-column-name">
-                        {{> inputTextField isEditable=../viewModel.isEditable propertyOwner=skill propertyPath="name" placeholder="ambersteel.labels.name" }}
+                        {{> inputTextField isEditable=../viewModel.isEditable propertyOwner=skill propertyPath="name" placeholder="ambersteel.labels.name" contextTemplate="component-skill-table" }}
                     </td>
                     <td class="skill-column-attribute">
-                        {{> inputDropDown isEditable=../viewModel.isEditable propertyOwner=skill propertyPath="data.data.relatedAttribute" options=viewModel.attributeOptions }}
+                        {{> inputDropDown isEditable=../viewModel.isEditable propertyOwner=skill propertyPath="data.data.relatedAttribute" options=viewModel.attributeOptions contextTemplate="component-skill-table" }}
                     </td>
                     <td class="skill-column-level">
-                        {{> inputNumberSpinner isEditable=../viewModel.isEditable propertyOwner=skill propertyPath="data.data.value" min=0 }}
+                        {{> inputNumberSpinner isEditable=../viewModel.isEditable propertyOwner=skill propertyPath="data.data.value" min=0 contextTemplate="component-skill-table" }}
                     </td>
                     <td class="skill-column-requirements">
                         {{skill.data.data.requiredSuccessses}} / {{skill.data.data.requiredFailures}}
                     </td>
                     <td class="skill-column-successes">
-                        {{> inputNumberSpinner isEditable=../viewModel.isEditable propertyOwner=skill propertyPath="data.data.successes" min=0 }}
+                        {{> inputNumberSpinner isEditable=../viewModel.isEditable propertyOwner=skill propertyPath="data.data.successes" min=0 contextTemplate="component-skill-table" }}
                     </td>
                     <td class="skill-column-failures">
-                        {{> inputNumberSpinner isEditable=../viewModel.isEditable propertyOwner=skill propertyPath="data.data.failures" min=0 }}
+                        {{> inputNumberSpinner isEditable=../viewModel.isEditable propertyOwner=skill propertyPath="data.data.failures" min=0 contextTemplate="component-skill-table" }}
                     </td>
                     {{#if ../viewModel.isEditable}}
                         <td class="skill-column-delete">

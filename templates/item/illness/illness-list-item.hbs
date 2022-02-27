@@ -11,10 +11,10 @@ viewModel: {IllnessListItemViewModel}
       {{> inputLabel text="ambersteel.labels.illness"}}
     </span>
     <span class="flex-grow margin-r-md">
-      {{> inputTextField isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath="name" placeholder="ambersteel.labels.name" }}
+      {{> inputTextField isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath="name" placeholder="ambersteel.labels.name" contextTemplate="illness-list-item" }}
     </span>
     {{!-- State --}}
-    {{> inputRadioButtonGroup isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath="data.data.state" options=viewModel.stateOptions }}
+    {{> inputRadioButtonGroup isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath="data.data.state" options=viewModel.stateOptions contextTemplate="illness-list-item" }}
   </div>
   {{!-- Delete --}}
   {{> buttonDelete target=viewModel.item withDialog=true }}
@@ -28,7 +28,7 @@ viewModel: {IllnessListItemViewModel}
     {{> inputLabel text="ambersteel.labels.treatmentSkill" }}
   </span>
   <span class="width-xl">
-    {{> inputTextField isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath="data.data.treatmentSkill" }}
+    {{> inputTextField isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath="data.data.treatmentSkill" contextTemplate="illness-list-item" }}
   </span>
   {{!-- Spacer --}}
   <div class="width-xs"></div>
@@ -37,7 +37,7 @@ viewModel: {IllnessListItemViewModel}
     {{> inputLabel text="ambersteel.labels.duration" }}
   </span>
   <span class="flex-grow">
-    {{> inputTextField isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath="data.data.duration" }}
+    {{> inputTextField isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath="data.data.duration" contextTemplate="illness-list-item" }}
   </span>
 </div>
 {{!-- Spacer --}}
@@ -48,11 +48,11 @@ viewModel: {IllnessListItemViewModel}
     {{> inputLabel text="ambersteel.labels.treatment" }}
   </span>
   <span class="flex-grow">
-    {{> inputTextField isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath="data.data.treatment" }}
+    {{> inputTextField isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath="data.data.treatment" contextTemplate="illness-list-item" }}
   </span>
 </div>
 {{!-- Row 3 --}}
 {{!-- Description --}}
 <div class="flex flex-row">
-  {{> inputTextarea isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath="data.data.description" placeholder="ambersteel.labels.description" allowResize=true }}
+  {{> inputTextarea isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath="data.data.description" placeholder="ambersteel.labels.description" allowResize=true contextTemplate="illness-list-item" }}
 </div>

@@ -23,7 +23,7 @@ viewModel: {ActorAssetsViewModel}
           {{> inputLabel for="totalBulk" text="ambersteel.labels.usedCarryingCapacity"}}
         </div>
         <span class="width-md">
-          {{> inputNumberSpinner isEditable=false propertyOwner=actor propertyPath="data.data.assets.totalBulk" }}
+          {{> inputNumberSpinner isEditable=false propertyOwner=actor propertyPath="data.data.assets.totalBulk" contextTemplate="actor-assets" }}
         </span>
       </div>
     </div>

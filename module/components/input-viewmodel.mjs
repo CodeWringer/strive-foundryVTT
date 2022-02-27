@@ -42,26 +42,43 @@ export default class InputViewModel extends ViewModel {
   get isEditable() { return this._isEditable; }
 
   /**
+   * Name or path of a template that embeds this input component. 
+   * @type {String | undefined}
+   * @private
+   */
+  _contextTemplate = undefined;
+
+  /**
    * @type {Any}
    */
-  get value() { return getNestedPropertyValue(this.propertyOwner, this.propertyPath); }
+  get value() {
+    try {
+      return getNestedPropertyValue(this.propertyOwner, this.propertyPath);
+    } catch (error) {
+      if (this._contextTemplate !== undefined) {
+        throw new Error(`[${this._contextTemplate}] IllegalStateException: ${error.message}`);
+      } else {
+        throw error;
+      }
+    }
+  }
   /**
    * @param {Any} newValue
    */
   set value(newValue) {
-    return new Promise((resolve, reject) => {
-      try {
-        if (this.propertyOwner.updateProperty !== undefined) {
-          this.propertyOwner.updateProperty(this.propertyPath, newValue)
-            .then(resolve());
-        } else {
-          setNestedPropertyValue(this.propertyOwner, this.propertyPath, newValue);
-          resolve();
-        }
-      } catch (error) {
-        reject(error);
+    try {
+      if (this.propertyOwner.updateProperty !== undefined) {
+        this.propertyOwner.updateProperty(this.propertyPath, newValue);
+      } else {
+        setNestedPropertyValue(this.propertyOwner, this.propertyPath, newValue);
       }
-    });
+    } catch (error) {
+      if (this._contextTemplate !== undefined) {
+        throw new Error(`[${this._contextTemplate}] IllegalStateException: ${error.message}`);
+      } else {
+        throw error;
+      }
+    }
   }
 
   /**
@@ -82,12 +99,14 @@ export default class InputViewModel extends ViewModel {
    * @param {Boolean | undefined} args.isEditable 
    * @param {String} args.propertyPath
    * @param {Object} args.propertyOwner
+   * @param {String | undefined} contextTemplate
    */
   constructor(args = {}) {
     super(args);
     this._isEditable = args.isEditable ?? false;
-    this.propertyPath = args.propertyPath ?? undefined;
-    this.propertyOwner = args.propertyOwner ?? undefined;
+    this.propertyPath = args.propertyPath;
+    this.propertyOwner = args.propertyOwner;
+    this._contextTemplate = args.contextTemplate;
   }
 
   /** @override */
@@ -99,7 +118,12 @@ export default class InputViewModel extends ViewModel {
     }
     
     if (this._element === undefined || this._element === null) {
-      throw new Error(`NullPointerException: Failed to get input element with id '${this.id}'`);
+      const errorMessage = `NullPointerException: Failed to get input element with id '${this.id}'`;
+      if (this._contextTemplate !== undefined) {
+        throw new Error(`[${this._contextTemplate}] ${errorMessage}`);
+      } else {
+        throw new Error(errorMessage);
+      }
     }
 
     // -------------------------------------------------------------
