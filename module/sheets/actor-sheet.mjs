@@ -103,7 +103,10 @@ export class AmbersteelActorSheet extends ActorSheet {
 
     // Prepare view model. 
     this._viewModel = this.subType.getViewModel(context);
-    this._viewModel.applyViewState(this._getViewState(this.actor.id));
+    const viewState = this._getViewState(this.item.id);
+    if (viewState !== undefined) {
+      this._viewModel.applyViewState(viewState);
+    }
     context.viewModel = this._viewModel;
     
     this._inputsAndButtons = new ViewModelCollection();
@@ -114,14 +117,14 @@ export class AmbersteelActorSheet extends ActorSheet {
   }
 
   /**
-   * Returns the view state. 
+   * Returns the view state, if any stored view state exists. 
    * @param {String} key 
    * @param {Map<String, Object>} globalViewStates 
-   * @returns {Object}
+   * @returns {Object | undefined} The stored view state, or undefined, if no stored view state exists. 
    * @private
    */
   _getViewState(key, globalViewStates = game.ambersteel.viewStates) {
-    return globalViewStates.get(key) ?? Object.create(null);
+    return globalViewStates.get(key);
   }
 
   /**
