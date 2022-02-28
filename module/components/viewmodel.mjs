@@ -71,6 +71,8 @@ export default class ViewModel {
   _id = undefined;
   /**
    * Id used for the HTML element's id and name attributes. 
+   * 
+   * The id of this view model serves as the key to read/write from/to the global view states map. 
    * @type {String}
    * @readonly
    */
@@ -240,5 +242,25 @@ export default class ViewModel {
     for (const child of this.children) {
       child.activateListeners(html, isOwner, isEditable);
     }
+  }
+
+  /**
+   * Retrieves and applies the view state. 
+   * @param {Map<String, Object>} globalViewStates 
+   */
+  readViewState(globalViewStates = game.ambersteel.viewStates) {
+    const viewState = globalViewStates.get(this.id);
+    if (viewState !== undefined) {
+      this.applyViewState(viewState);
+    }
+  }
+
+  /**
+   * Stores the current view state of this view model. 
+   * @param {Map<String, Object>} globalViewStates 
+   */
+  writeViewState(globalViewStates = game.ambersteel.viewStates) {
+    const viewState = this.toViewState()
+    globalViewStates.set(this.id, viewState);
   }
 }

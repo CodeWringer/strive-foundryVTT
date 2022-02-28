@@ -103,10 +103,7 @@ export class AmbersteelActorSheet extends ActorSheet {
 
     // Prepare view model. 
     this._viewModel = this.subType.getViewModel(context);
-    const viewState = this._getViewState(this.actor.id);
-    if (viewState !== undefined) {
-      this._viewModel.applyViewState(viewState);
-    }
+    this._viewModel.readViewState();
     context.viewModel = this._viewModel;
     
     this._inputsAndButtons = new ViewModelCollection();
@@ -114,27 +111,6 @@ export class AmbersteelActorSheet extends ActorSheet {
     this.subType.prepareDerivedData(context);
 
     return context;
-  }
-
-  /**
-   * Returns the view state, if any stored view state exists. 
-   * @param {String} key 
-   * @param {Map<String, Object>} globalViewStates 
-   * @returns {Object | undefined} The stored view state, or undefined, if no stored view state exists. 
-   * @private
-   */
-  _getViewState(key, globalViewStates = game.ambersteel.viewStates) {
-    return globalViewStates.get(key);
-  }
-
-  /**
-   * Stores the current view state. 
-   * @param {String} key 
-   * @param {Map<String, Object>} globalViewStates 
-   * @private
-   */
-  _setViewState(key, globalViewStates = game.ambersteel.viewStates) {
-    globalViewStates.set(key, this.viewModel.toViewState());
   }
 
   /**
@@ -181,7 +157,7 @@ export class AmbersteelActorSheet extends ActorSheet {
    */
   async close() {
     if (this._viewModel !== undefined && this._viewModel !== null) {
-      this._setViewState(this._getViewStateId());
+      this._viewModel.writeViewState();
       try {
         this._viewModel.dispose();
       } catch (e) {
@@ -208,13 +184,5 @@ export class AmbersteelActorSheet extends ActorSheet {
     await skillItem.createSkillAbility();
 
     this.parent.render();
-  }
-
-  /**
-   * @returns {String}
-   * @private
-   */
-  _getViewStateId() {
-    return this.actor.id;
   }
 }
