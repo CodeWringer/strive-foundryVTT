@@ -10,7 +10,7 @@ export default class SkillItemSheetViewModel extends SkillViewModel {
    * @type {Array<ChoiceOption>}
    * @readonly
    */
-  get attributeOptions() { return game.ambersteel.getAttributeOptions; }
+  get attributeOptions() { return game.ambersteel.getAttributeOptions(); }
 
   /**
    * @type {SkillAbilityTableViewModel}
