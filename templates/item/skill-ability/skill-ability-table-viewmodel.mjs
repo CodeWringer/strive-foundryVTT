@@ -24,13 +24,7 @@ export default class SkillAbilityTableViewModel extends SheetViewModel {
     this._skillAbilitiesInitiallyVisible = value;
     
     // Immediately write view state. 
-    // First, determine the root level parent. 
-    let parent = this.parent;
-    while(parent.parent !== undefined && parent.parent !== null) {
-      parent = parent.parent;
-    }
-    // Then, have that parent write out its current state. 
-    parent.writeViewState();
+    this.writeAllViewState();
   }
   
   /**

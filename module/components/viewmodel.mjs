@@ -263,4 +263,18 @@ export default class ViewModel {
     const viewState = this.toViewState()
     globalViewStates.set(this.id, viewState);
   }
+
+  /**
+   * Stores the current view state of the entire view model hierarchy this view model is a part of. 
+   * 
+   * What this really means is, the top-most parent writes out its state. 
+   * @param {Map<String, Object>} globalViewStates 
+   */
+  writeAllViewState(globalViewStates = game.ambersteel.viewStates) {
+    if (this.parent !== undefined && this.parent !== null) {
+      this.parent.writeAllViewState(globalViewStates);
+    } else {
+      this.writeViewState(globalViewStates);
+    }
+  }
 }
