@@ -140,7 +140,7 @@ Hooks.once('init', async function() {
       return (businessData.attributes.physical.toughness.value * 2) - (injuryCount * 2);
     },
     getCharacterMaximumInjuries: function(actor) {
-      return Math.max(Math.floor(actor.data.data.attributes.physical.toughness.value / 2), 1);
+      return Math.max(Math.floor(actor.data.data.attributes.physical.toughness.value / 2) + 1, 1);
     },
     getCharacterMaximumExhaustion: function(actor) {
       return actor.data.data.attributes.physical.endurance.value * 2;
