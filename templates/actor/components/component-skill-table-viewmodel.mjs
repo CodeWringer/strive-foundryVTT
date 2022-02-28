@@ -69,7 +69,7 @@ export default class SkillTableViewModel extends SheetViewModel {
     for (const skill of this.skills) {
       const vm = new SkillAbilityTableViewModel({
         ...args,
-        id: `${skill.id}.skill-abilities`,
+        id: `${skill.id}-skill-abilities`,
         parent: thiz,
         item: skill,
         _oneColumn: false,
