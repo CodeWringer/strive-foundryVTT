@@ -18,7 +18,20 @@ export default class SkillAbilityTableViewModel extends SheetViewModel {
    * @type {Boolean}
    * @readonly
    */
-  skillAbilitiesInitiallyVisible = false
+  _skillAbilitiesInitiallyVisible = false
+  get skillAbilitiesInitiallyVisible() { return this._skillAbilitiesInitiallyVisible; }
+  set skillAbilitiesInitiallyVisible(value) {
+    this._skillAbilitiesInitiallyVisible = value;
+    
+    // Immediately write view state. 
+    // First, determine the root level parent. 
+    let parent = this.parent;
+    while(parent.parent !== undefined && parent.parent !== null) {
+      parent = parent.parent;
+    }
+    // Then, have that parent write out its current state. 
+    parent.writeViewState();
+  }
   
   /**
    * @type {Boolean}
@@ -82,7 +95,7 @@ export default class SkillAbilityTableViewModel extends SheetViewModel {
     this.oneColumn = args.oneColumn ?? false;
     this.visGroupId = args.visGroupId ?? createUUID();
     this.actor = args.actor;
-    this.skillAbilitiesInitiallyVisible = args.skillAbilitiesInitiallyVisible ?? false;
+    this._skillAbilitiesInitiallyVisible = args.skillAbilitiesInitiallyVisible ?? false;
 
     // Child view models. 
     const thiz = this;
@@ -105,7 +118,7 @@ export default class SkillAbilityTableViewModel extends SheetViewModel {
   toViewState() {
     const viewState = super.toViewState();
 
-    viewState.skillAbilitiesInitiallyVisible = this.skillAbilitiesInitiallyVisible;
+    viewState._skillAbilitiesInitiallyVisible = this._skillAbilitiesInitiallyVisible;
 
     return viewState;
   }
