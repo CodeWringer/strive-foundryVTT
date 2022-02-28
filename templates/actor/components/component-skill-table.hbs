@@ -61,7 +61,7 @@ viewModel: {SkillTableViewModel}
                         {{> inputTextField isEditable=../viewModel.isEditable propertyOwner=skill propertyPath="name" placeholder="ambersteel.labels.name" contextTemplate="component-skill-table" }}
                     </td>
                     <td class="skill-column-attribute">
-                        {{> inputDropDown isEditable=../viewModel.isEditable propertyOwner=skill propertyPath="data.data.relatedAttribute" options=viewModel.attributeOptions contextTemplate="component-skill-table" }}
+                        {{> inputDropDown isEditable=../viewModel.isEditable propertyOwner=skill propertyPath="data.data.relatedAttribute" options=../viewModel.attributeOptions contextTemplate="component-skill-table" }}
                     </td>
                     <td class="skill-column-level">
                         {{> inputNumberSpinner isEditable=../viewModel.isEditable propertyOwner=skill propertyPath="data.data.value" min=0 contextTemplate="component-skill-table" }}
@@ -83,7 +83,7 @@ viewModel: {SkillTableViewModel}
                 </tr>
                 <tr>
                     <td style="display: table-cell;" colspan="100">
-                        {{> "systems/ambersteel/templates/item/skill-ability/skill-ability-table.hbs" viewModel=viewModel.skillAbilityTableViewModel }}
+                        {{> "systems/ambersteel/templates/item/skill-ability/skill-ability-table.hbs" viewModel=(getValue ../viewModel (concat "skillAbilityTableViewModels." skill.id)) }}
                     </td>
                 </tr>
             {{/each}}
