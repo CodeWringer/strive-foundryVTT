@@ -188,10 +188,26 @@ export default class ViewModel {
    * 
    * This means that types which extend {ViewModel} needn't override this method, unless if they have specific 
    * functionality that they need. 
-   * @param {Object} viewState The view state to apply. 
+   * @param {Object | undefined} viewState The view state to apply. 
    * @virtual
    */
   applyViewState(viewState) {
+    // There may be cases where a parent's state is at least partially stored, but not fully. 
+    // *This* instance of a ViewModel right here might not yet have been stored. Therefore, 
+    // the outdated state may be fetched and applied. To avoid null reference exceptions, 
+    // we can safely skip *this* method here. 
+
+    // A more concrete example: 
+    // * User opens character sheet.
+    // * User closes character sheet. View state is written. 
+    // * User re-opens the character sheet and adds one skill item. 
+    // * The sheet is re-rendered, thus re-instantiating view models and re-applying their view states. 
+    // * At this point, no state for the newly added skill item has been written, yet, as the 
+    // sheet hasn't been closed, yet. 
+    // * Without the if check here, the invocation of this method for the view model of the 
+    // newly added skill item would throw an error, as logically, its state could not yet be retrieved. 
+    if (viewState === undefined) return;
+
     for (const propertyName in viewState) {
       if (PropertyUtil.hasProperty(this, propertyName) !== true) continue;
 
