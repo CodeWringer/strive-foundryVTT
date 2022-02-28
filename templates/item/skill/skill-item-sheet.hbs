@@ -1,38 +1,17 @@
 {{!-- Requires context:
-isEditable: {Boolean}
-isSendable: {Boolean}
-item: {Item} = {
-  id: {String}
-  name: {String}
-  img: {String}
-  data: {ItemData} = {
-    data: {Object} = {
-      description: {String}
-      groupName: {String}
-      value: {Number}
-      successes: {Number}
-      failures: {Number}
-      relatedAttribute: {String}
-      requiredSuccessses: {Number}
-      requiredFailures: {Number}
-      abilities: {[Object]} -> see item/skill-ability/skill-ability-table.hbs,
-      category: {String}
-    }
-  }
-}
-actor: {Actor | undefined}
+viewModel: {SkillItemSheetViewModel}
 --}}
 <form class="{{cssClass}}" autocomplete="off">
   <header class="sheet-header">
     <div class="flex flex-column flex-grow">
       <div class="flex flex-row">
-        <img class="header-image" src="{{item.img}}" data-edit="img" title="{{item.name}}" height="64" width="64" />
+        <img class="header-image" src="{{viewModel.item.img}}" data-edit="img" title="{{viewModel.item.name}}" height="64" width="64" />
         <h1 class="header-name">
-          {{> inputTextField isEditable=isEditable propertyOwner=item propertyPath="name" placeholder="ambersteel.labels.name" }}
+          {{> inputTextField isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath="name" placeholder="ambersteel.labels.name" contextTemplate="skill-item-sheet" }}
         </h1>
-        {{#if isSendable}}
+        {{#if viewModel.isSendable}}
           <div class="flex flex-center">
-            {{> buttonSendToChat target=item }}
+            {{> buttonSendToChat target=viewModel.item }}
           </div>
         {{/if}}
       </div>
@@ -44,7 +23,7 @@ actor: {Actor | undefined}
       {{> inputLabel text="ambersteel.labels.relatedAttribute"}}
     </div>
     <div class="flex-grow">
-      {{> inputDropDown isEditable=isEditable propertyOwner=item propertyPath="data.data.relatedAttribute" options=(game.ambersteel.getAttributeOptions) }}
+      {{> inputDropDown isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath="data.data.relatedAttribute" options=viewModel.attributeOptions contextTemplate="skill-item-sheet" }}
     </div>
   </div>
   {{!-- Category --}}
@@ -53,7 +32,7 @@ actor: {Actor | undefined}
       {{> inputLabel text="ambersteel.labels.category"}}
     </div>
     <div class="flex-grow">
-      {{> inputTextField isEditable=isEditable propertyOwner=item propertyPath="data.data.category" }}
+      {{> inputTextField isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath="data.data.category" contextTemplate="skill-item-sheet" }}
     </div>
   </div>
   {{!-- Description --}}
@@ -62,18 +41,11 @@ actor: {Actor | undefined}
       {{> inputLabel text=(localize "ambersteel.labels.description")}}
     </div>
     <div class="flex-grow">
-      {{> inputTextarea isEditable=isEditable propertyOwner=item propertyPath="data.data.description" placeholder="ambersteel.labels.description" allowResize=true cssClass="fill" }}
+      {{> inputTextarea isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath="data.data.description" placeholder="ambersteel.labels.description" allowResize=true cssClass="fill" contextTemplate="skill-item-sheet" }}
     </div>
   </div>
   {{!-- Skill Abilites --}}
-  {{#if (or (eq isEditable true) (neq item.data.data.abilities.length 0)) }}
-    {{> "systems/ambersteel/templates/item/skill-ability/skill-ability-table.hbs" 
-      isEditable=isEditable 
-      isSendable=isSendable 
-      skillAbilitiesInitiallyVisible=true 
-      visGroupId=(generateId) 
-      item=item 
-      actor=actor 
-    }}
+  {{#if viewModel.isSkillAbilityListVisible }}
+    {{> "systems/ambersteel/templates/item/skill-ability/skill-ability-table.hbs" viewModel=viewModel.skillAbilityTableViewModel }}
   {{/if}}
 </form>

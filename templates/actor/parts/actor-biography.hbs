@@ -1,16 +1,8 @@
 {{!-- Requires parameters:
-isEditable: {Boolean}
-isSendable: {Boolean}
-actor: {Object} = {
-  data: {Object} where Object = {
-    data: {Object} where Object = {
-      biography: {String}
-    }
-  }
-}
+viewModel: {ActorBiographyViewModel}
 --}}
 <section class="fill">
   <div class="sheet-block fill">
-    {{editor content=actor.data.data.biography target="data.biography" button=true editable=isEditable owner=owner}}
+    {{editor content=viewModel.actor.data.data.biography target="data.biography" button=true editable=viewModel.isEditable owner=viewModel.owner }}
   </div>
 </section>

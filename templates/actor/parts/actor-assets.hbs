@@ -1,41 +1,5 @@
 {{!-- Requires parameters:
-isEditable: {Boolean}
-grid: {Array<Object>} = {
-  x: {Number}
-  y: {Number}
-}
-gridRows: {Number}
-actor: {Actor} = {
-  id: {String}
-  possessions: {Array<Item>} = {
-    id: {String}
-    name: {String}
-    img: {String}
-    data: {Object} = {
-      data: {Object} = {
-        description: {String}
-        gmNotes: {String}
-        isCustom: {Boolean}
-        quantity: {Number}
-        maxQuantity: {Number}
-        bulk: {Number}
-        shape: {String} = "straight"|"square"
-        isOnPerson: {Boolean}
-      }
-    }
-  }
-  propertyItems: {Array<Item>} -> see possessions
-  data: {Object} = {
-    data: {Object} = {
-      assets: {Object} = {
-        gridIndices: {Array<InventoryIndex>},
-        grid: {Array<Array<InventoryIndex | null>>}
-        maxBulk: {Number},
-        totalBulk: {Number}
-      }
-    }
-  }
-}
+viewModel: {ActorAssetsViewModel}
 --}}
 <section>
   {{!-- Personal assets --}}
@@ -59,7 +23,7 @@ actor: {Actor} = {
           {{> inputLabel for="totalBulk" text="ambersteel.labels.usedCarryingCapacity"}}
         </div>
         <span class="width-md">
-          {{> inputNumberSpinner isEditable=false propertyOwner=actor propertyPath="data.data.assets.totalBulk" }}
+          {{> inputNumberSpinner isEditable=false propertyOwner=actor propertyPath="data.data.assets.totalBulk" contextTemplate="actor-assets" }}
         </span>
       </div>
     </div>
@@ -68,9 +32,9 @@ actor: {Actor} = {
   {{!-- Remote assets --}}
   <h2>{{localize "ambersteel.labels.assetsRemote"}}</h2>
   <ol class="unstyled-list alternating-rows">
-    {{#each actor.propertyItems as |propertyItem key|}}
+    {{#each viewModel.itemViewModels as |vm key|}}
       <li class="ambersteel-list-row sheet-block">
-        {{> "systems/ambersteel/templates/item/item/item-list-item.hbs" item=propertyItem itemId=propertyItem.id isEditable=../isEditable isSendable=../isSendable CONFIG=../CONFIG }}
+        {{> "systems/ambersteel/templates/item/item/item-list-item.hbs" viewModel=vm }}
       </li>
     {{/each}}
     {{#if isEditable}}

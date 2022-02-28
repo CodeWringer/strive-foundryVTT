@@ -2,6 +2,8 @@
 
 This is the Ambersteel table-top role-playing game system for FoundryVTT. 
 
+See also the companion repository that contains the ruleset: https://github.com/CodeWringer/ambersteel
+
 # Credit
 * FontAwesome v5 (Free)
   * https://fontawesome.com/license#license

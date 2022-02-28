@@ -46,10 +46,13 @@ export default class InputRadioButtonGroupViewModel extends InputViewModel {
   get lastChecked() { return this._lastChecked; }
 
   /**
-   * @param {Boolean | undefined} args.isEditable 
    * @param {String | undefined} args.id
+   * 
+   * @param {Boolean | undefined} args.isEditable 
    * @param {String} args.propertyPath
    * @param {Object} args.propertyOwner
+   * @param {String | undefined} contextTemplate
+   * 
    * @param {Array<ChoiceOption>} args.options
    */
   constructor(args = {}) {
@@ -119,12 +122,13 @@ export default class InputRadioButtonGroupViewModel extends InputViewModel {
   }
 }
 
-Handlebars.registerHelper('createInputRadioButtonGroupViewModel', function(isEditable, propertyOwner, propertyPath, options) {
+Handlebars.registerHelper('createInputRadioButtonGroupViewModel', function(isEditable, propertyOwner, propertyPath, options, contextTemplate) {
   const vm = new InputRadioButtonGroupViewModel({
     isEditable: isEditable,
     propertyOwner: propertyOwner,
     propertyPath: propertyPath,
-    options: options
+    options: options,
+    contextTemplate: contextTemplate,
   });
 
   // Add new view model instance to global collection. 
@@ -133,4 +137,4 @@ Handlebars.registerHelper('createInputRadioButtonGroupViewModel', function(isEdi
   return vm;
 });
 Handlebars.registerPartial('_inputRadioButtonGroup', `{{#> "${InputRadioButtonGroupViewModel.TEMPLATE}"}}{{/"${InputRadioButtonGroupViewModel.TEMPLATE}"}}`);
-Handlebars.registerPartial('inputRadioButtonGroup', `{{> _inputRadioButtonGroup vm=(createInputRadioButtonGroupViewModel isEditable propertyOwner propertyPath options) cssClass=(isDefined cssClass "") readOnlyCssClass=(isDefined readOnlyCssClass "") }}`);
+Handlebars.registerPartial('inputRadioButtonGroup', `{{> _inputRadioButtonGroup vm=(createInputRadioButtonGroupViewModel isEditable propertyOwner propertyPath options contextTemplate) cssClass=(isDefined cssClass "") readOnlyCssClass=(isDefined readOnlyCssClass "") }}`);

@@ -1,22 +1,5 @@
 {{!-- Requires parameters:
-isEditable: {Boolean}
-isSendable: {Boolean}
-actor: {Actor} = {
-  id: {String}
-  injuries: {Array<Item>}
-  illnesses: {Array<Item>}
-  data: {Object} = {
-    data: {Object} = {
-      health: {Object} = {
-        maxHP: {Number}
-        HP: {Number}
-        maxInjuries: {Number}
-        maxExhaustion: {Number}
-        exhaustion: {Number}
-      }
-    }
-  }
-}
+viewModel: {ActorHealthViewModel}
 --}}
 <section>
   <h2>{{localize "ambersteel.labels.healthStats"}}</h2>
@@ -31,7 +14,7 @@ actor: {Actor} = {
             {{> inputLabel for="maxHP" text="ambersteel.labels.maxHP"}}
           </div>
           <span class="width-md">
-            {{> inputNumberSpinner isEditable=false propertyOwner=actor propertyPath="data.data.health.maxHP" }}
+            {{> inputNumberSpinner isEditable=false propertyOwner=viewModel.actor propertyPath="data.data.health.maxHP" contextTemplate="actor-health" }}
           </span>
         </div>
         <div class="flex flex-row">
@@ -39,7 +22,7 @@ actor: {Actor} = {
             {{> inputLabel for="HP" text="ambersteel.labels.HP"}}
           </div>
           <span class="width-md">
-            {{> inputNumberSpinner isEditable=isEditable propertyOwner=actor propertyPath="data.data.health.HP" }}
+            {{> inputNumberSpinner isEditable=viewModel.isEditable propertyOwner=viewModel.actor propertyPath="data.data.health.HP" contextTemplate="actor-health" }}
           </span>
         </div>
       </div>
@@ -50,7 +33,7 @@ actor: {Actor} = {
             {{> inputLabel for="maxExhaustion" text="ambersteel.labels.maxExhaustion"}}
           </div>
           <span class="width-md">
-            {{> inputNumberSpinner isEditable=false propertyOwner=actor propertyPath="data.data.health.maxExhaustion" min=0 }}
+            {{> inputNumberSpinner isEditable=false propertyOwner=viewModel.actor propertyPath="data.data.health.maxExhaustion" min=0 contextTemplate="actor-health" }}
           </span>
         </div>
         <div class="flex flex-row">
@@ -58,7 +41,7 @@ actor: {Actor} = {
             {{> inputLabel for="exhaustion" text="ambersteel.labels.exhaustion"}}
           </div>
           <span class="width-md">
-            {{> inputNumberSpinner isEditable=isEditable propertyOwner=actor propertyPath="data.data.health.exhaustion" min=0 }}
+            {{> inputNumberSpinner isEditable=viewModel.isEditable propertyOwner=viewModel.actor propertyPath="data.data.health.exhaustion" min=0 contextTemplate="actor-health" }}
           </span>
         </div>
       </div>
@@ -72,7 +55,7 @@ actor: {Actor} = {
           {{> inputLabel for="maxInjuries" text="ambersteel.labels.maxInjuries"}}
         </div>
         <span class="width-md">
-          {{> inputNumberSpinner isEditable=false propertyOwner=actor propertyPath="data.data.health.maxInjuries" min=0 }}
+          {{> inputNumberSpinner isEditable=false propertyOwner=viewModel.actor propertyPath="data.data.health.maxInjuries" min=0 contextTemplate="actor-health" }}
         </span>
       </div>
     </div>
@@ -83,25 +66,25 @@ actor: {Actor} = {
         </div>
         <span class="width-md">
           <div class="ambersteel-read-only pad-sm fill">
-            {{actor.injuries.length}}
+            {{viewModel.injuryCount}}
           </div>
         </span>
       </div>
     </div>
   </div>
   <ol class="unstyled-list alternating-rows">
-    {{#each actor.injuries as |injury key|}}
+    {{#each viewModel.injuries as |injuryViewModel key|}}
       <li class="ambersteel-list-row sheet-block">
-        {{> "systems/ambersteel/templates/item/injury/injury-list-item.hbs" item=injury itemId=injury.id isEditable=../isEditable isSendable=../isSendable CONFIG=../CONFIG game=../game }}
+        {{> "systems/ambersteel/templates/item/injury/injury-list-item.hbs" viewModel=injuryViewModel }}
       </li>
     {{/each}}
-    {{#if isEditable}}
+    {{#if viewModel.isEditable}}
       <li class="ambersteel-list-row ambersteel-list-footer">
         <div class="fill flex flex-row">
           <span class="flex-grow"></span>
           {{!-- Add injury --}}
           <span class="width-sm">
-            {{> buttonAdd target=actor creationType="injury" withDialog=true }}
+            {{> buttonAdd target=viewModel.actor creationType="injury" withDialog=true }}
           </span>
         </div>
       </li>
@@ -119,25 +102,25 @@ actor: {Actor} = {
         </div>
         <span class="width-md">
           <div class="ambersteel-read-only pad-sm fill">
-            {{actor.illnesses.length}}
+            {{viewModel.illnessCount}}
           </div>
         </span>
       </div>
     </div>
   </div>
   <ol class="unstyled-list alternating-rows">
-    {{#each actor.illnesses as |illness key|}}
+    {{#each viewModel.illnesses as |illnessViewModel key|}}
       <li class="ambersteel-list-row sheet-block">
-        {{> "systems/ambersteel/templates/item/illness/illness-list-item.hbs" item=illness itemId=illness.id isEditable=../isEditable isSendable=../isSendable CONFIG=../CONFIG game=../game }}
+        {{> "systems/ambersteel/templates/item/illness/illness-list-item.hbs" viewModel=illnessViewModel }}
       </li>
     {{/each}}
-    {{#if isEditable}}
+    {{#if viewModel.isEditable}}
       <li class="ambersteel-list-row ambersteel-list-footer">
         <div class="fill flex flex-row">
           <span class="flex-grow"></span>
           {{!-- Add illness --}}
           <span class="width-sm">
-            {{> buttonAdd target=actor creationType="illness" withDialog=true }}
+            {{> buttonAdd target=viewModel.actor creationType="illness" withDialog=true }}
           </span>
         </div>
       </li>

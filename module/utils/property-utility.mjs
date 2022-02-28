@@ -1,6 +1,8 @@
 /**
- * @param obj 
- * @param properties 
+ * Internal function that does the actual look-up of nested property values. 
+ * @param {Object} obj The object whose value is to be looked-up. 
+ * @param {Array<String>} properties The broken down property path. 
+ * Each element represents one property's name in the path. 
  * @private
  */
 function _get(obj, properties) {
@@ -99,8 +101,11 @@ export function setNestedPropertyValue(obj, path, value) {
  * Deletes a nested property. 
  * 
  * Supports array-access-notation. Does not support accessing properties via '[<propName>]'.
- * @param {Object} obj 
- * @param {String} path 
+ * @param {Object} obj The object whose nested property is to be ensured. 
+ * @param {String} path The property path. 
+ *        Separate properties with dot-notation. 
+ *        Access arrays with bracket-notation. 
+ *        E. g. "abilities[4].name"
  * @throws {Error} InvalidParameterException If the given path doesn't resolve to a property. 
  * @throws {Error} UnknownException If deleting the property failed. 
  */
@@ -122,10 +127,40 @@ export function deleteNestedProperty(obj, path) {
 
 /**
  * Returns true, if the given object contains a property with the given name. 
- * @param {Object} obj 
- * @param {String} prop 
+ * @param {Object} obj The object to be tested. 
+ * @param {String} prop Name of a property. 
  * @returns {Boolean} True, if the given object has a property with the given name. 
  */
 export function hasProperty(obj, prop) {
   return prop in obj;
+}
+
+/**
+ * Ensures a nested property at the given path exists. 
+ * 
+ * Will create new properties of type object on the given object, as necessary. 
+ * 
+ * Sets the last property's value to the given value. 
+ * @param {Object} obj The object whose nested property is to be ensured. 
+ * @param {String} propertyPath The property path. 
+ *        Separate properties with dot-notation. 
+ *        Access arrays with bracket-notation. 
+ *        E. g. "abilities[4].name"
+ * @param {Any} value The value to set, if it isn't already defined. 
+ */
+export function ensureNestedProperty(obj, propertyPath, value) {
+  const pathElements = splitPropertyPath(propertyPath);
+	const lastElement = pathElements.pop();
+
+	let currentObject = obj;
+	for (const pathElement of pathElements) {
+		if (currentObject[pathElement] === undefined) {
+			currentObject[pathElement] = {}
+		}
+		currentObject = currentObject[pathElement];
+	}
+
+	if (currentObject[lastElement] === undefined) {
+		currentObject[lastElement] = value;
+	}
 }

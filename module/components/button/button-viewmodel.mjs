@@ -2,6 +2,12 @@ import { TEMPLATES } from "../../templatePreloader.mjs";
 import ViewModel from "../viewmodel.mjs";
 
 /**
+ * Constant that defines the css class to look for when identifying button elements. 
+ * @constant
+ */
+export const SELECTOR_BUTTON = "custom-system-button";
+
+/**
  * --- Inherited from ViewModel
  * 
  * @property {String} id Optional. Id used for the HTML element's id and name attributes. 
@@ -16,13 +22,6 @@ import ViewModel from "../viewmodel.mjs";
  */
 export default class ButtonViewModel extends ViewModel {
   static get TEMPLATE() { return TEMPLATES.COMPONENT_BUTTON; }
-
-  /**
-   * Constant that defines the css class to look for when identifying button elements. 
-   * @static
-   * @readonly
-   */
-  static SELECTOR_BUTTON = "custom-system-button";
 
   /**
    * @type {JQuery | HTMLElement}
@@ -95,15 +94,9 @@ export default class ButtonViewModel extends ViewModel {
     }
   }
 
-  /**
-   * Registers events on elements of the given DOM. 
-   * @param {Object} html DOM of the sheet for which to register listeners. 
-   * @param {Boolean} isOwner If true, registers events that require owner permission. 
-   * @param {Boolean} isEditable If true, registers events that require editing permission. 
-   * @throws {Error} NullPointerException Thrown if the input element could not be found. 
-   */
+  /** @override */
   activateListeners(html, isOwner, isEditable) {
-    this._element = html.find(`.${ButtonViewModel.SELECTOR_BUTTON}#${this.id}`);
+    this._element = html.find(`.${SELECTOR_BUTTON}#${this.id}`);
     
     if (this._element === undefined || this._element === null) {
       throw new Error(`NullPointerException: Failed to get input element with id '${this.id}'`);

@@ -1,10 +1,10 @@
-import ViewModelCollection from "../utils/viewmodel-collection.mjs";
 import AmbersteelBaseItemSheet from "./subtypes/item/ambersteel-base-item-sheet.mjs";
 import AmbersteelSkillItemSheet from "./subtypes/item/ambersteel-skill-item-sheet.mjs";
 import AmbersteelFateCardItemSheet from "./subtypes/item/ambersteel-fate-item-sheet.mjs";
 import AmbersteelInjuryItemSheet from "./subtypes/item/ambersteel-injury-item-sheet.mjs";
 import AmbersteelIllnessItemSheet from "./subtypes/item/ambersteel-illness-item-sheet.mjs";
 import * as SheetUtil from "../utils/sheet-utility.mjs";
+import ViewModelCollection from "../utils/viewmodel-collection.mjs";
 
 export class AmbersteelItemSheet extends ItemSheet {
   /**
@@ -63,27 +63,43 @@ export class AmbersteelItemSheet extends ItemSheet {
   }
 
   /**
-   * @type {ViewModelCollection}
+   * @type {ViewModel}
    * @private
    */
-  _viewModels = undefined;
+  _viewModel = undefined;
   /**
-   * @returns {ViewModelCollection}
+   * @type {ViewModel}
+   * @readonly
    */
-  get viewModels() { return this._viewModels; }
+  get viewModel() { return this._viewModel; }
+
+  /**
+   * @private
+   * @todo Remove and properly integrate inputs and buttons into the "new" view model system. 
+   * @type {ViewModelCollection}
+   */
+  _inputsAndButtons = undefined;
 
   /** 
    * Returns an object that represents sheet and enriched item data. 
    * 
    * Enriched means, it contains derived data and convenience properties. 
+   * 
+   * This method is called *before* the sheet is rendered. 
    * @returns {Object} The enriched context object. 
    * @override 
    * @see https://foundryvtt.com/api/FormApplicatiocn.html#getData
    */
   getData() {
     const context = super.getData();
-
     SheetUtil.enrichData(context);
+
+    // Prepare view model. 
+    this._viewModel = this.subType.getViewModel(context);
+    this._viewModel.readViewState();
+    context.viewModel = this._viewModel;
+    
+    this._inputsAndButtons = new ViewModelCollection();
 
     this.subType.prepareDerivedData(context);
 
@@ -93,6 +109,8 @@ export class AmbersteelItemSheet extends ItemSheet {
   /**
    * @override
    * @see https://foundryvtt.com/api/FormApplication.html#activateListeners
+   * 
+   * This method is called *after* the sheet is rendered. 
    */
   activateListeners(html) {
     super.activateListeners(html);
@@ -101,8 +119,8 @@ export class AmbersteelItemSheet extends ItemSheet {
     const isEditable = this.isEditable;
 
     // Activate view model bound event listeners. 
-    this._viewModels = new ViewModelCollection();
-    this.viewModels.activateListeners(html, isOwner, isEditable);
+    this.viewModel.activateListeners(html, isOwner, isEditable);
+    this._inputsAndButtons.activateListeners(html, isOwner, isEditable);
 
     // -------------------------------------------------------------
     if (!isOwner) return;
@@ -115,7 +133,18 @@ export class AmbersteelItemSheet extends ItemSheet {
    * @see https://foundryvtt.com/api/FormApplication.html#close
    */
   async close() {
-    this.viewModels.dispose();
+    if (this._viewModel !== undefined && this._viewModel !== null) {
+      this._viewModel.writeViewState();
+      try {
+        this._viewModel.dispose();
+      } catch (e) {
+        game.ambersteel.logger.logWarn(e);
+      }
+    }
+    this._viewModel = null;
+
+    this._inputsAndButtons.dispose();
+
     return super.close();
   }
 }

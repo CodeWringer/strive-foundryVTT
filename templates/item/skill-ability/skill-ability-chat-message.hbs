@@ -1,24 +1,11 @@
 {{!-- Required context:
-isEditable: {Boolean}
-isSendable: {Boolean}
-skillAbility: {SkillAbility} = {
-  name: {String}
-  description: {String}
-  requiredLevel: {Number}
-  condition: {String}
-  apCost: {Number|undefined}
-  distance: {Number|undefined}
-  damageFormula: {String}
-  damageType: {CONFIG.ambersteel.damageTypes}
-  attackType: {CONFIG.ambersteel.attackTypes}
-  isCustom: {Boolean}
-}
+viewModel: {SkillAbilityChatMessageViewModel}
 --}}
 <section>
   {{!-- Header --}}
   <div class="flex flex-row">
     <h3 class="flex-grow">
-      {{skillAbility.name}}
+      {{localize viewModel.skillAbility.name}}
     </h3>
   </div>
   {{!-- Required level --}}
@@ -27,7 +14,7 @@ skillAbility: {SkillAbility} = {
       {{localize "ambersteel.labels.skillAbilityRequirement"}}
     </div>
     <div class="flex-grow">
-      {{skillAbility.requiredLevel}}
+      {{viewModel.skillAbility.requiredLevel}}
     </div>
   </div>
   {{!-- Condition --}}
@@ -36,7 +23,7 @@ skillAbility: {SkillAbility} = {
       {{localize "ambersteel.labels.skillAbilityCondition"}}
     </div>
     <div class="flex-grow">
-      {{skillAbility.condition}}
+      {{localize viewModel.skillAbility.condition}}
     </div>
   </div>
   {{!-- apCost --}}
@@ -45,7 +32,7 @@ skillAbility: {SkillAbility} = {
       {{localize "ambersteel.labels.apCost"}}
     </div>
     <div class="flex-grow">
-      {{skillAbility.apCost}}
+      {{viewModel.skillAbility.apCost}}
     </div>
   </div>
   {{!-- attackType --}}
@@ -54,7 +41,7 @@ skillAbility: {SkillAbility} = {
       {{localize "ambersteel.labels.attackType"}}
     </div>
     <div class="flex-grow">
-      {{localize skillAbility.attackType.localizableName}}
+      {{localize viewModel.skillAbility.attackType.localizableName}}
     </div>
   </div>
   {{!-- distance --}}
@@ -63,7 +50,7 @@ skillAbility: {SkillAbility} = {
       {{localize "ambersteel.labels.distance"}}
     </div>
     <div class="flex-grow">
-      {{skillAbility.distance}}
+      {{viewModel.skillAbility.distance}}
     </div>
   </div>
   {{!-- damageFormula --}}
@@ -72,7 +59,7 @@ skillAbility: {SkillAbility} = {
       {{localize "ambersteel.labels.damage"}}
     </div>
     <div class="flex-grow">
-      {{skillAbility.damageFormula}}
+      {{viewModel.skillAbility.damageFormula}}
     </div>
   </div>
   {{!-- damageType --}}
@@ -81,11 +68,11 @@ skillAbility: {SkillAbility} = {
       {{localize "ambersteel.labels.damageType"}}
     </div>
     <div class="flex-grow">
-      {{localize skillAbility.damageType.localizableName}}
+      {{localize viewModel.skillAbility.damageType.localizableName}}
     </div>
   </div>
   {{!-- Description --}}
   <div class="sheet-block multiline">
-    {{skillAbility.description}}
+    {{localize viewModel.skillAbility.description}}
   </div>
 </section>

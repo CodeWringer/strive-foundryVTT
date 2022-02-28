@@ -8,15 +8,18 @@ import { AmbersteelActorSheet } from "./sheets/actor-sheet.mjs";
 import { AmbersteelItemSheet } from "./sheets/item-sheet.mjs";
 // Import helper/utility classes and constants.
 import { preloadHandlebarsTemplates } from "./templatePreloader.mjs";
-import { getNestedPropertyValue } from "./utils/property-utility.mjs";
+import { getNestedPropertyValue, ensureNestedProperty, setNestedPropertyValue } from "./utils/property-utility.mjs";
 import AdvancementRequirements from "./dto/advancement-requirement.mjs";
 import { TEMPLATES } from "./templatePreloader.mjs";
 import { createUUID } from './utils/uuid-utility.mjs';
 import ChoiceOption from "./dto/choice-option.mjs";
-import ViewModelCollection from './utils/viewmodel-collection.mjs';
 // Import logging classes. 
 import { BaseLoggingStrategy, LogLevels } from "./logging/base-logging-strategy.mjs";
 import { ConsoleLoggingStrategy } from "./logging/console-logging-strategy.mjs";
+// Import view models. 
+import './components/viewmodel.mjs';
+import '../templates/sheet-viewmodel.mjs';
+import ViewModelCollection from './utils/viewmodel-collection.mjs';
 // Import components. 
 import './components/input-textfield/input-textfield-viewmodel.mjs';
 import './components/input-dropdown/input-dropdown-viewmodel.mjs';
@@ -32,6 +35,20 @@ import './components/button-roll/button-roll-viewmodel.mjs';
 import './components/button-send-to-chat/button-send-to-chat-viewmodel.mjs';
 import './components/button-toggle-visibility/button-toggle-visibility-viewmodel.mjs';
 import './components/button-take-item/button-take-item-viewmodel.mjs';
+// Import ui view models. 
+import '../templates/gm-notes-viewmodel.mjs';
+import '../templates/actor/actor-sheet-viewmodel.mjs';
+import '../templates/actor/components/component-attribute-table-viewmodel.mjs';
+import '../templates/actor/components/component-skill-table-viewmodel.mjs';
+import '../templates/actor/parts/actor-assets-viewmodel.mjs';
+import '../templates/actor/parts/actor-attributes-viewmodel.mjs';
+import '../templates/actor/parts/actor-beliefs-fate-viewmodel.mjs';
+import '../templates/actor/parts/actor-beliefs-viewmodel.mjs';
+import '../templates/actor/parts/actor-biography-viewmodel.mjs';
+import '../templates/actor/parts/actor-fate-viewmodel.mjs';
+import '../templates/actor/parts/actor-health-viewmodel.mjs';
+import '../templates/actor/parts/actor-personals-viewmodel.mjs';
+import '../templates/actor/parts/actor-skills-viewmodel.mjs';
 
 /* -------------------------------------------- */
 /*  Init Hook                                   */
@@ -123,7 +140,7 @@ Hooks.once('init', async function() {
       return (businessData.attributes.physical.toughness.value * 2) - (injuryCount * 2);
     },
     getCharacterMaximumInjuries: function(actor) {
-      return Math.max(Math.floor(actor.data.data.attributes.physical.toughness.value / 2), 1);
+      return Math.max(Math.floor(actor.data.data.attributes.physical.toughness.value / 2) + 1, 1);
     },
     getCharacterMaximumExhaustion: function(actor) {
       return actor.data.data.attributes.physical.endurance.value * 2;
@@ -179,6 +196,11 @@ Hooks.once('init', async function() {
      * @type {ViewModelCollection}
      */
     viewModels: new ViewModelCollection(),
+    /**
+     * 
+     * @type {Map<String, Object>}
+     */
+    viewStates: new Map(),
     /**
      * Returns an array of {ChoiceOption}s. 
      * @param {Object} Any CONFIG property. 
@@ -325,6 +347,14 @@ Handlebars.registerHelper('or', function(a, b) {
   return a || b;
 });
 
+Handlebars.registerHelper('not', function(a) {
+  return !a;
+});
+
+Handlebars.registerHelper('obj', function(a) {
+  return {};
+});
+
 Handlebars.registerHelper('ifThenElse', function(condition, thenValue, elseValue) {
   if (condition) {
     return thenValue;
@@ -353,30 +383,8 @@ Handlebars.registerHelper('arrayFrom', function(arrayString) {
   return result;
 });
 
-Handlebars.registerHelper('lookupValue', function(context, propertyPath, itemId) {
-  let propertyHolder = undefined;
-  if (context.item) {
-    propertyHolder = context.item;
-  } else if (context.actor) {
-    if (itemId) {
-      propertyHolder = context.actor.items.get(itemId);
-    } else {
-      propertyHolder = context.actor;
-    }
-  } else {
-    propertyHolder = context;
-  }
-  // Messy fix for context sometimes being a level deeper than it should. 
-  if (propertyPath.startsWith("data.data")) {
-    if (!hasProperty(propertyHolder, "data")) {
-      game.ambersteel.logger.logWarn(`[lookupValue] PropertyHolder doesn't have 'data' property!`, propertyHolder);
-      return undefined;
-    }
-    if (!hasProperty(propertyHolder.data, "data")) {
-      propertyPath = propertyPath.replace("data.data", "data");
-    }
-  }
-  return getNestedPropertyValue(propertyHolder, propertyPath);
+Handlebars.registerHelper('getValue', function(context, propertyPath) {
+  return getNestedPropertyValue(context, propertyPath);
 });
 
 Handlebars.registerHelper('isDefined', function() {
@@ -391,6 +399,32 @@ Handlebars.registerHelper('isDefined', function() {
 
 Handlebars.registerHelper('generateId', function() {
   return createUUID();
+});
+
+// If the given 'obj' has a property found via the given 'propertyPath', its value will be returned. 
+// Otherwise, if the property doesn't yet exist, it will be created and its value 
+// set to the given 'defaultValue'. 
+Handlebars.registerHelper('getEnsured', function(obj, propertyPath, defaultValue) {
+  ensureNestedProperty(obj, propertyPath, defaultValue);
+  return getNestedPropertyValue(obj, propertyPath);
+});
+
+// Returns an invocable function that, once invoked, will set the given object's 
+// property, identified by the given path, to the given value. 
+// The returned function need only be invoked. No arguments need to be passed. 
+Handlebars.registerHelper('setCallback', function(obj, propertyPath, value) {
+  // This defines the actual callback function. 
+  const f = (obj, propertyPath, value) => {
+    ensureNestedProperty(obj, propertyPath, value);
+    setNestedPropertyValue(obj, propertyPath, value);
+  };
+  // This wraps a concrete call to the callback function in an 
+  // instance of an anonymous function. This is necessary to prevent 
+  // the actual callback function to be invoked prematurely and 
+  // wraps the given arguments in a concrete call. 
+  // This means that the returned function need only be invoked 
+  // as any other function without arguments. 
+  return () => { f(obj, propertyPath, value) };
 });
 
 /* -------------------------------------------- */

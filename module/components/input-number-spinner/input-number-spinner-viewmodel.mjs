@@ -41,10 +41,13 @@ export default class InputNumberSpinnerViewModel extends InputViewModel {
   get hasMax() { return this.max !== undefined; }
 
   /**
-   * @param {Boolean | undefined} args.isEditable 
    * @param {String | undefined} args.id
+   * 
+   * @param {Boolean | undefined} args.isEditable 
    * @param {String} args.propertyPath
    * @param {Object} args.propertyOwner
+   * @param {String | undefined} contextTemplate
+   * 
    * @param {Number} min Gets the minimum value. 
    * @param {Number} max Gets the maximum value. 
    * @param {Number} step Gets the increment/decrement step size. 
@@ -83,14 +86,15 @@ export default class InputNumberSpinnerViewModel extends InputViewModel {
   }
 }
 
-Handlebars.registerHelper('createInputNumberSpinnerViewModel', function(isEditable, propertyOwner, propertyPath, step, min, max) {
+Handlebars.registerHelper('createInputNumberSpinnerViewModel', function(isEditable, propertyOwner, propertyPath, step, min, max, contextTemplate) {
   const vm = new InputNumberSpinnerViewModel({
     isEditable: isEditable,
     propertyOwner: propertyOwner,
     propertyPath: propertyPath,
     step: step,
     min: min,
-    max: max
+    max: max,
+    contextTemplate: contextTemplate,
   });
 
   // Add new view model instance to global collection. 
@@ -99,4 +103,4 @@ Handlebars.registerHelper('createInputNumberSpinnerViewModel', function(isEditab
   return vm;
 });
 Handlebars.registerPartial('_inputNumberSpinner', `{{#> "${InputNumberSpinnerViewModel.TEMPLATE}"}}{{/"${InputNumberSpinnerViewModel.TEMPLATE}"}}`);
-Handlebars.registerPartial('inputNumberSpinner', `{{> _inputNumberSpinner vm=(createInputNumberSpinnerViewModel isEditable propertyOwner propertyPath (isDefined step 1) min max) cssClass=(isDefined cssClass "") readOnlyCssClass=(isDefined readOnlyCssClass "") }}`);
+Handlebars.registerPartial('inputNumberSpinner', `{{> _inputNumberSpinner vm=(createInputNumberSpinnerViewModel isEditable propertyOwner propertyPath (isDefined step 1) min max contextTemplate) cssClass=(isDefined cssClass "") readOnlyCssClass=(isDefined readOnlyCssClass "") }}`);

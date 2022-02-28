@@ -1,3 +1,4 @@
+import ActorSheetViewModel from "../../../../templates/actor/actor-sheet-viewmodel.mjs";
 import { TEMPLATES } from "../../../templatePreloader.mjs";
 
 export default class AmbersteelBaseActorSheet {
@@ -77,5 +78,16 @@ export default class AmbersteelBaseActorSheet {
     context.data.learningSkills = actorData.learningSkills;
     context.data.skills = actorData.skills;
     context.data.attributeGroups = context.data.data.attributeGroups;
+  }
+
+  getViewModel(context) {
+    return new ActorSheetViewModel({
+      id: this.getActor().id,
+      isEditable: context.isEditable,
+      isSendable: context.isSendable,
+      isOwner: context.isOwner,
+      isGM: context.isGM,
+      actor: this.getActor(),
+    });
   }
 }

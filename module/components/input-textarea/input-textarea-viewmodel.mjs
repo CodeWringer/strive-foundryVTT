@@ -26,10 +26,13 @@ export default class InputTextareaViewModel extends InputViewModel {
   static get TEMPLATE() { return TEMPLATES.COMPONENT_INPUT_TEXTAREA; }
 
   /**
-   * @param {Boolean | undefined} args.isEditable 
    * @param {String | undefined} args.id
+   * 
+   * @param {Boolean | undefined} args.isEditable 
    * @param {String} args.propertyPath
    * @param {Object} args.propertyOwner
+   * @param {String | undefined} contextTemplate
+   * 
    * @param {Boolean} args.allowResize 
    * @param {Boolean} args.spellcheck 
    * @param {String} args.placeholder 
@@ -42,14 +45,15 @@ export default class InputTextareaViewModel extends InputViewModel {
   }
 }
 
-Handlebars.registerHelper('createInputTextareaViewModel', function(isEditable, propertyOwner, propertyPath, placeholder, allowResize, spellcheck) {
+Handlebars.registerHelper('createInputTextareaViewModel', function(isEditable, propertyOwner, propertyPath, placeholder, allowResize, spellcheck, contextTemplate) {
   const vm = new InputTextareaViewModel({
     isEditable: isEditable,
     propertyOwner: propertyOwner,
     propertyPath: propertyPath,
     allowResize: allowResize,
     spellcheck: spellcheck,
-    placeholder: placeholder
+    placeholder: placeholder,
+    contextTemplate: contextTemplate,
   });
 
   // Add new view model instance to global collection. 
@@ -58,4 +62,4 @@ Handlebars.registerHelper('createInputTextareaViewModel', function(isEditable, p
   return vm;
 });
 Handlebars.registerPartial('_inputTextarea', `{{#> "${InputTextareaViewModel.TEMPLATE}"}}{{/"${InputTextareaViewModel.TEMPLATE}"}}`);
-Handlebars.registerPartial('inputTextarea', `{{> _inputTextarea vm=(createInputTextareaViewModel isEditable propertyOwner propertyPath placeholder allowResize spellcheck) cssClass=(isDefined cssClass "") readOnlyCssClass=(isDefined readOnlyCssClass "") }}`);
+Handlebars.registerPartial('inputTextarea', `{{> _inputTextarea vm=(createInputTextareaViewModel isEditable propertyOwner propertyPath placeholder allowResize spellcheck contextTemplate) cssClass=(isDefined cssClass "") readOnlyCssClass=(isDefined readOnlyCssClass "") }}`);

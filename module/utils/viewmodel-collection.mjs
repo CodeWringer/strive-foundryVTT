@@ -1,5 +1,5 @@
-import ButtonViewModel from "../components/button/button-viewmodel.mjs";
-import InputViewModel from "../components/input-viewmodel.mjs";
+import { SELECTOR_BUTTON } from "../components/button/button-viewmodel.mjs";
+import { SELECTOR_EDIT, SELECTOR_READ } from "../components/input-viewmodel.mjs";
 
 /**
  * Represents a collection of {ViewModel} objects. 
@@ -82,25 +82,6 @@ export default class ViewModelCollection {
   }
 
   /**
-   * Looks up and removes the {ViewModel} with the given id from the global view model collection. 
-   * Adds the {ViewModel} instance to this collection and returns it. 
-   * @param {String} id 
-   * @returns {ViewModel}
-   * @throws {Error} NullPointerException
-   */
-  pullFromGlobal(id) {
-    const vm = game.ambersteel.viewModels.get(id);
-
-    if (vm !== undefined) {
-      game.ambersteel.viewModels.remove(id);
-      this.set(id, vm);
-      return vm;
-    } else {
-      throw new Error(`NullPointerException: Couldn't get {ViewModel} with id '${id}' from global!`);
-    }
-  }
-
-  /**
    * Registers events on elements of the given DOM. 
    * @param {Object} html DOM of the sheet for which to register listeners. 
    * @param {Boolean} isOwner
@@ -123,9 +104,29 @@ export default class ViewModelCollection {
       if (id === undefined) throw new Error("NullPointerException: id of element must not be undefined!");
 
       // Remove from global collection and add to this. 
-      const vm = this.pullFromGlobal(id);
+      const vm = this._pullFromGlobal(id);
       // Activate DOM event listeners of view model. 
       vm.activateListeners(html, isOwner, isEditable);
+    }
+  }
+
+  /**
+   * Looks up and removes the {ViewModel} with the given id from the global view model collection. 
+   * Adds the {ViewModel} instance to this collection and returns it. 
+   * @param {String} id 
+   * @returns {ViewModel}
+   * @throws {Error} NullPointerException
+   * @private
+   */
+  _pullFromGlobal(id) {
+    const vm = game.ambersteel.viewModels.get(id);
+
+    if (vm !== undefined) {
+      game.ambersteel.viewModels.remove(id);
+      this.set(id, vm);
+      return vm;
+    } else {
+      throw new Error(`NullPointerException: Couldn't get {ViewModel} with id '${id}' from global!`);
     }
   }
 
@@ -135,8 +136,8 @@ export default class ViewModelCollection {
    * @private
    */
   _getAllInputs(html) {
-    const cssClassEdits = InputViewModel.SELECTOR_EDIT;
-    const cssClassReadOnlys = InputViewModel.SELECTOR_READ;
+    const cssClassEdits = SELECTOR_EDIT;
+    const cssClassReadOnlys = SELECTOR_READ;
 
     // This returns JQuery objects. 
     const edits = html.find(`.${cssClassEdits}`);
@@ -159,7 +160,7 @@ export default class ViewModelCollection {
    * @private
    */
   _getAllButtons(html) {
-    const cssClassButton = ButtonViewModel.SELECTOR_BUTTON;
+    const cssClassButton = SELECTOR_BUTTON;
 
     // This returns JQuery objects. 
     return html.find(`.${cssClassButton}`);

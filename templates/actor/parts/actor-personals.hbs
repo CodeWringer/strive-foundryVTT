@@ -1,18 +1,5 @@
 {{!-- Requires parameters:
-isEditable: {Boolean}
-isSendable: {Boolean}
-actor: {AmbersteelActor}  = {
-  data: {Object} = {
-    data: {Object} = {
-      person: {Object} = {
-        species: {String}
-        culture: {String}
-        sex: {String}
-        age: {Number|String}
-      }
-    }
-  }
-}
+viewModel: {ActorPersonalsViewModel}
 --}}
 <section>
   <div class="flex sheet-block">
@@ -21,16 +8,16 @@ actor: {AmbersteelActor}  = {
       <label class="line-height fancy-font pad-sm" for="person.sex">{{localize "ambersteel.personals.sex"}}</label>
     </div>
     <div class="flex flex-column flex-grow">
-      {{> inputTextField isEditable=isEditable propertyOwner=actor propertyPath="data.data.person.species" cssClass="line-height pad-sm" readOnlyCssClass="line-height pad-sm" }}
-      {{> inputTextField isEditable=isEditable propertyOwner=actor propertyPath="data.data.person.culture" cssClass="line-height pad-sm" readOnlyCssClass="line-height pad-sm" }}
+      {{> inputTextField isEditable=viewModel.isEditable propertyOwner=viewModel.actor propertyPath="data.data.person.species" cssClass="line-height pad-sm" readOnlyCssClass="line-height pad-sm" contextTemplate="actor-personals" }}
+      {{> inputTextField isEditable=viewModel.isEditable propertyOwner=viewModel.actor propertyPath="data.data.person.culture" cssClass="line-height pad-sm" readOnlyCssClass="line-height pad-sm" contextTemplate="actor-personals" }}
     </div>
     <div class="flex flex-column">
       <label class="line-height fancy-font pad-sm" for="person.culture">{{localize "ambersteel.personals.culture"}}</label>
       <label class="line-height fancy-font pad-sm" for="person.age">{{localize "ambersteel.personals.age"}}</label>
     </div>
     <div class="flex flex-column flex-grow">
-      {{> inputTextField isEditable=isEditable propertyOwner=actor propertyPath="data.data.person.sex" cssClass="line-height pad-sm" readOnlyCssClass="line-height pad-sm" }}
-      {{> inputTextField isEditable=isEditable propertyOwner=actor propertyPath="data.data.person.age" cssClass="line-height pad-sm" readOnlyCssClass="line-height pad-sm" }}
+      {{> inputTextField isEditable=viewModel.isEditable propertyOwner=viewModel.actor propertyPath="data.data.person.sex" cssClass="line-height pad-sm" readOnlyCssClass="line-height pad-sm" contextTemplate="actor-personals" }}
+      {{> inputTextField isEditable=viewModel.isEditable propertyOwner=viewModel.actor propertyPath="data.data.person.age" cssClass="line-height pad-sm" readOnlyCssClass="line-height pad-sm" contextTemplate="actor-personals" }}
     </div>
   </div>
 </section>

@@ -34,10 +34,13 @@ export default class InputTextFieldViewModel extends InputViewModel {
   get placeholder() { return this._placeholder; }
 
   /**
-   * @param {Boolean | undefined} args.isEditable 
    * @param {String | undefined} args.id
+   * 
+   * @param {Boolean | undefined} args.isEditable 
    * @param {String} args.propertyPath
    * @param {Object} args.propertyOwner
+   * @param {String | undefined} contextTemplate
+   * 
    * @param {String} args.placeholder
    */
   constructor(args = {}) {
@@ -46,12 +49,13 @@ export default class InputTextFieldViewModel extends InputViewModel {
   }
 }
 
-Handlebars.registerHelper('createInputTextFieldViewModel', function(isEditable, propertyOwner, propertyPath, localizablePlaceholder) {
+Handlebars.registerHelper('createInputTextFieldViewModel', function(isEditable, propertyOwner, propertyPath, localizablePlaceholder, contextTemplate) {
   const vm = new InputTextFieldViewModel({
     isEditable: isEditable,
     propertyOwner: propertyOwner,
     propertyPath: propertyPath,
-    placeholder: game.i18n.localize(localizablePlaceholder)
+    placeholder: game.i18n.localize(localizablePlaceholder),
+    contextTemplate: contextTemplate,
   });
   
   // Add new view model instance to global collection. 
@@ -60,4 +64,4 @@ Handlebars.registerHelper('createInputTextFieldViewModel', function(isEditable, 
   return vm;
 });
 Handlebars.registerPartial('_inputTextField', `{{#> "${InputTextFieldViewModel.TEMPLATE}"}}{{/"${InputTextFieldViewModel.TEMPLATE}"}}`);
-Handlebars.registerPartial('inputTextField', `{{> _inputTextField vm=(createInputTextFieldViewModel isEditable propertyOwner propertyPath placeholder) cssClass=(isDefined cssClass "") readOnlyCssClass=(isDefined readOnlyCssClass "") }}`);
+Handlebars.registerPartial('inputTextField', `{{> _inputTextField vm=(createInputTextFieldViewModel isEditable propertyOwner propertyPath placeholder contextTemplate) cssClass=(isDefined cssClass "") readOnlyCssClass=(isDefined readOnlyCssClass "") }}`);
