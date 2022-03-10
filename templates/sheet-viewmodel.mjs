@@ -1,5 +1,10 @@
 import ViewModel from "../module/components/viewmodel.mjs";
 
+/**
+ * This view model sub-type is intended for use with sheets that expect the common flags, 
+ * like 'isEditable' or 'isSendable'. 
+ * @extends ViewModel
+ */
 export default class SheetViewModel extends ViewModel {
   /**
    * @type {Boolean}
