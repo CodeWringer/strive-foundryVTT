@@ -29,21 +29,34 @@ export default class AmbersteelInjuryItem extends AmbersteelBaseItem {
 
   /** @override */
   async getChatData() {
-    const messageBase = super.getChatData();
-    const renderedContent = await renderTemplate(this.chatMessageTemplate, {
-      viewModel: new InjuryChatMessageViewModel({
-        isEditable: false,
-        isSendable: false,
-        isOwner: this.parent.owner,
-        isGM: game.user.isGM,
-        item: this.parent,
-      })
-    });
+    const chatData = super.getChatData();
+    chatData.flavor = game.i18n.localize("ambersteel.labels.injury");
+    
+    return chatData;
+  }
 
-    return {
-      ...messageBase,
-      flavor: game.i18n.localize("ambersteel.labels.injury"),
-      renderedContent: renderedContent
-    }
+  /**
+   * Returns an instance of a view model for use in a chat message. 
+   * @returns {InjuryChatMessageViewModel}
+   * @param {Object | undefined} overrides Optional. An object that allows overriding any of the view model properties. 
+   * @param {String | undefined} overrides.id
+   * @param {Boolean | undefined} overrides.isEditable
+   * @param {Boolean | undefined} overrides.isSendable
+   * @param {Boolean | undefined} overrides.isOwner
+   * @param {Boolean | undefined} overrides.isGM
+   * @param {Item | undefined} overrides.item
+   * @override
+   */
+  getChatViewModel(overrides = {}) {
+    const base = super.getChatViewModel();
+    return new InjuryChatMessageViewModel({
+      id: base.id,
+      isEditable: base.isEditable,
+      isSendable: base.isSendable,
+      isOwner: base.isOwner,
+      isGM: base.isGM,
+      item: this.parent,
+      ...overrides,
+    });
   }
 }

@@ -1,8 +1,8 @@
 import { TEMPLATES } from "../../../module/templatePreloader.mjs";
 import { validateOrThrow } from "../../../module/utils/validation-utility.mjs";
-import SheetViewModel from "../../sheet-viewmodel.mjs";
+import ChatMessageViewModel from "../../chat-message-viewmodel.mjs";
 
-export default class SkillAbilityChatMessageViewModel extends SheetViewModel {
+export default class SkillAbilityChatMessageViewModel extends ChatMessageViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.SKILL_ABILITY_CHAT_MESSAGE; }
 
@@ -22,6 +22,12 @@ export default class SkillAbilityChatMessageViewModel extends SheetViewModel {
   actor = undefined;
 
   /**
+   * @type {Number}
+   * @readonly
+   */
+  index = -1;
+
+  /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
    * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 
    * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 
@@ -35,6 +41,7 @@ export default class SkillAbilityChatMessageViewModel extends SheetViewModel {
    * @param {Item} item
    * @param {SkillAbility} skillAbility
    * @param {Actor} actor
+   * @param {Number} index
    */
   constructor(args = {}) {
     super(args);
@@ -44,5 +51,6 @@ export default class SkillAbilityChatMessageViewModel extends SheetViewModel {
     this.item = args.item;
     this.skillAbility = args.skillAbility;
     this.actor = args.actor;
+    this.index = args.index;
   }
 }

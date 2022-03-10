@@ -1,7 +1,8 @@
 import PreparedChatData from '../../../dto/prepared-chat-data.mjs';
 import * as UpdateUtil from "../../../utils/document-update-utility.mjs";
 import * as ChatUtil from "../../../utils/chat-utility.mjs";
-import { TEMPLATES } from "../../../templatePreloader.mjs";
+import SheetViewModel from '../../../../templates/sheet-viewmodel.mjs';
+import { createUUID } from '../../../utils/uuid-utility.mjs';
 
 export default class AmbersteelBaseItem {
   /**
@@ -23,20 +24,23 @@ export default class AmbersteelBaseItem {
     this.parent.sendToChat = this.sendToChat.bind(this);
     this.parent.sendPropertyToChat = this.sendPropertyToChat.bind(this);
     this.parent.updateProperty = this.updateProperty.bind(this);
+    this.parent.getChatViewModel = this.getChatViewModel.bind(this);
   }
 
   /**
    * Returns the icon image path for this type of item. 
    * @returns {String} The icon image path. 
    * @virtual
+   * @readonly
    */
-  get img() { return "icons/svg/item-bag.svg"; }
+  get img() { throw new Error("NotImplementedException"); }
 
-    /**
+  /**
    * Chat message template path. 
    * @type {String}
+   * @readonly
    */
-  get chatMessageTemplate() { return TEMPLATES.ITEM_CHAT_MESSAGE; }
+  get chatMessageTemplate() { throw new Error("NotImplementedException"); }
 
   /**
    * Prepare base data for the item. 
@@ -72,16 +76,39 @@ export default class AmbersteelBaseItem {
    */
   async getChatData() {
     const actor = this.parent.parent;
+    const vm = this.getChatViewModel();
+
     const renderedContent = await renderTemplate(this.chatMessageTemplate, {
-      item: this.parent,
-      isEditable: false,
-      isSendable: false
+      viewModel: vm,
     });
 
     return new PreparedChatData({
       renderedContent: renderedContent,
       actor: actor, 
-      sound: "../sounds/notify.wav"
+      sound: "../sounds/notify.wav",
+      viewModel: vm,
+    });
+  }
+
+  /**
+   * Returns an instance of a view model for use in a chat message. 
+   * @returns {SheetViewModel}
+   * @param {Object | undefined} overrides Optional. An object that allows overriding any of the view model properties. 
+   * @param {String | undefined} overrides.id
+   * @param {Boolean | undefined} overrides.isEditable
+   * @param {Boolean | undefined} overrides.isSendable
+   * @param {Boolean | undefined} overrides.isOwner
+   * @param {Boolean | undefined} overrides.isGM
+   * @virtual
+   */
+  getChatViewModel(overrides = {}) {
+    return new SheetViewModel({
+      id: `${this.parent.id}-${createUUID()}`,
+      isEditable: false,
+      isSendable: false,
+      isOwner: this.parent.isOwner ?? this.parent.owner ?? false,
+      isGM: game.user.isGM,
+      ...overrides,
     });
   }
 

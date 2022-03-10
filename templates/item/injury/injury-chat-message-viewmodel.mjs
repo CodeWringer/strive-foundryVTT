@@ -1,9 +1,14 @@
 import { TEMPLATES } from "../../../module/templatePreloader.mjs";
-import InjuryViewModel from "./injury-viewmodel.mjs";
+import ChatMessageViewModel from "../../chat-message-viewmodel.mjs";
 
-export default class InjuryChatMessageViewModel extends InjuryViewModel {
+export default class InjuryChatMessageViewModel extends ChatMessageViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.INJURY_CHAT_MESSAGE; }
+
+  /**
+   * @type {Item}
+   */
+  item = undefined;
 
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
@@ -20,5 +25,9 @@ export default class InjuryChatMessageViewModel extends InjuryViewModel {
    */
   constructor(args = {}) {
     super(args);
+    validateOrThrow(args, ["item"]);
+
+    // Own properties.
+    this.item = args.item;
   }
 }

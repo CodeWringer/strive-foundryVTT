@@ -1,8 +1,8 @@
 import { TEMPLATES } from "../../../module/templatePreloader.mjs";
 import { validateOrThrow } from "../../../module/utils/validation-utility.mjs";
-import ItemViewModel from "./item-viewmodel.mjs";
+import ChatMessageViewModel from "../../chat-message-viewmodel.mjs";
 
-export default class ItemChatMessageViewModel extends ItemViewModel {
+export default class ItemChatMessageViewModel extends ChatMessageViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.ITEM_CHAT_MESSAGE; }
 
@@ -23,6 +23,13 @@ export default class ItemChatMessageViewModel extends ItemViewModel {
    * @readonly
    */
   sourceId = undefined;
+  
+  /**
+   * An array of user IDs, which identify those users whose characters would be permitted to pick the item up. 
+   * @type {Array<String>}
+   * @readonly
+   */
+  allowPickupBy = [];
 
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
@@ -37,16 +44,18 @@ export default class ItemChatMessageViewModel extends ItemViewModel {
    * 
    * @param {Item} item
    * 
-   * @param {Boolean | undefined} allowPickup
    * @param {String} sourceType
    * @param {String} sourceId
+   * @param {Boolean | undefined} allowPickup
+   * @param {Array<String> | undefined} allowPickupBy
    */
   constructor(args = {}) {
     super(args);
     validateOrThrow(args, ["sourceType", "sourceId"]);
 
-    this.allowPickup = args.allowPickup ?? false;
     this.sourceType = args.sourceType;
     this.sourceId = args.sourceId;
+    this.allowPickup = args.allowPickup ?? false;
+    this.allowPickupBy = args.allowPickupBy ?? [];
   }
 }

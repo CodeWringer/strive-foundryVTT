@@ -50,24 +50,26 @@ export default class AmbersteelSkillItem extends AmbersteelBaseItem {
 
   /** @override */
   async getChatData() {
-    const messageBase = super.getChatData();
-    const renderedContent = await renderTemplate(this.chatMessageTemplate, {
-      viewModel: new SkillChatMessageViewModel({
-        isEditable: false,
-        isSendable: false,
-        isOwner: this.parent.owner,
-        isGM: game.user.isGM,
-        item: this.parent,
-        actor: this.parent.parent,
-        visGroupId: createUUID(),
-      })
-    });
+    const chatData = super.getChatData();
+    chatData.flavor = game.i18n.localize("ambersteel.labels.skill");
 
-    return {
-      ...messageBase,
-      flavor: game.i18n.localize("ambersteel.labels.skill"),
-      renderedContent: renderedContent
-    }
+    return chatData;
+  }
+
+  /** @override */
+  getChatViewModel(overrides = {}) {
+    const base = super.getChatViewModel();
+    return new SkillChatMessageViewModel({
+      id: base.id,
+      isEditable: base.isEditable,
+      isSendable: base.isSendable,
+      isOwner: base.isOwner,
+      isGM: base.isGM,
+      item: this.parent,
+      actor: this.parent.parent,
+      visGroupId: base.id,
+      ...overrides,
+    });
   }
 
   /**

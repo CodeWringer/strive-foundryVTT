@@ -1,9 +1,14 @@
 import { TEMPLATES } from "../../../module/templatePreloader.mjs";
-import IllnessViewModel from "./illness-viewmodel.mjs";
+import ChatMessageViewModel from "../../chat-message-viewmodel.mjs";
 
-export default class IllnessChatMessageViewModel extends IllnessViewModel {
+export default class IllnessChatMessageViewModel extends ChatMessageViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.ILLNESS_CHAT_MESSAGE; }
+
+  /**
+   * @type {Item}
+   */
+  item = undefined;
 
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
@@ -20,5 +25,9 @@ export default class IllnessChatMessageViewModel extends IllnessViewModel {
    */
   constructor(args = {}) {
     super(args);
+    validateOrThrow(args, ["item"]);
+
+    // Own properties.
+    this.item = args.item;
   }
 }

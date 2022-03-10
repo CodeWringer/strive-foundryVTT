@@ -1,8 +1,8 @@
 import { TEMPLATES } from "../../../module/templatePreloader.mjs";
+import ChatMessageViewModel from "../../chat-message-viewmodel.mjs";
 import SkillAbilityTableViewModel from "../skill-ability/skill-ability-table-viewmodel.mjs";
-import SkillViewModel from "./skill-viewmodel.mjs";
 
-export default class SkillChatMessageViewModel extends SkillViewModel {
+export default class SkillChatMessageViewModel extends ChatMessageViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.SKILL_ITEM_CHAT_MESSAGE; }
 
@@ -13,6 +13,8 @@ export default class SkillChatMessageViewModel extends SkillViewModel {
 
   skillAbilityTableViewModel = undefined;
   get skillAbilityTableId() { return "skill-ability-table"; }
+
+  get visGroupId() { return `${this.id}-skill-ability-table-visgroup`; }
 
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
@@ -35,6 +37,15 @@ export default class SkillChatMessageViewModel extends SkillViewModel {
     // Child view models. 
     const thiz = this;
 
-    this.skillAbilityTableViewModel = new SkillAbilityTableViewModel({ ...args, id: thiz.skillAbilityTableId, parent: thiz });
+    this.skillAbilityTableViewModel = new SkillAbilityTableViewModel({
+      ...args,
+      id: thiz.skillAbilityTableId,
+      parent: thiz,
+      oneColumn: true,
+      visGroupId: thiz.visGroupId,
+      item: args.item,
+      actor: args.actor,
+      skillAbilitiesInitiallyVisible: false,
+    });
   }
 }

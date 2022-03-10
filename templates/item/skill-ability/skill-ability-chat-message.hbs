@@ -1,7 +1,11 @@
 {{!-- Required context:
 viewModel: {SkillAbilityChatMessageViewModel}
 --}}
-<section>
+<section class="custom-system-chat-message" 
+  data-view-model-id="{{viewModel.id}}"
+  data-document-id="{{viewModel.item.id}}"
+  data-ability-index="{{viewModel.index}}"
+>
   {{!-- Header --}}
   <div class="flex flex-row">
     <h3 class="flex-grow">
