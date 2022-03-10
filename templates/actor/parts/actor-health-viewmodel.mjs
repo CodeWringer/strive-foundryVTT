@@ -1,6 +1,6 @@
 import { TEMPLATES } from "../../../module/templatePreloader.mjs";
 import { validateOrThrow } from "../../../module/utils/validation-utility.mjs";
-import IllnessViewModel from "../../item/illness/illness-viewmodel.mjs";
+import IllnessListItemViewModel from "../../item/illness/illness-list-item-viewmodel.mjs";
 import InjuryViewModel from "../../item/injury/injury-viewmodel.mjs";
 import SheetViewModel from "../../sheet-viewmodel.mjs";
 
@@ -26,7 +26,7 @@ export default class ActorHealthViewModel extends SheetViewModel {
   get illnessCount() { return this.actor.illnesses.length; }
 
   /**
-   * @type {Array<IllnessViewModel>}
+   * @type {Array<IllnessListItemViewModel>}
    * @readonly
    */
   illnesses = [];
@@ -63,23 +63,23 @@ export default class ActorHealthViewModel extends SheetViewModel {
     const thiz = this;
 
     for (const illness of this.actor.illnesses) {
-      const illnessViewModel = new IllnessViewModel({
+      const vm = new IllnessListItemViewModel({
         ...args,
         id: illness.id,
         parent: thiz,
         item: illness,
       });
-      this.illnesses.push(illnessViewModel);
+      this.illnesses.push(vm);
     }
 
     for (const injury of this.actor.injuries) {
-      const injuryViewModel = new InjuryViewModel({
+      const vm = new InjuryViewModel({
         ...args,
         id: injury.id,
         parent: thiz,
         item: injury,
       });
-      this.injuries.push(injuryViewModel);
+      this.injuries.push(vm);
     }
   }
 }

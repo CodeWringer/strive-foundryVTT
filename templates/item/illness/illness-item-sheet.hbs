@@ -7,11 +7,11 @@ viewModel: {IllnessItemSheetViewModel}
       <div class="flex flex-row">
         <img class="header-image" src="{{item.img}}" data-edit="img" title="{{item.name}}" height="64" width="64" />
         <h1 class="header-name">
-          {{> inputTextField isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath="name" placeholder="ambersteel.labels.name" contextTemplate="illness-item-sheet" }}
+          {{> inputTextField viewModel=viewModel.vmTfName }}
         </h1>
         {{#if viewModel.isSendable}}
           <div class="flex flex-center">
-            {{> buttonSendToChat target=viewModel.item }}
+            {{> buttonSendToChat viewModel=viewModel.vmBtnSendToChat }}
           </div>
         {{/if}}
       </div>
@@ -23,7 +23,7 @@ viewModel: {IllnessItemSheetViewModel}
       {{> inputLabel text="ambersteel.labels.duration"}}
     </div>
     <div class="flex-grow">
-      {{> inputTextField isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath="data.data.duration" contextTemplate="illness-item-sheet" }}
+      {{> inputTextField viewModel=viewModel.vmTfDuration }}
     </div>
   </div>
   {{!-- Treatment skill --}}
@@ -32,7 +32,7 @@ viewModel: {IllnessItemSheetViewModel}
       {{> inputLabel text="ambersteel.labels.treatmentSkill"}}
     </div>
     <div class="flex-grow">
-      {{> inputTextField isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath="data.data.treatmentSkill" contextTemplate="illness-item-sheet" }}
+      {{> inputTextField viewModel=viewModel.vmTfTreatmentSkill }}
     </div>
   </div>
   {{!-- Treatment --}}
@@ -41,7 +41,7 @@ viewModel: {IllnessItemSheetViewModel}
       {{> inputLabel text="ambersteel.labels.treatment"}}
     </div>
     <div class="flex-grow">
-      {{> inputTextField isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath="data.data.treatment" contextTemplate="illness-item-sheet" }}
+      {{> inputTextField viewModel=viewModel.vmTfTreatment }}
     </div>
   </div>
   {{!-- Description --}}
@@ -50,7 +50,7 @@ viewModel: {IllnessItemSheetViewModel}
       {{> inputLabel text=(localize "ambersteel.labels.description")}}
     </div>
     <div class="flex-grow">
-      {{> inputTextarea isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath="data.data.description" placeholder="ambersteel.labels.description" allowResize=true cssClass="fill" contextTemplate="illness-item-sheet" }}
+      {{> inputTextarea viewModel=viewModel.vmTaDescription cssClass="fill" }}
     </div>
   </div>
 </form>
