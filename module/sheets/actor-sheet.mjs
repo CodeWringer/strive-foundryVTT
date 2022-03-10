@@ -80,13 +80,6 @@ export class AmbersteelActorSheet extends ActorSheet {
    */
   get viewModel() { return this._viewModel; }
 
-  /**
-   * @private
-   * @todo Remove and properly integrate inputs and buttons into the "new" view model system. 
-   * @type {ViewModelCollection}
-   */
-  _inputsAndButtons = undefined;
-
   /** 
    * Returns an object that represents sheet and enriched actor data. 
    * 
@@ -106,8 +99,6 @@ export class AmbersteelActorSheet extends ActorSheet {
     this._viewModel.readViewState();
     context.viewModel = this._viewModel;
     
-    this._inputsAndButtons = new ViewModelCollection();
-
     this.subType.prepareDerivedData(context);
 
     return context;
@@ -127,7 +118,6 @@ export class AmbersteelActorSheet extends ActorSheet {
 
     // Activate view model bound event listeners. 
     this.viewModel.activateListeners(html, isOwner, isEditable);
-    this._inputsAndButtons.activateListeners(html, isOwner, isEditable);
 
     // -------------------------------------------------------------
     if (!isOwner) return;
@@ -165,8 +155,6 @@ export class AmbersteelActorSheet extends ActorSheet {
       }
     }
     this._viewModel = null;
-
-    this._inputsAndButtons.dispose();
 
     return super.close();
   }
