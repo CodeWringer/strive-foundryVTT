@@ -1,13 +1,17 @@
 {{!-- Requires context:
 viewModel: {FateCardViewModel}
 --}}
-<section class="flex flex-column fate-card" data-item-id="{{viewModel.item.id}}">
+<section class="flex flex-column fate-card"
+  data-view-model-id="{{viewModel.id}}"
+  data-document-id="{{viewModel.item.id}}"
+  data-item-id="{{viewModel.item.id}}"
+>
   {{!-- Header --}}
   <div class="flex flex-column pad-md">
     <div class="flex flex-row">
       <img class="header-image" src="{{viewModel.item.img}}" data-edit="img" title="{{viewModel.item.name}}" height="26" width="26" />
       <h3 class="header-name flex-grow" style="margin: 0;">
-        {{> inputTextField isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath="name" placeholder="ambersteel.labels.name" contextTemplate="fate-card" }}
+        {{> inputTextField viewModel=viewModel.vmTfName }}
       </h3>
     </div>
   </div>
@@ -16,17 +20,17 @@ viewModel: {FateCardViewModel}
     <div class="flex flex-row pad-md">
       {{#if viewModel.isSendable}}
         <div class="flex flex-center">
-          {{> buttonSendToChat target=viewModel.item }}
+          {{> buttonSendToChat viewModel=viewModel.vmBtnSendToChat }}
         </div>
       {{/if}}
       <div class="flex-grow"></div>
       {{#if viewModel.isEditable}}
-        {{> buttonDelete target=viewModel.item withDialog=true }}
+        {{> buttonDelete viewModel=viewModel.vmBtnDelete }}
       {{/if}}
     </div>
   {{/if}}
   {{!-- Description --}}
   <div class="flex flex-grow">
-    {{> inputTextarea isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath="data.data.description" placeholder="ambersteel.labels.description" contextTemplate="fate-card" }}
+    {{> inputTextarea viewModel=viewModel.vmTaDescription }}
   </div>
 </section>
