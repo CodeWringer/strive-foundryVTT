@@ -84,18 +84,13 @@ export default class ItemGridViewViewModel extends InputViewModel {
   }
 }
 
-Handlebars.registerHelper('createItemGridViewViewModel', function(isEditable, propertyOwner, propertyPath, gridWidth) {
-  const vm = new ItemGridViewViewModel({
+Handlebars.registerHelper('createItemGridViewViewModel', function(id, isEditable, propertyOwner, propertyPath, gridWidth) {
+  return new ItemGridViewViewModel({
+    id: id,
     isEditable: isEditable,
     propertyOwner: propertyOwner,
     propertyPath: propertyPath,
     gridWidth: gridWidth,
   });
-  
-  // Add new view model instance to global collection. 
-  game.ambersteel.viewModels.set(vm.id, vm);
-  
-  return vm;
 });
-Handlebars.registerPartial('_itemGridView', `{{#> "${ItemGridViewViewModel.TEMPLATE}"}}{{/"${ItemGridViewViewModel.TEMPLATE}"}}`);
-Handlebars.registerPartial('itemGridView', `{{> _itemGridView vm=(createItemGridViewViewModel isEditable propertyOwner propertyPath gridWidth) }}`);
+Handlebars.registerPartial('itemGridView', `{{> "${ItemGridViewViewModel.TEMPLATE}"}}`);

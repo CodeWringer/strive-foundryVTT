@@ -45,8 +45,9 @@ export default class InputTextareaViewModel extends InputViewModel {
   }
 }
 
-Handlebars.registerHelper('createInputTextareaViewModel', function(isEditable, propertyOwner, propertyPath, placeholder, allowResize, spellcheck, contextTemplate) {
-  const vm = new InputTextareaViewModel({
+Handlebars.registerHelper('createTextareaViewModel', function(id, isEditable, propertyOwner, propertyPath, placeholder, allowResize, spellcheck, contextTemplate) {
+  return new InputTextareaViewModel({
+    id: id,
     isEditable: isEditable,
     propertyOwner: propertyOwner,
     propertyPath: propertyPath,
@@ -55,11 +56,5 @@ Handlebars.registerHelper('createInputTextareaViewModel', function(isEditable, p
     placeholder: placeholder,
     contextTemplate: contextTemplate,
   });
-
-  // Add new view model instance to global collection. 
-  game.ambersteel.viewModels.set(vm.id, vm);
-
-  return vm;
 });
-Handlebars.registerPartial('_inputTextarea', `{{#> "${InputTextareaViewModel.TEMPLATE}"}}{{/"${InputTextareaViewModel.TEMPLATE}"}}`);
-Handlebars.registerPartial('inputTextarea', `{{> _inputTextarea vm=(createInputTextareaViewModel isEditable propertyOwner propertyPath placeholder allowResize spellcheck contextTemplate) cssClass=(isDefined cssClass "") readOnlyCssClass=(isDefined readOnlyCssClass "") }}`);
+Handlebars.registerPartial('inputTextarea', `{{> "${InputTextareaViewModel.TEMPLATE}"}}`);

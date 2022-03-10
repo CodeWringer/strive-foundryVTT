@@ -50,17 +50,12 @@ export default class ButtonOpenSheetViewModel extends ButtonViewModel {
   }
 }
 
-Handlebars.registerHelper('createButtonOpenSheetViewModel', function(target, callback, callbackData) {
-  const vm = new ButtonOpenSheetViewModel({
+Handlebars.registerHelper('createButtonOpenSheetViewModel', function(id, target, callback, callbackData) {
+  return new ButtonOpenSheetViewModel({
+    id: id,
     target: target,
     callback: callback,
     callbackData: callbackData,
   });
-  
-  // Add new view model instance to global collection. 
-  game.ambersteel.viewModels.set(vm.id, vm);
-  
-  return vm;
 });
-Handlebars.registerPartial('_buttonOpenSheet', `{{#> "${ButtonOpenSheetViewModel.TEMPLATE}"}}{{/"${ButtonOpenSheetViewModel.TEMPLATE}"}}`);
-Handlebars.registerPartial('buttonOpenSheet', `{{> _buttonOpenSheet vm=(createButtonOpenSheetViewModel target callback callbackData) cssClass=(isDefined cssClass "") }}`);
+Handlebars.registerPartial('buttonOpenSheet', `{{> "${ButtonOpenSheetViewModel.TEMPLATE}"}}`);

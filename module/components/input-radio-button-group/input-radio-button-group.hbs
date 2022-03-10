@@ -1,28 +1,28 @@
 {{!-- Required context:
-vm: {InputRadioButtonGroupViewModel}
+viewModel: {InputRadioButtonGroupViewModel}
 cssClass: {String | undefined}
 readOnlyCssClass: {String | undefined}
 --}}
-{{#if vm.isEditable}}
+{{#if viewModel.isEditable}}
   <div 
     type="hidden"
-    class="custom-system-edit radio-button-group flex flex-row {{cssClass}}" 
-    data-property-path="{{vm.propertyPath}}"
-    name="{{vm.id}}"
-    id="{{vm.id}}"
-    data-property-path="{{vm.placeholder}}"
-    value="{{vm.value}}"
+    class="custom-system-edit radio-button-group flex flex-row component-input-radio-button-group {{cssClass}}" 
+    data-property-path="{{viewModel.propertyPath}}"
+    name="{{viewModel.id}}"
+    id="{{viewModel.id}}"
+    data-property-path="{{viewModel.placeholder}}"
+    value="{{viewModel.value}}"
   >
-    {{#each vm.options as |option index|}}
+    {{#each viewModel.options as |option index|}}
       <div class="radio-button-container flex flex-row">
         <input 
           type="radio" 
           class="radio-button" 
-          name="{{../vm.id}}" 
-          id="{{../vm.id}}-{{option.value}}" 
+          name="{{../viewModel.id}}" 
+          id="{{../viewModel.id}}-{{option.value}}" 
           value="{{option.value}}"
         >
-        <label class="fancy-font" for="{{../vm.id}}-{{option.value}}">
+        <label class="fancy-font" for="{{../viewModel.id}}-{{option.value}}">
           {{option.localizedValue}}
         </label>
       </div>
@@ -31,10 +31,10 @@ readOnlyCssClass: {String | undefined}
 {{else}}
   {{!-- Display read-only value --}}
   <div 
-    class="custom-system-read-only pad-sm fill {{readOnlyCssClass}}" 
-    name="{{vm.id}}"
-    id="{{vm.id}}"
+    class="custom-system-read-only pad-sm fill component-input-radio-button-group {{readOnlyCssClass}}" 
+    name="{{viewModel.id}}"
+    id="{{viewModel.id}}"
   >
-    {{localize vm.localizedValue}}
+    {{localize viewModel.localizedValue}}
   </div>
 {{/if}}

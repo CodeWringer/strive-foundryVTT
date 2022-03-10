@@ -86,21 +86,16 @@ export default class InputNumberSpinnerViewModel extends InputViewModel {
   }
 }
 
-Handlebars.registerHelper('createInputNumberSpinnerViewModel', function(isEditable, propertyOwner, propertyPath, step, min, max, contextTemplate) {
-  const vm = new InputNumberSpinnerViewModel({
+Handlebars.registerHelper('createNumberSpinnerViewModel', function(id, isEditable, propertyOwner, propertyPath, step, min, max, contextTemplate) {
+  return new InputNumberSpinnerViewModel({
+    id: id,
     isEditable: isEditable,
     propertyOwner: propertyOwner,
     propertyPath: propertyPath,
-    step: step,
+    step: step ?? 1,
     min: min,
     max: max,
     contextTemplate: contextTemplate,
   });
-
-  // Add new view model instance to global collection. 
-  game.ambersteel.viewModels.set(vm.id, vm);
-
-  return vm;
 });
-Handlebars.registerPartial('_inputNumberSpinner', `{{#> "${InputNumberSpinnerViewModel.TEMPLATE}"}}{{/"${InputNumberSpinnerViewModel.TEMPLATE}"}}`);
-Handlebars.registerPartial('inputNumberSpinner', `{{> _inputNumberSpinner vm=(createInputNumberSpinnerViewModel isEditable propertyOwner propertyPath (isDefined step 1) min max contextTemplate) cssClass=(isDefined cssClass "") readOnlyCssClass=(isDefined readOnlyCssClass "") }}`);
+Handlebars.registerPartial('inputNumberSpinner', `{{> "${InputNumberSpinnerViewModel.TEMPLATE}"}}`);

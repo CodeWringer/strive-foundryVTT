@@ -1,24 +1,24 @@
 {{!-- Required context:
-vm: {InputTextareaViewModel}
+viewModel: {InputTextareaViewModel}
 cssClass: {String | undefined}
 readOnlyCssClass: {String | undefined}
 --}}
-{{#if vm.isEditable}}
+{{#if viewModel.isEditable}}
   <textarea 
-    class="custom-system-edit {{#if vm.allowResize}}resize-vertical{{else}}resize-none{{/if}} {{cssClass}}"
-    spellcheck="{{vm.spellcheck}}"
-    data-property-path="{{vm.propertyPath}}"
-    name="{{vm.id}}"
-    id="{{vm.id}}"
-    placeholder="{{localize vm.placeholder}}"
-  >{{vm.value}}</textarea>
+    class="custom-system-edit {{#if viewModel.allowResize}}resize-vertical{{else}}resize-none{{/if}} component-input-textarea {{cssClass}}"
+    spellcheck="{{viewModel.spellcheck}}"
+    data-property-path="{{viewModel.propertyPath}}"
+    name="{{viewModel.id}}"
+    id="{{viewModel.id}}"
+    placeholder="{{localize viewModel.placeholder}}"
+  >{{viewModel.value}}</textarea>
 {{else}}
   {{!-- Display read-only value --}}
   <div 
-    class="custom-system-read-only pad-sm fill multiline {{readOnlyCssClass}}" 
-    name="{{vm.id}}"
-    id="{{vm.id}}"
+    class="custom-system-read-only pad-sm fill multiline component-input-textarea {{readOnlyCssClass}}" 
+    name="{{viewModel.id}}"
+    id="{{viewModel.id}}"
   >
-    {{localize vm.value}}
+    {{localize viewModel.value}}
   </div>
 {{/if}}

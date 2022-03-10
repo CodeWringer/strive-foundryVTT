@@ -49,19 +49,14 @@ export default class InputTextFieldViewModel extends InputViewModel {
   }
 }
 
-Handlebars.registerHelper('createInputTextFieldViewModel', function(isEditable, propertyOwner, propertyPath, localizablePlaceholder, contextTemplate) {
-  const vm = new InputTextFieldViewModel({
+Handlebars.registerHelper('createTextFieldViewModel', function(id, isEditable, propertyOwner, propertyPath, localizablePlaceholder, contextTemplate) {
+  return new InputTextFieldViewModel({
+    id: id,
     isEditable: isEditable,
     propertyOwner: propertyOwner,
     propertyPath: propertyPath,
     placeholder: game.i18n.localize(localizablePlaceholder),
     contextTemplate: contextTemplate,
   });
-  
-  // Add new view model instance to global collection. 
-  game.ambersteel.viewModels.set(vm.id, vm);
-  
-  return vm;
 });
-Handlebars.registerPartial('_inputTextField', `{{#> "${InputTextFieldViewModel.TEMPLATE}"}}{{/"${InputTextFieldViewModel.TEMPLATE}"}}`);
-Handlebars.registerPartial('inputTextField', `{{> _inputTextField vm=(createInputTextFieldViewModel isEditable propertyOwner propertyPath placeholder contextTemplate) cssClass=(isDefined cssClass "") readOnlyCssClass=(isDefined readOnlyCssClass "") }}`);
+Handlebars.registerPartial('inputTextField', `{{> "${InputTextFieldViewModel.TEMPLATE}"}}`);

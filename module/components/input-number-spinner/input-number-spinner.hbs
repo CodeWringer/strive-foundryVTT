@@ -1,21 +1,21 @@
 {{!-- Required context:
-vm: {InputNumberSpinnerViewModel}
+viewModel: {InputNumberSpinnerViewModel}
 cssClass: {String | undefined}
 readOnlyCssClass: {String | undefined}
 --}}
-{{#if vm.isEditable}}
-<span class="spinner-container">
+{{#if viewModel.isEditable}}
+<span class="spinner-container component-input-number-spinner">
   <input 
     class="custom-system-edit spinner {{cssClass}}"
-    data-property-path="{{vm.propertyPath}}"
+    data-property-path="{{viewModel.propertyPath}}"
     type="number"
     data-dtype="Number"
-    name="{{vm.id}}"
-    id="{{vm.id}}"
-    value="{{vm.value}}"
-    {{#if vm.hasMin}}min="{{vm.min}}"{{/if}}
-    {{#if vm.hasMax}}max="{{vm.max}}"{{/if}}
-    step="{{vm.step}}"
+    name="{{viewModel.id}}"
+    id="{{viewModel.id}}"
+    value="{{viewModel.value}}"
+    {{#if viewModel.hasMin}}min="{{viewModel.min}}"{{/if}}
+    {{#if viewModel.hasMax}}max="{{viewModel.max}}"{{/if}}
+    step="{{viewModel.step}}"
   />
   <div class="spinner-button-container">
       <a class="button-spinner button-spinner-up" title="{{localize ambersteel.labels.increment}}">
@@ -29,10 +29,10 @@ readOnlyCssClass: {String | undefined}
 {{else}}
   {{!-- Display read-only value --}}
   <div 
-    class="custom-system-read-only pad-sm fill {{readOnlyCssClass}}" 
-    name="{{vm.id}}"
-    id="{{vm.id}}"
+    class="custom-system-read-only pad-sm fill component-input-number-spinner {{readOnlyCssClass}}" 
+    name="{{viewModel.id}}"
+    id="{{viewModel.id}}"
   >
-    {{vm.value}}
+    {{viewModel.value}}
   </div>
 {{/if}}

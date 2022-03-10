@@ -1,12 +1,12 @@
 {{!-- Required context:
-vm: {ButtonAddViewModel}
+viewModel: {ButtonAddViewModel}
 cssClass: {String | undefined}
 fill: {Boolean | undefined}
 --}}
 <span class="{{#if fill}}fill-button-light{{else}}square-button-light{{/if}} {{#if cssClass}}{{cssClass}}{{else}}font-size-default{{/if}}">
   <a class="custom-system-button pad-sm button flex flex-center" 
     title="{{localize ambersteel.labels.add}}"
-    id="{{vm.id}}"
+    id="{{viewModel.id}}"
   >
     {{> @partial-block }}
   </a>
