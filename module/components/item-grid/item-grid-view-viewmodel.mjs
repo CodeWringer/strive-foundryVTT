@@ -49,10 +49,13 @@ export default class ItemGridViewViewModel extends InputViewModel {
   gridWidth() { return this._gridWidth; }
 
   /**
-   * @param {Boolean | undefined} args.isEditable 
    * @param {String | undefined} args.id
+   * 
+   * @param {Boolean | undefined} args.isEditable 
    * @param {String} args.propertyPath
    * @param {Object} args.propertyOwner
+   * @param {String | undefined} args.contextTemplate
+   * 
    * @param {Number} args.gridWidth
    */
   constructor(args = {}) {

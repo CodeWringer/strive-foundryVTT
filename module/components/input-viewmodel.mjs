@@ -99,7 +99,7 @@ export default class InputViewModel extends ViewModel {
    * @param {Boolean | undefined} args.isEditable 
    * @param {String} args.propertyPath
    * @param {Object} args.propertyOwner
-   * @param {String | undefined} contextTemplate
+   * @param {String | undefined} args.contextTemplate
    */
   constructor(args = {}) {
     super(args);
