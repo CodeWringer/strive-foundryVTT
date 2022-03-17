@@ -66,14 +66,19 @@ export default class SkillTableViewModel extends SheetViewModel {
     // Child view models. 
     const thiz = this;
 
-    for (const skill of this.skills) {
+    for (let i = 0; i < this.skills.length; i++) {
+      const skill = this.skills[i];
+      
       const vm = new SkillAbilityTableViewModel({
-        ...args,
-        id: `${skill.id}-skill-abilities`,
+        id: `vmSkillAbilityTable-${i}`,
         parent: thiz,
+        isEditable: thiz.isEditable,
+        isSendable: thiz.isSendable,
+        isOwner: thiz.isOwner,
+        isGM: thiz.isGM,
         item: skill,
-        _oneColumn: false,
-        _visGroupId: createUUID(),
+        oneColumn: false,
+        visGroupId: createUUID(),
         actor: thiz.actor,
       });
       this.skillAbilityTableViewModels[skill.id] = vm;

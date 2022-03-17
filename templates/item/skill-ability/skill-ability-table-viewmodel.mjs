@@ -103,11 +103,11 @@ export default class SkillAbilityTableViewModel extends SheetViewModel {
       const skillAbility = this.item.data.data.abilities[i];
 
       const vm = new SkillAbilityListItemViewModel({
+        id: `vmSkillAbility-${i}`, 
         isEditable: args.isEditable,
         isSendable: args.isSendable,
         isOwner: args.isOwner,
         isGM: args.isGM,
-        id: `ability[${i}]`, 
         skillAbility: skillAbility, 
         parent: thiz,
         item: thiz.item,
@@ -115,6 +115,7 @@ export default class SkillAbilityTableViewModel extends SheetViewModel {
         index: i,
       });
       this.abilities.push(vm);
+      this[vm.id] = vm;
     }
 
     this.vmBtnAdd = new ButtonAddViewModel({
