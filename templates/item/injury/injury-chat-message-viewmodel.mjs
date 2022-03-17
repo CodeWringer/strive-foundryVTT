@@ -1,4 +1,5 @@
 import { TEMPLATES } from "../../../module/templatePreloader.mjs";
+import { validateOrThrow } from "../../../module/utils/validation-utility.mjs";
 import ChatMessageViewModel from "../../chat-message-viewmodel.mjs";
 
 export default class InjuryChatMessageViewModel extends ChatMessageViewModel {

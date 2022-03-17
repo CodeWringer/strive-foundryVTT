@@ -1,9 +1,9 @@
-import ButtonSendToChatViewModel from "../../../module/components/button-send-to-chat/button-send-to-chat-viewmodel.mjs";
 import InputNumberSpinnerViewModel from "../../../module/components/input-number-spinner/input-number-spinner-viewmodel.mjs";
 import InputRadioButtonGroupViewModel from "../../../module/components/input-radio-button-group/input-radio-button-group-viewmodel.mjs";
 import InputTextareaViewModel from "../../../module/components/input-textarea/input-textarea-viewmodel.mjs";
 import InputTextFieldViewModel from "../../../module/components/input-textfield/input-textfield-viewmodel.mjs";
 import { TEMPLATES } from "../../../module/templatePreloader.mjs";
+import { validateOrThrow } from "../../../module/utils/validation-utility.mjs";
 import SheetViewModel from "../../sheet-viewmodel.mjs";
 
 export default class InjuryListItemViewModel extends SheetViewModel {
