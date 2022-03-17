@@ -67,7 +67,7 @@ export default class AmbersteelSkillItem extends AmbersteelBaseItem {
       isGM: base.isGM,
       item: this.parent,
       actor: this.parent.parent,
-      visGroupId: base.id,
+      visGroupId: createUUID(),
       ...overrides,
     });
   }
