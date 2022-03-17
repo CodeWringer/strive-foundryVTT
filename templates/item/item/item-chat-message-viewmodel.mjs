@@ -45,14 +45,14 @@ export default class ItemChatMessageViewModel extends ChatMessageViewModel {
    * 
    * @param {Item} args.item
    * 
-   * @param {String} args.sourceType
-   * @param {String} args.sourceId
+   * @param {String | undefined} args.sourceType
+   * @param {String | undefined} args.sourceId
    * @param {Boolean | undefined} args.allowPickup
    * @param {Array<String> | undefined} args.allowPickupBy
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["item", "sourceType", "sourceId"]);
+    validateOrThrow(args, ["item"]);
 
     this.item = args.item;
     this.sourceType = args.sourceType;
