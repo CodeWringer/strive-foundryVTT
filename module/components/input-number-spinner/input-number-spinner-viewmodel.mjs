@@ -48,9 +48,9 @@ export default class InputNumberSpinnerViewModel extends InputViewModel {
    * @param {Object} args.propertyOwner
    * @param {String | undefined} args.contextTemplate
    * 
-   * @param {Number} min Gets the minimum value. 
-   * @param {Number} max Gets the maximum value. 
-   * @param {Number} step Gets the increment/decrement step size. 
+   * @param {Number} args.min Gets the minimum value. 
+   * @param {Number} args.max Gets the maximum value. 
+   * @param {Number} args.step Gets the increment/decrement step size. 
    */
   constructor(args = {}) {
     super(args);
