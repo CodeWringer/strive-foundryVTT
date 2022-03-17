@@ -14,6 +14,15 @@ viewModel: {SkillChatMessageViewModel}
       {{viewModel.item.name}}
     </h2>
   </div>
+  {{!-- Related Attribute --}}
+  <div class="flex flex-row sheet-block margin-b-md">
+    <div class="width-min-xl fancy-font">
+      {{localize "ambersteel.labels.attribute"}}
+    </div>
+    <div class="flex-grow">
+      {{viewModel.relatedAttribute}}
+    </div>
+  </div>
   {{!-- Category --}}
   <div class="flex flex-row sheet-block margin-b-md">
     <div class="width-min-xl fancy-font">
