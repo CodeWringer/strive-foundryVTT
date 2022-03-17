@@ -6,28 +6,28 @@ viewModel: {SkillAbilityListItemViewModel}
   <div class="flex flex-grow">
     {{!-- Send to chat --}}
     {{#if viewModel.isSendable}}
-      {{> buttonSendToChat target=viewModel.item propertyPath=(concat "data.data.abilities[" viewModel.index "]") }}
+      {{> buttonSendToChat viewModel=viewModel.vmBtnSendToChat }}
     {{/if}}
     {{!-- Name --}}
     <span class="width-min-xl">
       {{> inputLabel text="ambersteel.labels.name"}}
     </span>
-    {{> inputTextField isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath=(concat "data.data.abilities[" viewModel.index "].name") placeholder="ambersteel.labels.name" contextTemplate="skill-ability-list-item" }}
+    {{> inputTextField viewModel=viewModel.vmTfName }}
   </div>
   {{!-- Delete --}}
   {{#if viewModel.isEditable}}
-    {{> buttonDelete target=viewModel.item propertyPath=(concat "data.data.abilities[" viewModel.index "]") withDialog=true }}
+    {{> buttonDelete viewModel=viewModel.vmBtnDelete }}
   {{/if}}
 </div>
 {{!-- Row 2 --}}
 <div class="flex flex-row">
-  {{!-- At level --}}
+  {{!-- Required Level --}}
   <div class="flex flex-row">
     <span class="width-min-xl">
       {{> inputLabel text="ambersteel.labels.skillAbilityRequirement"}}
     </span>
     <span class="width-md">
-      {{> inputNumberSpinner isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath=(concat "data.data.abilities[" viewModel.index "].requiredLevel") min=0 contextTemplate="skill-ability-list-item" }}
+      {{> inputNumberSpinner viewModel=viewModel.vmNsRequiredLevel }}
     </span>
   </div>
   {{!-- Obstacle --}}
@@ -36,7 +36,7 @@ viewModel: {SkillAbilityListItemViewModel}
       {{> inputLabel text="ambersteel.roll.obstacleAbbreviation"}}
     </span>
     <span class="width-xxl">
-      {{> inputTextField isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath=(concat "data.data.abilities[" viewModel.index "].obstacle") contextTemplate="skill-ability-list-item" }}
+      {{> inputTextField viewModel=viewModel.vmTfObstacle }}
     </span>
   </div>
 </div>
@@ -47,21 +47,21 @@ viewModel: {SkillAbilityListItemViewModel}
     {{> inputLabel text="ambersteel.labels.distance"}}
   </div>
   <span class="width-md">
-    {{> inputNumberSpinner isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath=(concat "data.data.abilities[" viewModel.index "].distance") min=0 contextTemplate="skill-ability-list-item" }}
+    {{> inputNumberSpinner viewModel=viewModel.vmNsDistance }}
   </span>
   {{!-- AP cost --}}
   <div class="width-min-xl">
     {{> inputLabel text="ambersteel.labels.apCost"}}
   </div>
   <span class="width-md">
-    {{> inputNumberSpinner isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath=(concat "data.data.abilities[" viewModel.index "].apCost") min=0 contextTemplate="skill-ability-list-item" }}
+    {{> inputNumberSpinner viewModel=viewModel.vmNsApCost }}
   </span>
   {{!-- Attack type --}}
   <div class="width-min-xl">
     {{> inputLabel text="ambersteel.labels.attackType"}}
   </div>
   <span class="width-min-lg">
-    {{> inputDropDown isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath=(concat "data.data.abilities[" viewModel.index "].attackType") options=viewModel.attackTypeOptions contextTemplate="skill-ability-list-item" }}
+    {{> inputDropDown viewModel=viewModel.vmDdAttackType }}
   </span>
 </div>
 {{!-- Row 4 --}}
@@ -70,22 +70,16 @@ viewModel: {SkillAbilityListItemViewModel}
   <div class="width-min-xl">
     {{> inputLabel text="ambersteel.labels.damage"}}
   </div>
-  {{> buttonRoll 
-      target=viewModel.item 
-      propertyPath=(concat "data.data.abilities[" viewModel.index "].damageFormula") 
-      chatTitle=viewModel.skillAbility.name
-      rollType="generic" 
-      actor=viewModel.actor 
-  }}
+  {{> buttonRoll viewModel=viewModel.vmBtnRollDamage}}
   <span class="width-min-xxl flex-grow">
-    {{> inputTextField isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath=(concat "data.data.abilities[" viewModel.index "].damageFormula") contextTemplate="skill-ability-list-item" }}
+    {{> inputTextField viewModel=viewModel.vmTfDamage }}
   </span>
   {{!-- Damage type --}}
   <div class="width-min-xxl">
     {{> inputLabel text="ambersteel.labels.damageType"}}
   </div>
   <span class="width-xxl">
-    {{> inputDropDown isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath=(concat "data.data.abilities[" viewModel.index "].damageType") options=viewModel.damageTypeOptions contextTemplate="skill-ability-list-item" }}
+    {{> inputDropDown viewModel=viewModel.vmDdDamageType }}
   </span>
 </div>
 {{!-- Row 5 --}}
@@ -95,11 +89,11 @@ viewModel: {SkillAbilityListItemViewModel}
     {{> inputLabel text="ambersteel.labels.skillAbilityCondition"}}
   </div>
   <div class="flex-grow">
-    {{> inputTextField isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath=(concat "data.data.abilities[" viewModel.index "].condition") contextTemplate="skill-ability-list-item" }}
+    {{> inputTextField viewModel=viewModel.vmTfCondition }}
   </div>
 </div>
 {{!-- Row 6 --}}
 {{!-- Description --}}
 <div class="flex flex-row">
-  {{> inputTextarea isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath=(concat "data.data.abilities[" viewModel.index "].description") placeholder="ambersteel.labels.description" allowResize=true cssClass="fill" contextTemplate="skill-ability-list-item" }}
+  {{> inputTextarea viewModel=viewModel.vmTaDescription cssClass="fill" }}
 </div>

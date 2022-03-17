@@ -1,3 +1,5 @@
+import ButtonAddViewModel from "../../../module/components/button-add/button-add-viewmodel.mjs";
+import ButtonToggleVisibilityViewModel from "../../../module/components/button-toggle-visibility/button-toggle-visibility-viewmodel.mjs";
 import { TEMPLATES } from "../../../module/templatePreloader.mjs";
 import { createUUID } from "../../../module/utils/uuid-utility.mjs";
 import { validateOrThrow } from "../../../module/utils/validation-utility.mjs";
@@ -92,6 +94,7 @@ export default class SkillAbilityTableViewModel extends SheetViewModel {
     this._skillAbilitiesInitiallyVisible = args.skillAbilitiesInitiallyVisible ?? false;
 
     // Child view models. 
+    this.contextTemplate = "skill-ability-table";
     const thiz = this;
 
     for (let i = 0; i < this.item.data.data.abilities.length; i++) {
@@ -106,6 +109,32 @@ export default class SkillAbilityTableViewModel extends SheetViewModel {
       });
       this.abilities.push(vm);
     }
+
+    this.vmBtnAdd = new ButtonAddViewModel({
+      id: "vmBtnAdd",
+      target: thiz.item,
+      parent: thiz,
+      creationType: "skill-ability",
+      withDialog: false,
+    });
+    this.vmBtnToggleVisibilityExpand = new ButtonToggleVisibilityViewModel({
+      id: "vmBtnToggleVisibilityExpand",
+      target: thiz.item,
+      parent: thiz,
+      visGroup: thiz.visGroupId,
+      fill: true,
+      toggleSelf: true,
+      callback: thiz._toggleSkillAbilitiesInitiallyVisible.bind(thiz),
+    });
+    this.vmBtnToggleVisibilityCollapse = new ButtonToggleVisibilityViewModel({
+      id: "vmBtnToggleVisibilityCollapse",
+      target: thiz.item,
+      parent: thiz,
+      visGroup: thiz.visGroupId,
+      fill: true,
+      toggleSelf: true,
+      callback: thiz._toggleSkillAbilitiesInitiallyVisible.bind(thiz),
+    });
   }
 
   /** @override */
@@ -115,5 +144,12 @@ export default class SkillAbilityTableViewModel extends SheetViewModel {
     viewState._skillAbilitiesInitiallyVisible = this._skillAbilitiesInitiallyVisible;
 
     return viewState;
+  }
+
+  /**
+   * @private
+   */
+  async _toggleSkillAbilitiesInitiallyVisible() {
+    this.skillAbilitiesInitiallyVisible = !this.skillAbilitiesInitiallyVisible;
   }
 }
