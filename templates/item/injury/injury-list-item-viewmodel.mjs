@@ -51,7 +51,7 @@ export default class InjuryListItemViewModel extends SheetViewModel {
       placeholder: "ambersteel.labels.name",
       contextTemplate: thiz.contextTemplate,
       parent: thiz,
-      options=thiz.stateOptions,
+      options: thiz.stateOptions,
     });
     this.vmBtnDelete = new ButtonDeleteViewModel({
       id: "vmBtnDelete",

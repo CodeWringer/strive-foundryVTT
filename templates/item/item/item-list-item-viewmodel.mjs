@@ -6,9 +6,9 @@ import InputTextareaViewModel from "../../../module/components/input-textarea/in
 import InputTextFieldViewModel from "../../../module/components/input-textfield/input-textfield-viewmodel.mjs";
 import { TEMPLATES } from "../../../module/templatePreloader.mjs";
 import { validateOrThrow } from "../../../module/utils/validation-utility.mjs";
-import ItemViewModel from "./item-viewmodel.mjs";
+import SheetViewModel from "../../sheet-viewmodel.mjs";
 
-export default class ItemListItemViewModel extends ItemViewModel {
+export default class ItemListItemViewModel extends SheetViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.ITEM_LIST_ITEM; }
 

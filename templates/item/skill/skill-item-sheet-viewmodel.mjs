@@ -66,7 +66,7 @@ export default class SkillItemSheetViewModel extends SkillViewModel {
       propertyPath: "data.data.relatedAttribute",
       contextTemplate: thiz.contextTemplate,
       parent: thiz,
-      options=thiz.attributeOptions,
+      options: thiz.attributeOptions,
     });
     this.vmTfCategory = new InputTextFieldViewModel({
       id: "vmTfCategory",

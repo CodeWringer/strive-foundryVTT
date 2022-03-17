@@ -1,7 +1,7 @@
 import { TEMPLATES } from "../../../module/templatePreloader.mjs";
 import { validateOrThrow } from "../../../module/utils/validation-utility.mjs";
 import IllnessListItemViewModel from "../../item/illness/illness-list-item-viewmodel.mjs";
-import InjuryViewModel from "../../item/injury/injury-viewmodel.mjs";
+import InjuryListItemViewModel from "../../item/injury/injury-list-item-viewmodel.mjs";
 import SheetViewModel from "../../sheet-viewmodel.mjs";
 
 export default class ActorHealthViewModel extends SheetViewModel {
@@ -73,7 +73,7 @@ export default class ActorHealthViewModel extends SheetViewModel {
     }
 
     for (const injury of this.actor.injuries) {
-      const vm = new InjuryViewModel({
+      const vm = new InjuryListItemViewModel({
         ...args,
         id: injury.id,
         parent: thiz,
