@@ -34,16 +34,6 @@ export default class ChatMessageViewModel extends SheetViewModel {
     this.globalViewModelCollection = args.globalViewModelCollection ?? game.ambersteel.viewModels;
   }
 
-  /** @override */
-  toViewState() {
-    return super.toViewState();
-  }
-
-  /** @override */
-  applyViewState(viewState) {
-    super.applyViewState(viewState);
-  }
-
   /**
    * Registers events on elements of the given DOM. 
    * @param {Object} html DOM of the sheet for which to register listeners. 

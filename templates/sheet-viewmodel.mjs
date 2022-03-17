@@ -73,14 +73,4 @@ export default class SheetViewModel extends ViewModel {
     this._isOwner = args.isOwner ?? false;
     this._isGM = args.isGM ?? false;
   }
-
-  /** @override */
-  toViewState() {
-    return super.toViewState();
-  }
-
-  /** @override */
-  applyViewState(viewState) {
-    super.applyViewState(viewState);
-  }
 }
