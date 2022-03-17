@@ -1,3 +1,4 @@
+import ButtonDeleteViewModel from "../../../module/components/button-delete/button-delete-viewmodel.mjs";
 import InputNumberSpinnerViewModel from "../../../module/components/input-number-spinner/input-number-spinner-viewmodel.mjs";
 import InputRadioButtonGroupViewModel from "../../../module/components/input-radio-button-group/input-radio-button-group-viewmodel.mjs";
 import InputTextareaViewModel from "../../../module/components/input-textarea/input-textarea-viewmodel.mjs";

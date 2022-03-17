@@ -1,3 +1,4 @@
+import ButtonSendToChatViewModel from "../../../module/components/button-send-to-chat/button-send-to-chat-viewmodel.mjs";
 import InputDropDownViewModel from "../../../module/components/input-dropdown/input-dropdown-viewmodel.mjs";
 import InputTextareaViewModel from "../../../module/components/input-textarea/input-textarea-viewmodel.mjs";
 import InputTextFieldViewModel from "../../../module/components/input-textfield/input-textfield-viewmodel.mjs";

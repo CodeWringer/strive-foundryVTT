@@ -1,4 +1,10 @@
+import ButtonDeleteViewModel from "../../../module/components/button-delete/button-delete-viewmodel.mjs";
+import ButtonSendToChatViewModel from "../../../module/components/button-send-to-chat/button-send-to-chat-viewmodel.mjs";
+import InputDropDownViewModel from "../../../module/components/input-dropdown/input-dropdown-viewmodel.mjs";
+import InputTextareaViewModel from "../../../module/components/input-textarea/input-textarea-viewmodel.mjs";
+import InputTextFieldViewModel from "../../../module/components/input-textfield/input-textfield-viewmodel.mjs";
 import { TEMPLATES } from "../../../module/templatePreloader.mjs";
+import SkillAbilityTableViewModel from "../skill-ability/skill-ability-table-viewmodel.mjs";
 import SkillViewModel from "./skill-viewmodel.mjs";
 
 export default class SkillListItemViewModel extends SkillViewModel {

@@ -1,4 +1,5 @@
 import ButtonSendToChatViewModel from "../../../module/components/button-send-to-chat/button-send-to-chat-viewmodel.mjs";
+import ButtonTakeItemViewModel from "../../../module/components/button-take-item/button-take-item-viewmodel.mjs";
 import InputNumberSpinnerViewModel from "../../../module/components/input-number-spinner/input-number-spinner-viewmodel.mjs";
 import InputTextareaViewModel from "../../../module/components/input-textarea/input-textarea-viewmodel.mjs";
 import InputTextFieldViewModel from "../../../module/components/input-textfield/input-textfield-viewmodel.mjs";
