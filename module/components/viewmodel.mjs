@@ -70,9 +70,19 @@ export default class ViewModel {
    */
   _id = undefined;
   /**
-   * Id used for the HTML element's id and name attributes. 
+   * @summary
+   * Unique ID of this view model instance. 
    * 
-   * The id of this view model serves as the key to read/write from/to the global view states map. 
+   * @description
+   * This unique ID is used to identify the same instance of this view model. It may also be set on DOM elements that 
+   * are associated with this view model. 
+   * 
+   * The ID also serves as the key to read and write from/to the global view states map. 
+   * 
+   * **IMPORTANT** This string may not contain any special characters! Alphanumeric symbols, as well as hyphen ('-') and 
+   * underscore ('_') are permitted, but no dots, brackets, braces, slashes, equal sign, and so on. Failing to comply to this 
+   * naming restriction may result in DOM elements not being properly detected by the 'activateListeners' method. 
+   * 
    * @type {String}
    * @readonly
    */
@@ -104,7 +114,13 @@ export default class ViewModel {
   viewStateFields = [];
 
   /**
-   * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
+   * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
+   * 
+   * If no value is provided, a shortened UUID will be generated for it. 
+   * 
+   * This string may not contain any special characters! Alphanumeric symbols, as well as hyphen ('-') and 
+   * underscore ('_') are permitted, but no dots, brackets, braces, slashes, equal sign, and so on. Failing to comply to this 
+   * naming restriction may result in DOM elements not being properly detected by the 'activateListeners' method. 
    * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 
    * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 
    * is expected to be associated with an actor sheet or item sheet or journal entry or chat message and so on.
