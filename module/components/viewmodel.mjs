@@ -139,7 +139,7 @@ export default class ViewModel {
     // Set properties of this view model to null. 
     for (const propertyName in this) {
       // Call dispose on any property that supports it. 
-      if (this.isObject(this[propertyName]) && this[propertyName].dispose !== undefined) {
+      if (PropertyUtil.isObject(this[propertyName]) && this[propertyName].dispose !== undefined) {
         this[propertyName].dispose();
       }
       // Set property to null, thus 'hopefully' freeing its referenced value up for garbage collection. 
@@ -149,7 +149,6 @@ export default class ViewModel {
     this.dispose = () => { throw DisposedAccessViolation };
     this.toViewState = () => { throw DisposedAccessViolation; };
     this.applyViewState = () => { throw DisposedAccessViolation; };
-    this.isObject = () => { throw DisposedAccessViolation; };
     this.activateListeners = () => { throw DisposedAccessViolation; };
   }
 
@@ -221,16 +220,6 @@ export default class ViewModel {
     }
   }
   
-  /**
-   * Returns true, if the given parameter is of type object. 
-   * @param {Any} obj 
-   * @returns {Boolean} True, if the given parameter is of type object. 
-   * @private
-   */
-  isObject(obj) {
-    return Object.prototype.toString.call(obj) === '[object Object]';
-  };
-
   /**
    * Registers events on elements of the given DOM. 
    * @param {Object} html DOM of the sheet for which to register listeners. 
