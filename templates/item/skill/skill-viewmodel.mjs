@@ -27,6 +27,7 @@ export default class SkillViewModel extends SheetViewModel {
    * @param {Boolean | undefined} isGM If true, the current user is a GM. 
    * 
    * @param {Item} item
+   * @param {Actor | undefined} actor If not undefined, this is the actor that owns the item. 
    * @param {String | undefined} visGroupId
    */
   constructor(args = {}) {
@@ -35,6 +36,7 @@ export default class SkillViewModel extends SheetViewModel {
 
     // Own properties.
     this.item = args.item;
+    this.actor = args.actor;
     this.visGroupId = args.visGroupId ?? createUUID();
   }
 }

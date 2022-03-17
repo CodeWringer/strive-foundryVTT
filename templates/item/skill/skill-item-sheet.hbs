@@ -7,11 +7,11 @@ viewModel: {SkillItemSheetViewModel}
       <div class="flex flex-row">
         <img class="header-image" src="{{viewModel.item.img}}" data-edit="img" title="{{viewModel.item.name}}" height="64" width="64" />
         <h1 class="header-name">
-          {{> inputTextField isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath="name" placeholder="ambersteel.labels.name" contextTemplate="skill-item-sheet" }}
+          {{> inputTextField viewModel=viewModel.vmTfName }}
         </h1>
         {{#if viewModel.isSendable}}
           <div class="flex flex-center">
-            {{> buttonSendToChat target=viewModel.item }}
+            {{> buttonSendToChat viewModel=viewModel.vmBtnSendToChat }}
           </div>
         {{/if}}
       </div>
@@ -23,7 +23,7 @@ viewModel: {SkillItemSheetViewModel}
       {{> inputLabel text="ambersteel.labels.relatedAttribute"}}
     </div>
     <div class="flex-grow">
-      {{> inputDropDown isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath="data.data.relatedAttribute" options=viewModel.attributeOptions contextTemplate="skill-item-sheet" }}
+      {{> inputDropDown viewModel=viewModel.vmDdRelatedAttribute }}
     </div>
   </div>
   {{!-- Category --}}
@@ -32,7 +32,7 @@ viewModel: {SkillItemSheetViewModel}
       {{> inputLabel text="ambersteel.labels.category"}}
     </div>
     <div class="flex-grow">
-      {{> inputTextField isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath="data.data.category" contextTemplate="skill-item-sheet" }}
+      {{> inputTextField viewModel=viewModel.vmTfCategory }}
     </div>
   </div>
   {{!-- Description --}}
@@ -41,11 +41,11 @@ viewModel: {SkillItemSheetViewModel}
       {{> inputLabel text=(localize "ambersteel.labels.description")}}
     </div>
     <div class="flex-grow">
-      {{> inputTextarea isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath="data.data.description" placeholder="ambersteel.labels.description" allowResize=true cssClass="fill" contextTemplate="skill-item-sheet" }}
+      {{> inputTextarea viewModel=viewModel.vmTaDescription cssClass="fill" }}
     </div>
   </div>
   {{!-- Skill Abilites --}}
   {{#if viewModel.isSkillAbilityListVisible }}
-    {{> "systems/ambersteel/templates/item/skill-ability/skill-ability-table.hbs" viewModel=viewModel.skillAbilityTableViewModel }}
+    {{> "systems/ambersteel/templates/item/skill-ability/skill-ability-table.hbs" viewModel=viewModel.vmSkillAbilityTable }}
   {{/if}}
 </form>

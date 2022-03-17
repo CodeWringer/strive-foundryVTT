@@ -1,3 +1,6 @@
+import InputDropDownViewModel from "../../../module/components/input-dropdown/input-dropdown-viewmodel.mjs";
+import InputTextareaViewModel from "../../../module/components/input-textarea/input-textarea-viewmodel.mjs";
+import InputTextFieldViewModel from "../../../module/components/input-textfield/input-textfield-viewmodel.mjs";
 import { TEMPLATES } from "../../../module/templatePreloader.mjs";
 import SkillAbilityTableViewModel from "../skill-ability/skill-ability-table-viewmodel.mjs";
 import SkillViewModel from "./skill-viewmodel.mjs";
@@ -11,18 +14,6 @@ export default class SkillItemSheetViewModel extends SkillViewModel {
    * @readonly
    */
   get attributeOptions() { return game.ambersteel.getAttributeOptions(); }
-
-  /**
-   * @type {SkillAbilityTableViewModel}
-   * @readonly
-   */
-  skillAbilityTableViewModel = undefined;
-
-  /**
-   * @type {String}
-   * @readonly
-   */
-  get skillAbilityTableId() { return "skill-ability-table"; }
   
   /**
    * Returns true, if the skill ability list should be visible. 
@@ -50,13 +41,58 @@ export default class SkillItemSheetViewModel extends SkillViewModel {
     super(args);
 
     // Child view models. 
+    this.contextTemplate = "skill-item-sheet";
     const thiz = this;
-
-    this.skillAbilityTableViewModel = new SkillAbilityTableViewModel({
-      ...args,
-      id: thiz.skillAbilityTableId,
+    
+    this.vmTfName = new InputTextFieldViewModel({
+      id: "vmTfName",
+      isEditable: thiz.isEditable,
+      propertyOwner: thiz.item,
+      propertyPath: "name",
+      placeholder: "ambersteel.labels.name",
+      contextTemplate: thiz.contextTemplate,
       parent: thiz,
+    });
+    this.vmBtnSendToChat = new ButtonSendToChatViewModel({
+      id: "vmBtnSendToChat",
+      target: thiz.item,
+      parent: thiz,
+    });
+    this.vmDdRelatedAttribute = new InputDropDownViewModel({
+      id: "vmDdRelatedAttribute",
+      isEditable: thiz.isEditable,
+      propertyOwner: thiz.item,
+      propertyPath: "data.data.relatedAttribute",
+      contextTemplate: thiz.contextTemplate,
+      parent: thiz,
+      options=thiz.attributeOptions,
+    });
+    this.vmTfCategory = new InputTextFieldViewModel({
+      id: "vmTfCategory",
+      isEditable: thiz.isEditable,
+      propertyOwner: thiz.item,
+      propertyPath: "data.data.category",
+      contextTemplate: thiz.contextTemplate,
+      parent: thiz,
+    });
+    this.vmTaDescription = new InputTextareaViewModel({
+      id: "vmTaDescription",
+      isEditable: thiz.isEditable,
+      propertyPath: "data.data.description",
+      propertyOwner: thiz.item,
+      contextTemplate: thiz.contextTemplate,
+      parent: thiz,
+      placeholder: "ambersteel.labels.description",
+      allowResize: true,
+    });
+    this.vmSkillAbilityTable = new SkillAbilityTableViewModel({
+      id: "vmSkillAbilityTable",
+      parent: thiz,
+      item: thiz.item,
       skillAbilitiesInitiallyVisible: true,
+      oneColumn: false,
+      visGroupId: thiz.visGroupId,
+      actor: thiz.actor,
     });
   }
 }

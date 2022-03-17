@@ -6,6 +6,19 @@ export default class SkillListItemViewModel extends SkillViewModel {
   static get TEMPLATE() { return TEMPLATES.SKILL_LIST_ITEM; }
 
   /**
+   * @type {Array<ChoiceOption>}
+   * @readonly
+   */
+  get attributeOptions() { return game.ambersteel.getAttributeOptions(); }
+  
+  /**
+   * Returns true, if the skill ability list should be visible. 
+   * @type {Boolean}
+   * @readonly
+   */
+  get isSkillAbilityListVisible() { return (this.isEditable === true) || this.item.data.data.abilities.length !== 0 }
+
+  /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
    * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 
    * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 
@@ -22,5 +35,66 @@ export default class SkillListItemViewModel extends SkillViewModel {
    */
   constructor(args = {}) {
     super(args);
+
+    // Child view models. 
+    this.contextTemplate = "skill-list-item";
+    const thiz = this;
+    
+    this.vmTfName = new InputTextFieldViewModel({
+      id: "vmTfName",
+      isEditable: thiz.isEditable,
+      propertyOwner: thiz.item,
+      propertyPath: "name",
+      placeholder: "ambersteel.labels.name",
+      contextTemplate: thiz.contextTemplate,
+      parent: thiz,
+    });
+    this.vmBtnSendToChat = new ButtonSendToChatViewModel({
+      id: "vmBtnSendToChat",
+      target: thiz.item,
+      parent: thiz,
+    });
+    this.vmBtnDelete = new ButtonDeleteViewModel({
+      id: "vmBtnDelete",
+      parent: thiz,
+      target: thiz.item,
+      withDialog: true,
+    })
+    this.vmDdRelatedAttribute = new InputDropDownViewModel({
+      id: "vmDdRelatedAttribute",
+      isEditable: thiz.isEditable,
+      propertyOwner: thiz.item,
+      propertyPath: "data.data.relatedAttribute",
+      contextTemplate: thiz.contextTemplate,
+      parent: thiz,
+      options=thiz.attributeOptions,
+    });
+    this.vmTfCategory = new InputTextFieldViewModel({
+      id: "vmTfCategory",
+      isEditable: thiz.isEditable,
+      propertyOwner: thiz.item,
+      propertyPath: "data.data.category",
+      contextTemplate: thiz.contextTemplate,
+      parent: thiz,
+    });
+    this.vmTaDescription = new InputTextareaViewModel({
+      id: "vmTaDescription",
+      isEditable: thiz.isEditable,
+      propertyPath: "data.data.description",
+      propertyOwner: thiz.item,
+      contextTemplate: thiz.contextTemplate,
+      parent: thiz,
+      placeholder: "ambersteel.labels.description",
+      allowResize: true,
+    });
+    this.vmSkillAbilityTable = new SkillAbilityTableViewModel({
+      id: "vmSkillAbilityTable",
+      parent: thiz,
+      item: thiz.item,
+      skillAbilitiesInitiallyVisible: false,
+      oneColumn: false,
+      visGroupId: thiz.visGroupId,
+      actor: thiz.actor,
+    });
   }
 }

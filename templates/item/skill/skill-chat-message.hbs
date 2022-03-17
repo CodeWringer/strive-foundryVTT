@@ -25,7 +25,7 @@ viewModel: {SkillChatMessageViewModel}
   </div>
   {{!-- Skill Abilites --}}
   {{#if viewModel.hasAbilities }}
-    {{> "systems/ambersteel/templates/item/skill-ability/skill-ability-table.hbs" viewModel=viewModel.skillAbilityTableViewModel }}
+    {{> "systems/ambersteel/templates/item/skill-ability/skill-ability-table.hbs" viewModel=viewModel.vmSkillAbilityTable }}
   {{/if}}
   {{!-- Description --}}
   <div class="sheet-block multiline">

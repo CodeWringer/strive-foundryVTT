@@ -11,9 +11,6 @@ export default class SkillChatMessageViewModel extends ChatMessageViewModel {
    */
   get hasAbilities() { return this.item.data.data.abilities.length !== 0; }
 
-  skillAbilityTableViewModel = undefined;
-  get skillAbilityTableId() { return "skill-ability-table"; }
-
   get visGroupId() { return `${this.id}-skill-ability-table-visgroup`; }
 
   /**
@@ -35,17 +32,17 @@ export default class SkillChatMessageViewModel extends ChatMessageViewModel {
     super(args);
 
     // Child view models. 
+    this.contextTemplate = "skill-chat-message";
     const thiz = this;
 
-    this.skillAbilityTableViewModel = new SkillAbilityTableViewModel({
-      ...args,
-      id: thiz.skillAbilityTableId,
+    this.vmSkillAbilityTable = new SkillAbilityTableViewModel({
+      id: "vmSkillAbilityTable",
       parent: thiz,
+      item: thiz.item,
+      skillAbilitiesInitiallyVisible: false,
       oneColumn: true,
       visGroupId: thiz.visGroupId,
-      item: args.item,
-      actor: args.actor,
-      skillAbilitiesInitiallyVisible: false,
+      actor: thiz.actor,
     });
   }
 }
