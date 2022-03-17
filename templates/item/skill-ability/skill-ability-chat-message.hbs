@@ -21,6 +21,15 @@ viewModel: {SkillAbilityChatMessageViewModel}
       {{viewModel.skillAbility.requiredLevel}}
     </div>
   </div>
+  {{!-- Obstacle --}}
+  <div class="flex flex-row sheet-block margin-b-md">
+    <div class="width-min-xl fancy-font">
+      {{localize "ambersteel.roll.obstacleAbbreviation"}}
+    </div>
+    <div class="flex-grow">
+      {{viewModel.skillAbility.obstacle}}
+    </div>
+  </div>
   {{!-- Condition --}}
   <div class="flex flex-row sheet-block margin-b-md">
     <div class="width-min-xl fancy-font">
