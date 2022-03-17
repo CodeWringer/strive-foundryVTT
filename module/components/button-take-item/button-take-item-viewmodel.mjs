@@ -192,18 +192,13 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
   }
 }
 
-Handlebars.registerHelper('createButtonTakeItemViewModel', function(target, callback, callbackData, contextType) {
-  const vm = new ButtonTakeItemViewModel({
+Handlebars.registerHelper('createButtonTakeItemViewModel', function(id, target, callback, callbackData, contextType) {
+  return new ButtonTakeItemViewModel({
+    id: id,
     target: target,
     callback: callback,
     callbackData: callbackData,
     contextType: contextType,
   });
-  
-  // Add new view model instance to global collection. 
-  game.ambersteel.viewModels.set(vm.id, vm);
-  
-  return vm;
 });
-Handlebars.registerPartial('_buttonTakeItem', `{{#> "${ButtonTakeItemViewModel.TEMPLATE}"}}{{> @partial-block }}{{/"${ButtonTakeItemViewModel.TEMPLATE}"}}`);
-Handlebars.registerPartial('buttonTakeItem', `{{> _buttonTakeItem vm=(createButtonTakeItemViewModel target callback callbackData contextType) cssClass=(isDefined cssClass "") }}`);
+Handlebars.registerPartial('buttonTakeItem', `{{#> "${ButtonTakeItemViewModel.TEMPLATE}"}}{{> @partial-block }}{{/"${ButtonTakeItemViewModel.TEMPLATE}"}}`);

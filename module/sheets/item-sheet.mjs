@@ -4,7 +4,6 @@ import AmbersteelFateCardItemSheet from "./subtypes/item/ambersteel-fate-item-sh
 import AmbersteelInjuryItemSheet from "./subtypes/item/ambersteel-injury-item-sheet.mjs";
 import AmbersteelIllnessItemSheet from "./subtypes/item/ambersteel-illness-item-sheet.mjs";
 import * as SheetUtil from "../utils/sheet-utility.mjs";
-import ViewModelCollection from "../utils/viewmodel-collection.mjs";
 
 export class AmbersteelItemSheet extends ItemSheet {
   /**
@@ -73,13 +72,6 @@ export class AmbersteelItemSheet extends ItemSheet {
    */
   get viewModel() { return this._viewModel; }
 
-  /**
-   * @private
-   * @todo Remove and properly integrate inputs and buttons into the "new" view model system. 
-   * @type {ViewModelCollection}
-   */
-  _inputsAndButtons = undefined;
-
   /** 
    * Returns an object that represents sheet and enriched item data. 
    * 
@@ -99,8 +91,6 @@ export class AmbersteelItemSheet extends ItemSheet {
     this._viewModel.readViewState();
     context.viewModel = this._viewModel;
     
-    this._inputsAndButtons = new ViewModelCollection();
-
     this.subType.prepareDerivedData(context);
 
     return context;
@@ -120,7 +110,6 @@ export class AmbersteelItemSheet extends ItemSheet {
 
     // Activate view model bound event listeners. 
     this.viewModel.activateListeners(html, isOwner, isEditable);
-    this._inputsAndButtons.activateListeners(html, isOwner, isEditable);
 
     // -------------------------------------------------------------
     if (!isOwner) return;
@@ -142,8 +131,6 @@ export class AmbersteelItemSheet extends ItemSheet {
       }
     }
     this._viewModel = null;
-
-    this._inputsAndButtons.dispose();
 
     return super.close();
   }

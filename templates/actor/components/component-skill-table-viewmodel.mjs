@@ -45,13 +45,13 @@ export default class SkillTableViewModel extends SheetViewModel {
    * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 
    * is expected to be associated with an actor sheet or item sheet or journal entry or chat message and so on.
    * 
-   * @param {Boolean | undefined} isEditable If true, the sheet is editable. 
-   * @param {Boolean | undefined} isSendable If true, the document represented by the sheet can be sent to chat. 
-   * @param {Boolean | undefined} isOwner If true, the current user is the owner of the represented document. 
-   * @param {Boolean | undefined} isGM If true, the current user is a GM. 
+   * @param {Boolean | undefined} args.isEditable If true, the sheet is editable. 
+   * @param {Boolean | undefined} args.isSendable If true, the document represented by the sheet can be sent to chat. 
+   * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document. 
+   * @param {Boolean | undefined} args.isGM If true, the current user is a GM. 
    * 
-   * @param {Actor} actor
-   * @param {Boolean} isLearningSkillsTable
+   * @param {Actor} args.actor
+   * @param {Boolean} args.isLearningSkillsTable
    * 
    * @throws {Error} ArgumentException - Thrown, if any of the mandatory arguments aren't defined. 
    */
@@ -66,14 +66,19 @@ export default class SkillTableViewModel extends SheetViewModel {
     // Child view models. 
     const thiz = this;
 
-    for (const skill of this.skills) {
+    for (let i = 0; i < this.skills.length; i++) {
+      const skill = this.skills[i];
+      
       const vm = new SkillAbilityTableViewModel({
-        ...args,
-        id: `${skill.id}-skill-abilities`,
+        id: `vmSkillAbilityTable-${i}`,
         parent: thiz,
+        isEditable: thiz.isEditable,
+        isSendable: thiz.isSendable,
+        isOwner: thiz.isOwner,
+        isGM: thiz.isGM,
         item: skill,
-        _oneColumn: false,
-        _visGroupId: createUUID(),
+        oneColumn: false,
+        visGroupId: createUUID(),
         actor: thiz.actor,
       });
       this.skillAbilityTableViewModels[skill.id] = vm;

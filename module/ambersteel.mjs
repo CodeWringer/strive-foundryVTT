@@ -9,6 +9,7 @@ import { AmbersteelItemSheet } from "./sheets/item-sheet.mjs";
 // Import helper/utility classes and constants.
 import { preloadHandlebarsTemplates } from "./templatePreloader.mjs";
 import { getNestedPropertyValue, ensureNestedProperty, setNestedPropertyValue } from "./utils/property-utility.mjs";
+import { findDocument } from "./utils/content-utility.mjs";
 import AdvancementRequirements from "./dto/advancement-requirement.mjs";
 import { TEMPLATES } from "./templatePreloader.mjs";
 import { createUUID } from './utils/uuid-utility.mjs';
@@ -451,9 +452,66 @@ Handlebars.registerPartial('inputLabel', `{{#> "${TEMPLATES.COMPONENT_INPUT_LABE
 // });
 
 Hooks.on("renderChatMessage", async function(message, html, data) {
-  const isEditable = data.author.isGM;
-  const isOwner = data.author.isOwner;
+  const SELECTOR_CHAT_MESSAGE = "custom-system-chat-message";
+  const element = html.find(`.${SELECTOR_CHAT_MESSAGE}`)[0];
+  
+  // The chat message may just be a normal chat message, without any associated document. 
+  // In such a case it is safe to skip any further operations, here. 
+  if (element === undefined || element === null) return;
 
-  // TODO: Incorporate view model system, instead. 
-  // ListenerUtil.activateListeners(html, undefined, isOwner, isEditable);
+  // Get data set of element. This assumes the element in question to have the following data defined:
+  // 'data-view-model-id' and 'data-document-id'
+  const dataset = element.dataset;
+  const vmId = dataset.viewModelId;
+  const documentId = dataset.documentId;
+
+  if (documentId === undefined) {
+    game.ambersteel.logger.logWarn(`renderChatMessage: Failed to get document ID from chat message`);
+    return;
+  }
+
+  const document = await findDocument(documentId);
+
+  if (document === undefined) {
+    game.ambersteel.logger.logWarn(`renderChatMessage: Failed to get document represented by chat message`);
+    return;
+  }
+  
+  let vm = game.ambersteel.viewModels.get(vmId);
+  if (vm === undefined) {
+    // Create new instance of a view model to associate with the chat message. 
+    vm = document.getChatViewModel({ id: vmId });
+    if (vm === undefined) {
+      game.ambersteel.logger.logWarn(`renderChatMessage: Failed to create view model for chat message`);
+      return;
+    }
+    game.ambersteel.viewModels.set(vmId, vm);
+  }
+
+  vm.activateListeners(html, vm.isOwner, vm.isEditable);
+});
+
+// Hooks.on("preDeleteChatMessage", async function(args) {
+// });
+
+Hooks.on("deleteChatMessage", async function(args) {
+  const deletedContent = args.data.content;
+  const rgxViewModelId = /data-view-model-id="([^"]*)"/;
+  const match = deletedContent.match(rgxViewModelId);
+
+  if (match.length === 2) {
+    const vmId = match[1];
+
+    // Dispose the view model, if it supports it. 
+    const vm = game.ambersteel.viewModels.get(vmId);
+
+    if (vm === undefined) return;
+
+    if (vm.dispose !== undefined){
+      vm.dispose();
+    }
+
+    // Remove the view model from the global collection. 
+    game.ambersteel.viewModels.remove(vmId);
+  }
 });

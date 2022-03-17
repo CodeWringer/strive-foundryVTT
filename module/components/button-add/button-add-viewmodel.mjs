@@ -2,6 +2,7 @@ import { TEMPLATES } from "../../templatePreloader.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
 import * as ItemAddDialog from '../../dialog/dialog-item-add.mjs';
 import { findItem, contentCollectionTypes } from '../../utils/content-utility.mjs';
+import * as PropertyUtil from "../../utils/property-utility.mjs";
 
 /**
  * --- Inherited from ViewModel
@@ -41,7 +42,7 @@ export default class ButtonAddViewModel extends ButtonViewModel {
     this.withDialog = args.withDialog ?? false;
     this.creationData = args.creationData ?? Object.create(null);
 
-    if (this.isObject(this.creationData) !== true) {
+    if (PropertyUtil.isObject(this.creationData) !== true) {
       this.creationData = this._parseCreationData(this.creationData);
     }
   }
@@ -171,8 +172,9 @@ export default class ButtonAddViewModel extends ButtonViewModel {
   }
 }
 
-Handlebars.registerHelper('createButtonAddViewModel', function(target, creationType, withDialog, creationData, callback, callbackData) {
-  const vm = new ButtonAddViewModel({
+Handlebars.registerHelper('createButtonAddViewModel', function(id, target, creationType, withDialog, creationData, callback, callbackData) {
+  return new ButtonAddViewModel({
+    id: id,
     target: target,
     creationType: creationType,
     withDialog: withDialog,
@@ -180,11 +182,5 @@ Handlebars.registerHelper('createButtonAddViewModel', function(target, creationT
     callback: callback,
     callbackData: callbackData,
   });
-  
-  // Add new view model instance to global collection. 
-  game.ambersteel.viewModels.set(vm.id, vm);
-  
-  return vm;
 });
-Handlebars.registerPartial('_buttonAdd', `{{#> "${ButtonAddViewModel.TEMPLATE}"}}{{/"${ButtonAddViewModel.TEMPLATE}"}}`);
-Handlebars.registerPartial('buttonAdd', `{{> _buttonAdd vm=(createButtonAddViewModel target creationType withDialog creationData callback callbackData) cssClass=(isDefined cssClass "") }}`);
+Handlebars.registerPartial('buttonAdd', `{{> "${ButtonAddViewModel.TEMPLATE}"}}`);

@@ -1,3 +1,5 @@
+import ButtonAddViewModel from "../../../module/components/button-add/button-add-viewmodel.mjs";
+import ButtonToggleVisibilityViewModel from "../../../module/components/button-toggle-visibility/button-toggle-visibility-viewmodel.mjs";
 import { TEMPLATES } from "../../../module/templatePreloader.mjs";
 import { createUUID } from "../../../module/utils/uuid-utility.mjs";
 import { validateOrThrow } from "../../../module/utils/validation-utility.mjs";
@@ -69,20 +71,22 @@ export default class SkillAbilityTableViewModel extends SheetViewModel {
    * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 
    * is expected to be associated with an actor sheet or item sheet or journal entry or chat message and so on.
    * 
-   * @param {Boolean | undefined} isEditable If true, the sheet is editable. 
-   * @param {Boolean | undefined} isSendable If true, the document represented by the sheet can be sent to chat. 
-   * @param {Boolean | undefined} isOwner If true, the current user is the owner of the represented document. 
-   * @param {Boolean | undefined} isGM If true, the current user is a GM. 
+   * @param {Boolean | undefined} args.isEditable If true, the sheet is editable. 
+   * @param {Boolean | undefined} args.isSendable If true, the document represented by the sheet can be sent to chat. 
+   * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document. 
+   * @param {Boolean | undefined} args.isGM If true, the current user is a GM. 
    * 
-   * @param {Item} item
-   * @param {Boolean | undefined} oneColumn
-   * @param {String | undefined} visGroupId
-   * @param {Actor | undefined} actor
-   * @param {Boolean | undefined} skillAbilitiesInitiallyVisible
+   * @param {Item} args.item
+   * @param {Boolean | undefined} args.oneColumn
+   * @param {String | undefined} args.visGroupId
+   * @param {Actor | undefined} args.actor
+   * @param {Boolean | undefined} args.skillAbilitiesInitiallyVisible
    */
   constructor(args = {}) {
     super(args);
     validateOrThrow(args, ["item"]);
+
+    this.registerViewStateProperty("_skillAbilitiesInitiallyVisible");
 
     // Own properties.
     this.item = args.item;
@@ -92,28 +96,60 @@ export default class SkillAbilityTableViewModel extends SheetViewModel {
     this._skillAbilitiesInitiallyVisible = args.skillAbilitiesInitiallyVisible ?? false;
 
     // Child view models. 
+    this.contextTemplate = "skill-ability-table";
     const thiz = this;
 
     for (let i = 0; i < this.item.data.data.abilities.length; i++) {
       const skillAbility = this.item.data.data.abilities[i];
 
-      const vm = new SkillAbilityListItemViewModel({ 
-        ...args, 
-        id: `ability[${i}]`, 
+      const vm = new SkillAbilityListItemViewModel({
+        id: `vmSkillAbility-${i}`, 
+        isEditable: args.isEditable,
+        isSendable: args.isSendable,
+        isOwner: args.isOwner,
+        isGM: args.isGM,
         skillAbility: skillAbility, 
         parent: thiz,
+        item: thiz.item,
+        actor: thiz.actor,
         index: i,
       });
       this.abilities.push(vm);
+      this[vm.id] = vm;
     }
+
+    this.vmBtnToggleVisibilityExpand = new ButtonToggleVisibilityViewModel({
+      id: "vmBtnToggleVisibilityExpand",
+      target: thiz.item,
+      parent: thiz,
+      visGroup: thiz.visGroupId,
+      toggleSelf: true,
+      callback: thiz._toggleSkillAbilitiesInitiallyVisible.bind(thiz),
+    });
+    this.vmBtnToggleVisibilityCollapse = new ButtonToggleVisibilityViewModel({
+      id: "vmBtnToggleVisibilityCollapse",
+      target: thiz.item,
+      parent: thiz,
+      visGroup: thiz.visGroupId,
+      toggleSelf: true,
+      callback: thiz._toggleSkillAbilitiesInitiallyVisible.bind(thiz),
+    });
+
+    if (this.isEditable !== true) return;
+
+    this.vmBtnAdd = new ButtonAddViewModel({
+      id: "vmBtnAdd",
+      target: thiz.item,
+      parent: thiz,
+      creationType: "skill-ability",
+      withDialog: false,
+    });
   }
 
-  /** @override */
-  toViewState() {
-    const viewState = super.toViewState();
-
-    viewState._skillAbilitiesInitiallyVisible = this._skillAbilitiesInitiallyVisible;
-
-    return viewState;
+  /**
+   * @private
+   */
+  async _toggleSkillAbilitiesInitiallyVisible() {
+    this.skillAbilitiesInitiallyVisible = !this.skillAbilitiesInitiallyVisible;
   }
 }

@@ -1,12 +1,12 @@
 {{!-- Required context:
-vm: {ButtonRollViewModel}
+viewModel: {ButtonRollViewModel}
 cssClass: {String | undefined}
 fill: {Boolean | undefined}
 --}}
-<span class="{{#if fill}}fill-button-light{{else}}square-button-light{{/if}} {{#if cssClass}}{{cssClass}}{{else}}font-size-default{{/if}}">
+<span class="component-button-roll {{#if fill}}fill-button-light{{else}}square-button-light{{/if}} {{#if cssClass}}{{cssClass}}{{else}}font-size-default{{/if}}">
   <a class="custom-system-button pad-sm button flex flex-center" 
     title="{{localize ambersteel.labels.roll}}"
-    id="{{vm.id}}"
+    id="{{viewModel.id}}"
   >
     <i class="fas fa-dice-three"></i>
   </a>

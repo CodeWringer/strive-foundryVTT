@@ -70,19 +70,14 @@ export default class ButtonDeleteViewModel extends ButtonViewModel {
   }
 }
 
-Handlebars.registerHelper('createButtonDeleteViewModel', function(target, propertyPath, withDialog, callback, callbackData) {
-  const vm = new ButtonDeleteViewModel({
+Handlebars.registerHelper('createButtonDeleteViewModel', function(id, target, propertyPath, withDialog, callback, callbackData) {
+  return new ButtonDeleteViewModel({
+    id: id,
     target: target,
     withDialog: withDialog,
     propertyPath: propertyPath,
     callback: callback,
     callbackData: callbackData,
   });
-  
-  // Add new view model instance to global collection. 
-  game.ambersteel.viewModels.set(vm.id, vm);
-  
-  return vm;
 });
-Handlebars.registerPartial('_buttonDelete', `{{#> "${ButtonDeleteViewModel.TEMPLATE}"}}{{/"${ButtonDeleteViewModel.TEMPLATE}"}}`);
-Handlebars.registerPartial('buttonDelete', `{{> _buttonDelete vm=(createButtonDeleteViewModel target propertyPath withDialog callback callbackData) cssClass=(isDefined cssClass "") }}`);
+Handlebars.registerPartial('buttonDelete', `{{> "${ButtonDeleteViewModel.TEMPLATE}"}}`);

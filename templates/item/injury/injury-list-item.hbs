@@ -11,13 +11,13 @@ viewModel: {InjuryListItemViewModel}
       {{> inputLabel text="ambersteel.labels.injury"}}
     </span>
     <span class="flex-grow margin-r-md">
-      {{> inputTextField isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath="name" placeholder="ambersteel.labels.name" contextTemplate="injury-list-item" }}
+      {{> inputTextField viewModel=viewModel.vmTfName }}
     </span>
     {{!-- State --}}
-    {{> inputRadioButtonGroup isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath="data.data.state" options=viewModel.stateOptions contextTemplate="injury-list-item" }}
+    {{> inputRadioButtonGroup viewModel=viewModel.vmRbgState }}
   </div>
   {{!-- Delete --}}
-  {{> buttonDelete target=viewModel.item withDialog=true }}
+  {{> buttonDelete viewModel=viewModel.vmBtnDelete }}
 </div>
 {{!-- Row 2 --}}
 <div class="flex flex-row">
@@ -27,7 +27,7 @@ viewModel: {InjuryListItemViewModel}
       {{> inputLabel text="ambersteel.labels.limit" }}
     </span>
     <span class="width-md">
-      {{> inputNumberSpinner isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath="data.data.limit" min=0 contextTemplate="injury-list-item" }}
+      {{> inputNumberSpinner viewModel=viewModel.vmNsLimit }}
     </span>
   </div>
   {{!-- Spacer --}}
@@ -38,12 +38,12 @@ viewModel: {InjuryListItemViewModel}
       {{> inputLabel text="ambersteel.labels.timeToHeal" }}
     </span>
     <span class="width-min-xl flex-grow">
-      {{> inputTextField isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath="data.data.timeToHeal" contextTemplate="injury-list-item" }}
+      {{> inputTextField viewModel=viewModel.vmTfTimeToHeal }}
     </span>
   </div>
 </div>
 {{!-- Row 3 --}}
 {{!-- Description --}}
 <div class="flex flex-row">
-  {{> inputTextarea isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath="data.data.description" placeholder="ambersteel.labels.description" allowResize=true contextTemplate="injury-list-item" }}
+  {{> inputTextarea viewModel=viewModel.vmTaDescription }}
 </div>

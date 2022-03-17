@@ -164,8 +164,9 @@ export default class ButtonRollViewModel extends ButtonViewModel {
   }
 }
 
-Handlebars.registerHelper('createButtonRollViewModel', function(target, propertyPath, rollType, chatTitle, actor, callback, callbackData) {
-  const vm = new ButtonRollViewModel({
+Handlebars.registerHelper('createButtonRollViewModel', function(id, target, propertyPath, rollType, chatTitle, actor, callback, callbackData) {
+  return new ButtonRollViewModel({
+    id: id,
     target: target,
     propertyPath: propertyPath,
     rollType: rollType,
@@ -174,11 +175,5 @@ Handlebars.registerHelper('createButtonRollViewModel', function(target, property
     callback: callback,
     callbackData: callbackData,
   });
-  
-  // Add new view model instance to global collection. 
-  game.ambersteel.viewModels.set(vm.id, vm);
-  
-  return vm;
 });
-Handlebars.registerPartial('_buttonRoll', `{{#> "${ButtonRollViewModel.TEMPLATE}"}}{{/"${ButtonRollViewModel.TEMPLATE}"}}`);
-Handlebars.registerPartial('buttonRoll', `{{> _buttonRoll vm=(createButtonRollViewModel target propertyPath rollType chatTitle actor callback callbackData) cssClass=(isDefined cssClass "") }}`);
+Handlebars.registerPartial('buttonRoll', `{{> "${ButtonRollViewModel.TEMPLATE}"}}`);

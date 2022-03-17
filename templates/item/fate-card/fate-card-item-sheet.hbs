@@ -7,11 +7,11 @@ viewModel: {FateCardViewModel}
       <div class="flex flex-row">
         <img class="header-image" src="{{viewModel.item.img}}" data-edit="img" title="{{viewModel.item.name}}" height="64" width="64" />
         <h1 class="header-name">
-          {{> inputTextField isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath="name" placeholder="ambersteel.labels.name" contextTemplate="fate-card-item-sheet" }}
+          {{> inputTextField viewModel=viewModel.vmTfName }}
         </h1>
         {{#if viewModel.isSendable}}
           <div class="flex flex-center">
-            {{> buttonSendToChat target=viewModel.item }}
+            {{> buttonSendToChat viewModel=viewModel.vmBtnSendToChat }}
           </div>
         {{/if}}
       </div>
@@ -22,22 +22,22 @@ viewModel: {FateCardViewModel}
     <div class="sheet-block grid grid-3col margin-b-md">
       {{> inputLabel text="ambersteel.fateSystem.miFP"}}
       <div class="flex flex-middle">{{localize "ambersteel.fateSystem.miFPAbbreviation"}}</div>
-      {{> inputNumberSpinner isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath="data.data.cost.miFP" min=0 contextTemplate="fate-card-item-sheet" }}
+      {{> inputNumberSpinner viewModel=viewModel.vmNsMifp }}
     </div>
     {{!-- Row 2 --}}
     <div class="sheet-block grid grid-3col margin-b-md">
       {{> inputLabel text="ambersteel.fateSystem.maFP"}}
       <div class="flex flex-middle">{{localize "ambersteel.fateSystem.maFPAbbreviation"}}</div>
-      {{> inputNumberSpinner isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath="data.data.cost.maFP" min=0 contextTemplate="fate-card-item-sheet" }}
+      {{> inputNumberSpinner viewModel=viewModel.vmNsMafp }}
     </div>
     {{!-- Row 3 --}}
     <div class="sheet-block grid grid-3col margin-b-md">
       {{> inputLabel text="ambersteel.fateSystem.AFP"}}
       <div class="flex flex-middle">{{localize "ambersteel.fateSystem.AFPAbbreviation"}}</div>
-      {{> inputNumberSpinner isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath="data.data.cost.AFP" min=0 contextTemplate="fate-card-item-sheet" }}
+      {{> inputNumberSpinner viewModel=viewModel.vmNsAfp }}
     </div>
     <div class="fate-card-item-description flex-grow">
-      {{> inputTextarea isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath="data.data.description" placeholder="ambersteel.labels.description" allowResize=true cssClass="fill" contextTemplate="fate-card-item-sheet" }}
+      {{> inputTextarea viewModel=viewModel.vmTaDescription cssClass="fill" }}
     </div>
   </div>
 </form>

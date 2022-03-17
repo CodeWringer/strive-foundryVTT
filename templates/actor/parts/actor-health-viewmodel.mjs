@@ -1,7 +1,7 @@
 import { TEMPLATES } from "../../../module/templatePreloader.mjs";
 import { validateOrThrow } from "../../../module/utils/validation-utility.mjs";
-import IllnessViewModel from "../../item/illness/illness-viewmodel.mjs";
-import InjuryViewModel from "../../item/injury/injury-viewmodel.mjs";
+import IllnessListItemViewModel from "../../item/illness/illness-list-item-viewmodel.mjs";
+import InjuryListItemViewModel from "../../item/injury/injury-list-item-viewmodel.mjs";
 import SheetViewModel from "../../sheet-viewmodel.mjs";
 
 export default class ActorHealthViewModel extends SheetViewModel {
@@ -26,7 +26,7 @@ export default class ActorHealthViewModel extends SheetViewModel {
   get illnessCount() { return this.actor.illnesses.length; }
 
   /**
-   * @type {Array<IllnessViewModel>}
+   * @type {Array<IllnessListItemViewModel>}
    * @readonly
    */
   illnesses = [];
@@ -43,12 +43,12 @@ export default class ActorHealthViewModel extends SheetViewModel {
    * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 
    * is expected to be associated with an actor sheet or item sheet or journal entry or chat message and so on.
    * 
-   * @param {Boolean | undefined} isEditable If true, the sheet is editable. 
-   * @param {Boolean | undefined} isSendable If true, the document represented by the sheet can be sent to chat. 
-   * @param {Boolean | undefined} isOwner If true, the current user is the owner of the represented document. 
-   * @param {Boolean | undefined} isGM If true, the current user is a GM. 
+   * @param {Boolean | undefined} args.isEditable If true, the sheet is editable. 
+   * @param {Boolean | undefined} args.isSendable If true, the document represented by the sheet can be sent to chat. 
+   * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document. 
+   * @param {Boolean | undefined} args.isGM If true, the current user is a GM. 
    * 
-   * @param {Actor} actor
+   * @param {Actor} args.actor
    * 
    * @throws {Error} ArgumentException - Thrown, if any of the mandatory arguments aren't defined. 
    */
@@ -63,23 +63,23 @@ export default class ActorHealthViewModel extends SheetViewModel {
     const thiz = this;
 
     for (const illness of this.actor.illnesses) {
-      const illnessViewModel = new IllnessViewModel({
+      const vm = new IllnessListItemViewModel({
         ...args,
         id: illness.id,
         parent: thiz,
         item: illness,
       });
-      this.illnesses.push(illnessViewModel);
+      this.illnesses.push(vm);
     }
 
     for (const injury of this.actor.injuries) {
-      const injuryViewModel = new InjuryViewModel({
+      const vm = new InjuryListItemViewModel({
         ...args,
         id: injury.id,
         parent: thiz,
         item: injury,
       });
-      this.injuries.push(injuryViewModel);
+      this.injuries.push(vm);
     }
   }
 }

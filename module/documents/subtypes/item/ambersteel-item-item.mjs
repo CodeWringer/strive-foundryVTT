@@ -43,43 +43,44 @@ export default class AmbersteelItemItem extends AmbersteelBaseItem {
 
   /** @override */
   async getChatData() {
-    const messageBase = super.getChatData();
+    const chatData = super.getChatData();
+    chatData.flavor = game.i18n.localize("ambersteel.labels.item");
+    
+    return chatData;
+  }
 
-    let sourceType = undefined;
-    let sourceId = undefined;
-
-    if (this.parent.parent !== undefined && this.parent.parent !== null) {
-      // An actor is the owner. 
-      sourceType = "actor";
-      sourceId = this.parent.parent.id;
-    } else if (this.parent.pack !== undefined && this.parent.pack !== null) {
-      // A compendium pack is the owner.
-      sourceType = "compendium";
-    } else {
-      // If neither an actor, nor a compendium own the item, then it must be owned by the world. 
-      sourceType = "world"; 
-    }
-
-    const allowPickup = false; // TODO: The user must be able to select who gets to pick this item up. 
-
-    const renderedContent = await renderTemplate(this.chatMessageTemplate, {
-      viewModel: new ItemChatMessageViewModel({
-        isEditable: false,
-        isSendable: false,
-        isOwner: this.parent.owner,
-        isGM: game.user.isGM,
-        item: this.parent,
-        actor: this.parent.parent,
-        sourceType: sourceType,
-        sourceId: sourceId,
-        allowPickup: allowPickup
-      }),
+  /**
+   * Returns an instance of a view model for use in a chat message. 
+   * @returns {ItemChatMessageViewModel}
+   * @param {Object | undefined} overrides Optional. An object that allows overriding any of the view model properties. 
+   * @param {String | undefined} overrides.id
+   * @param {Boolean | undefined} overrides.isEditable
+   * @param {Boolean | undefined} overrides.isSendable
+   * @param {Boolean | undefined} overrides.isOwner
+   * @param {Boolean | undefined} overrides.isGM
+   * @param {Item | undefined} overrides.item
+   * @param {Actor | undefined} overrides.actor
+   * @param {String | undefined} overrides.sourceType
+   * @param {String | undefined} overrides.sourceId
+   * @param {Boolean | undefined} overrides.allowPickup
+   * @param {Array<String> | undefined} overrides.allowPickupBy
+   * @override
+   */
+  getChatViewModel(overrides = {}) {
+    const base = super.getChatViewModel();
+    return new ItemChatMessageViewModel({
+      id: base.id,
+      isEditable: base.isEditable,
+      isSendable: base.isSendable,
+      isOwner: base.isOwner,
+      isGM: base.isGM,
+      item: this.parent,
+      actor: this.parent.parent,
+      sourceType: undefined,
+      sourceId: undefined,
+      allowPickup: false, // TODO: The user must be able to select who gets to pick this item up. 
+      allowPickupBy: [], // TODO: The user must be able to select who gets to pick this item up. 
+      ...overrides,
     });
-
-    return {
-      ...messageBase,
-      flavor: game.i18n.localize("ambersteel.labels.item"),
-      renderedContent: renderedContent
-    }
   }
 }

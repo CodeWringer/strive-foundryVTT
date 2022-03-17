@@ -99,7 +99,7 @@ export default class InputViewModel extends ViewModel {
    * @param {Boolean | undefined} args.isEditable 
    * @param {String} args.propertyPath
    * @param {Object} args.propertyOwner
-   * @param {String | undefined} contextTemplate
+   * @param {String | undefined} args.contextTemplate
    */
   constructor(args = {}) {
     super(args);
@@ -117,7 +117,7 @@ export default class InputViewModel extends ViewModel {
       this._element = html.find(`.${SELECTOR_READ}#${this.id}`);
     }
     
-    if (this._element === undefined || this._element === null) {
+    if (this._element === undefined || this._element === null || this._element.length === 0) {
       const errorMessage = `NullPointerException: Failed to get input element with id '${this.id}'`;
       if (this._contextTemplate !== undefined) {
         throw new Error(`[${this._contextTemplate}] ${errorMessage}`);

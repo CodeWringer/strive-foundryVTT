@@ -3,24 +3,48 @@ viewModel: {SkillListItemViewModel}
 --}}
 {{!-- Row 1 --}}
 <div class="flex flex-row">
-  {{!-- TODO --}}
   <div class="flex flex-grow">
     {{!-- Send to chat --}}
-    {{> buttonSendToChat target=viewModel.item }}
+    {{> buttonSendToChat viewModel=viewModel.vmBtnSendToChat }}
     {{!-- Name --}}
     <span class="width-min-xl">
       {{> inputLabel text="ambersteel.labels.injury"}}
     </span>
     <span class="flex-grow margin-r-md">
-      {{> inputTextField isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath="name" placeholder="ambersteel.labels.name" contextTemplate="skill-list-item" }}
+      {{> inputTextField viewModel=viewModel.vmTfName }}
     </span>
-    {{!-- State --}}
   </div>
   {{!-- Delete --}}
-  {{> buttonDelete target=viewModel.item withDialog=true }}
+  {{> buttonDelete viewModel=viewModel.vmBtnDelete }}
+</div>
+{{!-- Row 2 --}}
+<div class="flex flex-row">
+  {{!-- Related Attribute --}}
+  <div class="flex flex-row margin-b-md">
+    <div class="width-min-xxl">
+      {{> inputLabel text="ambersteel.labels.relatedAttribute"}}
+    </div>
+    <div class="flex-grow">
+      {{> inputDropDown viewModel=viewModel.vmDdRelatedAttribute }}
+    </div>
+  </div>
+  {{!-- Category --}}
+  <div class="flex flex-row margin-b-md">
+    <div class="width-min-xxl">
+      {{> inputLabel text="ambersteel.labels.category"}}
+    </div>
+    <div class="flex-grow">
+      {{> inputTextField viewModel=viewModel.vmTfCategory }}
+    </div>
+  </div>
 </div>
 {{!-- Row 3 --}}
 {{!-- Description --}}
 <div class="flex flex-row">
-  {{> inputTextarea isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath="data.data.description" placeholder="ambersteel.labels.description" allowResize=true cssClass="fill" contextTemplate="skill-list-item" }}
+  {{> inputTextarea viewModel=viewModel.vmTaDescription cssClass="fill" }}
 </div>
+{{!-- Row 4 --}}
+{{!-- Skill Abilites --}}
+{{#if viewModel.isSkillAbilityListVisible }}
+  {{> "systems/ambersteel/templates/item/skill-ability/skill-ability-table.hbs" viewModel=viewModel.vmSkillAbilityTable }}
+{{/if}}

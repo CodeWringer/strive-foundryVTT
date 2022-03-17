@@ -7,11 +7,11 @@ viewModel: {InjuryItemSheetViewModel}
       <div class="flex flex-row">
         <img class="header-image" src="{{viewModel.item.img}}" data-edit="img" title="{{viewModel.item.name}}" height="64" width="64" />
         <h1 class="header-name">
-          {{> inputTextField isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath="name" placeholder="ambersteel.labels.name" contextTemplate="injury-item-sheet" }}
+          {{> inputTextField viewModel=viewModel.vmTfName }}
         </h1>
         {{#if viewModel.isSendable}}
           <div class="flex flex-center">
-            {{> buttonSendToChat target=viewModel.item }}
+            {{> buttonSendToChat viewModel=viewModel.vmBtnSendToChat }}
           </div>
         {{/if}}
       </div>
@@ -23,7 +23,7 @@ viewModel: {InjuryItemSheetViewModel}
       {{> inputLabel text="ambersteel.labels.limit"}}
     </div>
     <div class="flex-grow">
-      {{> inputNumberSpinner isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath="data.data.limit" min=0 contextTemplate="injury-item-sheet" }}
+      {{> inputNumberSpinner viewModel=viewModel.vmNsLimit }}
     </div>
   </div>
   {{!-- Time to heal --}}
@@ -32,7 +32,7 @@ viewModel: {InjuryItemSheetViewModel}
       {{> inputLabel text="ambersteel.labels.timeToHeal"}}
     </div>
     <div class="flex-grow">
-      {{> inputTextField isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath="data.data.timeToHeal" contextTemplate="injury-item-sheet" }}
+      {{> inputTextField viewModel=viewModel.vmTfTimeToHeal }}
     </div>
   </div>
   {{!-- Description --}}
@@ -41,7 +41,7 @@ viewModel: {InjuryItemSheetViewModel}
       {{> inputLabel text=(localize "ambersteel.labels.description")}}
     </div>
     <div class="flex-grow">
-      {{> inputTextarea isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath="data.data.description" placeholder="ambersteel.labels.description" allowResize=true cssClass="fill" contextTemplate="injury-item-sheet" }}
+      {{> inputTextarea viewModel=viewModel.vmTaDescription cssClass="fill" }}
     </div>
   </div>
 </form>

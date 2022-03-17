@@ -1,7 +1,14 @@
+import ButtonDeleteViewModel from "../../../module/components/button-delete/button-delete-viewmodel.mjs";
+import ButtonSendToChatViewModel from "../../../module/components/button-send-to-chat/button-send-to-chat-viewmodel.mjs";
+import ButtonTakeItemViewModel from "../../../module/components/button-take-item/button-take-item-viewmodel.mjs";
+import InputNumberSpinnerViewModel from "../../../module/components/input-number-spinner/input-number-spinner-viewmodel.mjs";
+import InputTextareaViewModel from "../../../module/components/input-textarea/input-textarea-viewmodel.mjs";
+import InputTextFieldViewModel from "../../../module/components/input-textfield/input-textfield-viewmodel.mjs";
 import { TEMPLATES } from "../../../module/templatePreloader.mjs";
-import ItemViewModel from "./item-viewmodel.mjs";
+import { validateOrThrow } from "../../../module/utils/validation-utility.mjs";
+import SheetViewModel from "../../sheet-viewmodel.mjs";
 
-export default class ItemListItemViewModel extends ItemViewModel {
+export default class ItemListItemViewModel extends SheetViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.ITEM_LIST_ITEM; }
 
@@ -11,14 +18,91 @@ export default class ItemListItemViewModel extends ItemViewModel {
    * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 
    * is expected to be associated with an actor sheet or item sheet or journal entry or chat message and so on.
    * 
-   * @param {Boolean | undefined} isEditable If true, the sheet is editable. 
-   * @param {Boolean | undefined} isSendable If true, the document represented by the sheet can be sent to chat. 
-   * @param {Boolean | undefined} isOwner If true, the current user is the owner of the represented document. 
-   * @param {Boolean | undefined} isGM If true, the current user is a GM. 
+   * @param {Boolean | undefined} args.isEditable If true, the sheet is editable. 
+   * @param {Boolean | undefined} args.isSendable If true, the document represented by the sheet can be sent to chat. 
+   * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document. 
+   * @param {Boolean | undefined} args.isGM If true, the current user is a GM. 
    * 
-   * @param {Item} item
+   * @param {Item} args.item
    */
   constructor(args = {}) {
     super(args);
+    validateOrThrow(args, ["item"]);
+
+    this.item = args.item;
+    this.contextTemplate = "item-list-item";
+    const thiz = this;
+
+    this.vmTfName = new InputTextFieldViewModel({
+      id: "vmTfName",
+      isEditable: thiz.isEditable,
+      propertyOwner: thiz.item,
+      propertyPath: "name",
+      placeholder: "ambersteel.labels.name",
+      contextTemplate: thiz.contextTemplate,
+      parent: thiz,
+    });
+    this.vmBtnSendToChat = new ButtonSendToChatViewModel({
+      id: "vmBtnSendToChat",
+      target: thiz.item,
+      parent: thiz,
+    });
+    this.vmBtnTakeItem = new ButtonTakeItemViewModel({
+      id: "vmBtnTakeItem",
+      target: thiz.item,
+      contextType: "list-item"
+    });
+    this.vmBtnDelete = new ButtonDeleteViewModel({
+      id: "vmBtnDelete",
+      parent: thiz,
+      target: thiz.item,
+      withDialog: true,
+    })
+    this.vmNsQuantity = new InputNumberSpinnerViewModel({
+      id: "vmNsQuantity",
+      isEditable: thiz.isEditable,
+      propertyOwner: thiz.item,
+      propertyPath: "data.data.quantity",
+      contextTemplate: thiz.contextTemplate,
+      parent: thiz,
+      min: 1,
+    });
+    this.vmNsMaxQuantity = new InputNumberSpinnerViewModel({
+      id: "vmNsMaxQuantity",
+      isEditable: thiz.isEditable,
+      propertyOwner: thiz.item,
+      propertyPath: "data.data.maxQuantity",
+      contextTemplate: thiz.contextTemplate,
+      parent: thiz,
+      min: 1,
+    });
+    this.vmNsShapeWidth = new InputNumberSpinnerViewModel({
+      id: "vmNsShapeWidth",
+      isEditable: thiz.isEditable,
+      propertyOwner: thiz.item,
+      propertyPath: "data.data.shape.width",
+      contextTemplate: thiz.contextTemplate,
+      parent: thiz,
+      min: 1,
+    });
+    this.vmNsShapeHeight = new InputNumberSpinnerViewModel({
+      id: "vmNsShapeHeight",
+      isEditable: thiz.isEditable,
+      propertyOwner: thiz.item,
+      propertyPath: "data.data.shape.height",
+      contextTemplate: thiz.contextTemplate,
+      parent: thiz,
+      min: 1,
+    });
+    this.vmTaDescription = new InputTextareaViewModel({
+      id: "vmTaDescription",
+      isEditable: thiz.isEditable,
+      propertyPath: "data.data.description",
+      propertyOwner: thiz.item,
+      contextTemplate: thiz.contextTemplate,
+      parent: thiz,
+      placeholder: "ambersteel.labels.description",
+      allowResize: true,
+    });
   }
 }

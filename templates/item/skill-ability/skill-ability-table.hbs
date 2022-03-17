@@ -20,29 +20,17 @@ viewModel: {SkillAbilityTableViewModel}
           <span class="flex-grow"></span>
           {{!-- Add skill ability --}}
           <span class="width-sm">
-            {{> buttonAdd target=viewModel.item creationType="skill-ability" withDialog=false }}
+            {{> buttonAdd viewModel=viewModel.vmBtnAdd }}
           </span>
         </div>
       </li>
     {{/if}}
   </ol>
   <div class="line-height">
-    {{#> buttonToggleVisibility 
-      visGroup=viewModel.visGroupId
-      cssClass=(ifThenElse viewModel.skillAbilitiesInitiallyVisible "hidden" "")
-      fill=true 
-      toggleSelf=true 
-      callback=(setCallback viewModel "skillAbilitiesInitiallyVisible" (not viewModel.skillAbilitiesInitiallyVisible)) 
-    }}
+    {{#> buttonToggleVisibility viewModel=viewModel.vmBtnToggleVisibilityExpand fill=true cssClass=(ifThenElse viewModel.skillAbilitiesInitiallyVisible "hidden" "") }}
       <i class="fas fa-angle-double-down"></i>
     {{/buttonToggleVisibility}}
-    {{#> buttonToggleVisibility 
-      visGroup=viewModel.visGroupId
-      cssClass=(ifThenElse viewModel.skillAbilitiesInitiallyVisible "" "hidden")
-      fill=true 
-      toggleSelf=true 
-      callback=(setCallback viewModel "skillAbilitiesInitiallyVisible" (not viewModel.skillAbilitiesInitiallyVisible)) 
-    }}
+    {{#> buttonToggleVisibility viewModel=viewModel.vmBtnToggleVisibilityCollapse fill=true cssClass=(ifThenElse viewModel.skillAbilitiesInitiallyVisible "" "hidden") }}
       <i class="fas fa-angle-double-up"></i>
     {{/buttonToggleVisibility}}
   </div>

@@ -1,7 +1,10 @@
 {{!-- Requires context:
 viewModel: {InjuryChatMessageViewModel}
 --}}
-<section>
+<section class="custom-system-chat-message" 
+  data-view-model-id="{{viewModel.id}}"
+  data-document-id="{{viewModel.item.id}}"
+>
   {{!-- Header --}}
   <div class="flex flex-row">
     <div class="flex flex-center">

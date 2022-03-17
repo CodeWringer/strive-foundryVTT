@@ -51,7 +51,7 @@ export default class InputRadioButtonGroupViewModel extends InputViewModel {
    * @param {Boolean | undefined} args.isEditable 
    * @param {String} args.propertyPath
    * @param {Object} args.propertyOwner
-   * @param {String | undefined} contextTemplate
+   * @param {String | undefined} args.contextTemplate
    * 
    * @param {Array<ChoiceOption>} args.options
    */
@@ -72,7 +72,7 @@ export default class InputRadioButtonGroupViewModel extends InputViewModel {
 
     const radioButtonContainer = this.element.find(".radio-button-container");
 
-    if (radioButtonContainer === undefined) {
+    if (radioButtonContainer === undefined || radioButtonContainer === null || radioButtonContainer.length === 0) {
       throw new Error("NullPointerException: Failed to find radio button container");
     }
 
@@ -122,19 +122,14 @@ export default class InputRadioButtonGroupViewModel extends InputViewModel {
   }
 }
 
-Handlebars.registerHelper('createInputRadioButtonGroupViewModel', function(isEditable, propertyOwner, propertyPath, options, contextTemplate) {
-  const vm = new InputRadioButtonGroupViewModel({
+Handlebars.registerHelper('createRadioButtonGroupViewModel', function(id, isEditable, propertyOwner, propertyPath, options, contextTemplate) {
+  return new InputRadioButtonGroupViewModel({
+    id: id,
     isEditable: isEditable,
     propertyOwner: propertyOwner,
     propertyPath: propertyPath,
     options: options,
     contextTemplate: contextTemplate,
   });
-
-  // Add new view model instance to global collection. 
-  game.ambersteel.viewModels.set(vm.id, vm);
-
-  return vm;
 });
-Handlebars.registerPartial('_inputRadioButtonGroup', `{{#> "${InputRadioButtonGroupViewModel.TEMPLATE}"}}{{/"${InputRadioButtonGroupViewModel.TEMPLATE}"}}`);
-Handlebars.registerPartial('inputRadioButtonGroup', `{{> _inputRadioButtonGroup vm=(createInputRadioButtonGroupViewModel isEditable propertyOwner propertyPath options contextTemplate) cssClass=(isDefined cssClass "") readOnlyCssClass=(isDefined readOnlyCssClass "") }}`);
+Handlebars.registerPartial('inputRadioButtonGroup', `{{> "${InputRadioButtonGroupViewModel.TEMPLATE}"}}`);

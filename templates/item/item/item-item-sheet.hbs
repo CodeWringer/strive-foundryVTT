@@ -7,15 +7,15 @@ viewModel: {ItemItemSheetViewModel}
       <div class="flex flex-row">
         <img class="header-image" src="{{viewModel.item.img}}" data-edit="img" title="{{viewModel.item.name}}" height="64" width="64" />
         <h1 class="header-name">
-          {{> inputTextField isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath="name" placeholder="ambersteel.labels.name" contextTemplate="item-item-sheet" }}
+          {{> inputTextField viewModel=viewModel.vmTfName }}
         </h1>
         {{#if viewModel.isSendable}}
           <div class="flex flex-center">
-            {{> buttonSendToChat target=viewModel.item }}
+            {{> buttonSendToChat viewModel=viewModel.vmBtnSendToChat }}
           </div>
         {{/if}}
       </div>
-      {{> buttonTakeItem target=viewModel.item contextType="item-sheet" }}
+      {{> buttonTakeItem viewModel=viewModel.vmBtnTakeItem }}
     </div>
   </header>
   {{!-- Quantity --}}
@@ -24,7 +24,7 @@ viewModel: {ItemItemSheetViewModel}
       {{> inputLabel text="ambersteel.labels.quantity"}}
     </div>
     <div class="flex-grow">
-      {{> inputNumberSpinner isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath="data.data.quantity" min=1 contextTemplate="item-item-sheet" }}
+      {{> inputNumberSpinner viewModel=viewModel.vmNsQuantity }}
     </div>
   </div>
   {{!-- Max quantity --}}
@@ -33,7 +33,7 @@ viewModel: {ItemItemSheetViewModel}
       {{> inputLabel text="ambersteel.labels.maxQuantity"}}
     </div>
     <div class="flex-grow">
-      {{> inputNumberSpinner isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath="data.data.maxQuantity" min=1 contextTemplate="item-item-sheet" }}
+      {{> inputNumberSpinner viewModel=viewModel.vmNsMaxQuantity }}
     </div>
   </div>
   {{!-- SHAPE --}}
@@ -43,7 +43,7 @@ viewModel: {ItemItemSheetViewModel}
       {{> inputLabel text="ambersteel.labels.shapeWidth"}}
     </div>
     <div class="flex-grow">
-      {{> inputNumberSpinner isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath="data.data.shape.width" min=1 contextTemplate="item-item-sheet" }}
+      {{> inputNumberSpinner viewModel=viewModel.vmNsShapeWidth }}
     </div>
   </div>
   {{!-- Height --}}
@@ -52,7 +52,7 @@ viewModel: {ItemItemSheetViewModel}
       {{> inputLabel text="ambersteel.labels.shapeHeight"}}
     </div>
     <div class="flex-grow">
-      {{> inputNumberSpinner isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath="data.data.shape.height" min=1 contextTemplate="item-item-sheet" }}
+      {{> inputNumberSpinner viewModel=viewModel.vmNsShapeHeight }}
     </div>
   </div>
   {{!-- Bulk - read only! --}}
@@ -61,7 +61,9 @@ viewModel: {ItemItemSheetViewModel}
       {{> inputLabel text="ambersteel.labels.bulk"}}
     </div>
     <div class="flex-grow">
-      {{> inputNumberSpinner isEditable=false propertyOwner=viewModel.item propertyPath="data.data.bulk" contextTemplate="item-item-sheet" }}
+        <div class="custom-system-read-only pad-sm fill">
+          {{viewModel.item.data.data.bulk}}
+        </div>
     </div>
   </div>
   {{!-- Description --}}
@@ -70,7 +72,7 @@ viewModel: {ItemItemSheetViewModel}
       {{> inputLabel text=(localize "ambersteel.labels.description")}}
     </div>
     <div class="flex-grow">
-      {{> inputTextarea isEditable=viewModel.isEditable propertyOwner=viewModel.item propertyPath="data.data.description" placeholder="ambersteel.labels.description" allowResize=true cssClass="fill" contextTemplate="item-item-sheet" }}
+      {{> inputTextarea viewModel=viewModel.vmTaDescription cssClass="fill" }}
     </div>
   </div>
 </form>

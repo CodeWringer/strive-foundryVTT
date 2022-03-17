@@ -77,19 +77,14 @@ export default class ButtonToggleVisibilityViewModel extends ButtonViewModel {
   }
 }
 
-Handlebars.registerHelper('createButtonToggleVisibilityViewModel', function(target, callback, callbackData, visGroup, toggleSelf) {
-  const vm = new ButtonToggleVisibilityViewModel({
+Handlebars.registerHelper('createButtonToggleVisibilityViewModel', function(id, target, callback, callbackData, visGroup, toggleSelf) {
+  return new ButtonToggleVisibilityViewModel({
+    id: id,
     target: target,
     callback: callback,
     callbackData: callbackData,
     visGroup: visGroup,
     toggleSelf: toggleSelf,
   });
-  
-  // Add new view model instance to global collection. 
-  game.ambersteel.viewModels.set(vm.id, vm);
-  
-  return vm;
 });
-Handlebars.registerPartial('_buttonToggleVisibility', `{{#> "${ButtonToggleVisibilityViewModel.TEMPLATE}"}}{{> @partial-block }}{{/"${ButtonToggleVisibilityViewModel.TEMPLATE}"}}`);
-Handlebars.registerPartial('buttonToggleVisibility', `{{> _buttonToggleVisibility vm=(createButtonToggleVisibilityViewModel target callback callbackData visGroup toggleSelf) cssClass=(isDefined cssClass "") }}`);
+Handlebars.registerPartial('buttonToggleVisibility', `{{#> "${ButtonToggleVisibilityViewModel.TEMPLATE}"}}{{> @partial-block }}{{/"${ButtonToggleVisibilityViewModel.TEMPLATE}"}}`);

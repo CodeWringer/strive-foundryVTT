@@ -1,25 +1,25 @@
 {{!-- Required context:
-vm: {InputTextFieldViewModel}
+viewModel: {InputTextFieldViewModel}
 cssClass: {String | undefined}
 readOnlyCssClass: {String | undefined}
 --}}
-{{#if vm.isEditable}}
+{{#if viewModel.isEditable}}
   <input 
-    class="custom-system-edit input-width-override {{cssClass}}"
-    data-property-path="{{vm.propertyPath}}"
+    class="custom-system-edit input-width-override component-input-textfield {{cssClass}}"
+    data-property-path="{{viewModel.propertyPath}}"
     type="text"
-    name="{{vm.id}}"
-    id="{{vm.id}}"
-    placeholder="{{vm.placeholder}}"
-    value="{{vm.value}}"
+    name="{{viewModel.id}}"
+    id="{{viewModel.id}}"
+    placeholder="{{viewModel.placeholder}}"
+    value="{{viewModel.value}}"
   />
 {{else}}
   {{!-- Display read-only value --}}
   <div 
-    class="custom-system-read-only pad-sm fill {{readOnlyCssClass}}" 
-    name="{{vm.id}}"
-    id="{{vm.id}}"
+    class="custom-system-read-only pad-sm fill component-input-textfield {{readOnlyCssClass}}" 
+    name="{{viewModel.id}}"
+    id="{{viewModel.id}}"
   >
-    {{localize vm.value}}
+    {{localize viewModel.value}}
   </div>
 {{/if}}

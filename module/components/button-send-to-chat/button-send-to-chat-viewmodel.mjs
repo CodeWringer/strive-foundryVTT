@@ -113,8 +113,9 @@ export default class ButtonSendToChatViewModel extends ButtonViewModel {
   }
 }
 
-Handlebars.registerHelper('createButtonSendToChatViewModel', function(target, propertyPath, chatTitle, actor, callback, callbackData) {
-  const vm = new ButtonSendToChatViewModel({
+Handlebars.registerHelper('createButtonSendToChatViewModel', function(id, target, propertyPath, chatTitle, actor, callback, callbackData) {
+  return new ButtonSendToChatViewModel({
+    id: id,
     target: target,
     propertyPath: propertyPath,
     chatTitle: chatTitle,
@@ -122,11 +123,5 @@ Handlebars.registerHelper('createButtonSendToChatViewModel', function(target, pr
     callback: callback,
     callbackData: callbackData,
   });
-  
-  // Add new view model instance to global collection. 
-  game.ambersteel.viewModels.set(vm.id, vm);
-  
-  return vm;
 });
-Handlebars.registerPartial('_buttonSendToChat', `{{#> "${ButtonSendToChatViewModel.TEMPLATE}"}}{{/"${ButtonSendToChatViewModel.TEMPLATE}"}}`);
-Handlebars.registerPartial('buttonSendToChat', `{{> _buttonSendToChat vm=(createButtonSendToChatViewModel target propertyPath chatTitle actor callback callbackData) cssClass=(isDefined cssClass "") }}`);
+Handlebars.registerPartial('buttonSendToChat', `{{> "${ButtonSendToChatViewModel.TEMPLATE}"}}`);

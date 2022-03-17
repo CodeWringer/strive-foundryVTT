@@ -1,7 +1,10 @@
 {{!-- Requires context:
 viewModel: {SkillChatMessageViewModel}
 --}}
-<section>
+<section class="custom-system-chat-message" 
+  data-view-model-id="{{viewModel.id}}"
+  data-document-id="{{viewModel.item.id}}"
+>
   {{!-- Header --}}
   <div class="flex flex-row">
     <div class="flex flex-center">
@@ -20,12 +23,12 @@ viewModel: {SkillChatMessageViewModel}
       {{viewModel.item.data.data.category}}
     </div>
   </div>
-  {{!-- Skill Abilites --}}
-  {{#if viewModel.hasAbilities }}
-    {{> "systems/ambersteel/templates/item/skill-ability/skill-ability-table.hbs" viewModel=viewModel.skillAbilityTableViewModel }}
-  {{/if}}
   {{!-- Description --}}
   <div class="sheet-block multiline">
     {{viewModel.item.data.data.description}}
   </div>
+  {{!-- Skill Abilites --}}
+  {{#if viewModel.hasAbilities }}
+    {{> "systems/ambersteel/templates/item/skill-ability/skill-ability-table.hbs" viewModel=viewModel.vmSkillAbilityTable }}
+  {{/if}}
 </section>

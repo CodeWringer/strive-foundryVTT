@@ -1,18 +1,18 @@
 {{!-- Required context:
-vm: {InputDropDownViewModel}
+viewModel: {InputDropDownViewModel}
 cssClass: {String | undefined}
 readOnlyCssClass: {String | undefined}
 --}}
-{{#if vm.isEditable}}
+{{#if viewModel.isEditable}}
   <select 
-    class="custom-system-edit drop-down width-fill {{cssClass}}"
-    data-property-path="{{vm.propertyPath}}"
-    name="{{vm.id}}"
-    id="{{vm.id}}"
-    value="{{vm.value}}"
+    class="custom-system-edit drop-down width-fill component-input-dropdown {{cssClass}}"
+    data-property-path="{{viewModel.propertyPath}}"
+    name="{{viewModel.id}}"
+    id="{{viewModel.id}}"
+    value="{{viewModel.value}}"
   >
-  {{#select vm.propertyPath}}
-    {{#each vm.options as |option index|}}
+  {{#select viewModel.propertyPath}}
+    {{#each viewModel.options as |option index|}}
       <option value="{{option.value}}">{{option.localizedValue}}</option>
     {{/each}}
   {{/select}}
@@ -20,10 +20,10 @@ readOnlyCssClass: {String | undefined}
 {{else}}
   {{!-- Display read-only value --}}
   <div 
-    class="custom-system-read-only pad-sm fill {{readOnlyCssClass}}" 
-    name="{{vm.id}}"
-    id="{{vm.id}}"
+    class="custom-system-read-only pad-sm fill component-input-dropdown {{readOnlyCssClass}}" 
+    name="{{viewModel.id}}"
+    id="{{viewModel.id}}"
   >
-    {{localize vm.localizedValue}}
+    {{localize viewModel.localizedValue}}
   </div>
 {{/if}}
