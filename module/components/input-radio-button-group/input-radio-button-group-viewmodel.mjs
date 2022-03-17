@@ -72,7 +72,7 @@ export default class InputRadioButtonGroupViewModel extends InputViewModel {
 
     const radioButtonContainer = this.element.find(".radio-button-container");
 
-    if (radioButtonContainer === undefined) {
+    if (radioButtonContainer === undefined || radioButtonContainer === null || radioButtonContainer.length === 0) {
       throw new Error("NullPointerException: Failed to find radio button container");
     }
 

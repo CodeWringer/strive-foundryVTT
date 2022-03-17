@@ -259,7 +259,11 @@ export default class ViewModel {
    */
   activateListeners(html, isOwner, isEditable) {
     for (const child of this.children) {
-      child.activateListeners(html, isOwner, isEditable);
+      try {
+        child.activateListeners(html, isOwner, isEditable);
+      } catch (error) {
+        game.ambersteel.logger.logWarn(error);
+      }
     }
   }
 
