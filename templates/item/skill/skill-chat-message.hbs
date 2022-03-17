@@ -23,12 +23,12 @@ viewModel: {SkillChatMessageViewModel}
       {{viewModel.item.data.data.category}}
     </div>
   </div>
-  {{!-- Skill Abilites --}}
-  {{#if viewModel.hasAbilities }}
-    {{> "systems/ambersteel/templates/item/skill-ability/skill-ability-table.hbs" viewModel=viewModel.vmSkillAbilityTable }}
-  {{/if}}
   {{!-- Description --}}
   <div class="sheet-block multiline">
     {{viewModel.item.data.data.description}}
   </div>
+  {{!-- Skill Abilites --}}
+  {{#if viewModel.hasAbilities }}
+    {{> "systems/ambersteel/templates/item/skill-ability/skill-ability-table.hbs" viewModel=viewModel.vmSkillAbilityTable }}
+  {{/if}}
 </section>
