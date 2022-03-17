@@ -1,8 +1,8 @@
 import { TEMPLATES } from "../../../module/templatePreloader.mjs";
 import { validateOrThrow } from "../../../module/utils/validation-utility.mjs";
-import ChatMessageViewModel from "../../chat-message-viewmodel.mjs";
+import SheetViewModel from "../../sheet-viewmodel.mjs";
 
-export default class IllnessChatMessageViewModel extends ChatMessageViewModel {
+export default class IllnessChatMessageViewModel extends SheetViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.ILLNESS_CHAT_MESSAGE; }
 

@@ -1,9 +1,9 @@
 import { TEMPLATES } from "../../../module/templatePreloader.mjs";
 import { validateOrThrow } from "../../../module/utils/validation-utility.mjs";
-import ChatMessageViewModel from "../../chat-message-viewmodel.mjs";
+import SheetViewModel from "../../sheet-viewmodel.mjs";
 import SkillAbilityTableViewModel from "../skill-ability/skill-ability-table-viewmodel.mjs";
 
-export default class SkillChatMessageViewModel extends ChatMessageViewModel {
+export default class SkillChatMessageViewModel extends SheetViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.SKILL_ITEM_CHAT_MESSAGE; }
 

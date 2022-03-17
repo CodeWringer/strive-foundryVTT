@@ -1,9 +1,9 @@
 import ButtonTakeItemViewModel from "../../../module/components/button-take-item/button-take-item-viewmodel.mjs";
 import { TEMPLATES } from "../../../module/templatePreloader.mjs";
 import { validateOrThrow } from "../../../module/utils/validation-utility.mjs";
-import ChatMessageViewModel from "../../chat-message-viewmodel.mjs";
+import SheetViewModel from "../../sheet-viewmodel.mjs";
 
-export default class ItemChatMessageViewModel extends ChatMessageViewModel {
+export default class ItemChatMessageViewModel extends SheetViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.ITEM_CHAT_MESSAGE; }
 
