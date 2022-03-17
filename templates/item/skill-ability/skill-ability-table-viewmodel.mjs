@@ -86,6 +86,8 @@ export default class SkillAbilityTableViewModel extends SheetViewModel {
     super(args);
     validateOrThrow(args, ["item"]);
 
+    this.registerViewStateProperty("_skillAbilitiesInitiallyVisible");
+
     // Own properties.
     this.item = args.item;
     this.oneColumn = args.oneColumn ?? false;
@@ -135,15 +137,6 @@ export default class SkillAbilityTableViewModel extends SheetViewModel {
       toggleSelf: true,
       callback: thiz._toggleSkillAbilitiesInitiallyVisible.bind(thiz),
     });
-  }
-
-  /** @override */
-  toViewState() {
-    const viewState = super.toViewState();
-
-    viewState._skillAbilitiesInitiallyVisible = this._skillAbilitiesInitiallyVisible;
-
-    return viewState;
   }
 
   /**

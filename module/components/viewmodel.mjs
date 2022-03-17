@@ -96,6 +96,14 @@ export default class ViewModel {
   children = [];
 
   /**
+   * An array of property names. These are the properties of *this* view model that will 
+   * automatically be written to / restored from view state. 
+   * @type {Array<String>}
+   * @protected
+   */
+  viewStateFields = [];
+
+  /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
    * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 
    * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 
@@ -154,25 +162,56 @@ export default class ViewModel {
 
   /**
    * @summary
-   * Returns an object that represents the current view state. 
+   * Registers a property of *this* view model as view state storeable/restorable. 
    * 
    * @description
-   * By default, the returned object will *only* contain the view states of the child view models. 
+   * Silently prevents adding the same property name multiple times. 
    * 
-   * This means that types which extend {ViewModel} *must* override this method, if they mean to store 
-   * any variables which should be retrievable. 
+   * Does not verify that a property with the given name exists on this view model instance. 
+   * @param {String} propertyName Name of a property to register as view state writeable/restorable. 
+   */
+  registerViewStateProperty(propertyName) {
+    const existingEntry = this.viewStateFields.find(it => { return it === propertyName });
+    if (existingEntry === undefined) {
+      this.viewStateFields.push(propertyName);
+    }
+  }
+
+  /**
+   * @summary
+   * Returns the current view state. 
    * 
-   * Making the storing of variables an explicit task avoids cluttering up the view state objects with 
-   * unnecessary data and also makes debugging easier, as view state objects become more manageable, 
-   * the fewer properties they contain. 
-   * @returns {Object} An object that represents the current view state. 
+   * @description
+   * Creates an object that represents the view state, if there is any view state to store. 
+   * 
+   * Whether there is any view state to store, is determined by whether any propertys have been registered 
+   * and if any of the child view models return view state to store. 
+   * 
+   * This method should only have to be overridden, if specific data transformations need to be applied to values 
+   * to store on the view state. 
+   * 
+   * @returns {Object | undefined} An object that represents the current view state, 
+   * or undefined, if there is no view state to save. 
    * @virtual
    */
   toViewState() {
-    const viewState = Object.create(null);
+    let viewState = undefined;
+
+    for (const propertyName of this.viewStateFields) {
+      if (viewState === undefined) {
+        viewState = Object.create(null);
+      }
+      viewState[propertyName] = this[propertyName];
+    }
 
     for (const child of this.children) {
-      viewState[child.id] = child.toViewState();
+      const childViewState = child.toViewState();
+      if (childViewState === undefined) continue;
+      
+      if (viewState === undefined) {
+        viewState = Object.create(null);
+      }
+      viewState[child.id] = childViewState;
     }
     
     return viewState;
@@ -183,39 +222,30 @@ export default class ViewModel {
    * Applies the given view state, overriding any current values. 
    * 
    * @description
-   * This method looks for any properties whose names match in the given view state object and this current 
-   * view state instance. It will then apply the value from the property on the view state to this property 
-   * with the same name on this view model instance. 
+   * This method applies any properties from the given view state to this view model instance, whose names are contained 
+   * by the array of registered properties. 
    * 
-   * This means that types which extend {ViewModel} needn't override this method, unless if they have specific 
-   * functionality that they need. 
-   * @param {Object | undefined} viewState The view state to apply. 
+   * This method should only have to be overridden, if specific data transformations need to be applied to values 
+   * to apply from the view state. 
+   * 
+   * @param {Object | undefined} viewState The view state to apply, or undefined. 
+   * It can be undefined, if there is no view state to store. This can be the case, if no properties are registered 
+   * as storeable, either in this view model instance or in all of its children. 
    * @virtual
    */
   applyViewState(viewState) {
-    // There may be cases where a parent's state is at least partially stored, but not fully. 
-    // *This* instance of a ViewModel right here might not yet have been stored. Therefore, 
-    // the outdated state may be fetched and applied. To avoid null reference exceptions, 
-    // we can safely skip *this* method here. 
+    // If the view state is undefined, it cannot be applied. 
+    if (viewState === undefined || viewState === null) return;
 
-    // A more concrete example: 
-    // * User opens character sheet.
-    // * User closes character sheet. View state is written. 
-    // * User re-opens the character sheet and adds one skill item. 
-    // * The sheet is re-rendered, thus re-instantiating view models and re-applying their view states. 
-    // * At this point, no state for the newly added skill item has been written, yet, as the 
-    // sheet hasn't been closed, yet. 
-    // * Without the if check here, the invocation of this method for the view model of the 
-    // newly added skill item would throw an error, as logically, its state could not yet be retrieved. 
-    if (viewState === undefined) return;
-
-    for (const propertyName in viewState) {
-      if (PropertyUtil.hasProperty(this, propertyName) !== true) continue;
+    for (const propertyName of this.viewStateFields) {
+      if (PropertyUtil.hasProperty(viewState, propertyName) !== true) continue;
 
       this[propertyName] = viewState[propertyName];
     }
 
     for (const child of this.children) {
+      if (PropertyUtil.hasProperty(viewState, child.id) !== true) continue;
+
       child.applyViewState(viewState[child.id]);
     }
   }
@@ -254,9 +284,13 @@ export default class ViewModel {
   }
 
   /**
+   * @summary
    * Stores the current view state of the entire view model hierarchy this view model is a part of. 
    * 
-   * What this really means is, the top-most parent writes out its state. 
+   * @description
+   * The top-most parent in the hierarchy of parents writes out its state. 
+   * 
+   * To that end, the hierarchy is traversed upwards, starting with the parent of this view model instance. 
    * @param {Map<String, Object>} globalViewStates 
    */
   writeAllViewState(globalViewStates = game.ambersteel.viewStates) {
