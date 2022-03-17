@@ -89,6 +89,10 @@ export default class SkillItemSheetViewModel extends SkillViewModel {
     this.vmSkillAbilityTable = new SkillAbilityTableViewModel({
       id: "vmSkillAbilityTable",
       parent: thiz,
+      isEditable: thiz.isEditable,
+      isSendable: thiz.isSendable,
+      isOwner: thiz.isOwner,
+      isGM: thiz.isGM,
       item: thiz.item,
       skillAbilitiesInitiallyVisible: true,
       oneColumn: false,

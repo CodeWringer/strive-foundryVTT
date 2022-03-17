@@ -102,11 +102,16 @@ export default class SkillAbilityTableViewModel extends SheetViewModel {
     for (let i = 0; i < this.item.data.data.abilities.length; i++) {
       const skillAbility = this.item.data.data.abilities[i];
 
-      const vm = new SkillAbilityListItemViewModel({ 
-        ...args, 
+      const vm = new SkillAbilityListItemViewModel({
+        isEditable: args.isEditable,
+        isSendable: args.isSendable,
+        isOwner: args.isOwner,
+        isGM: args.isGM,
         id: `ability[${i}]`, 
         skillAbility: skillAbility, 
         parent: thiz,
+        item: thiz.item,
+        actor: thiz.actor,
         index: i,
       });
       this.abilities.push(vm);
@@ -124,7 +129,6 @@ export default class SkillAbilityTableViewModel extends SheetViewModel {
       target: thiz.item,
       parent: thiz,
       visGroup: thiz.visGroupId,
-      fill: true,
       toggleSelf: true,
       callback: thiz._toggleSkillAbilitiesInitiallyVisible.bind(thiz),
     });
@@ -133,7 +137,6 @@ export default class SkillAbilityTableViewModel extends SheetViewModel {
       target: thiz.item,
       parent: thiz,
       visGroup: thiz.visGroupId,
-      fill: true,
       toggleSelf: true,
       callback: thiz._toggleSkillAbilitiesInitiallyVisible.bind(thiz),
     });

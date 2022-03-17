@@ -1,4 +1,5 @@
 import { TEMPLATES } from "../../../module/templatePreloader.mjs";
+import { validateOrThrow } from "../../../module/utils/validation-utility.mjs";
 import ChatMessageViewModel from "../../chat-message-viewmodel.mjs";
 import SkillAbilityTableViewModel from "../skill-ability/skill-ability-table-viewmodel.mjs";
 
@@ -30,7 +31,10 @@ export default class SkillChatMessageViewModel extends ChatMessageViewModel {
    */
   constructor(args = {}) {
     super(args);
+    validateOrThrow(args, ["item"]);
 
+    this.item = args.item;
+    
     // Child view models. 
     this.contextTemplate = "skill-chat-message";
     const thiz = this;
@@ -38,6 +42,10 @@ export default class SkillChatMessageViewModel extends ChatMessageViewModel {
     this.vmSkillAbilityTable = new SkillAbilityTableViewModel({
       id: "vmSkillAbilityTable",
       parent: thiz,
+      isEditable: thiz.isEditable,
+      isSendable: thiz.isSendable,
+      isOwner: thiz.isOwner,
+      isGM: thiz.isGM,
       item: thiz.item,
       skillAbilitiesInitiallyVisible: false,
       oneColumn: true,
