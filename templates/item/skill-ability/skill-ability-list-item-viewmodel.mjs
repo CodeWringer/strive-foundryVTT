@@ -86,8 +86,6 @@ export default class SkillAbilityListItemViewModel extends SheetViewModel {
       });
     }
     
-    if (this.isEditable !== true) return;
-
     this.vmTfName = new InputTextFieldViewModel({
       id: "vmTfName",
       isEditable: thiz.isEditable,
