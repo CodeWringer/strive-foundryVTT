@@ -118,13 +118,6 @@ export default class SkillAbilityTableViewModel extends SheetViewModel {
       this[vm.id] = vm;
     }
 
-    this.vmBtnAdd = new ButtonAddViewModel({
-      id: "vmBtnAdd",
-      target: thiz.item,
-      parent: thiz,
-      creationType: "skill-ability",
-      withDialog: false,
-    });
     this.vmBtnToggleVisibilityExpand = new ButtonToggleVisibilityViewModel({
       id: "vmBtnToggleVisibilityExpand",
       target: thiz.item,
@@ -140,6 +133,16 @@ export default class SkillAbilityTableViewModel extends SheetViewModel {
       visGroup: thiz.visGroupId,
       toggleSelf: true,
       callback: thiz._toggleSkillAbilitiesInitiallyVisible.bind(thiz),
+    });
+
+    if (this.isEditable !== true) return;
+
+    this.vmBtnAdd = new ButtonAddViewModel({
+      id: "vmBtnAdd",
+      target: thiz.item,
+      parent: thiz,
+      creationType: "skill-ability",
+      withDialog: false,
     });
   }
 

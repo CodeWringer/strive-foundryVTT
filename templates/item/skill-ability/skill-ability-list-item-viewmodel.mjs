@@ -76,13 +76,18 @@ export default class SkillAbilityListItemViewModel extends SheetViewModel {
     this.contextTemplate = "skill-ability-list-item";
     const thiz = this;
     const pathSkillAbility = `data.data.abilities[${thiz.index}]`;
+    
+    if (this.isSendable === true) {
+      this.vmBtnSendToChat = new ButtonSendToChatViewModel({
+        id: "vmBtnSendToChat",
+        target: thiz.item,
+        parent: thiz,
+        propertyPath: pathSkillAbility,
+      });
+    }
+    
+    if (this.isEditable !== true) return;
 
-    this.vmBtnSendToChat = new ButtonSendToChatViewModel({
-      id: "vmBtnSendToChat",
-      target: thiz.item,
-      parent: thiz,
-      propertyPath: pathSkillAbility,
-    });
     this.vmTfName = new InputTextFieldViewModel({
       id: "vmTfName",
       isEditable: thiz.isEditable,
