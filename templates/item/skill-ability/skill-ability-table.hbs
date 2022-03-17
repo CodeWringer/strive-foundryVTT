@@ -27,10 +27,10 @@ viewModel: {SkillAbilityTableViewModel}
     {{/if}}
   </ol>
   <div class="line-height">
-    {{#> buttonToggleVisibility viewModel=viewModel.vmBtnToggleVisibilityExpand cssClass=(ifThenElse viewModel.skillAbilitiesInitiallyVisible "hidden" "") }}
+    {{#> buttonToggleVisibility viewModel=viewModel.vmBtnToggleVisibilityExpand fill=true cssClass=(ifThenElse viewModel.skillAbilitiesInitiallyVisible "hidden" "") }}
       <i class="fas fa-angle-double-down"></i>
     {{/buttonToggleVisibility}}
-    {{#> buttonToggleVisibility viewModel=viewModel.vmBtnToggleVisibilityCollapse cssClass=(ifThenElse viewModel.skillAbilitiesInitiallyVisible "" "hidden") }}
+    {{#> buttonToggleVisibility viewModel=viewModel.vmBtnToggleVisibilityCollapse fill=true cssClass=(ifThenElse viewModel.skillAbilitiesInitiallyVisible "" "hidden") }}
       <i class="fas fa-angle-double-up"></i>
     {{/buttonToggleVisibility}}
   </div>
