@@ -1,3 +1,4 @@
+import ButtonTakeItemViewModel from "../../../module/components/button-take-item/button-take-item-viewmodel.mjs";
 import { TEMPLATES } from "../../../module/templatePreloader.mjs";
 import { validateOrThrow } from "../../../module/utils/validation-utility.mjs";
 import ChatMessageViewModel from "../../chat-message-viewmodel.mjs";
@@ -51,11 +52,21 @@ export default class ItemChatMessageViewModel extends ChatMessageViewModel {
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["sourceType", "sourceId"]);
+    validateOrThrow(args, ["item", "sourceType", "sourceId"]);
 
+    this.item = args.item;
     this.sourceType = args.sourceType;
     this.sourceId = args.sourceId;
     this.allowPickup = args.allowPickup ?? false;
     this.allowPickupBy = args.allowPickupBy ?? [];
+
+    this.contextTemplate = "item-chat-message";
+    const thiz = this;
+
+    this.vmBtnTakeItem = new ButtonTakeItemViewModel({
+      id: "vmBtnTakeItem",
+      target: thiz.item,
+      contextType: "chat-message"
+    });
   }
 }

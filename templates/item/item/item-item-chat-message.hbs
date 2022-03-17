@@ -9,7 +9,7 @@ viewModel: {ItemChatMessageViewModel}
   <div class="flex flex-row">
     <div class="flex flex-center">
       {{#if viewModel.allowPickup}}
-        {{> buttonTakeItem target=viewModel.item contextType="chat-message" }}
+        {{> buttonTakeItem viewModel=viewModel.vmBtnTakeItem }}
       {{/if}}
     </div>
     <div class="flex flex-center">

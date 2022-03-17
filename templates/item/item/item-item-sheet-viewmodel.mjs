@@ -1,4 +1,9 @@
+import ButtonSendToChatViewModel from "../../../module/components/button-send-to-chat/button-send-to-chat-viewmodel.mjs";
+import InputNumberSpinnerViewModel from "../../../module/components/input-number-spinner/input-number-spinner-viewmodel.mjs";
+import InputTextareaViewModel from "../../../module/components/input-textarea/input-textarea-viewmodel.mjs";
+import InputTextFieldViewModel from "../../../module/components/input-textfield/input-textfield-viewmodel.mjs";
 import { TEMPLATES } from "../../../module/templatePreloader.mjs";
+import { validateOrThrow } from "../../../module/utils/validation-utility.mjs";
 import ItemViewModel from "./item-viewmodel.mjs";
 
 export default class ItemItemSheetViewModel extends ItemViewModel {
@@ -20,5 +25,76 @@ export default class ItemItemSheetViewModel extends ItemViewModel {
    */
   constructor(args = {}) {
     super(args);
+    validateOrThrow(args, ["item"]);
+
+    this.item = args.item;
+    this.contextTemplate = "item-item-sheet";
+    const thiz = this;
+
+    this.vmTfName = new InputTextFieldViewModel({
+      id: "vmTfName",
+      isEditable: thiz.isEditable,
+      propertyOwner: thiz.item,
+      propertyPath: "name",
+      placeholder: "ambersteel.labels.name",
+      contextTemplate: thiz.contextTemplate,
+      parent: thiz,
+    });
+    this.vmBtnSendToChat = new ButtonSendToChatViewModel({
+      id: "vmBtnSendToChat",
+      target: thiz.item,
+      parent: thiz,
+    });
+    this.vmBtnTakeItem = new ButtonTakeItemViewModel({
+      id: "vmBtnTakeItem",
+      target: thiz.item,
+      contextType: "item-sheet"
+    });
+    this.vmNsQuantity = new InputNumberSpinnerViewModel({
+      id: "vmNsQuantity",
+      isEditable: thiz.isEditable,
+      propertyOwner: thiz.item,
+      propertyPath: "data.data.quantity",
+      contextTemplate: thiz.contextTemplate,
+      parent: thiz,
+      min: 1,
+    });
+    this.vmNsMaxQuantity = new InputNumberSpinnerViewModel({
+      id: "vmNsMaxQuantity",
+      isEditable: thiz.isEditable,
+      propertyOwner: thiz.item,
+      propertyPath: "data.data.maxQuantity",
+      contextTemplate: thiz.contextTemplate,
+      parent: thiz,
+      min: 1,
+    });
+    this.vmNsShapeWidth = new InputNumberSpinnerViewModel({
+      id: "vmNsShapeWidth",
+      isEditable: thiz.isEditable,
+      propertyOwner: thiz.item,
+      propertyPath: "data.data.shape.width",
+      contextTemplate: thiz.contextTemplate,
+      parent: thiz,
+      min: 1,
+    });
+    this.vmNsShapeHeight = new InputNumberSpinnerViewModel({
+      id: "vmNsShapeHeight",
+      isEditable: thiz.isEditable,
+      propertyOwner: thiz.item,
+      propertyPath: "data.data.shape.height",
+      contextTemplate: thiz.contextTemplate,
+      parent: thiz,
+      min: 1,
+    });
+    this.vmTaDescription = new InputTextareaViewModel({
+      id: "vmTaDescription",
+      isEditable: thiz.isEditable,
+      propertyPath: "data.data.description",
+      propertyOwner: thiz.item,
+      contextTemplate: thiz.contextTemplate,
+      parent: thiz,
+      placeholder: "ambersteel.labels.description",
+      allowResize: true,
+    });
   }
 }
