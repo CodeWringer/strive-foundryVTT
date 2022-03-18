@@ -1,6 +1,6 @@
+import SheetViewModel from "../../../module/components/sheet-viewmodel.mjs";
 import { TEMPLATES } from "../../../module/templatePreloader.mjs";
 import { validateOrThrow } from "../../../module/utils/validation-utility.mjs";
-import SheetViewModel from "../../sheet-viewmodel.mjs";
 
 export default class SkillAbilityChatMessageViewModel extends SheetViewModel {
   /** @override */

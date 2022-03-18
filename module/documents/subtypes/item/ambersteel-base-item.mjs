@@ -1,8 +1,8 @@
 import PreparedChatData from '../../../dto/prepared-chat-data.mjs';
 import * as UpdateUtil from "../../../utils/document-update-utility.mjs";
 import * as ChatUtil from "../../../utils/chat-utility.mjs";
-import SheetViewModel from '../../../../templates/sheet-viewmodel.mjs';
 import { createUUID } from '../../../utils/uuid-utility.mjs';
+import SheetViewModel from '../../../components/sheet-viewmodel.mjs';
 
 export default class AmbersteelBaseItem {
   /**

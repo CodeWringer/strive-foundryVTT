@@ -1,8 +1,8 @@
+import SheetViewModel from "../../module/components/sheet-viewmodel.mjs";
 import ViewModel from "../../module/components/viewmodel.mjs";
 import { TEMPLATES } from "../../module/templatePreloader.mjs";
 import { validateOrThrow } from "../../module/utils/validation-utility.mjs";
 import GmNotesViewModel from "../gm-notes-viewmodel.mjs";
-import SheetViewModel from "../sheet-viewmodel.mjs";
 import ActorAssetsViewModel from "./parts/actor-assets-viewmodel.mjs";
 import ActorAttributesViewModel from "./parts/actor-attributes-viewmodel.mjs";
 import ActorBeliefsFateViewModel from "./parts/actor-beliefs-fate-viewmodel.mjs";

@@ -19,9 +19,10 @@ import { BaseLoggingStrategy, LogLevels } from "./logging/base-logging-strategy.
 import { ConsoleLoggingStrategy } from "./logging/console-logging-strategy.mjs";
 // Import view models. 
 import './components/viewmodel.mjs';
-import '../templates/sheet-viewmodel.mjs';
+import './components/sheet-viewmodel.mjs';
 import ViewModelCollection from './utils/viewmodel-collection.mjs';
 // Import components. 
+import './components/input-viewmodel.mjs';
 import './components/input-textfield/input-textfield-viewmodel.mjs';
 import './components/input-dropdown/input-dropdown-viewmodel.mjs';
 import './components/input-number-spinner/input-number-spinner-viewmodel.mjs';

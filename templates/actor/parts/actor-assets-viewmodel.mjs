@@ -1,7 +1,7 @@
+import SheetViewModel from "../../../module/components/sheet-viewmodel.mjs";
 import { TEMPLATES } from "../../../module/templatePreloader.mjs";
 import { validateOrThrow } from "../../../module/utils/validation-utility.mjs";
 import ItemListItemViewModel from "../../item/item/item-list-item-viewmodel.mjs";
-import SheetViewModel from "../../sheet-viewmodel.mjs";
 
 export default class ActorAssetsViewModel extends SheetViewModel {
   /** @override */

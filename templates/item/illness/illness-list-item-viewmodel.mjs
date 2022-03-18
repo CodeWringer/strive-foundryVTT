@@ -1,11 +1,11 @@
 import ButtonSendToChatViewModel from "../../../module/components/button-send-to-chat/button-send-to-chat-viewmodel.mjs";
 import InputTextareaViewModel from "../../../module/components/input-textarea/input-textarea-viewmodel.mjs";
 import InputTextFieldViewModel from "../../../module/components/input-textfield/input-textfield-viewmodel.mjs";
-import SheetViewModel from "../../sheet-viewmodel.mjs";
 import { TEMPLATES } from "../../../module/templatePreloader.mjs";
 import InputRadioButtonGroupViewModel from "../../../module/components/input-radio-button-group/input-radio-button-group-viewmodel.mjs";
 import ButtonDeleteViewModel from "../../../module/components/button-delete/button-delete-viewmodel.mjs";
 import { validateOrThrow } from "../../../module/utils/validation-utility.mjs";
+import SheetViewModel from "../../../module/components/sheet-viewmodel.mjs";
 
 export default class IllnessListItemViewModel extends SheetViewModel {
   /** @override */

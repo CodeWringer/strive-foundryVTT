@@ -1,9 +1,9 @@
 import ButtonAddViewModel from "../../../module/components/button-add/button-add-viewmodel.mjs";
 import ButtonToggleVisibilityViewModel from "../../../module/components/button-toggle-visibility/button-toggle-visibility-viewmodel.mjs";
+import SheetViewModel from "../../../module/components/sheet-viewmodel.mjs";
 import { TEMPLATES } from "../../../module/templatePreloader.mjs";
 import { createUUID } from "../../../module/utils/uuid-utility.mjs";
 import { validateOrThrow } from "../../../module/utils/validation-utility.mjs";
-import SheetViewModel from "../../sheet-viewmodel.mjs";
 import SkillAbilityListItemViewModel from "./skill-ability-list-item-viewmodel.mjs";
 
 export default class SkillAbilityTableViewModel extends SheetViewModel {

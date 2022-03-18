@@ -21,6 +21,7 @@ export const SELECTOR_BUTTON = "custom-system-button";
  * @property {Any} callbackData Any data to pass to the completion callback. 
  */
 export default class ButtonViewModel extends ViewModel {
+  /** @override */
   static get TEMPLATE() { return TEMPLATES.COMPONENT_BUTTON; }
 
   /**

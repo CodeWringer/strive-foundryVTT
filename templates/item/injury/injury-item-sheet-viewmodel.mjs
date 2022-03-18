@@ -2,9 +2,9 @@ import ButtonSendToChatViewModel from "../../../module/components/button-send-to
 import InputNumberSpinnerViewModel from "../../../module/components/input-number-spinner/input-number-spinner-viewmodel.mjs";
 import InputTextareaViewModel from "../../../module/components/input-textarea/input-textarea-viewmodel.mjs";
 import InputTextFieldViewModel from "../../../module/components/input-textfield/input-textfield-viewmodel.mjs";
+import SheetViewModel from "../../../module/components/sheet-viewmodel.mjs";
 import { TEMPLATES } from "../../../module/templatePreloader.mjs";
 import { validateOrThrow } from "../../../module/utils/validation-utility.mjs";
-import SheetViewModel from "../../sheet-viewmodel.mjs";
 
 export default class InjuryItemSheetViewModel extends SheetViewModel {
   /** @override */

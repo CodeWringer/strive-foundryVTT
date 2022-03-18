@@ -1,4 +1,4 @@
-import ViewModel from "../module/components/viewmodel.mjs";
+import ViewModel from "./viewmodel.mjs";
 
 /**
  * This view model sub-type is intended for use with sheets that expect the common flags, 

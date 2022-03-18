@@ -1,6 +1,6 @@
+import SheetViewModel from "../../../module/components/sheet-viewmodel.mjs";
 import { createUUID } from "../../../module/utils/uuid-utility.mjs";
 import { validateOrThrow } from "../../../module/utils/validation-utility.mjs";
-import SheetViewModel from "../../sheet-viewmodel.mjs";
 
 export default class SkillViewModel extends SheetViewModel {
   /**
