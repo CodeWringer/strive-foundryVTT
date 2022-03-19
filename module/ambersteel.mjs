@@ -500,7 +500,7 @@ Hooks.on("deleteChatMessage", async function(args) {
   const rgxViewModelId = /data-view-model-id="([^"]*)"/;
   const match = deletedContent.match(rgxViewModelId);
 
-  if (match.length === 2) {
+  if (match !== undefined && match !== null && match.length === 2) {
     const vmId = match[1];
 
     // Dispose the view model, if it supports it. 
@@ -508,8 +508,14 @@ Hooks.on("deleteChatMessage", async function(args) {
 
     if (vm === undefined) return;
 
-    if (vm.dispose !== undefined){
-      vm.dispose();
+    if (vm.dispose !== undefined) {
+      try {
+        vm.dispose();
+      } catch (error) {
+        // It may already be disposed, in which case it might throw an error. 
+        // Of course, if it is already disposed, the error isn't actually a problem. 
+        game.ambersteel.logger.logVerbose(error);
+      }
     }
 
     // Remove the view model from the global collection. 
