@@ -148,6 +148,7 @@ export default class SkillAbilityListItemViewModel extends SheetViewModel {
     });
     this.vmBtnRollDamage = new ButtonRollViewModel({
       id: "vmBtnRollDamage",
+      parent: thiz,
       target: thiz.item,
       propertyPath: `${pathSkillAbility}.damageFormula`,
       rollType: "generic",
