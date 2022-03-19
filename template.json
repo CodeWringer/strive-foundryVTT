@@ -118,7 +118,7 @@
     },
     "skill": {
       "templates": ["base"],
-      "relatedAttribute": "",
+      "relatedAttribute": "agility",
       "value": 0,
       "successes": 0,
       "failures": 0,
