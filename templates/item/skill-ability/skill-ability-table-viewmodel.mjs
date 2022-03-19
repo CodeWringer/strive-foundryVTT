@@ -4,6 +4,7 @@ import SheetViewModel from "../../../module/components/sheet-viewmodel.mjs";
 import { TEMPLATES } from "../../../module/templatePreloader.mjs";
 import { createUUID } from "../../../module/utils/uuid-utility.mjs";
 import { validateOrThrow } from "../../../module/utils/validation-utility.mjs";
+import SkillAbilityChatMessageViewModel from "./skill-ability-chat-message-viewmodel.mjs";
 import SkillAbilityListItemViewModel from "./skill-ability-list-item-viewmodel.mjs";
 
 export default class SkillAbilityTableViewModel extends SheetViewModel {
@@ -101,19 +102,34 @@ export default class SkillAbilityTableViewModel extends SheetViewModel {
 
     for (let i = 0; i < this.item.data.data.abilities.length; i++) {
       const skillAbility = this.item.data.data.abilities[i];
+      let vm = undefined;
 
-      const vm = new SkillAbilityListItemViewModel({
-        id: `vmSkillAbility-${i}`, 
-        isEditable: args.isEditable,
-        isSendable: args.isSendable,
-        isOwner: args.isOwner,
-        isGM: args.isGM,
-        skillAbility: skillAbility, 
-        parent: thiz,
-        item: thiz.item,
-        actor: thiz.actor,
-        index: i,
-      });
+      if (this.oneColumn === true) {
+        vm = new SkillAbilityChatMessageViewModel({
+          id: `vmSkillAbility-${i}`, 
+          parent: thiz,
+          isEditable: args.isEditable,
+          isSendable: args.isSendable,
+          isOwner: args.isOwner,
+          isGM: args.isGM,
+          skillAbility: skillAbility, 
+          item: thiz.item,
+          actor: thiz.actor,
+          index: i,
+        })
+      } else {
+        vm = new SkillAbilityListItemViewModel({
+          id: `vmSkillAbility-${i}`, 
+          parent: thiz,
+          isEditable: args.isEditable,
+          isSendable: args.isSendable,
+          isOwner: args.isOwner,
+          isGM: args.isGM,
+          item: thiz.item,
+          actor: thiz.actor,
+          index: i,
+        });
+      }
       this.abilities.push(vm);
       this[vm.id] = vm;
     }
