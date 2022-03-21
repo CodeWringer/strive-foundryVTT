@@ -1,5 +1,3 @@
-import ButtonAddViewModel from "../../../module/components/button-add/button-add-viewmodel.mjs";
-import ButtonToggleVisibilityViewModel from "../../../module/components/button-toggle-visibility/button-toggle-visibility-viewmodel.mjs";
 import SheetViewModel from "../../../module/components/sheet-viewmodel.mjs";
 import { TEMPLATES } from "../../../module/templatePreloader.mjs";
 import { createUUID } from "../../../module/utils/uuid-utility.mjs";
@@ -134,18 +132,16 @@ export default class SkillAbilityTableViewModel extends SheetViewModel {
       this[vm.id] = vm;
     }
 
-    this.vmBtnToggleVisibilityExpand = new ButtonToggleVisibilityViewModel({
+    this.vmBtnToggleVisibilityExpand = this.createVmBtnToggleVisibility({
       id: "vmBtnToggleVisibilityExpand",
       target: thiz.item,
-      parent: thiz,
       visGroup: thiz.visGroupId,
       toggleSelf: true,
       callback: thiz._toggleSkillAbilitiesInitiallyVisible.bind(thiz),
     });
-    this.vmBtnToggleVisibilityCollapse = new ButtonToggleVisibilityViewModel({
+    this.vmBtnToggleVisibilityCollapse = this.createVmBtnToggleVisibility({
       id: "vmBtnToggleVisibilityCollapse",
       target: thiz.item,
-      parent: thiz,
       visGroup: thiz.visGroupId,
       toggleSelf: true,
       callback: thiz._toggleSkillAbilitiesInitiallyVisible.bind(thiz),
@@ -153,10 +149,9 @@ export default class SkillAbilityTableViewModel extends SheetViewModel {
 
     if (this.isEditable !== true) return;
 
-    this.vmBtnAdd = new ButtonAddViewModel({
+    this.vmBtnAdd = this.createVmBtnAdd({
       id: "vmBtnAdd",
       target: thiz.item,
-      parent: thiz,
       creationType: "skill-ability",
       withDialog: false,
     });

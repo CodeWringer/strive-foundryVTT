@@ -1,10 +1,3 @@
-import ButtonDeleteViewModel from "../../../module/components/button-delete/button-delete-viewmodel.mjs";
-import ButtonRollViewModel from "../../../module/components/button-roll/button-roll-viewmodel.mjs";
-import ButtonSendToChatViewModel from "../../../module/components/button-send-to-chat/button-send-to-chat-viewmodel.mjs";
-import InputDropDownViewModel from "../../../module/components/input-dropdown/input-dropdown-viewmodel.mjs";
-import InputNumberSpinnerViewModel from "../../../module/components/input-number-spinner/input-number-spinner-viewmodel.mjs";
-import InputTextareaViewModel from "../../../module/components/input-textarea/input-textarea-viewmodel.mjs";
-import InputTextFieldViewModel from "../../../module/components/input-textfield/input-textfield-viewmodel.mjs";
 import SheetViewModel from "../../../module/components/sheet-viewmodel.mjs";
 import { TEMPLATES } from "../../../module/templatePreloader.mjs";
 import { validateOrThrow } from "../../../module/utils/validation-utility.mjs";
@@ -68,125 +61,91 @@ export default class SkillAbilityListItemViewModel extends SheetViewModel {
     super(args);
     validateOrThrow(args, ["item", "index"]);
 
-    // Own properties.
     this.item = args.item;
     this.actor = args.actor;
     this.index = args.index;
+    this.contextTemplate = args.contextTemplate ?? "skill-ability-list-item";
 
-    this.contextTemplate = "skill-ability-list-item";
     const thiz = this;
     const pathSkillAbility = `data.data.abilities[${thiz.index}]`;
     
     if (this.isSendable === true) {
-      this.vmBtnSendToChat = new ButtonSendToChatViewModel({
+      this.vmBtnSendToChat = this.createVmBtnSendToChat({
         id: "vmBtnSendToChat",
         target: thiz.item,
-        parent: thiz,
         propertyPath: pathSkillAbility,
       });
     }
     
-    this.vmTfName = new InputTextFieldViewModel({
+    this.vmTfName = this.createVmTextField({
       id: "vmTfName",
-      isEditable: thiz.isEditable,
       propertyOwner: thiz.item,
       propertyPath: `${pathSkillAbility}.name`,
       placeholder: "ambersteel.labels.name",
-      contextTemplate: thiz.contextTemplate,
-      parent: thiz,
     });
-    this.vmBtnDelete = new ButtonDeleteViewModel({
+    this.vmBtnDelete = this.createVmBtnDelete({
       id: "vmBtnDelete",
-      parent: thiz,
       target: thiz.item,
       propertyPath: pathSkillAbility,
       withDialog: true,
     });
-    this.vmNsRequiredLevel = new InputNumberSpinnerViewModel({
+    this.vmNsRequiredLevel = this.createVmNumberSpinner({
       id: "vmNsRequiredLevel",
-      isEditable: thiz.isEditable,
       propertyOwner: thiz.item,
       propertyPath: `${pathSkillAbility}.requiredLevel`,
-      contextTemplate: thiz.contextTemplate,
-      parent: thiz,
       min: 0,
     });
-    this.vmTfObstacle = new InputTextFieldViewModel({
+    this.vmTfObstacle = this.createVmTextField({
       id: "vmTfObstacle",
-      isEditable: thiz.isEditable,
       propertyOwner: thiz.item,
       propertyPath: `${pathSkillAbility}.obstacle`,
-      contextTemplate: thiz.contextTemplate,
-      parent: thiz,
     });
-    this.vmNsDistance = new InputNumberSpinnerViewModel({
+    this.vmNsDistance = this.createVmNumberSpinner({
       id: "vmNsDistance",
-      isEditable: thiz.isEditable,
       propertyOwner: thiz.item,
       propertyPath: `${pathSkillAbility}.distance`,
-      contextTemplate: thiz.contextTemplate,
-      parent: thiz,
       min: 0,
     });
-    this.vmNsApCost = new InputNumberSpinnerViewModel({
+    this.vmNsApCost = this.createVmNumberSpinner({
       id: "vmNsApCost",
-      isEditable: thiz.isEditable,
       propertyOwner: thiz.item,
       propertyPath: `${pathSkillAbility}.apCost`,
-      contextTemplate: thiz.contextTemplate,
-      parent: thiz,
       min: 0,
     });
-    this.vmDdAttackType = new InputDropDownViewModel({
+    this.vmDdAttackType = this.createVmDropDown({
       id: "vmDdAttackType",
-      isEditable: thiz.isEditable,
       propertyOwner: thiz.item,
       propertyPath: `${pathSkillAbility}.attackType`,
-      contextTemplate: thiz.contextTemplate,
-      parent: thiz,
       options: thiz.attackTypeOptions,
     });
-    this.vmBtnRollDamage = new ButtonRollViewModel({
+    this.vmBtnRollDamage = this.createVmBtnRoll({
       id: "vmBtnRollDamage",
-      parent: thiz,
       target: thiz.item,
       propertyPath: `${pathSkillAbility}.damageFormula`,
       rollType: "generic",
       chatTitle: thiz.skillAbility.name,
       actor: thiz.actor,
     });
-    this.vmTfDamage = new InputTextFieldViewModel({
+    this.vmTfDamage = this.createVmTextField({
       id: "vmTfDamage",
-      isEditable: thiz.isEditable,
       propertyOwner: thiz.item,
       propertyPath: `${pathSkillAbility}.damageFormula`,
-      contextTemplate: thiz.contextTemplate,
-      parent: thiz,
     });
-    this.vmDdDamageType = new InputDropDownViewModel({
+    this.vmDdDamageType = this.createVmDropDown({
       id: "vmDdDamageType",
-      isEditable: thiz.isEditable,
       propertyOwner: thiz.item,
       propertyPath: `${pathSkillAbility}.damageType`,
-      contextTemplate: thiz.contextTemplate,
-      parent: thiz,
       options: thiz.damageTypeOptions,
     });
-    this.vmTfCondition = new InputTextFieldViewModel({
+    this.vmTfCondition = this.createVmTextField({
       id: "vmTfCondition",
-      isEditable: thiz.isEditable,
       propertyOwner: thiz.item,
       propertyPath: `${pathSkillAbility}.condition`,
-      contextTemplate: thiz.contextTemplate,
-      parent: thiz,
     });
-    this.vmTaDescription = new InputTextareaViewModel({
+    this.vmTaDescription = this.createVmTextArea({
       id: "vmTaDescription",
-      isEditable: thiz.isEditable,
       propertyPath: `${pathSkillAbility}.description`,
       propertyOwner: thiz.item,
-      contextTemplate: thiz.contextTemplate,
-      parent: thiz,
       placeholder: "ambersteel.labels.description",
       allowResize: true,
     });
