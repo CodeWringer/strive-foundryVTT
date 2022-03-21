@@ -28,7 +28,7 @@ export default class IllnessChatMessageViewModel extends SheetViewModel {
     super(args);
     validateOrThrow(args, ["item"]);
 
-    // Own properties.
     this.item = args.item;
+    this.contextTemplate = args.contextTemplate ?? "illness-chat-message";
   }
 }

@@ -1,9 +1,4 @@
-import ButtonSendToChatViewModel from "../../../module/components/button-send-to-chat/button-send-to-chat-viewmodel.mjs";
-import InputTextareaViewModel from "../../../module/components/input-textarea/input-textarea-viewmodel.mjs";
-import InputTextFieldViewModel from "../../../module/components/input-textfield/input-textfield-viewmodel.mjs";
 import { TEMPLATES } from "../../../module/templatePreloader.mjs";
-import InputRadioButtonGroupViewModel from "../../../module/components/input-radio-button-group/input-radio-button-group-viewmodel.mjs";
-import ButtonDeleteViewModel from "../../../module/components/button-delete/button-delete-viewmodel.mjs";
 import { validateOrThrow } from "../../../module/utils/validation-utility.mjs";
 import SheetViewModel from "../../../module/components/sheet-viewmodel.mjs";
 
@@ -35,69 +30,49 @@ export default class IllnessListItemViewModel extends SheetViewModel {
     validateOrThrow(args, ["item"]);
 
     this.item = args.item;
-    this.contextTemplate = "illness-list-item";
+    this.contextTemplate = args.contextTemplate ?? "illness-list-item";
     const thiz = this;
 
-    this.vmTfName = new InputTextFieldViewModel({
+    this.vmTfName = this.createVmTextField({
       id: "tf-name",
-      isEditable: thiz.isEditable,
       propertyOwner: thiz.item,
       propertyPath: "name",
       placeholder: "ambersteel.labels.name",
-      contextTemplate: thiz.contextTemplate,
-      parent: thiz,
     });
-    this.vmRbgState = new InputRadioButtonGroupViewModel({
+    this.vmRbgState = this.createVmRadioButtonGroup({
       id: "rbg-state",
-      isEditable: thiz.isEditable,
-      contextTemplate: thiz.contextTemplate,
-      parent: thiz,
       propertyOwner: thiz.item,
       propertyPath: "data.data.state",
       options: thiz.stateOptions,
     })
-    this.vmBtnSendToChat = new ButtonSendToChatViewModel({
+    this.vmBtnSendToChat = this.createVmBtnSendToChat({
       id: "btn-send-to-chat",
-      parent: thiz,
       target: thiz.item,
     });
-    this.vmBtnDelete = new ButtonDeleteViewModel({
+    this.vmBtnDelete = this.createVmBtnDelete({
       id: "btn-delete",
-      parent: thiz,
       target: thiz.item,
       withDialog: true,
     })
-    this.vmTfDuration = new InputTextFieldViewModel({
+    this.vmTfDuration = this.createVmTextField({
       id: "tf-duration",
-      isEditable: thiz.isEditable,
       propertyOwner: thiz.item,
       propertyPath: "data.data.duration",
-      contextTemplate: thiz.contextTemplate,
-      parent: thiz,
     });
-    this.vmTfTreatmentSkill = new InputTextFieldViewModel({
+    this.vmTfTreatmentSkill = this.createVmTextField({
       id: "tf-treatment-skill",
-      isEditable: thiz.isEditable,
       propertyOwner: thiz.item,
       propertyPath: "data.data.treatmentSkill",
-      contextTemplate: thiz.contextTemplate,
-      parent: thiz,
     });
-    this.vmTfTreatment = new InputTextFieldViewModel({
+    this.vmTfTreatment = this.createVmTextField({
       id: "tf-treatment",
-      isEditable: thiz.isEditable,
       propertyOwner: thiz.item,
       propertyPath: "data.data.treatment",
-      contextTemplate: thiz.contextTemplate,
-      parent: thiz,
     });
-    this.vmTaDescription = new InputTextareaViewModel({
+    this.vmTaDescription = this.createVmTextArea({
       id: "ta-description",
-      isEditable: thiz.isEditable,
       propertyPath: "data.data.description",
       propertyOwner: thiz.item,
-      contextTemplate: thiz.contextTemplate,
-      parent: thiz,
       placeholder: "ambersteel.labels.description",
       allowResize: true,
     });

@@ -1,9 +1,3 @@
-import ButtonDeleteViewModel from "../../../module/components/button-delete/button-delete-viewmodel.mjs";
-import ButtonSendToChatViewModel from "../../../module/components/button-send-to-chat/button-send-to-chat-viewmodel.mjs";
-import ButtonTakeItemViewModel from "../../../module/components/button-take-item/button-take-item-viewmodel.mjs";
-import InputNumberSpinnerViewModel from "../../../module/components/input-number-spinner/input-number-spinner-viewmodel.mjs";
-import InputTextareaViewModel from "../../../module/components/input-textarea/input-textarea-viewmodel.mjs";
-import InputTextFieldViewModel from "../../../module/components/input-textfield/input-textfield-viewmodel.mjs";
 import SheetViewModel from "../../../module/components/sheet-viewmodel.mjs";
 import { TEMPLATES } from "../../../module/templatePreloader.mjs";
 import { validateOrThrow } from "../../../module/utils/validation-utility.mjs";
@@ -30,77 +24,57 @@ export default class ItemListItemViewModel extends SheetViewModel {
     validateOrThrow(args, ["item"]);
 
     this.item = args.item;
-    this.contextTemplate = "item-list-item";
+    this.contextTemplate = args.contextTemplate ?? "item-list-item";
     const thiz = this;
 
-    this.vmTfName = new InputTextFieldViewModel({
+    this.vmTfName = this.createVmTextField({
       id: "vmTfName",
-      isEditable: thiz.isEditable,
       propertyOwner: thiz.item,
       propertyPath: "name",
       placeholder: "ambersteel.labels.name",
-      contextTemplate: thiz.contextTemplate,
-      parent: thiz,
     });
-    this.vmBtnSendToChat = new ButtonSendToChatViewModel({
+    this.vmBtnSendToChat = this.createVmBtnSendToChat({
       id: "vmBtnSendToChat",
       target: thiz.item,
-      parent: thiz,
     });
-    this.vmBtnTakeItem = new ButtonTakeItemViewModel({
+    this.vmBtnTakeItem = this.createVmBtnTakeItem({
       id: "vmBtnTakeItem",
       target: thiz.item,
       contextType: "list-item"
     });
-    this.vmBtnDelete = new ButtonDeleteViewModel({
+    this.vmBtnDelete = this.createVmBtnDelete({
       id: "vmBtnDelete",
-      parent: thiz,
       target: thiz.item,
       withDialog: true,
     })
-    this.vmNsQuantity = new InputNumberSpinnerViewModel({
+    this.vmNsQuantity = this.createVmNumberSpinner({
       id: "vmNsQuantity",
-      isEditable: thiz.isEditable,
       propertyOwner: thiz.item,
       propertyPath: "data.data.quantity",
-      contextTemplate: thiz.contextTemplate,
-      parent: thiz,
       min: 1,
     });
-    this.vmNsMaxQuantity = new InputNumberSpinnerViewModel({
+    this.vmNsMaxQuantity = this.createVmNumberSpinner({
       id: "vmNsMaxQuantity",
-      isEditable: thiz.isEditable,
       propertyOwner: thiz.item,
       propertyPath: "data.data.maxQuantity",
-      contextTemplate: thiz.contextTemplate,
-      parent: thiz,
       min: 1,
     });
-    this.vmNsShapeWidth = new InputNumberSpinnerViewModel({
+    this.vmNsShapeWidth = this.createVmNumberSpinner({
       id: "vmNsShapeWidth",
-      isEditable: thiz.isEditable,
       propertyOwner: thiz.item,
       propertyPath: "data.data.shape.width",
-      contextTemplate: thiz.contextTemplate,
-      parent: thiz,
       min: 1,
     });
-    this.vmNsShapeHeight = new InputNumberSpinnerViewModel({
+    this.vmNsShapeHeight = this.createVmNumberSpinner({
       id: "vmNsShapeHeight",
-      isEditable: thiz.isEditable,
       propertyOwner: thiz.item,
       propertyPath: "data.data.shape.height",
-      contextTemplate: thiz.contextTemplate,
-      parent: thiz,
       min: 1,
     });
-    this.vmTaDescription = new InputTextareaViewModel({
+    this.vmTaDescription = this.createVmTextArea({
       id: "vmTaDescription",
-      isEditable: thiz.isEditable,
       propertyPath: "data.data.description",
       propertyOwner: thiz.item,
-      contextTemplate: thiz.contextTemplate,
-      parent: thiz,
       placeholder: "ambersteel.labels.description",
       allowResize: true,
     });

@@ -1,6 +1,3 @@
-import ButtonSendToChatViewModel from "../../../module/components/button-send-to-chat/button-send-to-chat-viewmodel.mjs";
-import InputTextareaViewModel from "../../../module/components/input-textarea/input-textarea-viewmodel.mjs";
-import InputTextFieldViewModel from "../../../module/components/input-textfield/input-textfield-viewmodel.mjs";
 import SheetViewModel from "../../../module/components/sheet-viewmodel.mjs";
 import { TEMPLATES } from "../../../module/templatePreloader.mjs";
 import { validateOrThrow } from "../../../module/utils/validation-utility.mjs";
@@ -27,54 +24,38 @@ export default class IllnessItemSheetViewModel extends SheetViewModel {
     validateOrThrow(args, ["item"]);
 
     this.item = args.item;
-    this.contextTemplate = "illness-item-sheet";
+    this.contextTemplate = args.contextTemplate ?? "illness-item-sheet";
     const thiz = this;
 
-    this.vmTfName = new InputTextFieldViewModel({
+    this.vmTfName = this.createVmTextField({
       id: "tf-name",
-      isEditable: thiz.isEditable,
       propertyOwner: thiz.item,
       propertyPath: "name",
       placeholder: "ambersteel.labels.name",
-      contextTemplate: thiz.contextTemplate,
-      parent: thiz,
     });
-    this.vmBtnSendToChat = new ButtonSendToChatViewModel({
+    this.vmBtnSendToChat = this.createVmBtnSendToChat({
       id: "btn-send-to-chat",
       target: thiz.item,
-      parent: thiz,
     });
-    this.vmTfDuration = new InputTextFieldViewModel({
+    this.vmTfDuration = this.createVmTextField({
       id: "tf-duration",
-      isEditable: thiz.isEditable,
       propertyOwner: thiz.item,
       propertyPath: "data.data.duration",
-      contextTemplate: thiz.contextTemplate,
-      parent: thiz,
     });
-    this.vmTfTreatmentSkill = new InputTextFieldViewModel({
+    this.vmTfTreatmentSkill = this.createVmTextField({
       id: "tf-treatment-skill",
-      isEditable: thiz.isEditable,
       propertyOwner: thiz.item,
       propertyPath: "data.data.treatmentSkill",
-      contextTemplate: thiz.contextTemplate,
-      parent: thiz,
     });
-    this.vmTfTreatment = new InputTextFieldViewModel({
+    this.vmTfTreatment = this.createVmTextField({
       id: "tf-treatment",
-      isEditable: thiz.isEditable,
       propertyOwner: thiz.item,
       propertyPath: "data.data.treatment",
-      contextTemplate: thiz.contextTemplate,
-      parent: thiz,
     });
-    this.vmTaDescription = new InputTextareaViewModel({
+    this.vmTaDescription = this.createVmTextArea({
       id: "ta-description",
-      isEditable: thiz.isEditable,
-      propertyPath: "data.data.description",
       propertyOwner: thiz.item,
-      contextTemplate: thiz.contextTemplate,
-      parent: thiz,
+      propertyPath: "data.data.description",
       placeholder: "ambersteel.labels.description",
       allowResize: true,
     });

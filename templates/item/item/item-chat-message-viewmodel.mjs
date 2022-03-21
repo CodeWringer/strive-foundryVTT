@@ -1,4 +1,3 @@
-import ButtonTakeItemViewModel from "../../../module/components/button-take-item/button-take-item-viewmodel.mjs";
 import SheetViewModel from "../../../module/components/sheet-viewmodel.mjs";
 import { TEMPLATES } from "../../../module/templatePreloader.mjs";
 import { validateOrThrow } from "../../../module/utils/validation-utility.mjs";
@@ -60,10 +59,10 @@ export default class ItemChatMessageViewModel extends SheetViewModel {
     this.allowPickup = args.allowPickup ?? false;
     this.allowPickupBy = args.allowPickupBy ?? [];
 
-    this.contextTemplate = "item-chat-message";
+    this.contextTemplate = args.contextTemplate ?? "item-chat-message";
     const thiz = this;
 
-    this.vmBtnTakeItem = new ButtonTakeItemViewModel({
+    this.vmBtnTakeItem = this.createVmBtnTakeItem({
       id: "vmBtnTakeItem",
       target: thiz.item,
       contextType: "chat-message"

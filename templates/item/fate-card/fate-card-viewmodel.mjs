@@ -16,34 +16,6 @@ export default class FateCardViewModel extends SheetViewModel {
   item = undefined;
 
   /**
-   * @type {InputTextFieldViewModel}
-   * @readonly
-   */
-  vmTfName = undefined;
-  get idTfName() { return "tf-name"; }
-
-  /**
-   * @type {ButtonSendToChatViewModel}
-   * @readonly
-   */
-  vmBtnSendToChat = undefined;
-  get idBtnSendToChat() { return "btn-send-to-chat"; }
-
-  /**
-   * @type {ButtonDeleteViewModel}
-   * @readonly
-   */
-  vmBtnDelete = undefined;
-  get idBtnDelete() { return "btn-delete"; }
-
-  /**
-   * @type {InputTextareaViewModel}
-   * @readonly
-   */
-  vmTaDescription = undefined;
-  get idTaDescription() { return "ta-description"; }
-
-  /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
    * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 
    * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 
@@ -61,39 +33,30 @@ export default class FateCardViewModel extends SheetViewModel {
     validateOrThrow(args, ["item"]);
     
     this.item = args.item;
-    this.contextTemplate = "fate-card";
+    this.contextTemplate = args.contextTemplate ?? "fate-card";
 
     const thiz = this;
 
-    this.vmTfName = new InputTextFieldViewModel({
-      id: thiz.idTfName,
-      contextTemplate: thiz.contextTemplate,
-      parent: thiz,
-      isEditable: thiz.isEditable,
+    this.vmTfName = this.createVmTextField({
+      id: "vmTfName",
       propertyOwner: thiz.item,
       propertyPath: "name",
       placeholder: "ambersteel.labels.name",
     });
-    this.vmBtnSendToChat = new ButtonSendToChatViewModel({
-      id: thiz.idBtnSendToChat,
-      contextTemplate: thiz.contextTemplate,
-      parent: thiz,
+    this.vmBtnSendToChat = this.createVmBtnSendToChat({
+      id: "vmBtnSendToChat",
       target: thiz.item,
     });
-    this.vmBtnDelete = new ButtonDeleteViewModel({
-      id: thiz.idBtnDelete,
-      contextTemplate: thiz.contextTemplate,
+    this.vmBtnDelete = this.createVmBtnDelete({
+      id: "vmBtnDelete",
       parent: thiz,
       target: thiz.item,
       withDialog: true,
     });
-    this.vmTaDescription = new InputTextareaViewModel({
-      id: thiz.idTaDescription,
-      contextTemplate: thiz.contextTemplate,
-      parent: thiz,
-      isEditable: thiz.isEditable,
-      propertyPath: "data.data.description",
+    this.vmTaDescription = this.createVmTextArea({
+      id: "vmTaDescription",
       propertyOwner: thiz.item,
+      propertyPath: "data.data.description",
       placeholder: "ambersteel.labels.description",
       allowResize: true,
     });

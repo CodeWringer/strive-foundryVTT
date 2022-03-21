@@ -1,7 +1,3 @@
-import ButtonSendToChatViewModel from "../../../module/components/button-send-to-chat/button-send-to-chat-viewmodel.mjs";
-import InputNumberSpinnerViewModel from "../../../module/components/input-number-spinner/input-number-spinner-viewmodel.mjs";
-import InputTextareaViewModel from "../../../module/components/input-textarea/input-textarea-viewmodel.mjs";
-import InputTextFieldViewModel from "../../../module/components/input-textfield/input-textfield-viewmodel.mjs";
 import SheetViewModel from "../../../module/components/sheet-viewmodel.mjs";
 import { TEMPLATES } from "../../../module/templatePreloader.mjs";
 import { validateOrThrow } from "../../../module/utils/validation-utility.mjs";
@@ -28,47 +24,34 @@ export default class InjuryItemSheetViewModel extends SheetViewModel {
     validateOrThrow(args, ["item"]);
 
     this.item = args.item;
-    this.contextTemplate = "injury-item-sheet";
+    this.contextTemplate = args.contextTemplate ?? "injury-item-sheet";
     const thiz = this;
 
-    this.vmTfName = new InputTextFieldViewModel({
+    this.vmTfName = this.createVmTextField({
       id: "vmTfName",
-      isEditable: thiz.isEditable,
       propertyOwner: thiz.item,
       propertyPath: "name",
       placeholder: "ambersteel.labels.name",
-      contextTemplate: thiz.contextTemplate,
-      parent: thiz,
     });
-    this.vmBtnSendToChat = new ButtonSendToChatViewModel({
+    this.vmBtnSendToChat = this.createVmBtnSendToChat({
       id: "vmBtnSendToChat",
       target: thiz.item,
-      parent: thiz,
     });
-    this.vmNsLimit = new InputNumberSpinnerViewModel({
+    this.vmNsLimit = this.createVmNumberSpinner({
       id: "vmNsLimit",
-      isEditable: thiz.isEditable,
       propertyOwner: thiz.item,
       propertyPath: "data.data.limit",
-      contextTemplate: thiz.contextTemplate,
-      parent: thiz,
       min: 0,
     });
-    this.vmTfTimeToHeal = new InputTextFieldViewModel({
+    this.vmTfTimeToHeal = this.createVmTextField({
       id: "vmTfTimeToHeal",
-      isEditable: thiz.isEditable,
       propertyOwner: thiz.item,
       propertyPath: "data.data.timeToHeal",
-      contextTemplate: thiz.contextTemplate,
-      parent: thiz,
     });
-    this.vmTaDescription = new InputTextareaViewModel({
+    this.vmTaDescription = this.createVmTextArea({
       id: "vmTaDescription",
-      isEditable: thiz.isEditable,
-      propertyPath: "data.data.description",
       propertyOwner: thiz.item,
-      contextTemplate: thiz.contextTemplate,
-      parent: thiz,
+      propertyPath: "data.data.description",
       placeholder: "ambersteel.labels.description",
       allowResize: true,
     });

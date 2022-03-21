@@ -1,7 +1,3 @@
-import ButtonSendToChatViewModel from "../../../module/components/button-send-to-chat/button-send-to-chat-viewmodel.mjs";
-import InputNumberSpinnerViewModel from "../../../module/components/input-number-spinner/input-number-spinner-viewmodel.mjs";
-import InputTextareaViewModel from "../../../module/components/input-textarea/input-textarea-viewmodel.mjs";
-import InputTextFieldViewModel from "../../../module/components/input-textfield/input-textfield-viewmodel.mjs";
 import SheetViewModel from "../../../module/components/sheet-viewmodel.mjs";
 import { TEMPLATES } from "../../../module/templatePreloader.mjs";
 import { validateOrThrow } from "../../../module/utils/validation-utility.mjs";
@@ -9,48 +5,6 @@ import { validateOrThrow } from "../../../module/utils/validation-utility.mjs";
 export default class FateCardItemSheetViewModel extends SheetViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.FATE_CARD_ITEM_SHEET; }
-
-  /**
-   * @type {InputTextFieldViewModel}
-   * @readonly
-   */
-  vmTfName = undefined;
-  get idTfName() { return "tf-name"; }
-  
-  /**
-   * @type {ButtonSendToChatViewModel}
-   * @readonly
-   */
-  vmBtnSendToChat = undefined;
-  get idBtnSendToChat() { return "btn-send-to-chat"; }
-  
-  /**
-   * @type {InputNumberSpinnerViewModel}
-   * @readonly
-   */
-  vmNsMifp = undefined;
-  get idNsMifp() { return "ns-mifp"; }
-  
-  /**
-   * @type {InputNumberSpinnerViewModel}
-   * @readonly
-   */
-  vmNsMafp = undefined;
-  get idNsMafp() { return "ns-mafp"; }
-  
-  /**
-   * @type {InputNumberSpinnerViewModel}
-   * @readonly
-   */
-  vmNsAfp = undefined;
-  get idNsAfp() { return "ns-afp"; }
-  
-  /**
-   * @type {InputTextareaViewModel}
-   * @readonly
-   */
-  vmTaDescription = undefined;
-  get idTaDescription() { return "ta-description"; }
 
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
@@ -70,58 +24,42 @@ export default class FateCardItemSheetViewModel extends SheetViewModel {
     validateOrThrow(args, ["item"]);
 
     this.item = args.item;
-    this.contextTemplate = "fate-card-item-sheet";
+    this.contextTemplate = args.contextTemplate ?? "fate-card-item-sheet";
 
     const thiz = this;
 
-    this.vmTfName = new InputTextFieldViewModel({
-      id: thiz.idTfName,
-      isEditable: thiz.isEditable,
+    this.vmTfName = this.createVmTextField({
+      id: "vmTfName",
       propertyOwner: thiz.item,
       propertyPath: "name",
       placeholder: "ambersteel.labels.name",
-      contextTemplate: thiz.contextTemplate,
-      parent: thiz,
     });
-    this.vmBtnSendToChat = new ButtonSendToChatViewModel({
-      id: thiz.idBtnSendToChat,
+    this.vmBtnSendToChat = this.createVmBtnSendToChat({
+      id: "vmBtnSendToChat",
       target: thiz.item,
-      parent: thiz,
     });
-    this.vmNsMifp = new InputNumberSpinnerViewModel({
-      id: thiz.idNsMifp,
-      isEditable: thiz.isEditable,
+    this.vmNsMifp = this.createVmNumberSpinner({
+      id: "vmNsMifp",
+      propertyOwner: thiz.item,
       propertyPath: "data.data.cost.miFP",
-      propertyOwner: thiz.item,
-      contextTemplate: thiz.contextTemplate,
-      parent: thiz,
       min: 0,
     });
-    this.vmNsMafp = new InputNumberSpinnerViewModel({
-      id: thiz.idNsMafp,
-      isEditable: thiz.isEditable,
+    this.vmNsMafp = this.createVmNumberSpinner({
+      id: "vmNsMafp",
+      propertyOwner: thiz.item,
       propertyPath: "data.data.cost.maFP",
-      propertyOwner: thiz.item,
-      contextTemplate: thiz.contextTemplate,
-      parent: thiz,
       min: 0,
     });
-    this.vmNsAfp = new InputNumberSpinnerViewModel({
-      id: thiz.idNsAfp,
-      isEditable: thiz.isEditable,
+    this.vmNsAfp = this.createVmNumberSpinner({
+      id: "vmNsAfp",
+      propertyOwner: thiz.item,
       propertyPath: "data.data.cost.AFP",
-      propertyOwner: thiz.item,
-      contextTemplate: thiz.contextTemplate,
-      parent: thiz,
       min: 0,
     });
-    this.vmTaDescription = new InputTextareaViewModel({
-      id: thiz.idTaDescription,
-      isEditable: thiz.isEditable,
-      propertyPath: "data.data.description",
+    this.vmTaDescription = this.createVmTextArea({
+      id: "vmTaDescription",
       propertyOwner: thiz.item,
-      contextTemplate: thiz.contextTemplate,
-      parent: thiz,
+      propertyPath: "data.data.description",
       placeholder: "ambersteel.labels.description",
       allowResize: true,
     });

@@ -28,7 +28,7 @@ export default class InjuryChatMessageViewModel extends SheetViewModel {
     super(args);
     validateOrThrow(args, ["item"]);
 
-    // Own properties.
     this.item = args.item;
+    this.contextTemplate = args.contextTemplate ?? "injury-chat-message";
   }
 }
