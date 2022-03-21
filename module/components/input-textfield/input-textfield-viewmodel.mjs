@@ -29,10 +29,25 @@ export default class InputTextFieldViewModel extends InputViewModel {
    */
   _placeholder = "";
   /**
+   * The placeholder text to display when the input has no value. 
    * @type {String}
    * @readonly
    */
   get placeholder() { return this._placeholder; }
+
+  /**
+   * Returns the localized placeholder. 
+   * @type {String}
+   * @readonly
+   */
+  get localizedPlaceholder() { return (this._placeholder !== undefined && this._placeholder !== null) ? game.i18n.localize(this._placeholder) : ""; }
+  
+  /**
+   * Returns the localized value. 
+   * @type {String}
+   * @readonly
+   */
+  get localizedValue() { return (this.value !== undefined && this.value !== null) ? game.i18n.localize(this.value) : this.value; }
 
   /**
    * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 

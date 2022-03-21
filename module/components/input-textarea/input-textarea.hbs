@@ -10,7 +10,7 @@ readOnlyCssClass: {String | undefined}
     data-property-path="{{viewModel.propertyPath}}"
     name="{{viewModel.id}}"
     id="{{viewModel.id}}"
-    placeholder="{{localize viewModel.placeholder}}"
+    placeholder="{{viewModel.localizedPlaceholder}}"
   >{{viewModel.value}}</textarea>
 {{else}}
   {{!-- Display read-only value --}}
@@ -19,6 +19,6 @@ readOnlyCssClass: {String | undefined}
     name="{{viewModel.id}}"
     id="{{viewModel.id}}"
   >
-    {{localize viewModel.value}}
+    {{viewModel.localizedValue}}
   </div>
 {{/if}}

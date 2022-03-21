@@ -26,13 +26,23 @@ import InputViewModel from "../input-viewmodel.mjs";
 export default class InputRadioButtonGroupViewModel extends InputViewModel {
   static get TEMPLATE() { return TEMPLATES.COMPONENT_INPUT_RADIO_BUTTON_GROUP; }
   static get activeCssClass() { return "active" }
-
+  
+  /**
+   * Returns the currently selected option. 
+   * @type {ChoiceOption}
+   * @readonly
+   */
   get selected() {
     return this.options.find(option => option.value === this.value);
   }
 
+  /**
+   * Returns the localized value of the currently selected option. 
+   * @type {String}
+   * @readonly
+   */
   get localizedValue() {
-    return this.selected.localizedValue;
+    return this.selected !== undefined ? this.selected.localizedValue : "";
   }
 
   /**

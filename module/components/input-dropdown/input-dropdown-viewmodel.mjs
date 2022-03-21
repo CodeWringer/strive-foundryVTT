@@ -26,17 +26,21 @@ import InputViewModel from "../input-viewmodel.mjs";
 export default class InputDropDownViewModel extends InputViewModel {
   static get TEMPLATE() { return TEMPLATES.COMPONENT_INPUT_DROPDOWN; }
 
+  /**
+   * Returns the currently selected option. 
+   * @type {ChoiceOption}
+   * @readonly
+   */
   get selected() {
     return this.options.find(option => option.value === this.value);
   }
 
-  get localizedValue() {
-    if (this.selected !== undefined) {
-      return this.selected.localizedValue;
-    } else {
-      return "";
-    }
-  }
+  /**
+   * Returns the localized value. 
+   * @type {String}
+   * @readonly
+   */
+  get localizedValue() { return this.selected !== undefined ? this.selected.localizedValue : ""; }
 
   /**
    * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 

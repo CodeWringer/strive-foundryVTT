@@ -10,7 +10,7 @@ readOnlyCssClass: {String | undefined}
     type="text"
     name="{{viewModel.id}}"
     id="{{viewModel.id}}"
-    placeholder="{{viewModel.placeholder}}"
+    placeholder="{{viewModel.localizedPlaceholder}}"
     value="{{viewModel.value}}"
   />
 {{else}}
@@ -20,6 +20,6 @@ readOnlyCssClass: {String | undefined}
     name="{{viewModel.id}}"
     id="{{viewModel.id}}"
   >
-    {{localize viewModel.value}}
+    {{viewModel.localizedValue}}
   </div>
 {{/if}}
