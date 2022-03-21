@@ -15,7 +15,9 @@ viewModel: {ItemItemSheetViewModel}
           </div>
         {{/if}}
       </div>
-      {{> buttonTakeItem viewModel=viewModel.vmBtnTakeItem }}
+      {{#if viewModel.allowPickup}}
+        {{> buttonTakeItem viewModel=viewModel.vmBtnTakeItem }}
+      {{/if}}
     </div>
   </header>
   {{!-- Quantity --}}

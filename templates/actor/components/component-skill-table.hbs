@@ -8,8 +8,12 @@ viewModel: {SkillTableViewModel}
                 {{#if viewModel.isEditable}}
                     <th class="skill-column-roll"></th>
                 {{/if}}
-                <th class="skill-column-roll"></th>
-                <th class="skill-column-roll"></th>
+                {{#if viewModel.isSendable}}
+                    <th class="skill-column-roll"></th>
+                {{/if}}
+                {{#if viewModel.isEditable}}
+                    <th class="skill-column-roll"></th>
+                {{/if}}
                 <th class="skill-column-name">
                     {{#if viewModel.isLearningSkillsTable}}
                         {{localize "ambersteel.labels.learningSkill"}}
@@ -38,17 +42,21 @@ viewModel: {SkillTableViewModel}
             </tr>
             {{#each viewModel.skillsViewModels as |vm key|}}
                 <tr class="item skill-item" data-item-id="{{vm.skill.data.id}}">
-                    {{#if ../isEditable}}
+                    {{#if ../viewModel.isEditable}}
                         <td class="skill-column-roll">
                             {{> buttonRoll viewModel=vm.vmBtnRoll }}
                         </td>
                     {{/if}}
-                    <td>
-                        {{> buttonSendToChat viewModel=vm.vmBtnSendToChat }}
-                    </td>
-                    <td>
-                        {{> buttonOpenSheet viewModel=vm.vmBtnOpenSheet }}
-                    </td>
+                    {{#if ../viewModel.isSendable}}
+                        <td>
+                            {{> buttonSendToChat viewModel=vm.vmBtnSendToChat }}
+                        </td>
+                    {{/if}}
+                    {{#if ../viewModel.isEditable}}
+                        <td>
+                            {{> buttonOpenSheet viewModel=vm.vmBtnOpenSheet }}
+                        </td>
+                    {{/if}}
                     <td class="fancy-font flex skill-column-name">
                         {{> inputTextField viewModel=vm.vmTfName }}
                     </td>

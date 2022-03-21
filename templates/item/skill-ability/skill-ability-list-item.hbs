@@ -70,7 +70,9 @@ viewModel: {SkillAbilityListItemViewModel}
   <div class="width-min-xl">
     {{> inputLabel text="ambersteel.labels.damage"}}
   </div>
-  {{> buttonRoll viewModel=viewModel.vmBtnRollDamage}}
+  {{#if viewModel.isEditable}}
+    {{> buttonRoll viewModel=viewModel.vmBtnRollDamage}}
+  {{/if}}
   <span class="width-min-xxl flex-grow">
     {{> inputTextField viewModel=viewModel.vmTfDamage }}
   </span>

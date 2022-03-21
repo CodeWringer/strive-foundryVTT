@@ -5,9 +5,13 @@ viewModel: {ItemListItemViewModel}
 <div class="flex flex-row">
   <div class="flex flex-grow">
     {{!-- Send to chat --}}
-    {{> buttonSendToChat viewModel=viewModel.vmBtnSendToChat }}
+    {{#if viewModel.isSendable}}
+      {{> buttonSendToChat viewModel=viewModel.vmBtnSendToChat }}
+    {{/if}}
     {{!-- Pick up --}}
-    {{> buttonTakeItem viewModel=viewModel.vmBtnTakeItem }}
+    {{#if viewModel.allowPickup}}
+      {{> buttonTakeItem viewModel=viewModel.vmBtnTakeItem }}
+    {{/if}}
     {{!-- Name --}}
     <span class="width-min-xl">
       {{> inputLabel text="ambersteel.labels.item"}}
@@ -17,7 +21,9 @@ viewModel: {ItemListItemViewModel}
     </span>
   </div>
   {{!-- Delete --}}
-  {{> buttonDelete viewModel=viewModel.vmBtnDelete }}
+  {{#if viewModel.isEditable}}
+    {{> buttonDelete viewModel=viewModel.vmBtnDelete }}
+  {{/if}}
 </div>
 {{!-- Row 2 --}}
 <div class="flex flex-row">
