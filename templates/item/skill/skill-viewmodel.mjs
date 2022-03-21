@@ -25,6 +25,8 @@ export default class SkillViewModel extends SheetViewModel {
    * @param {Boolean | undefined} args.isSendable If true, the document represented by the sheet can be sent to chat. 
    * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document. 
    * @param {Boolean | undefined} args.isGM If true, the current user is a GM. 
+   * @param {String | undefined} args.contextTemplate Optional. Name or path of a contextual template, 
+   * which will be displayed in exception log entries, to aid debugging. 
    * 
    * @param {Item} args.item
    * @param {Actor | undefined} args.actor If not undefined, this is the actor that owns the item. 
