@@ -1,4 +1,3 @@
-import { createUUID } from "../utils/uuid-utility.mjs";
 import { validateOrThrow } from "../utils/validation-utility.mjs";
 import ButtonAddViewModel from "./button-add/button-add-viewmodel.mjs";
 import ButtonDeleteViewModel from "./button-delete/button-delete-viewmodel.mjs";
@@ -8,6 +7,7 @@ import ButtonSendToChatViewModel from "./button-send-to-chat/button-send-to-chat
 import ButtonTakeItemViewModel from "./button-take-item/button-take-item-viewmodel.mjs";
 import ButtonToggleVisibilityViewModel from "./button-toggle-visibility/button-toggle-visibility-viewmodel.mjs";
 import InputDropDownViewModel from "./input-dropdown/input-dropdown-viewmodel.mjs";
+import InputNumberSpinnerViewModel from "./input-number-spinner/input-number-spinner-viewmodel.mjs";
 import InputRadioButtonGroupViewModel from "./input-radio-button-group/input-radio-button-group-viewmodel.mjs";
 import InputTextareaViewModel from "./input-textarea/input-textarea-viewmodel.mjs";
 import InputTextFieldViewModel from "./input-textfield/input-textfield-viewmodel.mjs";
