@@ -71,7 +71,6 @@ export default class InputNumberSpinnerViewModel extends InputViewModel {
 
     if (isEditable !== true) return;
 
-    // No binding necessary, as the DOM is the only required context. 
     this.element.parent().find(".button-spinner-up").click(this._onClickNumberSpinnerUp.bind(this));
     this.element.parent().find(".button-spinner-down").click(this._onClickNumberSpinnerDown.bind(this));
   }
