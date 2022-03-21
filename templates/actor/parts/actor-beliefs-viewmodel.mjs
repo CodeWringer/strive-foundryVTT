@@ -14,6 +14,9 @@ export default class ActorBeliefsViewModel extends SheetViewModel {
   get beliefs() { return this.actor.data.data.beliefSystem.beliefs; }
   get instincts() { return this.actor.data.data.beliefSystem.instincts; }
 
+  beliefViewModels = [];
+  instinctViewModels = [];
+
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
    * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 
@@ -33,7 +36,34 @@ export default class ActorBeliefsViewModel extends SheetViewModel {
     super(args);
     validateOrThrow(args, ["actor"]);
 
-    // Own properties.
     this.actor = args.actor;
+    this.contextType = args.contextType ?? "actor-beliefs";
+
+    const thiz = this;
+
+    this.vmTfAmbition = this.createVmTextField({
+      id: "vmTfAmbition",
+      propertyOwner: thiz.actor,
+      propertyPath: "data.data.beliefSystem.ambition",
+      placeholder: "ambersteel.beliefSystem.ambition",
+    });
+
+    for (let i = 0; i < this.beliefs.length; i++) {
+      this.beliefViewModels.push(this.createVmTextField({
+        id: `vmBelief${i}`,
+        propertyOwner: thiz.actor,
+        propertyPath: `data.data.beliefSystem.beliefs[${i}]`,
+        placeholder: "ambersteel.beliefSystem.belief",
+      }));
+    }
+
+    for (let i = 0; i < this.instincts.length; i++) {
+      this.instinctViewModels.push(this.createVmTextField({
+        id: `vmInstinct${i}`,
+        propertyOwner: thiz.actor,
+        propertyPath: `data.data.beliefSystem.instincts[${i}]`,
+        placeholder: "ambersteel.beliefSystem.instinct",
+      }));
+    }
   }
 }

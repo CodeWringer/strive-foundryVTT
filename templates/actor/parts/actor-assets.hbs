@@ -12,7 +12,7 @@ viewModel: {ActorAssetsViewModel}
         </div>
         <span class="width-md">
           <div class="ambersteel-read-only pad-sm fill">
-            {{actor.data.data.assets.maxBulk}}
+            {{> inputNumberSpinner viewModel=viewModel.vmNsMaxBulk }}
           </div>
         </span>
       </div>
@@ -23,12 +23,12 @@ viewModel: {ActorAssetsViewModel}
           {{> inputLabel for="totalBulk" text="ambersteel.labels.usedCarryingCapacity"}}
         </div>
         <span class="width-md">
-          {{> inputNumberSpinner isEditable=false propertyOwner=actor propertyPath="data.data.assets.totalBulk" contextTemplate="actor-assets" }}
+          {{> inputNumberSpinner viewModel=viewModel.vmNsTotalBulk }}
         </span>
       </div>
     </div>
   </div>
-  {{> itemGridView isEditable=isEditable propertyOwner=actor propertyPath="data.data.assets" }}
+  {{> itemGridView viewModel=viewModel.vmIgv }}
   {{!-- Remote assets --}}
   <h2>{{localize "ambersteel.labels.assetsRemote"}}</h2>
   <ol class="unstyled-list alternating-rows">
@@ -43,7 +43,7 @@ viewModel: {ActorAssetsViewModel}
           <span class="flex-grow"></span>
           {{!-- Add property --}}
           <span class="width-sm">
-            {{> buttonAdd target=actor creationType="item" withDialog=true }}
+            {{> buttonAdd viewModel=viewModel.vmBtnAddItem }}
           </span>
         </div>
       </li>

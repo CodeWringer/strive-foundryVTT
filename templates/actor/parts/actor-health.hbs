@@ -14,7 +14,7 @@ viewModel: {ActorHealthViewModel}
             {{> inputLabel for="maxHP" text="ambersteel.labels.maxHP"}}
           </div>
           <span class="width-md">
-            {{> inputNumberSpinner isEditable=false propertyOwner=viewModel.actor propertyPath="data.data.health.maxHP" contextTemplate="actor-health" }}
+            {{> inputNumberSpinner viewModel=viewModel.vmNsMaxHp }}
           </span>
         </div>
         <div class="flex flex-row">
@@ -22,7 +22,7 @@ viewModel: {ActorHealthViewModel}
             {{> inputLabel for="HP" text="ambersteel.labels.HP"}}
           </div>
           <span class="width-md">
-            {{> inputNumberSpinner isEditable=viewModel.isEditable propertyOwner=viewModel.actor propertyPath="data.data.health.HP" contextTemplate="actor-health" }}
+            {{> inputNumberSpinner viewModel=viewModel.vmNsHp }}
           </span>
         </div>
       </div>
@@ -33,7 +33,7 @@ viewModel: {ActorHealthViewModel}
             {{> inputLabel for="maxExhaustion" text="ambersteel.labels.maxExhaustion"}}
           </div>
           <span class="width-md">
-            {{> inputNumberSpinner isEditable=false propertyOwner=viewModel.actor propertyPath="data.data.health.maxExhaustion" min=0 contextTemplate="actor-health" }}
+            {{> inputNumberSpinner viewModel=viewModel.vmNsMaxExhaustion }}
           </span>
         </div>
         <div class="flex flex-row">
@@ -41,7 +41,7 @@ viewModel: {ActorHealthViewModel}
             {{> inputLabel for="exhaustion" text="ambersteel.labels.exhaustion"}}
           </div>
           <span class="width-md">
-            {{> inputNumberSpinner isEditable=viewModel.isEditable propertyOwner=viewModel.actor propertyPath="data.data.health.exhaustion" min=0 contextTemplate="actor-health" }}
+            {{> inputNumberSpinner viewModel=viewModel.vmNsExhaustion }}
           </span>
         </div>
       </div>
@@ -55,7 +55,7 @@ viewModel: {ActorHealthViewModel}
           {{> inputLabel for="maxInjuries" text="ambersteel.labels.maxInjuries"}}
         </div>
         <span class="width-md">
-          {{> inputNumberSpinner isEditable=false propertyOwner=viewModel.actor propertyPath="data.data.health.maxInjuries" min=0 contextTemplate="actor-health" }}
+          {{> inputNumberSpinner viewModel=viewModel.vmNsMaxInjuries }}
         </span>
       </div>
     </div>
@@ -84,7 +84,7 @@ viewModel: {ActorHealthViewModel}
           <span class="flex-grow"></span>
           {{!-- Add injury --}}
           <span class="width-sm">
-            {{> buttonAdd target=viewModel.actor creationType="injury" withDialog=true }}
+            {{> buttonAdd viewModel=viewModel.vmBtnAddInjury }}
           </span>
         </div>
       </li>
@@ -120,7 +120,7 @@ viewModel: {ActorHealthViewModel}
           <span class="flex-grow"></span>
           {{!-- Add illness --}}
           <span class="width-sm">
-            {{> buttonAdd target=viewModel.actor creationType="illness" withDialog=true }}
+            {{> buttonAdd viewModel=viewModel.vmBtnAddIllness }}
           </span>
         </div>
       </li>

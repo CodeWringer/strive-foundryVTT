@@ -45,11 +45,35 @@ export default class ActorFateViewModel extends SheetViewModel {
     super(args);
     validateOrThrow(args, ["actor"]);
 
-    // Own properties.
     this.actor = args.actor;
+    this.contextType = args.contextType ?? "actor-fate";
 
-    // Child view models. 
     const thiz = this;
+
+    this.vmNsMifp = this.createVmNumberSpinner({
+      id: "vmNsMifp",
+      propertyOwner: thiz.actor,
+      propertyPath: "data.data.fateSystem.miFP",
+      min: 0,
+    });
+    this.vmNsMafp = this.createVmNumberSpinner({
+      id: "vmNsMafp",
+      propertyOwner: thiz.actor,
+      propertyPath: "data.data.fateSystem.maFP",
+      min: 0,
+    });
+    this.vmNsAfp = this.createVmNumberSpinner({
+      id: "vmNsAfp",
+      propertyOwner: thiz.actor,
+      propertyPath: "data.data.fateSystem.AFP",
+      min: 0,
+    });
+    this.vmBtnAddFateCard = this.createVmBtnAdd({
+      id: "vmBtnAddFateCard",
+      target: thiz.actor,
+      creationType: "fate-card",
+      withDialog: true,
+    });
 
     for (const fateCard of this.actor.fateCards) {
       const vm = new FateCardViewModel({

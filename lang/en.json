@@ -80,7 +80,9 @@
     "beliefSystem": {
       "ambition": "Ambition",
       "beliefs": "Beliefs",
-      "instincts": "Instincts"
+      "belief": "Belief",
+      "instincts": "Instincts",
+      "instinct": "Instinct"
     },
     "labels": {
       "actor": "Actor",

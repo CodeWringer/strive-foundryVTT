@@ -1,3 +1,4 @@
+import ItemGridViewViewModel from "../../../module/components/item-grid/item-grid-view-viewmodel.mjs";
 import SheetViewModel from "../../../module/components/sheet-viewmodel.mjs";
 import { TEMPLATES } from "../../../module/templatePreloader.mjs";
 import { validateOrThrow } from "../../../module/utils/validation-utility.mjs";
@@ -36,11 +37,37 @@ export default class ActorAssetsViewModel extends SheetViewModel {
     super(args);
     validateOrThrow(args, ["actor"]);
 
-    // Own properties.
     this.actor = args.actor;
+    this.contextType = args.contextType ?? "actor-assets";
 
-    // Child view models.
     const thiz = this;
+
+    this.vmNsMaxBulk = this.createVmNumberSpinner({
+      id: "vmNsMaxBulk",
+      propertyOwner: thiz.actor,
+      propertyPath: "data.data.assets.maxBulk",
+      isEditable: false,
+    });
+    this.vmNsTotalBulk = this.createVmNumberSpinner({
+      id: "vmNsTotalBulk",
+      propertyOwner: thiz.actor,
+      propertyPath: "data.data.assets.totalBulk",
+      isEditable: false,
+    });
+    this.vmIgv = new ItemGridViewViewModel({
+      id: "vmIgv",
+      parent: thiz,
+      propertyOwner: thiz.actor,
+      propertyPath: "data.data.assets",
+      isEditable: thiz.isEditable,
+      contextTemplate: thiz.contextTemplate,
+    });
+    this.vmBtnAddItem = this.createVmBtnAdd({
+      id: "vmBtnAddItem",
+      target: thiz.actor,
+      creationType: "item",
+      withDialog: true,
+    });
 
     for (const item of this.actor.propertyItems) {
       this.itemViewModels[item.id] = new ItemListItemViewModel({

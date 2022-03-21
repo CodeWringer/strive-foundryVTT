@@ -25,38 +25,30 @@ viewModel: {AttributeTableViewModel}
                     {{localize "ambersteel.labels.failureAbbreviation"}}
                 </th>
             </tr>
-            {{#each viewModel.attributes as |att index|}}
-            <tr class="item attribute-item" data-att-group-name="{{../viewModel.attributeGroupName}}" data-att-name="{{att.name}}">
+            {{#each viewModel.attributeViewModels as |vm index|}}
+            <tr class="item attribute-item" data-att-group-name="{{../viewModel.attributeGroupName}}" data-att-name="{{vm.attributeName}}">
                 {{#if ../viewModel.isEditable}}
                     <td class="attribute-column-roll">
-                        {{> buttonRoll 
-                            target=../viewModel.actor 
-                            propertyPath=(concat "data.data.attributes." ../viewModel.attributeGroupName "." att.name ".value") 
-                            chatTitle=(localize att.localizableName) 
-                            rollType="dice-pool" 
-                            callback="advanceAttributeBasedOnRollResult" 
-                            callbackData=att.name 
-                            actor=../viewModel.actor 
-                        }}
+                        {{> buttonRoll viewModel=vm.vmBtnRoll }}
                     </td>
                 {{/if}}
                 <td class="attribute-column-name flex fancy-font">
-                    {{localize att.localizableName}}
+                    {{localize vm.localizableName}}
                 </td>
                 <td class="attribute-column-abbreviation fancy-font">
-                    [{{localize att.localizableAbbreviation}}]
+                    [{{localize vm.localizableAbbreviation}}]
                 </td>
                 <td class="attribute-column-level">
-                    {{> inputNumberSpinner isEditable=../viewModel.isEditable propertyOwner=../viewModel.actor propertyPath=(concat "data.data.attributes." ../viewModel.attributeGroupName "." att.name ".value") min=0 contextTemplate="component-attribute-table" }}
+                    {{> inputNumberSpinner viewModel=vm.vmNsLevel }}
                 </td>
                 <td class="attribute-column-requirements">
-                    {{att.requiredSuccessses}} / {{att.requiredFailures}}
+                    {{vm.requiredSuccessses}} / {{vm.requiredFailures}}
                 </td>
                 <td class="attribute-column-successes">
-                    {{> inputNumberSpinner isEditable=../viewModel.isEditable propertyOwner=../viewModel.actor propertyPath=(concat "data.data.attributes." ../viewModel.attributeGroupName "." att.name ".successes") min=0 contextTemplate="component-attribute-table" }}
+                    {{> inputNumberSpinner viewModel=vm.vmNsSuccesses }}
                 </td>
                 <td class="attribute-column-failures">
-                    {{> inputNumberSpinner isEditable=../viewModel.isEditable propertyOwner=../viewModel.actor propertyPath=(concat "data.data.attributes." ../viewModel.attributeGroupName "." att.name ".failures") min=0 contextTemplate="component-attribute-table" }}
+                    {{> inputNumberSpinner viewModel=vm.vmNsFailures }}
                 </td>
             </tr>
             {{/each}}

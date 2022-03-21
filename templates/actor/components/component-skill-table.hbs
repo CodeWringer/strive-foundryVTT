@@ -36,54 +36,46 @@ viewModel: {SkillTableViewModel}
                     <th class="skill-column-delete"></th>
                 {{/if}}
             </tr>
-            {{#each viewModel.skills as |skill key|}}
-                <tr class="item skill-item" data-item-id="{{skill.data.id}}">
+            {{#each viewModel.skillsViewModels as |vm key|}}
+                <tr class="item skill-item" data-item-id="{{vm.skill.data.id}}">
                     {{#if ../isEditable}}
                         <td class="skill-column-roll">
-                            {{> buttonRoll 
-                                target=skill 
-                                propertyPath="data.data.totalValue" 
-                                chatTitle=skill.name 
-                                rollType="dice-pool" 
-                                callback="advanceSkillBasedOnRollResult" 
-                                callbackData=skill.id 
-                                actor=../viewModel.actor 
-                            }}
+                            {{> buttonRoll viewModel=vm.vmBtnRoll }}
                         </td>
                     {{/if}}
                     <td>
-                        {{> buttonSendToChat target=skill }}
+                        {{> buttonSendToChat viewModel=vm.vmBtnSendToChat }}
                     </td>
                     <td>
-                        {{> buttonOpenSheet target=skill.name }}
+                        {{> buttonOpenSheet viewModel=vm.vmBtnOpenSheet }}
                     </td>
                     <td class="fancy-font flex skill-column-name">
-                        {{> inputTextField isEditable=../viewModel.isEditable propertyOwner=skill propertyPath="name" placeholder="ambersteel.labels.name" contextTemplate="component-skill-table" }}
+                        {{> inputTextField viewModel=vm.vmTfName }}
                     </td>
                     <td class="skill-column-attribute">
-                        {{> inputDropDown isEditable=../viewModel.isEditable propertyOwner=skill propertyPath="data.data.relatedAttribute" options=../viewModel.attributeOptions contextTemplate="component-skill-table" }}
+                        {{> inputDropDown viewModel=vm.vmDdRelatedAttribute }}
                     </td>
                     <td class="skill-column-level">
-                        {{> inputNumberSpinner isEditable=../viewModel.isEditable propertyOwner=skill propertyPath="data.data.value" min=0 contextTemplate="component-skill-table" }}
+                        {{> inputNumberSpinner viewModel=vm.vmNsLevel }}
                     </td>
                     <td class="skill-column-requirements">
-                        {{skill.data.data.requiredSuccessses}} / {{skill.data.data.requiredFailures}}
+                        {{vm.requiredSuccessses}} / {{vm.requiredFailures}}
                     </td>
                     <td class="skill-column-successes">
-                        {{> inputNumberSpinner isEditable=../viewModel.isEditable propertyOwner=skill propertyPath="data.data.successes" min=0 contextTemplate="component-skill-table" }}
+                        {{> inputNumberSpinner viewModel=vm.vmNsSuccesses }}
                     </td>
                     <td class="skill-column-failures">
-                        {{> inputNumberSpinner isEditable=../viewModel.isEditable propertyOwner=skill propertyPath="data.data.failures" min=0 contextTemplate="component-skill-table" }}
+                        {{> inputNumberSpinner viewModel=vm.vmNsFailures }}
                     </td>
                     {{#if ../viewModel.isEditable}}
                         <td class="skill-column-delete">
-                            {{> buttonDelete target=skill withDialog=true }}
+                            {{> buttonDelete viewModel=vm.vmBtnDelete }}
                         </td>
                     {{/if}}
                 </tr>
                 <tr>
                     <td style="display: table-cell;" colspan="100">
-                        {{> "systems/ambersteel/templates/item/skill-ability/skill-ability-table.hbs" viewModel=(getValue ../viewModel (concat "skillAbilityTableViewModels." skill.id)) }}
+                        {{> "systems/ambersteel/templates/item/skill-ability/skill-ability-table.hbs" viewModel=vm.vmSkillAbilityTable }}
                     </td>
                 </tr>
             {{/each}}
@@ -93,7 +85,7 @@ viewModel: {SkillTableViewModel}
                         <div class="flex">
                             <span class="flex-grow"></span>
                             <span class="width-sm">
-                                {{> buttonAdd target=viewModel.actor creationType="skill" withDialog=true creationData=(concat "[value:"(ifThenElse viewModel.isLearningSkillsTable "0" "1") "]" ) }}
+                                {{> buttonAdd viewModel=viewModel.vmBtnAddSkill }}
                             </span>
                         </div>
                     </td>

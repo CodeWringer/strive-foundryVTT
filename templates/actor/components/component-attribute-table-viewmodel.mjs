@@ -25,6 +25,11 @@ export default class AttributeTableViewModel extends SheetViewModel {
    * @type {String}
    */
   localizableAttributeGroupName = undefined;
+
+  /**
+   * @type {Array<Object>}
+   */
+  attributeViewModels = [];
   
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
@@ -48,13 +53,52 @@ export default class AttributeTableViewModel extends SheetViewModel {
     super(args);
     validateOrThrow(args, ["actor", "attributes", "attributeGroupName", "localizableAttributeGroupName"]);
 
-    // Own properties.
     this.actor = args.actor;
     this.attributes = args.attributes;
     this.attributeGroupName = args.attributeGroupName;
     this.localizableAttributeGroupName = args.localizableAttributeGroupName;
+    this.contextType = args.contextType ?? "component-attribute-table";
     
-    // Child view models. 
     const thiz = this;
+
+    for (let i = 0; i < this.attributes.length; i++) {
+      const attribute = this.attributes[i];
+
+      thiz.attributeViewModels.push({
+        attributeName: attribute.name,
+        localizableName: attribute.localizableName,
+        localizableAbbreviation: attribute.localizableAbbreviation,
+        requiredSuccessses: attribute.requiredSuccessses,
+        requiredFailures: attribute.requiredFailures,
+        vmBtnRoll: thiz.createVmBtnRoll({
+          id: `vmBtnRoll-${attribute.name}`,
+          target: thiz.actor,
+          propertyPath: `data.data.attributes.${thiz.attributeGroupName}.${attribute.name}.value`,
+          chatTitle: game.i18n.localize(attribute.localizableName),
+          rollType: "dice-pool",
+          callback: "advanceAttributeBasedOnRollResult",
+          callbackData: attribute.name,
+          actor: thiz.actor,
+        }),
+        vmNsLevel: thiz.createVmNumberSpinner({
+          id: `vmNsLevel-${attribute.name}`,
+          propertyOwner: thiz.actor,
+          propertyPath: `data.data.attributes.${thiz.attributeGroupName}.${attribute.name}.value`,
+          min: 0,
+        }),
+        vmNsSuccesses: thiz.createVmNumberSpinner({
+          id: `vmNsSuccesses-${attribute.name}`,
+          propertyOwner: thiz.actor,
+          propertyPath: `data.data.attributes.${thiz.attributeGroupName}.${attribute.name}.successes`,
+          min: 0,
+        }),
+        vmNsFailures: thiz.createVmNumberSpinner({
+          id: `vmNsFailures-${attribute.name}`,
+          propertyOwner: thiz.actor,
+          propertyPath: `data.data.attributes.${thiz.attributeGroupName}.${attribute.name}.failures`,
+          min: 0,
+        }),
+      });
+    }
   }
 }

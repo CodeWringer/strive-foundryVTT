@@ -69,11 +69,17 @@ export default class ActorSheetViewModel extends SheetViewModel {
     super(args);
     validateOrThrow(args, ["actor"]);
 
-    // Own properties.
     this.actor = args.actor;
+    this.contextTemplate = args.contextTemplate ?? "actor-character-sheet";
 
-    // Child view models. 
     const thiz = this;
+
+    this.vmTfName = this.createVmTextField({
+      id: "vmTfName",
+      propertyOwner: thiz.actor,
+      propertyPath: "name",
+      placeholder: "ambersteel.labels.name",
+    });
 
     this.personalsViewModel = new ActorPersonalsViewModel({ ...args, id: thiz.personalsId, parent: thiz });
     this.attributesViewModel = new ActorAttributesViewModel({ ...args, id: thiz.personalsId, parent: thiz });

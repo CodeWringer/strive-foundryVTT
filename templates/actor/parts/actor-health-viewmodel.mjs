@@ -56,11 +56,53 @@ export default class ActorHealthViewModel extends SheetViewModel {
     super(args);
     validateOrThrow(args, ["actor"]);
 
-    // Own properties.
     this.actor = args.actor;
+    this.contextType = args.contextType ?? "actor-health";
 
-    // Child view models. 
     const thiz = this;
+
+    this.vmNsMaxHp = this.createVmNumberSpinner({
+      id: "vmNsMaxHp",
+      propertyOwner: thiz.actor,
+      propertyPath: "data.data.health.maxHP",
+      isEditable: false,
+    });
+    this.vmNsHp = this.createVmNumberSpinner({
+      id: "vmNsHp",
+      propertyOwner: thiz.actor,
+      propertyPath: "data.data.health.HP",
+    });
+    this.vmNsMaxExhaustion = this.createVmNumberSpinner({
+      id: "vmNsMaxExhaustion",
+      propertyOwner: thiz.actor,
+      propertyPath: "data.data.health.maxExhaustion",
+      isEditable: false,
+    });
+    this.vmNsExhaustion = this.createVmNumberSpinner({
+      id: "vmNsExhaustion",
+      propertyOwner: thiz.actor,
+      propertyPath: "data.data.health.exhaustion",
+      min: 0,
+    });
+    this.vmNsMaxInjuries = this.createVmNumberSpinner({
+      id: "vmNsMaxInjuries",
+      propertyOwner: thiz.actor,
+      propertyPath: "data.data.health.maxInjuries",
+      isEditable: false,
+      min: 1,
+    });
+    this.vmBtnAddInjury = this.createVmBtnAdd({
+      id: "vmBtnAddInjury",
+      target: thiz.actor,
+      creationType: "injury",
+      withDialog: true,
+    });
+    this.vmBtnAddIllness = this.createVmBtnAdd({
+      id: "vmBtnAddIllness",
+      target: thiz.actor,
+      creationType: "illness",
+      withDialog: true,
+    });
 
     for (const illness of this.actor.illnesses) {
       const vm = new IllnessListItemViewModel({

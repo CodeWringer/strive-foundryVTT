@@ -30,7 +30,34 @@ export default class ActorPersonalsViewModel extends SheetViewModel {
     super(args);
     validateOrThrow(args, ["actor"]);
 
-    // Own properties.
     this.actor = args.actor;
+    this.contextType = args.contextType ?? "actor-personals";
+
+    const thiz = this;
+
+    this.vmTfSpecies = this.createVmTextField({
+      id: "vmTfSpecies",
+      propertyOwner: thiz.actor,
+      propertyPath: "data.data.person.species",
+      placeholder: "ambersteel.personals.species",
+    });
+    this.vmTfCulture = this.createVmTextField({
+      id: "vmTfCulture",
+      propertyOwner: thiz.actor,
+      propertyPath: "data.data.person.culture",
+      placeholder: "ambersteel.personals.culture",
+    });
+    this.vmTfSex = this.createVmTextField({
+      id: "vmTfSex",
+      propertyOwner: thiz.actor,
+      propertyPath: "data.data.person.sex",
+      placeholder: "ambersteel.personals.sex",
+    });
+    this.vmTfAge = this.createVmTextField({
+      id: "vmTfAge",
+      propertyOwner: thiz.actor,
+      propertyPath: "data.data.person.age",
+      placeholder: "ambersteel.personals.age",
+    });
   }
 }
