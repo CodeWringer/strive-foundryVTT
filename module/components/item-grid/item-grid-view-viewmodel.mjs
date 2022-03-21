@@ -1,4 +1,5 @@
 import { TEMPLATES } from "../../templatePreloader.mjs";
+import { validateOrThrow } from "../../utils/validation-utility.mjs";
 import InputViewModel from "../input-viewmodel.mjs";
 import { ItemGridView } from "./item-grid-view.mjs";
 
@@ -43,24 +44,27 @@ export default class ItemGridViewViewModel extends InputViewModel {
    */
   _gridWidth = undefined;
   /**
+   * Width of the grid, in pixels. 
    * @type {Number}
    * @readonly
    */
   gridWidth() { return this._gridWidth; }
 
   /**
-   * @param {String | undefined} args.id
+   * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
    * 
-   * @param {Boolean | undefined} args.isEditable 
-   * @param {String} args.propertyPath
-   * @param {Object} args.propertyOwner
-   * @param {String | undefined} args.contextTemplate
+   * @param {String} args.propertyPath The path used to look up the value. 
+   * @param {Object} args.propertyOwner An object on which to to look up the value. 
+   * @param {Boolean | undefined} args.isEditable Optional. If true, input(s) will be in edit mode. If false, input(s) will be in read-only mode.
+   * @param {String | undefined} args.contextTemplate Optional. Name or path of a template that embeds this input component. 
    * 
-   * @param {Number} args.gridWidth
+   * @param {Number | undefined} args.gridWidth Optional. Width of the grid, in pixels. 
    */
   constructor(args = {}) {
     super(args);
-    this._gridWidth = args.gridWidth ?? 550; // This magic constant is based on the assumption that the actor sheet is about 560px wide. 
+    validateOrThrow(args, ["propertyPath", "propertyOwner"]);
+
+    this._gridWidth = args.gridWidth ?? 550; // This magic constant is based on the assumption that the actor sheet is about 560px wide. TODO: Un-magic this.
   }
 
   /**

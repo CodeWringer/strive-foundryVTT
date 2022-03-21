@@ -1,4 +1,5 @@
 import { TEMPLATES } from "../../templatePreloader.mjs";
+import { validateOrThrow } from "../../utils/validation-utility.mjs";
 import InputViewModel from "../input-viewmodel.mjs";
 
 /**
@@ -41,19 +42,21 @@ export default class InputNumberSpinnerViewModel extends InputViewModel {
   get hasMax() { return this.max !== undefined; }
 
   /**
-   * @param {String | undefined} args.id
+   * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
    * 
-   * @param {Boolean | undefined} args.isEditable 
-   * @param {String} args.propertyPath
-   * @param {Object} args.propertyOwner
-   * @param {String | undefined} args.contextTemplate
+   * @param {String} args.propertyPath The path used to look up the value. 
+   * @param {Object} args.propertyOwner An object on which to to look up the value. 
+   * @param {Boolean | undefined} args.isEditable Optional. If true, input(s) will be in edit mode. If false, input(s) will be in read-only mode.
+   * @param {String | undefined} args.contextTemplate Optional. Name or path of a template that embeds this input component. 
    * 
-   * @param {Number} args.min Gets the minimum value. 
-   * @param {Number} args.max Gets the maximum value. 
-   * @param {Number} args.step Gets the increment/decrement step size. 
+   * @param {Number | undefined} args.min Optional. The minimum value. 
+   * @param {Number | undefined} args.max Optional. The maximum value. 
+   * @param {Number | undefined} args.step Optional. The increment/decrement step size. 
    */
   constructor(args = {}) {
     super(args);
+    validateOrThrow(args, ["propertyPath", "propertyOwner"]);
+
     this.min = args.min ?? undefined;
     this.max = args.max ?? undefined;
     this.step = args.step ?? 1;

@@ -1,4 +1,5 @@
 import { TEMPLATES } from "../../templatePreloader.mjs";
+import { validateOrThrow } from "../../utils/validation-utility.mjs";
 import InputViewModel from "../input-viewmodel.mjs";
 
 /**
@@ -26,19 +27,21 @@ export default class InputTextareaViewModel extends InputViewModel {
   static get TEMPLATE() { return TEMPLATES.COMPONENT_INPUT_TEXTAREA; }
 
   /**
-   * @param {String | undefined} args.id
+   * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
    * 
-   * @param {Boolean | undefined} args.isEditable 
-   * @param {String} args.propertyPath
-   * @param {Object} args.propertyOwner
-   * @param {String | undefined} args.contextTemplate
+   * @param {String} args.propertyPath The path used to look up the value. 
+   * @param {Object} args.propertyOwner An object on which to to look up the value. 
+   * @param {Boolean | undefined} args.isEditable Optional. If true, input(s) will be in edit mode. If false, input(s) will be in read-only mode.
+   * @param {String | undefined} args.contextTemplate Optional. Name or path of a template that embeds this input component. 
    * 
-   * @param {Boolean} args.allowResize 
-   * @param {Boolean} args.spellcheck 
-   * @param {String} args.placeholder 
+   * @param {Boolean | undefined} args.allowResize Optional. Sets whether resizing is allowed. 
+   * @param {Boolean | undefined} args.spellcheck Optional. Sets whether spell checking is enabled. 
+   * @param {String | undefined} args.placeholder Optional. Sets a placeholder text to display while the textfield is empty. 
    */
   constructor(args = {}) {
     super(args);
+    validateOrThrow(args, ["propertyPath", "propertyOwner"]);
+
     this.allowResize = args.allowResize ?? false;
     this.spellcheck = args.spellcheck ?? false;
     this.placeholder = args.placeholder ?? "";

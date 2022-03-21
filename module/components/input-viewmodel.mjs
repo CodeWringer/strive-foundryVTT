@@ -1,6 +1,7 @@
 import ViewModel from "./viewmodel.mjs";
 import { setNestedPropertyValue, getNestedPropertyValue } from "../utils/property-utility.mjs";
 import { getElementValue } from "../utils/sheet-utility.mjs";
+import { validateOrThrow } from "../utils/validation-utility.mjs";
 
 /**
  * Constant that defines the css class to look for when identifying input elements for editing. 
@@ -94,15 +95,17 @@ export default class InputViewModel extends ViewModel {
   get element() { return this._element; }
 
   /**
-   * @param {String | undefined} args.id
+   * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
    * 
-   * @param {Boolean | undefined} args.isEditable 
-   * @param {String} args.propertyPath
-   * @param {Object} args.propertyOwner
-   * @param {String | undefined} args.contextTemplate
+   * @param {String} args.propertyPath The path used to look up the value. 
+   * @param {Object} args.propertyOwner An object on which to to look up the value. 
+   * @param {Boolean | undefined} args.isEditable Optional. If true, input(s) will be in edit mode. If false, input(s) will be in read-only mode.
+   * @param {String | undefined} args.contextTemplate Optional. Name or path of a template that embeds this input component. 
    */
   constructor(args = {}) {
     super(args);
+    validateOrThrow(args, ["propertyPath", "propertyOwner"]);
+
     this._isEditable = args.isEditable ?? false;
     this.propertyPath = args.propertyPath;
     this.propertyOwner = args.propertyOwner;

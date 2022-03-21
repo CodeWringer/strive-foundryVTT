@@ -1,4 +1,5 @@
 import { TEMPLATES } from "../../templatePreloader.mjs";
+import { validateOrThrow } from "../../utils/validation-utility.mjs";
 import InputViewModel from "../input-viewmodel.mjs";
 
 /**
@@ -19,7 +20,7 @@ import InputViewModel from "../input-viewmodel.mjs";
  * 
  * @property {String} localizedValue Gets the localized version of the value. 
  * @property {ChoiceOption} selected Gets the currently selected option. 
- * @property {Array<ChoiceOption>} options Gets the options available to the drop-down. 
+ * @property {Array<ChoiceOption>} options Gets the options available to the radio button group. 
  * 
  */
 export default class InputRadioButtonGroupViewModel extends InputViewModel {
@@ -46,17 +47,19 @@ export default class InputRadioButtonGroupViewModel extends InputViewModel {
   get lastChecked() { return this._lastChecked; }
 
   /**
-   * @param {String | undefined} args.id
+   * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
    * 
-   * @param {Boolean | undefined} args.isEditable 
-   * @param {String} args.propertyPath
-   * @param {Object} args.propertyOwner
-   * @param {String | undefined} args.contextTemplate
+   * @param {String} args.propertyPath The path used to look up the value. 
+   * @param {Object} args.propertyOwner An object on which to to look up the value. 
+   * @param {Boolean | undefined} args.isEditable Optional. If true, input(s) will be in edit mode. If false, input(s) will be in read-only mode.
+   * @param {String | undefined} args.contextTemplate Optional. Name or path of a template that embeds this input component. 
    * 
-   * @param {Array<ChoiceOption>} args.options
+   * @param {Array<ChoiceOption>} args.options The options available to the radio button group. 
    */
   constructor(args = {}) {
     super(args);
+    validateOrThrow(args, ["propertyPath", "propertyOwner", "options"]);
+
     this.options = args.options ?? [];
   }
 
