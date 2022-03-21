@@ -1,8 +1,6 @@
 import { createUUID } from "../utils/uuid-utility.mjs";
 import * as PropertyUtil from "../utils/property-utility.mjs";
 
-export const DisposedAccessViolation = new Error("DisposedAccessViolation: The object has been disposed and its members can no longer be accessed");
-
 /**
  * @summary
  * Represents the base type for view models. 
@@ -61,8 +59,16 @@ export default class ViewModel {
    * Static. Returns the template this ViewModel is intended for. 
    * @abstract
    * @throws {Error} NotImplementedException - Thrown if not overriden by implementing types. 
+   * @readonly
    */
   static get TEMPLATE() { throw new Error("NotImplementedException"); }
+
+  /**
+   * The exception to throw when disposed fields and methods are accessed. 
+   * @type {Error}
+   * @readonly
+   */
+  static get DISPOSED_ACCESS_VIOLATION_EXCEPTION() { return new Error("DisposedAccessViolation: The object has been disposed and its members can no longer be accessed"); }
 
   /**
    * @type {String}
@@ -172,10 +178,10 @@ export default class ViewModel {
       this[propertyName] = null;
     }
     // Ensure methods cannot be called again. 
-    this.dispose = () => { throw DisposedAccessViolation };
-    this.toViewState = () => { throw DisposedAccessViolation; };
-    this.applyViewState = () => { throw DisposedAccessViolation; };
-    this.activateListeners = () => { throw DisposedAccessViolation; };
+    this.dispose = () => { throw ViewModel.DISPOSED_ACCESS_VIOLATION_EXCEPTION };
+    this.toViewState = () => { throw ViewModel.DISPOSED_ACCESS_VIOLATION_EXCEPTION; };
+    this.applyViewState = () => { throw ViewModel.DISPOSED_ACCESS_VIOLATION_EXCEPTION; };
+    this.activateListeners = () => { throw ViewModel.DISPOSED_ACCESS_VIOLATION_EXCEPTION; };
   }
 
   /**
