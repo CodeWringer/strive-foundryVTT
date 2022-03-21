@@ -40,49 +40,37 @@ export default class SkillItemSheetViewModel extends SkillViewModel {
    */
   constructor(args = {}) {
     super(args);
+    this.contextTemplate = args.contextTemplate ?? "skill-item-sheet";
 
     // Child view models. 
-    this.contextTemplate = "skill-item-sheet";
     const thiz = this;
     
-    this.vmTfName = new InputTextFieldViewModel({
+    this.vmTfName = this.createChildViewModelTextField({
       id: "vmTfName",
-      isEditable: thiz.isEditable,
       propertyOwner: thiz.item,
       propertyPath: "name",
       placeholder: "ambersteel.labels.name",
-      contextTemplate: thiz.contextTemplate,
-      parent: thiz,
     });
-    this.vmBtnSendToChat = new ButtonSendToChatViewModel({
+    this.vmBtnSendToChat = this.createChildViewModelSendToChat({
       id: "vmBtnSendToChat",
       target: thiz.item,
-      parent: thiz,
     });
-    this.vmDdRelatedAttribute = new InputDropDownViewModel({
+    this.vmDdRelatedAttribute = this.createChildViewModelDropDown({
       id: "vmDdRelatedAttribute",
-      isEditable: thiz.isEditable,
       propertyOwner: thiz.item,
       propertyPath: "data.data.relatedAttribute",
-      contextTemplate: thiz.contextTemplate,
-      parent: thiz,
       options: thiz.attributeOptions,
     });
-    this.vmTfCategory = new InputTextFieldViewModel({
+    this.vmTfCategory = this.createChildViewModelTextField({
       id: "vmTfCategory",
-      isEditable: thiz.isEditable,
       propertyOwner: thiz.item,
       propertyPath: "data.data.category",
-      contextTemplate: thiz.contextTemplate,
-      parent: thiz,
+      placeholder: "ambersteel.labels.category",
     });
-    this.vmTaDescription = new InputTextareaViewModel({
+    this.vmTaDescription = this.createChildViewModelTextArea({
       id: "vmTaDescription",
-      isEditable: thiz.isEditable,
-      propertyPath: "data.data.description",
       propertyOwner: thiz.item,
-      contextTemplate: thiz.contextTemplate,
-      parent: thiz,
+      propertyPath: "data.data.description",
       placeholder: "ambersteel.labels.description",
       allowResize: true,
     });
