@@ -102,6 +102,7 @@ export default class SheetViewModel extends ViewModel {
    * @param {Object} args.propertyOwner
    * @param {String} args.propertyPath
    * @param {String | undefined} args.id
+   * @param {Boolean | undefined} args.isEditable
    * @param {String | undefined} args.placeholder
    * @returns {InputTextFieldViewModel}
    */
@@ -111,7 +112,7 @@ export default class SheetViewModel extends ViewModel {
 
     return new InputTextFieldViewModel({
       parent: thiz,
-      isEditable: thiz.isEditable,
+      isEditable: args.isEditable ?? thiz.isEditable,
       contextTemplate: thiz.contextTemplate,
       propertyOwner: args.propertyOwner,
       propertyPath: args.propertyPath,
@@ -126,6 +127,7 @@ export default class SheetViewModel extends ViewModel {
    * @param {String} args.propertyPath
    * @param {Array<ChoiceOption>} args.options
    * @param {String | undefined} args.id
+   * @param {Boolean | undefined} args.isEditable
    * @returns {InputDropDownViewModel}
    */
   createVmDropDown(args = {}) {
@@ -134,7 +136,7 @@ export default class SheetViewModel extends ViewModel {
 
     return new InputDropDownViewModel({
       parent: thiz,
-      isEditable: thiz.isEditable,
+      isEditable: args.isEditable ?? thiz.isEditable,
       contextTemplate: thiz.contextTemplate,
       propertyOwner: args.propertyOwner,
       propertyPath: args.propertyPath,
@@ -148,6 +150,7 @@ export default class SheetViewModel extends ViewModel {
    * @param {Object} args.propertyOwner
    * @param {String} args.propertyPath
    * @param {String | undefined} args.id
+   * @param {Boolean | undefined} args.isEditable
    * @param {Number | undefined} args.min
    * @param {Number | undefined} args.max
    * @param {Number | undefined} args.step
@@ -159,7 +162,7 @@ export default class SheetViewModel extends ViewModel {
 
     return new InputNumberSpinnerViewModel({
       parent: thiz,
-      isEditable: thiz.isEditable,
+      isEditable: args.isEditable ?? thiz.isEditable,
       contextTemplate: thiz.contextTemplate,
       propertyOwner: args.propertyOwner,
       propertyPath: args.propertyPath,
@@ -176,6 +179,7 @@ export default class SheetViewModel extends ViewModel {
    * @param {String} args.propertyPath
    * @param {Array<ChoiceOption>} args.options
    * @param {String | undefined} args.id
+   * @param {Boolean | undefined} args.isEditable
    * @returns {InputRadioButtonGroupViewModel}
    */
   createVmRadioButtonGroup(args = {}) {
@@ -184,7 +188,7 @@ export default class SheetViewModel extends ViewModel {
 
     return new InputRadioButtonGroupViewModel({
       parent: thiz,
-      isEditable: thiz.isEditable,
+      isEditable: args.isEditable ?? thiz.isEditable,
       contextTemplate: thiz.contextTemplate,
       propertyOwner: args.propertyOwner,
       propertyPath: args.propertyPath,
@@ -198,6 +202,7 @@ export default class SheetViewModel extends ViewModel {
    * @param {Object} args.propertyOwner
    * @param {String} args.propertyPath
    * @param {String | undefined} args.id
+   * @param {Boolean | undefined} args.isEditable
    * @param {Boolean | undefined} args.allowResize 
    * @param {Boolean | undefined} args.spellcheck 
    * @param {String | undefined} args.placeholder 
@@ -209,7 +214,7 @@ export default class SheetViewModel extends ViewModel {
 
     return new InputTextareaViewModel({
       parent: thiz,
-      isEditable: thiz.isEditable,
+      isEditable: args.isEditable ?? thiz.isEditable,
       contextTemplate: thiz.contextTemplate,
       propertyOwner: args.propertyOwner,
       propertyPath: args.propertyPath,
