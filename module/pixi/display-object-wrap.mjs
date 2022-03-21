@@ -27,6 +27,9 @@ export default class DisplayObjectWrap extends Containable {
   get tint() { return this.wrapped.tint; }
   set tint(value) { this.wrapped.tint = value; }
 
+  get visible() { return this.wrapped.visible; }
+  set visible(value) { this.wrapped.visible = value; }
+
   constructor(toWrap, pixiApp) {
     super(pixiApp);
 

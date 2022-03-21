@@ -97,6 +97,9 @@ export class Button extends Containable {
    */
   requiresEditPermission = true;
 
+  get visible() { return this._wrapped.visible; }
+  set visible(value) { this._wrapped.visible = value; }
+
   /**
    * @param {PIXI.Texture} sprite 
    */

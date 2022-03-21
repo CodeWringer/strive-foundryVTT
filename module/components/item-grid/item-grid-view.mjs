@@ -1,6 +1,5 @@
 import { AmbersteelActor } from "../../documents/actor.mjs";
 import InventoryIndex from "../../dto/inventory-index.mjs";
-import AmbersteelBaseActorSheet from "../../sheets/subtypes/actor/ambersteel-base-actor-sheet.mjs";
 import { TEXTURES } from "../../pixi/texture-preloader.mjs";
 import { ItemOnGridView } from "./item-on-grid-view.mjs";
 import { DragIndicator } from "./drag-indicator.mjs";
@@ -114,6 +113,8 @@ export class ItemGridView {
   _hoverItem = undefined;
   get hoverItem() { return this._hoverItem; }
   set hoverItem(value) {
+    if (this.isEditable !== true) return;
+
     if (value != this.hoverItem) {
       if (this.hoverItem !== undefined) {
         this.hoverItem.tint = 0xFFFFFF; // Removes any highlighting. 
@@ -134,6 +135,8 @@ export class ItemGridView {
   _hoverButton = undefined;
   get hoverButton() { return this._hoverButton; }
   set hoverButton(value) {
+    if (this.isEditable !== true) return;
+
     if (value != this._hoverButton) {
       if (this.hoverButton !== undefined) {
         this._hoverButton.showHover = false;
@@ -147,23 +150,39 @@ export class ItemGridView {
     }
   }
 
+  /**
+   * @type {Boolean}
+   * @private
+   */
   _isEditable = true;
+  /**
+   * Returns true, if the item grid is editable.
+   * @type {Boolean}
+   */
   get isEditable() { return this._isEditable; }
+  /**
+   * Sets whether the item grid is editable.
+   * @param {Boolean} value
+   */
   set isEditable(value) {
     this._isEditable = value;
+    this._setEditability(value);
   }
 
   /**
-   * 
-   * @param {HTMLElement} html 
-   * @param {String} canvasElementId 
-   * @param {Actor} actor 
+   * @param {HTMLElement} html DOM that containes the canvas element. 
+   * @param {String} canvasElementId ID of the DOM element that represents the canvas. 
+   * @param {Actor} actor The actor whose item grid this will represent. 
+   * @param {Number} width Width of the canvas, in pixels. 
+   * @param {Number} tileSize Optional. Size of a tile, in pixels. 
+   * @param {Boolean} isEditable Optional. Determines whether the item grid will be editable. Default false. 
    */
-  constructor(html, canvasElementId, actor, width, tileSize = 128) {
+  constructor(html, canvasElementId, actor, width, tileSize = 128, isEditable = false) {
     this._width = width;
     this._tileSize = tileSize;
     this._actor = actor;
     this._itemGrid = this._actor.itemGrid;
+    this._isEditable = isEditable;
 
     // Setup HTML canvas element. 
     this._canvasElement = html.find("#" + canvasElementId)[0];
@@ -225,7 +244,7 @@ export class ItemGridView {
   _setupItemsOnGrid(indices, items) {
     for (const index of indices) {
       const item = items.find((element) => { return element.id === index.id; });
-      const itemOnGrid = new ItemOnGridView(item, index, { width: this._tileSize, height: this._tileSize }, this);
+      const itemOnGrid = new ItemOnGridView(item, index, { width: this._tileSize, height: this._tileSize }, this, this.isEditable);
       this._itemsOnGrid.push(itemOnGrid);
 
       this._rootContainer.addChild(itemOnGrid.rootContainer.wrapped);
@@ -436,15 +455,31 @@ export class ItemGridView {
     const itemOnGrid = this.getItemAt(pixelX, pixelY);
     const button = this._getButtonAt(pixelX, pixelY);
     
-    if (button !== undefined) {
+    if (this.isEditable === true && button !== undefined) {
       // Show clicking is possible. 
       this._canvasElement.style.cursor = "pointer";
-    } else if (itemOnGrid !== undefined) {
+    } else if (this.isEditable === true && itemOnGrid !== undefined) {
       // Show grabbing is possible. 
       this._canvasElement.style.cursor = "grab";
     } else {
       // No interaction possible at current pixel coordinates. 
       this._canvasElement.style.cursor = "default";
+    }
+  }
+
+  /**
+   * Sets the editability (or read-only mode) of the item grid. 
+   * @param {Boolean} value If true, the item grid will be editable. 
+   * @private
+   */
+  _setEditability(value) {
+    if (value !== true) {
+      this.hoverItem = undefined;
+      this.hoverButton = undefined;
+    }
+
+    for (const itemOnGrid of this._itemsOnGrid) {
+      itemOnGrid._setEditability(value);
     }
   }
 }

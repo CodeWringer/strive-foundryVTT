@@ -136,19 +136,40 @@ export class ItemOnGridView {
   set tint(value) { this._spriteBackground.tint = value; }
 
   /**
+   * @type {Boolean}
+   * @private
+   */
+  _isEditable = true;
+  /**
+   * Returns true, if the item is editable.
+   * @type {Boolean}
+   */
+  get isEditable() { return this._isEditable; }
+  /**
+   * Sets whether the item is editable.
+   * @param {Boolean} value
+   */
+  set isEditable(value) {
+    this._isEditable = value;
+    this._setEditability(value);
+  }
+
+  /**
    * 
    * @param {AmbersteelItemItem} item 
    * @param {InventoryIndex} index 
    * @param {Object} tileSize { width: {Number}, height: {Number} }
    * @param {ItemGridView} itemGridView 
+   * @param {Boolean} isEditable Optional. Determines whether the item will be editable. Default false. 
    */
-  constructor(item, index, tileSize, itemGridView) {
+  constructor(item, index, tileSize, itemGridView, isEditable = false) {
     this._item = item;
     this._index = index;
     this._shape = item.data.data.shape;
     this._tileSize = tileSize;
     this._parent = itemGridView;
     this._rectangle = new PIXI.Rectangle(0, 0, 0, 0);
+    this._isEditable = isEditable;
     
     // Set up root container and determine dimensions. 
     this.rootContainer = new CenterLayoutContainer(this._parent._pixiApp);
@@ -161,6 +182,7 @@ export class ItemOnGridView {
     this._rectangle.height = this.height;
     
     this._setupElements();
+    this._setEditability(isEditable);
   }
 
   /**
@@ -366,5 +388,25 @@ export class ItemOnGridView {
     // Title
     this._textName = new DisplayObjectWrap(new PIXI.Text(this._item.name, TEXT_SETTINGS), pixiApp);
     this._contentFooter.addChild(this._textName);
+  }
+
+  /**
+   * Sets the editability (or read-only mode) of the item grid. 
+   * @param {Boolean} value If true, the item grid will be editable. 
+   * @private
+   */
+  _setEditability(value) {
+    if (this._buttonDelete.requiresEditPermission === true) {
+      this._buttonDelete.visible = value;
+    }
+    if (this._buttonMoveItemToProperty.requiresEditPermission === true) {
+      this._buttonMoveItemToProperty.visible = value;
+    }
+    if (this._buttonOpenSheet.requiresEditPermission === true) {
+      this._buttonOpenSheet.visible = value;
+    }
+    if (this._buttonSendToChat.requiresEditPermission === true) {
+      this._buttonSendToChat.visible = value;
+    }
   }
 }
