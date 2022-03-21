@@ -47,7 +47,6 @@ export default class SkillAbilityChatMessageViewModel extends SheetViewModel {
     super(args);
     validateOrThrow(args, ["item", "skillAbility"]);
 
-    // Own properties.
     this.item = args.item;
     this.skillAbility = args.skillAbility;
     this.actor = args.actor;
