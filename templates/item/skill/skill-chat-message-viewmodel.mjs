@@ -37,11 +37,11 @@ export default class SkillChatMessageViewModel extends SheetViewModel {
   constructor(args = {}) {
     super(args);
     validateOrThrow(args, ["item"]);
-
+    this.contextTemplate = args.contextTemplate ?? "skill-chat-message";
+    
     this.item = args.item;
     
     // Child view models. 
-    this.contextTemplate = "skill-chat-message";
     const thiz = this;
 
     this.vmSkillAbilityTable = new SkillAbilityTableViewModel({

@@ -1,9 +1,5 @@
-import ButtonDeleteViewModel from "../../../module/components/button-delete/button-delete-viewmodel.mjs";
-import ButtonSendToChatViewModel from "../../../module/components/button-send-to-chat/button-send-to-chat-viewmodel.mjs";
-import InputDropDownViewModel from "../../../module/components/input-dropdown/input-dropdown-viewmodel.mjs";
-import InputTextareaViewModel from "../../../module/components/input-textarea/input-textarea-viewmodel.mjs";
-import InputTextFieldViewModel from "../../../module/components/input-textfield/input-textfield-viewmodel.mjs";
 import { TEMPLATES } from "../../../module/templatePreloader.mjs";
+import { validateOrThrow } from "../../../module/utils/validation-utility.mjs";
 import SkillAbilityTableViewModel from "../skill-ability/skill-ability-table-viewmodel.mjs";
 import SkillViewModel from "./skill-viewmodel.mjs";
 
@@ -41,55 +37,42 @@ export default class SkillListItemViewModel extends SkillViewModel {
    */
   constructor(args = {}) {
     super(args);
+    validateOrThrow(args, ["item"]);
+    this.contextTemplate = args.contextTemplate ?? "skill-list-item";
 
     // Child view models. 
-    this.contextTemplate = "skill-list-item";
     const thiz = this;
     
-    this.vmTfName = new InputTextFieldViewModel({
+    this.vmTfName = this.createVmTextField({
       id: "vmTfName",
-      isEditable: thiz.isEditable,
       propertyOwner: thiz.item,
       propertyPath: "name",
       placeholder: "ambersteel.labels.name",
-      contextTemplate: thiz.contextTemplate,
-      parent: thiz,
     });
-    this.vmBtnSendToChat = new ButtonSendToChatViewModel({
+    this.vmBtnSendToChat = this.createVmBtnSendToChat({
       id: "vmBtnSendToChat",
       target: thiz.item,
-      parent: thiz,
     });
-    this.vmBtnDelete = new ButtonDeleteViewModel({
+    this.vmBtnDelete = this.createVmBtnDelete({
       id: "vmBtnDelete",
-      parent: thiz,
       target: thiz.item,
       withDialog: true,
     })
-    this.vmDdRelatedAttribute = new InputDropDownViewModel({
+    this.vmDdRelatedAttribute = this.createVmDropDown({
       id: "vmDdRelatedAttribute",
-      isEditable: thiz.isEditable,
       propertyOwner: thiz.item,
       propertyPath: "data.data.relatedAttribute",
-      contextTemplate: thiz.contextTemplate,
-      parent: thiz,
-      options=thiz.attributeOptions,
+      options: thiz.attributeOptions,
     });
-    this.vmTfCategory = new InputTextFieldViewModel({
+    this.vmTfCategory = this.createVmTextField({
       id: "vmTfCategory",
-      isEditable: thiz.isEditable,
       propertyOwner: thiz.item,
       propertyPath: "data.data.category",
-      contextTemplate: thiz.contextTemplate,
-      parent: thiz,
     });
-    this.vmTaDescription = new InputTextareaViewModel({
+    this.vmTaDescription = this.createVmTextArea({
       id: "vmTaDescription",
-      isEditable: thiz.isEditable,
-      propertyPath: "data.data.description",
       propertyOwner: thiz.item,
-      contextTemplate: thiz.contextTemplate,
-      parent: thiz,
+      propertyPath: "data.data.description",
       placeholder: "ambersteel.labels.description",
       allowResize: true,
     });

@@ -1,8 +1,5 @@
-import ButtonSendToChatViewModel from "../../../module/components/button-send-to-chat/button-send-to-chat-viewmodel.mjs";
-import InputDropDownViewModel from "../../../module/components/input-dropdown/input-dropdown-viewmodel.mjs";
-import InputTextareaViewModel from "../../../module/components/input-textarea/input-textarea-viewmodel.mjs";
-import InputTextFieldViewModel from "../../../module/components/input-textfield/input-textfield-viewmodel.mjs";
 import { TEMPLATES } from "../../../module/templatePreloader.mjs";
+import { validateOrThrow } from "../../../module/utils/validation-utility.mjs";
 import SkillAbilityTableViewModel from "../skill-ability/skill-ability-table-viewmodel.mjs";
 import SkillViewModel from "./skill-viewmodel.mjs";
 
@@ -40,34 +37,35 @@ export default class SkillItemSheetViewModel extends SkillViewModel {
    */
   constructor(args = {}) {
     super(args);
+    validateOrThrow(args, ["item"]);
     this.contextTemplate = args.contextTemplate ?? "skill-item-sheet";
 
     // Child view models. 
     const thiz = this;
     
-    this.vmTfName = this.createChildViewModelTextField({
+    this.vmTfName = this.createVmTextField({
       id: "vmTfName",
       propertyOwner: thiz.item,
       propertyPath: "name",
       placeholder: "ambersteel.labels.name",
     });
-    this.vmBtnSendToChat = this.createChildViewModelSendToChat({
+    this.vmBtnSendToChat = this.createVmBtnSendToChat({
       id: "vmBtnSendToChat",
       target: thiz.item,
     });
-    this.vmDdRelatedAttribute = this.createChildViewModelDropDown({
+    this.vmDdRelatedAttribute = this.createVmDropDown({
       id: "vmDdRelatedAttribute",
       propertyOwner: thiz.item,
       propertyPath: "data.data.relatedAttribute",
       options: thiz.attributeOptions,
     });
-    this.vmTfCategory = this.createChildViewModelTextField({
+    this.vmTfCategory = this.createVmTextField({
       id: "vmTfCategory",
       propertyOwner: thiz.item,
       propertyPath: "data.data.category",
       placeholder: "ambersteel.labels.category",
     });
-    this.vmTaDescription = this.createChildViewModelTextArea({
+    this.vmTaDescription = this.createVmTextArea({
       id: "vmTaDescription",
       propertyOwner: thiz.item,
       propertyPath: "data.data.description",

@@ -105,7 +105,7 @@ export default class SheetViewModel extends ViewModel {
    * @param {String | undefined} args.placeholder
    * @returns {InputTextFieldViewModel}
    */
-  createChildViewModelTextField(args = {}) {
+  createVmTextField(args = {}) {
     const thiz = this;
     validateOrThrow(args, ["propertyOwner", "propertyPath"]);
 
@@ -128,7 +128,7 @@ export default class SheetViewModel extends ViewModel {
    * @param {String | undefined} args.id
    * @returns {InputDropDownViewModel}
    */
-  createChildViewModelDropDown(args = {}) {
+  createVmDropDown(args = {}) {
     const thiz = this;
     validateOrThrow(args, ["propertyOwner", "propertyPath", "options"]);
 
@@ -153,7 +153,7 @@ export default class SheetViewModel extends ViewModel {
    * @param {Number | undefined} args.step
    * @returns {InputNumberSpinnerViewModel}
    */
-  createChildViewModelNumberSpinner(args = {}) {
+  createVmNumberSpinner(args = {}) {
     const thiz = this;
     validateOrThrow(args, ["propertyOwner", "propertyPath"]);
 
@@ -178,7 +178,7 @@ export default class SheetViewModel extends ViewModel {
    * @param {String | undefined} args.id
    * @returns {InputRadioButtonGroupViewModel}
    */
-  createChildViewModelRadioButtonGroup(args = {}) {
+  createVmRadioButtonGroup(args = {}) {
     const thiz = this;
     validateOrThrow(args, ["propertyOwner", "propertyPath", "options"]);
 
@@ -203,7 +203,7 @@ export default class SheetViewModel extends ViewModel {
    * @param {String | undefined} args.placeholder 
    * @returns {InputTextareaViewModel}
    */
-  createChildViewModelTextArea(args = {}) {
+  createVmTextArea(args = {}) {
     const thiz = this;
     validateOrThrow(args, ["propertyOwner", "propertyPath"]);
 
@@ -231,7 +231,7 @@ export default class SheetViewModel extends ViewModel {
    * @param {Object | String | undefined} args.creationData Data to pass to the item creation function. 
    * @returns {ButtonAddViewModel}
    */
-  createChildViewModelButtonAdd(args = {}) {
+  createVmBtnAdd(args = {}) {
     const thiz = this;
     validateOrThrow(args, ["target", "creationType"]);
 
@@ -257,7 +257,7 @@ export default class SheetViewModel extends ViewModel {
    * @param {String | undefined} args.propertyPath If not undefined, will try to delete by this property path. 
    * @returns {ButtonDeleteViewModel}
    */
-  createChildViewModelButtonDelete(args = {}) {
+  createVmBtnDelete(args = {}) {
     const thiz = this;
     validateOrThrow(args, ["target"]);
 
@@ -280,7 +280,7 @@ export default class SheetViewModel extends ViewModel {
    * @param {Any | undefined} args.callbackData Defines any data to pass to the completion callback. 
    * @returns {ButtonOpenSheetViewModel}
    */
-  createChildViewModelOpenSheet(args = {}) {
+  createVmBtnOpenSheet(args = {}) {
     const thiz = this;
     validateOrThrow(args, ["target"]);
 
@@ -305,7 +305,7 @@ export default class SheetViewModel extends ViewModel {
    * @param {Actor | undefined} args.actor Actor associated with the roll result. 
    * @returns {ButtonRollViewModel}
    */
-  createChildViewModelRoll(args = {}) {
+  createVmBtnRoll(args = {}) {
     const thiz = this;
     validateOrThrow(args, ["target", "propertyPath", "rollType"]);
 
@@ -333,7 +333,7 @@ export default class SheetViewModel extends ViewModel {
    * @param {Actor | undefined} args.actor Actor associated with the chat message. 
    * @returns {ButtonSendToChatViewModel}
    */
-  createChildViewModelSendToChat(args = {}) {
+  createVmBtnSendToChat(args = {}) {
     const thiz = this;
     validateOrThrow(args, ["target"]);
 
@@ -358,7 +358,7 @@ export default class SheetViewModel extends ViewModel {
    * @param {contextTypes} contextType
    * @returns {ButtonTakeItemViewModel}
    */
-  createChildViewModelTakeItem(args = {}) {
+  createVmBtnTakeItem(args = {}) {
     const thiz = this;
     validateOrThrow(args, ["target", "contextType"]);
 
@@ -384,7 +384,7 @@ export default class SheetViewModel extends ViewModel {
    * @param {Boolean | undefined} args.toggleSelf Optional. If true, the button will also toggle visibility on itself. 
    * @returns {ButtonToggleVisibilityViewModel}
    */
-  createChildViewModelToggleVisibility(args = {}) {
+  createVmBtnToggleVisibility(args = {}) {
     const thiz = this;
     validateOrThrow(args, ["visGroup"]);
 
@@ -406,18 +406,18 @@ export default class SheetViewModel extends ViewModel {
    * @override
    */
   dispose() {
-    this.createChildViewModelTextField = () => { throw ViewModel.DISPOSED_ACCESS_VIOLATION_EXCEPTION };
-    this.createChildViewModelDropDown = () => { throw ViewModel.DISPOSED_ACCESS_VIOLATION_EXCEPTION };
-    this.createChildViewModelNumberSpinner = () => { throw ViewModel.DISPOSED_ACCESS_VIOLATION_EXCEPTION };
-    this.createChildViewModelRadioButtonGroup = () => { throw ViewModel.DISPOSED_ACCESS_VIOLATION_EXCEPTION };
-    this.createChildViewModelTextArea = () => { throw ViewModel.DISPOSED_ACCESS_VIOLATION_EXCEPTION };
-    this.createChildViewModelButtonAdd = () => { throw ViewModel.DISPOSED_ACCESS_VIOLATION_EXCEPTION };
-    this.createChildViewModelButtonDelete = () => { throw ViewModel.DISPOSED_ACCESS_VIOLATION_EXCEPTION };
-    this.createChildViewModelOpenSheet = () => { throw ViewModel.DISPOSED_ACCESS_VIOLATION_EXCEPTION };
-    this.createChildViewModelRoll = () => { throw ViewModel.DISPOSED_ACCESS_VIOLATION_EXCEPTION };
-    this.createChildViewModelSendToChat = () => { throw ViewModel.DISPOSED_ACCESS_VIOLATION_EXCEPTION };
-    this.createChildViewModelTakeItem = () => { throw ViewModel.DISPOSED_ACCESS_VIOLATION_EXCEPTION };
-    this.createChildViewModelToggleVisibility = () => { throw ViewModel.DISPOSED_ACCESS_VIOLATION_EXCEPTION };
+    this.createVmTextField = () => { throw ViewModel.DISPOSED_ACCESS_VIOLATION_EXCEPTION };
+    this.createVmDropDown = () => { throw ViewModel.DISPOSED_ACCESS_VIOLATION_EXCEPTION };
+    this.createVmNumberSpinner = () => { throw ViewModel.DISPOSED_ACCESS_VIOLATION_EXCEPTION };
+    this.createVmRadioButtonGroup = () => { throw ViewModel.DISPOSED_ACCESS_VIOLATION_EXCEPTION };
+    this.createVmTextArea = () => { throw ViewModel.DISPOSED_ACCESS_VIOLATION_EXCEPTION };
+    this.createVmBtnAdd = () => { throw ViewModel.DISPOSED_ACCESS_VIOLATION_EXCEPTION };
+    this.createVmBtnDelete = () => { throw ViewModel.DISPOSED_ACCESS_VIOLATION_EXCEPTION };
+    this.createVmBtnOpenSheet = () => { throw ViewModel.DISPOSED_ACCESS_VIOLATION_EXCEPTION };
+    this.createVmBtnRoll = () => { throw ViewModel.DISPOSED_ACCESS_VIOLATION_EXCEPTION };
+    this.createVmBtnSendToChat = () => { throw ViewModel.DISPOSED_ACCESS_VIOLATION_EXCEPTION };
+    this.createVmBtnTakeItem = () => { throw ViewModel.DISPOSED_ACCESS_VIOLATION_EXCEPTION };
+    this.createVmBtnToggleVisibility = () => { throw ViewModel.DISPOSED_ACCESS_VIOLATION_EXCEPTION };
 
     super.dispose();
   }
