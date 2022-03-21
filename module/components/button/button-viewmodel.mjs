@@ -66,15 +66,15 @@ export default class ButtonViewModel extends ViewModel {
   get completionCallbackData() { return this._callbackData; }
 
   /**
-   * @param {String | undefined} args.id
+   * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
    * 
-   * @param {Object} args.target The target object to affect.  
-   * For example, could be an instance of {ActorSheet} or {ItemSheet}. 
-   * @param {Function | String | undefined} args.callback Defines an asynchronous callback that is invoked upon completion of the button's own callback. 
-   * @param {Any} args.callbackData Defines any data to pass to the completion callback. 
+   * @param {Object | undefined} args.target Optional. The target object to affect.  
+   * @param {Function | String | undefined} args.callback Optional. Defines an asynchronous callback that is invoked upon completion of the button's own callback. 
+   * @param {Any | undefined} args.callbackData Optional. Defines any data to pass to the completion callback. 
    */
   constructor(args = {}) {
     super(args);
+
     this._target = args.target;
     this.callback = this._getCallback(args.callback);
     this._callbackData = args.callbackData;

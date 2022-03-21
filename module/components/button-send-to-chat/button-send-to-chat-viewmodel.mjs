@@ -1,6 +1,7 @@
 import { TEMPLATES } from "../../templatePreloader.mjs";
 import * as ChatUtil from "../../utils/chat-utility.mjs";
 import * as PropUtil from "../../utils/property-utility.mjs";
+import { validateOrThrow } from "../../utils/validation-utility.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
 
 /**
@@ -58,17 +59,20 @@ export default class ButtonSendToChatViewModel extends ButtonViewModel {
   get actor() { return this._actor; }
 
   /**
-   * @param {String | undefined} args.id
-   * @param {Object} args.target The target object to affect.  
-   * @param {Function | undefined} args.callback Defines an asynchronous callback that is invoked upon completion of the button's own callback. 
-   * @param {Any} args.callbackData Defines any data to pass to the completion callback. 
+   * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
    * 
-   * @param {String | undefined} args.propertyPath Property path identifying a property to send to chat. 
-   * @param {String | undefined} args.chatTitle Title to display above the chat message. 
-   * @param {Actor | undefined} args.actor Actor associated with the chat message. 
+   * @param {Object} args.target The target object to affect. 
+   * @param {Function | String | undefined} args.callback Optional. Defines an asynchronous callback that is invoked upon completion of the button's own callback. 
+   * @param {Any | undefined} args.callbackData Optional. Defines any data to pass to the completion callback. 
+   * 
+   * @param {String | undefined} args.propertyPath Optional. Property path identifying a property to send to chat. 
+   * @param {String | undefined} args.chatTitle Optional. Title to display above the chat message. 
+   * @param {Actor | undefined} args.actor Optional. Actor associated with the chat message. 
    */
   constructor(args = {}) {
     super(args);
+    validateOrThrow(args, ["target"]);
+
     this._propertyPath = args.propertyPath;
     this._chatTitle = args.chatTitle ?? "";
     this._actor = args.actor;

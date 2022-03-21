@@ -4,6 +4,7 @@ import * as DialogUtil from "../../utils/dialog-utility.mjs";
 import * as ContentUtil from "../../utils/content-utility.mjs";
 import { updateProperty } from "../../utils/document-update-utility.mjs";
 import ChoiceOption from "../../dto/choice-option.mjs";
+import { validateOrThrow } from "../../utils/validation-utility.mjs";
 
 export const contextTypes = {
   chatMessage: "chat-message",
@@ -25,21 +26,34 @@ export const contextTypes = {
  * 
  * --- Own properties
  * 
- * @property {contextTypes} contextType
+ * @property {contextTypes} contextType Represents the context of where this button view model is embedded. 
+ * Depending on this value, the behavior of the button changes. 
+ * 
+ * In the context "chat-message", the item in question will be moved to the current player's actor, or an actor chosen by a GM. 
+ * In the context "list-item", the item in question will be moved to its owning actor's item grid, if possible. 
+ * In the context "item-sheet", a copy of the item in question will be added to the current player's actor, or an actor chosen by a GM. 
  */
 export default class ButtonTakeItemViewModel extends ButtonViewModel {
   static get TEMPLATE() { return TEMPLATES.COMPONENT_BUTTON_TAKE_ITEM; }
 
   /**
-   * @param {String | undefined} args.id
-   * @param {Object} args.target The target object to affect.  
-   * @param {Function | undefined} args.callback Defines an asynchronous callback that is invoked upon completion of the button's own callback. 
-   * @param {Any} args.callbackData Defines any data to pass to the completion callback. 
+   * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
    * 
-   * @param {contextTypes} contextType
+   * @param {Object} args.target The target object to affect. 
+   * @param {Function | String | undefined} args.callback Optional. Defines an asynchronous callback that is invoked upon completion of the button's own callback. 
+   * @param {Any | undefined} args.callbackData Optional. Defines any data to pass to the completion callback. 
+   * 
+   * @param {contextTypes} contextType Represents the context of where this button view model is embedded. 
+   * Depending on this value, the behavior of the button changes. 
+   * 
+   * In the context "chat-message", the item in question will be moved to the current player's actor, or an actor chosen by a GM. 
+   * In the context "list-item", the item in question will be moved to its owning actor's item grid, if possible. 
+   * In the context "item-sheet", a copy of the item in question will be added to the current player's actor, or an actor chosen by a GM. 
    */
   constructor(args = {}) {
     super(args);
+    validateOrThrow(args, ["target", "contextType"]);
+
     this.contextType = args.contextType;
   }
 

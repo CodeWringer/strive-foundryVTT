@@ -2,6 +2,7 @@ import { TEMPLATES } from "../../templatePreloader.mjs";
 import * as ChatUtil from "../../utils/chat-utility.mjs";
 import * as DiceUtil from "../../utils/dice-utility.mjs";
 import * as PropUtil from "../../utils/property-utility.mjs";
+import { validateOrThrow } from "../../utils/validation-utility.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
 
 /**
@@ -84,18 +85,21 @@ export default class ButtonRollViewModel extends ButtonViewModel {
   get lastRollResult() { return this._lastRollResult; }
 
   /**
-   * @param {String | undefined} args.id
-   * @param {Object} args.target The target object to affect.  
-   * @param {Function | undefined} args.callback Defines an asynchronous callback that is invoked upon completion of the button's own callback. 
-   * @param {Any} args.callbackData Defines any data to pass to the completion callback. 
+   * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
+   * 
+   * @param {Object} args.target The target object to affect. 
+   * @param {Function | String | undefined} args.callback Optional. Defines an asynchronous callback that is invoked upon completion of the button's own callback. 
+   * @param {Any | undefined} args.callbackData Optional. Defines any data to pass to the completion callback. 
    * 
    * @param {String} args.propertyPath Property path identifying a property that contains a roll-formula. 
    * @param {CONFIG.rollTypes} args.rollType Determines the kind of roll to try and make. 
-   * @param {String | undefined} args.chatTitle Title to display above the roll result in the chat message. 
-   * @param {Actor | undefined} args.actor Actor associated with the roll result. 
+   * @param {String | undefined} args.chatTitle Optional Title to display above the roll result in the chat message. 
+   * @param {Actor | undefined} args.actor Optional. Actor associated with the roll result. 
    */
   constructor(args = {}) {
     super(args);
+    validateOrThrow(args, ["target", "propertyPath", "rollType"]);
+
     this._propertyPath = args.propertyPath;
     this._rollType = args.rollType;
     this._chatTitle = args.chatTitle ?? "";

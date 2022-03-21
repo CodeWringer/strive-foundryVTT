@@ -1,6 +1,7 @@
 import { TEMPLATES } from "../../templatePreloader.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
 import { showConfirmationDialog } from "../../utils/dialog-utility.mjs";
+import { validateOrThrow } from "../../utils/validation-utility.mjs";
 
 /**
  * --- Inherited from ViewModel
@@ -24,16 +25,19 @@ export default class ButtonDeleteViewModel extends ButtonViewModel {
   static get TEMPLATE() { return TEMPLATES.COMPONENT_BUTTON_DELETE; }
   
   /**
-   * @param {String | undefined} args.id
-   * @param {Object} args.target The target object to affect.  
-   * @param {Function | undefined} args.callback Defines an asynchronous callback that is invoked upon completion of the button's own callback. 
-   * @param {Any} args.callbackData Defines any data to pass to the completion callback. 
+   * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
    * 
-   * @param {Boolean | undefined} args.withDialog If true, will prompt the user to make a selection with a dialog. 
-   * @param {String | undefined} args.propertyPath If not undefined, will try to delete by this property path. 
+   * @param {Object} args.target The target object to affect. 
+   * @param {Function | String | undefined} args.callback Optional. Defines an asynchronous callback that is invoked upon completion of the button's own callback. 
+   * @param {Any | undefined} args.callbackData Optional. Defines any data to pass to the completion callback. 
+   * 
+   * @param {Boolean | undefined} args.withDialog Optional. If true, will prompt the user to make a selection with a dialog. 
+   * @param {String | undefined} args.propertyPath Optional. If not undefined, will try to delete by this property path. 
    */
   constructor(args = {}) {
     super(args);
+    validateOrThrow(args, ["target"]);
+
     this.withDialog = args.withDialog ?? false;
     this.propertyPath = args.propertyPath;
   }

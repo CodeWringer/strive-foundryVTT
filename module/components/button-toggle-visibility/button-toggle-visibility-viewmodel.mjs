@@ -1,5 +1,6 @@
 import { TEMPLATES } from "../../templatePreloader.mjs";
 import { createUUID } from "../../utils/uuid-utility.mjs";
+import { validateOrThrow } from "../../utils/validation-utility.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
 
 /**
@@ -47,18 +48,21 @@ export default class ButtonToggleVisibilityViewModel extends ButtonViewModel {
   get toggleSelf() { return this._toggleSelf; }
 
   /**
-   * @param {String | undefined} args.id
-   * @param {Object | undefined} args.target The target object to affect.  
-   * @param {Function | undefined} args.callback Defines an asynchronous callback that is invoked upon completion of the button's own callback. 
-   * @param {Any} args.callbackData Defines any data to pass to the completion callback. 
+   * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
    * 
-   * @param {String | undefined} args.visGroup Id or name to group the visiblity of elements by. 
+   * @param {Object} args.target The target object to affect. 
+   * @param {Function | String | undefined} args.callback Optional. Defines an asynchronous callback that is invoked upon completion of the button's own callback. 
+   * @param {Any | undefined} args.callbackData Optional. Defines any data to pass to the completion callback. 
+   * 
+   * @param {String} args.visGroup Id or name to group the visiblity of elements by. 
    * Expects this id to be defined as a data-attribute. 
-   * E. g. '<div data-vis-group="1A2b3F4E">My content</div>'
-   * @param {Boolean | undefined} args.toggleSelf If true, the button will also toggle visibility on itself. 
+   * E. g. '\<div data-vis-group="1A2b3F4E"\>My content\</div\>'
+   * @param {Boolean | undefined} args.toggleSelf Optional. If true, the button will also toggle visibility on itself. 
    */
   constructor(args = {}) {
     super(args);
+    validateOrThrow(args, ["visGroup"]);
+
     this._visGroup = args.visGroup ?? createUUID();
     this._toggleSelf = args.toggleSelf ?? false;
   }
