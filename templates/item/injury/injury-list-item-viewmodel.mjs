@@ -42,6 +42,10 @@ export default class InjuryListItemViewModel extends SheetViewModel {
       placeholder: "ambersteel.labels.name",
       options: thiz.stateOptions,
     });
+    this.vmBtnSendToChat = this.createVmBtnSendToChat({
+      id: "vmBtnSendToChat",
+      target: thiz.item,
+    });
     this.vmBtnDelete = this.createVmBtnDelete({
       id: "vmBtnDelete",
       target: thiz.item,

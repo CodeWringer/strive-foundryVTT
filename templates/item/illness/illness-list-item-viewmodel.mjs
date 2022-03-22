@@ -34,43 +34,43 @@ export default class IllnessListItemViewModel extends SheetViewModel {
     const thiz = this;
 
     this.vmTfName = this.createVmTextField({
-      id: "tf-name",
+      id: "vmTfName",
       propertyOwner: thiz.item,
       propertyPath: "name",
       placeholder: "ambersteel.labels.name",
     });
     this.vmRbgState = this.createVmRadioButtonGroup({
-      id: "rbg-state",
+      id: "vmRbgState",
       propertyOwner: thiz.item,
       propertyPath: "data.data.state",
       options: thiz.stateOptions,
     })
     this.vmBtnSendToChat = this.createVmBtnSendToChat({
-      id: "btn-send-to-chat",
+      id: "vmBtnSendToChat",
       target: thiz.item,
     });
     this.vmBtnDelete = this.createVmBtnDelete({
-      id: "btn-delete",
+      id: "vmBtnDelete",
       target: thiz.item,
       withDialog: true,
     })
     this.vmTfDuration = this.createVmTextField({
-      id: "tf-duration",
+      id: "vmTfDuration",
       propertyOwner: thiz.item,
       propertyPath: "data.data.duration",
     });
     this.vmTfTreatmentSkill = this.createVmTextField({
-      id: "tf-treatment-skill",
+      id: "vmTfTreatmentSkill",
       propertyOwner: thiz.item,
       propertyPath: "data.data.treatmentSkill",
     });
     this.vmTfTreatment = this.createVmTextField({
-      id: "tf-treatment",
+      id: "vmTfTreatment",
       propertyOwner: thiz.item,
       propertyPath: "data.data.treatment",
     });
     this.vmTaDescription = this.createVmTextArea({
-      id: "ta-description",
+      id: "vmTaDescription",
       propertyPath: "data.data.description",
       propertyOwner: thiz.item,
       placeholder: "ambersteel.labels.description",
