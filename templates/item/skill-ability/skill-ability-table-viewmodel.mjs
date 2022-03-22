@@ -135,6 +135,7 @@ export default class SkillAbilityTableViewModel extends SheetViewModel {
     this.vmBtnToggleVisibilityExpand = this.createVmBtnToggleVisibility({
       id: "vmBtnToggleVisibilityExpand",
       target: thiz.item,
+      isEditable: true,
       visGroup: thiz.visGroupId,
       toggleSelf: true,
       callback: thiz._toggleSkillAbilitiesInitiallyVisible.bind(thiz),
@@ -142,6 +143,7 @@ export default class SkillAbilityTableViewModel extends SheetViewModel {
     this.vmBtnToggleVisibilityCollapse = this.createVmBtnToggleVisibility({
       id: "vmBtnToggleVisibilityCollapse",
       target: thiz.item,
+      isEditable: true,
       visGroup: thiz.visGroupId,
       toggleSelf: true,
       callback: thiz._toggleSkillAbilitiesInitiallyVisible.bind(thiz),
