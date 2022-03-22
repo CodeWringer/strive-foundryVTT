@@ -64,6 +64,7 @@ export default class ButtonSendToChatViewModel extends ButtonViewModel {
    * @param {Object} args.target The target object to affect. 
    * @param {Function | String | undefined} args.callback Optional. Defines an asynchronous callback that is invoked upon completion of the button's own callback. 
    * @param {Any | undefined} args.callbackData Optional. Defines any data to pass to the completion callback. 
+   * @param {Boolean | undefined} args.isEditable Optional. If true, will be interactible. 
    * 
    * @param {String | undefined} args.propertyPath Optional. Property path identifying a property to send to chat. 
    * @param {String | undefined} args.chatTitle Optional. Title to display above the chat message. 

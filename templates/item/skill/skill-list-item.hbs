@@ -5,9 +5,7 @@ viewModel: {SkillListItemViewModel}
 <div class="flex flex-row">
   <div class="flex flex-grow">
     {{!-- Send to chat --}}
-    {{#if viewModel.isSendable}}
-      {{> buttonSendToChat viewModel=viewModel.vmBtnSendToChat }}
-    {{/if}}
+    {{> buttonSendToChat viewModel=viewModel.vmBtnSendToChat }}
     {{!-- Name --}}
     <span class="width-min-xl">
       {{> inputLabel text="ambersteel.labels.injury"}}
@@ -17,9 +15,7 @@ viewModel: {SkillListItemViewModel}
     </span>
   </div>
   {{!-- Delete --}}
-  {{#if viewModel.isEditable}}
-    {{> buttonDelete viewModel=viewModel.vmBtnDelete }}
-  {{/if}}
+  {{> buttonDelete viewModel=viewModel.vmBtnDelete }}
 </div>
 {{!-- Row 2 --}}
 <div class="flex flex-row">
@@ -49,6 +45,4 @@ viewModel: {SkillListItemViewModel}
 </div>
 {{!-- Row 4 --}}
 {{!-- Skill Abilites --}}
-{{#if viewModel.isSkillAbilityListVisible }}
-  {{> "systems/ambersteel/templates/item/skill-ability/skill-ability-table.hbs" viewModel=viewModel.vmSkillAbilityTable }}
-{{/if}}
+{{> "systems/ambersteel/templates/item/skill-ability/skill-ability-table.hbs" viewModel=viewModel.vmSkillAbilityTable cssClass=(ifThenElse viewModel.isSkillAbilityListVisible "" "hidden") }}

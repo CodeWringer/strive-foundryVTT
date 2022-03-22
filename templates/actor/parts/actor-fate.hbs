@@ -34,14 +34,12 @@ viewModel: {ActorFateViewModel}
       {{> "systems/ambersteel/templates/item/fate-card/fate-card.hbs" viewModel=cardViewModel }}
     </div>
     {{/each}}
-    {{#if viewModel.isEditable}}
-      {{#times viewModel.remainingSlots}}
-        <div class="fate-card-actor-container">
-          <div class="fate-card">
-            {{> buttonAdd viewModel=../viewModel.vmBtnAddFateCard fill=true cssClass="font-size-xxl" }}
-          </div>
+    {{#times viewModel.remainingSlots}}
+      <div class="fate-card-actor-container">
+        <div class="fate-card">
+          {{> buttonAdd viewModel=../viewModel.vmBtnAddFateCard fill=true cssClass="font-size-xxl" }}
         </div>
-      {{/times}}
-    {{/if}}
+      </div>
+    {{/times}}
   </div>
 </section>

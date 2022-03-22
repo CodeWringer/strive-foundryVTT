@@ -353,6 +353,7 @@ export class ItemGridView {
 
     this._stage.on("pointermove", (event) => {
       if (this._captureCursor !== true) return;
+      if (this._isEditable !== true) return;
       const coords = { x: event.data.global.x, y: event.data.global.y };
 
       if (this._dragItem === undefined) {
@@ -476,10 +477,6 @@ export class ItemGridView {
     if (value !== true) {
       this.hoverItem = undefined;
       this.hoverButton = undefined;
-    }
-
-    for (const itemOnGrid of this._itemsOnGrid) {
-      itemOnGrid._setEditability(value);
     }
   }
 }

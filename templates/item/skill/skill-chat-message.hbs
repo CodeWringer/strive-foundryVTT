@@ -37,7 +37,5 @@ viewModel: {SkillChatMessageViewModel}
     {{viewModel.item.data.data.description}}
   </div>
   {{!-- Skill Abilites --}}
-  {{#if viewModel.hasAbilities }}
-    {{> "systems/ambersteel/templates/item/skill-ability/skill-ability-table.hbs" viewModel=viewModel.vmSkillAbilityTable }}
-  {{/if}}
+  {{> "systems/ambersteel/templates/item/skill-ability/skill-ability-table.hbs" viewModel=viewModel.vmSkillAbilityTable cssClass=(ifThenElse viewModel.hasAbilities "" "hidden") }}
 </section>

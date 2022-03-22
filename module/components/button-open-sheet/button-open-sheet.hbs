@@ -3,7 +3,7 @@ viewModel: {ButtonOpenSheetViewModel}
 cssClass: {String | undefined}
 fill: {Boolean | undefined}
 --}}
-<span class="component-button-open-sheet {{#if fill}}fill-button-light{{else}}square-button-light{{/if}} {{#if cssClass}}{{cssClass}}{{else}}font-size-default{{/if}}">
+<span class="component-button-open-sheet {{#if fill}}fill-button-light{{else}}square-button-light{{/if}} {{#if (not viewModel.isEditable)}}disabled{{/if}} {{#if cssClass}}{{cssClass}}{{else}}font-size-default{{/if}}">
   <a class="custom-system-button pad-sm button flex flex-center" 
     title="{{localize ambersteel.labels.openSheet}}"
     id="{{viewModel.id}}"

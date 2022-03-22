@@ -53,6 +53,7 @@ export default class ButtonToggleVisibilityViewModel extends ButtonViewModel {
    * @param {Object} args.target The target object to affect. 
    * @param {Function | String | undefined} args.callback Optional. Defines an asynchronous callback that is invoked upon completion of the button's own callback. 
    * @param {Any | undefined} args.callbackData Optional. Defines any data to pass to the completion callback. 
+   * @param {Boolean | undefined} args.isEditable Optional. If true, will be interactible. 
    * 
    * @param {String} args.visGroup Id or name to group the visiblity of elements by. 
    * Expects this id to be defined as a data-attribute. 
@@ -73,6 +74,8 @@ export default class ButtonToggleVisibilityViewModel extends ButtonViewModel {
    * @async
    */
   async onClick(html, isOwner, isEditable) {
+    if (isEditable !== true) return;
+
     const elements = document.querySelectorAll("[data-vis-group='" + this._visGroup + "']");
 
     for(const element of elements) {

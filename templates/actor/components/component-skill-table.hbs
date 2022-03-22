@@ -5,15 +5,9 @@ viewModel: {SkillTableViewModel}
     <table class="skill-table">
         <tbody>
             <tr class="fancy-font header-row">
-                {{#if viewModel.isEditable}}
-                    <th class="skill-column-roll"></th>
-                {{/if}}
-                {{#if viewModel.isSendable}}
-                    <th class="skill-column-roll"></th>
-                {{/if}}
-                {{#if viewModel.isEditable}}
-                    <th class="skill-column-roll"></th>
-                {{/if}}
+                <th class="skill-column-roll"></th>
+                <th class="skill-column-roll"></th>
+                <th class="skill-column-roll"></th>
                 <th class="skill-column-name">
                     {{#if viewModel.isLearningSkillsTable}}
                         {{localize "ambersteel.labels.learningSkill"}}
@@ -36,27 +30,19 @@ viewModel: {SkillTableViewModel}
                 <th class="skill-column-failures">
                     {{localize "ambersteel.labels.failureAbbreviation"}}
                 </th>
-                {{#if viewModel.isEditable}}
-                    <th class="skill-column-delete"></th>
-                {{/if}}
+                <th class="skill-column-delete"></th>
             </tr>
             {{#each viewModel.skillsViewModels as |vm key|}}
                 <tr class="item skill-item" data-item-id="{{vm.skill.data.id}}">
-                    {{#if ../viewModel.isEditable}}
-                        <td class="skill-column-roll">
-                            {{> buttonRoll viewModel=vm.vmBtnRoll }}
-                        </td>
-                    {{/if}}
-                    {{#if ../viewModel.isSendable}}
-                        <td>
-                            {{> buttonSendToChat viewModel=vm.vmBtnSendToChat }}
-                        </td>
-                    {{/if}}
-                    {{#if ../viewModel.isEditable}}
-                        <td>
-                            {{> buttonOpenSheet viewModel=vm.vmBtnOpenSheet }}
-                        </td>
-                    {{/if}}
+                    <td class="skill-column-roll">
+                        {{> buttonRoll viewModel=vm.vmBtnRoll }}
+                    </td>
+                    <td>
+                        {{> buttonSendToChat viewModel=vm.vmBtnSendToChat }}
+                    </td>
+                    <td>
+                        {{> buttonOpenSheet viewModel=vm.vmBtnOpenSheet }}
+                    </td>
                     <td class="fancy-font flex skill-column-name">
                         {{> inputTextField viewModel=vm.vmTfName }}
                     </td>
@@ -75,11 +61,9 @@ viewModel: {SkillTableViewModel}
                     <td class="skill-column-failures">
                         {{> inputNumberSpinner viewModel=vm.vmNsFailures }}
                     </td>
-                    {{#if ../viewModel.isEditable}}
-                        <td class="skill-column-delete">
-                            {{> buttonDelete viewModel=vm.vmBtnDelete }}
-                        </td>
-                    {{/if}}
+                    <td class="skill-column-delete">
+                        {{> buttonDelete viewModel=vm.vmBtnDelete }}
+                    </td>
                 </tr>
                 <tr>
                     <td style="display: table-cell;" colspan="100">
@@ -87,18 +71,16 @@ viewModel: {SkillTableViewModel}
                     </td>
                 </tr>
             {{/each}}
-            {{#if viewModel.isEditable}}
-                <tr>
-                    <td style="display: table-cell;" colspan="100">
-                        <div class="flex">
-                            <span class="flex-grow"></span>
-                            <span class="width-sm">
-                                {{> buttonAdd viewModel=viewModel.vmBtnAddSkill }}
-                            </span>
-                        </div>
-                    </td>
-                </tr>
-            {{/if}}
+            <tr>
+                <td style="display: table-cell;" colspan="100">
+                    <div class="flex">
+                        <span class="flex-grow"></span>
+                        <span class="width-sm">
+                            {{> buttonAdd viewModel=viewModel.vmBtnAddSkill }}
+                        </span>
+                    </div>
+                </td>
+            </tr>
         </tbody>
     </table>
 </div>

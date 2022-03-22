@@ -42,6 +42,7 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
    * @param {Object} args.target The target object to affect. 
    * @param {Function | String | undefined} args.callback Optional. Defines an asynchronous callback that is invoked upon completion of the button's own callback. 
    * @param {Any | undefined} args.callbackData Optional. Defines any data to pass to the completion callback. 
+   * @param {Boolean | undefined} args.isEditable Optional. If true, will be interactible. 
    * 
    * @param {contextTypes} contextType Represents the context of where this button view model is embedded. 
    * Depending on this value, the behavior of the button changes. 
@@ -65,6 +66,8 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
    * @throws {Error} NullPointerException - Thrown, if the item could not be found/wasn't defined. 
    */
   async onClick(html, isOwner, isEditable) {
+    if (isEditable !== true) return;
+
     let item = this.target;
     if (typeof(this.target) === "String") { // Item id provided. 
       item = ContentUtil.findItem(this.target);

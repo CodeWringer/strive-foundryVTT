@@ -19,6 +19,7 @@ export const SELECTOR_BUTTON = "custom-system-button";
  * @property {Object} target The target object to affect.  
  * @property {Function} callback An asynchronous callback that is invoked upon completion of the button's own callback. 
  * @property {Any} callbackData Any data to pass to the completion callback. 
+ * @property {Boolean} isEditable If true, is interactible. 
  */
 export default class ButtonViewModel extends ViewModel {
   /** @override */
@@ -71,6 +72,7 @@ export default class ButtonViewModel extends ViewModel {
    * @param {Object | undefined} args.target Optional. The target object to affect.  
    * @param {Function | String | undefined} args.callback Optional. Defines an asynchronous callback that is invoked upon completion of the button's own callback. 
    * @param {Any | undefined} args.callbackData Optional. Defines any data to pass to the completion callback. 
+   * @param {Boolean | undefined} args.isEditable Optional. If true, will be interactible. 
    */
   constructor(args = {}) {
     super(args);
@@ -78,6 +80,7 @@ export default class ButtonViewModel extends ViewModel {
     this._target = args.target;
     this.callback = this._getCallback(args.callback);
     this._callbackData = args.callbackData;
+    this.isEditable = args.isEditable ?? false;
   }
 
   /**
@@ -103,7 +106,7 @@ export default class ButtonViewModel extends ViewModel {
       throw new Error(`NullPointerException: Failed to get input element with id '${this.id}'`);
     }
 
-    this.element.click(this._onClick.bind(this, html, isOwner, isEditable));
+    this.element.click(this._onClick.bind(this, html, isOwner, this.isEditable));
   }
 
   /**

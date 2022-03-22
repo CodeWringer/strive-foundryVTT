@@ -739,6 +739,29 @@ nav#nav-sheet-tabs.sheet-tabs > a.item.active {
   height: 100%;
 }
 
+.disabled a.custom-system-button {
+  cursor: default;
+  background-color: unset;
+  color: black;
+  opacity: 50%;
+  text-shadow: unset;
+}
+
+.disabled a.custom-system-button:hover {
+  -webkit-filter: unset;
+  filter: unset;
+}
+
+.disabled a.custom-system-button i.ambersteel-icon {
+  -webkit-filter: opacity(50);
+  filter: opacity(50);
+}
+
+.disabled a.custom-system-button i.ambersteel-icon:hover {
+  -webkit-filter: unset;
+  filter: unset;
+}
+
 textarea {
   font-size: 1rem;
   font-family: "Roboto", sans-serif;

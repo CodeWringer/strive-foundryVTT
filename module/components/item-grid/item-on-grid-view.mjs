@@ -391,22 +391,13 @@ export class ItemOnGridView {
   }
 
   /**
-   * Sets the editability (or read-only mode) of the item grid. 
-   * @param {Boolean} value If true, the item grid will be editable. 
+   * @param {Boolean} value Sets the editability. 
    * @private
    */
   _setEditability(value) {
-    if (this._buttonDelete.requiresEditPermission === true) {
-      this._buttonDelete.visible = value;
-    }
-    if (this._buttonMoveItemToProperty.requiresEditPermission === true) {
-      this._buttonMoveItemToProperty.visible = value;
-    }
-    if (this._buttonOpenSheet.requiresEditPermission === true) {
-      this._buttonOpenSheet.visible = value;
-    }
-    if (this._buttonSendToChat.requiresEditPermission === true) {
-      this._buttonSendToChat.visible = value;
-    }
+    this._buttonSendToChat.disabled = !value;
+    this._buttonOpenSheet.disabled = !value;
+    this._buttonMoveItemToProperty.disabled = !value;
+    this._buttonDelete.disabled = !value;
   }
 }

@@ -14,17 +14,15 @@ viewModel: {SkillAbilityTableViewModel}
         {{/if}}
       </li>
     {{/each}}
-    {{#if viewModel.isEditable}}
-      <li class="ambersteel-list-row ambersteel-list-footer">
-        <div class="fill flex flex-row">
-          <span class="flex-grow"></span>
-          {{!-- Add skill ability --}}
-          <span class="width-sm">
-            {{> buttonAdd viewModel=viewModel.vmBtnAdd }}
-          </span>
-        </div>
-      </li>
-    {{/if}}
+    <li class="ambersteel-list-row ambersteel-list-footer {{#if (not viewModel.isEditable)}}hidden{{/if}}">
+      <div class="fill flex flex-row">
+        <span class="flex-grow"></span>
+        {{!-- Add skill ability --}}
+        <span class="width-sm">
+          {{> buttonAdd viewModel=viewModel.vmBtnAdd }}
+        </span>
+      </div>
+    </li>
   </ol>
   <div class="line-height">
     {{#> buttonToggleVisibility viewModel=viewModel.vmBtnToggleVisibilityExpand fill=true cssClass=(ifThenElse viewModel.skillAbilitiesInitiallyVisible "hidden" "") }}

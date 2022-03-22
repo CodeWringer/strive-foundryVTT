@@ -26,12 +26,35 @@ export class Button extends Containable {
    * @type {Boolean}
    * @private
    */
+  _disabled = false;
+  /**
+   * @type {Boolean}
+   */
+  get disabled() { return this._disabled; }
+  /**
+   * @param {Boolean} value
+   */
+  set disabled(value) {
+    this._disabled = value;
+    
+    if (value === true) {
+      this.showHover = false;
+      this._spriteIcon.tint = 0x7F7F7F;
+    } else {
+      this._spriteIcon.tint = 0x000000;
+    }
+  }
+
+  /**
+   * @type {Boolean}
+   * @private
+   */
   _showHover = false;
   get showHover() { return this._showHover; }
   set showHover(value) {
     if (value === this._showHover) return;
 
-    if (value === true) {
+    if (value === true && this.disabled !== true) {
       this._wrapped.addChildAt(this._spriteHover, 0);
     } else {
       this._wrapped.removeChild(this._spriteHover);

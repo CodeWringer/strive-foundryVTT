@@ -9,11 +9,9 @@ viewModel: {InjuryItemSheetViewModel}
         <h1 class="header-name">
           {{> inputTextField viewModel=viewModel.vmTfName }}
         </h1>
-        {{#if viewModel.isSendable}}
-          <div class="flex flex-center">
-            {{> buttonSendToChat viewModel=viewModel.vmBtnSendToChat }}
-          </div>
-        {{/if}}
+        <div class="flex flex-center">
+          {{> buttonSendToChat viewModel=viewModel.vmBtnSendToChat }}
+        </div>
       </div>
     </div>
   </header>

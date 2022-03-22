@@ -105,6 +105,27 @@ nav#nav-sheet-tabs.sheet-tabs {
   }
 }
 
+.disabled {
+  a.custom-system-button {
+    cursor: default;
+    background-color: unset;
+    color: black;
+    opacity: 50%;
+    text-shadow: unset;
+  
+    &:hover {
+      filter: unset;
+    }
+  
+    i.ambersteel-icon {
+      filter: opacity(50);
+      &:hover {
+          filter: unset;
+      }
+    }
+  }
+}
+
 // Textarea styles
 textarea {
   font-size: 1rem;

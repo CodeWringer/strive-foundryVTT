@@ -5,9 +5,7 @@ viewModel: {AttributeTableViewModel}
     <table class="attribute-table">
         <tbody>
             <tr class="fancy-font header-row">
-                {{#if viewModel.isEditable}}
-                    <th class="attribute-column-roll"></th>
-                {{/if}}
+                <th class="attribute-column-roll"></th>
                 <th class="attribute-column-name">
                     {{localize viewModel.localizableAttributeGroupName}}
                 </th>
@@ -27,11 +25,9 @@ viewModel: {AttributeTableViewModel}
             </tr>
             {{#each viewModel.attributeViewModels as |vm index|}}
             <tr class="item attribute-item" data-att-group-name="{{../viewModel.attributeGroupName}}" data-att-name="{{vm.attributeName}}">
-                {{#if ../viewModel.isEditable}}
-                    <td class="attribute-column-roll">
-                        {{> buttonRoll viewModel=vm.vmBtnRoll }}
-                    </td>
-                {{/if}}
+                <td class="attribute-column-roll">
+                    {{> buttonRoll viewModel=vm.vmBtnRoll }}
+                </td>
                 <td class="attribute-column-name flex fancy-font">
                     {{localize vm.localizableName}}
                 </td>

@@ -27,6 +27,7 @@ export default class ButtonOpenSheetViewModel extends ButtonViewModel {
    * @param {Object} args.target The target object to affect. 
    * @param {Function | String | undefined} args.callback Optional. Defines an asynchronous callback that is invoked upon completion of the button's own callback. 
    * @param {Any | undefined} args.callbackData Optional. Defines any data to pass to the completion callback. 
+   * @param {Boolean | undefined} args.isEditable Optional. If true, will be interactible. 
    */
   constructor(args = {}) {
     super(args);

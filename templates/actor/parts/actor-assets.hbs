@@ -37,16 +37,14 @@ viewModel: {ActorAssetsViewModel}
         {{> "systems/ambersteel/templates/item/item/item-list-item.hbs" viewModel=vm }}
       </li>
     {{/each}}
-    {{#if isEditable}}
-      <li class="ambersteel-list-row ambersteel-list-footer">
-        <div class="fill flex flex-row">
-          <span class="flex-grow"></span>
-          {{!-- Add property --}}
-          <span class="width-sm">
-            {{> buttonAdd viewModel=viewModel.vmBtnAddItem }}
-          </span>
-        </div>
-      </li>
-    {{/if}}
+    <li class="ambersteel-list-row ambersteel-list-footer">
+      <div class="fill flex flex-row">
+        <span class="flex-grow"></span>
+        {{!-- Add property --}}
+        <span class="width-sm">
+          {{> buttonAdd viewModel=viewModel.vmBtnAddItem }}
+        </span>
+      </div>
+    </li>
   </ol>
 </section>

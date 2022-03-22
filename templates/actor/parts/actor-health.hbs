@@ -78,17 +78,15 @@ viewModel: {ActorHealthViewModel}
         {{> "systems/ambersteel/templates/item/injury/injury-list-item.hbs" viewModel=injuryViewModel }}
       </li>
     {{/each}}
-    {{#if viewModel.isEditable}}
-      <li class="ambersteel-list-row ambersteel-list-footer">
-        <div class="fill flex flex-row">
-          <span class="flex-grow"></span>
-          {{!-- Add injury --}}
-          <span class="width-sm">
-            {{> buttonAdd viewModel=viewModel.vmBtnAddInjury }}
-          </span>
-        </div>
-      </li>
-    {{/if}}
+    <li class="ambersteel-list-row ambersteel-list-footer">
+      <div class="fill flex flex-row">
+        <span class="flex-grow"></span>
+        {{!-- Add injury --}}
+        <span class="width-sm">
+          {{> buttonAdd viewModel=viewModel.vmBtnAddInjury }}
+        </span>
+      </div>
+    </li>
   </ol>
   {{!-- Illnesses --}}
   <h2>{{localize "ambersteel.labels.illnesses"}}</h2>
@@ -114,16 +112,14 @@ viewModel: {ActorHealthViewModel}
         {{> "systems/ambersteel/templates/item/illness/illness-list-item.hbs" viewModel=illnessViewModel }}
       </li>
     {{/each}}
-    {{#if viewModel.isEditable}}
-      <li class="ambersteel-list-row ambersteel-list-footer">
-        <div class="fill flex flex-row">
-          <span class="flex-grow"></span>
-          {{!-- Add illness --}}
-          <span class="width-sm">
-            {{> buttonAdd viewModel=viewModel.vmBtnAddIllness }}
-          </span>
-        </div>
-      </li>
-    {{/if}}
+    <li class="ambersteel-list-row ambersteel-list-footer">
+      <div class="fill flex flex-row">
+        <span class="flex-grow"></span>
+        {{!-- Add illness --}}
+        <span class="width-sm">
+          {{> buttonAdd viewModel=viewModel.vmBtnAddIllness }}
+        </span>
+      </div>
+    </li>
   </ol>
 </section>

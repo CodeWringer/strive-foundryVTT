@@ -242,6 +242,7 @@ export default class SheetViewModel extends ViewModel {
 
     return new ButtonAddViewModel({
       parent: thiz,
+      isEditable: args.isEditable ?? thiz.isEditable,
       target: args.target,
       creationType: args.creationType,
       id: args.id,
@@ -268,6 +269,7 @@ export default class SheetViewModel extends ViewModel {
 
     return new ButtonDeleteViewModel({
       parent: thiz,
+      isEditable: args.isEditable ?? thiz.isEditable,
       target: args.target,
       id: args.id,
       callback: args.callback,
@@ -291,6 +293,7 @@ export default class SheetViewModel extends ViewModel {
 
     return new ButtonOpenSheetViewModel({
       parent: thiz,
+      isEditable: args.isEditable ?? thiz.isEditable,
       target: args.target,
       id: args.id,
       callback: args.callback,
@@ -316,6 +319,7 @@ export default class SheetViewModel extends ViewModel {
 
     return new ButtonRollViewModel({
       parent: thiz,
+      isEditable: args.isEditable ?? thiz.isEditable,
       target: args.target,
       propertyPath: args.propertyPath,
       rollType: args.rollType,
@@ -344,6 +348,7 @@ export default class SheetViewModel extends ViewModel {
 
     return new ButtonSendToChatViewModel({
       parent: thiz,
+      isEditable: args.isEditable ?? thiz.isEditable,
       target: args.target,
       id: args.id,
       callback: args.callback,
@@ -369,6 +374,7 @@ export default class SheetViewModel extends ViewModel {
 
     return new ButtonTakeItemViewModel({
       parent: thiz,
+      isEditable: args.isEditable ?? thiz.isEditable,
       target: args.target,
       id: args.id,
       callback: args.callback,
@@ -395,6 +401,7 @@ export default class SheetViewModel extends ViewModel {
 
     return new ButtonToggleVisibilityViewModel({
       parent: thiz,
+      isEditable: args.isEditable ?? thiz.isEditable,
       visGroup: args.visGroup,
       id: args.id,
       target: args.target,

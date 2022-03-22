@@ -3,7 +3,7 @@ viewModel: {ButtonToggleVisibilityViewModel}
 cssClass: {String | undefined}
 fill: {Boolean | undefined}
 --}}
-<span class="component-button-toggle-visibility {{#if fill}}fill-button-light{{else}}square-button-light{{/if}} {{#if cssClass}}{{cssClass}}{{else}}font-size-default{{/if}}"
+<span class="component-button-toggle-visibility {{#if fill}}fill-button-light{{else}}square-button-light{{/if}} {{#if (not viewModel.isEditable)}}disabled{{/if}} {{#if cssClass}}{{cssClass}}{{else}}font-size-default{{/if}}"
   {{#if viewModel.toggleSelf}}
   data-vis-group="{{viewModel.visGroup}}"
   {{/if}}

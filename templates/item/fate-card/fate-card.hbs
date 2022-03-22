@@ -16,19 +16,13 @@ viewModel: {FateCardViewModel}
     </div>
   </div>
   {{!-- Buttons below header --}}
-  {{#if (or viewModel.isSendable viewModel.isEditable)}}
-    <div class="flex flex-row pad-md">
-      {{#if viewModel.isSendable}}
-        <div class="flex flex-center">
-          {{> buttonSendToChat viewModel=viewModel.vmBtnSendToChat }}
-        </div>
-      {{/if}}
-      <div class="flex-grow"></div>
-      {{#if viewModel.isEditable}}
-        {{> buttonDelete viewModel=viewModel.vmBtnDelete }}
-      {{/if}}
-    </div>
-  {{/if}}
+  <div class="flex flex-row pad-md">
+      <div class="flex flex-center">
+        {{> buttonSendToChat viewModel=viewModel.vmBtnSendToChat }}
+      </div>
+    <div class="flex-grow"></div>
+    {{> buttonDelete viewModel=viewModel.vmBtnDelete }}
+  </div>
   {{!-- Description --}}
   <div class="flex flex-grow">
     {{> inputTextarea viewModel=viewModel.vmTaDescription }}

@@ -3,7 +3,7 @@ viewModel: {ButtonAddViewModel}
 cssClass: {String | undefined}
 fill: {Boolean | undefined}
 --}}
-<span class="{{#if fill}}fill-button-light{{else}}square-button-light{{/if}} {{#if cssClass}}{{cssClass}}{{else}}font-size-default{{/if}}">
+<span class="{{#if fill}}fill-button-light{{else}}square-button-light{{/if}} {{#if (not viewModel.isEditable)}}disabled{{/if}} {{#if cssClass}}{{cssClass}}{{else}}font-size-default{{/if}}">
   <a class="custom-system-button pad-sm button flex flex-center" 
     title="{{localize ambersteel.labels.add}}"
     id="{{viewModel.id}}"
