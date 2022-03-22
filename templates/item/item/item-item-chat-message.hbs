@@ -8,7 +8,7 @@ viewModel: {ItemChatMessageViewModel}
   {{!-- Header --}}
   <div class="flex flex-row">
     <div class="flex flex-center">
-      {{> buttonTakeItem viewModel=viewModel.vmBtnTakeItem }}
+      {{> buttonTakeItem viewModel=viewModel.vmBtnTakeItem cssClass=(ifThenElse viewModel.allowPickup "" "hidden") }}
     </div>
     <div class="flex flex-center">
       <img class="inline-img header-image margin-r-sm" name="img" src="{{viewModel.item.img}}" title="{{viewModel.item.name}}" height="35" width="35" />
