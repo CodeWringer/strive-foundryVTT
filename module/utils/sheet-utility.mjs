@@ -62,7 +62,7 @@ export function enrichData(context) {
   }
   
   // In templates that implement it, this flag determines whether data on the sheet can be edited. 
-  context.isEditable = ((data.isCustom && context.isOwner) || context.isGM) && context.editable;
+  context.isEditable = (context.isOwner || context.isGM) && context.editable;
   // In templates that implement it, this flag determines whether the sheet data can be sent to the chat. 
   context.isSendable = (context.isOwner || context.isGM);
 }
