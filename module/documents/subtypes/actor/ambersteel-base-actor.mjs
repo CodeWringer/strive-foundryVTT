@@ -371,6 +371,10 @@ export default class AmbersteelBaseActor {
    * @async
    */
   async advanceAttributeBasedOnRollResult(rollResult, attributeName) {
+    if (rollResult === undefined) {
+      game.ambersteel.logger.logWarn("rollResult is undefined");
+      return;
+    }
     await this.parent.addAttributeProgress(attributeName, rollResult.isSuccess);
   }
 }

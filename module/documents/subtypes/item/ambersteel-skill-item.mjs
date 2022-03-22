@@ -159,6 +159,10 @@ export default class AmbersteelSkillItem extends AmbersteelBaseItem {
    * @async
    */
   async advanceSkillBasedOnRollResult(rollResult) {
+    if (rollResult === undefined) {
+      game.ambersteel.logger.logWarn("rollResult is undefined");
+      return;
+    }
     this.parent.addProgress(rollResult.isSuccess, false);
   }
 
