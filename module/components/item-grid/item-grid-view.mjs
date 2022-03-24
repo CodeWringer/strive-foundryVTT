@@ -51,13 +51,7 @@ export class ItemGridView {
    * @private
    */
   _itemGrid = undefined;
-  
-  /**
-   * @type {AmbersteelActor}
-   * @private
-   */
-  _actor = undefined;
-  
+    
   /**
    * @type {ItemOnGridView}
    * @private
@@ -166,22 +160,24 @@ export class ItemGridView {
    */
   set isEditable(value) {
     this._isEditable = value;
-    this._setEditability(value);
+    if (value !== true) {
+      this.hoverItem = undefined;
+      this.hoverButton = undefined;
+    }
   }
 
   /**
    * @param {HTMLElement} html DOM that containes the canvas element. 
    * @param {String} canvasElementId ID of the DOM element that represents the canvas. 
-   * @param {Actor} actor The actor whose item grid this will represent. 
+   * @param {ItemGrid} itemGrid The item grid to display. 
    * @param {Number} width Width of the canvas, in pixels. 
    * @param {Number} tileSize Optional. Size of a tile, in pixels. 
    * @param {Boolean} isEditable Optional. Determines whether the item grid will be editable. Default false. 
    */
-  constructor(html, canvasElementId, actor, width, tileSize = 128, isEditable = false) {
+  constructor(html, canvasElementId, itemGrid, width, tileSize = 128, isEditable = false) {
     this._width = width;
     this._tileSize = tileSize;
-    this._actor = actor;
-    this._itemGrid = this._actor.itemGrid;
+    this._itemGrid = itemGrid;
     this._isEditable = isEditable;
 
     // Setup HTML canvas element. 
@@ -259,7 +255,7 @@ export class ItemGridView {
    */
   _setupInteractivity() {
     window.addEventListener('keypress', (e) => {
-      if (e.code != "KeyR") return; // TODO: Add this to FoundryVTT's key map somehow. 
+      if (e.code != "KeyR") return; // TODO #45: Add this to FoundryVTT's key map somehow. 
 
       if (this._dragItem !== undefined) {
         this._dragIndicator.rotate();
@@ -391,7 +387,7 @@ export class ItemGridView {
     this._rootContainer = undefined;
 
     // Unset variables (probably unnecessary, but better to be on the safe side). 
-    this._actor = undefined;
+    this.itemGrid = undefined;
     this._spriteInstancesGrid = [];
     this._itemsOnGrid = [];
 
@@ -465,18 +461,6 @@ export class ItemGridView {
     } else {
       // No interaction possible at current pixel coordinates. 
       this._canvasElement.style.cursor = "default";
-    }
-  }
-
-  /**
-   * Sets the editability (or read-only mode) of the item grid. 
-   * @param {Boolean} value If true, the item grid will be editable. 
-   * @private
-   */
-  _setEditability(value) {
-    if (value !== true) {
-      this.hoverItem = undefined;
-      this.hoverButton = undefined;
     }
   }
 }

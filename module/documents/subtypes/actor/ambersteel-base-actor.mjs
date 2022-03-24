@@ -1,8 +1,5 @@
 import PreparedChatData from '../../../dto/prepared-chat-data.mjs';
-import * as UpdateUtil from "../../../utils/document-update-utility.mjs";
 import * as ChatUtil from "../../../utils/chat-utility.mjs";
-import { ItemGrid } from "../../../components/item-grid/item-grid.mjs";
-import { showPlainDialog } from '../../../utils/dialog-utility.mjs';
 
 export default class AmbersteelBaseActor {
   /**
@@ -10,16 +7,6 @@ export default class AmbersteelBaseActor {
    * @type {Actor}
    */
   parent = undefined;
-
-  /**
-   * @type {ItemGrid}
-   * @private
-   */
-  _itemGrid = undefined;
-  /**
-   * @type {ItemGrid}
-   */
-  get itemGrid() { return this._itemGrid; }
 
   /**
    * @param parent {Actor} The owning Actor. 
@@ -35,8 +22,6 @@ export default class AmbersteelBaseActor {
     this.parent.sendPropertyToChat = this.sendPropertyToChat.bind(this);
     this.parent.advanceSkillBasedOnRollResult = this.advanceSkillBasedOnRollResult.bind(this);
     this.parent.advanceAttributeBasedOnRollResult = this.advanceAttributeBasedOnRollResult.bind(this);
-
-    this.parent.itemGrid = this.itemGrid;
   }
 
   /**
@@ -74,44 +59,9 @@ export default class AmbersteelBaseActor {
   prepareDerivedData(context) {
     context.data.data.assets.maxBulk = game.ambersteel.getCharacterMaximumInventory(this.parent);
     context.data.data.assets.totalBulk = this._calculateUsedBulk(context);
-    this._initializeItemGrid(context);
     this._prepareDerivedAttributesData(context);
     this._prepareDerivedSkillsData(context);
     this._prepareDerivedHealthData(context);
-  }
-
-  /**
-   * Initializes the item grid. 
-   * @param {AmbersteelActor} context 
-   * @private
-   * @async
-   */
-  async _initializeItemGrid(context) {
-    const itemGridLoadResult = ItemGrid.from(context);
-    this._itemGrid = itemGridLoadResult.itemGrid;
-    context.itemGrid = this.itemGrid;
-    
-    if (itemGridLoadResult.itemsDropped.length > 0) {
-      for (const item of itemGridLoadResult.itemsDropped) {
-        // Move item to property (= drop from person). 
-        await item.updateProperty("data.data.isOnPerson", false, false); // Update the property without triggering a re-render. 
-      }
-      
-      // Display a warning dialog. 
-      showPlainDialog({
-        localizableTitle: "ambersteel.dialog.titleItemsDropped",
-        localizedContent: this.parent.name
-        + "\n"
-        + game.i18n.localize("ambersteel.dialog.contentItemsDropped")
-        + "\n"
-        + itemGridLoadResult.itemsDropped.map(it => it.name).join(",\n")
-      });
-    }
-
-    // Write the {ItemGrid} to the context document, without triggering a db update. 
-    // This prevents infinite recursion, as a db update would cause the document to be 
-    // reloaded, thus executing all initialization code again. 
-    await this._itemGrid.synchronizeTo(context, false);
   }
 
   /**

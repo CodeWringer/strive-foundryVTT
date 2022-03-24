@@ -2,6 +2,9 @@ import { TEMPLATES } from "../../templatePreloader.mjs";
 import { validateOrThrow } from "../../utils/validation-utility.mjs";
 import InputViewModel from "../input-viewmodel.mjs";
 import { ItemGridView } from "./item-grid-view.mjs";
+import * as UpdateUtil from "../../utils/document-update-utility.mjs";
+import { ItemGrid } from "../../components/item-grid/item-grid.mjs";
+import { showPlainDialog } from '../../utils/dialog-utility.mjs';
 
 /**
  * --- Inherited from ViewModel
@@ -50,6 +53,16 @@ export default class ItemGridViewViewModel extends InputViewModel {
    */
   gridWidth() { return this._gridWidth; }
 
+    /**
+   * @type {ItemGrid}
+   * @private
+   */
+  _itemGrid = undefined;
+  /**
+   * @type {ItemGrid}
+   */
+  get itemGrid() { return this._itemGrid; }
+
   /**
    * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
    * 
@@ -77,7 +90,9 @@ export default class ItemGridViewViewModel extends InputViewModel {
     const assets = this.value;
     const columnCount = assets.grid.length;
     const tileSize = Math.floor(this._gridWidth / columnCount);
-    this._itemGridView = new ItemGridView(html, this.id, this.propertyOwner, this._gridWidth, tileSize, isEditable);
+
+    this._initializeItemGrid(this.propertyOwner);
+    this._itemGridView = new ItemGridView(html, this.id, this._itemGrid, this._gridWidth, tileSize, isEditable);
   }
 
   /**
@@ -88,6 +103,36 @@ export default class ItemGridViewViewModel extends InputViewModel {
     this._itemGridView.dispose();
 
     super.dispose();
+  }
+
+  /**
+   * Initializes the item grid. 
+   * @param {AmbersteelActor} actor 
+   * @private
+   * @async
+   */
+  async _initializeItemGrid(actor) {
+    const itemGridLoadResult = ItemGrid.from(actor);
+    this._itemGrid = itemGridLoadResult.itemGrid;
+    
+    if (itemGridLoadResult.itemsDropped.length > 0) {
+      for (const item of itemGridLoadResult.itemsDropped) {
+        // Move item to property (= drop from person). 
+        await item.updateProperty("data.data.isOnPerson", false, false); // Update the property without triggering a re-render. 
+      }
+      
+      // Display a warning dialog. 
+      showPlainDialog({
+        localizableTitle: "ambersteel.dialog.titleItemsDropped",
+        localizedContent: actor.name
+        + "\n"
+        + game.i18n.localize("ambersteel.dialog.contentItemsDropped")
+        + "\n"
+        + itemGridLoadResult.itemsDropped.map(it => it.name).join(",\n")
+      });
+
+      await this._itemGrid.synchronizeTo(actor, true);
+    }
   }
 }
 
