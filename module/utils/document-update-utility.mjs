@@ -1,4 +1,4 @@
-import { getNestedPropertyValue } from "./property-utility.mjs";
+import * as PropUtil from "./property-utility.mjs";
 
 /**
  * Updates a property on the given document entity, identified via the given path. 
@@ -13,8 +13,8 @@ import { getNestedPropertyValue } from "./property-utility.mjs";
  * @async
  */
 export async function updateProperty(document, propertyPath, newValue, render = true) {
-  const parts = propertyPath.split(/\.|\[/g);
-  const lastPart = parts[parts.length - 1].replace("]", "");
+  const parts = PropUtil.splitPropertyPath(propertyPath);
+  const lastPart = parts[parts.length - 1];
 
   if (parts.length == 1) {
     // example:
@@ -29,8 +29,6 @@ export async function updateProperty(document, propertyPath, newValue, render = 
     const dataDelta = document.data[parts.shift()];
 
     for (let part of parts) {
-      part = part.replace("]", "");
-
       if (part == lastPart) {
         prop ? prop[part] = newValue : dataDelta[part] = newValue;
       } else {
@@ -58,7 +56,7 @@ export async function deleteByPropertyPath(document, propertyPath, render = true
     const indexLastBracket = propertyPath.length - 1;
     const arrayPropertyPath = propertyPath.substring(0, indexBracket);
     
-    let array = getNestedPropertyValue(document, arrayPropertyPath);
+    let array = PropUtil.getNestedPropertyValue(document, arrayPropertyPath);
     const index = parseInt(propertyPath.substring(indexBracket + 1, indexLastBracket));
     array = array.slice(0, index).concat(array.slice(index + 1));
 
