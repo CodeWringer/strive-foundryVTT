@@ -205,6 +205,6 @@ export class AmbersteelActor extends Actor {
    * @protected
    */
   async updateProperty(propertyPath, newValue, render = true) {
-    await UpdateUtil.updateProperty(this.parent, propertyPath, newValue, render);
+    await UpdateUtil.updateProperty(this, propertyPath, newValue, render);
   }
 }
