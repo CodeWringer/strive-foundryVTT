@@ -171,17 +171,16 @@ export class ItemGridView {
    * @param {String} canvasElementId ID of the DOM element that represents the canvas. 
    * @param {ItemGrid} itemGrid The item grid to display. 
    * @param {Number} width Width of the canvas, in pixels. 
-   * @param {Number} tileSize Optional. Size of a tile, in pixels. 
    * @param {Boolean} isEditable Optional. Determines whether the item grid will be editable. Default false. 
    */
-  constructor(html, canvasElementId, itemGrid, width, tileSize = 128, isEditable = false) {
+  constructor(html, canvasElementId, itemGrid, width, isEditable = false) {
     this._width = width;
-    this._tileSize = tileSize;
     this._itemGrid = itemGrid;
     this._isEditable = isEditable;
-
+    
     // Setup HTML canvas element. 
     this._canvasElement = html.find("#" + canvasElementId)[0];
+    this._tileSize = this._width / this._itemGrid.columnCount;
     const height = Math.ceil(this._itemGrid.capacity / this._itemGrid.columnCount) * this._tileSize;
     this._canvasElement.style.height = height;
   

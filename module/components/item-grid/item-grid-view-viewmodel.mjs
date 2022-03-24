@@ -87,12 +87,8 @@ export default class ItemGridViewViewModel extends InputViewModel {
   activateListeners(html, isOwner, isEditable) {
     super.activateListeners(html, isOwner, isEditable);
 
-    const assets = this.value;
-    const columnCount = assets.grid.length;
-    const tileSize = Math.floor(this._gridWidth / columnCount);
-
     this._initializeItemGrid(this.propertyOwner);
-    this._itemGridView = new ItemGridView(html, this.id, this._itemGrid, this._gridWidth, tileSize, isEditable);
+    this._itemGridView = new ItemGridView(html, this.id, this._itemGrid, this._gridWidth, isEditable);
   }
 
   /**
