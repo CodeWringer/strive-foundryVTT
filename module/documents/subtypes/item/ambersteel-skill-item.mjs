@@ -21,7 +21,7 @@ export default class AmbersteelSkillItem extends AmbersteelBaseItem {
   }
 
   /** @override */
-  get img() { return "icons/svg/book.svg"; }
+  get defaultImg() { return "icons/svg/book.svg"; }
 
   /**
    * Chat message template path. 
@@ -31,7 +31,6 @@ export default class AmbersteelSkillItem extends AmbersteelBaseItem {
 
   /** @override */
   prepareData() {
-    this.parent.data.img = this.img;
     this.parent.data.data.relatedAttribute = this.parent.data.data.relatedAttribute ?? "agility";
   }
   

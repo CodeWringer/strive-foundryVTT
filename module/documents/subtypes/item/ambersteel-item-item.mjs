@@ -14,7 +14,7 @@ export default class AmbersteelItemItem extends AmbersteelBaseItem {
   }
   
   /** @override */
-  get img() { return "icons/svg/item-bag.svg"; }
+  get defaultImg() { return "icons/svg/item-bag.svg"; }
   
   /**
    * Chat message template path. 
@@ -24,8 +24,6 @@ export default class AmbersteelItemItem extends AmbersteelBaseItem {
   
   /** @override */
   prepareData(context) {
-    context.data.img = this.img;
-
     // Ensure number data type. 
     context.data.data.shape.width = parseInt(context.data.data.shape.width);
     context.data.data.shape.height = parseInt(context.data.data.shape.height);

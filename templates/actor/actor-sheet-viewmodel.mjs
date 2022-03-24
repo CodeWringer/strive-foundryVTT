@@ -80,7 +80,11 @@ export default class ActorSheetViewModel extends SheetViewModel {
       propertyPath: "name",
       placeholder: "ambersteel.labels.name",
     });
-
+    this.vmImg = this.createVmImg({
+      id: "vmImg",
+      propertyOwner: thiz.actor,
+      propertyPath: "img",
+    });
     this.personalsViewModel = new ActorPersonalsViewModel({ ...args, id: thiz.personalsId, parent: thiz });
     this.attributesViewModel = new ActorAttributesViewModel({ ...args, id: thiz.personalsId, parent: thiz });
     this.skillsViewModel = new ActorSkillsViewModel({ ...args, id: thiz.skillsId, parent: thiz });

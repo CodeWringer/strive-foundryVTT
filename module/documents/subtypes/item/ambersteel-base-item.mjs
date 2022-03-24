@@ -26,12 +26,12 @@ export default class AmbersteelBaseItem {
   }
 
   /**
-   * Returns the icon image path for this type of item. 
-   * @returns {String} The icon image path. 
+   * Returns the default icon image path for this type of item. 
+   * @type {String}
    * @virtual
    * @readonly
    */
-  get img() { throw new Error("NotImplementedException"); }
+  get defaultImg() { throw new Error("NotImplementedException"); }
 
   /**
    * Chat message template path. 

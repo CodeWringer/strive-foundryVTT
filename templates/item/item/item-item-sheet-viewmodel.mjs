@@ -27,6 +27,11 @@ export default class ItemItemSheetViewModel extends SheetViewModel {
     this.contextTemplate = args.contextTemplate ?? "item-item-sheet";
     const thiz = this;
 
+    this.vmImg = this.createVmImg({
+      id: "vmImg",
+      propertyOwner: thiz.item,
+      propertyPath: "img",
+    });
     this.vmTfName = this.createVmTextField({
       id: "vmTfName",
       propertyOwner: thiz.item,
