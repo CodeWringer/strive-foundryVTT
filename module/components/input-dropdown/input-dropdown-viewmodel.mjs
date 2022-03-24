@@ -39,8 +39,12 @@ export default class InputDropDownViewModel extends InputViewModel {
    * Returns the localized value. 
    * @type {String}
    * @readonly
+   * @override
    */
-  get localizedValue() { return this.selected !== undefined ? this.selected.localizedValue : ""; }
+  get localizedValue() {
+    const selected = this.selected;
+    return selected !== undefined ? selected.localizedValue : "";
+  }
 
   /**
    * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 

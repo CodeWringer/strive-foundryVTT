@@ -37,12 +37,14 @@ export default class InputRadioButtonGroupViewModel extends InputViewModel {
   }
 
   /**
-   * Returns the localized value of the currently selected option. 
+   * Returns the localized value. 
    * @type {String}
    * @readonly
+   * @override
    */
   get localizedValue() {
-    return this.selected !== undefined ? this.selected.localizedValue : "";
+    const selected = this.selected;
+    return selected !== undefined ? selected.localizedValue : "";
   }
 
   /**
