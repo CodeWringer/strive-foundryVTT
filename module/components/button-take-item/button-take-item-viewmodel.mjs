@@ -5,6 +5,7 @@ import * as ContentUtil from "../../utils/content-utility.mjs";
 import { updateProperty } from "../../utils/document-update-utility.mjs";
 import ChoiceOption from "../../dto/choice-option.mjs";
 import { validateOrThrow } from "../../utils/validation-utility.mjs";
+import { ItemGrid } from "../item-grid/item-grid.mjs";
 
 export const contextTypes = {
   chatMessage: "chat-message",
@@ -98,23 +99,19 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
         }
 
         // Add copy to target actor. 
-        this._tryCreateCopyAndSetParent(item, targetActor);
+        this._cloneWithNewParentOnPerson(item, targetActor);
 
         // Remove from source actor. 
-        const removeResult = sourceActor.itemGrid.remove(item);
-        if (removeResult === true) {
-          sourceActor.itemGrid.synchronize();
-        }
         item.delete();
       } else if (this.contextType === contextTypes.listItem) {
         // Determine target actor. 
         const targetActor = parent;
 
         // Try to move item to item grid. 
-        const addResult = targetActor.itemGrid.add(item);
+        const itemGrid = ItemGrid.from(targetActor).itemGrid;
+        const addResult = itemGrid.add(item);
         if (addResult === true) {
           updateProperty(item, "data.data.isOnPerson", true);
-          targetActor.itemGrid.synchronize();
         } else {
           DialogUtil.showPlainDialog({
             localizableTitle: game.i18n.localize("ambersteel.dialog.titleInventoryFull"),
@@ -127,13 +124,13 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
       const targetActor = this._getTargetActor();
       
       // Add copy to target actor. 
-      this._tryCreateCopyAndSetParent(item, targetActor);
+      this._cloneWithNewParentOnPerson(item, targetActor);
     } else { // The item is part of the world. 
       // Determine target actor. 
       const targetActor = this._getTargetActor();
 
       // Add copy to target actor. 
-      this._tryCreateCopyAndSetParent(item, targetActor);
+      this._cloneWithNewParentOnPerson(item, targetActor);
 
       // Remove from world. 
       item.delete();
@@ -164,31 +161,21 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
    * Clones the given item, sets its parent to the given actor and returns the clone. 
    * @param {Item} templateItem 
    * @param {Actor} parent
+   * @async
    */
-  async _cloneAndSetParent(templateItem, parent) {
+  async _cloneWithNewParentOnPerson(templateItem, parent) {
     const itemData = {
       name: templateItem.name,
       type: templateItem.type,
-      data: templateItem.data
+      data: {
+        ...templateItem.data,
+        data: {
+          ...templateItem.data.data,
+          isOnPerson: true,
+        }
+      }
     };
     return await Item.create(itemData, { parent: parent });
-  }
-
-  /**
-   * @param {Item} item 
-   * @param {Actor} targetActor 
-   * @returns {Boolean}
-   * @private
-   */
-  _tryCreateCopyAndSetParent(item, targetActor) {
-    const copyOfItem = _cloneAndSetParent(item, targetActor);
-    const addResult = targetActor.itemGrid.add(copyOfItem);
-    if (addResult === true) {
-      updateProperty(copyOfItem, "data.data.isOnPerson", true);
-      targetActor.itemGrid.synchronize();
-      return true;
-    }
-    return false;
   }
 
   /**

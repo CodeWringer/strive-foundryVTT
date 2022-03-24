@@ -1,12 +1,10 @@
-import { AmbersteelActor } from "../../documents/actor.mjs";
-import AmbersteelItemItem from "../../documents/subtypes/item/ambersteel-item-item.mjs";
 import InventoryIndex from "../../dto/inventory-index.mjs";
 
 /**
  * Default column count used to initialize new a item grid. 
  * 
  * There is currently no means of deriving a column count, 
- * therefore all {ItemGrid}s will have this number of columns. 
+ * therefore all {ItemGrid}s will (at most) have this number of columns. 
  * @type {Number}
  * @constant 4
  */
@@ -144,7 +142,7 @@ export class ItemGrid {
   /**
    * Returns a new {ItemGrid}, based on the given actor's or item's 
    * {data.data.assets.grid} and {data.data.assets.gridIndices}.
-   * @param {AmbersteelActor | AmbersteelItem} document The actor or item from whose data to build an {ItemGrid}. 
+   * @param {AmbersteelActor} document The actor or item from whose data to build an {ItemGrid}. 
    * @returns {ItemGridLoadResult}
    */
   static from(document) {
@@ -189,45 +187,32 @@ export class ItemGrid {
   /**
    * Updates the given actor's or item's item grid based on this {ItemGrid}. 
    * @param {AmbersteelActor | AmbersteelItem} document 
-   * @param {Boolean} update If true, will push the changes to the db. Default true. 
+   * @param {Boolean | undefined} render If true, will trigger a re-render of the associated document sheet. Default 'true'. 
    * @async
    * @returns {Promise<undefined>}
    */
-  async synchronizeTo(document, update = true) {
-    if (update === true) {
-      return document.update({
-        data: {
-          assets: {
-            grid: this._grid,
-            gridIndices: this._indices
-          }
-        }
-      });
-    } else {
-      return new Promise((resolve, reject) => {
-        // This data will *not* be persisted!
-        // When a document is initialized, its grid may be empty. This is the case with new documents. 
-        // The ItemGrid and ItemGridView classes expect an initialized grid, however. 
-        // In that case, the empty grid will be initialized, so it has the correct number of 
-        // columns and rows. 
-        // Since updating an document's db entry causes it to be re-rendered, this causes an 
-        // unnecessary chain-reaction of initializations to occur, which would result in infinite recursion. 
-        document.data.data.assets.grid = this._grid;
-        document.data.data.assets.gridIndices = this._indices;
+  async synchronizeTo(document, render = true) {
+    document.data.data.assets.grid = this._grid;
+    document.data.data.assets.gridIndices = this._indices;
 
-        resolve();
-      });
-    }
+    return document.update({
+      data: {
+        assets: {
+          grid: this._grid,
+          gridIndices: this._indices
+        }
+      }
+    }, { render: render });
   }
 
   /**
    * Updates the owning actor's or item's item grid based on this {ItemGrid}. 
-   * @param {Boolean} update If true, will push the changes to the db. Default true. 
+   * @param {Boolean | undefined} render If true, will trigger a re-render of the associated document sheet. Default 'true'. 
    * @async
    * @returns {Promise<undefined>}
    */
-  async synchronize(update = true) {
-    return this.synchronizeTo(this._owner, update);
+  async synchronize(render = true) {
+    return this.synchronizeTo(this._owner, render);
   }
   
   /**
