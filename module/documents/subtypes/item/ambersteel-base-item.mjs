@@ -1,5 +1,4 @@
 import PreparedChatData from '../../../dto/prepared-chat-data.mjs';
-import * as UpdateUtil from "../../../utils/document-update-utility.mjs";
 import * as ChatUtil from "../../../utils/chat-utility.mjs";
 import { createUUID } from '../../../utils/uuid-utility.mjs';
 import SheetViewModel from '../../../components/sheet-viewmodel.mjs';
@@ -23,7 +22,6 @@ export default class AmbersteelBaseItem {
     this.parent.getChatData = this.getChatData.bind(this);
     this.parent.sendToChat = this.sendToChat.bind(this);
     this.parent.sendPropertyToChat = this.sendPropertyToChat.bind(this);
-    this.parent.updateProperty = this.updateProperty.bind(this);
     this.parent.getChatViewModel = this.getChatViewModel.bind(this);
   }
 
@@ -140,18 +138,5 @@ export default class AmbersteelBaseItem {
       actor: this.parent.actor,
       visibilityMode: visibilityMode
     });
-  }
-
-  /**
-   * Updates a property on the parent item, identified via the given path. 
-   * @param {String} propertyPath Path leading to the property to update, on the parent item. 
-   *        Array-accessing via brackets is supported. Property-accessing via brackets is *not* supported. 
-   *        E.g.: "data.attributes[0].value"
-   * @param {any} newValue The value to assign to the property. 
-   * @async
-   * @protected
-   */
-  async updateProperty(propertyPath, newValue) {
-    await UpdateUtil.updateProperty(this.parent, propertyPath, newValue);
   }
 }

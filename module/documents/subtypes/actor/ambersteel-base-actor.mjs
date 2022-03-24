@@ -33,7 +33,6 @@ export default class AmbersteelBaseActor {
     this.parent.getChatData = this.getChatData.bind(this);
     this.parent.sendToChat = this.sendToChat.bind(this);
     this.parent.sendPropertyToChat = this.sendPropertyToChat.bind(this);
-    this.parent.updateProperty = this.updateProperty.bind(this);
     this.parent.advanceSkillBasedOnRollResult = this.advanceSkillBasedOnRollResult.bind(this);
     this.parent.advanceAttributeBasedOnRollResult = this.advanceAttributeBasedOnRollResult.bind(this);
 
@@ -95,13 +94,15 @@ export default class AmbersteelBaseActor {
     if (itemGridLoadResult.itemsDropped.length > 0) {
       for (const item of itemGridLoadResult.itemsDropped) {
         // Move item to property (= drop from person). 
-        item.updateProperty("data.data.isOnPerson", false);
+        await item.updateProperty("data.data.isOnPerson", false, false); // Update the property without triggering a re-render. 
       }
       
       // Display a warning dialog. 
       showPlainDialog({
         localizableTitle: "ambersteel.dialog.titleItemsDropped",
-        localizedContent: game.i18n.localize("ambersteel.dialog.contentItemsDropped")
+        localizedContent: this.parent.name
+        + "\n"
+        + game.i18n.localize("ambersteel.dialog.contentItemsDropped")
         + "\n"
         + itemGridLoadResult.itemsDropped.map(it => it.name).join(",\n")
       });
@@ -338,19 +339,6 @@ export default class AmbersteelBaseActor {
       actor: this.parent.actor,
       visibilityMode: visibilityMode
     });
-  }
-
-  /**
-   * Updates a property on the parent Actor, identified via the given path. 
-   * @param {String} propertyPath Path leading to the property to update, on the parent Actor. 
-   *        Array-accessing via brackets is supported. Property-accessing via brackets is *not* supported. 
-   *        E.g.: "data.attributes[0].value"
-   * @param {any} newValue The value to assign to the property. 
-   * @async
-   * @protected
-   */
-  async updateProperty(propertyPath, newValue) {
-    await UpdateUtil.updateProperty(this.parent, propertyPath, newValue);
   }
 
   /**

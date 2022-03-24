@@ -1,6 +1,6 @@
 import AmbersteelPcActor from './subtypes/actor/ambersteel-pc-actor.mjs';
 import AmbersteelNpcActor from './subtypes/actor/ambersteel-npc-actor.mjs';
-import { deleteByPropertyPath } from '../utils/document-update-utility.mjs';
+import * as UpdateUtil from '../utils/document-update-utility.mjs';
 
 /**
  * @extends {Actor}
@@ -179,7 +179,32 @@ export class AmbersteelActor extends Actor {
     }
   }
 
-  async deleteByPropertyPath(propertyPath) {
-    await deleteByPropertyPath(this, propertyPath);
+  /**
+   * Deletes a property on the given document, via the given path. 
+   * @param {Document} document A Foundry {Document}. 
+   * @param {String} propertyPath Path leading to the property to delete, on the given document entity. 
+   *        Array-accessing via brackets is supported. Property-accessing via brackets is *not* supported. 
+   *        E.g.: "data.attributes[0].value" 
+   *        E.g.: "data.attributes[4]" 
+   *        E.g.: "data.attributes" 
+   * @param {Boolean | undefined} render If true, will trigger a re-render of the associated document sheet. Default 'true'. 
+   * @async
+   */
+  async deleteByPropertyPath(propertyPath, render = true) {
+    await UpdateUtil.deleteByPropertyPath(this, propertyPath, render);
+  }
+
+  /**
+   * Updates a property on the parent item, identified via the given path. 
+   * @param {String} propertyPath Path leading to the property to update, on the parent item. 
+   *        Array-accessing via brackets is supported. Property-accessing via brackets is *not* supported. 
+   *        E.g.: "data.attributes[0].value"
+   * @param {any} newValue The value to assign to the property. 
+   * @param {Boolean | undefined} render If true, will trigger a re-render of the associated document sheet. Default 'true'. 
+   * @async
+   * @protected
+   */
+  async updateProperty(propertyPath, newValue, render = true) {
+    await UpdateUtil.updateProperty(this.parent, propertyPath, newValue, render);
   }
 }
