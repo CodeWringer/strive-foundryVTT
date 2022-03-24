@@ -97,7 +97,7 @@ export default class ButtonAddViewModel extends ButtonViewModel {
       } else if (this.creationType === "illness") {
         dialogResult = await ItemAddDialog.query("illness", "ambersteel.labels.illness", "ambersteel.dialog.titleIllnessAddQuery");
       } else if (this.creationType === "fate-card") {
-        dialogResult = await ItemAddDialog.query("fate-card", "ambersteel.labels.fateCard", "ambersteel.dialog.titleFateCardAddQuery");
+        dialogResult = await ItemAddDialog.query("fate-card", "ambersteel.fateSystem.fateCard", "ambersteel.dialog.titleFateCardAddQuery");
       } else if (this.creationType === "item") {
         dialogResult = await ItemAddDialog.query("item", "ambersteel.labels.item", "ambersteel.dialog.titleAddItemQuery");
       } else {
