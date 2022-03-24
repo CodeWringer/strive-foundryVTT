@@ -83,6 +83,16 @@ export default class InputViewModel extends ViewModel {
   }
 
   /**
+   * Returns the localized value. 
+   * @type {String}
+   * @readonly
+   */
+  get localizedValue() {
+    const value = this.value;
+    return (value !== undefined && value !== null) ? game.i18n.localize(value) : value;
+  }
+
+  /**
    * @type {JQuery | HTMLElement}
    * @private
    */
