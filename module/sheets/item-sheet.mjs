@@ -86,7 +86,10 @@ export class AmbersteelItemSheet extends ItemSheet {
     const context = super.getData();
     SheetUtil.enrichData(context);
 
-    // Prepare view model. 
+    // Whenever the sheet is re-rendered, its view model is completely disposed and re-instantiated. 
+    // Dispose of the view model, if it exists. 
+    this._tryDisposeViewModel();
+    // Prepare a new view model instance. 
     this._viewModel = this.subType.getViewModel(context);
     this._viewModel.readViewState();
     context.viewModel = this._viewModel;
@@ -122,7 +125,21 @@ export class AmbersteelItemSheet extends ItemSheet {
    * @see https://foundryvtt.com/api/FormApplication.html#close
    */
   async close() {
+    this._tryDisposeViewModel();
+
+    return super.close();
+  }
+
+  /**
+   * Disposes of the view model, if possible. 
+   * 
+   * Will silently return, if there is no view model instance to dispose. 
+   * @private
+   * @async
+   */
+  _tryDisposeViewModel() {
     if (this._viewModel !== undefined && this._viewModel !== null) {
+      // Write out state to persist, before disposing the view model. 
       this._viewModel.writeViewState();
       try {
         this._viewModel.dispose();
@@ -131,7 +148,5 @@ export class AmbersteelItemSheet extends ItemSheet {
       }
     }
     this._viewModel = null;
-
-    return super.close();
   }
 }
