@@ -151,34 +151,30 @@ export default class ViewModel {
   dispose() {
     // First of all, dispose of children. 
     if (this.children !== undefined && this.children !== null) {
-      while (this.children.length > 0) {
-        const child = this.children[0];
-        child.dispose();
-        this.children.splice(0, 1);
+      for (const child of this.children) {
+        try {
+          child.dispose();
+          child.parent = null;
+        } catch (error) {
+          game.ambersteel.logger.logWarn(error);
+        }
       }
     }
-    this.children = null; // *Should* be unnecessary, but better safe than sorry...
-
-    // Remove from parent, if possible. 
-    if (this.parent !== undefined && this.parent !== null) {
-      const index = this.parent.children.indexOf(this);
-      if (index >= 0) {
-        this.parent.children.splice(index, 1);
-      }
-    }
-    this.parent = null; // *Should* be unnecessary, but better safe than sorry...
+    this.children = null;
 
     // Set properties of this view model to null. 
     for (const propertyName in this) {
       // Call dispose on any property that supports it. 
-      if (PropertyUtil.isObject(this[propertyName]) && this[propertyName].dispose !== undefined) {
+      if (PropertyUtil.isObject(this[propertyName]) 
+        && this[propertyName].dispose !== undefined
+        && propertyName !== "parent") {
         this[propertyName].dispose();
       }
       // Set property to null, thus 'hopefully' freeing its referenced value up for garbage collection. 
       this[propertyName] = null;
     }
     // Ensure methods cannot be called again. 
-    this.dispose = () => { throw ViewModel.DISPOSED_ACCESS_VIOLATION_EXCEPTION };
+    this.dispose = () => { /** Do nothing. */ };
     this.toViewState = () => { throw ViewModel.DISPOSED_ACCESS_VIOLATION_EXCEPTION; };
     this.applyViewState = () => { throw ViewModel.DISPOSED_ACCESS_VIOLATION_EXCEPTION; };
     this.activateListeners = () => { throw ViewModel.DISPOSED_ACCESS_VIOLATION_EXCEPTION; };
