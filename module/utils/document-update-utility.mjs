@@ -9,10 +9,10 @@ import { getNestedPropertyValue } from "./property-utility.mjs";
  *        E.g.: "data.attributes[4]" 
  *        E.g.: "data.attributes" 
  * @param {any} newValue The value to assign to the property. 
+ * @param {Boolean | undefined} render If true, will trigger a re-render of the associated document sheet. Default 'true'. 
  * @async
- * @protected
  */
-export async function updateProperty(document, propertyPath, newValue) {
+export async function updateProperty(document, propertyPath, newValue, render = true) {
   const parts = propertyPath.split(/\.|\[/g);
   const lastPart = parts[parts.length - 1].replace("]", "");
 
@@ -20,7 +20,7 @@ export async function updateProperty(document, propertyPath, newValue) {
     // example:
     // obj = { a: { b: [{c: 42}] } }
     // path: "a"
-    await document.update({ [propertyPath]: newValue });
+    await document.update({ [propertyPath]: newValue }, { render: render });
   } else {
     // example:
     // obj = { a: { b: [{c: 42}] } }
@@ -37,20 +37,22 @@ export async function updateProperty(document, propertyPath, newValue) {
         prop = prop ? prop[part] : dataDelta[part];
       }
     }
-    await document.update({ data: dataDelta });
+    await document.update({ data: dataDelta }, { render: render });
   }
 }
 
 /**
- * 
+ * Deletes a property on the given document, via the given path. 
  * @param {Document} document A Foundry {Document}. 
  * @param {String} propertyPath Path leading to the property to delete, on the given document entity. 
  *        Array-accessing via brackets is supported. Property-accessing via brackets is *not* supported. 
  *        E.g.: "data.attributes[0].value" 
  *        E.g.: "data.attributes[4]" 
  *        E.g.: "data.attributes" 
+ * @param {Boolean | undefined} render If true, will trigger a re-render of the associated document sheet. Default 'true'. 
+ * @async
  */
-export async function deleteByPropertyPath(document, propertyPath) {
+export async function deleteByPropertyPath(document, propertyPath, render = true) {
   if (propertyPath.endsWith("]")) { // Delete item from array.
     const indexBracket = propertyPath.lastIndexOf("[");
     const indexLastBracket = propertyPath.length - 1;
@@ -60,12 +62,12 @@ export async function deleteByPropertyPath(document, propertyPath) {
     const index = parseInt(propertyPath.substring(indexBracket + 1, indexLastBracket));
     array = array.slice(0, index).concat(array.slice(index + 1));
 
-    await updateProperty(document, arrayPropertyPath, array);
+    await updateProperty(document, arrayPropertyPath, array, render);
   } else { // Delete property from object. 
     const parts = propertyPath.split(/\./g);
     parts[parts.length - 1] = `-=${parts[parts.length - 1]}`; // The '-=' is what makes Foundry want to actually delete the property. 
     const parentPropertyPath = parts.join(".");
 
-    await updateProperty(document, parentPropertyPath, null); // Null must be given as the value for a property to be deleted. 
+    await updateProperty(document, parentPropertyPath, null, render); // Null must be given as the value for a property to be deleted. 
   }
 }

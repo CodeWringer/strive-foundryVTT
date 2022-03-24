@@ -112,9 +112,9 @@ export default class AmbersteelSkillItem extends AmbersteelBaseItem {
     const requiredFailures = parseInt(skillData.requiredFailures);
 
     if (success) {
-      await this.updateProperty("data.successes", successes + 1);
+      await this.parent.updateProperty("data.successes", successes + 1, false);
     } else {
-      await this.updateProperty("data.failures", failures + 1);
+      await this.parent.updateProperty("data.failures", failures + 1, false);
     }
 
     if (autoLevel) {
@@ -140,7 +140,7 @@ export default class AmbersteelSkillItem extends AmbersteelBaseItem {
     const abilities = this.parent.data.data.abilities.concat(
       [newAbility]
     );
-    await this.updateProperty("data.abilities", abilities);
+    await this.parent.updateProperty("data.abilities", abilities);
   }
 
   /**
@@ -150,7 +150,7 @@ export default class AmbersteelSkillItem extends AmbersteelBaseItem {
   async deleteSkillAbilityAt(index) {
     const dataAbilities = this.parent.data.data.abilities;
     const abilities = dataAbilities.slice(0, index).concat(dataAbilities.slice(index + 1));
-    await this.updateProperty("data.abilities", abilities);
+    await this.parent.updateProperty("data.abilities", abilities);
   }
   
   /**
