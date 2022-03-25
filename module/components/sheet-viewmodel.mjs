@@ -7,6 +7,7 @@ import ButtonSendToChatViewModel from "./button-send-to-chat/button-send-to-chat
 import ButtonTakeItemViewModel from "./button-take-item/button-take-item-viewmodel.mjs";
 import ButtonToggleVisibilityViewModel from "./button-toggle-visibility/button-toggle-visibility-viewmodel.mjs";
 import InputDropDownViewModel from "./input-dropdown/input-dropdown-viewmodel.mjs";
+import InputImageViewModel from "./input-image/input-image-viewmodel.mjs";
 import InputNumberSpinnerViewModel from "./input-number-spinner/input-number-spinner-viewmodel.mjs";
 import InputRadioButtonGroupViewModel from "./input-radio-button-group/input-radio-button-group-viewmodel.mjs";
 import InputTextareaViewModel from "./input-textarea/input-textarea-viewmodel.mjs";
@@ -412,6 +413,33 @@ export default class SheetViewModel extends ViewModel {
   }
 
   /**
+   * Creates a child image input view model and returns it. 
+   * @param {Object} args.propertyOwner
+   * @param {String} args.propertyPath
+   * @param {String | undefined} args.id
+   * @param {String | undefined} args.title Optional. Sets the tooltip text to display on cursor hover over the DOM element. 
+   * @param {Number | undefined} args.width Optional. Sets the width of the image DOM element. Default '26'. 
+   * @param {Number | undefined} args.height Optional. Sets the height of the image DOM element. Default '26'. 
+   * @returns {InputImageViewModel}
+   */
+  createVmImg(args = {}) {
+    const thiz = this;
+    validateOrThrow(args, ["propertyOwner", "propertyPath"]);
+
+    return new InputImageViewModel({
+      parent: thiz,
+      isEditable: args.isEditable ?? thiz.isEditable,
+      contextTemplate: thiz.contextTemplate,
+      propertyOwner: args.propertyOwner,
+      propertyPath: args.propertyPath,
+      id: args.id,
+      title: args.title,
+      width: args.width,
+      height: args.height,
+    });
+  }
+
+  /**
    * Disposes of any working data. 
    * 
    * This is a clean-up operation that should only be called when the instance of this class is no longer needed!
@@ -430,6 +458,7 @@ export default class SheetViewModel extends ViewModel {
     this.createVmBtnSendToChat = () => { throw ViewModel.DISPOSED_ACCESS_VIOLATION_EXCEPTION };
     this.createVmBtnTakeItem = () => { throw ViewModel.DISPOSED_ACCESS_VIOLATION_EXCEPTION };
     this.createVmBtnToggleVisibility = () => { throw ViewModel.DISPOSED_ACCESS_VIOLATION_EXCEPTION };
+    this.createVmImg = () => { throw ViewModel.DISPOSED_ACCESS_VIOLATION_EXCEPTION };
 
     super.dispose();
   }

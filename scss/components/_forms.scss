@@ -177,3 +177,21 @@ img.header-image {
   border: none;
   display: inline-block;
 }
+
+img.custom-icon {
+  &-sm {
+    flex: none;
+    width: $line-height !important;
+    height: $line-height !important;
+  }
+  &-md {
+    flex: none;
+    width: 64px !important;
+    height: 64px !important;
+  }
+  &-lg {
+    flex: none;
+    width: 100px !important;
+    height: 100px !important;
+  }
+}

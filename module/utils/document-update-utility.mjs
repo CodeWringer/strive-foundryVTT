@@ -17,14 +17,9 @@ export async function updateProperty(document, propertyPath, newValue, render = 
   const lastPart = parts[parts.length - 1];
 
   if (parts.length == 1) {
-    // example:
-    // obj = { a: { b: [{c: 42}] } }
-    // path: "a"
-    await document.update({ [propertyPath]: newValue }, { render: render });
+    const updatePayload = { [propertyPath]: newValue };
+    await document.update(updatePayload, { render: render });
   } else {
-    // example:
-    // obj = { a: { b: [{c: 42}] } }
-    // path: "a.b[0].c"
     let prop = undefined;
     const dataDelta = document.data[parts.shift()];
 
@@ -35,7 +30,8 @@ export async function updateProperty(document, propertyPath, newValue, render = 
         prop = prop ? prop[part] : dataDelta[part];
       }
     }
-    await document.update({ data: dataDelta }, { render: render });
+    const updatePayload = { data: dataDelta };
+    await document.update(updatePayload, { render: render });
   }
 }
 

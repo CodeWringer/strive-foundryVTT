@@ -8,6 +8,7 @@ export const TEMPLATES = {
   COMPONENT_INPUT_RADIO_BUTTON_GROUP: "systems/ambersteel/module/components/input-radio-button-group/input-radio-button-group.hbs",
   COMPONENT_INPUT_LABEL: "systems/ambersteel/templates/components/input-label.hbs",
   COMPONENT_INPUT_ITEM_GRID_VIEW: "systems/ambersteel/module/components/item-grid/item-grid-view.hbs",
+  COMPONENT_INPUT_IMAGE: "systems/ambersteel/module/components/input-image/input-image.hbs",
   // Buttons
   COMPONENT_BUTTON: "systems/ambersteel/module/components/button/button.hbs",
   COMPONENT_BUTTON_ADD: "systems/ambersteel/module/components/button-add/button-add.hbs",

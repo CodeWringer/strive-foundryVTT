@@ -444,6 +444,16 @@ Handlebars.registerPartial('inputLabel', `{{#> "${TEMPLATES.COMPONENT_INPUT_LABE
 // 
 // });
 
+Hooks.on("preCreateActor", async function(document, createData, options, userId) {
+  // This ensures the proper "default" image is set, upon creation of the document. 
+  document.data.update({ img: document.defaultImg });
+});
+
+Hooks.on("preCreateItem", async function(document, createData, options, userId) {
+  // This ensures the proper "default" image is set, upon creation of the document. 
+  document.data.update({ img: document.defaultImg });
+});
+
 // Hooks.on("createActor", async function(document, options, userId) {
 //   console.log("created!");
 // });

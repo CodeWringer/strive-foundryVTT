@@ -808,6 +808,30 @@ img.header-image {
   display: inline-block;
 }
 
+img.custom-icon-sm {
+  -webkit-box-flex: 0;
+  -ms-flex: none;
+  flex: none;
+  width: 26px !important;
+  height: 26px !important;
+}
+
+img.custom-icon-md {
+  -webkit-box-flex: 0;
+  -ms-flex: none;
+  flex: none;
+  width: 64px !important;
+  height: 64px !important;
+}
+
+img.custom-icon-lg {
+  -webkit-box-flex: 0;
+  -ms-flex: none;
+  flex: none;
+  width: 100px !important;
+  height: 100px !important;
+}
+
 .items-header {
   height: 28px;
   margin: 2px 0;

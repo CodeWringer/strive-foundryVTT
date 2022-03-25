@@ -25,11 +25,12 @@ export default class AmbersteelBaseActor {
   }
 
   /**
-   * Returns the icon image path for this type of Actor. 
-   * @returns {String} The icon image path. 
+   * Returns the default icon image path for this type of actor. 
+   * @type {String}
    * @virtual
+   * @readonly
    */
-  get img() { return "icons/svg/mystery-man.svg"; }
+  get defaultImg() { return "icons/svg/mystery-man.svg"; }
 
   /**
    * Prepare base data for the Actor. 

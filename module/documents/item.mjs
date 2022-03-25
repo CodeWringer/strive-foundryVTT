@@ -34,6 +34,14 @@ export class AmbersteelItem extends Item {
     return this._subType;
   }
 
+  /**
+   * Returns the default icon image path for this type of object. 
+   * @type {String}
+   * @virtual
+   * @readonly
+   */
+  get defaultImg() { return this.subType.defaultImg; }
+
   /** @override */
   prepareData() {
     super.prepareData();

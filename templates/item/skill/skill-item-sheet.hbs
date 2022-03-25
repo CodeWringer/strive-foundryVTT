@@ -5,7 +5,7 @@ viewModel: {SkillItemSheetViewModel}
   <header class="sheet-header">
     <div class="flex flex-column flex-grow">
       <div class="flex flex-row">
-        <img class="header-image" src="{{viewModel.item.img}}" data-edit="img" title="{{viewModel.item.name}}" height="64" width="64" />
+        {{> inputImage viewModel=viewModel.vmImg cssClass="custom-icon-md" }}
         <h1 class="header-name">
           {{> inputTextField viewModel=viewModel.vmTfName }}
         </h1>

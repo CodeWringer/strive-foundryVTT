@@ -9,7 +9,7 @@ viewModel: {FateCardViewModel}
   {{!-- Header --}}
   <div class="flex flex-column pad-md">
     <div class="flex flex-row">
-      <img class="header-image" src="{{viewModel.item.img}}" data-edit="img" title="{{viewModel.item.name}}" height="26" width="26" />
+      {{> inputImage viewModel=viewModel.vmImg cssClass="custom-icon-sm" }}
       <h3 class="header-name flex-grow" style="margin: 0;">
         {{> inputTextField viewModel=viewModel.vmTfName }}
       </h3>
