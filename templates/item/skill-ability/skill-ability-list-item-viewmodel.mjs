@@ -77,6 +77,11 @@ export default class SkillAbilityListItemViewModel extends SheetViewModel {
       });
     }
     
+    this.vmImg = this.createVmImg({
+      id: "vmImg",
+      propertyOwner: thiz.item,
+      propertyPath: `${pathSkillAbility}.img`,
+    });
     this.vmTfName = this.createVmTextField({
       id: "vmTfName",
       propertyOwner: thiz.item,

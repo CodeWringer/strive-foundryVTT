@@ -43,6 +43,11 @@ export default class SkillListItemViewModel extends SkillViewModel {
     // Child view models. 
     const thiz = this;
     
+    this.vmImg = this.createVmImg({
+      id: "vmImg",
+      propertyOwner: thiz.item,
+      propertyPath: "img",
+    });
     this.vmTfName = this.createVmTextField({
       id: "vmTfName",
       propertyOwner: thiz.item,

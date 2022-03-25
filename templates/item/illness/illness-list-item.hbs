@@ -10,7 +10,7 @@ viewModel: {IllnessListItemViewModel}
     <span class="width-min-xl">
       {{> inputLabel text="ambersteel.labels.illness"}}
     </span>
-    <img class="header-image" src="{{viewModel.item.img}}" title="{{item.name}}" height="26" width="26" />
+    {{> inputImage viewModel=viewModel.vmImg cssClass="custom-icon-sm" }}
     <span class="flex-grow margin-r-md">
       {{> inputTextField viewModel=viewModel.vmTfName }}
     </span>

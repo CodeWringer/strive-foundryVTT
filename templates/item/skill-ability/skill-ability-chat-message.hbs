@@ -8,6 +8,9 @@ viewModel: {SkillAbilityChatMessageViewModel}
 >
   {{!-- Header --}}
   <div class="flex flex-row">
+    <div class="flex flex-center">
+      <img class="inline-img header-image margin-r-sm" name="img" src="{{viewModel.skillAbility.img}}" title="{{viewModel.skillAbility.name}}" height="26" width="26" />
+    </div>
     <h3 class="flex-grow">
       {{localize viewModel.skillAbility.name}}
     </h3>
