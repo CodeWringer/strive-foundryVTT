@@ -25,7 +25,7 @@ export default class AmbersteelBaseActor {
   }
 
   /**
-   * Returns the default icon image path for this type of item. 
+   * Returns the default icon image path for this type of actor. 
    * @type {String}
    * @virtual
    * @readonly

@@ -33,6 +33,14 @@ export class AmbersteelActor extends Actor {
     return this._subType;
   }
 
+  /**
+   * Returns the default icon image path for this type of actor. 
+   * @type {String}
+   * @virtual
+   * @readonly
+   */
+  get defaultImg() { return this.subType.defaultImg; }
+
   /** @override */
   prepareData() {
     super.prepareData();
