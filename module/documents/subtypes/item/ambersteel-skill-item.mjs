@@ -3,7 +3,7 @@ import SkillAbility from "../../../dto/skill-ability.mjs";
 import { TEMPLATES } from "../../../templatePreloader.mjs";
 import { createUUID } from "../../../utils/uuid-utility.mjs";
 import SkillChatMessageViewModel from "../../../../templates/item/skill/skill-chat-message-viewmodel.mjs";
-import { RollData, RollDataComposition } from "../../../dto/roll-data.mjs";
+import { SummedData, SummedDataComponent } from "../../../dto/summed-data.mjs";
 
 export default class AmbersteelSkillItem extends AmbersteelBaseItem {
   /**
@@ -160,7 +160,7 @@ export default class AmbersteelSkillItem extends AmbersteelBaseItem {
 
   /**
    * @private
-   * @returns {RollData}
+   * @returns {SummedData}
    */
   _getRollData() {
     const relatedAttributeName = this.parent.data.data.relatedAttribute;
@@ -173,9 +173,9 @@ export default class AmbersteelSkillItem extends AmbersteelBaseItem {
 
     const compositionObj = game.ambersteel.getSkillTestNumberOfDice(skillLevel, relatedAttributeLevel);
 
-    return new RollData(compositionObj.totalDiceCount, [
-      new RollDataComposition(relatedAttributeName, `ambersteel.attributes.${relatedAttributeName}`, compositionObj.attributeDiceCount),
-      new RollDataComposition(this.parent.name, this.parent.name, compositionObj.skillDiceCount),
+    return new SummedData(compositionObj.totalDiceCount, [
+      new SummedDataComponent(relatedAttributeName, `ambersteel.attributes.${relatedAttributeName}`, compositionObj.attributeDiceCount),
+      new SummedDataComponent(this.parent.name, this.parent.name, compositionObj.skillDiceCount),
     ]);
   }
 }

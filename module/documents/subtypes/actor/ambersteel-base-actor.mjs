@@ -1,5 +1,5 @@
 import PreparedChatData from '../../../dto/prepared-chat-data.mjs';
-import { RollData, RollDataComposition } from '../../../dto/roll-data.mjs';
+import { SummedData, SummedDataComponent } from '../../../dto/summed-data.mjs';
 import * as ChatUtil from "../../../utils/chat-utility.mjs";
 
 export default class AmbersteelBaseActor {
@@ -175,8 +175,8 @@ export default class AmbersteelBaseActor {
     // Add functions.
     const thiz = this;
     oAtt.getRollData = () => {
-      return new RollData(attValue, [
-        new RollDataComposition(attName, oAtt.localizableName, attValue)
+      return new SummedData(attValue, [
+        new SummedDataComponent(attName, oAtt.localizableName, attValue)
       ]);
     };
     oAtt.advanceAttributeBasedOnRollResult = this.advanceAttributeBasedOnRollResult.bind(this);
