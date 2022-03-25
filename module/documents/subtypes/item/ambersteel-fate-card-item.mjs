@@ -14,7 +14,7 @@ export default class AmbersteelFateCardItem extends AmbersteelBaseItem {
   }
 
   /** @override */
-  get img() { return "icons/svg/wing.svg"; }
+  get defaultImg() { return "icons/svg/wing.svg"; }
 
   /**
    * Chat message template path. 
@@ -23,9 +23,7 @@ export default class AmbersteelFateCardItem extends AmbersteelBaseItem {
   get chatMessageTemplate() { return TEMPLATES.FATE_CARD; }
 
   /** @override */
-  prepareData() {
-    this.parent.data.img = this.img;
-  }
+  prepareData() {}
 
   /** @override */
   async getChatData() {

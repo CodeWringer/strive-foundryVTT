@@ -14,7 +14,7 @@ export default class AmbersteelIllnessItem extends AmbersteelBaseItem {
   }
 
   /** @override */
-  get img() { return "icons/svg/poison.svg"; }
+  get defaultImg() { return "icons/svg/poison.svg"; }
 
   /**
    * Chat message template path. 
@@ -23,9 +23,7 @@ export default class AmbersteelIllnessItem extends AmbersteelBaseItem {
   get chatMessageTemplate() { return TEMPLATES.ILLNESS_CHAT_MESSAGE; }
 
   /** @override */
-  prepareData() {
-    this.parent.data.img = this.img;
-  }
+  prepareData() {}
 
   /** @override */
   async getChatData() {
