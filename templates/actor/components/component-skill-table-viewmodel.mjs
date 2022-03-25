@@ -104,6 +104,11 @@ export default class SkillTableViewModel extends SheetViewModel {
           id: `vmBtnOpenSheet-skill-${i}`,
           target: skill.name,
         }),
+        vmImg: thiz.createVmImg({
+          id: "vmImg",
+          propertyOwner: skill,
+          propertyPath: "img",
+        }),
         vmTfName: thiz.createVmTextField({
           id: `vmTfName-skill-${i}`,
           propertyOwner: skill,

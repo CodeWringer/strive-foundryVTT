@@ -33,6 +33,11 @@ export default class IllnessListItemViewModel extends SheetViewModel {
     this.contextTemplate = args.contextTemplate ?? "illness-list-item";
     const thiz = this;
 
+    this.vmImg = this.createVmImg({
+      id: "vmImg",
+      propertyOwner: thiz.item,
+      propertyPath: "img",
+    });
     this.vmTfName = this.createVmTextField({
       id: "vmTfName",
       propertyOwner: thiz.item,

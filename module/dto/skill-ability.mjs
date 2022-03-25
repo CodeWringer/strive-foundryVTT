@@ -26,7 +26,7 @@ export default class SkillAbility {
       description: "",
       requiredLevel: 0,
       condition: "",
-      img: "icons/svg/item-book.svg",
+      img: "icons/svg/book.svg",
       apCost: 0,
       distance: 0,
       damageFormula: "",
