@@ -92,14 +92,15 @@ export default class ButtonRollViewModel extends ButtonViewModel {
    * @param {Any | undefined} args.callbackData Optional. Defines any data to pass to the completion callback. 
    * @param {Boolean | undefined} args.isEditable Optional. If true, will be interactible. 
    * 
-   * @param {String} args.propertyPath Property path identifying a property that contains a roll-formula. 
    * @param {CONFIG.rollTypes} args.rollType Determines the kind of roll to try and make. 
-   * @param {String | undefined} args.chatTitle Optional Title to display above the roll result in the chat message. 
+   * @param {String | undefined} args.propertyPath Optional. Property path identifying a property that contains a roll-formula. 
+   * IMPORTANT: If this argument is left undefined, then the target object MUST define a method 'getRollData()', which returns a {RollData} instance. 
+   * @param {String | undefined} args.chatTitle Optional. Title to display above the roll result in the chat message. 
    * @param {Actor | undefined} args.actor Optional. Actor associated with the roll result. 
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["target", "propertyPath", "rollType"]);
+    validateOrThrow(args, ["target", "rollType"]);
 
     this._propertyPath = args.propertyPath;
     this._rollType = args.rollType;
@@ -117,22 +118,29 @@ export default class ButtonRollViewModel extends ButtonViewModel {
    * @override
    * @see {ButtonViewModel.onClick}
    * @async
-   * @throws {Error} InvalidStateException - Thrown if the rollType is unrecognized. 
+   * @throws {Error} InvalidStateException - Thrown, if the rollType is unrecognized. 
+   * @throws {Error} InvalidStateException - Thrown, if the rollType is 'generic' and the property path
+   * is undefined. 
+   * @throws {Error} InvalidStateException - Thrown, if the property path is undefined and there is no 
+   * 'getRollData()' method defined on the target object. 
    */
   async onClick(html, isOwner, isEditable) {
     if (isOwner !== true) return;
 
     if (this.rollType === game.ambersteel.config.rollTypes.generic) {
+      if (this.propertyPath === undefined) {
+        throw new Error("InvalidStateException: For roll-type 'generic', a property path MUST be provided");
+      }
+
       const dialogResult = await ChatUtil.queryVisibilityMode();
       if (!dialogResult.confirmed) return;
-  
+      
       const propertyValue = PropUtil.getNestedPropertyValue(this.target, this.propertyPath);
-  
       // Do roll. 
       const roll = new Roll(propertyValue);
       const rollResult = await roll.evaluate({ async: true });
       this._lastRollResult = rollResult;
-    
+
       // Display roll result. 
       const renderedContent = await roll.render();
       await ChatUtil.sendToChat({
@@ -146,26 +154,57 @@ export default class ButtonRollViewModel extends ButtonViewModel {
       const dialogResult = await DiceUtil.queryRollData();
       if (!dialogResult.confirmed) return;
   
-      const numberOfDice = parseInt(PropUtil.getNestedPropertyValue(this.target, this.propertyPath));
+      let numberOfDice = 0;
+      let diceComposition = undefined;
+
+      if (this.propertyPath === undefined) {
+        if (this.target.getRollData === undefined) {
+          throw new Error("InvalidStateException: Neither 'propertyPath' nor 'getRollData()' is defined");
+        }
+
+        const rollData = this.target.getRollData();
+        numberOfDice = rollData.total;
+        diceComposition = this._getJoinedDiceComposition(rollData, dialogResult.bonusDice ?? 0);
+      } else {
+        const propertyValue = PropUtil.getNestedPropertyValue(this.target, this.propertyPath);
+        numberOfDice = parseInt(propertyValue);
+      }
   
       // Do roll. 
       const rollResult = await DiceUtil.rollDicePool({
         numberOfDice: numberOfDice, 
-        obstacle: dialogResult.obstacle,
-        bonusDice: dialogResult.bonusDice,
+        obstacle: dialogResult.obstacle ?? 0,
+        bonusDice: dialogResult.bonusDice ?? 0,
       });
       this._lastRollResult = rollResult;
   
       // Display roll result. 
       await DiceUtil.sendDiceResultToChat({
         rollResult: rollResult,
-        flavor: this.chatTitle,
+        title: this.chatTitle,
         actor: this.actor,
-        visibilityMode: dialogResult.visibilityMode
+        visibilityMode: dialogResult.visibilityMode,
+        diceComposition: diceComposition,
       });
     } else {
       throw new Error(`InvalidStateException: Invalid rollType '${this.rollType}'`);
     }
+  }
+
+  /**
+   * @param {RollData} rollData 
+   * @param {Number | String} bonusDice 
+   * @returns {String} The joined and comma-separated dice composition strings. 
+   * @async
+   */
+  _getJoinedDiceComposition(rollData, bonusDice) {
+    let joinedRollData = "";
+    for (const entry of rollData.composition) {
+      joinedRollData = `${joinedRollData}${entry.value} ${game.i18n.localize(entry.localizableName)}, `
+    }
+    joinedRollData = `${joinedRollData}${bonusDice} ${game.i18n.localize("ambersteel.roll.bonusDice")}`;
+
+    return `(${joinedRollData})`;
   }
 }
 

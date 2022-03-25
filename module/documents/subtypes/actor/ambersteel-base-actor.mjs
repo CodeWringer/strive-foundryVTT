@@ -1,4 +1,5 @@
 import PreparedChatData from '../../../dto/prepared-chat-data.mjs';
+import { RollData, RollDataComposition } from '../../../dto/roll-data.mjs';
 import * as ChatUtil from "../../../utils/chat-utility.mjs";
 
 export default class AmbersteelBaseActor {
@@ -98,7 +99,9 @@ export default class AmbersteelBaseActor {
    *         requiredFailures: {Number},
    *         name: {String},
    *         localizableName: {String},
-   *         localizableAbbreviation: {String}
+   *         localizableAbbreviation: {String},
+   *         getRollData(): {Function<Object>}
+   *         advanceAttributeBasedOnRollResult({DicePoolResult}, {String}): {Function<>}
    *       }
    *     },
    *     mental: {Object} = same as physical
@@ -168,8 +171,17 @@ export default class AmbersteelBaseActor {
     // Add localization keys. 
     oAtt.localizableName = `ambersteel.attributes.${attName}`;
     oAtt.localizableAbbreviation = `ambersteel.attributeAbbreviations.${attName}`;
-  }
 
+    // Add functions.
+    const thiz = this;
+    oAtt.getRollData = () => {
+      return new RollData(attValue, [
+        new RollDataComposition(attName, oAtt.localizableName, attValue)
+      ]);
+    };
+    oAtt.advanceAttributeBasedOnRollResult = this.advanceAttributeBasedOnRollResult.bind(this);
+  }
+  
   /**
    * @param {Document} context 
    * @returns {Array<Object>} { name: {String}, attributeNames: {Array<String>} }

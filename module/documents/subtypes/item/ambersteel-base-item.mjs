@@ -62,9 +62,10 @@ export default class AmbersteelBaseItem {
    * undefined and have meaningful values. 
    * 
    * Derived data is *not* persisted!
+   * @param {AmbersteelItem} context
    * @virtual
    */
-  prepareDerivedData() { }
+  prepareDerivedData(context) { }
 
   /**
    * Base implementation of returning data for a chat message, based on this item. 
