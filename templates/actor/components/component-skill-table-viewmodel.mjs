@@ -88,7 +88,7 @@ export default class SkillTableViewModel extends SheetViewModel {
         vmBtnRoll: thiz.createVmBtnRoll({
           id: `vmBtnRoll-skill-${i}`,
           target: skill,
-          propertyPath: "data.data.totalValue" ,
+          propertyPath: undefined,
           chatTitle: game.i18n.localize(skill.name),
           rollType: "dice-pool",
           callback: "advanceSkillBasedOnRollResult",

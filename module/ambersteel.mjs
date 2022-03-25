@@ -73,10 +73,15 @@ Hooks.once('init', async function() {
      * Returns the number of dice for a skill test. 
      * @param {Number} skillValue A skill level. 
      * @param {Number} relatedAttributeValue Level of the skill related attribute. 
-     * @returns {Number} The number of D6 available for the test. 
+     * @returns {Object} { totalDiceCount: {Number}, skillDiceCount: {Number}, attributeDiceCount: {Number} }
      */
     getSkillTestNumberOfDice: function(skillLevel, relatedAttributeLevel) {
-      return skillLevel == 0 ? parseInt(Math.ceil(relatedAttributeLevel / 2)) : parseInt(Math.floor(relatedAttributeLevel / 2)) + skillLevel;
+      const attributeDice = skillLevel == 0 ? parseInt(Math.ceil(relatedAttributeLevel / 2)) : parseInt(Math.floor(relatedAttributeLevel / 2));
+      return {
+        totalDiceCount: skillLevel + attributeDice,
+        skillDiceCount: skillLevel,
+        attributeDiceCount: attributeDice
+      };
     },
     /**
      * Returns the advancement requirements for the given level of an attribute. 

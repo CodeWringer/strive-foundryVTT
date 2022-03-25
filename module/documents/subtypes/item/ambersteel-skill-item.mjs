@@ -3,6 +3,7 @@ import SkillAbility from "../../../dto/skill-ability.mjs";
 import { TEMPLATES } from "../../../templatePreloader.mjs";
 import { createUUID } from "../../../utils/uuid-utility.mjs";
 import SkillChatMessageViewModel from "../../../../templates/item/skill/skill-chat-message-viewmodel.mjs";
+import { RollData, RollDataComposition } from "../../../dto/roll-data.mjs";
 
 export default class AmbersteelSkillItem extends AmbersteelBaseItem {
   /**
@@ -30,21 +31,13 @@ export default class AmbersteelSkillItem extends AmbersteelBaseItem {
   get chatMessageTemplate() { return TEMPLATES.SKILL_ITEM_CHAT_MESSAGE; }
 
   /** @override */
-  prepareData() {
-    this.parent.data.data.relatedAttribute = this.parent.data.data.relatedAttribute ?? "agility";
+  prepareData(context) {
+    context.data.data.relatedAttribute = context.data.data.relatedAttribute ?? "agility";
   }
   
-  /**
-   * @override
-   * @see {AmbersteelBaseItem.prepareDerivedData}
-   */
-  prepareDerivedData() {
-    const thiz = this;
-
-    this.parent.data.data = {
-      ...this.parent.data.data,
-      get totalValue() { return thiz._getTotalValue() }
-    };
+  /** @override */
+  prepareDerivedData(context) {
+    context.getRollData = this._getRollData.bind(this);
   }
 
   /** @override */
@@ -166,11 +159,10 @@ export default class AmbersteelSkillItem extends AmbersteelBaseItem {
   }
 
   /**
-   * Returns the number of dice available for a test of this skill. 
-   * @returns {Number} The number of dice available for the test. 
    * @private
+   * @returns {RollData}
    */
-  _getTotalValue() {
+  _getRollData() {
     const relatedAttributeName = this.parent.data.data.relatedAttribute;
     const attGroupName = game.ambersteel.getAttributeGroupName(relatedAttributeName);
     
@@ -179,6 +171,11 @@ export default class AmbersteelSkillItem extends AmbersteelBaseItem {
 
     const skillLevel = this.parent.data.data.value;
 
-    return game.ambersteel.getSkillTestNumberOfDice(skillLevel, relatedAttributeLevel);
+    const compositionObj = game.ambersteel.getSkillTestNumberOfDice(skillLevel, relatedAttributeLevel);
+
+    return new RollData(compositionObj.totalDiceCount, [
+      new RollDataComposition(relatedAttributeName, `ambersteel.attributes.${relatedAttributeName}`, compositionObj.attributeDiceCount),
+      new RollDataComposition(this.parent.name, this.parent.name, compositionObj.skillDiceCount),
+    ]);
   }
 }

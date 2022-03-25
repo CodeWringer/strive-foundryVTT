@@ -11,8 +11,7 @@ export const DICE_ROLL_SOUND = "../sounds/dice.wav";
 export const LOCALIZABLE_OBSTACLE_ABBREVIATION = "ambersteel.roll.obstacleAbbreviation";
 
 /**
- * Rolls the given number of dice and returns the results of the roll, both in raw 
- * form and as rendered HTML. 
+ * Rolls the given number of dice and returns the results of the roll. 
  * @param {Number} ops.numberOfDice The number of dice to roll. 
  * @param {Number} ops.obstacle The obstacle to roll against. 
  * @param {Number} ops.bonusDice An additional number of dice to roll. 
@@ -34,7 +33,8 @@ export function rollDicePool(ops = {}) {
   if (numberOfDice <= 0) {
     return new DicePoolResult({
       numberOfDice: numberOfDice,
-      obstacle: ops.obstacle
+      obstacle: ops.obstacle,
+      bonusDice: ops.bonusDice,
     });
   }
 
@@ -61,16 +61,19 @@ export function rollDicePool(ops = {}) {
     positives: positives,
     negatives: negatives,
     isSuccess: isSuccess,
-    degree: degree
+    degree: degree,
+    bonusDice: ops.bonusDice,
   });
 }
 
 /**
  * Creates a new ChatMessage to display dice roll results. 
  * @param {DicePoolResult} args.rollResult The results of a dice pool roll. 
- * @param {String} args.flavor Optional. The flavor text / subtitle of the message. 
- * @param {String} args.actor Optional. The actor to associate with the message. 
- * @param {CONFIG.ambersteel.visibilityModes} args.visibilityMode Optional. Sets the visibility of the chat message. Default public. 
+ * @param {String | undefined} args.flavor Optional. The flavor text / subtitle of the message. 
+ * @param {String | undefined} args.actor Optional. The actor to associate with the message. 
+ * @param {String | undefined} args.title Optional. A title for the message. 
+ * @param {CONFIG.ambersteel.visibilityModes | undefined} args.visibilityMode Optional. Sets the visibility of the chat message. Default public. 
+ * @param {String | undefined} args.diceComposition Optional. A localized string showing the composition of dice. 
  * @returns {Promise<any>}
  * @async
  */
@@ -80,6 +83,8 @@ export async function sendDiceResultToChat(args = {}) {
     flavor: undefined,
     actor: undefined,
     visibilityMode: CONFIG.ambersteel.visibilityModes.public,
+    diceComposition: undefined,
+    title: undefined,
     ...args
   };
   validateOrThrow(args, ["rollResult"]);
@@ -109,6 +114,8 @@ export async function sendDiceResultToChat(args = {}) {
   const renderedContent = await renderTemplate(TEMPLATES.DICE_ROLL_CHAT_MESSAGE, {
     ...rollResult,
     resultsForDisplay: resultsForDisplay,
+    diceComposition: args.diceComposition,
+    title: args.title,
   });
 
   return ChatUtil.sendToChat({

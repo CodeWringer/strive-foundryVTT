@@ -305,7 +305,8 @@ export default class SheetViewModel extends ViewModel {
   /**
    * Creates a child button roll view model and returns it. 
    * @param {Object} args.target The target object to affect.  
-   * @param {String} args.propertyPath Property path identifying a property that contains a roll-formula. 
+   * @param {String | undefined} args.propertyPath Optional. Property path identifying a property that contains a roll-formula. 
+   * IMPORTANT: If this argument is left undefined, then the target object MUST define a method 'getRollData()', which returns a {RollData} instance. 
    * @param {CONFIG.rollTypes} args.rollType Determines the kind of roll to try and make. 
    * @param {String | undefined} args.id
    * @param {Function | undefined} args.callback Defines an asynchronous callback that is invoked upon completion of the button's own callback. 
@@ -316,7 +317,7 @@ export default class SheetViewModel extends ViewModel {
    */
   createVmBtnRoll(args = {}) {
     const thiz = this;
-    validateOrThrow(args, ["target", "propertyPath", "rollType"]);
+    validateOrThrow(args, ["target", "rollType"]);
 
     return new ButtonRollViewModel({
       parent: thiz,

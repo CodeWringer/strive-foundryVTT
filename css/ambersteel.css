@@ -274,8 +274,18 @@ header.message-header span.flavor-text {
   align-items: center;
 }
 
-.dice-rolls-container {
+.dice-roll-chat-message-container .dice-rolls-container {
   overflow: hidden;
+}
+
+.dice-roll-chat-message-container .dice-number {
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.dice-roll-chat-message-container .dice-composition {
+  color: #46453f;
+  font-size: 0.8rem;
 }
 
 ol.dice-rolls {

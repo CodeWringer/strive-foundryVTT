@@ -72,8 +72,8 @@ export default class AttributeTableViewModel extends SheetViewModel {
         requiredFailures: attribute.requiredFailures,
         vmBtnRoll: thiz.createVmBtnRoll({
           id: `vmBtnRoll-${attribute.name}`,
-          target: thiz.actor,
-          propertyPath: `data.data.attributes.${thiz.attributeGroupName}.${attribute.name}.value`,
+          target: thiz.actor.data.data.attributes[thiz.attributeGroupName][attribute.name],
+          propertyPath: undefined,
           chatTitle: game.i18n.localize(attribute.localizableName),
           rollType: "dice-pool",
           callback: "advanceAttributeBasedOnRollResult",
