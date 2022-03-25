@@ -62,6 +62,27 @@ export class AmbersteelItemSheet extends ItemSheet {
   }
 
   /**
+   * @override
+   * @type {String}
+   * @see https://foundryvtt.com/api/ItemSheet.html#title
+   */
+  get title() {
+    if (this.item.type === "skill") {
+      return `${game.i18n.localize("ambersteel.labels.skill")} - ${this.item.name}`;
+    } else if (this.item.type === "fate-card") {
+      return `${game.i18n.localize("ambersteel.fateSystem.fateCard")} - ${this.item.name}`;
+    } else if (this.item.type === "item") {
+      return `${game.i18n.localize("ambersteel.labels.item")} - ${this.item.name}`;
+    } else if (this.item.type === "injury") {
+      return `${game.i18n.localize("ambersteel.labels.injury")} - ${this.item.name}`;
+    } else if (this.item.type === "illness") {
+      return `${game.i18n.localize("ambersteel.labels.illness")} - ${this.item.name}`;
+    } else {
+      return this.item.name;
+    }
+  }
+
+  /**
    * @type {ViewModel}
    * @private
    */

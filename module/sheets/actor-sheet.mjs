@@ -1,7 +1,6 @@
 import AmbersteelNpcActorSheet from "./subtypes/actor/ambersteel-npc-actor-sheet.mjs";
 import AmbersteelPcActorSheet from "./subtypes/actor/ambersteel-pc-actor-sheet.mjs";
 import * as SheetUtil from "../utils/sheet-utility.mjs";
-import ViewModelCollection from "../utils/viewmodel-collection.mjs";
 
 export class AmbersteelActorSheet extends ActorSheet {
   /**
@@ -67,6 +66,21 @@ export class AmbersteelActorSheet extends ActorSheet {
    */
   get template() {
     return this.subType.template;
+  }
+
+  /**
+   * @override
+   * @type {String}
+   * @see https://foundryvtt.com/api/ActorSheet.html#title
+   */
+  get title() {
+    if (this.actor.type === "pc") {
+      return `${game.i18n.localize("ambersteel.labels.pc")} - ${this.actor.name}`;
+    } else if (this.actor.type === "npc") {
+      return `${game.i18n.localize("ambersteel.labels.npc")} - ${this.actor.name}`;
+    } else {
+      return this.actor.name;
+    }
   }
 
   /**

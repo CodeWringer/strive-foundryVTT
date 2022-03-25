@@ -165,7 +165,11 @@
       "usedCarryingCapacity": "Used carrying capacity (in bulk)",
       "openSheet": "Open Sheet",
       "shapeWidth": "Width",
-      "shapeHeight": "Height"
+      "shapeHeight": "Height",
+      "pc": "Player Character",
+      "pcAbbreviation": "PC",
+      "npc": "Non-Player Character",
+      "npcAbbreviation": "NPC"
     },
     "fateSystem": {
       "fate": "Fate",
