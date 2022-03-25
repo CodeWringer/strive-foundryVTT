@@ -29,14 +29,15 @@ export default class AmbersteelItemItem extends AmbersteelBaseItem {
     context.data.data.shape.height = parseInt(context.data.data.shape.height);
   }
   
-  prepareDerivedData() {
+  /** @override */
+  prepareDerivedData(context) {
     // Derive bulk from shape. 
-    const shape = this.parent.data.data.shape;
+    const shape = context.data.data.shape;
     if (shape === undefined) {
       game.ambersteel.logger.logWarn("Shape on item undefined! Using fallback '{ width: 1, height: 1 }'");
       shape = { width: 1, height: 1 };
     }
-    this.parent.data.data.bulk = shape.width * shape.height;
+    context.data.data.bulk = shape.width * shape.height;
   }
 
   /** @override */

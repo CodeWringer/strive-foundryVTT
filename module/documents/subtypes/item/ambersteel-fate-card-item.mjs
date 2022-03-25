@@ -23,9 +23,6 @@ export default class AmbersteelFateCardItem extends AmbersteelBaseItem {
   get chatMessageTemplate() { return TEMPLATES.FATE_CARD; }
 
   /** @override */
-  prepareData() {}
-
-  /** @override */
   async getChatData() {
     const chatData = super.getChatData();
     chatData.flavor = game.i18n.localize("ambersteel.labels.fateCard");
