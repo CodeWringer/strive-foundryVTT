@@ -1,6 +1,9 @@
+import ActorChatMessageViewModel from '../../../../templates/actor/actor-chat-message-viewmodel.mjs';
 import PreparedChatData from '../../../dto/prepared-chat-data.mjs';
 import { SummedData, SummedDataComponent } from '../../../dto/summed-data.mjs';
+import { TEMPLATES } from '../../../templatePreloader.mjs';
 import * as ChatUtil from "../../../utils/chat-utility.mjs";
+import { createUUID } from '../../../utils/uuid-utility.mjs';
 
 export default class AmbersteelBaseActor {
   /**
@@ -32,6 +35,13 @@ export default class AmbersteelBaseActor {
    * @readonly
    */
   get defaultImg() { return "icons/svg/mystery-man.svg"; }
+
+  /**
+   * Chat message template path. 
+   * @type {String}
+   * @readonly
+   */
+  get chatMessageTemplate() { return TEMPLATES.ACTOR_CHAT_MESSAGE; }
 
   /**
    * Prepare base data for the Actor. 
@@ -266,12 +276,43 @@ export default class AmbersteelBaseActor {
    * Base implementation of returning data for a chat message, based on this Actor. 
    * @returns {PreparedChatData}
    * @virtual
+   * @async
    */
-  getChatData() {
+  async getChatData() {
     const actor = this.parent;
+    const vm = this.getChatViewModel();
+    const renderedContent = await renderTemplate(this.chatMessageTemplate, {
+      viewModel: vm,
+    });
+
     return new PreparedChatData({
+      renderedContent: renderedContent,
       actor: actor,
-      sound: "../sounds/notify.wav"
+      sound: "../sounds/notify.wav",
+      viewModel: vm,
+    });
+  }
+  
+  /**
+   * Returns an instance of a view model for use in a chat message. 
+   * @returns {ActorChatMessageViewModel}
+   * @param {Object | undefined} overrides Optional. An object that allows overriding any of the view model properties. 
+   * @param {String | undefined} overrides.id
+   * @param {Boolean | undefined} overrides.isEditable
+   * @param {Boolean | undefined} overrides.isSendable
+   * @param {Boolean | undefined} overrides.isOwner
+   * @param {Boolean | undefined} overrides.isGM
+   * @virtual
+   */
+  getChatViewModel(overrides = {}) {
+    return new ActorChatMessageViewModel({
+      id: `${this.parent.id}-${createUUID()}`,
+      isEditable: false,
+      isSendable: false,
+      isOwner: this.parent.isOwner ?? this.parent.owner ?? false,
+      isGM: game.user.isGM,
+      actor: this.parent,
+      ...overrides,
     });
   }
 

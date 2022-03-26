@@ -1,0 +1,19 @@
+.custom-system-chat-message {
+  .scrollable-height {
+    &-sm {
+      overflow-y: scroll;
+      min-height: $line-height;
+      max-height: 150px;
+    }
+    &-md {
+      overflow-y: scroll;
+      min-height: $line-height;
+      max-height: 250px;
+    }
+    &-lg {
+      overflow-y: scroll;
+      min-height: $line-height;
+      max-height: 350px;
+    }
+  }
+}
