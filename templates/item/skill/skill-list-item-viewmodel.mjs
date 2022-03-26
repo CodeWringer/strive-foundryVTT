@@ -94,5 +94,10 @@ export default class SkillListItemViewModel extends SkillViewModel {
       visGroupId: thiz.visGroupId,
       actor: thiz.actor,
     });
+    this.vmSwIsMagicSchool = this.createVmBtnToggle({
+      id: "vmSwIsMagicSchool",
+      target: thiz.item,
+      propertyPath: "data.data.isMagicSchool",
+    });
   }
 }

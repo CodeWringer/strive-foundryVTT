@@ -70,6 +70,11 @@ export default class SkillItemSheetViewModel extends SkillViewModel {
       propertyPath: "data.data.category",
       placeholder: "ambersteel.labels.category",
     });
+    this.vmSwIsMagicSchool = this.createVmBtnToggle({
+      id: "vmSwIsMagicSchool",
+      target: thiz.item,
+      propertyPath: "data.data.isMagicSchool",
+    });
     this.vmTaDescription = this.createVmTextArea({
       id: "vmTaDescription",
       propertyOwner: thiz.item,

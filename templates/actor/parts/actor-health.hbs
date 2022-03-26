@@ -45,6 +45,25 @@ viewModel: {ActorHealthViewModel}
           </span>
         </div>
       </div>
+      {{!-- Col 3 --}}
+      <div class="sheet-block">
+        <div class="flex flex-row">
+          <div class="flex-grow">
+            {{> inputLabel text="ambersteel.labels.maxMagicStamina"}}
+          </div>
+          <span class="width-md">
+            {{> inputNumberSpinner viewModel=viewModel.vmNsMaxMagicStamina }}
+          </span>
+        </div>
+        <div class="flex flex-row">
+          <div class="flex-grow">
+            {{> inputLabel text="ambersteel.labels.magicStamina"}}
+          </div>
+          <span class="width-md">
+            {{> inputNumberSpinner viewModel=viewModel.vmNsMagicStamina }}
+          </span>
+        </div>
+      </div>
     </div>
   {{!-- Injuries --}}
   <h2 class="flex flex-row">{{localize "ambersteel.labels.injuries"}}</h2>

@@ -94,7 +94,7 @@ export default class ButtonRollViewModel extends ButtonViewModel {
    * 
    * @param {CONFIG.rollTypes} args.rollType Determines the kind of roll to try and make. 
    * @param {String | undefined} args.propertyPath Optional. Property path identifying a property that contains a roll-formula. 
-   * IMPORTANT: If this argument is left undefined, then the target object MUST define a method 'getRollData()', which returns a {RollData} instance. 
+   * IMPORTANT: If this argument is left undefined, then the target object MUST define a method 'getRollData()', which returns a {SummedData} instance. 
    * @param {String | undefined} args.chatTitle Optional. Title to display above the roll result in the chat message. 
    * @param {Actor | undefined} args.actor Optional. Actor associated with the roll result. 
    */
@@ -192,14 +192,14 @@ export default class ButtonRollViewModel extends ButtonViewModel {
   }
 
   /**
-   * @param {RollData} rollData 
+   * @param {SummedData} rollData 
    * @param {Number | String} bonusDice 
-   * @returns {String} The joined and comma-separated dice composition strings. 
+   * @returns {String} The joined and comma-separated dice component strings. 
    * @async
    */
   _getJoinedDiceComposition(rollData, bonusDice) {
     let joinedRollData = "";
-    for (const entry of rollData.composition) {
+    for (const entry of rollData.components) {
       joinedRollData = `${joinedRollData}${entry.value} ${game.i18n.localize(entry.localizableName)}, `
     }
     joinedRollData = `${joinedRollData}${bonusDice} ${game.i18n.localize("ambersteel.roll.bonusDice")}`;

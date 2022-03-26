@@ -18,6 +18,7 @@ export const TEMPLATES = {
   COMPONENT_BUTTON_SEND_TO_CHAT: "systems/ambersteel/module/components/button-send-to-chat/button-send-to-chat.hbs",
   COMPONENT_BUTTON_TOGGLE_VISIBILITY: "systems/ambersteel/module/components/button-toggle-visibility/button-toggle-visibility.hbs",
   COMPONENT_BUTTON_TAKE_ITEM: "systems/ambersteel/module/components/button-take-item/button-take-item.hbs",
+  COMPONENT_BUTTON_TOGGLE: "systems/ambersteel/module/components/button-toggle/button-toggle.hbs",
   // GM
   COMPONENT_GM_NOTES: "systems/ambersteel/templates/gm-notes.hbs",
   // Dice

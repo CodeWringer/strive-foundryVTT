@@ -1,0 +1,40 @@
+button.component-button-toggle {
+  background-color: $c-neutral-bg-medium;
+  border: $c-border-input 1px solid;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  cursor: pointer;
+  border-radius: 24px;
+  width: 50px;
+  height: 24px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  
+  &.active {
+    background-color: $c-themed-bg-light;
+    justify-content: flex-end;
+
+    &.disabled {
+      background-color: $c-themed-bg-lighter;
+    }
+  }
+
+  &.disabled {
+    background-color: $c-themed-bg-disabled;
+  }
+}
+
+span.component-button-toggle-knob {
+  background-color: $c-border-medium;
+  border-radius: 100%;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  border: $c-border-input 1px solid;
+
+  &.active {
+    background-color: $c-dark;
+  }
+}

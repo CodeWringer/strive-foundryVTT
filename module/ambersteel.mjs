@@ -14,6 +14,7 @@ import AdvancementRequirements from "./dto/advancement-requirement.mjs";
 import { TEMPLATES } from "./templatePreloader.mjs";
 import { createUUID } from './utils/uuid-utility.mjs';
 import ChoiceOption from "./dto/choice-option.mjs";
+import { SummedData, SummedDataComponent } from "./dto/summed-data.mjs";
 // Import logging classes. 
 import { BaseLoggingStrategy, LogLevels } from "./logging/base-logging-strategy.mjs";
 import { ConsoleLoggingStrategy } from "./logging/console-logging-strategy.mjs";
@@ -154,6 +155,25 @@ Hooks.once('init', async function() {
     },
     getCharacterMaximumInventory: function(actor) {
       return actor.data.data.attributes.physical.strength.value * 3;
+    },
+    /**
+     * Returns an object containing the maximum magic stamina, as well as the details of how it came to be. 
+     * @param {AmbersteelActor} actor 
+     * @returns {SummedData} The maximum magic stamina of the given actor. 
+     */
+    getCharacterMaximumMagicStamina: function(actor) {
+      let total = actor.data.data.attributes.mental.arcana.value;
+      const components = [];
+
+      for (const skill of actor.data.data.skills) {
+        if (skill.data.data.isMagicSchool !== true) continue;
+
+        const skillLevel = parseInt(skill.data.data.value);
+        components.push(new SummedDataComponent(skill.name, skill.name, skillLevel));
+        total += skillLevel;
+      }
+
+      return new SummedData(parseInt(Math.ceil(total / 2)), components);
     },
     /**
      * Returns true, if the given actor must do toughness tests, whenever they suffer an injury. 
