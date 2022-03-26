@@ -1360,3 +1360,21 @@ span.component-button-toggle-knob {
 span.component-button-toggle-knob.active {
   background-color: #191813;
 }
+
+.custom-system-chat-message .scrollable-height-sm {
+  overflow-y: scroll;
+  min-height: 26px;
+  max-height: 150px;
+}
+
+.custom-system-chat-message .scrollable-height-md {
+  overflow-y: scroll;
+  min-height: 26px;
+  max-height: 250px;
+}
+
+.custom-system-chat-message .scrollable-height-lg {
+  overflow-y: scroll;
+  min-height: 26px;
+  max-height: 350px;
+}

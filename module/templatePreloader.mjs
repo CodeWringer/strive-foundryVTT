@@ -42,6 +42,7 @@ export const TEMPLATES = {
   ACTOR_HEALTH: "systems/ambersteel/templates/actor/parts/actor-health.hbs",
   ACTOR_ASSETS: "systems/ambersteel/templates/actor/parts/actor-assets.hbs",
   ACTOR_BIOGRAPHY: "systems/ambersteel/templates/actor/parts/actor-biography.hbs",
+  ACTOR_CHAT_MESSAGE: "systems/ambersteel/templates/actor/actor-chat-message.hbs",
   // --- Item
   ITEM_SHEET: "systems/ambersteel/templates/item/item/item-item-sheet.hbs",
   ITEM_CHAT_MESSAGE: "systems/ambersteel/templates/item/item/item-item-chat-message.hbs",

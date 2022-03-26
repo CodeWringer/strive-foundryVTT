@@ -1,0 +1,60 @@
+{{!-- Requires context:
+viewModel: {ActorChatMessageViewModel}
+--}}
+<section class="custom-system-chat-message" 
+  data-view-model-id="{{viewModel.id}}"
+  data-document-id="{{viewModel.actor.id}}"
+>
+  {{!-- Header --}}
+  <div class="flex flex-row">
+    <div class="flex flex-center">
+      <img class="inline-img header-image margin-r-sm" name="img" src="{{viewModel.actor.img}}" title="{{viewModel.actor.name}}" height="35" width="35" />
+    </div>
+    <h2 class="flex-grow">
+      {{viewModel.actor.name}}
+    </h2>
+  </div>
+  {{!-- Personals --}}
+  {{!-- Species --}}
+  <div class="flex flex-row sheet-block margin-b-md">
+    <div class="width-min-xl fancy-font">
+      {{localize "ambersteel.personals.species"}}
+    </div>
+    <div class="flex-grow">
+      {{viewModel.actor.data.data.person.species}}
+    </div>
+  </div>
+  <div class="flex flex-row sheet-block margin-b-md">
+    <div class="width-min-xl fancy-font">
+      {{localize "ambersteel.personals.culture"}}
+    </div>
+    <div class="flex-grow">
+      {{viewModel.actor.data.data.person.culture}}
+    </div>
+  </div>
+  <div class="flex flex-row sheet-block margin-b-md">
+    <div class="width-min-xl fancy-font">
+      {{localize "ambersteel.personals.sex"}}
+    </div>
+    <div class="flex-grow">
+      {{viewModel.actor.data.data.person.sex}}
+    </div>
+  </div>
+  <div class="flex flex-row sheet-block margin-b-md">
+    <div class="width-min-xl fancy-font">
+      {{localize "ambersteel.personals.age"}}
+    </div>
+    <div class="flex-grow">
+      {{viewModel.actor.data.data.person.age}}
+    </div>
+  </div>
+  {{!-- Biography --}}
+  <div class="sheet-block">
+    <h3 class="width-min-xl fancy-font">
+      {{localize "ambersteel.labels.biography"}}
+    </h3>
+    <div class="scrollable-height-md">
+      {{{viewModel.renderedBiography}}}
+    </div>
+  </div>
+</section>

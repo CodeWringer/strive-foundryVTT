@@ -87,6 +87,7 @@
     "labels": {
       "actor": "Actor",
       "attribute": "Attribute",
+      "biography": "Biography",
       "level": "Level",
       "attributeAbbreviation": "Attr.",
       "requiredSuccessFailureAbbreviation": "Req. S/F",
