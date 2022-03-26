@@ -91,6 +91,14 @@ viewModel: {ActorHealthViewModel}
       </div>
     </div>
   </div>
+  <div class="hint-card flex {{#if viewModel.isToughnessTestRequired}}{{else}}hidden{{/if}}">
+    <div class="flex flex-center hint-card-icon">
+      <i class="fas fa-exclamation"></i>
+    </div>
+    <div class="flex-grow">
+      <span>{{localize "ambersteel.rules.hintToughnessTestRequired"}}</span>
+    </div>
+  </div>
   <ol class="unstyled-list alternating-rows">
     {{#each viewModel.injuries as |injuryViewModel key|}}
       <li class="ambersteel-list-row sheet-block">

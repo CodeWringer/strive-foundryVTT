@@ -38,6 +38,12 @@ export default class ActorHealthViewModel extends SheetViewModel {
   injuries = [];
 
   /**
+   * @type {Boolean}
+   * @readonly
+   */
+  get isToughnessTestRequired() { return game.ambersteel.isToughnessTestRequired(this.actor); }
+
+  /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
    * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 
    * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 

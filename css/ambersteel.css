@@ -853,6 +853,18 @@ img.custom-icon-lg {
   cursor: default;
 }
 
+.hint-card {
+  background-color: #eddfb0;
+  border: 1px solid #a89b70;
+  border-radius: 4px;
+  padding: 6px;
+}
+
+.hint-card-icon {
+  font-size: 1.2rem;
+  margin-right: 0.6rem;
+}
+
 .items-header {
   height: 28px;
   margin: 2px 0;
