@@ -11,6 +11,8 @@ button.component-button-toggle {
   display: flex;
   justify-content: flex-start;
   align-items: center;
+  margin: 0;
+  padding: 3px;
   
   &.active {
     background-color: $c-themed-bg-light;

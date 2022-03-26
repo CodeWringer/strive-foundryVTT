@@ -1327,6 +1327,8 @@ button.component-button-toggle {
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
+  margin: 0;
+  padding: 3px;
 }
 
 button.component-button-toggle.active {
