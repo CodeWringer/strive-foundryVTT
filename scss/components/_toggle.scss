@@ -20,11 +20,13 @@ button.component-button-toggle {
 
     &.disabled {
       background-color: $c-themed-bg-lighter;
+      cursor: default;
     }
   }
 
   &.disabled {
     background-color: $c-themed-bg-disabled;
+    cursor: default;
   }
 }
 
@@ -38,5 +40,9 @@ span.component-button-toggle-knob {
 
   &.active {
     background-color: $c-dark;
+  }
+
+  &.disabled {
+    cursor: default;
   }
 }
