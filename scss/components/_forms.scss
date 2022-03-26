@@ -206,3 +206,16 @@ img.custom-icon {
     cursor: default;
   }
 }
+
+// Hint Card Styles
+.hint-card {
+  background-color: $c-themed-hint-bg;
+  border: 1px solid $c-themed-hint-border;
+  border-radius: 4px;
+  padding: 6px;
+
+  &-icon {
+    font-size: $font-size-lg;
+    margin-right: 0.6rem;
+  }
+}
