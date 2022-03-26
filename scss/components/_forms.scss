@@ -180,18 +180,29 @@ img.header-image {
 
 img.custom-icon {
   &-sm {
+    border: $c-border-input 1px solid;
     flex: none;
     width: $line-height !important;
     height: $line-height !important;
   }
   &-md {
+    border: $c-border-input 1px solid;
     flex: none;
     width: 64px !important;
     height: 64px !important;
   }
   &-lg {
+    border: $c-border-input 1px solid;
     flex: none;
     width: 100px !important;
     height: 100px !important;
+  }
+}
+
+.component-input-image {
+  cursor: pointer;
+
+  &.disabled {
+    cursor: default;
   }
 }

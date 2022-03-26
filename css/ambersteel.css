@@ -819,6 +819,7 @@ img.header-image {
 }
 
 img.custom-icon-sm {
+  border: #7a7971 1px solid;
   -webkit-box-flex: 0;
   -ms-flex: none;
   flex: none;
@@ -827,6 +828,7 @@ img.custom-icon-sm {
 }
 
 img.custom-icon-md {
+  border: #7a7971 1px solid;
   -webkit-box-flex: 0;
   -ms-flex: none;
   flex: none;
@@ -835,11 +837,20 @@ img.custom-icon-md {
 }
 
 img.custom-icon-lg {
+  border: #7a7971 1px solid;
   -webkit-box-flex: 0;
   -ms-flex: none;
   flex: none;
   width: 100px !important;
   height: 100px !important;
+}
+
+.component-input-image {
+  cursor: pointer;
+}
+
+.component-input-image.disabled {
+  cursor: default;
 }
 
 .items-header {
