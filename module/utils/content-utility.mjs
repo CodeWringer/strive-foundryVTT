@@ -155,8 +155,10 @@ async function _getDocumentFrom(id, where = contentCollectionTypes.all, worldCol
           } else if (worldCollection == game.actors) {
             // Also search in actors, because they can have embedded documents. 
             const result = entry.items.find(it => { return getId(it) === id || it.name === id })
-            resolve(result);
-            return;
+            if (result !== undefined) {
+              resolve(result);
+              return;
+            }
           }
         }
       }
