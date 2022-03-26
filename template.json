@@ -79,7 +79,8 @@
           "HP": 0,
           "maxInjuries": 0,
           "maxExhaustion": 0,
-          "exhaustion": 0
+          "exhaustion": 0,
+          "magicStamina": 0
         },
         "assets": {
           "grid": [],
@@ -123,7 +124,8 @@
       "successes": 0,
       "failures": 0,
       "abilities": [],
-      "category": ""
+      "category": "",
+      "isMagicSchool": false
     },
     "fate-card": {
       "templates": ["base"],

@@ -2,6 +2,7 @@ import { validateOrThrow } from "../utils/validation-utility.mjs";
 import ButtonAddViewModel from "./button-add/button-add-viewmodel.mjs";
 import ButtonDeleteViewModel from "./button-delete/button-delete-viewmodel.mjs";
 import ButtonOpenSheetViewModel from "./button-open-sheet/button-open-sheet-viewmodel.mjs";
+import ButtonToggleViewModel from "./button-toggle/button-toggle-viewmodel.mjs";
 import ButtonRollViewModel from "./button-roll/button-roll-viewmodel.mjs";
 import ButtonSendToChatViewModel from "./button-send-to-chat/button-send-to-chat-viewmodel.mjs";
 import ButtonTakeItemViewModel from "./button-take-item/button-take-item-viewmodel.mjs";
@@ -441,6 +442,28 @@ export default class SheetViewModel extends ViewModel {
   }
 
   /**
+   * Creates a child toggle button view model and returns it. 
+   * @param {Object} args.target
+   * @param {String} args.propertyPath
+   * @param {String | undefined} args.id
+   * @param {Boolean | undefined} args.isEditable
+   * @returns {ButtonToggleViewModel}
+   */
+  createVmBtnToggle(args = {}) {
+    const thiz = this;
+    validateOrThrow(args, ["target", "propertyPath"]);
+
+    return new ButtonToggleViewModel({
+      parent: thiz,
+      isEditable: args.isEditable ?? thiz.isEditable,
+      contextTemplate: thiz.contextTemplate,
+      target: args.target,
+      propertyPath: args.propertyPath,
+      id: args.id,
+    });
+  }
+
+  /**
    * Disposes of any working data. 
    * 
    * This is a clean-up operation that should only be called when the instance of this class is no longer needed!
@@ -460,6 +483,7 @@ export default class SheetViewModel extends ViewModel {
     this.createVmBtnTakeItem = () => { throw ViewModel.DISPOSED_ACCESS_VIOLATION_EXCEPTION };
     this.createVmBtnToggleVisibility = () => { throw ViewModel.DISPOSED_ACCESS_VIOLATION_EXCEPTION };
     this.createVmImg = () => { throw ViewModel.DISPOSED_ACCESS_VIOLATION_EXCEPTION };
+    this.createVmBtnToggle = () => { throw ViewModel.DISPOSED_ACCESS_VIOLATION_EXCEPTION };
 
     super.dispose();
   }

@@ -84,6 +84,18 @@ export default class ActorHealthViewModel extends SheetViewModel {
       propertyPath: "data.data.health.exhaustion",
       min: 0,
     });
+    this.vmNsMagicStamina = this.createVmNumberSpinner({
+      id: "vmNsMagicStamina",
+      propertyOwner: thiz.actor,
+      propertyPath: "data.data.health.magicStamina",
+      min: 0,
+    });
+    this.vmNsMaxMagicStamina = this.createVmNumberSpinner({
+      id: "vmNsMaxMagicStamina",
+      propertyOwner: thiz.actor,
+      propertyPath: "data.data.health.maxMagicStamina",
+      isEditable: false,
+    });
     this.vmNsMaxInjuries = this.createVmNumberSpinner({
       id: "vmNsMaxInjuries",
       propertyOwner: thiz.actor,

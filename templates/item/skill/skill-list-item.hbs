@@ -40,6 +40,11 @@ viewModel: {SkillListItemViewModel}
   </div>
 </div>
 {{!-- Row 3 --}}
+{{!-- IsMagicSchool --}}
+<div class="flex flex-row">
+  {{> buttonToggle viewModel=viewModel.vmSwIsMagicSchool }}
+</div>
+{{!-- Row 4 --}}
 {{!-- Description --}}
 <div class="flex flex-row">
   {{> inputTextarea viewModel=viewModel.vmTaDescription cssClass="fill" }}

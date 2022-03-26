@@ -100,7 +100,7 @@ export default class SkillTableViewModel extends SheetViewModel {
           target: skill,
           chatTitle: game.i18n.localize(thiz.actor.data.name),
         }),
-        vmBtnOpenSheet: thiz.createVmBtnOpenSheet({
+        vmBtnOpenSheet: thiz.createVmBtnOpenSheet({ // TODO: #55
           id: `vmBtnOpenSheet-skill-${i}`,
           target: skill.name,
         }),

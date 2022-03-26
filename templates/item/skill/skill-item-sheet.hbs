@@ -33,6 +33,15 @@ viewModel: {SkillItemSheetViewModel}
       {{> inputTextField viewModel=viewModel.vmTfCategory }}
     </div>
   </div>
+  {{!-- IsMagicSchol --}}
+  <div class="sheet-block flex flex-row margin-b-md">
+    <div class="width-min-xxl">
+      {{> inputLabel text="ambersteel.labels.magicSchool"}}
+    </div>
+    <div class="flex-grow">
+      {{> buttonToggle viewModel=viewModel.vmSwIsMagicSchool }}
+    </div>
+  </div>
   {{!-- Description --}}
   <div class="sheet-block flex flex-row margin-b-md">
     <div class="width-min-xxl">

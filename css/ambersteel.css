@@ -1296,3 +1296,54 @@ a.ambersteel-expand-skill-ability-list {
   background-color: rgba(0, 0, 0, 0.01);
   font-size: 1rem;
 }
+
+button.component-button-toggle {
+  background-color: #b9b9b9;
+  border: #7a7971 1px solid;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  cursor: pointer;
+  border-radius: 24px;
+  width: 50px;
+  height: 24px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+button.component-button-toggle.active {
+  background-color: #e0771c7d;
+  -webkit-box-pack: end;
+  -ms-flex-pack: end;
+  justify-content: flex-end;
+}
+
+button.component-button-toggle.active.disabled {
+  background-color: #ec81237d;
+}
+
+button.component-button-toggle.disabled {
+  background-color: #676662;
+}
+
+span.component-button-toggle-knob {
+  background-color: rgba(129, 129, 129, 0.45);
+  border-radius: 100%;
+  width: 16px;
+  height: 16px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  border: #7a7971 1px solid;
+}
+
+span.component-button-toggle-knob.active {
+  background-color: #191813;
+}

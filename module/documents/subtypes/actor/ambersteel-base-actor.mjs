@@ -259,6 +259,7 @@ export default class AmbersteelBaseActor {
     businessData.health.maxHP = game.ambersteel.getCharacterMaximumHp(context);
     businessData.health.maxInjuries = game.ambersteel.getCharacterMaximumInjuries(context);
     businessData.health.maxExhaustion = game.ambersteel.getCharacterMaximumExhaustion(context);
+    businessData.health.maxMagicStamina = game.ambersteel.getCharacterMaximumMagicStamina(context).total;
   }
 
   /**
