@@ -1,5 +1,6 @@
 import SheetViewModel from "../../../module/components/sheet-viewmodel.mjs";
 import { TEMPLATES } from "../../../module/templatePreloader.mjs";
+import { getNestedPropertyValue } from "../../../module/utils/property-utility.mjs";
 import { validateOrThrow } from "../../../module/utils/validation-utility.mjs";
 
 export default class SkillAbilityListItemViewModel extends SheetViewModel {
@@ -68,89 +69,85 @@ export default class SkillAbilityListItemViewModel extends SheetViewModel {
 
     const thiz = this;
     const pathSkillAbility = `data.data.abilities[${thiz.index}]`;
+    const skillAbility = getNestedPropertyValue(this.item, pathSkillAbility);
     
-    if (this.isSendable === true) {
-      this.vmBtnSendToChat = this.createVmBtnSendToChat({
-        id: "vmBtnSendToChat",
-        target: thiz.item,
-        propertyPath: pathSkillAbility,
-      });
-    }
-    
+    this.vmBtnSendToChat = this.createVmBtnSendToChat({
+      id: "vmBtnSendToChat",
+      target: skillAbility,
+    });
     this.vmImg = this.createVmImg({
       id: "vmImg",
-      propertyOwner: thiz.item,
-      propertyPath: `${pathSkillAbility}.img`,
+      propertyOwner: skillAbility,
+      propertyPath: "img",
     });
     this.vmTfName = this.createVmTextField({
       id: "vmTfName",
-      propertyOwner: thiz.item,
-      propertyPath: `${pathSkillAbility}.name`,
+      propertyOwner: skillAbility,
+      propertyPath: "name",
       placeholder: "ambersteel.labels.name",
     });
     this.vmBtnDelete = this.createVmBtnDelete({
       id: "vmBtnDelete",
-      target: thiz.item,
-      propertyPath: pathSkillAbility,
+      target: skillAbility,
       withDialog: true,
     });
     this.vmNsRequiredLevel = this.createVmNumberSpinner({
       id: "vmNsRequiredLevel",
-      propertyOwner: thiz.item,
-      propertyPath: `${pathSkillAbility}.requiredLevel`,
+      propertyOwner: skillAbility,
+      propertyPath: "requiredLevel",
       min: 0,
     });
     this.vmTfObstacle = this.createVmTextField({
       id: "vmTfObstacle",
-      propertyOwner: thiz.item,
-      propertyPath: `${pathSkillAbility}.obstacle`,
+      propertyOwner: skillAbility,
+      propertyPath: "obstacle",
     });
     this.vmNsDistance = this.createVmNumberSpinner({
       id: "vmNsDistance",
-      propertyOwner: thiz.item,
-      propertyPath: `${pathSkillAbility}.distance`,
+      propertyOwner: skillAbility,
+      propertyPath: "distance",
       min: 0,
     });
     this.vmNsApCost = this.createVmNumberSpinner({
       id: "vmNsApCost",
-      propertyOwner: thiz.item,
-      propertyPath: `${pathSkillAbility}.apCost`,
+      propertyOwner: skillAbility,
+      propertyPath: "apCost",
       min: 0,
     });
     this.vmDdAttackType = this.createVmDropDown({
       id: "vmDdAttackType",
-      propertyOwner: thiz.item,
-      propertyPath: `${pathSkillAbility}.attackType`,
+      propertyOwner: skillAbility,
+      propertyPath: "attackType",
       options: thiz.attackTypeOptions,
     });
     this.vmBtnRollDamage = this.createVmBtnRoll({
       id: "vmBtnRollDamage",
-      target: thiz.item,
-      propertyPath: `${pathSkillAbility}.damageFormula`,
+      target: skillAbility,
+      propertyPath: "damageFormula",
       rollType: "generic",
       chatTitle: thiz.skillAbility.name,
       actor: thiz.actor,
     });
     this.vmTfDamage = this.createVmTextField({
       id: "vmTfDamage",
-      propertyOwner: thiz.item,
-      propertyPath: `${pathSkillAbility}.damageFormula`,
+      propertyOwner: skillAbility,
+      propertyPath: "damageFormula",
     });
     this.vmDdDamageType = this.createVmDropDown({
       id: "vmDdDamageType",
-      propertyOwner: thiz.item,
-      propertyPath: `${pathSkillAbility}.damageType`,
+      propertyOwner: skillAbility,
+      propertyPath: "damageType",
       options: thiz.damageTypeOptions,
     });
     this.vmTfCondition = this.createVmTextField({
       id: "vmTfCondition",
-      propertyOwner: thiz.item,
-      propertyPath: `${pathSkillAbility}.condition`,
+      propertyOwner: skillAbility,
+      propertyPath: "condition",
     });
     this.vmTaDescription = this.createVmTextArea({
       id: "vmTaDescription",
-      propertyPath: `${pathSkillAbility}.description`,
-      propertyOwner: thiz.item,
+      propertyOwner: skillAbility,
+      propertyPath: "description",
       placeholder: "ambersteel.labels.description",
       allowResize: true,
     });

@@ -1,8 +1,11 @@
-import SheetViewModel from "../../../module/components/sheet-viewmodel.mjs";
+import ViewModel from "../../../module/components/viewmodel.mjs";
 import { TEMPLATES } from "../../../module/templatePreloader.mjs";
 import { validateOrThrow } from "../../../module/utils/validation-utility.mjs";
 
-export default class SkillAbilityChatMessageViewModel extends SheetViewModel {
+// For some reason, extending from SheetViewModel, which would be the correct parent type here, 
+// causes a circular reference error. This is where the interpreter gives up and claims that SheetViewModel is 
+// being used, before it is initialized. 
+export default class SkillAbilityChatMessageViewModel extends ViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.SKILL_ABILITY_CHAT_MESSAGE; }
 
@@ -28,15 +31,35 @@ export default class SkillAbilityChatMessageViewModel extends SheetViewModel {
   index = -1;
 
   /**
+   * @type {String}
+   * @readonly
+   */
+  get localizedAttackType() { 
+    const localizableName = this._getConfigValue(CONFIG.ambersteel.attackTypes, this.skillAbility.attackType).localizableName;
+    return game.i18n.localize(localizableName);
+  };
+
+  /**
+   * @type {String}
+   * @readonly
+   */
+  get localizedDamageType() { 
+    const localizableName = this._getConfigValue(CONFIG.ambersteel.damageTypes, this.skillAbility.damageType).localizableName;
+    return game.i18n.localize(localizableName);
+  };
+
+  /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
    * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 
    * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 
    * is expected to be associated with an actor sheet or item sheet or journal entry or chat message and so on.
    * 
-   * @param {Boolean | undefined} args.isEditable If true, the sheet is editable. 
-   * @param {Boolean | undefined} args.isSendable If true, the document represented by the sheet can be sent to chat. 
-   * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document. 
-   * @param {Boolean | undefined} args.isGM If true, the current user is a GM. 
+   * @param {Boolean | undefined} args.isEditable Optional. If true, the sheet is editable. 
+   * @param {Boolean | undefined} args.isSendable Optional. If true, the document represented by the sheet can be sent to chat. 
+   * @param {Boolean | undefined} args.isOwner Optional. If true, the current user is the owner of the represented document. 
+   * @param {Boolean | undefined} args.isGM Optional. If true, the current user is a GM. 
+   * @param {String | undefined} args.contextTemplate Optional. Name or path of a contextual template, 
+   * which will be displayed in exception log entries, to aid debugging. 
    * 
    * @param {Item} args.item
    * @param {SkillAbility} args.skillAbility
@@ -47,9 +70,34 @@ export default class SkillAbilityChatMessageViewModel extends SheetViewModel {
     super(args);
     validateOrThrow(args, ["item", "skillAbility"]);
 
+    this._isEditable = args.isEditable ?? false;
+    this._isSendable = args.isSendable ?? false;
+    this._isOwner = args.isOwner ?? false;
+    this._isGM = args.isGM ?? false;
+    this._contextTemplate = args.contextTemplate;
+
     this.item = args.item;
     this.skillAbility = args.skillAbility;
     this.actor = args.actor;
     this.index = args.index;
+  }
+
+  /**
+   * Returns the config object whose name matches the given value. Or, if the given value is an object, 
+   * simply returns the object. 
+   * @param {Object} configOptions 
+   * @param {String} value 
+   * @private
+   */
+  _getConfigValue(configOptions, value) {
+    for (const configOptionName in configOptions) {
+      const configOption = configOptions[configOptionName];
+
+      if (configOption.name === value) {
+        return configOption;
+      }
+    }
+
+    return undefined;
   }
 }
