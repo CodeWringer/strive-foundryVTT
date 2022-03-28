@@ -173,7 +173,8 @@
       "pc": "Player Character",
       "pcAbbreviation": "PC",
       "npc": "Non-Player Character",
-      "npcAbbreviation": "NPC"
+      "npcAbbreviation": "NPC",
+      "nameOfNewSkillAbility": "New Skill Ability"
     },
     "fateSystem": {
       "fate": "Fate",

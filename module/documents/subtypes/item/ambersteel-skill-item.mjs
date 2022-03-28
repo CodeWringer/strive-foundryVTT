@@ -38,6 +38,7 @@ export default class AmbersteelSkillItem extends AmbersteelBaseItem {
   /** @override */
   prepareDerivedData(context) {
     context.getRollData = this._getRollData.bind(this);
+    this._ensureSkillAbilityObjects(context);
   }
 
   /** @override */
@@ -123,7 +124,10 @@ export default class AmbersteelSkillItem extends AmbersteelBaseItem {
    * @param {Object} creationData Additional data to set on creation. 
    */
   async createSkillAbility(creationData) {
-    const newAbility = new SkillAbility();
+    const newAbility = new SkillAbility({
+      parent: this,
+      index: this.parent.data.data.abilities.length,
+    });
     
     for (const propertyName in creationData) {
       newAbility[propertyName] = creationData[propertyName];
@@ -177,5 +181,35 @@ export default class AmbersteelSkillItem extends AmbersteelBaseItem {
       new SummedDataComponent(relatedAttributeName, `ambersteel.attributes.${relatedAttributeName}`, compositionObj.attributeDiceCount),
       new SummedDataComponent(this.parent.name, this.parent.name, compositionObj.skillDiceCount),
     ]);
+  }
+
+  /**
+   * Ensures that all objects under context.data.data.abilities are 'proper' SkillAbility type objects. 
+   * @param {AmbersteelItem} context 
+   * @private
+   */
+  _ensureSkillAbilityObjects(context) {
+    const listOfProperObjects = [];
+    for (let i = 0; i < context.data.data.abilities.length; i++) {
+      const abilityObject = context.data.data.abilities[i];
+
+      listOfProperObjects.push(new SkillAbility({
+        parent: context,
+        index: i,
+        name: abilityObject.name,
+        description: abilityObject.description,
+        requiredLevel: abilityObject.requiredLevel,
+        apCost: abilityObject.apCost,
+        condition: abilityObject.condition,
+        img: abilityObject.img,
+        distance: abilityObject.distance,
+        damageFormula: abilityObject.damageFormula,
+        obstacle: abilityObject.obstacle,
+        isCustom: abilityObject.isCustom,
+        damageType: abilityObject.damageType,
+        attackType: abilityObject.attackType,
+      }));
+    }
+    context.data.data.abilities = listOfProperObjects;
   }
 }

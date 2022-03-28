@@ -57,7 +57,7 @@ viewModel: {SkillAbilityChatMessageViewModel}
       {{localize "ambersteel.labels.attackType"}}
     </div>
     <div class="flex-grow">
-      {{localize viewModel.skillAbility.attackType.localizableName}}
+      {{viewModel.localizedAttackType}}
     </div>
   </div>
   {{!-- distance --}}
@@ -84,7 +84,7 @@ viewModel: {SkillAbilityChatMessageViewModel}
       {{localize "ambersteel.labels.damageType"}}
     </div>
     <div class="flex-grow">
-      {{localize viewModel.skillAbility.damageType.localizableName}}
+      {{viewModel.localizedDamageType}}
     </div>
   </div>
   {{!-- Description --}}
