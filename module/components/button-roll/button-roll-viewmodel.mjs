@@ -125,7 +125,7 @@ export default class ButtonRollViewModel extends ButtonViewModel {
    * 'getRollData()' method defined on the target object. 
    */
   async onClick(html, isOwner, isEditable) {
-    if (isOwner !== true) return;
+    if (isEditable !== true) return;
 
     if (this.rollType === game.ambersteel.config.rollTypes.generic) {
       if (this.propertyPath === undefined) {

@@ -42,7 +42,7 @@ export default class ButtonOpenSheetViewModel extends ButtonViewModel {
    * @throws {Error} NullPointerException - Thrown, if trying to delete by property path and 'target.deleteByPropertyPath' is undefined. 
    */
   async onClick(html, isOwner, isEditable) {
-    if (isOwner !== true) return;
+    if (isEditable !== true) return;
 
     const toShow = await findDocument(this.target);
     if (toShow === undefined) {

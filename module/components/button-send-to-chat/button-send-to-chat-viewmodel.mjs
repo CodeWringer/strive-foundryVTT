@@ -85,7 +85,7 @@ export default class ButtonSendToChatViewModel extends ButtonViewModel {
    * @async
    */
   async onClick(html, isOwner, isEditable) {
-    if (isOwner !== true) return;
+    if (isEditable !== true) return;
 
     const dialogResult = await ChatUtil.queryVisibilityMode();
     if (!dialogResult.confirmed) return;

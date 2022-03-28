@@ -63,6 +63,8 @@ export default class ButtonToggleViewModel extends ButtonViewModel {
 
   /** @override */
   async onClick(html, isOwner, isEditable) {
+    if (isEditable !== true) return;
+    
     this.value = !this.value;
   }
 }
