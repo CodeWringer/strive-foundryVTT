@@ -3,31 +3,25 @@ viewModel: {ActorFateViewModel}
 cssClass: {undefined | String}
 --}}
 <section class="{{cssClass}}">
-  <div class="sheet-block grid grid-2col flex-column">
+  <div class="sheet-block grid-2col grid-gap-md flex-column">
     {{!-- row 1 --}}
-    <span class="fancy-font line-height">
-      <label for="miFP">{{localize "ambersteel.fateSystem.miFP"}}</label>
-      <span class="primary-font">[{{localize "ambersteel.fateSystem.miFPAbbreviation"}}]</span>
-    </span>
-    <span class="fate-spinner-column-container">
-      {{> inputNumberSpinner viewModel=viewModel.vmNsMifp }}
-    </span>
+    <div class="flex flex-row flex-middle flex-right">
+      {{> inputLabel text="ambersteel.fateSystem.miFP"}}
+      <div class="flex flex-middle width-md">({{localize "ambersteel.fateSystem.miFPAbbreviation"}})</div>
+    </div>
+    {{> inputNumberSpinner viewModel=viewModel.vmNsMifp }}
     {{!-- row 2 --}}
-    <span class="fancy-font line-height">
-      <label for="maFP">{{localize "ambersteel.fateSystem.maFP"}}</label>
-      <span class="primary-font">[{{localize "ambersteel.fateSystem.maFPAbbreviation"}}]</span>
-    </span>
-    <span class="fate-spinner-column-container">
-      {{> inputNumberSpinner viewModel=viewModel.vmNsMafp }}
-    </span>
+    <div class="flex flex-row flex-middle flex-right">
+      {{> inputLabel text="ambersteel.fateSystem.maFP"}}
+      <div class="flex flex-middle width-md">({{localize "ambersteel.fateSystem.maFPAbbreviation"}})</div>
+    </div>
+    {{> inputNumberSpinner viewModel=viewModel.vmNsMafp }}
     {{!-- row 3 --}}
-    <span class="fancy-font line-height">
-      <label for="AFP">{{localize "ambersteel.fateSystem.AFP"}}</label>
-      <span class="primary-font">[{{localize "ambersteel.fateSystem.AFPAbbreviation"}}]</span>
-    </span>
-    <span class="fate-spinner-column-container">
-      {{> inputNumberSpinner viewModel=viewModel.vmNsAfp }}
-    </span>
+    <div class="flex flex-row flex-middle flex-right">
+      {{> inputLabel text="ambersteel.fateSystem.AFP"}}
+      <div class="flex flex-middle width-md">({{localize "ambersteel.fateSystem.AFPAbbreviation"}})</div>
+    </div>
+    {{> inputNumberSpinner viewModel=viewModel.vmNsAfp }}
   </div>
   <div class="flex" style="flex-wrap: wrap;">
     {{#each viewModel.fateCards as |cardViewModel key|}}

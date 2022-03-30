@@ -3,26 +3,32 @@ viewModel: {ActorBeliefsViewModel}
 cssClass: {undefined | String}
 --}}
 <section class="{{cssClass}}">
-  <div class="sheet-block">
+  <div class="sheet-block margin-b-md">
     <h3>
       <label class="fancy-font">{{localize "ambersteel.beliefSystem.ambition"}}</label>
     </h3>
+    <div class="margin-b-md">
       {{> inputTextField viewModel=viewModel.vmTfAmbition }}
+    </div>
   </div>
-  <div class="sheet-block">
+  <div class="sheet-block margin-b-md">
     <h3>
       <label class="fancy-font">{{localize "ambersteel.beliefSystem.beliefs"}}</label>
     </h3>
     {{#each viewModel.beliefViewModels as |vm index|}}
-      {{> inputTextField viewModel=vm }}
+      <div class="margin-b-md">
+        {{> inputTextField viewModel=vm}}
+      </div>
     {{/each}}
   </div>
-  <div class="sheet-block">
+  <div class="sheet-block margin-b-md">
     <h3>
       <label class="fancy-font">{{localize "ambersteel.beliefSystem.instincts"}}</label>
     </h3>
     {{#each viewModel.instinctViewModels as |vm index|}}
-      {{> inputTextField viewModel=vm }}
+      <div class="margin-b-md">
+        {{> inputTextField viewModel=vm}}
+      </div>
     {{/each}}
   </div>
 </section>

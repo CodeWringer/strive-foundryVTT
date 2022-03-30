@@ -7,7 +7,7 @@ cssClass: {undefined | String}
   {{!-- General health stats --}}
   <div class="flex flex-column">
   {{!-- Row 1 --}}
-    <div class="grid grid-2col">
+    <div class="grid-2col grid-gap-md margin-b-md">
       {{!-- Col 1 --}}
       <div class="sheet-block">
         <div class="flex flex-row">
@@ -68,7 +68,7 @@ cssClass: {undefined | String}
     </div>
   {{!-- Injuries --}}
   <h2 class="flex flex-row">{{localize "ambersteel.labels.injuries"}}</h2>
-  <div class="grid grid-2col">
+  <div class="grid-2col grid-gap-md margin-b-md">
     <div class="sheet-block">
       <div class="flex flex-row">
         <div class="flex-grow">
@@ -92,7 +92,7 @@ cssClass: {undefined | String}
       </div>
     </div>
   </div>
-  <div class="hint-card flex {{#if viewModel.isToughnessTestRequired}}{{else}}hidden{{/if}}">
+  <div class="hint-card flex margin-b-md {{#if viewModel.isToughnessTestRequired}}{{else}}hidden{{/if}}">
     <div class="flex flex-center hint-card-icon">
       <i class="fas fa-exclamation"></i>
     </div>
@@ -118,7 +118,7 @@ cssClass: {undefined | String}
   </ol>
   {{!-- Illnesses --}}
   <h2>{{localize "ambersteel.labels.illnesses"}}</h2>
-  <div class="grid grid-2col">
+  <div class="grid-2col grid-gap-md margin-b-md">
     <div>
     </div>
     <div class="sheet-block">

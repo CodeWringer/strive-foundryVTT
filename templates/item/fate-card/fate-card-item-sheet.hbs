@@ -18,25 +18,38 @@ cssClass: {undefined | String}
   </header>
   <div class="flex flex-column flex-grow">
     {{!-- Row 1 --}}
-    <div class="sheet-block grid grid-3col margin-b-md">
-      {{> inputLabel text="ambersteel.fateSystem.miFP"}}
-      <div class="flex flex-middle">{{localize "ambersteel.fateSystem.miFPAbbreviation"}}</div>
+    <div class="sheet-block grid-2col grid-gap-md margin-b-md">
+      <div class="flex flex-row flex-middle flex-right">
+        {{> inputLabel text="ambersteel.fateSystem.miFP"}}
+        <div class="flex flex-middle width-md">({{localize "ambersteel.fateSystem.miFPAbbreviation"}})</div>
+      </div>
       {{> inputNumberSpinner viewModel=viewModel.vmNsMifp }}
     </div>
     {{!-- Row 2 --}}
-    <div class="sheet-block grid grid-3col margin-b-md">
-      {{> inputLabel text="ambersteel.fateSystem.maFP"}}
-      <div class="flex flex-middle">{{localize "ambersteel.fateSystem.maFPAbbreviation"}}</div>
+    <div class="sheet-block grid-2col grid-gap-md margin-b-md">
+      <div class="flex flex-row flex-middle flex-right">
+        {{> inputLabel text="ambersteel.fateSystem.maFP"}}
+        <div class="flex flex-middle width-md">({{localize "ambersteel.fateSystem.maFPAbbreviation"}})</div>
+      </div>
       {{> inputNumberSpinner viewModel=viewModel.vmNsMafp }}
     </div>
     {{!-- Row 3 --}}
-    <div class="sheet-block grid grid-3col margin-b-md">
-      {{> inputLabel text="ambersteel.fateSystem.AFP"}}
-      <div class="flex flex-middle">{{localize "ambersteel.fateSystem.AFPAbbreviation"}}</div>
+    <div class="sheet-block grid-2col grid-gap-md margin-b-md">
+      <div class="flex flex-row flex-middle flex-right">
+        {{> inputLabel text="ambersteel.fateSystem.AFP"}}
+        <div class="flex flex-middle width-md">({{localize "ambersteel.fateSystem.AFPAbbreviation"}})</div>
+      </div>
       {{> inputNumberSpinner viewModel=viewModel.vmNsAfp }}
     </div>
-    <div class="fate-card-item-description flex-grow">
-      {{> inputTextarea viewModel=viewModel.vmTaDescription cssClass="fill" }}
+    {{!-- Row 4 --}}
+    {{!-- Description --}}
+    <div class="sheet-block flex flex-column flex-grow">
+      <h3 class="fancy-font">
+        {{localize "ambersteel.labels.description"}}
+      </h3>
+      <div class="flex-grow">
+        {{> inputTextarea viewModel=viewModel.vmTaDescription cssClass="fill" }}
+      </div>
     </div>
   </div>
 </form>
