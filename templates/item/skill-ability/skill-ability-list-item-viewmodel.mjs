@@ -74,6 +74,7 @@ export default class SkillAbilityListItemViewModel extends SheetViewModel {
     this.vmBtnSendToChat = this.createVmBtnSendToChat({
       id: "vmBtnSendToChat",
       target: skillAbility,
+      isEditable: thiz.isEditable || thiz.isGM,
     });
     this.vmImg = this.createVmImg({
       id: "vmImg",

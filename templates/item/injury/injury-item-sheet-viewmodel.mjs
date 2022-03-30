@@ -41,6 +41,7 @@ export default class InjuryItemSheetViewModel extends SheetViewModel {
     this.vmBtnSendToChat = this.createVmBtnSendToChat({
       id: "vmBtnSendToChat",
       target: thiz.item,
+      isEditable: thiz.isEditable || thiz.isGM,
     });
     this.vmNsLimit = this.createVmNumberSpinner({
       id: "vmNsLimit",

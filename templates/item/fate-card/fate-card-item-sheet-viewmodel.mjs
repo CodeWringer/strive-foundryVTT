@@ -42,6 +42,7 @@ export default class FateCardItemSheetViewModel extends SheetViewModel {
     this.vmBtnSendToChat = this.createVmBtnSendToChat({
       id: "vmBtnSendToChat",
       target: thiz.item,
+      isEditable: thiz.isEditable || thiz.isGM,
     });
     this.vmNsMifp = this.createVmNumberSpinner({
       id: "vmNsMifp",

@@ -98,6 +98,7 @@ export default class ActorSheetViewModel extends SheetViewModel {
     this.vmBtnSendToChat = thiz.createVmBtnSendToChat({
       id: "vmBtnSendToChat",
       target: thiz.actor,
+      isEditable: thiz.isEditable || thiz.isGM,
     });
   }
 }
