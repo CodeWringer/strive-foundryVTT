@@ -1,54 +1,62 @@
-{{!-- Requires context:
+{{!-- Parameters:
 viewModel: {SkillListItemViewModel}
+cssClass: {undefined | String}
 --}}
-{{!-- Row 1 --}}
-<div class="flex flex-row">
-  <div class="flex flex-grow">
-    {{!-- Send to chat --}}
-    {{> buttonSendToChat viewModel=viewModel.vmBtnSendToChat }}
-    {{!-- Name --}}
-    <span class="width-min-xl">
-      {{> inputLabel text="ambersteel.labels.injury"}}
-    </span>
-    {{> inputImage viewModel=viewModel.vmImg cssClass="custom-icon-sm" }}
-    <span class="flex-grow margin-r-md">
-      {{> inputTextField viewModel=viewModel.vmTfName }}
-    </span>
+<div class="custom-system-list-item{{#if cssClass}} {{cssClass}}{{/if}}">
+  {{!-- Row 1 --}}
+  <div class="flex flex-row">
+    <div class="flex flex-grow">
+      {{!-- Send to chat --}}
+      {{> buttonSendToChat viewModel=viewModel.vmBtnSendToChat }}
+      {{!-- Name --}}
+      <span class="width-min-xl">
+        {{> inputLabel text="ambersteel.labels.injury"}}
+      </span>
+      {{> inputImage viewModel=viewModel.vmImg cssClass="custom-icon-sm" }}
+      <span class="flex-grow margin-r-md">
+        {{> inputTextField viewModel=viewModel.vmTfName }}
+      </span>
+    </div>
+    {{!-- Delete --}}
+    {{> buttonDelete viewModel=viewModel.vmBtnDelete }}
   </div>
-  {{!-- Delete --}}
-  {{> buttonDelete viewModel=viewModel.vmBtnDelete }}
-</div>
-{{!-- Row 2 --}}
-<div class="flex flex-row">
-  {{!-- Related Attribute --}}
-  <div class="flex flex-row margin-b-md">
+  {{!-- Row 2 --}}
+  <div class="flex flex-row">
+    {{!-- Related Attribute --}}
+    <div class="flex flex-row margin-b-md">
+      <div class="width-min-xxl">
+        {{> inputLabel text="ambersteel.labels.relatedAttribute"}}
+      </div>
+      <div class="flex-grow">
+        {{> inputDropDown viewModel=viewModel.vmDdRelatedAttribute }}
+      </div>
+    </div>
+    {{!-- Category --}}
+    <div class="flex flex-row margin-b-md">
+      <div class="width-min-xxl">
+        {{> inputLabel text="ambersteel.labels.category"}}
+      </div>
+      <div class="flex-grow">
+        {{> inputTextField viewModel=viewModel.vmTfCategory }}
+      </div>
+    </div>
+  </div>
+  {{!-- Row 3 --}}
+  {{!-- IsMagicSchool --}}
+  <div class="flex flex-row">
+    {{> buttonToggle viewModel=viewModel.vmSwIsMagicSchool }}
+  </div>
+  {{!-- Row 4 --}}
+  {{!-- Description --}}
+  <div class="sheet-block flex flex-row flex-grow">
     <div class="width-min-xxl">
-      {{> inputLabel text="ambersteel.labels.relatedAttribute"}}
+      {{> inputLabel text=(localize "ambersteel.labels.description")}}
     </div>
     <div class="flex-grow">
-      {{> inputDropDown viewModel=viewModel.vmDdRelatedAttribute }}
+      {{> inputTextarea viewModel=viewModel.vmTaDescription cssClass="fill" }}
     </div>
   </div>
-  {{!-- Category --}}
-  <div class="flex flex-row margin-b-md">
-    <div class="width-min-xxl">
-      {{> inputLabel text="ambersteel.labels.category"}}
-    </div>
-    <div class="flex-grow">
-      {{> inputTextField viewModel=viewModel.vmTfCategory }}
-    </div>
-  </div>
+  {{!-- Row 4 --}}
+  {{!-- Skill Abilites --}}
+  {{> "systems/ambersteel/templates/item/skill-ability/skill-ability-table.hbs" viewModel=viewModel.vmSkillAbilityTable cssClass=(ifThenElse viewModel.isSkillAbilityListVisible "" "hidden") }}
 </div>
-{{!-- Row 3 --}}
-{{!-- IsMagicSchool --}}
-<div class="flex flex-row">
-  {{> buttonToggle viewModel=viewModel.vmSwIsMagicSchool }}
-</div>
-{{!-- Row 4 --}}
-{{!-- Description --}}
-<div class="flex flex-row">
-  {{> inputTextarea viewModel=viewModel.vmTaDescription cssClass="fill" }}
-</div>
-{{!-- Row 4 --}}
-{{!-- Skill Abilites --}}
-{{> "systems/ambersteel/templates/item/skill-ability/skill-ability-table.hbs" viewModel=viewModel.vmSkillAbilityTable cssClass=(ifThenElse viewModel.isSkillAbilityListVisible "" "hidden") }}
