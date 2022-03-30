@@ -57,6 +57,7 @@ export default class SkillItemSheetViewModel extends SkillViewModel {
     this.vmBtnSendToChat = this.createVmBtnSendToChat({
       id: "vmBtnSendToChat",
       target: thiz.item,
+      isEditable: thiz.isEditable || thiz.isGM,
     });
     this.vmDdRelatedAttribute = this.createVmDropDown({
       id: "vmDdRelatedAttribute",

@@ -41,6 +41,7 @@ export default class ItemItemSheetViewModel extends SheetViewModel {
     this.vmBtnSendToChat = this.createVmBtnSendToChat({
       id: "vmBtnSendToChat",
       target: thiz.item,
+      isEditable: thiz.isEditable || thiz.isGM,
     });
     this.vmBtnTakeItem = this.createVmBtnTakeItem({
       id: "vmBtnTakeItem",

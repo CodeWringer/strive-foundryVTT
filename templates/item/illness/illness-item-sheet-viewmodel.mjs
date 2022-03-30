@@ -41,6 +41,7 @@ export default class IllnessItemSheetViewModel extends SheetViewModel {
     this.vmBtnSendToChat = this.createVmBtnSendToChat({
       id: "btn-send-to-chat",
       target: thiz.item,
+      isEditable: thiz.isEditable || thiz.isGM,
     });
     this.vmTfDuration = this.createVmTextField({
       id: "tf-duration",
