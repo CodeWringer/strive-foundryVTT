@@ -2,8 +2,9 @@
 localizableLabel: {String}
 options: {Array<ChoiceOption>}
 selected: Object
+cssClass: {undefined | String}
 --}}
-<section class="selection">
+<section class="selection{{#if cssClass}} {{cssClass}}{{/if}}">
   <div class="sheet-block grid grid-2col">
     <div>
       <label class="line-height fancy-font pad-sm" for="selection">{{localize localizableLabel}}</label>

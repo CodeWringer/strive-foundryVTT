@@ -1,7 +1,8 @@
-{{!-- Requires context:
+{{!-- Parameters:
 viewModel: {IllnessItemSheetViewModel}
+cssClass: {undefined | String}
 --}}
-<form class="flex flex-column {{cssClass}}" autocomplete="off">
+<form class="flex flex-column{{#if cssClass}} {{cssClass}}{{/if}}" autocomplete="off">
   <header class="sheet-header">
     <div class="flex flex-column flex-grow">
       <div class="flex flex-row">

@@ -1,8 +1,9 @@
 {{!-- Parameters:
 visibilityMode: {CONFIG.ambersteel.visibilityModes}
 visibilityModes: {Array<CONFIG.ambersteel.visibilityModes>}
+cssClass: {undefined | String}
 --}}
-<section class="visibility-mode-selection">
+<section class="visibility-mode-selection{{#if cssClass}} {{cssClass}}{{/if}}">
   <div class="sheet-block grid grid-2col">
     <div>
       <label class="line-height fancy-font pad-sm" for="visibilityMode">{{localize "ambersteel.labels.messageVisibility"}}</label>

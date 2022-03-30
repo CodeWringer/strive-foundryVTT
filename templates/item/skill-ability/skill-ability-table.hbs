@@ -1,7 +1,8 @@
-{{!-- Required context:
+{{!-- Parameters:
 viewModel: {SkillAbilityTableViewModel}
+cssClass: {undefined | String}
 --}}
-<section class="skill-ability-list">
+<section class="skill-ability-list{{#if cssClass}} {{cssClass}}{{/if}}">
   <ol class="unstyled-list {{#if viewModel.skillAbilitiesInitiallyVisible}}{{else}}hidden{{/if}}" 
     data-vis-group="{{viewModel.visGroupId}}"
   >

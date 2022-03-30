@@ -3,8 +3,9 @@ obstacle: {Number},
 bonusDice: {Number},
 visibilityMode: {CONFIG.ambersteel.visibilityModes}
 visibilityModes: {Array<CONFIG.ambersteel.visibilityModes>}
+cssClass: {undefined | String}
 --}}
-<section>
+<section class="{{cssClass}}">
   <div class="sheet-block grid grid-2col">
     <div class="flex flex-column">
       <label class="line-height fancy-font pad-sm" for="obstacle">{{localize "ambersteel.roll.obstacleAbbreviation"}}</label>

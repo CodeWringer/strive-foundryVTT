@@ -1,9 +1,10 @@
-{{!-- Requires parameters:
+{{!-- Parameters:
 viewModel: {ActorAttributesViewModel}
+cssClass: {undefined | String}
 --}}
-<section>
-    {{!-- Attributes --}}
-    {{> "systems/ambersteel/templates/actor/components/component-attribute-table.hbs" viewModel=viewModel.attributesPhysicalViewModel }}
-    {{> "systems/ambersteel/templates/actor/components/component-attribute-table.hbs" viewModel=viewModel.attributesMentalViewModel }}
-    {{> "systems/ambersteel/templates/actor/components/component-attribute-table.hbs" viewModel=viewModel.attributesSocialViewModel }}
+<section class="{{cssClass}}">
+  {{!-- Attributes --}}
+  {{> "systems/ambersteel/templates/actor/components/component-attribute-table.hbs" viewModel=viewModel.attributesPhysicalViewModel }}
+  {{> "systems/ambersteel/templates/actor/components/component-attribute-table.hbs" viewModel=viewModel.attributesMentalViewModel }}
+  {{> "systems/ambersteel/templates/actor/components/component-attribute-table.hbs" viewModel=viewModel.attributesSocialViewModel }}
 </section>

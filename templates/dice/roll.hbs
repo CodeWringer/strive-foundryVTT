@@ -5,8 +5,9 @@ degree: [String|Number]
 numberOfDice: String|Number
 diceComposition: String
 title: String
+cssClass: {undefined | String}
 --}}
-<div class="dice-roll-chat-message-container">
+<div class="dice-roll-chat-message-container{{#if cssClass}} {{cssClass}}{{/if}}">
   {{#if title}}
     <h2 class="dice-title">{{title}}</h2>
   {{/if}}

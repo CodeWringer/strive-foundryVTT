@@ -1,96 +1,99 @@
-{{!-- Required context:
+{{!-- Parameters:
 viewModel: {SkillAbilityListItemViewModel}
+cssClass: {undefined | String}
 --}}
-{{!-- Row 1 --}}
-<div class="flex flex-row">
-  <div class="flex flex-grow">
-    {{!-- Send to chat --}}
-    {{> buttonSendToChat viewModel=viewModel.vmBtnSendToChat }}
-    {{!-- Name --}}
-    <span class="width-min-xl">
-      {{> inputLabel text="ambersteel.labels.name"}}
-    </span>
-    {{> inputImage viewModel=viewModel.vmImg cssClass="custom-icon-sm" }}
-    {{> inputTextField viewModel=viewModel.vmTfName }}
-  </div>
-  {{!-- Delete --}}
-  {{> buttonDelete viewModel=viewModel.vmBtnDelete }}
-</div>
-{{!-- Row 2 --}}
-<div class="flex flex-row">
-  {{!-- Required Level --}}
+<div class="custom-system-list-item{{#if cssClass}} {{cssClass}}{{/if}}">
+  {{!-- Row 1 --}}
   <div class="flex flex-row">
-    <span class="width-min-xl">
-      {{> inputLabel text="ambersteel.labels.skillAbilityRequirement"}}
-    </span>
+    <div class="flex flex-grow">
+      {{!-- Send to chat --}}
+      {{> buttonSendToChat viewModel=viewModel.vmBtnSendToChat }}
+      {{!-- Name --}}
+      <span class="width-min-xl">
+        {{> inputLabel text="ambersteel.labels.name"}}
+      </span>
+      {{> inputImage viewModel=viewModel.vmImg cssClass="custom-icon-sm" }}
+      {{> inputTextField viewModel=viewModel.vmTfName }}
+    </div>
+    {{!-- Delete --}}
+    {{> buttonDelete viewModel=viewModel.vmBtnDelete }}
+  </div>
+  {{!-- Row 2 --}}
+  <div class="flex flex-row">
+    {{!-- Required Level --}}
+    <div class="flex flex-row">
+      <span class="width-min-xl">
+        {{> inputLabel text="ambersteel.labels.skillAbilityRequirement"}}
+      </span>
+      <span class="width-md">
+        {{> inputNumberSpinner viewModel=viewModel.vmNsRequiredLevel }}
+      </span>
+    </div>
+    {{!-- Obstacle --}}
+    <div class="flex flex-row">
+      <span class="width-min-xl">
+        {{> inputLabel text="ambersteel.roll.obstacleAbbreviation"}}
+      </span>
+      <span class="width-xxl">
+        {{> inputTextField viewModel=viewModel.vmTfObstacle }}
+      </span>
+    </div>
+  </div>
+  {{!-- Row 3 --}}
+  <div class="flex flex-row">
+    {{!-- Distance --}}
+    <div class="width-min-xl">
+      {{> inputLabel text="ambersteel.labels.distance"}}
+    </div>
     <span class="width-md">
-      {{> inputNumberSpinner viewModel=viewModel.vmNsRequiredLevel }}
+      {{> inputNumberSpinner viewModel=viewModel.vmNsDistance }}
+    </span>
+    {{!-- AP cost --}}
+    <div class="width-min-xl">
+      {{> inputLabel text="ambersteel.labels.apCost"}}
+    </div>
+    <span class="width-md">
+      {{> inputNumberSpinner viewModel=viewModel.vmNsApCost }}
+    </span>
+    {{!-- Attack type --}}
+    <div class="width-min-xl">
+      {{> inputLabel text="ambersteel.labels.attackType"}}
+    </div>
+    <span class="width-min-lg">
+      {{> inputDropDown viewModel=viewModel.vmDdAttackType }}
     </span>
   </div>
-  {{!-- Obstacle --}}
+  {{!-- Row 4 --}}
   <div class="flex flex-row">
-    <span class="width-min-xl">
-      {{> inputLabel text="ambersteel.roll.obstacleAbbreviation"}}
+    {{!-- Damage formula --}}
+    <div class="width-min-xl">
+      {{> inputLabel text="ambersteel.labels.damage"}}
+    </div>
+    {{> buttonRoll viewModel=viewModel.vmBtnRollDamage}}
+    <span class="width-min-xxl flex-grow">
+      {{> inputTextField viewModel=viewModel.vmTfDamage }}
     </span>
+    {{!-- Damage type --}}
+    <div class="width-min-xxl">
+      {{> inputLabel text="ambersteel.labels.damageType"}}
+    </div>
     <span class="width-xxl">
-      {{> inputTextField viewModel=viewModel.vmTfObstacle }}
+      {{> inputDropDown viewModel=viewModel.vmDdDamageType }}
     </span>
   </div>
-</div>
-{{!-- Row 3 --}}
-<div class="flex flex-row">
-  {{!-- Distance --}}
-  <div class="width-min-xl">
-    {{> inputLabel text="ambersteel.labels.distance"}}
+  {{!-- Row 5 --}}
+  <div class="flex flex-row flex-grow">
+    {{!-- Condition --}}
+    <div class="width-min-xl">
+      {{> inputLabel text="ambersteel.labels.skillAbilityCondition"}}
+    </div>
+    <div class="flex-grow">
+      {{> inputTextField viewModel=viewModel.vmTfCondition }}
+    </div>
   </div>
-  <span class="width-md">
-    {{> inputNumberSpinner viewModel=viewModel.vmNsDistance }}
-  </span>
-  {{!-- AP cost --}}
-  <div class="width-min-xl">
-    {{> inputLabel text="ambersteel.labels.apCost"}}
+  {{!-- Row 6 --}}
+  {{!-- Description --}}
+  <div class="flex flex-row">
+    {{> inputTextarea viewModel=viewModel.vmTaDescription cssClass="fill" }}
   </div>
-  <span class="width-md">
-    {{> inputNumberSpinner viewModel=viewModel.vmNsApCost }}
-  </span>
-  {{!-- Attack type --}}
-  <div class="width-min-xl">
-    {{> inputLabel text="ambersteel.labels.attackType"}}
-  </div>
-  <span class="width-min-lg">
-    {{> inputDropDown viewModel=viewModel.vmDdAttackType }}
-  </span>
-</div>
-{{!-- Row 4 --}}
-<div class="flex flex-row">
-  {{!-- Damage formula --}}
-  <div class="width-min-xl">
-    {{> inputLabel text="ambersteel.labels.damage"}}
-  </div>
-  {{> buttonRoll viewModel=viewModel.vmBtnRollDamage}}
-  <span class="width-min-xxl flex-grow">
-    {{> inputTextField viewModel=viewModel.vmTfDamage }}
-  </span>
-  {{!-- Damage type --}}
-  <div class="width-min-xxl">
-    {{> inputLabel text="ambersteel.labels.damageType"}}
-  </div>
-  <span class="width-xxl">
-    {{> inputDropDown viewModel=viewModel.vmDdDamageType }}
-  </span>
-</div>
-{{!-- Row 5 --}}
-<div class="flex flex-row flex-grow">
-  {{!-- Condition --}}
-  <div class="width-min-xl">
-    {{> inputLabel text="ambersteel.labels.skillAbilityCondition"}}
-  </div>
-  <div class="flex-grow">
-    {{> inputTextField viewModel=viewModel.vmTfCondition }}
-  </div>
-</div>
-{{!-- Row 6 --}}
-{{!-- Description --}}
-<div class="flex flex-row">
-  {{> inputTextarea viewModel=viewModel.vmTaDescription cssClass="fill" }}
 </div>

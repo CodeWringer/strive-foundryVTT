@@ -1,7 +1,8 @@
-{{!-- Requires context:
+{{!-- Parameters:
 viewModel: {InjuryChatMessageViewModel}
+cssClass: {undefined | String}
 --}}
-<section class="custom-system-chat-message" 
+<section class="custom-system-chat-message{{#if cssClass}} {{cssClass}}{{/if}}" 
   data-view-model-id="{{viewModel.id}}"
   data-document-id="{{viewModel.item.id}}"
 >

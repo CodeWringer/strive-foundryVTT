@@ -1,50 +1,53 @@
-{{!-- Requires context:
+{{!-- Parameters:
 viewModel: {InjuryListItemViewModel}
+cssClass: {undefined | String}
 --}}
-{{!-- Row 1 --}}
-<div class="flex flex-row">
-  <div class="flex flex-grow">
-    {{!-- Send to chat --}}
-    {{> buttonSendToChat viewModel=viewModel.vmBtnSendToChat }}
-    {{!-- Name --}}
-    <span class="width-min-xl">
-      {{> inputLabel text="ambersteel.labels.injury"}}
-    </span>
-    {{> inputImage viewModel=viewModel.vmImg cssClass="custom-icon-sm" }}
-    <span class="flex-grow margin-r-md">
-      {{> inputTextField viewModel=viewModel.vmTfName }}
-    </span>
-    {{!-- State --}}
-    {{> inputRadioButtonGroup viewModel=viewModel.vmRbgState }}
-  </div>
-  {{!-- Delete --}}
-  {{> buttonDelete viewModel=viewModel.vmBtnDelete }}
-</div>
-{{!-- Row 2 --}}
-<div class="flex flex-row">
-  {{!-- Limit --}}
+<div class="custom-system-list-item{{#if cssClass}} {{cssClass}}{{/if}}">
+  {{!-- Row 1 --}}
   <div class="flex flex-row">
-    <span class="width-min-xl">
-      {{> inputLabel text="ambersteel.labels.limit" }}
-    </span>
-    <span class="width-md">
-      {{> inputNumberSpinner viewModel=viewModel.vmNsLimit }}
-    </span>
+    <div class="flex flex-grow">
+      {{!-- Send to chat --}}
+      {{> buttonSendToChat viewModel=viewModel.vmBtnSendToChat }}
+      {{!-- Name --}}
+      <span class="width-min-xl">
+        {{> inputLabel text="ambersteel.labels.injury"}}
+      </span>
+      {{> inputImage viewModel=viewModel.vmImg cssClass="custom-icon-sm" }}
+      <span class="flex-grow margin-r-md">
+        {{> inputTextField viewModel=viewModel.vmTfName }}
+      </span>
+      {{!-- State --}}
+      {{> inputRadioButtonGroup viewModel=viewModel.vmRbgState }}
+    </div>
+    {{!-- Delete --}}
+    {{> buttonDelete viewModel=viewModel.vmBtnDelete }}
   </div>
-  {{!-- Spacer --}}
-  <div class="width-xs"></div>
-  {{!-- Time to heal --}}
-  <div class="flex flex-row flex-grow">
-    <span class="width-min-xl">
-      {{> inputLabel text="ambersteel.labels.timeToHeal" }}
-    </span>
-    <span class="width-min-xl flex-grow">
-      {{> inputTextField viewModel=viewModel.vmTfTimeToHeal }}
-    </span>
+  {{!-- Row 2 --}}
+  <div class="flex flex-row">
+    {{!-- Limit --}}
+    <div class="flex flex-row">
+      <span class="width-min-xl">
+        {{> inputLabel text="ambersteel.labels.limit" }}
+      </span>
+      <span class="width-md">
+        {{> inputNumberSpinner viewModel=viewModel.vmNsLimit }}
+      </span>
+    </div>
+    {{!-- Spacer --}}
+    <div class="width-xs"></div>
+    {{!-- Time to heal --}}
+    <div class="flex flex-row flex-grow">
+      <span class="width-min-xl">
+        {{> inputLabel text="ambersteel.labels.timeToHeal" }}
+      </span>
+      <span class="width-min-xl flex-grow">
+        {{> inputTextField viewModel=viewModel.vmTfTimeToHeal }}
+      </span>
+    </div>
   </div>
-</div>
-{{!-- Row 3 --}}
-{{!-- Description --}}
-<div class="flex flex-row">
-  {{> inputTextarea viewModel=viewModel.vmTaDescription }}
+  {{!-- Row 3 --}}
+  {{!-- Description --}}
+  <div class="flex flex-row">
+    {{> inputTextarea viewModel=viewModel.vmTaDescription }}
+  </div>
 </div>

@@ -1,7 +1,8 @@
-{{!-- Requires context:
+{{!-- Parameters:
 viewModel: {FateCardViewModel}
+cssClass: {undefined | String}
 --}}
-<section class="flex flex-column fate-card"
+<section class="flex flex-column fate-card{{#if cssClass}} {{cssClass}}{{/if}}"
   data-view-model-id="{{viewModel.id}}"
   data-document-id="{{viewModel.item.id}}"
   data-item-id="{{viewModel.item.id}}"

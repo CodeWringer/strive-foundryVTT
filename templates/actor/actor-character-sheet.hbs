@@ -1,7 +1,8 @@
 {{!-- Requires context:
 viewModel: {ActorSheetViewModel}
+cssClass: {undefined | String}
 --}}
-<form class="{{cssClass}} {{viewModel.actor.type}} flexcol" autocomplete="off">
+<form class="{{viewModel.actor.type}} flexcol{{#if cssClass}} {{cssClass}}{{/if}}" autocomplete="off">
 
   {{!-- Sheet Header --}}
   <header class="sheet-header">
