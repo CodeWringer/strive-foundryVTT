@@ -1358,6 +1358,8 @@ button.component-button-toggle.active.disabled {
 }
 
 button.component-button-toggle.disabled {
+  background: -o-repeating-linear-gradient(45deg, rgba(0, 0, 0, 0.2), transparent, rgba(0, 0, 0, 0.2) 10px);
+  background: repeating-linear-gradient(45deg, rgba(0, 0, 0, 0.2), transparent, rgba(0, 0, 0, 0.2) 10px);
   background-color: #676662;
   cursor: default;
 }

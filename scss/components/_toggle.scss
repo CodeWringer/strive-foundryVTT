@@ -25,6 +25,7 @@ button.component-button-toggle {
   }
 
   &.disabled {
+    background: repeating-linear-gradient(45deg, rgba(0,0,0,0.20), transparent, rgba(0,0,0,0.20) 10px);
     background-color: $c-themed-bg-disabled;
     cursor: default;
   }
