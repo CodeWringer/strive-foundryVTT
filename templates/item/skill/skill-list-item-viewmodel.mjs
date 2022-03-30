@@ -74,13 +74,6 @@ export default class SkillListItemViewModel extends SkillViewModel {
       propertyOwner: thiz.item,
       propertyPath: "data.data.category",
     });
-    this.vmTaDescription = this.createVmTextArea({
-      id: "vmTaDescription",
-      propertyOwner: thiz.item,
-      propertyPath: "data.data.description",
-      placeholder: "ambersteel.labels.description",
-      allowResize: true,
-    });
     this.vmSkillAbilityTable = new SkillAbilityTableViewModel({
       id: "vmSkillAbilityTable",
       parent: thiz,

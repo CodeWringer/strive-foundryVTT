@@ -19,6 +19,8 @@ export default class SkillChatMessageViewModel extends SheetViewModel {
     return options.find(it => { return it.value === this.item.data.data.relatedAttribute }).localizedValue;
   }
 
+  get description() { return TextEditor.enrichHTML(this.actor.data.data.description); }
+
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
    * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 

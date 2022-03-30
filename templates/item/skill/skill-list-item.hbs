@@ -48,12 +48,10 @@ cssClass: {undefined | String}
   </div>
   {{!-- Row 4 --}}
   {{!-- Description --}}
-  <div class="sheet-block flex flex-row flex-grow">
-    <div class="width-min-xxl">
-      {{> inputLabel text=(localize "ambersteel.labels.description")}}
-    </div>
-    <div class="flex-grow">
-      {{> inputTextarea viewModel=viewModel.vmTaDescription cssClass="fill" }}
+  <div class="sheet-block flex flex-column margin-b-md">
+    <h3 class="fancy-font">{{localize "ambersteel.labels.description"}}</h3>
+    <div class="description-editor">
+      {{editor content=viewModel.item.data.data.description target="data.description" button=true editable=viewModel.isEditable owner=viewModel.isOwner}}
     </div>
   </div>
   {{!-- Row 4 --}}

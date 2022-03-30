@@ -1400,3 +1400,11 @@ span.component-button-toggle-knob.disabled {
   min-height: 26px;
   max-height: 350px;
 }
+
+.description-editor {
+  min-height: 80px;
+}
+
+.description-editor .editor-content {
+  min-height: 80px;
+}

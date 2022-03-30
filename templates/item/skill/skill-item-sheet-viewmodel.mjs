@@ -75,13 +75,6 @@ export default class SkillItemSheetViewModel extends SkillViewModel {
       target: thiz.item,
       propertyPath: "data.data.isMagicSchool",
     });
-    this.vmTaDescription = this.createVmTextArea({
-      id: "vmTaDescription",
-      propertyOwner: thiz.item,
-      propertyPath: "data.data.description",
-      placeholder: "ambersteel.labels.description",
-      allowResize: true,
-    });
     this.vmSkillAbilityTable = new SkillAbilityTableViewModel({
       id: "vmSkillAbilityTable",
       parent: thiz,
