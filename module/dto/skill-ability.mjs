@@ -5,7 +5,6 @@ import PreparedChatData from './prepared-chat-data.mjs';
 import SkillAbilityChatMessageViewModel from '../../templates/item/skill-ability/skill-ability-chat-message-viewmodel.mjs';
 import { createUUID } from '../utils/uuid-utility.mjs';
 import * as PropUtil from '../utils/property-utility.mjs';
-import * as UpdateUtil from "../utils/document-update-utility.mjs";
 
 /**
  * Represents a skill ability. 
@@ -69,8 +68,18 @@ export default class SkillAbility {
   /**
    * Chat message template path. 
    * @type {String}
+   * @readonly
    */
   get chatMessageTemplate() { return TEMPLATES.SKILL_ABILITY_CHAT_MESSAGE; }
+  
+  /**
+   * Returns the full property path on the parent that identifies this SkillAbility. 
+   * 
+   * E.g. "data.data.abilities[0]"
+   * @type {String}
+   * @readonly
+   */
+  get propertyPathOnParent() { return `data.data.abilities[${this.index}]`; }
 
   /**
    * Base implementation of returning data for a chat message, based on this item. 
@@ -134,8 +143,32 @@ export default class SkillAbility {
     });
   }
 
+  /**
+   * Deletes this SkillAbility from its parent, if it has one. 
+   * @returns {Boolean} True, if the SkillAbility could be removed. 
+   */
   delete() {
+    if (this.parent === undefined) return false;
+
     this.parent.deleteSkillAbilityAt(this.index);
+
+    return true;
+  }
+
+  /**
+   * Updates the properties of this object, based on the given delta object. 
+   * @param {Object} delta An object containing the properties of this object to update. 
+   * @param {Boolean | undefined} render If true, will trigger a re-render of the associated document sheet. Default 'true'. 
+   * @async
+   */
+  async update(delta, render = true) {
+    for (const propertyName in delta) {
+      this[propertyName] = delta[propertyName];
+    }
+
+    if (this.parent === undefined) return;
+
+    await this.parent.updateProperty(this.propertyPathOnParent, this._toPlainObject(), render);
   }
 
   /**
@@ -146,17 +179,18 @@ export default class SkillAbility {
    * @param {any} newValue The value to assign to the property. 
    * @param {Boolean | undefined} render If true, will trigger a re-render of the associated document sheet. Default 'true'. 
    * @async
-   * @protected
    */
   async updateProperty(propertyPath, newValue, render = true) {
     PropUtil.setNestedPropertyValue(this, propertyPath, newValue);
     
+    if (this.parent === undefined) return;
+
     const abilitiesArray = [];
     for (const skillAbility of this.parent.data.data.abilities) {
       abilitiesArray.push(skillAbility._toPlainObject());
     }
     
-    await UpdateUtil.updateProperty(this.parent, `data.data.abilities`, abilitiesArray, render);
+    await this.parent.updateProperty("data.data.abilities", abilitiesArray, render);
   }
 
   /**
