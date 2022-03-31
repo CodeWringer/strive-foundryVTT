@@ -3,38 +3,44 @@ viewModel: {InputRadioButtonGroupViewModel}
 cssClass: {String | undefined}
 readOnlyCssClass: {String | undefined}
 --}}
-{{#if viewModel.isEditable}}
-  <div 
-    type="hidden"
-    class="custom-system-edit radio-button-group flex flex-row component-input-radio-button-group {{cssClass}}" 
-    data-property-path="{{viewModel.propertyPath}}"
-    name="{{viewModel.id}}"
-    id="{{viewModel.id}}"
-    data-property-path="{{viewModel.placeholder}}"
-    value="{{viewModel.value}}"
-  >
-    {{#each viewModel.options as |option index|}}
-      <div class="radio-button-container flex flex-row">
+<div 
+  type="hidden"
+  class="custom-system-edit radio-button-group flex flex-row component-input-radio-button-group{{#if cssClass}} {{cssClass}}{{/if}}" 
+  data-property-path="{{viewModel.propertyPath}}"
+  name="{{viewModel.id}}"
+  id="{{viewModel.id}}"
+  value="{{viewModel.value}}"
+>
+  {{#each viewModel.options as |option index|}}
+    <div class="radio-button-container flex flex-row{{#if (../viewModel.isSelectedOption ../viewModel option)}} active{{/if}}">
+      {{#if ../viewModel.isEditable}}
         <input 
           type="radio" 
           class="radio-button" 
-          name="{{../viewModel.id}}" 
+          name="{{../viewModel.id}}-{{option.value}}" 
           id="{{../viewModel.id}}-{{option.value}}" 
           value="{{option.value}}"
-        >
-        <label class="fancy-font" for="{{../viewModel.id}}-{{option.value}}">
-          {{option.localizedValue}}
-        </label>
-      </div>
-    {{/each}}
-  </div>
-{{else}}
-  {{!-- Display read-only value --}}
-  <div 
-    class="custom-system-read-only pad-sm fill component-input-radio-button-group {{readOnlyCssClass}}" 
-    name="{{viewModel.id}}"
-    id="{{viewModel.id}}"
-  >
-    {{viewModel.localizedValue}}
-  </div>
-{{/if}}
+        />
+      {{/if}}
+      <label class="fancy-font flex flex-middle{{#if ../viewModel.isEditable}}{{else}} custom-system-read-only disabled{{/if}}" 
+        for="{{../viewModel.id}}-{{option.value}}"
+        {{#if (not option.shouldDisplayValue)}}title="{{option.localizedValue}}"{{/if}}
+      >
+        {{#if option.displayHtmlOverride}}
+          {{{option.displayHtmlOverride}}}
+        {{else}}
+          {{#if option.shouldDisplayIcon}}
+            {{#if option.iconIsFontAwesome}}
+              <i class="{{option.icon}}"></i>
+            {{else}}
+              <img class="radio-button-icon" src="{{option.icon}}" />
+            {{/if}}
+          {{/if}}
+          {{#if option.shouldDisplayValue}}
+            <span>{{option.localizedValue}}</span>
+          {{/if}}
+        {{/if}}
+      </label>
+    </div>
+  {{/each}}
+</div>

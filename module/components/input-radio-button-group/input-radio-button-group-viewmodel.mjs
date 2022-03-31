@@ -25,7 +25,6 @@ import InputViewModel from "../input-viewmodel.mjs";
  */
 export default class InputRadioButtonGroupViewModel extends InputViewModel {
   static get TEMPLATE() { return TEMPLATES.COMPONENT_INPUT_RADIO_BUTTON_GROUP; }
-  static get activeCssClass() { return "active" }
   
   /**
    * Returns the currently selected option. 
@@ -96,44 +95,23 @@ export default class InputRadioButtonGroupViewModel extends InputViewModel {
       // Hook up events on radio button options. 
       radioButton.onchange = (event) => {
         this.value = event.currentTarget.value;
-        this._setChecked(event.currentTarget);
-
-        if (this._lastChecked !== undefined) {
-          this._setUnchecked(this._lastChecked);
-        }
-        this._lastChecked = event.currentTarget;
-      };
-      
-      // Ensure correct option of radio-buttons is set.
-      if (this.value == radioButton.value) {
-        this._setChecked(radioButton);
-
-        if (this._lastChecked !== undefined) {
-          this._setUnchecked(this._lastChecked);
-        }
-        this._lastChecked = radioButton;
       }
     }
   }
 
   /**
-   * @param {HTMLElement} radioButton 
-   * @private
+   * Returns true, if the given {ChoiceOption} represents the 
+   * current selection of the given {InputRadioButtonGroupViewModel}. 
+   * @param {InputRadioButtonGroupViewModel} viewModel 
+   * @param {ChoiceOption} option The option to check. 
+   * @returns {Boolean}
    */
-  _setChecked(radioButton) {
-    radioButton.checked = true;
-    const parent = this.element.find('#' + radioButton.id).parent();
-    parent.addClass(InputRadioButtonGroupViewModel.activeCssClass);
-  }
-  
-  /**
-   * @param {HTMLElement} radioButton 
-   * @private
-   */
-  _setUnchecked(radioButton) {
-    radioButton.checked = false;
-    const parent = this.element.find('#' + radioButton.id).parent();
-    parent.removeClass(InputRadioButtonGroupViewModel.activeCssClass);
+  isSelectedOption(viewModel, option) {
+    if (viewModel.value === option.value) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }
 

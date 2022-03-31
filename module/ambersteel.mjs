@@ -238,8 +238,16 @@ Hooks.once('init', async function() {
 
       for (const entryName in configObject) {
         const entry = configObject[entryName];
-        const localizedName = game.i18n.localize(entry.localizableName);
-        result.push(new ChoiceOption(entry.name, localizedName));
+        const localizedName = entry.localizableName !== undefined ? game.i18n.localize(entry.localizableName) : undefined;
+        const icon = entry.icon;
+
+        result.push(new ChoiceOption({
+          value: entry.name, 
+          localizedValue: localizedName, 
+          icon: icon,
+          shouldDisplayValue: localizedName !== undefined ? true : false,
+          shouldDisplayIcon: icon !== undefined ? true : false,
+        }));
       }
 
       return result;

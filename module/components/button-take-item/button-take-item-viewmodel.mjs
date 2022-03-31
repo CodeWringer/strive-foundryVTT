@@ -144,7 +144,11 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
   async _promptSelectActor() {
     const options = [];
     for (const actor of game.actors.values()) {
-      options.push(new ChoiceOption(actor.id, actor.name));
+      options.push(new ChoiceOption({
+        value: actor.id,
+        localizedValue: actor.name,
+        icon: actor.img,
+      }));
     }
 
     const dialogResult = await DialogUtil.showSelectionDialog({

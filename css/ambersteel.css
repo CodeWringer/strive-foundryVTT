@@ -1289,6 +1289,10 @@ a.button-spinner {
   background: rgba(0, 0, 0, 0.05);
 }
 
+.radio-button-container > label.disabled {
+  cursor: default;
+}
+
 .radio-button-container:last-child > label {
   border-right: none;
 }
@@ -1297,6 +1301,12 @@ a.button-spinner {
   background: rgba(0, 0, 0, 0.01);
   text-shadow: 0 0 10px #d23d3d;
   color: #191813;
+}
+
+.radio-button-container img.radio-button-icon {
+  display: block;
+  max-height: 32px;
+  max-width: 32px;
 }
 
 textarea.biography {

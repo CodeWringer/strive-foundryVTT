@@ -6,7 +6,20 @@ export default class InjuryListItemViewModel extends SheetViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.INJURY_LIST_ITEM; }
 
-  get stateOptions() { return game.ambersteel.getInjuryOptions(); }
+  /**
+   * An array of {ChoiceOption}s which represent the possible states of the injury. 
+   * @type {Array<ChoiceOption>}
+   * @readonly
+   */
+  get stateOptions() {
+    const stateOptions = game.ambersteel.getInjuryOptions();
+
+    for (const stateOption of stateOptions) {
+      stateOption.shouldDisplayValue = false;
+    }
+
+    return stateOptions;
+  }
 
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
