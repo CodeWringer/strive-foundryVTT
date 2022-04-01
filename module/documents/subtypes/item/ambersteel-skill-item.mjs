@@ -4,6 +4,7 @@ import { TEMPLATES } from "../../../templatePreloader.mjs";
 import { createUUID } from "../../../utils/uuid-utility.mjs";
 import SkillChatMessageViewModel from "../../../../templates/item/skill/skill-chat-message-viewmodel.mjs";
 import { SummedData, SummedDataComponent } from "../../../dto/summed-data.mjs";
+import DamageAndType from "../../../dto/damage-and-type.mjs";
 
 export default class AmbersteelSkillItem extends AmbersteelBaseItem {
   /**
@@ -193,20 +194,27 @@ export default class AmbersteelSkillItem extends AmbersteelBaseItem {
     for (let i = 0; i < context.data.data.abilities.length; i++) {
       const abilityObject = context.data.data.abilities[i];
 
+      const damage = [];
+      for (const plain of abilityObject.damage) {
+        damage.push(new DamageAndType({
+          damage: plain.damage,
+          damageType: plain.damageType,
+        }));
+      }
+
       listOfProperObjects.push(new SkillAbility({
         parent: context,
         index: i,
+        isCustom: abilityObject.isCustom,
         name: abilityObject.name,
+        img: abilityObject.img,
         description: abilityObject.description,
         requiredLevel: abilityObject.requiredLevel,
         apCost: abilityObject.apCost,
+        damage: damage,
         condition: abilityObject.condition,
-        img: abilityObject.img,
         distance: abilityObject.distance,
-        damageFormula: abilityObject.damageFormula,
         obstacle: abilityObject.obstacle,
-        isCustom: abilityObject.isCustom,
-        damageType: abilityObject.damageType,
         attackType: abilityObject.attackType,
       }));
     }

@@ -42,6 +42,36 @@ export default class SkillAbilityListItemViewModel extends SheetViewModel {
    * @readonly
    */
   get damageTypeOptions() { return game.ambersteel.getDamageTypeOptions(); }
+  
+  /**
+   * @type {Boolean}
+   * @readonly
+   */
+  get hideObstacle() { return this.skillAbility.obstacle === undefined; }
+  
+  /**
+   * @type {Boolean}
+   * @readonly
+   */
+  get hideCondition() { return this.skillAbility.condition === undefined; }
+  
+  /**
+   * @type {Boolean}
+   * @readonly
+   */
+  get hideDistance() { return this.skillAbility.distance === undefined; }
+  
+  /**
+   * @type {Boolean}
+   * @readonly
+   */
+  get hideAttackType() { return this.skillAbility.attackType === undefined; }
+  
+  /**
+   * @type {Boolean}
+   * @readonly
+   */
+  get hideDamage() { return this.skillAbility.damage.length <= 0; }
 
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
@@ -103,11 +133,11 @@ export default class SkillAbilityListItemViewModel extends SheetViewModel {
       propertyOwner: skillAbility,
       propertyPath: "obstacle",
     });
-    this.vmNsDistance = this.createVmNumberSpinner({
-      id: "vmNsDistance",
+    this.vmTfDistance = this.createVmTextField({
+      id: "vmTfDistance",
       propertyOwner: skillAbility,
       propertyPath: "distance",
-      min: 0,
+      placeholder: "3' / 1m / 0",
     });
     this.vmNsApCost = this.createVmNumberSpinner({
       id: "vmNsApCost",
