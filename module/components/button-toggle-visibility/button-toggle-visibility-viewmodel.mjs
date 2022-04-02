@@ -54,6 +54,7 @@ export default class ButtonToggleVisibilityViewModel extends ButtonViewModel {
    * @param {Function | String | undefined} args.callback Optional. Defines an asynchronous callback that is invoked upon completion of the button's own callback. 
    * @param {Any | undefined} args.callbackData Optional. Defines any data to pass to the completion callback. 
    * @param {Boolean | undefined} args.isEditable Optional. If true, will be interactible. 
+   * @param {String | undefined} args.localizableTitle Optional. The localizable title (tooltip). 
    * 
    * @param {String} args.visGroup Id or name to group the visiblity of elements by. 
    * Expects this id to be defined as a data-attribute. 
@@ -66,6 +67,7 @@ export default class ButtonToggleVisibilityViewModel extends ButtonViewModel {
 
     this._visGroup = args.visGroup ?? createUUID();
     this._toggleSelf = args.toggleSelf ?? false;
+    this.localizableTitle = args.localizableTitle ?? "ambersteel.labels.toggleVisibility";
   }
 
   /**
