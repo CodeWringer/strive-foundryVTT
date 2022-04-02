@@ -1,5 +1,6 @@
 import { createUUID } from "../utils/uuid-utility.mjs";
 import * as PropertyUtil from "../utils/property-utility.mjs";
+import * as ValidationUtil from "../utils/validation-utility.mjs";
 
 /**
  * @summary
@@ -165,7 +166,7 @@ export default class ViewModel {
     // Set properties of this view model to null. 
     for (const propertyName in this) {
       // Call dispose on any property that supports it. 
-      if (PropertyUtil.isObject(this[propertyName]) 
+      if (ValidationUtil.isObject(this[propertyName]) 
         && this[propertyName].dispose !== undefined
         && propertyName !== "parent") {
         this[propertyName].dispose();
