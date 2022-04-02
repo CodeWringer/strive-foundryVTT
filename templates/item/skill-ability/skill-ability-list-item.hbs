@@ -77,15 +77,6 @@ cssClass: {undefined | String}
         {{> inputDropDown viewModel=viewModel.vmDdAttackType }}
       </div>
     </div>
-    {{!-- Condition --}}
-    <div class="fill flex flex-row{{#if viewModel.hideCondition}} hidden{{/if}}">
-      <div class="width-min-lg">
-        {{> inputLabel text="ambersteel.labels.skillAbilityCondition"}}
-      </div>
-      <div class="flex-grow">
-        {{> inputTextField viewModel=viewModel.vmTfCondition }}
-      </div>
-    </div>
   </div>
   {{!-- Damage --}}
   <div class="flex flex-row{{#if viewModel.hideDamage}} hidden{{/if}}">
@@ -117,8 +108,22 @@ cssClass: {undefined | String}
       {{/each}}
     </ol>
   </div>
+  {{!-- Condition --}}
+  <div class="sheet-block flex flex-column margin-b-md{{#if viewModel.hideCondition}} hidden{{/if}}">
+    <h3 class="fancy-font">
+      {{localize "ambersteel.labels.skillAbilityCondition"}}
+    </h3>
+    <div class="flex-grow">
+      {{> inputTextarea viewModel=viewModel.vmTaCondition }}
+    </div>
+  </div>
   {{!-- Description --}}
-  <div class="flex flex-row">
-    {{> inputTextarea viewModel=viewModel.vmTaDescription cssClass="fill" }}
+  <div class="sheet-block flex flex-column margin-b-md{{#if viewModel.hideCondition}} hidden{{/if}}">
+    <h3 class="fancy-font">
+      {{localize "ambersteel.labels.description"}}
+    </h3>
+    <div class="flex-grow">
+      {{> inputTextarea viewModel=viewModel.vmTaDescription cssClass="fill" }}
+    </div>
   </div>
 </div>

@@ -237,11 +237,12 @@ export default class SkillAbilityListItemViewModel extends SheetViewModel {
       });
     };
 
-    this.vmTfCondition = this.createVmTextField({
-      id: "vmTfCondition",
+    this.vmTaCondition = this.createVmTextArea({
+      id: "vmTaCondition",
       propertyOwner: skillAbility,
       propertyPath: "condition",
       placeholder: game.i18n.localize("ambersteel.placeholders.condition"),
+      allowResize: true,
     });
     this.vmTaDescription = this.createVmTextArea({
       id: "vmTaDescription",
