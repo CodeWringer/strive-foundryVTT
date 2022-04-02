@@ -44,6 +44,7 @@ export default class ButtonContextMenuViewModel extends ButtonViewModel {
     this._isShown = value;
     if (value === true) {
       this._contextMenu.render(this.element);
+      this._ensureContextMenuWithin(this.html);
     } else {
       this._contextMenu.close({ animate: true });
     }
@@ -92,6 +93,7 @@ export default class ButtonContextMenuViewModel extends ButtonViewModel {
   activateListeners(html, isOwner, isEditable) {
     super.activateListeners(html, isOwner, isEditable);
 
+    this.html = html;
     this._contextMenu = new ContextMenu(html, this.id, this.menuItems);
   }
 
@@ -105,6 +107,41 @@ export default class ButtonContextMenuViewModel extends ButtonViewModel {
 
     // Show context menu below button. 
     this.isShown = !this.isShown;
+  }
+
+  /**
+   * Ensures the context menu isn't being cut off beyond the edges of the 
+   * passed outer (containing) html. 
+   * @param {JQuery} outerHtml 
+   * @private
+   */
+  _ensureContextMenuWithin(outerHtml) {
+    if (this.isShown !== true) return;
+
+    const contextMenuElement = outerHtml.find(`#${this.id} nav#context-menu`);
+
+    if (contextMenuElement === undefined || contextMenuElement === null || contextMenuElement.length === 0) {
+      game.ambersteel.logger.logWarn("NullPointerException: ContextMenu: Failed to get context menu element")
+    }
+
+    const outerBounds = outerHtml[0].getBoundingClientRect();
+    const contextMenuBounds = contextMenuElement[0].getBoundingClientRect();
+
+    if (contextMenuBounds.right > outerBounds.right) {
+      const delta = contextMenuBounds.right - outerBounds.right;
+      contextMenuElement[0].style.left = `-${delta}px`;
+    } else if (contextMenuBounds.left < outerBounds.left) {
+      const delta = outerBounds.left - contextMenuBounds.left;
+      contextMenuElement[0].style.left = `${delta}px`;
+    }
+
+    if (contextMenuBounds.bottom > outerBounds.bottom) {
+      const delta = contextMenuBounds.bottom - outerBounds.bottom;
+      contextMenuElement[0].style.top = `-${delta}px`;
+    } else if (contextMenuBounds.top < outerBounds.top) {
+      const delta = outerBounds.top - contextMenuBounds.top;
+      contextMenuElement[0].style.top = `${delta}px`;
+    }
   }
 }
 
