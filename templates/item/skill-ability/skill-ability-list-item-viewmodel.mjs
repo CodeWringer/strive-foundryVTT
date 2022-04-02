@@ -38,16 +38,16 @@ export default class SkillAbilityListItemViewModel extends SheetViewModel {
   get attackTypeOptions() { return game.ambersteel.getAttackTypeOptions(); }
 
   /**
-   * @type {Array<ChoiceOption>}
-   * @readonly
-   */
-  get damageTypeOptions() { return game.ambersteel.getDamageTypeOptions(); }
-  
-  /**
    * @type {Boolean}
    * @readonly
    */
   get hideObstacle() { return this.skillAbility.obstacle === undefined; }
+
+  /**
+   * @type {Boolean}
+   * @readonly
+   */
+  get hideOpposedBy() { return this.skillAbility.opposedBy === undefined; }
   
   /**
    * @type {Boolean}
@@ -72,6 +72,11 @@ export default class SkillAbilityListItemViewModel extends SheetViewModel {
    * @readonly
    */
   get hideDamage() { return this.skillAbility.damage.length <= 0; }
+
+  /**
+   * @type {Array<DamageAndTypeViewModel>}
+   */
+  damageViewModels = [];
 
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
@@ -132,12 +137,19 @@ export default class SkillAbilityListItemViewModel extends SheetViewModel {
       id: "vmTfObstacle",
       propertyOwner: skillAbility,
       propertyPath: "obstacle",
+      placeholder: game.i18n.localize("ambersteel.placeholders.obstacle"),
+    });
+    this.vmTfOpposedBy = this.createVmTextField({
+      id: "vmTfOpposedBy",
+      propertyOwner: skillAbility,
+      propertyPath: "opposedBy",
+      placeholder: game.i18n.localize("ambersteel.placeholders.opposedBy"),
     });
     this.vmTfDistance = this.createVmTextField({
       id: "vmTfDistance",
       propertyOwner: skillAbility,
       propertyPath: "distance",
-      placeholder: "3' / 1m / 0",
+      placeholder: game.i18n.localize("ambersteel.placeholders.distance"),
     });
     this.vmNsApCost = this.createVmNumberSpinner({
       id: "vmNsApCost",
@@ -159,21 +171,11 @@ export default class SkillAbilityListItemViewModel extends SheetViewModel {
       chatTitle: thiz.skillAbility.name,
       actor: thiz.actor,
     });
-    this.vmTfDamage = this.createVmTextField({
-      id: "vmTfDamage",
-      propertyOwner: skillAbility,
-      propertyPath: "damageFormula",
-    });
-    this.vmDdDamageType = this.createVmDropDown({
-      id: "vmDdDamageType",
-      propertyOwner: skillAbility,
-      propertyPath: "damageType",
-      options: thiz.damageTypeOptions,
-    });
     this.vmTfCondition = this.createVmTextField({
       id: "vmTfCondition",
       propertyOwner: skillAbility,
       propertyPath: "condition",
+      placeholder: game.i18n.localize("ambersteel.placeholders.condition"),
     });
     this.vmTaDescription = this.createVmTextArea({
       id: "vmTaDescription",
@@ -181,6 +183,128 @@ export default class SkillAbilityListItemViewModel extends SheetViewModel {
       propertyPath: "description",
       placeholder: "ambersteel.labels.description",
       allowResize: true,
+    });
+    this.vmBtnContextMenu = this.createVmBtnContextMenu({
+      id: "vmBtnContextMenu",
+      menuItems: [
+        // Toggle obstacle
+        {
+          name: game.i18n.localize("ambersteel.roll.obstacle"),
+          icon: '<i class="fas fa-check"></i>',
+          condition: () => { return thiz.skillAbility.obstacle !== undefined; },
+          callback: () => { thiz.skillAbility.updateProperty("obstacle", undefined); },
+        },
+        {
+          name: game.i18n.localize("ambersteel.roll.obstacle"),
+          icon: '',
+          condition: () => { return thiz.skillAbility.obstacle === undefined; },
+          callback: () => { thiz.skillAbility.updateProperty("obstacle", ""); },
+        },
+        // Toggle opposed by
+        {
+          name: game.i18n.localize("ambersteel.labels.opposedBy"),
+          icon: '<i class="fas fa-check"></i>',
+          condition: () => { return thiz.skillAbility.opposedBy !== undefined; },
+          callback: () => { thiz.skillAbility.updateProperty("opposedBy", undefined); },
+        },
+        {
+          name: game.i18n.localize("ambersteel.labels.opposedBy"),
+          icon: '',
+          condition: () => { return thiz.skillAbility.opposedBy === undefined; },
+          callback: () => { thiz.skillAbility.updateProperty("opposedBy", ""); },
+        },
+        // Toggle distance
+        {
+          name: game.i18n.localize("ambersteel.labels.distance"),
+          icon: '<i class="fas fa-check"></i>',
+          condition: () => { return thiz.skillAbility.distance !== undefined; },
+          callback: () => { thiz.skillAbility.updateProperty("distance", undefined); },
+        },
+        {
+          name: game.i18n.localize("ambersteel.labels.distance"),
+          icon: '',
+          condition: () => { return thiz.skillAbility.distance === undefined; },
+          callback: () => { thiz.skillAbility.updateProperty("distance", ""); },
+        },
+        // Toggle attack type
+        {
+          name: game.i18n.localize("ambersteel.labels.attackType"),
+          icon: '<i class="fas fa-check"></i>',
+          condition: () => { return thiz.skillAbility.attackType !== undefined; },
+          callback: () => { thiz.skillAbility.updateProperty("attackType", undefined); },
+        },
+        {
+          name: game.i18n.localize("ambersteel.labels.attackType"),
+          icon: '',
+          condition: () => { return thiz.skillAbility.attackType === undefined; },
+          callback: () => { thiz.skillAbility.updateProperty("attackType", CONFIG.attackTypes.none.name); },
+        },
+        // Toggle condition
+        {
+          name: game.i18n.localize("ambersteel.labels.skillAbilityCondition"),
+          icon: '<i class="fas fa-check"></i>',
+          condition: () => { return thiz.skillAbility.condition !== undefined; },
+          callback: () => { thiz.skillAbility.updateProperty("condition", undefined); },
+        },
+        {
+          name: game.i18n.localize("ambersteel.labels.skillAbilityCondition"),
+          icon: '',
+          condition: () => { return thiz.skillAbility.condition === undefined; },
+          callback: () => { thiz.skillAbility.updateProperty("condition", ""); },
+        },
+        // Add damage
+        {
+          name: game.i18n.localize("ambersteel.labels.addSkillAbilityDamage"),
+          icon: '<i class="fas fa-plus"></i>',
+          condition: () => { return true; },
+          callback: () => { /** TODO */; },
+        },
+      ],
+    });
+
+    for (let i = 0; i < skillAbility.damage.length; i++) {
+      const vm = new DamageAndTypeViewModel({
+        id: `vmDamageAndType-${i}`, 
+        parent: thiz,
+        isEditable: thiz.isEditable,
+        isSendable: thiz.isSendable,
+        isOwner: thiz.isOwner,
+        isGM: thiz.isGM,
+        skillAbility: skillAbility,
+        contextTemplate: this.contextTemplate,
+        index: i,
+      });
+      this.damageViewModels.push(vm);
+    }
+  }
+}
+
+class DamageAndTypeViewModel extends SheetViewModel {
+  /**
+   * @type {Array<ChoiceOption>}
+   * @readonly
+   */
+  get damageTypeOptions() { return game.ambersteel.getDamageTypeOptions(); }
+
+  constructor(args = {}) {
+    super(args);
+    validateOrThrow(args, ["skillAbility", "index"]);
+
+    this.skillAbility = args.skillAbility;
+    this.index = args.index;
+
+    const thiz = this;
+
+    this.vmTfDamage = this.createVmTextField({
+      id: "vmTfDamage",
+      propertyOwner: this.skillAbility,
+      propertyPath: `damage[${this.index}].damage`,
+    });
+    this.vmDdDamageType = this.createVmDropDown({
+      id: "vmDdDamageType",
+      propertyOwner: this.skillAbility,
+      propertyPath: `damage[${this.index}].damageType`,
+      options: thiz.damageTypeOptions,
     });
   }
 }

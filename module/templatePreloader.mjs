@@ -19,6 +19,7 @@ export const TEMPLATES = {
   COMPONENT_BUTTON_TOGGLE_VISIBILITY: "systems/ambersteel/module/components/button-toggle-visibility/button-toggle-visibility.hbs",
   COMPONENT_BUTTON_TAKE_ITEM: "systems/ambersteel/module/components/button-take-item/button-take-item.hbs",
   COMPONENT_BUTTON_TOGGLE: "systems/ambersteel/module/components/button-toggle/button-toggle.hbs",
+  COMPONENT_BUTTON_CONTEXT_MENU: "systems/ambersteel/module/components/button-context-menu/button-context-menu.hbs",
   // GM
   COMPONENT_GM_NOTES: "systems/ambersteel/templates/gm-notes.hbs",
   // Dice

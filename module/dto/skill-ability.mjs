@@ -23,6 +23,7 @@ import DamageAndType from "./damage-and-type.mjs";
  * @property {String | undefined} condition 
  * @property {Number | undefined} distance 
  * @property {String | undefined} obstacle 
+ * @property {String | undefined} opposedBy 
  * @property {CONFIG.ambersteel.attackTypes | undefined} attackType 
  */
 export default class SkillAbility {
@@ -39,6 +40,7 @@ export default class SkillAbility {
    * @param {String | undefined} args.condition Optional. 
    * @param {Number | undefined} args.distance Optional. 
    * @param {String | undefined} args.obstacle Optional. 
+   * @param {String | undefined} args.opposedBy Optional. 
    * @param {CONFIG.ambersteel.attackTypes | undefined} args.attackType Optional. 
    */
   constructor(args = {}) {
@@ -60,6 +62,7 @@ export default class SkillAbility {
     this.distance = args.distance;
     this.obstacle = args.obstacle;
     this.attackType = args.attackType;
+    this.opposedBy = args.opposedBy;
   }
 
   /**
@@ -214,6 +217,7 @@ export default class SkillAbility {
       distance: this.distance,
       obstacle: this.obstacle,
       attackType: this.attackType,
+      opposedBy: this.opposedBy,
     }
   }
 }

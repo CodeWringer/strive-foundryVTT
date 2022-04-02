@@ -14,6 +14,7 @@ import InputRadioButtonGroupViewModel from "./input-radio-button-group/input-rad
 import InputTextareaViewModel from "./input-textarea/input-textarea-viewmodel.mjs";
 import InputTextFieldViewModel from "./input-textfield/input-textfield-viewmodel.mjs";
 import ViewModel from "./viewmodel.mjs";
+import ButtonContextMenuViewModel from "./button-context-menu/button-context-menu-viewmodel.mjs";
 
 /**
  * This view model sub-type is intended for use with sheets that expect the common flags, 
@@ -464,6 +465,25 @@ export default class SheetViewModel extends ViewModel {
   }
 
   /**
+   * Creates a child context menu button view model and returns it. 
+   * @param {String | undefined} args.id
+   * @param {Boolean | undefined} args.isEditable
+   * @param {Array<ContextMenuItem> | undefined} menuItems
+   * @returns {ButtonContextMenuViewModel}
+   */
+  createVmBtnContextMenu(args = {}) {
+    const thiz = this;
+
+    return new ButtonContextMenuViewModel({
+      parent: thiz,
+      isEditable: args.isEditable ?? thiz.isEditable,
+      contextTemplate: thiz.contextTemplate,
+      id: args.id,
+      menuItems: args.menuItems,
+    });
+  }
+
+  /**
    * Disposes of any working data. 
    * 
    * This is a clean-up operation that should only be called when the instance of this class is no longer needed!
@@ -484,6 +504,7 @@ export default class SheetViewModel extends ViewModel {
     this.createVmBtnToggleVisibility = () => { throw ViewModel.DISPOSED_ACCESS_VIOLATION_EXCEPTION };
     this.createVmImg = () => { throw ViewModel.DISPOSED_ACCESS_VIOLATION_EXCEPTION };
     this.createVmBtnToggle = () => { throw ViewModel.DISPOSED_ACCESS_VIOLATION_EXCEPTION };
+    this.createVmBtnContextMenu = () => { throw ViewModel.DISPOSED_ACCESS_VIOLATION_EXCEPTION };
 
     super.dispose();
   }

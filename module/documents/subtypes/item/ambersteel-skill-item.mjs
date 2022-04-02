@@ -5,6 +5,7 @@ import { createUUID } from "../../../utils/uuid-utility.mjs";
 import SkillChatMessageViewModel from "../../../../templates/item/skill/skill-chat-message-viewmodel.mjs";
 import { SummedData, SummedDataComponent } from "../../../dto/summed-data.mjs";
 import DamageAndType from "../../../dto/damage-and-type.mjs";
+import * as ValUtil from "../../../utils/validation-utility.mjs";
 
 export default class AmbersteelSkillItem extends AmbersteelBaseItem {
   /**
@@ -195,27 +196,23 @@ export default class AmbersteelSkillItem extends AmbersteelBaseItem {
       const abilityObject = context.data.data.abilities[i];
 
       const damage = [];
-      for (const plain of abilityObject.damage) {
-        damage.push(new DamageAndType({
-          damage: plain.damage,
-          damageType: plain.damageType,
-        }));
+      if (ValUtil.isArray(abilityObject.damage)) {
+        for (const plain of abilityObject.damage) {
+          damage.push(new DamageAndType({
+            damage: plain.damage,
+            damageType: plain.damageType,
+          }));
+        }
+      } else {
+        // TODO: Fixup skill abilities and then remove this if-construct. 
+        game.ambersteel.logger.logWarn("Old SkillAbility detected - migration required");
       }
 
       listOfProperObjects.push(new SkillAbility({
+        ...abilityObject,
         parent: context,
         index: i,
-        isCustom: abilityObject.isCustom,
-        name: abilityObject.name,
-        img: abilityObject.img,
-        description: abilityObject.description,
-        requiredLevel: abilityObject.requiredLevel,
-        apCost: abilityObject.apCost,
         damage: damage,
-        condition: abilityObject.condition,
-        distance: abilityObject.distance,
-        obstacle: abilityObject.obstacle,
-        attackType: abilityObject.attackType,
       }));
     }
     context.data.data.abilities = listOfProperObjects;
