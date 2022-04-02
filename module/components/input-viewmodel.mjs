@@ -28,6 +28,8 @@ export const SELECTOR_READ = "custom-system-read-only";
  * @property {Object} propertyOwner An object on which to to look up the value. 
  * @property {Any} value Gets or sets the looked up value. 
  * For example, could be an instance of {ActorSheet} or {ItemSheet}. 
+ * @property {String | undefined} localizableTitle The localizable title (tooltip). 
+ * @property {String} localizedTitle The localized title (tooltip). 
  */
 export default class InputViewModel extends ViewModel {
   /**
@@ -48,6 +50,19 @@ export default class InputViewModel extends ViewModel {
    * @private
    */
   _contextTemplate = undefined;
+
+  /**
+   * The localizable title (tooltip). 
+   * @type {String | undefined}
+   */
+  localizableTitle = undefined;
+
+  /**
+   * The localized title (tooltip). 
+   * @type {String}
+   * @readonly
+   */
+  get localizedTitle() { return this.localizableTitle !== undefined ? game.i18n.localize(this.localizableTitle) : ""; }
 
   /**
    * @type {Any}
@@ -111,6 +126,7 @@ export default class InputViewModel extends ViewModel {
    * @param {Object} args.propertyOwner An object on which to to look up the value. 
    * @param {Boolean | undefined} args.isEditable Optional. If true, input(s) will be in edit mode. If false, input(s) will be in read-only mode.
    * @param {String | undefined} args.contextTemplate Optional. Name or path of a template that embeds this input component. 
+   * @param {String | undefined} args.localizableTitle Optional. The localizable title (tooltip). 
    */
   constructor(args = {}) {
     super(args);
@@ -120,6 +136,7 @@ export default class InputViewModel extends ViewModel {
     this.propertyPath = args.propertyPath;
     this.propertyOwner = args.propertyOwner;
     this._contextTemplate = args.contextTemplate;
+    this.localizableTitle = args.localizableTitle;
   }
 
   /** @override */

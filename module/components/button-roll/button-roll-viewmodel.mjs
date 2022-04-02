@@ -97,6 +97,7 @@ export default class ButtonRollViewModel extends ButtonViewModel {
    * IMPORTANT: If this argument is left undefined, then the target object MUST define a method 'getRollData()', which returns a {SummedData} instance. 
    * @param {String | undefined} args.chatTitle Optional. Title to display above the roll result in the chat message. 
    * @param {Actor | undefined} args.actor Optional. Actor associated with the roll result. 
+   * @param {String | undefined} args.localizableTitle Optional. The localizable title (tooltip). 
    */
   constructor(args = {}) {
     super(args);
@@ -106,6 +107,7 @@ export default class ButtonRollViewModel extends ButtonViewModel {
     this._rollType = args.rollType;
     this._chatTitle = args.chatTitle ?? "";
     this._actor = args.actor;
+    this.localizableTitle = args.localizableTitle ?? "ambersteel.labels.roll";
 
     // Wrap the inherited callback. 
     // Without wrapping the original callback, it would be impossible 
