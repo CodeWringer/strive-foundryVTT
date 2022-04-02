@@ -48,6 +48,7 @@ export default class InputNumberSpinnerViewModel extends InputViewModel {
    * @param {Object} args.propertyOwner An object on which to to look up the value. 
    * @param {Boolean | undefined} args.isEditable Optional. If true, input(s) will be in edit mode. If false, input(s) will be in read-only mode.
    * @param {String | undefined} args.contextTemplate Optional. Name or path of a template that embeds this input component. 
+   * @param {String | undefined} args.localizableTitle Optional. The localizable title (tooltip). 
    * 
    * @param {Number | undefined} args.min Optional. The minimum value. 
    * @param {Number | undefined} args.max Optional. The maximum value. 

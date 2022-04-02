@@ -52,6 +52,7 @@ export default class InputTextareaViewModel extends InputViewModel {
    * @param {Object} args.propertyOwner An object on which to to look up the value. 
    * @param {Boolean | undefined} args.isEditable Optional. If true, input(s) will be in edit mode. If false, input(s) will be in read-only mode.
    * @param {String | undefined} args.contextTemplate Optional. Name or path of a template that embeds this input component. 
+   * @param {String | undefined} args.localizableTitle Optional. The localizable title (tooltip). 
    * 
    * @param {Boolean | undefined} args.allowResize Optional. Sets whether resizing is allowed. 
    * @param {Boolean | undefined} args.spellcheck Optional. Sets whether spell checking is enabled. 

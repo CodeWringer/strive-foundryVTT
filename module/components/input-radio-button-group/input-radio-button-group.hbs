@@ -10,6 +10,7 @@ readOnlyCssClass: {String | undefined}
   name="{{viewModel.id}}"
   id="{{viewModel.id}}"
   value="{{viewModel.value}}"
+  title="{{viewModel.localizedTitle}}"
 >
   {{#each viewModel.options as |option index|}}
     <div class="radio-button-container flex flex-row{{#if (../viewModel.isSelectedOption ../viewModel option)}} active{{/if}}">

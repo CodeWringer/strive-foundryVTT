@@ -17,9 +17,12 @@ export const SELECTOR_BUTTON = "custom-system-button";
  * 
  * @property {JQuery | HTMLElement} element The button element on the DOM. 
  * @property {Object} target The target object to affect.  
- * @property {Function} callback An asynchronous callback that is invoked upon completion of the button's own callback. 
+ * @property {Function} callback An asynchronous callback that is invoked upon completion of the 
+ * button's own callback. 
  * @property {Any} callbackData Any data to pass to the completion callback. 
  * @property {Boolean} isEditable If true, is interactible. 
+ * @property {String | undefined} localizableTitle The localizable title (tooltip). 
+ * @property {String} localizedTitle The localized title (tooltip). 
  */
 export default class ButtonViewModel extends ViewModel {
   /** @override */
@@ -67,12 +70,26 @@ export default class ButtonViewModel extends ViewModel {
   get completionCallbackData() { return this._callbackData; }
 
   /**
+   * The localizable title (tooltip). 
+   * @type {String | undefined}
+   */
+  localizableTitle = undefined;
+
+  /**
+   * The localized title (tooltip). 
+   * @type {String}
+   * @readonly
+   */
+  get localizedTitle() { return this.localizableTitle !== undefined ? game.i18n.localize(this.localizableTitle) : ""; }
+
+  /**
    * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
    * 
    * @param {Object | undefined} args.target Optional. The target object to affect.  
    * @param {Function | String | undefined} args.callback Optional. Defines an asynchronous callback that is invoked upon completion of the button's own callback. 
    * @param {Any | undefined} args.callbackData Optional. Defines any data to pass to the completion callback. 
    * @param {Boolean | undefined} args.isEditable Optional. If true, will be interactible. 
+   * @param {String | undefined} args.localizableTitle Optional. The localizable title (tooltip). 
    */
   constructor(args = {}) {
     super(args);
@@ -81,6 +98,7 @@ export default class ButtonViewModel extends ViewModel {
     this.callback = this._getCallback(args.callback);
     this._callbackData = args.callbackData;
     this.isEditable = args.isEditable ?? false;
+    this.localizableTitle = args.localizableTitle;
   }
 
   /**
