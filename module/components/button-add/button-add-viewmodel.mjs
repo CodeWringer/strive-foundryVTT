@@ -2,8 +2,7 @@ import { TEMPLATES } from "../../templatePreloader.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
 import * as ItemAddDialog from '../../dialog/dialog-item-add.mjs';
 import { findItem, contentCollectionTypes } from '../../utils/content-utility.mjs';
-import * as PropertyUtil from "../../utils/property-utility.mjs";
-import { validateOrThrow } from "../../utils/validation-utility.mjs";
+import { validateOrThrow, isObject } from "../../utils/validation-utility.mjs";
 
 /**
  * --- Inherited from ViewModel
@@ -49,7 +48,7 @@ export default class ButtonAddViewModel extends ButtonViewModel {
     this.creationData = args.creationData ?? Object.create(null);
     this.localizableTitle = args.localizableTitle ?? "ambersteel.labels.add";
 
-    if (PropertyUtil.isObject(this.creationData) !== true) {
+    if (isObject(this.creationData) !== true) {
       this.creationData = this._parseCreationData(this.creationData);
     }
   }
