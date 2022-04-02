@@ -24,16 +24,9 @@ export const SELECTOR_INPUT_IMAGE = "component-input-image";
  * 
  * --- Own properties
  * 
- * @property {String} title Tooltip text to display on cursor hover over the DOM element. 
  */
 export default class InputImageViewModel extends InputViewModel {
   static get TEMPLATE() { return TEMPLATES.COMPONENT_INPUT_IMAGE; }
-
-  /**
-   * @type {String}
-   * @private
-   */
-  title = "";
 
   /**
    * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
@@ -42,14 +35,11 @@ export default class InputImageViewModel extends InputViewModel {
    * @param {Object} args.propertyOwner An object on which to to look up the value. 
    * @param {Boolean | undefined} args.isEditable Optional. If true, input(s) will be in edit mode. If false, input(s) will be in read-only mode.
    * @param {String | undefined} args.contextTemplate Optional. Name or path of a template that embeds this input component. 
-   * 
-   * @param {String | undefined} args.title Optional. Sets the tooltip text to display on cursor hover over the DOM element. 
+   * @param {String | undefined} args.localizableTitle Optional. The localizable title (tooltip). 
    */
   constructor(args = {}) {
     super(args);
     validateOrThrow(args, ["propertyPath", "propertyOwner"]);
-
-    this.title = args.title ?? "";
   }
 
   /**
