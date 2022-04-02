@@ -191,30 +191,31 @@ export default class AmbersteelSkillItem extends AmbersteelBaseItem {
    * @private
    */
   _ensureSkillAbilityObjects(context) {
-    const listOfProperObjects = [];
+    const skillAbilities = [];
     for (let i = 0; i < context.data.data.abilities.length; i++) {
       const abilityObject = context.data.data.abilities[i];
 
       const damage = [];
-      if (ValUtil.isArray(abilityObject.damage)) {
-        for (const plain of abilityObject.damage) {
-          damage.push(new DamageAndType({
-            damage: plain.damage,
-            damageType: plain.damageType,
-          }));
-        }
-      } else {
-        // TODO: Fixup skill abilities and then remove this if-construct. 
-        game.ambersteel.logger.logWarn("Old SkillAbility detected - migration required");
+      for (const propertyName in abilityObject.damage) {
+        if (abilityObject.damage.hasOwnProperty(propertyName) !== true) continue;
+
+        const plainDamageObject = abilityObject.damage[propertyName];
+
+        damage.push(new DamageAndType({
+          damage: plainDamageObject.damage ?? "",
+          damageType: plainDamageObject.damageType ?? game.ambersteel.config.damageTypes.none.name,
+        }));
       }
 
-      listOfProperObjects.push(new SkillAbility({
+      const skillAbility = new SkillAbility({
         ...abilityObject,
         parent: context,
         index: i,
         damage: damage,
-      }));
+      });
+
+      skillAbilities.push(skillAbility);
     }
-    context.data.data.abilities = listOfProperObjects;
+    context.data.data.abilities = skillAbilities;
   }
 }

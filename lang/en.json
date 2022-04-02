@@ -177,7 +177,8 @@
       "npc": "Non-Player Character",
       "npcAbbreviation": "NPC",
       "nameOfNewSkillAbility": "New Skill Ability",
-      "opposedBy": "Opposed By"
+      "opposedBy": "Opposed By",
+      "roll": "Roll Dice"
     },
     "placeholders": {
       "obstacle": "0 / Opposed+-0 / etc.",

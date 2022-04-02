@@ -166,9 +166,7 @@ export default class SkillAbility {
       this[propertyName] = delta[propertyName];
     }
 
-    if (this.parent === undefined) return;
-
-    await this.parent.updateProperty(this.propertyPathOnParent, this._toPlainObject(), render);
+    this._updateToDB(render);
   }
 
   /**
@@ -183,13 +181,38 @@ export default class SkillAbility {
   async updateProperty(propertyPath, newValue, render = true) {
     PropUtil.setNestedPropertyValue(this, propertyPath, newValue);
     
+    this._updateToDB(render);
+  }
+
+  /**
+   * Deletes a property on the skill ability, via the given path. 
+   * @param {String} propertyPath Path leading to the property to delete, on the given document entity. 
+   *        Array-accessing via brackets is supported. Property-accessing via brackets is *not* supported. 
+   *        E.g.: "data.attributes[0].value" 
+   *        E.g.: "data.attributes[4]" 
+   *        E.g.: "data.attributes" 
+   * @param {Boolean | undefined} render If true, will trigger a re-render of the associated document sheet. Default 'true'. 
+   * @async
+   */
+  async deleteByPropertyPath(propertyPath, render = true) {
+    PropUtil.deleteNestedProperty(this, propertyPath);
+
+    this._updateToDB(render);
+  }
+
+  /**
+   * Pushes the skill ability list on the parent to the DB. 
+   * @param {Boolean | undefined} render If true, will trigger a re-render of the associated document sheet. Default 'true'. 
+   * @private
+   * @async
+   */
+  async _updateToDB(render = true) {
     if (this.parent === undefined) return;
 
     const abilitiesArray = [];
     for (const skillAbility of this.parent.data.data.abilities) {
       abilitiesArray.push(skillAbility._toPlainObject());
     }
-    
     await this.parent.updateProperty("data.data.abilities", abilitiesArray, render);
   }
 
@@ -198,6 +221,7 @@ export default class SkillAbility {
    * @returns {Object}
    */
   _toPlainObject() {
+    // Ensure damage definitions are turned into plain objects. 
     const damage = [];
     for (const o of this.damage) {
       damage.push({ damage: o.damage, damageType: o.damageType });

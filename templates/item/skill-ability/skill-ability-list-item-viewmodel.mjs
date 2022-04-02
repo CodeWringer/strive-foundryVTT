@@ -1,7 +1,11 @@
+import ButtonViewModel from "../../../module/components/button/button-viewmodel.mjs";
 import SheetViewModel from "../../../module/components/sheet-viewmodel.mjs";
+import DamageAndType from "../../../module/dto/damage-and-type.mjs";
 import { TEMPLATES } from "../../../module/templatePreloader.mjs";
 import { getNestedPropertyValue } from "../../../module/utils/property-utility.mjs";
 import { validateOrThrow } from "../../../module/utils/validation-utility.mjs";
+import * as ChatUtil from "../../../module/utils/chat-utility.mjs";
+import { DICE_ROLL_SOUND } from "../../../module/utils/dice-utility.mjs";
 
 export default class SkillAbilityListItemViewModel extends SheetViewModel {
   /** @override */
@@ -163,14 +167,76 @@ export default class SkillAbilityListItemViewModel extends SheetViewModel {
       propertyPath: "attackType",
       options: thiz.attackTypeOptions,
     });
-    this.vmBtnRollDamage = this.createVmBtnRoll({
+
+    this.vmBtnRollDamage = new ButtonViewModel({
       id: "vmBtnRollDamage",
-      target: skillAbility,
-      propertyPath: "damageFormula",
-      rollType: "generic",
-      chatTitle: thiz.skillAbility.name,
-      actor: thiz.actor,
+      parent: thiz,
+      isEditable: thiz.isEditable,
+      localizableTitle: "ambersteel.labels.roll",
     });
+    this.vmBtnRollDamage.onClick = async (html, isOwner, isEditable) => {
+      const dialogResult = await ChatUtil.queryVisibilityMode();
+      if (!dialogResult.confirmed) return;
+
+      // This is the total across all damage definitions. 
+      let damageTotal = 0;
+
+      // Build roll array. 
+      const rolls = [];
+      for (const damageDefinition of thiz.skillAbility.damage) {
+        // Get evaluated roll of damage formula. 
+        const rollResult = new Roll(damageDefinition.damage);
+        await rollResult.evaluate({ async: true });
+
+        damageTotal += parseFloat(rollResult.total);
+
+        // Get an array of each dice term. 
+        const diceResults = [];
+        for (const term of rollResult.terms) {
+          if (term.values !== undefined) {
+            for (const value of term.values) {
+              diceResults.push({
+                value: value,
+                isDiceResult: true,
+              });
+            }
+          } else {
+            diceResults.push({
+              value: term.total,
+              isDiceResult: false,
+            });
+          }
+        }
+
+        // Get localized damage type. 
+        const damageType = game.ambersteel.getConfigItem(game.ambersteel.config.damageTypes, damageDefinition.damageType);
+        const localizedDamageType = game.i18n.localize(damageType.localizableName);
+
+        rolls.push({
+          damage: rollResult.total,
+          localizedDamageType: localizedDamageType,
+          diceResults: diceResults,
+        });
+      }
+
+      // Determine title
+      const title = `${game.i18n.localize("ambersteel.labels.damage")} - ${thiz.skillAbility.name}`;
+
+      // Render the results. 
+      const renderedContent = await renderTemplate(TEMPLATES.DICE_ROLL_DAMAGE_CHAT_MESSAGE, {
+        damageTotal: damageTotal,
+        rolls: rolls,
+        title: title,
+      });
+
+      return ChatUtil.sendToChat({
+        renderedContent: renderedContent,
+        actor: this.skillAbility.parent.parent,
+        sound: DICE_ROLL_SOUND,
+        visibilityMode: dialogResult.visibilityMode
+      });
+    };
+
     this.vmTfCondition = this.createVmTextField({
       id: "vmTfCondition",
       propertyOwner: skillAbility,
@@ -237,7 +303,7 @@ export default class SkillAbilityListItemViewModel extends SheetViewModel {
           name: game.i18n.localize("ambersteel.labels.attackType"),
           icon: '',
           condition: () => { return thiz.skillAbility.attackType === undefined; },
-          callback: () => { thiz.skillAbility.updateProperty("attackType", CONFIG.attackTypes.none.name); },
+          callback: () => { thiz.skillAbility.updateProperty("attackType", game.ambersteel.config.attackTypes.none.name); },
         },
         // Toggle condition
         {
@@ -257,7 +323,14 @@ export default class SkillAbilityListItemViewModel extends SheetViewModel {
           name: game.i18n.localize("ambersteel.labels.addSkillAbilityDamage"),
           icon: '<i class="fas fa-plus"></i>',
           condition: () => { return true; },
-          callback: () => { /** TODO */; },
+          callback: () => {
+            const damage = thiz.skillAbility.damage ?? [];
+            damage.push(new DamageAndType({
+              damage: "",
+              damageType: CONFIG.ambersteel.damageTypes.none.name,
+            }));
+            thiz.skillAbility.updateProperty("damage", damage);
+          },
         },
       ],
     });
@@ -306,5 +379,17 @@ class DamageAndTypeViewModel extends SheetViewModel {
       propertyPath: `damage[${this.index}].damageType`,
       options: thiz.damageTypeOptions,
     });
+
+    this.vmBtnDelete = new ButtonViewModel({
+      id: "vmBtnDelete",
+      parent: thiz,
+      isEditable: thiz.isEditable,
+      localizableTitle: "ambersteel.labels.delete",
+    });
+    this.vmBtnDelete.onClick = (html, isOwner, isEditable) => {
+      const damage = thiz.skillAbility.damage;
+      damage.splice(thiz.index, 1);
+      thiz.skillAbility.updateProperty("damage", damage);
+    };
   }
 }
