@@ -351,6 +351,13 @@ li.die.d6.roll-obstacle {
   margin: 2px;
 }
 
+.dice-rolls li.roll.die-sm {
+  width: 18px;
+  height: 18px;
+  line-height: 18px;
+  font-size: 15px;
+}
+
 li.roll.die.d6.roll-failure {
   color: #712625;
 }
@@ -373,6 +380,16 @@ li.roll.die.d6.roll-success {
 
 .dice-result.success {
   background-color: #0082072e;
+}
+
+.roll-damage-value {
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.roll-damage-value-total {
+  font-weight: bold;
+  font-size: 1.4rem;
 }
 
 .hidden {
@@ -740,6 +757,10 @@ nav#nav-sheet-tabs.sheet-tabs > a.item.active {
   border-radius: 3px;
   border: 1px rgba(129, 129, 129, 0.22) solid;
   background-color: rgba(0, 0, 0, 0.05);
+}
+
+.sheet-group-sidebar {
+  border-right: rgba(129, 129, 129, 0.45) 3px solid;
 }
 
 .button-full {

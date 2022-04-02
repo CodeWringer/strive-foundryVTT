@@ -5,6 +5,7 @@ import PreparedChatData from './prepared-chat-data.mjs';
 import SkillAbilityChatMessageViewModel from '../../templates/item/skill-ability/skill-ability-chat-message-viewmodel.mjs';
 import { createUUID } from '../utils/uuid-utility.mjs';
 import * as PropUtil from '../utils/property-utility.mjs';
+import DamageAndType from "./damage-and-type.mjs";
 
 /**
  * Represents a skill ability. 
@@ -12,34 +13,34 @@ import * as PropUtil from '../utils/property-utility.mjs';
  * Is **always** a child object of a skill item. 
  * @property {AmbersteelItem} parent The owning skill item. 
  * @property {Number} index The index of the skill ability, on the owning skill item. 
+ * @property {Boolean} isCustom 
  * @property {String} name 
+ * @property {String} img 
  * @property {String} description 
  * @property {Number} requiredLevel 
- * @property {String} condition 
- * @property {String} img 
  * @property {Number} apCost 
- * @property {Number} distance 
- * @property {String} damageFormula 
- * @property {String} obstacle 
- * @property {Boolean} isCustom 
- * @property {CONFIG.ambersteel.damageTypes} damageType 
- * @property {CONFIG.ambersteel.attackTypes} attackType 
+ * @property {Array<DamageAndType>} damage
+ * @property {String | undefined} condition 
+ * @property {Number | undefined} distance 
+ * @property {String | undefined} obstacle 
+ * @property {String | undefined} opposedBy 
+ * @property {CONFIG.ambersteel.attackTypes | undefined} attackType 
  */
 export default class SkillAbility {
   /**
    * @param {AmbersteelItem} args.parent The owning skill item. 
    * @param {Number} index The index of the skill ability, on the owning skill item. 
+   * @param {Boolean | undefined} args.isCustom Optional. 
    * @param {String | undefined} args.name Optional. 
+   * @param {String | undefined} args.img Optional. 
    * @param {String | undefined} args.description Optional. 
    * @param {Number | undefined} args.requiredLevel Optional. 
-   * @param {String | undefined} args.condition Optional. 
-   * @param {String | undefined} args.img Optional. 
    * @param {Number | undefined} args.apCost Optional. 
+   * @param {Array<DamageAndType> | undefined} args.damage Optional. 
+   * @param {String | undefined} args.condition Optional. 
    * @param {Number | undefined} args.distance Optional. 
-   * @param {String | undefined} args.damageFormula Optional. 
    * @param {String | undefined} args.obstacle Optional. 
-   * @param {Boolean | undefined} args.isCustom Optional. 
-   * @param {CONFIG.ambersteel.damageTypes | undefined} args.damageType Optional. 
+   * @param {String | undefined} args.opposedBy Optional. 
    * @param {CONFIG.ambersteel.attackTypes | undefined} args.attackType Optional. 
    */
   constructor(args = {}) {
@@ -49,20 +50,19 @@ export default class SkillAbility {
     this.index = args.index;
     
     this.type = "skill-ability";
+    this.isCustom = args.isCustom ?? false;
 
     this.name = args.name ?? game.i18n.localize("ambersteel.labels.nameOfNewSkillAbility");
+    this.img = args.img ?? "icons/svg/book.svg";
     this.description = args.description ?? "";
     this.requiredLevel = args.requiredLevel ?? 0;
     this.apCost = args.apCost ?? 0;
-    this.condition = args.condition ?? "";
-    this.img = args.img ?? "icons/svg/book.svg";
-    this.distance = args.distance ?? 0;
-    this.damageFormula = args.damageFormula ?? "";
-    this.obstacle = args.obstacle ?? "0";
-    this.isCustom = args.isCustom ?? false;
-
-    this.damageType = args.damageType ?? CONFIG.ambersteel.damageTypes.none.name;
-    this.attackType = args.attackType ?? CONFIG.ambersteel.attackTypes.none.name;
+    this.damage = args.damage ?? [];
+    this.condition = args.condition;
+    this.distance = args.distance;
+    this.obstacle = args.obstacle;
+    this.attackType = args.attackType;
+    this.opposedBy = args.opposedBy;
   }
 
   /**
@@ -166,9 +166,7 @@ export default class SkillAbility {
       this[propertyName] = delta[propertyName];
     }
 
-    if (this.parent === undefined) return;
-
-    await this.parent.updateProperty(this.propertyPathOnParent, this._toPlainObject(), render);
+    this._updateToDB(render);
   }
 
   /**
@@ -183,13 +181,38 @@ export default class SkillAbility {
   async updateProperty(propertyPath, newValue, render = true) {
     PropUtil.setNestedPropertyValue(this, propertyPath, newValue);
     
+    this._updateToDB(render);
+  }
+
+  /**
+   * Deletes a property on the skill ability, via the given path. 
+   * @param {String} propertyPath Path leading to the property to delete, on the given document entity. 
+   *        Array-accessing via brackets is supported. Property-accessing via brackets is *not* supported. 
+   *        E.g.: "data.attributes[0].value" 
+   *        E.g.: "data.attributes[4]" 
+   *        E.g.: "data.attributes" 
+   * @param {Boolean | undefined} render If true, will trigger a re-render of the associated document sheet. Default 'true'. 
+   * @async
+   */
+  async deleteByPropertyPath(propertyPath, render = true) {
+    PropUtil.deleteNestedProperty(this, propertyPath);
+
+    this._updateToDB(render);
+  }
+
+  /**
+   * Pushes the skill ability list on the parent to the DB. 
+   * @param {Boolean | undefined} render If true, will trigger a re-render of the associated document sheet. Default 'true'. 
+   * @private
+   * @async
+   */
+  async _updateToDB(render = true) {
     if (this.parent === undefined) return;
 
     const abilitiesArray = [];
     for (const skillAbility of this.parent.data.data.abilities) {
       abilitiesArray.push(skillAbility._toPlainObject());
     }
-    
     await this.parent.updateProperty("data.data.abilities", abilitiesArray, render);
   }
 
@@ -198,21 +221,27 @@ export default class SkillAbility {
    * @returns {Object}
    */
   _toPlainObject() {
+    // Ensure damage definitions are turned into plain objects. 
+    const damage = [];
+    for (const o of this.damage) {
+      damage.push({ damage: o.damage, damageType: o.damageType });
+    }
+
     // IMPORTANT: To avoid problems with recursion, the parent field **must not** be included!
     // The index field is also omitted, because it can be derived. 
     return {
+      isCustom: this.isCustom,
       name: this.name,
+      img: this.img,
       description: this.description,
       requiredLevel: this.requiredLevel,
-      condition: this.condition,
-      img: this.img,
       apCost: this.apCost,
+      damage: damage,
+      condition: this.condition,
       distance: this.distance,
-      damageFormula: this.damageFormula,
       obstacle: this.obstacle,
-      isCustom: this.isCustom,
-      damageType: this.damageType, 
-      attackType: this.attackType, 
+      attackType: this.attackType,
+      opposedBy: this.opposedBy,
     }
   }
 }

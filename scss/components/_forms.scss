@@ -67,6 +67,10 @@ nav#nav-sheet-tabs.sheet-tabs {
   background-color: $c-bg-light;
 }
 
+.sheet-group-sidebar {
+  border-right: $c-border-medium 3px solid;
+}
+
 // Button styles
 .button-full {
   padding: 0;

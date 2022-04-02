@@ -31,20 +31,49 @@ export default class SkillAbilityChatMessageViewModel extends ViewModel {
   index = -1;
 
   /**
-   * @type {String}
+   * @type {Boolean}
    * @readonly
    */
-  get localizedAttackType() { 
-    const localizableName = this._getConfigValue(CONFIG.ambersteel.attackTypes, this.skillAbility.attackType).localizableName;
-    return game.i18n.localize(localizableName);
-  };
+  get hideObstacle() { return this.skillAbility.obstacle === undefined; }
+
+  /**
+   * @type {Boolean}
+   * @readonly
+   */
+  get hideOpposedBy() { return this.skillAbility.opposedBy === undefined; }
+  
+  /**
+   * @type {Boolean}
+   * @readonly
+   */
+  get hideCondition() { return this.skillAbility.condition === undefined; }
+  
+  /**
+   * @type {Boolean}
+   * @readonly
+   */
+  get hideDistance() { return this.skillAbility.distance === undefined; }
+  
+  /**
+   * @type {Boolean}
+   * @readonly
+   */
+  get hideAttackType() { return this.skillAbility.attackType === undefined; }
+  
+  /**
+   * @type {Boolean}
+   * @readonly
+   */
+  get hideDamage() { return this.skillAbility.damage.length <= 0; }
 
   /**
    * @type {String}
    * @readonly
    */
-  get localizedDamageType() { 
-    const localizableName = this._getConfigValue(CONFIG.ambersteel.damageTypes, this.skillAbility.damageType).localizableName;
+  get localizedAttackType() {
+    if (this.skillAbility.attackType === undefined) return "";
+
+    const localizableName = this._getConfigValue(game.ambersteel.config.attackTypes, this.skillAbility.attackType).localizableName;
     return game.i18n.localize(localizableName);
   };
 
@@ -99,5 +128,15 @@ export default class SkillAbilityChatMessageViewModel extends ViewModel {
     }
 
     return undefined;
+  }
+
+  /**
+   * @param {String} damageTypeName 
+   * @returns {String}
+   * @private
+   */
+  getLocalizedDamageType(damageTypeName) {
+    const configItem = game.ambersteel.getConfigItem(game.ambersteel.config.damageTypes, damageTypeName);
+    return game.i18n.localize(configItem.localizableName);
   }
 }

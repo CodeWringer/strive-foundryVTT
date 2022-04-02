@@ -4,6 +4,8 @@ import { TEMPLATES } from "../../../templatePreloader.mjs";
 import { createUUID } from "../../../utils/uuid-utility.mjs";
 import SkillChatMessageViewModel from "../../../../templates/item/skill/skill-chat-message-viewmodel.mjs";
 import { SummedData, SummedDataComponent } from "../../../dto/summed-data.mjs";
+import DamageAndType from "../../../dto/damage-and-type.mjs";
+import * as ValUtil from "../../../utils/validation-utility.mjs";
 
 export default class AmbersteelSkillItem extends AmbersteelBaseItem {
   /**
@@ -189,27 +191,31 @@ export default class AmbersteelSkillItem extends AmbersteelBaseItem {
    * @private
    */
   _ensureSkillAbilityObjects(context) {
-    const listOfProperObjects = [];
+    const skillAbilities = [];
     for (let i = 0; i < context.data.data.abilities.length; i++) {
       const abilityObject = context.data.data.abilities[i];
 
-      listOfProperObjects.push(new SkillAbility({
+      const damage = [];
+      for (const propertyName in abilityObject.damage) {
+        if (abilityObject.damage.hasOwnProperty(propertyName) !== true) continue;
+
+        const plainDamageObject = abilityObject.damage[propertyName];
+
+        damage.push(new DamageAndType({
+          damage: plainDamageObject.damage ?? "",
+          damageType: plainDamageObject.damageType ?? game.ambersteel.config.damageTypes.none.name,
+        }));
+      }
+
+      const skillAbility = new SkillAbility({
+        ...abilityObject,
         parent: context,
         index: i,
-        name: abilityObject.name,
-        description: abilityObject.description,
-        requiredLevel: abilityObject.requiredLevel,
-        apCost: abilityObject.apCost,
-        condition: abilityObject.condition,
-        img: abilityObject.img,
-        distance: abilityObject.distance,
-        damageFormula: abilityObject.damageFormula,
-        obstacle: abilityObject.obstacle,
-        isCustom: abilityObject.isCustom,
-        damageType: abilityObject.damageType,
-        attackType: abilityObject.attackType,
-      }));
+        damage: damage,
+      });
+
+      skillAbilities.push(skillAbility);
     }
-    context.data.data.abilities = listOfProperObjects;
+    context.data.data.abilities = skillAbilities;
   }
 }

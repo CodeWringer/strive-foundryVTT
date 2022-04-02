@@ -42,6 +42,13 @@ li.die.d6.roll-obstacle {
   font-weight: bold;
   text-align: center;
   margin: 2px;
+
+  &.die-sm {
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+    font-size: 15px;
+  }
 }
 li.roll.die.d6.roll-failure {
   color: #712625;
@@ -64,4 +71,14 @@ li.roll.die.d6.roll-success {
   &.success {
     background-color: #0082072e;
   }
+}
+
+.roll-damage-value {
+  font-weight: bold;
+  font-size: $font-size-lg;
+}
+
+.roll-damage-value-total {
+  font-weight: bold;
+  font-size: $font-size-xl;
 }

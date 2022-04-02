@@ -1,7 +1,11 @@
+import ButtonViewModel from "../../../module/components/button/button-viewmodel.mjs";
 import SheetViewModel from "../../../module/components/sheet-viewmodel.mjs";
+import DamageAndType from "../../../module/dto/damage-and-type.mjs";
 import { TEMPLATES } from "../../../module/templatePreloader.mjs";
 import { getNestedPropertyValue } from "../../../module/utils/property-utility.mjs";
 import { validateOrThrow } from "../../../module/utils/validation-utility.mjs";
+import * as ChatUtil from "../../../module/utils/chat-utility.mjs";
+import { DICE_ROLL_SOUND } from "../../../module/utils/dice-utility.mjs";
 
 export default class SkillAbilityListItemViewModel extends SheetViewModel {
   /** @override */
@@ -38,10 +42,45 @@ export default class SkillAbilityListItemViewModel extends SheetViewModel {
   get attackTypeOptions() { return game.ambersteel.getAttackTypeOptions(); }
 
   /**
-   * @type {Array<ChoiceOption>}
+   * @type {Boolean}
    * @readonly
    */
-  get damageTypeOptions() { return game.ambersteel.getDamageTypeOptions(); }
+  get hideObstacle() { return this.skillAbility.obstacle === undefined; }
+
+  /**
+   * @type {Boolean}
+   * @readonly
+   */
+  get hideOpposedBy() { return this.skillAbility.opposedBy === undefined; }
+  
+  /**
+   * @type {Boolean}
+   * @readonly
+   */
+  get hideCondition() { return this.skillAbility.condition === undefined; }
+  
+  /**
+   * @type {Boolean}
+   * @readonly
+   */
+  get hideDistance() { return this.skillAbility.distance === undefined; }
+  
+  /**
+   * @type {Boolean}
+   * @readonly
+   */
+  get hideAttackType() { return this.skillAbility.attackType === undefined; }
+  
+  /**
+   * @type {Boolean}
+   * @readonly
+   */
+  get hideDamage() { return this.skillAbility.damage.length <= 0; }
+
+  /**
+   * @type {Array<DamageAndTypeViewModel>}
+   */
+  damageViewModels = [];
 
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
@@ -102,12 +141,19 @@ export default class SkillAbilityListItemViewModel extends SheetViewModel {
       id: "vmTfObstacle",
       propertyOwner: skillAbility,
       propertyPath: "obstacle",
+      placeholder: game.i18n.localize("ambersteel.placeholders.obstacle"),
     });
-    this.vmNsDistance = this.createVmNumberSpinner({
-      id: "vmNsDistance",
+    this.vmTfOpposedBy = this.createVmTextField({
+      id: "vmTfOpposedBy",
+      propertyOwner: skillAbility,
+      propertyPath: "opposedBy",
+      placeholder: game.i18n.localize("ambersteel.placeholders.opposedBy"),
+    });
+    this.vmTfDistance = this.createVmTextField({
+      id: "vmTfDistance",
       propertyOwner: skillAbility,
       propertyPath: "distance",
-      min: 0,
+      placeholder: game.i18n.localize("ambersteel.placeholders.distance"),
     });
     this.vmNsApCost = this.createVmNumberSpinner({
       id: "vmNsApCost",
@@ -121,29 +167,81 @@ export default class SkillAbilityListItemViewModel extends SheetViewModel {
       propertyPath: "attackType",
       options: thiz.attackTypeOptions,
     });
-    this.vmBtnRollDamage = this.createVmBtnRoll({
+
+    this.vmBtnRollDamage = new ButtonViewModel({
       id: "vmBtnRollDamage",
-      target: skillAbility,
-      propertyPath: "damageFormula",
-      rollType: "generic",
-      chatTitle: thiz.skillAbility.name,
-      actor: thiz.actor,
+      parent: thiz,
+      isEditable: thiz.isEditable,
+      localizableTitle: "ambersteel.labels.roll",
     });
-    this.vmTfDamage = this.createVmTextField({
-      id: "vmTfDamage",
-      propertyOwner: skillAbility,
-      propertyPath: "damageFormula",
-    });
-    this.vmDdDamageType = this.createVmDropDown({
-      id: "vmDdDamageType",
-      propertyOwner: skillAbility,
-      propertyPath: "damageType",
-      options: thiz.damageTypeOptions,
-    });
+    this.vmBtnRollDamage.onClick = async (html, isOwner, isEditable) => {
+      const dialogResult = await ChatUtil.queryVisibilityMode();
+      if (!dialogResult.confirmed) return;
+
+      // This is the total across all damage definitions. 
+      let damageTotal = 0;
+
+      // Build roll array. 
+      const rolls = [];
+      for (const damageDefinition of thiz.skillAbility.damage) {
+        // Get evaluated roll of damage formula. 
+        const rollResult = new Roll(damageDefinition.damage);
+        await rollResult.evaluate({ async: true });
+
+        damageTotal += parseFloat(rollResult.total);
+
+        // Get an array of each dice term. 
+        const diceResults = [];
+        for (const term of rollResult.terms) {
+          if (term.values !== undefined) {
+            for (const value of term.values) {
+              diceResults.push({
+                value: value,
+                isDiceResult: true,
+              });
+            }
+          } else {
+            diceResults.push({
+              value: term.total,
+              isDiceResult: false,
+            });
+          }
+        }
+
+        // Get localized damage type. 
+        const damageType = game.ambersteel.getConfigItem(game.ambersteel.config.damageTypes, damageDefinition.damageType);
+        const localizedDamageType = game.i18n.localize(damageType.localizableName);
+
+        rolls.push({
+          damage: rollResult.total,
+          localizedDamageType: localizedDamageType,
+          diceResults: diceResults,
+        });
+      }
+
+      // Determine title
+      const title = `${game.i18n.localize("ambersteel.labels.damage")} - ${thiz.skillAbility.name}`;
+
+      // Render the results. 
+      const renderedContent = await renderTemplate(TEMPLATES.DICE_ROLL_DAMAGE_CHAT_MESSAGE, {
+        damageTotal: damageTotal,
+        rolls: rolls,
+        title: title,
+      });
+
+      return ChatUtil.sendToChat({
+        renderedContent: renderedContent,
+        actor: this.skillAbility.parent.parent,
+        sound: DICE_ROLL_SOUND,
+        visibilityMode: dialogResult.visibilityMode
+      });
+    };
+
     this.vmTfCondition = this.createVmTextField({
       id: "vmTfCondition",
       propertyOwner: skillAbility,
       propertyPath: "condition",
+      placeholder: game.i18n.localize("ambersteel.placeholders.condition"),
     });
     this.vmTaDescription = this.createVmTextArea({
       id: "vmTaDescription",
@@ -152,5 +250,146 @@ export default class SkillAbilityListItemViewModel extends SheetViewModel {
       placeholder: "ambersteel.labels.description",
       allowResize: true,
     });
+    this.vmBtnContextMenu = this.createVmBtnContextMenu({
+      id: "vmBtnContextMenu",
+      menuItems: [
+        // Toggle obstacle
+        {
+          name: game.i18n.localize("ambersteel.roll.obstacle"),
+          icon: '<i class="fas fa-check"></i>',
+          condition: () => { return thiz.skillAbility.obstacle !== undefined; },
+          callback: () => { thiz.skillAbility.updateProperty("obstacle", undefined); },
+        },
+        {
+          name: game.i18n.localize("ambersteel.roll.obstacle"),
+          icon: '',
+          condition: () => { return thiz.skillAbility.obstacle === undefined; },
+          callback: () => { thiz.skillAbility.updateProperty("obstacle", ""); },
+        },
+        // Toggle opposed by
+        {
+          name: game.i18n.localize("ambersteel.labels.opposedBy"),
+          icon: '<i class="fas fa-check"></i>',
+          condition: () => { return thiz.skillAbility.opposedBy !== undefined; },
+          callback: () => { thiz.skillAbility.updateProperty("opposedBy", undefined); },
+        },
+        {
+          name: game.i18n.localize("ambersteel.labels.opposedBy"),
+          icon: '',
+          condition: () => { return thiz.skillAbility.opposedBy === undefined; },
+          callback: () => { thiz.skillAbility.updateProperty("opposedBy", ""); },
+        },
+        // Toggle distance
+        {
+          name: game.i18n.localize("ambersteel.labels.distance"),
+          icon: '<i class="fas fa-check"></i>',
+          condition: () => { return thiz.skillAbility.distance !== undefined; },
+          callback: () => { thiz.skillAbility.updateProperty("distance", undefined); },
+        },
+        {
+          name: game.i18n.localize("ambersteel.labels.distance"),
+          icon: '',
+          condition: () => { return thiz.skillAbility.distance === undefined; },
+          callback: () => { thiz.skillAbility.updateProperty("distance", ""); },
+        },
+        // Toggle attack type
+        {
+          name: game.i18n.localize("ambersteel.labels.attackType"),
+          icon: '<i class="fas fa-check"></i>',
+          condition: () => { return thiz.skillAbility.attackType !== undefined; },
+          callback: () => { thiz.skillAbility.updateProperty("attackType", undefined); },
+        },
+        {
+          name: game.i18n.localize("ambersteel.labels.attackType"),
+          icon: '',
+          condition: () => { return thiz.skillAbility.attackType === undefined; },
+          callback: () => { thiz.skillAbility.updateProperty("attackType", game.ambersteel.config.attackTypes.none.name); },
+        },
+        // Toggle condition
+        {
+          name: game.i18n.localize("ambersteel.labels.skillAbilityCondition"),
+          icon: '<i class="fas fa-check"></i>',
+          condition: () => { return thiz.skillAbility.condition !== undefined; },
+          callback: () => { thiz.skillAbility.updateProperty("condition", undefined); },
+        },
+        {
+          name: game.i18n.localize("ambersteel.labels.skillAbilityCondition"),
+          icon: '',
+          condition: () => { return thiz.skillAbility.condition === undefined; },
+          callback: () => { thiz.skillAbility.updateProperty("condition", ""); },
+        },
+        // Add damage
+        {
+          name: game.i18n.localize("ambersteel.labels.addSkillAbilityDamage"),
+          icon: '<i class="fas fa-plus"></i>',
+          condition: () => { return true; },
+          callback: () => {
+            const damage = thiz.skillAbility.damage ?? [];
+            damage.push(new DamageAndType({
+              damage: "",
+              damageType: CONFIG.ambersteel.damageTypes.none.name,
+            }));
+            thiz.skillAbility.updateProperty("damage", damage);
+          },
+        },
+      ],
+    });
+
+    for (let i = 0; i < skillAbility.damage.length; i++) {
+      const vm = new DamageAndTypeViewModel({
+        id: `vmDamageAndType-${i}`, 
+        parent: thiz,
+        isEditable: thiz.isEditable,
+        isSendable: thiz.isSendable,
+        isOwner: thiz.isOwner,
+        isGM: thiz.isGM,
+        skillAbility: skillAbility,
+        contextTemplate: this.contextTemplate,
+        index: i,
+      });
+      this.damageViewModels.push(vm);
+    }
+  }
+}
+
+class DamageAndTypeViewModel extends SheetViewModel {
+  /**
+   * @type {Array<ChoiceOption>}
+   * @readonly
+   */
+  get damageTypeOptions() { return game.ambersteel.getDamageTypeOptions(); }
+
+  constructor(args = {}) {
+    super(args);
+    validateOrThrow(args, ["skillAbility", "index"]);
+
+    this.skillAbility = args.skillAbility;
+    this.index = args.index;
+
+    const thiz = this;
+
+    this.vmTfDamage = this.createVmTextField({
+      id: "vmTfDamage",
+      propertyOwner: this.skillAbility,
+      propertyPath: `damage[${this.index}].damage`,
+    });
+    this.vmDdDamageType = this.createVmDropDown({
+      id: "vmDdDamageType",
+      propertyOwner: this.skillAbility,
+      propertyPath: `damage[${this.index}].damageType`,
+      options: thiz.damageTypeOptions,
+    });
+
+    this.vmBtnDelete = new ButtonViewModel({
+      id: "vmBtnDelete",
+      parent: thiz,
+      isEditable: thiz.isEditable,
+      localizableTitle: "ambersteel.labels.delete",
+    });
+    this.vmBtnDelete.onClick = (html, isOwner, isEditable) => {
+      const damage = thiz.skillAbility.damage;
+      damage.splice(thiz.index, 1);
+      thiz.skillAbility.updateProperty("damage", damage);
+    };
   }
 }
