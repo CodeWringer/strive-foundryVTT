@@ -2,8 +2,7 @@ import { TEMPLATES } from "../../templatePreloader.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
 import * as ItemAddDialog from '../../dialog/dialog-item-add.mjs';
 import { findItem, contentCollectionTypes } from '../../utils/content-utility.mjs';
-import * as PropertyUtil from "../../utils/property-utility.mjs";
-import { validateOrThrow } from "../../utils/validation-utility.mjs";
+import { validateOrThrow, isObject } from "../../utils/validation-utility.mjs";
 
 /**
  * --- Inherited from ViewModel
@@ -38,6 +37,7 @@ export default class ButtonAddViewModel extends ButtonViewModel {
    * @param {String} args.creationType = "skill"|"skill-ability"|"fate-card"|"item"|"injury"|"illness"
    * @param {Boolean | undefined} args.withDialog Optional. If true, will prompt the user to make a selection with a dialog. 
    * @param {Object | String | undefined} args.creationData Optional. Data to pass to the item creation function. 
+   * @param {String | undefined} args.localizableTitle Optional. The localizable title (tooltip). 
    */
   constructor(args = {}) {
     super(args);
@@ -46,8 +46,9 @@ export default class ButtonAddViewModel extends ButtonViewModel {
     this.creationType = args.creationType;
     this.withDialog = args.withDialog ?? false;
     this.creationData = args.creationData ?? Object.create(null);
+    this.localizableTitle = args.localizableTitle ?? "ambersteel.labels.add";
 
-    if (PropertyUtil.isObject(this.creationData) !== true) {
+    if (isObject(this.creationData) !== true) {
       this.creationData = this._parseCreationData(this.creationData);
     }
   }

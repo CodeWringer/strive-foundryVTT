@@ -5,7 +5,7 @@ fill: {Boolean | undefined}
 --}}
 <span class="component-button-add {{#if fill}}fill-button-light{{else}}square-button-light{{/if}} {{#if (not viewModel.isEditable)}}disabled{{/if}} {{#if cssClass}}{{cssClass}}{{else}}font-size-default{{/if}}">
   <a class="custom-system-button pad-sm button flex flex-center" 
-    title="{{localize ambersteel.labels.add}}"
+    title="{{viewModel.localizedTitle}}"
     id="{{viewModel.id}}"
   >
     <i class="fas fa-plus"></i>

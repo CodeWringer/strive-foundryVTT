@@ -7,7 +7,7 @@ cssClass: {undefined | String}
     data-vis-group="{{viewModel.visGroupId}}"
   >
     {{#each viewModel.abilities as |abilityViewModel key|}}
-      <li class="ambersteel-list-row sheet-block">
+      <li class="ambersteel-list-row sheet-block margin-b-lg border-solid-t-xl pad-t-lg">
         {{#if ../viewModel.oneColumn}}
           {{> "systems/ambersteel/templates/item/skill-ability/skill-ability-chat-message.hbs" viewModel=abilityViewModel }}
         {{else}}

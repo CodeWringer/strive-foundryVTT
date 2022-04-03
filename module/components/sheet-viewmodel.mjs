@@ -14,6 +14,7 @@ import InputRadioButtonGroupViewModel from "./input-radio-button-group/input-rad
 import InputTextareaViewModel from "./input-textarea/input-textarea-viewmodel.mjs";
 import InputTextFieldViewModel from "./input-textfield/input-textfield-viewmodel.mjs";
 import ViewModel from "./viewmodel.mjs";
+import ButtonContextMenuViewModel from "./button-context-menu/button-context-menu-viewmodel.mjs";
 
 /**
  * This view model sub-type is intended for use with sheets that expect the common flags, 
@@ -106,6 +107,7 @@ export default class SheetViewModel extends ViewModel {
    * @param {String | undefined} args.id
    * @param {Boolean | undefined} args.isEditable
    * @param {String | undefined} args.placeholder
+   * @param {String | undefined} args.localizableTitle Optional. Sets the tooltip text to display on cursor hover over the DOM element. 
    * @returns {InputTextFieldViewModel}
    */
   createVmTextField(args = {}) {
@@ -120,6 +122,7 @@ export default class SheetViewModel extends ViewModel {
       propertyPath: args.propertyPath,
       id: args.id,
       placeholder: args.placeholder,
+      localizableTitle: args.localizableTitle,
     });
   }
 
@@ -130,6 +133,7 @@ export default class SheetViewModel extends ViewModel {
    * @param {Array<ChoiceOption>} args.options
    * @param {String | undefined} args.id
    * @param {Boolean | undefined} args.isEditable
+   * @param {String | undefined} args.localizableTitle Optional. Sets the tooltip text to display on cursor hover over the DOM element. 
    * @returns {InputDropDownViewModel}
    */
   createVmDropDown(args = {}) {
@@ -144,6 +148,7 @@ export default class SheetViewModel extends ViewModel {
       propertyPath: args.propertyPath,
       options: args.options,
       id: args.id,
+      localizableTitle: args.localizableTitle,
     });
   }
 
@@ -156,6 +161,7 @@ export default class SheetViewModel extends ViewModel {
    * @param {Number | undefined} args.min
    * @param {Number | undefined} args.max
    * @param {Number | undefined} args.step
+   * @param {String | undefined} args.localizableTitle Optional. Sets the tooltip text to display on cursor hover over the DOM element. 
    * @returns {InputNumberSpinnerViewModel}
    */
   createVmNumberSpinner(args = {}) {
@@ -172,6 +178,7 @@ export default class SheetViewModel extends ViewModel {
       min: args.min,
       max: args.max,
       step: args.step,
+      localizableTitle: args.localizableTitle,
     });
   }
 
@@ -182,6 +189,7 @@ export default class SheetViewModel extends ViewModel {
    * @param {Array<ChoiceOption>} args.options
    * @param {String | undefined} args.id
    * @param {Boolean | undefined} args.isEditable
+   * @param {String | undefined} args.localizableTitle Optional. Sets the tooltip text to display on cursor hover over the DOM element. 
    * @returns {InputRadioButtonGroupViewModel}
    */
   createVmRadioButtonGroup(args = {}) {
@@ -196,6 +204,7 @@ export default class SheetViewModel extends ViewModel {
       propertyPath: args.propertyPath,
       options: args.options,
       id: args.id,
+      localizableTitle: args.localizableTitle,
     });
   }
 
@@ -208,6 +217,7 @@ export default class SheetViewModel extends ViewModel {
    * @param {Boolean | undefined} args.allowResize 
    * @param {Boolean | undefined} args.spellcheck 
    * @param {String | undefined} args.placeholder 
+   * @param {String | undefined} args.localizableTitle Optional. Sets the tooltip text to display on cursor hover over the DOM element. 
    * @returns {InputTextareaViewModel}
    */
   createVmTextArea(args = {}) {
@@ -224,6 +234,7 @@ export default class SheetViewModel extends ViewModel {
       allowResize: args.allowResize,
       spellcheck: args.spellcheck,
       placeholder: args.placeholder,
+      localizableTitle: args.localizableTitle,
     });
   }
 
@@ -236,6 +247,7 @@ export default class SheetViewModel extends ViewModel {
    * @param {Any | undefined} args.callbackData Defines any data to pass to the completion callback. 
    * @param {Boolean | undefined} args.withDialog If true, will prompt the user to make a selection with a dialog. 
    * @param {Object | String | undefined} args.creationData Data to pass to the item creation function. 
+   * @param {String | undefined} args.localizableTitle Optional. Sets the tooltip text to display on cursor hover over the DOM element. 
    * @returns {ButtonAddViewModel}
    */
   createVmBtnAdd(args = {}) {
@@ -252,6 +264,7 @@ export default class SheetViewModel extends ViewModel {
       callbackData: args.callbackData,
       withDialog: args.withDialog,
       creationData: args.creationData,
+      localizableTitle: args.localizableTitle,
     });
   }
 
@@ -263,6 +276,7 @@ export default class SheetViewModel extends ViewModel {
    * @param {Any | undefined} args.callbackData Defines any data to pass to the completion callback. 
    * @param {Boolean | undefined} args.withDialog If true, will prompt the user to make a selection with a dialog. 
    * @param {String | undefined} args.propertyPath If not undefined, will try to delete by this property path. 
+   * @param {String | undefined} args.localizableTitle Optional. Sets the tooltip text to display on cursor hover over the DOM element. 
    * @returns {ButtonDeleteViewModel}
    */
   createVmBtnDelete(args = {}) {
@@ -278,6 +292,7 @@ export default class SheetViewModel extends ViewModel {
       callbackData: args.callbackData,
       withDialog: args.withDialog,
       propertyPath: args.propertyPath,
+      localizableTitle: args.localizableTitle,
     });
   }
 
@@ -287,6 +302,7 @@ export default class SheetViewModel extends ViewModel {
    * @param {String | undefined} args.id
    * @param {Function | undefined} args.callback Defines an asynchronous callback that is invoked upon completion of the button's own callback. 
    * @param {Any | undefined} args.callbackData Defines any data to pass to the completion callback. 
+   * @param {String | undefined} args.localizableTitle Optional. Sets the tooltip text to display on cursor hover over the DOM element. 
    * @returns {ButtonOpenSheetViewModel}
    */
   createVmBtnOpenSheet(args = {}) {
@@ -300,6 +316,7 @@ export default class SheetViewModel extends ViewModel {
       id: args.id,
       callback: args.callback,
       callbackData: args.callbackData,
+      localizableTitle: args.localizableTitle,
     });
   }
 
@@ -314,6 +331,7 @@ export default class SheetViewModel extends ViewModel {
    * @param {Any | undefined} args.callbackData Defines any data to pass to the completion callback. 
    * @param {String | undefined} args.chatTitle Title to display above the roll result in the chat message. 
    * @param {Actor | undefined} args.actor Actor associated with the roll result. 
+   * @param {String | undefined} args.localizableTitle Optional. Sets the tooltip text to display on cursor hover over the DOM element. 
    * @returns {ButtonRollViewModel}
    */
   createVmBtnRoll(args = {}) {
@@ -331,6 +349,7 @@ export default class SheetViewModel extends ViewModel {
       callbackData: args.callbackData,
       chatTitle: args.chatTitle,
       actor: args.actor,
+      localizableTitle: args.localizableTitle,
     });
   }
 
@@ -343,6 +362,7 @@ export default class SheetViewModel extends ViewModel {
    * @param {String | undefined} args.propertyPath Property path identifying a property to send to chat. 
    * @param {String | undefined} args.chatTitle Title to display above the chat message. 
    * @param {Actor | undefined} args.actor Actor associated with the chat message. 
+   * @param {String | undefined} args.localizableTitle Optional. Sets the tooltip text to display on cursor hover over the DOM element. 
    * @returns {ButtonSendToChatViewModel}
    */
   createVmBtnSendToChat(args = {}) {
@@ -359,6 +379,7 @@ export default class SheetViewModel extends ViewModel {
       propertyPath: args.propertyPath,
       chatTitle: args.chatTitle,
       actor: args.actor,
+      localizableTitle: args.localizableTitle,
     });
   }
 
@@ -369,6 +390,7 @@ export default class SheetViewModel extends ViewModel {
    * @param {Function | undefined} args.callback Defines an asynchronous callback that is invoked upon completion of the button's own callback. 
    * @param {Any | undefined} args.callbackData Defines any data to pass to the completion callback. 
    * @param {contextTypes} contextType
+   * @param {String | undefined} args.localizableTitle Optional. Sets the tooltip text to display on cursor hover over the DOM element. 
    * @returns {ButtonTakeItemViewModel}
    */
   createVmBtnTakeItem(args = {}) {
@@ -383,6 +405,7 @@ export default class SheetViewModel extends ViewModel {
       callback: args.callback,
       callbackData: args.callbackData,
       contextType: args.contextType,
+      localizableTitle: args.localizableTitle,
     });
   }
 
@@ -396,6 +419,7 @@ export default class SheetViewModel extends ViewModel {
    * Expects this id to be defined as a data-attribute. 
    * E. g. '\<div data-vis-group="1A2b3F4E"\>My content\</div\>'
    * @param {Boolean | undefined} args.toggleSelf Optional. If true, the button will also toggle visibility on itself. 
+   * @param {String | undefined} args.localizableTitle Optional. Sets the tooltip text to display on cursor hover over the DOM element. 
    * @returns {ButtonToggleVisibilityViewModel}
    */
   createVmBtnToggleVisibility(args = {}) {
@@ -411,6 +435,7 @@ export default class SheetViewModel extends ViewModel {
       callback: args.callback,
       callbackData: args.callbackData,
       toggleSelf: args.toggleSelf,
+      localizableTitle: args.localizableTitle,
     });
   }
 
@@ -419,7 +444,7 @@ export default class SheetViewModel extends ViewModel {
    * @param {Object} args.propertyOwner
    * @param {String} args.propertyPath
    * @param {String | undefined} args.id
-   * @param {String | undefined} args.title Optional. Sets the tooltip text to display on cursor hover over the DOM element. 
+   * @param {String | undefined} args.localizableTitle Optional. Sets the tooltip text to display on cursor hover over the DOM element. 
    * @param {Number | undefined} args.width Optional. Sets the width of the image DOM element. Default '26'. 
    * @param {Number | undefined} args.height Optional. Sets the height of the image DOM element. Default '26'. 
    * @returns {InputImageViewModel}
@@ -435,7 +460,7 @@ export default class SheetViewModel extends ViewModel {
       propertyOwner: args.propertyOwner,
       propertyPath: args.propertyPath,
       id: args.id,
-      title: args.title,
+      localizableTitle: args.localizableTitle,
       width: args.width,
       height: args.height,
     });
@@ -447,6 +472,7 @@ export default class SheetViewModel extends ViewModel {
    * @param {String} args.propertyPath
    * @param {String | undefined} args.id
    * @param {Boolean | undefined} args.isEditable
+   * @param {String | undefined} args.localizableTitle Optional. Sets the tooltip text to display on cursor hover over the DOM element. 
    * @returns {ButtonToggleViewModel}
    */
   createVmBtnToggle(args = {}) {
@@ -460,6 +486,26 @@ export default class SheetViewModel extends ViewModel {
       target: args.target,
       propertyPath: args.propertyPath,
       id: args.id,
+      localizableTitle: args.localizableTitle,
+    });
+  }
+
+  /**
+   * Creates a child context menu button view model and returns it. 
+   * @param {String | undefined} args.id
+   * @param {Boolean | undefined} args.isEditable
+   * @param {Array<ContextMenuItem> | undefined} menuItems
+   * @returns {ButtonContextMenuViewModel}
+   */
+  createVmBtnContextMenu(args = {}) {
+    const thiz = this;
+
+    return new ButtonContextMenuViewModel({
+      parent: thiz,
+      isEditable: args.isEditable ?? thiz.isEditable,
+      contextTemplate: thiz.contextTemplate,
+      id: args.id,
+      menuItems: args.menuItems,
     });
   }
 
@@ -484,6 +530,7 @@ export default class SheetViewModel extends ViewModel {
     this.createVmBtnToggleVisibility = () => { throw ViewModel.DISPOSED_ACCESS_VIOLATION_EXCEPTION };
     this.createVmImg = () => { throw ViewModel.DISPOSED_ACCESS_VIOLATION_EXCEPTION };
     this.createVmBtnToggle = () => { throw ViewModel.DISPOSED_ACCESS_VIOLATION_EXCEPTION };
+    this.createVmBtnContextMenu = () => { throw ViewModel.DISPOSED_ACCESS_VIOLATION_EXCEPTION };
 
     super.dispose();
   }

@@ -306,30 +306,36 @@ ambersteel.visibilityModes = {
 ambersteel.injuryStates = {
     active: {
         name: "active",
-        localizableName: "ambersteel.injuryStates.active"
+        localizableName: "ambersteel.injuryStates.active",
+        icon: "fas fa-bone"
     },
     patchedUp: {
         name: "patchedUp",
-        localizableName: "ambersteel.injuryStates.patchedUp"
+        localizableName: "ambersteel.injuryStates.patchedUp",
+        icon: "fas fa-band-aid"
     },
     treated: {
         name: "treated",
-        localizableName: "ambersteel.injuryStates.treated"
+        localizableName: "ambersteel.injuryStates.treated",
+        icon: "fas fa-mortar-pestle"
     },
     permanent: {
         name: "permanent",
-        localizableName: "ambersteel.injuryStates.permanent"
+        localizableName: "ambersteel.injuryStates.permanent",
+        icon: "fas fa-crutch"
     }
 };
 
 ambersteel.illnessStates = {
     active: {
         name: "active",
-        localizableName: "ambersteel.illnessStates.active"
+        localizableName: "ambersteel.illnessStates.active",
+        icon: "fas fa-virus"
     },
     treated: {
         name: "treated",
-        localizableName: "ambersteel.illnessStates.treated"
+        localizableName: "ambersteel.illnessStates.treated",
+        icon: "fas fa-mortar-pestle"
     }
 };
 

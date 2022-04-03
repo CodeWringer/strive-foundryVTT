@@ -15,72 +15,72 @@
 // Padding styles
 .pad {
   &-xs {
-    padding: $padding-xs;
+    padding: $padding-xs !important;
   }
   &-sm {
-    padding: $padding-sm;
+    padding: $padding-sm !important;
   }
   &-md {
-    padding: $padding-md;
+    padding: $padding-md !important;
   }
   &-lg {
-    padding: $padding-lg;
+    padding: $padding-lg !important;
   }
 
   &-b {
     &-xs {
-      padding-bottom: $padding-xs;
+      padding-bottom: $padding-xs !important;
     }
     &-sm {
-      padding-bottom: $padding-sm;
+      padding-bottom: $padding-sm !important;
     }
     &-md {
-      padding-bottom: $padding-md;
+      padding-bottom: $padding-md !important;
     }
     &-lg {
-      padding-bottom: $padding-lg;
+      padding-bottom: $padding-lg !important;
     }
   }
   &-t {
     &-xs {
-      padding-top: $padding-xs;
+      padding-top: $padding-xs !important;
     }
     &-sm {
-      padding-top: $padding-sm;
+      padding-top: $padding-sm !important;
     }
     &-md {
-      padding-top: $padding-md;
+      padding-top: $padding-md !important;
     }
     &-lg {
-      padding-top: $padding-lg;
+      padding-top: $padding-lg !important;
     }
   }
   &-l {
     &-xs {
-      padding-left: $padding-xs;
+      padding-left: $padding-xs !important;
     }
     &-sm {
-      padding-left: $padding-sm;
+      padding-left: $padding-sm !important;
     }
     &-md {
-      padding-left: $padding-md;
+      padding-left: $padding-md !important;
     }
     &-lg {
-      padding-left: $padding-lg;
+      padding-left: $padding-lg !important;
     }
   }
   &-r {
     &-xs {
-      padding-right: $padding-xs;
+      padding-right: $padding-xs !important;
     }
     &-sm {
-      padding-right: $padding-sm;
+      padding-right: $padding-sm !important;
     }
     &-md {
-      padding-right: $padding-md;
+      padding-right: $padding-md !important;
     }
     &-lg {
-      padding-right: $padding-lg;
+      padding-right: $padding-lg !important;
     }
   }
 }

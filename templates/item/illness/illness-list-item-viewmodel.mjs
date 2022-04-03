@@ -7,10 +7,19 @@ export default class IllnessListItemViewModel extends SheetViewModel {
   static get TEMPLATE() { return TEMPLATES.ILLNESS_LIST_ITEM; }
 
   /**
+   * An array of {ChoiceOption}s which represent the possible states of the illness. 
    * @type {Array<ChoiceOption>}
    * @readonly
    */
-  get stateOptions() { return game.ambersteel.getIllnessOptions(); }
+  get stateOptions() {
+    const stateOptions = game.ambersteel.getIllnessOptions();
+
+    for (const stateOption of stateOptions) {
+      stateOption.shouldDisplayValue = false;
+    }
+
+    return stateOptions;
+  }
 
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 

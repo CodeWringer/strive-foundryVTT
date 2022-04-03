@@ -10,10 +10,28 @@ readOnlyCssClass: {String | undefined}
     name="{{viewModel.id}}"
     id="{{viewModel.id}}"
     value="{{viewModel.value}}"
+    title="{{viewModel.localizedTitle}}"
   >
   {{#select viewModel.propertyPath}}
     {{#each viewModel.options as |option index|}}
-      <option value="{{option.value}}">{{option.localizedValue}}</option>
+      <option class="flex flex-middle" value="{{option.value}}"
+        {{#if (not option.shouldDisplayValue)}}title="{{option.localizedValue}}"{{/if}}
+      >
+        {{#if option.displayHtmlOverride}}
+          {{{option.displayHtmlOverride}}}
+        {{else}}
+          {{#if option.shouldDisplayIcon}}
+            {{#if option.iconIsFontAwesome}}
+              <i class="{{option.icon}}"></i>
+            {{else}}
+              <img class="radio-button-icon" src="{{option.icon}}" />
+            {{/if}}
+          {{/if}}
+          {{#if option.shouldDisplayValue}}
+            <span>{{option.localizedValue}}</span>
+          {{/if}}
+        {{/if}}
+      </option>
     {{/each}}
   {{/select}}
 </select>

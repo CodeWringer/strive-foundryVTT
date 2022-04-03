@@ -6,11 +6,11 @@
  * @returns {Boolean} True, if the expected properties are not null or undefined. 
  */
 export function propertiesDefined(obj, props) {
-    for (const prop of props) {
-        if (obj[prop] == undefined
-        || obj[prop] == null) return false;
-    }
-    return true;
+  for (const prop of props) {
+    if (obj[prop] == undefined
+      || obj[prop] == null) return false;
+  }
+  return true;
 }
 
 /**
@@ -21,8 +21,30 @@ export function propertiesDefined(obj, props) {
  * @throws {Error} ArgumentException - Thrown, if any of the properties fail to validate. 
  */
 export function validateOrThrow(obj, props) {
-    for (const prop of props) {
-        if (obj[prop] == undefined
-        || obj[prop] == null) throw new Error(`ArgumentException: Required parameter '${prop}' is undefined!`);
-    }
+  for (const prop of props) {
+    if (obj[prop] == undefined
+      || obj[prop] == null) throw new Error(`ArgumentException: Required parameter '${prop}' is undefined!`);
+  }
+}
+
+/**
+ * Returns true, if the given argument is of type object. 
+ * @param {Any} obj 
+ * @returns {Boolean} True, if the given argument is of type object. 
+ */
+export function isObject(obj) {
+  return Object.prototype.toString.call(obj) === '[object Object]';
+};
+
+/**
+ * Returns true, if the given argument is of type array. 
+ * @param {Any} obj 
+ * @returns {Boolean} True, if the given argument is of type object. 
+ */
+export function isArray(obj) {
+  if (obj !== undefined && obj.isArray !== undefined && obj.isArray(obj)) {
+    return true;
+  } else {
+    return false;
+  }
 }

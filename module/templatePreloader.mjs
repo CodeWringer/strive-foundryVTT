@@ -19,10 +19,12 @@ export const TEMPLATES = {
   COMPONENT_BUTTON_TOGGLE_VISIBILITY: "systems/ambersteel/module/components/button-toggle-visibility/button-toggle-visibility.hbs",
   COMPONENT_BUTTON_TAKE_ITEM: "systems/ambersteel/module/components/button-take-item/button-take-item.hbs",
   COMPONENT_BUTTON_TOGGLE: "systems/ambersteel/module/components/button-toggle/button-toggle.hbs",
+  COMPONENT_BUTTON_CONTEXT_MENU: "systems/ambersteel/module/components/button-context-menu/button-context-menu.hbs",
   // GM
   COMPONENT_GM_NOTES: "systems/ambersteel/templates/gm-notes.hbs",
   // Dice
   DICE_ROLL_CHAT_MESSAGE: "systems/ambersteel/templates/dice/roll.hbs",
+  DICE_ROLL_DAMAGE_CHAT_MESSAGE: "systems/ambersteel/templates/dice/roll-damage-chat-message.hbs",
   // --- Dialogs
   DIALOG_ROLL: "systems/ambersteel/templates/dialog/dialog-roll.hbs",
   DIALOG_ITEM_ADD: "systems/ambersteel/templates/dialog/dialog-add-item.hbs",

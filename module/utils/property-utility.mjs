@@ -164,12 +164,3 @@ export function ensureNestedProperty(obj, propertyPath, value) {
 		currentObject[lastElement] = value;
 	}
 }
-
-/**
- * Returns true, if the given parameter is of type object. 
- * @param {Any} obj 
- * @returns {Boolean} True, if the given parameter is of type object. 
- */
-export function isObject(obj) {
-	return Object.prototype.toString.call(obj) === '[object Object]';
-};

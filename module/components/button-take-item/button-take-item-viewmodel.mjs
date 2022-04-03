@@ -44,6 +44,7 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
    * @param {Function | String | undefined} args.callback Optional. Defines an asynchronous callback that is invoked upon completion of the button's own callback. 
    * @param {Any | undefined} args.callbackData Optional. Defines any data to pass to the completion callback. 
    * @param {Boolean | undefined} args.isEditable Optional. If true, will be interactible. 
+   * @param {String | undefined} args.localizableTitle Optional. The localizable title (tooltip). 
    * 
    * @param {contextTypes} contextType Represents the context of where this button view model is embedded. 
    * Depending on this value, the behavior of the button changes. 
@@ -57,6 +58,7 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
     validateOrThrow(args, ["target", "contextType"]);
 
     this.contextType = args.contextType;
+    this.localizableTitle = args.localizableTitle ?? "ambersteel.labels.takeToPerson";
   }
 
   /**
@@ -144,7 +146,11 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
   async _promptSelectActor() {
     const options = [];
     for (const actor of game.actors.values()) {
-      options.push(new ChoiceOption(actor.id, actor.name));
+      options.push(new ChoiceOption({
+        value: actor.id,
+        localizedValue: actor.name,
+        icon: actor.img,
+      }));
     }
 
     const dialogResult = await DialogUtil.showSelectionDialog({

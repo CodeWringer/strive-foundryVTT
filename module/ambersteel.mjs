@@ -230,7 +230,7 @@ Hooks.once('init', async function() {
     viewStates: new Map(),
     /**
      * Returns an array of {ChoiceOption}s. 
-     * @param {Object} Any CONFIG property. 
+     * @param {Object} configObject Any config property.
      * @returns {Array<ChoiceOption>}
      */
     getOptionsFromConfig: function(configObject) {
@@ -238,8 +238,16 @@ Hooks.once('init', async function() {
 
       for (const entryName in configObject) {
         const entry = configObject[entryName];
-        const localizedName = game.i18n.localize(entry.localizableName);
-        result.push(new ChoiceOption(entry.name, localizedName));
+        const localizedName = entry.localizableName !== undefined ? game.i18n.localize(entry.localizableName) : undefined;
+        const icon = entry.icon;
+
+        result.push(new ChoiceOption({
+          value: entry.name, 
+          localizedValue: localizedName, 
+          icon: icon,
+          shouldDisplayValue: localizedName !== undefined ? true : false,
+          shouldDisplayIcon: icon !== undefined ? true : false,
+        }));
       }
 
       return result;
@@ -306,6 +314,23 @@ Hooks.once('init', async function() {
      */
     getVisibilityOptions: function() {
       return game.ambersteel.getOptionsFromConfig(ambersteelConfig.visibilityModes);
+    },
+    /**
+     * Returns the config item of the given config object, whose name matches with the given name. 
+     * @param {Object} configObject Any config property. 
+     * @param {String} name Name of the config item to fetch. 
+     * @returns {Object | undefined}
+     */
+    getConfigItem: function(configObject, name) {
+      for (const propertyName in configObject) {
+        const obj = configObject[propertyName];
+
+        if (obj.name === name) {
+          return obj;
+        }
+      }
+
+      return undefined;
     },
   };
 
