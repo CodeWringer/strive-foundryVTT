@@ -407,83 +407,83 @@ li.roll.die.d6.roll-success {
 }
 
 .pad-xs {
-  padding: 1px;
+  padding: 1px !important;
 }
 
 .pad-sm {
-  padding: 2px;
+  padding: 2px !important;
 }
 
 .pad-md {
-  padding: 5px;
+  padding: 5px !important;
 }
 
 .pad-lg {
-  padding: 10px;
+  padding: 10px !important;
 }
 
 .pad-b-xs {
-  padding-bottom: 1px;
+  padding-bottom: 1px !important;
 }
 
 .pad-b-sm {
-  padding-bottom: 2px;
+  padding-bottom: 2px !important;
 }
 
 .pad-b-md {
-  padding-bottom: 5px;
+  padding-bottom: 5px !important;
 }
 
 .pad-b-lg {
-  padding-bottom: 10px;
+  padding-bottom: 10px !important;
 }
 
 .pad-t-xs {
-  padding-top: 1px;
+  padding-top: 1px !important;
 }
 
 .pad-t-sm {
-  padding-top: 2px;
+  padding-top: 2px !important;
 }
 
 .pad-t-md {
-  padding-top: 5px;
+  padding-top: 5px !important;
 }
 
 .pad-t-lg {
-  padding-top: 10px;
+  padding-top: 10px !important;
 }
 
 .pad-l-xs {
-  padding-left: 1px;
+  padding-left: 1px !important;
 }
 
 .pad-l-sm {
-  padding-left: 2px;
+  padding-left: 2px !important;
 }
 
 .pad-l-md {
-  padding-left: 5px;
+  padding-left: 5px !important;
 }
 
 .pad-l-lg {
-  padding-left: 10px;
+  padding-left: 10px !important;
 }
 
 .pad-r-xs {
-  padding-right: 1px;
+  padding-right: 1px !important;
 }
 
 .pad-r-sm {
-  padding-right: 2px;
+  padding-right: 2px !important;
 }
 
 .pad-r-md {
-  padding-right: 5px;
+  padding-right: 5px !important;
 }
 
 .pad-r-lg {
-  padding-right: 10px;
+  padding-right: 10px !important;
 }
 
 .fill {
@@ -674,6 +674,108 @@ li.roll.die.d6.roll-success {
   background-size: cover;
   width: 24px;
   height: 24px;
+}
+
+.border-solid-r-sm {
+  border-right-color: rgba(129, 129, 129, 0.45) !important;
+  border-right-style: solid !important;
+  border-right-width: 1px !important;
+}
+
+.border-solid-r-md {
+  border-right-color: rgba(129, 129, 129, 0.45) !important;
+  border-right-style: solid !important;
+  border-right-width: 2px !important;
+}
+
+.border-solid-r-lg {
+  border-right-color: rgba(129, 129, 129, 0.45) !important;
+  border-right-style: solid !important;
+  border-right-width: 3px !important;
+}
+
+.border-solid-r-xl {
+  border-right-color: rgba(129, 129, 129, 0.45) !important;
+  border-right-style: solid !important;
+  border-right-width: 4px !important;
+}
+
+.border-solid-l-sm {
+  border-left-color: rgba(129, 129, 129, 0.45) !important;
+  border-left-style: solid !important;
+  border-left-width: 1px !important;
+}
+
+.border-solid-l-md {
+  border-left-color: rgba(129, 129, 129, 0.45) !important;
+  border-left-style: solid !important;
+  border-left-width: 2px !important;
+}
+
+.border-solid-l-lg {
+  border-left-color: rgba(129, 129, 129, 0.45) !important;
+  border-left-style: solid !important;
+  border-left-width: 3px !important;
+}
+
+.border-solid-l-xl {
+  border-left-color: rgba(129, 129, 129, 0.45) !important;
+  border-left-style: solid !important;
+  border-left-width: 4px !important;
+}
+
+.border-solid-b-sm {
+  border-bottom-color: rgba(129, 129, 129, 0.45) !important;
+  border-bottom-style: solid !important;
+  border-bottom-width: 1px !important;
+}
+
+.border-solid-b-md {
+  border-bottom-color: rgba(129, 129, 129, 0.45) !important;
+  border-bottom-style: solid !important;
+  border-bottom-width: 2px !important;
+}
+
+.border-solid-b-lg {
+  border-bottom-color: rgba(129, 129, 129, 0.45) !important;
+  border-bottom-style: solid !important;
+  border-bottom-width: 3px !important;
+}
+
+.border-solid-b-xl {
+  border-bottom-color: rgba(129, 129, 129, 0.45) !important;
+  border-bottom-style: solid !important;
+  border-bottom-width: 4px !important;
+}
+
+.border-solid-t-sm {
+  border-top-color: rgba(129, 129, 129, 0.45) !important;
+  border-top-style: solid !important;
+  border-top-width: 1px !important;
+}
+
+.border-solid-t-md {
+  border-top-color: rgba(129, 129, 129, 0.45) !important;
+  border-top-style: solid !important;
+  border-top-width: 2px !important;
+}
+
+.border-solid-t-lg {
+  border-top-color: rgba(129, 129, 129, 0.45) !important;
+  border-top-style: solid !important;
+  border-top-width: 3px !important;
+}
+
+.border-solid-t-xl {
+  border-top-color: rgba(129, 129, 129, 0.45) !important;
+  border-top-style: solid !important;
+  border-top-width: 4px !important;
+}
+
+hr {
+  width: 80%;
+  margin: 4px auto;
+  border: solid 1px rgba(129, 129, 129, 0.45);
 }
 
 /* Components */
