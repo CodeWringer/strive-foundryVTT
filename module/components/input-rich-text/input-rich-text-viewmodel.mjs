@@ -1,5 +1,6 @@
 import { TEMPLATES } from "../../templatePreloader.mjs";
 import { validateOrThrow } from "../../utils/validation-utility.mjs";
+import ButtonViewModel from "../button/button-viewmodel.mjs";
 import InputViewModel from "../input-viewmodel.mjs";
 
 /**
@@ -23,10 +24,63 @@ export default class InputRichTextViewModel extends InputViewModel {
   static get TEMPLATE() { return TEMPLATES.COMPONENT_INPUT_RICH_TEXT; }
 
   /**
-   * @type {TinyMCE}
+   * @type {Object}
    * @private
    */
-  _tinyMCE = undefined;
+  _editor = undefined;
+
+  /**
+   * @type {JQuery}
+   * @private
+   */
+  _elementButtonEditMode = undefined;
+
+  /**
+   * @type {JQuery}
+   * @private
+   */
+  _elementReadOnlyContents = undefined;
+
+  /**
+   * @type {JQuery}
+   * @private
+   */
+  _elementEditor = undefined;
+
+  _isInEditMode = false;
+  get isInEditMode() { return this._isInEditMode; }
+  set isInEditMode(value) {
+    // Ensure only a change in value causes any further logic. 
+    if (this._isInEditMode === value) return;
+
+    this._isInEditMode = value;
+    if (value === true) {
+      this._elementButtonEditMode.addClass("hidden");
+      this._elementReadOnlyContents.addClass("hidden");
+      this._elementEditor.removeClass("hidden");
+
+      this._createEditor();
+    } else {
+      this._editor.destroy();
+      this._editor = undefined;
+
+      this._elementEditor.addClass("hidden");
+      this._elementButtonEditMode.removeClass("hidden");
+      this._elementReadOnlyContents.removeClass("hidden");
+    }
+  }
+  
+  /**
+   * @private
+   * @async
+   */
+  async _createEditor() {
+    const mceConfig = this._getEditorConfig();
+    this._editor = (await tinyMCE.init(mceConfig))[0];
+    this._editor.resetContent(this.value);
+  }
+
+  get enrichedHtmlValue() { return TextEditor.enrichHTML(this.value ?? "", { secrets: this.isEditable }); }
 
   /**
    * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
@@ -40,17 +94,155 @@ export default class InputRichTextViewModel extends InputViewModel {
   constructor(args = {}) {
     super(args);
     validateOrThrow(args, ["propertyPath", "propertyOwner"]);
+
+    const thiz = this;
+
+    this.vmBtnEditMode = new ButtonViewModel({
+      id: "vmBtnEditMode",
+      parent: thiz,
+      isEditable: thiz.isEditable,
+    });
+    // this.vmBtnEditMode.onClick = async (html, isOwner, isEditable) => {
+    //   thiz.isInEditMode = true;
+    // }
+    this.vmBtnEditMode.onClick = async (html, isOwner, isEditable) => {
+      // const valueToSet = "<p>Performing acrobatic feats, such as jumping and climbing, without injuring oneself in the process.</p>"
+      // + "<ul>"
+      // + "<li>Melee</li>"
+      // + "<li>One-Handed&nbsp;</li>"
+      // + "</ul>"
+      const valueToSet = "Test Test";
+      this.value = valueToSet;
+    }
   }
 
   /** @override */
-  activateListeners(html, isOwner, isEditable) {
+  async activateListeners(html, isOwner, isEditable) {
     super.activateListeners(html, isOwner, isEditable);
 
-    this._tinyMCE = tinyMCE.init({
-      selector: `#${this.id}`,
-      inline: false,
-    });
+    const thiz = this;
+
+    this._elementButtonEditMode = this.element.find(".component-rich-text-editbutton");
+    this._elementEditor = this.element.find(".component-rich-text");
+    this._elementReadOnlyContents = this.element.find(".component-rich-text-read-only");
   }
+
+  /** @override */
+  dispose() {
+    super.dispose();
+
+    if (this._editor !== undefined && this._editor !== null) {
+      this._editor.destroy();
+    }
+    this._editor = undefined;
+  }
+  
+  /**
+   * @private
+   * @returns {Object}
+   */
+  _getEditorConfig() {
+    // branding: false
+    // content_css: "/css/mce.css"
+    // file_picker_callback: ƒ (pickerCallback, value, meta)
+    // init_instance_callback: editor => {…}
+    // menubar: false
+    // plugins: "lists image table hr code save link"
+    // save_enablewhendirty: true
+    // statusbar: false
+    // style_formats: [{…}]
+    // style_formats_merge: true
+    // table_default_styles: {}
+    // target: div#KLrmYtBpfUrOCzcJ-vmRtDescription.custom-system-edit.component-rich-text.editable
+    // toolbar: "styleselect removeformat | bullist numlist | image table hr link code | save cancel"
+
+    const thiz = this;
+
+    return {
+      target: this._elementEditor[0],
+      branding: false,
+      statusbar: false,
+      menubar: false,
+      content_css: "/css/mce.css",
+      style_formats_merge: true,
+      style_formats: [
+        {
+          title: "Custom", items: [
+            { block: "section", classes: "secret", title: "Secret", wrapper: true }
+          ]
+        }
+      ],
+      table_default_styles: {},
+      save_enablewhendirty: false,
+      plugins: "lists image table hr code save link",
+      toolbar: "styleselect removeformat | bullist numlist | image table hr link code | save cancel",
+      file_picker_callback: thiz._mceFilePickerCallback,
+      save_oncancelcallback: () => {
+        thiz.isInEditMode = false;
+      },
+      save_onsavecallback: () => {
+        // Fetch content **before** disposing of the editor. 
+        const content = this._editor.getContent();
+        
+        // If this value is true, that means the content was changed by the user. 
+        const isDirty = this.value.length !== content.length;
+
+        // Ensure the editor is destroyed, to avoid potential leaks. 
+        thiz.isInEditMode = false;
+
+        if (isDirty === true) {
+          // Update the value and send it to the DB. 
+          thiz.value = content;
+        }
+      }
+    };
+  }
+
+  /**
+   * @param pickerCallback 
+   * @param value 
+   * @param meta 
+   * @private
+   */
+  _mceFilePickerCallback(pickerCallback, value, meta) {
+    let filePicker = new FilePicker({
+      type: "image",
+      callback: path => {
+        pickerCallback(path);
+        // Reset our z-index for next open
+        $(".tox-tinymce-aux").css({zIndex: ''});
+      },
+    });
+    filePicker.render();
+    // Set the TinyMCE dialog to be below the FilePicker
+    $(".tox-tinymce-aux").css({zIndex: Math.min(++_maxZ, 9999)});
+  };
+
+  // /**
+  //  * Handle saving the content of a specific editor by name
+  //  * @param {string} name           The named editor to save
+  //  * @param {boolean} [remove]      Remove the editor after saving its content
+  //  * @return {Promise<void>}
+  //  */
+  // async saveEditor(name, {remove=true}={}) {
+  //   const editor = this._editor;
+  //   if ( !editor || !editor.mce ) throw new Error(`${name} is not an active editor name!`);
+  //   editor.active = false;
+
+  //   // Submit the form if the editor has changes
+  //   const mce = editor.mce;
+  //   const isDirty = mce.getContent() !== editor.initial;
+  //   if ( editor.hasButton ) editor.button.style.display = "block";
+  //   if ( isDirty ) await this._onSubmit(new Event("mcesave"));
+
+  //   // Remove the editor
+  //   if ( remove ) {
+  //     if ( !isDirty ) this.render();
+  //     mce.destroy();
+  //     editor.mce = null;
+  //   }
+  //   editor.changed = false;
+  // }
 }
 
 Handlebars.registerPartial('inputRichText', `{{> "${InputRichTextViewModel.TEMPLATE}"}}`);

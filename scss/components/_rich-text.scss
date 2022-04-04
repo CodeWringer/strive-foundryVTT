@@ -5,3 +5,17 @@
     min-height: 100px;
   }
 }
+
+.component-rich-text-editbutton {
+  float: right;
+  width: 32px;
+  height: 32px;
+
+  a.button {
+    font-size: 1.3em;
+  }
+}
+
+.component-rich-text-container {
+  min-height: 4em;
+}
