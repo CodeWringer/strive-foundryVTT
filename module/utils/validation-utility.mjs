@@ -33,18 +33,29 @@ export function validateOrThrow(obj, props) {
  * @returns {Boolean} True, if the given argument is of type object. 
  */
 export function isObject(obj) {
-  return Object.prototype.toString.call(obj) === '[object Object]';
+  return (Object.prototype.toString.call(obj) === '[object Object]' || typeof(obj) === 'object') && obj !== null
+  && isArray(obj) !== true
+  && isFunction(obj) !== true;
 };
 
 /**
  * Returns true, if the given argument is of type array. 
  * @param {Any} obj 
- * @returns {Boolean} True, if the given argument is of type object. 
+ * @returns {Boolean} True, if the given argument is of type array. 
  */
 export function isArray(obj) {
-  if (obj !== undefined && obj.isArray !== undefined && obj.isArray(obj)) {
+  if (obj !== undefined && obj !== null && ((obj.isArray !== undefined && obj.isArray(obj)) || Array.isArray(obj))) {
     return true;
   } else {
     return false;
   }
+}
+
+/**
+ * Returns true, if the given argument is of type function. 
+ * @param {Any} obj 
+ * @returns {Boolean} True, if the given argument is of type function. 
+ */
+export function isFunction(obj) {
+  return typeof(obj) === 'function';
 }

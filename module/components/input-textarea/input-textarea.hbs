@@ -4,7 +4,7 @@ cssClass: {String | undefined}
 readOnlyCssClass: {String | undefined}
 --}}
 {{#if viewModel.isEditable}}
-  <div aria-hidden="true" style="display: grid;">
+  <div style="display: grid;">
     <textarea 
       class="custom-system-edit component-input-textarea {{cssClass}}"
       style="grid-area: 1 / 1 / 2/ 2;"
@@ -15,7 +15,11 @@ readOnlyCssClass: {String | undefined}
       placeholder="{{viewModel.localizedPlaceholder}}"
       title="{{viewModel.localizedTitle}}"
       >{{viewModel.value}}</textarea>
-    <div class="textarea-auto-resize-sibling" style="visibility: hidden; grid-area: 1 / 1 / 2 / 2;">{{viewModel.value}}</div>
+    <div 
+      class="textarea-auto-resize-sibling"
+      aria-hidden="true"
+      style="visibility: hidden; grid-area: 1 / 1 / 2 / 2;"
+      >{{viewModel.value}}</div>
   </div>
 {{else}}
   {{!-- Display read-only value --}}
