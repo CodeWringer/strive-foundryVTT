@@ -77,13 +77,10 @@ export default class SkillItemSheetViewModel extends SkillViewModel {
       target: thiz.item,
       propertyPath: "data.data.isMagicSchool",
     });
-    this.vmRtDescription = new InputRichTextViewModel({
+    this.vmRtDescription = this.createVmRichText({
       id: "vmRtDescription",
-      parent: thiz,
-      isEditable: thiz.isEditable,
       propertyOwner: thiz.item,
       propertyPath: "data.data.description",
-      contextTemplate: thiz.contextTemplate,
     });
     this.vmSkillAbilityTable = new SkillAbilityTableViewModel({
       id: "vmSkillAbilityTable",
