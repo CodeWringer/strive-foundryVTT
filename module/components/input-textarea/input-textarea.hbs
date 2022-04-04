@@ -14,8 +14,8 @@ readOnlyCssClass: {String | undefined}
       id="{{viewModel.id}}"
       placeholder="{{viewModel.localizedPlaceholder}}"
       title="{{viewModel.localizedTitle}}"
-      >{{{viewModel.value}}}</textarea>
-    <div class="textarea-auto-resize-sibling" style="visibility: hidden; grid-area: 1 / 1 / 2 / 2;">{{{viewModel.value}}}</div>
+      >{{viewModel.value}}</textarea>
+    <div class="textarea-auto-resize-sibling" style="visibility: hidden; grid-area: 1 / 1 / 2 / 2;">{{viewModel.value}}</div>
   </div>
 {{else}}
   {{!-- Display read-only value --}}
