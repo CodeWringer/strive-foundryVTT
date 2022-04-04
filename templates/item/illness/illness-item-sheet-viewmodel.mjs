@@ -63,7 +63,6 @@ export default class IllnessItemSheetViewModel extends SheetViewModel {
       propertyOwner: thiz.item,
       propertyPath: "data.data.description",
       placeholder: "ambersteel.labels.description",
-      allowResize: true,
     });
   }
 }

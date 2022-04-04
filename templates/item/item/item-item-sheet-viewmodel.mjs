@@ -77,7 +77,6 @@ export default class ItemItemSheetViewModel extends SheetViewModel {
       propertyPath: "data.data.description",
       propertyOwner: thiz.item,
       placeholder: "ambersteel.labels.description",
-      allowResize: true,
     });
   }
 }

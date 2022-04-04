@@ -214,7 +214,6 @@ export default class SheetViewModel extends ViewModel {
    * @param {String} args.propertyPath
    * @param {String | undefined} args.id
    * @param {Boolean | undefined} args.isEditable
-   * @param {Boolean | undefined} args.allowResize 
    * @param {Boolean | undefined} args.spellcheck 
    * @param {String | undefined} args.placeholder 
    * @param {String | undefined} args.localizableTitle Optional. Sets the tooltip text to display on cursor hover over the DOM element. 
@@ -231,7 +230,6 @@ export default class SheetViewModel extends ViewModel {
       propertyOwner: args.propertyOwner,
       propertyPath: args.propertyPath,
       id: args.id,
-      allowResize: args.allowResize,
       spellcheck: args.spellcheck,
       placeholder: args.placeholder,
       localizableTitle: args.localizableTitle,
