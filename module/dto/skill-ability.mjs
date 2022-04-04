@@ -211,16 +211,18 @@ export default class SkillAbility {
 
     const abilitiesArray = [];
     for (const skillAbility of this.parent.data.data.abilities) {
-      abilitiesArray.push(skillAbility._toPlainObject());
+      abilitiesArray.push(skillAbility.toDto());
     }
     await this.parent.updateProperty("data.data.abilities", abilitiesArray, render);
   }
 
   /**
+   * Returns a plain object based on the given object instance. 
    * @private
+   * @see document-update-utility#toDto
    * @returns {Object}
    */
-  _toPlainObject() {
+  toDto() {
     // Ensure damage definitions are turned into plain objects. 
     const damage = [];
     for (const o of this.damage) {
@@ -229,19 +231,21 @@ export default class SkillAbility {
 
     // IMPORTANT: To avoid problems with recursion, the parent field **must not** be included!
     // The index field is also omitted, because it can be derived. 
-    return {
-      isCustom: this.isCustom,
-      name: this.name,
-      img: this.img,
-      description: this.description,
-      requiredLevel: this.requiredLevel,
-      apCost: this.apCost,
-      damage: damage,
-      condition: this.condition,
-      distance: this.distance,
-      obstacle: this.obstacle,
-      attackType: this.attackType,
-      opposedBy: this.opposedBy,
-    }
+    const obj = Object.create(null);
+
+    obj.isCustom = this.isCustom;
+    obj.name = this.name;
+    obj.img = this.img;
+    obj.description = this.description;
+    obj.requiredLevel = this.requiredLevel;
+    obj.apCost = this.apCost;
+    obj.damage = this.damage;
+    obj.condition = this.condition;
+    obj.distance = this.distance;
+    obj.obstacle = this.obstacle;
+    obj.attackType = this.attackType;
+    obj.opposedBy = this.opposedBy;
+    
+    return obj;
   }
 }
