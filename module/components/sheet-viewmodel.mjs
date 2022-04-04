@@ -15,6 +15,7 @@ import InputTextareaViewModel from "./input-textarea/input-textarea-viewmodel.mj
 import InputTextFieldViewModel from "./input-textfield/input-textfield-viewmodel.mjs";
 import ViewModel from "./viewmodel.mjs";
 import ButtonContextMenuViewModel from "./button-context-menu/button-context-menu-viewmodel.mjs";
+import InputRichTextViewModel from "./input-rich-text/input-rich-text-viewmodel.mjs";
 
 /**
  * This view model sub-type is intended for use with sheets that expect the common flags, 
@@ -508,6 +509,28 @@ export default class SheetViewModel extends ViewModel {
   }
 
   /**
+   * Creates a child rich text input view model and returns it. 
+   * @param {Object} args.propertyOwner
+   * @param {String} args.propertyPath
+   * @param {String | undefined} args.id
+   * @param {Boolean | undefined} args.isEditable
+   * @returns {InputRichTextViewModel}
+   */
+  createVmRichText(args = {}) {
+    const thiz = this;
+    validateOrThrow(args, ["propertyOwner", "propertyPath"]);
+
+    return new InputRichTextViewModel({
+      propertyOwner: args.propertyOwner,
+      propertyPath: args.propertyPath,
+      id: args.id,
+      isEditable: args.isEditable ?? thiz.isEditable,
+      parent: thiz,
+      contextTemplate: thiz.contextTemplate,
+    });
+  }
+
+  /**
    * Disposes of any working data. 
    * 
    * This is a clean-up operation that should only be called when the instance of this class is no longer needed!
@@ -529,6 +552,7 @@ export default class SheetViewModel extends ViewModel {
     this.createVmImg = () => { throw ViewModel.DISPOSED_ACCESS_VIOLATION_EXCEPTION };
     this.createVmBtnToggle = () => { throw ViewModel.DISPOSED_ACCESS_VIOLATION_EXCEPTION };
     this.createVmBtnContextMenu = () => { throw ViewModel.DISPOSED_ACCESS_VIOLATION_EXCEPTION };
+    this.createVmRichText = () => { throw ViewModel.DISPOSED_ACCESS_VIOLATION_EXCEPTION };
 
     super.dispose();
   }
