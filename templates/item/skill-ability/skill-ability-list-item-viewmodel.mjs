@@ -242,14 +242,12 @@ export default class SkillAbilityListItemViewModel extends SheetViewModel {
       propertyOwner: skillAbility,
       propertyPath: "condition",
       placeholder: game.i18n.localize("ambersteel.placeholders.condition"),
-      allowResize: true,
     });
     this.vmTaDescription = this.createVmTextArea({
       id: "vmTaDescription",
       propertyOwner: skillAbility,
       propertyPath: "description",
       placeholder: "ambersteel.labels.description",
-      allowResize: true,
     });
     this.vmBtnContextMenu = this.createVmBtnContextMenu({
       id: "vmBtnContextMenu",

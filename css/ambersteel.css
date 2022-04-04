@@ -925,20 +925,28 @@ nav#nav-sheet-tabs.sheet-tabs > a.item.active {
   filter: unset;
 }
 
-textarea {
+textarea, .textarea-auto-resize-sibling {
   font-size: 1rem;
   font-family: "Roboto", sans-serif;
+  resize: none;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  padding: 4px;
+  margin: 0;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  border: 1px solid #7a7971;
 }
 
-textarea.resize-vertical {
+textarea.resize-vertical, .textarea-auto-resize-sibling.resize-vertical {
   resize: vertical;
 }
 
-textarea.resize-none {
+textarea.resize-none, .textarea-auto-resize-sibling.resize-none {
   resize: none;
 }
 
-textarea.custom-system-edit {
+textarea.custom-system-edit, .textarea-auto-resize-sibling.custom-system-edit {
   border-color: #7a7971;
 }
 

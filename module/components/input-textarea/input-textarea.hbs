@@ -4,15 +4,19 @@ cssClass: {String | undefined}
 readOnlyCssClass: {String | undefined}
 --}}
 {{#if viewModel.isEditable}}
-  <textarea 
-    class="custom-system-edit {{#if viewModel.allowResize}}resize-vertical{{else}}resize-none{{/if}} component-input-textarea {{cssClass}}"
-    spellcheck="{{viewModel.spellcheck}}"
-    data-property-path="{{viewModel.propertyPath}}"
-    name="{{viewModel.id}}"
-    id="{{viewModel.id}}"
-    placeholder="{{viewModel.localizedPlaceholder}}"
-    title="{{viewModel.localizedTitle}}"
-  >{{viewModel.value}}</textarea>
+  <div aria-hidden="true" style="display: grid;">
+    <textarea 
+      class="custom-system-edit component-input-textarea {{cssClass}}"
+      style="grid-area: 1 / 1 / 2/ 2;"
+      spellcheck="{{viewModel.spellcheck}}"
+      data-property-path="{{viewModel.propertyPath}}"
+      name="{{viewModel.id}}"
+      id="{{viewModel.id}}"
+      placeholder="{{viewModel.localizedPlaceholder}}"
+      title="{{viewModel.localizedTitle}}"
+      >{{{viewModel.value}}}</textarea>
+    <div class="textarea-auto-resize-sibling" style="visibility: hidden; grid-area: 1 / 1 / 2 / 2;">{{{viewModel.value}}}</div>
+  </div>
 {{else}}
   {{!-- Display read-only value --}}
   <div 

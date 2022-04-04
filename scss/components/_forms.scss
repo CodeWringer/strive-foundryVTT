@@ -131,24 +131,30 @@ nav#nav-sheet-tabs.sheet-tabs {
 }
 
 // Textarea styles
-textarea {
+textarea, .textarea-auto-resize-sibling {
   font-size: 1rem;
   font-family: $font-primary;
-}
-
-textarea.resize-vertical {
-  resize: vertical;
-}
-textarea.resize-none {
   resize: none;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  padding: 4px;
+  margin: 0;
+  box-sizing: border-box;
+  border: 1px solid $c-border-input;
+  
+  &.resize-vertical {
+    resize: vertical;
+  }
+  &.resize-none {
+    resize: none;
+  }
+  // Default textarea override
+  &.custom-system-edit {
+    border-color: $c-border-input;
+  }
 }
 
 // Input styles
-
-// Default textarea override
-textarea.custom-system-edit {
-  border-color: $c-border-input;
-}
 
 .custom-system-read-only {
   background: repeating-linear-gradient(45deg, rgba(0,0,0,0.07), transparent, rgba(0,0,0,0.07) 10px);

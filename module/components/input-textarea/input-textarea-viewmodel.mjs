@@ -18,7 +18,6 @@ import InputViewModel from "../input-viewmodel.mjs";
  * 
  * --- Own properties
  * 
- * @property {Boolean} allowResize Gets whether resizing is allowed. 
  * @property {Boolean} spellcheck Gets whether spell checking is enabled. 
  * @property {String} placeholder Gets a placeholder text to display while the textfield is empty. 
  * 
@@ -54,7 +53,6 @@ export default class InputTextareaViewModel extends InputViewModel {
    * @param {String | undefined} args.contextTemplate Optional. Name or path of a template that embeds this input component. 
    * @param {String | undefined} args.localizableTitle Optional. The localizable title (tooltip). 
    * 
-   * @param {Boolean | undefined} args.allowResize Optional. Sets whether resizing is allowed. 
    * @param {Boolean | undefined} args.spellcheck Optional. Sets whether spell checking is enabled. 
    * @param {String | undefined} args.placeholder Optional. Sets a placeholder text to display while the textfield is empty. 
    */
@@ -62,19 +60,27 @@ export default class InputTextareaViewModel extends InputViewModel {
     super(args);
     validateOrThrow(args, ["propertyPath", "propertyOwner"]);
 
-    this.allowResize = args.allowResize ?? false;
     this.spellcheck = args.spellcheck ?? false;
     this._placeholder = args.placeholder ?? "";
   }
+
+  /** @override */
+  activateListeners(html, isOwner, isEditable) {
+    super.activateListeners(html, isOwner, isEditable);
+
+    // Ensure height is adjusted on edit. 
+    this.element.on("input", function() {
+      this.nextElementSibling.textContent = this.value;
+    });
+  }
 }
 
-Handlebars.registerHelper('createTextareaViewModel', function(id, isEditable, propertyOwner, propertyPath, placeholder, allowResize, spellcheck, contextTemplate) {
+Handlebars.registerHelper('createTextareaViewModel', function(id, isEditable, propertyOwner, propertyPath, placeholder, spellcheck, contextTemplate) {
   return new InputTextareaViewModel({
     id: id,
     isEditable: isEditable,
     propertyOwner: propertyOwner,
     propertyPath: propertyPath,
-    allowResize: allowResize,
     spellcheck: spellcheck,
     placeholder: placeholder,
     contextTemplate: contextTemplate,
