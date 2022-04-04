@@ -102,17 +102,8 @@ export default class InputRichTextViewModel extends InputViewModel {
       parent: thiz,
       isEditable: thiz.isEditable,
     });
-    // this.vmBtnEditMode.onClick = async (html, isOwner, isEditable) => {
-    //   thiz.isInEditMode = true;
-    // }
     this.vmBtnEditMode.onClick = async (html, isOwner, isEditable) => {
-      // const valueToSet = "<p>Performing acrobatic feats, such as jumping and climbing, without injuring oneself in the process.</p>"
-      // + "<ul>"
-      // + "<li>Melee</li>"
-      // + "<li>One-Handed&nbsp;</li>"
-      // + "</ul>"
-      const valueToSet = "Test Test";
-      this.value = valueToSet;
+      thiz.isInEditMode = true;
     }
   }
 
@@ -142,6 +133,7 @@ export default class InputRichTextViewModel extends InputViewModel {
    * @returns {Object}
    */
   _getEditorConfig() {
+    // Default settings that Foundry sets on its instances of TinyMCE. 
     // branding: false
     // content_css: "/css/mce.css"
     // file_picker_callback: ƒ (pickerCallback, value, meta)
@@ -217,32 +209,6 @@ export default class InputRichTextViewModel extends InputViewModel {
     // Set the TinyMCE dialog to be below the FilePicker
     $(".tox-tinymce-aux").css({zIndex: Math.min(++_maxZ, 9999)});
   };
-
-  // /**
-  //  * Handle saving the content of a specific editor by name
-  //  * @param {string} name           The named editor to save
-  //  * @param {boolean} [remove]      Remove the editor after saving its content
-  //  * @return {Promise<void>}
-  //  */
-  // async saveEditor(name, {remove=true}={}) {
-  //   const editor = this._editor;
-  //   if ( !editor || !editor.mce ) throw new Error(`${name} is not an active editor name!`);
-  //   editor.active = false;
-
-  //   // Submit the form if the editor has changes
-  //   const mce = editor.mce;
-  //   const isDirty = mce.getContent() !== editor.initial;
-  //   if ( editor.hasButton ) editor.button.style.display = "block";
-  //   if ( isDirty ) await this._onSubmit(new Event("mcesave"));
-
-  //   // Remove the editor
-  //   if ( remove ) {
-  //     if ( !isDirty ) this.render();
-  //     mce.destroy();
-  //     editor.mce = null;
-  //   }
-  //   editor.changed = false;
-  // }
 }
 
 Handlebars.registerPartial('inputRichText', `{{> "${InputRichTextViewModel.TEMPLATE}"}}`);
