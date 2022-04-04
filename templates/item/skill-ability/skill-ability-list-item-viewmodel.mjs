@@ -243,11 +243,10 @@ export default class SkillAbilityListItemViewModel extends SheetViewModel {
       propertyPath: "condition",
       placeholder: game.i18n.localize("ambersteel.placeholders.condition"),
     });
-    this.vmTaDescription = this.createVmTextArea({
-      id: "vmTaDescription",
+    this.vmRtDescription = this.createVmRichText({
+      id: "vmRtDescription",
       propertyOwner: skillAbility,
       propertyPath: "description",
-      placeholder: "ambersteel.labels.description",
     });
     this.vmBtnContextMenu = this.createVmBtnContextMenu({
       id: "vmBtnContextMenu",
