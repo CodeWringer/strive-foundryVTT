@@ -117,6 +117,10 @@ export function toDto(obj) {
       // Skip any prototype properties. 
       if (obj.hasOwnProperty(propertyName) !== true) continue;
 
+      if (propertyName.toLowerCase().startsWith("parent") === true) {
+        game.ambersteel.logger.logWarn(`Converting property '${propertyName}' to DTO, but name implies potential recursion?`);
+      }
+
       const property = obj[propertyName];
       const propertyDto = toDto(property);
 
