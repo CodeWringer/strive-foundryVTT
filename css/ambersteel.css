@@ -1563,9 +1563,17 @@ span.component-button-toggle-knob.disabled {
 }
 
 .description-editor {
-  min-height: 80px;
+  min-height: 100px;
 }
 
 .description-editor .editor-content {
-  min-height: 80px;
+  min-height: 100px;
+}
+
+.component-rich-text {
+  min-height: 100px;
+}
+
+.component-rich-text .editor-content {
+  min-height: 100px;
 }
