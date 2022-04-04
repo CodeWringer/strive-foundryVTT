@@ -89,7 +89,6 @@ export default class InputRichTextViewModel extends InputViewModel {
    * @param {Object} args.propertyOwner An object on which to to look up the value. 
    * @param {Boolean | undefined} args.isEditable Optional. If true, input(s) will be in edit mode. If false, input(s) will be in read-only mode.
    * @param {String | undefined} args.contextTemplate Optional. Name or path of a template that embeds this input component. 
-   * @param {String | undefined} args.localizableTitle Optional. The localizable title (tooltip). 
    */
   constructor(args = {}) {
     super(args);
@@ -103,6 +102,8 @@ export default class InputRichTextViewModel extends InputViewModel {
       isEditable: thiz.isEditable,
     });
     this.vmBtnEditMode.onClick = async (html, isOwner, isEditable) => {
+      if (isEditable !== true) return;
+      
       thiz.isInEditMode = true;
     }
   }
