@@ -11,6 +11,8 @@ export default class IllnessChatMessageViewModel extends SheetViewModel {
    */
   item = undefined;
 
+  get description() { return TextEditor.enrichHTML(this.item.data.data.description); }
+
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
    * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 
