@@ -872,8 +872,8 @@ nav#nav-sheet-tabs.sheet-tabs > a.item.active {
   min-width: 26px;
   font-size: 1rem;
   border-radius: 3px;
-  border: 1px rgba(129, 129, 129, 0.22) solid;
-  background-color: rgba(0, 0, 0, 0.01);
+  border: 1px rgba(129, 129, 129, 0.45) solid;
+  background-color: rgba(0, 0, 0, 0.08);
 }
 
 .square-button-light {
