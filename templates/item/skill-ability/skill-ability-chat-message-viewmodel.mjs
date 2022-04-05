@@ -77,6 +77,8 @@ export default class SkillAbilityChatMessageViewModel extends ViewModel {
     return game.i18n.localize(localizableName);
   };
 
+  get description() { return TextEditor.enrichHTML(this.skillAbility.description); }
+
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
    * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 

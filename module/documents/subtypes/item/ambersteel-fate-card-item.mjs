@@ -1,6 +1,6 @@
 import AmbersteelBaseItem from "./ambersteel-base-item.mjs";
 import { TEMPLATES } from "../../../templatePreloader.mjs";
-import FateCardViewModel from "../../../../templates/item/fate-card/fate-card-viewmodel.mjs";
+import FateCardChatMessageViewModel from "../../../../templates/item/fate-card/fate-card-chat-message-viewmodel.mjs";
 
 export default class AmbersteelFateCardItem extends AmbersteelBaseItem {
   /**
@@ -20,7 +20,7 @@ export default class AmbersteelFateCardItem extends AmbersteelBaseItem {
    * Chat message template path. 
    * @type {String}
    */
-  get chatMessageTemplate() { return TEMPLATES.FATE_CARD; }
+  get chatMessageTemplate() { return TEMPLATES.FATE_CARD_CHAT_MESSAGE; }
 
   /** @override */
   async getChatData() {
@@ -32,7 +32,7 @@ export default class AmbersteelFateCardItem extends AmbersteelBaseItem {
 
   /**
    * Returns an instance of a view model for use in a chat message. 
-   * @returns {FateCardViewModel}
+   * @returns {FateCardChatMessageViewModel}
    * @param {Object | undefined} overrides Optional. An object that allows overriding any of the view model properties. 
    * @param {String | undefined} overrides.id
    * @param {Boolean | undefined} overrides.isEditable
@@ -44,7 +44,7 @@ export default class AmbersteelFateCardItem extends AmbersteelBaseItem {
    */
   getChatViewModel(overrides = {}) {
     const base = super.getChatViewModel();
-    return new FateCardViewModel({
+    return new FateCardChatMessageViewModel({
       id: base.id,
       isEditable: base.isEditable,
       isSendable: base.isSendable,

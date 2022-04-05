@@ -62,11 +62,10 @@ export default class FateCardItemSheetViewModel extends SheetViewModel {
       propertyPath: "data.data.cost.AFP",
       min: 0,
     });
-    this.vmTaDescription = this.createVmTextArea({
-      id: "vmTaDescription",
+    this.vmRtDescription = this.createVmRichText({
+      id: "vmRtDescription",
       propertyOwner: thiz.item,
       propertyPath: "data.data.description",
-      placeholder: "ambersteel.labels.description",
     });
   }
 }

@@ -58,11 +58,10 @@ export default class IllnessItemSheetViewModel extends SheetViewModel {
       propertyOwner: thiz.item,
       propertyPath: "data.data.treatment",
     });
-    this.vmTaDescription = this.createVmTextArea({
-      id: "ta-description",
+    this.vmRtDescription = this.createVmRichText({
+      id: "vmRtDescription",
       propertyOwner: thiz.item,
       propertyPath: "data.data.description",
-      placeholder: "ambersteel.labels.description",
     });
   }
 }

@@ -2,9 +2,16 @@ import SheetViewModel from "../../../module/components/sheet-viewmodel.mjs";
 import { TEMPLATES } from "../../../module/templatePreloader.mjs";
 import { validateOrThrow } from "../../../module/utils/validation-utility.mjs";
 
-export default class InjuryItemSheetViewModel extends SheetViewModel {
+export default class FateCardChatMessageViewModel extends SheetViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.INJURY_ITEM_SHEET; }
+  static get TEMPLATE() { return TEMPLATES.FATE_CARD_CHAT_MESSAGE; }
+
+  /**
+   * @type {Item}
+   */
+  item = undefined;
+
+  get description() { return TextEditor.enrichHTML(this.item.data.data.description); }
 
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
@@ -24,7 +31,8 @@ export default class InjuryItemSheetViewModel extends SheetViewModel {
     validateOrThrow(args, ["item"]);
 
     this.item = args.item;
-    this.contextTemplate = args.contextTemplate ?? "injury-item-sheet";
+    this.contextTemplate = args.contextTemplate ?? "fate-card-chat-message";
+
     const thiz = this;
 
     this.vmImg = this.createVmImg({
@@ -36,28 +44,6 @@ export default class InjuryItemSheetViewModel extends SheetViewModel {
       id: "vmTfName",
       propertyOwner: thiz.item,
       propertyPath: "name",
-      placeholder: "ambersteel.labels.name",
-    });
-    this.vmBtnSendToChat = this.createVmBtnSendToChat({
-      id: "vmBtnSendToChat",
-      target: thiz.item,
-      isEditable: thiz.isEditable || thiz.isGM,
-    });
-    this.vmNsLimit = this.createVmNumberSpinner({
-      id: "vmNsLimit",
-      propertyOwner: thiz.item,
-      propertyPath: "data.data.limit",
-      min: 0,
-    });
-    this.vmTfTimeToHeal = this.createVmTextField({
-      id: "vmTfTimeToHeal",
-      propertyOwner: thiz.item,
-      propertyPath: "data.data.timeToHeal",
-    });
-    this.vmRtDescription = this.createVmRichText({
-      id: "vmRtDescription",
-      propertyOwner: thiz.item,
-      propertyPath: "data.data.description",
     });
   }
 }

@@ -1,3 +1,4 @@
+import InputRichTextViewModel from "../../../module/components/input-rich-text/input-rich-text-viewmodel.mjs";
 import { TEMPLATES } from "../../../module/templatePreloader.mjs";
 import { validateOrThrow } from "../../../module/utils/validation-utility.mjs";
 import SkillAbilityTableViewModel from "../skill-ability/skill-ability-table-viewmodel.mjs";
@@ -76,12 +77,10 @@ export default class SkillItemSheetViewModel extends SkillViewModel {
       target: thiz.item,
       propertyPath: "data.data.isMagicSchool",
     });
-    this.vmTaDescription = this.createVmTextArea({
-      id: "vmTaDescription",
+    this.vmRtDescription = this.createVmRichText({
+      id: "vmRtDescription",
       propertyOwner: thiz.item,
       propertyPath: "data.data.description",
-      placeholder: "ambersteel.labels.description",
-      allowResize: true,
     });
     this.vmSkillAbilityTable = new SkillAbilityTableViewModel({
       id: "vmSkillAbilityTable",

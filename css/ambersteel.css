@@ -659,6 +659,27 @@ li.roll.die.d6.roll-success {
   font-size: 1.6rem;
 }
 
+.scrollable-height-sm {
+  overflow-x: hidden;
+  overflow-y: auto;
+  min-height: 26px;
+  max-height: 150px;
+}
+
+.scrollable-height-md {
+  overflow-x: hidden;
+  overflow-y: auto;
+  min-height: 26px;
+  max-height: 250px;
+}
+
+.scrollable-height-lg {
+  overflow-x: hidden;
+  overflow-y: auto;
+  min-height: 26px;
+  max-height: 350px;
+}
+
 .ambersteel-icon {
   -webkit-filter: brightness(0);
   filter: brightness(0);
@@ -872,8 +893,8 @@ nav#nav-sheet-tabs.sheet-tabs > a.item.active {
   min-width: 26px;
   font-size: 1rem;
   border-radius: 3px;
-  border: 1px rgba(129, 129, 129, 0.22) solid;
-  background-color: rgba(0, 0, 0, 0.01);
+  border: 1px rgba(129, 129, 129, 0.45) solid;
+  background-color: rgba(0, 0, 0, 0.08);
 }
 
 .square-button-light {
@@ -1552,20 +1573,32 @@ span.component-button-toggle-knob.disabled {
   cursor: default;
 }
 
-.custom-system-chat-message .scrollable-height-sm {
-  overflow-y: scroll;
-  min-height: 26px;
-  max-height: 150px;
+.description-editor {
+  min-height: 100px;
 }
 
-.custom-system-chat-message .scrollable-height-md {
-  overflow-y: scroll;
-  min-height: 26px;
-  max-height: 250px;
+.description-editor .editor-content {
+  min-height: 100px;
 }
 
-.custom-system-chat-message .scrollable-height-lg {
-  overflow-y: scroll;
-  min-height: 26px;
-  max-height: 350px;
+.component-rich-text {
+  min-height: 100px;
+}
+
+.component-rich-text .editor-content {
+  min-height: 100px;
+}
+
+.component-rich-text-editbutton {
+  float: right;
+  width: 32px;
+  height: 32px;
+}
+
+.component-rich-text-editbutton a.button {
+  font-size: 1.3em;
+}
+
+.component-rich-text-container {
+  min-height: 4em;
 }

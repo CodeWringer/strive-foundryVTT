@@ -54,11 +54,10 @@ export default class FateCardViewModel extends SheetViewModel {
       target: thiz.item,
       withDialog: true,
     });
-    this.vmTaDescription = this.createVmTextArea({
-      id: "vmTaDescription",
+    this.vmRtDescription = this.createVmRichText({
+      id: "vmRtDescription",
       propertyOwner: thiz.item,
       propertyPath: "data.data.description",
-      placeholder: "ambersteel.labels.description",
     });
   }
 }
