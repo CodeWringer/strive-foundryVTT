@@ -72,11 +72,10 @@ export default class ItemItemSheetViewModel extends SheetViewModel {
       propertyPath: "data.data.shape.height",
       min: 1,
     });
-    this.vmTaDescription = this.createVmTextArea({
-      id: "vmTaDescription",
-      propertyPath: "data.data.description",
+    this.vmRtDescription = this.createVmRichText({
+      id: "vmRtDescription",
       propertyOwner: thiz.item,
-      placeholder: "ambersteel.labels.description",
+      propertyPath: "data.data.description",
     });
   }
 }
