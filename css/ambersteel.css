@@ -661,21 +661,21 @@ li.roll.die.d6.roll-success {
 
 .scrollable-height-sm {
   overflow-x: hidden;
-  overflow-y: scroll;
+  overflow-y: auto;
   min-height: 26px;
   max-height: 150px;
 }
 
 .scrollable-height-md {
   overflow-x: hidden;
-  overflow-y: scroll;
+  overflow-y: auto;
   min-height: 26px;
   max-height: 250px;
 }
 
 .scrollable-height-lg {
   overflow-x: hidden;
-  overflow-y: scroll;
+  overflow-y: auto;
   min-height: 26px;
   max-height: 350px;
 }

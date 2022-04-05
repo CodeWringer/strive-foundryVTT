@@ -250,19 +250,19 @@
 .scrollable-height {
   &-sm {
     overflow-x: hidden;
-    overflow-y: scroll;
+    overflow-y: auto;
     min-height: $line-height;
     max-height: 150px;
   }
   &-md {
     overflow-x: hidden;
-    overflow-y: scroll;
+    overflow-y: auto;
     min-height: $line-height;
     max-height: 250px;
   }
   &-lg {
     overflow-x: hidden;
-    overflow-y: scroll;
+    overflow-y: auto;
     min-height: $line-height;
     max-height: 350px;
   }
