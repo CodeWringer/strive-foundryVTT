@@ -92,5 +92,10 @@ export default class SkillListItemViewModel extends SkillViewModel {
       target: thiz.item,
       propertyPath: "data.data.isMagicSchool",
     });
+    this.vmRtDescription = this.createVmRichText({
+      id: "vmRtDescription",
+      propertyOwner: thiz.item,
+      propertyPath: "data.data.description",
+    });
   }
 }

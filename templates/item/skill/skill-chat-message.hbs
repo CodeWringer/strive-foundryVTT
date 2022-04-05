@@ -34,8 +34,8 @@ cssClass: {undefined | String}
     </div>
   </div>
   {{!-- Description --}}
-  <div class="sheet-block multiline scrollable-height-md">
-    {{viewModel.description}}
+  <div class="sheet-block scrollable-height-md">
+    {{{viewModel.description}}}
   </div>
   {{!-- Skill Abilites --}}
   {{> "systems/ambersteel/templates/item/skill-ability/skill-ability-table.hbs" viewModel=viewModel.vmSkillAbilityTable cssClass=(ifThenElse viewModel.hasAbilities "" "hidden") }}

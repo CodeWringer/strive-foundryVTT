@@ -50,9 +50,7 @@ cssClass: {undefined | String}
   {{!-- Description --}}
   <div class="sheet-block flex flex-column margin-b-md">
     <h3 class="fancy-font">{{localize "ambersteel.labels.description"}}</h3>
-    <div class="description-editor">
-      {{editor content=viewModel.item.data.data.description target="data.description" button=true editable=viewModel.isEditable owner=viewModel.isOwner}}
-    </div>
+    {{> inputRichText viewModel=viewModel.vmRtDescription }}
   </div>
   {{!-- Row 4 --}}
   {{!-- Skill Abilites --}}
