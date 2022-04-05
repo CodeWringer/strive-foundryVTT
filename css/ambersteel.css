@@ -659,6 +659,27 @@ li.roll.die.d6.roll-success {
   font-size: 1.6rem;
 }
 
+.scrollable-height-sm {
+  overflow-x: hidden;
+  overflow-y: scroll;
+  min-height: 26px;
+  max-height: 150px;
+}
+
+.scrollable-height-md {
+  overflow-x: hidden;
+  overflow-y: scroll;
+  min-height: 26px;
+  max-height: 250px;
+}
+
+.scrollable-height-lg {
+  overflow-x: hidden;
+  overflow-y: scroll;
+  min-height: 26px;
+  max-height: 350px;
+}
+
 .ambersteel-icon {
   -webkit-filter: brightness(0);
   filter: brightness(0);
@@ -1550,24 +1571,6 @@ span.component-button-toggle-knob.active {
 
 span.component-button-toggle-knob.disabled {
   cursor: default;
-}
-
-.custom-system-chat-message .scrollable-height-sm {
-  overflow-y: scroll;
-  min-height: 26px;
-  max-height: 150px;
-}
-
-.custom-system-chat-message .scrollable-height-md {
-  overflow-y: scroll;
-  min-height: 26px;
-  max-height: 250px;
-}
-
-.custom-system-chat-message .scrollable-height-lg {
-  overflow-y: scroll;
-  min-height: 26px;
-  max-height: 350px;
 }
 
 .description-editor {

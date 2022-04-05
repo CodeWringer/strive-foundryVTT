@@ -2,14 +2,16 @@ import SheetViewModel from "../../../module/components/sheet-viewmodel.mjs";
 import { TEMPLATES } from "../../../module/templatePreloader.mjs";
 import { validateOrThrow } from "../../../module/utils/validation-utility.mjs";
 
-export default class FateCardViewModel extends SheetViewModel {
+export default class FateCardChatMessageViewModel extends SheetViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.FATE_CARD; }
+  static get TEMPLATE() { return TEMPLATES.FATE_CARD_CHAT_MESSAGE; }
 
   /**
    * @type {Item}
    */
   item = undefined;
+
+  get description() { return TextEditor.enrichHTML(this.item.data.data.description); }
 
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
@@ -27,9 +29,9 @@ export default class FateCardViewModel extends SheetViewModel {
   constructor(args = {}) {
     super(args);
     validateOrThrow(args, ["item"]);
-    
+
     this.item = args.item;
-    this.contextTemplate = args.contextTemplate ?? "fate-card";
+    this.contextTemplate = args.contextTemplate ?? "fate-card-chat-message";
 
     const thiz = this;
 
@@ -42,22 +44,6 @@ export default class FateCardViewModel extends SheetViewModel {
       id: "vmTfName",
       propertyOwner: thiz.item,
       propertyPath: "name",
-      placeholder: "ambersteel.labels.name",
-    });
-    this.vmBtnSendToChat = this.createVmBtnSendToChat({
-      id: "vmBtnSendToChat",
-      target: thiz.item,
-    });
-    this.vmBtnDelete = this.createVmBtnDelete({
-      id: "vmBtnDelete",
-      parent: thiz,
-      target: thiz.item,
-      withDialog: true,
-    });
-    this.vmRtDescription = this.createVmRichText({
-      id: "vmRtDescription",
-      propertyOwner: thiz.item,
-      propertyPath: "data.data.description",
     });
   }
 }
