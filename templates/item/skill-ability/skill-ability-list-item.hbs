@@ -119,11 +119,7 @@ cssClass: {undefined | String}
   </div>
   {{!-- Description --}}
   <div class="flex flex-column margin-b-md">
-    <h3 class="fancy-font margin-b-sm">
-      {{localize "ambersteel.labels.description"}}
-    </h3>
-    <div class="flex-grow">
-      {{> inputRichText viewModel=viewModel.vmRtDescription }}
-    </div>
+    <h3 class="fancy-font margin-b-sm">{{localize "ambersteel.labels.description"}}</h3>
+    {{> inputRichText viewModel=viewModel.vmRtDescription }}
   </div>
 </div>
