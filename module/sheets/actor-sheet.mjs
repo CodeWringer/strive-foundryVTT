@@ -1,6 +1,6 @@
-import * as NumberSpinner from "../components/number-spinner.mjs";
 import AmbersteelNpcActorSheet from "./subtypes/actor/ambersteel-npc-actor-sheet.mjs";
 import AmbersteelPcActorSheet from "./subtypes/actor/ambersteel-pc-actor-sheet.mjs";
+import * as SheetUtil from "../utils/sheet-utility.mjs";
 
 export class AmbersteelActorSheet extends ActorSheet {
   /**
@@ -26,7 +26,12 @@ export class AmbersteelActorSheet extends ActorSheet {
     return this._subType;
   }
 
-  /** @override */
+  /**
+   * @returns {Object}
+   * @override
+   * @virtual
+   * @see https://foundryvtt.com/api/ActorSheet.html#.defaultOptions
+   */
   static get defaultOptions() {
     return mergeObject(super.defaultOptions, {
       classes: ["ambersteel", "sheet", "actor"],
@@ -41,51 +46,122 @@ export class AmbersteelActorSheet extends ActorSheet {
    * @returns {String} Path to the template. 
    * @virtual
    * @override
+   * @see https://foundryvtt.com/api/DocumentSheet.html#template
    */
   get template() {
     return this.subType.template;
   }
 
+  /**
+   * @override
+   * @type {String}
+   * @see https://foundryvtt.com/api/ActorSheet.html#title
+   */
+  get title() {
+    if (this.actor.type === "pc") {
+      return `${game.i18n.localize("ambersteel.labels.pc")} - ${this.actor.name}`;
+    } else if (this.actor.type === "npc") {
+      return `${game.i18n.localize("ambersteel.labels.npc")} - ${this.actor.name}`;
+    } else {
+      return this.actor.name;
+    }
+  }
+
+  /**
+   * @type {ViewModel}
+   * @private
+   */
+  _viewModel = undefined;
+  /**
+   * @type {ViewModel}
+   * @readonly
+   */
+  get viewModel() { return this._viewModel; }
+
   /** 
    * Returns an object that represents sheet and enriched actor data. 
    * 
    * Enriched means, it contains derived data and convenience properties. 
+   * 
+   * This method is called *before* the sheet is rendered. 
    * @returns {Object} The enriched context object. 
    * @override 
+   * @see https://foundryvtt.com/api/FormApplication.html#getData
    */
   getData() {
     const context = super.getData();
+    SheetUtil.enrichData(context);
 
-    // Add the config to the context object as a convenience property. 
-    context.CONFIG = CONFIG.ambersteel;
-    // Add the game to the context object as a convenience property. 
-    context.game = game;
-    // In templates that implement it, this flag indicates whether the current user is the owner of the sheet. 
-    context.isOwner = context.owner;
-    // In templates that implement it, this flag indicates whether the current user is a GM. 
-    context.isGM = game.user.isGM;
-    // In templates that implement it, this flag determines whether data on the sheet 
-    // can be edited. 
-    context.isEditable = ((context.actor.data.data.isCustom && context.isOwner) || context.isGM) && context.editable;
-    // In templates that implement it, this flag determines whether the sheet data can be 
-    // sent to the chat. 
-    context.isSendable = true;
-
+    // Whenever the sheet is re-rendered, its view model is completely disposed and re-instantiated. 
+    // Dispose of the view model, if it exists. 
+    this._tryDisposeViewModel();
+    // Prepare a new view model instance. 
+    this._viewModel = this.subType.getViewModel(context);
+    this._viewModel.readViewState();
+    context.viewModel = this._viewModel;
+    
     this.subType.prepareDerivedData(context);
 
     return context;
   }
 
-  /** @override */
+  /**
+   * @override
+   * @see https://foundryvtt.com/api/FormApplication.html#activateListeners
+   * 
+   * This method is called *after* the sheet is rendered. 
+   */
   activateListeners(html) {
     super.activateListeners(html);
-    const isOwner = this.actor.isOwner;
+
+    const isOwner = (this.actor ?? this.item).isOwner;
     const isEditable = this.isEditable;
 
-    // General listeners. 
-    NumberSpinner.activateListeners(html, this, isOwner, isEditable);
+    // Activate view model bound event listeners. 
+    this.viewModel.activateListeners(html, isOwner, isEditable);
 
-    // Subtype listeners. 
-    this.subType.activateListeners(html, isOwner, isEditable);
+    // -------------------------------------------------------------
+    if (!isOwner) return;
+
+    // Drag events for macros.
+    const handler = ev => this._onDragStart(ev);
+    html.find('li.item').each((i, li) => {
+      if (li.classList.contains("inventory-header")) return;
+      li.setAttribute("draggable", true);
+      li.addEventListener("dragstart", handler, false);
+    });
+
+    // -------------------------------------------------------------
+    if (!isEditable) return;
+  }
+
+  /**
+   * @override
+   * @see https://foundryvtt.com/api/FormApplication.html#close
+   */
+  async close() {
+    this._tryDisposeViewModel();
+    
+    return super.close();
+  }
+  
+  /**
+   * Disposes of the view model, if possible. 
+   * 
+   * Will silently return, if there is no view model instance to dispose. 
+   * @private
+   * @async
+   */
+  _tryDisposeViewModel() {
+    if (this._viewModel !== undefined && this._viewModel !== null) {
+      // Write out state to persist, before disposing the view model. 
+      this._viewModel.writeViewState();
+      try {
+        this._viewModel.dispose();
+      } catch (e) {
+        game.ambersteel.logger.logWarn(e);
+      }
+    }
+    this._viewModel = null;
   }
 }

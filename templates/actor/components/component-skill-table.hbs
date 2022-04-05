@@ -1,37 +1,16 @@
-{{!-- Requires parameters: 
-isEditable: {Boolean}
-isSendable: {Boolean}
-isLearningSkillsTable: {Boolean}
-skills: {[Item]} = {
-    id: {String}
-    name: {String}
-    img: {String}
-    data: {Object} = {
-        data: {Object} = {
-            value: {Number}
-            successes: {Number}
-            failures: {Number}
-            requiredSuccessses: {Number}
-            requiredFailures: {Number}
-            relatedAttribute: {String}
-            abilities: {[Object]} -> see item/skill-ability/skill-ability-table.hbs
-            localizableName: {String}
-            isCustom: {Boolean}
-        }
-    }
-}
+{{!-- Parameters: 
+viewModel: {SkillTableViewModel}
+cssClass: {undefined | String}
 --}}
-<div>
+<div class="{{cssClass}}">
     <table class="skill-table">
         <tbody>
             <tr class="fancy-font header-row">
-                {{#if isEditable}}
-                    <th class="skill-column-roll"></th>
-                {{/if}}
+                <th class="skill-column-roll"></th>
                 <th class="skill-column-roll"></th>
                 <th class="skill-column-roll"></th>
                 <th class="skill-column-name">
-                    {{#if isLearningSkillsTable}}
+                    {{#if viewModel.isLearningSkillsTable}}
                         {{localize "ambersteel.labels.learningSkill"}}
                     {{else}}
                         {{localize "ambersteel.labels.knownSkill"}}
@@ -52,85 +31,58 @@ skills: {[Item]} = {
                 <th class="skill-column-failures">
                     {{localize "ambersteel.labels.failureAbbreviation"}}
                 </th>
-                {{#if isEditable}}
-                    <th class="skill-column-delete"></th>
-                {{/if}}
+                <th class="skill-column-delete"></th>
             </tr>
-            {{#each skills as |skill key|}}
-                <tr class="item skill-item" data-item-id="{{skill.data.id}}">
-                    {{#if ../isEditable}}
-                        <td class="skill-column-roll">
-                            {{> buttonRoll
-                                type="dice-pool"
-                                itemId=skill.data.id
-                                chatTitle=skill.name
-                                callback="advanceSkillBasedOnRollResult"
-                                callbackData=skill.data.id
-                            }}
-                        </td>
-                    {{/if}}
-                    <td>
-                        {{> buttonSendToChat itemId=skill.data.id }}
+            {{#each viewModel.skillsViewModels as |vm key|}}
+                <tr class="item skill-item" data-item-id="{{vm.skill.data.id}}">
+                    <td class="skill-column-roll">
+                        {{> buttonRoll viewModel=vm.vmBtnRoll }}
                     </td>
                     <td>
-                        {{> buttonOpenSheet id=skill.name }}
+                        {{> buttonSendToChat viewModel=vm.vmBtnSendToChat }}
+                    </td>
+                    <td>
+                        {{> buttonOpenSheet viewModel=vm.vmBtnOpenSheet }}
                     </td>
                     <td class="fancy-font flex skill-column-name">
-                        {{> inputComponent type="single-line" propertyPath="name" itemId=skill.data.id isEditable=../isEditable contextOverride=../this }}
+                        {{> inputImage viewModel=vm.vmImg cssClass="custom-icon-sm" }}
+                        {{> inputTextField viewModel=vm.vmTfName }}
                     </td>
                     <td class="skill-column-attribute">
-                        {{> inputComponent type="drop-down" propertyPath="data.data.relatedAttribute" 
-                            itemId=skill.data.id
-                            options=../CONFIG.character.attributes
-                            optionValueProperty="name"
-                            optionDisplayProperty="localizableAbbreviation"
-                            isEditable=../isEditable
-                            contextOverride=../this
-                        }}
+                        {{> inputDropDown viewModel=vm.vmDdRelatedAttribute }}
                     </td>
                     <td class="skill-column-level">
-                        {{> inputComponent type="number" min="0" propertyPath="data.data.value" itemId=skill.data.id isEditable=../isEditable contextOverride=../this }}
+                        {{> inputNumberSpinner viewModel=vm.vmNsLevel }}
                     </td>
                     <td class="skill-column-requirements">
-                        {{data.requiredSuccessses}} / {{data.requiredFailures}}
+                        {{vm.requiredSuccessses}} / {{vm.requiredFailures}}
                     </td>
                     <td class="skill-column-successes">
-                        {{> inputComponent type="number" min="0" propertyPath="data.data.successes" itemId=skill.data.id isEditable=../isEditable contextOverride=../this }}
+                        {{> inputNumberSpinner viewModel=vm.vmNsSuccesses }}
                     </td>
                     <td class="skill-column-failures">
-                        {{> inputComponent type="number" min="0" propertyPath="data.data.failures" itemId=skill.data.id isEditable=../isEditable contextOverride=../this }}
+                        {{> inputNumberSpinner viewModel=vm.vmNsFailures }}
                     </td>
-                    {{#if ../isEditable}}
-                        <td class="skill-column-delete">
-                            {{> buttonDelete itemId=skill.data.id promptConfirm=true promptLocalizableTitle=(ifThenElse ../isLearningSkillsTable "ambersteel.dialog.titleConfirmDeletionLearningSkillQuery" "ambersteel.dialog.titleConfirmDeletiongSkillQuery") }}
-                        </td>
-                    {{/if}}
+                    <td class="skill-column-delete">
+                        {{> buttonDelete viewModel=vm.vmBtnDelete }}
+                    </td>
                 </tr>
                 <tr>
                     <td style="display: table-cell;" colspan="100">
-                        {{> "systems/ambersteel/templates/item/skill-ability/skill-ability-table.hbs" 
-                            isEditable=../isEditable
-                            isSendable=../isSendable
-                            skillItemId=skill.data.id
-                            itemId=skill.data.id
-                            abilities=data.abilities
-                            CONFIG=../CONFIG
-                        }}
+                        {{> "systems/ambersteel/templates/item/skill-ability/skill-ability-table.hbs" viewModel=vm.vmSkillAbilityTable }}
                     </td>
                 </tr>
             {{/each}}
-            {{#if isEditable}}
-                <tr>
-                    <td style="display: table-cell;" colspan="100">
-                        <div class="flex">
-                            <span class="flex-grow"></span>
-                            <span class="width-sm">
-                                {{> buttonAdd itemType="skill" withDialog="true" creationData=(concat "[value:"(ifThenElse isLearningSkillsTable "0" "1") "]" ) }}
-                            </span>
-                        </div>
-                    </td>
-                </tr>
-            {{/if}}
+            <tr>
+                <td style="display: table-cell;" colspan="100">
+                    <div class="flex">
+                        <span class="flex-grow"></span>
+                        <span class="width-sm">
+                            {{> buttonAdd viewModel=viewModel.vmBtnAddSkill }}
+                        </span>
+                    </div>
+                </td>
+            </tr>
         </tbody>
     </table>
 </div>

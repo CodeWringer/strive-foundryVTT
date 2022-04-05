@@ -1,85 +1,111 @@
-{{!-- Required context:
-isEditable: {Boolean}
-isSendable: {Boolean}
-skillAbility: {SkillAbility} = {
-  name: {String}
-  description: {String}
-  requiredLevel: {Number}
-  condition: {String}
-  img: {String}
-  apCost: {Number|undefined}
-  distance: {Number|undefined}
-  damageFormula: {String}
-  damageType: {CONFIG.ambersteel.damageTypes|undefined}
-  isCustom: {Boolean}
-}
+{{!-- Parameters:
+viewModel: {SkillAbilityChatMessageViewModel}
+cssClass: {undefined | String}
 --}}
-<section>
+<section class="custom-system-chat-message{{#if cssClass}} {{cssClass}}{{/if}}" 
+  data-view-model-id="{{viewModel.id}}"
+  data-document-id="{{viewModel.item.id}}"
+  data-ability-index="{{viewModel.index}}"
+>
   {{!-- Header --}}
   <div class="flex flex-row">
     <div class="flex flex-center">
-      <img class="inline-img header-image margin-r-sm" name="img" src="{{skillAbility.img}}" title="{{skillAbility.name}}" height="35" width="35" />
+      <img class="inline-img header-image margin-r-sm" name="img" src="{{viewModel.skillAbility.img}}" title="{{viewModel.skillAbility.name}}" height="26" width="26" />
     </div>
-    <h2 class="flex-grow">
-      {{skillAbility.name}}
-    </h2>
+    <h3 class="flex-grow">
+      {{localize viewModel.skillAbility.name}}
+    </h3>
   </div>
   {{!-- Required level --}}
   <div class="flex flex-row sheet-block margin-b-md">
-    <div class="width-min-xl fancy-font">
+    <div class="width-min-xxl fancy-font">
       {{localize "ambersteel.labels.skillAbilityRequirement"}}
     </div>
     <div class="flex-grow">
-      {{skillAbility.requiredLevel}}
-    </div>
-  </div>
-  {{!-- Condition --}}
-  <div class="flex flex-row sheet-block margin-b-md">
-    <div class="width-min-xl fancy-font">
-      {{localize "ambersteel.labels.skillAbilityCondition"}}
-    </div>
-    <div class="flex-grow">
-      {{skillAbility.condition}}
+      {{viewModel.skillAbility.requiredLevel}}
     </div>
   </div>
   {{!-- apCost --}}
   <div class="flex flex-row sheet-block margin-b-md">
-    <div class="width-min-xl fancy-font">
+    <div class="width-min-xxl fancy-font">
       {{localize "ambersteel.labels.apCost"}}
     </div>
     <div class="flex-grow">
-      {{skillAbility.apCost}}
+      {{viewModel.skillAbility.apCost}}
+    </div>
+  </div>
+  {{!-- Obstacle --}}
+  <div class="flex flex-row sheet-block margin-b-md{{#if viewModel.hideObstacle}} hidden{{/if}}">
+    <div class="width-min-xxl fancy-font">
+      {{localize "ambersteel.roll.obstacleAbbreviation"}}
+    </div>
+    <div class="flex-grow">
+      {{viewModel.skillAbility.obstacle}}
+    </div>
+  </div>
+  {{!-- Opposed By --}}
+  <div class="flex flex-row sheet-block margin-b-md{{#if viewModel.hideOpposedBy}} hidden{{/if}}">
+    <div class="width-min-xxl fancy-font">
+      {{localize "ambersteel.labels.opposedBy"}}
+    </div>
+    <div class="flex-grow">
+      {{viewModel.skillAbility.opposedBy}}
+    </div>
+  </div>
+  {{!-- Condition --}}
+  <div class="flex flex-row sheet-block margin-b-md{{#if viewModel.hideCondition}} hidden{{/if}}">
+    <div class="width-min-xxl fancy-font">
+      {{localize "ambersteel.labels.skillAbilityCondition"}}
+    </div>
+    <div class="flex-grow">
+      {{localize viewModel.skillAbility.condition}}
+    </div>
+  </div>
+  {{!-- attackType --}}
+  <div class="flex flex-row sheet-block margin-b-md{{#if viewModel.hideAttackType}} hidden{{/if}}">
+    <div class="width-min-xxl fancy-font">
+      {{localize "ambersteel.labels.attackType"}}
+    </div>
+    <div class="flex-grow">
+      {{viewModel.localizedAttackType}}
     </div>
   </div>
   {{!-- distance --}}
-  <div class="flex flex-row sheet-block margin-b-md">
-    <div class="width-min-xl fancy-font">
+  <div class="flex flex-row sheet-block margin-b-md{{#if viewModel.hideDistance}} hidden{{/if}}">
+    <div class="width-min-xxl fancy-font">
       {{localize "ambersteel.labels.distance"}}
     </div>
     <div class="flex-grow">
-      {{skillAbility.distance}}
+      {{viewModel.skillAbility.distance}}
     </div>
   </div>
-  {{!-- damageFormula --}}
-  <div class="flex flex-row sheet-block margin-b-md">
-    <div class="width-min-xl fancy-font">
-      {{localize "ambersteel.labels.damage"}}
-    </div>
-    <div class="flex-grow">
-      {{skillAbility.damageFormula}}
-    </div>
-  </div>
-  {{!-- damageType --}}
-  <div class="flex flex-row sheet-block margin-b-md">
-    <div class="width-min-xl fancy-font">
-      {{localize "ambersteel.labels.damageType"}}
-    </div>
-    <div class="flex-grow">
-      {{skillAbility.damageType}}
-    </div>
-  </div>
+  {{!-- Damage --}}
+  <ol class="unstyled-list{{#if viewModel.hideDamage}} hidden{{/if}}">
+    {{#each viewModel.skillAbility.damage as |entry index|}}
+      <li class="ambersteel-list-row sheet-block flex flex-column margin-b-md">
+        {{!-- Damage formula --}}
+        <div class="flex flex-row">
+          <div class="width-min-xxl fancy-font">
+            {{localize "ambersteel.labels.damage"}}
+          </div>
+          <span class="width-min-xxl">
+            {{entry.damage}}
+          </span>
+        </div>
+        {{!-- Damage type --}}
+        <div class="flex flex-row">
+          <div class="width-min-xxl fancy-font">
+            {{localize "ambersteel.labels.damageType"}}
+          </div>
+          <span class="width-xxl">
+            {{../viewModel.getLocalizedDamageType entry.damageType}}
+          </span>
+        </div>
+      </li>
+    {{/each}}
+  </ol>
   {{!-- Description --}}
-  <div class="sheet-block multiline">
-    {{skillAbility.description}}
+  <div class="sheet-block scrollable-height-md">
+    {{{viewModel.description}}}
   </div>
 </section>

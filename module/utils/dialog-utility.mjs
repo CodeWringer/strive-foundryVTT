@@ -1,5 +1,6 @@
 import DialogResult from '../dto/dialog-result.mjs';
-import * as NumberSpinner from '../components/number-spinner.mjs';
+import { TEMPLATES } from '../templatePreloader.mjs';
+import { getElementValue, setSelectedOptionByValue} from './sheet-utility.mjs';
 
 /**
  * Shows a dialog to the user and returns a promise with the result of the user interaction. 
@@ -50,7 +51,7 @@ export async function showDialog(args = {}, dialogData) {
             },
             default: "cancel",
             render: html => {
-                NumberSpinner.activateListeners(html, this, true, true);
+                // TODO: Activate DOM event listeners using the view model system. 
                 args.render(html);
             },
             close: html => {
@@ -66,6 +67,7 @@ export async function showDialog(args = {}, dialogData) {
 
 /**
  * Shows a confirmation dialog. 
+ * @param {Object} args Optional arguments to pass to the rendering function. 
  * @param {String} args.localizableTitle Localization string for the dialog title. 
  * @returns {Promise<Boolean>} Resolves, when the dialog is closed. 
  *          Is true, when the dialog was closed with confirmation. 
@@ -105,5 +107,91 @@ export async function showConfirmationDialog(args = {}) {
             }
         });
         dialog.render(true);
+    });
+}
+
+/**
+ * Shows a dialog that contains a paragraph of text. 
+ * 
+ * Offers a single confirmation button. 
+ * @param {Object} args Optional arguments to pass to the rendering function. 
+ * @param {String} args.localizableTitle
+ * @param {String} args.localizedContent
+ * @returns {Promise<void>} Resolves, when the dialog is closed. 
+ * @async
+ */
+export async function showPlainDialog(args = {}) {
+    args = {
+        localizableTitle: "",
+        localizedContent: "",
+        ...args
+    };
+
+    return new Promise(async (resolve, reject) => {
+        // Render template. 
+        const renderedContent = await renderTemplate(TEMPLATES.DIALOG_PLAIN, args);
+
+        const dialog = new Dialog({
+            title: game.i18n.localize(args.localizableTitle),
+            content: renderedContent,
+            buttons: {
+                ok: {
+                    icon: '<i class="fas fa-check"></i>',
+                    label: game.i18n.localize("ambersteel.labels.ok"),
+                    callback: () => {}
+                }
+            },
+            default: "ok",
+            render: html => {},
+            close: html => {
+                resolve();
+            }
+        });
+        dialog.render(true);
+    });
+}
+
+/**
+ * Shows a dialog that contains a paragraph of text. 
+ * 
+ * Offers a single confirmation button. 
+ * @param {Object} args Optional arguments to pass to the rendering function. 
+ * @param {String} args.localizableTitle
+ * @param {String} args.localizableLabel
+ * @param {Array<ChoiceOption>} args.options An array of choices to offer for selection. 
+ * @param {Any} args.selected Optional. The value to pre-select when the dialog is rendered. 
+ * @returns {Promise<Object>} = {
+ * selected: {String} Id of the selected item,
+ * confirmed: {Boolean}
+ * }
+ * @async
+ */
+export async function showSelectionDialog(args = {}) {
+    args = {
+        localizableTitle: "ambersteel.dialog.titleSelect",
+        localizableLabel: "",
+        options: [],
+        selected: undefined,
+        ...args
+    };
+
+    return new Promise(async (resolve, reject) => {
+        const dialogResult = await showDialog(
+          {
+            dialogTemplate: TEMPLATES.DIALOG_SELECT,
+            localizableTitle: args.localizableTitle,
+            render: html => {
+                if (args.selected !== undefined) {
+                    const selectElement = html.find("#selection");
+                    setSelectedOptionByValue(selectElement, args.selected);
+                }
+            }
+          },
+          args
+        );
+        resolve({
+            selected: getElementValue(dialogResult.html.find(".ambersteel-item-select")[0]),
+            confirmed: dialogResult.confirmed
+        });
     });
 }

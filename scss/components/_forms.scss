@@ -32,10 +32,12 @@ nav#nav-sheet-tabs.sheet-tabs {
   height: 32px;
   min-height: 32px;
   margin: 0;
+  padding: 0;
   flex: 0;
   border-top: 1px solid $c-border-beige-light;
   border-bottom: 1px solid $c-border-beige-light;
   line-height: unset;
+  background-color: rgba(0, 0, 0, 0.065);
 
   > a.item {
     margin: 0;
@@ -47,6 +49,7 @@ nav#nav-sheet-tabs.sheet-tabs {
       border-right: 2px solid rgba(0,0,0,0.2);
       border-radius: 10px 10px 0 0;
       padding: 2px 0 0 0;
+      background-color: rgba(255, 255, 255, 0.2);
     }
   }
 }
@@ -64,15 +67,11 @@ nav#nav-sheet-tabs.sheet-tabs {
   background-color: $c-bg-light;
 }
 
-// Button styles
-a.button {
-  padding: 0;
-  margin: 0;
-  width: 26px;
-  height: 26px;
-  font-size: 1rem;
+.sheet-group-sidebar {
+  border-right: $c-border-medium 3px solid;
 }
 
+// Button styles
 .button-full {
   padding: 0;
   margin: 0;
@@ -80,28 +79,95 @@ a.button {
   min-width: $line-height;
   font-size: 1rem;
   border-radius: 3px;
-  border: 1px $c-border-light solid;
-  background-color: $c-bg-lightest;
+  border: 1px $c-border-medium solid;
+  background-color: $c-bg-medium;
 }
 
 .square-button-light {
   width: 26px;
   height: 26px;
+  display: block;
+
+  > a.button {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+  }
 }
 
-.ambersteel-toggle-visibility {
+.fill-button-light {
+  width: 100%;
+  height: 100%;
   display: block;
-  font-size: 1rem;
+
+  > a.button {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.disabled {
+  a.custom-system-button {
+    cursor: default;
+    background-color: unset;
+    color: black;
+    opacity: 50%;
+    text-shadow: unset;
+  
+    &:hover {
+      filter: unset;
+    }
+  
+    i.ambersteel-icon {
+      filter: opacity(50);
+      &:hover {
+          filter: unset;
+      }
+    }
+  }
 }
 
 // Textarea styles
-textarea {
+textarea, .textarea-auto-resize-sibling {
   font-size: 1rem;
   font-family: $font-primary;
+  resize: none;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  padding: 4px;
+  margin: 0;
+  box-sizing: border-box;
+  border: 1px solid $c-border-input;
+  
+  &.resize-vertical {
+    resize: vertical;
+  }
+  &.resize-none {
+    resize: none;
+  }
+  // Default textarea override
+  &.custom-system-edit {
+    border-color: $c-border-input;
+  }
 }
 
-textarea.resize-vertical {
-  resize: vertical;
+// Input styles
+
+.custom-system-read-only {
+  background: repeating-linear-gradient(45deg, rgba(0,0,0,0.07), transparent, rgba(0,0,0,0.07) 10px);
+  border-radius: 0.2rem;
+  font-weight: bold;
+  border: 1px solid $c-border-beige-light;
+  color: $c-text-read-only;
+  min-height: 26px;
+}
+
+// Default width override
+input[type="text"].input-width-override {
+  width: 100%;
 }
 
 // Chat styles
@@ -109,11 +175,7 @@ textarea.resize-vertical {
   margin-right: 2%;
 }
 
-.ambersteel-read-only {
-  background: repeating-linear-gradient(45deg, rgba(0,0,0,0.1), transparent, rgba(0,0,0,0.1) 10px);
-  border-radius: 0.2rem;
-  font-weight: bold;
-}
+// Image styles
 
 img.header-image {
   background: $c-bg-medium;
@@ -121,13 +183,49 @@ img.header-image {
   border: 1px solid $c-border-beige-light;
 }
 
-// Image styles
 .inline-img {
   border: none;
   display: inline-block;
 }
 
-// Input overrides
-input[type="text"].input-width-override {
-  width: 100%;
+img.custom-icon {
+  &-sm {
+    border: $c-border-input 1px solid;
+    flex: none;
+    width: $line-height !important;
+    height: $line-height !important;
+  }
+  &-md {
+    border: $c-border-input 1px solid;
+    flex: none;
+    width: 64px !important;
+    height: 64px !important;
+  }
+  &-lg {
+    border: $c-border-input 1px solid;
+    flex: none;
+    width: 100px !important;
+    height: 100px !important;
+  }
+}
+
+.component-input-image {
+  cursor: pointer;
+
+  &.disabled {
+    cursor: default;
+  }
+}
+
+// Hint Card Styles
+.hint-card {
+  background-color: $c-themed-hint-bg;
+  border: 1px solid $c-themed-hint-border;
+  border-radius: 4px;
+  padding: 6px;
+
+  &-icon {
+    font-size: $font-size-lg;
+    margin-right: 0.6rem;
+  }
 }

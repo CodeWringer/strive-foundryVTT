@@ -1,0 +1,39 @@
+{{!-- Parameters:
+obstacle: {Number},
+bonusDice: {Number},
+visibilityMode: {CONFIG.ambersteel.visibilityModes}
+visibilityModes: {Array<CONFIG.ambersteel.visibilityModes>}
+cssClass: {undefined | String}
+--}}
+<section class="{{cssClass}}">
+  <div class="sheet-block grid grid-2col">
+    <div class="flex flex-column">
+      <label class="line-height fancy-font pad-sm" for="obstacle">{{localize "ambersteel.roll.obstacleAbbreviation"}}</label>
+      <label class="line-height fancy-font pad-sm" for="bonusDice">{{localize "ambersteel.roll.bonusDice"}}</label>
+    </div>
+    <div class="flex flex-column flex-grow">
+      {{#> numberSpinner}}
+      <input class="obstacle ambersteel-item-edit spinner" name="obstacle" type="number" data-dtype="Number" min="0" step="1" 
+        value="{{obstacle}}" data-field="obstacle" />
+      {{/numberSpinner}}
+      {{#> numberSpinner}}
+      <input class="bonus-dice ambersteel-item-edit spinner" name="bonusDice" type="number" data-dtype="Number" step="1"  
+        value="{{bonusDice}}" data-field="bonusDice" />
+      {{/numberSpinner}}
+    </div>
+  </div>
+  <div class="sheet-block grid grid-2col">
+    <div>
+      <label class="line-height fancy-font pad-sm" for="visibilityMode">{{localize "ambersteel.labels.messageVisibility"}}</label>
+    </div>
+    <div class="flex">
+      <select class="visibilityMode flex-grow" name="visibilityMode">
+        {{#select visibilityMode}}
+        {{#each visibilityModes as |mode key|}}
+        <option value="{{key}}">{{localize mode.localizableName}}</option>
+        {{/each}}
+        {{/select}}
+      </select>
+    </div>
+  </div>
+</section>

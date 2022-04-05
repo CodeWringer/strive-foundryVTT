@@ -1,16 +1,14 @@
 import AmbersteelPcActor from './subtypes/actor/ambersteel-pc-actor.mjs';
 import AmbersteelNpcActor from './subtypes/actor/ambersteel-npc-actor.mjs';
-import { deleteByPropertyPath } from '../utils/document-update-utility.mjs';
+import * as UpdateUtil from '../utils/document-update-utility.mjs';
 
 /**
  * @extends {Actor}
- * @property person {Object}
- * @property attributeGroups: {Object}
- * @property learningSkills: {[Object]}
- * @property skills: {[Object]}
- * @property beliefSystem: {Object}
- * @property fateSystem: {Object}
- * @property biography: {Object}
+ * @property {Array<Item>} injuries
+ * @property {Array<Item>} illnesses
+ * @property {Array<Item>} possessions
+ * @property {Array<Item>} propertyItems
+ * @property {Array<Item>} fateCards
  */
 export class AmbersteelActor extends Actor {
   /**
@@ -35,6 +33,14 @@ export class AmbersteelActor extends Actor {
     return this._subType;
   }
 
+  /**
+   * Returns the default icon image path for this type of actor. 
+   * @type {String}
+   * @virtual
+   * @readonly
+   */
+  get defaultImg() { return this.subType.defaultImg; }
+
   /** @override */
   prepareData() {
     super.prepareData();
@@ -52,29 +58,60 @@ export class AmbersteelActor extends Actor {
     this.subType.prepareDerivedData(this);
   }
 
-  get injuries() {
-    const items = Array.from(this.items);
-      const result = [];
-      for (const item of items) {
-        if (item.type === "injury") result.push(item);
-      }
-      return result;
-  }
-
-  get injuryCount() { return this.injuries.length; }
-  
-  get illnesses() {
+  /**
+   * Returns items of this actor, filtered by the given type. 
+   * @param {String} type The exact type to filter by. 
+   * @returns {Array<Item>} Items of the given type, of this actor. 
+   */
+  getItemsByType(type) {
     const items = Array.from(this.items);
     const result = [];
     for (const item of items) {
-      if (item.type === "illness") result.push(item);
+      if (item.type === type) result.push(item);
     }
     return result;
   }
 
-  get illnessCount() { return this.illnesses.length; }
+  /**
+   * @returns {Array<Item>} A list of "injury" type items that represent injuries of 
+   * this character. 
+   * @readonly
+   */
+  get injuries() { return this.getItemsByType("injury"); }
+  
+  /**
+   * @returns {Array<Item>} A list of "illness" type items that represent illnesses of 
+   * this character. 
+   * @readonly
+   */
+  get illnesses() { return this.getItemsByType("illness"); }
+  
+  /**
+   * @type {Array<AmbersteelItemItem>} A list of "item" type items that represent things owned 
+   * by this character, and currently on their person. 
+   * @readonly
+   */
+  get possessions() {
+    const items = Array.from(this.items);
+    return items.filter((item) => { return item.type === "item" && item.data.data.isOnPerson; });
+  }
 
-  // TODO: Move to ambersteel-base-actor.mjs
+  /**
+   * @returns {Array<Item>} A list of "item" type items that represent things owned 
+   * by this character, but not on their person. 
+   */
+  get propertyItems() { 
+    const items = Array.from(this.items);
+    return items.filter((item) => { return item.type === "item" && !item.data.data.isOnPerson; });
+  }
+
+  /**
+   * @returns {Array<Item>} A list of "fate-card" type items that represent fate-cards of 
+   * this character. 
+   * @readonly
+   */
+  get fateCards() { return this.getItemsByType("fate-card"); }
+
   /**
    * 
    * @param attName {String} Internal name of an attribute, e.g. 'magicSense'. 
@@ -96,7 +133,6 @@ export class AmbersteelActor extends Actor {
     }
   }
 
-  // TODO: Move to ambersteel-base-actor.mjs
   /**
    * Sets the level of the attribute with the given name. 
    * @param attName {String} Internal name of an attribute, e.g. 'magicSense'. 
@@ -117,7 +153,6 @@ export class AmbersteelActor extends Actor {
     });
   }
 
-  // TODO: Move to ambersteel-base-actor.mjs
   /**
    * Adds success/failure progress to an attribute. 
    * 
@@ -152,7 +187,32 @@ export class AmbersteelActor extends Actor {
     }
   }
 
-  async deleteByPropertyPath(propertyPath) {
-    await deleteByPropertyPath(this, propertyPath);
+  /**
+   * Deletes a property on the given document, via the given path. 
+   * @param {Document} document A Foundry {Document}. 
+   * @param {String} propertyPath Path leading to the property to delete, on the given document entity. 
+   *        Array-accessing via brackets is supported. Property-accessing via brackets is *not* supported. 
+   *        E.g.: "data.attributes[0].value" 
+   *        E.g.: "data.attributes[4]" 
+   *        E.g.: "data.attributes" 
+   * @param {Boolean | undefined} render If true, will trigger a re-render of the associated document sheet. Default 'true'. 
+   * @async
+   */
+  async deleteByPropertyPath(propertyPath, render = true) {
+    await UpdateUtil.deleteByPropertyPath(this, propertyPath, render);
+  }
+
+  /**
+   * Updates a property on the parent item, identified via the given path. 
+   * @param {String} propertyPath Path leading to the property to update, on the parent item. 
+   *        Array-accessing via brackets is supported. Property-accessing via brackets is *not* supported. 
+   *        E.g.: "data.attributes[0].value"
+   * @param {any} newValue The value to assign to the property. 
+   * @param {Boolean | undefined} render If true, will trigger a re-render of the associated document sheet. Default 'true'. 
+   * @async
+   * @protected
+   */
+  async updateProperty(propertyPath, newValue, render = true) {
+    await UpdateUtil.updateProperty(this, propertyPath, newValue, render);
   }
 }

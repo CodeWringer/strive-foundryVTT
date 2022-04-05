@@ -1,0 +1,14 @@
+{{!-- Required context:
+viewModel: {InputRichTextViewModel}
+cssClass: {String | undefined}
+--}}
+<div
+  class="custom-system-edit component-rich-text-container{{#if cssClass}} {{cssClass}}{{/if}}" 
+  id="{{viewModel.id}}" 
+>
+  <div class="component-rich-text-editbutton">
+    {{#> _button viewModel=viewModel.vmBtnEditMode cssClass="button-full" fill=true }}<i class="fas fa-edit"></i>{{/_button}}
+  </div>
+  <div class="component-rich-text hidden"></div>
+  <div class="component-rich-text-read-only">{{{viewModel.enrichedHtmlValue}}}</div>
+</div>

@@ -17,6 +17,8 @@
 @import 'global/flex';
 @import 'global/roll';
 @import 'global/general';
+@import 'global/icons';
+@import 'global/borders';
 
 /* Components */
 @import 'components/forms';
@@ -29,3 +31,6 @@
 @import 'components/gm';
 @import 'components/list';
 @import 'components/skill-ability';
+@import 'components/toggle';
+@import 'components/editor';
+@import 'components/rich-text';

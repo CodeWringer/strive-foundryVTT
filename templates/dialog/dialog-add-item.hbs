@@ -11,8 +11,9 @@ selected: {Object} = {
 }
 isCustomChecked: {Boolean}
 itemLabel: {String}
+cssClass: {undefined | String}
 --}}
-<section>
+<section class="{{cssClass}}">
   <div class="grid grid-2col">
     {{> inputLabel text=itemLabel }}
     <select class="ambersteel-item-select" data-property-path="selected">

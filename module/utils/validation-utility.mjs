@@ -6,11 +6,11 @@
  * @returns {Boolean} True, if the expected properties are not null or undefined. 
  */
 export function propertiesDefined(obj, props) {
-    for (const prop of props) {
-        if (obj[prop] == undefined
-        || obj[prop] == null) return false;
-    }
-    return true;
+  for (const prop of props) {
+    if (obj[prop] == undefined
+      || obj[prop] == null) return false;
+  }
+  return true;
 }
 
 /**
@@ -18,11 +18,44 @@ export function propertiesDefined(obj, props) {
  * whose value is null or undefined. 
  * @param {Object} obj The object whose properties will be validated. 
  * @param {Array<String>} props An array of properties whose value must not be null or undefined. 
- * @throws An error, if any of the properties fail to validate. 
+ * @throws {Error} ArgumentException - Thrown, if any of the properties fail to validate. 
  */
 export function validateOrThrow(obj, props) {
-    for (const prop of props) {
-        if (obj[prop] == undefined
-        || obj[prop] == null) throw `Required parameter '${prop}' is undefined!`;
-    }
+  for (const prop of props) {
+    if (obj[prop] == undefined
+      || obj[prop] == null) throw new Error(`ArgumentException: Required parameter '${prop}' is undefined!`);
+  }
+}
+
+/**
+ * Returns true, if the given argument is of type object. 
+ * @param {Any} obj 
+ * @returns {Boolean} True, if the given argument is of type object. 
+ */
+export function isObject(obj) {
+  return (Object.prototype.toString.call(obj) === '[object Object]' || typeof(obj) === 'object') && obj !== null
+  && isArray(obj) !== true
+  && isFunction(obj) !== true;
+};
+
+/**
+ * Returns true, if the given argument is of type array. 
+ * @param {Any} obj 
+ * @returns {Boolean} True, if the given argument is of type array. 
+ */
+export function isArray(obj) {
+  if (obj !== undefined && obj !== null && ((obj.isArray !== undefined && obj.isArray(obj)) || Array.isArray(obj))) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+/**
+ * Returns true, if the given argument is of type function. 
+ * @param {Any} obj 
+ * @returns {Boolean} True, if the given argument is of type function. 
+ */
+export function isFunction(obj) {
+  return typeof(obj) === 'function';
 }

@@ -1,36 +1,51 @@
 {{!-- Parameters:
-resultsForDisplay: [String],
+resultsForDisplay: {Array<Object>} = {
+  cssClass: {String}
+  content: {String}
+}
 isSuccess: Boolean
 degree: [String|Number]
 numberOfDice: String|Number
+diceComposition: String
+title: String
+cssClass: {undefined | String}
 --}}
-<div>
-    <div class="dice-number">
-        {{localize "ambersteel.roll.numberOfDice"}}: {{numberOfDice}}
+<div class="dice-roll-chat-message-container{{#if cssClass}} {{cssClass}}{{/if}}">
+  {{#if title}}
+    <h2 class="dice-title">{{title}}</h2>
+  {{/if}}
+  <div class="dice-number">
+    {{localize "ambersteel.roll.numberOfDice"}}: {{numberOfDice}}
+  </div>
+  {{#if diceComposition}}
+    <div class="dice-composition">
+      {{diceComposition}}
     </div>
-    <div class="dice-rolls-container">
-        <ol class="dice-rolls">
-        {{#each resultsForDisplay as | resultForDisplay |}}
-            <li class="roll die d6 {{resultForDisplay.cssClass}}">{{resultForDisplay.content}}</li>
-        {{/each}}
-        </ol>
-    </div>
-    <div class="dice-result-container">
-        {{#if isSuccess}}
-        <div class="dice-result success">
+  {{/if}}
+  <div class="dice-rolls-container">
+    <ol class="dice-rolls">
+      {{#each resultsForDisplay as | resultForDisplay |}}
+        <li class="roll die d6 {{resultForDisplay.cssClass}}">{{resultForDisplay.content}}</li>
+      {{/each}}
+    </ol>
+  </div>
+  <div class="dice-result-container">
+    {{#if isSuccess}}
+      <div class="dice-result success">
         {{localize "ambersteel.roll.success"}}!
-        {{else}}
-        <div class="dice-result failure">
+      </div>
+    {{else}}
+      <div class="dice-result failure">
         {{localize "ambersteel.roll.failure"}}!
-        {{/if}}
-        </div>
-        <div class="dice-degree">
-            {{#if isSuccess}}
-            <span>{{localize "ambersteel.roll.degreeOfSuccess"}}: </span>
-            {{else}}
-            <span>{{localize "ambersteel.roll.degreeOfFailure"}}: </span>
-            {{/if}}
-            <span>{{degree}}</span>
-        </div>
+      </div>
+    {{/if}}
+    <div class="dice-degree">
+      {{#if isSuccess}}
+        <span>{{localize "ambersteel.roll.degreeOfSuccess"}}: </span>
+      {{else}}
+        <span>{{localize "ambersteel.roll.degreeOfFailure"}}: </span>
+      {{/if}}
+      <span>{{degree}}</span>
     </div>
+  </div>
 </div>

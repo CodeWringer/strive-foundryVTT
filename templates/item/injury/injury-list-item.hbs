@@ -1,64 +1,53 @@
-{{!-- Requires context:
-isEditable: {Boolean}
-isSendable: {Boolean}
-itemId: {String|undefined}
-item: {Item} = {
-  name: {String}
-  data: {Object} = {
-    data: {Object} = {
-      description: {String}
-      state: {CONFIG.injuryStates}
-      timeToHeal: {String}
-      limit: {Number}
-    }
-  }
-}
+{{!-- Parameters:
+viewModel: {InjuryListItemViewModel}
+cssClass: {undefined | String}
 --}}
-{{!-- Row 1 --}}
-<div class="flex flex-row">
-  <div class="flex flex-grow">
-    {{!-- Send to chat --}}
-    {{> buttonSendToChat itemId=itemId }}
-    {{!-- Name --}}
-    <span class="width-min-xl">
-      {{> inputLabel text="ambersteel.labels.injury"}}
-    </span>
-    <span class="flex-grow margin-r-md">
-      {{> inputComponent type="single-line" propertyPath="name" itemId=itemId isEditable=isEditable }}
-    </span>
-    {{!-- State --}}
-    {{> inputComponent type="radio-buttons" propertyPath="data.data.state" itemId=itemId name=(concat "state-" itemId) isEditable=isEditable 
-      options=CONFIG.injuryStates optionValueProperty="name" optionDisplayProperty="localizableName"
-    }}
-  </div>
-  {{!-- Delete --}}
-  {{> buttonDelete itemId=itemId promptConfirm=true promptLocalizableTitle="ambersteel.dialog.titleConfirmDeletionInjuryQuery" }}
-</div>
-{{!-- Row 2 --}}
-<div class="flex flex-row">
-  {{!-- Limit --}}
+<div class="custom-system-list-item{{#if cssClass}} {{cssClass}}{{/if}}">
+  {{!-- Row 1 --}}
   <div class="flex flex-row">
-    <span class="width-min-xl">
-      {{> inputLabel text="ambersteel.labels.limit" }}
-    </span>
-    <span class="width-md">
-      {{> inputComponent type="number" propertyPath="data.data.limit" min="0" itemId=itemId isEditable=isEditable }}
-    </span>
+    <div class="flex flex-grow">
+      {{!-- Send to chat --}}
+      {{> buttonSendToChat viewModel=viewModel.vmBtnSendToChat }}
+      {{!-- Name --}}
+      <span class="width-min-xl">
+        {{> inputLabel text="ambersteel.labels.injury"}}
+      </span>
+      {{> inputImage viewModel=viewModel.vmImg cssClass="custom-icon-sm" }}
+      <span class="flex-grow margin-r-md">
+        {{> inputTextField viewModel=viewModel.vmTfName }}
+      </span>
+      {{!-- State --}}
+      {{> inputRadioButtonGroup viewModel=viewModel.vmRbgState }}
+    </div>
+    {{!-- Delete --}}
+    {{> buttonDelete viewModel=viewModel.vmBtnDelete }}
   </div>
-  {{!-- Spacer --}}
-  <div class="width-xs"></div>
-  {{!-- Time to heal --}}
-  <div class="flex flex-row flex-grow">
-    <span class="width-min-xl">
-      {{> inputLabel text="ambersteel.labels.timeToHeal" }}
-    </span>
-    <span class="width-min-xl flex-grow">
-      {{> inputComponent type="single-line" propertyPath="data.data.timeToHeal" itemId=itemId isEditable=isEditable }}
-    </span>
+  {{!-- Row 2 --}}
+  <div class="flex flex-row">
+    {{!-- Limit --}}
+    <div class="flex flex-row">
+      <span class="width-min-xl">
+        {{> inputLabel text="ambersteel.labels.limit" }}
+      </span>
+      <span class="width-md">
+        {{> inputNumberSpinner viewModel=viewModel.vmNsLimit }}
+      </span>
+    </div>
+    {{!-- Spacer --}}
+    <div class="width-xs"></div>
+    {{!-- Time to heal --}}
+    <div class="flex flex-row flex-grow">
+      <span class="width-min-xl">
+        {{> inputLabel text="ambersteel.labels.timeToHeal" }}
+      </span>
+      <span class="width-min-xl flex-grow">
+        {{> inputTextField viewModel=viewModel.vmTfTimeToHeal }}
+      </span>
+    </div>
   </div>
-</div>
-{{!-- Row 3 --}}
-{{!-- Description --}}
-<div class="flex flex-row">
-  {{> inputComponent type="multi-line" propertyPath="data.data.description" itemId=itemId isEditable=isEditable }}
+  {{!-- Row 3 --}}
+  {{!-- Description --}}
+  <div class="flex flex-row">
+    {{> inputRichText viewModel=viewModel.vmRtDescription }}
+  </div>
 </div>

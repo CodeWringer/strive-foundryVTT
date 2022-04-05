@@ -69,20 +69,26 @@ export async function sendToChat(chatData = {}) {
  * @async
  */
 export async function queryVisibilityMode() {
+  const visibilityModes = getVisibilityModes(CONFIG);
   const dialogData = {
-    visibilityMode: CONFIG.ambersteel.visibilityModes.public
+    visibilityMode: visibilityModes[0],
+    visibilityModes: visibilityModes,
   };
 
   return new Promise(async (resolve, reject) => {
-    if (keyboard.isDown("Shift")) {
+    if (game.keyboard.downKeys.has("SHIFT")) {
       resolve({
-        visibilityMode: CONFIG.ambersteel.visibilityModes.public,
+        visibilityMode: visibilityModes[0],
         confirmed: true
       });
     } else {
       const result = await showDialog({ dialogTemplate: TEMPLATES.DIALOG_VISIBILITY, localizableTitle: "ambersteel.dialog.titleVisibility" }, dialogData);
+
+      const visibilityModeKey = parseInt(getElementValue(result.html.find(".visibilityMode")[0]));
+      const visibilityMode = visibilityModes[visibilityModeKey];
+
       resolve({
-        visibilityMode: getElementValue(result.html.find(".visibilityMode")[0]),
+        visibilityMode: visibilityMode,
         confirmed: result.confirmed
       });
     }
@@ -130,4 +136,18 @@ export async function sendPropertyToChat(args = {}) {
       ...{ renderedContent: `<span>${prop}</span>` }
     });
   }
+}
+
+/**
+ * Returns an array of available visibility modes. 
+ * @param {Object} config Global constant definitions. 
+ * @returns {Array<CONFIG.ambersteel.visibilityModes>}
+ */
+export function getVisibilityModes(config) {
+  const visibilityModes = [];
+  for (const visibilityModeName in config.ambersteel.visibilityModes) {
+    const visibilityMode = config.ambersteel.visibilityModes[visibilityModeName];
+    visibilityModes.push(visibilityMode);
+  }
+  return visibilityModes;
 }

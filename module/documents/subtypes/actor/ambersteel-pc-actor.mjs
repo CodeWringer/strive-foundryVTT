@@ -21,4 +21,21 @@ export default class AmbersteelPcActor extends AmbersteelBaseActor {
       actorData.beliefSystem.instincts.push("")
     }
   }
+
+  prepareDerivedData(context) {
+    super.prepareDerivedData(context);
+    this._prepareDerivedFateSystemData(context);
+  }
+
+  /**
+   * Prepares fate system derived data for display on actor sheet. 
+   * @param context 
+   * @private
+   */
+  _prepareDerivedFateSystemData(context) {
+    const maxCards = CONFIG.ambersteel.fateSystem.maxCards;
+    const fateSystemData = context.data.data.fateSystem;
+
+    fateSystemData.remainingSlots = maxCards - context.fateCards.length;
+  }
 }

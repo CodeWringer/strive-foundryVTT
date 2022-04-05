@@ -1,0 +1,10 @@
+{{!-- Required context:
+viewModel: {InputImageViewModel}
+cssClass: {String | undefined}
+--}}
+<img 
+  class="component-input-image{{#if viewModel.isEditable}}{{else}}disabled{{/if}} {{cssClass}}" 
+  id="{{viewModel.id}}" 
+  src="{{viewModel.value}}" 
+  title="{{viewModel.localizedTitle}}"
+  />

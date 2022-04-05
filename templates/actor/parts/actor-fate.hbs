@@ -1,64 +1,38 @@
-{{!-- Requires parameters:
-isEditable: {Boolean}
-isSendable: {Boolean}
-data: {Object} = {
-  fateSystem: {Object} = {
-    miFP: {Number}
-    maFP: {Number}
-    AFP: {Number}
-    remainingSlots: {Number},
-    cards: {[Object]} = { 
-      id: {String}
-      img: {String}
-      name: {String}
-      localizableName: {String}
-      localizableDescription: {String}
-    }
-  }
-}
+{{!-- Parameters:
+viewModel: {ActorFateViewModel}
+cssClass: {undefined | String}
 --}}
-<section>
-  <div class="sheet-block grid grid-2col flex-column">
+<section class="{{cssClass}}">
+  <div class="sheet-block grid-2col grid-gap-md flex-column">
     {{!-- row 1 --}}
-    <span class="fancy-font line-height">
-      <label for="miFP">{{localize "ambersteel.fateSystem.miFP"}}</label>
-      <span class="primary-font">[{{localize "ambersteel.fateSystem.miFPAbbreviation"}}]</span>
-    </span>
-    <span class="fate-spinner-column-container">
-      {{> inputComponent type="number" min="0" name="miFP" propertyPath="data.data.fateSystem.miFP" isEditable=isEditable }}
-    </span>
+    <div class="flex flex-row flex-middle flex-right">
+      {{> inputLabel text="ambersteel.fateSystem.miFP"}}
+      <div class="flex flex-middle width-md">({{localize "ambersteel.fateSystem.miFPAbbreviation"}})</div>
+    </div>
+    {{> inputNumberSpinner viewModel=viewModel.vmNsMifp }}
     {{!-- row 2 --}}
-    <span class="fancy-font line-height">
-      <label for="maFP">{{localize "ambersteel.fateSystem.maFP"}}</label>
-      <span class="primary-font">[{{localize "ambersteel.fateSystem.maFPAbbreviation"}}]</span>
-    </span>
-    <span class="fate-spinner-column-container">
-      {{> inputComponent type="number" min="0" name="maFP" propertyPath="data.data.fateSystem.maFP" isEditable=isEditable }}
-    </span>
+    <div class="flex flex-row flex-middle flex-right">
+      {{> inputLabel text="ambersteel.fateSystem.maFP"}}
+      <div class="flex flex-middle width-md">({{localize "ambersteel.fateSystem.maFPAbbreviation"}})</div>
+    </div>
+    {{> inputNumberSpinner viewModel=viewModel.vmNsMafp }}
     {{!-- row 3 --}}
-    <span class="fancy-font line-height">
-      <label for="AFP">{{localize "ambersteel.fateSystem.AFP"}}</label>
-      <span class="primary-font">[{{localize "ambersteel.fateSystem.AFPAbbreviation"}}]</span>
-    </span>
-    <span class="fate-spinner-column-container">
-      {{> inputComponent type="number" min="0" name="AFP" propertyPath="data.data.fateSystem.AFP" isEditable=isEditable }}
-    </span>
+    <div class="flex flex-row flex-middle flex-right">
+      {{> inputLabel text="ambersteel.fateSystem.AFP"}}
+      <div class="flex flex-middle width-md">({{localize "ambersteel.fateSystem.AFPAbbreviation"}})</div>
+    </div>
+    {{> inputNumberSpinner viewModel=viewModel.vmNsAfp }}
   </div>
   <div class="flex" style="flex-wrap: wrap;">
-    {{#each data.data.fateSystem.cards as |card key|}}
+    {{#each viewModel.fateCards as |cardViewModel key|}}
     <div class="fate-card-actor-container">
-      {{> "systems/ambersteel/templates/item/fate-card/fate-card.hbs"
-        isEditable=../isEditable
-        isSendable=true
-        data=card
-        itemId=card._id
-      }}
+      {{> "systems/ambersteel/templates/item/fate-card/fate-card.hbs" viewModel=cardViewModel }}
     </div>
     {{/each}}
-    {{#times data.data.fateSystem.remainingSlots}}
+    {{#times viewModel.remainingSlots}}
       <div class="fate-card-actor-container">
         <div class="fate-card">
-          {{> buttonAdd itemType="fate-card" withDialog="true" }}
+          {{> buttonAdd viewModel=../viewModel.vmBtnAddFateCard fill=true cssClass="font-size-xxl" }}
         </div>
       </div>
     {{/times}}

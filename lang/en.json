@@ -35,6 +35,11 @@
       "mental": "Mental Attributes",
       "social": "Social Attributes"
     },
+    "attributeGroupAbbreviations": {
+      "physical": "Physical",
+      "mental": "Mental",
+      "social": "Social"
+    },
     "attributes": {
       "agility": "Agility",
       "endurance": "Endurance",
@@ -75,10 +80,16 @@
     "beliefSystem": {
       "ambition": "Ambition",
       "beliefs": "Beliefs",
-      "instincts": "Instincts"
+      "belief": "Belief",
+      "instincts": "Instincts",
+      "instinct": "Instinct"
     },
     "labels": {
+      "actor": "Actor",
+      "addSkillAbilityDamage": "Add Damage Definition",
       "attribute": "Attribute",
+      "biography": "Biography",
+      "contextMenu": "Context-Menu",
       "level": "Level",
       "attributeAbbreviation": "Attr.",
       "requiredSuccessFailureAbbreviation": "Req. S/F",
@@ -107,6 +118,7 @@
       "tabGmNotes": "GM",
       "confirm": "Confirm",
       "cancel": "Cancel",
+      "ok": "OK",
       "increment": "Increment",
       "decrement": "Decrement",
       "description": "Description",
@@ -122,9 +134,13 @@
       "skill": "Skill",
       "custom": "Custom",
       "sendToChat": "Send to Chat",
+      "takeToPerson": "Take (to person)",
+      "toggleVisibility": "Toggle visibility",
       "messageVisibility": "Visibility",
       "healthStats": "General Health Stats",
       "assetsStats": "General Assets Stats",
+      "assetsOnPerson": "Possessions (on person)",
+      "assetsRemote": "Property",
       "injury": "Injury",
       "maxInjuries": "Max. Injuries",
       "injuries": "Injuries",
@@ -140,11 +156,35 @@
       "duration": "Duration",
       "treatment": "Treatment",
       "treatmentSkill": "Treatment Skill",
+      "magicStamina": "Magic Stamina",
+      "maxMagicStamina": "Max. Magic Stamina",
+      "magicSchool": "Magic School",
       "none": "None",
       "noneAbbreviation": "N/A",
       "category": "Category",
       "item": "Item",
-      "openSheet": "Open Sheet"
+      "bulk": "Bulk",
+      "shape": "Shape",
+      "quantity": "Quantity",
+      "maxQuantity": "Max. Quantity",
+      "carryingCapacity": "Carrying Capacity (in bulk)",
+      "usedCarryingCapacity": "Used carrying capacity (in bulk)",
+      "openSheet": "Open Sheet",
+      "shapeWidth": "Width",
+      "shapeHeight": "Height",
+      "pc": "Player Character",
+      "pcAbbreviation": "PC",
+      "npc": "Non-Player Character",
+      "npcAbbreviation": "NPC",
+      "nameOfNewSkillAbility": "New Skill Ability",
+      "opposedBy": "Opposed By",
+      "roll": "Roll Dice"
+    },
+    "placeholders": {
+      "obstacle": "0 / Opposed+-0 / etc.",
+      "distance": "3' / 1m / 0 / etc.",
+      "condition": "Once per day / etc.",
+      "opposedBy": "Strength / Sneak / etc."
     },
     "fateSystem": {
       "fate": "Fate",
@@ -156,29 +196,7 @@
       "AFPAbbreviation": "AFP",
       "add": "Buy Fate Card",
       "delete": "Delete Fate Card",
-      "fateCard": "Fate Card",
-      "cardsNames": {
-        "singleReRoll": "Single Re-Roll",
-        "clotter": "Clotter",
-        "factCheck": "Fact Check",
-        "justFleshWound": "Just a Flesh-Wound",
-        "hastened": "Hastened",
-        "doubleTheFun": "Double the Fun",
-        "wrongdiagnosis": "Wrong Diagnosis",
-        "defyDeath": "Defy Death",
-        "yesMyLiege": "Yes, my liege"
-      },
-      "cardDescriptions" : {
-        "singleReRoll": "Re-Roll a single negative die.",
-        "clotter": "One active Inj. of choice is now patched up.",
-        "factCheck": "Change a minor plot point in a way your prefer. Work with your GM to make sure it fits the narrative, but they should respect your wish. This could be something like avoiding an NPC death or changing a fact about the plot.",
-        "justFleshWound": "Remove or avoid one non-permanent Inj. of choice.",
-        "hastened": "Gain +1 AP during your turn when in combat.",
-        "doubleTheFun": "Double the number of dice to roll on your next/current test.",
-        "wrongdiagnosis": "Remove or avoid one permanent Inj. of choice.",
-        "defyDeath": "Leap from death's door, remove 1 active Inj. of choice and be at 1 HP; Alternatively, avoid a narratively-driven death. The GM will decide the character's alternative fate. They could be captured, very badly injured or become indebted to someone or something.",
-        "yesMyLiege": "Work with your GM to create a follower/hireling who will now be at your command/employ."
-      }
+      "fateCard": "Fate Card"
     },
     "roll": {
       "success": "Success",
@@ -211,7 +229,12 @@
       "titleConfirmDeletionIllnessQuery": "Confirm Deletion of Illness",
       "titleConfirmDeletionFateCardQuery": "Confirm Deletion of Fate-Card",
       "titleConfirmDeletionPossessionQuery": "Confirm Deletion of Possession",
-      "titleConfirmDeletionPropertyQuery": "Confirm Deletion of Property"
+      "titleConfirmDeletionPropertyQuery": "Confirm Deletion of Property",
+      "titleInventoryFull": "Inventory full",
+      "titleItemsDropped": "Items dropped",
+      "titleSelect": "Select",
+      "contentItemsDropped": "The following items had to be dropped from the item grid:",
+      "contentInventoryFull": "There is not enough room on the item grid to add the item to it."
     },
     "attackTypes": {
       "singleTarget": "Single-Target",
@@ -248,6 +271,9 @@
     "illnessStates": {
       "active": "Active",
       "treated": "Treated"
+    },
+    "rules": {
+      "hintToughnessTestRequired": "Half of the maximum number of injuries reached. Any further injury incurred requires a toughness test to be passed. If failed, suffer +1 exhaustion."
     }
   }
 }

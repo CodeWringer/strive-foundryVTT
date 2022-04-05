@@ -1,45 +1,10 @@
-{{!-- Requires parameters:
-isEditable: {Boolean}
-isSendable: {Boolean}
-attributeGroups: {Object} = {
-    physical: {Object} = {
-        name: {String}
-        localizableName: {String}
-        attributes: {[Object]} -> see component-attribute-table.hbs
-    },
-    mental: {Object}: {Object} = {
-        name: {String}
-        localizableName: {String}
-        attributes: {[Object]} -> see component-attribute-table.hbs
-    },
-    social: {Object}: {Object} = {
-        name: {String}
-        localizableName: {String}
-        attributes: {[Object]} -> see component-attribute-table.hbs
-    }
-}
+{{!-- Parameters:
+viewModel: {ActorAttributesViewModel}
+cssClass: {undefined | String}
 --}}
-<section>
-    {{!-- Attributes --}}
-    {{> "systems/ambersteel/templates/actor/components/component-attribute-table.hbs" 
-        isEditable=isEditable
-        isSendable=isSendable
-        localizableAttributeGroupName=attributeGroups.physical.localizableName
-        attributeGroupName=attributeGroups.physical.name
-        attributes=attributeGroups.physical.attributes
-    }}
-    {{> "systems/ambersteel/templates/actor/components/component-attribute-table.hbs" 
-        isEditable=isEditable
-        isSendable=isSendable
-        localizableAttributeGroupName=attributeGroups.mental.localizableName 
-        attributeGroupName=attributeGroups.mental.name 
-        attributes=attributeGroups.mental.attributes
-    }}
-    {{> "systems/ambersteel/templates/actor/components/component-attribute-table.hbs"
-        isEditable=isEditable
-        isSendable=isSendable
-        localizableAttributeGroupName=attributeGroups.social.localizableName 
-        attributeGroupName=attributeGroups.social.name 
-        attributes=attributeGroups.social.attributes
-    }}
+<section class="{{cssClass}}">
+  {{!-- Attributes --}}
+  {{> "systems/ambersteel/templates/actor/components/component-attribute-table.hbs" viewModel=viewModel.attributesPhysicalViewModel }}
+  {{> "systems/ambersteel/templates/actor/components/component-attribute-table.hbs" viewModel=viewModel.attributesMentalViewModel }}
+  {{> "systems/ambersteel/templates/actor/components/component-attribute-table.hbs" viewModel=viewModel.attributesSocialViewModel }}
 </section>

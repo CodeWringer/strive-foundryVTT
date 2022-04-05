@@ -1,5 +1,6 @@
 import AmbersteelBaseItem from "./ambersteel-base-item.mjs";
 import { TEMPLATES } from "../../../templatePreloader.mjs";
+import FateCardChatMessageViewModel from "../../../../templates/item/fate-card/fate-card-chat-message-viewmodel.mjs";
 
 export default class AmbersteelFateCardItem extends AmbersteelBaseItem {
   /**
@@ -13,34 +14,44 @@ export default class AmbersteelFateCardItem extends AmbersteelBaseItem {
   }
 
   /** @override */
-  get img() { return "icons/svg/wing.svg"; }
+  get defaultImg() { return "icons/svg/wing.svg"; }
 
   /**
    * Chat message template path. 
    * @type {String}
    */
-  get chatMessageTemplate() { return TEMPLATES.FATE_CARD; }
-
-  /** @override */
-  prepareData() {
-    this.parent.data.img = this.img;
-  }
+  get chatMessageTemplate() { return TEMPLATES.FATE_CARD_CHAT_MESSAGE; }
 
   /** @override */
   async getChatData() {
-    const messageBase = super.getChatData();
-    const renderedContent = await renderTemplate(this.chatMessageTemplate, {
-      isEditable: false,
-      isSendable: false,
-      item: {
-        data: this.parent.data.data,
-      }
-    });
+    const chatData = super.getChatData();
+    chatData.flavor = game.i18n.localize("ambersteel.labels.fateCard");
+    
+    return chatData;
+  }
 
-    return {
-      ...messageBase,
-      flavor: game.i18n.localize("ambersteel.fateSystem.fateCard"),
-      renderedContent: renderedContent
-    }
+  /**
+   * Returns an instance of a view model for use in a chat message. 
+   * @returns {FateCardChatMessageViewModel}
+   * @param {Object | undefined} overrides Optional. An object that allows overriding any of the view model properties. 
+   * @param {String | undefined} overrides.id
+   * @param {Boolean | undefined} overrides.isEditable
+   * @param {Boolean | undefined} overrides.isSendable
+   * @param {Boolean | undefined} overrides.isOwner
+   * @param {Boolean | undefined} overrides.isGM
+   * @param {Item | undefined} overrides.item
+   * @override
+   */
+  getChatViewModel(overrides = {}) {
+    const base = super.getChatViewModel();
+    return new FateCardChatMessageViewModel({
+      id: base.id,
+      isEditable: base.isEditable,
+      isSendable: base.isSendable,
+      isOwner: base.isOwner,
+      isGM: base.isGM,
+      item: this.parent,
+      ...overrides,
+    });
   }
 }

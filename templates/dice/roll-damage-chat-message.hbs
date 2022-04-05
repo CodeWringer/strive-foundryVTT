@@ -1,0 +1,38 @@
+{{!-- Parameters:
+damageTotal: {String | Number}
+rolls: {Array<Object>} = {
+  cssClass: {String}
+  damage: {String}
+  localizedDamageType: {String}
+  diceResults: {Array<Object>} = {
+    value: {String}
+    isDiceResult: {Boolean}
+  }
+}
+title: String
+cssClass: {undefined | String}
+--}}
+<div class="dice-roll-chat-message-container{{#if cssClass}} {{cssClass}}{{/if}}">
+  {{#if title}}
+    <h2 class="dice-title">{{title}}</h2>
+  {{/if}}
+  <div class="dice-rolls-container">
+    <ol class="unstyled-list">
+      {{#each rolls as |roll index|}}
+        <li class="flex flex-column sheet-block margin-b-md{{#if roll.cssClass}} {{roll.cssClass}}{{/if}}">
+          <div class="flex flex-row">
+            <h3 class="roll-damage-value">{{roll.damage}} {{roll.localizedDamageType}}</h3>
+          </div>
+          <ol class="dice-rolls">
+            {{#each roll.diceResults as |diceResult diceIndex|}}
+              <li class="flex flex-center{{#if diceResult.isDiceResult}} roll d6 die die-sm{{/if}}">{{diceResult.value}}</li>
+            {{/each}}
+          </ol>
+        </li>
+      {{/each}}
+    </ol>
+  </div>
+  <div class="flex flex-center">
+    <h3 class="roll-damage-value-total">{{damageTotal}}</h3>
+  </div>
+</div>

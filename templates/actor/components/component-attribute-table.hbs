@@ -1,28 +1,14 @@
-{{!-- Requires parameters: 
-isEditable: {Boolean}
-isSendable: {Boolean}
-localizableAttributeGroupName: {String}
-attributeGroupName: {String}
-attributes: {[Object]} = {
-    name: {String}
-    localizableName: {String}
-    localizableAbbreviation: {String}
-    value: {Number}
-    successes: {Number}
-    failures: {Number}
-    requiredSuccessses: {Number}
-    requiredFailures: {Number}
-}
+{{!-- Parameters: 
+viewModel: {AttributeTableViewModel}
+cssClass: {undefined | String}
 --}}
-<div>
+<div class="{{cssClass}}">
     <table class="attribute-table">
         <tbody>
             <tr class="fancy-font header-row">
-                {{#if isEditable}}
-                    <th class="attribute-column-roll"></th>
-                {{/if}}
+                <th class="attribute-column-roll"></th>
                 <th class="attribute-column-name">
-                    {{localize localizableAttributeGroupName}}
+                    {{localize viewModel.localizableAttributeGroupName}}
                 </th>
                 <th class="attribute-column-abbreviation"></th>
                 <th class="attribute-column-level">
@@ -38,37 +24,28 @@ attributes: {[Object]} = {
                     {{localize "ambersteel.labels.failureAbbreviation"}}
                 </th>
             </tr>
-            {{#each attributes as | att |}}
-            <tr class="item attribute-item" data-att-group-name="{{../attributeGroupName}}" data-att-name="{{att.name}}">
-                {{#if ../isEditable}}
-                    <td class="attribute-column-roll">
-                        {{> buttonRoll
-                            type="dice-pool"
-                            propertyPath=(concat "data.data.attributes." ../attributeGroupName "." att.name ".value")
-                            chatTitle=(localize att.localizableName)
-                            callback="advanceAttributeBasedOnRollResult"
-                            callbackData=att.name
-                            contextOverride=../this
-                        }}
-                    </td>
-                {{/if}}
+            {{#each viewModel.attributeViewModels as |vm index|}}
+            <tr class="item attribute-item" data-att-group-name="{{../viewModel.attributeGroupName}}" data-att-name="{{vm.attributeName}}">
+                <td class="attribute-column-roll">
+                    {{> buttonRoll viewModel=vm.vmBtnRoll }}
+                </td>
                 <td class="attribute-column-name flex fancy-font">
-                    {{localize att.localizableName}}
+                    {{localize vm.localizableName}}
                 </td>
                 <td class="attribute-column-abbreviation fancy-font">
-                    [{{localize att.localizableAbbreviation}}]
+                    [{{localize vm.localizableAbbreviation}}]
                 </td>
                 <td class="attribute-column-level">
-                    {{> inputComponent type="number" min="0" propertyPath=(concat "data.data.attributes." ../attributeGroupName "." att.name ".value") isEditable=../isEditable contextOverride=../this }}
+                    {{> inputNumberSpinner viewModel=vm.vmNsLevel }}
                 </td>
                 <td class="attribute-column-requirements">
-                    {{att.requiredSuccessses}} / {{att.requiredFailures}}
+                    {{vm.requiredSuccessses}} / {{vm.requiredFailures}}
                 </td>
                 <td class="attribute-column-successes">
-                    {{> inputComponent type="number" min="0" propertyPath=(concat "data.data.attributes." ../attributeGroupName "." att.name ".successes") isEditable=../isEditable contextOverride=../this }}
+                    {{> inputNumberSpinner viewModel=vm.vmNsSuccesses }}
                 </td>
                 <td class="attribute-column-failures">
-                    {{> inputComponent type="number" min="0" propertyPath=(concat "data.data.attributes." ../attributeGroupName "." att.name ".failures") isEditable=../isEditable contextOverride=../this }}
+                    {{> inputNumberSpinner viewModel=vm.vmNsFailures }}
                 </td>
             </tr>
             {{/each}}

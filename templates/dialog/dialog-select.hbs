@@ -1,0 +1,22 @@
+{{!-- Parameters:
+localizableLabel: {String}
+options: {Array<ChoiceOption>}
+selected: Object
+cssClass: {undefined | String}
+--}}
+<section class="selection{{#if cssClass}} {{cssClass}}{{/if}}">
+  <div class="sheet-block grid grid-2col">
+    <div>
+      <label class="line-height fancy-font pad-sm" for="selection">{{localize localizableLabel}}</label>
+    </div>
+    <div class="flex">
+      <select id="selection" class="ambersteel-item-select" data-property-path="selected">
+        {{#select selected}}
+        {{#each options as |option key|}}
+        <option value="{{option.value}}">{{option.localizedValue}}</option>
+        {{/each}}
+        {{/select}}
+      </select>
+    </div>
+  </div>
+</section>

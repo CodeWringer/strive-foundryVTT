@@ -79,13 +79,16 @@
           "HP": 0,
           "maxInjuries": 0,
           "maxExhaustion": 0,
-          "exhaustion": 0
+          "exhaustion": 0,
+          "magicStamina": 0
         },
         "assets": {
-          "carryingCapacity": 0
+          "grid": [],
+          "gridIndices": []
         },
         "biography": "",
-        "gmNotes": ""
+        "gmNotes": "",
+        "isCustom": false
       }
     },
     "pc": {
@@ -116,12 +119,13 @@
     },
     "skill": {
       "templates": ["base"],
-      "relatedAttribute": "",
+      "relatedAttribute": "agility",
       "value": 0,
       "successes": 0,
       "failures": 0,
       "abilities": [],
-      "category": ""
+      "category": "",
+      "isMagicSchool": false
     },
     "fate-card": {
       "templates": ["base"],
@@ -134,7 +138,12 @@
     "item": {
       "templates": ["base"],
       "quantity": 1,
-      "bulk": 1
+      "maxQuantity": 1,
+      "shape": {
+        "width": 1,
+        "height": 1
+      },
+      "isOnPerson": false
     },
     "injury": {
       "templates": ["base"],

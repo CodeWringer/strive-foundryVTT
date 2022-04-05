@@ -1,7 +1,7 @@
 import PreparedChatData from '../../../dto/prepared-chat-data.mjs';
-import * as UpdateUtil from "../../../utils/document-update-utility.mjs";
 import * as ChatUtil from "../../../utils/chat-utility.mjs";
-import { TEMPLATES } from "../../../templatePreloader.mjs";
+import { createUUID } from '../../../utils/uuid-utility.mjs';
+import SheetViewModel from '../../../components/sheet-viewmodel.mjs';
 
 export default class AmbersteelBaseItem {
   /**
@@ -22,21 +22,23 @@ export default class AmbersteelBaseItem {
     this.parent.getChatData = this.getChatData.bind(this);
     this.parent.sendToChat = this.sendToChat.bind(this);
     this.parent.sendPropertyToChat = this.sendPropertyToChat.bind(this);
-    this.parent.updateProperty = this.updateProperty.bind(this);
+    this.parent.getChatViewModel = this.getChatViewModel.bind(this);
   }
 
   /**
-   * Returns the icon image path for this type of item. 
-   * @returns {String} The icon image path. 
+   * Returns the default icon image path for this type of item. 
+   * @type {String}
    * @virtual
+   * @readonly
    */
-  get img() { return "icons/svg/item-bag.svg"; }
+  get defaultImg() { throw new Error("NotImplementedException"); }
 
-    /**
+  /**
    * Chat message template path. 
    * @type {String}
+   * @readonly
    */
-  get chatMessageTemplate() { return TEMPLATES.ITEM_CHAT_MESSAGE; }
+  get chatMessageTemplate() { throw new Error("NotImplementedException"); }
 
   /**
    * Prepare base data for the item. 
@@ -48,9 +50,10 @@ export default class AmbersteelBaseItem {
    * type should be the most complex a 'calculation' as it gets. 
    * 
    * Base data *is* persisted!
+   * @param {AmbersteelItem} context
    * @virtual
    */
-  prepareData() { }
+  prepareData(context) { }
 
   /**
    * Prepare derived data for the item. 
@@ -59,9 +62,10 @@ export default class AmbersteelBaseItem {
    * undefined and have meaningful values. 
    * 
    * Derived data is *not* persisted!
+   * @param {AmbersteelItem} context
    * @virtual
    */
-  prepareDerivedData() { }
+  prepareDerivedData(context) { }
 
   /**
    * Base implementation of returning data for a chat message, based on this item. 
@@ -71,16 +75,39 @@ export default class AmbersteelBaseItem {
    */
   async getChatData() {
     const actor = this.parent.parent;
+    const vm = this.getChatViewModel();
+
     const renderedContent = await renderTemplate(this.chatMessageTemplate, {
-      item: this.parent,
-      isEditable: false,
-      isSendable: false
+      viewModel: vm,
     });
 
     return new PreparedChatData({
       renderedContent: renderedContent,
       actor: actor, 
-      sound: "../sounds/notify.wav"
+      sound: "../sounds/notify.wav",
+      viewModel: vm,
+    });
+  }
+
+  /**
+   * Returns an instance of a view model for use in a chat message. 
+   * @returns {SheetViewModel}
+   * @param {Object | undefined} overrides Optional. An object that allows overriding any of the view model properties. 
+   * @param {String | undefined} overrides.id
+   * @param {Boolean | undefined} overrides.isEditable
+   * @param {Boolean | undefined} overrides.isSendable
+   * @param {Boolean | undefined} overrides.isOwner
+   * @param {Boolean | undefined} overrides.isGM
+   * @virtual
+   */
+  getChatViewModel(overrides = {}) {
+    return new SheetViewModel({
+      id: `${this.parent.id}-${createUUID()}`,
+      isEditable: false,
+      isSendable: false,
+      isOwner: this.parent.isOwner ?? this.parent.owner ?? false,
+      isGM: game.user.isGM,
+      ...overrides,
     });
   }
 
@@ -112,18 +139,5 @@ export default class AmbersteelBaseItem {
       actor: this.parent.actor,
       visibilityMode: visibilityMode
     });
-  }
-
-  /**
-   * Updates a property on the parent item, identified via the given path. 
-   * @param {String} propertyPath Path leading to the property to update, on the parent item. 
-   *        Array-accessing via brackets is supported. Property-accessing via brackets is *not* supported. 
-   *        E.g.: "data.attributes[0].value"
-   * @param {any} newValue The value to assign to the property. 
-   * @async
-   * @protected
-   */
-  async updateProperty(propertyPath, newValue) {
-    await UpdateUtil.updateProperty(this.parent, propertyPath, newValue);
   }
 }

@@ -1,11 +1,51 @@
-{{!-- Requires parameters:
-isEditable: {Boolean}
-isSendable: {Boolean}
-data: {Object} where Object = {
-  TODO
-}
+{{!-- Parameters:
+viewModel: {ActorAssetsViewModel}
+cssClass: {undefined | String}
 --}}
-<section>
-  <h2>{{localize "ambersteel.labels.assetsStats"}}</h2>
-  {{!-- TODO --}}
+<section class="{{cssClass}}">
+  {{!-- Personal assets --}}
+  <h2>{{localize "ambersteel.labels.assetsOnPerson"}}</h2>
+  <div class="grid-2col grid-gap-md margin-b-md">
+    <div class="sheet-block">
+      <div class="flex flex-row">
+        <div class="flex-grow">
+          {{> inputLabel for="carryingCapacity" text="ambersteel.labels.carryingCapacity"}}
+        </div>
+        <span class="width-md">
+          <div class="ambersteel-read-only pad-sm fill">
+            {{> inputNumberSpinner viewModel=viewModel.vmNsMaxBulk }}
+          </div>
+        </span>
+      </div>
+    </div>
+    <div class="sheet-block">
+      <div class="flex flex-row">
+        <div class="flex-grow">
+          {{> inputLabel for="totalBulk" text="ambersteel.labels.usedCarryingCapacity"}}
+        </div>
+        <span class="width-md">
+          {{> inputNumberSpinner viewModel=viewModel.vmNsTotalBulk }}
+        </span>
+      </div>
+    </div>
+  </div>
+  {{> itemGridView viewModel=viewModel.vmIgv }}
+  {{!-- Remote assets --}}
+  <h2>{{localize "ambersteel.labels.assetsRemote"}}</h2>
+  <ol class="unstyled-list alternating-rows">
+    {{#each viewModel.itemViewModels as |vm key|}}
+      <li class="ambersteel-list-row sheet-block">
+        {{> "systems/ambersteel/templates/item/item/item-list-item.hbs" viewModel=vm }}
+      </li>
+    {{/each}}
+    <li class="ambersteel-list-row ambersteel-list-footer">
+      <div class="fill flex flex-row">
+        <span class="flex-grow"></span>
+        {{!-- Add property --}}
+        <span class="width-sm">
+          {{> buttonAdd viewModel=viewModel.vmBtnAddItem }}
+        </span>
+      </div>
+    </li>
+  </ol>
 </section>

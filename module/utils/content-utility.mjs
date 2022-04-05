@@ -42,7 +42,7 @@ export function getItemDeclarations(type, where = contentCollectionTypes.all) {
     for (const pack of game.packs) {
       for (const entry of pack.index) {
         if (entry.type == type) {
-          result.push(new ItemEntry(entry._id, entry.name, contentCollectionTypes.compendia));
+          result.push(new ItemEntry(getId(entry), entry.name, contentCollectionTypes.compendia));
         }
       }
     }
@@ -56,7 +56,7 @@ export function getItemDeclarations(type, where = contentCollectionTypes.all) {
       for (const pack of module.packs) {
         if (pack.metadata.name == type) {
           for (const entry of pack.index) {
-            result.push(new ItemEntry(entry._id, entry.name, contentCollectionTypes.modules));
+            result.push(new ItemEntry(getId(entry), entry.name, contentCollectionTypes.modules));
           }
         }
       }
@@ -65,9 +65,9 @@ export function getItemDeclarations(type, where = contentCollectionTypes.all) {
 
   // Collect from world items. 
   if (where === contentCollectionTypes.all || where === contentCollectionTypes.world) {
-    for (const item of game.items) {
-      if (item.type === type) {
-        result.push(new ItemEntry(item._id, item.name, contentCollectionTypes.world));
+    for (const entry of game.items) {
+      if (entry.type === type) {
+        result.push(new ItemEntry(getId(entry), entry.name, contentCollectionTypes.world));
       }
     }
   }
@@ -145,37 +145,45 @@ export async function findRollTable(id, where = contentCollectionTypes.all) {
  */
 async function _getDocumentFrom(id, where = contentCollectionTypes.all, worldCollections = [game.items, game.actors, game.journal, game.tables]) {
   return new Promise(async (resolve, reject) => {
-    let result = undefined;
-
     // Search in world items. 
     if (where === contentCollectionTypes.all || where === contentCollectionTypes.world) {
       for (const worldCollection of worldCollections) {
         for (const entry of worldCollection) {
-          if (entry.id === id || entry.name === id) {
-            result = entry;
+          if (getId(entry) === id || entry.name === id) {
+            resolve(entry);
+            return;
+          } else if (worldCollection == game.actors) {
+            // Also search in actors, because they can have embedded documents. 
+            const result = entry.items.find(it => { return getId(it) === id || it.name === id })
+            if (result !== undefined) {
+              resolve(result);
+              return;
+            }
           }
         }
       }
     }
   
     // Search in compendia. 
-    if (result === undefined) {
-      if (where === contentCollectionTypes.all || where === contentCollectionTypes.compendia) {
-        result = await _getDocumentFromCompendia(id);
+    if (where === contentCollectionTypes.all || where === contentCollectionTypes.compendia) {
+      const result = await _getDocumentFromCompendia(id);
+      if (result !== undefined) {
+        resolve(result);
+        return;
       }
     }
     
     // Search in module compendia. 
-    if (result === undefined) {
-      if (where === contentCollectionTypes.all || where === contentCollectionTypes.modules) {
-        result = await _getDocumentFromModuleCompendia(id);
+    if (where === contentCollectionTypes.all || where === contentCollectionTypes.modules) {
+      const result = await _getDocumentFromModuleCompendia(id);
+      if (result !== undefined) {
+        resolve(result);
+        return;
       }
     }
   
-    if (result === undefined) {
-      console.warn(`Failed to retrieve document with id '${id}'`);
-    }
-    resolve(result);
+    game.ambersteel.logger.logWarn(`Failed to retrieve document with id '${id}'`);
+    reject(result);
   });
 }
 
@@ -192,8 +200,8 @@ async function _getDocumentFromCompendia(id) {
 
     for (const pack of game.packs) {
       for (const entry of pack.index) {
-        if (entry._id === id || entry.name === id) {
-          result = await pack.getDocument(entry._id);
+        if (getId(entry) === id || entry.name === id) {
+          result = await pack.getDocument(getId(entry));
         }
       }
     }
@@ -218,8 +226,8 @@ async function _getDocumentFromModuleCompendia(id) {
       for (const pack of module.packs) {
         if (pack.metadata.name == type) {
           for (const entry of pack.index) {
-            if (entry._id === id || entry.name === id) {
-              result = await pack.getDocument(entry._id);
+            if (getId(entry) === id || entry.name === id) {
+              result = await pack.getDocument(getId(entry));
             }
           }
         }
@@ -227,4 +235,15 @@ async function _getDocumentFromModuleCompendia(id) {
     }
     resolve(result);
   });
+}
+
+function getId(item) {
+  if (item.id !== undefined) {
+    return item.id;
+  } else if (item._id !== undefined) {
+    return item._id;
+  } else {
+    game.ambersteel.logger.logWarn('Failed to get id from given item:', item);
+    return undefined;
+  }
 }
