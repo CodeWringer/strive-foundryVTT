@@ -1,5 +1,17 @@
 {
   "ambersteel": {
+    "core": {
+      "titleMigrationRequired": "Data Migration Required",
+      "migrationFrom": "Your world is currently on system version: ",
+      "migrationTo": "Your world will be migrated to system version: ",
+      "migratonHints": "Please make sure none of your players are logged in to the world during migration. Also, please be sure to make a manual backup copy of the world, before beginning migration.",
+      "migrationCancelNote": "Please note that you can cancel this process, but your world may not work properly with the current version of the system.",
+      "titleMigrationComplete": "World Migration Complete",
+      "migrationCompleteHint": "Please exit and save your world once to ensure the migration changes are properly saved, before continuing to use the world. After that, your world should be good to go!",
+      "migrationRequiredUserWarning": "It seems this world is not up to date with the installed system version. Please coordinate with your game master and log out while they migrate the world system.",
+      "titleMigrationError": "Migration Error",
+      "migrationError": "WARNING: An error has occurred during processing."
+    },
     "weaponTypes": {
       "unarmed": "Unarmed",
       "shortBlade": "Short Blade",

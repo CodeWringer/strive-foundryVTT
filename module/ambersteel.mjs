@@ -1,5 +1,8 @@
 // Import main config.
 import { ambersteel as ambersteelConfig } from "./config.js"
+import * as DialogUtil from "./utils/dialog-utility.mjs";
+import WorldSystemVersion from "./migration/world-system-version.mjs";
+import MigratorInitiator from "./migration/migrator-initiator.mjs";
 // Import document classes.
 import { AmbersteelActor } from "./documents/actor.mjs";
 import { AmbersteelItem } from "./documents/item.mjs";
@@ -490,9 +493,56 @@ Handlebars.registerPartial('inputLabel', `{{#> "${TEMPLATES.COMPONENT_INPUT_LABE
 /*  Hooks                                       */
 /* -------------------------------------------- */
 
-// Hooks.once("ready", async function() {
-// 
-// });
+Hooks.once("ready", async function() {
+  const migrator = new MigratorInitiator();
+  const worldSystemVersion = new WorldSystemVersion();
+  
+  if (migrator.isApplicable() === true) {
+    if (game.user.isGM === true) {
+      const worldVersionString = worldSystemVersion.version.toString();
+      const worldVersionMigratedString = migrator.finalMigrationVersion.toString();
+
+      // Display warning to GM. 
+      const dialogResult = await DialogUtil.showConfirmationDialog({
+        localizableTitle: "ambersteel.core.titleMigrationRequired",
+        content: `<p>${game.i18n.localize("ambersteel.core.migrationFrom")}${worldVersionString}</p>`
+        + `<p>${game.i18n.localize("ambersteel.core.migrationTo")}${worldVersionMigratedString}</p>`
+        + "<hr>"
+        + `<p class="hint-card">${game.i18n.localize("ambersteel.core.migratonHints")}</p>`
+        + `<h3>${game.i18n.localize("ambersteel.core.migrationCancelNote")}</h3>`
+      });
+
+      if (dialogResult.confirmed !== true) {
+        return;
+      }
+      // Do migrations. 
+      try {
+        await migrator.migrateAsPossible();
+      } catch (error) {
+        await DialogUtil.showPlainDialog({
+          localizableTitle: "ambersteel.core.titleMigrationError",
+          localizedContent: `<p>${game.i18n.localize("ambersteel.core.migrationError")}</p>`
+          + `<p>${error}</p>`,
+        });
+        return;
+      }
+
+      // Display migration completion dialog. 
+      await DialogUtil.showPlainDialog({
+        localizableTitle: "ambersteel.core.titleMigrationComplete",
+        localizedContent: game.i18n.localize("ambersteel.core.migrationCompleteHint"),
+      });
+    } else {
+      // Display warning to non-GM. 
+      await DialogUtil.showPlainDialog({
+        localizableTitle: "ambersteel.core.titleMigrationRequired",
+        localizedContent: game.i18n.localize("ambersteel.core.migrationRequiredUserWarning"),
+      });
+    }
+  } else {
+    game.ambersteel.logger.logVerbose("Version up to date - skipping migrations");
+  }
+});
 
 Hooks.on("preCreateActor", async function(document, createData, options, userId) {
   // This ensures the proper "default" image is set, upon creation of the document. 

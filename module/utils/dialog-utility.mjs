@@ -1,6 +1,6 @@
 import DialogResult from '../dto/dialog-result.mjs';
 import { TEMPLATES } from '../templatePreloader.mjs';
-import { getElementValue, setSelectedOptionByValue} from './sheet-utility.mjs';
+import { getElementValue, setSelectedOptionByValue } from './sheet-utility.mjs';
 
 /**
  * Shows a dialog to the user and returns a promise with the result of the user interaction. 
@@ -69,6 +69,7 @@ export async function showDialog(args = {}, dialogData) {
  * Shows a confirmation dialog. 
  * @param {Object} args Optional arguments to pass to the rendering function. 
  * @param {String} args.localizableTitle Localization string for the dialog title. 
+ * @param {String | undefined} args.content Optional. HTML content to show as the body of the dialog. 
  * @returns {Promise<Boolean>} Resolves, when the dialog is closed. 
  *          Is true, when the dialog was closed with confirmation. 
  * @async
@@ -85,7 +86,7 @@ export async function showConfirmationDialog(args = {}) {
     return new Promise(async (resolve, reject) => {
         const dialog = new Dialog({
             title: game.i18n.localize(args.localizableTitle),
-            content: "",
+            content: args.content ?? "",
             buttons: {
                 confirm: {
                     icon: '<i class="fas fa-check"></i>',
@@ -103,7 +104,9 @@ export async function showConfirmationDialog(args = {}) {
             default: "cancel",
             render: html => {},
             close: html => {
-                resolve(mergedDialogData.confirmed);
+                resolve({
+                    confirmed: mergedDialogData.confirmed,
+                });
             }
         });
         dialog.render(true);
