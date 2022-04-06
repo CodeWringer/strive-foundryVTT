@@ -1,26 +1,44 @@
 import VersionCode from "./version-code.mjs";
 
 /**
- * Provides a means to read/write the current world's system version. 
+ * Provides a means to read/write the world's system version. 
  */
 export default class WorldSystemVersion {
   /**
    * The FoundryVTT setting key for the system. 
+   * 
+   * This value must match the 'name' field defined in 'system.json'. 
    * @type {String}
    * @private
    * @readonly
    */
-  get _settingKeyAmbersteel() { return "ambersteel"; };
+  get _settingNamespace() { return "ambersteel"; }
   
   /**
    * The FoundryVTT setting key for the world version. 
+   * 
+   * This is a hashed verison of the game world's id. This ensures the setting's name is 
+   * unique (enough) and doesn't contain any white space, hyphens, underscores or any 
+   * other non-alphanumeric characters. 
    * @type {String}
    * @private
    * @readonly
    */
-  get _settingKeyWorldVersion() { return `worldSystemVersion-${game.world.id}`; };
+  get _settingKey() { return "worldSystemVersion"; }
+  
+  /**
+   * The FoundryVTT setting name for the world version. 
+   * @type {String}
+   * @private
+   * @readonly
+   */
+  get _settingName() { return "worldSystemVersion"; }
 
   /**
+   * Gets or sets the version represented by this object. 
+   * 
+   * IMPORTANT: Changes to this value are not automatically persisted! 
+   * Call `save()` to persist the change! 
    * @type {VersionCode}
    */
   version = undefined;
@@ -29,39 +47,46 @@ export default class WorldSystemVersion {
     this.version = this._get();
   }
 
+  /**
+   * Persists the currently set version as the world system version. 
+   */
   save() {
-    // Ensure current world system version is trackable. 
-    try {
-      game.settings.get(this._settingKeyAmbersteel, this._settingKeyWorldVersion); 
-    } catch (error) {
-      game.settings.register(this._settingKeyAmbersteel, this._settingKeyWorldVersion, {
-        name: "World Version",
-        hint: "Used to know if world migration is necessary",
-        scope: "world",
-        config: false,
-        default: this.version.toString(), 
-        type: String,
-      });
-    }
+    this._ensureSetting();
 
     // Set the world system version.
-    game.settings.set(this._settingKeyAmbersteel, this._settingKeyWorldVersion, this.version.toString()); 
+    game.settings.set(this._settingNamespace, this._settingKey, this.version.toString()); 
   }
 
   /**
-   * Returns the current version code of the installed and loaded system. 
+   * Returns the world system version. 
    * @returns {VersionCode}
    * @private
    */
   _get() {
+    this._ensureSetting();
+
+    const worldSystemVersion = game.settings.get(this._settingNamespace, this._settingKey); 
+    return VersionCode.fromString(worldSystemVersion);
+  }
+
+  /**
+   * Ensures the world system version is a registered world setting. 
+   * 
+   * IMPORTANT: This **must** be called internally, before every attempt to access 
+   * the setting via `game.settings.get` or `game.settings.set`! 
+   * @private
+   */
+  _ensureSetting() {
     const systemVersion = VersionCode.fromString(game.system.data.version);
 
-    try {
-      // Get world version from settings, if possible. 
-      const worldSystemVersion = game.settings.get(this._settingKeyAmbersteel, this._settingKeyWorldVersion); 
-      return VersionCode.fromString(worldSystemVersion);
-    } catch (error) {
-      return systemVersion;
-    }
+    // Ensures the setting is registered and available. 
+    game.settings.register(this._settingNamespace, this._settingKey, {
+      name: this._settingName,
+      hint: "Used to know if world migration is necessary",
+      scope: "world",
+      config: false,
+      default: systemVersion.toString(), 
+      type: String,
+    });
   }
 }

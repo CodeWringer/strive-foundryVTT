@@ -496,11 +496,12 @@ Handlebars.registerPartial('inputLabel', `{{#> "${TEMPLATES.COMPONENT_INPUT_LABE
 Hooks.once("ready", async function() {
   const migrator = new MigratorInitiator();
   const worldSystemVersion = new WorldSystemVersion();
-  const worldVersionString = worldSystemVersion.version.toString();
-  const worldVersionMigratedString = migrator.finalMigrationVersion.toString();
-
+  
   if (migrator.isApplicable() === true) {
     if (game.user.isGM === true) {
+      const worldVersionString = worldSystemVersion.version.toString();
+      const worldVersionMigratedString = migrator.finalMigrationVersion.toString();
+
       // Display warning to GM. 
       const dialogResult = await DialogUtil.showConfirmationDialog({
         localizableTitle: "ambersteel.core.titleMigrationRequired",
@@ -538,6 +539,8 @@ Hooks.once("ready", async function() {
         localizedContent: game.i18n.localize("ambersteel.core.migrationRequiredUserWarning"),
       });
     }
+  } else {
+    game.ambersteel.logger.logVerbose("Version up to date - skipping migrations");
   }
 });
 
