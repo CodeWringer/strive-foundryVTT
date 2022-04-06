@@ -32,7 +32,7 @@ export default class AbstractMigrator {
   get targetVersion() { throw new Error("NotImplementedException"); };
   
   /**
-   * The world version must be **equal** to this, in order for this migrator to be able to do its work. 
+   * This is the system version that the world is set to, once this migrator's work is complete. 
    * 
    * Implementing types **must** override this and provide an actual version number!
    * @type {VersionCode}
@@ -43,6 +43,7 @@ export default class AbstractMigrator {
   get migratedVersion() { throw new Error("NotImplementedException"); };
 
   /**
+   * Represents the world's system version. 
    * @type {WorldSystemVersion}
    * @private
    */
@@ -88,7 +89,6 @@ export default class AbstractMigrator {
    * @protected
    */
   async _doWork(args = {}) {
-    // Inheriting classes **must** implement this!
     throw new Error("NotImplementedException");
   }
 }

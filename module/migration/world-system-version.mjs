@@ -16,10 +16,6 @@ export default class WorldSystemVersion {
   
   /**
    * The FoundryVTT setting key for the world version. 
-   * 
-   * This is a hashed verison of the game world's id. This ensures the setting's name is 
-   * unique (enough) and doesn't contain any white space, hyphens, underscores or any 
-   * other non-alphanumeric characters. 
    * @type {String}
    * @private
    * @readonly
