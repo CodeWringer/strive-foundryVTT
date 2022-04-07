@@ -1,167 +1,36 @@
-{{!-- Required context:
-isEditable: {Boolean}
-isSendable: {Boolean}
-skillAbilitiesInitiallyVisible: {Boolean}
-skillItemId: {String}
-itemId: {String}
-abilities: {[SkillAbility]} = {
-  name: {String}
-  description: {String}
-  requiredLevel: {Number}
-  condition: {String}
-  img: {String}
-  apCost: {Number|undefined}
-  distance: {Number|undefined}
-  damageFormula: {String}
-  damageType: {CONFIG.ambersteel.damageTypes|undefined}
-  isCustom: {Boolean}
-}
-visGroupId: {String}
-oneColumn: {Boolean}
+{{!-- Parameters:
+viewModel: {SkillAbilityTableViewModel}
+cssClass: {undefined | String}
 --}}
-<section class="skill-ability-list">
-  <ol class="unstyled-list {{#if skillAbilitiesInitiallyVisible}}{{else}}hidden{{/if}}" data-vis-group="{{visGroupId}}">
-    {{#each abilities as |ability key|}}
-      <li class="ambersteel-list-row sheet-block">
-        {{#if ../oneColumn}}
-        {{> "systems/ambersteel/templates/item/skill-ability/skill-ability-chat-message.hbs" 
-          isEditable=../isEditable 
-          isSendable=../isSendable 
-          skillAbility=ability
-        }}
+<section class="skill-ability-list{{#if cssClass}} {{cssClass}}{{/if}}">
+  <ol class="unstyled-list {{#if viewModel.skillAbilitiesInitiallyVisible}}{{else}}hidden{{/if}}" 
+    data-vis-group="{{viewModel.visGroupId}}"
+  >
+    {{#each viewModel.abilities as |abilityViewModel key|}}
+      <li class="ambersteel-list-row sheet-block margin-b-lg border-solid-t-xl pad-t-lg">
+        {{#if ../viewModel.oneColumn}}
+          {{> "systems/ambersteel/templates/item/skill-ability/skill-ability-chat-message.hbs" viewModel=abilityViewModel }}
         {{else}}
-          {{!-- Row 1 --}}
-          <div class="flex flex-row">
-            <div class="flex flex-grow">
-              {{!-- Send to chat --}}
-              {{#if ../isSendable}}
-                {{> buttonSendToChat itemId=../itemId propertyPath=(concat "data.data.abilities[" key "]") }}
-              {{/if}}
-              {{!-- Name --}}
-              <span class="width-min-xl">
-                {{> inputLabel for=(concat "name[" key "]") text="ambersteel.labels.name"}}
-              </span>
-              {{> inputComponent type="single-line" name=(concat "name[" key "]") propertyPath=(concat "data.data.abilities[" key "].name") itemId=../skillItemId cssClass="flex-grow" isEditable=../isEditable contextOverride=../this }}
-            </div>
-            {{!-- Delete --}}
-            {{#if ../isEditable}}
-              {{> buttonDelete itemId=../itemId propertyPath=(concat "data.data.abilities[" key "]") promptConfirm=true promptLocalizableTitle="ambersteel.dialog.titleConfirmDeletionSkillAbilityQuery" }}
-            {{/if}}
-          </div>
-          {{!-- Row 2 --}}
-          <div class="flex flex-row">
-            {{!-- At level --}}
-            <div class="flex flex-row">
-              <span class="width-min-xl">
-                {{> inputLabel for=(concat "requiredLevel[" key "]") text="ambersteel.labels.skillAbilityRequirement"}}
-              </span>
-              <span class="width-md">
-                {{> inputComponent type="number" min="0" name=(concat "requiredLevel[" key "]") propertyPath=(concat "data.data.abilities[" key "].requiredLevel") itemId=../skillItemId isEditable=../isEditable contextOverride=../this }}
-              </span>
-            </div>
-            {{!-- Obstacle --}}
-            <div class="flex flex-row">
-              <span class="width-min-xl">
-                {{> inputLabel for=(concat "obstacle[" key "]") text="ambersteel.roll.obstacleAbbreviation"}}
-              </span>
-              <span class="width-xxl">
-                {{> inputComponent type="single-line" name=(concat "obstacle[" key "]") propertyPath=(concat "data.data.abilities[" key "].obstacle") itemId=../skillItemId isEditable=../isEditable contextOverride=../this }}
-              </span>
-            </div>
-          </div>
-          {{!-- Row 3 --}}
-          <div class="flex flex-row">
-            {{!-- Distance --}}
-            <div class="width-min-xl">
-              {{> inputLabel for=(concat "distance[" key "]") text="ambersteel.labels.distance"}}
-            </div>
-            <span class="width-md">
-              {{> inputComponent type="number" min="0" name=(concat "distance[" key "]") propertyPath=(concat "data.data.abilities[" key "].distance") itemId=../skillItemId isEditable=../isEditable contextOverride=../this }}
-            </span>
-            {{!-- AP cost --}}
-            <div class="width-min-xl">
-              {{> inputLabel for=(concat "apCost[" key "]") text="ambersteel.labels.apCost"}}
-            </div>
-            <span class="width-md">
-              {{> inputComponent type="number" min="0" name=(concat "apCost[" key "]") propertyPath=(concat "data.data.abilities[" key "].apCost") itemId=../skillItemId isEditable=../isEditable contextOverride=../this }}
-            </span>
-            {{!-- Attack type --}}
-            <div class="width-min-xl">
-              {{> inputLabel for=(concat "attackType[" key "]") text="ambersteel.labels.attackType"}}
-            </div>
-            <span class="width-min-lg">
-              {{> inputComponent type="drop-down" name=(concat "attackType[" key "]") propertyPath=(concat "data.data.abilities[" key "].attackType") itemId=../skillItemId
-                options=../CONFIG.attackTypes optionValueProperty="name" optionDisplayProperty="localizableAbbreviation"
-                isEditable=../isEditable contextOverride=../this
-              }}
-            </span>
-          </div>
-          {{!-- Row 4 --}}
-          <div class="flex flex-row">
-            {{!-- Damage formula --}}
-            <div class="width-min-xl">
-              {{> inputLabel for=(concat "damageFormula[" key "]") text="ambersteel.labels.damage"}}
-            </div>
-            {{> buttonRoll
-              type="generic"
-              itemId=../itemId
-              propertyPath=(concat "data.data.abilities[" key "].damageFormula")
-              chatTitle=ability.name
-            }}
-            <span class="width-min-xxl flex-grow">
-              {{> inputComponent type="single-line" name=(concat "damageFormula[" key "]") propertyPath=(concat "data.data.abilities[" key "].damageFormula") itemId=../skillItemId isEditable=../isEditable contextOverride=../this }}
-            </span>
-            {{!-- Damage type --}}
-            <div class="width-min-xxl">
-              {{> inputLabel for=(concat "damageType[" key "]") text="ambersteel.labels.damageType"}}
-            </div>
-            <span class="width-xxl">
-              {{> inputComponent type="drop-down" name=(concat "damageType[" key "]") propertyPath=(concat "data.data.abilities[" key "].damageType") itemId=../skillItemId
-                options=../CONFIG.damageTypes optionValueProperty="name" optionDisplayProperty="localizableAbbreviation"
-                isEditable=../isEditable contextOverride=../this
-              }}
-            </span>
-          </div>
-          {{!-- Row 5 --}}
-          <div class="flex flex-row flex-grow">
-            {{!-- Condition --}}
-            <div class="width-min-xl">
-              {{> inputLabel for=(concat "condition[" key "]") text="ambersteel.labels.skillAbilityCondition"}}
-            </div>
-            <div class="flex-grow">
-              {{> inputComponent type="single-line" name=(concat "condition[" key "]") propertyPath=(concat "data.data.abilities[" key "].condition") itemId=../skillItemId isEditable=../isEditable contextOverride=../this }}
-            </div>
-          </div>
-          {{!-- Row 6 --}}
-          {{!-- Description --}}
-          <div class="flex flex-row">
-            {{> inputComponent type="multi-line" name=(concat "description[" key "]") propertyPath=(concat "data.data.abilities[" key "].description") itemId=../skillItemId isEditable=../isEditable contextOverride=../this allowResize=true }}
-          </div>
+          {{> "systems/ambersteel/templates/item/skill-ability/skill-ability-list-item.hbs" viewModel=abilityViewModel }}
         {{/if}}
       </li>
     {{/each}}
-    {{#if isEditable}}
-      <li class="ambersteel-list-row ambersteel-list-footer">
-        <div class="fill flex flex-row">
-          <span class="flex-grow"></span>
-          {{!-- Add skill ability --}}
-          <span class="width-sm">
-            {{> buttonAdd itemType="skill-ability" itemId=skillItemId }}
-          </span>
-        </div>
-      </li>
-    {{/if}}
+    <li class="ambersteel-list-row ambersteel-list-footer {{#if (not viewModel.isEditable)}}hidden{{/if}}">
+      <div class="fill flex flex-row">
+        <span class="flex-grow"></span>
+        {{!-- Add skill ability --}}
+        <span class="width-sm">
+          {{> buttonAdd viewModel=viewModel.vmBtnAdd }}
+        </span>
+      </div>
+    </li>
   </ol>
-  {{#> buttonToggleVisibility 
-    visGroup=visGroupId
-    cssClass=(ifThenElse skillAbilitiesInitiallyVisible "hidden" "")
-  }}
-    <i class="fas fa-angle-double-down"></i>
-  {{/buttonToggleVisibility}}
-  {{#> buttonToggleVisibility 
-    visGroup=visGroupId
-    cssClass=(ifThenElse skillAbilitiesInitiallyVisible "" "hidden")
-  }}
-    <i class="fas fa-angle-double-up"></i>
-  {{/buttonToggleVisibility}}
+  <div class="line-height">
+    {{#> buttonToggleVisibility viewModel=viewModel.vmBtnToggleVisibilityExpand fill=true cssClass=(ifThenElse viewModel.skillAbilitiesInitiallyVisible "hidden" "") }}
+      <i class="fas fa-angle-double-down"></i>
+    {{/buttonToggleVisibility}}
+    {{#> buttonToggleVisibility viewModel=viewModel.vmBtnToggleVisibilityCollapse fill=true cssClass=(ifThenElse viewModel.skillAbilitiesInitiallyVisible "" "hidden") }}
+      <i class="fas fa-angle-double-up"></i>
+    {{/buttonToggleVisibility}}
+  </div>
 </section>

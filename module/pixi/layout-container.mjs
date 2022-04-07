@@ -220,7 +220,7 @@ export default class LayoutContainer extends Containable {
    * @abstract
    */
   refreshLayout() {
-    console.warn("Not implemented");
+    game.ambersteel.logger.logWarn("Not implemented: Base implementation called!");
   }
 }
 

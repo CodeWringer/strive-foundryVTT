@@ -1,5 +1,5 @@
+import ItemItemSheetViewModel from "../../../../templates/item/item/item-item-sheet-viewmodel.mjs";
 import { TEMPLATES } from "../../../templatePreloader.mjs";
-import * as ListenerUtil from "../../../utils/listeners-utility.mjs";
 
 export default class AmbersteelBaseItemSheet {
   /**
@@ -31,7 +31,7 @@ export default class AmbersteelBaseItemSheet {
   }
 
   /**
-   * @returns {Actor}
+   * @returns {Actor | undefined}
    */
   getActor() {
     return this.getItem().parent;
@@ -62,23 +62,16 @@ export default class AmbersteelBaseItemSheet {
    * 'item', 'CONFIG', 'isSendable' and 'isEditable'. 
    * @virtual
    */
-  prepareDerivedData(context) {
-  }
+  prepareDerivedData(context) {}
 
-  /**
-   * Registers events on elements of the given DOM. 
-   * @param html {Object} DOM of the sheet for which to register listeners. 
-   * @param isOwner {Boolean} If true, registers events that require owner permission. 
-   * @param isEditable {Boolean} If true, registers events that require editing permission. 
-   * @virtual
-   */
-  activateListeners(html, isOwner, isEditable) {
-    ListenerUtil.activateListeners(html, this, isOwner, isEditable);
-
-    // -------------------------------------------------------------
-    if (!isOwner) return;
-
-    // -------------------------------------------------------------
-    if (!isEditable) return;
+  getViewModel(context) {
+    return new ItemItemSheetViewModel({
+      id: this.getItem().id,
+      isEditable: context.isEditable,
+      isSendable: context.isSendable,
+      isOwner: context.isOwner,
+      isGM: context.isGM,
+      item: this.getItem(),
+    });
   }
 }

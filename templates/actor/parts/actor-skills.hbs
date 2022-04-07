@@ -1,22 +1,10 @@
-{{!-- Requires parameters:
-isEditable: {Boolean}
-isSendable: {Boolean}
-learningSkills: {[Object]} -> see component-skill-table.hbs
-skills: {[Object]} -> see component-skill-table.hbs
+{{!-- Parameters:
+viewModel: {ActorSkillsViewModel}
+cssClass: {undefined | String}
 --}}
-<section>
+<section class="{{cssClass}}">
   {{!-- Learning Skills --}}
-  {{> "systems/ambersteel/templates/actor/components/component-skill-table.hbs" 
-    isEditable=isEditable
-    isSendable=isSendable
-    isLearningSkillsTable=true 
-    skills=learningSkills
-  }}
+  {{> "systems/ambersteel/templates/actor/components/component-skill-table.hbs" viewModel=viewModel.learningSkillsViewModel }}
   {{!-- Known Skills --}}
-  {{> "systems/ambersteel/templates/actor/components/component-skill-table.hbs"
-    isEditable=isEditable
-    isSendable=isSendable
-    isLearningSkillsTable=false 
-    skills=skills
-  }}
+  {{> "systems/ambersteel/templates/actor/components/component-skill-table.hbs" viewModel=viewModel.skillsViewModel }}
 </section>

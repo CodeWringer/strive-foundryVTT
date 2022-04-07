@@ -6,7 +6,6 @@ import DisplayObjectWrap from "../../pixi/display-object-wrap.mjs";
 import HorizontalLayoutContainer from "../../pixi/horizontal-layout-container.mjs";
 import MarginLayoutContainer from "../../pixi/margin-layout-container.mjs";
 import VerticalLayoutContainer from "../../pixi/vertical-layout-container.mjs";
-import { EventEmitter } from "../../utils/event-emitter.mjs";
 import { TEXTURES } from "../../pixi/texture-preloader.mjs";
 import { queryVisibilityMode } from '../../utils/chat-utility.mjs';
 import { Button } from "../../pixi/button.mjs";
@@ -137,19 +136,40 @@ export class ItemOnGridView {
   set tint(value) { this._spriteBackground.tint = value; }
 
   /**
+   * @type {Boolean}
+   * @private
+   */
+  _isEditable = true;
+  /**
+   * Returns true, if the item is editable.
+   * @type {Boolean}
+   */
+  get isEditable() { return this._isEditable; }
+  /**
+   * Sets whether the item is editable.
+   * @param {Boolean} value
+   */
+  set isEditable(value) {
+    this._isEditable = value;
+    this._setEditability(value);
+  }
+
+  /**
    * 
    * @param {AmbersteelItemItem} item 
    * @param {InventoryIndex} index 
    * @param {Object} tileSize { width: {Number}, height: {Number} }
    * @param {ItemGridView} itemGridView 
+   * @param {Boolean} isEditable Optional. Determines whether the item will be editable. Default false. 
    */
-  constructor(item, index, tileSize, itemGridView) {
+  constructor(item, index, tileSize, itemGridView, isEditable = false) {
     this._item = item;
     this._index = index;
     this._shape = item.data.data.shape;
     this._tileSize = tileSize;
     this._parent = itemGridView;
     this._rectangle = new PIXI.Rectangle(0, 0, 0, 0);
+    this._isEditable = isEditable;
     
     // Set up root container and determine dimensions. 
     this.rootContainer = new CenterLayoutContainer(this._parent._pixiApp);
@@ -162,6 +182,7 @@ export class ItemOnGridView {
     this._rectangle.height = this.height;
     
     this._setupElements();
+    this._setEditability(isEditable);
   }
 
   /**
@@ -367,5 +388,16 @@ export class ItemOnGridView {
     // Title
     this._textName = new DisplayObjectWrap(new PIXI.Text(this._item.name, TEXT_SETTINGS), pixiApp);
     this._contentFooter.addChild(this._textName);
+  }
+
+  /**
+   * @param {Boolean} value Sets the editability. 
+   * @private
+   */
+  _setEditability(value) {
+    this._buttonSendToChat.disabled = !value;
+    this._buttonOpenSheet.disabled = !value;
+    this._buttonMoveItemToProperty.disabled = !value;
+    this._buttonDelete.disabled = !value;
   }
 }

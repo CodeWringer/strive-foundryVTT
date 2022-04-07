@@ -1,0 +1,11 @@
+{{!-- Required context:
+viewModel: {ButtonToggleViewModel}
+cssClass: {String | undefined}
+--}}
+<button 
+  class="custom-system-button component-button-toggle {{#if viewModel.value}}active {{/if}}{{#if viewModel.isEditable}}{{else}}disabled {{/if}}{{cssClass}}" 
+  title="{{viewModel.localizedTitle}}" 
+  id="{{viewModel.id}}" 
+>
+  <span class="component-button-toggle-knob {{#if viewModel.value}}active{{/if}}"></span>
+</button>

@@ -1,74 +1,62 @@
-{{!-- Requires context:
-isEditable: {Boolean}
-isSendable: {Boolean}
-itemId: {String|undefined}
-item: {Item} = {
-  name: {String}
-  data: {Object} = {
-    data: {Object} = {
-      description: {String}
-      state: {CONFIG.illnessStates}
-      duration: {String}
-      treatment: {String}
-      treatmentSkill: {String}
-    }
-  }
-}
+{{!-- Parameters:
+viewModel: {IllnessListItemViewModel}
+cssClass: {undefined | String}
 --}}
-{{!-- Row 1 --}}
-<div class="flex flex-row">
-  <div class="flex flex-grow">
-    {{!-- Send to chat --}}
-    {{> buttonSendToChat itemId=itemId }}
-    {{!-- Name --}}
-    <span class="width-min-xl">
-      {{> inputLabel text="ambersteel.labels.illness"}}
-    </span>
-    <span class="flex-grow margin-r-md">
-      {{> inputComponent type="single-line" propertyPath="name" itemId=itemId isEditable=isEditable }}
-    </span>
-    {{!-- State --}}
-    {{> inputComponent type="radio-buttons" propertyPath="data.data.state" itemId=itemId name=(concat "state-" itemId) isEditable=isEditable 
-      options=CONFIG.illnessStates optionValueProperty="name" optionDisplayProperty="localizableName"
-    }}
+<div class="custom-system-list-item{{#if cssClass}} {{cssClass}}{{/if}}">
+  {{!-- Row 1 --}}
+  <div class="flex flex-row">
+    <div class="flex flex-grow">
+      {{!-- Send to chat --}}
+      {{> buttonSendToChat viewModel=viewModel.vmBtnSendToChat }}
+      {{!-- Name --}}
+      <span class="width-min-xl">
+        {{> inputLabel text="ambersteel.labels.illness"}}
+      </span>
+      {{> inputImage viewModel=viewModel.vmImg cssClass="custom-icon-sm" }}
+      <span class="flex-grow margin-r-md">
+        {{> inputTextField viewModel=viewModel.vmTfName }}
+      </span>
+      {{!-- State --}}
+      {{> inputRadioButtonGroup viewModel=viewModel.vmRbgState }}
+    </div>
+    {{!-- Delete --}}
+    {{> buttonDelete viewModel=viewModel.vmBtnDelete }}
   </div>
-  {{!-- Delete --}}
-  {{> buttonDelete itemId=itemId promptConfirm=true promptLocalizableTitle="ambersteel.dialog.titleConfirmDeletionIllnessQuery" }}
-</div>
-<div class="flex flex-row">
-</div>
-{{!-- Row 2 --}}
-<div class="flex flex-row">
-  {{!-- Treatment Skill --}}
-  <span class="width-min-xxl">
-    {{> inputLabel text="ambersteel.labels.treatmentSkill" }}
-  </span>
-  <span class="width-xl">
-    {{> inputComponent type="single-line" propertyPath="data.data.treatmentSkill" itemId=itemId isEditable=isEditable }}
-  </span>
+  <div class="flex flex-row">
+  </div>
+  {{!-- Row 2 --}}
+  <div class="flex flex-row">
+    {{!-- Treatment Skill --}}
+    <span class="width-min-xxl">
+      {{> inputLabel text="ambersteel.labels.treatmentSkill" }}
+    </span>
+    <span class="width-xl flex-grow">
+      {{> inputTextField viewModel=viewModel.vmTfTreatmentSkill }}
+    </span>
+    {{!-- Spacer --}}
+    <div class="width-xs"></div>
+    {{!-- Duration --}}
+    <span class="width-min-xl">
+      {{> inputLabel text="ambersteel.labels.duration" }}
+    </span>
+    <span class="width-min-xxl">
+      {{> inputTextField viewModel=viewModel.vmTfDuration }}
+    </span>
+  </div>
   {{!-- Spacer --}}
   <div class="width-xs"></div>
-  {{!-- Duration --}}
-  <span class="width-min-xl">
-    {{> inputLabel text="ambersteel.labels.duration" }}
-  </span>
-  <span class="flex-grow">
-    {{> inputComponent type="single-line" propertyPath="data.data.duration" itemId=itemId isEditable=isEditable }}
-  </span>
-</div>
-{{!-- Spacer --}}
-<div class="width-xs"></div>
-<div class="flex flex-row">
-{{!-- Treatment --}}
-  <span class="width-min-xxl">
-    {{> inputLabel text="ambersteel.labels.treatment" }}
-  </span>
-  <span class="flex-grow">
-    {{> inputComponent type="single-line" propertyPath="data.data.treatment" itemId=itemId isEditable=isEditable }}
-  </span>
-</div>
-{{!-- Row 3 --}}
-{{!-- Description --}}
-<div class="flex flex-row">
-  {{> inputComponent type="multi-line" propertyPath="data.data.description" itemId=itemId isEditable=isEditable allowResize=true }}
+  <div class="flex flex-row">
+  {{!-- Treatment --}}
+    <span class="width-min-xxl">
+      {{> inputLabel text="ambersteel.labels.treatment" }}
+    </span>
+    <span class="flex-grow">
+      {{> inputTextField viewModel=viewModel.vmTfTreatment }}
+    </span>
+  </div>
+  {{!-- Row 3 --}}
+  {{!-- Description --}}
+  <div class="flex flex-row">
+    {{> inputRichText viewModel=viewModel.vmRtDescription }}
+  </div>
 </div>

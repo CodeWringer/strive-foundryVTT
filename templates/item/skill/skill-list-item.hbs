@@ -1,48 +1,58 @@
-{{!-- Requires context:
-isEditable: {Boolean}
-isSendable: {Boolean}
-item: {Item} = {
-  id: {String}
-  name: {String}
-  img: {String}
-  data: {ItemData} = {
-    data: {Object} = {
-      description: {String}
-      groupName: {String}
-      value: {Number}
-      successes: {Number}
-      failures: {Number}
-      relatedAttribute: {String}
-      requiredSuccessses: {Number}
-      requiredFailures: {Number}
-      abilities: {[Object]} -> see item/skill-ability/skill-ability-table.hbs,
-    }
-  }
-}
+{{!-- Parameters:
+viewModel: {SkillListItemViewModel}
+cssClass: {undefined | String}
 --}}
-{{!-- Row 1 --}}
-<div class="flex flex-row">
-  {{!-- TODO --}}
-  <div class="flex flex-grow">
-    {{!-- Send to chat --}}
-    {{> buttonSendToChat itemId=itemId }}
-    {{!-- Name --}}
-    <span class="width-min-xl">
-      {{> inputLabel text="ambersteel.labels.injury"}}
-    </span>
-    <span class="flex-grow margin-r-md">
-      {{> inputComponent type="single-line" propertyPath="name" itemId=itemId isEditable=isEditable }}
-    </span>
-    {{!-- State --}}
-    {{> inputComponent type="radio-buttons" propertyPath="data.data.state" itemId=itemId name=(concat "state-" itemId) isEditable=isEditable 
-      options=CONFIG.injuryStates optionValueProperty="name" optionDisplayProperty="localizableName"
-    }}
+<div class="custom-system-list-item{{#if cssClass}} {{cssClass}}{{/if}}">
+  {{!-- Row 1 --}}
+  <div class="flex flex-row">
+    <div class="flex flex-grow">
+      {{!-- Send to chat --}}
+      {{> buttonSendToChat viewModel=viewModel.vmBtnSendToChat }}
+      {{!-- Name --}}
+      <span class="width-min-xl">
+        {{> inputLabel text="ambersteel.labels.injury"}}
+      </span>
+      {{> inputImage viewModel=viewModel.vmImg cssClass="custom-icon-sm" }}
+      <span class="flex-grow margin-r-md">
+        {{> inputTextField viewModel=viewModel.vmTfName }}
+      </span>
+    </div>
+    {{!-- Delete --}}
+    {{> buttonDelete viewModel=viewModel.vmBtnDelete }}
   </div>
-  {{!-- Delete --}}
-  {{> buttonDelete itemId=itemId promptConfirm=true promptLocalizableTitle="ambersteel.dialog.titleConfirmDeletiongSkillQuery" }}
-</div>
-{{!-- Row 3 --}}
-{{!-- Description --}}
-<div class="flex flex-row">
-  {{> inputComponent type="multi-line" propertyPath="data.data.description" itemId=itemId isEditable=isEditable allowResize=true }}
+  {{!-- Row 2 --}}
+  <div class="flex flex-row">
+    {{!-- Related Attribute --}}
+    <div class="flex flex-row margin-b-md">
+      <div class="width-min-xxl">
+        {{> inputLabel text="ambersteel.labels.relatedAttribute"}}
+      </div>
+      <div class="flex-grow">
+        {{> inputDropDown viewModel=viewModel.vmDdRelatedAttribute }}
+      </div>
+    </div>
+    {{!-- Category --}}
+    <div class="flex flex-row margin-b-md">
+      <div class="width-min-xxl">
+        {{> inputLabel text="ambersteel.labels.category"}}
+      </div>
+      <div class="flex-grow">
+        {{> inputTextField viewModel=viewModel.vmTfCategory }}
+      </div>
+    </div>
+  </div>
+  {{!-- Row 3 --}}
+  {{!-- IsMagicSchool --}}
+  <div class="flex flex-row">
+    {{> buttonToggle viewModel=viewModel.vmSwIsMagicSchool }}
+  </div>
+  {{!-- Row 4 --}}
+  {{!-- Description --}}
+  <div class="sheet-block flex flex-column margin-b-md">
+    <h3 class="fancy-font">{{localize "ambersteel.labels.description"}}</h3>
+    {{> inputRichText viewModel=viewModel.vmRtDescription }}
+  </div>
+  {{!-- Row 4 --}}
+  {{!-- Skill Abilites --}}
+  {{> "systems/ambersteel/templates/item/skill-ability/skill-ability-table.hbs" viewModel=viewModel.vmSkillAbilityTable cssClass=(ifThenElse viewModel.isSkillAbilityListVisible "" "hidden") }}
 </div>

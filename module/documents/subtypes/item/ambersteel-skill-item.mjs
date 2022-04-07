@@ -2,6 +2,10 @@ import AmbersteelBaseItem from "./ambersteel-base-item.mjs";
 import SkillAbility from "../../../dto/skill-ability.mjs";
 import { TEMPLATES } from "../../../templatePreloader.mjs";
 import { createUUID } from "../../../utils/uuid-utility.mjs";
+import SkillChatMessageViewModel from "../../../../templates/item/skill/skill-chat-message-viewmodel.mjs";
+import { SummedData, SummedDataComponent } from "../../../dto/summed-data.mjs";
+import DamageAndType from "../../../dto/damage-and-type.mjs";
+import * as ValUtil from "../../../utils/validation-utility.mjs";
 
 export default class AmbersteelSkillItem extends AmbersteelBaseItem {
   /**
@@ -16,12 +20,11 @@ export default class AmbersteelSkillItem extends AmbersteelBaseItem {
     this.parent.addProgress = this.addProgress.bind(this);
     this.parent.createSkillAbility = this.createSkillAbility.bind(this);
     this.parent.deleteSkillAbilityAt = this.deleteSkillAbilityAt.bind(this);
-    this.parent.getTotalValue = this.getTotalValue.bind(this);
     this.parent.advanceSkillBasedOnRollResult = this.advanceSkillBasedOnRollResult.bind(this);
   }
 
   /** @override */
-  get img() { return "icons/svg/book.svg"; }
+  get defaultImg() { return "icons/svg/book.svg"; }
 
   /**
    * Chat message template path. 
@@ -30,33 +33,38 @@ export default class AmbersteelSkillItem extends AmbersteelBaseItem {
   get chatMessageTemplate() { return TEMPLATES.SKILL_ITEM_CHAT_MESSAGE; }
 
   /** @override */
-  prepareData() {
-    this.parent.data.img = this.img;
-    this.parent.data.data.relatedAttribute = this.parent.data.data.relatedAttribute ?? "agility";
+  prepareData(context) {
+    context.data.data.relatedAttribute = context.data.data.relatedAttribute ?? "agility";
+  }
+  
+  /** @override */
+  prepareDerivedData(context) {
+    context.getRollData = this._getRollData.bind(this);
+    this._ensureSkillAbilityObjects(context);
   }
 
   /** @override */
   async getChatData() {
-    const messageBase = super.getChatData();
-    const renderedContent = await renderTemplate(this.chatMessageTemplate, {
-      isEditable: false,
-      isSendable: false,
-      item: {
-        id: this.parent.id,
-        name: this.parent.name,
-        img: this.parent.img,
-        data: {
-          data: this.parent.data.data
-        }
-      },
-      visGroupId: createUUID()
-    });
+    const chatData = super.getChatData();
+    chatData.flavor = game.i18n.localize("ambersteel.labels.skill");
 
-    return {
-      ...messageBase,
-      flavor: game.i18n.localize("ambersteel.labels.skill"),
-      renderedContent: renderedContent
-    }
+    return chatData;
+  }
+
+  /** @override */
+  getChatViewModel(overrides = {}) {
+    const base = super.getChatViewModel();
+    return new SkillChatMessageViewModel({
+      id: base.id,
+      isEditable: base.isEditable,
+      isSendable: base.isSendable,
+      isOwner: base.isOwner,
+      isGM: base.isGM,
+      item: this.parent,
+      actor: this.parent.parent,
+      visGroupId: createUUID(),
+      ...overrides,
+    });
   }
 
   /**
@@ -99,9 +107,9 @@ export default class AmbersteelSkillItem extends AmbersteelBaseItem {
     const requiredFailures = parseInt(skillData.requiredFailures);
 
     if (success) {
-      await this.updateProperty("data.successes", successes + 1);
+      await this.parent.updateProperty("data.successes", successes + 1, false);
     } else {
-      await this.updateProperty("data.failures", failures + 1);
+      await this.parent.updateProperty("data.failures", failures + 1, false);
     }
 
     if (autoLevel) {
@@ -118,7 +126,10 @@ export default class AmbersteelSkillItem extends AmbersteelBaseItem {
    * @param {Object} creationData Additional data to set on creation. 
    */
   async createSkillAbility(creationData) {
-    const newAbility = new SkillAbility();
+    const newAbility = new SkillAbility({
+      parent: this,
+      index: this.parent.data.data.abilities.length,
+    });
     
     for (const propertyName in creationData) {
       newAbility[propertyName] = creationData[propertyName];
@@ -127,7 +138,7 @@ export default class AmbersteelSkillItem extends AmbersteelBaseItem {
     const abilities = this.parent.data.data.abilities.concat(
       [newAbility]
     );
-    await this.updateProperty("data.abilities", abilities);
+    await this.parent.updateProperty("data.abilities", abilities);
   }
 
   /**
@@ -137,14 +148,27 @@ export default class AmbersteelSkillItem extends AmbersteelBaseItem {
   async deleteSkillAbilityAt(index) {
     const dataAbilities = this.parent.data.data.abilities;
     const abilities = dataAbilities.slice(0, index).concat(dataAbilities.slice(index + 1));
-    await this.updateProperty("data.abilities", abilities);
+    await this.parent.updateProperty("data.abilities", abilities);
+  }
+  
+  /**
+   * Advances the skill, based on the given {DicePoolResult}. 
+   * @param {DicePoolResult} rollResult 
+   * @async
+   */
+  async advanceSkillBasedOnRollResult(rollResult) {
+    if (rollResult === undefined) {
+      game.ambersteel.logger.logWarn("rollResult is undefined");
+      return;
+    }
+    this.parent.addProgress(rollResult.isSuccess, false);
   }
 
   /**
-   * Returns the number of dice available for a test of this skill. 
-   * @returns {Number} The number of dice available for the test. 
+   * @private
+   * @returns {SummedData}
    */
-  getTotalValue() {
+  _getRollData() {
     const relatedAttributeName = this.parent.data.data.relatedAttribute;
     const attGroupName = game.ambersteel.getAttributeGroupName(relatedAttributeName);
     
@@ -153,15 +177,45 @@ export default class AmbersteelSkillItem extends AmbersteelBaseItem {
 
     const skillLevel = this.parent.data.data.value;
 
-    return game.ambersteel.getSkillTestNumberOfDice(skillLevel, relatedAttributeLevel);
+    const compositionObj = game.ambersteel.getSkillTestNumberOfDice(skillLevel, relatedAttributeLevel);
+
+    return new SummedData(compositionObj.totalDiceCount, [
+      new SummedDataComponent(relatedAttributeName, `ambersteel.attributes.${relatedAttributeName}`, compositionObj.attributeDiceCount),
+      new SummedDataComponent(this.parent.name, this.parent.name, compositionObj.skillDiceCount),
+    ]);
   }
 
   /**
-   * Advances the skill, based on the given {DicePoolResult}. 
-   * @param {DicePoolResult} rollResult 
-   * @async
+   * Ensures that all objects under context.data.data.abilities are 'proper' SkillAbility type objects. 
+   * @param {AmbersteelItem} context 
+   * @private
    */
-  async advanceSkillBasedOnRollResult(rollResult) {
-    this.parent.addProgress(rollResult.isSuccess, false);
+  _ensureSkillAbilityObjects(context) {
+    const skillAbilities = [];
+    for (let i = 0; i < context.data.data.abilities.length; i++) {
+      const abilityObject = context.data.data.abilities[i];
+
+      const damage = [];
+      for (const propertyName in abilityObject.damage) {
+        if (abilityObject.damage.hasOwnProperty(propertyName) !== true) continue;
+
+        const plainDamageObject = abilityObject.damage[propertyName];
+
+        damage.push(new DamageAndType({
+          damage: plainDamageObject.damage ?? "",
+          damageType: plainDamageObject.damageType ?? game.ambersteel.config.damageTypes.none.name,
+        }));
+      }
+
+      const skillAbility = new SkillAbility({
+        ...abilityObject,
+        parent: context,
+        index: i,
+        damage: damage,
+      });
+
+      skillAbilities.push(skillAbility);
+    }
+    context.data.data.abilities = skillAbilities;
   }
 }

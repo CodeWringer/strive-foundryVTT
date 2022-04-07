@@ -1,23 +1,14 @@
 import AmbersteelPcActor from './subtypes/actor/ambersteel-pc-actor.mjs';
 import AmbersteelNpcActor from './subtypes/actor/ambersteel-npc-actor.mjs';
-import { deleteByPropertyPath } from '../utils/document-update-utility.mjs';
-import { EventEmitter } from '../utils/event-emitter.mjs';
-
-export const ActorEvents = {
-  possessionAdded: "possession-added",
-  possessionRemoved: "possession-removed",
-  possessionUpdated: "possession-updated"
-}
+import * as UpdateUtil from '../utils/document-update-utility.mjs';
 
 /**
  * @extends {Actor}
- * @property person {Object}
- * @property attributeGroups: {Object}
- * @property learningSkills: {[Object]}
- * @property skills: {[Object]}
- * @property beliefSystem: {Object}
- * @property fateSystem: {Object}
- * @property biography: {Object}
+ * @property {Array<Item>} injuries
+ * @property {Array<Item>} illnesses
+ * @property {Array<Item>} possessions
+ * @property {Array<Item>} propertyItems
+ * @property {Array<Item>} fateCards
  */
 export class AmbersteelActor extends Actor {
   /**
@@ -43,10 +34,12 @@ export class AmbersteelActor extends Actor {
   }
 
   /**
-   * Central event aggregator. 
-   * @see {ActorEvents} for a list of emitted events. 
+   * Returns the default icon image path for this type of actor. 
+   * @type {String}
+   * @virtual
+   * @readonly
    */
-  _eventEmitter = new EventEmitter();
+  get defaultImg() { return this.subType.defaultImg; }
 
   /** @override */
   prepareData() {
@@ -112,7 +105,13 @@ export class AmbersteelActor extends Actor {
     return items.filter((item) => { return item.type === "item" && !item.data.data.isOnPerson; });
   }
 
-  // TODO: Move to ambersteel-base-actor.mjs
+  /**
+   * @returns {Array<Item>} A list of "fate-card" type items that represent fate-cards of 
+   * this character. 
+   * @readonly
+   */
+  get fateCards() { return this.getItemsByType("fate-card"); }
+
   /**
    * 
    * @param attName {String} Internal name of an attribute, e.g. 'magicSense'. 
@@ -134,7 +133,6 @@ export class AmbersteelActor extends Actor {
     }
   }
 
-  // TODO: Move to ambersteel-base-actor.mjs
   /**
    * Sets the level of the attribute with the given name. 
    * @param attName {String} Internal name of an attribute, e.g. 'magicSense'. 
@@ -155,7 +153,6 @@ export class AmbersteelActor extends Actor {
     });
   }
 
-  // TODO: Move to ambersteel-base-actor.mjs
   /**
    * Adds success/failure progress to an attribute. 
    * 
@@ -190,100 +187,32 @@ export class AmbersteelActor extends Actor {
     }
   }
 
-  async deleteByPropertyPath(propertyPath) {
-    await deleteByPropertyPath(this, propertyPath);
+  /**
+   * Deletes a property on the given document, via the given path. 
+   * @param {Document} document A Foundry {Document}. 
+   * @param {String} propertyPath Path leading to the property to delete, on the given document entity. 
+   *        Array-accessing via brackets is supported. Property-accessing via brackets is *not* supported. 
+   *        E.g.: "data.attributes[0].value" 
+   *        E.g.: "data.attributes[4]" 
+   *        E.g.: "data.attributes" 
+   * @param {Boolean | undefined} render If true, will trigger a re-render of the associated document sheet. Default 'true'. 
+   * @async
+   */
+  async deleteByPropertyPath(propertyPath, render = true) {
+    await UpdateUtil.deleteByPropertyPath(this, propertyPath, render);
   }
 
   /**
-   * Registers an event listener for the given event, which will fire every time the event is emitted. 
-   * @param {ActorEvents} event The type of event to register. 
-   * @param {Function} callback Gets called whenever the event is emitted. 
-   * @returns {Any} An identifier that can be used to unregister the just registered 
-   * event listener, with the 'off'-method. 
+   * Updates a property on the parent item, identified via the given path. 
+   * @param {String} propertyPath Path leading to the property to update, on the parent item. 
+   *        Array-accessing via brackets is supported. Property-accessing via brackets is *not* supported. 
+   *        E.g.: "data.attributes[0].value"
+   * @param {any} newValue The value to assign to the property. 
+   * @param {Boolean | undefined} render If true, will trigger a re-render of the associated document sheet. Default 'true'. 
+   * @async
+   * @protected
    */
-  on(event, callback) {
-    return this._eventEmitter.on(event, callback);
-  }
-  
-  /**
-   * Registers an event listener for the given event, which will fire only once. 
-   * @param {ActorEvents} event The type of event to register. 
-   * @param {Function} callback Gets called whenever the event is emitted. 
-   * @returns {Any} An identifier that can be used to unregister the just registered 
-   * event listener, with the 'off'-method. 
-   */
-  once(event, callback) {
-    return this._eventEmitter.once(event, callback);
-  }
-
-  /**
-   * Unregisters an event listener, based on the given identifier. 
-   * @param eventIdentifier An event identifier. 
-   */
-  off(eventIdentifier) {
-    this._eventEmitter.off(eventIdentifier)
-  }
-
-  /** 
-   * @override 
-   */
-  _preCreateEmbeddedDocuments(embeddedName, result, options, userId) {
-    const items = result.filter(it => it.type === "item");
-    const ailments = result.filter(it => it.type === "injury" || it.type === "illness");
-
-    for (const item of items) {
-      if (item.data.isOnPerson) {
-        this._eventEmitter.emit(ActorEvents.possessionAdded, item);
-      }
-    }
-    
-    return super._preCreateEmbeddedDocuments(embeddedName, result, options, userId);
-  }
-  
-  /** 
-   * @override 
-   */
-  async _preUpdateEmbeddedDocuments(embeddedName, result, options, userId) {
-    for (const dataDelta of result) {
-      const id = dataDelta._id;
-      const updatedItem = this.items.get(id);
-  
-      if (updatedItem.type === "item") {
-        if (updatedItem.data.data.isOnPerson) {
-          const existing = this.possessions.find((element) => { return element.id === updatedItem.id; });
-
-          if (existing !== undefined) {
-            // Possession is not yet in the possessions list -> is about 
-            // to be added. 
-            this._eventEmitter.emit(ActorEvents.possessionAdded, updatedItem);
-          } else {
-            this._eventEmitter.emit(ActorEvents.possessionUpdated, updatedItem);
-          }
-        }
-      } else if (updatedItem.type === "injury" || updatedItem.type === "illness") {
-        // TODO
-      }
-    }
-    
-    return super._preUpdateEmbeddedDocuments(embeddedName, result, options, userId);
-  }
-  
-  /** 
-   * @override 
-   */
-  _preDeleteEmbeddedDocuments(embeddedName, result, options, userId) {
-    for (const id of result) {
-      const itemToDelete = this.items.get(id);
-
-      if (itemToDelete.type === "item") {
-        if (itemToDelete.data.data.isOnPerson) {
-          this._eventEmitter.emit(ActorEvents.possessionRemoved, itemToDelete);
-        }
-      } else if (itemToDelete.type === "injury" || itemToDelete.type === "illness") {
-        // TODO
-      }
-    }
-
-    return super._preDeleteEmbeddedDocuments(embeddedName, result, options, userId);
+  async updateProperty(propertyPath, newValue, render = true) {
+    await UpdateUtil.updateProperty(this, propertyPath, newValue, render);
   }
 }

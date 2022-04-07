@@ -1,20 +1,10 @@
-{{!-- Requires parameters:
-isEditable: {Boolean}
-isSendable: {Boolean}
-beliefSystem: {Object} -> see "actor-beliefs.hbs",
-fateSystem: {Object} -> see "actor-fate.hbs"
+{{!-- Parameters:
+viewModel: {ActorBeliefsFateViewModel}
+cssClass: {undefined | String}
 --}}
-<section>
+<section class="{{cssClass}}">
   <h2>{{localize "ambersteel.beliefSystem.beliefs"}}</h2>
-  {{> "systems/ambersteel/templates/actor/parts/actor-beliefs.hbs"
-    isEditable=isEditable
-    isSendable=isSendable
-    beliefSystem=beliefSystem
-  }}
+  {{> "systems/ambersteel/templates/actor/parts/actor-beliefs.hbs" viewModel=viewModel.beliefsViewModel }}
   <h2>{{localize "ambersteel.fateSystem.fate"}}</h2>
-  {{> "systems/ambersteel/templates/actor/parts/actor-fate.hbs"
-    isEditable=isEditable
-    isSendable=isSendable
-    fateSystem=fateSystem
-  }}
+  {{> "systems/ambersteel/templates/actor/parts/actor-fate.hbs" viewModel=viewModel.fateViewModel }}
 </section>

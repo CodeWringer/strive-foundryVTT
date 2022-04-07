@@ -1,60 +1,42 @@
-{{!-- Requires context:
-isEditable: {Boolean}
-isSendable: {Boolean}
-item: {Item} = {
-  id: {String}
-  name: {String}
-  data: {Object} = {
-    data: {Object} = {
-      description: {String}
-      state: {CONFIG.injuryStates}
-      timeToHeal: {String}
-      limit: {Number}
-    }
-  }
-}
+{{!-- Parameters:
+viewModel: {InjuryItemSheetViewModel}
+cssClass: {undefined | String}
 --}}
-<form class="flex flex-column {{cssClass}}" autocomplete="off">
+<form class="flex flex-column{{#if cssClass}} {{cssClass}}{{/if}}" autocomplete="off">
   <header class="sheet-header">
     <div class="flex flex-column flex-grow">
       <div class="flex flex-row">
-        <img class="header-image" src="{{item.img}}" data-edit="img" title="{{item.name}}" height="64" width="64" />
+        {{> inputImage viewModel=viewModel.vmImg cssClass="custom-icon-md" }}
         <h1 class="header-name">
-          {{> inputComponent type="single-line" propertyPath="name" isEditable=isEditable }}
+          {{> inputTextField viewModel=viewModel.vmTfName }}
         </h1>
-        {{#if isSendable}}
-          <div class="flex flex-center">
-            {{> buttonSendToChat}}
-          </div>
-        {{/if}}
+        <div class="flex flex-center">
+          {{> buttonSendToChat viewModel=viewModel.vmBtnSendToChat }}
+        </div>
       </div>
     </div>
   </header>
   {{!-- Limit --}}
-  <div class="sheet-block flex flex-row margin-b-md">
-    <div class="width-min-xxl">
+  <div class="sheet-block grid-3col grid-gap-md margin-b-md">
+    <div class="flex flex-middle flex-right">
       {{> inputLabel text="ambersteel.labels.limit"}}
     </div>
-    <div class="flex-grow">
-      {{> inputComponent type="number" propertyPath="data.data.limit" min="0" isEditable=isEditable }}
+    <div class="grid-span-2">
+      {{> inputNumberSpinner viewModel=viewModel.vmNsLimit }}
     </div>
   </div>
   {{!-- Time to heal --}}
-  <div class="sheet-block flex flex-row margin-b-md">
-    <div class="width-min-xxl">
+  <div class="sheet-block grid-3col grid-gap-md margin-b-md">
+    <div class="flex flex-middle flex-right">
       {{> inputLabel text="ambersteel.labels.timeToHeal"}}
     </div>
-    <div class="flex-grow">
-      {{> inputComponent type="single-line" propertyPath="data.data.timeToHeal" isEditable=isEditable }}
+    <div class="grid-span-2">
+      {{> inputTextField viewModel=viewModel.vmTfTimeToHeal }}
     </div>
   </div>
   {{!-- Description --}}
-  <div class="sheet-block flex flex-row flex-grow">
-    <div class="width-min-xxl">
-      {{> inputLabel text="ambersteel.labels.description"}}
-    </div>
-    <div class="flex-grow">
-      {{> inputComponent type="multi-line" propertyPath="data.data.description" placeholder=(localize "ambersteel.labels.description") isEditable=isEditable cssClass="resize-vertical fill" readOnlyCssClass="multiline" allowResize=true }}
-    </div>
+  <div class="sheet-block flex flex-column flex-grow">
+    <h3 class="fancy-font">{{localize "ambersteel.labels.description"}}</h3>
+    {{> inputRichText viewModel=viewModel.vmRtDescription }}
   </div>
 </form>
