@@ -79,10 +79,12 @@ export async function deleteByPropertyPath(document, propertyPath, render = true
  * This function also recursively calls itself on all fields of the given object that are 
  * of type object. 
  * @param {Any} obj A complex object, an array (of complex objects) or a primitive value. 
+ * @param {Array<String> | undefined} exclude Optional. An array of property names of fields to exclude. 
+ * By default, "parent" is excluded. 
  * @returns {Object | Array<Any> | Any} Returns either a plain object, an array (of plain objects or 
  * primitive values) or a primitive value. 
  */
-export function toDto(obj) {
+export function toDto(obj, exclude = ["parent"]) {
   // Special case of a function being passed returns as undefined. 
   // A function should **never** end up in a DTO! 
   if (ValUtil.isFunction(obj)) return undefined;
@@ -116,6 +118,12 @@ export function toDto(obj) {
     for (const propertyName in obj) {
       // Skip any prototype properties. 
       if (obj.hasOwnProperty(propertyName) !== true) continue;
+
+      if (exclude !== undefined) {
+        if (exclude.find(it => { return it === propertyName; })) {
+          continue;
+        }
+      }
 
       if (propertyName.toLowerCase().startsWith("parent") === true) {
         game.ambersteel.logger.logWarn(`Converting property '${propertyName}' to DTO, but name implies potential recursion?`);
