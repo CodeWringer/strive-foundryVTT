@@ -1,6 +1,7 @@
 import AmbersteelPcActor from './subtypes/actor/ambersteel-pc-actor.mjs';
 import AmbersteelNpcActor from './subtypes/actor/ambersteel-npc-actor.mjs';
 import * as UpdateUtil from '../utils/document-update-utility.mjs';
+import { DiceOutcomeTypes } from '../dto/dice-outcome-types.mjs';
 
 /**
  * @extends {Actor}
@@ -157,25 +158,32 @@ export class AmbersteelActor extends Actor {
    * Adds success/failure progress to an attribute. 
    * 
    * Also auto-levels up the attribute, if 'autoLevel' is set to true. 
-   * @param attName {String} Internal name of an attribute, e.g. 'magicSense'. 
-   * @param success {Boolean} If true, will add 1 success, else will add 1 failure. Default false
-   * @param autoLevel {Boolean} If true, will auto-level up. Default false
+   * @param {DiceOutcomeTypes} outcomeType The test outcome to work with. 
+   * @param {String | undefined} attName Optional. Internal name of an attribute, e.g. 'magicSense'. 
+   * @param {Boolean | undefined} autoLevel Optional. If true, will auto-level up. Default false
    * @async
    */
-  async addAttributeProgress(attName = undefined, success = false, autoLevel = false) {
+  async addAttributeProgress(outcomeType, attName = undefined, autoLevel = false) {
+    if (outcomeType === undefined) {
+      game.ambersteel.logger.logWarn("outcomeType is undefined");
+      return;
+    }
+
     const oAttName = this.getAttributeForName(attName);
     const oAtt = oAttName.object;
 
-    const successes = parseInt(oAtt.successes);
-    const failures = parseInt(oAtt.failures);
+    let successes = parseInt(oAtt.successes);
+    let failures = parseInt(oAtt.failures);
     const requiredSuccessses = parseInt(oAtt.requiredSuccessses);
     const requiredFailures = parseInt(oAtt.requiredFailures);
     const propertyPath = `data.attributes.${oAttName.groupName}.${attName}`
 
-    if (success) {
-      await this.update({ [`${propertyPath}.successes`]: successes + 1 });
-    } else {
-      await this.update({ [`${propertyPath}.failures`]: failures + 1 });
+    if (outcomeType === DiceOutcomeTypes.SUCCESS) {
+      successes++;
+      await this.update({ [`${propertyPath}.successes`]: successes });
+    } else if (outcomeType === DiceOutcomeTypes.FAILURE || outcomeType === DiceOutcomeTypes.PARTIAL) {
+      failures++;
+      await this.update({ [`${propertyPath}.failures`]: failures });
     }
 
     if (autoLevel) {

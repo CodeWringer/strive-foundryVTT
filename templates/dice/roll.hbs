@@ -3,11 +3,13 @@ resultsForDisplay: {Array<Object>} = {
   cssClass: {String}
   content: {String}
 }
-isSuccess: Boolean
-degree: [String|Number]
-numberOfDice: String|Number
-diceComposition: String
-title: String
+outcomeType: {DiceOutcomeTypes}
+degree: {String | Number}
+numberOfDice: {String | Number}
+positives: {String | Number}
+negatives: {String | Number}
+diceComposition: {String}
+title: {String}
 cssClass: {undefined | String}
 --}}
 <div class="dice-roll-chat-message-container{{#if cssClass}} {{cssClass}}{{/if}}">
@@ -30,22 +32,19 @@ cssClass: {undefined | String}
     </ol>
   </div>
   <div class="dice-result-container">
-    {{#if isSuccess}}
+    {{#if (eq outcomeType "SUCCESS")}}
       <div class="dice-result success">
         {{localize "ambersteel.roll.success"}}!
       </div>
-    {{else}}
+    {{/if}}
+    {{#if (or (eq outcomeType "PARTIAL") (eq outcomeType "FAILURE"))}}
       <div class="dice-result failure">
         {{localize "ambersteel.roll.failure"}}!
       </div>
     {{/if}}
     <div class="dice-degree">
-      {{#if isSuccess}}
-        <span>{{localize "ambersteel.roll.degreeOfSuccess"}}: </span>
-      {{else}}
-        <span>{{localize "ambersteel.roll.degreeOfFailure"}}: </span>
-      {{/if}}
-      <span>{{degree}}</span>
+      <span>{{localize "ambersteel.roll.positives"}}: {{positives.length}}</span>
+      <span>{{localize "ambersteel.roll.negatives"}}: {{negatives.length}}</span>
     </div>
   </div>
 </div>

@@ -6,6 +6,7 @@ import SkillChatMessageViewModel from "../../../../templates/item/skill/skill-ch
 import { SummedData, SummedDataComponent } from "../../../dto/summed-data.mjs";
 import DamageAndType from "../../../dto/damage-and-type.mjs";
 import * as ValUtil from "../../../utils/validation-utility.mjs";
+import { DiceOutcomeTypes } from "../../../dto/dice-outcome-types.mjs";
 
 export default class AmbersteelSkillItem extends AmbersteelBaseItem {
   /**
@@ -92,24 +93,31 @@ export default class AmbersteelSkillItem extends AmbersteelBaseItem {
    * Adds success/failure progress to the skill. 
    * 
    * Also auto-levels up the skill, if 'autoLevel' is set to true. 
-   * @param success {Boolean} If true, will add 1 success, else will add 1 failure. Default false
-   * @param autoLevel {Boolean} If true, will auto-level up. Default false
-   * @param resetProgress {Boolean} If true, will also reset successes and failures,
+   * @param {DiceOutcomeTypes} outcomeType The test outcome to work with. 
+   * @param {Boolean | undefined} autoLevel Optional. If true, will auto-level up. Default false
+   * @param {Boolean | undefined} resetProgress Optional. If true, will also reset successes and failures,
    * if 'autoLevel' is also true and a level automatically incremented. Default true
    * @async
    */
-  async addProgress(success = false, autoLevel = false, resetProgress = true) {
+  async addProgress(outcomeType, autoLevel = false, resetProgress = true) {
+    if (outcomeType === undefined) {
+      game.ambersteel.logger.logWarn("outcomeType is undefined");
+      return;
+    }
+
     const skillData = this.parent.data.data;
 
-    const successes = parseInt(skillData.successes);
-    const failures = parseInt(skillData.failures);
+    let successes = parseInt(skillData.successes);
+    let failures = parseInt(skillData.failures);
     const requiredSuccessses = parseInt(skillData.requiredSuccessses);
     const requiredFailures = parseInt(skillData.requiredFailures);
 
-    if (success) {
-      await this.parent.updateProperty("data.successes", successes + 1, false);
-    } else {
-      await this.parent.updateProperty("data.failures", failures + 1, false);
+    if (outcomeType === DiceOutcomeTypes.SUCCESS) {
+      successes++;
+      await this.parent.updateProperty("data.successes", successes);
+    } else if (outcomeType === DiceOutcomeTypes.FAILURE || outcomeType === DiceOutcomeTypes.PARTIAL) {
+      failures++;
+      await this.parent.updateProperty("data.failures", failures);
     }
 
     if (autoLevel) {
@@ -161,7 +169,7 @@ export default class AmbersteelSkillItem extends AmbersteelBaseItem {
       game.ambersteel.logger.logWarn("rollResult is undefined");
       return;
     }
-    this.parent.addProgress(rollResult.isSuccess, false);
+    this.parent.addProgress(rollResult.outcomeType, false);
   }
 
   /**

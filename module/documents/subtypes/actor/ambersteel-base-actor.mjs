@@ -354,7 +354,7 @@ export default class AmbersteelBaseActor {
    */
   async advanceSkillBasedOnRollResult(rollResult, itemId) {
     const oSkill = this.parent.items.get(itemId);
-    oSkill.addProgress(rollResult.isSuccess, false);
+    oSkill.addProgress(rollResult.outcomeType, false);
   }
 
   /**
@@ -368,6 +368,6 @@ export default class AmbersteelBaseActor {
       game.ambersteel.logger.logWarn("rollResult is undefined");
       return;
     }
-    await this.parent.addAttributeProgress(attributeName, rollResult.isSuccess);
+    await this.parent.addAttributeProgress(rollResult.outcomeType, attributeName);
   }
 }
