@@ -1,7 +1,12 @@
 {
   "Actor": {
-    "types": ["pc", "npc"],
+    "types": ["npc", "plain", "pc"],
     "templates": {
+      "base": {
+        "description": "",
+        "gmNotes": "",
+        "isCustom": false
+      },
       "character": {
         "person": {
           "personName": "",
@@ -85,14 +90,11 @@
         "assets": {
           "grid": [],
           "gridIndices": []
-        },
-        "biography": "",
-        "gmNotes": "",
-        "isCustom": false
+        }
       }
     },
     "pc": {
-      "templates": ["character"],
+      "templates": ["base", "character"],
       "beliefSystem": {
         "ambition": "",
         "beliefs": ["", "", ""],
@@ -105,7 +107,10 @@
       }
     },
     "npc": {
-      "templates": ["character"]
+      "templates": ["base", "character"]
+    },
+    "plain": {
+      "templates": ["base"]
     }
   },
   "Item": {

@@ -33,7 +33,7 @@ export const TEMPLATES = {
   DIALOG_PLAIN: "systems/ambersteel/templates/dialog/dialog-plain.hbs",
   DIALOG_SELECT: "systems/ambersteel/templates/dialog/dialog-select.hbs",
   // --- Actor
-  ACTOR_SHEET: "systems/ambersteel/templates/actor/actor-character-sheet.hbs",
+  ACTOR_SHEET: "systems/ambersteel/templates/actor/actor-sheet.hbs",
   ACTOR_ATTRIBUTE_TABLE: "systems/ambersteel/templates/actor/components/component-attribute-table.hbs",
   ACTOR_SKILL_TABLE: "systems/ambersteel/templates/actor/components/component-skill-table.hbs",
   ACTOR_PERSONALS: "systems/ambersteel/templates/actor/parts/actor-personals.hbs",

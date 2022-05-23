@@ -1,6 +1,6 @@
-import AmbersteelBaseActor from "./ambersteel-base-actor.mjs";
+import AmbersteelBaseCharacterActor from "./ambersteel-base-character-actor.mjs";
 
-export default class AmbersteelPcActor extends AmbersteelBaseActor {
+export default class AmbersteelPcActor extends AmbersteelBaseCharacterActor {
   /**
    * Prepare PC type specific data. 
    * @param actorData 'this.data'

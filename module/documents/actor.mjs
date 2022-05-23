@@ -1,5 +1,6 @@
 import AmbersteelPcActor from './subtypes/actor/ambersteel-pc-actor.mjs';
 import AmbersteelNpcActor from './subtypes/actor/ambersteel-npc-actor.mjs';
+import AmbersteelBaseActor from './subtypes/actor/ambersteel-base-actor.mjs';
 import * as UpdateUtil from '../utils/document-update-utility.mjs';
 import { DiceOutcomeTypes } from '../dto/dice-outcome-types.mjs';
 
@@ -27,6 +28,8 @@ export class AmbersteelActor extends Actor {
         this._subType = new AmbersteelPcActor(this);
       } else if (type === "npc") {
         this._subType = new AmbersteelNpcActor(this);
+      } else if (type === "plain") {
+        this._subType = new AmbersteelBaseActor(this);
       } else {
         throw `Actor subtype ${type} is unrecognized!`
       }

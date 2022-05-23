@@ -1,6 +1,7 @@
 import AmbersteelNpcActorSheet from "./subtypes/actor/ambersteel-npc-actor-sheet.mjs";
 import AmbersteelPcActorSheet from "./subtypes/actor/ambersteel-pc-actor-sheet.mjs";
 import * as SheetUtil from "../utils/sheet-utility.mjs";
+import AmbersteelBaseActorSheet from "./subtypes/actor/ambersteel-base-actor-sheet.mjs";
 
 export class AmbersteelActorSheet extends ActorSheet {
   /**
@@ -19,6 +20,8 @@ export class AmbersteelActorSheet extends ActorSheet {
         this._subType = new AmbersteelPcActorSheet(this);
       } else if (type === "npc") {
         this._subType = new AmbersteelNpcActorSheet(this);
+      } else if (type === "plain") {
+        this._subType = new AmbersteelBaseActorSheet(this);
       } else {
         throw `Actor subtype ${type} is unrecognized!`
       }
@@ -62,6 +65,8 @@ export class AmbersteelActorSheet extends ActorSheet {
       return `${game.i18n.localize("ambersteel.labels.pc")} - ${this.actor.name}`;
     } else if (this.actor.type === "npc") {
       return `${game.i18n.localize("ambersteel.labels.npc")} - ${this.actor.name}`;
+    } else if (this.actor.type === "plain") {
+      return `${game.i18n.localize("ambersteel.labels.plainActor")} - ${this.actor.name}`;
     } else {
       return this.actor.name;
     }
