@@ -80,7 +80,7 @@ cssClass: {undefined | String}
         {{> "systems/ambersteel/templates/actor/parts/actor-biography.hbs" viewModel=viewModel.biographyViewModel }}
       </div>
     {{else}}
-      <div class="tab description" data-group="primary" data-tab="description">
+      <div class="{{#if viewModel.isGM}}tab {{/if}}description" data-group="primary" data-tab="description">
         <div class="sheet-block fill">
           {{editor content=viewModel.actor.data.data.description target="data.description" button=true editable=viewModel.isEditable owner=viewModel.isOwner}}
         </div>
