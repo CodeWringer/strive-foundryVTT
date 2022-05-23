@@ -1,28 +1,18 @@
-{{!-- Requires context:
-isEditable: {Boolean}
-isSendable: {Boolean}
-item: {Item} = {
-  id: {String}
-  name: {String}
-  img: {String}
-  data: {Object} = {
-    data: {Object} = {
-      description: {String}
-      state: {CONFIG.injuryStates}
-      timeToHeal: {String}
-      limit: {Number}
-    }
-  }
-}
+{{!-- Parameters:
+viewModel: {InjuryChatMessageViewModel}
+cssClass: {undefined | String}
 --}}
-<section>
+<section class="custom-system-chat-message{{#if cssClass}} {{cssClass}}{{/if}}" 
+  data-view-model-id="{{viewModel.id}}"
+  data-document-id="{{viewModel.item.id}}"
+>
   {{!-- Header --}}
   <div class="flex flex-row">
     <div class="flex flex-center">
-      <img class="inline-img header-image margin-r-sm" name="img" src="{{item.img}}" title="{{item.name}}" height="35" width="35" />
+      <img class="inline-img header-image margin-r-sm" name="img" src="{{viewModel.item.img}}" title="{{viewModel.item.name}}" height="35" width="35" />
     </div>
     <h2 class="flex-grow">
-      {{item.name}}
+      {{viewModel.item.name}}
     </h2>
   </div>
   {{!-- Limit --}}
@@ -31,7 +21,7 @@ item: {Item} = {
       {{localize "ambersteel.labels.limit"}}
     </div>
     <div class="flex-grow">
-      {{item.data.data.limit}}
+      {{viewModel.item.data.data.limit}}
     </div>
   </div>
   {{!-- Time to heal --}}
@@ -40,11 +30,11 @@ item: {Item} = {
       {{localize "ambersteel.labels.timeToHeal"}}
     </div>
     <div class="flex-grow">
-      {{item.data.data.timeToHeal}}
+      {{viewModel.item.data.data.timeToHeal}}
     </div>
   </div>
   {{!-- Description --}}
-  <div class="sheet-block multiline">
-    {{item.data.data.description}}
+  <div class="sheet-block multiline scrollable-height-md">
+    {{{viewModel.description}}}
   </div>
 </section>

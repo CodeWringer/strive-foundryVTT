@@ -1,48 +1,31 @@
-{{!-- Requires context:
-isEditable: {Boolean}
-isSendable: {Boolean}
-item: {Item} = {
-  id: {String}
-  name: {String}
-  img: {String}
-  data: {ItemData} = {
-    data: {Object} = {
-      description: {String}
-      cost: {Object} = {
-        miFP: {Number}
-        maFP: {Number}
-        AFP: {Number}
-      }
-    }
-  }
-}
+{{!-- Parameters:
+viewModel: {FateCardViewModel}
+cssClass: {undefined | String}
 --}}
-<section class="flex flex-column fate-card" data-item-id="{{item._id}}">
+<section class="flex flex-column fate-card{{#if cssClass}} {{cssClass}}{{/if}}"
+  data-view-model-id="{{viewModel.id}}"
+  data-document-id="{{viewModel.item.id}}"
+  data-item-id="{{viewModel.item.id}}"
+>
   {{!-- Header --}}
   <div class="flex flex-column pad-md">
     <div class="flex flex-row">
-      <img class="header-image" src="{{item.img}}" data-edit="img" title="{{item.name}}" height="26" width="26" />
+      {{> inputImage viewModel=viewModel.vmImg cssClass="custom-icon-sm" }}
       <h3 class="header-name flex-grow" style="margin: 0;">
-        {{> inputComponent type="single-line" itemId=item._id propertyPath="name" isEditable=isEditable }}
+        {{> inputTextField viewModel=viewModel.vmTfName }}
       </h3>
     </div>
   </div>
   {{!-- Buttons below header --}}
-  {{#if (or isSendable isEditable)}}
-    <div class="flex flex-row pad-md">
-      {{#if isSendable}}
-        <div class="flex flex-center">
-          {{> buttonSendToChat itemId=item._id }}
-        </div>
-      {{/if}}
-      <div class="flex-grow"></div>
-      {{#if isEditable}}
-        {{> buttonDelete itemId=item._id promptConfirm=true promptLocalizableTitle="ambersteel.dialog.titleConfirmDeletionFateCardQuery" }}
-      {{/if}}
-    </div>
-  {{/if}}
+  <div class="flex flex-row pad-r-md pad-l-md">
+      <div class="flex flex-center">
+        {{> buttonSendToChat viewModel=viewModel.vmBtnSendToChat }}
+      </div>
+    <div class="flex-grow"></div>
+    {{> buttonDelete viewModel=viewModel.vmBtnDelete }}
+  </div>
   {{!-- Description --}}
-  <div class="flex flex-grow">
-    {{> inputComponent type="multi-line" name="description" itemId=item._id propertyPath="data.data.description" isEditable=isEditable allowResize=false allowResize=true }}
+  <div class="fill pad-md scrollable-height-lg">
+    {{> inputRichText viewModel=viewModel.vmRtDescription }}
   </div>
 </section>

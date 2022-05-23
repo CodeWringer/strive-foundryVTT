@@ -1,5 +1,6 @@
 import AmbersteelBaseItemSheet from "./ambersteel-base-item-sheet.mjs";
 import { TEMPLATES } from "../../../templatePreloader.mjs";
+import SkillItemSheetViewModel from "../../../../templates/item/skill/skill-item-sheet-viewmodel.mjs";
 
 export default class AmbersteelSkillItemSheet extends AmbersteelBaseItemSheet {
   /** @override */
@@ -52,5 +53,16 @@ export default class AmbersteelSkillItemSheet extends AmbersteelBaseItemSheet {
     const index = parseInt(element.dataset.index);
     
     await this.getItem().deleteSkillAbilityAt(index);
+  }
+
+  getViewModel(context) {
+    return new SkillItemSheetViewModel({
+      id: this.getItem().id,
+      isEditable: context.isEditable,
+      isSendable: context.isSendable,
+      isOwner: context.isOwner,
+      isGM: context.isGM,
+      item: this.getItem(),
+    });
   }
 }

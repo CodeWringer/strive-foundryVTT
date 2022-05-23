@@ -1,43 +1,21 @@
-{{!-- Requires context:
-isEditable: {Boolean}
-isSendable: {Boolean}
-item: {Item} = {
-  id: {String}
-  name: {String}
-  img: {String}
-  data: {ItemData} = {
-    data: {Object} = {
-      description: {String}
-      gmNotes: {String}
-      isCustom: {Boolean}
-      quantity: {Number}
-      maxQuantity: {Number}
-      bulk: {Number} - Derived!
-      shape: {Object} = {
-        width: {Number}
-        height: {Number}
-      }
-      isOnPerson: {Boolean}
-    }
-  }
-}
-sourceType: {String} = "actor"|"world"|"compendium"
-sourceId: {String}
-allowPickup: {Boolean}
+{{!-- Parameters:
+viewModel: {ItemChatMessageViewModel}
+cssClass: {undefined | String}
 --}}
-<section>
+<section class="custom-system-chat-message{{#if cssClass}} {{cssClass}}{{/if}}" 
+  data-view-model-id="{{viewModel.id}}"
+  data-document-id="{{viewModel.item.id}}"
+>
   {{!-- Header --}}
   <div class="flex flex-row">
     <div class="flex flex-center">
-      {{#if allowPickup}}
-        {{> buttonTakeItem itemId=item.id sourceType=sourceType sourceId=sourceId}}
-      {{/if}}
+      {{> buttonTakeItem viewModel=viewModel.vmBtnTakeItem cssClass=(ifThenElse viewModel.allowPickup "" "hidden") }}
     </div>
     <div class="flex flex-center">
-      <img class="inline-img header-image margin-r-sm" name="img" src="{{item.img}}" title="{{item.name}}" height="35" width="35" />
+      <img class="inline-img header-image margin-r-sm" name="img" src="{{viewModel.item.img}}" title="{{viewModel.item.name}}" height="35" width="35" />
     </div>
     <h2 class="flex-grow">
-      {{item.name}}
+      {{viewModel.item.name}}
     </h2>
   </div>
   {{!-- Bulk --}}
@@ -46,7 +24,7 @@ allowPickup: {Boolean}
       {{localize "ambersteel.labels.bulk"}}
     </div>
     <div class="flex-grow">
-      {{item.data.data.bulk}}
+      {{viewModel.item.data.data.bulk}}
     </div>
   </div>
   {{!-- Quantity --}}
@@ -55,7 +33,7 @@ allowPickup: {Boolean}
       {{localize "ambersteel.labels.quantity"}}
     </div>
     <div class="flex-grow">
-      {{item.data.data.quantity}}
+      {{viewModel.item.data.data.quantity}}
     </div>
   </div>
   {{!-- Max quantity --}}
@@ -64,11 +42,11 @@ allowPickup: {Boolean}
       {{localize "ambersteel.labels.maxQuantity"}}
     </div>
     <div class="flex-grow">
-      {{item.data.data.maxQuantity}}
+      {{viewModel.item.data.data.maxQuantity}}
     </div>
   </div>
   {{!-- Description --}}
-  <div class="sheet-block multiline">
-    {{item.data.data.description}}
+  <div class="sheet-block scrollable-height-md">
+    {{{viewModel.description}}}
   </div>
 </section>

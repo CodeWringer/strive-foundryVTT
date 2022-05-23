@@ -2,8 +2,8 @@
   "name": "ambersteel",
   "title": "Ambersteel",
   "description": "The Ambersteel system for FoundryVTT",
-  "version": "0.3.0",
-  "minimumCoreVersion": "0.9.242",
+  "version": "1.0.0",
+  "minimumCoreVersion": "0.9.269",
   "compatibleCoreVersion": "9",
   "author": "Nicolas Haase",
   "esmodules": ["module/ambersteel.mjs"],
@@ -53,7 +53,7 @@
   "primaryTokenAttribute": null,
   "secondaryTokenAttribute": null,
   "url": "https://github.com/CodeWringer/ambersteel-foundryVTT",
-  "manifest": "https://raw.githubusercontent.com/CodeWringer/ambersteel-foundryVTT/main/system.json",
-  "download": "",
+  "manifest": "https://github.com/CodeWringer/ambersteel-foundryVTT/releases/download/v1.0.0-rc2/system.json",
+  "download": "https://github.com/CodeWringer/ambersteel-foundryVTT/releases/download/v1.0.0-rc2/system.zip",
   "license": "LICENSE.txt"
 }

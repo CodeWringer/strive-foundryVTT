@@ -1,34 +1,24 @@
-{{!-- Requires parameters:
-isEditable: {Boolean}
-isSendable: {Boolean}
-data: {Object} = {
-  data: {Object} = {
-    person: {Object} = {
-      species: {String}
-      culture: {String}
-      sex: {String}
-      age: {Number|String}
-    }
-  }
-}
+{{!-- Parameters:
+viewModel: {ActorPersonalsViewModel}
+cssClass: {undefined | String}
 --}}
-<section>
+<section class="{{cssClass}}">
   <div class="flex sheet-block">
     <div class="flex flex-column">
       <label class="line-height fancy-font pad-sm" for="person.species">{{localize "ambersteel.personals.species"}}</label>
       <label class="line-height fancy-font pad-sm" for="person.sex">{{localize "ambersteel.personals.sex"}}</label>
     </div>
     <div class="flex flex-column flex-grow">
-      {{> inputComponent type="single-line" propertyPath="data.data.person.species" isEditable=isEditable cssClass="line-height pad-sm" readOnlyCssClass="line-height pad-sm" }}
-      {{> inputComponent type="single-line" propertyPath="data.data.person.culture" isEditable=isEditable cssClass="line-height pad-sm" readOnlyCssClass="line-height pad-sm" }}
+      {{> inputTextField viewModel=viewModel.vmTfSpecies }}
+      {{> inputTextField viewModel=viewModel.vmTfSex }}
     </div>
     <div class="flex flex-column">
       <label class="line-height fancy-font pad-sm" for="person.culture">{{localize "ambersteel.personals.culture"}}</label>
       <label class="line-height fancy-font pad-sm" for="person.age">{{localize "ambersteel.personals.age"}}</label>
     </div>
     <div class="flex flex-column flex-grow">
-      {{> inputComponent type="single-line" propertyPath="data.data.person.sex" isEditable=isEditable cssClass="line-height pad-sm" readOnlyCssClass="line-height pad-sm" }}
-      {{> inputComponent type="single-line" propertyPath="data.data.person.age" isEditable=isEditable cssClass="line-height pad-sm" readOnlyCssClass="line-height pad-sm" }}
+      {{> inputTextField viewModel=viewModel.vmTfCulture }}
+      {{> inputTextField viewModel=viewModel.vmTfAge }}
     </div>
   </div>
 </section>

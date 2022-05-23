@@ -1,35 +1,34 @@
-{{!-- Requires parameters:
-isEditable: {Boolean}
-isSendable: {Boolean}
-data: {Object} where Object = {
-  beliefSystem: {Object} where Object = {
-    ambition: {String},
-    beliefs: {[String]},
-    instincts: {[String]}
-  }
-}
+{{!-- Parameters:
+viewModel: {ActorBeliefsViewModel}
+cssClass: {undefined | String}
 --}}
-<section>
-  <div class="sheet-block">
+<section class="{{cssClass}}">
+  <div class="sheet-block margin-b-md">
     <h3>
       <label class="fancy-font">{{localize "ambersteel.beliefSystem.ambition"}}</label>
     </h3>
-      {{> inputComponent type="single-line" name="ambition" propertyPath="data.data.beliefSystem.ambition" isEditable=isEditable }}
+    <div class="margin-b-md">
+      {{> inputTextField viewModel=viewModel.vmTfAmbition }}
+    </div>
   </div>
-  <div class="sheet-block">
+  <div class="sheet-block margin-b-md">
     <h3>
       <label class="fancy-font">{{localize "ambersteel.beliefSystem.beliefs"}}</label>
     </h3>
-    {{#each data.beliefSystem.beliefs as |belief key|}}
-      {{> inputComponent type="single-line" name=(concat "belief[" key "]") propertyPath=(concat "data.data.beliefSystem.beliefs[" key "]") isEditable=../isEditable contextOverride=../this }}
+    {{#each viewModel.beliefViewModels as |vm index|}}
+      <div class="margin-b-md">
+        {{> inputTextField viewModel=vm}}
+      </div>
     {{/each}}
   </div>
-  <div class="sheet-block">
+  <div class="sheet-block margin-b-md">
     <h3>
       <label class="fancy-font">{{localize "ambersteel.beliefSystem.instincts"}}</label>
     </h3>
-    {{#each data.beliefSystem.instincts as |instinct key|}}
-      {{> inputComponent type="single-line" name=(concat "instinct[" key "]") propertyPath=(concat "data.data.beliefSystem.instincts[" key "]") isEditable=../isEditable contextOverride=../this }}
+    {{#each viewModel.instinctViewModels as |vm index|}}
+      <div class="margin-b-md">
+        {{> inputTextField viewModel=vm}}
+      </div>
     {{/each}}
   </div>
 </section>

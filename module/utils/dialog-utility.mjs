@@ -1,7 +1,6 @@
 import DialogResult from '../dto/dialog-result.mjs';
-import * as NumberSpinner from '../components/number-spinner.mjs';
 import { TEMPLATES } from '../templatePreloader.mjs';
-import { getElementValue } from './sheet-utility.mjs';
+import { getElementValue, setSelectedOptionByValue } from './sheet-utility.mjs';
 
 /**
  * Shows a dialog to the user and returns a promise with the result of the user interaction. 
@@ -52,7 +51,7 @@ export async function showDialog(args = {}, dialogData) {
             },
             default: "cancel",
             render: html => {
-                NumberSpinner.activateListeners(html, this, true, true);
+                // TODO: Activate DOM event listeners using the view model system. 
                 args.render(html);
             },
             close: html => {
@@ -70,6 +69,7 @@ export async function showDialog(args = {}, dialogData) {
  * Shows a confirmation dialog. 
  * @param {Object} args Optional arguments to pass to the rendering function. 
  * @param {String} args.localizableTitle Localization string for the dialog title. 
+ * @param {String | undefined} args.content Optional. HTML content to show as the body of the dialog. 
  * @returns {Promise<Boolean>} Resolves, when the dialog is closed. 
  *          Is true, when the dialog was closed with confirmation. 
  * @async
@@ -86,7 +86,7 @@ export async function showConfirmationDialog(args = {}) {
     return new Promise(async (resolve, reject) => {
         const dialog = new Dialog({
             title: game.i18n.localize(args.localizableTitle),
-            content: "",
+            content: args.content ?? "",
             buttons: {
                 confirm: {
                     icon: '<i class="fas fa-check"></i>',
@@ -104,7 +104,9 @@ export async function showConfirmationDialog(args = {}) {
             default: "cancel",
             render: html => {},
             close: html => {
-                resolve(mergedDialogData.confirmed);
+                resolve({
+                    confirmed: mergedDialogData.confirmed,
+                });
             }
         });
         dialog.render(true);
@@ -159,9 +161,8 @@ export async function showPlainDialog(args = {}) {
  * @param {Object} args Optional arguments to pass to the rendering function. 
  * @param {String} args.localizableTitle
  * @param {String} args.localizableLabel
- * @param {Array<Object>} args.options An array of objects to offer for selection. 
- * Important note: The objects *must* have an 'id' and 'name' property!
- * @param {Object | undefined} args.selected Optional. The 
+ * @param {Array<ChoiceOption>} args.options An array of choices to offer for selection. 
+ * @param {Any} args.selected Optional. The value to pre-select when the dialog is rendered. 
  * @returns {Promise<Object>} = {
  * selected: {String} Id of the selected item,
  * confirmed: {Boolean}
@@ -170,7 +171,7 @@ export async function showPlainDialog(args = {}) {
  */
 export async function showSelectionDialog(args = {}) {
     args = {
-        localizableTitle: "",
+        localizableTitle: "ambersteel.dialog.titleSelect",
         localizableLabel: "",
         options: [],
         selected: undefined,
@@ -182,13 +183,18 @@ export async function showSelectionDialog(args = {}) {
           {
             dialogTemplate: TEMPLATES.DIALOG_SELECT,
             localizableTitle: args.localizableTitle,
-            render: html => {}
+            render: html => {
+                if (args.selected !== undefined) {
+                    const selectElement = html.find("#selection");
+                    setSelectedOptionByValue(selectElement, args.selected);
+                }
+            }
           },
           args
         );
         resolve({
-          selected: getElementValue(dialogResult.html.find(".ambersteel-item-select")[0]),
-          confirmed: dialogResult.confirmed
+            selected: getElementValue(dialogResult.html.find(".ambersteel-item-select")[0]),
+            confirmed: dialogResult.confirmed
         });
-      });
+    });
 }

@@ -1,6 +1,5 @@
 import { AmbersteelActor } from "../../documents/actor.mjs";
 import InventoryIndex from "../../dto/inventory-index.mjs";
-import AmbersteelBaseActorSheet from "../../sheets/subtypes/actor/ambersteel-base-actor-sheet.mjs";
 import { TEXTURES } from "../../pixi/texture-preloader.mjs";
 import { ItemOnGridView } from "./item-on-grid-view.mjs";
 import { DragIndicator } from "./drag-indicator.mjs";
@@ -52,18 +51,7 @@ export class ItemGridView {
    * @private
    */
   _itemGrid = undefined;
-  
-  /**
-   * @type {AmbersteelBaseActorSheet}
-   * @private
-   */
-  _actorSheet = undefined;
-  /**
-   * @type {AmbersteelActor}
-   * @private
-   */
-  _actor = undefined;
-  
+    
   /**
    * @type {ItemOnGridView}
    * @private
@@ -119,6 +107,8 @@ export class ItemGridView {
   _hoverItem = undefined;
   get hoverItem() { return this._hoverItem; }
   set hoverItem(value) {
+    if (this.isEditable !== true) return;
+
     if (value != this.hoverItem) {
       if (this.hoverItem !== undefined) {
         this.hoverItem.tint = 0xFFFFFF; // Removes any highlighting. 
@@ -139,6 +129,8 @@ export class ItemGridView {
   _hoverButton = undefined;
   get hoverButton() { return this._hoverButton; }
   set hoverButton(value) {
+    if (this.isEditable !== true) return;
+
     if (value != this._hoverButton) {
       if (this.hoverButton !== undefined) {
         this._hoverButton.showHover = false;
@@ -152,30 +144,43 @@ export class ItemGridView {
     }
   }
 
+  /**
+   * @type {Boolean}
+   * @private
+   */
   _isEditable = true;
+  /**
+   * Returns true, if the item grid is editable.
+   * @type {Boolean}
+   */
   get isEditable() { return this._isEditable; }
+  /**
+   * Sets whether the item grid is editable.
+   * @param {Boolean} value
+   */
   set isEditable(value) {
     this._isEditable = value;
+    if (value !== true) {
+      this.hoverItem = undefined;
+      this.hoverButton = undefined;
+    }
   }
 
   /**
-   * 
-   * @param {HTMLElement} html 
-   * @param {String} canvasElementId 
-   * @param {AmbersteelBaseActorSheet} actorSheet 
+   * @param {HTMLElement} html DOM that containes the canvas element. 
+   * @param {String} canvasElementId ID of the DOM element that represents the canvas. 
+   * @param {ItemGrid} itemGrid The item grid to display. 
+   * @param {Number} width Width of the canvas, in pixels. 
+   * @param {Boolean} isEditable Optional. Determines whether the item grid will be editable. Default false. 
    */
-  constructor(html, canvasElementId, actorSheet, width, tileSize = 128) {
+  constructor(html, canvasElementId, itemGrid, width, isEditable = false) {
     this._width = width;
-    this._tileSize = tileSize;
-
-    const usedActorSheet = actorSheet;
-    this._actorSheet = usedActorSheet;
-    this._actor = this._actorSheet.getActor();
-
-    this._itemGrid = this._actor.itemGrid;
-
+    this._itemGrid = itemGrid;
+    this._isEditable = isEditable;
+    
     // Setup HTML canvas element. 
     this._canvasElement = html.find("#" + canvasElementId)[0];
+    this._tileSize = this._width / this._itemGrid.columnCount;
     const height = Math.ceil(this._itemGrid.capacity / this._itemGrid.columnCount) * this._tileSize;
     this._canvasElement.style.height = height;
   
@@ -234,7 +239,7 @@ export class ItemGridView {
   _setupItemsOnGrid(indices, items) {
     for (const index of indices) {
       const item = items.find((element) => { return element.id === index.id; });
-      const itemOnGrid = new ItemOnGridView(item, index, { width: this._tileSize, height: this._tileSize }, this);
+      const itemOnGrid = new ItemOnGridView(item, index, { width: this._tileSize, height: this._tileSize }, this, this.isEditable);
       this._itemsOnGrid.push(itemOnGrid);
 
       this._rootContainer.addChild(itemOnGrid.rootContainer.wrapped);
@@ -249,7 +254,7 @@ export class ItemGridView {
    */
   _setupInteractivity() {
     window.addEventListener('keypress', (e) => {
-      if (e.code != "KeyR") return; // TODO: Add this to FoundryVTT's key map somehow. 
+      if (e.code != "KeyR") return; // TODO #45: Add this to FoundryVTT's key map somehow. 
 
       if (this._dragItem !== undefined) {
         this._dragIndicator.rotate();
@@ -343,6 +348,7 @@ export class ItemGridView {
 
     this._stage.on("pointermove", (event) => {
       if (this._captureCursor !== true) return;
+      if (this._isEditable !== true) return;
       const coords = { x: event.data.global.x, y: event.data.global.y };
 
       if (this._dragItem === undefined) {
@@ -370,7 +376,7 @@ export class ItemGridView {
   /**
    * Clean-up of the item grid. 
    */
-  tearDown() {
+  dispose() {
     // Tear down pixiApp
     this._stage = undefined;
     if (this._pixiApp !== undefined) {
@@ -380,8 +386,7 @@ export class ItemGridView {
     this._rootContainer = undefined;
 
     // Unset variables (probably unnecessary, but better to be on the safe side). 
-    this._actorSheet = undefined;
-    this._actor = undefined;
+    this.itemGrid = undefined;
     this._spriteInstancesGrid = [];
     this._itemsOnGrid = [];
 
@@ -446,10 +451,10 @@ export class ItemGridView {
     const itemOnGrid = this.getItemAt(pixelX, pixelY);
     const button = this._getButtonAt(pixelX, pixelY);
     
-    if (button !== undefined) {
+    if (this.isEditable === true && button !== undefined) {
       // Show clicking is possible. 
       this._canvasElement.style.cursor = "pointer";
-    } else if (itemOnGrid !== undefined) {
+    } else if (this.isEditable === true && itemOnGrid !== undefined) {
       // Show grabbing is possible. 
       this._canvasElement.style.cursor = "grab";
     } else {

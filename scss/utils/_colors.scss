@@ -21,9 +21,26 @@ $c-row-even: rgba(255, 255, 255, 0.2);
 $c-row-odd: rgba(0, 0, 0, 0.08);
 
 $c-text-normal: rgb(25, 24, 19);
+$c-text-lighter: #46453f;
 $c-text-disabled: #676662;
 $c-text-highlight: #d23d3d;
 $c-text-underline: #782e22;
 $c-text-read-only: #525252;
 
 $c-button-highlight: #FF0000;
+
+$c-neutral-bg-light: #c2c2c2;
+$c-neutral-bg-medium: #b9b9b9;
+$c-neutral-bg-dark: #acacac;
+
+$c-themed-bg-disabled: #676662;
+$c-themed-bg-lightest: #f78d317d;
+$c-themed-bg-lighter: #ec81237d;
+$c-themed-bg-light: #e0771c7d;
+$c-themed-bg-medium: #d76e147d;
+$c-themed-bg-dark: #ca6a167d;
+$c-themed-bg-darker: #bb62147d;
+$c-themed-bg-darkest: #a557127d;
+
+$c-themed-hint-bg: #eddfb0;
+$c-themed-hint-border: #a89b70;

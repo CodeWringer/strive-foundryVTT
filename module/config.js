@@ -1,36 +1,108 @@
 export const ambersteel = {}
 
 ambersteel.weaponTypes = {
-    unarmed: "ambersteel.attackTypes.unarmed",
-    shortBlade: "ambersteel.attackTypes.shortBlade",
-    longBlade: "ambersteel.attackTypes.longBlade",
-    greatBlade: "ambersteel.attackTypes.greatBlade",
-    axe: "ambersteel.attackTypes.axe",
-    greatAxe: "ambersteel.attackTypes.greatAxe",
-    spear: "ambersteel.attackTypes.spear",
-    lance: "ambersteel.attackTypes.lance",
-    polearm: "ambersteel.attackTypes.polearm",
-    club: "ambersteel.attackTypes.club",
-    smallCrusher: "ambersteel.attackTypes.smallCrusher",
-    largeCrusher: "ambersteel.attackTypes.largeCrusher",
-    shortBow: "ambersteel.attackTypes.shortBow",
-    longBow: "ambersteel.attackTypes.longBow",
-    warBow: "ambersteel.attackTypes.warBow",
-    crossbow: "ambersteel.attackTypes.crossbow",
-    firearm: "ambersteel.attackTypes.firearm"
+    unarmed: {
+        name: "unarmed",
+        localizableName: "ambersteel.weaponTypes.unarmed"
+    },
+    shortBlade: {
+        name: "shortBlade",
+        localizableName: "ambersteel.weaponTypes.shortBlade"
+    },
+    longBlade: {
+        name: "longBlade",
+        localizableName: "ambersteel.weaponTypes.longBlade"
+    },
+    greatBlade: {
+        name: "greatBlade",
+        localizableName: "ambersteel.weaponTypes.greatBlade"
+    },
+    axe: {
+        name: "axe",
+        localizableName: "ambersteel.weaponTypes.axe"
+    },
+    greatAxe: {
+        name: "greatAxe",
+        localizableName: "ambersteel.weaponTypes.greatAxe"
+    },
+    spear: {
+        name: "spear",
+        localizableName: "ambersteel.weaponTypes.spear"
+    },
+    lance: {
+        name: "lance",
+        localizableName: "ambersteel.weaponTypes.lance"
+    },
+    polearm: {
+        name: "polearm",
+        localizableName: "ambersteel.weaponTypes.polearm"
+    },
+    club: {
+        name: "club",
+        localizableName: "ambersteel.weaponTypes.club"
+    },
+    smallCrusher: {
+        name: "smallCrusher",
+        localizableName: "ambersteel.weaponTypes.smallCrusher"
+    },
+    largeCrusher: {
+        name: "largeCrusher",
+        localizableName: "ambersteel.weaponTypes.largeCrusher"
+    },
+    shortBow: {
+        name: "shortBow",
+        localizableName: "ambersteel.weaponTypes.shortBow"
+    },
+    longBow: {
+        name: "longBow",
+        localizableName: "ambersteel.weaponTypes.longBow"
+    },
+    warBow: {
+        name: "warBow",
+        localizableName: "ambersteel.weaponTypes.warBow"
+    },
+    crossbow: {
+        name: "crossbow",
+        localizableName: "ambersteel.weaponTypes.crossbow"
+    },
+    firearm: {
+        name: "firearm",
+        localizableName: "ambersteel.weaponTypes.firearm"
+    }
 };
 
 ambersteel.armorTypes = {
-    light: "ambersteel.armorTypes.light",
-    medium: "ambersteel.armorTypes.medium",
-    heavy: "ambersteel.armorTypes.heavy"
+    light: {
+        name: "light",
+        localizableName: "ambersteel.armorTypes.light"
+    },
+    medium: {
+        name: "medium",
+        localizableName: "ambersteel.armorTypes.medium"
+    },
+    heavy: {
+        name: "heavy",
+        localizableName: "ambersteel.armorTypes.heavy"
+    }
 };
 
 ambersteel.shieldTypes = {
-    buckler: "ambersteel.shieldTypes.buckler",
-    roundShield: "ambersteel.shieldTypes.roundShield",
-    heaterShield: "ambersteel.shieldTypes.heaterShield",
-    kiteShield: "ambersteel.shieldTypes.kiteShield"
+    buckler: {
+        name: "buckler",
+        localizableName: "ambersteel.shieldTypes.buckler"
+    },
+    roundShield: {
+        name: "roundShield",
+        localizableName: "ambersteel.shieldTypes.roundShield"
+    },
+    heaterShield: {
+        name: "heaterShield",
+        localizableName: "ambersteel.shieldTypes.heaterShield"
+    },
+    kiteShield: {
+        name: "kiteShield",
+        localizableName: "ambersteel.shieldTypes.kiteShield"
+    }
 };
 
 ambersteel.damageTypes = {
@@ -217,38 +289,53 @@ ambersteel.fateSystem = {
 };
 
 ambersteel.visibilityModes = {
-    public: "ambersteel.messageVisibilityModes.public",
-    self: "ambersteel.messageVisibilityModes.self",
-    gm: "ambersteel.messageVisibilityModes.gm"
+    public: {
+        name: "public",
+        localizableName: "ambersteel.messageVisibilityModes.public"
+    },
+    self: {
+        name: "self",
+        localizableName: "ambersteel.messageVisibilityModes.self"
+    },
+    gm: {
+        name: "gm",
+        localizableName: "ambersteel.messageVisibilityModes.gm"
+    }
 };
 
 ambersteel.injuryStates = {
     active: {
         name: "active",
-        localizableName: "ambersteel.injuryStates.active"
+        localizableName: "ambersteel.injuryStates.active",
+        icon: "fas fa-bone"
     },
     patchedUp: {
         name: "patchedUp",
-        localizableName: "ambersteel.injuryStates.patchedUp"
+        localizableName: "ambersteel.injuryStates.patchedUp",
+        icon: "fas fa-band-aid"
     },
     treated: {
         name: "treated",
-        localizableName: "ambersteel.injuryStates.treated"
+        localizableName: "ambersteel.injuryStates.treated",
+        icon: "fas fa-mortar-pestle"
     },
     permanent: {
         name: "permanent",
-        localizableName: "ambersteel.injuryStates.permanent"
+        localizableName: "ambersteel.injuryStates.permanent",
+        icon: "fas fa-crutch"
     }
 };
 
 ambersteel.illnessStates = {
     active: {
         name: "active",
-        localizableName: "ambersteel.illnessStates.active"
+        localizableName: "ambersteel.illnessStates.active",
+        icon: "fas fa-virus"
     },
     treated: {
         name: "treated",
-        localizableName: "ambersteel.illnessStates.treated"
+        localizableName: "ambersteel.illnessStates.treated",
+        icon: "fas fa-mortar-pestle"
     }
 };
 
@@ -256,3 +343,14 @@ ambersteel.itemOrientations = {
     vertical: 0,
     horizontal: 1
 };
+
+ambersteel.rollTypes = {
+    /**
+     * A generic roll, using Foundry's default system. 
+     */
+    generic: "generic",
+    /**
+     * An Ambersteel dice-pool roll. 
+     */
+    dicePool: "dice-pool",
+}
