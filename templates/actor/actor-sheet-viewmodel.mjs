@@ -25,6 +25,18 @@ export default class ActorSheetViewModel extends SheetViewModel {
    * @type {Boolean}
    */
   get isPC() { return this.actor.type === "pc"; }
+  
+  /**
+   * Is true, if the actor is a non-player character. 
+   * @type {Boolean}
+   */
+  get isNPC() { return this.actor.type === "npc"; }
+
+  /**
+   * Is true, if the actor is a plain actor. 
+   * @type {Boolean}
+   */
+  get isPlain() { return this.actor.type === "plain"; }
 
   personalsViewModel = undefined;
   get personalsId() { return "child-personals-viewmodel"; }
@@ -85,15 +97,18 @@ export default class ActorSheetViewModel extends SheetViewModel {
       propertyOwner: thiz.actor,
       propertyPath: "img",
     });
-    this.personalsViewModel = new ActorPersonalsViewModel({ ...args, id: thiz.personalsId, parent: thiz });
-    this.attributesViewModel = new ActorAttributesViewModel({ ...args, id: thiz.personalsId, parent: thiz });
-    this.skillsViewModel = new ActorSkillsViewModel({ ...args, id: thiz.skillsId, parent: thiz });
-    if (args.actor.type === 'pc') {
-      this.beliefsFateViewModel = new ActorBeliefsFateViewModel({ ...args, id: thiz.beliefsFateId, parent: thiz });
+
+    if (this.isPlain !== true) {
+      this.personalsViewModel = new ActorPersonalsViewModel({ ...args, id: thiz.personalsId, parent: thiz });
+      this.attributesViewModel = new ActorAttributesViewModel({ ...args, id: thiz.personalsId, parent: thiz });
+      this.skillsViewModel = new ActorSkillsViewModel({ ...args, id: thiz.skillsId, parent: thiz });
+      if (args.actor.type === 'pc') {
+        this.beliefsFateViewModel = new ActorBeliefsFateViewModel({ ...args, id: thiz.beliefsFateId, parent: thiz });
+      }
+      this.healthViewModel = new ActorHealthViewModel({ ...args, id: thiz.healthId, parent: thiz });
+      this.assetsViewModel = new ActorAssetsViewModel({ ...args, id: thiz.assetsId, parent: thiz });
+      this.biographyViewModel = new ActorBiographyViewModel({ ...args, id: thiz.biographyId, parent: thiz });
     }
-    this.healthViewModel = new ActorHealthViewModel({ ...args, id: thiz.healthId, parent: thiz });
-    this.assetsViewModel = new ActorAssetsViewModel({ ...args, id: thiz.assetsId, parent: thiz });
-    this.biographyViewModel = new ActorBiographyViewModel({ ...args, id: thiz.biographyId, parent: thiz });
     this.gmNotesViewModel = new GmNotesViewModel({ ...args, id: thiz.biographyId, document: thiz.actor, parent: thiz });
     this.vmBtnSendToChat = thiz.createVmBtnSendToChat({
       id: "vmBtnSendToChat",

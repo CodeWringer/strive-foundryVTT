@@ -1,5 +1,5 @@
-import AmbersteelBaseActor from "./ambersteel-base-actor.mjs";
+import AmbersteelBaseCharacterActor from "./ambersteel-base-character-actor.mjs";
 
-export default class AmbersteelNpcActor extends AmbersteelBaseActor {
+export default class AmbersteelNpcActor extends AmbersteelBaseCharacterActor {
   // Currently has no specific behavior. 
 }

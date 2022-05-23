@@ -1,0 +1,98 @@
+{{!-- Requires context:
+viewModel: {ActorSheetViewModel}
+cssClass: {undefined | String}
+--}}
+<form class="{{viewModel.actor.type}} flexcol{{#if cssClass}} {{cssClass}}{{/if}}" autocomplete="off">
+
+  {{!-- Sheet Header --}}
+  <header class="sheet-header">
+    {{> inputImage viewModel=viewModel.vmImg cssClass="profile-img" }}
+    <div class="header-fields">
+      <div class="flex flex-row">
+        <h1 class="header-name fancy-font flex-grow">
+          {{> inputTextField viewModel=viewModel.vmTfName }}
+        </h1>
+        <div class="flex flex-center {{#if viewModel.isSendable}}{{else}}hidden{{/if}}">
+          {{> buttonSendToChat viewModel=viewModel.vmBtnSendToChat }}
+        </div>
+      </div>
+      {{#if (eq viewModel.isPlain false)}}
+        {{> "systems/ambersteel/templates/actor/parts/actor-personals.hbs" viewModel=viewModel.personalsViewModel }}
+      {{/if}}
+    </div>
+  </header>
+
+  {{#if (or (eq viewModel.isPlain false) (eq viewModel.isGM true))}}
+    {{!-- Sheet Tab Navigation --}}
+    <nav class="sheet-tabs tabs flex flex-justify" id="nav-sheet-tabs" data-group="primary">
+      {{#if (eq viewModel.isPlain false)}}
+        {{!-- Default tab is specified in actor-sheet.mjs --}}
+        <a class="item fancy-font flex flex-center flex-grow" data-tab="attributes"><div>{{localize "ambersteel.labels.tabAttributes"}}</div></a>
+        <a class="item fancy-font flex flex-center flex-grow" data-tab="skills"><div>{{localize "ambersteel.labels.tabSkills"}}</div></a>
+        {{#if viewModel.isPC }}
+          <a class="item fancy-font flex flex-center flex-grow" data-tab="beliefs-fate"><div>{{localize "ambersteel.labels.tabBeliefsFate"}}</div></a>
+        {{/if}}
+        <a class="item fancy-font flex flex-center flex-grow" data-tab="health"><div>{{localize "ambersteel.labels.tabHealth"}}</div></a>
+        <a class="item fancy-font flex flex-center flex-grow" data-tab="assets"><div>{{localize "ambersteel.labels.tabAssets"}}</div></a>
+        <a class="item fancy-font flex flex-center flex-grow" data-tab="biography"><div>{{localize "ambersteel.labels.tabBiography"}}</div></a>
+      {{else}}
+        <a class="item fancy-font flex flex-center flex-grow" data-tab="description"><div>{{localize "ambersteel.labels.tabDescription"}}</div></a>
+      {{/if}}
+      {{#if viewModel.isGM }}
+        <a class="item fancy-font flex flex-center flex-grow" data-tab="gm-notes"><div>{{localize "ambersteel.labels.tabGmNotes"}}</div></a>
+      {{/if}}
+    </nav>
+  {{/if}}
+
+  {{!-- Sheet Body --}}
+  <section class="sheet-body">
+
+    {{#if (eq viewModel.isPlain false)}}
+      {{!-- Attributes Tab --}}
+      <div class="tab attributes" data-group="primary" data-tab="attributes">
+        {{> "systems/ambersteel/templates/actor/parts/actor-attributes.hbs" viewModel=viewModel.attributesViewModel }}
+      </div>
+
+      {{!-- Skills Tab --}}
+      <div class="tab skills" data-group="primary" data-tab="skills">
+        {{> "systems/ambersteel/templates/actor/parts/actor-skills.hbs" viewModel=viewModel.skillsViewModel }}
+      </div>
+
+      {{#if viewModel.isPC }}
+      {{!-- Beliefs&Fate Tab --}}
+        <div class="tab beliefs-fate" data-group="primary" data-tab="beliefs-fate">
+          {{> "systems/ambersteel/templates/actor/parts/actor-beliefs-fate.hbs" viewModel=viewModel.beliefsFateViewModel }}
+        </div>
+      {{/if}}
+
+      {{!-- Health Tab --}}
+      <div class="tab health" data-group="primary" data-tab="health">
+        {{> "systems/ambersteel/templates/actor/parts/actor-health.hbs" viewModel=viewModel.healthViewModel }}
+      </div>
+
+      {{!-- Assets Tab --}}
+      <div class="tab assets" data-group="primary" data-tab="assets">
+        {{> "systems/ambersteel/templates/actor/parts/actor-assets.hbs" viewModel=viewModel.assetsViewModel }}
+      </div>
+
+      {{!-- Biography Tab --}}
+      <div class="tab biography" data-group="primary" data-tab="biography">
+        {{> "systems/ambersteel/templates/actor/parts/actor-biography.hbs" viewModel=viewModel.biographyViewModel }}
+      </div>
+    {{else}}
+      <div class="tab description" data-group="primary" data-tab="description">
+        <div class="sheet-block fill">
+          {{editor content=viewModel.actor.data.data.description target="data.description" button=true editable=viewModel.isEditable owner=viewModel.isOwner}}
+        </div>
+      </div>
+    {{/if}}
+
+    {{!-- GM Notes Tab --}}
+    {{#if viewModel.isGM }}
+      <div class="tab gm-notes" data-group="primary" data-tab="gm-notes">
+        {{> "systems/ambersteel/templates/gm-notes.hbs" viewModel=viewModel.gmNotesViewModel }}
+      </div>
+    {{/if}}
+
+  </section>
+</form>

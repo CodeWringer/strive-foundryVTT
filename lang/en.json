@@ -128,6 +128,7 @@
       "tabAssets": "Assets",
       "tabBiography": "Biography",
       "tabGmNotes": "GM",
+      "tabDescription": "Description",
       "confirm": "Confirm",
       "cancel": "Cancel",
       "ok": "OK",
@@ -188,6 +189,8 @@
       "pcAbbreviation": "PC",
       "npc": "Non-Player Character",
       "npcAbbreviation": "NPC",
+      "plainActor": "Plain Actor",
+      "plainActorAbbreviation": "Plain",
       "nameOfNewSkillAbility": "New Skill Ability",
       "opposedBy": "Opposed By",
       "roll": "Roll Dice"
