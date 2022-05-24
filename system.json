@@ -11,6 +11,24 @@
   "scripts": [],
   "packs": [
     {
+      "name": "armors",
+      "label": "Armors",
+      "path": "packs/armors.db",
+      "entity": "Item"
+    },
+    {
+      "name": "bestiary-human",
+      "label": "Bestiary (Human)",
+      "path": "packs/bestiary-human.db",
+      "entity": "Actor"
+    },
+    {
+      "name": "bestiary-undead",
+      "label": "Bestiary (Undead)",
+      "path": "packs/bestiary-undead.db",
+      "entity": "Actor"
+    },
+    {
       "name": "fatecards",
       "label": "Fate Cards",
       "path": "packs/fate-cards.db",
@@ -29,9 +47,39 @@
       "entity": "Item"
     },
     {
+      "name": "burn-injuries",
+      "label": "Burn Injuries",
+      "path": "packs/burn-injuries.db",
+      "entity": "Item"
+    },
+    {
+      "name": "shields",
+      "label": "Shields",
+      "path": "packs/shields.db",
+      "entity": "Item"
+    },
+    {
       "name": "skills",
       "label": "Skills",
       "path": "packs/skills.db",
+      "entity": "Item"
+    },
+    {
+      "name": "supplies-and-stuff",
+      "label": "Supplies and Stuff",
+      "path": "packs/supplies-and-stuff.db",
+      "entity": "Item"
+    },
+    {
+      "name": "valuables",
+      "label": "Valuables",
+      "path": "packs/valuables.db",
+      "entity": "Item"
+    },
+    {
+      "name": "weapons",
+      "label": "Weapons",
+      "path": "packs/weapons.db",
       "entity": "Item"
     },
     {
