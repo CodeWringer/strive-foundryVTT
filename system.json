@@ -47,6 +47,12 @@
       "entity": "Item"
     },
     {
+      "name": "burn-injuries",
+      "label": "Burn Injuries",
+      "path": "packs/burn-injuries.db",
+      "entity": "Item"
+    },
+    {
       "name": "shields",
       "label": "Shields",
       "path": "packs/shields.db",
