@@ -127,6 +127,10 @@ export default class AmbersteelSkillItem extends AmbersteelBaseItem {
         await this.setLevel(nextSkillValue, resetProgress);
       }
     }
+
+    // Progress associated attribute. 
+    const attName = skillData.relatedAttribute;
+    this.parent.parent.addAttributeProgress(outcomeType, attName, autoLevel)
   }
 
   /**
