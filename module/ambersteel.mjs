@@ -80,11 +80,10 @@ Hooks.once('init', async function() {
      * @returns {Object} { totalDiceCount: {Number}, skillDiceCount: {Number}, attributeDiceCount: {Number} }
      */
     getSkillTestNumberOfDice: function(skillLevel, relatedAttributeLevel) {
-      const attributeDice = skillLevel == 0 ? parseInt(Math.ceil(relatedAttributeLevel / 2)) : parseInt(Math.floor(relatedAttributeLevel / 2));
       return {
-        totalDiceCount: skillLevel + attributeDice,
+        totalDiceCount: skillLevel + relatedAttributeLevel,
         skillDiceCount: skillLevel,
-        attributeDiceCount: attributeDice
+        attributeDiceCount: relatedAttributeLevel
       };
     },
     /**
