@@ -3,6 +3,7 @@ import AmbersteelIllnessItem from './subtypes/item/ambersteel-illness-item.mjs';
 import AmbersteelInjuryItem from './subtypes/item/ambersteel-injury-item.mjs';
 import AmbersteelItemItem from './subtypes/item/ambersteel-item-item.mjs';
 import AmbersteelSkillItem from './subtypes/item/ambersteel-skill-item.mjs';
+import AmbersteelMutationItem from './subtypes/item/ambersteel-mutation-item.mjs';
 import * as UpdateUtil from "../utils/document-update-utility.mjs";
 
 export class AmbersteelItem extends Item {
@@ -27,6 +28,8 @@ export class AmbersteelItem extends Item {
         this._subType = new AmbersteelInjuryItem(this);
       } else if (type === "illness") {
         this._subType = new AmbersteelIllnessItem(this);
+      } else if (type === "mutation") {
+        this._subType = new AmbersteelMutationItem(this);
       } else {
         throw `Item subtype ${type} is unrecognized!`
       }

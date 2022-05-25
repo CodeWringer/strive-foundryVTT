@@ -193,7 +193,8 @@
       "plainActorAbbreviation": "Plain",
       "nameOfNewSkillAbility": "New Skill Ability",
       "opposedBy": "Opposed By",
-      "roll": "Roll Dice"
+      "roll": "Roll Dice",
+      "mutations": "Mutations"
     },
     "placeholders": {
       "obstacle": "0 / Opposed+-0 / etc.",

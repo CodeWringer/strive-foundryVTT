@@ -3,6 +3,7 @@ import { TEMPLATES } from "../../../module/templatePreloader.mjs";
 import { validateOrThrow } from "../../../module/utils/validation-utility.mjs";
 import IllnessListItemViewModel from "../../item/illness/illness-list-item-viewmodel.mjs";
 import InjuryListItemViewModel from "../../item/injury/injury-list-item-viewmodel.mjs";
+import MutationListItemViewModel from "../../item/mutation/mutation-list-item-viewmodel.mjs";
 
 export default class ActorHealthViewModel extends SheetViewModel {
   /** @override */
@@ -26,6 +27,12 @@ export default class ActorHealthViewModel extends SheetViewModel {
   get illnessCount() { return this.actor.illnesses.length; }
 
   /**
+   * @type {Number}
+   * @readonly
+   */
+  get mutationCount() { return this.actor.mutations.length; }
+
+  /**
    * @type {Array<IllnessListItemViewModel>}
    * @readonly
    */
@@ -36,6 +43,12 @@ export default class ActorHealthViewModel extends SheetViewModel {
    * @readonly
    */
   injuries = [];
+
+  /**
+   * @type {Array<MutationViewModel>}
+   * @readonly
+   */
+  mutations = [];
 
   /**
    * @type {Boolean}
@@ -121,6 +134,12 @@ export default class ActorHealthViewModel extends SheetViewModel {
       creationType: "illness",
       withDialog: true,
     });
+    this.vmBtnAddMutation = this.createVmBtnAdd({
+      id: "vmBtnAddMutation",
+      target: thiz.actor,
+      creationType: "mutation",
+      withDialog: true,
+    });
 
     for (const illness of this.actor.illnesses) {
       const vm = new IllnessListItemViewModel({
@@ -140,6 +159,16 @@ export default class ActorHealthViewModel extends SheetViewModel {
         item: injury,
       });
       this.injuries.push(vm);
+    }
+
+    for (const mutation of this.actor.mutations) {
+      const vm = new MutationListItemViewModel({
+        ...args,
+        id: mutation.id,
+        parent: thiz,
+        item: mutation,
+      });
+      this.mutations.push(vm);
     }
   }
 }
