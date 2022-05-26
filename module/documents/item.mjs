@@ -18,6 +18,7 @@ export class AmbersteelItem extends Item {
     if (!this._subType) {
       const type = this.data.type;
 
+      // TODO: Refactor and somehow get rid of the explicit statements. 
       if (type === "skill") {
         this._subType = new AmbersteelSkillItem(this);
       } else if (type === "fate-card") {

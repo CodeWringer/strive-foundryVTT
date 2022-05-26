@@ -4,7 +4,7 @@ import { validateOrThrow } from "../../../module/utils/validation-utility.mjs";
 
 export default class MutationListItemViewModel extends SheetViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.ITEM_LIST_ITEM; }
+  static get TEMPLATE() { return TEMPLATES.MUTATION_LIST_ITEM; }
 
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
@@ -24,7 +24,7 @@ export default class MutationListItemViewModel extends SheetViewModel {
     validateOrThrow(args, ["item"]);
 
     this.item = args.item;
-    this.contextTemplate = args.contextTemplate ?? "item-list-item";
+    this.contextTemplate = args.contextTemplate ?? "mutation-list-item";
     const thiz = this;
 
     this.vmImg = this.createVmImg({
@@ -42,40 +42,11 @@ export default class MutationListItemViewModel extends SheetViewModel {
       id: "vmBtnSendToChat",
       target: thiz.item,
     });
-    this.vmBtnTakeItem = this.createVmBtnTakeItem({
-      id: "vmBtnTakeItem",
-      target: thiz.item,
-      contextType: "list-item"
-    });
     this.vmBtnDelete = this.createVmBtnDelete({
       id: "vmBtnDelete",
       target: thiz.item,
       withDialog: true,
     })
-    this.vmNsQuantity = this.createVmNumberSpinner({
-      id: "vmNsQuantity",
-      propertyOwner: thiz.item,
-      propertyPath: "data.data.quantity",
-      min: 1,
-    });
-    this.vmNsMaxQuantity = this.createVmNumberSpinner({
-      id: "vmNsMaxQuantity",
-      propertyOwner: thiz.item,
-      propertyPath: "data.data.maxQuantity",
-      min: 1,
-    });
-    this.vmNsShapeWidth = this.createVmNumberSpinner({
-      id: "vmNsShapeWidth",
-      propertyOwner: thiz.item,
-      propertyPath: "data.data.shape.width",
-      min: 1,
-    });
-    this.vmNsShapeHeight = this.createVmNumberSpinner({
-      id: "vmNsShapeHeight",
-      propertyOwner: thiz.item,
-      propertyPath: "data.data.shape.height",
-      min: 1,
-    });
     this.vmRtDescription = this.createVmRichText({
       id: "vmRtDescription",
       propertyOwner: thiz.item,

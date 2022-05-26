@@ -1,6 +1,6 @@
 import AmbersteelBaseItem from "./ambersteel-base-item.mjs";
 import { TEMPLATES } from "../../../templatePreloader.mjs";
-import MutationChatMessageViewModel from "../../../../templates/item/mutration/mutration-chat-message-viewmodel.mjs";
+import MutationChatMessageViewModel from "../../../../templates/item/mutation/mutation-chat-message-viewmodel.mjs";
 
 export default class AmbersteelMutationItem extends AmbersteelBaseItem {
   /**

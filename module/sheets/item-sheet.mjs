@@ -3,6 +3,7 @@ import AmbersteelSkillItemSheet from "./subtypes/item/ambersteel-skill-item-shee
 import AmbersteelFateCardItemSheet from "./subtypes/item/ambersteel-fate-item-sheet.mjs";
 import AmbersteelInjuryItemSheet from "./subtypes/item/ambersteel-injury-item-sheet.mjs";
 import AmbersteelIllnessItemSheet from "./subtypes/item/ambersteel-illness-item-sheet.mjs";
+import AmbersteelMutationItemSheet from "./subtypes/item/ambersteel-mutation-item-sheet.mjs";
 import * as SheetUtil from "../utils/sheet-utility.mjs";
 
 export class AmbersteelItemSheet extends ItemSheet {
@@ -18,6 +19,7 @@ export class AmbersteelItemSheet extends ItemSheet {
       const data = super.getData();
       const type = data.item.type;
 
+      // TODO: Refactor and somehow get rid of the explicit statements. 
       if (type === "skill") {
         this._subType = new AmbersteelSkillItemSheet(this);
       } else if (type === "fate-card") {
@@ -28,6 +30,8 @@ export class AmbersteelItemSheet extends ItemSheet {
         this._subType = new AmbersteelInjuryItemSheet(this);
       } else if (type === "illness") {
         this._subType = new AmbersteelIllnessItemSheet(this);
+      } else if (type === "mutation") {
+        this._subType = new AmbersteelMutationItemSheet(this);
       } else {
         throw `ItemSheet subtype ${type} is unrecognized!`
       }
@@ -61,6 +65,7 @@ export class AmbersteelItemSheet extends ItemSheet {
     return this.subType.template;
   }
 
+  // TODO: Refactor and make the subtype dictate the title. 
   /**
    * @override
    * @type {String}
@@ -77,6 +82,8 @@ export class AmbersteelItemSheet extends ItemSheet {
       return `${game.i18n.localize("ambersteel.labels.injury")} - ${this.item.name}`;
     } else if (this.item.type === "illness") {
       return `${game.i18n.localize("ambersteel.labels.illness")} - ${this.item.name}`;
+    } else if (this.item.type === "mutation") {
+      return `${game.i18n.localize("ambersteel.labels.mutation")} - ${this.item.name}`;
     } else {
       return this.item.name;
     }

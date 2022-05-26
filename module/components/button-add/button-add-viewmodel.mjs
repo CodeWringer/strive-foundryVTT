@@ -89,6 +89,7 @@ export default class ButtonAddViewModel extends ButtonViewModel {
     let createCustom = true;
     let templateId = undefined;
 
+    // TODO: Refactor and somehow get rid of the explicit statements. 
     if (this.withDialog === true) {
       let dialogResult = undefined;
       if (this.creationType === "skill") {
@@ -101,6 +102,8 @@ export default class ButtonAddViewModel extends ButtonViewModel {
         dialogResult = await ItemAddDialog.query("fate-card", "ambersteel.fateSystem.fateCard", "ambersteel.dialog.titleFateCardAddQuery");
       } else if (this.creationType === "item") {
         dialogResult = await ItemAddDialog.query("item", "ambersteel.labels.item", "ambersteel.dialog.titleAddItemQuery");
+      } else if (this.creationType === "mutation") {
+        dialogResult = await ItemAddDialog.query("mutation", "ambersteel.labels.mutation", "ambersteel.dialog.titleMutationAddQuery");
       } else {
         throw new Error(`InvalidArgumentException: Invalid creationType '${this.creationType}'`);
       }

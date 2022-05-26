@@ -4,7 +4,7 @@ import { validateOrThrow } from "../../../module/utils/validation-utility.mjs";
 
 export default class MutationChatMessageViewModel extends SheetViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.ITEM_CHAT_MESSAGE; }
+  static get TEMPLATE() { return TEMPLATES.MUTATION_CHAT_MESSAGE; }
 
   /**
    * @type {Boolean}
@@ -45,29 +45,13 @@ export default class MutationChatMessageViewModel extends SheetViewModel {
    * @param {Boolean | undefined} args.isGM If true, the current user is a GM. 
    * 
    * @param {Item} args.item
-   * 
-   * @param {String | undefined} args.sourceType
-   * @param {String | undefined} args.sourceId
-   * @param {Boolean | undefined} args.allowPickup
-   * @param {Array<String> | undefined} args.allowPickupBy
    */
   constructor(args = {}) {
     super(args);
     validateOrThrow(args, ["item"]);
 
     this.item = args.item;
-    this.sourceType = args.sourceType;
-    this.sourceId = args.sourceId;
-    this.allowPickup = args.allowPickup ?? false;
-    this.allowPickupBy = args.allowPickupBy ?? [];
 
-    this.contextTemplate = args.contextTemplate ?? "item-chat-message";
-    const thiz = this;
-
-    this.vmBtnTakeItem = this.createVmBtnTakeItem({
-      id: "vmBtnTakeItem",
-      target: thiz.item,
-      contextType: "chat-message"
-    });
+    this.contextTemplate = args.contextTemplate ?? "mutation-chat-message";
   }
 }

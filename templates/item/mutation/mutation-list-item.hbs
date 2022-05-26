@@ -1,5 +1,5 @@
 {{!-- Parameters:
-viewModel: {ItemListItemViewModel}
+viewModel: {MutationListItemViewModel}
 cssClass: {undefined | String}
 --}}
 <div class="custom-system-list-item{{#if cssClass}} {{cssClass}}{{/if}}">
@@ -8,11 +8,9 @@ cssClass: {undefined | String}
     <div class="flex flex-grow">
       {{!-- Send to chat --}}
       {{> buttonSendToChat viewModel=viewModel.vmBtnSendToChat }}
-      {{!-- Pick up --}}
-      {{> buttonTakeItem viewModel=viewModel.vmBtnTakeItem }}
       {{!-- Name --}}
       <span class="width-min-xl">
-        {{> inputLabel text="ambersteel.labels.item"}}
+        {{> inputLabel text="ambersteel.labels.mutation"}}
       </span>
       {{> inputImage viewModel=viewModel.vmImg cssClass="custom-icon-sm" }}
       <span class="flex-grow margin-r-md">
@@ -23,67 +21,8 @@ cssClass: {undefined | String}
     {{> buttonDelete viewModel=viewModel.vmBtnDelete }}
   </div>
   {{!-- Row 2 --}}
-  <div class="flex flex-row">
-    {{!-- Quantity --}}
-    <div class="flex flex-row">
-      <span class="width-min-xl">
-        {{> inputLabel text="ambersteel.labels.quantity" }}
-      </span>
-      <span class="width-md">
-        {{> inputNumberSpinner viewModel=viewModel.vmNsQuantity }}
-      </span>
-    </div>
-    {{!-- Spacer --}}
-    <div class="width-xs"></div>
-    {{!-- Max quantity --}}
-    <div class="flex flex-row flex-grow">
-      <span class="width-min-xl">
-        {{> inputLabel text="ambersteel.labels.maxQuantity" }}
-      </span>
-      <span class="width-md">
-        {{> inputNumberSpinner viewModel=viewModel.vmNsMaxQuantity }}
-      </span>
-    </div>
-  </div>
-  {{!-- Row 3 --}}
-  <div class="flex flex-row">
-    {{!-- Shape.width --}}
-    <div class="flex flex-row">
-      <span class="width-min-xl">
-        {{> inputLabel text="ambersteel.labels.shapeWidth" }}
-      </span>
-      <span class="width-md">
-        {{> inputNumberSpinner viewModel=viewModel.vmNsShapeWidth }}
-      </span>
-    </div>
-    {{!-- Spacer --}}
-    <div class="width-xs"></div>
-    {{!-- Shape.width --}}
-    <div class="flex flex-row">
-      <span class="width-min-xl">
-        {{> inputLabel text="ambersteel.labels.shapeHeight" }}
-      </span>
-      <span class="width-md">
-        {{> inputNumberSpinner viewModel=viewModel.vmNsShapeHeight }}
-      </span>
-    </div>
-    {{!-- Spacer --}}
-    <div class="width-xs"></div>
-    {{!-- Bulk - read only! --}}
-    <div class="flex flex-row">
-      <span class="width-min-xl">
-        {{> inputLabel text="ambersteel.labels.bulk" }}
-      </span>
-      <span class="width-md">
-          <div class="custom-system-read-only pad-sm fill">
-            {{viewModel.item.data.data.bulk}}
-          </div>
-      </span>
-    </div>
-  </div>
-  {{!-- Row 4 --}}
   {{!-- Description --}}
   <div class="flex flex-row">
-    {{> inputRichText viewModel=viewModel.vmRtDescription }}
+    {{> inputRichText viewModel=viewModel.vmRtDescription cssClass="fill" }}
   </div>
 </div>
