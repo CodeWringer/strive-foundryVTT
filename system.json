@@ -83,6 +83,12 @@
       "entity": "Item"
     },
     {
+      "name": "mutations",
+      "label": "Mutations",
+      "path": "packs/mutations.db",
+      "entity": "Item"
+    },
+    {
       "name": "rolltables",
       "label": "RollTables",
       "path": "packs/rolltables.db",
