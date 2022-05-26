@@ -91,6 +91,13 @@ export class AmbersteelActor extends Actor {
   get illnesses() { return this.getItemsByType("illness"); }
   
   /**
+   * @returns {Array<Item>} A list of "mutation" type items that represent mutations of 
+   * this character. 
+   * @readonly
+   */
+  get mutations() { return this.getItemsByType("mutation"); }
+  
+  /**
    * @type {Array<AmbersteelItemItem>} A list of "item" type items that represent things owned 
    * by this character, and currently on their person. 
    * @readonly

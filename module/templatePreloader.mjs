@@ -70,6 +70,10 @@ export const TEMPLATES = {
   ILLNESS_CHAT_MESSAGE: "systems/ambersteel/templates/item/illness/illness-chat-message.hbs",
   ILLNESS_ITEM_SHEET: "systems/ambersteel/templates/item/illness/illness-item-sheet.hbs",
   ILLNESS_LIST_ITEM: "systems/ambersteel/templates/item/illness/illness-list-item.hbs",
+  // Mutation
+  MUTATION_CHAT_MESSAGE: "systems/ambersteel/templates/item/mutation/mutation-chat-message.hbs",
+  MUTATION_ITEM_SHEET: "systems/ambersteel/templates/item/mutation/mutation-item-sheet.hbs",
+  MUTATION_LIST_ITEM: "systems/ambersteel/templates/item/mutation/mutation-list-item.hbs",
 }
 
 /**

@@ -1,0 +1,24 @@
+{{!-- Parameters:
+viewModel: {MutationItemSheetViewModel}
+cssClass: {undefined | String}
+--}}
+<form class="flex flex-column{{#if cssClass}} {{cssClass}}{{/if}}" autocomplete="off">
+  <header class="sheet-header">
+    <div class="flex flex-column flex-grow">
+      <div class="flex flex-row">
+        {{> inputImage viewModel=viewModel.vmImg cssClass="custom-icon-md" }}
+        <h1 class="header-name">
+          {{> inputTextField viewModel=viewModel.vmTfName }}
+        </h1>
+        <div class="flex flex-center">
+          {{> buttonSendToChat viewModel=viewModel.vmBtnSendToChat }}
+        </div>
+      </div>
+    </div>
+  </header>
+  {{!-- Description --}}
+  <div class="sheet-block flex flex-column flex-grow">
+    <h3 class="fancy-font">{{localize "ambersteel.labels.description"}}</h3>
+    {{> inputRichText viewModel=viewModel.vmRtDescription }}
+  </div>
+</form>

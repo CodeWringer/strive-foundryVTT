@@ -150,4 +150,38 @@ cssClass: {undefined | String}
       </div>
     </li>
   </ol>
+  {{!-- Mutations --}}
+  <h2>{{localize "ambersteel.labels.mutations"}}</h2>
+  <div class="grid-2col grid-gap-md margin-b-md">
+    <div>
+    </div>
+    <div class="sheet-block">
+      <div class="flex flex-row">
+        <div class="flex-grow">
+          {{> inputLabel text="ambersteel.labels.mutations"}}
+        </div>
+        <span class="width-md">
+          <div class="ambersteel-read-only pad-sm fill">
+            {{viewModel.mutationCount}}
+          </div>
+        </span>
+      </div>
+    </div>
+  </div>
+  <ol class="unstyled-list alternating-rows">
+    {{#each viewModel.mutations as |mutationViewModel key|}}
+      <li class="ambersteel-list-row sheet-block">
+        {{> "systems/ambersteel/templates/item/mutation/mutation-list-item.hbs" viewModel=mutationViewModel }}
+      </li>
+    {{/each}}
+    <li class="ambersteel-list-row ambersteel-list-footer">
+      <div class="fill flex flex-row">
+        <span class="flex-grow"></span>
+        {{!-- Add mutation --}}
+        <span class="width-sm">
+          {{> buttonAdd viewModel=viewModel.vmBtnAddMutation }}
+        </span>
+      </div>
+    </li>
+  </ol>
 </section>

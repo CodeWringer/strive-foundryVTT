@@ -193,7 +193,9 @@
       "plainActorAbbreviation": "Plain",
       "nameOfNewSkillAbility": "New Skill Ability",
       "opposedBy": "Opposed By",
-      "roll": "Roll Dice"
+      "roll": "Roll Dice",
+      "mutation": "Mutation",
+      "mutations": "Mutations"
     },
     "placeholders": {
       "obstacle": "0 / Opposed+-0 / etc.",
@@ -240,6 +242,7 @@
       "titleInjuryAddQuery": "Select Injury to Add",
       "titleIllnessAddQuery": "Select Illness to Add",
       "titleFateCardAddQuery": "Select Fate-Card to Add",
+      "titleMutationAddQuery": "Select Mutation to Add",
       "titleConfirmDeletionQuery": "Confirm Deletion",
       "titleConfirmDeletiongSkillQuery": "Confirm Deletion of Skill",
       "titleConfirmDeletionLearningSkillQuery": "Confirm Deletion of Learning Skill",
