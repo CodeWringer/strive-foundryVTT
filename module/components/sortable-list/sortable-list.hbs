@@ -26,7 +26,7 @@ cssClass: {String | undefined}
           <i class="fas fa-angle-double-down"></i>
         {{/_button}}
       </div>
-      {{> (lookup . 'listItemTemplate') viewModel=itemViewModelGroup.listItemViewModel }}
+      {{> (lookup . 'listItemTemplate') viewModel=itemViewModelGroup.listItemViewModel cssClass="flex-grow" }}
     </li>
   {{/each}}
   <li class="ambersteel-list-row ambersteel-list-footer{{#if (neq viewModel.isEditable true)}} hidden{{/if}}">

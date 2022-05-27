@@ -156,6 +156,8 @@ export default class ButtonViewModel extends ViewModel {
   async _onClick(html, isOwner, isEditable, event) {
     event.preventDefault();
 
+    if (this.isEditable !== true) return;
+
     await this.onClick(html, isOwner, isEditable);
     if (this.callback !== undefined && this.callback !== null) {
       await this.callback(this._callbackData);

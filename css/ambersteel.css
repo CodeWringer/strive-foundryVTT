@@ -900,6 +900,8 @@ nav#nav-sheet-tabs.sheet-tabs > a.item.active {
 .square-button-light {
   width: 26px;
   height: 26px;
+  max-width: 26px;
+  max-height: 26px;
   display: block;
 }
 

@@ -106,16 +106,23 @@ export default class SortableListViewModel extends SheetViewModel {
     this.orderedIdList = orderedIdList;
 
     // Generate data for the ui. 
-    for (const id of orderedIdList) {
+    for (let i = 0; i < orderedIdList.length; i++) {
+      const id = orderedIdList[i];
       const listItemViewModel = this.listItemViewModels.find(it => thiz._getItemViewModelId(it) === id);
-      const itemViewModelGroup = this._generateViewModelGroup(id, listItemViewModel);
+
+      const upButtonsDisabled = i === 0;
+      const downButtonsDisabled = i === orderedIdList.length - 1;
+
+      const itemViewModelGroup = this._generateViewModelGroup(id, listItemViewModel, !upButtonsDisabled, !downButtonsDisabled);
       this.itemViewModelGroups.push(itemViewModelGroup);
     }
   }
 
   /** @override */
   dispose() {
-    this._storeItemOrder(false);
+    if (this.isEditable === true || game.user.isGM === true) {
+      this._storeItemOrder(false);
+    }
     super.dispose();
   }
 
@@ -123,35 +130,37 @@ export default class SortableListViewModel extends SheetViewModel {
    * Returns a `SortableListViewModelGroup` instance, based on the given id and item view model. 
    * @param {String} id 
    * @param {ViewModel} itemViewModel 
+   * @param {Boolean | undefined} upButtonsDisabled Optional. 
+   * @param {Boolean | undefined} downButtonsDisabled Optional. 
    * @returns {SortableListViewModelGroup}
    */
-  _generateViewModelGroup(id, itemViewModel) {
+  _generateViewModelGroup(id, itemViewModel, upButtonsDisabled, downButtonsDisabled) {
     const thiz = this;
     return new SortableListViewModelGroup({
       vmBtnMoveTop: new ButtonViewModel({
         parent: thiz,
-        isEditable: thiz.isEditable,
+        isEditable: upButtonsDisabled ?? thiz.isEditable,
         id: `${id}-vmBtnMoveTop`,
         onClick: () => { thiz._moveToTop(id); },
         localizableTitle: "ambersteel.itemOrdering.moveToTop",
       }),
       vmBtnMoveUp: new ButtonViewModel({
         parent: thiz,
-        isEditable: thiz.isEditable,
+        isEditable: upButtonsDisabled ?? thiz.isEditable,
         id: `${id}-vmBtnMoveUp`,
         onClick: () => { thiz._moveUp(id); },
         localizableTitle: "ambersteel.itemOrdering.moveUp",
       }),
       vmBtnMoveDown: new ButtonViewModel({
         parent: thiz,
-        isEditable: thiz.isEditable,
+        isEditable: downButtonsDisabled ?? thiz.isEditable,
         id: `${id}-vmBtnMoveDown`,
         onClick: () => { thiz._moveDown(id); },
         localizableTitle: "ambersteel.itemOrdering.moveDown",
       }),
       vmBtnMoveBottom: new ButtonViewModel({
         parent: thiz,
-        isEditable: thiz.isEditable,
+        isEditable: downButtonsDisabled ?? thiz.isEditable,
         id: `${id}-vmBtnMoveBottom`,
         onClick: () => { thiz._moveToBottom(id); },
         localizableTitle: "ambersteel.itemOrdering.moveToBottom",

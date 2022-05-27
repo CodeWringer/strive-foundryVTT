@@ -5,18 +5,18 @@ cssClass: {undefined | String}
 <div class="custom-system-list-item{{#if cssClass}} {{cssClass}}{{/if}}">
   {{!-- Row 1 --}}
   <div class="flex flex-row">
-    <div class="flex flex-grow">
-      {{!-- Send to chat --}}
-      {{> buttonSendToChat viewModel=viewModel.vmBtnSendToChat }}
-      {{!-- Name --}}
-      <span class="width-min-xl">
-        {{> inputLabel text="ambersteel.labels.illness"}}
-      </span>
-      {{> inputImage viewModel=viewModel.vmImg cssClass="custom-icon-sm" }}
-      <span class="flex-grow margin-r-md">
-        {{> inputTextField viewModel=viewModel.vmTfName }}
-      </span>
-      {{!-- State --}}
+    {{!-- Send to chat --}}
+    {{> buttonSendToChat viewModel=viewModel.vmBtnSendToChat }}
+    {{!-- Name --}}
+    <span class="width-min-xl">
+      {{> inputLabel text="ambersteel.labels.illness"}}
+    </span>
+    {{> inputImage viewModel=viewModel.vmImg cssClass="custom-icon-sm" }}
+    <span class="flex-grow margin-r-md">
+      {{> inputTextField viewModel=viewModel.vmTfName }}
+    </span>
+    {{!-- State --}}
+    <div>
       {{> inputRadioButtonGroup viewModel=viewModel.vmRbgState }}
     </div>
     {{!-- Delete --}}
