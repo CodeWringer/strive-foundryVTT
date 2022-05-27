@@ -120,7 +120,7 @@ export default class SortableListViewModel extends SheetViewModel {
 
   /** @override */
   dispose() {
-    if (this.isEditable === true || game.user.isGM === true) {
+    if (this.isEditable === true) {
       this._storeItemOrder(false);
     }
     super.dispose();
