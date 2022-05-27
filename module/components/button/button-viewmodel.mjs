@@ -90,6 +90,7 @@ export default class ButtonViewModel extends ViewModel {
    * @param {Any | undefined} args.callbackData Optional. Defines any data to pass to the completion callback. 
    * @param {Boolean | undefined} args.isEditable Optional. If true, will be interactible. 
    * @param {String | undefined} args.localizableTitle Optional. The localizable title (tooltip). 
+   * @param {Function | undefined} args.onClick Optional. The function to call on click. 
    */
   constructor(args = {}) {
     super(args);
@@ -99,6 +100,9 @@ export default class ButtonViewModel extends ViewModel {
     this._callbackData = args.callbackData;
     this.isEditable = args.isEditable ?? false;
     this.localizableTitle = args.localizableTitle;
+    if (args.onClick !== undefined) {
+      this.onClick = args.onClick;
+    }
   }
 
   /**
@@ -107,6 +111,7 @@ export default class ButtonViewModel extends ViewModel {
    * @returns {Function}
    */
   _getCallback(callback) {
+    // TODO: Make this validate if the callback is a function. 
     if (typeof(callback) === "string") {
       return this.target[callback];
     } else if (callback === undefined) {

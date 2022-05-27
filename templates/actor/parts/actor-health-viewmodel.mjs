@@ -1,4 +1,6 @@
 import SheetViewModel from "../../../module/components/sheet-viewmodel.mjs";
+import DocumentListItemOrderDataSource from "../../../module/components/sortable-list/document-list-item-order-datasource.mjs";
+import SortableListViewModel from "../../../module/components/sortable-list/sortable-list-viewmodel.mjs";
 import { TEMPLATES } from "../../../module/templatePreloader.mjs";
 import { validateOrThrow } from "../../../module/utils/validation-utility.mjs";
 import IllnessListItemViewModel from "../../item/illness/illness-list-item-viewmodel.mjs";
@@ -122,12 +124,6 @@ export default class ActorHealthViewModel extends SheetViewModel {
       isEditable: false,
       min: 1,
     });
-    this.vmBtnAddInjury = this.createVmBtnAdd({
-      id: "vmBtnAddInjury",
-      target: thiz.actor,
-      creationType: "injury",
-      withDialog: true,
-    });
     this.vmBtnAddIllness = this.createVmBtnAdd({
       id: "vmBtnAddIllness",
       target: thiz.actor,
@@ -141,6 +137,7 @@ export default class ActorHealthViewModel extends SheetViewModel {
       withDialog: true,
     });
 
+    // Prepare illnesses list view models. 
     for (const illness of this.actor.illnesses) {
       const vm = new IllnessListItemViewModel({
         ...args,
@@ -150,7 +147,8 @@ export default class ActorHealthViewModel extends SheetViewModel {
       });
       this.illnesses.push(vm);
     }
-
+    
+    // Prepare injuries list view models. 
     for (const injury of this.actor.injuries) {
       const vm = new InjuryListItemViewModel({
         ...args,
@@ -160,7 +158,25 @@ export default class ActorHealthViewModel extends SheetViewModel {
       });
       this.injuries.push(vm);
     }
-
+    this.vmInjuryList = new SortableListViewModel({
+      parent: thiz,
+      isEditable: args.isEditable ?? thiz.isEditable,
+      id: "vmInjuryList",
+      indexDataSource: new DocumentListItemOrderDataSource({
+        propertyOwner: thiz.actor,
+        listName: "injuries",
+      }),
+      listItemViewModels: this.injuries,
+      listItemTemplate: "systems/ambersteel/templates/item/injury/injury-list-item.hbs",
+      vmBtnAddItem: thiz.createVmBtnAdd({
+        id: "vmBtnAddInjury",
+        target: thiz.actor,
+        creationType: "injury",
+        withDialog: true,
+      }),
+    });
+    
+    // Prepare mutations list view models. 
     for (const mutation of this.actor.mutations) {
       const vm = new MutationListItemViewModel({
         ...args,

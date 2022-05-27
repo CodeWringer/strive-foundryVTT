@@ -1602,3 +1602,35 @@ span.component-button-toggle-knob.disabled {
 .component-rich-text-container {
   min-height: 4em;
 }
+
+.component-list-item-order-controls {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  width: 1.8rem;
+  border-right: solid 1px #8d8d8d;
+  height: 100%;
+  margin-right: 0.5rem;
+}
+
+.component-list-item-order-controls > a.grab-handle {
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-box-flex: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  min-width: 1.8rem;
+  min-height: 1.8rem;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  cursor: row-resize;
+}

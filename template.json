@@ -5,7 +5,15 @@
       "base": {
         "description": "",
         "gmNotes": "",
-        "isCustom": false
+        "isCustom": false,
+        "displayOrders": {
+          "items": [],
+          "skills": [],
+          "fateCards": [],
+          "injuries": [],
+          "illnesses": [],
+          "mutations": []
+        }
       },
       "character": {
         "person": {
@@ -126,7 +134,8 @@
       "base": {
         "description": "",
         "gmNotes": "",
-        "isCustom": false
+        "isCustom": false,
+        "displayOrders": {}
       }
     },
     "skill": {

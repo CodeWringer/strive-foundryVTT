@@ -100,22 +100,7 @@ cssClass: {undefined | String}
       <span>{{localize "ambersteel.rules.hintToughnessTestRequired"}}</span>
     </div>
   </div>
-  <ol class="unstyled-list alternating-rows">
-    {{#each viewModel.injuries as |injuryViewModel key|}}
-      <li class="ambersteel-list-row sheet-block">
-        {{> "systems/ambersteel/templates/item/injury/injury-list-item.hbs" viewModel=injuryViewModel }}
-      </li>
-    {{/each}}
-    <li class="ambersteel-list-row ambersteel-list-footer">
-      <div class="fill flex flex-row">
-        <span class="flex-grow"></span>
-        {{!-- Add injury --}}
-        <span class="width-sm">
-          {{> buttonAdd viewModel=viewModel.vmBtnAddInjury }}
-        </span>
-      </div>
-    </li>
-  </ol>
+  {{> sortableList viewModel=viewModel.vmInjuryList }}
   {{!-- Illnesses --}}
   <h2>{{localize "ambersteel.labels.illnesses"}}</h2>
   <div class="grid-2col grid-gap-md margin-b-md">
