@@ -1,5 +1,7 @@
 import ItemGridViewViewModel from "../../../module/components/item-grid/item-grid-view-viewmodel.mjs";
 import SheetViewModel from "../../../module/components/sheet-viewmodel.mjs";
+import DocumentListItemOrderDataSource from "../../../module/components/sortable-list/document-list-item-order-datasource.mjs";
+import SortableListViewModel from "../../../module/components/sortable-list/sortable-list-viewmodel.mjs";
 import { TEMPLATES } from "../../../module/templatePreloader.mjs";
 import { validateOrThrow } from "../../../module/utils/validation-utility.mjs";
 import ItemListItemViewModel from "../../item/item/item-list-item-viewmodel.mjs";
@@ -14,9 +16,9 @@ export default class ActorAssetsViewModel extends SheetViewModel {
   actor = undefined;
 
   /**
-   * @type {Object}
+   * @type {Array<ViewModel>}
    */
-  itemViewModels = Object.create(null);
+  itemViewModels = [];
   
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
@@ -62,20 +64,32 @@ export default class ActorAssetsViewModel extends SheetViewModel {
       isEditable: thiz.isEditable,
       contextTemplate: thiz.contextTemplate,
     });
-    this.vmBtnAddItem = this.createVmBtnAdd({
-      id: "vmBtnAddItem",
-      target: thiz.actor,
-      creationType: "item",
-      withDialog: true,
-    });
 
     for (const item of this.actor.propertyItems) {
-      this.itemViewModels[item.id] = new ItemListItemViewModel({
+      const vm = new ItemListItemViewModel({
         ...args,
         id: item.id,
         parent: thiz,
         item: item,
       });
+      this.itemViewModels.push(vm);
     }
+    this.vmPropertyList = new SortableListViewModel({
+      parent: thiz,
+      isEditable: args.isEditable ?? thiz.isEditable,
+      id: "vmPropertyList",
+      indexDataSource: new DocumentListItemOrderDataSource({
+        propertyOwner: thiz.actor,
+        listName: "property",
+      }),
+      listItemViewModels: this.itemViewModels,
+      listItemTemplate: "systems/ambersteel/templates/item/item/item-list-item.hbs",
+      vmBtnAddItem: thiz.createVmBtnAdd({
+        id: "vmBtnAddItem",
+        target: thiz.actor,
+        creationType: "item",
+        withDialog: true,
+      }),
+    });
   }
 }
