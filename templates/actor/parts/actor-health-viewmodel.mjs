@@ -124,18 +124,6 @@ export default class ActorHealthViewModel extends SheetViewModel {
       isEditable: false,
       min: 1,
     });
-    this.vmBtnAddIllness = this.createVmBtnAdd({
-      id: "vmBtnAddIllness",
-      target: thiz.actor,
-      creationType: "illness",
-      withDialog: true,
-    });
-    this.vmBtnAddMutation = this.createVmBtnAdd({
-      id: "vmBtnAddMutation",
-      target: thiz.actor,
-      creationType: "mutation",
-      withDialog: true,
-    });
 
     // Prepare illnesses list view models. 
     for (const illness of this.actor.illnesses) {
@@ -147,6 +135,23 @@ export default class ActorHealthViewModel extends SheetViewModel {
       });
       this.illnesses.push(vm);
     }
+    this.vmIllnessList = new SortableListViewModel({
+      parent: thiz,
+      isEditable: args.isEditable ?? thiz.isEditable,
+      id: "vmIllnessList",
+      indexDataSource: new DocumentListItemOrderDataSource({
+        propertyOwner: thiz.actor,
+        listName: "illnesses",
+      }),
+      listItemViewModels: this.illnesses,
+      listItemTemplate: "systems/ambersteel/templates/item/illness/illness-list-item.hbs",
+      vmBtnAddItem: thiz.createVmBtnAdd({
+        id: "vmBtnAddIllness",
+        target: thiz.actor,
+        creationType: "illness",
+        withDialog: true,
+      }),
+    });
     
     // Prepare injuries list view models. 
     for (const injury of this.actor.injuries) {
@@ -186,5 +191,22 @@ export default class ActorHealthViewModel extends SheetViewModel {
       });
       this.mutations.push(vm);
     }
+    this.vmMutationList = new SortableListViewModel({
+      parent: thiz,
+      isEditable: args.isEditable ?? thiz.isEditable,
+      id: "vmMutationList",
+      indexDataSource: new DocumentListItemOrderDataSource({
+        propertyOwner: thiz.actor,
+        listName: "mutations",
+      }),
+      listItemViewModels: this.mutations,
+      listItemTemplate: "systems/ambersteel/templates/item/mutation/mutation-list-item.hbs",
+      vmBtnAddItem: thiz.createVmBtnAdd({
+        id: "vmBtnAddMutation",
+        target: thiz.actor,
+        creationType: "mutation",
+        withDialog: true,
+      }),
+    });
   }
 }
