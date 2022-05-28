@@ -6,6 +6,9 @@ export default class InjuryListItemViewModel extends SheetViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.INJURY_LIST_ITEM; }
 
+  /** @override */
+  get entityId() { return this.item.id; }
+
   /**
    * An array of {ChoiceOption}s which represent the possible states of the injury. 
    * @type {Array<ChoiceOption>}

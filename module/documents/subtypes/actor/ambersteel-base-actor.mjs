@@ -1,33 +1,11 @@
-import ActorChatMessageViewModel from '../../../../templates/actor/actor-chat-message-viewmodel.mjs';
-import PreparedChatData from '../../../dto/prepared-chat-data.mjs';
-import { SummedData, SummedDataComponent } from '../../../dto/summed-data.mjs';
 import { TEMPLATES } from '../../../templatePreloader.mjs';
-import * as ChatUtil from "../../../utils/chat-utility.mjs";
-import { createUUID } from '../../../utils/uuid-utility.mjs';
 
+/**
+ * This represents the base type for all actor sub-types to inherit from. 
+ * 
+ * The contract expected by a concrete `Actor` instance is defined herein. 
+ */
 export default class AmbersteelBaseActor {
-  /**
-   * The owning Actor object. 
-   * @type {Actor}
-   */
-  parent = undefined;
-
-  /**
-   * @param parent {Actor} The owning Actor. 
-   */
-  constructor(parent) {
-    if (!parent || parent === undefined) {
-      throw "Argument 'owner' must not be null or undefined!"
-    }
-    this.parent = parent;
-
-    this.parent.getChatData = this.getChatData.bind(this);
-    this.parent.sendToChat = this.sendToChat.bind(this);
-    this.parent.sendPropertyToChat = this.sendPropertyToChat.bind(this);
-    this.parent.advanceSkillBasedOnRollResult = this.advanceSkillBasedOnRollResult.bind(this);
-    this.parent.advanceAttributeBasedOnRollResult = this.advanceAttributeBasedOnRollResult.bind(this);
-  }
-
   /**
    * Returns the default icon image path for this type of actor. 
    * @type {String}
@@ -44,10 +22,13 @@ export default class AmbersteelBaseActor {
   get chatMessageTemplate() { return TEMPLATES.ACTOR_CHAT_MESSAGE; }
 
   /**
-   * Prepare base data for the Actor. 
+   * @summary
+   * Prepare base data for the actor. 
    * 
-   * This should be non-derivable data, meaning it should only prepare the data object to ensure 
-   * certain properties exist and aren't undefined. 
+   * @description
+   * The data added here should be non-derivable data, meaning it should only prepare 
+   * the data object to ensure certain properties exist and aren't undefined. 
+   * 
    * This should also set primitive data, even if it is technically derived, shouldn't be any 
    * data set based on extensive calculations. Setting the 'img'-property's path, based on the object 
    * type should be the most complex a 'calculation' as it gets. 
@@ -59,315 +40,24 @@ export default class AmbersteelBaseActor {
   prepareData(context) {}
 
   /**
-   * Prepare derived data for the Actor. 
+   * @summary
+   * Also prepares base data for the actor. 
+   * @param {Actor} context 
+   * @virtual
+   */
+  prepareBaseData(context) {}
+
+  /**
+   * @summary
+   * Prepare derived data for the actor. 
    * 
+   * @description
    * This is where extensive calculations can occur, to ensure properties aren't 
    * undefined and have meaningful values. 
    * 
    * Derived data is *not* persisted!
-   * @param {AmbersteelActor} context
+   * @param {Actor} context
    * @virtual
    */
-  prepareDerivedData(context) {
-    context.data.data.assets.maxBulk = game.ambersteel.getCharacterMaximumInventory(this.parent);
-    context.data.data.assets.totalBulk = this._calculateUsedBulk(context);
-    this._prepareDerivedAttributesData(context);
-    this._prepareDerivedSkillsData(context);
-    this._prepareDerivedHealthData(context);
-  }
-
-  /**
-   * Returns the currently used bulk. 
-   * @param {AmbersteelActor} context 
-   * @returns {Number} The currently used bulk. 
-   * @private
-   */
-  _calculateUsedBulk(context) {
-    let usedBulk = 0;
-    for (const possession of context.possessions) {
-      usedBulk += possession.data.data.bulk;
-    }
-    return usedBulk;
-  }
-
-  /**
-   * Prepares derived data for all attributes. 
-   * 
-   * This will adjust actor.data.data to the following result:
-   * actor.data.data = {
-   *   attributeGroups: {Array<Object>} = same as physical,
-   *   attributes: {Object} = {
-   *     physical: {Object} = {
-   *       name: {String},
-   *       localizableName: {String},
-   *       localizableAbbreviation: {String},
-   *       attributes: {Array<Object>} = {
-   *         value: {Number},
-   *         successes: {Number},
-   *         failures: {Number},
-   *         requiredSuccessses: {Number},
-   *         requiredFailures: {Number},
-   *         name: {String},
-   *         localizableName: {String},
-   *         localizableAbbreviation: {String},
-   *         getRollData(): {Function<Object>}
-   *         advanceAttributeBasedOnRollResult({DicePoolResult}, {String}): {Function<>}
-   *       }
-   *     },
-   *     mental: {Object} = same as physical
-   *     social: {Object} = same as physical
-   *   }
-   * }
-   * 
-   * @param {AmbersteelActor} context 
-   * @private
-   */
-  _prepareDerivedAttributesData(context) {
-    const actorData = context.data.data;
-
-    // The names of the attribute groups to iterate. "physical", "mental" and "social"
-    const attributeGroupNames = actorData.attributeGroupNames ?? this._getAttributeGroupNames(context);
-    if (actorData.attributeGroupNames === undefined) {
-      actorData.attributeGroupNames = attributeGroupNames;
-    }
-    
-    const attributeGroups = [];
-    for (const attGroup of attributeGroupNames) {
-      const attGroupName = attGroup.name;
-      const oAttGroup = actorData.attributes[attGroupName];
-      
-      // The names of the attributes to iterate. E. g. "agility" or "willpower"
-      const attributeNames = attGroup.attributeNames;
-      
-      // Prepare attributes of group. 
-      const attributes = [];
-      for (const attName of attributeNames) {
-        const oAtt = oAttGroup[attName];
-        this._prepareDerivedAttributeData(oAtt, attName);
-        attributes.push(oAtt);
-      }
-
-      // Add internal name. 
-      oAttGroup.name = attGroupName;
-      // Add localization keys. 
-      oAttGroup.localizableName = `ambersteel.attributeGroups.${attGroupName}`;
-      oAttGroup.localizableAbbreviation = `ambersteel.attributeGroupAbbreviations.${attGroupName}`;
-      // Add attributes of group for easy access. 
-      oAttGroup.attributes = attributes;
-
-      attributeGroups.push(oAttGroup);
-    }
-    // Add attribute groups for easy access. 
-    actorData.attributeGroups = attributeGroups;
-  }
-
-  /**
-   * Prepares derived data for a given attribute. 
-   * @param oAtt {Object} The attribute object. 
-   * @param attName {String} Internal name of the attribute, e.g. 'magicSense'. 
-   * @private
-   */
-  _prepareDerivedAttributeData(oAtt, attName) {
-    const attValue = parseInt(oAtt.value);
-    const req = game.ambersteel.getAttributeAdvancementRequirements(attValue);
-
-    // Calculate advancement requirements. 
-    oAtt.requiredSuccessses = req.requiredSuccessses;
-    oAtt.requiredFailures = req.requiredFailures;
-
-    // Add internal name. 
-    oAtt.name = attName;
-
-    // Add localization keys. 
-    oAtt.localizableName = `ambersteel.attributes.${attName}`;
-    oAtt.localizableAbbreviation = `ambersteel.attributeAbbreviations.${attName}`;
-
-    // Add functions.
-    const thiz = this;
-    oAtt.getRollData = () => {
-      return new SummedData(attValue, [
-        new SummedDataComponent(attName, oAtt.localizableName, attValue)
-      ]);
-    };
-    oAtt.advanceAttributeBasedOnRollResult = this.advanceAttributeBasedOnRollResult.bind(this);
-  }
-  
-  /**
-   * @param {Document} context 
-   * @returns {Array<Object>} { name: {String}, attributeNames: {Array<String>} }
-   * @private
-   */
-  _getAttributeGroupNames(context) {
-    const result = [];
-
-    for (const attributeGroupName in context.data.data.attributes) {
-      const attributeNames = [];
-      for (const attributeName in context.data.data.attributes[attributeGroupName]) {
-        attributeNames.push(attributeName);
-      }
-
-      const obj = { name: attributeGroupName, attributeNames: attributeNames };
-      result.push(obj);
-    }
-
-    return result;
-  }
-
-  /**
-   * Updates the given actorData with derived skill data. 
-   * Assigns items of type skill to the derived lists 'actorData.skills' and 'actorData.learningSkills'. 
-   * @param {AmbersteelActor} context 
-   * @private
-   */
-  _prepareDerivedSkillsData(context) {
-    const actorData = context.data.data;
-
-    actorData.skills = (this.parent.items.filter(item => {
-      return item.data.type == "skill" && parseInt(item.data.data.value) > 0
-    }));
-    for (const oSkill of actorData.skills) {
-      this._prepareDerivedSkillData(oSkill.id);
-    };
-
-    actorData.learningSkills = (this.parent.items.filter(item => {
-      return item.data.type == "skill" && parseInt(item.data.data.value) == 0
-    }));
-    for (const oSkill of actorData.learningSkills) {
-      this._prepareDerivedSkillData(oSkill.id);
-    };
-  }
-
-  /**
-   * Pepares derived skill data. 
-   * @param skillId {String} Id of a skill. 
-   * @private
-   */
-  _prepareDerivedSkillData(skillId) {
-    const oSkill = this.parent.items.get(skillId);
-    const skillData = oSkill.data.data;
-
-    skillData.id = oSkill.id;
-    skillData.entityName = skillData.entityName ? skillData.entityName : oSkill.name;
-    skillData.value = parseInt(skillData.value ? skillData.value : 0);
-    skillData.successes = parseInt(skillData.successes ? skillData.successes : 0);
-    skillData.failures = parseInt(skillData.failures ? skillData.failures : 0);
-    skillData.relatedAttribute = skillData.relatedAttribute ? skillData.relatedAttribute : "agility";
-
-    const req = game.ambersteel.getSkillAdvancementRequirements(skillData.value);
-    skillData.requiredSuccessses = req.requiredSuccessses;
-    skillData.requiredFailures = req.requiredFailures;
-  }
-
-  /**
-   * Prepares derived health data. 
-   * @param {AmbersteelActor} context 
-   * @private
-   * @async
-   */
-  _prepareDerivedHealthData(context) {
-    const businessData = context.data.data;
-    businessData.health.maxHP = game.ambersteel.getCharacterMaximumHp(context);
-    businessData.health.maxInjuries = game.ambersteel.getCharacterMaximumInjuries(context);
-    businessData.health.maxExhaustion = game.ambersteel.getCharacterMaximumExhaustion(context);
-    businessData.health.maxMagicStamina = game.ambersteel.getCharacterMaximumMagicStamina(context).total;
-  }
-
-  /**
-   * Base implementation of returning data for a chat message, based on this Actor. 
-   * @returns {PreparedChatData}
-   * @virtual
-   * @async
-   */
-  async getChatData() {
-    const actor = this.parent;
-    const vm = this.getChatViewModel();
-    const renderedContent = await renderTemplate(this.chatMessageTemplate, {
-      viewModel: vm,
-    });
-
-    return new PreparedChatData({
-      renderedContent: renderedContent,
-      actor: actor,
-      sound: "../sounds/notify.wav",
-      viewModel: vm,
-    });
-  }
-  
-  /**
-   * Returns an instance of a view model for use in a chat message. 
-   * @returns {ActorChatMessageViewModel}
-   * @param {Object | undefined} overrides Optional. An object that allows overriding any of the view model properties. 
-   * @param {String | undefined} overrides.id
-   * @param {Boolean | undefined} overrides.isEditable
-   * @param {Boolean | undefined} overrides.isSendable
-   * @param {Boolean | undefined} overrides.isOwner
-   * @param {Boolean | undefined} overrides.isGM
-   * @virtual
-   */
-  getChatViewModel(overrides = {}) {
-    return new ActorChatMessageViewModel({
-      id: `${this.parent.id}-${createUUID()}`,
-      isEditable: false,
-      isSendable: false,
-      isOwner: this.parent.isOwner ?? this.parent.owner ?? false,
-      isGM: game.user.isGM,
-      actor: this.parent,
-      ...overrides,
-    });
-  }
-
-  /**
-   * Base implementation of sending this Actor to the chat. 
-   * @param {CONFIG.ambersteel.visibilityModes} visibilityMode Determines the visibility of the chat message. 
-   * @async
-   * @virtual
-   */
-  async sendToChat(visibilityMode = CONFIG.ambersteel.visibilityModes.public) {
-    const chatData = await this.getChatData();
-    ChatUtil.sendToChat({
-      visibilityMode: visibilityMode,
-      ...chatData
-    });
-  }
-
-  /**
-   * Sends a property of this item to chat, based on the given property path. 
-   * @param {String} propertyPath 
-   * @param {CONFIG.ambersteel.visibilityModes} visibilityMode 
-   * @async
-   */
-  async sendPropertyToChat(propertyPath, visibilityMode = CONFIG.ambersteel.visibilityModes.public) {
-    await ChatUtil.sendPropertyToChat({
-      obj: this.parent,
-      propertyPath: propertyPath,
-      parent: this.parent,
-      actor: this.parent.actor,
-      visibilityMode: visibilityMode
-    });
-  }
-
-  /**
-   * Advances the skill, based on the given {DicePoolResult}. 
-   * @param {DicePoolResult} rollResult 
-   * @param {String} itemId The id of the skill item to advance. 
-   * @async
-   */
-  async advanceSkillBasedOnRollResult(rollResult, itemId) {
-    const oSkill = this.parent.items.get(itemId);
-    oSkill.addProgress(rollResult.isSuccess, false);
-  }
-
-  /**
-   * Attribute roll handler. 
-   * @param {DicePoolResult} rollResult 
-   * @param {String} attributeName The name of the attribute. 
-   * @async
-   */
-  async advanceAttributeBasedOnRollResult(rollResult, attributeName) {
-    if (rollResult === undefined) {
-      game.ambersteel.logger.logWarn("rollResult is undefined");
-      return;
-    }
-    await this.parent.addAttributeProgress(attributeName, rollResult.isSuccess);
-  }
+  prepareDerivedData(context) {}
 }

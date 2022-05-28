@@ -167,7 +167,7 @@ export class ItemGrid {
     }
 
     // Place new items on grid. 
-    const items = document.possessions;
+    const items = document.getPossessions();
     for (const item of items) {
       // Skip any items that were dropped. 
       if (itemsDropped.find(it => { return it.id === item.id }) !== undefined) continue;

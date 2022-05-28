@@ -2,7 +2,7 @@
   "name": "ambersteel",
   "title": "Ambersteel",
   "description": "The Ambersteel system for FoundryVTT",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "minimumCoreVersion": "0.9.269",
   "compatibleCoreVersion": "9",
   "author": "Nicolas Haase",
@@ -10,6 +10,24 @@
   "styles": ["css/ambersteel.css"],
   "scripts": [],
   "packs": [
+    {
+      "name": "armors",
+      "label": "Armors",
+      "path": "packs/armors.db",
+      "entity": "Item"
+    },
+    {
+      "name": "bestiary-human",
+      "label": "Bestiary (Human)",
+      "path": "packs/bestiary-human.db",
+      "entity": "Actor"
+    },
+    {
+      "name": "bestiary-undead",
+      "label": "Bestiary (Undead)",
+      "path": "packs/bestiary-undead.db",
+      "entity": "Actor"
+    },
     {
       "name": "fatecards",
       "label": "Fate Cards",
@@ -29,9 +47,45 @@
       "entity": "Item"
     },
     {
+      "name": "burn-injuries",
+      "label": "Burn Injuries",
+      "path": "packs/burn-injuries.db",
+      "entity": "Item"
+    },
+    {
+      "name": "shields",
+      "label": "Shields",
+      "path": "packs/shields.db",
+      "entity": "Item"
+    },
+    {
       "name": "skills",
       "label": "Skills",
       "path": "packs/skills.db",
+      "entity": "Item"
+    },
+    {
+      "name": "supplies-and-stuff",
+      "label": "Supplies and Stuff",
+      "path": "packs/supplies-and-stuff.db",
+      "entity": "Item"
+    },
+    {
+      "name": "valuables",
+      "label": "Valuables",
+      "path": "packs/valuables.db",
+      "entity": "Item"
+    },
+    {
+      "name": "weapons",
+      "label": "Weapons",
+      "path": "packs/weapons.db",
+      "entity": "Item"
+    },
+    {
+      "name": "mutations",
+      "label": "Mutations",
+      "path": "packs/mutations.db",
       "entity": "Item"
     },
     {
@@ -53,7 +107,7 @@
   "primaryTokenAttribute": null,
   "secondaryTokenAttribute": null,
   "url": "https://github.com/CodeWringer/ambersteel-foundryVTT",
-  "manifest": "https://github.com/CodeWringer/ambersteel-foundryVTT/releases/download/v1.0.0-rc2/system.json",
-  "download": "https://github.com/CodeWringer/ambersteel-foundryVTT/releases/download/v1.0.0-rc2/system.zip",
+  "manifest": "https://github.com/CodeWringer/ambersteel-foundryVTT/releases/latest/download/system.json",
+  "download": "https://github.com/CodeWringer/ambersteel-foundryVTT/releases/latest/download/system.zip",
   "license": "LICENSE.txt"
 }

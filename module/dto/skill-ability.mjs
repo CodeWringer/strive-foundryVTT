@@ -11,6 +11,7 @@ import DamageAndType from "./damage-and-type.mjs";
  * Represents a skill ability. 
  * 
  * Is **always** a child object of a skill item. 
+ * @property {String} id UUID of this instance of a skill ability. 
  * @property {AmbersteelItem} parent The owning skill item. 
  * @property {Number} index The index of the skill ability, on the owning skill item. 
  * @property {Boolean} isCustom 
@@ -30,6 +31,7 @@ export default class SkillAbility {
   /**
    * @param {AmbersteelItem} args.parent The owning skill item. 
    * @param {Number} index The index of the skill ability, on the owning skill item. 
+   * @param {String | undefined} id UUID of this instance of a skill ability. 
    * @param {Boolean | undefined} args.isCustom Optional. 
    * @param {String | undefined} args.name Optional. 
    * @param {String | undefined} args.img Optional. 
@@ -49,6 +51,7 @@ export default class SkillAbility {
     this.parent = args.parent;
     this.index = args.index;
     
+    this.id = args.id ?? createUUID();
     this.type = "skill-ability";
     this.isCustom = args.isCustom ?? false;
 
@@ -209,9 +212,17 @@ export default class SkillAbility {
   async _updateToDB(render = true) {
     if (this.parent === undefined) return;
 
+    const parentAbilities = this.parent.data.data.abilities;
+    const index = parentAbilities.findIndex(it => it.id === this.id);
     const abilitiesArray = [];
-    for (const skillAbility of this.parent.data.data.abilities) {
-      abilitiesArray.push(skillAbility.toDto());
+    const thisDto = this.toDto();
+    for (let i = 0; i < parentAbilities.length; i++) {
+      if (i === index) {
+        abilitiesArray.push(thisDto);
+      } else {
+        const skillAbility = parentAbilities[i];
+        abilitiesArray.push(skillAbility.toDto());
+      }
     }
     await this.parent.updateProperty("data.data.abilities", abilitiesArray, render);
   }
@@ -233,6 +244,7 @@ export default class SkillAbility {
     // The index field is also omitted, because it can be derived. 
     const obj = Object.create(null);
 
+    obj.id = this.id;
     obj.isCustom = this.isCustom;
     obj.name = this.name;
     obj.img = this.img;

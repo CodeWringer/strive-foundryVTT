@@ -1,8 +1,11 @@
 import SheetViewModel from "../../../module/components/sheet-viewmodel.mjs";
+import DocumentListItemOrderDataSource from "../../../module/components/sortable-list/document-list-item-order-datasource.mjs";
+import SortableListViewModel from "../../../module/components/sortable-list/sortable-list-viewmodel.mjs";
 import { TEMPLATES } from "../../../module/templatePreloader.mjs";
 import { validateOrThrow } from "../../../module/utils/validation-utility.mjs";
 import IllnessListItemViewModel from "../../item/illness/illness-list-item-viewmodel.mjs";
 import InjuryListItemViewModel from "../../item/injury/injury-list-item-viewmodel.mjs";
+import MutationListItemViewModel from "../../item/mutation/mutation-list-item-viewmodel.mjs";
 
 export default class ActorHealthViewModel extends SheetViewModel {
   /** @override */
@@ -13,17 +16,26 @@ export default class ActorHealthViewModel extends SheetViewModel {
    */
   actor = undefined;
 
-  /**
-   * @type {Number}
-   * @readonly
-   */
-  get injuryCount() { return this.actor.injuries.length; }
+  /** @override */
+  get entityId() { return this.actor.id; }
 
   /**
    * @type {Number}
    * @readonly
    */
-  get illnessCount() { return this.actor.illnesses.length; }
+  get injuryCount() { return this.actor.getInjuries().length; }
+
+  /**
+   * @type {Number}
+   * @readonly
+   */
+  get illnessCount() { return this.actor.getIllnesses().length; }
+
+  /**
+   * @type {Number}
+   * @readonly
+   */
+  get mutationCount() { return this.actor.getMutations().length; }
 
   /**
    * @type {Array<IllnessListItemViewModel>}
@@ -36,6 +48,12 @@ export default class ActorHealthViewModel extends SheetViewModel {
    * @readonly
    */
   injuries = [];
+
+  /**
+   * @type {Array<MutationViewModel>}
+   * @readonly
+   */
+  mutations = [];
 
   /**
    * @type {Boolean}
@@ -109,20 +127,10 @@ export default class ActorHealthViewModel extends SheetViewModel {
       isEditable: false,
       min: 1,
     });
-    this.vmBtnAddInjury = this.createVmBtnAdd({
-      id: "vmBtnAddInjury",
-      target: thiz.actor,
-      creationType: "injury",
-      withDialog: true,
-    });
-    this.vmBtnAddIllness = this.createVmBtnAdd({
-      id: "vmBtnAddIllness",
-      target: thiz.actor,
-      creationType: "illness",
-      withDialog: true,
-    });
 
-    for (const illness of this.actor.illnesses) {
+    // Prepare illnesses list view models. 
+    const actorIllnesses = this.actor.getIllnesses();
+    for (const illness of actorIllnesses) {
       const vm = new IllnessListItemViewModel({
         ...args,
         id: illness.id,
@@ -131,8 +139,27 @@ export default class ActorHealthViewModel extends SheetViewModel {
       });
       this.illnesses.push(vm);
     }
-
-    for (const injury of this.actor.injuries) {
+    this.vmIllnessList = new SortableListViewModel({
+      parent: thiz,
+      isEditable: args.isEditable ?? thiz.isEditable,
+      id: "vmIllnessList",
+      indexDataSource: new DocumentListItemOrderDataSource({
+        propertyOwner: thiz.actor,
+        listName: "illnesses",
+      }),
+      listItemViewModels: this.illnesses,
+      listItemTemplate: "systems/ambersteel/templates/item/illness/illness-list-item.hbs",
+      vmBtnAddItem: thiz.createVmBtnAdd({
+        id: "vmBtnAddIllness",
+        target: thiz.actor,
+        creationType: "illness",
+        withDialog: true,
+      }),
+    });
+    
+    // Prepare injuries list view models. 
+    const actorInjuries = this.actor.getInjuries();
+    for (const injury of actorInjuries) {
       const vm = new InjuryListItemViewModel({
         ...args,
         id: injury.id,
@@ -141,5 +168,51 @@ export default class ActorHealthViewModel extends SheetViewModel {
       });
       this.injuries.push(vm);
     }
+    this.vmInjuryList = new SortableListViewModel({
+      parent: thiz,
+      isEditable: args.isEditable ?? thiz.isEditable,
+      id: "vmInjuryList",
+      indexDataSource: new DocumentListItemOrderDataSource({
+        propertyOwner: thiz.actor,
+        listName: "injuries",
+      }),
+      listItemViewModels: this.injuries,
+      listItemTemplate: "systems/ambersteel/templates/item/injury/injury-list-item.hbs",
+      vmBtnAddItem: thiz.createVmBtnAdd({
+        id: "vmBtnAddInjury",
+        target: thiz.actor,
+        creationType: "injury",
+        withDialog: true,
+      }),
+    });
+    
+    // Prepare mutations list view models. 
+    const actorMutations = this.actor.getMutations();
+    for (const mutation of actorMutations) {
+      const vm = new MutationListItemViewModel({
+        ...args,
+        id: mutation.id,
+        parent: thiz,
+        item: mutation,
+      });
+      this.mutations.push(vm);
+    }
+    this.vmMutationList = new SortableListViewModel({
+      parent: thiz,
+      isEditable: args.isEditable ?? thiz.isEditable,
+      id: "vmMutationList",
+      indexDataSource: new DocumentListItemOrderDataSource({
+        propertyOwner: thiz.actor,
+        listName: "mutations",
+      }),
+      listItemViewModels: this.mutations,
+      listItemTemplate: "systems/ambersteel/templates/item/mutation/mutation-list-item.hbs",
+      vmBtnAddItem: thiz.createVmBtnAdd({
+        id: "vmBtnAddMutation",
+        target: thiz.actor,
+        creationType: "mutation",
+        withDialog: true,
+      }),
+    });
   }
 }

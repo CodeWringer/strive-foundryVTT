@@ -121,6 +121,15 @@ export default class ViewModel {
   viewStateFields = [];
 
   /**
+   * Returns the id of the associated entity (e. g. an actor document), or undefined, 
+   * if this view model is not associated with any identifiable entity. 
+   * @type {String | undefined}
+   * @readonly
+   * @virtual
+   */
+  get entityId() { return undefined; }
+
+  /**
    * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
    * 
    * If no value is provided, a shortened UUID will be generated for it. 

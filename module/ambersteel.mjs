@@ -41,6 +41,7 @@ import './components/button-roll/button-roll-viewmodel.mjs';
 import './components/button-send-to-chat/button-send-to-chat-viewmodel.mjs';
 import './components/button-toggle-visibility/button-toggle-visibility-viewmodel.mjs';
 import './components/button-take-item/button-take-item-viewmodel.mjs';
+import './components/sortable-list/sortable-list-viewmodel.mjs';
 // Import ui view models. 
 import '../templates/gm-notes-viewmodel.mjs';
 import '../templates/actor/actor-sheet-viewmodel.mjs';
@@ -80,11 +81,10 @@ Hooks.once('init', async function() {
      * @returns {Object} { totalDiceCount: {Number}, skillDiceCount: {Number}, attributeDiceCount: {Number} }
      */
     getSkillTestNumberOfDice: function(skillLevel, relatedAttributeLevel) {
-      const attributeDice = skillLevel == 0 ? parseInt(Math.ceil(relatedAttributeLevel / 2)) : parseInt(Math.floor(relatedAttributeLevel / 2));
       return {
-        totalDiceCount: skillLevel + attributeDice,
+        totalDiceCount: skillLevel + relatedAttributeLevel,
         skillDiceCount: skillLevel,
-        attributeDiceCount: attributeDice
+        attributeDiceCount: relatedAttributeLevel
       };
     },
     /**
@@ -97,8 +97,8 @@ Hooks.once('init', async function() {
      */
     getAttributeAdvancementRequirements: function(level = 0) {
       return new AdvancementRequirements({
-        requiredSuccessses: (level == 0) ? undefined : (level + 1) * (level + 1) * 3,
-        requiredFailures: (level == 0) ? undefined : (level + 1) * (level + 1) * 4
+        requiredSuccessses: (level === 0) ? undefined : (level + 1) * (level + 1) * 4,
+        requiredFailures: (level === 0) ? undefined : (level + 1) * (level + 1) * 5
       });
     },
     /**
@@ -137,6 +137,15 @@ Hooks.once('init', async function() {
       return int === 6 || int === 5;
     },
     /**
+     * Returns true, if the given face/number represents a negative (= failure).
+     * @param {String|Number} face A die face to check whether it represents a negative (= failure).
+     * @returns {Boolean}
+     */
+    isNegative: function(face) {
+      const int = parseInt(face);
+      return int <= 4;
+    },
+    /**
      * Returns true, if the given face/number represents a spell-backfire-causing negative. 
      * @param {String|Number} face A die face to check whether it represents a spell-backfire-causing negative. 
      * @returns {Boolean}
@@ -147,17 +156,17 @@ Hooks.once('init', async function() {
     },
     getCharacterMaximumHp: function(actor) {
       const businessData = actor.data.data;
-      const injuryCount = actor.injuries.length;
-      return (businessData.attributes.physical.toughness.value * 2) - (injuryCount * 2);
+      const injuryCount = actor.getInjuries().length;
+      return (businessData.attributes.physical.toughness.value * 4) - (injuryCount * 2);
     },
     getCharacterMaximumInjuries: function(actor) {
-      return Math.max(Math.floor(actor.data.data.attributes.physical.toughness.value / 2) + 1, 1);
+      return Math.max(actor.data.data.attributes.physical.toughness.value, 1);
     },
     getCharacterMaximumExhaustion: function(actor) {
-      return actor.data.data.attributes.physical.endurance.value * 2;
+      return actor.data.data.attributes.physical.endurance.value * 3;
     },
     getCharacterMaximumInventory: function(actor) {
-      return actor.data.data.attributes.physical.strength.value * 3;
+      return actor.data.data.attributes.physical.strength.value * 6;
     },
     /**
      * Returns an object containing the maximum magic stamina, as well as the details of how it came to be. 
@@ -186,7 +195,7 @@ Hooks.once('init', async function() {
     isToughnessTestRequired: function(actor) {
       const businessData = actor.data.data;
       const maxInjuries = businessData.health.maxInjuries;
-      const injuryCount = actor.injuries.length;
+      const injuryCount = actor.getInjuries().length;
       if (injuryCount >= Math.ceil(maxInjuries / 2)) {
         return true;
       } else {

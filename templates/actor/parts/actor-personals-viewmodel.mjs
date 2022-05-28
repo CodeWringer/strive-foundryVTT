@@ -10,6 +10,9 @@ export default class ActorPersonalsViewModel extends SheetViewModel {
    * @type {Actor}
    */
   actor = undefined;
+  
+  /** @override */
+  get entityId() { return this.actor.id; }
 
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 

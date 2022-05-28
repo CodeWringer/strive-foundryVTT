@@ -128,6 +128,7 @@
       "tabAssets": "Assets",
       "tabBiography": "Biography",
       "tabGmNotes": "GM",
+      "tabDescription": "Description",
       "confirm": "Confirm",
       "cancel": "Cancel",
       "ok": "OK",
@@ -188,9 +189,20 @@
       "pcAbbreviation": "PC",
       "npc": "Non-Player Character",
       "npcAbbreviation": "NPC",
+      "plainActor": "Plain Actor",
+      "plainActorAbbreviation": "Plain",
       "nameOfNewSkillAbility": "New Skill Ability",
       "opposedBy": "Opposed By",
-      "roll": "Roll Dice"
+      "roll": "Roll Dice",
+      "mutation": "Mutation",
+      "mutations": "Mutations"
+    },
+    "itemOrdering": {
+      "moveToTop": "Move to top",
+      "moveUp": "Move up",
+      "moveToBottom": "Move to bottom",
+      "moveDown": "Move down",
+      "moveByDragging": "Move by dragging"
     },
     "placeholders": {
       "obstacle": "0 / Opposed+-0 / etc.",
@@ -215,6 +227,10 @@
       "failure": "Failure",
       "degreeOfSuccess": "Degree of Success",
       "degreeOfFailure": "Degree of Failure",
+      "positive": "Positive",
+      "positives": "Positives",
+      "negative": "Negative",
+      "negatives": "Negatives",
       "numberOfDice": "Number of dice",
       "obstacle": "Obstacle",
       "obstacleAbbreviation": "Ob",
@@ -233,6 +249,7 @@
       "titleInjuryAddQuery": "Select Injury to Add",
       "titleIllnessAddQuery": "Select Illness to Add",
       "titleFateCardAddQuery": "Select Fate-Card to Add",
+      "titleMutationAddQuery": "Select Mutation to Add",
       "titleConfirmDeletionQuery": "Confirm Deletion",
       "titleConfirmDeletiongSkillQuery": "Confirm Deletion of Skill",
       "titleConfirmDeletionLearningSkillQuery": "Confirm Deletion of Learning Skill",
@@ -285,7 +302,7 @@
       "treated": "Treated"
     },
     "rules": {
-      "hintToughnessTestRequired": "Half of the maximum number of injuries reached. Any further injury incurred requires a toughness test to be passed. If failed, suffer +1 exhaustion."
+      "hintToughnessTestRequired": "Half of the maximum number of injuries reached. Any further damage incurred requires a toughness test at Ob of injuries*2 to be passed. If failed, suffer +1 exhaustion."
     }
   }
 }
