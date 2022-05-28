@@ -72,6 +72,7 @@ export class AmbersteelActor extends Actor {
   _getType() {
     const type = this.type;
 
+    // TODO: Refactor and somehow get rid of the explicit statements. 
     if (type === "pc") {
       return new AmbersteelPcActor();
     } else if (type === "npc") {
