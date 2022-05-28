@@ -2,42 +2,54 @@
 viewModel: {SortableListViewModel}
 cssClass: {String | undefined}
 --}}
-<ol class="unstyled-list alternating-rows{{#if cssClass}} {{cssClass}}{{/if}}"
+<div class="{{#if cssClass}} {{cssClass}}{{/if}}"
     id={{viewModel.id}}
   >
-  {{#each viewModel.itemViewModelGroups as |itemViewModelGroup key|}}
-    <li class="ambersteel-list-row sheet-block flex flex-row">
-      <div class="component-list-item-order-controls{{#if (neq ../viewModel.isEditable true)}} hidden{{/if}}">
-        {{#> _button viewModel=itemViewModelGroup.vmBtnMoveTop fill=false}}
-          <i class="fas fa-angle-double-up"></i>
-        {{/_button}}
-        {{#> _button viewModel=itemViewModelGroup.vmBtnMoveUp fill=false}}
-          <i class="fas fa-angle-up"></i>
-        {{/_button}}
-        {{!-- TODO: Implement the grab handle --}}
-        <div class="flex-grow"></div>
-        {{!-- <a 
-          class="grab-handle"
-          >
-          <i class="fas fa-grip-vertical"></i>
-        </a> --}}
-        {{#> _button viewModel=itemViewModelGroup.vmBtnMoveDown fill=false}}
-          <i class="fas fa-angle-down"></i>
-        {{/_button}}
-        {{#> _button viewModel=itemViewModelGroup.vmBtnMoveBottom fill=false}}
-          <i class="fas fa-angle-double-down"></i>
-        {{/_button}}
+  {{!-- Sorting controls --}}
+  <div class="flex flex-row flex-right{{#if (neq viewModel.isEditable true)}} hidden{{/if}}">
+    {{#> _button viewModel=viewModel.vmBtnSortAlphanumericDesc fill=false}}
+      <i class="fas fa-sort-alpha-down"></i>
+    {{/_button}}
+    {{#> _button viewModel=viewModel.vmBtnSortAlphanumericAsc fill=false}}
+      <i class="fas fa-sort-alpha-up"></i>
+    {{/_button}}
+  </div>
+  {{!-- The list --}}
+  <ol class="unstyled-list alternating-rows">
+    {{#each viewModel.itemViewModelGroups as |itemViewModelGroup key|}}
+      <li class="ambersteel-list-row sheet-block flex flex-row">
+        <div class="component-list-item-order-controls{{#if (neq ../viewModel.isEditable true)}} hidden{{/if}}">
+          {{#> _button viewModel=itemViewModelGroup.vmBtnMoveTop fill=false}}
+            <i class="fas fa-angle-double-up"></i>
+          {{/_button}}
+          {{#> _button viewModel=itemViewModelGroup.vmBtnMoveUp fill=false}}
+            <i class="fas fa-angle-up"></i>
+          {{/_button}}
+          {{!-- TODO: Implement the grab handle --}}
+          <div class="flex-grow"></div>
+          {{!-- <a 
+            class="grab-handle"
+            >
+            <i class="fas fa-grip-vertical"></i>
+          </a> --}}
+          {{#> _button viewModel=itemViewModelGroup.vmBtnMoveDown fill=false}}
+            <i class="fas fa-angle-down"></i>
+          {{/_button}}
+          {{#> _button viewModel=itemViewModelGroup.vmBtnMoveBottom fill=false}}
+            <i class="fas fa-angle-double-down"></i>
+          {{/_button}}
+        </div>
+        {{> (lookup . 'listItemTemplate') viewModel=itemViewModelGroup.listItemViewModel cssClass="flex-grow" }}
+      </li>
+    {{/each}}
+    <li class="ambersteel-list-row ambersteel-list-footer{{#if (neq viewModel.isEditable true)}} hidden{{/if}}">
+      <div class="fill flex flex-row">
+        <span class="flex-grow"></span>
+        {{!-- Add button --}}
+        <span class="width-sm">
+          {{> buttonAdd viewModel=viewModel.vmBtnAddItem }}
+        </span>
       </div>
-      {{> (lookup . 'listItemTemplate') viewModel=itemViewModelGroup.listItemViewModel cssClass="flex-grow" }}
     </li>
-  {{/each}}
-  <li class="ambersteel-list-row ambersteel-list-footer{{#if (neq viewModel.isEditable true)}} hidden{{/if}}">
-    <div class="fill flex flex-row">
-      <span class="flex-grow"></span>
-      {{!-- Add button --}}
-      <span class="width-sm">
-        {{> buttonAdd viewModel=viewModel.vmBtnAddItem }}
-      </span>
-    </div>
-  </li>
-</ol>
+  </ol>
+</div>

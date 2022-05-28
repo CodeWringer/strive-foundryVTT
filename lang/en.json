@@ -202,7 +202,9 @@
       "moveUp": "Move up",
       "moveToBottom": "Move to bottom",
       "moveDown": "Move down",
-      "moveByDragging": "Move by dragging"
+      "moveByDragging": "Move by dragging",
+      "sortAlphanumericAsc": "Sort alphanumerically, ascending",
+      "sortAlphanumericDesc": "Sort alphanumerically, descending"
     },
     "placeholders": {
       "obstacle": "0 / Opposed+-0 / etc.",

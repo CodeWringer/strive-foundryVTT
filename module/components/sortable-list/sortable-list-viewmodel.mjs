@@ -116,6 +116,22 @@ export default class SortableListViewModel extends SheetViewModel {
       const itemViewModelGroup = this._generateViewModelGroup(id, listItemViewModel, !upButtonsDisabled, !downButtonsDisabled);
       this.itemViewModelGroups.push(itemViewModelGroup);
     }
+
+    // Child view models.
+    this.vmBtnSortAlphanumericAsc = new ButtonViewModel({
+      parent: thiz,
+      isEditable: thiz.isEditable,
+      id: "vmBtnSortAlphanumericAsc",
+      onClick: () => { thiz._sortAlphanumerically(true); },
+      localizableTitle: "ambersteel.itemOrdering.sortAlphanumericAsc",
+    });
+    this.vmBtnSortAlphanumericDesc = new ButtonViewModel({
+      parent: thiz,
+      isEditable: thiz.isEditable,
+      id: "vmBtnSortAlphanumericDesc",
+      onClick: () => { thiz._sortAlphanumerically(false); },
+      localizableTitle: "ambersteel.itemOrdering.sortAlphanumericDesc",
+    });
   }
 
   /** @override */
@@ -219,6 +235,18 @@ export default class SortableListViewModel extends SheetViewModel {
   async _moveToBottom(id) {
     moveArrayElement(this.orderedIdList, id, this.orderedIdList.length - 1);
     this._storeItemOrder();
+  }
+  
+  /**
+   * Callback for moving an item to the bottom. 
+   * @param {Boolean | undefined} ascending Optional. If true, will sort in ascending order, or if false, in descending order. 
+   * @private
+   * @async
+   */
+  async _sortAlphanumerically(ascending = true) {
+    // TODO
+
+    this._storeItemOrder(true);
   }
 }
 
