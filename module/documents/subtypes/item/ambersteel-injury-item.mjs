@@ -1,6 +1,7 @@
 import AmbersteelBaseItem from "./ambersteel-base-item.mjs";
 import { TEMPLATES } from "../../../templatePreloader.mjs";
 import InjuryChatMessageViewModel from "../../../../templates/item/injury/injury-chat-message-viewmodel.mjs";
+import PreparedChatData from "../../../dto/prepared-chat-data.mjs";
 
 export default class AmbersteelInjuryItem extends AmbersteelBaseItem {
   /** @override */
@@ -71,13 +72,12 @@ export default class AmbersteelInjuryItem extends AmbersteelBaseItem {
    * @override
    */
   getChatViewModel(overrides = {}) {
-    const base = super.getChatViewModel();
     return new InjuryChatMessageViewModel({
-      id: base.id,
-      isEditable: base.isEditable,
-      isSendable: base.isSendable,
-      isOwner: base.isOwner,
-      isGM: base.isGM,
+      id: this.id,
+      isEditable: this.isEditable,
+      isSendable: this.isSendable,
+      isOwner: this.isOwner,
+      isGM: this.isGM,
       item: this,
       ...overrides,
     });
