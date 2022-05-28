@@ -6,6 +6,9 @@ export default class ItemChatMessageViewModel extends SheetViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.ITEM_CHAT_MESSAGE; }
 
+  /** @override */
+  get entityId() { return this.item.id; }
+
   /**
    * @type {Boolean}
    * @readonly

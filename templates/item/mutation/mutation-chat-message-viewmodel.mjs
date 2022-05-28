@@ -6,6 +6,9 @@ export default class MutationChatMessageViewModel extends SheetViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.MUTATION_CHAT_MESSAGE; }
 
+  /** @override */
+  get entityId() { return this.item.id; }
+
   /**
    * @type {Boolean}
    * @readonly

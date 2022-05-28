@@ -11,6 +11,9 @@ export default class ActorAttributesViewModel extends SheetViewModel {
    * @type {Actor}
    */
   actor = undefined;
+
+  /** @override */
+  get entityId() { return this.actor.id; }
   
   attributesPhysicalViewModel = undefined;
   get attributesPhysicalViewModelId() { return "child-attributes-physical-viewmodel"; }

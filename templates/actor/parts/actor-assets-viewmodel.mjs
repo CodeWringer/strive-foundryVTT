@@ -15,6 +15,9 @@ export default class ActorAssetsViewModel extends SheetViewModel {
    */
   actor = undefined;
 
+  /** @override */
+  get entityId() { return this.actor.id; }
+
   /**
    * @type {Array<ViewModel>}
    */

@@ -11,6 +11,9 @@ export default class ActorBiographyViewModel extends SheetViewModel {
    */
   actor = undefined;
 
+  /** @override */
+  get entityId() { return this.actor.id; }
+
   /**
    * @type {Any}
    */

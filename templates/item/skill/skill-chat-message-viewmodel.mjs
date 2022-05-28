@@ -7,6 +7,9 @@ export default class SkillChatMessageViewModel extends SheetViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.SKILL_ITEM_CHAT_MESSAGE; }
 
+  /** @override */
+  get entityId() { return this.item.id; }
+
   /**
    * @type {Boolean}
    */

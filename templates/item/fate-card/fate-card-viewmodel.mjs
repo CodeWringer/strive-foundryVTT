@@ -6,6 +6,9 @@ export default class FateCardViewModel extends SheetViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.FATE_CARD; }
 
+  /** @override */
+  get entityId() { return this.item.id; }
+  
   /**
    * @type {Item}
    */

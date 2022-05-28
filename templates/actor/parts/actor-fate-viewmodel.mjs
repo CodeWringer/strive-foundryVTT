@@ -12,6 +12,9 @@ export default class ActorFateViewModel extends SheetViewModel {
    */
   actor = undefined;
 
+  /** @override */
+  get entityId() { return this.actor.id; }
+
   /**
    * @type {Number}
    * @readonly

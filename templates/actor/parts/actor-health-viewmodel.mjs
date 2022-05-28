@@ -16,6 +16,9 @@ export default class ActorHealthViewModel extends SheetViewModel {
    */
   actor = undefined;
 
+  /** @override */
+  get entityId() { return this.actor.id; }
+
   /**
    * @type {Number}
    * @readonly

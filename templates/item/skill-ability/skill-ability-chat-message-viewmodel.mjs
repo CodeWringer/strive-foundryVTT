@@ -18,6 +18,9 @@ export default class SkillAbilityChatMessageViewModel extends ViewModel {
    * @type {SkillAbility}
    */
   skillAbility = undefined;
+  
+  /** @override */
+  get entityId() { return this.skillAbility.id; }
 
   /**
    * @type {Actor}

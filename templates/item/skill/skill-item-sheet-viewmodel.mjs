@@ -1,4 +1,3 @@
-import InputRichTextViewModel from "../../../module/components/input-rich-text/input-rich-text-viewmodel.mjs";
 import { TEMPLATES } from "../../../module/templatePreloader.mjs";
 import { validateOrThrow } from "../../../module/utils/validation-utility.mjs";
 import SkillAbilityTableViewModel from "../skill-ability/skill-ability-table-viewmodel.mjs";

@@ -87,7 +87,7 @@ export default class SortableListViewModel extends SheetViewModel {
 
     // Cull obsolete entries. 
     for (let i = orderedIdList.length -1; i >= 0; i--) {
-      const listItemViewModel = this.listItemViewModels.find(it => thiz._getItemViewModelId(it) === orderedIdList[i]);
+      const listItemViewModel = this.listItemViewModels.find(it => it.entityId === orderedIdList[i]);
       if (listItemViewModel === undefined) {
         orderedIdList.splice(i, 1);
       }
@@ -95,10 +95,10 @@ export default class SortableListViewModel extends SheetViewModel {
 
     // Add new entries. 
     for (const listItemViewModel of this.listItemViewModels) {
-      const itemId = thiz._getItemViewModelId(listItemViewModel);
-      const id = orderedIdList.find(it => it === itemId);
+      const entityId = listItemViewModel.entityId;
+      const id = orderedIdList.find(it => it === entityId);
       if (id === undefined) {
-        orderedIdList.push(itemId);
+        orderedIdList.push(entityId);
       }
     }
 
@@ -108,7 +108,7 @@ export default class SortableListViewModel extends SheetViewModel {
     // Generate data for the ui. 
     for (let i = 0; i < orderedIdList.length; i++) {
       const id = orderedIdList[i];
-      const listItemViewModel = this.listItemViewModels.find(it => thiz._getItemViewModelId(it) === id);
+      const listItemViewModel = this.listItemViewModels.find(it => it.entityId === id);
 
       const upButtonsDisabled = i === 0;
       const downButtonsDisabled = i === orderedIdList.length - 1;
@@ -169,22 +169,6 @@ export default class SortableListViewModel extends SheetViewModel {
       listItemTemplate: thiz.listItemTemplate,
       vmBtnAddItem: thiz.vmBtnAddItem,
     });
-  }
-
-  /**
-   * Returns the id of the actor, item, document, etc., represented by the given `ViewModel`.
-   * @param listItemViewModel 
-   * @returns {String} The id of the actor, item, document, etc., represented by the given `ViewModel`.
-   * @private
-   */
-  _getItemViewModelId(listItemViewModel) {
-    if (listItemViewModel.actor !== undefined) {
-      return listItemViewModel.actor.id;
-    } else if (listItemViewModel.item !== undefined) {
-      return listItemViewModel.item.id;
-    } else if (listItemViewModel.document !== undefined) {
-      return listItemViewModel.document.id;
-    }
   }
 
   /**

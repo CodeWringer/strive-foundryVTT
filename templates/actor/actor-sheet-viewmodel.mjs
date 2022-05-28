@@ -15,6 +15,9 @@ export default class ActorSheetViewModel extends SheetViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.ACTOR_SHEET; }
 
+  /** @override */
+  get entityId() { return this.actor.id; }
+
   /**
    * @type {Actor}
    */
