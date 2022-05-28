@@ -212,9 +212,17 @@ export default class SkillAbility {
   async _updateToDB(render = true) {
     if (this.parent === undefined) return;
 
+    const parentAbilities = this.parent.data.data.abilities;
+    const index = parentAbilities.findIndex(it => it.id === this.id);
     const abilitiesArray = [];
-    for (const skillAbility of this.parent.data.data.abilities) {
-      abilitiesArray.push(skillAbility.toDto());
+    const thisDto = this.toDto();
+    for (let i = 0; i < parentAbilities.length; i++) {
+      if (i === index) {
+        abilitiesArray.push(thisDto);
+      } else {
+        const skillAbility = parentAbilities[i];
+        abilitiesArray.push(skillAbility.toDto());
+      }
     }
     await this.parent.updateProperty("data.data.abilities", abilitiesArray, render);
   }
