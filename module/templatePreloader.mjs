@@ -21,6 +21,8 @@ export const TEMPLATES = {
   COMPONENT_BUTTON_TAKE_ITEM: "systems/ambersteel/module/components/button-take-item/button-take-item.hbs",
   COMPONENT_BUTTON_TOGGLE: "systems/ambersteel/module/components/button-toggle/button-toggle.hbs",
   COMPONENT_BUTTON_CONTEXT_MENU: "systems/ambersteel/module/components/button-context-menu/button-context-menu.hbs",
+  // Composite
+  COMPONENT_SORTABLE_LIST: "systems/ambersteel/module/components/sortable-list/sortable-list.hbs",
   // GM
   COMPONENT_GM_NOTES: "systems/ambersteel/templates/gm-notes.hbs",
   // Dice
@@ -33,7 +35,7 @@ export const TEMPLATES = {
   DIALOG_PLAIN: "systems/ambersteel/templates/dialog/dialog-plain.hbs",
   DIALOG_SELECT: "systems/ambersteel/templates/dialog/dialog-select.hbs",
   // --- Actor
-  ACTOR_SHEET: "systems/ambersteel/templates/actor/actor-character-sheet.hbs",
+  ACTOR_SHEET: "systems/ambersteel/templates/actor/actor-sheet.hbs",
   ACTOR_ATTRIBUTE_TABLE: "systems/ambersteel/templates/actor/components/component-attribute-table.hbs",
   ACTOR_SKILL_TABLE: "systems/ambersteel/templates/actor/components/component-skill-table.hbs",
   ACTOR_PERSONALS: "systems/ambersteel/templates/actor/parts/actor-personals.hbs",
@@ -70,6 +72,10 @@ export const TEMPLATES = {
   ILLNESS_CHAT_MESSAGE: "systems/ambersteel/templates/item/illness/illness-chat-message.hbs",
   ILLNESS_ITEM_SHEET: "systems/ambersteel/templates/item/illness/illness-item-sheet.hbs",
   ILLNESS_LIST_ITEM: "systems/ambersteel/templates/item/illness/illness-list-item.hbs",
+  // Mutation
+  MUTATION_CHAT_MESSAGE: "systems/ambersteel/templates/item/mutation/mutation-chat-message.hbs",
+  MUTATION_ITEM_SHEET: "systems/ambersteel/templates/item/mutation/mutation-item-sheet.hbs",
+  MUTATION_LIST_ITEM: "systems/ambersteel/templates/item/mutation/mutation-list-item.hbs",
 }
 
 /**

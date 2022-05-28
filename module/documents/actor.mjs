@@ -1,61 +1,87 @@
 import AmbersteelPcActor from './subtypes/actor/ambersteel-pc-actor.mjs';
 import AmbersteelNpcActor from './subtypes/actor/ambersteel-npc-actor.mjs';
+import AmbersteelPlainActor from './subtypes/actor/ambersteel-plain-actor.mjs';
+import ActorChatMessageViewModel from '../../templates/actor/actor-chat-message-viewmodel.mjs';
+import PreparedChatData from '../dto/prepared-chat-data.mjs';
 import * as UpdateUtil from '../utils/document-update-utility.mjs';
+import * as ChatUtil from "../utils/chat-utility.mjs";
+import { createUUID } from '../utils/uuid-utility.mjs';
 
 /**
- * @extends {Actor}
- * @property {Array<Item>} injuries
- * @property {Array<Item>} illnesses
- * @property {Array<Item>} possessions
- * @property {Array<Item>} propertyItems
- * @property {Array<Item>} fateCards
+ * @summary
+ * This class represents the basis for all actors. 
+ * 
+ * @description
+ * This is both the type that is instantiated by FoundryVTT for use in actors, 
+ * as well as a "base class" of sorts. To keep this class from becoming a 
+ * monolithic maintenance nightmare, any type-specific things are only 
+ * added after this class is instantiated. 
+ * 
+ * To that end, via the '_getType'-method an instance of the specific type 
+ * is fetched and then used in all the data preparation methods. 
+ * 
+ * **IMPORTANT**: The fetched sub-type instance **must not**, under any 
+ * circumstance, keep a reference to *this* `Actor` instance! Such circular 
+ * references would cause errors within FoundryVTT itself. 
+ * 
+ * The sub types add properties and methods to this `Actor` instance. 
+ * That is also why this class only contains general and basic methods 
  */
 export class AmbersteelActor extends Actor {
-  /**
-   * @private
-   */
-  _subType = undefined;
-  /**
-   * Type-dependent object which pseudo-extends the logic of this object. 
-   */
-  get subType() {
-    if (!this._subType) {
-      const type = this.type;
-
-      if (type === "pc") {
-        this._subType = new AmbersteelPcActor(this);
-      } else if (type === "npc") {
-        this._subType = new AmbersteelNpcActor(this);
-      } else {
-        throw `Actor subtype ${type} is unrecognized!`
-      }
-    }
-    return this._subType;
-  }
-
   /**
    * Returns the default icon image path for this type of actor. 
    * @type {String}
    * @virtual
    * @readonly
    */
-  get defaultImg() { return this.subType.defaultImg; }
+  get defaultImg() { return this._getType().defaultImg; }
+
+  /**
+   * Chat message template path. 
+   * @type {String}
+   * @readonly
+   */
+  get chatMessageTemplate() { return this._getType().chatMessageTemplate; }
 
   /** @override */
   prepareData() {
     super.prepareData();
-    this.subType.prepareData(this);
-  }
 
+    this._getType().prepareData(this);
+  }
+  
   /** @override */
   prepareBaseData() {
     super.prepareBaseData();
+    
+    this._getType().prepareBaseData(this);
   }
-
+  
   /** @override */
   prepareDerivedData() {
     super.prepareDerivedData();
-    this.subType.prepareDerivedData(this);
+    
+    this._getType().prepareDerivedData(this);
+  }
+
+  /**
+   * Returns an instance of the specific type of this actor. 
+   * @returns {Object}
+   * @private
+   */
+  _getType() {
+    const type = this.type;
+
+    // TODO: Refactor and somehow get rid of the explicit statements. 
+    if (type === "pc") {
+      return new AmbersteelPcActor();
+    } else if (type === "npc") {
+      return new AmbersteelNpcActor();
+    } else if (type === "plain") {
+      return new AmbersteelPlainActor();
+    } else {
+      throw new Error(`InvalidTypeException: Actor subtype ${type} is unrecognized!`);
+    }
   }
 
   /**
@@ -70,121 +96,6 @@ export class AmbersteelActor extends Actor {
       if (item.type === type) result.push(item);
     }
     return result;
-  }
-
-  /**
-   * @returns {Array<Item>} A list of "injury" type items that represent injuries of 
-   * this character. 
-   * @readonly
-   */
-  get injuries() { return this.getItemsByType("injury"); }
-  
-  /**
-   * @returns {Array<Item>} A list of "illness" type items that represent illnesses of 
-   * this character. 
-   * @readonly
-   */
-  get illnesses() { return this.getItemsByType("illness"); }
-  
-  /**
-   * @type {Array<AmbersteelItemItem>} A list of "item" type items that represent things owned 
-   * by this character, and currently on their person. 
-   * @readonly
-   */
-  get possessions() {
-    const items = Array.from(this.items);
-    return items.filter((item) => { return item.type === "item" && item.data.data.isOnPerson; });
-  }
-
-  /**
-   * @returns {Array<Item>} A list of "item" type items that represent things owned 
-   * by this character, but not on their person. 
-   */
-  get propertyItems() { 
-    const items = Array.from(this.items);
-    return items.filter((item) => { return item.type === "item" && !item.data.data.isOnPerson; });
-  }
-
-  /**
-   * @returns {Array<Item>} A list of "fate-card" type items that represent fate-cards of 
-   * this character. 
-   * @readonly
-   */
-  get fateCards() { return this.getItemsByType("fate-card"); }
-
-  /**
-   * 
-   * @param attName {String} Internal name of an attribute, e.g. 'magicSense'. 
-   * @returns {Object} With properties 'object', 'name', 'groupName'
-   * @private
-   */
-  getAttributeForName(attName) {
-    const data = this.data.data;
-
-    for (let attGroupName in data.attributes) {
-      let oAtt = data.attributes[attGroupName][attName];
-      if (oAtt) {
-        return {
-          object: oAtt,
-          name: attName,
-          groupName: attGroupName
-        };
-      }
-    }
-  }
-
-  /**
-   * Sets the level of the attribute with the given name. 
-   * @param attName {String} Internal name of an attribute, e.g. 'magicSense'. 
-   * @param newValue {Number} Value to set the attribute to, e.g. 0. Default 0
-   * @async
-   */
-  async setAttributeLevel(attName = undefined, newValue = 0) {
-    const oAttName = this.getAttributeForName(attName);
-    const req = game.ambersteel.getAttributeAdvancementRequirements(newValue);
-    const propertyPath = `data.attributes.${oAttName.groupName}.${attName}`
-
-    await this.update({
-      [`${propertyPath}.value`]: newValue,
-      [`${propertyPath}.requiredSuccessses`]: req.requiredSuccessses,
-      [`${propertyPath}.requiredFailures`]: req.requiredFailures,
-      [`${propertyPath}.successes`]: 0,
-      [`${propertyPath}.failures`]: 0
-    });
-  }
-
-  /**
-   * Adds success/failure progress to an attribute. 
-   * 
-   * Also auto-levels up the attribute, if 'autoLevel' is set to true. 
-   * @param attName {String} Internal name of an attribute, e.g. 'magicSense'. 
-   * @param success {Boolean} If true, will add 1 success, else will add 1 failure. Default false
-   * @param autoLevel {Boolean} If true, will auto-level up. Default false
-   * @async
-   */
-  async addAttributeProgress(attName = undefined, success = false, autoLevel = false) {
-    const oAttName = this.getAttributeForName(attName);
-    const oAtt = oAttName.object;
-
-    const successes = parseInt(oAtt.successes);
-    const failures = parseInt(oAtt.failures);
-    const requiredSuccessses = parseInt(oAtt.requiredSuccessses);
-    const requiredFailures = parseInt(oAtt.requiredFailures);
-    const propertyPath = `data.attributes.${oAttName.groupName}.${attName}`
-
-    if (success) {
-      await this.update({ [`${propertyPath}.successes`]: successes + 1 });
-    } else {
-      await this.update({ [`${propertyPath}.failures`]: failures + 1 });
-    }
-
-    if (autoLevel) {
-      if (successes >= requiredSuccessses
-      && failures >= requiredFailures) {
-        const newLevel = parseInt(oAtt.value) + 1;
-        await this.setAttributeLevel(attName, newLevel);
-      }
-    }
   }
 
   /**
@@ -214,5 +125,79 @@ export class AmbersteelActor extends Actor {
    */
   async updateProperty(propertyPath, newValue, render = true) {
     await UpdateUtil.updateProperty(this, propertyPath, newValue, render);
+  }
+
+  /**
+   * Base implementation of returning data for a chat message, based on this Actor. 
+   * @returns {PreparedChatData}
+   * @virtual
+   * @async
+   */
+  async getChatData() {
+    const actor = this;
+    const vm = this.getChatViewModel();
+    const renderedContent = await renderTemplate(this.chatMessageTemplate, {
+      viewModel: vm,
+    });
+
+    return new PreparedChatData({
+      renderedContent: renderedContent,
+      actor: actor,
+      sound: "../sounds/notify.wav",
+      viewModel: vm,
+    });
+  }
+  
+  /**
+   * Returns an instance of a view model for use in a chat message. 
+   * @returns {ActorChatMessageViewModel}
+   * @param {Object | undefined} overrides Optional. An object that allows overriding any of the view model properties. 
+   * @param {String | undefined} overrides.id
+   * @param {Boolean | undefined} overrides.isEditable
+   * @param {Boolean | undefined} overrides.isSendable
+   * @param {Boolean | undefined} overrides.isOwner
+   * @param {Boolean | undefined} overrides.isGM
+   * @virtual
+   */
+  getChatViewModel(overrides = {}) {
+    return new ActorChatMessageViewModel({
+      id: `${this.id}-${createUUID()}`,
+      isEditable: false,
+      isSendable: false,
+      isOwner: this.isOwner ?? this.owner ?? false,
+      isGM: game.user.isGM,
+      actor: this,
+      ...overrides,
+    });
+  }
+
+  /**
+   * Base implementation of sending this Actor to the chat. 
+   * @param {CONFIG.ambersteel.visibilityModes} visibilityMode Determines the visibility of the chat message. 
+   * @async
+   * @virtual
+   */
+  async sendToChat(visibilityMode = CONFIG.ambersteel.visibilityModes.public) {
+    const chatData = await this.getChatData();
+    ChatUtil.sendToChat({
+      visibilityMode: visibilityMode,
+      ...chatData
+    });
+  }
+
+  /**
+   * Sends a property of this item to chat, based on the given property path. 
+   * @param {String} propertyPath 
+   * @param {CONFIG.ambersteel.visibilityModes} visibilityMode 
+   * @async
+   */
+  async sendPropertyToChat(propertyPath, visibilityMode = CONFIG.ambersteel.visibilityModes.public) {
+    await ChatUtil.sendPropertyToChat({
+      obj: this,
+      propertyPath: propertyPath,
+      parent: this,
+      actor: this,
+      visibilityMode: visibilityMode
+    });
   }
 }

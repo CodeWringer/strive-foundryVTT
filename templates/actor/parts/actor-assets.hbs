@@ -32,20 +32,5 @@ cssClass: {undefined | String}
   {{> itemGridView viewModel=viewModel.vmIgv }}
   {{!-- Remote assets --}}
   <h2>{{localize "ambersteel.labels.assetsRemote"}}</h2>
-  <ol class="unstyled-list alternating-rows">
-    {{#each viewModel.itemViewModels as |vm key|}}
-      <li class="ambersteel-list-row sheet-block">
-        {{> "systems/ambersteel/templates/item/item/item-list-item.hbs" viewModel=vm }}
-      </li>
-    {{/each}}
-    <li class="ambersteel-list-row ambersteel-list-footer">
-      <div class="fill flex flex-row">
-        <span class="flex-grow"></span>
-        {{!-- Add property --}}
-        <span class="width-sm">
-          {{> buttonAdd viewModel=viewModel.vmBtnAddItem }}
-        </span>
-      </div>
-    </li>
-  </ol>
+  {{> sortableList viewModel=viewModel.vmPropertyList }}
 </section>

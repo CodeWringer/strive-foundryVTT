@@ -13,6 +13,9 @@ export default class SkillTableViewModel extends SheetViewModel {
    */
   actor = undefined;
 
+  /** @override */
+  get entityId() { return this.actor.id; }
+
   /**
    * @type {Boolean}
    */

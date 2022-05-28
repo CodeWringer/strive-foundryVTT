@@ -23,6 +23,9 @@ export default class SkillAbilityListItemViewModel extends SheetViewModel {
    */
   get skillAbility() { return this.item.data.data.abilities[this.index] }
 
+  /** @override */
+  get entityId() { return this.skillAbility.id; }
+
   /**
    * @type {Actor | undefined}
    * @readonly
@@ -110,6 +113,17 @@ export default class SkillAbilityListItemViewModel extends SheetViewModel {
     const pathSkillAbility = `data.data.abilities[${thiz.index}]`;
     const skillAbility = getNestedPropertyValue(this.item, pathSkillAbility);
     
+    this.vmBtnRoll = this.createVmBtnRoll({
+      id: "vmBtnRoll",
+      target: skillAbility.parent,
+      propertyPath: undefined,
+      chatTitle: game.i18n.localize(skillAbility.name),
+      rollType: "dice-pool",
+      callback: "advanceSkillBasedOnRollResult",
+      callbackData: skillAbility.parent.id,
+      actor: thiz.actor,
+      isEditable: thiz.isEditable || thiz.isGM,
+    });
     this.vmBtnSendToChat = this.createVmBtnSendToChat({
       id: "vmBtnSendToChat",
       target: skillAbility,

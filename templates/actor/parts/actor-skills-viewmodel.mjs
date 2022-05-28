@@ -12,6 +12,9 @@ export default class ActorSkillsViewModel extends SheetViewModel {
    */
   actor = undefined;
 
+  /** @override */
+  get entityId() { return this.actor.id; }
+  
   get learningSkills() { return this.actor.data.data.learningSkills; }
   get skills() { return this.actor.data.data.skills; }
   

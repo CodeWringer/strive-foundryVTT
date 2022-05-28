@@ -6,7 +6,30 @@ export default class ActorChatMessageViewModel extends SheetViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.ACTOR_CHAT_MESSAGE; }
 
+  /** @override */
+  get entityId() { return this.actor.id; }
+
   get renderedBiography() { return TextEditor.enrichHTML(this.actor.data.data.biography); }
+
+  get renderedDescription() { return TextEditor.enrichHTML(this.actor.data.data.description); }
+
+  /**
+   * Is true, if the actor is a player character. 
+   * @type {Boolean}
+   */
+  get isPC() { return this.actor.type === "pc"; }
+  
+  /**
+   * Is true, if the actor is a non-player character. 
+   * @type {Boolean}
+   */
+  get isNPC() { return this.actor.type === "npc"; }
+
+  /**
+   * Is true, if the actor is a plain actor. 
+   * @type {Boolean}
+   */
+  get isPlain() { return this.actor.type === "plain"; }
 
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
@@ -27,8 +50,5 @@ export default class ActorChatMessageViewModel extends SheetViewModel {
     this.contextTemplate = args.contextTemplate ?? "actor-chat-message";
     
     this.actor = args.actor;
-    
-    // Child view models. 
-    const thiz = this;
   }
 }

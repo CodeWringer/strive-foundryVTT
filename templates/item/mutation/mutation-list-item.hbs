@@ -1,0 +1,26 @@
+{{!-- Parameters:
+viewModel: {MutationListItemViewModel}
+cssClass: {undefined | String}
+--}}
+<div class="custom-system-list-item{{#if cssClass}} {{cssClass}}{{/if}}">
+  {{!-- Row 1 --}}
+  <div class="flex flex-row">
+    {{!-- Send to chat --}}
+    {{> buttonSendToChat viewModel=viewModel.vmBtnSendToChat }}
+    {{!-- Name --}}
+    <span class="width-min-xl">
+      {{> inputLabel text="ambersteel.labels.mutation"}}
+    </span>
+    {{> inputImage viewModel=viewModel.vmImg cssClass="custom-icon-sm" }}
+    <span class="flex-grow margin-r-md">
+      {{> inputTextField viewModel=viewModel.vmTfName }}
+    </span>
+    {{!-- Delete --}}
+    {{> buttonDelete viewModel=viewModel.vmBtnDelete }}
+  </div>
+  {{!-- Row 2 --}}
+  {{!-- Description --}}
+  <div class="flex flex-row">
+    {{> inputRichText viewModel=viewModel.vmRtDescription cssClass="fill" }}
+  </div>
+</div>

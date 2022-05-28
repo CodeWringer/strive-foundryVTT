@@ -5,6 +5,7 @@ import { validateOrThrow } from "./validation-utility.mjs";
 import DicePoolResult from "../dto/dice-pool-result.mjs";
 import RollDataQueryDialogResult from "../dto/roll-query-dialog-result.mjs";
 import { TEMPLATES } from "../templatePreloader.mjs";
+import { DiceOutcomeTypes } from "../dto/dice-outcome-types.mjs";
 
 export const DICE_ROLL_SOUND = "../sounds/dice.wav";
 
@@ -52,15 +53,28 @@ export function rollDicePool(ops = {}) {
       negatives.push(face);
     }
   }
-  const isSuccess = positives.length >= ops.obstacle;
-  const degree = isSuccess ? positives.length - ops.obstacle : negatives.length - ops.obstacle;
+  
+  // Determine outcome type and degree of success/failure. 
+  let outcomeType = undefined;
+  let degree = 0;
+  if (ops.obstacle <= 0) { // Ob 0 test?
+    outcomeType = DiceOutcomeTypes.NONE;
+  } else if (positives.length >= ops.obstacle) { // Complete success
+    outcomeType = DiceOutcomeTypes.SUCCESS;
+    degree = positives.length - ops.obstacle;
+  } else if (positives.length >= 0) { // Partial failure
+    outcomeType = DiceOutcomeTypes.PARTIAL;
+    degree = negatives.length - ops.obstacle;
+  } else {
+    outcomeType = DiceOutcomeTypes.FAILURE;
+  }
 
   return new DicePoolResult({
     numberOfDice: numberOfDice,
     obstacle: ops.obstacle,
     positives: positives,
     negatives: negatives,
-    isSuccess: isSuccess,
+    outcomeType: outcomeType,
     degree: degree,
     bonusDice: ops.bonusDice,
   });

@@ -1,33 +1,62 @@
 import AmbersteelBaseItem from "./ambersteel-base-item.mjs";
 import { TEMPLATES } from "../../../templatePreloader.mjs";
 import IllnessChatMessageViewModel from "../../../../templates/item/illness/illness-chat-message-viewmodel.mjs";
+import PreparedChatData from "../../../dto/prepared-chat-data.mjs";
 
 export default class AmbersteelIllnessItem extends AmbersteelBaseItem {
-  /**
-   * @param parent {Item} The owning Item. 
-   */
-  constructor(parent) {
-    super(parent);
-    
-    this.parent.chatMessageTemplate = this.chatMessageTemplate;
-    this.parent.getChatData = this.getChatData.bind(this);
-  }
-
   /** @override */
   get defaultImg() { return "icons/svg/poison.svg"; }
 
-  /**
-   * Chat message template path. 
-   * @type {String}
-   */
+  /** @override */
   get chatMessageTemplate() { return TEMPLATES.ILLNESS_CHAT_MESSAGE; }
 
+  /**
+   * Ensures type-specific methods and properties are added to the given 
+   * context entity. 
+   * @param {Actor} context 
+   * @virtual
+   * @private
+   */
+  _ensureContextHasSpecifics(context) {
+    context.getChatData = this.getChatData.bind(context);
+    context.getChatViewModel = this.getChatViewModel.bind(context);
+  }
+
   /** @override */
+  prepareData(context) {
+    super.prepareData(context);
+
+    this._ensureContextHasSpecifics(context);
+  }
+
+  /** @override */
+  prepareDerivedData(context) {
+    super.prepareDerivedData(context);
+
+    this._ensureContextHasSpecifics(context);
+  }
+
+  /**
+   * Returns data for a chat message, based on this illness. 
+   * @returns {PreparedChatData}
+   * @override
+   * @async
+   */
   async getChatData() {
-    const chatData = super.getChatData();
-    chatData.flavor = game.i18n.localize("ambersteel.labels.illness");
-    
-    return chatData;
+    const actor = this.parent ?? this.actor;
+    const vm = this.getChatViewModel();
+
+    const renderedContent = await renderTemplate(this.chatMessageTemplate, {
+      viewModel: vm,
+    });
+
+    return new PreparedChatData({
+      renderedContent: renderedContent,
+      actor: actor, 
+      sound: "../sounds/notify.wav",
+      viewModel: vm,
+      flavor: game.i18n.localize("ambersteel.labels.illness"),
+    });
   }
 
   /**
@@ -43,14 +72,13 @@ export default class AmbersteelIllnessItem extends AmbersteelBaseItem {
    * @override
    */
   getChatViewModel(overrides = {}) {
-    const base = super.getChatViewModel();
     return new IllnessChatMessageViewModel({
-      id: base.id,
-      isEditable: base.isEditable,
-      isSendable: base.isSendable,
-      isOwner: base.isOwner,
-      isGM: base.isGM,
-      item: this.parent,
+      id: this.id,
+      isEditable: this.isEditable,
+      isSendable: this.isSendable,
+      isOwner: this.isOwner,
+      isGM: this.isGM,
+      item: this,
       ...overrides,
     });
   }

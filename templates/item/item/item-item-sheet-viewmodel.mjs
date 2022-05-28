@@ -6,6 +6,9 @@ export default class ItemItemSheetViewModel extends SheetViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.ITEM_SHEET; }
 
+  /** @override */
+  get entityId() { return this.item.id; }
+
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
    * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 

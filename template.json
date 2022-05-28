@@ -1,7 +1,20 @@
 {
   "Actor": {
-    "types": ["pc", "npc"],
+    "types": ["npc", "plain", "pc"],
     "templates": {
+      "base": {
+        "description": "",
+        "gmNotes": "",
+        "isCustom": false,
+        "displayOrders": {
+          "property": [],
+          "skills": [],
+          "fateCards": [],
+          "injuries": [],
+          "illnesses": [],
+          "mutations": []
+        }
+      },
       "character": {
         "person": {
           "personName": "",
@@ -85,14 +98,11 @@
         "assets": {
           "grid": [],
           "gridIndices": []
-        },
-        "biography": "",
-        "gmNotes": "",
-        "isCustom": false
+        }
       }
     },
     "pc": {
-      "templates": ["character"],
+      "templates": ["base", "character"],
       "beliefSystem": {
         "ambition": "",
         "beliefs": ["", "", ""],
@@ -105,16 +115,27 @@
       }
     },
     "npc": {
-      "templates": ["character"]
+      "templates": ["base", "character"]
+    },
+    "plain": {
+      "templates": ["base"]
     }
   },
   "Item": {
-    "types": ["item", "skill", "fate-card", "injury", "illness"],
+    "types": [
+      "item",
+      "skill",
+      "fate-card",
+      "injury",
+      "illness",
+      "mutation"
+    ],
     "templates": {
       "base": {
         "description": "",
         "gmNotes": "",
-        "isCustom": false
+        "isCustom": false,
+        "displayOrders": {}
       }
     },
     "skill": {
@@ -157,6 +178,9 @@
       "duration": "",
       "treatment": "",
       "treatmentSkill": ""
+    },
+    "mutation": {
+      "templates": ["base"]
     }
   }
 }

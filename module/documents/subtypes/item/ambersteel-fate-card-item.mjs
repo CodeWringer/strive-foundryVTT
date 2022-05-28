@@ -1,33 +1,62 @@
 import AmbersteelBaseItem from "./ambersteel-base-item.mjs";
 import { TEMPLATES } from "../../../templatePreloader.mjs";
 import FateCardChatMessageViewModel from "../../../../templates/item/fate-card/fate-card-chat-message-viewmodel.mjs";
+import PreparedChatData from "../../../dto/prepared-chat-data.mjs";
 
 export default class AmbersteelFateCardItem extends AmbersteelBaseItem {
+  /** @override */
+  get defaultImg() { return "icons/svg/wing.svg"; }
+  
+  /** @override */
+  get chatMessageTemplate() { return TEMPLATES.FATE_CARD_CHAT_MESSAGE; }
+ 
   /**
-   * @param parent {Item} The owning Item. 
+   * Ensures type-specific methods and properties are added to the given 
+   * context entity. 
+   * @param {Actor} context 
+   * @virtual
+   * @private
    */
-  constructor(parent) {
-    super(parent);
-    
-    this.parent.chatMessageTemplate = this.chatMessageTemplate;
-    this.parent.getChatData = this.getChatData.bind(this);
+  _ensureContextHasSpecifics(context) {
+    context.getChatData = this.getChatData.bind(context);
+    context.getChatViewModel = this.getChatViewModel.bind(context);
   }
 
   /** @override */
-  get defaultImg() { return "icons/svg/wing.svg"; }
+  prepareData(context) {
+    super.prepareData(context);
 
-  /**
-   * Chat message template path. 
-   * @type {String}
-   */
-  get chatMessageTemplate() { return TEMPLATES.FATE_CARD_CHAT_MESSAGE; }
+    this._ensureContextHasSpecifics(context);
+  }
 
   /** @override */
+  prepareDerivedData(context) {
+    super.prepareDerivedData(context);
+
+    this._ensureContextHasSpecifics(context);
+  }
+
+  /**
+   * Returns data for a chat message, based on this fate card. 
+   * @returns {PreparedChatData}
+   * @override
+   * @async
+   */
   async getChatData() {
-    const chatData = super.getChatData();
-    chatData.flavor = game.i18n.localize("ambersteel.labels.fateCard");
-    
-    return chatData;
+    const actor = this.parent ?? this.actor;
+    const vm = this.getChatViewModel();
+
+    const renderedContent = await renderTemplate(this.chatMessageTemplate, {
+      viewModel: vm,
+    });
+
+    return new PreparedChatData({
+      renderedContent: renderedContent,
+      actor: actor, 
+      sound: "../sounds/notify.wav",
+      viewModel: vm,
+      flavor: game.i18n.localize("ambersteel.labels.fateCard"),
+    });
   }
 
   /**
@@ -43,14 +72,13 @@ export default class AmbersteelFateCardItem extends AmbersteelBaseItem {
    * @override
    */
   getChatViewModel(overrides = {}) {
-    const base = super.getChatViewModel();
     return new FateCardChatMessageViewModel({
-      id: base.id,
-      isEditable: base.isEditable,
-      isSendable: base.isSendable,
-      isOwner: base.isOwner,
-      isGM: base.isGM,
-      item: this.parent,
+      id: this.id,
+      isEditable: this.isEditable,
+      isSendable: this.isSendable,
+      isOwner: this.isOwner,
+      isGM: this.isGM,
+      item: this,
       ...overrides,
     });
   }
