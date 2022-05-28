@@ -29,7 +29,6 @@ export default class AmbersteelBaseCharacterActor extends AmbersteelBaseActor {
       const items = Array.from(context.items);
       return items.filter((item) => { return item.type === "item" && !item.data.data.isOnPerson; });
     }
-
     context.getAttributeForName = this.getAttributeForName.bind(context);
     context.setAttributeLevel = this.setAttributeLevel.bind(context);
     context.addAttributeProgress = this.addAttributeProgress.bind(context);
@@ -124,7 +123,7 @@ export default class AmbersteelBaseCharacterActor extends AmbersteelBaseActor {
       const attributes = [];
       for (const attName of attributeNames) {
         const oAtt = oAttGroup[attName];
-        this._prepareDerivedAttributeData(oAtt, attName);
+        this._prepareDerivedAttributeData(context, oAtt, attName);
         attributes.push(oAtt);
       }
 
@@ -148,7 +147,7 @@ export default class AmbersteelBaseCharacterActor extends AmbersteelBaseActor {
    * @param attName {String} Internal name of the attribute, e.g. 'magicSense'. 
    * @private
    */
-  _prepareDerivedAttributeData(oAtt, attName) {
+  _prepareDerivedAttributeData(context, oAtt, attName) {
     const attValue = parseInt(oAtt.value);
     const req = game.ambersteel.getAttributeAdvancementRequirements(attValue);
 
@@ -170,7 +169,7 @@ export default class AmbersteelBaseCharacterActor extends AmbersteelBaseActor {
         new SummedDataComponent(attName, oAtt.localizableName, attValue)
       ]);
     };
-    oAtt.advanceAttributeBasedOnRollResult = this.advanceAttributeBasedOnRollResult.bind(this);
+    oAtt.advanceAttributeBasedOnRollResult = this.advanceAttributeBasedOnRollResult.bind(context);
   }
   
   /**

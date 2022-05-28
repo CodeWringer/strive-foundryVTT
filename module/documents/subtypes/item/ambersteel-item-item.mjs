@@ -1,6 +1,7 @@
 import AmbersteelBaseItem from "./ambersteel-base-item.mjs";
 import { TEMPLATES } from "../../../templatePreloader.mjs";
 import ItemChatMessageViewModel from "../../../../templates/item/item/item-chat-message-viewmodel.mjs";
+import PreparedChatData from "../../../dto/prepared-chat-data.mjs";
 
 export default class AmbersteelItemItem extends AmbersteelBaseItem {
   /** @override */
@@ -88,13 +89,12 @@ export default class AmbersteelItemItem extends AmbersteelBaseItem {
    * @override
    */
   getChatViewModel(overrides = {}) {
-    const base = super.getChatViewModel();
     return new ItemChatMessageViewModel({
-      id: base.id,
-      isEditable: base.isEditable,
-      isSendable: base.isSendable,
-      isOwner: base.isOwner,
-      isGM: base.isGM,
+      id: this.id,
+      isEditable: this.isEditable,
+      isSendable: this.isSendable,
+      isOwner: this.isOwner,
+      isGM: this.isGM,
       item: this,
       actor: this.parent ?? this.actor,
       sourceType: undefined,

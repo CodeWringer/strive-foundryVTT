@@ -6,6 +6,7 @@ import SkillChatMessageViewModel from "../../../../templates/item/skill/skill-ch
 import { SummedData, SummedDataComponent } from "../../../dto/summed-data.mjs";
 import DamageAndType from "../../../dto/damage-and-type.mjs";
 import { DiceOutcomeTypes } from "../../../dto/dice-outcome-types.mjs";
+import PreparedChatData from "../../../dto/prepared-chat-data.mjs";
 
 export default class AmbersteelSkillItem extends AmbersteelBaseItem {
   /** @override */
@@ -29,7 +30,7 @@ export default class AmbersteelSkillItem extends AmbersteelBaseItem {
     context.advanceSkillBasedOnRollResult = this.advanceSkillBasedOnRollResult.bind(context);
     context.getChatData = this.getChatData.bind(context);
     context.getChatViewModel = this.getChatViewModel.bind(context);
-    context.getRollData = this._getRollData.bind(this);
+    context.getRollData = this._getRollData.bind(context);
   }
 
   /** @override */
@@ -75,13 +76,12 @@ export default class AmbersteelSkillItem extends AmbersteelBaseItem {
 
   /** @override */
   getChatViewModel(overrides = {}) {
-    const base = super.getChatViewModel();
     return new SkillChatMessageViewModel({
-      id: base.id,
-      isEditable: base.isEditable,
-      isSendable: base.isSendable,
-      isOwner: base.isOwner,
-      isGM: base.isGM,
+      id: this.id,
+      isEditable: this.isEditable,
+      isSendable: this.isSendable,
+      isOwner: this.isOwner,
+      isGM: this.isGM,
       item: this,
       actor: this.parent ?? this.actor,
       visGroupId: createUUID(),
