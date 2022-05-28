@@ -3,13 +3,14 @@ import AmbersteelBaseCharacterActor from "./ambersteel-base-character-actor.mjs"
 export default class AmbersteelPcActor extends AmbersteelBaseCharacterActor {
   /**
    * Prepare PC type specific data. 
-   * @param actorData 'this.data'
    * @param {Actor} context
    * @override
    */
   prepareData(context) {
     super.prepareData(context);
     const actorData = context.data.data;
+
+    context.getFateCards = () => { return context.getItemsByType("fate-card"); }
 
     // Ensure beliefs array has 3 items. 
     while (actorData.beliefSystem.beliefs.length < 3) {
