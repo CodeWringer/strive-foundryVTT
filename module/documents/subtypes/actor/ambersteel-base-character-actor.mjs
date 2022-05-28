@@ -1,7 +1,7 @@
+import { DiceOutcomeTypes } from '../../../dto/dice-outcome-types.mjs';
 import { SummedData, SummedDataComponent } from '../../../dto/summed-data.mjs';
 import { TEMPLATES } from '../../../templatePreloader.mjs';
 import AmbersteelBaseActor from './ambersteel-base-actor.mjs';
-import { DiceOutcomeTypes } from '../../dto/dice-outcome-types.mjs';
 
 export default class AmbersteelBaseCharacterActor extends AmbersteelBaseActor {
   /** @override */
@@ -9,11 +9,15 @@ export default class AmbersteelBaseCharacterActor extends AmbersteelBaseActor {
   
   /** @override */
   get chatMessageTemplate() { return TEMPLATES.ACTOR_CHAT_MESSAGE; }
-  
-  /** @override */
-  prepareData(context) {
-    super.prepareData(context);
-    
+
+  /**
+   * Ensures type-specific methods and properties are added to the given 
+   * context entity. 
+   * @param {Actor} context 
+   * @virtual
+   * @private
+   */
+  _ensureContextHasSpecifics(context) {
     context.getInjuries = () => { return context.getItemsByType("injury"); }
     context.getIllnesses = () => { return context.getItemsByType("illness"); }
     context.getMutations = () => { return context.getItemsByType("mutation"); }
@@ -32,9 +36,20 @@ export default class AmbersteelBaseCharacterActor extends AmbersteelBaseActor {
     context.advanceSkillBasedOnRollResult = this.advanceSkillBasedOnRollResult.bind(context);
     context.advanceAttributeBasedOnRollResult = this.advanceAttributeBasedOnRollResult.bind(context);
   }
+  
+  /** @override */
+  prepareData(context) {
+    super.prepareData(context);
+
+    this._ensureContextHasSpecifics(context);
+  }
 
   /** @override */
   prepareDerivedData(context) {
+    super.prepareDerivedData(context);
+
+    this._ensureContextHasSpecifics(context);
+
     context.data.data.assets.maxBulk = game.ambersteel.getCharacterMaximumInventory(context);
     context.data.data.assets.totalBulk = this._calculateUsedBulk(context);
     this._prepareDerivedAttributesData(context);
@@ -50,7 +65,7 @@ export default class AmbersteelBaseCharacterActor extends AmbersteelBaseActor {
    */
   _calculateUsedBulk(context) {
     let usedBulk = 0;
-    for (const possession of context.possessions) {
+    for (const possession of context.getPossessions()) {
       usedBulk += possession.data.data.bulk;
     }
     return usedBulk;
@@ -182,34 +197,35 @@ export default class AmbersteelBaseCharacterActor extends AmbersteelBaseActor {
   /**
    * Updates the given actorData with derived skill data. 
    * Assigns items of type skill to the derived lists 'actorData.skills' and 'actorData.learningSkills'. 
-   * @param {AmbersteelActor} context 
+   * @param {Actor} context 
    * @private
    */
   _prepareDerivedSkillsData(context) {
     const actorData = context.data.data;
-
-    actorData.skills = (this.parent.items.filter(item => {
+    
+    actorData.skills = (context.items.filter(item => {
       return item.data.type == "skill" && parseInt(item.data.data.value) > 0
     }));
     for (const oSkill of actorData.skills) {
-      this._prepareDerivedSkillData(oSkill.id);
+      this._prepareDerivedSkillData(context, oSkill.id);
     };
-
-    actorData.learningSkills = (this.parent.items.filter(item => {
+    
+    actorData.learningSkills = (context.items.filter(item => {
       return item.data.type == "skill" && parseInt(item.data.data.value) == 0
     }));
     for (const oSkill of actorData.learningSkills) {
-      this._prepareDerivedSkillData(oSkill.id);
+      this._prepareDerivedSkillData(context, oSkill.id);
     };
   }
-
+  
   /**
    * Pepares derived skill data. 
-   * @param skillId {String} Id of a skill. 
+   * @param {Actor} context 
+   * @param {String} skillId Id of a skill. 
    * @private
    */
-  _prepareDerivedSkillData(skillId) {
-    const oSkill = this.parent.items.get(skillId);
+  _prepareDerivedSkillData(context, skillId) {
+    const oSkill = context.items.get(skillId);
     const skillData = oSkill.data.data;
 
     skillData.id = oSkill.id;

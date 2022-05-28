@@ -68,7 +68,8 @@ export default class ActorAssetsViewModel extends SheetViewModel {
       contextTemplate: thiz.contextTemplate,
     });
 
-    for (const item of this.actor.propertyItems) {
+    const actorItems = this.actor.getPropertyItems();
+    for (const item of actorItems) {
       const vm = new ItemListItemViewModel({
         ...args,
         id: item.id,

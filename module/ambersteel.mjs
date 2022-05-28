@@ -156,7 +156,7 @@ Hooks.once('init', async function() {
     },
     getCharacterMaximumHp: function(actor) {
       const businessData = actor.data.data;
-      const injuryCount = actor.injuries.length;
+      const injuryCount = actor.getInjuries().length;
       return (businessData.attributes.physical.toughness.value * 4) - (injuryCount * 2);
     },
     getCharacterMaximumInjuries: function(actor) {
@@ -195,7 +195,7 @@ Hooks.once('init', async function() {
     isToughnessTestRequired: function(actor) {
       const businessData = actor.data.data;
       const maxInjuries = businessData.health.maxInjuries;
-      const injuryCount = actor.injuries.length;
+      const injuryCount = actor.getInjuries().length;
       if (injuryCount >= Math.ceil(maxInjuries / 2)) {
         return true;
       } else {
