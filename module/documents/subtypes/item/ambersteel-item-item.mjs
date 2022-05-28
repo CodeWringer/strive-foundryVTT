@@ -3,34 +3,41 @@ import { TEMPLATES } from "../../../templatePreloader.mjs";
 import ItemChatMessageViewModel from "../../../../templates/item/item/item-chat-message-viewmodel.mjs";
 
 export default class AmbersteelItemItem extends AmbersteelBaseItem {
-  /**
-   * @param parent {Item} The owning Item. 
-   */
-  constructor(parent) {
-    super(parent);
-    
-    this.parent.chatMessageTemplate = this.chatMessageTemplate;
-    this.parent.getChatData = this.getChatData.bind(this);
-  }
-  
   /** @override */
   get defaultImg() { return "icons/svg/item-bag.svg"; }
   
-  /**
-   * Chat message template path. 
-   * @type {String}
-   */
+  /** @override */
   get chatMessageTemplate() { return TEMPLATES.ITEM_CHAT_MESSAGE; }
   
+  /**
+   * Ensures type-specific methods and properties are added to the given 
+   * context entity. 
+   * @param {Actor} context 
+   * @virtual
+   * @private
+   */
+  _ensureContextHasSpecifics(context) {
+    context.getChatData = this.getChatData.bind(context);
+    context.getChatViewModel = this.getChatViewModel.bind(context);
+  }
+
   /** @override */
   prepareData(context) {
+    super.prepareData(context);
+
+    this._ensureContextHasSpecifics(context);
+
     // Ensure number data type. 
     context.data.data.shape.width = parseInt(context.data.data.shape.width);
     context.data.data.shape.height = parseInt(context.data.data.shape.height);
   }
-  
+
   /** @override */
   prepareDerivedData(context) {
+    super.prepareDerivedData(context);
+
+    this._ensureContextHasSpecifics(context);
+
     // Derive bulk from shape. 
     const shape = context.data.data.shape;
     if (shape === undefined) {
@@ -40,12 +47,27 @@ export default class AmbersteelItemItem extends AmbersteelBaseItem {
     context.data.data.bulk = shape.width * shape.height;
   }
 
-  /** @override */
+  /**
+   * Returns data for a chat message, based on this injury. 
+   * @returns {PreparedChatData}
+   * @override
+   * @async
+   */
   async getChatData() {
-    const chatData = super.getChatData();
-    chatData.flavor = game.i18n.localize("ambersteel.labels.item");
-    
-    return chatData;
+    const actor = this.parent ?? this.actor;
+    const vm = this.getChatViewModel();
+
+    const renderedContent = await renderTemplate(this.chatMessageTemplate, {
+      viewModel: vm,
+    });
+
+    return new PreparedChatData({
+      renderedContent: renderedContent,
+      actor: actor, 
+      sound: "../sounds/notify.wav",
+      viewModel: vm,
+      flavor: game.i18n.localize("ambersteel.labels.item"),
+    });
   }
 
   /**
@@ -73,8 +95,8 @@ export default class AmbersteelItemItem extends AmbersteelBaseItem {
       isSendable: base.isSendable,
       isOwner: base.isOwner,
       isGM: base.isGM,
-      item: this.parent,
-      actor: this.parent.parent,
+      item: this,
+      actor: this.parent ?? this.actor,
       sourceType: undefined,
       sourceId: undefined,
       allowPickup: false, // TODO: The user must be able to select who gets to pick this item up. 
