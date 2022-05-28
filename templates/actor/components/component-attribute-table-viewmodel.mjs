@@ -11,6 +11,9 @@ export default class AttributeTableViewModel extends SheetViewModel {
    */
   actor = undefined;
 
+  /** @override */
+  get entityId() { return this.actor.id; }
+
   /**
    * @type {Array<Object>}
    */

@@ -1,4 +1,6 @@
 import SheetViewModel from "../../../module/components/sheet-viewmodel.mjs";
+import DocumentListItemOrderDataSource from "../../../module/components/sortable-list/document-list-item-order-datasource.mjs";
+import SortableListViewModel from "../../../module/components/sortable-list/sortable-list-viewmodel.mjs";
 import { TEMPLATES } from "../../../module/templatePreloader.mjs";
 import { createUUID } from "../../../module/utils/uuid-utility.mjs";
 import { validateOrThrow } from "../../../module/utils/validation-utility.mjs";
@@ -131,6 +133,23 @@ export default class SkillAbilityTableViewModel extends SheetViewModel {
       this.abilities.push(vm);
       this[vm.id] = vm;
     }
+    this.vmSkillAbilities = new SortableListViewModel({
+      parent: thiz,
+      isEditable: args.isEditable ?? thiz.isEditable,
+      id: "vmSkillAbilities",
+      indexDataSource: new DocumentListItemOrderDataSource({
+        propertyOwner: thiz.item,
+        listName: "abilities",
+      }),
+      listItemViewModels: this.abilities,
+      listItemTemplate: thiz.oneColumn === true ? "systems/ambersteel/templates/item/skill-ability/skill-ability-chat-message.hbs" : "systems/ambersteel/templates/item/skill-ability/skill-ability-list-item.hbs",
+      vmBtnAddItem: thiz.createVmBtnAdd({
+        id: "vmBtnAdd",
+        target: thiz.item,
+        creationType: "skill-ability",
+        withDialog: false,
+      }),
+    });
 
     this.vmBtnToggleVisibilityExpand = this.createVmBtnToggleVisibility({
       id: "vmBtnToggleVisibilityExpand",
@@ -147,15 +166,6 @@ export default class SkillAbilityTableViewModel extends SheetViewModel {
       visGroup: thiz.visGroupId,
       toggleSelf: true,
       callback: thiz._toggleSkillAbilitiesInitiallyVisible.bind(thiz),
-    });
-
-    if (this.isEditable !== true) return;
-
-    this.vmBtnAdd = this.createVmBtnAdd({
-      id: "vmBtnAdd",
-      target: thiz.item,
-      creationType: "skill-ability",
-      withDialog: false,
     });
   }
 

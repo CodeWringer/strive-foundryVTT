@@ -11,6 +11,9 @@ export default class ActorBeliefsViewModel extends SheetViewModel {
    */
   actor = undefined;
 
+  /** @override */
+  get entityId() { return this.actor.id; }
+
   get beliefs() { return this.actor.data.data.beliefSystem.beliefs; }
   get instincts() { return this.actor.data.data.beliefSystem.instincts; }
 

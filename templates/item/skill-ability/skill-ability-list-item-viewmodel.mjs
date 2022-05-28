@@ -23,6 +23,9 @@ export default class SkillAbilityListItemViewModel extends SheetViewModel {
    */
   get skillAbility() { return this.item.data.data.abilities[this.index] }
 
+  /** @override */
+  get entityId() { return this.skillAbility.id; }
+
   /**
    * @type {Actor | undefined}
    * @readonly

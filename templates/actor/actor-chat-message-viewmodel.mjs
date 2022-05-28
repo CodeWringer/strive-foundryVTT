@@ -6,6 +6,9 @@ export default class ActorChatMessageViewModel extends SheetViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.ACTOR_CHAT_MESSAGE; }
 
+  /** @override */
+  get entityId() { return this.actor.id; }
+
   get renderedBiography() { return TextEditor.enrichHTML(this.actor.data.data.biography); }
 
   get renderedDescription() { return TextEditor.enrichHTML(this.actor.data.data.description); }

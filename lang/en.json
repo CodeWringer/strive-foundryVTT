@@ -197,6 +197,13 @@
       "mutation": "Mutation",
       "mutations": "Mutations"
     },
+    "itemOrdering": {
+      "moveToTop": "Move to top",
+      "moveUp": "Move up",
+      "moveToBottom": "Move to bottom",
+      "moveDown": "Move down",
+      "moveByDragging": "Move by dragging"
+    },
     "placeholders": {
       "obstacle": "0 / Opposed+-0 / etc.",
       "distance": "3' / 1m / 0 / etc.",

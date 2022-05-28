@@ -6,6 +6,9 @@ export default class InjuryChatMessageViewModel extends SheetViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.INJURY_CHAT_MESSAGE; }
 
+  /** @override */
+  get entityId() { return this.item.id; }
+
   /**
    * @type {Item}
    */

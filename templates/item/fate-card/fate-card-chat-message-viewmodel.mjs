@@ -6,6 +6,9 @@ export default class FateCardChatMessageViewModel extends SheetViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.FATE_CARD_CHAT_MESSAGE; }
 
+  /** @override */
+  get entityId() { return this.item.id; }
+  
   /**
    * @type {Item}
    */

@@ -6,6 +6,9 @@ export default class IllnessChatMessageViewModel extends SheetViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.ILLNESS_CHAT_MESSAGE; }
 
+  /** @override */
+  get entityId() { return this.item.id; }
+
   /**
    * @type {Item}
    */

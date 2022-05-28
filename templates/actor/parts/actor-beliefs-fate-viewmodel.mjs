@@ -19,6 +19,9 @@ export default class ActorBeliefsFateViewModel extends SheetViewModel {
    */
   actor = undefined;
 
+  /** @override */
+  get entityId() { return this.actor.id; }
+
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
    * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 
