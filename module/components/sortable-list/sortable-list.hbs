@@ -14,11 +14,13 @@ cssClass: {String | undefined}
         {{#> _button viewModel=itemViewModelGroup.vmBtnMoveUp fill=false}}
           <i class="fas fa-angle-up"></i>
         {{/_button}}
-        <a 
+        {{!-- TODO: Implement the grab handle --}}
+        <div class="flex-grow"></div>
+        {{!-- <a 
           class="grab-handle"
           >
           <i class="fas fa-grip-vertical"></i>
-        </a>
+        </a> --}}
         {{#> _button viewModel=itemViewModelGroup.vmBtnMoveDown fill=false}}
           <i class="fas fa-angle-down"></i>
         {{/_button}}
