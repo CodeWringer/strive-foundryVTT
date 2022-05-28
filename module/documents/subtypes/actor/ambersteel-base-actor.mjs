@@ -23,7 +23,7 @@ export default class AmbersteelBaseActor {
 
   /**
    * @summary
-   * Prepare base data for the Actor. 
+   * Prepare base data for the actor. 
    * 
    * @description
    * The data added here should be non-derivable data, meaning it should only prepare 
@@ -49,7 +49,7 @@ export default class AmbersteelBaseActor {
 
   /**
    * @summary
-   * Prepare derived data for the Actor. 
+   * Prepare derived data for the actor. 
    * 
    * @description
    * This is where extensive calculations can occur, to ensure properties aren't 
