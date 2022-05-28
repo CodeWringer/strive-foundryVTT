@@ -3,31 +3,59 @@ import { TEMPLATES } from "../../../templatePreloader.mjs";
 import InjuryChatMessageViewModel from "../../../../templates/item/injury/injury-chat-message-viewmodel.mjs";
 
 export default class AmbersteelInjuryItem extends AmbersteelBaseItem {
-  /**
-   * @param parent {Item} The owning Item. 
-   */
-  constructor(parent) {
-    super(parent);
-    
-    this.parent.chatMessageTemplate = this.chatMessageTemplate;
-    this.parent.getChatData = this.getChatData.bind(this);
-  }
-
   /** @override */
   get defaultImg() { return "icons/svg/bones.svg"; }
 
-  /**
-   * Chat message template path. 
-   * @type {String}
-   */
+  /** @override */
   get chatMessageTemplate() { return TEMPLATES.INJURY_CHAT_MESSAGE; }
 
+  /**
+   * Ensures type-specific methods and properties are added to the given 
+   * context entity. 
+   * @param {Actor} context 
+   * @virtual
+   * @private
+   */
+  _ensureContextHasSpecifics(context) {
+    context.getChatData = this.getChatData.bind(context);
+    context.getChatViewModel = this.getChatViewModel.bind(context);
+  }
+
   /** @override */
+  prepareData(context) {
+    super.prepareData(context);
+
+    this._ensureContextHasSpecifics(context);
+  }
+
+  /** @override */
+  prepareDerivedData(context) {
+    super.prepareDerivedData(context);
+
+    this._ensureContextHasSpecifics(context);
+  }
+
+  /**
+   * Returns data for a chat message, based on this injury. 
+   * @returns {PreparedChatData}
+   * @override
+   * @async
+   */
   async getChatData() {
-    const chatData = super.getChatData();
-    chatData.flavor = game.i18n.localize("ambersteel.labels.injury");
-    
-    return chatData;
+    const actor = this.parent ?? this.actor;
+    const vm = this.getChatViewModel();
+
+    const renderedContent = await renderTemplate(this.chatMessageTemplate, {
+      viewModel: vm,
+    });
+
+    return new PreparedChatData({
+      renderedContent: renderedContent,
+      actor: actor, 
+      sound: "../sounds/notify.wav",
+      viewModel: vm,
+      flavor: game.i18n.localize("ambersteel.labels.injury"),
+    });
   }
 
   /**
@@ -50,7 +78,7 @@ export default class AmbersteelInjuryItem extends AmbersteelBaseItem {
       isSendable: base.isSendable,
       isOwner: base.isOwner,
       isGM: base.isGM,
-      item: this.parent,
+      item: this,
       ...overrides,
     });
   }

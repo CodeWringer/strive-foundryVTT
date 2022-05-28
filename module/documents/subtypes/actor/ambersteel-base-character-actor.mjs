@@ -1,20 +1,56 @@
+import { DiceOutcomeTypes } from '../../../dto/dice-outcome-types.mjs';
 import { SummedData, SummedDataComponent } from '../../../dto/summed-data.mjs';
+import { TEMPLATES } from '../../../templatePreloader.mjs';
 import AmbersteelBaseActor from './ambersteel-base-actor.mjs';
 
 export default class AmbersteelBaseCharacterActor extends AmbersteelBaseActor {
-  /**
-   * @param parent {Actor} The owning Actor. 
-   */
-  constructor(parent) {
-    super(parent);
+  /** @override */
+  get defaultImg() { return "icons/svg/mystery-man.svg"; }
+  
+  /** @override */
+  get chatMessageTemplate() { return TEMPLATES.ACTOR_CHAT_MESSAGE; }
 
-    this.parent.advanceSkillBasedOnRollResult = this.advanceSkillBasedOnRollResult.bind(this);
-    this.parent.advanceAttributeBasedOnRollResult = this.advanceAttributeBasedOnRollResult.bind(this);
+  /**
+   * Ensures type-specific methods and properties are added to the given 
+   * context entity. 
+   * @param {Actor} context 
+   * @virtual
+   * @private
+   */
+  _ensureContextHasSpecifics(context) {
+    context.getInjuries = () => { return context.getItemsByType("injury"); }
+    context.getIllnesses = () => { return context.getItemsByType("illness"); }
+    context.getMutations = () => { return context.getItemsByType("mutation"); }
+    context.getPossessions = () => {
+      const items = Array.from(context.items);
+      return items.filter((item) => { return item.type === "item" && item.data.data.isOnPerson; });
+    }
+    context.getPropertyItems = () => {
+      const items = Array.from(context.items);
+      return items.filter((item) => { return item.type === "item" && !item.data.data.isOnPerson; });
+    }
+
+    context.getAttributeForName = this.getAttributeForName.bind(context);
+    context.setAttributeLevel = this.setAttributeLevel.bind(context);
+    context.addAttributeProgress = this.addAttributeProgress.bind(context);
+    context.advanceSkillBasedOnRollResult = this.advanceSkillBasedOnRollResult.bind(context);
+    context.advanceAttributeBasedOnRollResult = this.advanceAttributeBasedOnRollResult.bind(context);
+  }
+  
+  /** @override */
+  prepareData(context) {
+    super.prepareData(context);
+
+    this._ensureContextHasSpecifics(context);
   }
 
   /** @override */
   prepareDerivedData(context) {
-    context.data.data.assets.maxBulk = game.ambersteel.getCharacterMaximumInventory(this.parent);
+    super.prepareDerivedData(context);
+
+    this._ensureContextHasSpecifics(context);
+
+    context.data.data.assets.maxBulk = game.ambersteel.getCharacterMaximumInventory(context);
     context.data.data.assets.totalBulk = this._calculateUsedBulk(context);
     this._prepareDerivedAttributesData(context);
     this._prepareDerivedSkillsData(context);
@@ -29,7 +65,7 @@ export default class AmbersteelBaseCharacterActor extends AmbersteelBaseActor {
    */
   _calculateUsedBulk(context) {
     let usedBulk = 0;
-    for (const possession of context.possessions) {
+    for (const possession of context.getPossessions()) {
       usedBulk += possession.data.data.bulk;
     }
     return usedBulk;
@@ -161,34 +197,35 @@ export default class AmbersteelBaseCharacterActor extends AmbersteelBaseActor {
   /**
    * Updates the given actorData with derived skill data. 
    * Assigns items of type skill to the derived lists 'actorData.skills' and 'actorData.learningSkills'. 
-   * @param {AmbersteelActor} context 
+   * @param {Actor} context 
    * @private
    */
   _prepareDerivedSkillsData(context) {
     const actorData = context.data.data;
-
-    actorData.skills = (this.parent.items.filter(item => {
+    
+    actorData.skills = (context.items.filter(item => {
       return item.data.type == "skill" && parseInt(item.data.data.value) > 0
     }));
     for (const oSkill of actorData.skills) {
-      this._prepareDerivedSkillData(oSkill.id);
+      this._prepareDerivedSkillData(context, oSkill.id);
     };
-
-    actorData.learningSkills = (this.parent.items.filter(item => {
+    
+    actorData.learningSkills = (context.items.filter(item => {
       return item.data.type == "skill" && parseInt(item.data.data.value) == 0
     }));
     for (const oSkill of actorData.learningSkills) {
-      this._prepareDerivedSkillData(oSkill.id);
+      this._prepareDerivedSkillData(context, oSkill.id);
     };
   }
-
+  
   /**
    * Pepares derived skill data. 
-   * @param skillId {String} Id of a skill. 
+   * @param {Actor} context 
+   * @param {String} skillId Id of a skill. 
    * @private
    */
-  _prepareDerivedSkillData(skillId) {
-    const oSkill = this.parent.items.get(skillId);
+  _prepareDerivedSkillData(context, skillId) {
+    const oSkill = context.items.get(skillId);
     const skillData = oSkill.data.data;
 
     skillData.id = oSkill.id;
@@ -224,7 +261,7 @@ export default class AmbersteelBaseCharacterActor extends AmbersteelBaseActor {
    * @async
    */
   async advanceSkillBasedOnRollResult(rollResult, itemId) {
-    const oSkill = this.parent.items.get(itemId);
+    const oSkill = this.items.get(itemId);
     oSkill.addProgress(rollResult.outcomeType, false);
   }
 
@@ -239,6 +276,88 @@ export default class AmbersteelBaseCharacterActor extends AmbersteelBaseActor {
       game.ambersteel.logger.logWarn("rollResult is undefined");
       return;
     }
-    await this.parent.addAttributeProgress(rollResult.outcomeType, attributeName);
+    await this.addAttributeProgress(rollResult.outcomeType, attributeName);
+  }
+
+  /**
+   * 
+   * @param attName {String} Internal name of an attribute, e.g. 'magicSense'. 
+   * @returns {Object} With properties 'object', 'name', 'groupName'
+   * @private
+   */
+  getAttributeForName(attName) {
+    const data = this.data.data;
+
+    for (let attGroupName in data.attributes) {
+      let oAtt = data.attributes[attGroupName][attName];
+      if (oAtt) {
+        return {
+          object: oAtt,
+          name: attName,
+          groupName: attGroupName
+        };
+      }
+    }
+  }
+
+  /**
+   * Sets the level of the attribute with the given name. 
+   * @param attName {String} Internal name of an attribute, e.g. 'magicSense'. 
+   * @param newValue {Number} Value to set the attribute to, e.g. 0. Default 0
+   * @async
+   */
+  async setAttributeLevel(attName = undefined, newValue = 0) {
+    const oAttName = this.getAttributeForName(attName);
+    const req = game.ambersteel.getAttributeAdvancementRequirements(newValue);
+    const propertyPath = `data.attributes.${oAttName.groupName}.${attName}`
+
+    await this.update({
+      [`${propertyPath}.value`]: newValue,
+      [`${propertyPath}.requiredSuccessses`]: req.requiredSuccessses,
+      [`${propertyPath}.requiredFailures`]: req.requiredFailures,
+      [`${propertyPath}.successes`]: 0,
+      [`${propertyPath}.failures`]: 0
+    });
+  }
+
+  /**
+   * Adds success/failure progress to an attribute. 
+   * 
+   * Also auto-levels up the attribute, if 'autoLevel' is set to true. 
+   * @param {DiceOutcomeTypes} outcomeType The test outcome to work with. 
+   * @param {String | undefined} attName Optional. Internal name of an attribute, e.g. 'magicSense'. 
+   * @param {Boolean | undefined} autoLevel Optional. If true, will auto-level up. Default false
+   * @async
+   */
+  async addAttributeProgress(outcomeType, attName = undefined, autoLevel = false) {
+    if (outcomeType === undefined) {
+      game.ambersteel.logger.logWarn("outcomeType is undefined");
+      return;
+    }
+
+    const oAttName = this.getAttributeForName(attName);
+    const oAtt = oAttName.object;
+
+    let successes = parseInt(oAtt.successes);
+    let failures = parseInt(oAtt.failures);
+    const requiredSuccessses = parseInt(oAtt.requiredSuccessses);
+    const requiredFailures = parseInt(oAtt.requiredFailures);
+    const propertyPath = `data.attributes.${oAttName.groupName}.${attName}`
+
+    if (outcomeType === DiceOutcomeTypes.SUCCESS) {
+      successes++;
+      await this.update({ [`${propertyPath}.successes`]: successes });
+    } else if (outcomeType === DiceOutcomeTypes.FAILURE || outcomeType === DiceOutcomeTypes.PARTIAL) {
+      failures++;
+      await this.update({ [`${propertyPath}.failures`]: failures });
+    }
+
+    if (autoLevel) {
+      if (successes >= requiredSuccessses
+      && failures >= requiredFailures) {
+        const newLevel = parseInt(oAtt.value) + 1;
+        await this.setAttributeLevel(attName, newLevel);
+      }
+    }
   }
 }

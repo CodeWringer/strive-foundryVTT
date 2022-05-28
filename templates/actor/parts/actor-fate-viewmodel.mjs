@@ -19,7 +19,7 @@ export default class ActorFateViewModel extends SheetViewModel {
    * @type {Number}
    * @readonly
    */
-  get fateCardCount() { return this.actor.fateCards.length; }
+  get fateCardCount() { return this.actor.getFateCards().length; }
 
   /**
    * @type {Array<FateCardViewModel>}
@@ -78,7 +78,8 @@ export default class ActorFateViewModel extends SheetViewModel {
       withDialog: true,
     });
 
-    for (const fateCard of this.actor.fateCards) {
+    const actorFateCards = this.actor.getFateCards();
+    for (const fateCard of actorFateCards) {
       const vm = new FateCardViewModel({
         ...args,
         id: fateCard.id,

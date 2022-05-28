@@ -23,19 +23,19 @@ export default class ActorHealthViewModel extends SheetViewModel {
    * @type {Number}
    * @readonly
    */
-  get injuryCount() { return this.actor.injuries.length; }
+  get injuryCount() { return this.actor.getInjuries().length; }
 
   /**
    * @type {Number}
    * @readonly
    */
-  get illnessCount() { return this.actor.illnesses.length; }
+  get illnessCount() { return this.actor.getIllnesses().length; }
 
   /**
    * @type {Number}
    * @readonly
    */
-  get mutationCount() { return this.actor.mutations.length; }
+  get mutationCount() { return this.actor.getMutations().length; }
 
   /**
    * @type {Array<IllnessListItemViewModel>}
@@ -129,7 +129,8 @@ export default class ActorHealthViewModel extends SheetViewModel {
     });
 
     // Prepare illnesses list view models. 
-    for (const illness of this.actor.illnesses) {
+    const actorIllnesses = this.actor.getIllnesses();
+    for (const illness of actorIllnesses) {
       const vm = new IllnessListItemViewModel({
         ...args,
         id: illness.id,
@@ -157,7 +158,8 @@ export default class ActorHealthViewModel extends SheetViewModel {
     });
     
     // Prepare injuries list view models. 
-    for (const injury of this.actor.injuries) {
+    const actorInjuries = this.actor.getInjuries();
+    for (const injury of actorInjuries) {
       const vm = new InjuryListItemViewModel({
         ...args,
         id: injury.id,
@@ -185,7 +187,8 @@ export default class ActorHealthViewModel extends SheetViewModel {
     });
     
     // Prepare mutations list view models. 
-    for (const mutation of this.actor.mutations) {
+    const actorMutations = this.actor.getMutations();
+    for (const mutation of actorMutations) {
       const vm = new MutationListItemViewModel({
         ...args,
         id: mutation.id,

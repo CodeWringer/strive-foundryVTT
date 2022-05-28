@@ -1,14 +1,23 @@
 import AmbersteelBaseCharacterActor from "./ambersteel-base-character-actor.mjs";
 
 export default class AmbersteelPcActor extends AmbersteelBaseCharacterActor {
+  /** @override */
+  _ensureContextHasSpecifics(context) {
+    super._ensureContextHasSpecifics(context);
+
+    context.getFateCards = () => { return context.getItemsByType("fate-card"); }
+  }
+
   /**
    * Prepare PC type specific data. 
-   * @param actorData 'this.data'
    * @param {Actor} context
    * @override
    */
   prepareData(context) {
     super.prepareData(context);
+
+    this._ensureContextHasSpecifics(context);
+
     const actorData = context.data.data;
 
     // Ensure beliefs array has 3 items. 
@@ -24,6 +33,9 @@ export default class AmbersteelPcActor extends AmbersteelBaseCharacterActor {
 
   prepareDerivedData(context) {
     super.prepareDerivedData(context);
+
+    this._ensureContextHasSpecifics(context);
+
     this._prepareDerivedFateSystemData(context);
   }
 
@@ -36,6 +48,6 @@ export default class AmbersteelPcActor extends AmbersteelBaseCharacterActor {
     const maxCards = CONFIG.ambersteel.fateSystem.maxCards;
     const fateSystemData = context.data.data.fateSystem;
 
-    fateSystemData.remainingSlots = maxCards - context.fateCards.length;
+    fateSystemData.remainingSlots = maxCards - context.getFateCards().length;
   }
 }
