@@ -8,13 +8,18 @@ cssClass: {undefined | String}
   data-ability-index="{{viewModel.index}}"
 >
   {{!-- Header --}}
+  {{#if viewModel.showParentSkillName}}
+    <h3>
+      {{localize viewModel.parentSkillName}}
+    </h3>
+  {{/if}}
   <div class="flex flex-row">
     <div class="flex flex-center">
       <img class="inline-img header-image margin-r-sm" name="img" src="{{viewModel.skillAbility.img}}" title="{{viewModel.skillAbility.name}}" height="26" width="26" />
     </div>
-    <h3 class="flex-grow">
+    <h2 class="flex-grow">
       {{localize viewModel.skillAbility.name}}
-    </h3>
+    </h2>
   </div>
   {{!-- Required level --}}
   <div class="flex flex-row sheet-block margin-b-md">
