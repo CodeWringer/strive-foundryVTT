@@ -1,5 +1,6 @@
 import SheetViewModel from "../../module/components/sheet-viewmodel.mjs";
 import { TEMPLATES } from "../../module/templatePreloader.mjs";
+import { isNotBlankOrUndefined } from "../../module/utils/validation-utility.mjs";
 import { validateOrThrow } from "../../module/utils/validation-utility.mjs";
 
 export default class ActorChatMessageViewModel extends SheetViewModel {
@@ -30,6 +31,33 @@ export default class ActorChatMessageViewModel extends SheetViewModel {
    * @type {Boolean}
    */
   get isPlain() { return this.actor.type === "plain"; }
+
+  /***
+   * @type {Boolean}
+   * @readonly
+   */
+  get showSpecies() { return isNotBlankOrUndefined(this.actor.data.data.person.species); }
+
+  /***
+   * @type {Boolean}
+   * @readonly
+   */
+  get showCulture() { return isNotBlankOrUndefined(this.actor.data.data.person.culture); }
+
+  /***
+   * @type {Boolean}
+   * @readonly
+   */
+  get showSex() { return isNotBlankOrUndefined(this.actor.data.data.person.sex); }
+
+  /***
+   * @type {Boolean}
+   * @readonly
+   */
+  get showAge() { 
+    const value = this.actor.data.data.person.age;
+    return value !== 0 && value !== "0" && isNotBlankOrUndefined(value);
+  }
 
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
