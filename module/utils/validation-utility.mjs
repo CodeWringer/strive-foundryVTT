@@ -59,3 +59,22 @@ export function isArray(obj) {
 export function isFunction(obj) {
   return typeof(obj) === 'function';
 }
+
+/**
+ * Returns true, if the given value is blank or undefined. 
+ * @param {String | Number} value 
+ * @returns {Boolean}
+ */
+export function isBlankOrUndefined(value) {
+  const trimmed = value.trim() !== undefined ? value.trim() : value;
+  return trimmed === undefined || trimmed === "" || trimmed.length <= 0;
+}
+
+/**
+ * Returns true, if the given value is **not** blank or undefined. 
+ * @param {String | Number} value 
+ * @returns {Boolean}
+ */
+export function isNotBlankOrUndefined(value) {
+  return isBlankOrUndefined(value) === false;
+}
