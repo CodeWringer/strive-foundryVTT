@@ -85,7 +85,10 @@ export function rollDicePool(ops = {}) {
  * @param {DicePoolResult} args.rollResult The results of a dice pool roll. 
  * @param {String | undefined} args.flavor Optional. The flavor text / subtitle of the message. 
  * @param {String | undefined} args.actor Optional. The actor to associate with the message. 
- * @param {String | undefined} args.title Optional. A title for the message. 
+ * @param {String | undefined} args.primaryTitle Optional. A primary title. 
+ * @param {String | undefined} args.primaryImage Optional. An image url for the primary title. 
+ * @param {String | undefined} args.secondaryTitle Optional. A secondary title. 
+ * @param {String | undefined} args.secondaryImage Optional. An image url for the secondary title. 
  * @param {CONFIG.ambersteel.visibilityModes | undefined} args.visibilityMode Optional. Sets the visibility of the chat message. Default public. 
  * @param {String | undefined} args.diceComposition Optional. A localized string showing the composition of dice. 
  * @returns {Promise<any>}
@@ -93,12 +96,7 @@ export function rollDicePool(ops = {}) {
  */
 export async function sendDiceResultToChat(args = {}) {
   args = {
-    rollResult: undefined,
-    flavor: undefined,
-    actor: undefined,
     visibilityMode: CONFIG.ambersteel.visibilityModes.public,
-    diceComposition: undefined,
-    title: undefined,
     ...args
   };
   validateOrThrow(args, ["rollResult"]);
@@ -129,7 +127,10 @@ export async function sendDiceResultToChat(args = {}) {
     ...rollResult,
     resultsForDisplay: resultsForDisplay,
     diceComposition: args.diceComposition,
-    title: args.title,
+    primaryTitle: args.primaryTitle,
+    primaryImage: args.primaryImage,
+    secondaryTitle: args.secondaryTitle,
+    secondaryImage: args.secondaryImage,
   });
 
   return ChatUtil.sendToChat({

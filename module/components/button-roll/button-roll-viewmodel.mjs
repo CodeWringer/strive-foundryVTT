@@ -21,7 +21,10 @@ import ButtonViewModel from "../button/button-viewmodel.mjs";
  * 
  * @property {String} propertyPath Property path identifying a property that contains a roll-formula. 
  * @property {CONFIG.rollTypes} rollType Determines the kind of roll to try and make. 
- * @property {String} chatTitle Title to display above the roll result in the chat message. 
+ * @property {String} primaryChatTitle Primary title to display above the roll result in the chat message. 
+ * @property {String} primaryChatImage Primary image to display above the roll result in the chat message. 
+ * @property {String} secondaryChatTitle Primary title to display above the roll result in the chat message. 
+ * @property {String} secondaryChatImage Primary image to display above the roll result in the chat message. 
  * @property {Actor | undefined} actor Actor associated with the roll result. 
  * @property {DicePoolResult | Object | undefined} lastRollResult The last rolled result. Or undefined, if no roll has been made, yet. 
  */
@@ -49,17 +52,6 @@ export default class ButtonRollViewModel extends ButtonViewModel {
    * @readonly
    */
   get rollType() { return this._rollType; }
-
-  /**
-   * @type {String}
-   * @private
-   */
-  _chatTitle = undefined;
-  /**
-   * @type {String}
-   * @readonly
-   */
-  get chatTitle() { return this._chatTitle; }
 
   /**
    * @type {Actor | undefined}
@@ -95,7 +87,10 @@ export default class ButtonRollViewModel extends ButtonViewModel {
    * @param {CONFIG.rollTypes} args.rollType Determines the kind of roll to try and make. 
    * @param {String | undefined} args.propertyPath Optional. Property path identifying a property that contains a roll-formula. 
    * IMPORTANT: If this argument is left undefined, then the target object MUST define a method 'getRollData()', which returns a {SummedData} instance. 
-   * @param {String | undefined} args.chatTitle Optional. Title to display above the roll result in the chat message. 
+   * @param {String | undefined} primaryChatTitle Primary title to display above the roll result in the chat message. 
+   * @param {String | undefined} primaryChatImage Primary image to display above the roll result in the chat message. 
+   * @param {String | undefined} secondaryChatTitle Primary title to display above the roll result in the chat message. 
+   * @param {String | undefined} secondaryChatImage Primary image to display above the roll result in the chat message. 
    * @param {Actor | undefined} args.actor Optional. Actor associated with the roll result. 
    * @param {String | undefined} args.localizableTitle Optional. The localizable title (tooltip). 
    */
@@ -105,7 +100,10 @@ export default class ButtonRollViewModel extends ButtonViewModel {
 
     this._propertyPath = args.propertyPath;
     this._rollType = args.rollType;
-    this._chatTitle = args.chatTitle ?? "";
+    this.primaryChatTitle = args.primaryChatTitle;
+    this.primaryChatImage = args.primaryChatImage;
+    this.secondaryChatTitle = args.secondaryChatTitle;
+    this.secondaryChatImage = args.secondaryChatImage;
     this._actor = args.actor;
     this.localizableTitle = args.localizableTitle ?? "ambersteel.labels.roll";
 
@@ -147,7 +145,7 @@ export default class ButtonRollViewModel extends ButtonViewModel {
       const renderedContent = await roll.render();
       await ChatUtil.sendToChat({
         renderedContent: renderedContent,
-        flavor: this.chatTitle,
+        flavor: this.primaryChatTitle,
         actor: this.actor,
         sound: DiceUtil.DICE_ROLL_SOUND,
         visibilityMode: dialogResult.visibilityMode
@@ -183,7 +181,10 @@ export default class ButtonRollViewModel extends ButtonViewModel {
       // Display roll result. 
       await DiceUtil.sendDiceResultToChat({
         rollResult: rollResult,
-        title: this.chatTitle,
+        primaryTitle: this.primaryChatTitle,
+        primaryImage: this.primaryChatImage,
+        secondaryTitle: this.secondaryChatTitle,
+        secondaryImage: this.secondaryChatImage,
         actor: this.actor,
         visibilityMode: dialogResult.visibilityMode,
         diceComposition: diceComposition,
@@ -210,13 +211,28 @@ export default class ButtonRollViewModel extends ButtonViewModel {
   }
 }
 
-Handlebars.registerHelper('createButtonRollViewModel', function(id, target, propertyPath, rollType, chatTitle, actor, callback, callbackData) {
+Handlebars.registerHelper('createButtonRollViewModel', function(
+  id, 
+  target,
+  propertyPath,
+  rollType,
+  primaryTitle,
+  primaryImage,
+  secondaryTitle,
+  secondaryImage,
+  actor,
+  callback,
+  callbackData
+) {
   return new ButtonRollViewModel({
     id: id,
     target: target,
     propertyPath: propertyPath,
     rollType: rollType,
-    chatTitle: chatTitle,
+    primaryTitle: primaryTitle,
+    primaryImage: primaryImage,
+    secondaryTitle: secondaryTitle,
+    secondaryImage: secondaryImage,
     actor: actor,
     callback: callback,
     callbackData: callbackData,

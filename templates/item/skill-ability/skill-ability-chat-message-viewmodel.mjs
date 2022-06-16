@@ -96,6 +96,24 @@ export default class SkillAbilityChatMessageViewModel extends ViewModel {
   get parentSkillName() { return this.skillAbility.parent.name; }
 
   /**
+   * @type {Boolean}
+   * @readonly
+   */
+  get showParentSkillImage() { return isNotBlankOrUndefined(this.parentSkillImage); }
+  
+  /**
+   * @type {String}
+   * @readonly
+   */
+  get parentSkillImage() { return this.skillAbility.parent.img; }
+
+  /**
+   * @type {Boolean}
+   * @readonly
+   */
+  get showParentSkill() { return this.showParentSkillImage || this.showParentSkillName; }
+  
+  /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
    * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 
    * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 
