@@ -60,6 +60,8 @@ nav#nav-sheet-tabs.sheet-tabs {
   height: 100%;
 }
 
+// Grouping styles. 
+
 .sheet-block {
   padding: $padding-sm;
   border-radius: 3px;
@@ -71,45 +73,7 @@ nav#nav-sheet-tabs.sheet-tabs {
   border-right: $c-border-medium 3px solid;
 }
 
-// Button styles
-.button-full {
-  padding: 0;
-  margin: 0;
-  min-height: $line-height;
-  min-width: $line-height;
-  font-size: 1rem;
-  border-radius: 3px;
-  border: 1px $c-border-medium solid;
-  background-color: $c-bg-medium;
-}
-
-.square-button-light {
-  width: 26px;
-  height: 26px;
-  max-width: 26px;
-  max-height: 26px;
-  display: block;
-
-  > a.button {
-    padding: 0;
-    margin: 0;
-    width: 100%;
-    height: 100%;
-  }
-}
-
-.fill-button-light {
-  width: 100%;
-  height: 100%;
-  display: block;
-
-  > a.button {
-    padding: 0;
-    margin: 0;
-    width: 100%;
-    height: 100%;
-  }
-}
+// Disabled styles. 
 
 .disabled {
   a.custom-system-button {

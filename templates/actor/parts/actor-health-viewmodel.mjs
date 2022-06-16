@@ -154,6 +154,7 @@ export default class ActorHealthViewModel extends SheetViewModel {
         target: thiz.actor,
         creationType: "illness",
         withDialog: true,
+        localizableLabel: "ambersteel.labels.addIllness"
       }),
     });
     
@@ -183,6 +184,7 @@ export default class ActorHealthViewModel extends SheetViewModel {
         target: thiz.actor,
         creationType: "injury",
         withDialog: true,
+        localizableLabel: "ambersteel.labels.addInjury"
       }),
     });
     
@@ -212,6 +214,7 @@ export default class ActorHealthViewModel extends SheetViewModel {
         target: thiz.actor,
         creationType: "mutation",
         withDialog: true,
+        localizableLabel: "ambersteel.mutation.add"
       }),
     });
   }

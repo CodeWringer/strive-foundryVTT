@@ -3,6 +3,7 @@ import ButtonViewModel from "../button/button-viewmodel.mjs";
 import * as ItemAddDialog from '../../dialog/dialog-item-add.mjs';
 import { findItem, contentCollectionTypes } from '../../utils/content-utility.mjs';
 import { validateOrThrow, isObject } from "../../utils/validation-utility.mjs";
+import { isNotBlankOrUndefined } from "../../utils/validation-utility.mjs";
 
 /**
  * --- Inherited from ViewModel
@@ -21,11 +22,25 @@ import { validateOrThrow, isObject } from "../../utils/validation-utility.mjs";
  * @property {Boolean} withDialog If true, will prompt the user to make a selection with a dialog. 
  * @property {String | undefined} creationType = "skill"|"skill-ability"|"fate-card"|"item"|"injury"|"illness"
  * @property {Object} creationData Data to pass to the item creation function. 
+ * @property {Boolean} showLabel If true, will show the label. 
+ * @property {String} localizableLabel The label text. 
  * 
  */
 export default class ButtonAddViewModel extends ButtonViewModel {
   static get TEMPLATE() { return TEMPLATES.COMPONENT_BUTTON_ADD; }
   
+  /**
+   * @type {Boolean}
+   * @readonly
+   */
+  get showLabel() { return isNotBlankOrUndefined(this.localizableLabel); }
+  
+  /**
+   * @type {String}
+   * @readonly
+   */
+  get localizedLabel() { return game.i18n.localize(this.localizableLabel); }
+
   /**
    * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
    * 
@@ -37,7 +52,8 @@ export default class ButtonAddViewModel extends ButtonViewModel {
    * @param {String} args.creationType = "skill"|"skill-ability"|"fate-card"|"item"|"injury"|"illness"
    * @param {Boolean | undefined} args.withDialog Optional. If true, will prompt the user to make a selection with a dialog. 
    * @param {Object | String | undefined} args.creationData Optional. Data to pass to the item creation function. 
-   * @param {String | undefined} args.localizableTitle Optional. The localizable title (tooltip). 
+   * @param {String | undefined} args.localizableTitle Optional. Sets the tooltip text to display on cursor hover over the DOM element. 
+   * @param {String | undefined} args.localizableLabel Optional. The localizable label. 
    */
   constructor(args = {}) {
     super(args);
@@ -47,6 +63,7 @@ export default class ButtonAddViewModel extends ButtonViewModel {
     this.withDialog = args.withDialog ?? false;
     this.creationData = args.creationData ?? Object.create(null);
     this.localizableTitle = args.localizableTitle ?? "ambersteel.labels.add";
+    this.localizableLabel = args.localizableLabel;
 
     if (isObject(this.creationData) !== true) {
       this.creationData = this._parseCreationData(this.creationData);

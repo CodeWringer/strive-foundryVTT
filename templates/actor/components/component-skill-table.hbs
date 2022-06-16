@@ -75,11 +75,8 @@ cssClass: {undefined | String}
             {{/each}}
             <tr>
                 <td style="display: table-cell;" colspan="100">
-                    <div class="flex">
-                        <span class="flex-grow"></span>
-                        <span class="width-sm">
-                            {{> buttonAdd viewModel=viewModel.vmBtnAddSkill }}
-                        </span>
+                    <div class="flex flex-right">
+                        {{> buttonAdd viewModel=viewModel.vmBtnAddSkill }}
                     </div>
                 </td>
             </tr>

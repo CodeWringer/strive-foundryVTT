@@ -301,6 +301,16 @@
       "active": "Active",
       "treated": "Treated"
     },
+    "item": {
+      "add": "Add item"
+    },
+    "skill": {
+      "addLearning": "Add learning skill",
+      "addKnown": "Add known skill"
+    },
+    "mutation": {
+      "add": "Add mutation"
+    },
     "rules": {
       "hintToughnessTestRequired": "Half of the maximum number of injuries reached. Any further damage incurred requires a toughness test at Ob of injuries*2 to be passed. If failed, suffer +1 exhaustion."
     },

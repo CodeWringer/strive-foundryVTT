@@ -93,6 +93,7 @@ export default class ActorAssetsViewModel extends SheetViewModel {
         target: thiz.actor,
         creationType: "item",
         withDialog: true,
+        localizableLabel: "ambersteel.item.add"
       }),
     });
   }
