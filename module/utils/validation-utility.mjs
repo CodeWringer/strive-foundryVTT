@@ -66,8 +66,11 @@ export function isFunction(obj) {
  * @returns {Boolean}
  */
 export function isBlankOrUndefined(value) {
+  if (value === undefined || value === null)
+    return true;
+
   const trimmed = value.trim() !== undefined ? value.trim() : value;
-  return trimmed === undefined || trimmed === "" || trimmed.length <= 0;
+  return trimmed === "" || trimmed.length <= 0;
 }
 
 /**
