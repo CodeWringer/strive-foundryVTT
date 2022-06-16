@@ -3,11 +3,16 @@ viewModel: {ButtonAddViewModel}
 cssClass: {String | undefined}
 fill: {Boolean | undefined}
 --}}
-<span class="component-button-add {{#if fill}}fill-button-light{{else}}square-button-light{{/if}} {{#if (not viewModel.isEditable)}}disabled{{/if}} {{#if cssClass}}{{cssClass}}{{else}}font-size-default{{/if}}">
-  <a class="custom-system-button pad-sm button flex flex-center" 
+<span class="component-button-add{{#if fill}} fill-button-light{{/if}}{{#if (not viewModel.isEditable)}} disabled{{/if}}{{#if cssClass}} {{cssClass}}{{else}}font-size-default{{/if}}">
+  <a class="custom-system-button button flex flex-middle" 
     title="{{viewModel.localizedTitle}}"
     id="{{viewModel.id}}"
   >
-    <i class="fas fa-plus"></i>
+    {{#if viewModel.showLabel}}
+      <span>{{viewModel.localizedLabel}}</span>
+    {{/if}}
+    <div class="square-button-light flex flex-center">
+      <i class="fas fa-plus"></i>
+    </div>
   </a>
 </span>

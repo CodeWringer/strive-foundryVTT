@@ -32,12 +32,9 @@ cssClass: {String | undefined}
     </li>
   {{/each}}
   <li class="ambersteel-list-row ambersteel-list-footer{{#if (neq viewModel.isEditable true)}} hidden{{/if}}">
-    <div class="fill flex flex-row">
-      <span class="flex-grow"></span>
+    <div class="fill flex flex-row flex-right">
       {{!-- Add button --}}
-      <span class="width-sm">
-        {{> buttonAdd viewModel=viewModel.vmBtnAddItem }}
-      </span>
+      {{> buttonAdd viewModel=viewModel.vmBtnAddItem }}
     </div>
   </li>
 </ol>

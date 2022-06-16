@@ -79,6 +79,7 @@ export default class SkillTableViewModel extends SheetViewModel {
       target: this.actor,
       withDialog: true,
       creationData: `[value:${this.isLearningSkillsTable ? "0" : "1"}]`,
+      localizableLabel: this.isLearningSkillsTable ? "ambersteel.skill.addLearning" : "ambersteel.skill.addKnown"
     });
 
     for (let i = 0; i < this.skills.length; i++) {

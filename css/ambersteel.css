@@ -886,45 +886,6 @@ nav#nav-sheet-tabs.sheet-tabs > a.item.active {
   border-right: rgba(129, 129, 129, 0.45) 3px solid;
 }
 
-.button-full {
-  padding: 0;
-  margin: 0;
-  min-height: 26px;
-  min-width: 26px;
-  font-size: 1rem;
-  border-radius: 3px;
-  border: 1px rgba(129, 129, 129, 0.45) solid;
-  background-color: rgba(0, 0, 0, 0.08);
-}
-
-.square-button-light {
-  width: 26px;
-  height: 26px;
-  max-width: 26px;
-  max-height: 26px;
-  display: block;
-}
-
-.square-button-light > a.button {
-  padding: 0;
-  margin: 0;
-  width: 100%;
-  height: 100%;
-}
-
-.fill-button-light {
-  width: 100%;
-  height: 100%;
-  display: block;
-}
-
-.fill-button-light > a.button {
-  padding: 0;
-  margin: 0;
-  width: 100%;
-  height: 100%;
-}
-
 .disabled a.custom-system-button {
   cursor: default;
   background-color: unset;
@@ -1047,6 +1008,45 @@ img.custom-icon-lg {
 .hint-card-icon {
   font-size: 1.2rem;
   margin-right: 0.6rem;
+}
+
+.button-full {
+  padding: 0;
+  margin: 0;
+  min-height: 26px;
+  min-width: 26px;
+  font-size: 1rem;
+  border-radius: 3px;
+  border: 1px rgba(129, 129, 129, 0.45) solid;
+  background-color: rgba(0, 0, 0, 0.08);
+}
+
+.square-button-light {
+  width: 26px;
+  height: 26px;
+  max-width: 26px;
+  max-height: 26px;
+  font-size: 1rem;
+}
+
+.square-button-light > a.button {
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.fill-button-light {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.fill-button-light > a.button {
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  height: 100%;
 }
 
 .items-header {
@@ -1270,6 +1270,26 @@ span.fate-spinner-column-container {
 
 div.message-content .fate-card-description {
   overflow-y: scroll;
+}
+
+.fate-card-fill {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.fate-card-fill > a {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.fate-card-fill > a > div.square-button-light {
+  width: 100%;
+  height: 100%;
+  max-width: unset;
+  max-height: unset;
+  font-size: 1.6rem;
 }
 
 .attribute-column-roll {
