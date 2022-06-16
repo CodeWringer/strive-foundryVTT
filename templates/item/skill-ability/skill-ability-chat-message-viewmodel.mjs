@@ -1,5 +1,6 @@
 import ViewModel from "../../../module/components/viewmodel.mjs";
 import { TEMPLATES } from "../../../module/templatePreloader.mjs";
+import { isNotBlankOrUndefined } from "../../../module/utils/validation-utility.mjs";
 import { validateOrThrow } from "../../../module/utils/validation-utility.mjs";
 
 // For some reason, extending from SheetViewModel, which would be the correct parent type here, 
@@ -82,6 +83,36 @@ export default class SkillAbilityChatMessageViewModel extends ViewModel {
 
   get description() { return TextEditor.enrichHTML(this.skillAbility.description); }
 
+  /**
+   * @type {Boolean}
+   * @readonly
+   */
+  get showParentSkillName() { return isNotBlankOrUndefined(this.parentSkillName); }
+
+  /**
+   * @type {String}
+   * @readonly
+   */
+  get parentSkillName() { return this.skillAbility.parent.name; }
+
+  /**
+   * @type {Boolean}
+   * @readonly
+   */
+  get showParentSkillImage() { return isNotBlankOrUndefined(this.parentSkillImage); }
+  
+  /**
+   * @type {String}
+   * @readonly
+   */
+  get parentSkillImage() { return this.skillAbility.parent.img; }
+
+  /**
+   * @type {Boolean}
+   * @readonly
+   */
+  get showParentSkill() { return this.showParentSkillImage || this.showParentSkillName; }
+  
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
    * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 

@@ -345,7 +345,10 @@ export default class SheetViewModel extends ViewModel {
    * @param {String | undefined} args.id
    * @param {Function | undefined} args.callback Defines an asynchronous callback that is invoked upon completion of the button's own callback. 
    * @param {Any | undefined} args.callbackData Defines any data to pass to the completion callback. 
-   * @param {String | undefined} args.chatTitle Title to display above the roll result in the chat message. 
+   * @param {String | undefined} primaryChatTitle Primary title to display above the roll result in the chat message. 
+   * @param {String | undefined} primaryChatImage Primary image to display above the roll result in the chat message. 
+   * @param {String | undefined} secondaryChatTitle Primary title to display above the roll result in the chat message. 
+   * @param {String | undefined} secondaryChatImage Primary image to display above the roll result in the chat message. 
    * @param {Actor | undefined} args.actor Actor associated with the roll result. 
    * @param {String | undefined} args.localizableTitle Optional. Sets the tooltip text to display on cursor hover over the DOM element. 
    * @returns {ButtonRollViewModel}
@@ -363,7 +366,10 @@ export default class SheetViewModel extends ViewModel {
       id: args.id,
       callback: args.callback,
       callbackData: args.callbackData,
-      chatTitle: args.chatTitle,
+      primaryChatTitle: args.primaryChatTitle,
+      primaryChatImage: args.primaryChatImage,
+      secondaryChatTitle: args.secondaryChatTitle,
+      secondaryChatImage: args.secondaryChatImage,
       actor: args.actor,
       localizableTitle: args.localizableTitle,
     });
