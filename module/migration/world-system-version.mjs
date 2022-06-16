@@ -1,3 +1,4 @@
+import AmbersteelSettings from "../settings/ambersteel-settings.mjs";
 import VersionCode from "./version-code.mjs";
 
 /**
@@ -12,7 +13,7 @@ export default class WorldSystemVersion {
    * @private
    * @readonly
    */
-  get _settingNamespace() { return "ambersteel"; }
+  get _settingNamespace() { return AmbersteelSettings.SETTINGS_NAMESPACE; }
   
   /**
    * The FoundryVTT setting key for the world version. 
