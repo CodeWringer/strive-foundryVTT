@@ -21,6 +21,8 @@ import { SummedData, SummedDataComponent } from "./dto/summed-data.mjs";
 // Import logging classes. 
 import { BaseLoggingStrategy, LogLevels } from "./logging/base-logging-strategy.mjs";
 import { ConsoleLoggingStrategy } from "./logging/console-logging-strategy.mjs";
+// Import settings classes. 
+import AmbersteelUserSettings from "./settings/ambersteel-user-settings.mjs";
 // Import view models. 
 import './components/viewmodel.mjs';
 import './components/sheet-viewmodel.mjs';
@@ -503,6 +505,10 @@ Handlebars.registerPartial('inputLabel', `{{#> "${TEMPLATES.COMPONENT_INPUT_LABE
 /* -------------------------------------------- */
 
 Hooks.once("ready", async function() {
+  // Settings initialization.
+  new AmbersteelUserSettings().ensureAllSettings();
+
+  // Migration check. 
   const migrator = new MigratorInitiator();
   const worldSystemVersion = new WorldSystemVersion();
   

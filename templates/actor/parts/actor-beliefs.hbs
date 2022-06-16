@@ -5,7 +5,7 @@ cssClass: {undefined | String}
 <section class="{{cssClass}}">
   <div class="sheet-block margin-b-md">
     <h3>
-      <label class="fancy-font">{{localize "ambersteel.beliefSystem.ambition"}}</label>
+      <label class="{{#if viewModel.showFancyFont}}fancy-font{{/if}}">{{localize "ambersteel.beliefSystem.ambition"}}</label>
     </h3>
     <div class="margin-b-md">
       {{> inputTextField viewModel=viewModel.vmTfAmbition }}
@@ -13,7 +13,7 @@ cssClass: {undefined | String}
   </div>
   <div class="sheet-block margin-b-md">
     <h3>
-      <label class="fancy-font">{{localize "ambersteel.beliefSystem.beliefs"}}</label>
+      <label class="{{#if viewModel.showFancyFont}}fancy-font{{/if}}">{{localize "ambersteel.beliefSystem.beliefs"}}</label>
     </h3>
     {{#each viewModel.beliefViewModels as |vm index|}}
       <div class="margin-b-md">
@@ -23,7 +23,7 @@ cssClass: {undefined | String}
   </div>
   <div class="sheet-block margin-b-md">
     <h3>
-      <label class="fancy-font">{{localize "ambersteel.beliefSystem.instincts"}}</label>
+      <label class="{{#if viewModel.showFancyFont}}fancy-font{{/if}}">{{localize "ambersteel.beliefSystem.instincts"}}</label>
     </h3>
     {{#each viewModel.instinctViewModels as |vm index|}}
       <div class="margin-b-md">

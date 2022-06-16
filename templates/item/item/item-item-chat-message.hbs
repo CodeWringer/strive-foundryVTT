@@ -20,7 +20,7 @@ cssClass: {undefined | String}
   </div>
   {{!-- Bulk --}}
   <div class="flex flex-row sheet-block margin-b-md">
-    <div class="width-min-xxl fancy-font">
+    <div class="width-min-xxl{{#if viewModel.showFancyFont}} fancy-font{{/if}}">
       {{localize "ambersteel.labels.bulk"}}
     </div>
     <div class="flex-grow">
@@ -29,7 +29,7 @@ cssClass: {undefined | String}
   </div>
   {{!-- Quantity --}}
   <div class="flex flex-row sheet-block margin-b-md">
-    <div class="width-min-xxl fancy-font">
+    <div class="width-min-xxl{{#if viewModel.showFancyFont}} fancy-font{{/if}}">
       {{localize "ambersteel.labels.quantity"}}
     </div>
     <div class="flex-grow">
@@ -38,7 +38,7 @@ cssClass: {undefined | String}
   </div>
   {{!-- Max quantity --}}
   <div class="flex flex-row sheet-block margin-b-md">
-    <div class="width-min-xxl fancy-font">
+    <div class="width-min-xxl{{#if viewModel.showFancyFont}} fancy-font{{/if}}">
       {{localize "ambersteel.labels.maxQuantity"}}
     </div>
     <div class="flex-grow">

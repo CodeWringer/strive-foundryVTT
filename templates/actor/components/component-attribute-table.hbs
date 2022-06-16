@@ -5,7 +5,7 @@ cssClass: {undefined | String}
 <div class="{{cssClass}}">
     <table class="attribute-table">
         <tbody>
-            <tr class="fancy-font header-row">
+            <tr class="header-row{{#if viewModel.showFancyFont}} fancy-font{{/if}}">
                 <th class="attribute-column-roll"></th>
                 <th class="attribute-column-name">
                     {{localize viewModel.localizableAttributeGroupName}}
@@ -29,10 +29,10 @@ cssClass: {undefined | String}
                 <td class="attribute-column-roll">
                     {{> buttonRoll viewModel=vm.vmBtnRoll }}
                 </td>
-                <td class="attribute-column-name flex fancy-font">
+                <td class="attribute-column-name flex{{#if ../viewModel.showFancyFont}} fancy-font{{/if}}">
                     {{localize vm.localizableName}}
                 </td>
-                <td class="attribute-column-abbreviation fancy-font">
+                <td class="attribute-column-abbreviation{{#if ../viewModel.showFancyFont}} fancy-font{{/if}}">
                     [{{localize vm.localizableAbbreviation}}]
                 </td>
                 <td class="attribute-column-level">

@@ -17,7 +17,7 @@ cssClass: {undefined | String}
   </div>
   {{!-- Related Attribute --}}
   <div class="flex flex-row sheet-block margin-b-md">
-    <div class="width-min-xl fancy-font">
+    <div class="width-min-xl{{#if viewModel.showFancyFont}} fancy-font{{/if}}">
       {{localize "ambersteel.labels.attribute"}}
     </div>
     <div class="flex-grow">
@@ -26,7 +26,7 @@ cssClass: {undefined | String}
   </div>
   {{!-- Category --}}
   <div class="flex flex-row sheet-block margin-b-md">
-    <div class="width-min-xl fancy-font">
+    <div class="width-min-xl{{#if viewModel.showFancyFont}} fancy-font{{/if}}">
       {{localize "ambersteel.labels.category"}}
     </div>
     <div class="flex-grow">

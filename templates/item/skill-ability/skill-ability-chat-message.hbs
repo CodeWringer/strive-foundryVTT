@@ -18,7 +18,7 @@ cssClass: {undefined | String}
   </div>
   {{!-- Required level --}}
   <div class="flex flex-row sheet-block margin-b-md">
-    <div class="width-min-xxl fancy-font">
+    <div class="width-min-xxl{{#if viewModel.showFancyFont}} fancy-font{{/if}}">
       {{localize "ambersteel.labels.skillAbilityRequirement"}}
     </div>
     <div class="flex-grow">
@@ -27,7 +27,7 @@ cssClass: {undefined | String}
   </div>
   {{!-- apCost --}}
   <div class="flex flex-row sheet-block margin-b-md">
-    <div class="width-min-xxl fancy-font">
+    <div class="width-min-xxl{{#if viewModel.showFancyFont}} fancy-font{{/if}}">
       {{localize "ambersteel.labels.apCost"}}
     </div>
     <div class="flex-grow">
@@ -36,7 +36,7 @@ cssClass: {undefined | String}
   </div>
   {{!-- Obstacle --}}
   <div class="flex flex-row sheet-block margin-b-md{{#if viewModel.hideObstacle}} hidden{{/if}}">
-    <div class="width-min-xxl fancy-font">
+    <div class="width-min-xxl{{#if viewModel.showFancyFont}} fancy-font{{/if}}">
       {{localize "ambersteel.roll.obstacleAbbreviation"}}
     </div>
     <div class="flex-grow">
@@ -45,7 +45,7 @@ cssClass: {undefined | String}
   </div>
   {{!-- Opposed By --}}
   <div class="flex flex-row sheet-block margin-b-md{{#if viewModel.hideOpposedBy}} hidden{{/if}}">
-    <div class="width-min-xxl fancy-font">
+    <div class="width-min-xxl{{#if viewModel.showFancyFont}} fancy-font{{/if}}">
       {{localize "ambersteel.labels.opposedBy"}}
     </div>
     <div class="flex-grow">
@@ -54,7 +54,7 @@ cssClass: {undefined | String}
   </div>
   {{!-- Condition --}}
   <div class="flex flex-row sheet-block margin-b-md{{#if viewModel.hideCondition}} hidden{{/if}}">
-    <div class="width-min-xxl fancy-font">
+    <div class="width-min-xxl{{#if viewModel.showFancyFont}} fancy-font{{/if}}">
       {{localize "ambersteel.labels.skillAbilityCondition"}}
     </div>
     <div class="flex-grow">
@@ -63,7 +63,7 @@ cssClass: {undefined | String}
   </div>
   {{!-- attackType --}}
   <div class="flex flex-row sheet-block margin-b-md{{#if viewModel.hideAttackType}} hidden{{/if}}">
-    <div class="width-min-xxl fancy-font">
+    <div class="width-min-xxl{{#if viewModel.showFancyFont}} fancy-font{{/if}}">
       {{localize "ambersteel.labels.attackType"}}
     </div>
     <div class="flex-grow">
@@ -72,7 +72,7 @@ cssClass: {undefined | String}
   </div>
   {{!-- distance --}}
   <div class="flex flex-row sheet-block margin-b-md{{#if viewModel.hideDistance}} hidden{{/if}}">
-    <div class="width-min-xxl fancy-font">
+    <div class="width-min-xxl{{#if viewModel.showFancyFont}} fancy-font{{/if}}">
       {{localize "ambersteel.labels.distance"}}
     </div>
     <div class="flex-grow">
@@ -85,7 +85,7 @@ cssClass: {undefined | String}
       <li class="ambersteel-list-row sheet-block flex flex-column margin-b-md">
         {{!-- Damage formula --}}
         <div class="flex flex-row">
-          <div class="width-min-xxl fancy-font">
+          <div class="width-min-xxl{{#if ../viewModel.showFancyFont}} fancy-font{{/if}}">
             {{localize "ambersteel.labels.damage"}}
           </div>
           <span class="width-min-xxl">
@@ -94,7 +94,7 @@ cssClass: {undefined | String}
         </div>
         {{!-- Damage type --}}
         <div class="flex flex-row">
-          <div class="width-min-xxl fancy-font">
+          <div class="width-min-xxl{{#if ../viewModel.showFancyFont}} fancy-font{{/if}}">
             {{localize "ambersteel.labels.damageType"}}
           </div>
           <span class="width-xxl">

@@ -23,7 +23,7 @@ readOnlyCssClass: {String | undefined}
           value="{{option.value}}"
         />
       {{/if}}
-      <label class="fancy-font flex flex-middle{{#if ../viewModel.isEditable}}{{else}} custom-system-read-only disabled{{/if}}" 
+      <label class="flex flex-middle{{#if ../viewModel.isEditable}}{{else}} custom-system-read-only disabled{{/if}}{{#if ../viewModel.showFancyFont}} fancy-font{{/if}}" 
         for="{{../viewModel.id}}-{{option.value}}"
         {{#if (not option.shouldDisplayValue)}}title="{{option.localizedValue}}"{{/if}}
       >

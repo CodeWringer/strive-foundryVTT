@@ -8,8 +8,8 @@ cssClass: {undefined | String}
 <section class="{{cssClass}}">
   <div class="sheet-block grid grid-2col">
     <div class="flex flex-column">
-      <label class="line-height fancy-font pad-sm" for="obstacle">{{localize "ambersteel.roll.obstacleAbbreviation"}}</label>
-      <label class="line-height fancy-font pad-sm" for="bonusDice">{{localize "ambersteel.roll.bonusDice"}}</label>
+      <label class="line-height pad-sm{{#if viewModel.showFancyFont}} fancy-font{{/if}}" for="obstacle">{{localize "ambersteel.roll.obstacleAbbreviation"}}</label>
+      <label class="line-height pad-sm{{#if viewModel.showFancyFont}} fancy-font{{/if}}" for="bonusDice">{{localize "ambersteel.roll.bonusDice"}}</label>
     </div>
     <div class="flex flex-column flex-grow">
       {{#> numberSpinner}}
@@ -24,7 +24,7 @@ cssClass: {undefined | String}
   </div>
   <div class="sheet-block grid grid-2col">
     <div>
-      <label class="line-height fancy-font pad-sm" for="visibilityMode">{{localize "ambersteel.labels.messageVisibility"}}</label>
+      <label class="line-height pad-sm{{#if viewModel.showFancyFont}} fancy-font{{/if}}" for="visibilityMode">{{localize "ambersteel.labels.messageVisibility"}}</label>
     </div>
     <div class="flex">
       <select class="visibilityMode flex-grow" name="visibilityMode">
