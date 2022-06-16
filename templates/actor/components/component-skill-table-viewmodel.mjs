@@ -110,7 +110,7 @@ export default class SkillTableViewModel extends SheetViewModel {
           target: skill.id,
         }),
         vmImg: thiz.createVmImg({
-          id: "vmImg",
+          id: `vmImg-skill-${i}`,
           propertyOwner: skill,
           propertyPath: "img",
         }),
