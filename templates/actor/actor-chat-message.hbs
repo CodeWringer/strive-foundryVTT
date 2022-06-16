@@ -19,7 +19,7 @@ cssClass: {undefined | String}
     {{!-- Personals --}}
     {{!-- Species --}}
     <div class="flex flex-row sheet-block margin-b-md">
-      <div class="width-min-xl fancy-font">
+      <div class="width-min-xl{{#if viewModel.showFancyFont}} fancy-font{{/if}}">
         {{localize "ambersteel.personals.species"}}
       </div>
       <div class="flex-grow">
@@ -27,7 +27,7 @@ cssClass: {undefined | String}
       </div>
     </div>
     <div class="flex flex-row sheet-block margin-b-md">
-      <div class="width-min-xl fancy-font">
+      <div class="width-min-xl{{#if viewModel.showFancyFont}} fancy-font{{/if}}">
         {{localize "ambersteel.personals.culture"}}
       </div>
       <div class="flex-grow">
@@ -35,7 +35,7 @@ cssClass: {undefined | String}
       </div>
     </div>
     <div class="flex flex-row sheet-block margin-b-md">
-      <div class="width-min-xl fancy-font">
+      <div class="width-min-xl{{#if viewModel.showFancyFont}} fancy-font{{/if}}">
         {{localize "ambersteel.personals.sex"}}
       </div>
       <div class="flex-grow">
@@ -43,7 +43,7 @@ cssClass: {undefined | String}
       </div>
     </div>
     <div class="flex flex-row sheet-block margin-b-md">
-      <div class="width-min-xl fancy-font">
+      <div class="width-min-xl{{#if viewModel.showFancyFont}} fancy-font{{/if}}">
         {{localize "ambersteel.personals.age"}}
       </div>
       <div class="flex-grow">
@@ -52,7 +52,7 @@ cssClass: {undefined | String}
     </div>
     {{!-- Biography --}}
     <div class="sheet-block">
-      <h3 class="width-min-xl fancy-font">
+      <h3 class="width-min-xl{{#if viewModel.showFancyFont}} fancy-font{{/if}}">
         {{localize "ambersteel.labels.biography"}}
       </h3>
       <div class="scrollable-height-md">
@@ -62,7 +62,7 @@ cssClass: {undefined | String}
   {{else}}
     {{!-- Description --}}
     <div class="sheet-block">
-      <h3 class="width-min-xl fancy-font">
+      <h3 class="width-min-xl{{#if viewModel.showFancyFont}} fancy-font{{/if}}">
         {{localize "ambersteel.labels.description"}}
       </h3>
       <div class="scrollable-height-md">

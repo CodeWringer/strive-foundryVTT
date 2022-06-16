@@ -5,7 +5,7 @@ cssClass: {undefined | String}
 <div class="{{cssClass}}">
     <table class="skill-table">
         <tbody>
-            <tr class="fancy-font header-row">
+            <tr class="header-row{{#if viewModel.showFancyFont}} fancy-font{{/if}}">
                 <th class="skill-column-roll"></th>
                 <th class="skill-column-roll"></th>
                 <th class="skill-column-roll"></th>
@@ -44,7 +44,7 @@ cssClass: {undefined | String}
                     <td>
                         {{> buttonOpenSheet viewModel=vm.vmBtnOpenSheet }}
                     </td>
-                    <td class="fancy-font flex skill-column-name">
+                    <td class="flex skill-column-name{{#if ../viewModel.showFancyFont}} fancy-font{{/if}}">
                         {{> inputImage viewModel=vm.vmImg cssClass="custom-icon-sm" }}
                         {{> inputTextField viewModel=vm.vmTfName }}
                     </td>

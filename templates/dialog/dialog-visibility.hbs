@@ -6,7 +6,7 @@ cssClass: {undefined | String}
 <section class="visibility-mode-selection{{#if cssClass}} {{cssClass}}{{/if}}">
   <div class="sheet-block grid grid-2col">
     <div>
-      <label class="line-height fancy-font pad-sm" for="visibilityMode">{{localize "ambersteel.labels.messageVisibility"}}</label>
+      <label class="line-height pad-sm{{#if viewModel.showFancyFont}} fancy-font{{/if}}" for="visibilityMode">{{localize "ambersteel.labels.messageVisibility"}}</label>
     </div>
     <div class="flex">
       <select class="visibilityMode flex-grow" name="visibilityMode">

@@ -17,7 +17,7 @@ cssClass: {undefined | String}
   </div>
   {{!-- Limit --}}
   <div class="flex flex-row sheet-block margin-b-md">
-    <div class="width-min-xl fancy-font">
+    <div class="width-min-xl{{#if viewModel.showFancyFont}} fancy-font{{/if}}">
       {{localize "ambersteel.labels.limit"}}
     </div>
     <div class="flex-grow">
@@ -26,7 +26,7 @@ cssClass: {undefined | String}
   </div>
   {{!-- Time to heal --}}
   <div class="flex flex-row sheet-block margin-b-md">
-    <div class="width-min-xl fancy-font">
+    <div class="width-min-xl{{#if viewModel.showFancyFont}} fancy-font{{/if}}">
       {{localize "ambersteel.labels.timeToHeal"}}
     </div>
     <div class="flex-grow">

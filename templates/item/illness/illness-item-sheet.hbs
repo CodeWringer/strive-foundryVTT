@@ -45,7 +45,7 @@ cssClass: {undefined | String}
   </div>
   {{!-- Description --}}
   <div class="sheet-block flex flex-column flex-grow">
-    <h3 class="fancy-font">{{localize "ambersteel.labels.description"}}</h3>
+    <h3 class="{{#if viewModel.showFancyFont}}fancy-font{{/if}}">{{localize "ambersteel.labels.description"}}</h3>
     {{> inputRichText viewModel=viewModel.vmRtDescription }}
   </div>
 </form>

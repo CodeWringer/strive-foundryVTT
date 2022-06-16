@@ -3,6 +3,6 @@ text: {String|undefined}
 for: {String|undefined}
 cssClass: {undefined | String}
 --}}
-<label class="fancy-font flex flex-middle height-fill{{#if cssClass}} {{cssClass}}{{/if}}" for="{{for}}">
+<label class="flex flex-middle height-fill{{#if cssClass}} {{cssClass}}{{/if}}{{#if viewModel.showFancyFont}} fancy-font{{/if}}" for="{{for}}">
   <div class="text-align-r width-fill pad-r-md">{{localize text}}</div>
 </label>

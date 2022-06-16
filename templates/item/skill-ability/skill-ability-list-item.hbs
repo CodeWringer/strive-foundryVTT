@@ -112,7 +112,7 @@ cssClass: {undefined | String}
   </div>
   {{!-- Condition --}}
   <div class="flex flex-column margin-b-md{{#if viewModel.hideCondition}} hidden{{/if}}">
-    <h3 class="fancy-font margin-b-sm">
+    <h3 class="margin-b-sm{{#if viewModel.showFancyFont}} fancy-font{{/if}}">
       {{localize "ambersteel.labels.skillAbilityCondition"}}
     </h3>
     <div class="flex-grow">
@@ -121,7 +121,7 @@ cssClass: {undefined | String}
   </div>
   {{!-- Description --}}
   <div class="flex flex-column margin-b-md">
-    <h3 class="fancy-font margin-b-sm">{{localize "ambersteel.labels.description"}}</h3>
+    <h3 class="margin-b-sm{{#if viewModel.showFancyFont}} fancy-font{{/if}}">{{localize "ambersteel.labels.description"}}</h3>
     {{> inputRichText viewModel=viewModel.vmRtDescription }}
   </div>
 </div>

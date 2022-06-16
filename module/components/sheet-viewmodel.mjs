@@ -16,6 +16,7 @@ import InputTextFieldViewModel from "./input-textfield/input-textfield-viewmodel
 import ViewModel from "./viewmodel.mjs";
 import ButtonContextMenuViewModel from "./button-context-menu/button-context-menu-viewmodel.mjs";
 import InputRichTextViewModel from "./input-rich-text/input-rich-text-viewmodel.mjs";
+import GetShowFancyFontUseCase from "../usecases/get-show-fancy-font-use-case.mjs";
 
 /**
  * This view model sub-type is intended for use with sheets that expect the common flags, 
@@ -70,6 +71,18 @@ export default class SheetViewModel extends ViewModel {
    * @readonly
    */
   get isGM() { return this._isGM; }
+  
+  /**
+   * @type {Boolean}
+   * @private
+   */
+  _showFancyFont = false;
+  /**
+   * If true, show the 'fancy' font. 
+   * @type {Boolean}
+   * @readonly
+   */
+  get showFancyFont() { return this._showFancyFont; }
 
   /**
    * Name or path of a contextual template, which will be displayed in exception log entries, to aid debugging. 
@@ -99,6 +112,8 @@ export default class SheetViewModel extends ViewModel {
     this._isOwner = args.isOwner ?? false;
     this._isGM = args.isGM ?? false;
     this._contextTemplate = args.contextTemplate;
+
+    this._showFancyFont = new GetShowFancyFontUseCase().invoke();
   }
 
   /**
