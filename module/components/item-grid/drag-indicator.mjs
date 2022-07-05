@@ -1,3 +1,4 @@
+import { ITEM_ORIENTATIONS } from "../../constants/item-orientations.mjs";
 import { PositionInterpolator } from "../../pixi/interpolation/position-interpolator.mjs";
 import { TEXTURES } from "../../pixi/texture-preloader.mjs";
 
@@ -259,10 +260,10 @@ export class DragIndicator {
    * Rotates the target indicator. 
    */
   rotate() {
-    if (this.orientation === game.ambersteel.config.itemOrientations.vertical) {
-      this.orientation = game.ambersteel.config.itemOrientations.horizontal;
-    } else if (this.orientation === game.ambersteel.config.itemOrientations.horizontal) {
-      this.orientation = game.ambersteel.config.itemOrientations.vertical;
+    if (this.orientation === ITEM_ORIENTATIONS.vertical) {
+      this.orientation = ITEM_ORIENTATIONS.horizontal;
+    } else if (this.orientation === ITEM_ORIENTATIONS.horizontal) {
+      this.orientation = ITEM_ORIENTATIONS.vertical;
     }
 
     const width = this._sizeOnGrid.width;

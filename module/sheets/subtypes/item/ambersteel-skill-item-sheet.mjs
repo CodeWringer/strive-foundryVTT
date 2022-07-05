@@ -1,6 +1,7 @@
 import AmbersteelBaseItemSheet from "./ambersteel-base-item-sheet.mjs";
 import { TEMPLATES } from "../../../templatePreloader.mjs";
 import SkillItemSheetViewModel from "../../../../templates/item/skill/skill-item-sheet-viewmodel.mjs";
+import Ruleset from "../../../ruleset.mjs";
 
 export default class AmbersteelSkillItemSheet extends AmbersteelBaseItemSheet {
   /** @override */
@@ -13,7 +14,7 @@ export default class AmbersteelSkillItemSheet extends AmbersteelBaseItemSheet {
     super.prepareDerivedData(context);
 
     const itemData = context.data.data;
-    itemData.groupName = game.ambersteel.getAttributeGroupName(itemData.relatedAttribute);
+    itemData.groupName = new Ruleset().getAttributeGroupName(itemData.relatedAttribute);
   }
 
   /** @override */

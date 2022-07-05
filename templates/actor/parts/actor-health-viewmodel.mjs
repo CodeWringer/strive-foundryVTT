@@ -1,6 +1,7 @@
 import SheetViewModel from "../../../module/components/sheet-viewmodel.mjs";
 import DocumentListItemOrderDataSource from "../../../module/components/sortable-list/document-list-item-order-datasource.mjs";
 import SortableListViewModel from "../../../module/components/sortable-list/sortable-list-viewmodel.mjs";
+import Ruleset from "../../../module/ruleset.mjs";
 import { TEMPLATES } from "../../../module/templatePreloader.mjs";
 import { validateOrThrow } from "../../../module/utils/validation-utility.mjs";
 import IllnessListItemViewModel from "../../item/illness/illness-list-item-viewmodel.mjs";
@@ -59,7 +60,7 @@ export default class ActorHealthViewModel extends SheetViewModel {
    * @type {Boolean}
    * @readonly
    */
-  get isToughnessTestRequired() { return game.ambersteel.isToughnessTestRequired(this.actor); }
+  get isToughnessTestRequired() { return new Ruleset().isToughnessTestRequired(this.actor); }
 
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 

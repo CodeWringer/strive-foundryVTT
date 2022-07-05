@@ -1,3 +1,4 @@
+import { ROLL_TYPES } from "../../constants/roll-types.mjs";
 import { TEMPLATES } from "../../templatePreloader.mjs";
 import * as ChatUtil from "../../utils/chat-utility.mjs";
 import * as DiceUtil from "../../utils/dice-utility.mjs";
@@ -127,7 +128,7 @@ export default class ButtonRollViewModel extends ButtonViewModel {
   async onClick(html, isOwner, isEditable) {
     if (isEditable !== true) return;
 
-    if (this.rollType === game.ambersteel.config.rollTypes.generic) {
+    if (this.rollType === ROLL_TYPES.generic) {
       if (this.propertyPath === undefined) {
         throw new Error("InvalidStateException: For roll-type 'generic', a property path MUST be provided");
       }
@@ -150,7 +151,7 @@ export default class ButtonRollViewModel extends ButtonViewModel {
         sound: DiceUtil.DICE_ROLL_SOUND,
         visibilityMode: dialogResult.visibilityMode
       });
-    } else if (this.rollType === game.ambersteel.config.rollTypes.dicePool) {
+    } else if (this.rollType === ROLL_TYPES.dicePool) {
       const dialogResult = await DiceUtil.queryRollData();
       if (!dialogResult.confirmed) return;
   

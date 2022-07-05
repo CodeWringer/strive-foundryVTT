@@ -7,6 +7,8 @@ import { SummedData, SummedDataComponent } from "../../../dto/summed-data.mjs";
 import DamageAndType from "../../../dto/damage-and-type.mjs";
 import { DiceOutcomeTypes } from "../../../dto/dice-outcome-types.mjs";
 import PreparedChatData from "../../../dto/prepared-chat-data.mjs";
+import Ruleset from "../../../ruleset.mjs";
+import { DAMAGE_TYPES } from "../../../constants/damage-types.mjs";
 
 export default class AmbersteelSkillItem extends AmbersteelBaseItem {
   /** @override */
@@ -97,7 +99,7 @@ export default class AmbersteelSkillItem extends AmbersteelBaseItem {
    * @async
    */
   async setLevel(newLevel = 0, resetProgress = true) {
-    const req = game.ambersteel.getSkillAdvancementRequirements(newLevel);
+    const req = new Ruleset().getSkillAdvancementRequirements(newLevel);
 
     await this.update({
       data: {
@@ -203,14 +205,14 @@ export default class AmbersteelSkillItem extends AmbersteelBaseItem {
    */
   _getRollData() {
     const relatedAttributeName = this.data.data.relatedAttribute;
-    const attGroupName = game.ambersteel.getAttributeGroupName(relatedAttributeName);
+    const attGroupName = new Ruleset().getAttributeGroupName(relatedAttributeName);
     
     const actor = this.parent;
     const relatedAttributeLevel = actor ? actor.data.data.attributes[attGroupName][relatedAttributeName].value : 0;
 
     const skillLevel = this.data.data.value;
 
-    const compositionObj = game.ambersteel.getSkillTestNumberOfDice(skillLevel, relatedAttributeLevel);
+    const compositionObj = new Ruleset().getSkillTestNumberOfDice(skillLevel, relatedAttributeLevel);
 
     return new SummedData(compositionObj.totalDiceCount, [
       new SummedDataComponent(relatedAttributeName, `ambersteel.attributes.${relatedAttributeName}`, compositionObj.attributeDiceCount),
@@ -236,7 +238,7 @@ export default class AmbersteelSkillItem extends AmbersteelBaseItem {
 
         damage.push(new DamageAndType({
           damage: plainDamageObject.damage ?? "",
-          damageType: plainDamageObject.damageType ?? game.ambersteel.config.damageTypes.none.name,
+          damageType: plainDamageObject.damageType ?? DAMAGE_TYPES.none.name,
         }));
       }
 

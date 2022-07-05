@@ -1,4 +1,6 @@
 import ViewModel from "../../../module/components/viewmodel.mjs";
+import { ATTACK_TYPES } from "../../../module/constants/attack-types.mjs";
+import { DAMAGE_TYPES } from "../../../module/constants/damage-types.mjs";
 import { TEMPLATES } from "../../../module/templatePreloader.mjs";
 import { isNotBlankOrUndefined } from "../../../module/utils/validation-utility.mjs";
 import { validateOrThrow } from "../../../module/utils/validation-utility.mjs";
@@ -77,7 +79,7 @@ export default class SkillAbilityChatMessageViewModel extends ViewModel {
   get localizedAttackType() {
     if (this.skillAbility.attackType === undefined) return "";
 
-    const localizableName = this._getConfigValue(game.ambersteel.config.attackTypes, this.skillAbility.attackType).localizableName;
+    const localizableName = this._getConfigValue(ATTACK_TYPES, this.skillAbility.attackType).localizableName;
     return game.i18n.localize(localizableName);
   };
 
@@ -172,7 +174,7 @@ export default class SkillAbilityChatMessageViewModel extends ViewModel {
    * @private
    */
   getLocalizedDamageType(damageTypeName) {
-    const configItem = game.ambersteel.getConfigItem(game.ambersteel.config.damageTypes, damageTypeName);
+    const configItem = game.ambersteel.getConfigItem(DAMAGE_TYPES, damageTypeName);
     return game.i18n.localize(configItem.localizableName);
   }
 }

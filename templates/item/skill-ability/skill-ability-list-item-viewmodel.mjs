@@ -6,6 +6,8 @@ import { getNestedPropertyValue } from "../../../module/utils/property-utility.m
 import { validateOrThrow } from "../../../module/utils/validation-utility.mjs";
 import * as ChatUtil from "../../../module/utils/chat-utility.mjs";
 import { DICE_ROLL_SOUND } from "../../../module/utils/dice-utility.mjs";
+import { DAMAGE_TYPES } from "../../../module/constants/damage-types.mjs";
+import { ATTACK_TYPES } from "../../../module/constants/attack-types.mjs";
 
 export default class SkillAbilityListItemViewModel extends SheetViewModel {
   /** @override */
@@ -226,7 +228,7 @@ export default class SkillAbilityListItemViewModel extends SheetViewModel {
         }
 
         // Get localized damage type. 
-        const damageType = game.ambersteel.getConfigItem(game.ambersteel.config.damageTypes, damageDefinition.damageType);
+        const damageType = game.ambersteel.getConfigItem(DAMAGE_TYPES, damageDefinition.damageType);
         const localizedDamageType = game.i18n.localize(damageType.localizableName);
 
         rolls.push({
@@ -318,7 +320,7 @@ export default class SkillAbilityListItemViewModel extends SheetViewModel {
           name: game.i18n.localize("ambersteel.labels.attackType"),
           icon: '',
           condition: () => { return thiz.skillAbility.attackType === undefined; },
-          callback: () => { thiz.skillAbility.updateProperty("attackType", game.ambersteel.config.attackTypes.none.name); },
+          callback: () => { thiz.skillAbility.updateProperty("attackType", ATTACK_TYPES.none.name); },
         },
         // Toggle condition
         {

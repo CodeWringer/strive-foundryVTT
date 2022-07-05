@@ -1,3 +1,13 @@
+// Import constants.
+import { ATTRIBUTES } from "./constants/attributes.mjs";
+import { DAMAGE_TYPES } from "./constants/damage-types.mjs";
+import { ATTACK_TYPES } from "./constants/attack-types.mjs";
+import { SHIELD_TYPES } from "./constants/shield-types.mjs";
+import { ARMOR_TYPES } from "./constants/armor-types.mjs";
+import { WEAPON_TYPES } from "./constants/weapon-types.mjs";
+import { VISIBILITY_MODES } from "./constants/visibility-modes.mjs";
+import { INJURY_STATES } from "./constants/injury-states.mjs";
+import { ILLNESS_STATES } from "./constants/illness-states.mjs";
 // Import main config.
 import { ambersteel as ambersteelConfig } from "./config.js"
 import * as DialogUtil from "./utils/dialog-utility.mjs";
@@ -10,14 +20,13 @@ import { AmbersteelItem } from "./documents/item.mjs";
 import { AmbersteelActorSheet } from "./sheets/actor-sheet.mjs";
 import { AmbersteelItemSheet } from "./sheets/item-sheet.mjs";
 // Import helper/utility classes and constants.
+import Ruleset from "./ruleset.mjs";
 import { preloadHandlebarsTemplates } from "./templatePreloader.mjs";
 import { getNestedPropertyValue, ensureNestedProperty, setNestedPropertyValue } from "./utils/property-utility.mjs";
 import { findDocument } from "./utils/content-utility.mjs";
-import AdvancementRequirements from "./dto/advancement-requirement.mjs";
 import { TEMPLATES } from "./templatePreloader.mjs";
 import { createUUID } from './utils/uuid-utility.mjs';
 import ChoiceOption from "./dto/choice-option.mjs";
-import { SummedData, SummedDataComponent } from "./dto/summed-data.mjs";
 // Import logging classes. 
 import { BaseLoggingStrategy, LogLevels } from "./logging/base-logging-strategy.mjs";
 import { ConsoleLoggingStrategy } from "./logging/console-logging-strategy.mjs";
@@ -76,134 +85,6 @@ Hooks.once('init', async function() {
      * @type {Object}
      */
     config: ambersteelConfig,
-    /**
-     * Returns the number of dice for a skill test. 
-     * @param {Number} skillValue A skill level. 
-     * @param {Number} relatedAttributeValue Level of the skill related attribute. 
-     * @returns {Object} { totalDiceCount: {Number}, skillDiceCount: {Number}, attributeDiceCount: {Number} }
-     */
-    getSkillTestNumberOfDice: function(skillLevel, relatedAttributeLevel) {
-      return {
-        totalDiceCount: skillLevel + relatedAttributeLevel,
-        skillDiceCount: skillLevel,
-        attributeDiceCount: relatedAttributeLevel
-      };
-    },
-    /**
-     * Returns the advancement requirements for the given level of an attribute. 
-     * 
-     * If level is equal to 0, will return undefined, instead of actual values. 
-     * This is deliberate, as an attribute at level 0 cannot be advanced (naturally).
-     * @param {Number} level The level for which to get the advancement requirements. 
-     * @returns {AdvancementRequirements}
-     */
-    getAttributeAdvancementRequirements: function(level = 0) {
-      return new AdvancementRequirements({
-        requiredSuccessses: (level === 0) ? undefined : (level + 1) * (level + 1) * 4,
-        requiredFailures: (level === 0) ? undefined : (level + 1) * (level + 1) * 5
-      });
-    },
-    /**
-     * Returns the advancement requirements for the given level of a skill. 
-     * @param {Number} level The level for which to get the advancement requirements. 
-     * @returns {AdvancementRequirements}
-     */
-    getSkillAdvancementRequirements: function(level = 0) {
-      return new AdvancementRequirements({
-        requiredSuccessses: (level == 0) ? 10 : (level + 1) * level * 2,
-        requiredFailures: (level == 0) ? 14 : (level + 1) * level * 3
-      });
-    },
-    /**
-     * Returns the name of the attribute group containing the given attribute. 
-     * @param attributeName {String} Internal name of an attribute, e.g. 'arcana'. 
-     * @returns {String} Name of the attribute group, e. g. 'physical'. 
-     */
-    getAttributeGroupName: function(attributeName) {
-      const attGroups = CONFIG.ambersteel.character.attributeGroups;
-      for (const attGroupName in attGroups) {
-        for (const attName in attGroups[attGroupName].attributes) {
-          if (attName == attributeName) {
-            return attGroupName;
-          }
-        }
-      }
-    },
-    /**
-     * Returns true, if the given face/number represents a positive (= success).
-     * @param {String|Number} face A die face to check whether it represents a positive (= success).
-     * @returns {Boolean}
-     */
-    isPositive: function(face) {
-      const int = parseInt(face);
-      return int === 6 || int === 5;
-    },
-    /**
-     * Returns true, if the given face/number represents a negative (= failure).
-     * @param {String|Number} face A die face to check whether it represents a negative (= failure).
-     * @returns {Boolean}
-     */
-    isNegative: function(face) {
-      const int = parseInt(face);
-      return int <= 4;
-    },
-    /**
-     * Returns true, if the given face/number represents a spell-backfire-causing negative. 
-     * @param {String|Number} face A die face to check whether it represents a spell-backfire-causing negative. 
-     * @returns {Boolean}
-     */
-    causesBackfire: function(face) {
-      const int = parseInt(face);
-      return int === 1 || int === 2;
-    },
-    getCharacterMaximumHp: function(actor) {
-      const businessData = actor.data.data;
-      const injuryCount = actor.getInjuries().length;
-      return (businessData.attributes.physical.toughness.value * 4) - (injuryCount * 2);
-    },
-    getCharacterMaximumInjuries: function(actor) {
-      return Math.max(actor.data.data.attributes.physical.toughness.value, 1);
-    },
-    getCharacterMaximumExhaustion: function(actor) {
-      return actor.data.data.attributes.physical.endurance.value * 3;
-    },
-    getCharacterMaximumInventory: function(actor) {
-      return actor.data.data.attributes.physical.strength.value * 6;
-    },
-    /**
-     * Returns an object containing the maximum magic stamina, as well as the details of how it came to be. 
-     * @param {AmbersteelActor} actor 
-     * @returns {SummedData} The maximum magic stamina of the given actor. 
-     */
-    getCharacterMaximumMagicStamina: function(actor) {
-      let total = actor.data.data.attributes.mental.arcana.value;
-      const components = [];
-
-      for (const skill of actor.data.data.skills) {
-        if (skill.data.data.isMagicSchool !== true) continue;
-
-        const skillLevel = parseInt(skill.data.data.value);
-        components.push(new SummedDataComponent(skill.name, skill.name, skillLevel));
-        total += skillLevel;
-      }
-
-      return new SummedData(parseInt(Math.ceil(total / 2)), components);
-    },
-    /**
-     * Returns true, if the given actor must do toughness tests, whenever they suffer an injury. 
-     * @param actor 
-     * @returns {Boolean} True, if any further injury requires a toughness test. 
-     */
-    isToughnessTestRequired: function(actor) {
-      const businessData = actor.data.data;
-      const maxInjuries = businessData.health.maxInjuries;
-      const injuryCount = actor.getInjuries().length;
-      if (injuryCount >= Math.ceil(maxInjuries / 2)) {
-        return true;
-      } else {
-        return false;
-      }
-    },
     // TODO: #29 Make debug dependent on build settings. 
     /**
      * 
@@ -271,63 +152,63 @@ Hooks.once('init', async function() {
      * @returns {Array<ChoiceOption>}
      */
     getAttributeOptions: function() {
-      return game.ambersteel.getOptionsFromConfig(ambersteelConfig.character.attributes);
+      return game.ambersteel.getOptionsFromConfig(ATTRIBUTES);
     },
     /**
      * Returns an array of {ChoiceOption}s. 
      * @returns {Array<ChoiceOption>}
      */
     getInjuryOptions: function() {
-      return game.ambersteel.getOptionsFromConfig(ambersteelConfig.injuryStates);
+      return game.ambersteel.getOptionsFromConfig(INJURY_STATES);
     },
     /**
      * Returns an array of {ChoiceOption}s. 
      * @returns {Array<ChoiceOption>}
      */
     getIllnessOptions: function() {
-      return game.ambersteel.getOptionsFromConfig(ambersteelConfig.illnessStates);
+      return game.ambersteel.getOptionsFromConfig(ILLNESS_STATES);
     },
     /**
      * Returns an array of {ChoiceOption}s. 
      * @returns {Array<ChoiceOption>}
      */
     getDamageTypeOptions: function() {
-      return game.ambersteel.getOptionsFromConfig(ambersteelConfig.damageTypes);
+      return game.ambersteel.getOptionsFromConfig(DAMAGE_TYPES);
     },
     /**
      * Returns an array of {ChoiceOption}s. 
      * @returns {Array<ChoiceOption>}
      */
     getAttackTypeOptions: function() {
-      return game.ambersteel.getOptionsFromConfig(ambersteelConfig.attackTypes);
+      return game.ambersteel.getOptionsFromConfig(ATTACK_TYPES);
     },
     /**
      * Returns an array of {ChoiceOption}s. 
      * @returns {Array<ChoiceOption>}
      */
     getShieldTypeOptions: function() {
-      return game.ambersteel.getOptionsFromConfig(ambersteelConfig.shieldTypes);
+      return game.ambersteel.getOptionsFromConfig(SHIELD_TYPES);
     },
     /**
      * Returns an array of {ChoiceOption}s. 
      * @returns {Array<ChoiceOption>}
      */
     getArmorTypeOptions: function() {
-      return game.ambersteel.getOptionsFromConfig(ambersteelConfig.armorTypes);
+      return game.ambersteel.getOptionsFromConfig(ARMOR_TYPES);
     },
     /**
      * Returns an array of {ChoiceOption}s. 
      * @returns {Array<ChoiceOption>}
      */
     getWeaponTypeOptions: function() {
-      return game.ambersteel.getOptionsFromConfig(ambersteelConfig.weaponTypes);
+      return game.ambersteel.getOptionsFromConfig(WEAPON_TYPES);
     },
     /**
      * Returns an array of {ChoiceOption}s. 
      * @returns {Array<ChoiceOption>}
      */
     getVisibilityOptions: function() {
-      return game.ambersteel.getOptionsFromConfig(ambersteelConfig.visibilityModes);
+      return game.ambersteel.getOptionsFromConfig(VISIBILITY_MODES);
     },
     /**
      * Returns the config item of the given config object, whose name matches with the given name. 

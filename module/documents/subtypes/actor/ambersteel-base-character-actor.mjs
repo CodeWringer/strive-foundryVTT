@@ -1,5 +1,6 @@
 import { DiceOutcomeTypes } from '../../../dto/dice-outcome-types.mjs';
 import { SummedData, SummedDataComponent } from '../../../dto/summed-data.mjs';
+import Ruleset from '../../../ruleset.mjs';
 import { TEMPLATES } from '../../../templatePreloader.mjs';
 import AmbersteelBaseActor from './ambersteel-base-actor.mjs';
 
@@ -49,7 +50,7 @@ export default class AmbersteelBaseCharacterActor extends AmbersteelBaseActor {
 
     this._ensureContextHasSpecifics(context);
 
-    context.data.data.assets.maxBulk = game.ambersteel.getCharacterMaximumInventory(context);
+    context.data.data.assets.maxBulk = new Ruleset().getCharacterMaximumInventory(context);
     context.data.data.assets.totalBulk = this._calculateUsedBulk(context);
     this._prepareDerivedAttributesData(context);
     this._prepareDerivedSkillsData(context);
@@ -149,7 +150,7 @@ export default class AmbersteelBaseCharacterActor extends AmbersteelBaseActor {
    */
   _prepareDerivedAttributeData(context, oAtt, attName) {
     const attValue = parseInt(oAtt.value);
-    const req = game.ambersteel.getAttributeAdvancementRequirements(attValue);
+    const req = new Ruleset().getAttributeAdvancementRequirements(attValue);
 
     // Calculate advancement requirements. 
     oAtt.requiredSuccessses = req.requiredSuccessses;
@@ -234,7 +235,7 @@ export default class AmbersteelBaseCharacterActor extends AmbersteelBaseActor {
     skillData.failures = parseInt(skillData.failures ? skillData.failures : 0);
     skillData.relatedAttribute = skillData.relatedAttribute ? skillData.relatedAttribute : "agility";
 
-    const req = game.ambersteel.getSkillAdvancementRequirements(skillData.value);
+    const req = new Ruleset().getSkillAdvancementRequirements(skillData.value);
     skillData.requiredSuccessses = req.requiredSuccessses;
     skillData.requiredFailures = req.requiredFailures;
   }
@@ -247,10 +248,12 @@ export default class AmbersteelBaseCharacterActor extends AmbersteelBaseActor {
    */
   _prepareDerivedHealthData(context) {
     const businessData = context.data.data;
-    businessData.health.maxHP = game.ambersteel.getCharacterMaximumHp(context);
-    businessData.health.maxInjuries = game.ambersteel.getCharacterMaximumInjuries(context);
-    businessData.health.maxExhaustion = game.ambersteel.getCharacterMaximumExhaustion(context);
-    businessData.health.maxMagicStamina = game.ambersteel.getCharacterMaximumMagicStamina(context).total;
+
+    const ruleset = new Ruleset();
+    businessData.health.maxHP = ruleset.getCharacterMaximumHp(context);
+    businessData.health.maxInjuries = ruleset.getCharacterMaximumInjuries(context);
+    businessData.health.maxExhaustion = ruleset.getCharacterMaximumExhaustion(context);
+    businessData.health.maxMagicStamina = ruleset.getCharacterMaximumMagicStamina(context).total;
   }
 
   /**
@@ -307,7 +310,7 @@ export default class AmbersteelBaseCharacterActor extends AmbersteelBaseActor {
    */
   async setAttributeLevel(attName = undefined, newValue = 0) {
     const oAttName = this.getAttributeForName(attName);
-    const req = game.ambersteel.getAttributeAdvancementRequirements(newValue);
+    const req = new Ruleset().getAttributeAdvancementRequirements(newValue);
     const propertyPath = `data.attributes.${oAttName.groupName}.${attName}`
 
     await this.update({

@@ -9,6 +9,7 @@ import VerticalLayoutContainer from "../../pixi/vertical-layout-container.mjs";
 import { TEXTURES } from "../../pixi/texture-preloader.mjs";
 import { queryVisibilityMode } from '../../utils/chat-utility.mjs';
 import { Button } from "../../pixi/button.mjs";
+import { ITEM_ORIENTATIONS } from "../../constants/item-orientations.mjs";
 
 const FONT_FAMILY = "Black-Chancery";
 const TEXT_SETTINGS = {fontFamily : FONT_FAMILY, fontSize: 18, fontWeight: "bolder", fill : 0x191813, align : 'center'};
@@ -81,9 +82,9 @@ export class ItemOnGridView {
    * @type {Object} { width: {Number}, height: {Number} }
    */
   get orientedShape() {
-    if (this.index.orientation === game.ambersteel.config.itemOrientations.vertical) {
+    if (this.index.orientation === ITEM_ORIENTATIONS.vertical) {
       return { width: this._shape.width, height: this._shape.height };
-    } else if (this.index.orientation === game.ambersteel.config.itemOrientations.horizontal) {
+    } else if (this.index.orientation === ITEM_ORIENTATIONS.horizontal) {
       return { width: this._shape.height, height: this._shape.width };
     }
   }
@@ -318,7 +319,7 @@ export class ItemOnGridView {
     this._spriteIcon.alpha = 0.5;
     this._spriteIcon.tint = 0x565656;
     this._spriteIcon.wrapped.anchor.set(0.5);
-    this._spriteIcon.wrapped.angle = this.index.orientation === game.ambersteel.config.itemOrientations.vertical ? 0 : 270;
+    this._spriteIcon.wrapped.angle = this.index.orientation === ITEM_ORIENTATIONS.vertical ? 0 : 270;
     this._containerIcon.addChild(this._spriteIcon);
 
     this._contentContainer.addChild(this._containerIcon);
