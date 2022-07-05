@@ -1,4 +1,4 @@
-export const armorTypes = {
+export const ARMOR_TYPES = {
   light: {
     name: "light",
     localizableName: "ambersteel.armorTypes.light"

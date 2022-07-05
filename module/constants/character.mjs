@@ -1,4 +1,4 @@
-export const character = {
+export const CHARACTER = {
   biography: {
     origin: "ambersteel.biography.origin",
     youth: "ambersteel.biography.youth",

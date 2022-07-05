@@ -1,4 +1,4 @@
-export const shieldTypes = {
+export const SHIELD_TYPES = {
   buckler: {
     name: "buckler",
     localizableName: "ambersteel.shieldTypes.buckler"

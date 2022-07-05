@@ -1,4 +1,4 @@
-export const weaponTypes = {
+export const WEAPON_TYPES = {
   unarmed: {
     name: "unarmed",
     localizableName: "ambersteel.weaponTypes.unarmed"

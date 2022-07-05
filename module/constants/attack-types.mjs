@@ -1,4 +1,4 @@
-export const attackTypes = {
+export const ATTACK_TYPES = {
   none: {
     name: "none",
     localizableName: "ambersteel.labels.none",

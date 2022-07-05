@@ -1,4 +1,4 @@
-export const injuryStates = {
+export const INJURY_STATES = {
   active: {
     name: "active",
     localizableName: "ambersteel.injuryStates.active",

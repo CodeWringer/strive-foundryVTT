@@ -1,4 +1,4 @@
-export const rollTypes = {
+export const ROLL_TYPES = {
   /**
    * A generic roll, using Foundry's default system. 
    */

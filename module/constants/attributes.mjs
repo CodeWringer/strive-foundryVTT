@@ -1,4 +1,4 @@
-export const attributes = {
+export const ATTRIBUTES = {
   agility: {
     name: "agility",
     localizableName: "ambersteel.attributes.agility",

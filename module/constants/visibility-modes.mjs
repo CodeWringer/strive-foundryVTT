@@ -1,4 +1,4 @@
-export const visibilityModes = {
+export const VISIBILITY_MODES = {
   public: {
     name: "public",
     localizableName: "ambersteel.messageVisibilityModes.public"

@@ -1,3 +1,4 @@
+import { ITEM_ORIENTATIONS } from "../../constants/item-orientations.mjs";
 import InventoryIndex from "../../dto/inventory-index.mjs";
 
 /**
@@ -222,7 +223,7 @@ export class ItemGrid {
    * @param {AmbersteelItemItem} item The item to place on grid. 
    * @param {Number} x Column index on grid. 
    * @param {Number} y Row index on grid. 
-   * @param {CONFIG.itemOrientations} orientation Target orientation of the item. 
+   * @param {ITEM_ORIENTATIONS} orientation Target orientation of the item. 
    * @returns {Boolean} 'true', if the item could be added, otherwise, 'false'.
    */
   addAt(item, x, y, orientation) {
@@ -245,7 +246,7 @@ export class ItemGrid {
    * 
    * NOTE: Callers of this function must, in order to persist the change to the db, also call 'synchronize'!
    * @param {AmbersteelItemItem} item 
-   * @param {CONFIG.itemOrientations} orientation Optional. If left undefined, will rotate the item as needed 
+   * @param {ITEM_ORIENTATIONS} orientation Optional. If left undefined, will rotate the item as needed 
    * to fit it on grid. If defined, will only use that orientation. 
    * @returns {Boolean} 'true', if the item could be added, otherwise, 'false'.
    */
@@ -309,7 +310,7 @@ export class ItemGrid {
    * @param {AmbersteelItemItem} item The item to move. 
    * @param {Number} x Column index on grid. 
    * @param {Number} y Row index on grid. 
-   * @param {CONFIG.itemOrientations} orientation Target orientation of the item on grid. 
+   * @param {ITEM_ORIENTATIONS} orientation Target orientation of the item on grid. 
    * @returns {Boolean} 'true', if the given item could be moved, otherwise, 'false'. 
    */
   move(item, x, y, orientation) {
@@ -341,7 +342,7 @@ export class ItemGrid {
    * 
    * NOTE: Callers of this function must, in order to persist the change to the db, also call 'synchronize'!
    * @param {AmbersteelItemItem} item 
-   * @param {CONFIG.itemOrientations} orientation Optional. If not undefined, this is the target orientation. 
+   * @param {ITEM_ORIENTATIONS} orientation Optional. If not undefined, this is the target orientation. 
    * If undefined, will toggle from 'horizontal' to 'vertical', or vice-versa. 
    * @returns {Boolean} 'true', if the given item could be rotated, otherwise, 'false'. 
    */
@@ -354,10 +355,10 @@ export class ItemGrid {
     const index = this.getIndexOf(item);
     
     if (orientation === undefined) {
-      if (index.orientation === game.ambersteel.config.itemOrientations.vertical) {
-        orientation = game.ambersteel.config.itemOrientations.horizontal;
-      } else if (index.orientation === game.ambersteel.config.itemOrientations.horizontal) {
-        orientation = game.ambersteel.config.itemOrientations.vertical;
+      if (index.orientation === ITEM_ORIENTATIONS.vertical) {
+        orientation = ITEM_ORIENTATIONS.horizontal;
+      } else if (index.orientation === ITEM_ORIENTATIONS.horizontal) {
+        orientation = ITEM_ORIENTATIONS.vertical;
       }
     }
     
@@ -403,7 +404,7 @@ export class ItemGrid {
    * Tests if the given item could fit on the item grid and returns the result, 
    * which contains the grid coordinates and orientation of where it would fit. 
    * @param {AmbersteelItemItem} item 
-   * @param {CONFIG.itemOrientations} orientation Optional. If not undefined, will only test with that specific 
+   * @param {ITEM_ORIENTATIONS} orientation Optional. If not undefined, will only test with that specific 
    * orientation. If left undefined, will test every possible orientation in succession. 
    * @returns {GridPlacementTestResult}
    */
@@ -425,11 +426,11 @@ export class ItemGrid {
           if (result.result === true) return result;
         } else {
           // Test with default (vertical) orientation. 
-          let result = this.canItemFitOnGridAt(item, x, y, game.ambersteel.config.itemOrientations.vertical, false);
+          let result = this.canItemFitOnGridAt(item, x, y, ITEM_ORIENTATIONS.vertical, false);
           if (result.result === true) return result;
           
           // Test with rotated (horizontal) orientation. 
-          result = this.canItemFitOnGridAt(item, x, y, game.ambersteel.config.itemOrientations.horizontal, false);
+          result = this.canItemFitOnGridAt(item, x, y, ITEM_ORIENTATIONS.horizontal, false);
           if (result.result === true) return result;
         }
       }
@@ -442,7 +443,7 @@ export class ItemGrid {
    * Tests if the given item could fit on the item grid at the given coordinates and returns the result, 
    * which contains the grid coordinates and orientation of where it would fit. 
    * @param {AmbersteelItemItem} item 
-   * @param {CONFIG.itemOrientations} orientation
+   * @param {ITEM_ORIENTATIONS} orientation
    * @param {Boolean} allowOverlap Optional. If true, allows for item overlap (must be fully enveloped). Default 'false'
    * @returns {GridPlacementTestResult}
    */
@@ -538,7 +539,7 @@ export class ItemGrid {
    * @param {AmbersteelItemItem} item 
    * @param {Number} x 
    * @param {Number} y 
-   * @param {CONFIG.itemOrientations} orientation 
+   * @param {ITEM_ORIENTATIONS} orientation 
    * @private
    */
   _addAt(item, x, y, orientation) {
@@ -567,12 +568,12 @@ export class ItemGrid {
    * 
    * The given shape is not modified, in any way, during this operation. 
    * @param {Object} shape 
-   * @param {CONFIG.itemOrientations} orientation 
+   * @param {ITEM_ORIENTATIONS} orientation 
    */
   _getOrientedShape(shape, orientation = undefined) {
     return {
-      width: orientation === game.ambersteel.config.itemOrientations.horizontal ? shape.height : shape.width,
-      height: orientation === game.ambersteel.config.itemOrientations.horizontal ? shape.width : shape.height
+      width: orientation === ITEM_ORIENTATIONS.horizontal ? shape.height : shape.width,
+      height: orientation === ITEM_ORIENTATIONS.horizontal ? shape.width : shape.height
     };
   }
 }
@@ -585,7 +586,7 @@ export class GridPlacementTestResult {
    * @param {Boolean} result True, if the item can fit. 
    * @param {Number} x Column on grid where the item can fit. 
    * @param {Number} y Row on grid where the itme can fit. 
-   * @param {CONFIG.itemOrientations} orientation Which orientation the item must be in to be able to fit. 
+   * @param {ITEM_ORIENTATIONS} orientation Which orientation the item must be in to be able to fit. 
    * @param {Array<GridOverlapTestResult>} overlapped An array of overlapped items. 
    * In case of {result} being 'true', the overlapped items are completely enveloped. 
    * In case of {result} being 'false, at least one overlapped item isn't completely enveloped. 

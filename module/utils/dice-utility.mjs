@@ -6,6 +6,7 @@ import DicePoolResult from "../dto/dice-pool-result.mjs";
 import RollDataQueryDialogResult from "../dto/roll-query-dialog-result.mjs";
 import { TEMPLATES } from "../templatePreloader.mjs";
 import { DiceOutcomeTypes } from "../dto/dice-outcome-types.mjs";
+import Ruleset from "../ruleset.mjs";
 
 export const DICE_ROLL_SOUND = "../sounds/dice.wav";
 
@@ -47,7 +48,7 @@ export function rollDicePool(ops = {}) {
   const negatives = [];
   for (const result of results) {
     const face = result.result;
-    if (game.ambersteel.isPositive(face)) {
+    if (new Ruleset().isPositive(face)) {
       positives.push(face);
     } else {
       negatives.push(face);
@@ -108,7 +109,7 @@ export async function sendDiceResultToChat(args = {}) {
   // This holds the results to display in the rendered template, including the obstacle value. 
   const resultsForDisplay = [];
   for (const face of combinedResults) {
-    if (game.ambersteel.isPositive(face)) {
+    if (new Ruleset().isPositive(face)) {
       resultsForDisplay.push({ cssClass: "roll-success", content: face });
     } else {
       resultsForDisplay.push({ cssClass: "roll-failure", content: face });

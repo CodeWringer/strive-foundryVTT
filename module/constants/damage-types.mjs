@@ -1,4 +1,4 @@
-export const damageTypes = {
+export const DAMAGE_TYPES = {
   none: {
     name: "none",
     localizableName: "ambersteel.labels.none",
