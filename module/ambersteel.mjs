@@ -1,13 +1,13 @@
 // Import constants.
-import { attributes } from "./constants/attributes.mjs";
-import { damageTypes } from "./constants/damage-types.mjs";
-import { attackTypes } from "./constants/attack-types.mjs";
-import { shieldTypes } from "./constants/shield-types.mjs";
-import { armorTypes } from "./constants/armor-types.mjs";
-import { weaponTypes } from "./constants/weapon-types.mjs";
-import { visibilityModes } from "./constants/visibility-modes.mjs";
-import { injuryStates } from "./constants/injury-states.mjs";
-import { illnessStates } from "./constants/illness-states.mjs";
+import { ATTRIBUTES } from "./constants/attributes.mjs";
+import { DAMAGE_TYPES } from "./constants/damage-types.mjs";
+import { ATTACK_TYPES } from "./constants/attack-types.mjs";
+import { SHIELD_TYPES } from "./constants/shield-types.mjs";
+import { ARMOR_TYPES } from "./constants/armor-types.mjs";
+import { WEAPON_TYPES } from "./constants/weapon-types.mjs";
+import { VISIBILITY_MODES } from "./constants/visibility-modes.mjs";
+import { INJURY_STATES } from "./constants/injury-states.mjs";
+import { ILLNESS_STATES } from "./constants/illness-states.mjs";
 // Import main config.
 import { ambersteel as ambersteelConfig } from "./config.js"
 import * as DialogUtil from "./utils/dialog-utility.mjs";
@@ -24,11 +24,9 @@ import Ruleset from "./ruleset.mjs";
 import { preloadHandlebarsTemplates } from "./templatePreloader.mjs";
 import { getNestedPropertyValue, ensureNestedProperty, setNestedPropertyValue } from "./utils/property-utility.mjs";
 import { findDocument } from "./utils/content-utility.mjs";
-import AdvancementRequirements from "./dto/advancement-requirement.mjs";
 import { TEMPLATES } from "./templatePreloader.mjs";
 import { createUUID } from './utils/uuid-utility.mjs';
 import ChoiceOption from "./dto/choice-option.mjs";
-import { SummedData, SummedDataComponent } from "./dto/summed-data.mjs";
 // Import logging classes. 
 import { BaseLoggingStrategy, LogLevels } from "./logging/base-logging-strategy.mjs";
 import { ConsoleLoggingStrategy } from "./logging/console-logging-strategy.mjs";
@@ -87,128 +85,6 @@ Hooks.once('init', async function() {
      * @type {Object}
      */
     config: ambersteelConfig,
-    /**
-     * Returns the number of dice for a skill test. 
-     * @param {Number} skillValue A skill level. 
-     * @param {Number} relatedAttributeValue Level of the skill related attribute. 
-     * @returns {Object} { totalDiceCount: {Number}, skillDiceCount: {Number}, attributeDiceCount: {Number} }
-     * @deprecated
-     */
-    getSkillTestNumberOfDice: function(skillLevel, relatedAttributeLevel) {
-      this.logger.logWarn("This method is deprecated! Use the `Ruleset`-equivalent, instead!")
-      return new Ruleset().getSkillTestNumberOfDice(skillLevel, relatedAttributeLevel);
-    },
-    /**
-     * Returns the advancement requirements for the given level of an attribute. 
-     * 
-     * If level is equal to 0, will return undefined, instead of actual values. 
-     * This is deliberate, as an attribute at level 0 cannot be advanced (naturally).
-     * @param {Number} level The level for which to get the advancement requirements. 
-     * @returns {AdvancementRequirements}
-     * @deprecated
-     */
-    getAttributeAdvancementRequirements: function(level = 0) {
-      this.logger.logWarn("This method is deprecated! Use the `Ruleset`-equivalent, instead!")
-      return new Ruleset().getAttributeAdvancementRequirements(level);
-    },
-    /**
-     * Returns the advancement requirements for the given level of a skill. 
-     * @param {Number} level The level for which to get the advancement requirements. 
-     * @returns {AdvancementRequirements}
-     * @deprecated
-     */
-    getSkillAdvancementRequirements: function(level = 0) {
-      this.logger.logWarn("This method is deprecated! Use the `Ruleset`-equivalent, instead!")
-      return new Ruleset().getSkillAdvancementRequirements(level);
-    },
-    /**
-     * Returns the name of the attribute group containing the given attribute. 
-     * @param attributeName {String} Internal name of an attribute, e.g. 'arcana'. 
-     * @returns {String} Name of the attribute group, e. g. 'physical'. 
-     * @deprecated
-     */
-    getAttributeGroupName: function(attributeName) {
-      this.logger.logWarn("This method is deprecated! Use the `Ruleset`-equivalent, instead!")
-      return new Ruleset().getAttributeGroupName(attributeName);
-    },
-    /**
-     * Returns true, if the given face/number represents a positive (= success).
-     * @param {String|Number} face A die face to check whether it represents a positive (= success).
-     * @returns {Boolean}
-     * @deprecated
-     */
-    isPositive: function(face) {
-      this.logger.logWarn("This method is deprecated! Use the `Ruleset`-equivalent, instead!")
-      return new Ruleset().isPositive(face);
-    },
-    /**
-     * Returns true, if the given face/number represents a negative (= failure).
-     * @param {String|Number} face A die face to check whether it represents a negative (= failure).
-     * @returns {Boolean}
-     * @deprecated
-     */
-    isNegative: function(face) {
-      this.logger.logWarn("This method is deprecated! Use the `Ruleset`-equivalent, instead!")
-      return new Ruleset().isNegative(face);
-    },
-    /**
-     * Returns true, if the given face/number represents a spell-backfire-causing negative. 
-     * @param {String|Number} face A die face to check whether it represents a spell-backfire-causing negative. 
-     * @returns {Boolean}
-     * @deprecated
-     */
-    causesBackfire: function(face) {
-      this.logger.logWarn("This method is deprecated! Use the `Ruleset`-equivalent, instead!")
-      return new Ruleset().causesBackfire(face);
-    },
-    /**
-     * @deprecated
-     */
-    getCharacterMaximumHp: function(actor) {
-      this.logger.logWarn("This method is deprecated! Use the `Ruleset`-equivalent, instead!")
-      return new Ruleset().getCharacterMaximumHp(actor);
-    },
-    /**
-     * @deprecated
-     */
-    getCharacterMaximumInjuries: function(actor) {
-      this.logger.logWarn("This method is deprecated! Use the `Ruleset`-equivalent, instead!")
-      return new Ruleset().getCharacterMaximumInjuries(actor);
-    },
-    /**
-     * @deprecated
-     */
-    getCharacterMaximumExhaustion: function(actor) {
-      this.logger.logWarn("This method is deprecated! Use the `Ruleset`-equivalent, instead!")
-      return new Ruleset().getCharacterMaximumExhaustion(actor);
-    },
-    /**
-     * @deprecated
-     */
-    getCharacterMaximumInventory: function(actor) {
-      this.logger.logWarn("This method is deprecated! Use the `Ruleset`-equivalent, instead!")
-      return new Ruleset().getCharacterMaximumInventory(actor);
-    },
-    /**
-     * Returns an object containing the maximum magic stamina, as well as the details of how it came to be. 
-     * @param {AmbersteelActor} actor 
-     * @returns {SummedData} The maximum magic stamina of the given actor. 
-     * @deprecated
-     */
-    getCharacterMaximumMagicStamina: function(actor) {
-      this.logger.logWarn("This method is deprecated! Use the `Ruleset`-equivalent, instead!")
-      return new Ruleset().getCharacterMaximumMagicStamina(actor);
-    },
-    /**
-     * Returns true, if the given actor must do toughness tests, whenever they suffer an injury. 
-     * @param actor 
-     * @returns {Boolean} True, if any further injury requires a toughness test. 
-     * @deprecated
-     */
-    isToughnessTestRequired: function(actor) {
-      this.logger.logWarn("This method is deprecated! Use the `Ruleset`-equivalent, instead!")
-      return new Ruleset().isToughnessTestRequired(actor);
-    },
     // TODO: #29 Make debug dependent on build settings. 
     /**
      * 
@@ -276,63 +152,63 @@ Hooks.once('init', async function() {
      * @returns {Array<ChoiceOption>}
      */
     getAttributeOptions: function() {
-      return game.ambersteel.getOptionsFromConfig(attributes);
+      return game.ambersteel.getOptionsFromConfig(ATTRIBUTES);
     },
     /**
      * Returns an array of {ChoiceOption}s. 
      * @returns {Array<ChoiceOption>}
      */
     getInjuryOptions: function() {
-      return game.ambersteel.getOptionsFromConfig(injuryStates);
+      return game.ambersteel.getOptionsFromConfig(INJURY_STATES);
     },
     /**
      * Returns an array of {ChoiceOption}s. 
      * @returns {Array<ChoiceOption>}
      */
     getIllnessOptions: function() {
-      return game.ambersteel.getOptionsFromConfig(illnessStates);
+      return game.ambersteel.getOptionsFromConfig(ILLNESS_STATES);
     },
     /**
      * Returns an array of {ChoiceOption}s. 
      * @returns {Array<ChoiceOption>}
      */
     getDamageTypeOptions: function() {
-      return game.ambersteel.getOptionsFromConfig(damageTypes);
+      return game.ambersteel.getOptionsFromConfig(DAMAGE_TYPES);
     },
     /**
      * Returns an array of {ChoiceOption}s. 
      * @returns {Array<ChoiceOption>}
      */
     getAttackTypeOptions: function() {
-      return game.ambersteel.getOptionsFromConfig(attackTypes);
+      return game.ambersteel.getOptionsFromConfig(ATTACK_TYPES);
     },
     /**
      * Returns an array of {ChoiceOption}s. 
      * @returns {Array<ChoiceOption>}
      */
     getShieldTypeOptions: function() {
-      return game.ambersteel.getOptionsFromConfig(shieldTypes);
+      return game.ambersteel.getOptionsFromConfig(SHIELD_TYPES);
     },
     /**
      * Returns an array of {ChoiceOption}s. 
      * @returns {Array<ChoiceOption>}
      */
     getArmorTypeOptions: function() {
-      return game.ambersteel.getOptionsFromConfig(armorTypes);
+      return game.ambersteel.getOptionsFromConfig(ARMOR_TYPES);
     },
     /**
      * Returns an array of {ChoiceOption}s. 
      * @returns {Array<ChoiceOption>}
      */
     getWeaponTypeOptions: function() {
-      return game.ambersteel.getOptionsFromConfig(weaponTypes);
+      return game.ambersteel.getOptionsFromConfig(WEAPON_TYPES);
     },
     /**
      * Returns an array of {ChoiceOption}s. 
      * @returns {Array<ChoiceOption>}
      */
     getVisibilityOptions: function() {
-      return game.ambersteel.getOptionsFromConfig(visibilityModes);
+      return game.ambersteel.getOptionsFromConfig(VISIBILITY_MODES);
     },
     /**
      * Returns the config item of the given config object, whose name matches with the given name. 

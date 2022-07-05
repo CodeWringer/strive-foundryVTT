@@ -1,4 +1,4 @@
-import { attributeGroups } from "./constants/attribute-groups.mjs";
+import { ATTRIBUTE_GROUPS } from "./constants/attribute-groups.mjs";
 import AdvancementRequirements from "./dto/advancement-requirement.mjs";
 import { SummedData } from "./dto/summed-data.mjs";
 import { SummedDataComponent } from "./dto/summed-data.mjs";
@@ -54,7 +54,7 @@ export default class Ruleset {
    * @returns {String} Name of the attribute group, e. g. 'physical'. 
    */
   getAttributeGroupName(attributeName) {
-    const attGroups = attributeGroups;
+    const attGroups = ATTRIBUTE_GROUPS;
     for (const attGroupName in attGroups) {
       for (const attName in attGroups[attGroupName].attributes) {
         if (attName == attributeName) {
