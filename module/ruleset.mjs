@@ -105,7 +105,7 @@ export default class Ruleset {
   }
 
   getCharacterMaximumExhaustion(actor) {
-    return actor.data.data.attributes.physical.endurance.value * 3;
+    return 1 + (actor.data.data.attributes.physical.endurance.value * 1);
   }
 
   getCharacterMaximumInventory(actor) {
