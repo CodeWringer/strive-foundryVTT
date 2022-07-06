@@ -94,21 +94,49 @@ export default class Ruleset {
     return int === 1 || int === 2;
   }
 
+  /**
+   * Returns the *current* maximum HP of the given actor. 
+   * @param {Actor} actor 
+   * @returns {Number}
+   */
   getCharacterMaximumHp(actor) {
+    if (actor.type == "plain") return 0;
+
     const businessData = actor.data.data;
     const injuryCount = actor.getInjuries().length;
     return (businessData.attributes.physical.toughness.value * 4) - (injuryCount * 2);
   }
 
+  /**
+   * Returns the maximum injury threshold of the given actor. 
+   * @param {Actor} actor 
+   * @returns {Number}
+   */
   getCharacterMaximumInjuries(actor) {
+    if (actor.type == "plain") return 0;
+
     return Math.max(actor.data.data.attributes.physical.toughness.value, 1);
   }
 
+  /**
+   * Returns the maximum exhaustion threshold of the given actor. 
+   * @param {Actor} actor 
+   * @returns {Number}
+   */
   getCharacterMaximumExhaustion(actor) {
-    return actor.data.data.attributes.physical.endurance.value * 3;
+    if (actor.type == "plain") return 0;
+    
+    return 1 + (actor.data.data.attributes.physical.endurance.value * 1);
   }
-
+  
+  /**
+   * Returns the maximum inventory slot size of the given actor. 
+   * @param {Actor} actor 
+   * @returns {Number}
+   */
   getCharacterMaximumInventory(actor) {
+    if (actor.type == "plain") return 0;
+
     return actor.data.data.attributes.physical.strength.value * 6;
   }
 
@@ -118,6 +146,8 @@ export default class Ruleset {
    * @returns {SummedData} The maximum magic stamina of the given actor. 
    */
   getCharacterMaximumMagicStamina(actor) {
+    if (actor.type == "plain") return undefined;
+
     let total = actor.data.data.attributes.mental.arcana.value;
     const components = [];
 
@@ -146,6 +176,8 @@ export default class Ruleset {
    * @returns {Boolean} True, if any further injury requires a toughness test. 
    */
   isToughnessTestRequired(actor) {
+    if (actor.type == "plain") return false;
+
     const businessData = actor.data.data;
     const maxInjuries = businessData.health.maxInjuries;
     const injuryCount = actor.getInjuries().length;
