@@ -38,8 +38,8 @@ export class AmbersteelActorSheet extends ActorSheet {
   static get defaultOptions() {
     return mergeObject(super.defaultOptions, {
       classes: ["ambersteel", "sheet", "actor"],
-      width: 600,
-      height: 700,
+      width: 700,
+      height: 800,
       tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "attributes" }]
     });
   }
