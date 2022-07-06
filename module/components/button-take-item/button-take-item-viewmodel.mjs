@@ -73,7 +73,7 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
 
     let item = this.target;
     if (typeof(this.target) === "String") { // Item id provided. 
-      item = ContentUtil.findItem(this.target);
+      item = ContentUtil.findItem({ id: this.target });
     }
 
     if (item === undefined) {

@@ -2,6 +2,7 @@ import Migrator_0_3_0__0_3_1 from './migrators/migrator_0-3-0_0-3-1.mjs';
 import Migrator_0_3_1__1_0_0 from './migrators/migrator_0-3-1_1-0-0.mjs';
 import Migrator_1_0_0__1_1_0 from './migrators/migrator_1-0-0_1-1-0.mjs';
 import Migrator_1_1_0__1_2_2 from './migrators/migrator_1-1-0_1-2-2.mjs';
+import Migrator_1_2_2__1_3_0 from './migrators/migrator_1-2-2_1-3-0.mjs';
 import VersionCode from './version-code.mjs';
 
 /**
@@ -22,6 +23,7 @@ export default class MigratorInitiator {
     new Migrator_0_3_1__1_0_0(),
     new Migrator_1_0_0__1_1_0(),
     new Migrator_1_1_0__1_2_2(),
+    new Migrator_1_2_2__1_3_0(),
   ]};
 
   /**

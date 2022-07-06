@@ -477,7 +477,7 @@ Hooks.on("renderChatMessage", async function(message, html, data) {
     return;
   }
 
-  const document = await findDocument(documentId);
+  const document = await findDocument({ id: documentId });
 
   if (document === undefined) {
     game.ambersteel.logger.logWarn(`renderChatMessage: Failed to get document represented by chat message`);

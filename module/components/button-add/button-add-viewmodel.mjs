@@ -142,7 +142,7 @@ export default class ButtonAddViewModel extends ButtonViewModel {
       };
       return await Item.create(itemData, { parent: this.target });
     } else {
-      const templateItem = await findItem(templateId, contentCollectionTypes.all);
+      const templateItem = await findItem({ id: templateId }, contentCollectionTypes.all);
       const itemData = {
         name: templateItem !== undefined ? templateItem.name : `New ${this.creationType.capitalize()}`,
         type: templateItem !== undefined ? templateItem.type : this.creationType,
