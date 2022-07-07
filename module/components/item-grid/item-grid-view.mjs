@@ -1,4 +1,3 @@
-import { AmbersteelActor } from "../../documents/actor.mjs";
 import InventoryIndex from "../../dto/inventory-index.mjs";
 import { TEXTURES } from "../../pixi/texture-preloader.mjs";
 import { ItemOnGridView } from "./item-on-grid-view.mjs";
