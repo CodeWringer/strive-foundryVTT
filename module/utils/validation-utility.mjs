@@ -69,6 +69,9 @@ export function isBlankOrUndefined(value) {
   if (value === undefined || value === null)
     return true;
 
+  if (value.trim === undefined)
+    return false;
+
   const trimmed = value.trim() !== undefined ? value.trim() : value;
   return trimmed === "" || trimmed.length <= 0;
 }
