@@ -1,5 +1,5 @@
 import * as PropUtil from "./property-utility.mjs";
-import * as ValUtil from "./validation-utility.mjs";
+import { isFunction, isObject, isArray } from "./validation-utility.mjs";
 
 /**
  * Updates a property on the given document entity, identified via the given path. 
@@ -14,25 +14,50 @@ import * as ValUtil from "./validation-utility.mjs";
  * @async
  */
 export async function updateProperty(document, propertyPath, newValue, render = true) {
-  const parts = PropUtil.splitPropertyPath(propertyPath);
-  const lastPart = parts[parts.length - 1];
+  const propertyNames = PropUtil.splitPropertyPath(propertyPath);
+  // This is the data transfer object (DTO) that is sent to the server. 
+  let dto = Object.create(null);
 
-  if (parts.length == 1) {
-    const updatePayload = { [propertyPath]: toDto(newValue) };
-    await document.update(updatePayload, { render: render });
-  } else {
-    let prop = undefined;
-    const dataDelta = toDto(document.data[parts.shift()]);
+  // Commence building the DTO. 
+  let lastDtoProperty = dto;
+  let lastDocumentProperty = document;
+  for (const propertyName of propertyNames) {
+    lastDocumentProperty = lastDocumentProperty[propertyName];
 
-    for (let part of parts) {
-      if (part == lastPart) {
-        prop ? prop[part] = newValue : dataDelta[part] = newValue;
-      } else {
-        prop = prop ? prop[part] : dataDelta[part];
-      }
+    if (isFunction(lastDocumentProperty)) {
+      throw new Error("Detected a function as part of a given property path - functions cannot be persisted!");
+    } else if (isObject(lastDocumentProperty) === true) {
+      lastDtoProperty[propertyName] = Object.create(null);
+    } else if(isArray(lastDocumentProperty) === true) {
+      game.ambersteel.logger.logWarn("Detected array as part of given property path - consider converting the array to an object, instead, as arrays are very slow to process");
+      lastDtoProperty[propertyName] = lastDocumentProperty;
+    } else { // Not an object or array, so surely it's a primitive?
+      lastDtoProperty[propertyName] = newValue;
+      break;
     }
-    const updatePayload = { data: dataDelta };
-    await document.update(updatePayload, { render: render });
+    lastDtoProperty = lastDtoProperty[propertyName];
+  }
+
+  // FoundryVTT assumes that the data sent is based on `document.data`, meaning that the dto being sent 
+  // **must not** contain a nested `data` property. 
+  dto = unnestData(dto);
+
+  await document.update(dto, { render: render });
+}
+
+/**
+ * If the given object contains a `data` property nested in another property of the same name, 
+ * removes the first `data` and returns a new object without the nested properties. 
+ * @param {Object} dto 
+ * @returns {Object}
+ */
+export function unnestData(dto) {
+  if (dto.data !== undefined && dto.data.data !== undefined) {
+    const newDto = Object.create(null);
+    newDto.data = dto.data.data;
+    return newDto;
+  } else {
+    return dto;
   }
 }
 
@@ -64,79 +89,5 @@ export async function deleteByPropertyPath(document, propertyPath, render = true
     const parentPropertyPath = parts.join(".");
 
     await updateProperty(document, parentPropertyPath, null, render); // Null must be given as the value for a property to be deleted. 
-  }
-}
-
-/**
- * @summary
- * Returns a plain object based on the given object instance. 
- * 
- * @description
- * The returned object is created as a deep copy of the given object and is intended to be 
- * understood as a data transfer object (DTO). This DTO is supposed to be sent over the 
- * wire, to persist to the DB. 
- * 
- * This function also recursively calls itself on all fields of the given object that are 
- * of type object. 
- * @param {Any} obj A complex object, an array (of complex objects) or a primitive value. 
- * @param {Array<String> | undefined} exclude Optional. An array of property names of fields to exclude. 
- * By default, "parent" is excluded. 
- * @returns {Object | Array<Any> | Any} Returns either a plain object, an array (of plain objects or 
- * primitive values) or a primitive value. 
- */
-export function toDto(obj, exclude = ["parent"]) {
-  // Special case of a function being passed returns as undefined. 
-  // A function should **never** end up in a DTO! 
-  if (ValUtil.isFunction(obj)) return undefined;
-
-  // Recurse on array contents. 
-  if (ValUtil.isArray(obj) === true) {
-    const arr = [];
-      for (const item of obj) {
-        const itemDto = toDto(item);
-        if (itemDto !== undefined) {
-          arr.push(itemDto);
-        }
-      }
-    return arr;
-  }
-
-  // Not an object, nor an array, results in immediate return. 
-  // Do **not** recurse on non-objects or non-arrays!
-  if (ValUtil.isObject(obj) !== true) return obj;
-
-  // Check if the object in question implements its own logic to convert itself to a DTO. 
-  if (obj.toDto !== undefined) {
-    // Conversion is now the object's business. 
-    return obj.toDto();
-  } else {
-    // Conversion will have to be done here. 
-
-    const dto = {};
-  
-    // Recurse over every property of the given object. 
-    for (const propertyName in obj) {
-      // Skip any prototype properties. 
-      if (obj.hasOwnProperty(propertyName) !== true) continue;
-
-      if (exclude !== undefined) {
-        if (exclude.find(it => { return it === propertyName; })) {
-          continue;
-        }
-      }
-
-      if (propertyName.toLowerCase().startsWith("parent") === true) {
-        game.ambersteel.logger.logWarn(`Converting property '${propertyName}' to DTO, but name implies potential recursion?`);
-      }
-
-      const property = obj[propertyName];
-      const propertyDto = toDto(property);
-
-      if (propertyDto !== undefined) {
-        dto[propertyName] = propertyDto;
-      }
-    }
-  
-    return dto;
   }
 }
