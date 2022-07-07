@@ -10,10 +10,12 @@ import { TEXTURES } from "../../pixi/texture-preloader.mjs";
 import { queryVisibilityMode } from '../../utils/chat-utility.mjs';
 import { Button } from "../../pixi/button.mjs";
 import { ITEM_ORIENTATIONS } from "../../constants/item-orientations.mjs";
+import GetShowFancyFontUseCase from "../../usecases/get-show-fancy-font-use-case.mjs";
 
-const FONT_FAMILY = "Black-Chancery";
-const TEXT_SETTINGS = {fontFamily : FONT_FAMILY, fontSize: 18, fontWeight: "bolder", fill : 0x191813, align : 'center'};
-const TEXT_SETTINGS_INVERSE = {fontFamily : FONT_FAMILY, fontSize: 18, fontWeight: "bolder", fill : 0xffffff, align : 'center'};
+const FONT_FAMILY_FALLBACK = "sans-serif";
+const FONT_FAMILY_FANCY = "Black-Chancery";
+const TEXT_SETTINGS_FALLBACK = {fontFamily : FONT_FAMILY_FALLBACK, fontSize: 18, fontWeight: "bolder", fill : 0x191813, align : 'center'};
+const TEXT_SETTINGS_FANCY = {fontFamily : FONT_FAMILY_FANCY, fontSize: 18, fontWeight: "bolder", fill : 0x191813, align : 'center'};
 
 export class ItemOnGridView {
   /**
@@ -222,6 +224,8 @@ export class ItemOnGridView {
     const thiz = this;
 
     const pixiApp = this._parent._pixiApp;
+    const useFancyFont = new GetShowFancyFontUseCase().invoke() === true;
+    const textSettings = useFancyFont === true ? TEXT_SETTINGS_FANCY : TEXT_SETTINGS_FALLBACK;
 
     // Background sprite.
     // TODO: Make this work differently, perhaps more like a sprite grid, 
@@ -350,7 +354,7 @@ export class ItemOnGridView {
     this._containerQuantity.addChild(quantitySpacer);
     
     const quantityText = this._item.data.data.maxQuantity > 1 ? `${this._item.data.data.quantity}/${this._item.data.data.maxQuantity}` : this._item.data.data.quantity;
-    this._textQuantity = new DisplayObjectWrap(new PIXI.Text(quantityText, TEXT_SETTINGS), pixiApp);
+    this._textQuantity = new DisplayObjectWrap(new PIXI.Text(quantityText, textSettings), pixiApp);
     this._containerQuantity.addChild(this._textQuantity);
 
     // Spacer.
@@ -376,7 +380,7 @@ export class ItemOnGridView {
     bulkSpacer.width = 3;
     this._containerBulk.addChild(bulkSpacer);
     
-    this._textBulk = new DisplayObjectWrap(new PIXI.Text(this._item.data.data.bulk, TEXT_SETTINGS), pixiApp);
+    this._textBulk = new DisplayObjectWrap(new PIXI.Text(this._item.data.data.bulk, textSettings), pixiApp);
     this._containerBulk.addChild(this._textBulk);
 
     // FOOTER
@@ -387,7 +391,7 @@ export class ItemOnGridView {
     this._contentContainer.addChild(this._contentFooter);
 
     // Title
-    this._textName = new DisplayObjectWrap(new PIXI.Text(this._item.name, TEXT_SETTINGS), pixiApp);
+    this._textName = new DisplayObjectWrap(new PIXI.Text(this._item.name, textSettings), pixiApp);
     this._contentFooter.addChild(this._textName);
   }
 
