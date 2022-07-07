@@ -11,12 +11,8 @@ export default class Migrator_1_2_2__1_3_0 extends AbstractMigrator {
 
   /** @override */
   async _doWork() {
-    return new Promise(async (resolve, reject) => {
-      await this.replaceFighting();
-      await this.replaceSkills();
-
-      resolve();
-    });
+    await this.replaceFighting();
+    await this.replaceSkills();
   }
 
   async replaceFighting() {
