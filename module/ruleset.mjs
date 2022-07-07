@@ -181,7 +181,7 @@ export default class Ruleset {
     const businessData = actor.data.data;
     const maxInjuries = businessData.health.maxInjuries;
     const injuryCount = actor.getInjuries().length;
-    if (injuryCount >= Math.ceil(maxInjuries / 2)) {
+    if (injuryCount > 0 && injuryCount >= Math.floor(maxInjuries / 2)) {
       return true;
     } else {
       return false;
