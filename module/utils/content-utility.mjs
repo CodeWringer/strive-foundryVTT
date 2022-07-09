@@ -250,6 +250,102 @@ export async function getActors(where) {
 }
 
 /**
+ * Returns an actor with the given id. Looks for the actor in the given sources. 
+ * @param {String} id UUID of the actor to fetch. 
+ * @param {Object} where An object whose properties determine which sources to look in. 
+ * @param {Boolean | undefined} where.world If true, includes entries from world. 
+ * @param {Boolean | undefined} where.worldCompendia If true, includes entries from world compendia. 
+ * @param {Boolean | undefined} where.systemCompendia If true, includes entries from system compendia. 
+ * @returns {Array<Document>} 
+ */
+export async function getActor(id, where) {
+  return await getDocument("actor", id, where);
+}
+
+/**
+ * Returns an item with the given id. Looks for the item in the given sources. 
+ * @param {String} id UUID of the item to fetch. 
+ * @param {Object} where An object whose properties determine which sources to look in. 
+ * @param {Boolean | undefined} where.world If true, includes entries from world. 
+ * @param {Boolean | undefined} where.worldCompendia If true, includes entries from world compendia. 
+ * @param {Boolean | undefined} where.systemCompendia If true, includes entries from system compendia. 
+ * @returns {Array<Document>} 
+ */
+export async function getItem(id, where) {
+  return await getDocument("item", id, where);
+}
+
+/**
+ * Returns a document with the given id. Looks for the document in the given sources. 
+ * @param {String} docType Type of the document to fetch. 
+ * * "item" | "actor" 
+ * @param {String} id UUID of the document to fetch. 
+ * @param {Object} where An object whose properties determine which sources to look in. 
+ * @param {Boolean | undefined} where.world If true, includes entries from world. 
+ * @param {Boolean | undefined} where.worldCompendia If true, includes entries from world compendia. 
+ * @param {Boolean | undefined} where.systemCompendia If true, includes entries from system compendia. 
+ * @returns {Array<Document>} 
+ */
+export async function getDocument(docType, id, where) {
+  where = {
+    world: where.world ?? false,
+    worldCompendia: where.worldCompendia ?? false,
+    systemCompendia: where.systemCompendia ?? false,
+  };
+
+  // Look for the document in the world. 
+  if (where.world === true) {
+    let document = undefined;
+    
+    if (docType === "actor") {
+      document = game.actors.get(id);
+    } else if (docType === "item") {
+      document = game.items.get(id);
+    }
+    
+    if (document !== undefined) {
+      return document;
+    }
+  }
+
+  // In case of an item, also look in actors. 
+  if (docType === "item") {
+    const actors = await getActors({ world: true, worldCompendia: true, systemCompendia: true });
+    for (const actor of actors) {
+      const document = actor.items.filter(it => (it.id ?? it._id) === id)[0];
+      if (document !== undefined) {
+        return document;
+        break;
+      }
+    }
+  }
+
+  // Look for the document in compendia. 
+  if (where.worldCompendia === true || where.systemCompendia === true) {
+    for (const pack of game.packs) {
+      // Skip irrelevant packs. 
+      if (docType === "actor" && pack.metadata.type !== "Actor")
+        continue;
+      if (docType === "item" && pack.metadata.type !== "Item")
+        continue;
+      
+      if (pack.metadata.package === "ambersteel" && where.systemCompendia !== true) 
+        continue;
+      if (pack.metadata.package === "world" && where.worldCompendia !== true) 
+        continue;
+
+      // Load the document from the pack, if possible. 
+      const document = await pack.getDocument(id);
+      if (document !== undefined) {
+        return document;
+      }
+    }
+  }
+
+  return undefined;
+}
+
+/**
  * Returns a document matching the given filter from compendia. 
  * @param {Object} filter 
  * @param {String} filter.id 
