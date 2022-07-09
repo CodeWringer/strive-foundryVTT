@@ -19,24 +19,34 @@ export async function updateProperty(document, propertyPath, newValue, render = 
   let dto = {}; // This object **must** be based on 'Object' and not 'null', as otherwise FoundryVTT's merge utility will fail!
 
   // Commence building the DTO. 
-  let lastDtoProperty = dto;
-  let lastDocumentProperty = document;
+  const lastPropertyNameOfPath = propertyNames[propertyNames.length - 1];
+  let dtoProperty = dto;
+  let lastDtoPropertyParentProperty = undefined;
+  let documentProperty = document;
   for (const propertyName of propertyNames) {
-    lastDocumentProperty = lastDocumentProperty[propertyName];
+    documentProperty = documentProperty[propertyName];
 
-    if (isFunction(lastDocumentProperty)) {
+    if (isFunction(documentProperty)) {
       throw new Error("Detected a function as part of a given property path - functions cannot be persisted!");
-    } else if (isObject(lastDocumentProperty) === true) {
-      lastDtoProperty[propertyName] = {}; // This object **must** be based on 'Object' and not 'null', as otherwise FoundryVTT's merge utility will fail!
-    } else if(isArray(lastDocumentProperty) === true) {
+    } else if (isObject(documentProperty) === true) {
+      dtoProperty[propertyName] = {}; // This object **must** be based on 'Object' and not 'null', as otherwise FoundryVTT's merge utility will fail!
+    } else if(isArray(documentProperty) === true) {
       game.ambersteel.logger.logWarn("Detected array as part of given property path - consider converting the array to an object, instead, as arrays are very slow to process");
-      lastDtoProperty[propertyName] = lastDocumentProperty;
+      dtoProperty[propertyName] = documentProperty;
     } else { // Not an object or array, so surely it's a primitive?
-      lastDtoProperty[propertyName] = newValue;
-      break;
+      if (propertyName !== lastPropertyNameOfPath) {
+        throw new Error("Detected a primitive as part of a given property path - property paths may not contain primitives, only end on them!");
+      }
     }
-    lastDtoProperty = lastDtoProperty[propertyName];
+
+    // If this is the final iteration, make sure to keep a reference to the property that is parent to the final property. 
+    if (propertyName === lastPropertyNameOfPath) {
+      lastDtoPropertyParentProperty = dtoProperty;
+    }
+
+    dtoProperty = dtoProperty[propertyName];
   }
+  lastDtoPropertyParentProperty[lastPropertyNameOfPath] = newValue;
 
   // FoundryVTT assumes that the data sent is based on `document.data`, meaning that the dto being sent 
   // **must not** contain a nested `data` property. 
