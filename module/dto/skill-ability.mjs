@@ -10,10 +10,11 @@ import DamageAndType from "./damage-and-type.mjs";
 /**
  * Represents a skill ability. 
  * 
- * Is **always** a child object of a skill item. 
- * @property {String} id UUID of this instance of a skill ability. 
- * @property {AmbersteelItem} parent The owning skill item. 
+ * Is **always** a child object of a skill item document. 
+ * @property {Document} owner The owning document.
+ * @property {String} ownerId UUID of the owning document. 
  * @property {Number} index The index of the skill ability, on the owning skill item. 
+ * @property {String | undefined} id UUID of this instance of a skill ability. 
  * @property {Boolean} isCustom 
  * @property {String} name 
  * @property {String} img 
@@ -28,10 +29,12 @@ import DamageAndType from "./damage-and-type.mjs";
  * @property {CONFIG.ambersteel.attackTypes | undefined} attackType 
  */
 export default class SkillAbility {
+  get ownerId() { return this.getOwningDocument().id; }
+
   /**
-   * @param {AmbersteelItem} args.parent The owning skill item. 
+   * @param {Document} owner The owning document.
    * @param {Number} index The index of the skill ability, on the owning skill item. 
-   * @param {String | undefined} id UUID of this instance of a skill ability. 
+   * @param {String | undefined} id Optional. UUID of this instance of a skill ability. 
    * @param {Boolean | undefined} args.isCustom Optional. 
    * @param {String | undefined} args.name Optional. 
    * @param {String | undefined} args.img Optional. 
@@ -46,9 +49,9 @@ export default class SkillAbility {
    * @param {CONFIG.ambersteel.attackTypes | undefined} args.attackType Optional. 
    */
   constructor(args = {}) {
-    validateOrThrow(args, ["parent", "index"]);
+    validateOrThrow(args, ["owner", "index"]);
     
-    this.parent = args.parent;
+    this.getOwningDocument = () => { return args.owner; };
     this.index = args.index;
     
     this.id = args.id ?? createUUID();
@@ -91,7 +94,7 @@ export default class SkillAbility {
    * @async
    */
   async getChatData() {
-    const actor = this.parent.parent;
+    const actor = this.getOwningDocument().parent;
     const vm = this.getChatViewModel();
 
     const renderedContent = await renderTemplate(this.chatMessageTemplate, {
@@ -118,15 +121,17 @@ export default class SkillAbility {
    * @virtual
    */
   getChatViewModel(overrides = {}) {
+    const owningDocument = this.getOwningDocument();
+
     return new SkillAbilityChatMessageViewModel({
-      id: `${this.parent.id}-${createUUID()}`,
+      id: `${this.ownerId}-${createUUID()}`,
       isEditable: false,
       isSendable: false,
-      isOwner: this.parent.isOwner ?? this.parent.owner ?? false,
+      isOwner: owningDocument.isOwner ?? owningDocument.owner ?? false,
       isGM: game.user.isGM,
-      item: this.parent,
+      item: this.owningDocument,
       skillAbility: this,
-      actor: this.parent.parent,
+      actor: this.owningDocument.parent,
       index: this.index,
       ...overrides,
     });
@@ -151,9 +156,10 @@ export default class SkillAbility {
    * @returns {Boolean} True, if the SkillAbility could be removed. 
    */
   delete() {
-    if (this.parent === undefined) return false;
+    const owningDocument = this.getOwningDocument();
+    if (owningDocument === undefined) return false;
 
-    this.parent.deleteSkillAbilityAt(this.index);
+    owningDocument.deleteSkillAbilityAt(this.index);
 
     return true;
   }
@@ -210,9 +216,10 @@ export default class SkillAbility {
    * @async
    */
   async _updateToDB(render = true) {
-    if (this.parent === undefined) return;
+    const owningDocument = this.getOwningDocument();
+    if (owningDocument === undefined) return;
 
-    const parentAbilities = this.parent.data.data.abilities;
+    const parentAbilities = owningDocument.data.data.abilities;
     const index = parentAbilities.findIndex(it => it.id === this.id);
     const abilitiesArray = [];
     const thisDto = this.toDto();
@@ -224,7 +231,7 @@ export default class SkillAbility {
         abilitiesArray.push(skillAbility.toDto());
       }
     }
-    await this.parent.updateProperty("data.data.abilities", abilitiesArray, render);
+    await owningDocument.updateProperty("data.data.abilities", abilitiesArray, render);
   }
 
   /**

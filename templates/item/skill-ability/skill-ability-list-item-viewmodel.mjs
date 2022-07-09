@@ -115,17 +115,18 @@ export default class SkillAbilityListItemViewModel extends SheetViewModel {
     const pathSkillAbility = `data.data.abilities[${thiz.index}]`;
     const skillAbility = getNestedPropertyValue(this.item, pathSkillAbility);
     
+    const skillAbilityParent = skillAbility.getOwningDocument();
     this.vmBtnRoll = this.createVmBtnRoll({
       id: "vmBtnRoll",
-      target: skillAbility.parent,
+      target: skillAbilityParent,
       propertyPath: undefined,
       primaryChatTitle: game.i18n.localize(skillAbility.name),
       primaryChatImage: skillAbility.img,
-      secondaryChatTitle: game.i18n.localize(skillAbility.parent.name),
-      secondaryChatImage: skillAbility.parent.img,
+      secondaryChatTitle: game.i18n.localize(skillAbilityParent.name),
+      secondaryChatImage: skillAbilityParent.img,
       rollType: "dice-pool",
       callback: "advanceSkillBasedOnRollResult",
-      callbackData: skillAbility.parent.id,
+      callbackData: skillAbility.ownerId,
       actor: thiz.actor,
       isEditable: thiz.isEditable || thiz.isGM,
     });
@@ -250,7 +251,7 @@ export default class SkillAbilityListItemViewModel extends SheetViewModel {
 
       return ChatUtil.sendToChat({
         renderedContent: renderedContent,
-        actor: this.skillAbility.parent.parent,
+        actor: skillAbilityParent.parent,
         sound: DICE_ROLL_SOUND,
         visibilityMode: dialogResult.visibilityMode
       });

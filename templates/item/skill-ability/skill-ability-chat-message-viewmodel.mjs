@@ -95,7 +95,7 @@ export default class SkillAbilityChatMessageViewModel extends ViewModel {
    * @type {String}
    * @readonly
    */
-  get parentSkillName() { return this.skillAbility.parent.name; }
+  get parentSkillName() { return this.skillAbility.getOwningDocument().name; }
 
   /**
    * @type {Boolean}
@@ -107,7 +107,7 @@ export default class SkillAbilityChatMessageViewModel extends ViewModel {
    * @type {String}
    * @readonly
    */
-  get parentSkillImage() { return this.skillAbility.parent.img; }
+  get parentSkillImage() { return this.skillAbility.getOwningDocument().img; }
 
   /**
    * @type {Boolean}

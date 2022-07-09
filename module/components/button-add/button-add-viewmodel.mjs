@@ -90,7 +90,7 @@ export default class ButtonAddViewModel extends ButtonViewModel {
     }
 
     // Special case, because skill abilities aren't items - they're objects contained in an array, 
-    // referenced a property of a skill-item.
+    // referenced by a property of a skill-item.
     if (this.creationType === "skill-ability") {
       if (this.target.type !== "skill") {
         throw new Error("InvalidArgumentException: Cannot add item of type 'skill-ability' to non-'skill'-type item!");

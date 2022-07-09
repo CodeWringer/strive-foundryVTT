@@ -162,7 +162,7 @@ export default class AmbersteelSkillItem extends AmbersteelBaseItem {
    */
   async createSkillAbility(creationData) {
     const newAbility = new SkillAbility({
-      parent: this,
+      owner: this,
       index: this.data.data.abilities.length,
     });
     
@@ -244,7 +244,7 @@ export default class AmbersteelSkillItem extends AmbersteelBaseItem {
 
       const skillAbility = new SkillAbility({
         ...abilityObject,
-        parent: context,
+        owner: context,
         index: i,
         damage: damage,
       });
