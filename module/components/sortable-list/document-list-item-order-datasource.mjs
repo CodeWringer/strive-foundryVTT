@@ -9,32 +9,42 @@ import { validateOrThrow } from "../../utils/validation-utility.mjs";
  * @property {String} args.listName Name of the list whose orders are to be read/written. 
  */
 export default class DocumentListItemOrderDataSource extends AbstractListItemOrderDataSource {
-    get propertyPath() { return `data.data.displayOrders.${this.listName}` }
+  get propertyPath() { return `data.data.displayOrders.${this.listName}` }
 
-    /**
-     * @param {Document} args.propertyOwner The document to read from and write to. 
-     * @param {String} args.listName Name of the list whose orders are to be read/written. E. g. "skills"
-     */
-    constructor(args = {}) {
-        super(args);
-        validateOrThrow(args, ["propertyOwner", "listName"]);
+  /**
+   * @param {Document} args.propertyOwner The document to read from and write to. 
+   * @param {String} args.listName Name of the list whose orders are to be read/written. E. g. "skills"
+   */
+  constructor(args = {}) {
+    super(args);
+    validateOrThrow(args, ["propertyOwner", "listName"]);
 
-        this.propertyOwner = args.propertyOwner;
-        this.listName = args.listName;
+    this.propertyOwner = args.propertyOwner;
+    this.listName = args.listName;
+  }
+
+  /** @override */
+  getAll() {
+    try {
+      return getNestedPropertyValue(this.propertyOwner, this.propertyPath);
+    } catch (error) {
+      return [];
+    }
+  }
+
+  /** @override */
+  setAll(idList, render = true) {
+    // Prevent trying to persist the list item orders, if the property owner doesn't exist in the 
+    // items map of its parent. 
+    // This handles a case whereby an item is deleted from the parent (e. g. a "skill"). In such a case, 
+    // the list item orders can no longer be persisted. 
+    const parent = this.propertyOwner.parent;
+    if (parent !== null && parent !== undefined) {
+      const existsOnParent = parent.items.get(this.propertyOwner.id) !== undefined;
+      if (existsOnParent !== true) return;
     }
 
-    /** @override */
-    getAll() {
-        try {
-            return getNestedPropertyValue(this.propertyOwner, this.propertyPath);
-        } catch (error) {
-            return [];
-        }
-    }
-    
-    /** @override */
-    setAll(idList, render = true) {
-        this.propertyOwner.updateProperty(this.propertyPath, idList, render);
-    }
+    this.propertyOwner.updateProperty(this.propertyPath, idList, render);
+  }
 }
 
