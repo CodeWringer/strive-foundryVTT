@@ -47,7 +47,7 @@ export default class ButtonOpenSheetViewModel extends ButtonViewModel {
   async onClick(html, isOwner, isEditable) {
     if (isEditable !== true) return;
 
-    const toShow = await findDocument(this.target);
+    const toShow = await findDocument({ id: this.target.id ?? this.target, name: this.target.name ?? undefined });
     if (toShow === undefined) {
       game.ambersteel.logger.logWarn(`NullPointerException: Failed to find document '${this.target}' to open sheet`);
       return;

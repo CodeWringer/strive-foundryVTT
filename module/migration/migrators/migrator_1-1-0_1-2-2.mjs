@@ -10,11 +10,5 @@ export default class Migrator_1_1_0__1_2_2 extends AbstractMigrator {
 
   /** @override */
   async _doWork() {
-    return new Promise(async (resolve, reject) => {
-
-      // Do nothing.
-
-      resolve();
-    });
   }
 }

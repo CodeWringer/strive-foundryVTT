@@ -1,0 +1,31 @@
+<section class="fill flex">
+	<div id="section-initial" class="fill flex flex-column">
+		<p><span>{{localize "ambersteel.migration.from"}}</span> <span id="field-migrationFrom"></span></p>
+		<p><span>{{localize "ambersteel.migration.to"}}</span> <span id="field-migrationTo"></span></p>
+		<hr>
+		<p class="hint-card">{{localize "ambersteel.migration.initialHint"}}</p>
+		<h3>{{localize "ambersteel.migration.cancelNote"}}</h3>
+		<div class="flex flex-row">
+			<button id="confirm" class="button">{{localize "ambersteel.labels.confirm"}}</button>
+			<button id="cancel" class="button">{{localize "ambersteel.labels.cancel"}}</button>
+		</div>
+	</div>
+	<div id="section-progress" class="fill flex flex-center hidden">
+		<span class="flex flex-column">
+			<div class="flex flex-center">
+				<i class="fas fa-spinner spin"></i>
+			</div>
+			<p>{{localize "ambersteel.migration.inProgress"}}</p>
+		</span>
+	</div>
+	<div id="section-error" class="fill hidden">
+		<h2>{{localize "ambersteel.migration.error"}}</h2>
+		<p class="hint-card">{{localize "ambersteel.migration.errorHint"}} <a href="https://github.com/CodeWringer/ambersteel-foundryVTT/issues">https://github.com/CodeWringer/ambersteel-foundryVTT/issues</a></p>
+		<p id="field-error"></p>
+	</div>
+	<div id="section-completion" class="fill hidden">
+		<h2>{{localize "ambersteel.migration.completion"}}</h2>
+		<p class="hint-card">{{localize "ambersteel.migration.completionHint"}}</p>
+		<button id="ok" class="button">{{localize "ambersteel.labels.ok"}}</button>
+	</div>
+</section>

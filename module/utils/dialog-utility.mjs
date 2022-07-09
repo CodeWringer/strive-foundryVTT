@@ -5,10 +5,14 @@ import { getElementValue, setSelectedOptionByValue } from './sheet-utility.mjs';
 /**
  * Shows a dialog to the user and returns a promise with the result of the user interaction. 
  * @param {String} args.dialogTemplate Path to a hbs template. 
- * @param {String|undefined} args.localizableTitle A localization String for the dialog title. 
- * @param {Function|undefined} args.render A function to call during render of the dialog. 
+ * @param {String | undefined} args.localizableTitle A localization String for the dialog title. 
+ * @param {Function | undefined} args.render A function to call during render of the dialog. 
  * Receives the DOM of the dialog as its argument. 
  * Can be used for custom rendering logic like hiding certain inputs based on the state of another input. 
+ * @param {Boolean | undefined} args.showConfirmButton If true, will display a confirmation button. 
+ * * Default `true`. 
+ * @param {Boolean | undefined} args.showCancelButton If true, will display a cancellation button. 
+ * * Default `true`. 
  * @param {Object} dialogData An arbitrary data object which represents the context to use when rendering the dialog template. 
  * @returns {Promise<DialogResult>} Resolves, when the dialog is closed. 
  *          The returned object has the properties: 'confirmed' and 'html'. 
@@ -20,6 +24,8 @@ export async function showDialog(args = {}, dialogData) {
         dialogTemplate: undefined,
         localizableTitle: "",
         render: html => {},
+        showConfirmButton: true,
+        showCancelButton: true,
         ...args
     };
     const mergedDialogData = {
