@@ -16,7 +16,7 @@ import { isFunction, isObject, isArray } from "./validation-utility.mjs";
 export async function updateProperty(document, propertyPath, newValue, render = true) {
   const propertyNames = PropUtil.splitPropertyPath(propertyPath);
   // This is the data transfer object (DTO) that is sent to the server. 
-  let dto = Object.create(null);
+  let dto = {}; // This object **must** be based on 'Object' and not 'null', as otherwise FoundryVTT's merge utility will fail!
 
   // Commence building the DTO. 
   let lastDtoProperty = dto;
@@ -27,7 +27,7 @@ export async function updateProperty(document, propertyPath, newValue, render = 
     if (isFunction(lastDocumentProperty)) {
       throw new Error("Detected a function as part of a given property path - functions cannot be persisted!");
     } else if (isObject(lastDocumentProperty) === true) {
-      lastDtoProperty[propertyName] = Object.create(null);
+      lastDtoProperty[propertyName] = {}; // This object **must** be based on 'Object' and not 'null', as otherwise FoundryVTT's merge utility will fail!
     } else if(isArray(lastDocumentProperty) === true) {
       game.ambersteel.logger.logWarn("Detected array as part of given property path - consider converting the array to an object, instead, as arrays are very slow to process");
       lastDtoProperty[propertyName] = lastDocumentProperty;
@@ -53,7 +53,7 @@ export async function updateProperty(document, propertyPath, newValue, render = 
  */
 export function unnestData(dto) {
   if (dto.data !== undefined && dto.data.data !== undefined) {
-    const newDto = Object.create(null);
+    const newDto = {}; // This object **must** be based on 'Object' and not 'null', as otherwise FoundryVTT's merge utility will fail!
     newDto.data = dto.data.data;
     return newDto;
   } else {
