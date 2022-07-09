@@ -324,7 +324,7 @@
       "add": "Add mutation"
     },
     "rules": {
-      "hintToughnessTestRequired": "Half of the maximum number of injuries reached. Any further damage incurred requires a toughness test at Ob of injuries*2 to be passed. If failed, suffer +1 exhaustion."
+      "hintToughnessTestRequired": "Half of the maximum number of injuries (rounded down) reached. Any further damage incurred requires a toughness test with Ob as high as the number of injuries to be passed. If failed, suffer +1 exhaustion."
     },
     "settings": {
       "fancyFont": {
