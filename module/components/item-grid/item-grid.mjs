@@ -154,12 +154,26 @@ export class ItemGrid {
     const itemGrid = new ItemGrid(columnCount, capacity, document);
     // Any items that can not fit on grid, will be added to this list. 
     const itemsDropped = [];
+    // Any item indices that cause errors on load are added to this list. 
+    const itemsError = [];
 
     // Place existing items on grid.  
     const indices = document.data.data.assets.gridIndices;
     for (const index of indices) {
       // Get the item from the context document. 
       const item = document.items.get(index.id);
+
+      if (item === undefined) {
+        game.ambersteel.logger.logWarn(`Failed to get an item with id '${index.id}' from parent document with id '${document.id}'! Removing it from the index...`);
+        
+        itemsError.push(index.id);
+
+        itemGrid._removeFromIndex(index);
+        itemGrid._removeFromGrid(index);
+
+        continue;
+      }
+
       // Try to add the item, at its original location. 
       const canItFit = itemGrid.addAt(item, index.x, index.y, index.orientation);
       if (canItFit !== true) {
@@ -182,7 +196,7 @@ export class ItemGrid {
       }
     }
 
-    return new ItemGridLoadResult(itemGrid, itemsDropped);
+    return new ItemGridLoadResult(itemGrid, itemsDropped, itemsError);
   }
 
   /**
@@ -279,26 +293,9 @@ export class ItemGrid {
       return false;
     }
 
-    // Remove from index. 
-    const index = this._indices.indexOf(itemIndex);
-    this._indices.splice(index, 1);
-
-    // Remove from grid. 
-    const x = itemIndex.x;
-    const y = itemIndex.y;
-    const shape = item.data.data.shape;
-    const right = x + shape.width - 1;
-    const bottom = y + shape.height - 1;
-    
-    for (let iX = x; iX <= right; iX++) {
-      for (let iY = y; iY <= bottom; iY++) {
-        this._grid[iX][iY] = null;
-      }
-    }
-
-    // Remove from list.
-    const indexItem = this._items.indexOf(item);
-    this._items.splice(indexItem, 1);
+    this._removeFromIndex(itemIndex);
+    this._removeFromGrid(itemIndex);
+    this._removeFromList(item);
 
     return true;
   }
@@ -533,6 +530,46 @@ export class ItemGrid {
   }
 
   /**
+   * Internal method to remove an index from the list of indices. 
+   * @param {InventoryIndex} itemIndex 
+   * @private
+   */
+  _removeFromIndex(itemIndex) {
+    const index = this._indices.indexOf(itemIndex);
+    if (index < 0) return; // The given index does not belong to this item grid. 
+
+    this._indices.splice(index, 1);
+  }
+  
+  /**
+   * Internal method to remove an index from the grid. 
+   * @param {InventoryIndex} itemIndex 
+   * @private
+   */
+  _removeFromGrid(itemIndex) {
+    const x = itemIndex.x;
+    const y = itemIndex.y;
+    const right = x + itemIndex.w - 1;
+    const bottom = y + itemIndex.h - 1;
+    
+    for (let iX = x; iX <= right; iX++) {
+      for (let iY = y; iY <= bottom; iY++) {
+        this._grid[iX][iY] = null;
+      }
+    }
+  }
+
+  /**
+   * Internal method to remove an index from the list. 
+   * @param {AmbersteelItemItem} item 
+   * @private
+   */
+  _removeFromList(item) {
+    const indexItem = this._items.indexOf(item);
+    this._items.splice(indexItem, 1);
+  }
+
+  /**
    * Places an item at the given position, with the given orientation, if possible. 
    * 
    * Warning: will override any potentially overlapped items! Intended for internal use, only!
@@ -622,9 +659,11 @@ export class ItemGridLoadResult {
   /**
    * @param {ItemGrid} itemGrid The loaded and instantiated {ItemGrid}. 
    * @param {Array<AmbersteelItemItem>} itemsDropped A list of items which couldn't be fit onto the grid. 
+   * @param {Array<String>} itemsError A list of items that caused errors. 
    */
-  constructor(itemGrid, itemsDropped) {
+  constructor(itemGrid, itemsDropped, itemsError) {
     this.itemGrid = itemGrid;
     this.itemsDropped = itemsDropped;
+    this.itemsError = itemsError;
   }
 }

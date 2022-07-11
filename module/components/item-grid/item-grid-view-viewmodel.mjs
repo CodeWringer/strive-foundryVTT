@@ -128,6 +128,9 @@ export default class ItemGridViewViewModel extends InputViewModel {
       });
 
       await this._itemGrid.synchronizeTo(actor, true);
+    } else if (itemGridLoadResult.itemsError.length > 0) {
+      // Synchronizing here should purge any bad indices. 
+      await this._itemGrid.synchronizeTo(actor, true);
     }
   }
 }

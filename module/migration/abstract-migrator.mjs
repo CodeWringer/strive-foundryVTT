@@ -103,14 +103,14 @@ export default class AbstractMigrator {
     const actors = await getActors({ world: true, worldCompendia: true });
 
     // Prepare a map of the property names for the property values to keep. 
-    const propertyNames = new Map();
-    propertyNames.set("value", "value");
-    propertyNames.set("successes", "successes");
-    propertyNames.set("failures", "failures");
+    const propertiesToKeep = new Map();
+    propertiesToKeep.set("value", "value");
+    propertiesToKeep.set("successes", "successes");
+    propertiesToKeep.set("failures", "failures");
 
     // Do the replacement for every actor. 
     for (const actor of actors) {
-      this.replaceMatchingDocumentsWithPackData(actor, "skill", packs, propertyNames);
+      this.replaceMatchingDocumentsWithPackData(actor, "skill", packs, propertiesToKeep);
     }
   }
 
@@ -128,12 +128,12 @@ export default class AbstractMigrator {
     const actors = await getActors({ world: true, worldCompendia: true });
 
     // Prepare a map of the property names for the property values to keep. 
-    const propertyNames = new Map();
-    propertyNames.set("quantity", "quantity");
+    const propertiesToKeep = new Map();
+    propertiesToKeep.set("quantity", "quantity");
 
     // Do the replacement for every actor. 
     for (const actor of actors) {
-      this.replaceMatchingDocumentsWithPackData(actor, "item", packs, propertyNames);
+      this.replaceMatchingDocumentsWithPackData(actor, "item", packs, propertiesToKeep);
     }
   }
 
