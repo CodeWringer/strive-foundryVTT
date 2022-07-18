@@ -19,7 +19,7 @@ export default class AmbersteelSetting {
     this.hint = args.hint;
     this.scope = args.scope;
     this.config = args.config ?? false;
-    this.default = args.config;
+    this.default = args.default;
     this.type = args.type ?? String;
   }
 }
