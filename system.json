@@ -22,85 +22,85 @@
       "name": "armors",
       "label": "Armors",
       "path": "packs/armors.db",
-      "entity": "Item"
+      "type": "Item"
     },
     {
       "name": "bestiary-human",
       "label": "Bestiary (Human)",
       "path": "packs/bestiary-human.db",
-      "entity": "Actor"
+      "type": "Actor"
     },
     {
       "name": "bestiary-undead",
       "label": "Bestiary (Undead)",
       "path": "packs/bestiary-undead.db",
-      "entity": "Actor"
+      "type": "Actor"
     },
     {
       "name": "fatecards",
       "label": "Fate Cards",
       "path": "packs/fate-cards.db",
-      "entity": "Item"
+      "type": "Item"
     },
     {
       "name": "illnesses",
       "label": "Illnessess",
       "path": "packs/illnesses.db",
-      "entity": "Item"
+      "type": "Item"
     },
     {
       "name": "injuries",
       "label": "Injuries",
       "path": "packs/injuries.db",
-      "entity": "Item"
+      "type": "Item"
     },
     {
       "name": "burn-injuries",
       "label": "Burn Injuries",
       "path": "packs/burn-injuries.db",
-      "entity": "Item"
+      "type": "Item"
     },
     {
       "name": "shields",
       "label": "Shields",
       "path": "packs/shields.db",
-      "entity": "Item"
+      "type": "Item"
     },
     {
       "name": "skills",
       "label": "Skills",
       "path": "packs/skills.db",
-      "entity": "Item"
+      "type": "Item"
     },
     {
       "name": "supplies-and-stuff",
       "label": "Supplies and Stuff",
       "path": "packs/supplies-and-stuff.db",
-      "entity": "Item"
+      "type": "Item"
     },
     {
       "name": "valuables",
       "label": "Valuables",
       "path": "packs/valuables.db",
-      "entity": "Item"
+      "type": "Item"
     },
     {
       "name": "weapons",
       "label": "Weapons",
       "path": "packs/weapons.db",
-      "entity": "Item"
+      "type": "Item"
     },
     {
       "name": "mutations",
       "label": "Mutations",
       "path": "packs/mutations.db",
-      "entity": "Item"
+      "type": "Item"
     },
     {
       "name": "rolltables",
       "label": "RollTables",
       "path": "packs/rolltables.db",
-      "entity": "RollTable"
+      "type": "RollTable"
     }
   ],
   "languages": [
