@@ -46,15 +46,16 @@ async function transpileSass() {
   console.log(`Ensuring css dir '${cssDir}'`);
   await fs.ensureDir(cssDir);
 
-  const css = compile("scss/ambersteel.scss").css;
-  const cssDestPath = pathUtil.join(cssDir, "ambersteel.css")
+  const scssFileName = "ambersteel";
+  const css = compile(`scss/${scssFileName}.scss`).css;
+  const cssDestPath = pathUtil.join(cssDir, `${scssFileName}.css`)
   await writeFile(cssDestPath, css);
 }
 
 /**
  * Cleans the build destination directory. 
  * 
- * For use before a new build is made, to ensure the build destination directly is empty. 
+ * For use before a new build is made, to ensure the build destination directory is empty. 
  * This avoids packing any unnecessary artifacts. 
  * @async
  */
@@ -111,6 +112,8 @@ async function ensureTempDir() {
 
 /**
  * These file paths will be ignored during copy. 
+ * 
+ * NOTE: These are **regular expressions**! 
  */
 const copyExcludes = [
   ".git",
