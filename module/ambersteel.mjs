@@ -13,6 +13,7 @@ import { ambersteel as ambersteelConfig } from "./config.js"
 import * as DialogUtil from "./utils/dialog-utility.mjs";
 import MigratorInitiator from "./migration/migrator-initiator.mjs";
 import MigratorDialog from "./migration/presentation/migrator-dialog.mjs";
+import LoadDebugSettingUseCase from "./usecases/load-debug-setting-use-case.mjs";
 // Import document classes.
 import { AmbersteelActor } from "./documents/actor.mjs";
 import { AmbersteelItem } from "./documents/item.mjs";
@@ -22,10 +23,8 @@ import { AmbersteelItemSheet } from "./sheets/item-sheet.mjs";
 // Import helper/utility classes and constants.
 import Ruleset from "./ruleset.mjs";
 import { preloadHandlebarsTemplates } from "./templatePreloader.mjs";
-import { getNestedPropertyValue, ensureNestedProperty, setNestedPropertyValue } from "./utils/property-utility.mjs";
 import { findDocument } from "./utils/content-utility.mjs";
 import { TEMPLATES } from "./templatePreloader.mjs";
-import { createUUID } from './utils/uuid-utility.mjs';
 import ChoiceOption from "./dto/choice-option.mjs";
 // Import logging classes. 
 import { BaseLoggingStrategy, LogLevels } from "./logging/base-logging-strategy.mjs";
@@ -86,17 +85,16 @@ Hooks.once('init', async function() {
      * @type {Object}
      */
     config: ambersteelConfig,
-    // TODO: #29 Make debug dependent on build settings. 
     /**
      * 
      * @type {BaseLoggingStrategy}
      */
-    logger: new ConsoleLoggingStrategy(LogLevels.DEBUG),
+    logger: new ConsoleLoggingStrategy(LogLevels.ERROR),
     /**
      * @type {Boolean}
      * @private
      */
-    _debug: true,
+    _debug: false,
     /**
      * @type {Boolean}
      */
@@ -107,7 +105,7 @@ Hooks.once('init', async function() {
     set debug(value) {
       this._debug = value;
       if (value === true) {
-        this.logger = new ConsoleLoggingStrategy(LogLevels.DEBUG);
+        this.logger = new ConsoleLoggingStrategy(LogLevels.VERBOSE);
       }
     },
     /**
@@ -344,6 +342,9 @@ Handlebars.registerHelper('ifThenElse', function(condition, thenValue, elseValue
 Hooks.once("ready", async function() {
   // Settings initialization.
   new AmbersteelUserSettings().ensureAllSettings();
+
+  // Debug mode setting. 
+  game.ambersteel.debug = new LoadDebugSettingUseCase().invoke();
 
   // Migration check. 
   const migrator = new MigratorInitiator();

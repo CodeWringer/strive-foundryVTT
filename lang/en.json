@@ -538,6 +538,10 @@
       "fancyFont": {
         "label": "Fancy font",
         "hint": "Toggles the 'fancy' font off or on."
+      },
+      "toggleDebug": {
+        "label": "Debug Mode",
+        "hint": "Toggles debug mode on - increases log verbosity, at the cost of performance."
       }
     }
   }
