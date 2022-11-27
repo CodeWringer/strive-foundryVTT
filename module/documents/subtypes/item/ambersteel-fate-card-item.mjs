@@ -55,7 +55,7 @@ export default class AmbersteelFateCardItem extends AmbersteelBaseItem {
       actor: actor, 
       sound: "../sounds/notify.wav",
       viewModel: vm,
-      flavor: game.i18n.localize("ambersteel.labels.fateCard"),
+      flavor: game.i18n.localize("ambersteel.character.beliefSystem.fateSystem.fateCard.label"),
     });
   }
 

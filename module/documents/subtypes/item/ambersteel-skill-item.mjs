@@ -72,7 +72,7 @@ export default class AmbersteelSkillItem extends AmbersteelBaseItem {
       actor: actor, 
       sound: "../sounds/notify.wav",
       viewModel: vm,
-      flavor: game.i18n.localize("ambersteel.labels.skill"),
+      flavor: game.i18n.localize("ambersteel.character.skill.singular"),
     });
   }
 

@@ -116,8 +116,8 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
           updateProperty(item, "data.data.isOnPerson", true);
         } else {
           DialogUtil.showPlainDialog({
-            localizableTitle: game.i18n.localize("ambersteel.dialog.titleInventoryFull"),
-            localizedContent: game.i18n.localize("ambersteel.dialog.contentInventoryFull")
+            localizableTitle: game.i18n.localize("ambersteel.character.asset.carryingCapacity.dialog.titleInventoryFull"),
+            localizedContent: game.i18n.localize("ambersteel.character.asset.carryingCapacity.dialog.contentInventoryFull")
           });
         }
       }

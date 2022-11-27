@@ -58,7 +58,7 @@ export default class SkillAbility {
     this.type = "skill-ability";
     this.isCustom = args.isCustom ?? false;
 
-    this.name = args.name ?? game.i18n.localize("ambersteel.labels.nameOfNewSkillAbility");
+    this.name = args.name ?? game.i18n.localize("ambersteel.character.skill.ability.newDefaultName");
     this.img = args.img ?? "icons/svg/book.svg";
     this.description = args.description ?? "";
     this.requiredLevel = args.requiredLevel ?? 0;

@@ -44,14 +44,14 @@ export async function showDialog(args = {}, dialogData) {
             buttons: {
                 confirm: {
                     icon: '<i class="fas fa-check"></i>',
-                    label: game.i18n.localize("ambersteel.labels.confirm"),
+                    label: game.i18n.localize("ambersteel.general.confirm"),
                     callback: () => {
                         mergedDialogData.confirmed = true;
                     }
                 },
                 cancel: {
                     icon: '<i class="fas fa-times"></i>',
-                    label: game.i18n.localize("ambersteel.labels.cancel"),
+                    label: game.i18n.localize("ambersteel.general.cancel"),
                     callback: () => {}
                 }
             },
@@ -96,14 +96,14 @@ export async function showConfirmationDialog(args = {}) {
             buttons: {
                 confirm: {
                     icon: '<i class="fas fa-check"></i>',
-                    label: game.i18n.localize("ambersteel.labels.confirm"),
+                    label: game.i18n.localize("ambersteel.general.confirm"),
                     callback: () => {
                         mergedDialogData.confirmed = true;
                     }
                 },
                 cancel: {
                     icon: '<i class="fas fa-times"></i>',
-                    label: game.i18n.localize("ambersteel.labels.cancel"),
+                    label: game.i18n.localize("ambersteel.general.cancel"),
                     callback: () => {}
                 }
             },
@@ -146,7 +146,7 @@ export async function showPlainDialog(args = {}) {
             buttons: {
                 ok: {
                     icon: '<i class="fas fa-check"></i>',
-                    label: game.i18n.localize("ambersteel.labels.ok"),
+                    label: game.i18n.localize("ambersteel.general.ok"),
                     callback: () => {}
                 }
             },
