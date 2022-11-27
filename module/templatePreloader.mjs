@@ -6,7 +6,7 @@ export const TEMPLATES = {
   COMPONENT_INPUT_NUMBER_SPINNER: "systems/ambersteel/module/components/input-number-spinner/input-number-spinner.hbs",
   COMPONENT_INPUT_TEXTAREA: "systems/ambersteel/module/components/input-textarea/input-textarea.hbs",
   COMPONENT_INPUT_RADIO_BUTTON_GROUP: "systems/ambersteel/module/components/input-radio-button-group/input-radio-button-group.hbs",
-  COMPONENT_INPUT_LABEL: "systems/ambersteel/templates/components/input-label.hbs",
+  COMPONENT_INPUT_LABEL: "systems/ambersteel/module/components/label/label.hbs",
   COMPONENT_INPUT_ITEM_GRID_VIEW: "systems/ambersteel/module/components/item-grid/item-grid-view.hbs",
   COMPONENT_INPUT_IMAGE: "systems/ambersteel/module/components/input-image/input-image.hbs",
   COMPONENT_INPUT_RICH_TEXT: "systems/ambersteel/module/components/input-rich-text/input-rich-text.hbs",

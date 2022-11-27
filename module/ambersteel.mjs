@@ -38,6 +38,7 @@ import './components/sheet-viewmodel.mjs';
 import ViewModelCollection from './utils/viewmodel-collection.mjs';
 // Import components. 
 import './components/input-viewmodel.mjs';
+import './components/label/label-viewmodel.mjs';
 import './components/input-textfield/input-textfield-viewmodel.mjs';
 import './components/input-dropdown/input-dropdown-viewmodel.mjs';
 import './components/input-number-spinner/input-number-spinner-viewmodel.mjs';
@@ -335,13 +336,6 @@ Handlebars.registerHelper('ifThenElse', function(condition, thenValue, elseValue
     return elseValue;
   }
 });
-
-/* -------------------------------------------- */
-/*  Handlebars Partials                         */
-/* -------------------------------------------- */
-
-// Input components
-Handlebars.registerPartial('inputLabel', `{{#> "${TEMPLATES.COMPONENT_INPUT_LABEL}"}}{{/"${TEMPLATES.COMPONENT_INPUT_LABEL}"}}`);
 
 /* -------------------------------------------- */
 /*  Hooks                                       */
