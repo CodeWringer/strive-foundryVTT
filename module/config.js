@@ -108,8 +108,8 @@ ambersteel.shieldTypes = {
 ambersteel.damageTypes = {
     none: {
         name: "none",
-        localizableName: "ambersteel.labels.none",
-        localizableAbbreviation: "ambersteel.labels.noneAbbreviation"
+        localizableName: "ambersteel.none.label",
+        localizableAbbreviation: "ambersteel.none.abbreviation"
     },
     burning: {
         name: "burning",
@@ -156,8 +156,8 @@ ambersteel.damageTypes = {
 ambersteel.attackTypes = {
     none: {
         name: "none",
-        localizableName: "ambersteel.labels.none",
-        localizableAbbreviation: "ambersteel.labels.noneAbbreviation"
+        localizableName: "ambersteel.none.label",
+        localizableAbbreviation: "ambersteel.none.abbreviation"
     },
     singleTarget: {
         name: "singleTarget",
