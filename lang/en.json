@@ -114,6 +114,7 @@
         },
         "bulk": "Bulk",
         "stats": "General Assets Stats",
+        "singular": "Asset",
         "onPerson": "Possessions (on person)",
         "takeToPerson": "Take (to person)",
         "remote": "Property",
