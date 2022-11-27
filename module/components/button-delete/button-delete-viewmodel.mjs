@@ -42,7 +42,7 @@ export default class ButtonDeleteViewModel extends ButtonViewModel {
 
     this.withDialog = args.withDialog ?? false;
     this.propertyPath = args.propertyPath;
-    this.localizableTitle = args.localizableTitle ?? "ambersteel.labels.delete";
+    this.localizableTitle = args.localizableTitle ?? "ambersteel.general.delete.label";
   }
 
   /**
@@ -61,7 +61,7 @@ export default class ButtonDeleteViewModel extends ButtonViewModel {
 
     if (this.withDialog === true) {
       const dialogResult = await showConfirmationDialog({
-        localizableTitle: "ambersteel.dialog.titleConfirmDeletionQuery"
+        localizableTitle: "ambersteel.general.delete.query"
       });
       if (dialogResult.confirmed !== true) return;
     }

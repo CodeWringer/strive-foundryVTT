@@ -144,7 +144,7 @@ export default class SkillAbilityListItemViewModel extends SheetViewModel {
       id: "vmTfName",
       propertyOwner: skillAbility,
       propertyPath: "name",
-      placeholder: "ambersteel.labels.name",
+      placeholder: "ambersteel.general.name",
     });
     this.vmBtnDelete = this.createVmBtnDelete({
       id: "vmBtnDelete",
@@ -192,7 +192,7 @@ export default class SkillAbilityListItemViewModel extends SheetViewModel {
       id: "vmBtnRollDamage",
       parent: thiz,
       isEditable: thiz.isEditable,
-      localizableTitle: "ambersteel.labels.roll",
+      localizableTitle: "ambersteel.roll.doRoll",
     });
     this.vmBtnRollDamage.onClick = async (html, isOwner, isEditable) => {
       const dialogResult = await ChatUtil.queryVisibilityMode();
@@ -402,7 +402,7 @@ class DamageAndTypeViewModel extends SheetViewModel {
       id: "vmBtnDelete",
       parent: thiz,
       isEditable: thiz.isEditable,
-      localizableTitle: "ambersteel.labels.delete",
+      localizableTitle: "ambersteel.character.skill.ability.damage.delete",
     });
     this.vmBtnDelete.onClick = (html, isOwner, isEditable) => {
       const damage = thiz.skillAbility.damage;

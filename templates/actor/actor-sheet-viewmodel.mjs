@@ -93,7 +93,7 @@ export default class ActorSheetViewModel extends SheetViewModel {
       id: "vmTfName",
       propertyOwner: thiz.actor,
       propertyPath: "name",
-      placeholder: "ambersteel.labels.name",
+      placeholder: "ambersteel.general.name",
     });
     this.vmImg = this.createVmImg({
       id: "vmImg",

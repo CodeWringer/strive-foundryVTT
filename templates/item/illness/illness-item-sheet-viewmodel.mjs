@@ -39,7 +39,7 @@ export default class IllnessItemSheetViewModel extends SheetViewModel {
       id: "tf-name",
       propertyOwner: thiz.item,
       propertyPath: "name",
-      placeholder: "ambersteel.labels.name",
+      placeholder: "ambersteel.general.name",
     });
     this.vmBtnSendToChat = this.createVmBtnSendToChat({
       id: "btn-send-to-chat",

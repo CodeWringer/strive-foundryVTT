@@ -67,7 +67,7 @@ export default class ButtonToggleVisibilityViewModel extends ButtonViewModel {
 
     this._visGroup = args.visGroup ?? createUUID();
     this._toggleSelf = args.toggleSelf ?? false;
-    this.localizableTitle = args.localizableTitle ?? "ambersteel.labels.toggleVisibility";
+    this.localizableTitle = args.localizableTitle ?? "ambersteel.general.toggleVisibility";
   }
 
   /**

@@ -27,19 +27,19 @@ cssClass: {undefined | String}
     <nav class="sheet-tabs tabs flex flex-justify" id="nav-sheet-tabs" data-group="primary">
       {{#if (eq viewModel.isPlain false)}}
         {{!-- Default tab is specified in actor-sheet.mjs --}}
-        <a class="item flex flex-center flex-grow{{#if viewModel.showFancyFont}} fancy-font{{/if}}" data-tab="attributes"><div>{{localize "ambersteel.labels.tabAttributes"}}</div></a>
-        <a class="item flex flex-center flex-grow{{#if viewModel.showFancyFont}} fancy-font{{/if}}" data-tab="skills"><div>{{localize "ambersteel.labels.tabSkills"}}</div></a>
+        <a class="item flex flex-center flex-grow{{#if viewModel.showFancyFont}} fancy-font{{/if}}" data-tab="attributes"><div>{{localize "ambersteel.character.sheet.tab.attributes"}}</div></a>
+        <a class="item flex flex-center flex-grow{{#if viewModel.showFancyFont}} fancy-font{{/if}}" data-tab="skills"><div>{{localize "ambersteel.character.sheet.tab.skills"}}</div></a>
         {{#if viewModel.isPC }}
-          <a class="item flex flex-center flex-grow{{#if viewModel.showFancyFont}} fancy-font{{/if}}" data-tab="beliefs-fate"><div>{{localize "ambersteel.labels.tabBeliefsFate"}}</div></a>
+          <a class="item flex flex-center flex-grow{{#if viewModel.showFancyFont}} fancy-font{{/if}}" data-tab="beliefs-fate"><div>{{localize "ambersteel.character.sheet.tab.beliefsFate"}}</div></a>
         {{/if}}
-        <a class="item flex flex-center flex-grow{{#if viewModel.showFancyFont}} fancy-font{{/if}}" data-tab="health"><div>{{localize "ambersteel.labels.tabHealth"}}</div></a>
-        <a class="item flex flex-center flex-grow{{#if viewModel.showFancyFont}} fancy-font{{/if}}" data-tab="assets"><div>{{localize "ambersteel.labels.tabAssets"}}</div></a>
-        <a class="item flex flex-center flex-grow{{#if viewModel.showFancyFont}} fancy-font{{/if}}" data-tab="biography"><div>{{localize "ambersteel.labels.tabBiography"}}</div></a>
+        <a class="item flex flex-center flex-grow{{#if viewModel.showFancyFont}} fancy-font{{/if}}" data-tab="health"><div>{{localize "ambersteel.character.sheet.tab.health"}}</div></a>
+        <a class="item flex flex-center flex-grow{{#if viewModel.showFancyFont}} fancy-font{{/if}}" data-tab="assets"><div>{{localize "ambersteel.character.sheet.tab.assets"}}</div></a>
+        <a class="item flex flex-center flex-grow{{#if viewModel.showFancyFont}} fancy-font{{/if}}" data-tab="biography"><div>{{localize "ambersteel.character.sheet.tab.biography"}}</div></a>
       {{else}}
-        <a class="item flex flex-center flex-grow{{#if viewModel.showFancyFont}} fancy-font{{/if}}" data-tab="description"><div>{{localize "ambersteel.labels.tabDescription"}}</div></a>
+        <a class="item flex flex-center flex-grow{{#if viewModel.showFancyFont}} fancy-font{{/if}}" data-tab="description"><div>{{localize "ambersteel.character.sheet.tab.description"}}</div></a>
       {{/if}}
       {{#if viewModel.isGM }}
-        <a class="item flex flex-center flex-grow{{#if viewModel.showFancyFont}} fancy-font{{/if}}" data-tab="gm-notes"><div>{{localize "ambersteel.labels.tabGmNotes"}}</div></a>
+        <a class="item flex flex-center flex-grow{{#if viewModel.showFancyFont}} fancy-font{{/if}}" data-tab="gm-notes"><div>{{localize "ambersteel.character.sheet.tab.gmNotes"}}</div></a>
       {{/if}}
     </nav>
   {{/if}}

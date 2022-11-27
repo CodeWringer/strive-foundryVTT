@@ -78,7 +78,7 @@ export default class ButtonSendToChatViewModel extends ButtonViewModel {
     this._propertyPath = args.propertyPath;
     this._chatTitle = args.chatTitle ?? "";
     this._actor = args.actor;
-    this.localizableTitle = args.localizableTitle ?? "ambersteel.labels.sendToChat";
+    this.localizableTitle = args.localizableTitle ?? "ambersteel.general.sendToChat";
   }
 
   /**

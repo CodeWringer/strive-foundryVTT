@@ -58,7 +58,7 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
     validateOrThrow(args, ["target", "contextType"]);
 
     this.contextType = args.contextType;
-    this.localizableTitle = args.localizableTitle ?? "ambersteel.labels.takeToPerson";
+    this.localizableTitle = args.localizableTitle ?? "ambersteel.character.asset.takeToPerson";
   }
 
   /**
@@ -154,7 +154,7 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
     }
 
     const dialogResult = await DialogUtil.showSelectionDialog({
-      localizableLabel: "ambersteel.labels.actor",
+      localizableLabel: "ambersteel.general.actor.label",
       options: options
     });
 

@@ -48,7 +48,7 @@ export default class ActorBeliefsViewModel extends SheetViewModel {
       id: "vmTfAmbition",
       propertyOwner: thiz.actor,
       propertyPath: "data.data.beliefSystem.ambition",
-      placeholder: "ambersteel.beliefSystem.ambition",
+      placeholder: "ambersteel.character.beliefSystem.ambition",
     });
 
     for (let i = 0; i < this.beliefs.length; i++) {
@@ -56,7 +56,7 @@ export default class ActorBeliefsViewModel extends SheetViewModel {
         id: `vmBelief${i}`,
         propertyOwner: thiz.actor,
         propertyPath: `data.data.beliefSystem.beliefs[${i}]`,
-        placeholder: "ambersteel.beliefSystem.belief",
+        placeholder: "ambersteel.character.beliefSystem.belief.singular",
       }));
     }
 
@@ -65,7 +65,7 @@ export default class ActorBeliefsViewModel extends SheetViewModel {
         id: `vmInstinct${i}`,
         propertyOwner: thiz.actor,
         propertyPath: `data.data.beliefSystem.instincts[${i}]`,
-        placeholder: "ambersteel.beliefSystem.instinct",
+        placeholder: "ambersteel.character.beliefSystem.instinct.singular",
       }));
     }
   }

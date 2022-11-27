@@ -10,7 +10,7 @@ import Ruleset from "../ruleset.mjs";
 
 export const DICE_ROLL_SOUND = "../sounds/dice.wav";
 
-export const LOCALIZABLE_OBSTACLE_ABBREVIATION = "ambersteel.roll.obstacleAbbreviation";
+export const LOCALIZABLE_OBSTACLE_ABBREVIATION = "ambersteel.roll.obstacle.abbreviation";
 
 /**
  * Rolls the given number of dice and returns the results of the roll. 
@@ -159,7 +159,7 @@ export async function queryRollData() {
   };
 
   return new Promise(async (resolve, reject) => {
-    const result = await showDialog({ dialogTemplate: TEMPLATES.DIALOG_ROLL, localizableTitle: "ambersteel.dialog.titleRollQuery" }, dialogData);
+    const result = await showDialog({ dialogTemplate: TEMPLATES.DIALOG_ROLL, localizableTitle: "ambersteel.roll.query" }, dialogData);
     
     const obstacle = parseInt(getElementValue(result.html.find(".obstacle")[0]));
     const bonusDice = parseInt(getElementValue(result.html.find(".bonus-dice")[0]));

@@ -292,8 +292,9 @@
           "label": "Exhaustion",
           "maximum": "Max. Exhaustion"
         },
-        "HP": {
-          "label": "HP",
+        "hp": {
+          "label": "Hit-Points",
+          "abbreviation": "HP",
           "maximum": "Max. HP"
         },
         "illness": {
@@ -364,7 +365,7 @@
           "label": "Magic Stamina",
           "maximum": "Max. Magic Stamina"
         },
-        "magicSchool": "Magic School"
+        "school": "Magic School"
       },
       "personals": {
         "species": "Species",
@@ -402,6 +403,7 @@
           },
           "damage": {
             "add": "Add Damage Definition",
+            "delete": "Delete Damage Definition",
             "label": "Damage"
           },
           "distance": {
@@ -475,9 +477,7 @@
       },
       "bonusDice": "Bonus Dice",
       "doRoll": "Roll Dice",
-      "dialog": {
-        "title": "Select Obstacle and Bonus Dice"
-      }
+      "query": "Select Obstacle and Bonus Dice"
     },
     "attackType": {
       "label": "Attack Type",

@@ -177,7 +177,7 @@ export async function showPlainDialog(args = {}) {
  */
 export async function showSelectionDialog(args = {}) {
     args = {
-        localizableTitle: "ambersteel.dialog.titleSelect",
+        localizableTitle: "ambersteel.general.select",
         localizableLabel: "",
         options: [],
         selected: undefined,

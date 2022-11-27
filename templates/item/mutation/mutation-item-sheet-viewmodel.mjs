@@ -39,7 +39,7 @@ export default class MutationItemSheetViewModel extends SheetViewModel {
       id: "vmTfName",
       propertyOwner: thiz.item,
       propertyPath: "name",
-      placeholder: "ambersteel.labels.name",
+      placeholder: "ambersteel.general.name",
     });
     this.vmBtnSendToChat = this.createVmBtnSendToChat({
       id: "vmBtnSendToChat",
