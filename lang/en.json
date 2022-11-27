@@ -13,8 +13,8 @@
       "title": "Data Migration",
       "titleMigrationRequired": "Data Migration Required",
       "performingMigration": "Performing Migration...",
-      "from": "Your world is currently on system version: ",
-      "to": "Your world will be migrated to system version: ",
+      "fromVersion": "Your world is currently on system version: ",
+      "toVersion": "Your world will be migrated to system version: ",
       "initialHint": "Please make sure none of your players are logged in to the world during migration. Also, please be sure to make a manual backup copy of the world, before beginning migration.",
       "cancelNote": "Please note that you can cancel this process, but your world may not work properly with the current version of the system.",
       "error": "WARNING: An error has occurred during processing.",
@@ -24,311 +24,518 @@
       "inProgress": "Migration in progress, please wait...",
       "migrationRequiredUserWarning": "It seems this world is not up to date with the installed system version. Please coordinate with your game master and log out while they migrate the world system."
     },
-    "weaponTypes": {
-      "unarmed": "Unarmed",
-      "shortBlade": "Short Blade",
-      "longBlade": "Long Blade",
-      "greatBlade": "Great Blade",
-      "axe": "Axe",
-      "greatAxe": "Great Axe",
-      "spear": "Spear",
-      "lance": "Lance",
-      "polearm": "Polearm",
-      "club": "Club",
-      "smallCrusher": "Small Crusher",
-      "largeCrusher": "Large Crusher",
-      "shortBow": "Short Bow",
-      "longBow": "Long Bow",
-      "warBow": "War Bow",
-      "crossbow": "Crossbow",
-      "firearm": "Firearm"
-    },
-    "armorTypes": {
-      "light": "Light Armor",
-      "medium": "Medium Armor",
-      "heavy": "Heavy Armor"
-    },
-    "shieldTypes": {
-      "buckler": "Buckler",
-      "roundShield": "Round Shield",
-      "heaterShield": "Heater Shield",
-      "kiteShield": "Kite Shield"
-    },
-    "attributeGroups": {
-      "physical": "Physical Attributes",
-      "mental": "Mental Attributes",
-      "social": "Social Attributes"
-    },
-    "attributeGroupAbbreviations": {
-      "physical": "Physical",
-      "mental": "Mental",
-      "social": "Social"
-    },
-    "attributes": {
-      "agility": "Agility",
-      "endurance": "Endurance",
-      "perception": "Perception",
-      "strength": "Strength",
-      "toughness": "Toughness",
-      "intelligence": "Intelligence",
-      "wisdom": "Wisdom",
-      "empathy": "Empathy",
-      "oratory": "Oratory",
-      "willpower": "Willpower",
-      "arcana": "Arcana"
-    },
-    "attributeAbbreviations": {
-      "agility": "Agi",
-      "endurance": "End",
-      "perception": "Perc",
-      "strength": "Str",
-      "toughness": "Tough",
-      "intelligence": "Int",
-      "wisdom": "Wis",
-      "empathy": "Emp",
-      "oratory": "Ora",
-      "willpower": "Will",
-      "arcana": "Arc"
-    },
-    "biography": {
-      "origin": "Origin",
-      "youth": "Youth",
-      "lastFewYears": "The Last Few Years"
-    },
-    "personals": {
-      "species": "Species",
-      "culture": "Culture",
-      "sex": "Sex",
-      "age": "Age"
-    },
-    "beliefSystem": {
-      "ambition": "Ambition",
-      "beliefs": "Beliefs",
-      "belief": "Belief",
-      "instincts": "Instincts",
-      "instinct": "Instinct"
-    },
-    "labels": {
-      "actor": "Actor",
-      "addSkillAbilityDamage": "Add Damage Definition",
-      "attribute": "Attribute",
-      "biography": "Biography",
-      "contextMenu": "Context-Menu",
-      "level": "Level",
-      "attributeAbbreviation": "Attr.",
-      "requiredSuccessFailureAbbreviation": "Req. S/F",
-      "successFailureAbbreviation": "S/F",
-      "successAbbreviation": "S",
-      "failureAbbreviation": "F",
-      "learningSkill": "Learning Skills",
-      "knownSkill": "Known Skills",
+    "general": {
+      "actor": {
+        "label": "Actor",
+        "pc": {
+          "label": "Player Character",
+          "abbreviation": "PC"
+        },
+        "npc": {
+          "label": "Non-Player Character",
+          "abbreviation": "NPC"
+        },
+        "plain": {
+          "label": "Plain Actor",
+          "abbreviation": "Plain"
+        }
+      },
       "add": "Add",
-      "addSkill": "Add Skill",
-      "addSkillAbility": "Add Skill Ability",
-      "addInjury": "Add Injury",
-      "addIllness": "Add Illness",
-      "deleteSkill": "Delete Skill",
-      "deleteSkillAbility": "Delete Skill Ability",
-      "buyFateCard": "Buy Fate Card",
-      "edit": "Edit",
-      "delete": "Delete",
-      "tabAttributes": "Attributes",
-      "tabSkills": "Skills",
-      "tabMagic": "Magic",
-      "tabBeliefsFate": "Beliefs/Fate",
-      "tabHealth": "Health",
-      "tabAssets": "Assets",
-      "tabBiography": "Biography",
-      "tabGmNotes": "GM",
-      "tabDescription": "Description",
-      "confirm": "Confirm",
-      "cancel": "Cancel",
-      "ok": "OK",
-      "increment": "Increment",
-      "decrement": "Decrement",
-      "description": "Description",
-      "relatedAttribute": "Related Attribute",
-      "name": "Name",
-      "skillAbilityRequirement": "At Level",
-      "apCost": "AP Cost",
-      "skillAbilityCondition": "Condition",
-      "distance": "Distance",
-      "damage": "Damage",
-      "attackType": "Att. Type",
-      "damageType": "Dmg. Type",
-      "skill": "Skill",
-      "custom": "Custom",
-      "sendToChat": "Send to Chat",
-      "takeToPerson": "Take (to person)",
-      "toggleVisibility": "Toggle visibility",
-      "messageVisibility": "Visibility",
-      "healthStats": "General Health Stats",
-      "assetsStats": "General Assets Stats",
-      "assetsOnPerson": "Possessions (on person)",
-      "assetsRemote": "Property",
-      "injury": "Injury",
-      "maxInjuries": "Max. Injuries",
-      "injuries": "Injuries",
-      "illnesses": "Illnesses",
-      "illness": "Illness",
-      "maxHP": "Max. HP",
-      "HP": "HP",
-      "maxExhaustion": "Max. Exhaustion",
-      "exhaustion": "Exhaustion",
-      "limit": "Limit",
-      "timeToHeal": "Time to heal",
-      "state": "State",
-      "duration": "Duration",
-      "treatment": "Treatment",
-      "treatmentSkill": "Treatment Skill",
-      "magicStamina": "Magic Stamina",
-      "maxMagicStamina": "Max. Magic Stamina",
-      "magicSchool": "Magic School",
-      "none": "None",
-      "noneAbbreviation": "N/A",
       "category": "Category",
-      "item": "Item",
-      "bulk": "Bulk",
-      "shape": "Shape",
-      "quantity": "Quantity",
-      "maxQuantity": "Max. Quantity",
-      "carryingCapacity": "Carrying Capacity (in bulk)",
-      "usedCarryingCapacity": "Used carrying capacity (in bulk)",
+      "cancel": "Cancel",
+      "confirm": "Confirm",
+      "contextMenu": "Context-Menu",
+      "custom": "Custom",
+      "decrement": "Decrement",
+      "delete": {
+        "label": "Delete",
+        "query": "Confirm Deletion"
+      },
+      "description": "Description",
+      "edit": "Edit",
+      "increment": "Increment",
+      "messageVisibility": {
+        "label": "Visibility",
+        "public": {
+          "label": "Public"
+        },
+        "self": {
+          "label": "Self"
+        },
+        "gm": {
+          "label": "Game-Master"
+        },
+        "dialog": {
+          "title": "Select Message Visibility"
+        }
+      },
+      "name": "Name",
+      "none": {
+        "label": "None",
+        "abbreviation": "N/A"
+      },
+      "ok": "OK",
       "openSheet": "Open Sheet",
-      "shapeWidth": "Width",
-      "shapeHeight": "Height",
-      "pc": "Player Character",
-      "pcAbbreviation": "PC",
-      "npc": "Non-Player Character",
-      "npcAbbreviation": "NPC",
-      "plainActor": "Plain Actor",
-      "plainActorAbbreviation": "Plain",
-      "nameOfNewSkillAbility": "New Skill Ability",
-      "opposedBy": "Opposed By",
-      "roll": "Roll Dice",
-      "mutation": "Mutation",
-      "mutations": "Mutations"
+      "sendToChat": "Send to Chat",
+      "select": "Select",
+      "toggleVisibility": "Toggle visibility",
+      "ordering": {
+        "moveToTop": "Move to top",
+        "moveUp": "Move up",
+        "moveToBottom": "Move to bottom",
+        "moveDown": "Move down",
+        "moveByDragging": "Move by dragging"
+      }
     },
-    "itemOrdering": {
-      "moveToTop": "Move to top",
-      "moveUp": "Move up",
-      "moveToBottom": "Move to bottom",
-      "moveDown": "Move down",
-      "moveByDragging": "Move by dragging"
-    },
-    "placeholders": {
-      "obstacle": "0 / Opposed+-0 / etc.",
-      "distance": "3' / 1m / 0 / etc.",
-      "condition": "Once per day / etc.",
-      "opposedBy": "Strength / Sneak / etc."
-    },
-    "fateSystem": {
-      "fate": "Fate",
-      "miFP": "Minor Fate Points",
-      "maFP": "Major Fate Points",
-      "AFP": "Ambition Fate Points",
-      "miFPAbbreviation": "miFP",
-      "maFPAbbreviation": "maFP",
-      "AFPAbbreviation": "AFP",
-      "add": "Buy Fate Card",
-      "delete": "Delete Fate Card",
-      "fateCard": "Fate Card"
+    "character": {
+      "advancement": {
+        "level": "Level",
+        "requirements": {
+          "label": "Required Successes/Failures",
+          "abbreviation": "S/F",
+          "success": {
+            "label": "Successes",
+            "abbreviation": "S"
+          },
+          "failure": {
+            "label": "Failures",
+            "abbreviation": "F"
+          }
+        }
+      },
+      "asset": {
+        "add": {
+          "label": "Add Asset",
+          "query": "Select Asset to Add"
+        },
+        "delete": {
+          "label": "Delete Asset",
+          "query": "Confirm Deletion of Asset"
+        },
+        "bulk": "Bulk",
+        "stats": "General Assets Stats",
+        "onPerson": "Possessions (on person)",
+        "takeToPerson": "Take (to person)",
+        "remote": "Property",
+        "carryingCapacity": {
+          "label": "Carrying Capacity (in bulk)",
+          "used": "Used carrying capacity (in bulk)",
+          "dialog": {
+            "titleInventoryFull": "Inventory full",
+            "titleItemsDropped": "Items dropped",
+            "contentItemsDropped": "The following items had to be dropped from the item grid:",
+            "contentInventoryFull": "There is not enough room on the item grid to add the item to it."
+          }
+        },
+        "shape": {
+          "label": "Shape",
+          "width": "Width",
+          "height": "Height"
+        },
+        "quantity": {
+          "label": "Quantity",
+          "maximum": "Max. Quantity"
+        },
+        "type": {
+          "label": "Asset Type",
+          "armor": {
+            "label": "Armor",
+            "light": "Light Armor",
+            "medium": "Medium Armor",
+            "heavy": "Heavy Armor"
+          },
+          "shield": {
+            "label": "Shield",
+            "buckler": "Buckler",
+            "roundShield": "Round Shield",
+            "heaterShield": "Heater Shield",
+            "kiteShield": "Kite Shield"
+          },
+          "weapon": {
+            "label": "Weapon",
+            "unarmed": "Unarmed",
+            "shortBlade": "Short Blade",
+            "longBlade": "Long Blade",
+            "greatBlade": "Great Blade",
+            "axe": "Axe",
+            "greatAxe": "Great Axe",
+            "spear": "Spear",
+            "lance": "Lance",
+            "polearm": "Polearm",
+            "club": "Club",
+            "smallCrusher": "Small Crusher",
+            "largeCrusher": "Large Crusher",
+            "shortBow": "Short Bow",
+            "longBow": "Long Bow",
+            "warBow": "War Bow",
+            "crossbow": "Crossbow",
+            "firearm": "Firearm"
+          }
+        }
+      },
+      "attributeGroup": {
+        "physical": {
+          "label": "Physical Attributes",
+          "abbreviation": "Physical"
+        },
+        "mental": {
+          "label": "Mental Attributes",
+          "abbreviation": "Mental"
+        },
+        "social": {
+          "label": "Social Attributes",
+          "abbreviation": "Social"
+        }
+      },
+      "attribute": {
+        "singular": "Attribute",
+        "plural": "Attributes",
+        "abbreviation": "Attr.",
+        "agility": {
+          "label": "Agility",
+          "abbreviation": "Agi"
+        },
+        "endurance": {
+          "label": "Endurance",
+          "abbreviation": "End"
+        },
+        "perception": {
+          "label": "Perception",
+          "abbreviation": "Perc"
+        },
+        "strength": {
+          "label": "Strength",
+          "abbreviation": "Str"
+        },
+        "toughness": {
+          "label": "Toughness",
+          "abbreviation": "Tough"
+        },
+        "intelligence": {
+          "label": "Intelligence",
+          "abbreviation": "Int"
+        },
+        "wisdom": {
+          "label": "Wisdom",
+          "abbreviation": "Wis"
+        },
+        "empathy": {
+          "label": "Empathy",
+          "abbreviation": "Emp"
+        },
+        "oratory": {
+          "label": "Oratory",
+          "abbreviation": "Ora"
+        },
+        "willpower": {
+          "label": "Willpower",
+          "abbreviation": "Will"
+        },
+        "arcana": {
+          "label": "Arcana",
+          "abbreviation": "Arc"
+        }
+      },
+      "biography": {
+        "label": "Biography",
+        "origin": "Origin",
+        "youth": "Youth",
+        "lastFewYears": "The Last Few Years"
+      },
+      "beliefSystem": {
+        "ambition": "Ambition",
+        "belief": {
+          "singular": "Belief",
+          "plural": "Beliefs"
+        },
+        "instinct": {
+          "singular": "Instinct",
+          "plural": "Instincts"
+        },
+        "fateSystem": {
+          "label": "Fate",
+          "fateCard": {
+            "label": "Fate Card",
+            "add": {
+              "label": "Add Fate Card",
+              "query": "Select Fate Card to Add"
+            },
+            "delete": {
+              "label": "Delete Fate Card",
+              "query": "Confirm Deletion of Fate Card"
+            }
+          },
+          "fatePoints": {
+            "minor": {
+              "label": "Minor Fate Points",
+              "abbreviation": "miFP"
+            },
+            "major": {
+              "label": "Major Fate Points",
+              "abbreviation": "maFP"
+            },
+            "ambition": {
+              "label": "Ambition Fate Points",
+              "abbreviation": "AFP"
+            }
+          }
+        }
+      },
+      "health": {
+        "duration": "Duration",
+        "healthStats": "General Health Stats",
+        "timeToHeal": "Time to heal",
+        "treatment": "Treatment",
+        "treatmentSkill": "Treatment Skill",
+        "exhaustion": {
+          "label": "Exhaustion",
+          "maximum": "Max. Exhaustion"
+        },
+        "HP": {
+          "label": "HP",
+          "maximum": "Max. HP"
+        },
+        "illness": {
+          "add": {
+            "label": "Add Illness",
+            "query": "Select Illness to Add"
+          },
+          "delete": {
+            "label": "Delete Illness",
+            "query": "Confirm Deletion of Illness"
+          },
+          "plural": "Illnesses",
+          "singular": "Illness",
+          "state": {
+            "label": "Illness State",
+            "active": {
+              "label": "Active"
+            },
+            "treated": {
+              "label": "Treated"
+            }
+          }
+        },
+        "injury": {
+          "add": {
+            "label": "Add Injury",
+            "query": "Select Injury to Add"
+          },
+          "delete": {
+            "label": "Delete Injury",
+            "query": "Confirm Deletion of Injury"
+          },
+          "limit": "Limit",
+          "maximum": "Max. Injuries",
+          "plural": "Injuries",
+          "singular": "Injury",
+          "state": {
+            "label": "Injury State",
+            "active": {
+              "label": "Active"
+            },
+            "patchedUp": {
+              "label": "Patched Up"
+            },
+            "treated": {
+              "label": "Treated"
+            },
+            "permanent": {
+              "label": "Permanent"
+            }
+          }
+        },
+        "mutation": {
+          "add": {
+            "label": "Add Mutation",
+            "query": "Select Mutation to Add"
+          },
+          "delete": {
+            "label": "Delete Mutation",
+            "query": "Confirm Deletion of Mutation"
+          },
+          "plural": "Mutations",
+          "singular": "Mutation"
+        }
+      },
+      "magic": {
+        "stamina": {
+          "label": "Magic Stamina",
+          "maximum": "Max. Magic Stamina"
+        },
+        "magicSchool": "Magic School"
+      },
+      "personals": {
+        "species": "Species",
+        "culture": "Culture",
+        "sex": "Sex",
+        "age": "Age"
+      },
+      "sheet": {
+        "tab": {
+          "attributes": "Attributes",
+          "skills": "Skills",
+          "magic": "Magic",
+          "beliefsFate": "Beliefs/Fate",
+          "health": "Health",
+          "assets": "Assets",
+          "biography": "Biography",
+          "gmNotes": "GM",
+          "description": "Description"
+        }
+      },
+      "skill": {
+        "ability": {
+          "add": {
+            "label": "Add Skill Ability",
+            "query": "Select Skill Ability to Add"
+          },
+          "delete": {
+            "label": "Delete Skill Ability",
+            "query": "Confirm Deletion of Skill Ability"
+          },
+          "apCost": "AP Cost",
+          "condition": {
+            "label": "Condition",
+            "placeholder": "Once per day / etc."
+          },
+          "damage": {
+            "add": "Add Damage Definition",
+            "label": "Damage"
+          },
+          "distance": {
+            "label": "Distance",
+            "placeholder": "3' / 1m / 0 / etc."
+          },
+          "newDefaultName": "New Skill Ability",
+          "requirement": "At Level"
+        },
+        "add": {
+          "label": "Add Skill",
+          "query": "Select Skill to Add"
+        },
+        "delete": {
+          "label": "Delete Skill",
+          "query": "Confirm Deletion of Skill"
+        },
+        "known": {
+          "label": "Known Skills",
+          "add": {
+            "label": "Add Known Skill",
+            "query": "Select Known Skill to Add"
+          },
+          "delete": {
+            "label": "Delete Known Skill",
+            "query": "Confirm Deletion of Known Skill"
+          }
+        },
+        "learning": {
+          "label": "Learning Skills",
+          "add": {
+            "label": "Add Learning Skill",
+            "query": "Select Learning Skill to Add"
+          },
+          "delete": {
+            "label": "Delete Learning Skill",
+            "query": "Confirm Deletion of Learning Skill"
+          }
+        },
+        "plural": "Skills",
+        "relatedAttribute": "Related Attribute",
+        "singular": "Skill"
+      }
     },
     "roll": {
-      "success": "Success",
-      "failure": "Failure",
-      "degreeOfSuccess": "Degree of Success",
-      "degreeOfFailure": "Degree of Failure",
-      "positive": "Positive",
-      "positives": "Positives",
-      "negative": "Negative",
-      "negatives": "Negatives",
+      "success": {
+        "label": "Success",
+        "degree": "Degree of Success"
+      },
+      "failure": {
+        "label": "Failure",
+        "degree": "Degree of Failure"
+      },
+      "positive": {
+        "plural": "Positives",
+        "singular": "Positive"
+      },
+      "negative": {
+        "plural": "Negatives",
+        "singular": "Negative"
+      },
       "numberOfDice": "Number of dice",
-      "obstacle": "Obstacle",
-      "obstacleAbbreviation": "Ob",
-      "bonusDice": "Bonus Dice"
+      "obstacle": {
+        "label": "Obstacle",
+        "abbreviation": "Ob",
+        "opposedBy": {
+          "label": "Opposed By",
+          "placeholder": "Strength / Sneak / etc."
+        },
+        "placeholder": "0 / Opposed+-0 / etc."
+      },
+      "bonusDice": "Bonus Dice",
+      "doRoll": "Roll Dice",
+      "dialog": {
+        "title": "Select Obstacle and Bonus Dice"
+      }
     },
-    "messageVisibilityModes": {
-      "public": "Public",
-      "self": "Self",
-      "gm": "GM"
+    "attackType": {
+      "label": "Attack Type",
+      "abbreviation": "Att. Type",
+      "singleTarget": {
+        "label": "Single-Target",
+        "abbreviation": "ST"
+      },
+      "areaOfEffect": {
+        "label": "Area-of-Effect",
+        "abbreviation": "AoE"
+      },
+      "multipleSingleTarget": {
+        "label": "Multi-Single-Target",
+        "abbreviation": "MST"
+      }
     },
-    "dialog": {
-      "titleVisibility": "Select Message Visibility",
-      "titleRollQuery": "Select Obstacle and Bonus Dice",
-      "titleAddItemQuery": "Select Item to Add",
-      "titleSkillAddQuery": "Select Skill to Add",
-      "titleInjuryAddQuery": "Select Injury to Add",
-      "titleIllnessAddQuery": "Select Illness to Add",
-      "titleFateCardAddQuery": "Select Fate-Card to Add",
-      "titleMutationAddQuery": "Select Mutation to Add",
-      "titleConfirmDeletionQuery": "Confirm Deletion",
-      "titleConfirmDeletiongSkillQuery": "Confirm Deletion of Skill",
-      "titleConfirmDeletionLearningSkillQuery": "Confirm Deletion of Learning Skill",
-      "titleConfirmDeletionSkillAbilityQuery": "Confirm Deletion of Skill Ability",
-      "titleConfirmDeletionInjuryQuery": "Confirm Deletion of Injury",
-      "titleConfirmDeletionIllnessQuery": "Confirm Deletion of Illness",
-      "titleConfirmDeletionFateCardQuery": "Confirm Deletion of Fate-Card",
-      "titleConfirmDeletionPossessionQuery": "Confirm Deletion of Possession",
-      "titleConfirmDeletionPropertyQuery": "Confirm Deletion of Property",
-      "titleInventoryFull": "Inventory full",
-      "titleItemsDropped": "Items dropped",
-      "titleSelect": "Select",
-      "contentItemsDropped": "The following items had to be dropped from the item grid:",
-      "contentInventoryFull": "There is not enough room on the item grid to add the item to it."
-    },
-    "attackTypes": {
-      "singleTarget": "Single-Target",
-      "singleTargetAbbreviation": "ST",
-      "areaOfEffect": "Area-of-Effect",
-      "areaOfEffectAbbreviation": "AoE",
-      "multipleSingleTarget": "Multi-Single-Target",
-      "multipleSingleTargetAbbreviation": "MST"
-    },
-    "damageTypes": {
-      "burning": "Burning",
-      "burningAbbreviation": "Burn",
-      "freezing": "Freezing",
-      "freezingAbbreviation": "Freeze",
-      "slashing": "Slashing",
-      "slashingAbbreviation": "Slash",
-      "piercing": "Piercing",
-      "piercingAbbreviation": "Pierce",
-      "bludgeoning": "Bludgeoning",
-      "bludgeoningAbbreviation": "Bludgeon",
-      "crushing": "Crushing",
-      "crushingAbbreviation": "Crush",
-      "poison": "Poison",
-      "poisonAbbreviation": "Poison",
-      "acid": "Acid",
-      "acidAbbreviation": "Acid"
-    },
-    "injuryStates": {
-      "active": "Active",
-      "patchedUp": "Patched Up",
-      "treated": "Treated",
-      "permanent": "Permanent"
-    },
-    "illnessStates": {
-      "active": "Active",
-      "treated": "Treated"
-    },
-    "item": {
-      "add": "Add item"
-    },
-    "skill": {
-      "addLearning": "Add learning skill",
-      "addKnown": "Add known skill"
-    },
-    "mutation": {
-      "add": "Add mutation"
+    "damageType": {
+      "label": "Damage Type",
+      "abbreviation": "Dmg. Type",
+      "burning": {
+        "label": "Burning",
+        "abbreviation": "Burn"
+      },
+      "freezing": {
+        "label": "Freezing",
+        "abbreviation": "Freeze"
+      },
+      "slashing": {
+        "label": "Slashing",
+        "abbreviation": "Slash"
+      },
+      "piercing": {
+        "label": "Piercing",
+        "abbreviation": "Pierce"
+      },
+      "bludgeoning": {
+        "label": "Bludgeoning",
+        "abbreviation": "Bludgeon"
+      },
+      "crushing": {
+        "label": "Crushing",
+        "abbreviation": "Crush"
+      },
+      "poison": {
+        "label": "Poison",
+        "abbreviation": "Poison"
+      },
+      "acid": {
+        "label": "Acid",
+        "abbreviation": "Acid"
+      }
     },
     "rules": {
       "hintToughnessTestRequired": "Half of the maximum number of injuries (rounded down) reached. Any further damage incurred requires a toughness test with Ob as high as the number of injuries to be passed. If failed, suffer +1 exhaustion."
     },
     "settings": {
       "fancyFont": {
-        "name": "Fancy font",
+        "label": "Fancy font",
         "hint": "Toggles the 'fancy' font off or on."
       }
     }
