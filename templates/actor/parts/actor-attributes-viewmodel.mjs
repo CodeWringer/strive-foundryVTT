@@ -54,7 +54,7 @@ export default class ActorAttributesViewModel extends SheetViewModel {
       id: thiz.attributesPhysicalViewModelId,
       attributes: thiz.actor.data.data.attributes.physical.attributes,
       attributeGroupName: thiz.actor.data.data.attributes.physical.name,
-      localizableAttributeGroupName: thiz.actor.data.data.attributes.physical.localizableName,
+      localizableAttributeGroupName: "ambersteel.character.attributeGroup.physical.label",
       parent: thiz,
     });
     this.attributesMentalViewModel = new AttributeTableViewModel({
@@ -62,7 +62,7 @@ export default class ActorAttributesViewModel extends SheetViewModel {
       id: thiz.attributesMentalViewModelId,
       attributes: thiz.actor.data.data.attributes.mental.attributes,
       attributeGroupName: thiz.actor.data.data.attributes.mental.name,
-      localizableAttributeGroupName: thiz.actor.data.data.attributes.mental.localizableName,
+      localizableAttributeGroupName: "ambersteel.character.attributeGroup.mental.label",
       parent: thiz,
     });
     this.attributesSocialViewModel = new AttributeTableViewModel({
@@ -70,7 +70,7 @@ export default class ActorAttributesViewModel extends SheetViewModel {
       id: thiz.attributesSocialViewModelId,
       attributes: thiz.actor.data.data.attributes.social.attributes,
       attributeGroupName: thiz.actor.data.data.attributes.social.name,
-      localizableAttributeGroupName: thiz.actor.data.data.attributes.social.localizableName,
+      localizableAttributeGroupName: "ambersteel.character.attributeGroup.social.label",
       parent: thiz,
     });
   }

@@ -131,8 +131,8 @@ export default class AmbersteelBaseCharacterActor extends AmbersteelBaseActor {
       // Add internal name. 
       oAttGroup.name = attGroupName;
       // Add localization keys. 
-      oAttGroup.localizableName = `ambersteel.attributeGroups.${attGroupName}`;
-      oAttGroup.localizableAbbreviation = `ambersteel.attributeGroupAbbreviations.${attGroupName}`;
+      oAttGroup.localizableName = `ambersteel.character.attributeGroup.${attGroupName}.label`;
+      oAttGroup.localizableAbbreviation = `ambersteel.character.attributeGroup.${attGroupName}.abbreviation`;
       // Add attributes of group for easy access. 
       oAttGroup.attributes = attributes;
 
@@ -160,8 +160,8 @@ export default class AmbersteelBaseCharacterActor extends AmbersteelBaseActor {
     oAtt.name = attName;
 
     // Add localization keys. 
-    oAtt.localizableName = `ambersteel.attributes.${attName}`;
-    oAtt.localizableAbbreviation = `ambersteel.attributeAbbreviations.${attName}`;
+    oAtt.localizableName = `ambersteel.character.attribute.${attName}.label`;
+    oAtt.localizableAbbreviation = `ambersteel.character.attribute.${attName}.abbreviation`;
 
     // Add functions.
     const thiz = this;
