@@ -10,7 +10,7 @@ import { TEXTURES } from "../../pixi/texture-preloader.mjs";
 import { queryVisibilityMode } from '../../utils/chat-utility.mjs';
 import { Button } from "../../pixi/button.mjs";
 import { ITEM_ORIENTATIONS } from "../../constants/item-orientations.mjs";
-import GetShowFancyFontUseCase from "../../usecases/get-show-fancy-font-use-case.mjs";
+import GetShowFancyFontUseCase from "../../use-case/get-show-fancy-font-use-case.mjs";
 
 const FONT_FAMILY_FALLBACK = "sans-serif";
 const FONT_FAMILY_FANCY = "Black-Chancery";
