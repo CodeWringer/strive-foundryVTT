@@ -34,7 +34,7 @@ export default class ButtonOpenSheetViewModel extends ButtonViewModel {
     super(args);
     validateOrThrow(args, ["target"]);
 
-    this.localizableTitle = args.localizableTitle ?? "ambersteel.labels.openSheet";
+    this.localizableTitle = args.localizableTitle ?? "ambersteel.general.openSheet";
   }
 
   /**

@@ -21,7 +21,7 @@ cssClass: {undefined | String}
     {{#if viewModel.showSpecies}}
       <div class="flex flex-row sheet-block margin-b-md">
         <div class="width-min-xl{{#if viewModel.showFancyFont}} fancy-font{{/if}}">
-          {{localize "ambersteel.personals.species"}}
+          {{localize "ambersteel.character.personals.species"}}
         </div>
         <div class="flex-grow">
           {{viewModel.actor.data.data.person.species}}
@@ -31,7 +31,7 @@ cssClass: {undefined | String}
     {{#if viewModel.showCulture}}
       <div class="flex flex-row sheet-block margin-b-md">
         <div class="width-min-xl{{#if viewModel.showFancyFont}} fancy-font{{/if}}">
-          {{localize "ambersteel.personals.culture"}}
+          {{localize "ambersteel.character.personals.culture"}}
         </div>
         <div class="flex-grow">
           {{viewModel.actor.data.data.person.culture}}
@@ -41,7 +41,7 @@ cssClass: {undefined | String}
     {{#if viewModel.showSex}}
       <div class="flex flex-row sheet-block margin-b-md">
         <div class="width-min-xl{{#if viewModel.showFancyFont}} fancy-font{{/if}}">
-          {{localize "ambersteel.personals.sex"}}
+          {{localize "ambersteel.character.personals.sex"}}
         </div>
         <div class="flex-grow">
           {{viewModel.actor.data.data.person.sex}}
@@ -51,7 +51,7 @@ cssClass: {undefined | String}
     {{#if viewModel.showAge}}
       <div class="flex flex-row sheet-block margin-b-md">
         <div class="width-min-xl{{#if viewModel.showFancyFont}} fancy-font{{/if}}">
-          {{localize "ambersteel.personals.age"}}
+          {{localize "ambersteel.character.personals.age"}}
         </div>
         <div class="flex-grow">
           {{viewModel.actor.data.data.person.age}}
@@ -61,7 +61,7 @@ cssClass: {undefined | String}
     {{!-- Biography --}}
     <div class="sheet-block">
       <h3 class="width-min-xl{{#if viewModel.showFancyFont}} fancy-font{{/if}}">
-        {{localize "ambersteel.labels.biography"}}
+        {{localize "ambersteel.character.biography.label"}}
       </h3>
       <div class="scrollable-height-md">
         {{{viewModel.renderedBiography}}}
@@ -71,7 +71,7 @@ cssClass: {undefined | String}
     {{!-- Description --}}
     <div class="sheet-block">
       <h3 class="width-min-xl{{#if viewModel.showFancyFont}} fancy-font{{/if}}">
-        {{localize "ambersteel.labels.description"}}
+        {{localize "ambersteel.general.description"}}
       </h3>
       <div class="scrollable-height-md">
         {{{viewModel.renderedDescription}}}

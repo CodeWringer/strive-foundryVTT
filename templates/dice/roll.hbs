@@ -67,17 +67,17 @@ cssClass: {undefined | String}
   <div class="dice-result-container">
     {{#if (eq outcomeType "SUCCESS")}}
       <div class="dice-result success">
-        {{localize "ambersteel.roll.success"}}!
+        {{localize "ambersteel.roll.success.label"}}!
       </div>
     {{/if}}
     {{#if (or (eq outcomeType "PARTIAL") (eq outcomeType "FAILURE"))}}
       <div class="dice-result failure">
-        {{localize "ambersteel.roll.failure"}}!
+        {{localize "ambersteel.roll.failure.label"}}!
       </div>
     {{/if}}
     <div class="dice-degree">
-      <span>{{localize "ambersteel.roll.positives"}}: {{positives.length}}</span>
-      <span>{{localize "ambersteel.roll.negatives"}}: {{negatives.length}}</span>
+      <span>{{localize "ambersteel.roll.positive.plural"}}: {{positives.length}}</span>
+      <span>{{localize "ambersteel.roll.negative.plural"}}: {{negatives.length}}</span>
     </div>
   </div>
 </div>

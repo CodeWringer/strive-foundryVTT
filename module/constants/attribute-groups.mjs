@@ -3,7 +3,7 @@ import { ATTRIBUTES } from "./attributes.mjs";
 export const ATTRIBUTE_GROUPS = {
   physical: {
     name: "physical",
-    localizableName: "ambersteel.attributeGroups.physical",
+    localizableName: "ambersteel.character.attributeGroup.physical.label",
     attributes: {
       agility: ATTRIBUTES.agility,
       endurance: ATTRIBUTES.endurance,
@@ -14,7 +14,7 @@ export const ATTRIBUTE_GROUPS = {
   },
   mental: {
     name: "mental",
-    localizableName: "ambersteel.attributeGroups.mental",
+    localizableName: "ambersteel.character.attributeGroup.mental.label",
     attributes: {
       intelligence: ATTRIBUTES.intelligence,
       wisdom: ATTRIBUTES.wisdom,
@@ -23,7 +23,7 @@ export const ATTRIBUTE_GROUPS = {
   },
   social: {
     name: "social",
-    localizableName: "ambersteel.attributeGroups.social",
+    localizableName: "ambersteel.character.attributeGroup.social.label",
     attributes: {
       empathy: ATTRIBUTES.empathy,
       oratory: ATTRIBUTES.oratory,

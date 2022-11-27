@@ -79,7 +79,7 @@ export default class SkillTableViewModel extends SheetViewModel {
       target: this.actor,
       withDialog: true,
       creationData: `[value:${this.isLearningSkillsTable ? "0" : "1"}]`,
-      localizableLabel: this.isLearningSkillsTable ? "ambersteel.skill.addLearning" : "ambersteel.skill.addKnown"
+      localizableLabel: this.isLearningSkillsTable ? "ambersteel.character.skill.learning.add.label" : "ambersteel.character.skill.known.add.label"
     });
 
     for (let i = 0; i < this.skills.length; i++) {
@@ -118,7 +118,7 @@ export default class SkillTableViewModel extends SheetViewModel {
           id: `vmTfName-skill-${i}`,
           propertyOwner: skill,
           propertyPath: "name",
-          placeholder: "ambersteel.labels.name",
+          placeholder: "ambersteel.general.name",
         }),
         vmDdRelatedAttribute: thiz.createVmDropDown({
           id: `vmDdRelatedAttribute-skill-${i}`,

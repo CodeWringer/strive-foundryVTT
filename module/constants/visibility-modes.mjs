@@ -1,14 +1,14 @@
 export const VISIBILITY_MODES = {
   public: {
     name: "public",
-    localizableName: "ambersteel.messageVisibilityModes.public"
+    localizableName: "ambersteel.general.messageVisibility.public.label"
   },
   self: {
     name: "self",
-    localizableName: "ambersteel.messageVisibilityModes.self"
+    localizableName: "ambersteel.general.messageVisibility.self.label"
   },
   gm: {
     name: "gm",
-    localizableName: "ambersteel.messageVisibilityModes.gm"
+    localizableName: "ambersteel.general.messageVisibility.gm.label"
   }
 };

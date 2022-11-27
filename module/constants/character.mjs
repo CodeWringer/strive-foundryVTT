@@ -1,18 +1,18 @@
 export const CHARACTER = {
   biography: {
-    origin: "ambersteel.biography.origin",
-    youth: "ambersteel.biography.youth",
-    lastFewYears: "ambersteel.biography.lastFewYears"
+    origin: "ambersteel.character.biography.origin",
+    youth: "ambersteel.character.biography.youth",
+    lastFewYears: "ambersteel.character.biography.lastFewYears"
   },
   personals: {
-    species: "ambersteel.personals.species",
-    culture: "ambersteel.personals.culture",
-    sex: "ambersteel.personals.sex",
-    age: "ambersteel.personals.age"
+    species: "ambersteel.character.personals.species",
+    culture: "ambersteel.character.personals.culture",
+    sex: "ambersteel.character.personals.sex",
+    age: "ambersteel.character.personals.age"
   },
   beliefSystem: {
-    ambition: "ambersteel.beliefSystem.ambition",
-    beliefs: "ambersteel.beliefSystem.beliefs",
-    instincts: "ambersteel.beliefSystem.instincts"
+    ambition: "ambersteel.character.beliefSystem.ambition",
+    beliefs: "ambersteel.character.beliefSystem.belief.singular",
+    instincts: "ambersteel.character.beliefSystem.instinct.singular"
   }
 };

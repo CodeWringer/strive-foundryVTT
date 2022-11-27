@@ -62,11 +62,11 @@ export class AmbersteelActorSheet extends ActorSheet {
    */
   get title() {
     if (this.actor.type === "pc") {
-      return `${game.i18n.localize("ambersteel.labels.pc")} - ${this.actor.name}`;
+      return `${game.i18n.localize("ambersteel.general.actor.pc.label")} - ${this.actor.name}`;
     } else if (this.actor.type === "npc") {
-      return `${game.i18n.localize("ambersteel.labels.npc")} - ${this.actor.name}`;
+      return `${game.i18n.localize("ambersteel.general.actor.npc.label")} - ${this.actor.name}`;
     } else if (this.actor.type === "plain") {
-      return `${game.i18n.localize("ambersteel.labels.plainActor")} - ${this.actor.name}`;
+      return `${game.i18n.localize("ambersteel.general.actor.plain.label")} - ${this.actor.name}`;
     } else {
       return this.actor.name;
     }

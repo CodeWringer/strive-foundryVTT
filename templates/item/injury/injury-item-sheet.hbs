@@ -19,7 +19,7 @@ cssClass: {undefined | String}
   {{!-- Limit --}}
   <div class="sheet-block grid-3col grid-gap-md margin-b-md">
     <div class="flex flex-middle flex-right">
-      {{> inputLabel text="ambersteel.labels.limit"}}
+      {{> inputLabel text="ambersteel.character.health.injury.limit"}}
     </div>
     <div class="grid-span-2">
       {{> inputNumberSpinner viewModel=viewModel.vmNsLimit }}
@@ -28,7 +28,7 @@ cssClass: {undefined | String}
   {{!-- Time to heal --}}
   <div class="sheet-block grid-3col grid-gap-md margin-b-md">
     <div class="flex flex-middle flex-right">
-      {{> inputLabel text="ambersteel.labels.timeToHeal"}}
+      {{> inputLabel text="ambersteel.character.health.timeToHeal"}}
     </div>
     <div class="grid-span-2">
       {{> inputTextField viewModel=viewModel.vmTfTimeToHeal }}
@@ -36,7 +36,7 @@ cssClass: {undefined | String}
   </div>
   {{!-- Description --}}
   <div class="sheet-block flex flex-column flex-grow">
-    <h3 class="{{#if viewModel.showFancyFont}}fancy-font{{/if}}">{{localize "ambersteel.labels.description"}}</h3>
+    <h3 class="{{#if viewModel.showFancyFont}}fancy-font{{/if}}">{{localize "ambersteel.general.description"}}</h3>
     {{> inputRichText viewModel=viewModel.vmRtDescription }}
   </div>
 </form>

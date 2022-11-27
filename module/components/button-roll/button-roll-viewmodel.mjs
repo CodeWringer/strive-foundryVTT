@@ -106,7 +106,7 @@ export default class ButtonRollViewModel extends ButtonViewModel {
     this.secondaryChatTitle = args.secondaryChatTitle;
     this.secondaryChatImage = args.secondaryChatImage;
     this._actor = args.actor;
-    this.localizableTitle = args.localizableTitle ?? "ambersteel.labels.roll";
+    this.localizableTitle = args.localizableTitle ?? "ambersteel.roll.doRoll";
 
     // Wrap the inherited callback. 
     // Without wrapping the original callback, it would be impossible 

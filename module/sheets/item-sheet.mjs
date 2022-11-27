@@ -73,17 +73,17 @@ export class AmbersteelItemSheet extends ItemSheet {
    */
   get title() {
     if (this.item.type === "skill") {
-      return `${game.i18n.localize("ambersteel.labels.skill")} - ${this.item.name}`;
+      return `${game.i18n.localize("ambersteel.character.skill.singular")} - ${this.item.name}`;
     } else if (this.item.type === "fate-card") {
-      return `${game.i18n.localize("ambersteel.fateSystem.fateCard")} - ${this.item.name}`;
+      return `${game.i18n.localize("ambersteel.character.beliefSystem.fateSystem.fateCard.label")} - ${this.item.name}`;
     } else if (this.item.type === "item") {
-      return `${game.i18n.localize("ambersteel.labels.item")} - ${this.item.name}`;
+      return `${game.i18n.localize("ambersteel.character.asset.singular")} - ${this.item.name}`;
     } else if (this.item.type === "injury") {
-      return `${game.i18n.localize("ambersteel.labels.injury")} - ${this.item.name}`;
+      return `${game.i18n.localize("ambersteel.character.health.injury.singular")} - ${this.item.name}`;
     } else if (this.item.type === "illness") {
-      return `${game.i18n.localize("ambersteel.labels.illness")} - ${this.item.name}`;
+      return `${game.i18n.localize("ambersteel.character.health.illness.singular")} - ${this.item.name}`;
     } else if (this.item.type === "mutation") {
-      return `${game.i18n.localize("ambersteel.labels.mutation")} - ${this.item.name}`;
+      return `${game.i18n.localize("ambersteel.character.health.mutation.singular")} - ${this.item.name}`;
     } else {
       return this.item.name;
     }

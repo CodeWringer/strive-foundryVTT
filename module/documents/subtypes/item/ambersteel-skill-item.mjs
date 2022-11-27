@@ -72,7 +72,7 @@ export default class AmbersteelSkillItem extends AmbersteelBaseItem {
       actor: actor, 
       sound: "../sounds/notify.wav",
       viewModel: vm,
-      flavor: game.i18n.localize("ambersteel.labels.skill"),
+      flavor: game.i18n.localize("ambersteel.character.skill.singular"),
     });
   }
 
@@ -215,7 +215,7 @@ export default class AmbersteelSkillItem extends AmbersteelBaseItem {
     const compositionObj = new Ruleset().getSkillTestNumberOfDice(skillLevel, relatedAttributeLevel);
 
     return new SummedData(compositionObj.totalDiceCount, [
-      new SummedDataComponent(relatedAttributeName, `ambersteel.attributes.${relatedAttributeName}`, compositionObj.attributeDiceCount),
+      new SummedDataComponent(relatedAttributeName, `ambersteel.character.attribute.${relatedAttributeName}.label`, compositionObj.attributeDiceCount),
       new SummedDataComponent(this.name, this.name, compositionObj.skillDiceCount),
     ]);
   }

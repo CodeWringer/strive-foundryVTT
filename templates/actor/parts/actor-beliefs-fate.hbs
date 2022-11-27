@@ -3,8 +3,8 @@ viewModel: {ActorBeliefsFateViewModel}
 cssClass: {undefined | String}
 --}}
 <section class="{{cssClass}}">
-  <h2>{{localize "ambersteel.beliefSystem.beliefs"}}</h2>
+  <h2>{{localize "ambersteel.character.beliefSystem.belief.plural"}}</h2>
   {{> "systems/ambersteel/templates/actor/parts/actor-beliefs.hbs" viewModel=viewModel.beliefsViewModel }}
-  <h2>{{localize "ambersteel.fateSystem.fate"}}</h2>
+  <h2>{{localize "ambersteel.character.beliefSystem.fateSystem.label"}}</h2>
   {{> "systems/ambersteel/templates/actor/parts/actor-fate.hbs" viewModel=viewModel.fateViewModel }}
 </section>

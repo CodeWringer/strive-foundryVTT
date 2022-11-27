@@ -3,7 +3,7 @@ viewModel: {ActorHealthViewModel}
 cssClass: {undefined | String}
 --}}
 <section class="{{cssClass}}">
-  <h2>{{localize "ambersteel.labels.healthStats"}}</h2>
+  <h2>{{localize "ambersteel.character.health.healthStats"}}</h2>
   {{!-- General health stats --}}
   <div class="flex flex-column">
   {{!-- Row 1 --}}
@@ -12,7 +12,7 @@ cssClass: {undefined | String}
       <div class="sheet-block">
         <div class="flex flex-row">
           <div class="flex-grow">
-            {{> inputLabel for="maxHP" text="ambersteel.labels.maxHP"}}
+            {{> inputLabel for="maxHP" text="ambersteel.character.health.hp.maximum"}}
           </div>
           <span class="width-md">
             {{> inputNumberSpinner viewModel=viewModel.vmNsMaxHp }}
@@ -20,7 +20,7 @@ cssClass: {undefined | String}
         </div>
         <div class="flex flex-row">
           <div class="flex-grow">
-            {{> inputLabel for="HP" text="ambersteel.labels.HP"}}
+            {{> inputLabel for="HP" text="ambersteel.character.health.hp.abbreviation"}}
           </div>
           <span class="width-md">
             {{> inputNumberSpinner viewModel=viewModel.vmNsHp }}
@@ -31,7 +31,7 @@ cssClass: {undefined | String}
       <div class="sheet-block">
         <div class="flex flex-row">
           <div class="flex-grow">
-            {{> inputLabel for="maxExhaustion" text="ambersteel.labels.maxExhaustion"}}
+            {{> inputLabel for="maxExhaustion" text="ambersteel.character.health.exhaustion.maximum"}}
           </div>
           <span class="width-md">
             {{> inputNumberSpinner viewModel=viewModel.vmNsMaxExhaustion }}
@@ -39,7 +39,7 @@ cssClass: {undefined | String}
         </div>
         <div class="flex flex-row">
           <div class="flex-grow">
-            {{> inputLabel for="exhaustion" text="ambersteel.labels.exhaustion"}}
+            {{> inputLabel for="exhaustion" text="ambersteel.character.health.exhaustion.label"}}
           </div>
           <span class="width-md">
             {{> inputNumberSpinner viewModel=viewModel.vmNsExhaustion }}
@@ -50,7 +50,7 @@ cssClass: {undefined | String}
       <div class="sheet-block">
         <div class="flex flex-row">
           <div class="flex-grow">
-            {{> inputLabel text="ambersteel.labels.maxMagicStamina"}}
+            {{> inputLabel text="ambersteel.character.magic.stamina.maximum"}}
           </div>
           <span class="width-md">
             {{> inputNumberSpinner viewModel=viewModel.vmNsMaxMagicStamina }}
@@ -58,7 +58,7 @@ cssClass: {undefined | String}
         </div>
         <div class="flex flex-row">
           <div class="flex-grow">
-            {{> inputLabel text="ambersteel.labels.magicStamina"}}
+            {{> inputLabel text="ambersteel.character.magic.stamina.label"}}
           </div>
           <span class="width-md">
             {{> inputNumberSpinner viewModel=viewModel.vmNsMagicStamina }}
@@ -67,12 +67,12 @@ cssClass: {undefined | String}
       </div>
     </div>
   {{!-- Injuries --}}
-  <h2 class="flex flex-row">{{localize "ambersteel.labels.injuries"}}</h2>
+  <h2 class="flex flex-row">{{localize "ambersteel.character.health.injury.plural"}}</h2>
   <div class="grid-2col grid-gap-md margin-b-md">
     <div class="sheet-block">
       <div class="flex flex-row">
         <div class="flex-grow">
-          {{> inputLabel for="maxInjuries" text="ambersteel.labels.maxInjuries"}}
+          {{> inputLabel for="maxInjuries" text="ambersteel.character.health.injury.maximum"}}
         </div>
         <span class="width-md">
           {{> inputNumberSpinner viewModel=viewModel.vmNsMaxInjuries }}
@@ -82,7 +82,7 @@ cssClass: {undefined | String}
     <div class="sheet-block">
       <div class="flex flex-row">
         <div class="flex-grow">
-          {{> inputLabel text="ambersteel.labels.injuries"}}
+          {{> inputLabel text="ambersteel.character.health.injury.plural"}}
         </div>
         <span class="width-md">
           <div class="ambersteel-read-only pad-sm fill">
@@ -102,14 +102,14 @@ cssClass: {undefined | String}
   </div>
   {{> sortableList viewModel=viewModel.vmInjuryList }}
   {{!-- Illnesses --}}
-  <h2>{{localize "ambersteel.labels.illnesses"}}</h2>
+  <h2>{{localize "ambersteel.character.health.illness.plural"}}</h2>
   <div class="grid-2col grid-gap-md margin-b-md">
     <div>
     </div>
     <div class="sheet-block">
       <div class="flex flex-row">
         <div class="flex-grow">
-          {{> inputLabel text="ambersteel.labels.illnesses"}}
+          {{> inputLabel text="ambersteel.character.health.illness.plural"}}
         </div>
         <span class="width-md">
           <div class="ambersteel-read-only pad-sm fill">
@@ -121,14 +121,14 @@ cssClass: {undefined | String}
   </div>
   {{> sortableList viewModel=viewModel.vmIllnessList }}
   {{!-- Mutations --}}
-  <h2>{{localize "ambersteel.labels.mutations"}}</h2>
+  <h2>{{localize "ambersteel.character.health.mutation.plural"}}</h2>
   <div class="grid-2col grid-gap-md margin-b-md">
     <div>
     </div>
     <div class="sheet-block">
       <div class="flex flex-row">
         <div class="flex-grow">
-          {{> inputLabel text="ambersteel.labels.mutations"}}
+          {{> inputLabel text="ambersteel.character.health.mutation.plural"}}
         </div>
         <span class="width-md">
           <div class="ambersteel-read-only pad-sm fill">
