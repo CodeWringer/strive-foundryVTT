@@ -213,31 +213,4 @@ export default class ButtonRollViewModel extends ButtonViewModel {
   }
 }
 
-Handlebars.registerHelper('createButtonRollViewModel', function(
-  id, 
-  target,
-  propertyPath,
-  rollType,
-  primaryTitle,
-  primaryImage,
-  secondaryTitle,
-  secondaryImage,
-  actor,
-  callback,
-  callbackData
-) {
-  return new ButtonRollViewModel({
-    id: id,
-    target: target,
-    propertyPath: propertyPath,
-    rollType: rollType,
-    primaryTitle: primaryTitle,
-    primaryImage: primaryImage,
-    secondaryTitle: secondaryTitle,
-    secondaryImage: secondaryImage,
-    actor: actor,
-    callback: callback,
-    callbackData: callbackData,
-  });
-});
 Handlebars.registerPartial('buttonRoll', `{{> "${ButtonRollViewModel.TEMPLATE}"}}`);

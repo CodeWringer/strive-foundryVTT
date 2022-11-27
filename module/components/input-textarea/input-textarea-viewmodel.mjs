@@ -86,15 +86,4 @@ export default class InputTextareaViewModel extends InputViewModel {
   }
 }
 
-Handlebars.registerHelper('createTextareaViewModel', function(id, isEditable, propertyOwner, propertyPath, placeholder, spellcheck, contextTemplate) {
-  return new InputTextareaViewModel({
-    id: id,
-    isEditable: isEditable,
-    propertyOwner: propertyOwner,
-    propertyPath: propertyPath,
-    spellcheck: spellcheck,
-    placeholder: placeholder,
-    contextTemplate: contextTemplate,
-  });
-});
 Handlebars.registerPartial('inputTextarea', `{{> "${InputTextareaViewModel.TEMPLATE}"}}`);

@@ -202,13 +202,4 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
   }
 }
 
-Handlebars.registerHelper('createButtonTakeItemViewModel', function(id, target, callback, callbackData, contextType) {
-  return new ButtonTakeItemViewModel({
-    id: id,
-    target: target,
-    callback: callback,
-    callbackData: callbackData,
-    contextType: contextType,
-  });
-});
 Handlebars.registerPartial('buttonTakeItem', `{{#> "${ButtonTakeItemViewModel.TEMPLATE}"}}{{> @partial-block }}{{/"${ButtonTakeItemViewModel.TEMPLATE}"}}`);

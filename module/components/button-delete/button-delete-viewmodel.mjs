@@ -77,14 +77,4 @@ export default class ButtonDeleteViewModel extends ButtonViewModel {
   }
 }
 
-Handlebars.registerHelper('createButtonDeleteViewModel', function(id, target, propertyPath, withDialog, callback, callbackData) {
-  return new ButtonDeleteViewModel({
-    id: id,
-    target: target,
-    withDialog: withDialog,
-    propertyPath: propertyPath,
-    callback: callback,
-    callbackData: callbackData,
-  });
-});
 Handlebars.registerPartial('buttonDelete', `{{> "${ButtonDeleteViewModel.TEMPLATE}"}}`);

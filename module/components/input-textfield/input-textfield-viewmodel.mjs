@@ -61,14 +61,4 @@ export default class InputTextFieldViewModel extends InputViewModel {
   }
 }
 
-Handlebars.registerHelper('createTextFieldViewModel', function(id, isEditable, propertyOwner, propertyPath, localizablePlaceholder, contextTemplate) {
-  return new InputTextFieldViewModel({
-    id: id,
-    isEditable: isEditable,
-    propertyOwner: propertyOwner,
-    propertyPath: propertyPath,
-    placeholder: game.i18n.localize(localizablePlaceholder),
-    contextTemplate: contextTemplate,
-  });
-});
 Handlebars.registerPartial('inputTextField', `{{> "${InputTextFieldViewModel.TEMPLATE}"}}`);

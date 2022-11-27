@@ -56,12 +56,4 @@ export default class ButtonOpenSheetViewModel extends ButtonViewModel {
   }
 }
 
-Handlebars.registerHelper('createButtonOpenSheetViewModel', function(id, target, callback, callbackData) {
-  return new ButtonOpenSheetViewModel({
-    id: id,
-    target: target,
-    callback: callback,
-    callbackData: callbackData,
-  });
-});
 Handlebars.registerPartial('buttonOpenSheet', `{{> "${ButtonOpenSheetViewModel.TEMPLATE}"}}`);

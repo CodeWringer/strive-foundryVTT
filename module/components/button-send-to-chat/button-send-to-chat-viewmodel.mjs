@@ -120,15 +120,4 @@ export default class ButtonSendToChatViewModel extends ButtonViewModel {
   }
 }
 
-Handlebars.registerHelper('createButtonSendToChatViewModel', function(id, target, propertyPath, chatTitle, actor, callback, callbackData) {
-  return new ButtonSendToChatViewModel({
-    id: id,
-    target: target,
-    propertyPath: propertyPath,
-    chatTitle: chatTitle,
-    actor: actor,
-    callback: callback,
-    callbackData: callbackData,
-  });
-});
 Handlebars.registerPartial('buttonSendToChat', `{{> "${ButtonSendToChatViewModel.TEMPLATE}"}}`);

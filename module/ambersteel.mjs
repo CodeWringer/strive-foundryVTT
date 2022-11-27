@@ -254,21 +254,11 @@ Hooks.once('init', async function() {
 /*  Handlebars Helpers                          */
 /* -------------------------------------------- */
 
-// If you need to add Handlebars helpers, here are a few useful examples:
-Handlebars.registerHelper('concat', function() {
-  let outStr = '';
-  for (let arg in arguments) {
-    if (typeof arguments[arg] != 'object') {
-      outStr += arguments[arg];
-    }
-  }
-  return outStr;
-});
-
-Handlebars.registerHelper('toLowerCase', function(str) {
-  return str.toLowerCase();
-});
-
+/**
+ * Repeats the given `content` exactly `n` times. 
+ * @param {Number} n The repetition count. 
+ * @param {String} content The HTML content to repeat. 
+ */
 Handlebars.registerHelper('times', function(n, content) {
   let result = "";
   for (let i = 0; i < n; i++) {
@@ -278,100 +268,72 @@ Handlebars.registerHelper('times', function(n, content) {
   return result;
 });
 
+/**
+ * Returns `true`, if the given parameters are considered equal. Otherwise, returns `false`. 
+ * @param {Any} a
+ * @param {Any} b
+ * 
+ * @returns {Boolean}
+ */
 Handlebars.registerHelper('eq', function(a, b) {
   return a == b;
 });
 
+/**
+ * Returns `true`, if the given parameters are *not* considered equal. Otherwise, returns `false`. 
+ * @param {Any} a
+ * @param {Any} b
+ * 
+ * @returns {Boolean}
+ */
 Handlebars.registerHelper('neq', function(a, b) {
   return a != b;
 });
 
+/**
+ * Returns `true`, if both of the given parameters are 'truth-y' values. Otherwise, returns `false`. 
+ * @param {Any} a
+ * @param {Any} b
+ * 
+ * @returns {Boolean}
+ */
 Handlebars.registerHelper('and', function(a, b) {
   return a && b;
 });
 
+/**
+ * Returns `true`, if at least one of the given parameters is 'truth-y' values. Otherwise, returns `false`. 
+ * @param {Any} a
+ * @param {Any} b
+ * 
+ * @returns {Boolean}
+ */
 Handlebars.registerHelper('or', function(a, b) {
   return a || b;
 });
 
+/**
+ * Returns the negated given value. 
+ * @param {Any} a
+ * 
+ * @returns {Any | Boolean}
+ */
 Handlebars.registerHelper('not', function(a) {
   return !a;
 });
 
-Handlebars.registerHelper('obj', function(a) {
-  return {};
-});
-
+/**
+ * If the given condition is satisfied, returns `thenValue`, otherwise, returns `elseValue`. 
+ * @param {Any} condition
+ * @param {Any} thenValue
+ * @param {Any} elseValue
+ */
 Handlebars.registerHelper('ifThenElse', function(condition, thenValue, elseValue) {
   if (condition) {
     return thenValue;
   } else {
     return elseValue;
   }
-});
-
-Handlebars.registerHelper('arrayFrom', function(arrayString) {
-  let cleaned = arrayString.trim()
-  cleaned = cleaned.substring(1, cleaned.length - 1);
-  const splits = cleaned.split(",");
-  const result = [];
-  for (const split of splits) {
-    const indexColon = split.indexOf(":");
-
-    if (indexColon < 0) {
-      result.push({ key: split.trim(), value: undefined });
-    } else {
-      result.push({ 
-        key: split.substring(0, indexColon).trim(),
-        value: split.substring(indexColon + 1).trim()
-      });
-    }
-  }
-  return result;
-});
-
-Handlebars.registerHelper('getValue', function(context, propertyPath) {
-  return getNestedPropertyValue(context, propertyPath);
-});
-
-Handlebars.registerHelper('isDefined', function() {
-  for (const arg in arguments) {
-    const argValue = arguments[arg];
-    if (argValue !== undefined) {
-      return argValue;
-    }
-  }
-  return undefined;
-});
-
-Handlebars.registerHelper('generateId', function() {
-  return createUUID();
-});
-
-// If the given 'obj' has a property found via the given 'propertyPath', its value will be returned. 
-// Otherwise, if the property doesn't yet exist, it will be created and its value 
-// set to the given 'defaultValue'. 
-Handlebars.registerHelper('getEnsured', function(obj, propertyPath, defaultValue) {
-  ensureNestedProperty(obj, propertyPath, defaultValue);
-  return getNestedPropertyValue(obj, propertyPath);
-});
-
-// Returns an invocable function that, once invoked, will set the given object's 
-// property, identified by the given path, to the given value. 
-// The returned function need only be invoked. No arguments need to be passed. 
-Handlebars.registerHelper('setCallback', function(obj, propertyPath, value) {
-  // This defines the actual callback function. 
-  const f = (obj, propertyPath, value) => {
-    ensureNestedProperty(obj, propertyPath, value);
-    setNestedPropertyValue(obj, propertyPath, value);
-  };
-  // This wraps a concrete call to the callback function in an 
-  // instance of an anonymous function. This is necessary to prevent 
-  // the actual callback function to be invoked prematurely and 
-  // wraps the given arguments in a concrete call. 
-  // This means that the returned function need only be invoked 
-  // as any other function without arguments. 
-  return () => { f(obj, propertyPath, value) };
 });
 
 /* -------------------------------------------- */

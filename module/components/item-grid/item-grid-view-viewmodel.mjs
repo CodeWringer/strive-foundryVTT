@@ -135,13 +135,4 @@ export default class ItemGridViewViewModel extends InputViewModel {
   }
 }
 
-Handlebars.registerHelper('createItemGridViewViewModel', function(id, isEditable, propertyOwner, propertyPath, gridWidth) {
-  return new ItemGridViewViewModel({
-    id: id,
-    isEditable: isEditable,
-    propertyOwner: propertyOwner,
-    propertyPath: propertyPath,
-    gridWidth: gridWidth,
-  });
-});
 Handlebars.registerPartial('itemGridView', `{{> "${ItemGridViewViewModel.TEMPLATE}"}}`);

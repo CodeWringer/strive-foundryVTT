@@ -91,14 +91,4 @@ export default class InputDropDownViewModel extends InputViewModel {
   }
 }
 
-Handlebars.registerHelper('createDropDownViewModel', function(id, isEditable, propertyOwner, propertyPath, options, contextTemplate) {
-  return new InputDropDownViewModel({
-    id: id,
-    isEditable: isEditable,
-    propertyOwner: propertyOwner,
-    propertyPath: propertyPath,
-    options: options,
-    contextTemplate: contextTemplate,
-  });
-});
 Handlebars.registerPartial('inputDropDown', `{{> "${InputDropDownViewModel.TEMPLATE}"}}`);

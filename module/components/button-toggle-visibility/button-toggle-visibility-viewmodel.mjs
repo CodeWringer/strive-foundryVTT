@@ -86,14 +86,4 @@ export default class ButtonToggleVisibilityViewModel extends ButtonViewModel {
   }
 }
 
-Handlebars.registerHelper('createButtonToggleVisibilityViewModel', function(id, target, callback, callbackData, visGroup, toggleSelf) {
-  return new ButtonToggleVisibilityViewModel({
-    id: id,
-    target: target,
-    callback: callback,
-    callbackData: callbackData,
-    visGroup: visGroup,
-    toggleSelf: toggleSelf,
-  });
-});
 Handlebars.registerPartial('buttonToggleVisibility', `{{#> "${ButtonToggleVisibilityViewModel.TEMPLATE}"}}{{> @partial-block }}{{/"${ButtonToggleVisibilityViewModel.TEMPLATE}"}}`);

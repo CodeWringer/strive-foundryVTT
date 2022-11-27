@@ -222,15 +222,4 @@ export default class ButtonAddViewModel extends ButtonViewModel {
   }
 }
 
-Handlebars.registerHelper('createButtonAddViewModel', function(id, target, creationType, withDialog, creationData, callback, callbackData) {
-  return new ButtonAddViewModel({
-    id: id,
-    target: target,
-    creationType: creationType,
-    withDialog: withDialog,
-    creationData: creationData,
-    callback: callback,
-    callbackData: callbackData,
-  });
-});
 Handlebars.registerPartial('buttonAdd', `{{> "${ButtonAddViewModel.TEMPLATE}"}}`);
