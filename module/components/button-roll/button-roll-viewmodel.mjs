@@ -1,4 +1,5 @@
 import { ROLL_TYPES } from "../../constants/roll-types.mjs";
+import { SOUNDS_CONSTANTS } from "../../constants/sounds.mjs";
 import { TEMPLATES } from "../../templatePreloader.mjs";
 import * as ChatUtil from "../../utils/chat-utility.mjs";
 import * as DiceUtil from "../../utils/dice-utility.mjs";
@@ -148,7 +149,7 @@ export default class ButtonRollViewModel extends ButtonViewModel {
         renderedContent: renderedContent,
         flavor: this.primaryChatTitle,
         actor: this.actor,
-        sound: DiceUtil.DICE_ROLL_SOUND,
+        sound: SOUNDS_CONSTANTS.DICE_ROLL,
         visibilityMode: dialogResult.visibilityMode
       });
     } else if (this.rollType === ROLL_TYPES.dicePool) {

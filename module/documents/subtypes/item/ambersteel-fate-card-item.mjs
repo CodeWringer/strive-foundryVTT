@@ -2,6 +2,7 @@ import AmbersteelBaseItem from "./ambersteel-base-item.mjs";
 import { TEMPLATES } from "../../../templatePreloader.mjs";
 import FateCardChatMessageViewModel from "../../../../templates/item/fate-card/fate-card-chat-message-viewmodel.mjs";
 import PreparedChatData from "../../../dto/prepared-chat-data.mjs";
+import { SOUNDS_CONSTANTS } from "../../../constants/sounds.mjs";
 
 export default class AmbersteelFateCardItem extends AmbersteelBaseItem {
   /** @override */
@@ -53,7 +54,7 @@ export default class AmbersteelFateCardItem extends AmbersteelBaseItem {
     return new PreparedChatData({
       renderedContent: renderedContent,
       actor: actor, 
-      sound: "../sounds/notify.wav",
+      sound: SOUNDS_CONSTANTS.NOTIFY,
       viewModel: vm,
       flavor: game.i18n.localize("ambersteel.character.beliefSystem.fateSystem.fateCard.label"),
     });

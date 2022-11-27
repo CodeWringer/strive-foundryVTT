@@ -5,9 +5,9 @@ import { TEMPLATES } from "../../../module/templatePreloader.mjs";
 import { getNestedPropertyValue } from "../../../module/utils/property-utility.mjs";
 import { validateOrThrow } from "../../../module/utils/validation-utility.mjs";
 import * as ChatUtil from "../../../module/utils/chat-utility.mjs";
-import { DICE_ROLL_SOUND } from "../../../module/utils/dice-utility.mjs";
 import { DAMAGE_TYPES } from "../../../module/constants/damage-types.mjs";
 import { ATTACK_TYPES } from "../../../module/constants/attack-types.mjs";
+import { SOUNDS_CONSTANTS } from "../../../module/constants/sounds.mjs";
 
 export default class SkillAbilityListItemViewModel extends SheetViewModel {
   /** @override */
@@ -252,7 +252,7 @@ export default class SkillAbilityListItemViewModel extends SheetViewModel {
       return ChatUtil.sendToChat({
         renderedContent: renderedContent,
         actor: skillAbilityParent.parent,
-        sound: DICE_ROLL_SOUND,
+        sound: SOUNDS_CONSTANTS.DICE_ROLL,
         visibilityMode: dialogResult.visibilityMode
       });
     };

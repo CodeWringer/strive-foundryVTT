@@ -2,6 +2,7 @@ import AmbersteelBaseItem from "./ambersteel-base-item.mjs";
 import { TEMPLATES } from "../../../templatePreloader.mjs";
 import IllnessChatMessageViewModel from "../../../../templates/item/illness/illness-chat-message-viewmodel.mjs";
 import PreparedChatData from "../../../dto/prepared-chat-data.mjs";
+import { SOUNDS_CONSTANTS } from "../../../constants/sounds.mjs";
 
 export default class AmbersteelIllnessItem extends AmbersteelBaseItem {
   /** @override */
@@ -53,7 +54,7 @@ export default class AmbersteelIllnessItem extends AmbersteelBaseItem {
     return new PreparedChatData({
       renderedContent: renderedContent,
       actor: actor, 
-      sound: "../sounds/notify.wav",
+      sound: SOUNDS_CONSTANTS.NOTIFY,
       viewModel: vm,
       flavor: game.i18n.localize("ambersteel.character.health.illness.singular"),
     });

@@ -9,6 +9,7 @@ import { DiceOutcomeTypes } from "../../../dto/dice-outcome-types.mjs";
 import PreparedChatData from "../../../dto/prepared-chat-data.mjs";
 import Ruleset from "../../../ruleset.mjs";
 import { DAMAGE_TYPES } from "../../../constants/damage-types.mjs";
+import { SOUNDS_CONSTANTS } from "../../../constants/sounds.mjs";
 
 export default class AmbersteelSkillItem extends AmbersteelBaseItem {
   /** @override */
@@ -70,7 +71,7 @@ export default class AmbersteelSkillItem extends AmbersteelBaseItem {
     return new PreparedChatData({
       renderedContent: renderedContent,
       actor: actor, 
-      sound: "../sounds/notify.wav",
+      sound: SOUNDS_CONSTANTS.NOTIFY,
       viewModel: vm,
       flavor: game.i18n.localize("ambersteel.character.skill.singular"),
     });

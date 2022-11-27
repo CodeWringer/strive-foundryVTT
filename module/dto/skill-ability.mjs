@@ -6,6 +6,7 @@ import SkillAbilityChatMessageViewModel from '../../templates/item/skill-ability
 import { createUUID } from '../utils/uuid-utility.mjs';
 import * as PropUtil from '../utils/property-utility.mjs';
 import DamageAndType from "./damage-and-type.mjs";
+import { SOUNDS_CONSTANTS } from '../constants/sounds.mjs';
 
 /**
  * Represents a skill ability. 
@@ -104,7 +105,7 @@ export default class SkillAbility {
     return new PreparedChatData({
       renderedContent: renderedContent,
       actor: actor, 
-      sound: "../sounds/notify.wav",
+      sound: SOUNDS_CONSTANTS.NOTIFY,
       viewModel: vm,
     });
   }

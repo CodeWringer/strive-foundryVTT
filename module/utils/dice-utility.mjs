@@ -7,8 +7,7 @@ import RollDataQueryDialogResult from "../dto/roll-query-dialog-result.mjs";
 import { TEMPLATES } from "../templatePreloader.mjs";
 import { DiceOutcomeTypes } from "../dto/dice-outcome-types.mjs";
 import Ruleset from "../ruleset.mjs";
-
-export const DICE_ROLL_SOUND = "../sounds/dice.wav";
+import { SOUNDS_CONSTANTS } from "../constants/sounds.mjs";
 
 export const LOCALIZABLE_OBSTACLE_ABBREVIATION = "ambersteel.roll.obstacle.abbreviation";
 
@@ -138,7 +137,7 @@ export async function sendDiceResultToChat(args = {}) {
     renderedContent: renderedContent,
     flavor: args.flavor,
     actor: args.actor,
-    sound: DICE_ROLL_SOUND,
+    sound: SOUNDS_CONSTANTS.DICE_ROLL,
     visibilityMode: args.visibilityMode
   });
 }

@@ -6,6 +6,7 @@ import PreparedChatData from '../dto/prepared-chat-data.mjs';
 import * as UpdateUtil from '../utils/document-update-utility.mjs';
 import * as ChatUtil from "../utils/chat-utility.mjs";
 import { createUUID } from '../utils/uuid-utility.mjs';
+import { SOUNDS_CONSTANTS } from '../constants/sounds.mjs';
 
 /**
  * @summary
@@ -143,7 +144,7 @@ export class AmbersteelActor extends Actor {
     return new PreparedChatData({
       renderedContent: renderedContent,
       actor: actor,
-      sound: "../sounds/notify.wav",
+      sound: SOUNDS_CONSTANTS.NOTIFY,
       viewModel: vm,
     });
   }

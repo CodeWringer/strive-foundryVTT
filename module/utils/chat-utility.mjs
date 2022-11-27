@@ -4,8 +4,7 @@ import { getNestedPropertyValue } from "./property-utility.mjs";
 import { getElementValue } from "./sheet-utility.mjs";
 import { validateOrThrow } from "./validation-utility.mjs";
 import { TEMPLATES } from "../templatePreloader.mjs";
-
-const CHAT_GENERIC_SOUND = "../sounds/notify.wav";
+import { SOUNDS_CONSTANTS } from "../constants/sounds.mjs";
 
 /**
  * Creates a new ChatMessage, displaying the given contents. 
@@ -23,7 +22,7 @@ export async function sendToChat(chatData = {}) {
     renderedContent: undefined,
     flavor: undefined,
     actor: undefined,
-    sound: CHAT_GENERIC_SOUND,
+    sound: SOUNDS_CONSTANTS.NOTIFY,
     visibilityMode: CONFIG.ambersteel.visibilityModes.public,
     ...chatData
   };

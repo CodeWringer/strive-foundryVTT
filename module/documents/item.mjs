@@ -9,6 +9,7 @@ import * as ChatUtil from "../utils/chat-utility.mjs";
 import { createUUID } from '../utils/uuid-utility.mjs';
 import SheetViewModel from '../components/sheet-viewmodel.mjs';
 import PreparedChatData from '../dto/prepared-chat-data.mjs';
+import { SOUNDS_CONSTANTS } from '../constants/sounds.mjs';
 
 /**
  * @summary
@@ -139,7 +140,7 @@ export class AmbersteelItem extends Item {
     return new PreparedChatData({
       renderedContent: renderedContent,
       actor: actor, 
-      sound: "../sounds/notify.wav",
+      sound: SOUNDS_CONSTANTS.NOTIFY,
       viewModel: vm,
     });
   }
