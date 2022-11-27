@@ -5,7 +5,7 @@ import { getElementValue, setSelectedOptionByValue } from './sheet-utility.mjs';
 /**
  * Shows a dialog to the user and returns a promise with the result of the user interaction. 
  * @param {String} args.dialogTemplate Path to a hbs template. 
- * @param {String | undefined} args.localizableTitle A localization String for the dialog title. 
+ * @param {String | undefined} args.localizedTitle A localized title for the dialog. 
  * @param {Function | undefined} args.render A function to call during render of the dialog. 
  * Receives the DOM of the dialog as its argument. 
  * Can be used for custom rendering logic like hiding certain inputs based on the state of another input. 
@@ -22,7 +22,7 @@ import { getElementValue, setSelectedOptionByValue } from './sheet-utility.mjs';
 export async function showDialog(args = {}, dialogData) {
     args = {
         dialogTemplate: undefined,
-        localizableTitle: "",
+        localizedTitle: "",
         render: html => {},
         showConfirmButton: true,
         showCancelButton: true,
@@ -39,7 +39,7 @@ export async function showDialog(args = {}, dialogData) {
         const renderedContent = await renderTemplate(args.dialogTemplate, mergedDialogData);
 
         const dialog = new Dialog({
-            title: game.i18n.localize(args.localizableTitle),
+            title: args.localizedTitle,
             content: renderedContent,
             buttons: {
                 confirm: {
@@ -74,7 +74,7 @@ export async function showDialog(args = {}, dialogData) {
 /**
  * Shows a confirmation dialog. 
  * @param {Object} args Optional arguments to pass to the rendering function. 
- * @param {String} args.localizableTitle Localization string for the dialog title. 
+ * @param {String | undefined} args.localizedTitle A localized title for the dialog. 
  * @param {String | undefined} args.content Optional. HTML content to show as the body of the dialog. 
  * @returns {Promise<Boolean>} Resolves, when the dialog is closed. 
  *          Is true, when the dialog was closed with confirmation. 
@@ -82,7 +82,8 @@ export async function showDialog(args = {}, dialogData) {
  */
 export async function showConfirmationDialog(args = {}) {
     args = {
-        localizableTitle: "",
+        localizedTitle: "",
+        content: "",
         ...args
     };
     const mergedDialogData = {
@@ -91,8 +92,8 @@ export async function showConfirmationDialog(args = {}) {
 
     return new Promise(async (resolve, reject) => {
         const dialog = new Dialog({
-            title: game.i18n.localize(args.localizableTitle),
-            content: args.content ?? "",
+            title: args.localizedTitle,
+            content: args.content,
             buttons: {
                 confirm: {
                     icon: '<i class="fas fa-check"></i>',
@@ -124,14 +125,16 @@ export async function showConfirmationDialog(args = {}) {
  * 
  * Offers a single confirmation button. 
  * @param {Object} args Optional arguments to pass to the rendering function. 
- * @param {String} args.localizableTitle
- * @param {String} args.localizedContent
+ * @param {String | undefined} args.localizedTitle A localized title for the dialog. 
+ * @param {String | undefined} args.localizedContent The localized content of the dialog. 
+ * 
  * @returns {Promise<void>} Resolves, when the dialog is closed. 
+ * 
  * @async
  */
 export async function showPlainDialog(args = {}) {
     args = {
-        localizableTitle: "",
+        localizedTitle: "",
         localizedContent: "",
         ...args
     };
@@ -141,7 +144,7 @@ export async function showPlainDialog(args = {}) {
         const renderedContent = await renderTemplate(TEMPLATES.DIALOG_PLAIN, args);
 
         const dialog = new Dialog({
-            title: game.i18n.localize(args.localizableTitle),
+            title: args.localizedTitle,
             content: renderedContent,
             buttons: {
                 ok: {
@@ -165,8 +168,8 @@ export async function showPlainDialog(args = {}) {
  * 
  * Offers a single confirmation button. 
  * @param {Object} args Optional arguments to pass to the rendering function. 
- * @param {String} args.localizableTitle
- * @param {String} args.localizableLabel
+ * @param {String | undefined} args.localizedTitle A localized title for the dialog. 
+ * @param {String | undefined} args.localizedLabel 
  * @param {Array<ChoiceOption>} args.options An array of choices to offer for selection. 
  * @param {Any} args.selected Optional. The value to pre-select when the dialog is rendered. 
  * @returns {Promise<Object>} = {
@@ -177,8 +180,8 @@ export async function showPlainDialog(args = {}) {
  */
 export async function showSelectionDialog(args = {}) {
     args = {
-        localizableTitle: "ambersteel.general.select",
-        localizableLabel: "",
+        localizedTitle: "ambersteel.general.select",
+        localizedLabel: "",
         options: [],
         selected: undefined,
         ...args
@@ -188,7 +191,7 @@ export async function showSelectionDialog(args = {}) {
         const dialogResult = await showDialog(
           {
             dialogTemplate: TEMPLATES.DIALOG_SELECT,
-            localizableTitle: args.localizableTitle,
+            localizedTitle: args.localizedTitle,
             render: html => {
                 if (args.selected !== undefined) {
                     const selectElement = html.find("#selection");

@@ -398,7 +398,7 @@ Hooks.once("ready", async function() {
     } else {
       // Display warning to non-GM. 
       await DialogUtil.showPlainDialog({
-        localizableTitle: "ambersteel.migration.titleMigrationRequired",
+        localizedTitle: game.i18n.localize("ambersteel.migration.titleMigrationRequired"),
         localizedContent: game.i18n.localize("ambersteel.migration.migrationRequiredUserWarning"),
       });
     }

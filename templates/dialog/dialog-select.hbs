@@ -1,5 +1,5 @@
 {{!-- Parameters:
-localizableLabel: {String}
+localizedLabel: {String}
 options: {Array<ChoiceOption>}
 selected: Object
 cssClass: {undefined | String}
@@ -7,7 +7,7 @@ cssClass: {undefined | String}
 <section class="selection{{#if cssClass}} {{cssClass}}{{/if}}">
   <div class="sheet-block grid grid-2col">
     <div>
-      <label class="line-height pad-sm{{#if viewModel.showFancyFont}} fancy-font{{/if}}" for="selection">{{localize localizableLabel}}</label>
+      <label class="line-height pad-sm{{#if viewModel.showFancyFont}} fancy-font{{/if}}" for="selection">{{localizedLabel}}</label>
     </div>
     <div class="flex">
       <select id="selection" class="ambersteel-item-select" data-property-path="selected">

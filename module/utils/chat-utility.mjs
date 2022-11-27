@@ -81,7 +81,10 @@ export async function queryVisibilityMode() {
         confirmed: true
       });
     } else {
-      const result = await showDialog({ dialogTemplate: TEMPLATES.DIALOG_VISIBILITY, localizableTitle: "ambersteel.general.messageVisibility.dialog.title" }, dialogData);
+      const result = await showDialog({
+        dialogTemplate: TEMPLATES.DIALOG_VISIBILITY, 
+        localizedTitle: game.i18n.localize("ambersteel.general.messageVisibility.dialog.title" )
+      }, dialogData);
 
       const visibilityModeKey = parseInt(getElementValue(result.html.find(".visibilityMode")[0]));
       const visibilityMode = visibilityModes[visibilityModeKey];

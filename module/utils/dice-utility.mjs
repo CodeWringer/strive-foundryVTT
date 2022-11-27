@@ -158,7 +158,10 @@ export async function queryRollData() {
   };
 
   return new Promise(async (resolve, reject) => {
-    const result = await showDialog({ dialogTemplate: TEMPLATES.DIALOG_ROLL, localizableTitle: "ambersteel.roll.query" }, dialogData);
+    const result = await showDialog({
+      dialogTemplate: TEMPLATES.DIALOG_ROLL, 
+      localizedTitle: game.i18n.localize("ambersteel.roll.query")
+    }, dialogData);
     
     const obstacle = parseInt(getElementValue(result.html.find(".obstacle")[0]));
     const bonusDice = parseInt(getElementValue(result.html.find(".bonus-dice")[0]));

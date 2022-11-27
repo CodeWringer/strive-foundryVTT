@@ -119,7 +119,7 @@ export default class ItemGridViewViewModel extends InputViewModel {
       
       // Display a warning dialog. 
       showPlainDialog({
-        localizableTitle: "ambersteel.character.asset.carryingCapacity.dialog.titleItemsDropped",
+        localizedTitle: game.i18n.localize("ambersteel.character.asset.carryingCapacity.dialog.titleItemsDropped"),
         localizedContent: actor.name
         + "\n"
         + game.i18n.localize("ambersteel.character.asset.carryingCapacity.dialog.contentItemsDropped")

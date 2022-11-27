@@ -24,7 +24,7 @@ export async function showDialog(itemType, localizableItemLabel = LOCALIZABLE_IT
     const dialogResult = await DialogUtil.showDialog(
       {
         dialogTemplate: TEMPLATES.DIALOG_ITEM_ADD,
-        localizableTitle: localizableTitle,
+        localizedTitle: game.i18n.localize(localizableTitle),
         render: html => {
           html.find(".ambersteel-is-custom").change(event => {
             const select = html.find(".ambersteel-item-select")[0];
