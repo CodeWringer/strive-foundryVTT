@@ -215,7 +215,7 @@ export default class AmbersteelSkillItem extends AmbersteelBaseItem {
     const compositionObj = new Ruleset().getSkillTestNumberOfDice(skillLevel, relatedAttributeLevel);
 
     return new SummedData(compositionObj.totalDiceCount, [
-      new SummedDataComponent(relatedAttributeName, `ambersteel.attributes.${relatedAttributeName}`, compositionObj.attributeDiceCount),
+      new SummedDataComponent(relatedAttributeName, `ambersteel.character.attribute.${relatedAttributeName}.label`, compositionObj.attributeDiceCount),
       new SummedDataComponent(this.name, this.name, compositionObj.skillDiceCount),
     ]);
   }
