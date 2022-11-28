@@ -93,7 +93,7 @@ export default class ViewModel {
    * @type {String}
    * @readonly
    */
-  get id() { return this._id; }
+  get id() { return this.parent !== undefined ? `${this.parent.id}-${this._id}` : this._id; }
   
   /**
    * Parent ViewModel instance of this instance. 
@@ -142,9 +142,7 @@ export default class ViewModel {
    * is expected to be associated with an actor sheet or item sheet or journal entry or chat message and so on.
    */
   constructor(args = {}) {
-    const id = args.id ?? createUUID();
-
-    this._id = args.parent !== undefined ? `${args.parent.id}-${id}` : id;
+    this._id = args.id ?? createUUID();
     this.parent = args.parent;
 
     if (this.parent !== undefined) {
