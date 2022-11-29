@@ -1,6 +1,6 @@
 import AmbersteelBaseItemSheet from "./ambersteel-base-item-sheet.mjs";
-import { TEMPLATES } from "../../../templatePreloader.mjs";
-import MutationItemSheetViewModel from "../../../../templates/item/mutation/mutation-item-sheet-viewmodel.mjs";
+import { TEMPLATES } from "../../templatePreloader.mjs";
+import MutationItemSheetViewModel from "../../../templates/item/mutation/mutation-item-sheet-viewmodel.mjs";
 
 export default class AmbersteelMutationItemSheet extends AmbersteelBaseItemSheet {
   /** @override */

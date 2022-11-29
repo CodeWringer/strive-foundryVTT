@@ -1,9 +1,12 @@
-import AmbersteelNpcActorSheet from "./subtypes/actor/ambersteel-npc-actor-sheet.mjs";
-import AmbersteelPcActorSheet from "./subtypes/actor/ambersteel-pc-actor-sheet.mjs";
-import * as SheetUtil from "../utils/sheet-utility.mjs";
-import AmbersteelBaseActorSheet from "./subtypes/actor/ambersteel-base-actor-sheet.mjs";
+import AmbersteelBaseItemSheet from "./ambersteel-base-item-sheet.mjs";
+import AmbersteelSkillItemSheet from "./ambersteel-skill-item-sheet.mjs";
+import AmbersteelFateCardItemSheet from "./ambersteel-fate-item-sheet.mjs";
+import AmbersteelInjuryItemSheet from "./ambersteel-injury-item-sheet.mjs";
+import AmbersteelIllnessItemSheet from "./ambersteel-illness-item-sheet.mjs";
+import AmbersteelMutationItemSheet from "./ambersteel-mutation-item-sheet.mjs";
+import * as SheetUtil from "../../utils/sheet-utility.mjs";
 
-export class AmbersteelActorSheet extends ActorSheet {
+export class AmbersteelItemSheet extends ItemSheet {
   /**
    * @private
    */
@@ -14,16 +17,23 @@ export class AmbersteelActorSheet extends ActorSheet {
   get subType() {
     if (!this._subType) {
       const data = super.getData();
-      const type = data.actor.type;
+      const type = data.item.type;
 
-      if (type === "pc") {
-        this._subType = new AmbersteelPcActorSheet(this);
-      } else if (type === "npc") {
-        this._subType = new AmbersteelNpcActorSheet(this);
-      } else if (type === "plain") {
-        this._subType = new AmbersteelBaseActorSheet(this);
+      // TODO: Refactor and somehow get rid of the explicit statements. 
+      if (type === "skill") {
+        this._subType = new AmbersteelSkillItemSheet(this);
+      } else if (type === "fate-card") {
+        this._subType = new AmbersteelFateCardItemSheet(this);
+      } else if (type === "item") {
+        this._subType = new AmbersteelBaseItemSheet(this);
+      } else if (type === "injury") {
+        this._subType = new AmbersteelInjuryItemSheet(this);
+      } else if (type === "illness") {
+        this._subType = new AmbersteelIllnessItemSheet(this);
+      } else if (type === "mutation") {
+        this._subType = new AmbersteelMutationItemSheet(this);
       } else {
-        throw `Actor subtype ${type} is unrecognized!`
+        throw `ItemSheet subtype ${type} is unrecognized!`
       }
     }
     return this._subType;
@@ -33,14 +43,14 @@ export class AmbersteelActorSheet extends ActorSheet {
    * @returns {Object}
    * @override
    * @virtual
-   * @see https://foundryvtt.com/api/ActorSheet.html#.defaultOptions
+   * @see https://foundryvtt.com/api/ItemSheet.html#.defaultOptions
    */
   static get defaultOptions() {
     return mergeObject(super.defaultOptions, {
-      classes: ["ambersteel", "sheet", "actor"],
-      width: 700,
-      height: 800,
-      tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "attributes" }]
+      classes: ["ambersteel", "sheet", "item"],
+      width: 520,
+      height: 480,
+      tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "description" }]
     });
   }
 
@@ -55,20 +65,27 @@ export class AmbersteelActorSheet extends ActorSheet {
     return this.subType.template;
   }
 
+  // TODO: Refactor and make the subtype dictate the title. 
   /**
    * @override
    * @type {String}
-   * @see https://foundryvtt.com/api/ActorSheet.html#title
+   * @see https://foundryvtt.com/api/ItemSheet.html#title
    */
   get title() {
-    if (this.actor.type === "pc") {
-      return `${game.i18n.localize("ambersteel.general.actor.pc.label")} - ${this.actor.name}`;
-    } else if (this.actor.type === "npc") {
-      return `${game.i18n.localize("ambersteel.general.actor.npc.label")} - ${this.actor.name}`;
-    } else if (this.actor.type === "plain") {
-      return `${game.i18n.localize("ambersteel.general.actor.plain.label")} - ${this.actor.name}`;
+    if (this.item.type === "skill") {
+      return `${game.i18n.localize("ambersteel.character.skill.singular")} - ${this.item.name}`;
+    } else if (this.item.type === "fate-card") {
+      return `${game.i18n.localize("ambersteel.character.beliefSystem.fateSystem.fateCard.label")} - ${this.item.name}`;
+    } else if (this.item.type === "item") {
+      return `${game.i18n.localize("ambersteel.character.asset.singular")} - ${this.item.name}`;
+    } else if (this.item.type === "injury") {
+      return `${game.i18n.localize("ambersteel.character.health.injury.singular")} - ${this.item.name}`;
+    } else if (this.item.type === "illness") {
+      return `${game.i18n.localize("ambersteel.character.health.illness.singular")} - ${this.item.name}`;
+    } else if (this.item.type === "mutation") {
+      return `${game.i18n.localize("ambersteel.character.health.mutation.singular")} - ${this.item.name}`;
     } else {
-      return this.actor.name;
+      return this.item.name;
     }
   }
 
@@ -84,14 +101,14 @@ export class AmbersteelActorSheet extends ActorSheet {
   get viewModel() { return this._viewModel; }
 
   /** 
-   * Returns an object that represents sheet and enriched actor data. 
+   * Returns an object that represents sheet and enriched item data. 
    * 
    * Enriched means, it contains derived data and convenience properties. 
    * 
    * This method is called *before* the sheet is rendered. 
    * @returns {Object} The enriched context object. 
    * @override 
-   * @see https://foundryvtt.com/api/FormApplication.html#getData
+   * @see https://foundryvtt.com/api/FormApplicatiocn.html#getData
    */
   getData() {
     const context = super.getData();
@@ -127,15 +144,6 @@ export class AmbersteelActorSheet extends ActorSheet {
 
     // -------------------------------------------------------------
     if (!isOwner) return;
-
-    // Drag events for macros.
-    const handler = ev => this._onDragStart(ev);
-    html.find('li.item').each((i, li) => {
-      if (li.classList.contains("inventory-header")) return;
-      li.setAttribute("draggable", true);
-      li.addEventListener("dragstart", handler, false);
-    });
-
     // -------------------------------------------------------------
     if (!isEditable) return;
   }
@@ -146,10 +154,10 @@ export class AmbersteelActorSheet extends ActorSheet {
    */
   async close() {
     this._tryDisposeViewModel();
-    
+
     return super.close();
   }
-  
+
   /**
    * Disposes of the view model, if possible. 
    * 

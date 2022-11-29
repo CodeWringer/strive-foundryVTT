@@ -1,15 +1,15 @@
 import AmbersteelBaseItemSheet from "./ambersteel-base-item-sheet.mjs";
-import { TEMPLATES } from "../../../templatePreloader.mjs";
-import IllnessItemSheetViewModel from "../../../../templates/item/illness/illness-item-sheet-viewmodel.mjs";
+import { TEMPLATES } from "../../templatePreloader.mjs";
+import FateCardItemSheetViewModel from "../../../templates/item/fate-card/fate-card-item-sheet-viewmodel.mjs";
 
-export default class AmbersteelIllnessItemSheet extends AmbersteelBaseItemSheet {
+export default class AmbersteelFateItemSheet extends AmbersteelBaseItemSheet {
   /** @override */
   get template() {
-    return TEMPLATES.ILLNESS_ITEM_SHEET;
+    return TEMPLATES.FATE_CARD_ITEM_SHEET;
   }
 
   getViewModel(context) {
-    return new IllnessItemSheetViewModel({
+    return new FateCardItemSheetViewModel({
       id: this.getItem().id,
       isEditable: context.isEditable,
       isSendable: context.isSendable,

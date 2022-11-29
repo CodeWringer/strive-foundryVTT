@@ -18,8 +18,8 @@ import LoadDebugSettingUseCase from "./use-case/load-debug-setting-use-case.mjs"
 import { AmbersteelActor } from "./documents/actor/actor.mjs";
 import { AmbersteelItem } from "./documents/item/item.mjs";
 // Import sheet classes.
-import { AmbersteelActorSheet } from "./sheets/actor-sheet.mjs";
-import { AmbersteelItemSheet } from "./sheets/item-sheet.mjs";
+import { AmbersteelActorSheet } from "./sheets/actor/actor-sheet.mjs";
+import { AmbersteelItemSheet } from "./sheets/item/item-sheet.mjs";
 // Import helper/utility classes and constants.
 import Ruleset from "./ruleset.mjs";
 import { preloadHandlebarsTemplates } from "./templatePreloader.mjs";

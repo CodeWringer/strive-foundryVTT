@@ -1,15 +1,15 @@
 import AmbersteelBaseItemSheet from "./ambersteel-base-item-sheet.mjs";
-import { TEMPLATES } from "../../../templatePreloader.mjs";
-import FateCardItemSheetViewModel from "../../../../templates/item/fate-card/fate-card-item-sheet-viewmodel.mjs";
+import { TEMPLATES } from "../../templatePreloader.mjs";
+import InjuryItemSheetViewModel from "../../../templates/item/injury/injury-item-sheet-viewmodel.mjs";
 
-export default class AmbersteelFateItemSheet extends AmbersteelBaseItemSheet {
+export default class AmbersteelInjuryItemSheet extends AmbersteelBaseItemSheet {
   /** @override */
   get template() {
-    return TEMPLATES.FATE_CARD_ITEM_SHEET;
+    return TEMPLATES.INJURY_ITEM_SHEET;
   }
 
   getViewModel(context) {
-    return new FateCardItemSheetViewModel({
+    return new InjuryItemSheetViewModel({
       id: this.getItem().id,
       isEditable: context.isEditable,
       isSendable: context.isSendable,

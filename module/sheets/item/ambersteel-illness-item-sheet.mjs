@@ -1,15 +1,15 @@
 import AmbersteelBaseItemSheet from "./ambersteel-base-item-sheet.mjs";
-import { TEMPLATES } from "../../../templatePreloader.mjs";
-import InjuryItemSheetViewModel from "../../../../templates/item/injury/injury-item-sheet-viewmodel.mjs";
+import { TEMPLATES } from "../../templatePreloader.mjs";
+import IllnessItemSheetViewModel from "../../../templates/item/illness/illness-item-sheet-viewmodel.mjs";
 
-export default class AmbersteelInjuryItemSheet extends AmbersteelBaseItemSheet {
+export default class AmbersteelIllnessItemSheet extends AmbersteelBaseItemSheet {
   /** @override */
   get template() {
-    return TEMPLATES.INJURY_ITEM_SHEET;
+    return TEMPLATES.ILLNESS_ITEM_SHEET;
   }
 
   getViewModel(context) {
-    return new InjuryItemSheetViewModel({
+    return new IllnessItemSheetViewModel({
       id: this.getItem().id,
       isEditable: context.isEditable,
       isSendable: context.isSendable,

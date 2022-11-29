@@ -1,5 +1,5 @@
-import ActorSheetViewModel from "../../../../templates/actor/actor-sheet-viewmodel.mjs";
-import { TEMPLATES } from "../../../templatePreloader.mjs";
+import ActorSheetViewModel from "../../../templates/actor/actor-sheet-viewmodel.mjs";
+import { TEMPLATES } from "../../templatePreloader.mjs";
 
 export default class AmbersteelBaseActorSheet {
   /**

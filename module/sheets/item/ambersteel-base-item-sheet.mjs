@@ -1,5 +1,5 @@
-import ItemItemSheetViewModel from "../../../../templates/item/item/item-item-sheet-viewmodel.mjs";
-import { TEMPLATES } from "../../../templatePreloader.mjs";
+import ItemItemSheetViewModel from "../../../templates/item/item/item-item-sheet-viewmodel.mjs";
+import { TEMPLATES } from "../../templatePreloader.mjs";
 
 export default class AmbersteelBaseItemSheet {
   /**
