@@ -38,7 +38,6 @@ export const TEMPLATES = {
   // --- Actor
   ACTOR_SHEET: "systems/ambersteel/templates/actor/actor-sheet.hbs",
   ACTOR_ATTRIBUTE_TABLE: "systems/ambersteel/templates/actor/components/component-attribute-table.hbs",
-  ACTOR_SKILL_TABLE: "systems/ambersteel/templates/actor/components/component-skill-table.hbs",
   ACTOR_PERSONALS: "systems/ambersteel/templates/actor/parts/actor-personals.hbs",
   ACTOR_ATTRIBUTES: "systems/ambersteel/templates/actor/parts/actor-attributes.hbs",
   ACTOR_SKILLS: "systems/ambersteel/templates/actor/parts/actor-skills.hbs",

@@ -57,7 +57,6 @@ import './components/sortable-list/sortable-list-viewmodel.mjs';
 import '../templates/gm-notes-viewmodel.mjs';
 import '../templates/actor/actor-sheet-viewmodel.mjs';
 import '../templates/actor/components/component-attribute-table-viewmodel.mjs';
-import '../templates/actor/components/component-skill-table-viewmodel.mjs';
 import '../templates/actor/parts/actor-assets-viewmodel.mjs';
 import '../templates/actor/parts/actor-attributes-viewmodel.mjs';
 import '../templates/actor/parts/actor-beliefs-fate-viewmodel.mjs';
