@@ -1,9 +1,9 @@
 import { TEMPLATES } from '../../templatePreloader.mjs';
 
 /**
- * This represents the base type for all item sub-types to inherit from. 
+ * Represents the base contract for a "specific" item "sub-type". 
  * 
- * The contract expected by a concrete `Item` instance is defined herein. 
+ * Such a "sub-type" is really on an "enhancer", which adds properties and/or methods to a given `Item` instance. 
  */
 export default class AmbersteelBaseItem {
   /**

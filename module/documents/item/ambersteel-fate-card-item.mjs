@@ -3,6 +3,7 @@ import { TEMPLATES } from "../../templatePreloader.mjs";
 import FateCardChatMessageViewModel from "../../../templates/item/fate-card/fate-card-chat-message-viewmodel.mjs";
 import PreparedChatData from "../../dto/prepared-chat-data.mjs";
 import { SOUNDS_CONSTANTS } from "../../constants/sounds.mjs";
+import { ITEM_SUBTYPE } from "./item-subtype.mjs";
 
 export default class AmbersteelFateCardItem extends AmbersteelBaseItem {
   /** @override */
@@ -84,3 +85,5 @@ export default class AmbersteelFateCardItem extends AmbersteelBaseItem {
     });
   }
 }
+
+ITEM_SUBTYPE.set("fate-card", new AmbersteelFateCardItem());

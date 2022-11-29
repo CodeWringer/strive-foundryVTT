@@ -1,3 +1,4 @@
+import { ACTOR_SUBTYPE } from "./actor-subtype.mjs";
 import AmbersteelBaseCharacterActor from "./ambersteel-base-character-actor.mjs";
 
 export default class AmbersteelPcActor extends AmbersteelBaseCharacterActor {
@@ -51,3 +52,5 @@ export default class AmbersteelPcActor extends AmbersteelBaseCharacterActor {
     fateSystemData.remainingSlots = maxCards - context.getFateCards().length;
   }
 }
+
+ACTOR_SUBTYPE.set("pc", new AmbersteelPcActor());

@@ -1,22 +1,25 @@
+// Imports of specific actor "sub-types", to ensure their imports cause the `ACTOR_SUBTYPE` map to be populated. 
 import AmbersteelPcActor from './ambersteel-pc-actor.mjs';
 import AmbersteelNpcActor from './ambersteel-npc-actor.mjs';
 import AmbersteelPlainActor from './ambersteel-plain-actor.mjs';
+// Other imports
 import ActorChatMessageViewModel from '../../../templates/actor/actor-chat-message-viewmodel.mjs';
 import PreparedChatData from '../../dto/prepared-chat-data.mjs';
 import * as UpdateUtil from '../../utils/document-update-utility.mjs';
 import * as ChatUtil from "../../utils/chat-utility.mjs";
 import { createUUID } from '../../utils/uuid-utility.mjs';
 import { SOUNDS_CONSTANTS } from '../../constants/sounds.mjs';
+import { ACTOR_SUBTYPE } from './actor-subtype.mjs';
 
 /**
  * @summary
- * This class represents the basis for all actors. 
+ * This class represents FoundryVTT's `actor` document type. 
  * 
  * @description
  * This is both the type that is instantiated by FoundryVTT for use in actors, 
  * as well as a "base class" of sorts. To keep this class from becoming a 
  * monolithic maintenance nightmare, any type-specific things are only 
- * added after this class is instantiated. 
+ * added _after_ this class is instantiated. 
  * 
  * To that end, via the '_getType'-method an instance of the specific type 
  * is fetched and then used in all the data preparation methods. 
@@ -26,7 +29,7 @@ import { SOUNDS_CONSTANTS } from '../../constants/sounds.mjs';
  * references would cause errors within FoundryVTT itself. 
  * 
  * The sub types add properties and methods to this `Actor` instance. 
- * That is also why this class only contains general and basic methods 
+ * That is also why this class only contains general and basic methods. 
  */
 export class AmbersteelActor extends Actor {
   /**
@@ -67,22 +70,18 @@ export class AmbersteelActor extends Actor {
 
   /**
    * Returns an instance of the specific type of this actor. 
-   * @returns {Object}
+   * @returns {AmbersteelNpcActor | AmbersteelPcActor | AmbersteelPlainActor}
    * @private
    */
   _getType() {
     const type = this.type;
-
-    // TODO: Refactor and somehow get rid of the explicit statements. 
-    if (type === "pc") {
-      return new AmbersteelPcActor();
-    } else if (type === "npc") {
-      return new AmbersteelNpcActor();
-    } else if (type === "plain") {
-      return new AmbersteelPlainActor();
-    } else {
+    const enhancer = ACTOR_SUBTYPE.get(type);
+    
+    if (enhancer === undefined) {
       throw new Error(`InvalidTypeException: Actor subtype ${type} is unrecognized!`);
     }
+
+    return enhancer;
   }
 
   /**

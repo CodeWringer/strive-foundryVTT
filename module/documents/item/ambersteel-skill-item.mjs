@@ -10,6 +10,7 @@ import PreparedChatData from "../../dto/prepared-chat-data.mjs";
 import Ruleset from "../../ruleset.mjs";
 import { DAMAGE_TYPES } from "../../constants/damage-types.mjs";
 import { SOUNDS_CONSTANTS } from "../../constants/sounds.mjs";
+import { ITEM_SUBTYPE } from "./item-subtype.mjs";
 
 export default class AmbersteelSkillItem extends AmbersteelBaseItem {
   /** @override */
@@ -255,3 +256,5 @@ export default class AmbersteelSkillItem extends AmbersteelBaseItem {
     context.data.data.abilities = skillAbilities;
   }
 }
+
+ITEM_SUBTYPE.set("skill", new AmbersteelSkillItem());

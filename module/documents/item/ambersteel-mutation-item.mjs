@@ -3,6 +3,7 @@ import { TEMPLATES } from "../../templatePreloader.mjs";
 import MutationChatMessageViewModel from "../../../templates/item/mutation/mutation-chat-message-viewmodel.mjs";
 import PreparedChatData from "../../dto/prepared-chat-data.mjs";
 import { SOUNDS_CONSTANTS } from "../../constants/sounds.mjs";
+import { ITEM_SUBTYPE } from "./item-subtype.mjs";
 
 export default class AmbersteelMutationItem extends AmbersteelBaseItem {
   /** @override */
@@ -84,3 +85,5 @@ export default class AmbersteelMutationItem extends AmbersteelBaseItem {
     });
   }
 }
+
+ITEM_SUBTYPE.set("mutation", new AmbersteelMutationItem());

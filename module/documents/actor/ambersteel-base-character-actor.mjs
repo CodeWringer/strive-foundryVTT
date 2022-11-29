@@ -4,6 +4,11 @@ import Ruleset from '../../ruleset.mjs';
 import { TEMPLATES } from '../../templatePreloader.mjs';
 import AmbersteelBaseActor from './ambersteel-base-actor.mjs';
 
+/**
+ * Represents the base contract for a "specific" actor "sub-type" that represents a "character", in the way the Ambersteel rule set regards them. 
+ * 
+ * Such a "sub-type" is really on an "enhancer", which adds properties and/or methods to a given `Actor` instance. 
+ */
 export default class AmbersteelBaseCharacterActor extends AmbersteelBaseActor {
   /** @override */
   get defaultImg() { return "icons/svg/mystery-man.svg"; }

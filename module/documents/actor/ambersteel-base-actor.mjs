@@ -1,9 +1,9 @@
 import { TEMPLATES } from '../../templatePreloader.mjs';
 
 /**
- * This represents the base type for all actor sub-types to inherit from. 
+ * Represents the base contract for a "specific" actor "sub-type". 
  * 
- * The contract expected by a concrete `Actor` instance is defined herein. 
+ * Such a "sub-type" is really on an "enhancer", which adds properties and/or methods to a given `Actor` instance. 
  */
 export default class AmbersteelBaseActor {
   /**

@@ -3,6 +3,7 @@ import { TEMPLATES } from "../../templatePreloader.mjs";
 import ItemChatMessageViewModel from "../../../templates/item/item/item-chat-message-viewmodel.mjs";
 import PreparedChatData from "../../dto/prepared-chat-data.mjs";
 import { SOUNDS_CONSTANTS } from "../../constants/sounds.mjs";
+import { ITEM_SUBTYPE } from "./item-subtype.mjs";
 
 export default class AmbersteelItemItem extends AmbersteelBaseItem {
   /** @override */
@@ -106,3 +107,5 @@ export default class AmbersteelItemItem extends AmbersteelBaseItem {
     });
   }
 }
+
+ITEM_SUBTYPE.set("item", new AmbersteelItemItem());
