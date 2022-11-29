@@ -5,6 +5,7 @@ import AmbersteelInjuryItem from './ambersteel-injury-item.mjs';
 import AmbersteelItemItem from './ambersteel-item-item.mjs';
 import AmbersteelSkillItem from './ambersteel-skill-item.mjs';
 import AmbersteelMutationItem from './ambersteel-mutation-item.mjs';
+import { ITEM_SUBTYPE } from './item-subtype.mjs';
 // Other imports
 import * as UpdateUtil from "../../utils/document-update-utility.mjs";
 import * as ChatUtil from "../../utils/chat-utility.mjs";
@@ -12,7 +13,6 @@ import { createUUID } from '../../utils/uuid-utility.mjs';
 import SheetViewModel from '../../components/sheet-viewmodel.mjs';
 import PreparedChatData from '../../dto/prepared-chat-data.mjs';
 import { SOUNDS_CONSTANTS } from '../../constants/sounds.mjs';
-import { ITEM_SUBTYPE } from './item-subtype.mjs';
 
 /**
  * @summary
