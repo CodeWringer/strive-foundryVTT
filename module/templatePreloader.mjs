@@ -2,6 +2,7 @@ export const TEMPLATES = {
   // --- Components
   // Inputs
   COMPONENT_INPUT_TEXTFIELD: "systems/ambersteel/module/components/input-textfield/input-textfield.hbs",
+  COMPONENT_INPUT_TEXTFIELD_EXPERIMENT: "systems/ambersteel/module/components/input-textfield-experiment/input-textfield.hbs",
   COMPONENT_INPUT_DROPDOWN: "systems/ambersteel/module/components/input-dropdown/input-dropdown.hbs",
   COMPONENT_INPUT_NUMBER_SPINNER: "systems/ambersteel/module/components/input-number-spinner/input-number-spinner.hbs",
   COMPONENT_INPUT_TEXTAREA: "systems/ambersteel/module/components/input-textarea/input-textarea.hbs",

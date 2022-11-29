@@ -1,0 +1,29 @@
+{{!-- Required context:
+parent: {ViewModel}
+id: {String}
+cssClass: {String | undefined}
+readOnlyCssClass: {String | undefined}
+--}}
+{{#viewModel parent id}}
+{{#if isEditable}}
+  <input 
+    class="custom-system-edit input-width-override component-input-textfield {{../cssClass}}"
+    data-property-path="{{propertyPath}}"
+    type="text"
+    name="{{id}}"
+    id="{{id}}"
+    placeholder="{{localizedPlaceholder}}"
+    value="{{value}}"
+    title="{{localizedTitle}}"
+  />
+{{else}}
+  {{!-- Display read-only value --}}
+  <div 
+    class="custom-system-read-only pad-sm fill component-input-textfield {{../readOnlyCssClass}}" 
+    name="{{id}}"
+    id="{{id}}"
+  >
+    {{localizedValue}}
+  </div>
+{{/if}}
+{{/viewModel}}

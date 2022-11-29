@@ -39,6 +39,7 @@ import ViewModelCollection from './utils/viewmodel-collection.mjs';
 import './components/input-viewmodel.mjs';
 import './components/label/label-viewmodel.mjs';
 import './components/input-textfield/input-textfield-viewmodel.mjs';
+import './components/input-textfield-experiment/input-textfield-viewmodel.mjs';
 import './components/input-dropdown/input-dropdown-viewmodel.mjs';
 import './components/input-number-spinner/input-number-spinner-viewmodel.mjs';
 import './components/input-textarea/input-textarea-viewmodel.mjs';
@@ -72,7 +73,7 @@ import '../templates/actor/parts/actor-skills-viewmodel.mjs';
 /*  Init Hook                                   */
 /* -------------------------------------------- */
 
-Hooks.once('init', async function() {
+Hooks.once('init', function() {
   // Add config and constants to global namespace. 
   CONFIG.ambersteel = ambersteelConfig;
 

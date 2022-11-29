@@ -333,3 +333,20 @@ export default class ViewModel {
     }
   }
 }
+
+/**
+ * A block helper to provide access to a specific child view model. 
+ * @param {ViewModel} parent The parent `ViewModel` instance on which to look for the child-`ViewModel`. 
+ * @param {String} id Id of the `ViewModel` instance to return. 
+ * If no instance with that name can be found, creates and returns a new instance. 
+ * @param {String} name Name of the `ViewModel` type to return. E. g. `"input-textfield"`. 
+ */
+Handlebars.registerHelper("viewModel", function(parent, id, context) {
+  const vm = parent.children.find(it => it._id === id);
+
+  if (vm === undefined) {
+    game.ambersteel.logger.logError("[viewModel] Failed to get child view model");
+  }
+
+  return context.fn(vm);
+});

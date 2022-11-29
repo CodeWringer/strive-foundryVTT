@@ -16,6 +16,8 @@ cssClass: {undefined | String}
       </div>
     </div>
   </header>
+  {{!-- Experiment --}}
+  {{> inputTextFieldExperiment parent=viewModel id="experiment" cssClass="danger"}}
   {{!-- Description --}}
   <div class="sheet-block flex flex-column flex-grow">
     <h3 class="{{#if viewModel.showFancyFont}}fancy-font{{/if}}">{{localize "ambersteel.general.description"}}</h3>
