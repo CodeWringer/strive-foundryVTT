@@ -15,7 +15,9 @@ cssClass: {undefined | String}
         {{> inputLabel text="ambersteel.general.name"}}
       </span>
       {{> inputImage viewModel=viewModel.vmImg cssClass="custom-icon-sm" }}
-      {{> inputTextField viewModel=viewModel.vmTfName }}
+      <h4 class="flex-grow margin-r-md">
+        {{> inputTextField viewModel=viewModel.vmTfName }}
+      </h4>
     </div>
     {{!-- Context Menu --}}
     {{> buttonContextMenu viewModel=viewModel.vmBtnContextMenu }}
