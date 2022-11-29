@@ -1,15 +1,15 @@
 import AmbersteelBaseItem from "./ambersteel-base-item.mjs";
-import { TEMPLATES } from "../../../templatePreloader.mjs";
-import InjuryChatMessageViewModel from "../../../../templates/item/injury/injury-chat-message-viewmodel.mjs";
-import PreparedChatData from "../../../dto/prepared-chat-data.mjs";
-import { SOUNDS_CONSTANTS } from "../../../constants/sounds.mjs";
+import { TEMPLATES } from "../../templatePreloader.mjs";
+import MutationChatMessageViewModel from "../../../templates/item/mutation/mutation-chat-message-viewmodel.mjs";
+import PreparedChatData from "../../dto/prepared-chat-data.mjs";
+import { SOUNDS_CONSTANTS } from "../../constants/sounds.mjs";
 
-export default class AmbersteelInjuryItem extends AmbersteelBaseItem {
+export default class AmbersteelMutationItem extends AmbersteelBaseItem {
   /** @override */
-  get defaultImg() { return "icons/svg/bones.svg"; }
-
+  get defaultImg() { return "icons/svg/ice-aura.svg"; }
+  
   /** @override */
-  get chatMessageTemplate() { return TEMPLATES.INJURY_CHAT_MESSAGE; }
+  get chatMessageTemplate() { return TEMPLATES.MUTATION_CHAT_MESSAGE; }
 
   /**
    * Ensures type-specific methods and properties are added to the given 
@@ -56,13 +56,13 @@ export default class AmbersteelInjuryItem extends AmbersteelBaseItem {
       actor: actor, 
       sound: SOUNDS_CONSTANTS.NOTIFY,
       viewModel: vm,
-      flavor: game.i18n.localize("ambersteel.character.health.injury.singular"),
+      flavor: game.i18n.localize("ambersteel.character.health.mutation.singular"),
     });
   }
 
   /**
    * Returns an instance of a view model for use in a chat message. 
-   * @returns {InjuryChatMessageViewModel}
+   * @returns {MutationChatMessageViewModel}
    * @param {Object | undefined} overrides Optional. An object that allows overriding any of the view model properties. 
    * @param {String | undefined} overrides.id
    * @param {Boolean | undefined} overrides.isEditable
@@ -73,7 +73,7 @@ export default class AmbersteelInjuryItem extends AmbersteelBaseItem {
    * @override
    */
   getChatViewModel(overrides = {}) {
-    return new InjuryChatMessageViewModel({
+    return new MutationChatMessageViewModel({
       id: this.id,
       isEditable: this.isEditable,
       isSendable: this.isSendable,

@@ -1,4 +1,3 @@
-import AmbersteelItemItem from "../../documents/subtypes/item/ambersteel-item-item.mjs";
 import InventoryIndex from "../../dto/inventory-index.mjs";
 import CenterLayoutContainer from "../../pixi/center-layout-container.mjs";
 import Containable from "../../pixi/containable.mjs";

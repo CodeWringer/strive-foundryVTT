@@ -15,8 +15,8 @@ import MigratorInitiator from "./migration/migrator-initiator.mjs";
 import MigratorDialog from "./migration/presentation/migrator-dialog.mjs";
 import LoadDebugSettingUseCase from "./use-case/load-debug-setting-use-case.mjs";
 // Import document classes.
-import { AmbersteelActor } from "./documents/actor.mjs";
-import { AmbersteelItem } from "./documents/item.mjs";
+import { AmbersteelActor } from "./documents/actor/actor.mjs";
+import { AmbersteelItem } from "./documents/item/item.mjs";
 // Import sheet classes.
 import { AmbersteelActorSheet } from "./sheets/actor-sheet.mjs";
 import { AmbersteelItemSheet } from "./sheets/item-sheet.mjs";

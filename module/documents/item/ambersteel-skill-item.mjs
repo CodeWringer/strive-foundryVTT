@@ -1,15 +1,15 @@
 import AmbersteelBaseItem from "./ambersteel-base-item.mjs";
-import SkillAbility from "../../../dto/skill-ability.mjs";
-import { TEMPLATES } from "../../../templatePreloader.mjs";
-import { createUUID } from "../../../utils/uuid-utility.mjs";
-import SkillChatMessageViewModel from "../../../../templates/item/skill/skill-chat-message-viewmodel.mjs";
-import { SummedData, SummedDataComponent } from "../../../dto/summed-data.mjs";
-import DamageAndType from "../../../dto/damage-and-type.mjs";
-import { DiceOutcomeTypes } from "../../../dto/dice-outcome-types.mjs";
-import PreparedChatData from "../../../dto/prepared-chat-data.mjs";
-import Ruleset from "../../../ruleset.mjs";
-import { DAMAGE_TYPES } from "../../../constants/damage-types.mjs";
-import { SOUNDS_CONSTANTS } from "../../../constants/sounds.mjs";
+import SkillAbility from "../../dto/skill-ability.mjs";
+import { TEMPLATES } from "../../templatePreloader.mjs";
+import { createUUID } from "../../utils/uuid-utility.mjs";
+import SkillChatMessageViewModel from "../../../templates/item/skill/skill-chat-message-viewmodel.mjs";
+import { SummedData, SummedDataComponent } from "../../dto/summed-data.mjs";
+import DamageAndType from "../../dto/damage-and-type.mjs";
+import { DiceOutcomeTypes } from "../../dto/dice-outcome-types.mjs";
+import PreparedChatData from "../../dto/prepared-chat-data.mjs";
+import Ruleset from "../../ruleset.mjs";
+import { DAMAGE_TYPES } from "../../constants/damage-types.mjs";
+import { SOUNDS_CONSTANTS } from "../../constants/sounds.mjs";
 
 export default class AmbersteelSkillItem extends AmbersteelBaseItem {
   /** @override */

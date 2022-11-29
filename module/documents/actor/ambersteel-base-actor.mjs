@@ -1,4 +1,4 @@
-import { TEMPLATES } from '../../../templatePreloader.mjs';
+import { TEMPLATES } from '../../templatePreloader.mjs';
 
 /**
  * This represents the base type for all actor sub-types to inherit from. 

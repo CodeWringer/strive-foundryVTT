@@ -1,8 +1,8 @@
 import AmbersteelBaseItem from "./ambersteel-base-item.mjs";
-import { TEMPLATES } from "../../../templatePreloader.mjs";
-import IllnessChatMessageViewModel from "../../../../templates/item/illness/illness-chat-message-viewmodel.mjs";
-import PreparedChatData from "../../../dto/prepared-chat-data.mjs";
-import { SOUNDS_CONSTANTS } from "../../../constants/sounds.mjs";
+import { TEMPLATES } from "../../templatePreloader.mjs";
+import IllnessChatMessageViewModel from "../../../templates/item/illness/illness-chat-message-viewmodel.mjs";
+import PreparedChatData from "../../dto/prepared-chat-data.mjs";
+import { SOUNDS_CONSTANTS } from "../../constants/sounds.mjs";
 
 export default class AmbersteelIllnessItem extends AmbersteelBaseItem {
   /** @override */

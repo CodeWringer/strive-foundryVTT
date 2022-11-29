@@ -1,12 +1,12 @@
-import AmbersteelPcActor from './subtypes/actor/ambersteel-pc-actor.mjs';
-import AmbersteelNpcActor from './subtypes/actor/ambersteel-npc-actor.mjs';
-import AmbersteelPlainActor from './subtypes/actor/ambersteel-plain-actor.mjs';
-import ActorChatMessageViewModel from '../../templates/actor/actor-chat-message-viewmodel.mjs';
-import PreparedChatData from '../dto/prepared-chat-data.mjs';
-import * as UpdateUtil from '../utils/document-update-utility.mjs';
-import * as ChatUtil from "../utils/chat-utility.mjs";
-import { createUUID } from '../utils/uuid-utility.mjs';
-import { SOUNDS_CONSTANTS } from '../constants/sounds.mjs';
+import AmbersteelPcActor from './ambersteel-pc-actor.mjs';
+import AmbersteelNpcActor from './ambersteel-npc-actor.mjs';
+import AmbersteelPlainActor from './ambersteel-plain-actor.mjs';
+import ActorChatMessageViewModel from '../../../templates/actor/actor-chat-message-viewmodel.mjs';
+import PreparedChatData from '../../dto/prepared-chat-data.mjs';
+import * as UpdateUtil from '../../utils/document-update-utility.mjs';
+import * as ChatUtil from "../../utils/chat-utility.mjs";
+import { createUUID } from '../../utils/uuid-utility.mjs';
+import { SOUNDS_CONSTANTS } from '../../constants/sounds.mjs';
 
 /**
  * @summary

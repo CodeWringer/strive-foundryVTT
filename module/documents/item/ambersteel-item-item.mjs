@@ -1,16 +1,16 @@
 import AmbersteelBaseItem from "./ambersteel-base-item.mjs";
-import { TEMPLATES } from "../../../templatePreloader.mjs";
-import MutationChatMessageViewModel from "../../../../templates/item/mutation/mutation-chat-message-viewmodel.mjs";
-import PreparedChatData from "../../../dto/prepared-chat-data.mjs";
-import { SOUNDS_CONSTANTS } from "../../../constants/sounds.mjs";
+import { TEMPLATES } from "../../templatePreloader.mjs";
+import ItemChatMessageViewModel from "../../../templates/item/item/item-chat-message-viewmodel.mjs";
+import PreparedChatData from "../../dto/prepared-chat-data.mjs";
+import { SOUNDS_CONSTANTS } from "../../constants/sounds.mjs";
 
-export default class AmbersteelMutationItem extends AmbersteelBaseItem {
+export default class AmbersteelItemItem extends AmbersteelBaseItem {
   /** @override */
-  get defaultImg() { return "icons/svg/ice-aura.svg"; }
+  get defaultImg() { return "icons/svg/item-bag.svg"; }
   
   /** @override */
-  get chatMessageTemplate() { return TEMPLATES.MUTATION_CHAT_MESSAGE; }
-
+  get chatMessageTemplate() { return TEMPLATES.ITEM_CHAT_MESSAGE; }
+  
   /**
    * Ensures type-specific methods and properties are added to the given 
    * context entity. 
@@ -28,6 +28,10 @@ export default class AmbersteelMutationItem extends AmbersteelBaseItem {
     super.prepareData(context);
 
     this._ensureContextHasSpecifics(context);
+
+    // Ensure number data type. 
+    context.data.data.shape.width = parseInt(context.data.data.shape.width);
+    context.data.data.shape.height = parseInt(context.data.data.shape.height);
   }
 
   /** @override */
@@ -35,6 +39,14 @@ export default class AmbersteelMutationItem extends AmbersteelBaseItem {
     super.prepareDerivedData(context);
 
     this._ensureContextHasSpecifics(context);
+
+    // Derive bulk from shape. 
+    const shape = context.data.data.shape;
+    if (shape === undefined) {
+      game.ambersteel.logger.logWarn("Shape on item undefined! Using fallback '{ width: 1, height: 1 }'");
+      shape = { width: 1, height: 1 };
+    }
+    context.data.data.bulk = shape.width * shape.height;
   }
 
   /**
@@ -56,13 +68,13 @@ export default class AmbersteelMutationItem extends AmbersteelBaseItem {
       actor: actor, 
       sound: SOUNDS_CONSTANTS.NOTIFY,
       viewModel: vm,
-      flavor: game.i18n.localize("ambersteel.character.health.mutation.singular"),
+      flavor: game.i18n.localize("ambersteel.character.asset.singular"),
     });
   }
 
   /**
    * Returns an instance of a view model for use in a chat message. 
-   * @returns {MutationChatMessageViewModel}
+   * @returns {ItemChatMessageViewModel}
    * @param {Object | undefined} overrides Optional. An object that allows overriding any of the view model properties. 
    * @param {String | undefined} overrides.id
    * @param {Boolean | undefined} overrides.isEditable
@@ -70,16 +82,26 @@ export default class AmbersteelMutationItem extends AmbersteelBaseItem {
    * @param {Boolean | undefined} overrides.isOwner
    * @param {Boolean | undefined} overrides.isGM
    * @param {Item | undefined} overrides.item
+   * @param {Actor | undefined} overrides.actor
+   * @param {String | undefined} overrides.sourceType
+   * @param {String | undefined} overrides.sourceId
+   * @param {Boolean | undefined} overrides.allowPickup
+   * @param {Array<String> | undefined} overrides.allowPickupBy
    * @override
    */
   getChatViewModel(overrides = {}) {
-    return new MutationChatMessageViewModel({
+    return new ItemChatMessageViewModel({
       id: this.id,
       isEditable: this.isEditable,
       isSendable: this.isSendable,
       isOwner: this.isOwner,
       isGM: this.isGM,
       item: this,
+      actor: this.parent ?? this.actor,
+      sourceType: undefined,
+      sourceId: undefined,
+      allowPickup: false, // TODO: The user must be able to select who gets to pick this item up. 
+      allowPickupBy: [], // TODO: The user must be able to select who gets to pick this item up. 
       ...overrides,
     });
   }
