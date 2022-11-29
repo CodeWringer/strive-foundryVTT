@@ -92,7 +92,7 @@
         "level": "Level",
         "requirements": {
           "label": "Required Successes/Failures",
-          "abbreviation": "S/F",
+          "abbreviation": "Req. S/F",
           "success": {
             "label": "Successes",
             "abbreviation": "S"
@@ -411,7 +411,9 @@
             "placeholder": "3' / 1m / 0 / etc."
           },
           "newDefaultName": "New Skill Ability",
-          "requirement": "At Level"
+          "requirement": "At Level",
+          "singular": "Skill Ability",
+          "plural": "Skill Abilities"
         },
         "add": {
           "label": "Add Skill",

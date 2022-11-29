@@ -4,7 +4,9 @@ cssClass: {undefined | String}
 --}}
 <section class="{{cssClass}}">
   {{!-- Learning Skills --}}
-  {{> "systems/ambersteel/templates/actor/components/component-skill-table.hbs" viewModel=viewModel.learningSkillsViewModel }}
+  <h2>{{localize "ambersteel.character.skill.learning.label"}}</h2>
+  {{> sortableList viewModel=viewModel.vmLearningSkillList }}
   {{!-- Known Skills --}}
-  {{> "systems/ambersteel/templates/actor/components/component-skill-table.hbs" viewModel=viewModel.skillsViewModel }}
+  <h2>{{localize "ambersteel.character.skill.known.label"}}</h2>
+  {{> sortableList viewModel=viewModel.vmKnownSkillList }}
 </section>

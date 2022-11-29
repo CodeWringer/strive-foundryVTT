@@ -21,6 +21,20 @@ export default class SkillListItemViewModel extends SkillViewModel {
   get isSkillAbilityListVisible() { return (this.isEditable === true) || this.item.data.data.abilities.length !== 0 }
 
   /**
+   * Returns the current number of successes. 
+   * @type {Number}
+   * @readonly
+   */
+  get requiredSuccessses() { return this.item.data.data.requiredSuccessses; }
+
+  /**
+   * Returns the current number of failures. 
+   * @type {Number}
+   * @readonly
+   */
+  get requiredFailures() { return this.item.data.data.requiredFailures; }
+
+  /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
    * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 
    * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 
@@ -54,6 +68,17 @@ export default class SkillListItemViewModel extends SkillViewModel {
       propertyPath: "name",
       placeholder: "ambersteel.general.name",
     });
+    this.vmBtnRoll = thiz.createVmBtnRoll({
+      id: "vmBtnRoll",
+      target: thiz.item,
+      propertyPath: undefined,
+      primaryChatTitle: game.i18n.localize(thiz.item.name),
+      primaryChatImage: thiz.item.img,
+      rollType: "dice-pool",
+      callback: "advanceSkillBasedOnRollResult",
+      callbackData: thiz.item.id,
+      actor: thiz.actor,
+    })
     this.vmBtnSendToChat = this.createVmBtnSendToChat({
       id: "vmBtnSendToChat",
       target: thiz.item,
@@ -73,6 +98,24 @@ export default class SkillListItemViewModel extends SkillViewModel {
       id: "vmTfCategory",
       propertyOwner: thiz.item,
       propertyPath: "data.data.category",
+    });
+    this.vmNsLevel = this.createVmNumberSpinner({
+      id: "vmNsLevel",
+      propertyOwner: thiz.item,
+      propertyPath: "data.data.value",
+      min: 0,
+    });
+    this.vmNsSuccesses = this.createVmNumberSpinner({
+      id: "vmNsSuccesses",
+      propertyOwner: thiz.item,
+      propertyPath: "data.data.successes",
+      min: 0,
+    });
+    this.vmNsFailures = this.createVmNumberSpinner({
+      id: "vmNsFailures",
+      propertyOwner: thiz.item,
+      propertyPath: "data.data.failures",
+      min: 0,
     });
     this.vmSkillAbilityTable = new SkillAbilityTableViewModel({
       id: "vmSkillAbilityTable",

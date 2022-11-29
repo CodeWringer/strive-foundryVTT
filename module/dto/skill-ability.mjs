@@ -130,9 +130,9 @@ export default class SkillAbility {
       isSendable: false,
       isOwner: owningDocument.isOwner ?? owningDocument.owner ?? false,
       isGM: game.user.isGM,
-      item: this.owningDocument,
+      item: owningDocument,
       skillAbility: this,
-      actor: this.owningDocument.parent,
+      actor: owningDocument.parent,
       index: this.index,
       ...overrides,
     });
