@@ -12,29 +12,11 @@ export default class AmbersteelBaseActorSheet {
   get template() { return TEMPLATES.ACTOR_SHEET;  }
 
   /**
-   * Returns the actor object of the parent sheet. 
-   * @returns {Actor} The actor object of the parent sheet. 
+   * Returns the localized title of this sheet type. 
+   * @type {String}
+   * @readonly
    */
-  getActor() {
-    return this.parent.actor;
-  }
-
-  /**
-   * Returns the item object with the given id of the parent sheet. 
-   * @param {String} itemId The id of the item to fetch. 
-   * @returns {Item} The item object of the parent sheet. 
-   */
-  getItem(itemId) {
-    return this.getActor().items.get(itemId);
-  }
-
-  /**
-   * Returns the current context object. 
-   * @returns {Actor|Item} The current context object. 
-   */
-  getContextEntity() {
-    return this.getActor();
-  }
+  get title() { return game.i18n.localize("ambersteel.general.actor.plain.label"); }
 
   /**
    * Extends the given context object with derived data. 
