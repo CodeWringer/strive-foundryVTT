@@ -106,8 +106,6 @@ export class AmbersteelActorSheet extends ActorSheet {
     this._viewModel.readViewState();
     context.viewModel = this._viewModel;
     
-    this.subType.prepareDerivedData(context);
-
     return context;
   }
 
