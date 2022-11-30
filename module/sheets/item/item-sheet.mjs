@@ -5,40 +5,25 @@ import AmbersteelFateCardItemSheet from "./ambersteel-fate-item-sheet.mjs";
 import AmbersteelInjuryItemSheet from "./ambersteel-injury-item-sheet.mjs";
 import AmbersteelIllnessItemSheet from "./ambersteel-illness-item-sheet.mjs";
 import AmbersteelMutationItemSheet from "./ambersteel-mutation-item-sheet.mjs";
+import { ITEM_SHEET_SUBTYPE } from "./item-sheet-subtype.mjs";
 // Other imports
 import * as SheetUtil from "../../utils/sheet-utility.mjs";
 
 export class AmbersteelItemSheet extends ItemSheet {
   /**
-   * @private
-   */
-  _subType = undefined;
-  /**
    * Type-dependent object which pseudo-extends the logic of this object. 
+   * @type {AmbersteelBaseItemSheet | AmbersteelSkillItemSheet | AmbersteelFateCardItemSheet | AmbersteelInjuryItemSheet | AmbersteelIllnessItemSheet | AmbersteelMutationItemSheet}
+   * @readonly
    */
   get subType() {
-    if (!this._subType) {
-      const data = super.getData();
-      const type = data.item.type;
-
-      // TODO: Refactor and somehow get rid of the explicit statements. 
-      if (type === "skill") {
-        this._subType = new AmbersteelSkillItemSheet(this);
-      } else if (type === "fate-card") {
-        this._subType = new AmbersteelFateCardItemSheet(this);
-      } else if (type === "item") {
-        this._subType = new AmbersteelBaseItemSheet(this);
-      } else if (type === "injury") {
-        this._subType = new AmbersteelInjuryItemSheet(this);
-      } else if (type === "illness") {
-        this._subType = new AmbersteelIllnessItemSheet(this);
-      } else if (type === "mutation") {
-        this._subType = new AmbersteelMutationItemSheet(this);
-      } else {
-        throw `ItemSheet subtype ${type} is unrecognized!`
-      }
+    const type = this.item.type;
+    const enhancer = ITEM_SHEET_SUBTYPE.get(type);
+    
+    if (enhancer === undefined) {
+      throw new Error(`InvalidTypeException: Item sheet subtype ${type} is unrecognized!`);
     }
-    return this._subType;
+
+    return enhancer;
   }
 
   /**
@@ -61,35 +46,19 @@ export class AmbersteelItemSheet extends ItemSheet {
    * @returns {String} Path to the template. 
    * @virtual
    * @override
+   * @readonly
    * @see https://foundryvtt.com/api/DocumentSheet.html#template
    */
-  get template() {
-    return this.subType.template;
-  }
+  get template() { return this.subType.template; }
 
-  // TODO: Refactor and make the subtype dictate the title. 
   /**
+   * Returns the localized title of this sheet. 
    * @override
    * @type {String}
+   * @readonly
    * @see https://foundryvtt.com/api/ItemSheet.html#title
    */
-  get title() {
-    if (this.item.type === "skill") {
-      return `${game.i18n.localize("ambersteel.character.skill.singular")} - ${this.item.name}`;
-    } else if (this.item.type === "fate-card") {
-      return `${game.i18n.localize("ambersteel.character.beliefSystem.fateSystem.fateCard.label")} - ${this.item.name}`;
-    } else if (this.item.type === "item") {
-      return `${game.i18n.localize("ambersteel.character.asset.singular")} - ${this.item.name}`;
-    } else if (this.item.type === "injury") {
-      return `${game.i18n.localize("ambersteel.character.health.injury.singular")} - ${this.item.name}`;
-    } else if (this.item.type === "illness") {
-      return `${game.i18n.localize("ambersteel.character.health.illness.singular")} - ${this.item.name}`;
-    } else if (this.item.type === "mutation") {
-      return `${game.i18n.localize("ambersteel.character.health.mutation.singular")} - ${this.item.name}`;
-    } else {
-      return this.item.name;
-    }
-  }
+  get title() { return `${this.subType.title} - ${this.item.name}` }
 
   /**
    * @type {ViewModel}

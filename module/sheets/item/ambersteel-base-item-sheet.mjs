@@ -1,10 +1,13 @@
 import ItemItemSheetViewModel from "../../../templates/item/item/item-item-sheet-viewmodel.mjs";
 import { TEMPLATES } from "../../templatePreloader.mjs";
+import { ITEM_SHEET_SUBTYPE } from "./item-sheet-subtype.mjs";
 
 /**
  * Represents the base contract for a "specific" item sheet "sub-type". 
  * 
  * Such a "sub-type" is really on an "enhancer", which adds properties and/or methods to a given `ItemSheet` instance. 
+ * 
+ * This particular type also doubles as the definition for the item of type `"item"` (= asset). 
  */
 export default class AmbersteelBaseItemSheet {
   /**
@@ -20,7 +23,7 @@ export default class AmbersteelBaseItemSheet {
    * @type {String}
    * @readonly
    */
-  get title() { return game.i18n.localize("ambersteel.general.actor.plain.label"); }
+  get title() { return game.i18n.localize("ambersteel.character.asset.singular"); }
 
   /**
    * Extends the given context object with derived data. 
@@ -44,3 +47,5 @@ export default class AmbersteelBaseItemSheet {
     });
   }
 }
+
+ITEM_SHEET_SUBTYPE.set("item", new AmbersteelBaseItemSheet());
