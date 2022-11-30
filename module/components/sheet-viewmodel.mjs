@@ -16,7 +16,7 @@ import InputTextFieldViewModel from "./input-textfield/input-textfield-viewmodel
 import ViewModel from "./viewmodel.mjs";
 import ButtonContextMenuViewModel from "./button-context-menu/button-context-menu-viewmodel.mjs";
 import InputRichTextViewModel from "./input-rich-text/input-rich-text-viewmodel.mjs";
-import GetShowFancyFontUseCase from "../usecases/get-show-fancy-font-use-case.mjs";
+import GetShowFancyFontUseCase from "../use-case/get-show-fancy-font-use-case.mjs";
 
 /**
  * This view model sub-type is intended for use with sheets that expect the common flags, 

@@ -52,7 +52,7 @@ export default class SkillItemSheetViewModel extends SkillViewModel {
       id: "vmTfName",
       propertyOwner: thiz.item,
       propertyPath: "name",
-      placeholder: "ambersteel.labels.name",
+      placeholder: "ambersteel.general.name",
     });
     this.vmBtnSendToChat = this.createVmBtnSendToChat({
       id: "vmBtnSendToChat",
@@ -69,7 +69,7 @@ export default class SkillItemSheetViewModel extends SkillViewModel {
       id: "vmTfCategory",
       propertyOwner: thiz.item,
       propertyPath: "data.data.category",
-      placeholder: "ambersteel.labels.category",
+      placeholder: "ambersteel.general.category",
     });
     this.vmSwIsMagicSchool = this.createVmBtnToggle({
       id: "vmSwIsMagicSchool",

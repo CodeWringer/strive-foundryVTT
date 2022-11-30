@@ -75,7 +75,7 @@ export default class ButtonContextMenuViewModel extends ButtonViewModel {
     super(args);
 
     this.menuItems = args.menuItems ?? [];
-    this.localizableTitle = args.localizableTitle ?? "ambersteel.labels.contextMenu";
+    this.localizableTitle = args.localizableTitle ?? "ambersteel.general.contextMenu";
 
     // Wrap the callback function to make it also ensure the context menu is properly closed, 
     // when the menu item is clicked. 

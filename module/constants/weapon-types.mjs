@@ -1,70 +1,70 @@
 export const WEAPON_TYPES = {
   unarmed: {
     name: "unarmed",
-    localizableName: "ambersteel.weaponTypes.unarmed"
+    localizableName: "ambersteel.character.asset.type.weapon.unarmed"
   },
   shortBlade: {
     name: "shortBlade",
-    localizableName: "ambersteel.weaponTypes.shortBlade"
+    localizableName: "ambersteel.character.asset.type.weapon.shortBlade"
   },
   longBlade: {
     name: "longBlade",
-    localizableName: "ambersteel.weaponTypes.longBlade"
+    localizableName: "ambersteel.character.asset.type.weapon.longBlade"
   },
   greatBlade: {
     name: "greatBlade",
-    localizableName: "ambersteel.weaponTypes.greatBlade"
+    localizableName: "ambersteel.character.asset.type.weapon.greatBlade"
   },
   axe: {
     name: "axe",
-    localizableName: "ambersteel.weaponTypes.axe"
+    localizableName: "ambersteel.character.asset.type.weapon.axe"
   },
   greatAxe: {
     name: "greatAxe",
-    localizableName: "ambersteel.weaponTypes.greatAxe"
+    localizableName: "ambersteel.character.asset.type.weapon.greatAxe"
   },
   spear: {
     name: "spear",
-    localizableName: "ambersteel.weaponTypes.spear"
+    localizableName: "ambersteel.character.asset.type.weapon.spear"
   },
   lance: {
     name: "lance",
-    localizableName: "ambersteel.weaponTypes.lance"
+    localizableName: "ambersteel.character.asset.type.weapon.lance"
   },
   polearm: {
     name: "polearm",
-    localizableName: "ambersteel.weaponTypes.polearm"
+    localizableName: "ambersteel.character.asset.type.weapon.polearm"
   },
   club: {
     name: "club",
-    localizableName: "ambersteel.weaponTypes.club"
+    localizableName: "ambersteel.character.asset.type.weapon.club"
   },
   smallCrusher: {
     name: "smallCrusher",
-    localizableName: "ambersteel.weaponTypes.smallCrusher"
+    localizableName: "ambersteel.character.asset.type.weapon.smallCrusher"
   },
   largeCrusher: {
     name: "largeCrusher",
-    localizableName: "ambersteel.weaponTypes.largeCrusher"
+    localizableName: "ambersteel.character.asset.type.weapon.largeCrusher"
   },
   shortBow: {
     name: "shortBow",
-    localizableName: "ambersteel.weaponTypes.shortBow"
+    localizableName: "ambersteel.character.asset.type.weapon.shortBow"
   },
   longBow: {
     name: "longBow",
-    localizableName: "ambersteel.weaponTypes.longBow"
+    localizableName: "ambersteel.character.asset.type.weapon.longBow"
   },
   warBow: {
     name: "warBow",
-    localizableName: "ambersteel.weaponTypes.warBow"
+    localizableName: "ambersteel.character.asset.type.weapon.warBow"
   },
   crossbow: {
     name: "crossbow",
-    localizableName: "ambersteel.weaponTypes.crossbow"
+    localizableName: "ambersteel.character.asset.type.weapon.crossbow"
   },
   firearm: {
     name: "firearm",
-    localizableName: "ambersteel.weaponTypes.firearm"
+    localizableName: "ambersteel.character.asset.type.weapon.firearm"
   }
 };

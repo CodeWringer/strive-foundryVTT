@@ -8,7 +8,7 @@ cssClass: {undefined | String}
 <section class="{{cssClass}}">
   <div class="sheet-block grid grid-2col">
     <div class="flex flex-column">
-      <label class="line-height pad-sm{{#if viewModel.showFancyFont}} fancy-font{{/if}}" for="obstacle">{{localize "ambersteel.roll.obstacleAbbreviation"}}</label>
+      <label class="line-height pad-sm{{#if viewModel.showFancyFont}} fancy-font{{/if}}" for="obstacle">{{localize "ambersteel.roll.obstacle.abbreviation"}}</label>
       <label class="line-height pad-sm{{#if viewModel.showFancyFont}} fancy-font{{/if}}" for="bonusDice">{{localize "ambersteel.roll.bonusDice"}}</label>
     </div>
     <div class="flex flex-column flex-grow">
@@ -24,7 +24,7 @@ cssClass: {undefined | String}
   </div>
   <div class="sheet-block grid grid-2col">
     <div>
-      <label class="line-height pad-sm{{#if viewModel.showFancyFont}} fancy-font{{/if}}" for="visibilityMode">{{localize "ambersteel.labels.messageVisibility"}}</label>
+      <label class="line-height pad-sm{{#if viewModel.showFancyFont}} fancy-font{{/if}}" for="visibilityMode">{{localize "ambersteel.general.messageVisibility.label"}}</label>
     </div>
     <div class="flex">
       <select class="visibilityMode flex-grow" name="visibilityMode">

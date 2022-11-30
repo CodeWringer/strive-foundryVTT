@@ -6,6 +6,7 @@ import SkillAbilityChatMessageViewModel from '../../templates/item/skill-ability
 import { createUUID } from '../utils/uuid-utility.mjs';
 import * as PropUtil from '../utils/property-utility.mjs';
 import DamageAndType from "./damage-and-type.mjs";
+import { SOUNDS_CONSTANTS } from '../constants/sounds.mjs';
 
 /**
  * Represents a skill ability. 
@@ -58,7 +59,7 @@ export default class SkillAbility {
     this.type = "skill-ability";
     this.isCustom = args.isCustom ?? false;
 
-    this.name = args.name ?? game.i18n.localize("ambersteel.labels.nameOfNewSkillAbility");
+    this.name = args.name ?? game.i18n.localize("ambersteel.character.skill.ability.newDefaultName");
     this.img = args.img ?? "icons/svg/book.svg";
     this.description = args.description ?? "";
     this.requiredLevel = args.requiredLevel ?? 0;
@@ -104,7 +105,7 @@ export default class SkillAbility {
     return new PreparedChatData({
       renderedContent: renderedContent,
       actor: actor, 
-      sound: "../sounds/notify.wav",
+      sound: SOUNDS_CONSTANTS.NOTIFY,
       viewModel: vm,
     });
   }
@@ -129,9 +130,9 @@ export default class SkillAbility {
       isSendable: false,
       isOwner: owningDocument.isOwner ?? owningDocument.owner ?? false,
       isGM: game.user.isGM,
-      item: this.owningDocument,
+      item: owningDocument,
       skillAbility: this,
-      actor: this.owningDocument.parent,
+      actor: owningDocument.parent,
       index: this.index,
       ...overrides,
     });

@@ -89,16 +89,4 @@ export default class InputNumberSpinnerViewModel extends InputViewModel {
   }
 }
 
-Handlebars.registerHelper('createNumberSpinnerViewModel', function(id, isEditable, propertyOwner, propertyPath, step, min, max, contextTemplate) {
-  return new InputNumberSpinnerViewModel({
-    id: id,
-    isEditable: isEditable,
-    propertyOwner: propertyOwner,
-    propertyPath: propertyPath,
-    step: step ?? 1,
-    min: min,
-    max: max,
-    contextTemplate: contextTemplate,
-  });
-});
 Handlebars.registerPartial('inputNumberSpinner', `{{> "${InputNumberSpinnerViewModel.TEMPLATE}"}}`);

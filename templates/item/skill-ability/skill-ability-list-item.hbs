@@ -12,10 +12,12 @@ cssClass: {undefined | String}
       {{> buttonSendToChat viewModel=viewModel.vmBtnSendToChat }}
       {{!-- Name --}}
       <span class="width-min-xl">
-        {{> inputLabel text="ambersteel.labels.name"}}
+        {{> inputLabel text="ambersteel.general.name"}}
       </span>
       {{> inputImage viewModel=viewModel.vmImg cssClass="custom-icon-sm" }}
-      {{> inputTextField viewModel=viewModel.vmTfName }}
+      <h4 class="flex-grow margin-r-md">
+        {{> inputTextField viewModel=viewModel.vmTfName }}
+      </h4>
     </div>
     {{!-- Context Menu --}}
     {{> buttonContextMenu viewModel=viewModel.vmBtnContextMenu }}
@@ -27,7 +29,7 @@ cssClass: {undefined | String}
     {{!-- Required Level --}}
     <div class="fill flex flex-row">
       <div class="flex-grow">
-        {{> inputLabel text="ambersteel.labels.skillAbilityRequirement"}}
+        {{> inputLabel text="ambersteel.character.skill.ability.requirement"}}
       </div>
       <div class="width-md">
         {{> inputNumberSpinner viewModel=viewModel.vmNsRequiredLevel }}
@@ -36,7 +38,7 @@ cssClass: {undefined | String}
     {{!-- AP cost --}}
     <div class="fill flex flex-row">
       <div class="flex-grow">
-        {{> inputLabel text="ambersteel.labels.apCost"}}
+        {{> inputLabel text="ambersteel.character.skill.ability.apCost"}}
       </div>
       <div class="width-md">
         {{> inputNumberSpinner viewModel=viewModel.vmNsApCost }}
@@ -46,7 +48,7 @@ cssClass: {undefined | String}
     {{!-- Obstacle --}}
     <div class="fill flex flex-row{{#if viewModel.hideObstacle}} hidden{{/if}}">
       <div class="width-min-lg">
-        {{> inputLabel text="ambersteel.roll.obstacleAbbreviation"}}
+        {{> inputLabel text="ambersteel.roll.obstacle.abbreviation"}}
       </div>
       <div class="flex-grow">
         {{> inputTextField viewModel=viewModel.vmTfObstacle }}
@@ -55,7 +57,7 @@ cssClass: {undefined | String}
     {{!-- Opposed By --}}
     <div class="fill flex flex-row{{#if viewModel.hideOpposedBy}} hidden{{/if}}">
       <div class="width-min-lg">
-        {{> inputLabel text="ambersteel.labels.opposedBy"}}
+        {{> inputLabel text="ambersteel.roll.obstacle.opposedBy.label"}}
       </div>
       <div class="flex-grow">
         {{> inputTextField viewModel=viewModel.vmTfOpposedBy }}
@@ -64,7 +66,7 @@ cssClass: {undefined | String}
     {{!-- Distance --}}
     <div class="fill flex flex-row{{#if viewModel.hideDistance}} hidden{{/if}}">
       <div class="width-min-lg">
-        {{> inputLabel text="ambersteel.labels.distance"}}
+        {{> inputLabel text="ambersteel.character.skill.ability.distance.label"}}
       </div>
       <div class="flex-grow">
         {{> inputTextField viewModel=viewModel.vmTfDistance }}
@@ -73,7 +75,7 @@ cssClass: {undefined | String}
     {{!-- Attack type --}}
     <div class="fill flex flex-row{{#if viewModel.hideAttackType}} hidden{{/if}}">
       <div class="width-min-lg">
-        {{> inputLabel text="ambersteel.labels.attackType"}}
+        {{> inputLabel text="ambersteel.attackType.label"}}
       </div>
       <div class="flex-grow">
         {{> inputDropDown viewModel=viewModel.vmDdAttackType }}
@@ -91,14 +93,14 @@ cssClass: {undefined | String}
           <div class="fill flex flex-row">
             {{!-- Damage formula --}}
             <div class="width-min-xl">
-              {{> inputLabel text="ambersteel.labels.damage"}}
+              {{> inputLabel text="ambersteel.character.skill.ability.damage.label"}}
             </div>
             <span class="width-min-xxl flex-grow">
               {{> inputTextField viewModel=vm.vmTfDamage }}
             </span>
             {{!-- Damage type --}}
             <div class="width-min-xxl">
-              {{> inputLabel text="ambersteel.labels.damageType"}}
+              {{> inputLabel text="ambersteel.damageType.label"}}
             </div>
             <span class="width-xxl">
               {{> inputDropDown viewModel=vm.vmDdDamageType }}
@@ -113,7 +115,7 @@ cssClass: {undefined | String}
   {{!-- Condition --}}
   <div class="flex flex-column margin-b-md{{#if viewModel.hideCondition}} hidden{{/if}}">
     <h3 class="margin-b-sm{{#if viewModel.showFancyFont}} fancy-font{{/if}}">
-      {{localize "ambersteel.labels.skillAbilityCondition"}}
+      {{localize "ambersteel.character.skill.ability.condition.label"}}
     </h3>
     <div class="flex-grow">
       {{> inputTextarea viewModel=viewModel.vmTaCondition }}
@@ -121,7 +123,7 @@ cssClass: {undefined | String}
   </div>
   {{!-- Description --}}
   <div class="flex flex-column margin-b-md">
-    <h3 class="margin-b-sm{{#if viewModel.showFancyFont}} fancy-font{{/if}}">{{localize "ambersteel.labels.description"}}</h3>
+    <h3 class="margin-b-sm{{#if viewModel.showFancyFont}} fancy-font{{/if}}">{{localize "ambersteel.general.description"}}</h3>
     {{> inputRichText viewModel=viewModel.vmRtDescription }}
   </div>
 </div>

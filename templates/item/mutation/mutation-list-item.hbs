@@ -9,12 +9,12 @@ cssClass: {undefined | String}
     {{> buttonSendToChat viewModel=viewModel.vmBtnSendToChat }}
     {{!-- Name --}}
     <span class="width-min-xl">
-      {{> inputLabel text="ambersteel.labels.mutation"}}
+      {{> inputLabel text="ambersteel.character.health.mutation.singular"}}
     </span>
     {{> inputImage viewModel=viewModel.vmImg cssClass="custom-icon-sm" }}
-    <span class="flex-grow margin-r-md">
+    <h2 class="flex-grow margin-r-md">
       {{> inputTextField viewModel=viewModel.vmTfName }}
-    </span>
+    </h2>
     {{!-- Delete --}}
     {{> buttonDelete viewModel=viewModel.vmBtnDelete }}
   </div>

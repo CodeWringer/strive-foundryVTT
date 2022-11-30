@@ -6,7 +6,7 @@
     "build": "node ./npm-scripts/build.mjs",
     "sass:transpile": "sass scss:css",
     "sass:transpile-and-watch": "sass --watch scss:css",
-    "test": "mocha ./module/test/**/*"
+    "test": "mocha ./test/**/*"
   },
   "browserslist": [
     "last 3 versions"

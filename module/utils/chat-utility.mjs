@@ -4,8 +4,7 @@ import { getNestedPropertyValue } from "./property-utility.mjs";
 import { getElementValue } from "./sheet-utility.mjs";
 import { validateOrThrow } from "./validation-utility.mjs";
 import { TEMPLATES } from "../templatePreloader.mjs";
-
-const CHAT_GENERIC_SOUND = "../sounds/notify.wav";
+import { SOUNDS_CONSTANTS } from "../constants/sounds.mjs";
 
 /**
  * Creates a new ChatMessage, displaying the given contents. 
@@ -23,7 +22,7 @@ export async function sendToChat(chatData = {}) {
     renderedContent: undefined,
     flavor: undefined,
     actor: undefined,
-    sound: CHAT_GENERIC_SOUND,
+    sound: SOUNDS_CONSTANTS.NOTIFY,
     visibilityMode: CONFIG.ambersteel.visibilityModes.public,
     ...chatData
   };
@@ -82,7 +81,10 @@ export async function queryVisibilityMode() {
         confirmed: true
       });
     } else {
-      const result = await showDialog({ dialogTemplate: TEMPLATES.DIALOG_VISIBILITY, localizableTitle: "ambersteel.dialog.titleVisibility" }, dialogData);
+      const result = await showDialog({
+        dialogTemplate: TEMPLATES.DIALOG_VISIBILITY, 
+        localizedTitle: game.i18n.localize("ambersteel.general.messageVisibility.dialog.title" )
+      }, dialogData);
 
       const visibilityModeKey = parseInt(getElementValue(result.html.find(".visibilityMode")[0]));
       const visibilityMode = visibilityModes[visibilityModeKey];

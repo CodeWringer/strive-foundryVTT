@@ -4,12 +4,12 @@ cssClass: {undefined | String}
 --}}
 <section class="{{cssClass}}">
   {{!-- Personal assets --}}
-  <h2>{{localize "ambersteel.labels.assetsOnPerson"}}</h2>
+  <h2>{{localize "ambersteel.character.asset.onPerson"}}</h2>
   <div class="grid-2col grid-gap-md margin-b-md">
     <div class="sheet-block">
       <div class="flex flex-row">
         <div class="flex-grow">
-          {{> inputLabel for="carryingCapacity" text="ambersteel.labels.carryingCapacity"}}
+          {{> inputLabel for="carryingCapacity" text="ambersteel.character.asset.carryingCapacity.label"}}
         </div>
         <span class="width-md">
           <div class="ambersteel-read-only pad-sm fill">
@@ -21,7 +21,7 @@ cssClass: {undefined | String}
     <div class="sheet-block">
       <div class="flex flex-row">
         <div class="flex-grow">
-          {{> inputLabel for="totalBulk" text="ambersteel.labels.usedCarryingCapacity"}}
+          {{> inputLabel for="totalBulk" text="ambersteel.character.asset.carryingCapacity.used"}}
         </div>
         <span class="width-md">
           {{> inputNumberSpinner viewModel=viewModel.vmNsTotalBulk }}
@@ -31,6 +31,6 @@ cssClass: {undefined | String}
   </div>
   {{> itemGridView viewModel=viewModel.vmIgv }}
   {{!-- Remote assets --}}
-  <h2>{{localize "ambersteel.labels.assetsRemote"}}</h2>
+  <h2>{{localize "ambersteel.character.asset.remote"}}</h2>
   {{> sortableList viewModel=viewModel.vmPropertyList }}
 </section>

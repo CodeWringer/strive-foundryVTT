@@ -1,47 +1,47 @@
 export const DAMAGE_TYPES = {
   none: {
     name: "none",
-    localizableName: "ambersteel.labels.none",
-    localizableAbbreviation: "ambersteel.labels.noneAbbreviation"
+    localizableName: "ambersteel.general.none.label",
+    localizableAbbreviation: "ambersteel.general.none.abbreviation"
   },
   burning: {
     name: "burning",
-    localizableName: "ambersteel.damageTypes.burning",
-    localizableAbbreviation: "ambersteel.damageTypes.burningAbbreviation"
+    localizableName: "ambersteel.damageType.burning.label",
+    localizableAbbreviation: "ambersteel.damageType.burning.abbreviation"
   },
   freezing: {
     name: "freezing",
-    localizableName: "ambersteel.damageTypes.freezing",
-    localizableAbbreviation: "ambersteel.damageTypes.freezingAbbreviation"
+    localizableName: "ambersteel.damageType.freezing.label",
+    localizableAbbreviation: "ambersteel.damageType.freezing.abbreviation"
   },
   slashing: {
     name: "slashing",
-    localizableName: "ambersteel.damageTypes.slashing",
-    localizableAbbreviation: "ambersteel.damageTypes.slashingAbbreviation"
+    localizableName: "ambersteel.damageType.slashing.label",
+    localizableAbbreviation: "ambersteel.damageType.slashing.abbreviation"
   },
   piercing: {
     name: "piercing",
-    localizableName: "ambersteel.damageTypes.piercing",
-    localizableAbbreviation: "ambersteel.damageTypes.piercingAbbreviation"
+    localizableName: "ambersteel.damageType.piercing.label",
+    localizableAbbreviation: "ambersteel.damageType.piercing.abbreviation"
   },
   bludgeoning: {
     name: "bludgeoning",
-    localizableName: "ambersteel.damageTypes.bludgeoning",
-    localizableAbbreviation: "ambersteel.damageTypes.bludgeoningAbbreviation"
+    localizableName: "ambersteel.damageType.bludgeoning.label",
+    localizableAbbreviation: "ambersteel.damageType.bludgeoning.abbreviation"
   },
   crushing: {
     name: "crushing",
-    localizableName: "ambersteel.damageTypes.crushing",
-    localizableAbbreviation: "ambersteel.damageTypes.crushingAbbreviation"
+    localizableName: "ambersteel.damageType.crushing.label",
+    localizableAbbreviation: "ambersteel.damageType.crushing.abbreviation"
   },
   poison: {
     name: "poison",
-    localizableName: "ambersteel.damageTypes.poison",
-    localizableAbbreviation: "ambersteel.damageTypes.poisonAbbreviation"
+    localizableName: "ambersteel.damageType.poison.label",
+    localizableAbbreviation: "ambersteel.damageType.poison.abbreviation"
   },
   acid: {
     name: "acid",
-    localizableName: "ambersteel.damageTypes.acid",
-    localizableAbbreviation: "ambersteel.damageTypes.acidAbbreviation"
+    localizableName: "ambersteel.damageType.acid.label",
+    localizableAbbreviation: "ambersteel.damageType.acid.abbreviation"
   },
 };

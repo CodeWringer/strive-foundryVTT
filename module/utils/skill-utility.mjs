@@ -16,7 +16,7 @@ export async function querySkillAddData() {
 
   return showDialog({ 
       dialogTemplate: dialogTemplate, 
-      localizableTitle: "ambersteel.dialog.titleSkillAddQuery"
+      localizedTitle: game.i18n.localize("ambersteel.character.skill.ability.add.query")
     }, 
     dialogData
   );

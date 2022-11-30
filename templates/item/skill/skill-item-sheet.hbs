@@ -19,7 +19,7 @@ cssClass: {undefined | String}
   {{!-- Related Attribute --}}
   <div class="sheet-block grid-3col grid-gap-md margin-b-md">
     <div class="flex flex-middle flex-right">
-      {{> inputLabel text="ambersteel.labels.relatedAttribute"}}
+      {{> inputLabel text="ambersteel.character.skill.relatedAttribute"}}
     </div>
     <div class="grid-span-2">
       {{> inputDropDown viewModel=viewModel.vmDdRelatedAttribute }}
@@ -28,7 +28,7 @@ cssClass: {undefined | String}
   {{!-- Category --}}
   <div class="sheet-block grid-3col grid-gap-md margin-b-md">
     <div class="flex flex-middle flex-right">
-      {{> inputLabel text="ambersteel.labels.category"}}
+      {{> inputLabel text="ambersteel.general.category"}}
     </div>
     <div class="grid-span-2">
       {{> inputTextField viewModel=viewModel.vmTfCategory }}
@@ -37,7 +37,7 @@ cssClass: {undefined | String}
   {{!-- IsMagicSchol --}}
   <div class="sheet-block grid-3col grid-gap-md margin-b-md">
     <div class="flex flex-middle flex-right">
-      {{> inputLabel text="ambersteel.labels.magicSchool"}}
+      {{> inputLabel text="ambersteel.character.magic.school"}}
     </div>
     <div class="grid-span-2">
       {{> buttonToggle viewModel=viewModel.vmSwIsMagicSchool }}
@@ -45,7 +45,7 @@ cssClass: {undefined | String}
   </div>
   {{!-- Description --}}
   <div class="sheet-block flex flex-column margin-b-md">
-    <h3 class="{{#if viewModel.showFancyFont}}fancy-font{{/if}}">{{localize "ambersteel.labels.description"}}</h3>
+    <h3 class="{{#if viewModel.showFancyFont}}fancy-font{{/if}}">{{localize "ambersteel.general.description"}}</h3>
     {{> inputRichText viewModel=viewModel.vmRtDescription }}
   </div>
   {{!-- Skill Abilites --}}

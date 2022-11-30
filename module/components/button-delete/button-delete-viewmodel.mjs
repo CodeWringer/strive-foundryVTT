@@ -42,7 +42,7 @@ export default class ButtonDeleteViewModel extends ButtonViewModel {
 
     this.withDialog = args.withDialog ?? false;
     this.propertyPath = args.propertyPath;
-    this.localizableTitle = args.localizableTitle ?? "ambersteel.labels.delete";
+    this.localizableTitle = args.localizableTitle ?? "ambersteel.general.delete.label";
   }
 
   /**
@@ -61,7 +61,7 @@ export default class ButtonDeleteViewModel extends ButtonViewModel {
 
     if (this.withDialog === true) {
       const dialogResult = await showConfirmationDialog({
-        localizableTitle: "ambersteel.dialog.titleConfirmDeletionQuery"
+        localizedTitle: game.i18n.localize("ambersteel.general.delete.query")
       });
       if (dialogResult.confirmed !== true) return;
     }
@@ -77,14 +77,4 @@ export default class ButtonDeleteViewModel extends ButtonViewModel {
   }
 }
 
-Handlebars.registerHelper('createButtonDeleteViewModel', function(id, target, propertyPath, withDialog, callback, callbackData) {
-  return new ButtonDeleteViewModel({
-    id: id,
-    target: target,
-    withDialog: withDialog,
-    propertyPath: propertyPath,
-    callback: callback,
-    callbackData: callbackData,
-  });
-});
 Handlebars.registerPartial('buttonDelete', `{{> "${ButtonDeleteViewModel.TEMPLATE}"}}`);

@@ -119,10 +119,10 @@ export default class ItemGridViewViewModel extends InputViewModel {
       
       // Display a warning dialog. 
       showPlainDialog({
-        localizableTitle: "ambersteel.dialog.titleItemsDropped",
+        localizedTitle: game.i18n.localize("ambersteel.character.asset.carryingCapacity.dialog.titleItemsDropped"),
         localizedContent: actor.name
         + "\n"
-        + game.i18n.localize("ambersteel.dialog.contentItemsDropped")
+        + game.i18n.localize("ambersteel.character.asset.carryingCapacity.dialog.contentItemsDropped")
         + "\n"
         + itemGridLoadResult.itemsDropped.map(it => it.name).join(",\n")
       });
@@ -135,13 +135,4 @@ export default class ItemGridViewViewModel extends InputViewModel {
   }
 }
 
-Handlebars.registerHelper('createItemGridViewViewModel', function(id, isEditable, propertyOwner, propertyPath, gridWidth) {
-  return new ItemGridViewViewModel({
-    id: id,
-    isEditable: isEditable,
-    propertyOwner: propertyOwner,
-    propertyPath: propertyPath,
-    gridWidth: gridWidth,
-  });
-});
 Handlebars.registerPartial('itemGridView', `{{> "${ItemGridViewViewModel.TEMPLATE}"}}`);

@@ -42,25 +42,25 @@ export default class ActorPersonalsViewModel extends SheetViewModel {
       id: "vmTfSpecies",
       propertyOwner: thiz.actor,
       propertyPath: "data.data.person.species",
-      placeholder: "ambersteel.personals.species",
+      placeholder: "ambersteel.character.personals.species",
     });
     this.vmTfCulture = this.createVmTextField({
       id: "vmTfCulture",
       propertyOwner: thiz.actor,
       propertyPath: "data.data.person.culture",
-      placeholder: "ambersteel.personals.culture",
+      placeholder: "ambersteel.character.personals.culture",
     });
     this.vmTfSex = this.createVmTextField({
       id: "vmTfSex",
       propertyOwner: thiz.actor,
       propertyPath: "data.data.person.sex",
-      placeholder: "ambersteel.personals.sex",
+      placeholder: "ambersteel.character.personals.sex",
     });
     this.vmTfAge = this.createVmTextField({
       id: "vmTfAge",
       propertyOwner: thiz.actor,
       propertyPath: "data.data.person.age",
-      placeholder: "ambersteel.personals.age",
+      placeholder: "ambersteel.character.personals.age",
     });
   }
 }

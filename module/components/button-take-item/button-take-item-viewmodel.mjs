@@ -58,7 +58,7 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
     validateOrThrow(args, ["target", "contextType"]);
 
     this.contextType = args.contextType;
-    this.localizableTitle = args.localizableTitle ?? "ambersteel.labels.takeToPerson";
+    this.localizableTitle = args.localizableTitle ?? "ambersteel.character.asset.takeToPerson";
   }
 
   /**
@@ -116,8 +116,8 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
           updateProperty(item, "data.data.isOnPerson", true);
         } else {
           DialogUtil.showPlainDialog({
-            localizableTitle: game.i18n.localize("ambersteel.dialog.titleInventoryFull"),
-            localizedContent: game.i18n.localize("ambersteel.dialog.contentInventoryFull")
+            localizedTitle: game.i18n.localize("ambersteel.character.asset.carryingCapacity.dialog.titleInventoryFull"),
+            localizedContent: game.i18n.localize("ambersteel.character.asset.carryingCapacity.dialog.contentInventoryFull")
           });
         }
       }
@@ -154,7 +154,7 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
     }
 
     const dialogResult = await DialogUtil.showSelectionDialog({
-      localizableLabel: "ambersteel.labels.actor",
+      localizableLabel: game.i18n.localize("ambersteel.general.actor.label"),
       options: options
     });
 
@@ -202,13 +202,4 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
   }
 }
 
-Handlebars.registerHelper('createButtonTakeItemViewModel', function(id, target, callback, callbackData, contextType) {
-  return new ButtonTakeItemViewModel({
-    id: id,
-    target: target,
-    callback: callback,
-    callbackData: callbackData,
-    contextType: contextType,
-  });
-});
 Handlebars.registerPartial('buttonTakeItem', `{{#> "${ButtonTakeItemViewModel.TEMPLATE}"}}{{> @partial-block }}{{/"${ButtonTakeItemViewModel.TEMPLATE}"}}`);

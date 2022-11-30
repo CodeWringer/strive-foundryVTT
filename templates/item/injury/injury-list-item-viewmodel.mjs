@@ -54,13 +54,13 @@ export default class InjuryListItemViewModel extends SheetViewModel {
       id: "vmTfName",
       propertyOwner: thiz.item,
       propertyPath: "name",
-      placeholder: "ambersteel.labels.name",
+      placeholder: "ambersteel.general.name",
     });
     this.vmRbgState = this.createVmRadioButtonGroup({
       id: "vmRbgState",
       propertyOwner: thiz.item,
       propertyPath: "data.data.state",
-      placeholder: "ambersteel.labels.name",
+      placeholder: "ambersteel.general.name",
       options: thiz.stateOptions,
     });
     this.vmBtnSendToChat = this.createVmBtnSendToChat({

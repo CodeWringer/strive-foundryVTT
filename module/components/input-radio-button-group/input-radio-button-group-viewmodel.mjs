@@ -116,14 +116,4 @@ export default class InputRadioButtonGroupViewModel extends InputViewModel {
   }
 }
 
-Handlebars.registerHelper('createRadioButtonGroupViewModel', function(id, isEditable, propertyOwner, propertyPath, options, contextTemplate) {
-  return new InputRadioButtonGroupViewModel({
-    id: id,
-    isEditable: isEditable,
-    propertyOwner: propertyOwner,
-    propertyPath: propertyPath,
-    options: options,
-    contextTemplate: contextTemplate,
-  });
-});
 Handlebars.registerPartial('inputRadioButtonGroup', `{{> "${InputRadioButtonGroupViewModel.TEMPLATE}"}}`);

@@ -62,7 +62,7 @@ export default class ButtonAddViewModel extends ButtonViewModel {
     this.creationType = args.creationType;
     this.withDialog = args.withDialog ?? false;
     this.creationData = args.creationData ?? Object.create(null);
-    this.localizableTitle = args.localizableTitle ?? "ambersteel.labels.add";
+    this.localizableTitle = args.localizableTitle ?? "ambersteel.general.add";
     this.localizableLabel = args.localizableLabel;
 
     if (isObject(this.creationData) !== true) {
@@ -110,17 +110,41 @@ export default class ButtonAddViewModel extends ButtonViewModel {
     if (this.withDialog === true) {
       let dialogResult = undefined;
       if (this.creationType === "skill") {
-        dialogResult = await ItemAddDialog.query("skill", "ambersteel.labels.skill", "ambersteel.dialog.titleSkillAddQuery");
+        dialogResult = await ItemAddDialog.query(
+          "skill", 
+          "ambersteel.character.skill.singular", 
+          "ambersteel.character.skill.add.query"
+        );
       } else if (this.creationType === "injury") {
-        dialogResult = await ItemAddDialog.query("injury", "ambersteel.labels.injury", "ambersteel.dialog.titleInjuryAddQuery");
+        dialogResult = await ItemAddDialog.query(
+          "injury", 
+          "ambersteel.character.health.injury.singular", 
+          "ambersteel.character.health.injury.add.query"
+        );
       } else if (this.creationType === "illness") {
-        dialogResult = await ItemAddDialog.query("illness", "ambersteel.labels.illness", "ambersteel.dialog.titleIllnessAddQuery");
+        dialogResult = await ItemAddDialog.query(
+          "illness", 
+          "ambersteel.character.health.illness.singular", 
+          "ambersteel.character.health.illness.add.query"
+        );
       } else if (this.creationType === "fate-card") {
-        dialogResult = await ItemAddDialog.query("fate-card", "ambersteel.fateSystem.fateCard", "ambersteel.dialog.titleFateCardAddQuery");
+        dialogResult = await ItemAddDialog.query(
+          "fate-card", 
+          "ambersteel.character.beliefSystem.fateSystem.fateCard.label", 
+          "ambersteel.character.beliefSystem.fateSystem.fateCard.add.query"
+        );
       } else if (this.creationType === "item") {
-        dialogResult = await ItemAddDialog.query("item", "ambersteel.labels.item", "ambersteel.dialog.titleAddItemQuery");
+        dialogResult = await ItemAddDialog.query(
+          "item", 
+          "ambersteel.character.asset.singular", 
+          "ambersteel.character.asset.add.query"
+        );
       } else if (this.creationType === "mutation") {
-        dialogResult = await ItemAddDialog.query("mutation", "ambersteel.labels.mutation", "ambersteel.dialog.titleMutationAddQuery");
+        dialogResult = await ItemAddDialog.query(
+          "mutation", 
+          "ambersteel.character.health.mutation.singular", 
+          "ambersteel.character.health.mutation.add.query"
+        );
       } else {
         throw new Error(`InvalidArgumentException: Invalid creationType '${this.creationType}'`);
       }
@@ -198,15 +222,4 @@ export default class ButtonAddViewModel extends ButtonViewModel {
   }
 }
 
-Handlebars.registerHelper('createButtonAddViewModel', function(id, target, creationType, withDialog, creationData, callback, callbackData) {
-  return new ButtonAddViewModel({
-    id: id,
-    target: target,
-    creationType: creationType,
-    withDialog: withDialog,
-    creationData: creationData,
-    callback: callback,
-    callbackData: callbackData,
-  });
-});
 Handlebars.registerPartial('buttonAdd', `{{> "${ButtonAddViewModel.TEMPLATE}"}}`);

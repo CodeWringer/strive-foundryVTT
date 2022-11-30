@@ -1,8 +1,13 @@
 import SheetViewModel from "../../../module/components/sheet-viewmodel.mjs";
+import DocumentListItemOrderDataSource from "../../../module/components/sortable-list/document-list-item-order-datasource.mjs";
+import SortableListViewModel from "../../../module/components/sortable-list/sortable-list-viewmodel.mjs";
 import { TEMPLATES } from "../../../module/templatePreloader.mjs";
 import { validateOrThrow } from "../../../module/utils/validation-utility.mjs";
-import SkillTableViewModel from "../components/component-skill-table-viewmodel.mjs";
+import SkillListItemViewModel from "../../item/skill/skill-list-item-viewmodel.mjs";
 
+/**
+ * @property {Actor} actor
+ */
 export default class ActorSkillsViewModel extends SheetViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.ACTOR_SKILLS; }
@@ -18,26 +23,6 @@ export default class ActorSkillsViewModel extends SheetViewModel {
   get learningSkills() { return this.actor.data.data.learningSkills; }
   get skills() { return this.actor.data.data.skills; }
   
-  /**
-   * @type {SkillTableViewModel}
-   */
-  learningSkillsViewModel = undefined;
-  /**
-   * @type {String}
-   * @readonly
-   */
-  get learningSkillsViewModelId() { return "child-learning-skills-viewmodel"; }
-  
-  /**
-   * @type {SkillTableViewModel}
-   */
-  skillsViewModel = undefined;
-  /**
-   * @type {String}
-   * @readonly
-   */
-  get skillsViewModelId() { return "child-skills-viewmodel"; }
-
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
    * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 
@@ -63,7 +48,74 @@ export default class ActorSkillsViewModel extends SheetViewModel {
     // Child view models. 
     const thiz = this;
 
-    this.learningSkillsViewModel = new SkillTableViewModel({ ...args, id: this.learningSkillsViewModelId, parent: thiz, isLearningSkillsTable: true });
-    this.skillsViewModel = new SkillTableViewModel({ ...args, id: this.skillsViewModelId, parent: thiz, isLearningSkillsTable: false });
+    this.learningSkillViewModels = this.actor.data.data.learningSkills.map(skill => {
+      return new SkillListItemViewModel({
+        id: skill.id,
+        parent: thiz,
+        item: skill,
+        actor: thiz.actor,
+        isEditable: thiz.isEditable,
+        isSendable: thiz.isSendable,
+        isOwner: thiz.isOwner,
+        isGM: thiz.isGM,
+      });
+    });
+    this.vmLearningSkillList = new SortableListViewModel({
+      id: "vmLearningSkillList",
+      isEditable: thiz.isEditable,
+      isSendable: thiz.isSendable,
+      contextTemplate: thiz.contextTemplate,
+      indexDataSource: new DocumentListItemOrderDataSource({
+        propertyOwner: thiz.actor,
+        listName: "learningSkills",
+      }),
+      listItemViewModels: this.learningSkillViewModels,
+      listItemTemplate: TEMPLATES.SKILL_LIST_ITEM,
+      vmBtnAddItem: thiz.createVmBtnAdd({
+        id: "vmBtnAddLearningSkill",
+        target: thiz.actor,
+        creationType: "skill",
+        withDialog: true,
+        localizableLabel: "ambersteel.character.skill.learning.add.label",
+        creationData: {
+          value: 0
+        }
+      }),
+    });
+
+    this.knownSkillViewModels = this.actor.data.data.skills.map(skill => {
+      return new SkillListItemViewModel({
+        id: skill.id,
+        parent: thiz,
+        item: skill,
+        actor: thiz.actor,
+        isEditable: thiz.isEditable,
+        isSendable: thiz.isSendable,
+        isOwner: thiz.isOwner,
+        isGM: thiz.isGM,
+      });
+    });
+    this.vmKnownSkillList = new SortableListViewModel({
+      id: "vmKnownSkillList",
+      isEditable: thiz.isEditable,
+      isSendable: thiz.isSendable,
+      contextTemplate: thiz.contextTemplate,
+      indexDataSource: new DocumentListItemOrderDataSource({
+        propertyOwner: thiz.actor,
+        listName: "knownSkills",
+      }),
+      listItemViewModels: this.knownSkillViewModels,
+      listItemTemplate: TEMPLATES.SKILL_LIST_ITEM,
+      vmBtnAddItem: thiz.createVmBtnAdd({
+        id: "vmBtnAddKnownSkill",
+        target: thiz.actor,
+        creationType: "skill",
+        withDialog: true,
+        localizableLabel: "ambersteel.character.skill.known.add.label",
+        creationData: {
+          value: 1
+        }
+      }),
+    });
   }
 }

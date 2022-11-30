@@ -5,9 +5,9 @@ import { TEMPLATES } from "../../../module/templatePreloader.mjs";
 import { getNestedPropertyValue } from "../../../module/utils/property-utility.mjs";
 import { validateOrThrow } from "../../../module/utils/validation-utility.mjs";
 import * as ChatUtil from "../../../module/utils/chat-utility.mjs";
-import { DICE_ROLL_SOUND } from "../../../module/utils/dice-utility.mjs";
 import { DAMAGE_TYPES } from "../../../module/constants/damage-types.mjs";
 import { ATTACK_TYPES } from "../../../module/constants/attack-types.mjs";
+import { SOUNDS_CONSTANTS } from "../../../module/constants/sounds.mjs";
 
 export default class SkillAbilityListItemViewModel extends SheetViewModel {
   /** @override */
@@ -144,7 +144,7 @@ export default class SkillAbilityListItemViewModel extends SheetViewModel {
       id: "vmTfName",
       propertyOwner: skillAbility,
       propertyPath: "name",
-      placeholder: "ambersteel.labels.name",
+      placeholder: "ambersteel.general.name",
     });
     this.vmBtnDelete = this.createVmBtnDelete({
       id: "vmBtnDelete",
@@ -161,19 +161,19 @@ export default class SkillAbilityListItemViewModel extends SheetViewModel {
       id: "vmTfObstacle",
       propertyOwner: skillAbility,
       propertyPath: "obstacle",
-      placeholder: game.i18n.localize("ambersteel.placeholders.obstacle"),
+      placeholder: game.i18n.localize("ambersteel.roll.obstacle.placeholder"),
     });
     this.vmTfOpposedBy = this.createVmTextField({
       id: "vmTfOpposedBy",
       propertyOwner: skillAbility,
       propertyPath: "opposedBy",
-      placeholder: game.i18n.localize("ambersteel.placeholders.opposedBy"),
+      placeholder: game.i18n.localize("ambersteel.roll.obstacle.opposedBy.placeholder"),
     });
     this.vmTfDistance = this.createVmTextField({
       id: "vmTfDistance",
       propertyOwner: skillAbility,
       propertyPath: "distance",
-      placeholder: game.i18n.localize("ambersteel.placeholders.distance"),
+      placeholder: game.i18n.localize("ambersteel.character.skill.ability.distance.placeholder"),
     });
     this.vmNsApCost = this.createVmNumberSpinner({
       id: "vmNsApCost",
@@ -192,7 +192,7 @@ export default class SkillAbilityListItemViewModel extends SheetViewModel {
       id: "vmBtnRollDamage",
       parent: thiz,
       isEditable: thiz.isEditable,
-      localizableTitle: "ambersteel.labels.roll",
+      localizableTitle: "ambersteel.roll.doRoll",
     });
     this.vmBtnRollDamage.onClick = async (html, isOwner, isEditable) => {
       const dialogResult = await ChatUtil.queryVisibilityMode();
@@ -240,7 +240,7 @@ export default class SkillAbilityListItemViewModel extends SheetViewModel {
       }
 
       // Determine title
-      const title = `${game.i18n.localize("ambersteel.labels.damage")} - ${thiz.skillAbility.name}`;
+      const title = `${game.i18n.localize("ambersteel.character.skill.ability.damage.label")} - ${thiz.skillAbility.name}`;
 
       // Render the results. 
       const renderedContent = await renderTemplate(TEMPLATES.DICE_ROLL_DAMAGE_CHAT_MESSAGE, {
@@ -252,7 +252,7 @@ export default class SkillAbilityListItemViewModel extends SheetViewModel {
       return ChatUtil.sendToChat({
         renderedContent: renderedContent,
         actor: skillAbilityParent.parent,
-        sound: DICE_ROLL_SOUND,
+        sound: SOUNDS_CONSTANTS.DICE_ROLL,
         visibilityMode: dialogResult.visibilityMode
       });
     };
@@ -261,7 +261,7 @@ export default class SkillAbilityListItemViewModel extends SheetViewModel {
       id: "vmTaCondition",
       propertyOwner: skillAbility,
       propertyPath: "condition",
-      placeholder: game.i18n.localize("ambersteel.placeholders.condition"),
+      placeholder: game.i18n.localize("ambersteel.character.skill.ability.condition.placeholder"),
     });
     this.vmRtDescription = this.createVmRichText({
       id: "vmRtDescription",
@@ -273,72 +273,72 @@ export default class SkillAbilityListItemViewModel extends SheetViewModel {
       menuItems: [
         // Toggle obstacle
         {
-          name: game.i18n.localize("ambersteel.roll.obstacle"),
+          name: game.i18n.localize("ambersteel.roll.obstacle.label"),
           icon: '<i class="fas fa-check"></i>',
           condition: () => { return thiz.skillAbility.obstacle !== undefined; },
           callback: () => { thiz.skillAbility.updateProperty("obstacle", undefined); },
         },
         {
-          name: game.i18n.localize("ambersteel.roll.obstacle"),
+          name: game.i18n.localize("ambersteel.roll.obstacle.label"),
           icon: '',
           condition: () => { return thiz.skillAbility.obstacle === undefined; },
           callback: () => { thiz.skillAbility.updateProperty("obstacle", ""); },
         },
         // Toggle opposed by
         {
-          name: game.i18n.localize("ambersteel.labels.opposedBy"),
+          name: game.i18n.localize("ambersteel.roll.obstacle.opposedBy.label"),
           icon: '<i class="fas fa-check"></i>',
           condition: () => { return thiz.skillAbility.opposedBy !== undefined; },
           callback: () => { thiz.skillAbility.updateProperty("opposedBy", undefined); },
         },
         {
-          name: game.i18n.localize("ambersteel.labels.opposedBy"),
+          name: game.i18n.localize("ambersteel.roll.obstacle.opposedBy.label"),
           icon: '',
           condition: () => { return thiz.skillAbility.opposedBy === undefined; },
           callback: () => { thiz.skillAbility.updateProperty("opposedBy", ""); },
         },
         // Toggle distance
         {
-          name: game.i18n.localize("ambersteel.labels.distance"),
+          name: game.i18n.localize("ambersteel.character.skill.ability.distance.label"),
           icon: '<i class="fas fa-check"></i>',
           condition: () => { return thiz.skillAbility.distance !== undefined; },
           callback: () => { thiz.skillAbility.updateProperty("distance", undefined); },
         },
         {
-          name: game.i18n.localize("ambersteel.labels.distance"),
+          name: game.i18n.localize("ambersteel.character.skill.ability.distance.label"),
           icon: '',
           condition: () => { return thiz.skillAbility.distance === undefined; },
           callback: () => { thiz.skillAbility.updateProperty("distance", ""); },
         },
         // Toggle attack type
         {
-          name: game.i18n.localize("ambersteel.labels.attackType"),
+          name: game.i18n.localize("ambersteel.attackType.label"),
           icon: '<i class="fas fa-check"></i>',
           condition: () => { return thiz.skillAbility.attackType !== undefined; },
           callback: () => { thiz.skillAbility.updateProperty("attackType", undefined); },
         },
         {
-          name: game.i18n.localize("ambersteel.labels.attackType"),
+          name: game.i18n.localize("ambersteel.attackType.label"),
           icon: '',
           condition: () => { return thiz.skillAbility.attackType === undefined; },
           callback: () => { thiz.skillAbility.updateProperty("attackType", ATTACK_TYPES.none.name); },
         },
         // Toggle condition
         {
-          name: game.i18n.localize("ambersteel.labels.skillAbilityCondition"),
+          name: game.i18n.localize("ambersteel.character.skill.ability.condition.label"),
           icon: '<i class="fas fa-check"></i>',
           condition: () => { return thiz.skillAbility.condition !== undefined; },
           callback: () => { thiz.skillAbility.updateProperty("condition", undefined); },
         },
         {
-          name: game.i18n.localize("ambersteel.labels.skillAbilityCondition"),
+          name: game.i18n.localize("ambersteel.character.skill.ability.condition.label"),
           icon: '',
           condition: () => { return thiz.skillAbility.condition === undefined; },
           callback: () => { thiz.skillAbility.updateProperty("condition", ""); },
         },
         // Add damage
         {
-          name: game.i18n.localize("ambersteel.labels.addSkillAbilityDamage"),
+          name: game.i18n.localize("ambersteel.character.skill.ability.damage.add"),
           icon: '<i class="fas fa-plus"></i>',
           condition: () => { return true; },
           callback: () => {
@@ -402,7 +402,7 @@ class DamageAndTypeViewModel extends SheetViewModel {
       id: "vmBtnDelete",
       parent: thiz,
       isEditable: thiz.isEditable,
-      localizableTitle: "ambersteel.labels.delete",
+      localizableTitle: "ambersteel.character.skill.ability.damage.delete",
     });
     this.vmBtnDelete.onClick = (html, isOwner, isEditable) => {
       const damage = thiz.skillAbility.damage;

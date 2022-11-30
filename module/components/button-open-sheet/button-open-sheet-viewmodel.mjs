@@ -34,7 +34,7 @@ export default class ButtonOpenSheetViewModel extends ButtonViewModel {
     super(args);
     validateOrThrow(args, ["target"]);
 
-    this.localizableTitle = args.localizableTitle ?? "ambersteel.labels.openSheet";
+    this.localizableTitle = args.localizableTitle ?? "ambersteel.general.openSheet";
   }
 
   /**
@@ -56,12 +56,4 @@ export default class ButtonOpenSheetViewModel extends ButtonViewModel {
   }
 }
 
-Handlebars.registerHelper('createButtonOpenSheetViewModel', function(id, target, callback, callbackData) {
-  return new ButtonOpenSheetViewModel({
-    id: id,
-    target: target,
-    callback: callback,
-    callbackData: callbackData,
-  });
-});
 Handlebars.registerPartial('buttonOpenSheet', `{{> "${ButtonOpenSheetViewModel.TEMPLATE}"}}`);

@@ -78,7 +78,7 @@ export default class ButtonSendToChatViewModel extends ButtonViewModel {
     this._propertyPath = args.propertyPath;
     this._chatTitle = args.chatTitle ?? "";
     this._actor = args.actor;
-    this.localizableTitle = args.localizableTitle ?? "ambersteel.labels.sendToChat";
+    this.localizableTitle = args.localizableTitle ?? "ambersteel.general.sendToChat";
   }
 
   /**
@@ -120,15 +120,4 @@ export default class ButtonSendToChatViewModel extends ButtonViewModel {
   }
 }
 
-Handlebars.registerHelper('createButtonSendToChatViewModel', function(id, target, propertyPath, chatTitle, actor, callback, callbackData) {
-  return new ButtonSendToChatViewModel({
-    id: id,
-    target: target,
-    propertyPath: propertyPath,
-    chatTitle: chatTitle,
-    actor: actor,
-    callback: callback,
-    callbackData: callbackData,
-  });
-});
 Handlebars.registerPartial('buttonSendToChat', `{{> "${ButtonSendToChatViewModel.TEMPLATE}"}}`);
