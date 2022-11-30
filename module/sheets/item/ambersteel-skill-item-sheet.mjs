@@ -2,12 +2,14 @@ import AmbersteelBaseItemSheet from "./ambersteel-base-item-sheet.mjs";
 import { TEMPLATES } from "../../templatePreloader.mjs";
 import SkillItemSheetViewModel from "../../../templates/item/skill/skill-item-sheet-viewmodel.mjs";
 import Ruleset from "../../ruleset.mjs";
+import { ITEM_SHEET_SUBTYPE } from "./item-sheet-subtype.mjs";
 
 export default class AmbersteelSkillItemSheet extends AmbersteelBaseItemSheet {
   /** @override */
-  get template() {
-    return TEMPLATES.SKILL_ITEM_SHEET;
-  }
+  get template() { return TEMPLATES.SKILL_ITEM_SHEET; }
+
+  /** @override */
+  get title() { return game.i18n.localize("ambersteel.character.skill.singular"); }
 
   /** @override */
   prepareDerivedData(context) {
@@ -56,14 +58,16 @@ export default class AmbersteelSkillItemSheet extends AmbersteelBaseItemSheet {
     await this.getItem().deleteSkillAbilityAt(index);
   }
 
-  getViewModel(context) {
+  getViewModel(context, item) {
     return new SkillItemSheetViewModel({
-      id: this.getItem().id,
+      id: item.id,
       isEditable: context.isEditable,
       isSendable: context.isSendable,
       isOwner: context.isOwner,
       isGM: context.isGM,
-      item: this.getItem(),
+      item: item,
     });
   }
 }
+
+ITEM_SHEET_SUBTYPE.set("skill", new AmbersteelSkillItemSheet());

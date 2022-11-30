@@ -1,9 +1,11 @@
+// Imports of specific item sheet "sub-types", to ensure their imports cause the `ITEM_SHEET_SUBTYPE` map to be populated. 
 import AmbersteelBaseItemSheet from "./ambersteel-base-item-sheet.mjs";
 import AmbersteelSkillItemSheet from "./ambersteel-skill-item-sheet.mjs";
 import AmbersteelFateCardItemSheet from "./ambersteel-fate-item-sheet.mjs";
 import AmbersteelInjuryItemSheet from "./ambersteel-injury-item-sheet.mjs";
 import AmbersteelIllnessItemSheet from "./ambersteel-illness-item-sheet.mjs";
 import AmbersteelMutationItemSheet from "./ambersteel-mutation-item-sheet.mjs";
+// Other imports
 import * as SheetUtil from "../../utils/sheet-utility.mjs";
 
 export class AmbersteelItemSheet extends ItemSheet {
@@ -118,7 +120,7 @@ export class AmbersteelItemSheet extends ItemSheet {
     // Dispose of the view model, if it exists. 
     this._tryDisposeViewModel();
     // Prepare a new view model instance. 
-    this._viewModel = this.subType.getViewModel(context);
+    this._viewModel = this.subType.getViewModel(context, context.item);
     this._viewModel.readViewState();
     context.viewModel = this._viewModel;
     
