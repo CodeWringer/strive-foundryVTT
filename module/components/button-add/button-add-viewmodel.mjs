@@ -4,6 +4,7 @@ import * as ItemAddDialog from '../../dialog/dialog-item-add.mjs';
 import { findItem, contentCollectionTypes } from '../../utils/content-utility.mjs';
 import { validateOrThrow, isObject } from "../../utils/validation-utility.mjs";
 import { isNotBlankOrUndefined } from "../../utils/validation-utility.mjs";
+import GetShowFancyFontUseCase from "../../use-case/get-show-fancy-font-use-case.mjs";
 
 /**
  * --- Inherited from ViewModel
@@ -64,6 +65,7 @@ export default class ButtonAddViewModel extends ButtonViewModel {
     this.creationData = args.creationData ?? Object.create(null);
     this.localizableTitle = args.localizableTitle ?? "ambersteel.general.add";
     this.localizableLabel = args.localizableLabel;
+    this.showFancyFont = new GetShowFancyFontUseCase().invoke();
 
     if (isObject(this.creationData) !== true) {
       this.creationData = this._parseCreationData(this.creationData);

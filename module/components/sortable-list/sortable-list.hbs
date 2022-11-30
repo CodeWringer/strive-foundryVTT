@@ -8,12 +8,12 @@ cssClass: {String | undefined}
   {{#each viewModel.itemViewModelGroups as |itemViewModelGroup key|}}
     <li class="ambersteel-list-row sheet-block flex flex-row">
       <div class="component-list-item-order-controls{{#if (neq ../viewModel.isEditable true)}} hidden{{/if}}">
-        {{#> _button viewModel=itemViewModelGroup.vmBtnMoveTop fill=false}}
+        {{#> button viewModel=itemViewModelGroup.vmBtnMoveTop fill=false}}
           <i class="fas fa-angle-double-up"></i>
-        {{/_button}}
-        {{#> _button viewModel=itemViewModelGroup.vmBtnMoveUp fill=false}}
+        {{/button}}
+        {{#> button viewModel=itemViewModelGroup.vmBtnMoveUp fill=false}}
           <i class="fas fa-angle-up"></i>
-        {{/_button}}
+        {{/button}}
         {{!-- TODO: Implement the grab handle --}}
         <div class="flex-grow"></div>
         {{!-- <a 
@@ -21,12 +21,12 @@ cssClass: {String | undefined}
           >
           <i class="fas fa-grip-vertical"></i>
         </a> --}}
-        {{#> _button viewModel=itemViewModelGroup.vmBtnMoveDown fill=false}}
+        {{#> button viewModel=itemViewModelGroup.vmBtnMoveDown fill=false}}
           <i class="fas fa-angle-down"></i>
-        {{/_button}}
-        {{#> _button viewModel=itemViewModelGroup.vmBtnMoveBottom fill=false}}
+        {{/button}}
+        {{#> button viewModel=itemViewModelGroup.vmBtnMoveBottom fill=false}}
           <i class="fas fa-angle-double-down"></i>
-        {{/_button}}
+        {{/button}}
       </div>
       {{> (lookup . 'listItemTemplate') viewModel=itemViewModelGroup.listItemViewModel cssClass="flex-grow" }}
     </li>
@@ -34,7 +34,9 @@ cssClass: {String | undefined}
   <li class="ambersteel-list-row ambersteel-list-footer{{#if (neq viewModel.isEditable true)}} hidden{{/if}}">
     <div class="fill flex flex-row flex-right">
       {{!-- Add button --}}
-      {{> buttonAdd viewModel=viewModel.vmBtnAddItem }}
+      <div>
+        {{> buttonAdd viewModel=viewModel.vmBtnAddItem fill=true}}
+      </div>
     </div>
   </li>
 </ol>
