@@ -34,7 +34,9 @@ cssClass: {String | undefined}
   <li class="ambersteel-list-row ambersteel-list-footer{{#if (neq viewModel.isEditable true)}} hidden{{/if}}">
     <div class="fill flex flex-row flex-right">
       {{!-- Add button --}}
-      {{> buttonAdd viewModel=viewModel.vmBtnAddItem }}
+      <div>
+        {{> buttonAdd viewModel=viewModel.vmBtnAddItem fill=true}}
+      </div>
     </div>
   </li>
 </ol>
