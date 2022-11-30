@@ -1,5 +1,6 @@
 import ActorSheetViewModel from "../../../templates/actor/actor-sheet-viewmodel.mjs";
 import { TEMPLATES } from "../../templatePreloader.mjs";
+import { ACTOR_SHEET_SUBTYPE } from "./actor-sheet-subtype.mjs";
 
 export default class AmbersteelBaseActorSheet {
   /**
@@ -23,12 +24,11 @@ export default class AmbersteelBaseActorSheet {
 
   /**
    * Returns the template path. 
-   * @returns {String} Path to the template. 
+   * @type {String} Path to the template. 
+   * @readonly
    * @virtual
    */
-  get template() { 
-    return TEMPLATES.ACTOR_SHEET; 
-  }
+  get template() { return TEMPLATES.ACTOR_SHEET;  }
 
   /**
    * Returns the actor object of the parent sheet. 
@@ -91,3 +91,5 @@ export default class AmbersteelBaseActorSheet {
     });
   }
 }
+
+ACTOR_SHEET_SUBTYPE.set("plain", new AmbersteelBaseActorSheet());

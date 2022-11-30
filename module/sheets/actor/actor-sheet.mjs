@@ -1,7 +1,10 @@
+// Imports of specific actor sheet "sub-types", to ensure their imports cause the `ACTOR_SHEET_SUBTYPE` map to be populated. 
+import AmbersteelBaseActorSheet from "./ambersteel-base-actor-sheet.mjs";
 import AmbersteelNpcActorSheet from "./ambersteel-npc-actor-sheet.mjs";
 import AmbersteelPcActorSheet from "./ambersteel-pc-actor-sheet.mjs";
+import { ACTOR_SHEET_SUBTYPE } from "./actor-sheet-subtype.mjs";
+// Other imports
 import * as SheetUtil from "../../utils/sheet-utility.mjs";
-import AmbersteelBaseActorSheet from "./ambersteel-base-actor-sheet.mjs";
 
 export class AmbersteelActorSheet extends ActorSheet {
   /**
@@ -51,9 +54,7 @@ export class AmbersteelActorSheet extends ActorSheet {
    * @override
    * @see https://foundryvtt.com/api/DocumentSheet.html#template
    */
-  get template() {
-    return this.subType.template;
-  }
+  get template() { return this.subType.template; }
 
   /**
    * @override
