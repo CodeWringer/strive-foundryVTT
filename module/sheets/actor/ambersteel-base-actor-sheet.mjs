@@ -4,25 +4,6 @@ import { ACTOR_SHEET_SUBTYPE } from "./actor-sheet-subtype.mjs";
 
 export default class AmbersteelBaseActorSheet {
   /**
-   * The owning ActorSheet object. 
-   * @type {ActorSheet}
-   */
-  parent = undefined;
-
-  /**
-   * @param parent {ActorSheet} The owning ActorSheet. 
-   */
-  constructor(parent) {
-    if (!parent || parent === undefined) {
-      throw "Argument 'owner' must not be null or undefined!"
-    }
-    this.parent = parent;
-    this.parent.getActor = this.getActor.bind(this);
-    this.parent.getItem = this.getItem.bind(this);
-    this.parent.getContextEntity = this.getContextEntity.bind(this);
-  }
-
-  /**
    * Returns the template path. 
    * @type {String} Path to the template. 
    * @readonly
@@ -80,14 +61,20 @@ export default class AmbersteelBaseActorSheet {
     context.data.attributeGroups = context.data.data.attributeGroups;
   }
 
-  getViewModel(context) {
+  /**
+   * Returns a new actor sheet view model for the given actor sheet. 
+   * @param {Object} context Data fetched via getData. 
+   * @param {Actor} actor The actor associated with the sheet. 
+   * @returns {ActorSheetViewModel}
+   */
+  getViewModel(context, actor) {
     return new ActorSheetViewModel({
-      id: this.getActor().id,
+      id: actor.id,
       isEditable: context.isEditable,
       isSendable: context.isSendable,
       isOwner: context.isOwner,
       isGM: context.isGM,
-      actor: this.getActor(),
+      actor: actor,
     });
   }
 }
