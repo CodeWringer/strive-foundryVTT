@@ -373,14 +373,6 @@ Hooks.on("preCreateItem", async function(document, createData, options, userId) 
   document.data.update({ img: document.defaultImg });
 });
 
-// Hooks.on("createActor", async function(document, options, userId) {
-//   console.log("created!");
-// });
-
-// Hooks.on("deleteActor", async function(document, options, userId) {
-//   console.log("deleted!");
-// });
-
 Hooks.on("renderChatMessage", async function(message, html, data) {
   const SELECTOR_CHAT_MESSAGE = "custom-system-chat-message";
   const element = html.find(`.${SELECTOR_CHAT_MESSAGE}`)[0];
