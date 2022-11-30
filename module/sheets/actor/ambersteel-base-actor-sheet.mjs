@@ -2,6 +2,13 @@ import ActorSheetViewModel from "../../../templates/actor/actor-sheet-viewmodel.
 import { TEMPLATES } from "../../templatePreloader.mjs";
 import { ACTOR_SHEET_SUBTYPE } from "./actor-sheet-subtype.mjs";
 
+/**
+ * Represents the base contract for a "specific" actor sheet "sub-type". 
+ * 
+ * Such a "sub-type" is really on an "enhancer", which adds properties and/or methods to a given `ActorSheet` instance. 
+ * 
+ * This particular type also doubles as the definition for the actor of type `"plain"`. 
+ */
 export default class AmbersteelBaseActorSheet {
   /**
    * Returns the template path. 
