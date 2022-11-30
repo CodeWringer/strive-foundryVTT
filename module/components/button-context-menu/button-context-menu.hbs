@@ -3,11 +3,6 @@ viewModel: {ButtonContextMenuViewModel}
 cssClass: {String | undefined}
 fill: {Boolean | undefined}
 --}}
-<span class="component-button-context-menu {{#if fill}}fill-button-light{{else}}square-button-light{{/if}} {{#if (not viewModel.isEditable)}}disabled{{/if}} {{#if cssClass}}{{cssClass}}{{else}}font-size-default{{/if}}">
-  <a class="custom-system-button pad-sm button flex flex-center" 
-    title="{{viewModel.localizedTitle}}"
-    id="{{viewModel.id}}"
-  >
-    <i class="fas fa-bars"></i>
-  </a>
-</span>
+{{#> button viewModel=viewModel fill=fill cssClass=cssClass}}
+  <i class="fas fa-bars"></i>
+{{/button}}
