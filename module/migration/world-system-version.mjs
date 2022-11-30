@@ -2,9 +2,11 @@ import AmbersteelSettings from "../settings/ambersteel-settings.mjs";
 import VersionCode from "./version-code.mjs";
 
 /**
- * Provides a means to read/write the world's system version. 
+ * Provides a means to read/write the world's global system version. 
+ * 
+ * @private
  */
-export default class WorldSystemVersion {
+class WorldSystemVersionType {
   /**
    * The FoundryVTT setting key for the system. 
    * 
@@ -32,26 +34,27 @@ export default class WorldSystemVersion {
   get _settingName() { return "worldSystemVersion"; }
 
   /**
-   * Gets or sets the version represented by this object. 
-   * 
-   * IMPORTANT: Changes to this value are not automatically persisted! 
-   * Call `save()` to persist the change! 
+   * Gets the version represented by this object. 
    * @type {VersionCode}
    */
-  version = undefined;
-
-  constructor() {
-    this.version = this._get();
-  }
+  get version() { return this._get(); }
+  /**
+   * Sets the version represented by this object. 
+   * 
+   * **IMPORTANT**: This automatically sets the 
+   * @param {VersionCode} value
+   */
+  set version(value) { this._set(value); }
 
   /**
-   * Persists the currently set version as the world system version. 
+   * Sets and persists the given version as the world system version. 
+   * @param {VersionCode} version The version to set. 
    */
-  save() {
+  _set(version) {
     this._ensureSetting();
 
     // Set the world system version.
-    game.settings.set(this._settingNamespace, this._settingKey, this.version.toString()); 
+    game.settings.set(this._settingNamespace, this._settingKey, version.toString()); 
   }
 
   /**
@@ -87,3 +90,10 @@ export default class WorldSystemVersion {
     });
   }
 }
+
+/**
+ * Provides a means to read/write the world's global system version. 
+ * @type {WorldSystemVersionType}
+ * @constant
+ */
+export const WorldSystemVersion = new WorldSystemVersionType();
