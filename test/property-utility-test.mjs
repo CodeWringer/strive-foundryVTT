@@ -1,7 +1,7 @@
 import should from 'should';
 import sinon from 'sinon';
 import 'should-sinon';
-import * as PropertyUtility from '../utils/property-utility.mjs';
+import * as PropertyUtility from '../module/utils/property-utility.mjs';
 
 describe('property-utility', function() {
   describe('splitPropertyPath', function() {

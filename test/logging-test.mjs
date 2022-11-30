@@ -1,8 +1,8 @@
 import should from 'should';
 import sinon from 'sinon';
 import 'should-sinon';
-import { ConsoleLoggingStrategy } from '../logging/console-logging-strategy.mjs';
-import { LogLevels } from '../logging/base-logging-strategy.mjs';
+import { ConsoleLoggingStrategy } from '../module/logging/console-logging-strategy.mjs';
+import { LogLevels } from '../module/logging/base-logging-strategy.mjs';
 
 describe('ConsoleLoggingStrategy', function() {
   describe('log verbose', function() {

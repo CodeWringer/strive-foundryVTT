@@ -1,4 +1,4 @@
-import { moveArrayElement, moveArrayElementBy } from "../../utils/array-utility.mjs";
+import { moveArrayElement, moveArrayElementBy } from "../../module/utils/array-utility.mjs";
 
 describe('array-utility', function() {
   describe('moveArrayElement', function() {
