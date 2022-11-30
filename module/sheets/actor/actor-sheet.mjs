@@ -102,7 +102,7 @@ export class AmbersteelActorSheet extends ActorSheet {
     // Dispose of the view model, if it exists. 
     this._tryDisposeViewModel();
     // Prepare a new view model instance. 
-    this._viewModel = this.subType.getViewModel(context);
+    this._viewModel = this.subType.getViewModel(context, context.actor);
     this._viewModel.readViewState();
     context.viewModel = this._viewModel;
     
