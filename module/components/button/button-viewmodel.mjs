@@ -165,4 +165,4 @@ export default class ButtonViewModel extends ViewModel {
   }
 }
 
-Handlebars.registerPartial('_button', `{{#> "${ButtonViewModel.TEMPLATE}"}}{{> @partial-block }}{{/"${ButtonViewModel.TEMPLATE}"}}`);
+Handlebars.registerPartial('button', `{{#> "${ButtonViewModel.TEMPLATE}"}}{{> @partial-block }}{{/"${ButtonViewModel.TEMPLATE}"}}`);
