@@ -694,6 +694,14 @@ h4 {
 }
 
 /* Components */
+.ambersteel-modal {
+  z-index: 99999 !important;
+}
+.ambersteel-modal .dialog-buttons {
+  display: flex;
+  flex-direction: row;
+}
+
 header.sheet-header {
   flex: 0 auto;
   overflow: hidden;

@@ -1,5 +1,10 @@
 .ambersteel-modal {
   z-index: 99999 !important;
+
+  .dialog-buttons {
+    display: flex;
+    flex-direction: row;
+  }
 }
 
 header.sheet-header {

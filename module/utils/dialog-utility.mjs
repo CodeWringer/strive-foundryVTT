@@ -57,7 +57,6 @@ export async function showDialog(args = {}, dialogData) {
             },
             default: "cancel",
             render: html => {
-                // TODO: Activate DOM event listeners using the view model system. 
                 args.render(html);
             },
             close: html => {
@@ -66,6 +65,9 @@ export async function showDialog(args = {}, dialogData) {
                     html
                 ));
             }
+        },
+        {
+            classes: ["ambersteel-modal"]
         });
         dialog.render(true);
     });
@@ -115,6 +117,9 @@ export async function showConfirmationDialog(args = {}) {
                     confirmed: mergedDialogData.confirmed,
                 });
             }
+        },
+        {
+            classes: ["ambersteel-modal"]
         });
         dialog.render(true);
     });
@@ -158,6 +163,9 @@ export async function showPlainDialog(args = {}) {
             close: html => {
                 resolve();
             }
+        },
+        {
+            classes: ["ambersteel-modal"]
         });
         dialog.render(true);
     });
