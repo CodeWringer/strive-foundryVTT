@@ -1,5 +1,5 @@
 import VersionCode from "./version-code.mjs";
-import WorldSystemVersion from "./world-system-version.mjs";
+import { WorldSystemVersion } from "./world-system-version.mjs";
 import { getActors } from "../utils/content-utility.mjs";
 
 /**
@@ -44,18 +44,11 @@ export default class AbstractMigrator {
   get migratedVersion() { throw new Error("NotImplementedException"); };
 
   /**
-   * Represents the world's system version. 
-   * @type {WorldSystemVersion}
-   * @private
-   */
-  _worldSystemVersion = new WorldSystemVersion();
-
-  /**
    * Returns true, if this migrator can be applied to the current world system version. 
    * @returns {Boolean} True, if this migrator can be applied to the current world system version. 
    */
   isApplicable() {
-    const version = this._worldSystemVersion.version;
+    const version = WorldSystemVersion.version;
     
     const majorApplies = version.major === this.targetVersion.major;
     const minorApplies = version.minor === this.targetVersion.minor;
@@ -76,8 +69,7 @@ export default class AbstractMigrator {
     await this._doWork(args);
     
     // Update world system version. 
-    this._worldSystemVersion.version = this.migratedVersion;
-    this._worldSystemVersion.save();
+    WorldSystemVersion.version = this.migratedVersion;
   }
   
   /**

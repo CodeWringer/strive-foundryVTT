@@ -1,6 +1,6 @@
 import { TEMPLATES } from "../../templatePreloader.mjs";
 import MigratorInitiator from "../migrator-initiator.mjs";
-import WorldSystemVersion from "../world-system-version.mjs";
+import { WorldSystemVersion } from "../world-system-version.mjs";
 
 export default class MigratorDialog extends Application {
   static get defaultOptions() {
