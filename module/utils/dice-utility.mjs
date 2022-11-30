@@ -8,6 +8,7 @@ import { TEMPLATES } from "../templatePreloader.mjs";
 import { DiceOutcomeTypes } from "../dto/dice-outcome-types.mjs";
 import Ruleset from "../ruleset.mjs";
 import { SOUNDS_CONSTANTS } from "../constants/sounds.mjs";
+import GetShowFancyFontUseCase from "../use-case/get-show-fancy-font-use-case.mjs";
 
 export const LOCALIZABLE_OBSTACLE_ABBREVIATION = "ambersteel.roll.obstacle.abbreviation";
 
@@ -155,6 +156,7 @@ export async function queryRollData() {
     bonusDice: 0,
     visibilityMode: visibilityModes[0],
     visibilityModes: visibilityModes,
+    showFancyFont: new GetShowFancyFontUseCase().invoke(),
   };
 
   return new Promise(async (resolve, reject) => {

@@ -2,6 +2,7 @@ import * as DialogUtil from '../utils/dialog-utility.mjs';
 import { TEMPLATES } from '../templatePreloader.mjs';
 import { getItemDeclarations } from '../utils/content-utility.mjs';
 import { getElementValue } from '../utils/sheet-utility.mjs';
+import GetShowFancyFontUseCase from '../use-case/get-show-fancy-font-use-case.mjs';
 
 const LOCALIZABLE_TITLE = "ambersteel.character.asset.add.query";
 const LOCALIZABLE_ITEM_LABEL = "ambersteel.character.asset.add.label";
@@ -38,7 +39,8 @@ export async function showDialog(itemType, localizableItemLabel = LOCALIZABLE_IT
       },
       {
         itemLabel: game.i18n.localize(localizableItemLabel),
-        itemDeclarations: itemDeclarations
+        itemDeclarations: itemDeclarations,
+        showFancyFont: new GetShowFancyFontUseCase().invoke(),
       }
     );
     resolve({

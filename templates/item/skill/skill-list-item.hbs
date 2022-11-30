@@ -12,7 +12,7 @@ cssClass: {undefined | String}
       {{> buttonSendToChat viewModel=viewModel.vmBtnSendToChat }}
       {{!-- Name --}}
       <span class="width-min-xl">
-        {{> inputLabel text="ambersteel.character.skill.singular"}}
+        {{> inputLabel text="ambersteel.character.skill.singular" showFancyFont=viewModel.showFancyFont}}
       </span>
       {{> inputImage viewModel=viewModel.vmImg cssClass="custom-icon-sm" }}
       <h2 class="flex-grow margin-r-md">
@@ -27,7 +27,7 @@ cssClass: {undefined | String}
     {{!-- Related Attribute --}}
     <div class="flex flex-row margin-b-md">
       <div class="width-min-xxl">
-        {{> inputLabel text="ambersteel.character.skill.relatedAttribute"}}
+        {{> inputLabel text="ambersteel.character.skill.relatedAttribute" showFancyFont=viewModel.showFancyFont}}
       </div>
       <div class="flex-grow">
         {{> inputDropDown viewModel=viewModel.vmDdRelatedAttribute }}
@@ -36,7 +36,7 @@ cssClass: {undefined | String}
     {{!-- Category --}}
     <div class="flex flex-row margin-b-md">
       <div class="width-min-xxl">
-        {{> inputLabel text="ambersteel.general.category"}}
+        {{> inputLabel text="ambersteel.general.category" showFancyFont=viewModel.showFancyFont}}
       </div>
       <div class="flex-grow">
         {{> inputTextField viewModel=viewModel.vmTfCategory }}
@@ -45,7 +45,7 @@ cssClass: {undefined | String}
     {{!-- IsMagicSchool --}}
     <div class="flex flex-row margin-b-md">
       <div class="width-min-xxl">
-        {{> inputLabel text="ambersteel.character.magic.school"}}
+        {{> inputLabel text="ambersteel.character.magic.school" showFancyFont=viewModel.showFancyFont}}
       </div>
       <div class="width-min-l">
         {{> buttonToggle viewModel=viewModel.vmSwIsMagicSchool }}
@@ -57,7 +57,7 @@ cssClass: {undefined | String}
    {{!-- Level --}}
     <div class="flex flex-row margin-b-md">
       <div class="width-min-xxl">
-        {{> inputLabel text="ambersteel.character.advancement.level"}}
+        {{> inputLabel text="ambersteel.character.advancement.level" showFancyFont=viewModel.showFancyFont}}
       </div>
       <div class="width-md">
         {{> inputNumberSpinner viewModel=viewModel.vmNsLevel }}
@@ -68,7 +68,7 @@ cssClass: {undefined | String}
     {{!-- Advancement Requirements --}}
     <div class="flex flex-row margin-b-md">
       <div class="width-min-xl">
-        {{> inputLabel text="ambersteel.character.advancement.requirements.abbreviation"}}
+        {{> inputLabel text="ambersteel.character.advancement.requirements.abbreviation" showFancyFont=viewModel.showFancyFont}}
       </div>
       <div class="width-min-sm flex flex-center">
         <span>
@@ -81,7 +81,7 @@ cssClass: {undefined | String}
     {{!-- Successes --}}
     <div class="flex flex-row margin-b-md">
       <div class="width-min-l">
-        {{> inputLabel text="ambersteel.character.advancement.requirements.success.abbreviation"}}
+        {{> inputLabel text="ambersteel.character.advancement.requirements.success.abbreviation" showFancyFont=viewModel.showFancyFont}}
       </div>
       <div class="width-md">
         {{> inputNumberSpinner viewModel=viewModel.vmNsSuccesses }}
@@ -90,7 +90,7 @@ cssClass: {undefined | String}
     {{!-- Failures --}}
     <div class="flex flex-row margin-b-md">
       <div class="width-min-l">
-        {{> inputLabel text="ambersteel.character.advancement.requirements.failure.abbreviation"}}
+        {{> inputLabel text="ambersteel.character.advancement.requirements.failure.abbreviation" showFancyFont=viewModel.showFancyFont}}
       </div>
       <div class="width-md">
         {{> inputNumberSpinner viewModel=viewModel.vmNsFailures }}

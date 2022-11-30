@@ -1,5 +1,6 @@
 import DialogResult from '../dto/dialog-result.mjs';
 import { TEMPLATES } from '../templatePreloader.mjs';
+import GetShowFancyFontUseCase from '../use-case/get-show-fancy-font-use-case.mjs';
 import { getElementValue, setSelectedOptionByValue } from './sheet-utility.mjs';
 
 /**
@@ -184,6 +185,7 @@ export async function showSelectionDialog(args = {}) {
         localizedLabel: "",
         options: [],
         selected: undefined,
+        showFancyFont: new GetShowFancyFontUseCase().invoke(),
         ...args
     };
 

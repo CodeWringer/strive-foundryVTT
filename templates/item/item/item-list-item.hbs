@@ -12,7 +12,7 @@ cssClass: {undefined | String}
       {{> buttonTakeItem viewModel=viewModel.vmBtnTakeItem }}
       {{!-- Name --}}
       <span class="width-min-xl">
-        {{> inputLabel text="ambersteel.character.asset.singular"}}
+        {{> inputLabel text="ambersteel.character.asset.singular" showFancyFont=viewModel.showFancyFont}}
       </span>
       {{> inputImage viewModel=viewModel.vmImg cssClass="custom-icon-sm" }}
       <h2 class="flex-grow margin-r-md">
@@ -27,7 +27,7 @@ cssClass: {undefined | String}
     {{!-- Quantity --}}
     <div class="flex flex-row">
       <span class="width-min-xl">
-        {{> inputLabel text="ambersteel.character.asset.quantity.label" }}
+        {{> inputLabel text="ambersteel.character.asset.quantity.label" showFancyFont=viewModel.showFancyFont}}
       </span>
       <span class="width-md">
         {{> inputNumberSpinner viewModel=viewModel.vmNsQuantity }}
@@ -38,7 +38,7 @@ cssClass: {undefined | String}
     {{!-- Max quantity --}}
     <div class="flex flex-row flex-grow">
       <span class="width-min-xl">
-        {{> inputLabel text="ambersteel.character.asset.quantity.maximum" }}
+        {{> inputLabel text="ambersteel.character.asset.quantity.maximum" showFancyFont=viewModel.showFancyFont}}
       </span>
       <span class="width-md">
         {{> inputNumberSpinner viewModel=viewModel.vmNsMaxQuantity }}
@@ -50,7 +50,7 @@ cssClass: {undefined | String}
     {{!-- Shape.width --}}
     <div class="flex flex-row">
       <span class="width-min-xl">
-        {{> inputLabel text="ambersteel.character.asset.shape.width" }}
+        {{> inputLabel text="ambersteel.character.asset.shape.width" showFancyFont=viewModel.showFancyFont}}
       </span>
       <span class="width-md">
         {{> inputNumberSpinner viewModel=viewModel.vmNsShapeWidth }}
@@ -61,7 +61,7 @@ cssClass: {undefined | String}
     {{!-- Shape.width --}}
     <div class="flex flex-row">
       <span class="width-min-xl">
-        {{> inputLabel text="ambersteel.character.asset.shape.height" }}
+        {{> inputLabel text="ambersteel.character.asset.shape.height" showFancyFont=viewModel.showFancyFont}}
       </span>
       <span class="width-md">
         {{> inputNumberSpinner viewModel=viewModel.vmNsShapeHeight }}
@@ -72,7 +72,7 @@ cssClass: {undefined | String}
     {{!-- Bulk - read only! --}}
     <div class="flex flex-row">
       <span class="width-min-xl">
-        {{> inputLabel text="ambersteel.character.asset.bulk" }}
+        {{> inputLabel text="ambersteel.character.asset.bulk" showFancyFont=viewModel.showFancyFont}}
       </span>
       <span class="width-md">
           <div class="custom-system-read-only pad-sm fill">

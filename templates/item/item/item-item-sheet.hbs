@@ -20,7 +20,7 @@ cssClass: {undefined | String}
   {{!-- Quantity --}}
   <div class="sheet-block grid-3col grid-gap-md margin-b-md">
     <div class="flex flex-middle flex-right">
-      {{> inputLabel text="ambersteel.character.asset.quantity.label"}}
+      {{> inputLabel text="ambersteel.character.asset.quantity.label" showFancyFont=viewModel.showFancyFont}}
     </div>
     <div class="grid-span-2">
       {{> inputNumberSpinner viewModel=viewModel.vmNsQuantity }}
@@ -29,7 +29,7 @@ cssClass: {undefined | String}
   {{!-- Max quantity --}}
   <div class="sheet-block grid-3col grid-gap-md margin-b-md">
     <div class="flex flex-middle flex-right">
-      {{> inputLabel text="ambersteel.character.asset.quantity.maximum"}}
+      {{> inputLabel text="ambersteel.character.asset.quantity.maximum" showFancyFont=viewModel.showFancyFont}}
     </div>
     <div class="grid-span-2">
       {{> inputNumberSpinner viewModel=viewModel.vmNsMaxQuantity }}
@@ -39,7 +39,7 @@ cssClass: {undefined | String}
   {{!-- Width --}}
   <div class="sheet-block grid-3col grid-gap-md margin-b-md">
     <div class="flex flex-middle flex-right">
-      {{> inputLabel text="ambersteel.character.asset.shape.width"}}
+      {{> inputLabel text="ambersteel.character.asset.shape.width" showFancyFont=viewModel.showFancyFont}}
     </div>
     <div class="grid-span-2">
       {{> inputNumberSpinner viewModel=viewModel.vmNsShapeWidth }}
@@ -48,7 +48,7 @@ cssClass: {undefined | String}
   {{!-- Height --}}
   <div class="sheet-block grid-3col grid-gap-md margin-b-md">
     <div class="flex flex-middle flex-right">
-      {{> inputLabel text="ambersteel.character.asset.shape.height"}}
+      {{> inputLabel text="ambersteel.character.asset.shape.height" showFancyFont=viewModel.showFancyFont}}
     </div>
     <div class="grid-span-2">
       {{> inputNumberSpinner viewModel=viewModel.vmNsShapeHeight }}
@@ -57,7 +57,7 @@ cssClass: {undefined | String}
   {{!-- Bulk - read only! --}}
   <div class="sheet-block grid-3col grid-gap-md margin-b-md">
     <div class="flex flex-middle flex-right">
-      {{> inputLabel text="ambersteel.character.asset.bulk"}}
+      {{> inputLabel text="ambersteel.character.asset.bulk" showFancyFont=viewModel.showFancyFont}}
     </div>
     <div class="grid-span-2">
         <div class="custom-system-read-only pad-sm fill">

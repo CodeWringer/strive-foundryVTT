@@ -3,11 +3,12 @@ localizedLabel: {String}
 options: {Array<ChoiceOption>}
 selected: Object
 cssClass: {undefined | String}
+showFancyFont: {Boolean | undefined}
 --}}
 <section class="selection{{#if cssClass}} {{cssClass}}{{/if}}">
   <div class="sheet-block grid grid-2col">
     <div>
-      <label class="line-height pad-sm{{#if viewModel.showFancyFont}} fancy-font{{/if}}" for="selection">{{localizedLabel}}</label>
+      {{> inputLabel text=localizedLabel showFancyFont=showFancyFont}}
     </div>
     <div class="flex">
       <select id="selection" class="ambersteel-item-select" data-property-path="selected">
