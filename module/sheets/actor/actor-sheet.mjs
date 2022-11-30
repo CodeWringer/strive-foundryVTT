@@ -8,28 +8,19 @@ import * as SheetUtil from "../../utils/sheet-utility.mjs";
 
 export class AmbersteelActorSheet extends ActorSheet {
   /**
-   * @private
-   */
-  _subType = undefined;
-  /**
    * Type-dependent object which pseudo-extends the logic of this object. 
+   * @type {AmbersteelBaseActorSheet | AmbersteelNpcActorSheet | AmbersteelPcActorSheet}
+   * @readonly
    */
   get subType() {
-    if (!this._subType) {
-      const data = super.getData();
-      const type = data.actor.type;
-
-      if (type === "pc") {
-        this._subType = new AmbersteelPcActorSheet(this);
-      } else if (type === "npc") {
-        this._subType = new AmbersteelNpcActorSheet(this);
-      } else if (type === "plain") {
-        this._subType = new AmbersteelBaseActorSheet(this);
-      } else {
-        throw `Actor subtype ${type} is unrecognized!`
-      }
+    const type = this.actor.type;
+    const enhancer = ACTOR_SHEET_SUBTYPE.get(type);
+    
+    if (enhancer === undefined) {
+      throw new Error(`InvalidTypeException: Actor sheet subtype ${type} is unrecognized!`);
     }
-    return this._subType;
+
+    return enhancer;
   }
 
   /**
@@ -52,26 +43,19 @@ export class AmbersteelActorSheet extends ActorSheet {
    * @returns {String} Path to the template. 
    * @virtual
    * @override
+   * @readonly
    * @see https://foundryvtt.com/api/DocumentSheet.html#template
    */
   get template() { return this.subType.template; }
 
   /**
+   * Returns the localized title of this sheet. 
    * @override
    * @type {String}
+   * @readonly
    * @see https://foundryvtt.com/api/ActorSheet.html#title
    */
-  get title() {
-    if (this.actor.type === "pc") {
-      return `${game.i18n.localize("ambersteel.general.actor.pc.label")} - ${this.actor.name}`;
-    } else if (this.actor.type === "npc") {
-      return `${game.i18n.localize("ambersteel.general.actor.npc.label")} - ${this.actor.name}`;
-    } else if (this.actor.type === "plain") {
-      return `${game.i18n.localize("ambersteel.general.actor.plain.label")} - ${this.actor.name}`;
-    } else {
-      return this.actor.name;
-    }
-  }
+  get title() { return `${this.subType.title} - ${this.actor.name}` }
 
   /**
    * @type {ViewModel}
