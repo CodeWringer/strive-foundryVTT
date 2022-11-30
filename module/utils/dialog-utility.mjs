@@ -3,6 +3,33 @@ import { TEMPLATES } from '../templatePreloader.mjs';
 import { getElementValue, setSelectedOptionByValue } from './sheet-utility.mjs';
 
 /**
+ * Id of the back drop element. 
+ * @type {String}
+ * @constant
+ */
+const BACKDROP_ELEMENT_ID = "modal-backdrop-element";
+
+/**
+ * Adds the back drop element to the DOM. 
+ * @param {Dialog} dialog The dialog to close on click. 
+ * @private
+ */
+function _ensureModalBackdrop(dialog) {
+  $('body').append(`<div id="${BACKDROP_ELEMENT_ID}" class="ambersteel-modal-backdrop"></div>`);
+  $(`#${BACKDROP_ELEMENT_ID}`).click(function(e) {
+    dialog.close();
+  });
+}
+
+/**
+ * Removes the back drop element. 
+ * @private
+ */
+function _removeModalBackdrop() {
+  $(`#${BACKDROP_ELEMENT_ID}`).remove();
+}
+
+/**
  * Shows a dialog to the user and returns a promise with the result of the user interaction. 
  * @param {String} args.dialogTemplate Path to a hbs template. 
  * @param {String | undefined} args.localizedTitle A localized title for the dialog. 
@@ -60,6 +87,7 @@ export async function showDialog(args = {}, dialogData) {
         args.render(html);
       },
       close: html => {
+        _removeModalBackdrop();
         resolve(new DialogResult(
           mergedDialogData.confirmed,
           html
@@ -70,6 +98,7 @@ export async function showDialog(args = {}, dialogData) {
       classes: ["ambersteel-modal"]
     });
     dialog.render(true);
+    _ensureModalBackdrop(dialog);
   });
 }
 
@@ -113,6 +142,7 @@ export async function showConfirmationDialog(args = {}) {
       default: "cancel",
       render: html => { },
       close: html => {
+        _removeModalBackdrop();
         resolve({
           confirmed: mergedDialogData.confirmed,
         });
@@ -122,6 +152,7 @@ export async function showConfirmationDialog(args = {}) {
       classes: ["ambersteel-modal"]
     });
     dialog.render(true);
+    _ensureModalBackdrop(dialog);
   });
 }
 
@@ -161,6 +192,7 @@ export async function showPlainDialog(args = {}) {
       default: "ok",
       render: html => { },
       close: html => {
+        _removeModalBackdrop();
         resolve();
       }
     },
@@ -168,6 +200,7 @@ export async function showPlainDialog(args = {}) {
       classes: ["ambersteel-modal"]
     });
     dialog.render(true);
+    _ensureModalBackdrop(dialog);
   });
 }
 
