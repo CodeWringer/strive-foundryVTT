@@ -20,57 +20,57 @@ import { getElementValue, setSelectedOptionByValue } from './sheet-utility.mjs';
  * @async
  */
 export async function showDialog(args = {}, dialogData) {
-    args = {
-        dialogTemplate: undefined,
-        localizedTitle: "",
-        render: html => {},
-        showConfirmButton: true,
-        showCancelButton: true,
-        ...args
-    };
-    const mergedDialogData = {
-        confirmed: false,
-        CONFIG: CONFIG,
-        ...dialogData
-    };
+  args = {
+    dialogTemplate: undefined,
+    localizedTitle: "",
+    render: html => { },
+    showConfirmButton: true,
+    showCancelButton: true,
+    ...args
+  };
+  const mergedDialogData = {
+    confirmed: false,
+    CONFIG: CONFIG,
+    ...dialogData
+  };
 
-    return new Promise(async (resolve, reject) => {
-        // Render template. 
-        const renderedContent = await renderTemplate(args.dialogTemplate, mergedDialogData);
+  return new Promise(async (resolve, reject) => {
+    // Render template. 
+    const renderedContent = await renderTemplate(args.dialogTemplate, mergedDialogData);
 
-        const dialog = new Dialog({
-            title: args.localizedTitle,
-            content: renderedContent,
-            buttons: {
-                confirm: {
-                    icon: '<i class="fas fa-check"></i>',
-                    label: game.i18n.localize("ambersteel.general.confirm"),
-                    callback: () => {
-                        mergedDialogData.confirmed = true;
-                    }
-                },
-                cancel: {
-                    icon: '<i class="fas fa-times"></i>',
-                    label: game.i18n.localize("ambersteel.general.cancel"),
-                    callback: () => {}
-                }
-            },
-            default: "cancel",
-            render: html => {
-                args.render(html);
-            },
-            close: html => {
-                resolve(new DialogResult(
-                    mergedDialogData.confirmed,
-                    html
-                ));
-            }
+    const dialog = new Dialog({
+      title: args.localizedTitle,
+      content: renderedContent,
+      buttons: {
+        confirm: {
+          icon: '<i class="fas fa-check"></i>',
+          label: game.i18n.localize("ambersteel.general.confirm"),
+          callback: () => {
+            mergedDialogData.confirmed = true;
+          }
         },
-        {
-            classes: ["ambersteel-modal"]
-        });
-        dialog.render(true);
+        cancel: {
+          icon: '<i class="fas fa-times"></i>',
+          label: game.i18n.localize("ambersteel.general.cancel"),
+          callback: () => { }
+        }
+      },
+      default: "cancel",
+      render: html => {
+        args.render(html);
+      },
+      close: html => {
+        resolve(new DialogResult(
+          mergedDialogData.confirmed,
+          html
+        ));
+      }
+    },
+    {
+      classes: ["ambersteel-modal"]
     });
+    dialog.render(true);
+  });
 }
 
 /**
@@ -83,46 +83,46 @@ export async function showDialog(args = {}, dialogData) {
  * @async
  */
 export async function showConfirmationDialog(args = {}) {
-    args = {
-        localizedTitle: "",
-        content: "",
-        ...args
-    };
-    const mergedDialogData = {
-        confirmed: false
-    };
+  args = {
+    localizedTitle: "",
+    content: "",
+    ...args
+  };
+  const mergedDialogData = {
+    confirmed: false
+  };
 
-    return new Promise(async (resolve, reject) => {
-        const dialog = new Dialog({
-            title: args.localizedTitle,
-            content: args.content,
-            buttons: {
-                confirm: {
-                    icon: '<i class="fas fa-check"></i>',
-                    label: game.i18n.localize("ambersteel.general.confirm"),
-                    callback: () => {
-                        mergedDialogData.confirmed = true;
-                    }
-                },
-                cancel: {
-                    icon: '<i class="fas fa-times"></i>',
-                    label: game.i18n.localize("ambersteel.general.cancel"),
-                    callback: () => {}
-                }
-            },
-            default: "cancel",
-            render: html => {},
-            close: html => {
-                resolve({
-                    confirmed: mergedDialogData.confirmed,
-                });
-            }
+  return new Promise(async (resolve, reject) => {
+    const dialog = new Dialog({
+      title: args.localizedTitle,
+      content: args.content,
+      buttons: {
+        confirm: {
+          icon: '<i class="fas fa-check"></i>',
+          label: game.i18n.localize("ambersteel.general.confirm"),
+          callback: () => {
+            mergedDialogData.confirmed = true;
+          }
         },
-        {
-            classes: ["ambersteel-modal"]
+        cancel: {
+          icon: '<i class="fas fa-times"></i>',
+          label: game.i18n.localize("ambersteel.general.cancel"),
+          callback: () => { }
+        }
+      },
+      default: "cancel",
+      render: html => { },
+      close: html => {
+        resolve({
+          confirmed: mergedDialogData.confirmed,
         });
-        dialog.render(true);
+      }
+    },
+    {
+      classes: ["ambersteel-modal"]
     });
+    dialog.render(true);
+  });
 }
 
 /**
@@ -138,37 +138,37 @@ export async function showConfirmationDialog(args = {}) {
  * @async
  */
 export async function showPlainDialog(args = {}) {
-    args = {
-        localizedTitle: "",
-        localizedContent: "",
-        ...args
-    };
+  args = {
+    localizedTitle: "",
+    localizedContent: "",
+    ...args
+  };
 
-    return new Promise(async (resolve, reject) => {
-        // Render template. 
-        const renderedContent = await renderTemplate(TEMPLATES.DIALOG_PLAIN, args);
+  return new Promise(async (resolve, reject) => {
+    // Render template. 
+    const renderedContent = await renderTemplate(TEMPLATES.DIALOG_PLAIN, args);
 
-        const dialog = new Dialog({
-            title: args.localizedTitle,
-            content: renderedContent,
-            buttons: {
-                ok: {
-                    icon: '<i class="fas fa-check"></i>',
-                    label: game.i18n.localize("ambersteel.general.ok"),
-                    callback: () => {}
-                }
-            },
-            default: "ok",
-            render: html => {},
-            close: html => {
-                resolve();
-            }
-        },
-        {
-            classes: ["ambersteel-modal"]
-        });
-        dialog.render(true);
+    const dialog = new Dialog({
+      title: args.localizedTitle,
+      content: renderedContent,
+      buttons: {
+        ok: {
+          icon: '<i class="fas fa-check"></i>',
+          label: game.i18n.localize("ambersteel.general.ok"),
+          callback: () => { }
+        }
+      },
+      default: "ok",
+      render: html => { },
+      close: html => {
+        resolve();
+      }
+    },
+    {
+      classes: ["ambersteel-modal"]
     });
+    dialog.render(true);
+  });
 }
 
 /**
@@ -187,31 +187,31 @@ export async function showPlainDialog(args = {}) {
  * @async
  */
 export async function showSelectionDialog(args = {}) {
-    args = {
-        localizedTitle: "ambersteel.general.select",
-        localizedLabel: "",
-        options: [],
-        selected: undefined,
-        ...args
-    };
+  args = {
+    localizedTitle: "ambersteel.general.select",
+    localizedLabel: "",
+    options: [],
+    selected: undefined,
+    ...args
+  };
 
-    return new Promise(async (resolve, reject) => {
-        const dialogResult = await showDialog(
-          {
-            dialogTemplate: TEMPLATES.DIALOG_SELECT,
-            localizedTitle: args.localizedTitle,
-            render: html => {
-                if (args.selected !== undefined) {
-                    const selectElement = html.find("#selection");
-                    setSelectedOptionByValue(selectElement, args.selected);
-                }
-            }
-          },
-          args
-        );
-        resolve({
-            selected: getElementValue(dialogResult.html.find(".ambersteel-item-select")[0]),
-            confirmed: dialogResult.confirmed
-        });
+  return new Promise(async (resolve, reject) => {
+    const dialogResult = await showDialog(
+      {
+        dialogTemplate: TEMPLATES.DIALOG_SELECT,
+        localizedTitle: args.localizedTitle,
+        render: html => {
+          if (args.selected !== undefined) {
+            const selectElement = html.find("#selection");
+            setSelectedOptionByValue(selectElement, args.selected);
+          }
+        }
+      },
+      args
+    );
+    resolve({
+      selected: getElementValue(dialogResult.html.find(".ambersteel-item-select")[0]),
+      confirmed: dialogResult.confirmed
     });
+  });
 }
