@@ -36,10 +36,12 @@ export default class AmbersteelBaseCharacterActor extends AmbersteelBaseActor {
       return items.filter((item) => { return item.type === "item" && !item.data.data.isOnPerson; });
     }
     context.getAttributeForName = this.getAttributeForName.bind(context);
+    context.getAttributeForLocalizedName = this.getAttributeForLocalizedName.bind(context);
     context.setAttributeLevel = this.setAttributeLevel.bind(context);
     context.addAttributeProgress = this.addAttributeProgress.bind(context);
     context.advanceSkillBasedOnRollResult = this.advanceSkillBasedOnRollResult.bind(context);
     context.advanceAttributeBasedOnRollResult = this.advanceAttributeBasedOnRollResult.bind(context);
+    context.resolveReferences = this.resolveReferences.bind(context);
   }
   
   /** @override */
@@ -287,24 +289,66 @@ export default class AmbersteelBaseCharacterActor extends AmbersteelBaseActor {
   }
 
   /**
+   * Returns an attribute, whose internal name matches with the given string. 
    * 
-   * @param attName {String} Internal name of an attribute, e.g. 'magicSense'. 
+   * @param {String} name Internal name of an attribute, e.g. 'strength'. 
+   * 
    * @returns {Object} With properties 'object', 'name', 'groupName'
+   * 
    * @private
    */
-  getAttributeForName(attName) {
+  getAttributeForName(name) {
     const data = this.data.data;
 
-    for (let attGroupName in data.attributes) {
-      let oAtt = data.attributes[attGroupName][attName];
-      if (oAtt) {
+    for (const attGroupName in data.attributes) {
+      const oAtt = data.attributes[attGroupName][name];
+      if (oAtt !== undefined) {
         return {
           object: oAtt,
-          name: attName,
+          name: name,
           groupName: attGroupName
         };
       }
     }
+    return undefined;
+  }
+
+  /**
+   * Returns an attribute, whose localized name or name abbreviation matches with the given string. 
+   * 
+   * @param {String} name Localized name of an attribute, e.g. 'Stärke'. 
+   * * Also accepts a localized abbreviation, e. g. 'Str'. 
+   * 
+   * @returns {Object} With properties 'object', 'name', 'groupName'
+   * 
+   * @private
+   */
+  getAttributeForLocalizedName(name) {
+    const data = this.data.data;
+    const comparableName = name.toLowerCase();
+
+    for (const attGroupName in data.attributes) {
+      const attGroup = data.attributes[attGroupName];
+
+      for (const attGroupPropertyName in attGroup) {
+        const attGroupProperty = attGroup[attGroupPropertyName];
+
+        if (attGroupProperty.localizableName === undefined) {
+          // Don't bother looking at properties that don't represent attributes. 
+          continue;
+        }
+
+        if (comparableName == game.i18n.localize(attGroupProperty.localizableName).toLowerCase()
+        || comparableName == game.i18n.localize(attGroupProperty.localizableAbbreviation).toLowerCase()) {
+          return {
+            object: attGroupProperty,
+            name: attGroupProperty.name,
+            groupName: attGroupName
+          };
+        }
+      }
+    }
+    return undefined;
   }
 
   /**
@@ -366,5 +410,103 @@ export default class AmbersteelBaseCharacterActor extends AmbersteelBaseActor {
         await this.setAttributeLevel(attName, newLevel);
       }
     }
+  }
+
+  /**
+   * Returns the property values identified by the `@`-denoted references in the given string, 
+   * from this `Actor`. 
+   * 
+   * Searches: 
+   * * Attribute names.
+   * * Embedded skill name.
+   * * Embedded skill ability name.
+   * * Embedded asset name.
+   * * Embedded injury name.
+   * * Embedded illness name.
+   * * Embedded mutation name.
+   * * Embedded asset name.
+   * * Embedded fate-card name.
+   * 
+   * @param {String} str A string containing `@`-denoted references. 
+   * * E. g. `"@strength"` or localized and capitalized `"@Stärke"`. 
+   * * Abbreviated attribute names are permitted, e. g. `"@wis"` instead of `"@wisdom"`. 
+   * * If a reference's name contains spaces, they must be replaced with underscores. 
+   * E. g. `"@Heavy_Armor"`, instead of `"@Heavy Armor"`
+   * 
+   * @returns {Map<String, Any | undefined>} A map of the reference key, including the `@`-symbol, to its resolved reference. 
+   * * Only contains unique entries. No reference is included more than once. 
+   */
+  resolveReferences(str) {
+    const result = new Map();
+    const data = this.data.data;
+
+    const references = str.match(/@[^\s-/*+]+/g);
+
+    if (references === undefined || references === null) {
+      return result;
+    }
+
+    for (const reference of references) {
+      let matchFound = false;
+
+      const lowercaseReference = reference.toLowerCase();
+      const comparableReference = lowercaseReference.substring(1).replaceAll("_", " ");
+      if (result.has(comparableReference)) {
+        // Only bother looking up a reference once. 
+        continue;
+      }
+
+      // Search attributes. 
+      let attribute = this.getAttributeForName(comparableReference);
+      if (attribute === undefined) {
+        attribute = this.getAttributeForLocalizedName(comparableReference);
+      }
+      if (attribute !== undefined) {
+        result.set(lowercaseReference, attribute.object);
+        continue;
+      }
+
+      // Search skill. 
+      for (const skill of data.skills) {
+        const skillData = skill.data.data;
+
+        if (skill.name.toLowerCase() == comparableReference) {
+          result.set(lowercaseReference, skillData);
+          matchFound = true;
+          break;
+        }
+
+        // Search skill ability.
+        for (const ability of skillData.abilities) {
+          if (ability.name.toLowerCase() == comparableReference) {
+            result.set(lowercaseReference, ability);
+            matchFound = true;
+            break;
+          }
+        }
+        if (matchFound) break;
+      }
+      if (matchFound) break;
+
+      // Search asset.
+      // TODO
+
+      // Search injury.
+      // TODO
+
+      // Search illness.
+      // TODO
+
+      // Search mutation.
+      // TODO
+
+      // Search asset.
+      // TODO
+
+      // Search fate-card.
+      // TODO
+    }
+
+    return result;
   }
 }
