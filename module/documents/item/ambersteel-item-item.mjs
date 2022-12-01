@@ -101,8 +101,8 @@ export default class AmbersteelItemItem extends AmbersteelBaseItem {
       actor: this.parent ?? this.actor,
       sourceType: undefined,
       sourceId: undefined,
-      allowPickup: false, // TODO: The user must be able to select who gets to pick this item up. 
-      allowPickupBy: [], // TODO: The user must be able to select who gets to pick this item up. 
+      allowPickup: false, // TODO #53: The user must be able to select who gets to pick this item up. 
+      allowPickupBy: [], // TODO #53: The user must be able to select who gets to pick this item up. 
       ...overrides,
     });
   }
