@@ -1,4 +1,5 @@
 import { TEMPLATES } from "../../templatePreloader.mjs";
+import { isFunction } from "../../utils/validation-utility.mjs";
 import ViewModel from "../viewmodel.mjs";
 
 /**
@@ -109,15 +110,17 @@ export default class ButtonViewModel extends ViewModel {
    * @param {Function | String | undefined} callback 
    * @private
    * @returns {Function}
+   * @throws {Error} Thrown, on an invalid callback value, e. g. `null`. 
    */
   _getCallback(callback) {
-    // TODO: Make this validate if the callback is a function. 
     if (typeof(callback) === "string") {
       return this.target[callback];
     } else if (callback === undefined) {
       return (async (args) => {});
-    } else {
+    } else if (isFunction(callback)) {
       return callback;
+    } else {
+      throw new Error("Invalid callback");
     }
   }
 
