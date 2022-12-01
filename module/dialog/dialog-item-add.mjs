@@ -8,7 +8,7 @@ const LOCALIZABLE_TITLE = "ambersteel.character.asset.add.query";
 const LOCALIZABLE_ITEM_LABEL = "ambersteel.character.asset.add.label";
 
 /**
- * @param {String} itemType Item type. "skill"|"injury"|"illness"|"item"
+ * @param {String} itemType Item type. E. g. "skill" or "injury"
  * @param {String} localizableItemLabel Localization string for the item input label. 
  * @param {String} localizableTitle Localization string for the dialog title. 
  * @returns {Promise<Object>} = {
@@ -53,8 +53,8 @@ export async function showDialog(itemType, localizableItemLabel = LOCALIZABLE_IT
 
 /**
  * @param {String} itemType Item type. "skill"|"injury"|"illness"|"item"
- * @param {String} localizableItemLabel Localization string for the item input label. 
- * @param {String} localizableTitle Localization string for the dialog title. 
+ * @param {String | undefined} localizableItemLabel Localization string for the item input label. 
+ * @param {String | undefined} localizableTitle Localization string for the dialog title. 
  * @returns {Promise<Object>} = {
  * selected: {String} Id of the selected item,
  * isCustomChecked: {Boolean},

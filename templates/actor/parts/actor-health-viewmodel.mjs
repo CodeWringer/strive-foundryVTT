@@ -155,7 +155,9 @@ export default class ActorHealthViewModel extends SheetViewModel {
         target: thiz.actor,
         creationType: "illness",
         withDialog: true,
-        localizableLabel: "ambersteel.character.health.illness.add.label"
+        localizableLabel: "ambersteel.character.health.illness.add.label",
+        localizableType: "ambersteel.character.health.illness.singular",
+        localizableDialogTitle: "ambersteel.character.health.illness.add.query",
       }),
     });
     
@@ -185,7 +187,9 @@ export default class ActorHealthViewModel extends SheetViewModel {
         target: thiz.actor,
         creationType: "injury",
         withDialog: true,
-        localizableLabel: "ambersteel.character.health.injury.add.label"
+        localizableLabel: "ambersteel.character.health.injury.add.label",
+        localizableType: "ambersteel.character.health.injury.singular",
+        localizableDialogTitle: "ambersteel.character.health.injury.add.query",
       }),
     });
     
@@ -215,7 +219,9 @@ export default class ActorHealthViewModel extends SheetViewModel {
         target: thiz.actor,
         creationType: "mutation",
         withDialog: true,
-        localizableLabel: "ambersteel.character.health.mutation.add.label"
+        localizableLabel: "ambersteel.character.health.mutation.add.label",
+        localizableType: "ambersteel.character.health.mutation.singular",
+        localizableDialogTitle: "ambersteel.character.health.mutation.add.query",
       }),
     });
   }

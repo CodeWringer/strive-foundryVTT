@@ -93,7 +93,9 @@ export default class ActorAssetsViewModel extends SheetViewModel {
         target: thiz.actor,
         creationType: "item",
         withDialog: true,
-        localizableLabel: "ambersteel.character.asset.add.label"
+        localizableLabel: "ambersteel.character.asset.add.label",
+        localizableType: "ambersteel.character.asset.singular",
+        localizableDialogTitle: "ambersteel.character.asset.add.query",
       }),
     });
   }

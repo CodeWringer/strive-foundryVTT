@@ -425,6 +425,8 @@
         },
         "known": {
           "label": "Known Skills",
+          "plural": "Known Skills",
+          "singular": "Known Skill",
           "add": {
             "label": "Add Known Skill",
             "query": "Select Known Skill to Add"
@@ -436,6 +438,8 @@
         },
         "learning": {
           "label": "Learning Skills",
+          "plural": "Learning Skills",
+          "singular": "Learning Skill",
           "add": {
             "label": "Add Learning Skill",
             "query": "Select Learning Skill to Add"

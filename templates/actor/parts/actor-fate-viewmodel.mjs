@@ -76,6 +76,8 @@ export default class ActorFateViewModel extends SheetViewModel {
       target: thiz.actor,
       creationType: "fate-card",
       withDialog: true,
+      localizableType: "ambersteel.character.beliefSystem.fateSystem.fateCard.label",
+      localizableDialogTitle: "ambersteel.character.beliefSystem.fateSystem.fateCard.add.query",
     });
 
     const actorFateCards = this.actor.getFateCards();
