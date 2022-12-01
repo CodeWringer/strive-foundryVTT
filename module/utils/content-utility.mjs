@@ -66,7 +66,7 @@ export function getItemDeclarations(type, where = contentCollectionTypes.all) {
   // Collect from world items. 
   if (where === contentCollectionTypes.all || where === contentCollectionTypes.world) {
     for (const entry of game.items) {
-      if (entry.type === type) {
+      if (entry.type === type && (entry.visible === true || game.user.isGM === true)) {
         result.push(new ItemEntry(getId(entry), entry.name, contentCollectionTypes.world));
       }
     }
