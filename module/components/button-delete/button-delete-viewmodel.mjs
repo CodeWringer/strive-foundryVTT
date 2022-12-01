@@ -2,6 +2,7 @@ import { TEMPLATES } from "../../templatePreloader.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
 import { showConfirmationDialog } from "../../utils/dialog-utility.mjs";
 import { validateOrThrow } from "../../utils/validation-utility.mjs";
+import * as StringUtil from "../../utils/string-utility.mjs"
 
 /**
  * --- Inherited from ViewModel
@@ -14,12 +15,13 @@ import { validateOrThrow } from "../../utils/validation-utility.mjs";
  * 
  * @property {JQuery | HTMLElement} element The button element on the DOM. 
  * @property {Object} target The target object to affect.  
+ * @property {String} localizableTitle Localization key of the title of the dialog. 
  * 
  * --- Own properties
  * 
  * @property {String | undefined} propertyPath If not undefined, will try to delete by this property path. 
  * @property {Boolean} withDialog If true, will prompt the user to confirm deletion with a dialog. 
- * 
+ * @property {String} localizableDialogTitle Localization key of the title of the dialog. 
  */
 export default class ButtonDeleteViewModel extends ButtonViewModel {
   static get TEMPLATE() { return TEMPLATES.COMPONENT_BUTTON_DELETE; }
@@ -33,8 +35,9 @@ export default class ButtonDeleteViewModel extends ButtonViewModel {
    * @param {Boolean | undefined} args.isEditable Optional. If true, will be interactible. 
    * @param {String | undefined} args.localizableTitle Optional. The localizable title (tooltip). 
    * 
-   * @param {Boolean | undefined} args.withDialog Optional. If true, will prompt the user to make a selection with a dialog. 
    * @param {String | undefined} args.propertyPath Optional. If not undefined, will try to delete by this property path. 
+   * @param {Boolean | undefined} args.withDialog Optional. If true, will prompt the user to make a selection with a dialog. 
+   * @param {String | undefined} args.localizableDialogTitle Optional. Localization key of the confirmation dialog window. 
    */
   constructor(args = {}) {
     super(args);
@@ -43,6 +46,7 @@ export default class ButtonDeleteViewModel extends ButtonViewModel {
     this.withDialog = args.withDialog ?? false;
     this.propertyPath = args.propertyPath;
     this.localizableTitle = args.localizableTitle ?? "ambersteel.general.delete.label";
+    this.localizableDialogTitle = args.localizableDialogTitle ?? "ambersteel.general.delete.queryOf";
   }
 
   /**
@@ -61,7 +65,7 @@ export default class ButtonDeleteViewModel extends ButtonViewModel {
 
     if (this.withDialog === true) {
       const dialogResult = await showConfirmationDialog({
-        localizedTitle: game.i18n.localize("ambersteel.general.delete.query")
+        localizedTitle: StringUtil.format(game.i18n.localize(this.localizableDialogTitle), this.target.name),
       });
       if (dialogResult.confirmed !== true) return;
     }

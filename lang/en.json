@@ -49,7 +49,8 @@
       "decrement": "Decrement",
       "delete": {
         "label": "Delete",
-        "query": "Confirm Deletion"
+        "query": "Confirm Deletion",
+        "queryOf": "Confirm Deletion of '%s'"
       },
       "description": "Description",
       "edit": "Edit",
