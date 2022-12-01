@@ -12,10 +12,11 @@ selected: {Object} = {
 isCustomChecked: {Boolean}
 itemLabel: {String}
 cssClass: {undefined | String}
+showFancyFont: {Boolean | undefined}
 --}}
 <section class="{{cssClass}}">
   <div class="grid grid-2col">
-    {{> inputLabel text=itemLabel }}
+    {{> inputLabel text=itemLabel showFancyFont=showFancyFont}}
     <select class="ambersteel-item-select" data-property-path="selected">
       {{#select selected}}
       {{#each itemDeclarations as |itemDeclaration key|}}
@@ -25,7 +26,7 @@ cssClass: {undefined | String}
     </select>
   </div>
   <div class="grid grid-2col">
-    {{> inputLabel text=(localize "ambersteel.general.custom") }}
+    {{> inputLabel text=(localize "ambersteel.general.custom") showFancyFont=showFancyFont}}
     <input class="ambersteel-checkbox ambersteel-is-custom" type="checkbox" data-dtype="boolean" value="{{isCustomChecked}}" data-property-path="isCustomChecked" />
   </div>
 </section>

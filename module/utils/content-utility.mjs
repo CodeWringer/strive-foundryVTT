@@ -40,6 +40,10 @@ export function getItemDeclarations(type, where = contentCollectionTypes.all) {
   // Collect from compendia. 
   if (where === contentCollectionTypes.all || where === contentCollectionTypes.compendia) {
     for (const pack of game.packs) {
+      if (pack.private === true && game.user.isGM !== true) {
+        continue;
+      }
+
       for (const entry of pack.index) {
         if (entry.type == type) {
           result.push(new ItemEntry(getId(entry), entry.name, contentCollectionTypes.compendia));
@@ -54,6 +58,10 @@ export function getItemDeclarations(type, where = contentCollectionTypes.all) {
       if (!module.packs) break;
 
       for (const pack of module.packs) {
+        if (pack.private === true && game.user.isGM !== true) {
+          continue;
+        }
+        
         if (pack.metadata.name == type) {
           for (const entry of pack.index) {
             result.push(new ItemEntry(getId(entry), entry.name, contentCollectionTypes.modules));
@@ -66,7 +74,7 @@ export function getItemDeclarations(type, where = contentCollectionTypes.all) {
   // Collect from world items. 
   if (where === contentCollectionTypes.all || where === contentCollectionTypes.world) {
     for (const entry of game.items) {
-      if (entry.type === type) {
+      if (entry.type === type && (entry.visible === true || game.user.isGM === true)) {
         result.push(new ItemEntry(getId(entry), entry.name, contentCollectionTypes.world));
       }
     }

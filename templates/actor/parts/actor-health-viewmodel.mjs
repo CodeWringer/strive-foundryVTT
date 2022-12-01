@@ -149,13 +149,15 @@ export default class ActorHealthViewModel extends SheetViewModel {
         listName: "illnesses",
       }),
       listItemViewModels: this.illnesses,
-      listItemTemplate: "systems/ambersteel/templates/item/illness/illness-list-item.hbs",
+      listItemTemplate: TEMPLATES.ILLNESS_LIST_ITEM,
       vmBtnAddItem: thiz.createVmBtnAdd({
         id: "vmBtnAddIllness",
         target: thiz.actor,
         creationType: "illness",
         withDialog: true,
-        localizableLabel: "ambersteel.character.health.illness.add.label"
+        localizableLabel: "ambersteel.character.health.illness.add.label",
+        localizableType: "ambersteel.character.health.illness.singular",
+        localizableDialogTitle: "ambersteel.character.health.illness.add.query",
       }),
     });
     
@@ -179,13 +181,15 @@ export default class ActorHealthViewModel extends SheetViewModel {
         listName: "injuries",
       }),
       listItemViewModels: this.injuries,
-      listItemTemplate: "systems/ambersteel/templates/item/injury/injury-list-item.hbs",
+      listItemTemplate: TEMPLATES.INJURY_LIST_ITEM,
       vmBtnAddItem: thiz.createVmBtnAdd({
         id: "vmBtnAddInjury",
         target: thiz.actor,
         creationType: "injury",
         withDialog: true,
-        localizableLabel: "ambersteel.character.health.injury.add.label"
+        localizableLabel: "ambersteel.character.health.injury.add.label",
+        localizableType: "ambersteel.character.health.injury.singular",
+        localizableDialogTitle: "ambersteel.character.health.injury.add.query",
       }),
     });
     
@@ -209,13 +213,15 @@ export default class ActorHealthViewModel extends SheetViewModel {
         listName: "mutations",
       }),
       listItemViewModels: this.mutations,
-      listItemTemplate: "systems/ambersteel/templates/item/mutation/mutation-list-item.hbs",
+      listItemTemplate: TEMPLATES.MUTATION_LIST_ITEM,
       vmBtnAddItem: thiz.createVmBtnAdd({
         id: "vmBtnAddMutation",
         target: thiz.actor,
         creationType: "mutation",
         withDialog: true,
-        localizableLabel: "ambersteel.character.health.mutation.add.label"
+        localizableLabel: "ambersteel.character.health.mutation.add.label",
+        localizableType: "ambersteel.character.health.mutation.singular",
+        localizableDialogTitle: "ambersteel.character.health.mutation.add.query",
       }),
     });
   }

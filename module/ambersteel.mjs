@@ -15,11 +15,11 @@ import MigratorInitiator from "./migration/migrator-initiator.mjs";
 import MigratorDialog from "./migration/presentation/migrator-dialog.mjs";
 import LoadDebugSettingUseCase from "./use-case/load-debug-setting-use-case.mjs";
 // Import document classes.
-import { AmbersteelActor } from "./documents/actor.mjs";
-import { AmbersteelItem } from "./documents/item.mjs";
+import { AmbersteelActor } from "./documents/actor/actor.mjs";
+import { AmbersteelItem } from "./documents/item/item.mjs";
 // Import sheet classes.
-import { AmbersteelActorSheet } from "./sheets/actor-sheet.mjs";
-import { AmbersteelItemSheet } from "./sheets/item-sheet.mjs";
+import { AmbersteelActorSheet } from "./sheets/actor/actor-sheet.mjs";
+import { AmbersteelItemSheet } from "./sheets/item/item-sheet.mjs";
 // Import helper/utility classes and constants.
 import Ruleset from "./ruleset.mjs";
 import { preloadHandlebarsTemplates } from "./templatePreloader.mjs";
@@ -58,7 +58,6 @@ import './components/sortable-list/sortable-list-viewmodel.mjs';
 import '../templates/gm-notes-viewmodel.mjs';
 import '../templates/actor/actor-sheet-viewmodel.mjs';
 import '../templates/actor/components/component-attribute-table-viewmodel.mjs';
-import '../templates/actor/components/component-skill-table-viewmodel.mjs';
 import '../templates/actor/parts/actor-assets-viewmodel.mjs';
 import '../templates/actor/parts/actor-attributes-viewmodel.mjs';
 import '../templates/actor/parts/actor-beliefs-fate-viewmodel.mjs';
@@ -374,14 +373,6 @@ Hooks.on("preCreateItem", async function(document, createData, options, userId) 
   // This ensures the proper "default" image is set, upon creation of the document. 
   document.data.update({ img: document.defaultImg });
 });
-
-// Hooks.on("createActor", async function(document, options, userId) {
-//   console.log("created!");
-// });
-
-// Hooks.on("deleteActor", async function(document, options, userId) {
-//   console.log("deleted!");
-// });
 
 Hooks.on("renderChatMessage", async function(message, html, data) {
   const SELECTOR_CHAT_MESSAGE = "custom-system-chat-message";

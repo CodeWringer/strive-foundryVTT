@@ -2,12 +2,13 @@ import * as DialogUtil from '../utils/dialog-utility.mjs';
 import { TEMPLATES } from '../templatePreloader.mjs';
 import { getItemDeclarations } from '../utils/content-utility.mjs';
 import { getElementValue } from '../utils/sheet-utility.mjs';
+import GetShowFancyFontUseCase from '../use-case/get-show-fancy-font-use-case.mjs';
 
 const LOCALIZABLE_TITLE = "ambersteel.character.asset.add.query";
 const LOCALIZABLE_ITEM_LABEL = "ambersteel.character.asset.add.label";
 
 /**
- * @param {String} itemType Item type. "skill"|"injury"|"illness"|"item"
+ * @param {String} itemType Item type. E. g. "skill" or "injury"
  * @param {String} localizableItemLabel Localization string for the item input label. 
  * @param {String} localizableTitle Localization string for the dialog title. 
  * @returns {Promise<Object>} = {
@@ -38,7 +39,8 @@ export async function showDialog(itemType, localizableItemLabel = LOCALIZABLE_IT
       },
       {
         itemLabel: game.i18n.localize(localizableItemLabel),
-        itemDeclarations: itemDeclarations
+        itemDeclarations: itemDeclarations,
+        showFancyFont: new GetShowFancyFontUseCase().invoke(),
       }
     );
     resolve({
@@ -51,8 +53,8 @@ export async function showDialog(itemType, localizableItemLabel = LOCALIZABLE_IT
 
 /**
  * @param {String} itemType Item type. "skill"|"injury"|"illness"|"item"
- * @param {String} localizableItemLabel Localization string for the item input label. 
- * @param {String} localizableTitle Localization string for the dialog title. 
+ * @param {String | undefined} localizableItemLabel Localization string for the item input label. 
+ * @param {String | undefined} localizableTitle Localization string for the dialog title. 
  * @returns {Promise<Object>} = {
  * selected: {String} Id of the selected item,
  * isCustomChecked: {Boolean},

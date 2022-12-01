@@ -49,7 +49,8 @@
       "decrement": "Decrement",
       "delete": {
         "label": "Delete",
-        "query": "Confirm Deletion"
+        "query": "Confirm Deletion",
+        "queryOf": "Confirm Deletion of '%s'"
       },
       "description": "Description",
       "edit": "Edit",
@@ -92,7 +93,7 @@
         "level": "Level",
         "requirements": {
           "label": "Required Successes/Failures",
-          "abbreviation": "S/F",
+          "abbreviation": "Req. S/F",
           "success": {
             "label": "Successes",
             "abbreviation": "S"
@@ -411,7 +412,9 @@
             "placeholder": "3' / 1m / 0 / etc."
           },
           "newDefaultName": "New Skill Ability",
-          "requirement": "At Level"
+          "requirement": "At Level",
+          "singular": "Skill Ability",
+          "plural": "Skill Abilities"
         },
         "add": {
           "label": "Add Skill",
@@ -423,6 +426,8 @@
         },
         "known": {
           "label": "Known Skills",
+          "plural": "Known Skills",
+          "singular": "Known Skill",
           "add": {
             "label": "Add Known Skill",
             "query": "Select Known Skill to Add"
@@ -434,6 +439,8 @@
         },
         "learning": {
           "label": "Learning Skills",
+          "plural": "Learning Skills",
+          "singular": "Learning Skill",
           "add": {
             "label": "Add Learning Skill",
             "query": "Select Learning Skill to Add"

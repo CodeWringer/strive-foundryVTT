@@ -5,6 +5,7 @@ import { getElementValue } from "./sheet-utility.mjs";
 import { validateOrThrow } from "./validation-utility.mjs";
 import { TEMPLATES } from "../templatePreloader.mjs";
 import { SOUNDS_CONSTANTS } from "../constants/sounds.mjs";
+import GetShowFancyFontUseCase from "../use-case/get-show-fancy-font-use-case.mjs";
 
 /**
  * Creates a new ChatMessage, displaying the given contents. 
@@ -72,6 +73,7 @@ export async function queryVisibilityMode() {
   const dialogData = {
     visibilityMode: visibilityModes[0],
     visibilityModes: visibilityModes,
+    showFancyFont: new GetShowFancyFontUseCase().invoke(),
   };
 
   return new Promise(async (resolve, reject) => {

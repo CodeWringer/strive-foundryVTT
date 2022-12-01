@@ -4,6 +4,7 @@ import * as ItemAddDialog from '../../dialog/dialog-item-add.mjs';
 import { findItem, contentCollectionTypes } from '../../utils/content-utility.mjs';
 import { validateOrThrow, isObject } from "../../utils/validation-utility.mjs";
 import { isNotBlankOrUndefined } from "../../utils/validation-utility.mjs";
+import GetShowFancyFontUseCase from "../../use-case/get-show-fancy-font-use-case.mjs";
 
 /**
  * --- Inherited from ViewModel
@@ -23,7 +24,9 @@ import { isNotBlankOrUndefined } from "../../utils/validation-utility.mjs";
  * @property {String | undefined} creationType = "skill"|"skill-ability"|"fate-card"|"item"|"injury"|"illness"
  * @property {Object} creationData Data to pass to the item creation function. 
  * @property {Boolean} showLabel If true, will show the label. 
- * @property {String} localizableLabel The label text. 
+ * @property {String | undefined} localizableLabel The label text. 
+ * @property {String | undefined} localizableType Localization key of the type of thing to add. 
+ * @property {String | undefined} localizableDialogTitle Localization key of the title of the dialog. 
  * 
  */
 export default class ButtonAddViewModel extends ButtonViewModel {
@@ -54,6 +57,8 @@ export default class ButtonAddViewModel extends ButtonViewModel {
    * @param {Object | String | undefined} args.creationData Optional. Data to pass to the item creation function. 
    * @param {String | undefined} args.localizableTitle Optional. Sets the tooltip text to display on cursor hover over the DOM element. 
    * @param {String | undefined} args.localizableLabel Optional. The localizable label. 
+   * @param {String | undefined} localizableType Localization key of the type of thing to add. 
+   * @param {String | undefined} localizableDialogTitle Localization key of the title of the dialog. 
    */
   constructor(args = {}) {
     super(args);
@@ -64,6 +69,9 @@ export default class ButtonAddViewModel extends ButtonViewModel {
     this.creationData = args.creationData ?? Object.create(null);
     this.localizableTitle = args.localizableTitle ?? "ambersteel.general.add";
     this.localizableLabel = args.localizableLabel;
+    this.localizableType = args.localizableType;
+    this.localizableDialogTitle = args.localizableDialogTitle;
+    this.showFancyFont = new GetShowFancyFontUseCase().invoke();
 
     if (isObject(this.creationData) !== true) {
       this.creationData = this._parseCreationData(this.creationData);
@@ -106,49 +114,12 @@ export default class ButtonAddViewModel extends ButtonViewModel {
     let createCustom = true;
     let templateId = undefined;
 
-    // TODO: Refactor and somehow get rid of the explicit statements. 
     if (this.withDialog === true) {
-      let dialogResult = undefined;
-      if (this.creationType === "skill") {
-        dialogResult = await ItemAddDialog.query(
-          "skill", 
-          "ambersteel.character.skill.singular", 
-          "ambersteel.character.skill.add.query"
-        );
-      } else if (this.creationType === "injury") {
-        dialogResult = await ItemAddDialog.query(
-          "injury", 
-          "ambersteel.character.health.injury.singular", 
-          "ambersteel.character.health.injury.add.query"
-        );
-      } else if (this.creationType === "illness") {
-        dialogResult = await ItemAddDialog.query(
-          "illness", 
-          "ambersteel.character.health.illness.singular", 
-          "ambersteel.character.health.illness.add.query"
-        );
-      } else if (this.creationType === "fate-card") {
-        dialogResult = await ItemAddDialog.query(
-          "fate-card", 
-          "ambersteel.character.beliefSystem.fateSystem.fateCard.label", 
-          "ambersteel.character.beliefSystem.fateSystem.fateCard.add.query"
-        );
-      } else if (this.creationType === "item") {
-        dialogResult = await ItemAddDialog.query(
-          "item", 
-          "ambersteel.character.asset.singular", 
-          "ambersteel.character.asset.add.query"
-        );
-      } else if (this.creationType === "mutation") {
-        dialogResult = await ItemAddDialog.query(
-          "mutation", 
-          "ambersteel.character.health.mutation.singular", 
-          "ambersteel.character.health.mutation.add.query"
-        );
-      } else {
-        throw new Error(`InvalidArgumentException: Invalid creationType '${this.creationType}'`);
-      }
-
+      const dialogResult = await ItemAddDialog.query(
+        this.creationType, 
+        this.localizableType, 
+        this.localizableDialogTitle
+      );
       if (!dialogResult.confirmed) return;
 
       createCustom = dialogResult.isCustomChecked === true;

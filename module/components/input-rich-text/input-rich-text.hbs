@@ -7,7 +7,7 @@ cssClass: {String | undefined}
   id="{{viewModel.id}}" 
 >
   <div class="component-rich-text-editbutton">
-    {{#> _button viewModel=viewModel.vmBtnEditMode cssClass="button-full" fill=true }}<i class="fas fa-edit"></i>{{/_button}}
+    {{#> button viewModel=viewModel.vmBtnEditMode cssClass="button-full" fill=true }}<i class="fas fa-edit"></i>{{/button}}
   </div>
   <div class="component-rich-text hidden"></div>
   <div class="component-rich-text-read-only">{{{viewModel.enrichedHtmlValue}}}</div>

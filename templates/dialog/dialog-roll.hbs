@@ -4,12 +4,13 @@ bonusDice: {Number},
 visibilityMode: {CONFIG.ambersteel.visibilityModes}
 visibilityModes: {Array<CONFIG.ambersteel.visibilityModes>}
 cssClass: {undefined | String}
+showFancyFont: {Boolean | undefined}
 --}}
 <section class="{{cssClass}}">
   <div class="sheet-block grid grid-2col">
     <div class="flex flex-column">
-      <label class="line-height pad-sm{{#if viewModel.showFancyFont}} fancy-font{{/if}}" for="obstacle">{{localize "ambersteel.roll.obstacle.abbreviation"}}</label>
-      <label class="line-height pad-sm{{#if viewModel.showFancyFont}} fancy-font{{/if}}" for="bonusDice">{{localize "ambersteel.roll.bonusDice"}}</label>
+      {{> inputLabel text=(localize "ambersteel.roll.obstacle.abbreviation") showFancyFont=showFancyFont}}
+      {{> inputLabel text=(localize "ambersteel.roll.bonusDice") showFancyFont=showFancyFont}}
     </div>
     <div class="flex flex-column flex-grow">
       {{#> numberSpinner}}
@@ -24,7 +25,7 @@ cssClass: {undefined | String}
   </div>
   <div class="sheet-block grid grid-2col">
     <div>
-      <label class="line-height pad-sm{{#if viewModel.showFancyFont}} fancy-font{{/if}}" for="visibilityMode">{{localize "ambersteel.general.messageVisibility.label"}}</label>
+      {{> inputLabel text=(localize "ambersteel.general.messageVisibility.label") showFancyFont=showFancyFont}}
     </div>
     <div class="flex">
       <select class="visibilityMode flex-grow" name="visibilityMode">

@@ -148,7 +148,9 @@ export default class SkillAbilityTableViewModel extends SheetViewModel {
         target: thiz.item,
         creationType: "skill-ability",
         withDialog: false,
-        localizableLabel: "ambersteel.character.skill.ability.add.label"
+        localizableLabel: "ambersteel.character.skill.ability.add.label",
+        localizableType: "ambersteel.character.skill.ability.singular",
+        localizableDialogTitle: "ambersteel.character.skill.ability.add.query",
       }),
     });
 

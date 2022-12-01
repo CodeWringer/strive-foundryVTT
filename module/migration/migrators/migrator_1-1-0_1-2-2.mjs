@@ -1,4 +1,5 @@
 import AbstractMigrator from "../abstract-migrator.mjs";
+import { MIGRATORS } from "../migrators.mjs";
 import VersionCode from "../version-code.mjs";
 
 export default class Migrator_1_1_0__1_2_2 extends AbstractMigrator {
@@ -12,3 +13,5 @@ export default class Migrator_1_1_0__1_2_2 extends AbstractMigrator {
   async _doWork() {
   }
 }
+
+MIGRATORS.push(new Migrator_1_1_0__1_2_2());

@@ -263,6 +263,8 @@ export default class SheetViewModel extends ViewModel {
    * @param {Object | String | undefined} args.creationData Data to pass to the item creation function. 
    * @param {String | undefined} args.localizableTitle Optional. Sets the tooltip text to display on cursor hover over the DOM element. 
    * @param {String | undefined} args.localizableLabel Optional. The localizable label. 
+   * @param {String | undefined} args.localizableType Localization key of the type of thing to add. 
+   * @param {String | undefined} args.localizableDialogTitle Localization key of the title of the dialog. 
    * @returns {ButtonAddViewModel}
    */
   createVmBtnAdd(args = {}) {
@@ -281,6 +283,8 @@ export default class SheetViewModel extends ViewModel {
       creationData: args.creationData,
       localizableTitle: args.localizableTitle,
       localizableLabel: args.localizableLabel,
+      localizableType: args.localizableType,
+      localizableDialogTitle: args.localizableDialogTitle,
     });
   }
 
