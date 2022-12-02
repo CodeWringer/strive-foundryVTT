@@ -2,6 +2,7 @@ import { DiceOutcomeTypes } from '../../dto/dice-outcome-types.mjs';
 import { SummedData, SummedDataComponent } from '../../dto/summed-data.mjs';
 import Ruleset from '../../ruleset.mjs';
 import { TEMPLATES } from '../../templatePreloader.mjs';
+import * as PropUtil from '../../utils/property-utility.mjs';
 import AmbersteelBaseActor from './ambersteel-base-actor.mjs';
 
 /**
@@ -24,17 +25,13 @@ export default class AmbersteelBaseCharacterActor extends AmbersteelBaseActor {
    * @private
    */
   _ensureContextHasSpecifics(context) {
-    context.getInjuries = () => { return context.getItemsByType("injury"); }
-    context.getIllnesses = () => { return context.getItemsByType("illness"); }
-    context.getMutations = () => { return context.getItemsByType("mutation"); }
-    context.getPossessions = () => {
-      const items = Array.from(context.items);
-      return items.filter((item) => { return item.type === "item" && item.data.data.isOnPerson; });
-    }
-    context.getPropertyItems = () => {
-      const items = Array.from(context.items);
-      return items.filter((item) => { return item.type === "item" && !item.data.data.isOnPerson; });
-    }
+    context.getSkills = this.getSkills.bind(context);
+    context.getInjuries = this.getInjuries.bind(context);
+    context.getIllnesses = this.getIllnesses.bind(context);
+    context.getMutations = this.getMutations.bind(context);
+    context.getPossessions = this.getPossessions.bind(context);
+    context.getPropertyItems = this.getPropertyItems.bind(context);
+    context.getFateCards = this.getFateCards.bind(context);
     context.getAttributeForName = this.getAttributeForName.bind(context);
     context.getAttributeForLocalizedName = this.getAttributeForLocalizedName.bind(context);
     context.setAttributeLevel = this.setAttributeLevel.bind(context);
@@ -413,6 +410,58 @@ export default class AmbersteelBaseCharacterActor extends AmbersteelBaseActor {
   }
 
   /**
+   * Returns all currently embedded skill documents.
+   * @returns {Array<AmbersteelSkillItem>}
+   */
+  getSkills() { 
+    return this.getItemsByType("skill"); 
+  }
+  /**
+   * Returns all currently embedded injury documents.
+   * @returns {Array<AmbersteelInjuryItem>}
+   */
+  getInjuries() { 
+    return this.getItemsByType("injury"); 
+  }
+  /**
+   * Returns all currently embedded illness documents.
+   * @returns {Array<AmbersteelIllnessItem>}
+   */
+  getIllnesses() { 
+    return this.getItemsByType("illness"); 
+  }
+  /**
+   * Returns all currently embedded mutation documents.
+   * @returns {Array<AmbersteelMutationItem>}
+   */
+  getMutations() { 
+    return this.getItemsByType("mutation"); 
+  }
+  /**
+   * Returns all currently embedded asset documents that are considered "on person".
+   * @returns {Array<AmbersteelItemItem>}
+   */
+  getPossessions() {
+    const items = Array.from(this.items);
+    return items.filter((item) => { return item.type === "item" && item.data.data.isOnPerson; });
+  }
+  /**
+   * Returns all currently embedded asset documents that are considered "remote".
+   * @returns {Array<AmbersteelItemItem>}
+   */
+  getPropertyItems() {
+    const items = Array.from(this.items);
+    return items.filter((item) => { return item.type === "item" && !item.data.data.isOnPerson; });
+  }
+  /**
+   * Returns all currently embedded fate-card documents.
+   * @returns {Array<AmbersteelFateCardItem>}
+   */
+  getFateCards() {
+    return this.getItemsByType("fate-card"); 
+  }
+
+  /**
    * Returns the property values identified by the `@`-denoted references in the given string, 
    * from this `Actor`. 
    * 
@@ -432,25 +481,38 @@ export default class AmbersteelBaseCharacterActor extends AmbersteelBaseActor {
    * * Abbreviated attribute names are permitted, e. g. `"@wis"` instead of `"@wisdom"`. 
    * * If a reference's name contains spaces, they must be replaced with underscores. 
    * E. g. `"@Heavy_Armor"`, instead of `"@Heavy Armor"`
+   * * *Can* contain property paths! These paths are considered relative to the data-property. 
+   * E. g. `@a_fate_card.cost.miFP`, instead of `@a_fate_card.data.data.cost.miFP`. 
    * 
    * @returns {Map<String, Any | undefined>} A map of the reference key, including the `@`-symbol, to its resolved reference. 
    * * Only contains unique entries. No reference is included more than once. 
    */
   resolveReferences(str) {
     const result = new Map();
-    const data = this.data.data;
 
     const references = str.match(/@[^\s-/*+]+/g);
-
     if (references === undefined || references === null) {
       return result;
     }
 
-    for (const reference of references) {
-      let matchFound = false;
+    // Iterates the given documents array and returns the first element, 
+    // whose name matches the given name. Case-insensitive comparison. 
+    // No regard for localization! 
+    const _getMatchingDocument = (documents, name) => {
+      for (const document of documents) {
+        if (document.name.toLowerCase() == name) {
+          return document;
+        }
+      }
+      return undefined;
+    }
 
+    for (const reference of references) {
+      const propertyPathMatch = reference.match(/\.[^\s-/*+]+/i);
+      const propertyPath = propertyPathMatch == null ? undefined : propertyPathMatch[0].substring(1); // The property path, excluding the first dot. 
+      
       const lowercaseReference = reference.toLowerCase();
-      const comparableReference = lowercaseReference.substring(1).replaceAll("_", " ");
+      const comparableReference = (propertyPath !== undefined ? lowercaseReference.substring(1, lowercaseReference.indexOf(".", 1)): lowercaseReference.substring(1)).replaceAll("_", " ");
       if (result.has(comparableReference)) {
         // Only bother looking up a reference once. 
         continue;
@@ -467,11 +529,13 @@ export default class AmbersteelBaseCharacterActor extends AmbersteelBaseActor {
       }
 
       // Search skill. 
-      for (const skill of data.skills) {
+      let matchFound = false;
+      const skills = this.getSkills();
+      for (const skill of skills) {
         const skillData = skill.data.data;
 
         if (skill.name.toLowerCase() == comparableReference) {
-          result.set(lowercaseReference, skillData);
+          result.set(lowercaseReference, propertyPath !== undefined ? PropUtil.getNestedPropertyValue(skillData, propertyPath) : skillData);
           matchFound = true;
           break;
         }
@@ -479,32 +543,54 @@ export default class AmbersteelBaseCharacterActor extends AmbersteelBaseActor {
         // Search skill ability.
         for (const ability of skillData.abilities) {
           if (ability.name.toLowerCase() == comparableReference) {
-            result.set(lowercaseReference, ability);
+            result.set(lowercaseReference, propertyPath !== undefined ? PropUtil.getNestedPropertyValue(ability, propertyPath) : ability);
             matchFound = true;
             break;
           }
         }
         if (matchFound) break;
       }
-      if (matchFound) break;
+      if (matchFound) continue;
 
       // Search asset.
-      // TODO
-
+      const assets = this.getPossessions().concat(this.getPropertyItems());
+      const asset = _getMatchingDocument(assets, comparableReference);
+      if (asset !== undefined) {
+        result.set(lowercaseReference, propertyPath !== undefined ? PropUtil.getNestedPropertyValue(asset.data.data, propertyPath) : asset);
+        continue;
+      }
+      
       // Search injury.
-      // TODO
-
+      const injuries = this.getInjuries();
+      const injury = _getMatchingDocument(injuries, comparableReference);
+      if (injury !== undefined) {
+        result.set(lowercaseReference, propertyPath !== undefined ? PropUtil.getNestedPropertyValue(injury.data.data, propertyPath) : injury);
+        continue;
+      }
+      
       // Search illness.
-      // TODO
-
+      const illnesses = this.getIllnesses();
+      const illness = _getMatchingDocument(illnesses, comparableReference);
+      if (illness !== undefined) {
+        result.set(lowercaseReference, propertyPath !== undefined ? PropUtil.getNestedPropertyValue(illness.data.data, propertyPath) : illness);
+        continue;
+      }
+      
       // Search mutation.
-      // TODO
-
-      // Search asset.
-      // TODO
-
+      const mutations = this.getMutations();
+      const mutation = _getMatchingDocument(mutations, comparableReference);
+      if (mutation !== undefined) {
+        result.set(lowercaseReference, propertyPath !== undefined ? PropUtil.getNestedPropertyValue(mutation.data.data, propertyPath) : mutation);
+        continue;
+      }
+      
       // Search fate-card.
-      // TODO
+      const fateCards = this.getFateCards();
+      const fateCard = _getMatchingDocument(fateCards, comparableReference);
+      if (fateCard !== undefined) {
+        result.set(lowercaseReference, propertyPath !== undefined ? PropUtil.getNestedPropertyValue(fateCard.data.data, propertyPath) : fateCard);
+        continue;
+      }
     }
 
     return result;

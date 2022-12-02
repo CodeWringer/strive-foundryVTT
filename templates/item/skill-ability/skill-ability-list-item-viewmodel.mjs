@@ -9,6 +9,7 @@ import { DAMAGE_TYPES } from "../../../module/constants/damage-types.mjs";
 import { ATTACK_TYPES } from "../../../module/constants/attack-types.mjs";
 import { SOUNDS_CONSTANTS } from "../../../module/constants/sounds.mjs";
 import InfoBubble from "../../../module/components/info-bubble/info-bubble.mjs";
+import { isNumber } from "../../../module/utils/validation-utility.mjs";
 
 export default class SkillAbilityListItemViewModel extends SheetViewModel {
   /** @override */
@@ -213,7 +214,7 @@ export default class SkillAbilityListItemViewModel extends SheetViewModel {
             // current level or value of the thing, if possible. 
             // If a value cannot be determined, it will default to "0". 
             const regExpReplace = new RegExp(key, "gi");
-            resolvedDamage = resolvedDamage.replace(regExpReplace, value.level ?? value.value ?? "0");
+            resolvedDamage = resolvedDamage.replace(regExpReplace, value.level ?? value.value ?? isNumber(value) ? value : "0");
           }
           
           // Get evaluated roll of damage formula. 
