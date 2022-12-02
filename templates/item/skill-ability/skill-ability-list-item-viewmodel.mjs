@@ -397,12 +397,23 @@ export default class SkillAbilityListItemViewModel extends SheetViewModel {
   activateListeners(html, isOwner, isEditable) {
     super.activateListeners(html, isOwner, isEditable);
 
-    // this.damageInfoBubble = new InfoBubble({
-    //   html: html,
-    //   text: game.i18n.localize("ambersteel.character.skill.ability.damage.infoFormulae"),
-    // });
+    this.damageInfoBubble = new InfoBubble({
+      html: html,
+      text: game.i18n.localize("ambersteel.character.skill.ability.damage.infoFormulae"),
+    });
+    const thiz = this;
+    $.each(html.find(".damage-info"), (name, value) => {
+      const jElement = $(value);
 
-    // html.find(".damage-info");
+      if (jElement.attr('id') !== thiz.id) return;
+
+      jElement.on("mouseenter", (e) => {
+        thiz.damageInfoBubble.show(jElement);
+      }); 
+      jElement.on("mouseleave", (e) => {
+        thiz.damageInfoBubble.hide();
+      }); 
+    });
   }
 
   /** @override */
