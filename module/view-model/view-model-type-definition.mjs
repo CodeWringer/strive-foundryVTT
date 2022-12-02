@@ -1,7 +1,6 @@
 /**
  * Represents the definition of a specific sub-type of `ViewModel` . 
  * 
- * @property {String} id `ViewModel` sub-type key. E. g. `"InputTextFieldViewModel"`. 
  * @property {Function} factoryFunc Factory function that encapsulates the instantiation 
  * of a new instance of a `ViewModel` of the represented type. 
  * @property {Array<String>} argumentNames An **order-sensitive** list of argument names 
@@ -14,7 +13,6 @@
  */
 export default class ViewModelTypeDefinition {
   /**
-   * @param {String} id `ViewModel` sub-type key. E. g. `"InputTextFieldViewModel"`. 
    * @param {Function} factoryFunc Factory function that encapsulates the instantiation 
    * of a new instance of a `ViewModel` of the represented type. 
    * @param {Array<String>} argumentNames An **order-sensitive** list of argument names 
@@ -25,14 +23,12 @@ export default class ViewModelTypeDefinition {
    * The order in which the property names appear is the order in which the argument values 
    * are alotted. 
    * 
-   * @throws {Error} Thrown, if any required arguments are left undefined. 
+   * @throws {Error} InvalidArgumentException: Thrown, if any required arguments are left undefined. 
    */
-  constructor(id, factoryFunc, argumentNames) {
-    if (id === undefined || id === null) throw new Error("InvalidArgumentException: id must not be null or undefined");
+  constructor(factoryFunc, argumentNames) {
     if (factoryFunc === undefined || factoryFunc === null) throw new Error("InvalidArgumentException: factoryFunc must not be null or undefined");
     if (argumentNames === undefined || argumentNames === null) throw new Error("InvalidArgumentException: argumentNames must not be null or undefined");
 
-    this.id = id;
     this.factoryFunc = factoryFunc;
     this.argumentNames = argumentNames;
   }
