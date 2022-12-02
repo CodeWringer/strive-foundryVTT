@@ -6,7 +6,7 @@ cssClass: {String | undefined}
     id={{viewModel.id}}
   >
   {{#each viewModel.itemViewModelGroups as |itemViewModelGroup key|}}
-    <li class="ambersteel-list-row sheet-block flex flex-row">
+    <li id="{{itemViewModelGroup.id}}" class="ambersteel-list-row sheet-block flex flex-row">
       <div class="component-list-item-order-controls{{#if (neq ../viewModel.isEditable true)}} hidden{{/if}}">
         {{#> button viewModel=itemViewModelGroup.vmBtnMoveTop fill=false}}
           <i class="fas fa-angle-double-up"></i>

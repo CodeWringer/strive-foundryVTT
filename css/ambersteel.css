@@ -1414,6 +1414,27 @@ span.component-button-toggle-knob.disabled {
   cursor: row-resize;
 }
 
+.info-bubble {
+  position: absolute;
+  display: inline-block;
+  text-align: center;
+  border-radius: 1.8rem;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: var(--color-text-light-highlight);
+  z-index: 6;
+  padding: 0.25rem;
+}
+
+.info-button {
+  width: 1.8rem;
+  max-width: 1.8rem;
+  height: 1.8rem;
+  max-height: 1.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 /* Animations */
 .spin {
   transform-origin: center;
