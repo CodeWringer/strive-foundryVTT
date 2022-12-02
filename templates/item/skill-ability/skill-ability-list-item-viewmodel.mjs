@@ -214,7 +214,17 @@ export default class SkillAbilityListItemViewModel extends SheetViewModel {
             // current level or value of the thing, if possible. 
             // If a value cannot be determined, it will default to "0". 
             const regExpReplace = new RegExp(key, "gi");
-            resolvedDamage = resolvedDamage.replace(regExpReplace, value.level ?? value.value ?? isNumber(value) ? value : "0");
+            
+            let replaceValue = value.level;
+            if (replaceValue === undefined || replaceValue === null) {
+              replaceValue = value.value;
+              
+              if (replaceValue === undefined || replaceValue === null) {
+                replaceValue = isNumber(value) === true ? value : "0";
+              }
+            }
+            
+            resolvedDamage = resolvedDamage.replace(regExpReplace, replaceValue);
           }
           
           // Get evaluated roll of damage formula. 
