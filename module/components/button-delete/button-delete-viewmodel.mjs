@@ -3,6 +3,8 @@ import ButtonViewModel from "../button/button-viewmodel.mjs";
 import { showConfirmationDialog } from "../../utils/dialog-utility.mjs";
 import { validateOrThrow } from "../../utils/validation-utility.mjs";
 import * as StringUtil from "../../utils/string-utility.mjs"
+import ViewModelTypeDefinition from "../../view-model/view-model-type-definition.mjs";
+import { VIEW_MODEL_TYPE } from "../../view-model/view-model-type.mjs";
 
 /**
  * --- Inherited from ViewModel
@@ -82,3 +84,11 @@ export default class ButtonDeleteViewModel extends ButtonViewModel {
 }
 
 Handlebars.registerPartial('buttonDelete', `{{> "${ButtonDeleteViewModel.TEMPLATE}"}}`);
+
+VIEW_MODEL_TYPE.set(
+  "ButtonDeleteViewModel", 
+  new ViewModelTypeDefinition(
+    (args) => { return new ButtonDeleteViewModel(args); },
+    ["target", "callback", "callbackData", "localizableTitle", "propertyPath", "withDialog", "localizableDialogTitle"]
+  )
+);

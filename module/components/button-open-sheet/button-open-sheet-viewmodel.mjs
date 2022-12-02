@@ -2,6 +2,8 @@ import { TEMPLATES } from "../../templatePreloader.mjs";
 import { findDocument } from "../../utils/content-utility.mjs";
 import { validateOrThrow } from "../../utils/validation-utility.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
+import ViewModelTypeDefinition from "../../view-model/view-model-type-definition.mjs";
+import { VIEW_MODEL_TYPE } from "../../view-model/view-model-type.mjs";
 
 /**
  * --- Inherited from ViewModel
@@ -57,3 +59,11 @@ export default class ButtonOpenSheetViewModel extends ButtonViewModel {
 }
 
 Handlebars.registerPartial('buttonOpenSheet', `{{> "${ButtonOpenSheetViewModel.TEMPLATE}"}}`);
+
+VIEW_MODEL_TYPE.set(
+  "ButtonOpenSheetViewModel", 
+  new ViewModelTypeDefinition(
+    (args) => { return new ButtonOpenSheetViewModel(args); },
+    ["target", "callback", "callbackData", "localizableTitle"]
+  )
+);

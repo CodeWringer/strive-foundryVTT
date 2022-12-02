@@ -1,6 +1,8 @@
 import { TEMPLATES } from "../../templatePreloader.mjs";
 import { validateOrThrow } from "../../utils/validation-utility.mjs";
 import InputViewModel from "../input-viewmodel.mjs";
+import ViewModelTypeDefinition from "../../view-model/view-model-type-definition.mjs";
+import { VIEW_MODEL_TYPE } from "../../view-model/view-model-type.mjs";
 
 /**
  * --- Inherited from ViewModel
@@ -92,3 +94,11 @@ export default class InputDropDownViewModel extends InputViewModel {
 }
 
 Handlebars.registerPartial('inputDropDown', `{{> "${InputDropDownViewModel.TEMPLATE}"}}`);
+
+VIEW_MODEL_TYPE.set(
+  "InputDropDownViewModel", 
+  new ViewModelTypeDefinition(
+    (args) => { return new InputDropDownViewModel(args); },
+    ["propertyOwner", "propertyPath", "localizableTitle", "options"]
+  )
+);

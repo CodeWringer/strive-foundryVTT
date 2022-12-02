@@ -1,8 +1,9 @@
 import { TEMPLATES } from "../../templatePreloader.mjs";
 import * as ChatUtil from "../../utils/chat-utility.mjs";
-import * as PropUtil from "../../utils/property-utility.mjs";
 import { validateOrThrow } from "../../utils/validation-utility.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
+import ViewModelTypeDefinition from "../../view-model/view-model-type-definition.mjs";
+import { VIEW_MODEL_TYPE } from "../../view-model/view-model-type.mjs";
 
 /**
  * --- Inherited from ViewModel
@@ -121,3 +122,11 @@ export default class ButtonSendToChatViewModel extends ButtonViewModel {
 }
 
 Handlebars.registerPartial('buttonSendToChat', `{{> "${ButtonSendToChatViewModel.TEMPLATE}"}}`);
+
+VIEW_MODEL_TYPE.set(
+  "ButtonSendToChatViewModel", 
+  new ViewModelTypeDefinition(
+    (args) => { return new ButtonSendToChatViewModel(args); },
+    ["target", "callback", "callbackData", "localizableTitle", "propertyPath", "chatTitle", "actor", "localizableTitle"]
+  )
+);

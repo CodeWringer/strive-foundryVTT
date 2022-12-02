@@ -5,6 +5,8 @@ import { findItem, contentCollectionTypes } from '../../utils/content-utility.mj
 import { validateOrThrow, isObject } from "../../utils/validation-utility.mjs";
 import { isNotBlankOrUndefined } from "../../utils/validation-utility.mjs";
 import GetShowFancyFontUseCase from "../../use-case/get-show-fancy-font-use-case.mjs";
+import ViewModelTypeDefinition from "../../view-model/view-model-type-definition.mjs";
+import { VIEW_MODEL_TYPE } from "../../view-model/view-model-type.mjs";
 
 /**
  * --- Inherited from ViewModel
@@ -57,8 +59,8 @@ export default class ButtonAddViewModel extends ButtonViewModel {
    * @param {Object | String | undefined} args.creationData Optional. Data to pass to the item creation function. 
    * @param {String | undefined} args.localizableTitle Optional. Sets the tooltip text to display on cursor hover over the DOM element. 
    * @param {String | undefined} args.localizableLabel Optional. The localizable label. 
-   * @param {String | undefined} localizableType Localization key of the type of thing to add. 
-   * @param {String | undefined} localizableDialogTitle Localization key of the title of the dialog. 
+   * @param {String | undefined} args.localizableType Localization key of the type of thing to add. 
+   * @param {String | undefined} args.localizableDialogTitle Localization key of the title of the dialog. 
    */
   constructor(args = {}) {
     super(args);
@@ -194,3 +196,11 @@ export default class ButtonAddViewModel extends ButtonViewModel {
 }
 
 Handlebars.registerPartial('buttonAdd', `{{> "${ButtonAddViewModel.TEMPLATE}"}}`);
+
+VIEW_MODEL_TYPE.set(
+  "ButtonAddViewModel", 
+  new ViewModelTypeDefinition(
+    (args) => { return new ButtonAddViewModel(args); },
+    ["target", "callback", "callbackData", "localizableTitle", "creationType", "withDialog", "creationData", "localizableTitle", "localizableLabel", "localizableType", "localizableDialogTitle"]
+  )
+);

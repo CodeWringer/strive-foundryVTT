@@ -1,6 +1,8 @@
 import { TEMPLATES } from "../../templatePreloader.mjs";
 import { validateOrThrow } from "../../utils/validation-utility.mjs";
 import InputViewModel from "../input-viewmodel.mjs";
+import ViewModelTypeDefinition from "../../view-model/view-model-type-definition.mjs";
+import { VIEW_MODEL_TYPE } from "../../view-model/view-model-type.mjs";
 
 /**
  * --- Inherited from ViewModel
@@ -18,8 +20,8 @@ import InputViewModel from "../input-viewmodel.mjs";
  * 
  * --- Own properties
  * 
- * @property {Boolean} spellcheck Gets whether spell checking is enabled. 
  * @property {String} placeholder Gets a placeholder text to display while the textfield is empty. 
+ * @property {Boolean} spellcheck Gets whether spell checking is enabled. 
  * 
  */
 export default class InputTextareaViewModel extends InputViewModel {
@@ -53,15 +55,15 @@ export default class InputTextareaViewModel extends InputViewModel {
    * @param {String | undefined} args.contextTemplate Optional. Name or path of a template that embeds this input component. 
    * @param {String | undefined} args.localizableTitle Optional. The localizable title (tooltip). 
    * 
-   * @param {Boolean | undefined} args.spellcheck Optional. Sets whether spell checking is enabled. 
    * @param {String | undefined} args.placeholder Optional. Sets a placeholder text to display while the textfield is empty. 
+   * @param {Boolean | undefined} args.spellcheck Optional. Sets whether spell checking is enabled. 
    */
   constructor(args = {}) {
     super(args);
     validateOrThrow(args, ["propertyPath", "propertyOwner"]);
 
-    this.spellcheck = args.spellcheck ?? false;
     this._placeholder = args.placeholder ?? "";
+    this.spellcheck = args.spellcheck ?? false;
   }
 
   /** @override */
@@ -87,3 +89,11 @@ export default class InputTextareaViewModel extends InputViewModel {
 }
 
 Handlebars.registerPartial('inputTextarea', `{{> "${InputTextareaViewModel.TEMPLATE}"}}`);
+
+VIEW_MODEL_TYPE.set(
+  "InputTextareaViewModel", 
+  new ViewModelTypeDefinition(
+    (args) => { return new InputTextareaViewModel(args); },
+    ["propertyOwner", "propertyPath", "localizableTitle", "placeholder", "spellcheck"]
+  )
+);

@@ -2,6 +2,8 @@ import { TEMPLATES } from "../../templatePreloader.mjs";
 import { validateOrThrow } from "../../utils/validation-utility.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
 import InputViewModel from "../input-viewmodel.mjs";
+import ViewModelTypeDefinition from "../../view-model/view-model-type-definition.mjs";
+import { VIEW_MODEL_TYPE } from "../../view-model/view-model-type.mjs";
 
 /**
  * --- Inherited from ViewModel
@@ -213,3 +215,11 @@ export default class InputRichTextViewModel extends InputViewModel {
 }
 
 Handlebars.registerPartial('inputRichText', `{{> "${InputRichTextViewModel.TEMPLATE}"}}`);
+
+VIEW_MODEL_TYPE.set(
+  "InputRichTextViewModel", 
+  new ViewModelTypeDefinition(
+    (args) => { return new InputRichTextViewModel(args); },
+    ["propertyOwner", "propertyPath"]
+  )
+);

@@ -2,6 +2,8 @@ import { TEMPLATES } from "../../templatePreloader.mjs";
 import { createUUID } from "../../utils/uuid-utility.mjs";
 import { validateOrThrow } from "../../utils/validation-utility.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
+import ViewModelTypeDefinition from "../../view-model/view-model-type-definition.mjs";
+import { VIEW_MODEL_TYPE } from "../../view-model/view-model-type.mjs";
 
 /**
  * --- Inherited from ViewModel
@@ -87,3 +89,11 @@ export default class ButtonToggleVisibilityViewModel extends ButtonViewModel {
 }
 
 Handlebars.registerPartial('buttonToggleVisibility', `{{#> "${ButtonToggleVisibilityViewModel.TEMPLATE}"}}{{> @partial-block }}{{/"${ButtonToggleVisibilityViewModel.TEMPLATE}"}}`);
+
+VIEW_MODEL_TYPE.set(
+  "ButtonToggleVisibilityViewModel", 
+  new ViewModelTypeDefinition(
+    (args) => { return new ButtonToggleVisibilityViewModel(args); },
+    ["target", "callback", "callbackData", "localizableTitle", "visGroup", "toggleSelf"]
+  )
+);

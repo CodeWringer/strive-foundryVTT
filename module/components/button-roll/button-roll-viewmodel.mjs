@@ -6,6 +6,8 @@ import * as DiceUtil from "../../utils/dice-utility.mjs";
 import * as PropUtil from "../../utils/property-utility.mjs";
 import { validateOrThrow } from "../../utils/validation-utility.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
+import ViewModelTypeDefinition from "../../view-model/view-model-type-definition.mjs";
+import { VIEW_MODEL_TYPE } from "../../view-model/view-model-type.mjs";
 
 /**
  * --- Inherited from ViewModel
@@ -85,6 +87,7 @@ export default class ButtonRollViewModel extends ButtonViewModel {
    * @param {Function | String | undefined} args.callback Optional. Defines an asynchronous callback that is invoked upon completion of the button's own callback. 
    * @param {Any | undefined} args.callbackData Optional. Defines any data to pass to the completion callback. 
    * @param {Boolean | undefined} args.isEditable Optional. If true, will be interactible. 
+   * @param {String | undefined} args.localizableTitle Optional. The localizable title (tooltip). 
    * 
    * @param {CONFIG.rollTypes} args.rollType Determines the kind of roll to try and make. 
    * @param {String | undefined} args.propertyPath Optional. Property path identifying a property that contains a roll-formula. 
@@ -94,7 +97,6 @@ export default class ButtonRollViewModel extends ButtonViewModel {
    * @param {String | undefined} secondaryChatTitle Primary title to display above the roll result in the chat message. 
    * @param {String | undefined} secondaryChatImage Primary image to display above the roll result in the chat message. 
    * @param {Actor | undefined} args.actor Optional. Actor associated with the roll result. 
-   * @param {String | undefined} args.localizableTitle Optional. The localizable title (tooltip). 
    */
   constructor(args = {}) {
     super(args);
@@ -214,3 +216,11 @@ export default class ButtonRollViewModel extends ButtonViewModel {
 }
 
 Handlebars.registerPartial('buttonRoll', `{{> "${ButtonRollViewModel.TEMPLATE}"}}`);
+
+VIEW_MODEL_TYPE.set(
+  "ButtonRollViewModel", 
+  new ViewModelTypeDefinition(
+    (args) => { return new ButtonRollViewModel(args); },
+    ["target", "callback", "callbackData", "localizableTitle", "rollType", "propertyPath", "primaryChatTitle", "primaryChatImage", "secondaryChatTitle", "secondaryChatImage", "actor"]
+  )
+);

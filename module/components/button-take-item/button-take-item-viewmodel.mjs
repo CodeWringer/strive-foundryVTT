@@ -6,6 +6,8 @@ import { updateProperty } from "../../utils/document-update-utility.mjs";
 import ChoiceOption from "../../dto/choice-option.mjs";
 import { validateOrThrow } from "../../utils/validation-utility.mjs";
 import { ItemGrid } from "../item-grid/item-grid.mjs";
+import ViewModelTypeDefinition from "../../view-model/view-model-type-definition.mjs";
+import { VIEW_MODEL_TYPE } from "../../view-model/view-model-type.mjs";
 
 export const contextTypes = {
   chatMessage: "chat-message",
@@ -203,3 +205,11 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
 }
 
 Handlebars.registerPartial('buttonTakeItem', `{{#> "${ButtonTakeItemViewModel.TEMPLATE}"}}{{> @partial-block }}{{/"${ButtonTakeItemViewModel.TEMPLATE}"}}`);
+
+VIEW_MODEL_TYPE.set(
+  "ButtonTakeItemViewModel", 
+  new ViewModelTypeDefinition(
+    (args) => { return new ButtonTakeItemViewModel(args); },
+    ["target", "callback", "callbackData", "localizableTitle", "contextType"]
+  )
+);

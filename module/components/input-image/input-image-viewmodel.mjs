@@ -1,6 +1,8 @@
 import { TEMPLATES } from "../../templatePreloader.mjs";
 import { validateOrThrow } from "../../utils/validation-utility.mjs";
 import InputViewModel from "../input-viewmodel.mjs";
+import ViewModelTypeDefinition from "../../view-model/view-model-type-definition.mjs";
+import { VIEW_MODEL_TYPE } from "../../view-model/view-model-type.mjs";
 
 /**
  * Constant that defines the css class to look for when identifying image input elements. 
@@ -87,3 +89,11 @@ export default class InputImageViewModel extends InputViewModel {
 }
 
 Handlebars.registerPartial('inputImage', `{{> "${InputImageViewModel.TEMPLATE}"}}`);
+
+VIEW_MODEL_TYPE.set(
+  "InputImageViewModel", 
+  new ViewModelTypeDefinition(
+    (args) => { return new InputImageViewModel(args); },
+    ["propertyOwner", "propertyPath", "localizableTitle"]
+  )
+);

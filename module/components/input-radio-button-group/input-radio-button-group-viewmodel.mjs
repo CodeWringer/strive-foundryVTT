@@ -1,6 +1,8 @@
 import { TEMPLATES } from "../../templatePreloader.mjs";
 import { validateOrThrow } from "../../utils/validation-utility.mjs";
 import InputViewModel from "../input-viewmodel.mjs";
+import ViewModelTypeDefinition from "../../view-model/view-model-type-definition.mjs";
+import { VIEW_MODEL_TYPE } from "../../view-model/view-model-type.mjs";
 
 /**
  * --- Inherited from ViewModel
@@ -117,3 +119,11 @@ export default class InputRadioButtonGroupViewModel extends InputViewModel {
 }
 
 Handlebars.registerPartial('inputRadioButtonGroup', `{{> "${InputRadioButtonGroupViewModel.TEMPLATE}"}}`);
+
+VIEW_MODEL_TYPE.set(
+  "InputRadioButtonGroupViewModel", 
+  new ViewModelTypeDefinition(
+    (args) => { return new InputRadioButtonGroupViewModel(args); },
+    ["propertyOwner", "propertyPath", "localizableTitle", "options"]
+  )
+);

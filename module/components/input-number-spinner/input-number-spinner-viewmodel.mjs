@@ -1,6 +1,8 @@
 import { TEMPLATES } from "../../templatePreloader.mjs";
 import { validateOrThrow } from "../../utils/validation-utility.mjs";
 import InputViewModel from "../input-viewmodel.mjs";
+import ViewModelTypeDefinition from "../../view-model/view-model-type-definition.mjs";
+import { VIEW_MODEL_TYPE } from "../../view-model/view-model-type.mjs";
 
 /**
  * --- Inherited from ViewModel
@@ -90,3 +92,11 @@ export default class InputNumberSpinnerViewModel extends InputViewModel {
 }
 
 Handlebars.registerPartial('inputNumberSpinner', `{{> "${InputNumberSpinnerViewModel.TEMPLATE}"}}`);
+
+VIEW_MODEL_TYPE.set(
+  "InputNumberSpinnerViewModel", 
+  new ViewModelTypeDefinition(
+    (args) => { return new InputNumberSpinnerViewModel(args); },
+    ["propertyOwner", "propertyPath", "localizableTitle", "min", "max", "step"]
+  )
+);

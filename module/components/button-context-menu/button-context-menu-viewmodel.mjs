@@ -1,6 +1,7 @@
 import { TEMPLATES } from "../../templatePreloader.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
-import { validateOrThrow } from "../../utils/validation-utility.mjs";
+import ViewModelTypeDefinition from "../../view-model/view-model-type-definition.mjs";
+import { VIEW_MODEL_TYPE } from "../../view-model/view-model-type.mjs";
 
 /**
  * --- Inherited from ViewModel
@@ -146,3 +147,11 @@ export default class ButtonContextMenuViewModel extends ButtonViewModel {
 }
 
 Handlebars.registerPartial('buttonContextMenu', `{{> "${ButtonContextMenuViewModel.TEMPLATE}"}}`);
+
+VIEW_MODEL_TYPE.set(
+  "ButtonToggleVisibilityViewModel", 
+  new ViewModelTypeDefinition(
+    (args) => { return new ButtonToggleVisibilityViewModel(args); },
+    ["target", "callback", "callbackData", "localizableTitle", "menuItems"]
+  )
+);

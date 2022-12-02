@@ -1,6 +1,8 @@
 import { TEMPLATES } from "../../templatePreloader.mjs";
 import { isFunction } from "../../utils/validation-utility.mjs";
 import ViewModel from "../viewmodel.mjs";
+import ViewModelTypeDefinition from "../../view-model/view-model-type-definition.mjs";
+import { VIEW_MODEL_TYPE } from "../../view-model/view-model-type.mjs";
 
 /**
  * Constant that defines the css class to look for when identifying button elements. 
@@ -169,3 +171,11 @@ export default class ButtonViewModel extends ViewModel {
 }
 
 Handlebars.registerPartial('button', `{{#> "${ButtonViewModel.TEMPLATE}"}}{{> @partial-block }}{{/"${ButtonViewModel.TEMPLATE}"}}`);
+
+VIEW_MODEL_TYPE.set(
+  "ButtonViewModel", 
+  new ViewModelTypeDefinition(
+    (args) => { return new ButtonViewModel(args); },
+    ["target", "callback", "callbackData", "localizableTitle", "onClick"]
+  )
+);

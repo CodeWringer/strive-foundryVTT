@@ -1,6 +1,8 @@
 import { TEMPLATES } from "../../templatePreloader.mjs";
 import { validateOrThrow } from "../../utils/validation-utility.mjs";
 import InputViewModel from "../input-viewmodel.mjs";
+import ViewModelTypeDefinition from "../../view-model/view-model-type-definition.mjs";
+import { VIEW_MODEL_TYPE } from "../../view-model/view-model-type.mjs";
 
 /**
  * --- Inherited from ViewModel
@@ -51,7 +53,7 @@ export default class InputTextFieldViewModel extends InputViewModel {
    * @param {String | undefined} args.contextTemplate Optional. Name or path of a template that embeds this input component. 
    * @param {String | undefined} args.localizableTitle Optional. The localizable title (tooltip). 
    * 
-   * @param {String} args.placeholder Optional. A placeholder text to display while the textfield is empty. 
+   * @param {String | undefined} args.placeholder Optional. A placeholder text to display while the textfield is empty. 
    */
   constructor(args = {}) {
     super(args);
@@ -62,3 +64,11 @@ export default class InputTextFieldViewModel extends InputViewModel {
 }
 
 Handlebars.registerPartial('inputTextField', `{{> "${InputTextFieldViewModel.TEMPLATE}"}}`);
+
+VIEW_MODEL_TYPE.set(
+  "InputTextFieldViewModel", 
+  new ViewModelTypeDefinition(
+    (args) => { return new InputTextFieldViewModel(args); },
+    ["propertyOwner", "propertyPath", "localizableTitle", "placeholder"]
+  )
+);
