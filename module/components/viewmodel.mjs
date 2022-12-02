@@ -1,6 +1,7 @@
 import { createUUID } from "../utils/uuid-utility.mjs";
 import * as PropertyUtil from "../utils/property-utility.mjs";
 import * as ValidationUtil from "../utils/validation-utility.mjs";
+import { VIEW_MODEL_TYPE } from "../view-model/view-model-type.mjs";
 
 /**
  * @summary
@@ -336,16 +337,48 @@ export default class ViewModel {
 
 /**
  * A block helper to provide access to a specific child view model. 
+ * 
  * @param {ViewModel} parent The parent `ViewModel` instance on which to look for the child-`ViewModel`. 
  * @param {String} id Id of the `ViewModel` instance to return. 
  * If no instance with that name can be found, creates and returns a new instance. 
  * @param {String} name Name of the `ViewModel` type to return. E. g. `"input-textfield"`. 
+ * @param {String} viewModelTypeName Name of the actual `ViewModel`-type. E. g. `"InputTextFieldViewModel"`. 
+ * 
+ * @returns {Any} The wrapped content. 
  */
-Handlebars.registerHelper("viewModel", function(parent, id, context) {
-  const vm = parent.children.find(it => it._id === id);
-
+Handlebars.registerHelper("viewModel", function(parent, id, viewModelTypeName) {
+  let vm = parent.children.find(it => it._id === id);
+  const context = arguments[arguments.length - 1];
+  
   if (vm === undefined) {
-    game.ambersteel.logger.logError("[viewModel] Failed to get child view model");
+    const definition = VIEW_MODEL_TYPE.get(viewModelTypeName);
+    if (definition === undefined) {
+      game.ambersteel.logger.logError("[viewModel] Failed to get child view model");
+      return "ERROR: No ViewModel definition";
+    }
+
+    // Universal arguments. 
+    const args = {
+      parent: parent,
+      id: id,
+      isEditable: parent.isEditable,
+      isEditable: parent.isSendable,
+      contextTemplate: parent.contextTemplate,
+    };
+
+    // Add dynamic arguments. 
+    let argumentNameIndex = 0;
+    for (let i = 3; i < arguments.length - 1; i++) {
+      const argumentValue = arguments[i];
+      args[definition.argumentNames[argumentNameIndex]] = argumentValue;
+      argumentNameIndex++;
+    }
+
+    // Create the new view model instance. 
+    vm = definition.factoryFunc(args);
+    // For convenience's sake, the view model instance will be made available 
+    // as a new property on the parent view model instance. 
+    parent[id] = vm;
   }
 
   return context.fn(vm);
