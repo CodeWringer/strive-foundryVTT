@@ -98,6 +98,9 @@ cssClass: {undefined | String}
             <span class="width-min-xxl flex-grow">
               {{> inputTextField viewModel=vm.vmTfDamage }}
             </span>
+            <span class="square-button-light font-size-default flex flex-center">
+              <i class="far fa-question-circle info-button damage-info" id="{{../viewModel.id}}"></i>
+            </span>
             {{!-- Damage type --}}
             <div class="width-min-xxl">
               {{> inputLabel text="ambersteel.damageType.label" showFancyFont=viewModel.showFancyFont}}

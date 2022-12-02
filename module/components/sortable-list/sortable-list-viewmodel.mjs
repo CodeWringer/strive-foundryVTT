@@ -9,6 +9,7 @@ import ViewModel from "../viewmodel.mjs";
  * This object groups the view models of one list item, to pass through to the 
  * UI. 
  * @private
+ * @property {String} id 
  * @property {ViewModel} vmBtnMoveTop 
  * @property {ViewModel} vmBtnMoveUp 
  * @property {ViewModel} vmBtnMoveDown 
@@ -19,6 +20,7 @@ import ViewModel from "../viewmodel.mjs";
  */
 class SortableListViewModelGroup {
   constructor(args = {}) {
+    this.id = args.id;
     this.vmBtnMoveTop = args.vmBtnMoveTop;
     this.vmBtnMoveUp = args.vmBtnMoveUp;
     this.vmBtnMoveDown = args.vmBtnMoveDown;
@@ -137,6 +139,7 @@ export default class SortableListViewModel extends SheetViewModel {
   _generateViewModelGroup(id, itemViewModel, upButtonsDisabled, downButtonsDisabled) {
     const thiz = this;
     return new SortableListViewModelGroup({
+      id: id,
       vmBtnMoveTop: new ButtonViewModel({
         parent: thiz,
         isEditable: upButtonsDisabled ?? thiz.isEditable,
