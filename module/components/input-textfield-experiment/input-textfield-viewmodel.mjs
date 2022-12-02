@@ -1,6 +1,8 @@
 import { TEMPLATES } from "../../templatePreloader.mjs";
 import { validateOrThrow } from "../../utils/validation-utility.mjs";
 import InputViewModel from "../input-viewmodel.mjs";
+import ViewModelTypeDefinition from "../../view-model/view-model-type-definition.mjs";
+import { VIEW_MODEL_TYPE } from "../../view-model/view-model-type.mjs";
 
 /**
  * --- Inherited from ViewModel
@@ -57,3 +59,11 @@ export default class InputTextFieldExperimentViewModel extends InputViewModel {
 }
 
 Handlebars.registerPartial('inputTextFieldExperiment', `{{> "${InputTextFieldExperimentViewModel.TEMPLATE}"}}`);
+
+VIEW_MODEL_TYPE.set(
+  "InputTextFieldExperimentViewModel", 
+  new ViewModelTypeDefinition(
+    (args) => { return new InputTextFieldExperimentViewModel(args); },
+    ["propertyOwner", "propertyPath", "localizableTitle"]
+  )
+);

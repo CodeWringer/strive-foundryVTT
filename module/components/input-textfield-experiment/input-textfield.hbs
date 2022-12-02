@@ -3,8 +3,11 @@ parent: {ViewModel}
 id: {String}
 cssClass: {String | undefined}
 readOnlyCssClass: {String | undefined}
+propertyOwner: {Object}
+propertyPath: {String}
+localizableTitle: {String | undefined}
 --}}
-{{#viewModel parent id}}
+{{#viewModel parent id "InputTextFieldExperimentViewModel" propertyOwner propertyPath localizableTitle}}
 {{#if isEditable}}
   <input 
     class="custom-system-edit input-width-override component-input-textfield {{../cssClass}}"
