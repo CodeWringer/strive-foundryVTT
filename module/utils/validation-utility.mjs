@@ -61,6 +61,16 @@ export function isFunction(obj) {
 }
 
 /**
+ * Returns true, if the given argument is of type number. 
+ * @param {Any} o 
+ * @returns {Boolean} True, if the given argument is of type number. 
+ */
+export function isNumber(o) {
+  const isStringNumber = ("" + o).match(/^\d+(\.\d+)?$/);
+  return isStringNumber !== null ? true : Number.isFinite(o);
+}
+
+/**
  * Returns true, if the given value is blank or undefined. 
  * @param {String | Number} value 
  * @returns {Boolean}

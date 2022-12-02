@@ -273,4 +273,60 @@ describe('validation-utility', function() {
       result.should.be.equal(false);
     });
   });
+
+  describe('isNumber', function() {
+    it('detects 123 as true', function() {
+      // Given
+      const given = 123;
+      // When
+      const r = ValidationUtility.isNumber(given);
+      // Then
+      r.should.be.equal(true);
+    });
+
+    it('detects 123.5 as true', function() {
+      // Given
+      const given = 123.5;
+      // When
+      const r = ValidationUtility.isNumber(given);
+      // Then
+      r.should.be.equal(true);
+    });
+
+    it('detects "123" as true', function() {
+      // Given
+      const given = "123";
+      // When
+      const r = ValidationUtility.isNumber(given);
+      // Then
+      r.should.be.equal(true);
+    });
+
+    it('detects "0.123" as true', function() {
+      // Given
+      const given = "0.123";
+      // When
+      const r = ValidationUtility.isNumber(given);
+      // Then
+      r.should.be.equal(true);
+    });
+
+    it('detects object as false', function() {
+      // Given
+      const given = { a: 123, b: "345" };
+      // When
+      const r = ValidationUtility.isNumber(given);
+      // Then
+      r.should.be.equal(false);
+    });
+
+    it('detects function as false', function() {
+      // Given
+      const given = () => { return 124; };
+      // When
+      const r = ValidationUtility.isNumber(given);
+      // Then
+      r.should.be.equal(false);
+    });
+  });
 });
