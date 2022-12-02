@@ -1,4 +1,3 @@
-import InputTextFieldExperimentViewModel from "../../../module/components/input-textfield-experiment/input-textfield-viewmodel.mjs";
 import SheetViewModel from "../../../module/components/sheet-viewmodel.mjs";
 import { TEMPLATES } from "../../../module/templatePreloader.mjs";
 import { validateOrThrow } from "../../../module/utils/validation-utility.mjs";
@@ -51,14 +50,6 @@ export default class MutationItemSheetViewModel extends SheetViewModel {
       id: "vmRtDescription",
       propertyOwner: thiz.item,
       propertyPath: "data.data.description",
-    });
-
-    new InputTextFieldExperimentViewModel({
-      id: "experiment",
-      propertyOwner: thiz.item,
-      propertyPath: "data.data.description",
-      parent: thiz,
-      isEditable: thiz.isEditable,
     });
   }
 }
