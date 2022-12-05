@@ -1,17 +1,31 @@
 {{!-- Required context:
-viewModel: {ButtonToggleVisibilityViewModel}
 cssClass: {String | undefined}
+readOnlyCssClass: {String | undefined}
 fill: {Boolean | undefined}
+// If provided, "parent" and "id" must be undefined!
+viewModel: {ViewModel | undefined}
+
+// If provided, "viewModel" must be undefined!
+parent: {ViewModel | undefined}
+id: {String | undefined}
+target: {Object | undefined}
+callback: {Function | String | undefined}
+callbackData: {Any | undefined}
+localizableTitle: {String | undefined}
+visGroup: {String | undefined}
+toggleSelf: {Boolean | undefined}
 --}}
-<span class="component-button-toggle-visibility {{#if fill}}fill-button-light{{else}}square-button-light{{/if}}{{#if (not viewModel.isEditable)}} disabled{{/if}}{{#if cssClass}} {{cssClass}}{{else}} font-size-default{{/if}}"
-  {{#if viewModel.toggleSelf}}
-  data-vis-group="{{viewModel.visGroup}}"
+{{#viewModel parent id viewModel "ButtonToggleVisibilityViewModel" target callback callbackData localizableTitle visGroup toggleSelf}}
+<span class="component-button-toggle-visibility {{#if fill}}fill-button-light{{else}}square-button-light{{/if}}{{#if (not isEditable)}} disabled{{/if}}{{#if ../cssClass}} {{../cssClass}}{{else}} font-size-default{{/if}}"
+  {{#if toggleSelf}}
+  data-vis-group="{{visGroup}}"
   {{/if}}
   >
   <a class="custom-system-button pad-sm button flex flex-center" 
-    title="{{viewModel.localizedTitle}}" 
-    id="{{viewModel.id}}"
+    title="{{localizedTitle}}" 
+    id="{{id}}"
   >
     {{> @partial-block }}
   </a>
 </span>
+{{/viewModel}}

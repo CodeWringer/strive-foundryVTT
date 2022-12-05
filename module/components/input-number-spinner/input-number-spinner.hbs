@@ -1,22 +1,34 @@
 {{!-- Required context:
-viewModel: {InputNumberSpinnerViewModel}
 cssClass: {String | undefined}
 readOnlyCssClass: {String | undefined}
+// If provided, "parent" and "id" must be undefined!
+viewModel: {ViewModel | undefined}
+
+// If provided, "viewModel" must be undefined!
+parent: {ViewModel | undefined}
+id: {String | undefined}
+propertyOwner: {Object | undefined}
+propertyPath: {String | undefined}
+localizableTitle: {String | undefined}
+min: {Number | undefined}
+max: {Number | undefined}
+step: {Number | undefined}
 --}}
-{{#if viewModel.isEditable}}
+{{#viewModel parent id viewModel "InputNumberSpinnerViewModel" propertyOwner propertyPath localizableTitle min max step}}
+{{#if isEditable}}
 <span class="spinner-container component-input-number-spinner">
   <input 
-    class="custom-system-edit spinner {{cssClass}}"
-    data-property-path="{{viewModel.propertyPath}}"
+    class="custom-system-edit spinner {{../cssClass}}"
+    data-property-path="{{propertyPath}}"
     type="number"
     data-dtype="Number"
-    name="{{viewModel.id}}"
-    id="{{viewModel.id}}"
-    value="{{viewModel.value}}"
-    {{#if viewModel.hasMin}}min="{{viewModel.min}}"{{/if}}
-    {{#if viewModel.hasMax}}max="{{viewModel.max}}"{{/if}}
-    step="{{viewModel.step}}"
-    title="{{viewModel.localizedTitle}}"
+    name="{{id}}"
+    id="{{id}}"
+    value="{{value}}"
+    {{#if hasMin}}min="{{min}}"{{/if}}
+    {{#if hasMax}}max="{{max}}"{{/if}}
+    step="{{step}}"
+    title="{{localizedTitle}}"
   />
   <div class="spinner-button-container">
       <a class="button-spinner button-spinner-up" title="{{localize ambersteel.labels.increment}}">
@@ -30,10 +42,11 @@ readOnlyCssClass: {String | undefined}
 {{else}}
   {{!-- Display read-only value --}}
   <div 
-    class="custom-system-read-only pad-sm fill component-input-number-spinner {{readOnlyCssClass}}" 
-    name="{{viewModel.id}}"
-    id="{{viewModel.id}}"
+    class="custom-system-read-only pad-sm fill component-input-number-spinner {{../readOnlyCssClass}}" 
+    name="{{id}}"
+    id="{{id}}"
   >
-    {{viewModel.value}}
+    {{value}}
   </div>
 {{/if}}
+{{/viewModel}}

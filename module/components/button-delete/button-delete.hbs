@@ -1,8 +1,23 @@
 {{!-- Required context:
-viewModel: {ButtonDeleteViewModel}
 cssClass: {String | undefined}
+readOnlyCssClass: {String | undefined}
 fill: {Boolean | undefined}
+// If provided, "parent" and "id" must be undefined!
+viewModel: {ViewModel | undefined}
+
+// If provided, "viewModel" must be undefined!
+parent: {ViewModel | undefined}
+id: {String | undefined}
+target: {Object | undefined}
+callback: {Function | String | undefined}
+callbackData: {Any | undefined}
+localizableTitle: {String | undefined}
+propertyPath: {String | undefined}
+withDialog: {Boolean | undefined}
+localizableDialogTitle: {String | undefined}
 --}}
-{{#> button viewModel=viewModel fill=fill cssClass=cssClass}}
+{{#viewModel parent id viewModel "ButtonDeleteViewModel" target callback callbackData localizableTitle propertyPath withDialog localizableDialogTitle}}
+{{#> button viewModel=this fill=../fill cssClass=../cssClass}}
   <i class="fas fa-trash"></i>
 {{/button}}
+{{/viewModel}}

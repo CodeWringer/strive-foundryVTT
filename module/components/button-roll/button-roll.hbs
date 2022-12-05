@@ -1,8 +1,27 @@
 {{!-- Required context:
-viewModel: {ButtonRollViewModel}
 cssClass: {String | undefined}
+readOnlyCssClass: {String | undefined}
 fill: {Boolean | undefined}
+// If provided, "parent" and "id" must be undefined!
+viewModel: {ViewModel | undefined}
+
+// If provided, "viewModel" must be undefined!
+parent: {ViewModel | undefined}
+id: {String | undefined}
+target: {Object | undefined}
+callback: {Function | String | undefined}
+callbackData: {Any | undefined}
+localizableTitle: {String | undefined}
+rollType: {CONFIG.rollTypes | undefined}
+propertyPath: {String | undefined}
+primaryChatTitle: {String | undefined}
+primaryChatImage: {String | undefined}
+secondaryChatTitle: {String | undefined}
+secondaryChatImage: {String | undefined}
+actor: {Actor | undefined}
 --}}
-{{#> button viewModel=viewModel fill=fill cssClass=cssClass}}
+{{#viewModel parent id viewModel "ButtonRollViewModel" target callback callbackData localizableTitle}}
+{{#> button viewModel=this fill=../fill cssClass=../cssClass}}
   <i class="fas fa-dice-three"></i>
 {{/button}}
+{{/viewModel}}

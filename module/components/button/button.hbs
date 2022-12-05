@@ -1,13 +1,26 @@
 {{!-- Required context:
-viewModel: {ButtonViewModel}
 cssClass: {String | undefined}
+readOnlyCssClass: {String | undefined}
 fill: {Boolean | undefined}
+// If provided, "parent" and "id" must be undefined!
+viewModel: {ViewModel | undefined}
+
+// If provided, "viewModel" must be undefined!
+parent: {ViewModel | undefined}
+id: {String | undefined}
+target: {Object | undefined}
+callback: {Function | String | undefined}
+callbackData: {Any | undefined}
+localizableTitle: {String | undefined}
+onClick: {Function | undefined}
 --}}
-<span class="{{#if fill}}fill-button-light{{else}}square-button-light{{/if}}{{#if (not viewModel.isEditable)}} disabled{{/if}}{{#if cssClass}} {{cssClass}}{{else}} font-size-default{{/if}}">
+{{#viewModel parent id viewModel "ButtonViewModel" target callback callbackData localizableTitle onClick}}
+<span class="{{#if ../fill}}fill-button-light{{else}}square-button-light{{/if}}{{#if (not isEditable)}} disabled{{/if}}{{#if ../cssClass}} {{../cssClass}}{{else}} font-size-default{{/if}}">
   <a class="custom-system-button pad-sm button flex flex-center" 
-    title="{{viewModel.localizedTitle}}"
-    id="{{viewModel.id}}"
+    title="{{localizedTitle}}"
+    id="{{id}}"
   >
     {{> @partial-block }}
   </a>
 </span>
+{{/viewModel}}

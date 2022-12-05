@@ -1,33 +1,45 @@
 {{!-- Required context:
-viewModel: {InputTextareaViewModel}
 cssClass: {String | undefined}
 readOnlyCssClass: {String | undefined}
+// If provided, "parent" and "id" must be undefined!
+viewModel: {ViewModel | undefined}
+
+// If provided, "viewModel" must be undefined!
+parent: {ViewModel | undefined}
+id: {String | undefined}
+propertyOwner: {String | undefined}
+propertyPath: {Object | undefined}
+localizableTitle: {String | undefined}
+placeholder: {String | undefined}
+spellcheck: {Boolean | undefined}
 --}}
-{{#if viewModel.isEditable}}
+{{#viewModel parent id viewModel "InputTextareaViewModel" propertyOwner propertyPath localizableTitle placeholder spellcheck}}
+{{#if isEditable}}
   <div style="display: grid;">
     <textarea 
-      class="custom-system-edit component-input-textarea {{cssClass}}"
+      class="custom-system-edit component-input-textarea {{../cssClass}}"
       style="grid-area: 1 / 1 / 2/ 2;"
-      spellcheck="{{viewModel.spellcheck}}"
-      data-property-path="{{viewModel.propertyPath}}"
-      name="{{viewModel.id}}"
-      id="{{viewModel.id}}"
-      placeholder="{{viewModel.localizedPlaceholder}}"
-      title="{{viewModel.localizedTitle}}"
-      >{{viewModel.value}}</textarea>
+      spellcheck="{{spellcheck}}"
+      data-property-path="{{propertyPath}}"
+      name="{{id}}"
+      id="{{id}}"
+      placeholder="{{localizedPlaceholder}}"
+      title="{{localizedTitle}}"
+      >{{value}}</textarea>
     <div 
       class="textarea-auto-resize-sibling"
       aria-hidden="true"
       style="visibility: hidden; grid-area: 1 / 1 / 2 / 2;"
-      >{{viewModel.value}}</div>
+      >{{value}}</div>
   </div>
 {{else}}
   {{!-- Display read-only value --}}
   <div 
-    class="custom-system-read-only pad-sm fill multiline component-input-textarea {{readOnlyCssClass}}" 
-    name="{{viewModel.id}}"
-    id="{{viewModel.id}}"
+    class="custom-system-read-only pad-sm fill multiline component-input-textarea {{../readOnlyCssClass}}" 
+    name="{{id}}"
+    id="{{id}}"
   >
-    {{viewModel.localizedValue}}
+    {{localizedValue}}
   </div>
 {{/if}}
+{{/viewModel}}

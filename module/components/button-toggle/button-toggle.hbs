@@ -1,11 +1,24 @@
 {{!-- Required context:
-viewModel: {ButtonToggleViewModel}
 cssClass: {String | undefined}
+readOnlyCssClass: {String | undefined}
+// If provided, "parent" and "id" must be undefined!
+viewModel: {ViewModel | undefined}
+
+// If provided, "viewModel" must be undefined!
+parent: {ViewModel | undefined}
+id: {String | undefined}
+target: {Object | undefined}
+callback: {Function | String | undefined}
+callbackData: {Any | undefined}
+localizableTitle: {String | undefined}
+propertyPath: {String | undefined}
 --}}
+{{#viewModel parent id viewModel "ButtonToggleViewModel" target callback callbackData localizableTitle propertyPath}}
 <button 
-  class="custom-system-button component-button-toggle {{#if viewModel.value}}active {{/if}}{{#if viewModel.isEditable}}{{else}}disabled {{/if}}{{cssClass}}" 
-  title="{{viewModel.localizedTitle}}" 
-  id="{{viewModel.id}}" 
+  class="custom-system-button component-button-toggle {{#if value}}active {{/if}}{{#if isEditable}}{{else}}disabled {{/if}}{{../cssClass}}" 
+  title="{{localizedTitle}}" 
+  id="{{id}}" 
 >
-  <span class="component-button-toggle-knob {{#if viewModel.value}}active{{/if}}"></span>
+  <span class="component-button-toggle-knob {{#if value}}active{{/if}}"></span>
 </button>
+{{/viewModel}}

@@ -1,13 +1,31 @@
 {{!-- Required context:
-viewModel: {ButtonAddViewModel}
 cssClass: {String | undefined}
+readOnlyCssClass: {String | undefined}
 fill: {Boolean | undefined}
+// If provided, "parent" and "id" must be undefined!
+viewModel: {ViewModel | undefined}
+
+// If provided, "viewModel" must be undefined!
+parent: {ViewModel | undefined}
+id: {String | undefined}
+target: {Object | undefined}
+callback: {Function | String | undefined}
+callbackData: {Any | undefined}
+localizableTitle: {String | undefined}
+creationType: {String | undefined}
+withDialog: {Boolean | undefined}
+creationData: {Object | String | undefined}
+localizableLabel: {String | undefined}
+localizableType: {String | undefined}
+localizableDialogTitle: {String | undefined}
 --}}
-{{#> button viewModel=viewModel fill=fill cssClass=cssClass}}
-  {{#if viewModel.showLabel}}
-    <span{{#if viewModel.showFancyFont}} class="fancy-font"{{/if}}>{{viewModel.localizedLabel}}</span>
+{{#viewModel parent id viewModel "ButtonAddViewModel" target callback callbackData localizableTitle creationType withDialog creationData localizableLabel localizableType localizableDialogTitle}}
+{{#> button viewModel=this fill=../fill cssClass=../cssClass}}
+  {{#if showLabel}}
+    <span{{#if showFancyFont}} class="fancy-font"{{/if}}>{{localizedLabel}}</span>
   {{/if}}
   <div class="square-button-light flex flex-center">
     <i class="fas fa-plus"></i>
   </div>
 {{/button}}
+{{/viewModel}}

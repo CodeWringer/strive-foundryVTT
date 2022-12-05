@@ -1,30 +1,40 @@
 {{!-- Required context:
-viewModel: {InputRadioButtonGroupViewModel}
 cssClass: {String | undefined}
 readOnlyCssClass: {String | undefined}
+// If provided, "parent" and "id" must be undefined!
+viewModel: {ViewModel | undefined}
+
+// If provided, "viewModel" must be undefined!
+parent: {ViewModel | undefined}
+id: {String | undefined}
+propertyOwner: {Object | undefined}
+propertyPath: {String | undefined}
+localizableTitle: {String | undefined}
+options: {Array<ChoiceOption> | undefined}
 --}}
+{{#viewModel parent id viewModel "InputRadioButtonGroupViewModel" propertyOwner propertyPath localizableTitle options}}
 <div 
   type="hidden"
-  class="custom-system-edit radio-button-group flex flex-row component-input-radio-button-group{{#if cssClass}} {{cssClass}}{{/if}}" 
-  data-property-path="{{viewModel.propertyPath}}"
-  name="{{viewModel.id}}"
-  id="{{viewModel.id}}"
-  value="{{viewModel.value}}"
-  title="{{viewModel.localizedTitle}}"
+  class="custom-system-edit radio-button-group flex flex-row component-input-radio-button-group{{#if ../cssClass}} {{../cssClass}}{{/if}}" 
+  data-property-path="{{propertyPath}}"
+  name="{{id}}"
+  id="{{id}}"
+  value="{{value}}"
+  title="{{localizedTitle}}"
 >
-  {{#each viewModel.options as |option index|}}
-    <div class="radio-button-container flex flex-row{{#if (../viewModel.isSelectedOption ../viewModel option)}} active{{/if}}">
-      {{#if ../viewModel.isEditable}}
+  {{#each options as |option index|}}
+    <div class="radio-button-container flex flex-row{{#if (../isSelectedOption ../this option)}} active{{/if}}">
+      {{#if ../isEditable}}
         <input 
           type="radio" 
           class="radio-button" 
-          name="{{../viewModel.id}}-{{option.value}}" 
-          id="{{../viewModel.id}}-{{option.value}}" 
+          name="{{../id}}-{{option.value}}" 
+          id="{{../id}}-{{option.value}}" 
           value="{{option.value}}"
         />
       {{/if}}
-      <label class="flex flex-middle{{#if ../viewModel.isEditable}}{{else}} custom-system-read-only disabled{{/if}}{{#if ../viewModel.showFancyFont}} fancy-font{{/if}}" 
-        for="{{../viewModel.id}}-{{option.value}}"
+      <label class="flex flex-middle{{#if ../isEditable}}{{else}} custom-system-read-only disabled{{/if}}{{#if ../showFancyFont}} fancy-font{{/if}}" 
+        for="{{../id}}-{{option.value}}"
         {{#if (not option.shouldDisplayValue)}}title="{{option.localizedValue}}"{{/if}}
       >
         {{#if option.displayHtmlOverride}}
@@ -45,3 +55,4 @@ readOnlyCssClass: {String | undefined}
     </div>
   {{/each}}
 </div>
+{{/viewModel}}

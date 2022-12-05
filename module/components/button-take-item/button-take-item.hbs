@@ -1,8 +1,21 @@
 {{!-- Required context:
-viewModel: {ButtonTakeItemViewModel}
 cssClass: {String | undefined}
+readOnlyCssClass: {String | undefined}
 fill: {Boolean | undefined}
+// If provided, "parent" and "id" must be undefined!
+viewModel: {ViewModel | undefined}
+
+// If provided, "viewModel" must be undefined!
+parent: {ViewModel | undefined}
+id: {String | undefined}
+target: {Object | undefined}
+callback: {Function | String | undefined}
+callbackData: {Any | undefined}
+localizableTitle: {String | undefined}
+contextType: {contextTypes | undefined}
 --}}
-{{#> button viewModel=viewModel fill=fill cssClass=cssClass}}
+{{#viewModel parent id viewModel "ButtonTakeItemViewModel" target callback callbackData localizableTitle contextType}}
+{{#> button viewModel=this fill=../fill cssClass=../cssClass}}
   <i class="ambersteel-icon ico-take-item"></i>
 {{/button}}
+{{/viewModel}}

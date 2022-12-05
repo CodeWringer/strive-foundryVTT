@@ -1,8 +1,21 @@
 {{!-- Required context:
-viewModel: {ButtonContextMenuViewModel}
 cssClass: {String | undefined}
+readOnlyCssClass: {String | undefined}
 fill: {Boolean | undefined}
+// If provided, "parent" and "id" must be undefined!
+viewModel: {ViewModel | undefined}
+
+// If provided, "viewModel" must be undefined!
+parent: {ViewModel | undefined}
+id: {String | undefined}
+target: {Object | undefined}
+callback: {Function | String | undefined}
+callbackData: {Any | undefined}
+localizableTitle: {String | undefined}
+menuItems: {Array<ContextMenuItem> | undefined}
 --}}
-{{#> button viewModel=viewModel fill=fill cssClass=cssClass}}
+{{#viewModel parent id viewModel "ButtonContextMenuViewModel" target callback callbackData localizableTitle menuItems}}
+{{#> button viewModel=this fill=../fill cssClass=../cssClass}}
   <i class="fas fa-bars"></i>
 {{/button}}
+{{/viewModel}}

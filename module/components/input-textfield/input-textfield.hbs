@@ -1,18 +1,18 @@
 {{!-- Required context:
+cssClass: {String | undefined}
+readOnlyCssClass: {String | undefined}
 // If provided, "parent" and "id" must be undefined!
 viewModel: {ViewModel | undefined}
 
 // If provided, "viewModel" must be undefined!
 parent: {ViewModel | undefined}
 id: {String | undefined}
-
-cssClass: {String | undefined}
-readOnlyCssClass: {String | undefined}
-propertyOwner: {Object}
-propertyPath: {String}
+propertyOwner: {Object | undefined}
+propertyPath: {String | undefined}
 localizableTitle: {String | undefined}
+placeholder: {String | undefined}
 --}}
-{{#viewModel parent id viewModel "InputTextFieldViewModel" propertyOwner propertyPath localizableTitle}}
+{{#viewModel parent id viewModel "InputTextFieldViewModel" propertyOwner propertyPath localizableTitle placeholder}}
 {{#if isEditable}}
   <input 
     class="custom-system-edit input-width-override component-input-textfield {{../cssClass}}"

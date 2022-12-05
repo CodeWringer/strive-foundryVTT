@@ -201,6 +201,6 @@ VIEW_MODEL_TYPE.set(
   "ButtonAddViewModel", 
   new ViewModelTypeDefinition(
     (args) => { return new ButtonAddViewModel(args); },
-    ["target", "callback", "callbackData", "localizableTitle", "creationType", "withDialog", "creationData", "localizableTitle", "localizableLabel", "localizableType", "localizableDialogTitle"]
+    ["target", "callback", "callbackData", "localizableTitle", "creationType", "withDialog", "creationData", "localizableLabel", "localizableType", "localizableDialogTitle"]
   )
 );

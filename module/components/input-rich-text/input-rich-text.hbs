@@ -1,14 +1,24 @@
 {{!-- Required context:
-viewModel: {InputRichTextViewModel}
 cssClass: {String | undefined}
+readOnlyCssClass: {String | undefined}
+// If provided, "parent" and "id" must be undefined!
+viewModel: {ViewModel | undefined}
+
+// If provided, "viewModel" must be undefined!
+parent: {ViewModel | undefined}
+id: {String | undefined}
+propertyOwner: {Object | undefined}
+propertyPath: {String | undefined}
 --}}
+{{#viewModel parent id viewModel "InputRichTextViewModel" propertyOwner propertyPath}}
 <div
-  class="custom-system-edit component-rich-text-container{{#if cssClass}} {{cssClass}}{{/if}}" 
-  id="{{viewModel.id}}" 
+  class="custom-system-edit component-rich-text-container{{#if ../cssClass}} {{../cssClass}}{{/if}}" 
+  id="{{id}}" 
 >
   <div class="component-rich-text-editbutton">
-    {{#> button viewModel=viewModel.vmBtnEditMode cssClass="button-full" fill=true }}<i class="fas fa-edit"></i>{{/button}}
+    {{#> button viewModel=vmBtnEditMode cssClass="button-full" fill=true }}<i class="fas fa-edit"></i>{{/button}}
   </div>
   <div class="component-rich-text hidden"></div>
-  <div class="component-rich-text-read-only">{{{viewModel.enrichedHtmlValue}}}</div>
+  <div class="component-rich-text-read-only">{{{enrichedHtmlValue}}}</div>
 </div>
+{{/viewModel}}

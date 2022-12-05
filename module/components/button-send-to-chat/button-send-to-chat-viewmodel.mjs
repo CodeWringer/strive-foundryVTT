@@ -127,6 +127,6 @@ VIEW_MODEL_TYPE.set(
   "ButtonSendToChatViewModel", 
   new ViewModelTypeDefinition(
     (args) => { return new ButtonSendToChatViewModel(args); },
-    ["target", "callback", "callbackData", "localizableTitle", "propertyPath", "chatTitle", "actor", "localizableTitle"]
+    ["target", "callback", "callbackData", "localizableTitle", "propertyPath", "chatTitle", "actor"]
   )
 );

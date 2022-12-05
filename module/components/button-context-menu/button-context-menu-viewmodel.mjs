@@ -149,9 +149,9 @@ export default class ButtonContextMenuViewModel extends ButtonViewModel {
 Handlebars.registerPartial('buttonContextMenu', `{{> "${ButtonContextMenuViewModel.TEMPLATE}"}}`);
 
 VIEW_MODEL_TYPE.set(
-  "ButtonToggleVisibilityViewModel", 
+  "ButtonContextMenuViewModel", 
   new ViewModelTypeDefinition(
-    (args) => { return new ButtonToggleVisibilityViewModel(args); },
+    (args) => { return new ButtonContextMenuViewModel(args); },
     ["target", "callback", "callbackData", "localizableTitle", "menuItems"]
   )
 );

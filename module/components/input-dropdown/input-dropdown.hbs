@@ -1,19 +1,29 @@
 {{!-- Required context:
-viewModel: {InputDropDownViewModel}
 cssClass: {String | undefined}
 readOnlyCssClass: {String | undefined}
+// If provided, "parent" and "id" must be undefined!
+viewModel: {ViewModel | undefined}
+
+// If provided, "viewModel" must be undefined!
+parent: {ViewModel | undefined}
+id: {String | undefined}
+propertyOwner: {Object | undefined}
+propertyPath: {String | undefined}
+localizableTitle: {String | undefined}
+options: {Array<ChoiceOption> | undefined}
 --}}
-{{#if viewModel.isEditable}}
+{{#viewModel parent id viewModel "InputDropDownViewModel" propertyOwner propertyPath localizableTitle options}}
+{{#if isEditable}}
   <select 
-    class="custom-system-edit drop-down width-fill component-input-dropdown {{cssClass}}"
-    data-property-path="{{viewModel.propertyPath}}"
-    name="{{viewModel.id}}"
-    id="{{viewModel.id}}"
-    value="{{viewModel.value}}"
-    title="{{viewModel.localizedTitle}}"
+    class="custom-system-edit drop-down width-fill component-input-dropdown {{../cssClass}}"
+    data-property-path="{{propertyPath}}"
+    name="{{id}}"
+    id="{{id}}"
+    value="{{value}}"
+    title="{{localizedTitle}}"
   >
-  {{#select viewModel.propertyPath}}
-    {{#each viewModel.options as |option index|}}
+  {{#select propertyPath}}
+    {{#each options as |option index|}}
       <option class="flex flex-middle" value="{{option.value}}"
         {{#if (not option.shouldDisplayValue)}}title="{{option.localizedValue}}"{{/if}}
       >
@@ -38,10 +48,11 @@ readOnlyCssClass: {String | undefined}
 {{else}}
   {{!-- Display read-only value --}}
   <div 
-    class="custom-system-read-only pad-sm fill component-input-dropdown {{readOnlyCssClass}}" 
-    name="{{viewModel.id}}"
-    id="{{viewModel.id}}"
+    class="custom-system-read-only pad-sm fill component-input-dropdown {{../readOnlyCssClass}}" 
+    name="{{id}}"
+    id="{{id}}"
   >
-    {{viewModel.localizedValue}}
+    {{localizedValue}}
   </div>
 {{/if}}
+{{/viewModel}}

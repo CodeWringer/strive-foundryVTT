@@ -1,8 +1,20 @@
 {{!-- Required context:
-viewModel: {ButtonOpenSheetViewModel}
 cssClass: {String | undefined}
+readOnlyCssClass: {String | undefined}
 fill: {Boolean | undefined}
+// If provided, "parent" and "id" must be undefined!
+viewModel: {ViewModel | undefined}
+
+// If provided, "viewModel" must be undefined!
+parent: {ViewModel | undefined}
+id: {String | undefined}
+target: {Object | undefined}
+callback: {Function | String | undefined}
+callbackData: {Any | undefined}
+localizableTitle: {String | undefined}
 --}}
-{{#> button viewModel=viewModel fill=fill cssClass=cssClass}}
+{{#viewModel parent id viewModel "ButtonOpenSheetViewModel" target callback callbackData localizableTitle}}
+{{#> button viewModel=this fill=../fill cssClass=../cssClass}}
   <i class="fas fa-external-link-alt"></i>
 {{/button}}
+{{/viewModel}}
