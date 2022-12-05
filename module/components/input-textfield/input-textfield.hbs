@@ -1,26 +1,37 @@
 {{!-- Required context:
-viewModel: {InputTextFieldViewModel}
+// If provided, "parent" and "id" must be undefined!
+viewModel: {ViewModel | undefined}
+
+// If provided, "viewModel" must be undefined!
+parent: {ViewModel | undefined}
+id: {String | undefined}
+
 cssClass: {String | undefined}
 readOnlyCssClass: {String | undefined}
+propertyOwner: {Object}
+propertyPath: {String}
+localizableTitle: {String | undefined}
 --}}
-{{#if viewModel.isEditable}}
+{{#viewModel parent id viewModel "InputTextFieldViewModel" propertyOwner propertyPath localizableTitle}}
+{{#if isEditable}}
   <input 
-    class="custom-system-edit input-width-override component-input-textfield {{cssClass}}"
-    data-property-path="{{viewModel.propertyPath}}"
+    class="custom-system-edit input-width-override component-input-textfield {{../cssClass}}"
+    data-property-path="{{propertyPath}}"
     type="text"
-    name="{{viewModel.id}}"
-    id="{{viewModel.id}}"
-    placeholder="{{viewModel.localizedPlaceholder}}"
-    value="{{viewModel.value}}"
-    title="{{viewModel.localizedTitle}}"
+    name="{{id}}"
+    id="{{id}}"
+    placeholder="{{localizedPlaceholder}}"
+    value="{{value}}"
+    title="{{localizedTitle}}"
   />
 {{else}}
   {{!-- Display read-only value --}}
   <div 
-    class="custom-system-read-only pad-sm fill component-input-textfield {{readOnlyCssClass}}" 
-    name="{{viewModel.id}}"
-    id="{{viewModel.id}}"
+    class="custom-system-read-only pad-sm fill component-input-textfield {{../readOnlyCssClass}}" 
+    name="{{id}}"
+    id="{{id}}"
   >
-    {{viewModel.localizedValue}}
+    {{localizedValue}}
   </div>
 {{/if}}
+{{/viewModel}}

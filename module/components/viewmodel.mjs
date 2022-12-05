@@ -338,47 +338,61 @@ export default class ViewModel {
 /**
  * A block helper to provide access to a specific child view model. 
  * 
- * @param {ViewModel} parent The parent `ViewModel` instance on which to look for the child-`ViewModel`. 
- * @param {String} id Id of the `ViewModel` instance to return. 
- * If no instance with that name can be found, creates and returns a new instance. 
+ * @param {ViewModel | undefined} parent The parent `ViewModel` instance on which to look for the child-`ViewModel`. 
+ * * If defined, `viewModel` **must** be `undefined`!
+ * @param {String | undefined} id Id of the `ViewModel` instance to return. 
+ * * If no instance with that name can be found, creates and returns a new instance. 
+ * * If defined, `viewModel` **must** be `undefined`!
+ * @param {ViewModel | undefined} viewModel A `ViewModel` instance to use. 
+ * * If defined, `parent` and `id` **must** be `undefined`!
  * @param {String} name Name of the `ViewModel` type to return. E. g. `"input-textfield"`. 
  * @param {String} viewModelTypeName Name of the actual `ViewModel`-type. E. g. `"InputTextFieldViewModel"`. 
  * 
  * @returns {Any} The wrapped content. 
  */
-Handlebars.registerHelper("viewModel", function(parent, id, viewModelTypeName) {
-  let vm = parent.children.find(it => it._id === id);
+Handlebars.registerHelper("viewModel", function(parent, id, viewModel, viewModelTypeName) {
   const context = arguments[arguments.length - 1];
+  let vm = undefined;
+
+  if (viewModel !== undefined) {
+    vm = viewModel;
+  } else if (parent !== undefined && id !== undefined) {
+    // Try to fetch an existing instance of the view model. 
+    vm = parent.children.find(it => it._id === id);
   
-  if (vm === undefined) {
-    const definition = VIEW_MODEL_TYPE.get(viewModelTypeName);
-    if (definition === undefined) {
-      game.ambersteel.logger.logError("[viewModel] Failed to get child view model");
-      return "ERROR: No ViewModel definition";
+    // Check if a new instance must be provided. 
+    if (vm === undefined) {
+      const definition = VIEW_MODEL_TYPE.get(viewModelTypeName);
+      if (definition === undefined) {
+        game.ambersteel.logger.logError("[viewModel] Failed to get child view model");
+        return "ERROR: No ViewModel definition";
+      }
+  
+      // Universal arguments. 
+      const args = {
+        parent: parent,
+        id: id,
+        isEditable: parent.isEditable,
+        isEditable: parent.isSendable,
+        contextTemplate: parent.contextTemplate,
+      };
+  
+      // Add dynamic arguments. 
+      let argumentNameIndex = 0;
+      for (let i = 3; i < arguments.length - 1; i++) {
+        const argumentValue = arguments[i];
+        args[definition.argumentNames[argumentNameIndex]] = argumentValue;
+        argumentNameIndex++;
+      }
+  
+      // Create the new view model instance. 
+      vm = definition.factoryFunc(args);
+      // For convenience's sake, the view model instance will be made available 
+      // as a new property on the parent view model instance. 
+      parent[id] = vm;
     }
-
-    // Universal arguments. 
-    const args = {
-      parent: parent,
-      id: id,
-      isEditable: parent.isEditable,
-      isEditable: parent.isSendable,
-      contextTemplate: parent.contextTemplate,
-    };
-
-    // Add dynamic arguments. 
-    let argumentNameIndex = 0;
-    for (let i = 3; i < arguments.length - 1; i++) {
-      const argumentValue = arguments[i];
-      args[definition.argumentNames[argumentNameIndex]] = argumentValue;
-      argumentNameIndex++;
-    }
-
-    // Create the new view model instance. 
-    vm = definition.factoryFunc(args);
-    // For convenience's sake, the view model instance will be made available 
-    // as a new property on the parent view model instance. 
-    parent[id] = vm;
+  } else {
+    game.ambersteel.logger.logError("InvalidArgumentException: Either ('parent' and 'id') or 'viewModel' must be defined! Not all arguments may be defined!");
   }
 
   return context.fn(vm);
