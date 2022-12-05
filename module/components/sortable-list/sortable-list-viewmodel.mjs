@@ -1,6 +1,8 @@
 import { TEMPLATES } from "../../templatePreloader.mjs";
 import { moveArrayElement, moveArrayElementBy } from "../../utils/array-utility.mjs";
 import { validateOrThrow } from "../../utils/validation-utility.mjs";
+import ViewModelTypeDefinition from "../../view-model/view-model-type-definition.mjs";
+import { VIEW_MODEL_TYPE } from "../../view-model/view-model-type.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
 import SheetViewModel from "../sheet-viewmodel.mjs";
 import ViewModel from "../viewmodel.mjs";
@@ -226,3 +228,11 @@ export default class SortableListViewModel extends SheetViewModel {
 }
 
 Handlebars.registerPartial('sortableList', `{{> "${SortableListViewModel.TEMPLATE}"}}`);
+
+VIEW_MODEL_TYPE.set(
+  "SortableListViewModel", 
+  new ViewModelTypeDefinition(
+    (args) => { return new SortableListViewModel(args); },
+    ["indexDataSource", "listItemViewModels", "listItemTemplate", "vmBtnAddItem"]
+  )
+);

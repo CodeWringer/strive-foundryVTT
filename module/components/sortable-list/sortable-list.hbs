@@ -1,13 +1,24 @@
 {{!-- Required context:
-viewModel: {SortableListViewModel}
 cssClass: {String | undefined}
+readOnlyCssClass: {String | undefined}
+
+// If provided, "parent" and "id" must be undefined!
+viewModel: {ViewModel | undefined}
+// If provided, "viewModel" must be undefined!
+parent: {ViewModel | undefined}
+id: {String | undefined}
+indexDataSource: {AbstractListItemIndexDataSource | undefined}
+listItemViewModels: {Array<ViewModel></ViewModel> | undefined}
+listItemTemplate: {String | undefined}
+vmBtnAddItem: {ViewModel | undefined}
 --}}
-<ol class="unstyled-list alternating-rows{{#if cssClass}} {{cssClass}}{{/if}}"
-    id={{viewModel.id}}
+{{#viewModel parent id viewModel "SortableListViewModel" indexDataSource listItemViewModels listItemTemplate vmBtnAddItem}}
+<ol class="unstyled-list alternating-rows{{#if ../cssClass}} {{../cssClass}}{{/if}}"
+    id={{id}}
   >
-  {{#each viewModel.itemViewModelGroups as |itemViewModelGroup key|}}
+  {{#each itemViewModelGroups as |itemViewModelGroup key|}}
     <li id="{{itemViewModelGroup.id}}" class="ambersteel-list-row sheet-block flex flex-row">
-      <div class="component-list-item-order-controls{{#if (neq ../viewModel.isEditable true)}} hidden{{/if}}">
+      <div class="component-list-item-order-controls{{#if (neq ../isEditable true)}} hidden{{/if}}">
         {{#> button viewModel=itemViewModelGroup.vmBtnMoveTop fill=false}}
           <i class="fas fa-angle-double-up"></i>
         {{/button}}
@@ -31,12 +42,13 @@ cssClass: {String | undefined}
       {{> (lookup . 'listItemTemplate') viewModel=itemViewModelGroup.listItemViewModel cssClass="flex-grow" }}
     </li>
   {{/each}}
-  <li class="ambersteel-list-row ambersteel-list-footer{{#if (neq viewModel.isEditable true)}} hidden{{/if}}">
+  <li class="ambersteel-list-row ambersteel-list-footer{{#if (neq isEditable true)}} hidden{{/if}}">
     <div class="fill flex flex-row flex-right">
       {{!-- Add button --}}
       <div>
-        {{> buttonAdd viewModel=viewModel.vmBtnAddItem fill=true}}
+        {{> buttonAdd viewModel=vmBtnAddItem fill=true}}
       </div>
     </div>
   </li>
 </ol>
+{{/viewModel}}
