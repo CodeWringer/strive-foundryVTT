@@ -373,7 +373,7 @@ Handlebars.registerHelper("viewModel", function(parent, id, viewModel, viewModel
         parent: parent,
         id: id,
         isEditable: parent.isEditable,
-        isEditable: parent.isSendable,
+        isSendable: parent.isSendable,
         contextTemplate: parent.contextTemplate,
       };
   
