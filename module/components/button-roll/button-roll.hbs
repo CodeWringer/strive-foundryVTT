@@ -20,8 +20,8 @@ secondaryChatTitle: {String | undefined}
 secondaryChatImage: {String | undefined}
 actor: {Actor | undefined}
 --}}
-{{#viewModel parent id viewModel "ButtonRollViewModel" target callback callbackData localizableTitle}}
+{{#withViewModel parent id viewModel "ButtonRollViewModel" target callback callbackData localizableTitle}}
 {{#> button viewModel=this fill=../fill cssClass=../cssClass}}
   <i class="fas fa-dice-three"></i>
 {{/button}}
-{{/viewModel}}
+{{/withViewModel}}

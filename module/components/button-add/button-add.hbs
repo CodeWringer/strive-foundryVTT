@@ -19,7 +19,7 @@ localizableLabel: {String | undefined}
 localizableType: {String | undefined}
 localizableDialogTitle: {String | undefined}
 --}}
-{{#viewModel parent id viewModel "ButtonAddViewModel" target callback callbackData localizableTitle creationType withDialog creationData localizableLabel localizableType localizableDialogTitle}}
+{{#withViewModel parent id viewModel "ButtonAddViewModel" target callback callbackData localizableTitle creationType withDialog creationData localizableLabel localizableType localizableDialogTitle}}
 {{#> button viewModel=this fill=../fill cssClass=../cssClass}}
   {{#if showLabel}}
     <span{{#if showFancyFont}} class="fancy-font"{{/if}}>{{localizedLabel}}</span>
@@ -28,4 +28,4 @@ localizableDialogTitle: {String | undefined}
     <i class="fas fa-plus"></i>
   </div>
 {{/button}}
-{{/viewModel}}
+{{/withViewModel}}

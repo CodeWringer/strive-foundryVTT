@@ -14,7 +14,7 @@ callbackData: {Any | undefined}
 localizableTitle: {String | undefined}
 onClick: {Function | undefined}
 --}}
-{{#viewModel parent id viewModel "ButtonViewModel" target callback callbackData localizableTitle onClick}}
+{{#withViewModel parent id viewModel "ButtonViewModel" target callback callbackData localizableTitle onClick}}
 <span class="{{#if ../fill}}fill-button-light{{else}}square-button-light{{/if}}{{#if (not isEditable)}} disabled{{/if}}{{#if ../cssClass}} {{../cssClass}}{{else}} font-size-default{{/if}}">
   <a class="custom-system-button pad-sm button flex flex-center" 
     title="{{localizedTitle}}"
@@ -23,4 +23,4 @@ onClick: {Function | undefined}
     {{> @partial-block }}
   </a>
 </span>
-{{/viewModel}}
+{{/withViewModel}}

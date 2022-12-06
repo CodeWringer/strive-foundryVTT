@@ -14,8 +14,8 @@ callbackData: {Any | undefined}
 localizableTitle: {String | undefined}
 contextType: {contextTypes | undefined}
 --}}
-{{#viewModel parent id viewModel "ButtonTakeItemViewModel" target callback callbackData localizableTitle contextType}}
+{{#withViewModel parent id viewModel "ButtonTakeItemViewModel" target callback callbackData localizableTitle contextType}}
 {{#> button viewModel=this fill=../fill cssClass=../cssClass}}
   <i class="ambersteel-icon ico-take-item"></i>
 {{/button}}
-{{/viewModel}}
+{{/withViewModel}}

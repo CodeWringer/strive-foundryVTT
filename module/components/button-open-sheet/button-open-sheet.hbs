@@ -13,8 +13,8 @@ callback: {Function | String | undefined}
 callbackData: {Any | undefined}
 localizableTitle: {String | undefined}
 --}}
-{{#viewModel parent id viewModel "ButtonOpenSheetViewModel" target callback callbackData localizableTitle}}
+{{#withViewModel parent id viewModel "ButtonOpenSheetViewModel" target callback callbackData localizableTitle}}
 {{#> button viewModel=this fill=../fill cssClass=../cssClass}}
   <i class="fas fa-external-link-alt"></i>
 {{/button}}
-{{/viewModel}}
+{{/withViewModel}}

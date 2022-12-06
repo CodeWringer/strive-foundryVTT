@@ -2,6 +2,7 @@ import { createUUID } from "../utils/uuid-utility.mjs";
 import * as PropertyUtil from "../utils/property-utility.mjs";
 import * as ValidationUtil from "../utils/validation-utility.mjs";
 import { VIEW_MODEL_TYPE } from "../view-model/view-model-type.mjs";
+import { isObject } from "../utils/validation-utility.mjs";
 
 /**
  * @summary
@@ -350,11 +351,11 @@ export default class ViewModel {
  * 
  * @returns {Any} The wrapped content. 
  */
-Handlebars.registerHelper("viewModel", function(parent, id, viewModel, viewModelTypeName) {
+Handlebars.registerHelper("withViewModel", function(parent, id, viewModel, viewModelTypeName) {
   const context = arguments[arguments.length - 1];
   let vm = undefined;
 
-  if (viewModel !== undefined) {
+  if (viewModel !== undefined && isObject(viewModel)) {
     vm = viewModel;
   } else if (parent !== undefined && id !== undefined) {
     // Try to fetch an existing instance of the view model. 

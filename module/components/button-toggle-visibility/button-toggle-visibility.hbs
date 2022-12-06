@@ -15,7 +15,7 @@ localizableTitle: {String | undefined}
 visGroup: {String | undefined}
 toggleSelf: {Boolean | undefined}
 --}}
-{{#viewModel parent id viewModel "ButtonToggleVisibilityViewModel" target callback callbackData localizableTitle visGroup toggleSelf}}
+{{#withViewModel parent id viewModel "ButtonToggleVisibilityViewModel" target callback callbackData localizableTitle visGroup toggleSelf}}
 <span class="component-button-toggle-visibility {{#if fill}}fill-button-light{{else}}square-button-light{{/if}}{{#if (not isEditable)}} disabled{{/if}}{{#if ../cssClass}} {{../cssClass}}{{else}} font-size-default{{/if}}"
   {{#if toggleSelf}}
   data-vis-group="{{visGroup}}"
@@ -28,4 +28,4 @@ toggleSelf: {Boolean | undefined}
     {{> @partial-block }}
   </a>
 </span>
-{{/viewModel}}
+{{/withViewModel}}

@@ -16,8 +16,8 @@ propertyPath: {String | undefined}
 chatTitle: {String | undefined}
 actor: {Actor | undefined}
 --}}
-{{#viewModel parent id viewModel "ButtonSendToChatViewModel" target callback callbackData localizableTitlepropertyPath chatTitle actor}}
+{{#withViewModel parent id viewModel "ButtonSendToChatViewModel" target callback callbackData localizableTitlepropertyPath chatTitle actor}}
 {{#> button viewModel=this fill=../fill cssClass=../cssClass}}
   <i class="fas fa-comments"></i>
 {{/button}}
-{{/viewModel}}
+{{/withViewModel}}

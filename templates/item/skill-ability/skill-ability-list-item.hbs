@@ -20,7 +20,7 @@ cssClass: {undefined | String}
       </h4>
     </div>
     {{!-- Context Menu --}}
-    {{> buttonContextMenu viewModel=viewModel.vmBtnContextMenu }}
+    {{> buttonContextMenu parent=viewModel id="vmBtnContextMenu" viewModel="_" menuItems=viewModel.contextMenuItems}}
     {{!-- Delete --}}
     {{> buttonDelete viewModel=viewModel.vmBtnDelete }}
   </div>

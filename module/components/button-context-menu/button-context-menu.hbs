@@ -14,8 +14,8 @@ callbackData: {Any | undefined}
 localizableTitle: {String | undefined}
 menuItems: {Array<ContextMenuItem> | undefined}
 --}}
-{{#viewModel parent id viewModel "ButtonContextMenuViewModel" target callback callbackData localizableTitle menuItems}}
+{{#withViewModel parent id viewModel "ButtonContextMenuViewModel" target callback callbackData localizableTitle menuItems}}
 {{#> button viewModel=this fill=../fill cssClass=../cssClass}}
   <i class="fas fa-bars"></i>
 {{/button}}
-{{/viewModel}}
+{{/withViewModel}}

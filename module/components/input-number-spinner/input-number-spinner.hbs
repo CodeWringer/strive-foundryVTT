@@ -14,7 +14,7 @@ min: {Number | undefined}
 max: {Number | undefined}
 step: {Number | undefined}
 --}}
-{{#viewModel parent id viewModel "InputNumberSpinnerViewModel" propertyOwner propertyPath localizableTitle min max step}}
+{{#withViewModel parent id viewModel "InputNumberSpinnerViewModel" propertyOwner propertyPath localizableTitle min max step}}
 {{#if isEditable}}
 <span class="spinner-container component-input-number-spinner">
   <input 
@@ -49,4 +49,4 @@ step: {Number | undefined}
     {{value}}
   </div>
 {{/if}}
-{{/viewModel}}
+{{/withViewModel}}

@@ -12,7 +12,7 @@ propertyPath: {String | undefined}
 localizableTitle: {String | undefined}
 options: {Array<ChoiceOption> | undefined}
 --}}
-{{#viewModel parent id viewModel "InputRadioButtonGroupViewModel" propertyOwner propertyPath localizableTitle options}}
+{{#withViewModel parent id viewModel "InputRadioButtonGroupViewModel" propertyOwner propertyPath localizableTitle options}}
 <div 
   type="hidden"
   class="custom-system-edit radio-button-group flex flex-row component-input-radio-button-group{{#if ../cssClass}} {{../cssClass}}{{/if}}" 
@@ -55,4 +55,4 @@ options: {Array<ChoiceOption> | undefined}
     </div>
   {{/each}}
 </div>
-{{/viewModel}}
+{{/withViewModel}}

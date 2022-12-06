@@ -12,7 +12,7 @@ propertyPath: {String | undefined}
 localizableTitle: {String | undefined}
 options: {Array<ChoiceOption> | undefined}
 --}}
-{{#viewModel parent id viewModel "InputDropDownViewModel" propertyOwner propertyPath localizableTitle options}}
+{{#withViewModel parent id viewModel "InputDropDownViewModel" propertyOwner propertyPath localizableTitle options}}
 {{#if isEditable}}
   <select 
     class="custom-system-edit drop-down width-fill component-input-dropdown {{../cssClass}}"
@@ -55,4 +55,4 @@ options: {Array<ChoiceOption> | undefined}
     {{localizedValue}}
   </div>
 {{/if}}
-{{/viewModel}}
+{{/withViewModel}}

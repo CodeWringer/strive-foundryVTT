@@ -11,11 +11,11 @@ propertyOwner: {Object | undefined}
 propertyPath: {String | undefined}
 localizableTitle: {String | undefined}
 --}}
-{{#viewModel parent id viewModel "InputImageViewModel" propertyOwner propertyPath localizableTitle}}
+{{#withViewModel parent id viewModel "InputImageViewModel" propertyOwner propertyPath localizableTitle}}
 <img 
   class="component-input-image{{#if isEditable}}{{else}}disabled{{/if}} {{../cssClass}}" 
   id="{{id}}" 
   src="{{value}}" 
   title="{{localizedTitle}}"
   />
-{{/viewModel}}
+{{/withViewModel}}

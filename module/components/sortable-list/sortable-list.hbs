@@ -12,7 +12,7 @@ listItemViewModels: {Array<ViewModel></ViewModel> | undefined}
 listItemTemplate: {String | undefined}
 vmBtnAddItem: {ViewModel | undefined}
 --}}
-{{#viewModel parent id viewModel "SortableListViewModel" indexDataSource listItemViewModels listItemTemplate vmBtnAddItem}}
+{{#withViewModel parent id viewModel "SortableListViewModel" indexDataSource listItemViewModels listItemTemplate vmBtnAddItem}}
 <ol class="unstyled-list alternating-rows{{#if ../cssClass}} {{../cssClass}}{{/if}}"
     id={{id}}
   >
@@ -51,4 +51,4 @@ vmBtnAddItem: {ViewModel | undefined}
     </div>
   </li>
 </ol>
-{{/viewModel}}
+{{/withViewModel}}

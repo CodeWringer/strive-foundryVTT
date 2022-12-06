@@ -10,7 +10,7 @@ id: {String | undefined}
 propertyOwner: {Object | undefined}
 propertyPath: {String | undefined}
 --}}
-{{#viewModel parent id viewModel "InputRichTextViewModel" propertyOwner propertyPath}}
+{{#withViewModel parent id viewModel "InputRichTextViewModel" propertyOwner propertyPath}}
 <div
   class="custom-system-edit component-rich-text-container{{#if ../cssClass}} {{../cssClass}}{{/if}}" 
   id="{{id}}" 
@@ -21,4 +21,4 @@ propertyPath: {String | undefined}
   <div class="component-rich-text hidden"></div>
   <div class="component-rich-text-read-only">{{{enrichedHtmlValue}}}</div>
 </div>
-{{/viewModel}}
+{{/withViewModel}}

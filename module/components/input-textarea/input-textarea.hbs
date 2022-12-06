@@ -13,7 +13,7 @@ localizableTitle: {String | undefined}
 placeholder: {String | undefined}
 spellcheck: {Boolean | undefined}
 --}}
-{{#viewModel parent id viewModel "InputTextareaViewModel" propertyOwner propertyPath localizableTitle placeholder spellcheck}}
+{{#withViewModel parent id viewModel "InputTextareaViewModel" propertyOwner propertyPath localizableTitle placeholder spellcheck}}
 {{#if isEditable}}
   <div style="display: grid;">
     <textarea 
@@ -42,4 +42,4 @@ spellcheck: {Boolean | undefined}
     {{localizedValue}}
   </div>
 {{/if}}
-{{/viewModel}}
+{{/withViewModel}}

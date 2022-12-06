@@ -292,90 +292,88 @@ export default class SkillAbilityListItemViewModel extends SheetViewModel {
       propertyOwner: skillAbility,
       propertyPath: "description",
     });
-    this.vmBtnContextMenu = this.createVmBtnContextMenu({
-      id: "vmBtnContextMenu",
-      menuItems: [
-        // Toggle obstacle
-        {
-          name: game.i18n.localize("ambersteel.roll.obstacle.label"),
-          icon: '<i class="fas fa-check"></i>',
-          condition: () => { return thiz.skillAbility.obstacle !== undefined; },
-          callback: () => { thiz.skillAbility.updateProperty("obstacle", undefined); },
+
+    this.contextMenuItems = [
+      // Toggle obstacle
+      {
+        name: game.i18n.localize("ambersteel.roll.obstacle.label"),
+        icon: '<i class="fas fa-check"></i>',
+        condition: () => { return thiz.skillAbility.obstacle !== undefined; },
+        callback: () => { thiz.skillAbility.updateProperty("obstacle", undefined); },
+      },
+      {
+        name: game.i18n.localize("ambersteel.roll.obstacle.label"),
+        icon: '',
+        condition: () => { return thiz.skillAbility.obstacle === undefined; },
+        callback: () => { thiz.skillAbility.updateProperty("obstacle", ""); },
+      },
+      // Toggle opposed by
+      {
+        name: game.i18n.localize("ambersteel.roll.obstacle.opposedBy.label"),
+        icon: '<i class="fas fa-check"></i>',
+        condition: () => { return thiz.skillAbility.opposedBy !== undefined; },
+        callback: () => { thiz.skillAbility.updateProperty("opposedBy", undefined); },
+      },
+      {
+        name: game.i18n.localize("ambersteel.roll.obstacle.opposedBy.label"),
+        icon: '',
+        condition: () => { return thiz.skillAbility.opposedBy === undefined; },
+        callback: () => { thiz.skillAbility.updateProperty("opposedBy", ""); },
+      },
+      // Toggle distance
+      {
+        name: game.i18n.localize("ambersteel.character.skill.ability.distance.label"),
+        icon: '<i class="fas fa-check"></i>',
+        condition: () => { return thiz.skillAbility.distance !== undefined; },
+        callback: () => { thiz.skillAbility.updateProperty("distance", undefined); },
+      },
+      {
+        name: game.i18n.localize("ambersteel.character.skill.ability.distance.label"),
+        icon: '',
+        condition: () => { return thiz.skillAbility.distance === undefined; },
+        callback: () => { thiz.skillAbility.updateProperty("distance", ""); },
+      },
+      // Toggle attack type
+      {
+        name: game.i18n.localize("ambersteel.attackType.label"),
+        icon: '<i class="fas fa-check"></i>',
+        condition: () => { return thiz.skillAbility.attackType !== undefined; },
+        callback: () => { thiz.skillAbility.updateProperty("attackType", undefined); },
+      },
+      {
+        name: game.i18n.localize("ambersteel.attackType.label"),
+        icon: '',
+        condition: () => { return thiz.skillAbility.attackType === undefined; },
+        callback: () => { thiz.skillAbility.updateProperty("attackType", ATTACK_TYPES.none.name); },
+      },
+      // Toggle condition
+      {
+        name: game.i18n.localize("ambersteel.character.skill.ability.condition.label"),
+        icon: '<i class="fas fa-check"></i>',
+        condition: () => { return thiz.skillAbility.condition !== undefined; },
+        callback: () => { thiz.skillAbility.updateProperty("condition", undefined); },
+      },
+      {
+        name: game.i18n.localize("ambersteel.character.skill.ability.condition.label"),
+        icon: '',
+        condition: () => { return thiz.skillAbility.condition === undefined; },
+        callback: () => { thiz.skillAbility.updateProperty("condition", ""); },
+      },
+      // Add damage
+      {
+        name: game.i18n.localize("ambersteel.character.skill.ability.damage.add"),
+        icon: '<i class="fas fa-plus"></i>',
+        condition: () => { return true; },
+        callback: () => {
+          const damage = thiz.skillAbility.damage ?? [];
+          damage.push(new DamageAndType({
+            damage: "",
+            damageType: CONFIG.ambersteel.damageTypes.none.name,
+          }));
+          thiz.skillAbility.updateProperty("damage", damage);
         },
-        {
-          name: game.i18n.localize("ambersteel.roll.obstacle.label"),
-          icon: '',
-          condition: () => { return thiz.skillAbility.obstacle === undefined; },
-          callback: () => { thiz.skillAbility.updateProperty("obstacle", ""); },
-        },
-        // Toggle opposed by
-        {
-          name: game.i18n.localize("ambersteel.roll.obstacle.opposedBy.label"),
-          icon: '<i class="fas fa-check"></i>',
-          condition: () => { return thiz.skillAbility.opposedBy !== undefined; },
-          callback: () => { thiz.skillAbility.updateProperty("opposedBy", undefined); },
-        },
-        {
-          name: game.i18n.localize("ambersteel.roll.obstacle.opposedBy.label"),
-          icon: '',
-          condition: () => { return thiz.skillAbility.opposedBy === undefined; },
-          callback: () => { thiz.skillAbility.updateProperty("opposedBy", ""); },
-        },
-        // Toggle distance
-        {
-          name: game.i18n.localize("ambersteel.character.skill.ability.distance.label"),
-          icon: '<i class="fas fa-check"></i>',
-          condition: () => { return thiz.skillAbility.distance !== undefined; },
-          callback: () => { thiz.skillAbility.updateProperty("distance", undefined); },
-        },
-        {
-          name: game.i18n.localize("ambersteel.character.skill.ability.distance.label"),
-          icon: '',
-          condition: () => { return thiz.skillAbility.distance === undefined; },
-          callback: () => { thiz.skillAbility.updateProperty("distance", ""); },
-        },
-        // Toggle attack type
-        {
-          name: game.i18n.localize("ambersteel.attackType.label"),
-          icon: '<i class="fas fa-check"></i>',
-          condition: () => { return thiz.skillAbility.attackType !== undefined; },
-          callback: () => { thiz.skillAbility.updateProperty("attackType", undefined); },
-        },
-        {
-          name: game.i18n.localize("ambersteel.attackType.label"),
-          icon: '',
-          condition: () => { return thiz.skillAbility.attackType === undefined; },
-          callback: () => { thiz.skillAbility.updateProperty("attackType", ATTACK_TYPES.none.name); },
-        },
-        // Toggle condition
-        {
-          name: game.i18n.localize("ambersteel.character.skill.ability.condition.label"),
-          icon: '<i class="fas fa-check"></i>',
-          condition: () => { return thiz.skillAbility.condition !== undefined; },
-          callback: () => { thiz.skillAbility.updateProperty("condition", undefined); },
-        },
-        {
-          name: game.i18n.localize("ambersteel.character.skill.ability.condition.label"),
-          icon: '',
-          condition: () => { return thiz.skillAbility.condition === undefined; },
-          callback: () => { thiz.skillAbility.updateProperty("condition", ""); },
-        },
-        // Add damage
-        {
-          name: game.i18n.localize("ambersteel.character.skill.ability.damage.add"),
-          icon: '<i class="fas fa-plus"></i>',
-          condition: () => { return true; },
-          callback: () => {
-            const damage = thiz.skillAbility.damage ?? [];
-            damage.push(new DamageAndType({
-              damage: "",
-              damageType: CONFIG.ambersteel.damageTypes.none.name,
-            }));
-            thiz.skillAbility.updateProperty("damage", damage);
-          },
-        },
-      ],
-    });
+      },
+    ];
 
     for (let i = 0; i < skillAbility.damage.length; i++) {
       const vm = new DamageAndTypeViewModel({

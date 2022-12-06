@@ -16,8 +16,8 @@ propertyPath: {String | undefined}
 withDialog: {Boolean | undefined}
 localizableDialogTitle: {String | undefined}
 --}}
-{{#viewModel parent id viewModel "ButtonDeleteViewModel" target callback callbackData localizableTitle propertyPath withDialog localizableDialogTitle}}
+{{#withViewModel parent id viewModel "ButtonDeleteViewModel" target callback callbackData localizableTitle propertyPath withDialog localizableDialogTitle}}
 {{#> button viewModel=this fill=../fill cssClass=../cssClass}}
   <i class="fas fa-trash"></i>
 {{/button}}
-{{/viewModel}}
+{{/withViewModel}}

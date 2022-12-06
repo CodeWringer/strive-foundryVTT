@@ -13,7 +13,7 @@ callbackData: {Any | undefined}
 localizableTitle: {String | undefined}
 propertyPath: {String | undefined}
 --}}
-{{#viewModel parent id viewModel "ButtonToggleViewModel" target callback callbackData localizableTitle propertyPath}}
+{{#withViewModel parent id viewModel "ButtonToggleViewModel" target callback callbackData localizableTitle propertyPath}}
 <button 
   class="custom-system-button component-button-toggle {{#if value}}active {{/if}}{{#if isEditable}}{{else}}disabled {{/if}}{{../cssClass}}" 
   title="{{localizedTitle}}" 
@@ -21,4 +21,4 @@ propertyPath: {String | undefined}
 >
   <span class="component-button-toggle-knob {{#if value}}active{{/if}}"></span>
 </button>
-{{/viewModel}}
+{{/withViewModel}}

@@ -11,7 +11,7 @@ propertyOwner: {Object | undefined}
 propertyPath: {String | undefined}
 localizableTitle: {String | undefined}
 --}}
-{{#viewModel parent id viewModel "InputTextFieldExperimentViewModel" propertyOwner propertyPath localizableTitle}}
+{{#withViewModel parent id viewModel "InputTextFieldExperimentViewModel" propertyOwner propertyPath localizableTitle}}
 {{#if isEditable}}
   <input 
     class="custom-system-edit input-width-override component-input-textfield {{../cssClass}}"
@@ -33,4 +33,4 @@ localizableTitle: {String | undefined}
     {{localizedValue}}
   </div>
 {{/if}}
-{{/viewModel}}
+{{/withViewModel}}
