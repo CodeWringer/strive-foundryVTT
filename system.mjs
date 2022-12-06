@@ -9,7 +9,7 @@ import { VISIBILITY_MODES } from "./constants/visibility-modes.mjs";
 import { INJURY_STATES } from "./constants/injury-states.mjs";
 import { ILLNESS_STATES } from "./constants/illness-states.mjs";
 // Import main config.
-import { ambersteel as ambersteelConfig } from "./config.js"
+import { ambersteel as ambersteelConfig } from "./business/config.js"
 import * as DialogUtil from "./utils/dialog-utility.mjs";
 import MigratorInitiator from "./migration/migrator-initiator.mjs";
 import MigratorDialog from "./migration/presentation/migrator-dialog.mjs";
@@ -335,7 +335,7 @@ Handlebars.registerHelper('ifThenElse', function(condition, thenValue, elseValue
 });
 
 /* -------------------------------------------- */
-/*  Hooks                                       */
+/*  Other Hooks                                 */
 /* -------------------------------------------- */
 
 Hooks.once("ready", async function() {
@@ -421,9 +421,6 @@ Hooks.on("renderChatMessage", async function(message, html, data) {
 
   vm.activateListeners(html, vm.isOwner, vm.isEditable);
 });
-
-// Hooks.on("preDeleteChatMessage", async function(args) {
-// });
 
 Hooks.on("deleteChatMessage", async function(args) {
   const deletedContent = args.data.content;

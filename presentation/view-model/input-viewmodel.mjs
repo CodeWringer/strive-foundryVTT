@@ -1,4 +1,4 @@
-import ViewModel from "./viewmodel.mjs";
+import ViewModel from "./view-model.mjs";
 import { setNestedPropertyValue, getNestedPropertyValue } from "../utils/property-utility.mjs";
 import { getElementValue } from "../utils/sheet-utility.mjs";
 import { validateOrThrow } from "../utils/validation-utility.mjs";

@@ -1,14 +1,14 @@
-import { getElementValue } from "./sheet-utility.mjs";
-import * as ChatUtil from "./chat-utility.mjs";
-import { showDialog } from './dialog-utility.mjs';
-import { validateOrThrow } from "./validation-utility.mjs";
-import DicePoolResult from "../dto/dice-pool-result.mjs";
-import RollDataQueryDialogResult from "../dto/roll-query-dialog-result.mjs";
-import { TEMPLATES } from "../templatePreloader.mjs";
-import { DiceOutcomeTypes } from "../dto/dice-outcome-types.mjs";
-import Ruleset from "../ruleset.mjs";
-import { SOUNDS_CONSTANTS } from "../constants/sounds.mjs";
+import { SOUNDS_CONSTANTS } from "../../presentation/audio/sounds.mjs";
+import * as ChatUtil from "../../presentation/chat/chat-utility.mjs";
+import * as DialogUtil from '../../presentation/dialog/dialog-utility.mjs';
+import RollDataQueryDialogResult from "../../presentation/dialog/roll-query-dialog-result.mjs";
+import { TEMPLATES } from "../../presentation/template/templatePreloader.mjs";
+import * as SheetUtil from "../../presentation/util/sheet-utility.mjs";
+import Ruleset from "../ruleset/ruleset.mjs";
 import GetShowFancyFontUseCase from "../use-case/get-show-fancy-font-use-case.mjs";
+import * as ValidationUtil from "../util/validation-utility.mjs";
+import { DiceOutcomeTypes } from "./dice-outcome-types.mjs";
+import DicePoolResult from "./dice-pool-result.mjs";
 
 export const LOCALIZABLE_OBSTACLE_ABBREVIATION = "ambersteel.roll.obstacle.abbreviation";
 
@@ -17,7 +17,7 @@ export const LOCALIZABLE_OBSTACLE_ABBREVIATION = "ambersteel.roll.obstacle.abbre
  * @param {Number} ops.numberOfDice The number of dice to roll. 
  * @param {Number} ops.obstacle The obstacle to roll against. 
  * @param {Number} ops.bonusDice An additional number of dice to roll. 
- * @returns {DicePoolResult} The results of the roll
+ * @returns {DicePoolResultResult} The results of the roll
  */
 export function rollDicePool(ops = {}) {
   ops = {
@@ -26,7 +26,7 @@ export function rollDicePool(ops = {}) {
     bonusDice: 0,
     ...ops
   };
-  validateOrThrow(ops, ["numberOfDice", "obstacle", "bonusDice"]);
+  ValidationUtil.validateOrThrow(ops, ["numberOfDice", "obstacle", "bonusDice"]);
 
   // Get number of dice to roll. 
   const numberOfDice = ops.numberOfDice + ops.bonusDice;
@@ -100,7 +100,7 @@ export async function sendDiceResultToChat(args = {}) {
     visibilityMode: CONFIG.ambersteel.visibilityModes.public,
     ...args
   };
-  validateOrThrow(args, ["rollResult"]);
+  ValidationUtil.validateOrThrow(args, ["rollResult"]);
 
   // Convenience variable. 
   const rollResult = args.rollResult;
@@ -160,15 +160,15 @@ export async function queryRollData() {
   };
 
   return new Promise(async (resolve, reject) => {
-    const result = await showDialog({
+    const result = await DialogUtil.showDialog({
       dialogTemplate: TEMPLATES.DIALOG_ROLL, 
       localizedTitle: game.i18n.localize("ambersteel.roll.query")
     }, dialogData);
     
-    const obstacle = parseInt(getElementValue(result.html.find(".obstacle")[0]));
-    const bonusDice = parseInt(getElementValue(result.html.find(".bonus-dice")[0]));
+    const obstacle = parseInt(SheetUtil.getElementValue(result.html.find(".obstacle")[0]));
+    const bonusDice = parseInt(SheetUtil.getElementValue(result.html.find(".bonus-dice")[0]));
 
-    const visibilityModeKey = parseInt(getElementValue(result.html.find(".visibilityMode")[0]));
+    const visibilityModeKey = parseInt(SheetUtil.getElementValue(result.html.find(".visibilityMode")[0]));
     const visibilityMode = visibilityModes[visibilityModeKey];
 
     resolve(new RollDataQueryDialogResult({
