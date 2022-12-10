@@ -1,3 +1,5 @@
+import { DAMAGE_TYPES } from "../../../../business/ruleset/damage-types.mjs";
+import { ATTACK_TYPES } from "../../../../business/ruleset/skill/attack-types.mjs";
 import DamageAndType from "../../../../business/ruleset/skill/damage-and-type.mjs";
 import { getNestedPropertyValue } from "../../../../business/util/property-utility.mjs";
 import { isNumber, validateOrThrow } from "../../../../business/util/validation-utility.mjs";
@@ -5,8 +7,6 @@ import { SOUNDS_CONSTANTS } from "../../../audio/sounds.mjs";
 import * as ChatUtil from "../../../chat/chat-utility.mjs";
 import ButtonViewModel from "../../../component/button/button-viewmodel.mjs";
 import InfoBubble from "../../../component/info-bubble/info-bubble.mjs";
-import { ATTACK_TYPES } from "../../../module/constants/attack-types.mjs";
-import { DAMAGE_TYPES } from "../../../module/constants/damage-types.mjs";
 import SheetViewModel from "../../../view-model/sheet-view-model.mjs";
 import { TEMPLATES } from "../../templatePreloader.mjs";
 

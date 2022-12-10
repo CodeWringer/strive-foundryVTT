@@ -3,13 +3,13 @@ import GmNotesViewModel from "../../component/section-gm-notes/section-gm-notes-
 import SheetViewModel from "../../view-model/sheet-view-model.mjs"
 import ViewModel from "../../view-model/view-model.mjs"
 import { TEMPLATES } from "../templatePreloader.mjs"
-import ActorAssetsViewModel from "./parts/actor-assets-viewmodel.mjs"
-import ActorAttributesViewModel from "./parts/actor-attributes-viewmodel.mjs"
-import ActorBeliefsFateViewModel from "./parts/actor-beliefs-fate-viewmodel.mjs"
-import ActorBiographyViewModel from "./parts/actor-biography-viewmodel.mjs"
-import ActorHealthViewModel from "./parts/actor-health-viewmodel.mjs"
-import ActorPersonalsViewModel from "./parts/actor-personals-viewmodel.mjs"
-import ActorSkillsViewModel from "./parts/actor-skills-viewmodel.mjs"
+import ActorAssetsViewModel from "./part/actor-assets-viewmodel.mjs"
+import ActorAttributesViewModel from "./part/actor-attributes-viewmodel.mjs"
+import ActorBeliefsFateViewModel from "./part/actor-beliefs-fate-viewmodel.mjs"
+import ActorBiographyViewModel from "./part/actor-biography-viewmodel.mjs"
+import ActorHealthViewModel from "./part/actor-health-viewmodel.mjs"
+import ActorPersonalsViewModel from "./part/actor-personals-viewmodel.mjs"
+import ActorSkillsViewModel from "./part/actor-skills-viewmodel.mjs"
 
 export default class ActorSheetViewModel extends SheetViewModel {
   /** @override */

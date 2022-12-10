@@ -1,13 +1,13 @@
-const PATH_TEXTURE_SLOT = "systems/ambersteel/images/box.png";
-const PATH_BULK = "systems/ambersteel/images/weight-hanging-solid.svg";
-const PATH_QUANTITY = "systems/ambersteel/images/hashtag-solid.svg";
-const PATH_SEND_TO_CHAT = "systems/ambersteel/images/comments-solid.svg";
-const PATH_DELETE = "systems/ambersteel/images/trash-solid.svg";
-const PATH_OPEN_SHEET = "systems/ambersteel/images/external-link-alt-solid.svg";
-const PATH_CROSS = "systems/ambersteel/images/times-circle-solid.svg";
-const PATH_ARROW = "systems/ambersteel/images/caret-up-solid.svg";
-const PATH_HAND_HOLD_ITEM_UP = "systems/ambersteel/images/hand-holding-box-up-solid.svg";
-const PATH_HAND_HOLD_ITEM_DOWN = "systems/ambersteel/images/hand-holding-box-down-solid.svg";
+const PATH_TEXTURE_SLOT = "systems/ambersteel/presentation/image/box.png";
+const PATH_BULK = "systems/ambersteel/presentation/image/weight-hanging-solid.svg";
+const PATH_QUANTITY = "systems/ambersteel/presentation/image/hashtag-solid.svg";
+const PATH_SEND_TO_CHAT = "systems/ambersteel/presentation/image/comments-solid.svg";
+const PATH_DELETE = "systems/ambersteel/presentation/image/trash-solid.svg";
+const PATH_OPEN_SHEET = "systems/ambersteel/presentation/image/external-link-alt-solid.svg";
+const PATH_CROSS = "systems/ambersteel/presentation/image/times-circle-solid.svg";
+const PATH_ARROW = "systems/ambersteel/presentation/image/caret-up-solid.svg";
+const PATH_HAND_HOLD_ITEM_UP = "systems/ambersteel/presentation/image/hand-holding-box-up-solid.svg";
+const PATH_HAND_HOLD_ITEM_DOWN = "systems/ambersteel/presentation/image/hand-holding-box-down-solid.svg";
 
 const LOADER = new PIXI.Loader();
 export const TEXTURES = {};

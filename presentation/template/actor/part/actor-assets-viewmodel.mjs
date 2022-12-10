@@ -87,7 +87,7 @@ export default class ActorAssetsViewModel extends SheetViewModel {
         listName: "property",
       }),
       listItemViewModels: this.itemViewModels,
-      listItemTemplate: "systems/ambersteel/template/item/item/item-list-item.hbs",
+      listItemTemplate: "systems/ambersteel/presentation/template/item/item/item-list-item.hbs",
       vmBtnAddItem: thiz.createVmBtnAdd({
         id: "vmBtnAddItem",
         target: thiz.actor,

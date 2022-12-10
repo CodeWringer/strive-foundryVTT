@@ -1,5 +1,5 @@
 export const ambersteelConfig = {
-  weaponTypes = {
+  weaponTypes: {
     unarmed: {
       name: "unarmed",
       localizableName: "ambersteel.character.asset.type.weapon.unarmed"
@@ -69,7 +69,7 @@ export const ambersteelConfig = {
       localizableName: "ambersteel.character.asset.type.weapon.firearm"
     }
   },
-  armorTypes = {
+  armorTypes: {
     light: {
       name: "light",
       localizableName: "ambersteel.character.asset.type.armor.light"
@@ -83,7 +83,7 @@ export const ambersteelConfig = {
       localizableName: "ambersteel.character.asset.type.armor.heavy"
     }
   },
-  shieldTypes = {
+  shieldTypes: {
     buckler: {
       name: "buckler",
       localizableName: "ambersteel.character.asset.type.shield.buckler"
@@ -101,7 +101,7 @@ export const ambersteelConfig = {
       localizableName: "ambersteel.character.asset.type.shield.kiteShield"
     }
   },
-  damageTypes = {
+  damageTypes: {
     none: {
       name: "none",
       localizableName: "ambersteel.none.label",
@@ -148,7 +148,7 @@ export const ambersteelConfig = {
       localizableAbbreviation: "ambersteel.damageType.acid.abbreviation"
     },
   },
-  attackTypes = {
+  attackTypes: {
     none: {
       name: "none",
       localizableName: "ambersteel.none.label",
@@ -170,7 +170,7 @@ export const ambersteelConfig = {
       localizableAbbreviation: "ambersteel.attackType.multipleSingleTarget.abbreviation"
     }
   },
-  character = {
+  character: {
     attributes: {
       agility: {
         name: "agility",
@@ -244,42 +244,11 @@ export const ambersteelConfig = {
       beliefs: "ambersteel.character.beliefSystem.fateSystem.belief.plural",
       instincts: "ambersteel.character.beliefSystem.fateSystem.instinct.plural"
     },
-    attributeGroups = {
-      physical: {
-        name: "physical",
-        localizableName: "ambersteel.character.attributeGroup.physical.label",
-        attributes: {
-          agility: ambersteel.character.attributes.agility,
-          endurance: ambersteel.character.attributes.endurance,
-          perception: ambersteel.character.attributes.perception,
-          strength: ambersteel.character.attributes.strength,
-          toughness: ambersteel.character.attributes.toughness,
-        }
-      },
-      mental: {
-        name: "mental",
-        localizableName: "ambersteel.character.attributeGroup.mental.label",
-        attributes: {
-          intelligence: ambersteel.character.attributes.intelligence,
-          wisdom: ambersteel.character.attributes.wisdom,
-          arcana: ambersteel.character.attributes.arcana,
-        }
-      },
-      social: {
-        name: "social",
-        localizableName: "ambersteel.character.attributeGroup.social.label",
-        attributes: {
-          empathy: ambersteel.character.attributes.empathy,
-          oratory: ambersteel.character.attributes.oratory,
-          willpower: ambersteel.character.attributes.willpower,
-        }
-      }
-    }
   },
-  fateSystem = {
+  fateSystem: {
     maxCards: 5
   },
-  visibilityModes = {
+  visibilityModes: {
     public: {
       name: "public",
       localizableName: "ambersteel.general.messageVisibility.public.label"
@@ -293,7 +262,7 @@ export const ambersteelConfig = {
       localizableName: "ambersteel.general.messageVisibility.gm.label"
     }
   },
-  injuryStates = {
+  injuryStates: {
     active: {
       name: "active",
       localizableName: "ambersteel.character.health.injury.state.active.label",
@@ -315,7 +284,7 @@ export const ambersteelConfig = {
       icon: "fas fa-crutch"
     }
   },
-  illnessStates = {
+  illnessStates: {
     active: {
       name: "active",
       localizableName: "ambersteel.character.health.illness.state.active.label",
@@ -327,11 +296,11 @@ export const ambersteelConfig = {
       icon: "fas fa-mortar-pestle"
     }
   },
-  itemOrientations = {
+  itemOrientations: {
     vertical: 0,
     horizontal: 1
   },
-  rollTypes = {
+  rollTypes: {
     /**
      * A generic roll, using Foundry's default system. 
      */

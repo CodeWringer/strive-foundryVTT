@@ -142,7 +142,7 @@ export default class SkillAbilityTableViewModel extends SheetViewModel {
         listName: "abilities",
       }),
       listItemViewModels: this.abilities,
-      listItemTemplate: thiz.oneColumn === true ? "systems/ambersteel/template/item/skill-ability/skill-ability-chat-message.hbs" : "systems/ambersteel/template/item/skill-ability/skill-ability-list-item.hbs",
+      listItemTemplate: thiz.oneColumn === true ? "systems/ambersteel/presentation/template/item/skill-ability/skill-ability-chat-message.hbs" : "systems/ambersteel/presentation/template/item/skill-ability/skill-ability-list-item.hbs",
       vmBtnAddItem: thiz.createVmBtnAdd({
         id: "vmBtnAdd",
         target: thiz.item,

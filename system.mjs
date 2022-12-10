@@ -1,10 +1,10 @@
 // Ruleset
 import { ATTRIBUTES } from "./business/ruleset/attributes.mjs";
 import { DAMAGE_TYPES } from "./business/ruleset/damage-types.mjs";
-import { ATTACK_TYPES } from "./business/ruleset/attack-types.mjs";
-import { SHIELD_TYPES } from "./business/ruleset/shield-types.mjs";
-import { ARMOR_TYPES } from "./business/ruleset/armor-types.mjs";
-import { WEAPON_TYPES } from "./business/ruleset/weapon-types.mjs";
+import { ATTACK_TYPES } from "./business/ruleset/skill/attack-types.mjs";
+import { SHIELD_TYPES } from "./business/ruleset/asset/shield-types.mjs";
+import { ARMOR_TYPES } from "./business/ruleset/asset/armor-types.mjs";
+import { WEAPON_TYPES } from "./business/ruleset/asset/weapon-types.mjs";
 import { INJURY_STATES } from "./business/ruleset/injury-states.mjs";
 import { ILLNESS_STATES } from "./business/ruleset/illness-states.mjs";
 import Ruleset from "./business/ruleset/ruleset.mjs";
@@ -55,19 +55,19 @@ import './presentation/component/button-send-to-chat/button-send-to-chat-viewmod
 import './presentation/component/button-toggle-visibility/button-toggle-visibility-viewmodel.mjs';
 import './presentation/component/button-take-item/button-take-item-viewmodel.mjs';
 import './presentation/component/sortable-list/sortable-list-viewmodel.mjs';
+import './presentation/component/section-gm-notes/section-gm-notes-viewmodel.mjs';
 // Import ui view models. 
-import '../presentation/template/gm-notes-viewmodel.mjs';
-import '../presentation/template/actor/actor-sheet-viewmodel.mjs';
-import '../presentation/template/actor/component/component-attribute-table-viewmodel.mjs';
-import '../presentation/template/actor/part/actor-assets-viewmodel.mjs';
-import '../presentation/template/actor/part/actor-attributes-viewmodel.mjs';
-import '../presentation/template/actor/part/actor-beliefs-fate-viewmodel.mjs';
-import '../presentation/template/actor/part/actor-beliefs-viewmodel.mjs';
-import '../presentation/template/actor/part/actor-biography-viewmodel.mjs';
-import '../presentation/template/actor/part/actor-fate-viewmodel.mjs';
-import '../presentation/template/actor/part/actor-health-viewmodel.mjs';
-import '../presentation/template/actor/part/actor-personals-viewmodel.mjs';
-import '../presentation/template/actor/part/actor-skills-viewmodel.mjs';
+import './presentation/template/actor/actor-sheet-viewmodel.mjs';
+import './presentation/template/actor/component/component-attribute-table-viewmodel.mjs';
+import './presentation/template/actor/part/actor-assets-viewmodel.mjs';
+import './presentation/template/actor/part/actor-attributes-viewmodel.mjs';
+import './presentation/template/actor/part/actor-beliefs-fate-viewmodel.mjs';
+import './presentation/template/actor/part/actor-beliefs-viewmodel.mjs';
+import './presentation/template/actor/part/actor-biography-viewmodel.mjs';
+import './presentation/template/actor/part/actor-fate-viewmodel.mjs';
+import './presentation/template/actor/part/actor-health-viewmodel.mjs';
+import './presentation/template/actor/part/actor-personals-viewmodel.mjs';
+import './presentation/template/actor/part/actor-skills-viewmodel.mjs';
 
 /* -------------------------------------------- */
 /*  Init Hook                                   */
