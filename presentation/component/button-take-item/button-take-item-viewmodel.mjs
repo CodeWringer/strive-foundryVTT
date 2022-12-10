@@ -64,9 +64,11 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
   /**
    * @override
    * @see {ButtonViewModel.onClick}
-   * @async
+   * 
    * @throws {Error} NullPointerException - Thrown, if the actor to pick up the item could not be found. 
    * @throws {Error} NullPointerException - Thrown, if the item could not be found/wasn't defined. 
+   * 
+   * @async
    */
   async onClick(html, isOwner, isEditable) {
     if (isEditable !== true) return;
@@ -89,7 +91,7 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
     if (parent !== undefined && parent !== null) { // The item is embedded on an actor. 
       if (this.contextType === contextTypes.chatMessage) {
         // Determine target actor. 
-        const targetActor = this._getTargetActor();
+        const targetActor = await this._getTargetActor();
 
         // Determine source actor. 
         const sourceActor = parent;
@@ -123,13 +125,13 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
       }
     } else if (containingPack !== undefined && containingPack !== null) { // The item is embedded in a compendium. 
       // Determine target actor. 
-      const targetActor = this._getTargetActor();
+      const targetActor = await this._getTargetActor();
       
       // Add copy to target actor. 
       this._cloneWithNewParentOnPerson(item, targetActor);
     } else { // The item is part of the world. 
       // Determine target actor. 
-      const targetActor = this._getTargetActor();
+      const targetActor = await this._getTargetActor();
 
       // Add copy to target actor. 
       this._cloneWithNewParentOnPerson(item, targetActor);
@@ -188,6 +190,7 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
    * @returns {Actor | undefined}
    * @throws {Error} NullPointerException - thrown, if the current user is not a GM and has no set character. 
    * @private
+   * @async
    */
   async _getTargetActor() {
     if (game.user.isGM) {
