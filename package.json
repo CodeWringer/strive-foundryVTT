@@ -1,11 +1,11 @@
 {
   "name": "ambersteel",
-  "version": "1.0.0",
+  "version": "1.3.2",
   "description": "Ambersteel FoundryVTT development environment",
   "scripts": {
     "build": "node ./npm-scripts/build.mjs",
-    "sass:transpile": "sass scss:css",
-    "sass:transpile-and-watch": "sass --watch scss:css",
+    "sass:transpile": "sass ./presentation/style/ambersteel.scss ./presentation/style/ambersteel.css",
+    "sass:transpile-and-watch": "sass ./presentation/style/ambersteel.scss -w -o ./presentation/style",
     "test": "mocha ./test/**/*"
   },
   "browserslist": [

@@ -1,4 +1,4 @@
-import * as ValidationUtility from "../../module/utils/validation-utility.mjs";
+import * as ValidationUtility from "../../business/util/validation-utility.mjs";
 
 describe('validation-utility', function() {
   describe('propertiesDefined', function() {

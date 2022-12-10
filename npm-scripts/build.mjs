@@ -42,13 +42,13 @@ export default async function build() {
 async function transpileSass() {
   console.log("Transpiling css");
 
-  const cssDir = pathUtil.join(BUILD_DIR_PATH, "css");
+  const cssDir = pathUtil.join(BUILD_DIR_PATH, "presentation/style/css");
   console.log(`Ensuring css dir '${cssDir}'`);
   await fs.ensureDir(cssDir);
 
-  const scssFileName = "ambersteel";
-  const css = compile(`scss/${scssFileName}.scss`).css;
-  const cssDestPath = pathUtil.join(cssDir, `${scssFileName}.css`)
+  const fileName = "ambersteel";
+  const css = compile(`presentation/style/${fileName}.scss`).css;
+  const cssDestPath = pathUtil.join(cssDir, `${fileName}.css`)
   await writeFile(cssDestPath, css);
 }
 
@@ -119,7 +119,7 @@ const copyExcludes = [
   ".git",
   "build",
   "dist",
-  "scss",
+  "style",
   "test",
   "node_modules",
   ".gitignore",

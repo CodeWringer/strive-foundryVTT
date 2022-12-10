@@ -1,0 +1,110 @@
+{{!-- Parameters:
+viewModel: {SkillListItemViewModel}
+cssClass: {undefined | String}
+--}}
+<div class="custom-system-list-item{{#if cssClass}} {{cssClass}}{{/if}}">
+  {{!-- Row 1 --}}
+  <div class="flex flex-row">
+    <div class="flex flex-grow">
+      {{!-- Roll --}}
+      {{> buttonRoll viewModel=viewModel.vmBtnRoll }}
+      {{!-- Send to chat --}}
+      {{> buttonSendToChat viewModel=viewModel.vmBtnSendToChat }}
+      {{!-- Name --}}
+      <span class="width-min-xl">
+        {{> inputLabel text="ambersteel.character.skill.singular" showFancyFont=viewModel.showFancyFont}}
+      </span>
+      {{> inputImage viewModel=viewModel.vmImg cssClass="custom-icon-sm" }}
+      <h2 class="flex-grow margin-r-md">
+        {{> inputTextField viewModel=viewModel.vmTfName }}
+      </h2>
+    </div>
+    {{!-- Delete --}}
+    {{> buttonDelete viewModel=viewModel.vmBtnDelete }}
+  </div>
+  {{!-- Row 2 --}}
+  <div class="flex flex-row">
+    {{!-- Related Attribute --}}
+    <div class="flex flex-row margin-b-md">
+      <div class="width-min-xxl">
+        {{> inputLabel text="ambersteel.character.skill.relatedAttribute" showFancyFont=viewModel.showFancyFont}}
+      </div>
+      <div class="flex-grow">
+        {{> inputDropDown viewModel=viewModel.vmDdRelatedAttribute }}
+      </div>
+    </div>
+    {{!-- Category --}}
+    <div class="flex flex-row margin-b-md">
+      <div class="width-min-xxl">
+        {{> inputLabel text="ambersteel.general.category" showFancyFont=viewModel.showFancyFont}}
+      </div>
+      <div class="flex-grow">
+        {{> inputTextField viewModel=viewModel.vmTfCategory }}
+      </div>
+    </div>
+    {{!-- IsMagicSchool --}}
+    <div class="flex flex-row margin-b-md">
+      <div class="width-min-xxl">
+        {{> inputLabel text="ambersteel.character.magic.school" showFancyFont=viewModel.showFancyFont}}
+      </div>
+      <div class="width-min-l">
+        {{> buttonToggle viewModel=viewModel.vmSwIsMagicSchool }}
+      </div>
+    </div>
+  </div>
+  {{!-- Row 3 --}}
+  <div class="flex flex-row margin-b-md">
+   {{!-- Level --}}
+    <div class="flex flex-row margin-b-md">
+      <div class="width-min-xxl">
+        {{> inputLabel text="ambersteel.character.advancement.level" showFancyFont=viewModel.showFancyFont}}
+      </div>
+      <div class="width-md">
+        {{> inputNumberSpinner viewModel=viewModel.vmNsLevel }}
+      </div>
+    </div>
+    {{!-- Spacer --}}
+    <div class="width-lg"></div>
+    {{!-- Advancement Requirements --}}
+    <div class="flex flex-row margin-b-md">
+      <div class="width-min-xl">
+        {{> inputLabel text="ambersteel.character.advancement.requirements.abbreviation" showFancyFont=viewModel.showFancyFont}}
+      </div>
+      <div class="width-min-sm flex flex-center">
+        <span>
+          {{viewModel.requiredSuccessses}} / {{viewModel.requiredFailures}}
+        </span>
+      </div>
+    </div>
+    {{!-- Spacer --}}
+    <div class="width-lg"></div>
+    {{!-- Successes --}}
+    <div class="flex flex-row margin-b-md">
+      <div class="width-min-l">
+        {{> inputLabel text="ambersteel.character.advancement.requirements.success.abbreviation" showFancyFont=viewModel.showFancyFont}}
+      </div>
+      <div class="width-md">
+        {{> inputNumberSpinner viewModel=viewModel.vmNsSuccesses }}
+      </div>
+    </div>
+    {{!-- Failures --}}
+    <div class="flex flex-row margin-b-md">
+      <div class="width-min-l">
+        {{> inputLabel text="ambersteel.character.advancement.requirements.failure.abbreviation" showFancyFont=viewModel.showFancyFont}}
+      </div>
+      <div class="width-md">
+        {{> inputNumberSpinner viewModel=viewModel.vmNsFailures }}
+      </div>
+    </div>
+  </div>
+  {{!-- Row 4 --}}
+  {{!-- Description --}}
+  <div class="flex flex-column margin-b-md">
+    <h3{{#if viewModel.showFancyFont}} class="fancy-font"{{/if}}>{{localize "ambersteel.general.description"}}</h3>
+    {{> inputRichText viewModel=viewModel.vmRtDescription }}
+  </div>
+  {{!-- Row 5 --}}
+  {{!-- Skill Abilites --}}
+  <h3{{#if viewModel.showFancyFont}} class="fancy-font"{{/if}}>{{localize "ambersteel.character.skill.ability.plural"}}</h3>
+  {{> "systems/ambersteel/presentation/template/item/skill-ability/skill-ability-table.hbs" viewModel=viewModel.vmSkillAbilityTable cssClass=(ifThenElse viewModel.isSkillAbilityListVisible "" "hidden") }}
+</div>
