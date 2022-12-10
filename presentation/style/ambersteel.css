@@ -592,7 +592,7 @@ li.roll.die.d6.roll-success {
 }
 
 .ico-take-item {
-  background: url("/systems/ambersteel/images/take-item.svg");
+  background: url("/systems/ambersteel/presentation/image/take-item.svg");
   background-size: cover;
   width: 24px;
   height: 24px;
