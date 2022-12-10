@@ -1,5 +1,5 @@
-import * as PropUtil from "./property-utility.mjs";
-import { isFunction, isObject, isArray } from "./validation-utility.mjs";
+import * as PropUtil from "../util/property-utility.mjs";
+import { isFunction, isObject, isArray } from "../util/validation-utility.mjs";
 
 /**
  * Updates a property on the given document entity, identified via the given path. 

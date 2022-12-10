@@ -1,4 +1,4 @@
-import { ITEM_ORIENTATIONS } from "../../constants/item-orientations.mjs";
+import { ITEM_ORIENTATIONS } from "../../../business/item-grid/item-orientations.mjs";
 import { PositionInterpolator } from "../../pixi/interpolation/position-interpolator.mjs";
 import { TEXTURES } from "../../pixi/texture-preloader.mjs";
 

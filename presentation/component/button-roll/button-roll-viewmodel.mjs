@@ -1,10 +1,10 @@
-import { ROLL_TYPES } from "../../constants/roll-types.mjs";
-import { SOUNDS_CONSTANTS } from "../../constants/sounds.mjs";
-import { TEMPLATES } from "../../templatePreloader.mjs";
-import * as ChatUtil from "../../utils/chat-utility.mjs";
-import * as DiceUtil from "../../utils/dice-utility.mjs";
-import * as PropUtil from "../../utils/property-utility.mjs";
-import { validateOrThrow } from "../../utils/validation-utility.mjs";
+import { ROLL_TYPES } from "../../../business/dice/roll-types.mjs";
+import { SOUNDS_CONSTANTS } from "../../audio/sounds.mjs";
+import { TEMPLATES } from "../../template/templatePreloader.mjs";
+import * as ChatUtil from "../../chat/chat-utility.mjs";
+import * as DiceUtil from "../../../business/dice/dice-utility.mjs";
+import * as PropUtil from "../../../business/util/property-utility.mjs";
+import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
 
 /**

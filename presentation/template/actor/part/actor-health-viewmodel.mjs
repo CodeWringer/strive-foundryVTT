@@ -1,12 +1,12 @@
-import SheetViewModel from "../../../module/components/sheet-viewmodel.mjs";
-import DocumentListItemOrderDataSource from "../../../module/components/sortable-list/document-list-item-order-datasource.mjs";
-import SortableListViewModel from "../../../module/components/sortable-list/sortable-list-viewmodel.mjs";
-import Ruleset from "../../../module/ruleset.mjs";
-import { TEMPLATES } from "../../../module/templatePreloader.mjs";
-import { validateOrThrow } from "../../../module/utils/validation-utility.mjs";
+import Ruleset from "../../../../business/ruleset/ruleset.mjs";
+import { validateOrThrow } from "../../../../business/util/validation-utility.mjs";
+import DocumentListItemOrderDataSource from "../../../component/sortable-list/document-list-item-order-datasource.mjs";
+import SortableListViewModel from "../../../component/sortable-list/sortable-list-viewmodel.mjs";
+import SheetViewModel from "../../../view-model/sheet-view-model.mjs";
 import IllnessListItemViewModel from "../../item/illness/illness-list-item-viewmodel.mjs";
 import InjuryListItemViewModel from "../../item/injury/injury-list-item-viewmodel.mjs";
 import MutationListItemViewModel from "../../item/mutation/mutation-list-item-viewmodel.mjs";
+import { TEMPLATES } from "../../templatePreloader.mjs";
 
 export default class ActorHealthViewModel extends SheetViewModel {
   /** @override */

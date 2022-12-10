@@ -1,11 +1,11 @@
-import SheetViewModel from "../../../module/components/sheet-viewmodel.mjs";
-import DocumentListItemOrderDataSource from "../../../module/components/sortable-list/document-list-item-order-datasource.mjs";
-import SortableListViewModel from "../../../module/components/sortable-list/sortable-list-viewmodel.mjs";
-import { TEMPLATES } from "../../../module/templatePreloader.mjs";
-import { createUUID } from "../../../module/utils/uuid-utility.mjs";
-import { validateOrThrow } from "../../../module/utils/validation-utility.mjs";
-import SkillAbilityChatMessageViewModel from "./skill-ability-chat-message-viewmodel.mjs";
-import SkillAbilityListItemViewModel from "./skill-ability-list-item-viewmodel.mjs";
+import { createUUID } from "../../../../business/util/uuid-utility.mjs"
+import { validateOrThrow } from "../../../../business/util/validation-utility.mjs"
+import DocumentListItemOrderDataSource from "../../../component/sortable-list/document-list-item-order-datasource.mjs"
+import SortableListViewModel from "../../../component/sortable-list/sortable-list-viewmodel.mjs"
+import SheetViewModel from "../../../view-model/sheet-view-model.mjs"
+import { TEMPLATES } from "../../templatePreloader.mjs"
+import SkillAbilityChatMessageViewModel from "./skill-ability-chat-message-viewmodel.mjs"
+import SkillAbilityListItemViewModel from "./skill-ability-list-item-viewmodel.mjs"
 
 export default class SkillAbilityTableViewModel extends SheetViewModel {
   /** @override */
@@ -142,7 +142,7 @@ export default class SkillAbilityTableViewModel extends SheetViewModel {
         listName: "abilities",
       }),
       listItemViewModels: this.abilities,
-      listItemTemplate: thiz.oneColumn === true ? "systems/ambersteel/templates/item/skill-ability/skill-ability-chat-message.hbs" : "systems/ambersteel/templates/item/skill-ability/skill-ability-list-item.hbs",
+      listItemTemplate: thiz.oneColumn === true ? "systems/ambersteel/template/item/skill-ability/skill-ability-chat-message.hbs" : "systems/ambersteel/template/item/skill-ability/skill-ability-list-item.hbs",
       vmBtnAddItem: thiz.createVmBtnAdd({
         id: "vmBtnAdd",
         target: thiz.item,

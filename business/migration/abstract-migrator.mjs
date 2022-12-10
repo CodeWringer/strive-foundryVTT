@@ -1,6 +1,6 @@
 import VersionCode from "./version-code.mjs";
 import { WorldSystemVersion } from "./world-system-version.mjs";
-import { getActors } from "../utils/content-utility.mjs";
+import { getActors } from "../util/content-utility.mjs";
 
 /**
  * @summary

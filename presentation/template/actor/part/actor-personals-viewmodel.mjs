@@ -1,24 +1,16 @@
-import SheetViewModel from "../../../module/components/sheet-viewmodel.mjs";
-import { TEMPLATES } from "../../../module/templatePreloader.mjs";
-import { validateOrThrow } from "../../../module/utils/validation-utility.mjs";
-import ActorBeliefsViewModel from "./actor-beliefs-viewmodel.mjs";
-import ActorFateViewModel from "./actor-fate-viewmodel.mjs";
+import { validateOrThrow } from "../../../../business/util/validation-utility.mjs";
+import SheetViewModel from "../../../view-model/sheet-view-model.mjs";
+import { TEMPLATES } from "../../templatePreloader.mjs";
 
-export default class ActorBeliefsFateViewModel extends SheetViewModel {
+export default class ActorPersonalsViewModel extends SheetViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.ACTOR_BELIEFS_FATE; }
-
-  beliefsViewModel = undefined;
-  get beliefsViewModelId() { return "child-beliefs-view-model"; }
-
-  fateViewModel = undefined;
-  get fateViewModelId() { return "child-fate-view-model"; }
+  static get TEMPLATE() { return TEMPLATES.ACTOR_PERSONALS; }
 
   /**
    * @type {Actor}
    */
   actor = undefined;
-
+  
   /** @override */
   get entityId() { return this.actor.id; }
 
@@ -41,13 +33,34 @@ export default class ActorBeliefsFateViewModel extends SheetViewModel {
     super(args);
     validateOrThrow(args, ["actor"]);
 
-    // Own properties.
     this.actor = args.actor;
+    this.contextType = args.contextType ?? "actor-personals";
 
-    // Child view models. 
     const thiz = this;
 
-    this.beliefsViewModel = new ActorBeliefsViewModel({ ...args, id: thiz.beliefsViewModelId, parent: thiz });
-    this.fateViewModel = new ActorFateViewModel({ ...args, id: thiz.fateViewModelId, parent: thiz });
+    this.vmTfSpecies = this.createVmTextField({
+      id: "vmTfSpecies",
+      propertyOwner: thiz.actor,
+      propertyPath: "data.data.person.species",
+      placeholder: "ambersteel.character.personals.species",
+    });
+    this.vmTfCulture = this.createVmTextField({
+      id: "vmTfCulture",
+      propertyOwner: thiz.actor,
+      propertyPath: "data.data.person.culture",
+      placeholder: "ambersteel.character.personals.culture",
+    });
+    this.vmTfSex = this.createVmTextField({
+      id: "vmTfSex",
+      propertyOwner: thiz.actor,
+      propertyPath: "data.data.person.sex",
+      placeholder: "ambersteel.character.personals.sex",
+    });
+    this.vmTfAge = this.createVmTextField({
+      id: "vmTfAge",
+      propertyOwner: thiz.actor,
+      propertyPath: "data.data.person.age",
+      placeholder: "ambersteel.character.personals.age",
+    });
   }
 }

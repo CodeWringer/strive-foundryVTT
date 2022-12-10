@@ -1,7 +1,7 @@
-import DialogResult from '../dto/dialog-result.mjs';
-import { TEMPLATES } from '../templatePreloader.mjs';
-import GetShowFancyFontUseCase from '../use-case/get-show-fancy-font-use-case.mjs';
-import { getElementValue, setSelectedOptionByValue } from './sheet-utility.mjs';
+import GetShowFancyFontUseCase from '../../business/use-case/get-show-fancy-font-use-case.mjs';
+import { getElementValue, setSelectedOptionByValue } from '../sheet/sheet-utility.mjs';
+import { TEMPLATES } from '../template/templatePreloader.mjs';
+import DialogResult from './dialog-result.mjs';
 
 /**
  * Id of the back drop element. 

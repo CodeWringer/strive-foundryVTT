@@ -1,22 +1,22 @@
-import { validateOrThrow } from "../utils/validation-utility.mjs";
-import ButtonAddViewModel from "./button-add/button-add-viewmodel.mjs";
-import ButtonDeleteViewModel from "./button-delete/button-delete-viewmodel.mjs";
-import ButtonOpenSheetViewModel from "./button-open-sheet/button-open-sheet-viewmodel.mjs";
-import ButtonToggleViewModel from "./button-toggle/button-toggle-viewmodel.mjs";
-import ButtonRollViewModel from "./button-roll/button-roll-viewmodel.mjs";
-import ButtonSendToChatViewModel from "./button-send-to-chat/button-send-to-chat-viewmodel.mjs";
-import ButtonTakeItemViewModel from "./button-take-item/button-take-item-viewmodel.mjs";
-import ButtonToggleVisibilityViewModel from "./button-toggle-visibility/button-toggle-visibility-viewmodel.mjs";
-import InputDropDownViewModel from "./input-dropdown/input-dropdown-viewmodel.mjs";
-import InputImageViewModel from "./input-image/input-image-viewmodel.mjs";
-import InputNumberSpinnerViewModel from "./input-number-spinner/input-number-spinner-viewmodel.mjs";
-import InputRadioButtonGroupViewModel from "./input-radio-button-group/input-radio-button-group-viewmodel.mjs";
-import InputTextareaViewModel from "./input-textarea/input-textarea-viewmodel.mjs";
-import InputTextFieldViewModel from "./input-textfield/input-textfield-viewmodel.mjs";
-import ViewModel from "./viewmodel.mjs";
-import ButtonContextMenuViewModel from "./button-context-menu/button-context-menu-viewmodel.mjs";
-import InputRichTextViewModel from "./input-rich-text/input-rich-text-viewmodel.mjs";
-import GetShowFancyFontUseCase from "../use-case/get-show-fancy-font-use-case.mjs";
+import GetShowFancyFontUseCase from "../../business/use-case/get-show-fancy-font-use-case.mjs"
+import { validateOrThrow } from "../../business/util/validation-utility.mjs"
+import ButtonAddViewModel from "../component/button-add/button-add-viewmodel.mjs"
+import ButtonContextMenuViewModel from "../component/button-context-menu/button-context-menu-viewmodel.mjs"
+import ButtonDeleteViewModel from "../component/button-delete/button-delete-viewmodel.mjs"
+import ButtonOpenSheetViewModel from "../component/button-open-sheet/button-open-sheet-viewmodel.mjs"
+import ButtonRollViewModel from "../component/button-roll/button-roll-viewmodel.mjs"
+import ButtonSendToChatViewModel from "../component/button-send-to-chat/button-send-to-chat-viewmodel.mjs"
+import ButtonTakeItemViewModel from "../component/button-take-item/button-take-item-viewmodel.mjs"
+import ButtonToggleVisibilityViewModel from "../component/button-toggle-visibility/button-toggle-visibility-viewmodel.mjs"
+import ButtonToggleViewModel from "../component/button-toggle/button-toggle-viewmodel.mjs"
+import InputDropDownViewModel from "../component/input-dropdown/input-dropdown-viewmodel.mjs"
+import InputImageViewModel from "../component/input-image/input-image-viewmodel.mjs"
+import InputNumberSpinnerViewModel from "../component/input-number-spinner/input-number-spinner-viewmodel.mjs"
+import InputRadioButtonGroupViewModel from "../component/input-radio-button-group/input-radio-button-group-viewmodel.mjs"
+import InputRichTextViewModel from "../component/input-rich-text/input-rich-text-viewmodel.mjs"
+import InputTextareaViewModel from "../component/input-textarea/input-textarea-viewmodel.mjs"
+import InputTextFieldViewModel from "../component/input-textfield/input-textfield-viewmodel.mjs"
+import ViewModel from "./view-model.mjs"
 
 /**
  * This view model sub-type is intended for use with sheets that expect the common flags, 

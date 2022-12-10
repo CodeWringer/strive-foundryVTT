@@ -1,9 +1,9 @@
-import { TEMPLATES } from "../../templatePreloader.mjs";
-import { moveArrayElement, moveArrayElementBy } from "../../utils/array-utility.mjs";
-import { validateOrThrow } from "../../utils/validation-utility.mjs";
+import { moveArrayElement, moveArrayElementBy } from "../../../business/util/array-utility.mjs";
+import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
+import { TEMPLATES } from "../../template/templatePreloader.mjs";
+import SheetViewModel from "../../view-model/sheet-view-model.mjs";
+import ViewModel from "../../view-model/view-model.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
-import SheetViewModel from "../sheet-viewmodel.mjs";
-import ViewModel from "../viewmodel.mjs";
 
 /**
  * This object groups the view models of one list item, to pass through to the 

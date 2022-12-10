@@ -1,7 +1,6 @@
-import { TEMPLATES } from "../../templatePreloader.mjs";
-import * as ChatUtil from "../../utils/chat-utility.mjs";
-import * as PropUtil from "../../utils/property-utility.mjs";
-import { validateOrThrow } from "../../utils/validation-utility.mjs";
+import { TEMPLATES } from "../../template/templatePreloader.mjs";
+import * as ChatUtil from "../../chat/chat-utility.mjs";
+import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
 
 /**

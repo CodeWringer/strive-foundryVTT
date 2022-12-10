@@ -1,4 +1,4 @@
-import { TEMPLATES } from '../../templatePreloader.mjs';
+import { TEMPLATES } from "../../../presentation/template/templatePreloader.mjs";
 
 /**
  * Represents the base contract for a "specific" actor "sub-type". 

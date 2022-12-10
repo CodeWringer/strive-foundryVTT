@@ -1,4 +1,3 @@
-import InventoryIndex from "../../dto/inventory-index.mjs";
 import CenterLayoutContainer from "../../pixi/center-layout-container.mjs";
 import Containable from "../../pixi/containable.mjs";
 import DisplayObjectWrap from "../../pixi/display-object-wrap.mjs";
@@ -6,10 +5,11 @@ import HorizontalLayoutContainer from "../../pixi/horizontal-layout-container.mj
 import MarginLayoutContainer from "../../pixi/margin-layout-container.mjs";
 import VerticalLayoutContainer from "../../pixi/vertical-layout-container.mjs";
 import { TEXTURES } from "../../pixi/texture-preloader.mjs";
-import { queryVisibilityMode } from '../../utils/chat-utility.mjs';
 import { Button } from "../../pixi/button.mjs";
-import { ITEM_ORIENTATIONS } from "../../constants/item-orientations.mjs";
-import GetShowFancyFontUseCase from "../../use-case/get-show-fancy-font-use-case.mjs";
+import { queryVisibilityMode } from '../../chat/chat-utility.mjs';
+import InventoryIndex from "../../../business/item-grid/inventory-index.mjs";
+import { ITEM_ORIENTATIONS } from "../../../business/item-grid/item-orientations.mjs";
+import GetShowFancyFontUseCase from "../../../business/use-case/get-show-fancy-font-use-case.mjs";
 
 const FONT_FAMILY_FALLBACK = "sans-serif";
 const FONT_FAMILY_FANCY = "Black-Chancery";

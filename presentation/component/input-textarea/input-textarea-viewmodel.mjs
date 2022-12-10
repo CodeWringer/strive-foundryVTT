@@ -1,6 +1,6 @@
-import { TEMPLATES } from "../../templatePreloader.mjs";
-import { validateOrThrow } from "../../utils/validation-utility.mjs";
-import InputViewModel from "../input-viewmodel.mjs";
+import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
+import { TEMPLATES } from "../../template/templatePreloader.mjs";
+import InputViewModel from "../../view-model/input-view-model.mjs";
 
 /**
  * --- Inherited from ViewModel

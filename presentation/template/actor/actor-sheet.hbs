@@ -17,7 +17,7 @@ cssClass: {undefined | String}
         </div>
       </div>
       {{#if (eq viewModel.isPlain false)}}
-        {{> "systems/ambersteel/templates/actor/parts/actor-personals.hbs" viewModel=viewModel.personalsViewModel }}
+        {{> "systems/ambersteel/presentation/template/actor/part/actor-personals.hbs" viewModel=viewModel.personalsViewModel }}
       {{/if}}
     </div>
   </header>
@@ -50,34 +50,34 @@ cssClass: {undefined | String}
     {{#if (eq viewModel.isPlain false)}}
       {{!-- Attributes Tab --}}
       <div class="tab attributes" data-group="primary" data-tab="attributes">
-        {{> "systems/ambersteel/templates/actor/parts/actor-attributes.hbs" viewModel=viewModel.attributesViewModel }}
+        {{> "systems/ambersteel/presentation/template/actor/part/actor-attributes.hbs" viewModel=viewModel.attributesViewModel }}
       </div>
 
       {{!-- Skills Tab --}}
       <div class="tab skills" data-group="primary" data-tab="skills">
-        {{> "systems/ambersteel/templates/actor/parts/actor-skills.hbs" viewModel=viewModel.skillsViewModel }}
+        {{> "systems/ambersteel/presentation/template/actor/part/actor-skills.hbs" viewModel=viewModel.skillsViewModel }}
       </div>
 
       {{#if viewModel.isPC }}
       {{!-- Beliefs&Fate Tab --}}
         <div class="tab beliefs-fate" data-group="primary" data-tab="beliefs-fate">
-          {{> "systems/ambersteel/templates/actor/parts/actor-beliefs-fate.hbs" viewModel=viewModel.beliefsFateViewModel }}
+          {{> "systems/ambersteel/presentation/template/actor/part/actor-beliefs-fate.hbs" viewModel=viewModel.beliefsFateViewModel }}
         </div>
       {{/if}}
 
       {{!-- Health Tab --}}
       <div class="tab health" data-group="primary" data-tab="health">
-        {{> "systems/ambersteel/templates/actor/parts/actor-health.hbs" viewModel=viewModel.healthViewModel }}
+        {{> "systems/ambersteel/presentation/template/actor/part/actor-health.hbs" viewModel=viewModel.healthViewModel }}
       </div>
 
       {{!-- Assets Tab --}}
       <div class="tab assets" data-group="primary" data-tab="assets">
-        {{> "systems/ambersteel/templates/actor/parts/actor-assets.hbs" viewModel=viewModel.assetsViewModel }}
+        {{> "systems/ambersteel/presentation/template/actor/part/actor-assets.hbs" viewModel=viewModel.assetsViewModel }}
       </div>
 
       {{!-- Biography Tab --}}
       <div class="tab biography" data-group="primary" data-tab="biography">
-        {{> "systems/ambersteel/templates/actor/parts/actor-biography.hbs" viewModel=viewModel.biographyViewModel }}
+        {{> "systems/ambersteel/presentation/template/actor/part/actor-biography.hbs" viewModel=viewModel.biographyViewModel }}
       </div>
     {{else}}
       <div class="{{#if viewModel.isGM}}tab {{/if}}description" data-group="primary" data-tab="description">
@@ -90,7 +90,7 @@ cssClass: {undefined | String}
     {{!-- GM Notes Tab --}}
     {{#if viewModel.isGM }}
       <div class="tab gm-notes" data-group="primary" data-tab="gm-notes">
-        {{> "systems/ambersteel/templates/gm-notes.hbs" viewModel=viewModel.gmNotesViewModel }}
+        {{> "systems/ambersteel/presentation/template/gm-notes.hbs" viewModel=viewModel.gmNotesViewModel }}
       </div>
     {{/if}}
 

@@ -1,4 +1,4 @@
-import AmbersteelSettings from "../settings/ambersteel-settings.mjs";
+import AmbersteelSettings from "../setting/ambersteel-settings.mjs";
 import VersionCode from "./version-code.mjs";
 
 /**

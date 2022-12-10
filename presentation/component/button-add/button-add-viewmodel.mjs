@@ -1,10 +1,9 @@
-import { TEMPLATES } from "../../templatePreloader.mjs";
-import ButtonViewModel from "../button/button-viewmodel.mjs";
+import { TEMPLATES } from "../../template/templatePreloader.mjs";
+import ButtonViewModel from '../button/button-viewmodel.mjs';
 import * as ItemAddDialog from '../../dialog/dialog-item-add.mjs';
-import { findItem, contentCollectionTypes } from '../../utils/content-utility.mjs';
-import { validateOrThrow, isObject } from "../../utils/validation-utility.mjs";
-import { isNotBlankOrUndefined } from "../../utils/validation-utility.mjs";
-import GetShowFancyFontUseCase from "../../use-case/get-show-fancy-font-use-case.mjs";
+import { findItem, contentCollectionTypes } from '../../../business/util/content-utility.mjs';
+import { validateOrThrow, isObject, isNotBlankOrUndefined } from "../../../business/util/validation-utility.mjs";
+import GetShowFancyFontUseCase from "../../../business/use-case/get-show-fancy-font-use-case.mjs";
 
 /**
  * --- Inherited from ViewModel

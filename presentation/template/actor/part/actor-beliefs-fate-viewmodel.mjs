@@ -1,22 +1,26 @@
-import { createUUID } from "../../../../business/util/uuid-utility.mjs";
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs";
 import SheetViewModel from "../../../view-model/sheet-view-model.mjs";
+import { TEMPLATES } from "../../templatePreloader.mjs";
+import ActorBeliefsViewModel from "./actor-beliefs-viewmodel.mjs";
+import ActorFateViewModel from "./actor-fate-viewmodel.mjs";
 
-export default class SkillViewModel extends SheetViewModel {
-  /**
-   * @type {Item}
-   * @readonly
-   */
-  item = undefined;
+export default class ActorBeliefsFateViewModel extends SheetViewModel {
+  /** @override */
+  static get TEMPLATE() { return TEMPLATES.ACTOR_BELIEFS_FATE; }
+
+  beliefsViewModel = undefined;
+  get beliefsViewModelId() { return "child-beliefs-view-model"; }
+
+  fateViewModel = undefined;
+  get fateViewModelId() { return "child-fate-view-model"; }
 
   /**
-   * @type {String}
-   * @readonly
+   * @type {Actor}
    */
-  visGroupId = undefined;
+  actor = undefined;
 
   /** @override */
-  get entityId() { return this.item.id; }
+  get entityId() { return this.actor.id; }
 
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
@@ -28,20 +32,22 @@ export default class SkillViewModel extends SheetViewModel {
    * @param {Boolean | undefined} args.isSendable If true, the document represented by the sheet can be sent to chat. 
    * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document. 
    * @param {Boolean | undefined} args.isGM If true, the current user is a GM. 
-   * @param {String | undefined} args.contextTemplate Optional. Name or path of a contextual template, 
-   * which will be displayed in exception log entries, to aid debugging. 
    * 
-   * @param {Item} args.item
-   * @param {Actor | undefined} args.actor If not undefined, this is the actor that owns the item. 
-   * @param {String | undefined} args.visGroupId
+   * @param {Actor} args.actor
+   * 
+   * @throws {Error} ArgumentException - Thrown, if any of the mandatory arguments aren't defined. 
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["item"]);
+    validateOrThrow(args, ["actor"]);
 
     // Own properties.
-    this.item = args.item;
     this.actor = args.actor;
-    this.visGroupId = args.visGroupId ?? createUUID();
+
+    // Child view models. 
+    const thiz = this;
+
+    this.beliefsViewModel = new ActorBeliefsViewModel({ ...args, id: thiz.beliefsViewModelId, parent: thiz });
+    this.fateViewModel = new ActorFateViewModel({ ...args, id: thiz.fateViewModelId, parent: thiz });
   }
 }

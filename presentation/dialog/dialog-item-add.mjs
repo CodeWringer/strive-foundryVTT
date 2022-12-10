@@ -1,8 +1,8 @@
-import * as DialogUtil from '../utils/dialog-utility.mjs';
-import { TEMPLATES } from '../templatePreloader.mjs';
-import { getItemDeclarations } from '../utils/content-utility.mjs';
-import { getElementValue } from '../utils/sheet-utility.mjs';
-import GetShowFancyFontUseCase from '../use-case/get-show-fancy-font-use-case.mjs';
+import GetShowFancyFontUseCase from '../../business/use-case/get-show-fancy-font-use-case.mjs';
+import { getItemDeclarations } from '../../business/util/content-utility.mjs';
+import { TEMPLATES } from '../template/templatePreloader.mjs';
+import { getElementValue } from '../sheet/sheet-utility.mjs';
+import * as DialogUtil from './dialog-utility.mjs';
 
 const LOCALIZABLE_TITLE = "ambersteel.character.asset.add.query";
 const LOCALIZABLE_ITEM_LABEL = "ambersteel.character.asset.add.label";

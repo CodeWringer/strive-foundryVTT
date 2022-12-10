@@ -1,7 +1,7 @@
-import { DiceOutcomeTypes } from '../../dto/dice-outcome-types.mjs';
-import { SummedData, SummedDataComponent } from '../../dto/summed-data.mjs';
+import { TEMPLATES } from '../../../presentation/template/templatePreloader.mjs';
+import { DiceOutcomeTypes } from '../../dice/dice-outcome-types.mjs';
 import Ruleset from '../../ruleset.mjs';
-import { TEMPLATES } from '../../templatePreloader.mjs';
+import { SummedData, SummedDataComponent } from '../../ruleset/skill/summed-data.mjs';
 import * as PropUtil from '../../utils/property-utility.mjs';
 import AmbersteelBaseActor from './ambersteel-base-actor.mjs';
 

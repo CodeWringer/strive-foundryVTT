@@ -1,9 +1,10 @@
-import SheetViewModel from "../../../module/components/sheet-viewmodel.mjs";
-import DocumentListItemOrderDataSource from "../../../module/components/sortable-list/document-list-item-order-datasource.mjs";
-import SortableListViewModel from "../../../module/components/sortable-list/sortable-list-viewmodel.mjs";
-import { TEMPLATES } from "../../../module/templatePreloader.mjs";
-import { validateOrThrow } from "../../../module/utils/validation-utility.mjs";
-import SkillListItemViewModel from "../../item/skill/skill-list-item-viewmodel.mjs";
+import { validateOrThrow } from "../../../../business/util/validation-utility.mjs"
+import DocumentListItemOrderDataSource from "../../../component/sortable-list/document-list-item-order-datasource.mjs"
+import SortableListViewModel from "../../../component/sortable-list/sortable-list-viewmodel.mjs"
+import SheetViewModel from "../../../view-model/sheet-view-model.mjs"
+import SkillListItemViewModel from "../../item/skill/skill-list-item-viewmodel.mjs"
+import { TEMPLATES } from "../../templatePreloader.mjs"
+
 
 /**
  * @property {Actor} actor

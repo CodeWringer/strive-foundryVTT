@@ -1,6 +1,6 @@
-import { TEMPLATES } from "../../templatePreloader.mjs";
-import { getNestedPropertyValue, setNestedPropertyValue } from "../../utils/property-utility.mjs";
-import { validateOrThrow } from "../../utils/validation-utility.mjs";
+import { getNestedPropertyValue,setNestedPropertyValue } from "../../../business/util/property-utility.mjs";
+import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
+import { TEMPLATES } from "../../template/templatePreloader.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
 
 export default class ButtonToggleViewModel extends ButtonViewModel {

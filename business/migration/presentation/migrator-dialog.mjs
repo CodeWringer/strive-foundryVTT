@@ -1,4 +1,4 @@
-import { TEMPLATES } from "../../templatePreloader.mjs";
+import { TEMPLATES } from "../../../presentation/template/templatePreloader.mjs";
 import MigratorInitiator from "../migrator-initiator.mjs";
 import { WorldSystemVersion } from "../world-system-version.mjs";
 

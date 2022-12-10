@@ -1,4 +1,4 @@
-import { EventEmitter } from "../../utils/event-emitter.mjs";
+import { EventEmitter } from "../../../business/util/event-emitter.mjs";
 
 export const InterpolationEvents = {
   completed: "completed"

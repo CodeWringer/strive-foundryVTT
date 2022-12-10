@@ -1,9 +1,9 @@
-import InventoryIndex from "../../dto/inventory-index.mjs";
+import { Button } from "../../pixi/button.mjs";
+import { ItemGrid } from "./item-grid.mjs";
+import InventoryIndex from "../../../business/item-grid/inventory-index.mjs";
 import { TEXTURES } from "../../pixi/texture-preloader.mjs";
 import { ItemOnGridView } from "./item-on-grid-view.mjs";
 import { DragIndicator } from "./drag-indicator.mjs";
-import { Button } from "../../pixi/button.mjs";
-import { ItemGrid } from "./item-grid.mjs";
 
 /**
  * Represents an item grid (of possessions). 

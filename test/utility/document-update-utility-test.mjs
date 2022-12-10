@@ -1,4 +1,4 @@
-import { unnestData } from "../../module/utils/document-update-utility.mjs";
+import { unnestData } from "../../business/document/document-update-utility.mjs";
 
 describe('document-update-utility', function() {
   describe('unnestData', function() {

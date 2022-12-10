@@ -1,15 +1,14 @@
-import ButtonViewModel from "../../../module/components/button/button-viewmodel.mjs";
-import SheetViewModel from "../../../module/components/sheet-viewmodel.mjs";
-import DamageAndType from "../../../module/dto/damage-and-type.mjs";
-import { TEMPLATES } from "../../../module/templatePreloader.mjs";
-import { getNestedPropertyValue } from "../../../module/utils/property-utility.mjs";
-import { validateOrThrow } from "../../../module/utils/validation-utility.mjs";
-import * as ChatUtil from "../../../module/utils/chat-utility.mjs";
-import { DAMAGE_TYPES } from "../../../module/constants/damage-types.mjs";
+import DamageAndType from "../../../../business/ruleset/skill/damage-and-type.mjs";
+import { getNestedPropertyValue } from "../../../../business/util/property-utility.mjs";
+import { isNumber, validateOrThrow } from "../../../../business/util/validation-utility.mjs";
+import { SOUNDS_CONSTANTS } from "../../../audio/sounds.mjs";
+import * as ChatUtil from "../../../chat/chat-utility.mjs";
+import ButtonViewModel from "../../../component/button/button-viewmodel.mjs";
+import InfoBubble from "../../../component/info-bubble/info-bubble.mjs";
 import { ATTACK_TYPES } from "../../../module/constants/attack-types.mjs";
-import { SOUNDS_CONSTANTS } from "../../../module/constants/sounds.mjs";
-import InfoBubble from "../../../module/components/info-bubble/info-bubble.mjs";
-import { isNumber } from "../../../module/utils/validation-utility.mjs";
+import { DAMAGE_TYPES } from "../../../module/constants/damage-types.mjs";
+import SheetViewModel from "../../../view-model/sheet-view-model.mjs";
+import { TEMPLATES } from "../../templatePreloader.mjs";
 
 export default class SkillAbilityListItemViewModel extends SheetViewModel {
   /** @override */

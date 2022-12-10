@@ -1,11 +1,11 @@
-import { TEMPLATES } from "../../templatePreloader.mjs";
-import ButtonViewModel from "../button/button-viewmodel.mjs";
-import * as DialogUtil from "../../utils/dialog-utility.mjs";
-import * as ContentUtil from "../../utils/content-utility.mjs";
-import { updateProperty } from "../../utils/document-update-utility.mjs";
-import ChoiceOption from "../../dto/choice-option.mjs";
-import { validateOrThrow } from "../../utils/validation-utility.mjs";
 import { ItemGrid } from "../item-grid/item-grid.mjs";
+import { TEMPLATES } from "../../template/templatePreloader.mjs";
+import ButtonViewModel from "../button/button-viewmodel.mjs";
+import * as DialogUtil from "../../dialog/dialog-utility.mjs";
+import * as ContentUtil from "../../../business/util/content-utility.mjs";
+import { updateProperty } from "../../../business/document/document-update-utility.mjs";
+import ChoiceOption from "../../util/choice-option.mjs";
+import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
 
 export const contextTypes = {
   chatMessage: "chat-message",

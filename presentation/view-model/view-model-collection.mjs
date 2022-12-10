@@ -1,5 +1,5 @@
-import { SELECTOR_BUTTON } from "../components/button/button-viewmodel.mjs";
-import { SELECTOR_EDIT, SELECTOR_READ } from "../components/input-viewmodel.mjs";
+import { SELECTOR_BUTTON } from "../component/button/button-viewmodel.mjs";
+import { SELECTOR_EDIT, SELECTOR_READ } from "./input-view-model.mjs";
 
 /**
  * Represents a collection of {ViewModel} objects. 

@@ -1,9 +1,9 @@
-import ViewModel from "../../../module/components/viewmodel.mjs";
-import { ATTACK_TYPES } from "../../../module/constants/attack-types.mjs";
-import { DAMAGE_TYPES } from "../../../module/constants/damage-types.mjs";
-import { TEMPLATES } from "../../../module/templatePreloader.mjs";
-import { isNotBlankOrUndefined } from "../../../module/utils/validation-utility.mjs";
-import { validateOrThrow } from "../../../module/utils/validation-utility.mjs";
+import { DAMAGE_TYPES } from "../../../../business/ruleset/damage-types.mjs"
+import { ATTACK_TYPES } from "../../../../business/ruleset/skill/attack-types.mjs"
+import { validateOrThrow } from "../../../../business/util/validation-utility.mjs"
+import { isNotBlankOrUndefined } from "../../../../business/util/validation-utility.mjs"
+import ViewModel from "../../../view-model/view-model.mjs"
+import { TEMPLATES } from "../../templatePreloader.mjs"
 
 // For some reason, extending from SheetViewModel, which would be the correct parent type here, 
 // causes a circular reference error. This is where the interpreter gives up and claims that SheetViewModel is 

@@ -1,10 +1,9 @@
-import { TEMPLATES } from "../../templatePreloader.mjs";
-import { validateOrThrow } from "../../utils/validation-utility.mjs";
-import InputViewModel from "../input-viewmodel.mjs";
+import { TEMPLATES } from "../../template/templatePreloader.mjs";
+import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
+import InputViewModel from "../../view-model/input-view-model.mjs";
 import { ItemGridView } from "./item-grid-view.mjs";
-import * as UpdateUtil from "../../utils/document-update-utility.mjs";
-import { ItemGrid } from "../../components/item-grid/item-grid.mjs";
-import { showPlainDialog } from '../../utils/dialog-utility.mjs';
+import { ItemGrid } from './item-grid.mjs';
+import { showPlainDialog } from "../../dialog/dialog-utility.mjs";
 
 /**
  * --- Inherited from ViewModel

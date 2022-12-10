@@ -1,6 +1,6 @@
-import { getNestedPropertyValue } from "../../utils/property-utility.mjs";
+import { getNestedPropertyValue } from "../../../business/util/property-utility.mjs";
+import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import { AbstractListItemOrderDataSource } from "./abstract-list-item-order-datasource.mjs";
-import { validateOrThrow } from "../../utils/validation-utility.mjs";
 
 /**
  * Uses a document (actor, item, etc.) as a data source for list item ordering. 

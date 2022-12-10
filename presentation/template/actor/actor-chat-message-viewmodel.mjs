@@ -1,7 +1,7 @@
-import SheetViewModel from "../../module/components/sheet-viewmodel.mjs";
-import { TEMPLATES } from "../../module/templatePreloader.mjs";
-import { isNotBlankOrUndefined } from "../../module/utils/validation-utility.mjs";
-import { validateOrThrow } from "../../module/utils/validation-utility.mjs";
+import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
+import { isNotBlankOrUndefined } from "../../../business/util/validation-utility.mjs";
+import SheetViewModel from "../../view-model/sheet-view-model.mjs";
+import { TEMPLATES } from "../templatePreloader.mjs";
 
 export default class ActorChatMessageViewModel extends SheetViewModel {
   /** @override */

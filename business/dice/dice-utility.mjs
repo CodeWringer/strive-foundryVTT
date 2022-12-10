@@ -3,7 +3,7 @@ import * as ChatUtil from "../../presentation/chat/chat-utility.mjs";
 import * as DialogUtil from '../../presentation/dialog/dialog-utility.mjs';
 import RollDataQueryDialogResult from "../../presentation/dialog/roll-query-dialog-result.mjs";
 import { TEMPLATES } from "../../presentation/template/templatePreloader.mjs";
-import * as SheetUtil from "../../presentation/util/sheet-utility.mjs";
+import * as SheetUtil from "../../presentation/sheet/sheet-utility.mjs";
 import Ruleset from "../ruleset/ruleset.mjs";
 import GetShowFancyFontUseCase from "../use-case/get-show-fancy-font-use-case.mjs";
 import * as ValidationUtil from "../util/validation-utility.mjs";

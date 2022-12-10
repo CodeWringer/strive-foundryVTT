@@ -4,7 +4,7 @@ import AmbersteelNpcActorSheet from "./ambersteel-npc-actor-sheet.mjs";
 import AmbersteelPcActorSheet from "./ambersteel-pc-actor-sheet.mjs";
 import { ACTOR_SHEET_SUBTYPE } from "./actor-sheet-subtype.mjs";
 // Other imports
-import * as SheetUtil from "../../utils/sheet-utility.mjs";
+import * as SheetUtil from "../sheet-utility.mjs";
 
 export class AmbersteelActorSheet extends ActorSheet {
   /**

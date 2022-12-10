@@ -1,4 +1,4 @@
-import { createUUID } from "../utils/uuid-utility.mjs";
+import { createUUID } from "../../business/util/uuid-utility.mjs";
 
 /**
  * Represents a layoutable component of a {LayoutContainer}. 

@@ -1,4 +1,4 @@
-import { showDialog } from "./dialog-utility.mjs";
+import { showDialog } from "../../presentation/dialog/dialog-utility.mjs";
 
 /**
 * Shows a dialog to the user to select a skill from the existing list of skills, 
@@ -6,7 +6,7 @@ import { showDialog } from "./dialog-utility.mjs";
 * @returns {Promise} Resolves, when the dialog is closed. 
 */
 export async function querySkillAddData() {
-  const dialogTemplate = "systems/ambersteel/templates/dialog/skill-add-dialog.hbs";
+  const dialogTemplate = "systems/ambersteel/presentation/template/dialog/skill-add-dialog.hbs";
 
   const dialogData = {
     availableSkills: [],

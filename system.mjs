@@ -1,71 +1,73 @@
-// Import constants.
-import { ATTRIBUTES } from "./constants/attributes.mjs";
-import { DAMAGE_TYPES } from "./constants/damage-types.mjs";
-import { ATTACK_TYPES } from "./constants/attack-types.mjs";
-import { SHIELD_TYPES } from "./constants/shield-types.mjs";
-import { ARMOR_TYPES } from "./constants/armor-types.mjs";
-import { WEAPON_TYPES } from "./constants/weapon-types.mjs";
-import { VISIBILITY_MODES } from "./constants/visibility-modes.mjs";
-import { INJURY_STATES } from "./constants/injury-states.mjs";
-import { ILLNESS_STATES } from "./constants/illness-states.mjs";
+// Ruleset
+import { ATTRIBUTES } from "./business/ruleset/attributes.mjs";
+import { DAMAGE_TYPES } from "./business/ruleset/damage-types.mjs";
+import { ATTACK_TYPES } from "./business/ruleset/attack-types.mjs";
+import { SHIELD_TYPES } from "./business/ruleset/shield-types.mjs";
+import { ARMOR_TYPES } from "./business/ruleset/armor-types.mjs";
+import { WEAPON_TYPES } from "./business/ruleset/weapon-types.mjs";
+import { INJURY_STATES } from "./business/ruleset/injury-states.mjs";
+import { ILLNESS_STATES } from "./business/ruleset/illness-states.mjs";
+import Ruleset from "./business/ruleset/ruleset.mjs";
+// Chat constants
+import { VISIBILITY_MODES } from "./presentation/chat/visibility-modes.mjs";
+// Utility
+import * as DialogUtil from "./presentation/dialog/dialog-utility.mjs";
+import { TEMPLATES, preloadHandlebarsTemplates } from "./presentation/template/templatePreloader.mjs";
+import { findDocument } from "./business/util/content-utility.mjs";
+import ChoiceOption from "./presentation/util/choice-option.mjs";
 // Import main config.
-import { ambersteel as ambersteelConfig } from "./business/config.js"
-import * as DialogUtil from "./utils/dialog-utility.mjs";
-import MigratorInitiator from "./migration/migrator-initiator.mjs";
-import MigratorDialog from "./migration/presentation/migrator-dialog.mjs";
-import LoadDebugSettingUseCase from "./use-case/load-debug-setting-use-case.mjs";
+import { ambersteelConfig } from "./business/config.js"
+// Migration
+import MigratorInitiator from "./business/migration/migrator-initiator.mjs";
+import MigratorDialog from "./business/migration/presentation/migrator-dialog.mjs";
+import LoadDebugSettingUseCase from "./business/use-case/load-debug-setting-use-case.mjs";
 // Import document classes.
-import { AmbersteelActor } from "./documents/actor/actor.mjs";
-import { AmbersteelItem } from "./documents/item/item.mjs";
+import { AmbersteelActor } from "./business/document/actor/actor.mjs";
+import { AmbersteelItem } from "./business/document/item/item.mjs";
 // Import sheet classes.
-import { AmbersteelActorSheet } from "./sheets/actor/actor-sheet.mjs";
-import { AmbersteelItemSheet } from "./sheets/item/item-sheet.mjs";
-// Import helper/utility classes and constants.
-import Ruleset from "./ruleset.mjs";
-import { preloadHandlebarsTemplates } from "./templatePreloader.mjs";
-import { findDocument } from "./utils/content-utility.mjs";
-import { TEMPLATES } from "./templatePreloader.mjs";
-import ChoiceOption from "./dto/choice-option.mjs";
+import { AmbersteelActorSheet } from "./presentation/sheet/actor/actor-sheet.mjs";
+import { AmbersteelItemSheet } from "./presentation/sheet/item/item-sheet.mjs";
 // Import logging classes. 
-import { BaseLoggingStrategy, LogLevels } from "./logging/base-logging-strategy.mjs";
-import { ConsoleLoggingStrategy } from "./logging/console-logging-strategy.mjs";
+BaseLoggingStrategy
+import { BaseLoggingStrategy, LogLevels } from "./business/logging/base-logging-strategy.mjs";
+import { ConsoleLoggingStrategy } from "./business/logging/console-logging-strategy.mjs";
 // Import settings classes. 
-import AmbersteelUserSettings from "./settings/ambersteel-user-settings.mjs";
+import AmbersteelUserSettings from "./business/setting/ambersteel-user-settings.mjs";
 // Import view models. 
-import './components/viewmodel.mjs';
-import './components/sheet-viewmodel.mjs';
-import ViewModelCollection from './utils/viewmodel-collection.mjs';
+import './presentation/view-model/view-model.mjs';
+import './presentation/view-model/sheet-view-model.mjs';
+import ViewModelCollection from './presentation/view-model/view-model-collection.mjs';
 // Import components. 
-import './components/input-viewmodel.mjs';
-import './components/label/label-viewmodel.mjs';
-import './components/input-textfield/input-textfield-viewmodel.mjs';
-import './components/input-dropdown/input-dropdown-viewmodel.mjs';
-import './components/input-number-spinner/input-number-spinner-viewmodel.mjs';
-import './components/input-textarea/input-textarea-viewmodel.mjs';
-import './components/input-radio-button-group/input-radio-button-group-viewmodel.mjs';
-import './components/item-grid/item-grid-view-viewmodel.mjs';
-import './components/button/button-viewmodel.mjs';
-import './components/button-add/button-add-viewmodel.mjs';
-import './components/button-delete/button-delete-viewmodel.mjs';
-import './components/button-open-sheet/button-open-sheet-viewmodel.mjs';
-import './components/button-roll/button-roll-viewmodel.mjs';
-import './components/button-send-to-chat/button-send-to-chat-viewmodel.mjs';
-import './components/button-toggle-visibility/button-toggle-visibility-viewmodel.mjs';
-import './components/button-take-item/button-take-item-viewmodel.mjs';
-import './components/sortable-list/sortable-list-viewmodel.mjs';
+import './presentation/view-model/input-view-model.mjs';
+import './presentation/component/label/label-viewmodel.mjs';
+import './presentation/component/input-textfield/input-textfield-viewmodel.mjs';
+import './presentation/component/input-dropdown/input-dropdown-viewmodel.mjs';
+import './presentation/component/input-number-spinner/input-number-spinner-viewmodel.mjs';
+import './presentation/component/input-textarea/input-textarea-viewmodel.mjs';
+import './presentation/component/input-radio-button-group/input-radio-button-group-viewmodel.mjs';
+import './presentation/component/item-grid/item-grid-view-viewmodel.mjs';
+import './presentation/component/button/button-viewmodel.mjs';
+import './presentation/component/button-add/button-add-viewmodel.mjs';
+import './presentation/component/button-delete/button-delete-viewmodel.mjs';
+import './presentation/component/button-open-sheet/button-open-sheet-viewmodel.mjs';
+import './presentation/component/button-roll/button-roll-viewmodel.mjs';
+import './presentation/component/button-send-to-chat/button-send-to-chat-viewmodel.mjs';
+import './presentation/component/button-toggle-visibility/button-toggle-visibility-viewmodel.mjs';
+import './presentation/component/button-take-item/button-take-item-viewmodel.mjs';
+import './presentation/component/sortable-list/sortable-list-viewmodel.mjs';
 // Import ui view models. 
-import '../templates/gm-notes-viewmodel.mjs';
-import '../templates/actor/actor-sheet-viewmodel.mjs';
-import '../templates/actor/components/component-attribute-table-viewmodel.mjs';
-import '../templates/actor/parts/actor-assets-viewmodel.mjs';
-import '../templates/actor/parts/actor-attributes-viewmodel.mjs';
-import '../templates/actor/parts/actor-beliefs-fate-viewmodel.mjs';
-import '../templates/actor/parts/actor-beliefs-viewmodel.mjs';
-import '../templates/actor/parts/actor-biography-viewmodel.mjs';
-import '../templates/actor/parts/actor-fate-viewmodel.mjs';
-import '../templates/actor/parts/actor-health-viewmodel.mjs';
-import '../templates/actor/parts/actor-personals-viewmodel.mjs';
-import '../templates/actor/parts/actor-skills-viewmodel.mjs';
+import '../presentation/template/gm-notes-viewmodel.mjs';
+import '../presentation/template/actor/actor-sheet-viewmodel.mjs';
+import '../presentation/template/actor/component/component-attribute-table-viewmodel.mjs';
+import '../presentation/template/actor/part/actor-assets-viewmodel.mjs';
+import '../presentation/template/actor/part/actor-attributes-viewmodel.mjs';
+import '../presentation/template/actor/part/actor-beliefs-fate-viewmodel.mjs';
+import '../presentation/template/actor/part/actor-beliefs-viewmodel.mjs';
+import '../presentation/template/actor/part/actor-biography-viewmodel.mjs';
+import '../presentation/template/actor/part/actor-fate-viewmodel.mjs';
+import '../presentation/template/actor/part/actor-health-viewmodel.mjs';
+import '../presentation/template/actor/part/actor-personals-viewmodel.mjs';
+import '../presentation/template/actor/part/actor-skills-viewmodel.mjs';
 
 /* -------------------------------------------- */
 /*  Init Hook                                   */

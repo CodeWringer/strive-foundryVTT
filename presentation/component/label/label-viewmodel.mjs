@@ -1,5 +1,5 @@
-import { TEMPLATES } from "../../templatePreloader.mjs";
-import ViewModel from "../viewmodel.mjs";
+import { TEMPLATES } from "../../template/templatePreloader.mjs";
+import ViewModel from "../../view-model/view-model.mjs";
 
 /**
  * --- Inherited from ViewModel

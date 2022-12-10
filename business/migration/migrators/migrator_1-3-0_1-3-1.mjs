@@ -1,4 +1,4 @@
-import { findItem, getActors } from "../../utils/content-utility.mjs";
+import { findItem, getActors } from "../../util/content-utility.mjs";
 import AbstractMigrator from "../abstract-migrator.mjs";
 import { MIGRATORS } from "../migrators.mjs";
 import VersionCode from "../version-code.mjs";

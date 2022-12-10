@@ -1,6 +1,6 @@
-import { createUUID } from "../utils/uuid-utility.mjs";
-import * as PropertyUtil from "../utils/property-utility.mjs";
-import * as ValidationUtil from "../utils/validation-utility.mjs";
+import { createUUID } from "../../business/util/uuid-utility.mjs";
+import * as PropertyUtil from "../../business/util/property-utility.mjs";
+import * as ValidationUtil from "../../business/util/validation-utility.mjs";
 
 /**
  * @summary

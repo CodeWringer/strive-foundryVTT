@@ -1,8 +1,8 @@
+import { TEMPLATES } from "../../../presentation/template/templatePreloader.mjs";
+import FateCardChatMessageViewModel from "../../../presentation/template/item/fate-card/fate-card-chat-message-viewmodel.mjs";
+import PreparedChatData from "../../../presentation/chat/prepared-chat-data.mjs";
+import { SOUNDS_CONSTANTS } from "../../../presentation/audio/sounds.mjs";
 import AmbersteelBaseItem from "./ambersteel-base-item.mjs";
-import { TEMPLATES } from "../../templatePreloader.mjs";
-import FateCardChatMessageViewModel from "../../../templates/item/fate-card/fate-card-chat-message-viewmodel.mjs";
-import PreparedChatData from "../../dto/prepared-chat-data.mjs";
-import { SOUNDS_CONSTANTS } from "../../constants/sounds.mjs";
 import { ITEM_SUBTYPE } from "./item-subtype.mjs";
 
 export default class AmbersteelFateCardItem extends AmbersteelBaseItem {

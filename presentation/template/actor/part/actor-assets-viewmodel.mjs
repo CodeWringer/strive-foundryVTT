@@ -1,10 +1,10 @@
-import ItemGridViewViewModel from "../../../module/components/item-grid/item-grid-view-viewmodel.mjs";
-import SheetViewModel from "../../../module/components/sheet-viewmodel.mjs";
-import DocumentListItemOrderDataSource from "../../../module/components/sortable-list/document-list-item-order-datasource.mjs";
-import SortableListViewModel from "../../../module/components/sortable-list/sortable-list-viewmodel.mjs";
-import { TEMPLATES } from "../../../module/templatePreloader.mjs";
-import { validateOrThrow } from "../../../module/utils/validation-utility.mjs";
+import { validateOrThrow } from "../../../../business/util/validation-utility.mjs";
+import ItemGridViewViewModel from "../../../component/item-grid/item-grid-view-viewmodel.mjs";
+import DocumentListItemOrderDataSource from "../../../component/sortable-list/document-list-item-order-datasource.mjs";
+import SortableListViewModel from "../../../component/sortable-list/sortable-list-viewmodel.mjs";
+import SheetViewModel from "../../../view-model/sheet-view-model.mjs";
 import ItemListItemViewModel from "../../item/item/item-list-item-viewmodel.mjs";
+import { TEMPLATES } from "../../templatePreloader.mjs";
 
 export default class ActorAssetsViewModel extends SheetViewModel {
   /** @override */
@@ -87,7 +87,7 @@ export default class ActorAssetsViewModel extends SheetViewModel {
         listName: "property",
       }),
       listItemViewModels: this.itemViewModels,
-      listItemTemplate: "systems/ambersteel/templates/item/item/item-list-item.hbs",
+      listItemTemplate: "systems/ambersteel/template/item/item/item-list-item.hbs",
       vmBtnAddItem: thiz.createVmBtnAdd({
         id: "vmBtnAddItem",
         target: thiz.actor,

@@ -1,5 +1,5 @@
-import { ITEM_ORIENTATIONS } from "../../constants/item-orientations.mjs";
-import InventoryIndex from "../../dto/inventory-index.mjs";
+import InventoryIndex from "../../../business/item-grid/inventory-index.mjs";
+import { ITEM_ORIENTATIONS } from "../../../business/item-grid/item-orientations.mjs";
 
 /**
  * Default column count used to initialize new a item grid. 

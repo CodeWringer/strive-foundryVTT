@@ -7,7 +7,7 @@ import AmbersteelIllnessItemSheet from "./ambersteel-illness-item-sheet.mjs";
 import AmbersteelMutationItemSheet from "./ambersteel-mutation-item-sheet.mjs";
 import { ITEM_SHEET_SUBTYPE } from "./item-sheet-subtype.mjs";
 // Other imports
-import * as SheetUtil from "../../utils/sheet-utility.mjs";
+import * as SheetUtil from "../sheet-utility.mjs";
 
 export class AmbersteelItemSheet extends ItemSheet {
   /**

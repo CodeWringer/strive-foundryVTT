@@ -1,6 +1,6 @@
-import SheetViewModel from "../module/components/sheet-viewmodel.mjs";
-import { TEMPLATES } from "../module/templatePreloader.mjs";
-import { validateOrThrow } from "../module/utils/validation-utility.mjs";
+import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
+import { TEMPLATES } from "../../template/templatePreloader.mjs";
+import SheetViewModel from "../../view-model/sheet-view-model.mjs";
 
 export default class GmNotesViewModel extends SheetViewModel {
   /** @override */

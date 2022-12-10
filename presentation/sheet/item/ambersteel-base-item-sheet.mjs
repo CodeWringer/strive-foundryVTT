@@ -1,5 +1,5 @@
-import ItemItemSheetViewModel from "../../../templates/item/item/item-item-sheet-viewmodel.mjs";
-import { TEMPLATES } from "../../templatePreloader.mjs";
+import ItemItemSheetViewModel from "../../template/item/item/item-item-sheet-viewmodel.mjs";
+import { TEMPLATES } from "../../template/templatePreloader.mjs";
 import { ITEM_SHEET_SUBTYPE } from "./item-sheet-subtype.mjs";
 
 /**

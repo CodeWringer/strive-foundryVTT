@@ -1,7 +1,7 @@
+import Ruleset from "../../../business/ruleset/ruleset.mjs";
+import SkillItemSheetViewModel from "../../template/item/skill/skill-item-sheet-viewmodel.mjs";
+import { TEMPLATES } from "../../template/templatePreloader.mjs";
 import AmbersteelBaseItemSheet from "./ambersteel-base-item-sheet.mjs";
-import { TEMPLATES } from "../../templatePreloader.mjs";
-import SkillItemSheetViewModel from "../../../templates/item/skill/skill-item-sheet-viewmodel.mjs";
-import Ruleset from "../../ruleset.mjs";
 import { ITEM_SHEET_SUBTYPE } from "./item-sheet-subtype.mjs";
 
 export default class AmbersteelSkillItemSheet extends AmbersteelBaseItemSheet {

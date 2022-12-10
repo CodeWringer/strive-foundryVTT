@@ -1,15 +1,15 @@
-import SheetViewModel from "../../module/components/sheet-viewmodel.mjs";
-import ViewModel from "../../module/components/viewmodel.mjs";
-import { TEMPLATES } from "../../module/templatePreloader.mjs";
-import { validateOrThrow } from "../../module/utils/validation-utility.mjs";
-import GmNotesViewModel from "../gm-notes-viewmodel.mjs";
-import ActorAssetsViewModel from "./parts/actor-assets-viewmodel.mjs";
-import ActorAttributesViewModel from "./parts/actor-attributes-viewmodel.mjs";
-import ActorBeliefsFateViewModel from "./parts/actor-beliefs-fate-viewmodel.mjs";
-import ActorBiographyViewModel from "./parts/actor-biography-viewmodel.mjs";
-import ActorHealthViewModel from "./parts/actor-health-viewmodel.mjs";
-import ActorPersonalsViewModel from "./parts/actor-personals-viewmodel.mjs";
-import ActorSkillsViewModel from "./parts/actor-skills-viewmodel.mjs";
+import { validateOrThrow } from "../../../business/util/validation-utility.mjs"
+import GmNotesViewModel from "../../component/section-gm-notes/section-gm-notes-viewmodel.mjs"
+import SheetViewModel from "../../view-model/sheet-view-model.mjs"
+import ViewModel from "../../view-model/view-model.mjs"
+import { TEMPLATES } from "../templatePreloader.mjs"
+import ActorAssetsViewModel from "./parts/actor-assets-viewmodel.mjs"
+import ActorAttributesViewModel from "./parts/actor-attributes-viewmodel.mjs"
+import ActorBeliefsFateViewModel from "./parts/actor-beliefs-fate-viewmodel.mjs"
+import ActorBiographyViewModel from "./parts/actor-biography-viewmodel.mjs"
+import ActorHealthViewModel from "./parts/actor-health-viewmodel.mjs"
+import ActorPersonalsViewModel from "./parts/actor-personals-viewmodel.mjs"
+import ActorSkillsViewModel from "./parts/actor-skills-viewmodel.mjs"
 
 export default class ActorSheetViewModel extends SheetViewModel {
   /** @override */

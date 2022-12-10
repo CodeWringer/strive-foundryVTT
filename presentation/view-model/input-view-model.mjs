@@ -1,7 +1,7 @@
+import { setNestedPropertyValue, getNestedPropertyValue } from "../../business/util/property-utility.mjs";
+import { validateOrThrow } from "../../business/util/validation-utility.mjs";
+import { getElementValue } from "../sheet/sheet-utility.mjs";
 import ViewModel from "./view-model.mjs";
-import { setNestedPropertyValue, getNestedPropertyValue } from "../utils/property-utility.mjs";
-import { getElementValue } from "../utils/sheet-utility.mjs";
-import { validateOrThrow } from "../utils/validation-utility.mjs";
 
 /**
  * Constant that defines the css class to look for when identifying input elements for editing. 

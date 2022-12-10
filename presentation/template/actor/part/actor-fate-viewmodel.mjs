@@ -1,7 +1,7 @@
+import { validateOrThrow } from "../../../../business/util/validation-utility.mjs";
+import SheetViewModel from "../../../view-model/sheet-view-model.mjs";
 import FateCardViewModel from "../../item/fate-card/fate-card-viewmodel.mjs";
-import { TEMPLATES } from "../../../module/templatePreloader.mjs";
-import { validateOrThrow } from "../../../module/utils/validation-utility.mjs";
-import SheetViewModel from "../../../module/components/sheet-viewmodel.mjs";
+import { TEMPLATES } from "../../templatePreloader.mjs";
 
 export default class ActorFateViewModel extends SheetViewModel {
   /** @override */

@@ -1,11 +1,11 @@
-import SkillAbility from "../dto/skill-ability.mjs";
-import { showDialog } from "./dialog-utility.mjs";
-import { getNestedPropertyValue } from "./property-utility.mjs";
-import { getElementValue } from "./sheet-utility.mjs";
-import { validateOrThrow } from "./validation-utility.mjs";
-import { TEMPLATES } from "../templatePreloader.mjs";
-import { SOUNDS_CONSTANTS } from "../constants/sounds.mjs";
-import GetShowFancyFontUseCase from "../use-case/get-show-fancy-font-use-case.mjs";
+import SkillAbility from "../../business/ruleset/skill/skill-ability.mjs";
+import { showDialog } from "../dialog/dialog-utility.mjs";
+import { getNestedPropertyValue } from "../../business/util/property-utility.mjs";
+import { getElementValue } from "../sheet/sheet-utility.mjs";
+import { validateOrThrow } from "../../business/util/validation-utility.mjs";
+import { TEMPLATES } from "../template/templatePreloader.mjs";
+import { SOUNDS_CONSTANTS } from "../audio/sounds.mjs";
+import GetShowFancyFontUseCase from "../../business/use-case/get-show-fancy-font-use-case.mjs";
 
 /**
  * Creates a new ChatMessage, displaying the given contents. 

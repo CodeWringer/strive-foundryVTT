@@ -1,6 +1,6 @@
+import IllnessItemSheetViewModel from "../../template/item/illness/illness-item-sheet-viewmodel.mjs";
+import { TEMPLATES } from "../../template/templatePreloader.mjs";
 import AmbersteelBaseItemSheet from "./ambersteel-base-item-sheet.mjs";
-import { TEMPLATES } from "../../templatePreloader.mjs";
-import IllnessItemSheetViewModel from "../../../templates/item/illness/illness-item-sheet-viewmodel.mjs";
 import { ITEM_SHEET_SUBTYPE } from "./item-sheet-subtype.mjs";
 
 export default class AmbersteelIllnessItemSheet extends AmbersteelBaseItemSheet {

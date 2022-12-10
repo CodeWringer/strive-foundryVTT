@@ -1,8 +1,8 @@
-import { TEMPLATES } from "../../templatePreloader.mjs";
+import * as StringUtil from "../../../business/util/string-utility.mjs"
+import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
+import { TEMPLATES } from "../../template/templatePreloader.mjs";
+import { showConfirmationDialog } from "../../dialog/dialog-utility.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
-import { showConfirmationDialog } from "../../utils/dialog-utility.mjs";
-import { validateOrThrow } from "../../utils/validation-utility.mjs";
-import * as StringUtil from "../../utils/string-utility.mjs"
 
 /**
  * --- Inherited from ViewModel

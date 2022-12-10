@@ -1,7 +1,6 @@
-import { ATTRIBUTE_GROUPS } from "./constants/attribute-groups.mjs";
-import AdvancementRequirements from "./dto/advancement-requirement.mjs";
-import { SummedData } from "./dto/summed-data.mjs";
-import { SummedDataComponent } from "./dto/summed-data.mjs";
+import AdvancementRequirements from "./advancement-requirement.mjs";
+import { ATTRIBUTE_GROUPS } from "./attribute-groups.mjs";
+import { SummedData, SummedDataComponent } from "./skill/summed-data.mjs";
 
 /**
  * Provides all the ruleset-specifics. 

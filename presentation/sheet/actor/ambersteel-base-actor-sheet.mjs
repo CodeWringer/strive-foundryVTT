@@ -1,5 +1,5 @@
-import ActorSheetViewModel from "../../../templates/actor/actor-sheet-viewmodel.mjs";
-import { TEMPLATES } from "../../templatePreloader.mjs";
+import ActorSheetViewModel from "../../template/actor/actor-sheet-viewmodel.mjs";
+import { TEMPLATES } from "../../template/templatePreloader.mjs";
 import { ACTOR_SHEET_SUBTYPE } from "./actor-sheet-subtype.mjs";
 
 /**
