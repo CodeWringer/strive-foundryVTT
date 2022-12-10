@@ -34,7 +34,7 @@ export default class ChoiceOption {
   /**
    * A (relative) icon file path or a FontAwwesome icon class. 
    * 
-   * E.g. "systems/ambersteel/images/texture.svg" or 
+   * E.g. "systems/ambersteel/presentation/image/texture.svg" or 
    * e.g. "fas fa-plus"
    * @type {String | undefined}
    * @readonly
@@ -82,7 +82,7 @@ export default class ChoiceOption {
    * to display to the user. 
    * @param {String | undefined} args.icon Optional. A (relative) icon file path or a FontAwwesome icon class. 
    * 
-   * E.g. "systems/ambersteel/images/texture.svg" or 
+   * E.g. "systems/ambersteel/presentation/image/texture.svg" or 
    * e.g. "fas fa-plus"
    * @param {Boolean | undefined} shouldDisplayValue Optional. Sets whether the value should be displayed. Default true. 
    * @param {Boolean | undefined} shouldDisplayIcon Optional. Sets whether the icon should be displayed. Default true. 
