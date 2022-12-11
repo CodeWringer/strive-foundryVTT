@@ -29,10 +29,10 @@ export const TEMPLATES = {
   DICE_ROLL_CHAT_MESSAGE: "systems/ambersteel/presentation/template/dice/roll.hbs",
   DICE_ROLL_DAMAGE_CHAT_MESSAGE: "systems/ambersteel/presentation/template/dice/roll-damage-chat-message.hbs",
   // --- Dialogs
-  DIALOG_ROLL: "systems/ambersteel/presentation/template/dialog/dialog-roll.hbs",
-  DIALOG_VISIBILITY: "systems/ambersteel/presentation/template/dialog/dialog-visibility.hbs",
-  DIALOG_PLAIN: "systems/ambersteel/presentation/template/dialog/dialog-plain.hbs",
-  DIALOG_SELECT: "systems/ambersteel/presentation/template/dialog/dialog-select.hbs",
+  DIALOG_ROLL: "systems/ambersteel/presentation/dialog/dialog-roll/dialog-roll.hbs",
+  DIALOG_VISIBILITY: "systems/ambersteel/presentation/dialog/dialog-visibility/dialog-visibility.hbs",
+  DIALOG_PLAIN: "systems/ambersteel/presentation/dialog/dialog-plain/dialog-plain.hbs",
+  DIALOG_SELECT: "systems/ambersteel/presentation/dialog/dialog-select/dialog-select.hbs",
   DIALOG_ITEM_ADD: "systems/ambersteel/presentation/dialog/dialog-item-add/dialog-item-add.hbs",
   DIALOG_MIGRATOR: "systems/ambersteel/presentation/dialog/dialog-migrator/dialog-migrator.hbs",
   // --- Actor
