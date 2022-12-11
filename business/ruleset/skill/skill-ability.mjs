@@ -112,13 +112,16 @@ export default class SkillAbility {
 
   /**
    * Returns an instance of a view model for use in a chat message. 
-   * @returns {SheetViewModel}
+   * 
    * @param {Object | undefined} overrides Optional. An object that allows overriding any of the view model properties. 
    * @param {String | undefined} overrides.id
    * @param {Boolean | undefined} overrides.isEditable
    * @param {Boolean | undefined} overrides.isSendable
    * @param {Boolean | undefined} overrides.isOwner
    * @param {Boolean | undefined} overrides.isGM
+   * 
+   * @returns {SkillAbilityChatMessageViewModel}
+   * 
    * @virtual
    */
   getChatViewModel(overrides = {}) {

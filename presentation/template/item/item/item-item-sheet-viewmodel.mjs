@@ -1,8 +1,9 @@
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs";
-import SheetViewModel from "../../../view-model/sheet-view-model.mjs";
+import ViewModel from "../../../view-model/view-model.mjs";
+import ViewModelFactory from "../../../view-model/view-model-factory.mjs";
 import { TEMPLATES } from "../../templatePreloader.mjs";
 
-export default class ItemItemSheetViewModel extends SheetViewModel {
+export default class ItemItemSheetViewModel extends ViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.ITEM_SHEET; }
 
@@ -29,53 +30,63 @@ export default class ItemItemSheetViewModel extends SheetViewModel {
     this.item = args.item;
     this.contextTemplate = args.contextTemplate ?? "item-item-sheet";
     const thiz = this;
+    const factory = new ViewModelFactory();
 
-    this.vmImg = this.createVmImg({
+    this.vmImg = factory.createVmImg({
+      parent: thiz,
       id: "vmImg",
       propertyOwner: thiz.item,
       propertyPath: "img",
     });
-    this.vmTfName = this.createVmTextField({
+    this.vmTfName = factory.createVmTextField({
+      parent: thiz,
       id: "vmTfName",
       propertyOwner: thiz.item,
       propertyPath: "name",
       placeholder: "ambersteel.general.name",
     });
-    this.vmBtnSendToChat = this.createVmBtnSendToChat({
+    this.vmBtnSendToChat = factory.createVmBtnSendToChat({
+      parent: thiz,
       id: "vmBtnSendToChat",
       target: thiz.item,
       isEditable: thiz.isEditable || thiz.isGM,
     });
-    this.vmBtnTakeItem = this.createVmBtnTakeItem({
+    this.vmBtnTakeItem = factory.createVmBtnTakeItem({
+      parent: thiz,
       id: "vmBtnTakeItem",
       target: thiz.item,
       contextType: "item-sheet"
     });
-    this.vmNsQuantity = this.createVmNumberSpinner({
+    this.vmNsQuantity = factory.createVmNumberSpinner({
+      parent: thiz,
       id: "vmNsQuantity",
       propertyOwner: thiz.item,
       propertyPath: "data.data.quantity",
       min: 1,
     });
-    this.vmNsMaxQuantity = this.createVmNumberSpinner({
+    this.vmNsMaxQuantity = factory.createVmNumberSpinner({
+      parent: thiz,
       id: "vmNsMaxQuantity",
       propertyOwner: thiz.item,
       propertyPath: "data.data.maxQuantity",
       min: 1,
     });
-    this.vmNsShapeWidth = this.createVmNumberSpinner({
+    this.vmNsShapeWidth = factory.createVmNumberSpinner({
+      parent: thiz,
       id: "vmNsShapeWidth",
       propertyOwner: thiz.item,
       propertyPath: "data.data.shape.width",
       min: 1,
     });
-    this.vmNsShapeHeight = this.createVmNumberSpinner({
+    this.vmNsShapeHeight = factory.createVmNumberSpinner({
+      parent: thiz,
       id: "vmNsShapeHeight",
       propertyOwner: thiz.item,
       propertyPath: "data.data.shape.height",
       min: 1,
     });
-    this.vmRtDescription = this.createVmRichText({
+    this.vmRtDescription = factory.createVmRichText({
+      parent: thiz,
       id: "vmRtDescription",
       propertyOwner: thiz.item,
       propertyPath: "data.data.description",

@@ -7,10 +7,11 @@ import { SOUNDS_CONSTANTS } from "../../../audio/sounds.mjs";
 import * as ChatUtil from "../../../chat/chat-utility.mjs";
 import ButtonViewModel from "../../../component/button/button-viewmodel.mjs";
 import InfoBubble from "../../../component/info-bubble/info-bubble.mjs";
-import SheetViewModel from "../../../view-model/sheet-view-model.mjs";
+import ViewModel from "../../../view-model/view-model.mjs";
+import ViewModelFactory from "../../../view-model/view-model-factory.mjs";
 import { TEMPLATES } from "../../templatePreloader.mjs";
 
-export default class SkillAbilityListItemViewModel extends SheetViewModel {
+export default class SkillAbilityListItemViewModel extends ViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.SKILL_ABILITY_LIST_ITEM; }
 
@@ -58,25 +59,25 @@ export default class SkillAbilityListItemViewModel extends SheetViewModel {
    * @readonly
    */
   get hideOpposedBy() { return this.skillAbility.opposedBy === undefined; }
-  
+
   /**
    * @type {Boolean}
    * @readonly
    */
   get hideCondition() { return this.skillAbility.condition === undefined; }
-  
+
   /**
    * @type {Boolean}
    * @readonly
    */
   get hideDistance() { return this.skillAbility.distance === undefined; }
-  
+
   /**
    * @type {Boolean}
    * @readonly
    */
   get hideAttackType() { return this.skillAbility.attackType === undefined; }
-  
+
   /**
    * @type {Boolean}
    * @readonly
@@ -113,11 +114,14 @@ export default class SkillAbilityListItemViewModel extends SheetViewModel {
     this.contextTemplate = args.contextTemplate ?? "skill-ability-list-item";
 
     const thiz = this;
+    const factory = new ViewModelFactory();
+
     const pathSkillAbility = `data.data.abilities[${thiz.index}]`;
     const skillAbility = getNestedPropertyValue(this.item, pathSkillAbility);
-    
     const skillAbilityParent = skillAbility.getOwningDocument();
-    this.vmBtnRoll = this.createVmBtnRoll({
+
+    this.vmBtnRoll = factory.createVmBtnRoll({
+      parent: thiz,
       id: "vmBtnRoll",
       target: skillAbilityParent,
       propertyPath: undefined,
@@ -129,60 +133,70 @@ export default class SkillAbilityListItemViewModel extends SheetViewModel {
       callback: "advanceSkillBasedOnRollResult",
       callbackData: skillAbility.ownerId,
       actor: thiz.actor,
-      isEditable: thiz.isEditable || thiz.isGM,
+      isEditable: (thiz.isEditable || thiz.isGM) && thiz.actor !== undefined,
     });
-    this.vmBtnSendToChat = this.createVmBtnSendToChat({
+    this.vmBtnSendToChat = factory.createVmBtnSendToChat({
+      parent: thiz,
       id: "vmBtnSendToChat",
       target: skillAbility,
       isEditable: thiz.isEditable || thiz.isGM,
     });
-    this.vmImg = this.createVmImg({
+    this.vmImg = factory.createVmImg({
+      parent: thiz,
       id: "vmImg",
       propertyOwner: skillAbility,
       propertyPath: "img",
     });
-    this.vmTfName = this.createVmTextField({
+    this.vmTfName = factory.createVmTextField({
+      parent: thiz,
       id: "vmTfName",
       propertyOwner: skillAbility,
       propertyPath: "name",
       placeholder: "ambersteel.general.name",
     });
-    this.vmBtnDelete = this.createVmBtnDelete({
+    this.vmBtnDelete = factory.createVmBtnDelete({
+      parent: thiz,
       id: "vmBtnDelete",
       target: skillAbility,
       withDialog: true,
     });
-    this.vmNsRequiredLevel = this.createVmNumberSpinner({
+    this.vmNsRequiredLevel = factory.createVmNumberSpinner({
+      parent: thiz,
       id: "vmNsRequiredLevel",
       propertyOwner: skillAbility,
       propertyPath: "requiredLevel",
       min: 0,
     });
-    this.vmTfObstacle = this.createVmTextField({
+    this.vmTfObstacle = factory.createVmTextField({
+      parent: thiz,
       id: "vmTfObstacle",
       propertyOwner: skillAbility,
       propertyPath: "obstacle",
       placeholder: game.i18n.localize("ambersteel.roll.obstacle.placeholder"),
     });
-    this.vmTfOpposedBy = this.createVmTextField({
+    this.vmTfOpposedBy = factory.createVmTextField({
+      parent: thiz,
       id: "vmTfOpposedBy",
       propertyOwner: skillAbility,
       propertyPath: "opposedBy",
       placeholder: game.i18n.localize("ambersteel.roll.obstacle.opposedBy.placeholder"),
     });
-    this.vmTfDistance = this.createVmTextField({
+    this.vmTfDistance = factory.createVmTextField({
+      parent: thiz,
       id: "vmTfDistance",
       propertyOwner: skillAbility,
       propertyPath: "distance",
       placeholder: game.i18n.localize("ambersteel.character.skill.ability.distance.placeholder"),
     });
-    this.vmNsApCost = this.createVmNumberSpinner({
+    this.vmNsApCost = factory.createVmNumberSpinner({
+      parent: thiz,
       id: "vmNsApCost",
       propertyOwner: skillAbility,
       propertyPath: "apCost",
       min: 0,
     });
-    this.vmDdAttackType = this.createVmDropDown({
+    this.vmDdAttackType = factory.createVmDropDown({
+      parent: thiz,
       id: "vmDdAttackType",
       propertyOwner: skillAbility,
       propertyPath: "attackType",
@@ -192,15 +206,15 @@ export default class SkillAbilityListItemViewModel extends SheetViewModel {
     this.vmBtnRollDamage = new ButtonViewModel({
       id: "vmBtnRollDamage",
       parent: thiz,
-      isEditable: thiz.isEditable,
+      isEditable: thiz.isEditable && thiz.actor !== undefined,
       localizableTitle: "ambersteel.roll.doRoll",
       onClick: async (html, isOwner, isEditable) => {
         const dialogResult = await ChatUtil.queryVisibilityMode();
         if (!dialogResult.confirmed) return;
-  
+
         // This is the total across all damage definitions. 
         let damageTotal = 0;
-  
+
         // Build roll array. 
         const rolls = [];
         for (const damageDefinition of thiz.skillAbility.damage) {
@@ -213,25 +227,25 @@ export default class SkillAbilityListItemViewModel extends SheetViewModel {
             // current level or value of the thing, if possible. 
             // If a value cannot be determined, it will default to "0". 
             const regExpReplace = new RegExp(key, "gi");
-            
+
             let replaceValue = value.level;
             if (replaceValue === undefined || replaceValue === null) {
               replaceValue = value.value;
-              
+
               if (replaceValue === undefined || replaceValue === null) {
                 replaceValue = isNumber(value) === true ? value : "0";
               }
             }
-            
+
             resolvedDamage = resolvedDamage.replace(regExpReplace, replaceValue);
           }
-          
+
           // Get evaluated roll of damage formula. 
           const rollResult = new Roll(resolvedDamage);
           await rollResult.evaluate({ async: true });
-  
+
           damageTotal += parseFloat(rollResult.total);
-  
+
           // Get an array of each dice term. 
           const diceResults = [];
           for (const term of rollResult.terms) {
@@ -249,28 +263,28 @@ export default class SkillAbilityListItemViewModel extends SheetViewModel {
               });
             }
           }
-  
+
           // Get localized damage type. 
           const damageType = game.ambersteel.getConfigItem(DAMAGE_TYPES, damageDefinition.damageType);
           const localizedDamageType = game.i18n.localize(damageType.localizableName);
-  
+
           rolls.push({
             damage: rollResult.total,
             localizedDamageType: localizedDamageType,
             diceResults: diceResults,
           });
         }
-  
+
         // Determine title
         const title = `${game.i18n.localize("ambersteel.character.skill.ability.damage.label")} - ${thiz.skillAbility.name}`;
-  
+
         // Render the results. 
         const renderedContent = await renderTemplate(TEMPLATES.DICE_ROLL_DAMAGE_CHAT_MESSAGE, {
           damageTotal: damageTotal,
           rolls: rolls,
           title: title,
         });
-  
+
         return ChatUtil.sendToChat({
           renderedContent: renderedContent,
           actor: skillAbilityParent.parent,
@@ -280,18 +294,21 @@ export default class SkillAbilityListItemViewModel extends SheetViewModel {
       },
     });
 
-    this.vmTaCondition = this.createVmTextArea({
+    this.vmTaCondition = factory.createVmTextArea({
+      parent: thiz,
       id: "vmTaCondition",
       propertyOwner: skillAbility,
       propertyPath: "condition",
       placeholder: game.i18n.localize("ambersteel.character.skill.ability.condition.placeholder"),
     });
-    this.vmRtDescription = this.createVmRichText({
+    this.vmRtDescription = factory.createVmRichText({
+      parent: thiz,
       id: "vmRtDescription",
       propertyOwner: skillAbility,
       propertyPath: "description",
     });
-    this.vmBtnContextMenu = this.createVmBtnContextMenu({
+    this.vmBtnContextMenu = factory.createVmBtnContextMenu({
+      parent: thiz,
       id: "vmBtnContextMenu",
       menuItems: [
         // Toggle obstacle
@@ -378,7 +395,7 @@ export default class SkillAbilityListItemViewModel extends SheetViewModel {
 
     for (let i = 0; i < skillAbility.damage.length; i++) {
       const vm = new DamageAndTypeViewModel({
-        id: `vmDamageAndType-${i}`, 
+        id: `vmDamageAndType-${i}`,
         parent: thiz,
         isEditable: thiz.isEditable,
         isSendable: thiz.isSendable,
@@ -408,10 +425,10 @@ export default class SkillAbilityListItemViewModel extends SheetViewModel {
 
       jElement.on("mouseenter", (e) => {
         thiz.damageInfoBubble.show(jElement);
-      }); 
+      });
       jElement.on("mouseleave", (e) => {
         thiz.damageInfoBubble.hide();
-      }); 
+      });
     });
   }
 
@@ -423,7 +440,7 @@ export default class SkillAbilityListItemViewModel extends SheetViewModel {
   }
 }
 
-class DamageAndTypeViewModel extends SheetViewModel {
+class DamageAndTypeViewModel extends ViewModel {
   /**
    * @type {Array<ChoiceOption>}
    * @readonly
@@ -438,13 +455,16 @@ class DamageAndTypeViewModel extends SheetViewModel {
     this.index = args.index;
 
     const thiz = this;
+    const factory = new ViewModelFactory();
 
-    this.vmTfDamage = this.createVmTextField({
+    this.vmTfDamage = factory.createVmTextField({
+      parent: thiz,
       id: "vmTfDamage",
       propertyOwner: this.skillAbility,
       propertyPath: `damage[${this.index}].damage`,
     });
-    this.vmDdDamageType = this.createVmDropDown({
+    this.vmDdDamageType = factory.createVmDropDown({
+      parent: thiz,
       id: "vmDdDamageType",
       propertyOwner: this.skillAbility,
       propertyPath: `damage[${this.index}].damageType`,

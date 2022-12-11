@@ -10,9 +10,9 @@ import { ITEM_SUBTYPE } from './item-subtype.mjs';
 import * as ChatUtil from "../../../presentation/chat/chat-utility.mjs";
 import * as UpdateUtil from "../document-update-utility.mjs";
 import { createUUID } from '../../util/uuid-utility.mjs';
-import SheetViewModel from '../../../presentation/view-model/sheet-view-model.mjs';
 import PreparedChatData from '../../../presentation/chat/prepared-chat-data.mjs';
 import { SOUNDS_CONSTANTS } from '../../../presentation/audio/sounds.mjs';
+import ViewModel from '../../../presentation/view-model/view-model.mjs';
 
 /**
  * @summary
@@ -140,17 +140,20 @@ export class AmbersteelItem extends Item {
 
   /**
    * Returns an instance of a view model for use in a chat message. 
-   * @returns {SheetViewModel}
+   * 
    * @param {Object | undefined} overrides Optional. An object that allows overriding any of the view model properties. 
    * @param {String | undefined} overrides.id
    * @param {Boolean | undefined} overrides.isEditable
    * @param {Boolean | undefined} overrides.isSendable
    * @param {Boolean | undefined} overrides.isOwner
    * @param {Boolean | undefined} overrides.isGM
+   * 
+   * @returns {ViewModel}
+   * 
    * @virtual
    */
   getChatViewModel(overrides = {}) {
-    return new SheetViewModel({
+    return new ViewModel({
       id: `${this.id}-${createUUID()}`,
       isEditable: false,
       isSendable: false,

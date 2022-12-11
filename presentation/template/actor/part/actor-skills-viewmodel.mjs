@@ -1,7 +1,8 @@
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs"
 import DocumentListItemOrderDataSource from "../../../component/sortable-list/document-list-item-order-datasource.mjs"
 import SortableListViewModel from "../../../component/sortable-list/sortable-list-viewmodel.mjs"
-import SheetViewModel from "../../../view-model/sheet-view-model.mjs"
+import ViewModel from "../../../view-model/view-model.mjs"
+import ViewModelFactory from "../../../view-model/view-model-factory.mjs"
 import SkillListItemViewModel from "../../item/skill/skill-list-item-viewmodel.mjs"
 import { TEMPLATES } from "../../templatePreloader.mjs"
 
@@ -9,7 +10,7 @@ import { TEMPLATES } from "../../templatePreloader.mjs"
 /**
  * @property {Actor} actor
  */
-export default class ActorSkillsViewModel extends SheetViewModel {
+export default class ActorSkillsViewModel extends ViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.ACTOR_SKILLS; }
 
@@ -20,10 +21,10 @@ export default class ActorSkillsViewModel extends SheetViewModel {
 
   /** @override */
   get entityId() { return this.actor.id; }
-  
+
   get learningSkills() { return this.actor.data.data.learningSkills; }
   get skills() { return this.actor.data.data.skills; }
-  
+
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
    * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 
@@ -48,6 +49,7 @@ export default class ActorSkillsViewModel extends SheetViewModel {
 
     // Child view models. 
     const thiz = this;
+    const factory = new ViewModelFactory();
 
     this.learningSkillViewModels = this.actor.data.data.learningSkills.map(skill => {
       return new SkillListItemViewModel({
@@ -72,7 +74,8 @@ export default class ActorSkillsViewModel extends SheetViewModel {
       }),
       listItemViewModels: this.learningSkillViewModels,
       listItemTemplate: TEMPLATES.SKILL_LIST_ITEM,
-      vmBtnAddItem: thiz.createVmBtnAdd({
+      vmBtnAddItem: factory.createVmBtnAdd({
+        parent: thiz,
         id: "vmBtnAddLearningSkill",
         target: thiz.actor,
         creationType: "skill",
@@ -109,7 +112,8 @@ export default class ActorSkillsViewModel extends SheetViewModel {
       }),
       listItemViewModels: this.knownSkillViewModels,
       listItemTemplate: TEMPLATES.SKILL_LIST_ITEM,
-      vmBtnAddItem: thiz.createVmBtnAdd({
+      vmBtnAddItem: factory.createVmBtnAdd({
+        parent: thiz,
         id: "vmBtnAddKnownSkill",
         target: thiz.actor,
         creationType: "skill",

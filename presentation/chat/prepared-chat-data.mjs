@@ -4,7 +4,7 @@
  * @property {Actor | undefined} actor Optional. The actor who will act as the speaker (= sender) of the chat message. 
  * @property {String | undefined} flavor Optional. The flavor to display above the rendered chat message. Effectively represents an optional subtitle to display. 
  * @property {String | undefined} sound Optional. Path to a sound file to play, when the chat message is sent. 
- * @property {SheetViewModel | undefined} viewModel Optional. A view model instance to associate the chat message with. 
+ * @property {ViewModel | undefined} viewModel Optional. A view model instance to associate the chat message with. 
  * 
  */
 export default class PreparedChatData {
@@ -13,7 +13,7 @@ export default class PreparedChatData {
    * @param {Actor | undefined} args.actor
    * @param {String | undefined} args.flavor
    * @param {String | undefined} args.sound
-   * @param {SheetViewModel | undefined} args.viewModel
+   * @param {ViewModel | undefined} args.viewModel
    */
   constructor(args = {}) {
     this.type = "PreparedChatData";

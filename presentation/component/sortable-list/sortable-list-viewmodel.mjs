@@ -1,7 +1,6 @@
 import { moveArrayElement, moveArrayElementBy } from "../../../business/util/array-utility.mjs";
 import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import { TEMPLATES } from "../../template/templatePreloader.mjs";
-import SheetViewModel from "../../view-model/sheet-view-model.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
 
@@ -42,7 +41,7 @@ class SortableListViewModelGroup {
  * @property {Boolean} isEditable If true, input(s) will be in edit mode. If false, input(s) will be in read-only mode.
  * 
  */
-export default class SortableListViewModel extends SheetViewModel {
+export default class SortableListViewModel extends ViewModel {
   static get TEMPLATE() { return TEMPLATES.COMPONENT_SORTABLE_LIST; }
 
   /**

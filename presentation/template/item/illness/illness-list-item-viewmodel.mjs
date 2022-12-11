@@ -1,14 +1,15 @@
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs";
-import SheetViewModel from "../../../view-model/sheet-view-model.mjs";
+import ViewModel from "../../../view-model/view-model.mjs";
+import ViewModelFactory from "../../../view-model/view-model-factory.mjs";
 import { TEMPLATES } from "../../templatePreloader.mjs";
 
-export default class IllnessListItemViewModel extends SheetViewModel {
+export default class IllnessListItemViewModel extends ViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.ILLNESS_LIST_ITEM; }
 
   /** @override */
   get entityId() { return this.item.id; }
-  
+
   /**
    * An array of {ChoiceOption}s which represent the possible states of the illness. 
    * @type {Array<ChoiceOption>}
@@ -44,49 +45,59 @@ export default class IllnessListItemViewModel extends SheetViewModel {
     this.item = args.item;
     this.contextTemplate = args.contextTemplate ?? "illness-list-item";
     const thiz = this;
+    const factory = new ViewModelFactory();
 
-    this.vmImg = this.createVmImg({
+    this.vmImg = factory.createVmImg({
+      parent: thiz,
       id: "vmImg",
       propertyOwner: thiz.item,
       propertyPath: "img",
     });
-    this.vmTfName = this.createVmTextField({
+    this.vmTfName = factory.createVmTextField({
+      parent: thiz,
       id: "vmTfName",
       propertyOwner: thiz.item,
       propertyPath: "name",
       placeholder: "ambersteel.general.name",
     });
-    this.vmRbgState = this.createVmRadioButtonGroup({
+    this.vmRbgState = factory.createVmRadioButtonGroup({
+      parent: thiz,
       id: "vmRbgState",
       propertyOwner: thiz.item,
       propertyPath: "data.data.state",
       options: thiz.stateOptions,
     })
-    this.vmBtnSendToChat = this.createVmBtnSendToChat({
+    this.vmBtnSendToChat = factory.createVmBtnSendToChat({
+      parent: thiz,
       id: "vmBtnSendToChat",
       target: thiz.item,
     });
-    this.vmBtnDelete = this.createVmBtnDelete({
+    this.vmBtnDelete = factory.createVmBtnDelete({
+      parent: thiz,
       id: "vmBtnDelete",
       target: thiz.item,
       withDialog: true,
     })
-    this.vmTfDuration = this.createVmTextField({
+    this.vmTfDuration = factory.createVmTextField({
+      parent: thiz,
       id: "vmTfDuration",
       propertyOwner: thiz.item,
       propertyPath: "data.data.duration",
     });
-    this.vmTfTreatmentSkill = this.createVmTextField({
+    this.vmTfTreatmentSkill = factory.createVmTextField({
+      parent: thiz,
       id: "vmTfTreatmentSkill",
       propertyOwner: thiz.item,
       propertyPath: "data.data.treatmentSkill",
     });
-    this.vmTfTreatment = this.createVmTextField({
+    this.vmTfTreatment = factory.createVmTextField({
+      parent: thiz,
       id: "vmTfTreatment",
       propertyOwner: thiz.item,
       propertyPath: "data.data.treatment",
     });
-    this.vmRtDescription = this.createVmRichText({
+    this.vmRtDescription = factory.createVmRichText({
+      parent: thiz,
       id: "vmRtDescription",
       propertyOwner: thiz.item,
       propertyPath: "data.data.description",

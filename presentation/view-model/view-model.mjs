@@ -1,6 +1,7 @@
 import { createUUID } from "../../business/util/uuid-utility.mjs";
 import * as PropertyUtil from "../../business/util/property-utility.mjs";
 import * as ValidationUtil from "../../business/util/validation-utility.mjs";
+import GetShowFancyFontUseCase from "../../business/use-case/get-show-fancy-font-use-case.mjs";
 
 /**
  * @summary
@@ -93,7 +94,7 @@ export default class ViewModel {
    * @type {String}
    * @readonly
    */
-  get id() { return this._id; }
+  get id() { return (this.parent === undefined) ? this._id : `${this.parent.id}-${this._id}`; }
   
   /**
    * Parent ViewModel instance of this instance. 
@@ -130,6 +131,48 @@ export default class ViewModel {
   get entityId() { return undefined; }
 
   /**
+   * If true, the view model data is editable. 
+   * @type {Boolean}
+   * @default `false`
+   */
+  isEditable = false;
+  
+  /**
+   * If true, the document represented by the sheet can be sent to chat. 
+   * @type {Boolean}
+   * @default `false`
+   */
+  isSendable = false;
+
+  /**
+   * If true, the current user is the owner of the represented document. 
+   * @type {Boolean}
+   * @default `false`
+   */
+  isOwner = false;
+  
+  /**
+   * If true, the current user is a GM. 
+   * @type {Boolean}
+   * @default `false`
+   */
+  isGM = false;
+  
+  /**
+   * If true, show the 'fancy' font. 
+   * @type {Boolean}
+   * @default `false`
+   */
+  showFancyFont = false;
+
+  /**
+   * Name or path of a contextual template, which will be displayed in exception log entries, to aid debugging. 
+   * @type {String | undefined}
+   * @readonly
+   */
+  contextTemplate = undefined;
+
+  /**
    * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
    * 
    * If no value is provided, a shortened UUID will be generated for it. 
@@ -142,14 +185,21 @@ export default class ViewModel {
    * is expected to be associated with an actor sheet or item sheet or journal entry or chat message and so on.
    */
   constructor(args = {}) {
-    const id = args.id ?? createUUID();
-
-    this._id = args.parent !== undefined ? `${args.parent.id}-${id}` : id;
+    this._id = args.id ?? createUUID();
+    
     this.parent = args.parent;
-
     if (this.parent !== undefined) {
       this.parent.children.push(this);
     }
+
+    this.isEditable = args.isEditable ?? false;
+    this.isSendable = args.isSendable ?? false;
+    this.isOwner = args.isOwner ?? false;
+    this.isGM = args.isGM ?? false;
+    
+    this.contextTemplate = args.contextTemplate;
+    
+    this._showFancyFont = new GetShowFancyFontUseCase().invoke();
   }
 
   /**

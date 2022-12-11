@@ -1,8 +1,8 @@
 import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import { TEMPLATES } from "../../template/templatePreloader.mjs";
-import SheetViewModel from "../../view-model/sheet-view-model.mjs";
+import ViewModel from "../../view-model/view-model.mjs";
 
-export default class GmNotesViewModel extends SheetViewModel {
+export default class GmNotesViewModel extends ViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.ACTOR_BIOGRAPHY; }
 

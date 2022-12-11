@@ -1,8 +1,9 @@
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs";
-import SheetViewModel from "../../../view-model/sheet-view-model.mjs";
+import ViewModel from "../../../view-model/view-model.mjs";
+import ViewModelFactory from "../../../view-model/view-model-factory.mjs";
 import { TEMPLATES } from "../../templatePreloader.mjs";
 
-export default class ActorBeliefsViewModel extends SheetViewModel {
+export default class ActorBeliefsViewModel extends ViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.ACTOR_BELIEFS; }
 
@@ -43,8 +44,10 @@ export default class ActorBeliefsViewModel extends SheetViewModel {
     this.contextType = args.contextType ?? "actor-beliefs";
 
     const thiz = this;
+    const factory = new ViewModelFactory();
 
-    this.vmTfAmbition = this.createVmTextField({
+    this.vmTfAmbition = factory.createVmTextField({
+      parent: thiz,
       id: "vmTfAmbition",
       propertyOwner: thiz.actor,
       propertyPath: "data.data.beliefSystem.ambition",
@@ -52,7 +55,8 @@ export default class ActorBeliefsViewModel extends SheetViewModel {
     });
 
     for (let i = 0; i < this.beliefs.length; i++) {
-      this.beliefViewModels.push(this.createVmTextField({
+      this.beliefViewModels.push(factory.createVmTextField({
+        parent: thiz,
         id: `vmBelief${i}`,
         propertyOwner: thiz.actor,
         propertyPath: `data.data.beliefSystem.beliefs[${i}]`,
@@ -61,7 +65,8 @@ export default class ActorBeliefsViewModel extends SheetViewModel {
     }
 
     for (let i = 0; i < this.instincts.length; i++) {
-      this.instinctViewModels.push(this.createVmTextField({
+      this.instinctViewModels.push(factory.createVmTextField({
+        parent: thiz,
         id: `vmInstinct${i}`,
         propertyOwner: thiz.actor,
         propertyPath: `data.data.beliefSystem.instincts[${i}]`,

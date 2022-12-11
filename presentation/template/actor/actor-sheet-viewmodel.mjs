@@ -1,7 +1,7 @@
 import { validateOrThrow } from "../../../business/util/validation-utility.mjs"
 import GmNotesViewModel from "../../component/section-gm-notes/section-gm-notes-viewmodel.mjs"
-import SheetViewModel from "../../view-model/sheet-view-model.mjs"
 import ViewModel from "../../view-model/view-model.mjs"
+import ViewModelFactory from "../../view-model/view-model-factory.mjs"
 import { TEMPLATES } from "../templatePreloader.mjs"
 import ActorAssetsViewModel from "./part/actor-assets-viewmodel.mjs"
 import ActorAttributesViewModel from "./part/actor-attributes-viewmodel.mjs"
@@ -11,7 +11,7 @@ import ActorHealthViewModel from "./part/actor-health-viewmodel.mjs"
 import ActorPersonalsViewModel from "./part/actor-personals-viewmodel.mjs"
 import ActorSkillsViewModel from "./part/actor-skills-viewmodel.mjs"
 
-export default class ActorSheetViewModel extends SheetViewModel {
+export default class ActorSheetViewModel extends ViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.ACTOR_SHEET; }
 
@@ -88,14 +88,17 @@ export default class ActorSheetViewModel extends SheetViewModel {
     this.contextTemplate = args.contextTemplate ?? "actor-character-sheet";
 
     const thiz = this;
+    const factory = new ViewModelFactory();
 
-    this.vmTfName = this.createVmTextField({
+    this.vmTfName = factory.createVmTextField({
+      parent: thiz,
       id: "vmTfName",
       propertyOwner: thiz.actor,
       propertyPath: "name",
       placeholder: "ambersteel.general.name",
     });
-    this.vmImg = this.createVmImg({
+    this.vmImg = factory.createVmImg({
+      parent: thiz,
       id: "vmImg",
       propertyOwner: thiz.actor,
       propertyPath: "img",
@@ -113,7 +116,8 @@ export default class ActorSheetViewModel extends SheetViewModel {
       this.biographyViewModel = new ActorBiographyViewModel({ ...args, id: thiz.biographyId, parent: thiz });
     }
     this.gmNotesViewModel = new GmNotesViewModel({ ...args, id: thiz.biographyId, document: thiz.actor, parent: thiz });
-    this.vmBtnSendToChat = thiz.createVmBtnSendToChat({
+    this.vmBtnSendToChat = factory.createVmBtnSendToChat({
+      parent: this,
       id: "vmBtnSendToChat",
       target: thiz.actor,
       isEditable: thiz.isEditable || thiz.isGM,

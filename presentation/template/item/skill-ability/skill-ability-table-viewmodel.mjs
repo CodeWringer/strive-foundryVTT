@@ -2,12 +2,13 @@ import { createUUID } from "../../../../business/util/uuid-utility.mjs"
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs"
 import DocumentListItemOrderDataSource from "../../../component/sortable-list/document-list-item-order-datasource.mjs"
 import SortableListViewModel from "../../../component/sortable-list/sortable-list-viewmodel.mjs"
-import SheetViewModel from "../../../view-model/sheet-view-model.mjs"
+import ViewModel from "../../../view-model/view-model.mjs"
+import ViewModelFactory from "../../../view-model/view-model-factory.mjs"
 import { TEMPLATES } from "../../templatePreloader.mjs"
 import SkillAbilityChatMessageViewModel from "./skill-ability-chat-message-viewmodel.mjs"
 import SkillAbilityListItemViewModel from "./skill-ability-list-item-viewmodel.mjs"
 
-export default class SkillAbilityTableViewModel extends SheetViewModel {
+export default class SkillAbilityTableViewModel extends ViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.SKILL_ABILITY_TABLE; }
 
@@ -16,7 +17,7 @@ export default class SkillAbilityTableViewModel extends SheetViewModel {
    * @readonly
    */
   item = undefined;
-  
+
   /**
    * @type {Boolean}
    * @readonly
@@ -25,23 +26,23 @@ export default class SkillAbilityTableViewModel extends SheetViewModel {
   get skillAbilitiesInitiallyVisible() { return this._skillAbilitiesInitiallyVisible; }
   set skillAbilitiesInitiallyVisible(value) {
     this._skillAbilitiesInitiallyVisible = value;
-    
+
     // Immediately write view state. 
     this.writeAllViewState();
   }
-  
+
   /**
    * @type {Boolean}
    * @readonly
    */
   oneColumn = false;
-  
+
   /**
    * @type {String}
    * @readonly
    */
   visGroupId = undefined;
-  
+
   /**
    * @type {Array<ChoiceOption>}
    * @readonly
@@ -59,7 +60,7 @@ export default class SkillAbilityTableViewModel extends SheetViewModel {
    * @readonly
    */
   abilities = [];
-  
+
   /**
    * @type {Actor | undefined}
    * @readonly
@@ -99,6 +100,7 @@ export default class SkillAbilityTableViewModel extends SheetViewModel {
     // Child view models. 
     this.contextTemplate = "skill-ability-table";
     const thiz = this;
+    const factory = new ViewModelFactory();
 
     for (let i = 0; i < this.item.data.data.abilities.length; i++) {
       const skillAbility = this.item.data.data.abilities[i];
@@ -106,20 +108,20 @@ export default class SkillAbilityTableViewModel extends SheetViewModel {
 
       if (this.oneColumn === true) {
         vm = new SkillAbilityChatMessageViewModel({
-          id: `vmSkillAbility-${i}`, 
+          id: `vmSkillAbility-${i}`,
           parent: thiz,
           isEditable: args.isEditable,
           isSendable: args.isSendable,
           isOwner: args.isOwner,
           isGM: args.isGM,
-          skillAbility: skillAbility, 
+          skillAbility: skillAbility,
           item: thiz.item,
           actor: thiz.actor,
           index: i,
         })
       } else {
         vm = new SkillAbilityListItemViewModel({
-          id: `vmSkillAbility-${i}`, 
+          id: `vmSkillAbility-${i}`,
           parent: thiz,
           isEditable: args.isEditable,
           isSendable: args.isSendable,
@@ -143,7 +145,8 @@ export default class SkillAbilityTableViewModel extends SheetViewModel {
       }),
       listItemViewModels: this.abilities,
       listItemTemplate: thiz.oneColumn === true ? "systems/ambersteel/presentation/template/item/skill-ability/skill-ability-chat-message.hbs" : "systems/ambersteel/presentation/template/item/skill-ability/skill-ability-list-item.hbs",
-      vmBtnAddItem: thiz.createVmBtnAdd({
+      vmBtnAddItem: factory.createVmBtnAdd({
+        parent: thiz,
         id: "vmBtnAdd",
         target: thiz.item,
         creationType: "skill-ability",
@@ -154,7 +157,8 @@ export default class SkillAbilityTableViewModel extends SheetViewModel {
       }),
     });
 
-    this.vmBtnToggleVisibilityExpand = this.createVmBtnToggleVisibility({
+    this.vmBtnToggleVisibilityExpand = factory.createVmBtnToggleVisibility({
+      parent: thiz,
       id: "vmBtnToggleVisibilityExpand",
       target: thiz.item,
       isEditable: true,
@@ -162,7 +166,8 @@ export default class SkillAbilityTableViewModel extends SheetViewModel {
       toggleSelf: true,
       callback: thiz._toggleSkillAbilitiesInitiallyVisible.bind(thiz),
     });
-    this.vmBtnToggleVisibilityCollapse = this.createVmBtnToggleVisibility({
+    this.vmBtnToggleVisibilityCollapse = factory.createVmBtnToggleVisibility({
+      parent: thiz,
       id: "vmBtnToggleVisibilityCollapse",
       target: thiz.item,
       isEditable: true,

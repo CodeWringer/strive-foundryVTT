@@ -2,6 +2,7 @@ import { validateOrThrow } from "../../../../business/util/validation-utility.mj
 import { TEMPLATES } from "../../templatePreloader.mjs";
 import SkillAbilityTableViewModel from "../skill-ability/skill-ability-table-viewmodel.mjs";
 import SkillViewModel from "./skill-viewmodel.mjs";
+import ViewModelFactory from "../../../view-model/view-model-factory.mjs";
 
 export default class SkillItemSheetViewModel extends SkillViewModel {
   /** @override */
@@ -12,7 +13,7 @@ export default class SkillItemSheetViewModel extends SkillViewModel {
    * @readonly
    */
   get attributeOptions() { return game.ambersteel.getAttributeOptions(); }
-  
+
   /**
    * Returns true, if the skill ability list should be visible. 
    * @type {Boolean}
@@ -42,41 +43,49 @@ export default class SkillItemSheetViewModel extends SkillViewModel {
 
     // Child view models. 
     const thiz = this;
-    
-    this.vmImg = this.createVmImg({
+    const factory = new ViewModelFactory();
+
+    this.vmImg = factory.createVmImg({
+      parent: thiz,
       id: "vmImg",
       propertyOwner: thiz.item,
       propertyPath: "img",
     });
-    this.vmTfName = this.createVmTextField({
+    this.vmTfName = factory.createVmTextField({
+      parent: thiz,
       id: "vmTfName",
       propertyOwner: thiz.item,
       propertyPath: "name",
       placeholder: "ambersteel.general.name",
     });
-    this.vmBtnSendToChat = this.createVmBtnSendToChat({
+    this.vmBtnSendToChat = factory.createVmBtnSendToChat({
+      parent: thiz,
       id: "vmBtnSendToChat",
       target: thiz.item,
       isEditable: thiz.isEditable || thiz.isGM,
     });
-    this.vmDdRelatedAttribute = this.createVmDropDown({
+    this.vmDdRelatedAttribute = factory.createVmDropDown({
+      parent: thiz,
       id: "vmDdRelatedAttribute",
       propertyOwner: thiz.item,
       propertyPath: "data.data.relatedAttribute",
       options: thiz.attributeOptions,
     });
-    this.vmTfCategory = this.createVmTextField({
+    this.vmTfCategory = factory.createVmTextField({
+      parent: thiz,
       id: "vmTfCategory",
       propertyOwner: thiz.item,
       propertyPath: "data.data.category",
       placeholder: "ambersteel.general.category",
     });
-    this.vmSwIsMagicSchool = this.createVmBtnToggle({
+    this.vmSwIsMagicSchool = factory.createVmBtnToggle({
+      parent: thiz,
       id: "vmSwIsMagicSchool",
       target: thiz.item,
       propertyPath: "data.data.isMagicSchool",
     });
-    this.vmRtDescription = this.createVmRichText({
+    this.vmRtDescription = factory.createVmRichText({
+      parent: thiz,
       id: "vmRtDescription",
       propertyOwner: thiz.item,
       propertyPath: "data.data.description",

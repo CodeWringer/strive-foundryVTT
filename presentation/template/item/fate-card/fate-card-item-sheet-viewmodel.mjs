@@ -1,14 +1,15 @@
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs";
-import SheetViewModel from "../../../view-model/sheet-view-model.mjs";
+import ViewModel from "../../../view-model/view-model.mjs";
+import ViewModelFactory from "../../../view-model/view-model-factory.mjs";
 import { TEMPLATES } from "../../templatePreloader.mjs";
 
-export default class FateCardItemSheetViewModel extends SheetViewModel {
+export default class FateCardItemSheetViewModel extends ViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.FATE_CARD_ITEM_SHEET; }
 
   /** @override */
   get entityId() { return this.item.id; }
-  
+
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
    * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 
@@ -30,42 +31,50 @@ export default class FateCardItemSheetViewModel extends SheetViewModel {
     this.contextTemplate = args.contextTemplate ?? "fate-card-item-sheet";
 
     const thiz = this;
+    const factory = new ViewModelFactory();
 
-    this.vmImg = this.createVmImg({
+    this.vmImg = factory.createVmImg({
+      parent: thiz,
       id: "vmImg",
       propertyOwner: thiz.item,
       propertyPath: "img",
     });
-    this.vmTfName = this.createVmTextField({
+    this.vmTfName = factory.createVmTextField({
+      parent: thiz,
       id: "vmTfName",
       propertyOwner: thiz.item,
       propertyPath: "name",
       placeholder: "ambersteel.general.name",
     });
-    this.vmBtnSendToChat = this.createVmBtnSendToChat({
+    this.vmBtnSendToChat = factory.createVmBtnSendToChat({
+      parent: thiz,
       id: "vmBtnSendToChat",
       target: thiz.item,
       isEditable: thiz.isEditable || thiz.isGM,
     });
-    this.vmNsMifp = this.createVmNumberSpinner({
+    this.vmNsMifp = factory.createVmNumberSpinner({
+      parent: thiz,
       id: "vmNsMifp",
       propertyOwner: thiz.item,
       propertyPath: "data.data.cost.miFP",
       min: 0,
     });
-    this.vmNsMafp = this.createVmNumberSpinner({
+    this.vmNsMafp = factory.createVmNumberSpinner({
+      parent: thiz,
       id: "vmNsMafp",
       propertyOwner: thiz.item,
       propertyPath: "data.data.cost.maFP",
       min: 0,
     });
-    this.vmNsAfp = this.createVmNumberSpinner({
+    this.vmNsAfp = factory.createVmNumberSpinner({
+      parent: thiz,
       id: "vmNsAfp",
       propertyOwner: thiz.item,
       propertyPath: "data.data.cost.AFP",
       min: 0,
     });
-    this.vmRtDescription = this.createVmRichText({
+    this.vmRtDescription = factory.createVmRichText({
+      parent: thiz,
       id: "vmRtDescription",
       propertyOwner: thiz.item,
       propertyPath: "data.data.description",

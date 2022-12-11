@@ -1,14 +1,15 @@
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs";
-import SheetViewModel from "../../../view-model/sheet-view-model.mjs";
+import ViewModel from "../../../view-model/view-model.mjs";
+import ViewModelFactory from "../../../view-model/view-model-factory.mjs";
 import { TEMPLATES } from "../../templatePreloader.mjs";
 
-export default class FateCardChatMessageViewModel extends SheetViewModel {
+export default class FateCardChatMessageViewModel extends ViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.FATE_CARD_CHAT_MESSAGE; }
 
   /** @override */
   get entityId() { return this.item.id; }
-  
+
   /**
    * @type {Item}
    */
@@ -37,13 +38,16 @@ export default class FateCardChatMessageViewModel extends SheetViewModel {
     this.contextTemplate = args.contextTemplate ?? "fate-card-chat-message";
 
     const thiz = this;
+    const factory = new ViewModelFactory();
 
-    this.vmImg = this.createVmImg({
+    this.vmImg = factory.createVmImg({
+      parent: thiz,
       id: "vmImg",
       propertyOwner: thiz.item,
       propertyPath: "img",
     });
-    this.vmTfName = this.createVmTextField({
+    this.vmTfName = factory.createVmTextField({
+      parent: thiz,
       id: "vmTfName",
       propertyOwner: thiz.item,
       propertyPath: "name",
