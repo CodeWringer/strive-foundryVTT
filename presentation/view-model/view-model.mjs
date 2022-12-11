@@ -199,7 +199,7 @@ export default class ViewModel {
     
     this.contextTemplate = args.contextTemplate;
     
-    this._showFancyFont = new GetShowFancyFontUseCase().invoke();
+    this.showFancyFont = new GetShowFancyFontUseCase().invoke();
   }
 
   /**
