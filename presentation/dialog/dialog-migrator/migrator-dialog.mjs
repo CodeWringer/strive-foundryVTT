@@ -2,7 +2,17 @@ import MigratorInitiator from "../../../business/migration/migrator-initiator.mj
 import { WorldSystemVersion } from "../../../business/migration/world-system-version.mjs";
 import { TEMPLATES } from "../../template/templatePreloader.mjs";
 
+/**
+ * Encapsulates the main migration dialog. 
+ * 
+ * @extends Application 
+ * @see https://foundryvtt.com/api/classes/client.Application.html
+ */
 export default class MigratorDialog extends Application {
+  /**
+   * @override
+   * @see https://foundryvtt.com/api/classes/client.Application.html#defaultOptions
+   */
   static get defaultOptions() {
     return mergeObject(super.defaultOptions, {
       classes: ['form'],
@@ -23,6 +33,10 @@ export default class MigratorDialog extends Application {
     this.worldVersionMigratedString = this.migrator.finalMigrationVersion.toString();
   }
 
+  /** 
+   * @override 
+   * @see https://foundryvtt.com/api/classes/client.Application.html#activateListeners
+   */
   activateListeners(html) {
     super.activateListeners(html);
 
