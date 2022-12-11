@@ -1,6 +1,6 @@
-import { TEMPLATES } from "../../../presentation/template/templatePreloader.mjs";
-import MigratorInitiator from "../migrator-initiator.mjs";
-import { WorldSystemVersion } from "../world-system-version.mjs";
+import MigratorInitiator from "../../../business/migration/migrator-initiator.mjs";
+import { WorldSystemVersion } from "../../../business/migration/world-system-version.mjs";
+import { TEMPLATES } from "../../template/templatePreloader.mjs";
 
 export default class MigratorDialog extends Application {
   static get defaultOptions() {
@@ -19,8 +19,7 @@ export default class MigratorDialog extends Application {
     super();
     this.migrator = new MigratorInitiator();
 
-    const worldSystemVersion = new WorldSystemVersion();
-    this.worldVersionString = worldSystemVersion.version.toString();
+    this.worldVersionString = WorldSystemVersion.version.toString();
     this.worldVersionMigratedString = this.migrator.finalMigrationVersion.toString();
   }
 

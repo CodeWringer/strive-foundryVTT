@@ -19,7 +19,7 @@ import ChoiceOption from "./presentation/util/choice-option.mjs";
 import { ambersteelConfig } from "./business/config.js"
 // Migration
 import MigratorInitiator from "./business/migration/migrator-initiator.mjs";
-import MigratorDialog from "./business/migration/presentation/migrator-dialog.mjs";
+import MigratorDialog from "./presentation/dialog/dialog-migrator/migrator-dialog.mjs";
 import LoadDebugSettingUseCase from "./business/use-case/load-debug-setting-use-case.mjs";
 // Document classes
 import { AmbersteelActor } from "./business/document/actor/actor.mjs";

@@ -34,7 +34,7 @@ export const TEMPLATES = {
   DIALOG_VISIBILITY: "systems/ambersteel/presentation/template/dialog/dialog-visibility.hbs",
   DIALOG_PLAIN: "systems/ambersteel/presentation/template/dialog/dialog-plain.hbs",
   DIALOG_SELECT: "systems/ambersteel/presentation/template/dialog/dialog-select.hbs",
-  DIALOG_MIGRATOR: "systems/ambersteel/presentation/template/dialog/dialog-migrator.hbs",
+  DIALOG_MIGRATOR: "systems/ambersteel/presentation/dialog/dialog-migrator/dialog-migrator.hbs",
   // --- Actor
   ACTOR_SHEET: "systems/ambersteel/presentation/template/actor/actor-sheet.hbs",
   ACTOR_ATTRIBUTE_TABLE: "systems/ambersteel/presentation/template/actor/component/component-attribute-table.hbs",
