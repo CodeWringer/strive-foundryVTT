@@ -1,9 +1,10 @@
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs";
-import SheetViewModel from "../../../view-model/sheet-view-model.mjs";
+import ViewModel from "../../../view-model/view-model.mjs";
+import ViewModelFactory from "../../../view-model/view-model-factory.mjs";
 import FateCardViewModel from "../../item/fate-card/fate-card-viewmodel.mjs";
 import { TEMPLATES } from "../../templatePreloader.mjs";
 
-export default class ActorFateViewModel extends SheetViewModel {
+export default class ActorFateViewModel extends ViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.ACTOR_FATE; }
 
@@ -52,26 +53,27 @@ export default class ActorFateViewModel extends SheetViewModel {
     this.contextType = args.contextType ?? "actor-fate";
 
     const thiz = this;
+    const factory = new ViewModelFactory();
 
-    this.vmNsMifp = this.createVmNumberSpinner({
+    this.vmNsMifp = factory.createVmNumberSpinner({
       id: "vmNsMifp",
       propertyOwner: thiz.actor,
       propertyPath: "data.data.fateSystem.miFP",
       min: 0,
     });
-    this.vmNsMafp = this.createVmNumberSpinner({
+    this.vmNsMafp = factory.createVmNumberSpinner({
       id: "vmNsMafp",
       propertyOwner: thiz.actor,
       propertyPath: "data.data.fateSystem.maFP",
       min: 0,
     });
-    this.vmNsAfp = this.createVmNumberSpinner({
+    this.vmNsAfp = factory.createVmNumberSpinner({
       id: "vmNsAfp",
       propertyOwner: thiz.actor,
       propertyPath: "data.data.fateSystem.AFP",
       min: 0,
     });
-    this.vmBtnAddFateCard = this.createVmBtnAdd({
+    this.vmBtnAddFateCard = factory.createVmBtnAdd({
       id: "vmBtnAddFateCard",
       target: thiz.actor,
       creationType: "fate-card",

@@ -1,8 +1,9 @@
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs";
-import SheetViewModel from "../../../view-model/sheet-view-model.mjs";
+import ViewModel from "../../../view-model/view-model.mjs";
+import ViewModelFactory from "../../../view-model/view-model-factory.mjs";
 import { TEMPLATES } from "../../templatePreloader.mjs";
 
-export default class ActorPersonalsViewModel extends SheetViewModel {
+export default class ActorPersonalsViewModel extends ViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.ACTOR_PERSONALS; }
 
@@ -10,7 +11,7 @@ export default class ActorPersonalsViewModel extends SheetViewModel {
    * @type {Actor}
    */
   actor = undefined;
-  
+
   /** @override */
   get entityId() { return this.actor.id; }
 
@@ -37,26 +38,31 @@ export default class ActorPersonalsViewModel extends SheetViewModel {
     this.contextType = args.contextType ?? "actor-personals";
 
     const thiz = this;
+    const factory = new ViewModelFactory();
 
-    this.vmTfSpecies = this.createVmTextField({
+    this.vmTfSpecies = factory.createVmTextField({
+      parent: thiz,
       id: "vmTfSpecies",
       propertyOwner: thiz.actor,
       propertyPath: "data.data.person.species",
       placeholder: "ambersteel.character.personals.species",
     });
-    this.vmTfCulture = this.createVmTextField({
+    this.vmTfCulture = factory.createVmTextField({
+      parent: thiz,
       id: "vmTfCulture",
       propertyOwner: thiz.actor,
       propertyPath: "data.data.person.culture",
       placeholder: "ambersteel.character.personals.culture",
     });
-    this.vmTfSex = this.createVmTextField({
+    this.vmTfSex = factory.createVmTextField({
+      parent: thiz,
       id: "vmTfSex",
       propertyOwner: thiz.actor,
       propertyPath: "data.data.person.sex",
       placeholder: "ambersteel.character.personals.sex",
     });
-    this.vmTfAge = this.createVmTextField({
+    this.vmTfAge = factory.createVmTextField({
+      parent: thiz,
       id: "vmTfAge",
       propertyOwner: thiz.actor,
       propertyPath: "data.data.person.age",

@@ -2,13 +2,14 @@ import Ruleset from "../../../../business/ruleset/ruleset.mjs";
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs";
 import DocumentListItemOrderDataSource from "../../../component/sortable-list/document-list-item-order-datasource.mjs";
 import SortableListViewModel from "../../../component/sortable-list/sortable-list-viewmodel.mjs";
-import SheetViewModel from "../../../view-model/sheet-view-model.mjs";
+import ViewModel from "../../../view-model/view-model.mjs";
+import ViewModelFactory from "../../../view-model/view-model-factory.mjs";
 import IllnessListItemViewModel from "../../item/illness/illness-list-item-viewmodel.mjs";
 import InjuryListItemViewModel from "../../item/injury/injury-list-item-viewmodel.mjs";
 import MutationListItemViewModel from "../../item/mutation/mutation-list-item-viewmodel.mjs";
 import { TEMPLATES } from "../../templatePreloader.mjs";
 
-export default class ActorHealthViewModel extends SheetViewModel {
+export default class ActorHealthViewModel extends ViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.ACTOR_HEALTH; }
 
@@ -85,43 +86,51 @@ export default class ActorHealthViewModel extends SheetViewModel {
     this.contextType = args.contextType ?? "actor-health";
 
     const thiz = this;
+    const factory = new ViewModelFactory();
 
-    this.vmNsMaxHp = this.createVmNumberSpinner({
+    this.vmNsMaxHp = factory.createVmNumberSpinner({
+      parent: thiz,
       id: "vmNsMaxHp",
       propertyOwner: thiz.actor,
       propertyPath: "data.data.health.maxHP",
       isEditable: false,
     });
-    this.vmNsHp = this.createVmNumberSpinner({
+    this.vmNsHp = factory.createVmNumberSpinner({
+      parent: thiz,
       id: "vmNsHp",
       propertyOwner: thiz.actor,
       propertyPath: "data.data.health.HP",
     });
-    this.vmNsMaxExhaustion = this.createVmNumberSpinner({
+    this.vmNsMaxExhaustion = factory.createVmNumberSpinner({
+      parent: thiz,
       id: "vmNsMaxExhaustion",
       propertyOwner: thiz.actor,
       propertyPath: "data.data.health.maxExhaustion",
       isEditable: false,
     });
-    this.vmNsExhaustion = this.createVmNumberSpinner({
+    this.vmNsExhaustion = factory.createVmNumberSpinner({
+      parent: thiz,
       id: "vmNsExhaustion",
       propertyOwner: thiz.actor,
       propertyPath: "data.data.health.exhaustion",
       min: 0,
     });
-    this.vmNsMagicStamina = this.createVmNumberSpinner({
+    this.vmNsMagicStamina = factory.createVmNumberSpinner({
+      parent: thiz,
       id: "vmNsMagicStamina",
       propertyOwner: thiz.actor,
       propertyPath: "data.data.health.magicStamina",
       min: 0,
     });
-    this.vmNsMaxMagicStamina = this.createVmNumberSpinner({
+    this.vmNsMaxMagicStamina = factory.createVmNumberSpinner({
+      parent: thiz,
       id: "vmNsMaxMagicStamina",
       propertyOwner: thiz.actor,
       propertyPath: "data.data.health.maxMagicStamina",
       isEditable: false,
     });
-    this.vmNsMaxInjuries = this.createVmNumberSpinner({
+    this.vmNsMaxInjuries = factory.createVmNumberSpinner({
+      parent: thiz,
       id: "vmNsMaxInjuries",
       propertyOwner: thiz.actor,
       propertyPath: "data.data.health.maxInjuries",
@@ -150,7 +159,8 @@ export default class ActorHealthViewModel extends SheetViewModel {
       }),
       listItemViewModels: this.illnesses,
       listItemTemplate: TEMPLATES.ILLNESS_LIST_ITEM,
-      vmBtnAddItem: thiz.createVmBtnAdd({
+      vmBtnAddItem: factory.createVmBtnAdd({
+        parent: thiz,
         id: "vmBtnAddIllness",
         target: thiz.actor,
         creationType: "illness",
@@ -160,7 +170,7 @@ export default class ActorHealthViewModel extends SheetViewModel {
         localizableDialogTitle: "ambersteel.character.health.illness.add.query",
       }),
     });
-    
+
     // Prepare injuries list view models. 
     const actorInjuries = this.actor.getInjuries();
     for (const injury of actorInjuries) {
@@ -182,7 +192,8 @@ export default class ActorHealthViewModel extends SheetViewModel {
       }),
       listItemViewModels: this.injuries,
       listItemTemplate: TEMPLATES.INJURY_LIST_ITEM,
-      vmBtnAddItem: thiz.createVmBtnAdd({
+      vmBtnAddItem: factory.createVmBtnAdd({
+        parent: thiz,
         id: "vmBtnAddInjury",
         target: thiz.actor,
         creationType: "injury",
@@ -192,7 +203,7 @@ export default class ActorHealthViewModel extends SheetViewModel {
         localizableDialogTitle: "ambersteel.character.health.injury.add.query",
       }),
     });
-    
+
     // Prepare mutations list view models. 
     const actorMutations = this.actor.getMutations();
     for (const mutation of actorMutations) {
@@ -214,7 +225,8 @@ export default class ActorHealthViewModel extends SheetViewModel {
       }),
       listItemViewModels: this.mutations,
       listItemTemplate: TEMPLATES.MUTATION_LIST_ITEM,
-      vmBtnAddItem: thiz.createVmBtnAdd({
+      vmBtnAddItem: factory.createVmBtnAdd({
+        parent: thiz,
         id: "vmBtnAddMutation",
         target: thiz.actor,
         creationType: "mutation",

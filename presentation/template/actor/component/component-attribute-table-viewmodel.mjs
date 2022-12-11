@@ -1,8 +1,9 @@
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs";
-import SheetViewModel from "../../../view-model/sheet-view-model.mjs";
+import ViewModel from "../../../view-model/view-model.mjs";
+import ViewModelFactory from "../../../view-model/view-model-factory.mjs";
 import { TEMPLATES } from "../../templatePreloader.mjs";
 
-export default class AttributeTableViewModel extends SheetViewModel {
+export default class AttributeTableViewModel extends ViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.ACTOR_ATTRIBUTE_TABLE; }
 
@@ -63,6 +64,7 @@ export default class AttributeTableViewModel extends SheetViewModel {
     this.contextType = args.contextType ?? "component-attribute-table";
     
     const thiz = this;
+    const factory = new ViewModelFactory();
 
     for (let i = 0; i < this.attributes.length; i++) {
       const attribute = this.attributes[i];
@@ -73,7 +75,8 @@ export default class AttributeTableViewModel extends SheetViewModel {
         localizableAbbreviation: attribute.localizableAbbreviation,
         requiredSuccessses: attribute.requiredSuccessses,
         requiredFailures: attribute.requiredFailures,
-        vmBtnRoll: thiz.createVmBtnRoll({
+        vmBtnRoll: factory.createVmBtnRoll({
+          parent: thiz,
           id: `vmBtnRoll-${attribute.name}`,
           target: thiz.actor.data.data.attributes[thiz.attributeGroupName][attribute.name],
           propertyPath: undefined,
@@ -83,19 +86,22 @@ export default class AttributeTableViewModel extends SheetViewModel {
           callbackData: attribute.name,
           actor: thiz.actor,
         }),
-        vmNsLevel: thiz.createVmNumberSpinner({
+        vmNsLevel: factory.createVmNumberSpinner({
+          parent: thiz,
           id: `vmNsLevel-${attribute.name}`,
           propertyOwner: thiz.actor,
           propertyPath: `data.data.attributes.${thiz.attributeGroupName}.${attribute.name}.value`,
           min: 0,
         }),
-        vmNsSuccesses: thiz.createVmNumberSpinner({
+        vmNsSuccesses: factory.createVmNumberSpinner({
+          parent: thiz,
           id: `vmNsSuccesses-${attribute.name}`,
           propertyOwner: thiz.actor,
           propertyPath: `data.data.attributes.${thiz.attributeGroupName}.${attribute.name}.successes`,
           min: 0,
         }),
-        vmNsFailures: thiz.createVmNumberSpinner({
+        vmNsFailures: factory.createVmNumberSpinner({
+          parent: thiz,
           id: `vmNsFailures-${attribute.name}`,
           propertyOwner: thiz.actor,
           propertyPath: `data.data.attributes.${thiz.attributeGroupName}.${attribute.name}.failures`,

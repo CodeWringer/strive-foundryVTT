@@ -1,14 +1,15 @@
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs";
-import SheetViewModel from "../../../view-model/sheet-view-model.mjs";
+import ViewModel from "../../../view-model/view-model.mjs";
+import ViewModelFactory from "../../../view-model/view-model-factory.mjs";
 import { TEMPLATES } from "../../templatePreloader.mjs";
 
-export default class IllnessItemSheetViewModel extends SheetViewModel {
+export default class IllnessItemSheetViewModel extends ViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.ILLNESS_ITEM_SHEET; }
 
   /** @override */
   get entityId() { return this.item.id; }
-  
+
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
    * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 
@@ -29,39 +30,47 @@ export default class IllnessItemSheetViewModel extends SheetViewModel {
     this.item = args.item;
     this.contextTemplate = args.contextTemplate ?? "illness-item-sheet";
     const thiz = this;
+    const factory = new ViewModelFactory();
 
-    this.vmImg = this.createVmImg({
+    this.vmImg = factory.createVmImg({
+      parent: thiz,
       id: "vmImg",
       propertyOwner: thiz.item,
       propertyPath: "img",
     });
-    this.vmTfName = this.createVmTextField({
+    this.vmTfName = factory.createVmTextField({
+      parent: thiz,
       id: "tf-name",
       propertyOwner: thiz.item,
       propertyPath: "name",
       placeholder: "ambersteel.general.name",
     });
-    this.vmBtnSendToChat = this.createVmBtnSendToChat({
+    this.vmBtnSendToChat = factory.createVmBtnSendToChat({
+      parent: thiz,
       id: "btn-send-to-chat",
       target: thiz.item,
       isEditable: thiz.isEditable || thiz.isGM,
     });
-    this.vmTfDuration = this.createVmTextField({
+    this.vmTfDuration = factory.createVmTextField({
+      parent: thiz,
       id: "tf-duration",
       propertyOwner: thiz.item,
       propertyPath: "data.data.duration",
     });
-    this.vmTfTreatmentSkill = this.createVmTextField({
+    this.vmTfTreatmentSkill = factory.createVmTextField({
+      parent: thiz,
       id: "tf-treatment-skill",
       propertyOwner: thiz.item,
       propertyPath: "data.data.treatmentSkill",
     });
-    this.vmTfTreatment = this.createVmTextField({
+    this.vmTfTreatment = factory.createVmTextField({
+      parent: thiz,
       id: "tf-treatment",
       propertyOwner: thiz.item,
       propertyPath: "data.data.treatment",
     });
-    this.vmRtDescription = this.createVmRichText({
+    this.vmRtDescription = factory.createVmRichText({
+      parent: thiz,
       id: "vmRtDescription",
       propertyOwner: thiz.item,
       propertyPath: "data.data.description",

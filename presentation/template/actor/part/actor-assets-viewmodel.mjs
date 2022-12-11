@@ -2,11 +2,12 @@ import { validateOrThrow } from "../../../../business/util/validation-utility.mj
 import ItemGridViewViewModel from "../../../component/item-grid/item-grid-view-viewmodel.mjs";
 import DocumentListItemOrderDataSource from "../../../component/sortable-list/document-list-item-order-datasource.mjs";
 import SortableListViewModel from "../../../component/sortable-list/sortable-list-viewmodel.mjs";
-import SheetViewModel from "../../../view-model/sheet-view-model.mjs";
+import ViewModel from "../../../view-model/view-model.mjs";
+import ViewModelFactory from "../../../view-model/view-model-factory.mjs";
 import ItemListItemViewModel from "../../item/item/item-list-item-viewmodel.mjs";
 import { TEMPLATES } from "../../templatePreloader.mjs";
 
-export default class ActorAssetsViewModel extends SheetViewModel {
+export default class ActorAssetsViewModel extends ViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.ACTOR_ASSETS; }
 
@@ -46,14 +47,17 @@ export default class ActorAssetsViewModel extends SheetViewModel {
     this.contextType = args.contextType ?? "actor-assets";
 
     const thiz = this;
+    const factory = new ViewModelFactory();
 
-    this.vmNsMaxBulk = this.createVmNumberSpinner({
+    this.vmNsMaxBulk = factory.createVmNumberSpinner({
+      parent: thiz,
       id: "vmNsMaxBulk",
       propertyOwner: thiz.actor,
       propertyPath: "data.data.assets.maxBulk",
       isEditable: false,
     });
-    this.vmNsTotalBulk = this.createVmNumberSpinner({
+    this.vmNsTotalBulk = factory.createVmNumberSpinner({
+      parent: thiz,
       id: "vmNsTotalBulk",
       propertyOwner: thiz.actor,
       propertyPath: "data.data.assets.totalBulk",
@@ -88,7 +92,8 @@ export default class ActorAssetsViewModel extends SheetViewModel {
       }),
       listItemViewModels: this.itemViewModels,
       listItemTemplate: "systems/ambersteel/presentation/template/item/item/item-list-item.hbs",
-      vmBtnAddItem: thiz.createVmBtnAdd({
+      vmBtnAddItem: factory.createVmBtnAdd({
+        parent: thiz,
         id: "vmBtnAddItem",
         target: thiz.actor,
         creationType: "item",

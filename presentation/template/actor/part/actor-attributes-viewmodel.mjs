@@ -1,9 +1,9 @@
 import { TEMPLATES } from "../../templatePreloader.mjs";
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs";
-import SheetViewModel from "../../../view-model/sheet-view-model.mjs";
 import AttributeTableViewModel from "../component/component-attribute-table-viewmodel.mjs";
+import ViewModel from "../../../view-model/view-model.mjs";
 
-export default class ActorAttributesViewModel extends SheetViewModel {
+export default class ActorAttributesViewModel extends ViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.ACTOR_ATTRIBUTES; }
 

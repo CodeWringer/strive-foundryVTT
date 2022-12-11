@@ -15,29 +15,28 @@ import * as DialogUtil from "./presentation/dialog/dialog-utility.mjs";
 import { TEMPLATES, preloadHandlebarsTemplates } from "./presentation/template/templatePreloader.mjs";
 import { findDocument } from "./business/util/content-utility.mjs";
 import ChoiceOption from "./presentation/util/choice-option.mjs";
-// Import main config.
+// Main config
 import { ambersteelConfig } from "./business/config.js"
 // Migration
 import MigratorInitiator from "./business/migration/migrator-initiator.mjs";
 import MigratorDialog from "./business/migration/presentation/migrator-dialog.mjs";
 import LoadDebugSettingUseCase from "./business/use-case/load-debug-setting-use-case.mjs";
-// Import document classes.
+// Document classes
 import { AmbersteelActor } from "./business/document/actor/actor.mjs";
 import { AmbersteelItem } from "./business/document/item/item.mjs";
-// Import sheet classes.
+// Sheet classes
 import { AmbersteelActorSheet } from "./presentation/sheet/actor/actor-sheet.mjs";
 import { AmbersteelItemSheet } from "./presentation/sheet/item/item-sheet.mjs";
-// Import logging classes. 
+// Import logging classes
 BaseLoggingStrategy
 import { BaseLoggingStrategy, LogLevels } from "./business/logging/base-logging-strategy.mjs";
 import { ConsoleLoggingStrategy } from "./business/logging/console-logging-strategy.mjs";
-// Import settings classes. 
+// Import settings classes
 import AmbersteelUserSettings from "./business/setting/ambersteel-user-settings.mjs";
-// Import view models. 
+// Import view models
 import './presentation/view-model/view-model.mjs';
-import './presentation/view-model/sheet-view-model.mjs';
 import ViewModelCollection from './presentation/view-model/view-model-collection.mjs';
-// Import components. 
+// Components
 import './presentation/view-model/input-view-model.mjs';
 import './presentation/component/label/label-viewmodel.mjs';
 import './presentation/component/input-textfield/input-textfield-viewmodel.mjs';
@@ -56,7 +55,7 @@ import './presentation/component/button-toggle-visibility/button-toggle-visibili
 import './presentation/component/button-take-item/button-take-item-viewmodel.mjs';
 import './presentation/component/sortable-list/sortable-list-viewmodel.mjs';
 import './presentation/component/section-gm-notes/section-gm-notes-viewmodel.mjs';
-// Import ui view models. 
+// View models
 import './presentation/template/actor/actor-sheet-viewmodel.mjs';
 import './presentation/template/actor/component/component-attribute-table-viewmodel.mjs';
 import './presentation/template/actor/part/actor-assets-viewmodel.mjs';
@@ -68,6 +67,8 @@ import './presentation/template/actor/part/actor-fate-viewmodel.mjs';
 import './presentation/template/actor/part/actor-health-viewmodel.mjs';
 import './presentation/template/actor/part/actor-personals-viewmodel.mjs';
 import './presentation/template/actor/part/actor-skills-viewmodel.mjs';
+// View model factory
+import './presentation/view-model/view-model-factory.mjs';
 
 /* -------------------------------------------- */
 /*  Init Hook                                   */

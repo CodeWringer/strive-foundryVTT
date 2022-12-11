@@ -1,8 +1,9 @@
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs";
-import SheetViewModel from "../../../view-model/sheet-view-model.mjs";
+import ViewModel from "../../../view-model/view-model.mjs";
+import ViewModelFactory from "../../../view-model/view-model-factory.mjs";
 import { TEMPLATES } from "../../templatePreloader.mjs";
 
-export default class ItemChatMessageViewModel extends SheetViewModel {
+export default class ItemChatMessageViewModel extends ViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.ITEM_CHAT_MESSAGE; }
 
@@ -14,19 +15,19 @@ export default class ItemChatMessageViewModel extends SheetViewModel {
    * @readonly
    */
   allowPickup = false;
-  
+
   /**
    * @type {String}
    * @readonly
    */
   sourceType = undefined;
-  
+
   /**
    * @type {String}
    * @readonly
    */
   sourceId = undefined;
-  
+
   /**
    * An array of user IDs, which identify those users whose characters would be permitted to pick the item up. 
    * @type {Array<String>}
@@ -66,8 +67,10 @@ export default class ItemChatMessageViewModel extends SheetViewModel {
 
     this.contextTemplate = args.contextTemplate ?? "item-chat-message";
     const thiz = this;
+    const factory = new ViewModelFactory();
 
-    this.vmBtnTakeItem = this.createVmBtnTakeItem({
+    this.vmBtnTakeItem = factory.createVmBtnTakeItem({
+      parent: thiz,
       id: "vmBtnTakeItem",
       target: thiz.item,
       contextType: "chat-message"

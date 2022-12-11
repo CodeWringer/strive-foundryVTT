@@ -1,8 +1,9 @@
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs";
-import SheetViewModel from "../../../view-model/sheet-view-model.mjs";
+import ViewModel from "../../../view-model/view-model.mjs";
+import ViewModelFactory from "../../../view-model/view-model-factory.mjs";
 import { TEMPLATES } from "../../templatePreloader.mjs";
 
-export default class InjuryListItemViewModel extends SheetViewModel {
+export default class InjuryListItemViewModel extends ViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.INJURY_LIST_ITEM; }
 
@@ -44,46 +45,55 @@ export default class InjuryListItemViewModel extends SheetViewModel {
     this.item = args.item;
     this.contextTemplate = args.contextTemplate ?? "injury-list-item";
     const thiz = this;
+    const factory = new ViewModelFactory();
 
-    this.vmImg = this.createVmImg({
+    this.vmImg = factory.createVmImg({
+      parent: thiz,
       id: "vmImg",
       propertyOwner: thiz.item,
       propertyPath: "img",
     });
-    this.vmTfName = this.createVmTextField({
+    this.vmTfName = factory.createVmTextField({
+      parent: thiz,
       id: "vmTfName",
       propertyOwner: thiz.item,
       propertyPath: "name",
       placeholder: "ambersteel.general.name",
     });
-    this.vmRbgState = this.createVmRadioButtonGroup({
+    this.vmRbgState = factory.createVmRadioButtonGroup({
+      parent: thiz,
       id: "vmRbgState",
       propertyOwner: thiz.item,
       propertyPath: "data.data.state",
       placeholder: "ambersteel.general.name",
       options: thiz.stateOptions,
     });
-    this.vmBtnSendToChat = this.createVmBtnSendToChat({
+    this.vmBtnSendToChat = factory.createVmBtnSendToChat({
+      parent: thiz,
       id: "vmBtnSendToChat",
       target: thiz.item,
     });
-    this.vmBtnDelete = this.createVmBtnDelete({
+    this.vmBtnDelete = factory.createVmBtnDelete({
+      parent: thiz,
       id: "vmBtnDelete",
       target: thiz.item,
       withDialog: true,
     })
-    this.vmNsLimit = this.createVmNumberSpinner({
+    this.vmNsLimit = factory.createVmNumberSpinner({
+      parent: thiz,
       id: "vmNsLimit",
       propertyOwner: thiz.item,
       propertyPath: "data.data.limit",
       min: 0,
     });
-    this.vmTfTimeToHeal = this.createVmTextField({
+    this.vmTfTimeToHeal = factory.createVmTextField({
+      parent: thiz,
       id: "vmTfTimeToHeal",
       propertyOwner: thiz.item,
       propertyPath: "data.data.timeToHeal",
     });
-    this.vmRtDescription = this.createVmRichText({
+    this.vmRtDescription = factory.createVmRichText({
+      parent: thiz,
       id: "vmRtDescription",
       propertyOwner: thiz.item,
       propertyPath: "data.data.description",

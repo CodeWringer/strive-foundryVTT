@@ -1,8 +1,8 @@
 import { createUUID } from "../../../../business/util/uuid-utility.mjs";
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs";
-import SheetViewModel from "../../../view-model/sheet-view-model.mjs";
+import ViewModel from "../../../view-model/view-model.mjs";
 
-export default class SkillViewModel extends SheetViewModel {
+export default class SkillViewModel extends ViewModel {
   /**
    * @type {Item}
    * @readonly

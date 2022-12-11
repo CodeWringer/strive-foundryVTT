@@ -1,10 +1,10 @@
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs";
-import SheetViewModel from "../../../view-model/sheet-view-model.mjs";
+import ViewModel from "../../../view-model/view-model.mjs";
 import { TEMPLATES } from "../../templatePreloader.mjs";
 import ActorBeliefsViewModel from "./actor-beliefs-viewmodel.mjs";
 import ActorFateViewModel from "./actor-fate-viewmodel.mjs";
 
-export default class ActorBeliefsFateViewModel extends SheetViewModel {
+export default class ActorBeliefsFateViewModel extends ViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.ACTOR_BELIEFS_FATE; }
 

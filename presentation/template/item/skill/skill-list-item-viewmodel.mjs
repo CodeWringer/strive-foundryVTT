@@ -2,6 +2,7 @@ import { validateOrThrow } from "../../../../business/util/validation-utility.mj
 import { TEMPLATES } from "../../templatePreloader.mjs";
 import SkillAbilityTableViewModel from "../skill-ability/skill-ability-table-viewmodel.mjs";
 import SkillViewModel from "./skill-viewmodel.mjs";
+import ViewModelFactory from "../../../view-model/view-model-factory.mjs";
 
 export default class SkillListItemViewModel extends SkillViewModel {
   /** @override */
@@ -12,7 +13,7 @@ export default class SkillListItemViewModel extends SkillViewModel {
    * @readonly
    */
   get attributeOptions() { return game.ambersteel.getAttributeOptions(); }
-  
+
   /**
    * Returns true, if the skill ability list should be visible. 
    * @type {Boolean}
@@ -56,19 +57,23 @@ export default class SkillListItemViewModel extends SkillViewModel {
 
     // Child view models. 
     const thiz = this;
-    
-    this.vmImg = this.createVmImg({
+    const factory = new ViewModelFactory();
+
+    this.vmImg = factory.createVmImg({
+      parent: thiz,
       id: "vmImg",
       propertyOwner: thiz.item,
       propertyPath: "img",
     });
-    this.vmTfName = this.createVmTextField({
+    this.vmTfName = factory.createVmTextField({
+      parent: thiz,
       id: "vmTfName",
       propertyOwner: thiz.item,
       propertyPath: "name",
       placeholder: "ambersteel.general.name",
     });
-    this.vmBtnRoll = thiz.createVmBtnRoll({
+    this.vmBtnRoll = factory.createVmBtnRoll({
+      parent: thiz,
       id: "vmBtnRoll",
       target: thiz.item,
       propertyPath: undefined,
@@ -79,39 +84,46 @@ export default class SkillListItemViewModel extends SkillViewModel {
       callbackData: thiz.item.id,
       actor: thiz.actor,
     })
-    this.vmBtnSendToChat = this.createVmBtnSendToChat({
+    this.vmBtnSendToChat = factory.createVmBtnSendToChat({
+      parent: thiz,
       id: "vmBtnSendToChat",
       target: thiz.item,
     });
-    this.vmBtnDelete = this.createVmBtnDelete({
+    this.vmBtnDelete = factory.createVmBtnDelete({
+      parent: thiz,
       id: "vmBtnDelete",
       target: thiz.item,
       withDialog: true,
     })
-    this.vmDdRelatedAttribute = this.createVmDropDown({
+    this.vmDdRelatedAttribute = factory.createVmDropDown({
+      parent: thiz,
       id: "vmDdRelatedAttribute",
       propertyOwner: thiz.item,
       propertyPath: "data.data.relatedAttribute",
       options: thiz.attributeOptions,
     });
-    this.vmTfCategory = this.createVmTextField({
+    this.vmTfCategory = factory.createVmTextField({
+      parent: thiz,
       id: "vmTfCategory",
       propertyOwner: thiz.item,
       propertyPath: "data.data.category",
     });
-    this.vmNsLevel = this.createVmNumberSpinner({
+    this.vmNsLevel = factory.createVmNumberSpinner({
+      parent: thiz,
       id: "vmNsLevel",
       propertyOwner: thiz.item,
       propertyPath: "data.data.value",
       min: 0,
     });
-    this.vmNsSuccesses = this.createVmNumberSpinner({
+    this.vmNsSuccesses = factory.createVmNumberSpinner({
+      parent: thiz,
       id: "vmNsSuccesses",
       propertyOwner: thiz.item,
       propertyPath: "data.data.successes",
       min: 0,
     });
-    this.vmNsFailures = this.createVmNumberSpinner({
+    this.vmNsFailures = factory.createVmNumberSpinner({
+      parent: thiz,
       id: "vmNsFailures",
       propertyOwner: thiz.item,
       propertyPath: "data.data.failures",
@@ -130,12 +142,14 @@ export default class SkillListItemViewModel extends SkillViewModel {
       visGroupId: thiz.visGroupId,
       actor: thiz.actor,
     });
-    this.vmSwIsMagicSchool = this.createVmBtnToggle({
+    this.vmSwIsMagicSchool = factory.createVmBtnToggle({
+      parent: thiz,
       id: "vmSwIsMagicSchool",
       target: thiz.item,
       propertyPath: "data.data.isMagicSchool",
     });
-    this.vmRtDescription = this.createVmRichText({
+    this.vmRtDescription = factory.createVmRichText({
+      parent: thiz,
       id: "vmRtDescription",
       propertyOwner: thiz.item,
       propertyPath: "data.data.description",

@@ -1,9 +1,9 @@
 import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import { isNotBlankOrUndefined } from "../../../business/util/validation-utility.mjs";
-import SheetViewModel from "../../view-model/sheet-view-model.mjs";
+import ViewModel from "../../view-model/view-model.mjs";
 import { TEMPLATES } from "../templatePreloader.mjs";
 
-export default class ActorChatMessageViewModel extends SheetViewModel {
+export default class ActorChatMessageViewModel extends ViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.ACTOR_CHAT_MESSAGE; }
 
