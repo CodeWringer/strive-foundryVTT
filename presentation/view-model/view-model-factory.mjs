@@ -57,11 +57,11 @@ export default class ViewModelFactory {
     return {
       parent: args.parent,
       id: args.id,
-      isEditable: (args.isEditable ?? args.parent.isEditable) ?? false,
-      isSendable: (args.isSendable ?? args.parent.isSendable) ?? false,
-      isOwner: (args.isOwner ?? args.parent.isOwner) ?? false,
-      isGM: (args.isGM ?? args.parent.isGM) ?? false,
-      contextTemplate: args.contextTemplate ?? args.parent.contextTemplate,
+      isEditable: args.isEditable ?? (args.parent === undefined ? false : args.parent.isEditable),
+      isSendable: args.isSendable ?? (args.parent === undefined ? false : args.parent.isSendable),
+      isOwner: args.isOwner ?? (args.parent === undefined ? false : args.parent.isOwner),
+      isGM: args.isGM ?? (args.parent === undefined ? false : args.parent.isGM),
+      contextTemplate: args.contextTemplate ?? (args.parent === undefined ? undefined : args.parent.contextTemplate),
     };
   }
 
