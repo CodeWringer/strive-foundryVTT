@@ -56,24 +56,28 @@ export default class ActorFateViewModel extends ViewModel {
     const factory = new ViewModelFactory();
 
     this.vmNsMifp = factory.createVmNumberSpinner({
+      parent: thiz,
       id: "vmNsMifp",
       propertyOwner: thiz.actor,
       propertyPath: "data.data.fateSystem.miFP",
       min: 0,
     });
     this.vmNsMafp = factory.createVmNumberSpinner({
+      parent: thiz,
       id: "vmNsMafp",
       propertyOwner: thiz.actor,
       propertyPath: "data.data.fateSystem.maFP",
       min: 0,
     });
     this.vmNsAfp = factory.createVmNumberSpinner({
+      parent: thiz,
       id: "vmNsAfp",
       propertyOwner: thiz.actor,
       propertyPath: "data.data.fateSystem.AFP",
       min: 0,
     });
     this.vmBtnAddFateCard = factory.createVmBtnAdd({
+      parent: thiz,
       id: "vmBtnAddFateCard",
       target: thiz.actor,
       creationType: "fate-card",
