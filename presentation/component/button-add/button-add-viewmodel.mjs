@@ -1,6 +1,6 @@
 import { TEMPLATES } from "../../template/templatePreloader.mjs";
 import ButtonViewModel from '../button/button-viewmodel.mjs';
-import * as ItemAddDialog from '../../dialog/dialog-item-add.mjs';
+import * as ItemAddDialog from '../../dialog/dialog-item-add/dialog-item-add.mjs';
 import { findItem, contentCollectionTypes } from '../../../business/util/content-utility.mjs';
 import { validateOrThrow, isObject, isNotBlankOrUndefined } from "../../../business/util/validation-utility.mjs";
 import GetShowFancyFontUseCase from "../../../business/use-case/get-show-fancy-font-use-case.mjs";
