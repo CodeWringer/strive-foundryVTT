@@ -1,4 +1,5 @@
 import { createUUID } from "../../../business/util/uuid-utility.mjs";
+import { isFunction } from "../../../business/util/validation-utility.mjs";
 import { TEMPLATES } from "../../template/templatePreloader.mjs";
 
 /**
@@ -23,7 +24,7 @@ const BACKDROP_ELEMENT_CLASS = "ambersteel-modal-backdrop";
  * Overriding `buttons` is recommendable in case action buttons are desired. 
  * 
  * @abstract
- * @extends Dialog
+ * @extends Application
  * @see https://foundryvtt.com/api/classes/client.Application.html
  */
 export default class ModalDialog extends Application {
@@ -44,14 +45,6 @@ export default class ModalDialog extends Application {
 
   /** @override */
   get id() { throw new Error("NotImplementedException"); }
-
-  /**
-   * Id of the back drop element. 
-   * 
-   * @type {String}
-   * @private
-   */
-  backdropElementId;
 
   /**
    * Returns a list of button definitions for use in this dialog. 
@@ -80,20 +73,53 @@ export default class ModalDialog extends Application {
   easyDismissal = true;
 
   /**
+   * A function to invoke upon the closing of the dialog. 
+   * 
+   * Receives this dialog instance as its only argument. 
+   * 
+   * @type {Function | undefined}
+   */
+  closeCallback = undefined;
+
+  /**
+   * Id of the back drop element. 
+   * 
+   * @type {String}
+   * @private
+   */
+  _backdropElementId = undefined;
+
+  /**
+   * The DOM of the dialog. 
+   * 
+   * Only available **after** `activateListeners` is called! 
+   * 
+   * @type {JQuery}
+   * @private
+   */
+  _html = undefined;
+
+  /**
    * @param {Object} options 
    * @param {Boolean | undefined} options.easyDismissal If true, allows for easier dialog dismissal, 
    * by clicking anywhere on the backdrop element. Default `true`. 
+   * @param {Function | undefined} options.closeCallback A function to invoke upon the closing 
+   * of the dialog. Receives this dialog instance as its only argument. 
    */
   constructor(options = {}) {
     super(options);
 
-    this.idBackdropElement = createUUID();
+    this._backdropElementId = createUUID();
+
     this.easyDismissal = options.easyDismissal ?? true;
+    this.closeCallback = options.closeCallback;
   }
 
   /** @override */
   activateListeners(html) {
     super.activateListeners(html);
+
+    this._html = html;
 
     const thiz = this;
 
@@ -120,6 +146,9 @@ export default class ModalDialog extends Application {
     super.close(options);
 
     this._removeModalBackdrop();
+    if (isFunction(this.closeCallback)) {
+      this.closeCallback(this);
+    }
   }
 
   /**
@@ -128,10 +157,10 @@ export default class ModalDialog extends Application {
    * @private
    */
   _ensureModalBackdrop() {
-    let element = $(`#${this.backdropElementId}`);
+    let element = $(`#${this._backdropElementId}`);
 
     if (element.length < 1) {
-      element = $('body').append(`<div id="${this.backdropElementId}" class="${BACKDROP_ELEMENT_CLASS}"></div>`);
+      element = $('body').append(`<div id="${this._backdropElementId}" class="${BACKDROP_ELEMENT_CLASS}"></div>`);
     }
 
     if (this.easyDismissal === true) {
@@ -149,8 +178,8 @@ export default class ModalDialog extends Application {
    * @private
    */
   _removeModalBackdrop() {
-    $(`#${this.backdropElementId}`).remove();
+    $(`#${this._backdropElementId}`).remove();
   }
 }
 
-Handlebars.registerPartial('dialogModal', `{{#> "${TEMPLATES.DIALOG_MODAL}"}}{{> @partial-block }}{{/"${TEMPLATES.DIALOG_MODAL}"}}`);
+Handlebars.registerPartial('modalDialog', `{{#> "${TEMPLATES.DIALOG_MODAL}"}}{{> @partial-block }}{{/"${TEMPLATES.DIALOG_MODAL}"}}`);
