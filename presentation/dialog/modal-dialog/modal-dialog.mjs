@@ -43,6 +43,7 @@ export default class ModalDialog extends Application {
       popOut: true,
       resizable: false,
       classes: [DIALOG_ELEMENT_CLASS],
+      minimizable: false,
     });
   }
 
