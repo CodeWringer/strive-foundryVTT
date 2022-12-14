@@ -104,60 +104,6 @@ export async function showDialog(args = {}, dialogData) {
 }
 
 /**
- * Shows a confirmation dialog. 
- * @param {Object} args Optional arguments to pass to the rendering function. 
- * @param {String | undefined} args.localizedTitle A localized title for the dialog. 
- * @param {String | undefined} args.content Optional. HTML content to show as the body of the dialog. 
- * @returns {Promise<Boolean>} Resolves, when the dialog is closed. 
- *          Is true, when the dialog was closed with confirmation. 
- * @async
- */
-export async function showConfirmationDialog(args = {}) {
-  args = {
-    localizedTitle: "",
-    content: "",
-    ...args
-  };
-  const mergedDialogData = {
-    confirmed: false
-  };
-
-  return new Promise(async (resolve, reject) => {
-    const dialog = new Dialog({
-      title: args.localizedTitle,
-      content: args.content,
-      buttons: {
-        confirm: {
-          icon: '<i class="fas fa-check"></i>',
-          label: game.i18n.localize("ambersteel.general.confirm"),
-          callback: () => {
-            mergedDialogData.confirmed = true;
-          }
-        },
-        cancel: {
-          icon: '<i class="fas fa-times"></i>',
-          label: game.i18n.localize("ambersteel.general.cancel"),
-          callback: () => { }
-        }
-      },
-      default: "cancel",
-      render: html => { },
-      close: html => {
-        _removeModalBackdrop();
-        resolve({
-          confirmed: mergedDialogData.confirmed,
-        });
-      }
-    },
-    {
-      classes: ["ambersteel-modal"]
-    });
-    dialog.render(true);
-    _ensureModalBackdrop(dialog);
-  });
-}
-
-/**
  * Shows a dialog that contains a paragraph of text. 
  * 
  * Offers a single confirmation button. 
