@@ -6,13 +6,13 @@ import { TEMPLATES } from '../../template/templatePreloader.mjs';
 import ConfirmableModalDialog from '../confirmable-modal-dialog/confirmable-modal-dialog.mjs';
 
 /**
- * A localizable default dialog title. 
+ * The localization key of the dialog title. 
  * 
  * @type {String}
  * @constant
  * @private
  */
-const LOCALIZABLE_TITLE = "ambersteel.general.select";
+const DIALOG_TITLE = "ambersteel.general.select";
 
 /**
  * The CSS class of a read-only element. 
@@ -31,9 +31,6 @@ const READ_ONLY_CSS_CLASS = "ambersteel-read-only";
 export default class AddItemDialog extends ConfirmableModalDialog {
   /** @override */
   get template() { return TEMPLATES.DIALOG_ITEM_ADD; }
-
-  /** @override */
-  get title() { return this.localizedTitle; }
 
   /** @override */
   get id() { return "dialog-add-item"; }
@@ -78,6 +75,7 @@ export default class AddItemDialog extends ConfirmableModalDialog {
    * by clicking anywhere on the backdrop element. Default `true`. 
    * @param {Function | undefined} options.closeCallback A function to invoke upon the closing 
    * of the dialog. Receives this dialog instance as its only argument. 
+   * @param {String | undefined} options.localizedTitle Localized string for the dialog title. 
    * 
    * @param {Function | undefined} options.closeOnConfirm If set to true, the dialog will 
    * automatically close itself, if the user clicks the confirm button. Default `true`. 
@@ -85,16 +83,16 @@ export default class AddItemDialog extends ConfirmableModalDialog {
    * @param {String} options.itemType Item type. 
    * * E. g. "skill" or "injury"
    * @param {String | undefined} options.localizedItemLabel Localized string for the item input label. 
-   * @param {String | undefined} options.localizedTitle Localized string for the dialog title. 
    */
   constructor(options = {}) {
-    super(options);
+    super({...options,
+      localizedTitle: options.localizedTitle ?? game.i18n.localize(DIALOG_TITLE),
+    });
 
     validateOrThrow(options, ["itemType"]);
 
     this.itemType = options.itemType;
     this.localizedItemLabel = options.localizedItemLabel ?? options.itemType;
-    this.localizedTitle = options.localizedTitle ?? game.i18n.localize(LOCALIZABLE_TITLE);
 
     this._itemDeclarations = getItemDeclarations(this.itemType);
     this._showFancyFont = new GetShowFancyFontUseCase().invoke();

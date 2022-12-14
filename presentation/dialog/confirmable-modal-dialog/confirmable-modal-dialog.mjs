@@ -62,6 +62,7 @@ export default class ConfirmableModalDialog extends ModalDialog {
    * by clicking anywhere on the backdrop element. Default `true`. 
    * @param {Function | undefined} options.closeCallback A function to invoke upon the closing 
    * of the dialog. Receives this dialog instance as its only argument. 
+   * @param {String | undefined} options.localizedTitle Localized string for the dialog title. 
    * 
    * @param {Function | undefined} options.closeOnConfirm If set to true, the dialog will 
    * automatically close itself, if the user clicks the confirm button. Default `true`. 
