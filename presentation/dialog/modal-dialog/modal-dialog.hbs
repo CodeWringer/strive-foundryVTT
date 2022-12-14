@@ -5,8 +5,10 @@ buttons: {Array<DialogButtonDefinition>}
   {{> @partial-block }}
   <div class="flex flex-row">
     {{#each buttons as |button index|}}
-    {{#if button.iconCssClass}}<i class="{{button.iconCssClass}}"></i>{{/if}}
-    <button id="{{button.id}}" class="button{{#if button.cssClass}} {{button.cssClass}}{{/if}}">{{button.localizedLabel}}</button>
+    <button id="{{button.id}}" class="button{{#if button.cssClass}} {{button.cssClass}}{{/if}}">
+      {{#if button.iconCssClass}}<i class="{{button.iconCssClass}}"></i>{{/if}}
+      <span>{{button.localizedLabel}}</span>
+    </button>
     {{/each}}
   </div>
 </section>

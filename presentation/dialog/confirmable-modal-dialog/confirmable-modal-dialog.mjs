@@ -56,5 +56,3 @@ export default class ConfirmableModalDialog extends ModalDialog {
     super(options);
   }
 }
-
-Handlebars.registerPartial('confirmableModalDialog', `{{#> modalDialog}}{{> @partial-block }}{{/modalDialog}}`);

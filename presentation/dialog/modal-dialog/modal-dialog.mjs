@@ -12,6 +12,15 @@ import { TEMPLATES } from "../../template/templatePreloader.mjs";
 const BACKDROP_ELEMENT_CLASS = "ambersteel-modal-backdrop";
 
 /**
+ * Styling class of the dialog element. 
+ * 
+ * @type {String}
+ * @constant
+ * @private
+ */
+const DIALOG_ELEMENT_CLASS = "ambersteel-modal";
+
+/**
  * @summary
  * Represents the abstract base class for system-specific custom dialogs. 
  * 
@@ -33,7 +42,7 @@ export default class ModalDialog extends Application {
     return mergeObject(super.defaultOptions, {
       popOut: true,
       resizable: false,
-      classes: ["ambersteel-modal"],
+      classes: [DIALOG_ELEMENT_CLASS],
     });
   }
 
@@ -150,6 +159,14 @@ export default class ModalDialog extends Application {
       this.closeCallback(this);
     }
   }
+  
+  /** @override */
+  getData(options) {
+    return {
+      ...super.getData(options),
+      buttons: this.buttons,
+    }
+  }
 
   /**
    * Ensures the backdrop element is present on the DOM. 
@@ -160,7 +177,8 @@ export default class ModalDialog extends Application {
     let element = $(`#${this._backdropElementId}`);
 
     if (element.length < 1) {
-      element = $('body').append(`<div id="${this._backdropElementId}" class="${BACKDROP_ELEMENT_CLASS}"></div>`);
+      $('body').append(`<div id="${this._backdropElementId}" class="${BACKDROP_ELEMENT_CLASS}"></div>`);
+      element = $(`#${this._backdropElementId}`);
     }
 
     if (this.easyDismissal === true) {
@@ -182,4 +200,4 @@ export default class ModalDialog extends Application {
   }
 }
 
-Handlebars.registerPartial('modalDialog', `{{#> "${TEMPLATES.DIALOG_MODAL}"}}{{> @partial-block }}{{/"${TEMPLATES.DIALOG_MODAL}"}}`);
+Handlebars.registerPartial('dialogContent', `{{#> "${TEMPLATES.DIALOG_MODAL}"}}{{> @partial-block }}{{/"${TEMPLATES.DIALOG_MODAL}"}}`);
