@@ -3,7 +3,7 @@ import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import InputViewModel from "../../view-model/input-view-model.mjs";
 import { ItemGridView } from "./item-grid-view.mjs";
 import { ItemGrid } from './item-grid.mjs';
-import { showPlainDialog } from "../../dialog/dialog-utility.mjs";
+import PlainDialog from "../../dialog/plain-dialog/plain-dialog.mjs";
 
 /**
  * --- Inherited from ViewModel
@@ -117,14 +117,14 @@ export default class ItemGridViewViewModel extends InputViewModel {
       }
       
       // Display a warning dialog. 
-      showPlainDialog({
+      new PlainDialog({
         localizedTitle: game.i18n.localize("ambersteel.character.asset.carryingCapacity.dialog.titleItemsDropped"),
         localizedContent: actor.name
         + "\n"
         + game.i18n.localize("ambersteel.character.asset.carryingCapacity.dialog.contentItemsDropped")
         + "\n"
         + itemGridLoadResult.itemsDropped.map(it => it.name).join(",\n")
-      });
+      }).render(true);
 
       await this._itemGrid.synchronizeTo(actor, true);
     } else if (itemGridLoadResult.itemsError.length > 0) {

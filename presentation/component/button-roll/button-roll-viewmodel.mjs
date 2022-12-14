@@ -6,6 +6,8 @@ import * as DiceUtil from "../../../business/dice/dice-utility.mjs";
 import * as PropUtil from "../../../business/util/property-utility.mjs";
 import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
+import RollDialog from "../../dialog/roll-dialog/roll-dialog.mjs";
+import VisibilitySingleChoiceDialog from "../../dialog/visibility-single-choice-dialog/visibility-single-choice-dialog.mjs";
 
 /**
  * --- Inherited from ViewModel
@@ -134,63 +136,71 @@ export default class ButtonRollViewModel extends ButtonViewModel {
         throw new Error("InvalidStateException: For roll-type 'generic', a property path MUST be provided");
       }
 
-      const dialogResult = await ChatUtil.queryVisibilityMode();
-      if (!dialogResult.confirmed) return;
+      new VisibilitySingleChoiceDialog({
+        closeCallback: async (dialog) => {
+          if (dialog.confirmed !== true) return;
       
-      const propertyValue = PropUtil.getNestedPropertyValue(this.target, this.propertyPath);
-      // Do roll. 
-      const roll = new Roll(propertyValue);
-      const rollResult = await roll.evaluate({ async: true });
-      this._lastRollResult = rollResult;
-
-      // Display roll result. 
-      const renderedContent = await roll.render();
-      await ChatUtil.sendToChat({
-        renderedContent: renderedContent,
-        flavor: this.primaryChatTitle,
-        actor: this.actor,
-        sound: SOUNDS_CONSTANTS.DICE_ROLL,
-        visibilityMode: dialogResult.visibilityMode
-      });
+          const propertyValue = PropUtil.getNestedPropertyValue(this.target, this.propertyPath);
+          // Do roll. 
+          const roll = new Roll(propertyValue);
+          const rollResult = await roll.evaluate({ async: true });
+          this._lastRollResult = rollResult;
+    
+          // Display roll result. 
+          const renderedContent = await roll.render();
+          await ChatUtil.sendToChat({
+            renderedContent: renderedContent,
+            flavor: this.primaryChatTitle,
+            actor: this.actor,
+            sound: SOUNDS_CONSTANTS.DICE_ROLL,
+            visibilityMode: dialog.visibilityMode
+          });
+        },
+      }).render(true);
     } else if (this.rollType === ROLL_TYPES.dicePool) {
-      const dialogResult = await DiceUtil.queryRollData();
-      if (!dialogResult.confirmed) return;
-  
-      let numberOfDice = 0;
-      let diceComposition = undefined;
+      const thiz = this;
 
-      if (this.propertyPath === undefined) {
-        if (this.target.getRollData === undefined) {
-          throw new Error("InvalidStateException: Neither 'propertyPath' nor 'getRollData()' is defined");
+      new RollDialog({
+        closeCallback: async (dialog) => {
+          if (!dialog.confirmed) return;
+
+          let numberOfDice = 0;
+          let diceComposition = undefined;
+    
+          if (thiz.propertyPath === undefined) {
+            if (thiz.target.getRollData === undefined) {
+              throw new Error("InvalidStateException: Neither 'propertyPath' nor 'getRollData()' is defined");
+            }
+    
+            const rollData = thiz.target.getRollData();
+            numberOfDice = rollData.total;
+            diceComposition = thiz._getJoinedDiceComposition(rollData, dialog.bonusDice ?? 0);
+          } else {
+            const propertyValue = PropUtil.getNestedPropertyValue(thiz.target, thiz.propertyPath);
+            numberOfDice = parseInt(propertyValue);
+          }
+      
+          // Do roll. 
+          const rollResult = await DiceUtil.rollDicePool({
+            numberOfDice: numberOfDice, 
+            obstacle: dialog.obstacle ?? 0,
+            bonusDice: dialog.bonusDice ?? 0,
+          });
+          thiz._lastRollResult = rollResult;
+      
+          // Display roll result. 
+          await DiceUtil.sendDiceResultToChat({
+            rollResult: rollResult,
+            primaryTitle: thiz.primaryChatTitle,
+            primaryImage: thiz.primaryChatImage,
+            secondaryTitle: thiz.secondaryChatTitle,
+            secondaryImage: thiz.secondaryChatImage,
+            actor: thiz.actor,
+            visibilityMode: dialog.visibilityMode,
+            diceComposition: diceComposition,
+          });
         }
-
-        const rollData = this.target.getRollData();
-        numberOfDice = rollData.total;
-        diceComposition = this._getJoinedDiceComposition(rollData, dialogResult.bonusDice ?? 0);
-      } else {
-        const propertyValue = PropUtil.getNestedPropertyValue(this.target, this.propertyPath);
-        numberOfDice = parseInt(propertyValue);
-      }
-  
-      // Do roll. 
-      const rollResult = await DiceUtil.rollDicePool({
-        numberOfDice: numberOfDice, 
-        obstacle: dialogResult.obstacle ?? 0,
-        bonusDice: dialogResult.bonusDice ?? 0,
-      });
-      this._lastRollResult = rollResult;
-  
-      // Display roll result. 
-      await DiceUtil.sendDiceResultToChat({
-        rollResult: rollResult,
-        primaryTitle: this.primaryChatTitle,
-        primaryImage: this.primaryChatImage,
-        secondaryTitle: this.secondaryChatTitle,
-        secondaryImage: this.secondaryChatImage,
-        actor: this.actor,
-        visibilityMode: dialogResult.visibilityMode,
-        diceComposition: diceComposition,
-      });
+      }).render(true);
     } else {
       throw new Error(`InvalidStateException: Invalid rollType '${this.rollType}'`);
     }

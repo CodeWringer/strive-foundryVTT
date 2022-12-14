@@ -10,6 +10,7 @@ import InfoBubble from "../../../component/info-bubble/info-bubble.mjs";
 import ViewModel from "../../../view-model/view-model.mjs";
 import ViewModelFactory from "../../../view-model/view-model-factory.mjs";
 import { TEMPLATES } from "../../templatePreloader.mjs";
+import VisibilitySingleChoiceDialog from "../../../dialog/visibility-single-choice-dialog/visibility-single-choice-dialog.mjs";
 
 export default class SkillAbilityListItemViewModel extends ViewModel {
   /** @override */
@@ -209,88 +210,90 @@ export default class SkillAbilityListItemViewModel extends ViewModel {
       isEditable: thiz.isEditable && thiz.actor !== undefined,
       localizableTitle: "ambersteel.roll.doRoll",
       onClick: async (html, isOwner, isEditable) => {
-        const dialogResult = await ChatUtil.queryVisibilityMode();
-        if (!dialogResult.confirmed) return;
+        new VisibilitySingleChoiceDialog({
+          closeCallback: async (dialog) => {
+            if (dialog.confirmed !== true) return;
+            // This is the total across all damage definitions. 
+            let damageTotal = 0;
 
-        // This is the total across all damage definitions. 
-        let damageTotal = 0;
+            // Build roll array. 
+            const rolls = [];
+            for (const damageDefinition of thiz.skillAbility.damage) {
+              // At this point, the string may contain `@`-references. These must be resolved. 
+              let resolvedDamage = damageDefinition.damage;
+              // Resolve references on actor document. 
+              const resolvedReferences = thiz.actor.resolveReferences(damageDefinition.damage);
+              for (const [key, value] of resolvedReferences) {
+                // This replaces every reference of the current type, e. g. `"@strength"` with the 
+                // current level or value of the thing, if possible. 
+                // If a value cannot be determined, it will default to "0". 
+                const regExpReplace = new RegExp(key, "gi");
 
-        // Build roll array. 
-        const rolls = [];
-        for (const damageDefinition of thiz.skillAbility.damage) {
-          // At this point, the string may contain `@`-references. These must be resolved. 
-          let resolvedDamage = damageDefinition.damage;
-          // Resolve references on actor document. 
-          const resolvedReferences = thiz.actor.resolveReferences(damageDefinition.damage);
-          for (const [key, value] of resolvedReferences) {
-            // This replaces every reference of the current type, e. g. `"@strength"` with the 
-            // current level or value of the thing, if possible. 
-            // If a value cannot be determined, it will default to "0". 
-            const regExpReplace = new RegExp(key, "gi");
+                let replaceValue = value.level;
+                if (replaceValue === undefined || replaceValue === null) {
+                  replaceValue = value.value;
 
-            let replaceValue = value.level;
-            if (replaceValue === undefined || replaceValue === null) {
-              replaceValue = value.value;
+                  if (replaceValue === undefined || replaceValue === null) {
+                    replaceValue = isNumber(value) === true ? value : "0";
+                  }
+                }
 
-              if (replaceValue === undefined || replaceValue === null) {
-                replaceValue = isNumber(value) === true ? value : "0";
+                resolvedDamage = resolvedDamage.replace(regExpReplace, replaceValue);
               }
-            }
 
-            resolvedDamage = resolvedDamage.replace(regExpReplace, replaceValue);
-          }
+              // Get evaluated roll of damage formula. 
+              const rollResult = new Roll(resolvedDamage);
+              await rollResult.evaluate({ async: true });
 
-          // Get evaluated roll of damage formula. 
-          const rollResult = new Roll(resolvedDamage);
-          await rollResult.evaluate({ async: true });
+              damageTotal += parseFloat(rollResult.total);
 
-          damageTotal += parseFloat(rollResult.total);
-
-          // Get an array of each dice term. 
-          const diceResults = [];
-          for (const term of rollResult.terms) {
-            if (term.values !== undefined) {
-              for (const value of term.values) {
-                diceResults.push({
-                  value: value,
-                  isDiceResult: true,
-                });
+              // Get an array of each dice term. 
+              const diceResults = [];
+              for (const term of rollResult.terms) {
+                if (term.values !== undefined) {
+                  for (const value of term.values) {
+                    diceResults.push({
+                      value: value,
+                      isDiceResult: true,
+                    });
+                  }
+                } else {
+                  diceResults.push({
+                    value: term.total,
+                    isDiceResult: false,
+                  });
+                }
               }
-            } else {
-              diceResults.push({
-                value: term.total,
-                isDiceResult: false,
+
+              // Get localized damage type. 
+              const damageType = game.ambersteel.getConfigItem(DAMAGE_TYPES, damageDefinition.damageType);
+              const localizedDamageType = game.i18n.localize(damageType.localizableName);
+
+              rolls.push({
+                damage: rollResult.total,
+                localizedDamageType: localizedDamageType,
+                diceResults: diceResults,
               });
             }
-          }
 
-          // Get localized damage type. 
-          const damageType = game.ambersteel.getConfigItem(DAMAGE_TYPES, damageDefinition.damageType);
-          const localizedDamageType = game.i18n.localize(damageType.localizableName);
+            // Determine title
+            const title = `${game.i18n.localize("ambersteel.character.skill.ability.damage.label")} - ${thiz.skillAbility.name}`;
 
-          rolls.push({
-            damage: rollResult.total,
-            localizedDamageType: localizedDamageType,
-            diceResults: diceResults,
-          });
-        }
+            // Render the results. 
+            const renderedContent = await renderTemplate(TEMPLATES.DICE_ROLL_DAMAGE_CHAT_MESSAGE, {
+              damageTotal: damageTotal,
+              rolls: rolls,
+              title: title,
+            });
 
-        // Determine title
-        const title = `${game.i18n.localize("ambersteel.character.skill.ability.damage.label")} - ${thiz.skillAbility.name}`;
-
-        // Render the results. 
-        const renderedContent = await renderTemplate(TEMPLATES.DICE_ROLL_DAMAGE_CHAT_MESSAGE, {
-          damageTotal: damageTotal,
-          rolls: rolls,
-          title: title,
-        });
-
-        return ChatUtil.sendToChat({
-          renderedContent: renderedContent,
-          actor: skillAbilityParent.parent,
-          sound: SOUNDS_CONSTANTS.DICE_ROLL,
-          visibilityMode: dialogResult.visibilityMode
-        });
+            return ChatUtil.sendToChat({
+              renderedContent: renderedContent,
+              actor: skillAbilityParent.parent,
+              sound: SOUNDS_CONSTANTS.DICE_ROLL,
+              visibilityMode: dialog.visibilityMode
+            });
+          },
+        }).render(true);
       },
     });
 

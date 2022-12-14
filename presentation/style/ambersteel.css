@@ -694,22 +694,6 @@ h4 {
 }
 
 /* Components */
-.ambersteel-modal {
-  z-index: 99999 !important;
-}
-.ambersteel-modal .dialog-buttons {
-  display: flex;
-  flex-direction: row;
-}
-
-.ambersteel-modal-backdrop {
-  background-color: rgba(0, 0, 0, 0.5);
-  width: 100%;
-  height: 100%;
-  z-index: 9999 !important;
-  position: absolute;
-}
-
 header.sheet-header {
   flex: 0 auto;
   overflow: hidden;
@@ -1110,6 +1094,52 @@ div.message-content .fate-card-description {
   max-width: unset;
   max-height: unset;
   font-size: 1.6rem;
+}
+
+.ambersteel-modal {
+  z-index: 99999 !important;
+}
+.ambersteel-modal .dialog-buttons {
+  display: flex;
+  flex-direction: row;
+}
+.ambersteel-modal.width-min-sm {
+  min-width: 150px;
+}
+.ambersteel-modal.width-min-md {
+  min-width: 200px;
+}
+.ambersteel-modal.width-min-lg {
+  min-width: 250px;
+}
+.ambersteel-modal.width-min-xl {
+  min-width: 300px;
+}
+.ambersteel-modal.width-min-xxl {
+  min-width: 350px;
+}
+.ambersteel-modal.height-min-sm {
+  min-height: 100px;
+}
+.ambersteel-modal.height-min-md {
+  min-height: 150px;
+}
+.ambersteel-modal.height-min-lg {
+  min-height: 200px;
+}
+.ambersteel-modal.height-min-xl {
+  min-height: 250px;
+}
+.ambersteel-modal.height-min-xxl {
+  min-height: 300px;
+}
+
+.ambersteel-modal-backdrop {
+  background-color: rgba(0, 0, 0, 0.5);
+  width: 100%;
+  height: 100%;
+  z-index: 9999 !important;
+  position: absolute;
 }
 
 .attribute-column-roll {

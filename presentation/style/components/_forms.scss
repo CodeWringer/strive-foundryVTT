@@ -1,20 +1,3 @@
-.ambersteel-modal {
-  z-index: 99999 !important;
-
-  .dialog-buttons {
-    display: flex;
-    flex-direction: row;
-  }
-}
-
-.ambersteel-modal-backdrop {
-  background-color: rgba($color: #000000, $alpha: 0.5);
-  width: 100%;
-  height: 100%;
-  z-index: 9999 !important;
-  position: absolute;
-}
-
 header.sheet-header {
   flex: 0 auto;
   overflow: hidden;

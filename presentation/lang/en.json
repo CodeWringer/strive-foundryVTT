@@ -27,6 +27,7 @@
     "general": {
       "actor": {
         "label": "Actor",
+        "query": "Select Actor",
         "pc": {
           "label": "Player Character",
           "abbreviation": "PC"
@@ -57,6 +58,7 @@
       "increment": "Increment",
       "messageVisibility": {
         "label": "Visibility",
+        "query": "Select Message Visibility",
         "public": {
           "label": "Public"
         },
@@ -65,9 +67,6 @@
         },
         "gm": {
           "label": "Game-Master"
-        },
-        "dialog": {
-          "title": "Select Message Visibility"
         }
       },
       "name": "Name",

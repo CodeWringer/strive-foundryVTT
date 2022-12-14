@@ -1,6 +1,6 @@
 import { TEMPLATES } from "../../template/templatePreloader.mjs";
 import ButtonViewModel from '../button/button-viewmodel.mjs';
-import * as ItemAddDialog from '../../dialog/dialog-item-add.mjs';
+import AddItemDialog from '../../dialog/dialog-item-add/dialog-item-add.mjs';
 import { findItem, contentCollectionTypes } from '../../../business/util/content-utility.mjs';
 import { validateOrThrow, isObject, isNotBlankOrUndefined } from "../../../business/util/validation-utility.mjs";
 import GetShowFancyFontUseCase from "../../../business/use-case/get-show-fancy-font-use-case.mjs";
@@ -110,44 +110,56 @@ export default class ButtonAddViewModel extends ButtonViewModel {
       return;
     }
 
-    let createCustom = true;
-    let templateId = undefined;
-
     if (this.withDialog === true) {
-      const dialogResult = await ItemAddDialog.query(
-        this.creationType, 
-        this.localizableType, 
-        this.localizableDialogTitle
-      );
-      if (!dialogResult.confirmed) return;
+      new AddItemDialog({
+        itemType: this.creationType,
+        localizedItemLabel: game.i18n.localize(this.localizableType),
+        localizedTitle: game.i18n.localize(this.localizableDialogTitle),
+        closeCallback: async (dialog) => {
+          if (dialog.confirmed !== true) return;
 
-      createCustom = dialogResult.isCustomChecked === true;
-      templateId = dialogResult.selected;
-    }
-
-    if (createCustom === true) {
-      const itemData = {
-        name: `New ${this.creationType.capitalize()}`,
-        type: this.creationType,
-        data: {
-          ...this.creationData,
-          isCustom: true,
-        }
-      };
-      return await Item.create(itemData, { parent: this.target });
+          if (dialog.isCustomChecked === true) {
+            return await this._createCustom();
+          } else {
+            const templateId = dialog.selected;
+            const templateItem = await findItem({ id: templateId }, contentCollectionTypes.all);
+            const itemData = {
+              name: templateItem !== undefined ? templateItem.name : `New ${this.creationType.capitalize()}`,
+              type: templateItem !== undefined ? templateItem.type : this.creationType,
+              data: {
+                ...(templateItem !== undefined ? templateItem.data.data : {}),
+                ...this.creationData,
+                isCustom: false,
+              }
+            };
+            return await Item.create(itemData, { parent: this.target });
+          }
+        },
+      }).render(true);
     } else {
-      const templateItem = await findItem({ id: templateId }, contentCollectionTypes.all);
-      const itemData = {
-        name: templateItem !== undefined ? templateItem.name : `New ${this.creationType.capitalize()}`,
-        type: templateItem !== undefined ? templateItem.type : this.creationType,
-        data: {
-          ...(templateItem !== undefined ? templateItem.data.data : {}),
-          ...this.creationData,
-          isCustom: false,
-        }
-      };
-      return await Item.create(itemData, { parent: this.target });
+      this._createCustom();
     }
+  }
+
+  /**
+   * Creates and returns a new document of the type defined on this view model and 
+   * then returns it. 
+   * 
+   * @returns The new document instance. 
+   * 
+   * @async
+   * @private
+   */
+  async _createCustom() {
+    const itemData = {
+      name: `New ${this.creationType.capitalize()}`,
+      type: this.creationType,
+      data: {
+        ...this.creationData,
+        isCustom: true,
+      }
+    };
+    return await Item.create(itemData, { parent: this.target });
   }
 
   /**

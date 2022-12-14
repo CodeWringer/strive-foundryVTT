@@ -1,8 +1,8 @@
 import * as StringUtil from "../../../business/util/string-utility.mjs"
 import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import { TEMPLATES } from "../../template/templatePreloader.mjs";
-import { showConfirmationDialog } from "../../dialog/dialog-utility.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
+import ConfirmablePlainDialog from "../../dialog/plain-confirmable-dialog/plain-confirmable-dialog.mjs";
 
 /**
  * --- Inherited from ViewModel
@@ -62,19 +62,26 @@ export default class ButtonDeleteViewModel extends ButtonViewModel {
     if (this.target === undefined) {
       throw new Error("NullPointerException: 'target' or 'target.type' is undefined");
     }
-
+    
     if (this.withDialog === true) {
-      const dialogResult = await showConfirmationDialog({
-        localizedTitle: StringUtil.format(game.i18n.localize(this.localizableDialogTitle), this.target.name),
-      });
-      if (dialogResult.confirmed !== true) return;
-    }
+      const thiz = this;
 
-    if (this.propertyPath !== undefined) {
-      if (this.target.deleteByPropertyPath === undefined) {
-        throw new Error("NullPointerException: 'target.deleteByPropertyPath' is undefined");
-      }
-      await this.target.deleteByPropertyPath(this.propertyPath);
+      new ConfirmablePlainDialog({
+        localizedTitle: game.i18n.localize("ambersteel.general.delete.query"),
+        localizedContent: StringUtil.format(game.i18n.localize(thiz.localizableDialogTitle), thiz.target.name),
+        closeCallback: async (dialog) => {
+          if (dialog.confirmed !== true) return;
+          
+          if (thiz.propertyPath !== undefined) {
+            if (thiz.target.deleteByPropertyPath === undefined) {
+              throw new Error("NullPointerException: 'target.deleteByPropertyPath' is undefined");
+            }
+            await thiz.target.deleteByPropertyPath(thiz.propertyPath);
+          } else {
+            await thiz.target.delete();
+          }
+        },
+      }).render(true);
     } else {
       await this.target.delete();
     }
