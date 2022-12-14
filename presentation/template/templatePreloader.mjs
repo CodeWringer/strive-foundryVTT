@@ -33,6 +33,7 @@ export const TEMPLATES = {
   DIALOG_ROLL: "systems/ambersteel/presentation/dialog/dialog-roll/dialog-roll.hbs",
   DIALOG_VISIBILITY: "systems/ambersteel/presentation/dialog/dialog-visibility/dialog-visibility.hbs",
   DIALOG_PLAIN: "systems/ambersteel/presentation/dialog/plain-dialog/plain-dialog.hbs",
+  DIALOG_PLAIN_CONFIRMABLE: "systems/ambersteel/presentation/dialog/plain-confirmable-dialog/plain-confirmable-dialog.hbs",
   DIALOG_SELECT: "systems/ambersteel/presentation/dialog/dialog-select/dialog-select.hbs",
   DIALOG_ITEM_ADD: "systems/ambersteel/presentation/dialog/dialog-item-add/dialog-item-add.hbs",
   DIALOG_MIGRATOR: "systems/ambersteel/presentation/dialog/migrator-dialog/migrator-dialog.hbs",
