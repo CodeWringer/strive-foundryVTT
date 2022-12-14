@@ -120,11 +120,6 @@ export default class RollDialog extends ConfirmableModalDialog {
   }
 
   /** @override */
-  activateListeners(html) {
-    super.activateListeners(html);
-  }
-
-  /** @override */
   getData(options) {
     return {
       ...super.getData(options),
