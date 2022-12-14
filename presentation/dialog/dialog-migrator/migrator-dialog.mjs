@@ -1,32 +1,37 @@
 import MigratorInitiator from "../../../business/migration/migrator-initiator.mjs";
 import { WorldSystemVersion } from "../../../business/migration/world-system-version.mjs";
 import { TEMPLATES } from "../../template/templatePreloader.mjs";
+import ModalDialog from "../modal-dialog/modal-dialog.mjs";
 
 /**
  * Encapsulates the main migration dialog. 
  * 
- * @extends Application 
- * @see https://foundryvtt.com/api/classes/client.Application.html
+ * @extends ModalDialog 
  */
-export default class MigratorDialog extends Application {
-  /**
-   * @override
-   * @see https://foundryvtt.com/api/classes/client.Application.html#defaultOptions
-   */
+export default class MigratorDialog extends ModalDialog {
+  /** @override */
   static get defaultOptions() {
     return mergeObject(super.defaultOptions, {
-      classes: ['form'],
-      popOut: true,
-      template: TEMPLATES.DIALOG_MIGRATOR,
-      id: 'migrator-dialog',
-      title: game.i18n.localize("ambersteel.migration.title"),
       width: 500,
       height: 300,
     });
   }
 
-  constructor() {
-    super();
+  /** @override */
+  get template() { return TEMPLATES.DIALOG_MIGRATOR; }
+
+  /** @override */
+  get title() { return game.i18n.localize("ambersteel.migration.title"); }
+
+  /** @override */
+  get id() { return "migrator-dialog"; }
+
+  constructor(options = {}) {
+    super({
+      ...options,
+      easyDismissal: false,
+    });
+
     this.migrator = new MigratorInitiator();
 
     this.worldVersionString = WorldSystemVersion.version.toString();
@@ -84,5 +89,3 @@ export default class MigratorDialog extends Application {
     html.find("#section-completion").toggleClass("hidden");
   }
 }
-
-window.MigratorDialog = MigratorDialog;
