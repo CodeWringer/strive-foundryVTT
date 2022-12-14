@@ -5,7 +5,23 @@ import { getElementValue } from '../../sheet/sheet-utility.mjs';
 import { TEMPLATES } from '../../template/templatePreloader.mjs';
 import ConfirmableModalDialog from '../confirmable-modal-dialog/confirmable-modal-dialog.mjs';
 
+/**
+ * A localizable default dialog title. 
+ * 
+ * @type {String}
+ * @constant
+ * @private
+ */
 const LOCALIZABLE_TITLE = "ambersteel.general.select";
+
+/**
+ * The CSS class of a read-only element. 
+ * 
+ * @type {String}
+ * @constant
+ * @private
+ */
+const READ_ONLY_CSS_CLASS = "ambersteel-read-only";
 
 /**
  * Represents a dialog for the selection of an item to add to an actor. 
@@ -28,7 +44,7 @@ export default class AddItemDialog extends ConfirmableModalDialog {
    * @readonly
    * @type {String}
    */
-  get selected() { return getElementValue(this._html.find(".ambersteel-item-select")[0]); }
+  get selected() { return getElementValue(this._html.find(this._selectorItemSelect)[0]); }
 
   /**
    * Returns the current value of the "is custom" checkbox element. 
@@ -36,7 +52,25 @@ export default class AddItemDialog extends ConfirmableModalDialog {
    * @readonly
    * @type {Boolean}
    */
-  get isCustomChecked() { return getElementValue(this._html.find(".ambersteel-is-custom")[0]); }
+  get isCustomChecked() { return getElementValue(this._html.find(this._selectorIsCustom)[0]); }
+
+  /**
+   * The CSS selector of the drop-down element. 
+   * 
+   * @type {String}
+   * @readonly
+   * @private
+   */
+  get _selectorItemSelect() { return ".ambersteel-item-select"; }
+
+  /**
+   * The CSS selector of the "is custom" checkbox element. 
+   * 
+   * @type {String}
+   * @readonly
+   * @private
+   */
+  get _selectorIsCustom() { return ".ambersteel-is-custom"; }
 
   /**
    * @param {Object} options 
@@ -70,12 +104,12 @@ export default class AddItemDialog extends ConfirmableModalDialog {
   activateListeners(html) {
     super.activateListeners(html);
 
-    html.find(".ambersteel-is-custom").change(event => {
-      const select = html.find(".ambersteel-item-select")[0];
+    html.find(this._selectorIsCustom).change(event => {
+      const select = html.find(this._selectorItemSelect)[0];
       if (getElementValue(event.currentTarget) === true) {
-        select.className = select.className + " ambersteel-read-only";
+        $(select).addClass(READ_ONLY_CSS_CLASS);
       } else {
-        select.className = select.className.replace(" ambersteel-read-only", "");
+        $(select).removeClass(READ_ONLY_CSS_CLASS);
       }
     });
   }
