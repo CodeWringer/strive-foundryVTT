@@ -28,7 +28,7 @@ const DIALOG_ELEMENT_CLASS = "ambersteel-modal";
  * Handles setting up a "backdrop" which puts focus on the dialog and which allows 
  * for easy dialog dismissal. 
  * 
- * Inheriting types **must** override the properties `template` and `id`. 
+ * Inheriting types **must** override `template`. Overriding `id` is recommended. 
  * 
  * Overriding `buttons` is recommendable in case action buttons are desired. 
  * 
@@ -70,7 +70,7 @@ export default class ModalDialog extends Application {
   get title() { return this._localizedTitle; }
 
   /** @override */
-  get id() { throw new Error("NotImplementedException"); }
+  get id() { return "modal-dialog"; }
 
   /**
    * Returns a list of button definitions for use in this dialog. 

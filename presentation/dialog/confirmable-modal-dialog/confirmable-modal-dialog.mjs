@@ -2,8 +2,15 @@ import DialogButtonDefinition from "../dialog-button-definition.mjs";
 import ModalDialog from "../modal-dialog/modal-dialog.mjs";
 
 /**
+ * @summary
  * Represents the abstract base class for system-specific custom dialogs, 
  * which provide a confirm and cancel button. 
+ * 
+ * @description
+ * Inheriting types **must** override `template`. Overriding `id` is recommended. 
+ * 
+ * Overriding `buttons` is **not** recommendable, as that would override the confirmation 
+ * and cancel buttons. 
  * 
  * @abstract
  * @extends ModalDialog
@@ -15,6 +22,9 @@ import ModalDialog from "../modal-dialog/modal-dialog.mjs";
  * * Default `true`
  */
 export default class ConfirmableModalDialog extends ModalDialog {
+  /** @override */
+  get id() { return "confirmable-modal-dialog"; }
+  
   /** @override */
   get buttons() { return [
     new DialogButtonDefinition({
