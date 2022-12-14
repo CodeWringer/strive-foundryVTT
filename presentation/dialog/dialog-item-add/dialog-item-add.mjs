@@ -6,8 +6,7 @@ import { TEMPLATES } from '../../template/templatePreloader.mjs';
 import ConfirmableModalDialog from '../confirmable-modal-dialog/confirmable-modal-dialog.mjs';
 import * as DialogUtil from '../dialog-utility.mjs';
 
-const LOCALIZABLE_TITLE = "ambersteel.character.asset.add.query";
-const LOCALIZABLE_ITEM_LABEL = "ambersteel.character.asset.add.label";
+const LOCALIZABLE_TITLE = "ambersteel.general.select";
 
 /**
  * @summary
@@ -20,7 +19,7 @@ export default class AddItemDialog extends ConfirmableModalDialog {
   get template() { return TEMPLATES.DIALOG_ITEM_ADD; }
 
   /** @override */
-  get title() { return game.i18n.localize(localizableTitle); }
+  get title() { return this.localizedTitle; }
 
   /** @override */
   get id() { return "dialog-add-item"; }
@@ -59,8 +58,11 @@ export default class AddItemDialog extends ConfirmableModalDialog {
     validateOrThrow(options, ["itemType"]);
 
     this.itemType = options.itemType;
-    this.localizableItemLabel = options.localizedItemLabel ?? LOCALIZABLE_ITEM_LABEL;
-    this.localizableTitle = options.localizedTitle ?? LOCALIZABLE_TITLE;
+    this.localizedItemLabel = options.localizedItemLabel ?? options.itemType;
+    this.localizedTitle = options.localizedTitle ?? game.i18n.localize(LOCALIZABLE_TITLE);
+
+    this._itemDeclarations = getItemDeclarations(this.itemType);
+    this._showFancyFont = new GetShowFancyFontUseCase().invoke();
   }
 
   /** @override */
@@ -68,7 +70,6 @@ export default class AddItemDialog extends ConfirmableModalDialog {
     super.activateListeners(html);
 
     const thiz = this;
-    const itemDeclarations = getItemDeclarations(this.itemType);
     html.find(".ambersteel-is-custom").change(event => {
       const select = html.find(".ambersteel-item-select")[0];
       if (getElementValue(event.currentTarget) === true) {
@@ -77,6 +78,16 @@ export default class AddItemDialog extends ConfirmableModalDialog {
         select.className = select.className.replace(" ambersteel-read-only", "");
       }
     });
+  }
+
+  /** @override */
+  getData(options) {
+    return {
+      ...super.getData(options),
+      itemLabel: this.localizedItemLabel,
+      itemDeclarations: this._itemDeclarations,
+      showFancyFont: this._showFancyFont,
+    }
   }
 }
 
