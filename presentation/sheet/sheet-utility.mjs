@@ -43,8 +43,6 @@ export function setSelectedOptionByValue(selectElement, valueToSelect){
  * @param {Object} context 
  */
 export function enrichData(context) {
-  // Add the config to the context object as a convenience property. 
-  context.CONFIG = CONFIG.ambersteel;
   // Add the game to the context object as a convenience property. 
   context.game = game;
   // In templates that implement it, this flag indicates whether the current user is the owner of the sheet. 

@@ -2,6 +2,7 @@ import SkillAbility from "../../business/ruleset/skill/skill-ability.mjs";
 import { getNestedPropertyValue } from "../../business/util/property-utility.mjs";
 import { validateOrThrow } from "../../business/util/validation-utility.mjs";
 import { SOUNDS_CONSTANTS } from "../audio/sounds.mjs";
+import { VISIBILITY_MODES } from "./visibility-modes.mjs";
 
 /**
  * Creates a new ChatMessage, displaying the given contents. 
@@ -10,7 +11,7 @@ import { SOUNDS_CONSTANTS } from "../audio/sounds.mjs";
  * @param {String} chatData.flavor Optional. The flavor text / subtitle of the message. 
  * @param {Actor} chatData.actor Optional. The actor to associate with the message. 
  * @param {String} chatData.sound Optional. The sound to play when the message is sent. Default generic notify sound. 
- * @param {CONFIG.ambersteel.visibilityModes} chatData.visibilityMode Optional. Sets the visibility of the chat message. Default public. 
+ * @param {VisibilityMode} chatData.visibilityMode Optional. Sets the visibility of the chat message. Default public. 
  * @returns {Promise<any>}
  */
 export async function sendToChat(chatData = {}) {
@@ -20,14 +21,14 @@ export async function sendToChat(chatData = {}) {
     flavor: undefined,
     actor: undefined,
     sound: SOUNDS_CONSTANTS.NOTIFY,
-    visibilityMode: CONFIG.ambersteel.visibilityModes.public,
+    visibilityMode: VISIBILITY_MODES.public,
     ...chatData
   };
   validateOrThrow(chatData, ["renderedContent"])
 
   const speaker = chatData.speaker ?? ChatMessage.getSpeaker({ actor: chatData.actor });
 
-  if (chatData.visibilityMode === CONFIG.ambersteel.visibilityModes.self) {
+  if (chatData.visibilityMode === VISIBILITY_MODES.self) {
     const self = game.user;
     return ChatMessage.create({
       whisper: [self],
@@ -36,7 +37,7 @@ export async function sendToChat(chatData = {}) {
       content: chatData.renderedContent,
       sound: chatData.sound
     });
-  } else if (chatData.visibilityMode === CONFIG.ambersteel.visibilityModes.gm) {
+  } else if (chatData.visibilityMode === VISIBILITY_MODES.gm) {
     const gms = ChatMessage.getWhisperRecipients("GM");
     for (const gm of gms) {
       return ChatMessage.create({
@@ -63,7 +64,7 @@ export async function sendToChat(chatData = {}) {
  * @param {String} args.propertyPath The property path. 
  * @param {Actor|Item} args.parent the Item or Actor that owns the property. 
  * @param {Actor} args.actor Optional. The actor that owns the parent item. 
- * @param {CONFIG.ambersteel.visibilityModes} args.visibilityMode Optional. Sets the visibility of the chat message. 
+ * @param {VisibilityMode} args.visibilityMode Optional. Sets the visibility of the chat message. 
  * @async
  */
 export async function sendPropertyToChat(args = {}) {
@@ -72,7 +73,7 @@ export async function sendPropertyToChat(args = {}) {
     propertyPath: undefined,
     parent: undefined,
     actor: undefined,
-    visibilityMode: CONFIG.ambersteel.visibilityModes.public,
+    visibilityMode: VISIBILITY_MODES.public,
     ...args
   };
   validateOrThrow(args, ["obj", "propertyPath", "parent"]);
@@ -102,13 +103,13 @@ export async function sendPropertyToChat(args = {}) {
 
 /**
  * Returns an array of available visibility modes. 
- * @param {Object} config Global constant definitions. 
- * @returns {Array<CONFIG.ambersteel.visibilityModes>}
+ * 
+ * @returns {Array<VisibilityMode>}
  */
-export function getVisibilityModes(config) {
+export function getVisibilityModes() {
   const visibilityModes = [];
-  for (const visibilityModeName in config.ambersteel.visibilityModes) {
-    const visibilityMode = config.ambersteel.visibilityModes[visibilityModeName];
+  for (const visibilityModeName in VISIBILITY_MODES) {
+    const visibilityMode = VISIBILITY_MODES[visibilityModeName];
     visibilityModes.push(visibilityMode);
   }
   return visibilityModes;

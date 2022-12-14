@@ -14,8 +14,6 @@ import { VISIBILITY_MODES } from "./presentation/chat/visibility-modes.mjs";
 import { TEMPLATES, preloadHandlebarsTemplates } from "./presentation/template/templatePreloader.mjs";
 import { findDocument } from "./business/util/content-utility.mjs";
 import ChoiceOption from "./presentation/util/choice-option.mjs";
-// Main config
-import { ambersteelConfig } from "./business/config.js"
 // Migration
 import MigratorInitiator from "./business/migration/migrator-initiator.mjs";
 import MigratorDialog from "./presentation/dialog/migrator-dialog/migrator-dialog.mjs";
@@ -75,18 +73,10 @@ import './presentation/view-model/view-model-factory.mjs';
 /* -------------------------------------------- */
 
 Hooks.once('init', async function() {
-  // Add config and constants to global namespace. 
-  CONFIG.ambersteel = ambersteelConfig;
-
   // Add system specific logic to global namespace. 
   game.ambersteel = {
     AmbersteelActor,
     AmbersteelItem,
-    /**
-     * The global configuration and constants of the system. 
-     * @type {Object}
-     */
-    config: ambersteelConfig,
     /**
      * 
      * @type {BaseLoggingStrategy}

@@ -388,7 +388,7 @@ export default class SkillAbilityListItemViewModel extends ViewModel {
             const damage = thiz.skillAbility.damage ?? [];
             damage.push(new DamageAndType({
               damage: "",
-              damageType: CONFIG.ambersteel.damageTypes.none.name,
+              damageType: DAMAGE_TYPES.none.name,
             }));
             thiz.skillAbility.updateProperty("damage", damage);
           },
