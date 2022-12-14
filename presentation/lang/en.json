@@ -27,6 +27,7 @@
     "general": {
       "actor": {
         "label": "Actor",
+        "query": "Select Actor",
         "pc": {
           "label": "Player Character",
           "abbreviation": "PC"

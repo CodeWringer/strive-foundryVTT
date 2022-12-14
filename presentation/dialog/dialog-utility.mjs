@@ -1,6 +1,3 @@
-import GetShowFancyFontUseCase from '../../business/use-case/get-show-fancy-font-use-case.mjs';
-import { getElementValue, setSelectedOptionByValue } from '../sheet/sheet-utility.mjs';
-import { TEMPLATES } from '../template/templatePreloader.mjs';
 import DialogResult from './dialog-result.mjs';
 
 /**
@@ -100,51 +97,5 @@ export async function showDialog(args = {}, dialogData) {
     });
     dialog.render(true);
     _ensureModalBackdrop(dialog);
-  });
-}
-
-/**
- * Shows a dialog that contains a paragraph of text. 
- * 
- * Offers a single confirmation button. 
- * @param {Object} args Optional arguments to pass to the rendering function. 
- * @param {String | undefined} args.localizedTitle A localized title for the dialog. 
- * @param {String | undefined} args.localizedLabel 
- * @param {Array<ChoiceOption>} args.options An array of choices to offer for selection. 
- * @param {Any} args.selected Optional. The value to pre-select when the dialog is rendered. 
- * @returns {Promise<Object>} = {
- * selected: {String} Id of the selected item,
- * confirmed: {Boolean}
- * }
- * @async
- */
-export async function showSelectionDialog(args = {}) {
-  args = {
-    localizedTitle: "ambersteel.general.select",
-    localizedLabel: "",
-    options: [],
-    selected: undefined,
-    showFancyFont: new GetShowFancyFontUseCase().invoke(),
-    ...args
-  };
-
-  return new Promise(async (resolve, reject) => {
-    const dialogResult = await showDialog(
-      {
-        dialogTemplate: TEMPLATES.DIALOG_SELECT,
-        localizedTitle: args.localizedTitle,
-        render: html => {
-          if (args.selected !== undefined) {
-            const selectElement = html.find("#selection");
-            setSelectedOptionByValue(selectElement, args.selected);
-          }
-        }
-      },
-      args
-    );
-    resolve({
-      selected: getElementValue(dialogResult.html.find(".ambersteel-item-select")[0]),
-      confirmed: dialogResult.confirmed
-    });
   });
 }

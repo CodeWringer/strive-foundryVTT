@@ -1,12 +1,12 @@
 import { ItemGrid } from "../item-grid/item-grid.mjs";
 import { TEMPLATES } from "../../template/templatePreloader.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
-import * as DialogUtil from "../../dialog/dialog-utility.mjs";
 import * as ContentUtil from "../../../business/util/content-utility.mjs";
 import { updateProperty } from "../../../business/document/document-update-utility.mjs";
 import ChoiceOption from "../../util/choice-option.mjs";
 import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import PlainDialog from "../../dialog/plain-dialog/plain-dialog.mjs";
+import SingleChoiceDialog from "../../dialog/single-choice-dialog/single-choice-dialog.mjs";
 
 export const contextTypes = {
   chatMessage: "chat-message",
@@ -143,27 +143,38 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
   }
 
   /**
+   * Queries the user to select an actor. 
+   * 
+   * @returns {Promise<Actor | undefined>}
+   * 
    * @private
-   * @returns {Actor | undefined}
    */
   async _promptSelectActor() {
-    const options = [];
+    const choices = [];
     for (const actor of game.actors.values()) {
-      options.push(new ChoiceOption({
+      choices.push(new ChoiceOption({
         value: actor.id,
         localizedValue: actor.name,
         icon: actor.img,
       }));
     }
 
-    const dialogResult = await DialogUtil.showSelectionDialog({
-      localizableLabel: game.i18n.localize("ambersteel.general.actor.label"),
-      options: options
+    return new Promise((resolve) => {
+      new SingleChoiceDialog({
+        localizedTitle: game.i18n.localize("ambersteel.general.actor.query"),
+        localizedLabel: game.i18n.localize("ambersteel.general.actor.label"),
+        choices: choices,
+        closeCallback: async (dialog) => {
+          if (dialog.confirmed !== true) {
+            resolve(undefined);
+            return;
+          }
+  
+          const actor = await game.actors.get(dialog.selected.value);
+          resolve(actor);
+        },
+      }).render(true);
     });
-
-    if (dialogResult.confirmed !== true) return undefined;
-
-    return game.actors.get(dialogResult.selected);
   }
 
   /**
@@ -177,7 +188,7 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
       name: templateItem.name,
       type: templateItem.type,
       data: {
-        ...templateItem.data,
+        img: templateItem.data.img,
         data: {
           ...templateItem.data.data,
           isOnPerson: true,
