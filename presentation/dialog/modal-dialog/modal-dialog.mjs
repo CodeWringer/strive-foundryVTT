@@ -28,7 +28,7 @@ const DIALOG_ELEMENT_CLASS = "ambersteel-modal";
  * Handles setting up a "backdrop" which puts focus on the dialog and which allows 
  * for easy dialog dismissal. 
  * 
- * Inheriting types **must** override the properties `template`, `title` and `id`. 
+ * Inheriting types **must** override the properties `template` and `id`. 
  * 
  * Overriding `buttons` is recommendable in case action buttons are desired. 
  * 
@@ -50,8 +50,15 @@ export default class ModalDialog extends Application {
   /** @override */
   get template() { throw new Error("NotImplementedException"); }
 
+  /**
+   * The localized dialog title. 
+   * 
+   * @type {String}
+   * @private
+   */
+  _localizedTitle = "";
   /** @override */
-  get title() { throw new Error("NotImplementedException"); }
+  get title() { return this._localizedTitle; }
 
   /** @override */
   get id() { throw new Error("NotImplementedException"); }
@@ -105,7 +112,7 @@ export default class ModalDialog extends Application {
    * Only available **after** `activateListeners` is called! 
    * 
    * @type {JQuery}
-   * @private
+   * @protected
    */
   _html = undefined;
 
@@ -115,6 +122,7 @@ export default class ModalDialog extends Application {
    * by clicking anywhere on the backdrop element. Default `true`. 
    * @param {Function | undefined} options.closeCallback A function to invoke upon the closing 
    * of the dialog. Receives this dialog instance as its only argument. 
+   * @param {String | undefined} options.localizedTitle Localized string for the dialog title. 
    */
   constructor(options = {}) {
     super(options);
@@ -123,6 +131,7 @@ export default class ModalDialog extends Application {
 
     this.easyDismissal = options.easyDismissal ?? true;
     this.closeCallback = options.closeCallback;
+    this._localizedTitle = options.localizedTitle ?? "";
   }
 
   /** @override */
