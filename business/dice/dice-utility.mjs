@@ -1,11 +1,7 @@
 import { SOUNDS_CONSTANTS } from "../../presentation/audio/sounds.mjs";
 import * as ChatUtil from "../../presentation/chat/chat-utility.mjs";
-import * as DialogUtil from '../../presentation/dialog/dialog-utility.mjs';
-import RollDataQueryDialogResult from "../../presentation/dialog/roll-query-dialog-result.mjs";
 import { TEMPLATES } from "../../presentation/template/templatePreloader.mjs";
-import * as SheetUtil from "../../presentation/sheet/sheet-utility.mjs";
 import Ruleset from "../ruleset/ruleset.mjs";
-import GetShowFancyFontUseCase from "../use-case/get-show-fancy-font-use-case.mjs";
 import * as ValidationUtil from "../util/validation-utility.mjs";
 import { DiceOutcomeTypes } from "./dice-outcome-types.mjs";
 import DicePoolResult from "./dice-pool-result.mjs";
@@ -140,42 +136,5 @@ export async function sendDiceResultToChat(args = {}) {
     actor: args.actor,
     sound: SOUNDS_CONSTANTS.DICE_ROLL,
     visibilityMode: args.visibilityMode
-  });
-}
-
-/**
- * Shows a dialog to the user to enter an obstacle and bonus dice number. 
- * @returns {Promise<any>} Resolves, when the dialog is closed. 
- * @async
- */
-export async function queryRollData() {
-  const visibilityModes = ChatUtil.getVisibilityModes(CONFIG);
-
-  const dialogData = {
-    obstacle: 0,
-    bonusDice: 0,
-    visibilityMode: visibilityModes[0],
-    visibilityModes: visibilityModes,
-    showFancyFont: new GetShowFancyFontUseCase().invoke(),
-  };
-
-  return new Promise(async (resolve, reject) => {
-    const result = await DialogUtil.showDialog({
-      dialogTemplate: TEMPLATES.DIALOG_ROLL, 
-      localizedTitle: game.i18n.localize("ambersteel.roll.query")
-    }, dialogData);
-    
-    const obstacle = parseInt(SheetUtil.getElementValue(result.html.find(".obstacle")[0]));
-    const bonusDice = parseInt(SheetUtil.getElementValue(result.html.find(".bonus-dice")[0]));
-
-    const visibilityModeKey = parseInt(SheetUtil.getElementValue(result.html.find(".visibilityMode")[0]));
-    const visibilityMode = visibilityModes[visibilityModeKey];
-
-    resolve(new RollDataQueryDialogResult({
-      obstacle: obstacle,
-      bonusDice: bonusDice,
-      visibilityMode: visibilityMode,
-      confirmed: result.confirmed
-    }));
   });
 }

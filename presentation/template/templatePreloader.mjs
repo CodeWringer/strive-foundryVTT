@@ -30,7 +30,7 @@ export const TEMPLATES = {
   DICE_ROLL_DAMAGE_CHAT_MESSAGE: "systems/ambersteel/presentation/template/dice/roll-damage-chat-message.hbs",
   // --- Dialogs
   DIALOG_MODAL: "systems/ambersteel/presentation/dialog/modal-dialog/modal-dialog.hbs",
-  DIALOG_ROLL: "systems/ambersteel/presentation/dialog/dialog-roll/dialog-roll.hbs",
+  DIALOG_ROLL: "systems/ambersteel/presentation/dialog/roll-dialog/roll-dialog.hbs",
   DIALOG_VISIBILITY: "systems/ambersteel/presentation/dialog/dialog-visibility/dialog-visibility.hbs",
   DIALOG_PLAIN: "systems/ambersteel/presentation/dialog/plain-dialog/plain-dialog.hbs",
   DIALOG_PLAIN_CONFIRMABLE: "systems/ambersteel/presentation/dialog/plain-confirmable-dialog/plain-confirmable-dialog.hbs",

@@ -3,10 +3,9 @@ obstacle: {Number},
 bonusDice: {Number},
 visibilityMode: {CONFIG.ambersteel.visibilityModes}
 visibilityModes: {Array<CONFIG.ambersteel.visibilityModes>}
-cssClass: {undefined | String}
 showFancyFont: {Boolean | undefined}
 --}}
-<section class="{{cssClass}}">
+{{#> dialogContent}}
   <div class="sheet-block grid grid-2col">
     <div class="flex flex-column">
       {{> inputLabel text=(localize "ambersteel.roll.obstacle.abbreviation") showFancyFont=showFancyFont}}
@@ -37,4 +36,4 @@ showFancyFont: {Boolean | undefined}
       </select>
     </div>
   </div>
-</section>
+{{/dialogContent}}
