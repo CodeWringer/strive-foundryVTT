@@ -24,6 +24,24 @@ const DIALOG_TITLE = "ambersteel.general.select";
 const READ_ONLY_CSS_CLASS = "ambersteel-read-only";
 
 /**
+ * The CSS selector of the drop-down element. 
+ * 
+ * @type {String}
+ * @readonly
+ * @private
+ */
+const SELECTOR_ITEM_SELECT = ".ambersteel-item-select";
+
+/**
+ * The CSS selector of the "is custom" checkbox element. 
+ * 
+ * @type {String}
+ * @readonly
+ * @private
+ */
+const SELECTOR_IS_CUSTOM = ".ambersteel-is-custom";
+
+/**
  * Represents a dialog for the selection of an item to add to an actor. 
  * 
  * @extends ConfirmableModalDialog
@@ -41,7 +59,7 @@ export default class AddItemDialog extends ConfirmableModalDialog {
    * @readonly
    * @type {String}
    */
-  get selected() { return getElementValue(this._html.find(this._selectorItemSelect)[0]); }
+  get selected() { return getElementValue(this._html.find(SELECTOR_ITEM_SELECT)[0]); }
 
   /**
    * Returns the current value of the "is custom" checkbox element. 
@@ -49,25 +67,7 @@ export default class AddItemDialog extends ConfirmableModalDialog {
    * @readonly
    * @type {Boolean}
    */
-  get isCustomChecked() { return getElementValue(this._html.find(this._selectorIsCustom)[0]); }
-
-  /**
-   * The CSS selector of the drop-down element. 
-   * 
-   * @type {String}
-   * @readonly
-   * @private
-   */
-  get _selectorItemSelect() { return ".ambersteel-item-select"; }
-
-  /**
-   * The CSS selector of the "is custom" checkbox element. 
-   * 
-   * @type {String}
-   * @readonly
-   * @private
-   */
-  get _selectorIsCustom() { return ".ambersteel-is-custom"; }
+  get isCustomChecked() { return getElementValue(this._html.find(SELECTOR_IS_CUSTOM)[0]); }
 
   /**
    * @param {Object} options 
@@ -102,8 +102,8 @@ export default class AddItemDialog extends ConfirmableModalDialog {
   activateListeners(html) {
     super.activateListeners(html);
 
-    html.find(this._selectorIsCustom).change(event => {
-      const select = html.find(this._selectorItemSelect)[0];
+    html.find(SELECTOR_IS_CUSTOM).change(event => {
+      const select = html.find(SELECTOR_ITEM_SELECT)[0];
       if (getElementValue(event.currentTarget) === true) {
         $(select).addClass(READ_ONLY_CSS_CLASS);
       } else {
