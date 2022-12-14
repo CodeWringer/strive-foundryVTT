@@ -1,0 +1,52 @@
+.ambersteel-modal {
+  z-index: 99999 !important;
+
+  .dialog-buttons {
+    display: flex;
+    flex-direction: row;
+  }
+
+  &.width-min {
+    &-sm {
+      min-width: 150px;
+    }
+    &-md {
+      min-width: 200px;
+    }
+    &-lg {
+      min-width: 250px;
+    }
+    &-xl {
+      min-width: 300px;
+    }
+    &-xxl {
+      min-width: 350px;
+    }
+  }
+
+  &.height-min {
+    &-sm {
+      min-height: 100px;
+    }
+    &-md {
+      min-height: 150px;
+    }
+    &-lg {
+      min-height: 200px;
+    }
+    &-xl {
+      min-height: 250px;
+    }
+    &-xxl {
+      min-height: 300px;
+    }
+  }
+}
+
+.ambersteel-modal-backdrop {
+  background-color: rgba($color: #000000, $alpha: 0.5);
+  width: 100%;
+  height: 100%;
+  z-index: 9999 !important;
+  position: absolute;
+}
