@@ -7,6 +7,12 @@ import ModalDialog from "../modal-dialog/modal-dialog.mjs";
  * 
  * @abstract
  * @extends ModalDialog
+ * 
+ * @property {Boolean} confirmed Returns true, if the dialog was closed via the confirmation button. 
+ * * Read-only
+ * @property {Boolean} closeOnConfirm If set to true, the dialog will automatically close 
+ * itself, if the user clicks the confirm button. 
+ * * Default `true`
  */
 export default class ConfirmableModalDialog extends ModalDialog {
   /** @override */

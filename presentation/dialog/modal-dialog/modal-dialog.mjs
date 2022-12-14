@@ -35,6 +35,15 @@ const DIALOG_ELEMENT_CLASS = "ambersteel-modal";
  * @abstract
  * @extends Application
  * @see https://foundryvtt.com/api/classes/client.Application.html
+ * 
+ * @property {Array<DialogButtonDefinition>} buttons Returns a list of button definitions for use in this dialog. 
+ * * Read-only
+ * @property {String | undefined} defaultButtonId Returns the id of the button to focus by default. 
+ * * Read-only
+ * @property {Boolean} easyDismissal If true, allows for easier dialog dismissal, by clicking anywhere on the backdrop element. 
+ * * Default `true`
+ * @property {Function | undefined} closeCallback A function to invoke upon the closing of the dialog. 
+ * Receives this dialog instance as its only argument. 
  */
 export default class ModalDialog extends Application {
   /** @override */
