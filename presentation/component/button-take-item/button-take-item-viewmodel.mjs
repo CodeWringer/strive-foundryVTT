@@ -6,6 +6,7 @@ import * as ContentUtil from "../../../business/util/content-utility.mjs";
 import { updateProperty } from "../../../business/document/document-update-utility.mjs";
 import ChoiceOption from "../../util/choice-option.mjs";
 import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
+import PlainDialog from "../../dialog/plain-dialog/plain-dialog.mjs";
 
 export const contextTypes = {
   chatMessage: "chat-message",
@@ -117,10 +118,10 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
         if (addResult === true) {
           updateProperty(item, "data.data.isOnPerson", true);
         } else {
-          DialogUtil.showPlainDialog({
+          new PlainDialog({
             localizedTitle: game.i18n.localize("ambersteel.character.asset.carryingCapacity.dialog.titleInventoryFull"),
             localizedContent: game.i18n.localize("ambersteel.character.asset.carryingCapacity.dialog.contentInventoryFull")
-          });
+          }).render(true);
         }
       }
     } else if (containingPack !== undefined && containingPack !== null) { // The item is embedded in a compendium. 

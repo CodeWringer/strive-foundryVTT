@@ -163,54 +163,6 @@ export async function showConfirmationDialog(args = {}) {
  * Offers a single confirmation button. 
  * @param {Object} args Optional arguments to pass to the rendering function. 
  * @param {String | undefined} args.localizedTitle A localized title for the dialog. 
- * @param {String | undefined} args.localizedContent The localized content of the dialog. 
- * 
- * @returns {Promise<void>} Resolves, when the dialog is closed. 
- * 
- * @async
- */
-export async function showPlainDialog(args = {}) {
-  args = {
-    localizedTitle: "",
-    localizedContent: "",
-    ...args
-  };
-
-  return new Promise(async (resolve, reject) => {
-    // Render template. 
-    const renderedContent = await renderTemplate(TEMPLATES.DIALOG_PLAIN, args);
-
-    const dialog = new Dialog({
-      title: args.localizedTitle,
-      content: renderedContent,
-      buttons: {
-        ok: {
-          icon: '<i class="fas fa-check"></i>',
-          label: game.i18n.localize("ambersteel.general.ok"),
-          callback: () => { }
-        }
-      },
-      default: "ok",
-      render: html => { },
-      close: html => {
-        _removeModalBackdrop();
-        resolve();
-      }
-    },
-    {
-      classes: ["ambersteel-modal"]
-    });
-    dialog.render(true);
-    _ensureModalBackdrop(dialog);
-  });
-}
-
-/**
- * Shows a dialog that contains a paragraph of text. 
- * 
- * Offers a single confirmation button. 
- * @param {Object} args Optional arguments to pass to the rendering function. 
- * @param {String | undefined} args.localizedTitle A localized title for the dialog. 
  * @param {String | undefined} args.localizedLabel 
  * @param {Array<ChoiceOption>} args.options An array of choices to offer for selection. 
  * @param {Any} args.selected Optional. The value to pre-select when the dialog is rendered. 

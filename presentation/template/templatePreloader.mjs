@@ -32,10 +32,10 @@ export const TEMPLATES = {
   DIALOG_MODAL: "systems/ambersteel/presentation/dialog/modal-dialog/modal-dialog.hbs",
   DIALOG_ROLL: "systems/ambersteel/presentation/dialog/dialog-roll/dialog-roll.hbs",
   DIALOG_VISIBILITY: "systems/ambersteel/presentation/dialog/dialog-visibility/dialog-visibility.hbs",
-  DIALOG_PLAIN: "systems/ambersteel/presentation/dialog/dialog-plain/dialog-plain.hbs",
+  DIALOG_PLAIN: "systems/ambersteel/presentation/dialog/plain-dialog/plain-dialog.hbs",
   DIALOG_SELECT: "systems/ambersteel/presentation/dialog/dialog-select/dialog-select.hbs",
   DIALOG_ITEM_ADD: "systems/ambersteel/presentation/dialog/dialog-item-add/dialog-item-add.hbs",
-  DIALOG_MIGRATOR: "systems/ambersteel/presentation/dialog/dialog-migrator/dialog-migrator.hbs",
+  DIALOG_MIGRATOR: "systems/ambersteel/presentation/dialog/migrator-dialog/migrator-dialog.hbs",
   // --- Actor
   ACTOR_SHEET: "systems/ambersteel/presentation/template/actor/actor-sheet.hbs",
   ACTOR_ATTRIBUTE_TABLE: "systems/ambersteel/presentation/template/actor/component/component-attribute-table.hbs",

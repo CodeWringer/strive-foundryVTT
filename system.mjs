@@ -11,7 +11,6 @@ import Ruleset from "./business/ruleset/ruleset.mjs";
 // Chat constants
 import { VISIBILITY_MODES } from "./presentation/chat/visibility-modes.mjs";
 // Utility
-import * as DialogUtil from "./presentation/dialog/dialog-utility.mjs";
 import { TEMPLATES, preloadHandlebarsTemplates } from "./presentation/template/templatePreloader.mjs";
 import { findDocument } from "./business/util/content-utility.mjs";
 import ChoiceOption from "./presentation/util/choice-option.mjs";
@@ -19,8 +18,10 @@ import ChoiceOption from "./presentation/util/choice-option.mjs";
 import { ambersteelConfig } from "./business/config.js"
 // Migration
 import MigratorInitiator from "./business/migration/migrator-initiator.mjs";
-import MigratorDialog from "./presentation/dialog/dialog-migrator/migrator-dialog.mjs";
+import MigratorDialog from "./presentation/dialog/migrator-dialog/migrator-dialog.mjs";
 import LoadDebugSettingUseCase from "./business/use-case/load-debug-setting-use-case.mjs";
+// Dialogs
+import PlainDialog from "./presentation/dialog/plain-dialog/plain-dialog.mjs";
 // Document classes
 import { AmbersteelActor } from "./business/document/actor/actor.mjs";
 import { AmbersteelItem } from "./business/document/item/item.mjs";
@@ -28,7 +29,6 @@ import { AmbersteelItem } from "./business/document/item/item.mjs";
 import { AmbersteelActorSheet } from "./presentation/sheet/actor/actor-sheet.mjs";
 import { AmbersteelItemSheet } from "./presentation/sheet/item/item-sheet.mjs";
 // Import logging classes
-BaseLoggingStrategy
 import { BaseLoggingStrategy, LogLevels } from "./business/logging/base-logging-strategy.mjs";
 import { ConsoleLoggingStrategy } from "./business/logging/console-logging-strategy.mjs";
 // Import settings classes
@@ -356,10 +356,10 @@ Hooks.once("ready", async function() {
       new MigratorDialog().render(true);
     } else {
       // Display warning to non-GM. 
-      await DialogUtil.showPlainDialog({
+      new PlainDialog({
         localizedTitle: game.i18n.localize("ambersteel.migration.titleMigrationRequired"),
         localizedContent: game.i18n.localize("ambersteel.migration.migrationRequiredUserWarning"),
-      });
+      }).render(true);
     }
   } else {
     game.ambersteel.logger.logVerbose("Version up to date - skipping migrations");
