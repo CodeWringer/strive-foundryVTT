@@ -58,6 +58,7 @@
       "increment": "Increment",
       "messageVisibility": {
         "label": "Visibility",
+        "query": "Select Message Visibility",
         "public": {
           "label": "Public"
         },
@@ -66,9 +67,6 @@
         },
         "gm": {
           "label": "Game-Master"
-        },
-        "dialog": {
-          "title": "Select Message Visibility"
         }
       },
       "name": "Name",

@@ -1,11 +1,7 @@
 import SkillAbility from "../../business/ruleset/skill/skill-ability.mjs";
-import { showDialog } from "../dialog/dialog-utility.mjs";
 import { getNestedPropertyValue } from "../../business/util/property-utility.mjs";
-import { getElementValue } from "../sheet/sheet-utility.mjs";
 import { validateOrThrow } from "../../business/util/validation-utility.mjs";
-import { TEMPLATES } from "../template/templatePreloader.mjs";
 import { SOUNDS_CONSTANTS } from "../audio/sounds.mjs";
-import GetShowFancyFontUseCase from "../../business/use-case/get-show-fancy-font-use-case.mjs";
 
 /**
  * Creates a new ChatMessage, displaying the given contents. 
@@ -59,44 +55,6 @@ export async function sendToChat(chatData = {}) {
       sound: chatData.sound
     });
   }
-}
-
-/**
- * @returns {Promise<Object>}
- * @returns {Object} result
- * @returns {CONFIG.ambersteel.visibilityModes} result.visibilityMode
- * @returns {Boolean} result.confirmed
- * @async
- */
-export async function queryVisibilityMode() {
-  const visibilityModes = getVisibilityModes(CONFIG);
-  const dialogData = {
-    visibilityMode: visibilityModes[0],
-    visibilityModes: visibilityModes,
-    showFancyFont: new GetShowFancyFontUseCase().invoke(),
-  };
-
-  return new Promise(async (resolve, reject) => {
-    if (game.keyboard.downKeys.has("SHIFT")) {
-      resolve({
-        visibilityMode: visibilityModes[0],
-        confirmed: true
-      });
-    } else {
-      const result = await showDialog({
-        dialogTemplate: TEMPLATES.DIALOG_VISIBILITY, 
-        localizedTitle: game.i18n.localize("ambersteel.general.messageVisibility.dialog.title" )
-      }, dialogData);
-
-      const visibilityModeKey = parseInt(getElementValue(result.html.find(".visibilityMode")[0]));
-      const visibilityMode = visibilityModes[visibilityModeKey];
-
-      resolve({
-        visibilityMode: visibilityMode,
-        confirmed: result.confirmed
-      });
-    }
-  });
 }
 
 /**

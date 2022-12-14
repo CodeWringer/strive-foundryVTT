@@ -2,6 +2,7 @@ import { TEMPLATES } from "../../template/templatePreloader.mjs";
 import * as ChatUtil from "../../chat/chat-utility.mjs";
 import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
+import VisibilitySingleChoiceDialog from "../../dialog/visibility-single-choice-dialog/visibility-single-choice-dialog.mjs";
 
 /**
  * --- Inherited from ViewModel
@@ -88,34 +89,40 @@ export default class ButtonSendToChatViewModel extends ButtonViewModel {
   async onClick(html, isOwner, isEditable) {
     if (isEditable !== true) return;
 
-    const dialogResult = await ChatUtil.queryVisibilityMode();
-    if (!dialogResult.confirmed) return;
-    
-    if (this.propertyPath !== undefined) {
-      if (this.target.sendPropertyToChat !== undefined) {
-        this.target.sendPropertyToChat(this.propertyPath, dialogResult.visibilityMode);
-      } else {
-        ChatUtil.sendPropertyToChat({
-          obj: this.target,
-          propertyPath: this.propertyPath,
-          parent: this.target,
-          actor: this.actor,
-          visibilityMode: dialogResult.visibilityMode
-        });
-      }
-    } else {
-      if (this.target.sendToChat !== undefined) {
-        this.target.sendToChat(dialogResult.visibilityMode);
-      } else {
-        ChatUtil.sendPropertyToChat({
-          obj: this.target,
-          propertyPath: this.propertyPath,
-          parent: this.target,
-          actor: this.actor,
-          visibilityMode: dialogResult.visibilityMode
-        });
-      }
-    }
+    const thiz = this;
+
+    new VisibilitySingleChoiceDialog({
+      closeCallback: (dialog) => {
+        if (dialog.confirmed !== true) return;
+        const visibilityMode = dialog.visibilityMode;
+        
+        if (thiz.propertyPath !== undefined) {
+          if (thiz.target.sendPropertyToChat !== undefined) {
+            thiz.target.sendPropertyToChat(thiz.propertyPath, visibilityMode);
+          } else {
+            ChatUtil.sendPropertyToChat({
+              obj: thiz.target,
+              propertyPath: thiz.propertyPath,
+              parent: thiz.target,
+              actor: thiz.actor,
+              visibilityMode: visibilityMode
+            });
+          }
+        } else {
+          if (thiz.target.sendToChat !== undefined) {
+            thiz.target.sendToChat(visibilityMode);
+          } else {
+            ChatUtil.sendPropertyToChat({
+              obj: thiz.target,
+              propertyPath: thiz.propertyPath,
+              parent: thiz.target,
+              actor: thiz.actor,
+              visibilityMode: visibilityMode
+            });
+          }
+        }
+      },
+    }).render(true);
   }
 }
 

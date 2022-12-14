@@ -31,7 +31,7 @@ export const TEMPLATES = {
   // --- Dialogs
   DIALOG_MODAL: "systems/ambersteel/presentation/dialog/modal-dialog/modal-dialog.hbs",
   DIALOG_ROLL: "systems/ambersteel/presentation/dialog/roll-dialog/roll-dialog.hbs",
-  DIALOG_VISIBILITY: "systems/ambersteel/presentation/dialog/dialog-visibility/dialog-visibility.hbs",
+  DIALOG_VISIBILITY: "systems/ambersteel/presentation/dialog/visibility-single-choice-dialog/visibility-single-choice-dialog.hbs",
   DIALOG_PLAIN: "systems/ambersteel/presentation/dialog/plain-dialog/plain-dialog.hbs",
   DIALOG_PLAIN_CONFIRMABLE: "systems/ambersteel/presentation/dialog/plain-confirmable-dialog/plain-confirmable-dialog.hbs",
   DIALOG_SINGLE_CHOICE: "systems/ambersteel/presentation/dialog/single-choice-dialog/single-choice-dialog.hbs",

@@ -7,6 +7,7 @@ import * as PropUtil from "../../../business/util/property-utility.mjs";
 import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
 import RollDialog from "../../dialog/roll-dialog/roll-dialog.mjs";
+import VisibilitySingleChoiceDialog from "../../dialog/visibility-single-choice-dialog/visibility-single-choice-dialog.mjs";
 
 /**
  * --- Inherited from ViewModel
@@ -135,24 +136,27 @@ export default class ButtonRollViewModel extends ButtonViewModel {
         throw new Error("InvalidStateException: For roll-type 'generic', a property path MUST be provided");
       }
 
-      const dialogResult = await ChatUtil.queryVisibilityMode();
-      if (!dialogResult.confirmed) return;
+      new VisibilitySingleChoiceDialog({
+        closeCallback: async (dialog) => {
+          if (dialog.confirmed !== true) return;
       
-      const propertyValue = PropUtil.getNestedPropertyValue(this.target, this.propertyPath);
-      // Do roll. 
-      const roll = new Roll(propertyValue);
-      const rollResult = await roll.evaluate({ async: true });
-      this._lastRollResult = rollResult;
-
-      // Display roll result. 
-      const renderedContent = await roll.render();
-      await ChatUtil.sendToChat({
-        renderedContent: renderedContent,
-        flavor: this.primaryChatTitle,
-        actor: this.actor,
-        sound: SOUNDS_CONSTANTS.DICE_ROLL,
-        visibilityMode: dialogResult.visibilityMode
-      });
+          const propertyValue = PropUtil.getNestedPropertyValue(this.target, this.propertyPath);
+          // Do roll. 
+          const roll = new Roll(propertyValue);
+          const rollResult = await roll.evaluate({ async: true });
+          this._lastRollResult = rollResult;
+    
+          // Display roll result. 
+          const renderedContent = await roll.render();
+          await ChatUtil.sendToChat({
+            renderedContent: renderedContent,
+            flavor: this.primaryChatTitle,
+            actor: this.actor,
+            sound: SOUNDS_CONSTANTS.DICE_ROLL,
+            visibilityMode: dialog.visibilityMode
+          });
+        },
+      }).render(true);
     } else if (this.rollType === ROLL_TYPES.dicePool) {
       const thiz = this;
 

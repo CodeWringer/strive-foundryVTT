@@ -6,10 +6,10 @@ import MarginLayoutContainer from "../../pixi/margin-layout-container.mjs";
 import VerticalLayoutContainer from "../../pixi/vertical-layout-container.mjs";
 import { TEXTURES } from "../../pixi/texture-preloader.mjs";
 import { Button } from "../../pixi/button.mjs";
-import { queryVisibilityMode } from '../../chat/chat-utility.mjs';
 import InventoryIndex from "../../../business/item-grid/inventory-index.mjs";
 import { ITEM_ORIENTATIONS } from "../../../business/item-grid/item-orientations.mjs";
 import GetShowFancyFontUseCase from "../../../business/use-case/get-show-fancy-font-use-case.mjs";
+import VisibilitySingleChoiceDialog from "../../dialog/visibility-single-choice-dialog/visibility-single-choice-dialog.mjs";
 
 const FONT_FAMILY_FALLBACK = "sans-serif";
 const FONT_FAMILY_FANCY = "Black-Chancery";
@@ -257,10 +257,13 @@ export class ItemOnGridView {
 
     // SendToChat button. 
     this._buttonSendToChat = new Button(pixiApp, TEXTURES.SEND_TO_CHAT, async () => {
-      const dialogResult = await queryVisibilityMode();
-      if (!dialogResult.confirmed) return;
-
-      thiz.item.sendToChat(dialogResult.visibilityMode);
+      new VisibilitySingleChoiceDialog({
+        closeCallback: async (dialog) => {
+          if (dialog.confirmed !== true) return;
+      
+          thiz.item.sendToChat(dialog.visibilityMode);
+        },
+      }).render(true);
     });
     this._buttons.push(this._buttonSendToChat);
     this._buttonSendToChat.width = HEADER_HEIGHT;
