@@ -8,7 +8,6 @@ import ConfirmableModalDialog from '../confirmable-modal-dialog/confirmable-moda
 const LOCALIZABLE_TITLE = "ambersteel.general.select";
 
 /**
- * @summary
  * Represents a dialog for the selection of an item to add to an actor. 
  * 
  * @extends ConfirmableModalDialog
@@ -45,6 +44,9 @@ export default class AddItemDialog extends ConfirmableModalDialog {
    * by clicking anywhere on the backdrop element. Default `true`. 
    * @param {Function | undefined} options.closeCallback A function to invoke upon the closing 
    * of the dialog. Receives this dialog instance as its only argument. 
+   * 
+   * @param {Function | undefined} options.closeOnConfirm If set to true, the dialog will 
+   * automatically close itself, if the user clicks the confirm button. Default `true`. 
    * 
    * @param {String} options.itemType Item type. 
    * * E. g. "skill" or "injury"
