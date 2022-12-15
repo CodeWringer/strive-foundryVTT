@@ -13,6 +13,16 @@ export class AttackType {
   }
 }
 
+/**
+ * Represents the defined attack types.
+ * 
+ * @property {AttackType} none A placeholder/undefined attack type. 
+ * @property {AttackType} singleTarget
+ * @property {AttackType} areaOfEffect
+ * @property {AttackType} multipleSingleTarget
+ * 
+ * @constant
+ */
 export const ATTACK_TYPES = {
   none: new AttackType({
     name: "none",
