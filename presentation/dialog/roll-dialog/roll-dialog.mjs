@@ -115,7 +115,7 @@ export default class RollDialog extends ConfirmableModalDialog {
       localizedTitle: options.localizedTitle ?? game.i18n.localize(DIALOG_TITLE),
     });
 
-    this._visibilityModes = getVisibilityModes(CONFIG);
+    this._visibilityModes = getVisibilityModes();
     this._showFancyFont = new GetShowFancyFontUseCase().invoke();
   }
 

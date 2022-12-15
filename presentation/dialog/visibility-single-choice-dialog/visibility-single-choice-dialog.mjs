@@ -47,7 +47,7 @@ export default class VisibilitySingleChoiceDialog extends SingleChoiceDialog {
    */
   get visibilityModes() {
     if (this._visibilityModes === undefined) {
-      this._visibilityModes = getVisibilityModes(CONFIG);
+      this._visibilityModes = getVisibilityModes();
     }
     return this._visibilityModes;
   }
