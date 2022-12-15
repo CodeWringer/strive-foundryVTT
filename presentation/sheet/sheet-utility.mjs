@@ -39,7 +39,7 @@ export function setSelectedOptionByValue(selectElement, valueToSelect){
 /**
  * Enriches the given context object with basic contextual data. 
  * 
- * Adds the global 'game' and 'CONFIG' objects, as well as convenience flags like 'isOwner', 'isGM', 'isEditable' and 'isSendable'
+ * Adds the global 'game' object, as well as convenience flags like 'isOwner', 'isGM', 'isEditable' and 'isSendable'
  * @param {Object} context 
  */
 export function enrichData(context) {

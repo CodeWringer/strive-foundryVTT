@@ -92,7 +92,7 @@ export class ItemOnGridView {
 
   /**
    * Returns the current orientation of the item. 
-   * @type {CONFIG.itemOrientations}
+   * @type {ITEM_ORIENTATIONS}
    */
   get orientation() { return this.index.orientation; }
 

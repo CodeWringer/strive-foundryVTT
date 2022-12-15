@@ -24,7 +24,7 @@ import VisibilitySingleChoiceDialog from "../../dialog/visibility-single-choice-
  * --- Own properties
  * 
  * @property {String} propertyPath Property path identifying a property that contains a roll-formula. 
- * @property {CONFIG.rollTypes} rollType Determines the kind of roll to try and make. 
+ * @property {RollType} rollType Determines the kind of roll to try and make. 
  * @property {String} primaryChatTitle Primary title to display above the roll result in the chat message. 
  * @property {String} primaryChatImage Primary image to display above the roll result in the chat message. 
  * @property {String} secondaryChatTitle Primary title to display above the roll result in the chat message. 
@@ -47,12 +47,14 @@ export default class ButtonRollViewModel extends ButtonViewModel {
   get propertyPath() { return this._propertyPath; }
 
   /**
-   * @type {CONFIG.rollTypes}
+   * @type {RollType}
    * @private
    */
   _rollType = 0;
   /**
-   * @type {CONFIG.rollTypes}
+   * The internal name of a `RollType`. 
+   * 
+   * @type {String}
    * @readonly
    */
   get rollType() { return this._rollType; }
@@ -88,7 +90,7 @@ export default class ButtonRollViewModel extends ButtonViewModel {
    * @param {Any | undefined} args.callbackData Optional. Defines any data to pass to the completion callback. 
    * @param {Boolean | undefined} args.isEditable Optional. If true, will be interactible. 
    * 
-   * @param {CONFIG.rollTypes} args.rollType Determines the kind of roll to try and make. 
+   * @param {String} args.rollType The internal name of a `RollType` that Determines the kind of roll to try and make. 
    * @param {String | undefined} args.propertyPath Optional. Property path identifying a property that contains a roll-formula. 
    * IMPORTANT: If this argument is left undefined, then the target object MUST define a method 'getRollData()', which returns a {SummedData} instance. 
    * @param {String | undefined} primaryChatTitle Primary title to display above the roll result in the chat message. 
@@ -131,7 +133,7 @@ export default class ButtonRollViewModel extends ButtonViewModel {
   async onClick(html, isOwner, isEditable) {
     if (isEditable !== true) return;
 
-    if (this.rollType === ROLL_TYPES.generic) {
+    if (this.rollType === ROLL_TYPES.generic.name) {
       if (this.propertyPath === undefined) {
         throw new Error("InvalidStateException: For roll-type 'generic', a property path MUST be provided");
       }
@@ -157,7 +159,7 @@ export default class ButtonRollViewModel extends ButtonViewModel {
           });
         },
       }).render(true);
-    } else if (this.rollType === ROLL_TYPES.dicePool) {
+    } else if (this.rollType === ROLL_TYPES.dicePool.name) {
       const thiz = this;
 
       new RollDialog({
