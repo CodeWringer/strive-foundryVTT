@@ -71,10 +71,10 @@ import './presentation/template/actor/part/actor-skills-viewmodel.mjs';
 import './presentation/view-model/view-model-factory.mjs';
 
 /* -------------------------------------------- */
-/*  Init Hook                                   */
+/*  Initialization                              */
 /* -------------------------------------------- */
 
-Hooks.once('init', async function() {
+Hooks.once('init', function() {
   // Add system specific logic to global namespace. 
   game.ambersteel = {
     AmbersteelActor,
@@ -222,13 +222,13 @@ Hooks.once('init', async function() {
     },
   };
 
-  // Set initiative formula. 
+  // Set initiative formula on global CONFIG variable provided by FoundryVTT.
   CONFIG.Combat.initiative = {
     formula: "1d100",
     decimals: 2
   };
 
-  // Define custom Document classes. 
+  // Define custom Document classes on global CONFIG variable provided by FoundryVTT.
   CONFIG.Actor.documentClass = AmbersteelActor;
   CONFIG.Item.documentClass = AmbersteelItem;
 
@@ -371,11 +371,13 @@ Handlebars.registerHelper('ifThenElse', function(condition, thenValue, elseValue
 
 Hooks.on("preCreateActor", function(document, createData, options, userId) {
   // This ensures the proper "default" image is set, upon creation of the document. 
+  // TODO: Could this not be done by manipulating 'createData'?
   document.data.update({ img: document.defaultImg });
 });
 
-Hooks.on("preCreateItem", async function(document, createData, options, userId) {
+Hooks.on("preCreateItem", function(document, createData, options, userId) {
   // This ensures the proper "default" image is set, upon creation of the document. 
+  // TODO: Could this not be done by manipulating 'createData'?
   document.data.update({ img: document.defaultImg });
 });
 
@@ -428,7 +430,7 @@ Hooks.on("renderChatMessage", async function(message, html, data) {
   vm.activateListeners(html, vm.isOwner, vm.isEditable);
 });
 
-Hooks.on("deleteChatMessage", async function(args) {
+Hooks.on("deleteChatMessage", function(args) {
   const deletedContent = args.data.content;
   const rgxViewModelId = /data-view-model-id="([^"]*)"/;
   const match = deletedContent.match(rgxViewModelId);
