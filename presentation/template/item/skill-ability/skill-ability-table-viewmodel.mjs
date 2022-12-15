@@ -8,6 +8,7 @@ import { TEMPLATES } from "../../templatePreloader.mjs"
 import SkillAbilityChatMessageViewModel from "./skill-ability-chat-message-viewmodel.mjs"
 import SkillAbilityListItemViewModel from "./skill-ability-list-item-viewmodel.mjs"
 import { DAMAGE_TYPES } from "../../../../business/ruleset/damage-types.mjs"
+import { ATTACK_TYPES } from "../../../../business/ruleset/skill/attack-types.mjs"
 
 export default class SkillAbilityTableViewModel extends ViewModel {
   /** @override */
@@ -48,7 +49,7 @@ export default class SkillAbilityTableViewModel extends ViewModel {
    * @type {Array<ChoiceOption>}
    * @readonly
    */
-  get attackTypeOptions() { return game.ambersteel.getAttackTypeOptions(); }
+  get attackTypeOptions() { return ATTACK_TYPES.asChoices; }
 
   /**
    * @type {Array<ChoiceOption>}

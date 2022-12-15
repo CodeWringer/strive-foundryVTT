@@ -145,13 +145,6 @@ Hooks.once('init', function() {
      * Returns an array of {ChoiceOption}s. 
      * @returns {Array<ChoiceOption>}
      */
-    getAttackTypeOptions: function() {
-      return game.ambersteel.getOptionsFromConfig(ATTACK_TYPES);
-    },
-    /**
-     * Returns an array of {ChoiceOption}s. 
-     * @returns {Array<ChoiceOption>}
-     */
     getShieldTypeOptions: function() {
       return game.ambersteel.getOptionsFromConfig(SHIELD_TYPES);
     },

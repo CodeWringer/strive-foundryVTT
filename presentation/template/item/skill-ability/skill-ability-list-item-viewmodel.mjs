@@ -47,7 +47,7 @@ export default class SkillAbilityListItemViewModel extends ViewModel {
    * @type {Array<ChoiceOption>}
    * @readonly
    */
-  get attackTypeOptions() { return game.ambersteel.getAttackTypeOptions(); }
+  get attackTypeOptions() { return ATTACK_TYPES.asChoices; }
 
   /**
    * @type {Boolean}
