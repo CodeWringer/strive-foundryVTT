@@ -2,6 +2,7 @@ import { validateOrThrow } from "../../../../business/util/validation-utility.mj
 import ViewModel from "../../../view-model/view-model.mjs";
 import ViewModelFactory from "../../../view-model/view-model-factory.mjs";
 import { TEMPLATES } from "../../templatePreloader.mjs";
+import { ILLNESS_STATES } from "../../../../business/ruleset/illness-states.mjs";
 
 export default class IllnessListItemViewModel extends ViewModel {
   /** @override */
@@ -16,7 +17,7 @@ export default class IllnessListItemViewModel extends ViewModel {
    * @readonly
    */
   get stateOptions() {
-    const stateOptions = game.ambersteel.getIllnessOptions();
+    const stateOptions = ILLNESS_STATES.asChoices;
 
     for (const stateOption of stateOptions) {
       stateOption.shouldDisplayValue = false;

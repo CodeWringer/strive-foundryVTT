@@ -144,13 +144,6 @@ Hooks.once('init', function() {
      * Returns an array of {ChoiceOption}s. 
      * @returns {Array<ChoiceOption>}
      */
-    getIllnessOptions: function() {
-      return game.ambersteel.getOptionsFromConfig(ILLNESS_STATES);
-    },
-    /**
-     * Returns an array of {ChoiceOption}s. 
-     * @returns {Array<ChoiceOption>}
-     */
     getDamageTypeOptions: function() {
       return game.ambersteel.getOptionsFromConfig(DAMAGE_TYPES);
     },
