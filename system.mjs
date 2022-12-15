@@ -1,5 +1,6 @@
 // Ruleset
 import { ATTRIBUTES } from "./business/ruleset/attributes.mjs";
+import { ATTRIBUTE_GROUPS } from "./business/ruleset/attribute-groups.mjs";
 import { DAMAGE_TYPES } from "./business/ruleset/damage-types.mjs";
 import { ATTACK_TYPES } from "./business/ruleset/skill/attack-types.mjs";
 import { SHIELD_TYPES } from "./business/ruleset/asset/shield-types.mjs";
@@ -14,8 +15,7 @@ import { VISIBILITY_MODES } from "./presentation/chat/visibility-modes.mjs";
 import { TEMPLATES, preloadHandlebarsTemplates } from "./presentation/template/templatePreloader.mjs";
 import { findDocument } from "./business/util/content-utility.mjs";
 import ChoiceOption from "./presentation/util/choice-option.mjs";
-// Main config
-import { ambersteelConfig } from "./business/config.js"
+import { getAsChoices } from "./business/util/constants-utility.mjs";
 // Migration
 import MigratorInitiator from "./business/migration/migrator-initiator.mjs";
 import MigratorDialog from "./presentation/dialog/migrator-dialog/migrator-dialog.mjs";
@@ -71,22 +71,14 @@ import './presentation/template/actor/part/actor-skills-viewmodel.mjs';
 import './presentation/view-model/view-model-factory.mjs';
 
 /* -------------------------------------------- */
-/*  Init Hook                                   */
+/*  Initialization                              */
 /* -------------------------------------------- */
 
-Hooks.once('init', async function() {
-  // Add config and constants to global namespace. 
-  CONFIG.ambersteel = ambersteelConfig;
-
+Hooks.once('init', function() {
   // Add system specific logic to global namespace. 
   game.ambersteel = {
     AmbersteelActor,
     AmbersteelItem,
-    /**
-     * The global configuration and constants of the system. 
-     * @type {Object}
-     */
-    config: ambersteelConfig,
     /**
      * 
      * @type {BaseLoggingStrategy}
@@ -124,119 +116,15 @@ Hooks.once('init', async function() {
      * @type {Map<String, Object>}
      */
     viewStates: new Map(),
-    /**
-     * Returns an array of {ChoiceOption}s. 
-     * @param {Object} configObject Any config property.
-     * @returns {Array<ChoiceOption>}
-     */
-    getOptionsFromConfig: function(configObject) {
-      const result = [];
-
-      for (const entryName in configObject) {
-        const entry = configObject[entryName];
-        const localizedName = entry.localizableName !== undefined ? game.i18n.localize(entry.localizableName) : undefined;
-        const icon = entry.icon;
-
-        result.push(new ChoiceOption({
-          value: entry.name, 
-          localizedValue: localizedName, 
-          icon: icon,
-          shouldDisplayValue: localizedName !== undefined ? true : false,
-          shouldDisplayIcon: icon !== undefined ? true : false,
-        }));
-      }
-
-      return result;
-    },
-    /**
-     * Returns an array of {ChoiceOption}s. 
-     * @returns {Array<ChoiceOption>}
-     */
-    getAttributeOptions: function() {
-      return game.ambersteel.getOptionsFromConfig(ATTRIBUTES);
-    },
-    /**
-     * Returns an array of {ChoiceOption}s. 
-     * @returns {Array<ChoiceOption>}
-     */
-    getInjuryOptions: function() {
-      return game.ambersteel.getOptionsFromConfig(INJURY_STATES);
-    },
-    /**
-     * Returns an array of {ChoiceOption}s. 
-     * @returns {Array<ChoiceOption>}
-     */
-    getIllnessOptions: function() {
-      return game.ambersteel.getOptionsFromConfig(ILLNESS_STATES);
-    },
-    /**
-     * Returns an array of {ChoiceOption}s. 
-     * @returns {Array<ChoiceOption>}
-     */
-    getDamageTypeOptions: function() {
-      return game.ambersteel.getOptionsFromConfig(DAMAGE_TYPES);
-    },
-    /**
-     * Returns an array of {ChoiceOption}s. 
-     * @returns {Array<ChoiceOption>}
-     */
-    getAttackTypeOptions: function() {
-      return game.ambersteel.getOptionsFromConfig(ATTACK_TYPES);
-    },
-    /**
-     * Returns an array of {ChoiceOption}s. 
-     * @returns {Array<ChoiceOption>}
-     */
-    getShieldTypeOptions: function() {
-      return game.ambersteel.getOptionsFromConfig(SHIELD_TYPES);
-    },
-    /**
-     * Returns an array of {ChoiceOption}s. 
-     * @returns {Array<ChoiceOption>}
-     */
-    getArmorTypeOptions: function() {
-      return game.ambersteel.getOptionsFromConfig(ARMOR_TYPES);
-    },
-    /**
-     * Returns an array of {ChoiceOption}s. 
-     * @returns {Array<ChoiceOption>}
-     */
-    getWeaponTypeOptions: function() {
-      return game.ambersteel.getOptionsFromConfig(WEAPON_TYPES);
-    },
-    /**
-     * Returns an array of {ChoiceOption}s. 
-     * @returns {Array<ChoiceOption>}
-     */
-    getVisibilityOptions: function() {
-      return game.ambersteel.getOptionsFromConfig(VISIBILITY_MODES);
-    },
-    /**
-     * Returns the config item of the given config object, whose name matches with the given name. 
-     * @param {Object} configObject Any config property. 
-     * @param {String} name Name of the config item to fetch. 
-     * @returns {Object | undefined}
-     */
-    getConfigItem: function(configObject, name) {
-      for (const propertyName in configObject) {
-        const obj = configObject[propertyName];
-
-        if (obj.name === name) {
-          return obj;
-        }
-      }
-
-      return undefined;
-    },
   };
 
-  // Set initiative formula. 
+  // Set initiative formula on global CONFIG variable provided by FoundryVTT.
   CONFIG.Combat.initiative = {
     formula: "1d100",
     decimals: 2
   };
 
-  // Define custom Document classes. 
+  // Define custom Document classes on global CONFIG variable provided by FoundryVTT.
   CONFIG.Actor.documentClass = AmbersteelActor;
   CONFIG.Item.documentClass = AmbersteelItem;
 
@@ -249,6 +137,42 @@ Hooks.once('init', async function() {
 
   // Preload Handlebars templates.
   return preloadHandlebarsTemplates();
+});
+
+Hooks.once("ready", function() {
+  // Ensure constants provide a 'asChoices' property. 
+  ATTRIBUTES.asChoices = getAsChoices(ATTRIBUTES, ["asChoices"]);
+  ATTRIBUTE_GROUPS.asChoices = getAsChoices(ATTRIBUTE_GROUPS, ["asChoices"]);
+  DAMAGE_TYPES.asChoices = getAsChoices(DAMAGE_TYPES, ["asChoices"]);
+  ATTACK_TYPES.asChoices = getAsChoices(ATTACK_TYPES, ["asChoices"]);
+  SHIELD_TYPES.asChoices = getAsChoices(SHIELD_TYPES, ["asChoices"]);
+  ARMOR_TYPES.asChoices = getAsChoices(ARMOR_TYPES, ["asChoices"]);
+  WEAPON_TYPES.asChoices = getAsChoices(WEAPON_TYPES, ["asChoices"]);
+  INJURY_STATES.asChoices = getAsChoices(INJURY_STATES, ["asChoices"]);
+  ILLNESS_STATES.asChoices = getAsChoices(ILLNESS_STATES, ["asChoices"]);
+
+  // Settings initialization.
+  new AmbersteelUserSettings().ensureAllSettings();
+
+  // Debug mode setting. 
+  game.ambersteel.debug = new LoadDebugSettingUseCase().invoke();
+
+  // Migration check. 
+  const migrator = new MigratorInitiator();
+  
+  if (migrator.isApplicable() === true) {
+    if (game.user.isGM === true) {
+      new MigratorDialog().render(true);
+    } else {
+      // Display warning to non-GM. 
+      new PlainDialog({
+        localizedTitle: game.i18n.localize("ambersteel.migration.titleMigrationRequired"),
+        localizedContent: game.i18n.localize("ambersteel.migration.migrationRequiredUserWarning"),
+      }).render(true);
+    }
+  } else {
+    game.ambersteel.logger.logVerbose("Version up to date - skipping migrations");
+  }
 });
 
 /* -------------------------------------------- */
@@ -341,38 +265,15 @@ Handlebars.registerHelper('ifThenElse', function(condition, thenValue, elseValue
 /*  Other Hooks                                 */
 /* -------------------------------------------- */
 
-Hooks.once("ready", async function() {
-  // Settings initialization.
-  new AmbersteelUserSettings().ensureAllSettings();
-
-  // Debug mode setting. 
-  game.ambersteel.debug = new LoadDebugSettingUseCase().invoke();
-
-  // Migration check. 
-  const migrator = new MigratorInitiator();
-  
-  if (migrator.isApplicable() === true) {
-    if (game.user.isGM === true) {
-      new MigratorDialog().render(true);
-    } else {
-      // Display warning to non-GM. 
-      new PlainDialog({
-        localizedTitle: game.i18n.localize("ambersteel.migration.titleMigrationRequired"),
-        localizedContent: game.i18n.localize("ambersteel.migration.migrationRequiredUserWarning"),
-      }).render(true);
-    }
-  } else {
-    game.ambersteel.logger.logVerbose("Version up to date - skipping migrations");
-  }
-});
-
-Hooks.on("preCreateActor", async function(document, createData, options, userId) {
+Hooks.on("preCreateActor", function(document, createData, options, userId) {
   // This ensures the proper "default" image is set, upon creation of the document. 
+  // TODO: Could this not be done by manipulating 'createData'?
   document.data.update({ img: document.defaultImg });
 });
 
-Hooks.on("preCreateItem", async function(document, createData, options, userId) {
+Hooks.on("preCreateItem", function(document, createData, options, userId) {
   // This ensures the proper "default" image is set, upon creation of the document. 
+  // TODO: Could this not be done by manipulating 'createData'?
   document.data.update({ img: document.defaultImg });
 });
 
@@ -425,7 +326,7 @@ Hooks.on("renderChatMessage", async function(message, html, data) {
   vm.activateListeners(html, vm.isOwner, vm.isEditable);
 });
 
-Hooks.on("deleteChatMessage", async function(args) {
+Hooks.on("deleteChatMessage", function(args) {
   const deletedContent = args.data.content;
   const rgxViewModelId = /data-view-model-id="([^"]*)"/;
   const match = deletedContent.match(rgxViewModelId);

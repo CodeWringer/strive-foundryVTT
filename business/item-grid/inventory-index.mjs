@@ -1,3 +1,5 @@
+import { ITEM_ORIENTATIONS } from "./item-orientations.mjs";
+
 /**
  * Represents an item (asset/possession) of an actor, with its 
  * position and size on the grid. 
@@ -6,7 +8,7 @@
  * @property {Number} w
  * @property {Number} h
  * @property {String} id Id of the item, on the actor. 
- * @property {CONFIG.itemOrientations} Determines rotation of the item. 
+ * @property {ITEM_ORIENTATIONS} orientation Determines rotation of the item. 
  */
 export default class InventoryIndex {
   constructor(args = {}) {
@@ -15,6 +17,6 @@ export default class InventoryIndex {
     this.w = args.w ?? -1;
     this.h = args.h ?? -1;
     this.id = args.id;
-    this.orientation = args.orientation ?? ambersteel.itemOrientations.vertical;
+    this.orientation = args.orientation ?? ITEM_ORIENTATIONS.vertical;
   }
 }

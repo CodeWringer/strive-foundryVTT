@@ -31,7 +31,7 @@ export default class AmbersteelBaseItemSheet {
    * This is where any data should be added, which is only required to 
    * display the data via the sheet. 
    * @param context {Object} A context data object. Some noteworthy properties are 
-   * 'item', 'CONFIG', 'isSendable' and 'isEditable'. 
+   * 'item', 'isSendable' and 'isEditable'. 
    * @virtual
    */
   prepareDerivedData(context) { /* Inheriting types should implement this. */ }

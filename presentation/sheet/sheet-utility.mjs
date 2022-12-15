@@ -39,12 +39,10 @@ export function setSelectedOptionByValue(selectElement, valueToSelect){
 /**
  * Enriches the given context object with basic contextual data. 
  * 
- * Adds the global 'game' and 'CONFIG' objects, as well as convenience flags like 'isOwner', 'isGM', 'isEditable' and 'isSendable'
+ * Adds the global 'game' object, as well as convenience flags like 'isOwner', 'isGM', 'isEditable' and 'isSendable'
  * @param {Object} context 
  */
 export function enrichData(context) {
-  // Add the config to the context object as a convenience property. 
-  context.CONFIG = CONFIG.ambersteel;
   // Add the game to the context object as a convenience property. 
   context.game = game;
   // In templates that implement it, this flag indicates whether the current user is the owner of the sheet. 

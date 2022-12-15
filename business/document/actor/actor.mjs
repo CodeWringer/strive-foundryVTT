@@ -10,6 +10,7 @@ import * as UpdateUtil from '../document-update-utility.mjs';
 import * as ChatUtil from "../../../presentation/chat/chat-utility.mjs";
 import { createUUID } from '../../util/uuid-utility.mjs';
 import { SOUNDS_CONSTANTS } from '../../../presentation/audio/sounds.mjs';
+import { VISIBILITY_MODES } from '../../../presentation/chat/visibility-modes.mjs';
 
 /**
  * @summary
@@ -173,11 +174,11 @@ export class AmbersteelActor extends Actor {
 
   /**
    * Base implementation of sending this Actor to the chat. 
-   * @param {CONFIG.ambersteel.visibilityModes} visibilityMode Determines the visibility of the chat message. 
+   * @param {VisibilityMode} visibilityMode Determines the visibility of the chat message. 
    * @async
    * @virtual
    */
-  async sendToChat(visibilityMode = CONFIG.ambersteel.visibilityModes.public) {
+  async sendToChat(visibilityMode = VISIBILITY_MODES.public) {
     const chatData = await this.getChatData();
     ChatUtil.sendToChat({
       visibilityMode: visibilityMode,
@@ -188,10 +189,10 @@ export class AmbersteelActor extends Actor {
   /**
    * Sends a property of this item to chat, based on the given property path. 
    * @param {String} propertyPath 
-   * @param {CONFIG.ambersteel.visibilityModes} visibilityMode 
+   * @param {VisibilityMode} visibilityMode 
    * @async
    */
-  async sendPropertyToChat(propertyPath, visibilityMode = CONFIG.ambersteel.visibilityModes.public) {
+  async sendPropertyToChat(propertyPath, visibilityMode = VISIBILITY_MODES.public) {
     await ChatUtil.sendPropertyToChat({
       obj: this,
       propertyPath: propertyPath,

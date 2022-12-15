@@ -13,6 +13,7 @@ import { createUUID } from '../../util/uuid-utility.mjs';
 import PreparedChatData from '../../../presentation/chat/prepared-chat-data.mjs';
 import { SOUNDS_CONSTANTS } from '../../../presentation/audio/sounds.mjs';
 import ViewModel from '../../../presentation/view-model/view-model.mjs';
+import { VISIBILITY_MODES } from '../../../presentation/chat/visibility-modes.mjs';
 
 /**
  * @summary
@@ -165,11 +166,11 @@ export class AmbersteelItem extends Item {
 
   /**
    * Base implementation of sending this item to the chat. 
-   * @param {CONFIG.ambersteel.visibilityModes} visibilityMode Determines the visibility of the chat message. 
+   * @param {VisibilityMode} visibilityMode Determines the visibility of the chat message. 
    * @async
    * @virtual
    */
-  async sendToChat(visibilityMode = CONFIG.ambersteel.visibilityModes.public) {
+  async sendToChat(visibilityMode = VISIBILITY_MODES.public) {
     const chatData = await this.getChatData();
     ChatUtil.sendToChat({
       visibilityMode: visibilityMode,
@@ -180,10 +181,10 @@ export class AmbersteelItem extends Item {
   /**
    * Sends a property of this item to chat, based on the given property path. 
    * @param {String} propertyPath 
-   * @param {CONFIG.ambersteel.visibilityModes} visibilityMode 
+   * @param {VisibilityMode} visibilityMode 
    * @async
    */
-  async sendPropertyToChat(propertyPath, visibilityMode = CONFIG.ambersteel.visibilityModes.public) {
+  async sendPropertyToChat(propertyPath, visibilityMode = VISIBILITY_MODES.public) {
     await ChatUtil.sendPropertyToChat({
       obj: this,
       propertyPath: propertyPath,

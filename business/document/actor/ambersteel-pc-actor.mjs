@@ -1,3 +1,4 @@
+import Ruleset from "../../ruleset/ruleset.mjs";
 import { ACTOR_SUBTYPE } from "./actor-subtype.mjs";
 import AmbersteelBaseCharacterActor from "./ambersteel-base-character-actor.mjs";
 
@@ -46,7 +47,7 @@ export default class AmbersteelPcActor extends AmbersteelBaseCharacterActor {
    * @private
    */
   _prepareDerivedFateSystemData(context) {
-    const maxCards = CONFIG.ambersteel.fateSystem.maxCards;
+    const maxCards = new Ruleset().getMaximumFateCards();
     const fateSystemData = context.data.data.fateSystem;
 
     fateSystemData.remainingSlots = maxCards - context.getFateCards().length;

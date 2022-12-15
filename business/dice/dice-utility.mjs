@@ -1,5 +1,6 @@
 import { SOUNDS_CONSTANTS } from "../../presentation/audio/sounds.mjs";
 import * as ChatUtil from "../../presentation/chat/chat-utility.mjs";
+import { VISIBILITY_MODES } from "../../presentation/chat/visibility-modes.mjs";
 import { TEMPLATES } from "../../presentation/template/templatePreloader.mjs";
 import Ruleset from "../ruleset/ruleset.mjs";
 import * as ValidationUtil from "../util/validation-utility.mjs";
@@ -86,14 +87,14 @@ export function rollDicePool(ops = {}) {
  * @param {String | undefined} args.primaryImage Optional. An image url for the primary title. 
  * @param {String | undefined} args.secondaryTitle Optional. A secondary title. 
  * @param {String | undefined} args.secondaryImage Optional. An image url for the secondary title. 
- * @param {CONFIG.ambersteel.visibilityModes | undefined} args.visibilityMode Optional. Sets the visibility of the chat message. Default public. 
+ * @param {VisibilityMode | undefined} args.visibilityMode Optional. Sets the visibility of the chat message. Default public. 
  * @param {String | undefined} args.diceComposition Optional. A localized string showing the composition of dice. 
  * @returns {Promise<any>}
  * @async
  */
 export async function sendDiceResultToChat(args = {}) {
   args = {
-    visibilityMode: CONFIG.ambersteel.visibilityModes.public,
+    visibilityMode: VISIBILITY_MODES.public,
     ...args
   };
   ValidationUtil.validateOrThrow(args, ["rollResult"]);

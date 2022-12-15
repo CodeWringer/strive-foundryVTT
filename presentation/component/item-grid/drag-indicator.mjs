@@ -162,7 +162,7 @@ export class DragIndicator {
   }
 
   /**
-   * @type {CONFIG.itemOrientations}
+   * @type {ITEM_ORIENTATIONS}
    */
   orientation = undefined;
 
@@ -207,7 +207,7 @@ export class DragIndicator {
    * Changes will **not** be respected, while the indicator is shown. 
    * @param {Number} width Width of the indicator, in grid coordinates. 
    * @param {Number} height Height of the indicator, in grid coordinates. 
-   * @param {CONFIG.itemOrientations} orientation The orientation that the given dimensions represents. 
+   * @param {ITEM_ORIENTATIONS} orientation The orientation that the given dimensions represents. 
    */
   setSize(width, height, orientation) {
     this._sizeOnGrid.width = width;

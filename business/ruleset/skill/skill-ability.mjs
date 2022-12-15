@@ -7,6 +7,7 @@ import { createUUID } from '../../util/uuid-utility.mjs';
 import * as PropUtil from '../../util/property-utility.mjs';
 import DamageAndType from './damage-and-type.mjs';
 import { SOUNDS_CONSTANTS } from '../../../presentation/audio/sounds.mjs';
+import { VISIBILITY_MODES } from '../../../presentation/chat/visibility-modes.mjs';
 
 /**
  * Represents a skill ability. 
@@ -27,7 +28,7 @@ import { SOUNDS_CONSTANTS } from '../../../presentation/audio/sounds.mjs';
  * @property {Number | undefined} distance 
  * @property {String | undefined} obstacle 
  * @property {String | undefined} opposedBy 
- * @property {CONFIG.ambersteel.attackTypes | undefined} attackType 
+ * @property {AttackType | undefined} attackType 
  */
 export default class SkillAbility {
   get ownerId() { return this.getOwningDocument().id; }
@@ -47,7 +48,7 @@ export default class SkillAbility {
    * @param {Number | undefined} args.distance Optional. 
    * @param {String | undefined} args.obstacle Optional. 
    * @param {String | undefined} args.opposedBy Optional. 
-   * @param {CONFIG.ambersteel.attackTypes | undefined} args.attackType Optional. 
+   * @param {AttackType | undefined} args.attackType Optional. 
    */
   constructor(args = {}) {
     validateOrThrow(args, ["owner", "index"]);
@@ -143,11 +144,11 @@ export default class SkillAbility {
 
   /**
    * Base implementation of sending this item to the chat. 
-   * @param {CONFIG.ambersteel.visibilityModes} visibilityMode Determines the visibility of the chat message. 
+   * @param {VisibilityMode} visibilityMode Determines the visibility of the chat message. 
    * @async
    * @virtual
    */
-  async sendToChat(visibilityMode = CONFIG.ambersteel.visibilityModes.public) {
+  async sendToChat(visibilityMode = VISIBILITY_MODES.public) {
     const chatData = await this.getChatData();
     ChatUtil.sendToChat({
       visibilityMode: visibilityMode,

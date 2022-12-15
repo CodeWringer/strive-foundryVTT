@@ -11,6 +11,7 @@ import ViewModel from "../../../view-model/view-model.mjs";
 import ViewModelFactory from "../../../view-model/view-model-factory.mjs";
 import { TEMPLATES } from "../../templatePreloader.mjs";
 import VisibilitySingleChoiceDialog from "../../../dialog/visibility-single-choice-dialog/visibility-single-choice-dialog.mjs";
+import { getConstantByName } from "../../../../business/util/constants-utility.mjs";
 
 export default class SkillAbilityListItemViewModel extends ViewModel {
   /** @override */
@@ -47,7 +48,7 @@ export default class SkillAbilityListItemViewModel extends ViewModel {
    * @type {Array<ChoiceOption>}
    * @readonly
    */
-  get attackTypeOptions() { return game.ambersteel.getAttackTypeOptions(); }
+  get attackTypeOptions() { return ATTACK_TYPES.asChoices; }
 
   /**
    * @type {Boolean}
@@ -266,7 +267,7 @@ export default class SkillAbilityListItemViewModel extends ViewModel {
               }
 
               // Get localized damage type. 
-              const damageType = game.ambersteel.getConfigItem(DAMAGE_TYPES, damageDefinition.damageType);
+              const damageType = getConstantByName(DAMAGE_TYPES, damageDefinition.damageType);
               const localizedDamageType = game.i18n.localize(damageType.localizableName);
 
               rolls.push({
@@ -388,7 +389,7 @@ export default class SkillAbilityListItemViewModel extends ViewModel {
             const damage = thiz.skillAbility.damage ?? [];
             damage.push(new DamageAndType({
               damage: "",
-              damageType: CONFIG.ambersteel.damageTypes.none.name,
+              damageType: DAMAGE_TYPES.none.name,
             }));
             thiz.skillAbility.updateProperty("damage", damage);
           },
@@ -448,7 +449,7 @@ class DamageAndTypeViewModel extends ViewModel {
    * @type {Array<ChoiceOption>}
    * @readonly
    */
-  get damageTypeOptions() { return game.ambersteel.getDamageTypeOptions(); }
+  get damageTypeOptions() { return DAMAGE_TYPES.asChoices; }
 
   constructor(args = {}) {
     super(args);
