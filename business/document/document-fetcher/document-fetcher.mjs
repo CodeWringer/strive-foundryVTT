@@ -20,6 +20,8 @@ export default class DocumentFetcher {
    * 
    * Can search in a variety of sources, such as compendium packs or the world collections. 
    * 
+   * May also look for embedded documents.
+   * 
    * **WARNING**: This process can be very slow for large collections, as full document instances 
    * are loaded from the data base for **every** match. Make sure to filter as specifically, as 
    * possible! 
@@ -38,6 +40,10 @@ export default class DocumentFetcher {
    * @param {DocumentCollectionSource | undefined} filter.source A document source to 
    * filter by. 
    * * Default `DOCUMENT_COLLECTION_SOURCES.all`.
+   * @param {Boolean | undefined} filter.searchEmbedded If `true`, will also look for embedded 
+   * documents. 
+   * * Default `false`. 
+   * * Note, that this setting may slow searches down, **significantly**. 
    * 
    * @returns {Document | undefined} 
    * 
@@ -83,6 +89,10 @@ export default class DocumentFetcher {
    * * E. g. `"Item"` or `"Actor"`
    * @param {String | undefined} filter.contentType A content type. 
    * * E. g. `"skill"` or `"npc"`
+   * @param {Boolean | undefined} filter.searchEmbedded If `true`, will also look for embedded 
+   * documents. 
+   * * Default `false`. 
+   * * Note, that this setting may slow searches down, **significantly**. 
    * 
    * @returns {Document | undefined} 
    * 
@@ -94,9 +104,29 @@ export default class DocumentFetcher {
       // Skip empty packs. 
       if (pack.index.size < 1) continue;
 
+      // The document type of the pack. E. g. `"Actor"`. 
+      const packDocumentType = pack.metadata.type.toLowerCase();
+
+      // Look through embedded documents, if desired. 
+      // This loop is expected to be SLOW.
+      if (filter.searchEmbedded === true && packDocumentType == "actor") {
+        for (const index of pack.index) {
+          const id = index._id;
+          const actor = await pack.getDocument(id);
+
+          let document = actor.items.find(it => (it.id ?? it._id) === filter.id);
+          if (document == undefined) {
+            document = actor.items.find(it => it.name === filter.name);
+          }
+          if (document !== undefined) {
+            return document;
+          }
+        }
+      }
+
       // Skip, if the pack is of the wrong document type. 
       if (filter.documentType !== undefined 
-        && pack.metadata.type.toLowerCase() != filter.documentType.toLowerCase()) {
+        && packDocumentType != filter.documentType.toLowerCase()) {
         continue;
       }
 
@@ -133,6 +163,10 @@ export default class DocumentFetcher {
    * * E. g. `"Item"` or `"Actor"`
    * @param {String | undefined} filter.contentType A content type. 
    * * E. g. `"skill"` or `"npc"`
+   * @param {Boolean | undefined} filter.searchEmbedded If `true`, will also look for embedded 
+   * documents. 
+   * * Default `false`. 
+   * * Note, that this setting may slow searches down, **significantly**. 
    * 
    * @returns {Document | undefined} 
    * 
@@ -143,9 +177,26 @@ export default class DocumentFetcher {
       // Skip empty collection. 
       if (worldCollection.size < 1) continue;
 
+      // The document type of the collection. E. g. `"Actor"`. 
+      const collectionDocumentType = worldCollection.documentName.toLowerCase();
+
+      // Look through embedded documents, if desired. 
+      // This loop is expected to be SLOW.
+      if (filter.searchEmbedded === true && collectionDocumentType == "actor") {
+        for (const actor of worldCollection) {
+          let document = actor.items.find(it => (it.id ?? it._id) === filter.id);
+          if (document == undefined) {
+            document = actor.items.find(it => it.name === filter.name);
+          }
+          if (document !== undefined) {
+            return document;
+          }
+        }
+      }
+
       // Skip, if the collection is of the wrong document type. 
       if (filter.documentType !== undefined 
-        && worldCollection.documentName.toLowerCase() != filter.documentType.toLowerCase()) {
+        && collectionDocumentType != filter.documentType.toLowerCase()) {
         continue;
       }
 
