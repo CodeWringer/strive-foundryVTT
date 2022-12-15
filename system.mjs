@@ -1,5 +1,6 @@
 // Ruleset
 import { ATTRIBUTES } from "./business/ruleset/attributes.mjs";
+import { ATTRIBUTE_GROUPS } from "./business/ruleset/attribute-groups.mjs";
 import { DAMAGE_TYPES } from "./business/ruleset/damage-types.mjs";
 import { ATTACK_TYPES } from "./business/ruleset/skill/attack-types.mjs";
 import { SHIELD_TYPES } from "./business/ruleset/asset/shield-types.mjs";
@@ -14,6 +15,7 @@ import { VISIBILITY_MODES } from "./presentation/chat/visibility-modes.mjs";
 import { TEMPLATES, preloadHandlebarsTemplates } from "./presentation/template/templatePreloader.mjs";
 import { findDocument } from "./business/util/content-utility.mjs";
 import ChoiceOption from "./presentation/util/choice-option.mjs";
+import { getAsChoices } from "./business/util/constants-utility.mjs";
 // Migration
 import MigratorInitiator from "./business/migration/migrator-initiator.mjs";
 import MigratorDialog from "./presentation/dialog/migrator-dialog/migrator-dialog.mjs";
@@ -241,6 +243,42 @@ Hooks.once('init', async function() {
   return preloadHandlebarsTemplates();
 });
 
+Hooks.once("ready", function() {
+  // Ensure constants provide a 'asChoices' property. 
+  ATTRIBUTES.asChoices = getAsChoices(ATTRIBUTES, ["asChoices"]);
+  ATTRIBUTE_GROUPS.asChoices = getAsChoices(ATTRIBUTE_GROUPS, ["asChoices"]);
+  DAMAGE_TYPES.asChoices = getAsChoices(DAMAGE_TYPES, ["asChoices"]);
+  ATTACK_TYPES.asChoices = getAsChoices(ATTACK_TYPES, ["asChoices"]);
+  SHIELD_TYPES.asChoices = getAsChoices(SHIELD_TYPES, ["asChoices"]);
+  ARMOR_TYPES.asChoices = getAsChoices(ARMOR_TYPES, ["asChoices"]);
+  WEAPON_TYPES.asChoices = getAsChoices(WEAPON_TYPES, ["asChoices"]);
+  INJURY_STATES.asChoices = getAsChoices(INJURY_STATES, ["asChoices"]);
+  ILLNESS_STATES.asChoices = getAsChoices(ILLNESS_STATES, ["asChoices"]);
+
+  // Settings initialization.
+  new AmbersteelUserSettings().ensureAllSettings();
+
+  // Debug mode setting. 
+  game.ambersteel.debug = new LoadDebugSettingUseCase().invoke();
+
+  // Migration check. 
+  const migrator = new MigratorInitiator();
+  
+  if (migrator.isApplicable() === true) {
+    if (game.user.isGM === true) {
+      new MigratorDialog().render(true);
+    } else {
+      // Display warning to non-GM. 
+      new PlainDialog({
+        localizedTitle: game.i18n.localize("ambersteel.migration.titleMigrationRequired"),
+        localizedContent: game.i18n.localize("ambersteel.migration.migrationRequiredUserWarning"),
+      }).render(true);
+    }
+  } else {
+    game.ambersteel.logger.logVerbose("Version up to date - skipping migrations");
+  }
+});
+
 /* -------------------------------------------- */
 /*  Handlebars Helpers                          */
 /* -------------------------------------------- */
@@ -331,32 +369,7 @@ Handlebars.registerHelper('ifThenElse', function(condition, thenValue, elseValue
 /*  Other Hooks                                 */
 /* -------------------------------------------- */
 
-Hooks.once("ready", async function() {
-  // Settings initialization.
-  new AmbersteelUserSettings().ensureAllSettings();
-
-  // Debug mode setting. 
-  game.ambersteel.debug = new LoadDebugSettingUseCase().invoke();
-
-  // Migration check. 
-  const migrator = new MigratorInitiator();
-  
-  if (migrator.isApplicable() === true) {
-    if (game.user.isGM === true) {
-      new MigratorDialog().render(true);
-    } else {
-      // Display warning to non-GM. 
-      new PlainDialog({
-        localizedTitle: game.i18n.localize("ambersteel.migration.titleMigrationRequired"),
-        localizedContent: game.i18n.localize("ambersteel.migration.migrationRequiredUserWarning"),
-      }).render(true);
-    }
-  } else {
-    game.ambersteel.logger.logVerbose("Version up to date - skipping migrations");
-  }
-});
-
-Hooks.on("preCreateActor", async function(document, createData, options, userId) {
+Hooks.on("preCreateActor", function(document, createData, options, userId) {
   // This ensures the proper "default" image is set, upon creation of the document. 
   document.data.update({ img: document.defaultImg });
 });
