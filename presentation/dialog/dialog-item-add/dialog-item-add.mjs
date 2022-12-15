@@ -1,5 +1,5 @@
+import DocumentFetcher from '../../../business/document/document-fetcher/document-fetcher.mjs';
 import GetShowFancyFontUseCase from '../../../business/use-case/get-show-fancy-font-use-case.mjs';
-import { getItemDeclarations } from '../../../business/util/content-utility.mjs';
 import { validateOrThrow } from '../../../business/util/validation-utility.mjs';
 import { getElementValue } from '../../sheet/sheet-utility.mjs';
 import { TEMPLATES } from '../../template/templatePreloader.mjs';
@@ -94,7 +94,10 @@ export default class AddItemDialog extends ConfirmableModalDialog {
     this.itemType = options.itemType;
     this.localizedItemLabel = options.localizedItemLabel ?? options.itemType;
 
-    this._itemDeclarations = getItemDeclarations(this.itemType);
+    this._itemDeclarations = new DocumentFetcher().getDocumentIndices({
+      documentType: "Item",
+      contentType: this.itemType,
+    });
     this._showFancyFont = new GetShowFancyFontUseCase().invoke();
   }
 

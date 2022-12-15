@@ -25,64 +25,6 @@ export class ItemEntry {
   }
 }
 
-/************ Returning document declarations ************/
-
-/**
- * Returns all item declarations of the given type from the specified source. 
- * @param {String} type Item type to search for. E. g. "skill" or "fate-card"
- * @param {contentCollectionTypes} where Specifies where to collect from. 
- * @returns {Array<ItemEntry>} A list of item metadata. 
- * @async
- */
-export function getItemDeclarations(type, where = contentCollectionTypes.all) {
-  const result = [];
-
-  // Collect from compendia. 
-  if (where === contentCollectionTypes.all || where === contentCollectionTypes.compendia) {
-    for (const pack of game.packs) {
-      if (pack.private === true && game.user.isGM !== true) {
-        continue;
-      }
-
-      for (const entry of pack.index) {
-        if (entry.type == type) {
-          result.push(new ItemEntry(getId(entry), entry.name, contentCollectionTypes.compendia));
-        }
-      }
-    }
-  }
-
-  // Collect from module compendia. 
-  if (where === contentCollectionTypes.all || where === contentCollectionTypes.modules) {
-    for (const module of game.modules) {
-      if (!module.packs) break;
-
-      for (const pack of module.packs) {
-        if (pack.private === true && game.user.isGM !== true) {
-          continue;
-        }
-        
-        if (pack.metadata.name == type) {
-          for (const entry of pack.index) {
-            result.push(new ItemEntry(getId(entry), entry.name, contentCollectionTypes.modules));
-          }
-        }
-      }
-    }
-  }
-
-  // Collect from world items. 
-  if (where === contentCollectionTypes.all || where === contentCollectionTypes.world) {
-    for (const entry of game.items) {
-      if (entry.type === type && (entry.visible === true || game.user.isGM === true)) {
-        result.push(new ItemEntry(getId(entry), entry.name, contentCollectionTypes.world));
-      }
-    }
-  }
-
-  return result;
-}
-
 /************ Returning documents ************/
 
 /**
