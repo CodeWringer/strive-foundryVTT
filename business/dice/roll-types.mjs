@@ -12,18 +12,15 @@ export class RollType {
 /**
  * Represents all defined roll types. 
  * 
+ * @property {RollType} generic A generic roll, using Foundry's default system. 
+ * @property {RollType} dicePool An Ambersteel dice-pool roll. 
+ * 
  * @constant
  */
 export const ROLL_TYPES = {
-  /**
-   * A generic roll, using Foundry's default system. 
-   */
   generic: new RollType({
     name: "generic",
   }),
-  /**
-   * An Ambersteel dice-pool roll. 
-   */
   dicePool: new RollType({
     name: "dice-pool",
   }),

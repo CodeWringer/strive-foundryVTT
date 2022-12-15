@@ -11,6 +11,29 @@ export class WeaponType {
   }
 }
 
+/**
+ * Represents the defined weapon types.
+ * 
+ * @property {WeaponType} unarmed
+ * @property {WeaponType} shortBlade
+ * @property {WeaponType} longBlade
+ * @property {WeaponType} greatBlade
+ * @property {WeaponType} axe
+ * @property {WeaponType} greatAxe
+ * @property {WeaponType} spear
+ * @property {WeaponType} lance
+ * @property {WeaponType} polearm
+ * @property {WeaponType} club
+ * @property {WeaponType} smallCrusher
+ * @property {WeaponType} largeCrusher
+ * @property {WeaponType} shortBow
+ * @property {WeaponType} longBow
+ * @property {WeaponType} warBow
+ * @property {WeaponType} crossbow
+ * @property {WeaponType} firearm
+ * 
+ * @constant
+ */
 export const WEAPON_TYPES = {
   unarmed: new WeaponType({
     name: "unarmed",

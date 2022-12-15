@@ -8,7 +8,13 @@ import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import PlainDialog from "../../dialog/plain-dialog/plain-dialog.mjs";
 import SingleChoiceDialog from "../../dialog/single-choice-dialog/single-choice-dialog.mjs";
 
-export const contextTypes = {
+/**
+ * @property {String} chatMessage
+ * @property {String} itemSheet
+ * @property {String} listItem
+ * 
+ * @constant
+ */
   chatMessage: "chat-message",
   itemSheet: "item-sheet",
   listItem: "list-item"

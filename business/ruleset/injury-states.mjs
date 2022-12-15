@@ -14,6 +14,16 @@ export class InjuryState {
   }
 }
 
+/**
+ * Represents the defined injury states.
+ * 
+ * @property {InjuryState} active 
+ * @property {InjuryState} patchedUp
+ * @property {InjuryState} treated
+ * @property {InjuryState} permanent
+ * 
+ * @constant
+ */
 export const INJURY_STATES = {
   active: new InjuryState({
     name: "active",

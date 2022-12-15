@@ -14,6 +14,14 @@ export class IllnessState {
   }
 }
 
+/**
+ * Represents the defined illness states.
+ * 
+ * @property {IllnessState} active 
+ * @property {IllnessState} treated
+ * 
+ * @constant
+ */
 export const ILLNESS_STATES = {
   active: new IllnessState({
     name: "active",

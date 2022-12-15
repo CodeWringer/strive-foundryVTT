@@ -13,6 +13,23 @@ export class Attribute {
   }
 }
 
+/**
+ * Represents the defined character attributes.
+ * 
+ * @property {Attribute} agility A character's "agility" attribute. 
+ * @property {Attribute} endurance A character's "endurance" attribute. 
+ * @property {Attribute} perception A character's "perception" attribute. 
+ * @property {Attribute} strength A character's "strength" attribute. 
+ * @property {Attribute} toughness A character's "toughness" attribute. 
+ * @property {Attribute} intelligence A character's "intelligence" attribute. 
+ * @property {Attribute} wisdom A character's "wisdom" attribute. 
+ * @property {Attribute} arcana A character's "arcana" attribute. 
+ * @property {Attribute} empathy A character's "empathy" attribute. 
+ * @property {Attribute} oratory A character's "oratory" attribute. 
+ * @property {Attribute} willpower A character's "willpower" attribute. 
+ * 
+ * @constant
+ */
 export const ATTRIBUTES = {
   agility: new Attribute({
     name: "agility",

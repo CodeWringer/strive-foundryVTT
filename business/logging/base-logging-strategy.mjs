@@ -57,6 +57,13 @@ export class BaseLoggingStrategy {
 
 /**
  * Enum of available log levels. 
+ * 
+ * @property {Number} ERROR 
+ * @property {Number} WARN 
+ * @property {Number} DEBUG 
+ * @property {Number} VERBOSE 
+ * 
+ * @constant
  */
 export const LogLevels = {
   ERROR: 0,

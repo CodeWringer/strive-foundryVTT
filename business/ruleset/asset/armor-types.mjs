@@ -11,6 +11,15 @@ export class ArmorType {
   }
 }
 
+/**
+ * Represents the defined armor types.
+ * 
+ * @property {ArmorType} light
+ * @property {ArmorType} medium
+ * @property {ArmorType} heavy
+ * 
+ * @constant
+ */
 export const ARMOR_TYPES = {
   light: new ArmorType({
     name: "light",

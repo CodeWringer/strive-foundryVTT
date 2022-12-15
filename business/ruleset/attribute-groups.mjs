@@ -17,6 +17,15 @@ export class AttributeGroup {
   }
 }
 
+/**
+ * Represents the defined character attribute groups.
+ * 
+ * @property {AttributeGroup} physical A group of all "physical" attributes. 
+ * @property {AttributeGroup} mental A group of all "mental" attributes. 
+ * @property {AttributeGroup} social A group of all "social" attributes. 
+ * 
+ * @constant
+ */
 export const ATTRIBUTE_GROUPS = {
   physical: new AttributeGroup({
     name: "physical",

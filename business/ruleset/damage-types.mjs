@@ -13,6 +13,21 @@ export class DamageType {
   }
 }
 
+/**
+ * Represents the defined damage types.
+ * 
+ * @property {DamageType} none A placeholder damage type. 
+ * @property {DamageType} burning The "burning" damage type. 
+ * @property {DamageType} freezing The "freezing" damage type. 
+ * @property {DamageType} slashing The "slashing" damage type. 
+ * @property {DamageType} piercing The "piercing" damage type. 
+ * @property {DamageType} bludgeoning The "bludgeoning" damage type. 
+ * @property {DamageType} crushing The "crushing" damage type. 
+ * @property {DamageType} poison The "poison" damage type. 
+ * @property {DamageType} acid The "acid" damage type. 
+ * 
+ * @constant
+ */
 export const DAMAGE_TYPES = {
   none: new DamageType({
     name: "none",
