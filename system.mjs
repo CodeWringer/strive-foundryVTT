@@ -16,6 +16,7 @@ import { TEMPLATES, preloadHandlebarsTemplates } from "./presentation/template/t
 import { findDocument } from "./business/util/content-utility.mjs";
 import ChoiceOption from "./presentation/util/choice-option.mjs";
 import { getAsChoices } from "./business/util/constants-utility.mjs";
+import DocumentFetcher from "./business/document/document-fetcher/document-fetcher.mjs";
 // Migration
 import MigratorInitiator from "./business/migration/migrator-initiator.mjs";
 import MigratorDialog from "./presentation/dialog/migrator-dialog/migrator-dialog.mjs";
