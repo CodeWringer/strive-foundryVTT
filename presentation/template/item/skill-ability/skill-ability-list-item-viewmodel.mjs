@@ -448,7 +448,7 @@ class DamageAndTypeViewModel extends ViewModel {
    * @type {Array<ChoiceOption>}
    * @readonly
    */
-  get damageTypeOptions() { return game.ambersteel.getDamageTypeOptions(); }
+  get damageTypeOptions() { return DAMAGE_TYPES.asChoices; }
 
   constructor(args = {}) {
     super(args);

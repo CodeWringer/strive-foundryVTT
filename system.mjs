@@ -140,13 +140,7 @@ Hooks.once('init', function() {
 
       return result;
     },
-    /**
-     * Returns an array of {ChoiceOption}s. 
-     * @returns {Array<ChoiceOption>}
-     */
-    getDamageTypeOptions: function() {
-      return game.ambersteel.getOptionsFromConfig(DAMAGE_TYPES);
-    },
+    // TODO: Issue/170
     /**
      * Returns an array of {ChoiceOption}s. 
      * @returns {Array<ChoiceOption>}
