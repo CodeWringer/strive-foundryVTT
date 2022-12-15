@@ -1,3 +1,4 @@
+import { ATTRIBUTES } from "../../../../business/ruleset/attributes.mjs";
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs";
 import ViewModel from "../../../view-model/view-model.mjs";
 import { TEMPLATES } from "../../templatePreloader.mjs";
@@ -18,7 +19,7 @@ export default class SkillChatMessageViewModel extends ViewModel {
   get visGroupId() { return `${this.id}-skill-ability-table-visgroup`; }
 
   get relatedAttribute() {
-    const options = game.ambersteel.getAttributeOptions();
+    const options = ATTRIBUTES.asChoices;
     return options.find(it => { return it.value === this.item.data.data.relatedAttribute }).localizedValue;
   }
 

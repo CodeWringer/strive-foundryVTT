@@ -149,6 +149,7 @@ export default class SkillAbilityChatMessageViewModel extends ViewModel {
     this.index = args.index;
   }
 
+  // TODO: Issue/170
   /**
    * Returns the config object whose name matches the given value. Or, if the given value is an object, 
    * simply returns the object. 

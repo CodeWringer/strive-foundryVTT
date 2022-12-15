@@ -3,6 +3,7 @@ import { TEMPLATES } from "../../templatePreloader.mjs";
 import SkillAbilityTableViewModel from "../skill-ability/skill-ability-table-viewmodel.mjs";
 import SkillViewModel from "./skill-viewmodel.mjs";
 import ViewModelFactory from "../../../view-model/view-model-factory.mjs";
+import { ATTRIBUTES } from "../../../../business/ruleset/attributes.mjs";
 
 export default class SkillListItemViewModel extends SkillViewModel {
   /** @override */
@@ -12,7 +13,7 @@ export default class SkillListItemViewModel extends SkillViewModel {
    * @type {Array<ChoiceOption>}
    * @readonly
    */
-  get attributeOptions() { return game.ambersteel.getAttributeOptions(); }
+  get attributeOptions() { return ATTRIBUTES.asChoices; }
 
   /**
    * Returns true, if the skill ability list should be visible. 
