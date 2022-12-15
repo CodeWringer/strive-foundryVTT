@@ -11,6 +11,7 @@ import ViewModel from "../../../view-model/view-model.mjs";
 import ViewModelFactory from "../../../view-model/view-model-factory.mjs";
 import { TEMPLATES } from "../../templatePreloader.mjs";
 import VisibilitySingleChoiceDialog from "../../../dialog/visibility-single-choice-dialog/visibility-single-choice-dialog.mjs";
+import { getConstantByName } from "../../../../business/util/constants-utility.mjs";
 
 export default class SkillAbilityListItemViewModel extends ViewModel {
   /** @override */
@@ -266,7 +267,7 @@ export default class SkillAbilityListItemViewModel extends ViewModel {
               }
 
               // Get localized damage type. 
-              const damageType = game.ambersteel.getConfigItem(DAMAGE_TYPES, damageDefinition.damageType);
+              const damageType = getConstantByName(DAMAGE_TYPES, damageDefinition.damageType);
               const localizedDamageType = game.i18n.localize(damageType.localizableName);
 
               rolls.push({

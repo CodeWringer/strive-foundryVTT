@@ -33,3 +33,23 @@ export function getAsChoices(constantsObject, exclude) {
 
 	return result;
 }
+
+/**
+ * Returns the object property of the given constants object, whose `name` property matches with the given name. 
+ * 
+ * @param {Object} constantsObject Any constants object. 
+ * @param {String} internalName internal name of the object property to get. 
+ * 
+ * @returns {Object | undefined}
+ */
+export function getConstantByName(constantsObject, internalName) {
+	for (const propertyName in constantsObject) {
+		const obj = constantsObject[propertyName];
+
+		if (obj.name === internalName) {
+			return obj;
+		}
+	}
+
+	return undefined;
+}

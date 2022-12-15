@@ -1,5 +1,6 @@
 import { DAMAGE_TYPES } from "../../../../business/ruleset/damage-types.mjs"
 import { ATTACK_TYPES } from "../../../../business/ruleset/skill/attack-types.mjs"
+import { getConstantByName } from "../../../../business/util/constants-utility.mjs"
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs"
 import { isNotBlankOrUndefined } from "../../../../business/util/validation-utility.mjs"
 import ViewModel from "../../../view-model/view-model.mjs"
@@ -172,10 +173,10 @@ export default class SkillAbilityChatMessageViewModel extends ViewModel {
   /**
    * @param {String} damageTypeName 
    * @returns {String}
-   * @private
+   * @protected
    */
   getLocalizedDamageType(damageTypeName) {
-    const configItem = game.ambersteel.getConfigItem(DAMAGE_TYPES, damageTypeName);
+    const configItem = getConstantByName(DAMAGE_TYPES, damageTypeName);
     return game.i18n.localize(configItem.localizableName);
   }
 }
