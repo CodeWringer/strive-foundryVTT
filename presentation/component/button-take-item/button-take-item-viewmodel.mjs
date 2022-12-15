@@ -15,6 +15,7 @@ import SingleChoiceDialog from "../../dialog/single-choice-dialog/single-choice-
  * 
  * @constant
  */
+export const TAKE_ITEM_CONTEXT_TYPES = {
   chatMessage: "chat-message",
   itemSheet: "item-sheet",
   listItem: "list-item"
@@ -34,7 +35,7 @@ import SingleChoiceDialog from "../../dialog/single-choice-dialog/single-choice-
  * 
  * --- Own properties
  * 
- * @property {contextTypes} contextType Represents the context of where this button view model is embedded. 
+ * @property {TAKE_ITEM_CONTEXT_TYPES} contextType Represents the context of where this button view model is embedded. 
  * Depending on this value, the behavior of the button changes. 
  * 
  * In the context "chat-message", the item in question will be moved to the current player's actor, or an actor chosen by a GM. 
@@ -53,7 +54,7 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
    * @param {Boolean | undefined} args.isEditable Optional. If true, will be interactible. 
    * @param {String | undefined} args.localizableTitle Optional. The localizable title (tooltip). 
    * 
-   * @param {contextTypes} contextType Represents the context of where this button view model is embedded. 
+   * @param {TAKE_ITEM_CONTEXT_TYPES} contextType Represents the context of where this button view model is embedded. 
    * Depending on this value, the behavior of the button changes. 
    * 
    * In the context "chat-message", the item in question will be moved to the current player's actor, or an actor chosen by a GM. 
@@ -96,7 +97,7 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
     // If neither parent nor containingPack is defined, then we can be sure the item is a world item. 
 
     if (parent !== undefined && parent !== null) { // The item is embedded on an actor. 
-      if (this.contextType === contextTypes.chatMessage) {
+      if (this.contextType === TAKE_ITEM_CONTEXT_TYPES.chatMessage) {
         // Determine target actor. 
         const targetActor = await this._getTargetActor();
 
@@ -114,7 +115,7 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
 
         // Remove from source actor. 
         item.delete();
-      } else if (this.contextType === contextTypes.listItem) {
+      } else if (this.contextType === TAKE_ITEM_CONTEXT_TYPES.listItem) {
         // Determine target actor. 
         const targetActor = parent;
 

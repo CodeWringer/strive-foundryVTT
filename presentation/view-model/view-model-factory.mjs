@@ -429,7 +429,7 @@ export default class ViewModelFactory {
    * @param {Object} args.target The target object to affect.  
    * @param {Function | undefined} args.callback Defines an asynchronous callback that is invoked upon completion of the button's own callback. 
    * @param {Any | undefined} args.callbackData Defines any data to pass to the completion callback. 
-   * @param {contextTypes} contextType
+   * @param {TAKE_ITEM_CONTEXT_TYPES} contextType
    * @param {String | undefined} args.localizableTitle Optional. Sets the tooltip text to display on cursor hover over the DOM element. 
    * 
    * @returns {ButtonTakeItemViewModel}

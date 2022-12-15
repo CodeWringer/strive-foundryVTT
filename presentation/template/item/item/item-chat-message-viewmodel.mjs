@@ -2,6 +2,7 @@ import { validateOrThrow } from "../../../../business/util/validation-utility.mj
 import ViewModel from "../../../view-model/view-model.mjs";
 import ViewModelFactory from "../../../view-model/view-model-factory.mjs";
 import { TEMPLATES } from "../../templatePreloader.mjs";
+import { TAKE_ITEM_CONTEXT_TYPES } from "../../../component/button-take-item/button-take-item-viewmodel.mjs";
 
 export default class ItemChatMessageViewModel extends ViewModel {
   /** @override */
@@ -73,7 +74,7 @@ export default class ItemChatMessageViewModel extends ViewModel {
       parent: thiz,
       id: "vmBtnTakeItem",
       target: thiz.item,
-      contextType: "chat-message"
+      contextType: TAKE_ITEM_CONTEXT_TYPES.chatMessage
     });
   }
 }
