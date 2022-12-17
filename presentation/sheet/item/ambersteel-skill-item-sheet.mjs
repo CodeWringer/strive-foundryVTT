@@ -19,45 +19,6 @@ export default class AmbersteelSkillItemSheet extends AmbersteelBaseItemSheet {
     itemData.groupName = new Ruleset().getAttributeGroupName(itemData.relatedAttribute);
   }
 
-  /** @override */
-  activateListeners(html, isOwner, isEditable) {
-    super.activateListeners(html, isOwner, isEditable);
-
-    if (!isOwner) return;
-    if (!isEditable) return;
-
-    // Add skill ability. 
-    html.find(".ambersteel-skill-ability-create").click(this._onCreateSkillAbility.bind(this));
-
-    // Delete skill ability.
-    html.find(".ambersteel-skill-ability-delete").click(this._onDeleteSkillAbility.bind(this));
-  }
-  
-  /**
-   * @param event 
-   * @private
-   * @async
-   */
-  async _onCreateSkillAbility(event) {
-    event.preventDefault();
-    
-    await this.getItem().createSkillAbility();
-  }
-
-  /**
-   * @param event 
-   * @private
-   * @async
-   */
-  async _onDeleteSkillAbility(event) {
-    event.preventDefault();
-
-    const element = event.currentTarget;
-    const index = parseInt(element.dataset.index);
-    
-    await this.getItem().deleteSkillAbilityAt(index);
-  }
-
   getViewModel(context, item) {
     return new SkillItemSheetViewModel({
       id: item.id,

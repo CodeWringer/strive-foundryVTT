@@ -94,17 +94,14 @@ export class AmbersteelActorSheet extends ActorSheet {
     return context;
   }
 
-  /**
-   * @override
-   * @see https://foundryvtt.com/api/FormApplication.html#activateListeners
-   * 
-   * This method is called *after* the sheet is rendered. 
-   */
+  /** @override */
   activateListeners(html) {
     super.activateListeners(html);
 
     const isOwner = (this.actor ?? this.item).isOwner;
     const isEditable = this.isEditable;
+
+    this.subType.activateListeners(html, isOwner, isEditable);
 
     // Activate view model bound event listeners. 
     this.viewModel.activateListeners(html, isOwner, isEditable);
