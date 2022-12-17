@@ -1,4 +1,5 @@
-import { findItem, getActors } from "../../util/content-utility.mjs";
+import { DOCUMENT_COLLECTION_SOURCES } from "../../document/document-fetcher/document-collection-source.mjs";
+import DocumentFetcher from "../../document/document-fetcher/document-fetcher.mjs";
 import AbstractMigrator from "../abstract-migrator.mjs";
 import { MIGRATORS } from "../migrators.mjs";
 import VersionCode from "../version-code.mjs";
@@ -19,10 +20,16 @@ export default class Migrator_1_3_0__1_3_1 extends AbstractMigrator {
 
   async replaceFighting() {
     // Get "tactics" definition from system compendium. 
-    const tacticsSkillDefinition = await findItem({ name: "Tactics", pack: "ambersteel.skills" });
+    const tacticsSkillDefinition = await new DocumentFetcher().find({
+      name: "Tactics",
+      contentType: "skill",
+      source: DOCUMENT_COLLECTION_SOURCES.systemCompendia,
+    });
 
     // Get all actors from world and compendia. 
-    const actors = await getActors({ world: true, worldCompendia: true });
+    const actors = await await new DocumentFetcher().findAll({
+      documentType: "Actor",
+    });
 
     // Names of the properties to keep at their current values. 
     const propertiesToKeep = new Map();

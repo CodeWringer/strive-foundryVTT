@@ -1,9 +1,9 @@
 import { TEMPLATES } from "../../template/templatePreloader.mjs";
 import ButtonViewModel from '../button/button-viewmodel.mjs';
 import AddItemDialog from '../../dialog/dialog-item-add/dialog-item-add.mjs';
-import { findItem, contentCollectionTypes } from '../../../business/util/content-utility.mjs';
 import { validateOrThrow, isObject, isNotBlankOrUndefined } from "../../../business/util/validation-utility.mjs";
 import GetShowFancyFontUseCase from "../../../business/use-case/get-show-fancy-font-use-case.mjs";
+import DocumentFetcher from "../../../business/document/document-fetcher/document-fetcher.mjs";
 
 /**
  * --- Inherited from ViewModel
@@ -122,7 +122,9 @@ export default class ButtonAddViewModel extends ButtonViewModel {
             return await this._createCustom();
           } else {
             const templateId = dialog.selected;
-            const templateItem = await findItem({ id: templateId }, contentCollectionTypes.all);
+            const templateItem = await new DocumentFetcher().find({
+              id: templateId,
+            });
             const itemData = {
               name: templateItem !== undefined ? templateItem.name : `New ${this.creationType.capitalize()}`,
               type: templateItem !== undefined ? templateItem.type : this.creationType,
