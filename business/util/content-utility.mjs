@@ -28,20 +28,6 @@ export class ItemEntry {
 /************ Returning documents ************/
 
 /**
- * Returns a document matching the given filter. 
- * @param {Object} filter 
- * @param {String} filter.id 
- * @param {String} filter.name 
- * @param {String} filter.pack 
- * @param {contentCollectionTypes} where Specifies where to search for the document. 
- * @returns {Promise<Document|undefined>} The document, if it could be retrieved. 
- * @async
- */
-export async function findDocument(filter, where = contentCollectionTypes.all) {
-  return await _getDocumentFrom(filter, where);
-}
-
-/**
  * Returns an item matching the given filter. 
  * @param {Object} filter 
  * @param {String} filter.id 
@@ -54,49 +40,6 @@ export async function findDocument(filter, where = contentCollectionTypes.all) {
 export async function findItem(filter, where = contentCollectionTypes.all) {
   return await _getDocumentFrom(filter, where, [game.items]);
 }
-
-/**
- * Returns an actor matching the given filter. 
- * @param {Object} filter 
- * @param {String} filter.id 
- * @param {String} filter.name 
- * @param {String} filter.pack 
- * @param {contentCollectionTypes} where Specifies where to search for the actor. 
- * @returns {Promise<Actor|undefined>} The actor, if it could be retrieved. 
- * @async
- */
-export async function findActor(filter, where = contentCollectionTypes.all) {
-  return await _getDocumentFrom(filter, where, [game.actors]);
-}
-
-/**
- * Returns a journal entry matching the given filter. 
- * @param {Object} filter 
- * @param {String} filter.id 
- * @param {String} filter.name 
- * @param {String} filter.pack 
- * @param {contentCollectionTypes} where Specifies where to search for the journal entry. 
- * @returns {Promise<JournalEntry|undefined>} The journal entry, if it could be retrieved. 
- * @async
- */
-export async function findJournal(filter, where = contentCollectionTypes.all) {
-  return await _getDocumentFrom(filter, where, [game.journal]);
-}
-
-/**
- * Returns a roll table matching the given filter. 
- * @param {Object} filter 
- * @param {String} filter.id 
- * @param {String} filter.name 
- * @param {String} filter.pack 
- * @param {contentCollectionTypes} where Specifies where to search for the roll table. 
- * @returns {Promise<RollTable|undefined>} The roll table, if it could be retrieved. 
- * @async
- */
-export async function findRollTable(filter, where = contentCollectionTypes.all) {
-  return await _getDocumentFrom(filter, where, [game.tables]);
-}
-
 /**
  * Returns a document matching the given filter. 
  * 

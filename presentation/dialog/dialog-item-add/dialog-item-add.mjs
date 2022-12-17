@@ -1,6 +1,7 @@
 import DocumentFetcher from '../../../business/document/document-fetcher/document-fetcher.mjs';
 import GetShowFancyFontUseCase from '../../../business/use-case/get-show-fancy-font-use-case.mjs';
 import { validateOrThrow } from '../../../business/util/validation-utility.mjs';
+import { SYSTEM_ID } from '../../../system-id.mjs';
 import { getElementValue } from '../../sheet/sheet-utility.mjs';
 import { TEMPLATES } from '../../template/templatePreloader.mjs';
 import ConfirmableModalDialog from '../confirmable-modal-dialog/confirmable-modal-dialog.mjs';
@@ -94,7 +95,7 @@ export default class AddItemDialog extends ConfirmableModalDialog {
     this.itemType = options.itemType;
     this.localizedItemLabel = options.localizedItemLabel ?? options.itemType;
 
-    this._itemDeclarations = new DocumentFetcher().getDocumentIndices({
+    this._itemDeclarations = new DocumentFetcher(SYSTEM_ID).getIndices({
       documentType: "Item",
       contentType: this.itemType,
     });

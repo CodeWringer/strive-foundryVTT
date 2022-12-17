@@ -15,9 +15,13 @@ export class DocumentCollectionSource {
  * Represents the defined document collection sources. 
  * 
  * @property {DocumentCollectionSource} all Search in the world, the world and system 
- * compendia and module compendia.
- * @property {DocumentCollectionSource} compendia Search only in compendia 
- * (world and system compendia).
+ * compendium packs and in module compendium packs.
+ * @property {DocumentCollectionSource} allCompendia Search in all 
+ * compendium packs.
+ * @property {DocumentCollectionSource} systemCompendia Search only in system 
+ * compendium packs.
+ * @property {DocumentCollectionSource} worldCompendia Search only in world 
+ * compendium packs.
  * @property {DocumentCollectionSource} world Search only in the world.
  * 
  * @constant
@@ -27,12 +31,20 @@ export const DOCUMENT_COLLECTION_SOURCES = {
     id: 0,
     name: "all",
   }),
-  compendia: new DocumentCollectionSource({
+  allCompendia: new DocumentCollectionSource({
     id: 1,
-    name: "compendia",
+    name: "allCompendia",
+  }),
+  systemCompendia: new DocumentCollectionSource({
+    id: 2,
+    name: "systemCompendia",
+  }),
+  worldCompendia: new DocumentCollectionSource({
+    id: 3,
+    name: "worldCompendia",
   }),
   world: new DocumentCollectionSource({
-    id: 2,
+    id: 4,
     name: "world",
   }),
 }

@@ -13,7 +13,6 @@ import Ruleset from "./business/ruleset/ruleset.mjs";
 import { VISIBILITY_MODES } from "./presentation/chat/visibility-modes.mjs";
 // Utility
 import { TEMPLATES, preloadHandlebarsTemplates } from "./presentation/template/templatePreloader.mjs";
-import { findDocument } from "./business/util/content-utility.mjs";
 import ChoiceOption from "./presentation/util/choice-option.mjs";
 import { getAsChoices } from "./business/util/constants-utility.mjs";
 import DocumentFetcher from "./business/document/document-fetcher/document-fetcher.mjs";
@@ -294,11 +293,12 @@ Hooks.on("renderChatMessage", async function(message, html, data) {
   const documentId = dataset.documentId;
 
   if (documentId === undefined) {
-    game.ambersteel.logger.logWarn(`renderChatMessage: Failed to get document ID from chat message`);
     return;
   }
 
-  const document = await findDocument({ id: documentId });
+  const document = await new DocumentFetcher(SYSTEM_ID).find({
+    id: documentId,
+  });
 
   if (document === undefined) {
     game.ambersteel.logger.logWarn(`renderChatMessage: Failed to get document represented by chat message`);
