@@ -8,6 +8,7 @@ import AmbersteelMutationItemSheet from "./ambersteel-mutation-item-sheet.mjs";
 import { ITEM_SHEET_SUBTYPE } from "./item-sheet-subtype.mjs";
 // Other imports
 import * as SheetUtil from "../sheet-utility.mjs";
+import { SYSTEM_ID } from "../../../system-id.mjs";
 
 export class AmbersteelItemSheet extends ItemSheet {
   /**
@@ -34,7 +35,7 @@ export class AmbersteelItemSheet extends ItemSheet {
    */
   static get defaultOptions() {
     return mergeObject(super.defaultOptions, {
-      classes: ["ambersteel", "sheet", "item"],
+      classes: [SYSTEM_ID, "sheet", "item"],
       width: 520,
       height: 480,
       tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "description" }]

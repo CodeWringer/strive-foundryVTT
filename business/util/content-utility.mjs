@@ -1,3 +1,5 @@
+import { SYSTEM_ID } from "../../system-id.mjs";
+
 /**
  * Determines the possible source(s) in which to search for documents. 
  * @property {Number} all Search in the world, the world and system compendia and module compendia.
@@ -241,7 +243,7 @@ export async function getActors(where) {
     for (const pack of game.packs) {
       if (pack.metadata.type !== "Actor")
         continue;
-      if (pack.metadata.package === "ambersteel" && where.systemCompendia !== true) 
+      if (pack.metadata.package === SYSTEM_ID && where.systemCompendia !== true) 
         continue;
       if (pack.metadata.package === "world" && where.worldCompendia !== true) 
         continue;
@@ -337,7 +339,7 @@ export async function getDocument(docType, id, where) {
       if (docType === "item" && pack.metadata.type !== "Item")
         continue;
       
-      if (pack.metadata.package === "ambersteel" && where.systemCompendia !== true) 
+      if (pack.metadata.package === SYSTEM_ID && where.systemCompendia !== true) 
         continue;
       if (pack.metadata.package === "world" && where.worldCompendia !== true) 
         continue;

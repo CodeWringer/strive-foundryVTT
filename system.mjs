@@ -69,6 +69,7 @@ import './presentation/template/actor/part/actor-personals-viewmodel.mjs';
 import './presentation/template/actor/part/actor-skills-viewmodel.mjs';
 // View model factory
 import './presentation/view-model/view-model-factory.mjs';
+import { SYSTEM_ID } from "./system-id.mjs";
 
 /* -------------------------------------------- */
 /*  Initialization                              */
@@ -130,10 +131,10 @@ Hooks.once('init', function() {
 
   // Register sheet application classes. 
   Actors.unregisterSheet("core", ActorSheet);
-  Actors.registerSheet("ambersteel", AmbersteelActorSheet, { makeDefault: true });
+  Actors.registerSheet(SYSTEM_ID, AmbersteelActorSheet, { makeDefault: true });
   
   Items.unregisterSheet("core", ItemSheet);
-  Items.registerSheet("ambersteel", AmbersteelItemSheet, { makeDefault: true });
+  Items.registerSheet(SYSTEM_ID, AmbersteelItemSheet, { makeDefault: true });
 
   // Preload Handlebars templates.
   return preloadHandlebarsTemplates();

@@ -1,3 +1,5 @@
+import { SYSTEM_ID } from "../../system-id.mjs";
+
 /**
  * Defines the base contract for system-specific settings. 
  * @abstract
@@ -11,7 +13,7 @@ export default class AmbersteelSettings {
   * @static
   * @readonly
   */
-  static get SETTINGS_NAMESPACE() { return "ambersteel"; }
+  static get SETTINGS_NAMESPACE() { return SYSTEM_ID; }
 
   /**
    * A list of the registered/known/available settings. 
