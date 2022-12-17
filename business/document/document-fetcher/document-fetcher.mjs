@@ -508,20 +508,21 @@ export default class DocumentFetcher {
       // Skip empty packs. 
       if (pack.index.size < 1) continue;
 
+      // Skip, if the pack represents the wrong source.
+      if (this._packSourceFilterMatches(filter, pack) !== true) continue;
+
       // Skip, if the pack is of the wrong document type. 
       if (filter.documentType !== undefined 
         && pack.metadata.type.toLowerCase() != filter.documentType) {
         continue;
       }
 
-      let source = undefined;
       const packType = pack.metadata.packageType.toLowerCase();
-      if ((packType === "system") === true) {
-        source = DOCUMENT_COLLECTION_SOURCES.systemCompendia;
-      } else if ((packType === "world") === true) {
-        source = DOCUMENT_COLLECTION_SOURCES.worldCompendia;
-      } else {
-        throw new Error("Unknown compendium pack source");
+      let sourceType = undefined;
+      if (packType === "system") {
+        sourceType = DOCUMENT_COLLECTION_SOURCES.systemCompendia;
+      } else if (packType === "world") {
+        sourceType = DOCUMENT_COLLECTION_SOURCES.worldCompendia;
       }
 
       for (const index of pack.index) {
@@ -534,7 +535,7 @@ export default class DocumentFetcher {
         result.push(new DocumentIndex({
           id: index._id,
           name: index.name,
-          sourceType: source,
+          sourceType: sourceType,
           sourceName: pack.metadata.id,
         }));
       }
