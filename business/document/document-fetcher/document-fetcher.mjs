@@ -58,15 +58,10 @@ export default class DocumentFetcher {
         throw new Error("InvalidArgumentException: Either `id` or `name` must be defined");
     }
 
-    this._fixupFilter(filter);
-    const sourceId = filter.source.id;
+    filter = this._fixupFilter(filter);
 
     // Search compendia
-    if (sourceId == DOCUMENT_COLLECTION_SOURCES.all.id
-       || sourceId == DOCUMENT_COLLECTION_SOURCES.allCompendia.id
-       || sourceId == DOCUMENT_COLLECTION_SOURCES.systemCompendia.id
-       || sourceId == DOCUMENT_COLLECTION_SOURCES.worldCompendia.id
-      ) {
+    if (this._shouldSearchCompendia(filter) === true) {
       const document = await this._findInCompendia(filter);
       if (document !== undefined) {
         return document;
@@ -74,9 +69,7 @@ export default class DocumentFetcher {
     }
 
     // Search world
-    if (sourceId == DOCUMENT_COLLECTION_SOURCES.all.id 
-      || sourceId == DOCUMENT_COLLECTION_SOURCES.world.id
-    ) {
+    if (this._shouldSearchWorld(filter) === true) {
       const document = this._findInWorld(filter);
       if (document !== undefined) {
         return document;
@@ -272,23 +265,16 @@ export default class DocumentFetcher {
   async findAll(filter = {}) {
     let result = [];
 
-    this._fixupFilter(filter);
-    const sourceId = filter.source.id;
+    filter = this._fixupFilter(filter);
 
     // Search compendia
-    if (sourceId == DOCUMENT_COLLECTION_SOURCES.all.id
-      || sourceId == DOCUMENT_COLLECTION_SOURCES.allCompendia.id
-      || sourceId == DOCUMENT_COLLECTION_SOURCES.systemCompendia.id
-      || sourceId == DOCUMENT_COLLECTION_SOURCES.worldCompendia.id
-     ) {
+    if (this._shouldSearchCompendia(filter) === true) {
       const documents = await this._findAllInCompendia(filter);
       result = result.concat(documents);
     }
 
     // Search world
-    if (sourceId == DOCUMENT_COLLECTION_SOURCES.all.id 
-      || sourceId == DOCUMENT_COLLECTION_SOURCES.world.id
-    ) {
+    if (this._shouldSearchWorld(filter) === true) {
       const documents = this._findAllInWorld(filter);
       result = result.concat(documents);
     }
@@ -477,20 +463,16 @@ export default class DocumentFetcher {
 
     let result = [];
 
-    const source = filter.source ?? DOCUMENT_COLLECTION_SOURCES.all; 
+    filter = this._fixupFilter(filter);
 
     // Search compendia
-    if (source.id == DOCUMENT_COLLECTION_SOURCES.all.id 
-        || source.id == DOCUMENT_COLLECTION_SOURCES.allCompendia.id
-        || source.id == DOCUMENT_COLLECTION_SOURCES.systemCompendia.id
-        || source.id == DOCUMENT_COLLECTION_SOURCES.worldCompendia.id
-      ) {
+    if (this._shouldSearchCompendia(filter)) {
       const indices = this._getIndicesInCompendia(filter);
       result = result.concat(indices);
     }
 
     // Search world
-    if (source.id == DOCUMENT_COLLECTION_SOURCES.all.id || source.id == DOCUMENT_COLLECTION_SOURCES.world.id) {
+    if (this._shouldSearchWorld(filter)) {
       const indices = this._getIndicesInWorld(filter);
       result = result.concat(indices);
     }
@@ -653,6 +635,54 @@ export default class DocumentFetcher {
   }
 
   /**
+   * Returns true, if the given filter indicates that compendium packs 
+   * should be searched. 
+   * 
+   * @param {Object} filter 
+   * @param {DocumentCollectionSource | undefined} filter.source A document source to 
+   * filter by. 
+   * 
+   * @returns {Boolean} True, if the given filter indicates that compendium packs 
+   * should be searched. 
+   * 
+   * @private
+   */
+  _shouldSearchCompendia(filter) {
+    const sourceId = filter.source.id;
+    if (sourceId == DOCUMENT_COLLECTION_SOURCES.all.id
+      || sourceId == DOCUMENT_COLLECTION_SOURCES.allCompendia.id
+      || sourceId == DOCUMENT_COLLECTION_SOURCES.systemCompendia.id
+      || sourceId == DOCUMENT_COLLECTION_SOURCES.worldCompendia.id
+      ) {
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Returns true, if the given filter indicates that the world 
+   * should be searched. 
+   * 
+   * @param {Object} filter 
+   * @param {DocumentCollectionSource | undefined} filter.source A document source to 
+   * filter by. 
+   * 
+   * @returns {Boolean} True, if the given filter indicates that the world 
+   * should be searched. 
+   * 
+   * @private
+   */
+  _shouldSearchWorld(filter) {
+    const sourceId = filter.source.id;
+    if (sourceId == DOCUMENT_COLLECTION_SOURCES.all.id 
+      || sourceId == DOCUMENT_COLLECTION_SOURCES.world.id
+    ) {
+      return true;
+    }
+    return false;
+  }
+
+  /**
    * Returns true, if the given pack matches the source in the given filter. 
    * 
    * @param {Object} filter 
@@ -674,6 +704,8 @@ export default class DocumentFetcher {
     } else if (filter.source.id === DOCUMENT_COLLECTION_SOURCES.worldCompendia.id 
       && (type === "world") !== true
     ) {
+      return false;
+    } else if (filter.source.id === DOCUMENT_COLLECTION_SOURCES.world.id) {
       return false;
     }
     return true;
