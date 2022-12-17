@@ -1,6 +1,5 @@
 import DocumentFetcher from "../../../business/document/document-fetcher/document-fetcher.mjs";
 import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
-import { SYSTEM_ID } from "../../../system-id.mjs";
 import { TEMPLATES } from "../../template/templatePreloader.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
 
@@ -48,7 +47,7 @@ export default class ButtonOpenSheetViewModel extends ButtonViewModel {
   async onClick(html, isOwner, isEditable) {
     if (isEditable !== true) return;
 
-    const toShow = await new DocumentFetcher(SYSTEM_ID).find({
+    const toShow = await new DocumentFetcher().find({
       id: this.target.id ?? this.target,
       name: this.target.name ?? undefined,
       documentType: this.target.documentName ?? undefined,

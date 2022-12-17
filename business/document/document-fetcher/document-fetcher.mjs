@@ -4,8 +4,6 @@ import { DocumentIndex } from "./document-index.mjs";
 
 /**
  * Allows fetching document metadata and instances from various sources. 
- * 
- * @property {String} systemId Id of the rule system. 
  */
 export default class DocumentFetcher {
   /**
@@ -17,17 +15,6 @@ export default class DocumentFetcher {
    * @readonly
    */
   static get WORLD_COLLECTIONS() { return [game.items, game.actors, game.journal, game.tables]; }
-
-  /**
-   * @param {Object} args 
-   * @param {String} args.systemId Id of the rule system. 
-   * * E. g. `"ambersteel"`. 
-   */
-  constructor(args = {}) {
-    validateOrThrow(args, ["systemId"]);
-
-    this.systemId = args.systemId.toLowerCase();
-  }
 
   /**
    * Returns a document that matches the given filter parameters. 
@@ -283,7 +270,7 @@ export default class DocumentFetcher {
    * @async
    */
   async findAll(filter = {}) {
-    const result = [];
+    let result = [];
 
     this._fixupFilter(filter);
     const sourceId = filter.source.id;
@@ -337,7 +324,7 @@ export default class DocumentFetcher {
   async _findAllInCompendia(filter = {}) {
     validateOrThrow(filter, ["source"]);
 
-    const result = [];
+    let result = [];
 
     for (const pack of game.packs) {
       // Skip empty packs. 
@@ -417,7 +404,7 @@ export default class DocumentFetcher {
    * @private
    */
   _findAllInWorld(filter = {}) {
-    const result = [];
+    let result = [];
 
     for (const worldCollection of DocumentFetcher.WORLD_COLLECTIONS) {
       // Skip empty collection. 
@@ -546,10 +533,10 @@ export default class DocumentFetcher {
       }
 
       let source = undefined;
-      const packId = pack.metadata.id.toLowerCase();
-      if (packId.startsWith(`${this.systemId}.`) === true) {
+      const packType = pack.metadata.packageType.toLowerCase();
+      if ((packType === "system") === true) {
         source = DOCUMENT_COLLECTION_SOURCES.systemCompendia;
-      } else if (packId.startsWith("world.") === true) {
+      } else if ((packType === "world") === true) {
         source = DOCUMENT_COLLECTION_SOURCES.worldCompendia;
       } else {
         throw new Error("Unknown compendium pack source");
@@ -678,12 +665,14 @@ export default class DocumentFetcher {
    * @private
    */
   _packSourceFilterMatches(filter, pack) {
+    const type = pack.metadata.packageType.toLowerCase();
+
     if (filter.source.id === DOCUMENT_COLLECTION_SOURCES.systemCompendia.id 
-      && pack.metadata.id.toLowerCase().startsWith(`${this.systemId}.`) !== true
+      && (type === "system") !== true
     ) {
       return false;
     } else if (filter.source.id === DOCUMENT_COLLECTION_SOURCES.worldCompendia.id 
-      && pack.metadata.id.toLowerCase().startsWith("world.") !== true
+      && (type === "world") !== true
     ) {
       return false;
     }

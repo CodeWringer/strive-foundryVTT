@@ -1,4 +1,3 @@
-import { SYSTEM_ID } from "../../../system-id.mjs";
 import DocumentFetcher from "../../document/document-fetcher/document-fetcher.mjs";
 import AbstractMigrator from "../abstract-migrator.mjs";
 import { MIGRATORS } from "../migrators.mjs";
@@ -20,7 +19,7 @@ export default class Migrator_1_2_2__1_3_0 extends AbstractMigrator {
 
   async replaceFighting() {
     // Get "Tactics" document from system compendium. 
-    const documentFetcher = new DocumentFetcher(SYSTEM_ID);
+    const documentFetcher = new DocumentFetcher();
     const tacticsSkillDefinition = await documentFetcher.find({
       name: "Tactics",
       documentType: "Item",

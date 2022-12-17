@@ -296,7 +296,7 @@ Hooks.on("renderChatMessage", async function(message, html, data) {
     return;
   }
 
-  const document = await new DocumentFetcher(SYSTEM_ID).find({
+  const document = await new DocumentFetcher().find({
     id: documentId,
   });
 
