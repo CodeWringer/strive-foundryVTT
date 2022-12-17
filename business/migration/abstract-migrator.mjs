@@ -1,6 +1,6 @@
 import VersionCode from "./version-code.mjs";
 import { WorldSystemVersion } from "./world-system-version.mjs";
-import { getActors } from "../util/content-utility.mjs";
+import DocumentFetcher from "../document/document-fetcher/document-fetcher.mjs";
 
 /**
  * @summary
@@ -92,7 +92,9 @@ export default class AbstractMigrator {
     ];
 
     // Get all actors from world and compendia. 
-    const actors = await getActors({ world: true, worldCompendia: true });
+    const actors = await new DocumentFetcher().findAll({
+      documentType: "Actor",
+    });
 
     // Prepare a map of the property names for the property values to keep. 
     const propertiesToKeep = new Map();
@@ -117,7 +119,9 @@ export default class AbstractMigrator {
     ];
 
     // Get all actors from world and compendia. 
-    const actors = await getActors({ world: true, worldCompendia: true });
+    const actors = await await new DocumentFetcher().findAll({
+      documentType: "Actor",
+    });
 
     // Prepare a map of the property names for the property values to keep. 
     const propertiesToKeep = new Map();

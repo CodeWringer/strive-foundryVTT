@@ -1,12 +1,12 @@
 import { ItemGrid } from "../item-grid/item-grid.mjs";
 import { TEMPLATES } from "../../template/templatePreloader.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
-import * as ContentUtil from "../../../business/util/content-utility.mjs";
 import { updateProperty } from "../../../business/document/document-update-utility.mjs";
 import ChoiceOption from "../../util/choice-option.mjs";
 import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import PlainDialog from "../../dialog/plain-dialog/plain-dialog.mjs";
 import SingleChoiceDialog from "../../dialog/single-choice-dialog/single-choice-dialog.mjs";
+import DocumentFetcher from "../../../business/document/document-fetcher/document-fetcher.mjs";
 
 /**
  * @property {String} chatMessage
@@ -83,7 +83,9 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
 
     let item = this.target;
     if (typeof(this.target) === "String") { // Item id provided. 
-      item = ContentUtil.findItem({ id: this.target });
+      item = await new DocumentFetcher().find({
+        id: this.target,
+      });
     }
 
     if (item === undefined) {
