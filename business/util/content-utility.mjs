@@ -183,9 +183,9 @@ export async function getActors(where) {
     for (const pack of game.packs) {
       if (pack.metadata.type !== "Actor")
         continue;
-      if (pack.metadata.package === "ambersteel" && where.systemCompendia !== true) 
+      if (pack.metadata.packageType === "system" && where.systemCompendia !== true) 
         continue;
-      if (pack.metadata.package === "world" && where.worldCompendia !== true) 
+      if (pack.metadata.packageType === "world" && where.worldCompendia !== true) 
         continue;
 
       for (const index of pack.index) {
@@ -279,9 +279,9 @@ export async function getDocument(docType, id, where) {
       if (docType === "item" && pack.metadata.type !== "Item")
         continue;
       
-      if (pack.metadata.package === "ambersteel" && where.systemCompendia !== true) 
+      if (pack.metadata.packageType === "system" && where.systemCompendia !== true) 
         continue;
-      if (pack.metadata.package === "world" && where.worldCompendia !== true) 
+      if (pack.metadata.packageType === "world" && where.worldCompendia !== true) 
         continue;
 
       // Load the document from the pack, if possible. 

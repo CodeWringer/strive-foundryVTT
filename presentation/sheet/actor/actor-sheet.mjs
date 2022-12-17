@@ -5,6 +5,7 @@ import AmbersteelPcActorSheet from "./ambersteel-pc-actor-sheet.mjs";
 import { ACTOR_SHEET_SUBTYPE } from "./actor-sheet-subtype.mjs";
 // Other imports
 import * as SheetUtil from "../sheet-utility.mjs";
+import { SYSTEM_ID } from "../../../system-id.mjs";
 
 export class AmbersteelActorSheet extends ActorSheet {
   /**
@@ -31,7 +32,7 @@ export class AmbersteelActorSheet extends ActorSheet {
    */
   static get defaultOptions() {
     return mergeObject(super.defaultOptions, {
-      classes: ["ambersteel", "sheet", "actor"],
+      classes: [SYSTEM_ID, "sheet", "actor"],
       width: 700,
       height: 800,
       tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "attributes" }]
