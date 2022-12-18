@@ -230,14 +230,7 @@ export default class SkillAbilityListItemViewModel extends ViewModel {
                 // If a value cannot be determined, it will default to "0". 
                 const regExpReplace = new RegExp(key, "gi");
 
-                let replaceValue = value.level;
-                if (replaceValue === undefined || replaceValue === null) {
-                  replaceValue = value.value;
-
-                  if (replaceValue === undefined || replaceValue === null) {
-                    replaceValue = isNumber(value) === true ? value : "0";
-                  }
-                }
+                const replaceValue = (value.level ?? value.value) ?? (isNumber(value) === true ? value : "0");
 
                 resolvedDamage = resolvedDamage.replace(regExpReplace, replaceValue);
               }

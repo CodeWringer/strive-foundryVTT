@@ -153,7 +153,7 @@ export default class AmbersteelBaseCharacterActor extends AmbersteelBaseActor {
    * @private
    */
   _prepareDerivedAttributeData(context, oAtt, attName) {
-    const attValue = parseInt(oAtt.value);
+    const attValue = parseInt(oAtt.level);
     const req = new Ruleset().getAttributeAdvancementRequirements(attValue);
 
     // Calculate advancement requirements. 
@@ -208,14 +208,14 @@ export default class AmbersteelBaseCharacterActor extends AmbersteelBaseActor {
     const actorData = context.data.data;
     
     actorData.skills = (context.items.filter(item => {
-      return item.data.type == "skill" && parseInt(item.data.data.value) > 0
+      return item.data.type == "skill" && parseInt(item.data.data.level) > 0
     }));
     for (const oSkill of actorData.skills) {
       this._prepareDerivedSkillData(context, oSkill.id);
     };
     
     actorData.learningSkills = (context.items.filter(item => {
-      return item.data.type == "skill" && parseInt(item.data.data.value) == 0
+      return item.data.type == "skill" && parseInt(item.data.data.level) == 0
     }));
     for (const oSkill of actorData.learningSkills) {
       this._prepareDerivedSkillData(context, oSkill.id);
@@ -234,12 +234,12 @@ export default class AmbersteelBaseCharacterActor extends AmbersteelBaseActor {
 
     skillData.id = oSkill.id;
     skillData.entityName = skillData.entityName ? skillData.entityName : oSkill.name;
-    skillData.value = parseInt(skillData.value ? skillData.value : 0);
+    skillData.level = parseInt(skillData.level ? skillData.level : 0);
     skillData.successes = parseInt(skillData.successes ? skillData.successes : 0);
     skillData.failures = parseInt(skillData.failures ? skillData.failures : 0);
     skillData.relatedAttribute = skillData.relatedAttribute ? skillData.relatedAttribute : "agility";
 
-    const req = new Ruleset().getSkillAdvancementRequirements(skillData.value);
+    const req = new Ruleset().getSkillAdvancementRequirements(skillData.level);
     skillData.requiredSuccessses = req.requiredSuccessses;
     skillData.requiredFailures = req.requiredFailures;
   }
@@ -360,7 +360,7 @@ export default class AmbersteelBaseCharacterActor extends AmbersteelBaseActor {
     const propertyPath = `data.attributes.${oAttName.groupName}.${attName}`
 
     await this.update({
-      [`${propertyPath}.value`]: newValue,
+      [`${propertyPath}.level`]: newValue,
       [`${propertyPath}.requiredSuccessses`]: req.requiredSuccessses,
       [`${propertyPath}.requiredFailures`]: req.requiredFailures,
       [`${propertyPath}.successes`]: 0,
@@ -403,7 +403,7 @@ export default class AmbersteelBaseCharacterActor extends AmbersteelBaseActor {
     if (autoLevel) {
       if (successes >= requiredSuccessses
       && failures >= requiredFailures) {
-        const newLevel = parseInt(oAtt.value) + 1;
+        const newLevel = parseInt(oAtt.level) + 1;
         await this.setAttributeLevel(attName, newLevel);
       }
     }

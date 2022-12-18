@@ -90,7 +90,7 @@ export default class AttributeTableViewModel extends ViewModel {
           parent: thiz,
           id: `vmNsLevel-${attribute.name}`,
           propertyOwner: thiz.actor,
-          propertyPath: `data.data.attributes.${thiz.attributeGroupName}.${attribute.name}.value`,
+          propertyPath: `data.data.attributes.${thiz.attributeGroupName}.${attribute.name}.level`,
           min: 0,
         }),
         vmNsSuccesses: factory.createVmNumberSpinner({
