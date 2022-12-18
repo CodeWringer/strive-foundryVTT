@@ -148,7 +148,7 @@ export class ItemGrid {
    */
   static from(document) {
     // get the capacity (= item slot count) from the given document. 
-    const capacity = document.data.data.assets.maxBulk;
+    const capacity = document.getMaxBulk();
     const columnCount = COLUMN_COUNT;
     // The item grid to return. 
     const itemGrid = new ItemGrid(columnCount, capacity, document);

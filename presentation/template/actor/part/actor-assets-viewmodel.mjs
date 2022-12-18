@@ -23,6 +23,23 @@ export default class ActorAssetsViewModel extends ViewModel {
    * @type {Array<ViewModel>}
    */
   itemViewModels = [];
+
+
+  /**
+   * Returns the maximum bulk. 
+   * 
+   * @type {Number}
+   * @readonly
+   */
+  get maxBulk() { return this.actor.getMaxBulk(); }
+
+  /**
+   * Returns the currently used bulk. 
+   * 
+   * @type {Number}
+   * @readonly
+   */
+  get currentBulk() { return this.actor.getCurrentBulk(); }
   
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
@@ -49,20 +66,6 @@ export default class ActorAssetsViewModel extends ViewModel {
     const thiz = this;
     const factory = new ViewModelFactory();
 
-    this.vmNsMaxBulk = factory.createVmNumberSpinner({
-      parent: thiz,
-      id: "vmNsMaxBulk",
-      propertyOwner: thiz.actor,
-      propertyPath: "data.data.assets.maxBulk",
-      isEditable: false,
-    });
-    this.vmNsTotalBulk = factory.createVmNumberSpinner({
-      parent: thiz,
-      id: "vmNsTotalBulk",
-      propertyOwner: thiz.actor,
-      propertyPath: "data.data.assets.totalBulk",
-      isEditable: false,
-    });
     this.vmIgv = new ItemGridViewViewModel({
       id: "vmIgv",
       parent: thiz,

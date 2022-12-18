@@ -39,6 +39,9 @@ export default class AmbersteelBaseCharacterActor extends AmbersteelBaseActor {
     context.advanceSkillBasedOnRollResult = this.advanceSkillBasedOnRollResult.bind(context);
     context.advanceAttributeBasedOnRollResult = this.advanceAttributeBasedOnRollResult.bind(context);
     context.resolveReferences = this.resolveReferences.bind(context);
+
+    context.getMaxBulk = this._getMaxBulk.bind(context);
+    context.getCurrentBulk = this._getCurrentBulk.bind(context);
   }
   
   /** @override */
@@ -54,25 +57,9 @@ export default class AmbersteelBaseCharacterActor extends AmbersteelBaseActor {
 
     this._ensureContextHasSpecifics(context);
 
-    context.data.data.assets.maxBulk = new Ruleset().getCharacterMaximumInventory(context);
-    context.data.data.assets.totalBulk = this._calculateUsedBulk(context);
     this._prepareDerivedAttributesData(context);
     this._prepareDerivedSkillsData(context);
     this._prepareDerivedHealthData(context);
-  }
-
-  /**
-   * Returns the currently used bulk. 
-   * @param {AmbersteelActor} context 
-   * @returns {Number} The currently used bulk. 
-   * @private
-   */
-  _calculateUsedBulk(context) {
-    let usedBulk = 0;
-    for (const possession of context.getPossessions()) {
-      usedBulk += possession.data.data.bulk;
-    }
-    return usedBulk;
   }
 
   /**
@@ -593,6 +580,32 @@ export default class AmbersteelBaseCharacterActor extends AmbersteelBaseActor {
       }
     }
 
+    return result;
+  }
+  
+  /**
+   * Returns the maximum bulk. 
+   * 
+   * @returns {Number} The maximum bulk. 
+   * 
+   * @private
+   */
+  _getMaxBulk() {
+    return new Ruleset().getCharacterMaximumInventory(this);
+  }
+
+  /**
+   * Returns the currently used bulk. 
+   * 
+   * @returns {Number} The currently used bulk. 
+   * 
+   * @private
+   */
+  _getCurrentBulk() {
+    let result = 0;
+    for (const possession of this.getPossessions()) {
+      result += possession.data.data.bulk;
+    }
     return result;
   }
 }

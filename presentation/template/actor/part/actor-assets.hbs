@@ -12,11 +12,9 @@ cssClass: {undefined | String}
         <div class="flex-grow">
           {{> inputLabel text=(localize "ambersteel.character.asset.carryingCapacity.label") showFancyFont=viewModel.showFancyFont}}
         </div>
-        <span class="width-md">
-          <div class="ambersteel-read-only pad-sm fill">
-            {{> inputNumberSpinner viewModel=viewModel.vmNsMaxBulk }}
-          </div>
-        </span>
+        <div class="ambersteel-read-only width-md pad-sm">
+          {{> inputLabel text=viewModel.maxBulk showFancyFont=viewModel.showFancyFont}}
+        </div>
       </div>
     </div>
     {{!-- Current bulk --}}
@@ -25,9 +23,9 @@ cssClass: {undefined | String}
         <div class="flex-grow">
           {{> inputLabel text=(localize "ambersteel.character.asset.carryingCapacity.used") showFancyFont=viewModel.showFancyFont}}
         </div>
-        <span class="width-md">
-          {{> inputNumberSpinner viewModel=viewModel.vmNsTotalBulk }}
-        </span>
+        <div class="ambersteel-read-only width-md pad-sm">
+          {{> inputLabel text=viewModel.currentBulk showFancyFont=viewModel.showFancyFont}}
+        </div>
       </div>
     </div>
   </div>
