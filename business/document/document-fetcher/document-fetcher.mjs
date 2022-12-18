@@ -429,7 +429,7 @@ export default class DocumentFetcher {
         if (filter.id !== undefined && filter.id !== entry.id) continue;
         if (filter.name !== undefined && filter.name.toLowerCase() !== entry.name.toLowerCase()) continue;
 
-        return entry;
+        result.push(entry);
       }
     }
     return result;
