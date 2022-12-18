@@ -270,8 +270,6 @@ export default class DocumentFetcher {
    * 
    * @returns {Array<Document>} 
    * 
-   * @throws {Error} Thrown, if neither `id`, nor `name` are defined. 
-   * 
    * @async
    */
   async findAll(filter = {}) {
