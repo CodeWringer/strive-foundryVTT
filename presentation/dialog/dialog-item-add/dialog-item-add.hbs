@@ -15,7 +15,7 @@ showFancyFont: {Boolean | undefined}
 --}}
 {{#> dialogContent}}
 <div class="grid grid-2col">
-  {{> inputLabel text=itemLabel showFancyFont=showFancyFont}}
+  {{> inputLabel text=(localize itemLabel) showFancyFont=showFancyFont}}
   <select class="ambersteel-item-select" data-property-path="selected">
     {{#select selected}}
     {{#each itemDeclarations as |itemDeclaration key|}}

@@ -9,7 +9,7 @@ cssClass: {undefined | String}
     {{> buttonSendToChat viewModel=viewModel.vmBtnSendToChat }}
     {{!-- Name --}}
     <span class="width-min-xl">
-      {{> inputLabel text="ambersteel.character.health.injury.singular" showFancyFont=viewModel.showFancyFont}}
+      {{> inputLabel text=(localize "ambersteel.character.health.injury.singular") showFancyFont=viewModel.showFancyFont}}
     </span>
     {{> inputImage viewModel=viewModel.vmImg cssClass="custom-icon-sm" }}
     <h2 class="flex-grow margin-r-md">
@@ -27,7 +27,7 @@ cssClass: {undefined | String}
     {{!-- Limit --}}
     <div class="flex flex-row">
       <span class="width-min-xl">
-        {{> inputLabel text="ambersteel.character.health.injury.limit" showFancyFont=viewModel.showFancyFont}}
+        {{> inputLabel text=(localize "ambersteel.character.health.injury.limit") showFancyFont=viewModel.showFancyFont}}
       </span>
       <span class="width-md">
         {{> inputNumberSpinner viewModel=viewModel.vmNsLimit }}
@@ -38,7 +38,7 @@ cssClass: {undefined | String}
     {{!-- Time to heal --}}
     <div class="flex flex-row flex-grow">
       <span class="width-min-xl">
-        {{> inputLabel text="ambersteel.character.health.timeToHeal" showFancyFont=viewModel.showFancyFont}}
+        {{> inputLabel text=(localize "ambersteel.character.health.timeToHeal") showFancyFont=viewModel.showFancyFont}}
       </span>
       <span class="width-min-xl flex-grow">
         {{> inputTextField viewModel=viewModel.vmTfTimeToHeal }}

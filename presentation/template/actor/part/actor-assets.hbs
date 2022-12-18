@@ -6,10 +6,11 @@ cssClass: {undefined | String}
   {{!-- Personal assets --}}
   <h2>{{localize "ambersteel.character.asset.onPerson"}}</h2>
   <div class="grid-2col grid-gap-md margin-b-md">
+    {{!-- Maximum bulk --}}
     <div class="sheet-block">
       <div class="flex flex-row">
         <div class="flex-grow">
-          {{> inputLabel for="carryingCapacity" text="ambersteel.character.asset.carryingCapacity.label" showFancyFont=viewModel.showFancyFont}}
+          {{> inputLabel text=(localize "ambersteel.character.asset.carryingCapacity.label") showFancyFont=viewModel.showFancyFont}}
         </div>
         <span class="width-md">
           <div class="ambersteel-read-only pad-sm fill">
@@ -18,10 +19,11 @@ cssClass: {undefined | String}
         </span>
       </div>
     </div>
+    {{!-- Current bulk --}}
     <div class="sheet-block">
       <div class="flex flex-row">
         <div class="flex-grow">
-          {{> inputLabel for="totalBulk" text="ambersteel.character.asset.carryingCapacity.used" showFancyFont=viewModel.showFancyFont}}
+          {{> inputLabel text=(localize "ambersteel.character.asset.carryingCapacity.used") showFancyFont=viewModel.showFancyFont}}
         </div>
         <span class="width-md">
           {{> inputNumberSpinner viewModel=viewModel.vmNsTotalBulk }}
