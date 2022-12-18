@@ -6,7 +6,7 @@ import { isFunction, isObject, isArray } from "../util/validation-utility.mjs";
  * @param {Actor|Item} document An Actor or Item document. 
  * @param {String} propertyPath Path leading to the property to update, on the given document entity. 
  *        Array-accessing via brackets is supported. Property-accessing via brackets is *not* supported. 
- *        E.g.: "data.attributes[0].value"
+ *        E.g.: "data.attributes[0].level"
  *        E.g.: "data.attributes[4]" 
  *        E.g.: "data.attributes" 
  * @param {any} newValue The value to assign to the property. 
@@ -76,7 +76,7 @@ export function unnestData(dto) {
  * @param {Document} document A Foundry {Document}. 
  * @param {String} propertyPath Path leading to the property to delete, on the given document entity. 
  *        Array-accessing via brackets is supported. Property-accessing via brackets is *not* supported. 
- *        E.g.: "data.attributes[0].value" 
+ *        E.g.: "data.attributes[0].level" 
  *        E.g.: "data.attributes[4]" 
  *        E.g.: "data.attributes" 
  * @param {Boolean | undefined} render If true, will trigger a re-render of the associated document sheet. Default 'true'. 

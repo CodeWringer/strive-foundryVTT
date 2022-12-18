@@ -103,7 +103,7 @@ export default class Ruleset {
 
     const businessData = actor.data.data;
     const injuryCount = actor.getInjuries().length;
-    return (businessData.attributes.physical.toughness.value * 4) - (injuryCount * 2);
+    return (businessData.attributes.physical.toughness.level * 4) - (injuryCount * 2);
   }
 
   /**
@@ -114,7 +114,7 @@ export default class Ruleset {
   getCharacterMaximumInjuries(actor) {
     if (actor.type == "plain") return 0;
 
-    return Math.max(actor.data.data.attributes.physical.toughness.value, 1);
+    return Math.max(actor.data.data.attributes.physical.toughness.level, 1);
   }
 
   /**
@@ -125,7 +125,7 @@ export default class Ruleset {
   getCharacterMaximumExhaustion(actor) {
     if (actor.type == "plain") return 0;
     
-    return 1 + (actor.data.data.attributes.physical.endurance.value * 1);
+    return 1 + (actor.data.data.attributes.physical.endurance.level * 1);
   }
   
   /**
@@ -136,7 +136,7 @@ export default class Ruleset {
   getCharacterMaximumInventory(actor) {
     if (actor.type == "plain") return 0;
 
-    return actor.data.data.attributes.physical.strength.value * 6;
+    return actor.data.data.attributes.physical.strength.level * 6;
   }
 
   /**
@@ -147,13 +147,13 @@ export default class Ruleset {
   getCharacterMaximumMagicStamina(actor) {
     if (actor.type == "plain") return undefined;
 
-    let total = actor.data.data.attributes.mental.arcana.value;
+    let total = actor.data.data.attributes.mental.arcana.level;
     const components = [];
 
     for (const skill of actor.data.data.skills) {
       if (skill.data.data.isMagicSchool !== true) continue;
 
-      const skillLevel = parseInt(skill.data.data.value);
+      const skillLevel = parseInt(skill.data.data.level);
       components.push(new SummedDataComponent(skill.name, skill.name, skillLevel));
       total += skillLevel;
     }

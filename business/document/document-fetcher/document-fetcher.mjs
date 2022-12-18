@@ -45,6 +45,10 @@ export default class DocumentFetcher {
    * documents. 
    * * Default `false`. 
    * * Note, that this setting may slow searches down, **significantly**. 
+   * @param {Boolean | undefined} filter.includeLocked If `true`, will also search in locked 
+   * copendium packs. 
+   * * Only relevant, if compendium packs are searched. 
+   * * Default `true`.
    * 
    * @returns {Document | undefined} 
    * 
@@ -97,6 +101,10 @@ export default class DocumentFetcher {
    * * Note, that this setting may slow searches down, **significantly**. 
    * @param {DocumentCollectionSource} filter.source A document source to 
    * filter by. 
+   * @param {Boolean | undefined} filter.includeLocked If `true`, will also search in locked 
+   * copendium packs. 
+   * * Only relevant, if compendium packs are searched. 
+   * * Default `true`.
    * 
    * @returns {Document | undefined} 
    * 
@@ -255,10 +263,12 @@ export default class DocumentFetcher {
    * documents. 
    * * Default `false`. 
    * * Note, that this setting may slow searches down, **significantly**. 
+   * @param {Boolean | undefined} filter.includeLocked If `true`, will also search in locked 
+   * copendium packs. 
+   * * Only relevant, if compendium packs are searched. 
+   * * Default `true`.
    * 
    * @returns {Array<Document>} 
-   * 
-   * @throws {Error} Thrown, if neither `id`, nor `name` are defined. 
    * 
    * @async
    */
@@ -301,6 +311,10 @@ export default class DocumentFetcher {
    * * Note, that this setting may slow searches down, **significantly**. 
    * @param {DocumentCollectionSource} filter.source A document source to 
    * filter by. 
+   * @param {Boolean | undefined} filter.includeLocked If `true`, will also search in locked 
+   * copendium packs. 
+   * * Only relevant, if compendium packs are searched. 
+   * * Default `true`.
    * 
    * @returns {Array<Document> | undefined} 
    * 
@@ -429,7 +443,7 @@ export default class DocumentFetcher {
         if (filter.id !== undefined && filter.id !== entry.id) continue;
         if (filter.name !== undefined && filter.name.toLowerCase() !== entry.name.toLowerCase()) continue;
 
-        return entry;
+        result.push(entry);
       }
     }
     return result;
@@ -494,6 +508,10 @@ export default class DocumentFetcher {
    * * If undefined, `documentType` **must** be defined. 
    * @param {DocumentCollectionSource | undefined} filter.source A document source to 
    * filter by. 
+   * @param {Boolean | undefined} filter.includeLocked If `true`, will also search in locked 
+   * copendium packs. 
+   * * Only relevant, if compendium packs are searched. 
+   * * Default `true`.
    * 
    * @returns {Array<DocumentIndex>} 
    * 
@@ -614,6 +632,10 @@ export default class DocumentFetcher {
    * documents. 
    * * Default `false`. 
    * * Note, that this setting may slow searches down, **significantly**. 
+   * @param {Boolean | undefined} filter.includeLocked If `true`, will also search in locked 
+   * copendium packs. 
+   * * Only relevant, if compendium packs are searched. 
+   * * Default `true`.
    * 
    * @returns {Object} 
    * 
@@ -621,6 +643,7 @@ export default class DocumentFetcher {
    */
   _fixupFilter(filter) {
     filter.source = filter.source ?? DOCUMENT_COLLECTION_SOURCES.all; 
+    filter.includeLocked = filter.includeLocked ?? true;
 
     // Convert the type string to lowercase, for easier comparisons. 
     if (filter.documentType !== undefined) {
@@ -707,6 +730,8 @@ export default class DocumentFetcher {
     ) {
       return false;
     } else if (filter.source.id === DOCUMENT_COLLECTION_SOURCES.world.id) {
+      return false;
+    } else if (filter.includeLocked !== true && pack.locked === true) {
       return false;
     }
     return true;

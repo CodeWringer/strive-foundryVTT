@@ -148,7 +148,7 @@ export default class AmbersteelSkillItem extends AmbersteelBaseItem {
     if (autoLevel) {
       if (successes >= requiredSuccessses
         && failures >= requiredFailures) {
-        const nextSkillValue = parseInt(skillData.value) + 1;
+        const nextSkillValue = parseInt(skillData.level) + 1;
         await this.setLevel(nextSkillValue, resetProgress);
       }
     }
@@ -210,9 +210,9 @@ export default class AmbersteelSkillItem extends AmbersteelBaseItem {
     const attGroupName = new Ruleset().getAttributeGroupName(relatedAttributeName);
     
     const actor = this.parent;
-    const relatedAttributeLevel = actor ? actor.data.data.attributes[attGroupName][relatedAttributeName].value : 0;
+    const relatedAttributeLevel = actor ? actor.data.data.attributes[attGroupName][relatedAttributeName].level : 0;
 
-    const skillLevel = this.data.data.value;
+    const skillLevel = this.data.data.level;
 
     const compositionObj = new Ruleset().getSkillTestNumberOfDice(skillLevel, relatedAttributeLevel);
 

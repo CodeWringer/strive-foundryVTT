@@ -27,61 +27,61 @@
         "attributes": {
           "physical": {
             "agility": {
-              "value": 1,
+              "level": 1,
               "successes": 0,
               "failures": 0
             },
             "endurance": {
-              "value": 1,
+              "level": 1,
               "successes": 0,
               "failures": 0
             },
             "perception": {
-              "value": 1,
+              "level": 1,
               "successes": 0,
               "failures": 0
             },
             "strength": {
-              "value": 1,
+              "level": 1,
               "successes": 0,
               "failures": 0
             },
             "toughness": {
-              "value": 1,
+              "level": 1,
               "successes": 0,
               "failures": 0
             }
           },
           "mental": {
             "intelligence": {
-              "value": 1,
+              "level": 1,
               "successes": 0,
               "failures": 0
             },
             "wisdom": {
-              "value": 1,
+              "level": 1,
               "successes": 0,
               "failures": 0
             },
             "arcana": {
-              "value": 0,
+              "level": 0,
               "successes": 0,
               "failures": 0
             }
           },
           "social": {
             "empathy": {
-              "value": 1,
+              "level": 1,
               "successes": 0,
               "failures": 0
             },
             "oratory": {
-              "value": 1,
+              "level": 1,
               "successes": 0,
               "failures": 0
             },
             "willpower": {
-              "value": 1,
+              "level": 1,
               "successes": 0,
               "failures": 0
             }
@@ -141,7 +141,7 @@
     "skill": {
       "templates": ["base"],
       "relatedAttribute": "agility",
-      "value": 0,
+      "level": 0,
       "successes": 0,
       "failures": 0,
       "abilities": [],
