@@ -21,6 +21,7 @@ export default class Migrator_1_3_2__1_4_0 extends AbstractMigrator {
     const actors = await documentFetcher.findAll({
       documentType: "Actor",
       source: DOCUMENT_COLLECTION_SOURCES.all,
+      includeLocked: false,
     });
 
     // These attribute groups will be migrated. 
