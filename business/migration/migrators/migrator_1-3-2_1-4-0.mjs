@@ -17,7 +17,10 @@ export default class Migrator_1_3_2__1_4_0 extends AbstractMigrator {
   async _doWork() {
     const documentFetcher = new DocumentFetcher();
 
-    // Get _all_ actors. 
+    // Get all _editable_ actors. 
+    // Locked compendia will be excluded in the search. FoundryVTT doesn't allow 
+    // editing them and chances are we're dealing with system compendia, 
+    // which shouldn't be touched, anyway. 
     const actors = await documentFetcher.findAll({
       documentType: "Actor",
       source: DOCUMENT_COLLECTION_SOURCES.all,
