@@ -58,20 +58,6 @@ export class AmbersteelItem extends Item {
     this._getType().prepareData(this);
   }
   
-  /** @override */
-  prepareBaseData() {
-    super.prepareBaseData();
-    
-    this._getType().prepareBaseData(this);
-  }
-  
-  /** @override */
-  prepareDerivedData() {
-    super.prepareDerivedData();
-    
-    this._getType().prepareDerivedData(this);
-  }
-
   /**
    * Returns an instance of the specific type of this item. 
    * @returns {AmbersteelFateCardItem | AmbersteelIllnessItem | AmbersteelInjuryItem | AmbersteelItemItem | AmbersteelSkillItem | AmbersteelMutationItem}

@@ -4,67 +4,37 @@ import { ATTRIBUTE_GROUPS } from '../../ruleset/attribute/attribute-groups.mjs';
 import CharacterAttributeGroup from '../../ruleset/attribute/character-attribute-group.mjs';
 import Ruleset from '../../ruleset/ruleset.mjs';
 import * as PropUtil from '../../util/property-utility.mjs';
-import AmbersteelBaseActor from './ambersteel-base-actor.mjs';
+import TransientBaseActor from './transient-base-actor.mjs';
 
 /**
- * Represents the base contract for a "specific" actor "sub-type" that represents a "character", in the way the Ambersteel rule set regards them. 
+ * Represents the base contract for a "specific" actor "sub-type" that 
+ * represents a "character", in the way the Ambersteel rule set regards them. 
  * 
- * Such a "sub-type" is really on an "enhancer", which adds properties and/or methods to a given `Actor` instance. 
+ * @extends TransientBaseActor
+ * 
+ * @property {Array<CharacterAttributeGroup>} attributeGroups The grouped attributes 
+ * of the character. 
+ * @property {Array<CharacterAttribute>} attributes The attributes of the character. 
  */
-export default class AmbersteelBaseCharacterActor extends AmbersteelBaseActor {
+export default class TransientBaseCharacterActor extends TransientBaseActor {
   /** @override */
   get defaultImg() { return "icons/svg/mystery-man.svg"; }
   
   /** @override */
   get chatMessageTemplate() { return TEMPLATES.ACTOR_CHAT_MESSAGE; }
 
-  /** @override */
-  prepareData(context) {
-    super.prepareData(context);
-
-    this._ensureContextHasSpecifics(context);
-  }
-
-  /** @override */
-  prepareDerivedData(context) {
-    super.prepareDerivedData(context);
-
-    this._ensureContextHasSpecifics(context);
-
-    this._prepareDerivedSkillsData(context);
-    this._prepareDerivedHealthData(context);
-  }
-
   /**
-   * Ensures type-specific methods and properties are added to the given 
-   * context entity. 
-   * @param {Actor} context 
-   * @virtual
-   * @private
+   * @param {Actor} actor An encapsulated actor instance. 
+   * 
+   * @throws {Error} Thrown, if `actor` is `undefined`. 
    */
-  _ensureContextHasSpecifics(context) {
-    context.getSkills = this.getSkills.bind(context);
-    context.getInjuries = this.getInjuries.bind(context);
-    context.getIllnesses = this.getIllnesses.bind(context);
-    context.getMutations = this.getMutations.bind(context);
-    context.getPossessions = this.getPossessions.bind(context);
-    context.getPropertyItems = this.getPropertyItems.bind(context);
-    context.getFateCards = this.getFateCards.bind(context);
-    context.getAttributeForName = this.getAttributeForName.bind(context);
-    context.getAttributeForLocalizedName = this.getAttributeForLocalizedName.bind(context);
-    context.setAttributeLevel = this.setAttributeLevel.bind(context);
-    context.addAttributeProgress = this.addAttributeProgress.bind(context);
-    context.advanceSkillBasedOnRollResult = this.advanceSkillBasedOnRollResult.bind(context);
-    context.advanceAttributeBasedOnRollResult = this.advanceAttributeBasedOnRollResult.bind(context);
-    context.resolveReferences = this.resolveReferences.bind(context);
+  constructor(actor) {
+    super(actor);
 
-    context.getMaxBulk = this._getMaxBulk.bind(context);
-    context.getCurrentBulk = this._getCurrentBulk.bind(context);
-
-    context.getAttributeGroups = this._getAttributeGroups.bind(context);
-    context.getAttributes = this._getAttributes.bind(context);
+    this.attributeGroups = this._getAttributeGroups();
+    this.attributes = this._getAttributes();
   }
-  
+
   /**
    * Returns the grouped attributes of the character. 
    * 
@@ -80,7 +50,7 @@ export default class AmbersteelBaseCharacterActor extends AmbersteelBaseActor {
       // Skip any convenience members, such as `asChoices`.
       if (groupDef.name === undefined) continue;
 
-      result.push(new CharacterAttributeGroup(this, groupDef.name));
+      result.push(new CharacterAttributeGroup(this.actor, groupDef.name));
     }
 
     return result;
@@ -94,7 +64,7 @@ export default class AmbersteelBaseCharacterActor extends AmbersteelBaseActor {
    * @private
    */
   _getAttributes() {
-    return this.getAttributeGroups().map(it => it.attributes);
+    return this._getAttributeGroups().map(it => it.attributes);
   }
 
   /**

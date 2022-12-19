@@ -22,42 +22,16 @@ export default class AmbersteelBaseItem {
   get chatMessageTemplate() { return TEMPLATES.ITEM_CHAT_MESSAGE; }
 
   /**
-   * @summary
-   * Prepare base data for the item. 
+   * Prepare data for the item. 
    * 
-   * @description
-   * The data added here should be non-derivable data, meaning it should only prepare 
-   * the data object to ensure certain properties exist and aren't undefined. 
+   * **IMPORTANT**: Any changes to the item made **will be persisted** to the 
+   * data base! Therefore, **only** use this method to ensure sensible 
+   * default values are set. Under no circumstance should derivable data 
+   * be added here! 
    * 
-   * This should also set primitive data, even if it is technically derived, shouldn't be any 
-   * data set based on extensive calculations. Setting the 'img'-property's path, based on the object 
-   * type should be the most complex a 'calculation' as it gets. 
+   * @param {Item} context An item instance. 
    * 
-   * Base data *is* persisted!
-   * @param {Item} context
    * @virtual
    */
-  prepareData(context) {}
-
-  /**
-   * @summary
-   * Also prepares base data for the item. 
-   * @param {Item} context 
-   * @virtual
-   */
-  prepareBaseData(context) {}
-
-  /**
-   * @summary
-   * Prepare derived data for the item. 
-   * 
-   * @description
-   * This is where extensive calculations can occur, to ensure properties aren't 
-   * undefined and have meaningful values. 
-   * 
-   * Derived data is *not* persisted!
-   * @param {Item} context
-   * @virtual
-   */
-  prepareDerivedData(context) {}
+  prepareData(context) { /** Actual implementation left to inheriting types. */}
 }
