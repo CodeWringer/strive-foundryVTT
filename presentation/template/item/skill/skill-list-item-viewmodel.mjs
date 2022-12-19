@@ -3,7 +3,7 @@ import { TEMPLATES } from "../../templatePreloader.mjs";
 import SkillAbilityTableViewModel from "../skill-ability/skill-ability-table-viewmodel.mjs";
 import SkillViewModel from "./skill-viewmodel.mjs";
 import ViewModelFactory from "../../../view-model/view-model-factory.mjs";
-import { ATTRIBUTES } from "../../../../business/ruleset/attributes.mjs";
+import { ATTRIBUTES } from "../../../../business/ruleset/attribute/attributes.mjs";
 
 export default class SkillListItemViewModel extends SkillViewModel {
   /** @override */
@@ -27,14 +27,14 @@ export default class SkillListItemViewModel extends SkillViewModel {
    * @type {Number}
    * @readonly
    */
-  get requiredSuccessses() { return this.item.data.data.requiredSuccessses; }
+  get successses() { return this.item.data.data.requiredSuccessses; }
 
   /**
    * Returns the current number of failures. 
    * @type {Number}
    * @readonly
    */
-  get requiredFailures() { return this.item.data.data.requiredFailures; }
+  get failures() { return this.item.data.data.requiredFailures; }
 
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 

@@ -1,5 +1,5 @@
-import AdvancementRequirements from "./advancement-requirement.mjs";
-import { ATTRIBUTE_GROUPS } from "./attribute-groups.mjs";
+import LevelAdvancement from "./level-advancement.mjs";
+import { ATTRIBUTE_GROUPS } from "./attribute/attribute-groups.mjs";
 import { SummedData, SummedDataComponent } from "./skill/summed-data.mjs";
 
 /**
@@ -26,24 +26,26 @@ export default class Ruleset {
    * If level is equal to 0, will return undefined, instead of actual values. 
    * This is deliberate, as an attribute at level 0 cannot be advanced (naturally).
    * @param {Number} level The level for which to get the advancement requirements. 
-   * @returns {AdvancementRequirements}
+   * 
+   * @returns {LevelAdvancement}
    */
   getAttributeAdvancementRequirements(level = 0) {
-    return new AdvancementRequirements({
-      requiredSuccessses: (level === 0) ? undefined : (level + 1) * (level + 1) * 4,
-      requiredFailures: (level === 0) ? undefined : (level + 1) * (level + 1) * 5
+    return new LevelAdvancement({
+      successses: (level === 0) ? undefined : (level + 1) * (level + 1) * 4,
+      failures: (level === 0) ? undefined : (level + 1) * (level + 1) * 5
     });
   }
 
   /**
    * Returns the advancement requirements for the given level of a skill. 
    * @param {Number} level The level for which to get the advancement requirements. 
-   * @returns {AdvancementRequirements}
+   * 
+   * @returns {LevelAdvancement}
    */
   getSkillAdvancementRequirements(level = 0) {
-    return new AdvancementRequirements({
-      requiredSuccessses: (level == 0) ? 10 : (level + 1) * level * 2,
-      requiredFailures: (level == 0) ? 14 : (level + 1) * level * 3
+    return new LevelAdvancement({
+      successses: (level == 0) ? 10 : (level + 1) * level * 2,
+      failures: (level == 0) ? 14 : (level + 1) * level * 3
     });
   }
 

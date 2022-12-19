@@ -19,24 +19,6 @@ export default class AmbersteelSkillItem extends AmbersteelBaseItem {
   /** @override */
   get chatMessageTemplate() { return TEMPLATES.SKILL_ITEM_CHAT_MESSAGE; }
   
-  /**
-   * Ensures type-specific methods and properties are added to the given 
-   * context entity. 
-   * @param {Actor} context 
-   * @virtual
-   * @private
-   */
-  _ensureContextHasSpecifics(context) {
-    context.setLevel = this.setLevel.bind(context);
-    context.addSkillProgress = this.addSkillProgress.bind(context);
-    context.createSkillAbility = this.createSkillAbility.bind(context);
-    context.deleteSkillAbilityAt = this.deleteSkillAbilityAt.bind(context);
-    context.advanceSkillBasedOnRollResult = this.advanceSkillBasedOnRollResult.bind(context);
-    context.getChatData = this.getChatData.bind(context);
-    context.getChatViewModel = this.getChatViewModel.bind(context);
-    context.getRollData = this._getRollData.bind(context);
-  }
-
   /** @override */
   prepareData(context) {
     super.prepareData(context);
@@ -53,6 +35,24 @@ export default class AmbersteelSkillItem extends AmbersteelBaseItem {
     this._ensureContextHasSpecifics(context);
 
     this._ensureSkillAbilityObjects(context);
+  }
+
+  /**
+   * Ensures type-specific methods and properties are added to the given 
+   * context entity. 
+   * @param {Actor} context 
+   * @virtual
+   * @private
+   */
+  _ensureContextHasSpecifics(context) {
+    context.setLevel = this.setLevel.bind(context);
+    context.addSkillProgress = this.addSkillProgress.bind(context);
+    context.createSkillAbility = this.createSkillAbility.bind(context);
+    context.deleteSkillAbilityAt = this.deleteSkillAbilityAt.bind(context);
+    context.advanceSkillBasedOnRollResult = this.advanceSkillBasedOnRollResult.bind(context);
+    context.getChatData = this.getChatData.bind(context);
+    context.getChatViewModel = this.getChatViewModel.bind(context);
+    context.getRollData = this._getRollData.bind(context);
   }
 
   /**

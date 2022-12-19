@@ -12,18 +12,6 @@ export default class AmbersteelFateCardItem extends AmbersteelBaseItem {
   /** @override */
   get chatMessageTemplate() { return TEMPLATES.FATE_CARD_CHAT_MESSAGE; }
  
-  /**
-   * Ensures type-specific methods and properties are added to the given 
-   * context entity. 
-   * @param {Actor} context 
-   * @virtual
-   * @private
-   */
-  _ensureContextHasSpecifics(context) {
-    context.getChatData = this.getChatData.bind(context);
-    context.getChatViewModel = this.getChatViewModel.bind(context);
-  }
-
   /** @override */
   prepareData(context) {
     super.prepareData(context);
@@ -36,6 +24,18 @@ export default class AmbersteelFateCardItem extends AmbersteelBaseItem {
     super.prepareDerivedData(context);
 
     this._ensureContextHasSpecifics(context);
+  }
+
+  /**
+   * Ensures type-specific methods and properties are added to the given 
+   * context entity. 
+   * @param {Actor} context 
+   * @virtual
+   * @private
+   */
+  _ensureContextHasSpecifics(context) {
+    context.getChatData = this.getChatData.bind(context);
+    context.getChatViewModel = this.getChatViewModel.bind(context);
   }
 
   /**

@@ -3,7 +3,7 @@ import { TEMPLATES } from "../../templatePreloader.mjs";
 import SkillAbilityTableViewModel from "../skill-ability/skill-ability-table-viewmodel.mjs";
 import SkillViewModel from "./skill-viewmodel.mjs";
 import ViewModelFactory from "../../../view-model/view-model-factory.mjs";
-import { ATTRIBUTES } from "../../../../business/ruleset/attributes.mjs";
+import { ATTRIBUTES } from "../../../../business/ruleset/attribute/attributes.mjs";
 
 export default class SkillItemSheetViewModel extends SkillViewModel {
   /** @override */

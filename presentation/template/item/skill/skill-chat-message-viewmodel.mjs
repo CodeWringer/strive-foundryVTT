@@ -1,4 +1,4 @@
-import { ATTRIBUTES } from "../../../../business/ruleset/attributes.mjs";
+import { ATTRIBUTES } from "../../../../business/ruleset/attribute/attributes.mjs";
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs";
 import ViewModel from "../../../view-model/view-model.mjs";
 import { TEMPLATES } from "../../templatePreloader.mjs";

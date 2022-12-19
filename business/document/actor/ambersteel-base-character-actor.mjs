@@ -1,7 +1,8 @@
 import { TEMPLATES } from '../../../presentation/template/templatePreloader.mjs';
 import { DiceOutcomeTypes } from '../../dice/dice-outcome-types.mjs';
+import { ATTRIBUTE_GROUPS } from '../../ruleset/attribute/attribute-groups.mjs';
+import CharacterAttributeGroup from '../../ruleset/attribute/character-attribute-group.mjs';
 import Ruleset from '../../ruleset/ruleset.mjs';
-import { SummedData, SummedDataComponent } from '../../ruleset/skill/summed-data.mjs';
 import * as PropUtil from '../../util/property-utility.mjs';
 import AmbersteelBaseActor from './ambersteel-base-actor.mjs';
 
@@ -16,6 +17,23 @@ export default class AmbersteelBaseCharacterActor extends AmbersteelBaseActor {
   
   /** @override */
   get chatMessageTemplate() { return TEMPLATES.ACTOR_CHAT_MESSAGE; }
+
+  /** @override */
+  prepareData(context) {
+    super.prepareData(context);
+
+    this._ensureContextHasSpecifics(context);
+  }
+
+  /** @override */
+  prepareDerivedData(context) {
+    super.prepareDerivedData(context);
+
+    this._ensureContextHasSpecifics(context);
+
+    this._prepareDerivedSkillsData(context);
+    this._prepareDerivedHealthData(context);
+  }
 
   /**
    * Ensures type-specific methods and properties are added to the given 
@@ -42,147 +60,41 @@ export default class AmbersteelBaseCharacterActor extends AmbersteelBaseActor {
 
     context.getMaxBulk = this._getMaxBulk.bind(context);
     context.getCurrentBulk = this._getCurrentBulk.bind(context);
-  }
-  
-  /** @override */
-  prepareData(context) {
-    super.prepareData(context);
 
-    this._ensureContextHasSpecifics(context);
-  }
-
-  /** @override */
-  prepareDerivedData(context) {
-    super.prepareDerivedData(context);
-
-    this._ensureContextHasSpecifics(context);
-
-    this._prepareDerivedAttributesData(context);
-    this._prepareDerivedSkillsData(context);
-    this._prepareDerivedHealthData(context);
-  }
-
-  /**
-   * Prepares derived data for all attributes. 
-   * 
-   * This will adjust actor.data.data to the following result:
-   * actor.data.data = {
-   *   attributeGroups: {Array<Object>} = same as physical,
-   *   attributes: {Object} = {
-   *     physical: {Object} = {
-   *       name: {String},
-   *       localizableName: {String},
-   *       localizableAbbreviation: {String},
-   *       attributes: {Array<Object>} = {
-   *         value: {Number},
-   *         successes: {Number},
-   *         failures: {Number},
-   *         requiredSuccessses: {Number},
-   *         requiredFailures: {Number},
-   *         name: {String},
-   *         localizableName: {String},
-   *         localizableAbbreviation: {String},
-   *         getRollData(): {Function<Object>}
-   *         advanceAttributeBasedOnRollResult({DicePoolResult}, {String}): {Function<>}
-   *       }
-   *     },
-   *     mental: {Object} = same as physical
-   *     social: {Object} = same as physical
-   *   }
-   * }
-   * 
-   * @param {AmbersteelActor} context 
-   * @private
-   */
-  _prepareDerivedAttributesData(context) {
-    const actorData = context.data.data;
-
-    // The names of the attribute groups to iterate. "physical", "mental" and "social"
-    const attributeGroupNames = actorData.attributeGroupNames ?? this._getAttributeGroupNames(context);
-    if (actorData.attributeGroupNames === undefined) {
-      actorData.attributeGroupNames = attributeGroupNames;
-    }
-    
-    const attributeGroups = [];
-    for (const attGroup of attributeGroupNames) {
-      const attGroupName = attGroup.name;
-      const oAttGroup = actorData.attributes[attGroupName];
-      
-      // The names of the attributes to iterate. E. g. "agility" or "willpower"
-      const attributeNames = attGroup.attributeNames;
-      
-      // Prepare attributes of group. 
-      const attributes = [];
-      for (const attName of attributeNames) {
-        const oAtt = oAttGroup[attName];
-        this._prepareDerivedAttributeData(context, oAtt, attName);
-        attributes.push(oAtt);
-      }
-
-      // Add internal name. 
-      oAttGroup.name = attGroupName;
-      // Add localization keys. 
-      oAttGroup.localizableName = `ambersteel.character.attributeGroup.${attGroupName}.label`;
-      oAttGroup.localizableAbbreviation = `ambersteel.character.attributeGroup.${attGroupName}.abbreviation`;
-      // Add attributes of group for easy access. 
-      oAttGroup.attributes = attributes;
-
-      attributeGroups.push(oAttGroup);
-    }
-    // Add attribute groups for easy access. 
-    actorData.attributeGroups = attributeGroups;
-  }
-
-  /**
-   * Prepares derived data for a given attribute. 
-   * @param oAtt {Object} The attribute object. 
-   * @param attName {String} Internal name of the attribute, e.g. 'magicSense'. 
-   * @private
-   */
-  _prepareDerivedAttributeData(context, oAtt, attName) {
-    const attValue = parseInt(oAtt.level);
-    const req = new Ruleset().getAttributeAdvancementRequirements(attValue);
-
-    // Calculate advancement requirements. 
-    oAtt.requiredSuccessses = req.requiredSuccessses;
-    oAtt.requiredFailures = req.requiredFailures;
-
-    // Add internal name. 
-    oAtt.name = attName;
-
-    // Add localization keys. 
-    oAtt.localizableName = `ambersteel.character.attribute.${attName}.label`;
-    oAtt.localizableAbbreviation = `ambersteel.character.attribute.${attName}.abbreviation`;
-
-    // Add functions.
-    const thiz = this;
-    oAtt.getRollData = () => {
-      return new SummedData(attValue, [
-        new SummedDataComponent(attName, oAtt.localizableName, attValue)
-      ]);
-    };
-    oAtt.advanceAttributeBasedOnRollResult = this.advanceAttributeBasedOnRollResult.bind(context);
+    context.getAttributeGroups = this._getAttributeGroups.bind(context);
+    context.getAttributes = this._getAttributes.bind(context);
   }
   
   /**
-   * @param {Document} context 
-   * @returns {Array<Object>} { name: {String}, attributeNames: {Array<String>} }
+   * Returns the grouped attributes of the character. 
+   * 
+   * @returns {Array<CharacterAttributeGroup>}
+   * 
    * @private
    */
-  _getAttributeGroupNames(context) {
+  _getAttributeGroups() {
     const result = [];
 
-    for (const attributeGroupName in context.data.data.attributes) {
-      const attributeNames = [];
-      for (const attributeName in context.data.data.attributes[attributeGroupName]) {
-        attributeNames.push(attributeName);
-      }
+    for (const groupDefName in ATTRIBUTE_GROUPS) {
+      const groupDef = ATTRIBUTE_GROUPS[groupDefName];
+      // Skip any convenience members, such as `asChoices`.
+      if (groupDef.name === undefined) continue;
 
-      const obj = { name: attributeGroupName, attributeNames: attributeNames };
-      result.push(obj);
+      result.push(new CharacterAttributeGroup(this, groupDef.name));
     }
 
     return result;
+  }
+  
+  /**
+   * Returns the attributes of the character. 
+   * 
+   * @returns {Array<CharacterAttribute>}
+   * 
+   * @private
+   */
+  _getAttributes() {
+    return this.getAttributeGroups().map(it => it.attributes);
   }
 
   /**
@@ -227,8 +139,8 @@ export default class AmbersteelBaseCharacterActor extends AmbersteelBaseActor {
     skillData.relatedAttribute = skillData.relatedAttribute ? skillData.relatedAttribute : "agility";
 
     const req = new Ruleset().getSkillAdvancementRequirements(skillData.level);
-    skillData.requiredSuccessses = req.requiredSuccessses;
-    skillData.requiredFailures = req.requiredFailures;
+    skillData.requiredSuccessses = req.successses;
+    skillData.requiredFailures = req.failures;
   }
 
   /**
@@ -348,8 +260,8 @@ export default class AmbersteelBaseCharacterActor extends AmbersteelBaseActor {
 
     await this.update({
       [`${propertyPath}.level`]: newValue,
-      [`${propertyPath}.requiredSuccessses`]: req.requiredSuccessses,
-      [`${propertyPath}.requiredFailures`]: req.requiredFailures,
+      [`${propertyPath}.successses`]: req.successses,
+      [`${propertyPath}.failures`]: req.failures,
       [`${propertyPath}.successes`]: 0,
       [`${propertyPath}.failures`]: 0
     });

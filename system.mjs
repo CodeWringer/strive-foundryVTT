@@ -1,6 +1,6 @@
 // Ruleset
-import { ATTRIBUTES } from "./business/ruleset/attributes.mjs";
-import { ATTRIBUTE_GROUPS } from "./business/ruleset/attribute-groups.mjs";
+import { ATTRIBUTES } from "./business/ruleset/attribute/attributes.mjs";
+import { ATTRIBUTE_GROUPS } from "./business/ruleset/attribute/attribute-groups.mjs";
 import { DAMAGE_TYPES } from "./business/ruleset/damage-types.mjs";
 import { ATTACK_TYPES } from "./business/ruleset/skill/attack-types.mjs";
 import { SHIELD_TYPES } from "./business/ruleset/asset/shield-types.mjs";
