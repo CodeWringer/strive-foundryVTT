@@ -12,14 +12,19 @@ import { VISIBILITY_MODES } from '../../../presentation/chat/visibility-modes.mj
 /**
  * Represents a skill ability. 
  * 
- * Is **always** a child object of a skill item document. 
- * @property {Document} owner The owning document.
- * @property {String} ownerId UUID of the owning document. 
- * @property {Number} index The index of the skill ability, on the owning skill item. 
- * @property {String | undefined} id UUID of this instance of a skill ability. 
- * @property {Boolean} isCustom 
- * @property {String} name 
- * @property {String} img 
+ * Is **always** a child object of a skill document. 
+ * 
+ * @property {TransientSkill} owningDocument The owning document. I. e. a `TransientSkill`. 
+ * * Read-only. 
+ * @property {String} owningDocumentId UUID of the owning document. 
+ * * Read-only. 
+ * @property {String} type Returns the content type of this "document". 
+ * * Read-only. 
+ * @property {Number} index The index of the skill ability, on the owning document. 
+ * @property {String} id UUID of this instance of a skill ability. 
+ * @property {Boolean} isCustom If `true`, this skill ability was added by a user. 
+ * @property {String} name Internal name of the skill. 
+ * @property {String} img A relative url to an image resource on the server. 
  * @property {String} description 
  * @property {Number} requiredLevel 
  * @property {Number} apCost 
@@ -31,11 +36,17 @@ import { VISIBILITY_MODES } from '../../../presentation/chat/visibility-modes.mj
  * @property {AttackType | undefined} attackType 
  */
 export default class SkillAbility {
-  get ownerId() { return this.getOwningDocument().id; }
+  /**
+   * Returns the content type of this "document". 
+   * 
+   * @type {String}
+   * @readonly
+   */
+  get type() { return "skill-ability"; }
 
   /**
-   * @param {Document} owner The owning document.
-   * @param {Number} index The index of the skill ability, on the owning skill item. 
+   * @param {TransientSkill} owningDocument The owning document.
+   * @param {Number} index The index of the skill ability, on the owning document. 
    * @param {String | undefined} id Optional. UUID of this instance of a skill ability. 
    * @param {Boolean | undefined} args.isCustom Optional. 
    * @param {String | undefined} args.name Optional. 
@@ -49,15 +60,17 @@ export default class SkillAbility {
    * @param {String | undefined} args.obstacle Optional. 
    * @param {String | undefined} args.opposedBy Optional. 
    * @param {AttackType | undefined} args.attackType Optional. 
+   * 
+   * @throws {Error} Thrown, if `owningDocument` or `index` are undefined. 
    */
   constructor(args = {}) {
-    validateOrThrow(args, ["owner", "index"]);
+    validateOrThrow(args, ["owningDocument", "index"]);
     
-    this.getOwningDocument = () => { return args.owner; };
+    this.owningDocument = args.owningDocument;
+    this.owningDocumentId = args.owningDocument.id;
     this.index = args.index;
     
     this.id = args.id ?? createUUID();
-    this.type = "skill-ability";
     this.isCustom = args.isCustom ?? false;
 
     this.name = args.name ?? game.i18n.localize("ambersteel.character.skill.ability.newDefaultName");
@@ -69,8 +82,8 @@ export default class SkillAbility {
     this.condition = args.condition;
     this.distance = args.distance;
     this.obstacle = args.obstacle;
-    this.attackType = args.attackType;
     this.opposedBy = args.opposedBy;
+    this.attackType = args.attackType;
   }
 
   /**
@@ -81,22 +94,13 @@ export default class SkillAbility {
   get chatMessageTemplate() { return TEMPLATES.SKILL_ABILITY_CHAT_MESSAGE; }
   
   /**
-   * Returns the full property path on the parent that identifies this SkillAbility. 
-   * 
-   * E.g. "data.data.abilities[0]"
-   * @type {String}
-   * @readonly
-   */
-  get propertyPathOnParent() { return `data.data.abilities[${this.index}]`; }
-
-  /**
    * Base implementation of returning data for a chat message, based on this item. 
    * @returns {PreparedChatData}
    * @virtual
    * @async
    */
   async getChatData() {
-    const actor = this.getOwningDocument().parent;
+    const actor = this.owningDocument.owningDocument.document;
     const vm = this.getChatViewModel();
 
     const renderedContent = await renderTemplate(this.chatMessageTemplate, {
@@ -126,25 +130,27 @@ export default class SkillAbility {
    * @virtual
    */
   getChatViewModel(overrides = {}) {
-    const owningDocument = this.getOwningDocument();
+    const actor = (this.owningDocument.owningDocument !== undefined) ? 
+      this.owningDocument.owningDocument.document : undefined;
 
     return new SkillAbilityChatMessageViewModel({
-      id: `${this.ownerId}-${createUUID()}`,
-      isEditable: false,
-      isSendable: false,
-      isOwner: owningDocument.isOwner ?? owningDocument.owner ?? false,
+      id: this.id,
+      isEditable: this.owningDocument.isEditable,
+      isSendable: this.owningDocument.isSendable,
+      isOwner: this.owningDocument.isOwner,
       isGM: game.user.isGM,
-      item: owningDocument,
-      skillAbility: this,
-      actor: owningDocument.parent,
-      index: this.index,
       ...overrides,
+      item: this.owningDocument,
+      skillAbility: this,
+      actor: actor,
+      index: this.index,
     });
   }
 
   /**
    * Base implementation of sending this item to the chat. 
    * @param {VisibilityMode} visibilityMode Determines the visibility of the chat message. 
+   * 
    * @async
    * @virtual
    */
@@ -157,22 +163,25 @@ export default class SkillAbility {
   }
 
   /**
-   * Deletes this SkillAbility from its parent, if it has one. 
-   * @returns {Boolean} True, if the SkillAbility could be removed. 
+   * Deletes this `SkillAbility`. 
+   * 
+   * @returns {Boolean} True, if the `SkillAbility` could be removed. 
    */
   delete() {
-    const owningDocument = this.getOwningDocument();
-    if (owningDocument === undefined) return false;
+    if (this.owningDocument === undefined) return false;
 
-    owningDocument.deleteSkillAbilityAt(this.index);
+    this.owningDocument.deleteSkillAbilityAt(this.index);
 
     return true;
   }
 
   /**
    * Updates the properties of this object, based on the given delta object. 
+   * 
    * @param {Object} delta An object containing the properties of this object to update. 
-   * @param {Boolean | undefined} render If true, will trigger a re-render of the associated document sheet. Default 'true'. 
+   * @param {Boolean | undefined} render If true, will trigger a re-render of the associated document sheet. 
+   * * Default 'true'. 
+   * 
    * @async
    */
   async update(delta, render = true) {
@@ -185,11 +194,14 @@ export default class SkillAbility {
 
   /**
    * Updates a property of this SkillAbility on the parent item, identified via the given path. 
+   * 
    * @param {String} propertyPath Path leading to the property to update, on the SkillAbility. 
    *        Array-accessing via brackets is supported. Property-accessing via brackets is *not* supported. 
    *        E.g.: "data.attributes[0].level"
    * @param {any} newValue The value to assign to the property. 
-   * @param {Boolean | undefined} render If true, will trigger a re-render of the associated document sheet. Default 'true'. 
+   * @param {Boolean | undefined} render If true, will trigger a re-render of the associated document sheet. 
+   * * Default 'true'. 
+   * 
    * @async
    */
   async updateProperty(propertyPath, newValue, render = true) {
@@ -200,12 +212,15 @@ export default class SkillAbility {
 
   /**
    * Deletes a property on the skill ability, via the given path. 
+   * 
    * @param {String} propertyPath Path leading to the property to delete, on the given document entity. 
    *        Array-accessing via brackets is supported. Property-accessing via brackets is *not* supported. 
    *        E.g.: "data.attributes[0].level" 
    *        E.g.: "data.attributes[4]" 
    *        E.g.: "data.attributes" 
-   * @param {Boolean | undefined} render If true, will trigger a re-render of the associated document sheet. Default 'true'. 
+   * @param {Boolean | undefined} render If true, will trigger a re-render of the associated document sheet. 
+   * * Default 'true'. 
+   * 
    * @async
    */
   async deleteByPropertyPath(propertyPath, render = true) {
@@ -216,47 +231,38 @@ export default class SkillAbility {
 
   /**
    * Pushes the skill ability list on the parent to the DB. 
-   * @param {Boolean | undefined} render If true, will trigger a re-render of the associated document sheet. Default 'true'. 
+   * 
+   * @param {Boolean | undefined} render If true, will trigger a re-render of the associated document sheet. 
+   * * Default 'true'. 
+   * 
    * @private
    * @async
    */
   async _updateToDB(render = true) {
-    const owningDocument = this.getOwningDocument();
-    if (owningDocument === undefined) return;
-
-    const parentAbilities = owningDocument.data.data.abilities;
-    const index = parentAbilities.findIndex(it => it.id === this.id);
-    const abilitiesArray = [];
-    const thisDto = this.toDto();
-    for (let i = 0; i < parentAbilities.length; i++) {
-      if (i === index) {
-        abilitiesArray.push(thisDto);
-      } else {
-        const skillAbility = parentAbilities[i];
-        abilitiesArray.push(skillAbility.toDto());
-      }
-    }
-    await owningDocument.updateProperty("data.data.abilities", abilitiesArray, render);
+    this.owningDocument._persistSkillAbilities(render);
   }
 
   /**
    * Returns a plain object based on the given object instance. 
-   * @private
-   * @see document-update-utility#toDto
+   * 
    * @returns {Object}
+   * 
+   * @private
    */
   toDto() {
     // Ensure damage definitions are turned into plain objects. 
     const damage = [];
     for (const o of this.damage) {
-      damage.push({ damage: o.damage, damageType: o.damageType });
+      damage.push({ damage: o.damage, damageType: o.damageType.name });
     }
 
-    // IMPORTANT: To avoid problems with recursion, the parent field **must not** be included!
-    // The index field is also omitted, because it can be derived. 
+    // IMPORTANT: To avoid problems with recursion, the `owningDocument` field 
+    // **must not** be included!
     const obj = Object.create(null);
 
     obj.id = this.id;
+    obj.owningDocumentId = this.owningDocumentId;
+    obj.index = this.index;
     obj.isCustom = this.isCustom;
     obj.name = this.name;
     obj.img = this.img;

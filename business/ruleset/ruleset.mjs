@@ -51,8 +51,10 @@ export default class Ruleset {
 
   /**
    * Returns the name of the attribute group containing the given attribute. 
-   * @param attributeName {String} Internal name of an attribute, e.g. 'arcana'. 
-   * @returns {String} Name of the attribute group, e. g. 'physical'. 
+   * 
+   * @param {String} attributeName Internal name of an attribute, e.g. `"arcana"`. 
+   * 
+   * @returns {String} Name of the attribute group, e. g. `"physical"`. 
    */
   getAttributeGroupName(attributeName) {
     const attGroups = ATTRIBUTE_GROUPS;

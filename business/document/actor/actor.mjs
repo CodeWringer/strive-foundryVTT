@@ -2,7 +2,7 @@ import { ACTOR_SUBTYPE } from './actor-subtype.mjs';
 
 /**
  * @summary
- * This class represents FoundryVTT's `actor` document type. 
+ * This class represents FoundryVTT's `Actor` document type. 
  * 
  * @description
  * In truth, this class only serves as a "data source" and should never be worked with 

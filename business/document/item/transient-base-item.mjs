@@ -1,62 +1,67 @@
 import { TEMPLATES } from "../../../presentation/template/templatePreloader.mjs";
-import ActorChatMessageViewModel from '../../../presentation/template/actor/actor-chat-message-viewmodel.mjs';
-import PreparedChatData from '../../../presentation/chat/prepared-chat-data.mjs';
-import * as UpdateUtil from '../document-update-utility.mjs';
+import AmbersteelFateCardItem from './transient-fate-card.mjs';
+import AmbersteelIllnessItem from './transient-illness.mjs';
+import AmbersteelInjuryItem from './transient-injury.mjs';
+import AmbersteelItemItem from './transient-asset.mjs';
+import AmbersteelSkillItem from './transient-skill.mjs';
+import AmbersteelMutationItem from './transient-mutation.mjs';
 import * as ChatUtil from "../../../presentation/chat/chat-utility.mjs";
+import * as UpdateUtil from "../document-update-utility.mjs";
 import { createUUID } from '../../util/uuid-utility.mjs';
+import PreparedChatData from '../../../presentation/chat/prepared-chat-data.mjs';
 import { SOUNDS_CONSTANTS } from '../../../presentation/audio/sounds.mjs';
+import ViewModel from '../../../presentation/view-model/view-model.mjs';
 import { VISIBILITY_MODES } from '../../../presentation/chat/visibility-modes.mjs';
 
 /**
  * @summary
- * Represents the base contract for a transient actor object.
+ * Represents the base contract for a transient item object.
  * 
  * @description
  * This object provides both persisted and transient (= derived) data and 
- * type-specific methods of a given actor. 
+ * type-specific methods of a given item. 
  * 
- * The actor itself only serves as a "data source", being used only to write and read 
+ * The item itself only serves as a "data source", being used only to write and read 
  * data to and from the data base. 
  * 
- * So, if some other code wants to access an actor's derived data, they will need 
+ * So, if some other code wants to access an item's derived data, they will need 
  * to first fetch an instance of an inheriting type of this class. 
  * 
  * @abstract
  * 
- * @property {String} defaultImg Returns the default icon image path for this type of actor. 
+ * @property {String} defaultImg Returns the default icon image path for this type of item. 
  * * Read-only.
  * @property {String} chatMessageTemplate Returns the Chat message template path. 
  * * Read-only.
- * @property {Actor} document Returns the encapsulated actor instance. 
+ * @property {String} id Returns the id of the document. 
  * * Read-only.
+ * @property {Boolean} isOwner Returns true, if the current user is the owner of the document. 
+ * * Read-only.
+ * @property {Item} document Returns the encapsulated item instance. 
+ * * Read-only.
+ * @property {TransientBaseActor | undefined} owningDocument Another document that 
+ * this document is embedded in. 
+ * @property {String} name Internal name. 
+ * * Read-only.
+ * @property {String} localizableName Localization key for the full name. 
+ * @property {String} localizableAbbreviation Localization key for the abbreviated name. 
  */
-export default class TransientBaseActor {
+export default class TransientBaseItem {
   /**
-   * Returns the default icon image path for this type of actor. 
-   * 
+   * Returns the default icon image path for this type of item. 
    * @type {String}
    * @virtual
    * @readonly
    */
-  get defaultImg() { return "icons/svg/mystery-man.svg"; }
+  get defaultImg() { return "icons/svg/item-bag.svg"; }
 
   /**
-   * Returns the Chat message template path. 
-   * 
+   * Chat message template path. 
    * @type {String}
-   * @virtual
    * @readonly
    */
-  get chatMessageTemplate() { return TEMPLATES.ACTOR_CHAT_MESSAGE; }
-  
-  /**
-   * Returns the embedded documents of the actor. 
-   * 
-   * @type {Array<Item>}
-   * @readonly
-   */
-  get items() { return this.document.items; }
-  
+  get chatMessageTemplate() { return TEMPLATES.ITEM_CHAT_MESSAGE; }
+
   /**
    * Returns the id of the document. 
    * 
@@ -74,48 +79,56 @@ export default class TransientBaseActor {
   get isOwner() { return this.document.isOwner ?? this.document.owner ?? false; }
 
   /**
-   * @param {Actor} document An encapsulated actor instance. 
+   * Another document that this document is embedded in. 
+   * 
+   * @type {TransientBaseActor | undefined}
+   */
+  owningDocument = undefined;
+
+  /**
+   * Returns the internal name of the document. 
+   * 
+   * @type {String}
+   * @readonly
+   */
+  get name() { return this.document.name; }
+
+  /**
+   * @param {Item} document An encapsulated item instance. 
    * 
    * @throws {Error} Thrown, if `document` is `undefined`. 
    */
   constructor(document) {
     if (document === undefined) {
-      throw new Error("An `Actor` instance must be provided");
+      throw new Error("An `Item` instance must be provided");
     }
 
     this.document = document;
+    if (this.document.parent !== undefined) {
+      this.owningDocument = this.document.parent.getTransientObject();
+    }
+
+    this.localizableName = this.name;
+    this.localizableAbbreviation = this.name;
   }
 
   /**
-   * Prepare data for the actor. 
+   * Prepare data for the item. 
    * 
-   * **IMPORTANT**: Any changes to the actor made **will be persisted** to the 
+   * **IMPORTANT**: Any changes to the item made **will be persisted** to the 
    * data base! Therefore, **only** use this method to ensure sensible 
    * default values are set. Under no circumstance should derivable data 
    * be added here! 
    * 
-   * @param {Actor} context An actor instance. 
+   * @param {Item} context An item instance. 
    * 
    * @virtual
    */
   prepareData(context) { /** Actual implementation left to inheriting types. */}
-  
-  /**
-   * Returns items of this actor, filtered by the given type. 
-   * @param {String} type The exact type to filter by. 
-   * @returns {Array<Item>} Items of the given type, of this actor. 
-   */
-  getItemsByType(type) {
-    const items = Array.from(this.items);
-    const result = [];
-    for (const item of items) {
-      if (item.type === type) result.push(item);
-    }
-    return result;
-  }
 
   /**
    * Deletes a property on the given document, via the given path. 
+   * 
    * @param {Document} document A Foundry {Document}. 
    * @param {String} propertyPath Path leading to the property to delete, on the given document entity. 
    *        Array-accessing via brackets is supported. Property-accessing via brackets is *not* supported. 
@@ -123,6 +136,7 @@ export default class TransientBaseActor {
    *        E.g.: "data.attributes[4]" 
    *        E.g.: "data.attributes" 
    * @param {Boolean | undefined} render If true, will trigger a re-render of the associated document sheet. Default 'true'. 
+   * 
    * @async
    */
   async deleteByPropertyPath(propertyPath, render = true) {
@@ -130,13 +144,14 @@ export default class TransientBaseActor {
   }
 
   /**
-   * Updates a property on the actor, identified via the given path. 
+   * Updates a property on the parent item, identified via the given path. 
    * 
    * @param {String} propertyPath Path leading to the property to update, on the parent item. 
    *        Array-accessing via brackets is supported. Property-accessing via brackets is *not* supported. 
    *        E.g.: "data.attributes[0].level"
    * @param {any} newValue The value to assign to the property. 
-   * @param {Boolean | undefined} render If true, will trigger a re-render of the associated document sheet. Default 'true'. 
+   * @param {Boolean | undefined} render If true, will trigger a re-render of the associated document sheet. 
+   * * Default 'true'. 
    * 
    * @async
    * @protected
@@ -146,9 +161,10 @@ export default class TransientBaseActor {
   }
 
   /**
-   * Base implementation of returning data for a chat message, based on this actor. 
+   * Base implementation of returning data for a chat message, based on this item. 
    * 
    * @returns {PreparedChatData}
+   * 
    * @virtual
    * @async
    */
@@ -161,12 +177,12 @@ export default class TransientBaseActor {
 
     return new PreparedChatData({
       renderedContent: renderedContent,
-      actor: this,
+      actor: this.owningDocument.document, 
       sound: SOUNDS_CONSTANTS.NOTIFY,
       viewModel: vm,
     });
   }
-  
+
   /**
    * Returns an instance of a view model for use in a chat message. 
    * 
@@ -177,27 +193,24 @@ export default class TransientBaseActor {
    * @param {Boolean | undefined} overrides.isOwner
    * @param {Boolean | undefined} overrides.isGM
    * 
-   * @returns {ActorChatMessageViewModel}
+   * @returns {ViewModel}
    * 
    * @virtual
    */
   getChatViewModel(overrides = {}) {
-    return new ActorChatMessageViewModel({
+    return new ViewModel({
       id: `${this.id}-${createUUID()}`,
-      isEditable: false,
-      isSendable: false,
+      isEditable: this.isOwner,
+      isSendable: this.isOwner || game.user.isGM,
       isOwner: this.isOwner,
       isGM: game.user.isGM,
-      actor: this,
       ...overrides,
     });
   }
 
   /**
-   * Base implementation of sending this Actor to the chat. 
-   * 
+   * Base implementation of sending this item to the chat. 
    * @param {VisibilityMode} visibilityMode Determines the visibility of the chat message. 
-   * 
    * @async
    * @virtual
    */
@@ -220,7 +233,7 @@ export default class TransientBaseActor {
       obj: this.document,
       propertyPath: propertyPath,
       parent: this,
-      actor: this,
+      actor: this.owningDocument.document,
       visibilityMode: visibilityMode
     });
   }

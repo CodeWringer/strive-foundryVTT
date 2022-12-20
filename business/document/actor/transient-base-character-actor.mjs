@@ -33,6 +33,7 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
 
     this.attributeGroups = this._getAttributeGroups();
     this.attributes = this._getAttributes();
+    this.skills = this._getSkills();
   }
 
   /**
@@ -65,6 +66,18 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
    */
   _getAttributes() {
     return this._getAttributeGroups().map(it => it.attributes);
+  }
+
+  /**
+   * Returns all embedded documents that represent skills. 
+   * 
+   * @returns {Array<TransientSkill>} 
+   * 
+   * @private
+   */
+  _getSkills() {
+    return this.items.filter(it => it.type === "skill")
+      .map(it => new TransientSkill(it));
   }
 
   /**

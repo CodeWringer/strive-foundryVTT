@@ -2,10 +2,17 @@ import { TEMPLATES } from "../../../presentation/template/templatePreloader.mjs"
 import ItemChatMessageViewModel from "../../../presentation/template/item/item/item-chat-message-viewmodel.mjs";
 import PreparedChatData from "../../../presentation/chat/prepared-chat-data.mjs";
 import { SOUNDS_CONSTANTS } from "../../../presentation/audio/sounds.mjs";
-import AmbersteelBaseItem from "./ambersteel-base-item.mjs";
 import { ITEM_SUBTYPE } from "./item-subtype.mjs";
+import TransientBaseItem from "./transient-base-item.mjs";
 
-export default class AmbersteelItemItem extends AmbersteelBaseItem {
+/**
+ * Represents the full transient data of an asset. 
+ * 
+ * @extends TransientBaseItem
+ * 
+ * @property {Number} bulk
+ */
+export default class TransientAsset extends TransientBaseItem {
   /** @override */
   get defaultImg() { return "icons/svg/item-bag.svg"; }
   
@@ -13,22 +20,19 @@ export default class AmbersteelItemItem extends AmbersteelBaseItem {
   get chatMessageTemplate() { return TEMPLATES.ITEM_CHAT_MESSAGE; }
   
   /**
-   * Ensures type-specific methods and properties are added to the given 
-   * context entity. 
-   * @param {Actor} context 
-   * @virtual
-   * @private
+   * @param {Item} document An encapsulated item instance. 
+   * 
+   * @throws {Error} Thrown, if `document` is `undefined`. 
    */
-  _ensureContextHasSpecifics(context) {
-    context.getChatData = this.getChatData.bind(context);
-    context.getChatViewModel = this.getChatViewModel.bind(context);
+  constructor(document) {
+    super(document);
+
+    this.bulk = parseInt(context.data.data.shape.width) * parseInt(context.data.data.shape.height);
   }
 
   /** @override */
   prepareData(context) {
     super.prepareData(context);
-
-    this._ensureContextHasSpecifics(context);
 
     // Ensure number data type. 
     context.data.data.shape.width = parseInt(context.data.data.shape.width);
@@ -36,28 +40,7 @@ export default class AmbersteelItemItem extends AmbersteelBaseItem {
   }
 
   /** @override */
-  prepareDerivedData(context) {
-    super.prepareDerivedData(context);
-
-    this._ensureContextHasSpecifics(context);
-
-    // Derive bulk from shape. 
-    const shape = context.data.data.shape;
-    if (shape === undefined) {
-      game.ambersteel.logger.logWarn("Shape on item undefined! Using fallback '{ width: 1, height: 1 }'");
-      shape = { width: 1, height: 1 };
-    }
-    context.data.data.bulk = shape.width * shape.height;
-  }
-
-  /**
-   * Returns data for a chat message, based on this injury. 
-   * @returns {PreparedChatData}
-   * @override
-   * @async
-   */
   async getChatData() {
-    const actor = this.parent ?? this.actor;
     const vm = this.getChatViewModel();
 
     const renderedContent = await renderTemplate(this.chatMessageTemplate, {
@@ -66,7 +49,7 @@ export default class AmbersteelItemItem extends AmbersteelBaseItem {
 
     return new PreparedChatData({
       renderedContent: renderedContent,
-      actor: actor, 
+      actor: this.owningDocument.document, 
       sound: SOUNDS_CONSTANTS.NOTIFY,
       viewModel: vm,
       flavor: game.i18n.localize("ambersteel.character.asset.singular"),
@@ -75,7 +58,7 @@ export default class AmbersteelItemItem extends AmbersteelBaseItem {
 
   /**
    * Returns an instance of a view model for use in a chat message. 
-   * @returns {ItemChatMessageViewModel}
+   * 
    * @param {Object | undefined} overrides Optional. An object that allows overriding any of the view model properties. 
    * @param {String | undefined} overrides.id
    * @param {Boolean | undefined} overrides.isEditable
@@ -88,17 +71,20 @@ export default class AmbersteelItemItem extends AmbersteelBaseItem {
    * @param {String | undefined} overrides.sourceId
    * @param {Boolean | undefined} overrides.allowPickup
    * @param {Array<String> | undefined} overrides.allowPickupBy
+   * 
+   * @returns {ItemChatMessageViewModel}
+   * 
    * @override
    */
   getChatViewModel(overrides = {}) {
     return new ItemChatMessageViewModel({
       id: this.id,
-      isEditable: this.isEditable,
-      isSendable: this.isSendable,
+      isEditable: this.isOwner,
+      isSendable: this.isOwner || game.user.isGM,
       isOwner: this.isOwner,
-      isGM: this.isGM,
-      item: this,
-      actor: this.parent ?? this.actor,
+      isGM: game.user.isGM,
+      item: this.document,
+      actor: this.owningDocument.document,
       sourceType: undefined,
       sourceId: undefined,
       allowPickup: false, // TODO #53: The user must be able to select who gets to pick this item up. 
@@ -108,4 +94,4 @@ export default class AmbersteelItemItem extends AmbersteelBaseItem {
   }
 }
 
-ITEM_SUBTYPE.set("item", new AmbersteelItemItem());
+ITEM_SUBTYPE.set("item", (document) => { return new TransientAsset(document) });
