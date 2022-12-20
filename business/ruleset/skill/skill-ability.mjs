@@ -239,15 +239,13 @@ export default class SkillAbility {
    * @async
    */
   async _updateToDB(render = true) {
-    this.owningDocument._persistSkillAbilities(render);
+    this.owningDocument.persistSkillAbilities(render);
   }
 
   /**
    * Returns a plain object based on the given object instance. 
    * 
    * @returns {Object}
-   * 
-   * @private
    */
   toDto() {
     // Ensure damage definitions are turned into plain objects. 

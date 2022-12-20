@@ -235,6 +235,19 @@ export default class TransientSkill extends TransientBaseItem {
   }
 
   /**
+   * Persists the current skill ability array to the data base. 
+   * 
+   * @param {Boolean | undefined} render If true, will trigger a re-render of the associated document sheet. 
+   * * Default 'true'. 
+   * 
+   * @async
+   */
+  async persistSkillAbilities(render = true) {
+    const abilitiesToPersist = this.abilities.map(it => it.toDto());
+    await this.updateProperty("data.abilities", abilitiesToPersist, render);
+  }
+
+  /**
    * Fetches the skill abilities from the underlying document and returns 
    * them, converted to "proper" objects. 
    * 
@@ -274,20 +287,6 @@ export default class TransientSkill extends TransientBaseItem {
     return result;
   }
   
-  /**
-   * Persists the current skill ability array to the data base. 
-   * 
-   * @param {Boolean | undefined} render If true, will trigger a re-render of the associated document sheet. 
-   * * Default 'true'. 
-   * 
-   * @private
-   * @async
-   */
-  async _persistSkillAbilities(render = true) {
-    const abilitiesToPersist = this.abilities.map(it => it.toDto());
-    await this.updateProperty("data.abilities", abilitiesToPersist, render);
-  }
-
   /**
    * Persists the current level and advancement progress to the data base. 
    * 
