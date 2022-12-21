@@ -39,6 +39,8 @@ import { VISIBILITY_MODES } from '../../../presentation/chat/visibility-modes.mj
  * @property {String} localizableAbbreviation Localization key for the abbreviated name. 
  * @property {Array<TransientBaseItem>} items Returns the embedded documents of the actor. 
  * * Read-only.
+ * @property {String} type Internal type name. 
+ * * Read-only.
  */
 export default class TransientBaseActor {
   /**
@@ -82,6 +84,14 @@ export default class TransientBaseActor {
    * @readonly
    */
   get name() { return this.document.name; }
+
+  /**
+   * Returns the internal type name of the document. 
+   * 
+   * @type {String}
+   * @readonly
+   */
+  get type() { return this.document.type; }
 
   /**
    * Returns the embedded documents of the actor. 

@@ -39,6 +39,8 @@ import { VISIBILITY_MODES } from '../../../presentation/chat/visibility-modes.mj
  * * Read-only.
  * @property {String} localizableName Localization key for the full name. 
  * @property {String} localizableAbbreviation Localization key for the abbreviated name. 
+ * @property {String} type Internal type name. 
+ * * Read-only.
  */
 export default class TransientBaseItem {
   /**
@@ -88,6 +90,14 @@ export default class TransientBaseItem {
    * @readonly
    */
   get name() { return this.document.name; }
+
+  /**
+   * Returns the internal type name of the document. 
+   * 
+   * @type {String}
+   * @readonly
+   */
+  get type() { return this.document.type; }
 
   /**
    * @param {Item} document An encapsulated item instance. 

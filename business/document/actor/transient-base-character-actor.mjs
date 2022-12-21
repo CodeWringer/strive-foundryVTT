@@ -111,7 +111,7 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
       // Skip any convenience members, such as `asChoices`.
       if (groupDef.name === undefined) continue;
 
-      result.push(new CharacterAttributeGroup(this.actor, groupDef.name));
+      result.push(new CharacterAttributeGroup(this.document, groupDef.name));
     }
 
     return result;

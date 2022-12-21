@@ -19,7 +19,7 @@ import { ATTRIBUTES } from "./attributes.mjs";
  */
 export default class CharacterAttribute {
   /**
-   * @param {AmbersteelBaseCharacterActor} actor The actor for which to gather 
+   * @param {AmbersteelActor} actor The actor for which to gather 
    * attribute data. 
    * @param {String} name Internal name of the attribute. 
    * * E. g. `"strength"`

@@ -11,7 +11,7 @@ import CharacterAttribute from "./character-attribute.mjs";
  */
 export default class CharacterAttributeGroup {
   /**
-   * @param {AmbersteelBaseCharacterActor} actor The actor for which to gather 
+   * @param {AmbersteelActor} actor The actor for which to gather 
    * attribute group data. 
    * @param {String} name Internal name of the attribute group. 
    * * E. g. `"physical"`

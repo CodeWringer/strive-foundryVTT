@@ -29,6 +29,8 @@ import { ATTACK_TYPES } from "../../ruleset/skill/attack-types.mjs";
  * @property {Attribute} relatedAttribute The attribute that serves as the basis 
  * for this skill. 
  * @property {Array<SkillAbility>} abilities The array of skill abilities of this skill. 
+ * @property {Boolean} isMagicSchool Returns true, if the skill is considered 
+ * a magic school. 
  */
 export default class TransientSkill extends TransientBaseItem {
   /** @override */
@@ -55,6 +57,8 @@ export default class TransientSkill extends TransientBaseItem {
     });
 
     this.relatedAttribute = ATTRIBUTES[data.relatedAttribute];
+
+    this.isMagicSchool = data.isMagicSchool ?? false; // TODO #85: Does this require parsing?
 
     this.abilities = this._getSkillAbilities();
   }
