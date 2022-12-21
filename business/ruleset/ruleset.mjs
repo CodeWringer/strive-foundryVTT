@@ -230,7 +230,7 @@ export default class Ruleset {
   /**
    * Returns true, if the given actor must do toughness tests, whenever they suffer an injury. 
    * 
-   * @param actor 
+   * @param {TransientBaseCharacterActor} actor 
    * 
    * @returns {Boolean} True, if any further injury requires a toughness test. 
    * 
