@@ -148,7 +148,8 @@ export default class SkillAbility {
   }
 
   /**
-   * Base implementation of sending this item to the chat. 
+   * Sends this `SkillAbility` to chat. 
+   * 
    * @param {VisibilityMode} visibilityMode Determines the visibility of the chat message. 
    * 
    * @async
