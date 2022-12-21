@@ -12,12 +12,71 @@ export default class Migrator_1_2_2__1_3_0 extends AbstractMigrator {
 
   /** @override */
   async _doWork() {
-    await this.replaceFighting();
-    await this.updateSkills();
-    await this.updateItems();
+    await this._replaceFighting();
+    await this._updateSkills();
+    await this._updateItems();
+  }
+  
+  /**
+   * @private
+   */
+  async _updateSkills() {
+    // Get all "skill" containing system compendia. 
+    const packs = [
+      game.packs.get("ambersteel.skills"),
+    ];
+
+    // Get all editable actors from world and compendia. 
+    const actors = await new DocumentFetcher().findAll({
+      documentType: "Actor",
+      includeLocked: false,
+    });
+
+    // Prepare a map of the property names for the property values to keep. 
+    const propertiesToKeep = new Map();
+    propertiesToKeep.set("value", "value");
+    propertiesToKeep.set("successes", "successes");
+    propertiesToKeep.set("failures", "failures");
+
+    // Do the replacement for every actor. 
+    for (const actor of actors) {
+      this.replaceMatchingDocumentsWithPackData(actor, "skill", packs, propertiesToKeep);
+    }
   }
 
-  async replaceFighting() {
+  /**
+   * @private
+   */
+  async _updateItems() {
+    // Get all "item" containing system compendia. 
+    const packs = [
+      game.packs.get("ambersteel.armors"),
+      game.packs.get("ambersteel.shields"),
+      game.packs.get("ambersteel.supplies-and-stuff"),
+      game.packs.get("ambersteel.valuables"),
+      game.packs.get("ambersteel.weapons"),
+    ];
+
+    // Get all editable actors from world and compendia. 
+    const actors = await await new DocumentFetcher().findAll({
+      documentType: "Actor",
+      includeLocked: false,
+    });
+
+    // Prepare a map of the property names for the property values to keep. 
+    const propertiesToKeep = new Map();
+    propertiesToKeep.set("quantity", "quantity");
+
+    // Do the replacement for every actor. 
+    for (const actor of actors) {
+      this.replaceMatchingDocumentsWithPackData(actor, "item", packs, propertiesToKeep);
+    }
+  }
+
+  /**
+   * @private
+   */
+  async _replaceFighting() {
     // Get "Tactics" document from system compendium. 
     const documentFetcher = new DocumentFetcher();
     const tacticsSkillDefinition = await documentFetcher.find({

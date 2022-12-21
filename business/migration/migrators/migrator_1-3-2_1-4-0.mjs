@@ -53,6 +53,8 @@ export default class Migrator_1_3_2__1_4_0 extends AbstractMigrator {
         for (const attributeName of attributeGroupToMigrate.attributeNames) {
           const attribute = attributeGroup[attributeName];
 
+          if (attribute.value === undefined) continue;
+
           // Change in-memory data. 
           attribute.level = attribute.value;
           delete attribute.value;
@@ -82,6 +84,7 @@ export default class Migrator_1_3_2__1_4_0 extends AbstractMigrator {
 
     // Replace "value" with "level" on every skill.
     for (const skill of skills) {
+      if (skill.data.data.value === undefined) continue;
       
       // Change in-memory data. 
       skill.data.data.level = skill.data.data.value;
