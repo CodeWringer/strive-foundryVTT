@@ -8,8 +8,10 @@ import { SummedData, SummedDataComponent } from "./skill/summed-data.mjs";
 export default class Ruleset {
   /**
    * Returns the number of dice for a skill test. 
+   * 
    * @param {Number} skillLevel A skill level. 
    * @param {Number} relatedAttributeLevel Level of the skill related attribute. 
+   * 
    * @returns {Object} { totalDiceCount: {Number}, skillDiceCount: {Number}, attributeDiceCount: {Number} }
    */
   getSkillTestNumberOfDice(skillLevel, relatedAttributeLevel) {
@@ -25,6 +27,7 @@ export default class Ruleset {
    * 
    * If level is equal to 0, will return undefined, instead of actual values. 
    * This is deliberate, as an attribute at level 0 cannot be advanced (naturally).
+   * 
    * @param {Number} level The level for which to get the advancement requirements. 
    * 
    * @returns {LevelAdvancement}
@@ -38,6 +41,7 @@ export default class Ruleset {
 
   /**
    * Returns the advancement requirements for the given level of a skill. 
+   * 
    * @param {Number} level The level for which to get the advancement requirements. 
    * 
    * @returns {LevelAdvancement}
@@ -69,97 +73,146 @@ export default class Ruleset {
 
   /**
    * Returns true, if the given face/number represents a positive (= success).
-   * @param {String|Number} face A die face to check whether it represents a positive (= success).
+   * 
+   * @param {String | Number} face A die face to check whether it represents a positive (= success).
+   * 
    * @returns {Boolean}
+   * 
+   * @throws {Error} Thrown, if the given face is outside the valid range of 0 (inclusive) to 6 (inclusive).
    */
   isPositive(face) {
     const int = parseInt(face);
-    return int === 6 || int === 5;
+
+    if (int < 0 || int > 6) throw new Error("Die face count out of range [0-6]");
+
+    return int > 4;
   }
 
   /**
    * Returns true, if the given face/number represents a negative (= failure).
-   * @param {String|Number} face A die face to check whether it represents a negative (= failure).
+   * 
+   * @param {String | Number} face A die face to check whether it represents a negative (= failure).
+   * 
    * @returns {Boolean}
+   * 
+   * @throws {Error} Thrown, if the given face is outside the valid range of 0 (inclusive) to 6 (inclusive).
    */
   isNegative(face) {
     const int = parseInt(face);
-    return int <= 4;
+
+    if (int < 0 || int > 6) throw new Error("Die face count out of range [0-6]");
+
+    return int < 5;
   }
 
   /**
    * Returns true, if the given face/number represents a spell-backfire-causing negative. 
+   * 
    * @param {String|Number} face A die face to check whether it represents a spell-backfire-causing negative. 
+   * 
    * @returns {Boolean}
+   * 
+   * @throws {Error} Thrown, if the given face is outside the valid range of 0 (inclusive) to 6 (inclusive).
    */
   causesBackfire(face) {
     const int = parseInt(face);
-    return int === 1 || int === 2;
+
+    if (int < 0 || int > 6) throw new Error("Die face count out of range [0-6]");
+
+    return int < 3;
   }
 
   /**
    * Returns the *current* maximum HP of the given actor. 
-   * @param {Actor} actor 
+   * 
+   * @param {TransientBaseCharacterActor} actor 
+   * 
    * @returns {Number}
+   * 
+   * @throws {Error} Thrown, if the given actor is not of type `"pc"` or `"npc"`. 
    */
   getCharacterMaximumHp(actor) {
-    if (actor.type == "plain") return 0;
+    const type = actor.type.toLowerCase();
+    if (type !== "pc" && type !== "npc") throw new Error("Only PC and NPC type actors allowed");
 
-    const businessData = actor.data.data;
-    const injuryCount = actor.getInjuries().length;
-    return (businessData.attributes.physical.toughness.level * 4) - (injuryCount * 2);
+    const injuryCount = actor.health.injuries.length;
+    const attributeToughness = actor.attributes.find(it => it.name === "toughness");
+    return (attributeToughness.level * 4) - (injuryCount * 2);
   }
 
   /**
    * Returns the maximum injury threshold of the given actor. 
-   * @param {Actor} actor 
+   * 
+   * @param {TransientBaseCharacterActor} actor 
+   * 
    * @returns {Number}
+   * 
+   * @throws {Error} Thrown, if the given actor is not of type `"pc"` or `"npc"`. 
    */
   getCharacterMaximumInjuries(actor) {
-    if (actor.type == "plain") return 0;
+    const type = actor.type.toLowerCase();
+    if (type !== "pc" && type !== "npc") throw new Error("Only PC and NPC type actors allowed");
 
-    return Math.max(actor.data.data.attributes.physical.toughness.level, 1);
+    const attributeToughness = actor.attributes.find(it => it.name === "toughness");
+    return Math.max(attributeToughness.level, 1);
   }
 
   /**
    * Returns the maximum exhaustion threshold of the given actor. 
-   * @param {Actor} actor 
+   * 
+   * @param {TransientBaseCharacterActor} actor 
+   * 
    * @returns {Number}
+   * 
+   * @throws {Error} Thrown, if the given actor is not of type `"pc"` or `"npc"`. 
    */
   getCharacterMaximumExhaustion(actor) {
-    if (actor.type == "plain") return 0;
+    const type = actor.type.toLowerCase();
+    if (type !== "pc" && type !== "npc") throw new Error("Only PC and NPC type actors allowed");
     
-    return 1 + (actor.data.data.attributes.physical.endurance.level * 1);
+    const attributeEndurance = actor.attributes.find(it => it.name === "endurance");
+    return 1 + (attributeEndurance.level * 1);
   }
   
   /**
    * Returns the maximum inventory slot size of the given actor. 
-   * @param {Actor} actor 
+   * 
+   * @param {TransientBaseCharacterActor} actor 
+   * 
    * @returns {Number}
+   * 
+   * @throws {Error} Thrown, if the given actor is not of type `"pc"` or `"npc"`. 
    */
   getCharacterMaximumInventory(actor) {
-    if (actor.type == "plain") return 0;
+    const type = actor.type.toLowerCase();
+    if (type !== "pc" && type !== "npc") throw new Error("Only PC and NPC type actors allowed");
 
-    return actor.data.data.attributes.physical.strength.level * 6;
+    const attributeStrength = actor.attributes.find(it => it.name === "strength");
+    return attributeStrength.level * 6;
   }
 
   /**
    * Returns an object containing the maximum magic stamina, as well as the details of how it came to be. 
-   * @param {AmbersteelActor} actor 
+   * 
+   * @param {TransientBaseCharacterActor} actor 
+   * 
    * @returns {SummedData} The maximum magic stamina of the given actor. 
+   * 
+   * @throws {Error} Thrown, if the given actor is not of type `"pc"` or `"npc"`. 
    */
   getCharacterMaximumMagicStamina(actor) {
-    if (actor.type == "plain") return undefined;
+    const type = actor.type.toLowerCase();
+    if (type !== "pc" && type !== "npc") throw new Error("Only PC and NPC type actors allowed");
 
-    let total = actor.data.data.attributes.mental.arcana.level;
+    const attributeArcana = actor.attributes.find(it => it.name === "arcana");
+    let total = attributeArcana.level;
     const components = [];
 
-    for (const skill of actor.data.data.skills) {
-      if (skill.data.data.isMagicSchool !== true) continue;
+    for (const skill of actor.skills.all) {
+      if (skill.isMagicSchool !== true) continue;
 
-      const skillLevel = parseInt(skill.data.data.level);
-      components.push(new SummedDataComponent(skill.name, skill.name, skillLevel));
-      total += skillLevel;
+      components.push(new SummedDataComponent(skill.name, skill.localizableName, skill.level));
+      total += skill.level;
     }
 
     return new SummedData(parseInt(Math.ceil(total / 2)), components);
@@ -167,6 +220,7 @@ export default class Ruleset {
 
   /**
    * Returns the maximum number of fate cards that can be accrued on a character. 
+   * 
    * @returns {Number} The maximum number of fate cards. 
    */
   getMaximumFateCards() {
@@ -175,15 +229,19 @@ export default class Ruleset {
 
   /**
    * Returns true, if the given actor must do toughness tests, whenever they suffer an injury. 
+   * 
    * @param actor 
+   * 
    * @returns {Boolean} True, if any further injury requires a toughness test. 
+   * 
+   * @throws {Error} Thrown, if the given actor is not of type `"pc"` or `"npc"`. 
    */
   isToughnessTestRequired(actor) {
-    if (actor.type == "plain") return false;
+    const type = actor.type.toLowerCase();
+    if (type !== "pc" && type !== "npc") throw new Error("Only PC and NPC type actors allowed");
 
-    const businessData = actor.data.data;
-    const maxInjuries = businessData.health.maxInjuries;
-    const injuryCount = actor.getInjuries().length;
+    const maxInjuries = actor.health.maxInjuries;
+    const injuryCount = actor.health.injuries.length;
     if (injuryCount > 0 && injuryCount >= Math.floor(maxInjuries / 2)) {
       return true;
     } else {
