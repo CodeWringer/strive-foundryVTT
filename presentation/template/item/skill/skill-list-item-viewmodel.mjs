@@ -81,7 +81,7 @@ export default class SkillListItemViewModel extends SkillViewModel {
       primaryChatTitle: game.i18n.localize(thiz.item.name),
       primaryChatImage: thiz.item.img,
       rollType: "dice-pool",
-      callback: "advanceSkillBasedOnRollResult",
+      callback: "advanceBasedOnRollResult",
       callbackData: thiz.item.id,
       actor: thiz.actor,
     })

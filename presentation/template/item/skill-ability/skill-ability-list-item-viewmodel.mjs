@@ -132,7 +132,7 @@ export default class SkillAbilityListItemViewModel extends ViewModel {
       secondaryChatTitle: game.i18n.localize(skillAbilityParent.name),
       secondaryChatImage: skillAbilityParent.img,
       rollType: "dice-pool",
-      callback: "advanceSkillBasedOnRollResult",
+      callback: "advanceBasedOnRollResult",
       callbackData: skillAbility.ownerId,
       actor: thiz.actor,
       isEditable: (thiz.isEditable || thiz.isGM) && thiz.actor !== undefined,

@@ -101,8 +101,9 @@ export default class TransientSkill extends TransientBaseItem {
   /**
    * Sets the given level of the skill. 
    * 
-   * @param {Number} newLevel Value to set the skill to, e.g. 0. Default 0
-   * @param {Boolean} resetProgress If true, will also reset successes and failures. 
+   * @param {Number | undefined} newLevel Value to set the skill to, e.g. `4`. 
+   * * Default `0`
+   * @param {Boolean | undefined} resetProgress If true, will also reset successes and failures. 
    * * Default `true`
    * 
    * @async
@@ -131,9 +132,11 @@ export default class TransientSkill extends TransientBaseItem {
    * incremented. 
    * * Default `true`
    * 
+   * @throws {Error} Thrown, if `outcomeType` is undefined. 
+   * 
    * @async
    */
-  async addSkillProgress(outcomeType, autoLevel = false, resetProgress = true) {
+  async addProgress(outcomeType, autoLevel = false, resetProgress = true) {
     if (outcomeType === undefined) {
       game.ambersteel.logger.logWarn("outcomeType is undefined");
       return;
@@ -210,12 +213,12 @@ export default class TransientSkill extends TransientBaseItem {
    * 
    * @async
    */
-  async advanceSkillBasedOnRollResult(rollResult) {
+  async advanceBasedOnRollResult(rollResult) {
     if (rollResult === undefined) {
       game.ambersteel.logger.logWarn("rollResult is undefined");
       return;
     }
-    this.addSkillProgress(rollResult.outcomeType, false);
+    this.addProgress(rollResult.outcomeType, false);
   }
 
   /**

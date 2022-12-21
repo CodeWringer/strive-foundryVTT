@@ -90,8 +90,6 @@
         "health": {
           "maxHP": 0,
           "HP": 0,
-          "maxInjuries": 0,
-          "maxExhaustion": 0,
           "exhaustion": 0,
           "magicStamina": 0
         },

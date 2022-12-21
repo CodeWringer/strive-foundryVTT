@@ -1,10 +1,4 @@
 import { TEMPLATES } from "../../../presentation/template/templatePreloader.mjs";
-import AmbersteelFateCardItem from './transient-fate-card.mjs';
-import AmbersteelIllnessItem from './transient-illness.mjs';
-import AmbersteelInjuryItem from './transient-injury.mjs';
-import AmbersteelItemItem from './transient-asset.mjs';
-import AmbersteelSkillItem from './transient-skill.mjs';
-import AmbersteelMutationItem from './transient-mutation.mjs';
 import * as ChatUtil from "../../../presentation/chat/chat-utility.mjs";
 import * as UpdateUtil from "../document-update-utility.mjs";
 import { createUUID } from '../../util/uuid-utility.mjs';
@@ -49,6 +43,7 @@ import { VISIBILITY_MODES } from '../../../presentation/chat/visibility-modes.mj
 export default class TransientBaseItem {
   /**
    * Returns the default icon image path for this type of item. 
+   * 
    * @type {String}
    * @virtual
    * @readonly
@@ -56,7 +51,8 @@ export default class TransientBaseItem {
   get defaultImg() { return "icons/svg/item-bag.svg"; }
 
   /**
-   * Chat message template path. 
+   * Returns the Chat message template path. 
+   * 
    * @type {String}
    * @readonly
    */
@@ -131,11 +127,12 @@ export default class TransientBaseItem {
    * 
    * @param {Document} document A Foundry {Document}. 
    * @param {String} propertyPath Path leading to the property to delete, on the given document entity. 
-   *        Array-accessing via brackets is supported. Property-accessing via brackets is *not* supported. 
-   *        E.g.: "data.attributes[0].level" 
-   *        E.g.: "data.attributes[4]" 
-   *        E.g.: "data.attributes" 
-   * @param {Boolean | undefined} render If true, will trigger a re-render of the associated document sheet. Default 'true'. 
+   *  * Array-accessing via brackets is supported. Property-accessing via brackets is *not* supported. 
+   * * E.g.: `"data.attributes[0].level" `
+   * * E.g.: `"data.attributes[4]" `
+   * * E.g.: `"data.attributes" `
+   * @param {Boolean | undefined} render If true, will trigger a re-render of the associated document sheet. 
+   * * Default 'true'. 
    * 
    * @async
    */
@@ -144,11 +141,11 @@ export default class TransientBaseItem {
   }
 
   /**
-   * Updates a property on the parent item, identified via the given path. 
+   * Updates a property on the document, identified via the given path. 
    * 
-   * @param {String} propertyPath Path leading to the property to update, on the parent item. 
-   *        Array-accessing via brackets is supported. Property-accessing via brackets is *not* supported. 
-   *        E.g.: "data.attributes[0].level"
+   * @param {String} propertyPath Path leading to the property to update, on the document. 
+   * * Array-accessing via brackets is supported. Property-accessing via brackets is *not* supported. 
+   * * E.g.: `"data.attributes[0].level"`
    * @param {any} newValue The value to assign to the property. 
    * @param {Boolean | undefined} render If true, will trigger a re-render of the associated document sheet. 
    * * Default 'true'. 
@@ -210,7 +207,10 @@ export default class TransientBaseItem {
 
   /**
    * Base implementation of sending this item to the chat. 
-   * @param {VisibilityMode} visibilityMode Determines the visibility of the chat message. 
+   * 
+   * @param {VisibilityMode | undefined} visibilityMode Determines the visibility of the chat message. 
+   * * Default `VISIBILITY_MODES.public`
+   * 
    * @async
    * @virtual
    */
@@ -224,8 +224,11 @@ export default class TransientBaseItem {
 
   /**
    * Sends a property of this item to chat, based on the given property path. 
+   * 
    * @param {String} propertyPath 
-   * @param {VisibilityMode} visibilityMode 
+   * @param {VisibilityMode | undefined} visibilityMode Determines the visibility of the chat message. 
+   * * Default `VISIBILITY_MODES.public`
+   * 
    * @async
    */
   async sendPropertyToChat(propertyPath, visibilityMode = VISIBILITY_MODES.public) {

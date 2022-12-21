@@ -27,7 +27,17 @@ import { VISIBILITY_MODES } from '../../../presentation/chat/visibility-modes.mj
  * * Read-only.
  * @property {String} chatMessageTemplate Returns the Chat message template path. 
  * * Read-only.
+ * @property {String} id Returns the id of the document. 
+ * * Read-only.
+ * @property {Boolean} isOwner Returns true, if the current user is the owner of the document. 
+ * * Read-only.
  * @property {Actor} document Returns the encapsulated actor instance. 
+ * * Read-only.
+ * @property {String} name Internal name. 
+ * * Read-only.
+ * @property {String} localizableName Localization key for the full name. 
+ * @property {String} localizableAbbreviation Localization key for the abbreviated name. 
+ * @property {Array<TransientBaseItem>} items Returns the embedded documents of the actor. 
  * * Read-only.
  */
 export default class TransientBaseActor {
@@ -50,14 +60,6 @@ export default class TransientBaseActor {
   get chatMessageTemplate() { return TEMPLATES.ACTOR_CHAT_MESSAGE; }
   
   /**
-   * Returns the embedded documents of the actor. 
-   * 
-   * @type {Array<Item>}
-   * @readonly
-   */
-  get items() { return this.document.items; }
-  
-  /**
    * Returns the id of the document. 
    * 
    * @type {String}
@@ -74,6 +76,22 @@ export default class TransientBaseActor {
   get isOwner() { return this.document.isOwner ?? this.document.owner ?? false; }
 
   /**
+   * Returns the internal name of the document. 
+   * 
+   * @type {String}
+   * @readonly
+   */
+  get name() { return this.document.name; }
+
+  /**
+   * Returns the embedded documents of the actor. 
+   * 
+   * @type {Array<TransientBaseItem>}
+   * @readonly
+   */
+  items = [];
+  
+  /**
    * @param {Actor} document An encapsulated actor instance. 
    * 
    * @throws {Error} Thrown, if `document` is `undefined`. 
@@ -84,6 +102,12 @@ export default class TransientBaseActor {
     }
 
     this.document = document;
+
+    this.localizableName = this.name;
+    this.localizableAbbreviation = this.name;
+
+    // Get transient embedded documents. 
+    this.items = Array.from(this.document.items).map(it => it.getTransientObject());
   }
 
   /**
@@ -99,30 +123,19 @@ export default class TransientBaseActor {
    * @virtual
    */
   prepareData(context) { /** Actual implementation left to inheriting types. */}
-  
-  /**
-   * Returns items of this actor, filtered by the given type. 
-   * @param {String} type The exact type to filter by. 
-   * @returns {Array<Item>} Items of the given type, of this actor. 
-   */
-  getItemsByType(type) {
-    const items = Array.from(this.items);
-    const result = [];
-    for (const item of items) {
-      if (item.type === type) result.push(item);
-    }
-    return result;
-  }
 
   /**
    * Deletes a property on the given document, via the given path. 
+   * 
    * @param {Document} document A Foundry {Document}. 
    * @param {String} propertyPath Path leading to the property to delete, on the given document entity. 
-   *        Array-accessing via brackets is supported. Property-accessing via brackets is *not* supported. 
-   *        E.g.: "data.attributes[0].level" 
-   *        E.g.: "data.attributes[4]" 
-   *        E.g.: "data.attributes" 
-   * @param {Boolean | undefined} render If true, will trigger a re-render of the associated document sheet. Default 'true'. 
+   *  * Array-accessing via brackets is supported. Property-accessing via brackets is *not* supported. 
+   * * E.g.: `"data.attributes[0].level" `
+   * * E.g.: `"data.attributes[4]" `
+   * * E.g.: `"data.attributes" `
+   * @param {Boolean | undefined} render If true, will trigger a re-render of the associated document sheet. 
+   * * Default 'true'. 
+   * 
    * @async
    */
   async deleteByPropertyPath(propertyPath, render = true) {
@@ -130,13 +143,14 @@ export default class TransientBaseActor {
   }
 
   /**
-   * Updates a property on the actor, identified via the given path. 
+   * Updates a property on the document, identified via the given path. 
    * 
-   * @param {String} propertyPath Path leading to the property to update, on the parent item. 
-   *        Array-accessing via brackets is supported. Property-accessing via brackets is *not* supported. 
-   *        E.g.: "data.attributes[0].level"
+   * @param {String} propertyPath Path leading to the property to update, on the document. 
+   * * Array-accessing via brackets is supported. Property-accessing via brackets is *not* supported. 
+   * * E.g.: `"data.attributes[0].level"`
    * @param {any} newValue The value to assign to the property. 
-   * @param {Boolean | undefined} render If true, will trigger a re-render of the associated document sheet. Default 'true'. 
+   * @param {Boolean | undefined} render If true, will trigger a re-render of the associated document sheet. 
+   * * Default 'true'. 
    * 
    * @async
    * @protected
@@ -149,6 +163,7 @@ export default class TransientBaseActor {
    * Base implementation of returning data for a chat message, based on this actor. 
    * 
    * @returns {PreparedChatData}
+   * 
    * @virtual
    * @async
    */
@@ -161,7 +176,7 @@ export default class TransientBaseActor {
 
     return new PreparedChatData({
       renderedContent: renderedContent,
-      actor: this,
+      actor: this.document,
       sound: SOUNDS_CONSTANTS.NOTIFY,
       viewModel: vm,
     });
@@ -184,8 +199,8 @@ export default class TransientBaseActor {
   getChatViewModel(overrides = {}) {
     return new ActorChatMessageViewModel({
       id: `${this.id}-${createUUID()}`,
-      isEditable: false,
-      isSendable: false,
+      isEditable: this.isOwner,
+      isSendable: this.isOwner || game.user.isGM,
       isOwner: this.isOwner,
       isGM: game.user.isGM,
       actor: this,
@@ -196,7 +211,8 @@ export default class TransientBaseActor {
   /**
    * Base implementation of sending this Actor to the chat. 
    * 
-   * @param {VisibilityMode} visibilityMode Determines the visibility of the chat message. 
+   * @param {VisibilityMode | undefined} visibilityMode Determines the visibility of the chat message. 
+   * * Default `VISIBILITY_MODES.public`
    * 
    * @async
    * @virtual
@@ -211,8 +227,11 @@ export default class TransientBaseActor {
 
   /**
    * Sends a property of this item to chat, based on the given property path. 
+   * 
    * @param {String} propertyPath 
-   * @param {VisibilityMode} visibilityMode 
+   * @param {VisibilityMode | undefined} visibilityMode Determines the visibility of the chat message. 
+   * * Default `VISIBILITY_MODES.public`
+   * 
    * @async
    */
   async sendPropertyToChat(propertyPath, visibilityMode = VISIBILITY_MODES.public) {
@@ -220,7 +239,7 @@ export default class TransientBaseActor {
       obj: this.document,
       propertyPath: propertyPath,
       parent: this,
-      actor: this,
+      actor: this.document,
       visibilityMode: visibilityMode
     });
   }

@@ -15,6 +15,27 @@ import TransientBaseActor from './transient-base-actor.mjs';
  * @property {Array<CharacterAttributeGroup>} attributeGroups The grouped attributes 
  * of the character. 
  * @property {Array<CharacterAttribute>} attributes The attributes of the character. 
+ * @property {Object} skills
+ * @property {Array<TransientSkill>} skills.all Returns **all** skills of the character. 
+ * @property {Array<TransientSkill>} skills.learningSkills Returns all learning skills of the character. 
+ * @property {Array<TransientSkill>} skills.knownSkills Returns all known skills of the character. 
+ * @property {Object} health
+ * @property {Array<TransientInjury>} health.injuries 
+ * @property {Array<TransientIllness>} health.illnesss 
+ * @property {Array<TransientMutation>} health.mutations 
+ * @property {Number} health.HP 
+ * @property {Number} health.maxHP 
+ * @property {Number} health.maxInjuries 
+ * @property {Number} health.exhaustion 
+ * @property {Number} health.maxExhaustion 
+ * @property {Number} health.magicStamina 
+ * @property {Number} health.maxMagicStamina 
+ * @property {Object} assets
+ * @property {Array<TransientAsset>} assets.all 
+ * @property {Array<TransientAsset>} assets.onPerson 
+ * @property {Array<TransientAsset>} assets.remote 
+ * @property {Number} assets.currentBulk
+ * @property {Number} assets.maxBulk
  */
 export default class TransientBaseCharacterActor extends TransientBaseActor {
   /** @override */
@@ -24,16 +45,55 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
   get chatMessageTemplate() { return TEMPLATES.ACTOR_CHAT_MESSAGE; }
 
   /**
-   * @param {Actor} actor An encapsulated actor instance. 
+   * @param {Actor} document An encapsulated actor instance. 
    * 
-   * @throws {Error} Thrown, if `actor` is `undefined`. 
+   * @throws {Error} Thrown, if `document` is `undefined`. 
    */
-  constructor(actor) {
-    super(actor);
+  constructor(document) {
+    super(document);
 
     this.attributeGroups = this._getAttributeGroups();
     this.attributes = this._getAttributes();
-    this.skills = this._getSkills();
+
+    const ruleset = new Ruleset();
+
+    // Skills
+    this.skills = {
+      all: this.items.filter(it => it.type === "skill"),
+      learningSkills: this.items.filter(it => it.type === "skill" && it.level < 1),
+      knownSkills: this.items.filter(it => it.type === "skill" && it.level > 0),
+    };
+
+    // Health
+    this.health = {
+      injuries: this.items.filter(it => it.type === "injury"),
+      illnesss: this.items.filter(it => it.type === "illness"),
+      mutations: this.items.filter(it => it.type === "mutation"),
+      HP: this.document.data.data.health.HP,
+      maxHP: ruleset.getCharacterMaximumHp(document),
+      maxInjuries: ruleset.getCharacterMaximumInjuries(document),
+      exhaustion: this.document.data.data.health.exhaustion,
+      maxExhaustion: ruleset.getCharacterMaximumExhaustion(document),
+      magicStamina: this.document.data.data.health.magicStamina,
+      maxMagicStamina: ruleset.getCharacterMaximumMagicStamina(document),
+    };
+
+    // Assets
+    const assets = this.items.filter(it => it.type === "item");
+    const assetsOnPerson = assets.filter(it => it.isOnPerson === true);
+    
+    let currentBulk = 0;
+    for (const assetOnPerson of assetsOnPerson) {
+      currentBulk += assetOnPerson.bulk;
+    }
+
+    this.assets = {
+      all: assets,
+      onPerson: assetsOnPerson,
+      remote: assets.filter(it => it.isOnPerson !== true),
+      currentBulk: currentBulk,
+      maxBulk: ruleset.getCharacterMaximumInventory(document),
+    };
   }
 
   /**
@@ -69,94 +129,24 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
   }
 
   /**
-   * Returns all embedded documents that represent skills. 
-   * 
-   * @returns {Array<TransientSkill>} 
-   * 
-   * @private
-   */
-  _getSkills() {
-    return this.items.filter(it => it.type === "skill")
-      .map(it => new TransientSkill(it));
-  }
-
-  /**
-   * Updates the given actorData with derived skill data. 
-   * Assigns items of type skill to the derived lists 'actorData.skills' and 'actorData.learningSkills'. 
-   * @param {Actor} context 
-   * @private
-   */
-  _prepareDerivedSkillsData(context) {
-    const actorData = context.data.data;
-    
-    actorData.skills = (context.items.filter(item => {
-      return item.data.type == "skill" && parseInt(item.data.data.level) > 0
-    }));
-    for (const oSkill of actorData.skills) {
-      this._prepareDerivedSkillData(context, oSkill.id);
-    };
-    
-    actorData.learningSkills = (context.items.filter(item => {
-      return item.data.type == "skill" && parseInt(item.data.data.level) == 0
-    }));
-    for (const oSkill of actorData.learningSkills) {
-      this._prepareDerivedSkillData(context, oSkill.id);
-    };
-  }
-  
-  /**
-   * Pepares derived skill data. 
-   * @param {Actor} context 
-   * @param {String} skillId Id of a skill. 
-   * @private
-   */
-  _prepareDerivedSkillData(context, skillId) {
-    const oSkill = context.items.get(skillId);
-    const skillData = oSkill.data.data;
-
-    skillData.id = oSkill.id;
-    skillData.entityName = skillData.entityName ? skillData.entityName : oSkill.name;
-    skillData.level = parseInt(skillData.level ? skillData.level : 0);
-    skillData.successes = parseInt(skillData.successes ? skillData.successes : 0);
-    skillData.failures = parseInt(skillData.failures ? skillData.failures : 0);
-    skillData.relatedAttribute = skillData.relatedAttribute ? skillData.relatedAttribute : "agility";
-
-    const req = new Ruleset().getSkillAdvancementRequirements(skillData.level);
-    skillData.requiredSuccessses = req.successses;
-    skillData.requiredFailures = req.failures;
-  }
-
-  /**
-   * Prepares derived health data. 
-   * @param {AmbersteelActor} context 
-   * @private
-   * @async
-   */
-  _prepareDerivedHealthData(context) {
-    const businessData = context.data.data;
-
-    const ruleset = new Ruleset();
-    businessData.health.maxHP = ruleset.getCharacterMaximumHp(context);
-    businessData.health.maxInjuries = ruleset.getCharacterMaximumInjuries(context);
-    businessData.health.maxExhaustion = ruleset.getCharacterMaximumExhaustion(context);
-    businessData.health.maxMagicStamina = ruleset.getCharacterMaximumMagicStamina(context).total;
-  }
-
-  /**
    * Advances the skill, based on the given {DicePoolResult}. 
+   * 
    * @param {DicePoolResult} rollResult 
    * @param {String} itemId The id of the skill item to advance. 
+   * 
    * @async
    */
   async advanceSkillBasedOnRollResult(rollResult, itemId) {
-    const oSkill = this.items.get(itemId);
-    oSkill.addProgress(rollResult.outcomeType, false);
+    const oSkill = this.skills.find(it => it.id === itemId);
+    oSkill.addProgress(rollResult.outcomeType, true);
   }
 
   /**
-   * Attribute roll handler. 
+   * Attribute roll handler.
+   *  
    * @param {DicePoolResult} rollResult 
    * @param {String} attributeName The name of the attribute. 
+   * 
    * @async
    */
   async advanceAttributeBasedOnRollResult(rollResult, attributeName) {
@@ -168,179 +158,84 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
   }
 
   /**
-   * Returns an attribute, whose internal name matches with the given string. 
-   * 
-   * @param {String} name Internal name of an attribute, e.g. 'strength'. 
-   * 
-   * @returns {Object} With properties 'object', 'name', 'groupName'
-   * 
-   * @private
-   */
-  getAttributeForName(name) {
-    const data = this.data.data;
-
-    for (const attGroupName in data.attributes) {
-      const oAtt = data.attributes[attGroupName][name];
-      if (oAtt !== undefined) {
-        return {
-          object: oAtt,
-          name: name,
-          groupName: attGroupName
-        };
-      }
-    }
-    return undefined;
-  }
-
-  /**
-   * Returns an attribute, whose localized name or name abbreviation matches with the given string. 
-   * 
-   * @param {String} name Localized name of an attribute, e.g. 'Stärke'. 
-   * * Also accepts a localized abbreviation, e. g. 'Str'. 
-   * 
-   * @returns {Object} With properties 'object', 'name', 'groupName'
-   * 
-   * @private
-   */
-  getAttributeForLocalizedName(name) {
-    const data = this.data.data;
-    const comparableName = name.toLowerCase();
-
-    for (const attGroupName in data.attributes) {
-      const attGroup = data.attributes[attGroupName];
-
-      for (const attGroupPropertyName in attGroup) {
-        const attGroupProperty = attGroup[attGroupPropertyName];
-
-        if (attGroupProperty.localizableName === undefined) {
-          // Don't bother looking at properties that don't represent attributes. 
-          continue;
-        }
-
-        if (comparableName == game.i18n.localize(attGroupProperty.localizableName).toLowerCase()
-        || comparableName == game.i18n.localize(attGroupProperty.localizableAbbreviation).toLowerCase()) {
-          return {
-            object: attGroupProperty,
-            name: attGroupProperty.name,
-            groupName: attGroupName
-          };
-        }
-      }
-    }
-    return undefined;
-  }
-
-  /**
    * Sets the level of the attribute with the given name. 
-   * @param attName {String} Internal name of an attribute, e.g. 'magicSense'. 
-   * @param newValue {Number} Value to set the attribute to, e.g. 0. Default 0
+   * 
+   * @param {String} attName Internal name of an attribute, e.g. `"magicSense"`. 
+   * @param {Number | undefined} newValue Value to set the attribute to, e.g. `4`. 
+   * * Default `0`
+   * @param {Boolean | undefined} resetProgress If true, will also reset successes and failures. 
+   * * Default `true`
+   * 
    * @async
    */
-  async setAttributeLevel(attName = undefined, newValue = 0) {
-    const oAttName = this.getAttributeForName(attName);
-    const req = new Ruleset().getAttributeAdvancementRequirements(newValue);
-    const propertyPath = `data.attributes.${oAttName.groupName}.${attName}`
+  async setAttributeLevel(attName, newValue = 0, resetProgress = true) {
+    const groupName = new Ruleset().getAttributeGroupName(attName);
+    const propertyPath = `data.attributes.${groupName}.${attName}`;
 
-    await this.update({
-      [`${propertyPath}.level`]: newValue,
-      [`${propertyPath}.successses`]: req.successses,
-      [`${propertyPath}.failures`]: req.failures,
-      [`${propertyPath}.successes`]: 0,
-      [`${propertyPath}.failures`]: 0
-    });
+    if (resetProgress === true) {
+      await this.document.update({
+        [`${propertyPath}.level`]: newValue,
+        [`${propertyPath}.successes`]: 0,
+        [`${propertyPath}.failures`]: 0
+      });
+    } else {
+      await this.document.update({
+        [`${propertyPath}.level`]: newValue,
+      });
+    }
   }
 
   /**
    * Adds success/failure progress to an attribute. 
    * 
    * Also auto-levels up the attribute, if 'autoLevel' is set to true. 
+   * 
    * @param {DiceOutcomeTypes} outcomeType The test outcome to work with. 
    * @param {String | undefined} attName Optional. Internal name of an attribute, e.g. 'magicSense'. 
    * @param {Boolean | undefined} autoLevel Optional. If true, will auto-level up. Default false
+   * @param {Boolean | undefined} resetProgress Optional. If true, will also reset 
+   * successes and failures, if `autoLevel` is also true and a level automatically 
+   * incremented. 
+   * * Default `true`
+   * 
+   * @throws {Error} Thrown, if `outcomeType` is undefined. 
+   * 
    * @async
    */
-  async addAttributeProgress(outcomeType, attName = undefined, autoLevel = false) {
+  async addAttributeProgress(outcomeType, attName = undefined, autoLevel = false, resetProgress = true) {
     if (outcomeType === undefined) {
       game.ambersteel.logger.logWarn("outcomeType is undefined");
       return;
     }
 
-    const oAttName = this.getAttributeForName(attName);
-    const oAtt = oAttName.object;
-
-    let successes = parseInt(oAtt.successes);
-    let failures = parseInt(oAtt.failures);
-    const requiredSuccessses = parseInt(oAtt.requiredSuccessses);
-    const requiredFailures = parseInt(oAtt.requiredFailures);
-    const propertyPath = `data.attributes.${oAttName.groupName}.${attName}`
+    const attribute = this.attributes.find(it => it.name === attName);
 
     if (outcomeType === DiceOutcomeTypes.SUCCESS) {
-      successes++;
-      await this.update({ [`${propertyPath}.successes`]: successes });
-    } else if (outcomeType === DiceOutcomeTypes.FAILURE || outcomeType === DiceOutcomeTypes.PARTIAL) {
-      failures++;
-      await this.update({ [`${propertyPath}.failures`]: failures });
+      attribute.advancementProgress.successes++;
+    } else {
+      attribute.advancementProgress.failures++;
     }
 
-    if (autoLevel) {
-      if (successes >= requiredSuccessses
-      && failures >= requiredFailures) {
-        const newLevel = parseInt(oAtt.level) + 1;
-        await this.setAttributeLevel(attName, newLevel);
+    if (autoLevel === true) {
+      if (attribute.advancementProgress.successes >= attribute.advancementRequirements.successes
+        && attribute.advancementProgress.failures >= attribute.advancementRequirements.failures) {
+        attribute.level++;
+
+        if (resetProgress === true) {
+          attribute.advancementProgress.successes = 0;
+          attribute.advancementProgress.failures = 0;
+        }
       }
     }
-  }
 
-  /**
-   * Returns all currently embedded skill documents.
-   * @returns {Array<AmbersteelSkillItem>}
-   */
-  getSkills() { 
-    return this.getItemsByType("skill"); 
-  }
-  /**
-   * Returns all currently embedded injury documents.
-   * @returns {Array<AmbersteelInjuryItem>}
-   */
-  getInjuries() { 
-    return this.getItemsByType("injury"); 
-  }
-  /**
-   * Returns all currently embedded illness documents.
-   * @returns {Array<AmbersteelIllnessItem>}
-   */
-  getIllnesses() { 
-    return this.getItemsByType("illness"); 
-  }
-  /**
-   * Returns all currently embedded mutation documents.
-   * @returns {Array<AmbersteelMutationItem>}
-   */
-  getMutations() { 
-    return this.getItemsByType("mutation"); 
-  }
-  /**
-   * Returns all currently embedded asset documents that are considered "on person".
-   * @returns {Array<AmbersteelItemItem>}
-   */
-  getPossessions() {
-    const items = Array.from(this.items);
-    return items.filter((item) => { return item.type === "item" && item.data.data.isOnPerson; });
-  }
-  /**
-   * Returns all currently embedded asset documents that are considered "remote".
-   * @returns {Array<AmbersteelItemItem>}
-   */
-  getPropertyItems() {
-    const items = Array.from(this.items);
-    return items.filter((item) => { return item.type === "item" && !item.data.data.isOnPerson; });
-  }
-  /**
-   * Returns all currently embedded fate-card documents.
-   * @returns {Array<AmbersteelFateCardItem>}
-   */
-  getFateCards() {
-    return this.getItemsByType("fate-card"); 
+    const groupName = new Ruleset().getAttributeGroupName(attName);
+    const propertyPath = `data.attributes.${groupName}.${attName}`;
+
+    await this.document.update({
+      [`${propertyPath}.level`]: attribute.level,
+      [`${propertyPath}.successes`]: attribute.advancementProgress.successes,
+      [`${propertyPath}.failures`]: attribute.advancementProgress.failures
+    });
   }
 
   /**
@@ -401,31 +296,28 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
       }
 
       // Search attributes. 
-      let attribute = this.getAttributeForName(comparableReference);
+      let attribute = this.attributes.find(it => it.name === comparableReference);
       if (attribute === undefined) {
-        attribute = this.getAttributeForLocalizedName(comparableReference);
+        attribute = this.attributes.find(it => game.i18n.localize(it.localizableName).toLowerCase());
       }
       if (attribute !== undefined) {
-        result.set(lowercaseReference, attribute.object);
+        result.set(lowercaseReference, attribute);
         continue;
       }
 
       // Search skill. 
       let matchFound = false;
-      const skills = this.getSkills();
-      for (const skill of skills) {
-        const skillData = skill.data.data;
-
+      for (const skill of this.skills.all) {
         if (skill.name.toLowerCase() == comparableReference) {
-          result.set(lowercaseReference, propertyPath !== undefined ? PropUtil.getNestedPropertyValue(skillData, propertyPath) : skillData);
+          result.set(lowercaseReference, (propertyPath !== undefined) ? PropUtil.getNestedPropertyValue(skill.document.data, propertyPath) : skill);
           matchFound = true;
           break;
         }
 
         // Search skill ability.
-        for (const ability of skillData.abilities) {
+        for (const ability of skill.abilities) {
           if (ability.name.toLowerCase() == comparableReference) {
-            result.set(lowercaseReference, propertyPath !== undefined ? PropUtil.getNestedPropertyValue(ability, propertyPath) : ability);
+            result.set(lowercaseReference, (propertyPath !== undefined) ? PropUtil.getNestedPropertyValue(ability, propertyPath) : ability);
             matchFound = true;
             break;
           }
@@ -435,72 +327,44 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
       if (matchFound) continue;
 
       // Search asset.
-      const assets = this.getPossessions().concat(this.getPropertyItems());
-      const asset = _getMatchingDocument(assets, comparableReference);
+      const asset = _getMatchingDocument(this.assets.all, comparableReference);
       if (asset !== undefined) {
-        result.set(lowercaseReference, propertyPath !== undefined ? PropUtil.getNestedPropertyValue(asset.data.data, propertyPath) : asset);
+        result.set(lowercaseReference, propertyPath !== undefined ? PropUtil.getNestedPropertyValue(asset.document.data, propertyPath) : asset);
         continue;
       }
       
       // Search injury.
-      const injuries = this.getInjuries();
-      const injury = _getMatchingDocument(injuries, comparableReference);
+      const injury = _getMatchingDocument(this.health.injuries, comparableReference);
       if (injury !== undefined) {
-        result.set(lowercaseReference, propertyPath !== undefined ? PropUtil.getNestedPropertyValue(injury.data.data, propertyPath) : injury);
+        result.set(lowercaseReference, propertyPath !== undefined ? PropUtil.getNestedPropertyValue(injury.document.data, propertyPath) : injury);
         continue;
       }
       
       // Search illness.
-      const illnesses = this.getIllnesses();
-      const illness = _getMatchingDocument(illnesses, comparableReference);
+      const illness = _getMatchingDocument(this.health.illnesses, comparableReference);
       if (illness !== undefined) {
-        result.set(lowercaseReference, propertyPath !== undefined ? PropUtil.getNestedPropertyValue(illness.data.data, propertyPath) : illness);
+        result.set(lowercaseReference, propertyPath !== undefined ? PropUtil.getNestedPropertyValue(illness.document.data, propertyPath) : illness);
         continue;
       }
       
       // Search mutation.
-      const mutations = this.getMutations();
-      const mutation = _getMatchingDocument(mutations, comparableReference);
+      const mutation = _getMatchingDocument(this.health.mutations, comparableReference);
       if (mutation !== undefined) {
-        result.set(lowercaseReference, propertyPath !== undefined ? PropUtil.getNestedPropertyValue(mutation.data.data, propertyPath) : mutation);
+        result.set(lowercaseReference, propertyPath !== undefined ? PropUtil.getNestedPropertyValue(mutation.document.data, propertyPath) : mutation);
         continue;
       }
       
+      // TODO #85: This really belongs on the `TransientPc` type, instead of here. 
       // Search fate-card.
-      const fateCards = this.getFateCards();
-      const fateCard = _getMatchingDocument(fateCards, comparableReference);
-      if (fateCard !== undefined) {
-        result.set(lowercaseReference, propertyPath !== undefined ? PropUtil.getNestedPropertyValue(fateCard.data.data, propertyPath) : fateCard);
-        continue;
+      if (this.fateCards !== undefined) {
+        const fateCard = _getMatchingDocument(this.fateCards, comparableReference);
+        if (fateCard !== undefined) {
+          result.set(lowercaseReference, propertyPath !== undefined ? PropUtil.getNestedPropertyValue(fateCard.document.data, propertyPath) : fateCard);
+          continue;
+        }
       }
     }
 
-    return result;
-  }
-  
-  /**
-   * Returns the maximum bulk. 
-   * 
-   * @returns {Number} The maximum bulk. 
-   * 
-   * @private
-   */
-  _getMaxBulk() {
-    return new Ruleset().getCharacterMaximumInventory(this);
-  }
-
-  /**
-   * Returns the currently used bulk. 
-   * 
-   * @returns {Number} The currently used bulk. 
-   * 
-   * @private
-   */
-  _getCurrentBulk() {
-    let result = 0;
-    for (const possession of this.getPossessions()) {
-      result += possession.data.data.bulk;
-    }
     return result;
   }
 }
