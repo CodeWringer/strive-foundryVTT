@@ -7,13 +7,45 @@ import * as ValidationUtil from "../util/validation-utility.mjs";
 import { DiceOutcomeTypes } from "./dice-outcome-types.mjs";
 import DicePoolResult from "./dice-pool-result.mjs";
 
-export const LOCALIZABLE_OBSTACLE_ABBREVIATION = "ambersteel.roll.obstacle.abbreviation";
+/**
+ * Localization key of the obstacle abbreviation. 
+ * 
+ * @type {String}
+ * @constant
+ */
+const LOCALIZABLE_OBSTACLE_ABBREVIATION = "ambersteel.roll.obstacle.abbreviation";
+
+/**
+ * CSS class of a positive die result. 
+ * 
+ * @type {String}
+ * @constant
+ */
+const CSS_CLASS_POSITIVE = "roll-success";
+
+/**
+ * CSS class of a negative die result. 
+ * 
+ * @type {String}
+ * @constant
+ */
+const CSS_CLASS_NEGATIVE = "roll-failure";
+
+/**
+ * CSS class of the obstacle value. 
+ * 
+ * @type {String}
+ * @constant
+ */
+const CSS_CLASS_OBSTACLE = "roll-obstacle";
 
 /**
  * Rolls the given number of dice and returns the results of the roll. 
+ * 
  * @param {Number} ops.numberOfDice The number of dice to roll. 
  * @param {Number} ops.obstacle The obstacle to roll against. 
  * @param {Number} ops.bonusDice An additional number of dice to roll. 
+ * 
  * @returns {DicePoolResultResult} The results of the roll
  */
 export function rollDicePool(ops = {}) {
@@ -41,11 +73,14 @@ export function rollDicePool(ops = {}) {
   const results = new Die({ faces: 6, number: numberOfDice }).evaluate().results;
 
   // Analyze results. 
+  const ruleset = new Ruleset();
+
   const positives = [];
   const negatives = [];
+
   for (const result of results) {
     const face = result.result;
-    if (new Ruleset().isPositive(face)) {
+    if (ruleset.isPositive(face)) {
       positives.push(face);
     } else {
       negatives.push(face);
@@ -80,6 +115,7 @@ export function rollDicePool(ops = {}) {
 
 /**
  * Creates a new ChatMessage to display dice roll results. 
+ * 
  * @param {DicePoolResult} args.rollResult The results of a dice pool roll. 
  * @param {String | undefined} args.flavor Optional. The flavor text / subtitle of the message. 
  * @param {String | undefined} args.actor Optional. The actor to associate with the message. 
@@ -87,9 +123,12 @@ export function rollDicePool(ops = {}) {
  * @param {String | undefined} args.primaryImage Optional. An image url for the primary title. 
  * @param {String | undefined} args.secondaryTitle Optional. A secondary title. 
  * @param {String | undefined} args.secondaryImage Optional. An image url for the secondary title. 
- * @param {VisibilityMode | undefined} args.visibilityMode Optional. Sets the visibility of the chat message. Default public. 
+ * @param {VisibilityMode | undefined} args.visibilityMode Optional. Sets the visibility of the chat message. 
+ * * Default `VISIBILITY_MODES.public`. 
  * @param {String | undefined} args.diceComposition Optional. A localized string showing the composition of dice. 
+ * 
  * @returns {Promise<any>}
+ * 
  * @async
  */
 export async function sendDiceResultToChat(args = {}) {
@@ -99,6 +138,8 @@ export async function sendDiceResultToChat(args = {}) {
   };
   ValidationUtil.validateOrThrow(args, ["rollResult"]);
 
+  const ruleset = new Ruleset();
+
   // Convenience variable. 
   const rollResult = args.rollResult;
 
@@ -106,14 +147,14 @@ export async function sendDiceResultToChat(args = {}) {
   // This holds the results to display in the rendered template, including the obstacle value. 
   const resultsForDisplay = [];
   for (const face of combinedResults) {
-    if (new Ruleset().isPositive(face)) {
-      resultsForDisplay.push({ cssClass: "roll-success", content: face });
+    if (ruleset.isPositive(face)) {
+      resultsForDisplay.push({ cssClass: CSS_CLASS_POSITIVE, content: face });
     } else {
-      resultsForDisplay.push({ cssClass: "roll-failure", content: face });
+      resultsForDisplay.push({ cssClass: CSS_CLASS_NEGATIVE, content: face });
     }
   }
   // Insert obstacle threshold. 
-  const obstacleForDisplay = { cssClass: "roll-obstacle", content: `${game.i18n.localize(LOCALIZABLE_OBSTACLE_ABBREVIATION)} ${rollResult.obstacle}` }
+  const obstacleForDisplay = { cssClass: CSS_CLASS_OBSTACLE, content: `${game.i18n.localize(LOCALIZABLE_OBSTACLE_ABBREVIATION)} ${rollResult.obstacle}` }
   if (rollResult.obstacle >= resultsForDisplay.length) { // Obstacle greater than number of dice rolled. 
     resultsForDisplay.push(obstacleForDisplay);
   } else { // Obstacle less than or equal to number of dice rolled. 
