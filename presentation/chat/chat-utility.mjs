@@ -100,17 +100,3 @@ export async function sendPropertyToChat(args = {}) {
     });
   }
 }
-
-/**
- * Returns an array of available visibility modes. 
- * 
- * @returns {Array<VisibilityMode>}
- */
-export function getVisibilityModes() {
-  const visibilityModes = [];
-  for (const visibilityModeName in VISIBILITY_MODES) {
-    const visibilityMode = VISIBILITY_MODES[visibilityModeName];
-    visibilityModes.push(visibilityMode);
-  }
-  return visibilityModes;
-}

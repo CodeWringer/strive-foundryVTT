@@ -1,5 +1,5 @@
 import GetShowFancyFontUseCase from '../../../business/use-case/get-show-fancy-font-use-case.mjs';
-import { getVisibilityModes } from '../../chat/chat-utility.mjs';
+import { VISIBILITY_MODES } from '../../chat/visibility-modes.mjs';
 import { getElementValue } from '../../sheet/sheet-utility.mjs';
 import { TEMPLATES } from '../../template/templatePreloader.mjs';
 import ConfirmableModalDialog from '../confirmable-modal-dialog/confirmable-modal-dialog.mjs';
@@ -47,7 +47,7 @@ const SELECTOR_VISIBILITY_MODE = ".visibilityMode";
  * 
  * @param {Number} obstacle The "obstacle" that was input. 
  * @param {Number} bonusDice The "bonusDice" that was input. 
- * @param {Object} visibilityMode The "visibilityMode" that was input. 
+ * @param {VisibilityMode} visibilityMode The "visibilityMode" that was selected. 
  */
 export default class RollDialog extends ConfirmableModalDialog {
   /** @override */
@@ -76,21 +76,13 @@ export default class RollDialog extends ConfirmableModalDialog {
    * Returns the current value of the "visibilityMode" input element. 
    * 
    * @readonly
-   * @type {Object}
+   * @type {VisibilityMode}
    */
   get visibilityMode() {
-    const visibilityModeKey = parseInt(getElementValue(this._html.find(SELECTOR_VISIBILITY_MODE)[0]));
-    return this._visibilityModes[visibilityModeKey];
+    const choiceKey = getElementValue(this._html.find(SELECTOR_VISIBILITY_MODE)[0]);
+    return VISIBILITY_MODES[choiceKey];
   }
 
-  /**
-   * The visibility modes available for selection. 
-   * 
-   * @type {Array<Object>}
-   * @private
-   */
-  _visibilityModes = [];
-  
   /**
    * If true, will render using the "fancy font". If false, will render using the default font. 
    * 
@@ -115,7 +107,6 @@ export default class RollDialog extends ConfirmableModalDialog {
       localizedTitle: options.localizedTitle ?? game.i18n.localize(DIALOG_TITLE),
     });
 
-    this._visibilityModes = getVisibilityModes();
     this._showFancyFont = new GetShowFancyFontUseCase().invoke();
   }
 
@@ -126,8 +117,8 @@ export default class RollDialog extends ConfirmableModalDialog {
       showFancyFont: this._showFancyFont,
       obstacle: 0,
       bonusDice: 0,
-      visibilityMode: this._visibilityModes[0],
-      visibilityModes: this._visibilityModes,
+      selectedVisibilityMode: VISIBILITY_MODES.asChoices.find(it => it.value === "public"),
+      visibilityModeChoices: VISIBILITY_MODES.asChoices,
     }
   }
 }

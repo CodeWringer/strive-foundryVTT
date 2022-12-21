@@ -1,8 +1,8 @@
 {{!-- Parameters:
 obstacle: {Number},
 bonusDice: {Number},
-visibilityMode: {VisibilityMode}
-visibilityModes: {Array<VisibilityMode>}
+selectedVisibilityMode: {ChoiceOption}
+visibilityModeChoices: {Array<ChoiceOption>}
 showFancyFont: {Boolean | undefined}
 --}}
 {{#> dialogContent}}
@@ -28,9 +28,9 @@ showFancyFont: {Boolean | undefined}
     </div>
     <div class="flex">
       <select class="visibilityMode flex-grow" name="visibilityMode">
-        {{#select visibilityMode}}
-        {{#each visibilityModes as |mode key|}}
-        <option value="{{key}}">{{localize mode.localizableName}}</option>
+        {{#select selectedVisibilityMode.value}}
+        {{#each visibilityModeChoices as |choice key|}}
+        <option value="{{choice.value}}">{{choice.localizedValue}}</option>
         {{/each}}
         {{/select}}
       </select>

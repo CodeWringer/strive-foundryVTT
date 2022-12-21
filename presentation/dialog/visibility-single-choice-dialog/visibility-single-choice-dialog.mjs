@@ -1,4 +1,4 @@
-import { getVisibilityModes } from '../../chat/chat-utility.mjs';
+import { VISIBILITY_MODES } from '../../chat/visibility-modes.mjs';
 import ChoiceOption from '../../util/choice-option.mjs';
 import SingleChoiceDialog from '../single-choice-dialog/single-choice-dialog.mjs';
 
@@ -35,31 +35,13 @@ export default class VisibilitySingleChoiceDialog extends SingleChoiceDialog {
   get id() { return "dialog-visibility-single-choice"; }
 
   /**
-   * @type {Array<Object>}
-   * @private
-   */
-  _visibilityModes = undefined;
-  /**
-   * Returns the visibility modes. 
-   * 
-   * @type {Array<Object>}
-   * @readonly
-   */
-  get visibilityModes() {
-    if (this._visibilityModes === undefined) {
-      this._visibilityModes = getVisibilityModes();
-    }
-    return this._visibilityModes;
-  }
-
-  /**
    * Returns the current value of the "visibilityMode" input element. 
    * 
    * @readonly
-   * @type {Object}
+   * @type {ChoiceOption}
    */
   get visibilityMode() {
-    return this.visibilityModes.find(it => it.name === this.selected.value);
+    return this.choices.find(it => it.name === this.selected.value);
   }
 
   /**
@@ -81,12 +63,7 @@ export default class VisibilitySingleChoiceDialog extends SingleChoiceDialog {
     super({...options,
       localizedTitle: options.localizedTitle ?? game.i18n.localize(DIALOG_TITLE),
       localizedLabel: options.localizedLabel ?? game.i18n.localize(LABEL),
-      choices: ["_"], // Irrelevant and will be overridden, but is required by the contract. 
+      choices: VISIBILITY_MODES.asChoices
     });
-
-    this.choices = this.visibilityModes.map(it => new ChoiceOption({
-      value: it.name,
-      localizedValue: game.i18n.localize(it.localizableName),
-    }));
   }
 }
