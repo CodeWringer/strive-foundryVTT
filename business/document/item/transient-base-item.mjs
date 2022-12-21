@@ -250,4 +250,11 @@ export default class TransientBaseItem {
       visibilityMode: visibilityMode
     });
   }
+
+  /**
+   * Deletes the underlying document. 
+   */
+  delete() {
+    this.document.delete();
+  }
 }

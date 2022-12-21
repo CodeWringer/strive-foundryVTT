@@ -253,4 +253,11 @@ export default class TransientBaseActor {
       visibilityMode: visibilityMode
     });
   }
+
+  /**
+   * Deletes the underlying document. 
+   */
+  delete() {
+    this.document.delete();
+  }
 }
