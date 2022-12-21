@@ -23,7 +23,9 @@ import LoadDebugSettingUseCase from "./business/use-case/load-debug-setting-use-
 // Dialogs
 import PlainDialog from "./presentation/dialog/plain-dialog/plain-dialog.mjs";
 // Document classes
+import { ACTOR_SUBTYPE } from "./business/document/actor/actor-subtype.mjs";
 import { AmbersteelActor } from "./business/document/actor/actor.mjs";
+import { ITEM_SUBTYPE } from "./business/document/item/item-subtype.mjs";
 import { AmbersteelItem } from "./business/document/item/item.mjs";
 // Sheet classes
 import { AmbersteelActorSheet } from "./presentation/sheet/actor/actor-sheet.mjs";
