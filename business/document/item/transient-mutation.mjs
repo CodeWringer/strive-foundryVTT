@@ -27,7 +27,7 @@ export default class TransientMutation extends TransientBaseItem {
 
     return new PreparedChatData({
       renderedContent: renderedContent,
-      actor: this.owningDocument.document, 
+      actor: (this.owningDocument ?? {}).document, 
       sound: SOUNDS_CONSTANTS.NOTIFY,
       viewModel: vm,
       flavor: game.i18n.localize("ambersteel.character.health.mutation.singular"),

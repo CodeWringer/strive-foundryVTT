@@ -34,7 +34,7 @@ export default class TransientBaseItem extends TransientDocument {
    * @type {TransientBaseActor | undefined}
    */
   get owningDocument() {
-    if (this.document.parent !== undefined) {
+    if (this.document.parent !== undefined && this.document.parent !== null) {
       return this.document.parent.getTransientObject();
     } else {
       return undefined;

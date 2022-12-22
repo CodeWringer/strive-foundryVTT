@@ -164,7 +164,7 @@ export default class TransientSkill extends TransientBaseItem {
 
     return new PreparedChatData({
       renderedContent: renderedContent,
-      actor: this.owningDocument.document, 
+      actor: (this.owningDocument ?? {}).document, 
       sound: SOUNDS_CONSTANTS.NOTIFY,
       viewModel: vm,
       flavor: game.i18n.localize("ambersteel.character.skill.singular"),
@@ -314,7 +314,7 @@ export default class TransientSkill extends TransientBaseItem {
    * @returns {SummedData}
    */
   getRollData() {
-    const actor = this.owningDocument.document;
+    const actor = (this.owningDocument ?? {}).document;
     const characterAttribute = new CharacterAttribute(actor, this.relatedAttribute.name);
     const compositionObj = new Ruleset().getSkillTestNumberOfDice(this.level, characterAttribute.level);
 

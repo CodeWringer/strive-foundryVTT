@@ -105,7 +105,7 @@ export default class TransientAsset extends TransientBaseItem {
 
     return new PreparedChatData({
       renderedContent: renderedContent,
-      actor: this.owningDocument.document, 
+      actor: (this.owningDocument ?? {}).document, 
       sound: SOUNDS_CONSTANTS.NOTIFY,
       viewModel: vm,
       flavor: game.i18n.localize("ambersteel.character.asset.singular"),
@@ -140,7 +140,7 @@ export default class TransientAsset extends TransientBaseItem {
       isOwner: this.isOwner,
       isGM: game.user.isGM,
       item: this.document,
-      actor: this.owningDocument.document,
+      actor: (this.owningDocument ?? {}).document, 
       sourceType: undefined,
       sourceId: undefined,
       allowPickup: false, // TODO #53: The user must be able to select who gets to pick this item up. 
