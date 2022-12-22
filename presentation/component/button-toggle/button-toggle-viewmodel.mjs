@@ -3,16 +3,23 @@ import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import { TEMPLATES } from "../../template/templatePreloader.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
 
+/**
+ * A button that allows changing a specific boolean value on a `TransientDocument` 
+ * instance, identified by the `propertyPath`. 
+ * 
+ * @extends ButtonViewModel
+ * 
+ * @property {TransientDocument} target A document instance. 
+ * @property {String} propertyPath The path identifying the boolean value. 
+ * @property {Boolean} value The value of the boolean property. 
+ */
 export default class ButtonToggleViewModel extends ButtonViewModel {
   static get TEMPLATE() { return TEMPLATES.COMPONENT_BUTTON_TOGGLE; }
 
   /**
-   * @type {String}
-   */
-  propertyPath = undefined;
-
-  /**
-   * @type {Any}
+   * Returns the current value of the property. 
+   * 
+   * @type {Boolean}
    */
   get value() {
     try {
@@ -26,7 +33,9 @@ export default class ButtonToggleViewModel extends ButtonViewModel {
     }
   }
   /**
-   * @param {Any} newValue
+   * Sets the value of the property. 
+   * 
+   * @param {Boolean} newValue
    */
   set value(newValue) {
     try {
@@ -47,7 +56,7 @@ export default class ButtonToggleViewModel extends ButtonViewModel {
   /**
    * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
    * 
-   * @param {Object} args.target Optional. The target object to affect.  
+   * @param {TransientDocument} args.target Optional. The target document to affect.  
    * @param {Function | String | undefined} args.callback Optional. Defines an asynchronous callback that is invoked upon completion of the button's own callback. 
    * @param {Any | undefined} args.callbackData Optional. Defines any data to pass to the completion callback. 
    * @param {Boolean | undefined} args.isEditable Optional. If true, will be interactible. 
