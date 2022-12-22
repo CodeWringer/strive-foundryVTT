@@ -1,5 +1,5 @@
-import { moveArrayElementBy } from "../../business/util/array-utility.mjs";
-import { moveArrayElement } from "../../business/util/array-utility.mjs";
+import { moveArrayElementBy } from "../../../business/util/array-utility.mjs";
+import { moveArrayElement } from "../../../business/util/array-utility.mjs";
 
 describe('array-utility', function() {
   describe('moveArrayElement', function() {

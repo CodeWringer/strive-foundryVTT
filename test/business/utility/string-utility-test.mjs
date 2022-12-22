@@ -1,4 +1,4 @@
-import * as StringUtil from "../../business/util/string-utility.mjs"
+import * as StringUtil from "../../../business/util/string-utility.mjs"
 
 describe('string-utility', function() {
   describe('format', function() {
@@ -44,6 +44,62 @@ describe('string-utility', function() {
       const r = StringUtil.format(given, givenReplacement1, givenReplacement2, givenReplacement3, givenReplacement4);
       // Then
       r.should.be.equal("Hello, Bob! Goodbye, Bobette!");
+    });
+  });
+
+  describe("coerce", function() {
+    it("parses boolean true", function() {
+      // Given
+      const given = "true";
+      // When
+      const r = StringUtil.coerce(given);
+      // Then
+      r.should.be.equal(true);
+    });
+
+    it("parses boolean false", function() {
+      // Given
+      const given = "false";
+      // When
+      const r = StringUtil.coerce(given);
+      // Then
+      r.should.be.equal(false);
+    });
+
+    it("parses negative integer", function() {
+      // Given
+      const given = "-5";
+      // When
+      const r = StringUtil.coerce(given);
+      // Then
+      r.should.be.equal(-5);
+    });
+
+    it("parses positive integer", function() {
+      // Given
+      const given = "5";
+      // When
+      const r = StringUtil.coerce(given);
+      // Then
+      r.should.be.equal(5);
+    });
+
+    it("parses negative float", function() {
+      // Given
+      const given = "-5.3";
+      // When
+      const r = StringUtil.coerce(given);
+      // Then
+      r.should.be.equal(-5.3);
+    });
+
+    it("parses positive float", function() {
+      // Given
+      const given = "5.3";
+      // When
+      const r = StringUtil.coerce(given);
+      // Then
+      r.should.be.equal(5.3);
     });
   });
 });
