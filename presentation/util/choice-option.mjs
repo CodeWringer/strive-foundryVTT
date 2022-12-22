@@ -1,5 +1,16 @@
 /**
  * Represents a choice option for drop-downs, radio-buttons or check-boxes. 
+ * 
+ * @property {String} value The actual value. 
+ * @property {String | undefined} localizedValue The text that represents the value, to display to the user. 
+ * @property {String | undefined} icon A (relative) icon file path or a FontAwwesome icon class. 
+ * * E.g. `"systems/ambersteel/presentation/image/texture.svg"`
+ * * E.g. `"fas fa-plus"`
+ * @property {Boolean} shouldDisplayValue Gets or sets whether the value should be displayed. 
+ * @property {Boolean} shouldDisplayIcon Gets or sets whether the icon should be displayed. 
+ * @property {String | undefined} displayHtmlOverride Gets or sets the raw HTML to display as the content. 
+ * * If not undefined, this value should take precedence over both localizedValue and icon, 
+ * and be used instead!
  */
 export default class ChoiceOption {
   /**
@@ -34,8 +45,8 @@ export default class ChoiceOption {
   /**
    * A (relative) icon file path or a FontAwwesome icon class. 
    * 
-   * E.g. "systems/ambersteel/presentation/image/texture.svg" or 
-   * e.g. "fas fa-plus"
+   * * E.g. `"systems/ambersteel/presentation/image/texture.svg"`
+   * * E.g. `"fas fa-plus"`
    * @type {String | undefined}
    * @readonly
    */
