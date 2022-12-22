@@ -4,8 +4,14 @@ import { TEMPLATES } from "../../template/templatePreloader.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
 
 /**
- * --- Inherited from ViewModel
+ * The attribute DOM-elements must have, if they are to be targetable by the visibility 
+ * toggle button. 
  * 
+ * @type {String}
+ * @constant
+ */
+export const ATTRIBUTE_VIS_GROUP = "data-vis-group";
+
 /**
  * @summary
  * A button that allows toggling the visibility of DOM elements with a specific attribute. 
@@ -79,7 +85,7 @@ export default class ButtonToggleVisibilityViewModel extends ButtonViewModel {
   async onClick(html, isOwner, isEditable) {
     if (isEditable !== true) return;
 
-    const elements = document.querySelectorAll("[data-vis-group='" + this._visGroup + "']");
+    const elements = document.querySelectorAll(`[${ATTRIBUTE_VIS_GROUP}='${this._visGroup}']`);
 
     for(const element of elements) {
       element.classList.toggle("hidden");
