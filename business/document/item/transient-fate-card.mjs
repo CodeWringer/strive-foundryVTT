@@ -9,6 +9,11 @@ import TransientBaseItem from "./transient-base-item.mjs";
  * Represents the full transient data of a fate card. 
  * 
  * @extends TransientBaseItem
+ * 
+ * @property {Object} cost
+ * @property {Number} cost.miFP
+ * @property {Number} cost.maFP
+ * @property {Number} cost.AFP
  */
 export default class TransientFateCard extends TransientBaseItem {
   /** @override */
@@ -17,6 +22,25 @@ export default class TransientFateCard extends TransientBaseItem {
   /** @override */
   get chatMessageTemplate() { return TEMPLATES.FATE_CARD_CHAT_MESSAGE; }
  
+  /**
+   * @type {Object}
+   */
+  get cost() {
+    const thiz = this;
+    return {
+      get miFP() { return parseInt(thiz.document.data.data.cost.miFP); },
+      set miFP(value) { thiz.updateSingle("data.data.cost.miFP", value); },
+      get maFP() { return parseInt(thiz.document.data.data.cost.maFP); },
+      set maFP(value) { thiz.updateSingle("data.data.cost.maFP", value); },
+      get AFP() { return parseInt(thiz.document.data.data.cost.AFP); },
+      set AFP(value) { thiz.updateSingle("data.data.cost.AFP", value); },
+    };
+  }
+  set cost(value) {
+    this.document.data.data.cost = value;
+    this.updateSingle("data.data.cost", value);
+  }
+  
   /** @override */
   async getChatData() {
     const vm = this.getChatViewModel();

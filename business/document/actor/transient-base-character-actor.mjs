@@ -14,28 +14,54 @@ import TransientBaseActor from './transient-base-actor.mjs';
  * 
  * @property {Array<CharacterAttributeGroup>} attributeGroups The grouped attributes 
  * of the character. 
+ * * Read-only. 
  * @property {Array<CharacterAttribute>} attributes The attributes of the character. 
+ * * Read-only. 
+ * @property {Object} person
+ * @property {Number} person.age
+ * @property {String} person.species
+ * @property {String} person.culture
+ * @property {String} person.sex
+ * @property {String} person.appearance
  * @property {Object} skills
+ * * Read-only. 
  * @property {Array<TransientSkill>} skills.all Returns **all** skills of the character. 
+ * * Read-only. 
  * @property {Array<TransientSkill>} skills.learningSkills Returns all learning skills of the character. 
+ * * Read-only. 
  * @property {Array<TransientSkill>} skills.knownSkills Returns all known skills of the character. 
+ * * Read-only. 
  * @property {Object} health
+ * * Read-only. 
  * @property {Array<TransientInjury>} health.injuries 
+ * * Read-only. 
  * @property {Array<TransientIllness>} health.illnesss 
+ * * Read-only. 
  * @property {Array<TransientMutation>} health.mutations 
+ * * Read-only. 
  * @property {Number} health.HP 
  * @property {Number} health.maxHP 
+ * * Read-only. 
  * @property {Number} health.maxInjuries 
+ * * Read-only. 
  * @property {Number} health.exhaustion 
  * @property {Number} health.maxExhaustion 
+ * * Read-only. 
  * @property {Number} health.magicStamina 
  * @property {Number} health.maxMagicStamina 
+ * * Read-only. 
  * @property {Object} assets
+ * * Read-only. 
  * @property {Array<TransientAsset>} assets.all 
+ * * Read-only. 
  * @property {Array<TransientAsset>} assets.onPerson 
+ * * Read-only. 
  * @property {Array<TransientAsset>} assets.remote 
+ * * Read-only. 
  * @property {Number} assets.currentBulk
+ * * Read-only. 
  * @property {Number} assets.maxBulk
+ * * Read-only. 
  */
 export default class TransientBaseCharacterActor extends TransientBaseActor {
   /** @override */
@@ -43,6 +69,87 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
   
   /** @override */
   get chatMessageTemplate() { return TEMPLATES.ACTOR_CHAT_MESSAGE; }
+
+  /**
+   * @type {Object}
+   */
+  get person() {
+    return {
+      get age() { return parseInt(thiz.document.data.data.cost.age); },
+      set age(value) { thiz.updateSingle("data.data.cost.age", value); },
+      get species() { return thiz.document.data.data.cost.species; },
+      set species(value) { thiz.updateSingle("data.data.cost.species", value); },
+      get culture() { return thiz.document.data.data.cost.culture; },
+      set culture(value) { thiz.updateSingle("data.data.cost.culture", value); },
+      get sex() { return thiz.document.data.data.cost.sex; },
+      set sex(value) { thiz.updateSingle("data.data.cost.sex", value); },
+      get appearance() { return thiz.document.data.data.cost.appearance; },
+      set appearance(value) { thiz.updateSingle("data.data.cost.appearance", value); },
+    };
+  }
+  set person(value) {
+    this.document.data.data.person = value;
+    this.updateSingle("data.data.person", value);
+  }
+  
+  /**
+   * @type {Object}
+   * @readonly
+   */
+  get skills() {
+    return {
+      get all() { return this.items.filter(it => it.type === "skill"); },
+      get learningSkills() { return this.items.filter(it => it.type === "skill" && it.level < 1); },
+      get knownSkills() { return this.items.filter(it => it.type === "skill" && it.level > 0); },
+    };
+  }
+
+  /**
+   * @type {Object}
+   * @readonly
+   */
+  get health() {
+    return {
+      get injuries() { return this.items.filter(it => it.type === "injury"); },
+      get illnesss() { return this.items.filter(it => it.type === "illness"); },
+      get mutations() { return this.items.filter(it => it.type === "mutation"); },
+
+      get HP() { return parseInt(thiz.document.data.data.health.HP); },
+      set HP(value) { thiz.updateSingle("data.data.health.HP", value); },
+
+      get exhaustion() { return parseInt(thiz.document.data.data.health.exhaustion); },
+      set exhaustion(value) { thiz.updateSingle("data.data.health.exhaustion", value); },
+      
+      get magicStamina() { return parseInt(thiz.document.data.data.health.magicStamina); },
+      set magicStamina(value) { thiz.updateSingle("data.data.health.magicStamina", value); },
+      
+      get maxHP() { return new Ruleset().getCharacterMaximumHp(document) },
+      get maxInjuries() { return new Ruleset().getCharacterMaximumInjuries(document) },
+      get maxExhaustion() { return new Ruleset().getCharacterMaximumExhaustion(document) },
+      get maxMagicStamina() { return new Ruleset().getCharacterMaximumMagicStamina(document) },
+    };
+  }
+
+  /**
+   * @type {Object}
+   * @readonly
+   */
+  get health() {
+    return {
+      get all() { return this.items.filter(it => it.type === "item"); },
+      get onPerson() { return this.items.filter(it => it.type === "item" && it.isOnPerson === true); },
+      get remote() { return this.items.filter(it => it.type === "item" && it.isOnPerson !== true); },
+      get currentBulk() {
+        let currentBulk = 0;
+        const assetsOnPerson = this.onPerson;
+        for (const assetOnPerson of assetsOnPerson) {
+          currentBulk += assetOnPerson.bulk;
+        }
+        return currentBulk;
+      },
+      get maxBulk() { return new Ruleset().getCharacterMaximumInventory(document); },
+    };
+  }
 
   /**
    * @param {Actor} document An encapsulated actor instance. 
@@ -54,46 +161,6 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
 
     this.attributeGroups = this._getAttributeGroups();
     this.attributes = this._getAttributes();
-
-    const ruleset = new Ruleset();
-
-    // Skills
-    this.skills = {
-      all: this.items.filter(it => it.type === "skill"),
-      learningSkills: this.items.filter(it => it.type === "skill" && it.level < 1),
-      knownSkills: this.items.filter(it => it.type === "skill" && it.level > 0),
-    };
-
-    // Health
-    this.health = {
-      injuries: this.items.filter(it => it.type === "injury"),
-      illnesss: this.items.filter(it => it.type === "illness"),
-      mutations: this.items.filter(it => it.type === "mutation"),
-      HP: this.document.data.data.health.HP,
-      maxHP: ruleset.getCharacterMaximumHp(document),
-      maxInjuries: ruleset.getCharacterMaximumInjuries(document),
-      exhaustion: this.document.data.data.health.exhaustion,
-      maxExhaustion: ruleset.getCharacterMaximumExhaustion(document),
-      magicStamina: this.document.data.data.health.magicStamina,
-      maxMagicStamina: ruleset.getCharacterMaximumMagicStamina(document),
-    };
-
-    // Assets
-    const assets = this.items.filter(it => it.type === "item");
-    const assetsOnPerson = assets.filter(it => it.isOnPerson === true);
-    
-    let currentBulk = 0;
-    for (const assetOnPerson of assetsOnPerson) {
-      currentBulk += assetOnPerson.bulk;
-    }
-
-    this.assets = {
-      all: assets,
-      onPerson: assetsOnPerson,
-      remote: assets.filter(it => it.isOnPerson !== true),
-      currentBulk: currentBulk,
-      maxBulk: ruleset.getCharacterMaximumInventory(document),
-    };
   }
 
   /**

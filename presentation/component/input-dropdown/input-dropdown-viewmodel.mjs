@@ -66,7 +66,10 @@ export default class InputDropDownViewModel extends InputViewModel {
     // Ensure correct option of drop-down is set. 
     try {
       const optionElements = this.element.find('option');
-      const value = this.value;
+      // Often times, the value is a definition of something, which exposes an internal 
+      // `name` as a means of identifying it. When deciding wich `ChoiceOption` to pick, 
+      // this name is the identifier to use. 
+      const value = this.value.name ?? this.value;
       for(let i = 0; i < optionElements.length; i++) {
         const optionElement = optionElements[i];
         if (optionElement.value === value) {

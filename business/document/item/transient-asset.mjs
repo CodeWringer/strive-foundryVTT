@@ -11,6 +11,12 @@ import TransientBaseItem from "./transient-base-item.mjs";
  * @extends TransientBaseItem
  * 
  * @property {Number} bulk
+ * @property {Number} quantity
+ * @property {Number} maxQuantity
+ * @property {Object} shape
+ * @property {Number} shape.width
+ * @property {Number} shape.height
+ * @property {Boolean} isOnPerson
  */
 export default class TransientAsset extends TransientBaseItem {
   /** @override */
@@ -18,6 +24,56 @@ export default class TransientAsset extends TransientBaseItem {
   
   /** @override */
   get chatMessageTemplate() { return TEMPLATES.ITEM_CHAT_MESSAGE; }
+  
+  /**
+   * @type {Number}
+   */
+  get quantity() {
+    return parseInt(this.document.data.data.quantity);
+  }
+  set quantity(value) {
+    this.document.data.data.quantity = value;
+    this.updateSingle("data.data.quantity", value);
+  }
+  
+  /**
+   * @type {Number}
+   */
+  get maxQuantity() {
+    return parseInt(this.document.data.data.maxQuantity);
+  }
+  set maxQuantity(value) {
+    this.document.data.data.maxQuantity = value;
+    this.updateSingle("data.data.maxQuantity", value);
+  }
+  
+  /**
+   * @type {Object}
+   */
+  get shape() {
+    const thiz = this;
+    return {
+      get width() { return parseInt(thiz.document.data.data.shape.width); },
+      set width(value) { thiz.updateSingle("data.data.shape.width", value); },
+      get height() { return parseInt(thiz.document.data.data.shape.height); },
+      set height(value) { thiz.updateSingle("data.data.shape.height", value); },
+    };
+  }
+  set shape(value) {
+    this.document.data.data.shape = value;
+    this.updateSingle("data.data.shape", value);
+  }
+  
+  /**
+   * @type {Boolean}
+   */
+  get isOnPerson() {
+    return this.document.data.data.isOnPerson;
+  }
+  set isOnPerson(value) {
+    this.document.data.data.isOnPerson = value;
+    this.updateSingle("data.data.isOnPerson", value);
+  }
   
   /**
    * @param {Item} document An encapsulated item instance. 

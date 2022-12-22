@@ -9,6 +9,10 @@ import TransientBaseItem from "./transient-base-item.mjs";
  * Represents the full transient data of an injury. 
  * 
  * @extends TransientBaseItem
+ * 
+ * @property {String} state
+ * @property {String} timeToHeal
+ * @property {Number} limit
  */
 export default class TransientInjury extends TransientBaseItem {
   /** @override */
@@ -17,6 +21,39 @@ export default class TransientInjury extends TransientBaseItem {
   /** @override */
   get chatMessageTemplate() { return TEMPLATES.INJURY_CHAT_MESSAGE; }
 
+  /**
+   * @type {String}
+   */
+  get state() {
+    return this.document.data.data.state;
+  }
+  set state(value) {
+    this.document.data.data.state = value;
+    this.updateSingle("data.data.state", value);
+  }
+  
+  /**
+   * @type {String}
+   */
+  get timeToHeal() {
+    return this.document.data.data.timeToHeal;
+  }
+  set timeToHeal(value) {
+    this.document.data.data.timeToHeal = value;
+    this.updateSingle("data.data.timeToHeal", value);
+  }
+  
+  /**
+   * @type {Number}
+   */
+  get limit() {
+    return parseInt(this.document.data.data.limit);
+  }
+  set limit(value) {
+    this.document.data.data.limit = value;
+    this.updateSingle("data.data.limit", value);
+  }
+  
   /** @override */
   async getChatData() {
     const vm = this.getChatViewModel();

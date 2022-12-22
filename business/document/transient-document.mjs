@@ -48,6 +48,10 @@ import { VISIBILITY_MODES } from '../../presentation/chat/visibility-modes.mjs';
  * * Read-only.
  * @property {Object} displayOrders An object on which sortable lists store their entry orders. 
  * * Read-only.
+ * @property {String} description
+ * @property {String} gmNotes
+ * @property {Boolean} isCustom
+ * @property {Object} displayOrders
  */
 export default class TransientDocument {
   /**
@@ -117,21 +121,49 @@ export default class TransientDocument {
   get type() { return this.document.type; }
 
   /**
-   * Returns an object on which sortable lists store their entry orders. 
-   * 
+   * @type {String}
+   */
+  get description() {
+    return this.document.data.data.description;
+  }
+  set description(value) {
+    this.document.data.data.description = value;
+    this.updateSingle("data.data.description", value);
+  }
+  
+  /**
+   * @type {String}
+   */
+  get gmNotes() {
+    return this.document.data.data.gmNotes;
+  }
+  set gmNotes(value) {
+    this.document.data.data.gmNotes = value;
+    this.updateSingle("data.data.gmNotes", value);
+  }
+  
+  /**
+   * @type {Boolean}
+   */
+  get isCustom() {
+    return this.document.data.data.isCustom;
+  }
+  set isCustom(value) {
+    this.document.data.data.isCustom = value;
+    this.updateSingle("data.data.isCustom", value);
+  }
+  
+  /**
    * @type {Object}
    */
-  get displayOrders() { return this.document.data.data.displayOrders; }
-  /**
-   * Sets an object on which sortable lists store their entry orders. 
-   * 
-   * @param {Object} value
-   */
+  get displayOrders() {
+    return this.document.data.data.displayOrders;
+  }
   set displayOrders(value) {
     this.document.data.data.displayOrders = value;
-    this.updateProperty("data.data.displayOrders", value);
+    this.updateSingle("data.data.displayOrders", value);
   }
-
+  
   /**
    * @param {Actor | Item} document An encapsulated document instance. 
    * 

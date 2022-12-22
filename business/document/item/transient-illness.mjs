@@ -9,6 +9,11 @@ import TransientBaseItem from "./transient-base-item.mjs";
  * Represents the full transient data of an illness. 
  * 
  * @extends TransientBaseItem
+ * 
+ * @property {String} state
+ * @property {String} duration
+ * @property {String} treatment
+ * @property {String} treatmentSkill
  */
 export default class TransientIllness extends TransientBaseItem {
   /** @override */
@@ -17,6 +22,50 @@ export default class TransientIllness extends TransientBaseItem {
   /** @override */
   get chatMessageTemplate() { return TEMPLATES.ILLNESS_CHAT_MESSAGE; }
 
+  /**
+   * @type {String}
+   */
+  get state() {
+    return this.document.data.data.state;
+  }
+  set state(value) {
+    this.document.data.data.state = value;
+    this.updateSingle("data.data.state", value);
+  }
+  
+  /**
+   * @type {String}
+   */
+  get duration() {
+    return this.document.data.data.duration;
+  }
+  set duration(value) {
+    this.document.data.data.duration = value;
+    this.updateSingle("data.data.duration", value);
+  }
+  
+  /**
+   * @type {String}
+   */
+  get treatment() {
+    return this.document.data.data.treatment;
+  }
+  set treatment(value) {
+    this.document.data.data.treatment = value;
+    this.updateSingle("data.data.treatment", value);
+  }
+  
+  /**
+   * @type {String}
+   */
+  get treatmentSkill() {
+    return this.document.data.data.treatmentSkill;
+  }
+  set treatmentSkill(value) {
+    this.document.data.data.treatmentSkill = value;
+    this.updateSingle("data.data.treatmentSkill", value);
+  }
+  
   /** @override */
   async getChatData() {
     const vm = this.getChatViewModel();

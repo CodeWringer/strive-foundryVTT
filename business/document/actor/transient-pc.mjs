@@ -8,12 +8,28 @@ import TransientBaseCharacterActor from "./transient-base-character-actor.mjs";
  * @extends TransientBaseCharacterActor
  * 
  * @property {Array<TransientFateCard>} fateCards
+ * * Read-only. 
  * @property {Number} maxFateCards The maximum number of fate cards allowed on the actor. 
+ * * Read-only. 
  * @property {Number} remainingFateCards The remaining number of fate cards currently 
  * allowed on the actor. 
  * * Read-only. 
  */
 export default class TransientPc extends TransientBaseCharacterActor {
+  /**
+   * @type {Array<TransientFateCard>}
+   * @readonly
+   */
+  get fateCards() { return this.items.filter(it => it.type === "fate-card"); };
+
+  /**
+   * The maximum number of fate cards allowed on the actor. 
+   * 
+   * @type {Number}
+   * @readonly
+   */
+  get maxFateCards() { return new Ruleset().getMaximumFateCards(); };
+
   /**
    * The remaining number of fate cards currently allowed on the actor. 
    * 
@@ -29,10 +45,6 @@ export default class TransientPc extends TransientBaseCharacterActor {
    */
   constructor(actor) {
     super(actor);
-
-    // Fate-cards
-    this.fateCards = this.items.filter(it => it.type === "fate-card");
-    this.maxFateCards = new Ruleset().getMaximumFateCards();
   }
 
   /**

@@ -11,7 +11,6 @@ import { ITEM_SUBTYPE } from "./item-subtype.mjs";
 import TransientBaseItem from "./transient-base-item.mjs";
 import LevelAdvancement from "../../ruleset/level-advancement.mjs";
 import Ruleset from "../../ruleset/ruleset.mjs";
-import { ATTRIBUTES } from "../../ruleset/attribute/attributes.mjs";
 import SkillAbility from "../../ruleset/skill/skill-ability.mjs";
 import CharacterAttribute from "../../ruleset/attribute/character-attribute.mjs";
 import { ATTACK_TYPES } from "../../ruleset/skill/attack-types.mjs";
@@ -31,8 +30,6 @@ import { ATTACK_TYPES } from "../../ruleset/skill/attack-types.mjs";
  * @property {Array<SkillAbility>} abilities The array of skill abilities of this skill. 
  * @property {Boolean} isMagicSchool Returns true, if the skill is considered 
  * a magic school. 
- * @property {String} description
- * * Read-only. 
  */
 export default class TransientSkill extends TransientBaseItem {
   /** @override */
@@ -107,17 +104,6 @@ export default class TransientSkill extends TransientBaseItem {
         failures: value.failures
       }
     });
-  }
-  
-  /**
-   * @type {String}
-   */
-  get description() {
-    return this.document.data.data.description;
-  }
-  set description(value) {
-    this.document.data.data.description = value;
-    this.updateSingle("data.data.description", value);
   }
   
   /**
@@ -279,7 +265,7 @@ export default class TransientSkill extends TransientBaseItem {
     });
     
     this.abilities.push(newAbility);
-    await this._persistSkillAbilities();
+    await this.persistSkillAbilities();
   }
 
   /**
@@ -295,7 +281,7 @@ export default class TransientSkill extends TransientBaseItem {
     const toRemove = this.abilities[index];
 
     this.abilities = this.abilities.slice(0, index).concat(this.abilities.slice(index + 1));
-    await this._persistSkillAbilities();
+    await this.persistSkillAbilities();
 
     return toRemove;
   }

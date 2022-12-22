@@ -8,6 +8,8 @@ import * as PropUtil from '../../util/property-utility.mjs';
 import DamageAndType from './damage-and-type.mjs';
 import { SOUNDS_CONSTANTS } from '../../../presentation/audio/sounds.mjs';
 import { VISIBILITY_MODES } from '../../../presentation/chat/visibility-modes.mjs';
+import { isObject } from '../../util/validation-utility.mjs';
+import { DAMAGE_TYPES } from '../damage-types.mjs';
 
 /**
  * Represents a skill ability. 
@@ -22,8 +24,9 @@ import { VISIBILITY_MODES } from '../../../presentation/chat/visibility-modes.mj
  * * Read-only. 
  * @property {Number} index The index of the skill ability, on the owning document. 
  * @property {String} id UUID of this instance of a skill ability. 
+ * * Read-only. 
  * @property {Boolean} isCustom If `true`, this skill ability was added by a user. 
- * @property {String} name Internal name of the skill. 
+ * @property {String} name Name of the skill ability. 
  * @property {String} img A relative url to an image resource on the server. 
  * @property {String} description 
  * @property {Number} requiredLevel 
@@ -44,6 +47,99 @@ export default class SkillAbility {
    */
   get type() { return "skill-ability"; }
 
+  /**
+   * @type {Number}
+   */
+  get index() { return this._index; }
+  set index(value) { this._index = value; this._updateToDB(); }
+
+  /**
+   * @type {Boolean}
+   */
+  get isCustom() { return this._isCustom; }
+  set isCustom(value) { this._isCustom = value; this._updateToDB(); }
+
+  /**
+   * @type {String}
+   */
+  get name() { return this._name; }
+  set name(value) { this._name = value; this._updateToDB(); }
+
+  /**
+   * @type {String}
+   */
+  get img() { return this._img; }
+  set img(value) { this._img = value; this._updateToDB(); }
+  
+  /**
+   * @type {String}
+   */
+  get description() { return this._description; }
+  set description(value) { this._description = value; this._updateToDB(); }
+  
+  /**
+   * @type {Number}
+   */
+  get requiredLevel() { return this._requiredLevel; }
+  set requiredLevel(value) { this._requiredLevel = value; this._updateToDB(); }
+  
+  /**
+   * @type {Number}
+   */
+  get apCost() { return this._apCost; }
+  set apCost(value) { this._apCost = value; this._updateToDB(); }
+  
+  /**
+   * @type {Array<DamageAndType>} 
+   */
+  get damage() { return this._damage.map(it => {
+    const thiz = this;
+    return {
+      get damage() { return it.damage; },
+      set damage(value) { it.damage = value; thiz._updateToDB(); },
+      get damageType() { return it.damageType; },
+      set damageType(value) {
+        if (isObject(value)) {
+          it.damageType = value; 
+        } else {
+          it.damageType = DAMAGE_TYPES[value]; 
+        }
+        thiz._updateToDB();
+      },
+    }
+  }); }
+  set damage(value) { this._damage = value; this._updateToDB(); }
+  
+  /**
+   * @type {String | undefined}
+   */
+  get condition() { return this._condition; }
+  set condition(value) { this._condition = value; this._updateToDB(); }
+  
+  /**
+   * @type {Number | undefined}
+   */
+  get distance() { return this._distance; }
+  set distance(value) { this._distance = value; this._updateToDB(); }
+  
+  /**
+   * @type {String | undefined}
+   */
+  get obstacle() { return this._obstacle; }
+  set obstacle(value) { this._obstacle = value; this._updateToDB(); }
+  
+  /**
+   * @type {String | undefined}
+   */
+  get opposedBy() { return this._opposedBy; }
+  set opposedBy(value) { this._opposedBy = value; this._updateToDB(); }
+  
+  /**
+   * @type {AttackType | undefined}
+   */
+  get attackType() { return this._attackType; }
+  set attackType(value) { this._attackType = value; this._updateToDB(); }
+  
   /**
    * @param {TransientSkill} owningDocument The owning document.
    * @param {Number} index The index of the skill ability, on the owning document. 
@@ -68,22 +164,22 @@ export default class SkillAbility {
     
     this.owningDocument = args.owningDocument;
     this.owningDocumentId = args.owningDocument.id;
-    this.index = args.index;
+    this._index = args.index;
     
     this.id = args.id ?? createUUID();
-    this.isCustom = args.isCustom ?? false;
 
-    this.name = args.name ?? game.i18n.localize("ambersteel.character.skill.ability.newDefaultName");
-    this.img = args.img ?? "icons/svg/book.svg";
-    this.description = args.description ?? "";
-    this.requiredLevel = args.requiredLevel ?? 0;
-    this.apCost = args.apCost ?? 0;
-    this.damage = args.damage ?? [];
-    this.condition = args.condition;
-    this.distance = args.distance;
-    this.obstacle = args.obstacle;
-    this.opposedBy = args.opposedBy;
-    this.attackType = args.attackType;
+    this._isCustom = args.isCustom ?? false;
+    this._name = args.name ?? game.i18n.localize("ambersteel.character.skill.ability.newDefaultName");
+    this._img = args.img ?? "icons/svg/book.svg";
+    this._description = args.description ?? "";
+    this._requiredLevel = args.requiredLevel ?? 0;
+    this._apCost = args.apCost ?? 0;
+    this._damage = args.damage ?? [];
+    this._condition = args.condition;
+    this._distance = args.distance;
+    this._obstacle = args.obstacle;
+    this._opposedBy = args.opposedBy;
+    this._attackType = args.attackType;
   }
 
   /**
@@ -246,17 +342,12 @@ export default class SkillAbility {
   /**
    * Returns a plain object based on the given object instance. 
    * 
+   * IMPORTANT: To avoid problems with recursion, the `owningDocument` field 
+   * **is not and must not** be included!
+   * 
    * @returns {Object}
    */
   toDto() {
-    // Ensure damage definitions are turned into plain objects. 
-    const damage = [];
-    for (const o of this.damage) {
-      damage.push({ damage: o.damage, damageType: o.damageType.name });
-    }
-
-    // IMPORTANT: To avoid problems with recursion, the `owningDocument` field 
-    // **must not** be included!
     const obj = Object.create(null);
 
     obj.id = this.id;
@@ -268,11 +359,13 @@ export default class SkillAbility {
     obj.description = this.description;
     obj.requiredLevel = this.requiredLevel;
     obj.apCost = this.apCost;
-    obj.damage = this.damage;
+    obj.damage = this.damage.map(it => {
+      return { damage: it.damage, damageType: it.damageType.name }
+    });
     obj.condition = this.condition;
     obj.distance = this.distance;
     obj.obstacle = this.obstacle;
-    obj.attackType = this.attackType;
+    obj.attackType = (this.attackType ?? {}).name;
     obj.opposedBy = this.opposedBy;
     
     return obj;
