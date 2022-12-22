@@ -15,7 +15,7 @@ import DocumentFetcher from "../../../business/document/document-fetcher/documen
  * --- Inherited from ButtonViewModel
  * 
  * @property {JQuery | HTMLElement} element The button element on the DOM. 
- * @property {Object} target The target object to affect.  
+ * @property {TransientBaseActor | TransientBaseItem} target The target object to affect.  
  * 
  * --- Own properties
  * 
@@ -46,7 +46,7 @@ export default class ButtonAddViewModel extends ButtonViewModel {
   /**
    * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
    * 
-   * @param {Object} args.target The target object to affect. 
+   * @param {TransientBaseActor | TransientBaseItem} args.target The target object to affect. 
    * @param {Function | String | undefined} args.callback Optional. Defines an asynchronous callback that is invoked upon completion of the button's own callback. 
    * @param {Any | undefined} args.callbackData Optional. Defines any data to pass to the completion callback. 
    * @param {Boolean | undefined} args.isEditable Optional. If true, will be interactible. 
@@ -107,40 +107,47 @@ export default class ButtonAddViewModel extends ButtonViewModel {
         isCustom: true
       };
       this.target.createSkillAbility(creationData);
-      return;
-    }
-
-    if (this.withDialog === true) {
-      new AddItemDialog({
-        itemType: this.creationType,
-        localizedItemLabel: game.i18n.localize(this.localizableType),
-        localizedTitle: game.i18n.localize(this.localizableDialogTitle),
-        closeCallback: async (dialog) => {
-          if (dialog.confirmed !== true) return;
-
-          if (dialog.isCustomChecked === true) {
-            return await this._createCustom();
-          } else {
-            const templateId = dialog.selected;
-            const templateItem = await new DocumentFetcher().find({
-              id: templateId,
-            });
-            const itemData = {
-              name: templateItem !== undefined ? templateItem.name : `New ${this.creationType.capitalize()}`,
-              type: templateItem !== undefined ? templateItem.type : this.creationType,
-              data: {
-                ...(templateItem !== undefined ? templateItem.data.data : {}),
-                ...this.creationData,
-                isCustom: false,
-              }
-            };
-            return await Item.create(itemData, { parent: this.target });
-          }
-        },
-      }).render(true);
+    } else if (this.withDialog === true) {
+      this._createWithDialog();
     } else {
       this._createCustom();
     }
+  }
+
+  /**
+   * Prompts the user to pick a specific document to add to the target, via a dialog. 
+   * 
+   * @async
+   * @private
+   */
+  async _createWithDialog() {
+    new AddItemDialog({
+      itemType: this.creationType,
+      localizedItemLabel: game.i18n.localize(this.localizableType),
+      localizedTitle: game.i18n.localize(this.localizableDialogTitle),
+      closeCallback: async (dialog) => {
+        if (dialog.confirmed !== true) return;
+
+        if (dialog.isCustomChecked === true) {
+          return await this._createCustom();
+        } else {
+          const templateId = dialog.selected;
+          const templateItem = await new DocumentFetcher().find({
+            id: templateId,
+          });
+          const itemData = {
+            name: templateItem !== undefined ? templateItem.name : `New ${this.creationType.capitalize()}`,
+            type: templateItem !== undefined ? templateItem.type : this.creationType,
+            data: {
+              ...(templateItem !== undefined ? templateItem.data.data : {}),
+              ...this.creationData,
+              isCustom: false,
+            }
+          };
+          return await Item.create(itemData, { parent: this.target.document });
+        }
+      },
+    }).render(true);
   }
 
   /**
@@ -161,7 +168,7 @@ export default class ButtonAddViewModel extends ButtonViewModel {
         isCustom: true,
       }
     };
-    return await Item.create(itemData, { parent: this.target });
+    return await Item.create(itemData, { parent: this.target.document });
   }
 
   /**
