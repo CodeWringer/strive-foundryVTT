@@ -79,11 +79,7 @@ export default class InputViewModel extends ViewModel {
    */
   set value(newValue) {
     try {
-      if (this.propertyOwner.updateProperty !== undefined) {
-        this.propertyOwner.updateProperty(this.propertyPath, newValue);
-      } else {
-        setNestedPropertyValue(this.propertyOwner, this.propertyPath, newValue);
-      }
+      setNestedPropertyValue(this.propertyOwner, this.propertyPath, newValue);
     } catch (error) {
       if (this._contextTemplate !== undefined) {
         throw new Error(`[${this._contextTemplate}] IllegalStateException: ${error.message}`);

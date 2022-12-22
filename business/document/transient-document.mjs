@@ -34,6 +34,8 @@ import { VISIBILITY_MODES } from '../../presentation/chat/visibility-modes.mjs';
  * * Read-only.
  * @property {String} id Returns the id of the document. 
  * * Read-only.
+ * @property {String} img Returns the icon/image path of the document. 
+ * * Read-only.
  * @property {Boolean} isOwner Returns true, if the current user is the owner of the document. 
  * * Read-only.
  * @property {Item | Actor} document Returns the encapsulated document instance. 
@@ -81,6 +83,14 @@ export default class TransientDocument {
    * @readonly
    */
   get id() { return this.document.id; }
+  
+  /**
+   * Returns the icon/image path of the document. 
+   * 
+   * @type {String}
+   * @readonly
+   */
+  get img() { return this.document.img; }
   
   /**
    * Returns true, if the current user is the owner of the document. 
@@ -182,8 +192,21 @@ export default class TransientDocument {
    * @async
    * @protected
    */
-  async updateProperty(propertyPath, newValue, render = true) {
+  async updateSingle(propertyPath, newValue, render = true) {
     await UpdateUtil.updateProperty(this.document, propertyPath, newValue, render);
+  }
+
+  /**
+   * Updates the document with the given `delta` object. 
+   * 
+   * @param {Object} delta The update delta to persist. 
+   * * If aiming to update `data`, only include **one** `data` property in the `delta`.
+   * E. g. `{ data: { myProperty: "myNewValue" } }`
+   * @param {Boolean} render If true, will trigger a re-render of the associated document sheet. 
+   * * Default 'true'. 
+   */
+  async update(delta, render = true) {
+    this.document.update(delta);
   }
 
   /**

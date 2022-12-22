@@ -69,7 +69,7 @@ export default class ActorSkillsViewModel extends ViewModel {
       isSendable: thiz.isSendable,
       contextTemplate: thiz.contextTemplate,
       indexDataSource: new DocumentListItemOrderDataSource({
-        propertyOwner: thiz.actor,
+        document: thiz.actor,
         listName: "learningSkills",
       }),
       listItemViewModels: this.learningSkillViewModels,
@@ -107,7 +107,7 @@ export default class ActorSkillsViewModel extends ViewModel {
       isSendable: thiz.isSendable,
       contextTemplate: thiz.contextTemplate,
       indexDataSource: new DocumentListItemOrderDataSource({
-        propertyOwner: thiz.actor,
+        document: thiz.actor,
         listName: "knownSkills",
       }),
       listItemViewModels: this.knownSkillViewModels,

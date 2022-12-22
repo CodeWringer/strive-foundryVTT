@@ -26,19 +26,21 @@ export default class AmbersteelBaseActorSheet {
   get title() { return game.i18n.localize("ambersteel.general.actor.plain.label"); }
 
   /**
-   * Returns a new actor sheet view model for the given actor sheet. 
-   * @param {Object} context Data fetched via getData. 
-   * @param {Actor} actor The actor associated with the sheet. 
+   * Returns a view model for the given document. 
+   * 
+   * @param {Object} context 
+   * @param {TransientDocument} document 
+   * 
    * @returns {ActorSheetViewModel}
    */
-  getViewModel(context, actor) {
+  getViewModel(context, document) {
     return new ActorSheetViewModel({
-      id: actor.id,
+      id: document.id,
       isEditable: context.isEditable,
       isSendable: context.isSendable,
       isOwner: context.isOwner,
       isGM: context.isGM,
-      actor: actor,
+      document: document,
     });
   }
 }

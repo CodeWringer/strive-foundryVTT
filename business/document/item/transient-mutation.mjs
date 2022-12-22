@@ -42,7 +42,7 @@ export default class TransientMutation extends TransientBaseItem {
       isSendable: this.isOwner || game.user.isGM,
       isOwner: this.isOwner,
       isGM: game.user.isGM,
-      item: this.document,
+      document: this.document,
       ...overrides,
     });
   }

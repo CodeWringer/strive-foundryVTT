@@ -154,7 +154,7 @@ export default class ActorHealthViewModel extends ViewModel {
       isEditable: args.isEditable ?? thiz.isEditable,
       id: "vmIllnessList",
       indexDataSource: new DocumentListItemOrderDataSource({
-        propertyOwner: thiz.actor,
+        document: thiz.actor,
         listName: "illnesses",
       }),
       listItemViewModels: this.illnesses,
@@ -187,7 +187,7 @@ export default class ActorHealthViewModel extends ViewModel {
       isEditable: args.isEditable ?? thiz.isEditable,
       id: "vmInjuryList",
       indexDataSource: new DocumentListItemOrderDataSource({
-        propertyOwner: thiz.actor,
+        document: thiz.actor,
         listName: "injuries",
       }),
       listItemViewModels: this.injuries,
@@ -220,7 +220,7 @@ export default class ActorHealthViewModel extends ViewModel {
       isEditable: args.isEditable ?? thiz.isEditable,
       id: "vmMutationList",
       indexDataSource: new DocumentListItemOrderDataSource({
-        propertyOwner: thiz.actor,
+        document: thiz.actor,
         listName: "mutations",
       }),
       listItemViewModels: this.mutations,

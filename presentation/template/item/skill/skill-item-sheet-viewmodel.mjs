@@ -20,26 +20,24 @@ export default class SkillItemSheetViewModel extends SkillViewModel {
    * @type {Boolean}
    * @readonly
    */
-  get isSkillAbilityListVisible() { return (this.isEditable === true) || this.item.data.data.abilities.length !== 0 }
+  get isSkillAbilityListVisible() { return (this.isEditable === true) || this.document.abilities.length !== 0 }
 
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
    * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 
-   * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 
-   * is expected to be associated with an actor sheet or item sheet or journal entry or chat message and so on.
    * 
    * @param {Boolean | undefined} args.isEditable If true, the sheet is editable. 
    * @param {Boolean | undefined} args.isSendable If true, the document represented by the sheet can be sent to chat. 
    * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document. 
    * @param {Boolean | undefined} args.isGM If true, the current user is a GM. 
    * 
-   * @param {Item} args.item
-   * @param {Actor | undefined} args.actor If not undefined, this is the actor that owns the item. 
+   * @param {TransientSkill} args.document
    * @param {String | undefined} args.visGroupId
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["item"]);
+    validateOrThrow(args, ["document"]);
+
     this.contextTemplate = args.contextTemplate ?? "skill-item-sheet";
 
     // Child view models. 
@@ -49,47 +47,47 @@ export default class SkillItemSheetViewModel extends SkillViewModel {
     this.vmImg = factory.createVmImg({
       parent: thiz,
       id: "vmImg",
-      propertyOwner: thiz.item,
+      propertyOwner: thiz.document,
       propertyPath: "img",
     });
     this.vmTfName = factory.createVmTextField({
       parent: thiz,
       id: "vmTfName",
-      propertyOwner: thiz.item,
+      propertyOwner: thiz.document,
       propertyPath: "name",
       placeholder: "ambersteel.general.name",
     });
     this.vmBtnSendToChat = factory.createVmBtnSendToChat({
       parent: thiz,
       id: "vmBtnSendToChat",
-      target: thiz.item,
+      target: thiz.document,
       isEditable: thiz.isEditable || thiz.isGM,
     });
     this.vmDdRelatedAttribute = factory.createVmDropDown({
       parent: thiz,
       id: "vmDdRelatedAttribute",
-      propertyOwner: thiz.item,
-      propertyPath: "data.data.relatedAttribute",
+      propertyOwner: thiz.document,
+      propertyPath: "relatedAttribute",
       options: thiz.attributeOptions,
     });
     this.vmTfCategory = factory.createVmTextField({
       parent: thiz,
       id: "vmTfCategory",
-      propertyOwner: thiz.item,
-      propertyPath: "data.data.category",
+      propertyOwner: thiz.document,
+      propertyPath: "category",
       placeholder: "ambersteel.general.category",
     });
     this.vmSwIsMagicSchool = factory.createVmBtnToggle({
       parent: thiz,
       id: "vmSwIsMagicSchool",
-      target: thiz.item,
-      propertyPath: "data.data.isMagicSchool",
+      target: thiz.document,
+      propertyPath: "isMagicSchool",
     });
     this.vmRtDescription = factory.createVmRichText({
       parent: thiz,
       id: "vmRtDescription",
-      propertyOwner: thiz.item,
-      propertyPath: "data.data.description",
+      propertyOwner: thiz.document,
+      propertyPath: "description",
     });
     this.vmSkillAbilityTable = new SkillAbilityTableViewModel({
       id: "vmSkillAbilityTable",
@@ -98,11 +96,10 @@ export default class SkillItemSheetViewModel extends SkillViewModel {
       isSendable: thiz.isSendable,
       isOwner: thiz.isOwner,
       isGM: thiz.isGM,
-      item: thiz.item,
+      document: thiz.document,
       skillAbilitiesInitiallyVisible: true,
       oneColumn: false,
       visGroupId: thiz.visGroupId,
-      actor: thiz.actor,
     });
   }
 }

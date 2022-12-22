@@ -31,6 +31,8 @@ import { ATTACK_TYPES } from "../../ruleset/skill/attack-types.mjs";
  * @property {Array<SkillAbility>} abilities The array of skill abilities of this skill. 
  * @property {Boolean} isMagicSchool Returns true, if the skill is considered 
  * a magic school. 
+ * @property {String} description
+ * * Read-only. 
  */
 export default class TransientSkill extends TransientBaseItem {
   /** @override */
@@ -40,6 +42,107 @@ export default class TransientSkill extends TransientBaseItem {
   get chatMessageTemplate() { return TEMPLATES.SKILL_ITEM_CHAT_MESSAGE; }
   
   /**
+   * @type {String}
+   */
+  get relatedAttribute() {
+    return this.document.data.data.relatedAttribute;
+  }
+  set relatedAttribute(value) {
+    this.document.data.data.relatedAttribute = value;
+    this.updateSingle("data.data.relatedAttribute", value);
+  }
+  
+  /**
+   * @type {String}
+   */
+  get category() {
+    return this.document.data.data.category;
+  }
+  set category(value) {
+    this.document.data.data.category = value;
+    this.updateSingle("data.data.category", value);
+  }
+  
+  /**
+   * @type {Number}
+   */
+  get level() {
+    return parseInt(this.document.data.data.level);
+  }
+  set level(value) {
+    this.document.data.data.level = value;
+    this.updateSingle("data.data.level", value);
+  }
+  
+  /**
+   * @type {LevelAdvancement}
+   */
+  get advancementProgress() {
+    const thiz = this;
+    return {
+      get successes() { return parseInt(thiz.document.data.data.successes); },
+      set successes(value) {
+        thiz.update({
+          data: {
+            successes: value,
+          }
+        }); 
+      },
+      get failures() { return parseInt(thiz.document.data.data.failures); },
+      set failures(value) {
+        thiz.update({
+          data: {
+            failures: value,
+          }
+        }); 
+      },
+    };
+  }
+  set advancementProgress(value) {
+    this.document.data.data.successes = value.successes;
+    this.document.data.data.failures = value.failures;
+    this.update({
+      data: {
+        successes: value.successes,
+        failures: value.failures
+      }
+    });
+  }
+  
+  /**
+   * @type {String}
+   */
+  get description() {
+    return this.document.data.data.description;
+  }
+  set description(value) {
+    this.document.data.data.description = value;
+    this.updateSingle("data.data.description", value);
+  }
+  
+  /**
+   * @type {Boolean}
+   */
+  get isMagicSchool() {
+    return this.document.data.data.isMagicSchool;
+  }
+  set isMagicSchool(value) {
+    this.document.data.data.isMagicSchool = value;
+    this.updateSingle("data.data.isMagicSchool", value);
+  }
+  
+  /**
+   * @type {Boolean}
+   */
+  get abilities() {
+    return this._abilities;
+  }
+  set abilities(value) {
+    this._abilities = value;
+    this.updateSingle("data.data.abilities", value);
+  }
+  
+  /**
    * @param {Item} document An encapsulated item instance. 
    * 
    * @throws {Error} Thrown, if `document` is `undefined`. 
@@ -47,20 +150,8 @@ export default class TransientSkill extends TransientBaseItem {
   constructor(document) {
     super(document);
 
-    const data = document.data.data;
-
-    this.level = parseInt(data.level);
     this.advancementRequirements = new Ruleset().getSkillAdvancementRequirements(this.level);
-    this.advancementProgress = new LevelAdvancement({
-      successes: parseInt(data.successes),
-      failures: parseInt(data.failures),
-    });
-
-    this.relatedAttribute = ATTRIBUTES[data.relatedAttribute];
-
-    this.isMagicSchool = data.isMagicSchool ?? false; // TODO #85: Does this require parsing?
-
-    this.abilities = this._getSkillAbilities();
+    this._abilities = this._getSkillAbilities();
   }
 
   /** @override */
@@ -95,8 +186,7 @@ export default class TransientSkill extends TransientBaseItem {
       isSendable: this.isOwner || game.user.isGM,
       isOwner: this.isOwner,
       isGM: game.user.isGM,
-      item: this.document,
-      actor: this.owningDocument.document,
+      document: this,
       visGroupId: createUUID(),
       ...overrides,
     });
@@ -251,7 +341,7 @@ export default class TransientSkill extends TransientBaseItem {
    */
   async persistSkillAbilities(render = true) {
     const abilitiesToPersist = this.abilities.map(it => it.toDto());
-    await this.updateProperty("data.abilities", abilitiesToPersist, render);
+    await this.updateSingle("data.abilities", abilitiesToPersist, render);
   }
 
   /**

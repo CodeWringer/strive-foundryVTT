@@ -31,16 +31,16 @@ export default class SkillViewModel extends ViewModel {
    * @param {String | undefined} args.contextTemplate Optional. Name or path of a contextual template, 
    * which will be displayed in exception log entries, to aid debugging. 
    * 
-   * @param {Item} args.item
+   * @param {TransientSkill} args.document
    * @param {Actor | undefined} args.actor If not undefined, this is the actor that owns the item. 
    * @param {String | undefined} args.visGroupId
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["item"]);
+    validateOrThrow(args, ["document"]);
 
     // Own properties.
-    this.item = args.item;
+    this.document = args.document;
     this.actor = args.actor;
     this.visGroupId = args.visGroupId ?? createUUID();
   }

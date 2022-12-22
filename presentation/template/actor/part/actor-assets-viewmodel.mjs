@@ -90,7 +90,7 @@ export default class ActorAssetsViewModel extends ViewModel {
       isEditable: args.isEditable ?? thiz.isEditable,
       id: "vmPropertyList",
       indexDataSource: new DocumentListItemOrderDataSource({
-        propertyOwner: thiz.actor,
+        document: thiz.actor,
         listName: "property",
       }),
       listItemViewModels: this.itemViewModels,

@@ -10,14 +10,15 @@ export default class AmbersteelIllnessItemSheet extends AmbersteelBaseItemSheet 
   /** @override */
   get title() { return game.i18n.localize("ambersteel.character.health.illness.singular"); }
 
-  getViewModel(context, item) {
+  /** @override */
+  getViewModel(context, document) {
     return new IllnessItemSheetViewModel({
-      id: item.id,
+      id: document.id,
       isEditable: context.isEditable,
       isSendable: context.isSendable,
       isOwner: context.isOwner,
       isGM: context.isGM,
-      item: item,
+      document: document.getTransientObject(),
     });
   }
 }

@@ -10,14 +10,15 @@ export default class AmbersteelSkillItemSheet extends AmbersteelBaseItemSheet {
   /** @override */
   get title() { return game.i18n.localize("ambersteel.character.skill.singular"); }
 
-  getViewModel(context, item) {
+  /** @override */
+  getViewModel(context, document) {
     return new SkillItemSheetViewModel({
-      id: item.id,
+      id: document.id,
       isEditable: context.isEditable,
       isSendable: context.isSendable,
       isOwner: context.isOwner,
       isGM: context.isGM,
-      item: item,
+      document: document.getTransientObject(),
     });
   }
 }

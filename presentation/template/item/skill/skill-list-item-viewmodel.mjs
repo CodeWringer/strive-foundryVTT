@@ -20,21 +20,21 @@ export default class SkillListItemViewModel extends SkillViewModel {
    * @type {Boolean}
    * @readonly
    */
-  get isSkillAbilityListVisible() { return (this.isEditable === true) || this.item.data.data.abilities.length !== 0 }
+  get isSkillAbilityListVisible() { return (this.isEditable === true) || this.document.abilities.length !== 0 }
 
   /**
    * Returns the current number of successes. 
    * @type {Number}
    * @readonly
    */
-  get successses() { return this.item.data.data.requiredSuccessses; }
+  get successses() { return this.document.advancementRequirements.successses; }
 
   /**
    * Returns the current number of failures. 
    * @type {Number}
    * @readonly
    */
-  get failures() { return this.item.data.data.requiredFailures; }
+  get failures() { return this.document.advancementRequirements.failures; }
 
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
@@ -47,13 +47,12 @@ export default class SkillListItemViewModel extends SkillViewModel {
    * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document. 
    * @param {Boolean | undefined} args.isGM If true, the current user is a GM. 
    * 
-   * @param {Item} args.item
-   * @param {Actor | undefined} args.actor If not undefined, this is the actor that owns the item. 
+   * @param {TransientSkill} args.document
    * @param {String | undefined} args.visGroupId
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["item"]);
+    validateOrThrow(args, ["document"]);
     this.contextTemplate = args.contextTemplate ?? "skill-list-item";
 
     // Child view models. 
@@ -63,71 +62,71 @@ export default class SkillListItemViewModel extends SkillViewModel {
     this.vmImg = factory.createVmImg({
       parent: thiz,
       id: "vmImg",
-      propertyOwner: thiz.item,
+      propertyOwner: thiz.document,
       propertyPath: "img",
     });
     this.vmTfName = factory.createVmTextField({
       parent: thiz,
       id: "vmTfName",
-      propertyOwner: thiz.item,
+      propertyOwner: thiz.document,
       propertyPath: "name",
       placeholder: "ambersteel.general.name",
     });
     this.vmBtnRoll = factory.createVmBtnRoll({
       parent: thiz,
       id: "vmBtnRoll",
-      target: thiz.item,
+      target: thiz.document,
       propertyPath: undefined,
-      primaryChatTitle: game.i18n.localize(thiz.item.name),
-      primaryChatImage: thiz.item.img,
+      primaryChatTitle: game.i18n.localize(thiz.document.name),
+      primaryChatImage: thiz.document.img,
       rollType: "dice-pool",
       callback: "advanceBasedOnRollResult",
-      callbackData: thiz.item.id,
-      actor: thiz.actor,
+      callbackData: thiz.document.id,
+      actor: thiz.document.owningDocument.document,
     })
     this.vmBtnSendToChat = factory.createVmBtnSendToChat({
       parent: thiz,
       id: "vmBtnSendToChat",
-      target: thiz.item,
+      target: thiz.document,
     });
     this.vmBtnDelete = factory.createVmBtnDelete({
       parent: thiz,
       id: "vmBtnDelete",
-      target: thiz.item,
+      target: thiz.document,
       withDialog: true,
     })
     this.vmDdRelatedAttribute = factory.createVmDropDown({
       parent: thiz,
       id: "vmDdRelatedAttribute",
-      propertyOwner: thiz.item,
-      propertyPath: "data.data.relatedAttribute",
+      propertyOwner: thiz.document,
+      propertyPath: "relatedAttribute",
       options: thiz.attributeOptions,
     });
     this.vmTfCategory = factory.createVmTextField({
       parent: thiz,
       id: "vmTfCategory",
-      propertyOwner: thiz.item,
-      propertyPath: "data.data.category",
+      propertyOwner: thiz.document,
+      propertyPath: "category",
     });
     this.vmNsLevel = factory.createVmNumberSpinner({
       parent: thiz,
       id: "vmNsLevel",
-      propertyOwner: thiz.item,
-      propertyPath: "data.data.level",
+      propertyOwner: thiz.document,
+      propertyPath: "level",
       min: 0,
     });
     this.vmNsSuccesses = factory.createVmNumberSpinner({
       parent: thiz,
       id: "vmNsSuccesses",
-      propertyOwner: thiz.item,
-      propertyPath: "data.data.successes",
+      propertyOwner: thiz.document,
+      propertyPath: "advancementProgress.successes",
       min: 0,
     });
     this.vmNsFailures = factory.createVmNumberSpinner({
       parent: thiz,
       id: "vmNsFailures",
-      propertyOwner: thiz.item,
-      propertyPath: "data.data.failures",
+      propertyOwner: thiz.document,
+      propertyPath: "advancementProgress.failures",
       min: 0,
     });
     this.vmSkillAbilityTable = new SkillAbilityTableViewModel({
@@ -137,23 +136,22 @@ export default class SkillListItemViewModel extends SkillViewModel {
       isSendable: thiz.isSendable,
       isOwner: thiz.isOwner,
       isGM: thiz.isGM,
-      item: thiz.item,
+      document: thiz.document,
       skillAbilitiesInitiallyVisible: false,
       oneColumn: false,
       visGroupId: thiz.visGroupId,
-      actor: thiz.actor,
     });
     this.vmSwIsMagicSchool = factory.createVmBtnToggle({
       parent: thiz,
       id: "vmSwIsMagicSchool",
-      target: thiz.item,
-      propertyPath: "data.data.isMagicSchool",
+      target: thiz.document,
+      propertyPath: "isMagicSchool",
     });
     this.vmRtDescription = factory.createVmRichText({
       parent: thiz,
       id: "vmRtDescription",
-      propertyOwner: thiz.item,
-      propertyPath: "data.data.description",
+      propertyOwner: thiz.document,
+      propertyPath: "description",
     });
   }
 }

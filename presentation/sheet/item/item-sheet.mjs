@@ -35,7 +35,7 @@ export class AmbersteelItemSheet extends ItemSheet {
   static get defaultOptions() {
     return mergeObject(super.defaultOptions, {
       classes: [SYSTEM_ID, "sheet", "item"],
-      width: 520,
+      width: 600,
       height: 480,
       tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "description" }]
     });

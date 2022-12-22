@@ -23,7 +23,7 @@ export default class DocumentListItemOrderDataSource extends AbstractListItemOrd
   /** @override */
   getAll() {
     try {
-      return this.document.displayOrders;
+      return this.document.displayOrders[listName];
     } catch (error) {
       return [];
     }
@@ -41,7 +41,12 @@ export default class DocumentListItemOrderDataSource extends AbstractListItemOrd
       if (existsOnParent !== true) return;
     }
 
-    this.document.displayOrders = idList;
+    const newDisplayOrders = {
+      ...this.document.displayOrders
+    }
+    newDisplayOrders[listName] = idList;
+
+    this.document.displayOrders = newDisplayOrders;
   }
 }
 

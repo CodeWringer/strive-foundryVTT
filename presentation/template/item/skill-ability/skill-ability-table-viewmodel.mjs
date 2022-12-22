@@ -22,9 +22,12 @@ export default class SkillAbilityTableViewModel extends ViewModel {
 
   /**
    * @type {Boolean}
-   * @readonly
+   * @private
    */
   _skillAbilitiesInitiallyVisible = false;
+  /**
+   * @type {Boolean}
+   */
   get skillAbilitiesInitiallyVisible() {
     return this._skillAbilitiesInitiallyVisible;
   }
@@ -66,16 +69,8 @@ export default class SkillAbilityTableViewModel extends ViewModel {
   abilities = [];
 
   /**
-   * @type {Actor | undefined}
-   * @readonly
-   */
-  actor = undefined;
-
-  /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
    * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 
-   * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 
-   * is expected to be associated with an actor sheet or item sheet or journal entry or chat message and so on.
    * 
    * @param {Boolean | undefined} args.isEditable If true, the sheet is editable. 
    * @param {Boolean | undefined} args.isSendable If true, the document represented by the sheet can be sent to chat. 
@@ -85,7 +80,6 @@ export default class SkillAbilityTableViewModel extends ViewModel {
    * @param {TransientSkill} args.document
    * @param {Boolean | undefined} args.oneColumn
    * @param {String | undefined} args.visGroupId
-   * @param {Actor | undefined} args.actor
    * @param {Boolean | undefined} args.skillAbilitiesInitiallyVisible
    */
   constructor(args = {}) {
@@ -98,7 +92,6 @@ export default class SkillAbilityTableViewModel extends ViewModel {
     this.document = args.document;
     this.oneColumn = args.oneColumn ?? false;
     this.visGroupId = args.visGroupId ?? createUUID();
-    this.actor = args.actor;
     this._skillAbilitiesInitiallyVisible = args.skillAbilitiesInitiallyVisible ?? false;
 
     // Child view models. 
@@ -139,7 +132,7 @@ export default class SkillAbilityTableViewModel extends ViewModel {
       isEditable: args.isEditable ?? thiz.isEditable,
       id: "vmSkillAbilities",
       indexDataSource: new DocumentListItemOrderDataSource({
-        propertyOwner: thiz.document,
+        document: thiz.document,
         listName: "abilities",
       }),
       listItemViewModels: this.abilities,

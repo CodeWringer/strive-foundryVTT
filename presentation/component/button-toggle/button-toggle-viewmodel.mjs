@@ -39,11 +39,7 @@ export default class ButtonToggleViewModel extends ButtonViewModel {
    */
   set value(newValue) {
     try {
-      if (this.target.updateProperty !== undefined) {
-        this.target.updateProperty(this.propertyPath, newValue);
-      } else {
-        setNestedPropertyValue(this.target, this.propertyPath, newValue);
-      }
+      setNestedPropertyValue(this.target, this.propertyPath, newValue);
     } catch (error) {
       if (this._contextTemplate !== undefined) {
         throw new Error(`[${this._contextTemplate}] IllegalStateException: ${error.message}`);

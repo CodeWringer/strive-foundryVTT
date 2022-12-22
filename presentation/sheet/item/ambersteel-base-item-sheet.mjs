@@ -25,14 +25,22 @@ export default class AmbersteelBaseItemSheet {
    */
   get title() { return game.i18n.localize("ambersteel.character.asset.singular"); }
 
-  getViewModel(context, item) {
+  /**
+   * Returns a view model for the given document. 
+   * 
+   * @param {Object} context 
+   * @param {TransientDocument} document 
+   * 
+   * @returns {ItemItemSheetViewModel}
+   */
+  getViewModel(context, document) {
     return new ItemItemSheetViewModel({
-      id: item.id,
+      id: document.id,
       isEditable: context.isEditable,
       isSendable: context.isSendable,
       isOwner: context.isOwner,
       isGM: context.isGM,
-      item: item,
+      document: document.getTransientObject(),
     });
   }
   
