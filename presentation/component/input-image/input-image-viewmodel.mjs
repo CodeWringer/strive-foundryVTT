@@ -4,28 +4,21 @@ import InputViewModel from "../../view-model/input-view-model.mjs";
 
 /**
  * Constant that defines the css class to look for when identifying image input elements. 
+ * 
+ * @type {String}
  * @constant
  */
 export const SELECTOR_INPUT_IMAGE = "component-input-image";
 
 /**
- * --- Inherited from ViewModel
+ * Represents a changeable image. 
  * 
- * @property {Boolean} isEditable If true, input(s) will be in edit mode. If false, input(s) will be in read-only mode.
- * @property {String} id Optional. Id used for the HTML element's id and name attributes. 
- * @property {String} TEMPLATE Static. Returns the template this ViewModel is intended for. 
+ * A click on the image element prompts for the selection of a new image. 
  * 
- * --- Inherited from InputViewModel
- * 
- * @property {JQuery | HTMLElement} element The button element on the DOM. 
- * @property {String} propertyPath The path used to look up the value. 
- * @property {Object} propertyOwner An object on which to to look up the value. 
- * @property {Any} value Gets or sets the looked up value. 
- * 
- * --- Own properties
- * 
+ * @extends InputViewModel
  */
 export default class InputImageViewModel extends InputViewModel {
+  /** @override */
   static get TEMPLATE() { return TEMPLATES.COMPONENT_INPUT_IMAGE; }
 
   /**

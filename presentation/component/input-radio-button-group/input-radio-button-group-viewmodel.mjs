@@ -3,27 +3,16 @@ import { TEMPLATES } from "../../template/templatePreloader.mjs";
 import InputViewModel from "../../view-model/input-view-model.mjs";
 
 /**
- * --- Inherited from ViewModel
+ * Represents a radio-button-group. The user can select one of a defined list of options. 
  * 
- * @property {Boolean} isEditable If true, input(s) will be in edit mode. If false, input(s) will be in read-only mode.
- * @property {String} id Optional. Id used for the HTML element's id and name attributes. 
- * @property {String} TEMPLATE Static. Returns the template this ViewModel is intended for. 
- * 
- * --- Inherited from InputViewModel
- * 
- * @property {JQuery | HTMLElement} element The button element on the DOM. 
- * @property {String} propertyPath The path used to look up the value. 
- * @property {Object} propertyOwner An object on which to to look up the value. 
- * @property {Any} value Gets or sets the looked up value. 
- * 
- * --- Own properties
+ * @extends InputViewModel
  * 
  * @property {String} localizedValue Gets the localized version of the value. 
  * @property {ChoiceOption} selected Gets the currently selected option. 
  * @property {Array<ChoiceOption>} options Gets the options available to the radio button group. 
- * 
  */
 export default class InputRadioButtonGroupViewModel extends InputViewModel {
+  /** @override */
   static get TEMPLATE() { return TEMPLATES.COMPONENT_INPUT_RADIO_BUTTON_GROUP; }
   
   /**

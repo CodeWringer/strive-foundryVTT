@@ -4,23 +4,14 @@ import InputViewModel from "../../view-model/input-view-model.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
 
 /**
- * --- Inherited from ViewModel
+ * Represents a rich-text-editor. 
  * 
- * @property {Boolean} isEditable If true, input(s) will be in edit mode. If false, input(s) will be in read-only mode.
- * @property {String} id Optional. Id used for the HTML element's id and name attributes. 
- * @property {String} TEMPLATE Static. Returns the template this ViewModel is intended for. 
+ * Internally, this works as a wrapper to a tinyMCE editor, the way FoundryVTT includes it. 
  * 
- * --- Inherited from InputViewModel
- * 
- * @property {JQuery | HTMLElement} element The button element on the DOM. 
- * @property {String} propertyPath The path used to look up the value. 
- * @property {Object} propertyOwner An object on which to to look up the value. 
- * @property {Any} value Gets or sets the looked up value. 
- * 
- * --- Own properties
- * 
+ * @extends InputViewModel
  */
 export default class InputRichTextViewModel extends InputViewModel {
+  /** @override */
   static get TEMPLATE() { return TEMPLATES.COMPONENT_INPUT_RICH_TEXT; }
 
   /**

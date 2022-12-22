@@ -2,6 +2,11 @@ import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import { TEMPLATES } from "../../template/templatePreloader.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
 
+/**
+ * Represents a section that only game masters can access and write arbitrary content in. 
+ * 
+ * @extends ViewModel
+ */
 export default class GmNotesViewModel extends ViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.ACTOR_BIOGRAPHY; }

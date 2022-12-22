@@ -2,20 +2,16 @@ import { TEMPLATES } from "../../template/templatePreloader.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
 
 /**
- * --- Inherited from ViewModel
+ * Represents a label. It simply displays the text it is given. Localization must be done by the user. 
  * 
- * @property {Boolean} isEditable If true, input(s) will be in edit mode. If false, input(s) will be in read-only mode.
- * @property {String} id Optional. Id used for the HTML element's id and name attributes. 
- * @property {String} TEMPLATE Static. Returns the template this ViewModel is intended for. 
- * 
- * --- Own properties
+ * @extends ViewModel
  * 
  * @property {String} text Optional. The localization key of the text to display. 
  * @property {String} for Optional. The id of the associated input component. 
  * @property {String} cssClass Optional. A custom css class. 
- * 
  */
 export default class LabelViewModel extends ViewModel {
+  /** @override */
   static get TEMPLATE() { return TEMPLATES.COMPONENT_INPUT_LABEL; }
 
   /**

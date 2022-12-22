@@ -5,9 +5,8 @@ import ViewModel from "../../view-model/view-model.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
 
 /**
- * This object groups the view models of one list item, to pass through to the 
- * UI. 
- * @private
+ * This object groups the view models of one list item, to pass through to the UI. 
+ * 
  * @property {String} id 
  * @property {ViewModel} vmBtnMoveTop 
  * @property {ViewModel} vmBtnMoveUp 
@@ -16,6 +15,8 @@ import ButtonViewModel from "../button/button-viewmodel.mjs";
  * @property {ViewModel} vmBtnAddItem 
  * @property {ViewModel} listItemViewModel 
  * @property {String} listItemTemplate 
+ * 
+ * @private
  */
 class SortableListViewModelGroup {
   constructor(args = {}) {
@@ -31,26 +32,32 @@ class SortableListViewModelGroup {
 }
 
 /**
- * --- Inherited from ViewModel
+ * Represents a sortable and orderable list of arbitrary entries. 
  * 
- * @property {String} id Optional. Id used for the HTML element's id and name attributes. 
- * @property {String} TEMPLATE Static. Returns the template this ViewModel is intended for. 
- * 
- * --- Own properties
+ * @extends ViewModel
  * 
  * @property {Boolean} isEditable If true, input(s) will be in edit mode. If false, input(s) will be in read-only mode.
- * 
  */
 export default class SortableListViewModel extends ViewModel {
   static get TEMPLATE() { return TEMPLATES.COMPONENT_SORTABLE_LIST; }
 
   /**
+   * An array of view models that belong to the entries. 
+   * 
    * @type {Array<SortableListViewModelGroup>}
+   * @private
    */
   itemViewModelGroups = [];
 
   /**
+   * This is a list of ids, in the order that they should be rendered in the list. 
+   * 
+   * It is possible this list contains obsolete information, for example after an item 
+   * is deleted, its entry in this list must also be removed. Or a new item might have 
+   * been added, which isn't yet in this list and has yet to be added. 
+   * 
    * @type {Array<String>}
+   * @private
    */
   orderedIdList = [];
 
@@ -79,11 +86,6 @@ export default class SortableListViewModel extends ViewModel {
 
     // Get the item order. 
 
-    // This is only a list of IDs, in the order that they should be rendered in the list. 
-    // It is possible this list contains obsolete information, for example after an item 
-    // is deleted, its entry in this list must also be removed. 
-    // Or a new item might have been added, which isn't yet in this list and has to 
-    // be added. 
     const orderedIdList = this.indexDataSource.getAll();
 
     // Cull obsolete entries. 
