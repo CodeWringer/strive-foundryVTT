@@ -15,19 +15,15 @@ export const SELECTOR_EDIT = "custom-system-edit";
 export const SELECTOR_READ = "custom-system-read-only";
 
 /**
- * --- Inherited from ViewModel
+ * Represents the basis for all input type view models. 
  * 
- * @property {String} id Optional. Id used for the HTML element's id and name attributes. 
- * @property {String} TEMPLATE Static. Returns the template this ViewModel is intended for. 
- * 
- * --- Own properties
+ * @extends ViewModel
  * 
  * @property {Boolean} isEditable If true, input(s) will be in edit mode. If false, input(s) will be in read-only mode.
  * @property {JQuery | HTMLElement} element The button element on the DOM. 
  * @property {String} propertyPath The path used to look up the value. 
  * @property {Object} propertyOwner An object on which to to look up the value. 
  * @property {Any} value Gets or sets the looked up value. 
- * For example, could be an instance of {ActorSheet} or {ItemSheet}. 
  * @property {String | undefined} localizableTitle The localizable title (tooltip). 
  * @property {String} localizedTitle The localized title (tooltip). 
  */

@@ -2,7 +2,8 @@ import { SELECTOR_BUTTON } from "../component/button/button-viewmodel.mjs";
 import { SELECTOR_EDIT, SELECTOR_READ } from "./input-view-model.mjs";
 
 /**
- * Represents a collection of {ViewModel} objects. 
+ * Represents a collection of `ViewModel` objects. 
+ * 
  * @see {ViewModel}
  * 
  * @property {Object} viewModels Represents a map of view model ids to their instances. 
