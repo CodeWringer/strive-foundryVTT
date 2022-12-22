@@ -1,16 +1,11 @@
-// Imports of specific actor sheet "sub-types", to ensure their imports cause the `ACTOR_SHEET_SUBTYPE` map to be populated. 
-import AmbersteelBaseActorSheet from "./ambersteel-base-actor-sheet.mjs";
-import AmbersteelNpcActorSheet from "./ambersteel-npc-actor-sheet.mjs";
-import AmbersteelPcActorSheet from "./ambersteel-pc-actor-sheet.mjs";
 import { ACTOR_SHEET_SUBTYPE } from "./actor-sheet-subtype.mjs";
-// Other imports
 import * as SheetUtil from "../sheet-utility.mjs";
 import { SYSTEM_ID } from "../../../system-id.mjs";
 
 export class AmbersteelActorSheet extends ActorSheet {
   /**
    * Type-dependent object which pseudo-extends the logic of this object. 
-   * @type {AmbersteelBaseActorSheet | AmbersteelNpcActorSheet | AmbersteelPcActorSheet}
+   * @type {AmbersteelBaseActorSheet}
    * @readonly
    */
   get subType() {
@@ -102,11 +97,8 @@ export class AmbersteelActorSheet extends ActorSheet {
     const isEditable = this.isEditable;
 
     this.subType.activateListeners(html, isOwner, isEditable);
-
-    // Activate view model bound event listeners. 
     this.viewModel.activateListeners(html, isOwner, isEditable);
 
-    // -------------------------------------------------------------
     if (!isOwner) return;
 
     // Drag events for macros.
@@ -116,9 +108,6 @@ export class AmbersteelActorSheet extends ActorSheet {
       li.setAttribute("draggable", true);
       li.addEventListener("dragstart", handler, false);
     });
-
-    // -------------------------------------------------------------
-    if (!isEditable) return;
   }
 
   /**
