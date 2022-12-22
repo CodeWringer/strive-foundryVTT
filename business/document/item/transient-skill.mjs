@@ -14,6 +14,8 @@ import Ruleset from "../../ruleset/ruleset.mjs";
 import SkillAbility from "../../ruleset/skill/skill-ability.mjs";
 import CharacterAttribute from "../../ruleset/attribute/character-attribute.mjs";
 import { ATTACK_TYPES } from "../../ruleset/skill/attack-types.mjs";
+import { ATTRIBUTES } from "../../ruleset/attribute/attributes.mjs";
+import { isObject } from "../../util/validation-utility.mjs";
 
 /**
  * Represents the full transient data of a skill. 
@@ -39,14 +41,19 @@ export default class TransientSkill extends TransientBaseItem {
   get chatMessageTemplate() { return TEMPLATES.SKILL_ITEM_CHAT_MESSAGE; }
   
   /**
-   * @type {String}
+   * @type {Attribute}
    */
   get relatedAttribute() {
-    return this.document.data.data.relatedAttribute;
+    return ATTRIBUTES[this.document.data.data.relatedAttribute];
   }
   set relatedAttribute(value) {
-    this.document.data.data.relatedAttribute = value;
-    this.updateSingle("data.data.relatedAttribute", value);
+    if (isObject(value)) { // This assumes an `Attribute` object was given. 
+      this.document.data.data.relatedAttribute = value.name;
+      this.updateSingle("data.data.relatedAttribute", value.name);
+    } else { // This assumes a String was given. 
+      this.document.data.data.relatedAttribute = value;
+      this.updateSingle("data.data.relatedAttribute", value);
+    }
   }
   
   /**
