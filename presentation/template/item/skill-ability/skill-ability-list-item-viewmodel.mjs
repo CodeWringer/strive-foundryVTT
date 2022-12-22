@@ -1,7 +1,6 @@
 import { DAMAGE_TYPES } from "../../../../business/ruleset/damage-types.mjs";
 import { ATTACK_TYPES } from "../../../../business/ruleset/skill/attack-types.mjs";
 import DamageAndType from "../../../../business/ruleset/skill/damage-and-type.mjs";
-import { getNestedPropertyValue } from "../../../../business/util/property-utility.mjs";
 import { isNumber, validateOrThrow } from "../../../../business/util/validation-utility.mjs";
 import { SOUNDS_CONSTANTS } from "../../../audio/sounds.mjs";
 import * as ChatUtil from "../../../chat/chat-utility.mjs";
@@ -18,31 +17,12 @@ export default class SkillAbilityListItemViewModel extends ViewModel {
   static get TEMPLATE() { return TEMPLATES.SKILL_ABILITY_LIST_ITEM; }
 
   /**
-   * @type {Item}
-   * @readonly
-   */
-  item = undefined;
-
-  /**
    * @type {SkillAbility}
-   * @readonly
    */
-  get skillAbility() { return this.item.data.data.abilities[this.index] }
+  skillAbility = undefined;
 
   /** @override */
   get entityId() { return this.skillAbility.id; }
-
-  /**
-   * @type {Actor | undefined}
-   * @readonly
-   */
-  actor = undefined;
-
-  /**
-   * @type {Number}
-   * @readonly
-   */
-  index = -1;
 
   /**
    * @type {Array<ChoiceOption>}
@@ -102,38 +82,33 @@ export default class SkillAbilityListItemViewModel extends ViewModel {
    * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document. 
    * @param {Boolean | undefined} args.isGM If true, the current user is a GM. 
    * 
-   * @param {Item} args.item
-   * @param {Actor | undefined} args.actor
-   * @param {Number} args.index
+   * @param {SkillAbility} args.skillAbility
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["item", "index"]);
+    validateOrThrow(args, ["skillAbility"]);
 
-    this.item = args.item;
-    this.actor = args.actor;
-    this.index = args.index;
     this.contextTemplate = args.contextTemplate ?? "skill-ability-list-item";
-
+    this.skillAbility = args.skillAbility;
+    
     const thiz = this;
     const factory = new ViewModelFactory();
-
-    const pathSkillAbility = `data.data.abilities[${thiz.index}]`;
-    const skillAbility = getNestedPropertyValue(this.item, pathSkillAbility);
-    const skillAbilityParent = skillAbility.getOwningDocument();
+    
+    const skillAbility = this.skillAbility;
+    const owningDocument = skillAbility.owningDocument;
 
     this.vmBtnRoll = factory.createVmBtnRoll({
       parent: thiz,
       id: "vmBtnRoll",
-      target: skillAbilityParent,
+      target: owningDocument,
       propertyPath: undefined,
       primaryChatTitle: game.i18n.localize(skillAbility.name),
       primaryChatImage: skillAbility.img,
-      secondaryChatTitle: game.i18n.localize(skillAbilityParent.name),
-      secondaryChatImage: skillAbilityParent.img,
+      secondaryChatTitle: game.i18n.localize(owningDocument.name),
+      secondaryChatImage: owningDocument.img,
       rollType: "dice-pool",
       callback: "advanceBasedOnRollResult",
-      callbackData: skillAbility.ownerId,
+      callbackData: skillAbility.owningDocumentId,
       actor: thiz.actor,
       isEditable: (thiz.isEditable || thiz.isGM) && thiz.actor !== undefined,
     });
@@ -282,7 +257,7 @@ export default class SkillAbilityListItemViewModel extends ViewModel {
 
             return ChatUtil.sendToChat({
               renderedContent: renderedContent,
-              actor: skillAbilityParent.parent,
+              actor: owningDocument.parent,
               sound: SOUNDS_CONSTANTS.DICE_ROLL,
               visibilityMode: dialog.visibilityMode
             });
@@ -437,13 +412,20 @@ export default class SkillAbilityListItemViewModel extends ViewModel {
   }
 }
 
-class DamageAndTypeViewModel extends ViewModel {
+/**
+ * @extends ViewModel
+ */
+export class DamageAndTypeViewModel extends ViewModel {
   /**
    * @type {Array<ChoiceOption>}
    * @readonly
    */
   get damageTypeOptions() { return DAMAGE_TYPES.asChoices; }
 
+  /**
+   * @param {Object} args 
+   * @param {SkillAbility} args.skillAbility 
+   */
   constructor(args = {}) {
     super(args);
     validateOrThrow(args, ["skillAbility", "index"]);

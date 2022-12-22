@@ -4,7 +4,7 @@ cssClass: {undefined | String}
 --}}
 <section class="custom-system-chat-message{{#if cssClass}} {{cssClass}}{{/if}}" 
   data-view-model-id="{{viewModel.id}}"
-  data-document-id="{{viewModel.item.id}}"
+  data-document-id="{{viewModel.owningDocumentId}}"
   data-ability-index="{{viewModel.index}}"
 >
   {{!-- Header --}}
@@ -112,7 +112,7 @@ cssClass: {undefined | String}
             {{localize "ambersteel.damageType.label"}}
           </div>
           <span class="width-xxl">
-            {{../viewModel.getLocalizedDamageType entry.damageType}}
+            {{localize entry.damageType.localizableName}}
           </span>
         </div>
       </li>

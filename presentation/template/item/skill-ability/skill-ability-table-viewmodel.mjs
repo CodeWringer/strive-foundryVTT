@@ -15,17 +15,19 @@ export default class SkillAbilityTableViewModel extends ViewModel {
   static get TEMPLATE() { return TEMPLATES.SKILL_ABILITY_TABLE; }
 
   /**
-   * @type {Item}
+   * @type {TransientSkill}
    * @readonly
    */
-  item = undefined;
+  document = undefined;
 
   /**
    * @type {Boolean}
    * @readonly
    */
-  _skillAbilitiesInitiallyVisible = false
-  get skillAbilitiesInitiallyVisible() { return this._skillAbilitiesInitiallyVisible; }
+  _skillAbilitiesInitiallyVisible = false;
+  get skillAbilitiesInitiallyVisible() {
+    return this._skillAbilitiesInitiallyVisible;
+  }
   set skillAbilitiesInitiallyVisible(value) {
     this._skillAbilitiesInitiallyVisible = value;
 
@@ -80,7 +82,7 @@ export default class SkillAbilityTableViewModel extends ViewModel {
    * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document. 
    * @param {Boolean | undefined} args.isGM If true, the current user is a GM. 
    * 
-   * @param {Item} args.item
+   * @param {TransientSkill} args.document
    * @param {Boolean | undefined} args.oneColumn
    * @param {String | undefined} args.visGroupId
    * @param {Actor | undefined} args.actor
@@ -88,12 +90,12 @@ export default class SkillAbilityTableViewModel extends ViewModel {
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["item"]);
+    validateOrThrow(args, ["document"]);
 
     this.registerViewStateProperty("_skillAbilitiesInitiallyVisible");
 
     // Own properties.
-    this.item = args.item;
+    this.document = args.document;
     this.oneColumn = args.oneColumn ?? false;
     this.visGroupId = args.visGroupId ?? createUUID();
     this.actor = args.actor;
@@ -104,45 +106,40 @@ export default class SkillAbilityTableViewModel extends ViewModel {
     const thiz = this;
     const factory = new ViewModelFactory();
 
-    for (let i = 0; i < this.item.data.data.abilities.length; i++) {
-      const skillAbility = this.item.data.data.abilities[i];
+    for (const skillAbility of this.document.abilities) {
       let vm = undefined;
 
       if (this.oneColumn === true) {
         vm = new SkillAbilityChatMessageViewModel({
-          id: `vmSkillAbility-${i}`,
+          id: `vmSkillAbility-${skillAbility.id}`,
           parent: thiz,
           isEditable: args.isEditable,
           isSendable: args.isSendable,
           isOwner: args.isOwner,
           isGM: args.isGM,
           skillAbility: skillAbility,
-          item: thiz.item,
-          actor: thiz.actor,
-          index: i,
         })
       } else {
         vm = new SkillAbilityListItemViewModel({
-          id: `vmSkillAbility-${i}`,
+          id: `vmSkillAbility-${skillAbility.id}`,
           parent: thiz,
           isEditable: args.isEditable,
           isSendable: args.isSendable,
           isOwner: args.isOwner,
           isGM: args.isGM,
-          item: thiz.item,
-          actor: thiz.actor,
-          index: i,
+          skillAbility: skillAbility,
         });
       }
       this.abilities.push(vm);
       this[vm.id] = vm;
     }
+
     this.vmSkillAbilities = new SortableListViewModel({
       parent: thiz,
       isEditable: args.isEditable ?? thiz.isEditable,
       id: "vmSkillAbilities",
       indexDataSource: new DocumentListItemOrderDataSource({
-        propertyOwner: thiz.item,
+        propertyOwner: thiz.document,
         listName: "abilities",
       }),
       listItemViewModels: this.abilities,
@@ -150,7 +147,7 @@ export default class SkillAbilityTableViewModel extends ViewModel {
       vmBtnAddItem: factory.createVmBtnAdd({
         parent: thiz,
         id: "vmBtnAdd",
-        target: thiz.item,
+        target: thiz.document,
         creationType: "skill-ability",
         withDialog: false,
         localizableLabel: "ambersteel.character.skill.ability.add.label",
@@ -162,7 +159,7 @@ export default class SkillAbilityTableViewModel extends ViewModel {
     this.vmBtnToggleVisibilityExpand = factory.createVmBtnToggleVisibility({
       parent: thiz,
       id: "vmBtnToggleVisibilityExpand",
-      target: thiz.item,
+      target: thiz.document,
       isEditable: true,
       visGroup: thiz.visGroupId,
       toggleSelf: true,
@@ -171,7 +168,7 @@ export default class SkillAbilityTableViewModel extends ViewModel {
     this.vmBtnToggleVisibilityCollapse = factory.createVmBtnToggleVisibility({
       parent: thiz,
       id: "vmBtnToggleVisibilityCollapse",
-      target: thiz.item,
+      target: thiz.document,
       isEditable: true,
       visGroup: thiz.visGroupId,
       toggleSelf: true,

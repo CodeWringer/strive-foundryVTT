@@ -1,22 +1,11 @@
-import { DAMAGE_TYPES } from "../../../../business/ruleset/damage-types.mjs"
-import { ATTACK_TYPES } from "../../../../business/ruleset/skill/attack-types.mjs"
-import { getConstantByName } from "../../../../business/util/constants-utility.mjs"
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs"
 import { isNotBlankOrUndefined } from "../../../../business/util/validation-utility.mjs"
 import ViewModel from "../../../view-model/view-model.mjs"
 import { TEMPLATES } from "../../templatePreloader.mjs"
 
-// For some reason, extending from SheetViewModel, which would be the correct parent type here, 
-// causes a circular reference error. This is where the interpreter gives up and claims that SheetViewModel is 
-// being used, before it is initialized. 
 export default class SkillAbilityChatMessageViewModel extends ViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.SKILL_ABILITY_CHAT_MESSAGE; }
-
-  /**
-   * @type {Item}
-   */
-  item = undefined;
 
   /**
    * @type {SkillAbility}
@@ -27,15 +16,9 @@ export default class SkillAbilityChatMessageViewModel extends ViewModel {
   get entityId() { return this.skillAbility.id; }
 
   /**
-   * @type {Actor}
+   * @type {String}
    */
-  actor = undefined;
-
-  /**
-   * @type {Number}
-   * @readonly
-   */
-  index = -1;
+  get owningDocumentId() { return this.skillAbility.owningDocument.id; }
 
   /**
    * @type {Boolean}
@@ -80,7 +63,7 @@ export default class SkillAbilityChatMessageViewModel extends ViewModel {
   get localizedAttackType() {
     if (this.skillAbility.attackType === undefined) return "";
 
-    const localizableName = this._getConfigValue(ATTACK_TYPES, this.skillAbility.attackType).localizableName;
+    const localizableName = this.skillAbility.attackType.localizableName;
     return game.i18n.localize(localizableName);
   };
 
@@ -129,14 +112,11 @@ export default class SkillAbilityChatMessageViewModel extends ViewModel {
    * @param {String | undefined} args.contextTemplate Optional. Name or path of a contextual template, 
    * which will be displayed in exception log entries, to aid debugging. 
    * 
-   * @param {Item} args.item
    * @param {SkillAbility} args.skillAbility
-   * @param {Actor} args.actor
-   * @param {Number} args.index
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["item", "skillAbility"]);
+    validateOrThrow(args, ["skillAbility"]);
 
     this._isEditable = args.isEditable ?? false;
     this._isSendable = args.isSendable ?? false;
@@ -144,39 +124,6 @@ export default class SkillAbilityChatMessageViewModel extends ViewModel {
     this._isGM = args.isGM ?? false;
     this._contextTemplate = args.contextTemplate;
 
-    this.item = args.item;
     this.skillAbility = args.skillAbility;
-    this.actor = args.actor;
-    this.index = args.index;
-  }
-
-  // TODO: Issue/170
-  /**
-   * Returns the config object whose name matches the given value. Or, if the given value is an object, 
-   * simply returns the object. 
-   * @param {Object} configOptions 
-   * @param {String} value 
-   * @private
-   */
-  _getConfigValue(configOptions, value) {
-    for (const configOptionName in configOptions) {
-      const configOption = configOptions[configOptionName];
-
-      if (configOption.name === value) {
-        return configOption;
-      }
-    }
-
-    return undefined;
-  }
-
-  /**
-   * @param {String} damageTypeName 
-   * @returns {String}
-   * @protected
-   */
-  getLocalizedDamageType(damageTypeName) {
-    const configItem = getConstantByName(DAMAGE_TYPES, damageTypeName);
-    return game.i18n.localize(configItem.localizableName);
   }
 }
