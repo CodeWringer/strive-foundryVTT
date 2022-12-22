@@ -76,6 +76,8 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
     if (typeof(this.target) === "String") { // Item id provided. 
       item = await new DocumentFetcher().find({
         id: this.target,
+        documentType: "Item",
+        contentType: "item"
       });
     }
 
