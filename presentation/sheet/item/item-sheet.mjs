@@ -86,8 +86,6 @@ export class AmbersteelItemSheet extends ItemSheet {
     this._viewModel.readViewState();
     context.viewModel = this._viewModel;
     
-    this.subType.prepareDerivedData(context);
-
     return context;
   }
 
@@ -99,14 +97,17 @@ export class AmbersteelItemSheet extends ItemSheet {
     const isEditable = this.isEditable;
     
     this.subType.activateListeners(html, isOwner, isEditable);
-
-    // Activate view model bound event listeners. 
     this.viewModel.activateListeners(html, isOwner, isEditable);
 
-    // -------------------------------------------------------------
     if (!isOwner) return;
-    // -------------------------------------------------------------
-    if (!isEditable) return;
+
+    // Drag events for macros.
+    const handler = ev => this._onDragStart(ev);
+    html.find('li.item').each((i, li) => {
+      if (li.classList.contains("inventory-header")) return;
+      li.setAttribute("draggable", true);
+      li.addEventListener("dragstart", handler, false);
+    });
   }
 
   /**

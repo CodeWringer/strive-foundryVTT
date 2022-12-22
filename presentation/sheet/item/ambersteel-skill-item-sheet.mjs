@@ -1,4 +1,3 @@
-import Ruleset from "../../../business/ruleset/ruleset.mjs";
 import SkillItemSheetViewModel from "../../template/item/skill/skill-item-sheet-viewmodel.mjs";
 import { TEMPLATES } from "../../template/templatePreloader.mjs";
 import AmbersteelBaseItemSheet from "./ambersteel-base-item-sheet.mjs";
@@ -10,14 +9,6 @@ export default class AmbersteelSkillItemSheet extends AmbersteelBaseItemSheet {
 
   /** @override */
   get title() { return game.i18n.localize("ambersteel.character.skill.singular"); }
-
-  /** @override */
-  prepareDerivedData(context) {
-    super.prepareDerivedData(context);
-
-    const itemData = context.data.data;
-    itemData.groupName = new Ruleset().getAttributeGroupName(itemData.relatedAttribute);
-  }
 
   getViewModel(context, item) {
     return new SkillItemSheetViewModel({

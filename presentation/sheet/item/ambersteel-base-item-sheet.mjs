@@ -25,17 +25,6 @@ export default class AmbersteelBaseItemSheet {
    */
   get title() { return game.i18n.localize("ambersteel.character.asset.singular"); }
 
-  /**
-   * Extends the given context object with derived data. 
-   * 
-   * This is where any data should be added, which is only required to 
-   * display the data via the sheet. 
-   * @param context {Object} A context data object. Some noteworthy properties are 
-   * 'item', 'isSendable' and 'isEditable'. 
-   * @virtual
-   */
-  prepareDerivedData(context) { /* Inheriting types should implement this. */ }
-
   getViewModel(context, item) {
     return new ItemItemSheetViewModel({
       id: item.id,
