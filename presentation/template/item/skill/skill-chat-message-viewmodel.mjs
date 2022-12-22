@@ -29,7 +29,7 @@ export default class SkillChatMessageViewModel extends ViewModel {
    */
   get relatedAttribute() {
     const options = ATTRIBUTES.asChoices;
-    return options.find(it => { return it.value === this.document.relatedAttribute }).localizedValue;
+    return options.find(it => { return it.value === this.document.relatedAttribute.name }).localizedValue;
   }
 
   get description() { return TextEditor.enrichHTML(this.document.description); }
