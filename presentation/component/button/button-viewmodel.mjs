@@ -4,17 +4,16 @@ import ViewModel from "../../view-model/view-model.mjs";
 
 /**
  * Constant that defines the css class to look for when identifying button elements. 
+ * 
  * @constant
  */
 export const SELECTOR_BUTTON = "custom-system-button";
 
 /**
- * --- Inherited from ViewModel
+ * This is a basic implementation of a clickable button, that calls a given callback function 
+ * when clicked. 
  * 
- * @property {String} id Optional. Id used for the HTML element's id and name attributes. 
- * @property {String} TEMPLATE Static. Returns the template this ViewModel is intended for. 
- * 
- * --- Own properties
+ * @extends ViewModel
  * 
  * @property {JQuery | HTMLElement} element The button element on the DOM. 
  * @property {Object} target The target object to affect.  

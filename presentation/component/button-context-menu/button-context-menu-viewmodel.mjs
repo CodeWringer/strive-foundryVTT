@@ -2,21 +2,13 @@ import { TEMPLATES } from "../../template/templatePreloader.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
 
 /**
- * --- Inherited from ViewModel
+ * A button that allows showing a context menu with specifically defined menu items. 
  * 
- * @property {JQuery | HTMLElement} element The button element on the DOM. 
- * @property {String} id Optional. Id used for the HTML element's id and name attributes. 
- * @property {String} TEMPLATE Static. Returns the template this ViewModel is intended for. 
- * 
- * --- Inherited from ButtonViewModel
- * 
- * @property {JQuery | HTMLElement} element The button element on the DOM. 
- * @property {Object} target The target object to affect.  
- * 
- * --- Own properties
+ * @extends ButtonViewModel
  * 
  * @property {Array<ContextMenuItem>} menuItems An array of {ContextMenuItem} instances, 
  * which are used to populate the context menu. 
+ * 
  * @see https://foundryvtt.com/api/ContextMenu.html
  */
 export default class ButtonContextMenuViewModel extends ButtonViewModel {

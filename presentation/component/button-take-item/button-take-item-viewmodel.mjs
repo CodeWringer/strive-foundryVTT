@@ -22,18 +22,9 @@ export const TAKE_ITEM_CONTEXT_TYPES = {
 }
 
 /**
- * --- Inherited from ViewModel
+ * A button that allows (re-)assigning a specific asset to a specific actor. 
  * 
- * @property {JQuery | HTMLElement} element The button element on the DOM. 
- * @property {String} id Optional. Id used for the HTML element's id and name attributes. 
- * @property {String} TEMPLATE Static. Returns the template this ViewModel is intended for. 
- * 
- * --- Inherited from ButtonViewModel
- * 
- * @property {JQuery | HTMLElement} element The button element on the DOM. 
- * @property {Item | String} target An item instance or the id of an item. 
- * 
- * --- Own properties
+ * @extends ButtonViewModel
  * 
  * @property {TAKE_ITEM_CONTEXT_TYPES} contextType Represents the context of where this button view model is embedded. 
  * Depending on this value, the behavior of the button changes. 

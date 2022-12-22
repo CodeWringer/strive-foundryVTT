@@ -6,20 +6,21 @@ import ButtonViewModel from "../button/button-viewmodel.mjs";
 /**
  * --- Inherited from ViewModel
  * 
- * @property {JQuery | HTMLElement} element The button element on the DOM. 
- * @property {String} id Optional. Id used for the HTML element's id and name attributes. 
- * @property {String} TEMPLATE Static. Returns the template this ViewModel is intended for. 
+/**
+ * @summary
+ * A button that allows toggling the visibility of DOM elements with a specific attribute. 
  * 
- * --- Inherited from ButtonViewModel
+ * @description
+ * Allows toggling the visibility of all DOM elements that have the attribute `data-vis-group`. 
  * 
- * @property {JQuery | HTMLElement} element The button element on the DOM. 
- * @property {Object} target The target object to affect.  
+ * The value of the attribute is expected to be a unique id, which groups this button and the 
+ * elements it target. 
  * 
- * --- Own properties
+ * @extends ButtonViewModel
  * 
  * @property {String} visGroup Id or name to group the visiblity of elements by. 
- * Expects this id to be defined as a data-attribute. 
- * E. g. '<div data-vis-group="1A2b3F4E">My content</div>'
+ * * Expects this id to be defined as a data-attribute. 
+ * * E. g. `'<div data-vis-group="1A2b3F4E">My content</div>'`
  * @property {Boolean} toggleSelf If true, the button will also toggle visibility on itself. 
  */
 export default class ButtonToggleVisibilityViewModel extends ButtonViewModel {

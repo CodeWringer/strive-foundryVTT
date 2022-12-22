@@ -10,18 +10,9 @@ import RollDialog from "../../dialog/roll-dialog/roll-dialog.mjs";
 import VisibilitySingleChoiceDialog from "../../dialog/visibility-single-choice-dialog/visibility-single-choice-dialog.mjs";
 
 /**
- * --- Inherited from ViewModel
+ * A button that allows performing a dice roll and then sending the result to the chat. 
  * 
- * @property {JQuery | HTMLElement} element The button element on the DOM. 
- * @property {String} id Optional. Id used for the HTML element's id and name attributes. 
- * @property {String} TEMPLATE Static. Returns the template this ViewModel is intended for. 
- * 
- * --- Inherited from ButtonViewModel
- * 
- * @property {JQuery | HTMLElement} element The button element on the DOM. 
- * @property {Object} target The target object to affect.  
- * 
- * --- Own properties
+ * @extends ButtonViewModel
  * 
  * @property {String} propertyPath Property path identifying a property that contains a roll-formula. 
  * @property {RollType} rollType Determines the kind of roll to try and make. 
@@ -85,7 +76,7 @@ export default class ButtonRollViewModel extends ButtonViewModel {
   /**
    * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
    * 
-   * @param {Object} args.target The target object to affect. 
+   * @param {TransientDocument | Object} args.target The target object to affect. 
    * @param {Function | String | undefined} args.callback Optional. Defines an asynchronous callback that is invoked upon completion of the button's own callback. 
    * @param {Any | undefined} args.callbackData Optional. Defines any data to pass to the completion callback. 
    * @param {Boolean | undefined} args.isEditable Optional. If true, will be interactible. 
