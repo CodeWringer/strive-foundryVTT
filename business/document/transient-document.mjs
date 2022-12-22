@@ -44,6 +44,8 @@ import { VISIBILITY_MODES } from '../../presentation/chat/visibility-modes.mjs';
  * @property {String} localizableAbbreviation Localization key for the abbreviated name. 
  * @property {String} type Internal type name. E. g. `"skill"`
  * * Read-only.
+ * @property {Object} displayOrders An object on which sortable lists store their entry orders. 
+ * * Read-only.
  */
 export default class TransientDocument {
   /**
@@ -103,6 +105,22 @@ export default class TransientDocument {
    * @readonly
    */
   get type() { return this.document.type; }
+
+  /**
+   * Returns an object on which sortable lists store their entry orders. 
+   * 
+   * @type {Object}
+   */
+  get displayOrders() { return this.document.data.data.displayOrders; }
+  /**
+   * Sets an object on which sortable lists store their entry orders. 
+   * 
+   * @param {Object} value
+   */
+  set displayOrders(value) {
+    this.document.data.data.displayOrders = value;
+    this.updateProperty("data.data.displayOrders", value);
+  }
 
   /**
    * @param {Actor | Item} document An encapsulated document instance. 
