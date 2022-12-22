@@ -1,3 +1,5 @@
+import { getAsChoices } from "../util/constants-utility.mjs";
+
 /**
  * Represents a damage type. 
  * 
@@ -25,6 +27,9 @@ export class DamageType {
  * @property {DamageType} crushing The "crushing" damage type. 
  * @property {DamageType} poison The "poison" damage type. 
  * @property {DamageType} acid The "acid" damage type. 
+ * 
+ * @property {Array<ChoiceOption>} asChoices The constants of this type, as an array 
+ * of `ChoiceOption`s. 
  * 
  * @constant
  */
@@ -74,4 +79,10 @@ export const DAMAGE_TYPES = {
     localizableName: "ambersteel.damageType.acid.label",
     localizableAbbreviation: "ambersteel.damageType.acid.abbreviation"
   }),
+  get asChoices() {
+    if (this._asChoices === undefined) {
+      this._asChoices = getAsChoices(this, ["asChoices", "_asChoices"]);
+    }
+    return this._asChoices;
+  },
 };

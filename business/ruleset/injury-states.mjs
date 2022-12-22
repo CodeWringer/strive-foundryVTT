@@ -1,3 +1,5 @@
+import { getAsChoices } from "../util/constants-utility.mjs";
+
 /**
  * Represents an injury state. 
  * 
@@ -22,6 +24,9 @@ export class InjuryState {
  * @property {InjuryState} treated
  * @property {InjuryState} permanent
  * 
+ * @property {Array<ChoiceOption>} asChoices The constants of this type, as an array 
+ * of `ChoiceOption`s. 
+ * 
  * @constant
  */
 export const INJURY_STATES = {
@@ -44,5 +49,11 @@ export const INJURY_STATES = {
     name: "permanent",
     localizableName: "ambersteel.character.health.injury.state.permanent.label",
     icon: "fas fa-crutch"
-  })
+  }),
+  get asChoices() {
+    if (this._asChoices === undefined) {
+      this._asChoices = getAsChoices(this, ["asChoices", "_asChoices"]);
+    }
+    return this._asChoices;
+  },
 };

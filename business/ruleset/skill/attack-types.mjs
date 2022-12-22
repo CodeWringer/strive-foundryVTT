@@ -1,3 +1,5 @@
+import { getAsChoices } from "../../util/constants-utility.mjs";
+
 /**
  * Represents an attack type. 
  * 
@@ -21,6 +23,9 @@ export class AttackType {
  * @property {AttackType} areaOfEffect
  * @property {AttackType} multipleSingleTarget
  * 
+ * @property {Array<ChoiceOption>} asChoices The constants of this type, as an array 
+ * of `ChoiceOption`s. 
+ * 
  * @constant
  */
 export const ATTACK_TYPES = {
@@ -43,5 +48,10 @@ export const ATTACK_TYPES = {
     name: "multipleSingleTarget",
     localizableName: "ambersteel.attackType.multipleSingleTarget.label",
     localizableAbbreviation: "ambersteel.attackType.multipleSingleTarget.abbreviation"
-  })
+  }),get asChoices() {
+    if (this._asChoices === undefined) {
+      this._asChoices = getAsChoices(this, ["asChoices", "_asChoices"]);
+    }
+    return this._asChoices;
+  },
 };

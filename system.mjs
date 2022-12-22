@@ -143,17 +143,6 @@ Hooks.once('init', function() {
 });
 
 Hooks.once("ready", function() {
-  // Ensure constants provide a 'asChoices' property. 
-  ATTRIBUTES.asChoices = getAsChoices(ATTRIBUTES, ["asChoices"]);
-  ATTRIBUTE_GROUPS.asChoices = getAsChoices(ATTRIBUTE_GROUPS, ["asChoices"]);
-  DAMAGE_TYPES.asChoices = getAsChoices(DAMAGE_TYPES, ["asChoices"]);
-  ATTACK_TYPES.asChoices = getAsChoices(ATTACK_TYPES, ["asChoices"]);
-  SHIELD_TYPES.asChoices = getAsChoices(SHIELD_TYPES, ["asChoices"]);
-  ARMOR_TYPES.asChoices = getAsChoices(ARMOR_TYPES, ["asChoices"]);
-  WEAPON_TYPES.asChoices = getAsChoices(WEAPON_TYPES, ["asChoices"]);
-  INJURY_STATES.asChoices = getAsChoices(INJURY_STATES, ["asChoices"]);
-  ILLNESS_STATES.asChoices = getAsChoices(ILLNESS_STATES, ["asChoices"]);
-
   // Settings initialization.
   new AmbersteelUserSettings().ensureAllSettings();
 

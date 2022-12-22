@@ -1,3 +1,4 @@
+import { getAsChoices } from "../../util/constants-utility.mjs";
 import { ATTRIBUTES } from "./attributes.mjs";
 
 /**
@@ -23,6 +24,9 @@ export class AttributeGroup {
  * @property {AttributeGroup} physical A group of all "physical" attributes. 
  * @property {AttributeGroup} mental A group of all "mental" attributes. 
  * @property {AttributeGroup} social A group of all "social" attributes. 
+ * 
+ * @property {Array<ChoiceOption>} asChoices The constants of this type, as an array 
+ * of `ChoiceOption`s. 
  * 
  * @constant
  */
@@ -58,5 +62,11 @@ export const ATTRIBUTE_GROUPS = {
       oratory: ATTRIBUTES.oratory,
       willpower: ATTRIBUTES.willpower,
     }
-  })
+  }),
+  get asChoices() {
+    if (this._asChoices === undefined) {
+      this._asChoices = getAsChoices(this, ["asChoices", "_asChoices"]);
+    }
+    return this._asChoices;
+  },
 };
