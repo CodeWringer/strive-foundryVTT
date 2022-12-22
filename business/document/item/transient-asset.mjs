@@ -27,7 +27,7 @@ export default class TransientAsset extends TransientBaseItem {
   constructor(document) {
     super(document);
 
-    this.bulk = parseInt(context.data.data.shape.width) * parseInt(context.data.data.shape.height);
+    this.bulk = parseInt(document.data.data.shape.width) * parseInt(document.data.data.shape.height);
   }
 
   /** @override */

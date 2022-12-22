@@ -30,8 +30,9 @@ export default class CharacterAttributeGroup {
     this.localizableAbbreviation = groupDef.localizableAbbreviation;
 
     this.attributes = [];
-    for (const attributeDef in groupDef.attributes) {
-      this.attributes.push(new CharacterAttribute(actor, attributeDef.name));
+    for (const attributeName in groupDef.attributes) {
+      const attribute = groupDef.attributes[attributeName];
+      this.attributes.push(new CharacterAttribute(actor, attribute.name));
     }
   }
 }

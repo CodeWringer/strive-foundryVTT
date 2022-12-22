@@ -184,7 +184,7 @@ export default class TransientSkill extends TransientBaseItem {
   async createSkillAbility(creationData) {
     const newAbility = new SkillAbility({
       ...creationData,
-      owner: this,
+      owningDocument: this,
       index: this.abilities.length,
     });
     
@@ -283,7 +283,7 @@ export default class TransientSkill extends TransientBaseItem {
 
       const skillAbility = new SkillAbility({
         ...dto,
-        owner: this,
+        owningDocument: this,
         index: i,
         damage: damage,
         attackType: ATTACK_TYPES[dto.attackType],

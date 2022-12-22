@@ -98,7 +98,7 @@ export default class CharacterAttribute {
         if (attributeDef.name === undefined) continue;
         
         if (attributeDef.name === name) {
-          return actor.data.data.attributes[groupDefName].attributes[attributeDefName];
+          return actor.data.data.attributes[groupDefName][attributeDefName];
         }
       }
     }

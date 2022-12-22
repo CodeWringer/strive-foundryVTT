@@ -125,7 +125,7 @@ export default class Ruleset {
   /**
    * Returns the *current* maximum HP of the given actor. 
    * 
-   * @param {TransientBaseCharacterActor} actor 
+   * @param {Actor} actor 
    * 
    * @returns {Number}
    * 
@@ -135,15 +135,15 @@ export default class Ruleset {
     const type = actor.type.toLowerCase();
     if (type !== "pc" && type !== "npc") throw new Error("Only PC and NPC type actors allowed");
 
-    const injuryCount = actor.health.injuries.length;
-    const attributeToughness = actor.attributes.find(it => it.name === "toughness");
+    const injuryCount = (actor.items.filter(it => it.type === "injury")).length;
+    const attributeToughness = actor.data.data.attributes.physical.toughness;
     return (attributeToughness.level * 4) - (injuryCount * 2);
   }
 
   /**
    * Returns the maximum injury threshold of the given actor. 
    * 
-   * @param {TransientBaseCharacterActor} actor 
+   * @param {Actor} actor 
    * 
    * @returns {Number}
    * 
@@ -153,14 +153,14 @@ export default class Ruleset {
     const type = actor.type.toLowerCase();
     if (type !== "pc" && type !== "npc") throw new Error("Only PC and NPC type actors allowed");
 
-    const attributeToughness = actor.attributes.find(it => it.name === "toughness");
-    return Math.max(attributeToughness.level, 1);
+    const attribute = actor.data.data.attributes.physical.toughness;
+    return Math.max(attribute.level, 1);
   }
 
   /**
    * Returns the maximum exhaustion threshold of the given actor. 
    * 
-   * @param {TransientBaseCharacterActor} actor 
+   * @param {Actor} actor 
    * 
    * @returns {Number}
    * 
@@ -170,14 +170,14 @@ export default class Ruleset {
     const type = actor.type.toLowerCase();
     if (type !== "pc" && type !== "npc") throw new Error("Only PC and NPC type actors allowed");
     
-    const attributeEndurance = actor.attributes.find(it => it.name === "endurance");
-    return 1 + (attributeEndurance.level * 1);
+    const attribute = actor.data.data.attributes.physical.endurance;
+    return 1 + (attribute.level * 1);
   }
   
   /**
    * Returns the maximum inventory slot size of the given actor. 
    * 
-   * @param {TransientBaseCharacterActor} actor 
+   * @param {Actor} actor 
    * 
    * @returns {Number}
    * 
@@ -187,14 +187,14 @@ export default class Ruleset {
     const type = actor.type.toLowerCase();
     if (type !== "pc" && type !== "npc") throw new Error("Only PC and NPC type actors allowed");
 
-    const attributeStrength = actor.attributes.find(it => it.name === "strength");
-    return attributeStrength.level * 6;
+    const attribute = actor.data.data.attributes.physical.strength;
+    return attribute.level * 6;
   }
 
   /**
    * Returns an object containing the maximum magic stamina, as well as the details of how it came to be. 
    * 
-   * @param {TransientBaseCharacterActor} actor 
+   * @param {Actor} actor 
    * 
    * @returns {SummedData} The maximum magic stamina of the given actor. 
    * 
@@ -204,11 +204,12 @@ export default class Ruleset {
     const type = actor.type.toLowerCase();
     if (type !== "pc" && type !== "npc") throw new Error("Only PC and NPC type actors allowed");
 
-    const attributeArcana = actor.attributes.find(it => it.name === "arcana");
+    const attributeArcana = actor.data.data.attributes.mental.arcana;
     let total = attributeArcana.level;
     const components = [];
 
-    for (const skill of actor.skills.all) {
+    const skills = actor.items.filter(it => it.type === "skill");
+    for (const skill of skills) {
       if (skill.isMagicSchool !== true) continue;
 
       components.push(new SummedDataComponent(skill.name, skill.localizableName, skill.level));
@@ -230,7 +231,7 @@ export default class Ruleset {
   /**
    * Returns true, if the given actor must do toughness tests, whenever they suffer an injury. 
    * 
-   * @param {TransientBaseCharacterActor} actor 
+   * @param {Actor} actor 
    * 
    * @returns {Boolean} True, if any further injury requires a toughness test. 
    * 
@@ -240,8 +241,8 @@ export default class Ruleset {
     const type = actor.type.toLowerCase();
     if (type !== "pc" && type !== "npc") throw new Error("Only PC and NPC type actors allowed");
 
-    const maxInjuries = actor.health.maxInjuries;
-    const injuryCount = actor.health.injuries.length;
+    const maxInjuries = this.getCharacterMaximumInjuries(actor);
+    const injuryCount = (actor.items.filter(it => it.type === "injury")).length;
     if (injuryCount > 0 && injuryCount >= Math.floor(maxInjuries / 2)) {
       return true;
     } else {

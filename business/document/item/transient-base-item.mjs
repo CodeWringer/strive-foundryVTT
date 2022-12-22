@@ -33,18 +33,11 @@ export default class TransientBaseItem extends TransientDocument {
    * 
    * @type {TransientBaseActor | undefined}
    */
-  owningDocument = undefined;
-
-  /**
-   * @param {Item} document An encapsulated item instance. 
-   * 
-   * @throws {Error} Thrown, if `document` is `undefined`. 
-   */
-  constructor(document) {
-    super(document);
-
+  get owningDocument() {
     if (this.document.parent !== undefined) {
-      this.owningDocument = this.document.parent.getTransientObject();
+      return this.document.parent.getTransientObject();
+    } else {
+      return undefined;
     }
   }
 }

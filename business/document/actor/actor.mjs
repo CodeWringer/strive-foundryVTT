@@ -1,4 +1,7 @@
 import { ACTOR_SUBTYPE } from './actor-subtype.mjs';
+import TransientNpc from "./transient-npc.mjs";
+import TransientPc from "./transient-pc.mjs";
+import TransientPlainActor from "./transient-plain-actor.mjs";
 
 /**
  * @summary
@@ -40,12 +43,15 @@ export class AmbersteelActor extends Actor {
    * @returns {TransientBaseActor}
    */
   getTransientObject() {
-    const factoryFunction = ACTOR_SUBTYPE.get(this.type);
-    
-    if (factoryFunction === undefined) {
-      throw new Error(`InvalidTypeException: Actor subtype ${this.type} is unrecognized!`);
-    }
+    if (this._transientObject === undefined) {
+      const factoryFunction = ACTOR_SUBTYPE.get(this.type);
+      
+      if (factoryFunction === undefined) {
+        throw new Error(`InvalidTypeException: Actor subtype ${this.type} is unrecognized!`);
+      }
 
-    return factoryFunction(this);
+      this._transientObject = factoryFunction(this);
+    }
+    return this._transientObject;
   }
 }

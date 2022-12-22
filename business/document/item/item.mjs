@@ -1,4 +1,10 @@
 import { ITEM_SUBTYPE } from './item-subtype.mjs';
+import TransientAsset from "./transient-asset.mjs";
+import TransientFateCard from "./transient-fate-card.mjs";
+import TransientIllness from "./transient-illness.mjs";
+import TransientInjury from "./transient-injury.mjs";
+import TransientMutation from "./transient-mutation.mjs";
+import TransientSkill from "./transient-skill.mjs";
 
 /**
  * @summary
@@ -18,14 +24,14 @@ export class AmbersteelItem extends Item {
    * @virtual
    * @readonly
    */
-  get defaultImg() { return this._getType().defaultImg; }
+  get defaultImg() { return this.getTransientObject().defaultImg; }
 
   /**
    * Chat message template path. 
    * @type {String}
    * @readonly
    */
-  get chatMessageTemplate() { return this._getType().chatMessageTemplate; }
+  get chatMessageTemplate() { return this.getTransientObject().chatMessageTemplate; }
 
   /** @override */
   prepareData() {
@@ -40,12 +46,15 @@ export class AmbersteelItem extends Item {
    * @returns {TransientBaseItem}
    */
   getTransientObject() {
-    const factoryFunction = ITEM_SUBTYPE.get(this.type);
-    
-    if (factoryFunction === undefined) {
-      throw new Error(`InvalidTypeException: Item subtype ${this.type} is unrecognized!`);
-    }
+    if (this._transientObject === undefined) {
+      const factoryFunction = ITEM_SUBTYPE.get(this.type);
+      
+      if (factoryFunction === undefined) {
+        throw new Error(`InvalidTypeException: Item subtype ${this.type} is unrecognized!`);
+      }
 
-    return factoryFunction(this);
+      this._transientObject = factoryFunction(this);
+    }
+    return this._transientObject;
   }
 }

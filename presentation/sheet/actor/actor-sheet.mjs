@@ -1,4 +1,8 @@
 import { ACTOR_SHEET_SUBTYPE } from "./actor-sheet-subtype.mjs";
+// Imports of specific actor sheet "sub-types", to ensure their imports cause the `ACTOR_SHEET_SUBTYPE` map to be populated. 
+import AmbersteelBaseActorSheet from "./ambersteel-base-actor-sheet.mjs";
+import AmbersteelNpcActorSheet from "./ambersteel-npc-actor-sheet.mjs";
+import AmbersteelPcActorSheet from "./ambersteel-pc-actor-sheet.mjs";
 import * as SheetUtil from "../sheet-utility.mjs";
 import { SYSTEM_ID } from "../../../system-id.mjs";
 
