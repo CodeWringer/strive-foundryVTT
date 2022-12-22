@@ -1,9 +1,26 @@
 /**
  * The place holder character sequence. 
+ * 
  * @type {String}
  * @constant
  */
 export const FORMAT_PLACEHOLDER = "%s";
+
+/**
+ * Pattern for detection of a float. 
+ * 
+ * @type {String}
+ * @constant
+ */
+const REGEX_FLOAT = /-?\d+\.\d+/;
+
+/**
+ * Pattern for detection of an integer. 
+ * 
+ * @type {String}
+ * @constant
+ */
+const REGEX_INT = /-?\d+/;
 
 /**
  * Returns a new String, based on the given string, with any placeholders 
@@ -36,4 +53,26 @@ export function format(str) {
   }
 
   return newString;
+}
+
+/**
+ * Returns a parsed/coerced value, based on the given string value. 
+ * 
+ * @param {String} value A string value to parse/coerce. 
+ * 
+ * @returns {Boolean | Number | String}
+ */
+export function coerce(value) {
+  const matchFloat = value.match(REGEX_FLOAT);
+  const matchInt = value.match(REGEX_INT);
+
+  if (value === "true" || value === "false") {
+    return value === "true";
+  } else if (matchFloat !== null && matchFloat[0].length === value.length) {
+    return parseFloat(value);
+  } else if (matchInt !== null && matchInt[0].length === value.length) {
+    return parseInt(value);
+  } else {
+    return value;
+  }
 }

@@ -4,6 +4,7 @@ import AddItemDialog from '../../dialog/dialog-item-add/dialog-item-add.mjs';
 import { validateOrThrow, isObject, isNotBlankOrUndefined } from "../../../business/util/validation-utility.mjs";
 import GetShowFancyFontUseCase from "../../../business/use-case/get-show-fancy-font-use-case.mjs";
 import DocumentFetcher from "../../../business/document/document-fetcher/document-fetcher.mjs";
+import { coerce } from "../../../business/util/string-utility.mjs";
 
 /**
  * --- Inherited from ViewModel
@@ -79,14 +80,15 @@ export default class ButtonAddViewModel extends ButtonViewModel {
 
   /**
    * Handle creating a new Owned Item for the actor using initial data defined in the HTML dataset
+   * 
    * @override
    * @see {ButtonViewModel.onClick}
-   * @async
+   * 
    * @throws {Error} NullPointerException - Thrown, if 'target', 'target.type' or 'creationType' is undefined. 
    * @throws {Error} InvalidArgumentException - Thrown, if trying to add a skill-ability to a non-skill-item. 
    * @throws {Error} InvalidArgumentException - Thrown, if 'creationType' is unrecognized. 
    */
-  async onClick(html, isOwner, isEditable) {
+  onClick(html, isOwner, isEditable) {
     if (isEditable !== true) return;
 
     if (this.target === undefined || this.target.type === undefined) {
@@ -183,33 +185,11 @@ export default class ButtonAddViewModel extends ButtonViewModel {
     const splits = creationData.substring(1, creationData.length - 1).split(":");
     for (let i = 0; i < splits.length; i += 2) {
       const propertyName = splits[i];
-      const propertyValue = this._coerce(splits[i + 1]);
+      const propertyValue = coerce(splits[i + 1]);
       parsedCreationData[propertyName] = propertyValue;
     }
 
     return parsedCreationData;
-  }
-
-  /**
-   * Returns a parsed/coerced value, based on the given string value. 
-   * @param {String} value A string value to parse/coerce. 
-   * @returns {Boolean | Number | String}
-   */
-  _coerce(value) {
-    const regexpFloat = /\d+\.\d+/;
-    const regexpInt = /\d+/;
-    const matchFloat = value.match(regexpFloat);
-    const matchInt = value.match(regexpInt);
-
-    if (value === "true" || value === "false") {
-      return value === "true";
-    } else if (matchFloat !== null && matchFloat[0].length === value.length) {
-      return parseFloat(value);
-    } else if (matchInt !== null && matchInt[0].length === value.length) {
-      return parseInt(value);
-    } else {
-      return value;
-    }
   }
 }
 
