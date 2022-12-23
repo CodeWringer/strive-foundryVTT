@@ -6,31 +6,36 @@ cssClass: {String | undefined}
     id={{viewModel.id}}
   >
   {{#each viewModel.itemViewModelGroups as |itemViewModelGroup key|}}
-    <li id="{{itemViewModelGroup.id}}" class="ambersteel-list-row sheet-block flex flex-row">
-      <div class="component-list-item-order-controls{{#if (neq ../viewModel.isEditable true)}} hidden{{/if}}">
-        {{#> button viewModel=itemViewModelGroup.vmBtnMoveTop fill=false}}
-          <i class="fas fa-angle-double-up"></i>
-        {{/button}}
-        {{#> button viewModel=itemViewModelGroup.vmBtnMoveUp fill=false}}
-          <i class="fas fa-angle-up"></i>
-        {{/button}}
-        {{!-- TODO #116: Implement the grab handle --}}
-        <div class="flex-grow"></div>
-        {{!-- <a 
-          class="grab-handle"
-          >
-          <i class="fas fa-grip-vertical"></i>
-        </a> --}}
-        {{#> button viewModel=itemViewModelGroup.vmBtnMoveDown fill=false}}
-          <i class="fas fa-angle-down"></i>
-        {{/button}}
-        {{#> button viewModel=itemViewModelGroup.vmBtnMoveBottom fill=false}}
-          <i class="fas fa-angle-double-down"></i>
-        {{/button}}
-      </div>
+    {{#if ../viewModel.isEditable}}
+      <li id="{{itemViewModelGroup.id}}" class="ambersteel-list-row sheet-block flex flex-row">
+        <div class="component-list-item-order-controls{{#if (neq ../viewModel.isEditable true)}} hidden{{/if}}">
+          {{#> button viewModel=itemViewModelGroup.vmBtnMoveTop fill=false}}
+            <i class="fas fa-angle-double-up"></i>
+          {{/button}}
+          {{#> button viewModel=itemViewModelGroup.vmBtnMoveUp fill=false}}
+            <i class="fas fa-angle-up"></i>
+          {{/button}}
+          {{!-- TODO #116: Implement the grab handle --}}
+          <div class="flex-grow"></div>
+          {{!-- <a 
+            class="grab-handle"
+            >
+            <i class="fas fa-grip-vertical"></i>
+          </a> --}}
+          {{#> button viewModel=itemViewModelGroup.vmBtnMoveDown fill=false}}
+            <i class="fas fa-angle-down"></i>
+          {{/button}}
+          {{#> button viewModel=itemViewModelGroup.vmBtnMoveBottom fill=false}}
+            <i class="fas fa-angle-double-down"></i>
+          {{/button}}
+        </div>
+      {{/if}}
       {{> (lookup . 'listItemTemplate') viewModel=itemViewModelGroup.listItemViewModel cssClass="flex-grow" }}
     </li>
   {{/each}}
+  {{log "---- DEBUG DEBUG ----"}}
+  {{log viewModel.isEditable}}
+  {{#if viewModel.isEditable}}
   <li class="ambersteel-list-row ambersteel-list-footer{{#if (neq viewModel.isEditable true)}} hidden{{/if}}">
     <div class="fill flex flex-row flex-right">
       {{!-- Add button --}}
@@ -39,4 +44,5 @@ cssClass: {String | undefined}
       </div>
     </div>
   </li>
+  {{/if}}
 </ol>
