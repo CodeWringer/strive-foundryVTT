@@ -10,13 +10,14 @@ import TransientBaseItem from "./transient-base-item.mjs";
  * 
  * @extends TransientBaseItem
  * 
- * @property {Number} bulk
  * @property {Number} quantity
  * @property {Number} maxQuantity
  * @property {Object} shape
  * @property {Number} shape.width
  * @property {Number} shape.height
  * @property {Boolean} isOnPerson
+ * @property {Number} bulk
+ * * Read-only. 
  */
 export default class TransientAsset extends TransientBaseItem {
   /** @override */
@@ -74,7 +75,15 @@ export default class TransientAsset extends TransientBaseItem {
     this.document.data.data.isOnPerson = value;
     this.updateSingle("data.data.isOnPerson", value);
   }
-  
+
+  /**
+   * @type {Number}
+   * @readonly
+   */
+  get bulk() {
+    return parseInt(this.document.data.data.shape.width) * parseInt(this.document.data.data.shape.height);
+  }
+
   /**
    * @param {Item} document An encapsulated item instance. 
    * 
@@ -82,8 +91,6 @@ export default class TransientAsset extends TransientBaseItem {
    */
   constructor(document) {
     super(document);
-
-    this.bulk = parseInt(document.data.data.shape.width) * parseInt(document.data.data.shape.height);
   }
 
   /** @override */
