@@ -329,4 +329,96 @@ describe('validation-utility', function() {
       r.should.be.equal(false);
     });
   });
+
+  describe("isString", function() {
+    it("detects 'abc' as true", function() {
+      // Given
+      const given = "abc";
+      // When
+      const r = ValidationUtility.isString(given);
+      // Then
+      r.should.be.equal(true);
+    });
+
+    it("detects 'true' as true", function() {
+      // Given
+      const given = "true";
+      // When
+      const r = ValidationUtility.isString(given);
+      // Then
+      r.should.be.equal(true);
+    });
+
+    it("detects true as false", function() {
+      // Given
+      const given = true;
+      // When
+      const r = ValidationUtility.isString(given);
+      // Then
+      r.should.be.equal(false);
+    });
+
+    it("detects an object as false", function() {
+      // Given
+      const given = { abc: "test" };
+      // When
+      const r = ValidationUtility.isString(given);
+      // Then
+      r.should.be.equal(false);
+    });
+
+    it("detects a number as false", function() {
+      // Given
+      const given = 34;
+      // When
+      const r = ValidationUtility.isString(given);
+      // Then
+      r.should.be.equal(false);
+    });
+
+    it("detects a negative number as false", function() {
+      // Given
+      const given = -34;
+      // When
+      const r = ValidationUtility.isString(given);
+      // Then
+      r.should.be.equal(false);
+    });
+
+    it("detects a floating number as false", function() {
+      // Given
+      const given = 34.245;
+      // When
+      const r = ValidationUtility.isString(given);
+      // Then
+      r.should.be.equal(false);
+    });
+
+    it("detects a negative floating number as false", function() {
+      // Given
+      const given = -34.245;
+      // When
+      const r = ValidationUtility.isString(given);
+      // Then
+      r.should.be.equal(false);
+    });
+
+    it("detects a function as false", function() {
+      // Given
+      const given = () => { return 5 };
+      // When
+      const r = ValidationUtility.isString(given);
+      // Then
+      r.should.be.equal(false);
+    });
+
+    it("detects a function which returns a string as false", function() {
+      // Given
+      const given = () => { return "abc" };
+      // When
+      const r = ValidationUtility.isString(given);
+      // Then
+      r.should.be.equal(false);
+    });
+  });
 });

@@ -1,8 +1,10 @@
 /**
  * Returns true, if the given object has properties with the given names and 
  * whose value is not null and not undefined. 
+ * 
  * @param {Object} obj The object whose properties will be validated. 
  * @param {Array<String>} props An array of properties whose value must not be null or undefined. 
+ * 
  * @returns {Boolean} True, if the expected properties are not null or undefined. 
  */
 export function propertiesDefined(obj, props) {
@@ -16,8 +18,10 @@ export function propertiesDefined(obj, props) {
 /**
  * Throws an error, if the given object has properties with the given names and 
  * whose value is null or undefined. 
+ * 
  * @param {Object} obj The object whose properties will be validated. 
  * @param {Array<String>} props An array of properties whose value must not be null or undefined. 
+ * 
  * @throws {Error} ArgumentException - Thrown, if any of the properties fail to validate. 
  */
 export function validateOrThrow(obj, props) {
@@ -29,7 +33,9 @@ export function validateOrThrow(obj, props) {
 
 /**
  * Returns true, if the given argument is of type object. 
+ * 
  * @param {Any} obj 
+ * 
  * @returns {Boolean} True, if the given argument is of type object. 
  */
 export function isObject(obj) {
@@ -40,7 +46,9 @@ export function isObject(obj) {
 
 /**
  * Returns true, if the given argument is of type array. 
+ * 
  * @param {Any} obj 
+ * 
  * @returns {Boolean} True, if the given argument is of type array. 
  */
 export function isArray(obj) {
@@ -53,7 +61,9 @@ export function isArray(obj) {
 
 /**
  * Returns true, if the given argument is of type function. 
+ * 
  * @param {Any} obj 
+ * 
  * @returns {Boolean} True, if the given argument is of type function. 
  */
 export function isFunction(obj) {
@@ -62,7 +72,9 @@ export function isFunction(obj) {
 
 /**
  * Returns true, if the given argument is of type number. 
+ * 
  * @param {Any} o 
+ * 
  * @returns {Boolean} True, if the given argument is of type number. 
  */
 export function isNumber(o) {
@@ -71,8 +83,21 @@ export function isNumber(o) {
 }
 
 /**
+ * Returns true, if the given argument is of type string. 
+ * 
+ * @param {Any} o 
+ * 
+ * @returns {Boolean} True, if the given argument is of type string. 
+ */
+export function isString(o) {
+  return typeof(o) === "string";
+}
+
+/**
  * Returns true, if the given value is blank or undefined. 
+ * 
  * @param {String | Number} value 
+ * 
  * @returns {Boolean}
  */
 export function isBlankOrUndefined(value) {
@@ -88,7 +113,9 @@ export function isBlankOrUndefined(value) {
 
 /**
  * Returns true, if the given value is **not** blank or undefined. 
+ * 
  * @param {String | Number} value 
+ * 
  * @returns {Boolean}
  */
 export function isNotBlankOrUndefined(value) {

@@ -44,12 +44,12 @@ import { VISIBILITY_MODES } from '../../presentation/chat/visibility-modes.mjs';
  * @property {String} localizableAbbreviation Localization key for the abbreviated name. 
  * @property {String} type Internal type name. E. g. `"skill"`
  * * Read-only.
- * @property {Object} displayOrders An object on which sortable lists store their entry orders. 
+ * @property {Object | undefined | null} pack A compendium pack this document is contained in. 
  * * Read-only.
+ * @property {Object} displayOrders An object on which sortable lists store their entry orders. 
  * @property {String} description
  * @property {String} gmNotes
  * @property {Boolean} isCustom
- * @property {Object} displayOrders
  */
 export default class TransientDocument {
   /**
@@ -125,6 +125,14 @@ export default class TransientDocument {
   get type() { return this.document.type; }
 
   /**
+   * Returns a compendium pack this document is contained in. 
+   * 
+   * @type {Object | undefined | null}
+   * @readonly
+   */
+  get pack() { return this.document.pack; }
+
+  /**
    * @type {String}
    */
   get description() {
@@ -158,6 +166,8 @@ export default class TransientDocument {
   }
   
   /**
+   * An object on which sortable lists store their entry orders. 
+   * 
    * @type {Object}
    */
   get displayOrders() {

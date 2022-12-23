@@ -7,6 +7,7 @@ import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import PlainDialog from "../../dialog/plain-dialog/plain-dialog.mjs";
 import SingleChoiceDialog from "../../dialog/single-choice-dialog/single-choice-dialog.mjs";
 import DocumentFetcher from "../../../business/document/document-fetcher/document-fetcher.mjs";
+import { isString } from "../../../business/util/validation-utility.mjs";
 
 /**
  * @property {String} chatMessage
@@ -39,7 +40,7 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
   /**
    * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
    * 
-   * @param {Object} args.target The target object to affect. 
+   * @param {TransientAsset} args.target The target object to affect. 
    * @param {Function | String | undefined} args.callback Optional. Defines an asynchronous callback that is invoked upon completion of the button's own callback. 
    * @param {Any | undefined} args.callbackData Optional. Defines any data to pass to the completion callback. 
    * @param {Boolean | undefined} args.isEditable Optional. If true, will be interactible. 
@@ -72,29 +73,31 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
   async onClick(html, isOwner, isEditable) {
     if (isEditable !== true) return;
 
-    let item = this.target;
-    if (typeof(this.target) === "String") { // Item id provided. 
-      item = await new DocumentFetcher().find({
+    let assetDocument = this.target;
+    if (isString(this.target) === true) { // Item id provided. 
+      assetDocument = await new DocumentFetcher().find({
         id: this.target,
         documentType: "Item",
         contentType: "item"
       });
     }
 
-    if (item === undefined) {
+    if (assetDocument === undefined) {
       throw new Error("NullPointerException: item could not be determined");
     }
 
     // If parent is not null, we can be sure the item is embedded on an actor. 
-    const parent = item.parent;
+    const parent = assetDocument.owningDocument;
     // If containingPack is not null, we can be sure the item is embedded in a compendium. 
-    const containingPack = item.pack;
+    const containingPack = assetDocument.pack;
     // If neither parent nor containingPack is defined, then we can be sure the item is a world item. 
 
-    if (parent !== undefined && parent !== null) { // The item is embedded on an actor. 
+    if (parent !== undefined) { // The item is embedded on an actor. 
       if (this.contextType === TAKE_ITEM_CONTEXT_TYPES.chatMessage) {
         // Determine target actor. 
         const targetActor = await this._getTargetActor();
+
+        if (targetActor === undefined) return;
 
         // Determine source actor. 
         const sourceActor = parent;
@@ -106,19 +109,21 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
         }
 
         // Add copy to target actor. 
-        this._cloneWithNewParentOnPerson(item, targetActor);
+        this._cloneWithNewParentOnPerson(assetDocument, targetActor);
 
         // Remove from source actor. 
-        item.delete();
+        assetDocument.delete();
       } else if (this.contextType === TAKE_ITEM_CONTEXT_TYPES.listItem) {
         // Determine target actor. 
         const targetActor = parent;
 
+        if (targetActor === undefined) return;
+
         // Try to move item to item grid. 
         const itemGrid = ItemGrid.from(targetActor).itemGrid;
-        const addResult = itemGrid.add(item);
+        const addResult = itemGrid.add(assetDocument);
         if (addResult === true) {
-          updateProperty(item, "data.data.isOnPerson", true);
+          updateProperty(assetDocument, "data.data.isOnPerson", true);
         } else {
           new PlainDialog({
             localizedTitle: game.i18n.localize("ambersteel.character.asset.carryingCapacity.dialog.titleInventoryFull"),
@@ -130,17 +135,21 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
       // Determine target actor. 
       const targetActor = await this._getTargetActor();
       
+      if (targetActor === undefined) return;
+
       // Add copy to target actor. 
-      this._cloneWithNewParentOnPerson(item, targetActor);
+      this._cloneWithNewParentOnPerson(assetDocument, targetActor);
     } else { // The item is part of the world. 
       // Determine target actor. 
       const targetActor = await this._getTargetActor();
 
+      if (targetActor === undefined) return;
+
       // Add copy to target actor. 
-      this._cloneWithNewParentOnPerson(item, targetActor);
+      this._cloneWithNewParentOnPerson(assetDocument, targetActor);
 
       // Remove from world. 
-      item.delete();
+      assetDocument.delete();
     }
   }
 
@@ -181,8 +190,12 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
 
   /**
    * Clones the given item, sets its parent to the given actor and returns the clone. 
-   * @param {Item} templateItem 
+   * 
+   * @param {TransientAsset} templateItem 
    * @param {Actor} parent
+   * 
+   * @returns {Item} The cloned item document. This is **not** a transient type instance!
+   * 
    * @async
    */
   async _cloneWithNewParentOnPerson(templateItem, parent) {
@@ -190,9 +203,9 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
       name: templateItem.name,
       type: templateItem.type,
       data: {
-        img: templateItem.data.img,
+        img: templateItem.img,
         data: {
-          ...templateItem.data.data,
+          ...templateItem.document.data.data,
           isOnPerson: true,
         }
       }
