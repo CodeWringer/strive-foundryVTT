@@ -6,24 +6,15 @@ import ViewModelFactory from "../../../view-model/view-model-factory.mjs"
 import SkillListItemViewModel from "../../item/skill/skill-list-item-viewmodel.mjs"
 import { TEMPLATES } from "../../templatePreloader.mjs"
 
-
-/**
- * @property {Actor} actor
- */
 export default class ActorSkillsViewModel extends ViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.ACTOR_SKILLS; }
 
-  /**
-   * @type {Actor}
-   */
-  actor = undefined;
-
   /** @override */
-  get entityId() { return this.actor.id; }
+  get entityId() { return this.document.id; }
 
-  get learningSkills() { return this.actor.data.data.learningSkills; }
-  get skills() { return this.actor.data.data.skills; }
+  get knownSkills() { return this.document.skills.known; }
+  get learningSkills() { return this.document.skills.learning; }
 
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
@@ -36,27 +27,26 @@ export default class ActorSkillsViewModel extends ViewModel {
    * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document. 
    * @param {Boolean | undefined} args.isGM If true, the current user is a GM. 
    * 
-   * @param {Actor} args.actor
+   * @param {TransientBaseCharacterActor} args.document
    * 
    * @throws {Error} ArgumentException - Thrown, if any of the mandatory arguments aren't defined. 
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["actor"]);
+    validateOrThrow(args, ["document"]);
 
     // Own properties.
-    this.actor = args.actor;
+    this.document = args.document;
 
     // Child view models. 
     const thiz = this;
     const factory = new ViewModelFactory();
 
-    this.learningSkillViewModels = this.actor.data.data.learningSkills.map(skill => {
+    this.learningSkillViewModels = this.learningSkills.map(skill => {
       return new SkillListItemViewModel({
         id: skill.id,
         parent: thiz,
-        item: skill,
-        actor: thiz.actor,
+        document: skill,
         isEditable: thiz.isEditable,
         isSendable: thiz.isSendable,
         isOwner: thiz.isOwner,
@@ -69,7 +59,7 @@ export default class ActorSkillsViewModel extends ViewModel {
       isSendable: thiz.isSendable,
       contextTemplate: thiz.contextTemplate,
       indexDataSource: new DocumentListItemOrderDataSource({
-        document: thiz.actor,
+        document: thiz.document,
         listName: "learningSkills",
       }),
       listItemViewModels: this.learningSkillViewModels,
@@ -77,7 +67,7 @@ export default class ActorSkillsViewModel extends ViewModel {
       vmBtnAddItem: factory.createVmBtnAdd({
         parent: thiz,
         id: "vmBtnAddLearningSkill",
-        target: thiz.actor,
+        target: thiz.document,
         creationType: "skill",
         withDialog: true,
         localizableLabel: "ambersteel.character.skill.learning.add.label",
@@ -89,12 +79,11 @@ export default class ActorSkillsViewModel extends ViewModel {
       }),
     });
 
-    this.knownSkillViewModels = this.actor.data.data.skills.map(skill => {
+    this.knownSkillViewModels = this.knownSkills.map(skill => {
       return new SkillListItemViewModel({
         id: skill.id,
         parent: thiz,
-        item: skill,
-        actor: thiz.actor,
+        document: skill,
         isEditable: thiz.isEditable,
         isSendable: thiz.isSendable,
         isOwner: thiz.isOwner,
@@ -107,7 +96,7 @@ export default class ActorSkillsViewModel extends ViewModel {
       isSendable: thiz.isSendable,
       contextTemplate: thiz.contextTemplate,
       indexDataSource: new DocumentListItemOrderDataSource({
-        document: thiz.actor,
+        document: thiz.document,
         listName: "knownSkills",
       }),
       listItemViewModels: this.knownSkillViewModels,
@@ -115,7 +104,7 @@ export default class ActorSkillsViewModel extends ViewModel {
       vmBtnAddItem: factory.createVmBtnAdd({
         parent: thiz,
         id: "vmBtnAddKnownSkill",
-        target: thiz.actor,
+        target: thiz.document,
         creationType: "skill",
         withDialog: true,
         localizableLabel: "ambersteel.character.skill.known.add.label",

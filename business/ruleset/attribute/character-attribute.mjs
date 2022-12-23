@@ -13,11 +13,80 @@ import { ATTRIBUTES } from "./attributes.mjs";
  * @property {String} localizableAbbreviation Localization key for the abbreviated name. 
  * @property {LevelAdvancement} advancementRequirements The current requirements 
  * to advance the attribute. 
+ * * Read-only. 
+ * @property {Number} advancementRequirements.successes
+ * * Read-only. 
+ * @property {Number} advancementRequirements.failures
+ * * Read-only. 
  * @property {LevelAdvancement} advancementProgress The current progress towards 
  * advancing the attribute. 
+ * * Read-only. 
+ * @property {Number} advancementProgress.successes
+ * @property {Number} advancementProgress.failures
  * @property {Number} level The current level of the attribute. 
  */
 export default class CharacterAttribute {
+  /**
+   * @type {Number}
+   */
+  get level() { return parseInt(this._actor.data.data.attributes[this._attributeGroupName][this.name].level); }
+  set level(value) {
+    this._actor.update({
+      data: {
+        attributes: {
+          [this._attributeGroupName]: {
+            [this.name]: {
+              level: value
+            }
+          }
+        }
+      }
+    }); 
+  }
+
+  /**
+   * @type {LevelAdvancement}
+   */
+  get advancementProgress() {
+    const thiz = this;
+    return {
+      get successes() { return parseInt(thiz._actor.data.data.attributes[thiz._attributeGroupName][thiz.name].successes); },
+      set successes(value) {
+        thiz._actor.update({
+          data: {
+            attributes: {
+              [thiz._attributeGroupName]: {
+                [thiz.name]: {
+                  successes: value
+                }
+              }
+            }
+          }
+        }); 
+      },
+      get failures() { return parseInt(thiz._actor.data.data.attributes[thiz._attributeGroupName][thiz.name].failures); },
+      set failures(value) {
+        this._actor.update({
+          data: {
+            attributes: {
+              [this._attributeGroupName]: {
+                [this.name]: {
+                  failures: value
+                }
+              }
+            }
+          }
+        }); 
+      },
+    };
+  }
+
+  /**
+   * @type {LevelAdvancement}
+   * @readonly
+   */
+  get advancementRequirements() { return new Ruleset().getAttributeAdvancementRequirements(this.level); }
+
   /**
    * @param {AmbersteelActor} actor The actor for which to gather 
    * attribute data. 
@@ -31,24 +100,17 @@ export default class CharacterAttribute {
     const attributeDef = ATTRIBUTES[name];
 
     if (attributeDef === undefined) {
-      throw new Error(`Failed to get global attribute definition '${name}'`);
+      throw new Error(`Failed to get global attribute definition for '${name}'`);
     }
 
     this.localizableName = attributeDef.localizableName;
     this.localizableAbbreviation = attributeDef.localizableAbbreviation;
 
-    const characterAttribute = CharacterAttribute.getAttributeFromCharacter(actor, name);
+    this._attributeGroupName = CharacterAttribute.getAttributeGroupName(name);
 
-    if (characterAttribute === undefined) {
-      throw new Error(`Failed to get attribute '${name}' from character '${actor.name}'`);
+    if (this._attributeGroupName === undefined) {
+      throw new Error(`Failed to get global attribute group name for '${name}'`);
     }
-
-    this.level = parseInt(characterAttribute.level);
-    this.advancementRequirements = new Ruleset().getAttributeAdvancementRequirements(this.level);
-    this.advancementProgress = new LevelAdvancement({
-      successes: parseInt(characterAttribute.successes),
-      failures: parseInt(characterAttribute.failures),
-    });
   }
 
   /**
@@ -75,18 +137,16 @@ export default class CharacterAttribute {
   }
 
   /**
-   * Returns the attribute data from the given actor for an attribute of the 
-   * given name.
+   * Returns the name of the containing attribute group. 
    * 
-   * @param {AmbersteelBaseCharacterActor} actor 
    * @param {String} name Internal name of the attribute. 
    * * E. g. `"strength"`
    * 
-   * @returns {Object | undefined}
+   * @returns {String | undefined}
    * 
    * @private
    */
-  static getAttributeFromCharacter(actor, name) {
+  static getAttributeGroupName(name) {
     for (const groupDefName in ATTRIBUTE_GROUPS) {
       const groupDef = ATTRIBUTE_GROUPS[groupDefName];
       // Skip any convenience members, such as `asChoices`.
@@ -94,11 +154,8 @@ export default class CharacterAttribute {
       
       for (const attributeDefName in groupDef.attributes) {
         const attributeDef = groupDef.attributes[attributeDefName];
-        // Skip any convenience members, such as `asChoices`.
-        if (attributeDef.name === undefined) continue;
-        
         if (attributeDef.name === name) {
-          return actor.data.data.attributes[groupDefName][attributeDefName];
+          return groupDef.name;
         }
       }
     }

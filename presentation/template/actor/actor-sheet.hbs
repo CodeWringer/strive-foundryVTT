@@ -2,7 +2,7 @@
 viewModel: {ActorSheetViewModel}
 cssClass: {undefined | String}
 --}}
-<form class="{{viewModel.actor.type}} flexcol{{#if cssClass}} {{cssClass}}{{/if}}" autocomplete="off">
+<form class="{{viewModel.document.type}} flexcol{{#if cssClass}} {{cssClass}}{{/if}}" autocomplete="off">
 
   {{!-- Sheet Header --}}
   <header class="sheet-header">
@@ -82,7 +82,7 @@ cssClass: {undefined | String}
     {{else}}
       <div class="{{#if viewModel.isGM}}tab {{/if}}description" data-group="primary" data-tab="description">
         <div class="sheet-block fill">
-          {{editor content=viewModel.actor.data.data.description target="data.description" button=true editable=viewModel.isEditable owner=viewModel.isOwner}}
+          {{editor content=viewModel.document.description target="data.description" button=true editable=viewModel.isEditable owner=viewModel.isOwner}}
         </div>
       </div>
     {{/if}}

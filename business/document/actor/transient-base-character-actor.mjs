@@ -3,7 +3,6 @@ import { DiceOutcomeTypes } from '../../dice/dice-outcome-types.mjs';
 import { ATTRIBUTE_GROUPS } from '../../ruleset/attribute/attribute-groups.mjs';
 import CharacterAttributeGroup from '../../ruleset/attribute/character-attribute-group.mjs';
 import Ruleset from '../../ruleset/ruleset.mjs';
-import * as PropUtil from '../../util/property-utility.mjs';
 import TransientBaseActor from './transient-base-actor.mjs';
 
 /**
@@ -18,6 +17,7 @@ import TransientBaseActor from './transient-base-actor.mjs';
  * @property {Array<CharacterAttribute>} attributes The attributes of the character. 
  * * Read-only. 
  * @property {Object} person
+ * * Read-only. 
  * @property {Number} person.age
  * @property {String} person.species
  * @property {String} person.culture
@@ -28,9 +28,9 @@ import TransientBaseActor from './transient-base-actor.mjs';
  * * Read-only. 
  * @property {Array<TransientSkill>} skills.all Returns **all** skills of the character. 
  * * Read-only. 
- * @property {Array<TransientSkill>} skills.learningSkills Returns all learning skills of the character. 
+ * @property {Array<TransientSkill>} skills.learning Returns all learning skills of the character. 
  * * Read-only. 
- * @property {Array<TransientSkill>} skills.knownSkills Returns all known skills of the character. 
+ * @property {Array<TransientSkill>} skills.known Returns all known skills of the character. 
  * * Read-only. 
  * @property {Object} health
  * * Read-only. 
@@ -75,6 +75,7 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
    * @type {Object}
    */
   get person() {
+    const thiz = this;
     return {
       get age() { return parseInt(thiz.document.data.data.person.age); },
       set age(value) { thiz.updateSingle("data.data.person.age", value); },
@@ -95,20 +96,17 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
       set biography(value) { thiz.updateSingle("data.data.person.biography", value); },
     };
   }
-  set person(value) {
-    this.document.data.data.person = value;
-    this.updateSingle("data.data.person", value);
-  }
   
   /**
    * @type {Object}
    * @readonly
    */
   get skills() {
+    const thiz = this;
     return {
-      get all() { return this.items.filter(it => it.type === "skill"); },
-      get learningSkills() { return this.items.filter(it => it.type === "skill" && it.level < 1); },
-      get knownSkills() { return this.items.filter(it => it.type === "skill" && it.level > 0); },
+      get all() { return thiz.items.filter(it => it.type === "skill"); },
+      get learning() { return thiz.items.filter(it => it.type === "skill" && it.level < 1); },
+      get known() { return thiz.items.filter(it => it.type === "skill" && it.level > 0); },
     };
   }
 
@@ -117,10 +115,11 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
    * @readonly
    */
   get health() {
+    const thiz = this;
     return {
-      get injuries() { return this.items.filter(it => it.type === "injury"); },
-      get illnesss() { return this.items.filter(it => it.type === "illness"); },
-      get mutations() { return this.items.filter(it => it.type === "mutation"); },
+      get injuries() { return thiz.items.filter(it => it.type === "injury"); },
+      get illnesses() { return thiz.items.filter(it => it.type === "illness"); },
+      get mutations() { return thiz.items.filter(it => it.type === "mutation"); },
 
       get HP() { return parseInt(thiz.document.data.data.health.HP); },
       set HP(value) { thiz.updateSingle("data.data.health.HP", value); },
@@ -131,10 +130,10 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
       get magicStamina() { return parseInt(thiz.document.data.data.health.magicStamina); },
       set magicStamina(value) { thiz.updateSingle("data.data.health.magicStamina", value); },
       
-      get maxHP() { return new Ruleset().getCharacterMaximumHp(document) },
-      get maxInjuries() { return new Ruleset().getCharacterMaximumInjuries(document) },
-      get maxExhaustion() { return new Ruleset().getCharacterMaximumExhaustion(document) },
-      get maxMagicStamina() { return new Ruleset().getCharacterMaximumMagicStamina(document) },
+      get maxHP() { return new Ruleset().getCharacterMaximumHp(thiz.document) },
+      get maxInjuries() { return new Ruleset().getCharacterMaximumInjuries(thiz.document) },
+      get maxExhaustion() { return new Ruleset().getCharacterMaximumExhaustion(thiz.document) },
+      get maxMagicStamina() { return new Ruleset().getCharacterMaximumMagicStamina(thiz.document) },
     };
   }
 
@@ -142,11 +141,12 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
    * @type {Object}
    * @readonly
    */
-  get health() {
+  get assets() {
+    const thiz = this;
     return {
-      get all() { return this.items.filter(it => it.type === "item"); },
-      get onPerson() { return this.items.filter(it => it.type === "item" && it.isOnPerson === true); },
-      get remote() { return this.items.filter(it => it.type === "item" && it.isOnPerson !== true); },
+      get all() { return thiz.items.filter(it => it.type === "item"); },
+      get onPerson() { return thiz.items.filter(it => it.type === "item" && it.isOnPerson === true); },
+      get remote() { return thiz.items.filter(it => it.type === "item" && it.isOnPerson !== true); },
       get currentBulk() {
         let currentBulk = 0;
         const assetsOnPerson = this.onPerson;
@@ -155,7 +155,7 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
         }
         return currentBulk;
       },
-      get maxBulk() { return new Ruleset().getCharacterMaximumInventory(document); },
+      get maxBulk() { return new Ruleset().getCharacterMaximumInventory(thiz.document); },
     };
   }
 

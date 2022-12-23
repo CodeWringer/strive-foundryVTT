@@ -6,18 +6,14 @@ import ViewModel from "../../../view-model/view-model.mjs";
 import ViewModelFactory from "../../../view-model/view-model-factory.mjs";
 import ItemListItemViewModel from "../../item/item/item-list-item-viewmodel.mjs";
 import { TEMPLATES } from "../../templatePreloader.mjs";
+import TransientBaseCharacterActor from "../../../../business/document/actor/transient-base-character-actor.mjs";
 
 export default class ActorAssetsViewModel extends ViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.ACTOR_ASSETS; }
 
-  /**
-   * @type {Actor}
-   */
-  actor = undefined;
-
   /** @override */
-  get entityId() { return this.actor.id; }
+  get entityId() { return this.document.id; }
 
   /**
    * @type {Array<ViewModel>}
@@ -31,7 +27,7 @@ export default class ActorAssetsViewModel extends ViewModel {
    * @type {Number}
    * @readonly
    */
-  get maxBulk() { return this.actor.getMaxBulk(); }
+  get maxBulk() { return this.document.assets.maxBulk; }
 
   /**
    * Returns the currently used bulk. 
@@ -39,7 +35,7 @@ export default class ActorAssetsViewModel extends ViewModel {
    * @type {Number}
    * @readonly
    */
-  get currentBulk() { return this.actor.getCurrentBulk(); }
+  get currentBulk() { return this.document.assets.currentBulk; }
   
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
@@ -52,15 +48,15 @@ export default class ActorAssetsViewModel extends ViewModel {
    * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document. 
    * @param {Boolean | undefined} args.isGM If true, the current user is a GM. 
    * 
-   * @param {Actor} args.actor
+   * @param {TransientBaseCharacterActor} args.document
    * 
    * @throws {Error} ArgumentException - Thrown, if any of the mandatory arguments aren't defined. 
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["actor"]);
+    validateOrThrow(args, ["document"]);
 
-    this.actor = args.actor;
+    this.document = args.document;
     this.contextType = args.contextType ?? "actor-assets";
 
     const thiz = this;
@@ -69,19 +65,19 @@ export default class ActorAssetsViewModel extends ViewModel {
     this.vmIgv = new ItemGridViewViewModel({
       id: "vmIgv",
       parent: thiz,
-      propertyOwner: thiz.actor,
-      propertyPath: "data.data.assets",
+      propertyOwner: thiz.document,
+      propertyPath: "assets",
       isEditable: thiz.isEditable,
       contextTemplate: thiz.contextTemplate,
     });
 
-    const actorItems = this.actor.getPropertyItems();
-    for (const item of actorItems) {
+    const remoteAssets = this.document.assets.remote;
+    for (const remoteAsset of remoteAssets) {
       const vm = new ItemListItemViewModel({
         ...args,
-        id: item.id,
+        id: remoteAsset.id,
         parent: thiz,
-        item: item,
+        document: remoteAsset,
       });
       this.itemViewModels.push(vm);
     }
@@ -90,7 +86,7 @@ export default class ActorAssetsViewModel extends ViewModel {
       isEditable: args.isEditable ?? thiz.isEditable,
       id: "vmPropertyList",
       indexDataSource: new DocumentListItemOrderDataSource({
-        document: thiz.actor,
+        document: thiz.document,
         listName: "property",
       }),
       listItemViewModels: this.itemViewModels,
@@ -98,7 +94,7 @@ export default class ActorAssetsViewModel extends ViewModel {
       vmBtnAddItem: factory.createVmBtnAdd({
         parent: thiz,
         id: "vmBtnAddItem",
-        target: thiz.actor,
+        target: thiz.document,
         creationType: "item",
         withDialog: true,
         localizableLabel: "ambersteel.character.asset.add.label",

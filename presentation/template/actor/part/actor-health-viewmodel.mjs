@@ -13,31 +13,26 @@ export default class ActorHealthViewModel extends ViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.ACTOR_HEALTH; }
 
-  /**
-   * @type {Actor}
-   */
-  actor = undefined;
-
   /** @override */
-  get entityId() { return this.actor.id; }
+  get entityId() { return this.document.id; }
 
   /**
    * @type {Number}
    * @readonly
    */
-  get injuryCount() { return this.actor.getInjuries().length; }
+  get injuryCount() { return this.document.health.injuries.length; }
 
   /**
    * @type {Number}
    * @readonly
    */
-  get illnessCount() { return this.actor.getIllnesses().length; }
+  get illnessCount() { return this.document.health.illnesses.length; }
 
   /**
    * @type {Number}
    * @readonly
    */
-  get mutationCount() { return this.actor.getMutations().length; }
+  get mutationCount() { return this.document.health.mutations.length; }
 
   /**
    * @type {Array<IllnessListItemViewModel>}
@@ -61,7 +56,7 @@ export default class ActorHealthViewModel extends ViewModel {
    * @type {Boolean}
    * @readonly
    */
-  get isToughnessTestRequired() { return new Ruleset().isToughnessTestRequired(this.actor); }
+  get isToughnessTestRequired() { return new Ruleset().isToughnessTestRequired(this.document.document); }
 
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
@@ -74,15 +69,15 @@ export default class ActorHealthViewModel extends ViewModel {
    * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document. 
    * @param {Boolean | undefined} args.isGM If true, the current user is a GM. 
    * 
-   * @param {Actor} args.actor
+   * @param {TransientBaseCharacterActor} args.document
    * 
    * @throws {Error} ArgumentException - Thrown, if any of the mandatory arguments aren't defined. 
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["actor"]);
+    validateOrThrow(args, ["document"]);
 
-    this.actor = args.actor;
+    this.document = args.document;
     this.contextType = args.contextType ?? "actor-health";
 
     const thiz = this;
@@ -91,61 +86,61 @@ export default class ActorHealthViewModel extends ViewModel {
     this.vmNsMaxHp = factory.createVmNumberSpinner({
       parent: thiz,
       id: "vmNsMaxHp",
-      propertyOwner: thiz.actor,
-      propertyPath: "data.data.health.maxHP",
+      propertyOwner: thiz.document,
+      propertyPath: "health.maxHP",
       isEditable: false,
     });
     this.vmNsHp = factory.createVmNumberSpinner({
       parent: thiz,
       id: "vmNsHp",
-      propertyOwner: thiz.actor,
-      propertyPath: "data.data.health.HP",
+      propertyOwner: thiz.document,
+      propertyPath: "health.HP",
     });
     this.vmNsMaxExhaustion = factory.createVmNumberSpinner({
       parent: thiz,
       id: "vmNsMaxExhaustion",
-      propertyOwner: thiz.actor,
-      propertyPath: "data.data.health.maxExhaustion",
+      propertyOwner: thiz.document,
+      propertyPath: "health.maxExhaustion",
       isEditable: false,
     });
     this.vmNsExhaustion = factory.createVmNumberSpinner({
       parent: thiz,
       id: "vmNsExhaustion",
-      propertyOwner: thiz.actor,
-      propertyPath: "data.data.health.exhaustion",
+      propertyOwner: thiz.document,
+      propertyPath: "health.exhaustion",
       min: 0,
     });
     this.vmNsMagicStamina = factory.createVmNumberSpinner({
       parent: thiz,
       id: "vmNsMagicStamina",
-      propertyOwner: thiz.actor,
-      propertyPath: "data.data.health.magicStamina",
+      propertyOwner: thiz.document,
+      propertyPath: "health.magicStamina",
       min: 0,
     });
     this.vmNsMaxMagicStamina = factory.createVmNumberSpinner({
       parent: thiz,
       id: "vmNsMaxMagicStamina",
-      propertyOwner: thiz.actor,
-      propertyPath: "data.data.health.maxMagicStamina",
+      propertyOwner: thiz.document,
+      propertyPath: "health.maxMagicStamina",
       isEditable: false,
     });
     this.vmNsMaxInjuries = factory.createVmNumberSpinner({
       parent: thiz,
       id: "vmNsMaxInjuries",
-      propertyOwner: thiz.actor,
-      propertyPath: "data.data.health.maxInjuries",
+      propertyOwner: thiz.document,
+      propertyPath: "health.maxInjuries",
       isEditable: false,
       min: 1,
     });
 
     // Prepare illnesses list view models. 
-    const actorIllnesses = this.actor.getIllnesses();
-    for (const illness of actorIllnesses) {
+    const illnesses = this.document.health.illnesses;
+    for (const illness of illnesses) {
       const vm = new IllnessListItemViewModel({
         ...args,
         id: illness.id,
         parent: thiz,
-        item: illness,
+        document: illness,
       });
       this.illnesses.push(vm);
     }
@@ -154,7 +149,7 @@ export default class ActorHealthViewModel extends ViewModel {
       isEditable: args.isEditable ?? thiz.isEditable,
       id: "vmIllnessList",
       indexDataSource: new DocumentListItemOrderDataSource({
-        document: thiz.actor,
+        document: thiz.document,
         listName: "illnesses",
       }),
       listItemViewModels: this.illnesses,
@@ -162,7 +157,7 @@ export default class ActorHealthViewModel extends ViewModel {
       vmBtnAddItem: factory.createVmBtnAdd({
         parent: thiz,
         id: "vmBtnAddIllness",
-        target: thiz.actor,
+        target: thiz.document,
         creationType: "illness",
         withDialog: true,
         localizableLabel: "ambersteel.character.health.illness.add.label",
@@ -172,13 +167,13 @@ export default class ActorHealthViewModel extends ViewModel {
     });
 
     // Prepare injuries list view models. 
-    const actorInjuries = this.actor.getInjuries();
-    for (const injury of actorInjuries) {
+    const injuries = this.document.health.injuries;
+    for (const injury of injuries) {
       const vm = new InjuryListItemViewModel({
         ...args,
         id: injury.id,
         parent: thiz,
-        item: injury,
+        document: injury,
       });
       this.injuries.push(vm);
     }
@@ -187,7 +182,7 @@ export default class ActorHealthViewModel extends ViewModel {
       isEditable: args.isEditable ?? thiz.isEditable,
       id: "vmInjuryList",
       indexDataSource: new DocumentListItemOrderDataSource({
-        document: thiz.actor,
+        document: thiz.document,
         listName: "injuries",
       }),
       listItemViewModels: this.injuries,
@@ -195,7 +190,7 @@ export default class ActorHealthViewModel extends ViewModel {
       vmBtnAddItem: factory.createVmBtnAdd({
         parent: thiz,
         id: "vmBtnAddInjury",
-        target: thiz.actor,
+        target: thiz.document,
         creationType: "injury",
         withDialog: true,
         localizableLabel: "ambersteel.character.health.injury.add.label",
@@ -205,13 +200,13 @@ export default class ActorHealthViewModel extends ViewModel {
     });
 
     // Prepare mutations list view models. 
-    const actorMutations = this.actor.getMutations();
-    for (const mutation of actorMutations) {
+    const mutations = this.document.health.mutations;
+    for (const mutation of mutations) {
       const vm = new MutationListItemViewModel({
         ...args,
         id: mutation.id,
         parent: thiz,
-        item: mutation,
+        document: mutation,
       });
       this.mutations.push(vm);
     }
@@ -220,7 +215,7 @@ export default class ActorHealthViewModel extends ViewModel {
       isEditable: args.isEditable ?? thiz.isEditable,
       id: "vmMutationList",
       indexDataSource: new DocumentListItemOrderDataSource({
-        document: thiz.actor,
+        document: thiz.document,
         listName: "mutations",
       }),
       listItemViewModels: this.mutations,
@@ -228,7 +223,7 @@ export default class ActorHealthViewModel extends ViewModel {
       vmBtnAddItem: factory.createVmBtnAdd({
         parent: thiz,
         id: "vmBtnAddMutation",
-        target: thiz.actor,
+        target: thiz.document,
         creationType: "mutation",
         withDialog: true,
         localizableLabel: "ambersteel.character.health.mutation.add.label",

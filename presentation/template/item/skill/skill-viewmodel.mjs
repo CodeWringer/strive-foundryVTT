@@ -4,19 +4,13 @@ import ViewModel from "../../../view-model/view-model.mjs";
 
 export default class SkillViewModel extends ViewModel {
   /**
-   * @type {Item}
-   * @readonly
-   */
-  item = undefined;
-
-  /**
    * @type {String}
    * @readonly
    */
   visGroupId = undefined;
 
   /** @override */
-  get entityId() { return this.item.id; }
+  get entityId() { return this.document.id; }
 
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 

@@ -16,30 +16,25 @@ export default class ActorSheetViewModel extends ViewModel {
   static get TEMPLATE() { return TEMPLATES.ACTOR_SHEET; }
 
   /** @override */
-  get entityId() { return this.actor.id; }
-
-  /**
-   * @type {Actor}
-   */
-  actor = undefined;
+  get entityId() { return this.document.id; }
 
   /**
    * Is true, if the actor is a player character. 
    * @type {Boolean}
    */
-  get isPC() { return this.actor.type === "pc"; }
+  get isPC() { return this.document.type === "pc"; }
   
   /**
    * Is true, if the actor is a non-player character. 
    * @type {Boolean}
    */
-  get isNPC() { return this.actor.type === "npc"; }
+  get isNPC() { return this.document.type === "npc"; }
 
   /**
    * Is true, if the actor is a plain actor. 
    * @type {Boolean}
    */
-  get isPlain() { return this.actor.type === "plain"; }
+  get isPlain() { return this.document.type === "plain"; }
 
   personalsViewModel = undefined;
   get personalsId() { return "child-personals-viewmodel"; }
@@ -78,13 +73,13 @@ export default class ActorSheetViewModel extends ViewModel {
    * @param {String | undefined} args.contextTemplate Optional. Name or path of a contextual template, 
    * which will be displayed in exception log entries, to aid debugging. 
    * 
-   * @param {Actor} args.actor
+   * @param {TransientBaseactor} args.document
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["actor"]);
+    validateOrThrow(args, ["document"]);
 
-    this.actor = args.actor;
+    this.document = args.document;
     this.contextTemplate = args.contextTemplate ?? "actor-character-sheet";
 
     const thiz = this;
@@ -93,14 +88,14 @@ export default class ActorSheetViewModel extends ViewModel {
     this.vmTfName = factory.createVmTextField({
       parent: thiz,
       id: "vmTfName",
-      propertyOwner: thiz.actor,
+      propertyOwner: thiz.document,
       propertyPath: "name",
       placeholder: "ambersteel.general.name",
     });
     this.vmImg = factory.createVmImg({
       parent: thiz,
       id: "vmImg",
-      propertyOwner: thiz.actor,
+      propertyOwner: thiz.document,
       propertyPath: "img",
     });
 
@@ -108,18 +103,18 @@ export default class ActorSheetViewModel extends ViewModel {
       this.personalsViewModel = new ActorPersonalsViewModel({ ...args, id: thiz.personalsId, parent: thiz });
       this.attributesViewModel = new ActorAttributesViewModel({ ...args, id: thiz.personalsId, parent: thiz });
       this.skillsViewModel = new ActorSkillsViewModel({ ...args, id: thiz.skillsId, parent: thiz });
-      if (args.actor.type === 'pc') {
+      if (args.document.type === 'pc') {
         this.beliefsFateViewModel = new ActorBeliefsFateViewModel({ ...args, id: thiz.beliefsFateId, parent: thiz });
       }
       this.healthViewModel = new ActorHealthViewModel({ ...args, id: thiz.healthId, parent: thiz });
       this.assetsViewModel = new ActorAssetsViewModel({ ...args, id: thiz.assetsId, parent: thiz });
       this.biographyViewModel = new ActorBiographyViewModel({ ...args, id: thiz.biographyId, parent: thiz });
     }
-    this.gmNotesViewModel = new GmNotesViewModel({ ...args, id: thiz.biographyId, document: thiz.actor, parent: thiz });
+    this.gmNotesViewModel = new GmNotesViewModel({ ...args, id: thiz.biographyId, document: thiz.document, parent: thiz });
     this.vmBtnSendToChat = factory.createVmBtnSendToChat({
       parent: this,
       id: "vmBtnSendToChat",
-      target: thiz.actor,
+      target: thiz.document,
       isEditable: thiz.isEditable || thiz.isGM,
     });
   }

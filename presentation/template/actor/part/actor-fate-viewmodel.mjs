@@ -8,19 +8,14 @@ export default class ActorFateViewModel extends ViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.ACTOR_FATE; }
 
-  /**
-   * @type {Actor}
-   */
-  actor = undefined;
-
   /** @override */
-  get entityId() { return this.actor.id; }
+  get entityId() { return this.document.id; }
 
   /**
    * @type {Number}
    * @readonly
    */
-  get fateCardCount() { return this.actor.getFateCards().length; }
+  get fateCardCount() { return this.document.fateSystem.fateCards.length; }
 
   /**
    * @type {Array<FateCardViewModel>}
@@ -28,7 +23,7 @@ export default class ActorFateViewModel extends ViewModel {
    */
   fateCards = [];
 
-  get remainingSlots() { return this.actor.data.data.fateSystem.remainingSlots; }
+  get remainingSlots() { return this.document.fateSystem.remainingFateCards; }
 
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
@@ -41,15 +36,15 @@ export default class ActorFateViewModel extends ViewModel {
    * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document. 
    * @param {Boolean | undefined} args.isGM If true, the current user is a GM. 
    * 
-   * @param {Actor} args.actor
+   * @param {TransientPc} args.document
    * 
    * @throws {Error} ArgumentException - Thrown, if any of the mandatory arguments aren't defined. 
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["actor"]);
+    validateOrThrow(args, ["document"]);
 
-    this.actor = args.actor;
+    this.document = args.document;
     this.contextType = args.contextType ?? "actor-fate";
 
     const thiz = this;
@@ -58,41 +53,41 @@ export default class ActorFateViewModel extends ViewModel {
     this.vmNsMifp = factory.createVmNumberSpinner({
       parent: thiz,
       id: "vmNsMifp",
-      propertyOwner: thiz.actor,
-      propertyPath: "data.data.fateSystem.miFP",
+      propertyOwner: thiz.document,
+      propertyPath: "fateSystem.miFP",
       min: 0,
     });
     this.vmNsMafp = factory.createVmNumberSpinner({
       parent: thiz,
       id: "vmNsMafp",
-      propertyOwner: thiz.actor,
-      propertyPath: "data.data.fateSystem.maFP",
+      propertyOwner: thiz.document,
+      propertyPath: "fateSystem.maFP",
       min: 0,
     });
     this.vmNsAfp = factory.createVmNumberSpinner({
       parent: thiz,
       id: "vmNsAfp",
-      propertyOwner: thiz.actor,
-      propertyPath: "data.data.fateSystem.AFP",
+      propertyOwner: thiz.document,
+      propertyPath: "fateSystem.AFP",
       min: 0,
     });
     this.vmBtnAddFateCard = factory.createVmBtnAdd({
       parent: thiz,
       id: "vmBtnAddFateCard",
-      target: thiz.actor,
+      target: thiz.document,
       creationType: "fate-card",
       withDialog: true,
       localizableType: "ambersteel.character.beliefSystem.fateSystem.fateCard.label",
       localizableDialogTitle: "ambersteel.character.beliefSystem.fateSystem.fateCard.add.query",
     });
 
-    const actorFateCards = this.actor.getFateCards();
-    for (const fateCard of actorFateCards) {
+    const fateCards = this.document.fateSystem.fateCards;
+    for (const fateCard of fateCards) {
       const vm = new FateCardViewModel({
         ...args,
         id: fateCard.id,
         parent: thiz,
-        item: fateCard,
+        document: fateCard,
       });
       this.fateCards.push(vm);
     }

@@ -7,13 +7,8 @@ export default class ActorPersonalsViewModel extends ViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.ACTOR_PERSONALS; }
 
-  /**
-   * @type {Actor}
-   */
-  actor = undefined;
-
   /** @override */
-  get entityId() { return this.actor.id; }
+  get entityId() { return this.document.id; }
 
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
@@ -26,15 +21,15 @@ export default class ActorPersonalsViewModel extends ViewModel {
    * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document. 
    * @param {Boolean | undefined} args.isGM If true, the current user is a GM. 
    * 
-   * @param {Actor} args.actor
+   * @param {TransientBaseCharacterActor} args.document
    * 
    * @throws {Error} ArgumentException - Thrown, if any of the mandatory arguments aren't defined. 
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["actor"]);
+    validateOrThrow(args, ["document"]);
 
-    this.actor = args.actor;
+    this.document = args.document;
     this.contextType = args.contextType ?? "actor-personals";
 
     const thiz = this;
@@ -43,29 +38,29 @@ export default class ActorPersonalsViewModel extends ViewModel {
     this.vmTfSpecies = factory.createVmTextField({
       parent: thiz,
       id: "vmTfSpecies",
-      propertyOwner: thiz.actor,
-      propertyPath: "data.data.person.species",
+      propertyOwner: thiz.document,
+      propertyPath: "person.species",
       placeholder: "ambersteel.character.personals.species",
     });
     this.vmTfCulture = factory.createVmTextField({
       parent: thiz,
       id: "vmTfCulture",
-      propertyOwner: thiz.actor,
-      propertyPath: "data.data.person.culture",
+      propertyOwner: thiz.document,
+      propertyPath: "person.culture",
       placeholder: "ambersteel.character.personals.culture",
     });
     this.vmTfSex = factory.createVmTextField({
       parent: thiz,
       id: "vmTfSex",
-      propertyOwner: thiz.actor,
-      propertyPath: "data.data.person.sex",
+      propertyOwner: thiz.document,
+      propertyPath: "person.sex",
       placeholder: "ambersteel.character.personals.sex",
     });
     this.vmTfAge = factory.createVmTextField({
       parent: thiz,
       id: "vmTfAge",
-      propertyOwner: thiz.actor,
-      propertyPath: "data.data.person.age",
+      propertyOwner: thiz.document,
+      propertyPath: "person.age",
       placeholder: "ambersteel.character.personals.age",
     });
   }

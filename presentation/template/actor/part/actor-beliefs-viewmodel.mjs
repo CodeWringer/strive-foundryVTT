@@ -7,16 +7,11 @@ export default class ActorBeliefsViewModel extends ViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.ACTOR_BELIEFS; }
 
-  /**
-   * @type {Actor}
-   */
-  actor = undefined;
-
   /** @override */
-  get entityId() { return this.actor.id; }
+  get entityId() { return this.document.id; }
 
-  get beliefs() { return this.actor.data.data.beliefSystem.beliefs; }
-  get instincts() { return this.actor.data.data.beliefSystem.instincts; }
+  get beliefs() { return this.document.beliefSystem.beliefs; }
+  get instincts() { return this.document.beliefSystem.instincts; }
 
   beliefViewModels = [];
   instinctViewModels = [];
@@ -32,15 +27,15 @@ export default class ActorBeliefsViewModel extends ViewModel {
    * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document. 
    * @param {Boolean | undefined} args.isGM If true, the current user is a GM. 
    * 
-   * @param {Actor} args.actor
+   * @param {TransientPc} args.document
    * 
    * @throws {Error} ArgumentException - Thrown, if any of the mandatory arguments aren't defined. 
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["actor"]);
+    validateOrThrow(args, ["document"]);
 
-    this.actor = args.actor;
+    this.document = args.document;
     this.contextType = args.contextType ?? "actor-beliefs";
 
     const thiz = this;
@@ -49,8 +44,8 @@ export default class ActorBeliefsViewModel extends ViewModel {
     this.vmTfAmbition = factory.createVmTextField({
       parent: thiz,
       id: "vmTfAmbition",
-      propertyOwner: thiz.actor,
-      propertyPath: "data.data.beliefSystem.ambition",
+      propertyOwner: thiz.document,
+      propertyPath: "beliefSystem.ambition",
       placeholder: "ambersteel.character.beliefSystem.ambition",
     });
 
@@ -58,8 +53,8 @@ export default class ActorBeliefsViewModel extends ViewModel {
       this.beliefViewModels.push(factory.createVmTextField({
         parent: thiz,
         id: `vmBelief${i}`,
-        propertyOwner: thiz.actor,
-        propertyPath: `data.data.beliefSystem.beliefs[${i}]`,
+        propertyOwner: thiz.document,
+        propertyPath: `beliefSystem.beliefs[${i}]`,
         placeholder: "ambersteel.character.beliefSystem.belief.singular",
       }));
     }
@@ -68,8 +63,8 @@ export default class ActorBeliefsViewModel extends ViewModel {
       this.instinctViewModels.push(factory.createVmTextField({
         parent: thiz,
         id: `vmInstinct${i}`,
-        propertyOwner: thiz.actor,
-        propertyPath: `data.data.beliefSystem.instincts[${i}]`,
+        propertyOwner: thiz.document,
+        propertyPath: `beliefSystem.instincts[${i}]`,
         placeholder: "ambersteel.character.beliefSystem.instinct.singular",
       }));
     }

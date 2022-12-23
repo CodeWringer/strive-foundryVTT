@@ -7,13 +7,8 @@ export default class ActorAttributesViewModel extends ViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.ACTOR_ATTRIBUTES; }
 
-  /**
-   * @type {Actor}
-   */
-  actor = undefined;
-
   /** @override */
-  get entityId() { return this.actor.id; }
+  get entityId() { return this.document.id; }
   
   attributesPhysicalViewModel = undefined;
   get attributesPhysicalViewModelId() { return "child-attributes-physical-viewmodel"; }
@@ -35,42 +30,47 @@ export default class ActorAttributesViewModel extends ViewModel {
    * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document. 
    * @param {Boolean | undefined} args.isGM If true, the current user is a GM. 
    * 
-   * @param {Actor} args.actor
+   * @param {TransientBaseCharacterActor} args.document
    * 
    * @throws {Error} ArgumentException - Thrown, if any of the mandatory arguments aren't defined. 
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["actor"]);
+    validateOrThrow(args, ["document"]);
     
     // Own properties.
-    this.actor = args.actor;
+    this.document = args.document;
 
     // Child view models. 
     const thiz = this;
 
+    const physicalAttributes = this.document.attributeGroups.find(it => it.name === "physical");
     this.attributesPhysicalViewModel = new AttributeTableViewModel({
       ...args, 
       id: thiz.attributesPhysicalViewModelId,
-      attributes: thiz.actor.data.data.attributes.physical.attributes,
-      attributeGroupName: thiz.actor.data.data.attributes.physical.name,
-      localizableAttributeGroupName: "ambersteel.character.attributeGroup.physical.label",
+      attributes: physicalAttributes.attributes,
+      attributeGroupName: physicalAttributes.name,
+      localizableAttributeGroupName: physicalAttributes.localizableName,
       parent: thiz,
     });
+
+    const mentalAttributes = this.document.attributeGroups.find(it => it.name === "mental");
     this.attributesMentalViewModel = new AttributeTableViewModel({
       ...args, 
       id: thiz.attributesMentalViewModelId,
-      attributes: thiz.actor.data.data.attributes.mental.attributes,
-      attributeGroupName: thiz.actor.data.data.attributes.mental.name,
-      localizableAttributeGroupName: "ambersteel.character.attributeGroup.mental.label",
+      attributes: mentalAttributes.attributes,
+      attributeGroupName: mentalAttributes.name,
+      localizableAttributeGroupName: mentalAttributes.localizableName,
       parent: thiz,
     });
+
+    const socialAttributes = this.document.attributeGroups.find(it => it.name === "social");
     this.attributesSocialViewModel = new AttributeTableViewModel({
       ...args, 
       id: thiz.attributesSocialViewModelId,
-      attributes: thiz.actor.data.data.attributes.social.attributes,
-      attributeGroupName: thiz.actor.data.data.attributes.social.name,
-      localizableAttributeGroupName: "ambersteel.character.attributeGroup.social.label",
+      attributes: socialAttributes.attributes,
+      attributeGroupName: socialAttributes.name,
+      localizableAttributeGroupName: socialAttributes.localizableName,
       parent: thiz,
     });
   }

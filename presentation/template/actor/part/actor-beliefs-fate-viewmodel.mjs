@@ -14,13 +14,8 @@ export default class ActorBeliefsFateViewModel extends ViewModel {
   fateViewModel = undefined;
   get fateViewModelId() { return "child-fate-view-model"; }
 
-  /**
-   * @type {Actor}
-   */
-  actor = undefined;
-
   /** @override */
-  get entityId() { return this.actor.id; }
+  get entityId() { return this.document.id; }
 
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
@@ -33,16 +28,16 @@ export default class ActorBeliefsFateViewModel extends ViewModel {
    * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document. 
    * @param {Boolean | undefined} args.isGM If true, the current user is a GM. 
    * 
-   * @param {Actor} args.actor
+   * @param {TransientBaseCharacterActor} args.document
    * 
    * @throws {Error} ArgumentException - Thrown, if any of the mandatory arguments aren't defined. 
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["actor"]);
+    validateOrThrow(args, ["document"]);
 
     // Own properties.
-    this.actor = args.actor;
+    this.document = args.document;
 
     // Child view models. 
     const thiz = this;

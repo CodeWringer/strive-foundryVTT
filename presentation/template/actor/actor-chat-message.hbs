@@ -4,15 +4,15 @@ cssClass: {undefined | String}
 --}}
 <section class="custom-system-chat-message{{#if cssClass}} {{cssClass}}{{/if}}" 
   data-view-model-id="{{viewModel.id}}"
-  data-document-id="{{viewModel.actor.id}}"
+  data-document-id="{{viewModel.document.id}}"
 >
   {{!-- Header --}}
   <div class="flex flex-row">
     <div class="flex flex-center">
-      <img class="inline-img header-image margin-r-sm" name="img" src="{{viewModel.actor.img}}" title="{{viewModel.actor.name}}" height="35" width="35" />
+      <img class="inline-img header-image margin-r-sm" name="img" src="{{viewModel.document.img}}" title="{{viewModel.document.name}}" height="35" width="35" />
     </div>
     <h2 class="flex-grow">
-      {{viewModel.actor.name}}
+      {{viewModel.document.name}}
     </h2>
   </div>
   {{#if (eq viewModel.isPlain false)}}
@@ -24,7 +24,7 @@ cssClass: {undefined | String}
           {{localize "ambersteel.character.personals.species"}}
         </div>
         <div class="flex-grow">
-          {{viewModel.actor.data.data.person.species}}
+          {{viewModel.document.person.species}}
         </div>
       </div>
     {{/if}}
@@ -34,7 +34,7 @@ cssClass: {undefined | String}
           {{localize "ambersteel.character.personals.culture"}}
         </div>
         <div class="flex-grow">
-          {{viewModel.actor.data.data.person.culture}}
+          {{viewModel.document.person.culture}}
         </div>
       </div>
     {{/if}}
@@ -44,7 +44,7 @@ cssClass: {undefined | String}
           {{localize "ambersteel.character.personals.sex"}}
         </div>
         <div class="flex-grow">
-          {{viewModel.actor.data.data.person.sex}}
+          {{viewModel.document.person.sex}}
         </div>
       </div>
     {{/if}}
@@ -54,7 +54,7 @@ cssClass: {undefined | String}
           {{localize "ambersteel.character.personals.age"}}
         </div>
         <div class="flex-grow">
-          {{viewModel.actor.data.data.person.age}}
+          {{viewModel.document.person.age}}
         </div>
       </div>
     {{/if}}

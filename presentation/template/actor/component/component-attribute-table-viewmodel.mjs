@@ -7,13 +7,8 @@ export default class AttributeTableViewModel extends ViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.ACTOR_ATTRIBUTE_TABLE; }
 
-  /**
-   * @type {Actor}
-   */
-  actor = undefined;
-
   /** @override */
-  get entityId() { return this.actor.id; }
+  get entityId() { return this.document.id; }
 
   /**
    * @type {Array<Object>}
@@ -46,7 +41,7 @@ export default class AttributeTableViewModel extends ViewModel {
    * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document. 
    * @param {Boolean | undefined} args.isGM If true, the current user is a GM. 
    * 
-   * @param {Actor} args.actor
+   * @param {TransientBaseActor} args.document
    * @param {Array<Object>} args.attributes
    * @param {String} args.attributeGroupName
    * @param {String} args.localizableAttributeGroupName
@@ -55,9 +50,9 @@ export default class AttributeTableViewModel extends ViewModel {
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["actor", "attributes", "attributeGroupName", "localizableAttributeGroupName"]);
+    validateOrThrow(args, ["document", "attributes", "attributeGroupName", "localizableAttributeGroupName"]);
 
-    this.actor = args.actor;
+    this.document = args.document;
     this.attributes = args.attributes;
     this.attributeGroupName = args.attributeGroupName;
     this.localizableAttributeGroupName = args.localizableAttributeGroupName;
@@ -66,8 +61,8 @@ export default class AttributeTableViewModel extends ViewModel {
     const thiz = this;
     const factory = new ViewModelFactory();
 
-    for (let i = 0; i < this.attributes.length; i++) {
-      const attribute = this.attributes[i];
+    for (let attributeIndex = 0; attributeIndex < this.attributes.length; attributeIndex++) {
+      const attribute = this.attributes[attributeIndex];
 
       thiz.attributeViewModels.push({
         attributeName: attribute.name,
@@ -78,33 +73,33 @@ export default class AttributeTableViewModel extends ViewModel {
         vmBtnRoll: factory.createVmBtnRoll({
           parent: thiz,
           id: `vmBtnRoll-${attribute.name}`,
-          target: thiz.actor.data.data.attributes[thiz.attributeGroupName][attribute.name],
+          target: attribute,
           propertyPath: undefined,
           primaryChatTitle: game.i18n.localize(attribute.localizableName),
           rollType: "dice-pool",
           callback: "advanceAttributeBasedOnRollResult",
           callbackData: attribute.name,
-          actor: thiz.actor,
+          document: thiz.document,
         }),
         vmNsLevel: factory.createVmNumberSpinner({
           parent: thiz,
           id: `vmNsLevel-${attribute.name}`,
-          propertyOwner: thiz.actor,
-          propertyPath: `data.data.attributes.${thiz.attributeGroupName}.${attribute.name}.level`,
+          propertyOwner: attribute,
+          propertyPath: "level",
           min: 0,
         }),
         vmNsSuccesses: factory.createVmNumberSpinner({
           parent: thiz,
           id: `vmNsSuccesses-${attribute.name}`,
-          propertyOwner: thiz.actor,
-          propertyPath: `data.data.attributes.${thiz.attributeGroupName}.${attribute.name}.successes`,
+          propertyOwner: attribute,
+          propertyPath: "advancementProgress.successes",
           min: 0,
         }),
         vmNsFailures: factory.createVmNumberSpinner({
           parent: thiz,
           id: `vmNsFailures-${attribute.name}`,
-          propertyOwner: thiz.actor,
-          propertyPath: `data.data.attributes.${thiz.attributeGroupName}.${attribute.name}.failures`,
+          propertyOwner: attribute,
+          propertyPath: "advancementProgress.failures",
           min: 0,
         }),
       });
