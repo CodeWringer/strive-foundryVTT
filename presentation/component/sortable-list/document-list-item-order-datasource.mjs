@@ -4,8 +4,8 @@ import { AbstractListItemOrderDataSource } from "./abstract-list-item-order-data
 /**
  * Uses a document (actor, item, etc.) as a data source for list item ordering. 
  * 
- * @property {TransientDocument} args.document The document to read from and write to. 
- * @property {String} args.listName Name of the list whose orders are to be read/written. 
+ * @property {TransientDocument} document The document to read from and write to. 
+ * @property {String} listName Name of the list whose orders are to be read/written. 
  */
 export default class DocumentListItemOrderDataSource extends AbstractListItemOrderDataSource {
   /**
@@ -23,7 +23,7 @@ export default class DocumentListItemOrderDataSource extends AbstractListItemOrd
   /** @override */
   getAll() {
     try {
-      return this.document.displayOrders[listName];
+      return this.document.displayOrders[this.listName];
     } catch (error) {
       return [];
     }
@@ -44,7 +44,7 @@ export default class DocumentListItemOrderDataSource extends AbstractListItemOrd
     const newDisplayOrders = {
       ...this.document.displayOrders
     }
-    newDisplayOrders[listName] = idList;
+    newDisplayOrders[this.listName] = idList;
 
     this.document.displayOrders = newDisplayOrders;
   }
