@@ -35,13 +35,11 @@ import { VISIBILITY_MODES } from '../../presentation/chat/visibility-modes.mjs';
  * @property {String} id Returns the id of the document. 
  * * Read-only.
  * @property {String} img Returns the icon/image path of the document. 
- * * Read-only.
  * @property {Boolean} isOwner Returns true, if the current user is the owner of the document. 
  * * Read-only.
  * @property {Item | Actor} document Returns the encapsulated document instance. 
  * * Read-only.
  * @property {String} name Internal name. 
- * * Read-only.
  * @property {String} localizableName Localization key for the full name. 
  * @property {String} localizableAbbreviation Localization key for the abbreviated name. 
  * @property {String} type Internal type name. E. g. `"skill"`
@@ -89,12 +87,15 @@ export default class TransientDocument {
   get id() { return this.document.id; }
   
   /**
-   * Returns the icon/image path of the document. 
+   * The icon/image path of the document. 
    * 
    * @type {String}
-   * @readonly
    */
   get img() { return this.document.img; }
+  set img(value) {
+    this.document.img = value;
+    this.updateSingle("img", value);
+  }
   
   /**
    * Returns true, if the current user is the owner of the document. 
@@ -105,12 +106,15 @@ export default class TransientDocument {
   get isOwner() { return this.document.isOwner ?? this.document.owner ?? false; }
 
   /**
-   * Returns the internal name of the document. 
+   * The internal name of the document. 
    * 
    * @type {String}
-   * @readonly
    */
   get name() { return this.document.name; }
+  set name(value) {
+    this.document.name = value;
+    this.updateSingle("name", value);
+  }
 
   /**
    * Returns the internal type name of the document. 
