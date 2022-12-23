@@ -121,7 +121,7 @@ export default class ActorHealthViewModel extends ViewModel {
       parent: thiz,
       id: "vmNsMaxMagicStamina",
       propertyOwner: thiz.document,
-      propertyPath: "health.maxMagicStamina",
+      propertyPath: "health.maxMagicStamina.total",
       isEditable: false,
     });
     this.vmNsMaxInjuries = factory.createVmNumberSpinner({
