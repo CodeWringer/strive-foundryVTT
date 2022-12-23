@@ -5,6 +5,23 @@ import PreparedChatData from '../../presentation/chat/prepared-chat-data.mjs';
 import { SOUNDS_CONSTANTS } from '../../presentation/audio/sounds.mjs';
 import ViewModel from '../../presentation/view-model/view-model.mjs';
 import { VISIBILITY_MODES } from '../../presentation/chat/visibility-modes.mjs';
+import { getNestedPropertyValue } from "../util/property-utility.mjs";
+
+/**
+ * The regular expression pattern used to identify all `@`-references. 
+ * 
+ * @type {String}
+ * @constant
+ */
+export const REGEX_PATTERN_REFERENCES = /@[^\s-/*+]+/g;
+
+/**
+ * The regular expression pattern used to identify a `@`-reference. 
+ * 
+ * @type {String}
+ * @constant
+ */
+export const REGEX_PATTERN_REFERENCE = /\.[^\s-/*+]+/i;
 
 /**
  * @summary
@@ -344,5 +361,113 @@ export default class TransientDocument {
    */
   delete() {
     this.document.delete();
+  }
+
+  /**
+   * Returns the property values identified by the `@`-denoted references in the given string, 
+   * from this `TransientDocument`. 
+   * 
+   * @param {String} str A string containing `@`-denoted references. 
+   * * E. g. `"@strength"` or localized and capitalized `"@Stärke"`. 
+   * * Abbreviated attribute names are permitted, e. g. `"@wis"` instead of `"@wisdom"`. 
+   * * If a reference's name contains spaces, they must be replaced with underscores. 
+   * E. g. `"@Heavy_Armor"`, instead of `"@Heavy Armor"`
+   * * *Can* contain property paths! These paths are considered relative to the data-property. 
+   * E. g. `@a_fate_card.cost.miFP`, instead of `@a_fate_card.data.data.cost.miFP`. 
+   * 
+   * @returns {Map<String, Any | undefined>} A map of the reference key, including the `@`-symbol, to its resolved reference. 
+   * * Only contains unique entries. No reference is included more than once. 
+   */
+  resolveReferences(str) {
+    const result = new Map();
+
+    // Get all references from the given string. 
+    const references = this._getReferencesIn(str);
+    if (references === undefined) {
+      return result;
+    }
+    
+    // Resolve each reference, one by one. 
+    for (const reference of references) {
+      const lowercaseReference = reference.toLowerCase();
+      
+      if (result.has(lowercaseReference)) {
+        // Only bother looking up a reference once. 
+        continue;
+      }
+      
+      // A comparable version of the reference. 
+      // Comparable in the sense that underscores "_" are replaced with spaces " " 
+      // or only the last piece of a property path is returned. 
+      // E. g. `"@a.b.c"` -> `"c"`
+      // E. g. `"@heavy_armor"` -> `"@heavy armor"`
+      const propertyPathMatch = lowercaseReference.match(REGEX_PATTERN_REFERENCE);
+      const comparableReference = 
+        (propertyPathMatch === undefined || propertyPathMatch === null) 
+        ? lowercaseReference.substring(1).replaceAll("_", " ")
+        : lowercaseReference.substring(1, lowercaseReference.indexOf(".", 1));
+
+      const match = this._resolveReference(lowercaseReference, comparableReference);
+      result.set(lowercaseReference, match);
+    }
+
+    return result;
+  }
+
+  /**
+   * Tries to return a match for the given reference. 
+   * 
+   * @param {String} reference A reference to resolve. 
+   * * E. g. `"@heavy_armor"`
+   * * Can contain property paths. E. g. `"a.b.c"`
+   * @param {String} comparableReference A comparable version of the reference. 
+   * * Comparable in the sense that underscores "_" are replaced with spaces " " 
+   * or only the last piece of a property path is returned. 
+   * * E. g. `"@a.b.c"` -> `"c"`
+   * * E. g. `"@heavy_armor"` -> `"@heavy armor"`
+   * 
+   * @returns {Any | undefined} The matched reference or undefined, no match was found. 
+   * 
+   * @virtual
+   * @protected
+   */
+  _resolveReference(reference, comparableReference) {
+    if (this.name.toLowerCase() === comparableReference) {
+      return this;
+    }
+
+    const propertyPathMatch = reference.match(REGEX_PATTERN_REFERENCE);
+
+    // Look in own properties. 
+    if (propertyPathMatch !== undefined && propertyPathMatch !== null) {
+      const propertyPath = propertyPathMatch[0].substring(1); // The property path, excluding the first dot. 
+      try {
+        return getNestedPropertyValue(this, propertyPath);
+      } catch (error) {
+        // Errors are expected for "bad" property paths and can be safely ignored. 
+        return undefined;
+      }
+    }
+    return undefined;
+  }
+  
+  /**
+   * Returns all `@` denoted references in the given string. 
+   * 
+   * Returns `undefined`, if no references could be found. 
+   * 
+   * @param {String} str A string to look in for references. 
+   * 
+   * @returns {Array<Object> | undefined}
+   * 
+   * @protected
+   */
+  _getReferencesIn(str) {
+    const references = str.match(REGEX_PATTERN_REFERENCES);
+    if (references === undefined || references === null) {
+      return undefined;
+    } else {
+      return references;
+    }
   }
 }

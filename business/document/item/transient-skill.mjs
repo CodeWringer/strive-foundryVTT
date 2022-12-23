@@ -392,6 +392,23 @@ export default class TransientSkill extends TransientBaseItem {
       }
     });
   }
+
+  /**
+   * Searches in: 
+   * * Skill abilities
+   * 
+   * @override
+   */
+  _resolveReference(reference, comparableReference) {
+    // Search skill ability.
+    for (const ability of this.abilities) {
+      const match = ability._resolveReference(reference, comparableReference);
+      if (match !== undefined) {
+        return match;
+      }
+    }
+    return undefined;
+  }
 }
 
 ITEM_SUBTYPE.set("skill", (document) => { return new TransientSkill(document) });

@@ -67,6 +67,24 @@ export default class TransientPc extends TransientBaseCharacterActor {
       actorData.beliefSystem.instincts.push("")
     }
   }
+
+  /**
+   * Searches in: 
+   * * Embedded fate-card name.
+   * 
+   * @override
+   */
+  _resolveReference(reference, comparableReference) {
+    // Search fate-cards.
+    for (const fateCard of this.fateCards) {
+      const match = fateCard._resolveReference(reference, comparableReference);
+      if (match !== undefined) {
+        return match;
+      }
+    }
+
+    return super._resolveReference(reference, comparableReference);
+  }
 }
 
 ACTOR_SUBTYPE.set("pc", (document) => { return new TransientPc(document) });

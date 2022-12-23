@@ -306,10 +306,7 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
   }
 
   /**
-   * Returns the property values identified by the `@`-denoted references in the given string, 
-   * from this `Actor`. 
-   * 
-   * Searches: 
+   * Searches in: 
    * * Attribute names.
    * * Embedded skill name.
    * * Embedded skill ability name.
@@ -318,120 +315,59 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
    * * Embedded illness name.
    * * Embedded mutation name.
    * * Embedded asset name.
-   * * Embedded fate-card name.
    * 
-   * @param {String} str A string containing `@`-denoted references. 
-   * * E. g. `"@strength"` or localized and capitalized `"@Stärke"`. 
-   * * Abbreviated attribute names are permitted, e. g. `"@wis"` instead of `"@wisdom"`. 
-   * * If a reference's name contains spaces, they must be replaced with underscores. 
-   * E. g. `"@Heavy_Armor"`, instead of `"@Heavy Armor"`
-   * * *Can* contain property paths! These paths are considered relative to the data-property. 
-   * E. g. `@a_fate_card.cost.miFP`, instead of `@a_fate_card.data.data.cost.miFP`. 
-   * 
-   * @returns {Map<String, Any | undefined>} A map of the reference key, including the `@`-symbol, to its resolved reference. 
-   * * Only contains unique entries. No reference is included more than once. 
+   * @override
    */
-  resolveReferences(str) {
-    const result = new Map();
-
-    const references = str.match(/@[^\s-/*+]+/g);
-    if (references === undefined || references === null) {
-      return result;
+  _resolveReference(reference, comparableReference) {
+    // Search attributes. 
+    let attribute = this.attributes.find(it => it.name === comparableReference);
+    if (attribute === undefined) {
+      attribute = this.attributes.find(it => game.i18n.localize(it.localizableName).toLowerCase());
+    }
+    if (attribute !== undefined) {
+      return attribute;
     }
 
-    // Iterates the given documents array and returns the first element, 
-    // whose name matches the given name. Case-insensitive comparison. 
-    // No regard for localization! 
-    const _getMatchingDocument = (documents, name) => {
-      for (const document of documents) {
-        if (document.name.toLowerCase() == name) {
-          return document;
-        }
-      }
-      return undefined;
-    }
-
-    for (const reference of references) {
-      const propertyPathMatch = reference.match(/\.[^\s-/*+]+/i);
-      const propertyPath = propertyPathMatch == null ? undefined : propertyPathMatch[0].substring(1); // The property path, excluding the first dot. 
-      
-      const lowercaseReference = reference.toLowerCase();
-      const comparableReference = (propertyPath !== undefined ? lowercaseReference.substring(1, lowercaseReference.indexOf(".", 1)): lowercaseReference.substring(1)).replaceAll("_", " ");
-      if (result.has(comparableReference)) {
-        // Only bother looking up a reference once. 
-        continue;
-      }
-
-      // Search attributes. 
-      let attribute = this.attributes.find(it => it.name === comparableReference);
-      if (attribute === undefined) {
-        attribute = this.attributes.find(it => game.i18n.localize(it.localizableName).toLowerCase());
-      }
-      if (attribute !== undefined) {
-        result.set(lowercaseReference, attribute);
-        continue;
-      }
-
-      // Search skill. 
-      let matchFound = false;
-      for (const skill of this.skills.all) {
-        if (skill.name.toLowerCase() == comparableReference) {
-          result.set(lowercaseReference, (propertyPath !== undefined) ? PropUtil.getNestedPropertyValue(skill.document.data, propertyPath) : skill);
-          matchFound = true;
-          break;
-        }
-
-        // Search skill ability.
-        for (const ability of skill.abilities) {
-          if (ability.name.toLowerCase() == comparableReference) {
-            result.set(lowercaseReference, (propertyPath !== undefined) ? PropUtil.getNestedPropertyValue(ability, propertyPath) : ability);
-            matchFound = true;
-            break;
-          }
-        }
-        if (matchFound) break;
-      }
-      if (matchFound) continue;
-
-      // Search asset.
-      const asset = _getMatchingDocument(this.assets.all, comparableReference);
-      if (asset !== undefined) {
-        result.set(lowercaseReference, propertyPath !== undefined ? PropUtil.getNestedPropertyValue(asset.document.data, propertyPath) : asset);
-        continue;
-      }
-      
-      // Search injury.
-      const injury = _getMatchingDocument(this.health.injuries, comparableReference);
-      if (injury !== undefined) {
-        result.set(lowercaseReference, propertyPath !== undefined ? PropUtil.getNestedPropertyValue(injury.document.data, propertyPath) : injury);
-        continue;
-      }
-      
-      // Search illness.
-      const illness = _getMatchingDocument(this.health.illnesses, comparableReference);
-      if (illness !== undefined) {
-        result.set(lowercaseReference, propertyPath !== undefined ? PropUtil.getNestedPropertyValue(illness.document.data, propertyPath) : illness);
-        continue;
-      }
-      
-      // Search mutation.
-      const mutation = _getMatchingDocument(this.health.mutations, comparableReference);
-      if (mutation !== undefined) {
-        result.set(lowercaseReference, propertyPath !== undefined ? PropUtil.getNestedPropertyValue(mutation.document.data, propertyPath) : mutation);
-        continue;
-      }
-      
-      // TODO #85: This really belongs on the `TransientPc` type, instead of here. 
-      // Search fate-card.
-      if (this.fateCards !== undefined) {
-        const fateCard = _getMatchingDocument(this.fateCards, comparableReference);
-        if (fateCard !== undefined) {
-          result.set(lowercaseReference, propertyPath !== undefined ? PropUtil.getNestedPropertyValue(fateCard.document.data, propertyPath) : fateCard);
-          continue;
-        }
+    // Search skill. 
+    for (const skill of this.skills.all) {
+      const match = skill._resolveReference(reference, comparableReference);
+      if (match !== undefined) {
+        return match;
       }
     }
 
-    return result;
+    // Search asset.
+    for (const asset of this.assets.all) {
+      const match = asset._resolveReference(reference, comparableReference);
+      if (match !== undefined) {
+        return match;
+      }
+    }
+
+    // Search injury.
+    for (const injury of this.health.injuries) {
+      const match = injury._resolveReference(reference, comparableReference);
+      if (match !== undefined) {
+        return match;
+      }
+    }
+
+    // Search illness.
+    for (const illness of this.health.illnesses) {
+      const match = illness._resolveReference(reference, comparableReference);
+      if (match !== undefined) {
+        return match;
+      }
+    }
+
+    // Search mutation.
+    for (const mutation of this.health.mutations) {
+      const match = mutation._resolveReference(reference, comparableReference);
+      if (match !== undefined) {
+        return match;
+      }
+    }
+
+    return super._resolveReference(reference, comparableReference);
   }
 }

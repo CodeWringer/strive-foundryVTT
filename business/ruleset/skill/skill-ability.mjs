@@ -369,4 +369,42 @@ export default class SkillAbility {
     
     return obj;
   }
+  
+  /**
+   * Tries to return a match for the given reference. 
+   * 
+   * @param {String} reference A reference to resolve. 
+   * * E. g. `"@heavy_armor"`
+   * * Can contain property paths. E. g. `"a.b.c"`
+   * @param {String} comparableReference A comparable version of the reference. 
+   * * Comparable in the sense that underscores "_" are replaced with spaces " " 
+   * or only the last piece of a property path is returned. 
+   * * E. g. `"@a.b.c"` -> `"c"`
+   * * E. g. `"@heavy_armor"` -> `"@heavy armor"`
+   * 
+   * @returns {Any | undefined} The matched reference or undefined, no match was found. 
+   * 
+   * @virtual
+   * @protected
+   */
+  _resolveReference(reference, comparableReference) {
+    if (this.name.toLowerCase() === comparableReference) {
+      return this;
+    }
+    
+    const propertyPathMatch = reference.match(REGEX_PATTERN_REFERENCE);
+
+    // Look in own properties. 
+    if (propertyPathMatch !== undefined && propertyPathMatch !== null) {
+      const propertyPath = propertyPathMatch[0].substring(1); // The property path, excluding the first dot. 
+      try {
+        return getNestedPropertyValue(this, propertyPath);
+      } catch (error) {
+        // Errors are expected for "bad" property paths and can be safely ignored. 
+        return undefined;
+      }
+    }
+    return undefined;
+  }
+  
 }
