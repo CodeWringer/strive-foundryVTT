@@ -98,7 +98,7 @@ export class ItemGrid {
    * This is also the document to synchronize changes to. 
    * 
    * For internal use, only!
-   * @type {AmbersteelActor | AmbersteelItem}
+   * @type {TransientDocument}
    * @private
    */
   _owner = undefined;
@@ -106,8 +106,8 @@ export class ItemGrid {
    * The owning document. 
    * 
    * This is also the document to synchronize changes to. 
-   * @type {AmbersteelActor | AmbersteelItem}
-   * @private
+   * @type {TransientDocument}
+   * @readonly
    */
   get owner() { return this._owner; }
 
@@ -115,7 +115,7 @@ export class ItemGrid {
    * Instantiates an empty item grid. 
    * @param {Number} columnCount Number of columns the grid will have, at most. 
    * @param {Number} capacity Number of slots (tiles) the item grid will have. 
-   * @param {AmbersteelActor | AmbersteelItem} owner The document whose {ItemGrid} this is. 
+   * @param {TransientDocument} owner The document whose {ItemGrid} this is. 
    */
   constructor(columnCount, capacity, owner) {
     this._columnCount = columnCount;
@@ -141,14 +141,13 @@ export class ItemGrid {
   }
 
   /**
-   * Returns a new {ItemGrid}, based on the given actor's or item's 
-   * {data.data.assets.grid} and {data.data.assets.gridIndices}.
-   * @param {AmbersteelActor} document The actor or item from whose data to build an {ItemGrid}. 
+   * Returns a new {ItemGrid}, based on the given actor. 
+   * @param {TransientBaseCharacterActor} document The actor from whose data to build an {ItemGrid}. 
    * @returns {ItemGridLoadResult}
    */
   static from(document) {
     // get the capacity (= item slot count) from the given document. 
-    const capacity = document.getMaxBulk();
+    const capacity = document.assets.maxBulk;
     const columnCount = COLUMN_COUNT;
     // The item grid to return. 
     const itemGrid = new ItemGrid(columnCount, capacity, document);
@@ -158,10 +157,10 @@ export class ItemGrid {
     const itemsError = [];
 
     // Place existing items on grid.  
-    const indices = document.data.data.assets.gridIndices;
+    const indices = document.assets.gridIndices;
     for (const index of indices) {
       // Get the item from the context document. 
-      const item = document.items.get(index.id);
+      const item = document.items.find(it => it.id === index.id);
 
       if (item === undefined) {
         game.ambersteel.logger.logWarn(`Failed to get an item with id '${index.id}' from parent document with id '${document.id}'! Removing it from the index...`);
@@ -182,7 +181,7 @@ export class ItemGrid {
     }
 
     // Place new items on grid. 
-    const items = document.getPossessions();
+    const items = document.assets.onPerson;
     for (const item of items) {
       // Skip any items that were dropped. 
       if (itemsDropped.find(it => { return it.id === item.id }) !== undefined) continue;
@@ -201,14 +200,14 @@ export class ItemGrid {
 
   /**
    * Updates the given actor's or item's item grid based on this {ItemGrid}. 
-   * @param {AmbersteelActor | AmbersteelItem} document 
+   * @param {TransientBaseCharacterActor} document 
    * @param {Boolean | undefined} render If true, will trigger a re-render of the associated document sheet. Default 'true'. 
    * @async
    * @returns {Promise<undefined>}
    */
   async synchronizeTo(document, render = true) {
-    document.data.data.assets.grid = this._grid;
-    document.data.data.assets.gridIndices = this._indices;
+    document.assets.grid = this._grid;
+    document.assets.gridIndices = this._indices;
 
     return document.update({
       data: {
@@ -454,7 +453,7 @@ export class ItemGrid {
     }
 
     const failureResult = new GridPlacementTestResult(false, undefined, undefined, undefined, []);
-    const shape = this._getOrientedShape(item.data.data.shape, orientation);
+    const shape = this._getOrientedShape(item.shape, orientation);
     const right = x + shape.width - 1;
     const bottom = y + shape.height - 1;
 
@@ -561,7 +560,7 @@ export class ItemGrid {
 
   /**
    * Internal method to remove an index from the list. 
-   * @param {AmbersteelItemItem} item 
+   * @param {TransientAsset} item 
    * @private
    */
   _removeFromList(item) {
@@ -573,14 +572,14 @@ export class ItemGrid {
    * Places an item at the given position, with the given orientation, if possible. 
    * 
    * Warning: will override any potentially overlapped items! Intended for internal use, only!
-   * @param {AmbersteelItemItem} item 
+   * @param {TransientAsset} item 
    * @param {Number} x 
    * @param {Number} y 
    * @param {ITEM_ORIENTATIONS} orientation 
    * @private
    */
   _addAt(item, x, y, orientation) {
-    const shape = this._getOrientedShape(item.data.data.shape, orientation);
+    const shape = this._getOrientedShape(item.shape, orientation);
 
     // Add to indices. 
     const itemIndex = new InventoryIndex({ x: x, y: y, w: shape.width, h: shape.height, id: item.id, orientation: orientation });

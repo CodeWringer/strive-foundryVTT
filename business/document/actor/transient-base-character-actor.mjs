@@ -63,6 +63,8 @@ import TransientBaseActor from './transient-base-actor.mjs';
  * * Read-only. 
  * @property {Number} assets.maxBulk
  * * Read-only. 
+ * @property {Any} assets.grid
+ * @property {Any} assets.gridIndices
  */
 export default class TransientBaseCharacterActor extends TransientBaseActor {
   /** @override */
@@ -156,6 +158,8 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
         return currentBulk;
       },
       get maxBulk() { return new Ruleset().getCharacterMaximumInventory(thiz.document); },
+      get grid() { return thiz.document.data.data.assets.grid; },
+      get gridIndices() { return thiz.document.data.data.assets.gridIndices; },
     };
   }
 
