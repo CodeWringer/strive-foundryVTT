@@ -9,7 +9,7 @@ export default class IllnessListItemViewModel extends ViewModel {
   static get TEMPLATE() { return TEMPLATES.ILLNESS_LIST_ITEM; }
 
   /** @override */
-  get entityId() { return this.item.id; }
+  get entityId() { return this.document.id; }
 
   /**
    * An array of {ChoiceOption}s which represent the possible states of the illness. 
@@ -37,13 +37,13 @@ export default class IllnessListItemViewModel extends ViewModel {
    * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document. 
    * @param {Boolean | undefined} args.isGM If true, the current user is a GM. 
    * 
-   * @param {Item} args.item
+   * @param {TransientIllness} args.document
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["item"]);
+    validateOrThrow(args, ["document"]);
 
-    this.item = args.item;
+    this.document = args.document;
     this.contextTemplate = args.contextTemplate ?? "illness-list-item";
     const thiz = this;
     const factory = new ViewModelFactory();
@@ -51,57 +51,57 @@ export default class IllnessListItemViewModel extends ViewModel {
     this.vmImg = factory.createVmImg({
       parent: thiz,
       id: "vmImg",
-      propertyOwner: thiz.item,
+      propertyOwner: thiz.document,
       propertyPath: "img",
     });
     this.vmTfName = factory.createVmTextField({
       parent: thiz,
       id: "vmTfName",
-      propertyOwner: thiz.item,
+      propertyOwner: thiz.document,
       propertyPath: "name",
       placeholder: "ambersteel.general.name",
     });
     this.vmRbgState = factory.createVmRadioButtonGroup({
       parent: thiz,
       id: "vmRbgState",
-      propertyOwner: thiz.item,
-      propertyPath: "data.data.state",
+      propertyOwner: thiz.document,
+      propertyPath: "state",
       options: thiz.stateOptions,
     })
     this.vmBtnSendToChat = factory.createVmBtnSendToChat({
       parent: thiz,
       id: "vmBtnSendToChat",
-      target: thiz.item,
+      target: thiz.document,
     });
     this.vmBtnDelete = factory.createVmBtnDelete({
       parent: thiz,
       id: "vmBtnDelete",
-      target: thiz.item,
+      target: thiz.document,
       withDialog: true,
     })
     this.vmTfDuration = factory.createVmTextField({
       parent: thiz,
       id: "vmTfDuration",
-      propertyOwner: thiz.item,
-      propertyPath: "data.data.duration",
+      propertyOwner: thiz.document,
+      propertyPath: "duration",
     });
     this.vmTfTreatmentSkill = factory.createVmTextField({
       parent: thiz,
       id: "vmTfTreatmentSkill",
-      propertyOwner: thiz.item,
-      propertyPath: "data.data.treatmentSkill",
+      propertyOwner: thiz.document,
+      propertyPath: "treatmentSkill",
     });
     this.vmTfTreatment = factory.createVmTextField({
       parent: thiz,
       id: "vmTfTreatment",
-      propertyOwner: thiz.item,
-      propertyPath: "data.data.treatment",
+      propertyOwner: thiz.document,
+      propertyPath: "treatment",
     });
     this.vmRtDescription = factory.createVmRichText({
       parent: thiz,
       id: "vmRtDescription",
-      propertyOwner: thiz.item,
-      propertyPath: "data.data.description",
+      propertyOwner: thiz.document,
+      propertyPath: "description",
     });
   }
 }
