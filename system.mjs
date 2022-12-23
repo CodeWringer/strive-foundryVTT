@@ -303,9 +303,9 @@ Hooks.on("renderChatMessage", async function(message, html, data) {
       // Create a skill ability chat view model. 
       const skillAbilityIndex = parseInt(dataset.abilityIndex);
       const skillAbility = document.data.data.abilities[skillAbilityIndex];
-      vm = skillAbility.getChatViewModel({ id: vmId });
+      vm = skillAbility.getChatViewModel({ id: vmId, isEditable: false });
     } else {
-      vm = document.getChatViewModel({ id: vmId });
+      vm = document.getTransientObject().getChatViewModel({ id: vmId, isEditable: false });
     }
 
     if (vm === undefined) {
