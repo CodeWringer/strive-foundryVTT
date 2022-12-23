@@ -10,7 +10,6 @@ import ViewModel from "../../../view-model/view-model.mjs";
 import ViewModelFactory from "../../../view-model/view-model-factory.mjs";
 import { TEMPLATES } from "../../templatePreloader.mjs";
 import VisibilitySingleChoiceDialog from "../../../dialog/visibility-single-choice-dialog/visibility-single-choice-dialog.mjs";
-import { getConstantByName } from "../../../../business/util/constants-utility.mjs";
 
 export default class SkillAbilityListItemViewModel extends ViewModel {
   /** @override */
@@ -96,6 +95,7 @@ export default class SkillAbilityListItemViewModel extends ViewModel {
     
     const skillAbility = this.skillAbility;
     const owningDocument = skillAbility.owningDocument;
+    const actor = ((thiz.skillAbility.owningDocument ?? {}).owningDocument ?? {}).document;
 
     this.vmBtnRoll = factory.createVmBtnRoll({
       parent: thiz,
@@ -109,8 +109,8 @@ export default class SkillAbilityListItemViewModel extends ViewModel {
       rollType: "dice-pool",
       callback: "advanceBasedOnRollResult",
       callbackData: skillAbility.owningDocumentId,
-      actor: thiz.actor,
-      isEditable: (thiz.isEditable || thiz.isGM) && thiz.actor !== undefined,
+      actor: actor,
+      isEditable: (thiz.isEditable || thiz.isGM) && actor !== undefined,
     });
     this.vmBtnSendToChat = factory.createVmBtnSendToChat({
       parent: thiz,
@@ -183,7 +183,7 @@ export default class SkillAbilityListItemViewModel extends ViewModel {
     this.vmBtnRollDamage = new ButtonViewModel({
       id: "vmBtnRollDamage",
       parent: thiz,
-      isEditable: thiz.isEditable && thiz.actor !== undefined,
+      isEditable: thiz.isEditable,
       localizableTitle: "ambersteel.roll.doRoll",
       onClick: async (html, isOwner, isEditable) => {
         new VisibilitySingleChoiceDialog({
@@ -197,17 +197,20 @@ export default class SkillAbilityListItemViewModel extends ViewModel {
             for (const damageDefinition of thiz.skillAbility.damage) {
               // At this point, the string may contain `@`-references. These must be resolved. 
               let resolvedDamage = damageDefinition.damage;
-              // Resolve references on actor document. 
-              const resolvedReferences = thiz.actor.resolveReferences(damageDefinition.damage);
-              for (const [key, value] of resolvedReferences) {
-                // This replaces every reference of the current type, e. g. `"@strength"` with the 
-                // current level or value of the thing, if possible. 
-                // If a value cannot be determined, it will default to "0". 
-                const regExpReplace = new RegExp(key, "gi");
 
-                const replaceValue = (value.level ?? value.value) ?? (isNumber(value) === true ? value : "0");
-
-                resolvedDamage = resolvedDamage.replace(regExpReplace, replaceValue);
+              if (thiz.skillAbility.owningDocument !== undefined) {
+                // Resolve references on owning document. 
+                const resolvedReferences = thiz.skillAbility.owningDocument.resolveReferences(damageDefinition.damage);
+                for (const [key, value] of resolvedReferences) {
+                  // This replaces every reference of the current type, e. g. `"@strength"` with the 
+                  // current level or value of the thing, if possible. 
+                  // If a value cannot be determined, it will default to "0". 
+                  const regExpReplace = new RegExp(key, "gi");
+  
+                  const replaceValue = (value.level ?? value.value) ?? (isNumber(value) === true ? value : "0");
+  
+                  resolvedDamage = resolvedDamage.replace(regExpReplace, replaceValue);
+                }
               }
 
               // Get evaluated roll of damage formula. 
@@ -235,8 +238,7 @@ export default class SkillAbilityListItemViewModel extends ViewModel {
               }
 
               // Get localized damage type. 
-              const damageType = getConstantByName(DAMAGE_TYPES, damageDefinition.damageType);
-              const localizedDamageType = game.i18n.localize(damageType.localizableName);
+              const localizedDamageType = game.i18n.localize(damageDefinition.damageType.localizableName);
 
               rolls.push({
                 damage: rollResult.total,
