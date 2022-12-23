@@ -136,7 +136,7 @@ export default class SkillAbilityTableViewModel extends ViewModel {
         listName: "abilities",
       }),
       listItemViewModels: this.abilities,
-      listItemTemplate: thiz.oneColumn === true ? "systems/ambersteel/presentation/template/item/skill-ability/skill-ability-chat-message.hbs" : "systems/ambersteel/presentation/template/item/skill-ability/skill-ability-list-item.hbs",
+      listItemTemplate: thiz.oneColumn === true ? TEMPLATES.SKILL_ABILITY_CHAT_MESSAGE : TEMPLATES.SKILL_ABILITY_LIST_ITEM,
       vmBtnAddItem: factory.createVmBtnAdd({
         parent: thiz,
         id: "vmBtnAdd",
