@@ -112,26 +112,7 @@ export default class TransientAsset extends TransientBaseItem {
     });
   }
 
-  /**
-   * Returns an instance of a view model for use in a chat message. 
-   * 
-   * @param {Object | undefined} overrides Optional. An object that allows overriding any of the view model properties. 
-   * @param {String | undefined} overrides.id
-   * @param {Boolean | undefined} overrides.isEditable
-   * @param {Boolean | undefined} overrides.isSendable
-   * @param {Boolean | undefined} overrides.isOwner
-   * @param {Boolean | undefined} overrides.isGM
-   * @param {Item | undefined} overrides.item
-   * @param {Actor | undefined} overrides.actor
-   * @param {String | undefined} overrides.sourceType
-   * @param {String | undefined} overrides.sourceId
-   * @param {Boolean | undefined} overrides.allowPickup
-   * @param {Array<String> | undefined} overrides.allowPickupBy
-   * 
-   * @returns {ItemChatMessageViewModel}
-   * 
-   * @override
-   */
+  /** @override */
   getChatViewModel(overrides = {}) {
     return new ItemChatMessageViewModel({
       id: this.id,
@@ -139,8 +120,7 @@ export default class TransientAsset extends TransientBaseItem {
       isSendable: false,
       isOwner: this.isOwner,
       isGM: game.user.isGM,
-      item: this.document,
-      actor: (this.owningDocument ?? {}).document, 
+      document: this,
       sourceType: undefined,
       sourceId: undefined,
       allowPickup: false, // TODO #53: The user must be able to select who gets to pick this item up. 

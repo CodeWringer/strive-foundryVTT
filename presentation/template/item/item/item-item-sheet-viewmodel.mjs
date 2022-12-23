@@ -9,7 +9,7 @@ export default class ItemItemSheetViewModel extends ViewModel {
   static get TEMPLATE() { return TEMPLATES.ITEM_SHEET; }
 
   /** @override */
-  get entityId() { return this.item.id; }
+  get entityId() { return this.document.id; }
 
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
@@ -17,18 +17,17 @@ export default class ItemItemSheetViewModel extends ViewModel {
    * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 
    * is expected to be associated with an actor sheet or item sheet or journal entry or chat message and so on.
    * 
+   * @param {TransientAsset} args.document 
    * @param {Boolean | undefined} args.isEditable If true, the sheet is editable. 
    * @param {Boolean | undefined} args.isSendable If true, the document represented by the sheet can be sent to chat. 
    * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document. 
    * @param {Boolean | undefined} args.isGM If true, the current user is a GM. 
-   * 
-   * @param {Item} args.item
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["item"]);
+    validateOrThrow(args, ["document"]);
 
-    this.item = args.item;
+    this.document = args.document;
     this.contextTemplate = args.contextTemplate ?? "item-item-sheet";
     const thiz = this;
     const factory = new ViewModelFactory();
@@ -36,61 +35,61 @@ export default class ItemItemSheetViewModel extends ViewModel {
     this.vmImg = factory.createVmImg({
       parent: thiz,
       id: "vmImg",
-      propertyOwner: thiz.item,
+      propertyOwner: thiz.document,
       propertyPath: "img",
     });
     this.vmTfName = factory.createVmTextField({
       parent: thiz,
       id: "vmTfName",
-      propertyOwner: thiz.item,
+      propertyOwner: thiz.document,
       propertyPath: "name",
       placeholder: "ambersteel.general.name",
     });
     this.vmBtnSendToChat = factory.createVmBtnSendToChat({
       parent: thiz,
       id: "vmBtnSendToChat",
-      target: thiz.item,
+      target: thiz.document,
       isEditable: thiz.isEditable || thiz.isGM,
     });
     this.vmBtnTakeItem = factory.createVmBtnTakeItem({
       parent: thiz,
       id: "vmBtnTakeItem",
-      target: thiz.item,
+      target: thiz.document,
       contextType: TAKE_ITEM_CONTEXT_TYPES.itemSheet
     });
     this.vmNsQuantity = factory.createVmNumberSpinner({
       parent: thiz,
       id: "vmNsQuantity",
-      propertyOwner: thiz.item,
-      propertyPath: "data.data.quantity",
+      propertyOwner: thiz.document,
+      propertyPath: "quantity",
       min: 1,
     });
     this.vmNsMaxQuantity = factory.createVmNumberSpinner({
       parent: thiz,
       id: "vmNsMaxQuantity",
-      propertyOwner: thiz.item,
-      propertyPath: "data.data.maxQuantity",
+      propertyOwner: thiz.document,
+      propertyPath: "maxQuantity",
       min: 1,
     });
     this.vmNsShapeWidth = factory.createVmNumberSpinner({
       parent: thiz,
       id: "vmNsShapeWidth",
-      propertyOwner: thiz.item,
-      propertyPath: "data.data.shape.width",
+      propertyOwner: thiz.document,
+      propertyPath: "shape.width",
       min: 1,
     });
     this.vmNsShapeHeight = factory.createVmNumberSpinner({
       parent: thiz,
       id: "vmNsShapeHeight",
-      propertyOwner: thiz.item,
-      propertyPath: "data.data.shape.height",
+      propertyOwner: thiz.document,
+      propertyPath: "shape.height",
       min: 1,
     });
     this.vmRtDescription = factory.createVmRichText({
       parent: thiz,
       id: "vmRtDescription",
-      propertyOwner: thiz.item,
-      propertyPath: "data.data.description",
+      propertyOwner: thiz.document,
+      propertyPath: "description",
     });
   }
 }

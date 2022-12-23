@@ -91,7 +91,7 @@ export default class TransientIllness extends TransientBaseItem {
       isSendable: false,
       isOwner: this.isOwner,
       isGM: game.user.isGM,
-      item: this.document,
+      document: this,
       ...overrides,
     });
   }

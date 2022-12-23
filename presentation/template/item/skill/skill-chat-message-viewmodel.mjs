@@ -38,12 +38,12 @@ export default class SkillChatMessageViewModel extends ViewModel {
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
    * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 
 
+   * @param {TransientSkill} args.document 
    * @param {Boolean | undefined} args.isEditable If true, the sheet is editable. 
    * @param {Boolean | undefined} args.isSendable If true, the document represented by the sheet can be sent to chat. 
    * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document. 
    * @param {Boolean | undefined} args.isGM If true, the current user is a GM. 
    * 
-   * @param {TransientSkill} args.document
    * @param {String | undefined} args.visGroupId
    */
   constructor(args = {}) {

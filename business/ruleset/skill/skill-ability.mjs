@@ -236,7 +236,6 @@ export default class SkillAbility {
       isOwner: this.owningDocument.isOwner,
       isGM: game.user.isGM,
       ...overrides,
-      item: this.owningDocument,
       skillAbility: this,
       actor: actor,
       index: this.index,

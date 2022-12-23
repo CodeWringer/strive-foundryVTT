@@ -105,14 +105,13 @@ export default class SkillAbilityChatMessageViewModel extends ViewModel {
    * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 
    * is expected to be associated with an actor sheet or item sheet or journal entry or chat message and so on.
    * 
+   * @param {SkillAbility} args.skillAbility 
    * @param {Boolean | undefined} args.isEditable Optional. If true, the sheet is editable. 
    * @param {Boolean | undefined} args.isSendable Optional. If true, the document represented by the sheet can be sent to chat. 
    * @param {Boolean | undefined} args.isOwner Optional. If true, the current user is the owner of the represented document. 
    * @param {Boolean | undefined} args.isGM Optional. If true, the current user is a GM. 
    * @param {String | undefined} args.contextTemplate Optional. Name or path of a contextual template, 
    * which will be displayed in exception log entries, to aid debugging. 
-   * 
-   * @param {SkillAbility} args.skillAbility
    */
   constructor(args = {}) {
     super(args);

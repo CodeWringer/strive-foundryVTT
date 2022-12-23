@@ -9,7 +9,7 @@ export default class ItemChatMessageViewModel extends ViewModel {
   static get TEMPLATE() { return TEMPLATES.ITEM_CHAT_MESSAGE; }
 
   /** @override */
-  get entityId() { return this.item.id; }
+  get entityId() { return this.document.id; }
 
   /**
    * @type {Boolean}
@@ -36,7 +36,7 @@ export default class ItemChatMessageViewModel extends ViewModel {
    */
   allowPickupBy = [];
 
-  get description() { return TextEditor.enrichHTML(this.item.data.data.description); }
+  get description() { return TextEditor.enrichHTML(this.document.description); }
 
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
@@ -44,12 +44,11 @@ export default class ItemChatMessageViewModel extends ViewModel {
    * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 
    * is expected to be associated with an actor sheet or item sheet or journal entry or chat message and so on.
    * 
+   * @param {TransientAsset} args.document 
    * @param {Boolean | undefined} args.isEditable If true, the sheet is editable. 
    * @param {Boolean | undefined} args.isSendable If true, the document represented by the sheet can be sent to chat. 
    * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document. 
    * @param {Boolean | undefined} args.isGM If true, the current user is a GM. 
-   * 
-   * @param {Item} args.item
    * 
    * @param {String | undefined} args.sourceType
    * @param {String | undefined} args.sourceId
@@ -58,9 +57,9 @@ export default class ItemChatMessageViewModel extends ViewModel {
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["item"]);
+    validateOrThrow(args, ["document"]);
 
-    this.item = args.item;
+    this.document = args.document;
     this.sourceType = args.sourceType;
     this.sourceId = args.sourceId;
     this.allowPickup = args.allowPickup ?? false;
@@ -73,7 +72,7 @@ export default class ItemChatMessageViewModel extends ViewModel {
     this.vmBtnTakeItem = factory.createVmBtnTakeItem({
       parent: thiz,
       id: "vmBtnTakeItem",
-      target: thiz.item,
+      target: thiz.document,
       contextType: TAKE_ITEM_CONTEXT_TYPES.chatMessage
     });
   }
