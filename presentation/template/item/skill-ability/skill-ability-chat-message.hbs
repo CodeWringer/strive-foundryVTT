@@ -5,7 +5,7 @@ cssClass: {undefined | String}
 <section class="custom-system-chat-message{{#if cssClass}} {{cssClass}}{{/if}}" 
   data-view-model-id="{{viewModel.id}}"
   data-document-id="{{viewModel.owningDocumentId}}"
-  data-ability-index="{{viewModel.index}}"
+  data-ability-id="{{viewModel.skillAbility.id}}"
 >
   {{!-- Header --}}
   {{#if viewModel.showParentSkill}}
