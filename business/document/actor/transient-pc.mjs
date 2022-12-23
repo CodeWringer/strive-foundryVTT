@@ -55,7 +55,7 @@ export default class TransientPc extends TransientBaseCharacterActor {
     return {
       get fateCards() { return thiz.items.filter(it => it.type === "fate-card"); },
       get maxFateCards() { return new Ruleset().getMaximumFateCards(); },
-      get remainingFateCards() { return thiz.maxFateCards - this.fateCards.length; },
+      get remainingFateCards() { return this.maxFateCards - this.fateCards.length; },
 
       get miFP() { return thiz.document.data.data.fateSystem.miFP; },
       set miFP(value) { thiz.updateSingle("data.data.fateSystem.miFP", value); },
