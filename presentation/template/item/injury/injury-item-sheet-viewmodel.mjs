@@ -8,7 +8,7 @@ export default class InjuryItemSheetViewModel extends ViewModel {
   static get TEMPLATE() { return TEMPLATES.INJURY_ITEM_SHEET; }
 
   /** @override */
-  get entityId() { return this.item.id; }
+  get entityId() { return this.document.id; }
 
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
@@ -21,13 +21,13 @@ export default class InjuryItemSheetViewModel extends ViewModel {
    * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document. 
    * @param {Boolean | undefined} args.isGM If true, the current user is a GM. 
    * 
-   * @param {Item} args.item
+   * @param {TransientInjury} args.document
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["item"]);
+    validateOrThrow(args, ["document"]);
 
-    this.item = args.item;
+    this.document = args.document;
     this.contextTemplate = args.contextTemplate ?? "injury-item-sheet";
     const thiz = this;
     const factory = new ViewModelFactory();
@@ -35,40 +35,40 @@ export default class InjuryItemSheetViewModel extends ViewModel {
     this.vmImg = factory.createVmImg({
       parent: thiz,
       id: "vmImg",
-      propertyOwner: thiz.item,
+      propertyOwner: thiz.document,
       propertyPath: "img",
     });
     this.vmTfName = factory.createVmTextField({
       parent: thiz,
       id: "vmTfName",
-      propertyOwner: thiz.item,
+      propertyOwner: thiz.document,
       propertyPath: "name",
       placeholder: "ambersteel.general.name",
     });
     this.vmBtnSendToChat = factory.createVmBtnSendToChat({
       parent: thiz,
       id: "vmBtnSendToChat",
-      target: thiz.item,
+      target: thiz.document,
       isEditable: thiz.isEditable || thiz.isGM,
     });
     this.vmNsLimit = factory.createVmNumberSpinner({
       parent: thiz,
       id: "vmNsLimit",
-      propertyOwner: thiz.item,
-      propertyPath: "data.data.limit",
+      propertyOwner: thiz.document,
+      propertyPath: "limit",
       min: 0,
     });
     this.vmTfTimeToHeal = factory.createVmTextField({
       parent: thiz,
       id: "vmTfTimeToHeal",
-      propertyOwner: thiz.item,
-      propertyPath: "data.data.timeToHeal",
+      propertyOwner: thiz.document,
+      propertyPath: "timeToHeal",
     });
     this.vmRtDescription = factory.createVmRichText({
       parent: thiz,
       id: "vmRtDescription",
-      propertyOwner: thiz.item,
-      propertyPath: "data.data.description",
+      propertyOwner: thiz.document,
+      propertyPath: "description",
     });
   }
 }

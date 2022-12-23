@@ -7,14 +7,9 @@ export default class InjuryChatMessageViewModel extends ViewModel {
   static get TEMPLATE() { return TEMPLATES.INJURY_CHAT_MESSAGE; }
 
   /** @override */
-  get entityId() { return this.item.id; }
+  get entityId() { return this.document.id; }
 
-  /**
-   * @type {Item}
-   */
-  item = undefined;
-
-  get description() { return TextEditor.enrichHTML(this.item.data.data.description); }
+  get description() { return TextEditor.enrichHTML(this.document.description); }
 
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
@@ -27,13 +22,13 @@ export default class InjuryChatMessageViewModel extends ViewModel {
    * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document. 
    * @param {Boolean | undefined} args.isGM If true, the current user is a GM. 
    * 
-   * @param {Item} args.item
+   * @param {TransientInjury} args.document
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["item"]);
+    validateOrThrow(args, ["document"]);
 
-    this.item = args.item;
+    this.document = args.document;
     this.contextTemplate = args.contextTemplate ?? "injury-chat-message";
   }
 }
