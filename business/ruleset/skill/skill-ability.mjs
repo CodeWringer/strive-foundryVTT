@@ -231,8 +231,8 @@ export default class SkillAbility {
 
     return new SkillAbilityChatMessageViewModel({
       id: this.id,
-      isEditable: this.owningDocument.isEditable,
-      isSendable: this.owningDocument.isSendable,
+      isEditable: false,
+      isSendable: false,
       isOwner: this.owningDocument.isOwner,
       isGM: game.user.isGM,
       ...overrides,

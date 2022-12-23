@@ -38,8 +38,8 @@ export default class TransientMutation extends TransientBaseItem {
   getChatViewModel(overrides = {}) {
     return new MutationChatMessageViewModel({
       id: this.id,
-      isEditable: this.isOwner,
-      isSendable: this.isOwner || game.user.isGM,
+      isEditable: false,
+      isSendable: false,
       isOwner: this.isOwner,
       isGM: game.user.isGM,
       document: this.document,

@@ -281,8 +281,8 @@ export default class TransientDocument {
   getChatViewModel(overrides = {}) {
     return new ViewModel({
       id: `${this.id}-${createUUID()}`,
-      isEditable: this.isOwner,
-      isSendable: this.isOwner || game.user.isGM,
+      isEditable: false,
+      isSendable: false,
       isOwner: this.isOwner,
       isGM: game.user.isGM,
       ...overrides,
