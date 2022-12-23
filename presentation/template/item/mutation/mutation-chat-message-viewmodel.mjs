@@ -7,7 +7,7 @@ export default class MutationChatMessageViewModel extends ViewModel {
   static get TEMPLATE() { return TEMPLATES.MUTATION_CHAT_MESSAGE; }
 
   /** @override */
-  get entityId() { return this.item.id; }
+  get entityId() { return this.document.id; }
 
   /**
    * @type {Boolean}
@@ -34,7 +34,11 @@ export default class MutationChatMessageViewModel extends ViewModel {
    */
   allowPickupBy = [];
 
-  get description() { return TextEditor.enrichHTML(this.item.data.data.description); }
+  /**
+   * @type {String}
+   * @readonly
+   */
+  get description() { return TextEditor.enrichHTML(this.document.description); }
 
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
@@ -47,13 +51,13 @@ export default class MutationChatMessageViewModel extends ViewModel {
    * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document. 
    * @param {Boolean | undefined} args.isGM If true, the current user is a GM. 
    * 
-   * @param {Item} args.item
+   * @param {document} args.document
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["item"]);
+    validateOrThrow(args, ["document"]);
 
-    this.item = args.item;
+    this.document = args.document;
 
     this.contextTemplate = args.contextTemplate ?? "mutation-chat-message";
   }

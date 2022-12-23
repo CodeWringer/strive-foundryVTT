@@ -4,15 +4,15 @@ cssClass: {undefined | String}
 --}}
 <section class="custom-system-chat-message{{#if cssClass}} {{cssClass}}{{/if}}" 
   data-view-model-id="{{viewModel.id}}"
-  data-document-id="{{viewModel.item.id}}"
+  data-document-id="{{viewModel.entityId}}"
 >
   {{!-- Header --}}
   <div class="flex flex-row">
     <div class="flex flex-center">
-      <img class="inline-img header-image margin-r-sm" name="img" src="{{viewModel.item.img}}" title="{{viewModel.item.name}}" height="35" width="35" />
+      <img class="inline-img header-image margin-r-sm" name="img" src="{{viewModel.document.img}}" title="{{viewModel.document.name}}" height="35" width="35" />
     </div>
     <h2 class="flex-grow">
-      {{viewModel.item.name}}
+      {{viewModel.document.name}}
     </h2>
   </div>
   {{!-- Description --}}

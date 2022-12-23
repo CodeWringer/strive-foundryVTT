@@ -8,7 +8,7 @@ export default class MutationListItemViewModel extends ViewModel {
   static get TEMPLATE() { return TEMPLATES.MUTATION_LIST_ITEM; }
 
   /** @override */
-  get entityId() { return this.item.id; }
+  get entityId() { return this.document.id; }
 
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
@@ -21,13 +21,13 @@ export default class MutationListItemViewModel extends ViewModel {
    * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document. 
    * @param {Boolean | undefined} args.isGM If true, the current user is a GM. 
    * 
-   * @param {Item} args.item
+   * @param {document} args.document
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["item"]);
+    validateOrThrow(args, ["document"]);
 
-    this.item = args.item;
+    this.document = args.document;
     this.contextTemplate = args.contextTemplate ?? "mutation-list-item";
     const thiz = this;
     const factory = new ViewModelFactory();
@@ -35,32 +35,32 @@ export default class MutationListItemViewModel extends ViewModel {
     this.vmImg = factory.createVmImg({
       parent: thiz,
       id: "vmImg",
-      propertyOwner: thiz.item,
+      propertyOwner: thiz.document,
       propertyPath: "img",
     });
     this.vmTfName = factory.createVmTextField({
       parent: thiz,
       id: "vmTfName",
-      propertyOwner: thiz.item,
+      propertyOwner: thiz.document,
       propertyPath: "name",
       placeholder: "ambersteel.general.name",
     });
     this.vmBtnSendToChat = factory.createVmBtnSendToChat({
       parent: thiz,
       id: "vmBtnSendToChat",
-      target: thiz.item,
+      target: thiz.document,
     });
     this.vmBtnDelete = factory.createVmBtnDelete({
       parent: thiz,
       id: "vmBtnDelete",
-      target: thiz.item,
+      target: thiz.document,
       withDialog: true,
     })
     this.vmRtDescription = factory.createVmRichText({
       parent: thiz,
       id: "vmRtDescription",
-      propertyOwner: thiz.item,
-      propertyPath: "data.data.description",
+      propertyOwner: thiz.document,
+      propertyPath: "description",
     });
   }
 }
