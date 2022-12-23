@@ -196,7 +196,7 @@ export default class SkillAbility {
    * @async
    */
   async getChatData() {
-    const actor = this.owningDocument.owningDocument.document;
+    const actor = ((this.owningDocument ?? {}).owningDocument ?? {}).document;
     const vm = this.getChatViewModel();
 
     const renderedContent = await renderTemplate(this.chatMessageTemplate, {
