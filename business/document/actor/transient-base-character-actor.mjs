@@ -23,6 +23,7 @@ import TransientBaseActor from './transient-base-actor.mjs';
  * @property {String} person.culture
  * @property {String} person.sex
  * @property {String} person.appearance
+ * @property {String} person.biography
  * @property {Object} skills
  * * Read-only. 
  * @property {Array<TransientSkill>} skills.all Returns **all** skills of the character. 
@@ -75,16 +76,23 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
    */
   get person() {
     return {
-      get age() { return parseInt(thiz.document.data.data.cost.age); },
-      set age(value) { thiz.updateSingle("data.data.cost.age", value); },
-      get species() { return thiz.document.data.data.cost.species; },
-      set species(value) { thiz.updateSingle("data.data.cost.species", value); },
-      get culture() { return thiz.document.data.data.cost.culture; },
-      set culture(value) { thiz.updateSingle("data.data.cost.culture", value); },
-      get sex() { return thiz.document.data.data.cost.sex; },
-      set sex(value) { thiz.updateSingle("data.data.cost.sex", value); },
-      get appearance() { return thiz.document.data.data.cost.appearance; },
-      set appearance(value) { thiz.updateSingle("data.data.cost.appearance", value); },
+      get age() { return parseInt(thiz.document.data.data.person.age); },
+      set age(value) { thiz.updateSingle("data.data.person.age", value); },
+
+      get species() { return thiz.document.data.data.person.species; },
+      set species(value) { thiz.updateSingle("data.data.person.species", value); },
+
+      get culture() { return thiz.document.data.data.person.culture; },
+      set culture(value) { thiz.updateSingle("data.data.person.culture", value); },
+
+      get sex() { return thiz.document.data.data.person.sex; },
+      set sex(value) { thiz.updateSingle("data.data.person.sex", value); },
+
+      get appearance() { return thiz.document.data.data.person.appearance; },
+      set appearance(value) { thiz.updateSingle("data.data.person.appearance", value); },
+
+      get biography() { return thiz.document.data.data.person.biography; },
+      set biography(value) { thiz.updateSingle("data.data.person.biography", value); },
     };
   }
   set person(value) {

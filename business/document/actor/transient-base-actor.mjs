@@ -20,6 +20,12 @@ import TransientDocument from "../transient-document.mjs";
  * @abstract
  * @extends TransientDocument
  * 
+ * @property {String} defaultImg Returns the default icon image path for this type of actor. 
+ * * Read-only. 
+ * * Virtual
+ * @property {String} chatMessageTemplate Returns the Chat message template path. 
+ * * Read-only. 
+ * * Virtual
  * @property {Array<TransientBaseItem>} items The embedded documents of this document. 
  * * Read-only. 
  */
@@ -43,12 +49,19 @@ export default class TransientBaseActor extends TransientDocument {
   get chatMessageTemplate() { return TEMPLATES.ACTOR_CHAT_MESSAGE; }
   
   /**
+   * @private
+   */
+  _items;
+  /**
    * Returns the embedded documents of the actor. 
    * 
    * @type {Array<TransientBaseItem>}
    * @readonly
    */
-  items = [];
+  get items() { 
+    this._items = Array.from(this.document.items).map(it => it.getTransientObject()); 
+    return this._items;
+  }
   
   /**
    * @param {Actor} document An encapsulated actor instance. 
@@ -58,8 +71,8 @@ export default class TransientBaseActor extends TransientDocument {
   constructor(document) {
     super(document);
 
-    // Get transient embedded documents. 
-    this.items = Array.from(this.document.items).map(it => it.getTransientObject());
+    // Ensure transient objects are instantiated at least once. 
+    this._items = this.items;
   }
 
   /**
@@ -83,7 +96,7 @@ export default class TransientBaseActor extends TransientDocument {
       isSendable: false,
       isOwner: this.isOwner,
       isGM: game.user.isGM,
-      actor: this,
+      document: this,
       ...overrides,
     });
   }
