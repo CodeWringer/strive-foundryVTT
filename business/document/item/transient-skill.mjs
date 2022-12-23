@@ -125,14 +125,14 @@ export default class TransientSkill extends TransientBaseItem {
   }
   
   /**
-   * @type {Boolean}
+   * @type {Array<SkillAbility>}
    */
   get abilities() {
     return this._abilities;
   }
   set abilities(value) {
     this._abilities = value;
-    this.updateSingle("data.data.abilities", value);
+    this.persistSkillAbilities();
   }
   
   /**
