@@ -33,8 +33,6 @@ cssClass: {String | undefined}
       {{> (lookup . 'listItemTemplate') viewModel=itemViewModelGroup.listItemViewModel cssClass="flex-grow" }}
     </li>
   {{/each}}
-  {{log "---- DEBUG DEBUG ----"}}
-  {{log viewModel.isEditable}}
   {{#if viewModel.isEditable}}
   <li class="ambersteel-list-row ambersteel-list-footer{{#if (neq viewModel.isEditable true)}} hidden{{/if}}">
     <div class="fill flex flex-row flex-right">
