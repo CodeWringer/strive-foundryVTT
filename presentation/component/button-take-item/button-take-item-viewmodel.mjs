@@ -86,23 +86,21 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
       throw new Error("NullPointerException: item could not be determined");
     }
 
-    // If parent is not null, we can be sure the item is embedded on an actor. 
-    const parent = assetDocument.owningDocument;
+    // If this is not undefined, we can be sure the item is embedded on an actor. 
+    const parentDocument = assetDocument.owningDocument;
     // If containingPack is not null, we can be sure the item is embedded in a compendium. 
     const containingPack = assetDocument.pack;
     // If neither parent nor containingPack is defined, then we can be sure the item is a world item. 
 
-    if (parent !== undefined) { // The item is embedded on an actor. 
+    // Determine target actor. 
+    const targetActor = await this._getTargetActor();
+    // If no target actor could be determined, abort any further action. 
+    if (targetActor === undefined) return;
+    
+    if (parentDocument !== undefined) { // The item is embedded on an actor. 
       if (this.contextType === TAKE_ITEM_CONTEXT_TYPES.chatMessage) {
-        // Determine target actor. 
-        const targetActor = await this._getTargetActor();
 
-        if (targetActor === undefined) return;
-
-        // Determine source actor. 
-        const sourceActor = parent;
-
-        if (sourceActor.id === targetActor.id) {
+        if (parentDocument.id === targetActor.id) {
           // If the player that owns the item tries to pick the item up, do nothing. 
           // After all, they already have the item and therefore nothing needs to change. 
           return;
@@ -114,11 +112,6 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
         // Remove from source actor. 
         assetDocument.delete();
       } else if (this.contextType === TAKE_ITEM_CONTEXT_TYPES.listItem) {
-        // Determine target actor. 
-        const targetActor = parent;
-
-        if (targetActor === undefined) return;
-
         // Try to move item to item grid. 
         const itemGrid = ItemGrid.from(targetActor).itemGrid;
         const addResult = itemGrid.add(assetDocument);
@@ -132,19 +125,9 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
         }
       }
     } else if (containingPack !== undefined && containingPack !== null) { // The item is embedded in a compendium. 
-      // Determine target actor. 
-      const targetActor = await this._getTargetActor();
-      
-      if (targetActor === undefined) return;
-
       // Add copy to target actor. 
       this._cloneWithNewParentOnPerson(assetDocument, targetActor);
     } else { // The item is part of the world. 
-      // Determine target actor. 
-      const targetActor = await this._getTargetActor();
-
-      if (targetActor === undefined) return;
-
       // Add copy to target actor. 
       this._cloneWithNewParentOnPerson(assetDocument, targetActor);
 
