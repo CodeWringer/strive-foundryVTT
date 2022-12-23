@@ -8,14 +8,9 @@ export default class FateCardChatMessageViewModel extends ViewModel {
   static get TEMPLATE() { return TEMPLATES.FATE_CARD_CHAT_MESSAGE; }
 
   /** @override */
-  get entityId() { return this.item.id; }
+  get entityId() { return this.document.id; }
 
-  /**
-   * @type {Item}
-   */
-  item = undefined;
-
-  get description() { return TextEditor.enrichHTML(this.item.data.data.description); }
+  get description() { return TextEditor.enrichHTML(this.document.description); }
 
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
@@ -28,13 +23,13 @@ export default class FateCardChatMessageViewModel extends ViewModel {
    * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document. 
    * @param {Boolean | undefined} args.isGM If true, the current user is a GM. 
    * 
-   * @param {Item} args.item
+   * @param {TransientFateCard} args.document
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["item"]);
+    validateOrThrow(args, ["document"]);
 
-    this.item = args.item;
+    this.document = args.document;
     this.contextTemplate = args.contextTemplate ?? "fate-card-chat-message";
 
     const thiz = this;
@@ -43,13 +38,13 @@ export default class FateCardChatMessageViewModel extends ViewModel {
     this.vmImg = factory.createVmImg({
       parent: thiz,
       id: "vmImg",
-      propertyOwner: thiz.item,
+      propertyOwner: thiz.document,
       propertyPath: "img",
     });
     this.vmTfName = factory.createVmTextField({
       parent: thiz,
       id: "vmTfName",
-      propertyOwner: thiz.item,
+      propertyOwner: thiz.document,
       propertyPath: "name",
     });
   }
