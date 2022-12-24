@@ -1,6 +1,5 @@
 import VersionCode from "./version-code.mjs";
 import { WorldSystemVersion } from "./world-system-version.mjs";
-import DocumentFetcher from "../document/document-fetcher/document-fetcher.mjs";
 
 /**
  * @summary

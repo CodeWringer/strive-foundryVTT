@@ -41,7 +41,7 @@ export default class Migrator_1_3_0__1_3_1 extends AbstractMigrator {
 
     // Do the replacement for every actor. 
     for (const actor of actors) {
-      this.replaceMatchingDocumentsWithPackData(actor, "skill", packs, propertiesToKeep);
+      await this.replaceMatchingDocumentsWithPackData(actor, "skill", packs, propertiesToKeep);
     }
   }
 
@@ -70,7 +70,7 @@ export default class Migrator_1_3_0__1_3_1 extends AbstractMigrator {
 
     // Do the replacement for every actor. 
     for (const actor of actors) {
-      this.replaceMatchingDocumentsWithPackData(actor, "item", packs, propertiesToKeep);
+      await this.replaceMatchingDocumentsWithPackData(actor, "item", packs, propertiesToKeep);
     }
   }
 
@@ -88,6 +88,7 @@ export default class Migrator_1_3_0__1_3_1 extends AbstractMigrator {
     // Get all actors from world and compendia. 
     const actors = await await new DocumentFetcher().findAll({
       documentType: "Actor",
+      includeLocked: false,
     });
 
     // Names of the properties to keep at their current values. 
