@@ -1,5 +1,6 @@
 import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import { TEMPLATES } from "../../template/templatePreloader.mjs";
+import ViewModelFactory from "../../view-model/view-model-factory.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
 
 /**
@@ -42,5 +43,15 @@ export default class GmNotesViewModel extends ViewModel {
     // Own properties.
     this.document = args.document;
     this.owner = args.owner;
+
+    const thiz = this;
+    const factory = new ViewModelFactory();
+
+    this.vmRtGmNotes = factory.createVmRichText({
+      parent: thiz,
+      id: "vmRtGmNotes",
+      propertyOwner: thiz.document,
+      propertyPath: "gmNotes",
+    });
   }
 }

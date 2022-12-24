@@ -4,6 +4,6 @@ cssClass: {undefined | String}
 --}}
 <section class="fill{{#if cssClass}} {{cssClass}}{{/if}}">
   <div class="sheet-block fill">
-    {{editor content=viewModel.document.data.data.gmNotes target="data.gmNotes" button=true editable=viewModel.isEditable owner=viewModel.isOwner}}
+    {{> inputRichText viewModel=viewModel.vmRtGmNotes }}
   </div>
 </section>

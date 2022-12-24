@@ -195,6 +195,20 @@ export default class TransientDocument {
     this.updateSingle("data.data.displayOrders", value);
   }
   
+  
+  /**
+   * Arbitrary notes only visible to game-masters. 
+   * 
+   * @type {String}
+   */
+  get gmNotes() {
+    return this.document.data.data.gmNotes;
+  }
+  set gmNotes(value) {
+    this.document.data.data.gmNotes = value;
+    this.updateSingle("data.data.gmNotes", value);
+  }
+  
   /**
    * @param {Actor | Item} document An encapsulated document instance. 
    * 
