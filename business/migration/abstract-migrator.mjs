@@ -121,7 +121,7 @@ export default class AbstractMigrator {
       }
 
       for (const definition of definitions) {
-        this.replaceMatchingDocumentsData(actor, docType, definition, propertyNames, propertiesToDelete);
+        await this.replaceMatchingDocumentsData(actor, docType, definition, propertyNames, propertiesToDelete);
       }
     }
   }
