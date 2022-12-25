@@ -22,11 +22,7 @@ export default class DocumentListItemOrderDataSource extends AbstractListItemOrd
 
   /** @override */
   getAll() {
-    try {
-      return this.document.displayOrders[this.listName];
-    } catch (error) {
-      return [];
-    }
+    return this.document.displayOrders[this.listName] ?? [];
   }
 
   /** @override */
