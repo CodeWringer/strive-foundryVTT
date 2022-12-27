@@ -177,6 +177,10 @@ export default class ModalDialog extends Application {
     if (isFunction(this.closeCallback)) {
       this.closeCallback(this);
     }
+
+    if (this._renderAndAwait === true) {
+      this._resolve(this);
+    }
   }
   
   /** @override */
@@ -185,6 +189,27 @@ export default class ModalDialog extends Application {
       ...super.getData(options),
       buttons: this.buttons,
     }
+  }
+
+  /**
+   * Renders this dialog and returns a promise that resolves when the dialog 
+   * is closed. The dialog itself is the promise's payload. 
+   * 
+   * @param {Boolean} force Optional. 
+   * * Default `true`. 
+   * 
+   * @returns {Promise} A promise that resolves when the dialog 
+   * is closed. The dialog itself is the promise's payload. 
+   * 
+   * @async
+   */
+  async renderAndAwait(force = true) {
+    this._renderAndAwait = true;
+    this.render(force);
+
+    return new Promise((resolve, reject) => {
+      this._resolve = resolve;
+    });
   }
 
   /**
