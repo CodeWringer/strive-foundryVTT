@@ -42,7 +42,7 @@ export default class AttributeTableViewModel extends ViewModel {
    * @param {Boolean | undefined} args.isGM If true, the current user is a GM. 
    * 
    * @param {TransientBaseActor} args.document
-   * @param {Array<Object>} args.attributes
+   * @param {Array<CharacterAttribute>} args.attributes
    * @param {String} args.attributeGroupName
    * @param {String} args.localizableAttributeGroupName
    * 
@@ -77,8 +77,7 @@ export default class AttributeTableViewModel extends ViewModel {
           propertyPath: undefined,
           primaryChatTitle: game.i18n.localize(attribute.localizableName),
           rollType: "dice-pool",
-          callback: "advanceAttributeBasedOnRollResult",
-          callbackData: attribute.name,
+          callback: "advanceByRollResult",
           document: thiz.document,
         }),
         vmNsLevel: factory.createVmNumberSpinner({

@@ -300,7 +300,7 @@ export default class TransientSkill extends TransientBaseItem {
    * 
    * @async
    */
-  async advanceBasedOnRollResult(rollResult) {
+  async advanceByRollResult(rollResult) {
     if (rollResult === undefined) {
       game.ambersteel.logger.logWarn("rollResult is undefined");
       return;

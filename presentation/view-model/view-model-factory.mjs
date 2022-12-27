@@ -237,7 +237,6 @@ export default class ViewModelFactory {
    * @param {Object} args.target The target object to affect.  
    * @param {String} args.creationType = "skill"|"skill-ability"|"fate-card"|"item"|"injury"|"illness"
    * @param {Function | undefined} args.callback Defines an asynchronous callback that is invoked upon completion of the button's own callback. 
-   * @param {Any | undefined} args.callbackData Defines any data to pass to the completion callback. 
    * @param {Boolean | undefined} args.withDialog If true, will prompt the user to make a selection with a dialog. 
    * @param {Object | String | undefined} args.creationData Data to pass to the item creation function. 
    * @param {String | undefined} args.localizableTitle Optional. Sets the tooltip text to display on cursor hover over the DOM element. 
@@ -256,7 +255,6 @@ export default class ViewModelFactory {
       target: args.target,
       creationType: args.creationType,
       callback: args.callback,
-      callbackData: args.callbackData,
       withDialog: args.withDialog,
       creationData: args.creationData,
       localizableTitle: args.localizableTitle,
@@ -279,7 +277,6 @@ export default class ViewModelFactory {
    * which will be displayed in exception log entries, to aid debugging. 
    * @param {Object} args.target The target object to affect.  
    * @param {Function | undefined} args.callback Defines an asynchronous callback that is invoked upon completion of the button's own callback. 
-   * @param {Any | undefined} args.callbackData Defines any data to pass to the completion callback. 
    * @param {Boolean | undefined} args.withDialog If true, will prompt the user to make a selection with a dialog. 
    * @param {String | undefined} args.propertyPath If not undefined, will try to delete by this property path. 
    * @param {String | undefined} args.localizableTitle Optional. Sets the tooltip text to display on cursor hover over the DOM element. 
@@ -294,7 +291,6 @@ export default class ViewModelFactory {
       ...this._getBaseArguments(args),
       target: args.target,
       callback: args.callback,
-      callbackData: args.callbackData,
       withDialog: args.withDialog,
       propertyPath: args.propertyPath,
       localizableTitle: args.localizableTitle,
@@ -314,7 +310,6 @@ export default class ViewModelFactory {
    * which will be displayed in exception log entries, to aid debugging. 
    * @param {Object} args.target The target object to affect.  
    * @param {Function | undefined} args.callback Defines an asynchronous callback that is invoked upon completion of the button's own callback. 
-   * @param {Any | undefined} args.callbackData Defines any data to pass to the completion callback. 
    * @param {String | undefined} args.localizableTitle Optional. Sets the tooltip text to display on cursor hover over the DOM element. 
    * 
    * @returns {ButtonOpenSheetViewModel}
@@ -327,7 +322,6 @@ export default class ViewModelFactory {
       ...this._getBaseArguments(args),
       target: args.target,
       callback: args.callback,
-      callbackData: args.callbackData,
       localizableTitle: args.localizableTitle,
     });
   }
@@ -348,7 +342,6 @@ export default class ViewModelFactory {
    * IMPORTANT: If this argument is left undefined, then the target object MUST define a method 'getRollData()', which returns a {SummedData} instance. 
    * @param {RollType} args.rollType Determines the kind of roll to try and make. 
    * @param {Function | undefined} args.callback Defines an asynchronous callback that is invoked upon completion of the button's own callback. 
-   * @param {Any | undefined} args.callbackData Defines any data to pass to the completion callback. 
    * @param {String | undefined} args.primaryChatTitle Primary title to display above the roll result in the chat message. 
    * @param {String | undefined} args.primaryChatImage Primary image to display above the roll result in the chat message. 
    * @param {String | undefined} args.secondaryChatTitle Primary title to display above the roll result in the chat message. 
@@ -368,7 +361,6 @@ export default class ViewModelFactory {
       propertyPath: args.propertyPath,
       rollType: args.rollType,
       callback: args.callback,
-      callbackData: args.callbackData,
       primaryChatTitle: args.primaryChatTitle,
       primaryChatImage: args.primaryChatImage,
       secondaryChatTitle: args.secondaryChatTitle,
@@ -391,7 +383,6 @@ export default class ViewModelFactory {
    * which will be displayed in exception log entries, to aid debugging. 
    * @param {Object} args.target The target object to affect.  
    * @param {Function | undefined} args.callback Defines an asynchronous callback that is invoked upon completion of the button's own callback. 
-   * @param {Any | undefined} args.callbackData Defines any data to pass to the completion callback. 
    * @param {String | undefined} args.propertyPath Property path identifying a property to send to chat. 
    * @param {String | undefined} args.chatTitle Title to display above the chat message. 
    * @param {Actor | undefined} args.actor Actor associated with the chat message. 
@@ -407,7 +398,6 @@ export default class ViewModelFactory {
       ...this._getBaseArguments(args),
       target: args.target,
       callback: args.callback,
-      callbackData: args.callbackData,
       propertyPath: args.propertyPath,
       chatTitle: args.chatTitle,
       actor: args.actor,
@@ -428,7 +418,6 @@ export default class ViewModelFactory {
    * which will be displayed in exception log entries, to aid debugging. 
    * @param {Object} args.target The target object to affect.  
    * @param {Function | undefined} args.callback Defines an asynchronous callback that is invoked upon completion of the button's own callback. 
-   * @param {Any | undefined} args.callbackData Defines any data to pass to the completion callback. 
    * @param {TAKE_ITEM_CONTEXT_TYPES} contextType
    * @param {String | undefined} args.localizableTitle Optional. Sets the tooltip text to display on cursor hover over the DOM element. 
    * 
@@ -442,7 +431,6 @@ export default class ViewModelFactory {
       ...this._getBaseArguments(args),
       target: args.target,
       callback: args.callback,
-      callbackData: args.callbackData,
       contextType: args.contextType,
       localizableTitle: args.localizableTitle,
     });
@@ -462,7 +450,6 @@ export default class ViewModelFactory {
    * @param {String} args.visGroup Id or name to group the visiblity of elements by. 
    * @param {Object | undefined} args.target Optional. The target object to affect.  
    * @param {Function | undefined} args.callback Optional. Defines an asynchronous callback that is invoked upon completion of the button's own callback. 
-   * @param {Any | undefined} args.callbackData Optional. Defines any data to pass to the completion callback. 
    * Expects this id to be defined as a data-attribute. 
    * E. g. '\<div data-vis-group="1A2b3F4E"\>My content\</div\>'
    * @param {Boolean | undefined} args.toggleSelf Optional. If true, the button will also toggle visibility on itself. 
@@ -479,7 +466,6 @@ export default class ViewModelFactory {
       visGroup: args.visGroup,
       target: args.target,
       callback: args.callback,
-      callbackData: args.callbackData,
       toggleSelf: args.toggleSelf,
       localizableTitle: args.localizableTitle,
     });

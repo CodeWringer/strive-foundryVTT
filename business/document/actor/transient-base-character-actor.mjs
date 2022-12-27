@@ -221,22 +221,6 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
   }
 
   /**
-   * Attribute roll handler.
-   *  
-   * @param {DicePoolResult} rollResult 
-   * @param {String} attributeName The name of the attribute. 
-   * 
-   * @async
-   */
-  async advanceAttributeBasedOnRollResult(rollResult, attributeName) {
-    if (rollResult === undefined) {
-      game.ambersteel.logger.logWarn("rollResult is undefined");
-      return;
-    }
-    await this.addAttributeProgress(rollResult.outcomeType, attributeName);
-  }
-
-  /**
    * Sets the level of the attribute with the given name. 
    * 
    * @param {String} attName Internal name of an attribute, e.g. `"magicSense"`. 

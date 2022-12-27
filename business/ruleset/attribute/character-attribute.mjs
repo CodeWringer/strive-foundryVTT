@@ -133,7 +133,7 @@ export default class CharacterAttribute {
    * @async
    */
   async advanceByRollResult(diceResult) {
-    await this._actor.addAttributeProgress(diceResult.outcomeType, this.name);
+    await this._actor.getTransientObject().addAttributeProgress(diceResult.outcomeType, this.name);
   }
 
   /**

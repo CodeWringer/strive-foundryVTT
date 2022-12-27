@@ -73,12 +73,14 @@ export default class ButtonRollViewModel extends ButtonViewModel {
    */
   get lastRollResult() { return this._lastRollResult; }
 
+  /** @override */
+  get callbackData() { return this.lastRollResult; }
+
   /**
    * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
    * 
    * @param {TransientDocument | Object} args.target The target object to affect. 
    * @param {Function | String | undefined} args.callback Optional. Defines an asynchronous callback that is invoked upon completion of the button's own callback. 
-   * @param {Any | undefined} args.callbackData Optional. Defines any data to pass to the completion callback. 
    * @param {Boolean | undefined} args.isEditable Optional. If true, will be interactible. 
    * 
    * @param {String} args.rollType The internal name of a `RollType` that Determines the kind of roll to try and make. 
@@ -103,12 +105,6 @@ export default class ButtonRollViewModel extends ButtonViewModel {
     this.secondaryChatImage = args.secondaryChatImage;
     this._actor = args.actor;
     this.localizableTitle = args.localizableTitle ?? "ambersteel.roll.doRoll";
-
-    // Wrap the inherited callback. 
-    // Without wrapping the original callback, it would be impossible 
-    // to both pass in the roll result, as well as the original callback data. 
-    const callbackToWrap = this.callback;
-    this.callback = () => { callbackToWrap(this.lastRollResult, args.callbackData) };
   }
 
   /**
@@ -129,7 +125,7 @@ export default class ButtonRollViewModel extends ButtonViewModel {
         throw new Error("InvalidStateException: For roll-type 'generic', a property path MUST be provided");
       }
 
-      new VisibilitySingleChoiceDialog({
+      await new VisibilitySingleChoiceDialog({
         closeCallback: async (dialog) => {
           if (dialog.confirmed !== true) return;
       
@@ -149,11 +145,11 @@ export default class ButtonRollViewModel extends ButtonViewModel {
             visibilityMode: dialog.visibilityMode
           });
         },
-      }).render(true);
+      }).renderAndAwait(true);
     } else if (this.rollType === ROLL_TYPES.dicePool.name) {
       const thiz = this;
 
-      new RollDialog({
+      await new RollDialog({
         closeCallback: async (dialog) => {
           if (!dialog.confirmed) return;
 
@@ -193,7 +189,7 @@ export default class ButtonRollViewModel extends ButtonViewModel {
             diceComposition: diceComposition,
           });
         }
-      }).render(true);
+      }).renderAndAwait(true);
     } else {
       throw new Error(`InvalidStateException: Invalid rollType '${this.rollType}'`);
     }

@@ -106,8 +106,7 @@ export default class SkillAbilityListItemViewModel extends ViewModel {
       secondaryChatTitle: game.i18n.localize(owningDocument.name),
       secondaryChatImage: owningDocument.img,
       rollType: "dice-pool",
-      callback: "advanceBasedOnRollResult",
-      callbackData: skillAbility.owningDocumentId,
+      callback: "advanceByRollResult",
       actor: actor,
       isEditable: (thiz.isEditable || thiz.isGM) && actor !== undefined,
     });

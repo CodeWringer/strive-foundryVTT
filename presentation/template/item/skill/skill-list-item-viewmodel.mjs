@@ -80,8 +80,7 @@ export default class SkillListItemViewModel extends SkillViewModel {
       primaryChatTitle: game.i18n.localize(thiz.document.name),
       primaryChatImage: thiz.document.img,
       rollType: "dice-pool",
-      callback: "advanceBasedOnRollResult",
-      callbackData: thiz.document.id,
+      callback: "advanceByRollResult",
       actor: thiz.document.owningDocument.document,
     })
     this.vmBtnSendToChat = factory.createVmBtnSendToChat({

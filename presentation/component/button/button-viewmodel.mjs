@@ -58,16 +58,18 @@ export default class ButtonViewModel extends ViewModel {
   callback = undefined;
 
   /**
-   * @type {Any}
-   * @private
-   */
-  _callbackData = undefined;
-  /**
-   * Defines any data to pass to the completion callback. 
-   * @type {Any}
+   * Returns data to pass to the callback function, if one is defined. 
+   * 
+   * This getter is to be overridden by inheriting types! 
+   * 
+   * @type {Any | undefined}
+   * @default undefined
+   * 
+   * @protected
+   * @virtual
    * @readonly
    */
-  get completionCallbackData() { return this._callbackData; }
+  get callbackData() { return undefined; }
 
   /**
    * The localizable title (tooltip). 
@@ -87,7 +89,6 @@ export default class ButtonViewModel extends ViewModel {
    * 
    * @param {Object | undefined} args.target Optional. The target object to affect.  
    * @param {Function | String | undefined} args.callback Optional. Defines an asynchronous callback that is invoked upon completion of the button's own callback. 
-   * @param {Any | undefined} args.callbackData Optional. Defines any data to pass to the completion callback. 
    * @param {Boolean | undefined} args.isEditable Optional. If true, will be interactible. 
    * @param {String | undefined} args.localizableTitle Optional. The localizable title (tooltip). 
    * @param {Function | undefined} args.onClick Optional. The function to call on click. 
@@ -96,8 +97,7 @@ export default class ButtonViewModel extends ViewModel {
     super(args);
 
     this._target = args.target;
-    this.callback = this._getCallback(args.callback);
-    this._callbackData = args.callbackData;
+    this.callback = this._getCallback(args.callback).bind(this._target);
     this.isEditable = args.isEditable ?? false;
     this.localizableTitle = args.localizableTitle;
     if (args.onClick !== undefined) {
@@ -162,7 +162,7 @@ export default class ButtonViewModel extends ViewModel {
 
     await this.onClick(html, isOwner, isEditable);
     if (this.callback !== undefined && this.callback !== null) {
-      await this.callback(this._callbackData);
+      await this.callback(this.callbackData);
     }
   }
 }
