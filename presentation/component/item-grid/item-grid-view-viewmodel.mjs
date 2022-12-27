@@ -117,14 +117,14 @@ export default class ItemGridViewViewModel extends InputViewModel {
       }
       
       // Display a warning dialog. 
-      new PlainDialog({
+      await new PlainDialog({
         localizedTitle: game.i18n.localize("ambersteel.character.asset.carryingCapacity.dialog.titleItemsDropped"),
         localizedContent: actor.name
         + "\n"
         + game.i18n.localize("ambersteel.character.asset.carryingCapacity.dialog.contentItemsDropped")
         + "\n"
         + itemGridLoadResult.itemsDropped.map(it => it.name).join(",\n")
-      }).render(true);
+      }).renderAndAwait(true);
 
       await this._itemGrid.synchronizeTo(actor, true);
     } else if (itemGridLoadResult.itemsError.length > 0) {

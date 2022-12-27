@@ -113,7 +113,7 @@ export default class ButtonAddViewModel extends ButtonViewModel {
    * @private
    */
   async _createWithDialog() {
-    new AddItemDialog({
+    await new AddItemDialog({
       itemType: this.creationType,
       localizedItemLabel: game.i18n.localize(this.localizableType),
       localizedTitle: game.i18n.localize(this.localizableDialogTitle),
@@ -139,7 +139,7 @@ export default class ButtonAddViewModel extends ButtonViewModel {
           return await Item.create(itemData, { parent: this.target.document }); // TODO #85: This should probably be extracted to the transient-type object. 
         }
       },
-    }).render(true);
+    }).renderAndAwait(true);
   }
 
   /**

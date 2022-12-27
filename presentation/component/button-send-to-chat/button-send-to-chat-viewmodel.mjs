@@ -81,7 +81,7 @@ export default class ButtonSendToChatViewModel extends ButtonViewModel {
 
     const thiz = this;
 
-    new VisibilitySingleChoiceDialog({
+    await new VisibilitySingleChoiceDialog({
       closeCallback: (dialog) => {
         if (dialog.confirmed !== true) return;
         const visibilityMode = dialog.visibilityMode;
@@ -112,7 +112,7 @@ export default class ButtonSendToChatViewModel extends ButtonViewModel {
           }
         }
       },
-    }).render(true);
+    }).renderAndAwait(true);
   }
 }
 

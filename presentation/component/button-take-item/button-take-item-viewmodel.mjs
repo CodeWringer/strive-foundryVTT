@@ -117,10 +117,10 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
         if (addResult === true) {
           updateProperty(assetDocument, "data.data.isOnPerson", true);
         } else {
-          new PlainDialog({
+          await new PlainDialog({
             localizedTitle: game.i18n.localize("ambersteel.character.asset.carryingCapacity.dialog.titleInventoryFull"),
             localizedContent: game.i18n.localize("ambersteel.character.asset.carryingCapacity.dialog.contentInventoryFull")
-          }).render(true);
+          }).renderAndAwait(true);
         }
       }
     } else if (containingPack !== undefined && containingPack !== null) { // The item is embedded in a compendium. 
@@ -152,22 +152,17 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
       }));
     }
 
-    return new Promise((resolve) => {
-      new SingleChoiceDialog({
-        localizedTitle: game.i18n.localize("ambersteel.general.actor.query"),
-        localizedLabel: game.i18n.localize("ambersteel.general.actor.label"),
-        choices: choices,
-        closeCallback: async (dialog) => {
-          if (dialog.confirmed !== true) {
-            resolve(undefined);
-            return;
-          }
-  
-          const actor = await game.actors.get(dialog.selected.value);
-          resolve(actor);
-        },
-      }).render(true);
-    });
+    const dialog = await new SingleChoiceDialog({
+      localizedTitle: game.i18n.localize("ambersteel.general.actor.query"),
+      localizedLabel: game.i18n.localize("ambersteel.general.actor.label"),
+      choices: choices,
+    }).renderAndAwait(true);
+
+    if (dialog.confirmed !== true) {
+      return undefined;
+    } else {
+      return await game.actors.get(dialog.selected.value);
+    }
   }
 
   /**

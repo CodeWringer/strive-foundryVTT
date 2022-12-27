@@ -55,7 +55,7 @@ export default class ButtonDeleteViewModel extends ButtonViewModel {
     if (this.withDialog === true) {
       const thiz = this;
 
-      new ConfirmablePlainDialog({
+      await new ConfirmablePlainDialog({
         localizedTitle: game.i18n.localize("ambersteel.general.delete.query"),
         localizedContent: StringUtil.format(game.i18n.localize(thiz.localizableDialogTitle), thiz.target.name),
         closeCallback: async (dialog) => {
@@ -70,7 +70,7 @@ export default class ButtonDeleteViewModel extends ButtonViewModel {
             await thiz.target.delete();
           }
         },
-      }).render(true);
+      }).renderAndAwait(true);
     } else {
       await this.target.delete();
     }

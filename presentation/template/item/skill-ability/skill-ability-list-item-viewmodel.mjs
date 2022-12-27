@@ -184,7 +184,7 @@ export default class SkillAbilityListItemViewModel extends ViewModel {
       isEditable: thiz.isEditable,
       localizableTitle: "ambersteel.roll.doRoll",
       onClick: async (html, isOwner, isEditable) => {
-        new VisibilitySingleChoiceDialog({
+        await new VisibilitySingleChoiceDialog({
           closeCallback: async (dialog) => {
             if (dialog.confirmed !== true) return;
             // This is the total across all damage definitions. 
@@ -262,7 +262,7 @@ export default class SkillAbilityListItemViewModel extends ViewModel {
               visibilityMode: dialog.visibilityMode
             });
           },
-        }).render(true);
+        }).renderAndAwait(true);
       },
     });
 

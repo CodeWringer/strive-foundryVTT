@@ -257,13 +257,13 @@ export class ItemOnGridView {
 
     // SendToChat button. 
     this._buttonSendToChat = new Button(pixiApp, TEXTURES.SEND_TO_CHAT, async () => {
-      new VisibilitySingleChoiceDialog({
+      await new VisibilitySingleChoiceDialog({
         closeCallback: async (dialog) => {
           if (dialog.confirmed !== true) return;
       
           thiz.item.sendToChat(dialog.visibilityMode);
         },
-      }).render(true);
+      }).renderAndAwait(true);
     });
     this._buttons.push(this._buttonSendToChat);
     this._buttonSendToChat.width = HEADER_HEIGHT;
