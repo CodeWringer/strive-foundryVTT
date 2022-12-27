@@ -279,6 +279,10 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
       game.ambersteel.logger.logWarn("outcomeType is undefined");
       return;
     }
+    if (outcomeType === DiceOutcomeTypes.NONE) {
+      // Do not advance anything for a "none" result. 
+      return;
+    }
 
     const attribute = this.attributes.find(it => it.name === attName);
 

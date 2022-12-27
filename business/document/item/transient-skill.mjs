@@ -228,6 +228,10 @@ export default class TransientSkill extends TransientBaseItem {
       game.ambersteel.logger.logWarn("outcomeType is undefined");
       return;
     }
+    if (outcomeType === DiceOutcomeTypes.NONE) {
+      // Do not advance anything for a "none" result. 
+      return;
+    }
 
     if (outcomeType === DiceOutcomeTypes.SUCCESS) {
       this.advancementProgress.successes++;
@@ -296,16 +300,14 @@ export default class TransientSkill extends TransientBaseItem {
   /**
    * Advances the skill, based on the given `DicePoolResult`. 
    * 
-   * @param {DicePoolResult} rollResult 
+   * @param {DicePoolResult | undefined} rollResult 
    * 
    * @async
    */
   async advanceByRollResult(rollResult) {
-    if (rollResult === undefined) {
-      game.ambersteel.logger.logWarn("rollResult is undefined");
-      return;
+    if (rollResult !== undefined) {
+      this.addProgress(rollResult.outcomeType);
     }
-    this.addProgress(rollResult.outcomeType, false);
   }
 
   /**

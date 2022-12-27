@@ -151,7 +151,7 @@ export default class ButtonRollViewModel extends ButtonViewModel {
 
       await new RollDialog({
         closeCallback: async (dialog) => {
-          if (!dialog.confirmed) return;
+          if (dialog.confirmed !== true) return;
 
           let numberOfDice = 0;
           let diceComposition = undefined;

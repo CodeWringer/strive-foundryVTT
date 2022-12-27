@@ -66,11 +66,11 @@ export default class CharacterAttribute {
       },
       get failures() { return parseInt(thiz._actor.data.data.attributes[thiz._attributeGroupName][thiz.name].failures); },
       set failures(value) {
-        this._actor.update({
+        thiz._actor.update({
           data: {
             attributes: {
-              [this._attributeGroupName]: {
-                [this.name]: {
+              [thiz._attributeGroupName]: {
+                [thiz.name]: {
                   failures: value
                 }
               }
@@ -128,12 +128,14 @@ export default class CharacterAttribute {
    * Advances the represented attribute on the owning actor, based on the given 
    * roll's outcome. 
    * 
-   * @param {DicePoolResult} diceResult A dice roll result. 
+   * @param {DicePoolResult | undefined} diceResult A dice roll result. 
    * 
    * @async
    */
   async advanceByRollResult(diceResult) {
-    await this._actor.getTransientObject().addAttributeProgress(diceResult.outcomeType, this.name);
+    if (diceResult !== undefined) {
+      await this._actor.getTransientObject().addAttributeProgress(diceResult.outcomeType, this.name);
+    }
   }
 
   /**
