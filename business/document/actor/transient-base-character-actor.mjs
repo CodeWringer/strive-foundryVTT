@@ -204,7 +204,16 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
    * @private
    */
   _getAttributes() {
-    return this._getAttributeGroups().map(it => it.attributes);
+    const result = [];
+
+    const attributeGroups = this._getAttributeGroups();
+    for(const attributeGroup of attributeGroups) {
+      for (const attribute of attributeGroup.attributes) {
+        result.push(attribute);
+      }
+    }
+
+    return result;
   }
 
   /**
