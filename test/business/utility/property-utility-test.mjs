@@ -28,6 +28,20 @@ describe('property-utility', function() {
       split[2].should.be.equal(4);
       split[3].should.be.equal("c");
     });
+    
+    it('successfully splits the path "a.b[4][2].c"', function() {
+      // Given
+      const path = "a.b[4][2].c";
+      // When
+      const split = PropertyUtility.splitPropertyPath(path);
+      // Then
+      split.length.should.be.equal(5);
+      split[0].should.be.equal("a");
+      split[1].should.be.equal("b");
+      split[2].should.be.equal(4);
+      split[3].should.be.equal(2);
+      split[4].should.be.equal("c");
+    });
   });
 
   describe('getNestedPropertyValue', function() {

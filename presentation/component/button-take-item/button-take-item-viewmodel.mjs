@@ -1,7 +1,6 @@
 import { ItemGrid } from "../item-grid/item-grid.mjs";
 import { TEMPLATES } from "../../template/templatePreloader.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
-import { updateProperty } from "../../../business/document/document-update-utility.mjs";
 import ChoiceOption from "../../util/choice-option.mjs";
 import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import PlainDialog from "../../dialog/plain-dialog/plain-dialog.mjs";
@@ -115,7 +114,7 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
         const itemGrid = ItemGrid.from(targetActor).itemGrid;
         const addResult = itemGrid.add(assetDocument);
         if (addResult === true) {
-          updateProperty(assetDocument, "data.data.isOnPerson", true);
+          assetDocument.getTransientObject().isOnPerson = true;
         } else {
           await new PlainDialog({
             localizedTitle: game.i18n.localize("ambersteel.character.asset.carryingCapacity.dialog.titleInventoryFull"),
