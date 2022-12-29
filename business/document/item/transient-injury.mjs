@@ -29,7 +29,7 @@ export default class TransientInjury extends TransientBaseItem {
   }
   set state(value) {
     this.document.data.data.state = value;
-    this.updateSingle("data.data.state", value);
+    this.updateByPath("data.data.state", value);
   }
   
   /**
@@ -40,7 +40,7 @@ export default class TransientInjury extends TransientBaseItem {
   }
   set timeToHeal(value) {
     this.document.data.data.timeToHeal = value;
-    this.updateSingle("data.data.timeToHeal", value);
+    this.updateByPath("data.data.timeToHeal", value);
   }
   
   /**
@@ -51,7 +51,7 @@ export default class TransientInjury extends TransientBaseItem {
   }
   set limit(value) {
     this.document.data.data.limit = value;
-    this.updateSingle("data.data.limit", value);
+    this.updateByPath("data.data.limit", value);
   }
   
   /** @override */

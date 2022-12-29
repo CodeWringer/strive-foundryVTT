@@ -35,13 +35,13 @@ export default class TransientPc extends TransientBaseCharacterActor {
 
     return {
       get ambition() { return thiz.document.data.data.beliefSystem.ambition; },
-      set ambition(value) { thiz.updateSingle("data.data.beliefSystem.ambition", value); },
+      set ambition(value) { thiz.updateByPath("data.data.beliefSystem.ambition", value); },
 
       get beliefs() { return thiz.document.data.data.beliefSystem.beliefs; },
-      set beliefs(value) { thiz.updateSingle("data.data.beliefSystem.beliefs", value); },
+      set beliefs(value) { thiz.updateByPath("data.data.beliefSystem.beliefs", value); },
 
       get instincts() { return thiz.document.data.data.beliefSystem.instincts; },
-      set instincts(value) { thiz.updateSingle("data.data.beliefSystem.instincts", value); },
+      set instincts(value) { thiz.updateByPath("data.data.beliefSystem.instincts", value); },
     };
   }
   
@@ -58,13 +58,13 @@ export default class TransientPc extends TransientBaseCharacterActor {
       get remainingFateCards() { return this.maxFateCards - this.fateCards.length; },
 
       get miFP() { return thiz.document.data.data.fateSystem.miFP; },
-      set miFP(value) { thiz.updateSingle("data.data.fateSystem.miFP", value); },
+      set miFP(value) { thiz.updateByPath("data.data.fateSystem.miFP", value); },
 
       get maFP() { return thiz.document.data.data.fateSystem.maFP; },
-      set maFP(value) { thiz.updateSingle("data.data.fateSystem.maFP", value); },
+      set maFP(value) { thiz.updateByPath("data.data.fateSystem.maFP", value); },
 
       get AFP() { return thiz.document.data.data.fateSystem.AFP; },
-      set AFP(value) { thiz.updateSingle("data.data.fateSystem.AFP", value); },
+      set AFP(value) { thiz.updateByPath("data.data.fateSystem.AFP", value); },
     };
   }
 

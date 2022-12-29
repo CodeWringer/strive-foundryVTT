@@ -111,7 +111,7 @@ export default class TransientDocument {
   get img() { return this.document.img; }
   set img(value) {
     this.document.img = value;
-    this.updateSingle("img", value);
+    this.updateByPath("img", value);
   }
   
   /**
@@ -130,7 +130,7 @@ export default class TransientDocument {
   get name() { return this.document.name; }
   set name(value) {
     this.document.name = value;
-    this.updateSingle("name", value);
+    this.updateByPath("name", value);
   }
 
   /**
@@ -157,7 +157,7 @@ export default class TransientDocument {
   }
   set description(value) {
     this.document.data.data.description = value;
-    this.updateSingle("data.data.description", value);
+    this.updateByPath("data.data.description", value);
   }
   
   /**
@@ -168,7 +168,7 @@ export default class TransientDocument {
   }
   set gmNotes(value) {
     this.document.data.data.gmNotes = value;
-    this.updateSingle("data.data.gmNotes", value);
+    this.updateByPath("data.data.gmNotes", value);
   }
   
   /**
@@ -179,7 +179,7 @@ export default class TransientDocument {
   }
   set isCustom(value) {
     this.document.data.data.isCustom = value;
-    this.updateSingle("data.data.isCustom", value);
+    this.updateByPath("data.data.isCustom", value);
   }
   
   /**
@@ -192,7 +192,7 @@ export default class TransientDocument {
   }
   set displayOrders(value) {
     this.document.data.data.displayOrders = value;
-    this.updateSingle("data.data.displayOrders", value);
+    this.updateByPath("data.data.displayOrders", value);
   }
   
   
@@ -206,7 +206,7 @@ export default class TransientDocument {
   }
   set gmNotes(value) {
     this.document.data.data.gmNotes = value;
-    this.updateSingle("data.data.gmNotes", value);
+    this.updateByPath("data.data.gmNotes", value);
   }
   
   /**

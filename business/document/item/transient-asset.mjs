@@ -34,7 +34,7 @@ export default class TransientAsset extends TransientBaseItem {
   }
   set quantity(value) {
     this.document.data.data.quantity = value;
-    this.updateSingle("data.data.quantity", value);
+    this.updateByPath("data.data.quantity", value);
   }
   
   /**
@@ -45,7 +45,7 @@ export default class TransientAsset extends TransientBaseItem {
   }
   set maxQuantity(value) {
     this.document.data.data.maxQuantity = value;
-    this.updateSingle("data.data.maxQuantity", value);
+    this.updateByPath("data.data.maxQuantity", value);
   }
   
   /**
@@ -55,14 +55,14 @@ export default class TransientAsset extends TransientBaseItem {
     const thiz = this;
     return {
       get width() { return parseInt(thiz.document.data.data.shape.width); },
-      set width(value) { thiz.updateSingle("data.data.shape.width", value); },
+      set width(value) { thiz.updateByPath("data.data.shape.width", value); },
       get height() { return parseInt(thiz.document.data.data.shape.height); },
-      set height(value) { thiz.updateSingle("data.data.shape.height", value); },
+      set height(value) { thiz.updateByPath("data.data.shape.height", value); },
     };
   }
   set shape(value) {
     this.document.data.data.shape = value;
-    this.updateSingle("data.data.shape", value);
+    this.updateByPath("data.data.shape", value);
   }
   
   /**
@@ -73,7 +73,7 @@ export default class TransientAsset extends TransientBaseItem {
   }
   set isOnPerson(value) {
     this.document.data.data.isOnPerson = value;
-    this.updateSingle("data.data.isOnPerson", value);
+    this.updateByPath("data.data.isOnPerson", value);
   }
 
   /**
