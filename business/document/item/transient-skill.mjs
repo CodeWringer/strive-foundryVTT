@@ -49,10 +49,10 @@ export default class TransientSkill extends TransientBaseItem {
   set relatedAttribute(value) {
     if (isObject(value)) { // This assumes an `Attribute` object was given. 
       this.document.data.data.relatedAttribute = value.name;
-      this.updateSingle("data.data.relatedAttribute", value.name);
+      this.updateByPath("data.data.relatedAttribute", value.name);
     } else { // This assumes a String was given. 
       this.document.data.data.relatedAttribute = value;
-      this.updateSingle("data.data.relatedAttribute", value);
+      this.updateByPath("data.data.relatedAttribute", value);
     }
   }
   
@@ -64,7 +64,7 @@ export default class TransientSkill extends TransientBaseItem {
   }
   set category(value) {
     this.document.data.data.category = value;
-    this.updateSingle("data.data.category", value);
+    this.updateByPath("data.data.category", value);
   }
   
   /**
@@ -75,7 +75,7 @@ export default class TransientSkill extends TransientBaseItem {
   }
   set level(value) {
     this.document.data.data.level = value;
-    this.updateSingle("data.data.level", value);
+    this.updateByPath("data.data.level", value);
   }
   
   /**
@@ -121,7 +121,7 @@ export default class TransientSkill extends TransientBaseItem {
   }
   set isMagicSchool(value) {
     this.document.data.data.isMagicSchool = value;
-    this.updateSingle("data.data.isMagicSchool", value);
+    this.updateByPath("data.data.isMagicSchool", value);
   }
   
   /**
@@ -336,7 +336,7 @@ export default class TransientSkill extends TransientBaseItem {
    */
   async persistSkillAbilities(render = true) {
     const abilitiesToPersist = this.abilities.map(it => it.toDto());
-    await this.updateSingle("data.abilities", abilitiesToPersist, render);
+    await this.updateByPath("data.abilities", abilitiesToPersist, render);
   }
 
   /**

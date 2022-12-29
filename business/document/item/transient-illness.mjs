@@ -30,7 +30,7 @@ export default class TransientIllness extends TransientBaseItem {
   }
   set state(value) {
     this.document.data.data.state = value;
-    this.updateSingle("data.data.state", value);
+    this.updateByPath("data.data.state", value);
   }
   
   /**
@@ -41,7 +41,7 @@ export default class TransientIllness extends TransientBaseItem {
   }
   set duration(value) {
     this.document.data.data.duration = value;
-    this.updateSingle("data.data.duration", value);
+    this.updateByPath("data.data.duration", value);
   }
   
   /**
@@ -52,7 +52,7 @@ export default class TransientIllness extends TransientBaseItem {
   }
   set treatment(value) {
     this.document.data.data.treatment = value;
-    this.updateSingle("data.data.treatment", value);
+    this.updateByPath("data.data.treatment", value);
   }
   
   /**
@@ -63,7 +63,7 @@ export default class TransientIllness extends TransientBaseItem {
   }
   set treatmentSkill(value) {
     this.document.data.data.treatmentSkill = value;
-    this.updateSingle("data.data.treatmentSkill", value);
+    this.updateByPath("data.data.treatmentSkill", value);
   }
   
   /** @override */
