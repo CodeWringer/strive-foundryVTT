@@ -265,7 +265,7 @@ export default class TransientDocument {
    * 
    * @async
    */
-  async deleteByPropertyPath(propertyPath, render = true) {
+  async deleteByPath(propertyPath, render = true) {
     await this._updater.deleteByPath(this.document, propertyPath, render);
   }
 
@@ -282,7 +282,7 @@ export default class TransientDocument {
    * @async
    * @protected
    */
-  async updateSingle(propertyPath, newValue, render = true) {
+  async updateByPath(propertyPath, newValue, render = true) {
     await this._updater.updateByPath(this.document, propertyPath, newValue, render);
   }
 
