@@ -1,11 +1,11 @@
 import * as ChatUtil from "../../presentation/chat/chat-utility.mjs";
-import * as UpdateUtil from "./document-update-utility.mjs";
 import { createUUID } from '../util/uuid-utility.mjs';
 import PreparedChatData from '../../presentation/chat/prepared-chat-data.mjs';
 import { SOUNDS_CONSTANTS } from '../../presentation/audio/sounds.mjs';
 import ViewModel from '../../presentation/view-model/view-model.mjs';
 import { VISIBILITY_MODES } from '../../presentation/chat/visibility-modes.mjs';
-import { getNestedPropertyValue } from "../util/property-utility.mjs";
+import * as PropertyUtility from "../util/property-utility.mjs";
+import DocumentUpdater from "./document-updater/document-updater.mjs";
 
 /**
  * The regular expression pattern used to identify all `@`-references. 
@@ -69,6 +69,14 @@ export const REGEX_PATTERN_REFERENCE = /\.[^\s-/*+]+/i;
  * @property {Boolean} isCustom
  */
 export default class TransientDocument {
+  /**
+   * Encapsulates the logic to update by property path. 
+   * 
+   * @type {DocumentUpdater}
+   * @private
+   */
+  _updater;
+
   /**
    * Returns the default icon image path for this type of document. 
    * 
@@ -219,6 +227,11 @@ export default class TransientDocument {
       throw new Error("A document instance must be provided");
     }
 
+    this._updater = new DocumentUpdater({
+      propertyUtility: PropertyUtility,
+      logger: game.ambersteel.logger,
+    });
+
     this.document = document;
     this.localizableName = this.name;
     this.localizableAbbreviation = this.name;
@@ -253,7 +266,7 @@ export default class TransientDocument {
    * @async
    */
   async deleteByPropertyPath(propertyPath, render = true) {
-    await UpdateUtil.deleteByPropertyPath(this.document, propertyPath, render);
+    await this._updater.deleteByPath(this.document, propertyPath, render);
   }
 
   /**
@@ -270,7 +283,7 @@ export default class TransientDocument {
    * @protected
    */
   async updateSingle(propertyPath, newValue, render = true) {
-    await UpdateUtil.updateProperty(this.document, propertyPath, newValue, render);
+    await this._updater.updateByPath(this.document, propertyPath, newValue, render);
   }
 
   /**
@@ -456,7 +469,7 @@ export default class TransientDocument {
     if (propertyPathMatch !== undefined && propertyPathMatch !== null) {
       const propertyPath = propertyPathMatch[0].substring(1); // The property path, excluding the first dot. 
       try {
-        return getNestedPropertyValue(this, propertyPath);
+        return PropertyUtility.getNestedPropertyValue(this, propertyPath);
       } catch (error) {
         // Errors are expected for "bad" property paths and can be safely ignored. 
         return undefined;
