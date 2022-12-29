@@ -43,7 +43,7 @@ export default class ButtonDeleteViewModel extends ButtonViewModel {
    * @see {ButtonViewModel.onClick}
    * @async
    * @throws {Error} NullPointerException - Thrown, if 'target' is undefined. 
-   * @throws {Error} NullPointerException - Thrown, if trying to delete by property path and 'target.deleteByPropertyPath' is undefined. 
+   * @throws {Error} NullPointerException - Thrown, if trying to delete by property path and 'target.deleteByPath' is undefined. 
    */
   async onClick(html, isOwner, isEditable) {
     if (isEditable !== true) return;
@@ -62,10 +62,10 @@ export default class ButtonDeleteViewModel extends ButtonViewModel {
           if (dialog.confirmed !== true) return;
           
           if (thiz.propertyPath !== undefined) {
-            if (thiz.target.deleteByPropertyPath === undefined) {
-              throw new Error("NullPointerException: 'target.deleteByPropertyPath' is undefined");
+            if (thiz.target.deleteByPath === undefined) {
+              throw new Error("NullPointerException: 'target.deleteByPath' is undefined");
             }
-            await thiz.target.deleteByPropertyPath(thiz.propertyPath);
+            await thiz.target.deleteByPath(thiz.propertyPath);
           } else {
             await thiz.target.delete();
           }

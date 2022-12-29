@@ -319,7 +319,7 @@ export default class SkillAbility {
    * 
    * @async
    */
-  async deleteByPropertyPath(propertyPath, render = true) {
+  async deleteByPath(propertyPath, render = true) {
     PropUtil.deleteNestedProperty(this, propertyPath);
 
     this._updateToDB(render);

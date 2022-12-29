@@ -80,22 +80,22 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
     const thiz = this;
     return {
       get age() { return parseInt(thiz.document.data.data.person.age); },
-      set age(value) { thiz.updateSingle("data.data.person.age", value); },
+      set age(value) { thiz.updateByPath("data.data.person.age", value); },
 
       get species() { return thiz.document.data.data.person.species; },
-      set species(value) { thiz.updateSingle("data.data.person.species", value); },
+      set species(value) { thiz.updateByPath("data.data.person.species", value); },
 
       get culture() { return thiz.document.data.data.person.culture; },
-      set culture(value) { thiz.updateSingle("data.data.person.culture", value); },
+      set culture(value) { thiz.updateByPath("data.data.person.culture", value); },
 
       get sex() { return thiz.document.data.data.person.sex; },
-      set sex(value) { thiz.updateSingle("data.data.person.sex", value); },
+      set sex(value) { thiz.updateByPath("data.data.person.sex", value); },
 
       get appearance() { return thiz.document.data.data.person.appearance; },
-      set appearance(value) { thiz.updateSingle("data.data.person.appearance", value); },
+      set appearance(value) { thiz.updateByPath("data.data.person.appearance", value); },
 
       get biography() { return thiz.document.data.data.person.biography; },
-      set biography(value) { thiz.updateSingle("data.data.person.biography", value); },
+      set biography(value) { thiz.updateByPath("data.data.person.biography", value); },
     };
   }
   
@@ -124,13 +124,13 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
       get mutations() { return thiz.items.filter(it => it.type === "mutation"); },
 
       get HP() { return parseInt(thiz.document.data.data.health.HP); },
-      set HP(value) { thiz.updateSingle("data.data.health.HP", value); },
+      set HP(value) { thiz.updateByPath("data.data.health.HP", value); },
 
       get exhaustion() { return parseInt(thiz.document.data.data.health.exhaustion); },
-      set exhaustion(value) { thiz.updateSingle("data.data.health.exhaustion", value); },
+      set exhaustion(value) { thiz.updateByPath("data.data.health.exhaustion", value); },
       
       get magicStamina() { return parseInt(thiz.document.data.data.health.magicStamina); },
-      set magicStamina(value) { thiz.updateSingle("data.data.health.magicStamina", value); },
+      set magicStamina(value) { thiz.updateByPath("data.data.health.magicStamina", value); },
       
       get maxHP() { return new Ruleset().getCharacterMaximumHp(thiz.document) },
       get maxInjuries() { return new Ruleset().getCharacterMaximumInjuries(thiz.document) },
