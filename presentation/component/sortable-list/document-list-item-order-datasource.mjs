@@ -42,7 +42,10 @@ export default class DocumentListItemOrderDataSource extends AbstractListItemOrd
     }
     newDisplayOrders[this.listName] = idList;
 
-    this.document.displayOrders = newDisplayOrders;
+    // This cannot use the setter of the display orders, as that would always cause an 
+    // immediate and unnecessary re-render. 
+    // Using `updateByPath` allows optionally not re-rendering the sheet. 
+    this.document.updateByPath("data.data.displayOrders", newDisplayOrders, render);
   }
 }
 

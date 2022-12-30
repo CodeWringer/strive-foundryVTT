@@ -34,6 +34,7 @@ export class AmbersteelActor extends Actor {
   prepareData() {
     super.prepareData();
 
+    this._invalidateTransientObject();
     this.getTransientObject().prepareData(this);
   }
 
@@ -53,5 +54,14 @@ export class AmbersteelActor extends Actor {
       this._transientObject = factoryFunction(this);
     }
     return this._transientObject;
+  }
+  
+  /**
+   * Invalidates the cached transient object instance, causing a new one to be instantiated at the next access. 
+   * 
+   * @private
+   */
+  _invalidateTransientObject() {
+    this._transientObject = undefined;
   }
 }

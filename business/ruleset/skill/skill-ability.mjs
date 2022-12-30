@@ -180,12 +180,12 @@ export default class SkillAbility {
   }
   
   /**
-   * @type {AttackType | undefined}
+   * @type {AttackType | String | undefined}
    */
   get attackType() { return this._attackType; }
   set attackType(value) {
     this._attackType = value;
-    this.owningDocument.updateByPath(`${this._pathOnParent}.attackType`, value.name);
+    this.owningDocument.updateByPath(`${this._pathOnParent}.attackType`, value.name ?? value);
   }
   
   /**
