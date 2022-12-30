@@ -110,7 +110,11 @@ export default class ActorSheetViewModel extends ViewModel {
       this.assetsViewModel = new ActorAssetsViewModel({ ...args, id: thiz.assetsId, parent: thiz });
       this.biographyViewModel = new ActorBiographyViewModel({ ...args, id: thiz.biographyId, parent: thiz });
     }
-    this.gmNotesViewModel = new GmNotesViewModel({ ...args, id: thiz.biographyId, document: thiz.document, parent: thiz });
+
+    if (this.isGM === true) {
+      this.gmNotesViewModel = new GmNotesViewModel({ ...args, id: thiz.biographyId, document: thiz.document, parent: thiz });
+    }
+    
     this.vmBtnSendToChat = factory.createVmBtnSendToChat({
       parent: this,
       id: "vmBtnSendToChat",
