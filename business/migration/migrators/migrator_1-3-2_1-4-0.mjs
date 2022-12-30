@@ -13,13 +13,18 @@ export default class Migrator_1_3_2__1_4_0 extends AbstractMigrator {
   /** @override */
   get migratedVersion() { return new VersionCode(1, 4, 0) };
 
-  constructor(args = {}) {
-    super(args);
-
-    this._updater = new DocumentUpdater({
-      propertyUtility: PropertyUtility,
-      logger: game.ambersteel.logger,
-    });
+  /**
+   * @type {DocumentUpdater}
+   * @private
+   */
+  get updater() {
+    if (this._updater === undefined) {
+      this._updater = new DocumentUpdater({
+        propertyUtility: PropertyUtility,
+        logger: game.ambersteel.logger,
+      });
+    }
+    return this._updater;
   }
 
   /** @override */
@@ -71,10 +76,10 @@ export default class Migrator_1_3_2__1_4_0 extends AbstractMigrator {
           const dataPath = `data.data.attributes.${attributeGroupToMigrate.groupName}.${attributeName}`;
 
           // Delete property from attribute in data base. 
-          await this._updater.deleteByPath(actor, `${dataPath}.value`, false);
+          await this.updater.deleteByPath(actor, `${dataPath}.value`, false);
           
           // Persist level to attribute in data base. 
-          await this._updater.updateByPath(actor, `${dataPath}.level`, attribute.level, false);
+          await this.updater.updateByPath(actor, `${dataPath}.level`, attribute.level, false);
         }
       }
     }
@@ -100,10 +105,10 @@ export default class Migrator_1_3_2__1_4_0 extends AbstractMigrator {
       delete skill.data.data.value;
 
       // Delete property from skill in data base. 
-      await this._updater.deleteByPath(skill, "data.data.value", false);
+      await this.updater.deleteByPath(skill, "data.data.value", false);
 
       // Persist level to skill in data base. 
-      await this._updater.updateByPath(skill, "data.data.level", skill.data.data.level, false);
+      await this.updater.updateByPath(skill, "data.data.level", skill.data.data.level, false);
     }
   }
 }
