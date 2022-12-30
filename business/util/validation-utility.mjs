@@ -9,10 +9,22 @@
  */
 export function propertiesDefined(obj, props) {
   for (const prop of props) {
-    if (obj[prop] == undefined
-      || obj[prop] == null) return false;
+    if (isDefined(obj[prop]) !== true) {
+      return false;
+    }
   }
   return true;
+}
+
+/**
+ * Returns true, if the given value is neither `undefined`, nor `null`. 
+ * 
+ * @param {Any | undefined | null} obj 
+ * 
+ * @returns {Boolean} True, if the given value is neither `undefined`, nor `null`. 
+ */
+export function isDefined(obj) {
+  return obj !== undefined && obj !== null;
 }
 
 /**

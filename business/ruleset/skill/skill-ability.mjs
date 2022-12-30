@@ -10,6 +10,7 @@ import { SOUNDS_CONSTANTS } from '../../../presentation/audio/sounds.mjs';
 import { VISIBILITY_MODES } from '../../../presentation/chat/visibility-modes.mjs';
 import { isObject } from '../../util/validation-utility.mjs';
 import { DAMAGE_TYPES } from '../damage-types.mjs';
+import { isDefined } from '../../util/validation-utility.mjs';
 
 /**
  * Represents a skill ability. 
@@ -31,11 +32,11 @@ import { DAMAGE_TYPES } from '../damage-types.mjs';
  * @property {Number} requiredLevel 
  * @property {Number} apCost 
  * @property {Array<DamageAndType>} damage
- * @property {String | undefined} condition 
- * @property {Number | undefined} distance 
- * @property {String | undefined} obstacle 
- * @property {String | undefined} opposedBy 
- * @property {AttackType | undefined} attackType 
+ * @property {String | Null} condition 
+ * @property {Number | Null} distance 
+ * @property {String | Null} obstacle 
+ * @property {String | Null} opposedBy 
+ * @property {AttackType | Null} attackType 
  */
 export default class SkillAbility {
   /**
@@ -144,7 +145,7 @@ export default class SkillAbility {
   }
   
   /**
-   * @type {String | undefined}
+   * @type {String | null}
    */
   get condition() { return this._condition; }
   set condition(value) {
@@ -153,7 +154,7 @@ export default class SkillAbility {
   }
   
   /**
-   * @type {Number | undefined}
+   * @type {Number | null}
    */
   get distance() { return this._distance; }
   set distance(value) {
@@ -162,7 +163,7 @@ export default class SkillAbility {
   }
   
   /**
-   * @type {String | undefined}
+   * @type {String | null}
    */
   get obstacle() { return this._obstacle; }
   set obstacle(value) {
@@ -171,7 +172,7 @@ export default class SkillAbility {
   }
   
   /**
-   * @type {String | undefined}
+   * @type {String | null}
    */
   get opposedBy() { return this._opposedBy; }
   set opposedBy(value) {
@@ -180,12 +181,12 @@ export default class SkillAbility {
   }
   
   /**
-   * @type {AttackType | String | undefined}
+   * @type {AttackType | String | null}
    */
   get attackType() { return this._attackType; }
   set attackType(value) {
     this._attackType = value;
-    this.owningDocument.updateByPath(`${this._pathOnParent}.attackType`, value.name ?? value);
+    this.owningDocument.updateByPath(`${this._pathOnParent}.attackType`, value === null ? value : (value.name ?? value));
   }
   
   /**
@@ -221,11 +222,11 @@ export default class SkillAbility {
     this._requiredLevel = args.requiredLevel ?? 0;
     this._apCost = args.apCost ?? 0;
     this._damage = args.damage ?? [];
-    this._condition = args.condition;
-    this._distance = args.distance;
-    this._obstacle = args.obstacle;
-    this._opposedBy = args.opposedBy;
-    this._attackType = args.attackType;
+    this._condition = args.condition ?? null;
+    this._distance = args.distance ?? null;
+    this._obstacle = args.obstacle ?? null;
+    this._opposedBy = args.opposedBy ?? null;
+    this._attackType = args.attackType ?? null;
   }
 
   /**

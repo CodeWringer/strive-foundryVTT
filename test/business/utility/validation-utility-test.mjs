@@ -21,6 +21,53 @@ describe('validation-utility', function() {
     });
   });
 
+  describe('isDefined', function() {
+    it('Returns false on undefined', function() {
+      // Given
+      const given = undefined;
+      // When
+      const result = ValidationUtility.isDefined(given);
+      // Then
+      result.should.be.equal(false);
+    });
+
+    it('Returns false on null', function() {
+      // Given
+      const given = null;
+      // When
+      const result = ValidationUtility.isDefined(given);
+      // Then
+      result.should.be.equal(false);
+    });
+
+    it('Returns true on "abc"', function() {
+      // Given
+      const given = "abc";
+      // When
+      const result = ValidationUtility.isDefined(given);
+      // Then
+      result.should.be.equal(true);
+    });
+
+    it('Returns true on "undefined"', function() {
+      // Given
+      const given = "undefined";
+      // When
+      const result = ValidationUtility.isDefined(given);
+      // Then
+      result.should.be.equal(true);
+    });
+
+    it('Returns true on "null"', function() {
+      // Given
+      const given = "null";
+      // When
+      const result = ValidationUtility.isDefined(given);
+      // Then
+      result.should.be.equal(true);
+    });
+  });
+
   describe('validateOrThrow', function() {
     it('correctly throws', function() {
       // Given

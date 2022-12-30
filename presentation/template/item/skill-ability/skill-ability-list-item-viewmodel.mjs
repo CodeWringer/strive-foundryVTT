@@ -1,7 +1,7 @@
 import { DAMAGE_TYPES } from "../../../../business/ruleset/damage-types.mjs";
 import { ATTACK_TYPES } from "../../../../business/ruleset/skill/attack-types.mjs";
 import DamageAndType from "../../../../business/ruleset/skill/damage-and-type.mjs";
-import { isNumber, validateOrThrow } from "../../../../business/util/validation-utility.mjs";
+import { isNumber, validateOrThrow, isDefined } from "../../../../business/util/validation-utility.mjs";
 import { SOUNDS_CONSTANTS } from "../../../audio/sounds.mjs";
 import * as ChatUtil from "../../../chat/chat-utility.mjs";
 import ButtonViewModel from "../../../component/button/button-viewmodel.mjs";
@@ -33,31 +33,31 @@ export default class SkillAbilityListItemViewModel extends ViewModel {
    * @type {Boolean}
    * @readonly
    */
-  get hideObstacle() { return this.skillAbility.obstacle === undefined; }
+  get hideObstacle() { return isDefined(this.skillAbility.obstacle) !== true; }
 
   /**
    * @type {Boolean}
    * @readonly
    */
-  get hideOpposedBy() { return this.skillAbility.opposedBy === undefined; }
+  get hideOpposedBy() { return isDefined(this.skillAbility.opposedBy) !== true; }
 
   /**
    * @type {Boolean}
    * @readonly
    */
-  get hideCondition() { return this.skillAbility.condition === undefined; }
+  get hideCondition() { return isDefined(this.skillAbility.condition) !== true; }
 
   /**
    * @type {Boolean}
    * @readonly
    */
-  get hideDistance() { return this.skillAbility.distance === undefined; }
+  get hideDistance() { return isDefined(this.skillAbility.distance) !== true; }
 
   /**
    * @type {Boolean}
    * @readonly
    */
-  get hideAttackType() { return this.skillAbility.attackType === undefined; }
+  get hideAttackType() { return isDefined(this.skillAbility.attackType) !== true; }
 
   /**
    * @type {Boolean}
@@ -283,71 +283,6 @@ export default class SkillAbilityListItemViewModel extends ViewModel {
       parent: thiz,
       id: "vmBtnContextMenu",
       menuItems: [
-        // Toggle obstacle
-        {
-          name: game.i18n.localize("ambersteel.roll.obstacle.label"),
-          icon: '<i class="fas fa-check"></i>',
-          condition: () => { return thiz.skillAbility.obstacle !== undefined; },
-          callback: () => { thiz.skillAbility.obstacle = undefined; },
-        },
-        {
-          name: game.i18n.localize("ambersteel.roll.obstacle.label"),
-          icon: '',
-          condition: () => { return thiz.skillAbility.obstacle === undefined; },
-          callback: () => { thiz.skillAbility.obstacle = ""; },
-        },
-        // Toggle opposed by
-        {
-          name: game.i18n.localize("ambersteel.roll.obstacle.opposedBy.label"),
-          icon: '<i class="fas fa-check"></i>',
-          condition: () => { return thiz.skillAbility.opposedBy !== undefined; },
-          callback: () => { thiz.skillAbility.opposedBy = undefined; },
-        },
-        {
-          name: game.i18n.localize("ambersteel.roll.obstacle.opposedBy.label"),
-          icon: '',
-          condition: () => { return thiz.skillAbility.opposedBy === undefined; },
-          callback: () => { thiz.skillAbility.opposedBy = ""; },
-        },
-        // Toggle distance
-        {
-          name: game.i18n.localize("ambersteel.character.skill.ability.distance.label"),
-          icon: '<i class="fas fa-check"></i>',
-          condition: () => { return thiz.skillAbility.distance !== undefined; },
-          callback: () => { thiz.skillAbility.distance = undefined; },
-        },
-        {
-          name: game.i18n.localize("ambersteel.character.skill.ability.distance.label"),
-          icon: '',
-          condition: () => { return thiz.skillAbility.distance === undefined; },
-          callback: () => { thiz.skillAbility.distance = ""; },
-        },
-        // Toggle attack type
-        {
-          name: game.i18n.localize("ambersteel.attackType.label"),
-          icon: '<i class="fas fa-check"></i>',
-          condition: () => { return thiz.skillAbility.attackType !== undefined; },
-          callback: () => { thiz.skillAbility.attackType = undefined; },
-        },
-        {
-          name: game.i18n.localize("ambersteel.attackType.label"),
-          icon: '',
-          condition: () => { return thiz.skillAbility.attackType === undefined; },
-          callback: () => { thiz.skillAbility.attackType = ATTACK_TYPES.none.name; },
-        },
-        // Toggle condition
-        {
-          name: game.i18n.localize("ambersteel.character.skill.ability.condition.label"),
-          icon: '<i class="fas fa-check"></i>',
-          condition: () => { return thiz.skillAbility.condition !== undefined; },
-          callback: () => { thiz.skillAbility.condition = undefined; },
-        },
-        {
-          name: game.i18n.localize("ambersteel.character.skill.ability.condition.label"),
-          icon: '',
-          condition: () => { return thiz.skillAbility.condition === undefined; },
-          callback: () => { thiz.skillAbility.condition = ""; },
-        },
         // Add damage
         {
           name: game.i18n.localize("ambersteel.character.skill.ability.damage.add"),
@@ -362,7 +297,17 @@ export default class SkillAbilityListItemViewModel extends ViewModel {
             thiz.skillAbility.damage = damage;
           },
         },
-      ],
+      ]
+      // Toggle obstacle
+      .concat(this._createContextMenuToggleButtons("ambersteel.roll.obstacle.label", thiz.skillAbility, "obstacle", ""))
+      // Toggle opposed by
+      .concat(this._createContextMenuToggleButtons("ambersteel.roll.obstacle.opposedBy.label", thiz.skillAbility, "opposedBy", ""))
+      // Toggle distance
+      .concat(this._createContextMenuToggleButtons("ambersteel.character.skill.ability.distance.label", thiz.skillAbility, "distance", ""))
+      // Toggle attack type
+      .concat(this._createContextMenuToggleButtons("ambersteel.attackType.label", thiz.skillAbility, "attackType", ATTACK_TYPES.none.name))
+      // Toggle condition
+      .concat(this._createContextMenuToggleButtons("ambersteel.character.skill.ability.condition.label", thiz.skillAbility, "condition", "")),
     });
 
     for (let i = 0; i < skillAbility.damage.length; i++) {
@@ -409,6 +354,37 @@ export default class SkillAbilityListItemViewModel extends ViewModel {
     super.dispose();
 
     this.damageInfoBubble.remove();
+  }
+
+  /**
+   * Returns two button definitions for a button to "toggle" a property value to be 
+   * null or non-null. 
+   * 
+   * @param {String} label The button's localizable label. 
+   * @param {Object} propertyOwner Parent object of the property. 
+   * @param {String} propertyName Name of the property. 
+   * @param {Any} nonNullValue Value to set on the property that is non-null. 
+   * 
+   * @returns {Array<Object>} Two button definitions. One for each state of the toggle button. 
+   * 
+   * @private
+   */
+  _createContextMenuToggleButtons(label, propertyOwner, propertyName, nonNullValue) {
+    const localizedLabel = game.i18n.localize(label);
+    return [
+      {
+        name: localizedLabel,
+        icon: '<i class="fas fa-check"></i>',
+        condition: () => { return isDefined(propertyOwner[propertyName]) === true; },
+        callback: () => { propertyOwner[propertyName] = null; },
+      },
+      {
+        name: localizedLabel,
+        icon: '',
+        condition: () => { return isDefined(propertyOwner[propertyName]) !== true; },
+        callback: () => { propertyOwner[propertyName] = nonNullValue; },
+      }
+    ];
   }
 }
 

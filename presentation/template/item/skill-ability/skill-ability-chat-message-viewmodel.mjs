@@ -1,4 +1,5 @@
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs"
+import { isDefined } from "../../../../business/util/validation-utility.mjs";
 import { isNotBlankOrUndefined } from "../../../../business/util/validation-utility.mjs"
 import ViewModel from "../../../view-model/view-model.mjs"
 import { TEMPLATES } from "../../templatePreloader.mjs"
@@ -24,31 +25,31 @@ export default class SkillAbilityChatMessageViewModel extends ViewModel {
    * @type {Boolean}
    * @readonly
    */
-  get hideObstacle() { return this.skillAbility.obstacle === undefined; }
+  get hideObstacle() { return isDefined(this.skillAbility.obstacle) !== true; }
 
   /**
    * @type {Boolean}
    * @readonly
    */
-  get hideOpposedBy() { return this.skillAbility.opposedBy === undefined; }
+  get hideOpposedBy() { return isDefined(this.skillAbility.opposedBy) !== true; }
   
   /**
    * @type {Boolean}
    * @readonly
    */
-  get hideCondition() { return this.skillAbility.condition === undefined; }
+  get hideCondition() { return isDefined(this.skillAbility.condition) !== true; }
   
   /**
    * @type {Boolean}
    * @readonly
    */
-  get hideDistance() { return this.skillAbility.distance === undefined; }
+  get hideDistance() { return isDefined(this.skillAbility.distance) !== true; }
   
   /**
    * @type {Boolean}
    * @readonly
    */
-  get hideAttackType() { return this.skillAbility.attackType === undefined; }
+  get hideAttackType() { return isDefined(this.skillAbility.attackType) !== true; }
   
   /**
    * @type {Boolean}
@@ -61,7 +62,7 @@ export default class SkillAbilityChatMessageViewModel extends ViewModel {
    * @readonly
    */
   get localizedAttackType() {
-    if (this.skillAbility.attackType === undefined) return "";
+    if (isDefined(this.skillAbility.attackType) !== true) return "";
 
     const localizableName = this.skillAbility.attackType.localizableName;
     return game.i18n.localize(localizableName);

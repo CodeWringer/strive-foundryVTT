@@ -117,5 +117,3 @@ export default class Migrator_1_3_2__1_4_0 extends AbstractMigrator {
 }
 
 MIGRATORS.push(new Migrator_1_3_2__1_4_0());
-
-window.Migrator_1_3_2__1_4_0 = Migrator_1_3_2__1_4_0;
