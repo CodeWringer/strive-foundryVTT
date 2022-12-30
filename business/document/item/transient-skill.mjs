@@ -340,7 +340,11 @@ export default class TransientSkill extends TransientBaseItem {
   async persistSkillAbilities(render = true) {
     const abilitiesToPersist = {};
 
-    for (const ability in this.abilities) {
+    for (const abilityId in this.abilities) {
+      if (this.abilities.hasOwnProperty(abilityId) !== true) continue;
+
+      const ability = this.abilities[abilityId];
+
       abilitiesToPersist[ability.id] = ability.toDto();
     }
 

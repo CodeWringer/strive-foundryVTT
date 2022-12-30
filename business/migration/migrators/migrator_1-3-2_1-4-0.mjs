@@ -98,6 +98,9 @@ export default class Migrator_1_3_2__1_4_0 extends AbstractMigrator {
 
     // Replace "value" with "level" on every skill.
     for (const skill of skills) {
+      // Ensure skill abilities are updated to now be stored on an object, instead of an array. 
+      await skill.getTransientObject().persistSkillAbilities(false);
+      
       if (skill.data.data.value === undefined) continue;
       
       // Change in-memory data. 
@@ -114,3 +117,5 @@ export default class Migrator_1_3_2__1_4_0 extends AbstractMigrator {
 }
 
 MIGRATORS.push(new Migrator_1_3_2__1_4_0());
+
+window.Migrator_1_3_2__1_4_0 = Migrator_1_3_2__1_4_0;
