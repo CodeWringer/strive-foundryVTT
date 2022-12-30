@@ -22,7 +22,6 @@ import { DAMAGE_TYPES } from '../damage-types.mjs';
  * * Read-only. 
  * @property {String} type Returns the content type of this "document". 
  * * Read-only. 
- * @property {Number} index The index of the skill ability, on the owning document. 
  * @property {String} id UUID of this instance of a skill ability. 
  * * Read-only. 
  * @property {Boolean} isCustom If `true`, this skill ability was added by a user. 
@@ -40,6 +39,15 @@ import { DAMAGE_TYPES } from '../damage-types.mjs';
  */
 export default class SkillAbility {
   /**
+   * Returns the data path of this skill ability on its parent. 
+   * 
+   * @type {String}
+   * @private
+   * @readonly
+   */
+  get _pathOnParent() { return `data.data.abilities.${this.id}`; }
+
+  /**
    * Returns the content type of this "document". 
    * 
    * @type {String}
@@ -48,46 +56,58 @@ export default class SkillAbility {
   get type() { return "skill-ability"; }
 
   /**
-   * @type {Number}
-   */
-  get index() { return this._index; }
-  set index(value) { this._index = value; this._updateToDB(); }
-
-  /**
    * @type {Boolean}
    */
   get isCustom() { return this._isCustom; }
-  set isCustom(value) { this._isCustom = value; this._updateToDB(); }
+  set isCustom(value) { 
+    this._isCustom = value; 
+    this.owningDocument.updateByPath(`${this._pathOnParent}.isCustom`, value);
+  }
 
   /**
    * @type {String}
    */
   get name() { return this._name; }
-  set name(value) { this._name = value; this._updateToDB(); }
+  set name(value) {
+    this._name = value;
+    this.owningDocument.updateByPath(`${this._pathOnParent}.name`, value);
+  }
 
   /**
    * @type {String}
    */
   get img() { return this._img; }
-  set img(value) { this._img = value; this._updateToDB(); }
+  set img(value) {
+    this._img = value;
+    this.owningDocument.updateByPath(`${this._pathOnParent}.img`, value);
+  }
   
   /**
    * @type {String}
    */
   get description() { return this._description; }
-  set description(value) { this._description = value; this._updateToDB(); }
+  set description(value) {
+    this._description = value;
+    this.owningDocument.updateByPath(`${this._pathOnParent}.description`, value);
+  }
   
   /**
    * @type {Number}
    */
   get requiredLevel() { return this._requiredLevel; }
-  set requiredLevel(value) { this._requiredLevel = value; this._updateToDB(); }
+  set requiredLevel(value) {
+    this._requiredLevel = value;
+    this.owningDocument.updateByPath(`${this._pathOnParent}.requiredLevel`, value);
+  }
   
   /**
    * @type {Number}
    */
   get apCost() { return this._apCost; }
-  set apCost(value) { this._apCost = value; this._updateToDB(); }
+  set apCost(value) {
+    this._apCost = value;
+    this.owningDocument.updateByPath(`${this._pathOnParent}.apCost`, value);
+  }
   
   /**
    * @type {Array<DamageAndType>} 
@@ -96,7 +116,14 @@ export default class SkillAbility {
     const thiz = this;
     return {
       get damage() { return it.damage; },
-      set damage(value) { it.damage = value; thiz._updateToDB(); },
+      set damage(value) {
+        it.damage = value;
+        const damageToPersist = thiz.damage.map(it => {
+          return { damage: it.damage, damageType: it.damageType.name }
+        });
+        thiz.owningDocument.updateByPath(`${thiz._pathOnParent}.damage`, damageToPersist);
+      },
+
       get damageType() { return it.damageType; },
       set damageType(value) {
         if (isObject(value)) {
@@ -104,45 +131,65 @@ export default class SkillAbility {
         } else {
           it.damageType = DAMAGE_TYPES[value]; 
         }
-        thiz._updateToDB();
+        const damageToPersist = thiz.damage.map(it => {
+          return { damage: it.damage, damageType: it.damageType.name }
+        });
+        thiz.owningDocument.updateByPath(`${thiz._pathOnParent}.damage`, damageToPersist);
       },
     }
   }); }
-  set damage(value) { this._damage = value; this._updateToDB(); }
+  set damage(value) {
+    this._damage = value;
+    this.owningDocument.updateByPath(`${this._pathOnParent}.damage`, value);
+  }
   
   /**
    * @type {String | undefined}
    */
   get condition() { return this._condition; }
-  set condition(value) { this._condition = value; this._updateToDB(); }
+  set condition(value) {
+    this._condition = value;
+    this.owningDocument.updateByPath(`${this._pathOnParent}.condition`, value);
+  }
   
   /**
    * @type {Number | undefined}
    */
   get distance() { return this._distance; }
-  set distance(value) { this._distance = value; this._updateToDB(); }
+  set distance(value) {
+    this._distance = value;
+    this.owningDocument.updateByPath(`${this._pathOnParent}.distance`, value);
+  }
   
   /**
    * @type {String | undefined}
    */
   get obstacle() { return this._obstacle; }
-  set obstacle(value) { this._obstacle = value; this._updateToDB(); }
+  set obstacle(value) {
+    this._obstacle = value;
+    this.owningDocument.updateByPath(`${this._pathOnParent}.obstacle`, value);
+  }
   
   /**
    * @type {String | undefined}
    */
   get opposedBy() { return this._opposedBy; }
-  set opposedBy(value) { this._opposedBy = value; this._updateToDB(); }
+  set opposedBy(value) {
+    this._opposedBy = value;
+    this.owningDocument.updateByPath(`${this._pathOnParent}.opposedBy`, value);
+  }
   
   /**
    * @type {AttackType | undefined}
    */
   get attackType() { return this._attackType; }
-  set attackType(value) { this._attackType = value; this._updateToDB(); }
+  set attackType(value) {
+    this._attackType = value;
+    this.owningDocument.updateByPath(`${this._pathOnParent}.attackType`, value.name);
+  }
   
   /**
    * @param {TransientSkill} owningDocument The owning document.
-   * @param {Number} index The index of the skill ability, on the owning document. 
    * @param {String | undefined} id Optional. UUID of this instance of a skill ability. 
    * @param {Boolean | undefined} args.isCustom Optional. 
    * @param {String | undefined} args.name Optional. 
@@ -157,14 +204,13 @@ export default class SkillAbility {
    * @param {String | undefined} args.opposedBy Optional. 
    * @param {AttackType | undefined} args.attackType Optional. 
    * 
-   * @throws {Error} Thrown, if `owningDocument` or `index` are undefined. 
+   * @throws {Error} Thrown, if `owningDocument` is undefined. 
    */
   constructor(args = {}) {
-    validateOrThrow(args, ["owningDocument", "index"]);
+    validateOrThrow(args, ["owningDocument"]);
     
     this.owningDocument = args.owningDocument;
     this.owningDocumentId = args.owningDocument.id;
-    this._index = args.index;
     
     this.id = args.id ?? createUUID();
 
@@ -238,7 +284,6 @@ export default class SkillAbility {
       ...overrides,
       skillAbility: this,
       actor: actor,
-      index: this.index,
     });
   }
 
@@ -266,7 +311,7 @@ export default class SkillAbility {
   delete() {
     if (this.owningDocument === undefined) return false;
 
-    this.owningDocument.deleteSkillAbilityAt(this.index);
+    this.owningDocument.deleteSkillAbility(this.id);
 
     return true;
   }
@@ -281,11 +326,21 @@ export default class SkillAbility {
    * @async
    */
   async update(delta, render = true) {
+    const dto = {
+      data: {
+        abilities: {
+          [this.id]: {}
+        }
+      }
+    };
+
     for (const propertyName in delta) {
-      this[propertyName] = delta[propertyName];
+      if (delta.hasOwnProperty(propertyName) !== true) continue;
+
+      dto.data.abilities[this.id][propertyName] = delta[propertyName];
     }
 
-    this._updateToDB(render);
+    this.owningDocument.update(dto, render);
   }
 
   /**
@@ -300,10 +355,13 @@ export default class SkillAbility {
    * 
    * @async
    */
-  async updateProperty(propertyPath, newValue, render = true) {
-    PropUtil.setNestedPropertyValue(this, propertyPath, newValue);
-    
-    this._updateToDB(render);
+  async updateByPath(propertyPath, newValue, render = true) {
+    if (propertyPath.startsWith(this._pathOnParent)) {
+      this.owningDocument.updateByPath(propertyPath, newValue, render);
+    } else {
+      const newPath = `${this._pathOnParent}.${propertyPath}`;
+      this.owningDocument.updateByPath(newPath, newValue, render);
+    }
   }
 
   /**
@@ -320,22 +378,12 @@ export default class SkillAbility {
    * @async
    */
   async deleteByPath(propertyPath, render = true) {
-    PropUtil.deleteNestedProperty(this, propertyPath);
-
-    this._updateToDB(render);
-  }
-
-  /**
-   * Pushes the skill ability list on the parent to the DB. 
-   * 
-   * @param {Boolean | undefined} render If true, will trigger a re-render of the associated document sheet. 
-   * * Default 'true'. 
-   * 
-   * @private
-   * @async
-   */
-  async _updateToDB(render = true) {
-    this.owningDocument.persistSkillAbilities(render);
+    if (propertyPath.startsWith(this._pathOnParent)) {
+      this.owningDocument.deleteByPath(propertyPath, render);
+    } else {
+      const newPath = `${this._pathOnParent}.${propertyPath}`;
+      this.owningDocument.deleteByPath(newPath, render);
+    }
   }
 
   /**
@@ -406,5 +454,4 @@ export default class SkillAbility {
     }
     return undefined;
   }
-  
 }

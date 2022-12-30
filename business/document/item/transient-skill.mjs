@@ -276,23 +276,26 @@ export default class TransientSkill extends TransientBaseItem {
     });
     
     this.abilities.push(newAbility);
-    await this.persistSkillAbilities();
+    await this.updateByPath(`data.data.abilities.${newAbility.id}`, newAbility.toDto());
   }
 
   /**
    * Deletes the skill ability at the given index. 
    * 
-   * @param index Index of the skill ability to delete. 
+   * @param id ID of the skill ability to delete. 
    * 
    * @returns {SkillAbility} The `SkillAbility` instance that was removed. 
    * 
    * @async
    */
-  async deleteSkillAbilityAt(index) {
-    const toRemove = this.abilities[index];
+  async deleteSkillAbility(id) {
+    const toRemove = this.abilities.find(it => it.id === id);
 
-    this.abilities = this.abilities.slice(0, index).concat(this.abilities.slice(index + 1));
-    await this.persistSkillAbilities();
+    if (toRemove === undefined) {
+      return undefined;
+    }
+
+    await this.deleteByPath(`data.data.abilities.${id}`);
 
     return toRemove;
   }
@@ -335,8 +338,13 @@ export default class TransientSkill extends TransientBaseItem {
    * @async
    */
   async persistSkillAbilities(render = true) {
-    const abilitiesToPersist = this.abilities.map(it => it.toDto());
-    await this.updateByPath("data.abilities", abilitiesToPersist, render);
+    const abilitiesToPersist = {};
+
+    for (const ability in this.abilities) {
+      abilitiesToPersist[ability.id] = ability.toDto();
+    }
+
+    await this.updateByPath("data.data.abilities", abilitiesToPersist, render);
   }
 
   /**
@@ -349,10 +357,10 @@ export default class TransientSkill extends TransientBaseItem {
    */
   _getSkillAbilities() {
     const abilitiesOnDocument = this.document.data.data.abilities;
-
+      
     const result = [];
-    for (let i = 0; i < abilitiesOnDocument.length; i++) {
-      const dto = abilitiesOnDocument[i];
+    for (const abilityId in abilitiesOnDocument) {
+      const dto = abilitiesOnDocument[abilityId];
 
       const damage = [];
       for (const propertyName in dto.damage) {
@@ -369,7 +377,6 @@ export default class TransientSkill extends TransientBaseItem {
       const skillAbility = new SkillAbility({
         ...dto,
         owningDocument: this,
-        index: i,
         damage: damage,
         attackType: ATTACK_TYPES[dto.attackType],
       });

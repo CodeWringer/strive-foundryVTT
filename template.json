@@ -142,7 +142,7 @@
       "level": 0,
       "successes": 0,
       "failures": 0,
-      "abilities": [],
+      "abilities": {},
       "category": "",
       "isMagicSchool": false
     },
