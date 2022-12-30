@@ -1,17 +1,17 @@
 import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import { TEMPLATES } from "../../template/templatePreloader.mjs";
-import InputViewModel from "../../view-model/input-view-model.mjs";
+import InputChoiceViewModel from "../input-choice/input-choice-viewmodel.mjs";
 
 /**
  * Represents a drop-down input. The user can select one of a defined list of options. 
  * 
- * @extends InputViewModel
+ * @extends InputChoiceViewModel
  * 
  * @property {String} localizedValue Gets the localized version of the value. 
  * @property {ChoiceOption} selected Gets the currently selected option. 
  * @property {Array<ChoiceOption>} options Gets the options available to the drop-down. 
  */
-export default class InputDropDownViewModel extends InputViewModel {
+export default class InputDropDownViewModel extends InputChoiceViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.COMPONENT_INPUT_DROPDOWN; }
 
