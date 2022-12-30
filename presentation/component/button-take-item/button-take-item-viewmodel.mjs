@@ -1,7 +1,7 @@
 import { ItemGrid } from "../item-grid/item-grid.mjs";
 import { TEMPLATES } from "../../template/templatePreloader.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
-import ChoiceOption from "../../util/choice-option.mjs";
+import ChoiceOption from "../input-choice/choice-option.mjs";
 import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import PlainDialog from "../../dialog/plain-dialog/plain-dialog.mjs";
 import SingleChoiceDialog from "../../dialog/single-choice-dialog/single-choice-dialog.mjs";

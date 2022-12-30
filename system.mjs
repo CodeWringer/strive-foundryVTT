@@ -13,7 +13,7 @@ import Ruleset from "./business/ruleset/ruleset.mjs";
 import { VISIBILITY_MODES } from "./presentation/chat/visibility-modes.mjs";
 // Utility
 import { TEMPLATES, preloadHandlebarsTemplates } from "./presentation/template/templatePreloader.mjs";
-import ChoiceOption from "./presentation/util/choice-option.mjs";
+import ChoiceOption from "./presentation/component/input-choice/choice-option.mjs";
 import { getAsChoices } from "./business/util/constants-utility.mjs";
 import DocumentFetcher from "./business/document/document-fetcher/document-fetcher.mjs";
 // Migration

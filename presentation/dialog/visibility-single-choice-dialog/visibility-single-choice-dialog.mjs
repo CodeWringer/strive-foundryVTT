@@ -1,5 +1,5 @@
 import { VISIBILITY_MODES } from '../../chat/visibility-modes.mjs';
-import ChoiceOption from '../../util/choice-option.mjs';
+import ChoiceOption from '../../component/input-choice/choice-option.mjs';
 import SingleChoiceDialog from '../single-choice-dialog/single-choice-dialog.mjs';
 
 /**

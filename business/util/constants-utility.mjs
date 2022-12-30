@@ -1,4 +1,4 @@
-import ChoiceOption from "../../presentation/util/choice-option.mjs";
+import ChoiceOption from "../../presentation/component/input-choice/choice-option.mjs";
 
 /**
 * Returns an array of `ChoiceOption`s, based on the given constants object. 
