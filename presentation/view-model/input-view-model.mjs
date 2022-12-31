@@ -58,7 +58,7 @@ export default class InputViewModel extends ViewModel {
    * @type {String}
    * @readonly
    */
-  get localizedTitle() { return this.localizableTitle !== undefined ? game.i18n.localize(this.localizableTitle) : ""; }
+  get localizedTitle() { return this.localizableTitle !== undefined ? game.i18n.localize(`${this.localizableTitle}`) : ""; }
 
   /**
    * @type {Any}
@@ -96,7 +96,7 @@ export default class InputViewModel extends ViewModel {
    */
   get localizedValue() {
     const value = this.value;
-    return (value !== undefined && value !== null) ? game.i18n.localize(value) : value;
+    return (value !== undefined && value !== null) ? game.i18n.localize(`${value}`) : value;
   }
 
   /**
