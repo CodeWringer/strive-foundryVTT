@@ -10,6 +10,7 @@ import ViewModel from "../../../view-model/view-model.mjs";
 import ViewModelFactory from "../../../view-model/view-model-factory.mjs";
 import { TEMPLATES } from "../../templatePreloader.mjs";
 import VisibilitySingleChoiceDialog from "../../../dialog/visibility-single-choice-dialog/visibility-single-choice-dialog.mjs";
+import ChoiceAdapter from "../../../component/input-choice/choice-adapter.mjs";
 
 export default class SkillAbilityListItemViewModel extends ViewModel {
   /** @override */
@@ -176,6 +177,18 @@ export default class SkillAbilityListItemViewModel extends ViewModel {
       propertyOwner: skillAbility,
       propertyPath: "attackType",
       options: thiz.attackTypeOptions,
+      adapter: new ChoiceAdapter({
+        toChoiceOption(obj) {
+          if (isDefined(obj) === true) {
+            return ATTACK_TYPES.asChoices.find(it => it.value === obj.name);
+          } else {
+            return ATTACK_TYPES.asChoices.find(it => it.value === "none");
+          }
+        },
+        fromChoiceOption(option) {
+          return ATTACK_TYPES[option.name];
+        }
+      }),
     });
 
     this.vmBtnRollDamage = new ButtonViewModel({
@@ -424,6 +437,18 @@ export class DamageAndTypeViewModel extends ViewModel {
       propertyOwner: this.skillAbility,
       propertyPath: `damage[${this.index}].damageType`,
       options: thiz.damageTypeOptions,
+      adapter: new ChoiceAdapter({
+        toChoiceOption(obj) {
+          if (isDefined(obj) === true) {
+            return DAMAGE_TYPES.asChoices.find(it => it.value === obj.name);
+          } else {
+            return DAMAGE_TYPES.asChoices.find(it => it.value === "none");
+          }
+        },
+        fromChoiceOption(option) {
+          return DAMAGE_TYPES[option.name];
+        }
+      }),
     });
 
     this.vmBtnDelete = new ButtonViewModel({

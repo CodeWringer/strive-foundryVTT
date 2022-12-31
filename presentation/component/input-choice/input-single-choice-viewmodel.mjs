@@ -1,3 +1,4 @@
+import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import InputChoiceViewModel from "./input-choice-viewmodel.mjs";
 
 /**
@@ -26,7 +27,8 @@ export default class InputSingleChoiceViewModel extends InputChoiceViewModel {
    * @readonly
    */
   get selected() {
-    return this.options.find(option => option.value === this.value);
+    const valueAsChoice = this.adapter.toChoiceOption(this.value);
+    return this.options.find(option => option.value === valueAsChoice.value);
   }
 
   /**
@@ -55,8 +57,38 @@ export default class InputSingleChoiceViewModel extends InputChoiceViewModel {
   constructor(args = {}) {
     super(args);
     validateOrThrow(args, ["propertyPath", "propertyOwner", "options", "adapter"]);
+  }
+  
+  /**
+   * @override
+   * 
+   * @throws {Error} UnknownException Thrown if the current option could not be set correctly. 
+   */
+  activateListeners(html, isOwner, isEditable) {
+    super.activateListeners(html, isOwner, isEditable);
 
-    this.options = args.options;
-    this.adapter = args.adapter;
+    if (isEditable !== true) return;
+    
+    // Ensure correct option of drop-down is set. 
+    try {
+      const optionElements = this.element.find('option');
+      const choice = this.adapter.toChoiceOption(this.value);
+      for(let i = 0; i < optionElements.length; i++) {
+        const optionElement = optionElements[i];
+        if (optionElement.value === choice.value) {
+          this.element[0].selectedIndex = i;
+          break;
+        }
+      }
+    } catch (error) {
+      throw new Error("UnknownException: Failed to set the current drop-down option", { cause: error });
+    }
+  }
+
+  /** @override */
+  onChange(newValue) {
+    const choiceOption = this.options.find(it => it.value === newValue);
+    const value = this.adapter.fromChoiceOption(choiceOption);
+    this.value = value;
   }
 }

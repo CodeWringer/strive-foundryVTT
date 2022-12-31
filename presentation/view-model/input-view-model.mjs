@@ -159,12 +159,28 @@ export default class InputViewModel extends ViewModel {
   }
 
   /**
-   * @param event 
-   * @private
+   * Callback triggered when the value changes. 
+   * 
+   * @param {String} newValue The value from the DOM element. 
+   * 
    * @async
+   * @protected
+   * @virtual
+   */
+  async onChange(newValue) {
+    this.value = newValue;
+  }
+
+  /**
+   * Internal callback for the value change. 
+   * 
+   * @param {Object} event 
+   * 
+   * @async
+   * @private
    */
   async _onEdit(event) {
     const newValue = getElementValue(event.currentTarget);
-    this.value = newValue;
+    this.onChange(newValue);
   }
 }

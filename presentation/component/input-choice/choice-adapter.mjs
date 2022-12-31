@@ -1,7 +1,5 @@
 /**
  * Represents an adapter of an object or primitive type to a `ChoiceOption`. 
- * 
- * @abstract
  */
 export default class ChoiceAdapter {
   /**

@@ -109,6 +109,7 @@ export default class ViewModelFactory {
    * @param {Object} args.propertyOwner
    * @param {String} args.propertyPath
    * @param {Array<ChoiceOption>} args.options
+   * @param {ChoiceAdapter} args.adapter
    * @param {Boolean | undefined} args.isEditable
    * @param {String | undefined} args.localizableTitle Optional. Sets the tooltip text to display on cursor hover over the DOM element. 
    * 
@@ -122,6 +123,7 @@ export default class ViewModelFactory {
       propertyOwner: args.propertyOwner,
       propertyPath: args.propertyPath,
       options: args.options,
+      adapter: args.adapter,
       localizableTitle: args.localizableTitle,
     });
   }

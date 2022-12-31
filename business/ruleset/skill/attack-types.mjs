@@ -48,7 +48,8 @@ export const ATTACK_TYPES = {
     name: "multipleSingleTarget",
     localizableName: "ambersteel.attackType.multipleSingleTarget.label",
     localizableAbbreviation: "ambersteel.attackType.multipleSingleTarget.abbreviation"
-  }),get asChoices() {
+  }),
+  get asChoices() {
     if (this._asChoices === undefined) {
       this._asChoices = getAsChoices(this, ["asChoices", "_asChoices"]);
     }

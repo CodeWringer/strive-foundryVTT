@@ -56,7 +56,7 @@ export default class ChoiceOption {
    * Returns true, if the icon string represents a FontAwesome icon class. 
    * @returns {Boolean}
    */
-  iconIsFontAwesome() {
+  get iconIsFontAwesome() {
     if (this.icon !== undefined && this.icon.startsWith("fas fa-")) {
       return true;
     } else {

@@ -1,9 +1,10 @@
-import { validateOrThrow } from "../../../../business/util/validation-utility.mjs";
+import { isDefined, validateOrThrow } from "../../../../business/util/validation-utility.mjs";
 import { TEMPLATES } from "../../templatePreloader.mjs";
 import SkillAbilityTableViewModel from "../skill-ability/skill-ability-table-viewmodel.mjs";
 import SkillViewModel from "./skill-viewmodel.mjs";
 import ViewModelFactory from "../../../view-model/view-model-factory.mjs";
 import { ATTRIBUTES } from "../../../../business/ruleset/attribute/attributes.mjs";
+import ChoiceAdapter from "../../../component/input-choice/choice-adapter.mjs";
 
 export default class SkillItemSheetViewModel extends SkillViewModel {
   /** @override */
@@ -69,6 +70,18 @@ export default class SkillItemSheetViewModel extends SkillViewModel {
       propertyOwner: thiz.document,
       propertyPath: "relatedAttribute",
       options: thiz.attributeOptions,
+      adapter: new ChoiceAdapter({
+        toChoiceOption(obj) {
+          if (isDefined(obj) === true) {
+            return ATTRIBUTES.asChoices.find(it => it.value === obj.name);
+          } else {
+            return ATTRIBUTES.asChoices.find(it => it.value === "none");
+          }
+        },
+        fromChoiceOption(option) {
+          return ATTRIBUTES[option.name];
+        }
+      }),
     });
     this.vmTfCategory = factory.createVmTextField({
       parent: thiz,
