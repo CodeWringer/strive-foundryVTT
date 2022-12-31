@@ -289,6 +289,8 @@ Hooks.on("renderChatMessage", async function(message, html, data) {
 
   const document = await new DocumentFetcher().find({
     id: documentId,
+    searchEmbedded: true,
+    includeLocked: true,
   });
 
   if (document === undefined) {
