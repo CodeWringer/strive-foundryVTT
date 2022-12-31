@@ -110,7 +110,7 @@ export default class SkillListItemViewModel extends SkillViewModel {
           }
         },
         fromChoiceOption(option) {
-          return ATTRIBUTES[option.name];
+          return ATTRIBUTES[option.value];
         }
       }),
     });

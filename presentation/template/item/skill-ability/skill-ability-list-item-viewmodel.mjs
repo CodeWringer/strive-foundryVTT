@@ -186,7 +186,7 @@ export default class SkillAbilityListItemViewModel extends ViewModel {
           }
         },
         fromChoiceOption(option) {
-          return ATTACK_TYPES[option.name];
+          return ATTACK_TYPES[option.value];
         }
       }),
     });
@@ -446,7 +446,7 @@ export class DamageAndTypeViewModel extends ViewModel {
           }
         },
         fromChoiceOption(option) {
-          return DAMAGE_TYPES[option.name];
+          return DAMAGE_TYPES[option.value];
         }
       }),
     });
