@@ -103,8 +103,16 @@
       "templates": ["base", "character"],
       "beliefSystem": {
         "ambition": "",
-        "beliefs": ["", "", ""],
-        "instincts": ["", "", ""]
+        "beliefs": {
+          "_0": "",
+          "_1": "",
+          "_2": ""
+        },
+        "instincts": {
+          "_0": "",
+          "_1": "",
+          "_2": ""
+        }
       },
       "fateSystem": {
         "miFP": 0,

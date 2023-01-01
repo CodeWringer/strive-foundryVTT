@@ -10,8 +10,14 @@ import TransientBaseCharacterActor from "./transient-base-character-actor.mjs";
  * @property {Object} beliefSystem
  * * Read-only. 
  * @property {String} beliefSystem.ambition
- * @property {Array<String>} beliefSystem.beliefs
- * @property {Array<String>} beliefSystem.instincts
+ * @property {Object} beliefSystem.beliefs
+ * @property {String} beliefSystem.beliefs.0
+ * @property {String} beliefSystem.beliefs.1
+ * @property {String} beliefSystem.beliefs.2
+ * @property {Object} beliefSystem.instincts
+ * @property {String} beliefSystem.instincts.0
+ * @property {String} beliefSystem.instincts.1
+ * @property {String} beliefSystem.instincts.2
  * @property {Object} fateSystem
  * * Read-only. 
  * @property {Array<TransientFateCard>} fateSystem.fateCards
@@ -37,11 +43,27 @@ export default class TransientPc extends TransientBaseCharacterActor {
       get ambition() { return thiz.document.data.data.beliefSystem.ambition; },
       set ambition(value) { thiz.updateByPath("data.data.beliefSystem.ambition", value); },
 
-      get beliefs() { return thiz.document.data.data.beliefSystem.beliefs; },
-      set beliefs(value) { thiz.updateByPath("data.data.beliefSystem.beliefs", value); },
-
-      get instincts() { return thiz.document.data.data.beliefSystem.instincts; },
-      set instincts(value) { thiz.updateByPath("data.data.beliefSystem.instincts", value); },
+      get beliefs() {
+        return {
+          get _0() { return thiz.document.data.data.beliefSystem.beliefs._0; },
+          set _0(value) { thiz.updateByPath(`data.data.beliefSystem.beliefs._0`, value); },
+          get _1() { return thiz.document.data.data.beliefSystem.beliefs._1; },
+          set _1(value) { thiz.updateByPath(`data.data.beliefSystem.beliefs._1`, value); },
+          get _2() { return thiz.document.data.data.beliefSystem.beliefs._2; },
+          set _2(value) { thiz.updateByPath(`data.data.beliefSystem.beliefs._2`, value); },
+        }
+      },
+     
+      get instincts() {
+        return {
+          get _0() { return thiz.document.data.data.beliefSystem.instincts._0; },
+          set _0(value) { thiz.updateByPath(`data.data.beliefSystem.instincts._0`, value); },
+          get _1() { return thiz.document.data.data.beliefSystem.instincts._1; },
+          set _1(value) { thiz.updateByPath(`data.data.beliefSystem.instincts._1`, value); },
+          get _2() { return thiz.document.data.data.beliefSystem.instincts._2; },
+          set _2(value) { thiz.updateByPath(`data.data.beliefSystem.instincts._2`, value); },
+        }
+      },
     };
   }
   
@@ -75,27 +97,6 @@ export default class TransientPc extends TransientBaseCharacterActor {
    */
   constructor(actor) {
     super(actor);
-  }
-
-  /**
-   * Prepare PC type specific data. 
-   * @param {Actor} context
-   * @override
-   */
-  prepareData(context) {
-    super.prepareData(context);
-
-    const actorData = context.data.data;
-
-    // Ensure beliefs array has 3 items. 
-    while (actorData.beliefSystem.beliefs.length < 3) {
-      actorData.beliefSystem.beliefs.push("")
-    }
-
-    // Ensure instincts array has 3 items. 
-    while (actorData.beliefSystem.instincts.length < 3) {
-      actorData.beliefSystem.instincts.push("")
-    }
   }
 
   /**

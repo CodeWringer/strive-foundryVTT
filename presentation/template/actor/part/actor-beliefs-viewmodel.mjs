@@ -10,8 +10,14 @@ export default class ActorBeliefsViewModel extends ViewModel {
   /** @override */
   get entityId() { return this.document.id; }
 
-  get beliefs() { return this.document.beliefSystem.beliefs; }
-  get instincts() { return this.document.beliefSystem.instincts; }
+  get beliefs() {
+    const dataBeliefs = this.document.beliefSystem.beliefs;
+    return [dataBeliefs._0, dataBeliefs._1, dataBeliefs._2];
+  }
+  get instincts() {
+    const dataInstincts = this.document.beliefSystem.instincts;
+    return [dataInstincts._0, dataInstincts._1, dataInstincts._2];
+  }
 
   beliefViewModels = [];
   instinctViewModels = [];
@@ -52,9 +58,9 @@ export default class ActorBeliefsViewModel extends ViewModel {
     for (let i = 0; i < this.beliefs.length; i++) {
       this.beliefViewModels.push(factory.createVmTextField({
         parent: thiz,
-        id: `vmBelief${i}`,
+        id: `vmBelief-${i}`,
         propertyOwner: thiz.document,
-        propertyPath: `beliefSystem.beliefs[${i}]`,
+        propertyPath: `beliefSystem.beliefs._${i}`,
         placeholder: "ambersteel.character.beliefSystem.belief.singular",
       }));
     }
@@ -62,9 +68,9 @@ export default class ActorBeliefsViewModel extends ViewModel {
     for (let i = 0; i < this.instincts.length; i++) {
       this.instinctViewModels.push(factory.createVmTextField({
         parent: thiz,
-        id: `vmInstinct${i}`,
+        id: `vmInstinct-${i}`,
         propertyOwner: thiz.document,
-        propertyPath: `beliefSystem.instincts[${i}]`,
+        propertyPath: `beliefSystem.instincts._${i}`,
         placeholder: "ambersteel.character.beliefSystem.instinct.singular",
       }));
     }

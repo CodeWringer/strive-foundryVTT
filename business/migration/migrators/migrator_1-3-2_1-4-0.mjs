@@ -83,6 +83,31 @@ export default class Migrator_1_3_2__1_4_0 extends AbstractMigrator {
         }
       }
     }
+    
+    // Replace any pc's belief and instinct arrays with objects. 
+    for (const actor of actors) {
+      if (actor.type !== "pc") continue;
+      
+      const beliefsArray = actor.data.data.beliefSystem.beliefs;
+      const beliefsDataPath = `data.data.beliefSystem.beliefs`;
+      const beliefs = {
+        _0: beliefsArray[0],
+        _1: beliefsArray[1],
+        _2: beliefsArray[2]
+      };
+  
+      await this.updater.updateByPath(actor, beliefsDataPath, beliefs, false);
+
+      const instinctsArray = actor.data.data.beliefSystem.instincts;
+      const instinctsDataPath = `data.data.beliefSystem.instincts`;
+      const instincts = {
+        _0: instinctsArray[0],
+        _1: instinctsArray[1],
+        _2: instinctsArray[2]
+      };
+  
+      await this.updater.updateByPath(actor, instinctsDataPath, instincts, false);
+    }
 
     // Get all _editable_ skills.
     // Locked compendia will be excluded in the search. FoundryVTT doesn't allow 
