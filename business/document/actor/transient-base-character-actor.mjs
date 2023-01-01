@@ -286,31 +286,42 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
 
     const attribute = this.attributes.find(it => it.name === attName);
 
+    let successes = attribute.advancementProgress.successes;
+    let failures = attribute.advancementProgress.failures;
+    let level = attribute.level;
+
     if (outcomeType === DiceOutcomeTypes.SUCCESS) {
-      attribute.advancementProgress.successes++;
+      successes++;
     } else {
-      attribute.advancementProgress.failures++;
+      failures++;
     }
 
     if (autoLevel === true) {
-      if (attribute.advancementProgress.successes >= attribute.advancementRequirements.successes
-        && attribute.advancementProgress.failures >= attribute.advancementRequirements.failures) {
-        attribute.level++;
+      if (successes >= attribute.advancementRequirements.successes
+        && failures >= attribute.advancementRequirements.failures) {
+        level++;
 
         if (resetProgress === true) {
-          attribute.advancementProgress.successes = 0;
-          attribute.advancementProgress.failures = 0;
+          successes = 0;
+          failures = 0;
         }
       }
     }
 
     const groupName = new Ruleset().getAttributeGroupName(attName);
-    const propertyPath = `data.attributes.${groupName}.${attName}`;
 
     await this.document.update({
-      [`${propertyPath}.level`]: attribute.level,
-      [`${propertyPath}.successes`]: attribute.advancementProgress.successes,
-      [`${propertyPath}.failures`]: attribute.advancementProgress.failures
+      data: {
+        attributes: {
+          [groupName]: {
+            [attName]: {
+              level: level,
+              successes: successes,
+              failures: failures,
+            }
+          }
+        }
+      }
     });
   }
 
