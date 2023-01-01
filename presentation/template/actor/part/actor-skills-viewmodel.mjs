@@ -72,7 +72,7 @@ export default class ActorSkillsViewModel extends ViewModel {
         withDialog: true,
         localizableLabel: "ambersteel.character.skill.learning.add.label",
         creationData: {
-          value: 0
+          level: 0
         },
         localizableType: "ambersteel.character.skill.learning.singular",
         localizableDialogTitle: "ambersteel.character.skill.learning.add.query",
@@ -109,7 +109,7 @@ export default class ActorSkillsViewModel extends ViewModel {
         withDialog: true,
         localizableLabel: "ambersteel.character.skill.known.add.label",
         creationData: {
-          value: 1
+          level: 1
         },
         localizableType: "ambersteel.character.skill.known.singular",
         localizableDialogTitle: "ambersteel.character.skill.known.add.query",
