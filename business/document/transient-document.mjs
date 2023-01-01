@@ -296,7 +296,7 @@ export default class TransientDocument {
    * * Default 'true'. 
    */
   async update(delta, render = true) {
-    this.document.update(delta, render);
+    this.document.update(delta, { render: render });
   }
 
   /**
