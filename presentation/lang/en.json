@@ -401,12 +401,6 @@
             "label": "Condition",
             "placeholder": "Once per day / etc."
           },
-          "damage": {
-            "add": "Add Damage Definition",
-            "delete": "Delete Damage Definition",
-            "label": "Damage",
-            "infoFormulae": "It is possible to reference this character's attributes and other skills or skill abilities. To reference, type the '@'-symbol, immediately followed by the name of the reference, e. g. '@strength' or '@int' or '@acrobatics'. If the reference's name contains spaces, they must be replaced with underscores, e. g. '@Heavy_Armor' instead of '@Heavy Armor'."
-          },
           "distance": {
             "label": "Distance",
             "placeholder": "3' / 1m / 0 / etc."

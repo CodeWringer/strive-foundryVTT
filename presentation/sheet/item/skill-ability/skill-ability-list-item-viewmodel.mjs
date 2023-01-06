@@ -262,7 +262,7 @@ export default class SkillAbilityListItemViewModel extends ViewModel {
             }
 
             // Determine title
-            const title = `${game.i18n.localize("ambersteel.character.skill.ability.damage.label")} - ${thiz.skillAbility.name}`;
+            const title = `${game.i18n.localize("ambersteel.damageDefinition.label")} - ${thiz.skillAbility.name}`;
 
             // Render the results. 
             const renderedContent = await renderTemplate(TEMPLATES.DICE_ROLL_DAMAGE_CHAT_MESSAGE, {
@@ -301,7 +301,7 @@ export default class SkillAbilityListItemViewModel extends ViewModel {
       menuItems: [
         // Add damage
         {
-          name: game.i18n.localize("ambersteel.character.skill.ability.damage.add"),
+          name: game.i18n.localize("ambersteel.damageDefinition.add"),
           icon: '<i class="fas fa-plus"></i>',
           condition: () => { return true; },
           callback: () => {
@@ -348,7 +348,7 @@ export default class SkillAbilityListItemViewModel extends ViewModel {
 
     this.damageInfoBubble = new InfoBubble({
       html: html,
-      text: game.i18n.localize("ambersteel.character.skill.ability.damage.infoFormulae"),
+      text: game.i18n.localize("ambersteel.damageDefinition.infoFormulae"),
     });
     const thiz = this;
     $.each(html.find(".damage-info"), (name, value) => {
