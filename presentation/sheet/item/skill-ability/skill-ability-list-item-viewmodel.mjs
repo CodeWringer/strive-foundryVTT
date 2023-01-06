@@ -13,6 +13,7 @@ import ViewModelFactory from "../../../view-model/view-model-factory.mjs";
 import { TEMPLATES } from "../../../templatePreloader.mjs";
 import VisibilitySingleChoiceDialog from "../../../dialog/visibility-single-choice-dialog/visibility-single-choice-dialog.mjs";
 import ChoiceAdapter from "../../../component/input-choice/choice-adapter.mjs";
+import { DamageAndTypeViewModel } from "./damage-and-type-viewmodel.mjs";
 
 export default class SkillAbilityListItemViewModel extends ViewModel {
   /** @override */
@@ -333,7 +334,7 @@ export default class SkillAbilityListItemViewModel extends ViewModel {
         isSendable: thiz.isSendable,
         isOwner: thiz.isOwner,
         isGM: thiz.isGM,
-        skillAbility: skillAbility,
+        propertyOwner: skillAbility,
         contextTemplate: this.contextTemplate,
         index: i,
       });
@@ -400,69 +401,5 @@ export default class SkillAbilityListItemViewModel extends ViewModel {
         callback: () => { propertyOwner[propertyName] = nonNullValue; },
       }
     ];
-  }
-}
-
-/**
- * @extends ViewModel
- */
-export class DamageAndTypeViewModel extends ViewModel {
-  /**
-   * @type {Array<ChoiceOption>}
-   * @readonly
-   */
-  get damageTypeOptions() { return DAMAGE_TYPES.asChoices; }
-
-  /**
-   * @param {Object} args 
-   * @param {SkillAbility} args.skillAbility 
-   */
-  constructor(args = {}) {
-    super(args);
-    validateOrThrow(args, ["skillAbility", "index"]);
-
-    this.skillAbility = args.skillAbility;
-    this.index = args.index;
-
-    const thiz = this;
-    const factory = new ViewModelFactory();
-
-    this.vmTfDamage = factory.createVmTextField({
-      parent: thiz,
-      id: "vmTfDamage",
-      propertyOwner: this.skillAbility,
-      propertyPath: `damage[${this.index}].damage`,
-    });
-    this.vmDdDamageType = factory.createVmDropDown({
-      parent: thiz,
-      id: "vmDdDamageType",
-      propertyOwner: this.skillAbility,
-      propertyPath: `damage[${this.index}].damageType`,
-      options: thiz.damageTypeOptions,
-      adapter: new ChoiceAdapter({
-        toChoiceOption(obj) {
-          if (isDefined(obj) === true) {
-            return DAMAGE_TYPES.asChoices.find(it => it.value === obj.name);
-          } else {
-            return DAMAGE_TYPES.asChoices.find(it => it.value === "none");
-          }
-        },
-        fromChoiceOption(option) {
-          return DAMAGE_TYPES[option.value];
-        }
-      }),
-    });
-
-    this.vmBtnDelete = new ButtonViewModel({
-      id: "vmBtnDelete",
-      parent: thiz,
-      isEditable: thiz.isEditable,
-      localizableTitle: "ambersteel.character.skill.ability.damage.delete",
-    });
-    this.vmBtnDelete.onClick = (html, isOwner, isEditable) => {
-      const damage = thiz.skillAbility.damage;
-      damage.splice(thiz.index, 1);
-      thiz.skillAbility.damage = damage;
-    };
   }
 }
