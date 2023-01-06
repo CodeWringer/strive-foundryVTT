@@ -26,7 +26,7 @@ export default class TransientBaseItem extends TransientDocument {
   get defaultImg() { return "icons/svg/item-bag.svg"; }
   
   /** @override */
-  get chatMessageTemplate() { return TEMPLATES.ITEM_CHAT_MESSAGE; }
+  get chatMessageTemplate() { return TEMPLATES.ASSET_CHAT_MESSAGE; }
   
   /**
    * Another document that this document is embedded in. 

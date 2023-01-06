@@ -4,9 +4,9 @@ import DocumentListItemOrderDataSource from "../../../component/sortable-list/do
 import SortableListViewModel from "../../../component/sortable-list/sortable-list-viewmodel.mjs";
 import ViewModel from "../../../view-model/view-model.mjs";
 import ViewModelFactory from "../../../view-model/view-model-factory.mjs";
-import ItemListItemViewModel from "../../item/item/item-list-item-viewmodel.mjs";
 import { TEMPLATES } from "../../templatePreloader.mjs";
 import TransientBaseCharacterActor from "../../../../business/document/actor/transient-base-character-actor.mjs";
+import AssetListItemViewModel from "../../item/asset/asset-list-item-viewmodel.mjs";
 
 export default class ActorAssetsViewModel extends ViewModel {
   /** @override */
@@ -73,7 +73,7 @@ export default class ActorAssetsViewModel extends ViewModel {
 
     const remoteAssets = this.document.assets.remote;
     for (const remoteAsset of remoteAssets) {
-      const vm = new ItemListItemViewModel({
+      const vm = new AssetListItemViewModel({
         ...args,
         id: remoteAsset.id,
         parent: thiz,

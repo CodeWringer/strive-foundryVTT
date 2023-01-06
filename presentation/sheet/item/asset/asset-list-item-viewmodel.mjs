@@ -4,9 +4,9 @@ import ViewModelFactory from "../../../view-model/view-model-factory.mjs";
 import { TEMPLATES } from "../../templatePreloader.mjs";
 import { TAKE_ITEM_CONTEXT_TYPES } from "../../../component/button-take-item/button-take-item-viewmodel.mjs";
 
-export default class ItemItemSheetViewModel extends ViewModel {
+export default class AssetListItemViewModel extends ViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.ITEM_SHEET; }
+  static get TEMPLATE() { return TEMPLATES.ASSET_LIST_ITEM; }
 
   /** @override */
   get entityId() { return this.document.id; }
@@ -28,7 +28,7 @@ export default class ItemItemSheetViewModel extends ViewModel {
     validateOrThrow(args, ["document"]);
 
     this.document = args.document;
-    this.contextTemplate = args.contextTemplate ?? "item-item-sheet";
+    this.contextTemplate = args.contextTemplate ?? "item-list-item";
     const thiz = this;
     const factory = new ViewModelFactory();
 
@@ -49,14 +49,19 @@ export default class ItemItemSheetViewModel extends ViewModel {
       parent: thiz,
       id: "vmBtnSendToChat",
       target: thiz.document,
-      isEditable: thiz.isEditable || thiz.isGM,
     });
     this.vmBtnTakeItem = factory.createVmBtnTakeItem({
       parent: thiz,
       id: "vmBtnTakeItem",
       target: thiz.document,
-      contextType: TAKE_ITEM_CONTEXT_TYPES.itemSheet
+      contextType: TAKE_ITEM_CONTEXT_TYPES.listItem
     });
+    this.vmBtnDelete = factory.createVmBtnDelete({
+      parent: thiz,
+      id: "vmBtnDelete",
+      target: thiz.document,
+      withDialog: true,
+    })
     this.vmNsQuantity = factory.createVmNumberSpinner({
       parent: thiz,
       id: "vmNsQuantity",

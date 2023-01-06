@@ -4,9 +4,9 @@ import ViewModelFactory from "../../../view-model/view-model-factory.mjs";
 import { TEMPLATES } from "../../templatePreloader.mjs";
 import { TAKE_ITEM_CONTEXT_TYPES } from "../../../component/button-take-item/button-take-item-viewmodel.mjs";
 
-export default class ItemChatMessageViewModel extends ViewModel {
+export default class AssetChatMessageViewModel extends ViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.ITEM_CHAT_MESSAGE; }
+  static get TEMPLATE() { return TEMPLATES.ASSET_CHAT_MESSAGE; }
 
   /** @override */
   get entityId() { return this.document.id; }

@@ -1,48 +1,40 @@
-import ItemItemSheetViewModel from "../../template/item/item/item-item-sheet-viewmodel.mjs";
-import { TEMPLATES } from "../../template/templatePreloader.mjs";
-import { ITEM_SHEET_SUBTYPE } from "./item-sheet-subtype.mjs";
-
 /**
- * Represents the base contract for a "specific" item sheet "sub-type". 
+ * Represents the abstract base contract for a "specific" item sheet "sub-type". 
  * 
- * Such a "sub-type" is really on an "enhancer", which adds properties and/or methods to a given `ItemSheet` instance. 
+ * Such a "sub-type" is really only an "enhancer", which adds properties and/or methods to a given `ItemSheet` instance. 
  * 
- * This particular type also doubles as the definition for the item of type `"item"` (= asset). 
+ * @abstract
  */
 export default class AmbersteelBaseItemSheet {
   /**
    * Returns the template path. 
-   * @type {String} Path to the template. 
+   * 
+   * @type {String}
    * @readonly
-   * @virtual
+   * @abstract
    */
-  get template() { return TEMPLATES.ITEM_SHEET;  }
+  get template() { throw new Error("NotImplementedException"); }
 
   /**
    * Returns the localized title of this sheet type. 
+   * 
    * @type {String}
    * @readonly
+   * @abstract
    */
-  get title() { return game.i18n.localize("ambersteel.character.asset.singular"); }
+  get title() { throw new Error("NotImplementedException"); }
 
   /**
    * Returns a view model for the given document. 
    * 
-   * @param {Object} context 
-   * @param {TransientDocument} document 
+   * @param {Object} context A context object provided by FoundryVTT. 
+   * @param {TransientDocument} document A transient document instance of "this" type of item sheet. 
    * 
-   * @returns {ItemItemSheetViewModel}
+   * @returns {ViewModel}
+   * 
+   * @abstract
    */
-  getViewModel(context, document) {
-    return new ItemItemSheetViewModel({
-      id: document.id,
-      isEditable: context.isEditable,
-      isSendable: context.isSendable,
-      isOwner: context.isOwner,
-      isGM: context.isGM,
-      document: document.getTransientObject(),
-    });
-  }
+  getViewModel(context, document) { throw new Error("NotImplementedException"); }
   
   /**
    * Register any DOM-reliant event listeners and manipulations here. 
@@ -56,5 +48,3 @@ export default class AmbersteelBaseItemSheet {
    */
   activateListeners(html, isOwner, isEditable) { /** Do nothing */}
 }
-
-ITEM_SHEET_SUBTYPE.set("item", new AmbersteelBaseItemSheet());
