@@ -1,4 +1,4 @@
-import { TEMPLATES } from '../../template/templatePreloader.mjs';
+import { TEMPLATES } from '../../templatePreloader.mjs';
 import DialogButtonDefinition from '../dialog-button-definition.mjs';
 import ModalDialog from '../modal-dialog/modal-dialog.mjs';
 

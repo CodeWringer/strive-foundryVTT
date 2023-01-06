@@ -1,7 +1,7 @@
 import GetShowFancyFontUseCase from '../../../business/use-case/get-show-fancy-font-use-case.mjs';
 import { VISIBILITY_MODES } from '../../chat/visibility-modes.mjs';
 import { getElementValue } from '../../sheet/sheet-utility.mjs';
-import { TEMPLATES } from '../../template/templatePreloader.mjs';
+import { TEMPLATES } from '../../templatePreloader.mjs';
 import ConfirmableModalDialog from '../confirmable-modal-dialog/confirmable-modal-dialog.mjs';
 
 /**

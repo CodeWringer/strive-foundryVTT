@@ -1,4 +1,4 @@
-import { TEMPLATES } from "../../template/templatePreloader.mjs";
+import { TEMPLATES } from '../../templatePreloader.mjs';
 import ButtonViewModel from '../button/button-viewmodel.mjs';
 import AddItemDialog from '../../dialog/dialog-item-add/dialog-item-add.mjs';
 import { validateOrThrow, isObject, isNotBlankOrUndefined } from "../../../business/util/validation-utility.mjs";

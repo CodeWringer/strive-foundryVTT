@@ -1,0 +1,52 @@
+{{!-- Parameters:
+viewModel: {AssetChatMessageViewModel}
+cssClass: {undefined | String}
+--}}
+<section class="custom-system-chat-message{{#if cssClass}} {{cssClass}}{{/if}}" 
+  data-view-model-id="{{viewModel.id}}"
+  data-document-id="{{viewModel.entityId}}"
+>
+  {{!-- Header --}}
+  <div class="flex flex-row">
+    <div class="flex flex-center">
+      {{> buttonTakeItem viewModel=viewModel.vmBtnTakeItem cssClass=(ifThenElse viewModel.allowPickup "" "hidden") }}
+    </div>
+    <div class="flex flex-center">
+      <img class="inline-img header-image margin-r-sm" name="img" src="{{viewModel.document.img}}" title="{{viewModel.document.name}}" height="35" width="35" />
+    </div>
+    <h2 class="flex-grow">
+      {{viewModel.document.name}}
+    </h2>
+  </div>
+  {{!-- Bulk --}}
+  <div class="flex flex-row sheet-block margin-b-md">
+    <div class="width-min-xxl{{#if viewModel.showFancyFont}} fancy-font{{/if}}">
+      {{localize "ambersteel.character.asset.bulk"}}
+    </div>
+    <div class="flex-grow">
+      {{viewModel.document.bulk}}
+    </div>
+  </div>
+  {{!-- Quantity --}}
+  <div class="flex flex-row sheet-block margin-b-md">
+    <div class="width-min-xxl{{#if viewModel.showFancyFont}} fancy-font{{/if}}">
+      {{localize "ambersteel.character.asset.quantity.label"}}
+    </div>
+    <div class="flex-grow">
+      {{viewModel.document.quantity}}
+    </div>
+  </div>
+  {{!-- Max quantity --}}
+  <div class="flex flex-row sheet-block margin-b-md">
+    <div class="width-min-xxl{{#if viewModel.showFancyFont}} fancy-font{{/if}}">
+      {{localize "ambersteel.character.asset.quantity.maximum"}}
+    </div>
+    <div class="flex-grow">
+      {{viewModel.document.maxQuantity}}
+    </div>
+  </div>
+  {{!-- Description --}}
+  <div class="sheet-block scrollable-height-md">
+    {{{viewModel.description}}}
+  </div>
+</section>

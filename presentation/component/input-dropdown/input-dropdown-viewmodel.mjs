@@ -1,5 +1,4 @@
-import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
-import { TEMPLATES } from "../../template/templatePreloader.mjs";
+import { TEMPLATES } from "../../templatePreloader.mjs";
 import InputSingleChoiceViewModel from "../input-choice/input-single-choice-viewmodel.mjs";
 
 /**

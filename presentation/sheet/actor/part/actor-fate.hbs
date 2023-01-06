@@ -1,0 +1,38 @@
+{{!-- Parameters:
+viewModel: {ActorFateViewModel}
+cssClass: {undefined | String}
+--}}
+<section class="{{cssClass}}">
+  <div class="sheet-block grid-2col grid-gap-md flex-column">
+    {{!-- row 1 --}}
+    <div class="flex flex-row flex-middle flex-right">
+      {{> inputLabel text=(localize "ambersteel.character.beliefSystem.fateSystem.fatePoints.minor.label") showFancyFont=viewModel.showFancyFont}}
+      <div class="flex flex-middle width-md">({{localize "ambersteel.character.beliefSystem.fateSystem.fatePoints.minor.abbreviation"}})</div>
+    </div>
+    {{> inputNumberSpinner viewModel=viewModel.vmNsMifp }}
+    {{!-- row 2 --}}
+    <div class="flex flex-row flex-middle flex-right">
+      {{> inputLabel text=(localize "ambersteel.character.beliefSystem.fateSystem.fatePoints.major.label") showFancyFont=viewModel.showFancyFont}}
+      <div class="flex flex-middle width-md">({{localize "ambersteel.character.beliefSystem.fateSystem.fatePoints.major.abbreviation"}})</div>
+    </div>
+    {{> inputNumberSpinner viewModel=viewModel.vmNsMafp }}
+    {{!-- row 3 --}}
+    <div class="flex flex-row flex-middle flex-right">
+      {{> inputLabel text=(localize "ambersteel.character.beliefSystem.fateSystem.fatePoints.ambition.label") showFancyFont=viewModel.showFancyFont}}
+      <div class="flex flex-middle width-md">({{localize "ambersteel.character.beliefSystem.fateSystem.fatePoints.ambition.abbreviation"}})</div>
+    </div>
+    {{> inputNumberSpinner viewModel=viewModel.vmNsAfp }}
+  </div>
+  <div class="flex" style="flex-wrap: wrap;">
+    {{#each viewModel.fateCards as |cardViewModel key|}}
+    <div class="fate-card-actor-container">
+      {{> "systems/ambersteel/presentation/sheet/item/fate-card/fate-card.hbs" viewModel=cardViewModel }}
+    </div>
+    {{/each}}
+    {{#times viewModel.remainingSlots}}
+      <div class="fate-card-actor-container fate-card">
+        {{> buttonAdd viewModel=../viewModel.vmBtnAddFateCard fill=true cssClass="fate-card-fill" }}
+      </div>
+    {{/times}}
+  </div>
+</section>

@@ -1,0 +1,42 @@
+{{!-- Parameters:
+viewModel: {SkillChatMessageViewModel}
+cssClass: {undefined | String}
+--}}
+<section class="custom-system-chat-message{{#if cssClass}} {{cssClass}}{{/if}}" 
+  data-view-model-id="{{viewModel.id}}"
+  data-document-id="{{viewModel.entityId}}"
+>
+  {{!-- Header --}}
+  <div class="flex flex-row">
+    <div class="flex flex-center">
+      <img class="inline-img header-image margin-r-sm" name="img" src="{{viewModel.document.img}}" title="{{viewModel.document.name}}" height="35" width="35" />
+    </div>
+    <h2 class="flex-grow">
+      {{viewModel.document.name}}
+    </h2>
+  </div>
+  {{!-- Related Attribute --}}
+  <div class="flex flex-row sheet-block margin-b-md">
+    <div class="width-min-xl{{#if viewModel.showFancyFont}} fancy-font{{/if}}">
+      {{localize "ambersteel.character.attribute.singular"}}
+    </div>
+    <div class="flex-grow">
+      {{viewModel.relatedAttribute}}
+    </div>
+  </div>
+  {{!-- Category --}}
+  <div class="flex flex-row sheet-block margin-b-md">
+    <div class="width-min-xl{{#if viewModel.showFancyFont}} fancy-font{{/if}}">
+      {{localize "ambersteel.general.category"}}
+    </div>
+    <div class="flex-grow">
+      {{viewModel.document.category}}
+    </div>
+  </div>
+  {{!-- Description --}}
+  <div class="sheet-block scrollable-height-md">
+    {{{viewModel.description}}}
+  </div>
+  {{!-- Skill Abilites --}}
+  {{> "systems/ambersteel/presentation/sheet/item/skill-ability/skill-ability-table.hbs" viewModel=viewModel.vmSkillAbilityTable cssClass=(ifThenElse viewModel.hasAbilities "" "hidden") }}
+</section>

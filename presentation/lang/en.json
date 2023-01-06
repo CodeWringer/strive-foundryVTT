@@ -2,7 +2,7 @@
   "ACTOR.TypePc": "PC",
   "ACTOR.TypeNpc": "NPC",
   "ACTOR.TypePlain": "Plain Actor",
-  "ITEM.TypeItem": "Item",
+  "ITEM.TypeItem": "Asset",
   "ITEM.TypeSkill": "Skill",
   "ITEM.TypeFate-card": "Fate-Card",
   "ITEM.TypeInjury": "Injury",

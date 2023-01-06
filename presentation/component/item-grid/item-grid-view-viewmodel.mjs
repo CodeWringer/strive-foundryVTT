@@ -1,4 +1,4 @@
-import { TEMPLATES } from "../../template/templatePreloader.mjs";
+import { TEMPLATES } from "../../templatePreloader.mjs";
 import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import InputViewModel from "../../view-model/input-view-model.mjs";
 import { ItemGridView } from "./item-grid-view.mjs";

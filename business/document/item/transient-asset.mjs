@@ -1,9 +1,9 @@
-import { TEMPLATES } from "../../../presentation/template/templatePreloader.mjs";
-import ItemChatMessageViewModel from "../../../presentation/template/item/item/item-chat-message-viewmodel.mjs";
 import PreparedChatData from "../../../presentation/chat/prepared-chat-data.mjs";
 import { SOUNDS_CONSTANTS } from "../../../presentation/audio/sounds.mjs";
 import { ITEM_SUBTYPE } from "./item-subtype.mjs";
 import TransientBaseItem from "./transient-base-item.mjs";
+import AssetChatMessageViewModel from "../../../presentation/sheet/item/asset/asset-chat-message-viewmodel.mjs";
+import { TEMPLATES } from "../../../presentation/templatePreloader.mjs";
 
 /**
  * Represents the full transient data of an asset. 
@@ -24,7 +24,7 @@ export default class TransientAsset extends TransientBaseItem {
   get defaultImg() { return "icons/svg/item-bag.svg"; }
   
   /** @override */
-  get chatMessageTemplate() { return TEMPLATES.ITEM_CHAT_MESSAGE; }
+  get chatMessageTemplate() { return TEMPLATES.ASSET_CHAT_MESSAGE; }
   
   /**
    * @type {Number}
@@ -121,7 +121,7 @@ export default class TransientAsset extends TransientBaseItem {
 
   /** @override */
   getChatViewModel(overrides = {}) {
-    return new ItemChatMessageViewModel({
+    return new AssetChatMessageViewModel({
       id: this.id,
       isEditable: false,
       isSendable: false,

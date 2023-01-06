@@ -1,0 +1,89 @@
+{{!-- Parameters:
+viewModel: {AssetListItemViewModel}
+cssClass: {undefined | String}
+--}}
+<div class="custom-system-list-item{{#if cssClass}} {{cssClass}}{{/if}}">
+  {{!-- Row 1 --}}
+  <div class="flex flex-row">
+    <div class="flex flex-grow">
+      {{!-- Send to chat --}}
+      {{> buttonSendToChat viewModel=viewModel.vmBtnSendToChat }}
+      {{!-- Pick up --}}
+      {{> buttonTakeItem viewModel=viewModel.vmBtnTakeItem }}
+      {{!-- Name --}}
+      <span class="width-min-xl">
+        {{> inputLabel text=(localize "ambersteel.character.asset.singular") showFancyFont=viewModel.showFancyFont}}
+      </span>
+      {{> inputImage viewModel=viewModel.vmImg cssClass="custom-icon-sm" }}
+      <h2 class="flex-grow margin-r-md">
+        {{> inputTextField viewModel=viewModel.vmTfName }}
+      </h2>
+    </div>
+    {{!-- Delete --}}
+    {{> buttonDelete viewModel=viewModel.vmBtnDelete }}
+  </div>
+  {{!-- Row 2 --}}
+  <div class="flex flex-row">
+    {{!-- Quantity --}}
+    <div class="flex flex-row">
+      <span class="width-min-xl">
+        {{> inputLabel text=(localize "ambersteel.character.asset.quantity.label") showFancyFont=viewModel.showFancyFont}}
+      </span>
+      <span class="width-md">
+        {{> inputNumberSpinner viewModel=viewModel.vmNsQuantity }}
+      </span>
+    </div>
+    {{!-- Spacer --}}
+    <div class="width-xs"></div>
+    {{!-- Max quantity --}}
+    <div class="flex flex-row flex-grow">
+      <span class="width-min-xl">
+        {{> inputLabel text=(localize "ambersteel.character.asset.quantity.maximum") showFancyFont=viewModel.showFancyFont}}
+      </span>
+      <span class="width-md">
+        {{> inputNumberSpinner viewModel=viewModel.vmNsMaxQuantity }}
+      </span>
+    </div>
+  </div>
+  {{!-- Row 3 --}}
+  <div class="flex flex-row">
+    {{!-- Shape.width --}}
+    <div class="flex flex-row">
+      <span class="width-min-xl">
+        {{> inputLabel text=(localize "ambersteel.character.asset.shape.width") showFancyFont=viewModel.showFancyFont}}
+      </span>
+      <span class="width-md">
+        {{> inputNumberSpinner viewModel=viewModel.vmNsShapeWidth }}
+      </span>
+    </div>
+    {{!-- Spacer --}}
+    <div class="width-xs"></div>
+    {{!-- Shape.width --}}
+    <div class="flex flex-row">
+      <span class="width-min-xl">
+        {{> inputLabel text=(localize "ambersteel.character.asset.shape.height") showFancyFont=viewModel.showFancyFont}}
+      </span>
+      <span class="width-md">
+        {{> inputNumberSpinner viewModel=viewModel.vmNsShapeHeight }}
+      </span>
+    </div>
+    {{!-- Spacer --}}
+    <div class="width-xs"></div>
+    {{!-- Bulk - read only! --}}
+    <div class="flex flex-row">
+      <span class="width-min-xl">
+        {{> inputLabel text=(localize "ambersteel.character.asset.bulk") showFancyFont=viewModel.showFancyFont}}
+      </span>
+      <span class="width-md">
+          <div class="custom-system-read-only pad-sm fill">
+            {{viewModel.document.bulk}}
+          </div>
+      </span>
+    </div>
+  </div>
+  {{!-- Row 4 --}}
+  {{!-- Description --}}
+  <div class="flex flex-row">
+    {{> inputRichText viewModel=viewModel.vmRtDescription }}
+  </div>
+</div>

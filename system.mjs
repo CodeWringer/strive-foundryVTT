@@ -12,7 +12,7 @@ import Ruleset from "./business/ruleset/ruleset.mjs";
 // Chat constants
 import { VISIBILITY_MODES } from "./presentation/chat/visibility-modes.mjs";
 // Utility
-import { TEMPLATES, preloadHandlebarsTemplates } from "./presentation/template/templatePreloader.mjs";
+import { TEMPLATES, preloadHandlebarsTemplates } from "./presentation/templatePreloader.mjs";
 import ChoiceOption from "./presentation/component/input-choice/choice-option.mjs";
 import { getAsChoices } from "./business/util/constants-utility.mjs";
 import DocumentFetcher from "./business/document/document-fetcher/document-fetcher.mjs";
@@ -58,17 +58,17 @@ import './presentation/component/button-take-item/button-take-item-viewmodel.mjs
 import './presentation/component/sortable-list/sortable-list-viewmodel.mjs';
 import './presentation/component/section-gm-notes/section-gm-notes-viewmodel.mjs';
 // View models
-import './presentation/template/actor/actor-sheet-viewmodel.mjs';
-import './presentation/template/actor/component/component-attribute-table-viewmodel.mjs';
-import './presentation/template/actor/part/actor-assets-viewmodel.mjs';
-import './presentation/template/actor/part/actor-attributes-viewmodel.mjs';
-import './presentation/template/actor/part/actor-beliefs-fate-viewmodel.mjs';
-import './presentation/template/actor/part/actor-beliefs-viewmodel.mjs';
-import './presentation/template/actor/part/actor-biography-viewmodel.mjs';
-import './presentation/template/actor/part/actor-fate-viewmodel.mjs';
-import './presentation/template/actor/part/actor-health-viewmodel.mjs';
-import './presentation/template/actor/part/actor-personals-viewmodel.mjs';
-import './presentation/template/actor/part/actor-skills-viewmodel.mjs';
+import './presentation/sheet/actor/actor-sheet-viewmodel.mjs';
+import './presentation/sheet/actor/part/actor-attribute-table-viewmodel.mjs';
+import './presentation/sheet/actor/part/actor-assets-viewmodel.mjs';
+import './presentation/sheet/actor/part/actor-attributes-viewmodel.mjs';
+import './presentation/sheet/actor/part/actor-beliefs-fate-viewmodel.mjs';
+import './presentation/sheet/actor/part/actor-beliefs-viewmodel.mjs';
+import './presentation/sheet/actor/part/actor-biography-viewmodel.mjs';
+import './presentation/sheet/actor/part/actor-fate-viewmodel.mjs';
+import './presentation/sheet/actor/part/actor-health-viewmodel.mjs';
+import './presentation/sheet/actor/part/actor-personals-viewmodel.mjs';
+import './presentation/sheet/actor/part/actor-skills-viewmodel.mjs';
 // View model factory
 import './presentation/view-model/view-model-factory.mjs';
 import { SYSTEM_ID } from "./system-id.mjs";

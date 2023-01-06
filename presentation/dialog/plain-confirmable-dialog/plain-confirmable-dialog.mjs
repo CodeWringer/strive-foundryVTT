@@ -1,4 +1,4 @@
-import { TEMPLATES } from '../../template/templatePreloader.mjs';
+import { TEMPLATES } from '../../templatePreloader.mjs';
 import ConfirmableModalDialog from '../confirmable-modal-dialog/confirmable-modal-dialog.mjs';
 
 /**

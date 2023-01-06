@@ -2,7 +2,7 @@ import DocumentFetcher from '../../../business/document/document-fetcher/documen
 import GetShowFancyFontUseCase from '../../../business/use-case/get-show-fancy-font-use-case.mjs';
 import { validateOrThrow } from '../../../business/util/validation-utility.mjs';
 import { getElementValue } from '../../sheet/sheet-utility.mjs';
-import { TEMPLATES } from '../../template/templatePreloader.mjs';
+import { TEMPLATES } from '../../templatePreloader.mjs';
 import ConfirmableModalDialog from '../confirmable-modal-dialog/confirmable-modal-dialog.mjs';
 
 /**
