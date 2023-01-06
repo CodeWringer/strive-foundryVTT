@@ -1,7 +1,7 @@
-import InjuryItemSheetViewModel from "../../template/item/injury/injury-item-sheet-viewmodel.mjs";
-import { TEMPLATES } from "../../template/templatePreloader.mjs";
-import AmbersteelBaseItemSheet from "./ambersteel-base-item-sheet.mjs";
-import { ITEM_SHEET_SUBTYPE } from "./item-sheet-subtype.mjs";
+import { TEMPLATES } from "../../../templatePreloader.mjs";
+import AmbersteelBaseItemSheet from "../ambersteel-base-item-sheet.mjs";
+import { ITEM_SHEET_SUBTYPE } from "../item-sheet-subtype.mjs";
+import InjuryItemSheetViewModel from "./injury-item-sheet-viewmodel.mjs";
 
 export default class AmbersteelInjuryItemSheet extends AmbersteelBaseItemSheet {
   /** @override */

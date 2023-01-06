@@ -1,7 +1,7 @@
-import SkillItemSheetViewModel from "../../template/item/skill/skill-item-sheet-viewmodel.mjs";
-import { TEMPLATES } from "../../template/templatePreloader.mjs";
-import AmbersteelBaseItemSheet from "./ambersteel-base-item-sheet.mjs";
-import { ITEM_SHEET_SUBTYPE } from "./item-sheet-subtype.mjs";
+import { TEMPLATES } from "../../../templatePreloader.mjs";
+import AmbersteelBaseItemSheet from "../ambersteel-base-item-sheet.mjs";
+import { ITEM_SHEET_SUBTYPE } from "../item-sheet-subtype.mjs";
+import SkillItemSheetViewModel from "./skill-item-sheet-viewmodel.mjs";
 
 export default class AmbersteelSkillItemSheet extends AmbersteelBaseItemSheet {
   /** @override */

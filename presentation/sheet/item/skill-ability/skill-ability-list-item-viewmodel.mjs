@@ -1,14 +1,16 @@
+import * as ChatUtil from "../../../chat/chat-utility.mjs";
 import { DAMAGE_TYPES } from "../../../../business/ruleset/damage-types.mjs";
 import { ATTACK_TYPES } from "../../../../business/ruleset/skill/attack-types.mjs";
 import DamageAndType from "../../../../business/ruleset/skill/damage-and-type.mjs";
-import { isNumber, validateOrThrow, isDefined } from "../../../../business/util/validation-utility.mjs";
+import { isNumber } from "../../../../business/util/validation-utility.mjs";
+import { validateOrThrow } from "../../../../business/util/validation-utility.mjs";
+import { isDefined } from "../../../../business/util/validation-utility.mjs";
 import { SOUNDS_CONSTANTS } from "../../../audio/sounds.mjs";
-import * as ChatUtil from "../../../chat/chat-utility.mjs";
 import ButtonViewModel from "../../../component/button/button-viewmodel.mjs";
 import InfoBubble from "../../../component/info-bubble/info-bubble.mjs";
 import ViewModel from "../../../view-model/view-model.mjs";
 import ViewModelFactory from "../../../view-model/view-model-factory.mjs";
-import { TEMPLATES } from "../../templatePreloader.mjs";
+import { TEMPLATES } from "../../../templatePreloader.mjs";
 import VisibilitySingleChoiceDialog from "../../../dialog/visibility-single-choice-dialog/visibility-single-choice-dialog.mjs";
 import ChoiceAdapter from "../../../component/input-choice/choice-adapter.mjs";
 

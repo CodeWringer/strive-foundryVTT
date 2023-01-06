@@ -1,6 +1,6 @@
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs";
+import { TEMPLATES } from "../../../templatePreloader.mjs";
 import ViewModel from "../../../view-model/view-model.mjs";
-import { TEMPLATES } from "../../templatePreloader.mjs";
 
 export default class MutationChatMessageViewModel extends ViewModel {
   /** @override */

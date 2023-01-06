@@ -1,8 +1,8 @@
-import { ATTRIBUTES } from "../../../../business/ruleset/attribute/attributes.mjs";
-import { validateOrThrow } from "../../../../business/util/validation-utility.mjs";
-import ViewModel from "../../../view-model/view-model.mjs";
-import { TEMPLATES } from "../../templatePreloader.mjs";
-import SkillAbilityTableViewModel from "../skill-ability/skill-ability-table-viewmodel.mjs";
+import { ATTRIBUTES } from "../../../../business/ruleset/attribute/attributes.mjs"
+import { validateOrThrow } from "../../../../business/util/validation-utility.mjs"
+import { TEMPLATES } from "../../../templatePreloader.mjs"
+import ViewModel from "../../../view-model/view-model.mjs"
+import SkillAbilityTableViewModel from "../skill-ability/skill-ability-table-viewmodel.mjs"
 
 export default class SkillChatMessageViewModel extends ViewModel {
   /** @override */

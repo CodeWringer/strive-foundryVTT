@@ -1,7 +1,7 @@
-import { TEMPLATES } from "../../template/templatePreloader.mjs";
-import { ITEM_SHEET_SUBTYPE } from "./item-sheet-subtype.mjs";
+import { TEMPLATES } from "../../../templatePreloader.mjs";
+import { ITEM_SHEET_SUBTYPE } from "../item-sheet-subtype.mjs";
 import AmbersteelBaseItemSheet from "../ambersteel-base-item-sheet.mjs";
-import AssetItemSheetViewModel from "./asset/asset-item-sheet-viewmodel.mjs";
+import AssetItemSheetViewModel from "./asset-item-sheet-viewmodel.mjs";
 
 /**
  * Represents an "asset" type item sheet. 

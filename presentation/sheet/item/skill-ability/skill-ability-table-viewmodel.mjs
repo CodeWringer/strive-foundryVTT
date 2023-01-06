@@ -1,14 +1,14 @@
+import { DAMAGE_TYPES } from "../../../../business/ruleset/damage-types.mjs"
+import { ATTACK_TYPES } from "../../../../business/ruleset/skill/attack-types.mjs"
 import { createUUID } from "../../../../business/util/uuid-utility.mjs"
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs"
 import DocumentListItemOrderDataSource from "../../../component/sortable-list/document-list-item-order-datasource.mjs"
 import SortableListViewModel from "../../../component/sortable-list/sortable-list-viewmodel.mjs"
-import ViewModel from "../../../view-model/view-model.mjs"
+import { TEMPLATES } from "../../../templatePreloader.mjs"
 import ViewModelFactory from "../../../view-model/view-model-factory.mjs"
-import { TEMPLATES } from "../../templatePreloader.mjs"
+import ViewModel from "../../../view-model/view-model.mjs"
 import SkillAbilityChatMessageViewModel from "./skill-ability-chat-message-viewmodel.mjs"
 import SkillAbilityListItemViewModel from "./skill-ability-list-item-viewmodel.mjs"
-import { DAMAGE_TYPES } from "../../../../business/ruleset/damage-types.mjs"
-import { ATTACK_TYPES } from "../../../../business/ruleset/skill/attack-types.mjs"
 
 export default class SkillAbilityTableViewModel extends ViewModel {
   /** @override */
