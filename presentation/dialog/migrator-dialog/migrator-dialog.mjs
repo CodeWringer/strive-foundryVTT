@@ -1,6 +1,6 @@
 import MigratorInitiator from "../../../business/migration/migrator-initiator.mjs";
 import { WorldSystemVersion } from "../../../business/migration/world-system-version.mjs";
-import { TEMPLATES } from "../../template/templatePreloader.mjs";
+import { TEMPLATES } from "../../templatePreloader.mjs";
 import ModalDialog from "../modal-dialog/modal-dialog.mjs";
 
 /**

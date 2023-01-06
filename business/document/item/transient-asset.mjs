@@ -1,9 +1,9 @@
-import { TEMPLATES } from "../../../presentation/template/templatePreloader.mjs";
 import PreparedChatData from "../../../presentation/chat/prepared-chat-data.mjs";
 import { SOUNDS_CONSTANTS } from "../../../presentation/audio/sounds.mjs";
 import { ITEM_SUBTYPE } from "./item-subtype.mjs";
 import TransientBaseItem from "./transient-base-item.mjs";
 import AssetChatMessageViewModel from "../../../presentation/sheet/item/asset/asset-chat-message-viewmodel.mjs";
+import { TEMPLATES } from "../../../presentation/templatePreloader.mjs";
 
 /**
  * Represents the full transient data of an asset. 

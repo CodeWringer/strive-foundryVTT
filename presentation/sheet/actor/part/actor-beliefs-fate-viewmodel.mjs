@@ -1,8 +1,8 @@
-import { validateOrThrow } from "../../../../business/util/validation-utility.mjs";
-import ViewModel from "../../../view-model/view-model.mjs";
-import { TEMPLATES } from "../../templatePreloader.mjs";
-import ActorBeliefsViewModel from "./actor-beliefs-viewmodel.mjs";
-import ActorFateViewModel from "./actor-fate-viewmodel.mjs";
+import { validateOrThrow } from "../../../../business/util/validation-utility.mjs"
+import { TEMPLATES } from "../../../templatePreloader.mjs"
+import ViewModel from "../../../view-model/view-model.mjs"
+import ActorBeliefsViewModel from "./actor-beliefs-viewmodel.mjs"
+import ActorFateViewModel from "./actor-fate-viewmodel.mjs"
 
 export default class ActorBeliefsFateViewModel extends ViewModel {
   /** @override */

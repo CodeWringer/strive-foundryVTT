@@ -1,6 +1,6 @@
-import { TEMPLATES } from "../../../presentation/template/templatePreloader.mjs";
+import { TEMPLATES } from "../../../presentation/templatePreloader.mjs";
 import { createUUID } from "../../util/uuid-utility.mjs";
-import SkillChatMessageViewModel from "../../../presentation/template/item/skill/skill-chat-message-viewmodel.mjs";
+import SkillChatMessageViewModel from "../../../presentation/sheet/item/skill/skill-chat-message-viewmodel.mjs";
 import { SummedData, SummedDataComponent } from "../../ruleset/skill/summed-data.mjs";
 import DamageAndType from "../../ruleset/skill/damage-and-type.mjs";
 import { DiceOutcomeTypes } from "../../dice/dice-outcome-types.mjs";

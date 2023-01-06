@@ -38,5 +38,5 @@ cssClass: {undefined | String}
     {{{viewModel.description}}}
   </div>
   {{!-- Skill Abilites --}}
-  {{> "systems/ambersteel/presentation/template/item/skill-ability/skill-ability-table.hbs" viewModel=viewModel.vmSkillAbilityTable cssClass=(ifThenElse viewModel.hasAbilities "" "hidden") }}
+  {{> "systems/ambersteel/presentation/sheet/item/skill-ability/skill-ability-table.hbs" viewModel=viewModel.vmSkillAbilityTable cssClass=(ifThenElse viewModel.hasAbilities "" "hidden") }}
 </section>

@@ -1,4 +1,4 @@
-import { TEMPLATES } from '../../../presentation/template/templatePreloader.mjs';
+import { TEMPLATES } from '../../../presentation/templatePreloader.mjs';
 import { DiceOutcomeTypes } from '../../dice/dice-outcome-types.mjs';
 import { ATTRIBUTE_GROUPS } from '../../ruleset/attribute/attribute-groups.mjs';
 import CharacterAttributeGroup from '../../ruleset/attribute/character-attribute-group.mjs';

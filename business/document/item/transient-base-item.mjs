@@ -1,4 +1,4 @@
-import { TEMPLATES } from "../../../presentation/template/templatePreloader.mjs";
+import { TEMPLATES } from "../../../presentation/templatePreloader.mjs";
 import TransientDocument from "../transient-document.mjs";
 
 /**

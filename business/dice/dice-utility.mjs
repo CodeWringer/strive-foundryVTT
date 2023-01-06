@@ -1,7 +1,7 @@
 import { SOUNDS_CONSTANTS } from "../../presentation/audio/sounds.mjs";
 import * as ChatUtil from "../../presentation/chat/chat-utility.mjs";
 import { VISIBILITY_MODES } from "../../presentation/chat/visibility-modes.mjs";
-import { TEMPLATES } from "../../presentation/template/templatePreloader.mjs";
+import { TEMPLATES } from "../../presentation/templatePreloader.mjs";
 import Ruleset from "../ruleset/ruleset.mjs";
 import * as ValidationUtil from "../util/validation-utility.mjs";
 import { DiceOutcomeTypes } from "./dice-outcome-types.mjs";

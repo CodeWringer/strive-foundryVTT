@@ -1,7 +1,7 @@
-import { TEMPLATES } from "../../templatePreloader.mjs";
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs";
-import AttributeTableViewModel from "../component/component-attribute-table-viewmodel.mjs";
+import { TEMPLATES } from "../../../templatePreloader.mjs";
 import ViewModel from "../../../view-model/view-model.mjs";
+import AttributeTableViewModel from "./actor-attribute-table-viewmodel.mjs";
 
 export default class ActorAttributesViewModel extends ViewModel {
   /** @override */

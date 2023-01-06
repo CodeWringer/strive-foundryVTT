@@ -35,4 +35,4 @@ export default class AmbersteelAssetItemSheet extends AmbersteelBaseItemSheet {
   }
 }
 
-ITEM_SHEET_SUBTYPE.set("item", new AmbersteelBaseItemSheet());
+ITEM_SHEET_SUBTYPE.set("item", new AmbersteelAssetItemSheet());

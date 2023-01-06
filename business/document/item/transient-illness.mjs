@@ -1,5 +1,5 @@
-import { TEMPLATES } from "../../../presentation/template/templatePreloader.mjs";
-import IllnessChatMessageViewModel from "../../../presentation/template/item/illness/illness-chat-message-viewmodel.mjs";
+import { TEMPLATES } from "../../../presentation/templatePreloader.mjs";
+import IllnessChatMessageViewModel from "../../../presentation/sheet/item/illness/illness-chat-message-viewmodel.mjs";
 import PreparedChatData from "../../../presentation/chat/prepared-chat-data.mjs";
 import { SOUNDS_CONSTANTS } from "../../../presentation/audio/sounds.mjs";
 import { ITEM_SUBTYPE } from "./item-subtype.mjs";

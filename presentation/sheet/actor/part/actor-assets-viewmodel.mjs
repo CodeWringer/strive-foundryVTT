@@ -1,12 +1,12 @@
-import { validateOrThrow } from "../../../../business/util/validation-utility.mjs";
-import ItemGridViewViewModel from "../../../component/item-grid/item-grid-view-viewmodel.mjs";
-import DocumentListItemOrderDataSource from "../../../component/sortable-list/document-list-item-order-datasource.mjs";
-import SortableListViewModel from "../../../component/sortable-list/sortable-list-viewmodel.mjs";
-import ViewModel from "../../../view-model/view-model.mjs";
-import ViewModelFactory from "../../../view-model/view-model-factory.mjs";
-import { TEMPLATES } from "../../templatePreloader.mjs";
-import TransientBaseCharacterActor from "../../../../business/document/actor/transient-base-character-actor.mjs";
-import AssetListItemViewModel from "../../item/asset/asset-list-item-viewmodel.mjs";
+import TransientBaseCharacterActor from "../../../../business/document/actor/transient-base-character-actor.mjs"
+import { validateOrThrow } from "../../../../business/util/validation-utility.mjs"
+import ItemGridViewViewModel from "../../../component/item-grid/item-grid-view-viewmodel.mjs"
+import DocumentListItemOrderDataSource from "../../../component/sortable-list/document-list-item-order-datasource.mjs"
+import SortableListViewModel from "../../../component/sortable-list/sortable-list-viewmodel.mjs"
+import { TEMPLATES } from "../../../templatePreloader.mjs"
+import ViewModelFactory from "../../../view-model/view-model-factory.mjs"
+import ViewModel from "../../../view-model/view-model.mjs"
+import AssetListItemViewModel from "../../item/asset/asset-list-item-viewmodel.mjs"
 
 export default class ActorAssetsViewModel extends ViewModel {
   /** @override */
@@ -90,7 +90,7 @@ export default class ActorAssetsViewModel extends ViewModel {
         listName: "property",
       }),
       listItemViewModels: this.itemViewModels,
-      listItemTemplate: "systems/ambersteel/presentation/template/item/item/item-list-item.hbs",
+      listItemTemplate: TEMPLATES.ASSET_LIST_ITEM,
       vmBtnAddItem: factory.createVmBtnAdd({
         parent: thiz,
         id: "vmBtnAddItem",

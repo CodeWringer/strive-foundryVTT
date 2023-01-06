@@ -1,6 +1,6 @@
 import { ROLL_TYPES } from "../../../business/dice/roll-types.mjs";
 import { SOUNDS_CONSTANTS } from "../../audio/sounds.mjs";
-import { TEMPLATES } from "../../template/templatePreloader.mjs";
+import { TEMPLATES } from "../../templatePreloader.mjs";
 import * as ChatUtil from "../../chat/chat-utility.mjs";
 import * as DiceUtil from "../../../business/dice/dice-utility.mjs";
 import * as PropUtil from "../../../business/util/property-utility.mjs";

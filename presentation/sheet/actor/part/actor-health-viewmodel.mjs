@@ -1,13 +1,13 @@
-import Ruleset from "../../../../business/ruleset/ruleset.mjs";
-import { validateOrThrow } from "../../../../business/util/validation-utility.mjs";
-import DocumentListItemOrderDataSource from "../../../component/sortable-list/document-list-item-order-datasource.mjs";
-import SortableListViewModel from "../../../component/sortable-list/sortable-list-viewmodel.mjs";
-import ViewModel from "../../../view-model/view-model.mjs";
-import ViewModelFactory from "../../../view-model/view-model-factory.mjs";
-import IllnessListItemViewModel from "../../item/illness/illness-list-item-viewmodel.mjs";
-import InjuryListItemViewModel from "../../item/injury/injury-list-item-viewmodel.mjs";
-import MutationListItemViewModel from "../../item/mutation/mutation-list-item-viewmodel.mjs";
-import { TEMPLATES } from "../../templatePreloader.mjs";
+import Ruleset from "../../../../business/ruleset/ruleset.mjs"
+import { validateOrThrow } from "../../../../business/util/validation-utility.mjs"
+import DocumentListItemOrderDataSource from "../../../component/sortable-list/document-list-item-order-datasource.mjs"
+import SortableListViewModel from "../../../component/sortable-list/sortable-list-viewmodel.mjs"
+import { TEMPLATES } from "../../../templatePreloader.mjs"
+import ViewModelFactory from "../../../view-model/view-model-factory.mjs"
+import ViewModel from "../../../view-model/view-model.mjs"
+import IllnessListItemViewModel from "../../item/illness/illness-list-item-viewmodel.mjs"
+import InjuryListItemViewModel from "../../item/injury/injury-list-item-viewmodel.mjs"
+import MutationListItemViewModel from "../../item/mutation/mutation-list-item-viewmodel.mjs"
 
 export default class ActorHealthViewModel extends ViewModel {
   /** @override */

@@ -1,8 +1,8 @@
-import { TEMPLATES } from '../../../presentation/template/templatePreloader.mjs';
+import { TEMPLATES } from '../../../presentation/templatePreloader.mjs';
 import * as ChatUtil from '../../../presentation/chat/chat-utility.mjs';
 import { validateOrThrow } from '../../util/validation-utility.mjs';
 import PreparedChatData from '../../../presentation/chat/prepared-chat-data.mjs';
-import SkillAbilityChatMessageViewModel from '../../../presentation/template/item/skill-ability/skill-ability-chat-message-viewmodel.mjs';
+import SkillAbilityChatMessageViewModel from '../../../presentation/sheet/item/skill-ability/skill-ability-chat-message-viewmodel.mjs';
 import { createUUID } from '../../util/uuid-utility.mjs';
 import * as PropUtil from '../../util/property-utility.mjs';
 import DamageAndType from './damage-and-type.mjs';

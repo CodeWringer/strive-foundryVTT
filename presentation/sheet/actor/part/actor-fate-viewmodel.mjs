@@ -1,8 +1,7 @@
-import { validateOrThrow } from "../../../../business/util/validation-utility.mjs";
-import ViewModel from "../../../view-model/view-model.mjs";
-import ViewModelFactory from "../../../view-model/view-model-factory.mjs";
-import FateCardViewModel from "../../item/fate-card/fate-card-viewmodel.mjs";
-import { TEMPLATES } from "../../templatePreloader.mjs";
+import { validateOrThrow } from "../../../../business/util/validation-utility.mjs"
+import ViewModelFactory from "../../../view-model/view-model-factory.mjs"
+import ViewModel from "../../../view-model/view-model.mjs"
+import FateCardViewModel from "../../item/fate-card/fate-card-viewmodel.mjs"
 
 export default class ActorFateViewModel extends ViewModel {
   /** @override */

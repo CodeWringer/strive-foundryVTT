@@ -1,5 +1,5 @@
-import { TEMPLATES } from "../../../presentation/template/templatePreloader.mjs";
-import ActorChatMessageViewModel from '../../../presentation/template/actor/actor-chat-message-viewmodel.mjs';
+import ActorChatMessageViewModel from '../../../presentation/sheet/actor/actor-chat-message-viewmodel.mjs';
+import { TEMPLATES } from '../../../presentation/templatePreloader.mjs';
 import { createUUID } from '../../util/uuid-utility.mjs';
 import TransientDocument from "../transient-document.mjs";
 
