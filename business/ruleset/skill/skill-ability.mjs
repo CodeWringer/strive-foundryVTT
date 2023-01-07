@@ -4,13 +4,12 @@ import { validateOrThrow } from '../../util/validation-utility.mjs';
 import PreparedChatData from '../../../presentation/chat/prepared-chat-data.mjs';
 import SkillAbilityChatMessageViewModel from '../../../presentation/sheet/item/skill-ability/skill-ability-chat-message-viewmodel.mjs';
 import { createUUID } from '../../util/uuid-utility.mjs';
-import * as PropUtil from '../../util/property-utility.mjs';
 import DamageAndType from './damage-and-type.mjs';
 import { SOUNDS_CONSTANTS } from '../../../presentation/audio/sounds.mjs';
 import { VISIBILITY_MODES } from '../../../presentation/chat/visibility-modes.mjs';
 import { isObject } from '../../util/validation-utility.mjs';
 import { DAMAGE_TYPES } from '../damage-types.mjs';
-import { isDefined } from '../../util/validation-utility.mjs';
+import { getNestedPropertyValue } from '../../util/property-utility.mjs';
 
 /**
  * Represents a skill ability. 
@@ -428,29 +427,34 @@ export default class SkillAbility {
    * @param {String} comparableReference A comparable version of the reference. 
    * * Comparable in the sense that underscores "_" are replaced with spaces " " 
    * or only the last piece of a property path is returned. 
-   * * E. g. `"@a.b.c"` -> `"c"`
-   * * E. g. `"@heavy_armor"` -> `"@heavy armor"`
+   * * E. g. `"@Heavy_Armor"` -> `"@heavy armor"`
+   * * E. g. `"@A.B.c"` -> `"a"`
+   * @param {String | undefined} propertyPath If not undefined, a property path on 
+   * the referenced object. 
+   * * E. g. `"@A.B.c"` -> `"B.c"`
    * 
    * @returns {Any | undefined} The matched reference or undefined, no match was found. 
    * 
    * @virtual
    * @protected
    */
-  _resolveReference(reference, comparableReference) {
-    if (this.name.toLowerCase() === comparableReference) {
+  _resolveReference(reference, comparableReference, propertyPath) {
+    if (this.name.toLowerCase() !== comparableReference) {
+      return undefined;
+    } else if (propertyPath === undefined) {
       return this;
     }
-    
-    const propertyPathMatch = reference.match(REGEX_PATTERN_REFERENCE);
 
     // Look in own properties. 
-    if (propertyPathMatch !== undefined && propertyPathMatch !== null) {
-      const propertyPath = propertyPathMatch[0].substring(1); // The property path, excluding the first dot. 
-      try {
-        return getNestedPropertyValue(this, propertyPath);
-      } catch (error) {
-        // Errors are expected for "bad" property paths and can be safely ignored. 
-        return undefined;
+    try {
+      return getNestedPropertyValue(this, propertyPath);
+    } catch (error) {
+      if (error.message.startsWith("Failed to get nested property value")) {
+        // Such errors are expected for "bad" property paths and can be ignored safely. 
+        game.ambersteel.logger.logWarn(error.message);
+      } else {
+        // Any other error is re-thrown. 
+        throw error;
       }
     }
     return undefined;

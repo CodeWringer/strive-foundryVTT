@@ -13,15 +13,16 @@ import DocumentUpdater from "./document-updater/document-updater.mjs";
  * @type {String}
  * @constant
  */
-export const REGEX_PATTERN_REFERENCES = /@[^\s-/*+]+/g;
+export const REGEX_PATTERN_PROPERTY_PATHS = /@[^\s-/*+]+/g;
 
 /**
- * The regular expression pattern used to identify a `@`-reference. 
+ * The regular expression pattern used to find out if an `@`-reference 
+ * contains a property path. 
  * 
  * @type {String}
  * @constant
  */
-export const REGEX_PATTERN_REFERENCE = /\.[^\s-/*+]+/i;
+export const REGEX_PATTERN_PROPERTY_PATH = /\.[^\s-/*+]+/i;
 
 /**
  * @summary
@@ -416,26 +417,56 @@ export default class TransientDocument {
     
     // Resolve each reference, one by one. 
     for (const reference of references) {
-      const lowercaseReference = reference.toLowerCase();
-      
-      if (result.has(lowercaseReference)) {
-        // Only bother looking up a reference once. 
-        continue;
-      }
-      
+      // Only the first part is converted to lower case, for easier comparisons. 
+      // E. g. `"@Heavy_Armor.requiredLevel"` -> `"@heavy_armor.requiredLevel"`
+      let lowercaseReference;
       // A comparable version of the reference. 
       // Comparable in the sense that underscores "_" are replaced with spaces " " 
       // or only the last piece of a property path is returned. 
-      // E. g. `"@a.b.c"` -> `"c"`
-      // E. g. `"@heavy_armor"` -> `"@heavy armor"`
-      const propertyPathMatch = lowercaseReference.match(REGEX_PATTERN_REFERENCE);
-      const comparableReference = 
-        (propertyPathMatch === undefined || propertyPathMatch === null) 
-        ? lowercaseReference.substring(1).replaceAll("_", " ")
-        : lowercaseReference.substring(1, lowercaseReference.indexOf(".", 1));
+      // E. g. `"@a.B.cD"` -> `"cD"`
+      // E. g. `"@heavy_armor"` -> `"heavy armor"`
+      let comparableReference;
+      // If defined, this is the property path of the reference. 
+      // E. g. `"@Heavy_Armor.requiredLevel.aBc"` -> `"requiredLevel.aBc"`
+      let propertyPath;
 
-      const match = this._resolveReference(lowercaseReference, comparableReference);
-      result.set(lowercaseReference, match);
+      const propertyPathMatch = reference.match(REGEX_PATTERN_PROPERTY_PATH);
+      if (propertyPathMatch !== undefined && propertyPathMatch !== null) {
+        const index = propertyPathMatch.index;
+        const lowerCasedFirstPart = reference.substring(0, index).toLowerCase();
+        const unchangedLastPart = reference.substring(index);
+        lowercaseReference = `${lowerCasedFirstPart}${unchangedLastPart}`
+
+        // Substring to exclude the leading `@`-symbol. 
+        comparableReference = lowerCasedFirstPart.substring(1);
+
+        // The property path from the reference, excluding the leading dot. 
+        // E. g. `"@a.B.cD"` -> `"B.cD"`
+        propertyPath = unchangedLastPart.substring(1);
+      } else {
+        lowercaseReference = reference.toLowerCase();
+        
+        // Substring to exclude the leading `@`-symbol. 
+        comparableReference = lowercaseReference.substring(1);
+      }
+      
+      if (result.has(lowercaseReference)) {
+        // Only bother looking up the same reference once. 
+        continue;
+      }
+
+      // Ensure underscores are replaced with spaces. 
+      comparableReference = comparableReference.replaceAll("_", " ");
+      
+      const match = this._resolveReference(lowercaseReference, comparableReference, propertyPath);
+      if (match === undefined) {
+        // In case no match was found, a 0 is returned. 
+        // This is done to ensure the damage roll can still technically function 
+        // without throwing an error. 
+        result.set(lowercaseReference, 0);
+      } else {
+        result.set(lowercaseReference, match);
+      }
     }
 
     return result;
@@ -450,29 +481,34 @@ export default class TransientDocument {
    * @param {String} comparableReference A comparable version of the reference. 
    * * Comparable in the sense that underscores "_" are replaced with spaces " " 
    * or only the last piece of a property path is returned. 
-   * * E. g. `"@a.b.c"` -> `"c"`
-   * * E. g. `"@heavy_armor"` -> `"@heavy armor"`
+   * * E. g. `"@Heavy_Armor"` -> `"@heavy armor"`
+   * * E. g. `"@A.B.c"` -> `"a"`
+   * @param {String | undefined} propertyPath If not undefined, a property path on 
+   * the referenced object. 
+   * * E. g. `"@A.B.c"` -> `"B.c"`
    * 
    * @returns {Any | undefined} The matched reference or undefined, no match was found. 
    * 
    * @virtual
    * @protected
    */
-  _resolveReference(reference, comparableReference) {
-    if (this.name.toLowerCase() === comparableReference) {
+  _resolveReference(reference, comparableReference, propertyPath) {
+    if (this.name.toLowerCase() !== comparableReference) {
+      return undefined;
+    } else if (propertyPath === undefined) {
       return this;
     }
 
-    const propertyPathMatch = reference.match(REGEX_PATTERN_REFERENCE);
-
     // Look in own properties. 
-    if (propertyPathMatch !== undefined && propertyPathMatch !== null) {
-      const propertyPath = propertyPathMatch[0].substring(1); // The property path, excluding the first dot. 
-      try {
-        return PropertyUtility.getNestedPropertyValue(this, propertyPath);
-      } catch (error) {
-        // Errors are expected for "bad" property paths and can be safely ignored. 
-        return undefined;
+    try {
+      return PropertyUtility.getNestedPropertyValue(this, propertyPath);
+    } catch (error) {
+      if (error.message.startsWith("Failed to get nested property value")) {
+        // Such errors are expected for "bad" property paths and can be ignored safely. 
+        game.ambersteel.logger.logWarn(error.message);
+      } else {
+        // Any other error is re-thrown. 
+        throw error;
       }
     }
     return undefined;
@@ -490,7 +526,7 @@ export default class TransientDocument {
    * @protected
    */
   _getReferencesIn(str) {
-    const references = str.match(REGEX_PATTERN_REFERENCES);
+    const references = str.match(REGEX_PATTERN_PROPERTY_PATHS);
     if (references === undefined || references === null) {
       return undefined;
     } else {

@@ -412,15 +412,16 @@ export default class TransientSkill extends TransientBaseItem {
    * 
    * @override
    */
-  _resolveReference(reference, comparableReference) {
+  _resolveReference(reference, comparableReference, propertyPath) {
     // Search skill ability.
     for (const ability of this.abilities) {
-      const match = ability._resolveReference(reference, comparableReference);
+      const match = ability._resolveReference(reference, comparableReference, propertyPath);
       if (match !== undefined) {
         return match;
       }
     }
-    return undefined;
+    
+    return super._resolveReference(reference, comparableReference, propertyPath);
   }
 }
 
