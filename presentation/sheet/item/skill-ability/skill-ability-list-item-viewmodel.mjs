@@ -13,7 +13,7 @@ import ViewModelFactory from "../../../view-model/view-model-factory.mjs";
 import { TEMPLATES } from "../../../templatePreloader.mjs";
 import VisibilitySingleChoiceDialog from "../../../dialog/visibility-single-choice-dialog/visibility-single-choice-dialog.mjs";
 import ChoiceAdapter from "../../../component/input-choice/choice-adapter.mjs";
-import { DamageAndTypeViewModel } from "./damage-and-type-viewmodel.mjs";
+import DamageAndTypeViewModel from "./damage-and-type-viewmodel.mjs";
 
 export default class SkillAbilityListItemViewModel extends ViewModel {
   /** @override */
