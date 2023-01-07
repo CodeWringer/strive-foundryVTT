@@ -213,8 +213,16 @@ export default class SkillAbilityListItemViewModel extends ViewModel {
               let resolvedDamage = damageDefinition.damage;
 
               if (thiz.skillAbility.owningDocument !== undefined) {
-                // Resolve references on owning document. 
-                const resolvedReferences = thiz.skillAbility.owningDocument.resolveReferences(damageDefinition.damage);
+                // Resolve references. 
+                // If the skill (which is the ability's owning document) has a parent (= an actor document), 
+                // resolve references on that document, instead of the skill document. 
+                let resolvedReferences;
+                if (thiz.skillAbility.owningDocument.owningDocument !== undefined) {
+                  resolvedReferences = thiz.skillAbility.owningDocument.owningDocument.resolveReferences(damageDefinition.damage)
+                } else {
+                  resolvedReferences = thiz.skillAbility.owningDocument.resolveReferences(damageDefinition.damage)
+                }
+
                 for (const [key, value] of resolvedReferences) {
                   // This replaces every reference of the current type, e. g. `"@strength"` with the 
                   // current level or value of the thing, if possible. 

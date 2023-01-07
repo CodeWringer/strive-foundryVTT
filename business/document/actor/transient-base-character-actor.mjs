@@ -338,19 +338,20 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
    * 
    * @override
    */
-  _resolveReference(reference, comparableReference) {
+  _resolveReference(reference, comparableReference, propertyPath) {
     // Search attributes. 
-    let attribute = this.attributes.find(it => it.name === comparableReference);
-    if (attribute === undefined) {
-      attribute = this.attributes.find(it => game.i18n.localize(it.localizableName).toLowerCase());
-    }
+    const attribute = this.attributes.find(it => 
+      it.name === comparableReference
+        || game.i18n.localize(it.localizableName).toLowerCase() === comparableReference
+        || game.i18n.localize(it.localizableAbbreviation).toLowerCase() === comparableReference
+    );
     if (attribute !== undefined) {
       return attribute;
     }
 
     // Search skill. 
     for (const skill of this.skills.all) {
-      const match = skill._resolveReference(reference, comparableReference);
+      const match = skill._resolveReference(reference, comparableReference, propertyPath);
       if (match !== undefined) {
         return match;
       }
@@ -358,7 +359,7 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
 
     // Search asset.
     for (const asset of this.assets.all) {
-      const match = asset._resolveReference(reference, comparableReference);
+      const match = asset._resolveReference(reference, comparableReference, propertyPath);
       if (match !== undefined) {
         return match;
       }
@@ -366,7 +367,7 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
 
     // Search injury.
     for (const injury of this.health.injuries) {
-      const match = injury._resolveReference(reference, comparableReference);
+      const match = injury._resolveReference(reference, comparableReference, propertyPath);
       if (match !== undefined) {
         return match;
       }
@@ -374,7 +375,7 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
 
     // Search illness.
     for (const illness of this.health.illnesses) {
-      const match = illness._resolveReference(reference, comparableReference);
+      const match = illness._resolveReference(reference, comparableReference, propertyPath);
       if (match !== undefined) {
         return match;
       }
@@ -382,12 +383,12 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
 
     // Search mutation.
     for (const mutation of this.health.mutations) {
-      const match = mutation._resolveReference(reference, comparableReference);
+      const match = mutation._resolveReference(reference, comparableReference, propertyPath);
       if (match !== undefined) {
         return match;
       }
     }
 
-    return super._resolveReference(reference, comparableReference);
+    return super._resolveReference(reference, comparableReference, propertyPath);
   }
 }

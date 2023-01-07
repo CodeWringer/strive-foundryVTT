@@ -105,16 +105,16 @@ export default class TransientPc extends TransientBaseCharacterActor {
    * 
    * @override
    */
-  _resolveReference(reference, comparableReference) {
+  _resolveReference(reference, comparableReference, propertyPath) {
     // Search fate-cards.
-    for (const fateCard of this.fateCards) {
-      const match = fateCard._resolveReference(reference, comparableReference);
+    for (const fateCard of this.fateSystem.fateCards) {
+      const match = fateCard._resolveReference(reference, comparableReference, propertyPath);
       if (match !== undefined) {
         return match;
       }
     }
 
-    return super._resolveReference(reference, comparableReference);
+    return super._resolveReference(reference, comparableReference, propertyPath);
   }
 }
 
