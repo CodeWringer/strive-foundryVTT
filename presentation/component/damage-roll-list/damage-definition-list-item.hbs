@@ -1,0 +1,25 @@
+{{!-- Required context:
+viewModel: {DamageDefinitionListItemViewModel}
+cssClass: {String | undefined}
+--}}
+<div class="fill flex flex-row{{#if cssClass}} {{cssClass}}{{/if}}">
+  {{!-- Damage formula --}}
+  <div class="width-min-xl">
+    {{> inputLabel text=(localize "ambersteel.damageDefinition.label") showFancyFont=viewModel.showFancyFont}}
+  </div>
+  <span class="width-min-xxl flex-grow">
+    {{> inputTextField viewModel=viewModel.vmTfDamage }}
+  </span>
+  <span class="square-button-light font-size-default flex flex-center">
+    <i class="far fa-question-circle info-button damage-info" id="{{viewModel.parentId}}"></i>
+  </span>
+  {{!-- Damage type --}}
+  <div class="width-min-xxl">
+    {{> inputLabel text=(localize "ambersteel.damageType.label") showFancyFont=viewModel.showFancyFont}}
+  </div>
+  <span class="width-xxl">
+    {{> inputDropDown viewModel=viewModel.vmDdDamageType }}
+  </span>
+  {{!-- Delete button --}}
+  {{#> button viewModel=viewModel.vmBtnDelete }}<i class="fas fa-trash"></i>{{/button}}
+</div>

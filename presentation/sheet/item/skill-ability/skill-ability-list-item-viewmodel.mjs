@@ -13,7 +13,7 @@ import ViewModelFactory from "../../../view-model/view-model-factory.mjs";
 import { TEMPLATES } from "../../../templatePreloader.mjs";
 import VisibilitySingleChoiceDialog from "../../../dialog/visibility-single-choice-dialog/visibility-single-choice-dialog.mjs";
 import ChoiceAdapter from "../../../component/input-choice/choice-adapter.mjs";
-import DamageAndTypeViewModel from "./damage-and-type-viewmodel.mjs";
+import DamageDefinitionListItemViewModel from "../../../component/damage-roll-list/damage-definition-list-item-viewmodel.mjs";
 
 export default class SkillAbilityListItemViewModel extends ViewModel {
   /** @override */
@@ -70,7 +70,7 @@ export default class SkillAbilityListItemViewModel extends ViewModel {
   get hideDamage() { return this.skillAbility.damage.length < 1; }
 
   /**
-   * @type {Array<DamageAndTypeViewModel>}
+   * @type {Array<DamageDefinitionListItemViewModel>}
    */
   damageViewModels = [];
 
@@ -335,15 +335,15 @@ export default class SkillAbilityListItemViewModel extends ViewModel {
     });
 
     for (let i = 0; i < skillAbility.damage.length; i++) {
-      const vm = new DamageAndTypeViewModel({
+      const vm = new DamageDefinitionListItemViewModel({
         id: `vmDamageAndType-${i}`,
         parent: thiz,
         isEditable: thiz.isEditable,
         isSendable: thiz.isSendable,
         isOwner: thiz.isOwner,
         isGM: thiz.isGM,
-        propertyOwner: skillAbility,
         contextTemplate: this.contextTemplate,
+        propertyOwner: skillAbility,
         index: i,
       });
       this.damageViewModels.push(vm);

@@ -90,27 +90,7 @@ cssClass: {undefined | String}
     <ol class="unstyled-list flex-grow">
       {{#each viewModel.damageViewModels as |vm index|}}
         <li class="ambersteel-list-row flex flex-row margin-b-md">
-          <div class="fill flex flex-row">
-            {{!-- Damage formula --}}
-            <div class="width-min-xl">
-              {{> inputLabel text=(localize "ambersteel.damageDefinition.label") showFancyFont=viewModel.showFancyFont}}
-            </div>
-            <span class="width-min-xxl flex-grow">
-              {{> inputTextField viewModel=vm.vmTfDamage }}
-            </span>
-            <span class="square-button-light font-size-default flex flex-center">
-              <i class="far fa-question-circle info-button damage-info" id="{{../viewModel.id}}"></i>
-            </span>
-            {{!-- Damage type --}}
-            <div class="width-min-xxl">
-              {{> inputLabel text=(localize "ambersteel.damageType.label") showFancyFont=viewModel.showFancyFont}}
-            </div>
-            <span class="width-xxl">
-              {{> inputDropDown viewModel=vm.vmDdDamageType }}
-            </span>
-            {{!-- Delete button --}}
-            {{#> button viewModel=vm.vmBtnDelete }}<i class="fas fa-trash"></i>{{/button}}
-          </div>
+          {{> damageDefinitionListItem viewModel=vm}}
         </li>
       {{/each}}
     </ol>

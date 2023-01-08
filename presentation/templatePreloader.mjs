@@ -48,6 +48,7 @@ export const TEMPLATES = {
   // Composite
   COMPONENT_SORTABLE_LIST: `${basePathComponent}/sortable-list/sortable-list.hbs`,
   DICE_ROLL_LIST: `${basePathComponent}/dice-roll-list/dice-roll-list.hbs`,
+  COMPONENT_ROLL_DAMAGE_LIST_ITEM: `${basePathComponent}/damage-roll-list/damage-definition-list-item.hbs`,
   // GM
   COMPONENT_GM_NOTES: `${basePathComponent}/section-gm-notes/section-gm-notes.hbs`,
   // Dice

@@ -9,10 +9,8 @@ cssClass: {String | undefined}
   <ol class="unstyled-list flex-grow">
     {{#each viewModel.formulaViewModels as |vm index|}}
     <li class="ambersteel-list-row flex flex-row margin-b-md">
-      <div class="fill flex flex-row">
-        {{!-- Formula list item --}}
-        {{> ../viewModel.formulaListItemTemplate viewModel=vm}}
-      </div>
+      {{!-- Formula list item --}}
+      {{> ../viewModel.formulaListItemTemplate viewModel=vm}}
     </li>
     {{/each}}
   </ol>
