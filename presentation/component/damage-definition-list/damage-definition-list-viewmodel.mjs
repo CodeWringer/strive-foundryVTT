@@ -73,18 +73,17 @@ export default class DamageDefinitionListViewModel extends ViewModel {
           // At this point, the string may contain `@`-references. These must be resolved. 
           let resolvedDamage = damageDefinition.damage;
 
-          if (thiz.propertyOwner.owningDocument !== undefined) {
-            const owningDocument = thiz.propertyOwner.owningDocument;
-            // Resolve references. 
-            // If the skill (which is the ability's owning document) has a parent (= an actor document), 
-            // resolve references on that document, instead of the skill document. 
-            let resolvedReferences;
-            if (owningDocument.owningDocument !== undefined) {
-              resolvedReferences = owningDocument.owningDocument.resolveReferences(damageDefinition.damage)
-            } else {
-              resolvedReferences = owningDocument.resolveReferences(damageDefinition.damage)
-            }
+          const owningDocument = thiz._getRootOwningDocument(thiz.propertyOwner);
+          let resolvedReferences;
 
+          // Resolve references. 
+          if (owningDocument !== undefined) {
+            resolvedReferences = owningDocument.resolveReferences(damageDefinition.damage);
+          } else if (thiz.propertyOwner.resolveReferences !== undefined) {
+            resolvedReferences = thiz.propertyOwner.resolveReferences(damageDefinition.damage);
+          }
+
+          if (resolvedReferences !== undefined) {
             for (const [key, value] of resolvedReferences) {
               // This replaces every reference of the current type, e. g. `"@strength"` with the 
               // current level or value of the thing, if possible. 
@@ -94,6 +93,7 @@ export default class DamageDefinitionListViewModel extends ViewModel {
               resolvedDamage = resolvedDamage.replace(regExpReplace, replaceValue);
             }
           }
+
           return resolvedDamage;
         },
       });
@@ -112,6 +112,21 @@ export default class DamageDefinitionListViewModel extends ViewModel {
       chatMessageTemplate: TEMPLATES.DICE_ROLL_DAMAGE_CHAT_MESSAGE,
       chatTitle: `${game.i18n.localize("ambersteel.damageDefinition.label")} - ${thiz.propertyOwner.name}`,
     });
+  }
+
+  /**
+   * Returns the root owning document of the given document. 
+   * 
+   * @param {TransientDocument} document 
+   * 
+   * @returns {TransientDocument}
+   */
+  _getRootOwningDocument(document) {
+    if (document.owningDocument !== undefined) {
+      return this._getRootOwningDocument(document.owningDocument);
+    } else {
+      return document;
+    }
   }
 }
 
