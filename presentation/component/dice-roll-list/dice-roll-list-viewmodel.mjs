@@ -9,15 +9,22 @@ import ViewModel from "../../view-model/view-model.mjs";
  * 
  * @extends ViewModel
  * 
- * @property {Array<ViewModel>} formulaViewModels
+ * @property {Array<ViewModel>} formulaViewModels View model instances of formula list items. 
+ * * These view models **must** expose a function named `resolveFormula`, which returns a `String`, 
+ * that represents a fully resolved and rollable formula. E. g. `"5D5 + 2"`. 
  * * Read-only. 
+ * @property {String} formulaListItemTemplate Template of the formula list item. 
+ * @property {String} chatMessageTemplate Template of the results chat message. 
+ * @property {String | undefined} chatTitle Title to display above the chat message. 
  */
 export default class DiceRollListViewModel extends ViewModel {
   static get TEMPLATE() { return TEMPLATES.DICE_ROLL_LIST; }
 
   /**
    * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
-   * @param {Array<ViewModel>} args.formulaViewModels View model instnaces of formula list items. 
+   * @param {Array<ViewModel>} args.formulaViewModels View model instances of formula list items. 
+   * * These view models **must** expose a function named `resolveFormula`, which returns a `String`, 
+   * that represents a fully resolved and rollable formula. E. g. `"5D5 + 2"`. 
    * @param {String} args.formulaListItemTemplate Template of the formula list item. 
    * @param {String} args.chatMessageTemplate Template of the results chat message. 
    * @param {String | undefined} args.chatTitle Title to display above the chat message. 
