@@ -2,6 +2,7 @@ import { DAMAGE_TYPES } from "../../../business/ruleset/damage-types.mjs"
 import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import { isDefined } from "../../../business/util/validation-utility.mjs";
 import { TEMPLATES } from "../../templatePreloader.mjs";
+import { getNestedPropertyValue } from "../../../business/util/property-utility.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
 import ViewModelFactory from "../../view-model/view-model-factory.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
@@ -19,6 +20,9 @@ import ChoiceAdapter from "../input-choice/choice-adapter.mjs";
  * definitions on the `propertyOwner`. 
  * @property {String | undefined} hintId Id of the info bubble element that informs 
  * the user about formula references. 
+ * @property {String} localizedLabel Returns the localized label of the roll total. 
+ * I. e. the localized damage type. 
+ * * Read-only. 
  * 
  * @property {ViewModel} vmTfDamage
  * @property {ViewModel} vmDdDamageType
@@ -42,6 +46,16 @@ export default class DamageDefinitionListItemViewModel extends ViewModel {
    * @readonly
    */
   get localizableDeletionHint() { return "ambersteel.damageDefinition.delete"; }
+
+  /**
+   * Returns the localized label of the roll total. I. e. the localized damage type. 
+   * 
+   * @type {String}
+   * @readonly
+   */
+  get localizedLabel() { return game.i18n.localize(
+    getNestedPropertyValue(this.propertyOwner, `damage[${this.index}].damageType.localizableName`)
+  ); }
   
   /**
    * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 

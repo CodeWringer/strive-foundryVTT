@@ -26,7 +26,9 @@ export default class DiceRollListViewModel extends ViewModel {
    * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
    * @param {Array<ViewModel>} args.formulaViewModels View model instances of formula list items. 
    * * These view models **must** expose a function named `resolveFormula`, which returns a `String`, 
-   * that represents a fully resolved and rollable formula. E. g. `"5D5 + 2"`. 
+   * which represents a fully resolved and rollable formula. E. g. `"5D5 + 2"`. 
+   * * These view models *should* expose a property named `localizedLabel`, which returns a `String`,
+   * which represents the localized label of the roll total. 
    * @param {String} args.formulaListItemTemplate Template of the formula list item. 
    * @param {String} args.chatMessageTemplate Template of the results chat message. 
    * @param {String | undefined} args.chatTitle Title to display above the chat message. 
@@ -79,6 +81,7 @@ export default class DiceRollListViewModel extends ViewModel {
             formula: resolvedFormula,
             rollTotal: formulaRollResult.total,
             diceResults: diceResults,
+            localizedLabel: viewModel.localizedLabel,
           };
           rolls.push(obj);
         }
