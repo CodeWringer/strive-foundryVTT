@@ -1,4 +1,5 @@
 import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
+import { isNumber } from "../../../business/util/validation-utility.mjs";
 import { getNestedPropertyValue } from "../../../business/util/property-utility.mjs";
 import { TEMPLATES } from "../../templatePreloader.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
@@ -37,7 +38,7 @@ export default class DamageDefinitionListViewModel extends ViewModel {
 
   /**
    * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
-   * @param {Object} args.propertyOwner The transient document whose damage definition this is. 
+   * @param {Object | TransientDocument} args.propertyOwner The transient document whose damage definition this is. 
    * @param {String} args.propertyPath The path on the `propertyOwner` by which to identify 
    * the list of damage definitions. 
    * @param {String | undefined} hintId Id of the info bubble elements that inform 
@@ -55,6 +56,8 @@ export default class DamageDefinitionListViewModel extends ViewModel {
 
     const damageDefinitions = this.damageDefinitions;
     for (let i = 0; i < damageDefinitions.length; i++) {
+      const damageDefinition = damageDefinitions[i];
+
       const vm = new DamageDefinitionListItemViewModel({
         id: `vmDamageDefinition-${i}`,
         parent: thiz,
@@ -67,97 +70,31 @@ export default class DamageDefinitionListViewModel extends ViewModel {
         index: i,
         hintId: thiz.hintId,
         resolveFormula: () => {
+          // At this point, the string may contain `@`-references. These must be resolved. 
+          let resolvedDamage = damageDefinition.damage;
 
-          // TODO
-        //   await new VisibilitySingleChoiceDialog({
-        //     closeCallback: async (dialog) => {
-        //       if (dialog.confirmed !== true) return;
-        //       // This is the total across all damage definitions. 
-        //       let damageTotal = 0;
-  
-        //       // Build roll array. 
-        //       const rolls = [];
-        //       for (const damageDefinition of thiz.skillAbility.damage) {
-        //         // At this point, the string may contain `@`-references. These must be resolved. 
-        //         let resolvedDamage = damageDefinition.damage;
-  
-        //         if (thiz.skillAbility.owningDocument !== undefined) {
-        //           // Resolve references. 
-        //           // If the skill (which is the ability's owning document) has a parent (= an actor document), 
-        //           // resolve references on that document, instead of the skill document. 
-        //           let resolvedReferences;
-        //           if (thiz.skillAbility.owningDocument.owningDocument !== undefined) {
-        //             resolvedReferences = thiz.skillAbility.owningDocument.owningDocument.resolveReferences(damageDefinition.damage)
-        //           } else {
-        //             resolvedReferences = thiz.skillAbility.owningDocument.resolveReferences(damageDefinition.damage)
-        //           }
-  
-        //           for (const [key, value] of resolvedReferences) {
-        //             // This replaces every reference of the current type, e. g. `"@strength"` with the 
-        //             // current level or value of the thing, if possible. 
-        //             // If a value cannot be determined, it will default to "0". 
-        //             const regExpReplace = new RegExp(key, "gi");
-    
-        //             const replaceValue = (value.level ?? value.value) ?? (isNumber(value) === true ? value : "0");
-    
-        //             resolvedDamage = resolvedDamage.replace(regExpReplace, replaceValue);
-        //           }
-        //         }
-  
-        //         // Get evaluated roll of damage formula. 
-        //         const rollResult = new Roll(resolvedDamage);
-        //         await rollResult.evaluate({ async: true });
-  
-        //         damageTotal += parseFloat(rollResult.total);
-  
-        //         // Get an array of each dice term. 
-        //         const diceResults = [];
-        //         for (const term of rollResult.terms) {
-        //           if (term.values !== undefined) {
-        //             for (const value of term.values) {
-        //               diceResults.push({
-        //                 value: value,
-        //                 isDiceResult: true,
-        //               });
-        //             }
-        //           } else {
-        //             diceResults.push({
-        //               value: term.total,
-        //               isDiceResult: false,
-        //             });
-        //           }
-        //         }
-  
-        //         // Get localized damage type. 
-        //         const localizedDamageType = game.i18n.localize(damageDefinition.damageType.localizableName);
-  
-        //         rolls.push({
-        //           damage: rollResult.total,
-        //           localizedDamageType: localizedDamageType,
-        //           diceResults: diceResults,
-        //         });
-        //       }
-  
-        //       // Determine title
-        //       const title = `${game.i18n.localize("ambersteel.damageDefinition.label")} - ${thiz.skillAbility.name}`;
-  
-        //       // Render the results. 
-        //       const renderedContent = await renderTemplate(TEMPLATES.DICE_ROLL_DAMAGE_CHAT_MESSAGE, {
-        //         damageTotal: damageTotal,
-        //         rolls: rolls,
-        //         title: title,
-        //       });
-  
-        //       return ChatUtil.sendToChat({
-        //         renderedContent: renderedContent,
-        //         actor: owningDocument.parent,
-        //         sound: SOUNDS_CONSTANTS.DICE_ROLL,
-        //         visibilityMode: dialog.visibilityMode
-        //       });
-        //     },
-        //   }).renderAndAwait(true);
-        // },
-          return "5 + 3D3";
+          if (thiz.propertyOwner.owningDocument !== undefined) {
+            const owningDocument = thiz.propertyOwner.owningDocument;
+            // Resolve references. 
+            // If the skill (which is the ability's owning document) has a parent (= an actor document), 
+            // resolve references on that document, instead of the skill document. 
+            let resolvedReferences;
+            if (owningDocument.owningDocument !== undefined) {
+              resolvedReferences = owningDocument.owningDocument.resolveReferences(damageDefinition.damage)
+            } else {
+              resolvedReferences = owningDocument.resolveReferences(damageDefinition.damage)
+            }
+
+            for (const [key, value] of resolvedReferences) {
+              // This replaces every reference of the current type, e. g. `"@strength"` with the 
+              // current level or value of the thing, if possible. 
+              // If a value cannot be determined, it will default to "0". 
+              const regExpReplace = new RegExp(key, "gi");
+              const replaceValue = (value.level ?? value.value) ?? (isNumber(value) === true ? value : "0");
+              resolvedDamage = resolvedDamage.replace(regExpReplace, replaceValue);
+            }
+          }
+          return resolvedDamage;
         },
       });
       this.damageDefinitionViewModels.push(vm);
