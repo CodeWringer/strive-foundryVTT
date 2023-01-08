@@ -10,9 +10,11 @@ cssClass: {String | undefined}
   <span class="width-min-xxl flex-grow">
     {{> inputTextField viewModel=viewModel.vmTfDamage }}
   </span>
-  <span class="square-button-light font-size-default flex flex-center">
-    <i class="far fa-question-circle info-button damage-info" id="{{viewModel.parentId}}"></i>
-  </span>
+  {{#if viewModel.hintId}}
+    <span class="square-button-light font-size-default flex flex-center">
+      <i class="far fa-question-circle info-button damage-info" id="{{viewModel.hintId}}"></i>
+    </span>
+  {{/if}}
   {{!-- Damage type --}}
   <div class="width-min-xxl">
     {{> inputLabel text=(localize "ambersteel.damageType.label") showFancyFont=viewModel.showFancyFont}}

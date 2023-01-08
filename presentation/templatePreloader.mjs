@@ -48,7 +48,9 @@ export const TEMPLATES = {
   // Composite
   COMPONENT_SORTABLE_LIST: `${basePathComponent}/sortable-list/sortable-list.hbs`,
   DICE_ROLL_LIST: `${basePathComponent}/dice-roll-list/dice-roll-list.hbs`,
-  COMPONENT_ROLL_DAMAGE_LIST_ITEM: `${basePathComponent}/damage-roll-list/damage-definition-list-item.hbs`,
+  COMPONENT_DAMAGE_DEFINITION_LIST_ITEM: `${basePathComponent}/damage-definition-list/damage-definition-list-item.hbs`,
+  COMPONENT_DAMAGE_DEFINITION_LIST: `${basePathComponent}/damage-definition-list/damage-definition-list.hbs`,
+  DICE_ROLL_DAMAGE_CHAT_MESSAGE: `${basePathComponent}/damage-definition-list/damage-roll-chat-message.hbs`,
   // GM
   COMPONENT_GM_NOTES: `${basePathComponent}/section-gm-notes/section-gm-notes.hbs`,
   // Dice
@@ -87,7 +89,6 @@ export const TEMPLATES = {
   SKILL_ABILITY_TABLE: `${basePathPresentation}/sheet/item/skill-ability/skill-ability-table.hbs`,
   SKILL_ABILITY_LIST_ITEM: `${basePathPresentation}/sheet/item/skill-ability/skill-ability-list-item.hbs`,
   SKILL_ABILITY_CHAT_MESSAGE: `${basePathPresentation}/sheet/item/skill-ability/skill-ability-chat-message.hbs`,
-  DICE_ROLL_DAMAGE_CHAT_MESSAGE: `${basePathPresentation}/sheet/item/skill-ability/roll-damage-chat-message.hbs`,
   // Fate
   FATE_CARD: `${basePathPresentation}/sheet/item/fate-card/fate-card.hbs`,
   FATE_CARD_ITEM_SHEET: `${basePathPresentation}/sheet/item/fate-card/fate-card-item-sheet.hbs`,

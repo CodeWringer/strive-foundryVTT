@@ -1,8 +1,10 @@
 import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import { SOUNDS_CONSTANTS } from "../../audio/sounds.mjs";
 import * as ChatUtil from "../../chat/chat-utility.mjs";
+import VisibilitySingleChoiceDialog from "../../dialog/visibility-single-choice-dialog/visibility-single-choice-dialog.mjs";
 import { TEMPLATES } from "../../templatePreloader.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
+import ButtonViewModel from "../button/button-viewmodel.mjs";
 
 /**
  * A button that allows performing a dice roll and then sending the result to the chat. 

@@ -58,7 +58,8 @@ import './presentation/component/button-take-item/button-take-item-viewmodel.mjs
 import './presentation/component/sortable-list/sortable-list-viewmodel.mjs';
 import './presentation/component/section-gm-notes/section-gm-notes-viewmodel.mjs';
 import './presentation/component/dice-roll-list/dice-roll-list-viewmodel.mjs';
-import './presentation/component/damage-roll-list/damage-definition-list-item-viewmodel.mjs';
+import './presentation/component/damage-definition-list/damage-definition-list-item-viewmodel.mjs';
+import './presentation/component/damage-definition-list/damage-definition-list-viewmodel.mjs';
 // View models
 import './presentation/sheet/actor/actor-sheet-viewmodel.mjs';
 import './presentation/sheet/actor/part/actor-attribute-table-viewmodel.mjs';

@@ -17,13 +17,15 @@ import ChoiceAdapter from "../input-choice/choice-adapter.mjs";
  * @property {Object} propertyOwner The transient document whose damage definition this is. 
  * @property {Number} index The index of this damage definition, in the array of damage 
  * definitions on the `propertyOwner`. 
+ * @property {String | undefined} hintId Id of the info bubble element that informs 
+ * the user about formula references. 
  * 
  * @property {ViewModel} vmTfDamage
  * @property {ViewModel} vmDdDamageType
  * @property {ViewModel} vmBtnDelete
  */
 export default class DamageDefinitionListItemViewModel extends ViewModel {
-  static get TEMPLATE() { return TEMPLATES.COMPONENT_ROLL_DAMAGE_LIST_ITEM; }
+  static get TEMPLATE() { return TEMPLATES.COMPONENT_DAMAGE_DEFINITION_LIST_ITEM; }
 
   /**
    * Returns an array of damage type choices. 
@@ -42,29 +44,26 @@ export default class DamageDefinitionListItemViewModel extends ViewModel {
   get localizableDeletionHint() { return "ambersteel.damageDefinition.delete"; }
   
   /**
-   * Returns the id of the parent view model instance. 
-   * 
-   * @type {String}
-   * @readonly
-   */
-  get parentId() { return this.parent.id; }
-
-  /**
    * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
    * @param {Object} args.propertyOwner The transient document whose damage definition this is. 
    * @param {Number} args.index The index of this damage definition, in the array of damage 
    * definitions on the `propertyOwner`. 
+   * @param {Function} args.resolveFormula A function which resolves the damage definition's 
+   * formula and returns it. 
+   * @param {String | undefined} hintId Id of the info bubble element that informs 
+   * the user about formula references. 
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["propertyOwner", "index"]);
+    validateOrThrow(args, ["propertyOwner", "index", "resolveFormula"]);
 
     this.propertyOwner = args.propertyOwner;
     this.index = args.index;
+    this.resolveFormula = args.resolveFormula;
+    this.hintId = args.hintId;
 
     const thiz = this;
     const factory = new ViewModelFactory();
-
     
     this.vmTfDamage = factory.createVmTextField({
       parent: thiz,
@@ -105,6 +104,14 @@ export default class DamageDefinitionListItemViewModel extends ViewModel {
       },
     });
   }
+
+  /**
+   * Resolves the formula and returns the result. 
+   * 
+   * @returns {String} A fully resolved and rollable formula. 
+   * * E. g. `"5D5 + 2"`. 
+   */
+  resolveFormula() { throw new Error("NotImplementedException"); }
 }
 
 Handlebars.registerPartial('damageDefinitionListItem', `{{> "${DamageDefinitionListItemViewModel.TEMPLATE}"}}`);
