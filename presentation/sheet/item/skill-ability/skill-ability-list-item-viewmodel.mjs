@@ -231,7 +231,7 @@ export default class SkillAbilityListItemViewModel extends ViewModel {
     this.vmDamageDefinitionList = new DamageDefinitionListViewModel({
       id: `vmDamageDefinitionList`,
       parent: thiz,
-      isEditable: (thiz.isEditable || thiz.isGM) && actor !== undefined,
+      isEditable: thiz.isEditable,
       isSendable: thiz.isSendable,
       isOwner: thiz.isOwner,
       isGM: thiz.isGM,
