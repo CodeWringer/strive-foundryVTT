@@ -47,6 +47,7 @@ export const TEMPLATES = {
   COMPONENT_BUTTON_CONTEXT_MENU: `${basePathComponent}/button-context-menu/button-context-menu.hbs`,
   // Composite
   COMPONENT_SORTABLE_LIST: `${basePathComponent}/sortable-list/sortable-list.hbs`,
+  DICE_ROLL_LIST: `${basePathComponent}/dice-roll-list/dice-roll-list.hbs`,
   // GM
   COMPONENT_GM_NOTES: `${basePathComponent}/section-gm-notes/section-gm-notes.hbs`,
   // Dice
