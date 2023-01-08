@@ -1,9 +1,9 @@
 {{!-- Parameters:
-damageTotal: {String | Number}
+rollTotal: {String | Number}
 rolls: {Array<Object>} = {
   cssClass: {String}
-  damage: {String}
-  localizedDamageType: {String}
+  rollTotal: {String}
+  localizedLabel: {String}
   diceResults: {Array<Object>} = {
     value: {String}
     isDiceResult: {Boolean}
@@ -21,7 +21,7 @@ cssClass: {undefined | String}
       {{#each rolls as |roll index|}}
         <li class="flex flex-column sheet-block margin-b-md{{#if roll.cssClass}} {{roll.cssClass}}{{/if}}">
           <div class="flex flex-row">
-            <h3 class="roll-damage-value">{{roll.damage}} {{roll.localizedDamageType}}</h3>
+            <h3 class="roll-damage-value">{{roll.rollTotal}} {{roll.localizedLabel}}</h3>
           </div>
           <ol class="dice-rolls">
             {{#each roll.diceResults as |diceResult diceIndex|}}
@@ -33,6 +33,6 @@ cssClass: {undefined | String}
     </ol>
   </div>
   <div class="flex flex-center">
-    <h3 class="roll-damage-value-total">{{damageTotal}}</h3>
+    <h3 class="roll-damage-value-total">{{rollTotal}}</h3>
   </div>
 </div>

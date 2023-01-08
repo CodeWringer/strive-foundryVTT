@@ -47,11 +47,14 @@ export const TEMPLATES = {
   COMPONENT_BUTTON_CONTEXT_MENU: `${basePathComponent}/button-context-menu/button-context-menu.hbs`,
   // Composite
   COMPONENT_SORTABLE_LIST: `${basePathComponent}/sortable-list/sortable-list.hbs`,
+  DICE_ROLL_LIST: `${basePathComponent}/dice-roll-list/dice-roll-list.hbs`,
+  COMPONENT_DAMAGE_DEFINITION_LIST_ITEM: `${basePathComponent}/damage-definition-list/damage-definition-list-item.hbs`,
+  COMPONENT_DAMAGE_DEFINITION_LIST: `${basePathComponent}/damage-definition-list/damage-definition-list.hbs`,
+  DICE_ROLL_DAMAGE_CHAT_MESSAGE: `${basePathComponent}/damage-definition-list/damage-roll-chat-message.hbs`,
   // GM
   COMPONENT_GM_NOTES: `${basePathComponent}/section-gm-notes/section-gm-notes.hbs`,
   // Dice
   DICE_ROLL_CHAT_MESSAGE: `${basePathPresentation}/dice/roll.hbs`,
-  DICE_ROLL_DAMAGE_CHAT_MESSAGE: `${basePathPresentation}/dice/roll-damage-chat-message.hbs`,
   // --- Dialogs
   DIALOG_MODAL: `${basePathPresentation}/dialog/modal-dialog/modal-dialog.hbs`,
   DIALOG_ROLL: `${basePathPresentation}/dialog/roll-dialog/roll-dialog.hbs`,
