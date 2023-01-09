@@ -11,6 +11,18 @@ import ActorHealthViewModel from "./part/actor-health-viewmodel.mjs"
 import ActorPersonalsViewModel from "./part/actor-personals-viewmodel.mjs"
 import ActorSkillsViewModel from "./part/actor-skills-viewmodel.mjs"
 
+/**
+ * @extends ViewModel
+ * 
+ * @property {ViewModel} personalsViewModel
+ * @property {ViewModel} attributesViewModel
+ * @property {ViewModel} skillsViewModel
+ * @property {ViewModel} beliefsFateViewModel
+ * @property {ViewModel} healthViewModel
+ * @property {ViewModel} assetsViewModel
+ * @property {ViewModel} biographyViewModel
+ * @property {ViewModel} gmNotesViewModel
+ */
 export default class ActorSheetViewModel extends ViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.ACTOR_SHEET; }
@@ -35,30 +47,6 @@ export default class ActorSheetViewModel extends ViewModel {
    * @type {Boolean}
    */
   get isPlain() { return this.document.type === "plain"; }
-
-  personalsViewModel = undefined;
-  get personalsId() { return "child-personals-viewmodel"; }
-  
-  attributesViewModel = undefined;
-  get attributesId() { return "child-attributes-viewmodel"; }
-  
-  skillsViewModel = undefined;
-  get skillsId() { return "child-skill-viewmodel"; }
-  
-  beliefsFateViewModel = undefined;
-  get beliefsFateId() { return "child-beliefs-fate-viewmodel"; }
-  
-  healthViewModel = undefined;
-  get healthId() { return "child-health-viewmodel"; }
-  
-  assetsViewModel = undefined;
-  get assetsId() { return "child-assets-viewmodel"; }
-  
-  biographyViewModel = undefined;
-  get biographyId() { return "child-biography-viewmodel"; }
-  
-  gmNotesViewModel = undefined;
-  get gmNotesId() { return "child-gm-notes-viewmodel"; }
 
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
@@ -100,19 +88,52 @@ export default class ActorSheetViewModel extends ViewModel {
     });
 
     if (this.isPlain !== true) {
-      this.personalsViewModel = new ActorPersonalsViewModel({ ...args, id: thiz.personalsId, parent: thiz });
-      this.attributesViewModel = new ActorAttributesViewModel({ ...args, id: thiz.personalsId, parent: thiz });
-      this.skillsViewModel = new ActorSkillsViewModel({ ...args, id: thiz.skillsId, parent: thiz });
+      this.personalsViewModel = new ActorPersonalsViewModel({ 
+        ...args, 
+        id: "personals", 
+        parent: thiz 
+      });
+      this.attributesViewModel = new ActorAttributesViewModel({ 
+        ...args, 
+        id: "attributes", 
+        parent: thiz 
+      });
+      this.skillsViewModel = new ActorSkillsViewModel({ 
+        ...args, 
+        id: "skills", 
+        parent: thiz 
+      });
       if (args.document.type === 'pc') {
-        this.beliefsFateViewModel = new ActorBeliefsFateViewModel({ ...args, id: thiz.beliefsFateId, parent: thiz });
+        this.beliefsFateViewModel = new ActorBeliefsFateViewModel({ 
+          ...args, 
+          id: "beliefs-fate", 
+          parent: thiz 
+        });
       }
-      this.healthViewModel = new ActorHealthViewModel({ ...args, id: thiz.healthId, parent: thiz });
-      this.assetsViewModel = new ActorAssetsViewModel({ ...args, id: thiz.assetsId, parent: thiz });
-      this.biographyViewModel = new ActorBiographyViewModel({ ...args, id: thiz.biographyId, parent: thiz });
+      this.healthViewModel = new ActorHealthViewModel({ 
+        ...args, 
+        id: "health", 
+        parent: thiz 
+      });
+      this.assetsViewModel = new ActorAssetsViewModel({ 
+        ...args, 
+        id: "assets", 
+        parent: thiz 
+      });
+      this.biographyViewModel = new ActorBiographyViewModel({ 
+        ...args, 
+        id: "biography", 
+        parent: thiz 
+      });
     }
 
     if (this.isGM === true) {
-      this.gmNotesViewModel = new GmNotesViewModel({ ...args, id: thiz.biographyId, document: thiz.document, parent: thiz });
+      this.gmNotesViewModel = new GmNotesViewModel({ 
+        ...args, 
+        id: "gmNotes", 
+        document: thiz.document, 
+        parent: thiz 
+      });
     }
     
     this.vmBtnSendToChat = factory.createVmBtnSendToChat({
