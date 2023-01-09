@@ -90,8 +90,12 @@ export class AmbersteelItemSheet extends ItemSheet {
     // Dispose of the view model, if it exists. 
     this._tryDisposeViewModel();
     // Prepare a new view model instance. 
-    this._viewModel = this.subType.getViewModel(context, context.item);
-    this._viewModel.readViewState();
+    game.ambersteel.logger.logPerf(this, "item.getData (getViewModel)", () => {
+      this._viewModel = this.subType.getViewModel(context, context.item);
+    });
+    game.ambersteel.logger.logPerf(this, "item.getData (readViewState)", () => {
+      this._viewModel.readViewState();
+    });
     context.viewModel = this._viewModel;
     
     return context;
@@ -104,8 +108,12 @@ export class AmbersteelItemSheet extends ItemSheet {
     const isOwner = (this.actor ?? this.item).isOwner;
     const isEditable = this.isEditable;
     
-    this.subType.activateListeners(html, isOwner, isEditable);
-    this.viewModel.activateListeners(html, isOwner, isEditable);
+    game.ambersteel.logger.logPerf(this, "item.activateListeners (subType)", () => {
+      this.subType.activateListeners(html, isOwner, isEditable);
+    });
+    game.ambersteel.logger.logPerf(this, "item.activateListeners (viewModel)", () => {
+      this.viewModel.activateListeners(html, isOwner, isEditable);
+    });
 
     if (!isOwner) return;
 

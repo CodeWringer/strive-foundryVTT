@@ -51,7 +51,9 @@ export class AmbersteelActor extends Actor {
         throw new Error(`InvalidTypeException: Actor subtype ${this.type} is unrecognized!`);
       }
 
-      this._transientObject = factoryFunction(this);
+      game.ambersteel.logger.logPerf(this, "actor.getTransientObject (non-cached)", () => {
+        this._transientObject = factoryFunction(this);
+      });
     }
     return this._transientObject;
   }
