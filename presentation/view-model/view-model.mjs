@@ -41,24 +41,33 @@ import GetShowFancyFontUseCase from "../../business/use-case/get-show-fancy-font
  * In order to achieve that, view models can write their current state to an object, which can then be 
  * stored in some global location and later retrieved and applied to the view model. 
  * 
- * Since view models are always disposed when their associated document sheet is closed, 
- * their current state, naturally, gets lost. When a view model is re-instantiated, its stored view state 
- * can be fetched from the global location and applied, thus restoring its previous state. 
- * 
- * IMPORTANT: Persistent state can only be achieved, if the ids of the child view models 
+ * IMPORTANT: Persistent state can only be achieved, if the IDs of the child view models 
  * always remain the same. This implies that the parent view model must create its child view models and 
- * pass in explicit ids for them to use. 
+ * pass in explicit IDs for them to use. 
  * 
- * @property {String} id Id used for the HTML element's id and name attributes. 
+ * @property {String} id Unique ID of this view model instance. 
+ * * Read-only. 
  * @property {ViewModel | undefined} parent Optional. Parent ViewModel instance of this instance. 
  * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 
  * is expected to be associated with an actor sheet or item sheet or journal entry or chat message and so on.
+ * * Read-only. 
  * @property {Array<ViewModel>} children An array of the child view models of this view model. 
+ * * Read-only. 
  * @property {String} TEMPLATE Static. Returns the template this ViewModel is intended for. 
+ * * Read-only. 
+ * @property {Boolean} isGM If true, the current user is a GM. 
+ * * Read-only. 
+ * @property {Boolean} isEditable If true, the view model data is editable.
+ * @property {Boolean} isSendable If true, the document represented by the sheet can be sent to chat.
+ * @property {Boolean} isOwner If true, the current user is the owner of the represented document.
+ * @property {String | undefined} contextTemplate Name or path of a contextual template, 
+ * which will be displayed in exception log entries, to aid debugging.
+ * * Read-only. 
  */
 export default class ViewModel {
   /**
    * Static. Returns the template this ViewModel is intended for. 
+   * 
    * @abstract
    * @throws {Error} NotImplementedException - Thrown if not overriden by implementing types. 
    * @readonly
@@ -67,12 +76,23 @@ export default class ViewModel {
 
   /**
    * The exception to throw when disposed fields and methods are accessed. 
+   * 
    * @type {Error}
    * @readonly
    */
   static get DISPOSED_ACCESS_VIOLATION_EXCEPTION() { return new Error("DisposedAccessViolation: The object has been disposed and its members can no longer be accessed"); }
 
   /**
+   * The data source for view state objects. 
+   * 
+   * @type {Map<String, Object>}
+   * @private
+   */
+  _viewStateSource = undefined;
+
+  /**
+   * Internal unique ID of this view model instance.
+   * 
    * @type {String}
    * @private
    */
@@ -101,6 +121,7 @@ export default class ViewModel {
    * 
    * If undefined, then this ViewModel instance may be regarded as a "root" level instance. A root level instance 
    * is expected to be associated with an actor sheet or item sheet or journal entry or chat message and so on.
+   * 
    * @type {ViewModel | undefined}
    * @readonly
    */
@@ -108,6 +129,7 @@ export default class ViewModel {
 
   /**
    * An array of the child view models of this view model. 
+   * 
    * @type {Array<ViewModel>}
    * @readonly
    */
@@ -116,6 +138,7 @@ export default class ViewModel {
   /**
    * An array of property names. These are the properties of *this* view model that will 
    * automatically be written to / restored from view state. 
+   * 
    * @type {Array<String>}
    * @protected
    */
@@ -124,6 +147,7 @@ export default class ViewModel {
   /**
    * Returns the id of the associated entity (e. g. an actor document), or undefined, 
    * if this view model is not associated with any identifiable entity. 
+   * 
    * @type {String | undefined}
    * @readonly
    * @virtual
@@ -132,6 +156,7 @@ export default class ViewModel {
 
   /**
    * If true, the view model data is editable. 
+   * 
    * @type {Boolean}
    * @default `false`
    */
@@ -139,6 +164,7 @@ export default class ViewModel {
   
   /**
    * If true, the document represented by the sheet can be sent to chat. 
+   * 
    * @type {Boolean}
    * @default `false`
    */
@@ -146,6 +172,7 @@ export default class ViewModel {
 
   /**
    * If true, the current user is the owner of the represented document. 
+   * 
    * @type {Boolean}
    * @default `false`
    */
@@ -153,10 +180,10 @@ export default class ViewModel {
   
   /**
    * If true, the current user is a GM. 
+   * 
    * @type {Boolean}
-   * @default `false`
    */
-  isGM = false;
+  get isGM() { return game.user.isGM; }
   
   /**
    * If true, show the 'fancy' font. 
@@ -168,6 +195,7 @@ export default class ViewModel {
 
   /**
    * Name or path of a contextual template, which will be displayed in exception log entries, to aid debugging. 
+   * 
    * @type {String | undefined}
    * @readonly
    */
@@ -180,10 +208,20 @@ export default class ViewModel {
    * 
    * This string may not contain any special characters! Alphanumeric symbols, as well as hyphen ('-') and 
    * underscore ('_') are permitted, but no dots, brackets, braces, slashes, equal sign, and so on. Failing to comply to this 
-   * naming restriction may result in DOM elements not being properly detected by the 'activateListeners' method. 
+   * naming restriction may result in DOM elements not being properly detected by the `activateListeners` method. 
    * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 
    * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 
    * is expected to be associated with an actor sheet or item sheet or journal entry or chat message and so on.
+   * @param {Boolean | undefined} args.isEditable If true, the view model data is editable.
+   * * Default `false`. 
+   * @param {Boolean | undefined} args.isSendable If true, the document represented by the sheet can be sent to chat.
+   * * Default `false`. 
+   * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document.
+   * * Default `false`. 
+   * @param {String | undefined} args.contextTemplate Name or path of a contextual template, 
+   * which will be displayed in exception log entries, to aid debugging.
+   * @param {Map<String, Object>} args.viewStateSource The data source for view state objects. 
+   * * Default `game.ambersteel.viewStates`. 
    */
   constructor(args = {}) {
     this._id = args.id ?? createUUID();
@@ -193,18 +231,35 @@ export default class ViewModel {
       this.parent.children.push(this);
     }
 
+    this.contextTemplate = args.contextTemplate;
+    this._viewStateSource = args.viewStateSource ?? game.ambersteel.viewStates;
+
+    this.update(args);
+  }
+
+  /**
+   * Updates the data of this view model. 
+   * 
+   * @param {Boolean | undefined} args.isEditable If true, the view model data is editable.
+   * * Default `false`. 
+   * @param {Boolean | undefined} args.isSendable If true, the document represented by the sheet can be sent to chat.
+   * * Default `false`. 
+   * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document.
+   * * Default `false`. 
+   * 
+   * @virtual
+   */
+  update(args = {}) {
     this.isEditable = args.isEditable ?? false;
     this.isSendable = args.isSendable ?? false;
     this.isOwner = args.isOwner ?? false;
-    this.isGM = args.isGM ?? false;
-    
-    this.contextTemplate = args.contextTemplate;
   }
 
   /**
    * Disposes of any working data. 
    * 
    * This is a clean-up operation that should only be called when the instance of this class is no longer needed!
+   * 
    * @virtual
    */
   dispose() {
@@ -247,6 +302,7 @@ export default class ViewModel {
    * Silently prevents adding the same property name multiple times. 
    * 
    * Does not verify that a property with the given name exists on this view model instance. 
+   * 
    * @param {String} propertyName Name of a property to register as view state writeable/restorable. 
    */
   registerViewStateProperty(propertyName) {
@@ -271,6 +327,7 @@ export default class ViewModel {
    * 
    * @returns {Object | undefined} An object that represents the current view state, 
    * or undefined, if there is no view state to save. 
+   * 
    * @virtual
    */
   toViewState() {
@@ -310,6 +367,7 @@ export default class ViewModel {
    * @param {Object | undefined} viewState The view state to apply, or undefined. 
    * It can be undefined, if there is no view state to store. This can be the case, if no properties are registered 
    * as storeable, either in this view model instance or in all of its children. 
+   * 
    * @virtual
    */
   applyViewState(viewState) {
@@ -331,10 +389,12 @@ export default class ViewModel {
   
   /**
    * Registers events on elements of the given DOM. 
+   * 
    * @param {Object} html DOM of the sheet for which to register listeners. 
    * @param {Boolean} isOwner If true, registers events that require owner permission. 
    * @param {Boolean} isEditable If true, registers events that require editing permission. 
-   * @throws {Error} NullPointerException - Thrown if the input element could not be found. 
+   * 
+   * @virtual
    */
   activateListeners(html, isOwner, isEditable) {
     for (const child of this.children) {
@@ -348,10 +408,9 @@ export default class ViewModel {
 
   /**
    * Retrieves and applies the view state. 
-   * @param {Map<String, Object>} globalViewStates 
    */
-  readViewState(globalViewStates = game.ambersteel.viewStates) {
-    const viewState = globalViewStates.get(this.id);
+  readViewState() {
+    const viewState = this._viewStateSource.get(this.id);
     if (viewState !== undefined) {
       this.applyViewState(viewState);
     }
@@ -359,11 +418,10 @@ export default class ViewModel {
 
   /**
    * Stores the current view state of this view model. 
-   * @param {Map<String, Object>} globalViewStates 
    */
-  writeViewState(globalViewStates = game.ambersteel.viewStates) {
+  writeViewState() {
     const viewState = this.toViewState()
-    globalViewStates.set(this.id, viewState);
+    this._viewStateSource.set(this.id, viewState);
   }
 
   /**
@@ -374,13 +432,12 @@ export default class ViewModel {
    * The top-most parent in the hierarchy of parents writes out its state. 
    * 
    * To that end, the hierarchy is traversed upwards, starting with the parent of this view model instance. 
-   * @param {Map<String, Object>} globalViewStates 
    */
-  writeAllViewState(globalViewStates = game.ambersteel.viewStates) {
+  writeAllViewState() {
     if (this.parent !== undefined && this.parent !== null) {
-      this.parent.writeAllViewState(globalViewStates);
+      this.parent.writeAllViewState();
     } else {
-      this.writeViewState(globalViewStates);
+      this.writeViewState();
     }
   }
 }
