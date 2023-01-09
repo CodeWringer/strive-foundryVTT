@@ -364,6 +364,8 @@ export default class TransientSkill extends TransientBaseItem {
       
     const result = [];
     for (const abilityId in abilitiesOnDocument) {
+      if (abilitiesOnDocument.hasOwnProperty(abilityId) !== true) continue;
+
       const dto = abilitiesOnDocument[abilityId];
 
       const damage = [];
