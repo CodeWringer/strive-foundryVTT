@@ -61,7 +61,6 @@ export default class ButtonAddViewModel extends ButtonViewModel {
     this.localizableLabel = args.localizableLabel;
     this.localizableType = args.localizableType;
     this.localizableDialogTitle = args.localizableDialogTitle;
-    this.showFancyFont = new GetShowFancyFontUseCase().invoke();
 
     if (isObject(this.creationData) !== true) {
       this.creationData = this._parseCreationData(this.creationData);

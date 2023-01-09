@@ -160,10 +160,11 @@ export default class ViewModel {
   
   /**
    * If true, show the 'fancy' font. 
+   * 
    * @type {Boolean}
-   * @default `false`
+   * @readonly
    */
-  showFancyFont = false;
+  get showFancyFont() { return new GetShowFancyFontUseCase().invoke(); };
 
   /**
    * Name or path of a contextual template, which will be displayed in exception log entries, to aid debugging. 
@@ -198,8 +199,6 @@ export default class ViewModel {
     this.isGM = args.isGM ?? false;
     
     this.contextTemplate = args.contextTemplate;
-    
-    this.showFancyFont = new GetShowFancyFontUseCase().invoke();
   }
 
   /**
