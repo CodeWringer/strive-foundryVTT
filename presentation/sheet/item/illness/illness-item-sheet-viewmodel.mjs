@@ -19,7 +19,6 @@ export default class IllnessItemSheetViewModel extends ViewModel {
    * @param {Boolean | undefined} args.isEditable If true, the sheet is editable. 
    * @param {Boolean | undefined} args.isSendable If true, the document represented by the sheet can be sent to chat. 
    * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document. 
-   * @param {Boolean | undefined} args.isGM If true, the current user is a GM. 
    * 
    * @param {TransientIllness} args.document
    */
@@ -75,5 +74,14 @@ export default class IllnessItemSheetViewModel extends ViewModel {
       propertyOwner: thiz.document,
       propertyPath: "description",
     });
+  }
+
+  /** @override */
+  update(args = {}, childArgs = new Map()) {
+    childArgs.set(this.vmBtnSendToChat.id, {
+      isEditable: this.isEditable || this.isGM,
+    });
+
+    super.update(args, childArgs);
   }
 }

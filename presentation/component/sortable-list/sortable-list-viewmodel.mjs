@@ -1,3 +1,4 @@
+import { arrayContains } from "../../../business/util/array-utility.mjs";
 import { moveArrayElement, moveArrayElementBy } from "../../../business/util/array-utility.mjs";
 import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import { TEMPLATES } from "../../templatePreloader.mjs";
@@ -45,7 +46,6 @@ export default class SortableListViewModel extends ViewModel {
    * An array of view models that belong to the entries. 
    * 
    * @type {Array<SortableListViewModelGroup>}
-   * @private
    */
   itemViewModelGroups = [];
 
@@ -82,43 +82,36 @@ export default class SortableListViewModel extends ViewModel {
     this.vmBtnAddItem = args.vmBtnAddItem;
     this.contextTemplate = args.contextTemplate ?? "sortable-list";
 
-    const thiz = this;
-
-    // Get the item order. 
-
-    const orderedIdList = this.indexDataSource.getAll();
-
-    // Cull obsolete entries. 
-    for (let i = orderedIdList.length -1; i >= 0; i--) {
-      const listItemViewModel = this.listItemViewModels.find(it => it.entityId === orderedIdList[i]);
-      if (listItemViewModel === undefined) {
-        orderedIdList.splice(i, 1);
-      }
-    }
-
-    // Add new entries. 
-    for (const listItemViewModel of this.listItemViewModels) {
-      const entityId = listItemViewModel.entityId;
-      const id = orderedIdList.find(it => it === entityId);
-      if (id === undefined) {
-        orderedIdList.push(entityId);
-      }
-    }
-
-    // Ensure the ordered ids remain accessible. 
-    this.orderedIdList = orderedIdList;
-
+    this.orderedIdList = this._getOrderedIdList();
     // Generate data for the ui. 
-    for (let i = 0; i < orderedIdList.length; i++) {
-      const id = orderedIdList[i];
-      const listItemViewModel = this.listItemViewModels.find(it => it.entityId === id);
+    this.itemViewModelGroups = this._generateViewModelGroups();
+  }
 
-      const upButtonsDisabled = i === 0;
-      const downButtonsDisabled = i === orderedIdList.length - 1;
+  /**
+   * Updates the data of this view model. 
+   * 
+   * @param {Boolean | undefined} args.isEditable If true, the view model data is editable.
+   * * Default `false`. 
+   * @param {Boolean | undefined} args.isSendable If true, the document represented by the sheet can be sent to chat.
+   * * Default `false`. 
+   * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document.
+   * * Default `false`. 
+   * @param {Map<String, Object> | undefined} args.childArgs Do not use!
+   * * Intended for internal use, only. 
+   * @param {Array<ViewModel>} args.listItemViewModels A list of item view models.
+   * 
+   * @override
+   */
+  update(args = {}, childArgs = new Map()) {
+    validateOrThrow(args, ["listItemViewModels"]);
 
-      const itemViewModelGroup = this._generateViewModelGroup(id, listItemViewModel, !upButtonsDisabled, !downButtonsDisabled);
-      this.itemViewModelGroups.push(itemViewModelGroup);
-    }
+    this.listItemViewModels = args.listItemViewModels;
+
+    this.orderedIdList = this._getOrderedIdList();
+    // Generate data for the ui. 
+    this.itemViewModelGroups = this._generateViewModelGroups();
+
+    super.update(args, childArgs);
   }
 
   /** @override */
@@ -131,10 +124,12 @@ export default class SortableListViewModel extends ViewModel {
 
   /**
    * Returns a `SortableListViewModelGroup` instance, based on the given id and item view model. 
+   * 
    * @param {String} id 
    * @param {ViewModel} itemViewModel 
    * @param {Boolean | undefined} upButtonsDisabled Optional. 
    * @param {Boolean | undefined} downButtonsDisabled Optional. 
+   * 
    * @returns {SortableListViewModelGroup}
    */
   _generateViewModelGroup(id, itemViewModel, upButtonsDisabled, downButtonsDisabled) {
@@ -173,6 +168,28 @@ export default class SortableListViewModel extends ViewModel {
       listItemTemplate: thiz.listItemTemplate,
       vmBtnAddItem: thiz.vmBtnAddItem,
     });
+  }
+
+  /**
+   * @returns {Array<SortableListViewModelGroup>}
+   * 
+   * @private
+   */
+  _generateViewModelGroups() {
+    const result = [];
+
+    for (let i = 0; i < this.orderedIdList.length; i++) {
+      const id = this.orderedIdList[i];
+      const listItemViewModel = this.listItemViewModels.find(it => it.entityId === id);
+
+      const upButtonsEnabled = i > 0;
+      const downButtonsEnabled = i < this.orderedIdList.length - 1;
+
+      const itemViewModelGroup = this._generateViewModelGroup(id, listItemViewModel, upButtonsEnabled, downButtonsEnabled);
+      result.push(itemViewModelGroup);
+    }
+
+    return result;
   }
 
   /**
@@ -223,6 +240,37 @@ export default class SortableListViewModel extends ViewModel {
   async _moveToBottom(id) {
     moveArrayElement(this.orderedIdList, id, this.orderedIdList.length - 1);
     this._storeItemOrder();
+  }
+
+  /**
+   * @returns {Array<String>}
+   * 
+   * @private
+   */
+  _getOrderedIdList() {
+    const result = [];
+
+    // The ordered IDs currently stroed on the document. 
+    const existingIds = this.indexDataSource.getAll();
+
+    // Cull removed entries. 
+    for (const existingId of existingIds) {
+      const listItemViewModel = this.listItemViewModels.find(it => it.entityId === existingId);
+      if (listItemViewModel !== undefined) {
+        result.push(existingId);
+      }
+    }
+
+    // Add new entries.
+    for (const listItemViewModel of this.listItemViewModels) {
+      if (arrayContains(result, listItemViewModel.entityId) === true) {
+        continue;
+      } else {
+        result.push(listItemViewModel.entityId);
+      }
+    }
+
+    return result;
   }
 }
 

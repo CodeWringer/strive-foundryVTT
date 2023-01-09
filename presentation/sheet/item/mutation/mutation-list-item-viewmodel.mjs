@@ -20,7 +20,6 @@ export default class MutationListItemViewModel extends ViewModel {
    * @param {Boolean | undefined} args.isEditable If true, the sheet is editable. 
    * @param {Boolean | undefined} args.isSendable If true, the document represented by the sheet can be sent to chat. 
    * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document. 
-   * @param {Boolean | undefined} args.isGM If true, the current user is a GM. 
    */
   constructor(args = {}) {
     super(args);
@@ -48,6 +47,7 @@ export default class MutationListItemViewModel extends ViewModel {
       parent: thiz,
       id: "vmBtnSendToChat",
       target: thiz.document,
+      isEditable: thiz.isEditable || thiz.isGM,
     });
     this.vmBtnDelete = factory.createVmBtnDelete({
       parent: thiz,
@@ -61,5 +61,14 @@ export default class MutationListItemViewModel extends ViewModel {
       propertyOwner: thiz.document,
       propertyPath: "description",
     });
+  }
+
+  /** @override */
+  update(args = {}, childArgs = new Map()) {
+    childArgs.set(this.vmBtnSendToChat.id, {
+      isEditable: this.isEditable || this.isGM,
+    });
+
+    super.update(args, childArgs);
   }
 }

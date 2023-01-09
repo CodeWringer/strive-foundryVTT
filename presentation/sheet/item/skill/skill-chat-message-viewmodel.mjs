@@ -42,7 +42,6 @@ export default class SkillChatMessageViewModel extends ViewModel {
    * @param {Boolean | undefined} args.isEditable If true, the sheet is editable. 
    * @param {Boolean | undefined} args.isSendable If true, the document represented by the sheet can be sent to chat. 
    * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document. 
-   * @param {Boolean | undefined} args.isGM If true, the current user is a GM. 
    * 
    * @param {String | undefined} args.visGroupId
    */
@@ -62,7 +61,6 @@ export default class SkillChatMessageViewModel extends ViewModel {
       isEditable: thiz.isEditable,
       isSendable: thiz.isSendable,
       isOwner: thiz.isOwner,
-      isGM: thiz.isGM,
       document: thiz.document,
       skillAbilitiesInitiallyVisible: false,
       oneColumn: true,

@@ -74,7 +74,6 @@ export default class SkillAbilityListItemViewModel extends ViewModel {
    * @param {Boolean | undefined} args.isEditable If true, the sheet is editable. 
    * @param {Boolean | undefined} args.isSendable If true, the document represented by the sheet can be sent to chat. 
    * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document. 
-   * @param {Boolean | undefined} args.isGM If true, the current user is a GM. 
    */
   constructor(args = {}) {
     super(args);
@@ -88,7 +87,8 @@ export default class SkillAbilityListItemViewModel extends ViewModel {
     
     const skillAbility = this.skillAbility;
     const owningDocument = skillAbility.owningDocument;
-    const actor = ((thiz.skillAbility.owningDocument ?? {}).owningDocument ?? {}).document;
+    this._actor = ((thiz.skillAbility.owningDocument ?? {}).owningDocument ?? {}).document;
+    const actor = this._actor;
 
     this.vmBtnRoll = factory.createVmBtnRoll({
       parent: thiz,
@@ -234,11 +234,22 @@ export default class SkillAbilityListItemViewModel extends ViewModel {
       isEditable: thiz.isEditable,
       isSendable: thiz.isSendable,
       isOwner: thiz.isOwner,
-      isGM: thiz.isGM,
       propertyOwner: thiz.skillAbility,
       propertyPath: "damage",
       hintId: thiz.id,
     });
+  }
+
+  /** @override */
+  update(args = {}, childArgs = new Map()) {
+    childArgs.set(this.vmBtnSendToChat.id, {
+      isEditable: this.isEditable || this.isGM,
+    });
+    childArgs.set(this.vmBtnRoll.id, {
+      isEditable: (this.isEditable || this.isGM) && this._actor !== undefined,
+    });
+
+    super.update(args, childArgs);
   }
 
   /** @override */

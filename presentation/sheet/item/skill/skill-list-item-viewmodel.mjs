@@ -48,7 +48,6 @@ export default class SkillListItemViewModel extends SkillViewModel {
    * @param {Boolean | undefined} args.isEditable If true, the sheet is editable. 
    * @param {Boolean | undefined} args.isSendable If true, the document represented by the sheet can be sent to chat. 
    * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document. 
-   * @param {Boolean | undefined} args.isGM If true, the current user is a GM. 
    * 
    * @param {String | undefined} args.visGroupId
    */
@@ -89,6 +88,7 @@ export default class SkillListItemViewModel extends SkillViewModel {
       parent: thiz,
       id: "vmBtnSendToChat",
       target: thiz.document,
+      isEditable: thiz.isEditable || thiz.isGM,
     });
     this.vmBtnDelete = factory.createVmBtnDelete({
       parent: thiz,
@@ -148,7 +148,6 @@ export default class SkillListItemViewModel extends SkillViewModel {
       isEditable: thiz.isEditable,
       isSendable: thiz.isSendable,
       isOwner: thiz.isOwner,
-      isGM: thiz.isGM,
       document: thiz.document,
       skillAbilitiesInitiallyVisible: false,
       oneColumn: false,
@@ -166,5 +165,14 @@ export default class SkillListItemViewModel extends SkillViewModel {
       propertyOwner: thiz.document,
       propertyPath: "description",
     });
+  }
+
+  /** @override */
+  update(args = {}, childArgs = new Map()) {
+    childArgs.set(this.vmBtnSendToChat.id, {
+      isEditable: this.isEditable || this.isGM,
+    });
+
+    super.update(args, childArgs);
   }
 }

@@ -75,7 +75,6 @@ export default class SkillAbilityTableViewModel extends ViewModel {
    * @param {Boolean | undefined} args.isEditable If true, the sheet is editable. 
    * @param {Boolean | undefined} args.isSendable If true, the document represented by the sheet can be sent to chat. 
    * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document. 
-   * @param {Boolean | undefined} args.isGM If true, the current user is a GM. 
    * 
    * @param {TransientSkill} args.document
    * @param {Boolean | undefined} args.oneColumn
@@ -109,7 +108,6 @@ export default class SkillAbilityTableViewModel extends ViewModel {
           isEditable: args.isEditable,
           isSendable: args.isSendable,
           isOwner: args.isOwner,
-          isGM: args.isGM,
           skillAbility: skillAbility,
         })
       } else {
@@ -119,7 +117,6 @@ export default class SkillAbilityTableViewModel extends ViewModel {
           isEditable: args.isEditable,
           isSendable: args.isSendable,
           isOwner: args.isOwner,
-          isGM: args.isGM,
           skillAbility: skillAbility,
         });
       }
