@@ -234,7 +234,11 @@ export default class ViewModel {
     this.contextTemplate = args.contextTemplate;
     this._viewStateSource = args.viewStateSource ?? game.ambersteel.viewStates;
 
-    this.update(args);
+    // Even though this may seem redundant at first (see `update` method), 
+    // this is more efficient than calling `update` here. 
+    this.isEditable = args.isEditable ?? false;
+    this.isSendable = args.isSendable ?? false;
+    this.isOwner = args.isOwner ?? false;
   }
 
   /**
@@ -246,13 +250,28 @@ export default class ViewModel {
    * * Default `false`. 
    * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document.
    * * Default `false`. 
+   * @param {Map<String, Object> | undefined} args.childArgs A map of child view model 
+   * IDs and their own specialized arguments. 
+   * 
+   * If a specialized arguments object is provided for a child view model, it will be used, 
+   * instead of the given `args` object. If not given, the `args` object is passed through 
+   * to the child view model. 
    * 
    * @virtual
    */
-  update(args = {}) {
+  update(args = {}, childArgs = new Map()) {
     this.isEditable = args.isEditable ?? false;
     this.isSendable = args.isSendable ?? false;
     this.isOwner = args.isOwner ?? false;
+
+    for (const child of this.children) {
+      const _childArgs = childArgs.get(child.id);
+      if (_childArgs !== undefined) {
+        child.update(_childArgs);
+      } else {
+        child.update(args);
+      }
+    }
   }
 
   /**
