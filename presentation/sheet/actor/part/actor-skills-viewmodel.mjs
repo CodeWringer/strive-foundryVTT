@@ -111,22 +111,12 @@ export default class ActorSkillsViewModel extends ViewModel {
   update(args = {}) {
     // Known skills
     const newKnownSkills = this._getKnownSkillViewModels();
-    for (const existing of this.knownSkillViewModels) {
-      const cull = newKnownSkills.find(it => it._id === existing._id) === undefined;
-      if (cull === true) {
-        existing.parent = undefined;
-      }
-    }
+    this._cullObsolete(this.knownSkillViewModels, newKnownSkills);
     this.knownSkillViewModels = newKnownSkills;
     
     // Learning skills
     const newLearningSkills = this._getLearningSkillViewModels();
-    for (const existing of this.learningSkillViewModels) {
-      const cull = newLearningSkills.find(it => it._id === existing._id) === undefined;
-      if (cull === true) {
-        existing.parent = undefined;
-      }
-    }
+    this._cullObsolete(this.learningSkillViewModels, newLearningSkills);
     this.learningSkillViewModels = newLearningSkills;
 
     super.update(args);
@@ -154,25 +144,11 @@ export default class ActorSkillsViewModel extends ViewModel {
    * @private
    */
   _getLearningSkillViewModels() {
-    const result = [];
-    
-    const documents = this.document.skills.learning;
-    for (const document of documents) {
-      let vm = this.learningSkillViewModels.find(it => it._id === document.id);
-      if (vm === undefined) {
-        vm = new SkillListItemViewModel({
-          id: document.id,
-          document: document,
-          isEditable: this.isEditable,
-          isSendable: this.isSendable,
-          isOwner: this.isOwner,
-          isGM: this.isGM,
-        });
-      }
-      result.push(vm);
-    }
-
-    return result;
+    return this._getViewModels(
+      this.document.skills.learning, 
+      this.learningSkillViewModels,
+      (args) => { return new SkillListItemViewModel(args); }
+    );
   }
   
   /**
@@ -181,24 +157,10 @@ export default class ActorSkillsViewModel extends ViewModel {
    * @private
    */
   _getKnownSkillViewModels() {
-    const result = [];
-    
-    const documents = this.document.skills.known;
-    for (const document of documents) {
-      let vm = this.knownSkillViewModels.find(it => it._id === document.id);
-      if (vm === undefined) {
-        vm = new SkillListItemViewModel({
-          id: document.id,
-          document: document,
-          isEditable: this.isEditable,
-          isSendable: this.isSendable,
-          isOwner: this.isOwner,
-          isGM: this.isGM,
-        });
-      }
-      result.push(vm);
-    }
-
-    return result;
+    return this._getViewModels(
+      this.document.skills.known, 
+      this.knownSkillViewModels,
+      (args) => { return new SkillListItemViewModel(args); }
+    );
   }
 }

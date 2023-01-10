@@ -108,12 +108,7 @@ export default class ActorFateViewModel extends ViewModel {
    */
   update(args = {}) {
     const newFateCards = this._getFateCardViewModels();
-    for (const existingFateCard of this.fateCards) {
-      const cull = newFateCards.find(it => it._id === existingFateCard._id) === undefined;
-      if (cull === true) {
-        existingFateCard.parent = undefined;
-      }
-    }
+    this._cullObsolete(this.fateCards, newFateCards);
     this.fateCards = newFateCards;
 
     super.update(args);
@@ -125,24 +120,10 @@ export default class ActorFateViewModel extends ViewModel {
    * @private
    */
   _getFateCardViewModels() {
-    const result = [];
-    
-    const fateCards = this.document.fateSystem.fateCards;
-    for (const fateCard of fateCards) {
-      let vm = this.fateCards.find(it => it._id === fateCard.id);
-      if (vm === undefined) {
-        vm = new FateCardViewModel({
-          id: fateCard.id,
-          parent: this,
-          document: fateCard,
-          isEditable: this.isEditable,
-          isSendable: this.isSendable,
-          isOwner: this.isOwner,
-        });
-      }
-      result.push(vm);
-    }
-
-    return result;
+    return this._getViewModels(
+      this.document.fateSystem.fateCards, 
+      this.fateCards,
+      (args) => { return new FateCardViewModel(args); }
+    );
   }
 }

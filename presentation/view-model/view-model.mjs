@@ -557,4 +557,65 @@ export default class ViewModel {
       return this.isParentOf(viewModel.parent);
     }
   }
+
+  /**
+   * Returns an array of view model instances that have either been fetched 
+   * from the `currentList` or newly instantiated, using the `factoryFunc`. 
+   * 
+   * This internal method is meant for use when updating an array of child 
+   * view models, to fetch or create the needed child view models. 
+   * 
+   * @param {Array<TransientDocument>} documents An array of source documents. 
+   * These represent the current data state and will be compared against. 
+   * @param {Array<ViewModel>} currentList An array of "current" view model 
+   * instances. 
+   * @param {Function} factoryFunc A factory function that receives the default 
+   * instantiation arguments (`id`, `document`, `isEditable`, `isSendable` and `isOwner`) 
+   * and which must return a new instance of a view model of the expected type. 
+   * 
+   * @returns {Array<ViewModel>}
+   * 
+   * @protected
+   */
+  _getViewModels(documents, currentList, factoryFunc) {
+    const result = [];
+    
+    for (const document of documents) {
+      let vm = currentList.find(it => it._id === document.id);
+      if (vm === undefined) {
+        vm = factoryFunc({
+          id: document.id,
+          document: document,
+          isEditable: this.isEditable,
+          isSendable: this.isSendable,
+          isOwner: this.isOwner,
+        });
+      }
+      result.push(vm);
+    }
+
+    return result;
+  }
+
+  /**
+   * Removes the parent from all view models of the given `list` array, which 
+   * are **not** also present on the `compare` array. 
+   * 
+   * This internal method is meant for use when updating an array of child 
+   * view models, to ensure obsolete children aren't kept. 
+   * 
+   * @param {Array<ViewModel>} list An array of view models "to cull". 
+   * @param {Array<ViewModel>} compare An array of view models to compare against. 
+   * 
+   * @protected
+   */
+  _cullObsolete(list, compare) {
+    for (const document of compare) {
+      const cull = list.find(it => it._id === document._id) === undefined;
+      if (cull === true) {
+        document.parent = undefined;
+      }
+    }
+  }
+
 }
