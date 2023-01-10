@@ -110,21 +110,27 @@ export default class ActorAssetsViewModel extends ViewModel {
    * * Default `false`. 
    * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document.
    * * Default `false`. 
-   * @param {Map<String, Object> | undefined} args.childArgs Do not use!
-   * * Intended for internal use, only. 
    * 
    * @override
    */
-  update(args = {}, childArgs = new Map()) {
+  update(args = {}) {
     this.listItemViewModels = this._getAssetViewModels();
-    childArgs.set(this.vmPropertyList._id, {
-      isEditable: this.isEditable,
+
+    super.update(args);
+  }
+
+  /** @override */
+  _getChildUpdates() {
+    const updates = super._getChildUpdates();
+
+    updates.set(this.vmPropertyList, {
+      ...updates.get(this.vmPropertyList),
       listItemViewModels: this.listItemViewModels,
     });
 
-    super.update(args, childArgs);
+    return updates;
   }
-
+  
   /**
    * @returns {Array<AssetListItemViewModel>}
    * 

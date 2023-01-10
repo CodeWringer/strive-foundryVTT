@@ -142,25 +142,15 @@ export default class ActorSheetViewModel extends ViewModel {
     }
   }
 
-  /**
-   * Updates the data of this view model. 
-   * 
-   * @param {Boolean | undefined} args.isEditable If true, the view model data is editable.
-   * * Default `false`. 
-   * @param {Boolean | undefined} args.isSendable If true, the document represented by the sheet can be sent to chat.
-   * * Default `false`. 
-   * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document.
-   * * Default `false`. 
-   * @param {Map<String, Object> | undefined} args.childArgs Do not use!
-   * * Intended for internal use, only. 
-   * 
-   * @override
-   */
-  update(args = {}, childArgs = new Map()) {
-    childArgs.set(this.vmBtnSendToChat._id, {
+  /** @override */
+  _getChildUpdates() {
+    const updates = super._getChildUpdates();
+
+    updates.set(this.vmBtnSendToChat, {
+      ...updates.get(this.vmBtnSendToChat),
       isEditable: this.isEditable || this.isGM,
     });
 
-    super.update(args, childArgs);
+    return updates;
   }
 }

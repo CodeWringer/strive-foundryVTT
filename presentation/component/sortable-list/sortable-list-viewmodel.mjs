@@ -101,14 +101,14 @@ export default class SortableListViewModel extends ViewModel {
    * * Default `false`. 
    * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document.
    * * Default `false`. 
-   * @param {Map<String, Object> | undefined} args.childArgs Do not use!
-   * * Intended for internal use, only. 
    * @param {Array<ViewModel>} args.listItemViewModels A list of item view models.
    * 
    * @override
    */
-  update(args = {}, childArgs = new Map()) {
+  update(args = {}) {
     validateOrThrow(args, ["listItemViewModels"]);
+
+    // TODO #85: Preserve list items as possible. No need to replace all list item view models every time, if not all items have changed. 
 
     // Unset parent from current list.
     for (const listItemViewModel of this.listItemViewModels) {
@@ -135,7 +135,7 @@ export default class SortableListViewModel extends ViewModel {
     // Generate new data for the ui. 
     this.itemViewModelGroups = this._generateViewModelGroups();
 
-    super.update(args, childArgs);
+    super.update(args);
   }
 
   /** @override */

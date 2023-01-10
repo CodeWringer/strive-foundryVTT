@@ -274,34 +274,80 @@ export default class ViewModel {
   /**
    * Updates the data of this view model. 
    * 
+   * **IMPORTANT** Also automatically updates any child view models. 
+   * If there are any updates that must be made **before** child view models 
+   * are updated, call `super.update()` only **after** those updates are made 
+   * in the overridden implementation of the method! 
+   * 
+   * @example
+   * ```JS
+   * update(args) {
+   *   // First do updates that child updates rely on. 
+   *   this.importantData = this.getImportantData();
+   *   // Then call super implementation. 
+   *   super.update(args);
+   * }
+   * ```
+   * 
    * @param {Boolean | undefined} args.isEditable If true, the view model data is editable.
    * * Default `false`. 
    * @param {Boolean | undefined} args.isSendable If true, the document represented by the sheet can be sent to chat.
    * * Default `false`. 
    * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document.
    * * Default `false`. 
-   * @param {Map<String, Object> | undefined} args.childArgs A map of child view model 
-   * IDs and their own specialized arguments. 
-   * 
-   * If a specialized arguments object is provided for a child view model, it will be used, 
-   * instead of the given `args` object. If not given, the `args` object is passed through 
-   * to the child view model. 
    * 
    * @virtual
    */
-  update(args = {}, childArgs = new Map()) {
+  update(args = {}) {
     this.isEditable = args.isEditable ?? false;
     this.isSendable = args.isSendable ?? false;
     this.isOwner = args.isOwner ?? false;
 
-    for (const child of this.children) {
-      const _childArgs = childArgs.get(child._id);
-      if (_childArgs !== undefined) {
-        child.update(_childArgs);
-      } else {
-        child.update(args);
-      }
+    const childUpdates = this._getChildUpdates();
+    for (const childViewModel of this.children) {
+      const childUpdate = childUpdates.get(childViewModel);
+      childViewModel.update(childUpdate);
     }
+  }
+
+  /**
+   * Returns a map of view models and their respective 
+   * update arguments. 
+   * 
+   * By default, all child view models will have their `isEditable`, 
+   * `isSendable` and `isOwner` properties updated. 
+   * 
+   * **IMPORTANT** You only need to override this if a child view model requires 
+   * more/other arguments than the default as described above. 
+   * 
+   * @example
+   * ```JS
+   * _getChildUpdates() {
+   *   const updates = super._getChildUpdates();
+   *   updates.set(myViewModel, {
+   *     ...updates.get(myViewModel),
+   *     a: 42,
+   *   });
+   * }
+   * ```
+   * 
+   * @returns {Map<ViewModel, Object>} A map of view models and their 
+   * update arguments. 
+   * 
+   * @virtual
+   */
+  _getChildUpdates() {
+    const result = new Map();
+
+    for (const childViewModel of this.children) {
+      result.set(childViewModel, {
+        isEditable: this.isEditable,
+        isSendable: this.isSendable,
+        isOwner: this.isOwner,
+      });
+    }
+
+    return result;
   }
 
   /**

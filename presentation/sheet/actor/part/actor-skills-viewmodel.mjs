@@ -96,21 +96,39 @@ export default class ActorSkillsViewModel extends ViewModel {
     });
   }
 
-  /** @override */
-  update(args = {}, childArgs = new Map()) {
+  /**
+   * Updates the data of this view model. 
+   * 
+   * @param {Boolean | undefined} args.isEditable If true, the view model data is editable.
+   * * Default `false`. 
+   * @param {Boolean | undefined} args.isSendable If true, the document represented by the sheet can be sent to chat.
+   * * Default `false`. 
+   * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document.
+   * * Default `false`. 
+   * 
+   * @override
+   */
+  update(args = {}) {
     this.knownSkillViewModels = this._getKnownSkillViewModels();
-    childArgs.set(this.vmKnownSkillList._id, {
-      isEditable: this.isEditable || this.isGM,
+    this.learningSkillViewModels = this._getLearningSkillViewModels();
+
+    super.update(args);
+  }
+
+  /** @override */
+  _getChildUpdates() {
+    const updates = super._getChildUpdates();
+
+    updates.set(this.vmKnownSkillList, {
+      ...updates.get(this.vmKnownSkillList),
       listItemViewModels: this.knownSkillViewModels,
     });
-
-    this.learningSkillViewModels = this._getLearningSkillViewModels();
-    childArgs.set(this.vmLearningSkillList._id, {
-      isEditable: this.isEditable || this.isGM,
+    updates.set(this.vmLearningSkillList, {
+      ...updates.get(this.vmLearningSkillList),
       listItemViewModels: this.learningSkillViewModels,
     });
-
-    super.update(args, childArgs);
+    
+    return updates;
   }
   
   /**
