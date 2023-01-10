@@ -144,6 +144,22 @@ describe("ViewModel", function() {
         // Then
         operation.should.not.throw();
       });
+     
+      it("Does not throw on child assigned to same parent", function() {
+        // Given
+        const givenParent = new ViewModel({
+          viewStateSource: givenViewStateSource,
+        });
+        const givenChild = new ViewModel({
+          viewStateSource: givenViewStateSource,
+          parent: givenParent,
+        });
+        const operation = () => {
+          givenChild.parent = givenParent;
+        };
+        // Then
+        operation.should.not.throw();
+      });
 
       it("Does not throw on child assigned from another parent", function() {
         // Given
