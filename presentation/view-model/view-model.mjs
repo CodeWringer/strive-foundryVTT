@@ -75,14 +75,6 @@ export default class ViewModel {
   static get TEMPLATE() { throw new Error("NotImplementedException"); }
 
   /**
-   * The exception to throw when disposed fields and methods are accessed. 
-   * 
-   * @type {Error}
-   * @readonly
-   */
-  static get DISPOSED_ACCESS_VIOLATION_EXCEPTION() { return new Error("DisposedAccessViolation: The object has been disposed and its members can no longer be accessed"); }
-
-  /**
    * The data source for view state objects. 
    * 
    * @type {Map<String, Object>}
@@ -362,31 +354,30 @@ export default class ViewModel {
     if (this.children !== undefined && this.children !== null) {
       for (const child of this.children) {
         try {
+          child.parent = undefined;
           child.dispose();
-          child.parent = null;
         } catch (error) {
           game.ambersteel.logger.logWarn(error);
         }
       }
     }
-    this.children = null;
+    this.children = undefined;
 
     // Set properties of this view model to null. 
     for (const propertyName in this) {
       // Call dispose on any property that supports it. 
       if (ValidationUtil.isObject(this[propertyName]) 
         && this[propertyName].dispose !== undefined
-        && propertyName !== "parent") {
+        && propertyName !== "parent"
+        && propertyName !== "_parent"
+      ) {
         this[propertyName].dispose();
       }
       // Set property to null, thus 'hopefully' freeing its referenced value up for garbage collection. 
-      this[propertyName] = null;
+      this[propertyName] = undefined;
     }
     // Ensure methods cannot be called again. 
     this.dispose = () => { /** Do nothing. */ };
-    this.toViewState = () => { throw ViewModel.DISPOSED_ACCESS_VIOLATION_EXCEPTION; };
-    this.applyViewState = () => { throw ViewModel.DISPOSED_ACCESS_VIOLATION_EXCEPTION; };
-    this.activateListeners = () => { throw ViewModel.DISPOSED_ACCESS_VIOLATION_EXCEPTION; };
   }
 
   /**
