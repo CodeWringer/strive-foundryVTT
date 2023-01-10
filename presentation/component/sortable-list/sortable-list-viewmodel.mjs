@@ -13,9 +13,7 @@ import ButtonViewModel from "../button/button-viewmodel.mjs";
  * @property {ViewModel} vmBtnMoveUp 
  * @property {ViewModel} vmBtnMoveDown 
  * @property {ViewModel} vmBtnMoveBottom 
- * @property {ViewModel} vmBtnAddItem 
  * @property {ViewModel} listItemViewModel 
- * @property {String} listItemTemplate 
  * 
  * @private
  */
@@ -26,9 +24,7 @@ class SortableListViewModelGroup {
     this.vmBtnMoveUp = args.vmBtnMoveUp;
     this.vmBtnMoveDown = args.vmBtnMoveDown;
     this.vmBtnMoveBottom = args.vmBtnMoveBottom;
-    this.vmBtnAddItem = args.vmBtnAddItem;
     this.listItemViewModel = args.listItemViewModel;
-    this.listItemTemplate = args.listItemTemplate;
   }
 }
 
@@ -74,15 +70,24 @@ export default class SortableListViewModel extends ViewModel {
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["indexDataSource", "listItemViewModels", "listItemTemplate"]);
+    validateOrThrow(args, ["indexDataSource", "listItemViewModels", "listItemTemplate", "vmBtnAddItem"]);
 
     this.indexDataSource = args.indexDataSource;
-    this.listItemViewModels = args.listItemViewModels;
-    this.listItemTemplate = args.listItemTemplate;
-    this.vmBtnAddItem = args.vmBtnAddItem;
     this.contextTemplate = args.contextTemplate ?? "sortable-list";
+    this.listItemTemplate = args.listItemTemplate;
+    
+    // Prepare given list. 
+    this.listItemViewModels = args.listItemViewModels;
+    for (const listItemViewModel of this.listItemViewModels) {
+      listItemViewModel.parent = this;
+    }
+
+    // Prepare given "add" button. 
+    this.vmBtnAddItem = args.vmBtnAddItem;
+    this.vmBtnAddItem.parent = this;
 
     this.orderedIdList = this._getOrderedIdList();
+
     // Generate data for the ui. 
     this.itemViewModelGroups = this._generateViewModelGroups();
   }
@@ -105,10 +110,29 @@ export default class SortableListViewModel extends ViewModel {
   update(args = {}, childArgs = new Map()) {
     validateOrThrow(args, ["listItemViewModels"]);
 
+    // Unset parent from current list.
+    for (const listItemViewModel of this.listItemViewModels) {
+      listItemViewModel.parent = undefined;
+    }
+    
+    // Override current list with given list. 
     this.listItemViewModels = args.listItemViewModels;
+    
+    // Set parent on given list. 
+    for (const listItemViewModel of this.listItemViewModels) {
+      listItemViewModel.parent = this;
+    }
 
     this.orderedIdList = this._getOrderedIdList();
-    // Generate data for the ui. 
+
+    // Clean up of previous ui data. 
+    for (const itemViewModelGroup of this.itemViewModelGroups) {
+      itemViewModelGroup.vmBtnMoveTop.parent = undefined;
+      itemViewModelGroup.vmBtnMoveUp.parent = undefined;
+      itemViewModelGroup.vmBtnMoveDown.parent = undefined;
+      itemViewModelGroup.vmBtnMoveBottom.parent = undefined;
+    }
+    // Generate new data for the ui. 
     this.itemViewModelGroups = this._generateViewModelGroups();
 
     super.update(args, childArgs);
@@ -165,8 +189,6 @@ export default class SortableListViewModel extends ViewModel {
         localizableTitle: "ambersteel.general.ordering.moveToBottom",
       }),
       listItemViewModel: itemViewModel,
-      listItemTemplate: thiz.listItemTemplate,
-      vmBtnAddItem: thiz.vmBtnAddItem,
     });
   }
 

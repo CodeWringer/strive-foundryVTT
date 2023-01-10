@@ -100,7 +100,7 @@ export default class AssetListItemViewModel extends ViewModel {
 
   /** @override */
   update(args = {}, childArgs = new Map()) {
-    childArgs.set(this.vmBtnSendToChat.id, {
+    childArgs.set(this.vmBtnSendToChat._id, {
       isEditable: this.isEditable || this.isGM,
     });
 

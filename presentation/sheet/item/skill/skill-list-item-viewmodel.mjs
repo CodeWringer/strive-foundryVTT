@@ -169,7 +169,7 @@ export default class SkillListItemViewModel extends SkillViewModel {
 
   /** @override */
   update(args = {}, childArgs = new Map()) {
-    childArgs.set(this.vmBtnSendToChat.id, {
+    childArgs.set(this.vmBtnSendToChat._id, {
       isEditable: this.isEditable || this.isGM,
     });
 

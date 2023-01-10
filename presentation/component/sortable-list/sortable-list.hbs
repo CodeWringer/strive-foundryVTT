@@ -30,7 +30,9 @@ cssClass: {String | undefined}
           {{/button}}
         </div>
       {{/if}}
-      {{> (lookup . 'listItemTemplate') viewModel=itemViewModelGroup.listItemViewModel cssClass="flex-grow" }}
+      {{#with ../viewModel.listItemTemplate as | template |}}
+        {{> (template) viewModel=itemViewModelGroup.listItemViewModel cssClass="flex-grow" }}
+      {{/with}}
     </li>
   {{/each}}
   {{#if viewModel.isEditable}}

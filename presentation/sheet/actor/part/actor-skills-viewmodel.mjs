@@ -13,9 +13,6 @@ export default class ActorSkillsViewModel extends ViewModel {
   /** @override */
   get entityId() { return this.document.id; }
 
-  get knownSkills() { return this.document.skills.known; }
-  get learningSkills() { return this.document.skills.learning; }
-
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
    * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 
@@ -42,19 +39,11 @@ export default class ActorSkillsViewModel extends ViewModel {
     const thiz = this;
     const factory = new ViewModelFactory();
 
-    this.learningSkillViewModels = this.learningSkills.map(skill => {
-      return new SkillListItemViewModel({
-        id: skill.id,
-        parent: thiz,
-        document: skill,
-        isEditable: thiz.isEditable,
-        isSendable: thiz.isSendable,
-        isOwner: thiz.isOwner,
-        isGM: thiz.isGM,
-      });
-    });
+    this.learningSkillViewModels = [];
+    this.learningSkillViewModels = this._getLearningSkillViewModels();
     this.vmLearningSkillList = new SortableListViewModel({
       id: "vmLearningSkillList",
+      parent: thiz,
       isEditable: thiz.isEditable,
       isSendable: thiz.isSendable,
       contextTemplate: thiz.contextTemplate,
@@ -65,7 +54,6 @@ export default class ActorSkillsViewModel extends ViewModel {
       listItemViewModels: this.learningSkillViewModels,
       listItemTemplate: TEMPLATES.SKILL_LIST_ITEM,
       vmBtnAddItem: factory.createVmBtnAdd({
-        parent: thiz,
         id: "vmBtnAddLearningSkill",
         target: thiz.document,
         creationType: "skill",
@@ -79,19 +67,11 @@ export default class ActorSkillsViewModel extends ViewModel {
       }),
     });
 
-    this.knownSkillViewModels = this.knownSkills.map(skill => {
-      return new SkillListItemViewModel({
-        id: skill.id,
-        parent: thiz,
-        document: skill,
-        isEditable: thiz.isEditable,
-        isSendable: thiz.isSendable,
-        isOwner: thiz.isOwner,
-        isGM: thiz.isGM,
-      });
-    });
+    this.knownSkillViewModels = [];
+    this.knownSkillViewModels = this._getKnownSkillViewModels();
     this.vmKnownSkillList = new SortableListViewModel({
       id: "vmKnownSkillList",
+      parent: thiz,
       isEditable: thiz.isEditable,
       isSendable: thiz.isSendable,
       contextTemplate: thiz.contextTemplate,
@@ -102,7 +82,6 @@ export default class ActorSkillsViewModel extends ViewModel {
       listItemViewModels: this.knownSkillViewModels,
       listItemTemplate: TEMPLATES.SKILL_LIST_ITEM,
       vmBtnAddItem: factory.createVmBtnAdd({
-        parent: thiz,
         id: "vmBtnAddKnownSkill",
         target: thiz.document,
         creationType: "skill",
@@ -115,5 +94,76 @@ export default class ActorSkillsViewModel extends ViewModel {
         localizableDialogTitle: "ambersteel.character.skill.known.add.query",
       }),
     });
+  }
+
+  /** @override */
+  update(args = {}, childArgs = new Map()) {
+    this.knownSkillViewModels = this._getKnownSkillViewModels();
+    childArgs.set(this.vmKnownSkillList._id, {
+      isEditable: this.isEditable || this.isGM,
+      listItemViewModels: this.knownSkillViewModels,
+    });
+
+    this.learningSkillViewModels = this._getLearningSkillViewModels();
+    childArgs.set(this.vmLearningSkillList._id, {
+      isEditable: this.isEditable || this.isGM,
+      listItemViewModels: this.learningSkillViewModels,
+    });
+
+    super.update(args, childArgs);
+  }
+  
+  /**
+   * @returns {Array<SkillListItemViewModel>}
+   * 
+   * @private
+   */
+  _getLearningSkillViewModels() {
+    const result = [];
+    
+    const documents = this.document.skills.learning;
+    for (const document of documents) {
+      let vm = this.learningSkillViewModels.find(it => it._id === document.id);
+      if (vm === undefined) {
+        vm = new SkillListItemViewModel({
+          id: document.id,
+          document: document,
+          isEditable: this.isEditable,
+          isSendable: this.isSendable,
+          isOwner: this.isOwner,
+          isGM: this.isGM,
+        });
+      }
+      result.push(vm);
+    }
+
+    return result;
+  }
+  
+  /**
+   * @returns {Array<SkillListItemViewModel>}
+   * 
+   * @private
+   */
+  _getKnownSkillViewModels() {
+    const result = [];
+    
+    const documents = this.document.skills.known;
+    for (const document of documents) {
+      let vm = this.knownSkillViewModels.find(it => it._id === document.id);
+      if (vm === undefined) {
+        vm = new SkillListItemViewModel({
+          id: document.id,
+          document: document,
+          isEditable: this.isEditable,
+          isSendable: this.isSendable,
+          isOwner: this.isOwner,
+          isGM: this.isGM,
+        });
+      }
+      result.push(vm);
+    }
+
+    return result;
   }
 }

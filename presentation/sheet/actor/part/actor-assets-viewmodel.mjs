@@ -77,8 +77,8 @@ export default class ActorAssetsViewModel extends ViewModel {
       contextTemplate: thiz.contextTemplate,
     });
 
+    this.listItemViewModels = [];
     this.listItemViewModels = this._getAssetViewModels();
-
     this.vmPropertyList = new SortableListViewModel({
       parent: this,
       isEditable: this.isEditable,
@@ -90,7 +90,6 @@ export default class ActorAssetsViewModel extends ViewModel {
       listItemViewModels: this.listItemViewModels,
       listItemTemplate: TEMPLATES.ASSET_LIST_ITEM,
       vmBtnAddItem: factory.createVmBtnAdd({
-        parent: thiz,
         id: "vmBtnAddItem",
         target: thiz.document,
         creationType: "item",
@@ -118,7 +117,7 @@ export default class ActorAssetsViewModel extends ViewModel {
    */
   update(args = {}, childArgs = new Map()) {
     this.listItemViewModels = this._getAssetViewModels();
-    childArgs.set(this.vmPropertyList.id, {
+    childArgs.set(this.vmPropertyList._id, {
       isEditable: this.isEditable,
       listItemViewModels: this.listItemViewModels,
     });
@@ -134,14 +133,13 @@ export default class ActorAssetsViewModel extends ViewModel {
   _getAssetViewModels() {
     const result = [];
     
-    const remoteAssets = this.document.assets.remote;
-    for (const remoteAsset of remoteAssets) {
-      let vm = this.listItemViewModels.find(it => it.id === remoteAsset.id);
+    const documents = this.document.assets.remote;
+    for (const document of documents) {
+      let vm = this.listItemViewModels.find(it => it._id === document.id);
       if (vm === undefined) {
         vm = new AssetListItemViewModel({
-          id: remoteAsset.id,
-          parent: this,
-          document: remoteAsset,
+          id: document.id,
+          document: document,
           isEditable: this.isEditable,
           isSendable: this.isSendable,
           isOwner: this.isOwner,

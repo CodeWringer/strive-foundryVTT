@@ -242,10 +242,10 @@ export default class SkillAbilityListItemViewModel extends ViewModel {
 
   /** @override */
   update(args = {}, childArgs = new Map()) {
-    childArgs.set(this.vmBtnSendToChat.id, {
+    childArgs.set(this.vmBtnSendToChat._id, {
       isEditable: this.isEditable || this.isGM,
     });
-    childArgs.set(this.vmBtnRoll.id, {
+    childArgs.set(this.vmBtnRoll._id, {
       isEditable: (this.isEditable || this.isGM) && this._actor !== undefined,
     });
 

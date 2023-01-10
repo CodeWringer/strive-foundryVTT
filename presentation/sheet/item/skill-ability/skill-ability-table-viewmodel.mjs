@@ -98,31 +98,8 @@ export default class SkillAbilityTableViewModel extends ViewModel {
     const thiz = this;
     const factory = new ViewModelFactory();
 
-    for (const skillAbility of this.document.abilities) {
-      let vm = undefined;
-
-      if (this.oneColumn === true) {
-        vm = new SkillAbilityChatMessageViewModel({
-          id: `vmSkillAbility-${skillAbility.id}`,
-          parent: thiz,
-          isEditable: args.isEditable,
-          isSendable: args.isSendable,
-          isOwner: args.isOwner,
-          skillAbility: skillAbility,
-        })
-      } else {
-        vm = new SkillAbilityListItemViewModel({
-          id: `vmSkillAbility-${skillAbility.id}`,
-          parent: thiz,
-          isEditable: args.isEditable,
-          isSendable: args.isSendable,
-          isOwner: args.isOwner,
-          skillAbility: skillAbility,
-        });
-      }
-      this.abilities.push(vm);
-      this[vm.id] = vm;
-    }
+    this.abilities = [];
+    this.abilities = this._getSkillAbilityViewModels();
 
     this.vmSkillAbilities = new SortableListViewModel({
       parent: thiz,
@@ -135,7 +112,6 @@ export default class SkillAbilityTableViewModel extends ViewModel {
       listItemViewModels: this.abilities,
       listItemTemplate: thiz.oneColumn === true ? TEMPLATES.SKILL_ABILITY_CHAT_MESSAGE : TEMPLATES.SKILL_ABILITY_LIST_ITEM,
       vmBtnAddItem: factory.createVmBtnAdd({
-        parent: thiz,
         id: "vmBtnAdd",
         target: thiz.document,
         creationType: "skill-ability",
@@ -164,6 +140,52 @@ export default class SkillAbilityTableViewModel extends ViewModel {
       toggleSelf: true,
       callback: thiz._toggleSkillAbilitiesInitiallyVisible.bind(thiz),
     });
+  }
+
+  /** @override */
+  update(args = {}, childArgs = new Map()) {
+    this.abilities = this._getSkillAbilityViewModels();
+    childArgs.set(this.vmSkillAbilities._id, {
+      isEditable: this.isEditable,
+      listItemViewModels: this.abilities,
+    });
+
+    super.update(args, childArgs);
+  }
+
+  /**
+   * @returns {Array<SkillAbilityChatMessageViewModel> | Array<SkillAbilityListItemViewModel>}
+   * 
+   * @private
+   */
+  _getSkillAbilityViewModels() {
+    const result = [];
+    const skillAbilities = this.document.abilities;
+    for (const skillAbility of skillAbilities) {
+      let vm = undefined;
+
+      if (this.oneColumn === true) {
+        vm = new SkillAbilityChatMessageViewModel({
+          id: skillAbility._id,
+          isEditable: this.isEditable,
+          isSendable: this.isSendable,
+          isOwner: this.isOwner,
+          skillAbility: skillAbility,
+        })
+      } else {
+        vm = new SkillAbilityListItemViewModel({
+          id: skillAbility._id,
+          isEditable: this.isEditable,
+          isSendable: this.isSendable,
+          isOwner: this.isOwner,
+          skillAbility: skillAbility,
+        });
+      }
+
+      result.push(vm);
+      this[vm._id] = vm;
+    }
+    return result;
   }
 
   /**
