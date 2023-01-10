@@ -117,15 +117,48 @@ export default class ViewModel {
   get id() { return (this.parent === undefined) ? this._id : `${this.parent.id}-${this._id}`; }
   
   /**
+   * @type {ViewModel | undefined}
+   * @private
+   */
+  _parent = undefined;
+  /**
    * Parent ViewModel instance of this instance. 
    * 
    * If undefined, then this ViewModel instance may be regarded as a "root" level instance. A root level instance 
    * is expected to be associated with an actor sheet or item sheet or journal entry or chat message and so on.
    * 
    * @type {ViewModel | undefined}
-   * @readonly
    */
-  parent = undefined;
+  get parent() { return this._parent; }
+  /**
+   * Parent ViewModel instance of this instance. 
+   * 
+   * If undefined, then this ViewModel instance may be regarded as a "root" level instance. A root level instance 
+   * is expected to be associated with an actor sheet or item sheet or journal entry or chat message and so on.
+   * 
+   * @param {ViewModel | undefined} value
+   * 
+   * @throws InvalidArgumentException - Thrown, if a view model instance is assigned as its own parent. 
+   */
+  set parent(value) {
+    if (value == this) {
+      throw new Error("InvalidArgumentException: Recursion! A view model cannot be assigned as its own parent");
+    } else if (this.isParentOf(value) === true) {
+      throw new Error("InvalidArgumentException: Recursion! A child or indirect child view model cannot be assigned as the parent of one of its parents");
+    }
+
+    // Remove from previous parent. 
+    if (this._parent !== undefined) {
+      const index = this._parent.children.indexOf(this);
+      this._parent.children.splice(index, 1);
+    }
+
+    // Add to new parent. 
+    this._parent = value;
+    if (this._parent !== undefined) {
+      this._parent.children.push(this);
+    }
+  }
 
   /**
    * An array of the child view models of this view model. 
@@ -227,9 +260,6 @@ export default class ViewModel {
     this._id = args.id ?? createUUID();
     
     this.parent = args.parent;
-    if (this.parent !== undefined) {
-      this.parent.children.push(this);
-    }
 
     this.contextTemplate = args.contextTemplate;
     this._viewStateSource = args.viewStateSource ?? game.ambersteel.viewStates;
@@ -265,7 +295,7 @@ export default class ViewModel {
     this.isOwner = args.isOwner ?? false;
 
     for (const child of this.children) {
-      const _childArgs = childArgs.get(child.id);
+      const _childArgs = childArgs.get(child._id);
       if (_childArgs !== undefined) {
         child.update(_childArgs);
       } else {
@@ -457,6 +487,28 @@ export default class ViewModel {
       this.parent.writeAllViewState();
     } else {
       this.writeViewState();
+    }
+  }
+  
+  /**
+   * Returns true, if this view model is a direct or indirect parent of 
+   * the given view model instance. 
+   * 
+   * @param {ViewModel | undefined} viewModel A view model instance to check on whether it is 
+   * a direct or indirect child of this view model. 
+   * 
+   * @returns {Boolean} True, if this view model is a direct or indirect parent of 
+   * the given view model instance. 
+   */
+  isParentOf(viewModel) {
+    if (viewModel === undefined) {
+      return false;
+    } else if (viewModel.parent === undefined) {
+      return false;
+    } else if (viewModel.parent == this) {
+      return true;
+    } else {
+      return this.isParentOf(viewModel.parent);
     }
   }
 }
