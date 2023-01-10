@@ -4,6 +4,7 @@ import PreparedChatData from "../../../presentation/chat/prepared-chat-data.mjs"
 import { SOUNDS_CONSTANTS } from "../../../presentation/audio/sounds.mjs";
 import { ITEM_SUBTYPE } from "./item-subtype.mjs";
 import TransientBaseItem from "./transient-base-item.mjs";
+import { createUUID } from "../../util/uuid-utility.mjs";
 
 /**
  * Represents the full transient data of a mutation. 
@@ -37,7 +38,7 @@ export default class TransientMutation extends TransientBaseItem {
   /** @override */
   getChatViewModel(overrides = {}) {
     return new MutationChatMessageViewModel({
-      id: this.id,
+      id: `${this.id}-${createUUID()}`,
       isEditable: false,
       isSendable: false,
       isOwner: this.isOwner,

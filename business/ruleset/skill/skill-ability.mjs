@@ -276,7 +276,7 @@ export default class SkillAbility {
       this.owningDocument.owningDocument.document : undefined;
 
     return new SkillAbilityChatMessageViewModel({
-      id: this.id,
+      id: `${this.id}-${createUUID()}`,
       isEditable: false,
       isSendable: false,
       isOwner: this.owningDocument.isOwner,
