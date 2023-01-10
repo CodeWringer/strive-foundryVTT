@@ -109,8 +109,25 @@ export default class ActorSkillsViewModel extends ViewModel {
    * @override
    */
   update(args = {}) {
-    this.knownSkillViewModels = this._getKnownSkillViewModels();
-    this.learningSkillViewModels = this._getLearningSkillViewModels();
+    // Known skills
+    const newKnownSkills = this._getKnownSkillViewModels();
+    for (const existing of this.knownSkillViewModels) {
+      const cull = newKnownSkills.find(it => it._id === existing._id) === undefined;
+      if (cull === true) {
+        existing.parent = undefined;
+      }
+    }
+    this.knownSkillViewModels = newKnownSkills;
+    
+    // Learning skills
+    const newLearningSkills = this._getLearningSkillViewModels();
+    for (const existing of this.learningSkillViewModels) {
+      const cull = newLearningSkills.find(it => it._id === existing._id) === undefined;
+      if (cull === true) {
+        existing.parent = undefined;
+      }
+    }
+    this.learningSkillViewModels = newLearningSkills;
 
     super.update(args);
   }

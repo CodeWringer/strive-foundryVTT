@@ -11,7 +11,7 @@ export default class AttributeTableViewModel extends ViewModel {
   get entityId() { return this.document.id; }
 
   /**
-   * @type {Array<Object>}
+   * @type {Array<CharacterAttribute>}
    */
   attributes = [];
 
@@ -39,7 +39,6 @@ export default class AttributeTableViewModel extends ViewModel {
    * @param {Boolean | undefined} args.isEditable If true, the sheet is editable. 
    * @param {Boolean | undefined} args.isSendable If true, the document represented by the sheet can be sent to chat. 
    * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document. 
-   * @param {Boolean | undefined} args.isGM If true, the current user is a GM. 
    * 
    * @param {TransientBaseActor} args.document
    * @param {Array<CharacterAttribute>} args.attributes
@@ -61,9 +60,7 @@ export default class AttributeTableViewModel extends ViewModel {
     const thiz = this;
     const factory = new ViewModelFactory();
 
-    for (let attributeIndex = 0; attributeIndex < this.attributes.length; attributeIndex++) {
-      const attribute = this.attributes[attributeIndex];
-
+    for (const attribute of this.attributes) {
       thiz.attributeViewModels.push({
         attributeName: attribute.name,
         localizableName: attribute.localizableName,

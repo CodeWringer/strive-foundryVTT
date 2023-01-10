@@ -11,11 +11,6 @@ export default class ActorBiographyViewModel extends ViewModel {
   get entityId() { return this.document.id; }
 
   /**
-   * @type {Any}
-   */
-  owner = undefined;
-
-  /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
    * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 
    * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 
@@ -24,7 +19,6 @@ export default class ActorBiographyViewModel extends ViewModel {
    * @param {Boolean | undefined} args.isEditable If true, the sheet is editable. 
    * @param {Boolean | undefined} args.isSendable If true, the document represented by the sheet can be sent to chat. 
    * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document. 
-   * @param {Boolean | undefined} args.isGM If true, the current user is a GM. 
    * 
    * @param {TransientBaseCharacterActor} args.document
    * 
@@ -36,7 +30,6 @@ export default class ActorBiographyViewModel extends ViewModel {
 
     // Own properties.
     this.document = args.document;
-    this.owner = args.isOwner;
     
     const thiz = this;
     const factory = new ViewModelFactory();

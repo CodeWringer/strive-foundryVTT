@@ -4,7 +4,11 @@ cssClass: {undefined | String}
 --}}
 <section class="{{cssClass}}">
   <h2>{{localize "ambersteel.character.beliefSystem.belief.plural"}}</h2>
-  {{> "systems/ambersteel/presentation/sheet/actor/part/actor-beliefs.hbs" viewModel=viewModel.beliefsViewModel }}
+  {{#with viewModel.beliefsTemplate as | template |}}
+    {{> (template) viewModel=../viewModel.beliefsViewModel }}
+  {{/with}}
   <h2>{{localize "ambersteel.character.beliefSystem.fateSystem.label"}}</h2>
-  {{> "systems/ambersteel/presentation/sheet/actor/part/actor-fate.hbs" viewModel=viewModel.fateViewModel }}
+  {{#with viewModel.fateTemplate as | template |}}
+    {{> (template) viewModel=../viewModel.fateViewModel }}
+  {{/with}}
 </section>

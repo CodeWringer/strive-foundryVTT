@@ -67,7 +67,6 @@ export default class ActorHealthViewModel extends ViewModel {
    * @param {Boolean | undefined} args.isEditable If true, the sheet is editable. 
    * @param {Boolean | undefined} args.isSendable If true, the document represented by the sheet can be sent to chat. 
    * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document. 
-   * @param {Boolean | undefined} args.isGM If true, the current user is a GM. 
    * 
    * @param {TransientBaseCharacterActor} args.document
    * 
@@ -134,16 +133,8 @@ export default class ActorHealthViewModel extends ViewModel {
     });
 
     // Prepare illnesses list view models. 
-    const illnesses = this.document.health.illnesses;
-    for (const illness of illnesses) {
-      const vm = new IllnessListItemViewModel({
-        ...args,
-        id: illness.id,
-        parent: thiz,
-        document: illness,
-      });
-      this.illnesses.push(vm);
-    }
+    this.illnesses = [];
+    this.illnesses = this._getIllnessViewModels();
     this.vmIllnessList = new SortableListViewModel({
       parent: thiz,
       isEditable: args.isEditable ?? thiz.isEditable,
@@ -155,7 +146,6 @@ export default class ActorHealthViewModel extends ViewModel {
       listItemViewModels: this.illnesses,
       listItemTemplate: TEMPLATES.ILLNESS_LIST_ITEM,
       vmBtnAddItem: factory.createVmBtnAdd({
-        parent: thiz,
         id: "vmBtnAddIllness",
         target: thiz.document,
         creationType: "illness",
@@ -167,16 +157,8 @@ export default class ActorHealthViewModel extends ViewModel {
     });
 
     // Prepare injuries list view models. 
-    const injuries = this.document.health.injuries;
-    for (const injury of injuries) {
-      const vm = new InjuryListItemViewModel({
-        ...args,
-        id: injury.id,
-        parent: thiz,
-        document: injury,
-      });
-      this.injuries.push(vm);
-    }
+    this.injuries = [];
+    this.injuries = this._getInjuryViewModels();
     this.vmInjuryList = new SortableListViewModel({
       parent: thiz,
       isEditable: args.isEditable ?? thiz.isEditable,
@@ -188,7 +170,6 @@ export default class ActorHealthViewModel extends ViewModel {
       listItemViewModels: this.injuries,
       listItemTemplate: TEMPLATES.INJURY_LIST_ITEM,
       vmBtnAddItem: factory.createVmBtnAdd({
-        parent: thiz,
         id: "vmBtnAddInjury",
         target: thiz.document,
         creationType: "injury",
@@ -200,16 +181,8 @@ export default class ActorHealthViewModel extends ViewModel {
     });
 
     // Prepare mutations list view models. 
-    const mutations = this.document.health.mutations;
-    for (const mutation of mutations) {
-      const vm = new MutationListItemViewModel({
-        ...args,
-        id: mutation.id,
-        parent: thiz,
-        document: mutation,
-      });
-      this.mutations.push(vm);
-    }
+    this.mutations = [];
+    this.mutations = this._getMutationViewModels();
     this.vmMutationList = new SortableListViewModel({
       parent: thiz,
       isEditable: args.isEditable ?? thiz.isEditable,
@@ -221,7 +194,6 @@ export default class ActorHealthViewModel extends ViewModel {
       listItemViewModels: this.mutations,
       listItemTemplate: TEMPLATES.MUTATION_LIST_ITEM,
       vmBtnAddItem: factory.createVmBtnAdd({
-        parent: thiz,
         id: "vmBtnAddMutation",
         target: thiz.document,
         creationType: "mutation",
@@ -231,5 +203,149 @@ export default class ActorHealthViewModel extends ViewModel {
         localizableDialogTitle: "ambersteel.character.health.mutation.add.query",
       }),
     });
+  }
+
+  /**
+   * Updates the data of this view model. 
+   * 
+   * @param {Boolean | undefined} args.isEditable If true, the view model data is editable.
+   * * Default `false`. 
+   * @param {Boolean | undefined} args.isSendable If true, the document represented by the sheet can be sent to chat.
+   * * Default `false`. 
+   * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document.
+   * * Default `false`. 
+   * 
+   * @override
+   */
+  update(args = {}) {
+    // Illnesses
+    const newIllnesses = this._getIllnessViewModels();
+    for (const existingIllness of this.illnesses) {
+      const cull = newIllnesses.find(it => it._id === existingIllness._id) === undefined;
+      if (cull === true) {
+        existingIllness.parent = undefined;
+      }
+    }
+    this.illnesses = newIllnesses;
+    
+    // Injuries
+    const newInjuries = this._getInjuryViewModels();
+    for (const existingInjury of this.injuries) {
+      const cull = newInjuries.find(it => it._id === existingInjury._id) === undefined;
+      if (cull === true) {
+        existingInjury.parent = undefined;
+      }
+    }
+    this.injuries = newInjuries;
+    
+    // Mutations
+    const newMutations = this._getMutationViewModels();
+    for (const existingMutation of this.mutations) {
+      const cull = newMutations.find(it => it._id === existingMutation._id) === undefined;
+      if (cull === true) {
+        existingMutation.parent = undefined;
+      }
+    }
+    this.mutations = newMutations;
+
+    super.update(args);
+  }
+
+  /** @override */
+  _getChildUpdates() {
+    const updates = super._getChildUpdates();
+
+    updates.set(this.vmIllnessList, {
+      ...updates.get(this.vmIllnessList),
+      listItemViewModels: this.illnesses,
+    });
+    updates.set(this.vmInjuryList, {
+      ...updates.get(this.vmInjuryList),
+      listItemViewModels: this.injuries,
+    });
+    updates.set(this.vmMutationList, {
+      ...updates.get(this.vmMutationList),
+      listItemViewModels: this.mutations,
+    });
+    
+    return updates;
+  }
+
+  /**
+   * @returns {Array<IllnessListItemViewModel>}
+   * 
+   * @private
+   */
+  _getIllnessViewModels() {
+    const result = [];
+    
+    const illnesses = this.document.health.illnesses;
+    for (const illness of illnesses) {
+      let vm = this.illnesses.find(it => it._id === illness.id);
+      if (vm === undefined) {
+        vm = new IllnessListItemViewModel({
+          id: illness.id,
+          document: illness,
+          isEditable: this.isEditable,
+          isSendable: this.isSendable,
+          isOwner: this.isOwner,
+        });
+      }
+      result.push(vm);
+    }
+
+    return result;
+  }
+
+  /**
+   * @returns {Array<InjuryListItemViewModel>}
+   * 
+   * @private
+   */
+  _getInjuryViewModels() {
+    const result = [];
+    
+    const injuries = this.document.health.injuries;
+    for (const injury of injuries) {
+      let vm = this.injuries.find(it => it._id === injury.id);
+      if (vm === undefined) {
+        vm = new InjuryListItemViewModel({
+          id: injury.id,
+          document: injury,
+          isEditable: this.isEditable,
+          isSendable: this.isSendable,
+          isOwner: this.isOwner,
+        });
+      }
+      result.push(vm);
+    }
+
+    return result;
+  }
+
+  /**
+   * @returns {Array<MutationListItemViewModel>}
+   * 
+   * @private
+   */
+  _getMutationViewModels() {
+    const result = [];
+    
+    const mutations = this.document.health.mutations;
+    for (const mutation of mutations) {
+      let vm = this.mutations.find(it => it._id === mutation.id);
+      if (vm === undefined) {
+        vm = new MutationListItemViewModel({
+          id: mutation.id,
+          document: mutation,
+          isEditable: this.isEditable,
+          isSendable: this.isSendable,
+          isOwner: this.isOwner,
+        });
+      }
+      result.push(vm);
+    }
+
+    return result;
   }
 }

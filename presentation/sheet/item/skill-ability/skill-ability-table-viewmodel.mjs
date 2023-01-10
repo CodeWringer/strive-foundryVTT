@@ -142,15 +142,34 @@ export default class SkillAbilityTableViewModel extends ViewModel {
     });
   }
 
-  /** @override */
-  update(args = {}, childArgs = new Map()) {
+  /**
+   * Updates the data of this view model. 
+   * 
+   * @param {Boolean | undefined} args.isEditable If true, the view model data is editable.
+   * * Default `false`. 
+   * @param {Boolean | undefined} args.isSendable If true, the document represented by the sheet can be sent to chat.
+   * * Default `false`. 
+   * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document.
+   * * Default `false`. 
+   * 
+   * @override
+   */
+  update(args = {}) {
     this.abilities = this._getSkillAbilityViewModels();
-    childArgs.set(this.vmSkillAbilities._id, {
-      isEditable: this.isEditable,
+
+    super.update(args);
+  }
+
+  /** @override */
+  _getChildUpdates() {
+    const updates = super._getChildUpdates();
+
+    updates.set(this.vmSkillAbilities, {
+      ...updates.get(this.vmSkillAbilities),
       listItemViewModels: this.abilities,
     });
-
-    super.update(args, childArgs);
+    
+    return updates;
   }
 
   /**

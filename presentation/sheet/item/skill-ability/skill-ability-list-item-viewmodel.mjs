@@ -241,15 +241,19 @@ export default class SkillAbilityListItemViewModel extends ViewModel {
   }
 
   /** @override */
-  update(args = {}, childArgs = new Map()) {
-    childArgs.set(this.vmBtnSendToChat._id, {
+  _getChildUpdates() {
+    const updates = super._getChildUpdates();
+
+    updates.set(this.vmBtnSendToChat, {
+      ...updates.get(this.vmBtnSendToChat),
       isEditable: this.isEditable || this.isGM,
     });
-    childArgs.set(this.vmBtnRoll._id, {
+    updates.set(this.vmBtnRoll, {
+      ...updates.get(this.vmBtnRoll),
       isEditable: (this.isEditable || this.isGM) && this._actor !== undefined,
     });
 
-    super.update(args, childArgs);
+    return updates;
   }
 
   /** @override */

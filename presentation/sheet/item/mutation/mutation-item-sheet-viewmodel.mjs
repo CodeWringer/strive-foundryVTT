@@ -58,11 +58,14 @@ export default class MutationItemSheetViewModel extends ViewModel {
   }
 
   /** @override */
-  update(args = {}, childArgs = new Map()) {
-    childArgs.set(this.vmBtnSendToChat._id, {
+  _getChildUpdates() {
+    const updates = super._getChildUpdates();
+
+    updates.set(this.vmBtnSendToChat, {
+      ...updates.get(this.vmBtnSendToChat),
       isEditable: this.isEditable || this.isGM,
     });
 
-    super.update(args, childArgs);
+    return updates;
   }
 }
