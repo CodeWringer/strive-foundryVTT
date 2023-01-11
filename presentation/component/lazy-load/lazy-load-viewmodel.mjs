@@ -138,14 +138,14 @@ export default class LazyLoadViewModel extends ViewModel {
         viewModel: this.viewModel,
       });
       this._invalidated = false;
+
+      // Manipulate the DOM. 
+      this.element.empty();
+      this.element.append(this._renderedContent);
+  
+      // *Lastly* the wrapped view model may attach its event listeners. 
+      this.viewModel.activateListeners(this.element, this.viewModel.isOwner, this.viewModel.isEditable);
     }
-
-    // Manipulate the DOM. 
-    this.element.empty();
-    this.element.append(this._renderedContent);
-
-    // *Lastly* the wrapped view model may attach its event listeners. 
-    this.viewModel.activateListeners(this.element, this.viewModel.isOwner, this.viewModel.isEditable);
   }
 
   /** @override */
