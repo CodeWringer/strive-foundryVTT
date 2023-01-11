@@ -10,14 +10,11 @@ export default class ActorAttributesViewModel extends ViewModel {
   /** @override */
   get entityId() { return this.document.id; }
   
-  attributesPhysicalViewModel = undefined;
-  get attributesPhysicalViewModelId() { return "child-attributes-physical-viewmodel"; }
-
-  attributesMentalViewModel = undefined;
-  get attributesMentalViewModelId() { return "child-attributes-mental-viewmodel"; }
-
-  attributesSocialViewModel = undefined;
-  get attributesSocialViewModelId() { return "child-attributes-social-viewmodel"; }
+  /**
+   * @type {String}
+   * @readonly
+   */
+  get attributeTableTemplate() { return TEMPLATES.ACTOR_ATTRIBUTE_TABLE; }
 
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
@@ -28,7 +25,6 @@ export default class ActorAttributesViewModel extends ViewModel {
    * @param {Boolean | undefined} args.isEditable If true, the sheet is editable. 
    * @param {Boolean | undefined} args.isSendable If true, the document represented by the sheet can be sent to chat. 
    * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document. 
-   * @param {Boolean | undefined} args.isGM If true, the current user is a GM. 
    * 
    * @param {TransientBaseCharacterActor} args.document
    * 
@@ -47,7 +43,7 @@ export default class ActorAttributesViewModel extends ViewModel {
     const physicalAttributes = this.document.attributeGroups.find(it => it.name === "physical");
     this.attributesPhysicalViewModel = new AttributeTableViewModel({
       ...args, 
-      id: thiz.attributesPhysicalViewModelId,
+      id: "attributes-physical",
       attributes: physicalAttributes.attributes,
       attributeGroupName: physicalAttributes.name,
       localizableAttributeGroupName: physicalAttributes.localizableName,
@@ -57,7 +53,7 @@ export default class ActorAttributesViewModel extends ViewModel {
     const mentalAttributes = this.document.attributeGroups.find(it => it.name === "mental");
     this.attributesMentalViewModel = new AttributeTableViewModel({
       ...args, 
-      id: thiz.attributesMentalViewModelId,
+      id: "attributes-mental",
       attributes: mentalAttributes.attributes,
       attributeGroupName: mentalAttributes.name,
       localizableAttributeGroupName: mentalAttributes.localizableName,
@@ -67,7 +63,7 @@ export default class ActorAttributesViewModel extends ViewModel {
     const socialAttributes = this.document.attributeGroups.find(it => it.name === "social");
     this.attributesSocialViewModel = new AttributeTableViewModel({
       ...args, 
-      id: thiz.attributesSocialViewModelId,
+      id: "attributes-social",
       attributes: socialAttributes.attributes,
       attributeGroupName: socialAttributes.name,
       localizableAttributeGroupName: socialAttributes.localizableName,

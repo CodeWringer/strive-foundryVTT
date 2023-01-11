@@ -8,14 +8,20 @@ export default class ActorBeliefsFateViewModel extends ViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.ACTOR_BELIEFS_FATE; }
 
-  beliefsViewModel = undefined;
-  get beliefsViewModelId() { return "child-beliefs-view-model"; }
-
-  fateViewModel = undefined;
-  get fateViewModelId() { return "child-fate-view-model"; }
-
   /** @override */
   get entityId() { return this.document.id; }
+
+  /**
+   * @type {String}
+   * @readonly
+   */
+  get beliefsTemplate() { return TEMPLATES.ACTOR_BELIEFS; }
+
+  /**
+   * @type {String}
+   * @readonly
+   */
+  get fateTemplate() { return TEMPLATES.ACTOR_FATE; }
 
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
@@ -26,7 +32,6 @@ export default class ActorBeliefsFateViewModel extends ViewModel {
    * @param {Boolean | undefined} args.isEditable If true, the sheet is editable. 
    * @param {Boolean | undefined} args.isSendable If true, the document represented by the sheet can be sent to chat. 
    * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document. 
-   * @param {Boolean | undefined} args.isGM If true, the current user is a GM. 
    * 
    * @param {TransientBaseCharacterActor} args.document
    * 
@@ -42,7 +47,15 @@ export default class ActorBeliefsFateViewModel extends ViewModel {
     // Child view models. 
     const thiz = this;
 
-    this.beliefsViewModel = new ActorBeliefsViewModel({ ...args, id: thiz.beliefsViewModelId, parent: thiz });
-    this.fateViewModel = new ActorFateViewModel({ ...args, id: thiz.fateViewModelId, parent: thiz });
+    this.beliefsViewModel = new ActorBeliefsViewModel({
+      ...args,
+      id: "beliefs",
+      parent: thiz
+    });
+    this.fateViewModel = new ActorFateViewModel({
+      ...args,
+      id: "fate",
+      parent: thiz
+    });
   }
 }

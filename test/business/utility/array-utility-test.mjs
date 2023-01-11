@@ -1,3 +1,4 @@
+import { arrayContains } from "../../../business/util/array-utility.mjs";
 import { moveArrayElementBy } from "../../../business/util/array-utility.mjs";
 import { moveArrayElement } from "../../../business/util/array-utility.mjs";
 
@@ -80,6 +81,45 @@ describe('array-utility', function() {
       arr[0].should.be.equal("abc");
       arr[1].should.be.equal("def");
       arr[2].should.be.equal("ghi");
+    });
+  });
+  
+  describe('arrayContains', function() {
+    it('Contains "abc" returns true', function() {
+      // Given
+      const arr = ["abc", "def", "ghi"];
+      // When
+      const r = arrayContains(arr, "abc");
+      // Then
+      r.should.be.equal(true);
+    });
+
+    it('Contains "abc" returns false', function() {
+      // Given
+      const arr = ["def", "ghi"];
+      // When
+      const r = arrayContains(arr, "abc");
+      // Then
+      r.should.be.equal(false);
+    });
+
+    it('Contains object literal returns false', function() {
+      // Given
+      const arr = [{ a: 42 }, { b: 0 }];
+      // When
+      const r = arrayContains(arr, { a: 42 });
+      // Then
+      r.should.be.equal(false);
+    });
+
+    it('Contains object reference returns true', function() {
+      // Given
+      const givenObj = { a: 42 };
+      const arr = [givenObj, { b: 0 }];
+      // When
+      const r = arrayContains(arr, givenObj);
+      // Then
+      r.should.be.equal(true);
     });
   });
 });

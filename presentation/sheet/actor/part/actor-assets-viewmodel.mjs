@@ -8,6 +8,14 @@ import ViewModelFactory from "../../../view-model/view-model-factory.mjs"
 import ViewModel from "../../../view-model/view-model.mjs"
 import AssetListItemViewModel from "../../item/asset/asset-list-item-viewmodel.mjs"
 
+/**
+ * @property {Array<AssetListItemViewModel>} listItemViewModels 
+ * @property {Number} maxBulk 
+ * @property {Number} currentBulk 
+ * 
+ * @property {ViewModel} vmIgv 
+ * @property {ViewModel} vmPropertyList 
+ */
 export default class ActorAssetsViewModel extends ViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.ACTOR_ASSETS; }
@@ -16,10 +24,9 @@ export default class ActorAssetsViewModel extends ViewModel {
   get entityId() { return this.document.id; }
 
   /**
-   * @type {Array<ViewModel>}
+   * @type {Array<AssetListItemViewModel>}
    */
-  itemViewModels = [];
-
+  listItemViewModels = [];
 
   /**
    * Returns the maximum bulk. 
@@ -46,7 +53,6 @@ export default class ActorAssetsViewModel extends ViewModel {
    * @param {Boolean | undefined} args.isEditable If true, the sheet is editable. 
    * @param {Boolean | undefined} args.isSendable If true, the document represented by the sheet can be sent to chat. 
    * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document. 
-   * @param {Boolean | undefined} args.isGM If true, the current user is a GM. 
    * 
    * @param {TransientBaseCharacterActor} args.document
    * 
@@ -71,28 +77,19 @@ export default class ActorAssetsViewModel extends ViewModel {
       contextTemplate: thiz.contextTemplate,
     });
 
-    const remoteAssets = this.document.assets.remote;
-    for (const remoteAsset of remoteAssets) {
-      const vm = new AssetListItemViewModel({
-        ...args,
-        id: remoteAsset.id,
-        parent: thiz,
-        document: remoteAsset,
-      });
-      this.itemViewModels.push(vm);
-    }
+    this.listItemViewModels = [];
+    this.listItemViewModels = this._getAssetViewModels();
     this.vmPropertyList = new SortableListViewModel({
-      parent: thiz,
-      isEditable: args.isEditable ?? thiz.isEditable,
+      parent: this,
+      isEditable: this.isEditable,
       id: "vmPropertyList",
       indexDataSource: new DocumentListItemOrderDataSource({
         document: thiz.document,
         listName: "property",
       }),
-      listItemViewModels: this.itemViewModels,
+      listItemViewModels: this.listItemViewModels,
       listItemTemplate: TEMPLATES.ASSET_LIST_ITEM,
       vmBtnAddItem: factory.createVmBtnAdd({
-        parent: thiz,
         id: "vmBtnAddItem",
         target: thiz.document,
         creationType: "item",
@@ -102,5 +99,61 @@ export default class ActorAssetsViewModel extends ViewModel {
         localizableDialogTitle: "ambersteel.character.asset.add.query",
       }),
     });
+  }
+  
+  /**
+   * Updates the data of this view model. 
+   * 
+   * @param {Boolean | undefined} args.isEditable If true, the view model data is editable.
+   * * Default `false`. 
+   * @param {Boolean | undefined} args.isSendable If true, the document represented by the sheet can be sent to chat.
+   * * Default `false`. 
+   * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document.
+   * * Default `false`. 
+   * 
+   * @override
+   */
+  update(args = {}) {
+    this.listItemViewModels = this._getAssetViewModels();
+
+    super.update(args);
+  }
+
+  /** @override */
+  _getChildUpdates() {
+    const updates = super._getChildUpdates();
+
+    updates.set(this.vmPropertyList, {
+      ...updates.get(this.vmPropertyList),
+      listItemViewModels: this.listItemViewModels,
+    });
+
+    return updates;
+  }
+  
+  /**
+   * @returns {Array<AssetListItemViewModel>}
+   * 
+   * @private
+   */
+  _getAssetViewModels() {
+    const result = [];
+    
+    const documents = this.document.assets.remote;
+    for (const document of documents) {
+      let vm = this.listItemViewModels.find(it => it._id === document.id);
+      if (vm === undefined) {
+        vm = new AssetListItemViewModel({
+          id: document.id,
+          document: document,
+          isEditable: this.isEditable,
+          isSendable: this.isSendable,
+          isOwner: this.isOwner,
+        });
+      }
+      result.push(vm);
+    }
+
+    return result;
   }
 }

@@ -26,7 +26,9 @@ cssClass: {undefined | String}
   <div class="flex" style="flex-wrap: wrap;">
     {{#each viewModel.fateCards as |cardViewModel key|}}
     <div class="fate-card-actor-container">
-      {{> "systems/ambersteel/presentation/sheet/item/fate-card/fate-card.hbs" viewModel=cardViewModel }}
+      {{#with ../viewModel.fateCardTemplate as | template |}}
+        {{> (template) viewModel=cardViewModel }}
+      {{/with}}
     </div>
     {{/each}}
     {{#times viewModel.remainingSlots}}

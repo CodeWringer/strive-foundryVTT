@@ -174,7 +174,7 @@ export default class TransientSkill extends TransientBaseItem {
   /** @override */
   getChatViewModel(overrides = {}) {
     return new SkillChatMessageViewModel({
-      id: this.id,
+      id: `${this.id}-${createUUID()}`,
       isEditable: false,
       isSendable: false,
       isOwner: this.isOwner,

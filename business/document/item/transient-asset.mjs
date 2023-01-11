@@ -4,6 +4,7 @@ import { ITEM_SUBTYPE } from "./item-subtype.mjs";
 import TransientBaseItem from "./transient-base-item.mjs";
 import AssetChatMessageViewModel from "../../../presentation/sheet/item/asset/asset-chat-message-viewmodel.mjs";
 import { TEMPLATES } from "../../../presentation/templatePreloader.mjs";
+import { createUUID } from "../../util/uuid-utility.mjs";
 
 /**
  * Represents the full transient data of an asset. 
@@ -122,7 +123,7 @@ export default class TransientAsset extends TransientBaseItem {
   /** @override */
   getChatViewModel(overrides = {}) {
     return new AssetChatMessageViewModel({
-      id: this.id,
+      id: `${this.id}-${createUUID()}`,
       isEditable: false,
       isSendable: false,
       isOwner: this.isOwner,

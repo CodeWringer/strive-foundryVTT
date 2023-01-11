@@ -82,12 +82,14 @@ export class AmbersteelActorSheet extends ActorSheet {
     const context = super.getData();
     SheetUtil.enrichData(context);
 
-    // Whenever the sheet is re-rendered, its view model is completely disposed and re-instantiated. 
-    // Dispose of the view model, if it exists. 
-    this._tryDisposeViewModel();
     // Prepare a new view model instance. 
-    this._viewModel = this.subType.getViewModel(context, context.actor);
-    this._viewModel.readViewState();
+    game.ambersteel.logger.logPerf(this, "actor.getData (getViewModel)", () => {
+      this._viewModel = this.subType.getViewModel(context, context.actor);
+    });
+    game.ambersteel.logger.logPerf(this, "actor.getData (readViewState)", () => {
+      this._viewModel.readViewState();
+    });
+
     context.viewModel = this._viewModel;
     
     return context;
@@ -100,8 +102,12 @@ export class AmbersteelActorSheet extends ActorSheet {
     const isOwner = (this.actor ?? this.item).isOwner;
     const isEditable = this.isEditable;
 
-    this.subType.activateListeners(html, isOwner, isEditable);
-    this.viewModel.activateListeners(html, isOwner, isEditable);
+    game.ambersteel.logger.logPerf(this, "actor.activateListeners (subType)", () => {
+      this.subType.activateListeners(html, isOwner, isEditable);
+    });
+    game.ambersteel.logger.logPerf(this, "actor.activateListeners (viewModel)", () => {
+      this.viewModel.activateListeners(html, isOwner, isEditable);
+    });
 
     if (!isOwner) return;
 
@@ -119,28 +125,10 @@ export class AmbersteelActorSheet extends ActorSheet {
    * @see https://foundryvtt.com/api/FormApplication.html#close
    */
   async close() {
-    this._tryDisposeViewModel();
+    if (this._viewModel !== undefined && this._viewModel !== null) {
+      this._viewModel.writeViewState();
+    }
     
     return super.close();
-  }
-  
-  /**
-   * Disposes of the view model, if possible. 
-   * 
-   * Will silently return, if there is no view model instance to dispose. 
-   * @private
-   * @async
-   */
-  _tryDisposeViewModel() {
-    if (this._viewModel !== undefined && this._viewModel !== null) {
-      // Write out state to persist, before disposing the view model. 
-      this._viewModel.writeViewState();
-      try {
-        this._viewModel.dispose();
-      } catch (e) {
-        game.ambersteel.logger.logWarn(e);
-      }
-    }
-    this._viewModel = null;
   }
 }

@@ -53,6 +53,23 @@ export class BaseLoggingStrategy {
   logError(error) {
     this.log(LogLevels.ERROR, `[ERROR] ${error.message ?? error}`);
   }
+
+  /**
+   * Executes and then logs the time taken for the given `functionBlock`. 
+   * 
+   * Outputs a `LogLevels.VERBOSE` level message. 
+   * 
+   * @param {Object} obj The context to bind the `functionBlock` to. 
+   * @param {String | undefined} msg A message to output along with the time taken. 
+   * @param {Function} functionBlock The function block to execute. 
+   */
+  logPerf(obj, msg, functionBlock) {
+    functionBlock.bind(obj);
+    const perf0 = performance.now();
+    functionBlock();
+    const perf1 = performance.now();
+    this.logVerbose(`Perf: ${msg} took: ${perf1 - perf0} milliseconds`);
+  }
 }
 
 /**

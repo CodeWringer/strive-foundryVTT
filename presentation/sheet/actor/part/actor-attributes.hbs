@@ -4,7 +4,9 @@ cssClass: {undefined | String}
 --}}
 <section class="{{cssClass}}">
   {{!-- Attributes --}}
-  {{> "systems/ambersteel/presentation/sheet/actor/part/actor-attribute-table.hbs" viewModel=viewModel.attributesPhysicalViewModel }}
-  {{> "systems/ambersteel/presentation/sheet/actor/part/actor-attribute-table.hbs" viewModel=viewModel.attributesMentalViewModel }}
-  {{> "systems/ambersteel/presentation/sheet/actor/part/actor-attribute-table.hbs" viewModel=viewModel.attributesSocialViewModel }}
+  {{#with viewModel.attributeTableTemplate as | template |}}
+    {{> (template) viewModel=../viewModel.attributesPhysicalViewModel }}
+    {{> (template) viewModel=../viewModel.attributesMentalViewModel }}
+    {{> (template) viewModel=../viewModel.attributesSocialViewModel }}
+  {{/with}}
 </section>

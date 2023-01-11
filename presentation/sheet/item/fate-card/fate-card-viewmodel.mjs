@@ -19,7 +19,6 @@ export default class FateCardViewModel extends ViewModel {
    * @param {Boolean | undefined} args.isEditable If true, the sheet is editable. 
    * @param {Boolean | undefined} args.isSendable If true, the document represented by the sheet can be sent to chat. 
    * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document. 
-   * @param {Boolean | undefined} args.isGM If true, the current user is a GM. 
    * 
    * @param {TransientFateCard} args.document
    */
@@ -50,6 +49,7 @@ export default class FateCardViewModel extends ViewModel {
       parent: thiz,
       id: "vmBtnSendToChat",
       target: thiz.document,
+      isEditable: thiz.isEditable || thiz.isGM,
     });
     this.vmBtnDelete = factory.createVmBtnDelete({
       parent: thiz,
@@ -64,5 +64,17 @@ export default class FateCardViewModel extends ViewModel {
       propertyOwner: thiz.document,
       propertyPath: "description",
     });
+  }
+
+  /** @override */
+  _getChildUpdates() {
+    const updates = super._getChildUpdates();
+
+    updates.set(this.vmBtnSendToChat, {
+      ...updates.get(this.vmBtnSendToChat),
+      isEditable: this.isEditable || this.isGM,
+    });
+
+    return updates;
   }
 }

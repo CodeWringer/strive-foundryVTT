@@ -3,7 +3,6 @@ viewModel: {ActorSheetViewModel}
 cssClass: {undefined | String}
 --}}
 <form class="{{viewModel.document.type}} flexcol{{#if cssClass}} {{cssClass}}{{/if}}" autocomplete="off">
-
   {{!-- Sheet Header --}}
   <header class="sheet-header">
     {{> inputImage viewModel=viewModel.vmImg cssClass="profile-img" }}
@@ -17,12 +16,14 @@ cssClass: {undefined | String}
         </div>
       </div>
       {{#if (eq viewModel.isPlain false)}}
-        {{> "systems/ambersteel/presentation/sheet/actor/part/actor-personals.hbs" viewModel=viewModel.personalsViewModel }}
+      {{#with viewModel.templatePersonals as | template |}}
+        {{> (template) viewModel=../viewModel.personalsViewModel }}
+      {{/with}}
       {{/if}}
     </div>
   </header>
 
-  {{#if (or (eq viewModel.isPlain false) (eq viewModel.isGM true))}}
+  {{#if viewModel.showNavigation}}
     {{!-- Sheet Tab Navigation --}}
     <nav class="sheet-tabs tabs flex flex-justify" id="nav-sheet-tabs" data-group="primary">
       {{#if (eq viewModel.isPlain false)}}
@@ -46,38 +47,32 @@ cssClass: {undefined | String}
 
   {{!-- Sheet Body --}}
   <section class="sheet-body">
-
     {{#if (eq viewModel.isPlain false)}}
       {{!-- Attributes Tab --}}
       <div class="tab attributes" data-group="primary" data-tab="attributes">
-        {{> "systems/ambersteel/presentation/sheet/actor/part/actor-attributes.hbs" viewModel=viewModel.attributesViewModel }}
+        {{> lazy viewModel=viewModel.attributesViewModel}}
       </div>
-
       {{!-- Skills Tab --}}
       <div class="tab skills" data-group="primary" data-tab="skills">
-        {{> "systems/ambersteel/presentation/sheet/actor/part/actor-skills.hbs" viewModel=viewModel.skillsViewModel }}
+        {{> lazy viewModel=viewModel.skillsViewModel}}
       </div>
-
       {{#if viewModel.isPC }}
       {{!-- Beliefs&Fate Tab --}}
         <div class="tab beliefs-fate" data-group="primary" data-tab="beliefs-fate">
-          {{> "systems/ambersteel/presentation/sheet/actor/part/actor-beliefs-fate.hbs" viewModel=viewModel.beliefsFateViewModel }}
+          {{> lazy viewModel=viewModel.beliefsFateViewModel}}
         </div>
       {{/if}}
-
       {{!-- Health Tab --}}
       <div class="tab health" data-group="primary" data-tab="health">
-        {{> "systems/ambersteel/presentation/sheet/actor/part/actor-health.hbs" viewModel=viewModel.healthViewModel }}
+        {{> lazy viewModel=viewModel.healthViewModel}}
       </div>
-
       {{!-- Assets Tab --}}
       <div class="tab assets" data-group="primary" data-tab="assets">
-        {{> "systems/ambersteel/presentation/sheet/actor/part/actor-assets.hbs" viewModel=viewModel.assetsViewModel }}
+        {{> lazy viewModel=viewModel.assetsViewModel}}
       </div>
-
       {{!-- Biography Tab --}}
       <div class="tab biography" data-group="primary" data-tab="biography">
-        {{> "systems/ambersteel/presentation/sheet/actor/part/actor-biography.hbs" viewModel=viewModel.biographyViewModel }}
+        {{> lazy viewModel=viewModel.biographyViewModel}}
       </div>
     {{else}}
       <div class="{{#if viewModel.isGM}}tab {{/if}}description" data-group="primary" data-tab="description">
@@ -86,13 +81,11 @@ cssClass: {undefined | String}
         </div>
       </div>
     {{/if}}
-
     {{!-- GM Notes Tab --}}
     {{#if viewModel.isGM }}
       <div class="tab gm-notes" data-group="primary" data-tab="gm-notes">
-        {{> "systems/ambersteel/presentation/component/section-gm-notes/section-gm-notes.hbs" viewModel=viewModel.gmNotesViewModel }}
+        {{> lazy viewModel=viewModel.gmNotesViewModel}}
       </div>
     {{/if}}
-
   </section>
 </form>

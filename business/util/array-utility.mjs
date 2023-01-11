@@ -25,7 +25,7 @@ export function moveArrayElement(arr, element, newIndex) {
  * further back, while negative numbers pull it further to the front. 
  * @private
  */
-export function  moveArrayElementBy(arr, element, indices) {
+export function moveArrayElementBy(arr, element, indices) {
   const index = arr.indexOf(element);
   
   // Determine the new index and ensure the array boundaries are respected. 
@@ -33,4 +33,16 @@ export function  moveArrayElementBy(arr, element, indices) {
 
   arr.splice(index, 1);
   arr.splice(newIndex, 0, element);
+}
+
+/**
+ * Returns true, if the given array contains the given element. 
+ * 
+ * @param {Array<Any>} arr 
+ * @param {Any} element 
+ * 
+ * @returns {Boolean} True, if the given array contains the given element. 
+ */
+export function arrayContains(arr, element) {
+  return arr.indexOf(element) > -1;
 }

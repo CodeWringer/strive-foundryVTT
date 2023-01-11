@@ -110,7 +110,6 @@ export default class SkillAbilityChatMessageViewModel extends ViewModel {
    * @param {Boolean | undefined} args.isEditable Optional. If true, the sheet is editable. 
    * @param {Boolean | undefined} args.isSendable Optional. If true, the document represented by the sheet can be sent to chat. 
    * @param {Boolean | undefined} args.isOwner Optional. If true, the current user is the owner of the represented document. 
-   * @param {Boolean | undefined} args.isGM Optional. If true, the current user is a GM. 
    * @param {String | undefined} args.contextTemplate Optional. Name or path of a contextual template, 
    * which will be displayed in exception log entries, to aid debugging. 
    */
@@ -121,7 +120,6 @@ export default class SkillAbilityChatMessageViewModel extends ViewModel {
     this._isEditable = args.isEditable ?? false;
     this._isSendable = args.isSendable ?? false;
     this._isOwner = args.isOwner ?? false;
-    this._isGM = args.isGM ?? false;
     this._contextTemplate = args.contextTemplate;
 
     this.skillAbility = args.skillAbility;

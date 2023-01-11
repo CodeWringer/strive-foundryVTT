@@ -1,4 +1,5 @@
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs"
+import { TEMPLATES } from "../../../templatePreloader.mjs";
 import ViewModelFactory from "../../../view-model/view-model-factory.mjs"
 import ViewModel from "../../../view-model/view-model.mjs"
 import FateCardViewModel from "../../item/fate-card/fate-card-viewmodel.mjs"
@@ -22,7 +23,17 @@ export default class ActorFateViewModel extends ViewModel {
    */
   fateCards = [];
 
+  /**
+   * @type {Number}
+   * @readonly
+   */
   get remainingSlots() { return this.document.fateSystem.remainingFateCards; }
+
+  /**
+   * @type {String}
+   * @readonly
+   */
+  get fateCardTemplate() { return TEMPLATES.FATE_CARD; }
 
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
@@ -33,7 +44,6 @@ export default class ActorFateViewModel extends ViewModel {
    * @param {Boolean | undefined} args.isEditable If true, the sheet is editable. 
    * @param {Boolean | undefined} args.isSendable If true, the document represented by the sheet can be sent to chat. 
    * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document. 
-   * @param {Boolean | undefined} args.isGM If true, the current user is a GM. 
    * 
    * @param {TransientPc} args.document
    * 
@@ -80,15 +90,40 @@ export default class ActorFateViewModel extends ViewModel {
       localizableDialogTitle: "ambersteel.character.beliefSystem.fateSystem.fateCard.add.query",
     });
 
-    const fateCards = this.document.fateSystem.fateCards;
-    for (const fateCard of fateCards) {
-      const vm = new FateCardViewModel({
-        ...args,
-        id: fateCard.id,
-        parent: thiz,
-        document: fateCard,
-      });
-      this.fateCards.push(vm);
-    }
+    this.fateCards = [];
+    this.fateCards = this._getFateCardViewModels();
+  }
+
+  /**
+   * Updates the data of this view model. 
+   * 
+   * @param {Boolean | undefined} args.isEditable If true, the view model data is editable.
+   * * Default `false`. 
+   * @param {Boolean | undefined} args.isSendable If true, the document represented by the sheet can be sent to chat.
+   * * Default `false`. 
+   * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document.
+   * * Default `false`. 
+   * 
+   * @override
+   */
+  update(args = {}) {
+    const newFateCards = this._getFateCardViewModels();
+    this._cullObsolete(this.fateCards, newFateCards);
+    this.fateCards = newFateCards;
+
+    super.update(args);
+  }
+
+  /**
+   * @returns {Array<FateCardViewModel>}
+   * 
+   * @private
+   */
+  _getFateCardViewModels() {
+    return this._getViewModels(
+      this.document.fateSystem.fateCards, 
+      this.fateCards,
+      (args) => { return new FateCardViewModel(args); }
+    );
   }
 }

@@ -86,12 +86,13 @@ export class AmbersteelItemSheet extends ItemSheet {
     const context = super.getData();
     SheetUtil.enrichData(context);
 
-    // Whenever the sheet is re-rendered, its view model is completely disposed and re-instantiated. 
-    // Dispose of the view model, if it exists. 
-    this._tryDisposeViewModel();
     // Prepare a new view model instance. 
-    this._viewModel = this.subType.getViewModel(context, context.item);
-    this._viewModel.readViewState();
+    game.ambersteel.logger.logPerf(this, "item.getData (getViewModel)", () => {
+      this._viewModel = this.subType.getViewModel(context, context.item);
+    });
+    game.ambersteel.logger.logPerf(this, "item.getData (readViewState)", () => {
+      this._viewModel.readViewState();
+    });
     context.viewModel = this._viewModel;
     
     return context;
@@ -104,8 +105,12 @@ export class AmbersteelItemSheet extends ItemSheet {
     const isOwner = (this.actor ?? this.item).isOwner;
     const isEditable = this.isEditable;
     
-    this.subType.activateListeners(html, isOwner, isEditable);
-    this.viewModel.activateListeners(html, isOwner, isEditable);
+    game.ambersteel.logger.logPerf(this, "item.activateListeners (subType)", () => {
+      this.subType.activateListeners(html, isOwner, isEditable);
+    });
+    game.ambersteel.logger.logPerf(this, "item.activateListeners (viewModel)", () => {
+      this.viewModel.activateListeners(html, isOwner, isEditable);
+    });
 
     if (!isOwner) return;
 
@@ -123,28 +128,10 @@ export class AmbersteelItemSheet extends ItemSheet {
    * @see https://foundryvtt.com/api/FormApplication.html#close
    */
   async close() {
-    this._tryDisposeViewModel();
-
-    return super.close();
-  }
-
-  /**
-   * Disposes of the view model, if possible. 
-   * 
-   * Will silently return, if there is no view model instance to dispose. 
-   * @private
-   * @async
-   */
-  _tryDisposeViewModel() {
     if (this._viewModel !== undefined && this._viewModel !== null) {
-      // Write out state to persist, before disposing the view model. 
       this._viewModel.writeViewState();
-      try {
-        this._viewModel.dispose();
-      } catch (e) {
-        game.ambersteel.logger.logWarn(e);
-      }
     }
-    this._viewModel = null;
+    
+    return super.close();
   }
 }

@@ -189,8 +189,8 @@ export default class SkillAbility {
   }
   
   /**
-   * @param {TransientSkill} owningDocument The owning document.
-   * @param {String | undefined} id Optional. UUID of this instance of a skill ability. 
+   * @param {TransientSkill} args.owningDocument The owning document.
+   * @param {String | undefined} args.id Optional. UUID of this instance of a skill ability. 
    * @param {Boolean | undefined} args.isCustom Optional. 
    * @param {String | undefined} args.name Optional. 
    * @param {String | undefined} args.img Optional. 
@@ -276,7 +276,7 @@ export default class SkillAbility {
       this.owningDocument.owningDocument.document : undefined;
 
     return new SkillAbilityChatMessageViewModel({
-      id: this.id,
+      id: `${this.id}-${createUUID()}`,
       isEditable: false,
       isSendable: false,
       isOwner: this.owningDocument.isOwner,

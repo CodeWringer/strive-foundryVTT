@@ -12,14 +12,24 @@ export default class AmbersteelInjuryItemSheet extends AmbersteelBaseItemSheet {
 
   /** @override */
   getViewModel(context, document) {
-    return new InjuryItemSheetViewModel({
-      id: document.id,
-      isEditable: context.isEditable,
-      isSendable: context.isSendable,
-      isOwner: context.isOwner,
-      isGM: context.isGM,
-      document: document.getTransientObject(),
-    });
+    let viewModel = game.ambersteel.viewModels.get(document.id);
+    if (viewModel === undefined) {
+      viewModel = new InjuryItemSheetViewModel({
+        id: document.id,
+        document: document.getTransientObject(),
+        isEditable: context.isEditable,
+        isSendable: context.isSendable,
+        isOwner: context.isOwner,
+      });
+      game.ambersteel.viewModels.set(document.id, viewModel);
+    } else {
+      viewModel.update({
+        isEditable: context.isEditable,
+        isSendable: context.isSendable,
+        isOwner: context.isOwner,
+      });
+    }
+    return viewModel;
   }
 }
 

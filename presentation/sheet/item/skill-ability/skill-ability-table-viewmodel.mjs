@@ -75,7 +75,6 @@ export default class SkillAbilityTableViewModel extends ViewModel {
    * @param {Boolean | undefined} args.isEditable If true, the sheet is editable. 
    * @param {Boolean | undefined} args.isSendable If true, the document represented by the sheet can be sent to chat. 
    * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document. 
-   * @param {Boolean | undefined} args.isGM If true, the current user is a GM. 
    * 
    * @param {TransientSkill} args.document
    * @param {Boolean | undefined} args.oneColumn
@@ -99,33 +98,8 @@ export default class SkillAbilityTableViewModel extends ViewModel {
     const thiz = this;
     const factory = new ViewModelFactory();
 
-    for (const skillAbility of this.document.abilities) {
-      let vm = undefined;
-
-      if (this.oneColumn === true) {
-        vm = new SkillAbilityChatMessageViewModel({
-          id: `vmSkillAbility-${skillAbility.id}`,
-          parent: thiz,
-          isEditable: args.isEditable,
-          isSendable: args.isSendable,
-          isOwner: args.isOwner,
-          isGM: args.isGM,
-          skillAbility: skillAbility,
-        })
-      } else {
-        vm = new SkillAbilityListItemViewModel({
-          id: `vmSkillAbility-${skillAbility.id}`,
-          parent: thiz,
-          isEditable: args.isEditable,
-          isSendable: args.isSendable,
-          isOwner: args.isOwner,
-          isGM: args.isGM,
-          skillAbility: skillAbility,
-        });
-      }
-      this.abilities.push(vm);
-      this[vm.id] = vm;
-    }
+    this.abilities = [];
+    this.abilities = this._getSkillAbilityViewModels();
 
     this.vmSkillAbilities = new SortableListViewModel({
       parent: thiz,
@@ -138,7 +112,6 @@ export default class SkillAbilityTableViewModel extends ViewModel {
       listItemViewModels: this.abilities,
       listItemTemplate: thiz.oneColumn === true ? TEMPLATES.SKILL_ABILITY_CHAT_MESSAGE : TEMPLATES.SKILL_ABILITY_LIST_ITEM,
       vmBtnAddItem: factory.createVmBtnAdd({
-        parent: thiz,
         id: "vmBtnAdd",
         target: thiz.document,
         creationType: "skill-ability",
@@ -167,6 +140,71 @@ export default class SkillAbilityTableViewModel extends ViewModel {
       toggleSelf: true,
       callback: thiz._toggleSkillAbilitiesInitiallyVisible.bind(thiz),
     });
+  }
+
+  /**
+   * Updates the data of this view model. 
+   * 
+   * @param {Boolean | undefined} args.isEditable If true, the view model data is editable.
+   * * Default `false`. 
+   * @param {Boolean | undefined} args.isSendable If true, the document represented by the sheet can be sent to chat.
+   * * Default `false`. 
+   * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document.
+   * * Default `false`. 
+   * 
+   * @override
+   */
+  update(args = {}) {
+    this.abilities = this._getSkillAbilityViewModels();
+
+    super.update(args);
+  }
+
+  /** @override */
+  _getChildUpdates() {
+    const updates = super._getChildUpdates();
+
+    updates.set(this.vmSkillAbilities, {
+      ...updates.get(this.vmSkillAbilities),
+      listItemViewModels: this.abilities,
+    });
+    
+    return updates;
+  }
+
+  /**
+   * @returns {Array<SkillAbilityChatMessageViewModel> | Array<SkillAbilityListItemViewModel>}
+   * 
+   * @private
+   */
+  _getSkillAbilityViewModels() {
+    const result = [];
+    const skillAbilities = this.document.abilities;
+    for (const skillAbility of skillAbilities) {
+      let vm = undefined;
+
+      if (this.oneColumn === true) {
+        vm = new SkillAbilityChatMessageViewModel({
+          id: skillAbility.id,
+          isEditable: this.isEditable,
+          isSendable: this.isSendable,
+          isOwner: this.isOwner,
+          skillAbility: skillAbility,
+        })
+      } else {
+        vm = new SkillAbilityListItemViewModel({
+          id: skillAbility.id,
+          isEditable: this.isEditable,
+          isSendable: this.isSendable,
+          isOwner: this.isOwner,
+          skillAbility: skillAbility,
+        });
+      }
+
+      result.push(vm);
+      this[vm._id] = vm;
+    }
+    return result;
   }
 
   /**
