@@ -116,7 +116,8 @@ async function ensureTempDir() {
  * NOTE: These are **regular expressions**! 
  */
 const copyExcludes = [
-  ".git",
+  "\\.git",
+  "\\.vscode",
   "build",
   "dist",
   "style",
