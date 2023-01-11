@@ -17,12 +17,14 @@ cssClass: {undefined | String}
         </div>
       </div>
       {{#if (eq viewModel.isPlain false)}}
-        {{> "systems/ambersteel/presentation/sheet/actor/part/actor-personals.hbs" viewModel=viewModel.personalsViewModel }}
+      {{#with viewModel.templatePersonals as | template |}}
+        {{> (template) viewModel=../viewModel.personalsViewModel }}
+      {{/with}}
       {{/if}}
     </div>
   </header>
 
-  {{#if (or (eq viewModel.isPlain false) (eq viewModel.isGM true))}}
+  {{#if viewModel.showNavigation}}
     {{!-- Sheet Tab Navigation --}}
     <nav class="sheet-tabs tabs flex flex-justify" id="nav-sheet-tabs" data-group="primary">
       {{#if (eq viewModel.isPlain false)}}
@@ -50,7 +52,8 @@ cssClass: {undefined | String}
     {{#if (eq viewModel.isPlain false)}}
       {{!-- Attributes Tab --}}
       <div class="tab attributes" data-group="primary" data-tab="attributes">
-        {{> "systems/ambersteel/presentation/sheet/actor/part/actor-attributes.hbs" viewModel=viewModel.attributesViewModel }}
+        {{> lazy viewModel=viewModel.attributesViewModel}}
+        {{!-- {{> "systems/ambersteel/presentation/sheet/actor/part/actor-attributes.hbs" viewModel=viewModel.attributesViewModel }} --}}
       </div>
 
       {{!-- Skills Tab --}}

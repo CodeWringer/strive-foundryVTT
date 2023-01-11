@@ -1,4 +1,5 @@
 import { validateOrThrow } from "../../../business/util/validation-utility.mjs"
+import LazyLoadViewModel from "../../component/lazy-load/lazy-load-viewmodel.mjs"
 import GmNotesViewModel from "../../component/section-gm-notes/section-gm-notes-viewmodel.mjs"
 import { TEMPLATES } from "../../templatePreloader.mjs"
 import ViewModelFactory from "../../view-model/view-model-factory.mjs"
@@ -31,22 +32,41 @@ export default class ActorSheetViewModel extends ViewModel {
   get entityId() { return this.document.id; }
 
   /**
-   * Is true, if the actor is a player character. 
+   * Returns true, if the actor is a player character. 
+   * 
    * @type {Boolean}
    */
   get isPC() { return this.document.type === "pc"; }
   
   /**
-   * Is true, if the actor is a non-player character. 
+   * Returns true, if the actor is a non-player character. 
+   * 
    * @type {Boolean}
    */
   get isNPC() { return this.document.type === "npc"; }
 
   /**
-   * Is true, if the actor is a plain actor. 
+   * Returns true, if the actor is a plain actor. 
+   * 
    * @type {Boolean}
    */
   get isPlain() { return this.document.type === "plain"; }
+
+  /**
+   * Returns true, if the navigation is to be shown. 
+   * 
+   * @type {Boolean}
+   * @readonly
+   */
+  get showNavigation() { return this.isPlain === false || this.isGM === true }
+
+  /**
+   * Returns the template path of the "personals" partial. 
+   * 
+   * @type {String}
+   * @readonly
+   */
+  get templatePersonals() { return TEMPLATES.ACTOR_PERSONALS; }
 
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
@@ -98,10 +118,15 @@ export default class ActorSheetViewModel extends ViewModel {
         id: "personals", 
         parent: thiz 
       });
-      this.attributesViewModel = new ActorAttributesViewModel({ 
-        ...args, 
-        id: "attributes", 
-        parent: thiz 
+      this.attributesViewModel = new LazyLoadViewModel({
+        id: "lazyAttributes",
+        parent: thiz,
+        template: TEMPLATES.ACTOR_ATTRIBUTES,
+        viewModelFactoryFunction: (args) => { return new ActorAttributesViewModel(args); },
+        viewModelArgs: {
+          ...args, 
+          id: "attributes", 
+        },
       });
       this.skillsViewModel = new ActorSkillsViewModel({ 
         ...args, 
@@ -139,6 +164,17 @@ export default class ActorSheetViewModel extends ViewModel {
         document: thiz.document, 
         parent: thiz 
       });
+    }
+  }
+
+  /** @override */
+  activateListeners(html, isOwner, isEditable) {
+    super.activateListeners(html, isOwner, isEditable);
+
+    const activeTab = html.find("nav.sheet-tabs > a.active");
+    const dataTab = activeTab.data("tab");
+    if (dataTab === "attributes") {
+      this.attributesViewModel.render();
     }
   }
 
