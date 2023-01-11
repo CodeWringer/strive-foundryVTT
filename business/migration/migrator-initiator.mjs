@@ -7,7 +7,7 @@ import Migrator_1_1_0__1_2_2 from './migrators/migrator_1-1-0_1-2-2.mjs';
 import Migrator_1_2_2__1_3_0 from './migrators/migrator_1-2-2_1-3-0.mjs';
 import Migrator_1_3_0__1_3_1 from './migrators/migrator_1-3-0_1-3-1.mjs';
 import Migrator_1_3_1__1_3_2 from './migrators/migrator_1-3-1_1-3-2.mjs';
-import Migrator_1_3_2__1_4_0 from './migrators/migrator_1-3-2_1-4-0.mjs';
+import Migrator_1_3_2__1_4_1 from './migrators/migrator_1-3-2_1-4-1.mjs';
 // Other imports. 
 import VersionCode from './version-code.mjs';
 
