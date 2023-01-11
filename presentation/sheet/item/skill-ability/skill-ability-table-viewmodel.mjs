@@ -185,7 +185,7 @@ export default class SkillAbilityTableViewModel extends ViewModel {
 
       if (this.oneColumn === true) {
         vm = new SkillAbilityChatMessageViewModel({
-          id: skillAbility._id,
+          id: skillAbility.id,
           isEditable: this.isEditable,
           isSendable: this.isSendable,
           isOwner: this.isOwner,
@@ -193,7 +193,7 @@ export default class SkillAbilityTableViewModel extends ViewModel {
         })
       } else {
         vm = new SkillAbilityListItemViewModel({
-          id: skillAbility._id,
+          id: skillAbility.id,
           isEditable: this.isEditable,
           isSendable: this.isSendable,
           isOwner: this.isOwner,
