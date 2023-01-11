@@ -1,34 +1,36 @@
 .ambersteel-shimmer {
+  background-color: $c-bg-medium;
+  border-radius: $border-radius-md;
+  padding: 10% $padding-lg;
+  overflow: hidden;
+
+  .line {
+    width: 100%;
+    height: 15%;
+    padding: 0;
+    margin-bottom: $padding-lg;
+    background-color: $c-bg-dark;
+    border-radius: $border-radius-sm;
+  }
+}
+
+.animate-shimmer {
+  width: 100%;
+  height: 100%;
   background: linear-gradient(
     100deg,
     rgba(255, 255, 255, 0) 20%,
-    rgba(255, 255, 255, 0.5) 50%,
+    rgba(255, 255, 255, 0.25) 50%,
     rgba(255, 255, 255, 0) 80%
   );
-
-  border-radius: $border-radius-md;
-  padding: $padding-lg;
-
-  animation: shimmer 2s infinite linear;
-
-  .line {
-    background: linear-gradient(
-      100deg,
-      rgba(255, 255, 255, 0) 20%,
-      rgba(255, 255, 255, 0.25) 50%,
-      rgba(255, 255, 255, 0) 80%
-    );
-    width: 100%;
-    height: $line-height;
-    margin-bottom: $padding-lg;
-  }
+  animation: shimmer 1500ms infinite linear;
 }
 
 @keyframes shimmer {
   from {
-    transform: translateX(-200%);
+    transform: translateX(-150%);
   }
   to {
-    transform: translateX(200%);
+    transform: translateX(150%);
   }
 }
