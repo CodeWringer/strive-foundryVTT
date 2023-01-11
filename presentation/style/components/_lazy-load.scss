@@ -1,0 +1,34 @@
+.ambersteel-shimmer {
+  background: linear-gradient(
+    100deg,
+    rgba(255, 255, 255, 0) 20%,
+    rgba(255, 255, 255, 0.5) 50%,
+    rgba(255, 255, 255, 0) 80%
+  );
+
+  border-radius: $border-radius-md;
+  padding: $padding-lg;
+
+  animation: shimmer 2s infinite linear;
+
+  .line {
+    background: linear-gradient(
+      100deg,
+      rgba(255, 255, 255, 0) 20%,
+      rgba(255, 255, 255, 0.25) 50%,
+      rgba(255, 255, 255, 0) 80%
+    );
+    width: 100%;
+    height: $line-height;
+    margin-bottom: $padding-lg;
+  }
+}
+
+@keyframes shimmer {
+  from {
+    transform: translateX(-200%);
+  }
+  to {
+    transform: translateX(200%);
+  }
+}
