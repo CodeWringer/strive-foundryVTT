@@ -9,6 +9,10 @@ import ViewModel from "../../view-model/view-model.mjs";
  * When updating, serves only as a proxy and will pass the given update arguments 
  * through to the wrapped view model instance. 
  * 
+ * The properties `isEditable`, `isSendable` and `isOwner` are irrelevant to this 
+ * component. As a proxy, it will never send its own values for these properties, 
+ * but instead pass through the values of the wrapped view model instance. 
+ * 
  * @extends ViewModel
  * 
  * @property {String} template A Handlebars template to lazy load. 
@@ -88,10 +92,12 @@ export default class LazyLoadViewModel extends ViewModel {
 
     this.element.empty();
 
-    const renderedContent = await renderTemplate(this.template, this.viewModel);
+    const renderedContent = await renderTemplate(this.template, {
+      viewModel: this.viewModel,
+    });
     this.element.append(renderedContent);
 
-    this.viewModel.activateListeners(this.element, this.isOwner, this.isEditable);
+    this.viewModel.activateListeners(this.element, this.viewModel.isOwner, this.viewModel.isEditable);
   }
 
   /** @override */
