@@ -126,16 +126,16 @@ export default class ButtonAddViewModel extends ButtonViewModel {
           const templateItem = await new DocumentFetcher().find({
             id: templateId,
           });
-          const itemData = {
+          const creationData = {
             name: templateItem !== undefined ? templateItem.name : `New ${this.creationType.capitalize()}`,
             type: templateItem !== undefined ? templateItem.type : this.creationType,
-            data: {
-              ...(templateItem !== undefined ? templateItem.data.data : {}),
+            system: {
+              ...(templateItem !== undefined ? templateItem.system : {}),
               ...this.creationData,
               isCustom: false,
             }
           };
-          return await Item.create(itemData, { parent: this.target.document }); // TODO #85: This should probably be extracted to the transient-type object. 
+          return await Item.create(creationData, { parent: this.target.document }); // TODO #85: This should probably be extracted to the transient-type object. 
         }
       },
     }).renderAndAwait(true);
@@ -151,15 +151,15 @@ export default class ButtonAddViewModel extends ButtonViewModel {
    * @private
    */
   async _createCustom() {
-    const itemData = {
+    const creationData = {
       name: `New ${this.creationType.capitalize()}`,
       type: this.creationType,
-      data: {
+      system: {
         ...this.creationData,
         isCustom: true,
       }
     };
-    return await Item.create(itemData, { parent: this.target.document }); // TODO #85: This should probably be extracted to the transient-type object. 
+    return await Item.create(creationData, { parent: this.target.document }); // TODO #85: This should probably be extracted to the transient-type object. 
   }
 
   /**
