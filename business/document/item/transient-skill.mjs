@@ -86,12 +86,12 @@ export default class TransientSkill extends TransientBaseItem {
     return {
       get successes() { return parseInt(thiz.document.system.successes); },
       set successes(value) {
-        this.document.system.successes = value;
+        thiz.document.system.successes = value;
         thiz.updateByPath("system.successes", value);
       },
       get failures() { return parseInt(thiz.document.system.failures); },
       set failures(value) {
-        this.document.system.failures = value;
+        thiz.document.system.failures = value;
         thiz.updateByPath("system.failures", value);
       },
     };
