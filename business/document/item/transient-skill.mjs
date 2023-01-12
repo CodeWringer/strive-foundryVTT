@@ -44,15 +44,15 @@ export default class TransientSkill extends TransientBaseItem {
    * @type {Attribute}
    */
   get relatedAttribute() {
-    return ATTRIBUTES[this.document.data.data.relatedAttribute];
+    return ATTRIBUTES[this.document.system.relatedAttribute];
   }
   set relatedAttribute(value) {
     if (isObject(value)) { // This assumes an `Attribute` object was given. 
-      this.document.data.data.relatedAttribute = value.name;
-      this.updateByPath("data.data.relatedAttribute", value.name);
+      this.document.system.relatedAttribute = value.name;
+      this.updateByPath("system.relatedAttribute", value.name);
     } else { // This assumes a String was given. 
-      this.document.data.data.relatedAttribute = value;
-      this.updateByPath("data.data.relatedAttribute", value);
+      this.document.system.relatedAttribute = value;
+      this.updateByPath("system.relatedAttribute", value);
     }
   }
   
@@ -60,22 +60,22 @@ export default class TransientSkill extends TransientBaseItem {
    * @type {String}
    */
   get category() {
-    return this.document.data.data.category;
+    return this.document.system.category;
   }
   set category(value) {
-    this.document.data.data.category = value;
-    this.updateByPath("data.data.category", value);
+    this.document.system.category = value;
+    this.updateByPath("system.category", value);
   }
   
   /**
    * @type {Number}
    */
   get level() {
-    return parseInt(this.document.data.data.level);
+    return parseInt(this.document.system.level);
   }
   set level(value) {
-    this.document.data.data.level = value;
-    this.updateByPath("data.data.level", value);
+    this.document.system.level = value;
+    this.updateByPath("system.level", value);
   }
   
   /**
@@ -84,7 +84,7 @@ export default class TransientSkill extends TransientBaseItem {
   get advancementProgress() {
     const thiz = this;
     return {
-      get successes() { return parseInt(thiz.document.data.data.successes); },
+      get successes() { return parseInt(thiz.document.system.successes); },
       set successes(value) {
         thiz.update({
           data: {
@@ -92,7 +92,7 @@ export default class TransientSkill extends TransientBaseItem {
           }
         }); 
       },
-      get failures() { return parseInt(thiz.document.data.data.failures); },
+      get failures() { return parseInt(thiz.document.system.failures); },
       set failures(value) {
         thiz.update({
           data: {
@@ -103,8 +103,8 @@ export default class TransientSkill extends TransientBaseItem {
     };
   }
   set advancementProgress(value) {
-    this.document.data.data.successes = value.successes;
-    this.document.data.data.failures = value.failures;
+    this.document.system.successes = value.successes;
+    this.document.system.failures = value.failures;
     this.update({
       data: {
         successes: value.successes,
@@ -117,11 +117,11 @@ export default class TransientSkill extends TransientBaseItem {
    * @type {Boolean}
    */
   get isMagicSchool() {
-    return this.document.data.data.isMagicSchool;
+    return this.document.system.isMagicSchool;
   }
   set isMagicSchool(value) {
-    this.document.data.data.isMagicSchool = value;
-    this.updateByPath("data.data.isMagicSchool", value);
+    this.document.system.isMagicSchool = value;
+    this.updateByPath("system.isMagicSchool", value);
   }
   
   /**
@@ -151,7 +151,7 @@ export default class TransientSkill extends TransientBaseItem {
   prepareData(context) {
     super.prepareData(context);
 
-    context.data.data.relatedAttribute = context.data.data.relatedAttribute ?? "agility";
+    context.system.relatedAttribute = context.system.relatedAttribute ?? "agility";
   }
 
   /** @override */
@@ -276,7 +276,7 @@ export default class TransientSkill extends TransientBaseItem {
     });
     
     this.abilities.push(newAbility);
-    await this.updateByPath(`data.data.abilities.${newAbility.id}`, newAbility.toDto());
+    await this.updateByPath(`system.abilities.${newAbility.id}`, newAbility.toDto());
   }
 
   /**
@@ -295,7 +295,7 @@ export default class TransientSkill extends TransientBaseItem {
       return undefined;
     }
 
-    await this.deleteByPath(`data.data.abilities.${id}`);
+    await this.deleteByPath(`system.abilities.${id}`);
 
     return toRemove;
   }
@@ -348,7 +348,7 @@ export default class TransientSkill extends TransientBaseItem {
       abilitiesToPersist[ability.id] = ability.toDto();
     }
 
-    await this.updateByPath("data.data.abilities", abilitiesToPersist, render);
+    await this.updateByPath("system.abilities", abilitiesToPersist, render);
   }
 
   /**
@@ -360,7 +360,7 @@ export default class TransientSkill extends TransientBaseItem {
    * @private
    */
   _getSkillAbilities() {
-    const abilitiesOnDocument = this.document.data.data.abilities;
+    const abilitiesOnDocument = this.document.system.abilities;
       
     const result = [];
     for (const abilityId in abilitiesOnDocument) {

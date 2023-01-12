@@ -26,33 +26,33 @@ export default class TransientInjury extends TransientBaseItem {
    * @type {String}
    */
   get state() {
-    return this.document.data.data.state;
+    return this.document.system.state;
   }
   set state(value) {
-    this.document.data.data.state = value;
-    this.updateByPath("data.data.state", value);
+    this.document.system.state = value;
+    this.updateByPath("system.state", value);
   }
   
   /**
    * @type {String}
    */
   get timeToHeal() {
-    return this.document.data.data.timeToHeal;
+    return this.document.system.timeToHeal;
   }
   set timeToHeal(value) {
-    this.document.data.data.timeToHeal = value;
-    this.updateByPath("data.data.timeToHeal", value);
+    this.document.system.timeToHeal = value;
+    this.updateByPath("system.timeToHeal", value);
   }
   
   /**
    * @type {Number}
    */
   get limit() {
-    return parseInt(this.document.data.data.limit);
+    return parseInt(this.document.system.limit);
   }
   set limit(value) {
-    this.document.data.data.limit = value;
-    this.updateByPath("data.data.limit", value);
+    this.document.system.limit = value;
+    this.updateByPath("system.limit", value);
   }
   
   /** @override */

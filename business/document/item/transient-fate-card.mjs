@@ -29,17 +29,17 @@ export default class TransientFateCard extends TransientBaseItem {
   get cost() {
     const thiz = this;
     return {
-      get miFP() { return parseInt(thiz.document.data.data.cost.miFP); },
-      set miFP(value) { thiz.updateByPath("data.data.cost.miFP", value); },
-      get maFP() { return parseInt(thiz.document.data.data.cost.maFP); },
-      set maFP(value) { thiz.updateByPath("data.data.cost.maFP", value); },
-      get AFP() { return parseInt(thiz.document.data.data.cost.AFP); },
-      set AFP(value) { thiz.updateByPath("data.data.cost.AFP", value); },
+      get miFP() { return parseInt(thiz.document.system.cost.miFP); },
+      set miFP(value) { thiz.updateByPath("system.cost.miFP", value); },
+      get maFP() { return parseInt(thiz.document.system.cost.maFP); },
+      set maFP(value) { thiz.updateByPath("system.cost.maFP", value); },
+      get AFP() { return parseInt(thiz.document.system.cost.AFP); },
+      set AFP(value) { thiz.updateByPath("system.cost.AFP", value); },
     };
   }
   set cost(value) {
-    this.document.data.data.cost = value;
-    this.updateByPath("data.data.cost", value);
+    this.document.system.cost = value;
+    this.updateByPath("system.cost", value);
   }
   
   /** @override */

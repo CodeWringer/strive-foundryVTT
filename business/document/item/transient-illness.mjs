@@ -27,44 +27,44 @@ export default class TransientIllness extends TransientBaseItem {
    * @type {String}
    */
   get state() {
-    return this.document.data.data.state;
+    return this.document.system.state;
   }
   set state(value) {
-    this.document.data.data.state = value;
-    this.updateByPath("data.data.state", value);
+    this.document.system.state = value;
+    this.updateByPath("system.state", value);
   }
   
   /**
    * @type {String}
    */
   get duration() {
-    return this.document.data.data.duration;
+    return this.document.system.duration;
   }
   set duration(value) {
-    this.document.data.data.duration = value;
-    this.updateByPath("data.data.duration", value);
+    this.document.system.duration = value;
+    this.updateByPath("system.duration", value);
   }
   
   /**
    * @type {String}
    */
   get treatment() {
-    return this.document.data.data.treatment;
+    return this.document.system.treatment;
   }
   set treatment(value) {
-    this.document.data.data.treatment = value;
-    this.updateByPath("data.data.treatment", value);
+    this.document.system.treatment = value;
+    this.updateByPath("system.treatment", value);
   }
   
   /**
    * @type {String}
    */
   get treatmentSkill() {
-    return this.document.data.data.treatmentSkill;
+    return this.document.system.treatmentSkill;
   }
   set treatmentSkill(value) {
-    this.document.data.data.treatmentSkill = value;
-    this.updateByPath("data.data.treatmentSkill", value);
+    this.document.system.treatmentSkill = value;
+    this.updateByPath("system.treatmentSkill", value);
   }
   
   /** @override */

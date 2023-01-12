@@ -31,22 +31,22 @@ export default class TransientAsset extends TransientBaseItem {
    * @type {Number}
    */
   get quantity() {
-    return parseInt(this.document.data.data.quantity);
+    return parseInt(this.document.system.quantity);
   }
   set quantity(value) {
-    this.document.data.data.quantity = value;
-    this.updateByPath("data.data.quantity", value);
+    this.document.system.quantity = value;
+    this.updateByPath("system.quantity", value);
   }
   
   /**
    * @type {Number}
    */
   get maxQuantity() {
-    return parseInt(this.document.data.data.maxQuantity);
+    return parseInt(this.document.system.maxQuantity);
   }
   set maxQuantity(value) {
-    this.document.data.data.maxQuantity = value;
-    this.updateByPath("data.data.maxQuantity", value);
+    this.document.system.maxQuantity = value;
+    this.updateByPath("system.maxQuantity", value);
   }
   
   /**
@@ -55,26 +55,26 @@ export default class TransientAsset extends TransientBaseItem {
   get shape() {
     const thiz = this;
     return {
-      get width() { return parseInt(thiz.document.data.data.shape.width); },
-      set width(value) { thiz.updateByPath("data.data.shape.width", value); },
-      get height() { return parseInt(thiz.document.data.data.shape.height); },
-      set height(value) { thiz.updateByPath("data.data.shape.height", value); },
+      get width() { return parseInt(thiz.document.system.shape.width); },
+      set width(value) { thiz.updateByPath("system.shape.width", value); },
+      get height() { return parseInt(thiz.document.system.shape.height); },
+      set height(value) { thiz.updateByPath("system.shape.height", value); },
     };
   }
   set shape(value) {
-    this.document.data.data.shape = value;
-    this.updateByPath("data.data.shape", value);
+    this.document.system.shape = value;
+    this.updateByPath("system.shape", value);
   }
   
   /**
    * @type {Boolean}
    */
   get isOnPerson() {
-    return this.document.data.data.isOnPerson;
+    return this.document.system.isOnPerson;
   }
   set isOnPerson(value) {
-    this.document.data.data.isOnPerson = value;
-    this.updateByPath("data.data.isOnPerson", value);
+    this.document.system.isOnPerson = value;
+    this.updateByPath("system.isOnPerson", value);
   }
 
   /**
@@ -82,7 +82,7 @@ export default class TransientAsset extends TransientBaseItem {
    * @readonly
    */
   get bulk() {
-    return parseInt(this.document.data.data.shape.width) * parseInt(this.document.data.data.shape.height);
+    return parseInt(this.document.system.shape.width) * parseInt(this.document.system.shape.height);
   }
 
   /**
@@ -99,8 +99,8 @@ export default class TransientAsset extends TransientBaseItem {
     super.prepareData(context);
 
     // Ensure number data type. 
-    context.data.data.shape.width = parseInt(context.data.data.shape.width);
-    context.data.data.shape.height = parseInt(context.data.data.shape.height);
+    context.system.shape.width = parseInt(context.system.shape.width);
+    context.system.shape.height = parseInt(context.system.shape.height);
   }
 
   /** @override */

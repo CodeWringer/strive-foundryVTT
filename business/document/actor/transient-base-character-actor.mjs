@@ -79,23 +79,23 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
   get person() {
     const thiz = this;
     return {
-      get age() { return parseInt(thiz.document.data.data.person.age); },
-      set age(value) { thiz.updateByPath("data.data.person.age", value); },
+      get age() { return parseInt(thiz.document.system.person.age); },
+      set age(value) { thiz.updateByPath("system.person.age", value); },
 
-      get species() { return thiz.document.data.data.person.species; },
-      set species(value) { thiz.updateByPath("data.data.person.species", value); },
+      get species() { return thiz.document.system.person.species; },
+      set species(value) { thiz.updateByPath("system.person.species", value); },
 
-      get culture() { return thiz.document.data.data.person.culture; },
-      set culture(value) { thiz.updateByPath("data.data.person.culture", value); },
+      get culture() { return thiz.document.system.person.culture; },
+      set culture(value) { thiz.updateByPath("system.person.culture", value); },
 
-      get sex() { return thiz.document.data.data.person.sex; },
-      set sex(value) { thiz.updateByPath("data.data.person.sex", value); },
+      get sex() { return thiz.document.system.person.sex; },
+      set sex(value) { thiz.updateByPath("system.person.sex", value); },
 
-      get appearance() { return thiz.document.data.data.person.appearance; },
-      set appearance(value) { thiz.updateByPath("data.data.person.appearance", value); },
+      get appearance() { return thiz.document.system.person.appearance; },
+      set appearance(value) { thiz.updateByPath("system.person.appearance", value); },
 
-      get biography() { return thiz.document.data.data.person.biography; },
-      set biography(value) { thiz.updateByPath("data.data.person.biography", value); },
+      get biography() { return thiz.document.system.person.biography; },
+      set biography(value) { thiz.updateByPath("system.person.biography", value); },
     };
   }
   
@@ -123,14 +123,14 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
       get illnesses() { return thiz.items.filter(it => it.type === "illness"); },
       get mutations() { return thiz.items.filter(it => it.type === "mutation"); },
 
-      get HP() { return parseInt(thiz.document.data.data.health.HP); },
-      set HP(value) { thiz.updateByPath("data.data.health.HP", value); },
+      get HP() { return parseInt(thiz.document.system.health.HP); },
+      set HP(value) { thiz.updateByPath("system.health.HP", value); },
 
-      get exhaustion() { return parseInt(thiz.document.data.data.health.exhaustion); },
-      set exhaustion(value) { thiz.updateByPath("data.data.health.exhaustion", value); },
+      get exhaustion() { return parseInt(thiz.document.system.health.exhaustion); },
+      set exhaustion(value) { thiz.updateByPath("system.health.exhaustion", value); },
       
-      get magicStamina() { return parseInt(thiz.document.data.data.health.magicStamina); },
-      set magicStamina(value) { thiz.updateByPath("data.data.health.magicStamina", value); },
+      get magicStamina() { return parseInt(thiz.document.system.health.magicStamina); },
+      set magicStamina(value) { thiz.updateByPath("system.health.magicStamina", value); },
       
       get maxHP() { return new Ruleset().getCharacterMaximumHp(thiz.document) },
       get maxInjuries() { return new Ruleset().getCharacterMaximumInjuries(thiz.document) },
@@ -158,8 +158,8 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
         return currentBulk;
       },
       get maxBulk() { return new Ruleset().getCharacterMaximumInventory(thiz.document); },
-      get grid() { return thiz.document.data.data.assets.grid; },
-      get gridIndices() { return thiz.document.data.data.assets.gridIndices; },
+      get grid() { return thiz.document.system.assets.grid; },
+      get gridIndices() { return thiz.document.system.assets.gridIndices; },
     };
   }
 

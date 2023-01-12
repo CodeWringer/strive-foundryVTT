@@ -40,28 +40,28 @@ export default class TransientPc extends TransientBaseCharacterActor {
     const thiz = this;
 
     return {
-      get ambition() { return thiz.document.data.data.beliefSystem.ambition; },
-      set ambition(value) { thiz.updateByPath("data.data.beliefSystem.ambition", value); },
+      get ambition() { return thiz.document.system.beliefSystem.ambition; },
+      set ambition(value) { thiz.updateByPath("system.beliefSystem.ambition", value); },
 
       get beliefs() {
         return {
-          get _0() { return thiz.document.data.data.beliefSystem.beliefs._0; },
-          set _0(value) { thiz.updateByPath(`data.data.beliefSystem.beliefs._0`, value); },
-          get _1() { return thiz.document.data.data.beliefSystem.beliefs._1; },
-          set _1(value) { thiz.updateByPath(`data.data.beliefSystem.beliefs._1`, value); },
-          get _2() { return thiz.document.data.data.beliefSystem.beliefs._2; },
-          set _2(value) { thiz.updateByPath(`data.data.beliefSystem.beliefs._2`, value); },
+          get _0() { return thiz.document.system.beliefSystem.beliefs._0; },
+          set _0(value) { thiz.updateByPath("system.beliefSystem.beliefs._0", value); },
+          get _1() { return thiz.document.system.beliefSystem.beliefs._1; },
+          set _1(value) { thiz.updateByPath("system.beliefSystem.beliefs._1", value); },
+          get _2() { return thiz.document.system.beliefSystem.beliefs._2; },
+          set _2(value) { thiz.updateByPath("system.beliefSystem.beliefs._2", value); },
         }
       },
      
       get instincts() {
         return {
-          get _0() { return thiz.document.data.data.beliefSystem.instincts._0; },
-          set _0(value) { thiz.updateByPath(`data.data.beliefSystem.instincts._0`, value); },
-          get _1() { return thiz.document.data.data.beliefSystem.instincts._1; },
-          set _1(value) { thiz.updateByPath(`data.data.beliefSystem.instincts._1`, value); },
-          get _2() { return thiz.document.data.data.beliefSystem.instincts._2; },
-          set _2(value) { thiz.updateByPath(`data.data.beliefSystem.instincts._2`, value); },
+          get _0() { return thiz.document.system.beliefSystem.instincts._0; },
+          set _0(value) { thiz.updateByPath("system.beliefSystem.instincts._0", value); },
+          get _1() { return thiz.document.system.beliefSystem.instincts._1; },
+          set _1(value) { thiz.updateByPath("system.beliefSystem.instincts._1", value); },
+          get _2() { return thiz.document.system.beliefSystem.instincts._2; },
+          set _2(value) { thiz.updateByPath("system.beliefSystem.instincts._2", value); },
         }
       },
     };
@@ -79,14 +79,14 @@ export default class TransientPc extends TransientBaseCharacterActor {
       get maxFateCards() { return new Ruleset().getMaximumFateCards(); },
       get remainingFateCards() { return this.maxFateCards - this.fateCards.length; },
 
-      get miFP() { return thiz.document.data.data.fateSystem.miFP; },
-      set miFP(value) { thiz.updateByPath("data.data.fateSystem.miFP", value); },
+      get miFP() { return thiz.document.system.fateSystem.miFP; },
+      set miFP(value) { thiz.updateByPath("system.fateSystem.miFP", value); },
 
-      get maFP() { return thiz.document.data.data.fateSystem.maFP; },
-      set maFP(value) { thiz.updateByPath("data.data.fateSystem.maFP", value); },
+      get maFP() { return thiz.document.system.fateSystem.maFP; },
+      set maFP(value) { thiz.updateByPath("system.fateSystem.maFP", value); },
 
-      get AFP() { return thiz.document.data.data.fateSystem.AFP; },
-      set AFP(value) { thiz.updateByPath("data.data.fateSystem.AFP", value); },
+      get AFP() { return thiz.document.system.fateSystem.AFP; },
+      set AFP(value) { thiz.updateByPath("system.fateSystem.AFP", value); },
     };
   }
 

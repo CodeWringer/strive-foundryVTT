@@ -162,33 +162,33 @@ export default class TransientDocument {
    * @type {String}
    */
   get description() {
-    return this.document.data.data.description;
+    return this.document.system.description;
   }
   set description(value) {
-    this.document.data.data.description = value;
-    this.updateByPath("data.data.description", value);
+    this.document.system.description = value;
+    this.updateByPath("system.description", value);
   }
   
   /**
    * @type {String}
    */
   get gmNotes() {
-    return this.document.data.data.gmNotes;
+    return this.document.system.gmNotes;
   }
   set gmNotes(value) {
-    this.document.data.data.gmNotes = value;
-    this.updateByPath("data.data.gmNotes", value);
+    this.document.system.gmNotes = value;
+    this.updateByPath("system.gmNotes", value);
   }
   
   /**
    * @type {Boolean}
    */
   get isCustom() {
-    return this.document.data.data.isCustom;
+    return this.document.system.isCustom;
   }
   set isCustom(value) {
-    this.document.data.data.isCustom = value;
-    this.updateByPath("data.data.isCustom", value);
+    this.document.system.isCustom = value;
+    this.updateByPath("system.isCustom", value);
   }
   
   /**
@@ -197,11 +197,11 @@ export default class TransientDocument {
    * @type {Object}
    */
   get displayOrders() {
-    return this.document.data.data.displayOrders;
+    return this.document.system.displayOrders;
   }
   set displayOrders(value) {
-    this.document.data.data.displayOrders = value;
-    this.updateByPath("data.data.displayOrders", value);
+    this.document.system.displayOrders = value;
+    this.updateByPath("system.displayOrders", value);
   }
   
   
@@ -211,11 +211,11 @@ export default class TransientDocument {
    * @type {String}
    */
   get gmNotes() {
-    return this.document.data.data.gmNotes;
+    return this.document.system.gmNotes;
   }
   set gmNotes(value) {
-    this.document.data.data.gmNotes = value;
-    this.updateByPath("data.data.gmNotes", value);
+    this.document.system.gmNotes = value;
+    this.updateByPath("system.gmNotes", value);
   }
   
   /**
@@ -401,7 +401,7 @@ export default class TransientDocument {
    * * If a reference's name contains spaces, they must be replaced with underscores. 
    * E. g. `"@Heavy_Armor"`, instead of `"@Heavy Armor"`
    * * *Can* contain property paths! These paths are considered relative to the data-property. 
-   * E. g. `@a_fate_card.cost.miFP`, instead of `@a_fate_card.data.data.cost.miFP`. 
+   * E. g. `@a_fate_card.cost.miFP`, instead of `@a_fate_card.system.cost.miFP`. 
    * 
    * @returns {Map<String, Any | undefined>} A map of the reference key, including the `@`-symbol, to its resolved reference. 
    * * Only contains unique entries. No reference is included more than once. 
