@@ -136,7 +136,7 @@ export default class Ruleset {
     if (type !== "pc" && type !== "npc") throw new Error("Only PC and NPC type actors allowed");
 
     const injuryCount = (actor.items.filter(it => it.type === "injury")).length;
-    const attributeToughness = actor.data.data.attributes.physical.toughness;
+    const attributeToughness = actor.system.attributes.physical.toughness;
     return (attributeToughness.level * 4) - (injuryCount * 2);
   }
 
@@ -153,7 +153,7 @@ export default class Ruleset {
     const type = actor.type.toLowerCase();
     if (type !== "pc" && type !== "npc") throw new Error("Only PC and NPC type actors allowed");
 
-    const attribute = actor.data.data.attributes.physical.toughness;
+    const attribute = actor.system.attributes.physical.toughness;
     return Math.max(attribute.level, 1);
   }
 
@@ -170,7 +170,7 @@ export default class Ruleset {
     const type = actor.type.toLowerCase();
     if (type !== "pc" && type !== "npc") throw new Error("Only PC and NPC type actors allowed");
     
-    const attribute = actor.data.data.attributes.physical.endurance;
+    const attribute = actor.system.attributes.physical.endurance;
     return 1 + (attribute.level * 1);
   }
   
@@ -187,7 +187,7 @@ export default class Ruleset {
     const type = actor.type.toLowerCase();
     if (type !== "pc" && type !== "npc") throw new Error("Only PC and NPC type actors allowed");
 
-    const attribute = actor.data.data.attributes.physical.strength;
+    const attribute = actor.system.attributes.physical.strength;
     return attribute.level * 6;
   }
 
@@ -204,7 +204,7 @@ export default class Ruleset {
     const type = actor.type.toLowerCase();
     if (type !== "pc" && type !== "npc") throw new Error("Only PC and NPC type actors allowed");
 
-    const attributeArcana = actor.data.data.attributes.mental.arcana;
+    const attributeArcana = actor.system.attributes.mental.arcana;
     let total = attributeArcana.level;
     const components = [];
 

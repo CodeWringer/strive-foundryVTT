@@ -29,7 +29,7 @@ export default class CharacterAttribute {
   /**
    * @type {Number}
    */
-  get level() { return parseInt(this._actor.data.data.attributes[this._attributeGroupName][this.name].level); }
+  get level() { return parseInt(this._actor.system.attributes[this._attributeGroupName][this.name].level); }
   set level(value) {
     this._actor.update({
       data: {
@@ -50,7 +50,7 @@ export default class CharacterAttribute {
   get advancementProgress() {
     const thiz = this;
     return {
-      get successes() { return parseInt(thiz._actor.data.data.attributes[thiz._attributeGroupName][thiz.name].successes); },
+      get successes() { return parseInt(thiz._actor.system.attributes[thiz._attributeGroupName][thiz.name].successes); },
       set successes(value) {
         thiz._actor.update({
           data: {
@@ -64,7 +64,7 @@ export default class CharacterAttribute {
           }
         }); 
       },
-      get failures() { return parseInt(thiz._actor.data.data.attributes[thiz._attributeGroupName][thiz.name].failures); },
+      get failures() { return parseInt(thiz._actor.system.attributes[thiz._attributeGroupName][thiz.name].failures); },
       set failures(value) {
         thiz._actor.update({
           data: {

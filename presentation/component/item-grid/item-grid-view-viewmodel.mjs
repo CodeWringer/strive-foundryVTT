@@ -113,7 +113,7 @@ export default class ItemGridViewViewModel extends InputViewModel {
     if (itemGridLoadResult.itemsDropped.length > 0) {
       for (const item of itemGridLoadResult.itemsDropped) {
         // Move item to property (= drop from person). 
-        await item.updateByPath("data.data.isOnPerson", false, false); // Update the property without triggering a re-render. 
+        await item.updateByPath("system.isOnPerson", false, false); // Update the property without triggering a re-render. 
       }
       
       // Display a warning dialog. 

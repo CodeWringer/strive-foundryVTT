@@ -45,7 +45,7 @@ export default class SkillAbility {
    * @private
    * @readonly
    */
-  get _pathOnParent() { return `data.data.abilities.${this.id}`; }
+  get _pathOnParent() { return `system.abilities.${this.id}`; }
 
   /**
    * Returns the content type of this "document". 

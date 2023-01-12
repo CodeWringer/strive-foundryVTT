@@ -167,7 +167,7 @@ export class ItemOnGridView {
   constructor(item, index, tileSize, itemGridView, isEditable = false) {
     this._item = item;
     this._index = index;
-    this._shape = item.data.data.shape;
+    this._shape = item.system.shape;
     this._tileSize = tileSize;
     this._parent = itemGridView;
     this._rectangle = new PIXI.Rectangle(0, 0, 0, 0);
@@ -355,7 +355,7 @@ export class ItemOnGridView {
     quantitySpacer.width = 3;
     this._containerQuantity.addChild(quantitySpacer);
     
-    const quantityText = this._item.data.data.maxQuantity > 1 ? `${this._item.data.data.quantity}/${this._item.data.data.maxQuantity}` : this._item.data.data.quantity;
+    const quantityText = this._item.system.maxQuantity > 1 ? `${this._item.system.quantity}/${this._item.system.maxQuantity}` : this._item.system.quantity;
     this._textQuantity = new DisplayObjectWrap(new PIXI.Text(quantityText, textSettings), pixiApp);
     this._containerQuantity.addChild(this._textQuantity);
 
@@ -382,7 +382,7 @@ export class ItemOnGridView {
     bulkSpacer.width = 3;
     this._containerBulk.addChild(bulkSpacer);
     
-    this._textBulk = new DisplayObjectWrap(new PIXI.Text(this._item.data.data.bulk, textSettings), pixiApp);
+    this._textBulk = new DisplayObjectWrap(new PIXI.Text(this._item.system.bulk, textSettings), pixiApp);
     this._containerBulk.addChild(this._textBulk);
 
     // FOOTER
