@@ -11,7 +11,7 @@ import ViewModel from "../../view-model/view-model.mjs";
  */
 export default class LazyRichTextViewModel extends ViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.COMPONENT_LAZY_LOAD; }
+  static get TEMPLATE() { return TEMPLATES.COMPONENT_LAZY_LOAD_RICH_TEXT; }
 
   /**
    * The cached rendered content. 
