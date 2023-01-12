@@ -147,6 +147,16 @@ Hooks.once('init', function() {
   return preloadHandlebarsTemplates();
 });
 
+Hooks.once('setup', function() {
+  // Register custom fonts.
+  CONFIG.fontDefinitions["BlackChancery"] = {
+    editor: true,
+    fonts: [
+      { urls: ["systems/ambersteel/presentation/font/BLKCHCRY.TTF"] },
+    ]
+  }
+});
+
 Hooks.once("ready", function() {
   // Settings initialization.
   new AmbersteelUserSettings().ensureAllSettings();
