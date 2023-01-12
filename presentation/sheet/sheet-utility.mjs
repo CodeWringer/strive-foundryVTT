@@ -49,16 +49,6 @@ export function enrichData(context) {
   context.isOwner = context.owner;
   // In templates that implement it, this flag indicates whether the current user is a GM. 
   context.isGM = game.user.isGM;
-  
-  let data = undefined;
-  if (context.actor) {
-    data = context.actor.data.data;
-  } else if (context.item) {
-    data = context.item.data.data;
-  } else {
-    throw new Error("NullPointerException: Context object has neither 'actor' nor 'item' property.");
-  }
-  
   // In templates that implement it, this flag determines whether data on the sheet can be edited. 
   context.isEditable = (context.isOwner || context.isGM) && context.editable;
   // In templates that implement it, this flag determines whether the sheet data can be sent to the chat. 
