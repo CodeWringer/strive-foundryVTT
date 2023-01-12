@@ -77,7 +77,7 @@ cssClass: {undefined | String}
     {{else}}
       <div class="{{#if viewModel.isGM}}tab {{/if}}description" data-group="primary" data-tab="description">
         <div class="sheet-block fill">
-          {{editor content=viewModel.document.description target="data.description" button=true editable=viewModel.isEditable owner=viewModel.isOwner}}
+          {{> inputRichText viewModel=viewModel.vmRtDescription }}
         </div>
       </div>
     {{/if}}

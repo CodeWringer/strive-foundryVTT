@@ -180,6 +180,13 @@ export default class ActorSheetViewModel extends ViewModel {
           id: "biography", 
         },
       });
+    } else {
+      this.vmRtDescription = factory.createVmRichText({
+        id: "vmRtDescription",
+        parent: thiz,
+        propertyOwner: thiz.document,
+        propertyPath: "description",
+      });
     }
     
     if (this.isGM === true) {
