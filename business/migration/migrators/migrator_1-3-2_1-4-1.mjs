@@ -60,9 +60,12 @@ export default class Migrator_1_3_2__1_4_1 extends AbstractMigrator {
     for (const actor of actors) {
       if (actor.type === "plain") continue;
       
+      const hasSystem = actor.system !== undefined && actor.system !== null;
+      const dataPath = hasSystem === true ? "system" : "data.data";
+
       // Replace "value" with "level" on every attribute of every actor.
 
-      const attributes = actor.data.data.attributes;
+      const attributes = (actor.system ?? actor.data.data).attributes;
 
       for (const attributeGroupToMigrate of attributeGroupsToMigrate) {
         const attributeGroup = attributes[attributeGroupToMigrate.groupName];
@@ -76,7 +79,7 @@ export default class Migrator_1_3_2__1_4_1 extends AbstractMigrator {
           attribute.level = attribute.value;
           delete attribute.value;
 
-          const dataPath = `data.data.attributes.${attributeGroupToMigrate.groupName}.${attributeName}`;
+          const dataPath = `${dataPath}.attributes.${attributeGroupToMigrate.groupName}.${attributeName}`;
 
           // Delete property from attribute in data base. 
           await this.updater.deleteByPath(actor, `${dataPath}.value`, false);
@@ -88,8 +91,8 @@ export default class Migrator_1_3_2__1_4_1 extends AbstractMigrator {
 
       // Replace any pc's belief and instinct arrays with objects. 
       if (actor.type === "pc") {
-        const beliefsArray = actor.data.data.beliefSystem.beliefs;
-        const beliefsDataPath = `data.data.beliefSystem.beliefs`;
+        const beliefsArray = (actor.system ?? actor.data.data).beliefSystem.beliefs;
+        const beliefsDataPath = `${dataPath}.beliefSystem.beliefs`;
         const beliefs = {
           _0: beliefsArray[0],
           _1: beliefsArray[1],
@@ -98,8 +101,8 @@ export default class Migrator_1_3_2__1_4_1 extends AbstractMigrator {
     
         await this.updater.updateByPath(actor, beliefsDataPath, beliefs, false);
   
-        const instinctsArray = actor.data.data.beliefSystem.instincts;
-        const instinctsDataPath = `data.data.beliefSystem.instincts`;
+        const instinctsArray = (actor.system ?? actor.data.data).beliefSystem.instincts;
+        const instinctsDataPath = `${dataPath}.beliefSystem.instincts`;
         const instincts = {
           _0: instinctsArray[0],
           _1: instinctsArray[1],
@@ -127,17 +130,17 @@ export default class Migrator_1_3_2__1_4_1 extends AbstractMigrator {
       // Ensure skill abilities are updated to now be stored on an object, instead of an array. 
       await skill.getTransientObject().persistSkillAbilities(false);
       
-      if (skill.data.data.value === undefined) continue;
+      if ((skill.system ?? skill.data.data).value === undefined) continue;
       
       // Change in-memory data. 
-      skill.data.data.level = skill.data.data.value;
-      delete skill.data.data.value;
+      (skill.system ?? skill.data.data).level = (skill.system ?? skill.data.data).value;
+      delete (skill.system ?? skill.data.data).value;
 
       // Delete property from skill in data base. 
-      await this.updater.deleteByPath(skill, "data.data.value", false);
+      await this.updater.deleteByPath(skill, `${dataPath}.value`, false);
 
       // Persist level to skill in data base. 
-      await this.updater.updateByPath(skill, "data.data.level", skill.data.data.level, false);
+      await this.updater.updateByPath(skill, `${dataPath}.level`, (skill.system ?? skill.data.data).level, false);
     }
   }
 }

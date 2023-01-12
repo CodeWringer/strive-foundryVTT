@@ -100,7 +100,11 @@ export default class Migrator_1_2_2__1_3_0 extends AbstractMigrator {
 
     // Replace...
     for (const actor of actors) {
-      const fightingSkill = actor.items.filter(it => it.type === "skill" && it.name === "Fighting" && it.data.data.isCustom === false)[0];
+      const fightingSkill = actor.items.filter(it => 
+        it.type === "skill" 
+        && it.name === "Fighting" 
+        && (it.system ?? it.data.data).isCustom === false
+      )[0];
 
       if (fightingSkill === undefined) {
         continue;

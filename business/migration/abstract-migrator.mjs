@@ -103,9 +103,9 @@ export default class AbstractMigrator {
    * @param {Document} docType The type of document. E. g. "skill" or "item". 
    * @param {Array<Object>} packs An array of compendium packs that contain the definitions to use. 
    * @param {Map} propertiesToKeep A map of properties whose value will be preserved. 
-   * * The key is the name of a property within `data.data` on the document to update. 
+   * * The key is the name of a property within `system` on the document to update. 
    * This is the value to copy. 
-   * * The value is the name of a property within `data.data` on the definition document. 
+   * * The value is the name of a property within `system` on the definition document. 
    * This is the name of a (potenially new) property the original value will be copied into. 
    * @param {Array<String>} propertiesToDelete An array of property names to delete. 
    * 
@@ -138,16 +138,16 @@ export default class AbstractMigrator {
    * @param {Document} docType The type of document. E. g. "skill" or "item". 
    * @param {Document} definition The document whose data will be used. 
    * @param {Map} propertiesToKeep A map of properties whose value will be preserved. 
-   * * The key is the name of a property within `data.data` on the document to update. 
+   * * The key is the name of a property within `system` on the document to update. 
    * This is the value to copy. 
-   * * The value is the name of a property within `data.data` on the definition document. 
+   * * The value is the name of a property within `system` on the definition document. 
    * This is the name of a (potenially new) property the original value will be copied into. 
    * @param {Array<String>} propertiesToDelete An array of property names to delete. 
    * 
    * @protected
    */
   async replaceMatchingDocumentsData(actor, docType, definition, propertyNames, propertiesToDelete) {
-    const documents = actor.items.filter(it => it.type === docType && it.name === definition.name && it.data.data.isCustom === false);
+    const documents = actor.items.filter(it => it.type === docType && it.name === definition.name && (it.system ?? it.data.data).isCustom === false);
 
     if (documents === undefined || (documents.length > 0) !== true) {
       return;
@@ -168,29 +168,51 @@ export default class AbstractMigrator {
    * @param {Document} toReplace The document whose data is to be replaced. 
    * @param {Document} replaceWith The document whose data will be used. 
    * @param {Map} propertiesToKeep A map of properties whose value will be preserved. 
-   * * The key is the name of a property within `data.data` on the document to update. 
+   * * The key is the name of a property within `system` on the document to update. 
    * This is the value to copy. 
-   * * The value is the name of a property within `data.data` on the definition document. 
+   * * The value is the name of a property within `system` on the definition document. 
    * This is the name of a (potenially new) property the original value will be copied into. 
    * @param {Array<String>} propertiesToDelete An array of property names to delete. 
    * 
    * @protected
    */
   async replaceDocumentData(toReplace, replaceWith, propertiesToKeep = new Map(), propertiesToDelete = []) {
-    const dto = {
-      name: replaceWith.name,
-      img: replaceWith.img,
-      data: replaceWith.data.data
-    }
+    let dto;
 
-    // Map values. 
-    for (const entry of propertiesToKeep.entries()) {
-      dto.data[entry[1]] = toReplace.data.data[entry[0]];
-    }
+    if (replaceWith.system !== undefined && replaceWith.system !== null) {
+      dto = {
+        name: replaceWith.name,
+        img: replaceWith.img,
+        system: replaceWith.system
+      }
 
-    // Add property removals. 
-    for (const propertyName of propertiesToDelete) {
-      dto.data[`-=${propertyName}`] = null;
+      // Map values. 
+      for (const entry of propertiesToKeep.entries()) {
+        dto.system[entry[1]] = toReplace.system[entry[0]];
+      }
+  
+      // Add property removals. 
+      for (const propertyName of propertiesToDelete) {
+        delete dto[propertyName];
+        dto.system[`-=${propertyName}`] = null;
+      }
+    } else {
+      dto = {
+        name: replaceWith.name,
+        img: replaceWith.img,
+        data: replaceWith.data.data
+      }
+
+      // Map values. 
+      for (const entry of propertiesToKeep.entries()) {
+        dto.data[entry[1]] = toReplace.data.data[entry[0]];
+      }
+  
+      // Add property removals. 
+      for (const propertyName of propertiesToDelete) {
+        delete dto[propertyName];
+        dto.data[`-=${propertyName}`] = null;
+      }
     }
 
     await toReplace.update(dto);
