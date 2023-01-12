@@ -183,27 +183,6 @@ export default class DocumentUpdater {
 
     // FoundryVTT assumes that the data sent is based on `document.data`, meaning that the dto being sent 
     // **must not** contain a nested `data` property. 
-    return this._unnestData(dto);
-  }
-
-  /**
-   * If the given object contains a `data` property nested in another property of the same name, 
-   * removes the first `data` and returns a new object without the nested properties. 
-   * 
-   * @param {Object} dto 
-   * 
-   * @returns {Object}
-   * 
-   * @private
-   */
-  _unnestData(dto) {
-    if (dto.data !== undefined && dto.data.data !== undefined) {
-      // This object **must** be based on 'Object' and not 'null', as otherwise FoundryVTT's merge utility will fail!
-      const newDto = {};
-      newDto.data = dto.data.data;
-      return newDto;
-    } else {
-      return dto;
-    }
+    return dto;
   }
 }
