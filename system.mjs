@@ -315,7 +315,7 @@ Hooks.on("renderChatMessage", async function(message, html, data) {
 });
 
 Hooks.on("deleteChatMessage", function(args) {
-  const deletedContent = args.data.content;
+  const deletedContent = args.content;
   const rgxViewModelId = /data-view-model-id="([^"]*)"/;
   const match = deletedContent.match(rgxViewModelId);
 
