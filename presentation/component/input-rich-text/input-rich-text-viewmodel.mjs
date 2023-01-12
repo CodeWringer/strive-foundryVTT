@@ -138,7 +138,7 @@ export default class InputRichTextViewModel extends InputViewModel {
     // style_formats_merge: true
     // table_default_styles: {}
     // target: div#KLrmYtBpfUrOCzcJ-vmRtDescription.custom-system-edit.component-rich-text.editable
-    // toolbar: "styleselect removeformat | bullist numlist | image table hr link code | save cancel"
+    // toolbar: "styles removeformat | bullist numlist | image table hr link code | save cancel"
 
     const thiz = this;
 
@@ -159,7 +159,7 @@ export default class InputRichTextViewModel extends InputViewModel {
       table_default_styles: {},
       save_enablewhendirty: false,
       plugins: "lists image table hr code save link",
-      toolbar: "styleselect removeformat | bullist numlist | image table hr link code | save cancel",
+      toolbar: "styles removeformat | bullist numlist | image table hr link code | save cancel",
       file_picker_callback: thiz._mceFilePickerCallback,
       save_oncancelcallback: () => {
         thiz.isInEditMode = false;
