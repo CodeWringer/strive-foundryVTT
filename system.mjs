@@ -261,18 +261,6 @@ Handlebars.registerHelper('ifThenElse', function(condition, thenValue, elseValue
 /*  Other Hooks                                 */
 /* -------------------------------------------- */
 
-Hooks.on("preCreateActor", function(document, createData, options, userId) {
-  // This ensures the proper "default" image is set, upon creation of the document. 
-  // TODO: Could this not be done by manipulating 'createData'?
-  document.data.update({ img: document.defaultImg });
-});
-
-Hooks.on("preCreateItem", function(document, createData, options, userId) {
-  // This ensures the proper "default" image is set, upon creation of the document. 
-  // TODO: Could this not be done by manipulating 'createData'?
-  document.data.update({ img: document.defaultImg });
-});
-
 Hooks.on("renderChatMessage", async function(message, html, data) {
   const SELECTOR_CHAT_MESSAGE = "custom-system-chat-message";
   const element = html.find(`.${SELECTOR_CHAT_MESSAGE}`)[0];
