@@ -1,5 +1,6 @@
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs"
 import { TAKE_ITEM_CONTEXT_TYPES } from "../../../component/button-take-item/button-take-item-viewmodel.mjs"
+import LazyRichTextViewModel from "../../../component/lazy-rich-text/lazy-rich-text-viewmodel.mjs"
 import { TEMPLATES } from "../../../templatePreloader.mjs"
 import ViewModelFactory from "../../../view-model/view-model-factory.mjs"
 import ViewModel from "../../../view-model/view-model.mjs"
@@ -36,8 +37,6 @@ export default class AssetChatMessageViewModel extends ViewModel {
    */
   allowPickupBy = [];
 
-  get description() { return TextEditor.enrichHTML(this.document.description); }
-
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
    * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 
@@ -73,6 +72,14 @@ export default class AssetChatMessageViewModel extends ViewModel {
       id: "vmBtnTakeItem",
       target: thiz.document,
       contextType: TAKE_ITEM_CONTEXT_TYPES.chatMessage
+    });
+    this.vmLazyDescription = new LazyRichTextViewModel({
+      id: "vmLazyDescription",
+      parent: this,
+      isEditable: this.isEditable,
+      isSendable: this.isSendable,
+      isOwner: this.isOwner,
+      renderableContent: this.document.description,
     });
   }
 }

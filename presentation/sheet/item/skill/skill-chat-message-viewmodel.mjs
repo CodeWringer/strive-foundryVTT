@@ -1,5 +1,6 @@
 import { ATTRIBUTES } from "../../../../business/ruleset/attribute/attributes.mjs"
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs"
+import LazyRichTextViewModel from "../../../component/lazy-rich-text/lazy-rich-text-viewmodel.mjs"
 import { TEMPLATES } from "../../../templatePreloader.mjs"
 import ViewModel from "../../../view-model/view-model.mjs"
 import SkillAbilityTableViewModel from "../skill-ability/skill-ability-table-viewmodel.mjs"
@@ -32,8 +33,6 @@ export default class SkillChatMessageViewModel extends ViewModel {
     return options.find(it => { return it.value === this.document.relatedAttribute.name }).localizedValue;
   }
 
-  get description() { return TextEditor.enrichHTML(this.document.description); }
-
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
    * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 
@@ -65,6 +64,14 @@ export default class SkillChatMessageViewModel extends ViewModel {
       skillAbilitiesInitiallyVisible: false,
       oneColumn: true,
       visGroupId: thiz.visGroupId,
+    });
+    this.vmLazyDescription = new LazyRichTextViewModel({
+      id: "vmLazyDescription",
+      parent: this,
+      isEditable: this.isEditable,
+      isSendable: this.isSendable,
+      isOwner: this.isOwner,
+      renderableContent: this.document.description,
     });
   }
 }

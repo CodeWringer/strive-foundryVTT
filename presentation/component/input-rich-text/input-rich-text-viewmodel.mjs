@@ -71,8 +71,6 @@ export default class InputRichTextViewModel extends InputViewModel {
     this._editor.resetContent(this.value);
   }
 
-  get enrichedHtmlValue() { return TextEditor.enrichHTML(this.value ?? "", { secrets: this.isEditable }); }
-
   /**
    * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
    * 
@@ -103,11 +101,13 @@ export default class InputRichTextViewModel extends InputViewModel {
   async activateListeners(html, isOwner, isEditable) {
     super.activateListeners(html, isOwner, isEditable);
 
-    const thiz = this;
-
     this._elementButtonEditMode = this.element.find(".component-rich-text-editbutton");
     this._elementEditor = this.element.find(".component-rich-text");
-    this._elementReadOnlyContents = this.element.find(".component-rich-text-read-only");
+    this._elementReadOnlyContents = this.element.find("#content");
+
+    const renderedContent = await TextEditor.enrichHTML(this.value ?? "", { async: true, secrets: this.isEditable });
+    this._elementReadOnlyContents.empty();
+    this._elementReadOnlyContents.append(renderedContent);
   }
 
   /** @override */

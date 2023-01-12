@@ -1,4 +1,5 @@
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs";
+import LazyRichTextViewModel from "../../../component/lazy-rich-text/lazy-rich-text-viewmodel.mjs";
 import { TEMPLATES } from "../../../templatePreloader.mjs";
 import ViewModel from "../../../view-model/view-model.mjs";
 
@@ -35,12 +36,6 @@ export default class MutationChatMessageViewModel extends ViewModel {
   allowPickupBy = [];
 
   /**
-   * @type {String}
-   * @readonly
-   */
-  get description() { return TextEditor.enrichHTML(this.document.description); }
-
-  /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
    * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 
    * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 
@@ -58,5 +53,14 @@ export default class MutationChatMessageViewModel extends ViewModel {
     this.document = args.document;
 
     this.contextTemplate = args.contextTemplate ?? "mutation-chat-message";
+
+    this.vmLazyDescription = new LazyRichTextViewModel({
+      id: "vmLazyDescription",
+      parent: this,
+      isEditable: this.isEditable,
+      isSendable: this.isSendable,
+      isOwner: this.isOwner,
+      renderableContent: this.document.description,
+    });
   }
 }

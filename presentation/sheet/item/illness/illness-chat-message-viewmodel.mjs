@@ -1,4 +1,5 @@
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs";
+import LazyRichTextViewModel from "../../../component/lazy-rich-text/lazy-rich-text-viewmodel.mjs";
 import { TEMPLATES } from "../../../templatePreloader.mjs";
 import ViewModel from "../../../view-model/view-model.mjs";
 
@@ -8,8 +9,6 @@ export default class IllnessChatMessageViewModel extends ViewModel {
 
   /** @override */
   get entityId() { return this.document.id; }
-
-  get description() { return TextEditor.enrichHTML(this.document.description); }
 
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
@@ -29,5 +28,14 @@ export default class IllnessChatMessageViewModel extends ViewModel {
 
     this.document = args.document;
     this.contextTemplate = args.contextTemplate ?? "illness-chat-message";
+
+    this.vmLazyDescription = new LazyRichTextViewModel({
+      id: "vmLazyDescription",
+      parent: this,
+      isEditable: this.isEditable,
+      isSendable: this.isSendable,
+      isOwner: this.isOwner,
+      renderableContent: this.document.description,
+    });
   }
 }

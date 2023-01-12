@@ -10,5 +10,5 @@ cssClass: {String | undefined}
     {{#> button viewModel=viewModel.vmBtnEditMode cssClass="button-full" fill=true }}<i class="fas fa-edit"></i>{{/button}}
   </div>
   <div class="component-rich-text hidden"></div>
-  <div class="component-rich-text-read-only">{{{viewModel.enrichedHtmlValue}}}</div>
+  <div id="content" class="component-rich-text-read-only"></div>
 </div>

@@ -47,6 +47,6 @@ cssClass: {undefined | String}
   </div>
   {{!-- Description --}}
   <div class="sheet-block scrollable-height-md">
-    {{{viewModel.description}}}
+    {{> lazyRichText viewModel=viewModel.vmLazyDescription}}
   </div>
 </section>

@@ -61,6 +61,7 @@ import './presentation/component/dice-roll-list/dice-roll-list-viewmodel.mjs';
 import './presentation/component/damage-definition-list/damage-definition-list-item-viewmodel.mjs';
 import './presentation/component/damage-definition-list/damage-definition-list-viewmodel.mjs';
 import './presentation/component/lazy-load/lazy-load-viewmodel.mjs';
+import './presentation/component/lazy-rich-text/lazy-rich-text-viewmodel.mjs';
 // View models
 import './presentation/sheet/actor/actor-sheet-viewmodel.mjs';
 import './presentation/sheet/actor/part/actor-attribute-table-viewmodel.mjs';

@@ -17,6 +17,6 @@ cssClass: {undefined | String}
   </div>
   {{!-- Description --}}
   <div class="fill pad-md scrollable-height-md">
-    {{{viewModel.description}}}
+    {{> lazyRichText viewModel=viewModel.vmLazyDescription}}
   </div>
 </section>

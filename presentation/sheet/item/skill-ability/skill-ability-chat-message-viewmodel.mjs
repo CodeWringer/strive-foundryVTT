@@ -1,6 +1,7 @@
 import { isNotBlankOrUndefined } from "../../../../business/util/validation-utility.mjs"
 import { isDefined } from "../../../../business/util/validation-utility.mjs"
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs"
+import LazyRichTextViewModel from "../../../component/lazy-rich-text/lazy-rich-text-viewmodel.mjs"
 import { TEMPLATES } from "../../../templatePreloader.mjs"
 import ViewModel from "../../../view-model/view-model.mjs"
 
@@ -68,8 +69,6 @@ export default class SkillAbilityChatMessageViewModel extends ViewModel {
     return game.i18n.localize(localizableName);
   };
 
-  get description() { return TextEditor.enrichHTML(this.skillAbility.description); }
-
   /**
    * @type {Boolean}
    * @readonly
@@ -123,5 +122,14 @@ export default class SkillAbilityChatMessageViewModel extends ViewModel {
     this._contextTemplate = args.contextTemplate;
 
     this.skillAbility = args.skillAbility;
+
+    this.vmLazyDescription = new LazyRichTextViewModel({
+      id: "vmLazyDescription",
+      parent: this,
+      isEditable: this.isEditable,
+      isSendable: this.isSendable,
+      isOwner: this.isOwner,
+      renderableContent: this.skillAbility.description,
+    });
   }
 }

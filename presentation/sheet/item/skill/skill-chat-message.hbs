@@ -35,7 +35,7 @@ cssClass: {undefined | String}
   </div>
   {{!-- Description --}}
   <div class="sheet-block scrollable-height-md">
-    {{{viewModel.description}}}
+    {{> lazyRichText viewModel=viewModel.vmLazyDescription}}
   </div>
   {{!-- Skill Abilites --}}
   {{> "systems/ambersteel/presentation/sheet/item/skill-ability/skill-ability-table.hbs" viewModel=viewModel.vmSkillAbilityTable cssClass=(ifThenElse viewModel.hasAbilities "" "hidden") }}

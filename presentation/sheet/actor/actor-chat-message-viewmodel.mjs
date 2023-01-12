@@ -1,5 +1,6 @@
 import { isNotBlankOrUndefined } from "../../../business/util/validation-utility.mjs";
 import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
+import LazyRichTextViewModel from "../../component/lazy-rich-text/lazy-rich-text-viewmodel.mjs";
 import { TEMPLATES } from "../../templatePreloader.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
 
@@ -9,10 +10,6 @@ export default class ActorChatMessageViewModel extends ViewModel {
 
   /** @override */
   get entityId() { return this.document.id; }
-
-  get renderedBiography() { return TextEditor.enrichHTML(this.document.person.biography); }
-
-  get renderedDescription() { return TextEditor.enrichHTML(this.document.description); }
 
   /**
    * Is true, if the actor is a player character. 
@@ -77,5 +74,25 @@ export default class ActorChatMessageViewModel extends ViewModel {
     this.contextTemplate = args.contextTemplate ?? "actor-chat-message";
     
     this.document = args.document;
+
+    if (this.document.type !== "plain") {
+      this.vmLazyBiography = new LazyRichTextViewModel({
+        id: "vmLazyBiography",
+        parent: this,
+        isEditable: this.isEditable,
+        isSendable: this.isSendable,
+        isOwner: this.isOwner,
+        renderableContent: this.document.person.biography,
+      });
+    } else {
+      this.vmLazyDescription = new LazyRichTextViewModel({
+        id: "vmLazyDescription",
+        parent: this,
+        isEditable: this.isEditable,
+        isSendable: this.isSendable,
+        isOwner: this.isOwner,
+        renderableContent: this.document.description,
+      });
+    }
   }
 }

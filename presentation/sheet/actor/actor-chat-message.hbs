@@ -63,9 +63,7 @@ cssClass: {undefined | String}
       <h3 class="width-min-xl{{#if viewModel.showFancyFont}} fancy-font{{/if}}">
         {{localize "ambersteel.character.biography.label"}}
       </h3>
-      <div class="scrollable-height-md">
-        {{{viewModel.renderedBiography}}}
-      </div>
+      {{> lazyRichText viewModel=viewModel.vmLazyBiography}}
     </div>
   {{else}}
     {{!-- Description --}}
@@ -73,9 +71,7 @@ cssClass: {undefined | String}
       <h3 class="width-min-xl{{#if viewModel.showFancyFont}} fancy-font{{/if}}">
         {{localize "ambersteel.general.description"}}
       </h3>
-      <div class="scrollable-height-md">
-        {{{viewModel.renderedDescription}}}
-      </div>
+      {{> lazyRichText viewModel=viewModel.vmLazyDescription}}
     </div>
   {{/if}}
 </section>
