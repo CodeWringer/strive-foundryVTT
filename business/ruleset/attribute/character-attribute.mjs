@@ -32,7 +32,7 @@ export default class CharacterAttribute {
   get level() { return parseInt(this._actor.system.attributes[this._attributeGroupName][this.name].level); }
   set level(value) {
     this._actor.update({
-      data: {
+      system: {
         attributes: {
           [this._attributeGroupName]: {
             [this.name]: {
@@ -53,7 +53,7 @@ export default class CharacterAttribute {
       get successes() { return parseInt(thiz._actor.system.attributes[thiz._attributeGroupName][thiz.name].successes); },
       set successes(value) {
         thiz._actor.update({
-          data: {
+          system: {
             attributes: {
               [thiz._attributeGroupName]: {
                 [thiz.name]: {
@@ -67,7 +67,7 @@ export default class CharacterAttribute {
       get failures() { return parseInt(thiz._actor.system.attributes[thiz._attributeGroupName][thiz.name].failures); },
       set failures(value) {
         thiz._actor.update({
-          data: {
+          system: {
             attributes: {
               [thiz._attributeGroupName]: {
                 [thiz.name]: {

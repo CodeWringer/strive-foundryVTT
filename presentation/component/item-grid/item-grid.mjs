@@ -210,7 +210,7 @@ export class ItemGrid {
     document.assets.gridIndices = this._indices;
 
     return document.update({
-      data: {
+      system: {
         assets: {
           grid: this._grid,
           gridIndices: this._indices

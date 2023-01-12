@@ -291,7 +291,7 @@ export class ItemOnGridView {
     
     // Move to property button. 
     this._buttonMoveItemToProperty = new Button(pixiApp, TEXTURES.HAND_HOLD_ITEM_DOWN, async () => {
-      thiz.item.updateByPath("data.isOnPerson", false);
+      thiz.item.updateByPath("system.isOnPerson", false);
       thiz._parent._itemGrid.remove(thiz.item);
       thiz._parent._itemGrid.synchronize();
     });

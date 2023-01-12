@@ -62,10 +62,11 @@ export default class Migrator_1_3_2__1_4_1 extends AbstractMigrator {
       
       const hasSystem = actor.system !== undefined && actor.system !== null;
       const dataPath = hasSystem === true ? "system" : "data.data";
+      const actorData = (actor.system ?? actor.data.data);
 
       // Replace "value" with "level" on every attribute of every actor.
 
-      const attributes = (actor.system ?? actor.data.data).attributes;
+      const attributes = actorData.attributes;
 
       for (const attributeGroupToMigrate of attributeGroupsToMigrate) {
         const attributeGroup = attributes[attributeGroupToMigrate.groupName];
@@ -91,7 +92,7 @@ export default class Migrator_1_3_2__1_4_1 extends AbstractMigrator {
 
       // Replace any pc's belief and instinct arrays with objects. 
       if (actor.type === "pc") {
-        const beliefsArray = (actor.system ?? actor.data.data).beliefSystem.beliefs;
+        const beliefsArray = actorData.beliefSystem.beliefs;
         const beliefsDataPath = `${dataPath}.beliefSystem.beliefs`;
         const beliefs = {
           _0: beliefsArray[0],
@@ -101,7 +102,7 @@ export default class Migrator_1_3_2__1_4_1 extends AbstractMigrator {
     
         await this.updater.updateByPath(actor, beliefsDataPath, beliefs, false);
   
-        const instinctsArray = (actor.system ?? actor.data.data).beliefSystem.instincts;
+        const instinctsArray = actorData.beliefSystem.instincts;
         const instinctsDataPath = `${dataPath}.beliefSystem.instincts`;
         const instincts = {
           _0: instinctsArray[0],
@@ -129,18 +130,20 @@ export default class Migrator_1_3_2__1_4_1 extends AbstractMigrator {
     for (const skill of skills) {
       // Ensure skill abilities are updated to now be stored on an object, instead of an array. 
       await skill.getTransientObject().persistSkillAbilities(false);
+
+      const skillData = (skill.system ?? skill.data.data);
       
-      if ((skill.system ?? skill.data.data).value === undefined) continue;
+      if (skillData.value === undefined) continue;
       
       // Change in-memory data. 
-      (skill.system ?? skill.data.data).level = (skill.system ?? skill.data.data).value;
-      delete (skill.system ?? skill.data.data).value;
+      skillData.level = skillData.value;
+      delete skillData.value;
 
       // Delete property from skill in data base. 
       await this.updater.deleteByPath(skill, `${dataPath}.value`, false);
 
       // Persist level to skill in data base. 
-      await this.updater.updateByPath(skill, `${dataPath}.level`, (skill.system ?? skill.data.data).level, false);
+      await this.updater.updateByPath(skill, `${dataPath}.level`, skillData.level, false);
     }
   }
 }

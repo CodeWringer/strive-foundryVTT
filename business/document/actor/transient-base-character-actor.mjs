@@ -242,7 +242,7 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
    */
   async setAttributeLevel(attName, newValue = 0, resetProgress = true) {
     const groupName = new Ruleset().getAttributeGroupName(attName);
-    const propertyPath = `data.attributes.${groupName}.${attName}`;
+    const propertyPath = `system.attributes.${groupName}.${attName}`;
 
     if (resetProgress === true) {
       await this.document.update({
@@ -311,7 +311,7 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
     const groupName = new Ruleset().getAttributeGroupName(attName);
 
     await this.document.update({
-      data: {
+      system: {
         attributes: {
           [groupName]: {
             [attName]: {

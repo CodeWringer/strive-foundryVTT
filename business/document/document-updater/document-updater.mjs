@@ -1,7 +1,7 @@
 import { validateOrThrow, isFunction, isObject, isArray } from "../../util/validation-utility.mjs";
 
 /**
- * Allows updating a document's nested data. 
+ * Allows updating a document's data. 
  */
 export default class DocumentUpdater {
   /**
@@ -41,9 +41,9 @@ export default class DocumentUpdater {
    * @param {Actor|Item} document An Actor or Item document. 
    * @param {String} propertyPath Path leading to the property to update, on the given document entity. 
    *        Array-accessing via brackets is supported. Property-accessing via brackets is *not* supported. 
-   *        E.g.: "data.attributes[0].level"
-   *        E.g.: "data.attributes[4]" 
-   *        E.g.: "data.attributes" 
+   *        E.g.: "system.attributes[0].level"
+   *        E.g.: "system.attributes[4]" 
+   *        E.g.: "system.attributes" 
    * @param {any} newValue The value to assign to the property. 
    * @param {Boolean | undefined} render If true, will trigger a re-render of the associated document sheet. Default 'true'. 
    * 
@@ -59,9 +59,9 @@ export default class DocumentUpdater {
    * @param {Actor | Item} document An Actor or Item document. 
    * @param {String} propertyPath Path leading to the property to delete, on the given document entity. 
    * * Array-accessing via brackets is supported. Property-accessing via brackets is *not* supported. 
-   * * E.g.: `"data.attributes[0].level"`
-   * * E.g.: `"data.attributes[4]"`
-   * * E.g.: `"data.attributes"`
+   * * E.g.: `"system.attributes[0].level"`
+   * * E.g.: `"system.attributes[4]"`
+   * * E.g.: `"system.attributes"`
    * @param {Boolean | undefined} render If true, will trigger a re-render of the associated document sheet. Default 'true'. 
    * @async
    */
@@ -97,9 +97,9 @@ export default class DocumentUpdater {
    * @param {Actor | Item} document An Actor or Item document. 
    * @param {String} propertyPath Path leading to the property to update, on the given document entity. 
    * * Array-accessing via brackets is supported. Property-accessing via brackets is *not* supported. 
-   * * E.g.: `"data.attributes[0].level"`
-   * * E.g.: `"data.attributes[4]"`
-   * * E.g.: `"data.attributes"`
+   * * E.g.: `"system.attributes[0].level"`
+   * * E.g.: `"system.attributes[4]"`
+   * * E.g.: `"system.attributes"`
    * @param {any} newValue The value to assign to the property. 
    * 
    * @returns {Object} An "update delta" object. This is a dto to send to the data base. 
@@ -181,8 +181,6 @@ export default class DocumentUpdater {
     // Finally, assign the new value. 
     previousDtoProperty[finalPropertyName] = newValue;
 
-    // FoundryVTT assumes that the data sent is based on `document.data`, meaning that the dto being sent 
-    // **must not** contain a nested `data` property. 
     return dto;
   }
 }

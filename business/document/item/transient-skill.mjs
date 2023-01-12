@@ -86,19 +86,13 @@ export default class TransientSkill extends TransientBaseItem {
     return {
       get successes() { return parseInt(thiz.document.system.successes); },
       set successes(value) {
-        thiz.update({
-          data: {
-            successes: value,
-          }
-        }); 
+        this.document.system.successes = value;
+        thiz.updateByPath("system.successes", value);
       },
       get failures() { return parseInt(thiz.document.system.failures); },
       set failures(value) {
-        thiz.update({
-          data: {
-            failures: value,
-          }
-        }); 
+        this.document.system.failures = value;
+        thiz.updateByPath("system.failures", value);
       },
     };
   }
@@ -106,7 +100,7 @@ export default class TransientSkill extends TransientBaseItem {
     this.document.system.successes = value.successes;
     this.document.system.failures = value.failures;
     this.update({
-      data: {
+      system: {
         successes: value.successes,
         failures: value.failures
       }
@@ -400,7 +394,7 @@ export default class TransientSkill extends TransientBaseItem {
    */
   async _persistLevel() {
     await this.document.update({
-      data: {
+      system: {
         value: this.level,
         successes: this.advancementProgress.successes,
         failures: this.advancementProgress.failures

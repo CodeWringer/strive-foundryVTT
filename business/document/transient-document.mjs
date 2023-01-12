@@ -258,9 +258,9 @@ export default class TransientDocument {
    * @param {Document} document A Foundry {Document}. 
    * @param {String} propertyPath Path leading to the property to delete, on the given document entity. 
    *  * Array-accessing via brackets is supported. Property-accessing via brackets is *not* supported. 
-   * * E.g.: `"data.attributes[0].level" `
-   * * E.g.: `"data.attributes[4]" `
-   * * E.g.: `"data.attributes" `
+   * * E.g.: `"system.attributes[0].level" `
+   * * E.g.: `"system.attributes[4]" `
+   * * E.g.: `"system.attributes" `
    * @param {Boolean | undefined} render If true, will trigger a re-render of the associated document sheet. 
    * * Default 'true'. 
    * 
@@ -275,7 +275,7 @@ export default class TransientDocument {
    * 
    * @param {String} propertyPath Path leading to the property to update, on the document. 
    * * Array-accessing via brackets is supported. Property-accessing via brackets is *not* supported. 
-   * * E.g.: `"data.attributes[0].level"`
+   * * E.g.: `"system.attributes[0].level"`
    * @param {any} newValue The value to assign to the property. 
    * @param {Boolean | undefined} render If true, will trigger a re-render of the associated document sheet. 
    * * Default 'true'. 
@@ -291,8 +291,6 @@ export default class TransientDocument {
    * Updates the document with the given `delta` object. 
    * 
    * @param {Object} delta The update delta to persist. 
-   * * If aiming to update `data`, only include **one** `data` property in the `delta`.
-   * E. g. `{ data: { myProperty: "myNewValue" } }`
    * @param {Boolean} render If true, will trigger a re-render of the associated document sheet. 
    * * Default 'true'. 
    */
@@ -400,8 +398,7 @@ export default class TransientDocument {
    * * Abbreviated attribute names are permitted, e. g. `"@wis"` instead of `"@wisdom"`. 
    * * If a reference's name contains spaces, they must be replaced with underscores. 
    * E. g. `"@Heavy_Armor"`, instead of `"@Heavy Armor"`
-   * * *Can* contain property paths! These paths are considered relative to the data-property. 
-   * E. g. `@a_fate_card.cost.miFP`, instead of `@a_fate_card.system.cost.miFP`. 
+   * * *Can* contain property paths! E. g. `@a_fate_card.cost.miFP`. 
    * 
    * @returns {Map<String, Any | undefined>} A map of the reference key, including the `@`-symbol, to its resolved reference. 
    * * Only contains unique entries. No reference is included more than once. 

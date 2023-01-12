@@ -77,7 +77,7 @@ class WorldSystemVersionType {
    * @private
    */
   _ensureSetting() {
-    const systemVersion = VersionCode.fromString(game.system.data.version);
+    const systemVersion = VersionCode.fromString(game.system.version);
 
     // Ensures the setting is registered and available. 
     game.settings.register(this._settingNamespace, this._settingKey, {

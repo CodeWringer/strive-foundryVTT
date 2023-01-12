@@ -327,7 +327,7 @@ export default class SkillAbility {
    */
   async update(delta, render = true) {
     const dto = {
-      data: {
+      system: {
         abilities: {
           [this.id]: {}
         }
@@ -337,7 +337,7 @@ export default class SkillAbility {
     for (const propertyName in delta) {
       if (delta.hasOwnProperty(propertyName) !== true) continue;
 
-      dto.data.abilities[this.id][propertyName] = delta[propertyName];
+      dto.system.abilities[this.id][propertyName] = delta[propertyName];
     }
 
     this.owningDocument.update(dto, render);
@@ -348,7 +348,7 @@ export default class SkillAbility {
    * 
    * @param {String} propertyPath Path leading to the property to update, on the SkillAbility. 
    *        Array-accessing via brackets is supported. Property-accessing via brackets is *not* supported. 
-   *        E.g.: "data.attributes[0].level"
+   *        E.g.: "system.attributes[0].level"
    * @param {any} newValue The value to assign to the property. 
    * @param {Boolean | undefined} render If true, will trigger a re-render of the associated document sheet. 
    * * Default 'true'. 
@@ -369,9 +369,9 @@ export default class SkillAbility {
    * 
    * @param {String} propertyPath Path leading to the property to delete, on the given document entity. 
    *        Array-accessing via brackets is supported. Property-accessing via brackets is *not* supported. 
-   *        E.g.: "data.attributes[0].level" 
-   *        E.g.: "data.attributes[4]" 
-   *        E.g.: "data.attributes" 
+   *        E.g.: "system.attributes[0].level" 
+   *        E.g.: "system.attributes[4]" 
+   *        E.g.: "system.attributes" 
    * @param {Boolean | undefined} render If true, will trigger a re-render of the associated document sheet. 
    * * Default 'true'. 
    * 
