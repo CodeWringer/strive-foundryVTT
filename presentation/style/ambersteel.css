@@ -1426,6 +1426,37 @@ span.component-button-toggle-knob.disabled {
 .component-rich-text-container {
   min-height: 4em;
 }
+.component-rich-text-container .tox.tox-tinymce {
+  border-radius: 0;
+}
+.component-rich-text-container > div.tox.tox-tinymce > div.tox-editor-container > div.tox-editor-header {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+.component-rich-text-container > div.tox.tox-tinymce > div.tox-editor-container > div.tox-editor-header .tox-toolbar-overlord {
+  background-color: transparent;
+}
+.component-rich-text-container > div.tox.tox-tinymce > div.tox-editor-container > div.tox-editor-header .tox-toolbar-overlord .tox-toolbar__primary {
+  background-color: transparent;
+}
+.component-rich-text-container > div.tox.tox-tinymce > div.tox-editor-container > div.tox-editor-header .tox-toolbar-overlord .tox-toolbar__primary button.tox-tbtn--select {
+  background-color: #d9d8c8;
+}
+.component-rich-text-container > div.tox.tox-tinymce > div.tox-editor-container > div.tox-editor-header .tox-toolbar-overlord .tox-toolbar__primary button.tox-tbtn--select:hover, .component-rich-text-container > div.tox.tox-tinymce > div.tox-editor-container > div.tox-editor-header .tox-toolbar-overlord .tox-toolbar__primary button.tox-tbtn--select:active {
+  background-color: #f0f0e0;
+}
+
+div.tox-tiered-menu > div.tox-menu.tox-collection.tox-collection--list.tox-selected-menu {
+  background-color: #d9d8c8;
+}
+div.tox-tiered-menu > div.tox-menu.tox-collection.tox-collection--list.tox-selected-menu > div.tox-collection__group > div.tox-collection__item--active {
+  background-color: #f0f0e0;
+}
+div.tox-tiered-menu > div.tox-menu.tox-collection.tox-collection--list.tox-selected-menu > div.tox-collection__group > div.tox-collection__item--enabled {
+  background-color: unset;
+}
+div.tox-tiered-menu > div.tox-menu.tox-collection.tox-collection--list.tox-selected-menu > div.tox-collection__group > div.tox-collection__item--active.tox-collection__item--enabled {
+  background-color: #f0f0e0;
+}
 
 .component-list-item-order-controls {
   display: flex;
