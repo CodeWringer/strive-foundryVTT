@@ -38,5 +38,22 @@ cssClass: {undefined | String}
     {{> lazyRichText viewModel=viewModel.vmLazyDescription}}
   </div>
   {{!-- Skill Abilites --}}
-  {{> "systems/ambersteel/presentation/sheet/item/skill-ability/skill-ability-table.hbs" viewModel=viewModel.vmSkillAbilityTable cssClass=(ifThenElse viewModel.hasAbilities "" "hidden") }}
+  {{#if viewModel.hasAbilities}}
+    {{!-- {{> "systems/ambersteel/presentation/sheet/item/skill-ability/skill-ability-table.hbs" viewModel=viewModel.vmSkillAbilityTable cssClass=(ifThenElse viewModel.hasAbilities "" "hidden") }} --}}
+    <div data-vis-group="{{viewModel.id}}-abilities" class="{{#if viewModel.skillAbilitiesInitiallyVisible}}{{else}}hidden{{/if}}">
+    {{#with viewModel.templateSkillAbility as | template |}}
+    {{#each ../viewModel.skillAbilityViewModels as |vm index|}}
+      {{> (template) viewModel=vm}}
+    {{/each}}
+    {{/with}}
+    </div>
+    <div class="line-height">
+      {{#> buttonToggleVisibility viewModel=viewModel.vmBtnToggleVisibilityExpand fill=true cssClass=(ifThenElse viewModel.skillAbilitiesInitiallyVisible "hidden" "") }}
+        <i class="fas fa-angle-double-down"></i>
+      {{/buttonToggleVisibility}}
+      {{#> buttonToggleVisibility viewModel=viewModel.vmBtnToggleVisibilityCollapse fill=true cssClass=(ifThenElse viewModel.skillAbilitiesInitiallyVisible "" "hidden") }}
+        <i class="fas fa-angle-double-up"></i>
+      {{/buttonToggleVisibility}}
+    </div>
+  {{/if}}
 </section>
