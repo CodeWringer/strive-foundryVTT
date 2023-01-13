@@ -137,7 +137,6 @@ export default class InputRichTextViewModel extends InputViewModel {
     // style_formats: [{…}]
     // style_formats_merge: true
     // table_default_styles: {}
-    // target: div#KLrmYtBpfUrOCzcJ-vmRtDescription.custom-system-edit.component-rich-text.editable
     // toolbar: "styles removeformat | bullist numlist | image table hr link code | save cancel"
 
     const thiz = this;
@@ -148,6 +147,7 @@ export default class InputRichTextViewModel extends InputViewModel {
       statusbar: false,
       menubar: false,
       content_css: "/css/mce.css",
+      content_style: '@font-face { font-family: "Black-Chancery"; src: url("systems/ambersteel/presentation/font/BLKCHCRY.TTF") format("truetype"); }',
       style_formats_merge: true,
       style_formats: [
         {
@@ -159,7 +159,8 @@ export default class InputRichTextViewModel extends InputViewModel {
       table_default_styles: {},
       save_enablewhendirty: false,
       plugins: "lists image table hr code save link",
-      toolbar: "styles removeformat | bullist numlist | image table hr link code | save cancel",
+      toolbar: "styles fontfamily fontsize removeformat | save cancel | bullist numlist | image table hr link code",
+      font_family_formats: 'Andale Mono=andale mono,times; Arial=arial,helvetica,sans-serif; Arial Black=arial black,avant garde; BlackChancery=Black-Chancery; Book Antiqua=book antiqua,palatino; Comic Sans MS=comic sans ms,sans-serif; Courier New=courier new,courier; Georgia=georgia,palatino; Helvetica=helvetica; Impact=impact,chicago; Symbol=symbol; Tahoma=tahoma,arial,helvetica,sans-serif; Terminal=terminal,monaco; Times New Roman=times new roman,times; Trebuchet MS=trebuchet ms,geneva; Verdana=verdana,geneva; Webdings=webdings; Wingdings=wingdings,zapf dingbats',
       file_picker_callback: thiz._mceFilePickerCallback,
       save_oncancelcallback: () => {
         thiz.isInEditMode = false;
