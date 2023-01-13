@@ -1,9 +1,10 @@
 import { ATTRIBUTES } from "../../../../business/ruleset/attribute/attributes.mjs"
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs"
+import ButtonToggleVisibilityViewModel from "../../../component/button-toggle-visibility/button-toggle-visibility-viewmodel.mjs"
 import LazyRichTextViewModel from "../../../component/lazy-rich-text/lazy-rich-text-viewmodel.mjs"
 import { TEMPLATES } from "../../../templatePreloader.mjs"
 import ViewModel from "../../../view-model/view-model.mjs"
-import SkillAbilityTableViewModel from "../skill-ability/skill-ability-table-viewmodel.mjs"
+import SkillAbilityChatMessageViewModel from "../skill-ability/skill-ability-chat-message-viewmodel.mjs"
 
 export default class SkillChatMessageViewModel extends ViewModel {
   /** @override */
@@ -32,6 +33,23 @@ export default class SkillChatMessageViewModel extends ViewModel {
     const options = ATTRIBUTES.asChoices;
     return options.find(it => { return it.value === this.document.relatedAttribute.name }).localizedValue;
   }
+  
+  /**
+   * @type {String}
+   * @readonly
+   */
+  get templateSkillAbility() { return TEMPLATES.SKILL_ABILITY_CHAT_MESSAGE; }
+
+  /**
+   * @type {Boolean}
+   * @default false
+   */
+  skillAbilitiesInitiallyVisible = false;
+
+  /**
+   * @type {Array<SkillAbilityChatMessageViewModel>}
+   */
+  skillAbilityViewModels = [];
 
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
@@ -50,20 +68,25 @@ export default class SkillChatMessageViewModel extends ViewModel {
     this.contextTemplate = args.contextTemplate ?? "skill-chat-message";
     
     this.document = args.document;
-    
-    // Child view models. 
-    const thiz = this;
+    this.skillAbilityViewModels = this.document.abilities.map(it => it.getChatViewModel());
 
-    this.vmSkillAbilityTable = new SkillAbilityTableViewModel({
-      id: "vmSkillAbilityTable",
-      parent: thiz,
-      isEditable: thiz.isEditable,
-      isSendable: thiz.isSendable,
-      isOwner: thiz.isOwner,
-      document: thiz.document,
-      skillAbilitiesInitiallyVisible: false,
-      oneColumn: true,
-      visGroupId: thiz.visGroupId,
+    this.vmBtnToggleVisibilityExpand = new ButtonToggleVisibilityViewModel({
+      id: "vmBtnToggleVisibilityExpand",
+      parent: this,
+      isEditable: true,
+      isSendable: this.isSendable,
+      isOwner: this.isOwner,
+      visGroup: `${this.id}-abilities`,
+      toggleSelf: true,
+    });
+    this.vmBtnToggleVisibilityCollapse = new ButtonToggleVisibilityViewModel({
+      id: "vmBtnToggleVisibilityCollapse",
+      parent: this,
+      isEditable: true,
+      isSendable: this.isSendable,
+      isOwner: this.isOwner,
+      visGroup: `${this.id}-abilities`,
+      toggleSelf: true,
     });
     this.vmLazyDescription = new LazyRichTextViewModel({
       id: "vmLazyDescription",

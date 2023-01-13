@@ -57,15 +57,17 @@ export default class ButtonToggleVisibilityViewModel extends ButtonViewModel {
   /**
    * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
    * 
-   * @param {Object} args.target The target object to affect. 
+   * @param {Object | undefined} args.target The target object to affect. 
    * @param {Function | String | undefined} args.callback Optional. Defines an asynchronous callback that is invoked upon completion of the button's own callback. 
    * @param {Boolean | undefined} args.isEditable Optional. If true, will be interactible. 
    * @param {String | undefined} args.localizableTitle Optional. The localizable title (tooltip). 
    * 
-   * @param {String} args.visGroup Id or name to group the visiblity of elements by. 
+   * @param {String | undefined} args.visGroup Id or name to group the visiblity of elements by. 
    * Expects this id to be defined as a data-attribute. 
-   * E. g. '\<div data-vis-group="1A2b3F4E"\>My content\</div\>'
+   * 
+   * E. g. `<div data-vis-group="1A2b3F4E">My content</div>`. 
    * @param {Boolean | undefined} args.toggleSelf Optional. If true, the button will also toggle visibility on itself. 
+   * * Default `false`. 
    */
   constructor(args = {}) {
     super(args);

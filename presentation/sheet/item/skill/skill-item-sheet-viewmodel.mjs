@@ -110,7 +110,6 @@ export default class SkillItemSheetViewModel extends SkillViewModel {
       isOwner: thiz.isOwner,
       document: thiz.document,
       skillAbilitiesInitiallyVisible: true,
-      oneColumn: false,
       visGroupId: thiz.visGroupId,
     });
   }

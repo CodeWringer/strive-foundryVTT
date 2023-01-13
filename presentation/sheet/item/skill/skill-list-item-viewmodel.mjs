@@ -150,7 +150,6 @@ export default class SkillListItemViewModel extends SkillViewModel {
       isOwner: thiz.isOwner,
       document: thiz.document,
       skillAbilitiesInitiallyVisible: false,
-      oneColumn: false,
       visGroupId: thiz.visGroupId,
     });
     this.vmSwIsMagicSchool = factory.createVmBtnToggle({

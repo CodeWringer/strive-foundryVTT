@@ -7,7 +7,6 @@ import SortableListViewModel from "../../../component/sortable-list/sortable-lis
 import { TEMPLATES } from "../../../templatePreloader.mjs"
 import ViewModelFactory from "../../../view-model/view-model-factory.mjs"
 import ViewModel from "../../../view-model/view-model.mjs"
-import SkillAbilityChatMessageViewModel from "./skill-ability-chat-message-viewmodel.mjs"
 import SkillAbilityListItemViewModel from "./skill-ability-list-item-viewmodel.mjs"
 
 export default class SkillAbilityTableViewModel extends ViewModel {
@@ -37,12 +36,6 @@ export default class SkillAbilityTableViewModel extends ViewModel {
     // Immediately write view state. 
     this.writeAllViewState();
   }
-
-  /**
-   * @type {Boolean}
-   * @readonly
-   */
-  oneColumn = false;
 
   /**
    * @type {String}
@@ -77,7 +70,6 @@ export default class SkillAbilityTableViewModel extends ViewModel {
    * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document. 
    * 
    * @param {TransientSkill} args.document
-   * @param {Boolean | undefined} args.oneColumn
    * @param {String | undefined} args.visGroupId
    * @param {Boolean | undefined} args.skillAbilitiesInitiallyVisible
    */
@@ -89,7 +81,6 @@ export default class SkillAbilityTableViewModel extends ViewModel {
 
     // Own properties.
     this.document = args.document;
-    this.oneColumn = args.oneColumn ?? false;
     this.visGroupId = args.visGroupId ?? createUUID();
     this._skillAbilitiesInitiallyVisible = args.skillAbilitiesInitiallyVisible ?? false;
 
@@ -110,7 +101,7 @@ export default class SkillAbilityTableViewModel extends ViewModel {
         listName: "abilities",
       }),
       listItemViewModels: this.abilities,
-      listItemTemplate: thiz.oneColumn === true ? TEMPLATES.SKILL_ABILITY_CHAT_MESSAGE : TEMPLATES.SKILL_ABILITY_LIST_ITEM,
+      listItemTemplate: TEMPLATES.SKILL_ABILITY_LIST_ITEM,
       vmBtnAddItem: factory.createVmBtnAdd({
         id: "vmBtnAdd",
         target: thiz.document,
@@ -173,7 +164,7 @@ export default class SkillAbilityTableViewModel extends ViewModel {
   }
 
   /**
-   * @returns {Array<SkillAbilityChatMessageViewModel> | Array<SkillAbilityListItemViewModel>}
+   * @returns {Array<SkillAbilityListItemViewModel>}
    * 
    * @private
    */
@@ -181,26 +172,13 @@ export default class SkillAbilityTableViewModel extends ViewModel {
     const result = [];
     const skillAbilities = this.document.abilities;
     for (const skillAbility of skillAbilities) {
-      let vm = undefined;
-
-      if (this.oneColumn === true) {
-        vm = new SkillAbilityChatMessageViewModel({
-          id: skillAbility.id,
-          isEditable: this.isEditable,
-          isSendable: this.isSendable,
-          isOwner: this.isOwner,
-          skillAbility: skillAbility,
-        })
-      } else {
-        vm = new SkillAbilityListItemViewModel({
-          id: skillAbility.id,
-          isEditable: this.isEditable,
-          isSendable: this.isSendable,
-          isOwner: this.isOwner,
-          skillAbility: skillAbility,
-        });
-      }
-
+      const vm = new SkillAbilityListItemViewModel({
+        id: skillAbility.id,
+        isEditable: this.isEditable,
+        isSendable: this.isSendable,
+        isOwner: this.isOwner,
+        skillAbility: skillAbility,
+      });
       result.push(vm);
       this[vm._id] = vm;
     }
