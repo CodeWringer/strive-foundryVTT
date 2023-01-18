@@ -45,6 +45,10 @@ cssClass: {undefined | String}
       {{viewModel.document.maxQuantity}}
     </div>
   </div>
+  {{!-- Properties --}}
+  <div class="flex flex-row sheet-block margin-b-md{{#if viewModel.hasProperties}}{{else}} hidden{{/if}}">
+    {{> inputProperties viewModel=viewModel.vmProperties}}
+  </div>
   {{!-- Description --}}
   <div class="sheet-block scrollable-height-md">
     {{> lazyRichText viewModel=viewModel.vmLazyDescription}}

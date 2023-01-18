@@ -82,6 +82,16 @@ cssClass: {undefined | String}
     </div>
   </div>
   {{!-- Row 4 --}}
+  {{!-- Properties --}}
+  <div class="flex flex-row">
+    <span class="width-min-xl">
+      {{> inputLabel text=(localize "ambersteel.general.properties.label") showFancyFont=viewModel.showFancyFont}}
+    </span>
+    <span class="flex flex-grow">
+      {{> inputProperties viewModel=viewModel.vmProperties}}
+    </span>
+  </div>
+  {{!-- Row 5 --}}
   {{!-- Description --}}
   <div class="flex flex-row">
     {{> inputRichText viewModel=viewModel.vmRtDescription }}

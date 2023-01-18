@@ -1,7 +1,9 @@
+import { SKILL_PROPERTIES } from "../../../../business/document/item/item-properties.mjs"
 import { ATTRIBUTES } from "../../../../business/ruleset/attribute/attributes.mjs"
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs"
 import { isDefined } from "../../../../business/util/validation-utility.mjs"
 import ChoiceAdapter from "../../../component/input-choice/choice-adapter.mjs"
+import InputPropertiesViewModel from "../../../component/input-properties/input-properties-viewmodel.mjs"
 import { TEMPLATES } from "../../../templatePreloader.mjs"
 import ViewModelFactory from "../../../view-model/view-model-factory.mjs"
 import SkillAbilityTableViewModel from "../skill-ability/skill-ability-table-viewmodel.mjs"
@@ -163,6 +165,14 @@ export default class SkillListItemViewModel extends SkillViewModel {
       id: "vmRtDescription",
       propertyOwner: thiz.document,
       propertyPath: "description",
+    });
+    this.vmProperties = new InputPropertiesViewModel({
+      id: "vmProperties",
+      parent: this,
+      propertyPath: "properties",
+      propertyOwner: this.document,
+      isEditable: this.isEditable,
+      systemProperties: SKILL_PROPERTIES.asArray,
     });
   }
 

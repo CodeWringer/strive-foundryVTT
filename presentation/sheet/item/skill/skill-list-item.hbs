@@ -98,12 +98,21 @@ cssClass: {undefined | String}
     </div>
   </div>
   {{!-- Row 4 --}}
+  <div class="flex flex-row">
+    <span class="width-min-xl">
+      {{> inputLabel text=(localize "ambersteel.general.properties.label") showFancyFont=viewModel.showFancyFont}}
+    </span>
+    <span class="flex flex-grow">
+      {{> inputProperties viewModel=viewModel.vmProperties}}
+    </span>
+  </div>
+  {{!-- Row 5 --}}
   {{!-- Description --}}
   <div class="flex flex-column margin-b-md">
     <h3{{#if viewModel.showFancyFont}} class="fancy-font"{{/if}}>{{localize "ambersteel.general.description"}}</h3>
     {{> inputRichText viewModel=viewModel.vmRtDescription }}
   </div>
-  {{!-- Row 5 --}}
+  {{!-- Row 6 --}}
   {{!-- Skill Abilites --}}
   <h3{{#if viewModel.showFancyFont}} class="fancy-font"{{/if}}>{{localize "ambersteel.character.skill.ability.plural"}}</h3>
   {{> "systems/ambersteel/presentation/sheet/item/skill-ability/skill-ability-table.hbs" viewModel=viewModel.vmSkillAbilityTable cssClass=(ifThenElse viewModel.isSkillAbilityListVisible "" "hidden") }}

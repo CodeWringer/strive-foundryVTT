@@ -1,6 +1,7 @@
 import { ATTRIBUTES } from "../../../../business/ruleset/attribute/attributes.mjs"
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs"
 import ButtonToggleVisibilityViewModel from "../../../component/button-toggle-visibility/button-toggle-visibility-viewmodel.mjs"
+import InputPropertiesViewModel from "../../../component/input-properties/input-properties-viewmodel.mjs"
 import LazyRichTextViewModel from "../../../component/lazy-rich-text/lazy-rich-text-viewmodel.mjs"
 import { TEMPLATES } from "../../../templatePreloader.mjs"
 import ViewModel from "../../../view-model/view-model.mjs"
@@ -18,6 +19,12 @@ export default class SkillChatMessageViewModel extends ViewModel {
    * @readonly
    */
   get hasAbilities() { return this.document.abilities.length !== 0; }
+  
+  /**
+   * @type {Boolean}
+   * @readonly
+   */
+  get hasProperties() { return this.document.properties.length > 0; }
 
   /**
    * @type {String}
@@ -95,6 +102,13 @@ export default class SkillChatMessageViewModel extends ViewModel {
       isSendable: this.isSendable,
       isOwner: this.isOwner,
       renderableContent: this.document.description,
+    });
+    this.vmProperties = new InputPropertiesViewModel({
+      id: "vmProperties",
+      parent: this,
+      propertyPath: "properties",
+      propertyOwner: this.document,
+      isEditable: false,
     });
   }
 }

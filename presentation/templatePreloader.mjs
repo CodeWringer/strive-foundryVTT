@@ -34,6 +34,8 @@ export const TEMPLATES = {
   COMPONENT_INPUT_ITEM_GRID_VIEW: `${basePathComponent}/item-grid/item-grid-view.hbs`,
   COMPONENT_INPUT_IMAGE: `${basePathComponent}/input-image/input-image.hbs`,
   COMPONENT_INPUT_RICH_TEXT: `${basePathComponent}/input-rich-text/input-rich-text.hbs`,
+  COMPONENT_INPUT_PROPERTIES: `${basePathComponent}/input-properties/input-properties.hbs`,
+  COMPONENT_INPUT_PROPERTY_PILL: `${basePathComponent}/input-properties/input-property-pill.hbs`,
   // Buttons
   COMPONENT_BUTTON: `${basePathComponent}/button/button.hbs`,
   COMPONENT_BUTTON_ADD: `${basePathComponent}/button-add/button-add.hbs`,

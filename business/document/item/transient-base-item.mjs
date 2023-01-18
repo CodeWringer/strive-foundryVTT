@@ -1,4 +1,5 @@
 import { TEMPLATES } from "../../../presentation/templatePreloader.mjs";
+import DocumentProperty from "../document-property.mjs";
 import TransientDocument from "../transient-document.mjs";
 
 /**
@@ -20,6 +21,13 @@ import TransientDocument from "../transient-document.mjs";
  * 
  * @property {TransientBaseActor | undefined} owningDocument Another document that 
  * this document is embedded in. 
+ * @property {Array<DocumentProperty>} properties An array of the current document 
+ * properties of this document. 
+ * @property {Array<DocumentProperty>} acceptedProperties Returns an array of accepted 
+ * document properties. 
+ * * Read-only. 
+ * * virtual. 
+ * * Default `[]`.
  */
 export default class TransientBaseItem extends TransientDocument {
   /** @override */
@@ -27,7 +35,47 @@ export default class TransientBaseItem extends TransientDocument {
   
   /** @override */
   get chatMessageTemplate() { return TEMPLATES.ASSET_CHAT_MESSAGE; }
+
+  /**
+   * An array of the current document properties of this document. 
+   * 
+   * @type {Array<DocumentProperty>}
+   */
+  get properties() {
+    const ids = this.document.system.properties ?? [];
+    const accepted = this.acceptedProperties;
+    const result = [];
+
+    for (const id of ids) {
+      let property = accepted.find(it => it.id === id);
+      if (property === undefined) {
+        property = new DocumentProperty({
+          id: id,
+          localizableName: id,
+        });
+      }
+      result.push(property);
+    }
+
+    return result;
+  }
+  set properties(value) {
+    const ids = value.map(it => it.id);
+
+    this.document.system.properties = ids;
+    this.updateByPath("system.properties", ids);
+  }
   
+  /**
+   * Returns an array of accepted document properties. 
+   * 
+   * @type {Array<DocumentProperty>}
+   * @readonly
+   * @virtual
+   * @default []
+   */
+  get acceptedProperties() { return []; }
+
   /**
    * Another document that this document is embedded in. 
    * 

@@ -85,6 +85,9 @@
         "moveToBottom": "Move to bottom",
         "moveDown": "Move down",
         "moveByDragging": "Move by dragging"
+      },
+      "properties": {
+        "label": "Properties"
       }
     },
     "character": {
@@ -116,6 +119,27 @@
         "stats": "General Assets Stats",
         "singular": "Asset",
         "onPerson": "Possessions (on person)",
+        "equipped": "Worn & Equipped",
+        "luggage": "Luggage",
+        "property": "Property",
+        "properties": {
+          "ambersteelForged": "Ambersteel-Forged",
+          "ambersteelLined": "Ambersteel-Lined",
+          "ambersteelPlated": "Ambersteel-Plated",
+          "armor": "Armor",
+          "clothing": "Clothing",
+          "exhaustingToWield": "Exhausting to Wield",
+          "holdable": "Holdable",
+          "longReach": "Long Reach",
+          "melee": "Melee",
+          "meleeOnly": "Melee Only",
+          "preferMelee": "Prefer Melee",
+          "preferRange": "Prefer Range",
+          "range": "Range",
+          "rangeOnly": "Range Only",
+          "veryLongReach": "Very Long Reach",
+          "weapon": "Weapon"
+        },
         "takeToPerson": "Take (to person)",
         "remote": "Property",
         "carryingCapacity": {
@@ -446,7 +470,11 @@
         },
         "plural": "Skills",
         "relatedAttribute": "Related Attribute",
-        "singular": "Skill"
+        "singular": "Skill",
+        "properties": {
+          "magicSchool": "Magic School",
+          "innate": "Innate"
+        }
       }
     },
     "roll": {

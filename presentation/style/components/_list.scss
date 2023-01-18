@@ -3,6 +3,12 @@
   margin: 0;
   padding: 0;
   display: block;
+
+  &.compact {
+    > li {
+      display: inline-block;
+    }
+  }
 }
 
 .ambersteel-list-row {

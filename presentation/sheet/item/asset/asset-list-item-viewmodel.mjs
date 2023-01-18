@@ -1,5 +1,6 @@
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs"
 import { TAKE_ITEM_CONTEXT_TYPES } from "../../../component/button-take-item/button-take-item-viewmodel.mjs"
+import InputPropertiesViewModel from "../../../component/input-properties/input-properties-viewmodel.mjs"
 import { TEMPLATES } from "../../../templatePreloader.mjs"
 import ViewModelFactory from "../../../view-model/view-model-factory.mjs"
 import ViewModel from "../../../view-model/view-model.mjs"
@@ -95,6 +96,14 @@ export default class AssetListItemViewModel extends ViewModel {
       id: "vmRtDescription",
       propertyOwner: thiz.document,
       propertyPath: "description",
+    });
+    this.vmProperties = new InputPropertiesViewModel({
+      id: "vmProperties",
+      parent: this,
+      propertyPath: "properties",
+      propertyOwner: this.document,
+      isEditable: this.isEditable,
+      systemProperties: ASSET_PROPERTIES.asArray,
     });
   }
 

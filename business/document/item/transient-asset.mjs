@@ -5,6 +5,7 @@ import TransientBaseItem from "./transient-base-item.mjs";
 import AssetChatMessageViewModel from "../../../presentation/sheet/item/asset/asset-chat-message-viewmodel.mjs";
 import { TEMPLATES } from "../../../presentation/templatePreloader.mjs";
 import { createUUID } from "../../util/uuid-utility.mjs";
+import { ASSET_PROPERTIES } from "./item-properties.mjs";
 
 /**
  * Represents the full transient data of an asset. 
@@ -84,6 +85,9 @@ export default class TransientAsset extends TransientBaseItem {
   get bulk() {
     return parseInt(this.document.system.shape.width) * parseInt(this.document.system.shape.height);
   }
+
+  /** @override */
+  get acceptedProperties() { return ASSET_PROPERTIES.asArray; }
 
   /**
    * @param {Item} document An encapsulated item instance. 
