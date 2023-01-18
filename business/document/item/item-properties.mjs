@@ -1,5 +1,4 @@
 import DocumentProperty from "../document-property.mjs";
-import DocumentProperty from "../document-property.mjs"
 
 /**
  * Property constants of "item/asset" type documents. 
