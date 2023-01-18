@@ -1,0 +1,14 @@
+{{!-- Parameters:
+viewModel: {ActorAssetSlotViewModel}
+cssClass: {undefined | String}
+--}}
+<div class="ambersteel-asset-slot flex flex-column{{#if cssClass}} {{cssClass}}{{/if}}">
+  <div class="flex flex-row">
+    <h3>{{viewModel.localizedName}}</h3>
+    {{#> button viewModel=viewModel.vmBtnEdit}}
+      <div class="square-button-light flex flex-center">
+        <i class="fas fa-cog"></i>
+      </div>
+    {{/button}}
+  </div>
+</div>

@@ -65,7 +65,7 @@ import './presentation/component/lazy-rich-text/lazy-rich-text-viewmodel.mjs';
 // View models
 import './presentation/sheet/actor/actor-sheet-viewmodel.mjs';
 import './presentation/sheet/actor/part/actor-attribute-table-viewmodel.mjs';
-import './presentation/sheet/actor/part/actor-assets-viewmodel.mjs';
+import './presentation/sheet/actor/part/assets/actor-assets-viewmodel.mjs';
 import './presentation/sheet/actor/part/actor-attributes-viewmodel.mjs';
 import './presentation/sheet/actor/part/actor-beliefs-fate-viewmodel.mjs';
 import './presentation/sheet/actor/part/actor-beliefs-viewmodel.mjs';

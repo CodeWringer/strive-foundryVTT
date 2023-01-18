@@ -1,0 +1,27 @@
+{{!-- Parameters:
+viewModel: {ActorAssetsEquippedViewModel}
+cssClass: {undefined | String}
+--}}
+<section{{#if cssClass}} class="{{cssClass}}"{{/if}}>
+  <ul class="unstyled-list">
+    {{#each viewModel.assetSlotViewModels as |vm index|}}
+    {{#with ../viewModel.assetTemplate as | template |}}
+    <li class="sheet-block flex">
+      {{> (template) viewModel=vm}}
+    </li>
+    {{/with}}
+    {{/each}}
+    <li class="ambersteel-list-row ambersteel-list-footer">
+      <div class="fill flex flex-row flex-right">
+        <div>
+          {{#> button viewModel=viewModel.vmBtnAddSlot}}
+            <span{{#if ../viewModel.showFancyFont}} class="fancy-font"{{/if}}>{{../viewModel.localizedAddSlotLabel}}</span>
+            <div class="square-button-light flex flex-center">
+              <i class="fas fa-plus"></i>
+            </div>
+          {{/button}}
+        </div>
+      </div>
+    </li>
+  </ul>
+</section>

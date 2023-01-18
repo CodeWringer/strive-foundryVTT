@@ -4,7 +4,7 @@ import GmNotesViewModel from "../../component/section-gm-notes/section-gm-notes-
 import { TEMPLATES } from "../../templatePreloader.mjs"
 import ViewModelFactory from "../../view-model/view-model-factory.mjs"
 import ViewModel from "../../view-model/view-model.mjs"
-import ActorAssetsViewModel from "./part/actor-assets-viewmodel.mjs"
+import ActorAssetsViewModel from "./part/assets/actor-assets-viewmodel.mjs"
 import ActorAttributesViewModel from "./part/actor-attributes-viewmodel.mjs"
 import ActorBeliefsFateViewModel from "./part/actor-beliefs-fate-viewmodel.mjs"
 import ActorBiographyViewModel from "./part/actor-biography-viewmodel.mjs"

@@ -123,7 +123,6 @@
         "bulk": "Bulk",
         "stats": "General Assets Stats",
         "singular": "Asset",
-        "onPerson": "Possessions (on person)",
         "equipped": "Worn & Equipped",
         "luggage": "Luggage",
         "property": "Property",
@@ -151,10 +150,23 @@
           "label": "Carrying Capacity (in bulk)",
           "used": "Used carrying capacity (in bulk)"
         },
-        "shape": {
-          "label": "Shape",
-          "width": "Width",
-          "height": "Height"
+        "slot": {
+          "add": {
+            "label": "Add Asset Slot",
+            "query": "Select Asset Slot to Add"
+          },
+          "acceptedTypes": "Accepted Types",
+          "armor": "Armor",
+          "back": "Back",
+          "clothing": "Clothing",
+          "delete": {
+            "label": "Delete Asset Slot",
+            "query": "Confirm Deletion of Asset Slot"
+          },
+          "edit": "Edit",
+          "hand": "Hand",
+          "label": "Asset Slot",
+          "name": "Name"
         },
         "quantity": {
           "label": "Quantity",

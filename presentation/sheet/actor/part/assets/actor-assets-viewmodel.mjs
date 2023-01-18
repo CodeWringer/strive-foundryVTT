@@ -1,19 +1,18 @@
-import TransientBaseCharacterActor from "../../../../business/document/actor/transient-base-character-actor.mjs"
-import { validateOrThrow } from "../../../../business/util/validation-utility.mjs"
-import ItemGridViewViewModel from "../../../component/item-grid/item-grid-view-viewmodel.mjs"
-import DocumentListItemOrderDataSource from "../../../component/sortable-list/document-list-item-order-datasource.mjs"
-import SortableListViewModel from "../../../component/sortable-list/sortable-list-viewmodel.mjs"
-import { TEMPLATES } from "../../../templatePreloader.mjs"
-import ViewModelFactory from "../../../view-model/view-model-factory.mjs"
-import ViewModel from "../../../view-model/view-model.mjs"
-import AssetListItemViewModel from "../../item/asset/asset-list-item-viewmodel.mjs"
+import TransientBaseCharacterActor from "../../../../../business/document/actor/transient-base-character-actor.mjs"
+import { validateOrThrow } from "../../../../../business/util/validation-utility.mjs"
+import DocumentListItemOrderDataSource from "../../../../component/sortable-list/document-list-item-order-datasource.mjs"
+import SortableListViewModel from "../../../../component/sortable-list/sortable-list-viewmodel.mjs"
+import { TEMPLATES } from "../../../../templatePreloader.mjs"
+import ViewModelFactory from "../../../../view-model/view-model-factory.mjs"
+import ViewModel from "../../../../view-model/view-model.mjs"
+import AssetListItemViewModel from "../../../item/asset/asset-list-item-viewmodel.mjs"
+import ActorAssetsEquippedViewModel from "./actor-assets-equipped-viewmodel.mjs"
 
 /**
  * @property {Array<AssetListItemViewModel>} listItemViewModels 
  * @property {Number} maxBulk 
  * @property {Number} currentBulk 
  * 
- * @property {ViewModel} vmIgv 
  * @property {ViewModel} vmPropertyList 
  */
 export default class ActorAssetsViewModel extends ViewModel {
@@ -22,11 +21,6 @@ export default class ActorAssetsViewModel extends ViewModel {
 
   /** @override */
   get entityId() { return this.document.id; }
-
-  /**
-   * @type {Array<AssetListItemViewModel>}
-   */
-  listItemViewModels = [];
 
   /**
    * Returns the maximum bulk. 
@@ -44,6 +38,12 @@ export default class ActorAssetsViewModel extends ViewModel {
    */
   get currentBulk() { return this.document.assets.currentBulk; }
   
+  /**
+   * @type {String}
+   * @readonly
+   */
+  get templateEquipped() { return TEMPLATES.ACTOR_ASSETS_EQUIPPED; }
+
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
    * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 
@@ -68,26 +68,49 @@ export default class ActorAssetsViewModel extends ViewModel {
     const thiz = this;
     const factory = new ViewModelFactory();
 
-    this.vmIgv = new ItemGridViewViewModel({
-      id: "vmIgv",
-      parent: thiz,
-      propertyOwner: thiz.document,
-      propertyPath: "assets",
-      isEditable: thiz.isEditable,
-      contextTemplate: thiz.contextTemplate,
-    });
-
-    this.listItemViewModels = [];
-    this.listItemViewModels = this._getAssetViewModels();
-    this.vmPropertyList = new SortableListViewModel({
+    this.vmEquipped = new ActorAssetsEquippedViewModel({
+      id: "vmEquipped",
       parent: this,
       isEditable: this.isEditable,
-      id: "vmPropertyList",
+      isSendable: this.isSendable,
+      isOwner: this.isOwner,
+      document: this.document,
+    });
+
+    this.luggageViewModels = [];
+    this.luggageViewModels = this._getAssetViewModels(this.document.assets.luggage, this.luggageViewModels);
+    this.vmLuggageList = new SortableListViewModel({
+      id: "vmLuggageList",
+      parent: this,
+      isEditable: this.isEditable,
       indexDataSource: new DocumentListItemOrderDataSource({
         document: thiz.document,
         listName: "property",
       }),
-      listItemViewModels: this.listItemViewModels,
+      listItemViewModels: this.luggageViewModels,
+      listItemTemplate: TEMPLATES.ASSET_LIST_ITEM,
+      vmBtnAddItem: factory.createVmBtnAdd({
+        id: "vmBtnAddItem",
+        target: thiz.document,
+        creationType: "item",
+        withDialog: true,
+        localizableLabel: "ambersteel.character.asset.add.label",
+        localizableType: "ambersteel.character.asset.singular",
+        localizableDialogTitle: "ambersteel.character.asset.add.query",
+      }),
+    });
+
+    this.propertyViewModels = [];
+    this.propertyViewModels = this._getAssetViewModels(this.document.assets.property, this.propertyViewModels);
+    this.vmPropertyList = new SortableListViewModel({
+      id: "vmPropertyList",
+      parent: this,
+      isEditable: this.isEditable,
+      indexDataSource: new DocumentListItemOrderDataSource({
+        document: thiz.document,
+        listName: "property",
+      }),
+      listItemViewModels: this.propertyViewModels,
       listItemTemplate: TEMPLATES.ASSET_LIST_ITEM,
       vmBtnAddItem: factory.createVmBtnAdd({
         id: "vmBtnAddItem",
@@ -114,7 +137,8 @@ export default class ActorAssetsViewModel extends ViewModel {
    * @override
    */
   update(args = {}) {
-    this.listItemViewModels = this._getAssetViewModels();
+    this.luggageViewModels = this._getAssetViewModels(this.document.assets.luggage, this.luggageViewModels);
+    this.propertyViewModels = this._getAssetViewModels(this.document.assets.property, this.propertyViewModels);
 
     super.update(args);
   }
@@ -123,25 +147,33 @@ export default class ActorAssetsViewModel extends ViewModel {
   _getChildUpdates() {
     const updates = super._getChildUpdates();
 
+    updates.set(this.vmLuggageList, {
+      ...updates.get(this.vmLuggageList),
+      listItemViewModels: this.luggageViewModels,
+    });
     updates.set(this.vmPropertyList, {
       ...updates.get(this.vmPropertyList),
-      listItemViewModels: this.listItemViewModels,
+      listItemViewModels: this.propertyViewModels,
     });
 
     return updates;
   }
   
   /**
+   * Returns an array of view models for the given array of `TransientAsset`s. 
+   * 
+   * @param {Array<TransientAsset>} assets
+   * @param {Array<TransientAsset>} cacheList
+   * 
    * @returns {Array<AssetListItemViewModel>}
    * 
    * @private
    */
-  _getAssetViewModels() {
+  _getAssetViewModels(assets, cacheList) {
     const result = [];
     
-    const documents = this.document.assets.remote;
-    for (const document of documents) {
-      let vm = this.listItemViewModels.find(it => it._id === document.id);
+    for (const document of assets) {
+      let vm = cacheList.find(it => it._id === document.id);
       if (vm === undefined) {
         vm = new AssetListItemViewModel({
           id: document.id,

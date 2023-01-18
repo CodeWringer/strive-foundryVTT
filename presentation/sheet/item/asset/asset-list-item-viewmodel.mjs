@@ -77,18 +77,11 @@ export default class AssetListItemViewModel extends ViewModel {
       propertyPath: "maxQuantity",
       min: 1,
     });
-    this.vmNsShapeWidth = factory.createVmNumberSpinner({
+    this.vmNsBulk = factory.createVmNumberSpinner({
       parent: thiz,
-      id: "vmNsShapeWidth",
+      id: "vmNsBulk",
       propertyOwner: thiz.document,
-      propertyPath: "shape.width",
-      min: 1,
-    });
-    this.vmNsShapeHeight = factory.createVmNumberSpinner({
-      parent: thiz,
-      id: "vmNsShapeHeight",
-      propertyOwner: thiz.document,
-      propertyPath: "shape.height",
+      propertyPath: "bulk",
       min: 1,
     });
     this.vmRtDescription = factory.createVmRichText({

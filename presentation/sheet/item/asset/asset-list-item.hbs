@@ -47,39 +47,13 @@ cssClass: {undefined | String}
   </div>
   {{!-- Row 3 --}}
   <div class="flex flex-row">
-    {{!-- Shape.width --}}
-    <div class="flex flex-row">
-      <span class="width-min-xl">
-        {{> inputLabel text=(localize "ambersteel.character.asset.shape.width") showFancyFont=viewModel.showFancyFont}}
-      </span>
-      <span class="width-md">
-        {{> inputNumberSpinner viewModel=viewModel.vmNsShapeWidth }}
-      </span>
-    </div>
-    {{!-- Spacer --}}
-    <div class="width-xs"></div>
-    {{!-- Shape.width --}}
-    <div class="flex flex-row">
-      <span class="width-min-xl">
-        {{> inputLabel text=(localize "ambersteel.character.asset.shape.height") showFancyFont=viewModel.showFancyFont}}
-      </span>
-      <span class="width-md">
-        {{> inputNumberSpinner viewModel=viewModel.vmNsShapeHeight }}
-      </span>
-    </div>
-    {{!-- Spacer --}}
-    <div class="width-xs"></div>
-    {{!-- Bulk - read only! --}}
-    <div class="flex flex-row">
-      <span class="width-min-xl">
-        {{> inputLabel text=(localize "ambersteel.character.asset.bulk") showFancyFont=viewModel.showFancyFont}}
-      </span>
-      <span class="width-md">
-          <div class="custom-system-read-only pad-sm fill">
-            {{viewModel.document.bulk}}
-          </div>
-      </span>
-    </div>
+    {{!-- Bulk --}}
+    <span class="width-min-xl">
+      {{> inputLabel text=(localize "ambersteel.character.asset.bulk") showFancyFont=viewModel.showFancyFont}}
+    </span>
+    <span class="width-md">
+      {{> inputNumberSpinner viewModel=viewModel.vmNsBulk }}
+    </span>
   </div>
   {{!-- Row 4 --}}
   {{!-- Properties --}}

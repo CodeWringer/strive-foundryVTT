@@ -7,6 +7,7 @@
         "gmNotes": "",
         "isCustom": false,
         "displayOrders": {
+          "luggage": [],
           "property": [],
           "skills": [],
           "fateCards": [],
@@ -94,8 +95,44 @@
           "magicStamina": 0
         },
         "assets": {
-          "grid": [],
-          "gridIndices": []
+          "equipped": {
+            "458e47e6-f6ce-4841-83b2-0ac05c160a52": {
+              "customName": "clothing",
+              "localizableName": "ambersteel.character.asset.slot.clothing",
+              "acceptedTypes": ["clothing"],
+              "alottedId": null,
+              "maxBulk": 4
+            },
+            "16b24ed7-de48-46fd-8849-82d7b2648b8d": {
+              "customName": "armor",
+              "localizableName": "ambersteel.character.asset.slot.armor",
+              "acceptedTypes": ["armor"],
+              "alottedId": null,
+              "maxBulk": 4
+            },
+            "5321c233-8aef-43a5-b6a0-3b3309d31732": {
+              "customName": "hand",
+              "localizableName": "ambersteel.character.asset.slot.hand",
+              "acceptedTypes": ["holdable"],
+              "alottedId": null,
+              "maxBulk": 2
+            },
+            "6348fbf9-0ec1-4dea-b6c7-d3a650c5a313": {
+              "customName": "hand",
+              "localizableName": "ambersteel.character.asset.slot.hand",
+              "acceptedTypes": ["holdable"],
+              "alottedId": null,
+              "maxBulk": 2
+            },
+            "112d2056-8754-48e3-bad0-31a6ef5d6a38": {
+              "customName": "back",
+              "localizableName": "ambersteel.character.asset.slot.back",
+              "acceptedTypes": ["holdable", "strappable"],
+              "alottedId": null,
+              "maxBulk": 4
+            }
+          },
+          "luggage": []
         }
       }
     },
@@ -166,10 +203,7 @@
       "templates": ["base"],
       "quantity": 1,
       "maxQuantity": 1,
-      "shape": {
-        "width": 1,
-        "height": 1
-      },
+      "bulk": 1,
       "isOnPerson": false
     },
     "injury": {
