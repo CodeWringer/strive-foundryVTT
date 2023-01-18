@@ -1,4 +1,4 @@
-import TransientBaseCharacterActor from "../../../../../business/document/actor/transient-base-character-actor.mjs"
+import TransientBaseCharacterActor from "../../../../../business/document/actor/transient-base-character-actor.mjs";
 import * as StringUtil from "../../../../../business/util/string-utility.mjs";
 import { validateOrThrow } from "../../../../../business/util/validation-utility.mjs"
 import ButtonViewModel from "../../../../component/button/button-viewmodel.mjs";
@@ -7,7 +7,6 @@ import DynamicInputDialog from "../../../../dialog/dynamic-input-dialog/dynamic-
 import { DYNAMIC_INPUT_TYPES } from "../../../../dialog/dynamic-input-dialog/dynamic-input-types.mjs";
 import { TEMPLATES } from "../../../../templatePreloader.mjs"
 import ViewModel from "../../../../view-model/view-model.mjs"
-import ActorAssetSlotViewModel from "./actor-asset-slot-group-viewmodel.mjs";
 
 /**
  * Represents the "Worn & Equipped" section on a character sheet. 

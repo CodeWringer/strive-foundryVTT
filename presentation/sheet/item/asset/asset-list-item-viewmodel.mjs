@@ -1,3 +1,4 @@
+import { ASSET_PROPERTIES } from "../../../../business/document/item/item-properties.mjs"
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs"
 import { TAKE_ITEM_CONTEXT_TYPES } from "../../../component/button-take-item/button-take-item-viewmodel.mjs"
 import InputPropertiesViewModel from "../../../component/input-properties/input-properties-viewmodel.mjs"
