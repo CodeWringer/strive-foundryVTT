@@ -22,6 +22,7 @@ import MigratorDialog from "./presentation/dialog/migrator-dialog/migrator-dialo
 import LoadDebugSettingUseCase from "./business/use-case/load-debug-setting-use-case.mjs";
 // Dialogs
 import PlainDialog from "./presentation/dialog/plain-dialog/plain-dialog.mjs";
+import "./presentation/dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
 // Document classes
 import { ACTOR_SUBTYPE } from "./business/document/actor/actor-subtype.mjs";
 import { AmbersteelActor } from "./business/document/actor/actor.mjs";

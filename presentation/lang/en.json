@@ -56,6 +56,11 @@
       "description": "Description",
       "edit": "Edit",
       "increment": "Increment",
+      "input": {
+        "requiredMissing": "The following required fields must not be left empty",
+        "query": "Provide Data",
+        "queryFor": "Provide Data for %s"
+      },
       "messageVisibility": {
         "label": "Visibility",
         "query": "Select Message Visibility",

@@ -53,6 +53,7 @@ export default class ModalDialog extends Application {
       resizable: false,
       classes: [DIALOG_ELEMENT_CLASS, "width-min-xl", "height-min-sm"],
       minimizable: false,
+      height: "unset",
     });
   }
 
