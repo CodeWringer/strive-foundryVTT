@@ -46,7 +46,7 @@ cssClass: {undefined | String}
     </div>
   </div>
   {{!-- Properties --}}
-  <div class="flex flex-row sheet-block margin-b-md">
+  <div class="flex flex-row sheet-block margin-b-md{{#if viewModel.hasProperties}}{{else}} hidden{{/if}}">
     {{> inputProperties viewModel=viewModel.vmProperties}}
   </div>
   {{!-- Description --}}

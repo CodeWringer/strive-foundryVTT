@@ -17,6 +17,12 @@ export default class AssetChatMessageViewModel extends ViewModel {
    * @type {Boolean}
    * @readonly
    */
+  get hasProperties() { return this.document.properties.length > 0; }
+
+  /**
+   * @type {Boolean}
+   * @readonly
+   */
   allowPickup = false;
 
   /**
