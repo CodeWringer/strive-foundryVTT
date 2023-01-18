@@ -1,0 +1,43 @@
+{{!-- Parameters:
+viewModel: {Array<DynamicInputDialogViewModel>}
+--}}
+{{#> dialogContent}}
+  {{#each viewModel.controls as |control index|}}
+  <div class="flex flex-row sheet-block">
+    <div class="flex flex-row flex-grow">
+      {{> inputLabel text=control.definition.localizedLabel showFancyFont=viewModel.showFancyFont}}
+      {{#if control.definition.required}}
+        <span><b>*</b></span>
+      {{/if}}
+    </div>
+    <div class="flex-grow">
+      {{#if (eq control.definition.type "DROP_DOWN")}}
+        {{> inputDropDown viewModel=control.viewModel}}
+      {{/if}}
+      {{#if (eq control.definition.type "IMAGE")}}
+        {{> inputImage viewModel=control.viewModel}}
+      {{/if}}
+      {{#if (eq control.definition.type "NUMBER_SPINNER")}}
+        {{> inputNumberSpinner viewModel=control.viewModel}}
+      {{/if}}
+      {{#if (eq control.definition.type "RADIO_BUTTONS")}}
+        {{> inputRadioButtonGroup viewModel=control.viewModel}}
+      {{/if}}
+      {{#if (eq control.definition.type "RICH_TEXT")}}
+        {{> inputRichText viewModel=control.viewModel}}
+      {{/if}}
+      {{#if (eq control.definition.type "TEXTAREA")}}
+        {{> inputTextarea viewModel=control.viewModel}}
+      {{/if}}
+      {{#if (eq control.definition.type "TEXTFIELD")}}
+        {{> inputTextField viewModel=control.viewModel}}
+      {{/if}}
+    </div>
+  </div>
+  {{/each}}
+  <div id="required-input-warning" class="hint-card hidden">
+		<p>{{localize "ambersteel.general.input.requiredMissing"}}:</p>
+    <ul id="required-input-list">
+    </ul>
+  </div>
+{{/dialogContent}}
