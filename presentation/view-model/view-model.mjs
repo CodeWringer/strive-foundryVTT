@@ -601,10 +601,10 @@ export default class ViewModel {
    * @protected
    */
   _cullObsolete(list, compare) {
-    for (const document of compare) {
-      const cull = list.find(it => it._id === document._id) === undefined;
+    for (const viewModel of list) {
+      const cull = compare.find(it => it._id === viewModel._id) === undefined;
       if (cull === true) {
-        document.parent = undefined;
+        viewModel.parent = undefined;
       }
     }
   }
