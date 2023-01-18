@@ -6,8 +6,32 @@ import { validateOrThrow } from "../../util/validation-utility.mjs";
  * @property {String} name Name of the group. 
  * @property {String | undefined} localizableName Localization key. 
  * @property {Array<CharacterAssetSlot>} slots The asset slots this group holds. 
+ * @property {Number} maxBulk The maximum bulk that all the slots within this 
+ * group can hold, in total. 
+ * * Read-only. 
+ * @property {Number} currentBulk The bulk that all the slots within this group 
+ * are currently holding, in total. 
+ * * Read-only. 
  */
 export default class CharacterAssetSlotGroup {
+  get maxBulk() {
+    let result = 0;
+    for (const slot of this.slots) {
+      result += slot.maxBulk;
+    }
+    return result;
+  }
+
+  get currentBulk() {
+    let result = 0;
+    for (const slot of this.slots) {
+      if (slot.asset !== undefined) {
+        result += slot.asset.bulk;
+      }
+    }
+    return result;
+  }
+
   /**
    * @param {Object} args
    * @param {String} args.name Name of the group. 

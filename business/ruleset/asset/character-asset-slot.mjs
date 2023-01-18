@@ -16,6 +16,7 @@ import { validateOrThrow } from "../../util/validation-utility.mjs";
  * that has been alotted to this slot. 
  * @property {Number} maxBulk The maximum bulk of an asset to accept. 
  * * Default `1`. 
+ * @property {TransientAsset | undefined} asset
  */
 export default class CharacterAssetSlot {
   get name() { return this._actor.system.assets.equipped[this.id].name; }
@@ -34,6 +35,14 @@ export default class CharacterAssetSlot {
   set maxBulk(value) { this._actor.updateByPath(`system.assets.equipped.${this.id}.maxBulk`, value); }
 
   get actor() { return this._actor; }
+
+  get asset() {
+    if (this.alottedId === null) {
+      return undefined;
+    } else {
+      return this.actor.getTransientObject().assets.equipped.find(it => it.id === this.alottedId);
+    }
+  }
 
   /**
    * @param {Object} args
