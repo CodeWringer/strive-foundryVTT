@@ -1,0 +1,11 @@
+{{!-- Required context:
+viewModel: {InputPropertyPillViewModel}
+--}}
+<div id="{{viewModel.id}}" class="ambersteel-pill flex flex-row">
+  <span>{{viewModel.localizedName}}</span>
+  <span{{#if viewModel.isEditable}}{{else}} class="hidden"{{/if}}>
+    {{#> button viewModel=viewModel.vmBtnDelete}}
+      <i class="fas fa-times"></i>
+    {{/button}}
+  </span>
+</div>

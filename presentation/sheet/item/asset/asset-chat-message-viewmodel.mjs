@@ -1,5 +1,6 @@
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs"
 import { TAKE_ITEM_CONTEXT_TYPES } from "../../../component/button-take-item/button-take-item-viewmodel.mjs"
+import InputPropertiesViewModel from "../../../component/input-properties/input-properties-viewmodel.mjs"
 import LazyRichTextViewModel from "../../../component/lazy-rich-text/lazy-rich-text-viewmodel.mjs"
 import { TEMPLATES } from "../../../templatePreloader.mjs"
 import ViewModelFactory from "../../../view-model/view-model-factory.mjs"
@@ -80,6 +81,13 @@ export default class AssetChatMessageViewModel extends ViewModel {
       isSendable: this.isSendable,
       isOwner: this.isOwner,
       renderableContent: this.document.description,
+    });
+    this.vmProperties = new InputPropertiesViewModel({
+      id: "vmProperties",
+      parent: this,
+      propertyPath: "properties",
+      propertyOwner: this.document,
+      isEditable: false,
     });
   }
 }

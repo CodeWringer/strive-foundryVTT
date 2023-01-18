@@ -85,6 +85,9 @@
         "moveToBottom": "Move to bottom",
         "moveDown": "Move down",
         "moveByDragging": "Move by dragging"
+      },
+      "properties": {
+        "label": "Properties"
       }
     },
     "character": {

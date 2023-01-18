@@ -1,0 +1,17 @@
+{{!-- Required context:
+viewModel: {InputTextFieldViewModel}
+cssClass: {String | undefined}
+readOnlyCssClass: {String | undefined}
+--}}
+<ul id="{{viewModel.id}}" class="custom-system-edit unstyled-list compact fill flex flex-row flex-wrap">
+  {{#each viewModel.propertyViewModels as |vm key|}}
+  {{#with ../viewModel.templatePill as | template |}}
+  <li>
+    {{> (template) viewModel=vm}}
+  </li>
+  {{/with}}
+  {{/each}}
+  <li class="width-min-lg{{#if viewModel.isEditable}}{{else}} hidden{{/if}}">
+    {{> inputTextField viewModel=viewModel.vmAddNew cssClass="minimal-input"}}
+  </li>
+</ul>

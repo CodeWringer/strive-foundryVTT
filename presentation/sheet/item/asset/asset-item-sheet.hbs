@@ -63,6 +63,15 @@ cssClass: {undefined | String}
       <div class="custom-system-read-only pad-sm fill">{{viewModel.document.bulk}}</div>
     </div>
   </div>
+  {{!-- Properties --}}
+  <div class="sheet-block grid-3col grid-gap-md margin-b-md">
+    <div class="flex flex-middle flex-right">
+      {{> inputLabel text=(localize "ambersteel.general.properties.label") showFancyFont=viewModel.showFancyFont}}
+    </div>
+    <div class="grid-span-2">
+      {{> inputProperties viewModel=viewModel.vmProperties}}
+    </div>
+  </div>
   {{!-- Description --}}
   <div class="sheet-block flex flex-column flex-grow">
     <h3 class="{{#if viewModel.showFancyFont}}fancy-font{{/if}}">{{localize "ambersteel.general.description"}}</h3>

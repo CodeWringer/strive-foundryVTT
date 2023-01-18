@@ -1324,6 +1324,9 @@ textarea.gm-notes {
   padding: 0;
   display: block;
 }
+.unstyled-list.compact > li {
+  display: inline-block;
+}
 
 .ambersteel-list-row {
   margin-top: 2px;
@@ -1526,6 +1529,23 @@ div.tox-tiered-menu > div.tox-menu.tox-collection.tox-collection--list.tox-selec
     transform: translateX(150%);
   }
 }
+.component-input-textfield.minimal-input {
+  border: none;
+  border-bottom: 1px solid;
+  border-radius: unset;
+  background-color: transparent;
+}
+.component-input-textfield.minimal-input:focus, .component-input-textfield.minimal-input:active {
+  box-shadow: unset;
+}
+
+.ambersteel-pill {
+  border-radius: 1rem;
+  background-color: rgba(0, 0, 0, 0.12);
+  padding: 2px 10px;
+  text-align: center;
+}
+
 /* Animations */
 .spin {
   transform-origin: center;
