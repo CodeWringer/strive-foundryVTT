@@ -432,11 +432,7 @@
           "newDefaultName": "New Skill Ability",
           "requirement": "At Level",
           "singular": "Skill Ability",
-          "plural": "Skill Abilities",
-          "properties": {
-            "magicSchool": "Magic School",
-            "innate": "Innate"
-          }
+          "plural": "Skill Abilities"
         },
         "add": {
           "label": "Add Skill",
@@ -474,7 +470,11 @@
         },
         "plural": "Skills",
         "relatedAttribute": "Related Attribute",
-        "singular": "Skill"
+        "singular": "Skill",
+        "properties": {
+          "magicSchool": "Magic School",
+          "innate": "Innate"
+        }
       }
     },
     "roll": {

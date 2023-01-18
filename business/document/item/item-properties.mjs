@@ -103,11 +103,11 @@ export const ASSET_PROPERTIES = {
 export const SKILL_PROPERTIES = {
   MAGIC_SCHOOL: new DocumentProperty({
     id: "MAGIC_SCHOOL",
-    localizableName: "ambersteel.character.skill.property.magicSchool"
+    localizableName: "ambersteel.character.skill.properties.magicSchool"
   }),
   INNATE: new DocumentProperty({
     id: "INNATE",
-    localizableName: "ambersteel.character.skill.property.innate"
+    localizableName: "ambersteel.character.skill.properties.innate"
   }),
   get asArray() { return getAsArray(this); }
 }
