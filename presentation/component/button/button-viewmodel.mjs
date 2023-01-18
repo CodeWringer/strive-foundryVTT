@@ -16,7 +16,7 @@ export const SELECTOR_BUTTON = "custom-system-button";
  * @extends ViewModel
  * 
  * @property {JQuery | HTMLElement} element The button element on the DOM. 
- * @property {Object} target The target object to affect.  
+ * @property {Object | undefined} target The target object to affect.  
  * @property {Function} callback An asynchronous callback that is invoked upon completion of the 
  * button's own callback. 
  * @property {Any} callbackData Any data to pass to the completion callback. 
@@ -41,12 +41,12 @@ export default class ButtonViewModel extends ViewModel {
   get element() { return this._element; }
 
   /**
-   * @type {Object}
+   * @type {Object | undefined}
    * @private
    */
   _target = undefined;
   /**
-   * @type {Object}
+   * @type {Object | undefined}
    * @readonly
    */
   get target() { return this._target; }

@@ -135,20 +135,7 @@ export default class InputViewModel extends ViewModel {
   activateListeners(html, isOwner, isEditable) {
     super.activateListeners(html, isOwner, isEditable);
 
-    this._element = html.find(`.${SELECTOR_EDIT}#${this.id}`);
-    
-    if (this._element === undefined || this._element === null || this._element.length === 0) {
-      this._element = html.find(`.${SELECTOR_READ}#${this.id}`);
-    }
-    
-    if (this._element === undefined || this._element === null || this._element.length === 0) {
-      const errorMessage = `NullPointerException: Failed to get input element with id '${this.id}'`;
-      if (this._contextTemplate !== undefined) {
-        throw new Error(`[${this._contextTemplate}] ${errorMessage}`);
-      } else {
-        throw new Error(errorMessage);
-      }
-    }
+    this._detectElement(html);
 
     // -------------------------------------------------------------
     if (!isOwner) return;
@@ -169,6 +156,29 @@ export default class InputViewModel extends ViewModel {
    */
   async onChange(newValue) {
     this.value = newValue;
+  }
+
+  /**
+   * Attempts to find and assign the relevant DOM element. 
+   * 
+   * @param {Any} html 
+   * @protected
+   */
+  _detectElement(html) {
+    this._element = html.find(`.${SELECTOR_EDIT}#${this.id}`);
+    
+    if (this._element === undefined || this._element === null || this._element.length === 0) {
+      this._element = html.find(`.${SELECTOR_READ}#${this.id}`);
+    }
+    
+    if (this._element === undefined || this._element === null || this._element.length === 0) {
+      const errorMessage = `NullPointerException: Failed to get input element with id '${this.id}'`;
+      if (this._contextTemplate !== undefined) {
+        throw new Error(`[${this._contextTemplate}] ${errorMessage}`);
+      } else {
+        throw new Error(errorMessage);
+      }
+    }
   }
 
   /**
