@@ -66,6 +66,7 @@ export const TEMPLATES = {
   DIALOG_SINGLE_CHOICE: `${basePathPresentation}/dialog/single-choice-dialog/single-choice-dialog.hbs`,
   DIALOG_ITEM_ADD: `${basePathPresentation}/dialog/dialog-item-add/dialog-item-add.hbs`,
   DIALOG_MIGRATOR: `${basePathPresentation}/dialog/migrator-dialog/migrator-dialog.hbs`,
+  DIALOG_DYNAMIC_INPUT: `${basePathPresentation}/dialog/dynamic-input-dialog/dynamic-input-dialog.hbs`,
   // --- Actor
   ACTOR_SHEET: `${basePathPresentation}/sheet/actor/actor-sheet.hbs`,
   ACTOR_ATTRIBUTE_TABLE: `${basePathPresentation}/sheet/actor/part/actor-attribute-table.hbs`,
