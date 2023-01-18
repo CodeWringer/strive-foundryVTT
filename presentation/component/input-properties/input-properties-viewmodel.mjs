@@ -112,6 +112,7 @@ export default class InputPropertiesViewModel extends InputViewModel {
       this.propertyViewModels,
       (args) => { return new InputPropertyPillViewModel({
         id: args.document.id,
+        parent: this,
         propertyPath: this.propertyPath,
         propertyOwner: this.propertyOwner,
         documentProperty: args.document,

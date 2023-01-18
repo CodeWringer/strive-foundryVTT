@@ -66,8 +66,8 @@ export default class InputPropertyPillViewModel extends ViewModel {
         if (index < 0) {
           game.ambersteel.logger.logWarn(`Attempting to delete document property '${thiz.documentProperty.id}' failed! Document property not on 'propertyOwner'`);
         } else {
-          const newProperties = properties.splice(index, 1);
-          setNestedPropertyValue(thiz.propertyOwner, thiz.propertyPath, newProperties);
+          properties.splice(index, 1);
+          setNestedPropertyValue(thiz.propertyOwner, thiz.propertyPath, properties);
         }
       }
     });
