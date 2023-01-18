@@ -26,67 +26,67 @@ import DocumentProperty from "../document-property.mjs";
 export const ASSET_PROPERTIES = {
   LONG_REACH: new DocumentProperty({
     id: "LONG_REACH",
-    localizableName: "ambersteel.asset.properties.longReach"
+    localizableName: "ambersteel.character.asset.properties.longReach"
   }),
   VERY_LONG_REACH: new DocumentProperty({
     id: "VERY_LONG_REACH",
-    localizableName: "ambersteel.asset.properties.veryLongReach"
+    localizableName: "ambersteel.character.asset.properties.veryLongReach"
   }),
   RANGE: new DocumentProperty({
     id: "RANGE",
-    localizableName: "ambersteel.asset.properties.range"
+    localizableName: "ambersteel.character.asset.properties.range"
   }),
   RANGE_ONLY: new DocumentProperty({
     id: "RANGE_ONLY",
-    localizableName: "ambersteel.asset.properties.rangeOnly"
+    localizableName: "ambersteel.character.asset.properties.rangeOnly"
   }),
   PREFER_RANGE: new DocumentProperty({
     id: "PREFER_RANGE",
-    localizableName: "ambersteel.asset.properties.preferRange"
+    localizableName: "ambersteel.character.asset.properties.preferRange"
   }),
   MELEE: new DocumentProperty({
     id: "MELEE",
-    localizableName: "ambersteel.asset.properties.melee"
+    localizableName: "ambersteel.character.asset.properties.melee"
   }),
   MELEE_ONLY: new DocumentProperty({
     id: "MELEE_ONLY",
-    localizableName: "ambersteel.asset.properties.meleeOnly"
+    localizableName: "ambersteel.character.asset.properties.meleeOnly"
   }),
   PREFER_MELEE: new DocumentProperty({
     id: "PREFER_MELEE",
-    localizableName: "ambersteel.asset.properties.preferMelee"
+    localizableName: "ambersteel.character.asset.properties.preferMelee"
   }),
   AMBERSTEEL_LINED: new DocumentProperty({
     id: "AMBERSTEEL_LINED",
-    localizableName: "ambersteel.asset.properties.ambersteelLined"
+    localizableName: "ambersteel.character.asset.properties.ambersteelLined"
   }),
   AMBERSTEEL_PLATED: new DocumentProperty({
     id: "AMBERSTEEL_PLATED",
-    localizableName: "ambersteel.asset.properties.ambersteelPlated"
+    localizableName: "ambersteel.character.asset.properties.ambersteelPlated"
   }),
   AMBERSTEEL_FORGED: new DocumentProperty({
     id: "AMBERSTEEL_FORGED",
-    localizableName: "ambersteel.asset.properties.ambersteelForged"
+    localizableName: "ambersteel.character.asset.properties.ambersteelForged"
   }),
   EXHAUSTING_TO_WIELD: new DocumentProperty({
     id: "EXHAUSTING_TO_WIELD",
-    localizableName: "ambersteel.asset.properties.exhaustingToWield"
+    localizableName: "ambersteel.character.asset.properties.exhaustingToWield"
   }),
   HOLDABLE: new DocumentProperty({
     id: "HOLDABLE",
-    localizableName: "ambersteel.asset.properties.holdable"
+    localizableName: "ambersteel.character.asset.properties.holdable"
   }),
   ARMOR: new DocumentProperty({
     id: "ARMOR",
-    localizableName: "ambersteel.asset.properties.armor"
+    localizableName: "ambersteel.character.asset.properties.armor"
   }),
   CLOTHING: new DocumentProperty({
     id: "CLOTHING",
-    localizableName: "ambersteel.asset.properties.clothing"
+    localizableName: "ambersteel.character.asset.properties.clothing"
   }),
   WEAPON: new DocumentProperty({
     id: "WEAPON",
-    localizableName: "ambersteel.asset.properties.weapon"
+    localizableName: "ambersteel.character.asset.properties.weapon"
   }),
   get asArray() { return getAsArray(this); }
 }
@@ -103,11 +103,11 @@ export const ASSET_PROPERTIES = {
 export const SKILL_PROPERTIES = {
   MAGIC_SCHOOL: new DocumentProperty({
     id: "MAGIC_SCHOOL",
-    localizableName: "ambersteel.skill.property.magicSchool"
+    localizableName: "ambersteel.character.skill.property.magicSchool"
   }),
   INNATE: new DocumentProperty({
     id: "INNATE",
-    localizableName: "ambersteel.skill.property.innate"
+    localizableName: "ambersteel.character.skill.property.innate"
   }),
   get asArray() { return getAsArray(this); }
 }

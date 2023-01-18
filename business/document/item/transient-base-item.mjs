@@ -42,7 +42,7 @@ export default class TransientBaseItem extends TransientDocument {
    * @type {Array<DocumentProperty>}
    */
   get properties() {
-    const ids = this.document.system.properties;
+    const ids = this.document.system.properties ?? [];
     const accepted = this.acceptedProperties;
     const result = [];
 
