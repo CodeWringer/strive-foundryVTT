@@ -46,7 +46,6 @@ import './presentation/component/input-dropdown/input-dropdown-viewmodel.mjs';
 import './presentation/component/input-number-spinner/input-number-spinner-viewmodel.mjs';
 import './presentation/component/input-textarea/input-textarea-viewmodel.mjs';
 import './presentation/component/input-radio-button-group/input-radio-button-group-viewmodel.mjs';
-import './presentation/component/item-grid/item-grid-view-viewmodel.mjs';
 import './presentation/component/button/button-viewmodel.mjs';
 import './presentation/component/button-add/button-add-viewmodel.mjs';
 import './presentation/component/button-delete/button-delete-viewmodel.mjs';

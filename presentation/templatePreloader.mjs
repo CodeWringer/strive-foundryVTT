@@ -31,7 +31,6 @@ export const TEMPLATES = {
   COMPONENT_INPUT_TEXTAREA: `${basePathComponent}/input-textarea/input-textarea.hbs`,
   COMPONENT_INPUT_RADIO_BUTTON_GROUP: `${basePathComponent}/input-radio-button-group/input-radio-button-group.hbs`,
   COMPONENT_INPUT_LABEL: `${basePathComponent}/label/label.hbs`,
-  COMPONENT_INPUT_ITEM_GRID_VIEW: `${basePathComponent}/item-grid/item-grid-view.hbs`,
   COMPONENT_INPUT_IMAGE: `${basePathComponent}/input-image/input-image.hbs`,
   COMPONENT_INPUT_RICH_TEXT: `${basePathComponent}/input-rich-text/input-rich-text.hbs`,
   COMPONENT_INPUT_PROPERTIES: `${basePathComponent}/input-properties/input-properties.hbs`,
