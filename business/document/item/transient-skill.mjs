@@ -16,6 +16,7 @@ import CharacterAttribute from "../../ruleset/attribute/character-attribute.mjs"
 import { ATTACK_TYPES } from "../../ruleset/skill/attack-types.mjs";
 import { ATTRIBUTES } from "../../ruleset/attribute/attributes.mjs";
 import { isObject } from "../../util/validation-utility.mjs";
+import { SKILL_PROPERTIES } from "./item-properties.mjs";
 
 /**
  * Represents the full transient data of a skill. 
@@ -118,6 +119,9 @@ export default class TransientSkill extends TransientBaseItem {
     this.updateByPath("system.isMagicSchool", value);
   }
   
+  /** @override */
+  get acceptedProperties() { return SKILL_PROPERTIES.asArray; }
+
   /**
    * @type {Array<SkillAbility>}
    */
