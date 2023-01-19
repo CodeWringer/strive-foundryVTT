@@ -121,6 +121,7 @@
           "query": "Confirm Deletion of Asset"
         },
         "bulk": "Bulk",
+        "maxBulk": "Maximum Bulk",
         "stats": "General Assets Stats",
         "singular": "Asset",
         "equipped": "Worn & Equipped",
@@ -157,6 +158,9 @@
           },
           "acceptedTypes": "Accepted Types",
           "armor": "Armor",
+          "assign": {
+            "label": "Assign Asset"
+          },
           "back": "Back",
           "clothing": "Clothing",
           "delete": {

@@ -19,11 +19,11 @@ import CharacterAssetSlot from "./character-asset-slot.mjs";
  * * Read-only. 
  */
 export default class CharacterAssetSlotGroup {
-  get _reference() { return this._actor.system.assets.equipment[this.id]; }
+  get _reference() { return this.actor.document.system.assets.equipment[this.id]; }
   get _path() { return `system.assets.equipment.${this.id}`; }
 
   get name() { return this._reference.name; }
-  set name(value) { this._actor.updateByPath(`${this._path}.name`, value); }
+  set name(value) { this.actor.updateByPath(`${this._path}.name`, value); }
 
   get slots() {
     const slots = this._reference.slots;
@@ -49,7 +49,7 @@ export default class CharacterAssetSlotGroup {
       };
     }
 
-    this._actor.updateByPath(`${this._path}.slots`, delta);
+    this.actor.updateByPath(`${this._path}.slots`, delta);
   }
 
   get maxBulk() {

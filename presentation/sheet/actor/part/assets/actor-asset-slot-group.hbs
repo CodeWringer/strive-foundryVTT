@@ -2,18 +2,31 @@
 viewModel: {ActorAssetSlotGroupViewModel}
 cssClass: {undefined | String}
 --}}
-<div class="ambersteel-asset-slot flex flex-column{{#if cssClass}} {{cssClass}}{{/if}}">
-  <div class="flex flex-row">
-    <h3>{{viewModel.localizedName}}</h3>
-    <div class="flex flex-row flex-grow flex-right">
-      <div>
-        {{#> button viewModel=viewModel.vmBtnAddSlot}}
-          <span{{#if ../viewModel.showFancyFont}} class="fancy-font"{{/if}}>{{../viewModel.localizedAddSlotLabel}}</span>
-          <div class="square-button-light flex flex-center">
-            <i class="fas fa-plus"></i>
-          </div>
-        {{/button}}
+<div class="ambersteel-asset-slot flex flex-column flex-grow{{#if cssClass}} {{cssClass}}{{/if}}">
+  {{!-- Header Row --}}
+  <div class="flex flex-row flex-grow">
+    <h3 class="flex flex-row flex-grow flex-middle">
+      <span class="width-min-xl">{{viewModel.localizedName}}</span>
+      <span style="width: 2rem"></span>
+      <div class="flex flex-row flex-middle font-size-sm">
+        <span>{{localize "ambersteel.character.asset.bulk"}}: {{viewModel.group.currentBulk}} / {{viewModel.group.maxBulk}}</span>
       </div>
+      <div class="flex flex-row flex-grow flex-right">
+        <div>
+          {{> buttonContextMenu viewModel=viewModel.vmBtnEdit}}
+        </div>
+      </div>
+    </h3>
+  </div>
+  {{!-- Assign Asset --}}
+  <div class="flex flex-row flex-grow{{#if viewModel.hasFreeSlot}}{{else}} hidden{{/if}}">
+    <div>
+      {{#> button viewModel=viewModel.vmBtnAssign}}
+        <span{{#if ../viewModel.showFancyFont}} class="fancy-font"{{/if}}>{{localize "ambersteel.character.asset.slot.assign.label"}}</span>
+        <div class="square-button-light flex flex-center">
+          <i class="fas fa-plus"></i>
+        </div>
+      {{/button}}
     </div>
   </div>
 </div>

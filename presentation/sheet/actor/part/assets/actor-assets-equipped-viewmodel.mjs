@@ -1,5 +1,6 @@
 import TransientBaseCharacterActor from "../../../../../business/document/actor/transient-base-character-actor.mjs";
 import * as StringUtil from "../../../../../business/util/string-utility.mjs";
+import { createUUID } from "../../../../../business/util/uuid-utility.mjs";
 import { validateOrThrow } from "../../../../../business/util/validation-utility.mjs"
 import ButtonViewModel from "../../../../component/button/button-viewmodel.mjs";
 import DynamicInputDefinition from "../../../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
@@ -7,6 +8,7 @@ import DynamicInputDialog from "../../../../dialog/dynamic-input-dialog/dynamic-
 import { DYNAMIC_INPUT_TYPES } from "../../../../dialog/dynamic-input-dialog/dynamic-input-types.mjs";
 import { TEMPLATES } from "../../../../templatePreloader.mjs"
 import ViewModel from "../../../../view-model/view-model.mjs"
+import ActorAssetSlotGroupViewModel from "./actor-asset-slot-group-viewmodel.mjs";
 
 /**
  * Represents the "Worn & Equipped" section on a character sheet. 
@@ -65,7 +67,6 @@ export default class ActorAssetsEquippedViewModel extends ViewModel {
       localizableTitle: "ambersteel.character.asset.slot.add.label",
       onClick: async () => {
         const inputName = "name";
-        const inputLocalizableName = "localizableName";
 
         const dialog = await new DynamicInputDialog({
           localizedTitle: StringUtil.format(
@@ -80,24 +81,22 @@ export default class ActorAssetsEquippedViewModel extends ViewModel {
               required: true,
               defaultValue: "New Asset Slot"
             }),
-            new DynamicInputDefinition({
-              type: DYNAMIC_INPUT_TYPES.TEXTFIELD,
-              name: inputLocalizableName,
-              localizableLabel: "ambersteel.character.asset.slot.acceptedTypes",
-              required: true,
-              defaultValue: "",
-              specificArgs: {
-                placeholder: "holdable, armor, clothing"
-              },
-            }),
           ],
         }).renderAndAwait(true);
         
         if (dialog.confirmed !== true) return;
         
-        this.document.addEquipmentAssetSlotGroup({
-          name: dialog[inputName],
-          localizableName: dialog[inputLocalizableName],
+        this.document.update({
+          system: {
+            assets: {
+              equipment: {
+                [createUUID()]: {
+                  name: dialog[inputName],
+                  slots: {}
+                }
+              }
+            }
+          }
         });
       },
     });
@@ -118,7 +117,9 @@ export default class ActorAssetsEquippedViewModel extends ViewModel {
   update(args = {}) {
     super.update(args);
 
-    this.assetSlotGroupViewModels = this._getAssetSlotGroupViewModels();
+    const newGroups = this._getAssetSlotGroupViewModels();
+    this._cullObsolete(this.assetSlotGroupViewModels, newGroups);
+    this.assetSlotGroupViewModels = newGroups;
   }
 
   /**
@@ -129,20 +130,20 @@ export default class ActorAssetsEquippedViewModel extends ViewModel {
   _getAssetSlotGroupViewModels() {
     const result = [];
 
-    const groups = this.document.assets.equipmentSlots;
+    const groups = this.document.assets.equipmentSlotGroups;
     for (const group of groups) {
-      // let vm = this.assetSlotGroupViewModels.find(it => it.id === assetSlot.id);
-      // if (vm === undefined) {
-      //   vm = new ActorAssetSlotViewModel({
-      //     id: assetSlot.id,
-      //     parent: this,
-      //     assetSlot: assetSlot,
-      //     isEditable: this.isEditable,
-      //     isSendable: this.isSendable,
-      //     isOwner: this.isOwner,
-      //   });
-      // }
-      // result.push(vm);
+      let vm = this.assetSlotGroupViewModels.find(it => it.id === group.id);
+      if (vm === undefined) {
+        vm = new ActorAssetSlotGroupViewModel({
+          id: group.id,
+          parent: this,
+          group: group,
+          isEditable: this.isEditable,
+          isSendable: this.isSendable,
+          isOwner: this.isOwner,
+        });
+      }
+      result.push(vm);
     }
 
     return result;
