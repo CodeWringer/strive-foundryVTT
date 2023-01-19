@@ -165,7 +165,8 @@
           "clothing": "Clothing",
           "delete": {
             "label": "Delete Asset Slot",
-            "query": "Confirm Deletion of Asset Slot"
+            "query": "Confirm Deletion of Asset Slot",
+            "queryOf": "Confirm Deletion of Asset Slot '%s'"
           },
           "edit": "Edit",
           "hand": "Hand",
@@ -178,7 +179,8 @@
             },
             "delete": {
               "label": "Delete Asset Slot Group",
-              "query": "Confirm Deletion of Asset Slot Group"
+              "query": "Confirm Deletion of Asset Slot Group",
+              "queryOf": "Confirm Deletion of Asset Slot Group '%s'"
             }
           }
         },

@@ -1,5 +1,6 @@
 import * as StringUtil from "../../../../../business/util/string-utility.mjs";
 import { isDefined, validateOrThrow } from "../../../../../business/util/validation-utility.mjs";
+import ButtonDeleteViewModel from "../../../../component/button-delete/button-delete-viewmodel.mjs";
 import ButtonViewModel from "../../../../component/button/button-viewmodel.mjs";
 import ChoiceAdapter from "../../../../component/input-choice/choice-adapter.mjs";
 import ChoiceOption from "../../../../component/input-choice/choice-option.mjs";
@@ -139,19 +140,18 @@ export default class ActorAssetSlotViewModel extends ViewModel {
         
         const asset = this.availableAssets.find(it => it.id === dialog[inputChoices]);
         
-        // // Deny, if maxbulk exceeded. 
-        // const newBulk = this.group.currentBulk + asset.bulk;
-        // if (newBulk > this.group.maxBulk) {
-        //   // TODO #196: Dialog to inform user.
-        //   return;
-        // }
-
-        // // Find vacant slots.
-        // let assignedBulk = 0;
-        // while (assignedBulk < asset.bulk) {
-          
-        // }
+        // TODO #196
       },
+    });
+
+    this.vmBtnDelete = new ButtonDeleteViewModel({
+      id: "vmBtnDelete",
+      parent: this,
+      isEditable: this.isEditable,
+      target: this.assetSlot,
+      withDialog: true,
+      localizableTitle: "ambersteel.character.asset.slot.delete.query",
+      localizableDialogTitle: "ambersteel.character.asset.slot.delete.queryOf",
     });
   }
   
