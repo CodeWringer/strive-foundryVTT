@@ -8,6 +8,7 @@ import DynamicInputDialog from "../../../../dialog/dynamic-input-dialog/dynamic-
 import { DYNAMIC_INPUT_TYPES } from "../../../../dialog/dynamic-input-dialog/dynamic-input-types.mjs";
 import { TEMPLATES } from "../../../../templatePreloader.mjs";
 import ViewModel from "../../../../view-model/view-model.mjs";
+import { queryAssetSlotConfiguration } from "./assets-utils.mjs";
 
 /**
  * @extends ViewModel
@@ -87,68 +88,8 @@ export default class ActorAssetSlotViewModel extends ViewModel {
       target: this.document,
       localizableTitle: "ambersteel.character.asset.slot.edit",
       onClick: async () => {
-        const inputName = "name";
-        const inputAcceptedTypes = "acceptedTypes";
-        const inputMaxBulk = "maxBulk";
-
-        const dialog = await new DynamicInputDialog({
-          localizedTitle: StringUtil.format(
-            game.i18n.localize("ambersteel.general.input.queryFor"), 
-            game.i18n.localize("ambersteel.character.asset.slot.label"), 
-          ),
-          inputDefinitions: [
-            new DynamicInputDefinition({
-              type: DYNAMIC_INPUT_TYPES.TEXTFIELD,
-              name: inputName,
-              localizableLabel: "ambersteel.character.asset.slot.name",
-              required: true,
-              defaultValue: this.assetSlot.name,
-            }),
-            new DynamicInputDefinition({
-              type: DYNAMIC_INPUT_TYPES.TEXTFIELD,
-              name: inputAcceptedTypes,
-              localizableLabel: "ambersteel.character.asset.slot.acceptedTypes",
-              required: true,
-              defaultValue: this.assetSlot.acceptedTypes.join(", "),
-              specificArgs: {
-                placeholder: "holdable, armor, ..."
-              },
-            }),
-            new DynamicInputDefinition({
-              type: DYNAMIC_INPUT_TYPES.NUMBER_SPINNER,
-              name: inputMaxBulk,
-              localizableLabel: "ambersteel.character.asset.maxBulk",
-              required: false,
-              defaultValue: this.assetSlot.maxBulk,
-              specificArgs: {
-                min: 1
-              },
-              validationFunc: (value) => {
-                try {
-                  const int = parseInt(value);
-                  if (int < 1) {
-                    return false;
-                  }
-                  return true;
-                } catch {
-                  return false;
-                }
-              },
-            }),
-          ],
-        }).renderAndAwait(true);
-        
-        if (dialog.confirmed !== true) return;
-
-        const name = dialog[inputName];
-        const acceptedTypes = dialog[inputAcceptedTypes].split(",").trim();
-        const maxBulk = parseInt(dialog[inputMaxBulk]);
-
-        this.assetSlot.update({
-          name: name,
-          acceptedTypes: acceptedTypes,
-          maxBulk: maxBulk,
-        });
+        const delta = await queryAssetSlotConfiguration(this.assetSlot);
+        await this.assetSlot.update(delta);
       },
     });
 
