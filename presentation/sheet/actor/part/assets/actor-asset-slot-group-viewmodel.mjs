@@ -218,6 +218,17 @@ export default class ActorAssetSlotGroupViewModel extends ViewModel {
           specificArgs: {
             min: 1
           },
+          validationFunc: (value) => {
+            try {
+              const int = parseInt(value);
+              if (int < 1) {
+                return false;
+              }
+              return true;
+            } catch {
+              return false;
+            }
+          },
         }),
       ],
     }).renderAndAwait(true);
