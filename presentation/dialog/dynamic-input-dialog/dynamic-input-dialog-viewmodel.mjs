@@ -10,6 +10,7 @@ import InputRichTextViewModel from "../../component/input-rich-text/input-rich-t
 import InputTextareaViewModel from "../../component/input-textarea/input-textarea-viewmodel.mjs";
 import InputTextFieldViewModel from "../../component/input-textfield/input-textfield-viewmodel.mjs";
 import { isBlankOrUndefined } from "../../../business/util/validation-utility.mjs";
+import { isDefined } from "../../../business/util/validation-utility.mjs";
 
 /**
  * @property {Array<DynamicInputDefinition>} inputDefinitions
@@ -106,9 +107,18 @@ export default class DynamicInputDialogViewModel extends ViewModel {
         throw new Error(`Invalid input type: "${definition.type}"`);
       }
 
+      let validationFunc = definition.validationFunc;
+      if (validationFunc === undefined && definition.required === true) {
+        // Fallback function, for a required field only. 
+        validationFunc = (value) => {
+          return isBlankOrUndefined(value) === false;
+        };
+      }
+
       this.controls.push(new DynamicInputDialogControl({
         definition: definition,
         viewModel: viewModel,
+        validationFunc: validationFunc,
       }));
     }
   }
@@ -130,34 +140,10 @@ export default class DynamicInputDialogViewModel extends ViewModel {
     let allValid = true;
 
     for (const control of this.controls) {
-      if (control.definition.required !== true) continue;
-
       const value = control.viewModel.value;
       let controlValidated = true;
-      if (control.definition.type === DYNAMIC_INPUT_TYPES.DROP_DOWN) {
-        // TODO #196
-      } else if (control.definition.type === DYNAMIC_INPUT_TYPES.IMAGE) {
-        if (isBlankOrUndefined(value) === true) {
-          controlValidated = false;
-        }
-      } else if (control.definition.type === DYNAMIC_INPUT_TYPES.NUMBER_SPINNER) {
-        if (isBlankOrUndefined(value) === true) {
-          controlValidated = false;
-        }
-      } else if (control.definition.type === DYNAMIC_INPUT_TYPES.RADIO_BUTTONS) {
-        // TODO #196
-      } else if (control.definition.type === DYNAMIC_INPUT_TYPES.RICH_TEXT) {
-        if (isBlankOrUndefined(value) === true) {
-          controlValidated = false;
-        }
-      } else if (control.definition.type === DYNAMIC_INPUT_TYPES.TEXTAREA) {
-        if (isBlankOrUndefined(value) === true) {
-          controlValidated = false;
-        }
-      } else if (control.definition.type === DYNAMIC_INPUT_TYPES.TEXTFIELD) {
-        if (isBlankOrUndefined(value) === true) {
-          controlValidated = false;
-        }
+      if (isDefined(control.validationFunc) === true && control.validationFunc(value) === false) {
+        controlValidated = false;
       }
 
       validations.push({
@@ -188,11 +174,16 @@ class DynamicInputDialogControl {
    * @param {Object} args 
    * @param {DynamicInputDefinition} args.definition
    * @param {ViewModel} args.viewModel
+   * @param {Function | undefined} args.validationFunc A validation function. 
+   * * Receives the current value of the control as its input and must return a boolean 
+   * value. `true` signalizes a successful validation without errors, while `false` 
+   * indicates validation failed. 
    */
   constructor(args = {}) {
     validateOrThrow(args, ["definition", "viewModel"]);
 
     this.definition = args.definition;
     this.viewModel = args.viewModel;
+    this.validationFunc = args.validationFunc;
   }
 }

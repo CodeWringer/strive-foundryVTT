@@ -15,6 +15,10 @@ import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
  * input, to allow dialog confirmation. 
  * @property {Any | undefined} defaultValue A default value to initialize the 
  * input control with. 
+ * @property {Function | undefined} validationFunc A validation function. 
+ * * Receives the current value of the control as its input and must return a boolean 
+ * value. `true` signalizes a successful validation without errors, while `false` 
+ * indicates validation failed. 
  */
 export default class DynamicInputDefinition {
   get localizedLabel() {
@@ -34,11 +38,15 @@ export default class DynamicInputDefinition {
    * label. 
    * @param {Object | undefined} args.specificArgs Arguments specific to the type 
    * of represented input control. 
-   * @param {Boolean | undefined} required If true, the represented input must have a valid 
+   * @param {Boolean | undefined} args.required If true, the represented input must have a valid 
    * input, to allow dialog confirmation. 
    * * Default `false`. 
-   * @param {Any | undefined} defaultValue A default value to initialize the 
+   * @param {Any | undefined} args.defaultValue A default value to initialize the 
    * input control with. 
+   * @param {Function | undefined} args.validationFunc A validation function. 
+   * * Receives the current value of the control as its input and must return a boolean 
+   * value. `true` signalizes a successful validation without errors, while `false` 
+   * indicates validation failed. 
    */
   constructor(args = {}) {
     validateOrThrow(args, ["type", "name"]);
@@ -49,5 +57,6 @@ export default class DynamicInputDefinition {
     this.specificArgs = args.specificArgs ?? {};
     this.required = args.required ?? false;
     this.defaultValue = args.defaultValue;
+    this.validationFunc = args.validationFunc;
   }
 }

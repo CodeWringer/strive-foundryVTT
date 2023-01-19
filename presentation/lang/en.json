@@ -57,7 +57,7 @@
       "edit": "Edit",
       "increment": "Increment",
       "input": {
-        "requiredMissing": "The following required fields must not be left empty",
+        "validationFailed": "The following required fields failed validation. Ensure required fields have a valid value.",
         "query": "Provide Data",
         "queryFor": "Provide Data for %s"
       },
