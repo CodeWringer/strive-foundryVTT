@@ -1,0 +1,19 @@
+{{!-- Parameters:
+viewModel: {ActorAssetSlotGroupViewModel}
+cssClass: {undefined | String}
+--}}
+<div class="ambersteel-asset-slot flex flex-column{{#if cssClass}} {{cssClass}}{{/if}}">
+  <div class="flex flex-row">
+    <h3>{{viewModel.localizedName}}</h3>
+    <div class="flex flex-row flex-grow flex-right">
+      <div>
+        {{#> button viewModel=viewModel.vmBtnAddSlot}}
+          <span{{#if ../viewModel.showFancyFont}} class="fancy-font"{{/if}}>{{../viewModel.localizedAddSlotLabel}}</span>
+          <div class="square-button-light flex flex-center">
+            <i class="fas fa-plus"></i>
+          </div>
+        {{/button}}
+      </div>
+    </div>
+  </div>
+</div>

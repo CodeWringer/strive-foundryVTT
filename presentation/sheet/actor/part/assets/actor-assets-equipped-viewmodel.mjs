@@ -24,13 +24,13 @@ export default class ActorAssetsEquippedViewModel extends ViewModel {
    * @type {String}
    * @readonly
    */
-  get assetTemplate() { return TEMPLATES.ACTOR_ASSET_SLOT; }
+  get assetSlotGroupTemplate() { return TEMPLATES.ACTOR_ASSET_SLOT_GROUP; }
   
   /**
    * @type {String}
    * @readonly
    */
-  get localizedAddSlotLabel() { return game.i18n.localize("ambersteel.character.asset.slot.add.label"); }
+  get localizedAddSlotGroupLabel() { return game.i18n.localize("ambersteel.character.asset.slot.group.add.label"); }
 
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
@@ -52,11 +52,11 @@ export default class ActorAssetsEquippedViewModel extends ViewModel {
 
     this.document = args.document;
 
-    this.assetSlotViewModels = [];
-    this.assetSlotViewModels = this._getAssetSlotViewModels();
+    this.assetSlotGroupViewModels = [];
+    this.assetSlotGroupViewModels = this._getAssetSlotGroupViewModels();
 
-    this.vmBtnAddSlot = new ButtonViewModel({
-      id: "vmBtnAddSlot",
+    this.vmBtnAddSlotGroup = new ButtonViewModel({
+      id: "vmBtnAddSlotGroup",
       parent: this,
       isSendable: this.isSendable,
       isEditable: this.isEditable,
@@ -64,25 +64,25 @@ export default class ActorAssetsEquippedViewModel extends ViewModel {
       target: this.document,
       localizableTitle: "ambersteel.character.asset.slot.add.label",
       onClick: async () => {
-        const inputNameCustomName = "customName";
-        const inputNameAcceptedTypes = "acceptedTypes";
+        const inputName = "name";
+        const inputLocalizableName = "localizableName";
 
         const dialog = await new DynamicInputDialog({
           localizedTitle: StringUtil.format(
             game.i18n.localize("ambersteel.general.input.queryFor"), 
-            game.i18n.localize("ambersteel.character.asset.slot.label"), 
+            game.i18n.localize("ambersteel.character.asset.slot.group.label"), 
           ),
           inputDefinitions: [
             new DynamicInputDefinition({
               type: DYNAMIC_INPUT_TYPES.TEXTFIELD,
-              name: inputNameCustomName,
+              name: inputName,
               localizableLabel: "ambersteel.character.asset.slot.name",
               required: true,
               defaultValue: "New Asset Slot"
             }),
             new DynamicInputDefinition({
               type: DYNAMIC_INPUT_TYPES.TEXTFIELD,
-              name: inputNameAcceptedTypes,
+              name: inputLocalizableName,
               localizableLabel: "ambersteel.character.asset.slot.acceptedTypes",
               required: true,
               defaultValue: "",
@@ -94,9 +94,10 @@ export default class ActorAssetsEquippedViewModel extends ViewModel {
         }).renderAndAwait(true);
         
         if (dialog.confirmed !== true) return;
-        this.document.addEquipmentAssetSlot({
-          customName: dialog[inputNameCustomName],
-          acceptedTypes: dialog[inputNameAcceptedTypes],
+        
+        this.document.addEquipmentAssetSlotGroup({
+          name: dialog[inputName],
+          localizableName: dialog[inputLocalizableName],
         });
       },
     });
@@ -117,7 +118,7 @@ export default class ActorAssetsEquippedViewModel extends ViewModel {
   update(args = {}) {
     super.update(args);
 
-    this.assetSlotViewModels = this._getAssetSlotViewModels();
+    this.assetSlotGroupViewModels = this._getAssetSlotGroupViewModels();
   }
 
   /**
@@ -125,12 +126,12 @@ export default class ActorAssetsEquippedViewModel extends ViewModel {
    * 
    * @private
    */
-  _getAssetSlotViewModels() {
+  _getAssetSlotGroupViewModels() {
     const result = [];
 
     const groups = this.document.assets.equipmentSlots;
     for (const group of groups) {
-      // let vm = this.assetSlotViewModels.find(it => it.id === assetSlot.id);
+      // let vm = this.assetSlotGroupViewModels.find(it => it.id === assetSlot.id);
       // if (vm === undefined) {
       //   vm = new ActorAssetSlotViewModel({
       //     id: assetSlot.id,

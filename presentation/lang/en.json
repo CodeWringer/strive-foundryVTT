@@ -166,7 +166,17 @@
           "edit": "Edit",
           "hand": "Hand",
           "label": "Asset Slot",
-          "name": "Name"
+          "name": "Name",
+          "group": {
+            "label": "Asset Slot Group",
+            "add": {
+              "label": "Add Asset Slot Group"
+            },
+            "delete": {
+              "label": "Delete Asset Slot Group",
+              "query": "Confirm Deletion of Asset Slot Group"
+            }
+          }
         },
         "quantity": {
           "label": "Quantity",

@@ -57,11 +57,11 @@ import TransientBaseActor from './transient-base-actor.mjs';
  * * Read-only. 
  * @property {Object} assets
  * * Read-only. 
+ * @property {Array<CharacterAssetSlotGroup>} assets.equipmentSlotGroups 
+ * * Read-only. 
  * @property {Array<TransientAsset>} assets.all 
  * * Read-only. 
- * @property {Array<CharacterAssetSlotGroup>} assets.equipmentSlots 
- * * Read-only. 
- * @property {Array<TransientAsset>} assets.equipped 
+ * @property {Array<TransientAsset>} assets.equipment 
  * * Read-only. 
  * @property {Array<TransientAsset>} assets.luggage 
  * * Read-only. 
@@ -154,9 +154,9 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
     return {
       get all() { return thiz._allAssets; },
       
-      get equipmentSlots() { return thiz._equipmentSlots; },
+      get equipmentSlotGroups() { return thiz._equipmentSlotGroups; },
 
-      get equipped() { return thiz._equippedAssets; },
+      get equipment() { return thiz._equipmentAssets; },
       
       get luggage() { return thiz._luggageAssets; },
       
@@ -297,27 +297,6 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
   }
 
   /**
-   * Adds a new equipment asset slot with the given parameters. 
-   * 
-   * @param {Object} args 
-   * @param {String | undefined} args.customName A user-defined name. 
-   * @param {String | undefined} args.localizableName Localization key. 
-   * @param {Array<String> | undefined} args.acceptedTypes An array of asset type names that this 
-   * slot may hold. E. g. `["clothing"]`
-   * @param {String | undefined} args.alottedId If not null, the ID of an asset document 
-   * that has been alotted to this slot. 
-   */
-  addEquipmentAssetSlot(args = {}) {
-    const id = createUUID();
-    this.updateByPath(`system.assets.equipped.${id}`, {
-      customName: args.customName,
-      localizableName: args.localizableName,
-      acceptedTypes: args.acceptedTypes ?? [],
-      alottedId: args.alottedId ?? null,
-    });
-  }
-
-  /**
    * Returns the grouped attributes of the character. 
    * 
    * @returns {Array<CharacterAttributeGroup>}
@@ -363,20 +342,20 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
    */
   _prepareAssetsData() {
     this._allAssets = this.items.filter(it => it.type === "item");
-    this._equipmentSlots = this._getEquipmentSlots();
+    this._equipmentSlotGroups = this._getEquipmentSlotGroups();
 
     // Worn & Equipped
-    const equippedIds = [];
-    const equippedAssets = [];
-    for (const group in this._equipmentSlots) {
+    const equipmentIds = [];
+    const equipmentAssets = [];
+    for (const group in this._equipmentSlotGroups) {
       for (const slot in group.slots) {
         if (isDefined(slot.alottedId) === true) {
-          equippedIds.push(slot.alottedId);
+          equipmentIds.push(slot.alottedId);
           const asset = this._allAssets.find(asset => asset.id === id);
           if (asset === undefined) {
             game.ambersteel.logger.logWarn("NullReferenceException: equipped asset could not be found on actor");
           } else {
-            equippedAssets.push(asset);
+            equipmentAssets.push(asset);
           }
         }
       }
@@ -413,12 +392,12 @@ this.updateByPath("")
     // Property
     const propertyAssets = [];
     for (const asset of this._allAssets) {
-      if (equippedIds.indexOf(asset.id) < 0 && luggageIds.indexOf(asset.id) < 0) {
+      if (equipmentIds.indexOf(asset.id) < 0 && luggageIds.indexOf(asset.id) < 0) {
         propertyAssets.push(asset);
       }
     }
 
-    this._equippedAssets = equippedAssets;
+    this._equipmentAssets = equipmentAssets;
     this._luggageAssets = luggageAssets;
     this._propertyAssets = propertyAssets;
   }
@@ -430,29 +409,18 @@ this.updateByPath("")
    * 
    * @private
    */
-  _getEquipmentSlots() {
+  _getEquipmentSlotGroups() {
     const result = [];
 
-    const equipped = this.document.system.assets.equipped;
-    for (const id in equipped) {
-      if (equipped.hasOwnProperty(id) !== true) continue;
+    const groups = this.document.system.assets.equipment;
+    for (const groupId in groups) {
+      if (groups.hasOwnProperty(groupId) !== true) continue;
 
-      const assetSlot = new CharacterAssetSlot({
-        actor: this.document,
-        id: id,
+      const assetSlotGroup = new CharacterAssetSlotGroup({
+        actor: this,
+        id: groupId,
       });
-
-      let group = result.find(it => it.name === assetSlot.name);
-      if (group === undefined) {
-        group = new CharacterAssetSlotGroup({
-          name: assetSlot.name ?? createUUID(),
-          localizableName: assetSlot.localizableName,
-          slots: [assetSlot],
-        });
-        result.push(group);
-      } else {
-        group.slots.push(assetSlot);
-      }
+      result.push(assetSlotGroup);
     }
 
     return result;

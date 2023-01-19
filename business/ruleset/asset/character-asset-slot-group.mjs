@@ -1,10 +1,15 @@
+import { createUUID } from "../../util/uuid-utility.mjs";
 import { validateOrThrow } from "../../util/validation-utility.mjs";
+import CharacterAssetSlot from "./character-asset-slot.mjs";
 
 /**
  * Represents a grouping of asset slots of a character. 
  * 
- * @property {String} name Name of the group. 
- * @property {String | undefined} localizableName Localization key. 
+ * @property {TransientBaseCharacterActor} actor The underlying actor. 
+ * * Read-only. 
+ * @property {String} id Unique ID. 
+ * * Read-only. 
+ * @property {String | undefined} name Name of the group. 
  * @property {Array<CharacterAssetSlot>} slots The asset slots this group holds. 
  * @property {Number} maxBulk The maximum bulk that all the slots within this 
  * group can hold, in total. 
@@ -14,6 +19,39 @@ import { validateOrThrow } from "../../util/validation-utility.mjs";
  * * Read-only. 
  */
 export default class CharacterAssetSlotGroup {
+  get _reference() { return this._actor.system.assets.equipment[this.id]; }
+  get _path() { return `system.assets.equipment.${this.id}`; }
+
+  get name() { return this._reference.name; }
+  set name(value) { this._actor.updateByPath(`${this._path}.name`, value); }
+
+  get slots() {
+    const slots = this._reference.slots;
+    const result = [];
+    for (const slotId in slots) {
+      if (slots.hasOwnProperty(slotId) !== true) continue;
+
+      result.push(new CharacterAssetSlot({
+        id: slotId,
+        group: this,
+      }));
+    }
+    return result;
+  }
+  set slots(value) {
+    const delta = {};
+    for (const slot of value) {
+      delta[slot.id] = {
+        name: slot.name,
+        acceptedTypes: slot.acceptedTypes,
+        alottedId: slot.alottedId,
+        maxBulk: slot.maxBulk,
+      };
+    }
+
+    this._actor.updateByPath(`${this._path}.slots`, delta);
+  }
+
   get maxBulk() {
     let result = 0;
     for (const slot of this.slots) {
@@ -34,15 +72,13 @@ export default class CharacterAssetSlotGroup {
 
   /**
    * @param {Object} args
-   * @param {String} args.name Name of the group. 
-   * @param {String | undefined} args.localizableName Localization key. 
-   * @param {Array<CharacterAssetSlot> | undefined} args.slots The asset slots this group holds. 
+   * @param {TransientBaseCharacterActor} args.actor 
+   * @param {String | undefined} args.id Unique ID. 
    */
   constructor(args = {}) {
-    validateOrThrow(args, ["name"]);
+    validateOrThrow(args, ["actor"]);
 
-    this.name = args.name;
-    this.localizableName = args.localizableName;
-    this.slots = args.slots ?? [];
+    this.actor = args.actor;
+    this.id = args.id ?? createUUID();
   }
 }
