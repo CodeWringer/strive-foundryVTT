@@ -1,7 +1,9 @@
+import * as StringUtil from "../../../../../business/util/string-utility.mjs";
 import { createUUID } from "../../../../../business/util/uuid-utility.mjs";
 import { isDefined } from "../../../../../business/util/validation-utility.mjs";
 import { validateOrThrow } from "../../../../../business/util/validation-utility.mjs";
 import ButtonContextMenuViewModel from "../../../../component/button-context-menu/button-context-menu-viewmodel.mjs";
+import ConfirmablePlainDialog from "../../../../dialog/plain-confirmable-dialog/plain-confirmable-dialog.mjs";
 import ViewModel from "../../../../view-model/view-model.mjs";
 import ActorAssetSlotViewModel from "./actor-asset-slot-viewmodel.mjs";
 import { queryAssetSlotConfiguration } from "./assets-utils.mjs";
@@ -105,7 +107,25 @@ export default class ActorAssetSlotGroupViewModel extends ViewModel {
               maxBulk: data.maxBulk,
             });
           },
-        }
+        },
+        {
+          name: game.i18n.localize("ambersteel.character.asset.slot.group.delete.label"),
+          icon: '<i class="fas fa-trash"></i>',
+          condition: () => { return true; },
+          callback: async () => {
+            const dialog = await new ConfirmablePlainDialog({
+              localizedTitle: game.i18n.localize("ambersteel.general.delete.query"),
+              localizedContent: StringUtil.format(
+                game.i18n.localize("ambersteel.character.asset.slot.group.delete.queryOf"), 
+                thiz.group.name
+              ),
+            }).renderAndAwait(true);
+
+            if (dialog.confirmed !== true) return;
+
+            thiz.group.delete();
+          },
+        },
       ],
     });
     this.assetSlotViewModels = [];
