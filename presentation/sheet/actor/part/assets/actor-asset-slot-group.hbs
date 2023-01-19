@@ -18,15 +18,10 @@ cssClass: {undefined | String}
       </div>
     </h3>
   </div>
-  {{!-- Assign Asset --}}
-  <div class="flex flex-row flex-grow{{#if viewModel.hasFreeSlot}}{{else}} hidden{{/if}}">
-    <div>
-      {{#> button viewModel=viewModel.vmBtnAssign}}
-        <span{{#if ../viewModel.showFancyFont}} class="fancy-font"{{/if}}>{{localize "ambersteel.character.asset.slot.assign.label"}}</span>
-        <div class="square-button-light flex flex-center">
-          <i class="fas fa-plus"></i>
-        </div>
-      {{/button}}
-    </div>
-  </div>
+  {{!-- Slots --}}
+  {{#each viewModel.assetSlotViewModels as |vm key|}}
+  {{#with ../viewModel.assetSlotTemplate as | template |}}
+    {{> (template) viewModel=vm}}
+  {{/with}}
+  {{/each}}
 </div>

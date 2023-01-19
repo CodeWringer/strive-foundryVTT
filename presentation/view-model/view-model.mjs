@@ -577,6 +577,7 @@ export default class ViewModel {
         vm = factoryFunc({
           id: document.id,
           document: document,
+          parent: this,
           isEditable: this.isEditable,
           isSendable: this.isSendable,
           isOwner: this.isOwner,

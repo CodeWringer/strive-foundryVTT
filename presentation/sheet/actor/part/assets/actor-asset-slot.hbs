@@ -3,8 +3,22 @@ viewModel: {ActorAssetSlotViewModel}
 cssClass: {undefined | String}
 --}}
 <div class="ambersteel-asset-slot flex flex-column{{#if cssClass}} {{cssClass}}{{/if}}">
+  {{!-- Header Row --}}
   <div class="flex flex-row">
-    <h3>{{viewModel.localizedName}}</h3>
+    {{!-- Assign Asset --}}
+    <div>
+      {{#> button viewModel=viewModel.vmBtnAssign}}
+        <span{{#if ../viewModel.showFancyFont}} class="fancy-font"{{/if}}>{{localize "ambersteel.character.asset.slot.assign.label"}}</span>
+        <div class="square-button-light flex flex-center">
+          <i class="fas fa-plus"></i>
+        </div>
+      {{/button}}
+    </div>
+    <div style="width: 50px"></div>
+    <div class="flex flex-row flex-middle font-size-xs">
+      <span>{{localize "ambersteel.character.asset.bulk"}}: {{viewModel.currentBulk}} / {{viewModel.maxBulk}}</span>
+    </div>
+    <div class="flex flex-grow"></div>
     {{#> button viewModel=viewModel.vmBtnEdit}}
       <div class="square-button-light flex flex-center">
         <i class="fas fa-cog"></i>

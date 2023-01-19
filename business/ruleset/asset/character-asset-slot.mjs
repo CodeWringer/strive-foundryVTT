@@ -56,4 +56,17 @@ export default class CharacterAssetSlot {
     this._actor = this.group.actor;
     this.id = args.id ?? createUUID();
   }
+
+  /**
+   * Persists the given data delta to the data base. 
+   * 
+   * @param {Object} delta 
+   * @param {String | undefined} delta.name
+   * @param {Array<String> | undefined} delta.acceptedTypes
+   * @param {String | undefined} delta.alottedId
+   * @param {Number | undefined} delta.maxBulk
+   */
+  update(delta = {}) {
+    this._actor.updateByPath(this._path, delta);
+  }
 }
