@@ -171,7 +171,6 @@
           "edit": "Edit",
           "hand": "Hand",
           "label": "Asset Slot",
-          "name": "Name",
           "group": {
             "label": "Asset Slot Group",
             "add": {
