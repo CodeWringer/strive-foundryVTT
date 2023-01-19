@@ -90,8 +90,19 @@ export default class CharacterAssetSlotGroup {
    * @param {Array<Object> | undefined} delta.slots
    * * The objects are based on `CharacterAssetSlot`. See its `update`
    * -method for further details.
+   * 
+   * @async
    */
-  update(delta = {}) {
-    this.actor.updateByPath(this._path, delta);
+  async update(delta = {}) {
+    await this.actor.updateByPath(this._path, delta);
+  }
+  
+  /**
+   * Deletes this asset slot group from the data base. 
+   * 
+   * @async
+   */
+  async delete() {
+    await this.actor.deleteByPath(this._path);
   }
 }

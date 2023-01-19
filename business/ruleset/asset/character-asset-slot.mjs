@@ -65,8 +65,19 @@ export default class CharacterAssetSlot {
    * @param {Array<String> | undefined} delta.acceptedTypes
    * @param {String | undefined} delta.alottedId
    * @param {Number | undefined} delta.maxBulk
+   * 
+   * @async
    */
-  update(delta = {}) {
-    this._actor.updateByPath(this._path, delta);
+  async update(delta = {}) {
+    await this._actor.updateByPath(this._path, delta);
+  }
+
+  /**
+   * Deletes this asset slot from the data base. 
+   * 
+   * @async
+   */
+  async delete() {
+    await this._actor.deleteByPath(this._path);
   }
 }
