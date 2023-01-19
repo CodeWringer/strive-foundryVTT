@@ -1,13 +1,10 @@
-import * as StringUtil from "../../../../../business/util/string-utility.mjs";
 import { createUUID } from "../../../../../business/util/uuid-utility.mjs";
 import { isDefined } from "../../../../../business/util/validation-utility.mjs";
 import { validateOrThrow } from "../../../../../business/util/validation-utility.mjs";
 import ButtonContextMenuViewModel from "../../../../component/button-context-menu/button-context-menu-viewmodel.mjs";
-import DynamicInputDefinition from "../../../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
-import DynamicInputDialog from "../../../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
-import { DYNAMIC_INPUT_TYPES } from "../../../../dialog/dynamic-input-dialog/dynamic-input-types.mjs";
 import ViewModel from "../../../../view-model/view-model.mjs";
 import ActorAssetSlotViewModel from "./actor-asset-slot-viewmodel.mjs";
+import { queryAssetSlotConfiguration } from "./assets-utils.mjs";
 
 /**
  * @extends ViewModel
@@ -98,7 +95,15 @@ export default class ActorAssetSlotGroupViewModel extends ViewModel {
           icon: '<i class="fas fa-plus"></i>',
           condition: () => { return true; },
           callback: async () => {
-            thiz._queryAddSlot();
+            const data = await queryAssetSlotConfiguration({
+              name: this.group.name,
+            });
+            await this.group.actor.updateByPath(`system.assets.equipment.${this.group.id}.slots.${createUUID()}`, {
+              name: data.name,
+              acceptedTypes: data.acceptedTypes,
+              alottedId: null,
+              maxBulk: data.maxBulk,
+            });
           },
         }
       ],
@@ -138,76 +143,5 @@ export default class ActorAssetSlotGroupViewModel extends ViewModel {
         isOwner: this.isOwner,
       }); }
     );
-  }
-
-  /**
-   * Queries the user for data for a new asset slot to add to the represented 
-   * asset slot group. 
-   * 
-   * If the user confirms, the asset slot is created and added to the group. 
-   * 
-   * @async
-   * @private
-   */
-  async _queryAddSlot() {
-    const inputName = "name";
-    const inputAcceptedTypes = "acceptedTypes";
-    const inputMaxBulk = "maxBulk";
-
-    const dialog = await new DynamicInputDialog({
-      localizedTitle: StringUtil.format(
-        game.i18n.localize("ambersteel.general.input.queryFor"), 
-        game.i18n.localize("ambersteel.character.asset.slot.label"), 
-      ),
-      inputDefinitions: [
-        new DynamicInputDefinition({
-          type: DYNAMIC_INPUT_TYPES.TEXTFIELD,
-          name: inputName,
-          localizableLabel: "ambersteel.character.asset.slot.name",
-          required: true,
-          defaultValue: "New Asset Slot"
-        }),
-        new DynamicInputDefinition({
-          type: DYNAMIC_INPUT_TYPES.TEXTFIELD,
-          name: inputAcceptedTypes,
-          localizableLabel: "ambersteel.character.asset.slot.acceptedTypes",
-          required: true,
-          defaultValue: "",
-          specificArgs: {
-            placeholder: "holdable, armor, clothing"
-          },
-        }),
-        new DynamicInputDefinition({
-          type: DYNAMIC_INPUT_TYPES.NUMBER_SPINNER,
-          name: inputMaxBulk,
-          localizableLabel: "ambersteel.character.asset.maxBulk",
-          required: false,
-          defaultValue: 1,
-          specificArgs: {
-            min: 1
-          },
-          validationFunc: (value) => {
-            try {
-              const int = parseInt(value);
-              if (int < 1) {
-                return false;
-              }
-              return true;
-            } catch {
-              return false;
-            }
-          },
-        }),
-      ],
-    }).renderAndAwait(true);
-    
-    if (dialog.confirmed !== true) return;
-
-    this.group.actor.updateByPath(`system.assets.equipment.${this.group.id}.slots.${createUUID()}`, {
-      name: dialog[inputName],
-      acceptedTypes: dialog[inputAcceptedTypes],
-      alottedId: null,
-      maxBulk: dialog[inputMaxBulk],
-    });
   }
 }
