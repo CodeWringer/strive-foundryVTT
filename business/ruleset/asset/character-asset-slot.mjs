@@ -40,7 +40,7 @@ export default class CharacterAssetSlot {
     if (this.alottedId === null) {
       return undefined;
     } else {
-      return this._actor.assets.equipment.find(it => it.id === this.alottedId);
+      return this._actor.assets.all.find(it => it.id === this.alottedId);
     }
   }
 

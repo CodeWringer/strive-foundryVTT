@@ -138,7 +138,7 @@ export default class ActorAssetSlotViewModel extends ViewModel {
               name: inputChoices,
               localizableLabel: "ambersteel.general.name",
               required: true,
-              defaultValue: undefined,
+              defaultValue: (thiz.availableAssets[0] ?? {}).id,
               specificArgs: {
                 options: this._getAssetsAsChoices(),
                 adapter: this.choiceAdapter,
@@ -149,7 +149,7 @@ export default class ActorAssetSlotViewModel extends ViewModel {
         
         if (dialog.confirmed !== true) return;
         
-        this.assetSlot.alottedId = dialog[inputChoices].selected.value;
+        this.assetSlot.alottedId = dialog[inputChoices];
       },
     });
 
@@ -183,7 +183,7 @@ export default class ActorAssetSlotViewModel extends ViewModel {
       this.assetListItemViewModel.dispose();
     }
     if (isDefined(this.assetSlot.alottedId) === true) {
-      this.assetListItemViewModel.parent = new AssetListItemViewModel({
+      this.assetListItemViewModel = new AssetListItemViewModel({
         id: "assetListItemViewModel",
         parent: this,
         document: this.assetSlot.asset,
