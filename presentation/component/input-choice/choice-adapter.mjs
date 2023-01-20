@@ -15,7 +15,7 @@ export default class ChoiceAdapter {
   }
 
   /**
-   * Returns a `ChoiceOption`, based on the given object. 
+   * Converts a business object to a `ChoiceOption` and returns it. 
    * 
    * @param {Any} obj 
    * 
@@ -28,15 +28,16 @@ export default class ChoiceAdapter {
   }
 
   /**
-   * Returns an object, based on the given `ChoiceOption`.
+   * Converts a `ChoiceOption` to a business object and returns it. 
    * 
-   * @param {ChoiceOption} option
+   * @param {ChoiceOption} choice
+   * @param {Array<Any>} items
    * 
    * @returns {Any}
    * 
    * @abstract
    */
-  fromChoiceOption(option) {
+  fromChoiceOption(choice, items) {
     throw new Error("NotImplementedException");
   }
 }
