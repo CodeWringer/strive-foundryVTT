@@ -350,11 +350,12 @@ export default class ViewModel {
    * @virtual
    */
   dispose() {
+    this.parent = undefined;
+
     // First of all, dispose of children. 
     if (this.children !== undefined && this.children !== null) {
       for (const child of this.children) {
         try {
-          child.parent = undefined;
           child.dispose();
         } catch (error) {
           game.ambersteel.logger.logWarn(error);

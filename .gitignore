@@ -1,6 +1,7 @@
 # IDE
 .idea/
 .vs/
+debug.log
 
 # Node Modules
 node_modules/
