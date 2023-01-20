@@ -9,6 +9,7 @@ import DynamicInputDialog from "../../../../dialog/dynamic-input-dialog/dynamic-
 import { DYNAMIC_INPUT_TYPES } from "../../../../dialog/dynamic-input-dialog/dynamic-input-types.mjs";
 import { TEMPLATES } from "../../../../templatePreloader.mjs";
 import ViewModel from "../../../../view-model/view-model.mjs";
+import AssetListItemViewModel from "../../../item/asset/asset-list-item-viewmodel.mjs";
 import { queryAssetSlotConfiguration } from "./assets-utils.mjs";
 
 /**
@@ -25,6 +26,10 @@ import { queryAssetSlotConfiguration } from "./assets-utils.mjs";
  * @property {Number} maxBulk
  * * Read-only. 
  * @property {Array<TransientAsset>} availableAssets
+ * * Read-only. 
+ * @property {String} assetListItemTemplate
+ * * Read-only. 
+ * @property {AssetListItemViewModel} assetListItemViewModel
  * * Read-only. 
  */
 export default class ActorAssetSlotViewModel extends ViewModel {
@@ -57,6 +62,12 @@ export default class ActorAssetSlotViewModel extends ViewModel {
   get availableAssets() {
     return this.assetSlot.group.actor.assets.luggage.concat(this.assetSlot.group.actor.assets.property);
   }
+
+  /**
+   * @type {String}
+   * @readonly
+   */
+  get assetListItemTemplate() { return AssetListItemViewModel.TEMPLATE; }
   
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
@@ -138,9 +149,7 @@ export default class ActorAssetSlotViewModel extends ViewModel {
         
         if (dialog.confirmed !== true) return;
         
-        const asset = this.availableAssets.find(it => it.id === dialog[inputChoices]);
-        
-        // TODO #196
+        this.assetSlot.alottedId = dialog[inputChoices].selected.value;
       },
     });
 
@@ -153,8 +162,38 @@ export default class ActorAssetSlotViewModel extends ViewModel {
       localizableTitle: "ambersteel.character.asset.slot.delete.query",
       localizableDialogTitle: "ambersteel.character.asset.slot.delete.queryOf",
     });
+
+    this._updateViewModel();
   }
   
+  /** @override */
+  update(args = {}) {
+    this._updateViewModel();
+
+    super.update(args);
+  }
+
+  /**
+   * Updates the view model, by discarding and re-instantiating it. 
+   * 
+   * @private
+   */
+  _updateViewModel() {
+    if (this.assetListItemViewModel !== undefined) {
+      this.assetListItemViewModel.dispose();
+    }
+    if (isDefined(this.assetSlot.alottedId) === true) {
+      this.assetListItemViewModel.parent = new AssetListItemViewModel({
+        id: "assetListItemViewModel",
+        parent: this,
+        document: this.assetSlot.asset,
+        isEditable: this.isEditable,
+        isSendable: this.isSendable,
+        isOwner: this.isOwner,
+      });
+    }
+  }
+
   /**
    * Returns all luggage and property from the group's parent actor. 
    * 

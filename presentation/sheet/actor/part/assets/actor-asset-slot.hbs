@@ -6,7 +6,7 @@ cssClass: {undefined | String}
   {{!-- Header Row --}}
   <div class="flex flex-row">
     {{!-- Assign Asset --}}
-    <div>
+    <div{{#if viewModel.hasAsset}} class="hidden"{{/if}}>
       {{#> button viewModel=viewModel.vmBtnAssign}}
         <span{{#if ../viewModel.showFancyFont}} class="fancy-font"{{/if}}>{{localize "ambersteel.character.asset.slot.assign.label"}}</span>
         <div class="square-button-light flex flex-center">
@@ -26,4 +26,11 @@ cssClass: {undefined | String}
     {{/button}}
     {{> buttonDelete viewModel=viewModel.vmBtnDelete}}
   </div>
+  {{#if viewModel.hasAsset}}
+  <div>
+    {{#with viewModel.assetListItemTemplate as |template|}}
+      {{> (template) viewModel=../viewModel.assetListItemViewModel}}
+    {{/with}}
+  </div>
+  {{/if}}
 </div>
