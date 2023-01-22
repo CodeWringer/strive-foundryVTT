@@ -46,3 +46,49 @@ export function moveArrayElementBy(arr, element, indices) {
 export function arrayContains(arr, element) {
   return arr.indexOf(element) > -1;
 }
+
+/**
+ * Returns a new array, based on the given array and only including elements 
+ * for which the given `predicate` function returns `true`. 
+ * 
+ * @param {Array<Any>} arr An array from which to take elements. 
+ * @param {Function} predicate A function that must return `true` for every element 
+ * of the given array to keep. 
+ * * Receives the element as its sole argument. 
+ * 
+ * @returns {Array<Any>}
+ */
+export function arrayTakeWhen(arr, predicate) {
+  const result = [];
+
+  for(const element of arr) {
+    if (predicate(element) === true) {
+      result.push(element);
+    }
+  }
+
+  return result;
+}
+
+/**
+ * Returns a new array, based on the given array and only including elements 
+ * for which the given `predicate` function returns `false`. 
+ * 
+ * @param {Array<Any>} arr An array from which to take elements. 
+ * @param {Function} predicate A function that must return `false` for every element 
+ * of the given array to exclude. 
+ * * Receives the element as its sole argument. 
+ * 
+ * @returns {Array<Any>}
+ */
+export function arrayTakeUnless(arr, predicate) {
+  const result = [];
+
+  for(const element of arr) {
+    if (predicate(element) === false) {
+      result.push(element);
+    }
+  }
+
+  return result;
+}

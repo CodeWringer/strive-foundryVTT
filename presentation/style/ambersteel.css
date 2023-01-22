@@ -604,6 +604,13 @@ li.roll.die.d6.roll-success {
   height: 24px;
 }
 
+.ico-drop-item {
+  background: url("/systems/ambersteel/presentation/image/hand-holding-box-down-solid.svg");
+  background-size: cover;
+  width: 24px;
+  height: 24px;
+}
+
 .border-solid-r-sm {
   border-right-color: rgba(129, 129, 129, 0.45) !important;
   border-right-style: solid !important;

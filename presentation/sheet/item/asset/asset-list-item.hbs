@@ -9,7 +9,17 @@ cssClass: {undefined | String}
       {{!-- Send to chat --}}
       {{> buttonSendToChat viewModel=viewModel.vmBtnSendToChat }}
       {{!-- Pick up --}}
-      {{> buttonTakeItem viewModel=viewModel.vmBtnTakeItem }}
+      <span{{#if viewModel.hideTakeAsset}} class="hidden"{{/if}}>
+        {{#> button viewModel=viewModel.vmBtnTakeAsset }}
+          <i class="ambersteel-icon ico-take-item"></i>
+        {{/button}}
+      </span>
+      {{!-- Drop --}}
+      <span{{#if viewModel.hideDropAsset}} class="hidden"{{/if}}>
+        {{#> button viewModel=viewModel.vmBtnDropAsset }}
+          <i class="ambersteel-icon ico-drop-item"></i>
+        {{/button}}
+      </span>
       {{!-- Name --}}
       <span class="width-min-xl">
         {{> inputLabel text=(localize "ambersteel.character.asset.singular") showFancyFont=viewModel.showFancyFont}}

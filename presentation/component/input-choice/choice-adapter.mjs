@@ -31,13 +31,12 @@ export default class ChoiceAdapter {
    * Converts a `ChoiceOption` to a business object and returns it. 
    * 
    * @param {ChoiceOption} choice
-   * @param {Array<Any>} items
    * 
    * @returns {Any}
    * 
    * @abstract
    */
-  fromChoiceOption(choice, items) {
+  fromChoiceOption(choice) {
     throw new Error("NotImplementedException");
   }
 }
