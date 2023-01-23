@@ -1,4 +1,3 @@
-import { ItemGrid } from "../item-grid/item-grid.mjs";
 import { TEMPLATES } from "../../templatePreloader.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
 import ChoiceOption from "../input-choice/choice-option.mjs";
@@ -30,7 +29,7 @@ export const TAKE_ITEM_CONTEXT_TYPES = {
  * Depending on this value, the behavior of the button changes. 
  * 
  * In the context "chat-message", the item in question will be moved to the current player's actor, or an actor chosen by a GM. 
- * In the context "list-item", the item in question will be moved to its owning actor's item grid, if possible. 
+ * In the context "list-item", TODO #196
  * In the context "item-sheet", a copy of the item in question will be added to the current player's actor, or an actor chosen by a GM. 
  */
 export default class ButtonTakeItemViewModel extends ButtonViewModel {
@@ -48,7 +47,7 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
    * Depending on this value, the behavior of the button changes. 
    * 
    * In the context "chat-message", the item in question will be moved to the current player's actor, or an actor chosen by a GM. 
-   * In the context "list-item", the item in question will be moved to its owning actor's item grid, if possible. 
+   * In the context "list-item", TODO #196
    * In the context "item-sheet", a copy of the item in question will be added to the current player's actor, or an actor chosen by a GM. 
    */
   constructor(args = {}) {
@@ -110,17 +109,7 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
         // Remove from source actor. 
         assetDocument.delete();
       } else if (this.contextType === TAKE_ITEM_CONTEXT_TYPES.listItem) {
-        // Try to move item to item grid. 
-        const itemGrid = ItemGrid.from(targetActor).itemGrid;
-        const addResult = itemGrid.add(assetDocument);
-        if (addResult === true) {
-          assetDocument.getTransientObject().isOnPerson = true;
-        } else {
-          await new PlainDialog({
-            localizedTitle: game.i18n.localize("ambersteel.character.asset.carryingCapacity.dialog.titleInventoryFull"),
-            localizedContent: game.i18n.localize("ambersteel.character.asset.carryingCapacity.dialog.contentInventoryFull")
-          }).renderAndAwait(true);
-        }
+        // TODO #196: Move to free slot?
       }
     } else if (containingPack !== undefined && containingPack !== null) { // The item is embedded in a compendium. 
       // Add copy to target actor. 

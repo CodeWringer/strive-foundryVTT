@@ -121,9 +121,9 @@
           "query": "Confirm Deletion of Asset"
         },
         "bulk": "Bulk",
+        "maxBulk": "Maximum Bulk",
         "stats": "General Assets Stats",
         "singular": "Asset",
-        "onPerson": "Possessions (on person)",
         "equipped": "Worn & Equipped",
         "luggage": "Luggage",
         "property": "Property",
@@ -149,18 +149,39 @@
         "remote": "Property",
         "carryingCapacity": {
           "label": "Carrying Capacity (in bulk)",
-          "used": "Used carrying capacity (in bulk)",
-          "dialog": {
-            "titleInventoryFull": "Inventory full",
-            "titleItemsDropped": "Items dropped",
-            "contentItemsDropped": "The following items had to be dropped from the item grid:",
-            "contentInventoryFull": "There is not enough room on the item grid to add the item to it."
-          }
+          "used": "Used carrying capacity (in bulk)"
         },
-        "shape": {
-          "label": "Shape",
-          "width": "Width",
-          "height": "Height"
+        "slot": {
+          "add": {
+            "label": "Add Asset Slot",
+            "query": "Select Asset Slot to Add"
+          },
+          "acceptedTypes": "Accepted Types",
+          "armor": "Armor",
+          "assign": {
+            "label": "Assign Asset"
+          },
+          "back": "Back",
+          "clothing": "Clothing",
+          "delete": {
+            "label": "Delete Asset Slot",
+            "query": "Confirm Deletion of Asset Slot",
+            "queryOf": "Confirm Deletion of Asset Slot '%s'"
+          },
+          "edit": "Edit",
+          "hand": "Hand",
+          "label": "Asset Slot",
+          "group": {
+            "label": "Asset Slot Group",
+            "add": {
+              "label": "Add Asset Slot Group"
+            },
+            "delete": {
+              "label": "Delete Asset Slot Group",
+              "query": "Confirm Deletion of Asset Slot Group",
+              "queryOf": "Confirm Deletion of Asset Slot Group '%s'"
+            }
+          }
         },
         "quantity": {
           "label": "Quantity",

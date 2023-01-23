@@ -47,7 +47,6 @@ import './presentation/component/input-dropdown/input-dropdown-viewmodel.mjs';
 import './presentation/component/input-number-spinner/input-number-spinner-viewmodel.mjs';
 import './presentation/component/input-textarea/input-textarea-viewmodel.mjs';
 import './presentation/component/input-radio-button-group/input-radio-button-group-viewmodel.mjs';
-import './presentation/component/item-grid/item-grid-view-viewmodel.mjs';
 import './presentation/component/button/button-viewmodel.mjs';
 import './presentation/component/button-add/button-add-viewmodel.mjs';
 import './presentation/component/button-delete/button-delete-viewmodel.mjs';
@@ -66,7 +65,7 @@ import './presentation/component/lazy-rich-text/lazy-rich-text-viewmodel.mjs';
 // View models
 import './presentation/sheet/actor/actor-sheet-viewmodel.mjs';
 import './presentation/sheet/actor/part/actor-attribute-table-viewmodel.mjs';
-import './presentation/sheet/actor/part/actor-assets-viewmodel.mjs';
+import './presentation/sheet/actor/part/assets/actor-assets-viewmodel.mjs';
 import './presentation/sheet/actor/part/actor-attributes-viewmodel.mjs';
 import './presentation/sheet/actor/part/actor-beliefs-fate-viewmodel.mjs';
 import './presentation/sheet/actor/part/actor-beliefs-viewmodel.mjs';

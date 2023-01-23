@@ -549,22 +549,6 @@ li.roll.die.d6.roll-success {
   margin-right: 10px;
 }
 
-.font-size-default {
-  font-size: 1rem;
-}
-.font-size-md {
-  font-size: 1.1rem;
-}
-.font-size-lg {
-  font-size: 1.2rem;
-}
-.font-size-xl {
-  font-size: 1.4rem;
-}
-.font-size-xxl {
-  font-size: 1.6rem;
-}
-
 .scrollable-height-sm {
   overflow-x: hidden;
   overflow-y: auto;
@@ -584,6 +568,28 @@ li.roll.die.d6.roll-success {
   max-height: 350px;
 }
 
+.font-size-xxs {
+  font-size: 0.7rem;
+}
+.font-size-xs {
+  font-size: 0.8rem;
+}
+.font-size-sm {
+  font-size: 0.9rem;
+}
+.font-size-default {
+  font-size: 1rem;
+}
+.font-size-lg {
+  font-size: 1.2rem;
+}
+.font-size-xl {
+  font-size: 1.4rem;
+}
+.font-size-xxl {
+  font-size: 1.6rem;
+}
+
 .ambersteel-icon {
   filter: brightness(0);
 }
@@ -593,6 +599,13 @@ li.roll.die.d6.roll-success {
 
 .ico-take-item {
   background: url("/systems/ambersteel/presentation/image/take-item.svg");
+  background-size: cover;
+  width: 24px;
+  height: 24px;
+}
+
+.ico-drop-item {
+  background: url("/systems/ambersteel/presentation/image/hand-holding-box-down-solid.svg");
   background-size: cover;
   width: 24px;
   height: 24px;
@@ -694,6 +707,13 @@ h4 {
 }
 
 /* Components */
+.ambersteel-asset-slot-header {
+  border-bottom: 1px solid rgba(129, 129, 129, 0.45);
+  background-color: rgba(0, 0, 0, 0.12);
+  padding: 2px;
+  height: 2rem;
+}
+
 header.sheet-header {
   flex: 0 auto;
   overflow: hidden;

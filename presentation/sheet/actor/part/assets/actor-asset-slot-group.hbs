@@ -1,0 +1,27 @@
+{{!-- Parameters:
+viewModel: {ActorAssetSlotGroupViewModel}
+cssClass: {undefined | String}
+--}}
+<div class="ambersteel-asset-slot flex flex-column flex-grow{{#if cssClass}} {{cssClass}}{{/if}}">
+  {{!-- Header Row --}}
+  <div class="flex flex-row flex-grow">
+    <h3 class="flex flex-row flex-grow flex-middle">
+      <span class="width-min-xl">{{viewModel.localizedName}}</span>
+      <span style="width: 2rem"></span>
+      <div class="flex flex-row flex-middle font-size-sm">
+        <span>{{localize "ambersteel.character.asset.bulk"}}: {{viewModel.group.currentBulk}} / {{viewModel.group.maxBulk}}</span>
+      </div>
+      <div class="flex flex-row flex-grow flex-right">
+        <div>
+          {{> buttonContextMenu viewModel=viewModel.vmBtnEdit}}
+        </div>
+      </div>
+    </h3>
+  </div>
+  {{!-- Slots --}}
+  {{#each viewModel.assetSlotViewModels as |vm key|}}
+  {{#with ../viewModel.assetSlotTemplate as | template |}}
+    {{> (template) viewModel=vm}}
+  {{/with}}
+  {{/each}}
+</div>

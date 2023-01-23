@@ -35,32 +35,13 @@ cssClass: {undefined | String}
       {{> inputNumberSpinner viewModel=viewModel.vmNsMaxQuantity }}
     </div>
   </div>
-  {{!-- SHAPE --}}
-  {{!-- Width --}}
-  <div class="sheet-block grid-3col grid-gap-md margin-b-md">
-    <div class="flex flex-middle flex-right">
-      {{> inputLabel text=(localize "ambersteel.character.asset.shape.width") showFancyFont=viewModel.showFancyFont}}
-    </div>
-    <div class="grid-span-2">
-      {{> inputNumberSpinner viewModel=viewModel.vmNsShapeWidth }}
-    </div>
-  </div>
-  {{!-- Height --}}
-  <div class="sheet-block grid-3col grid-gap-md margin-b-md">
-    <div class="flex flex-middle flex-right">
-      {{> inputLabel text=(localize "ambersteel.character.asset.shape.height") showFancyFont=viewModel.showFancyFont}}
-    </div>
-    <div class="grid-span-2">
-      {{> inputNumberSpinner viewModel=viewModel.vmNsShapeHeight }}
-    </div>
-  </div>
-  {{!-- Bulk - read only! --}}
+  {{!-- Bulk --}}
   <div class="sheet-block grid-3col grid-gap-md margin-b-md">
     <div class="flex flex-middle flex-right">
       {{> inputLabel text=(localize "ambersteel.character.asset.bulk") showFancyFont=viewModel.showFancyFont}}
     </div>
     <div class="grid-span-2">
-      <div class="custom-system-read-only pad-sm fill">{{viewModel.document.bulk}}</div>
+      {{> inputNumberSpinner viewModel=viewModel.vmNsBulk }}
     </div>
   </div>
   {{!-- Properties --}}

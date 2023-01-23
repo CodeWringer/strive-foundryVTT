@@ -3,26 +3,26 @@ $font-secondary: 'Roboto', sans-serif;
 $font-fancy: 'Black-Chancery';
 
 .fancy-font {
-    font-family: $font-fancy;
-    font-size: 1rem;
+  font-family: $font-fancy;
+  font-size: 1rem;
 }
 
 .primary-font {
-    font-family: $font-primary;
+  font-family: $font-primary;
 }
 
 .secondary-font {
-    font-family: $font-secondary;
+  font-family: $font-secondary;
 }
 
 .text-align {
-    &-l {
-        text-align: left;
-    }
-    &-r {
-        text-align: right;
-    }
-    &-c {
-        text-align: center;
-    }
+  &-l {
+    text-align: left;
+  }
+  &-r {
+    text-align: right;
+  }
+  &-c {
+    text-align: center;
+  }
 }

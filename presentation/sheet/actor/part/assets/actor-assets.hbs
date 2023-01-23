@@ -3,8 +3,13 @@ viewModel: {ActorAssetsViewModel}
 cssClass: {undefined | String}
 --}}
 <section class="{{cssClass}}">
-  {{!-- Personal assets --}}
-  <h2>{{localize "ambersteel.character.asset.onPerson"}}</h2>
+  {{!-- Worn & Equipped --}}
+  <h2>{{localize "ambersteel.character.asset.equipped"}}</h2>
+  {{#with viewModel.templateEquipped as | template |}}
+  {{> (template) viewModel=../viewModel.vmEquipped}}
+  {{/with}}
+  {{!-- Luggage --}}
+  <h2>{{localize "ambersteel.character.asset.luggage"}}</h2>
   <div class="grid-2col grid-gap-md margin-b-md">
     {{!-- Maximum bulk --}}
     <div class="sheet-block">
@@ -29,8 +34,8 @@ cssClass: {undefined | String}
       </div>
     </div>
   </div>
-  {{> itemGridView viewModel=viewModel.vmIgv }}
-  {{!-- Remote assets --}}
-  <h2>{{localize "ambersteel.character.asset.remote"}}</h2>
+  {{> sortableList viewModel=viewModel.vmLuggageList }}
+  {{!-- Property --}}
+  <h2>{{localize "ambersteel.character.asset.property"}}</h2>
   {{> sortableList viewModel=viewModel.vmPropertyList }}
 </section>

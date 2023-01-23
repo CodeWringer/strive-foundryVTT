@@ -183,12 +183,12 @@ export default class Ruleset {
    * 
    * @throws {Error} Thrown, if the given actor is not of type `"pc"` or `"npc"`. 
    */
-  getCharacterMaximumInventory(actor) {
+  getCharacterCarryingCapacity(actor) {
     const type = actor.type.toLowerCase();
     if (type !== "pc" && type !== "npc") throw new Error("Only PC and NPC type actors allowed");
 
     const attribute = actor.system.attributes.physical.strength;
-    return attribute.level * 6;
+    return attribute.level * 3;
   }
 
   /**

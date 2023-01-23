@@ -229,24 +229,6 @@
   }
 }
 
-.font-size {
-  &-default {
-    font-size: $font-size-default;
-  }
-  &-md {
-    font-size: $font-size-md;
-  }
-  &-lg {
-    font-size: $font-size-lg;
-  }
-  &-xl {
-    font-size: $font-size-xl;
-  }
-  &-xxl {
-    font-size: $font-size-xxl;
-  }
-}
-
 .scrollable-height {
   &-sm {
     overflow-x: hidden;
@@ -265,5 +247,30 @@
     overflow-y: auto;
     min-height: $line-height;
     max-height: 350px;
+  }
+}
+
+// Font sizes
+.font-size {
+  &-xxs {
+    font-size: $font-size-xxs;
+  }
+  &-xs {
+    font-size: $font-size-xs;
+  }
+  &-sm {
+    font-size: $font-size-sm;
+  }
+  &-default {
+    font-size: $font-size-default;
+  }
+  &-lg {
+    font-size: $font-size-lg;
+  }
+  &-xl {
+    font-size: $font-size-xl;
+  }
+  &-xxl {
+    font-size: $font-size-xxl;
   }
 }

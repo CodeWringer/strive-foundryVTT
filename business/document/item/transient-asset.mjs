@@ -14,12 +14,8 @@ import { ASSET_PROPERTIES } from "./item-properties.mjs";
  * 
  * @property {Number} quantity
  * @property {Number} maxQuantity
- * @property {Object} shape
- * @property {Number} shape.width
- * @property {Number} shape.height
  * @property {Boolean} isOnPerson
  * @property {Number} bulk
- * * Read-only. 
  */
 export default class TransientAsset extends TransientBaseItem {
   /** @override */
@@ -51,23 +47,6 @@ export default class TransientAsset extends TransientBaseItem {
   }
   
   /**
-   * @type {Object}
-   */
-  get shape() {
-    const thiz = this;
-    return {
-      get width() { return parseInt(thiz.document.system.shape.width); },
-      set width(value) { thiz.updateByPath("system.shape.width", value); },
-      get height() { return parseInt(thiz.document.system.shape.height); },
-      set height(value) { thiz.updateByPath("system.shape.height", value); },
-    };
-  }
-  set shape(value) {
-    this.document.system.shape = value;
-    this.updateByPath("system.shape", value);
-  }
-  
-  /**
    * @type {Boolean}
    */
   get isOnPerson() {
@@ -80,10 +59,11 @@ export default class TransientAsset extends TransientBaseItem {
 
   /**
    * @type {Number}
-   * @readonly
    */
-  get bulk() {
-    return parseInt(this.document.system.shape.width) * parseInt(this.document.system.shape.height);
+  get bulk() { return parseInt(this.document.system.bulk); }
+  set bulk(value) {
+    this.document.system.bulk = value;
+    this.updateByPath("system.bulk", value);
   }
 
   /** @override */
@@ -96,15 +76,6 @@ export default class TransientAsset extends TransientBaseItem {
    */
   constructor(document) {
     super(document);
-  }
-
-  /** @override */
-  prepareData(context) {
-    super.prepareData(context);
-
-    // Ensure number data type. 
-    context.system.shape.width = parseInt(context.system.shape.width);
-    context.system.shape.height = parseInt(context.system.shape.height);
   }
 
   /** @override */

@@ -7,6 +7,7 @@
         "gmNotes": "",
         "isCustom": false,
         "displayOrders": {
+          "luggage": [],
           "property": [],
           "skills": [],
           "fateCards": [],
@@ -94,8 +95,59 @@
           "magicStamina": 0
         },
         "assets": {
-          "grid": [],
-          "gridIndices": []
+          "equipment": {
+            "b0fed8b3-1aa4-4b8e-a150-7c2fb647fe7e": {
+              "name": "clothing",
+              "slots": {
+                "458e47e6-f6ce-4841-83b2-0ac05c160a52": {
+                  "name": "clothing",
+                  "acceptedTypes": ["clothing"],
+                  "alottedId": null,
+                  "maxBulk": 4
+                }
+              }
+            },
+            "5af8c4db-de4a-4d2f-a3ed-9f8f18233cc5": {
+              "name": "armor",
+              "slots": {
+                "16b24ed7-de48-46fd-8849-82d7b2648b8d": {
+                  "name": "armor",
+                  "acceptedTypes": ["armor"],
+                  "alottedId": null,
+                  "maxBulk": 4
+                }
+              }
+            },
+            "d7c46adc-848a-4fc9-a73d-a3ba37c18cb3": {
+              "name": "hand",
+              "slots": {
+                "5321c233-8aef-43a5-b6a0-3b3309d31732": {
+                  "name": "hand",
+                  "acceptedTypes": ["holdable"],
+                  "alottedId": null,
+                  "maxBulk": 2
+                },
+                "6348fbf9-0ec1-4dea-b6c7-d3a650c5a313": {
+                  "name": "hand",
+                  "acceptedTypes": ["holdable"],
+                  "alottedId": null,
+                  "maxBulk": 2
+                }
+              }
+            },
+            "4f44dbc4-8fd4-486d-a6d0-16d8b7642852": {
+              "name": "back",
+              "slots": {
+                "112d2056-8754-48e3-bad0-31a6ef5d6a38": {
+                  "name": "back",
+                  "acceptedTypes": ["holdable", "strappable"],
+                  "alottedId": null,
+                  "maxBulk": 4
+                }
+              }
+            }
+          },
+          "luggage": []
         }
       }
     },
@@ -166,10 +218,7 @@
       "templates": ["base"],
       "quantity": 1,
       "maxQuantity": 1,
-      "shape": {
-        "width": 1,
-        "height": 1
-      },
+      "bulk": 1,
       "isOnPerson": false
     },
     "injury": {

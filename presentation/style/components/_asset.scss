@@ -1,0 +1,15 @@
+.ambersteel-asset-slot {
+  // height: 300px;
+  // margin: $padding-sm;
+  // border: 3px $c-border-medium solid;
+  // background-color: $c-bg-light;
+  // border-radius: 10px;
+  // overflow: hidden;
+
+  &-header {
+    border-bottom: 1px solid $c-border-medium;
+    background-color: $c-bg-dark;
+    padding: $padding-sm;
+    height: 2rem;
+  }
+}

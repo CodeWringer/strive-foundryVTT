@@ -1,8 +1,12 @@
 import { TEMPLATES } from '../../../presentation/templatePreloader.mjs';
 import { DiceOutcomeTypes } from '../../dice/dice-outcome-types.mjs';
+import CharacterAssetSlotGroup from '../../ruleset/asset/character-asset-slot-group.mjs';
+import CharacterAssetSlot from '../../ruleset/asset/character-asset-slot.mjs';
 import { ATTRIBUTE_GROUPS } from '../../ruleset/attribute/attribute-groups.mjs';
 import CharacterAttributeGroup from '../../ruleset/attribute/character-attribute-group.mjs';
 import Ruleset from '../../ruleset/ruleset.mjs';
+import { createUUID } from '../../util/uuid-utility.mjs';
+import { isDefined } from '../../util/validation-utility.mjs';
 import TransientBaseActor from './transient-base-actor.mjs';
 
 /**
@@ -53,18 +57,20 @@ import TransientBaseActor from './transient-base-actor.mjs';
  * * Read-only. 
  * @property {Object} assets
  * * Read-only. 
+ * @property {Array<CharacterAssetSlotGroup>} assets.equipmentSlotGroups 
+ * * Read-only. 
  * @property {Array<TransientAsset>} assets.all 
  * * Read-only. 
- * @property {Array<TransientAsset>} assets.onPerson 
+ * @property {Array<TransientAsset>} assets.equipment 
  * * Read-only. 
- * @property {Array<TransientAsset>} assets.remote 
+ * @property {Array<TransientAsset>} assets.luggage 
+ * * Read-only. 
+ * @property {Array<TransientAsset>} assets.property 
  * * Read-only. 
  * @property {Number} assets.currentBulk
  * * Read-only. 
  * @property {Number} assets.maxBulk
  * * Read-only. 
- * @property {Any} assets.grid
- * @property {Any} assets.gridIndices
  */
 export default class TransientBaseCharacterActor extends TransientBaseActor {
   /** @override */
@@ -146,20 +152,25 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
   get assets() {
     const thiz = this;
     return {
-      get all() { return thiz.items.filter(it => it.type === "item"); },
-      get onPerson() { return thiz.items.filter(it => it.type === "item" && it.isOnPerson === true); },
-      get remote() { return thiz.items.filter(it => it.type === "item" && it.isOnPerson !== true); },
+      get all() { return thiz._allAssets; },
+      
+      get equipmentSlotGroups() { return thiz._equipmentSlotGroups; },
+
+      get equipment() { return thiz._equipmentAssets; },
+      
+      get luggage() { return thiz._luggageAssets; },
+      
+      get property() { return thiz._propertyAssets; },
+
       get currentBulk() {
         let currentBulk = 0;
-        const assetsOnPerson = this.onPerson;
-        for (const assetOnPerson of assetsOnPerson) {
-          currentBulk += assetOnPerson.bulk;
+        const luggage = this.luggage;
+        for (const asset of luggage) {
+          currentBulk += asset.bulk;
         }
         return currentBulk;
       },
-      get maxBulk() { return new Ruleset().getCharacterMaximumInventory(thiz.document); },
-      get grid() { return thiz.document.system.assets.grid; },
-      get gridIndices() { return thiz.document.system.assets.gridIndices; },
+      get maxBulk() { return new Ruleset().getCharacterCarryingCapacity(thiz.document); },
     };
   }
 
@@ -173,47 +184,7 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
 
     this.attributeGroups = this._getAttributeGroups();
     this.attributes = this._getAttributes();
-  }
-
-  /**
-   * Returns the grouped attributes of the character. 
-   * 
-   * @returns {Array<CharacterAttributeGroup>}
-   * 
-   * @private
-   */
-  _getAttributeGroups() {
-    const result = [];
-
-    for (const groupDefName in ATTRIBUTE_GROUPS) {
-      const groupDef = ATTRIBUTE_GROUPS[groupDefName];
-      // Skip any convenience members, such as `asChoices`.
-      if (groupDef.name === undefined) continue;
-
-      result.push(new CharacterAttributeGroup(this.document, groupDef.name));
-    }
-
-    return result;
-  }
-  
-  /**
-   * Returns the attributes of the character. 
-   * 
-   * @returns {Array<CharacterAttribute>}
-   * 
-   * @private
-   */
-  _getAttributes() {
-    const result = [];
-
-    const attributeGroups = this._getAttributeGroups();
-    for(const attributeGroup of attributeGroups) {
-      for (const attribute of attributeGroup.attributes) {
-        result.push(attribute);
-      }
-    }
-
-    return result;
+    this._prepareAssetsData();
   }
 
   /**
@@ -323,6 +294,137 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
         }
       }
     });
+  }
+
+  /**
+   * Returns the grouped attributes of the character. 
+   * 
+   * @returns {Array<CharacterAttributeGroup>}
+   * 
+   * @private
+   */
+  _getAttributeGroups() {
+    const result = [];
+
+    for (const groupDefName in ATTRIBUTE_GROUPS) {
+      const groupDef = ATTRIBUTE_GROUPS[groupDefName];
+      // Skip any convenience members, such as `asChoices`.
+      if (groupDef.name === undefined) continue;
+
+      result.push(new CharacterAttributeGroup(this.document, groupDef.name));
+    }
+
+    return result;
+  }
+  
+  /**
+   * Returns the attributes of the character. 
+   * 
+   * @returns {Array<CharacterAttribute>}
+   * 
+   * @private
+   */
+  _getAttributes() {
+    const result = [];
+
+    const attributeGroups = this._getAttributeGroups();
+    for(const attributeGroup of attributeGroups) {
+      for (const attribute of attributeGroup.attributes) {
+        result.push(attribute);
+      }
+    }
+
+    return result;
+  }
+
+  /**
+   * @private
+   */
+  _prepareAssetsData() {
+    this._allAssets = this.items.filter(it => it.type === "item");
+    this._equipmentSlotGroups = this._getEquipmentSlotGroups();
+
+    // Worn & Equipped
+    const equipmentIds = [];
+    const equipmentAssets = [];
+    for (const group in this._equipmentSlotGroups) {
+      for (const slot in group.slots) {
+        if (isDefined(slot.alottedId) === true) {
+          equipmentIds.push(slot.alottedId);
+          const asset = this._allAssets.find(asset => asset.id === id);
+          if (asset === undefined) {
+            game.ambersteel.logger.logWarn("NullReferenceException: equipped asset could not be found on actor");
+          } else {
+            equipmentAssets.push(asset);
+          }
+        }
+      }
+    }
+
+    // Luggage
+
+    // TODO: Purge obsolete entries. 
+    // This requires a unified and central solution. 
+    /*
+// Purge obsolete entries. 
+const toCull = ids.filter(id => 
+  filtered.find(asset => 
+    asset.id === id
+  ) === undefined
+);
+const cleanIdList = [];
+for (const id of ids) {
+  if (toCull.indexOf(id) < 0) {
+    cleanIdList.push(id);
+  }
+}
+this.updateByPath("")
+    */
+
+    const luggageIds = this.document.system.assets.luggage;
+    const luggageAssets = [];
+    for (const id of luggageIds) {
+      const asset = this._allAssets.find(asset => asset.id === id);
+      if (asset !== undefined) {
+        luggageAssets.push(asset);
+      }
+    }
+
+    // Property
+    const propertyAssets = [];
+    for (const asset of this._allAssets) {
+      if (equipmentIds.indexOf(asset.id) < 0 && luggageIds.indexOf(asset.id) < 0) {
+        propertyAssets.push(asset);
+      }
+    }
+
+    this._equipmentAssets = equipmentAssets;
+    this._luggageAssets = luggageAssets;
+    this._propertyAssets = propertyAssets;
+  }
+
+  /**
+   * Returns the "worn & equipment" asset slots of the character. 
+   * 
+   * @returns {Array<CharacterAssetSlotGroup>}
+   * 
+   * @private
+   */
+  _getEquipmentSlotGroups() {
+    const result = [];
+
+    const groups = this.document.system.assets.equipment;
+    for (const groupId in groups) {
+      if (groups.hasOwnProperty(groupId) !== true) continue;
+
+      const assetSlotGroup = new CharacterAssetSlotGroup({
+        actor: this,
+        id: groupId,
+      });
+      result.push(assetSlotGroup);
+    }
+
+    return result;
   }
 
   /**
