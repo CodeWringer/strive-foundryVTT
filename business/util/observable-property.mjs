@@ -1,5 +1,5 @@
 /**
- * 
+ * @property {any} value
  */
 export default class ObservableProperty {
   /**
@@ -15,7 +15,7 @@ export default class ObservableProperty {
   set value(value) {
     const oldValue = this._value;
     this._value = value;
-    this._onChange(oldValue, value);
+    this.onChange(oldValue, value);
   }
 
   /**
@@ -38,16 +38,4 @@ export default class ObservableProperty {
    * @virtual
   */
  onChange(oldValue, newValue) { /* Implementation up to user. */}
- 
- /**
-   * Invoked whenever the value is changed. 
-   * 
-   * @param {any} oldValue 
-   * @param {any} newValue 
-   * 
-   * @private
-   */
-  _onChange(oldValue, newValue) {
-    this.onChange(oldValue, newValue);
-  }
 }
