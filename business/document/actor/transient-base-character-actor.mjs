@@ -363,7 +363,8 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
 
     // Luggage
 
-    // TODO #196: Purge obsolete entries:
+    // TODO: Purge obsolete entries. 
+    // This requires a unified and central solution. 
     /*
 // Purge obsolete entries. 
 const toCull = ids.filter(id => 
