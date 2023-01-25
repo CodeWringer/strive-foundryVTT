@@ -3,14 +3,12 @@
  * 
  * @property {number} ADD One or more elements were added. 
  * @property {number} REMOVE One or more elements were removed. 
- * @property {number} CLEAR All elements were removed. 
  * 
  * @constant
  */
 export const CollectionChangeTypes = {
   ADD: 0,
   REMOVE: 1,
-  CLEAR: 2,
 };
 
 /**
@@ -22,6 +20,14 @@ export default class ObservableCollection {
    * @private
    */
   _array = [];
+
+  /**
+   * Returns the current number of elements in the collection. 
+   * 
+   * @type {number}
+   * @readonly
+   */
+  get length() { return this._array.length; }
 
   /**
    * @param {Object} args 
