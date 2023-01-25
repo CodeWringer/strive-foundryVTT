@@ -1,4 +1,4 @@
-import { createUUID } from './uuid-utility.mjs';
+import { createUUID } from '../business/util/uuid-utility.mjs';
 
 /**
  * Internal listener representing object. 
