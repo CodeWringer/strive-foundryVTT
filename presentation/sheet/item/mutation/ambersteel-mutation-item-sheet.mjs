@@ -11,25 +11,14 @@ export default class AmbersteelMutationItemSheet extends AmbersteelBaseItemSheet
   get title() { return game.i18n.localize("ambersteel.character.health.mutation.singular"); }
 
   /** @override */
-  getViewModel(context, document) {
-    let viewModel = game.ambersteel.viewModels.get(document.id);
-    if (viewModel === undefined) {
-      viewModel = new MutationItemSheetViewModel({
-        id: document.id,
-        document: document.getTransientObject(),
-        isEditable: context.isEditable,
-        isSendable: context.isSendable,
-        isOwner: context.isOwner,
-      });
-      game.ambersteel.viewModels.set(document.id, viewModel);
-    } else {
-      viewModel.update({
-        isEditable: context.isEditable,
-        isSendable: context.isSendable,
-        isOwner: context.isOwner,
-      });
-    }
-    return viewModel;
+  _getViewModel(context, document) {
+    return new MutationItemSheetViewModel({
+      id: document.id,
+      document: document.getTransientObject(),
+      isEditable: context.isEditable,
+      isSendable: context.isSendable,
+      isOwner: context.isOwner,
+    });
   }
 }
 
