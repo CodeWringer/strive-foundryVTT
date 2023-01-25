@@ -1,7 +1,7 @@
 import should from 'should';
 import sinon from 'sinon';
 import 'should-sinon';
-import ObservableProperty from '../../../common/observables/observable-property.mjs';
+import ObservableField from '../../../common/observables/observable-field.mjs';
 
 describe("ObservableProperty", () => {
   it("invokes callback when the value is changed", () => {
@@ -15,7 +15,7 @@ describe("ObservableProperty", () => {
     };
     const spy = sinon.spy(givenCallback);
 
-    const given = new ObservableProperty({
+    const given = new ObservableField({
       value: givenCurrentValue,
       onChange: spy,
     });

@@ -1,7 +1,11 @@
 /**
- * @property {any} value
+ * Represents a field on an object, whose value changes can be observed/listened for. 
+ * 
+ * Wraps a single value. 
+ * 
+ * @property {any} value The wrapped value. 
  */
-export default class ObservableProperty {
+export default class ObservableField {
   /**
    * @type {any}
    * @private
@@ -9,6 +13,8 @@ export default class ObservableProperty {
   _value = undefined;
 
   /**
+   * The wrapped value. 
+   * 
    * @type {any}
    */
   get value() { return this._value; }
