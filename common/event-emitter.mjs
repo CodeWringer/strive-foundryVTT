@@ -2,13 +2,21 @@ import { createUUID } from '../business/util/uuid-utility.mjs';
 
 /**
  * Internal listener representing object. 
+ * 
  * @property {String} id ID of this listener. 
- *           Used for removing this listener. 
+ * * Used for removing this listener. 
  * @property {Boolean} isOnce If true, will only ever be called once and then removed. 
  * @property {Function} callback The function to call when the associated event is emitted. 
+ * 
  * @private
  */
 class Listener {
+  /**
+  * @param {String} id ID of this listener. 
+  * * Used for removing this listener. 
+  * @param {Boolean} isOnce If true, will only ever be called once and then removed. 
+  * @param {Function} callback The function to call when the associated event is emitted. 
+   */
   constructor(id, isOnce, callback) {
     this.id = id;
     this.isOnce = isOnce;
@@ -21,7 +29,8 @@ class Listener {
  */
 export class EventEmitter {
   /**
-   * A list of events and their respective list of event ids. 
+   * A map of events and their respective listeners. 
+   * 
    * @type {Map<String, Array<Listener>>}
    * @private
    */
@@ -29,35 +38,32 @@ export class EventEmitter {
 
   /**
    * Registers the given callback to be called whenever the given event is emitted. 
+   * 
    * @param {String} event The event to register to. 
    * @param {Function} callback A callback to call when the given event is emitted. 
+   * 
    * @returns {String} An id to refer to the registered callback to. 
    */
   on(event, callback) {
-    const events = this._events.has(event) ? this._events.get(event) : new Map();
-    
-    const uuid = createUUID();
-    events.set(uuid, new Listener(uuid, false, callback));
-    return uuid;
+    return this._on(event, false, callback);
   }
   
   /**
    * Registers the given callback to be called once, when the given event is emitted 
    * and then automatically un-registered. 
+   * 
    * @param {String} event The event to register to. 
    * @param {Function} callback A callback to call when the given event is emitted. 
+   * 
    * @returns {String} An id to refer to the registered callback to. 
    */
   once(event, callback) {
-    const events = this._events.has(event) ? this._events.get(event) : new Map();
-    
-    const uuid = createUUID();
-    events.set(uuid, new Listener(uuid, true, callback));
-    return uuid;
+    return this._on(event, true, callback);
   }
 
   /**
    * Un-registers the given callback from the given event. 
+   * 
    * @param {String} callbackId 
    */
   off(callbackId) {
@@ -65,6 +71,9 @@ export class EventEmitter {
       for (let i = 0; i < listeners.length; i++) {
         if (listeners[i].id === callbackId) {
           listeners.splice(i, 1);
+          if (listeners.length === 0) {
+            this._events.delete(event);
+          }
           return;
         }
       }
@@ -73,24 +82,42 @@ export class EventEmitter {
 
   /**
    * Un-registers all callbacks from the given event. 
+   * 
    * @param {String} event The event to un-register all callbacks from. 
    */
   allOff(event) {
-    this._events.set(event, []);
+    this._events.delete(event);
   }
 
   /**
    * Emits the given event, with optional arguments. 
    * @param {String} event The event to emit. 
-   * @param {Any} args Optional, additional arguments to pass to the callback. 
+   * @param {Any} arguments Optional, additional arguments to pass to the callback. 
    */
   emit(event) {
     const listeners = this._events.get(event);
     if (listeners === undefined) return;
 
-    const callbacks = listeners.values();
-    for (const callback of callbacks) {
-      callback(arguments);
+    // Exclude the event name from the arguments. 
+    const args = [];
+    for (let i = 1; i < arguments.length; i++) {
+      args.push(arguments[i]);
+    }
+
+    // Listeners that are only to be called once and then removed. 
+    const toRemove = [];
+    // Call every listener's callback. 
+    for (const listener of listeners) {
+      listener.callback(args);
+      if (listener.isOnce === true) {
+        // Remember this listener for removal. 
+        toRemove.push(listener);
+      }
+    }
+
+    // Remove now obsolete listeners. 
+    for (const listener of toRemove) {
+      this.off(listener.id);
     }
   }
 
@@ -105,5 +132,31 @@ export class EventEmitter {
     object.off = this.off.bind(this);
     object.allOff = this.allOff.bind(this);
     object.emit = this.emit.bind(this);
+  }
+
+  /**
+   * Registers the given callback to be called whenever the given event is emitted. 
+   * 
+   * @param {String} event The event to register to. 
+   * @param {Boolean} isOnce If true, will only ever be called once and then removed. 
+   * @param {Function} callback A callback to call when the given event is emitted. 
+   * 
+   * @returns {String} An id to refer to the registered callback to. 
+   * 
+   * @private
+   */
+  _on(event, isOnce, callback) {
+    // Get the existing list of listeners or create a new one. 
+    const listeners = this._events.get(event) ?? [];
+
+    // Create the listener. 
+    const uuid = createUUID();
+    const listener = new Listener(uuid, isOnce, callback);
+    listeners.push(listener);
+    
+    // Update/Add entry on map. 
+    this._events.set(event, listeners);
+
+    return uuid;
   }
 }
