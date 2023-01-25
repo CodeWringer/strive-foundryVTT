@@ -111,6 +111,15 @@ Hooks.once('init', function() {
       }
     },
     /**
+     * If `true`, view model caching is enabled. 
+     * 
+     * If `false`, view models will be re-instantiated every time a sheet is rendered or 
+     * an underlying document updated. 
+     * 
+     * @type {Boolean}
+     */
+    enableViewModelCaching: false,
+    /**
      * The global collection of view models. 
      * 
      * Any newly instantiated view models will be added to this list. Then, during their activateListeners-call, 
@@ -120,6 +129,7 @@ Hooks.once('init', function() {
      */
     viewModels: new ViewModelCollection(),
     /**
+     * The global view states map. 
      * 
      * @type {Map<String, Object>}
      */
@@ -301,28 +311,30 @@ Hooks.on("renderChatMessage", async function(message, html, data) {
     return;
   }
   
-  let vm = game.ambersteel.viewModels.get(vmId);
-  if (vm === undefined) {
+  let viewModel = game.ambersteel.viewModels.get(vmId);
+  if (viewModel === undefined) {
     // Create new instance of a view model to associate with the chat message. 
     if (dataset.abilityId !== undefined) {
       // Create a skill ability chat view model. 
       const skillAbilityId = dataset.abilityId;
       const skillDocument = document.getTransientObject();
       const skillAbility = skillDocument.abilities.find(it => it.id === skillAbilityId);
-      vm = skillAbility.getChatViewModel({ id: vmId });
+      viewModel = skillAbility.getChatViewModel({ id: vmId });
     } else {
-      vm = document.getTransientObject().getChatViewModel({ id: vmId });
+      viewModel = document.getTransientObject().getChatViewModel({ id: vmId });
     }
 
-    if (vm === undefined) {
+    if (viewModel === undefined) {
       game.ambersteel.logger.logWarn(`renderChatMessage: Failed to create view model for chat message`);
       return;
     }
     // Ensure the view model is stored in the global collection. 
-    game.ambersteel.viewModels.set(vmId, vm);
+    if (game.ambersteel.enableViewModelCaching === true) {
+      game.ambersteel.viewModels.set(vmId, viewModel);
+    }
   }
 
-  vm.activateListeners(html, vm.isOwner, vm.isEditable);
+  viewModel.activateListeners(html, viewModel.isOwner, viewModel.isEditable);
 });
 
 Hooks.on("deleteChatMessage", function(args) {
