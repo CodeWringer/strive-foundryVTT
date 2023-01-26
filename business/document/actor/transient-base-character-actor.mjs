@@ -46,6 +46,7 @@ import TransientBaseActor from './transient-base-actor.mjs';
  * * Read-only. 
  * @property {Array<TransientScar>} health.scars 
  * * Read-only. 
+ * @property {Array<String>} health.states
  * @property {Number} health.HP 
  * @property {Number} health.maxHP 
  * * Read-only. 
@@ -145,6 +146,9 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
       get maxInjuries() { return new Ruleset().getCharacterMaximumInjuries(thiz.document) },
       get maxExhaustion() { return new Ruleset().getCharacterMaximumExhaustion(thiz.document) },
       get maxMagicStamina() { return new Ruleset().getCharacterMaximumMagicStamina(thiz.document) },
+      
+      get states() { return thiz.document.system.health.states; },
+      set states(value) { thiz.updateByPath("system.health.states", value); },
     };
   }
 
