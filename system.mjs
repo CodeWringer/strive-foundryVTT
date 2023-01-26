@@ -6,8 +6,9 @@ import { ATTACK_TYPES } from "./business/ruleset/skill/attack-types.mjs";
 import { SHIELD_TYPES } from "./business/ruleset/asset/shield-types.mjs";
 import { ARMOR_TYPES } from "./business/ruleset/asset/armor-types.mjs";
 import { WEAPON_TYPES } from "./business/ruleset/asset/weapon-types.mjs";
-import { INJURY_STATES } from "./business/ruleset/injury-states.mjs";
-import { ILLNESS_STATES } from "./business/ruleset/illness-states.mjs";
+import { INJURY_STATES } from "./business/ruleset/health/injury-states.mjs";
+import { ILLNESS_STATES } from "./business/ruleset/health/illness-states.mjs";
+import { HEALTH_STATES } from "./business/ruleset/health/health-states.mjs";
 import Ruleset from "./business/ruleset/ruleset.mjs";
 // Chat constants
 import { VISIBILITY_MODES } from "./presentation/chat/visibility-modes.mjs";
@@ -71,7 +72,7 @@ import './presentation/sheet/actor/part/actor-beliefs-fate-viewmodel.mjs';
 import './presentation/sheet/actor/part/actor-beliefs-viewmodel.mjs';
 import './presentation/sheet/actor/part/actor-biography-viewmodel.mjs';
 import './presentation/sheet/actor/part/actor-fate-viewmodel.mjs';
-import './presentation/sheet/actor/part/actor-health-viewmodel.mjs';
+import './presentation/sheet/actor/part/health/actor-health-viewmodel.mjs';
 import './presentation/sheet/actor/part/actor-personals-viewmodel.mjs';
 import './presentation/sheet/actor/part/actor-skills-viewmodel.mjs';
 // View model factory

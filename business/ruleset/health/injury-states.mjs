@@ -1,4 +1,4 @@
-import { getAsChoices } from "../util/constants-utility.mjs";
+import { getAsChoices } from "../../util/constants-utility.mjs";
 
 /**
  * Represents an injury state. 
