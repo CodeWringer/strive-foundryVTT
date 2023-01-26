@@ -8,6 +8,7 @@ import ViewModel from "../../../view-model/view-model.mjs"
 import IllnessListItemViewModel from "../../item/illness/illness-list-item-viewmodel.mjs"
 import InjuryListItemViewModel from "../../item/injury/injury-list-item-viewmodel.mjs"
 import MutationListItemViewModel from "../../item/mutation/mutation-list-item-viewmodel.mjs"
+import ScarListItemViewModel from "../../item/scar/scar-list-item-viewmodel.mjs"
 
 export default class ActorHealthViewModel extends ViewModel {
   /** @override */
@@ -35,6 +36,12 @@ export default class ActorHealthViewModel extends ViewModel {
   get mutationCount() { return this.document.health.mutations.length; }
 
   /**
+   * @type {Number}
+   * @readonly
+   */
+  get scarCount() { return this.document.health.scars.length; }
+
+  /**
    * @type {Array<IllnessListItemViewModel>}
    * @readonly
    */
@@ -51,6 +58,12 @@ export default class ActorHealthViewModel extends ViewModel {
    * @readonly
    */
   mutations = [];
+
+  /**
+   * @type {Array<ScarListItemViewModel>}
+   * @readonly
+   */
+  scars = [];
 
   /**
    * @type {Boolean}
@@ -148,6 +161,7 @@ export default class ActorHealthViewModel extends ViewModel {
       vmBtnAddItem: factory.createVmBtnAdd({
         id: "vmBtnAddIllness",
         target: thiz.document,
+        isEditable: this.isEditable,
         creationType: "illness",
         withDialog: true,
         localizableLabel: "ambersteel.character.health.illness.add.label",
@@ -172,6 +186,7 @@ export default class ActorHealthViewModel extends ViewModel {
       vmBtnAddItem: factory.createVmBtnAdd({
         id: "vmBtnAddInjury",
         target: thiz.document,
+        isEditable: this.isEditable,
         creationType: "injury",
         withDialog: true,
         localizableLabel: "ambersteel.character.health.injury.add.label",
@@ -196,11 +211,37 @@ export default class ActorHealthViewModel extends ViewModel {
       vmBtnAddItem: factory.createVmBtnAdd({
         id: "vmBtnAddMutation",
         target: thiz.document,
+        isEditable: this.isEditable,
         creationType: "mutation",
         withDialog: true,
         localizableLabel: "ambersteel.character.health.mutation.add.label",
         localizableType: "ambersteel.character.health.mutation.singular",
         localizableDialogTitle: "ambersteel.character.health.mutation.add.query",
+      }),
+    });
+
+    // Prepare scars list view models. 
+    this.scars = [];
+    this.scars = this._getScarViewModels();
+    this.vmScarList = new SortableListViewModel({
+      parent: thiz,
+      isEditable: args.isEditable ?? thiz.isEditable,
+      id: "vmScarList",
+      indexDataSource: new DocumentListItemOrderDataSource({
+        document: thiz.document,
+        listName: "scars",
+      }),
+      listItemViewModels: this.scars,
+      listItemTemplate: TEMPLATES.SCAR_LIST_ITEM,
+      vmBtnAddItem: factory.createVmBtnAdd({
+        id: "vmBtnAddScar",
+        target: thiz.document,
+        isEditable: this.isEditable,
+        creationType: "scar",
+        withDialog: true,
+        localizableLabel: "ambersteel.character.health.scar.add.label",
+        localizableType: "ambersteel.character.health.scar.singular",
+        localizableDialogTitle: "ambersteel.character.health.scar.add.query",
       }),
     });
   }
@@ -232,6 +273,11 @@ export default class ActorHealthViewModel extends ViewModel {
     const newMutations = this._getMutationViewModels();
     this._cullObsolete(this.mutations, newMutations);
     this.mutations = newMutations;
+    
+    // Scars
+    const newScars = this._getScarViewModels();
+    this._cullObsolete(this.scars, newScars);
+    this.scars = newScars;
 
     super.update(args);
   }
@@ -251,6 +297,10 @@ export default class ActorHealthViewModel extends ViewModel {
     updates.set(this.vmMutationList, {
       ...updates.get(this.vmMutationList),
       listItemViewModels: this.mutations,
+    });
+    updates.set(this.vmScarList, {
+      ...updates.get(this.vmScarList),
+      listItemViewModels: this.scars,
     });
     
     return updates;
@@ -292,6 +342,19 @@ export default class ActorHealthViewModel extends ViewModel {
       this.document.health.mutations, 
       this.mutations,
       (args) => { return new MutationListItemViewModel(args); }
+    );
+  }
+  
+  /**
+   * @returns {Array<ScarListItemViewModel>}
+   * 
+   * @private
+   */
+  _getScarViewModels() {
+    return this._getViewModels(
+      this.document.health.scars, 
+      this.scars,
+      (args) => { return new ScarListItemViewModel(args); }
     );
   }
 }

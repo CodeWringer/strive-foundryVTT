@@ -19,6 +19,21 @@ cssClass: {undefined | String}
     {{> buttonDelete viewModel=viewModel.vmBtnDelete }}
   </div>
   {{!-- Row 2 --}}
+  {{!-- Limit --}}
+  <div class="flex flex-row">
+    <div class="flex flex-middle flex-right">
+      {{> inputLabel text=(localize "ambersteel.character.health.injury.limit") showFancyFont=viewModel.showFancyFont}}
+    </div>
+    <div class="grid-span-2">
+      {{> inputNumberSpinner viewModel=viewModel.vmNsLimit }}
+    </div>
+  </div>
+  {{!-- Row 3 --}}
+  {{!-- Modifiers --}}
+  <div class="flex flex-row">
+    {{> modifiersList viewModel=viewModel.vmModifiers}}
+  </div>
+  {{!-- Row 4 --}}
   {{!-- Description --}}
   <div class="flex flex-row">
     {{> inputRichText viewModel=viewModel.vmRtDescription cssClass="fill" }}

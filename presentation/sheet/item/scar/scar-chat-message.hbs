@@ -15,6 +15,19 @@ cssClass: {undefined | String}
       {{viewModel.document.name}}
     </h2>
   </div>
+    {{!-- Limit --}}
+  <div class="flex flex-row">
+    <div class="flex flex-middle flex-right">
+      {{> inputLabel text=(localize "ambersteel.character.health.injury.limit") showFancyFont=viewModel.showFancyFont}}
+    </div>
+    <div class="grid-span-2">
+      {{> inputNumberSpinner viewModel=viewModel.vmNsLimit }}
+    </div>
+  </div>
+  {{!-- Modifiers --}}
+  <div class="flex flex-row">
+    {{> modifiersList viewModel=viewModel.vmModifiers}}
+  </div>
   {{!-- Description --}}
   <div class="sheet-block scrollable-height-md">
     {{> lazyRichText viewModel=viewModel.vmLazyDescription}}

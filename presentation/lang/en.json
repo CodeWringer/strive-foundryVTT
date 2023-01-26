@@ -56,6 +56,7 @@
       },
       "description": "Description",
       "edit": "Edit",
+      "formula": "Formula",
       "increment": "Increment",
       "input": {
         "validationFailed": "The following required fields failed validation. Ensure required fields have a valid value.",
@@ -94,7 +95,8 @@
       },
       "properties": {
         "label": "Properties"
-      }
+      },
+      "propertyPath": "Property path"
     },
     "character": {
       "advancement": {

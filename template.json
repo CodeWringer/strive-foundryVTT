@@ -240,7 +240,9 @@
       "templates": ["base"]
     },
     "scar": {
-      "templates": ["base"]
+      "templates": ["base"],
+      "limit": 0,
+      "modifiers": []
     }
   }
 }
