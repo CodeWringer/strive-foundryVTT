@@ -423,6 +423,26 @@
           },
           "plural": "Scars",
           "singular": "Scar"
+        },
+        "states": {
+          "label": "States",
+          "berserk": "Berserk",
+          "burning": "Burning",
+          "bleeding": "Bleeding",
+          "dazed": "Dazed",
+          "death": "Death's Door",
+          "dissolving": "Dissolving",
+          "electrified": "Electrified",
+          "frostbitten": "Frostbitten",
+          "grappled": "Grappled",
+          "hasted": "Hasted",
+          "jealous": "Jealous",
+          "pacified": "Pacified",
+          "poisoned": "Poisoned",
+          "prone": "Prone",
+          "rooted": "Rooted",
+          "terrified": "Terrified",
+          "unconscious": "Unconscious"
         }
       },
       "magic": {
