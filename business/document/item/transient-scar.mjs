@@ -5,7 +5,6 @@ import { SOUNDS_CONSTANTS } from "../../../presentation/audio/sounds.mjs";
 import { ITEM_SUBTYPE } from "./item-subtype.mjs";
 import TransientBaseItem from "./transient-base-item.mjs";
 import { createUUID } from "../../util/uuid-utility.mjs";
-import Modifier from "../modifier.mjs";
 
 /**
  * Represents the full transient data of a scar. 
@@ -13,7 +12,6 @@ import Modifier from "../modifier.mjs";
  * @extends TransientBaseItem
  * 
  * @property {Number} limit
- * @property {Array<Modifier>} modifiers
  */
 export default class TransientScar extends TransientBaseItem {
   /** @override */
@@ -33,17 +31,6 @@ export default class TransientScar extends TransientBaseItem {
     this.updateByPath("system.limit", value);
   }
 
-  /**
-   * @type {Array<Modifier>}
-   */
-  get modifiers() {
-    return this.document.system.modifiers;
-  }
-  set modifiers(value) {
-    this.document.system.modifiers = value;
-    this.updateByPath("system.modifiers", value);
-  }
-  
   /** @override */
   async getChatData() {
     const vm = this.getChatViewModel();

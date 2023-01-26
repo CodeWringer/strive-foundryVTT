@@ -25,11 +25,6 @@ cssClass: {undefined | String}
       {{> inputNumberSpinner viewModel=viewModel.vmNsLimit }}
     </div>
   </div>
-  {{!-- Modifiers --}}
-  <div class="sheet-block flex flex-column margin-b-md">
-    <h3>{{localize "ambersteel.general.modifier.plural"}}</h3>
-    {{> modifiersList viewModel=viewModel.vmModifiers}}
-  </div>
   {{!-- Description --}}
   <div class="sheet-block flex flex-column flex-grow">
     <h3 class="{{#if viewModel.showFancyFont}}fancy-font{{/if}}">{{localize "ambersteel.general.description"}}</h3>

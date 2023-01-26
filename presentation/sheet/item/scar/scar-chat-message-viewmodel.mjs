@@ -2,7 +2,6 @@ import TransientScar from "../../../../business/document/item/transient-scar.mjs
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs";
 import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
 import LazyRichTextViewModel from "../../../component/lazy-rich-text/lazy-rich-text-viewmodel.mjs";
-import ModifiersListViewModel from "../../../component/modifiers-list/modifiers-list-viewmodel.mjs";
 import { TEMPLATES } from "../../../templatePreloader.mjs";
 import ViewModel from "../../../view-model/view-model.mjs";
 
@@ -74,15 +73,6 @@ export default class ScarChatMessageViewModel extends ViewModel {
       propertyOwner: this.document,
       propertyPath: "limit",
       min: 0,
-    });
-    this.vmModifiers = new ModifiersListViewModel({
-      id: "vmModifiers",
-      parent: this,
-      propertyOwner: this.document,
-      propertyPath: "modifiers",
-      isEditable: this.isEditable,
-      isSendable: this.isSendable,
-      isOwner: this.isOwner,
     });
   }
 }

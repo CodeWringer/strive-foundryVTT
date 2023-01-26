@@ -241,8 +241,7 @@
     },
     "scar": {
       "templates": ["base"],
-      "limit": 0,
-      "modifiers": []
+      "limit": 0
     }
   }
 }

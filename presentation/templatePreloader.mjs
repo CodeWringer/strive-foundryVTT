@@ -35,8 +35,6 @@ export const TEMPLATES = {
   COMPONENT_INPUT_RICH_TEXT: `${basePathComponent}/input-rich-text/input-rich-text.hbs`,
   COMPONENT_INPUT_PROPERTIES: `${basePathComponent}/input-properties/input-properties.hbs`,
   COMPONENT_INPUT_PROPERTY_PILL: `${basePathComponent}/input-properties/input-property-pill.hbs`,
-  COMPONENT_MODIFIERS_LIST: `${basePathComponent}/modifiers-list/modifiers-list.hbs`,
-  COMPONENT_MODIFIERS_LIST_ITEM: `${basePathComponent}/modifiers-list/modifiers-list-item.hbs`,
   // Buttons
   COMPONENT_BUTTON: `${basePathComponent}/button/button.hbs`,
   COMPONENT_BUTTON_ADD: `${basePathComponent}/button-add/button-add.hbs`,
