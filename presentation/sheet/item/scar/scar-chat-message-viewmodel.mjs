@@ -1,5 +1,6 @@
 import TransientScar from "../../../../business/document/item/transient-scar.mjs";
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs";
+import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
 import LazyRichTextViewModel from "../../../component/lazy-rich-text/lazy-rich-text-viewmodel.mjs";
 import ModifiersListViewModel from "../../../component/modifiers-list/modifiers-list-viewmodel.mjs";
 import { TEMPLATES } from "../../../templatePreloader.mjs";
@@ -64,17 +65,20 @@ export default class ScarChatMessageViewModel extends ViewModel {
       isOwner: this.isOwner,
       renderableContent: this.document.description,
     });
-    this.vmNsLimit = factory.createVmNumberSpinner({
-      parent: thiz,
+    this.vmNsLimit = new InputNumberSpinnerViewModel({
       id: "vmNsLimit",
-      propertyOwner: thiz.document,
+      parent: this,
+      isEditable: this.isEditable,
+      isSendable: this.isSendable,
+      isOwner: this.isOwner,
+      propertyOwner: this.document,
       propertyPath: "limit",
       min: 0,
     });
     this.vmModifiers = new ModifiersListViewModel({
       id: "vmModifiers",
       parent: this,
-      propertyOwner: thiz.document,
+      propertyOwner: this.document,
       propertyPath: "modifiers",
       isEditable: this.isEditable,
       isSendable: this.isSendable,

@@ -26,7 +26,8 @@ cssClass: {undefined | String}
     </div>
   </div>
   {{!-- Modifiers --}}
-  <div class="sheet-block grid-3col grid-gap-md margin-b-md">
+  <div class="sheet-block flex flex-column margin-b-md">
+    <h3>{{localize "ambersteel.general.modifier.plural"}}</h3>
     {{> modifiersList viewModel=viewModel.vmModifiers}}
   </div>
   {{!-- Description --}}

@@ -16,7 +16,7 @@ cssClass: {undefined | String}
     </h2>
   </div>
     {{!-- Limit --}}
-  <div class="flex flex-row">
+  <div class="sheet-block grid-3col">
     <div class="flex flex-middle flex-right">
       {{> inputLabel text=(localize "ambersteel.character.health.injury.limit") showFancyFont=viewModel.showFancyFont}}
     </div>
@@ -25,8 +25,11 @@ cssClass: {undefined | String}
     </div>
   </div>
   {{!-- Modifiers --}}
-  <div class="flex flex-row">
-    {{> modifiersList viewModel=viewModel.vmModifiers}}
+  <div class="sheet-block">
+    <h3>{{localize "ambersteel.general.modifier.plural"}}</h3>
+    <div class="flex flex-row">
+      {{> modifiersList viewModel=viewModel.vmModifiers}}
+    </div>
   </div>
   {{!-- Description --}}
   <div class="sheet-block scrollable-height-md">

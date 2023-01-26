@@ -76,6 +76,11 @@
           "label": "Game-Master"
         }
       },
+      "modifier": {
+        "label": "Modifier",
+        "singular": "Modifier",
+        "plural": "Modifiers"
+      },
       "name": "Name",
       "none": {
         "label": "None",
