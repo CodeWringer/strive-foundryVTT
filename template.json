@@ -195,7 +195,8 @@
         "description": "",
         "gmNotes": "",
         "isCustom": false,
-        "displayOrders": {}
+        "displayOrders": {},
+        "modifiers": []
       }
     },
     "skill": {
