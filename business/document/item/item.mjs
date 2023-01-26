@@ -60,6 +60,15 @@ export class AmbersteelItem extends Item {
     }
     return this._transientObject;
   }
+
+  /** @override */
+  async _preCreate(data, options, user) {
+    this.updateSource({
+      img: this.defaultImg,
+    });
+
+    return super._preCreate(data, options, user);
+  }
   
   /**
    * Invalidates the cached transient object instance, causing a new one to be instantiated at the next access. 
