@@ -13,7 +13,8 @@
           "fateCards": [],
           "injuries": [],
           "illnesses": [],
-          "mutations": []
+          "mutations": [],
+          "scars": []
         }
       },
       "character": {
@@ -186,7 +187,8 @@
       "fate-card",
       "injury",
       "illness",
-      "mutation"
+      "mutation",
+      "scar"
     ],
     "templates": {
       "base": {
@@ -235,6 +237,9 @@
       "treatmentSkill": ""
     },
     "mutation": {
+      "templates": ["base"]
+    },
+    "scar": {
       "templates": ["base"]
     }
   }

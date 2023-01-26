@@ -5,6 +5,7 @@ import AmbersteelSkillItemSheet from "./skill/ambersteel-skill-item-sheet.mjs";
 import AmbersteelInjuryItemSheet from "./injury/ambersteel-injury-item-sheet.mjs";
 import AmbersteelIllnessItemSheet from "./illness/ambersteel-illness-item-sheet.mjs";
 import AmbersteelMutationItemSheet from "./mutation/ambersteel-mutation-item-sheet.mjs";
+import AmbersteelScarItemSheet from "./scar/ambersteel-scar-item-sheet.mjs";
 import AmbersteelFateItemSheet from "./fate-card/ambersteel-fate-item-sheet.mjs";
 // Other imports
 import * as SheetUtil from "../sheet-utility.mjs";

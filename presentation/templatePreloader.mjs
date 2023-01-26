@@ -112,6 +112,10 @@ export const TEMPLATES = {
   MUTATION_CHAT_MESSAGE: `${basePathPresentation}/sheet/item/mutation/mutation-chat-message.hbs`,
   MUTATION_ITEM_SHEET: `${basePathPresentation}/sheet/item/mutation/mutation-item-sheet.hbs`,
   MUTATION_LIST_ITEM: `${basePathPresentation}/sheet/item/mutation/mutation-list-item.hbs`,
+  // Mutation
+  SCAR_CHAT_MESSAGE: `${basePathPresentation}/sheet/item/scar/scar-chat-message.hbs`,
+  SCAR_ITEM_SHEET: `${basePathPresentation}/sheet/item/scar/scar-item-sheet.hbs`,
+  SCAR_LIST_ITEM: `${basePathPresentation}/sheet/item/scar/scar-list-item.hbs`,
 }
 
 /**

@@ -8,6 +8,7 @@
   "ITEM.TypeInjury": "Injury",
   "ITEM.TypeIllness": "Illness",
   "ITEM.TypeMutation": "Mutation",
+  "ITEM.TypeScar": "Scar",
   "ambersteel": {
     "migration": {
       "title": "Data Migration",
@@ -408,6 +409,18 @@
           },
           "plural": "Mutations",
           "singular": "Mutation"
+        },
+        "scar": {
+          "add": {
+            "label": "Add Scar",
+            "query": "Select Scar to Add"
+          },
+          "delete": {
+            "label": "Delete Scar",
+            "query": "Confirm Deletion of Scar"
+          },
+          "plural": "Scars",
+          "singular": "Scar"
         }
       },
       "magic": {
