@@ -170,7 +170,7 @@ export default class InputRichTextViewModel extends InputViewModel {
         const content = this._editor.getContent();
         
         // If this value is true, that means the content was changed by the user. 
-        const isDirty = this.value.length !== content.length;
+        const isDirty = (this.value ?? "").length !== content.length;
 
         // Ensure the editor is destroyed, to avoid potential leaks. 
         thiz.isInEditMode = false;
