@@ -66,6 +66,9 @@ cssClass: {undefined | String}
         </div>
       </div>
     </div>
+    {{#with viewModel.healthStatesTemplate as | template |}}
+      {{> (template) viewModel=../viewModel.vmHealthStates}}
+    {{/with}}
   {{!-- Injuries --}}
   <h2 class="flex flex-row">{{localize "ambersteel.character.health.injury.plural"}}</h2>
   <div class="grid-2col grid-gap-md margin-b-md">

@@ -1,15 +1,19 @@
-import Ruleset from "../../../../business/ruleset/ruleset.mjs"
-import { validateOrThrow } from "../../../../business/util/validation-utility.mjs"
-import DocumentListItemOrderDataSource from "../../../component/sortable-list/document-list-item-order-datasource.mjs"
-import SortableListViewModel from "../../../component/sortable-list/sortable-list-viewmodel.mjs"
-import { TEMPLATES } from "../../../templatePreloader.mjs"
-import ViewModelFactory from "../../../view-model/view-model-factory.mjs"
-import ViewModel from "../../../view-model/view-model.mjs"
-import IllnessListItemViewModel from "../../item/illness/illness-list-item-viewmodel.mjs"
-import InjuryListItemViewModel from "../../item/injury/injury-list-item-viewmodel.mjs"
-import MutationListItemViewModel from "../../item/mutation/mutation-list-item-viewmodel.mjs"
-import ScarListItemViewModel from "../../item/scar/scar-list-item-viewmodel.mjs"
+import Ruleset from "../../../../../business/ruleset/ruleset.mjs"
+import { validateOrThrow } from "../../../../../business/util/validation-utility.mjs"
+import DocumentListItemOrderDataSource from "../../../../component/sortable-list/document-list-item-order-datasource.mjs"
+import SortableListViewModel from "../../../../component/sortable-list/sortable-list-viewmodel.mjs"
+import { TEMPLATES } from "../../../../templatePreloader.mjs"
+import ViewModelFactory from "../../../../view-model/view-model-factory.mjs"
+import ViewModel from "../../../../view-model/view-model.mjs"
+import IllnessListItemViewModel from "../../../item/illness/illness-list-item-viewmodel.mjs"
+import InjuryListItemViewModel from "../../../item/injury/injury-list-item-viewmodel.mjs"
+import MutationListItemViewModel from "../../../item/mutation/mutation-list-item-viewmodel.mjs"
+import ScarListItemViewModel from "../../../item/scar/scar-list-item-viewmodel.mjs"
+import ActorHealthStatesViewModel from "./actor-health-states-viewmodel.mjs"
 
+/**
+ * @extends ViewModel
+ */
 export default class ActorHealthViewModel extends ViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.ACTOR_HEALTH; }
@@ -70,13 +74,18 @@ export default class ActorHealthViewModel extends ViewModel {
    * @readonly
    */
   get isToughnessTestRequired() { return new Ruleset().isToughnessTestRequired(this.document.document); }
+  
+  /**
+   * @type {String}
+   * @readonly
+   */
+  get healthStatesTemplate() { return ActorHealthStatesViewModel.TEMPLATE; }
 
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
    * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 
    * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 
    * is expected to be associated with an actor sheet or item sheet or journal entry or chat message and so on.
-   * 
    * @param {Boolean | undefined} args.isEditable If true, the sheet is editable. 
    * @param {Boolean | undefined} args.isSendable If true, the document represented by the sheet can be sent to chat. 
    * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document. 
@@ -143,6 +152,14 @@ export default class ActorHealthViewModel extends ViewModel {
       propertyPath: "health.maxInjuries",
       isEditable: false,
       min: 1,
+    });
+    this.vmHealthStates = new ActorHealthStatesViewModel({
+      id: "vmHealthStates",
+      parent: this,
+      isEditable: this.isEditable,
+      isSendable: this.isSendable,
+      isOwner: this.isOwner,
+      document: this.document,
     });
 
     // Prepare illnesses list view models. 
