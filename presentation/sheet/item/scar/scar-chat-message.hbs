@@ -24,6 +24,13 @@ cssClass: {undefined | String}
       {{> inputNumberSpinner viewModel=viewModel.vmNsLimit }}
     </div>
   </div>
+  {{!-- Modifiers --}}
+  <div class="sheet-block">
+    <h3>{{localize "ambersteel.general.modifier.plural"}}</h3>
+    <div class="flex flex-row">
+      {{> modifiersList viewModel=viewModel.vmModifiers}}
+    </div>
+  </div>
   {{!-- Description --}}
   <div class="sheet-block scrollable-height-md">
     {{> lazyRichText viewModel=viewModel.vmLazyDescription}}

@@ -3,6 +3,7 @@ import { validateOrThrow } from "../../../../business/util/validation-utility.mj
 import { TEMPLATES } from "../../../templatePreloader.mjs";
 import ViewModelFactory from "../../../view-model/view-model-factory.mjs";
 import ViewModel from "../../../view-model/view-model.mjs";
+import ModifiersListViewModel from "../../../component/modifiers-list/modifiers-list-viewmodel.mjs";
 
 export default class ScarListItemViewModel extends ViewModel {
   /** @override */
@@ -68,6 +69,15 @@ export default class ScarListItemViewModel extends ViewModel {
       propertyOwner: thiz.document,
       propertyPath: "limit",
       min: 0,
+    });
+    this.vmModifiers = new ModifiersListViewModel({
+      id: "vmModifiers",
+      parent: this,
+      propertyOwner: thiz.document,
+      propertyPath: "modifiers",
+      isEditable: this.isEditable,
+      isSendable: this.isSendable,
+      isOwner: this.isOwner,
     });
   }
 
