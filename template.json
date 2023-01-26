@@ -93,7 +93,8 @@
           "maxHP": 0,
           "HP": 0,
           "exhaustion": 0,
-          "magicStamina": 0
+          "magicStamina": 0,
+          "states": []
         },
         "assets": {
           "equipment": {
