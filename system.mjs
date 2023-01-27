@@ -37,6 +37,7 @@ import { BaseLoggingStrategy, LogLevels } from "./business/logging/base-logging-
 import { ConsoleLoggingStrategy } from "./business/logging/console-logging-strategy.mjs";
 // Import settings classes
 import AmbersteelUserSettings from "./business/setting/ambersteel-user-settings.mjs";
+import AmbersteelWorldSettings from "./business/setting/ambersteel-world-settings.mjs";
 // Import view models
 import './presentation/view-model/view-model.mjs';
 import ViewModelCollection from './presentation/view-model/view-model-collection.mjs';
@@ -171,6 +172,7 @@ Hooks.once('setup', function() {
 Hooks.once("ready", function() {
   // Settings initialization.
   new AmbersteelUserSettings().ensureAllSettings();
+  new AmbersteelWorldSettings().ensureAllSettings();
 
   // Debug mode setting. 
   game.ambersteel.debug = new LoadDebugSettingUseCase().invoke();

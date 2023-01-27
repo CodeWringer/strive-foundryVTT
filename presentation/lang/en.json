@@ -638,6 +638,10 @@
       "toggleDebug": {
         "label": "Debug Mode",
         "hint": "Toggles debug mode on - increases log verbosity, at the cost of performance."
+      },
+      "healthStates": {
+        "label": "Health State Customization",
+        "hint": "Allows defining new and hiding system default health states."
       }
     }
   }
