@@ -67,6 +67,8 @@ export const TEMPLATES = {
   DIALOG_ITEM_ADD: `${basePathPresentation}/dialog/dialog-item-add/dialog-item-add.hbs`,
   DIALOG_MIGRATOR: `${basePathPresentation}/dialog/migrator-dialog/migrator-dialog.hbs`,
   DIALOG_DYNAMIC_INPUT: `${basePathPresentation}/dialog/dynamic-input-dialog/dynamic-input-dialog.hbs`,
+  // --- Settings Dialogs
+  DIALOG_SETTINGS_HEALTH_STATES: `${basePathPresentation}/dialog/settings/health-states-settings-dialog.hbs`,
   // --- Actor
   ACTOR_SHEET: `${basePathPresentation}/sheet/actor/actor-sheet.hbs`,
   ACTOR_ATTRIBUTE_TABLE: `${basePathPresentation}/sheet/actor/part/actor-attribute-table.hbs`,

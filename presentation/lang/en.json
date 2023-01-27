@@ -631,6 +631,7 @@
       "hintToughnessTestRequired": "Half of the maximum number of injuries (rounded down) reached. Any further damage incurred requires a toughness test with Ob as high as the number of injuries to be passed. If failed, suffer +1 exhaustion."
     },
     "settings": {
+      "saveChanges": "Save Changes",
       "fancyFont": {
         "label": "Fancy font",
         "hint": "Toggles the 'fancy' font off or on."
@@ -641,7 +642,9 @@
       },
       "healthStates": {
         "label": "Health State Customization",
-        "hint": "Allows defining new and hiding system default health states."
+        "hint": "Allows defining new and hiding system default health states.",
+        "configureSystemDefaults": "Configure system health state visibilities",
+        "configureCustom": "Define custom health states"
       }
     }
   }

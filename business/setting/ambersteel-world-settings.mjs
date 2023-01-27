@@ -26,7 +26,7 @@ export default class AmbersteelWorldSettings extends AmbersteelSettings {
         config: false,
         default: {
           hidden: [],
-          added: [],
+          custom: [],
         },
         type: Object,
         menu: HealthStatesSettingsDialog,
