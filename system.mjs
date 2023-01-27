@@ -57,6 +57,8 @@ import './presentation/component/button-roll/button-roll-viewmodel.mjs';
 import './presentation/component/button-send-to-chat/button-send-to-chat-viewmodel.mjs';
 import './presentation/component/button-toggle-visibility/button-toggle-visibility-viewmodel.mjs';
 import './presentation/component/button-take-item/button-take-item-viewmodel.mjs';
+import './presentation/component/button-toggle-icon/button-toggle-icon-viewmodel.mjs';
+// Composites
 import './presentation/component/sortable-list/sortable-list-viewmodel.mjs';
 import './presentation/component/section-gm-notes/section-gm-notes-viewmodel.mjs';
 import './presentation/component/dice-roll-list/dice-roll-list-viewmodel.mjs';
@@ -64,6 +66,7 @@ import './presentation/component/damage-definition-list/damage-definition-list-i
 import './presentation/component/damage-definition-list/damage-definition-list-viewmodel.mjs';
 import './presentation/component/lazy-load/lazy-load-viewmodel.mjs';
 import './presentation/component/lazy-rich-text/lazy-rich-text-viewmodel.mjs';
+import './presentation/component/visibility-toggle-list/visibility-toggle-list-viewmodel.mjs';
 // View models
 import './presentation/sheet/actor/actor-sheet-viewmodel.mjs';
 import './presentation/sheet/actor/part/actor-attribute-table-viewmodel.mjs';

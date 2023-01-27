@@ -1,0 +1,11 @@
+{{!--
+viewModel: VisibilityToggleListItemViewModel
+--}}
+<div class="flex flex-row flex-middle pad-md">
+  <span>
+    {{> buttonToggleIcon viewModel=viewModel.btnToggle}}
+  </span>
+  <span class="flex flex-grow pad-l-lg">
+    {{> inputLabel text=viewModel.localizedLabel showFancyFont=viewModel.showFancyFont}}
+  </span>
+</div>

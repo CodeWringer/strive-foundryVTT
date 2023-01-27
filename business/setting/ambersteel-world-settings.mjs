@@ -1,4 +1,4 @@
-import HealthStatesSettingsDialog from "../../presentation/dialog/settings/health-states-settings-dialog.mjs";
+import HealthStatesSettingsDialog from "../../presentation/dialog/settings/health-states/health-states-settings-dialog.mjs";
 import AmbersteelSetting from "./ambersteel-setting.mjs";
 import AmbersteelSettings from "./ambersteel-settings.mjs";
 import { SettingScopes } from "./setting-scopes.mjs";

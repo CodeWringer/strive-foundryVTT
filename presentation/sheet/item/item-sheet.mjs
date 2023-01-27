@@ -32,7 +32,6 @@ export class AmbersteelItemSheet extends ItemSheet {
    * @returns {Object}
    * @override
    * @virtual
-   * @see https://foundryvtt.com/api/ItemSheet.html#.defaultOptions
    */
   static get defaultOptions() {
     return mergeObject(super.defaultOptions, {
@@ -49,7 +48,6 @@ export class AmbersteelItemSheet extends ItemSheet {
    * @virtual
    * @override
    * @readonly
-   * @see https://foundryvtt.com/api/DocumentSheet.html#template
    */
   get template() { return this.subType.template; }
 
@@ -58,7 +56,6 @@ export class AmbersteelItemSheet extends ItemSheet {
    * @override
    * @type {String}
    * @readonly
-   * @see https://foundryvtt.com/api/ItemSheet.html#title
    */
   get title() { return `${this.subType.title} - ${this.item.name}` }
 
@@ -81,7 +78,6 @@ export class AmbersteelItemSheet extends ItemSheet {
    * This method is called *before* the sheet is rendered. 
    * @returns {Object} The enriched context object. 
    * @override 
-   * @see https://foundryvtt.com/api/FormApplicatiocn.html#getData
    */
   getData() {
     const context = super.getData();

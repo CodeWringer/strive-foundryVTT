@@ -45,6 +45,7 @@ export const TEMPLATES = {
   COMPONENT_BUTTON_TOGGLE_VISIBILITY: `${basePathComponent}/button-toggle-visibility/button-toggle-visibility.hbs`,
   COMPONENT_BUTTON_TAKE_ITEM: `${basePathComponent}/button-take-item/button-take-item.hbs`,
   COMPONENT_BUTTON_TOGGLE: `${basePathComponent}/button-toggle/button-toggle.hbs`,
+  COMPONENT_BUTTON_TOGGLE_ICON: `${basePathComponent}/button-toggle-icon/button-toggle-icon.hbs`,
   COMPONENT_BUTTON_CONTEXT_MENU: `${basePathComponent}/button-context-menu/button-context-menu.hbs`,
   // Composite
   COMPONENT_SORTABLE_LIST: `${basePathComponent}/sortable-list/sortable-list.hbs`,
@@ -54,6 +55,8 @@ export const TEMPLATES = {
   DICE_ROLL_DAMAGE_CHAT_MESSAGE: `${basePathComponent}/damage-definition-list/damage-roll-chat-message.hbs`,
   COMPONENT_LAZY_LOAD: `${basePathComponent}/lazy-load/lazy-load.hbs`,
   COMPONENT_LAZY_LOAD_RICH_TEXT: `${basePathComponent}/lazy-rich-text/lazy-rich-text.hbs`,
+  COMPONENT_VISIBILITY_TOGGLE_LIST: `${basePathComponent}/visibility-toggle-list/visibility-toggle-list.hbs`,
+  COMPONENT_VISIBILITY_TOGGLE_LIST_ITEM: `${basePathComponent}/visibility-toggle-list/visibility-toggle-list-item.hbs`,
   // GM
   COMPONENT_GM_NOTES: `${basePathComponent}/section-gm-notes/section-gm-notes.hbs`,
   // Dice
@@ -68,7 +71,7 @@ export const TEMPLATES = {
   DIALOG_MIGRATOR: `${basePathPresentation}/dialog/migrator-dialog/migrator-dialog.hbs`,
   DIALOG_DYNAMIC_INPUT: `${basePathPresentation}/dialog/dynamic-input-dialog/dynamic-input-dialog.hbs`,
   // --- Settings Dialogs
-  DIALOG_SETTINGS_HEALTH_STATES: `${basePathPresentation}/dialog/settings/health-states-settings-dialog.hbs`,
+  DIALOG_SETTINGS_HEALTH_STATES: `${basePathPresentation}/dialog/settings/health-states/health-states-settings-dialog.hbs`,
   // --- Actor
   ACTOR_SHEET: `${basePathPresentation}/sheet/actor/actor-sheet.hbs`,
   ACTOR_ATTRIBUTE_TABLE: `${basePathPresentation}/sheet/actor/part/actor-attribute-table.hbs`,
