@@ -20,8 +20,7 @@ export default class AmbersteelUserSettings extends AmbersteelSettings {
    */
   static get KEY_TOGGLE_DEBUG() { return "toggleDebug"; }
 
-  constructor()
-  {
+  constructor() {
     super();
 
     this._settings.push(
