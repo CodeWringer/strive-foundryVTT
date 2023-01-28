@@ -60,6 +60,7 @@ export default class HealthStatesSettingsDialogViewModel extends ViewModel {
       isEditable: this.isEditable,
       onClick: async () => {
         const stateSettings = new LoadHealthStatesSettingUseCase().invoke();
+        stateSettings.hidden = [];
         for (const item of thiz.stateVisibilityItems) {
           if (item.value === false) {
             stateSettings.hidden.push(item.id);
