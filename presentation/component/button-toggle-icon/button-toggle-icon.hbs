@@ -2,8 +2,8 @@
 viewModel: {ButtonToggleViewModel}
 cssClass: {String | undefined}
 --}}
-<button 
-  class="custom-system-button {{#if viewModel.isEditable}}{{else}}disabled {{/if}}{{cssClass}}" 
+<a 
+  class="custom-system-button square-button-light flex flex-center{{#if viewModel.isEditable}}{{else}} disabled{{/if}}{{cssClass}}" 
   title="{{viewModel.localizedTitle}}" 
   id="{{viewModel.id}}" 
 >
@@ -12,4 +12,4 @@ cssClass: {String | undefined}
   {{else}}
     <span>{{{viewModel.iconInactive}}}</span>
   {{/if}}
-</button>
+</a>
