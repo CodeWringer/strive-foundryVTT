@@ -1,6 +1,5 @@
 import { SYSTEM_ID } from "../../../../system-id.mjs";
 import { TEMPLATES } from "../../../templatePreloader.mjs";
-import LoadHealthStatesSettingUseCase from "../../../../business/use-case/load-health-states-setting-use-case.mjs";
 import SetHealthStatesSettingUseCase from "../../../../business/use-case/set-health-states-setting-use-case.mjs";
 import HealthStatesSettingsDialogViewModel from "./health-states-settings-dialog-viewmodel.mjs";
 
@@ -54,7 +53,6 @@ export default class HealthStatesSettingsDialog extends FormApplication {
   /** @override */
   getData() {
     const context = super.getData();
-    const settings = new LoadHealthStatesSettingUseCase().invoke();
 
     this._viewModel = new HealthStatesSettingsDialogViewModel({
       id: this.id,
@@ -62,7 +60,6 @@ export default class HealthStatesSettingsDialog extends FormApplication {
       isSendable: true,
       isOwner: true,
       contextTemplate: "HealthStatesSettingsDialog",
-      settings: settings,
       formApplication: this,
     });
     context.viewModel = this._viewModel;

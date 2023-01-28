@@ -9,11 +9,9 @@ import ViewModel from "../../../view-model/view-model.mjs";
 /**
  * @extends ViewModel
  * 
- * @property {Object} settings
- * @property {Array<String>} settings.hidden
- * @property {Array<Object>} settings.custom
  * @property {Array<ViewModel>} stateViewModels
  * @property {Array<VisibilityToggleListItem>} stateVisibilityItems
+ * * Cached
  */
 export default class HealthStatesSettingsDialogViewModel extends ViewModel {
   /** @override */
@@ -22,6 +20,7 @@ export default class HealthStatesSettingsDialogViewModel extends ViewModel {
   get stateVisibilityItems() { return this._stateVisibilityItems; }
   set stateVisibilityItems(value) {
     this._stateVisibilityItems = value;
+    this.writeAllViewState();
     this.formApplication.render();
   }
 
@@ -34,24 +33,23 @@ export default class HealthStatesSettingsDialogViewModel extends ViewModel {
    * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document. 
    * 
    * @param {formApplication} args.formApplication
-   * @param {Object} args.settings
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["formApplication", "settings"]);
+    validateOrThrow(args, ["formApplication"]);
 
     this.formApplication = args.formApplication;
-    this.settings = args.settings;
+
+    this.registerViewStateProperty("stateVisibilityItems");
     
     // Build initial visibility states, based on the world setting. 
     const stateSettings = new LoadHealthStatesSettingUseCase().invoke();
-    const hidden = stateSettings.hidden;
 
     const states = HEALTH_STATES.asArray;
-    this._stateVisibilityItems = states.map(it => new VisibilityToggleListItem({
-      id: it.name,
-      localizedName: game.i18n.localize(it.localizableName),
-      value: hidden.find(it => it === it.name) === undefined,
+    this._stateVisibilityItems = states.map(healthState => new VisibilityToggleListItem({
+      id: healthState.name,
+      localizedName: game.i18n.localize(healthState.localizableName),
+      value: stateSettings.hidden.find(stateName => stateName === healthState.name) === undefined,
     }));
 
     const thiz = this;
@@ -61,7 +59,13 @@ export default class HealthStatesSettingsDialogViewModel extends ViewModel {
       parent: this,
       isEditable: this.isEditable,
       onClick: async () => {
-        thiz.formApplication._saveSettings(thiz.settings);
+        const stateSettings = new LoadHealthStatesSettingUseCase().invoke();
+        for (const item of thiz.stateVisibilityItems) {
+          if (item.value === false) {
+            stateSettings.hidden.push(item.id);
+          }
+        }
+        thiz.formApplication._saveSettings(stateSettings);
         thiz.formApplication.close();
       },
     });
@@ -74,5 +78,8 @@ export default class HealthStatesSettingsDialogViewModel extends ViewModel {
       propertyOwner: this,
       propertyPath: "stateVisibilityItems",
     });
+
+    // Lastly, read view state. 
+    this.readViewState();
   }
 }
