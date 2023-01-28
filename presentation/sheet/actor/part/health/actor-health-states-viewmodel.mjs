@@ -1,4 +1,5 @@
 import { HEALTH_STATES } from "../../../../../business/ruleset/health/health-states.mjs";
+import LoadHealthStatesSettingUseCase from "../../../../../business/use-case/load-health-states-setting-use-case.mjs";
 import { validateOrThrow } from "../../../../../business/util/validation-utility.mjs";
 import { TEMPLATES } from "../../../../templatePreloader.mjs"
 import ViewModel from "../../../../view-model/view-model.mjs"
@@ -43,19 +44,24 @@ export default class ActorHealthStatesViewModel extends ViewModel {
 
     // Turn states into view models. 
     this.stateViewModels = [];
+    
+    const stateSettings = new LoadHealthStatesSettingUseCase().invoke();
     const states = HEALTH_STATES.asArray;
+
     for (const state of states) {
-      const vm = new ActorHealthStatesListItemViewModel({
-        id: state.name,
-        parent: this,
-        document: this.document,
-        isEditable: this.isEditable,
-        isSendable: this.isSendable,
-        isOwner: this.isOwner,
-        localizedLabel: game.i18n.localize(state.localizableName),
-        stateName: state.name,
-      });
-      this.stateViewModels.push(vm);
+      if (stateSettings.hidden.find(stateName => state.name === stateName) === undefined) {
+        const vm = new ActorHealthStatesListItemViewModel({
+          id: state.name,
+          parent: this,
+          document: this.document,
+          isEditable: this.isEditable,
+          isSendable: this.isSendable,
+          isOwner: this.isOwner,
+          localizedLabel: game.i18n.localize(state.localizableName),
+          stateName: state.name,
+        });
+        this.stateViewModels.push(vm);
+      }
     }
   }
 }
