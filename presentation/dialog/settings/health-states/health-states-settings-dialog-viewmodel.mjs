@@ -2,6 +2,7 @@ import { HEALTH_STATES } from "../../../../business/ruleset/health/health-states
 import LoadHealthStatesSettingUseCase from "../../../../business/use-case/load-health-states-setting-use-case.mjs";
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs";
 import ButtonViewModel from "../../../component/button/button-viewmodel.mjs";
+import SimpleListViewModel from "../../../component/simple-list/simple-list-viewmodel.mjs";
 import VisibilityToggleListViewModel, { VisibilityToggleListItem } from "../../../component/visibility-toggle-list/visibility-toggle-list-viewmodel.mjs";
 import { TEMPLATES } from "../../../templatePreloader.mjs";
 import ViewModel from "../../../view-model/view-model.mjs";
@@ -78,6 +79,17 @@ export default class HealthStatesSettingsDialogViewModel extends ViewModel {
       isOwner: this.isOwner,
       propertyOwner: this,
       propertyPath: "stateVisibilityItems",
+    });
+    this.vmCustomList = new SimpleListViewModel({
+      id: "vmCustomList",
+      parent: this,
+      isEditable: this.isEditable,
+      itemViewModels: ,
+      itemTemplate: ,
+      onAddClick: ,
+      isItemAddable: ,
+      isItemRemovable: ,
+      localizedAddLabel: ,
     });
 
     // Lastly, read view state. 

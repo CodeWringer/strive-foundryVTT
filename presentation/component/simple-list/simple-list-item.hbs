@@ -1,0 +1,13 @@
+{{!--
+viewModel: SimpleListViewModel
+--}}
+{{!-- The item's content --}}
+{{#with ../viewModel.itemTemplate as |template|}}
+  {{> (template) viewModel=../viewModel.itemViewModel}}
+{{/with}}
+{{!-- Remove button --}}
+<div{{#if viewModel.isRemovable}}{{else}} class="hidden"{{/if}}>
+  {{#> button viewModel=viewModel.vmBtnRemove fill=true}}
+    <i class="fas fa-trash"></i>
+  {{/button}}
+</div>

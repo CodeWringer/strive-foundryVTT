@@ -49,6 +49,8 @@ export const TEMPLATES = {
   COMPONENT_BUTTON_CONTEXT_MENU: `${basePathComponent}/button-context-menu/button-context-menu.hbs`,
   // Composite
   COMPONENT_SORTABLE_LIST: `${basePathComponent}/sortable-list/sortable-list.hbs`,
+  COMPONENT_SIMPLE_LIST: `${basePathComponent}/simple-list/simple-list.hbs`,
+  COMPONENT_SIMPLE_LIST_ITEM: `${basePathComponent}/simple-list/simple-list-item.hbs`,
   DICE_ROLL_LIST: `${basePathComponent}/dice-roll-list/dice-roll-list.hbs`,
   COMPONENT_DAMAGE_DEFINITION_LIST_ITEM: `${basePathComponent}/damage-definition-list/damage-definition-list-item.hbs`,
   COMPONENT_DAMAGE_DEFINITION_LIST: `${basePathComponent}/damage-definition-list/damage-definition-list.hbs`,
@@ -72,6 +74,7 @@ export const TEMPLATES = {
   DIALOG_DYNAMIC_INPUT: `${basePathPresentation}/dialog/dynamic-input-dialog/dynamic-input-dialog.hbs`,
   // --- Settings Dialogs
   DIALOG_SETTINGS_HEALTH_STATES: `${basePathPresentation}/dialog/settings/health-states/health-states-settings-dialog.hbs`,
+  CUSTOM_HEALTH_STATE_LIST_ITEM: `${basePathPresentation}/dialog/settings/health-states/custom-health-state-list-item.hbs`,
   // --- Actor
   ACTOR_SHEET: `${basePathPresentation}/sheet/actor/actor-sheet.hbs`,
   ACTOR_ATTRIBUTE_TABLE: `${basePathPresentation}/sheet/actor/part/actor-attribute-table.hbs`,

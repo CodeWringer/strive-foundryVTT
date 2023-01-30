@@ -8,6 +8,7 @@ viewModel: HealthStatesSettingsDialogViewModel
   </div>
   <div class="sheet-block flex flex-column">
     <h2>{{localize "ambersteel.settings.healthStates.configureCustom"}}</h2>
+    {{> simpleList viewModel=viewModel.vmCustomList}}
   </div>
   <div>
     {{#> button viewModel=viewModel.vmBtnSave}}
