@@ -1,4 +1,4 @@
-import { HEALTH_STATES } from "../../../../../business/ruleset/health/health-states.mjs";
+import { HealthState, HEALTH_STATES } from "../../../../../business/ruleset/health/health-states.mjs";
 import LoadHealthStatesSettingUseCase from "../../../../../business/use-case/load-health-states-setting-use-case.mjs";
 import { validateOrThrow } from "../../../../../business/util/validation-utility.mjs";
 import { TEMPLATES } from "../../../../templatePreloader.mjs"
@@ -43,10 +43,33 @@ export default class ActorHealthStatesViewModel extends ViewModel {
     this.document = args.document;
 
     // Turn states into view models. 
+
     this.stateViewModels = [];
     
     const stateSettings = new LoadHealthStatesSettingUseCase().invoke();
-    const states = HEALTH_STATES.asArray;
+
+    // Combine the system default states with the custom states in a single list. 
+    const states = HEALTH_STATES.asArray.concat(
+      stateSettings.custom.map(customName => 
+        new HealthState({
+          name: customName,
+          localizableName: customName,
+        })
+      )
+    );
+    // Sort alphabetically. 
+    states.sort((a, b) => {
+      const lowerA = a.name.toLowerCase();
+      const lowerB = b.name.toLowerCase();
+
+      if (lowerA > lowerB) {
+        return 1;
+      } else if (lowerA < lowerB) {
+        return -1;
+      } else {
+        return 0;
+      }
+    });
 
     for (const state of states) {
       if (stateSettings.hidden.find(stateName => state.name === stateName) === undefined) {
