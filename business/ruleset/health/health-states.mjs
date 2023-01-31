@@ -33,7 +33,7 @@ export class HealthState {
  * @property {HealthState} burning 
  * @property {HealthState} bleeding 
  * @property {HealthState} dazed 
- * @property {HealthState} death 
+ * @property {HealthState} deathsDoor 
  * @property {HealthState} dissolving 
  * @property {HealthState} electrified 
  * @property {HealthState} frostbitten 
@@ -70,8 +70,8 @@ export const HEALTH_STATES = {
     name: "dazed",
     localizableName: "ambersteel.character.health.states.dazed",
   }),
-  death: new HealthState({
-    name: "death",
+  deathsDoor: new HealthState({
+    name: "deathsDoor",
     localizableName: "ambersteel.character.health.states.death",
   }),
   dissolving: new HealthState({

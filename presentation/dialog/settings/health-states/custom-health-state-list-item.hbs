@@ -1,8 +1,8 @@
 {{!--
 viewModel: CustomHealthStateListItemViewModel
 --}}
-<div class="flex flex-row flex-middle">
-  <span>{{localize "ambersteel.general.name"}}</span>
+<div class="flex flex-row flex-grow flex-middle">
+  {{> inputLabel text=(localize "ambersteel.general.name") showFancyFont=viewModel.showFancyFont}}
   <div class="flex-grow">
     {{> inputTextField viewModel=viewModel.vmName}}
   </div>

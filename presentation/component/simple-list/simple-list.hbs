@@ -4,8 +4,8 @@ viewModel: SimpleListViewModel
 <ul id="{{viewModel.id}}" class="unstyled-list">
   {{#each viewModel.itemViewModels as |vm index|}}
   {{#with ../viewModel.itemTemplate as |template|}}
-    <li>
-      {{> (template) viewModel=vm.itemViewModel}}
+    <li class="flex flex-row">
+      {{> (template) viewModel=vm}}
     </li>
   {{/with}}
   {{/each}}

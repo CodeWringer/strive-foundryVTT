@@ -2,6 +2,7 @@ import { HealthState, HEALTH_STATES } from "../../../../business/ruleset/health/
 import LoadHealthStatesSettingUseCase from "../../../../business/use-case/load-health-states-setting-use-case.mjs";
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs";
 import ButtonViewModel from "../../../component/button/button-viewmodel.mjs";
+import SimpleListItemViewModel from "../../../component/simple-list/simple-list-item-viewmodel.mjs";
 import SimpleListViewModel from "../../../component/simple-list/simple-list-viewmodel.mjs";
 import VisibilityToggleListViewModel, { VisibilityToggleListItem } from "../../../component/visibility-toggle-list/visibility-toggle-list-viewmodel.mjs";
 import { TEMPLATES } from "../../../templatePreloader.mjs";
@@ -28,14 +29,14 @@ export default class HealthStatesSettingsDialogViewModel extends ViewModel {
   get stateVisibilityItems() { return this._stateVisibilityItems; }
   set stateVisibilityItems(value) {
     this._stateVisibilityItems = value;
+
     this.stateSettings.hidden = [];
     for (const item of value) {
       if (item.value === false) {
         this.stateSettings.hidden.push(item.id);
       }
     }
-    this.writeAllViewState();
-    this.formApplication.render();
+    this._renderFormApplication();
   }
 
   /**
@@ -101,8 +102,8 @@ export default class HealthStatesSettingsDialogViewModel extends ViewModel {
       isOwner: this.isOwner,
       contentItemViewModels: this.customHealthStateViewModels,
       contentItemTemplate: this.customHealthStateListItemTemplate,
-      onAddClick: this._onClickAddCustomHealthState,
-      onRemoveClick: this._onClickRemoveCustomHealthState,
+      onAddClick: this._onClickAddCustomHealthState.bind(this),
+      onRemoveClick: this._onClickRemoveCustomHealthState.bind(this),
       isItemAddable: true,
       isItemRemovable: true,
       localizedAddLabel: game.i18n.localize("ambersteel.settings.healthStates.add.label"),
@@ -159,29 +160,54 @@ export default class HealthStatesSettingsDialogViewModel extends ViewModel {
    * @private
    */
   _getCustomHealthStateViewModels() {
-    const result = this.stateSettings.custom.map(name => 
-      new CustomHealthStateListItemViewModel({
-        id: name,
-        parent: this,
+    const result = [];
+    const thiz = this;
+
+    for (let index = 0; index < this.stateSettings.custom.length; index++) {
+      const vm = new CustomHealthStateListItemViewModel({
+        id: `name${index}`,
         isEditable: this.isEditable,
-      })
-    );
+        propertyOwner: this,
+        propertyPath: `stateSettings.custom[${index}]`,
+        onChange: () => {
+          thiz._renderFormApplication();
+        }
+      });
+      result.push(vm);
+    }
     return result;
   }
 
   /**
+   * Writes all view state and then incites the owning form to re-render. 
+   * 
    * @private
    */
-  _onClickAddCustomHealthState() {
-    throw new Error("NotImplementedException");
+  _renderFormApplication() {
+    this.writeAllViewState();
+    this.formApplication.render();
   }
 
   /**
-   * @param {}
+   * Event handler for when a new custom health state is added. 
+   * 
+   * @private
+   */
+  _onClickAddCustomHealthState() {
+    this.stateSettings.custom.push("New Health State");
+    this._renderFormApplication();
+  }
+
+  /**
+   * Event handler for when a custom health state is to be removed. 
+   * 
+   * @param {SimpleListItemViewModel} viewModel
    * 
    * @private
    */
   _onClickRemoveCustomHealthState(viewModel) {
-    throw new Error("NotImplementedException");
+    const index = this.customHealthStateViewModels.indexOf(viewModel.itemViewModel);
+    this.stateSettings.custom.splice(index, 1);
+    this._renderFormApplication();
   }
 }

@@ -124,10 +124,11 @@ export default class SimpleListViewModel extends ViewModel {
         itemViewModel: contentItemViewModel,
         itemTemplate: this.contentItemTemplate,
         isRemovable: this.isItemRemovable,
+        onRemoveClick: () => {
+          thiz.onRemoveClick(vm);
+        }
       });
-      vm.onRemoveClick = () => {
-        thiz.onRemoveClick(vm);
-      }
+      contentItemViewModel.parent = vm;
       result.push(vm);
     }
 
