@@ -320,6 +320,7 @@ export default class ViewModel {
    *     ...updates.get(myViewModel),
    *     a: 42,
    *   });
+   *   return updates;
    * }
    * ```
    * 

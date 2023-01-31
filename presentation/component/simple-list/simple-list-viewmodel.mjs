@@ -34,10 +34,15 @@ export default class SimpleListViewModel extends ViewModel {
    * @param {Object} args
    * @param {String | undefined} args.id Unique ID of this view model instance. 
    * @param {Boolean | undefined} args.isEditable If true, input(s) will be in edit mode. If false, input(s) will be in read-only mode.
+   * @param {Boolean | undefined} args.isSendable
+   * @param {Boolean | undefined} args.isOwner
    * @param {String | undefined} args.contextTemplate Name or path of a template that embeds this input component. 
    * 
-   * @param {Array<ViewModel>} args.itemViewModels 
+   * @param {Array<ViewModel>} args.contentItemViewModels 
+   * @param {String} args.contentItemTemplate
    * @param {Function | undefined} args.onAddClick
+   * @param {Function | undefined} args.onRemoveClick
+   * * Receives the content view model of the item to remove as its argument. 
    * @param {Boolean | undefined} args.isItemAddable 
    * * Default `false`.
    * @param {Boolean | undefined} args.isItemRemovable 
@@ -46,21 +51,20 @@ export default class SimpleListViewModel extends ViewModel {
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["itemViewModels"]);
+    validateOrThrow(args, ["contentItemViewModels", "contentItemTemplate"]);
 
-    this.itemViewModels = args.itemViewModels;
+    this.contentItemViewModels = args.contentItemViewModels;
+    this.contentItemTemplate = args.contentItemTemplate;
     this.isItemAddable = args.isItemAddable ?? false;
     this.isItemRemovable = args.isItemRemovable ?? false;
     this.localizedAddLabel = args.localizedAddLabel ?? "";
     this.onAddClick = args.onAddClick ?? this.onAddClick;
+    this.onRemoveClick = args.onRemoveClick ?? this.onRemoveClick;
 
     const thiz = this;
 
-    for(const viewModel of this.itemViewModels) {
-      viewModel.onRemoveClick = () => {
-        thiz.onRemoveClick(viewModel);
-      }
-    }
+    this.itemViewModels = [];
+    this.itemViewModels = this._getItemViewModels();
 
     if (this.isItemAddable === true) {
       this.vmBtnAddItem = new ButtonViewModel({
@@ -70,6 +74,16 @@ export default class SimpleListViewModel extends ViewModel {
         onClick: this.onAddClick,
       });
     }
+  }
+
+  /** @override */
+  update(args = {}) {
+    // Remove current list of child view models. 
+    for (const vm of this.itemViewModels) {
+      vm.dispose();
+    }
+    // Generate new list of child view models. 
+    this.itemViewModels = this._getItemViewModels();
   }
 
   /**
@@ -87,6 +101,38 @@ export default class SimpleListViewModel extends ViewModel {
    * @param {SimpleListItemViewModel} viewmodel The view model instance whose remove button was clicked. 
    */
   onRemoveClick(viewmodel) { /* Implementation up to the user. */ }
+  
+  /**
+   * Returns simple list item view models, based on `this.contentItemViewModels`. 
+   * 
+   * @returns {Array<SimpleListItemViewModel>}
+   * 
+   * @private
+   */
+  _getItemViewModels() {
+    const result = [];
+    const thiz = this;
+
+    for (let i = 0; i < this.contentItemViewModels.length; i++) {
+      const contentItemViewModel = this.contentItemViewModels[i];
+      const vm = new SimpleListItemViewModel({
+        id: `simpleListItem${i}`,
+        parent: this,
+        isEditable: this.isEditable,
+        isSendable: this.isSendable,
+        isOwner: this.isOwner,
+        itemViewModel: contentItemViewModel,
+        itemTemplate: this.contentItemTemplate,
+        isRemovable: this.isItemRemovable,
+      });
+      vm.onRemoveClick = () => {
+        thiz.onRemoveClick(vm);
+      }
+      result.push(vm);
+    }
+
+    return result;
+  }
 }
 
 Handlebars.registerPartial('simpleList', `{{> "${SimpleListViewModel.TEMPLATE}"}}`);

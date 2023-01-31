@@ -27,6 +27,7 @@ export default class SimpleListItemViewModel extends ViewModel {
    * @param {String} args.itemTemplate Template path of the content. 
    * @param {Boolean | undefined} args.isRemovable If `true`, the item is removable. 
    * * Default `false`.
+   * @param {Function | undefined} args.onRemoveClick Invoked when the "remove" button is clicked. 
    */
   constructor(args = {}) {
     super(args);
@@ -35,6 +36,7 @@ export default class SimpleListItemViewModel extends ViewModel {
     this.itemViewModel = args.itemViewModel;
     this.itemTemplate = args.itemTemplate;
     this.isRemovable = args.isRemovable ?? false;
+    this.onRemoveClick = args.onRemoveClick ?? this.onRemoveClick;
 
     this.vmBtnRemove = new ButtonViewModel({
       id: "vmBtnRemove",

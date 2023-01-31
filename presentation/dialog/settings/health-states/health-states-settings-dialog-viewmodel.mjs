@@ -1,4 +1,4 @@
-import { HEALTH_STATES } from "../../../../business/ruleset/health/health-states.mjs";
+import { HealthState, HEALTH_STATES } from "../../../../business/ruleset/health/health-states.mjs";
 import LoadHealthStatesSettingUseCase from "../../../../business/use-case/load-health-states-setting-use-case.mjs";
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs";
 import ButtonViewModel from "../../../component/button/button-viewmodel.mjs";
@@ -6,24 +6,43 @@ import SimpleListViewModel from "../../../component/simple-list/simple-list-view
 import VisibilityToggleListViewModel, { VisibilityToggleListItem } from "../../../component/visibility-toggle-list/visibility-toggle-list-viewmodel.mjs";
 import { TEMPLATES } from "../../../templatePreloader.mjs";
 import ViewModel from "../../../view-model/view-model.mjs";
+import CustomHealthStateListItemViewModel from "./custom-health-state-list-item-viewmodel.mjs";
 
 /**
  * @extends ViewModel
  * 
+ * @property {Object} stateSettings
+ * * Private
+ * * Cached
  * @property {Array<ViewModel>} stateViewModels
  * @property {Array<VisibilityToggleListItem>} stateVisibilityItems
- * * Cached
+ * @property {Array<HealthState>} customHealthStates
  */
 export default class HealthStatesSettingsDialogViewModel extends ViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.DIALOG_SETTINGS_HEALTH_STATES; }
 
+  /**
+   * @type {Array<VisibilityToggleListItem>}
+   */
   get stateVisibilityItems() { return this._stateVisibilityItems; }
   set stateVisibilityItems(value) {
     this._stateVisibilityItems = value;
+    this.stateSettings.hidden = [];
+    for (const item of value) {
+      if (item.value === false) {
+        this.stateSettings.hidden.push(item.id);
+      }
+    }
     this.writeAllViewState();
     this.formApplication.render();
   }
+
+  /**
+   * @type {String}
+   * @readonly
+   */
+  get customHealthStateListItemTemplate() { return CustomHealthStateListItemViewModel.TEMPLATE; }
 
   /**
    * @param {Object} args
@@ -41,17 +60,18 @@ export default class HealthStatesSettingsDialogViewModel extends ViewModel {
 
     this.formApplication = args.formApplication;
 
-    this.registerViewStateProperty("stateVisibilityItems");
+    // Register cachable view state properties. 
+    this.registerViewStateProperty("stateSettings");
     
     // Build initial visibility states, based on the world setting. 
-    const stateSettings = new LoadHealthStatesSettingUseCase().invoke();
+    this.stateSettings = new LoadHealthStatesSettingUseCase().invoke();
 
-    const states = HEALTH_STATES.asArray;
-    this._stateVisibilityItems = states.map(healthState => new VisibilityToggleListItem({
-      id: healthState.name,
-      localizedName: game.i18n.localize(healthState.localizableName),
-      value: stateSettings.hidden.find(stateName => stateName === healthState.name) === undefined,
-    }));
+    // Prepare data for system default health state visibilities. 
+    this._stateVisibilityItems = this._getHealthStateVisibilityViewModels();
+
+    // Prepare data for custom health states. 
+    this.customHealthStateViewModels = [];
+    this.customHealthStateViewModels = this._getCustomHealthStateViewModels();
 
     const thiz = this;
 
@@ -60,14 +80,7 @@ export default class HealthStatesSettingsDialogViewModel extends ViewModel {
       parent: this,
       isEditable: this.isEditable,
       onClick: async () => {
-        const stateSettings = new LoadHealthStatesSettingUseCase().invoke();
-        stateSettings.hidden = [];
-        for (const item of thiz.stateVisibilityItems) {
-          if (item.value === false) {
-            stateSettings.hidden.push(item.id);
-          }
-        }
-        thiz.formApplication._saveSettings(stateSettings);
+        thiz.formApplication._saveSettings(this.stateSettings);
         thiz.formApplication.close();
       },
     });
@@ -84,15 +97,91 @@ export default class HealthStatesSettingsDialogViewModel extends ViewModel {
       id: "vmCustomList",
       parent: this,
       isEditable: this.isEditable,
-      itemViewModels: ,
-      itemTemplate: ,
-      onAddClick: ,
-      isItemAddable: ,
-      isItemRemovable: ,
-      localizedAddLabel: ,
+      isSendable: this.isSendable,
+      isOwner: this.isOwner,
+      contentItemViewModels: this.customHealthStateViewModels,
+      contentItemTemplate: this.customHealthStateListItemTemplate,
+      onAddClick: this._onClickAddCustomHealthState,
+      onRemoveClick: this._onClickRemoveCustomHealthState,
+      isItemAddable: true,
+      isItemRemovable: true,
+      localizedAddLabel: game.i18n.localize("ambersteel.settings.healthStates.add.label"),
     });
 
-    // Lastly, read view state. 
     this.readViewState();
+  }
+
+  /** @override */
+  update(args = {}) {
+    for (const vm of this._stateVisibilityItems) {
+      vm.dispose();
+    }
+    this._stateVisibilityItems = this._getHealthStateVisibilityViewModels();
+    
+    for (const vm of this.customHealthStateViewModels) {
+      vm.dispose();
+    }
+    this.customHealthStateViewModels = this._getCustomHealthStateViewModels();
+
+    super.update(args);
+  }
+
+  /** @override */
+  _getChildUpdates() {
+    const updates = super._getChildUpdates();
+
+    updates.set(this.vmCustomList, {
+      ...updates.get(this.vmCustomList),
+      contentItemViewModels: this.customHealthStateViewModels,
+    });
+
+    return updates;
+  }
+
+  /**
+   * @returns {Array<VisibilityToggleListItem>}
+   * 
+   * @private
+   */
+  _getHealthStateVisibilityViewModels() {
+    const states = HEALTH_STATES.asArray;
+    const result = states.map(healthState => new VisibilityToggleListItem({
+      id: healthState.name,
+      localizedName: game.i18n.localize(healthState.localizableName),
+      value: this.stateSettings.hidden.find(stateName => stateName === healthState.name) === undefined,
+    }));
+    return result;
+  }
+
+  /**
+   * @returns {Array<CustomHealthStateListItemViewModel>}
+   * 
+   * @private
+   */
+  _getCustomHealthStateViewModels() {
+    const result = this.stateSettings.custom.map(name => 
+      new CustomHealthStateListItemViewModel({
+        id: name,
+        parent: this,
+        isEditable: this.isEditable,
+      })
+    );
+    return result;
+  }
+
+  /**
+   * @private
+   */
+  _onClickAddCustomHealthState() {
+    throw new Error("NotImplementedException");
+  }
+
+  /**
+   * @param {}
+   * 
+   * @private
+   */
+  _onClickRemoveCustomHealthState(viewModel) {
+    throw new Error("NotImplementedException");
   }
 }

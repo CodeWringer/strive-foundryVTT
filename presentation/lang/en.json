@@ -644,7 +644,10 @@
         "label": "Health State Customization",
         "hint": "Allows defining new and hiding system default health states.",
         "configureSystemDefaults": "Configure system health state visibilities",
-        "configureCustom": "Define custom health states"
+        "configureCustom": "Define custom health states",
+        "add": {
+          "label": "Add Custom Health State"
+        }
       }
     }
   }

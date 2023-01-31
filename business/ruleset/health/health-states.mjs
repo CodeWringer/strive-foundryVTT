@@ -1,15 +1,25 @@
 import { getAsArray, getAsChoices } from "../../util/constants-utility.mjs";
+import { validateOrThrow } from "../../util/validation-utility.mjs";
 
 /**
  * Represents a general health state. 
  * 
  * @property {String} name Internal name. 
- * @property {String} localizableName Localization key. 
+ * @property {String | undefined} localizableName Localization key. 
  * @property {String | undefined} icon CSS class of an icon. 
  * * E. g. `"fas fa-virus"`
- */
+*/
 export class HealthState {
+  /**
+   * @param {Object} args
+   * @param {String} args.name Internal name. 
+   * @param {String | undefined} args.localizableName Localization key. 
+   * @param {String | undefined} args.icon CSS class of an icon. 
+   * * E. g. `"fas fa-virus"`
+   */
   constructor(args = {}) {
+    validateOrThrow(args, ["name"]);
+
     this.name = args.name;
     this.localizableName = args.localizableName;
     this.icon = args.icon;
