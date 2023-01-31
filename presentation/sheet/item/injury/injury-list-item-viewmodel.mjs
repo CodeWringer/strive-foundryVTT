@@ -1,4 +1,4 @@
-import { INJURY_STATES } from "../../../../business/ruleset/injury-states.mjs"
+import { INJURY_STATES } from "../../../../business/ruleset/health/injury-states.mjs"
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs"
 import { TEMPLATES } from "../../../templatePreloader.mjs"
 import ViewModelFactory from "../../../view-model/view-model-factory.mjs"

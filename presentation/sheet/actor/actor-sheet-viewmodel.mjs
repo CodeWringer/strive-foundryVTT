@@ -8,7 +8,7 @@ import ActorAssetsViewModel from "./part/assets/actor-assets-viewmodel.mjs"
 import ActorAttributesViewModel from "./part/actor-attributes-viewmodel.mjs"
 import ActorBeliefsFateViewModel from "./part/actor-beliefs-fate-viewmodel.mjs"
 import ActorBiographyViewModel from "./part/actor-biography-viewmodel.mjs"
-import ActorHealthViewModel from "./part/actor-health-viewmodel.mjs"
+import ActorHealthViewModel from "./part/health/actor-health-viewmodel.mjs"
 import ActorPersonalsViewModel from "./part/actor-personals-viewmodel.mjs"
 import ActorSkillsViewModel from "./part/actor-skills-viewmodel.mjs"
 

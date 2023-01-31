@@ -13,7 +13,8 @@
           "fateCards": [],
           "injuries": [],
           "illnesses": [],
-          "mutations": []
+          "mutations": [],
+          "scars": []
         }
       },
       "character": {
@@ -92,7 +93,8 @@
           "maxHP": 0,
           "HP": 0,
           "exhaustion": 0,
-          "magicStamina": 0
+          "magicStamina": 0,
+          "states": []
         },
         "assets": {
           "equipment": {
@@ -186,7 +188,8 @@
       "fate-card",
       "injury",
       "illness",
-      "mutation"
+      "mutation",
+      "scar"
     ],
     "templates": {
       "base": {
@@ -236,6 +239,10 @@
     },
     "mutation": {
       "templates": ["base"]
+    },
+    "scar": {
+      "templates": ["base"],
+      "limit": 0
     }
   }
 }

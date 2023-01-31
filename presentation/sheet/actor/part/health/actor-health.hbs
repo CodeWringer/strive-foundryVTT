@@ -7,7 +7,7 @@ cssClass: {undefined | String}
   {{!-- General health stats --}}
   <div class="flex flex-column">
   {{!-- Row 1 --}}
-    <div class="grid-2col grid-gap-md margin-b-md">
+    <div class="grid-3col grid-gap-md margin-b-md">
       {{!-- Col 1 --}}
       <div class="sheet-block">
         <div class="flex flex-row">
@@ -66,6 +66,10 @@ cssClass: {undefined | String}
         </div>
       </div>
     </div>
+    {{!-- Health States --}}
+    {{#with viewModel.healthStatesTemplate as | template |}}
+      {{> (template) viewModel=../viewModel.vmHealthStates}}
+    {{/with}}
   {{!-- Injuries --}}
   <h2 class="flex flex-row">{{localize "ambersteel.character.health.injury.plural"}}</h2>
   <div class="grid-2col grid-gap-md margin-b-md">
@@ -139,4 +143,7 @@ cssClass: {undefined | String}
     </div>
   </div>
   {{> sortableList viewModel=viewModel.vmMutationList }}
+  {{!-- Scars --}}
+  <h2>{{localize "ambersteel.character.health.scar.plural"}}</h2>
+  {{> sortableList viewModel=viewModel.vmScarList }}
 </section>

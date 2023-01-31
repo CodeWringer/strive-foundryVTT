@@ -1,0 +1,31 @@
+{{!-- Parameters:
+viewModel: {ScarChatMessageViewModel}
+cssClass: {undefined | String}
+--}}
+<section class="custom-system-chat-message{{#if cssClass}} {{cssClass}}{{/if}}" 
+  data-view-model-id="{{viewModel.id}}"
+  data-document-id="{{viewModel.entityId}}"
+>
+  {{!-- Header --}}
+  <div class="flex flex-row">
+    <div class="flex flex-center">
+      <img class="inline-img header-image margin-r-sm" name="img" src="{{viewModel.document.img}}" title="{{viewModel.document.name}}" height="35" width="35" />
+    </div>
+    <h2 class="flex-grow">
+      {{viewModel.document.name}}
+    </h2>
+  </div>
+    {{!-- Limit --}}
+  <div class="sheet-block grid-3col">
+    <div class="flex flex-middle flex-right">
+      {{> inputLabel text=(localize "ambersteel.character.health.injury.limit") showFancyFont=viewModel.showFancyFont}}
+    </div>
+    <div class="grid-span-2">
+      {{> inputNumberSpinner viewModel=viewModel.vmNsLimit }}
+    </div>
+  </div>
+  {{!-- Description --}}
+  <div class="sheet-block scrollable-height-md">
+    {{> lazyRichText viewModel=viewModel.vmLazyDescription}}
+  </div>
+</section>

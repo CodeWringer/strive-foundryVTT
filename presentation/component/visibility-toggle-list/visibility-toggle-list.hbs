@@ -1,0 +1,10 @@
+{{!--
+viewModel: VisibilityToggleListViewModel
+--}}
+<div id="{{viewModel.id}}" class="grid-3col">
+  {{#each viewModel.itemViewModels as |vm index|}}
+    {{#with ../viewModel.itemTemplate as | template |}}
+      {{> (template) viewModel=vm}}
+    {{/with}}
+  {{/each}}
+</div>

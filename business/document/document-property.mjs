@@ -9,7 +9,7 @@ import { validateOrThrow } from "../util/validation-utility.mjs";
 export default class DocumentProperty {
   /**
    * 
-   * @param args 
+   * @param {Object} args 
    * @param {String} args.id Unique identifier. 
    * @param {String | undefined} args.localizableName A localization key. 
    */

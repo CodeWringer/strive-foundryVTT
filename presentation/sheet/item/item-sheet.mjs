@@ -5,6 +5,7 @@ import AmbersteelSkillItemSheet from "./skill/ambersteel-skill-item-sheet.mjs";
 import AmbersteelInjuryItemSheet from "./injury/ambersteel-injury-item-sheet.mjs";
 import AmbersteelIllnessItemSheet from "./illness/ambersteel-illness-item-sheet.mjs";
 import AmbersteelMutationItemSheet from "./mutation/ambersteel-mutation-item-sheet.mjs";
+import AmbersteelScarItemSheet from "./scar/ambersteel-scar-item-sheet.mjs";
 import AmbersteelFateItemSheet from "./fate-card/ambersteel-fate-item-sheet.mjs";
 // Other imports
 import * as SheetUtil from "../sheet-utility.mjs";
@@ -31,7 +32,6 @@ export class AmbersteelItemSheet extends ItemSheet {
    * @returns {Object}
    * @override
    * @virtual
-   * @see https://foundryvtt.com/api/ItemSheet.html#.defaultOptions
    */
   static get defaultOptions() {
     return mergeObject(super.defaultOptions, {
@@ -48,7 +48,6 @@ export class AmbersteelItemSheet extends ItemSheet {
    * @virtual
    * @override
    * @readonly
-   * @see https://foundryvtt.com/api/DocumentSheet.html#template
    */
   get template() { return this.subType.template; }
 
@@ -57,7 +56,6 @@ export class AmbersteelItemSheet extends ItemSheet {
    * @override
    * @type {String}
    * @readonly
-   * @see https://foundryvtt.com/api/ItemSheet.html#title
    */
   get title() { return `${this.subType.title} - ${this.item.name}` }
 
@@ -80,7 +78,6 @@ export class AmbersteelItemSheet extends ItemSheet {
    * This method is called *before* the sheet is rendered. 
    * @returns {Object} The enriched context object. 
    * @override 
-   * @see https://foundryvtt.com/api/FormApplicatiocn.html#getData
    */
   getData() {
     const context = super.getData();

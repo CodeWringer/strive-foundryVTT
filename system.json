@@ -97,6 +97,12 @@
       "type": "Item"
     },
     {
+      "name": "scars",
+      "label": "Scars",
+      "path": "packs/scars.db",
+      "type": "Item"
+    },
+    {
       "name": "rolltables",
       "label": "RollTables",
       "path": "packs/rolltables.db",

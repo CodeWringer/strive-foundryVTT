@@ -8,6 +8,7 @@
   "ITEM.TypeInjury": "Injury",
   "ITEM.TypeIllness": "Illness",
   "ITEM.TypeMutation": "Mutation",
+  "ITEM.TypeScar": "Scar",
   "ambersteel": {
     "migration": {
       "title": "Data Migration",
@@ -55,6 +56,7 @@
       },
       "description": "Description",
       "edit": "Edit",
+      "formula": "Formula",
       "increment": "Increment",
       "input": {
         "validationFailed": "The following required fields failed validation. Ensure required fields have a valid value.",
@@ -93,7 +95,8 @@
       },
       "properties": {
         "label": "Properties"
-      }
+      },
+      "propertyPath": "Property path"
     },
     "character": {
       "advancement": {
@@ -408,6 +411,38 @@
           },
           "plural": "Mutations",
           "singular": "Mutation"
+        },
+        "scar": {
+          "add": {
+            "label": "Add Scar",
+            "query": "Select Scar to Add"
+          },
+          "delete": {
+            "label": "Delete Scar",
+            "query": "Confirm Deletion of Scar"
+          },
+          "plural": "Scars",
+          "singular": "Scar"
+        },
+        "states": {
+          "label": "States",
+          "berserk": "Berserk",
+          "burning": "Burning",
+          "bleeding": "Bleeding",
+          "dazed": "Dazed",
+          "death": "Death's Door",
+          "dissolving": "Dissolving",
+          "electrified": "Electrified",
+          "frostbitten": "Frostbitten",
+          "grappled": "Grappled",
+          "hasted": "Hasted",
+          "jealous": "Jealous",
+          "pacified": "Pacified",
+          "poisoned": "Poisoned",
+          "prone": "Prone",
+          "rooted": "Rooted",
+          "terrified": "Terrified",
+          "unconscious": "Unconscious"
         }
       },
       "magic": {
@@ -596,6 +631,7 @@
       "hintToughnessTestRequired": "Half of the maximum number of injuries (rounded down) reached. Any further damage incurred requires a toughness test with Ob as high as the number of injuries to be passed. If failed, suffer +1 exhaustion."
     },
     "settings": {
+      "saveChanges": "Save Changes",
       "fancyFont": {
         "label": "Fancy font",
         "hint": "Toggles the 'fancy' font off or on."
@@ -603,6 +639,15 @@
       "toggleDebug": {
         "label": "Debug Mode",
         "hint": "Toggles debug mode on - increases log verbosity, at the cost of performance."
+      },
+      "healthStates": {
+        "label": "Health State Customization",
+        "hint": "Allows defining new and hiding system default health states.",
+        "configureSystemDefaults": "Configure system health state visibilities",
+        "configureCustom": "Define custom health states",
+        "add": {
+          "label": "Add Custom Health State"
+        }
       }
     }
   }

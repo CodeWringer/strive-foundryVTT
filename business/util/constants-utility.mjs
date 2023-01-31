@@ -15,7 +15,7 @@ export function getAsChoices(constantsObject, exclude) {
 
 	for (const entryName in constantsObject) {
 		if (constantsObject.hasOwnProperty(entryName) !== true) continue;
-		if (exclude.find(it => it === entryName) !== undefined) continue;
+		if ((exclude ?? []).find(it => it === entryName) !== undefined) continue;
 
 		const entry = constantsObject[entryName];
 		
@@ -29,6 +29,29 @@ export function getAsChoices(constantsObject, exclude) {
 			shouldDisplayValue: localizedName !== undefined ? true : false,
 			shouldDisplayIcon: icon !== undefined ? true : false,
 		}));
+	}
+
+	return result;
+}
+
+/**
+* Returns an array elements, based on the given constants object. 
+* 
+* @param {Object} constantsObject Any constants object.
+* * **All** not explicitly excluded properties, that aren't part of the prototype, will be returned. 
+* @param {Array<String> | undefined} exclude An array of property names to exclude. 
+* 
+* @returns {Array<Any>}
+*/
+export function getAsArray(constantsObject, exclude) {
+	const result = [];
+
+	for (const entryName in constantsObject) {
+		if (constantsObject.hasOwnProperty(entryName) !== true) continue;
+		if ((exclude ?? []).find(it => it === entryName) !== undefined) continue;
+
+		const entry = constantsObject[entryName];
+		result.push(entry);
 	}
 
 	return result;
