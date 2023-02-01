@@ -170,8 +170,9 @@ export default class Ruleset {
     const type = actor.type.toLowerCase();
     if (type !== "pc" && type !== "npc") throw new Error("Only PC and NPC type actors allowed");
     
-    const attribute = actor.system.attributes.physical.endurance;
-    return 1 + (attribute.level * 1);
+    const attributeLevel = actor.system.attributes.physical.endurance.level;
+    const base = 1;
+    return base + attribute;
   }
   
   /**
