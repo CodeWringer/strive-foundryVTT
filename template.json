@@ -30,26 +30,31 @@
           "physical": {
             "agility": {
               "level": 1,
+              "moddedLevel": 0,
               "successes": 0,
               "failures": 0
             },
             "endurance": {
               "level": 1,
+              "moddedLevel": 0,
               "successes": 0,
               "failures": 0
             },
             "perception": {
               "level": 1,
+              "moddedLevel": 0,
               "successes": 0,
               "failures": 0
             },
             "strength": {
               "level": 1,
+              "moddedLevel": 0,
               "successes": 0,
               "failures": 0
             },
             "toughness": {
               "level": 1,
+              "moddedLevel": 0,
               "successes": 0,
               "failures": 0
             }
@@ -57,16 +62,19 @@
           "mental": {
             "intelligence": {
               "level": 1,
+              "moddedLevel": 0,
               "successes": 0,
               "failures": 0
             },
             "wisdom": {
               "level": 1,
+              "moddedLevel": 0,
               "successes": 0,
               "failures": 0
             },
             "arcana": {
               "level": 0,
+              "moddedLevel": 0,
               "successes": 0,
               "failures": 0
             }
@@ -74,16 +82,19 @@
           "social": {
             "empathy": {
               "level": 1,
+              "moddedLevel": 0,
               "successes": 0,
               "failures": 0
             },
             "oratory": {
               "level": 1,
+              "moddedLevel": 0,
               "successes": 0,
               "failures": 0
             },
             "willpower": {
               "level": 1,
+              "moddedLevel": 0,
               "successes": 0,
               "failures": 0
             }

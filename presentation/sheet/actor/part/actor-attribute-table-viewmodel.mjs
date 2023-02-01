@@ -84,6 +84,13 @@ export default class AttributeTableViewModel extends ViewModel {
           propertyPath: "level",
           min: 0,
         }),
+        vmNsModdedLevel: factory.createVmNumberSpinner({
+          parent: thiz,
+          id: `vmNsModdedLevel-${attribute.name}`,
+          propertyOwner: attribute,
+          propertyPath: "moddedLevel",
+          min: 0,
+        }),
         vmNsSuccesses: factory.createVmNumberSpinner({
           parent: thiz,
           id: `vmNsSuccesses-${attribute.name}`,
