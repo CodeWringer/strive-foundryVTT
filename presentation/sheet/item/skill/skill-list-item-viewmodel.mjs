@@ -31,7 +31,7 @@ export default class SkillListItemViewModel extends SkillViewModel {
    * @type {Number}
    * @readonly
    */
-  get successses() { return this.document.advancementRequirements.successses; }
+  get successes() { return this.document.advancementRequirements.successes; }
 
   /**
    * Returns the current number of failures. 

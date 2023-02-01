@@ -535,6 +535,11 @@
         "properties": {
           "magicSchool": "Magic School",
           "innate": "Innate"
+        },
+        "tier": {
+          "dabbling": "Dabbling",
+          "apprentice": "Apprentice",
+          "master": "Master"
         }
       }
     },
