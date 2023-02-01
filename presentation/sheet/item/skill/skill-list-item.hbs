@@ -63,8 +63,17 @@ cssClass: {undefined | String}
         {{> inputNumberSpinner viewModel=viewModel.vmNsLevel }}
       </div>
     </div>
+   {{!-- Modified Level --}}
+    <div class="flex flex-row margin-b-md">
+      <div class="width-min-xxl">
+        {{> inputLabel text=(localize "ambersteel.character.advancement.moddedLevel") showFancyFont=viewModel.showFancyFont}}
+      </div>
+      <div class="width-md">
+        {{> inputNumberSpinner viewModel=viewModel.vmNsModdedLevel }}
+      </div>
+    </div>
     {{!-- Spacer --}}
-    <div class="width-lg"></div>
+    <div class="width-xs"></div>
     {{!-- Advancement Requirements --}}
     <div class="flex flex-row margin-b-md">
       <div class="width-min-xl">
@@ -77,7 +86,7 @@ cssClass: {undefined | String}
       </div>
     </div>
     {{!-- Spacer --}}
-    <div class="width-lg"></div>
+    <div class="width-xs"></div>
     {{!-- Successes --}}
     <div class="flex flex-row margin-b-md">
       <div class="width-min-l">

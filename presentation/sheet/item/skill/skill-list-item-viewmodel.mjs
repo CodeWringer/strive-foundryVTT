@@ -130,6 +130,13 @@ export default class SkillListItemViewModel extends SkillViewModel {
       propertyPath: "level",
       min: 0,
     });
+    this.vmNsModdedLevel = factory.createVmNumberSpinner({
+      parent: thiz,
+      id: "vmNsModdedLevel",
+      propertyOwner: thiz.document,
+      propertyPath: "moddedLevel",
+      min: 0,
+    });
     this.vmNsSuccesses = factory.createVmNumberSpinner({
       parent: thiz,
       id: "vmNsSuccesses",

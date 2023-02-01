@@ -214,6 +214,7 @@
       "templates": ["base"],
       "relatedAttribute": "agility",
       "level": 0,
+      "moddedLevel": 0,
       "successes": 0,
       "failures": 0,
       "abilities": {},
