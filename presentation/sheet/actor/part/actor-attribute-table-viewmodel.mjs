@@ -65,8 +65,8 @@ export default class AttributeTableViewModel extends ViewModel {
         attributeName: attribute.name,
         localizableName: attribute.localizableName,
         localizableAbbreviation: attribute.localizableAbbreviation,
-        requiredSuccesses: attribute.requiredSuccesses,
-        requiredFailures: attribute.requiredFailures,
+        requiredSuccesses: attribute.advancementRequirements.successes,
+        requiredFailures: attribute.advancementRequirements.failures,
         vmBtnRoll: factory.createVmBtnRoll({
           parent: thiz,
           id: `vmBtnRoll-${attribute.name}`,
