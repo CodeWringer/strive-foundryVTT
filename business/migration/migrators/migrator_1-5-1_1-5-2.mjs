@@ -60,8 +60,10 @@ export default class Migrator_1_5_1__1_5_2 extends AbstractMigrator {
             _1: instincts._1 ?? "",
             _2: instincts._2 ?? "",
           };
+          const instinctsDataPath = `${dataPath}.beliefSystem.instincts`;
           const reactionsDataPath = `${dataPath}.beliefSystem.reactions`;
           await this.updater.updateByPath(actor, reactionsDataPath, reactions, false);
+          await this.updater.deleteByPath(actor, instinctsDataPath, false);
         }
       }
     }

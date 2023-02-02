@@ -89,6 +89,9 @@ import { SYSTEM_ID } from "./system-id.mjs";
 /* -------------------------------------------- */
 
 Hooks.once('init', function() {
+  // Register globals. 
+  window.DocumentFetcher = DocumentFetcher;
+
   // Add system specific logic to global namespace. 
   game.ambersteel = {
     AmbersteelActor,
