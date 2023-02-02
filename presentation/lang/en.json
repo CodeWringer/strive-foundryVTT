@@ -303,9 +303,9 @@
           "singular": "Belief",
           "plural": "Beliefs"
         },
-        "instinct": {
-          "singular": "Instinct",
-          "plural": "Instincts"
+        "reaction": {
+          "singular": "Reaction",
+          "plural": "Reactions"
         },
         "fateSystem": {
           "label": "Fate",

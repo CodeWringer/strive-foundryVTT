@@ -14,13 +14,13 @@ export default class ActorBeliefsViewModel extends ViewModel {
     const dataBeliefs = this.document.beliefSystem.beliefs;
     return [dataBeliefs._0, dataBeliefs._1, dataBeliefs._2];
   }
-  get instincts() {
-    const dataInstincts = this.document.beliefSystem.instincts;
-    return [dataInstincts._0, dataInstincts._1, dataInstincts._2];
+  get reactions() {
+    const dataReactions = this.document.beliefSystem.reactions;
+    return [dataReactions._0, dataReactions._1, dataReactions._2];
   }
 
   beliefViewModels = [];
-  instinctViewModels = [];
+  reactionViewModels = [];
 
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
@@ -64,13 +64,13 @@ export default class ActorBeliefsViewModel extends ViewModel {
       }));
     }
 
-    for (let i = 0; i < this.instincts.length; i++) {
-      this.instinctViewModels.push(factory.createVmTextField({
+    for (let i = 0; i < this.reactions.length; i++) {
+      this.reactionViewModels.push(factory.createVmTextField({
         parent: thiz,
-        id: `vmInstinct-${i}`,
+        id: `vmReaction-${i}`,
         propertyOwner: thiz.document,
-        propertyPath: `beliefSystem.instincts._${i}`,
-        placeholder: "ambersteel.character.beliefSystem.instinct.singular",
+        propertyPath: `beliefSystem.reactions._${i}`,
+        placeholder: "ambersteel.character.beliefSystem.reaction.singular",
       }));
     }
   }
