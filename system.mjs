@@ -9,6 +9,7 @@ import { WEAPON_TYPES } from "./business/ruleset/asset/weapon-types.mjs";
 import { INJURY_STATES } from "./business/ruleset/health/injury-states.mjs";
 import { ILLNESS_STATES } from "./business/ruleset/health/illness-states.mjs";
 import { HEALTH_STATES } from "./business/ruleset/health/health-states.mjs";
+import { CHARACTER_TEST_TYPES } from "./business/ruleset/test/character-test-types.mjs";
 import Ruleset from "./business/ruleset/ruleset.mjs";
 // Chat constants
 import { VISIBILITY_MODES } from "./presentation/chat/visibility-modes.mjs";

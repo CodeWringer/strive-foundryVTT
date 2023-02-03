@@ -542,6 +542,27 @@
           "apprentice": "Apprentice",
           "master": "Master"
         }
+      },
+      "testType": {
+        "label": "Test type",
+        "binary": {
+          "label": "Binary test"
+        },
+        "stepped": {
+          "label": "Stepped test"
+        },
+        "graduated": {
+          "label": "Graduated test"
+        },
+        "failableGraduated": {
+          "label": "Failable graduated test"
+        },
+        "creative": {
+          "label": "Creative test"
+        },
+        "opposed": {
+          "label": "Opposed test"
+        }
       }
     },
     "roll": {
