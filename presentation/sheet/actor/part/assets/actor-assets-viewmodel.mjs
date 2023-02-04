@@ -9,6 +9,8 @@ import AssetListItemViewModel from "../../../item/asset/asset-list-item-viewmode
 import ActorAssetsEquippedViewModel from "./actor-assets-equipped-viewmodel.mjs"
 
 /**
+ * @property {TransientBaseCharacterActor} document
+ * * Read-only
  * @property {Array<AssetListItemViewModel>} listItemViewModels 
  * @property {Number} maxBulk 
  * @property {Number} currentBulk 
