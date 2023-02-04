@@ -653,6 +653,10 @@
       "acid": {
         "label": "Acid",
         "abbreviation": "Acid"
+      },
+      "electrical": {
+        "label": "Electrical",
+        "abbreviation": "Electric"
       }
     },
     "rules": {
