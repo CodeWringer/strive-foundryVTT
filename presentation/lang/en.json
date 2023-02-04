@@ -137,6 +137,7 @@
           "ambersteelPlated": "Ambersteel-Plated",
           "armor": "Armor",
           "clothing": "Clothing",
+          "counterAttack": "Counter-Attack",
           "exhaustingToWield": "Exhausting to Wield",
           "holdable": "Holdable",
           "longReach": "Long Reach",
@@ -303,9 +304,9 @@
           "singular": "Belief",
           "plural": "Beliefs"
         },
-        "instinct": {
-          "singular": "Instinct",
-          "plural": "Instincts"
+        "reaction": {
+          "singular": "Reaction",
+          "plural": "Reactions"
         },
         "fateSystem": {
           "label": "Fate",
@@ -541,6 +542,27 @@
           "dabbling": "Dabbling",
           "apprentice": "Apprentice",
           "master": "Master"
+        }
+      },
+      "testType": {
+        "label": "Test type",
+        "binary": {
+          "label": "Binary test"
+        },
+        "stepped": {
+          "label": "Stepped test"
+        },
+        "graduated": {
+          "label": "Graduated test"
+        },
+        "failableGraduated": {
+          "label": "Failable graduated test"
+        },
+        "creative": {
+          "label": "Creative test"
+        },
+        "opposed": {
+          "label": "Opposed test"
         }
       }
     },

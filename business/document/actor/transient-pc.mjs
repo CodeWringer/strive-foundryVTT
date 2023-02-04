@@ -14,10 +14,10 @@ import TransientBaseCharacterActor from "./transient-base-character-actor.mjs";
  * @property {String} beliefSystem.beliefs.0
  * @property {String} beliefSystem.beliefs.1
  * @property {String} beliefSystem.beliefs.2
- * @property {Object} beliefSystem.instincts
- * @property {String} beliefSystem.instincts.0
- * @property {String} beliefSystem.instincts.1
- * @property {String} beliefSystem.instincts.2
+ * @property {Object} beliefSystem.reactions
+ * @property {String} beliefSystem.reactions.0
+ * @property {String} beliefSystem.reactions.1
+ * @property {String} beliefSystem.reactions.2
  * @property {Object} fateSystem
  * * Read-only. 
  * @property {Array<TransientFateCard>} fateSystem.fateCards
@@ -54,14 +54,14 @@ export default class TransientPc extends TransientBaseCharacterActor {
         }
       },
      
-      get instincts() {
+      get reactions() {
         return {
-          get _0() { return thiz.document.system.beliefSystem.instincts._0; },
-          set _0(value) { thiz.updateByPath("system.beliefSystem.instincts._0", value); },
-          get _1() { return thiz.document.system.beliefSystem.instincts._1; },
-          set _1(value) { thiz.updateByPath("system.beliefSystem.instincts._1", value); },
-          get _2() { return thiz.document.system.beliefSystem.instincts._2; },
-          set _2(value) { thiz.updateByPath("system.beliefSystem.instincts._2", value); },
+          get _0() { return thiz.document.system.beliefSystem.reactions._0; },
+          set _0(value) { thiz.updateByPath("system.beliefSystem.reactions._0", value); },
+          get _1() { return thiz.document.system.beliefSystem.reactions._1; },
+          set _1(value) { thiz.updateByPath("system.beliefSystem.reactions._1", value); },
+          get _2() { return thiz.document.system.beliefSystem.reactions._2; },
+          set _2(value) { thiz.updateByPath("system.beliefSystem.reactions._2", value); },
         }
       },
     };

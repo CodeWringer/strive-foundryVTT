@@ -55,12 +55,6 @@
       "type": "Item"
     },
     {
-      "name": "burn-injuries",
-      "label": "Burn Injuries",
-      "path": "packs/burn-injuries.db",
-      "type": "Item"
-    },
-    {
       "name": "shields",
       "label": "Shields",
       "path": "packs/shields.db",

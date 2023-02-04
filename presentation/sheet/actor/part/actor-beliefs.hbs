@@ -23,9 +23,9 @@ cssClass: {undefined | String}
   </div>
   <div class="sheet-block margin-b-md">
     <h3>
-      <label class="{{#if viewModel.showFancyFont}}fancy-font{{/if}}">{{localize "ambersteel.character.beliefSystem.instinct.plural"}}</label>
+      <label class="{{#if viewModel.showFancyFont}}fancy-font{{/if}}">{{localize "ambersteel.character.beliefSystem.reaction.plural"}}</label>
     </h3>
-    {{#each viewModel.instinctViewModels as |vm index|}}
+    {{#each viewModel.reactionViewModels as |vm index|}}
       <div class="margin-b-md">
         {{> inputTextField viewModel=vm}}
       </div>
