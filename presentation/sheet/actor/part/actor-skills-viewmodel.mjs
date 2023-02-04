@@ -55,6 +55,7 @@ export default class ActorSkillsViewModel extends ViewModel {
       listItemTemplate: TEMPLATES.SKILL_LIST_ITEM,
       vmBtnAddItem: factory.createVmBtnAdd({
         id: "vmBtnAddLearningSkill",
+        isEditable: thiz.isEditable,
         target: thiz.document,
         creationType: "skill",
         withDialog: true,
@@ -84,6 +85,7 @@ export default class ActorSkillsViewModel extends ViewModel {
       vmBtnAddItem: factory.createVmBtnAdd({
         id: "vmBtnAddKnownSkill",
         target: thiz.document,
+        isEditable: thiz.isEditable,
         creationType: "skill",
         withDialog: true,
         localizableLabel: "ambersteel.character.skill.known.add.label",

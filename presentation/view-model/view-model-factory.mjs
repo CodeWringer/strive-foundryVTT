@@ -249,7 +249,6 @@ export default class ViewModelFactory {
    * @returns {ButtonAddViewModel}
    */
   createVmBtnAdd(args = {}) {
-    const thiz = this;
     validateOrThrow(args, ["target", "creationType"]);
 
     return new ButtonAddViewModel({
