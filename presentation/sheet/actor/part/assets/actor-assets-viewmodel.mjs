@@ -92,6 +92,7 @@ export default class ActorAssetsViewModel extends ViewModel {
       vmBtnAddItem: factory.createVmBtnAdd({
         id: "vmBtnAddItem",
         target: thiz.document,
+        isEditable: thiz.isEditable,
         creationType: "item",
         withDialog: true,
         localizableLabel: "ambersteel.character.asset.add.label",
@@ -115,6 +116,7 @@ export default class ActorAssetsViewModel extends ViewModel {
       vmBtnAddItem: factory.createVmBtnAdd({
         id: "vmBtnAddItem",
         target: thiz.document,
+        isEditable: thiz.isEditable,
         creationType: "item",
         withDialog: true,
         localizableLabel: "ambersteel.character.asset.add.label",
