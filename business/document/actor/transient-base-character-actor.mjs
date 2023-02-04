@@ -354,14 +354,15 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
     // Worn & Equipped
     const equipmentIds = [];
     const equipmentAssets = [];
-    for (const group in this._equipmentSlotGroups) {
-      for (const slot in group.slots) {
+    for (const group of this._equipmentSlotGroups) {
+      for (const slot of group.slots) {
         if (isDefined(slot.alottedId) === true) {
-          equipmentIds.push(slot.alottedId);
-          const asset = this._allAssets.find(asset => asset.id === id);
+          const asset = this._allAssets.find(asset => asset.id === slot.alottedId);
           if (asset === undefined) {
             game.ambersteel.logger.logWarn("NullReferenceException: equipped asset could not be found on actor");
+            slot.alottedId = null;
           } else {
+            equipmentIds.push(slot.alottedId);
             equipmentAssets.push(asset);
           }
         }
