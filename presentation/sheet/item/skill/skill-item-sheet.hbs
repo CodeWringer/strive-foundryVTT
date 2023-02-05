@@ -58,5 +58,6 @@ cssClass: {undefined | String}
     {{> inputRichText viewModel=viewModel.vmRtDescription }}
   </div>
   {{!-- Skill Abilites --}}
+  <h3{{#if viewModel.showFancyFont}} class="fancy-font"{{/if}}>{{localize "ambersteel.character.skill.ability.plural"}}</h3>
   {{> "systems/ambersteel/presentation/sheet/item/skill-ability/skill-ability-table.hbs" viewModel=viewModel.vmSkillAbilityTable cssClass=(ifThenElse viewModel.isSkillAbilityListVisible "" "hidden") }}
 </form>
