@@ -87,8 +87,9 @@ export default class AmbersteelBaseActorSheet {
    * @param {Boolean | undefined} isEditable If true, the sheet will be editable. 
    * 
    * @virtual
+   * @async
    */
-  activateListeners(html, isOwner, isEditable) { /** Do nothing */}
+  async activateListeners(html, isOwner, isEditable) { /** Do nothing */}
 }
 
 ACTOR_SHEET_SUBTYPE.set("plain", new AmbersteelBaseActorSheet());

@@ -354,7 +354,7 @@ Hooks.on("renderChatMessage", async function(message, html, data) {
     }
   }
 
-  viewModel.activateListeners(html, viewModel.isOwner, viewModel.isEditable);
+  await viewModel.activateListeners(html, viewModel.isOwner, viewModel.isEditable);
 });
 
 Hooks.on("deleteChatMessage", function(args) {

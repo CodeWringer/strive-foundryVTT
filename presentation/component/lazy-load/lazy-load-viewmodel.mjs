@@ -85,6 +85,7 @@ export default class LazyLoadViewModel extends ViewModel {
   _invalidated = false;
 
   /**
+   * @param {Object} args
    * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
    * @param {String} args.template A Handlebars template to lazy load. 
    * @param {Function} args.viewModelFactoryFunction A function that returns a view 
@@ -103,7 +104,7 @@ export default class LazyLoadViewModel extends ViewModel {
   }
 
   /** @override */
-  activateListeners(html, isOwner, isEditable) {
+  async activateListeners(html, isOwner, isEditable) {
     // First of all, cache the DOM we're working with. The getters rely on it. 
     this._html = html;
 
@@ -116,7 +117,7 @@ export default class LazyLoadViewModel extends ViewModel {
       this.element.append(this._renderedContent);
     }
 
-    super.activateListeners(html, isOwner, isEditable);
+    await super.activateListeners(html, isOwner, isEditable);
   }
 
   /**
@@ -143,8 +144,8 @@ export default class LazyLoadViewModel extends ViewModel {
       this.element.empty();
       this.element.append(this._renderedContent);
   
-      // *Lastly* the wrapped view model may attach its event listeners. 
-      this.viewModel.activateListeners(this.element, this.viewModel.isOwner, this.viewModel.isEditable);
+      // *After* DOM manipulations the wrapped view model may attach its event listeners. 
+      await this.viewModel.activateListeners(this.element, this.viewModel.isOwner, this.viewModel.isEditable);
     }
   }
 

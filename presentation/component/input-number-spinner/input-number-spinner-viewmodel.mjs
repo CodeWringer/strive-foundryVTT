@@ -57,10 +57,9 @@ export default class InputNumberSpinnerViewModel extends InputViewModel {
 
   /**
    * @override
-   * @see "module\components\input-viewmodel.mjs"
    */
-  activateListeners(html, isOwner, isEditable) {
-    super.activateListeners(html, isOwner, isEditable);
+  async activateListeners(html, isOwner, isEditable) {
+    await super.activateListeners(html, isOwner, isEditable);
 
     if (isEditable !== true) return;
 

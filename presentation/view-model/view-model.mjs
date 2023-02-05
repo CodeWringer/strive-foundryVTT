@@ -483,11 +483,12 @@ export default class ViewModel {
    * @param {Boolean} isEditable If true, registers events that require editing permission. 
    * 
    * @virtual
+   * @async
    */
-  activateListeners(html, isOwner, isEditable) {
+  async activateListeners(html, isOwner, isEditable) {
     for (const child of this.children) {
       try {
-        child.activateListeners(html, isOwner, isEditable);
+        await child.activateListeners(html, isOwner, isEditable);
       } catch (error) {
         game.ambersteel.logger.logWarn(error);
       }

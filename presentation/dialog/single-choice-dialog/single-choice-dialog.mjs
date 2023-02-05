@@ -113,8 +113,8 @@ export default class SingleChoiceDialog extends ConfirmableModalDialog {
   }
 
   /** @override */
-  activateListeners(html) {
-    super.activateListeners(html);
+  async activateListeners(html) {
+    await super.activateListeners(html);
 
     this.selected = this._initialValue;
   }

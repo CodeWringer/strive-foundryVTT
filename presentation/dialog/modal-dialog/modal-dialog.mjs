@@ -145,8 +145,8 @@ export default class ModalDialog extends Application {
   }
 
   /** @override */
-  activateListeners(html) {
-    super.activateListeners(html);
+  async activateListeners(html) {
+    await super.activateListeners(html);
 
     this._html = html;
 

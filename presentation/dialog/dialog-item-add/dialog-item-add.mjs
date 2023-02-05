@@ -102,8 +102,8 @@ export default class AddItemDialog extends ConfirmableModalDialog {
   }
 
   /** @override */
-  activateListeners(html) {
-    super.activateListeners(html);
+  async activateListeners(html) {
+    await super.activateListeners(html);
 
     html.find(SELECTOR_IS_CUSTOM).change(event => {
       const select = html.find(SELECTOR_ITEM_SELECT)[0];

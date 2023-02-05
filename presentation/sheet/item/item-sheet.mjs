@@ -132,17 +132,17 @@ export class AmbersteelItemSheet extends ItemSheet {
   }
 
   /** @override */
-  activateListeners(html) {
-    super.activateListeners(html);
+  async activateListeners(html) {
+    await super.activateListeners(html);
 
     const isOwner = (this.actor ?? this.item).isOwner;
     const isEditable = this.isEditable;
     
-    game.ambersteel.logger.logPerf(this, "item.activateListeners (subType)", () => {
-      this.subType.activateListeners(html, isOwner, isEditable);
+    await game.ambersteel.logger.logPerfAsync(this, "item.activateListeners (subType)", async () => {
+      await this.subType.activateListeners(html, isOwner, isEditable);
     });
-    game.ambersteel.logger.logPerf(this, "item.activateListeners (viewModel)", () => {
-      this.viewModel.activateListeners(html, isOwner, isEditable);
+    await game.ambersteel.logger.logPerfAsync(this, "item.activateListeners (viewModel)", async () => {
+      await this.viewModel.activateListeners(html, isOwner, isEditable);
     });
 
     if (!isOwner) return;

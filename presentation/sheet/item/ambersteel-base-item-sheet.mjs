@@ -77,6 +77,7 @@ export default class AmbersteelBaseItemSheet {
    * @param {Boolean | undefined} isEditable If true, the sheet will be editable. 
    * 
    * @virtual
+   * @async
    */
-  activateListeners(html, isOwner, isEditable) { /** Do nothing */}
+  async activateListeners(html, isOwner, isEditable) { /** Do nothing */}
 }
