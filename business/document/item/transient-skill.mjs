@@ -15,7 +15,7 @@ import SkillAbility from "../../ruleset/skill/skill-ability.mjs";
 import CharacterAttribute from "../../ruleset/attribute/character-attribute.mjs";
 import { ATTACK_TYPES } from "../../ruleset/skill/attack-types.mjs";
 import { ATTRIBUTES } from "../../ruleset/attribute/attributes.mjs";
-import { isObject } from "../../util/validation-utility.mjs";
+import { isBlankOrUndefined, isObject } from "../../util/validation-utility.mjs";
 import { SKILL_PROPERTIES } from "./item-properties.mjs";
 
 /**
@@ -46,7 +46,11 @@ export default class TransientSkill extends TransientBaseItem {
    * @type {Attribute}
    */
   get relatedAttribute() {
-    return ATTRIBUTES[this.document.system.relatedAttribute];
+    let _relatedAttribute = this.document.system.relatedAttribute;
+    if (isBlankOrUndefined(_relatedAttribute) === true) {
+      _relatedAttribute = ATTRIBUTES.agility.name;
+    }
+    return ATTRIBUTES[_relatedAttribute];
   }
   set relatedAttribute(value) {
     if (isObject(value)) { // This assumes an `Attribute` object was given. 
