@@ -6,7 +6,7 @@ cssClass: {String | undefined}
   class="custom-system-edit component-rich-text-container{{#if cssClass}} {{cssClass}}{{/if}}" 
   id="{{viewModel.id}}" 
 >
-  <div class="component-rich-text-editbutton">
+  <div class="component-rich-text-editbutton{{#if viewModel.isEditable}}{{else}} hidden{{/if}}">
     {{#> button viewModel=viewModel.vmBtnEditMode cssClass="button-full" fill=true }}<i class="fas fa-edit"></i>{{/button}}
   </div>
   <div class="component-rich-text hidden"></div>
