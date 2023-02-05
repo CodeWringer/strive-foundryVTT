@@ -4,17 +4,13 @@ cssClass: {undefined | String}
 --}}
 <section class="{{cssClass}}">
   <div class="sheet-block margin-b-md">
-    <h3>
-      <label class="{{#if viewModel.showFancyFont}}fancy-font{{/if}}">{{localize "ambersteel.character.beliefSystem.ambition"}}</label>
-    </h3>
+    {{#> header3 showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.beliefSystem.ambition"}}{{/header3}}
     <div class="margin-b-md">
       {{> inputTextField viewModel=viewModel.vmTfAmbition }}
     </div>
   </div>
   <div class="sheet-block margin-b-md">
-    <h3>
-      <label class="{{#if viewModel.showFancyFont}}fancy-font{{/if}}">{{localize "ambersteel.character.beliefSystem.belief.plural"}}</label>
-    </h3>
+    {{#> header3 showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.beliefSystem.belief.plural"}}{{/header3}}
     {{#each viewModel.beliefViewModels as |vm index|}}
       <div class="margin-b-md">
         {{> inputTextField viewModel=vm}}
@@ -22,9 +18,7 @@ cssClass: {undefined | String}
     {{/each}}
   </div>
   <div class="sheet-block margin-b-md">
-    <h3>
-      <label class="{{#if viewModel.showFancyFont}}fancy-font{{/if}}">{{localize "ambersteel.character.beliefSystem.reaction.plural"}}</label>
-    </h3>
+    {{#> header3 showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.beliefSystem.reaction.plural"}}{{/header3}}
     {{#each viewModel.reactionViewModels as |vm index|}}
       <div class="margin-b-md">
         {{> inputTextField viewModel=vm}}
