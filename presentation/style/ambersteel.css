@@ -1374,6 +1374,9 @@ button.component-button-toggle.disabled {
   background-color: #676662;
   cursor: default;
 }
+button.component-button-toggle.disabled:hover, button.component-button-toggle.disabled:active, button.component-button-toggle.disabled:focus {
+  box-shadow: unset;
+}
 
 span.component-button-toggle-knob {
   background-color: rgba(129, 129, 129, 0.55);
