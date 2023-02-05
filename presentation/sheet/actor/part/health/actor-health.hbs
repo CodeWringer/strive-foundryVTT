@@ -3,7 +3,7 @@ viewModel: {ActorHealthViewModel}
 cssClass: {undefined | String}
 --}}
 <section class="{{cssClass}}">
-  <h2>{{localize "ambersteel.character.health.healthStats"}}</h2>
+  {{#> header1 showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.health.healthStats"}}{{/header1}}
   {{!-- General health stats --}}
   <div class="flex flex-column">
   {{!-- Row 1 --}}
@@ -15,7 +15,7 @@ cssClass: {undefined | String}
             {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.health.hp.maximum"}}{{/label}}
           </div>
           <span class="width-md">
-            {{> inputNumberSpinner viewModel=viewModel.vmNsMaxHp }}
+            {{#> readOnlyValue}}{{viewModel.maxHP}}{{/readOnlyValue}}
           </span>
         </div>
         <div class="flex flex-row">
@@ -34,7 +34,7 @@ cssClass: {undefined | String}
             {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.health.exhaustion.maximum"}}{{/label}}
           </div>
           <span class="width-md">
-            {{> inputNumberSpinner viewModel=viewModel.vmNsMaxExhaustion }}
+            {{#> readOnlyValue}}{{viewModel.maxExhaustion}}{{/readOnlyValue}}
           </span>
         </div>
         <div class="flex flex-row">
@@ -53,7 +53,7 @@ cssClass: {undefined | String}
             {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.magic.stamina.maximum"}}{{/label}}
           </div>
           <span class="width-md">
-            {{> inputNumberSpinner viewModel=viewModel.vmNsMaxMagicStamina }}
+            {{#> readOnlyValue}}{{viewModel.maxMagicStamina}}{{/readOnlyValue}}
           </span>
         </div>
         <div class="flex flex-row">
@@ -72,7 +72,7 @@ cssClass: {undefined | String}
     {{/with}}
   </div>
   {{!-- Injuries --}}
-  <h2 class="flex flex-row">{{localize "ambersteel.character.health.injury.plural"}}</h2>
+  {{#> header1 showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.health.injury.plural"}}{{/header1}}
   <div class="grid-2col grid-gap-md margin-b-md">
     <div class="sheet-block">
       <div class="flex flex-row">
@@ -80,7 +80,7 @@ cssClass: {undefined | String}
           {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.health.injury.maximum"}}{{/label}}
         </div>
         <span class="width-md">
-          {{> inputNumberSpinner viewModel=viewModel.vmNsMaxInjuries }}
+          {{#> readOnlyValue}}{{viewModel.maxInjuryCount}}{{/readOnlyValue}}
         </span>
       </div>
     </div>
@@ -91,7 +91,7 @@ cssClass: {undefined | String}
         </div>
         <span class="width-md">
           <div class="ambersteel-read-only pad-sm fill">
-            {{viewModel.injuryCount}}
+            {{#> readOnlyValue}}{{viewModel.injuryCount}}{{/readOnlyValue}}
           </div>
         </span>
       </div>
@@ -107,10 +107,9 @@ cssClass: {undefined | String}
   </div>
   {{> sortableList viewModel=viewModel.vmInjuryList }}
   {{!-- Illnesses --}}
-  <h2>{{localize "ambersteel.character.health.illness.plural"}}</h2>
+  {{#> header1 showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.health.illness.plural"}}{{/header1}}
   <div class="grid-2col grid-gap-md margin-b-md">
-    <div>
-    </div>
+    <div></div>
     <div class="sheet-block">
       <div class="flex flex-row">
         <div class="flex-grow">
@@ -118,7 +117,7 @@ cssClass: {undefined | String}
         </div>
         <span class="width-md">
           <div class="ambersteel-read-only pad-sm fill">
-            {{viewModel.illnessCount}}
+            {{#> readOnlyValue}}{{viewModel.illnessCount}}{{/readOnlyValue}}
           </div>
         </span>
       </div>
@@ -126,10 +125,9 @@ cssClass: {undefined | String}
   </div>
   {{> sortableList viewModel=viewModel.vmIllnessList }}
   {{!-- Mutations --}}
-  <h2>{{localize "ambersteel.character.health.mutation.plural"}}</h2>
+  {{#> header1 showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.health.mutation.plural"}}{{/header1}}
   <div class="grid-2col grid-gap-md margin-b-md">
-    <div>
-    </div>
+    <div></div>
     <div class="sheet-block">
       <div class="flex flex-row">
         <div class="flex-grow">
@@ -137,7 +135,7 @@ cssClass: {undefined | String}
         </div>
         <span class="width-md">
           <div class="ambersteel-read-only pad-sm fill">
-            {{viewModel.mutationCount}}
+            {{#> readOnlyValue}}{{viewModel.mutationCount}}{{/readOnlyValue}}
           </div>
         </span>
       </div>
@@ -145,6 +143,21 @@ cssClass: {undefined | String}
   </div>
   {{> sortableList viewModel=viewModel.vmMutationList }}
   {{!-- Scars --}}
-  <h2>{{localize "ambersteel.character.health.scar.plural"}}</h2>
+  {{#> header1 showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.health.scar.plural"}}{{/header1}}
+  <div class="grid-2col grid-gap-md margin-b-md">
+    <div></div>
+    <div class="sheet-block">
+      <div class="flex flex-row">
+        <div class="flex-grow">
+          {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.health.scar.plural"}}{{/label}}
+        </div>
+        <span class="width-md">
+          <div class="ambersteel-read-only pad-sm fill">
+            {{#> readOnlyValue}}{{viewModel.scarCount}}{{/readOnlyValue}}
+          </div>
+        </span>
+      </div>
+    </div>
+  </div>
   {{> sortableList viewModel=viewModel.vmScarList }}
 </section>
