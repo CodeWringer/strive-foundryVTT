@@ -1,8 +1,8 @@
 {{!-- Parameters:
-text: {String|undefined}
 for: {String|undefined}
 cssClass: {undefined | String}
+showFancyFont: {Boolean | undefined}
 --}}
-<label class="flex flex-middle height-fill{{#if cssClass}} {{cssClass}}{{/if}}{{#if showFancyFont}} fancy-font{{/if}}" for="{{for}}">
-  <div class="text-align-r width-fill pad-r-md">{{text}}</div>
+<label class="flex flex-middle height-fill ambersteel-label{{#if cssClass}} {{cssClass}}{{/if}}{{#if showFancyFont}} fancy-font{{/if}}" for="{{for}}">
+  <div class="text-align-r width-fill pad-r-md">{{> @partial-block}}</div>
 </label>

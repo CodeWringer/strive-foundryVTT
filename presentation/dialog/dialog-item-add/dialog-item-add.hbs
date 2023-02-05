@@ -15,7 +15,7 @@ showFancyFont: {Boolean | undefined}
 --}}
 {{#> dialogContent}}
 <div class="grid grid-2col">
-  {{> label text=(localize itemLabel) showFancyFont=showFancyFont}}
+  {{#> label showFancyFont=showFancyFont}}{{localize itemLabel}}{{/label}}
   <select class="ambersteel-item-select" data-property-path="selected">
     {{#select selected}}
     {{#each itemDeclarations as |itemDeclaration key|}}
@@ -25,7 +25,7 @@ showFancyFont: {Boolean | undefined}
   </select>
 </div>
 <div class="grid grid-2col">
-  {{> label text=(localize "ambersteel.general.custom") showFancyFont=showFancyFont}}
+  {{#> label showFancyFont=showFancyFont}}{{localize "ambersteel.general.custom"}}{{/label}}
   <input class="ambersteel-checkbox ambersteel-is-custom" type="checkbox" data-dtype="boolean" value="{{isCustomChecked}}" data-property-path="isCustomChecked" />
 </div>
 {{/dialogContent}}

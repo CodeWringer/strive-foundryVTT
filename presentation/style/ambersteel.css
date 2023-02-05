@@ -6,7 +6,6 @@
 /* Utilities */
 .fancy-font {
   font-family: "Black-Chancery";
-  font-size: 1rem;
 }
 
 .primary-font {
@@ -1564,6 +1563,10 @@ div.tox-tiered-menu > div.tox-menu.tox-collection.tox-collection--list.tox-selec
   background-color: rgba(0, 0, 0, 0.12);
   padding: 2px 10px;
   text-align: center;
+}
+
+label.ambersteel-label {
+  font-size: 1rem;
 }
 
 /* Animations */

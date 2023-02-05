@@ -22,7 +22,7 @@ cssClass: {undefined | String}
       </span>
       {{!-- Name --}}
       <span class="width-min-xl">
-        {{> label text=(localize "ambersteel.character.asset.singular") showFancyFont=viewModel.showFancyFont}}
+        {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.asset.singular"}}{{/label}}
       </span>
       {{> inputImage viewModel=viewModel.vmImg cssClass="custom-icon-sm" }}
       <h2 class="flex-grow margin-r-md">
@@ -37,7 +37,7 @@ cssClass: {undefined | String}
     {{!-- Quantity --}}
     <div class="flex flex-row">
       <span class="width-min-xl">
-        {{> label text=(localize "ambersteel.character.asset.quantity.label") showFancyFont=viewModel.showFancyFont}}
+        {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.asset.quantity.label"}}{{/label}}
       </span>
       <span class="width-md">
         {{> inputNumberSpinner viewModel=viewModel.vmNsQuantity }}
@@ -48,7 +48,7 @@ cssClass: {undefined | String}
     {{!-- Max quantity --}}
     <div class="flex flex-row flex-grow">
       <span class="width-min-xl">
-        {{> label text=(localize "ambersteel.character.asset.quantity.maximum") showFancyFont=viewModel.showFancyFont}}
+        {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.asset.quantity.maximum"}}{{/label}}
       </span>
       <span class="width-md">
         {{> inputNumberSpinner viewModel=viewModel.vmNsMaxQuantity }}
@@ -59,7 +59,7 @@ cssClass: {undefined | String}
   <div class="flex flex-row">
     {{!-- Bulk --}}
     <span class="width-min-xl">
-      {{> label text=(localize "ambersteel.character.asset.bulk") showFancyFont=viewModel.showFancyFont}}
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.asset.bulk"}}{{/label}}
     </span>
     <span class="width-md">
       {{> inputNumberSpinner viewModel=viewModel.vmNsBulk }}
@@ -69,7 +69,7 @@ cssClass: {undefined | String}
   {{!-- Properties --}}
   <div class="flex flex-row">
     <span class="width-min-xl">
-      {{> label text=(localize "ambersteel.general.properties.label") showFancyFont=viewModel.showFancyFont}}
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.general.properties.label"}}{{/label}}
     </span>
     <span class="flex flex-grow">
       {{> inputProperties viewModel=viewModel.vmProperties}}

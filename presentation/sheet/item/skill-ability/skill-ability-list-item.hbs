@@ -12,7 +12,7 @@ cssClass: {undefined | String}
       {{> buttonSendToChat viewModel=viewModel.vmBtnSendToChat }}
       {{!-- Name --}}
       <span class="width-min-xl">
-        {{> label text=(localize "ambersteel.general.name") showFancyFont=viewModel.showFancyFont}}
+        {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.general.name"}}{{/label}}
       </span>
       {{> inputImage viewModel=viewModel.vmImg cssClass="custom-icon-sm" }}
       <h4 class="flex-grow margin-r-md">
@@ -29,7 +29,7 @@ cssClass: {undefined | String}
     {{!-- Required Level --}}
     <div class="fill flex flex-row">
       <div class="flex-grow">
-        {{> label text=(localize "ambersteel.character.skill.ability.requirement") showFancyFont=viewModel.showFancyFont}}
+        {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.skill.ability.requirement"}}{{/label}}
       </div>
       <div class="width-md">
         {{> inputNumberSpinner viewModel=viewModel.vmNsRequiredLevel }}
@@ -38,7 +38,7 @@ cssClass: {undefined | String}
     {{!-- AP cost --}}
     <div class="fill flex flex-row">
       <div class="flex-grow">
-        {{> label text=(localize "ambersteel.character.skill.ability.apCost") showFancyFont=viewModel.showFancyFont}}
+        {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.skill.ability.apCost"}}{{/label}}
       </div>
       <div class="width-md">
         {{> inputNumberSpinner viewModel=viewModel.vmNsApCost }}
@@ -48,7 +48,7 @@ cssClass: {undefined | String}
     {{!-- Obstacle --}}
     <div class="fill flex flex-row{{#if viewModel.hideObstacle}} hidden{{/if}}">
       <div class="width-min-lg">
-        {{> label text=(localize "ambersteel.roll.obstacle.abbreviation") showFancyFont=viewModel.showFancyFont}}
+        {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.roll.obstacle.abbreviation"}}{{/label}}
       </div>
       <div class="flex-grow">
         {{> inputTextField viewModel=viewModel.vmTfObstacle }}
@@ -57,7 +57,7 @@ cssClass: {undefined | String}
     {{!-- Opposed By --}}
     <div class="fill flex flex-row{{#if viewModel.hideOpposedBy}} hidden{{/if}}">
       <div class="width-min-lg">
-        {{> label text=(localize "ambersteel.roll.obstacle.opposedBy.label") showFancyFont=viewModel.showFancyFont}}
+        {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.roll.obstacle.opposedBy.label"}}{{/label}}
       </div>
       <div class="flex-grow">
         {{> inputTextField viewModel=viewModel.vmTfOpposedBy }}
@@ -66,7 +66,7 @@ cssClass: {undefined | String}
     {{!-- Distance --}}
     <div class="fill flex flex-row{{#if viewModel.hideDistance}} hidden{{/if}}">
       <div class="width-min-lg">
-        {{> label text=(localize "ambersteel.character.skill.ability.distance.label") showFancyFont=viewModel.showFancyFont}}
+        {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.skill.ability.distance.label"}}{{/label}}
       </div>
       <div class="flex-grow">
         {{> inputTextField viewModel=viewModel.vmTfDistance }}
@@ -75,7 +75,7 @@ cssClass: {undefined | String}
     {{!-- Attack type --}}
     <div class="fill flex flex-row{{#if viewModel.hideAttackType}} hidden{{/if}}">
       <div class="width-min-lg">
-        {{> label text=(localize "ambersteel.attackType.label") showFancyFont=viewModel.showFancyFont}}
+        {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.attackType.label"}}{{/label}}
       </div>
       <div class="flex-grow">
         {{> inputDropDown viewModel=viewModel.vmDdAttackType }}
