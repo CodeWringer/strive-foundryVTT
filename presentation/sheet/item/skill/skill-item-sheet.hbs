@@ -54,7 +54,7 @@ cssClass: {undefined | String}
   </div>
   {{!-- Description --}}
   <div class="sheet-block flex flex-column margin-b-md">
-    <h3 class="{{#if viewModel.showFancyFont}}fancy-font{{/if}}">{{localize "ambersteel.general.description"}}</h3>
+    {{#> header3 showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.general.description"}}{{/header3}}
     {{> inputRichText viewModel=viewModel.vmRtDescription }}
   </div>
   {{!-- Skill Abilites --}}
