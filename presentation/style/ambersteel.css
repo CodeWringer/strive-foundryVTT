@@ -1572,14 +1572,17 @@ div.tox-tiered-menu > div.tox-menu.tox-collection.tox-collection--list.tox-selec
 
 h1.ambersteel-header {
   font-size: 1.8rem;
+  text-align: center;
+  vertical-align: middle;
 }
 
 h2.ambersteel-header {
-  font-size: 1.5rem;
+  font-size: 1.4rem;
 }
 
 h3.ambersteel-header {
-  font-size: 1.2rem;
+  font-size: 1.1rem;
+  border-bottom: 1px solid rgba(129, 129, 129, 0.85);
 }
 
 label.ambersteel-label {
