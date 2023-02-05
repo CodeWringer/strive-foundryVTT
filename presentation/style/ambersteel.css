@@ -1565,6 +1565,18 @@ div.tox-tiered-menu > div.tox-menu.tox-collection.tox-collection--list.tox-selec
   text-align: center;
 }
 
+h1.ambersteel-header {
+  font-size: 1.8rem;
+}
+
+h2.ambersteel-header {
+  font-size: 1.5rem;
+}
+
+h3.ambersteel-header {
+  font-size: 1.2rem;
+}
+
 label.ambersteel-label {
   font-size: 1rem;
 }
