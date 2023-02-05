@@ -30,4 +30,4 @@ export default class LabelViewModel extends ViewModel {
   }
 }
 
-Handlebars.registerPartial('inputLabel', `{{> "${LabelViewModel.TEMPLATE}"}}`);
+Handlebars.registerPartial('label', `{{> "${LabelViewModel.TEMPLATE}"}}`);

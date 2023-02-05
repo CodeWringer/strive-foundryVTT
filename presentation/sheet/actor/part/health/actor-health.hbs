@@ -12,7 +12,7 @@ cssClass: {undefined | String}
       <div class="sheet-block">
         <div class="flex flex-row">
           <div class="flex-grow">
-            {{> inputLabel for="maxHP" text=(localize "ambersteel.character.health.hp.maximum") showFancyFont=viewModel.showFancyFont}}
+            {{> label for="maxHP" text=(localize "ambersteel.character.health.hp.maximum") showFancyFont=viewModel.showFancyFont}}
           </div>
           <span class="width-md">
             {{> inputNumberSpinner viewModel=viewModel.vmNsMaxHp }}
@@ -20,7 +20,7 @@ cssClass: {undefined | String}
         </div>
         <div class="flex flex-row">
           <div class="flex-grow">
-            {{> inputLabel for="HP" text=(localize "ambersteel.character.health.hp.abbreviation") showFancyFont=viewModel.showFancyFont}}
+            {{> label for="HP" text=(localize "ambersteel.character.health.hp.abbreviation") showFancyFont=viewModel.showFancyFont}}
           </div>
           <span class="width-md">
             {{> inputNumberSpinner viewModel=viewModel.vmNsHp }}
@@ -31,7 +31,7 @@ cssClass: {undefined | String}
       <div class="sheet-block">
         <div class="flex flex-row">
           <div class="flex-grow">
-            {{> inputLabel for="maxExhaustion" text=(localize "ambersteel.character.health.exhaustion.maximum") showFancyFont=viewModel.showFancyFont}}
+            {{> label for="maxExhaustion" text=(localize "ambersteel.character.health.exhaustion.maximum") showFancyFont=viewModel.showFancyFont}}
           </div>
           <span class="width-md">
             {{> inputNumberSpinner viewModel=viewModel.vmNsMaxExhaustion }}
@@ -39,7 +39,7 @@ cssClass: {undefined | String}
         </div>
         <div class="flex flex-row">
           <div class="flex-grow">
-            {{> inputLabel for="exhaustion" text=(localize "ambersteel.character.health.exhaustion.label") showFancyFont=viewModel.showFancyFont}}
+            {{> label for="exhaustion" text=(localize "ambersteel.character.health.exhaustion.label") showFancyFont=viewModel.showFancyFont}}
           </div>
           <span class="width-md">
             {{> inputNumberSpinner viewModel=viewModel.vmNsExhaustion }}
@@ -50,7 +50,7 @@ cssClass: {undefined | String}
       <div class="sheet-block">
         <div class="flex flex-row">
           <div class="flex-grow">
-            {{> inputLabel text=(localize "ambersteel.character.magic.stamina.maximum") showFancyFont=viewModel.showFancyFont}}
+            {{> label text=(localize "ambersteel.character.magic.stamina.maximum") showFancyFont=viewModel.showFancyFont}}
           </div>
           <span class="width-md">
             {{> inputNumberSpinner viewModel=viewModel.vmNsMaxMagicStamina }}
@@ -58,7 +58,7 @@ cssClass: {undefined | String}
         </div>
         <div class="flex flex-row">
           <div class="flex-grow">
-            {{> inputLabel text=(localize "ambersteel.character.magic.stamina.label") showFancyFont=viewModel.showFancyFont}}
+            {{> label text=(localize "ambersteel.character.magic.stamina.label") showFancyFont=viewModel.showFancyFont}}
           </div>
           <span class="width-md">
             {{> inputNumberSpinner viewModel=viewModel.vmNsMagicStamina }}
@@ -76,7 +76,7 @@ cssClass: {undefined | String}
     <div class="sheet-block">
       <div class="flex flex-row">
         <div class="flex-grow">
-          {{> inputLabel for="maxInjuries" text=(localize "ambersteel.character.health.injury.maximum") showFancyFont=viewModel.showFancyFont}}
+          {{> label for="maxInjuries" text=(localize "ambersteel.character.health.injury.maximum") showFancyFont=viewModel.showFancyFont}}
         </div>
         <span class="width-md">
           {{> inputNumberSpinner viewModel=viewModel.vmNsMaxInjuries }}
@@ -86,7 +86,7 @@ cssClass: {undefined | String}
     <div class="sheet-block">
       <div class="flex flex-row">
         <div class="flex-grow">
-          {{> inputLabel text=(localize "ambersteel.character.health.injury.plural") showFancyFont=viewModel.showFancyFont}}
+          {{> label text=(localize "ambersteel.character.health.injury.plural") showFancyFont=viewModel.showFancyFont}}
         </div>
         <span class="width-md">
           <div class="ambersteel-read-only pad-sm fill">
@@ -113,7 +113,7 @@ cssClass: {undefined | String}
     <div class="sheet-block">
       <div class="flex flex-row">
         <div class="flex-grow">
-          {{> inputLabel text=(localize "ambersteel.character.health.illness.plural") showFancyFont=viewModel.showFancyFont}}
+          {{> label text=(localize "ambersteel.character.health.illness.plural") showFancyFont=viewModel.showFancyFont}}
         </div>
         <span class="width-md">
           <div class="ambersteel-read-only pad-sm fill">
@@ -132,7 +132,7 @@ cssClass: {undefined | String}
     <div class="sheet-block">
       <div class="flex flex-row">
         <div class="flex-grow">
-          {{> inputLabel text=(localize "ambersteel.character.health.mutation.plural") showFancyFont=viewModel.showFancyFont}}
+          {{> label text=(localize "ambersteel.character.health.mutation.plural") showFancyFont=viewModel.showFancyFont}}
         </div>
         <span class="width-md">
           <div class="ambersteel-read-only pad-sm fill">

@@ -20,7 +20,7 @@ cssClass: {undefined | String}
     {{!-- Row 1 --}}
     <div class="sheet-block grid-2col grid-gap-md margin-b-md">
       <div class="flex flex-row flex-middle flex-right">
-        {{> inputLabel text=(localize "ambersteel.character.beliefSystem.fateSystem.fatePoints.minor.label") showFancyFont=viewModel.showFancyFont}}
+        {{> label text=(localize "ambersteel.character.beliefSystem.fateSystem.fatePoints.minor.label") showFancyFont=viewModel.showFancyFont}}
         <div class="flex flex-middle width-md">({{localize "ambersteel.character.beliefSystem.fateSystem.fatePoints.minor.abbreviation"}})</div>
       </div>
       {{> inputNumberSpinner viewModel=viewModel.vmNsMifp }}
@@ -28,7 +28,7 @@ cssClass: {undefined | String}
     {{!-- Row 2 --}}
     <div class="sheet-block grid-2col grid-gap-md margin-b-md">
       <div class="flex flex-row flex-middle flex-right">
-        {{> inputLabel text=(localize "ambersteel.character.beliefSystem.fateSystem.fatePoints.major.label") showFancyFont=viewModel.showFancyFont}}
+        {{> label text=(localize "ambersteel.character.beliefSystem.fateSystem.fatePoints.major.label") showFancyFont=viewModel.showFancyFont}}
         <div class="flex flex-middle width-md">({{localize "ambersteel.character.beliefSystem.fateSystem.fatePoints.major.abbreviation"}})</div>
       </div>
       {{> inputNumberSpinner viewModel=viewModel.vmNsMafp }}
@@ -36,7 +36,7 @@ cssClass: {undefined | String}
     {{!-- Row 3 --}}
     <div class="sheet-block grid-2col grid-gap-md margin-b-md">
       <div class="flex flex-row flex-middle flex-right">
-        {{> inputLabel text=(localize "ambersteel.character.beliefSystem.fateSystem.fatePoints.ambition.label") showFancyFont=viewModel.showFancyFont}}
+        {{> label text=(localize "ambersteel.character.beliefSystem.fateSystem.fatePoints.ambition.label") showFancyFont=viewModel.showFancyFont}}
         <div class="flex flex-middle width-md">({{localize "ambersteel.character.beliefSystem.fateSystem.fatePoints.ambition.abbreviation"}})</div>
       </div>
       {{> inputNumberSpinner viewModel=viewModel.vmNsAfp }}

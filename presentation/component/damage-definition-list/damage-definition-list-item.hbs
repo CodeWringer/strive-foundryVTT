@@ -5,7 +5,7 @@ cssClass: {String | undefined}
 <div class="fill flex flex-row{{#if cssClass}} {{cssClass}}{{/if}}">
   {{!-- Damage formula --}}
   <div class="width-min-xl">
-    {{> inputLabel text=(localize "ambersteel.damageDefinition.label") showFancyFont=viewModel.showFancyFont}}
+    {{> label text=(localize "ambersteel.damageDefinition.label") showFancyFont=viewModel.showFancyFont}}
   </div>
   <span class="width-min-xxl flex-grow">
     {{> inputTextField viewModel=viewModel.vmTfDamage }}
@@ -17,7 +17,7 @@ cssClass: {String | undefined}
   {{/if}}
   {{!-- Damage type --}}
   <div class="width-min-xxl">
-    {{> inputLabel text=(localize "ambersteel.damageType.label") showFancyFont=viewModel.showFancyFont}}
+    {{> label text=(localize "ambersteel.damageType.label") showFancyFont=viewModel.showFancyFont}}
   </div>
   <span class="width-xxl">
     {{> inputDropDown viewModel=viewModel.vmDdDamageType }}

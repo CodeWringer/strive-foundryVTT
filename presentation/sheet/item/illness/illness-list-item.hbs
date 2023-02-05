@@ -9,7 +9,7 @@ cssClass: {undefined | String}
     {{> buttonSendToChat viewModel=viewModel.vmBtnSendToChat }}
     {{!-- Name --}}
     <span class="width-min-xl">
-      {{> inputLabel text=(localize "ambersteel.character.health.illness.singular") showFancyFont=viewModel.showFancyFont}}
+      {{> label text=(localize "ambersteel.character.health.illness.singular") showFancyFont=viewModel.showFancyFont}}
     </span>
     {{> inputImage viewModel=viewModel.vmImg cssClass="custom-icon-sm" }}
     <h2 class="flex-grow margin-r-md">
@@ -28,7 +28,7 @@ cssClass: {undefined | String}
   <div class="flex flex-row">
     {{!-- Treatment Skill --}}
     <span class="width-min-xxl">
-      {{> inputLabel text=(localize "ambersteel.character.health.treatmentSkill") showFancyFont=viewModel.showFancyFont}}
+      {{> label text=(localize "ambersteel.character.health.treatmentSkill") showFancyFont=viewModel.showFancyFont}}
     </span>
     <span class="width-xl flex-grow">
       {{> inputTextField viewModel=viewModel.vmTfTreatmentSkill }}
@@ -37,7 +37,7 @@ cssClass: {undefined | String}
     <div class="width-xs"></div>
     {{!-- Duration --}}
     <span class="width-min-xl">
-      {{> inputLabel text=(localize "ambersteel.character.health.duration") showFancyFont=viewModel.showFancyFont}}
+      {{> label text=(localize "ambersteel.character.health.duration") showFancyFont=viewModel.showFancyFont}}
     </span>
     <span class="width-min-xxl">
       {{> inputTextField viewModel=viewModel.vmTfDuration }}
@@ -48,7 +48,7 @@ cssClass: {undefined | String}
   <div class="flex flex-row">
   {{!-- Treatment --}}
     <span class="width-min-xxl">
-      {{> inputLabel text=(localize "ambersteel.character.health.treatment") showFancyFont=viewModel.showFancyFont}}
+      {{> label text=(localize "ambersteel.character.health.treatment") showFancyFont=viewModel.showFancyFont}}
     </span>
     <span class="flex-grow">
       {{> inputTextField viewModel=viewModel.vmTfTreatment }}

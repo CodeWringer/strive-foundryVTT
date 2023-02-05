@@ -9,7 +9,7 @@ cssClass: {undefined | String}
     {{> buttonSendToChat viewModel=viewModel.vmBtnSendToChat }}
     {{!-- Name --}}
     <span class="width-min-xl">
-      {{> inputLabel text=(localize "ambersteel.character.health.scar.singular") showFancyFont=viewModel.showFancyFont}}
+      {{> label text=(localize "ambersteel.character.health.scar.singular") showFancyFont=viewModel.showFancyFont}}
     </span>
     {{> inputImage viewModel=viewModel.vmImg cssClass="custom-icon-sm" }}
     <h2 class="flex-grow margin-r-md">
@@ -22,7 +22,7 @@ cssClass: {undefined | String}
   {{!-- Limit --}}
   <div class="flex flex-row">
     <div class="flex flex-middle flex-right">
-      {{> inputLabel text=(localize "ambersteel.character.health.injury.limit") showFancyFont=viewModel.showFancyFont}}
+      {{> label text=(localize "ambersteel.character.health.injury.limit") showFancyFont=viewModel.showFancyFont}}
     </div>
     <div class="grid-span-2">
       {{> inputNumberSpinner viewModel=viewModel.vmNsLimit }}
