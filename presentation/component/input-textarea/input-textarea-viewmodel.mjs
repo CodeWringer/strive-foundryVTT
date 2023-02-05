@@ -54,8 +54,8 @@ export default class InputTextareaViewModel extends InputViewModel {
   }
 
   /** @override */
-  activateListeners(html, isOwner, isEditable) {
-    super.activateListeners(html, isOwner, isEditable);
+  async activateListeners(html, isOwner, isEditable) {
+    await super.activateListeners(html, isOwner, isEditable);
 
     this.element.each(function() {
       // This counter-acts a rather bothersome quirk of Handlebars. Turns out, if a partial containing a 

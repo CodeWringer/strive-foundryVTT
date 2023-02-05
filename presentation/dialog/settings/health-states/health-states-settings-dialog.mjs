@@ -68,11 +68,11 @@ export default class HealthStatesSettingsDialog extends FormApplication {
   }
 
   /** @override */
-  activateListeners(html) {
-    super.activateListeners(html);
+  async activateListeners(html) {
+    await super.activateListeners(html);
 
-    game.ambersteel.logger.logPerf(this, "HealthStatesSettingsDialog.activateListeners (viewModel)", () => {
-      this.viewModel.activateListeners(html, true, true);
+    await game.ambersteel.logger.logPerfAsync(this, "HealthStatesSettingsDialog.activateListeners (viewModel)", async () => {
+      await this.viewModel.activateListeners(html, true, true);
     });
   }
 

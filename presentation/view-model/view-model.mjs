@@ -227,14 +227,15 @@ export default class ViewModel {
   contextTemplate = undefined;
 
   /**
-   * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
+   * @param {Object} args The arguments object. 
+   * @param {String | undefined} args.id Unique ID of this view model instance. 
    * 
    * If no value is provided, a shortened UUID will be generated for it. 
    * 
    * This string may not contain any special characters! Alphanumeric symbols, as well as hyphen ('-') and 
    * underscore ('_') are permitted, but no dots, brackets, braces, slashes, equal sign, and so on. Failing to comply to this 
    * naming restriction may result in DOM elements not being properly detected by the `activateListeners` method. 
-   * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 
+   * @param {ViewModel | undefined} args.parent Parent ViewModel instance of this instance. 
    * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 
    * is expected to be associated with an actor sheet or item sheet or journal entry or chat message and so on.
    * @param {Boolean | undefined} args.isEditable If true, the view model data is editable.
@@ -483,11 +484,12 @@ export default class ViewModel {
    * @param {Boolean} isEditable If true, registers events that require editing permission. 
    * 
    * @virtual
+   * @async
    */
-  activateListeners(html, isOwner, isEditable) {
+  async activateListeners(html, isOwner, isEditable) {
     for (const child of this.children) {
       try {
-        child.activateListeners(html, isOwner, isEditable);
+        await child.activateListeners(html, isOwner, isEditable);
       } catch (error) {
         game.ambersteel.logger.logWarn(error);
       }

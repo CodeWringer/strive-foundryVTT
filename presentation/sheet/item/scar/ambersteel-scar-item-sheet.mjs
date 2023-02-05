@@ -11,13 +11,14 @@ export default class AmbersteelScarItemSheet extends AmbersteelBaseItemSheet {
   get title() { return game.i18n.localize("ambersteel.character.health.scar.singular"); }
 
   /** @override */
-  _getViewModel(context, document) {
+  _getViewModel(context, document, sheet) {
     return new ScarItemSheetViewModel({
       id: document.id,
       document: document.getTransientObject(),
       isEditable: context.isEditable,
       isSendable: context.isSendable,
       isOwner: context.isOwner,
+      sheet: sheet,
     });
   }
 }

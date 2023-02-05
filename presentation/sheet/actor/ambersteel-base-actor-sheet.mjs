@@ -32,15 +32,16 @@ export default class AmbersteelBaseActorSheet {
    * 
    * @param {Object} context A context object provided by FoundryVTT. 
    * @param {TransientDocument} document A transient document instance of "this" type of item sheet. 
+   * @param {ActorSheet} sheet The sheet instance to return a view model instance for. 
    * 
    * @returns {ActorSheetViewModel}
    * 
    * @protected
    */
-  getViewModel(context, document) {
+  getViewModel(context, document, sheet) {
     let viewModel = game.ambersteel.viewModels.get(document.id);
     if (viewModel === undefined) {
-      viewModel = this._getViewModel(context, document);
+      viewModel = this._getViewModel(context, document, sheet);
       if (game.ambersteel.enableViewModelCaching === true) {
         game.ambersteel.viewModels.set(document.id, viewModel);
       }
@@ -59,19 +60,21 @@ export default class AmbersteelBaseActorSheet {
    * 
    * @param {Object} context A context object provided by FoundryVTT. 
    * @param {TransientDocument} document A transient document instance of "this" type of item sheet. 
+   * @param {ActorSheet} sheet The sheet instance to return a view model instance for. 
    * 
    * @returns {ActorSheetViewModel}
    * 
    * @protected
    * @virtual
    */
-  _getViewModel(context, document) {
+  _getViewModel(context, document, sheet) {
     return new ActorSheetViewModel({
       id: document.id,
       document: document.getTransientObject(),
       isEditable: context.isEditable,
       isSendable: context.isSendable,
       isOwner: context.isOwner,
+      sheet: sheet,
     });
   }
   
@@ -84,8 +87,9 @@ export default class AmbersteelBaseActorSheet {
    * @param {Boolean | undefined} isEditable If true, the sheet will be editable. 
    * 
    * @virtual
+   * @async
    */
-  activateListeners(html, isOwner, isEditable) { /** Do nothing */}
+  async activateListeners(html, isOwner, isEditable) { /** Do nothing */}
 }
 
 ACTOR_SHEET_SUBTYPE.set("plain", new AmbersteelBaseActorSheet());

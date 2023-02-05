@@ -124,8 +124,8 @@ export default class ButtonViewModel extends ViewModel {
   }
 
   /** @override */
-  activateListeners(html, isOwner, isEditable) {
-    super.activateListeners(html, isOwner, isEditable);
+  async activateListeners(html, isOwner, isEditable) {
+    await super.activateListeners(html, isOwner, isEditable);
     
     this._element = html.find(`.${SELECTOR_BUTTON}#${this.id}`);
     

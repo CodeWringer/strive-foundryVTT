@@ -99,7 +99,7 @@ export default class InputRichTextViewModel extends InputViewModel {
 
   /** @override */
   async activateListeners(html, isOwner, isEditable) {
-    super.activateListeners(html, isOwner, isEditable);
+    await super.activateListeners(html, isOwner, isEditable);
 
     this._elementButtonEditMode = this.element.find(".component-rich-text-editbutton");
     this._elementEditor = this.element.find(".component-rich-text");

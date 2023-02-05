@@ -57,7 +57,7 @@ export default class LazyRichTextViewModel extends ViewModel {
       element.empty();
       element.append(this._renderedContent);
       
-      super.activateListeners(html, isOwner, isEditable);
+      await super.activateListeners(html, isOwner, isEditable);
     }
   }
 
