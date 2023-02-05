@@ -1,6 +1,6 @@
 import LevelAdvancement from "./level-advancement.mjs";
 import { ATTRIBUTE_GROUPS } from "./attribute/attribute-groups.mjs";
-import { SummedData, SummedDataComponent } from "./skill/summed-data.mjs";
+import { SummedData, SummedDataComponent } from "./summed-data.mjs";
 import { SkillTier, SKILL_TIERS } from "./skill/skill-tier.mjs";
 
 /**

@@ -1,7 +1,7 @@
 import LevelAdvancement from "../level-advancement.mjs";
 import Ruleset from "../ruleset.mjs";
-import { SummedDataComponent } from "../skill/summed-data.mjs";
-import { SummedData } from "../skill/summed-data.mjs";
+import { SummedDataComponent } from "../summed-data.mjs";
+import { SummedData } from "../summed-data.mjs";
 import { ATTRIBUTE_GROUPS } from "./attribute-groups.mjs";
 import { ATTRIBUTES } from "./attributes.mjs";
 
