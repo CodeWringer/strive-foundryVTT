@@ -342,7 +342,7 @@ li.roll.die.d6.roll-success {
 
 .roll-damage-value {
   font-weight: bold;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
 }
 
 .roll-damage-value-total {
@@ -580,7 +580,7 @@ li.roll.die.d6.roll-success {
   font-size: 1rem;
 }
 .font-size-lg {
-  font-size: 1.2rem;
+  font-size: 1.1rem;
 }
 .font-size-xl {
   font-size: 1.4rem;
@@ -879,7 +879,7 @@ img.custom-icon-lg {
   padding: 6px;
 }
 .hint-card-icon {
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   margin-right: 0.6rem;
 }
 
@@ -1583,10 +1583,6 @@ h2.ambersteel-header {
 h3.ambersteel-header {
   font-size: 1.1rem;
   border-bottom: 1px solid rgba(129, 129, 129, 0.85);
-}
-
-label.ambersteel-label {
-  font-size: 1rem;
 }
 
 /* Animations */

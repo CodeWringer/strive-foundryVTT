@@ -1,5 +1,5 @@
 h1.ambersteel-header {
-  font-size: 1.8rem;
+  font-size: $font-size-3xl;
   text-align: center;
   vertical-align: middle;
 }
@@ -9,10 +9,6 @@ h2.ambersteel-header {
 }
 
 h3.ambersteel-header {
-  font-size: 1.1rem;
+  font-size: $font-size-lg;
   border-bottom: 1px solid $c-border-dark;
-}
-
-label.ambersteel-label {
-  font-size: $font-size-default;
 }
