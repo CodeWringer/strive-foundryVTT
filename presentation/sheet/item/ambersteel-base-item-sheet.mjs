@@ -31,15 +31,16 @@ export default class AmbersteelBaseItemSheet {
    * 
    * @param {Object} context A context object provided by FoundryVTT. 
    * @param {TransientDocument} document A transient document instance of "this" type of item sheet. 
+   * @param {ItemSheet} sheet The sheet instance to return a view model instance for. 
    * 
    * @returns {ViewModel}
    * 
    * @protected
    */
-  getViewModel(context, document) {
+  getViewModel(context, document, sheet) {
     let viewModel = game.ambersteel.viewModels.get(document.id);
     if (viewModel === undefined) {
-      viewModel = this._getViewModel(context, document);
+      viewModel = this._getViewModel(context, document, sheet);
       if (game.ambersteel.enableViewModelCaching === true) {
         game.ambersteel.viewModels.set(document.id, viewModel);
       }
@@ -58,13 +59,14 @@ export default class AmbersteelBaseItemSheet {
    * 
    * @param {Object} context A context object provided by FoundryVTT. 
    * @param {TransientDocument} document A transient document instance of "this" type of item sheet. 
+   * @param {ItemSheet} sheet The sheet instance to return a view model instance for. 
    * 
    * @returns {ViewModel}
    * 
    * @abstract
    * @protected
    */
-  _getViewModel(context, document) { throw new Error("NotImplementedException"); }
+  _getViewModel(context, document, sheet) { throw new Error("NotImplementedException"); }
   
   /**
    * Register any DOM-reliant event listeners and manipulations here. 

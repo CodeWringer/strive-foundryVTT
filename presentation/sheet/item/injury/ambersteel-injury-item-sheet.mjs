@@ -11,13 +11,14 @@ export default class AmbersteelInjuryItemSheet extends AmbersteelBaseItemSheet {
   get title() { return game.i18n.localize("ambersteel.character.health.injury.singular"); }
 
   /** @override */
-  _getViewModel(context, document) {
+  _getViewModel(context, document, sheet) {
     return new InjuryItemSheetViewModel({
       id: document.id,
       document: document.getTransientObject(),
       isEditable: context.isEditable,
       isSendable: context.isSendable,
       isOwner: context.isOwner,
+      sheet: sheet,
     });
   }
 }

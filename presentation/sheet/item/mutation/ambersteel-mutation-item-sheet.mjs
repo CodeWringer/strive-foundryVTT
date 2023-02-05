@@ -11,13 +11,14 @@ export default class AmbersteelMutationItemSheet extends AmbersteelBaseItemSheet
   get title() { return game.i18n.localize("ambersteel.character.health.mutation.singular"); }
 
   /** @override */
-  _getViewModel(context, document) {
+  _getViewModel(context, document, sheet) {
     return new MutationItemSheetViewModel({
       id: document.id,
       document: document.getTransientObject(),
       isEditable: context.isEditable,
       isSendable: context.isSendable,
       isOwner: context.isOwner,
+      sheet: sheet,
     });
   }
 }
