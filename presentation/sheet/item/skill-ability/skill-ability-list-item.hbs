@@ -88,16 +88,14 @@ cssClass: {undefined | String}
   </div>
   {{!-- Condition --}}
   <div class="flex flex-column margin-b-md{{#if viewModel.hideCondition}} hidden{{/if}}">
-    <h3 class="margin-b-sm{{#if viewModel.showFancyFont}} fancy-font{{/if}}">
-      {{localize "ambersteel.character.skill.ability.condition.label"}}
-    </h3>
+    {{#> header3 showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.skill.ability.condition.label"}}{{/header3}}
     <div class="flex-grow">
       {{> inputTextarea viewModel=viewModel.vmTaCondition }}
     </div>
   </div>
   {{!-- Description --}}
   <div class="flex flex-column margin-b-md">
-    <h3 class="margin-b-sm{{#if viewModel.showFancyFont}} fancy-font{{/if}}">{{localize "ambersteel.general.description"}}</h3>
+    {{#> header3 showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.general.description"}}{{/header3}}
     {{> inputRichText viewModel=viewModel.vmRtDescription }}
   </div>
 </div>

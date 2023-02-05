@@ -79,10 +79,8 @@ cssClass: {undefined | String}
       <div class="width-min-xl">
         {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.advancement.requirements.abbreviation"}}{{/label}}
       </div>
-      <div class="width-min-sm flex flex-center">
-        <span>
-          {{viewModel.successes}} / {{viewModel.failures}}
-        </span>
+      <div class="width-md">
+        {{#> readOnlyValue}}{{viewModel.successes}} / {{viewModel.failures}}{{/readOnlyValue}}
       </div>
     </div>
     {{!-- Spacer --}}
@@ -118,11 +116,11 @@ cssClass: {undefined | String}
   {{!-- Row 5 --}}
   {{!-- Description --}}
   <div class="flex flex-column margin-b-md">
-    <h3{{#if viewModel.showFancyFont}} class="fancy-font"{{/if}}>{{localize "ambersteel.general.description"}}</h3>
+    {{#> header3 showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.general.description"}}{{/header3}}
     {{> inputRichText viewModel=viewModel.vmRtDescription }}
   </div>
   {{!-- Row 6 --}}
   {{!-- Skill Abilites --}}
-  <h3{{#if viewModel.showFancyFont}} class="fancy-font"{{/if}}>{{localize "ambersteel.character.skill.ability.plural"}}</h3>
+  {{#> header3 showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.skill.ability.plural"}}{{/header3}}
   {{> "systems/ambersteel/presentation/sheet/item/skill-ability/skill-ability-table.hbs" viewModel=viewModel.vmSkillAbilityTable cssClass=(ifThenElse viewModel.isSkillAbilityListVisible "" "hidden") }}
 </div>
