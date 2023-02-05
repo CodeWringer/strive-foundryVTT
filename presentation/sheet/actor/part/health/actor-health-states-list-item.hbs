@@ -6,6 +6,6 @@ viewModel: {ActorHealthStatesListItemViewModel}
     {{> buttonToggle viewModel=viewModel.btnToggle}}
   </span>
   <span class="flex flex-grow pad-l-lg">
-    {{> inputLabel text=viewModel.localizedLabel showFancyFont=viewModel.showFancyFont}}
+    {{#> label showFancyFont=viewModel.showFancyFont}}{{viewModel.localizedLabel}}{{/label}}
   </span>
 </div>

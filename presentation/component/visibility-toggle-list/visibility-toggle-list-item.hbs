@@ -4,6 +4,6 @@ viewModel: VisibilityToggleListItemViewModel
 <div class="flex flex-row flex-middle pad-md">
   {{> buttonToggleIcon viewModel=viewModel.btnToggle}}
   <span class="flex flex-grow pad-l-lg">
-    {{> inputLabel text=viewModel.localizedLabel showFancyFont=viewModel.showFancyFont}}
+    {{#> label showFancyFont=viewModel.showFancyFont}}{{viewModel.localizedLabel}}{{/label}}
   </span>
 </div>

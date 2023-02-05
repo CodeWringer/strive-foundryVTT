@@ -44,7 +44,6 @@ import './presentation/view-model/view-model.mjs';
 import ViewModelCollection from './presentation/view-model/view-model-collection.mjs';
 // Components
 import './presentation/view-model/input-view-model.mjs';
-import './presentation/component/label/label-viewmodel.mjs';
 import './presentation/component/input-textfield/input-textfield-viewmodel.mjs';
 import './presentation/component/input-dropdown/input-dropdown-viewmodel.mjs';
 import './presentation/component/input-number-spinner/input-number-spinner-viewmodel.mjs';
@@ -288,6 +287,16 @@ Handlebars.registerHelper('ifThenElse', function(condition, thenValue, elseValue
     return elseValue;
   }
 });
+
+/* -------------------------------------------- */
+/*  Handlebars Partials                          */
+/* -------------------------------------------- */
+
+Handlebars.registerPartial('label', `{{#> "${TEMPLATES.COMPONENT_LABEL}"}}{{> @partial-block}}{{/"${TEMPLATES.COMPONENT_LABEL}"}}`);
+Handlebars.registerPartial('readOnlyValue', `{{#> "${TEMPLATES.COMPONENT_LABEL_READ_ONLY_VALUE}"}}{{> @partial-block}}{{/"${TEMPLATES.COMPONENT_LABEL_READ_ONLY_VALUE}"}}`);
+Handlebars.registerPartial('header1', `{{#> "${TEMPLATES.COMPONENT_HEADER_PRIMARY}"}}{{> @partial-block}}{{/"${TEMPLATES.COMPONENT_HEADER_PRIMARY}"}}`);
+Handlebars.registerPartial('header2', `{{#> "${TEMPLATES.COMPONENT_HEADER_SECONDARY}"}}{{> @partial-block}}{{/"${TEMPLATES.COMPONENT_HEADER_SECONDARY}"}}`);
+Handlebars.registerPartial('header3', `{{#> "${TEMPLATES.COMPONENT_HEADER_TERTIARY}"}}{{> @partial-block}}{{/"${TEMPLATES.COMPONENT_HEADER_TERTIARY}"}}`);
 
 /* -------------------------------------------- */
 /*  Other Hooks                                 */

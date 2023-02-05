@@ -46,6 +46,30 @@ export default class ActorHealthViewModel extends ViewModel {
   get scarCount() { return this.document.health.scars.length; }
 
   /**
+   * @type {Number}
+   * @readonly
+   */
+  get maxHP() { return this.document.health.maxHP; }
+
+  /**
+   * @type {Number}
+   * @readonly
+   */
+  get maxExhaustion() { return this.document.health.maxExhaustion; }
+
+  /**
+   * @type {Number}
+   * @readonly
+   */
+  get maxMagicStamina() { return this.document.health.maxMagicStamina.total; }
+
+  /**
+   * @type {Number}
+   * @readonly
+   */
+  get maxInjuryCount() { return this.document.health.maxInjuries; }
+
+  /**
    * @type {Array<IllnessListItemViewModel>}
    * @readonly
    */
@@ -104,25 +128,11 @@ export default class ActorHealthViewModel extends ViewModel {
     const thiz = this;
     const factory = new ViewModelFactory();
 
-    this.vmNsMaxHp = factory.createVmNumberSpinner({
-      parent: thiz,
-      id: "vmNsMaxHp",
-      propertyOwner: thiz.document,
-      propertyPath: "health.maxHP",
-      isEditable: false,
-    });
     this.vmNsHp = factory.createVmNumberSpinner({
       parent: thiz,
       id: "vmNsHp",
       propertyOwner: thiz.document,
       propertyPath: "health.HP",
-    });
-    this.vmNsMaxExhaustion = factory.createVmNumberSpinner({
-      parent: thiz,
-      id: "vmNsMaxExhaustion",
-      propertyOwner: thiz.document,
-      propertyPath: "health.maxExhaustion",
-      isEditable: false,
     });
     this.vmNsExhaustion = factory.createVmNumberSpinner({
       parent: thiz,
@@ -137,21 +147,6 @@ export default class ActorHealthViewModel extends ViewModel {
       propertyOwner: thiz.document,
       propertyPath: "health.magicStamina",
       min: 0,
-    });
-    this.vmNsMaxMagicStamina = factory.createVmNumberSpinner({
-      parent: thiz,
-      id: "vmNsMaxMagicStamina",
-      propertyOwner: thiz.document,
-      propertyPath: "health.maxMagicStamina.total",
-      isEditable: false,
-    });
-    this.vmNsMaxInjuries = factory.createVmNumberSpinner({
-      parent: thiz,
-      id: "vmNsMaxInjuries",
-      propertyOwner: thiz.document,
-      propertyPath: "health.maxInjuries",
-      isEditable: false,
-      min: 1,
     });
     this.vmHealthStates = new ActorHealthStatesViewModel({
       id: "vmHealthStates",

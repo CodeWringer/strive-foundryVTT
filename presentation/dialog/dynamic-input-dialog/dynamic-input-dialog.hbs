@@ -5,7 +5,7 @@ viewModel: {Array<DynamicInputDialogViewModel>}
   {{#each viewModel.controls as |control index|}}
   <div class="flex flex-row sheet-block">
     <div class="flex flex-row flex-grow">
-      {{> inputLabel text=control.definition.localizedLabel showFancyFont=viewModel.showFancyFont}}
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{control.definition.localizedLabel}}{{/label}}
       {{#if control.definition.required}}
         <span><b>*</b></span>
       {{/if}}

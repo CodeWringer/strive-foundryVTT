@@ -4,9 +4,9 @@ cssClass: {undefined | String}
 --}}
 <section class="{{cssClass}}">
   {{!-- Learning Skills --}}
-  <h2>{{localize "ambersteel.character.skill.learning.label"}}</h2>
+  {{#> header1 showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.skill.learning.label"}}{{/header1}}
   {{> sortableList viewModel=viewModel.vmLearningSkillList }}
   {{!-- Known Skills --}}
-  <h2>{{localize "ambersteel.character.skill.known.label"}}</h2>
+  {{#> header1 showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.skill.known.label"}}{{/header1}}
   {{> sortableList viewModel=viewModel.vmKnownSkillList }}
 </section>
