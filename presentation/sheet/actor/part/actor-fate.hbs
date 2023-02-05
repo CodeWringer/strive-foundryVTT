@@ -3,25 +3,25 @@ viewModel: {ActorFateViewModel}
 cssClass: {undefined | String}
 --}}
 <section class="{{cssClass}}">
-  <div class="sheet-block grid-2col grid-gap-md flex-column">
-    {{!-- row 1 --}}
-    <div class="flex flex-row flex-middle flex-right">
+  <div class="sheet-block grid-3col">
+    <div class="flex flex-row flex-middle">
       {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.beliefSystem.fateSystem.fatePoints.minor.label"}}{{/label}}
-      <div class="flex flex-middle width-md">({{localize "ambersteel.character.beliefSystem.fateSystem.fatePoints.minor.abbreviation"}})</div>
+      <div class="width-md flex-right">
+        {{> inputNumberSpinner viewModel=viewModel.vmNsMifp }}
+      </div>
     </div>
-    {{> inputNumberSpinner viewModel=viewModel.vmNsMifp }}
-    {{!-- row 2 --}}
-    <div class="flex flex-row flex-middle flex-right">
+    <div class="flex flex-row flex-middle flex-center">
       {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.beliefSystem.fateSystem.fatePoints.major.label"}}{{/label}}
-      <div class="flex flex-middle width-md">({{localize "ambersteel.character.beliefSystem.fateSystem.fatePoints.major.abbreviation"}})</div>
+      <div class="width-md flex-right">
+        {{> inputNumberSpinner viewModel=viewModel.vmNsMafp }}
+      </div>
     </div>
-    {{> inputNumberSpinner viewModel=viewModel.vmNsMafp }}
-    {{!-- row 3 --}}
     <div class="flex flex-row flex-middle flex-right">
       {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.beliefSystem.fateSystem.fatePoints.ambition.label"}}{{/label}}
-      <div class="flex flex-middle width-md">({{localize "ambersteel.character.beliefSystem.fateSystem.fatePoints.ambition.abbreviation"}})</div>
+      <div class="width-md flex-right">
+        {{> inputNumberSpinner viewModel=viewModel.vmNsAfp }}
+      </div>
     </div>
-    {{> inputNumberSpinner viewModel=viewModel.vmNsAfp }}
   </div>
   <div class="flex" style="flex-wrap: wrap;">
     {{#each viewModel.fateCards as |cardViewModel key|}}
