@@ -8,15 +8,19 @@ cssClass: {undefined | String}
     {{!-- Assign Asset --}}
     <div{{#if viewModel.hasAsset}} class="hidden"{{/if}}>
       {{#> button viewModel=viewModel.vmBtnAssign}}
-        <span{{#if ../viewModel.showFancyFont}} class="fancy-font"{{/if}}>{{localize "ambersteel.character.asset.slot.assign.label"}}</span>
+        {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.asset.slot.assign.label"}}{{/label}}
         <div class="square-button-light flex flex-center">
           <i class="fas fa-plus"></i>
         </div>
       {{/button}}
     </div>
     <div style="width: 50px"></div>
+    {{!-- Slot Bulk --}}
     <div class="flex flex-row flex-middle font-size-xs">
-      <span>{{localize "ambersteel.character.asset.bulk"}}: {{viewModel.currentBulk}} / {{viewModel.maxBulk}}</span>
+      {{#> label showFancyFont=viewModel.showFancyFont cssClass=" "}}{{localize "ambersteel.character.asset.bulk"}}{{/label}}
+      <span class="width-md">
+        {{#> readOnlyValue}}{{viewModel.currentBulk}} / {{viewModel.maxBulk}}{{/readOnlyValue}}
+      </span>
     </div>
     <div class="flex flex-grow"></div>
     {{#> button viewModel=viewModel.vmBtnEdit}}

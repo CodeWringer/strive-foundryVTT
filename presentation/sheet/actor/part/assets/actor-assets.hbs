@@ -4,12 +4,12 @@ cssClass: {undefined | String}
 --}}
 <section class="{{cssClass}}">
   {{!-- Worn & Equipped --}}
-  <h2>{{localize "ambersteel.character.asset.equipped"}}</h2>
+  {{#> header1 showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.asset.equipped"}}{{/header1}}
   {{#with viewModel.templateEquipped as | template |}}
   {{> (template) viewModel=../viewModel.vmEquipped}}
   {{/with}}
   {{!-- Luggage --}}
-  <h2>{{localize "ambersteel.character.asset.luggage"}}</h2>
+  {{#> header1 showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.asset.luggage"}}{{/header1}}
   <div class="grid-2col grid-gap-md margin-b-md">
     {{!-- Maximum bulk --}}
     <div class="sheet-block">
@@ -17,7 +17,9 @@ cssClass: {undefined | String}
         <div class="flex-grow">
           {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.asset.carryingCapacity.label"}}{{/label}}
         </div>
-        {{#> label showFancyFont=false cssClass="ambersteel-read-only width-md pad-sm"}}{{viewModel.maxBulk}}{{/label}}
+        <span class="width-md">
+          {{#> readOnlyValue}}{{viewModel.maxBulk}}{{/readOnlyValue}}
+        </span>
       </div>
     </div>
     {{!-- Current bulk --}}
@@ -26,12 +28,14 @@ cssClass: {undefined | String}
         <div class="flex-grow">
           {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.asset.carryingCapacity.used"}}{{/label}}
         </div>
-        {{#> label showFancyFont=false cssClass="ambersteel-read-only width-md pad-sm"}}{{viewModel.currentBulk}}{{/label}}
+        <span class="width-md">
+          {{#> readOnlyValue}}{{viewModel.currentBulk}}{{/readOnlyValue}}
+        </span>
       </div>
     </div>
   </div>
   {{> sortableList viewModel=viewModel.vmLuggageList }}
   {{!-- Property --}}
-  <h2>{{localize "ambersteel.character.asset.property"}}</h2>
+  {{#> header1 showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.asset.property"}}{{/header1}}
   {{> sortableList viewModel=viewModel.vmPropertyList }}
 </section>
