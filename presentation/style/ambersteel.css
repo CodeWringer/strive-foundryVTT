@@ -1472,11 +1472,12 @@ div.tox-tiered-menu > div.tox-menu.tox-collection.tox-collection--list.tox-selec
   position: absolute;
   display: inline-block;
   text-align: center;
-  border-radius: 1.8rem;
-  background-color: rgba(0, 0, 0, 0.6);
+  border-radius: 1rem;
+  background-color: rgba(0, 0, 0, 0.75);
   color: var(--color-text-light-highlight);
   z-index: 6;
   padding: 0.25rem;
+  max-width: 400px;
 }
 
 .info-button {
