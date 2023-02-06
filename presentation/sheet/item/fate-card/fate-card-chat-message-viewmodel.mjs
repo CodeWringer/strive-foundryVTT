@@ -1,7 +1,6 @@
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs";
 import LazyRichTextViewModel from "../../../component/lazy-rich-text/lazy-rich-text-viewmodel.mjs";
 import { TEMPLATES } from "../../../templatePreloader.mjs";
-import ViewModelFactory from "../../../view-model/view-model-factory.mjs";
 import ViewModel from "../../../view-model/view-model.mjs";
 
 export default class FateCardChatMessageViewModel extends ViewModel {
@@ -30,21 +29,6 @@ export default class FateCardChatMessageViewModel extends ViewModel {
     this.document = args.document;
     this.contextTemplate = args.contextTemplate ?? "fate-card-chat-message";
 
-    const thiz = this;
-    const factory = new ViewModelFactory();
-
-    this.vmImg = factory.createVmImg({
-      parent: thiz,
-      id: "vmImg",
-      propertyOwner: thiz.document,
-      propertyPath: "img",
-    });
-    this.vmTfName = factory.createVmTextField({
-      parent: thiz,
-      id: "vmTfName",
-      propertyOwner: thiz.document,
-      propertyPath: "name",
-    });
     this.vmLazyDescription = new LazyRichTextViewModel({
       id: "vmLazyDescription",
       parent: this,

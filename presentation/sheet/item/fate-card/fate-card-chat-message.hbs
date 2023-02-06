@@ -7,13 +7,11 @@ cssClass: {undefined | String}
   data-document-id="{{viewModel.document.id}}"
 >
   {{!-- Header --}}
-  <div class="flex flex-column pad-md">
-    <div class="flex flex-row">
-      {{> inputImage viewModel=viewModel.vmImg cssClass="custom-icon-sm" }}
-      <h3 class="header-name flex-grow" style="margin: 0;">
-        {{> inputTextField viewModel=viewModel.vmTfName }}
-      </h3>
+  <div class="flex flex-row">
+    <div class="flex flex-center">
+      <img class="inline-img header-image margin-r-sm" name="img" src="{{viewModel.document.img}}" title="{{viewModel.document.name}}" height="35" width="35" />
     </div>
+    {{#> header2 showFancyFont=viewModel.showFancyFont cssClass="flex-grow"}}{{viewModel.document.name}}{{/header2}}
   </div>
   {{!-- Description --}}
   <div class="fill pad-md scrollable-height-md">

@@ -16,9 +16,7 @@ cssClass: {undefined | String}
       </div>
       {{/if}}
       {{#if viewModel.showParentSkillName}}
-        <h3>
-          {{localize viewModel.parentSkillName}}
-        </h3>
+        {{#> header3 showFancyFont=viewModel.showFancyFont}}{{viewModel.parentSkillName}}{{/header3}}
       {{/if}}
     </div>
   {{/if}}
@@ -26,14 +24,12 @@ cssClass: {undefined | String}
     <div class="flex flex-center">
       <img class="inline-img header-image margin-r-sm" name="img" src="{{viewModel.skillAbility.img}}" title="{{viewModel.skillAbility.name}}" height="26" width="26" />
     </div>
-    <h2 class="flex-grow">
-      {{localize viewModel.skillAbility.name}}
-    </h2>
+    {{#> header2 showFancyFont=viewModel.showFancyFont cssClass="flex-grow"}}{{viewModel.skillAbility.name}}{{/header2}}
   </div>
   {{!-- Required level --}}
   <div class="flex flex-row sheet-block margin-b-md">
-    <div class="width-min-xxl{{#if viewModel.showFancyFont}} fancy-font{{/if}}">
-      {{localize "ambersteel.character.skill.ability.requirement"}}
+    <div class="width-min-xxl">
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.skill.ability.requirement"}}{{/label}}
     </div>
     <div class="flex-grow">
       {{viewModel.skillAbility.requiredLevel}}
@@ -41,8 +37,8 @@ cssClass: {undefined | String}
   </div>
   {{!-- apCost --}}
   <div class="flex flex-row sheet-block margin-b-md">
-    <div class="width-min-xxl{{#if viewModel.showFancyFont}} fancy-font{{/if}}">
-      {{localize "ambersteel.character.skill.ability.apCost"}}
+    <div class="width-min-xxl">
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.skill.ability.apCost"}}{{/label}}
     </div>
     <div class="flex-grow">
       {{viewModel.skillAbility.apCost}}
@@ -50,8 +46,8 @@ cssClass: {undefined | String}
   </div>
   {{!-- Obstacle --}}
   <div class="flex flex-row sheet-block margin-b-md{{#if viewModel.hideObstacle}} hidden{{/if}}">
-    <div class="width-min-xxl{{#if viewModel.showFancyFont}} fancy-font{{/if}}">
-      {{localize "ambersteel.roll.obstacle.abbreviation"}}
+    <div class="width-min-xxl">
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.roll.obstacle.abbreviation"}}{{/label}}
     </div>
     <div class="flex-grow">
       {{viewModel.skillAbility.obstacle}}
@@ -59,8 +55,8 @@ cssClass: {undefined | String}
   </div>
   {{!-- Opposed By --}}
   <div class="flex flex-row sheet-block margin-b-md{{#if viewModel.hideOpposedBy}} hidden{{/if}}">
-    <div class="width-min-xxl{{#if viewModel.showFancyFont}} fancy-font{{/if}}">
-      {{localize "ambersteel.roll.obstacle.opposedBy.label"}}
+    <div class="width-min-xxl">
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.roll.obstacle.opposedBy.label"}}{{/label}}
     </div>
     <div class="flex-grow">
       {{viewModel.skillAbility.opposedBy}}
@@ -68,8 +64,8 @@ cssClass: {undefined | String}
   </div>
   {{!-- Condition --}}
   <div class="flex flex-row sheet-block margin-b-md{{#if viewModel.hideCondition}} hidden{{/if}}">
-    <div class="width-min-xxl{{#if viewModel.showFancyFont}} fancy-font{{/if}}">
-      {{localize "ambersteel.character.skill.ability.condition.label"}}
+    <div class="width-min-xxl">
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.skill.ability.condition.label"}}{{/label}}
     </div>
     <div class="flex-grow">
       {{localize viewModel.skillAbility.condition}}
@@ -77,8 +73,8 @@ cssClass: {undefined | String}
   </div>
   {{!-- attackType --}}
   <div class="flex flex-row sheet-block margin-b-md{{#if viewModel.hideAttackType}} hidden{{/if}}">
-    <div class="width-min-xxl{{#if viewModel.showFancyFont}} fancy-font{{/if}}">
-      {{localize "ambersteel.attackType.label"}}
+    <div class="width-min-xxl">
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.attackType.label"}}{{/label}}
     </div>
     <div class="flex-grow">
       {{viewModel.localizedAttackType}}
@@ -86,8 +82,8 @@ cssClass: {undefined | String}
   </div>
   {{!-- distance --}}
   <div class="flex flex-row sheet-block margin-b-md{{#if viewModel.hideDistance}} hidden{{/if}}">
-    <div class="width-min-xxl{{#if viewModel.showFancyFont}} fancy-font{{/if}}">
-      {{localize "ambersteel.character.skill.ability.distance.label"}}
+    <div class="width-min-xxl">
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.skill.ability.distance.label"}}{{/label}}
     </div>
     <div class="flex-grow">
       {{viewModel.skillAbility.distance}}

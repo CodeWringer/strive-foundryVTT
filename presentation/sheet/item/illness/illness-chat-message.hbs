@@ -11,14 +11,12 @@ cssClass: {undefined | String}
     <div class="flex flex-center">
       <img class="inline-img header-image margin-r-sm" name="img" src="{{viewModel.document.img}}" title="{{viewModel.document.name}}" height="35" width="35" />
     </div>
-    <h2 class="flex-grow">
-      {{viewModel.document.name}}
-    </h2>
+    {{#> header2 showFancyFont=viewModel.showFancyFont cssClass="flex-grow"}}{{viewModel.document.name}}{{/header2}}
   </div>
   {{!-- Duration --}}
   <div class="sheet-block flex flex-row margin-b-md">
     <div class="width-min-xxl">
-      {{localize "ambersteel.character.health.duration"}}
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.health.duration"}}{{/label}}
     </div>
     <div class="flex-grow">
       {{viewModel.document.duration}}
@@ -27,7 +25,7 @@ cssClass: {undefined | String}
   {{!-- Treatment skill --}}
   <div class="sheet-block flex flex-row margin-b-md">
     <div class="width-min-xxl">
-      {{localize "ambersteel.character.health.treatmentSkill"}}
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.health.treatmentSkill"}}{{/label}}
     </div>
     <div class="flex-grow">
       {{viewModel.document.treatmentSkill}}
@@ -36,7 +34,7 @@ cssClass: {undefined | String}
   {{!-- Treatment --}}
   <div class="sheet-block flex flex-row margin-b-md">
     <div class="width-min-xxl">
-      {{localize "ambersteel.character.health.treatment"}}
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.health.treatment"}}{{/label}}
     </div>
     <div class="flex-grow">
       {{viewModel.document.treatment}}

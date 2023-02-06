@@ -38,6 +38,12 @@ export default class ScarChatMessageViewModel extends ViewModel {
   allowPickupBy = [];
 
   /**
+   * @type {Number}
+   * @readonly
+   */
+  get limit() { return this.document.limit; }
+
+  /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
    * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 
    * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 
@@ -63,16 +69,6 @@ export default class ScarChatMessageViewModel extends ViewModel {
       isSendable: this.isSendable,
       isOwner: this.isOwner,
       renderableContent: this.document.description,
-    });
-    this.vmNsLimit = new InputNumberSpinnerViewModel({
-      id: "vmNsLimit",
-      parent: this,
-      isEditable: this.isEditable,
-      isSendable: this.isSendable,
-      isOwner: this.isOwner,
-      propertyOwner: this.document,
-      propertyPath: "limit",
-      min: 0,
     });
   }
 }
