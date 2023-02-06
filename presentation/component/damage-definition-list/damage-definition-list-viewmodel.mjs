@@ -14,8 +14,6 @@ import DamageDefinitionListItemViewModel from "./damage-definition-list-item-vie
  * @property {Object} propertyOwner The transient document whose damage definition this is. 
  * @property {String} propertyPath The path on the `propertyOwner` by which to identify 
  * the list of damage definitions. 
- * @property {String | undefined} hintId Id of the info bubble elements that inform 
- * the user about formula references. 
  * 
  * @property {DiceRollListViewModel} vmList
  * @property {Array<DamageDefinitionListItemViewModel>} damageDefinitionViewModels
@@ -41,8 +39,6 @@ export default class DamageDefinitionListViewModel extends ViewModel {
    * @param {Object | TransientDocument} args.propertyOwner The transient document whose damage definition this is. 
    * @param {String} args.propertyPath The path on the `propertyOwner` by which to identify 
    * the list of damage definitions. 
-   * @param {String | undefined} hintId Id of the info bubble elements that inform 
-   * the user about formula references. 
    */
   constructor(args = {}) {
     super(args);
@@ -50,7 +46,6 @@ export default class DamageDefinitionListViewModel extends ViewModel {
 
     this.propertyOwner = args.propertyOwner;
     this.propertyPath = args.propertyPath;
-    this.hintId = args.hintId;
 
     const thiz = this;
 
@@ -68,7 +63,6 @@ export default class DamageDefinitionListViewModel extends ViewModel {
         contextTemplate: this.contextTemplate,
         propertyOwner: thiz.propertyOwner,
         index: i,
-        hintId: thiz.hintId,
         resolveFormula: () => {
           // At this point, the string may contain `@`-references. These must be resolved. 
           let resolvedDamage = damageDefinition.damage;

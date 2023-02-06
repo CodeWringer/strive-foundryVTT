@@ -31,7 +31,7 @@
  *   html: html,
  *   parent: html.find("#my-dom-element-id"),
  *   text: game.i18n.localize("words.to.localize"),
- *   autoShowType: InfoBubbleAutoHidingTypes.MOUSE_ENTER,
+ *   autoShowType: InfoBubbleAutoShowingTypes.MOUSE_ENTER,
  *   autoHideType: InfoBubbleAutoHidingTypes.MOUSE_LEAVE,
  * });
  * ```
@@ -103,32 +103,25 @@ export default class InfoBubble {
   }
 
   /**
-   * Manually shows the info bubble. 
+   * Manually shows the info bubble beneath the given element. 
    * 
-   * Calling this method is not necessary, if an automatic show type other than `NONE` is defined. 
+   * Calling this method is not necessary, if an automatic show type other 
+   * than `NONE` is defined. 
    * 
-   * @throws {Error} Thrown, if no parent element is defined. 
+   * @param {JQuery | undefined} element The element beneath which to show the info bubble. 
    */
-  show() {
-    if (this.parent === undefined) {
+  show(element) {
+    if (element === undefined && this.parent === undefined) {
       throw new Error("No parent defined");
     }
 
-    this.show(this.parent);
-  }
-
-  /**
-   * Manually shows the info bubble beneath the given element. 
-   * 
-   * @param {JQuery} element The element beneath which to show the info bubble. 
-   */
-  show(element) {
     // Important: The hidden class must be removed first, as otherwise the element's width and height will 
     // show up as `0` in the calculations below. 
     this._element.removeClass("hidden");
 
-    const parentPos = element.position();
-    const parentSize = { width: element.outerWidth(), height: element.outerHeight() };
+    const workingElement = (element ?? this.parent);
+    const parentPos = workingElement.position();
+    const parentSize = { width: workingElement.outerWidth(), height: workingElement.outerHeight() };
     
     const bubbleSize = { width: this._element.outerWidth(), height: this._element.outerHeight() };
 

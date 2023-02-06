@@ -84,6 +84,11 @@ cssClass: {undefined | String}
   </div>
   {{!-- Damage --}}
   <div class="flex flex-row{{#if viewModel.hideDamage}} hidden{{/if}}">
+    <div class="flex flex-center">
+      <span class="square-button-light font-size-default flex flex-center" id="{{viewModel.id}}-damage-info">
+        <i class="far fa-question-circle info-button"></i>
+      </span>
+    </div>
     {{> damageDefinitionList viewModel=viewModel.vmDamageDefinitionList}}
   </div>
   {{!-- Condition --}}
