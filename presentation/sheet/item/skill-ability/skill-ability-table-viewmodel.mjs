@@ -34,7 +34,7 @@ export default class SkillAbilityTableViewModel extends ViewModel {
     this._skillAbilitiesInitiallyVisible = value;
 
     // Immediately write view state. 
-    this.writeAllViewState();
+    this.writeViewState();
   }
 
   /**
