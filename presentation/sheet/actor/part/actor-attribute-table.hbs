@@ -1,54 +1,59 @@
-{{!-- Parameters: 
+{{!-- Parameters:
 viewModel: {AttributeTableViewModel}
 cssClass: {undefined | String}
 --}}
-<div class="{{cssClass}}">
-    <table class="attribute-table">
-        <tbody>
-            <tr class="header-row{{#if viewModel.showFancyFont}} fancy-font{{/if}}">
-                <th class="attribute-column-roll"></th>
-                <th class="attribute-column-name">
-                    {{localize viewModel.localizableAttributeGroupName}}
-                </th>
-                <th class="attribute-column-abbreviation"></th>
-                <th class="attribute-column-level">
-                    {{localize "ambersteel.character.advancement.level"}}
-                </th>
-                <th class="attribute-column-requirements">
-                    {{localize "ambersteel.character.advancement.requirements.abbreviation"}}
-                </th>
-                <th class="attribute-column-successes">
-                    {{localize "ambersteel.character.advancement.requirements.success.abbreviation"}}
-                </th>
-                <th class="attribute-column-failures">
-                    {{localize "ambersteel.character.advancement.requirements.failure.abbreviation"}}
-                </th>
-            </tr>
-            {{#each viewModel.attributeViewModels as |vm index|}}
-            <tr class="item attribute-item" data-att-group-name="{{../viewModel.attributeGroupName}}" data-att-name="{{vm.attributeName}}">
-                <td class="attribute-column-roll">
-                    {{> buttonRoll viewModel=vm.vmBtnRoll }}
-                </td>
-                <td class="attribute-column-name flex{{#if ../viewModel.showFancyFont}} fancy-font{{/if}}">
-                    {{localize vm.localizableName}}
-                </td>
-                <td class="attribute-column-abbreviation{{#if ../viewModel.showFancyFont}} fancy-font{{/if}}">
-                    [{{localize vm.localizableAbbreviation}}]
-                </td>
-                <td class="attribute-column-level">
-                    {{> inputNumberSpinner viewModel=vm.vmNsLevel }}
-                </td>
-                <td class="attribute-column-requirements">
-                    {{vm.requiredSuccessses}} / {{vm.requiredFailures}}
-                </td>
-                <td class="attribute-column-successes">
-                    {{> inputNumberSpinner viewModel=vm.vmNsSuccesses }}
-                </td>
-                <td class="attribute-column-failures">
-                    {{> inputNumberSpinner viewModel=vm.vmNsFailures }}
-                </td>
-            </tr>
-            {{/each}}
-        </tbody>
-    </table>
-</div>
+<table class="attribute-table">
+  <tbody>
+    <tr class="header-row{{#if viewModel.showFancyFont}} fancy-font{{/if}}">
+      <th class="attribute-column-roll"></th>
+      <th class="attribute-column-name">
+        {{localize viewModel.localizableAttributeGroupName}}
+      </th>
+      <th class="attribute-column-abbreviation"></th>
+      <th class="attribute-column-level">
+        {{localize "ambersteel.character.advancement.level"}}
+      </th>
+      <th class="attribute-column-level">
+        {{localize "ambersteel.character.advancement.moddedLevel"}}
+      </th>
+      <th class="attribute-column-requirements">
+        {{localize "ambersteel.character.advancement.requirements.abbreviation"}}
+      </th>
+      <th class="attribute-column-successes">
+        {{localize "ambersteel.character.advancement.requirements.success.abbreviation"}}
+      </th>
+      <th class="attribute-column-failures">
+        {{localize "ambersteel.character.advancement.requirements.failure.abbreviation"}}
+      </th>
+    </tr>
+    {{#each viewModel.attributeViewModels as |vm index|}}
+    <tr class="item attribute-item" data-att-group-name="{{../viewModel.attributeGroupName}}"
+      data-att-name="{{vm.attributeName}}">
+      <td class="attribute-column-roll">
+        {{> buttonRoll viewModel=vm.vmBtnRoll }}
+      </td>
+      <td class="attribute-column-name font-size-default flex{{#if ../viewModel.showFancyFont}} fancy-font{{/if}}">
+        {{localize vm.localizableName}}
+      </td>
+      <td class="attribute-column-abbreviation font-size-default{{#if ../viewModel.showFancyFont}} fancy-font{{/if}}">
+        [{{localize vm.localizableAbbreviation}}]
+      </td>
+      <td class="attribute-column-level">
+        {{> inputNumberSpinner viewModel=vm.vmNsLevel }}
+      </td>
+      <td class="attribute-column-level">
+        {{> inputNumberSpinner viewModel=vm.vmNsModdedLevel }}
+      </td>
+      <td class="attribute-column-requirements">
+        {{#> readOnlyValue}}{{vm.requiredSuccesses}} / {{vm.requiredFailures}}{{/readOnlyValue}}
+      </td>
+      <td class="attribute-column-successes">
+        {{> inputNumberSpinner viewModel=vm.vmNsSuccesses }}
+      </td>
+      <td class="attribute-column-failures">
+        {{> inputNumberSpinner viewModel=vm.vmNsFailures }}
+      </td>
+    </tr>
+    {{/each}}
+  </tbody>
+</table>

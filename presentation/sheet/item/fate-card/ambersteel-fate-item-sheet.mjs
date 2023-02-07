@@ -11,13 +11,14 @@ export default class AmbersteelFateItemSheet extends AmbersteelBaseItemSheet {
   get title() { return game.i18n.localize("ambersteel.character.beliefSystem.fateSystem.fateCard.label"); }
 
   /** @override */
-  _getViewModel(context, document) {
+  _getViewModel(context, document, sheet) {
     return new FateCardItemSheetViewModel({
       id: document.id,
       document: document.getTransientObject(),
       isEditable: context.isEditable,
       isSendable: context.isSendable,
       isOwner: context.isOwner,
+      sheet: sheet,
     });
   }
 }

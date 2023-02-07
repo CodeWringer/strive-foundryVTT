@@ -5,6 +5,7 @@ import TransientIllness from "./transient-illness.mjs";
 import TransientInjury from "./transient-injury.mjs";
 import TransientMutation from "./transient-mutation.mjs";
 import TransientSkill from "./transient-skill.mjs";
+import TransientScar from "./transient-scar.mjs";
 
 /**
  * @summary
@@ -59,6 +60,15 @@ export class AmbersteelItem extends Item {
       });
     }
     return this._transientObject;
+  }
+
+  /** @override */
+  async _preCreate(data, options, user) {
+    this.updateSource({
+      img: this.defaultImg,
+    });
+
+    return super._preCreate(data, options, user);
   }
   
   /**

@@ -1,14 +1,19 @@
-import Ruleset from "../../../../business/ruleset/ruleset.mjs"
-import { validateOrThrow } from "../../../../business/util/validation-utility.mjs"
-import DocumentListItemOrderDataSource from "../../../component/sortable-list/document-list-item-order-datasource.mjs"
-import SortableListViewModel from "../../../component/sortable-list/sortable-list-viewmodel.mjs"
-import { TEMPLATES } from "../../../templatePreloader.mjs"
-import ViewModelFactory from "../../../view-model/view-model-factory.mjs"
-import ViewModel from "../../../view-model/view-model.mjs"
-import IllnessListItemViewModel from "../../item/illness/illness-list-item-viewmodel.mjs"
-import InjuryListItemViewModel from "../../item/injury/injury-list-item-viewmodel.mjs"
-import MutationListItemViewModel from "../../item/mutation/mutation-list-item-viewmodel.mjs"
+import Ruleset from "../../../../../business/ruleset/ruleset.mjs"
+import { validateOrThrow } from "../../../../../business/util/validation-utility.mjs"
+import DocumentListItemOrderDataSource from "../../../../component/sortable-list/document-list-item-order-datasource.mjs"
+import SortableListViewModel from "../../../../component/sortable-list/sortable-list-viewmodel.mjs"
+import { TEMPLATES } from "../../../../templatePreloader.mjs"
+import ViewModelFactory from "../../../../view-model/view-model-factory.mjs"
+import ViewModel from "../../../../view-model/view-model.mjs"
+import IllnessListItemViewModel from "../../../item/illness/illness-list-item-viewmodel.mjs"
+import InjuryListItemViewModel from "../../../item/injury/injury-list-item-viewmodel.mjs"
+import MutationListItemViewModel from "../../../item/mutation/mutation-list-item-viewmodel.mjs"
+import ScarListItemViewModel from "../../../item/scar/scar-list-item-viewmodel.mjs"
+import ActorHealthStatesViewModel from "./actor-health-states-viewmodel.mjs"
 
+/**
+ * @extends ViewModel
+ */
 export default class ActorHealthViewModel extends ViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.ACTOR_HEALTH; }
@@ -35,6 +40,36 @@ export default class ActorHealthViewModel extends ViewModel {
   get mutationCount() { return this.document.health.mutations.length; }
 
   /**
+   * @type {Number}
+   * @readonly
+   */
+  get scarCount() { return this.document.health.scars.length; }
+
+  /**
+   * @type {Number}
+   * @readonly
+   */
+  get maxHP() { return this.document.health.maxHP; }
+
+  /**
+   * @type {Number}
+   * @readonly
+   */
+  get maxExhaustion() { return this.document.health.maxExhaustion; }
+
+  /**
+   * @type {Number}
+   * @readonly
+   */
+  get maxMagicStamina() { return this.document.health.maxMagicStamina.total; }
+
+  /**
+   * @type {Number}
+   * @readonly
+   */
+  get maxInjuryCount() { return this.document.health.maxInjuries; }
+
+  /**
    * @type {Array<IllnessListItemViewModel>}
    * @readonly
    */
@@ -53,17 +88,28 @@ export default class ActorHealthViewModel extends ViewModel {
   mutations = [];
 
   /**
+   * @type {Array<ScarListItemViewModel>}
+   * @readonly
+   */
+  scars = [];
+
+  /**
    * @type {Boolean}
    * @readonly
    */
   get isToughnessTestRequired() { return new Ruleset().isToughnessTestRequired(this.document.document); }
+  
+  /**
+   * @type {String}
+   * @readonly
+   */
+  get healthStatesTemplate() { return ActorHealthStatesViewModel.TEMPLATE; }
 
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
    * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 
    * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 
    * is expected to be associated with an actor sheet or item sheet or journal entry or chat message and so on.
-   * 
    * @param {Boolean | undefined} args.isEditable If true, the sheet is editable. 
    * @param {Boolean | undefined} args.isSendable If true, the document represented by the sheet can be sent to chat. 
    * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document. 
@@ -82,25 +128,11 @@ export default class ActorHealthViewModel extends ViewModel {
     const thiz = this;
     const factory = new ViewModelFactory();
 
-    this.vmNsMaxHp = factory.createVmNumberSpinner({
-      parent: thiz,
-      id: "vmNsMaxHp",
-      propertyOwner: thiz.document,
-      propertyPath: "health.maxHP",
-      isEditable: false,
-    });
     this.vmNsHp = factory.createVmNumberSpinner({
       parent: thiz,
       id: "vmNsHp",
       propertyOwner: thiz.document,
       propertyPath: "health.HP",
-    });
-    this.vmNsMaxExhaustion = factory.createVmNumberSpinner({
-      parent: thiz,
-      id: "vmNsMaxExhaustion",
-      propertyOwner: thiz.document,
-      propertyPath: "health.maxExhaustion",
-      isEditable: false,
     });
     this.vmNsExhaustion = factory.createVmNumberSpinner({
       parent: thiz,
@@ -116,20 +148,13 @@ export default class ActorHealthViewModel extends ViewModel {
       propertyPath: "health.magicStamina",
       min: 0,
     });
-    this.vmNsMaxMagicStamina = factory.createVmNumberSpinner({
-      parent: thiz,
-      id: "vmNsMaxMagicStamina",
-      propertyOwner: thiz.document,
-      propertyPath: "health.maxMagicStamina.total",
-      isEditable: false,
-    });
-    this.vmNsMaxInjuries = factory.createVmNumberSpinner({
-      parent: thiz,
-      id: "vmNsMaxInjuries",
-      propertyOwner: thiz.document,
-      propertyPath: "health.maxInjuries",
-      isEditable: false,
-      min: 1,
+    this.vmHealthStates = new ActorHealthStatesViewModel({
+      id: "vmHealthStates",
+      parent: this,
+      isEditable: this.isEditable,
+      isSendable: this.isSendable,
+      isOwner: this.isOwner,
+      document: this.document,
     });
 
     // Prepare illnesses list view models. 
@@ -148,6 +173,7 @@ export default class ActorHealthViewModel extends ViewModel {
       vmBtnAddItem: factory.createVmBtnAdd({
         id: "vmBtnAddIllness",
         target: thiz.document,
+        isEditable: this.isEditable,
         creationType: "illness",
         withDialog: true,
         localizableLabel: "ambersteel.character.health.illness.add.label",
@@ -172,6 +198,7 @@ export default class ActorHealthViewModel extends ViewModel {
       vmBtnAddItem: factory.createVmBtnAdd({
         id: "vmBtnAddInjury",
         target: thiz.document,
+        isEditable: this.isEditable,
         creationType: "injury",
         withDialog: true,
         localizableLabel: "ambersteel.character.health.injury.add.label",
@@ -196,11 +223,37 @@ export default class ActorHealthViewModel extends ViewModel {
       vmBtnAddItem: factory.createVmBtnAdd({
         id: "vmBtnAddMutation",
         target: thiz.document,
+        isEditable: this.isEditable,
         creationType: "mutation",
         withDialog: true,
         localizableLabel: "ambersteel.character.health.mutation.add.label",
         localizableType: "ambersteel.character.health.mutation.singular",
         localizableDialogTitle: "ambersteel.character.health.mutation.add.query",
+      }),
+    });
+
+    // Prepare scars list view models. 
+    this.scars = [];
+    this.scars = this._getScarViewModels();
+    this.vmScarList = new SortableListViewModel({
+      parent: thiz,
+      isEditable: args.isEditable ?? thiz.isEditable,
+      id: "vmScarList",
+      indexDataSource: new DocumentListItemOrderDataSource({
+        document: thiz.document,
+        listName: "scars",
+      }),
+      listItemViewModels: this.scars,
+      listItemTemplate: TEMPLATES.SCAR_LIST_ITEM,
+      vmBtnAddItem: factory.createVmBtnAdd({
+        id: "vmBtnAddScar",
+        target: thiz.document,
+        isEditable: this.isEditable,
+        creationType: "scar",
+        withDialog: true,
+        localizableLabel: "ambersteel.character.health.scar.add.label",
+        localizableType: "ambersteel.character.health.scar.singular",
+        localizableDialogTitle: "ambersteel.character.health.scar.add.query",
       }),
     });
   }
@@ -232,6 +285,11 @@ export default class ActorHealthViewModel extends ViewModel {
     const newMutations = this._getMutationViewModels();
     this._cullObsolete(this.mutations, newMutations);
     this.mutations = newMutations;
+    
+    // Scars
+    const newScars = this._getScarViewModels();
+    this._cullObsolete(this.scars, newScars);
+    this.scars = newScars;
 
     super.update(args);
   }
@@ -251,6 +309,10 @@ export default class ActorHealthViewModel extends ViewModel {
     updates.set(this.vmMutationList, {
       ...updates.get(this.vmMutationList),
       listItemViewModels: this.mutations,
+    });
+    updates.set(this.vmScarList, {
+      ...updates.get(this.vmScarList),
+      listItemViewModels: this.scars,
     });
     
     return updates;
@@ -292,6 +354,19 @@ export default class ActorHealthViewModel extends ViewModel {
       this.document.health.mutations, 
       this.mutations,
       (args) => { return new MutationListItemViewModel(args); }
+    );
+  }
+  
+  /**
+   * @returns {Array<ScarListItemViewModel>}
+   * 
+   * @private
+   */
+  _getScarViewModels() {
+    return this._getViewModels(
+      this.document.health.scars, 
+      this.scars,
+      (args) => { return new ScarListItemViewModel(args); }
     );
   }
 }

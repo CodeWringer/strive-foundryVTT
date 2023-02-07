@@ -1,0 +1,15 @@
+{{!-- Required context:
+viewModel: {ButtonToggleViewModel}
+cssClass: {String | undefined}
+--}}
+<a 
+  class="custom-system-button square-button-light flex flex-center{{#if viewModel.isEditable}}{{else}} disabled{{/if}}{{cssClass}}" 
+  title="{{viewModel.localizedTitle}}" 
+  id="{{viewModel.id}}" 
+>
+  {{#if viewModel.value}}
+    <span>{{{viewModel.iconActive}}}</span>
+  {{else}}
+    <span>{{{viewModel.iconInactive}}}</span>
+  {{/if}}
+</a>

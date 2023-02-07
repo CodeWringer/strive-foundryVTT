@@ -53,8 +53,8 @@ export default class MigratorDialog extends ModalDialog {
   }
 
   /** @override */
-  activateListeners(html) {
-    super.activateListeners(html);
+  async activateListeners(html) {
+    await super.activateListeners(html);
 
     const thiz = this;
 

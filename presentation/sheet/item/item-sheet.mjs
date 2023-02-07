@@ -5,6 +5,7 @@ import AmbersteelSkillItemSheet from "./skill/ambersteel-skill-item-sheet.mjs";
 import AmbersteelInjuryItemSheet from "./injury/ambersteel-injury-item-sheet.mjs";
 import AmbersteelIllnessItemSheet from "./illness/ambersteel-illness-item-sheet.mjs";
 import AmbersteelMutationItemSheet from "./mutation/ambersteel-mutation-item-sheet.mjs";
+import AmbersteelScarItemSheet from "./scar/ambersteel-scar-item-sheet.mjs";
 import AmbersteelFateItemSheet from "./fate-card/ambersteel-fate-item-sheet.mjs";
 // Other imports
 import * as SheetUtil from "../sheet-utility.mjs";
@@ -28,10 +29,45 @@ export class AmbersteelItemSheet extends ItemSheet {
   }
 
   /**
+   * Returns the content container. 
+   * 
+   * @type {JQuery | undefined}
+   * @readonly
+   */
+  get contentElement() {
+    if (isDefined(this._element) !== true) return undefined;
+
+    if (this._contentElement === undefined) {
+      this._contentElement = this._element.find("section.window-content");
+    }
+    return this._contentElement;
+  }
+
+  /**
+   * Returns the content container's current scroll value. 
+   * 
+   * @type {Number | undefined}
+   */
+  get scrollValue() {
+    if (isDefined(this._element) !== true) return undefined;
+
+    return this.contentElement[0].scrollTop;
+  }
+  /**
+   * Sets the content container's current scroll value. 
+   * 
+   * @param {Number} value
+   */
+  set scrollValue(value) {
+    if (isDefined(this._element) !== true) return;
+
+    this.contentElement[0].scrollTop = value;
+  }
+
+  /**
    * @returns {Object}
    * @override
    * @virtual
-   * @see https://foundryvtt.com/api/ItemSheet.html#.defaultOptions
    */
   static get defaultOptions() {
     return mergeObject(super.defaultOptions, {
@@ -48,7 +84,6 @@ export class AmbersteelItemSheet extends ItemSheet {
    * @virtual
    * @override
    * @readonly
-   * @see https://foundryvtt.com/api/DocumentSheet.html#template
    */
   get template() { return this.subType.template; }
 
@@ -57,7 +92,6 @@ export class AmbersteelItemSheet extends ItemSheet {
    * @override
    * @type {String}
    * @readonly
-   * @see https://foundryvtt.com/api/ItemSheet.html#title
    */
   get title() { return `${this.subType.title} - ${this.item.name}` }
 
@@ -80,7 +114,6 @@ export class AmbersteelItemSheet extends ItemSheet {
    * This method is called *before* the sheet is rendered. 
    * @returns {Object} The enriched context object. 
    * @override 
-   * @see https://foundryvtt.com/api/FormApplicatiocn.html#getData
    */
   getData() {
     const context = super.getData();
@@ -88,7 +121,7 @@ export class AmbersteelItemSheet extends ItemSheet {
 
     // Prepare a new view model instance. 
     game.ambersteel.logger.logPerf(this, "item.getData (getViewModel)", () => {
-      this._viewModel = this.subType.getViewModel(context, context.item);
+      this._viewModel = this.subType.getViewModel(context, context.item, this);
     });
     game.ambersteel.logger.logPerf(this, "item.getData (readViewState)", () => {
       this._viewModel.readViewState();
@@ -99,17 +132,17 @@ export class AmbersteelItemSheet extends ItemSheet {
   }
 
   /** @override */
-  activateListeners(html) {
-    super.activateListeners(html);
+  async activateListeners(html) {
+    await super.activateListeners(html);
 
     const isOwner = (this.actor ?? this.item).isOwner;
     const isEditable = this.isEditable;
     
-    game.ambersteel.logger.logPerf(this, "item.activateListeners (subType)", () => {
-      this.subType.activateListeners(html, isOwner, isEditable);
+    await game.ambersteel.logger.logPerfAsync(this, "item.activateListeners (subType)", async () => {
+      await this.subType.activateListeners(html, isOwner, isEditable);
     });
-    game.ambersteel.logger.logPerf(this, "item.activateListeners (viewModel)", () => {
-      this.viewModel.activateListeners(html, isOwner, isEditable);
+    await game.ambersteel.logger.logPerfAsync(this, "item.activateListeners (viewModel)", async () => {
+      await this.viewModel.activateListeners(html, isOwner, isEditable);
     });
 
     if (!isOwner) return;

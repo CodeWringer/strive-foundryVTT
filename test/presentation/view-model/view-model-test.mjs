@@ -256,4 +256,49 @@ describe("ViewModel", function() {
       });
     });
   });
+
+  describe("getViewState", () => {
+    it("returns undefined when no view state fields are defined", () => {
+      // Given
+      const given = new ViewModel();
+      // When
+      const r = given.getViewState();
+      // Then
+      should.equal(r, undefined);
+    });
+
+    it("returns object when one view state field is defined and no children", () => {
+      // Given
+      const given = new ViewModel();
+      given.test = false;
+      given.registerViewStateProperty("test");
+
+      const expected = Object.create(null);
+      expected.test = false;
+      // When
+      const r = given.getViewState();
+      // Then
+      should.deepEqual(r, expected);
+    });
+
+    it("returns object when one view state field is defined and one child also with view state field", () => {
+      // Given
+      const given = new ViewModel();
+      given.test = false;
+      given.registerViewStateProperty("test");
+      
+      const givenChild = new ViewModel({
+        parent: given,
+      });
+      givenChild.test2 = true;
+      givenChild.registerViewStateProperty("test2");
+      
+      const expected = Object.create(null);
+      expected.test = false;
+      // When
+      const r = given.getViewState();
+      // Then
+      should.deepEqual(r, expected);
+    });
+  });
 });

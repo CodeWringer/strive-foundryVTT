@@ -227,14 +227,15 @@ export default class ViewModel {
   contextTemplate = undefined;
 
   /**
-   * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
+   * @param {Object} args The arguments object. 
+   * @param {String | undefined} args.id Unique ID of this view model instance. 
    * 
    * If no value is provided, a shortened UUID will be generated for it. 
    * 
    * This string may not contain any special characters! Alphanumeric symbols, as well as hyphen ('-') and 
    * underscore ('_') are permitted, but no dots, brackets, braces, slashes, equal sign, and so on. Failing to comply to this 
    * naming restriction may result in DOM elements not being properly detected by the `activateListeners` method. 
-   * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 
+   * @param {ViewModel | undefined} args.parent Parent ViewModel instance of this instance. 
    * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 
    * is expected to be associated with an actor sheet or item sheet or journal entry or chat message and so on.
    * @param {Boolean | undefined} args.isEditable If true, the view model data is editable.
@@ -320,6 +321,7 @@ export default class ViewModel {
    *     ...updates.get(myViewModel),
    *     a: 42,
    *   });
+   *   return updates;
    * }
    * ```
    * 
@@ -340,6 +342,26 @@ export default class ViewModel {
     }
 
     return result;
+  }
+
+  /**
+   * Registers events on elements of the given DOM. 
+   * 
+   * @param {Object} html DOM of the sheet for which to register listeners. 
+   * @param {Boolean} isOwner If true, registers events that require owner permission. 
+   * @param {Boolean} isEditable If true, registers events that require editing permission. 
+   * 
+   * @virtual
+   * @async
+   */
+  async activateListeners(html, isOwner, isEditable) {
+    for (const child of this.children) {
+      try {
+        await child.activateListeners(html, isOwner, isEditable);
+      } catch (error) {
+        game.ambersteel.logger.logWarn(error);
+      }
+    }
   }
 
   /**
@@ -406,6 +428,9 @@ export default class ViewModel {
    * @description
    * Creates an object that represents the view state, if there is any view state to store. 
    * 
+   * Keep in mind that **only** _this_ view model's state is returned. **No** child view model states 
+   * will be included! 
+   * 
    * Whether there is any view state to store, is determined by whether any propertys have been registered 
    * and if any of the child view models return view state to store. 
    * 
@@ -417,26 +442,16 @@ export default class ViewModel {
    * 
    * @virtual
    */
-  toViewState() {
-    let viewState = undefined;
+  getViewState() {
+    if (this.viewStateFields.length < 1) {
+      return undefined;
+    }
 
+    const viewState = Object.create(null);
     for (const propertyName of this.viewStateFields) {
-      if (viewState === undefined) {
-        viewState = Object.create(null);
-      }
       viewState[propertyName] = this[propertyName];
     }
 
-    for (const child of this.children) {
-      const childViewState = child.toViewState();
-      if (childViewState === undefined) continue;
-      
-      if (viewState === undefined) {
-        viewState = Object.create(null);
-      }
-      viewState[child.id] = childViewState;
-    }
-    
     return viewState;
   }
   
@@ -445,15 +460,18 @@ export default class ViewModel {
    * Applies the given view state, overriding any current values. 
    * 
    * @description
-   * This method applies any properties from the given view state to this view model instance, whose names are contained 
+   * This method applies any properties from the given view state to _this_ view model instance, whose names are contained 
    * by the array of registered properties. 
+   * 
+   * Keep in mind that **only** _this_ view model's state is affected. **No** child view model states 
+   * will be affected! 
    * 
    * This method should only have to be overridden, if specific data transformations need to be applied to values 
    * to apply from the view state. 
    * 
    * @param {Object | undefined} viewState The view state to apply, or undefined. 
-   * It can be undefined, if there is no view state to store. This can be the case, if no properties are registered 
-   * as storeable, either in this view model instance or in all of its children. 
+   * * It can be undefined, if there is no view state to store. This can be the case, if no properties are registered 
+   * as storeable. 
    * 
    * @virtual
    */
@@ -462,39 +480,18 @@ export default class ViewModel {
     if (viewState === undefined || viewState === null) return;
 
     for (const propertyName of this.viewStateFields) {
+      // Skip any potential "mistakes" - for example from old versions of the code. 
       if (PropertyUtil.hasProperty(viewState, propertyName) !== true) continue;
-
+      // Override the matching property's value. 
       this[propertyName] = viewState[propertyName];
-    }
-
-    for (const child of this.children) {
-      if (PropertyUtil.hasProperty(viewState, child.id) !== true) continue;
-
-      child.applyViewState(viewState[child.id]);
     }
   }
   
   /**
-   * Registers events on elements of the given DOM. 
+   * Retrieves and applies the view state of _this_ view model, if possible. 
    * 
-   * @param {Object} html DOM of the sheet for which to register listeners. 
-   * @param {Boolean} isOwner If true, registers events that require owner permission. 
-   * @param {Boolean} isEditable If true, registers events that require editing permission. 
-   * 
-   * @virtual
-   */
-  activateListeners(html, isOwner, isEditable) {
-    for (const child of this.children) {
-      try {
-        child.activateListeners(html, isOwner, isEditable);
-      } catch (error) {
-        game.ambersteel.logger.logWarn(error);
-      }
-    }
-  }
-
-  /**
-   * Retrieves and applies the view state. 
+   * In order for this operation to succeed, the view state will have 
+   * to have been written out using `writeViewState`, previously. 
    */
   readViewState() {
     const viewState = this._viewStateSource.get(this.id);
@@ -504,27 +501,38 @@ export default class ViewModel {
   }
 
   /**
-   * Stores the current view state of this view model. 
+   * Retrieves and applies the view state of _this_ view model **and** of all 
+   * its children, if possible. 
+   * 
+   * In order for this operation to succeed, the view state will have 
+   * to have been written out using `writeAllViewState`, previously. 
    */
-  writeViewState() {
-    const viewState = this.toViewState()
-    this._viewStateSource.set(this.id, viewState);
+  readAllViewState() {
+    this.readViewState();
+
+    for (const child of this.children) {
+      child.readAllViewState();
+    }
   }
 
   /**
-   * @summary
-   * Stores the current view state of the entire view model hierarchy this view model is a part of. 
-   * 
-   * @description
-   * The top-most parent in the hierarchy of parents writes out its state. 
-   * 
-   * To that end, the hierarchy is traversed upwards, starting with the parent of this view model instance. 
+   * Stores the current view state of **only** _this_ view model. 
+   */
+  writeViewState() {
+    const viewState = this.getViewState()
+    if (ValidationUtil.isDefined(viewState) === true) {
+      this._viewStateSource.set(this.id, viewState);
+    }
+  }
+
+  /**
+   * Stores the current view state of _this_ view model **and** all its children. 
    */
   writeAllViewState() {
-    if (this.parent !== undefined && this.parent !== null) {
-      this.parent.writeAllViewState();
-    } else {
-      this.writeViewState();
+    this.writeViewState();
+    
+    for (const child of this.children) {
+      child.writeAllViewState();
     }
   }
   

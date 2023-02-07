@@ -64,8 +64,8 @@ export default class InputSingleChoiceViewModel extends InputChoiceViewModel {
    * 
    * @throws {Error} UnknownException Thrown if the current option could not be set correctly. 
    */
-  activateListeners(html, isOwner, isEditable) {
-    super.activateListeners(html, isOwner, isEditable);
+  async activateListeners(html, isOwner, isEditable) {
+    await super.activateListeners(html, isOwner, isEditable);
 
     if (isEditable !== true) return;
     

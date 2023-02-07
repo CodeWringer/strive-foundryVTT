@@ -1,7 +1,7 @@
 import { TEMPLATES } from "../../../presentation/templatePreloader.mjs";
 import { createUUID } from "../../util/uuid-utility.mjs";
 import SkillChatMessageViewModel from "../../../presentation/sheet/item/skill/skill-chat-message-viewmodel.mjs";
-import { SummedData, SummedDataComponent } from "../../ruleset/skill/summed-data.mjs";
+import { SummedData, SummedDataComponent } from "../../ruleset/summed-data.mjs";
 import DamageAndType from "../../ruleset/skill/damage-and-type.mjs";
 import { DiceOutcomeTypes } from "../../dice/dice-outcome-types.mjs";
 import PreparedChatData from "../../../presentation/chat/prepared-chat-data.mjs";
@@ -15,7 +15,7 @@ import SkillAbility from "../../ruleset/skill/skill-ability.mjs";
 import CharacterAttribute from "../../ruleset/attribute/character-attribute.mjs";
 import { ATTACK_TYPES } from "../../ruleset/skill/attack-types.mjs";
 import { ATTRIBUTES } from "../../ruleset/attribute/attributes.mjs";
-import { isObject } from "../../util/validation-utility.mjs";
+import { isBlankOrUndefined, isObject } from "../../util/validation-utility.mjs";
 import { SKILL_PROPERTIES } from "./item-properties.mjs";
 
 /**
@@ -27,7 +27,8 @@ import { SKILL_PROPERTIES } from "./item-properties.mjs";
  * to advance the skill. 
  * @property {LevelAdvancement} advancementProgress The current progress towards 
  * advancing the skill. 
- * @property {Number} level The current level of the skill. 
+ * @property {Number} level The current raw level of the skill. 
+ * @property {Number} moddedLevel The current modified level of the skill. 
  * @property {Attribute} relatedAttribute The attribute that serves as the basis 
  * for this skill. 
  * @property {Array<SkillAbility>} abilities The array of skill abilities of this skill. 
@@ -45,7 +46,11 @@ export default class TransientSkill extends TransientBaseItem {
    * @type {Attribute}
    */
   get relatedAttribute() {
-    return ATTRIBUTES[this.document.system.relatedAttribute];
+    let _relatedAttribute = this.document.system.relatedAttribute;
+    if (isBlankOrUndefined(_relatedAttribute) === true) {
+      _relatedAttribute = ATTRIBUTES.agility.name;
+    }
+    return ATTRIBUTES[_relatedAttribute];
   }
   set relatedAttribute(value) {
     if (isObject(value)) { // This assumes an `Attribute` object was given. 
@@ -77,6 +82,18 @@ export default class TransientSkill extends TransientBaseItem {
   set level(value) {
     this.document.system.level = value;
     this.updateByPath("system.level", value);
+  }
+  
+  
+  /**
+   * @type {Number}
+   */
+  get moddedLevel() {
+    return parseInt(this.document.system.moddedLevel ?? "0");
+  }
+  set moddedLevel(value) {
+    this.document.system.moddedLevel = value;
+    this.updateByPath("system.moddedLevel", value);
   }
   
   /**
@@ -319,7 +336,7 @@ export default class TransientSkill extends TransientBaseItem {
   getRollData() {
     const actor = (this.owningDocument ?? {}).document;
     const characterAttribute = new CharacterAttribute(actor, this.relatedAttribute.name);
-    const compositionObj = new Ruleset().getSkillTestNumberOfDice(this.level, characterAttribute.level);
+    const compositionObj = new Ruleset().getSkillTestNumberOfDice(this.moddedLevel, characterAttribute.moddedLevel);
 
     return new SummedData(compositionObj.totalDiceCount, [
       new SummedDataComponent(this.relatedAttribute.name, characterAttribute.localizableName, compositionObj.attributeDiceCount),

@@ -37,7 +37,10 @@ export default class InputPropertiesViewModel extends InputViewModel {
 
   get newEntry() { return ""; }
   set newEntry(value) {
-    let documentProperty = this.systemProperties.find(it => it.id === value);
+    // Try to find a matching property by id. 
+    // Search case-insensitively and replace spaces with underscores, so users needn't know the internal IDs and can 
+    // instead simply type the exact text they may find on other documents and expect it to work. 
+    let documentProperty = this.systemProperties.find(it => it.id.toLowerCase() === value.toLowerCase().replace(" ", "_"));
     if (documentProperty === undefined) {
       documentProperty = new DocumentProperty({
         id: value,

@@ -9,6 +9,8 @@ import AssetListItemViewModel from "../../../item/asset/asset-list-item-viewmode
 import ActorAssetsEquippedViewModel from "./actor-assets-equipped-viewmodel.mjs"
 
 /**
+ * @property {TransientBaseCharacterActor} document
+ * * Read-only
  * @property {Array<AssetListItemViewModel>} listItemViewModels 
  * @property {Number} maxBulk 
  * @property {Number} currentBulk 
@@ -92,6 +94,7 @@ export default class ActorAssetsViewModel extends ViewModel {
       vmBtnAddItem: factory.createVmBtnAdd({
         id: "vmBtnAddItem",
         target: thiz.document,
+        isEditable: thiz.isEditable,
         creationType: "item",
         withDialog: true,
         localizableLabel: "ambersteel.character.asset.add.label",
@@ -115,6 +118,7 @@ export default class ActorAssetsViewModel extends ViewModel {
       vmBtnAddItem: factory.createVmBtnAdd({
         id: "vmBtnAddItem",
         target: thiz.document,
+        isEditable: thiz.isEditable,
         creationType: "item",
         withDialog: true,
         localizableLabel: "ambersteel.character.asset.add.label",

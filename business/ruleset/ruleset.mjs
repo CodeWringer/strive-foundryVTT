@@ -1,6 +1,7 @@
 import LevelAdvancement from "./level-advancement.mjs";
 import { ATTRIBUTE_GROUPS } from "./attribute/attribute-groups.mjs";
-import { SummedData, SummedDataComponent } from "./skill/summed-data.mjs";
+import { SummedData, SummedDataComponent } from "./summed-data.mjs";
+import { SkillTier, SKILL_TIERS } from "./skill/skill-tier.mjs";
 
 /**
  * Provides all the ruleset-specifics. 
@@ -34,9 +35,26 @@ export default class Ruleset {
    */
   getAttributeAdvancementRequirements(level = 0) {
     return new LevelAdvancement({
-      successses: (level === 0) ? undefined : (level + 1) * (level + 1) * 4,
+      successes: (level === 0) ? undefined : (level + 1) * (level + 1) * 4,
       failures: (level === 0) ? undefined : (level + 1) * (level + 1) * 5
     });
+  }
+  
+  /**
+   * Returns the tier of the given level of a skill. 
+   * 
+   * @param {Number} level The level for which to get the skill tier. 
+   * 
+   * @returns {SkillTier}
+   */
+  getSkillLevelTier(level = 0) {
+    if (level < 1) {
+      return SKILL_TIERS.dabbling;
+    } else if (level < 5) {
+      return SKILL_TIERS.apprentice;
+    } else {
+      return SKILL_TIERS.master;
+    }
   }
 
   /**
@@ -45,11 +63,30 @@ export default class Ruleset {
    * @param {Number} level The level for which to get the advancement requirements. 
    * 
    * @returns {LevelAdvancement}
+   * 
+   * @throws When the given level does not result in a valid skill tier. 
    */
   getSkillAdvancementRequirements(level = 0) {
+    const tier = this.getSkillLevelTier(level);
+    let successes = 0;
+    let failures = 0;
+
+    if (tier.name === SKILL_TIERS.dabbling.name) {
+      successes = 6;
+      failures = 9;
+    } else if (tier.name === SKILL_TIERS.apprentice.name) {
+      successes = (level + 1) * 2;
+      failures = (level + 1) * 3;
+    } else if (tier.name === SKILL_TIERS.master.name) {
+      successes = level * level;
+      failures = (level + 1) * (level + 1);
+    } else {
+      throw new Error(`Unrecognized skill tier ${tier.name}`);
+    }
+
     return new LevelAdvancement({
-      successses: (level == 0) ? 10 : (level + 1) * level * 2,
-      failures: (level == 0) ? 14 : (level + 1) * level * 3
+      successes: successes,
+      failures: failures
     });
   }
 
@@ -170,8 +207,9 @@ export default class Ruleset {
     const type = actor.type.toLowerCase();
     if (type !== "pc" && type !== "npc") throw new Error("Only PC and NPC type actors allowed");
     
-    const attribute = actor.system.attributes.physical.endurance;
-    return 1 + (attribute.level * 1);
+    const attributeLevel = parseInt(actor.system.attributes.physical.endurance.level);
+    const base = 1;
+    return base + attributeLevel;
   }
   
   /**
@@ -187,8 +225,8 @@ export default class Ruleset {
     const type = actor.type.toLowerCase();
     if (type !== "pc" && type !== "npc") throw new Error("Only PC and NPC type actors allowed");
 
-    const attribute = actor.system.attributes.physical.strength;
-    return attribute.level * 3;
+    const attributeLevel = parseInt(actor.system.attributes.physical.strength.level);
+    return attributeLevel * 3;
   }
 
   /**

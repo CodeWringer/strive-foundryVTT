@@ -31,7 +31,7 @@ export default class SkillListItemViewModel extends SkillViewModel {
    * @type {Number}
    * @readonly
    */
-  get successses() { return this.document.advancementRequirements.successses; }
+  get successes() { return this.document.advancementRequirements.successes; }
 
   /**
    * Returns the current number of failures. 
@@ -128,6 +128,13 @@ export default class SkillListItemViewModel extends SkillViewModel {
       id: "vmNsLevel",
       propertyOwner: thiz.document,
       propertyPath: "level",
+      min: 0,
+    });
+    this.vmNsModdedLevel = factory.createVmNumberSpinner({
+      parent: thiz,
+      id: "vmNsModdedLevel",
+      propertyOwner: thiz.document,
+      propertyPath: "moddedLevel",
       min: 0,
     });
     this.vmNsSuccesses = factory.createVmNumberSpinner({

@@ -8,8 +8,8 @@ showFancyFont: {Boolean | undefined}
 {{#> dialogContent}}
   <div class="sheet-block grid grid-2col">
     <div class="flex flex-column">
-      {{> inputLabel text=(localize "ambersteel.roll.obstacle.abbreviation") showFancyFont=showFancyFont}}
-      {{> inputLabel text=(localize "ambersteel.roll.bonusDice") showFancyFont=showFancyFont}}
+      {{#> label showFancyFont=showFancyFont}}{{localize "ambersteel.roll.obstacle.abbreviation"}}{{/label}}
+      {{#> label showFancyFont=showFancyFont}}{{localize "ambersteel.roll.bonusDice"}}{{/label}}
     </div>
     <div class="flex flex-column flex-grow">
       {{#> numberSpinner}}
@@ -24,7 +24,7 @@ showFancyFont: {Boolean | undefined}
   </div>
   <div class="sheet-block grid grid-2col">
     <div>
-      {{> inputLabel text=(localize "ambersteel.general.messageVisibility.label") showFancyFont=showFancyFont}}
+      {{#> label showFancyFont=showFancyFont}}{{localize "ambersteel.general.messageVisibility.label"}}{{/label}}
     </div>
     <div class="flex">
       <select class="visibilityMode flex-grow" name="visibilityMode">

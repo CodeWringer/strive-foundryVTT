@@ -8,12 +8,13 @@ import ActorAssetsViewModel from "./part/assets/actor-assets-viewmodel.mjs"
 import ActorAttributesViewModel from "./part/actor-attributes-viewmodel.mjs"
 import ActorBeliefsFateViewModel from "./part/actor-beliefs-fate-viewmodel.mjs"
 import ActorBiographyViewModel from "./part/actor-biography-viewmodel.mjs"
-import ActorHealthViewModel from "./part/actor-health-viewmodel.mjs"
+import ActorHealthViewModel from "./part/health/actor-health-viewmodel.mjs"
 import ActorPersonalsViewModel from "./part/actor-personals-viewmodel.mjs"
 import ActorSkillsViewModel from "./part/actor-skills-viewmodel.mjs"
+import BaseSheetViewModel from "../../view-model/base-sheet-viewmodel.mjs"
 
 /**
- * @extends ViewModel
+ * @extends BaseSheetViewModel
  * 
  * @property {ViewModel} personalsViewModel
  * @property {LazyLoadViewModel} attributesViewModel
@@ -23,8 +24,8 @@ import ActorSkillsViewModel from "./part/actor-skills-viewmodel.mjs"
  * @property {LazyLoadViewModel} assetsViewModel
  * @property {LazyLoadViewModel} biographyViewModel
  * @property {LazyLoadViewModel} gmNotesViewModel
- */
-export default class ActorSheetViewModel extends ViewModel {
+*/
+export default class ActorSheetViewModel extends BaseSheetViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.ACTOR_SHEET; }
 
@@ -69,24 +70,22 @@ export default class ActorSheetViewModel extends ViewModel {
   get templatePersonals() { return TEMPLATES.ACTOR_PERSONALS; }
 
   /**
+   * @param {Object} args
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
    * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 
    * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 
    * is expected to be associated with an actor sheet or item sheet or journal entry or chat message and so on.
-   * 
    * @param {Boolean | undefined} args.isEditable If true, the sheet is editable. 
    * @param {Boolean | undefined} args.isSendable If true, the document represented by the sheet can be sent to chat. 
    * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document. 
    * @param {String | undefined} args.contextTemplate Optional. Name or path of a contextual template, 
    * which will be displayed in exception log entries, to aid debugging. 
-   * 
-   * @param {TransientBaseactor} args.document
+   * @param {TransientBaseactor} args.document The represented transient document instance. 
+   * @param {ActorSheet} args.sheet The parent sheet instance. 
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["document"]);
 
-    this.document = args.document;
     this.contextTemplate = args.contextTemplate ?? "actor-character-sheet";
 
     const thiz = this;
@@ -205,8 +204,8 @@ export default class ActorSheetViewModel extends ViewModel {
   }
 
   /** @override */
-  activateListeners(html, isOwner, isEditable) {
-    super.activateListeners(html, isOwner, isEditable);
+  async activateListeners(html, isOwner, isEditable) {
+    await super.activateListeners(html, isOwner, isEditable);
 
     const thiz = this;
     const tabs = html.find("nav.sheet-tabs > a");
@@ -215,7 +214,7 @@ export default class ActorSheetViewModel extends ViewModel {
       thiz._renderLazyTab(tab);
     });
 
-    this._renderActiveTab(html);
+    await this._renderActiveTab(html);
   }
 
   /** @override */
@@ -242,6 +241,7 @@ export default class ActorSheetViewModel extends ViewModel {
     const activeTab = html.find("nav.sheet-tabs > a.active");
     const tab = activeTab.data("tab");
     await this._renderLazyTab(tab);
+    this._restoreScrollPositions();
   }
 
   /**

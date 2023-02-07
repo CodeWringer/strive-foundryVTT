@@ -6,8 +6,10 @@ import { ATTACK_TYPES } from "./business/ruleset/skill/attack-types.mjs";
 import { SHIELD_TYPES } from "./business/ruleset/asset/shield-types.mjs";
 import { ARMOR_TYPES } from "./business/ruleset/asset/armor-types.mjs";
 import { WEAPON_TYPES } from "./business/ruleset/asset/weapon-types.mjs";
-import { INJURY_STATES } from "./business/ruleset/injury-states.mjs";
-import { ILLNESS_STATES } from "./business/ruleset/illness-states.mjs";
+import { INJURY_STATES } from "./business/ruleset/health/injury-states.mjs";
+import { ILLNESS_STATES } from "./business/ruleset/health/illness-states.mjs";
+import { HEALTH_STATES } from "./business/ruleset/health/health-states.mjs";
+import { CHARACTER_TEST_TYPES } from "./business/ruleset/test/character-test-types.mjs";
 import Ruleset from "./business/ruleset/ruleset.mjs";
 // Chat constants
 import { VISIBILITY_MODES } from "./presentation/chat/visibility-modes.mjs";
@@ -36,12 +38,12 @@ import { BaseLoggingStrategy, LogLevels } from "./business/logging/base-logging-
 import { ConsoleLoggingStrategy } from "./business/logging/console-logging-strategy.mjs";
 // Import settings classes
 import AmbersteelUserSettings from "./business/setting/ambersteel-user-settings.mjs";
+import AmbersteelWorldSettings from "./business/setting/ambersteel-world-settings.mjs";
 // Import view models
 import './presentation/view-model/view-model.mjs';
 import ViewModelCollection from './presentation/view-model/view-model-collection.mjs';
 // Components
 import './presentation/view-model/input-view-model.mjs';
-import './presentation/component/label/label-viewmodel.mjs';
 import './presentation/component/input-textfield/input-textfield-viewmodel.mjs';
 import './presentation/component/input-dropdown/input-dropdown-viewmodel.mjs';
 import './presentation/component/input-number-spinner/input-number-spinner-viewmodel.mjs';
@@ -55,13 +57,17 @@ import './presentation/component/button-roll/button-roll-viewmodel.mjs';
 import './presentation/component/button-send-to-chat/button-send-to-chat-viewmodel.mjs';
 import './presentation/component/button-toggle-visibility/button-toggle-visibility-viewmodel.mjs';
 import './presentation/component/button-take-item/button-take-item-viewmodel.mjs';
+import './presentation/component/button-toggle-icon/button-toggle-icon-viewmodel.mjs';
+// Composites
 import './presentation/component/sortable-list/sortable-list-viewmodel.mjs';
+import './presentation/component/simple-list/simple-list-viewmodel.mjs';
 import './presentation/component/section-gm-notes/section-gm-notes-viewmodel.mjs';
 import './presentation/component/dice-roll-list/dice-roll-list-viewmodel.mjs';
 import './presentation/component/damage-definition-list/damage-definition-list-item-viewmodel.mjs';
 import './presentation/component/damage-definition-list/damage-definition-list-viewmodel.mjs';
 import './presentation/component/lazy-load/lazy-load-viewmodel.mjs';
 import './presentation/component/lazy-rich-text/lazy-rich-text-viewmodel.mjs';
+import './presentation/component/visibility-toggle-list/visibility-toggle-list-viewmodel.mjs';
 // View models
 import './presentation/sheet/actor/actor-sheet-viewmodel.mjs';
 import './presentation/sheet/actor/part/actor-attribute-table-viewmodel.mjs';
@@ -71,7 +77,7 @@ import './presentation/sheet/actor/part/actor-beliefs-fate-viewmodel.mjs';
 import './presentation/sheet/actor/part/actor-beliefs-viewmodel.mjs';
 import './presentation/sheet/actor/part/actor-biography-viewmodel.mjs';
 import './presentation/sheet/actor/part/actor-fate-viewmodel.mjs';
-import './presentation/sheet/actor/part/actor-health-viewmodel.mjs';
+import './presentation/sheet/actor/part/health/actor-health-viewmodel.mjs';
 import './presentation/sheet/actor/part/actor-personals-viewmodel.mjs';
 import './presentation/sheet/actor/part/actor-skills-viewmodel.mjs';
 // View model factory
@@ -83,6 +89,9 @@ import { SYSTEM_ID } from "./system-id.mjs";
 /* -------------------------------------------- */
 
 Hooks.once('init', function() {
+  // Register globals. 
+  window.DocumentFetcher = DocumentFetcher;
+
   // Add system specific logic to global namespace. 
   game.ambersteel = {
     AmbersteelActor,
@@ -170,6 +179,7 @@ Hooks.once('setup', function() {
 Hooks.once("ready", function() {
   // Settings initialization.
   new AmbersteelUserSettings().ensureAllSettings();
+  new AmbersteelWorldSettings().ensureAllSettings();
 
   // Debug mode setting. 
   game.ambersteel.debug = new LoadDebugSettingUseCase().invoke();
@@ -279,6 +289,16 @@ Handlebars.registerHelper('ifThenElse', function(condition, thenValue, elseValue
 });
 
 /* -------------------------------------------- */
+/*  Handlebars Partials                          */
+/* -------------------------------------------- */
+
+Handlebars.registerPartial('label', `{{#> "${TEMPLATES.COMPONENT_LABEL}"}}{{> @partial-block}}{{/"${TEMPLATES.COMPONENT_LABEL}"}}`);
+Handlebars.registerPartial('readOnlyValue', `{{#> "${TEMPLATES.COMPONENT_LABEL_READ_ONLY_VALUE}"}}{{> @partial-block}}{{/"${TEMPLATES.COMPONENT_LABEL_READ_ONLY_VALUE}"}}`);
+Handlebars.registerPartial('header1', `{{#> "${TEMPLATES.COMPONENT_HEADER_PRIMARY}"}}{{> @partial-block}}{{/"${TEMPLATES.COMPONENT_HEADER_PRIMARY}"}}`);
+Handlebars.registerPartial('header2', `{{#> "${TEMPLATES.COMPONENT_HEADER_SECONDARY}"}}{{> @partial-block}}{{/"${TEMPLATES.COMPONENT_HEADER_SECONDARY}"}}`);
+Handlebars.registerPartial('header3', `{{#> "${TEMPLATES.COMPONENT_HEADER_TERTIARY}"}}{{> @partial-block}}{{/"${TEMPLATES.COMPONENT_HEADER_TERTIARY}"}}`);
+
+/* -------------------------------------------- */
 /*  Other Hooks                                 */
 /* -------------------------------------------- */
 
@@ -334,7 +354,7 @@ Hooks.on("renderChatMessage", async function(message, html, data) {
     }
   }
 
-  viewModel.activateListeners(html, viewModel.isOwner, viewModel.isEditable);
+  await viewModel.activateListeners(html, viewModel.isOwner, viewModel.isEditable);
 });
 
 Hooks.on("deleteChatMessage", function(args) {

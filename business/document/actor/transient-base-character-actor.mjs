@@ -44,6 +44,9 @@ import TransientBaseActor from './transient-base-actor.mjs';
  * * Read-only. 
  * @property {Array<TransientMutation>} health.mutations 
  * * Read-only. 
+ * @property {Array<TransientScar>} health.scars 
+ * * Read-only. 
+ * @property {Array<String>} health.states
  * @property {Number} health.HP 
  * @property {Number} health.maxHP 
  * * Read-only. 
@@ -128,6 +131,7 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
       get injuries() { return thiz.items.filter(it => it.type === "injury"); },
       get illnesses() { return thiz.items.filter(it => it.type === "illness"); },
       get mutations() { return thiz.items.filter(it => it.type === "mutation"); },
+      get scars() { return thiz.items.filter(it => it.type === "scar"); },
 
       get HP() { return parseInt(thiz.document.system.health.HP); },
       set HP(value) { thiz.updateByPath("system.health.HP", value); },
@@ -142,6 +146,9 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
       get maxInjuries() { return new Ruleset().getCharacterMaximumInjuries(thiz.document) },
       get maxExhaustion() { return new Ruleset().getCharacterMaximumExhaustion(thiz.document) },
       get maxMagicStamina() { return new Ruleset().getCharacterMaximumMagicStamina(thiz.document) },
+      
+      get states() { return thiz.document.system.health.states; },
+      set states(value) { thiz.updateByPath("system.health.states", value); },
     };
   }
 
@@ -347,14 +354,15 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
     // Worn & Equipped
     const equipmentIds = [];
     const equipmentAssets = [];
-    for (const group in this._equipmentSlotGroups) {
-      for (const slot in group.slots) {
+    for (const group of this._equipmentSlotGroups) {
+      for (const slot of group.slots) {
         if (isDefined(slot.alottedId) === true) {
-          equipmentIds.push(slot.alottedId);
-          const asset = this._allAssets.find(asset => asset.id === id);
+          const asset = this._allAssets.find(asset => asset.id === slot.alottedId);
           if (asset === undefined) {
             game.ambersteel.logger.logWarn("NullReferenceException: equipped asset could not be found on actor");
+            slot.alottedId = null;
           } else {
+            equipmentIds.push(slot.alottedId);
             equipmentAssets.push(asset);
           }
         }
@@ -436,6 +444,7 @@ this.updateByPath("")
    * * Embedded injury name.
    * * Embedded illness name.
    * * Embedded mutation name.
+   * * Embedded scar name.
    * * Embedded asset name.
    * 
    * @override
@@ -486,6 +495,14 @@ this.updateByPath("")
     // Search mutation.
     for (const mutation of this.health.mutations) {
       const match = mutation._resolveReference(reference, comparableReference, propertyPath);
+      if (match !== undefined) {
+        return match;
+      }
+    }
+
+    // Search scar.
+    for (const scar of this.health.scars) {
+      const match = scar._resolveReference(reference, comparableReference, propertyPath);
       if (match !== undefined) {
         return match;
       }

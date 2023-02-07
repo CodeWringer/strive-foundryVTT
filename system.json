@@ -2,7 +2,7 @@
   "id": "ambersteel",
   "title": "Ambersteel",
   "description": "The Ambersteel system for FoundryVTT",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "compatibility": {
     "minimum": 10,
     "verified": 10.291
@@ -55,12 +55,6 @@
       "type": "Item"
     },
     {
-      "name": "burn-injuries",
-      "label": "Burn Injuries",
-      "path": "packs/burn-injuries.db",
-      "type": "Item"
-    },
-    {
       "name": "shields",
       "label": "Shields",
       "path": "packs/shields.db",
@@ -94,6 +88,12 @@
       "name": "mutations",
       "label": "Mutations",
       "path": "packs/mutations.db",
+      "type": "Item"
+    },
+    {
+      "name": "scars",
+      "label": "Scars",
+      "path": "packs/scars.db",
       "type": "Item"
     },
     {

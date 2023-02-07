@@ -1,0 +1,14 @@
+{{!-- Parameters:
+viewModel: {ActorHealthStatesViewModel}
+cssClass: {undefined | String}
+--}}
+<div class="sheet-block">
+  {{#> header3 showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.health.states.label"}}{{/header3}}
+  <div class="grid-3col">
+    {{#each viewModel.stateViewModels as |vm index|}}
+      {{#with ../viewModel.listItemTemplate as | template |}}
+        {{> (template) viewModel=vm}}
+      {{/with}}
+    {{/each}}
+  </div>
+</div>

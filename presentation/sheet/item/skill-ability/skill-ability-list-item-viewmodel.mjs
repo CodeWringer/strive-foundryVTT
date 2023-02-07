@@ -3,7 +3,7 @@ import { ATTACK_TYPES } from "../../../../business/ruleset/skill/attack-types.mj
 import DamageAndType from "../../../../business/ruleset/skill/damage-and-type.mjs";
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs";
 import { isDefined } from "../../../../business/util/validation-utility.mjs";
-import InfoBubble from "../../../component/info-bubble/info-bubble.mjs";
+import InfoBubble, { InfoBubbleAutoHidingTypes, InfoBubbleAutoShowingTypes } from "../../../component/info-bubble/info-bubble.mjs";
 import ViewModel from "../../../view-model/view-model.mjs";
 import ViewModelFactory from "../../../view-model/view-model-factory.mjs";
 import { TEMPLATES } from "../../../templatePreloader.mjs";
@@ -236,7 +236,6 @@ export default class SkillAbilityListItemViewModel extends ViewModel {
       isOwner: thiz.isOwner,
       propertyOwner: thiz.skillAbility,
       propertyPath: "damage",
-      hintId: thiz.id,
     });
   }
 
@@ -257,25 +256,15 @@ export default class SkillAbilityListItemViewModel extends ViewModel {
   }
 
   /** @override */
-  activateListeners(html, isOwner, isEditable) {
-    super.activateListeners(html, isOwner, isEditable);
+  async activateListeners(html, isOwner, isEditable) {
+    await super.activateListeners(html, isOwner, isEditable);
 
     this.damageInfoBubble = new InfoBubble({
       html: html,
       text: game.i18n.localize("ambersteel.damageDefinition.infoFormulae"),
-    });
-    const thiz = this;
-    $.each(html.find(".damage-info"), (name, value) => {
-      const jElement = $(value);
-
-      if (jElement.attr('id') !== thiz.id) return;
-
-      jElement.on("mouseenter", (e) => {
-        thiz.damageInfoBubble.show(jElement);
-      });
-      jElement.on("mouseleave", (e) => {
-        thiz.damageInfoBubble.hide();
-      });
+      parent: html.find(`#${this.id}-damage-info`),
+      autoShowType: InfoBubbleAutoShowingTypes.MOUSE_ENTER,
+      autoHideType: InfoBubbleAutoHidingTypes.MOUSE_LEAVE,
     });
   }
 

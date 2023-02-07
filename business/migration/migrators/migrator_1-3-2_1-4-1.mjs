@@ -15,6 +15,7 @@ export default class Migrator_1_3_2__1_4_1 extends AbstractMigrator {
 
   /**
    * @type {DocumentUpdater}
+   * @readonly
    * @private
    */
   get updater() {
@@ -60,6 +61,7 @@ export default class Migrator_1_3_2__1_4_1 extends AbstractMigrator {
     for (const actor of actors) {
       if (actor.type === "plain") continue;
       
+      // Compatibility checks for FoundryVTT version < 10
       const hasSystem = actor.system !== undefined && actor.system !== null;
       const dataPath = hasSystem === true ? "system" : "data.data";
       const actorData = (actor.system ?? actor.data.data);

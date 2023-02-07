@@ -11,9 +11,7 @@ cssClass: {undefined | String}
     <div class="flex flex-center">
       <img class="inline-img header-image margin-r-sm" name="img" src="{{viewModel.document.img}}" title="{{viewModel.document.name}}" height="35" width="35" />
     </div>
-    <h2 class="flex-grow">
-      {{viewModel.document.name}}
-    </h2>
+    {{#> header2 showFancyFont=viewModel.showFancyFont cssClass="flex-grow"}}{{viewModel.document.name}}{{/header2}}
   </div>
   {{!-- Description --}}
   <div class="sheet-block scrollable-height-md">

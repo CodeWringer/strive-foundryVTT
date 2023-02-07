@@ -5,6 +5,7 @@ import AmbersteelNpcActorSheet from "./ambersteel-npc-actor-sheet.mjs";
 import AmbersteelPcActorSheet from "./ambersteel-pc-actor-sheet.mjs";
 import * as SheetUtil from "../sheet-utility.mjs";
 import { SYSTEM_ID } from "../../../system-id.mjs";
+import { isDefined } from "../../../business/util/validation-utility.mjs";
 
 export class AmbersteelActorSheet extends ActorSheet {
   /**
@@ -21,6 +22,42 @@ export class AmbersteelActorSheet extends ActorSheet {
     }
 
     return enhancer;
+  }
+
+  /**
+   * Returns the content container. 
+   * 
+   * @type {JQuery | undefined}
+   * @readonly
+   */
+  get contentElement() {
+    if (isDefined(this._element) !== true) return undefined;
+
+    if (this._contentElement === undefined) {
+      this._contentElement = this._element.find("section.window-content");
+    }
+    return this._contentElement;
+  }
+
+  /**
+   * Returns the content container's current scroll value. 
+   * 
+   * @type {Number | undefined}
+   */
+  get scrollValue() {
+    if (isDefined(this._element) !== true) return undefined;
+
+    return this.contentElement[0].scrollTop;
+  }
+  /**
+   * Sets the content container's current scroll value. 
+   * 
+   * @param {Number} value
+   */
+  set scrollValue(value) {
+    if (isDefined(this._element) !== true) return;
+
+    this.contentElement[0].scrollTop = value;
   }
 
   /**
@@ -84,7 +121,7 @@ export class AmbersteelActorSheet extends ActorSheet {
 
     // Prepare a new view model instance. 
     game.ambersteel.logger.logPerf(this, "actor.getData (getViewModel)", () => {
-      this._viewModel = this.subType.getViewModel(context, context.actor);
+      this._viewModel = this.subType.getViewModel(context, context.actor, this);
     });
     game.ambersteel.logger.logPerf(this, "actor.getData (readViewState)", () => {
       this._viewModel.readViewState();
@@ -96,17 +133,17 @@ export class AmbersteelActorSheet extends ActorSheet {
   }
 
   /** @override */
-  activateListeners(html) {
-    super.activateListeners(html);
+  async activateListeners(html) {
+    await super.activateListeners(html);
 
     const isOwner = (this.actor ?? this.item).isOwner;
     const isEditable = this.isEditable;
 
-    game.ambersteel.logger.logPerf(this, "actor.activateListeners (subType)", () => {
-      this.subType.activateListeners(html, isOwner, isEditable);
+    await game.ambersteel.logger.logPerfAsync(this, "actor.activateListeners (subType)", async () => {
+      await this.subType.activateListeners(html, isOwner, isEditable);
     });
-    game.ambersteel.logger.logPerf(this, "actor.activateListeners (viewModel)", () => {
-      this.viewModel.activateListeners(html, isOwner, isEditable);
+    await game.ambersteel.logger.logPerfAsync(this, "actor.activateListeners (viewModel)", async () => {
+      await this.viewModel.activateListeners(html, isOwner, isEditable);
     });
 
     if (!isOwner) return;

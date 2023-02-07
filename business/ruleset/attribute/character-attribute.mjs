@@ -1,7 +1,7 @@
 import LevelAdvancement from "../level-advancement.mjs";
 import Ruleset from "../ruleset.mjs";
-import { SummedDataComponent } from "../skill/summed-data.mjs";
-import { SummedData } from "../skill/summed-data.mjs";
+import { SummedDataComponent } from "../summed-data.mjs";
+import { SummedData } from "../summed-data.mjs";
 import { ATTRIBUTE_GROUPS } from "./attribute-groups.mjs";
 import { ATTRIBUTES } from "./attributes.mjs";
 
@@ -23,7 +23,8 @@ import { ATTRIBUTES } from "./attributes.mjs";
  * * Read-only. 
  * @property {Number} advancementProgress.successes
  * @property {Number} advancementProgress.failures
- * @property {Number} level The current level of the attribute. 
+ * @property {Number} level The current raw level of the attribute. 
+ * @property {Number} moddedLevel The current modified level of the attribute. 
  */
 export default class CharacterAttribute {
   /**
@@ -37,6 +38,24 @@ export default class CharacterAttribute {
           [this._attributeGroupName]: {
             [this.name]: {
               level: value
+            }
+          }
+        }
+      }
+    }); 
+  }
+
+  /**
+   * @type {Number}
+   */
+  get moddedLevel() { return parseInt(this._actor.system.attributes[this._attributeGroupName][this.name].moddedLevel ?? "0"); }
+  set moddedLevel(value) {
+    this._actor.update({
+      system: {
+        attributes: {
+          [this._attributeGroupName]: {
+            [this.name]: {
+              moddedLevel: value
             }
           }
         }
@@ -119,8 +138,8 @@ export default class CharacterAttribute {
    * @returns {SummedData}
    */
   getRollData() {
-    return new SummedData(this.level, [
-      new SummedDataComponent(this.name, this.localizableName, this.level)
+    return new SummedData(this.moddedLevel, [
+      new SummedDataComponent(this.name, this.localizableName, this.moddedLevel)
     ]);
   }
 

@@ -1,0 +1,27 @@
+{{!--
+viewModel: SimpleListViewModel
+--}}
+<ul id="{{viewModel.id}}" class="unstyled-list">
+  {{#each viewModel.itemViewModels as |vm index|}}
+  {{#with ../viewModel.itemTemplate as |template|}}
+    <li class="flex flex-row">
+      {{> (template) viewModel=vm}}
+    </li>
+  {{/with}}
+  {{/each}}
+  {{#if viewModel.isItemAddable}}
+  <li class="ambersteel-list-row ambersteel-list-footer{{#if (neq viewModel.isEditable true)}} hidden{{/if}}">
+    <div class="fill flex flex-row flex-right">
+      {{!-- Add button --}}
+      <div>
+        {{#> button viewModel=viewModel.vmBtnAddItem fill=true}}
+          <span{{#if ../viewModel.showFancyFont}} class="fancy-font"{{/if}}>{{../viewModel.localizedAddLabel}}</span>
+          <div class="square-button-light flex flex-center">
+            <i class="fas fa-plus"></i>
+          </div>
+        {{/button}}
+      </div>
+    </div>
+  </li>
+  {{/if}}
+</ul>

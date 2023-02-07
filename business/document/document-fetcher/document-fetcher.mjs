@@ -737,5 +737,3 @@ export default class DocumentFetcher {
     return true;
   }
 }
-
-window.DocumentFetcher = DocumentFetcher;

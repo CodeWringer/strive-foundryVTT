@@ -70,6 +70,25 @@ export class BaseLoggingStrategy {
     const perf1 = performance.now();
     this.logVerbose(`Perf: ${msg} took: ${perf1 - perf0} milliseconds`);
   }
+
+  /**
+   * Executes and then logs the time taken for the given `functionBlock`. 
+   * 
+   * Outputs a `LogLevels.VERBOSE` level message. 
+   * 
+   * @param {Object} obj The context to bind the `functionBlock` to. 
+   * @param {String | undefined} msg A message to output along with the time taken. 
+   * @param {Function} functionBlock The async function block to execute. 
+   * 
+   * @async
+   */
+  async logPerfAsync(obj, msg, functionBlock) {
+    functionBlock.bind(obj);
+    const perf0 = performance.now();
+    await functionBlock();
+    const perf1 = performance.now();
+    this.logVerbose(`Perf: ${msg} took: ${perf1 - perf0} milliseconds`);
+  }
 }
 
 /**

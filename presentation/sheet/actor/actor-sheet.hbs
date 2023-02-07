@@ -25,7 +25,7 @@ cssClass: {undefined | String}
 
   {{#if viewModel.showNavigation}}
     {{!-- Sheet Tab Navigation --}}
-    <nav class="sheet-tabs tabs flex flex-justify" id="nav-sheet-tabs" data-group="primary">
+    <nav class="sheet-tabs tabs flex flex-justify font-size-default" id="nav-sheet-tabs" data-group="primary">
       {{#if (eq viewModel.isPlain false)}}
         {{!-- Default tab is specified in actor-sheet.mjs --}}
         <a class="item flex flex-center flex-grow{{#if viewModel.showFancyFont}} fancy-font{{/if}}" data-tab="attributes"><div>{{localize "ambersteel.character.sheet.tab.attributes"}}</div></a>

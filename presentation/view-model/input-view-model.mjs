@@ -79,7 +79,9 @@ export default class InputViewModel extends ViewModel {
    */
   set value(newValue) {
     try {
+      const oldValue = getNestedPropertyValue(this.propertyOwner, this.propertyPath);
       setNestedPropertyValue(this.propertyOwner, this.propertyPath, newValue);
+      this.onChange(oldValue, newValue);
     } catch (error) {
       if (this._contextTemplate !== undefined) {
         throw new Error(`[${this._contextTemplate}] IllegalStateException: ${error.message}`);
@@ -112,13 +114,17 @@ export default class InputViewModel extends ViewModel {
   get element() { return this._element; }
 
   /**
-   * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
-   * 
+   * @param {Object} args
+   * @param {String | undefined} args.id Unique ID of this view model instance. 
    * @param {String} args.propertyPath The path used to look up the value. 
    * @param {Object} args.propertyOwner An object on which to to look up the value. 
-   * @param {Boolean | undefined} args.isEditable Optional. If true, input(s) will be in edit mode. If false, input(s) will be in read-only mode.
-   * @param {String | undefined} args.contextTemplate Optional. Name or path of a template that embeds this input component. 
-   * @param {String | undefined} args.localizableTitle Optional. The localizable title (tooltip). 
+   * @param {Boolean | undefined} args.isEditable If true, input(s) will be in edit mode. If false, input(s) will be in read-only mode.
+   * @param {String | undefined} args.contextTemplate Name or path of a template that embeds this input component. 
+   * @param {String | undefined} args.localizableTitle The localizable title (tooltip). 
+   * @param {Function | undefined} args.onChange Callback that is invoked when the value changes. 
+   * * Receives two arguments: 
+   * * * `oldValue: {Any}`
+   * * * `newValue: {Any}`
    */
   constructor(args = {}) {
     super(args);
@@ -129,11 +135,12 @@ export default class InputViewModel extends ViewModel {
     this.propertyOwner = args.propertyOwner;
     this._contextTemplate = args.contextTemplate;
     this.localizableTitle = args.localizableTitle;
+    this.onChange = args.onChange ?? this.onChange;
   }
 
   /** @override */
-  activateListeners(html, isOwner, isEditable) {
-    super.activateListeners(html, isOwner, isEditable);
+  async activateListeners(html, isOwner, isEditable) {
+    await super.activateListeners(html, isOwner, isEditable);
 
     this._detectElement(html);
 
@@ -146,17 +153,14 @@ export default class InputViewModel extends ViewModel {
   }
 
   /**
-   * Callback triggered when the value changes. 
+   * Callback that is invoked when the value changes. 
    * 
-   * @param {String} newValue The value from the DOM element. 
+   * @param {Any} oldValue The value prior to the change. 
+   * @param {Any} newValue The value after the change. 
    * 
-   * @async
-   * @protected
    * @virtual
    */
-  async onChange(newValue) {
-    this.value = newValue;
-  }
+  onChange(oldValue, newValue) { /* Implementation up to the user. */}
 
   /**
    * Attempts to find and assign the relevant DOM element. 
@@ -191,6 +195,6 @@ export default class InputViewModel extends ViewModel {
    */
   async _onEdit(event) {
     const newValue = getElementValue(event.currentTarget);
-    this.onChange(newValue);
+    this.value = newValue;
   }
 }

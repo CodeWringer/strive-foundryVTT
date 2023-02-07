@@ -18,8 +18,6 @@ import ChoiceAdapter from "../input-choice/choice-adapter.mjs";
  * @property {Object} propertyOwner The transient document whose damage definition this is. 
  * @property {Number} index The index of this damage definition, in the array of damage 
  * definitions on the `propertyOwner`. 
- * @property {String | undefined} hintId Id of the info bubble element that informs 
- * the user about formula references. 
  * @property {String} localizedLabel Returns the localized label of the roll total. 
  * I. e. the localized damage type. 
  * * Read-only. 
@@ -64,8 +62,6 @@ export default class DamageDefinitionListItemViewModel extends ViewModel {
    * definitions on the `propertyOwner`. 
    * @param {Function} args.resolveFormula A function which resolves the damage definition's 
    * formula and returns it. 
-   * @param {String | undefined} hintId Id of the info bubble element that informs 
-   * the user about formula references. 
    */
   constructor(args = {}) {
     super(args);
@@ -74,7 +70,6 @@ export default class DamageDefinitionListItemViewModel extends ViewModel {
     this.propertyOwner = args.propertyOwner;
     this.index = args.index;
     this.resolveFormula = args.resolveFormula;
-    this.hintId = args.hintId;
 
     const thiz = this;
     const factory = new ViewModelFactory();

@@ -9,7 +9,7 @@ cssClass: {undefined | String}
     {{> buttonSendToChat viewModel=viewModel.vmBtnSendToChat }}
     {{!-- Name --}}
     <span class="width-min-xl">
-      {{> inputLabel text=(localize "ambersteel.character.health.mutation.singular") showFancyFont=viewModel.showFancyFont}}
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.health.mutation.singular"}}{{/label}}
     </span>
     {{> inputImage viewModel=viewModel.vmImg cssClass="custom-icon-sm" }}
     <h2 class="flex-grow margin-r-md">

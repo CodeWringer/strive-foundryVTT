@@ -10,6 +10,7 @@ import DocumentProperty from "../document-property.mjs";
  * @property {DocumentProperty} AMBERSTEEL_PLATED
  * @property {DocumentProperty} ARMOR
  * @property {DocumentProperty} CLOTHING
+ * @property {DocumentProperty} COUNTER_ATTACK
  * @property {DocumentProperty} EXHAUSTING_TO_WIELD
  * @property {DocumentProperty} HOLDABLE
  * @property {DocumentProperty} LONG_REACH
@@ -83,6 +84,10 @@ export const ASSET_PROPERTIES = {
   CLOTHING: new DocumentProperty({
     id: "CLOTHING",
     localizableName: "ambersteel.character.asset.properties.clothing"
+  }),
+  COUNTER_ATTACK: new DocumentProperty({
+    id: "COUNTER_ATTACK",
+    localizableName: "ambersteel.character.asset.properties.counterAttack"
   }),
   WEAPON: new DocumentProperty({
     id: "WEAPON",

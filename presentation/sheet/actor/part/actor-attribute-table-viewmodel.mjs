@@ -65,8 +65,8 @@ export default class AttributeTableViewModel extends ViewModel {
         attributeName: attribute.name,
         localizableName: attribute.localizableName,
         localizableAbbreviation: attribute.localizableAbbreviation,
-        requiredSuccessses: attribute.requiredSuccessses,
-        requiredFailures: attribute.requiredFailures,
+        requiredSuccesses: attribute.advancementRequirements.successes,
+        requiredFailures: attribute.advancementRequirements.failures,
         vmBtnRoll: factory.createVmBtnRoll({
           parent: thiz,
           id: `vmBtnRoll-${attribute.name}`,
@@ -82,6 +82,13 @@ export default class AttributeTableViewModel extends ViewModel {
           id: `vmNsLevel-${attribute.name}`,
           propertyOwner: attribute,
           propertyPath: "level",
+          min: 0,
+        }),
+        vmNsModdedLevel: factory.createVmNumberSpinner({
+          parent: thiz,
+          id: `vmNsModdedLevel-${attribute.name}`,
+          propertyOwner: attribute,
+          propertyPath: "moddedLevel",
           min: 0,
         }),
         vmNsSuccesses: factory.createVmNumberSpinner({
