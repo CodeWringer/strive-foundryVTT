@@ -34,7 +34,7 @@ export default class SkillAbilityTableViewModel extends ViewModel {
     this._skillAbilitiesInitiallyVisible = value;
 
     // Immediately write view state. 
-    this.writeAllViewState();
+    this.writeViewState();
   }
 
   /**
@@ -77,12 +77,12 @@ export default class SkillAbilityTableViewModel extends ViewModel {
     super(args);
     validateOrThrow(args, ["document"]);
 
-    this.registerViewStateProperty("_skillAbilitiesInitiallyVisible");
-
     // Own properties.
     this.document = args.document;
     this.visGroupId = args.visGroupId ?? createUUID();
     this._skillAbilitiesInitiallyVisible = args.skillAbilitiesInitiallyVisible ?? false;
+    
+    this.registerViewStateProperty("_skillAbilitiesInitiallyVisible");
 
     // Child view models. 
     this.contextTemplate = "skill-ability-table";
