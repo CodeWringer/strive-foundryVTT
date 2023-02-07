@@ -136,7 +136,7 @@ export default class LazyLoadViewModel extends ViewModel {
     // Render as needed. 
     if (this._renderedContent === undefined || this._invalidated === true) {
       // Make sure the child view model reads its view state, **before** its content is rendered. 
-      this.viewModel.readViewState();
+      this.viewModel.readAllViewState();
 
       this._renderedContent = await renderTemplate(this.template, {
         viewModel: this.viewModel,
