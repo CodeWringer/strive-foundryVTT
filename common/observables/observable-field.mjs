@@ -1,3 +1,5 @@
+import { EventEmitter } from "../event-emitter.mjs";
+
 /**
  * Represents a field on an object, whose value changes can be observed/listened for. 
  * 
@@ -13,6 +15,12 @@ export default class ObservableField {
   _value = undefined;
 
   /**
+   * @type {EventEmitter}
+   * @private
+   */
+  _eventEmitter;
+
+  /**
    * The wrapped value. 
    * 
    * @type {any}
@@ -21,14 +29,12 @@ export default class ObservableField {
   set value(value) {
     const oldValue = this._value;
     this._value = value;
-    this.onChange(oldValue, value);
+    this._eventEmitter = args.eventEmitter ?? new EventEmitter();
   }
 
   /**
    * @param {object} args 
    * @param {any} args.value
-   * @param {Function | undefined} args.onChange Callback function that is invoked 
-   * whenever the value is changed. 
    */
   constructor(args = {}) {
     this._value = args.value;
