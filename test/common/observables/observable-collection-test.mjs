@@ -44,16 +44,26 @@ describe("ObservableCollection", () => {
       element.should.be.eql(2);
     });
 
-    it("throws on index out of bounds", () => {
+    it("returns expected element 2", () => {
       // Given
       const givenElements = [1, 2, 3];
       const given = new ObservableCollection({
         elements: givenElements,
       });
       // When
-      (() => {
-        given.get(-1);
-      }).should.throw();
+      const element = given.get(2);
+      element.should.be.eql(3);
+    });
+
+    it("returns undefined on index out of bounds", () => {
+      // Given
+      const givenElements = [1, 2, 3];
+      const given = new ObservableCollection({
+        elements: givenElements,
+      });
+      // When
+      const r = given.get(-1);
+      should.equal(r, undefined);
     });
   });
 
@@ -298,7 +308,7 @@ describe("ObservableCollection", () => {
       spy.should.not.have.been.called();
     });
 
-    it("throws on positive fromIndex out of bounds", () => {
+    it("throws on positive out of bounds fromIndex", () => {
       // Given
       const givenElements = [1, 2, 3];
       const given = new ObservableCollection({
@@ -337,6 +347,127 @@ describe("ObservableCollection", () => {
       given.get(0).should.be.eql(3);
       given.get(1).should.be.eql(2);
       given.get(2).should.be.eql(1);
+    });
+  });
+
+  describe("replace", () => {
+    it("replaces element as expected", () => {
+      // Given
+      const givenElements = [1, 2, 3];
+      const given = new ObservableCollection({
+        elements: givenElements,
+      });
+      const spy = sinon.fake();
+      given.onChange(spy);
+      // When
+      given.replace(1, 4);
+      // Then
+      spy.should.have.been.calledOnce();
+      spy.should.have.been.calledWith(CollectionChangeTypes.REPLACE, 1, 4);
+
+      given.get(0).should.be.eql(4);
+      given.get(1).should.be.eql(2);
+      given.get(2).should.be.eql(3);
+    });
+
+    it("throws on negative index", () => {
+      // Given
+      const givenElements = [1, 2, 3];
+      const given = new ObservableCollection({
+        elements: givenElements,
+      });
+      const spy = sinon.fake();
+      given.onChange(spy);
+      // Then
+      (() => {
+        given.replace(-1, 4);
+      }).should.throw();
+    });
+
+    it("throws on positive out of bounds index", () => {
+      // Given
+      const givenElements = [1, 2, 3];
+      const given = new ObservableCollection({
+        elements: givenElements,
+      });
+      const spy = sinon.fake();
+      given.onChange(spy);
+      // Then
+      (() => {
+        given.replace(99, 4);
+      }).should.throw();
+    });
+  });
+
+  describe("replaceAt", () => {
+    it("replaces element as expected", () => {
+      // Given
+      const givenElements = [1, 2, 3];
+      const given = new ObservableCollection({
+        elements: givenElements,
+      });
+      const spy = sinon.fake();
+      given.onChange(spy);
+      // When
+      given.replaceAt(0, 4);
+      // Then
+      spy.should.have.been.calledOnce();
+      spy.should.have.been.calledWith(CollectionChangeTypes.REPLACE, 1, 4);
+
+      given.get(0).should.be.eql(4);
+      given.get(1).should.be.eql(2);
+      given.get(2).should.be.eql(3);
+    });
+
+    it("throws on negative index", () => {
+      // Given
+      const givenElements = [1, 2, 3];
+      const given = new ObservableCollection({
+        elements: givenElements,
+      });
+      const spy = sinon.fake();
+      given.onChange(spy);
+      // Then
+      (() => {
+        given.replaceAt(-1, 4);
+      }).should.throw();
+    });
+
+    it("throws on positive out of bounds index", () => {
+      // Given
+      const givenElements = [1, 2, 3];
+      const given = new ObservableCollection({
+        elements: givenElements,
+      });
+      const spy = sinon.fake();
+      given.onChange(spy);
+      // Then
+      (() => {
+        given.replaceAt(99, 4);
+      }).should.throw();
+    });
+  });
+
+  describe("replaceAll", () => {
+    it("replaces as expected", () => {
+      // Given
+      const givenElements = [1, 2, 3];
+      const given = new ObservableCollection({
+        elements: givenElements,
+      });
+      const spy = sinon.fake();
+      given.onChange(spy);
+
+      const givenReplacements = [4, 5, 6];
+      // When
+      given.replaceAll(givenReplacements);
+      // Then
+      spy.should.have.been.calledOnce();
+      spy.should.have.been.calledWith(CollectionChangeTypes.REPLACE, givenElements, givenReplacements);
+
+      given.get(0).should.be.eql(4);
+      given.get(1).should.be.eql(5);
+      given.get(2).should.be.eql(6);
     });
   });
 });

@@ -3,9 +3,10 @@ import { EventEmitter } from "../event-emitter.mjs";
 /**
  * Represents the possible changes of a collection. 
  * 
- * @property {number} ADD One or more elements were added. 
- * @property {number} REMOVE One or more elements were removed. 
- * @property {number} MOVE One or more elements were moved / re-ordered. 
+ * @property {Number} ADD One or more elements were added. 
+ * @property {Number} REMOVE One or more elements were removed. 
+ * @property {Number} MOVE One or more elements were moved / re-ordered. 
+ * @property {Number} REPLACE One or more elements were replaced. 
  * 
  * @constant
  */
@@ -13,6 +14,7 @@ export const CollectionChangeTypes = {
   ADD: 0,
   REMOVE: 1,
   MOVE: 2,
+  REPLACE: 3,
 };
 
 /**
@@ -31,12 +33,16 @@ export default class ObservableCollection {
   static EVENT_ON_CHANGE = "collectionOnChange";
 
   /**
+   * A wrapped array instance. 
+   * 
    * @type {Array<Any>}
    * @private
    */
   _array = [];
 
   /**
+   * Internally handles the `onChange` event. 
+   * 
    * @type {EventEmitter}
    * @private
    */
@@ -77,13 +83,12 @@ export default class ObservableCollection {
    * 
    * @param {Number} index The index of the element to get. 
    * 
-   * @returns {Any} The element at the given index. 
-   * 
-   * @throws Thrown, if the given index is out of bounds. 
+   * @returns {Any | undefined} The element at the given index or `undefined`, 
+   * if there is no element at the given index. 
    */
   get(index) {
-    if (index < 0 || index > this._array.length) {
-      throw new Error("Index out of bounds");
+    if (index < 0 || index > this._array.length - 1) {
+      return undefined;
     } else {
       return this._array[index];
     }
@@ -256,7 +261,76 @@ export default class ObservableCollection {
 
     this._eventEmitter.emit(ObservableCollection.EVENT_ON_CHANGE, CollectionChangeTypes.MOVE, oldElements, newElements);
   }
-  
+
+  /**
+   * Attempts to replace the given element with the given element. 
+   * 
+   * Invokes event listeners with the following arguments:
+   * * `change: CollectionChangeTypes.REPLACE`
+   * * `replaced: Any`
+   * * `replacedWith: Any`
+   * 
+   * @param {Any} elementToReplace The element to replace. 
+   * @param {Any} element The element to replace with. 
+   * 
+   * @throws Thrown, if the `elementToReplace` is not contained in this collection. 
+   */
+  replace(elementToReplace, element) {
+    const index = this._array.indexOf(elementToReplace);
+
+    if (index < 0) {
+      throw new Error("Element to replace not contained");
+    }
+
+    this._array.splice(index, 1);
+    this._array.splice(index, 0, element);
+
+    this._eventEmitter.emit(ObservableCollection.EVENT_ON_CHANGE, CollectionChangeTypes.REPLACE, elementToReplace, element);
+  }
+
+  /**
+   * Attempts to replace an element at the given index with the given element. 
+   * 
+   * Invokes event listeners with the following arguments:
+   * * `change: CollectionChangeTypes.REPLACE`
+   * * `replaced: Any`
+   * * `replacedWith: Any`
+   * * `index: Number`
+   * 
+   * @param {Number} index Index of the element to replace. 
+   * @param {Any} element The element to replace with. 
+   * 
+   * @throws Thrown, if the `index` is out of bounds. 
+   */
+  replaceAt(index, element) {
+    if (index < 0 || index > this._array.length - 1) {
+      throw new Error("Index out of bounds");
+    }
+
+    const replaced = this._array.splice(index, 1)[0];
+    this._array.splice(index, 0, element);
+
+    this._eventEmitter.emit(ObservableCollection.EVENT_ON_CHANGE, CollectionChangeTypes.REPLACE, replaced, element);
+  }
+
+  /**
+   * Replaces the entire collection's contents with the given array of elements. 
+   * 
+   * Invokes event listeners with the following arguments:
+   * * `change: CollectionChangeTypes.REPLACE`
+   * * `replaced: Array<Any>`
+   * * `replacedWith: Array<Any>`
+   * 
+   * @param {Array<Any>} elements The new array of elements for the collection. 
+   */
+  replaceAll(elements) {
+    const replaced = this._array.concat([]);
+    const replacedWith = elements.concat([]);
+    this._array = [].concat(elements);
+
+    this._eventEmitter.emit(ObservableCollection.EVENT_ON_CHANGE, CollectionChangeTypes.REPLACE, replaced, replacedWith);
+  }
+
   /**
   * Disposes of any working data. 
   */
