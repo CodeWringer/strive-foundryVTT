@@ -5,12 +5,14 @@ import { EventEmitter } from "../event-emitter.mjs";
  * 
  * @property {number} ADD One or more elements were added. 
  * @property {number} REMOVE One or more elements were removed. 
+ * @property {number} MOVE One or more elements were moved / re-ordered. 
  * 
  * @constant
  */
 export const CollectionChangeTypes = {
   ADD: 0,
   REMOVE: 1,
+  MOVE: 2,
 };
 
 /**
@@ -26,7 +28,7 @@ export default class ObservableCollection {
    * @static
    * @type {String}
    */
-    static EVENT_ON_CHANGE = "collectionOnChange";
+  static EVENT_ON_CHANGE = "collectionOnChange";
 
   /**
    * @type {Array<Any>}
@@ -63,12 +65,8 @@ export default class ObservableCollection {
    * 
    * @param {Function | undefined} onChange Callback that is invoked whenever 
    * the data set changes in any way. 
-   * * Receives two arguments when called: 
-   * * * `change: CollectionChangeTypes`
-   * * * `elements: Array<any>`
-   * * * `index: Number | undefined`
-   * 
-   * @virtual
+   * * See the other methods for a description on the arguments to expect, 
+   * when the `callback` is invoked. 
   */
  onChange(callback) {
   this._eventEmitter.on(ObservableCollection.EVENT_ON_CHANGE, callback);
@@ -80,6 +78,8 @@ export default class ObservableCollection {
    * @param {Number} index The index of the element to get. 
    * 
    * @returns {Any} The element at the given index. 
+   * 
+   * @throws Thrown, if the given index is out of bounds. 
    */
   get(index) {
     if (index < 0 || index > this._array.length) {
@@ -87,6 +87,19 @@ export default class ObservableCollection {
     } else {
       return this._array[index];
     }
+  }
+
+  /**
+   * Returns the index of the given element, if possible. If the element could 
+   * not be found, returns `-1`. 
+   * 
+   * @param {any} element The element whose index to return. 
+   * 
+   * @returns {Number} The index of the element or -1, if no element 
+   * was found. 
+   */
+  indexOf(element) {
+    return this._array.indexOf(element);
   }
   
   /**
@@ -101,15 +114,26 @@ export default class ObservableCollection {
   /**
    * Adds the given element at the end of the collection.
    * 
+   * Invokes event listeners with the following arguments:
+   * * `change: CollectionChangeTypes.ADD`
+   * * `elements: Array<Any>`
+   * * `index: Number`
+   * 
    * @param {Any} element 
    */
   add(element) {
+    const index = this._array.length;
     this._array.push(element);
-    this._eventEmitter.emit(ObservableCollection.EVENT_ON_CHANGE, CollectionChangeTypes.ADD, [element]);
+    this._eventEmitter.emit(ObservableCollection.EVENT_ON_CHANGE, CollectionChangeTypes.ADD, [element], index);
   }
 
   /**
    * Adds the given element at the given index. 
+   * 
+   * Invokes event listeners with the following arguments:
+   * * `change: CollectionChangeTypes.ADD`
+   * * `elements: Array<Any>`
+   * * `index: Number`
    * 
    * @param {number} index 
    * @param {any} element 
@@ -122,30 +146,46 @@ export default class ObservableCollection {
   /**
    * Adds the given elements to the end of the collection.
    * 
+   * Invokes event listeners with the following arguments:
+   * * `change: CollectionChangeTypes.ADD`
+   * * `elements: Array<Any>`
+   * * `index: Number`
+   * 
    * @param {Array<any>} elements 
    */
   addAll(elements) {
+    const index = this._array.length;
     this._array = this._array.concat(elements);
-    this._eventEmitter.emit(ObservableCollection.EVENT_ON_CHANGE, CollectionChangeTypes.ADD, elements);
+    this._eventEmitter.emit(ObservableCollection.EVENT_ON_CHANGE, CollectionChangeTypes.ADD, elements, index);
   }
 
   /**
    * Removes the given element. 
+   * 
+   * Invokes event listeners with the following arguments:
+   * * `change: CollectionChangeTypes.REMOVE`
+   * * `elements: Array<Any>`
+   * * `index: Number`
    * 
    * @param {any} element 
    */
   remove(element) {
     const index = this._array.indexOf(element);
     this._array.splice(index, 1);
-    this._eventEmitter.emit(ObservableCollection.EVENT_ON_CHANGE, CollectionChangeTypes.REMOVE, [element]);
+    this._eventEmitter.emit(ObservableCollection.EVENT_ON_CHANGE, CollectionChangeTypes.REMOVE, [element], index);
   }
 
   /**
    * Removes and returns the element at the given index. 
    * 
-   * @param {number} index 
+   * Invokes event listeners with the following arguments:
+   * * `change: CollectionChangeTypes.REMOVE`
+   * * `elements: Array<Any>`
+   * * `index: Number`
    * 
-   * @returns {any}
+   * @param {Number} index 
+   * 
+   * @returns {Any}
    */
   removeAt(index) {
     const elements = this._array.splice(index, 1);
@@ -154,11 +194,67 @@ export default class ObservableCollection {
 
   /**
    * Removes all elements. 
+   * 
+   * Invokes event listeners with the following arguments:
+   * * `change: CollectionChangeTypes.REMOVE`
+   * * `elements: Array<Any>`
    */
   clear() {
     const elements = this._array.concat([]);
     this._array = [];
     this._eventEmitter.emit(ObservableCollection.EVENT_ON_CHANGE, CollectionChangeTypes.REMOVE, elements);
+  }
+
+  /**
+   * Moves an element at the given index to the given index. 
+   * 
+   * Invokes event listeners with the following arguments:
+   * * `change: CollectionChangeTypes.MOVE`
+   * * `oldIndex: Number`
+   * * `newIndex: Number`
+   * 
+   * @param {Number} fromIndex Index of the element to move. 
+   * @param {Number} toIndex Index to move the element to.
+   * 
+   * @throws Thrown, if the given `fromIndex` is out of bounds. 
+   */
+  move(fromIndex, toIndex) {
+    if (fromIndex < 0 || fromIndex > this._array.length - 1) {
+      throw new Error("Index out of bounds");
+    }
+
+    // Ensure the new index remains bounded. 
+    const newIndex = Math.max(Math.min(this._array.length - 1, toIndex), 0);
+
+    // "Move" the object by first removing and then re-inserting it at the desired index. 
+    const element = this._array.splice(fromIndex, 1)[0];
+    this._array.splice(newIndex, 0, element);
+
+    this._eventEmitter.emit(ObservableCollection.EVENT_ON_CHANGE, CollectionChangeTypes.MOVE, fromIndex, newIndex);
+  }
+
+  /**
+   * Sorts the collection in place. 
+   * 
+   * Invokes event listeners with the following arguments:
+   * * `change: CollectionChangeTypes.MOVE`
+   * * `oldElements: Array<Any>`
+   * * `newElements: Array<Any>`
+   * 
+   * @param {Function} sortFunc Function used to determine the order of the elements. 
+   * It is expected to return a negative value if the first argument is less than 
+   * the second argument, zero if they're equal, and a positive value otherwise. 
+   * If omitted, the elements are sorted in ascending, ASCII character order.
+   * ```JS
+   * [11,2,22,1].sort((a, b) => a - b)
+   * ```
+   */
+  sort(sortFunc) {
+    const oldElements = this._array.concat([]);
+    this._array.sort(sortFunc);
+    const newElements = this._array.concat([]);
+
+    this._eventEmitter.emit(ObservableCollection.EVENT_ON_CHANGE, CollectionChangeTypes.MOVE, oldElements, newElements);
   }
   
   /**
