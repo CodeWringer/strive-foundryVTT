@@ -96,8 +96,10 @@ export class EventEmitter {
 
   /**
    * Emits the given event, with optional arguments. 
+   * 
    * @param {String} event The event to emit. 
    * @param {Any} arguments Optional, additional arguments to pass to the callback. 
+   * * Only supports up to 4 additional arguments!
    */
   emit(event) {
     const listeners = this._events.get(event);
@@ -122,7 +124,8 @@ export class EventEmitter {
 
   /**
    * Creates aliases for the methods of this object on a given object. 
-   * So that calling 'object.on()' will actually call this 'on()'. 
+   * So that calling `object.on()` will actually call _this_ event emitter's `on()`. 
+   * 
    * @param {Object} object 
    */
   bind(object) {
