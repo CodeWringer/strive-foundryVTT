@@ -9,6 +9,14 @@ import { EventEmitter } from "../event-emitter.mjs";
  */
 export default class ObservableField {
   /**
+   * Event key for the "onChange" event. 
+   * 
+   * @static
+   * @type {String}
+   */
+  static EVENT_ON_CHANGE = "fieldOnChange";
+
+  /**
    * @type {any}
    * @private
    */
@@ -29,25 +37,36 @@ export default class ObservableField {
   set value(value) {
     const oldValue = this._value;
     this._value = value;
-    this._eventEmitter = args.eventEmitter ?? new EventEmitter();
+    this._eventEmitter.emit(ObservableField.EVENT_ON_CHANGE, oldValue, value);
   }
 
   /**
    * @param {object} args 
-   * @param {any} args.value
+   * @param {any} args.value An initial value to set. 
    */
   constructor(args = {}) {
     this._value = args.value;
-    this.onChange = args.onChange ?? this.onChange;
+    this._eventEmitter = new EventEmitter();
   }
 
   /**
-   * Invoked whenever the value is changed. 
+   * Registers an event listener that is invoked whenever the value is changed. 
    * 
-   * @param {any} oldValue 
-   * @param {any} newValue 
+   * @param {Function} callback 
+   * * Receives the following arguments:
+   * * * `oldValue: any`
+   * * * `newValue: any`
    * 
    * @virtual
   */
- onChange(oldValue, newValue) { /* Implementation up to user. */}
+  onChange(callback) {
+    this._eventEmitter.on(ObservableField.EVENT_ON_CHANGE, callback);
+  }
+
+  /**
+  * Disposes of any working data. 
+  */
+  dispose() {
+    this._eventEmitter.allOff();
+  }
 }

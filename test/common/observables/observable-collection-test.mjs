@@ -34,9 +34,9 @@ describe("ObservableCollection", () => {
       change.should.be.equal(CollectionChangeTypes.ADD);
       elements.length.should.be.equal(1);
     };
-    const given = new ObservableCollection({
-      onChange: givenCallback,
-    });
+    const given = new ObservableCollection();
+    const spy = sinon.spy(givenCallback);
+    given.onChange(spy);
     // Sanity
     given.length.should.be.equal(0);
     // When
@@ -44,6 +44,9 @@ describe("ObservableCollection", () => {
     // Then
     given.length.should.be.equal(1);
     given.get(0).should.be.equal(4);
+
+    spy.should.have.been.calledOnce();
+    spy.should.have.been.calledWith(CollectionChangeTypes.ADD, [4]);
   });
 
   it("invokes callback and change is 'ADD' on 'addAt'", () => {
@@ -55,8 +58,9 @@ describe("ObservableCollection", () => {
     const givenElements = [1, 2, 3];
     const given = new ObservableCollection({
       elements: givenElements,
-      onChange: givenCallback,
     });
+    const spy = sinon.spy(givenCallback);
+    given.onChange(spy);
     // Sanity
     given.length.should.be.equal(3);
     // When
@@ -64,6 +68,9 @@ describe("ObservableCollection", () => {
     // Then
     given.length.should.be.equal(4);
     given.get(0).should.be.equal(4);
+
+    spy.should.have.been.calledOnce();
+    spy.should.have.been.calledWith(CollectionChangeTypes.ADD, [4], 0);
   });
 
   it("invokes callback and change is 'ADD' on 'addAll'", () => {
@@ -73,9 +80,9 @@ describe("ObservableCollection", () => {
       elements.length.should.be.equal(3);
     };
     const givenElements = [1, 2, 3];
-    const given = new ObservableCollection({
-      onChange: givenCallback,
-    });
+    const given = new ObservableCollection();
+    const spy = sinon.spy(givenCallback);
+    given.onChange(spy);
     // Sanity
     given.length.should.be.equal(0);
     // When
@@ -83,6 +90,9 @@ describe("ObservableCollection", () => {
     // Then
     given.length.should.be.equal(3);
     given.get(0).should.be.equal(1);
+
+    spy.should.have.been.calledOnce();
+    spy.should.have.been.calledWith(CollectionChangeTypes.ADD, givenElements);
   });
 
   it("invokes callback and change is 'REMOVE' on 'remove'", () => {
@@ -95,14 +105,18 @@ describe("ObservableCollection", () => {
     };
     const given = new ObservableCollection({
       elements: givenElements,
-      onChange: givenCallback,
     });
+    const spy = sinon.spy(givenCallback);
+    given.onChange(spy);
     // Sanity
     given.length.should.be.equal(3);
     // When
     given.remove(2);
     // Then
     given.length.should.be.equal(2);
+
+    spy.should.have.been.calledOnce();
+    spy.should.have.been.calledWith(CollectionChangeTypes.REMOVE, [2]);
   });
 
   it("invokes callback and change is 'REMOVE' on 'removeAt'", () => {
@@ -116,8 +130,9 @@ describe("ObservableCollection", () => {
     };
     const given = new ObservableCollection({
       elements: givenElements,
-      onChange: givenCallback,
     });
+    const spy = sinon.spy(givenCallback);
+    given.onChange(spy);
     // Sanity
     given.length.should.be.equal(3);
     // When
@@ -126,6 +141,9 @@ describe("ObservableCollection", () => {
     given.length.should.be.equal(2);
     given.get(0).should.be.eql(1);
     given.get(1).should.be.eql(3);
+
+    spy.should.have.been.calledOnce();
+    spy.should.have.been.calledWith(CollectionChangeTypes.REMOVE, [2], 1);
   });
 
   it("invokes callback and change is 'REMOVE' on 'clear'", () => {
@@ -137,13 +155,17 @@ describe("ObservableCollection", () => {
     };
     const given = new ObservableCollection({
       elements: givenElements,
-      onChange: givenCallback,
     });
+    const spy = sinon.spy(givenCallback);
+    given.onChange(spy);
     // Sanity
     given.length.should.be.equal(3);
     // When
     given.clear();
     // Then
     given.length.should.be.equal(0);
+
+    spy.should.have.been.calledOnce();
+    spy.should.have.been.calledWith(CollectionChangeTypes.REMOVE, givenElements);
   });
 });

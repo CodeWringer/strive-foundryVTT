@@ -1,3 +1,5 @@
+import { EventEmitter } from "../event-emitter.mjs";
+
 /**
  * Represents the possible changes of a collection. 
  * 
@@ -13,13 +15,30 @@ export const CollectionChangeTypes = {
 
 /**
  * Represents a collection/list whose data set changes can be observed/listened for. 
+ * 
+ * @property {Number} length Returns the current number of items in the collection. 
+ * * Read-only
  */
 export default class ObservableCollection {
+  /**
+   * Event key for the "onChange" event. 
+   * 
+   * @static
+   * @type {String}
+   */
+    static EVENT_ON_CHANGE = "collectionOnChange";
+
   /**
    * @type {Array<Any>}
    * @private
    */
   _array = [];
+
+  /**
+   * @type {EventEmitter}
+   * @private
+   */
+  _eventEmitter;
 
   /**
    * Returns the current number of elements in the collection. 
@@ -33,26 +52,27 @@ export default class ObservableCollection {
    * @param {Object} args 
    * @param {Array<Any> | undefined} args.elements An initial set of elements to 
    * add to the collection. 
-   * @param {Function | undefined} args.onChange Callback that is invoked whenever 
-   * the data set changes in any way. 
-   * * Receives two arguments when called: 
-   * * * `change: CollectionChangeTypes`
-   * * * `elements: Array<any>`
    */
   constructor(args = {}) {
     this._array = args.elements ?? [];
-    this.onChange = args.onChange ?? this.onChange;
+    this._eventEmitter = new EventEmitter();
   }
 
   /**
    * Invoked whenever the collection is changed. 
    * 
-   * @param {CollectionChangeTypes} change 
-   * @param {Array<any>} elements One of more elements that were changed. 
+   * @param {Function | undefined} onChange Callback that is invoked whenever 
+   * the data set changes in any way. 
+   * * Receives two arguments when called: 
+   * * * `change: CollectionChangeTypes`
+   * * * `elements: Array<any>`
+   * * * `index: Number | undefined`
    * 
    * @virtual
   */
- onChange(change, elements) { /* Implementation up to user. */}
+ onChange(callback) {
+  this._eventEmitter.on(ObservableCollection.EVENT_ON_CHANGE, callback);
+ }
 
   /**
    * Returns the element at the given index. 
@@ -85,7 +105,7 @@ export default class ObservableCollection {
    */
   add(element) {
     this._array.push(element);
-    this.onChange(CollectionChangeTypes.ADD, [element]);
+    this._eventEmitter.emit(ObservableCollection.EVENT_ON_CHANGE, CollectionChangeTypes.ADD, [element]);
   }
 
   /**
@@ -96,7 +116,7 @@ export default class ObservableCollection {
    */
   addAt(index, element) {
     this._array.splice(index, 0, element);
-    this.onChange(CollectionChangeTypes.ADD, [element]);
+    this._eventEmitter.emit(ObservableCollection.EVENT_ON_CHANGE, CollectionChangeTypes.ADD, [element], index);
   }
 
   /**
@@ -106,7 +126,7 @@ export default class ObservableCollection {
    */
   addAll(elements) {
     this._array = this._array.concat(elements);
-    this.onChange(CollectionChangeTypes.ADD, elements);
+    this._eventEmitter.emit(ObservableCollection.EVENT_ON_CHANGE, CollectionChangeTypes.ADD, elements);
   }
 
   /**
@@ -117,7 +137,7 @@ export default class ObservableCollection {
   remove(element) {
     const index = this._array.indexOf(element);
     this._array.splice(index, 1);
-    this.onChange(CollectionChangeTypes.REMOVE, [element]);
+    this._eventEmitter.emit(ObservableCollection.EVENT_ON_CHANGE, CollectionChangeTypes.REMOVE, [element]);
   }
 
   /**
@@ -129,7 +149,7 @@ export default class ObservableCollection {
    */
   removeAt(index) {
     const elements = this._array.splice(index, 1);
-    this.onChange(CollectionChangeTypes.REMOVE, elements);
+    this._eventEmitter.emit(ObservableCollection.EVENT_ON_CHANGE, CollectionChangeTypes.REMOVE, elements, index);
   }
 
   /**
@@ -138,6 +158,13 @@ export default class ObservableCollection {
   clear() {
     const elements = this._array.concat([]);
     this._array = [];
-    this.onChange(CollectionChangeTypes.REMOVE, elements);
+    this._eventEmitter.emit(ObservableCollection.EVENT_ON_CHANGE, CollectionChangeTypes.REMOVE, elements);
+  }
+  
+  /**
+  * Disposes of any working data. 
+  */
+  dispose() {
+    this._eventEmitter.allOff();
   }
 }

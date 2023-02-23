@@ -63,7 +63,7 @@ describe("EventEmitter", () => {
   });
 
   describe("allOff", () => {
-    it("Unregisters all events", () => {
+    it("Unregisters all specifc events", () => {
       // Given
       const given = new EventEmitter();
 
@@ -88,6 +88,40 @@ describe("EventEmitter", () => {
       given.allOff(givenEvent1);
       given.allOff(givenEvent2);
       given.allOff(givenEvent3);
+
+      given.emit(givenEvent1);
+      given.emit(givenEvent2);
+      given.emit(givenEvent3);
+
+      // Then
+      givenCallback1.should.not.have.been.called();
+      givenCallback2.should.not.have.been.called();
+      givenCallback3.should.not.have.been.called();
+    });
+
+    it("Unregisters all events", () => {
+      // Given
+      const given = new EventEmitter();
+
+      const givenEvent1 = "givenEvent1";
+      const givenEvent2 = "givenEvent2";
+      const givenEvent3 = "givenEvent3";
+
+      const givenCallback1 = sinon.fake();
+      const givenCallback2 = sinon.fake();
+      const givenCallback3 = sinon.fake();
+
+      given.on(givenEvent1, givenCallback1);
+      given.on(givenEvent2, givenCallback2);
+      given.on(givenEvent3, givenCallback3);
+
+      // Sanity
+      givenCallback1.should.not.have.been.called();
+      givenCallback2.should.not.have.been.called();
+      givenCallback3.should.not.have.been.called();
+
+      // When
+      given.allOff();
 
       given.emit(givenEvent1);
       given.emit(givenEvent2);

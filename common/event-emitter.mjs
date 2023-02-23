@@ -83,10 +83,15 @@ export class EventEmitter {
   /**
    * Un-registers all callbacks from the given event. 
    * 
-   * @param {String} event The event to un-register all callbacks from. 
+   * @param {String | undefined} event The event to un-register all listeners from. 
+   * If left undefined, un-registers **all** listeners. 
    */
-  allOff(event) {
-    this._events.delete(event);
+  allOff(event = undefined) {
+    if (event === undefined) {
+      this._events = new Map();
+    } else {
+      this._events.delete(event);
+    }
   }
 
   /**
@@ -98,17 +103,11 @@ export class EventEmitter {
     const listeners = this._events.get(event);
     if (listeners === undefined) return;
 
-    // Exclude the event name from the arguments. 
-    const args = [];
-    for (let i = 1; i < arguments.length; i++) {
-      args.push(arguments[i]);
-    }
-
     // Listeners that are only to be called once and then removed. 
     const toRemove = [];
     // Call every listener's callback. 
     for (const listener of listeners) {
-      listener.callback(args);
+      listener.callback(arguments[1], arguments[2], arguments[3], arguments[4], arguments[5]);
       if (listener.isOnce === true) {
         // Remember this listener for removal. 
         toRemove.push(listener);
