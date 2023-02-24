@@ -110,6 +110,28 @@ describe("ObservableCollection", () => {
       spy.should.have.been.calledOnce();
       spy.should.have.been.calledWith(CollectionChangeTypes.ADD, [4]);
     });
+    
+    it("un-registers a callback as expected", () => {
+      // Given
+      const given = new ObservableCollection();
+      const spy = sinon.fake();
+      const callbackId = given.onChange(spy);
+      const givenNewValue1 = 4;
+      const givenNewValue2 = -99;
+      // Sanity
+      given.length.should.be.equal(0);
+      // When
+      given.add(givenNewValue1);
+      given.offChange(callbackId);
+      given.add(givenNewValue2);
+      // Then
+      given.length.should.be.equal(2);
+      given.get(0).should.be.equal(givenNewValue1);
+      given.get(1).should.be.equal(givenNewValue2);
+
+      spy.should.have.been.calledOnce();
+      spy.should.have.been.calledWith(CollectionChangeTypes.ADD, [4]);
+    });
   });
 
   describe("addAt", () => {

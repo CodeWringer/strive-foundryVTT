@@ -57,15 +57,24 @@ export default class ObservableField {
    * * * `oldValue: any`
    * * * `newValue: any`
    * 
-   * @virtual
-  */
+   * @returns {String} An id to refer to the registered callback to. 
+   */
   onChange(callback) {
-    this._eventEmitter.on(ObservableField.EVENT_ON_CHANGE, callback);
+    return this._eventEmitter.on(ObservableField.EVENT_ON_CHANGE, callback);
   }
 
   /**
-  * Disposes of any working data. 
-  */
+   * Un-registers an event listener with the given id. 
+   * 
+   * @param {String} callbackId 
+   */
+  offChange(callbackId) {
+    this._eventEmitter.off(callbackId);
+  }
+
+  /**
+   * Disposes of any working data. 
+   */
   dispose() {
     this._eventEmitter.allOff();
   }

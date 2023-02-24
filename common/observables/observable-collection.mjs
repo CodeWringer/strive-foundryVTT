@@ -67,16 +67,27 @@ export default class ObservableCollection {
   }
 
   /**
-   * Invoked whenever the collection is changed. 
+   * Registers an event listener that is invoked whenever the value is changed. 
    * 
    * @param {Function | undefined} onChange Callback that is invoked whenever 
    * the data set changes in any way. 
    * * See the other methods for a description on the arguments to expect, 
    * when the `callback` is invoked. 
-  */
- onChange(callback) {
-  this._eventEmitter.on(ObservableCollection.EVENT_ON_CHANGE, callback);
- }
+   * 
+   * @returns {String} An id to refer to the registered callback to. 
+   */
+  onChange(callback) {
+    return this._eventEmitter.on(ObservableCollection.EVENT_ON_CHANGE, callback);
+  }
+
+  /**
+   * Un-registers an event listener with the given id. 
+   * 
+   * @param {String} callbackId 
+   */
+  offChange(callbackId) {
+    this._eventEmitter.off(callbackId);
+  }
 
   /**
    * Returns the element at the given index. 
@@ -106,7 +117,7 @@ export default class ObservableCollection {
   indexOf(element) {
     return this._array.indexOf(element);
   }
-  
+
   /**
    * Returns all elements. 
    * 
