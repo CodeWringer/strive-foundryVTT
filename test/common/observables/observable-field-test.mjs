@@ -32,11 +32,11 @@ describe("ObservableField", () => {
     given.value = givenNewValue;
     // Then
     spy.should.have.been.calledOnce();
-    spy.should.have.been.calledWith(givenCurrentValue, givenNewValue);
+    spy.should.have.been.calledWith(given, givenCurrentValue, givenNewValue);
     given.value.should.be.equal(givenNewValue);
   });
 
-  it("un-registers a callback as expected", () => {
+  it("un-registers a specific callback as expected", () => {
     // Given
     const givenCurrentValue = 42;
     const givenNewValue1 = 55;
@@ -57,7 +57,38 @@ describe("ObservableField", () => {
     given.value = givenNewValue2;
     // Then
     spy.should.have.been.calledOnce();
-    spy.should.have.been.calledWith(givenCurrentValue, givenNewValue1);
+    spy.should.have.been.calledWith(given, givenCurrentValue, givenNewValue1);
+    given.value.should.be.equal(givenNewValue2);
+  });
+
+  it("un-registers all callbacks as expected", () => {
+    // Given
+    const givenCurrentValue = 42;
+    const givenNewValue1 = 55;
+    const givenNewValue2 = -99;
+    
+    const given = new ObservableField({
+      value: givenCurrentValue,
+    });
+
+    const spy1 = sinon.fake();
+    given.onChange(spy1);
+    const spy2 = sinon.fake();
+    given.onChange(spy2);
+    // Sanity
+    spy1.should.not.have.been.called();
+    spy2.should.not.have.been.called();
+    // When
+    given.value = givenNewValue1;
+    given.offChange();
+    given.value = givenNewValue2;
+    // Then
+    spy1.should.have.been.calledOnce();
+    spy1.should.have.been.calledWith(given, givenCurrentValue, givenNewValue1);
+    
+    spy2.should.have.been.calledOnce();
+    spy2.should.have.been.calledWith(given, givenCurrentValue, givenNewValue1);
+
     given.value.should.be.equal(givenNewValue2);
   });
 });

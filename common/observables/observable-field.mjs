@@ -37,7 +37,7 @@ export default class ObservableField {
   set value(value) {
     const oldValue = this._value;
     this._value = value;
-    this._eventEmitter.emit(ObservableField.EVENT_ON_CHANGE, oldValue, value);
+    this._eventEmitter.emit(ObservableField.EVENT_ON_CHANGE, this, oldValue, value);
   }
 
   /**
@@ -54,6 +54,7 @@ export default class ObservableField {
    * 
    * @param {Function} callback 
    * * Receives the following arguments:
+   * * * `field: ObservableField` - a reference to _this_ object. 
    * * * `oldValue: any`
    * * * `newValue: any`
    * 
@@ -66,10 +67,15 @@ export default class ObservableField {
   /**
    * Un-registers an event listener with the given id. 
    * 
-   * @param {String} callbackId 
+   * @param {String | undefined} callbackId A callback ID to un-register or 
+   * `undefined`, to un-register **all** callbacks. 
    */
   offChange(callbackId) {
-    this._eventEmitter.off(callbackId);
+    if (callbackId === undefined) {
+      this._eventEmitter.allOff(ObservableField.EVENT_ON_CHANGE);
+    } else {
+      this._eventEmitter.off(callbackId);
+    }
   }
 
   /**
