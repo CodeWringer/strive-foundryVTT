@@ -2,6 +2,7 @@ import should from 'should';
 import sinon from 'sinon';
 import 'should-sinon';
 import ObservableCollection, { CollectionChangeTypes } from '../../../common/observables/observable-collection.mjs';
+import ObservableField from '../../../common/observables/observable-field.mjs';
 
 describe("ObservableCollection", () => {
   describe("constructor", () => {
@@ -27,8 +28,24 @@ describe("ObservableCollection", () => {
       given.length.should.be.equal(3);
       // When
       const elements = given.getAll();
+      // Then
       elements.length.should.be.eql(3);
-      elements[0].should.be.eql(1);
+    });
+
+    it("modifies the returned array, but the collection remains unchanged", () => {
+      // Given
+      const givenElements = [1, 2, 3];
+      const given = new ObservableCollection({
+        elements: givenElements,
+      });
+      // Sanity
+      given.length.should.be.equal(3);
+      // When
+      const elements = given.getAll();
+      elements.push(4);
+      // Then
+      elements.length.should.be.eql(4);
+      given.length.should.be.eql(3);
     });
   });
 
@@ -93,6 +110,34 @@ describe("ObservableCollection", () => {
     });
   });
 
+  describe("contains", () => {
+    it("returns true on contained element", () => {
+      const element = { a: 42 }
+      const givenElements = [element];
+      const given = new ObservableCollection({
+        elements: givenElements,
+      });
+      const expected = true;
+      // When
+      const r = given.contains(element);
+      // Then
+      r.should.be.eql(expected);
+    });
+
+    it("returns false on not contained element", () => {
+      const element = { a: 42 }
+      const givenElements = [];
+      const given = new ObservableCollection({
+        elements: givenElements,
+      });
+      const expected = false;
+      // When
+      const r = given.contains(element);
+      // Then
+      r.should.be.eql(expected);
+    });
+  });
+
   describe("add", () => {
     it("invokes callback and change is 'ADD' on 'add'", () => {
       // Given
@@ -106,28 +151,6 @@ describe("ObservableCollection", () => {
       // Then
       given.length.should.be.equal(1);
       given.get(0).should.be.equal(4);
-
-      spy.should.have.been.calledOnce();
-      spy.should.have.been.calledWith(CollectionChangeTypes.ADD, [4]);
-    });
-    
-    it("un-registers a callback as expected", () => {
-      // Given
-      const given = new ObservableCollection();
-      const spy = sinon.fake();
-      const callbackId = given.onChange(spy);
-      const givenNewValue1 = 4;
-      const givenNewValue2 = -99;
-      // Sanity
-      given.length.should.be.equal(0);
-      // When
-      given.add(givenNewValue1);
-      given.offChange(callbackId);
-      given.add(givenNewValue2);
-      // Then
-      given.length.should.be.equal(2);
-      given.get(0).should.be.equal(givenNewValue1);
-      given.get(1).should.be.equal(givenNewValue2);
 
       spy.should.have.been.calledOnce();
       spy.should.have.been.calledWith(CollectionChangeTypes.ADD, [4]);
@@ -490,6 +513,97 @@ describe("ObservableCollection", () => {
       given.get(0).should.be.eql(4);
       given.get(1).should.be.eql(5);
       given.get(2).should.be.eql(6);
+    });
+  });
+
+  describe("offChange", () => {
+    it("un-registers a callback as expected", () => {
+      // Given
+      const given = new ObservableCollection();
+
+      const spy = sinon.fake();
+      const callbackId = given.onChange(spy);
+      
+      const givenNewValue1 = 4;
+      const givenNewValue2 = -99;
+      // Sanity
+      given.length.should.be.equal(0);
+      // When
+      given.add(givenNewValue1);
+      given.offChange(callbackId);
+      given.add(givenNewValue2);
+      // Then
+      spy.should.have.been.calledOnce();
+    });
+
+    it("un-registers all callbacks as expected", () => {
+      // Given
+      const given = new ObservableCollection();
+
+      const spy1 = sinon.fake();
+      const spy2 = sinon.fake();
+
+      given.onChange(spy1);
+      given.onChange(spy2);
+
+      const givenNewValue1 = 4;
+      const givenNewValue2 = -99;
+      // Sanity
+      given.length.should.be.equal(0);
+      // When
+      given.add(givenNewValue1);
+      given.offChange();
+      given.add(givenNewValue2);
+      // Then
+      spy1.should.have.been.calledOnce();
+      spy2.should.have.been.calledOnce();
+    });
+  });
+
+  describe("element changes", () => {
+    it("invokes callback as expected on ObservableField change", () => {
+      // Given
+      const givenValue = 42;
+      const givenElement = new ObservableField({
+        value: givenValue,
+      });
+      const givenElements = [givenElement];
+      const given = new ObservableCollection({
+        elements: givenElements,
+      });
+      
+      const spy = sinon.fake();
+      given.onChange(spy);
+
+      const givenNewValue = 99;
+      // When
+      givenElement.value = givenNewValue;
+      // Then
+      spy.should.have.been.calledOnce();
+      spy.should.have.been.calledWith(CollectionChangeTypes.ELEMENT, givenElement, givenValue, givenNewValue);
+    });
+
+    it("unregisters callback on element that is removed", () => {
+      // Given
+      const givenValue = 42;
+      const givenElement = new ObservableField({
+        value: givenValue,
+      });
+      const givenElements = [givenElement];
+      const given = new ObservableCollection({
+        elements: givenElements,
+      });
+      
+      const spy = sinon.fake();
+      given.onChange(spy);
+
+      const givenNewValue = 99;
+      // When
+      given.remove(givenElement);
+      givenElement.value = givenNewValue;
+      // Then
+      spy.should.have.been.calledOnce();
+      spy.should.have.been.calledWith(CollectionChangeTypes.REMOVE, givenElements, 0);
     });
   });
 });

@@ -7,6 +7,8 @@ import { EventEmitter } from "../event-emitter.mjs";
  * @property {Number} REMOVE One or more elements were removed. 
  * @property {Number} MOVE One or more elements were moved / re-ordered. 
  * @property {Number} REPLACE One or more elements were replaced. 
+ * @property {Number} ELEMENT One or more elements' internal state changed. 
+ * * This change can only occur for `object`s, which support a `onChange` method. 
  * 
  * @constant
  */
@@ -15,6 +17,7 @@ export const CollectionChangeTypes = {
   REMOVE: 1,
   MOVE: 2,
   REPLACE: 3,
+  ELEMENT: 4,
 };
 
 /**
@@ -35,6 +38,9 @@ export default class ObservableCollection {
   /**
    * A wrapped array instance. 
    * 
+   * As a collection user DO **NOT** MODIFY THIS ARRAY DIRECTLY! 
+   * Changes will not be trackable, if applied directly to this array. 
+   * 
    * @type {Array<Any>}
    * @private
    */
@@ -47,6 +53,14 @@ export default class ObservableCollection {
    * @private
    */
   _eventEmitter;
+
+  /**
+   * Maps elements to their `onChange` callback IDs. 
+   * 
+   * @type {Map<any, String>}
+   * @private
+   */
+  _elementCallbackIds = new Map();
 
   /**
    * Returns the current number of elements in the collection. 
@@ -62,8 +76,14 @@ export default class ObservableCollection {
    * add to the collection. 
    */
   constructor(args = {}) {
-    this._array = args.elements ?? [];
+    // Ensure a safe-copy of the array. Using the given array reference would imply 
+    // allowing this class to modify the given array, which would be unexpected behavior. 
+    this._array = (args.elements ?? []).concat([]);
     this._eventEmitter = new EventEmitter();
+
+    for (const element of this._array) {
+      this._setOnChangeOnElementIfPossible(element);
+    }
   }
 
   /**
@@ -83,10 +103,15 @@ export default class ObservableCollection {
   /**
    * Un-registers an event listener with the given id. 
    * 
-   * @param {String} callbackId 
+   * @param {String | undefined} callbackId A callback ID to un-register or 
+   * `undefined`, to un-register **all** callbacks. 
    */
   offChange(callbackId) {
-    this._eventEmitter.off(callbackId);
+    if (callbackId === undefined) {
+      this._eventEmitter.allOff(ObservableCollection.EVENT_ON_CHANGE);
+    } else {
+      this._eventEmitter.off(callbackId);
+    }
   }
 
   /**
@@ -119,12 +144,25 @@ export default class ObservableCollection {
   }
 
   /**
+   * Returns true, if the given element is contained.
+   * 
+   * @param {any} element The element to check for whether it is contained. 
+   * 
+   * @returns {Boolean} True, if the element is contained.
+   */
+  contains(element) {
+    return this.indexOf(element) > -1;
+  }
+
+  /**
    * Returns all elements. 
+   * 
+   * Modifying the returned array **does not** modify the collection!
    * 
    * @returns {Array<Any>} The element at the given index. 
    */
   getAll() {
-    return this._array;
+    return this._array.concat([]);
   }
 
   /**
@@ -141,6 +179,8 @@ export default class ObservableCollection {
     const index = this._array.length;
     this._array.push(element);
     this._eventEmitter.emit(ObservableCollection.EVENT_ON_CHANGE, CollectionChangeTypes.ADD, [element], index);
+
+    this._setOnChangeOnElementIfPossible(element);
   }
 
   /**
@@ -157,6 +197,8 @@ export default class ObservableCollection {
   addAt(index, element) {
     this._array.splice(index, 0, element);
     this._eventEmitter.emit(ObservableCollection.EVENT_ON_CHANGE, CollectionChangeTypes.ADD, [element], index);
+
+    this._setOnChangeOnElementIfPossible(element);
   }
 
   /**
@@ -173,6 +215,10 @@ export default class ObservableCollection {
     const index = this._array.length;
     this._array = this._array.concat(elements);
     this._eventEmitter.emit(ObservableCollection.EVENT_ON_CHANGE, CollectionChangeTypes.ADD, elements, index);
+
+    for (const element of elements) {
+      this._setOnChangeOnElementIfPossible(element);
+    }
   }
 
   /**
@@ -189,6 +235,8 @@ export default class ObservableCollection {
     const index = this._array.indexOf(element);
     this._array.splice(index, 1);
     this._eventEmitter.emit(ObservableCollection.EVENT_ON_CHANGE, CollectionChangeTypes.REMOVE, [element], index);
+   
+    this._unsetOnChangeOnElementIfPossible(element);
   }
 
   /**
@@ -206,6 +254,8 @@ export default class ObservableCollection {
   removeAt(index) {
     const elements = this._array.splice(index, 1);
     this._eventEmitter.emit(ObservableCollection.EVENT_ON_CHANGE, CollectionChangeTypes.REMOVE, elements, index);
+   
+    this._unsetOnChangeOnElementIfPossible(elements[0]);
   }
 
   /**
@@ -219,6 +269,10 @@ export default class ObservableCollection {
     const elements = this._array.concat([]);
     this._array = [];
     this._eventEmitter.emit(ObservableCollection.EVENT_ON_CHANGE, CollectionChangeTypes.REMOVE, elements);
+    
+    for (const element of elements) {
+      this._unsetOnChangeOnElementIfPossible(element);
+    }
   }
 
   /**
@@ -297,6 +351,8 @@ export default class ObservableCollection {
     this._array.splice(index, 0, element);
 
     this._eventEmitter.emit(ObservableCollection.EVENT_ON_CHANGE, CollectionChangeTypes.REPLACE, elementToReplace, element);
+    this._unsetOnChangeOnElementIfPossible(elementToReplace);
+    this._setOnChangeOnElementIfPossible(element);
   }
 
   /**
@@ -322,6 +378,8 @@ export default class ObservableCollection {
     this._array.splice(index, 0, element);
 
     this._eventEmitter.emit(ObservableCollection.EVENT_ON_CHANGE, CollectionChangeTypes.REPLACE, replaced, element);
+    this._unsetOnChangeOnElementIfPossible(replaced);
+    this._setOnChangeOnElementIfPossible(element);
   }
 
   /**
@@ -336,16 +394,71 @@ export default class ObservableCollection {
    */
   replaceAll(elements) {
     const replaced = this._array.concat([]);
-    const replacedWith = elements.concat([]);
-    this._array = [].concat(elements);
+    const replacedWith = elements.concat([]); // This ensures an array. 
+    this._array = replacedWith;
 
     this._eventEmitter.emit(ObservableCollection.EVENT_ON_CHANGE, CollectionChangeTypes.REPLACE, replaced, replacedWith);
+
+    for (const element of replaced) {
+      this._unsetOnChangeOnElementIfPossible(element);
+    }
+    for (const element of replacedWith) {
+      this._setOnChangeOnElementIfPossible(element);
+    }
   }
 
   /**
-  * Disposes of any working data. 
-  */
+   * Disposes of any working data. 
+   */
   dispose() {
+    this.clear();
     this._eventEmitter.allOff();
+    this._elementCallbackIds.clear();
+  }
+  
+  /**
+   * Attaches a `onChange` callback to the given element, 
+   * if it supports the method. 
+   * 
+   * @param {any} element 
+   * 
+   * @private
+   */
+  _setOnChangeOnElementIfPossible(element) {
+    if (element.onChange === undefined) {
+      return;
+    }
+
+    const thiz = this;
+    const callbackId = element.onChange((field, oldValue, newValue) => {
+      thiz._eventEmitter.emit(ObservableCollection.EVENT_ON_CHANGE, CollectionChangeTypes.ELEMENT, field, oldValue, newValue);
+    });
+    this._elementCallbackIds.set(element, callbackId);
+  }
+  
+  /**
+   * Detaches the `onChange` callback of the given element, 
+   * if it supports the method. 
+   * 
+   * @param {any} element 
+   * 
+   * @private
+   */
+  _unsetOnChangeOnElementIfPossible(element) {
+    if (element.onChange === undefined) {
+      return;
+    }
+
+    const callbackId = this._elementCallbackIds.get(element);
+    if (callbackId !== undefined) {
+      // In case the callback ID being undefined, avoid un-registering 
+      // **all** callbacks, which is what would happen, if undefined 
+      // were passed to the element's offChange method. 
+      // 
+      // After all, there may be other consumers of the element's 
+      // onChange event which should remain unaffected. 
+      element.offChange(callbackId);
+    }
+    this._elementCallbackIds.delete(element);
   }
 }
