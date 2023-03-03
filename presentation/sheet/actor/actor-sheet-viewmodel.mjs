@@ -1,16 +1,15 @@
-import { validateOrThrow } from "../../../business/util/validation-utility.mjs"
 import LazyLoadViewModel from "../../component/lazy-load/lazy-load-viewmodel.mjs"
 import GmNotesViewModel from "../../component/section-gm-notes/section-gm-notes-viewmodel.mjs"
 import { TEMPLATES } from "../../templatePreloader.mjs"
 import ViewModelFactory from "../../view-model/view-model-factory.mjs"
 import ViewModel from "../../view-model/view-model.mjs"
 import ActorAssetsViewModel from "./part/assets/actor-assets-viewmodel.mjs"
-import ActorAttributesViewModel from "./part/actor-attributes-viewmodel.mjs"
+import ActorAttributesViewModel from "./part/abilities/actor-attributes-viewmodel.mjs"
+import ActorSkillsViewModel from "./part/abilities/actor-skills-viewmodel.mjs"
 import ActorBeliefsFateViewModel from "./part/actor-beliefs-fate-viewmodel.mjs"
 import ActorBiographyViewModel from "./part/actor-biography-viewmodel.mjs"
 import ActorHealthViewModel from "./part/health/actor-health-viewmodel.mjs"
 import ActorPersonalsViewModel from "./part/actor-personals-viewmodel.mjs"
-import ActorSkillsViewModel from "./part/actor-skills-viewmodel.mjs"
 import BaseSheetViewModel from "../../view-model/base-sheet-viewmodel.mjs"
 
 /**
@@ -254,9 +253,8 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
    * @async
    */
   async _renderLazyTab(tab) {
-    if (tab === "attributes") {
+    if (tab === "abilities") {
       await this.attributesViewModel.render();
-    } else if (tab === "skills") {
       await this.skillsViewModel.render();
     } else if (tab === "beliefs-fate") {
       await this.beliefsFateViewModel.render();

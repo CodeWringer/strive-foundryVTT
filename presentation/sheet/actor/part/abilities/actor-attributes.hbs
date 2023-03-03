@@ -3,7 +3,7 @@ viewModel: {ActorAttributesViewModel}
 cssClass: {undefined | String}
 --}}
 <section class="{{cssClass}}">
-  {{!-- Attributes --}}
+  {{#> header1 showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.attribute.plural"}}{{/header1}}
   {{#with viewModel.attributeTableTemplate as | template |}}
     {{> (template) viewModel=../viewModel.attributesPhysicalViewModel }}
     {{> (template) viewModel=../viewModel.attributesMentalViewModel }}

@@ -1,7 +1,7 @@
-import { validateOrThrow } from "../../../../business/util/validation-utility.mjs";
-import { TEMPLATES } from "../../../templatePreloader.mjs";
-import ViewModelFactory from "../../../view-model/view-model-factory.mjs";
-import ViewModel from "../../../view-model/view-model.mjs";
+import { validateOrThrow } from "../../../../../business/util/validation-utility.mjs";
+import { TEMPLATES } from "../../../../templatePreloader.mjs";
+import ViewModelFactory from "../../../../view-model/view-model-factory.mjs";
+import ViewModel from "../../../../view-model/view-model.mjs";
 
 export default class AttributeTableViewModel extends ViewModel {
   /** @override */

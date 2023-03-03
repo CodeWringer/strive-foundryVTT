@@ -70,16 +70,16 @@ import './presentation/component/lazy-rich-text/lazy-rich-text-viewmodel.mjs';
 import './presentation/component/visibility-toggle-list/visibility-toggle-list-viewmodel.mjs';
 // View models
 import './presentation/sheet/actor/actor-sheet-viewmodel.mjs';
-import './presentation/sheet/actor/part/actor-attribute-table-viewmodel.mjs';
+import './presentation/sheet/actor/part/abilities/actor-attribute-table-viewmodel.mjs';
+import './presentation/sheet/actor/part/abilities/actor-attributes-viewmodel.mjs';
+import './presentation/sheet/actor/part/abilities/actor-skills-viewmodel.mjs';
 import './presentation/sheet/actor/part/assets/actor-assets-viewmodel.mjs';
-import './presentation/sheet/actor/part/actor-attributes-viewmodel.mjs';
 import './presentation/sheet/actor/part/actor-beliefs-fate-viewmodel.mjs';
 import './presentation/sheet/actor/part/actor-beliefs-viewmodel.mjs';
 import './presentation/sheet/actor/part/actor-biography-viewmodel.mjs';
 import './presentation/sheet/actor/part/actor-fate-viewmodel.mjs';
 import './presentation/sheet/actor/part/health/actor-health-viewmodel.mjs';
 import './presentation/sheet/actor/part/actor-personals-viewmodel.mjs';
-import './presentation/sheet/actor/part/actor-skills-viewmodel.mjs';
 // View model factory
 import './presentation/view-model/view-model-factory.mjs';
 import { SYSTEM_ID } from "./system-id.mjs";

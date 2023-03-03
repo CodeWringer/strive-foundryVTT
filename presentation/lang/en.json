@@ -463,8 +463,7 @@
       },
       "sheet": {
         "tab": {
-          "attributes": "Attributes",
-          "skills": "Skills",
+          "abilities": "Abilities",
           "magic": "Magic",
           "beliefsFate": "Beliefs/Fate",
           "health": "Health",
