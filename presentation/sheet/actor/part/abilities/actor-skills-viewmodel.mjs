@@ -1,10 +1,10 @@
-import { validateOrThrow } from "../../../../business/util/validation-utility.mjs"
-import DocumentListItemOrderDataSource from "../../../component/sortable-list/document-list-item-order-datasource.mjs"
-import SortableListViewModel from "../../../component/sortable-list/sortable-list-viewmodel.mjs"
-import { TEMPLATES } from "../../../templatePreloader.mjs"
-import ViewModelFactory from "../../../view-model/view-model-factory.mjs"
-import ViewModel from "../../../view-model/view-model.mjs"
-import SkillListItemViewModel from "../../item/skill/skill-list-item-viewmodel.mjs"
+import { validateOrThrow } from "../../../../../business/util/validation-utility.mjs"
+import DocumentListItemOrderDataSource from "../../../../component/sortable-list/document-list-item-order-datasource.mjs"
+import SortableListViewModel from "../../../../component/sortable-list/sortable-list-viewmodel.mjs"
+import { TEMPLATES } from "../../../../templatePreloader.mjs"
+import ViewModelFactory from "../../../../view-model/view-model-factory.mjs"
+import ViewModel from "../../../../view-model/view-model.mjs"
+import SkillListItemViewModel from "../../../item/skill/skill-list-item-viewmodel.mjs"
 
 export default class ActorSkillsViewModel extends ViewModel {
   /** @override */

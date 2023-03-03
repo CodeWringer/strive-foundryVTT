@@ -28,8 +28,7 @@ cssClass: {undefined | String}
     <nav class="sheet-tabs tabs flex flex-justify font-size-default" id="nav-sheet-tabs" data-group="primary">
       {{#if (eq viewModel.isPlain false)}}
         {{!-- Default tab is specified in actor-sheet.mjs --}}
-        <a class="item flex flex-center flex-grow{{#if viewModel.showFancyFont}} fancy-font{{/if}}" data-tab="attributes"><div>{{localize "ambersteel.character.sheet.tab.attributes"}}</div></a>
-        <a class="item flex flex-center flex-grow{{#if viewModel.showFancyFont}} fancy-font{{/if}}" data-tab="skills"><div>{{localize "ambersteel.character.sheet.tab.skills"}}</div></a>
+        <a class="item flex flex-center flex-grow{{#if viewModel.showFancyFont}} fancy-font{{/if}}" data-tab="abilities"><div>{{localize "ambersteel.character.sheet.tab.abilities"}}</div></a>
         {{#if viewModel.isPC }}
           <a class="item flex flex-center flex-grow{{#if viewModel.showFancyFont}} fancy-font{{/if}}" data-tab="beliefs-fate"><div>{{localize "ambersteel.character.sheet.tab.beliefsFate"}}</div></a>
         {{/if}}
@@ -48,13 +47,16 @@ cssClass: {undefined | String}
   {{!-- Sheet Body --}}
   <section class="sheet-body">
     {{#if (eq viewModel.isPlain false)}}
-      {{!-- Attributes Tab --}}
-      <div class="tab attributes" data-group="primary" data-tab="attributes">
-        {{> lazy viewModel=viewModel.attributesViewModel}}
-      </div>
-      {{!-- Skills Tab --}}
-      <div class="tab skills" data-group="primary" data-tab="skills">
-        {{> lazy viewModel=viewModel.skillsViewModel}}
+      {{!-- Abilities Tab --}}
+      <div class="tab abilities" data-group="primary" data-tab="abilities">
+        {{!-- Attributes --}}
+        <div>
+          {{> lazy viewModel=viewModel.attributesViewModel}}
+        </div>
+        {{!-- Skills --}}
+        <div>
+          {{> lazy viewModel=viewModel.skillsViewModel}}
+        </div>
       </div>
       {{#if viewModel.isPC }}
       {{!-- Beliefs&Fate Tab --}}

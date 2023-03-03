@@ -82,10 +82,10 @@ export const TEMPLATES = {
   CUSTOM_HEALTH_STATE_LIST_ITEM: `${basePathPresentation}/dialog/settings/health-states/custom-health-state-list-item.hbs`,
   // --- Actor
   ACTOR_SHEET: `${basePathPresentation}/sheet/actor/actor-sheet.hbs`,
-  ACTOR_ATTRIBUTE_TABLE: `${basePathPresentation}/sheet/actor/part/actor-attribute-table.hbs`,
   ACTOR_PERSONALS: `${basePathPresentation}/sheet/actor/part/actor-personals.hbs`,
-  ACTOR_ATTRIBUTES: `${basePathPresentation}/sheet/actor/part/actor-attributes.hbs`,
-  ACTOR_SKILLS: `${basePathPresentation}/sheet/actor/part/actor-skills.hbs`,
+  ACTOR_ATTRIBUTE_TABLE: `${basePathPresentation}/sheet/actor/part/abilities/actor-attribute-table.hbs`,
+  ACTOR_ATTRIBUTES: `${basePathPresentation}/sheet/actor/part/abilities/actor-attributes.hbs`,
+  ACTOR_SKILLS: `${basePathPresentation}/sheet/actor/part/abilities/actor-skills.hbs`,
   ACTOR_BELIEFS: `${basePathPresentation}/sheet/actor/part/actor-beliefs.hbs`,
   ACTOR_FATE: `${basePathPresentation}/sheet/actor/part/actor-fate.hbs`,
   ACTOR_BELIEFS_FATE: `${basePathPresentation}/sheet/actor/part/actor-beliefs-fate.hbs`,
