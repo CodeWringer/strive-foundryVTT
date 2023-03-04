@@ -1,15 +1,18 @@
-<section class="fill flex">
+<section class="fill flex font-size-default">
+	{{!-- Initial screen --}}
 	<div id="section-initial" class="fill flex flex-column">
 		<p><span>{{localize "ambersteel.migration.fromVersion"}}</span> <span id="field-migrationFrom"></span></p>
 		<p><span>{{localize "ambersteel.migration.toVersion"}}</span> <span id="field-migrationTo"></span></p>
 		<hr>
-		<p class="hint-card">{{localize "ambersteel.migration.initialHint"}}</p>
-		<h3>{{localize "ambersteel.migration.cancelNote"}}</h3>
+		<p class="hint-card warn"><i class="fas fa-exclamation-circle"></i> {{localize "ambersteel.migration.initialHint"}}</p>
+		<p class="hint-card info"><i class="fas fa-question-circle"></i> {{localize "ambersteel.migration.cancelNote"}}</p>
+    <div class="flex-grow"></div>
 		<div class="flex flex-row">
 			<button id="confirm" class="button">{{localize "ambersteel.general.confirm"}}</button>
 			<button id="cancel" class="button">{{localize "ambersteel.general.cancel"}}</button>
 		</div>
 	</div>
+	{{!-- Progress screen --}}
 	<div id="section-progress" class="fill flex flex-center hidden">
 		<span class="flex flex-column">
 			<div class="flex flex-center">
@@ -18,14 +21,17 @@
 			<p>{{localize "ambersteel.migration.inProgress"}}</p>
 		</span>
 	</div>
+	{{!-- Error screen --}}
 	<div id="section-error" class="fill hidden">
-		<h2>{{localize "ambersteel.migration.error"}}</h2>
-		<p class="hint-card">{{localize "ambersteel.migration.errorHint"}} <a href="https://github.com/CodeWringer/ambersteel-foundryVTT/issues">https://github.com/CodeWringer/ambersteel-foundryVTT/issues</a></p>
-		<p id="field-error"></p>
+		<h2 class="error"><i class="fas fa-exclamation-triangle"></i> {{localize "ambersteel.migration.error"}}</h2>
+		<p class="hint-card error cohesive" id="field-error"></p>
+		<p class="hint-card warn">{{localize "ambersteel.migration.errorHint"}} <a href="https://github.com/CodeWringer/ambersteel-foundryVTT/issues">https://github.com/CodeWringer/ambersteel-foundryVTT/issues</a></p>
 	</div>
-	<div id="section-completion" class="fill hidden">
-		<h2>{{localize "ambersteel.migration.completion"}}</h2>
-		<p class="hint-card">{{localize "ambersteel.migration.completionHint"}}</p>
+	{{!-- Success screen --}}
+	<div id="section-completion" class="fill flex flex-column hidden">
+		<h2 class="success"><i class="fas fa-check-circle"></i> {{localize "ambersteel.migration.completion"}}</h2>
+		<p class="hint-card success cohesive">{{localize "ambersteel.migration.completionHint"}}</p>
+    <div class="flex-grow"></div>
 		<button id="ok" class="button">{{localize "ambersteel.general.ok"}}</button>
 	</div>
 </section>

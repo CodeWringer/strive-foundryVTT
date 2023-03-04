@@ -1,0 +1,67 @@
+.hint-card {
+  padding: 6px;
+  border-radius: $border-radius-md;
+  border-style: solid;
+  border-width: 1px;
+
+  &.success {
+    background-color: $c-themed-bg-success;
+    border-color: $c-themed-border-success;
+    color: $c-themed-success;
+  }
+
+  &.warn {
+    background-color: $c-themed-bg-warn;
+    border-color: $c-themed-border-warn;
+    color: $c-themed-warn;
+  }
+
+  &.error {
+    background-color: $c-themed-bg-error;
+    border-color: $c-themed-border-error;
+    color: $c-themed-error;
+  }
+
+  &.info {
+    background-color: $c-themed-bg-info;
+    border-color: $c-themed-border-info;
+    color: $c-themed-info;
+  }
+
+  &-icon {
+    font-size: $font-size-lg;
+    margin-right: 0.6rem;
+  }
+
+  &.cohesive {
+    margin: 0;
+    border-radius: 0 0 $border-radius-md $border-radius-md;
+  }
+}
+
+h1, h2, h3, h4, h5 {
+  margin: 0;
+  border: none;
+  border-radius: $border-radius-md $border-radius-md 0 0;
+  padding: 4px 16px;
+
+  &.success {
+    background-color: $c-themed-header-bg-success;
+    color: $c-themed-header-success;
+  }
+
+  &.warn {
+    background-color: $c-themed-header-bg-warn;
+    color: $c-themed-header-warn;
+  }
+
+  &.error {
+    background-color: $c-themed-header-bg-error;
+    color: $c-themed-header-error;
+  }
+
+  &.info {
+    background-color: $c-themed-header-bg-info;
+    color: $c-themed-header-info;
+  }
+}

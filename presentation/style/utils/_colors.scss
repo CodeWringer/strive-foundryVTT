@@ -43,5 +43,31 @@ $c-themed-bg-dark: #ca6a167d;
 $c-themed-bg-darker: #bb62147d;
 $c-themed-bg-darkest: #a557127d;
 
-$c-themed-hint-bg: #eddfb0;
-$c-themed-hint-border: #a89b70;
+// Themed operation state - success, warn, error and failure
+
+// Headers
+$c-themed-header-bg-success: rgb(53, 94, 70);
+$c-themed-header-bg-warn: rgb(94, 76, 39);
+$c-themed-header-bg-error: rgb(106 35 35);
+$c-themed-header-bg-info: rgb(40, 35, 106);
+
+$c-themed-header-success: rgb(191, 255, 191);
+$c-themed-header-warn: rgb(255, 242, 159);
+$c-themed-header-error: rgb(255 197 197);
+$c-themed-header-info: rgb(197, 197, 255);
+
+// Content
+$c-themed-success: rgb(16 80 16);
+$c-themed-warn: rgb(82, 77, 59);
+$c-themed-error: rgb(84 23 23);
+$c-themed-info: rgb(37 56 100);
+
+$c-themed-bg-success: rgb(153 189 157);
+$c-themed-bg-warn: rgb(241, 227, 182);
+$c-themed-bg-error: rgb(233 185 185);
+$c-themed-bg-info: rgb(164 180 209);
+
+$c-themed-border-success: rgb(75 137 74);
+$c-themed-border-warn: rgb(181, 167, 83);
+$c-themed-border-error: rgb(131 67 67);
+$c-themed-border-info: rgb(77 114 145);

@@ -835,17 +835,6 @@ input[type=text].input-width-override {
   margin-right: 2%;
 }
 
-.hint-card {
-  background-color: #eddfb0;
-  border: 1px solid #a89b70;
-  border-radius: 4px;
-  padding: 6px;
-}
-.hint-card-icon {
-  font-size: 1.1rem;
-  margin-right: 0.6rem;
-}
-
 .button-full {
   padding: 0;
   margin: 0;
@@ -1303,6 +1292,64 @@ textarea.gm-notes {
   height: 100%;
   resize: none;
   overflow-x: hidden;
+}
+
+.hint-card {
+  padding: 6px;
+  border-radius: 0.3rem;
+  border-style: solid;
+  border-width: 1px;
+}
+.hint-card.success {
+  background-color: rgb(153, 189, 157);
+  border-color: rgb(75, 137, 74);
+  color: rgb(16, 80, 16);
+}
+.hint-card.warn {
+  background-color: rgb(241, 227, 182);
+  border-color: rgb(181, 167, 83);
+  color: rgb(82, 77, 59);
+}
+.hint-card.error {
+  background-color: rgb(233, 185, 185);
+  border-color: rgb(131, 67, 67);
+  color: rgb(84, 23, 23);
+}
+.hint-card.info {
+  background-color: rgb(164, 180, 209);
+  border-color: rgb(77, 114, 145);
+  color: rgb(37, 56, 100);
+}
+.hint-card-icon {
+  font-size: 1.1rem;
+  margin-right: 0.6rem;
+}
+.hint-card.cohesive {
+  margin: 0;
+  border-radius: 0 0 0.3rem 0.3rem;
+}
+
+h1, h2, h3, h4, h5 {
+  margin: 0;
+  border: none;
+  border-radius: 0.3rem 0.3rem 0 0;
+  padding: 4px 16px;
+}
+h1.success, h2.success, h3.success, h4.success, h5.success {
+  background-color: rgb(53, 94, 70);
+  color: rgb(191, 255, 191);
+}
+h1.warn, h2.warn, h3.warn, h4.warn, h5.warn {
+  background-color: rgb(94, 76, 39);
+  color: rgb(255, 242, 159);
+}
+h1.error, h2.error, h3.error, h4.error, h5.error {
+  background-color: rgb(106, 35, 35);
+  color: rgb(255, 197, 197);
+}
+h1.info, h2.info, h3.info, h4.info, h5.info {
+  background-color: rgb(40, 35, 106);
+  color: rgb(197, 197, 255);
 }
 
 .unstyled-list {
