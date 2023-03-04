@@ -21,7 +21,7 @@ export default class MigratorDialog extends ModalDialog {
   static get defaultOptions() {
     return mergeObject(super.defaultOptions, {
       width: 500,
-      height: 300,
+      height: 330,
     });
   }
 
