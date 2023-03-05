@@ -8,7 +8,7 @@ export default class AmbersteelFateItemSheet extends AmbersteelBaseItemSheet {
   get template() { return TEMPLATES.FATE_CARD_ITEM_SHEET; }
 
   /** @override */
-  get title() { return game.i18n.localize("ambersteel.character.beliefSystem.fateSystem.fateCard.label"); }
+  get title() { return game.i18n.localize("ambersteel.character.driverSystem.fateSystem.fateCard.label"); }
 
   /** @override */
   _getViewModel(context, document, sheet) {

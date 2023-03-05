@@ -55,7 +55,7 @@ export default class TransientFateCard extends TransientBaseItem {
       actor: (this.owningDocument ?? {}).document, 
       sound: SOUNDS_CONSTANTS.NOTIFY,
       viewModel: vm,
-      flavor: game.i18n.localize("ambersteel.character.beliefSystem.fateSystem.fateCard.label"),
+      flavor: game.i18n.localize("ambersteel.character.driverSystem.fateSystem.fateCard.label"),
     });
   }
 

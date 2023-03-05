@@ -7,17 +7,17 @@ import TransientBaseCharacterActor from "./transient-base-character-actor.mjs";
  * 
  * @extends TransientBaseCharacterActor
  * 
- * @property {Object} beliefSystem
+ * @property {Object} driverSystem
  * * Read-only. 
- * @property {String} beliefSystem.ambition
- * @property {Object} beliefSystem.beliefs
- * @property {String} beliefSystem.beliefs.0
- * @property {String} beliefSystem.beliefs.1
- * @property {String} beliefSystem.beliefs.2
- * @property {Object} beliefSystem.reactions
- * @property {String} beliefSystem.reactions.0
- * @property {String} beliefSystem.reactions.1
- * @property {String} beliefSystem.reactions.2
+ * @property {String} driverSystem.ambition
+ * @property {Object} driverSystem.aspirations
+ * @property {String} driverSystem.aspirations.0
+ * @property {String} driverSystem.aspirations.1
+ * @property {String} driverSystem.aspirations.2
+ * @property {Object} driverSystem.reactions
+ * @property {String} driverSystem.reactions.0
+ * @property {String} driverSystem.reactions.1
+ * @property {String} driverSystem.reactions.2
  * @property {Object} fateSystem
  * * Read-only. 
  * @property {Array<TransientFateCard>} fateSystem.fateCards
@@ -36,32 +36,32 @@ export default class TransientPc extends TransientBaseCharacterActor {
    * @type {Object}
    * @readonly
    */
-  get beliefSystem() {
+  get driverSystem() {
     const thiz = this;
 
     return {
-      get ambition() { return thiz.document.system.beliefSystem.ambition; },
-      set ambition(value) { thiz.updateByPath("system.beliefSystem.ambition", value); },
+      get ambition() { return thiz.document.system.driverSystem.ambition; },
+      set ambition(value) { thiz.updateByPath("system.driverSystem.ambition", value); },
 
-      get beliefs() {
+      get aspirations() {
         return {
-          get _0() { return thiz.document.system.beliefSystem.beliefs._0; },
-          set _0(value) { thiz.updateByPath("system.beliefSystem.beliefs._0", value); },
-          get _1() { return thiz.document.system.beliefSystem.beliefs._1; },
-          set _1(value) { thiz.updateByPath("system.beliefSystem.beliefs._1", value); },
-          get _2() { return thiz.document.system.beliefSystem.beliefs._2; },
-          set _2(value) { thiz.updateByPath("system.beliefSystem.beliefs._2", value); },
+          get _0() { return thiz.document.system.driverSystem.aspirations._0; },
+          set _0(value) { thiz.updateByPath("system.driverSystem.aspirations._0", value); },
+          get _1() { return thiz.document.system.driverSystem.aspirations._1; },
+          set _1(value) { thiz.updateByPath("system.driverSystem.aspirations._1", value); },
+          get _2() { return thiz.document.system.driverSystem.aspirations._2; },
+          set _2(value) { thiz.updateByPath("system.driverSystem.aspirations._2", value); },
         }
       },
      
       get reactions() {
         return {
-          get _0() { return thiz.document.system.beliefSystem.reactions._0; },
-          set _0(value) { thiz.updateByPath("system.beliefSystem.reactions._0", value); },
-          get _1() { return thiz.document.system.beliefSystem.reactions._1; },
-          set _1(value) { thiz.updateByPath("system.beliefSystem.reactions._1", value); },
-          get _2() { return thiz.document.system.beliefSystem.reactions._2; },
-          set _2(value) { thiz.updateByPath("system.beliefSystem.reactions._2", value); },
+          get _0() { return thiz.document.system.driverSystem.reactions._0; },
+          set _0(value) { thiz.updateByPath("system.driverSystem.reactions._0", value); },
+          get _1() { return thiz.document.system.driverSystem.reactions._1; },
+          set _1(value) { thiz.updateByPath("system.driverSystem.reactions._1", value); },
+          get _2() { return thiz.document.system.driverSystem.reactions._2; },
+          set _2(value) { thiz.updateByPath("system.driverSystem.reactions._2", value); },
         }
       },
     };

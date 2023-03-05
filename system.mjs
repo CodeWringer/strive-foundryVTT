@@ -74,8 +74,8 @@ import './presentation/sheet/actor/part/abilities/actor-attribute-table-viewmode
 import './presentation/sheet/actor/part/abilities/actor-attributes-viewmodel.mjs';
 import './presentation/sheet/actor/part/abilities/actor-skills-viewmodel.mjs';
 import './presentation/sheet/actor/part/assets/actor-assets-viewmodel.mjs';
-import './presentation/sheet/actor/part/actor-beliefs-fate-viewmodel.mjs';
-import './presentation/sheet/actor/part/actor-beliefs-viewmodel.mjs';
+import './presentation/sheet/actor/part/actor-drivers-fate-viewmodel.mjs';
+import './presentation/sheet/actor/part/actor-drivers-viewmodel.mjs';
 import './presentation/sheet/actor/part/actor-biography-viewmodel.mjs';
 import './presentation/sheet/actor/part/actor-fate-viewmodel.mjs';
 import './presentation/sheet/actor/part/health/actor-health-viewmodel.mjs';

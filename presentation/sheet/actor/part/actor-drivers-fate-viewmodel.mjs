@@ -1,12 +1,12 @@
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs"
 import { TEMPLATES } from "../../../templatePreloader.mjs"
 import ViewModel from "../../../view-model/view-model.mjs"
-import ActorBeliefsViewModel from "./actor-beliefs-viewmodel.mjs"
+import ActorDriversViewModel from "./actor-drivers-viewmodel.mjs"
 import ActorFateViewModel from "./actor-fate-viewmodel.mjs"
 
-export default class ActorBeliefsFateViewModel extends ViewModel {
+export default class ActorDriversFateViewModel extends ViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.ACTOR_BELIEFS_FATE; }
+  static get TEMPLATE() { return TEMPLATES.ACTOR_DRIVERS_FATE; }
 
   /** @override */
   get entityId() { return this.document.id; }
@@ -15,7 +15,7 @@ export default class ActorBeliefsFateViewModel extends ViewModel {
    * @type {String}
    * @readonly
    */
-  get beliefsTemplate() { return TEMPLATES.ACTOR_BELIEFS; }
+  get driversTemplate() { return TEMPLATES.ACTOR_DRIVERS; }
 
   /**
    * @type {String}
@@ -47,9 +47,9 @@ export default class ActorBeliefsFateViewModel extends ViewModel {
     // Child view models. 
     const thiz = this;
 
-    this.beliefsViewModel = new ActorBeliefsViewModel({
+    this.driversViewModel = new ActorDriversViewModel({
       ...args,
-      id: "beliefs",
+      id: "drivers",
       parent: thiz
     });
     this.fateViewModel = new ActorFateViewModel({

@@ -298,11 +298,12 @@
         "youth": "Youth",
         "lastFewYears": "The Last Few Years"
       },
-      "beliefSystem": {
+      "driverSystem": {
+        "label": "Drivers",
         "ambition": "Ambition",
-        "belief": {
-          "singular": "Belief",
-          "plural": "Beliefs"
+        "aspiration": {
+          "singular": "Aspiration",
+          "plural": "Aspirations"
         },
         "reaction": {
           "singular": "Reaction",
@@ -465,7 +466,7 @@
         "tab": {
           "abilities": "Abilities",
           "magic": "Magic",
-          "beliefsFate": "Beliefs/Fate",
+          "driversFate": "Drivers/Fate",
           "health": "Health",
           "assets": "Assets",
           "biography": "Biography",

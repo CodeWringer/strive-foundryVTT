@@ -3,23 +3,41 @@ import { TEMPLATES } from "../../../templatePreloader.mjs";
 import ViewModelFactory from "../../../view-model/view-model-factory.mjs";
 import ViewModel from "../../../view-model/view-model.mjs";
 
-export default class ActorBeliefsViewModel extends ViewModel {
+export default class ActorDriversViewModel extends ViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.ACTOR_BELIEFS; }
+  static get TEMPLATE() { return TEMPLATES.ACTOR_DRIVERS; }
 
   /** @override */
   get entityId() { return this.document.id; }
 
-  get beliefs() {
-    const dataBeliefs = this.document.beliefSystem.beliefs;
-    return [dataBeliefs._0, dataBeliefs._1, dataBeliefs._2];
+  /**
+   * @type {Array<String>}
+   * @readonly
+   */
+  get aspirations() {
+    const dataAspirations = this.document.driverSystem.aspirations;
+    return [dataAspirations._0, dataAspirations._1, dataAspirations._2];
   }
+
+  /**
+   * @type {Array<String>}
+   * @readonly
+   */
   get reactions() {
-    const dataReactions = this.document.beliefSystem.reactions;
+    const dataReactions = this.document.driverSystem.reactions;
     return [dataReactions._0, dataReactions._1, dataReactions._2];
   }
 
-  beliefViewModels = [];
+  /**
+   * @type {Array<ViewModel>}
+   * @readonly
+   */
+  aspirationViewModels = [];
+
+  /**
+   * @type {Array<ViewModel>}
+   * @readonly
+   */
   reactionViewModels = [];
 
   /**
@@ -41,7 +59,7 @@ export default class ActorBeliefsViewModel extends ViewModel {
     validateOrThrow(args, ["document"]);
 
     this.document = args.document;
-    this.contextType = args.contextType ?? "actor-beliefs";
+    this.contextType = args.contextType ?? "actor-drivers";
 
     const thiz = this;
     const factory = new ViewModelFactory();
@@ -50,17 +68,17 @@ export default class ActorBeliefsViewModel extends ViewModel {
       parent: thiz,
       id: "vmTfAmbition",
       propertyOwner: thiz.document,
-      propertyPath: "beliefSystem.ambition",
-      placeholder: "ambersteel.character.beliefSystem.ambition",
+      propertyPath: "driverSystem.ambition",
+      placeholder: "ambersteel.character.driverSystem.ambition",
     });
 
-    for (let i = 0; i < this.beliefs.length; i++) {
-      this.beliefViewModels.push(factory.createVmTextField({
+    for (let i = 0; i < this.aspirations.length; i++) {
+      this.aspirationViewModels.push(factory.createVmTextField({
         parent: thiz,
-        id: `vmBelief-${i}`,
+        id: `vmAspiration-${i}`,
         propertyOwner: thiz.document,
-        propertyPath: `beliefSystem.beliefs._${i}`,
-        placeholder: "ambersteel.character.beliefSystem.belief.singular",
+        propertyPath: `driverSystem.aspirations._${i}`,
+        placeholder: "ambersteel.character.driverSystem.aspiration.singular",
       }));
     }
 
@@ -69,8 +87,8 @@ export default class ActorBeliefsViewModel extends ViewModel {
         parent: thiz,
         id: `vmReaction-${i}`,
         propertyOwner: thiz.document,
-        propertyPath: `beliefSystem.reactions._${i}`,
-        placeholder: "ambersteel.character.beliefSystem.reaction.singular",
+        propertyPath: `driverSystem.reactions._${i}`,
+        placeholder: "ambersteel.character.driverSystem.reaction.singular",
       }));
     }
   }
