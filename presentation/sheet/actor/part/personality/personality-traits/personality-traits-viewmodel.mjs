@@ -1,8 +1,8 @@
 import { TEMPLATES } from "../../../../../templatePreloader.mjs";
 import { validateOrThrow } from "../../../../../../business/util/validation-utility.mjs";
-import ChoiceOption from "../../../../../component/input-choice/choice-option.mjs";
 import InputRadioButtonGroupViewModel from "../../../../../component/input-radio-button-group/input-radio-button-group-viewmodel.mjs";
 import ViewModel from "../../../../../view-model/view-model.mjs";
+import StatefulChoiceOption from "../../../../../component/input-choice/stateful-choice-option.mjs";
 
 /**
  * @property {Array<Object>} personalityTraits An array of personality traits for display. 
@@ -81,32 +81,46 @@ export default class PersonalityTraitsViewModel extends ViewModel {
   }
 
   /**
-   * @returns {Array<ChoiceOption>}
+   * @returns {Array<StatefulChoiceOption>}
    * 
    * @private
    */
   _getTraitOptions() {
     return [
-      new ChoiceOption({
+      new StatefulChoiceOption({
         value: -3,
+        activeHtml: "X",
+        inactiveHtml: "",
       }),
-      new ChoiceOption({
+      new StatefulChoiceOption({
         value: -2,
+        activeHtml: "X",
+        inactiveHtml: "",
       }),
-      new ChoiceOption({
+      new StatefulChoiceOption({
         value: -1,
+        activeHtml: "X",
+        inactiveHtml: "",
       }),
-      new ChoiceOption({
+      new StatefulChoiceOption({
         value: 0,
+        activeHtml: "X",
+        inactiveHtml: "",
       }),
-      new ChoiceOption({
+      new StatefulChoiceOption({
         value: 1,
+        activeHtml: "X",
+        inactiveHtml: "",
       }),
-      new ChoiceOption({
+      new StatefulChoiceOption({
         value: 2,
+        activeHtml: "X",
+        inactiveHtml: "",
       }),
-      new ChoiceOption({
+      new StatefulChoiceOption({
         value: 3,
+        activeHtml: "X",
+        inactiveHtml: "",
       }),
     ];
   }

@@ -1,15 +1,15 @@
 import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import { TEMPLATES } from "../../templatePreloader.mjs";
 import InputViewModel from "../../view-model/input-view-model.mjs";
+import StatefulChoiceOption from "../input-choice/stateful-choice-option.mjs";
 
 /**
  * Represents a radio-button-group. The user can select one of a defined list of options. 
  * 
  * @extends InputViewModel
  * 
- * @property {String} localizedValue Gets the localized version of the value. 
- * @property {ChoiceOption} selected Gets the currently selected option. 
- * @property {Array<ChoiceOption>} options Gets the options available to the radio button group. 
+ * @property {StatefulChoiceOption} selected Gets the currently selected option. 
+ * @property {Array<StatefulChoiceOption>} options Gets the options available to the radio button group. 
  */
 export default class InputRadioButtonGroupViewModel extends InputViewModel {
   /** @override */
@@ -17,34 +17,13 @@ export default class InputRadioButtonGroupViewModel extends InputViewModel {
   
   /**
    * Returns the currently selected option. 
-   * @type {ChoiceOption}
+   * 
+   * @type {StatefulChoiceOption}
    * @readonly
    */
   get selected() {
     return this.options.find(option => option.value === this.value);
   }
-
-  /**
-   * Returns the localized value. 
-   * @type {String}
-   * @readonly
-   * @override
-   */
-  get localizedValue() {
-    const selected = this.selected;
-    return selected !== undefined ? selected.localizedValue : "";
-  }
-
-  /**
-   * @type {HTMLElement}
-   * @private
-   */
-  _lastChecked = undefined;
-  /**
-   * @type {HTMLElement}
-   * @readonly
-   */
-  get lastChecked() { return this._lastChecked; }
 
   /**
    * @param {Object} args
@@ -56,13 +35,13 @@ export default class InputRadioButtonGroupViewModel extends InputViewModel {
    * @param {String | undefined} args.contextTemplate Optional. Name or path of a template that embeds this input component. 
    * @param {String | undefined} args.localizableTitle Optional. The localizable title (tooltip). 
    * 
-   * @param {Array<ChoiceOption>} args.options The options available to the radio button group. 
+   * @param {Array<StatefulChoiceOption>} args.options The options available to the radio button group. 
    */
   constructor(args = {}) {
     super(args);
     validateOrThrow(args, ["propertyPath", "propertyOwner", "options"]);
 
-    this.options = args.options ?? [];
+    this.options = args.options;
   }
 
   /**
@@ -91,10 +70,12 @@ export default class InputRadioButtonGroupViewModel extends InputViewModel {
   }
 
   /**
-   * Returns true, if the given {ChoiceOption} represents the 
-   * current selection of the given {InputRadioButtonGroupViewModel}. 
+   * Returns true, if the given `StatefulChoiceOption` represents the 
+   * current selection of the given `InputRadioButtonGroupViewModel`. 
+   * 
    * @param {InputRadioButtonGroupViewModel} viewModel 
-   * @param {ChoiceOption} option The option to check. 
+   * @param {StatefulChoiceOption} option The option to check. 
+   * 
    * @returns {Boolean}
    */
   isSelectedOption(viewModel, option) {
