@@ -47,6 +47,7 @@ export default class InputRadioButtonGroupViewModel extends InputViewModel {
   get lastChecked() { return this._lastChecked; }
 
   /**
+   * @param {Object} args
    * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
    * 
    * @param {String} args.propertyPath The path used to look up the value. 
