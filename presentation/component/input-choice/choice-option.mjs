@@ -88,16 +88,16 @@ export default class ChoiceOption {
   displayHtmlOverride = undefined;
 
   /**
+   * @param {Object} args
    * @param {String} args.value The actual value. 
    * @param {String | undefined} args.localizedValue Optional. The text that represents the value, 
    * to display to the user. 
    * @param {String | undefined} args.icon Optional. A (relative) icon file path or a FontAwwesome icon class. 
-   * 
-   * E.g. "systems/ambersteel/presentation/image/texture.svg" or 
-   * e.g. "fas fa-plus"
-   * @param {Boolean | undefined} shouldDisplayValue Optional. Sets whether the value should be displayed. Default true. 
-   * @param {Boolean | undefined} shouldDisplayIcon Optional. Sets whether the icon should be displayed. Default true. 
-   * @param {Boolean | undefined} displayHtmlOverride Optional. Sets the raw HTML to display as the content. 
+   * * E.g. `"systems/ambersteel/presentation/image/texture.svg"`
+   * * E.g. `"fas fa-plus"`
+   * @param {Boolean | undefined} args.shouldDisplayValue Optional. Sets whether the value should be displayed. Default true. 
+   * @param {Boolean | undefined} args.shouldDisplayIcon Optional. Sets whether the icon should be displayed. Default true. 
+   * @param {Boolean | undefined} args.displayHtmlOverride Optional. Sets the raw HTML to display as the content. 
    */
   constructor(args = {}) {
     this._value = args.value;

@@ -11,27 +11,18 @@ import ChoiceOption from "../../presentation/component/input-choice/choice-optio
 * @returns {Array<ChoiceOption>}
 */
 export function getAsChoices(constantsObject, exclude) {
-	const result = [];
-
-	for (const entryName in constantsObject) {
-		if (constantsObject.hasOwnProperty(entryName) !== true) continue;
-		if ((exclude ?? []).find(it => it === entryName) !== undefined) continue;
-
-		const entry = constantsObject[entryName];
-		
+	return _getAs(constantsObject, exclude, (entry) => {
 		const localizedName = entry.localizableName !== undefined ? game.i18n.localize(entry.localizableName) : undefined;
 		const icon = entry.icon;
 
-		result.push(new ChoiceOption({
+		return new ChoiceOption({
 			value: entry.name,
 			localizedValue: localizedName,
 			icon: icon,
 			shouldDisplayValue: localizedName !== undefined ? true : false,
 			shouldDisplayIcon: icon !== undefined ? true : false,
-		}));
-	}
-
-	return result;
+		});
+	});
 }
 
 /**
@@ -44,6 +35,23 @@ export function getAsChoices(constantsObject, exclude) {
 * @returns {Array<Any>}
 */
 export function getAsArray(constantsObject, exclude) {
+	return _getAs(constantsObject, exclude, (entry) => {
+		return entry
+	});
+}
+
+/**
+ * 
+ * @param {Object} constantsObject Any constants object.
+ * * **All** not explicitly excluded properties, that aren't part of the prototype, will be returned. 
+ * @param {Array<String> | undefined} exclude An array of property names to exclude. 
+ * @param {Function} func A function that receives a constant's object's entry 
+ * and is expected to return an instance of something to be returned by 
+ * the `getAsChoices`, `getAsStatefulChoices` or `getAsArray` functions. 
+ * 
+ * @returns {Array<Object>}
+ */
+function _getAs(constantsObject, exclude, func) {
 	const result = [];
 
 	for (const entryName in constantsObject) {
@@ -51,7 +59,7 @@ export function getAsArray(constantsObject, exclude) {
 		if ((exclude ?? []).find(it => it === entryName) !== undefined) continue;
 
 		const entry = constantsObject[entryName];
-		result.push(entry);
+		result.push(func(entry));
 	}
 
 	return result;

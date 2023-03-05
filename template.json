@@ -26,6 +26,17 @@
           "appearance": "",
           "biography": ""
         },
+        "personalityTraits": {
+          "arrogantOrHumble": 0,
+          "cowardlyOrCourageous": 0,
+          "cruelOrMerciful": 0,
+          "deceitfulOrHonest": 0,
+          "lazyOrEnergetic": 0,
+          "paranoidOrNaive": 0,
+          "recklessOrPrudent": 0,
+          "selfishOrConsiderate": 0,
+          "vengefulOrForgiving": 0
+        },
         "attributes": {
           "physical": {
             "agility": {

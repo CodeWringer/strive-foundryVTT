@@ -74,6 +74,36 @@ import TransientBaseActor from './transient-base-actor.mjs';
  * * Read-only. 
  * @property {Number} assets.maxBulk
  * * Read-only. 
+ * 
+ * @property {Object} personalityTraits
+ * * Read-only
+ * @property {Number} personalityTraits.arrogantOrHumble
+ * * Read-only
+ * * Ranges from -3 to +3
+ * @property {Number} personalityTraits.cowardlyOrCourageous
+ * * Read-only
+ * * Ranges from -3 to +3
+ * @property {Number} personalityTraits.cruelOrMerciful
+ * * Read-only
+ * * Ranges from -3 to +3
+ * @property {Number} personalityTraits.deceitfulOrHonest
+ * * Read-only
+ * * Ranges from -3 to +3
+ * @property {Number} personalityTraits.lazyOrEnergetic
+ * * Read-only
+ * * Ranges from -3 to +3
+ * @property {Number} personalityTraits.paranoidOrNaive
+ * * Read-only
+ * * Ranges from -3 to +3
+ * @property {Number} personalityTraits.recklessOrPrudent
+ * * Read-only
+ * * Ranges from -3 to +3
+ * @property {Number} personalityTraits.selfishOrConsiderate
+ * * Read-only
+ * * Ranges from -3 to +3
+ * @property {Number} personalityTraits.vengefulOrForgiving
+ * * Read-only
+ * * Ranges from -3 to +3
  */
 export default class TransientBaseCharacterActor extends TransientBaseActor {
   /** @override */
@@ -84,6 +114,7 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
 
   /**
    * @type {Object}
+   * @readonly
    */
   get person() {
     const thiz = this;
@@ -105,6 +136,73 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
 
       get biography() { return thiz.document.system.person.biography; },
       set biography(value) { thiz.updateByPath("system.person.biography", value); },
+    };
+  }
+  
+
+  /**
+   * @type {Object}
+   * @readonly
+   */
+  get personalityTraits() {
+    const thiz = this;
+    /**
+     * Returns the given value, but kept within the range of -3 to +3. 
+     * 
+     * E. g. `-5` would return `-3`; `35` would return `3`; `1` would return `1`. 
+     * 
+     * @param {Number | String} value A value to keep in the bounds of -3 and +3. 
+     * 
+     * @returns {Number} The bounded value. 
+     * 
+     * @private
+     */
+    const _getBoundedPersonalityTrait = function(value) {
+      return Math.max(-3, Math.min(3, parseInt(value)));
+    }
+
+    /**
+     * Persists the given value only, if it is not `undefined`. 
+     * 
+     * @param {String} propertyName Internal name of the personality trait. 
+     * * E. g. `"arrogantOrHumble"`
+     * @param {Number | undefined} value
+     * 
+     * @private
+     */
+    const _updateIfNotUndefined = function(propertyName, value) {
+      if (value === undefined) return;
+
+      thiz.updateByPath(`system.personalityTraits.${propertyName}`, _getBoundedPersonalityTrait(value));
+    }
+
+    return {
+      get arrogantOrHumble() { return parseInt((thiz.document.system.personalityTraits ?? {}).arrogantOrHumble ?? 0); },
+      set arrogantOrHumble(value) { _updateIfNotUndefined("arrogantOrHumble", value) },
+      
+      get cowardlyOrCourageous() { return parseInt((thiz.document.system.personalityTraits ?? {}).cowardlyOrCourageous ?? 0); },
+      set cowardlyOrCourageous(value) { _updateIfNotUndefined("cowardlyOrCourageous", value) },
+
+      get cruelOrMerciful() { return parseInt((thiz.document.system.personalityTraits ?? {}).cruelOrMerciful ?? 0); },
+      set cruelOrMerciful(value) { _updateIfNotUndefined("cruelOrMerciful", value) },
+      
+      get deceitfulOrHonest() { return parseInt((thiz.document.system.personalityTraits ?? {}).deceitfulOrHonest ?? 0); },
+      set deceitfulOrHonest(value) { _updateIfNotUndefined("deceitfulOrHonest", value) },
+
+      get lazyOrEnergetic() { return parseInt((thiz.document.system.personalityTraits ?? {}).lazyOrEnergetic ?? 0); },
+      set lazyOrEnergetic(value) { _updateIfNotUndefined("lazyOrEnergetic", value) },
+
+      get paranoidOrNaive() { return parseInt((thiz.document.system.personalityTraits ?? {}).paranoidOrNaive ?? 0); },
+      set paranoidOrNaive(value) { _updateIfNotUndefined("paranoidOrNaive", value) },
+
+      get recklessOrPrudent() { return parseInt((thiz.document.system.personalityTraits ?? {}).recklessOrPrudent ?? 0); },
+      set recklessOrPrudent(value) { _updateIfNotUndefined("recklessOrPrudent", value) },
+
+      get selfishOrConsiderate() { return parseInt((thiz.document.system.personalityTraits ?? {}).selfishOrConsiderate ?? 0); },
+      set selfishOrConsiderate(value) { _updateIfNotUndefined("selfishOrConsiderate", value) },
+
+      get vengefulOrForgiving() { return parseInt((thiz.document.system.personalityTraits ?? {}).vengefulOrForgiving ?? 0); },
+      set vengefulOrForgiving(value) { _updateIfNotUndefined("vengefulOrForgiving", value) },
     };
   }
   
@@ -371,7 +469,7 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
 
     // Luggage
 
-    // TODO: Purge obsolete entries. 
+    // TODO #207: Purge obsolete entries. 
     // This requires a unified and central solution. 
     /*
 // Purge obsolete entries. 

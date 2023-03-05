@@ -462,6 +462,38 @@
         "sex": "Sex",
         "age": "Age"
       },
+      "personalityTrait": {
+        "singular": "Personality Trait",
+        "plural": "Personality Traits",
+        "abbreviation": "Trait",
+        "signature": {
+          "label": "Signature",
+          "abbreviation": "Sig."
+        },
+        "strong": "Very",
+        "weak": "A little",
+        "undecided": "Undecided",
+        "traits": {
+          "arrogant": "Arrogant",
+          "humble": "Humble",
+          "cowardly": "Cowardly",
+          "courageous": "Courageous",
+          "cruel": "Cruel",
+          "merciful": "Merciful",
+          "deceitful": "Deceitful",
+          "honest": "Honest",
+          "lazy": "Lazy",
+          "energetic": "Energetic",
+          "paranoid": "Paranoid",
+          "naive": "Naive",
+          "reckless": "Reckless",
+          "prudent": "Prudent",
+          "selfish": "Selfish",
+          "considerate": "Considerate",
+          "vengeful": "Vengeful",
+          "forgiving": "Forgiving"
+        }
+      },
       "sheet": {
         "tab": {
           "abilities": "Abilities",

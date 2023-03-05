@@ -175,7 +175,7 @@ export default class ViewModelFactory {
    * which will be displayed in exception log entries, to aid debugging. 
    * @param {Object} args.propertyOwner
    * @param {String} args.propertyPath
-   * @param {Array<ChoiceOption>} args.options
+   * @param {Array<StatefulChoiceOption>} args.options
    * @param {String | undefined} args.localizableTitle Optional. Sets the tooltip text to display on cursor hover over the DOM element. 
    * 
    * @returns {InputRadioButtonGroupViewModel}

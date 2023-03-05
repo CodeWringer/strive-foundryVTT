@@ -167,6 +167,10 @@ export default class DocumentUpdater {
           // This object **must** be based on 'Object' and not 'null', as otherwise FoundryVTT's merge utility will fail!
           previousDtoProperty[propertyName] = {};
         }
+      } else if (currentDocumentProperty === undefined) {
+        this._logger.logWarn("Substituting missing object in path");
+        // This object **must** be based on 'Object' and not 'null', as otherwise FoundryVTT's merge utility will fail!
+        previousDtoProperty[propertyName] = {};
       } else {
         // Not an object, function or array, so surely it's a primitive?
         // A primitive is good as the last part of the path, but illegal within a path. 

@@ -1,5 +1,6 @@
 import { ILLNESS_STATES } from "../../../../business/ruleset/health/illness-states.mjs"
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs"
+import StatefulChoiceOption from "../../../component/input-choice/stateful-choice-option.mjs"
 import { TEMPLATES } from "../../../templatePreloader.mjs"
 import ViewModelFactory from "../../../view-model/view-model-factory.mjs"
 import ViewModel from "../../../view-model/view-model.mjs"
@@ -12,18 +13,24 @@ export default class IllnessListItemViewModel extends ViewModel {
   get entityId() { return this.document.id; }
 
   /**
-   * An array of {ChoiceOption}s which represent the possible states of the illness. 
-   * @type {Array<ChoiceOption>}
+   * An array of {StatefulChoiceOption}s which represent the possible states of the illness. 
+   * @type {Array<StatefulChoiceOption>}
    * @readonly
    */
   get stateOptions() {
-    const stateOptions = ILLNESS_STATES.asChoices;
-
-    for (const stateOption of stateOptions) {
-      stateOption.shouldDisplayValue = false;
+    if (this._stateOptions === undefined) {
+      this._stateOptions = ILLNESS_STATES.asChoices.map((choiceOption) => {
+        const html = `<i class="${choiceOption.icon}"></i>`;
+        return new StatefulChoiceOption({
+          value: choiceOption.value,
+          activeHtml: html,
+          tooltip: choiceOption.localizedValue,
+          inactiveHtml: html,
+        });
+      });
     }
-
-    return stateOptions;
+    
+    return this._stateOptions;
   }
 
   /**

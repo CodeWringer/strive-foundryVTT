@@ -3,6 +3,7 @@ import { TEMPLATES } from "../../../templatePreloader.mjs"
 import ViewModel from "../../../view-model/view-model.mjs"
 import ActorDriversViewModel from "./actor-drivers-viewmodel.mjs"
 import ActorFateViewModel from "./actor-fate-viewmodel.mjs"
+import PersonalityTraitsViewModel from "./personality/personality-traits/personality-traits-viewmodel.mjs"
 
 export default class ActorDriversFateViewModel extends ViewModel {
   /** @override */
@@ -10,6 +11,12 @@ export default class ActorDriversFateViewModel extends ViewModel {
 
   /** @override */
   get entityId() { return this.document.id; }
+
+  /**
+   * @type {String}
+   * @readonly
+   */
+  get personalityTraitsTemplate() { return TEMPLATES.ACTOR_PERSONALITY_TRAITS; }
 
   /**
    * @type {String}
@@ -47,15 +54,30 @@ export default class ActorDriversFateViewModel extends ViewModel {
     // Child view models. 
     const thiz = this;
 
+    this.personalityTraitsViewModel = new PersonalityTraitsViewModel({
+      ...args,
+      id: "personalityTraits",
+      parent: thiz,
+      isSendable: this.isSendable,
+      isEditable: this.isEditable,
+      isOwner: this.isOwner,
+      document: this.document,
+    });
     this.driversViewModel = new ActorDriversViewModel({
       ...args,
       id: "drivers",
-      parent: thiz
+      parent: thiz,
+      isSendable: this.isSendable,
+      isEditable: this.isEditable,
+      isOwner: this.isOwner,
     });
     this.fateViewModel = new ActorFateViewModel({
       ...args,
       id: "fate",
-      parent: thiz
+      parent: thiz,
+      isSendable: this.isSendable,
+      isEditable: this.isEditable,
+      isOwner: this.isOwner,
     });
   }
 }
