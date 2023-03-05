@@ -30,7 +30,7 @@ cssClass: {undefined | String}
         {{!-- Default tab is specified in actor-sheet.mjs --}}
         <a class="item flex flex-center flex-grow{{#if viewModel.showFancyFont}} fancy-font{{/if}}" data-tab="abilities"><div>{{localize "ambersteel.character.sheet.tab.abilities"}}</div></a>
         {{#if viewModel.isPC }}
-          <a class="item flex flex-center flex-grow{{#if viewModel.showFancyFont}} fancy-font{{/if}}" data-tab="beliefs-fate"><div>{{localize "ambersteel.character.sheet.tab.beliefsFate"}}</div></a>
+          <a class="item flex flex-center flex-grow{{#if viewModel.showFancyFont}} fancy-font{{/if}}" data-tab="drivers-fate"><div>{{localize "ambersteel.character.sheet.tab.driversFate"}}</div></a>
         {{/if}}
         <a class="item flex flex-center flex-grow{{#if viewModel.showFancyFont}} fancy-font{{/if}}" data-tab="health"><div>{{localize "ambersteel.character.sheet.tab.health"}}</div></a>
         <a class="item flex flex-center flex-grow{{#if viewModel.showFancyFont}} fancy-font{{/if}}" data-tab="assets"><div>{{localize "ambersteel.character.sheet.tab.assets"}}</div></a>
@@ -59,9 +59,9 @@ cssClass: {undefined | String}
         </div>
       </div>
       {{#if viewModel.isPC }}
-      {{!-- Beliefs&Fate Tab --}}
-        <div class="tab beliefs-fate" data-group="primary" data-tab="beliefs-fate">
-          {{> lazy viewModel=viewModel.beliefsFateViewModel}}
+      {{!-- Driverss & Fate Tab --}}
+        <div class="tab drivers-fate" data-group="primary" data-tab="drivers-fate">
+          {{> lazy viewModel=viewModel.driversFateViewModel}}
         </div>
       {{/if}}
       {{!-- Health Tab --}}

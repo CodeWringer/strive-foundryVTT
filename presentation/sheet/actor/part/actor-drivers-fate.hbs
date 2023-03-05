@@ -1,0 +1,14 @@
+{{!-- Parameters:
+viewModel: {ActorDriversFateViewModel}
+cssClass: {undefined | String}
+--}}
+<section class="{{cssClass}}">
+  {{#> header1 showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.driverSystem.label"}}{{/header1}}
+  {{#with viewModel.driversTemplate as | template |}}
+    {{> (template) viewModel=../viewModel.driversViewModel }}
+  {{/with}}
+  {{#> header1 showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.driverSystem.fateSystem.label"}}{{/header1}}
+  {{#with viewModel.fateTemplate as | template |}}
+    {{> (template) viewModel=../viewModel.fateViewModel }}
+  {{/with}}
+</section>

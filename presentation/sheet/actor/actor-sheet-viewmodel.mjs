@@ -6,7 +6,7 @@ import ViewModel from "../../view-model/view-model.mjs"
 import ActorAssetsViewModel from "./part/assets/actor-assets-viewmodel.mjs"
 import ActorAttributesViewModel from "./part/abilities/actor-attributes-viewmodel.mjs"
 import ActorSkillsViewModel from "./part/abilities/actor-skills-viewmodel.mjs"
-import ActorBeliefsFateViewModel from "./part/actor-beliefs-fate-viewmodel.mjs"
+import ActorDriversFateViewModel from "./part/actor-drivers-fate-viewmodel.mjs"
 import ActorBiographyViewModel from "./part/actor-biography-viewmodel.mjs"
 import ActorHealthViewModel from "./part/health/actor-health-viewmodel.mjs"
 import ActorPersonalsViewModel from "./part/actor-personals-viewmodel.mjs"
@@ -18,7 +18,7 @@ import BaseSheetViewModel from "../../view-model/base-sheet-viewmodel.mjs"
  * @property {ViewModel} personalsViewModel
  * @property {LazyLoadViewModel} attributesViewModel
  * @property {LazyLoadViewModel} skillsViewModel
- * @property {LazyLoadViewModel} beliefsFateViewModel
+ * @property {LazyLoadViewModel} driversFateViewModel
  * @property {LazyLoadViewModel} healthViewModel
  * @property {LazyLoadViewModel} assetsViewModel
  * @property {LazyLoadViewModel} biographyViewModel
@@ -137,14 +137,14 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
         },
       });
       if (args.document.type === 'pc') {
-        this.beliefsFateViewModel = new LazyLoadViewModel({
-          id: "lazyBeliefsFate",
+        this.driversFateViewModel = new LazyLoadViewModel({
+          id: "lazyDriversFate",
           parent: thiz,
-          template: TEMPLATES.ACTOR_BELIEFS_FATE,
-          viewModelFactoryFunction: (args) => { return new ActorBeliefsFateViewModel(args); },
+          template: TEMPLATES.ACTOR_DRIVERS_FATE,
+          viewModelFactoryFunction: (args) => { return new ActorDriversFateViewModel(args); },
           viewModelArgs: {
             ...args, 
-            id: "beliefs-fate", 
+            id: "drivers-fate", 
           },
         });
       }
@@ -256,8 +256,8 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
     if (tab === "abilities") {
       await this.attributesViewModel.render();
       await this.skillsViewModel.render();
-    } else if (tab === "beliefs-fate") {
-      await this.beliefsFateViewModel.render();
+    } else if (tab === "drivers-fate") {
+      await this.driversFateViewModel.render();
     } else if (tab === "health") {
       await this.healthViewModel.render();
     } else if (tab === "assets") {
