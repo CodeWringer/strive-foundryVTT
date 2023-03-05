@@ -1,13 +1,13 @@
-import { validateOrThrow } from "../../../../business/util/validation-utility.mjs"
-import { TEMPLATES } from "../../../templatePreloader.mjs"
-import ViewModel from "../../../view-model/view-model.mjs"
+import { validateOrThrow } from "../../../../../business/util/validation-utility.mjs"
+import { TEMPLATES } from "../../../../templatePreloader.mjs"
+import ViewModel from "../../../../view-model/view-model.mjs"
 import ActorDriversViewModel from "./actor-drivers-viewmodel.mjs"
-import ActorFateViewModel from "./actor-fate-viewmodel.mjs"
-import PersonalityTraitsViewModel from "./personality/personality-traits/personality-traits-viewmodel.mjs"
+import ActorFateViewModel from "../actor-fate-viewmodel.mjs"
+import PersonalityTraitsViewModel from "./personality-traits/personality-traits-viewmodel.mjs"
 
-export default class ActorDriversFateViewModel extends ViewModel {
+export default class ActorPersonalityViewModel extends ViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.ACTOR_DRIVERS_FATE; }
+  static get TEMPLATE() { return TEMPLATES.ACTOR_PERSONALITY; }
 
   /** @override */
   get entityId() { return this.document.id; }
