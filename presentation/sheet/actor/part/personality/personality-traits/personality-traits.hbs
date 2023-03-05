@@ -6,22 +6,22 @@ viewModel: {PersonalityTraitsViewModel}
   id="{{viewModel.id}}">
   {{!-- Header --}}
     <div class="flex flex-center">{{localize "ambersteel.character.personalityTrait.abbreviation"}}</div>
-    <div class="grid-span-7 grid-7col margin-l-md margin-r-md">
-      <div class="flex flex-center">{{localize "ambersteel.character.personalityTrait.signature"}}</div>
-      <div class="flex flex-center">{{localize "ambersteel.character.personalityTrait.strong"}}</div>
-      <div class="flex flex-center">{{localize "ambersteel.character.personalityTrait.weak"}}</div>
-      <div class="flex flex-center">{{localize "ambersteel.character.personalityTrait.undecided"}}</div>
-      <div class="flex flex-center">{{localize "ambersteel.character.personalityTrait.weak"}}</div>
-      <div class="flex flex-center">{{localize "ambersteel.character.personalityTrait.strong"}}</div>
-      <div class="flex flex-center">{{localize "ambersteel.character.personalityTrait.signature"}}</div>
+    <div class="grid-span-7 grid-7col">
+      <div class="flex flex-center border-solid-r-sm border-solid-l-sm">{{localize "ambersteel.character.personalityTrait.signature"}}</div>
+      <div class="flex flex-center border-solid-r-sm">{{localize "ambersteel.character.personalityTrait.strong"}}</div>
+      <div class="flex flex-center border-solid-r-sm">{{localize "ambersteel.character.personalityTrait.weak"}}</div>
+      <div class="flex flex-center border-solid-r-sm">{{localize "ambersteel.character.personalityTrait.undecided"}}</div>
+      <div class="flex flex-center border-solid-r-sm">{{localize "ambersteel.character.personalityTrait.weak"}}</div>
+      <div class="flex flex-center border-solid-r-sm">{{localize "ambersteel.character.personalityTrait.strong"}}</div>
+      <div class="flex flex-center border-solid-r-sm">{{localize "ambersteel.character.personalityTrait.signature"}}</div>
     </div>
     <div class="flex flex-center">{{localize "ambersteel.character.personalityTrait.abbreviation"}}</div>
   {{!-- Rows --}}
   {{#each viewModel.personalityTraits as |obj index|}}
-    <div class="flex flex-middle flex-right">{{localize obj.localizableTraitLeft}}</div>
-    <div class="grid-span-7 margin-l-md margin-r-md">
+    <div class="flex flex-middle flex-right pad-r-md border-solid-t-sm">{{localize obj.localizableTraitLeft}}</div>
+    <div class="grid-span-7">
       {{> inputRadioButtonGroup viewModel=obj.vmRadioButtonGroup}}
     </div>
-    <div class="flex flex-middle">{{localize obj.localizableTraitRight}}</div>
+    <div class="flex flex-middle pad-l-md border-solid-t-sm">{{localize obj.localizableTraitRight}}</div>
   {{/each}}
 </div>
