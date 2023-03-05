@@ -160,31 +160,31 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
     }
 
     return {
-      get arrogantOrHumble() { return parseInt(thiz.document.system.personalityTraits.arrogantOrHumble); },
+      get arrogantOrHumble() { return parseInt((thiz.document.system.personalityTraits ?? {}).arrogantOrHumble ?? 0); },
       set arrogantOrHumble(value) { thiz.updateByPath("system.personalityTraits.arrogantOrHumble", _getBoundedPersonalityTrait(value)); },
       
-      get cowardlyOrCourageous() { return parseInt(thiz.document.system.personalityTraits.cowardlyOrCourageous); },
+      get cowardlyOrCourageous() { return parseInt((thiz.document.system.personalityTraits ?? {}).cowardlyOrCourageous ?? 0); },
       set cowardlyOrCourageous(value) { thiz.updateByPath("system.personalityTraits.cowardlyOrCourageous", _getBoundedPersonalityTrait(value)); },
 
-      get cruelOrMerciful() { return parseInt(thiz.document.system.personalityTraits.cruelOrMerciful); },
+      get cruelOrMerciful() { return parseInt((thiz.document.system.personalityTraits ?? {}).cruelOrMerciful ?? 0); },
       set cruelOrMerciful(value) { thiz.updateByPath("system.personalityTraits.cruelOrMerciful", _getBoundedPersonalityTrait(value)); },
       
-      get deceitfulOrHonest() { return parseInt(thiz.document.system.personalityTraits.deceitfulOrHonest); },
+      get deceitfulOrHonest() { return parseInt((thiz.document.system.personalityTraits ?? {}).deceitfulOrHonest ?? 0); },
       set deceitfulOrHonest(value) { thiz.updateByPath("system.personalityTraits.deceitfulOrHonest", _getBoundedPersonalityTrait(value)); },
       
-      get lazyOrEnergetic() { return parseInt(thiz.document.system.personalityTraits.lazyOrEnergetic); },
+      get lazyOrEnergetic() { return parseInt((thiz.document.system.personalityTraits ?? {}).lazyOrEnergetic ?? 0); },
       set lazyOrEnergetic(value) { thiz.updateByPath("system.personalityTraits.lazyOrEnergetic", _getBoundedPersonalityTrait(value)); },
 
-      get paranoidOrNaive() { return parseInt(thiz.document.system.personalityTraits.paranoidOrNaive); },
+      get paranoidOrNaive() { return parseInt((thiz.document.system.personalityTraits ?? {}).paranoidOrNaive ?? 0); },
       set paranoidOrNaive(value) { thiz.updateByPath("system.personalityTraits.paranoidOrNaive", _getBoundedPersonalityTrait(value)); },
 
-      get recklessOrPrudent() { return parseInt(thiz.document.system.personalityTraits.recklessOrPrudent); },
+      get recklessOrPrudent() { return parseInt((thiz.document.system.personalityTraits ?? {}).recklessOrPrudent ?? 0); },
       set recklessOrPrudent(value) { thiz.updateByPath("system.personalityTraits.recklessOrPrudent", _getBoundedPersonalityTrait(value)); },
       
-      get selfishOrConsiderate() { return parseInt(thiz.document.system.personalityTraits.selfishOrConsiderate); },
+      get selfishOrConsiderate() { return parseInt((thiz.document.system.personalityTraits ?? {}).selfishOrConsiderate ?? 0); },
       set selfishOrConsiderate(value) { thiz.updateByPath("system.personalityTraits.selfishOrConsiderate", _getBoundedPersonalityTrait(value)); },
 
-      get vengefulOrForgiving() { return parseInt(thiz.document.system.personalityTraits.vengefulOrForgiving); },
+      get vengefulOrForgiving() { return parseInt((thiz.document.system.personalityTraits ?? {}).vengefulOrForgiving ?? 0); },
       set vengefulOrForgiving(value) { thiz.updateByPath("system.personalityTraits.vengefulOrForgiving", _getBoundedPersonalityTrait(value)); },
     };
   }
