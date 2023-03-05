@@ -452,7 +452,7 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
 
     // Luggage
 
-    // TODO: Purge obsolete entries. 
+    // TODO #207: Purge obsolete entries. 
     // This requires a unified and central solution. 
     /*
 // Purge obsolete entries. 
