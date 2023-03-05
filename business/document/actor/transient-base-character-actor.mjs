@@ -154,38 +154,55 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
      * @param {Number} value A value to keep in the bounds of -3 and +3. 
      * 
      * @returns {Number} The bounded value. 
+     * 
+     * @private
      */
     const _getBoundedPersonalityTrait = function(value) {
       return Math.max(-3, Math.min(3, value));
     }
 
+    /**
+     * Persists the given value only, if it is not `undefined`. 
+     * 
+     * @param {String} propertyName Internal name of the personality trait. 
+     * * E. g. `"arrogantOrHumble"`
+     * @param {Number | undefined} value
+     * 
+     * @private
+     */
+    const _updateIfNotUndefined = function(propertyName, value) {
+      if (value === undefined) return;
+
+      thiz.updateByPath(`system.personalityTraits.${propertyName}`, _getBoundedPersonalityTrait(value));
+    }
+
     return {
       get arrogantOrHumble() { return parseInt((thiz.document.system.personalityTraits ?? {}).arrogantOrHumble ?? 0); },
-      set arrogantOrHumble(value) { thiz.updateByPath("system.personalityTraits.arrogantOrHumble", _getBoundedPersonalityTrait(value)); },
+      set arrogantOrHumble(value) { _updateIfNotUndefined("arrogantOrHumble", value) },
       
       get cowardlyOrCourageous() { return parseInt((thiz.document.system.personalityTraits ?? {}).cowardlyOrCourageous ?? 0); },
-      set cowardlyOrCourageous(value) { thiz.updateByPath("system.personalityTraits.cowardlyOrCourageous", _getBoundedPersonalityTrait(value)); },
+      set cowardlyOrCourageous(value) { _updateIfNotUndefined("cowardlyOrCourageous", value) },
 
       get cruelOrMerciful() { return parseInt((thiz.document.system.personalityTraits ?? {}).cruelOrMerciful ?? 0); },
-      set cruelOrMerciful(value) { thiz.updateByPath("system.personalityTraits.cruelOrMerciful", _getBoundedPersonalityTrait(value)); },
+      set cruelOrMerciful(value) { _updateIfNotUndefined("cruelOrMerciful", value) },
       
       get deceitfulOrHonest() { return parseInt((thiz.document.system.personalityTraits ?? {}).deceitfulOrHonest ?? 0); },
-      set deceitfulOrHonest(value) { thiz.updateByPath("system.personalityTraits.deceitfulOrHonest", _getBoundedPersonalityTrait(value)); },
-      
+      set deceitfulOrHonest(value) { _updateIfNotUndefined("deceitfulOrHonest", value) },
+
       get lazyOrEnergetic() { return parseInt((thiz.document.system.personalityTraits ?? {}).lazyOrEnergetic ?? 0); },
-      set lazyOrEnergetic(value) { thiz.updateByPath("system.personalityTraits.lazyOrEnergetic", _getBoundedPersonalityTrait(value)); },
+      set lazyOrEnergetic(value) { _updateIfNotUndefined("lazyOrEnergetic", value) },
 
       get paranoidOrNaive() { return parseInt((thiz.document.system.personalityTraits ?? {}).paranoidOrNaive ?? 0); },
-      set paranoidOrNaive(value) { thiz.updateByPath("system.personalityTraits.paranoidOrNaive", _getBoundedPersonalityTrait(value)); },
+      set paranoidOrNaive(value) { _updateIfNotUndefined("paranoidOrNaive", value) },
 
       get recklessOrPrudent() { return parseInt((thiz.document.system.personalityTraits ?? {}).recklessOrPrudent ?? 0); },
-      set recklessOrPrudent(value) { thiz.updateByPath("system.personalityTraits.recklessOrPrudent", _getBoundedPersonalityTrait(value)); },
-      
+      set recklessOrPrudent(value) { _updateIfNotUndefined("recklessOrPrudent", value) },
+
       get selfishOrConsiderate() { return parseInt((thiz.document.system.personalityTraits ?? {}).selfishOrConsiderate ?? 0); },
-      set selfishOrConsiderate(value) { thiz.updateByPath("system.personalityTraits.selfishOrConsiderate", _getBoundedPersonalityTrait(value)); },
+      set selfishOrConsiderate(value) { _updateIfNotUndefined("selfishOrConsiderate", value) },
 
       get vengefulOrForgiving() { return parseInt((thiz.document.system.personalityTraits ?? {}).vengefulOrForgiving ?? 0); },
-      set vengefulOrForgiving(value) { thiz.updateByPath("system.personalityTraits.vengefulOrForgiving", _getBoundedPersonalityTrait(value)); },
+      set vengefulOrForgiving(value) { _updateIfNotUndefined("vengefulOrForgiving", value) },
     };
   }
   
