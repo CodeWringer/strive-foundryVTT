@@ -74,6 +74,36 @@ import TransientBaseActor from './transient-base-actor.mjs';
  * * Read-only. 
  * @property {Number} assets.maxBulk
  * * Read-only. 
+ * 
+ * @property {Object} personalityTraits
+ * * Read-only
+ * @property {Number} personalityTraits.arrogantOrHumble
+ * * Read-only
+ * * Ranges from -3 to +3
+ * @property {Number} personalityTraits.cowardlyOrCourageous
+ * * Read-only
+ * * Ranges from -3 to +3
+ * @property {Number} personalityTraits.cruelOrMerciful
+ * * Read-only
+ * * Ranges from -3 to +3
+ * @property {Number} personalityTraits.deceitfulOrHonest
+ * * Read-only
+ * * Ranges from -3 to +3
+ * @property {Number} personalityTraits.lazyOrEnergetic
+ * * Read-only
+ * * Ranges from -3 to +3
+ * @property {Number} personalityTraits.paranoidOrNaive
+ * * Read-only
+ * * Ranges from -3 to +3
+ * @property {Number} personalityTraits.recklessOrPrudent
+ * * Read-only
+ * * Ranges from -3 to +3
+ * @property {Number} personalityTraits.selfishOrConsiderate
+ * * Read-only
+ * * Ranges from -3 to +3
+ * @property {Number} personalityTraits.vengefulOrForgiving
+ * * Read-only
+ * * Ranges from -3 to +3
  */
 export default class TransientBaseCharacterActor extends TransientBaseActor {
   /** @override */
@@ -84,6 +114,7 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
 
   /**
    * @type {Object}
+   * @readonly
    */
   get person() {
     const thiz = this;
@@ -105,6 +136,56 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
 
       get biography() { return thiz.document.system.person.biography; },
       set biography(value) { thiz.updateByPath("system.person.biography", value); },
+    };
+  }
+  
+
+  /**
+   * @type {Object}
+   * @readonly
+   */
+  get personalityTraits() {
+    const thiz = this;
+    /**
+     * Returns the given value, but kept within the range of -3 to +3. 
+     * 
+     * E. g. `-5` would return `-3`; `35` would return `3`; `1` would return `1`. 
+     * 
+     * @param {Number} value A value to keep in the bounds of -3 and +3. 
+     * 
+     * @returns {Number} The bounded value. 
+     */
+    const _getBoundedPersonalityTrait = function(value) {
+      return Math.max(-3, Math.min(3, value));
+    }
+
+    return {
+      get arrogantOrHumble() { return parseInt(thiz.document.system.personalityTraits.arrogantOrHumble); },
+      set arrogantOrHumble(value) { thiz.updateByPath("system.personalityTraits.arrogantOrHumble", _getBoundedPersonalityTrait(value)); },
+      
+      get cowardlyOrCourageous() { return parseInt(thiz.document.system.personalityTraits.cowardlyOrCourageous); },
+      set cowardlyOrCourageous(value) { thiz.updateByPath("system.personalityTraits.cowardlyOrCourageous", _getBoundedPersonalityTrait(value)); },
+
+      get cruelOrMerciful() { return parseInt(thiz.document.system.personalityTraits.cruelOrMerciful); },
+      set cruelOrMerciful(value) { thiz.updateByPath("system.personalityTraits.cruelOrMerciful", _getBoundedPersonalityTrait(value)); },
+      
+      get deceitfulOrHonest() { return parseInt(thiz.document.system.personalityTraits.deceitfulOrHonest); },
+      set deceitfulOrHonest(value) { thiz.updateByPath("system.personalityTraits.deceitfulOrHonest", _getBoundedPersonalityTrait(value)); },
+      
+      get lazyOrEnergetic() { return parseInt(thiz.document.system.personalityTraits.lazyOrEnergetic); },
+      set lazyOrEnergetic(value) { thiz.updateByPath("system.personalityTraits.lazyOrEnergetic", _getBoundedPersonalityTrait(value)); },
+
+      get paranoidOrNaive() { return parseInt(thiz.document.system.personalityTraits.paranoidOrNaive); },
+      set paranoidOrNaive(value) { thiz.updateByPath("system.personalityTraits.paranoidOrNaive", _getBoundedPersonalityTrait(value)); },
+
+      get recklessOrPrudent() { return parseInt(thiz.document.system.personalityTraits.recklessOrPrudent); },
+      set recklessOrPrudent(value) { thiz.updateByPath("system.personalityTraits.recklessOrPrudent", _getBoundedPersonalityTrait(value)); },
+      
+      get selfishOrConsiderate() { return parseInt(thiz.document.system.personalityTraits.selfishOrConsiderate); },
+      set selfishOrConsiderate(value) { thiz.updateByPath("system.personalityTraits.selfishOrConsiderate", _getBoundedPersonalityTrait(value)); },
+
+      get vengefulOrForgiving() { return parseInt(thiz.document.system.personalityTraits.vengefulOrForgiving); },
+      set vengefulOrForgiving(value) { thiz.updateByPath("system.personalityTraits.vengefulOrForgiving", _getBoundedPersonalityTrait(value)); },
     };
   }
   
