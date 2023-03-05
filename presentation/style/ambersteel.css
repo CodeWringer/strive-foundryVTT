@@ -589,6 +589,10 @@ li.roll.die.d6.roll-success {
   font-size: 1.6rem;
 }
 
+.font-bold {
+  font-weight: bold;
+}
+
 .ambersteel-icon {
   filter: brightness(0);
 }
@@ -1634,6 +1638,72 @@ img.custom-system-edit {
 }
 img.custom-system-edit.disabled {
   cursor: default;
+}
+
+.personality-traits .personality-dark3 {
+  background-color: rgba(0, 0, 0, 0.25);
+}
+.personality-traits .personality-dark2 {
+  background-color: rgba(0, 0, 0, 0.125);
+}
+.personality-traits .personality-dark1 {
+  background-color: rgba(0, 0, 0, 0.075);
+}
+.personality-traits .personality-neutral {
+  background-color: unset;
+}
+.personality-traits .personality-bright3 {
+  background-color: rgba(255, 255, 255, 0.5);
+}
+.personality-traits .personality-bright2 {
+  background-color: rgba(255, 255, 255, 0.325);
+}
+.personality-traits .personality-bright1 {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+.personality-traits .header {
+  padding: 6px 0;
+  font-weight: bold;
+}
+.personality-traits .header.first {
+  border-radius: 0.3rem 0 0 0;
+}
+.personality-traits .header.last {
+  border-radius: 0 0.3rem 0 0;
+}
+.personality-traits div.personality-radio div.radio-button-group {
+  border-color: rgba(129, 129, 129, 0.55);
+  border-style: solid;
+  border-top-width: 1px;
+  border-radius: 0;
+}
+.personality-traits div.personality-radio .radio-button-container:nth-child(1), .personality-traits div.personality-radio .radio-button-container:nth-child(1).active > label {
+  background-color: rgba(0, 0, 0, 0.25);
+}
+.personality-traits div.personality-radio .radio-button-container:nth-child(2), .personality-traits div.personality-radio .radio-button-container:nth-child(2).active > label {
+  background-color: rgba(0, 0, 0, 0.125);
+}
+.personality-traits div.personality-radio .radio-button-container:nth-child(3), .personality-traits div.personality-radio .radio-button-container:nth-child(3).active > label {
+  background-color: rgba(0, 0, 0, 0.075);
+}
+.personality-traits div.personality-radio .radio-button-container:nth-child(4), .personality-traits div.personality-radio .radio-button-container:nth-child(4).active > label {
+  background-color: unset;
+}
+.personality-traits div.personality-radio .radio-button-container:nth-child(5), .personality-traits div.personality-radio .radio-button-container:nth-child(5).active > label {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+.personality-traits div.personality-radio .radio-button-container:nth-child(6), .personality-traits div.personality-radio .radio-button-container:nth-child(6).active > label {
+  background-color: rgba(255, 255, 255, 0.325);
+}
+.personality-traits div.personality-radio .radio-button-container:nth-child(7), .personality-traits div.personality-radio .radio-button-container:nth-child(7).active > label {
+  background-color: rgba(255, 255, 255, 0.5);
+}
+.personality-traits div.personality-radio .radio-button-container label {
+  border: none;
+  background: none;
+}
+.personality-traits div.personality-radio .radio-button-container.active {
+  background-color: inherit;
 }
 
 /* Animations */
