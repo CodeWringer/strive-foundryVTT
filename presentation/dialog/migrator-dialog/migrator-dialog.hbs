@@ -23,13 +23,13 @@
 	</div>
 	{{!-- Error screen --}}
 	<div id="section-error" class="fill hidden">
-		<h2 class="error"><i class="fas fa-exclamation-triangle"></i> {{localize "ambersteel.migration.error"}}</h2>
+		<h2 class="hint-card error"><i class="fas fa-exclamation-triangle"></i> {{localize "ambersteel.migration.error"}}</h2>
 		<p class="hint-card error cohesive" id="field-error"></p>
 		<p class="hint-card warn">{{localize "ambersteel.migration.errorHint"}} <a href="https://github.com/CodeWringer/ambersteel-foundryVTT/issues">https://github.com/CodeWringer/ambersteel-foundryVTT/issues</a></p>
 	</div>
 	{{!-- Success screen --}}
 	<div id="section-completion" class="fill flex flex-column hidden">
-		<h2 class="success"><i class="fas fa-check-circle"></i> {{localize "ambersteel.migration.completion"}}</h2>
+		<h2 class="hint-card success"><i class="fas fa-check-circle"></i> {{localize "ambersteel.migration.completion"}}</h2>
 		<p class="hint-card success cohesive">{{localize "ambersteel.migration.completionHint"}}</p>
     <div class="flex-grow"></div>
 		<button id="ok" class="button">{{localize "ambersteel.general.ok"}}</button>

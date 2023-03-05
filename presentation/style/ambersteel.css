@@ -1329,25 +1329,25 @@ textarea.gm-notes {
   border-radius: 0 0 0.3rem 0.3rem;
 }
 
-h1, h2, h3, h4, h5 {
+h1.hint-card, h2.hint-card, h3.hint-card, h4.hint-card, h5.hint-card {
   margin: 0;
   border: none;
   border-radius: 0.3rem 0.3rem 0 0;
   padding: 4px 16px;
 }
-h1.success, h2.success, h3.success, h4.success, h5.success {
+h1.hint-card.success, h2.hint-card.success, h3.hint-card.success, h4.hint-card.success, h5.hint-card.success {
   background-color: rgb(53, 94, 70);
   color: rgb(191, 255, 191);
 }
-h1.warn, h2.warn, h3.warn, h4.warn, h5.warn {
+h1.hint-card.warn, h2.hint-card.warn, h3.hint-card.warn, h4.hint-card.warn, h5.hint-card.warn {
   background-color: rgb(94, 76, 39);
   color: rgb(255, 242, 159);
 }
-h1.error, h2.error, h3.error, h4.error, h5.error {
+h1.hint-card.error, h2.hint-card.error, h3.hint-card.error, h4.hint-card.error, h5.hint-card.error {
   background-color: rgb(106, 35, 35);
   color: rgb(255, 197, 197);
 }
-h1.info, h2.info, h3.info, h4.info, h5.info {
+h1.hint-card.info, h2.hint-card.info, h3.hint-card.info, h4.hint-card.info, h5.hint-card.info {
   background-color: rgb(40, 35, 106);
   color: rgb(197, 197, 255);
 }

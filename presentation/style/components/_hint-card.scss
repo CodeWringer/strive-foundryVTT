@@ -40,28 +40,30 @@
 }
 
 h1, h2, h3, h4, h5 {
-  margin: 0;
-  border: none;
-  border-radius: $border-radius-md $border-radius-md 0 0;
-  padding: 4px 16px;
-
-  &.success {
-    background-color: $c-themed-header-bg-success;
-    color: $c-themed-header-success;
-  }
-
-  &.warn {
-    background-color: $c-themed-header-bg-warn;
-    color: $c-themed-header-warn;
-  }
-
-  &.error {
-    background-color: $c-themed-header-bg-error;
-    color: $c-themed-header-error;
-  }
-
-  &.info {
-    background-color: $c-themed-header-bg-info;
-    color: $c-themed-header-info;
+  &.hint-card {
+    margin: 0;
+    border: none;
+    border-radius: $border-radius-md $border-radius-md 0 0;
+    padding: 4px 16px;
+  
+    &.success {
+      background-color: $c-themed-header-bg-success;
+      color: $c-themed-header-success;
+    }
+  
+    &.warn {
+      background-color: $c-themed-header-bg-warn;
+      color: $c-themed-header-warn;
+    }
+  
+    &.error {
+      background-color: $c-themed-header-bg-error;
+      color: $c-themed-header-error;
+    }
+  
+    &.info {
+      background-color: $c-themed-header-bg-info;
+      color: $c-themed-header-info;
+    }
   }
 }
