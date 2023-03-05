@@ -2,20 +2,20 @@
 viewModel: {PersonalityTraitsViewModel}
 --}}
 <div
-  class="personality-traits grid-9col font-size-default{{#if viewModel.showFancyFont}} fancy-font{{/if}}"
+  class="personality-traits font-size-lg{{#if viewModel.showFancyFont}} fancy-font{{/if}}"
   id="{{viewModel.id}}">
   {{!-- Header --}}
-    <div class="flex flex-center header first personality-dark3">{{localize "ambersteel.character.personalityTrait.abbreviation"}}</div>
+    <div class="flex flex-center header first personality-dark3"></div>
     <div class="grid-span-7 grid-7col">
-      <div class="flex flex-center border-solid-r-sm border-solid-l-sm header personality-dark3">{{localize "ambersteel.character.personalityTrait.signature"}}</div>
-      <div class="flex flex-center border-solid-r-sm header personality-dark2">{{localize "ambersteel.character.personalityTrait.strong"}}</div>
-      <div class="flex flex-center border-solid-r-sm header personality-dark1">{{localize "ambersteel.character.personalityTrait.weak"}}</div>
-      <div class="flex flex-center border-solid-r-sm header personality-neutral">{{localize "ambersteel.character.personalityTrait.undecided"}}</div>
-      <div class="flex flex-center border-solid-r-sm header personality-bright1">{{localize "ambersteel.character.personalityTrait.weak"}}</div>
-      <div class="flex flex-center border-solid-r-sm header personality-bright2">{{localize "ambersteel.character.personalityTrait.strong"}}</div>
-      <div class="flex flex-center border-solid-r-sm header personality-bright3">{{localize "ambersteel.character.personalityTrait.signature"}}</div>
+      <div class="flex flex-center border-solid-r-sm border-solid-l-sm header personality-dark3">{{localize "ambersteel.character.personalityTrait.signature.abbreviation"}}</div>
+      <div class="flex flex-center border-solid-r-sm header personality-dark2">&LeftAngleBracket;&LeftAngleBracket;</div>
+      <div class="flex flex-center border-solid-r-sm header personality-dark1">&LeftAngleBracket;</div>
+      <div class="flex flex-center border-solid-r-sm header personality-neutral">?</div>
+      <div class="flex flex-center border-solid-r-sm header personality-bright1">&RightAngleBracket;</div>
+      <div class="flex flex-center border-solid-r-sm header personality-bright2">&RightAngleBracket;&RightAngleBracket;</div>
+      <div class="flex flex-center border-solid-r-sm header personality-bright3">{{localize "ambersteel.character.personalityTrait.signature.abbreviation"}}</div>
     </div>
-    <div class="flex flex-center header last personality-bright3">{{localize "ambersteel.character.personalityTrait.abbreviation"}}</div>
+    <div class="flex flex-center header last personality-bright3"></div>
   {{!-- Rows --}}
   {{#each viewModel.personalityTraits as |obj index|}}
     <div class="flex flex-middle flex-right pad-r-md border-solid-t-sm personality-dark3">{{localize obj.localizableTraitLeft}}</div>

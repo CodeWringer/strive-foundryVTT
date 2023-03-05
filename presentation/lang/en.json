@@ -466,7 +466,10 @@
         "singular": "Personality Trait",
         "plural": "Personality Traits",
         "abbreviation": "Trait",
-        "signature": "Signature",
+        "signature": {
+          "label": "Signature",
+          "abbreviation": "Sig."
+        },
         "strong": "Very",
         "weak": "A little",
         "undecided": "Undecided",

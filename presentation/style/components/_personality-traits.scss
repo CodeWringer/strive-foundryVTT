@@ -8,7 +8,11 @@ $c-personality-bright-3: rgba(255, 255, 255, 0.5);
 $c-personality-bright-2: rgba(255, 255, 255, 0.325);
 $c-personality-bright-1: rgba(255, 255, 255, 0.2);
 
-.personality-traits {
+div.personality-traits {
+  display: grid;
+  grid-column: span 9 / span 9;
+  grid-template-columns: 3fr repeat(7, minmax(0, 1fr)) 3fr;
+
   .personality-dark {
     &3 {
       background-color: $c-personality-dark-3;
