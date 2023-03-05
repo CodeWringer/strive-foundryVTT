@@ -186,6 +186,26 @@ describe('DocumentUpdater', function() {
       mockedLogger.logWarn.should.be.calledOnce();
     });
 
+    it("builds an expected dto with substituted object in the path", function() {
+      // Given
+      const given = new DocumentUpdater({ logger: mockedLogger, propertyUtility: PropertyUtility });
+      const givenPath = "system.f.g";
+      const givenNewValue = 55;
+      const spy = sinon.spy(mockedLogger, "logWarn");
+      // When
+      const dto = given._buildDto(givenDocument, givenPath, givenNewValue);
+      // Then
+      dto.should.be.deepEqual({
+        system: {
+          f: {
+            g: givenNewValue
+          }
+        }
+      });
+      spy.should.have.been.calledOnce();
+      spy.should.have.been.calledWith("Substituting missing object in path");
+    });
+
     it("throws on undefined path", function() {
       // Given
       const given = new DocumentUpdater({ logger: mockedLogger, propertyUtility: PropertyUtility });
