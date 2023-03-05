@@ -151,14 +151,14 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
      * 
      * E. g. `-5` would return `-3`; `35` would return `3`; `1` would return `1`. 
      * 
-     * @param {Number} value A value to keep in the bounds of -3 and +3. 
+     * @param {Number | String} value A value to keep in the bounds of -3 and +3. 
      * 
      * @returns {Number} The bounded value. 
      * 
      * @private
      */
     const _getBoundedPersonalityTrait = function(value) {
-      return Math.max(-3, Math.min(3, value));
+      return Math.max(-3, Math.min(3, parseInt(value)));
     }
 
     /**
