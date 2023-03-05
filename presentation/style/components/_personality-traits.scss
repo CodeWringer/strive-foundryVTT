@@ -54,6 +54,9 @@ $c-personality-bright-1: rgba(255, 255, 255, 0.2);
       border-color: $c-border-medium;
       border-style: solid;
       border-top-width: $border-size-sm;
+      border-right-width: 0;
+      border-bottom-width: 0;
+      border-left-width: 0;
       border-radius: 0;
     }
 
