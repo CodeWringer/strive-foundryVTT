@@ -101,7 +101,8 @@
     "character": {
       "advancement": {
         "level": "Level",
-        "moddedLevel": "Mod. Level",
+        "moddedLevel": "Modified Level",
+        "moddedLevelAbbreviation": "Mod.",
         "requirements": {
           "label": "Required Successes/Failures",
           "abbreviation": "Req. S/F",
@@ -519,7 +520,7 @@
           "apCost": "AP Cost",
           "condition": {
             "label": "Condition",
-            "placeholder": "Once per day / etc."
+            "placeholder": "Condition: Once per day / etc."
           },
           "distance": {
             "label": "Distance",

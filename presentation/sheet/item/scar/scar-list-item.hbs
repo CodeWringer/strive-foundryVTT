@@ -21,16 +21,16 @@ cssClass: {undefined | String}
   {{!-- Row 2 --}}
   {{!-- Limit --}}
   <div class="flex flex-row">
-    <div class="flex flex-middle flex-right">
+    <div class="width-min-xl">
       {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.health.injury.limit"}}{{/label}}
     </div>
-    <div class="grid-span-2">
+    <div class="width-md">
       {{> inputNumberSpinner viewModel=viewModel.vmNsLimit }}
     </div>
   </div>
   {{!-- Row 3 --}}
   {{!-- Description --}}
-  <div class="flex flex-row">
+  <div class="flex flex-row border-solid-t-sm border-solid-b-sm">
     {{> inputRichText viewModel=viewModel.vmRtDescription cssClass="fill" }}
   </div>
 </div>

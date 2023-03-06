@@ -1468,7 +1468,7 @@ span.component-button-toggle-knob.disabled {
 }
 
 .component-rich-text-container {
-  min-height: 4em;
+  min-height: 2em;
 }
 .component-rich-text-container .tox.tox-tinymce {
   border-radius: 0;

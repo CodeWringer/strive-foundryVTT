@@ -24,7 +24,12 @@ cssClass: {undefined | String}
     {{!-- Delete --}}
     {{> buttonDelete viewModel=viewModel.vmBtnDelete }}
   </div>
-  {{!-- Row 2 --}}
+  {{!-- Row --}}
+  {{!-- Description --}}
+  <div class="flex flex-column margin-b-md border-solid-t-sm border-solid-b-sm">
+    {{> inputRichText viewModel=viewModel.vmRtDescription }}
+  </div>
+  {{!-- Row --}}
   <div class="grid grid-2col grid-gap-md">
     {{!-- Required Level --}}
     <div class="fill flex flex-row">
@@ -92,15 +97,7 @@ cssClass: {undefined | String}
     {{> damageDefinitionList viewModel=viewModel.vmDamageDefinitionList}}
   </div>
   {{!-- Condition --}}
-  <div class="flex flex-column margin-b-md{{#if viewModel.hideCondition}} hidden{{/if}}">
-    {{#> header3 showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.skill.ability.condition.label"}}{{/header3}}
-    <div class="flex-grow">
-      {{> inputTextarea viewModel=viewModel.vmTaCondition }}
-    </div>
-  </div>
-  {{!-- Description --}}
-  <div class="flex flex-column margin-b-md">
-    {{#> header3 showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.general.description"}}{{/header3}}
-    {{> inputRichText viewModel=viewModel.vmRtDescription }}
+  <div class="flex flex-column margin-t-md{{#if viewModel.hideCondition}} hidden{{/if}}">
+    {{> inputTextarea viewModel=viewModel.vmTaCondition }}
   </div>
 </div>
