@@ -43,41 +43,36 @@ cssClass: {undefined | String}
         {{> inputNumberSpinner viewModel=viewModel.vmNsQuantity }}
       </span>
     </div>
-    {{!-- Spacer --}}
-    <div class="width-xs"></div>
     {{!-- Max quantity --}}
-    <div class="flex flex-row flex-grow">
-      <span class="width-min-xl">
+    <div class="flex flex-row">
+      <span class="width-min-xl margin-l-sm">
         {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.asset.quantity.maximum"}}{{/label}}
       </span>
       <span class="width-md">
         {{> inputNumberSpinner viewModel=viewModel.vmNsMaxQuantity }}
       </span>
     </div>
-  </div>
-  {{!-- Row 3 --}}
-  <div class="flex flex-row">
     {{!-- Bulk --}}
-    <span class="width-min-xl">
+    <span class="width-min-xl margin-l-sm">
       {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.asset.bulk"}}{{/label}}
     </span>
     <span class="width-md">
       {{> inputNumberSpinner viewModel=viewModel.vmNsBulk }}
     </span>
   </div>
-  {{!-- Row 4 --}}
+  {{!-- Row --}}
+  {{!-- Description --}}
+  <div class="flex flex-row border-solid-t-sm border-solid-b-sm">
+    {{> inputRichText viewModel=viewModel.vmRtDescription }}
+  </div>
+  {{!-- Row --}}
   {{!-- Properties --}}
-  <div class="flex flex-row">
+  <div class="flex flex-row pad-b-sm">
     <span class="width-min-xl">
       {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.general.properties.label"}}{{/label}}
     </span>
     <span class="flex flex-grow">
       {{> inputProperties viewModel=viewModel.vmProperties}}
     </span>
-  </div>
-  {{!-- Row 5 --}}
-  {{!-- Description --}}
-  <div class="flex flex-row">
-    {{> inputRichText viewModel=viewModel.vmRtDescription }}
   </div>
 </div>
