@@ -101,7 +101,8 @@
     "character": {
       "advancement": {
         "level": "Level",
-        "moddedLevel": "Mod. Level",
+        "moddedLevel": "Modified Level",
+        "moddedLevelAbbreviation": "Mod.",
         "requirements": {
           "label": "Required Successes/Failures",
           "abbreviation": "Req. S/F",
