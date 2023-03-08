@@ -33,6 +33,8 @@ import { queryAssetSlotConfiguration } from "./assets-utils.mjs";
  * * Read-only. 
  * @property {AssetListItemViewModel} assetListItemViewModel
  * * Read-only. 
+ * @property {Boolean} hasExceededBulk Returns `true`, if the asset slot's maximum allowed bulk has been exceeded. 
+ * * Read-only. 
  */
 export default class ActorAssetSlotViewModel extends ViewModel {
   /** @override */
@@ -56,12 +58,11 @@ export default class ActorAssetSlotViewModel extends ViewModel {
   get maxBulk() {
     return this.assetSlot.maxBulk;
   }
-  
 
   get moddedMaxBulk() {
     return this.assetSlot.moddedMaxBulk;
   }
-  
+
   /**
    * @type {Array<TransientAsset>}
    * @readonly
@@ -75,7 +76,19 @@ export default class ActorAssetSlotViewModel extends ViewModel {
    * @readonly
    */
   get assetListItemTemplate() { return AssetListItemViewModel.TEMPLATE; }
-  
+
+  /**
+   * @type {Boolean}
+   * @readonly
+   */
+  get hasExceededBulk() {
+    if (this.currentBulk > this.moddedMaxBulk) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
    * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 

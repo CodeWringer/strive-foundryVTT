@@ -1,0 +1,5 @@
+{{!-- Parameters:
+cssClass: {undefined | String}
+admonish: {Boolean | undefined}
+--}}
+<div class="custom-system-read-only pad-sm fill{{#if admonish}} hint-card error{{/if}}{{#if cssClass}} {{cssClass}}{{/if}}">{{#if admonish}}<i class="fas fa-exclamation-triangle"></i> {{/if}}{{> @partial-block}}</div>
