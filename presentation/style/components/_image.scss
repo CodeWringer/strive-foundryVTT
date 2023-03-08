@@ -14,20 +14,20 @@ img.custom-icon {
   &-sm {
     border: $c-border-input 1px solid;
     flex: none;
-    width: $line-height !important;
-    height: $line-height !important;
+    width: $line-height;
+    height: $line-height;
   }
   &-md {
     border: $c-border-input 1px solid;
     flex: none;
-    width: 64px !important;
-    height: 64px !important;
+    width: 64px;
+    height: 64px;
   }
   &-lg {
     border: $c-border-input 1px solid;
     flex: none;
-    width: 100px !important;
-    height: 100px !important;
+    width: 100px;
+    height: 100px;
   }
 }
 
