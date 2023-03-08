@@ -28,8 +28,8 @@ cssClass: {undefined | String}
         <div class="flex-grow">
           {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.asset.carryingCapacity.used"}}{{/label}}
         </div>
-        <span class="width-md">
-          {{#> readOnlyValue}}{{viewModel.currentBulk}}{{/readOnlyValue}}
+        <span class="flex flex-row flex-middle width-md">
+          {{#> admonishReadOnlyValue admonish=viewModel.hasExceededBulk}}{{viewModel.currentBulk}}{{/admonishReadOnlyValue}}
         </span>
       </div>
     </div>
