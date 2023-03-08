@@ -17,6 +17,8 @@ import { queryAssetSlotConfiguration } from "./assets-utils.mjs";
  * * Read-only. 
  * @property {Boolean} hasFreeSlot
  * * Read-only. 
+ * @property {Boolean} hasExceededBulk Returns `true`, if the asset slot group's maximum allowed bulk has been exceeded. 
+ * * Read-only. 
  * @property {Array<ActorAssetSlotViewModel>} assetSlotViewModels
  * * Read-only. 
  * @property {String} assetSlotTemplate
@@ -62,6 +64,18 @@ export default class ActorAssetSlotGroupViewModel extends ViewModel {
       }
     }
     return false;
+  }
+
+  /**
+   * @type {Boolean}
+   * @readonly
+   */
+  get hasExceededBulk() {
+    if (this.group.currentBulk > this.group.maxBulk) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   /**

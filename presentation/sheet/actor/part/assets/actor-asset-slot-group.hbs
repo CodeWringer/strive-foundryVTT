@@ -11,8 +11,8 @@ cssClass: {undefined | String}
       {{!-- Slot Group Bulk --}}
       <div class="flex flex-row flex-middle font-size-sm">
         {{#> label showFancyFont=viewModel.showFancyFont cssClass=" "}}{{localize "ambersteel.character.asset.bulk"}}{{/label}}
-        <span class="width-md">
-          {{#> readOnlyValue}}{{viewModel.group.currentBulk}} / {{viewModel.group.maxBulk}}{{/readOnlyValue}}
+        <span class="flex flex-row flex-middle">
+          {{#> admonishReadOnlyValue cssClass="pad-l-md pad-r-md" admonish=viewModel.hasExceededBulk}}{{viewModel.group.currentBulk}} / {{viewModel.group.maxBulk}}{{/admonishReadOnlyValue}}
         </span>
       </div>
       {{!-- Edit Controls --}}
