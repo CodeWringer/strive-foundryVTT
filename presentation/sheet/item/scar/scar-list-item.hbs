@@ -4,17 +4,19 @@ cssClass: {undefined | String}
 --}}
 <div class="custom-system-list-item{{#if cssClass}} {{cssClass}}{{/if}}">
   {{!-- Row 1 --}}
-  <div class="flex flex-row">
+  <div class="flex flex-row flex-middle list-item-header">
     {{!-- Send to chat --}}
     {{> buttonSendToChat viewModel=viewModel.vmBtnSendToChat }}
     {{!-- Name --}}
     <span class="width-min-xl">
       {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.health.scar.singular"}}{{/label}}
     </span>
-    {{> inputImage viewModel=viewModel.vmImg cssClass="custom-icon-sm" }}
-    <h2 class="flex-grow margin-r-md">
-      {{> inputTextField viewModel=viewModel.vmTfName }}
-    </h2>
+    <div class="list-item-header-img">
+      {{> inputImage viewModel=viewModel.vmImg cssClass="custom-icon-sm" }}
+    </div>
+    <div class="flex-grow margin-r-md">
+      {{> inputTextField viewModel=viewModel.vmTfName cssClass="list-item-header" }}
+    </div>
     {{!-- Delete --}}
     {{> buttonDelete viewModel=viewModel.vmBtnDelete }}
   </div>
