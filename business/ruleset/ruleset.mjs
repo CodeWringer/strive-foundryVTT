@@ -230,6 +230,18 @@ export default class Ruleset {
   }
 
   /**
+   * Returns the asset slot maximum bulk bonus, based on the given character's strength. 
+   * 
+   * @param {Actor} actor 
+   * 
+   * @returns {Number}
+   */
+  getAssetSlotBonus(actor) {
+    const strengthLevel = parseInt(actor.system.attributes.physical.strength.moddedLevel);
+    return Math.max(0, Math.floor((strengthLevel - 1) / 3));
+  }
+
+  /**
    * Returns an object containing the maximum magic stamina, as well as the details of how it came to be. 
    * 
    * @param {Actor} actor 

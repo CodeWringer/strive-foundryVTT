@@ -1,5 +1,6 @@
 import { createUUID } from "../../util/uuid-utility.mjs";
 import { validateOrThrow } from "../../util/validation-utility.mjs";
+import Ruleset from "../ruleset.mjs";
 
 /**
  * Represents an asset slot of a character. 
@@ -18,6 +19,10 @@ import { validateOrThrow } from "../../util/validation-utility.mjs";
  * that has been alotted to this slot. 
  * @property {Number} maxBulk The maximum bulk of an asset to accept. 
  * * Default `1`. 
+ * @property {Number} moddedMaxBulk The modified maximum bulk of an asset to accept. 
+ * * Read-only
+ * @property {Number} strengthBulkBonus Returns the number of bonus bulk, based on the character's strength. 
+ * * Read-only
  * @property {TransientAsset | undefined} asset
  */
 export default class CharacterAssetSlot {
@@ -35,6 +40,15 @@ export default class CharacterAssetSlot {
   
   get maxBulk() { return this._reference.maxBulk ?? 1; }
   set maxBulk(value) { this._actor.updateByPath(`${this._path}.maxBulk`, value); }
+  
+  get moddedMaxBulk() {
+    return (this._reference.maxBulk ?? 1) + this.strengthBulkBonus;
+  }
+
+  get strengthBulkBonus() {
+    const ruleset = new Ruleset();
+    return ruleset.getAssetSlotBonus(this._actor.document);
+  }
 
   get asset() {
     if (this.alottedId === null) {

@@ -55,7 +55,7 @@ export default class CharacterAssetSlotGroup {
   get maxBulk() {
     let result = 0;
     for (const slot of this.slots) {
-      result += slot.maxBulk;
+      result += slot.moddedMaxBulk;
     }
     return result;
   }

@@ -25,6 +25,8 @@ import { queryAssetSlotConfiguration } from "./assets-utils.mjs";
  * * Read-only. 
  * @property {Number} maxBulk
  * * Read-only. 
+ * @property {Number} moddedMaxBulk
+ * * Read-only. 
  * @property {Array<TransientAsset>} availableAssets
  * * Read-only. 
  * @property {String} assetListItemTemplate
@@ -53,6 +55,11 @@ export default class ActorAssetSlotViewModel extends ViewModel {
 
   get maxBulk() {
     return this.assetSlot.maxBulk;
+  }
+  
+
+  get moddedMaxBulk() {
+    return this.assetSlot.moddedMaxBulk;
   }
   
   /**
