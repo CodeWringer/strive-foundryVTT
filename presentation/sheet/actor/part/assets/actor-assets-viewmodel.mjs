@@ -14,6 +14,8 @@ import ActorAssetsEquippedViewModel from "./actor-assets-equipped-viewmodel.mjs"
  * @property {Array<AssetListItemViewModel>} listItemViewModels 
  * @property {Number} maxBulk 
  * @property {Number} currentBulk 
+ * @property {Boolean} hasExceededBulk Returns `true`, if the luggage's maximum allowed bulk has been exceeded. 
+ * * Read-only. 
  * 
  * @property {ViewModel} vmPropertyList 
  */
@@ -45,6 +47,18 @@ export default class ActorAssetsViewModel extends ViewModel {
    * @readonly
    */
   get templateEquipped() { return TEMPLATES.ACTOR_ASSETS_EQUIPPED; }
+
+  /**
+   * @type {Boolean}
+   * @readonly
+   */
+  get hasExceededBulk() {
+    if (this.currentBulk > this.maxBulk) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
