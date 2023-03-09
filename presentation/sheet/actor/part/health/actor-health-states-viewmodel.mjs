@@ -107,7 +107,7 @@ export default class ActorHealthStatesViewModel extends ViewModel {
       const isVisible = stateSettings.hidden.find(stateName => state.name === stateName) === undefined;
       if (isVisible === true) {
         const vm = new ActorHealthStatesListItemViewModel({
-          id: state.name,
+          id: this.getSanitizedStateName(state.name),
           parent: this,
           document: this.document,
           isEditable: this.isEditable,
@@ -121,5 +121,19 @@ export default class ActorHealthStatesViewModel extends ViewModel {
         this.stateViewModels.push(vm);
       }
     }
+  }
+
+  /**
+   * "Sanitizes" the given state name, by removing spaces and converting to lower-case 
+   * and returns the result. 
+   * 
+   * @param {String} stateName 
+   * 
+   * @returns {String}
+   * 
+   * @private
+   */
+  getSanitizedStateName(stateName) {
+    return stateName.replace(/ /g, "-").toLowerCase();
   }
 }
