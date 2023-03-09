@@ -428,6 +428,11 @@
           "plural": "Scars",
           "singular": "Scar"
         },
+        "state": {
+          "label": "Health State",
+          "intensity": "Intensity",
+          "limit": "Limit"
+        },
         "states": {
           "label": "States",
           "berserk": "Berserk",

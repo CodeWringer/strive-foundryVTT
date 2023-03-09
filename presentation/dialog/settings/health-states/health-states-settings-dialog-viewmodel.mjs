@@ -164,12 +164,14 @@ export default class HealthStatesSettingsDialogViewModel extends ViewModel {
     const thiz = this;
 
     for (let index = 0; index < this.stateSettings.custom.length; index++) {
+      const customHealthState = this.stateSettings.custom[index];
       const vm = new CustomHealthStateListItemViewModel({
         id: `name${index}`,
         isEditable: this.isEditable,
-        propertyOwner: this,
-        propertyPath: `stateSettings.custom[${index}]`,
-        onChange: () => {
+        stateName: (customHealthState.name ?? customHealthState),
+        stateLimit: (customHealthState.limit ?? 0),
+        onChange: (state) => {
+          this.stateSettings.custom[index] = state;
           thiz._renderFormApplication();
         }
       });
@@ -194,7 +196,10 @@ export default class HealthStatesSettingsDialogViewModel extends ViewModel {
    * @private
    */
   _onClickAddCustomHealthState() {
-    this.stateSettings.custom.push("New Health State");
+    this.stateSettings.custom.push({
+      name: "New Health State",
+      limit: 0,
+    });
     this._renderFormApplication();
   }
 

@@ -5,6 +5,11 @@ viewModel: {ActorHealthStatesListItemViewModel}
   <span>
     {{> buttonToggle viewModel=viewModel.btnToggle}}
   </span>
+  {{#if viewModel.showIntensity}}
+    <span class="width-md">
+      {{> inputNumberSpinner viewModel=viewModel.vmIntensity}}
+    </span>
+  {{/if}}
   <span class="flex flex-grow pad-l-lg">
     {{#> label showFancyFont=viewModel.showFancyFont}}{{viewModel.localizedLabel}}{{/label}}
   </span>

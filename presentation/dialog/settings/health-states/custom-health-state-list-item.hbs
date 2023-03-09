@@ -2,8 +2,16 @@
 viewModel: CustomHealthStateListItemViewModel
 --}}
 <div class="flex flex-row flex-grow flex-middle">
+  {{!-- Name --}}
   {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.general.name"}}{{/label}}
-  <div class="flex-grow">
+  <span class="flex-grow">
     {{> inputTextField viewModel=viewModel.vmName}}
-  </div>
+  </span>
+  {{!-- Spacer --}}
+  <span class="width-sm"></span>
+  {{!-- Limit --}}
+  {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.health.state.limit"}}{{/label}}
+  <span class="width-md">
+    {{> inputNumberSpinner viewModel=viewModel.vmLimit}}
+  </span>
 </div>

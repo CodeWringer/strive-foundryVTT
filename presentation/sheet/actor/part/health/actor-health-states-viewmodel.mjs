@@ -1,3 +1,4 @@
+import { CharacterHealthState } from "../../../../../business/ruleset/health/character-health-state.mjs";
 import { HealthState, HEALTH_STATES } from "../../../../../business/ruleset/health/health-states.mjs";
 import LoadHealthStatesSettingUseCase from "../../../../../business/use-case/load-health-states-setting-use-case.mjs";
 import { validateOrThrow } from "../../../../../business/util/validation-utility.mjs";
@@ -46,17 +47,48 @@ export default class ActorHealthStatesViewModel extends ViewModel {
 
     this.stateViewModels = [];
     
+    const characterHealthStates = this.document.health.states;
+
+    // Get all custom-defined health states. 
+    // If a particular health state is already on the character, then that instance 
+    // will be taken, instead of a new "blank" instance. 
     const stateSettings = new LoadHealthStatesSettingUseCase().invoke();
+    const customHealthStates = stateSettings.custom.map((customDefinition) => {
+      // For backwards-compatibility, also attempt to use the `customDefinition` directly - 
+      // in older versions, custom health states were defined as a string, instead of object. 
+      const characterHealthState = characterHealthStates.find(it => it.name === (customDefinition.name ?? customDefinition));
+      if (characterHealthState === undefined) {
+        return new CharacterHealthState({
+          name: customDefinition.name ?? customDefinition,
+          localizableName: customDefinition.name ?? customDefinition,
+          limit: customDefinition.limit ?? 0,
+          intensity: 0,
+        });
+      } else {
+        return characterHealthState;
+      }
+    });
+
+    // Get all system-defined health states. 
+    // If a particular health state is already on the character, then that instance 
+    // will be taken, instead of a new "blank" instance. 
+    const systemHealthStates = HEALTH_STATES.asArray.map((healthState) => {
+      const characterHealthState = characterHealthStates.find(it => it.name === healthState.name);
+      if (characterHealthState === undefined) {
+        return new CharacterHealthState({
+          name: healthState.name,
+          localizableName: healthState.localizableName,
+          limit: healthState.limit,
+          intensity: 0,
+        });
+      } else {
+        return characterHealthState;
+      }
+    });
 
     // Combine the system default states with the custom states in a single list. 
-    const states = HEALTH_STATES.asArray.concat(
-      stateSettings.custom.map(customName => 
-        new HealthState({
-          name: customName,
-          localizableName: customName,
-        })
-      )
-    );
+    const states = systemHealthStates.concat(customHealthStates);
+
     // Sort alphabetically. 
     states.sort((a, b) => {
       const lowerA = a.name.toLowerCase();
@@ -72,9 +104,10 @@ export default class ActorHealthStatesViewModel extends ViewModel {
     });
 
     for (const state of states) {
-      if (stateSettings.hidden.find(stateName => state.name === stateName) === undefined) {
+      const isVisible = stateSettings.hidden.find(stateName => state.name === stateName) === undefined;
+      if (isVisible === true) {
         const vm = new ActorHealthStatesListItemViewModel({
-          id: state.name,
+          id: this.getSanitizedStateName(state.name),
           parent: this,
           document: this.document,
           isEditable: this.isEditable,
@@ -82,9 +115,25 @@ export default class ActorHealthStatesViewModel extends ViewModel {
           isOwner: this.isOwner,
           localizedLabel: game.i18n.localize(state.localizableName),
           stateName: state.name,
+          stateIntensity: state.intensity,
+          stateLimit: state.limit,
         });
         this.stateViewModels.push(vm);
       }
     }
+  }
+
+  /**
+   * "Sanitizes" the given state name, by removing spaces and converting to lower-case 
+   * and returns the result. 
+   * 
+   * @param {String} stateName 
+   * 
+   * @returns {String}
+   * 
+   * @private
+   */
+  getSanitizedStateName(stateName) {
+    return stateName.replace(/ /g, "-").toLowerCase();
   }
 }

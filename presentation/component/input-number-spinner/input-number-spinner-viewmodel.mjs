@@ -34,6 +34,7 @@ export default class InputNumberSpinnerViewModel extends InputViewModel {
   get hasMax() { return this.max !== undefined; }
 
   /**
+   * @param {Object} args
    * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
    * 
    * @param {String} args.propertyPath The path used to look up the value. 

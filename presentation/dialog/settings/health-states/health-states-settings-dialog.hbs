@@ -3,11 +3,11 @@ viewModel: HealthStatesSettingsDialogViewModel
 --}}
 <section>
   <div class="sheet-block flex flex-column">
-    <h2>{{localize "ambersteel.settings.healthStates.configureSystemDefaults"}}</h2>
+    {{#> header2 showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.settings.healthStates.configureSystemDefaults"}}{{/header2}}
     {{> visibilityToggleList viewModel=viewModel.vmVisibilityList}}
   </div>
   <div class="sheet-block flex flex-column">
-    <h2>{{localize "ambersteel.settings.healthStates.configureCustom"}}</h2>
+    {{#> header2 showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.settings.healthStates.configureCustom"}}{{/header2}}
     {{> simpleList viewModel=viewModel.vmCustomList}}
   </div>
   <div>
