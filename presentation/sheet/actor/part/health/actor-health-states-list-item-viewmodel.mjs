@@ -1,6 +1,9 @@
+import { CharacterHealthState } from "../../../../../business/ruleset/health/character-health-state.mjs";
 import { arrayTakeUnless } from "../../../../../business/util/array-utility.mjs";
 import { validateOrThrow } from "../../../../../business/util/validation-utility.mjs";
+import ObservableField from "../../../../../common/observables/observable-field.mjs";
 import ButtonToggleViewModel from "../../../../component/button-toggle/button-toggle-viewmodel.mjs";
+import InputNumberSpinnerViewModel from "../../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
 import { TEMPLATES } from "../../../../templatePreloader.mjs"
 import ViewModel from "../../../../view-model/view-model.mjs"
 
@@ -13,6 +16,9 @@ import ViewModel from "../../../../view-model/view-model.mjs"
  * @property {TransientBaseCharacterActor} document An actor document on which to set the state. 
  * @property {String} localizedLabel A localized label for the state. 
  * @property {String} stateName The state's "id". 
+ * @property {ObservableField} stateIntensity
+ * @property {ObservableField} activeState
+ * @property {Number} stateLimit
  * 
  * @extends ViewModel
  */
@@ -21,30 +27,13 @@ export default class ActorHealthStatesListItemViewModel extends ViewModel {
   static get TEMPLATE() { return TEMPLATES.ACTOR_HEALTH_STATES_LIST_ITEM; }
 
   /**
-   * Gets or sets the state on the given document. 
-   * 
-   * If set to `true`, adds the state's "id" to the document's `states` array. 
-   * If set to `false`, removes the state's "id" from the document's `states` array. 
+   * Returns true, if the state can be incurred multiple times, which means the 
+   * intensity number spinner should be visible. 
    * 
    * @type {Boolean}
+   * @readonly
    */
-  get value() {
-    const index = (this.document.health.states ?? []).indexOf(this.stateName);
-    return index > -1;
-  }
-  set value(value) {
-    const states = this.document.health.states ?? [];
-    const index = states.indexOf(this.stateName);
-    if (value === true && index < 0) {
-      // State not yet on document - add it. 
-      this.document.health.states = states.concat([this.stateName]);
-    } else if (value === false && index > -1) {
-      // State on document - remove it. 
-      this.document.health.states = arrayTakeUnless(states, (it) => {
-        return it === this.stateName;
-      });
-    }
-  }
+  get showIntensity() { return (this.stateLimit !== 1) && (this.stateIntensity.value > 0); }
 
   /**
    * @param {Object} args
@@ -59,6 +48,10 @@ export default class ActorHealthStatesListItemViewModel extends ViewModel {
    * @param {TransientBaseCharacterActor} args.document An actor document on which to set the state. 
    * @param {String} args.localizedLabel A localized label for the state. 
    * @param {String} args.stateName The state's "id". 
+   * @param {Number | undefined} args.stateIntensity
+   * * Default `0`
+   * @param {Number | undefined} args.stateLimit
+   * * Default `0`
    * 
    * @throws {Error} ArgumentException - Thrown, if any of the mandatory arguments aren't defined. 
    */
@@ -69,6 +62,46 @@ export default class ActorHealthStatesListItemViewModel extends ViewModel {
     this.document = args.document;
     this.localizedLabel = args.localizedLabel;
     this.stateName = args.stateName;
+    
+    this.activeState = new ObservableField({ value: (args.stateIntensity > 0)})
+    this.activeState.onChange((field, oldValue, newValue) => {
+      if (newValue === true) {
+        this.stateIntensity.value = 1;
+      } else {
+        this.stateIntensity.value = 0;
+      }
+    });
+    
+    this.stateIntensity = new ObservableField({ value: (args.stateIntensity ?? 0)})
+    this.stateIntensity.onChange((field, oldValue, newValue) => {
+      let characterHealthStates = this.document.health.states;
+      const healthState = characterHealthStates.find(it => it.name === this.stateName);
+
+      if (newValue < 1 && healthState !== undefined) {
+        // Remove health state. 
+        characterHealthStates = arrayTakeUnless(
+          characterHealthStates, 
+          it => it.name === this.stateName,
+        );
+      } else {
+        if (healthState === undefined) {
+          // Health state does not yet exist on character - add it. 
+          characterHealthStates.push(
+            new CharacterHealthState({
+              name: this.stateName,
+              intensity: newValue,
+            })
+          );
+        } else {
+          // Set new value for health state. 
+          healthState.intensity = newValue;
+        }
+      }
+
+      this.document.health.states = characterHealthStates;
+    });
+
+    this.stateLimit = args.stateLimit ?? 0;
 
     this.btnToggle = new ButtonToggleViewModel({
       id: "btnToggle",
@@ -76,8 +109,30 @@ export default class ActorHealthStatesListItemViewModel extends ViewModel {
       isEditable: this.isEditable,
       isSendable: this.isSendable,
       isOwner: this.isOwner,
-      propertyPath: "value",
       target: this,
+      propertyPath: "activeState.value",
     });
+
+    if (this.showIntensity === true) {
+      this.vmIntensity = new InputNumberSpinnerViewModel({
+        id: "vmIntensity",
+        parent: this,
+        isEditable: this.isEditable,
+        isSendable: this.isSendable,
+        isOwner: this.isOwner,
+        propertyOwner: this,
+        propertyPath: "stateIntensity.value",
+        min: 0,
+        max: (this.stateLimit > 0) ? this.stateLimit : undefined,
+      });
+    }
+  }
+
+  /** @override */
+  dispose() {
+    this.activeState.dispose();
+    this.stateIntensity.dispose();
+
+    super.dispose();
   }
 }

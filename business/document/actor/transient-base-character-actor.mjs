@@ -4,7 +4,10 @@ import CharacterAssetSlotGroup from '../../ruleset/asset/character-asset-slot-gr
 import CharacterAssetSlot from '../../ruleset/asset/character-asset-slot.mjs';
 import { ATTRIBUTE_GROUPS } from '../../ruleset/attribute/attribute-groups.mjs';
 import CharacterAttributeGroup from '../../ruleset/attribute/character-attribute-group.mjs';
+import { CharacterHealthState } from '../../ruleset/health/character-health-state.mjs';
+import { HEALTH_STATES } from '../../ruleset/health/health-states.mjs';
 import Ruleset from '../../ruleset/ruleset.mjs';
+import LoadHealthStatesSettingUseCase from '../../use-case/load-health-states-setting-use-case.mjs';
 import { createUUID } from '../../util/uuid-utility.mjs';
 import { isDefined } from '../../util/validation-utility.mjs';
 import TransientBaseActor from './transient-base-actor.mjs';
@@ -46,7 +49,8 @@ import TransientBaseActor from './transient-base-actor.mjs';
  * * Read-only. 
  * @property {Array<TransientScar>} health.scars 
  * * Read-only. 
- * @property {Array<String>} health.states
+ * @property {Array<CharacterHealthState>} health.states
+ * * Getter returns a safe-copy.
  * @property {Number} health.HP 
  * @property {Number} health.maxHP 
  * * Read-only. 
@@ -245,8 +249,16 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
       get maxExhaustion() { return new Ruleset().getCharacterMaximumExhaustion(thiz.document) },
       get maxMagicStamina() { return new Ruleset().getCharacterMaximumMagicStamina(thiz.document) },
       
-      get states() { return thiz.document.system.health.states; },
-      set states(value) { thiz.updateByPath("system.health.states", value); },
+      get states() { return thiz._healthStates.concat([]); },
+      set states(value) {
+        const dtoArray = value.map((healthState) => {
+          return {
+            name: healthState.name,
+            intensity: healthState.intensity,
+          };
+        });
+        thiz.updateByPath("system.health.states", dtoArray);
+      },
     };
   }
 
@@ -290,6 +302,7 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
     this.attributeGroups = this._getAttributeGroups();
     this.attributes = this._getAttributes();
     this._prepareAssetsData();
+    this._healthStates = this._getHealthStates();
   }
 
   /**
@@ -530,6 +543,45 @@ this.updateByPath("")
       result.push(assetSlotGroup);
     }
 
+    return result;
+  }
+
+  /**
+   * Returns the health states of the character. 
+   * 
+   * @returns {Array<CharacterHealthState>}
+   * 
+   * @private
+   */
+  _getHealthStates() {
+    const rawArray = this.document.system.health.states;
+    const stateSettings = new LoadHealthStatesSettingUseCase().invoke();
+    const result = [];
+    let definition = undefined;
+
+    for (const entry of rawArray) {
+      // First try to get system-defined state. 
+      definition = HEALTH_STATES[entry.name];
+      if (definition === undefined) {
+        // Second try - is it a custom-defined state?
+        // For backwards-compatibility, also attempt to use the `it` directly - 
+        // in older versions, custom health states were defined as a string, instead of object. 
+        definition = stateSettings.custom.find(it => (it.name ?? it) === entry.name);
+        if (definition === undefined) {
+          game.ambersteel.logger.logWarn(`Failed to get health state definition '${entry.name}'`);
+          continue;
+        }
+      }
+
+      const healthState = new CharacterHealthState({
+        name: entry.name,
+        localizableName: definition.localizableName ?? entry.name,
+        icon: definition.icon, 
+        limit: definition.limit,
+        intensity: entry.intensity,
+      });
+      result.push(healthState);
+    }
     return result;
   }
 
