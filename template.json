@@ -15,7 +15,8 @@
           "illnesses": [],
           "mutations": [],
           "scars": []
-        }
+        },
+        "properties": []
       },
       "character": {
         "person": {
@@ -218,7 +219,8 @@
         "description": "",
         "gmNotes": "",
         "isCustom": false,
-        "displayOrders": {}
+        "displayOrders": {},
+        "properties": []
       }
     },
     "skill": {
@@ -229,8 +231,7 @@
       "successes": 0,
       "failures": 0,
       "abilities": {},
-      "category": "",
-      "isMagicSchool": false
+      "category": ""
     },
     "fate-card": {
       "templates": ["base"],

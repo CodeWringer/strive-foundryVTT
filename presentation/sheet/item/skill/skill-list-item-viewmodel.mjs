@@ -161,12 +161,6 @@ export default class SkillListItemViewModel extends SkillViewModel {
       skillAbilitiesInitiallyVisible: false,
       visGroupId: thiz.visGroupId,
     });
-    this.vmSwIsMagicSchool = factory.createVmBtnToggle({
-      parent: thiz,
-      id: "vmSwIsMagicSchool",
-      target: thiz.document,
-      propertyPath: "isMagicSchool",
-    });
     this.vmRtDescription = factory.createVmRichText({
       parent: thiz,
       id: "vmRtDescription",

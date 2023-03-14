@@ -17,6 +17,7 @@ import { ATTACK_TYPES } from "../../ruleset/skill/attack-types.mjs";
 import { ATTRIBUTES } from "../../ruleset/attribute/attributes.mjs";
 import { isBlankOrUndefined, isObject } from "../../util/validation-utility.mjs";
 import { SKILL_PROPERTIES } from "./item-properties.mjs";
+import { arrayContains } from "../../util/array-utility.mjs";
 
 /**
  * Represents the full transient data of a skill. 
@@ -129,11 +130,19 @@ export default class TransientSkill extends TransientBaseItem {
    * @type {Boolean}
    */
   get isMagicSchool() {
-    return this.document.system.isMagicSchool;
+    return arrayContains((this.document.system.properties ?? []), SKILL_PROPERTIES.MAGIC_SCHOOL.id);
   }
   set isMagicSchool(value) {
-    this.document.system.isMagicSchool = value;
-    this.updateByPath("system.isMagicSchool", value);
+    const properties = (this.document.system.properties ?? []).concat([]); // Local-copy
+    const index = properties.indexOf(SKILL_PROPERTIES.MAGIC_SCHOOL.id);
+
+    if (value === true && index < 0) {
+      properties.push(SKILL_PROPERTIES.MAGIC_SCHOOL.id);
+      this.updateByPath("system.properties", properties);
+    } else if (value !== true && index > -1) {
+      properties.splice(index, 1);
+      this.updateByPath("system.properties", properties);
+    }
   }
   
   /** @override */

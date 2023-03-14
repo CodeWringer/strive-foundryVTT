@@ -92,12 +92,6 @@ export default class SkillItemSheetViewModel extends SkillViewModel {
       propertyPath: "category",
       placeholder: "ambersteel.general.category",
     });
-    this.vmSwIsMagicSchool = factory.createVmBtnToggle({
-      parent: thiz,
-      id: "vmSwIsMagicSchool",
-      target: thiz.document,
-      propertyPath: "isMagicSchool",
-    });
     this.vmRtDescription = factory.createVmRichText({
       parent: thiz,
       id: "vmRtDescription",
