@@ -1,6 +1,8 @@
 import { DOCUMENT_COLLECTION_SOURCES } from "../../document/document-fetcher/document-collection-source.mjs";
 import DocumentFetcher from "../../document/document-fetcher/document-fetcher.mjs";
 import DocumentUpdater from "../../document/document-updater/document-updater.mjs";
+import { SKILL_PROPERTIES } from "../../document/item/item-properties.mjs";
+import { arrayContains } from "../../util/array-utility.mjs";
 import * as PropertyUtility from "../../util/property-utility.mjs";
 import AbstractMigrator from "../abstract-migrator.mjs";
 import { MIGRATORS } from "../migrators.mjs";
@@ -76,6 +78,36 @@ export default class Migrator_1_5_2__1_5_3 extends AbstractMigrator {
           await this.updater.deleteByPath(actor, pathFrom, false);
         }
       }
+    }
+    
+    // Get all _editable_ skills. 
+    // Locked compendia will be excluded in the search. FoundryVTT doesn't allow 
+    // editing them and chances are we're dealing with system compendia, 
+    // which shouldn't be touched, anyway. 
+    const editableSkills = await documentFetcher.findAll({
+      documentType: "Item",
+      contentType: "skill",
+      source: DOCUMENT_COLLECTION_SOURCES.all,
+      includeLocked: false,
+    });
+
+    for (const skill of editableSkills) {
+      // Compatibility checks for FoundryVTT version < 10
+      const hasSystem = skill.system !== undefined && skill.system !== null;
+      const dataPath = hasSystem === true ? "system" : "data.data";
+      const systemData = (skill.system ?? skill.data.data);
+      const properties = systemData.properties;
+
+      // Migrate from `isMagicSchool` field to the more generic properties list. 
+      const isMagicSchool = (systemData.isMagicSchool === true);
+      if (isMagicSchool === true) {
+        if (arrayContains(properties, SKILL_PROPERTIES.MAGIC_SCHOOL.id) !== true) {
+          properties.push(SKILL_PROPERTIES.MAGIC_SCHOOL.id);
+          await this.updater.updateByPath(skill, `${dataPath}.properties`, properties, false);
+        }
+      }
+      // Delete the now obsolete `isMagicSchool` field. 
+      await this.updater.deleteByPath(skill, `${dataPath}.isMagicSchool`, false);
     }
   }
 }
