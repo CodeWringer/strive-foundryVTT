@@ -260,10 +260,11 @@ export default class Ruleset {
 
     const skills = actor.items.filter(it => it.type === "skill");
     for (const skill of skills) {
-      if (skill.isMagicSchool !== true) continue;
+      const transientSkill = skill.getTransientObject();
+      if (transientSkill.isMagicSchool !== true) continue;
 
-      components.push(new SummedDataComponent(skill.name, skill.localizableName, skill.level));
-      total += skill.level;
+      components.push(new SummedDataComponent(transientSkill.name, transientSkill.localizableName, transientSkill.level));
+      total += transientSkill.level;
     }
 
     return new SummedData(parseInt(Math.ceil(total / 2)), components);
