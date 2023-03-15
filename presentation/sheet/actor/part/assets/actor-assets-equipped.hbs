@@ -6,7 +6,7 @@ cssClass: {undefined | String}
   <ul class="unstyled-list">
     {{#each viewModel.assetSlotGroupViewModels as |vm index|}}
     {{#with ../viewModel.assetSlotGroupTemplate as | template |}}
-    <li class="sheet-block flex margin-b-lg">
+    <li class="sheet-block flex margin-b-lg heavy-border-t">
       {{> (template) viewModel=vm}}
     </li>
     {{/with}}

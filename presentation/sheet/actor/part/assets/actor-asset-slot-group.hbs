@@ -2,10 +2,10 @@
 viewModel: {ActorAssetSlotGroupViewModel}
 cssClass: {undefined | String}
 --}}
-<div class="ambersteel-asset-slot flex flex-column flex-grow{{#if cssClass}} {{cssClass}}{{/if}}">
+<div class="ambersteel-asset-slot-group flex flex-column flex-grow{{#if cssClass}} {{cssClass}}{{/if}}">
   {{!-- Header Row --}}
   <div class="flex flex-row flex-grow">
-    {{#> header3 showFancyFont=false cssClass="flex flex-row flex-grow flex-middle"}}
+    {{#> header2 showFancyFont=false cssClass="flex flex-row flex-grow flex-middle"}}
       {{#> label showFancyFont=viewModel.showFancyFont cssClass="width-min-xl"}}{{viewModel.localizedName}}{{/label}}
       <span style="width: 2rem"></span>
       {{!-- Slot Group Bulk --}}
@@ -21,7 +21,7 @@ cssClass: {undefined | String}
           {{> buttonContextMenu viewModel=viewModel.vmBtnEdit}}
         </div>
       </div>
-    {{/header3}}
+    {{/header2}}
   </div>
   {{!-- Slots --}}
   {{#each viewModel.assetSlotViewModels as |vm key|}}
