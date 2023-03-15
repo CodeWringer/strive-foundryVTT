@@ -1,3 +1,5 @@
+import TransientBaseCharacterActor from "../../../../../business/document/actor/transient-base-character-actor.mjs";
+import CharacterAssetSlot from "../../../../../business/ruleset/asset/character-asset-slot.mjs";
 import * as StringUtil from "../../../../../business/util/string-utility.mjs";
 import { isDefined, validateOrThrow } from "../../../../../business/util/validation-utility.mjs";
 import ButtonDeleteViewModel from "../../../../component/button-delete/button-delete-viewmodel.mjs";
@@ -35,17 +37,33 @@ import { queryAssetSlotConfiguration } from "./assets-utils.mjs";
  * * Read-only. 
  * @property {Boolean} hasExceededBulk Returns `true`, if the asset slot's maximum allowed bulk has been exceeded. 
  * * Read-only. 
+ * @property {TransientBaseCharacterActor} actor 
+ * * Read-only. 
  */
 export default class ActorAssetSlotViewModel extends ViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.ACTOR_ASSET_SLOT; }
 
-  get asset() { return this.assetSlot.asset; }
+  /**
+   * @type {TransientAsset | undefined}
+   * @readonly
+   */
+  get asset() {
+    return this.assetSlot.asset;
+  }
 
+  /**
+   * @type {Boolean}
+   * @readonly
+   */
   get hasAsset() {
     return isDefined(this.assetSlot.alottedId) === true;
   }
 
+    /**
+   * @type {Number}
+   * @readonly
+   */
   get currentBulk() {
     const asset = this.asset;
     if (asset === undefined) {
@@ -55,12 +73,28 @@ export default class ActorAssetSlotViewModel extends ViewModel {
     }
   }
 
+  /**
+   * @type {Number}
+   * @readonly
+   */
   get maxBulk() {
     return this.assetSlot.maxBulk;
   }
 
+  /**
+   * @type {Number}
+   * @readonly
+   */
   get moddedMaxBulk() {
     return this.assetSlot.moddedMaxBulk;
+  }
+
+  /**
+   * @type {TransientBaseCharacterActor}
+   * @readonly
+   */
+  get actor() {
+    return this.assetSlot.group.actor;
   }
 
   /**
@@ -68,7 +102,7 @@ export default class ActorAssetSlotViewModel extends ViewModel {
    * @readonly
    */
   get availableAssets() {
-    return this.assetSlot.group.actor.assets.luggage.concat(this.assetSlot.group.actor.assets.property);
+    return this.actor.assets.luggage.concat(this.actor.assets.property);
   }
 
   /**
@@ -169,7 +203,10 @@ export default class ActorAssetSlotViewModel extends ViewModel {
         
         if (dialog.confirmed !== true) return;
         
-        this.assetSlot.alottedId = dialog[inputChoices];
+        // Assign the asset to the slot, via its `moveToAssetSlot` method. 
+        const assetIdToAlot = dialog[inputChoices];
+        const assetToAlot = this.availableAssets.find(it => it.id === assetIdToAlot);
+        assetToAlot.moveToAssetSlot(this.assetSlot);
       },
     });
 
@@ -181,6 +218,12 @@ export default class ActorAssetSlotViewModel extends ViewModel {
       withDialog: true,
       localizableTitle: "ambersteel.character.asset.slot.delete.query",
       localizableDialogTitle: "ambersteel.character.asset.slot.delete.queryOf",
+      callback: async () => {
+        const assetToUnassign = this.availableAssets.find(it => it.id === this.assetSlot.alottedId);
+        if (assetToUnassign !== undefined) {
+          assetToUnassign.moveToProperty();
+        }
+      },
     });
 
     this._updateViewModel();

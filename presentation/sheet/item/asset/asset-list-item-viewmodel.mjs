@@ -1,8 +1,8 @@
 import { ASSET_PROPERTIES } from "../../../../business/document/item/item-properties.mjs"
+import TransientAsset from "../../../../business/document/item/transient-asset.mjs"
 import CharacterAssetSlot from "../../../../business/ruleset/asset/character-asset-slot.mjs"
 import { arrayTakeUnless } from "../../../../business/util/array-utility.mjs"
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs"
-import { TAKE_ITEM_CONTEXT_TYPES } from "../../../component/button-take-item/button-take-item-viewmodel.mjs"
 import ButtonViewModel from "../../../component/button/button-viewmodel.mjs"
 import ChoiceAdapter from "../../../component/input-choice/choice-adapter.mjs"
 import ChoiceOption from "../../../component/input-choice/choice-option.mjs"
@@ -15,12 +15,8 @@ import ViewModelFactory from "../../../view-model/view-model-factory.mjs"
 import ViewModel from "../../../view-model/view-model.mjs"
 
 /**
- * @property {Boolean} assetIsProperty
- * * Read-only. 
- * @property {Boolean} assetIsLuggage
- * * Read-only. 
- * @property {Boolean} assetIsEquipped
- * * Read-only. 
+ * @property {Boolean} hideTakeAsset
+ * @property {Boolean} hideDropAsset
  * 
  * @extends ViewModel
  */
@@ -35,44 +31,8 @@ export default class AssetListItemViewModel extends ViewModel {
    * @type {Boolean}
    * @readonly
    */
-  get assetIsProperty() {
-    if (this.document.owningDocument === undefined) {
-      return false;
-    } else {
-      return this.document.owningDocument.assets.property.find(it => it.id === this.document.id) !== undefined;
-    }
-  }
-
-  /**
-   * @type {Boolean}
-   * @readonly
-   */
-  get assetIsLuggage() {
-    if (this.document.owningDocument === undefined) {
-      return false;
-    } else {
-      return this.document.owningDocument.assets.luggage.find(it => it.id === this.document.id) !== undefined;
-    }
-  }
-
-  /**
-   * @type {Boolean}
-   * @readonly
-   */
-  get assetIsEquipped() {
-    if (this.document.owningDocument === undefined) {
-      return false;
-    } else {
-      return this.document.owningDocument.assets.equipment.find(it => it.id === this.document.id) !== undefined;
-    }
-  }
-
-  /**
-   * @type {Boolean}
-   * @readonly
-   */
   get hideTakeAsset() {
-    return this.assetIsEquipped === true;
+    return this.document.isEquipped === true;
   }
 
   /**
@@ -80,7 +40,7 @@ export default class AssetListItemViewModel extends ViewModel {
    * @readonly
    */
   get hideDropAsset() {
-    return this.assetIsProperty === true;
+    return this.document.isProperty === true;
   }
 
   /**
@@ -103,7 +63,7 @@ export default class AssetListItemViewModel extends ViewModel {
 
     const thiz = this;
     const factory = new ViewModelFactory();
-    const actor = this.document.owningDocument;
+    this._actor = this.document.owningDocument;
 
     this.vmImg = factory.createVmImg({
       parent: thiz,
@@ -127,64 +87,29 @@ export default class AssetListItemViewModel extends ViewModel {
     this.vmBtnTakeAsset = new ButtonViewModel({
       id: "vmBtnTakeAsset",
       parent: this,
-      isEditable: actor !== undefined && this.isEditable,
+      isEditable: this._actor !== undefined && this.isEditable,
       onClick: async () => {
         // Move "up" on character sheet. 
-        if (actor === undefined) return;
-
-        if (thiz.assetIsProperty === true) {
-          // Assign asset to luggage list. 
-          const newLuggage = actor.document.system.assets.luggage.concat([this.document.id]);
-          actor.updateByPath("system.assets.luggage", newLuggage);
-
-          // Remove asset from property list. 
-          const propertyIds = arrayTakeUnless(actor.document.system.assets.property, (element) => {
-            return element === this.document.id;
-          });
-          actor.updateByPath("system.assets.property", propertyIds);
-        } else if (thiz.assetIsLuggage === true) {
-          // Assign asset to slot. 
+        if (thiz.document.isProperty === true) {
+          thiz.document.moveToLuggage();
+        } else if (thiz.document.isLuggage === true) {
           const slot = await this._querySelectSlot();
-          if (slot === undefined) return; // User canceled. 
-          slot.alottedId = this.document.id;
-
-          // Remove asset from luggage list. 
-          const luggageIds = arrayTakeUnless(actor.document.system.assets.luggage, (element) => {
-            return element === this.document.id;
-          });
-          actor.updateByPath("system.assets.luggage", luggageIds);
+          if (slot !== undefined) {
+            thiz.document.moveToAssetSlot(slot);
+          }
         }
       },
     });
     this.vmBtnDropAsset = new ButtonViewModel({
       id: "vmBtnDropAsset",
       parent: this,
-      isEditable: actor !== undefined && this.isEditable,
+      isEditable: this._actor !== undefined && this.isEditable,
       onClick: async () => {
         // Move "down" on character sheet. 
-        if (actor === undefined) return;
-
-        if (thiz.assetIsEquipped === true) {
-          // Remove from slot. 
-          const slot = this._getAssetSlot(this.document.id);
-          if (slot === undefined) {
-            throw new Error("Asset slot is undefined");
-          }
-          slot.alottedId = null;
-
-          // Assign to luggage list. 
-          const newLuggage = actor.document.system.assets.luggage.concat([this.document.id]);
-          actor.updateByPath("system.assets.luggage", newLuggage);
-        } else if (thiz.assetIsLuggage === true) {
-          // Assign asset to property list. 
-          const newPropertyList = actor.document.system.assets.property.concat([this.document.id]);
-          actor.updateByPath("system.assets.property", newPropertyList);
-
-          // Remove asset from luggage list. 
-          const luggageIds = arrayTakeUnless(actor.document.system.assets.luggage, (element) => {
-            return element === this.document.id;
-          });
-          actor.updateByPath("system.assets.luggage", luggageIds);
+        if (thiz.document.isEquipped === true) {
+          thiz.document.moveToLuggage();
+        } else if (thiz.document.isLuggage === true) {
+          thiz.document.moveToProperty();
         }
       },
     });
@@ -234,7 +159,6 @@ export default class AssetListItemViewModel extends ViewModel {
   /** @override */
   _getChildUpdates() {
     const updates = super._getChildUpdates();
-    const actor = this.document.owningDocument;
 
     updates.set(this.vmBtnSendToChat, {
       ...updates.get(this.vmBtnSendToChat),
@@ -242,7 +166,7 @@ export default class AssetListItemViewModel extends ViewModel {
     });
     updates.set(this.vmBtnTakeItem, {
       ...updates.get(this.vmBtnTakeItem),
-      isEditable: actor !== undefined && this.isEditable,
+      isEditable: this._actor !== undefined && this.isEditable,
     });
 
     return updates;
@@ -255,13 +179,12 @@ export default class AssetListItemViewModel extends ViewModel {
    * @async
    */
   async _querySelectSlot() {
-    if (this.document.owningDocument === undefined) {
+    if (this._actor === undefined) {
       throw new Error("actor is undefined");
     }
 
     const availableSlots = [];
-    const owningDocument = this.document.owningDocument;
-    for (const group of owningDocument.assets.equipmentSlotGroups) {
+    for (const group of this._actor.assets.equipmentSlotGroups) {
       for (const slot of group.slots) {
         availableSlots.push(slot);
       }
@@ -306,32 +229,5 @@ export default class AssetListItemViewModel extends ViewModel {
     if (dialog.confirmed !== true) return undefined;
 
     return dialog[inputSlots];
-  }
-
-  /**
-   * Returns the asset slot the asset with the given id is currently assigned to. 
-   * 
-   * @param {String} assetId 
-   * 
-   * @returns {CharacterAssetSlot | undefined}
-   * 
-   * @private
-   * 
-   * @throws If the owningDocument is undefined. 
-   */
-  _getAssetSlot(assetId) {
-    if (this.document.owningDocument === undefined) {
-      throw new Error("actor is undefined");
-    }
-
-    const owningDocument = this.document.owningDocument;
-    for (const group of owningDocument.assets.equipmentSlotGroups) {
-      for (const slot of group.slots) {
-        if (slot.alottedId === assetId) {
-          return slot;
-        }
-      }
-    }
-    return undefined;
   }
 }

@@ -71,7 +71,6 @@ import TransientBaseActor from './transient-base-actor.mjs';
  * @property {Array<TransientAsset>} assets.equipment 
  * * Read-only. 
  * @property {Array<TransientAsset>} assets.luggage 
- * * Read-only. 
  * @property {Array<TransientAsset>} assets.property 
  * * Read-only. 
  * @property {Number} assets.currentBulk
@@ -276,6 +275,10 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
       get equipment() { return thiz._equipmentAssets; },
       
       get luggage() { return thiz._luggageAssets; },
+      set luggage(value) {
+        thiz.updateByPath("system.assets.luggage", 
+        value.map(it => it.id));
+      },
       
       get property() { return thiz._propertyAssets; },
 
@@ -463,6 +466,7 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
     this._equipmentSlotGroups = this._getEquipmentSlotGroups();
 
     // Worn & Equipped
+    // TODO #239: Cull invalid assignments?
     const equipmentIds = [];
     const equipmentAssets = [];
     for (const group of this._equipmentSlotGroups) {
@@ -481,26 +485,8 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
     }
 
     // Luggage
-
-    // TODO #207: Purge obsolete entries. 
-    // This requires a unified and central solution. 
-    /*
-// Purge obsolete entries. 
-const toCull = ids.filter(id => 
-  filtered.find(asset => 
-    asset.id === id
-  ) === undefined
-);
-const cleanIdList = [];
-for (const id of ids) {
-  if (toCull.indexOf(id) < 0) {
-    cleanIdList.push(id);
-  }
-}
-this.updateByPath("")
-    */
-
     const luggageIds = this.document.system.assets.luggage;
+    // TODO #239: Cull duplicates
     const luggageAssets = [];
     for (const id of luggageIds) {
       const asset = this._allAssets.find(asset => asset.id === id);

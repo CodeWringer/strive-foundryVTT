@@ -6,6 +6,8 @@ import AssetChatMessageViewModel from "../../../presentation/sheet/item/asset/as
 import { TEMPLATES } from "../../../presentation/templatePreloader.mjs";
 import { createUUID } from "../../util/uuid-utility.mjs";
 import { ASSET_PROPERTIES } from "./item-properties.mjs";
+import CharacterAssetSlot from "../../ruleset/asset/character-asset-slot.mjs";
+import { arrayTakeUnless } from "../../util/array-utility.mjs";
 
 /**
  * Represents the full transient data of an asset. 
@@ -16,6 +18,14 @@ import { ASSET_PROPERTIES } from "./item-properties.mjs";
  * @property {Number} maxQuantity
  * @property {Boolean} isOnPerson
  * @property {Number} bulk
+ * @property {Boolean} isProperty
+ * * Read-only
+ * @property {Boolean} isLuggage
+ * * Read-only
+ * @property {Boolean} isEquipped
+ * * Read-only
+ * @property {CharacterAssetSlot | undefined} assetSlot
+ * * Read-only
  */
 export default class TransientAsset extends TransientBaseItem {
   /** @override */
@@ -70,6 +80,61 @@ export default class TransientAsset extends TransientBaseItem {
   get acceptedProperties() { return ASSET_PROPERTIES.asArray; }
 
   /**
+   * @type {Boolean}
+   * @readonly
+   */
+  get isProperty() {
+    if (this.owningDocument === undefined) {
+      return false;
+    } else {
+      return this.owningDocument.assets.property.find(it => it.id === this.id) !== undefined;
+    }
+  }
+
+  /**
+   * @type {Boolean}
+   * @readonly
+   */
+  get isLuggage() {
+    if (this.owningDocument === undefined) {
+      return false;
+    } else {
+      return this.owningDocument.assets.luggage.find(it => it.id === this.id) !== undefined;
+    }
+  }
+
+  /**
+   * @type {Boolean}
+   * @readonly
+   */
+  get isEquipped() {
+    if (this.owningDocument === undefined) {
+      return false;
+    } else {
+      return this.owningDocument.assets.equipment.find(it => it.id === this.id) !== undefined;
+    }
+  }
+
+  /**
+   * Returns the asset slot the asset is currently assigned to. 
+   * 
+   * @type {CharacterAssetSlot | undefined}
+   * @readonly
+   */
+  get assetSlot() {
+    if (this.owningDocument === undefined) return undefined;
+
+    for (const group of this.owningDocument.assets.equipmentSlotGroups) {
+      for (const slot of group.slots) {
+        if (slot.alottedId === this.id) {
+          return slot;
+        }
+      }
+    }
+    return undefined;
+  }
+
+  /**
    * @param {Item} document An encapsulated item instance. 
    * 
    * @throws {Error} Thrown, if `document` is `undefined`. 
@@ -110,6 +175,95 @@ export default class TransientAsset extends TransientBaseItem {
       allowPickupBy: [], // TODO #53: The user must be able to select who gets to pick this item up. 
       ...overrides,
     });
+  }
+
+  /**
+   * Moves the asset to the owning document's property list, 
+   * if possible. 
+   */
+  moveToProperty() {
+    if (this.owningDocument === undefined 
+      || this.isProperty === true) {
+      return;
+    }
+
+    if (this.isEquipped === true) {
+      this._removeFromAssetSlot();
+    } else if (this.isLuggage === true) {
+      this._removeFromLuggageList();
+    }
+    // No need to add the asset to anything. It will implicitly end up in 
+    // the property list, if it is in no other list. 
+  }
+
+  /**
+   * Moves the asset to the owning document's luggage list, 
+   * if possible.
+   */
+  moveToLuggage() {
+    if (this.owningDocument === undefined 
+      || this.isLuggage === true) {
+      return;
+    }
+
+    if (this.isEquipped === true) {
+      this._removeFromAssetSlot();
+    }
+
+    // Add to luggage list.
+    const newLuggageList = this.owningDocument.assets.luggage.concat([this]);
+    this.owningDocument.assets.luggage = newLuggageList;
+  }
+
+  /**
+   * Moves the asset to the owning document's equipped list, 
+   * by assigning it to the given asset slot, if possible. 
+   * 
+   * @param {CharacterAssetSlot} assetSlot The asset slot to 
+   * assign the asset to. 
+   */
+  moveToAssetSlot(assetSlot) {
+    if (this.owningDocument === undefined
+      || (this.assetSlot ?? {}).id === assetSlot.id) {
+      return;
+    }
+
+    if (this.isEquipped === true) {
+      this._removeFromAssetSlot();
+    } else if (this.isLuggage === true) {
+      this._removeFromLuggageList();
+    }
+
+    // Assign to the given slot. 
+    assetSlot.alottedId = this.id;
+  }
+
+  /**
+   * Removes the asset from its currently assigned slot, if possible. 
+   * 
+   * @private
+   */
+  _removeFromAssetSlot() {
+    const slot = this.assetSlot;
+    if (slot !== undefined) {
+      slot.alottedId = null;
+    }
+  }
+
+  /**
+   * Removes the asset from the luggage list, is possible. 
+   * 
+   * @private
+   */
+  _removeFromLuggageList() {
+    const newLuggageList = arrayTakeUnless(
+      this.owningDocument.assets.luggage,
+      it => it.id === this.id,
+    );
+    // Only send the update, if the list is actually smaller. 
+    if (newLuggageList.length < this.owningDocument.assets.luggage.length) {
+      this.owningDocument.assets.luggage = newLuggageList;
+    }
   }
 }
 
