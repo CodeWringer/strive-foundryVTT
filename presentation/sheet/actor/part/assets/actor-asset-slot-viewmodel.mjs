@@ -102,7 +102,7 @@ export default class ActorAssetSlotViewModel extends ViewModel {
    * @readonly
    */
   get availableAssets() {
-    return this.actor.assets.luggage.concat(this.actor.assets.property);
+    return this.actor.assets.all;
   }
 
   /**
