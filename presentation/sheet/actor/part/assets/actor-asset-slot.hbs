@@ -8,7 +8,7 @@ cssClass: {undefined | String}
     {{!-- Assign Asset --}}
     <div{{#if viewModel.hasAsset}} class="hidden"{{/if}}>
       {{#> button viewModel=viewModel.vmBtnAssign}}
-        {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.asset.slot.assign.label"}}{{/label}}
+        <span{{#if ../viewModel.showFancyFont}} class="fancy-font"{{/if}}>{{localize "ambersteel.character.asset.slot.assign.label"}}</span>
         <div class="square-button-light flex flex-center">
           <i class="fas fa-plus"></i>
         </div>
