@@ -466,7 +466,6 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
     this._equipmentSlotGroups = this._getEquipmentSlotGroups();
 
     // Worn & Equipped
-    // TODO #239: Cull invalid assignments?
     const equipmentIds = [];
     const equipmentAssets = [];
     for (const group of this._equipmentSlotGroups) {
