@@ -486,9 +486,13 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
 
     // Luggage
     const luggageIds = this.document.system.assets.luggage;
-    // TODO #239: Cull duplicates
     const luggageAssets = [];
     for (const id of luggageIds) {
+      // Cull duplicates. 
+      const isDuplicate = luggageAssets.find(asset => asset.id === id) !== undefined;
+      if (isDuplicate === true) continue;
+
+      // Add asset to luggage list. 
       const asset = this._allAssets.find(asset => asset.id === id);
       if (asset !== undefined) {
         luggageAssets.push(asset);
