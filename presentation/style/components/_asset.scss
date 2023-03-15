@@ -1,6 +1,7 @@
 .ambersteel-asset-slot {
-  border-bottom: $c-border-dark 1px solid;
+  border-bottom: $c-text-underline 1px solid;
   margin-bottom: $padding-lg;
+  padding-bottom: $padding-md;
   &:last-of-type {
     border-bottom: unset;
     margin-bottom: unset;
