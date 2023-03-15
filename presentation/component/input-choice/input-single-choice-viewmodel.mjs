@@ -84,11 +84,4 @@ export default class InputSingleChoiceViewModel extends InputChoiceViewModel {
       throw new Error("UnknownException: Failed to set the current drop-down option", { cause: error });
     }
   }
-
-  /** @override */
-  onChange(newValue) {
-    const choiceOption = this.options.find(it => it.value === newValue);
-    const value = this.adapter.fromChoiceOption(choiceOption);
-    this.value = value;
-  }
 }
