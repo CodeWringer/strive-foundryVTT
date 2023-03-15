@@ -64,7 +64,7 @@ nav#nav-sheet-tabs.sheet-tabs {
 
 .sheet-block {
   padding: $padding-sm;
-  border-radius: 3px;
+  border-radius: $border-radius-md;
   border: 1px $c-border-light solid;
   background-color: $c-bg-light;
 }
