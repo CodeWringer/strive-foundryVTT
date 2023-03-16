@@ -22,31 +22,37 @@
 @import 'global/headers';
 
 /* Components */
-@import 'components/asset';
+@import '../component/button/button';
+@import '../component/button-toggle/button-toggle';
+@import '../component/info-bubble/info-bubble';
 @import 'components/forms';
-@import 'components/button';
 @import 'components/items';
 @import 'components/fate';
-@import 'components/dialog';
 @import 'components/tables';
 @import 'components/spinner';
 @import 'components/radio-button';
-@import 'components/biography';
 @import 'components/gm';
 @import 'components/hint-card';
 @import 'components/list';
 @import 'components/skill-ability';
-@import 'components/toggle';
-@import 'components/editor';
 @import 'components/rich-text';
 @import 'components/list-item-order-controls';
-@import 'components/bubble';
 @import 'components/lazy-load';
 @import 'components/text-field';
 @import 'components/properties';
 @import 'components/label';
 @import 'components/image';
 @import 'components/personality-traits';
+
+/* Sheets / Documents */
+@import '../sheet/actor/part/assets/actor-asset-slot';
+@import '../sheet/actor/actor-sheet';
+
+/* Dialog */
+@import '../dialog/dialog';
+
+/* Overrides */
+@import 'overrides/editor';
 
 /* Animations */
 @import 'anims/spinner';
