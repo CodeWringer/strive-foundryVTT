@@ -221,13 +221,16 @@ export default class AssetListItemViewModel extends ViewModel {
             adapter: adapter,
           },
           required: true,
-          defaultValue: availableSlots[0],
+          defaultValue: availableSlots[0].id,
         }),
       ],
     }).renderAndAwait(true);
 
     if (dialog.confirmed !== true) return undefined;
 
-    return dialog[inputSlots];
+    const selectedId = dialog[inputSlots];
+    const assetSlot = availableSlots.find(it => it.id === selectedId);
+
+    return assetSlot;
   }
 }
