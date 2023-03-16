@@ -33,10 +33,7 @@ export class AmbersteelActorSheet extends ActorSheet {
   get contentElement() {
     if (isDefined(this._element) !== true) return undefined;
 
-    if (this._contentElement === undefined) {
-      this._contentElement = this._element.find("section.window-content");
-    }
-    return this._contentElement;
+    return this._element.find("section.window-content");
   }
 
   /**
@@ -45,7 +42,7 @@ export class AmbersteelActorSheet extends ActorSheet {
    * @type {Number | undefined}
    */
   get scrollValue() {
-    if (isDefined(this._element) !== true) return undefined;
+    if (isDefined(this.contentElement) !== true) return undefined;
 
     return this.contentElement[0].scrollTop;
   }
@@ -55,7 +52,7 @@ export class AmbersteelActorSheet extends ActorSheet {
    * @param {Number} value
    */
   set scrollValue(value) {
-    if (isDefined(this._element) !== true) return;
+    if (isDefined(this.contentElement) !== true) return;
 
     this.contentElement[0].scrollTop = value;
   }

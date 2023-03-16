@@ -41,14 +41,16 @@ export default class BaseSheetViewModel extends ViewModel {
     this.document = args.document;
     this.sheet = args.sheet;
 
-    // Prepare scroll value. 
-    this._scrollValue = this.sheet.scrollValue ?? 0;
+    // Register view state properties. 
     this.registerViewStateProperty("_scrollValue");
+
+    // Prepare scroll value. 
+    this._saveScrollPosition();
   }
 
   /** @override */
   update(args) {
-    this._saveScrollPositions();
+    this._saveScrollPosition();
 
     super.update(args);
   }
@@ -58,8 +60,9 @@ export default class BaseSheetViewModel extends ViewModel {
    * 
    * @protected
    */
-  _saveScrollPositions() {
-    this._scrollValue = this.sheet.scrollValue;
+  _saveScrollPosition() {
+    this._scrollValue = this.sheet.scrollValue ?? 0;
+    this.writeViewState();
   }
   
   /**
@@ -67,7 +70,7 @@ export default class BaseSheetViewModel extends ViewModel {
    * 
    * @protected
   */
- _restoreScrollPositions() {
+ _restoreScrollPosition() {
     this.sheet.scrollValue = this._scrollValue;
   }
 }

@@ -37,10 +37,7 @@ export class AmbersteelItemSheet extends ItemSheet {
   get contentElement() {
     if (isDefined(this._element) !== true) return undefined;
 
-    if (this._contentElement === undefined) {
-      this._contentElement = this._element.find("section.window-content");
-    }
-    return this._contentElement;
+    return this._element.find("section.window-content");
   }
 
   /**
@@ -49,7 +46,7 @@ export class AmbersteelItemSheet extends ItemSheet {
    * @type {Number | undefined}
    */
   get scrollValue() {
-    if (isDefined(this._element) !== true) return undefined;
+    if (isDefined(this.contentElement) !== true) return undefined;
 
     return this.contentElement[0].scrollTop;
   }
@@ -59,7 +56,7 @@ export class AmbersteelItemSheet extends ItemSheet {
    * @param {Number} value
    */
   set scrollValue(value) {
-    if (isDefined(this._element) !== true) return;
+    if (isDefined(this.contentElement) !== true) return;
 
     this.contentElement[0].scrollTop = value;
   }
