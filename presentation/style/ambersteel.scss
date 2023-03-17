@@ -25,13 +25,12 @@
 @import '../component/button/button';
 @import '../component/button-toggle/button-toggle';
 @import '../component/info-bubble/info-bubble';
+@import '../component/section-gm-notes/gm-notes';
 @import 'components/forms';
 @import 'components/items';
-@import 'components/fate';
 @import 'components/tables';
 @import 'components/spinner';
 @import 'components/radio-button';
-@import 'components/gm';
 @import 'components/hint-card';
 @import 'components/list';
 @import 'components/skill-ability';
@@ -47,6 +46,7 @@
 /* Sheets / Documents */
 @import '../sheet/actor/part/assets/actor-asset-slot';
 @import '../sheet/actor/actor-sheet';
+@import '../sheet/item/fate-card/fate-card';
 
 /* Dialog */
 @import '../dialog/dialog';
