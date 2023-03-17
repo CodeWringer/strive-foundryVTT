@@ -30,11 +30,3 @@ img.custom-icon {
     height: 100px;
   }
 }
-
-img.custom-system-edit {
-  cursor: pointer;
-
-  &.disabled {
-    cursor: default;
-  }
-}

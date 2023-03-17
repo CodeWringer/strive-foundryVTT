@@ -1,0 +1,7 @@
+img.custom-system-edit {
+  cursor: pointer;
+
+  &.disabled {
+    cursor: default;
+  }
+}

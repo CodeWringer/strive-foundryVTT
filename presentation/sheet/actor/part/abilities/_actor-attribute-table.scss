@@ -1,0 +1,49 @@
+.attribute-column {
+  &-roll {
+    max-width: $width-column-sm;
+    width: $width-column-sm;
+    text-align: center;
+  }
+
+  &-name {
+    flex: 1;
+  }
+
+  &-abbreviation {
+    max-width: $width-column-xl;
+    width: $width-column-xl;
+  }
+
+  &-level {
+    max-width: $width-column-md;
+    width: $width-column-md;
+  }
+
+  &-requirements {
+    max-width: $width-column-xl;
+    width: $width-column-xl;
+    text-align: center;
+  }
+
+  &-successes,
+  &-failures {
+    max-width: $width-column-md;
+    width: $width-column-md;
+  }
+}
+
+.attribute-table {
+  margin: 0;
+  border-top: none;
+  border-bottom: 1px solid $c-border-dark;
+
+  th {
+    padding: 0 3px;
+  }
+
+  .header-row {
+    min-height: 40px;
+    height: 40px;
+    font-size: 1.1rem;
+  }
+}

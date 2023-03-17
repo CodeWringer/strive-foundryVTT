@@ -1,0 +1,25 @@
+.description-editor {
+  min-height: 100px;
+
+  .editor-content {
+    min-height: 100px;
+  }
+}
+
+div.tox-tiered-menu {
+  > div.tox-menu.tox-collection.tox-collection--list.tox-selected-menu {
+    background-color: $c-tox-button-override-bg;
+    
+    > div.tox-collection__group {
+      > div.tox-collection__item--active {
+        background-color: $c-tox-button-hover-override-bg;
+      }
+      > div.tox-collection__item--enabled {
+        background-color: unset;
+      }
+      > div.tox-collection__item--active.tox-collection__item--enabled {
+        background-color: $c-tox-button-hover-override-bg;
+      }
+    }
+  }
+}
