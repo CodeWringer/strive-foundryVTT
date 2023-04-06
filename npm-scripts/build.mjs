@@ -42,14 +42,20 @@ export default async function build() {
 async function transpileSass() {
   console.log("Transpiling css");
 
-  const cssDir = pathUtil.join(BUILD_DIR_PATH, "presentation/style/css");
-  console.log(`Ensuring css dir '${cssDir}'`);
-  await fs.ensureDir(cssDir);
-
   const fileName = "ambersteel";
+
   const css = compile(`presentation/style/${fileName}.scss`).css;
-  const cssDestPath = pathUtil.join(cssDir, `${fileName}.css`)
+  const cssDestPath = `presentation/style/${fileName}.css`;
+  console.log(`writing css file at '${cssDestPath}'`);
   await writeFile(cssDestPath, css);
+
+  const buildStyleDir = pathUtil.join(BUILD_DIR_PATH, "presentation/style");
+  console.log(`Ensuring css dir '${buildStyleDir}'`);
+  await fs.ensureDir(buildStyleDir);
+  const buildStyleDest = pathUtil.join(buildStyleDir, `${fileName}.css`);
+  
+  console.log(`Copying css file '${cssDestPath}' to '${buildStyleDest}'`);
+  fs.copySync(cssDestPath, buildStyleDest, false);
 }
 
 /**
