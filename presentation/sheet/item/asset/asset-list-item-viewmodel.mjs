@@ -138,7 +138,7 @@ export default class AssetListItemViewModel extends ViewModel {
       id: "vmNsBulk",
       propertyOwner: thiz.document,
       propertyPath: "bulk",
-      min: 1,
+      min: 0,
     });
     this.vmRtDescription = factory.createVmRichText({
       parent: thiz,
