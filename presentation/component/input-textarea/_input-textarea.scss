@@ -1,0 +1,22 @@
+textarea, .textarea-auto-resize-sibling {
+  font-size: 1rem;
+  font-family: $font-primary;
+  resize: none;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  padding: 4px;
+  margin: 0;
+  box-sizing: border-box;
+  border: 1px solid $c-border-input;
+  
+  &.resize-vertical {
+    resize: vertical;
+  }
+  &.resize-none {
+    resize: none;
+  }
+  // Default textarea override
+  &.custom-system-edit {
+    border-color: $c-border-input;
+  }
+}

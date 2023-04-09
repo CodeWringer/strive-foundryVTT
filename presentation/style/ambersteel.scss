@@ -22,9 +22,12 @@
 @import 'global/headers';
 @import 'global/image';
 @import 'global/list';
-@import 'global/pill';
+@import 'global/sheet';
 
-/* Components */
+/* Global and composable component styles */
+@import 'components/input';
+@import 'components/pill';
+/* Specific components styles */
 @import '../component/button/button';
 @import '../component/button-toggle/button-toggle';
 @import '../component/info-bubble/info-bubble';
@@ -38,8 +41,7 @@
 @import '../component/input-rich-text/input-rich-text';
 @import '../component/input-number-spinner/input-number-spinner';
 @import '../component/input-textfield/input-textfield';
-@import 'components/forms';
-@import 'components/items';
+@import '../component/input-textarea/input-textarea';
 
 /* Sheets / Documents */
 @import '../sheet/actor/part/assets/actor-asset-slot';
@@ -53,7 +55,9 @@
 @import '../dialog/dialog';
 
 /* Overrides */
+// Overrides of default or FoundryVTT introduced styles. 
 @import 'global/overrides/editor';
+@import 'global/overrides/textfield';
 
 /* Animations */
 @import 'anims/spinner';
