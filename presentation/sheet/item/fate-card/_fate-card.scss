@@ -21,54 +21,8 @@
     }
 }
 
-.fate-item-body-container {
-    height: 80%;
-    background-color: $c-bg-light;
-}
-
-.fate-card-item-description {
-    height: 80%;
-    overflow: hidden;
-    > textarea {
-        width: 100%;
-        height: 100%;
-        resize: none;
-    }
-}
-
-.fate-card-description {
-    height: 75%;
-    overflow: hidden;
-    > textarea {
-        width: 100%;
-        height: 100%;
-        resize: none;
-    }
-}
-
-a.ambersteel-fate-card-add {
-    display: flex;
-    width: 100%;
-    height: 100%;
-    align-items: center;
-    
-    i {
-        width: 100%;
-        text-align: center;
-        font-size: 2rem;
-    }
-}
-
-span.fate-spinner-column-container {
-    max-width: 60px;
-}
-
 .fate-card-actor-container {
     width: 190px;
-}
-
-div.message-content .fate-card-description {
-    overflow-y: scroll;
 }
 
 .fate-card-fill {

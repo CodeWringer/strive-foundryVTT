@@ -1,0 +1,74 @@
+header.sheet-header {
+  flex: 0 auto;
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  margin-bottom: 10px;
+
+  img.profile-img {
+    height: 100px;
+    margin-right: 10px;
+  }
+
+  .header-fields {
+    flex: 1;
+  }
+}
+
+h1.header-name {
+  padding: 0px;
+  margin: 0;
+  font-size: 1.8rem;
+
+  input.header-name {
+    margin: 0;
+  }
+}
+
+// Tab styles
+nav#nav-sheet-tabs.sheet-tabs {
+  height: 32px;
+  min-height: 32px;
+  margin: 0;
+  padding: 0;
+  flex: 0;
+  border-top: 1px solid $c-border-beige-light;
+  border-bottom: 1px solid $c-border-beige-light;
+  line-height: unset;
+  background-color: rgba(0, 0, 0, 0.065);
+
+  > a.item {
+    margin: 0;
+    padding: 4px 0 0 0;
+
+    &.active {
+      border-left: 2px solid rgba(0,0,0,0.2);
+      border-top: 2px solid rgba(0,0,0,0.2);
+      border-right: 2px solid rgba(0,0,0,0.2);
+      border-radius: 10px 10px 0 0;
+      padding: 2px 0 0 0;
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+  }
+}
+
+.sheet-body,
+.sheet-body .tab,
+.sheet-body .tab .editor {
+  height: 100%;
+}
+
+// Grouping styles. 
+
+.sheet-block {
+  padding: $padding-sm;
+  border-radius: $border-radius-md;
+  border: 1px $c-border-light solid;
+  background-color: $c-bg-light;
+
+  &-sidebar {
+    border-right: $c-border-medium 3px solid;
+  }
+}

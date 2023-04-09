@@ -298,6 +298,7 @@ Handlebars.registerPartial('admonishReadOnlyValue', `{{#> "${TEMPLATES.COMPONENT
 Handlebars.registerPartial('header1', `{{#> "${TEMPLATES.COMPONENT_HEADER_PRIMARY}"}}{{> @partial-block}}{{/"${TEMPLATES.COMPONENT_HEADER_PRIMARY}"}}`);
 Handlebars.registerPartial('header2', `{{#> "${TEMPLATES.COMPONENT_HEADER_SECONDARY}"}}{{> @partial-block}}{{/"${TEMPLATES.COMPONENT_HEADER_SECONDARY}"}}`);
 Handlebars.registerPartial('header3', `{{#> "${TEMPLATES.COMPONENT_HEADER_TERTIARY}"}}{{> @partial-block}}{{/"${TEMPLATES.COMPONENT_HEADER_TERTIARY}"}}`);
+Handlebars.registerPartial('hintCard', `{{#> "${TEMPLATES.COMPONENT_HINT_CARD}"}}{{> @partial-block}}{{/"${TEMPLATES.COMPONENT_HINT_CARD}"}}`);
 
 /* -------------------------------------------- */
 /*  Other Hooks                                 */

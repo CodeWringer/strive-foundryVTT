@@ -20,33 +20,44 @@
 @import 'global/icons';
 @import 'global/borders';
 @import 'global/headers';
+@import 'global/image';
+@import 'global/list';
+@import 'global/sheet';
 
-/* Components */
-@import 'components/asset';
-@import 'components/forms';
-@import 'components/button';
-@import 'components/items';
-@import 'components/fate';
-@import 'components/dialog';
-@import 'components/tables';
-@import 'components/spinner';
-@import 'components/radio-button';
-@import 'components/biography';
-@import 'components/gm';
-@import 'components/hint-card';
-@import 'components/list';
-@import 'components/skill-ability';
-@import 'components/toggle';
-@import 'components/editor';
-@import 'components/rich-text';
-@import 'components/list-item-order-controls';
-@import 'components/bubble';
-@import 'components/lazy-load';
-@import 'components/text-field';
-@import 'components/properties';
-@import 'components/label';
-@import 'components/image';
-@import 'components/personality-traits';
+/* Global and composable component styles */
+@import 'components/input';
+@import 'components/pill';
+/* Specific components styles */
+@import '../component/button/button';
+@import '../component/button-toggle/button-toggle';
+@import '../component/info-bubble/info-bubble';
+@import '../component/section-gm-notes/gm-notes';
+@import '../component/hint-card/hint-card';
+@import '../component/input-image/input-image';
+@import '../component/label/label';
+@import '../component/lazy-load/lazy-load';
+@import '../component/sortable-list/list-item-order-controls';
+@import '../component/input-radio-button-group/input-radio-button';
+@import '../component/input-rich-text/input-rich-text';
+@import '../component/input-number-spinner/input-number-spinner';
+@import '../component/input-textfield/input-textfield';
+@import '../component/input-textarea/input-textarea';
+
+/* Sheets / Documents */
+@import '../sheet/actor/part/assets/actor-asset-slot';
+@import '../sheet/actor/actor-sheet';
+@import '../sheet/item/fate-card/fate-card';
+@import '../sheet/actor/part/personality/personality-traits/personality-traits';
+@import '../sheet/actor/part/abilities/actor-attribute-table';
+@import '../sheet/item/skill-ability/skill-ability';
+
+/* Dialog */
+@import '../dialog/dialog';
+
+/* Overrides */
+// Overrides of default or FoundryVTT introduced styles. 
+@import 'global/overrides/editor';
+@import 'global/overrides/textfield';
 
 /* Animations */
 @import 'anims/spinner';
