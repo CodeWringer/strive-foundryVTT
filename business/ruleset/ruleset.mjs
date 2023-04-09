@@ -255,7 +255,7 @@ export default class Ruleset {
     if (type !== "pc" && type !== "npc") throw new Error("Only PC and NPC type actors allowed");
 
     const attributeArcana = actor.system.attributes.mental.arcana;
-    let total = attributeArcana.level;
+    let total = attributeArcana.moddedLevel;
     const components = [];
 
     const skills = actor.items.filter(it => it.type === "skill");
@@ -263,8 +263,9 @@ export default class Ruleset {
       const transientSkill = skill.getTransientObject();
       if (transientSkill.isMagicSchool !== true) continue;
 
-      components.push(new SummedDataComponent(transientSkill.name, transientSkill.localizableName, transientSkill.level));
-      total += transientSkill.level;
+      const skillLevel = transientSkill.level;
+      components.push(new SummedDataComponent(transientSkill.name, transientSkill.localizableName, skillLevel));
+      total += skillLevel;
     }
 
     return new SummedData(parseInt(Math.ceil(total / 2)), components);
