@@ -126,7 +126,6 @@ const copyExcludes = [
   "\\.vscode",
   "build",
   "dist",
-  "style",
   "test",
   "node_modules",
   ".gitignore",
@@ -136,22 +135,49 @@ const copyExcludes = [
   "workspace.code-workspace",
   "gulpfile.js",
   "npm-scripts",
-  "\\*\\.scss",
+  "\\.scss",
 ];
+
 /**
  * Copies all files to be distributed to the build destination directory. 
+ * 
+ * @param {String | undefined} path 
+ * 
  * @async
  */
-async function copyFilesToBuild() {
-  const paths = fs.readdirSync('./');
+async function copyFilesToBuild(path = '.') {
+  const paths = fs.readdirSync(path);
 
-  for (const path of paths) {
-    if (isExcluded(path)) continue;
+  for (const _childPath of paths) {
+    const childPath = pathUtil.join(path, _childPath);
+    if (isExcluded(childPath)) continue;
 
-    const destPath = pathUtil.join(BUILD_DIR_PATH, path);
-    console.log(`Copying '${path}' to '${destPath}'`);
-    fs.copySync(path, destPath, false);
+    if (isDirectory(childPath) === true) {
+      // Drill deeper - recurse.
+      await copyFilesToBuild(childPath);
+    } else {
+      // Copy the target file. 
+      const destPath = pathUtil.join(BUILD_DIR_PATH, childPath);
+      
+      console.log(`Copying '${childPath}' to '${destPath}'`);
+      
+      const dirPath = destPath.substring(0, destPath.length - pathUtil.basename(destPath).length)
+      await fs.ensureDir(dirPath);
+
+      fs.copySync(childPath, destPath, false);
+    }
   }
+}
+
+/**
+ * Returns `true`, if the given file system path represents a directory. 
+ * 
+ * @param {String} path The path to test for whether it is a directory. 
+ * 
+ * @returns {Boolean} `true`, if the given file system path represents a directory. 
+ */
+function isDirectory(path) {
+  return fs.statSync(path).isDirectory();
 }
 
 /**
@@ -197,14 +223,12 @@ async function zipFilesToTempSync() {
 function zipRecursively(zip, srcPath, dstPath = undefined) {
   const zipDestPath = dstPath === undefined ? srcPath : dstPath;
 
-  if (fs.statSync(srcPath).isDirectory()) {
+  if (isDirectory(srcPath) === true) {
     console.log(`Zipping directory '${srcPath}' to '${zipDestPath}'`);
     
     const srcSubNames = fs.readdirSync(srcPath);
     for (const srcSubName of srcSubNames) {
       const srcSubPath = pathUtil.join(srcPath, srcSubName);
-      if (isExcluded(srcSubPath) === true) continue;
-
       const dstSubPath = pathUtil.join(dstPath, srcSubName);
       console.log(`Recursing '${srcSubPath}' to '${dstSubPath}'`);
       zipRecursively(zip, srcSubPath, dstSubPath);
