@@ -135,7 +135,8 @@ const copyExcludes = [
   "package.json",
   "workspace.code-workspace",
   "gulpfile.js",
-  "npm-scripts"
+  "npm-scripts",
+  "\\*\\.scss",
 ];
 /**
  * Copies all files to be distributed to the build destination directory. 
@@ -202,6 +203,8 @@ function zipRecursively(zip, srcPath, dstPath = undefined) {
     const srcSubNames = fs.readdirSync(srcPath);
     for (const srcSubName of srcSubNames) {
       const srcSubPath = pathUtil.join(srcPath, srcSubName);
+      if (isExcluded(srcSubPath) === true) continue;
+
       const dstSubPath = pathUtil.join(dstPath, srcSubName);
       console.log(`Recursing '${srcSubPath}' to '${dstSubPath}'`);
       zipRecursively(zip, srcSubPath, dstSubPath);
