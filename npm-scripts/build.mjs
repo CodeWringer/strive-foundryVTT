@@ -42,14 +42,20 @@ export default async function build() {
 async function transpileSass() {
   console.log("Transpiling css");
 
-  const cssDir = pathUtil.join(BUILD_DIR_PATH, "presentation/style/css");
-  console.log(`Ensuring css dir '${cssDir}'`);
-  await fs.ensureDir(cssDir);
-
   const fileName = "ambersteel";
+
   const css = compile(`presentation/style/${fileName}.scss`).css;
-  const cssDestPath = pathUtil.join(cssDir, `${fileName}.css`)
+  const cssDestPath = `presentation/style/${fileName}.css`;
+  console.log(`writing css file at '${cssDestPath}'`);
   await writeFile(cssDestPath, css);
+
+  const buildStyleDir = pathUtil.join(BUILD_DIR_PATH, "presentation/style");
+  console.log(`Ensuring css dir '${buildStyleDir}'`);
+  await fs.ensureDir(buildStyleDir);
+  const buildStyleDest = pathUtil.join(buildStyleDir, `${fileName}.css`);
+  
+  console.log(`Copying css file '${cssDestPath}' to '${buildStyleDest}'`);
+  fs.copySync(cssDestPath, buildStyleDest, false);
 }
 
 /**
@@ -120,7 +126,6 @@ const copyExcludes = [
   "\\.vscode",
   "build",
   "dist",
-  "style",
   "test",
   "node_modules",
   ".gitignore",
@@ -129,22 +134,50 @@ const copyExcludes = [
   "package.json",
   "workspace.code-workspace",
   "gulpfile.js",
-  "npm-scripts"
+  "npm-scripts",
+  "\\.scss",
 ];
+
 /**
  * Copies all files to be distributed to the build destination directory. 
+ * 
+ * @param {String | undefined} path 
+ * 
  * @async
  */
-async function copyFilesToBuild() {
-  const paths = fs.readdirSync('./');
+async function copyFilesToBuild(path = '.') {
+  const paths = fs.readdirSync(path);
 
-  for (const path of paths) {
-    if (isExcluded(path)) continue;
+  for (const _childPath of paths) {
+    const childPath = pathUtil.join(path, _childPath);
+    if (isExcluded(childPath)) continue;
 
-    const destPath = pathUtil.join(BUILD_DIR_PATH, path);
-    console.log(`Copying '${path}' to '${destPath}'`);
-    fs.copySync(path, destPath, false);
+    if (isDirectory(childPath) === true) {
+      // Drill deeper - recurse.
+      await copyFilesToBuild(childPath);
+    } else {
+      // Copy the target file. 
+      const destPath = pathUtil.join(BUILD_DIR_PATH, childPath);
+      
+      console.log(`Copying '${childPath}' to '${destPath}'`);
+      
+      const dirPath = destPath.substring(0, destPath.length - pathUtil.basename(destPath).length)
+      await fs.ensureDir(dirPath);
+
+      fs.copySync(childPath, destPath, false);
+    }
   }
+}
+
+/**
+ * Returns `true`, if the given file system path represents a directory. 
+ * 
+ * @param {String} path The path to test for whether it is a directory. 
+ * 
+ * @returns {Boolean} `true`, if the given file system path represents a directory. 
+ */
+function isDirectory(path) {
+  return fs.statSync(path).isDirectory();
 }
 
 /**
@@ -190,7 +223,7 @@ async function zipFilesToTempSync() {
 function zipRecursively(zip, srcPath, dstPath = undefined) {
   const zipDestPath = dstPath === undefined ? srcPath : dstPath;
 
-  if (fs.statSync(srcPath).isDirectory()) {
+  if (isDirectory(srcPath) === true) {
     console.log(`Zipping directory '${srcPath}' to '${zipDestPath}'`);
     
     const srcSubNames = fs.readdirSync(srcPath);
