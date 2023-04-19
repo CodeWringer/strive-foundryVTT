@@ -13,6 +13,13 @@ import InputSingleChoiceViewModel from "../input-choice/input-single-choice-view
 export default class InputDropDownViewModel extends InputSingleChoiceViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.COMPONENT_INPUT_DROPDOWN; }
-}
 
-Handlebars.registerPartial('inputDropDown', `{{> "${InputDropDownViewModel.TEMPLATE}"}}`);
+  /**
+   * Registers the Handlebars partial for this component. 
+   * 
+   * @static
+   */
+  static registerHandlebarsPartial() {
+    Handlebars.registerPartial('inputDropDown', `{{> "${InputDropDownViewModel.TEMPLATE}"}}`);
+  }
+}

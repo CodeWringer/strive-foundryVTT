@@ -30,6 +30,15 @@ export default class InputPropertiesViewModel extends InputViewModel {
   static get TEMPLATE() { return TEMPLATES.COMPONENT_INPUT_PROPERTIES; }
 
   /**
+   * Registers the Handlebars partial for this component. 
+   * 
+   * @static
+   */
+  static registerHandlebarsPartial() {
+    Handlebars.registerPartial('inputProperties', `{{> "${InputPropertiesViewModel.TEMPLATE}"}}`);
+  }
+
+  /**
    * @type {String}
    * @readonly
    */
@@ -124,5 +133,3 @@ export default class InputPropertiesViewModel extends InputViewModel {
     );
   }
 }
-
-Handlebars.registerPartial('inputProperties', `{{> "${InputPropertiesViewModel.TEMPLATE}"}}`);

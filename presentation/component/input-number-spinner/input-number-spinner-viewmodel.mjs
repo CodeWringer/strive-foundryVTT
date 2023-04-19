@@ -21,6 +21,15 @@ export default class InputNumberSpinnerViewModel extends InputViewModel {
   static get TEMPLATE() { return TEMPLATES.COMPONENT_INPUT_NUMBER_SPINNER; }
 
   /**
+   * Registers the Handlebars partial for this component. 
+   * 
+   * @static
+   */
+  static registerHandlebarsPartial() {
+    Handlebars.registerPartial('inputNumberSpinner', `{{> "${InputNumberSpinnerViewModel.TEMPLATE}"}}`);
+  }
+
+  /**
    * Returns true, if the minimum value is defined. 
    * @type {Boolean}
    * @readonly
@@ -80,5 +89,3 @@ export default class InputNumberSpinnerViewModel extends InputViewModel {
     this.value = newValue;
   }
 }
-
-Handlebars.registerPartial('inputNumberSpinner', `{{> "${InputNumberSpinnerViewModel.TEMPLATE}"}}`);

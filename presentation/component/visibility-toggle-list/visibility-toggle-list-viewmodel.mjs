@@ -45,6 +45,15 @@ export default class VisibilityToggleListViewModel extends ViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.COMPONENT_VISIBILITY_TOGGLE_LIST; }
 
+  /**
+   * Registers the Handlebars partial for this component. 
+   * 
+   * @static
+   */
+  static registerHandlebarsPartial() {
+    Handlebars.registerPartial('visibilityToggleList', `{{> "${VisibilityToggleListViewModel.TEMPLATE}"}}`);
+  }
+
   get itemTemplate() { return VisibilityToggleListItemViewModel.TEMPLATE; }
 
   /**
@@ -125,5 +134,3 @@ export default class VisibilityToggleListViewModel extends ViewModel {
     return result;
   }
 }
-
-Handlebars.registerPartial('visibilityToggleList', `{{> "${VisibilityToggleListViewModel.TEMPLATE}"}}`);

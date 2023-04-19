@@ -15,6 +15,15 @@ export default class InputRichTextViewModel extends InputViewModel {
   static get TEMPLATE() { return TEMPLATES.COMPONENT_INPUT_RICH_TEXT; }
 
   /**
+   * Registers the Handlebars partial for this component. 
+   * 
+   * @static
+   */
+  static registerHandlebarsPartial() {
+    Handlebars.registerPartial('inputRichText', `{{> "${InputRichTextViewModel.TEMPLATE}"}}`);
+  }
+
+  /**
    * @type {Object}
    * @private
    */
@@ -203,5 +212,3 @@ export default class InputRichTextViewModel extends InputViewModel {
     $(".tox-tinymce-aux").css({zIndex: Math.min(++_maxZ, 9999)});
   };
 }
-
-Handlebars.registerPartial('inputRichText', `{{> "${InputRichTextViewModel.TEMPLATE}"}}`);

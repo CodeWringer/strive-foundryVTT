@@ -15,6 +15,15 @@ export default class ButtonContextMenuViewModel extends ButtonViewModel {
   static get TEMPLATE() { return TEMPLATES.COMPONENT_BUTTON_CONTEXT_MENU; }
 
   /**
+   * Registers the Handlebars partial for this component. 
+   * 
+   * @static
+   */
+  static registerHandlebarsPartial() {
+    Handlebars.registerPartial('buttonContextMenu', `{{> "${ButtonContextMenuViewModel.TEMPLATE}"}}`);
+  }
+
+  /**
    * @type {ContextMenu}
    * @private
    */
@@ -134,5 +143,3 @@ export default class ButtonContextMenuViewModel extends ButtonViewModel {
     }
   }
 }
-
-Handlebars.registerPartial('buttonContextMenu', `{{> "${ButtonContextMenuViewModel.TEMPLATE}"}}`);

@@ -29,6 +29,15 @@ export default class ButtonViewModel extends ViewModel {
   static get TEMPLATE() { return TEMPLATES.COMPONENT_BUTTON; }
 
   /**
+   * Registers the Handlebars partial for this component. 
+   * 
+   * @static
+   */
+  static registerHandlebarsPartial() {
+    Handlebars.registerPartial('button', `{{#> "${ButtonViewModel.TEMPLATE}"}}{{> @partial-block }}{{/"${ButtonViewModel.TEMPLATE}"}}`);
+  }
+
+  /**
    * @type {JQuery | HTMLElement}
    * @private
    */
@@ -166,5 +175,3 @@ export default class ButtonViewModel extends ViewModel {
     }
   }
 }
-
-Handlebars.registerPartial('button', `{{#> "${ButtonViewModel.TEMPLATE}"}}{{> @partial-block }}{{/"${ButtonViewModel.TEMPLATE}"}}`);

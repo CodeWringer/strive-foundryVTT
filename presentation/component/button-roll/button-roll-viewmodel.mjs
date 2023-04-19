@@ -27,6 +27,15 @@ export default class ButtonRollViewModel extends ButtonViewModel {
   static get TEMPLATE() { return TEMPLATES.COMPONENT_BUTTON_ROLL; }
 
   /**
+   * Registers the Handlebars partial for this component. 
+   * 
+   * @static
+   */
+  static registerHandlebarsPartial() {
+    Handlebars.registerPartial('buttonRoll', `{{> "${ButtonRollViewModel.TEMPLATE}"}}`);
+  }
+
+  /**
    * @type {String}
    * @private
    */
@@ -211,5 +220,3 @@ export default class ButtonRollViewModel extends ButtonViewModel {
     return `(${joinedRollData})`;
   }
 }
-
-Handlebars.registerPartial('buttonRoll', `{{> "${ButtonRollViewModel.TEMPLATE}"}}`);

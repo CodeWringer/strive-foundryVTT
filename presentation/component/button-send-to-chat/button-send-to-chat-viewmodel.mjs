@@ -17,6 +17,15 @@ export default class ButtonSendToChatViewModel extends ButtonViewModel {
   static get TEMPLATE() { return TEMPLATES.COMPONENT_BUTTON_SEND_TO_CHAT; }
 
   /**
+   * Registers the Handlebars partial for this component. 
+   * 
+   * @static
+   */
+  static registerHandlebarsPartial() {
+    Handlebars.registerPartial('buttonSendToChat', `{{> "${ButtonSendToChatViewModel.TEMPLATE}"}}`);
+  }
+
+  /**
    * @type {String | undefined}
    * @private
    */
@@ -115,5 +124,3 @@ export default class ButtonSendToChatViewModel extends ButtonViewModel {
     }).renderAndAwait(true);
   }
 }
-
-Handlebars.registerPartial('buttonSendToChat', `{{> "${ButtonSendToChatViewModel.TEMPLATE}"}}`);

@@ -17,6 +17,15 @@ import ButtonViewModel from "../button/button-viewmodel.mjs";
  */
 export default class ButtonToggleIconViewModel extends ButtonViewModel {
   static get TEMPLATE() { return TEMPLATES.COMPONENT_BUTTON_TOGGLE_ICON; }
+  
+  /**
+   * Registers the Handlebars partial for this component. 
+   * 
+   * @static
+  */
+ static registerHandlebarsPartial() {
+    Handlebars.registerPartial('buttonToggleIcon', `{{> "${ButtonToggleIconViewModel.TEMPLATE}"}}`);
+  }
 
   /**
    * Returns the current value of the property. 
@@ -81,5 +90,3 @@ export default class ButtonToggleIconViewModel extends ButtonViewModel {
     this.value = !this.value;
   }
 }
-
-Handlebars.registerPartial('buttonToggleIcon', `{{> "${ButtonToggleIconViewModel.TEMPLATE}"}}`);

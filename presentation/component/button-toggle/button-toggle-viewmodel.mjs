@@ -17,6 +17,15 @@ export default class ButtonToggleViewModel extends ButtonViewModel {
   static get TEMPLATE() { return TEMPLATES.COMPONENT_BUTTON_TOGGLE; }
 
   /**
+   * Registers the Handlebars partial for this component. 
+   * 
+   * @static
+   */
+  static registerHandlebarsPartial() {
+    Handlebars.registerPartial('buttonToggle', `{{> "${ButtonToggleViewModel.TEMPLATE}"}}`);
+  }
+
+  /**
    * Returns the current value of the property. 
    * 
    * @type {Boolean}
@@ -73,5 +82,3 @@ export default class ButtonToggleViewModel extends ButtonViewModel {
     this.value = !this.value;
   }
 }
-
-Handlebars.registerPartial('buttonToggle', `{{> "${ButtonToggleViewModel.TEMPLATE}"}}`);
