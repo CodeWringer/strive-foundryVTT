@@ -30,6 +30,15 @@ export default class DamageDefinitionListItemViewModel extends ViewModel {
   static get TEMPLATE() { return TEMPLATES.COMPONENT_DAMAGE_DEFINITION_LIST_ITEM; }
 
   /**
+   * Registers the Handlebars partial for this component. 
+   * 
+   * @static
+   */
+  static registerHandlebarsPartial() {
+    Handlebars.registerPartial('damageDefinitionListItem', `{{> "${DamageDefinitionListItemViewModel.TEMPLATE}"}}`);
+  }
+
+  /**
    * Returns an array of damage type choices. 
    * 
    * @type {Array<ChoiceOption>}
@@ -122,5 +131,3 @@ export default class DamageDefinitionListItemViewModel extends ViewModel {
    */
   resolveFormula() { throw new Error("NotImplementedException"); }
 }
-
-Handlebars.registerPartial('damageDefinitionListItem', `{{> "${DamageDefinitionListItemViewModel.TEMPLATE}"}}`);

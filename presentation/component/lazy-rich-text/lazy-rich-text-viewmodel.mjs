@@ -14,6 +14,15 @@ export default class LazyRichTextViewModel extends ViewModel {
   static get TEMPLATE() { return TEMPLATES.COMPONENT_LAZY_LOAD_RICH_TEXT; }
 
   /**
+   * Registers the Handlebars partial for this component. 
+   * 
+   * @static
+   */
+  static registerHandlebarsPartial() {
+    Handlebars.registerPartial('lazyRichText', `{{> "${LazyRichTextViewModel.TEMPLATE}"}}`);
+  }
+
+  /**
    * The cached rendered content. 
    * 
    * Assuming the data model didn't change, the content won't have to be 
@@ -71,5 +80,3 @@ export default class LazyRichTextViewModel extends ViewModel {
     super.update(args);
   }
 }
-
-Handlebars.registerPartial('lazyRichText', `{{> "${LazyRichTextViewModel.TEMPLATE}"}}`);

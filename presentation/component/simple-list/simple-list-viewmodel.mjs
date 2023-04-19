@@ -25,6 +25,15 @@ export default class SimpleListViewModel extends ViewModel {
   static get TEMPLATE() { return TEMPLATES.COMPONENT_SIMPLE_LIST; }
 
   /**
+   * Registers the Handlebars partial for this component. 
+   * 
+   * @static
+   */
+  static registerHandlebarsPartial() {
+    Handlebars.registerPartial('simpleList', `{{> "${SimpleListViewModel.TEMPLATE}"}}`);
+  }
+
+  /**
    * @type {String}
    * @readonly
    */
@@ -135,5 +144,3 @@ export default class SimpleListViewModel extends ViewModel {
     return result;
   }
 }
-
-Handlebars.registerPartial('simpleList', `{{> "${SimpleListViewModel.TEMPLATE}"}}`);

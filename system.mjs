@@ -1,6 +1,7 @@
 // Handlebars
 import { TEMPLATES, preloadHandlebarsTemplates } from "./presentation/templatePreloader.mjs";
 import { initHandlebarsHelpers, initHandlebarsPartials } from "./presentation/handlebars-globals/handlebars-globals.mjs";
+import { initHandlebarsComponents } from "./presentation/handlebars-globals/handlebars-components.mjs";
 // Ruleset
 import { ATTRIBUTES } from "./business/ruleset/attribute/attributes.mjs";
 import { ATTRIBUTE_GROUPS } from "./business/ruleset/attribute/attribute-groups.mjs";
@@ -180,6 +181,8 @@ Hooks.once('setup', function() {
   // Initialize global Handlebars helpers and partials.
   initHandlebarsHelpers();
   initHandlebarsPartials();
+  // Initialize component Handlebars partials. 
+  initHandlebarsComponents();
 });
 
 Hooks.once("ready", function() {

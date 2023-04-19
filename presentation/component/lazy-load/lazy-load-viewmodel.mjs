@@ -31,6 +31,15 @@ export default class LazyLoadViewModel extends ViewModel {
   static get TEMPLATE() { return TEMPLATES.COMPONENT_LAZY_LOAD; }
 
   /**
+   * Registers the Handlebars partial for this component. 
+   * 
+   * @static
+   */
+  static registerHandlebarsPartial() {
+    Handlebars.registerPartial('lazy', `{{> "${LazyLoadViewModel.TEMPLATE}"}}`);
+  }
+
+  /**
    * Returns the shimmer element. 
    * 
    * @type {JQuery | undefined}
@@ -164,5 +173,3 @@ export default class LazyLoadViewModel extends ViewModel {
   /** @override */
   _getChildUpdates() { /* Do nothing. Never called - see `update`. */ }
 }
-
-Handlebars.registerPartial('lazy', `{{> "${LazyLoadViewModel.TEMPLATE}"}}`);

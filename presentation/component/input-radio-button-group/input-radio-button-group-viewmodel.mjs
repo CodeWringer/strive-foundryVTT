@@ -16,6 +16,15 @@ export default class InputRadioButtonGroupViewModel extends InputViewModel {
   static get TEMPLATE() { return TEMPLATES.COMPONENT_INPUT_RADIO_BUTTON_GROUP; }
   
   /**
+   * Registers the Handlebars partial for this component. 
+   * 
+   * @static
+   */
+  static registerHandlebarsPartial() {
+    Handlebars.registerPartial('inputRadioButtonGroup', `{{> "${InputRadioButtonGroupViewModel.TEMPLATE}"}}`);
+  }
+
+  /**
    * Returns the currently selected option. 
    * 
    * @type {StatefulChoiceOption}
@@ -86,5 +95,3 @@ export default class InputRadioButtonGroupViewModel extends InputViewModel {
     }
   }
 }
-
-Handlebars.registerPartial('inputRadioButtonGroup', `{{> "${InputRadioButtonGroupViewModel.TEMPLATE}"}}`);

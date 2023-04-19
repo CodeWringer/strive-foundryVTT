@@ -23,6 +23,15 @@ export default class DamageDefinitionListViewModel extends ViewModel {
   static get TEMPLATE() { return TEMPLATES.COMPONENT_DAMAGE_DEFINITION_LIST; }
   
   /**
+   * Registers the Handlebars partial for this component. 
+   * 
+   * @static
+   */
+  static registerHandlebarsPartial() {
+    Handlebars.registerPartial('damageDefinitionList', `{{> "${DamageDefinitionListViewModel.TEMPLATE}"}}`);
+  }
+
+  /**
    * @type {Array<DamageAndType>}
    * @readonly
    */
@@ -123,5 +132,3 @@ export default class DamageDefinitionListViewModel extends ViewModel {
     }
   }
 }
-
-Handlebars.registerPartial('damageDefinitionList', `{{> "${DamageDefinitionListViewModel.TEMPLATE}"}}`);

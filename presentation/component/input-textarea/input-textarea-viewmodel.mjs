@@ -15,6 +15,15 @@ export default class InputTextareaViewModel extends InputViewModel {
   static get TEMPLATE() { return TEMPLATES.COMPONENT_INPUT_TEXTAREA; }
 
   /**
+   * Registers the Handlebars partial for this component. 
+   * 
+   * @static
+   */
+  static registerHandlebarsPartial() {
+    Handlebars.registerPartial('inputTextarea', `{{> "${InputTextareaViewModel.TEMPLATE}"}}`);
+  }
+
+  /**
    * @type {String}
    * @private
    */
@@ -74,5 +83,3 @@ export default class InputTextareaViewModel extends InputViewModel {
     });
   }
 }
-
-Handlebars.registerPartial('inputTextarea', `{{> "${InputTextareaViewModel.TEMPLATE}"}}`);

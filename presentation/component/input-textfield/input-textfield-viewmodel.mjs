@@ -14,6 +14,15 @@ export default class InputTextFieldViewModel extends InputViewModel {
   static get TEMPLATE() { return TEMPLATES.COMPONENT_INPUT_TEXTFIELD; }
 
   /**
+   * Registers the Handlebars partial for this component. 
+   * 
+   * @static
+   */
+  static registerHandlebarsPartial() {
+    Handlebars.registerPartial('inputTextField', `{{> "${InputTextFieldViewModel.TEMPLATE}"}}`);
+  }
+
+  /**
    * @type {String}
    * @private
    */
@@ -50,5 +59,3 @@ export default class InputTextFieldViewModel extends InputViewModel {
     this._placeholder = args.placeholder ?? "";
   }
 }
-
-Handlebars.registerPartial('inputTextField', `{{> "${InputTextFieldViewModel.TEMPLATE}"}}`);

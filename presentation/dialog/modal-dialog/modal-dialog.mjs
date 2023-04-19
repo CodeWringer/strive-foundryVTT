@@ -57,6 +57,15 @@ export default class ModalDialog extends Application {
     });
   }
 
+  /**
+   * Registers the Handlebars partial for this component. 
+   * 
+   * @static
+   */
+  static registerHandlebarsPartial() {
+    Handlebars.registerPartial('dialogContent', `{{#> "${TEMPLATES.DIALOG_MODAL}"}}{{> @partial-block }}{{/"${TEMPLATES.DIALOG_MODAL}"}}`);
+  }
+
   /** @override */
   get template() { throw new Error("NotImplementedException"); }
 
@@ -244,5 +253,3 @@ export default class ModalDialog extends Application {
     $(`#${this._backdropElementId}`).remove();
   }
 }
-
-Handlebars.registerPartial('dialogContent', `{{#> "${TEMPLATES.DIALOG_MODAL}"}}{{> @partial-block }}{{/"${TEMPLATES.DIALOG_MODAL}"}}`);

@@ -23,6 +23,15 @@ export default class ButtonAddViewModel extends ButtonViewModel {
   static get TEMPLATE() { return TEMPLATES.COMPONENT_BUTTON_ADD; }
   
   /**
+   * Registers the Handlebars partial for this component. 
+   * 
+   * @static
+   */
+  static registerHandlebarsPartial() {
+    Handlebars.registerPartial('buttonAdd', `{{> "${ButtonAddViewModel.TEMPLATE}"}}`);
+  }
+
+  /**
    * @type {Boolean}
    * @readonly
    */
@@ -180,5 +189,3 @@ export default class ButtonAddViewModel extends ButtonViewModel {
     return parsedCreationData;
   }
 }
-
-Handlebars.registerPartial('buttonAdd', `{{> "${ButtonAddViewModel.TEMPLATE}"}}`);

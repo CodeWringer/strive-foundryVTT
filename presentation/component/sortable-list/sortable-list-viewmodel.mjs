@@ -39,6 +39,15 @@ export default class SortableListViewModel extends ViewModel {
   static get TEMPLATE() { return TEMPLATES.COMPONENT_SORTABLE_LIST; }
 
   /**
+   * Registers the Handlebars partial for this component. 
+   * 
+   * @static
+   */
+  static registerHandlebarsPartial() {
+    Handlebars.registerPartial('sortableList', `{{> "${SortableListViewModel.TEMPLATE}"}}`);
+  }
+
+  /**
    * An array of view models that belong to the entries. 
    * 
    * @type {Array<SortableListViewModelGroup>}
@@ -295,5 +304,3 @@ export default class SortableListViewModel extends ViewModel {
     return result;
   }
 }
-
-Handlebars.registerPartial('sortableList', `{{> "${SortableListViewModel.TEMPLATE}"}}`);

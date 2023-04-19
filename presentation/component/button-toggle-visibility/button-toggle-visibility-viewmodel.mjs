@@ -31,6 +31,15 @@ export const ATTRIBUTE_VIS_GROUP = "data-vis-group";
  */
 export default class ButtonToggleVisibilityViewModel extends ButtonViewModel {
   static get TEMPLATE() { return TEMPLATES.COMPONENT_BUTTON_TOGGLE_VISIBILITY; }
+  
+  /**
+   * Registers the Handlebars partial for this component. 
+   * 
+   * @static
+   */
+  static registerHandlebarsPartial() {
+    Handlebars.registerPartial('buttonToggleVisibility', `{{#> "${ButtonToggleVisibilityViewModel.TEMPLATE}"}}{{> @partial-block }}{{/"${ButtonToggleVisibilityViewModel.TEMPLATE}"}}`);
+  }
 
   /**
    * @type {String}
@@ -93,5 +102,3 @@ export default class ButtonToggleVisibilityViewModel extends ButtonViewModel {
     }
   }
 }
-
-Handlebars.registerPartial('buttonToggleVisibility', `{{#> "${ButtonToggleVisibilityViewModel.TEMPLATE}"}}{{> @partial-block }}{{/"${ButtonToggleVisibilityViewModel.TEMPLATE}"}}`);

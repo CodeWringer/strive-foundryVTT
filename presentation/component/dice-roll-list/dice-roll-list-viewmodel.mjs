@@ -21,6 +21,15 @@ import ButtonViewModel from "../button/button-viewmodel.mjs";
  */
 export default class DiceRollListViewModel extends ViewModel {
   static get TEMPLATE() { return TEMPLATES.DICE_ROLL_LIST; }
+  
+  /**
+   * Registers the Handlebars partial for this component. 
+   * 
+   * @static
+  */
+ static registerHandlebarsPartial() {
+    Handlebars.registerPartial('diceRollList', `{{> "${DiceRollListViewModel.TEMPLATE}"}}`);
+  }
 
   /**
    * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
@@ -101,5 +110,3 @@ export default class DiceRollListViewModel extends ViewModel {
     });
   }
 }
-
-Handlebars.registerPartial('diceRollList', `{{> "${DiceRollListViewModel.TEMPLATE}"}}`);

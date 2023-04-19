@@ -12,6 +12,15 @@ export default class ButtonOpenSheetViewModel extends ButtonViewModel {
   static get TEMPLATE() { return TEMPLATES.COMPONENT_BUTTON_OPEN_SHEET; }
   
   /**
+   * Registers the Handlebars partial for this component. 
+   * 
+   * @static
+   */
+  static registerHandlebarsPartial() {
+    Handlebars.registerPartial('buttonOpenSheet', `{{> "${ButtonOpenSheetViewModel.TEMPLATE}"}}`);
+  }
+
+  /**
    * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
    * 
    * @param {TransientDocument} args.target The target object to affect. 
@@ -50,5 +59,3 @@ export default class ButtonOpenSheetViewModel extends ButtonViewModel {
     toShow.sheet.render(true);
   }
 }
-
-Handlebars.registerPartial('buttonOpenSheet', `{{> "${ButtonOpenSheetViewModel.TEMPLATE}"}}`);
