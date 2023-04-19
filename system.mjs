@@ -1,3 +1,6 @@
+// Handlebars
+import { TEMPLATES, preloadHandlebarsTemplates } from "./presentation/templatePreloader.mjs";
+import { initHandlebarsHelpers, initHandlebarsPartials } from "./presentation/handlebars-globals/handlebars-globals.mjs";
 // Ruleset
 import { ATTRIBUTES } from "./business/ruleset/attribute/attributes.mjs";
 import { ATTRIBUTE_GROUPS } from "./business/ruleset/attribute/attribute-groups.mjs";
@@ -14,7 +17,6 @@ import Ruleset from "./business/ruleset/ruleset.mjs";
 // Chat constants
 import { VISIBILITY_MODES } from "./presentation/chat/visibility-modes.mjs";
 // Utility
-import { TEMPLATES, preloadHandlebarsTemplates } from "./presentation/templatePreloader.mjs";
 import ChoiceOption from "./presentation/component/input-choice/choice-option.mjs";
 import { getAsChoices } from "./business/util/constants-utility.mjs";
 import DocumentFetcher from "./business/document/document-fetcher/document-fetcher.mjs";
@@ -173,7 +175,11 @@ Hooks.once('setup', function() {
     fonts: [
       { urls: ["systems/ambersteel/presentation/font/BLKCHCRY.TTF"] },
     ]
-  }
+  };
+
+  // Initialize global Handlebars helpers and partials.
+  initHandlebarsHelpers();
+  initHandlebarsPartials();
 });
 
 Hooks.once("ready", function() {
@@ -201,104 +207,6 @@ Hooks.once("ready", function() {
     game.ambersteel.logger.logVerbose("Version up to date - skipping migrations");
   }
 });
-
-/* -------------------------------------------- */
-/*  Handlebars Helpers                          */
-/* -------------------------------------------- */
-
-/**
- * Repeats the given `content` exactly `n` times. 
- * @param {Number} n The repetition count. 
- * @param {String} content The HTML content to repeat. 
- */
-Handlebars.registerHelper('times', function(n, content) {
-  let result = "";
-  for (let i = 0; i < n; i++) {
-    result += content.fn(i);
-  }
-
-  return result;
-});
-
-/**
- * Returns `true`, if the given parameters are considered equal. Otherwise, returns `false`. 
- * @param {Any} a
- * @param {Any} b
- * 
- * @returns {Boolean}
- */
-Handlebars.registerHelper('eq', function(a, b) {
-  return a == b;
-});
-
-/**
- * Returns `true`, if the given parameters are *not* considered equal. Otherwise, returns `false`. 
- * @param {Any} a
- * @param {Any} b
- * 
- * @returns {Boolean}
- */
-Handlebars.registerHelper('neq', function(a, b) {
-  return a != b;
-});
-
-/**
- * Returns `true`, if both of the given parameters are 'truth-y' values. Otherwise, returns `false`. 
- * @param {Any} a
- * @param {Any} b
- * 
- * @returns {Boolean}
- */
-Handlebars.registerHelper('and', function(a, b) {
-  return a && b;
-});
-
-/**
- * Returns `true`, if at least one of the given parameters is 'truth-y' values. Otherwise, returns `false`. 
- * @param {Any} a
- * @param {Any} b
- * 
- * @returns {Boolean}
- */
-Handlebars.registerHelper('or', function(a, b) {
-  return a || b;
-});
-
-/**
- * Returns the negated given value. 
- * @param {Any} a
- * 
- * @returns {Any | Boolean}
- */
-Handlebars.registerHelper('not', function(a) {
-  return !a;
-});
-
-/**
- * If the given condition is satisfied, returns `thenValue`, otherwise, returns `elseValue`. 
- * @param {Any} condition
- * @param {Any} thenValue
- * @param {Any} elseValue
- */
-Handlebars.registerHelper('ifThenElse', function(condition, thenValue, elseValue) {
-  if (condition) {
-    return thenValue;
-  } else {
-    return elseValue;
-  }
-});
-
-/* -------------------------------------------- */
-/*  Handlebars Partials                          */
-/* -------------------------------------------- */
-
-Handlebars.registerPartial('label', `{{#> "${TEMPLATES.COMPONENT_LABEL}"}}{{> @partial-block}}{{/"${TEMPLATES.COMPONENT_LABEL}"}}`);
-Handlebars.registerPartial('readOnlyValue', `{{#> "${TEMPLATES.COMPONENT_LABEL_READ_ONLY_VALUE}"}}{{> @partial-block}}{{/"${TEMPLATES.COMPONENT_LABEL_READ_ONLY_VALUE}"}}`);
-Handlebars.registerPartial('admonishReadOnlyValue', `{{#> "${TEMPLATES.COMPONENT_LABEL_ADMONISHING_READ_ONLY_VALUE}"}}{{> @partial-block}}{{/"${TEMPLATES.COMPONENT_LABEL_ADMONISHING_READ_ONLY_VALUE}"}}`);
-Handlebars.registerPartial('header1', `{{#> "${TEMPLATES.COMPONENT_HEADER_PRIMARY}"}}{{> @partial-block}}{{/"${TEMPLATES.COMPONENT_HEADER_PRIMARY}"}}`);
-Handlebars.registerPartial('header2', `{{#> "${TEMPLATES.COMPONENT_HEADER_SECONDARY}"}}{{> @partial-block}}{{/"${TEMPLATES.COMPONENT_HEADER_SECONDARY}"}}`);
-Handlebars.registerPartial('header3', `{{#> "${TEMPLATES.COMPONENT_HEADER_TERTIARY}"}}{{> @partial-block}}{{/"${TEMPLATES.COMPONENT_HEADER_TERTIARY}"}}`);
-Handlebars.registerPartial('hintCard', `{{#> "${TEMPLATES.COMPONENT_HINT_CARD}"}}{{> @partial-block}}{{/"${TEMPLATES.COMPONENT_HINT_CARD}"}}`);
 
 /* -------------------------------------------- */
 /*  Other Hooks                                 */
