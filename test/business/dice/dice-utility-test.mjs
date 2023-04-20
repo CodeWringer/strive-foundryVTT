@@ -43,7 +43,7 @@ describe("dice-utility", () => {
       }));
     });
 
-    it("3 die and 1 obstacle yields success with degree 0", () => {
+    it("3 dice and 1 obstacle yields success with degree 0", () => {
       // Given
       const givenNumberOfDice = 3;
       const givenObstacle = 1;
@@ -81,7 +81,7 @@ describe("dice-utility", () => {
       }));
     });
 
-    it("3 die and 1 obstacle yields success with degree 1", () => {
+    it("3 dice and 1 obstacle yields success with degree 1", () => {
       // Given
       const givenNumberOfDice = 3;
       const givenObstacle = 1;
@@ -119,7 +119,7 @@ describe("dice-utility", () => {
       }));
     });
 
-    it("3 die and 1 obstacle yields failure", () => {
+    it("3 dice and 1 obstacle yields failure", () => {
       // Given
       const givenNumberOfDice = 3;
       const givenObstacle = 1;
@@ -157,7 +157,7 @@ describe("dice-utility", () => {
       }));
     });
 
-    it("3 die and 2 obstacle yields partial", () => {
+    it("3 dice and 2 obstacle yields partial", () => {
       // Given
       const givenNumberOfDice = 3;
       const givenObstacle = 2;
@@ -222,12 +222,50 @@ describe("dice-utility", () => {
       });
       // Then
       r.should.deepEqual(new DicePoolResult({
-        numberOfDice: givenNumberOfDice,
+        numberOfDice: givenNumberOfDice + givenBonusDice,
         obstacle: givenObstacle,
         degree: 0,
         positives: [6],
         negatives: [],
         outcomeType: DiceOutcomeTypes.NONE,
+      }));
+    });
+
+    it("2 dice and 1 bonus die and 0 obstacle yields success", () => {
+      // Given
+      const givenNumberOfDice = 2;
+      const givenObstacle = 1;
+      const givenBonusDice = 1;
+      // Setup
+      globalThis.Die = function(args = {}) {
+        return {
+          faces: args.faces,
+          number: args.number,
+          evaluate: function() {
+            return {
+              results: [
+                { result: 1 },
+                { result: 5 },
+                { result: 6 },
+              ],
+            };
+          },
+        }
+      }
+      // When
+      const r = DiceUtility.rollDicePool({
+        numberOfDice: givenNumberOfDice,
+        obstacle: givenObstacle,
+        bonusDice: givenBonusDice,
+      });
+      // Then
+      r.should.deepEqual(new DicePoolResult({
+        numberOfDice: givenNumberOfDice + givenBonusDice,
+        obstacle: givenObstacle,
+        degree: 1,
+        positives: [5, 6],
+        negatives: [1],
+        outcomeType: DiceOutcomeTypes.SUCCESS,
       }));
     });
   });
