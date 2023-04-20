@@ -6,7 +6,8 @@
     "build": "node ./npm-scripts/build.mjs",
     "sass:transpile": "sass ./presentation/style/ambersteel.scss ./presentation/style/ambersteel.css",
     "sass:transpile-and-watch": "sass -w ./presentation/style/ ./presentation/style",
-    "test": "mocha ./test/**/*"
+    "test": "mocha ./test/**/*",
+    "test-coverage": "c8 mocha ./test/**/*"
   },
   "browserslist": [
     "last 3 versions"
