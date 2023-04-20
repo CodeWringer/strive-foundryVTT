@@ -95,7 +95,7 @@ export function rollDicePool(ops = {}) {
   } else if (positives.length >= ops.obstacle) { // Complete success
     outcomeType = DiceOutcomeTypes.SUCCESS;
     degree = positives.length - ops.obstacle;
-  } else if (positives.length >= 0) { // Partial failure
+  } else if (positives.length > 0) { // Partial failure
     outcomeType = DiceOutcomeTypes.PARTIAL;
     degree = negatives.length - ops.obstacle;
   } else {
