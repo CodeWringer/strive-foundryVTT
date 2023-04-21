@@ -1,6 +1,7 @@
 import { validateOrThrow } from "../../util/validation-utility.mjs";
 import { DOCUMENT_COLLECTION_SOURCES } from "./document-collection-source.mjs";
 import { DocumentIndex } from "./document-index.mjs";
+import * as ValidationUtility from "../../util/validation-utility.mjs";
 
 /**
  * Allows fetching document metadata and instances from various sources. 

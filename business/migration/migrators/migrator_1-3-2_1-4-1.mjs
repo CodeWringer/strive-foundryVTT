@@ -82,13 +82,13 @@ export default class Migrator_1_3_2__1_4_1 extends AbstractMigrator {
           attribute.level = attribute.value;
           delete attribute.value;
 
-          const dataPath = `${dataPath}.attributes.${attributeGroupToMigrate.groupName}.${attributeName}`;
+          const attributeDataPath = `${dataPath}.attributes.${attributeGroupToMigrate.groupName}.${attributeName}`;
 
           // Delete property from attribute in data base. 
-          await this.updater.deleteByPath(actor, `${dataPath}.value`, false);
+          await this.updater.deleteByPath(actor, `${attributeDataPath}.value`, false);
           
           // Persist level to attribute in data base. 
-          await this.updater.updateByPath(actor, `${dataPath}.level`, attribute.level, false);
+          await this.updater.updateByPath(actor, `${attributeDataPath}.level`, attribute.level, false);
         }
       }
 
