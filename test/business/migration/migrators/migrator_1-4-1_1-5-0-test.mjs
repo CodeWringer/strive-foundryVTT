@@ -10,6 +10,7 @@ describe("Migrator_1_4_1__1_5_0", () => {
   it("migrates correctly", async () => {
     // Given
     const given = new Migrator_1_4_1__1_5_0();
+    // Setup
     MigratorTestBase.setup("1.4.1");
     // When
     await given.migrate();

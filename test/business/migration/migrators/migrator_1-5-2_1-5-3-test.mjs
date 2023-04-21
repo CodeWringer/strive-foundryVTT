@@ -4,28 +4,7 @@ import 'should-sinon';
 import Migrator_1_5_2__1_5_3 from '../../../../business/migration/migrators/migrator_1-5-2_1-5-3.mjs';
 import { BaseLoggingStrategy } from '../../../../business/logging/base-logging-strategy.mjs';
 import { SKILL_PROPERTIES } from '../../../../business/document/item/item-properties.mjs';
-
-/**
- * Creates a new map, modifies it to look like a FoundryVTT world collection 
- * (e. g. `game.actors`) and returns it. 
- * 
- * @param {String} documentName The document type of the collection. 
- * * E. g. `"Actor"`. 
- * @param {Array<Object>} items 
- * * Every element is expected to be an object with the following field(s): 
- * * * `id: {String}`
- * 
- * @returns {Map}
- */
-function createMockWorldCollection(documentName, items) {
-  const map = new Map();
-  map.documentName = documentName;
-  for (const item of (items ?? [])) {
-    map.set(item.id, item);
-  }
-
-  return map;
-}
+import * as MigratorTestBase from './migrator-test-base.mjs';
 
 /**
  * Creates a new mock document of type "Actor" and returns it. 
@@ -358,11 +337,11 @@ describe("Migrator_1_5_2__1_5_3", () => {
 
     globalThis.MIGRATORS = [];
     globalThis.game = {
-      actors: createMockWorldCollection("Actor", actors),
-      packs: createMockWorldCollection("Pack"),
-      items: createMockWorldCollection("Item", items),
-      journal: createMockWorldCollection("Journal"),
-      tables: createMockWorldCollection("RollTable"),
+      actors: MigratorTestBase.createMockWorldCollection("Actor", actors),
+      packs: MigratorTestBase.createMockWorldCollection("Pack"),
+      items: MigratorTestBase.createMockWorldCollection("Item", items),
+      journal: MigratorTestBase.createMockWorldCollection("Journal"),
+      tables: MigratorTestBase.createMockWorldCollection("RollTable"),
       ambersteel: {
         logger: sinon.createStubInstance(BaseLoggingStrategy),
       },
