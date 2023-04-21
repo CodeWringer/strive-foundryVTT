@@ -133,3 +133,14 @@ export function isBlankOrUndefined(value) {
 export function isNotBlankOrUndefined(value) {
   return isBlankOrUndefined(value) === false;
 }
+
+/**
+ * Returns `true`, if the given object is iterable. 
+ * 
+ * @param {Any} o The object to test.
+ * 
+ * @returns {Boolean} `true`, if the given object is iterable.
+ */
+export function isIterable(o) {
+  return Symbol.iterator in Object(o);
+}

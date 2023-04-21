@@ -468,4 +468,63 @@ describe('validation-utility', function() {
       r.should.be.equal(false);
     });
   });
+
+  describe("isIterable", () => {
+    it("detects iterable array with no elements and yields true", () => {
+      // Given
+      const given = [];
+      // When
+      const r = ValidationUtility.isIterable(given);
+      // Then
+      r.should.be.equal(true);
+    });
+
+    it("detects iterable array with elements and yields true", () => {
+      // Given
+      const given = [1, 2, 3];
+      // When
+      const r = ValidationUtility.isIterable(given);
+      // Then
+      r.should.be.equal(true);
+    });
+
+    it("detects iterable Map with no elements and yields true", () => {
+      // Given
+      const given = new Map();
+      // When
+      const r = ValidationUtility.isIterable(given);
+      // Then
+      r.should.be.equal(true);
+    });
+
+    it("detects iterable Map with elements and yields true", () => {
+      // Given
+      const given = new Map();
+      given.set("a", 1);
+      given.set("b", 2);
+      given.set("c", 3);
+      // When
+      const r = ValidationUtility.isIterable(given);
+      // Then
+      r.should.be.equal(true);
+    });
+
+    it("detects iterable String and yields true", () => {
+      // Given
+      const given = "abc";
+      // When
+      const r = ValidationUtility.isIterable(given);
+      // Then
+      r.should.be.equal(true);
+    });
+
+    it("detects non-iterable object and yields false", () => {
+      // Given
+      const given = {};
+      // When
+      const r = ValidationUtility.isIterable(given);
+      // Then
+      r.should.be.equal(false);
+    });
+  });
 });
