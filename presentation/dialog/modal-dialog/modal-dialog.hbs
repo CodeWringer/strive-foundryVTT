@@ -7,7 +7,9 @@ buttons: {Array<DialogButtonDefinition>}
 <div class="flex flex-row">
   {{#each buttons as |button index|}}
   <button id="{{button.id}}" class="button{{#if button.cssClass}} {{button.cssClass}}{{/if}}">
-    {{#if button.iconCssClass}}<i class="{{button.iconCssClass}}"></i>{{/if}}
+    <span class="pad-l-md pad-r-md">
+      {{#if button.iconCssClass}}<i class="{{button.iconCssClass}}"></i>{{/if}}
+    </span>
     <span>{{button.localizedLabel}}</span>
   </button>
   {{/each}}
