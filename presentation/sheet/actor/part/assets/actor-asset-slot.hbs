@@ -9,7 +9,7 @@ cssClass: {undefined | String}
     <div{{#if viewModel.hasAsset}} class="hidden"{{/if}}>
       {{#> button viewModel=viewModel.vmBtnAssign}}
         <span{{#if ../viewModel.showFancyFont}} class="fancy-font"{{/if}}>{{localize "ambersteel.character.asset.slot.assign.label"}}</span>
-        <div class="square-button-light flex flex-center">
+        <div class="button light square flex flex-center">
           <i class="fas fa-plus"></i>
         </div>
       {{/button}}
@@ -24,7 +24,7 @@ cssClass: {undefined | String}
     </div>
     <div class="flex flex-grow"></div>
     {{#> button viewModel=viewModel.vmBtnEdit}}
-      <div class="square-button-light flex flex-center">
+      <div class="button light square flex flex-center">
         <i class="fas fa-cog"></i>
       </div>
     {{/button}}
