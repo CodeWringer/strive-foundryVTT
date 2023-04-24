@@ -3,7 +3,7 @@ viewModel: {ButtonToggleViewModel}
 cssClass: {String | undefined}
 --}}
 <a 
-  class="custom-system-button square-button-light flex flex-center{{#if viewModel.isEditable}}{{else}} disabled{{/if}}{{cssClass}}" 
+  class="custom-system-button button light square flex flex-center{{#if viewModel.isEditable}}{{else}} disabled{{/if}}{{cssClass}}" 
   title="{{viewModel.localizedTitle}}" 
   id="{{viewModel.id}}" 
 >

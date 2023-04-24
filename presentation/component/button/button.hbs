@@ -1,10 +1,11 @@
 {{!-- Required context:
 viewModel: {ButtonViewModel}
 cssClass: {String | undefined}
+square: {Boolean | undefined}
 fill: {Boolean | undefined}
 --}}
-<span class="{{#if fill}}fill-button-light{{else}}square-button-light{{/if}}{{#if (not viewModel.isEditable)}} disabled{{/if}}{{#if cssClass}} {{cssClass}}{{else}} font-size-default{{/if}}">
-  <a class="custom-system-button pad-sm button flex flex-center" 
+<span class="button light{{#if square}} square{{/if}}{{#if fill}} fill{{/if}}{{#if (not viewModel.isEditable)}} disabled{{/if}}{{#if cssClass}} {{cssClass}}{{else}} font-size-default{{/if}}">
+  <a class="custom-system-button pad-sm fill flex flex-center" 
     title="{{viewModel.localizedTitle}}"
     id="{{viewModel.id}}"
   >
