@@ -46,8 +46,8 @@ export function createMockWorldCollection(documentName, items) {
   }
 
   // Setup a custom iterator, because that's what FoundryVTT does. 
-  map[Symbol.iterator] = function*(index) {
-    return map.values[index];
+  map[Symbol.iterator] = function*() {
+    return this.values();
   }
 
   return map;
