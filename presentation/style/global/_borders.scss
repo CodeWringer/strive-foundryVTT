@@ -101,18 +101,8 @@ hr {
   border: solid 1px $c-border-medium;
 }
 
-.sheet-block.heavy-border-t, .heavy-border-t {
+.heavy-border-t {
   border-top-left-radius: $border-radius-md;
   border-top-right-radius: $border-radius-md;
-  border-top: $c-border-medium $border-radius-lg solid;
-}
-
-ol, ul {
-  &.heavy-border-t {
-    > li {
-      border-top-left-radius: $border-radius-md;
-      border-top-right-radius: $border-radius-md;
-      border-top: $c-border-medium $border-radius-lg solid;
-    }
-  }
+  border-top-width: $border-radius-lg;
 }
