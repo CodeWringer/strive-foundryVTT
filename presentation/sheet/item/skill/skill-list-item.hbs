@@ -101,6 +101,8 @@ cssClass: {undefined | String}
   </div>
   {{!-- Row --}}
   {{!-- Skill Abilites --}}
+  {{#if viewModel.showSkillAbilities}}
   {{#> header3 showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.skill.ability.plural"}}{{/header3}}
   {{> "systems/ambersteel/presentation/sheet/item/skill-ability/skill-ability-table.hbs" viewModel=viewModel.vmSkillAbilityTable cssClass=(ifThenElse viewModel.isSkillAbilityListVisible "" "hidden") }}
+  {{/if}}
 </div>
