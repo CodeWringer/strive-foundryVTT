@@ -5,11 +5,17 @@ cssClass: {undefined | String}
 <form class="{{cssClass}}" autocomplete="off">
   <header class="sheet-header">
     <div class="flex flex-column flex-grow">
-      <div class="flex flex-row">
+      <div class="flex flex-row flex-middle">
         {{> inputImage viewModel=viewModel.vmImg cssClass="custom-icon-md" }}
         <h1 class="header-name">
           {{> inputTextField viewModel=viewModel.vmTfName }}
         </h1>
+        {{!-- Configure --}}
+        {{#> button viewModel=viewModel.vmBtnEdit square=true }}
+          <div class="button light square flex flex-center">
+            <i class="fas fa-cog"></i>
+          </div>
+        {{/button}}
         <div class="flex flex-center">
           {{> buttonSendToChat viewModel=viewModel.vmBtnSendToChat }}
         </div>
