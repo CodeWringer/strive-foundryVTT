@@ -88,7 +88,10 @@ export default class SkillChatMessageViewModel extends ViewModel {
     this.contextTemplate = args.contextTemplate ?? "skill-chat-message";
     
     this.document = args.document;
-    this.skillAbilityViewModels = this.document.abilities.map(it => it.getChatViewModel());
+
+    this.skillAbilityViewModels = this.document.abilities.map(it => it.getChatViewModel({
+      showParentSkill: false,
+    }));
 
     this.vmBtnToggleVisibilityExpand = new ButtonToggleVisibilityViewModel({
       id: "vmBtnToggleVisibilityExpand",

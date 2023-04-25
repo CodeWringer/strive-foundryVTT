@@ -97,7 +97,7 @@ export default class SkillAbilityChatMessageViewModel extends ViewModel {
    * @type {Boolean}
    * @readonly
    */
-  get showParentSkill() { return this.showParentSkillImage || this.showParentSkillName; }
+  get showParentSkill() { return this._showParentSkill === true && (this.showParentSkillImage === true || this.showParentSkillName === true); }
   
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
@@ -111,6 +111,8 @@ export default class SkillAbilityChatMessageViewModel extends ViewModel {
    * @param {Boolean | undefined} args.isOwner Optional. If true, the current user is the owner of the represented document. 
    * @param {String | undefined} args.contextTemplate Optional. Name or path of a contextual template, 
    * which will be displayed in exception log entries, to aid debugging. 
+   * @param {Boolean | undefined} args.showParentSkill Optional. If true, will show the parent skill name and icon, if possible. 
+   * * Default `true`
    */
   constructor(args = {}) {
     super(args);
@@ -120,6 +122,7 @@ export default class SkillAbilityChatMessageViewModel extends ViewModel {
     this._isSendable = args.isSendable ?? false;
     this._isOwner = args.isOwner ?? false;
     this._contextTemplate = args.contextTemplate;
+    this._showParentSkill = args.showParentSkill ?? true;
 
     this.skillAbility = args.skillAbility;
 

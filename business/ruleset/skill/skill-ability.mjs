@@ -266,6 +266,8 @@ export default class SkillAbility {
    * @param {Boolean | undefined} overrides.isSendable
    * @param {Boolean | undefined} overrides.isOwner
    * @param {Boolean | undefined} overrides.isGM
+   * @param {Boolean | undefined} overrides.showParentSkill Optional. If true, will show the parent skill name and icon, if possible. 
+   * * Default `true`
    * 
    * @returns {SkillAbilityChatMessageViewModel}
    * 
