@@ -359,7 +359,7 @@ export default class ViewModel {
       try {
         await child.activateListeners(html, isOwner, isEditable);
       } catch (error) {
-        game.ambersteel.logger.logWarn(error);
+        game.ambersteel.logger.logWarn(`${error.message}; ${error.stack}`);
       }
     }
   }

@@ -66,6 +66,8 @@ export default class InputTextareaViewModel extends InputViewModel {
   async activateListeners(html, isOwner, isEditable) {
     await super.activateListeners(html, isOwner, isEditable);
 
+    if (isEditable !== true && this.isEditable !== true) return;
+
     this.element.each(function() {
       // This counter-acts a rather bothersome quirk of Handlebars. Turns out, if a partial containing a 
       // textarea is indented, or if any of the partials that contain the textarea containing 
