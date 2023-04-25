@@ -1,10 +1,20 @@
 import should from 'should';
 import sinon from 'sinon';
 import 'should-sinon';
-/*
 import TransientSkill from '../../../../business/document/item/transient-skill.mjs';
 import { SKILL_PROPERTIES } from '../../../../business/document/item/item-properties.mjs';
+import { BaseLoggingStrategy } from '../../../../business/logging/base-logging-strategy.mjs';
+
 describe("TransientSkill", () => {
+
+  beforeEach(function () {
+    globalThis.game = {
+      ambersteel: {
+        logger: sinon.createStubInstance(BaseLoggingStrategy),
+      },
+    };
+  });
+
   describe("isMagicSchool", () => {
     describe("get", () => {
       it("returns false on non-existent properties field", () => {
@@ -44,10 +54,10 @@ describe("TransientSkill", () => {
         // When
         const r = given.isMagicSchool;
         // Then
-        r.should.be.eql(false);
+        r.should.be.eql(true);
       });
     });
-    
+
     describe("set", () => {
       it("sets true correctly on non-existent properties", () => {
         // Given
@@ -64,7 +74,7 @@ describe("TransientSkill", () => {
           system: {
             properties: [SKILL_PROPERTIES.MAGIC_SCHOOL.id],
           }
-        }, true);
+        }, { render: true });
       });
 
       it("sets true correctly on existing but empty properties", () => {
@@ -84,7 +94,7 @@ describe("TransientSkill", () => {
           system: {
             properties: [SKILL_PROPERTIES.MAGIC_SCHOOL.id],
           }
-        }, true);
+        }, { render: true });
       });
 
       it("sets false correctly on existing properties with contained property", () => {
@@ -104,7 +114,7 @@ describe("TransientSkill", () => {
           system: {
             properties: [],
           }
-        }, true);
+        }, { render: true });
       });
 
       it("doesn't set true on existing properties with contained property", () => {
@@ -124,4 +134,3 @@ describe("TransientSkill", () => {
     });
   });
 });
-*/
