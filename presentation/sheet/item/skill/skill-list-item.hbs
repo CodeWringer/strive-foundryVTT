@@ -19,35 +19,41 @@ cssClass: {undefined | String}
     <div class="flex-grow margin-r-md">
       {{> inputTextField viewModel=viewModel.vmTfName cssClass="list-item-header" }}
     </div>
+    {{!-- Configure --}}
+    {{#> button viewModel=viewModel.vmBtnEdit square=true }}
+      <div class="button light square flex flex-center">
+        <i class="fas fa-cog"></i>
+      </div>
+    {{/button}}
     {{!-- Delete --}}
     {{> buttonDelete viewModel=viewModel.vmBtnDelete }}
   </div>
   {{!-- Row --}}
   <div class="flex flex-row">
     {{!-- Related Attribute --}}
-    <div class="width-min-xxl">
+    <div class="width-min-xxl{{#if (neq viewModel.showAdvancedData true)}} hidden{{/if}}">
       {{> inputDropDown viewModel=viewModel.vmDdRelatedAttribute }}
     </div>
     {{!-- Level --}}
     <div class="flex flex-row margin-b-md">
-      <div class="width-min-lg">
+      <div class="width-min-lg{{#if (neq viewModel.showLevel true)}} hidden{{/if}}">
         {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.advancement.level"}}{{/label}}
       </div>
-      <div class="width-md">
+      <div class="width-md{{#if (neq viewModel.showLevel true)}} hidden{{/if}}">
         {{> inputNumberSpinner viewModel=viewModel.vmNsLevel }}
       </div>
       {{!-- Modified Level --}}
-      <div class="margin-l-sm">
+      <div class="margin-l-sm{{#if (neq viewModel.showAdvancedData true)}} hidden{{/if}}">
         {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.advancement.moddedLevelAbbreviation"}}{{/label}}
       </div>
-      <div class="width-md">
+      <div class="width-md{{#if (neq viewModel.showAdvancedData true)}} hidden{{/if}}">
         {{> inputNumberSpinner viewModel=viewModel.vmNsModdedLevel }}
       </div>
     </div>
     {{!-- Spacer --}}
     <div class="flex-grow"></div>
     {{!-- Advancement Requirements --}}
-    <div class="flex flex-row margin-b-md">
+    <div class="flex flex-row margin-b-md{{#if (neq viewModel.showAdvancedData true)}} hidden{{/if}}">
       <div class="width-min-xl">
         {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.advancement.requirements.abbreviation"}}{{/label}}
       </div>
@@ -56,7 +62,7 @@ cssClass: {undefined | String}
       </div>
     </div>
     {{!-- Successes --}}
-    <div class="flex flex-row margin-b-md">
+    <div class="flex flex-row margin-b-md{{#if (neq viewModel.showAdvancedData true)}} hidden{{/if}}">
       <div class="width-min-l margin-l-sm">
         {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.advancement.requirements.success.abbreviation"}}{{/label}}
       </div>
@@ -65,7 +71,7 @@ cssClass: {undefined | String}
       </div>
     </div>
     {{!-- Failures --}}
-    <div class="flex flex-row margin-b-md">
+    <div class="flex flex-row margin-b-md{{#if (neq viewModel.showAdvancedData true)}} hidden{{/if}}">
       <div class="width-min-l margin-l-sm">
         {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.advancement.requirements.failure.abbreviation"}}{{/label}}
       </div>
@@ -76,12 +82,12 @@ cssClass: {undefined | String}
   </div>
   {{!-- Row --}}
   {{!-- Description --}}
-  <div class="flex flex-column margin-b-md border-solid-t-sm border-solid-b-sm">
+  <div class="flex flex-column margin-b-md border-solid-t-sm border-solid-b-sm{{#if (neq viewModel.showAdvancedData true)}} hidden{{/if}}">
     {{> inputRichText viewModel=viewModel.vmRtDescription }}
   </div>
   {{!-- Row --}}
   {{!-- Properties --}}
-  <div class="flex flex-row margin-b-sm">
+  <div class="flex flex-row margin-b-sm{{#if (neq viewModel.showAdvancedData true)}} hidden{{/if}}">
     <span class="width-min-xl">
       {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.general.properties.label"}}{{/label}}
     </span>
@@ -90,7 +96,7 @@ cssClass: {undefined | String}
     </span>
   </div>
   {{!-- Row --}}
-  <div class="flex flex-row">
+  <div class="flex flex-row{{#if (neq viewModel.showAdvancedData true)}} hidden{{/if}}">
     {{!-- Category --}}
     <div class="width-min-xl">
       {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.general.category"}}{{/label}}

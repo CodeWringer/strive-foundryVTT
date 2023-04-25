@@ -544,6 +544,12 @@
           "label": "Delete Skill",
           "query": "Confirm Deletion of Skill"
         },
+        "headState": "Head State",
+        "headStates": {
+          "full": "Full",
+          "level_only": "Level Only",
+          "headless": "Headless"
+        },
         "known": {
           "label": "Known Skills",
           "plural": "Known Skills",

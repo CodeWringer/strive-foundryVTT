@@ -18,6 +18,71 @@ import { ATTRIBUTES } from "../../ruleset/attribute/attributes.mjs";
 import { isBlankOrUndefined, isObject } from "../../util/validation-utility.mjs";
 import { SKILL_PROPERTIES } from "./item-properties.mjs";
 import { arrayContains } from "../../util/array-utility.mjs";
+import { getAsArray, getAsChoices } from "../../util/constants-utility.mjs";
+
+/**
+ * Represents a skill type document's "head" state. 
+ * 
+ * A head state of a skill determines how much data fidelity its 
+ * associated skill exposes and makes interactible to the user. 
+ * 
+ * @property {String} name Internal name. 
+ * @property {String | undefined} localizableName Localization key. 
+ * @property {String | undefined} icon CSS class of an icon. 
+ * * E. g. `"fas fa-virus"`
+ */
+export class SkillHeadState {
+  /**
+   * @param {Object} args
+   * @param {String} args.name Internal name. 
+   * @param {String | undefined} args.localizableName Localization key. 
+   * @param {String | undefined} args.icon CSS class of an icon. 
+   * * E. g. `"fas fa-virus"`
+   */
+  constructor(args = {}) {
+    this.name = args.name;
+    this.localizableName = args.localizableName;
+    this.icon = args.icon;
+  }
+}
+
+/**
+ * Represents the defined skill head states. 
+ * 
+ * @property {HealthState} full All of the skills data is available. 
+ * @property {HealthState} level_only Only name, icon, unmodified level and 
+ * skill ability list are exposed. 
+ * @property {HealthState} headless Only name, icon and skill ability 
+ * list are exposed. 
+ * 
+ * @constant
+ */
+export const SKILL_HEAD_STATES = {
+  full: new SkillHeadState({
+    name: "full",
+    localizableName: "ambersteel.character.skill.headStates.full",
+  }),
+  level_only: new SkillHeadState({
+    name: "level_only",
+    localizableName: "ambersteel.character.skill.headStates.level_only",
+  }),
+  headless: new SkillHeadState({
+    name: "headless",
+    localizableName: "ambersteel.character.skill.headStates.headless",
+  }),
+  get asChoices() {
+    if (this._asChoices === undefined) {
+      this._asChoices = getAsChoices(this, ["asChoices", "_asChoices", "asArray", "_asArray"]);
+    }
+    return this._asChoices;
+  },
+  get asArray() {
+    if (this._asArray === undefined) {
+      this._asArray = getAsArray(this, ["asChoices", "_asChoices", "asArray", "_asArray"]);
+    }
+    return this._asArray;
+  }
+}
 
 /**
  * Represents the full transient data of a skill. 
@@ -35,6 +100,7 @@ import { arrayContains } from "../../util/array-utility.mjs";
  * @property {Array<SkillAbility>} abilities The array of skill abilities of this skill. 
  * @property {Boolean} isMagicSchool Returns true, if the skill is considered 
  * a magic school. 
+ * @property {SkillHeadState} headState The current degree of data fidelity to expose. 
  */
 export default class TransientSkill extends TransientBaseItem {
   /** @override */
@@ -84,7 +150,6 @@ export default class TransientSkill extends TransientBaseItem {
     this.document.system.level = value;
     this.updateByPath("system.level", value);
   }
-  
   
   /**
    * @type {Number}
@@ -157,6 +222,21 @@ export default class TransientSkill extends TransientBaseItem {
   set abilities(value) {
     this._abilities = value;
     this.persistSkillAbilities();
+  }
+  
+  /**
+   * @type {SkillHeadState}
+   */
+  get headState() {
+    if (this.document.system.headState === undefined) {
+      return SKILL_HEAD_STATES.full;
+    } else {
+      return SKILL_HEAD_STATES.asArray.find(it => it.name === this.document.system.headState); 
+    }
+  }
+  set headState(value) {
+    this.document.system.headState = value.name;
+    this.updateByPath("system.headState", value.name);
   }
   
   /**
@@ -343,14 +423,22 @@ export default class TransientSkill extends TransientBaseItem {
    * @returns {SummedData}
    */
   getRollData() {
-    const actor = (this.owningDocument ?? {}).document;
-    const characterAttribute = new CharacterAttribute(actor, this.relatedAttribute.name);
-    const compositionObj = new Ruleset().getSkillTestNumberOfDice(this.moddedLevel, characterAttribute.moddedLevel);
-
-    return new SummedData(compositionObj.totalDiceCount, [
-      new SummedDataComponent(this.relatedAttribute.name, characterAttribute.localizableName, compositionObj.attributeDiceCount),
-      new SummedDataComponent(this.name, this.name, compositionObj.skillDiceCount),
-    ]);
+    if (this.headState.name === SKILL_HEAD_STATES.full.name) {
+      const actor = (this.owningDocument ?? {}).document;
+      const characterAttribute = new CharacterAttribute(actor, this.relatedAttribute.name);
+      const compositionObj = new Ruleset().getSkillTestNumberOfDice(this.moddedLevel, characterAttribute.moddedLevel);
+  
+      return new SummedData(compositionObj.totalDiceCount, [
+        new SummedDataComponent(this.relatedAttribute.name, characterAttribute.localizableName, compositionObj.attributeDiceCount),
+        new SummedDataComponent(this.name, this.name, compositionObj.skillDiceCount),
+      ]);
+    } else if (this.headState.name === SKILL_HEAD_STATES.level_only.name) {
+      return new SummedData(this.level, [
+        new SummedDataComponent(this.name, this.name, this.level),
+      ]);
+    } else {
+      return new SummedData(0, []);
+    }
   }
 
   /**

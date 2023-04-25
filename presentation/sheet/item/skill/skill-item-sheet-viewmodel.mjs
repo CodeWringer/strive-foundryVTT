@@ -2,11 +2,13 @@ import { SKILL_PROPERTIES } from "../../../../business/document/item/item-proper
 import { ATTRIBUTES } from "../../../../business/ruleset/attribute/attributes.mjs";
 import { isDefined } from "../../../../business/util/validation-utility.mjs";
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs";
+import ButtonViewModel from "../../../component/button/button-viewmodel.mjs";
 import ChoiceAdapter from "../../../component/input-choice/choice-adapter.mjs";
 import InputPropertiesViewModel from "../../../component/input-properties/input-properties-viewmodel.mjs";
 import { TEMPLATES } from "../../../templatePreloader.mjs"
 import ViewModelFactory from "../../../view-model/view-model-factory.mjs";
 import SkillAbilityTableViewModel from "../skill-ability/skill-ability-table-viewmodel.mjs"
+import { querySkillConfiguration } from "./skill-utils.mjs";
 import SkillViewModel from "./skill-viewmodel.mjs";
 
 export default class SkillItemSheetViewModel extends SkillViewModel {
@@ -59,6 +61,21 @@ export default class SkillItemSheetViewModel extends SkillViewModel {
       propertyOwner: thiz.document,
       propertyPath: "name",
       placeholder: "ambersteel.general.name",
+    });
+    this.vmBtnEdit = new ButtonViewModel({
+      id: "vmBtnEdit",
+      parent: this,
+      isSendable: this.isSendable,
+      isEditable: this.isEditable,
+      isOwner: this.isOwner,
+      target: this.document,
+      localizableTitle: "ambersteel.general.edit",
+      onClick: async () => {
+        const delta = await querySkillConfiguration(this.document);
+        if (delta !== undefined) {
+          this.document.headState = delta.headState;
+        }
+      },
     });
     this.vmBtnSendToChat = factory.createVmBtnSendToChat({
       parent: thiz,
