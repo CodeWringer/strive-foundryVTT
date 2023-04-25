@@ -231,7 +231,8 @@
       "successes": 0,
       "failures": 0,
       "abilities": {},
-      "category": ""
+      "category": "",
+      "headState": "full"
     },
     "fate-card": {
       "templates": ["base"],
