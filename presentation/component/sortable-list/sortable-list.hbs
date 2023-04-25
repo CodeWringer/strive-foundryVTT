@@ -6,34 +6,32 @@ cssClass: {String | undefined}
     id={{viewModel.id}}
   >
   {{#each viewModel.itemViewModelGroups as |itemViewModelGroup key|}}
-    {{#if ../viewModel.isEditable}}
-      <li id="{{itemViewModelGroup.id}}" class="ambersteel-list-row sheet-block heavy-border-t flex flex-row">
-        <div class="component-list-item-order-controls{{#if (neq ../viewModel.isEditable true)}} hidden{{/if}}">
-          {{#> button viewModel=itemViewModelGroup.vmBtnMoveTop fill=false}}
-            <i class="fas fa-angle-double-up"></i>
-          {{/button}}
-          {{#> button viewModel=itemViewModelGroup.vmBtnMoveUp fill=false}}
-            <i class="fas fa-angle-up"></i>
-          {{/button}}
-          {{!-- TODO #116: Implement the grab handle --}}
-          <div class="flex-grow"></div>
-          {{!-- <a 
-            class="grab-handle"
-            >
-            <i class="fas fa-grip-vertical"></i>
-          </a> --}}
-          {{#> button viewModel=itemViewModelGroup.vmBtnMoveDown fill=false}}
-            <i class="fas fa-angle-down"></i>
-          {{/button}}
-          {{#> button viewModel=itemViewModelGroup.vmBtnMoveBottom fill=false}}
-            <i class="fas fa-angle-double-down"></i>
-          {{/button}}
-        </div>
-      {{/if}}
-      {{#with ../viewModel.listItemTemplate as | template |}}
-        {{> (template) viewModel=itemViewModelGroup.listItemViewModel cssClass="flex-grow" }}
-      {{/with}}
-    </li>
+  <li id="{{itemViewModelGroup.id}}" class="ambersteel-list-row sheet-block heavy-border-t flex flex-row">
+    <div class="component-list-item-order-controls{{#if (neq ../viewModel.isEditable true)}} hidden{{/if}}">
+      {{#> button viewModel=itemViewModelGroup.vmBtnMoveTop fill=false}}
+        <i class="fas fa-angle-double-up"></i>
+      {{/button}}
+      {{#> button viewModel=itemViewModelGroup.vmBtnMoveUp fill=false}}
+        <i class="fas fa-angle-up"></i>
+      {{/button}}
+      {{!-- TODO #116: Implement the grab handle --}}
+      <div class="flex-grow"></div>
+      {{!-- <a 
+        class="grab-handle"
+        >
+        <i class="fas fa-grip-vertical"></i>
+      </a> --}}
+      {{#> button viewModel=itemViewModelGroup.vmBtnMoveDown fill=false}}
+        <i class="fas fa-angle-down"></i>
+      {{/button}}
+      {{#> button viewModel=itemViewModelGroup.vmBtnMoveBottom fill=false}}
+        <i class="fas fa-angle-double-down"></i>
+      {{/button}}
+    </div>
+    {{#with ../viewModel.listItemTemplate as | template |}}
+      {{> (template) viewModel=itemViewModelGroup.listItemViewModel cssClass="flex-grow" }}
+    {{/with}}
+  </li>
   {{/each}}
   <li class="ambersteel-list-row ambersteel-list-footer{{#if (eq viewModel.isEditable false)}} hidden{{/if}}">
     <div class="fill flex flex-row flex-right">
