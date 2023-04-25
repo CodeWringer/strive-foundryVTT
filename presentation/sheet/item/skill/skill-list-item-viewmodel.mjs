@@ -41,6 +41,13 @@ export default class SkillListItemViewModel extends SkillViewModel {
   get failures() { return this.document.advancementRequirements.failures; }
 
   /**
+   * Returns true, if the skill ability list should be rendered. 
+   * @type {Boolean}
+   * @readonly
+   */
+  get showSkillAbilities() { return this.isEditable === true || this.document.abilities.length > 0; }
+
+  /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
    * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 
    * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 
@@ -151,16 +158,18 @@ export default class SkillListItemViewModel extends SkillViewModel {
       propertyPath: "advancementProgress.failures",
       min: 0,
     });
-    this.vmSkillAbilityTable = new SkillAbilityTableViewModel({
-      id: "vmSkillAbilityTable",
-      parent: thiz,
-      isEditable: thiz.isEditable,
-      isSendable: thiz.isSendable,
-      isOwner: thiz.isOwner,
-      document: thiz.document,
-      skillAbilitiesInitiallyVisible: false,
-      visGroupId: thiz.visGroupId,
-    });
+    if (this.showSkillAbilities === true) {
+      this.vmSkillAbilityTable = new SkillAbilityTableViewModel({
+        id: "vmSkillAbilityTable",
+        parent: thiz,
+        isEditable: thiz.isEditable,
+        isSendable: thiz.isSendable,
+        isOwner: thiz.isOwner,
+        document: thiz.document,
+        skillAbilitiesInitiallyVisible: false,
+        visGroupId: thiz.visGroupId,
+      });
+    }
     this.vmRtDescription = factory.createVmRichText({
       parent: thiz,
       id: "vmRtDescription",
