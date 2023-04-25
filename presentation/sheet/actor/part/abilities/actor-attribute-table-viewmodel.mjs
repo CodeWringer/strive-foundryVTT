@@ -65,8 +65,7 @@ export default class AttributeTableViewModel extends ViewModel {
         attributeName: attribute.name,
         localizableName: attribute.localizableName,
         localizableAbbreviation: attribute.localizableAbbreviation,
-        requiredSuccesses: attribute.advancementRequirements.successes,
-        requiredFailures: attribute.advancementRequirements.failures,
+        requiredProgress: attribute.advancementRequirements,
         vmBtnRoll: factory.createVmBtnRoll({
           parent: thiz,
           id: `vmBtnRoll-${attribute.name}`,
@@ -91,18 +90,11 @@ export default class AttributeTableViewModel extends ViewModel {
           propertyPath: "moddedLevel",
           min: 0,
         }),
-        vmNsSuccesses: factory.createVmNumberSpinner({
+        vmNsProgress: factory.createVmNumberSpinner({
           parent: thiz,
-          id: `vmNsSuccesses-${attribute.name}`,
+          id: `vmNsProgress-${attribute.name}`,
           propertyOwner: attribute,
-          propertyPath: "advancementProgress.successes",
-          min: 0,
-        }),
-        vmNsFailures: factory.createVmNumberSpinner({
-          parent: thiz,
-          id: `vmNsFailures-${attribute.name}`,
-          propertyOwner: attribute,
-          propertyPath: "advancementProgress.failures",
+          propertyPath: "advancementProgress",
           min: 0,
         }),
       });

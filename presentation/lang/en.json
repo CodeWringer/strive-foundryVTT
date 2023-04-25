@@ -104,8 +104,8 @@
         "moddedLevel": "Modified Level",
         "moddedLevelAbbreviation": "Mod.",
         "requirements": {
-          "label": "Required Successes/Failures",
-          "abbreviation": "Req. S/F",
+          "label": "Required",
+          "abbreviation": "Req.",
           "success": {
             "label": "Successes",
             "abbreviation": "S"
@@ -113,6 +113,14 @@
           "failure": {
             "label": "Failures",
             "abbreviation": "F"
+          },
+          "successAndFailure": {
+            "label": "Required Successes/Failures",
+            "abbreviation": "Req. S/F"
+          },
+          "progress": {
+            "label": "Progress",
+            "abbreviation": "Prog."
           }
         }
       },
@@ -291,6 +299,11 @@
         "arcana": {
           "label": "Arcana",
           "abbreviation": "Arc"
+        },
+        "tier": {
+          "underdeveloped": "Underdeveloped",
+          "average": "Average",
+          "exceptional": "Exceptional"
         }
       },
       "biography": {
