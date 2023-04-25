@@ -103,7 +103,7 @@ cssClass: {undefined | String}
       <span>{{localize "ambersteel.rules.hintToughnessTestRequired"}}</span>
     </div>
   </div>
-  {{> sortableList viewModel=viewModel.vmInjuryList }}
+  {{> sortableList viewModel=viewModel.vmInjuryList prominentItemStyling=true }}
   {{!-- Illnesses --}}
   {{#> header1 showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.health.illness.plural"}}{{/header1}}
   <div class="grid-2col grid-gap-md margin-b-md">
@@ -119,7 +119,7 @@ cssClass: {undefined | String}
       </div>
     </div>
   </div>
-  {{> sortableList viewModel=viewModel.vmIllnessList }}
+  {{> sortableList viewModel=viewModel.vmIllnessList prominentItemStyling=true }}
   {{!-- Mutations --}}
   {{#> header1 showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.health.mutation.plural"}}{{/header1}}
   <div class="grid-2col grid-gap-md margin-b-md">
@@ -135,7 +135,7 @@ cssClass: {undefined | String}
       </div>
     </div>
   </div>
-  {{> sortableList viewModel=viewModel.vmMutationList }}
+  {{> sortableList viewModel=viewModel.vmMutationList prominentItemStyling=true }}
   {{!-- Scars --}}
   {{#> header1 showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.health.scar.plural"}}{{/header1}}
   <div class="grid-2col grid-gap-md margin-b-md">
@@ -153,5 +153,5 @@ cssClass: {undefined | String}
       </div>
     </div>
   </div>
-  {{> sortableList viewModel=viewModel.vmScarList }}
+  {{> sortableList viewModel=viewModel.vmScarList prominentItemStyling=true }}
 </section>

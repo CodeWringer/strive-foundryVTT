@@ -34,8 +34,8 @@ cssClass: {undefined | String}
       </div>
     </div>
   </div>
-  {{> sortableList viewModel=viewModel.vmLuggageList }}
+  {{> sortableList viewModel=viewModel.vmLuggageList prominentItemStyling=true }}
   {{!-- Property --}}
   {{#> header1 showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.asset.property"}}{{/header1}}
-  {{> sortableList viewModel=viewModel.vmPropertyList }}
+  {{> sortableList viewModel=viewModel.vmPropertyList prominentItemStyling=true }}
 </section>
