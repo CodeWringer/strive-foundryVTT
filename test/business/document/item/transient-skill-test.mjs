@@ -1,7 +1,7 @@
 import should from 'should';
 import sinon from 'sinon';
 import 'should-sinon';
-import TransientSkill from '../../../../business/document/item/transient-skill.mjs';
+import TransientSkill, { SKILL_HEAD_STATES } from '../../../../business/document/item/transient-skill.mjs';
 import { SKILL_PROPERTIES } from '../../../../business/document/item/item-properties.mjs';
 import { BaseLoggingStrategy } from '../../../../business/logging/base-logging-strategy.mjs';
 
@@ -130,6 +130,56 @@ describe("TransientSkill", () => {
         given.isMagicSchool = true;
         // Then
         givenDocument.update.should.not.have.been.called();
+      });
+    });
+  });
+
+  describe("headState", () => {
+    describe("get", () => {
+      it("returns 'full' on uninitialized data", () => {
+        // Given
+        const givenDocument = {
+          system: {}
+        };
+        const given = new TransientSkill(givenDocument);
+        // When
+        const r = given.headState;
+        // Then
+        r.should.be.eql(SKILL_HEAD_STATES.full);
+      });
+
+      it("returns parsed 'headless'", () => {
+        // Given
+        const givenDocument = {
+          system: {
+            headState: SKILL_HEAD_STATES.headless.name,
+          }
+        };
+        const given = new TransientSkill(givenDocument);
+        // When
+        const r = given.headState;
+        // Then
+        r.should.be.eql(SKILL_HEAD_STATES.headless);
+      });
+    });
+
+    describe("set", () => {
+      it("sets 'level_only' with expected update", () => {
+        // Given
+        const givenDocument = {
+          system: {},
+          update: sinon.fake(),
+        };
+        const given = new TransientSkill(givenDocument);
+        // When
+        given.headState = SKILL_HEAD_STATES.level_only;
+        // Then
+        givenDocument.update.should.have.been.calledOnce();
+        givenDocument.update.should.have.been.calledWith({
+          system: {
+            headState: SKILL_HEAD_STATES.level_only.name,
+          }
+        }, { render: true });
       });
     });
   });

@@ -18,7 +18,7 @@ import { ATTRIBUTES } from "../../ruleset/attribute/attributes.mjs";
 import { isBlankOrUndefined, isObject } from "../../util/validation-utility.mjs";
 import { SKILL_PROPERTIES } from "./item-properties.mjs";
 import { arrayContains } from "../../util/array-utility.mjs";
-import { getAsChoices } from "../../util/constants-utility.mjs";
+import { getAsArray, getAsChoices } from "../../util/constants-utility.mjs";
 
 /**
  * Represents a skill type document's "head" state. 
