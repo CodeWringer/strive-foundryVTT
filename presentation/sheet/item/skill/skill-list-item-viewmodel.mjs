@@ -141,7 +141,9 @@ export default class SkillListItemViewModel extends SkillViewModel {
       localizableTitle: "ambersteel.general.edit",
       onClick: async () => {
         const delta = await querySkillConfiguration(this.document);
-        this.document.headState = delta.headState;
+        if (delta !== undefined) {
+          this.document.headState = delta.headState;
+        }
       },
     });
     this.vmDdRelatedAttribute = factory.createVmDropDown({
