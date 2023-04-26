@@ -304,6 +304,10 @@
           "underdeveloped": "Underdeveloped",
           "average": "Average",
           "exceptional": "Exceptional"
+        },
+        "initiative": {
+          "initiative": "Initiative",
+          "baseInitiative": "Base Initiative"
         }
       },
       "biography": {
