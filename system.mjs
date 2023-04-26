@@ -150,7 +150,7 @@ Hooks.once('init', function() {
 
   // Set initiative formula on global CONFIG variable provided by FoundryVTT.
   CONFIG.Combat.initiative = {
-    formula: "1d100",
+    formula: "1D10 + @baseInitiative",
     decimals: 2
   };
 

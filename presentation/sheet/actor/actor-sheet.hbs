@@ -53,6 +53,13 @@ cssClass: {undefined | String}
         <div>
           {{> lazy viewModel=viewModel.attributesViewModel}}
         </div>
+        {{!-- Base Initiative --}}
+        {{#> header3 cssClass="flex flex-row"}}
+          <span class="flex-grow"></span>
+          {{localize "ambersteel.character.attribute.initiative.baseInitiative"}}
+          <span class="width-sm"></span>
+          {{#> readOnlyValue cssClass="width-md"}}{{viewModel.document.baseInitiative}}{{/readOnlyValue}}
+        {{/header3}}
         {{!-- Skills --}}
         <div>
           {{> lazy viewModel=viewModel.skillsViewModel}}

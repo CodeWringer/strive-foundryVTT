@@ -3,6 +3,7 @@ import { DiceOutcomeTypes } from '../../dice/dice-outcome-types.mjs';
 import CharacterAssetSlotGroup from '../../ruleset/asset/character-asset-slot-group.mjs';
 import CharacterAssetSlot from '../../ruleset/asset/character-asset-slot.mjs';
 import { ATTRIBUTE_GROUPS } from '../../ruleset/attribute/attribute-groups.mjs';
+import { ATTRIBUTES } from '../../ruleset/attribute/attributes.mjs';
 import CharacterAttributeGroup from '../../ruleset/attribute/character-attribute-group.mjs';
 import { CharacterHealthState } from '../../ruleset/health/character-health-state.mjs';
 import { HEALTH_STATES } from '../../ruleset/health/health-states.mjs';
@@ -22,6 +23,8 @@ import TransientBaseActor from './transient-base-actor.mjs';
  * of the character. 
  * * Read-only. 
  * @property {Array<CharacterAttribute>} attributes The attributes of the character. 
+ * * Read-only. 
+ * @property {Number} baseInitiative 
  * * Read-only. 
  * @property {Object} person
  * * Read-only. 
@@ -292,6 +295,18 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
       },
       get maxBulk() { return new Ruleset().getCharacterCarryingCapacity(thiz.document); },
     };
+  }
+
+  /**
+   * @type {Number}
+   * @readonly
+   */
+  get baseInitiative() {
+    const perceptionLevel = this.attributes.find(it => it.name === ATTRIBUTES.perception.name).moddedLevel;
+    const intelligenceLevel = this.attributes.find(it => it.name === ATTRIBUTES.intelligence.name).moddedLevel;
+    const empathyLevel = this.attributes.find(it => it.name === ATTRIBUTES.empathy.name).moddedLevel;
+
+    return perceptionLevel + intelligenceLevel + empathyLevel;
   }
 
   /**
