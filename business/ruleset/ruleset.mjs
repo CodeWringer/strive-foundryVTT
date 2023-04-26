@@ -2,6 +2,7 @@ import LevelAdvancement from "./level-advancement.mjs";
 import { ATTRIBUTE_GROUPS } from "./attribute/attribute-groups.mjs";
 import { SummedData, SummedDataComponent } from "./summed-data.mjs";
 import { SkillTier, SKILL_TIERS } from "./skill/skill-tier.mjs";
+import { ATTRIBUTE_TIERS, AttributeTier } from "./attribute/attribute-tier.mjs";
 
 /**
  * Provides all the ruleset-specifics. 
@@ -24,22 +25,43 @@ export default class Ruleset {
   }
 
   /**
-   * Returns the advancement requirements for the given level of an attribute. 
+   * Returns the tier of the given level of an attribute. 
    * 
-   * If level is equal to 0, will return undefined, instead of actual values. 
-   * This is deliberate, as an attribute at level 0 cannot be advanced (naturally).
+   * @param {Number} level The level for which to get the attribute tier. 
+   * 
+   * @returns {AttributeTier}
+   */
+  getAttributeLevelTier(level = 0) {
+    if (level < 3) {
+      return ATTRIBUTE_TIERS.underdeveloped;
+    } else if (level < 6) {
+      return ATTRIBUTE_TIERS.average;
+    } else {
+      return ATTRIBUTE_TIERS.exceptional;
+    }
+  }
+
+  /**
+   * Returns the advancement requirements for the given level of an attribute. 
    * 
    * @param {Number} level The level for which to get the advancement requirements. 
    * 
-   * @returns {LevelAdvancement}
+   * @returns {Number}
    */
   getAttributeAdvancementRequirements(level = 0) {
-    return new LevelAdvancement({
-      successes: (level === 0) ? undefined : (level + 1) * (level + 1) * 4,
-      failures: (level === 0) ? undefined : (level + 1) * (level + 1) * 5
-    });
+    const tier = this.getAttributeLevelTier(level);
+
+    if (tier.name === ATTRIBUTE_TIERS.underdeveloped.name) {
+      return 15 + (level * 4);
+    } else if (tier.name === ATTRIBUTE_TIERS.average.name) {
+      return (level + 3) * (level + 2);
+    } else if (tier.name === ATTRIBUTE_TIERS.exceptional.name) {
+      return (level + 4) * (level + 3);
+    } else {
+      throw new Error(`Unrecognized attribute tier ${tier.name}`);
+    }
   }
-  
+    
   /**
    * Returns the tier of the given level of a skill. 
    * 

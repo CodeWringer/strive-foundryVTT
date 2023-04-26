@@ -2,14 +2,14 @@ import { getAsArray, getAsChoices } from "../../util/constants-utility.mjs";
 import { validateOrThrow } from "../../util/validation-utility.mjs";
 
 /**
- * Represents a skill tier. 
+ * Represents an attribute tier. 
  * 
  * @property {String} name Internal name. 
  * @property {String | undefined} localizableName Localization key. 
  * @property {String | undefined} icon CSS class of an icon. 
  * * E. g. `"fas fa-virus"`
 */
-export class SkillTier {
+export class AttributeTier {
   /**
    * @param {Object} args
    * @param {String} args.name Internal name. 
@@ -27,30 +27,30 @@ export class SkillTier {
 }
 
 /**
- * Represents the defined skill tiers.
+ * Represents the defined attribute tiers.
  * 
- * @property {SkillTier} dabbling 
- * @property {SkillTier} apprentice 
- * @property {SkillTier} master 
+ * @property {AttributeTier} underdeveloped
+ * @property {AttributeTier} average
+ * @property {AttributeTier} exceptional
  * 
  * @property {Array<ChoiceOption>} asChoices The constants of this type, as an array 
  * of `ChoiceOption`s. 
- * @property {Array<SkillTier>} asArray The constants of this type, as an array. 
+ * @property {Array<AttributeTier>} asArray The constants of this type, as an array. 
  * 
  * @constant
  */
-export const SKILL_TIERS = {
-  dabbling: new SkillTier({
-    name: "dabbling",
-    localizableName: "ambersteel.character.skill.tier.dabbling",
+export const ATTRIBUTE_TIERS = {
+  underdeveloped: new AttributeTier({
+    name: "underdeveloped",
+    localizableName: "ambersteel.character.attribute.tier.underdeveloped",
   }),
-  apprentice: new SkillTier({
-    name: "apprentice",
-    localizableName: "ambersteel.character.skill.tier.apprentice",
+  average: new AttributeTier({
+    name: "average",
+    localizableName: "ambersteel.character.attribute.tier.average",
   }),
-  master: new SkillTier({
-    name: "master",
-    localizableName: "ambersteel.character.skill.tier.master",
+  exceptional: new AttributeTier({
+    name: "exceptional",
+    localizableName: "ambersteel.character.attribute.tier.exceptional",
   }),
   get asChoices() {
     if (this._asChoices === undefined) {
