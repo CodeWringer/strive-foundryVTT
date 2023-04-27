@@ -167,23 +167,6 @@ export default class Ruleset {
   }
 
   /**
-   * Returns true, if the given face/number represents a spell-backfire-causing negative. 
-   * 
-   * @param {String|Number} face A die face to check whether it represents a spell-backfire-causing negative. 
-   * 
-   * @returns {Boolean}
-   * 
-   * @throws {Error} Thrown, if the given face is outside the valid range of 0 (inclusive) to 6 (inclusive).
-   */
-  causesBackfire(face) {
-    const int = parseInt(face);
-
-    if (int < 0 || int > 6) throw new Error("Die face count out of range [0-6]");
-
-    return int < 3;
-  }
-
-  /**
    * Returns true, if the given dice pool roll result should result in a spell-backfire. 
    * 
    * @param {DicePoolResult} rollResult 
