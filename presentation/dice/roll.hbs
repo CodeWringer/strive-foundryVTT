@@ -14,6 +14,7 @@ primaryImage: {String | undefined}
 secondaryTitle: {String | undefined}
 secondaryImage: {String | undefined}
 cssClass: {undefined | String}
+showBackFire: {Boolean | String}
 --}}
 <div class="dice-roll-chat-message-container{{#if cssClass}} {{cssClass}}{{/if}}">
   {{!-- Header --}}
@@ -70,9 +71,20 @@ cssClass: {undefined | String}
         {{localize "ambersteel.roll.success.label"}}!
       </div>
     {{/if}}
-    {{#if (or (eq outcomeType "PARTIAL") (eq outcomeType "FAILURE"))}}
+    {{#if (eq outcomeType "PARTIAL")}}
+      <div class="dice-result partial">
+        {{localize "ambersteel.roll.partial.label"}}!
+      </div>
+    {{/if}}
+    {{#if (eq outcomeType "FAILURE")}}
       <div class="dice-result failure">
         {{localize "ambersteel.roll.failure.label"}}!
+      </div>
+    {{/if}}
+    {{#if showBackFire}}
+      <div class="dice-result failure flex flex-row flex-middle">
+        <i class="fas fa-exclamation-triangle"></i>
+        <span class="margin-l-md">{{localize "ambersteel.roll.backFire.label"}}!</span>
       </div>
     {{/if}}
     <div class="dice-degree">

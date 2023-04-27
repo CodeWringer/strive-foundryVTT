@@ -3,6 +3,8 @@ import { ATTRIBUTE_GROUPS } from "./attribute/attribute-groups.mjs";
 import { SummedData, SummedDataComponent } from "./summed-data.mjs";
 import { SkillTier, SKILL_TIERS } from "./skill/skill-tier.mjs";
 import { ATTRIBUTE_TIERS, AttributeTier } from "./attribute/attribute-tier.mjs";
+import DicePoolResult from "../dice/dice-pool-result.mjs";
+import { DiceOutcomeTypes } from "../dice/dice-outcome-types.mjs";
 
 /**
  * Provides all the ruleset-specifics. 
@@ -179,6 +181,21 @@ export default class Ruleset {
     if (int < 0 || int > 6) throw new Error("Die face count out of range [0-6]");
 
     return int < 3;
+  }
+
+  /**
+   * Returns true, if the given dice pool roll result should result in a spell-backfire. 
+   * 
+   * @param {DicePoolResult} rollResult 
+   * 
+   * @returns {Boolean}
+   */
+  rollCausesBackfire(rollResult) {
+    if (rollResult.outcomeType === DiceOutcomeTypes.FAILURE) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   /**

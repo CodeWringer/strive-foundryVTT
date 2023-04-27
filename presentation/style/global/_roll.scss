@@ -68,6 +68,11 @@ li.roll.die.d6.roll-success {
     background-color: #8200002e;
   }
 
+  &.partial {
+    background: #8200002e;
+    background: linear-gradient(315deg, #8200002e 49%, #0082072e 51%);
+  }
+
   &.success {
     background-color: #0082072e;
   }
