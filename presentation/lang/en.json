@@ -637,6 +637,10 @@
         "label": "Failure",
         "degree": "Degree of Failure"
       },
+      "partial": {
+        "label": "Partial",
+        "degree": "Degree of partial Success"
+      },
       "positive": {
         "plural": "Positives",
         "singular": "Positive"
@@ -654,6 +658,9 @@
           "placeholder": "Strength / Sneak / etc."
         },
         "placeholder": "0 / Opposed+-0 / etc."
+      },
+      "backFire": {
+        "label": "Backfire"
       },
       "bonusDice": "Bonus Dice",
       "doRoll": "Roll Dice",
