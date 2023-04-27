@@ -16,7 +16,7 @@
 	],
   "esmodules": ["system.mjs"],
   "styles": ["presentation/style/ambersteel.css"],
-  "scripts": [],
+  "scripts": ["common/environment-rewire-stub.js"],
   "packs": [
     {
       "name": "armors",
