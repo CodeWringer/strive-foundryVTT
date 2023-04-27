@@ -2,6 +2,9 @@ import LevelAdvancement from "./level-advancement.mjs";
 import { ATTRIBUTE_GROUPS } from "./attribute/attribute-groups.mjs";
 import { SummedData, SummedDataComponent } from "./summed-data.mjs";
 import { SkillTier, SKILL_TIERS } from "./skill/skill-tier.mjs";
+import { ATTRIBUTE_TIERS, AttributeTier } from "./attribute/attribute-tier.mjs";
+import DicePoolResult from "../dice/dice-pool-result.mjs";
+import { DiceOutcomeTypes } from "../dice/dice-outcome-types.mjs";
 
 /**
  * Provides all the ruleset-specifics. 
@@ -24,22 +27,43 @@ export default class Ruleset {
   }
 
   /**
-   * Returns the advancement requirements for the given level of an attribute. 
+   * Returns the tier of the given level of an attribute. 
    * 
-   * If level is equal to 0, will return undefined, instead of actual values. 
-   * This is deliberate, as an attribute at level 0 cannot be advanced (naturally).
+   * @param {Number} level The level for which to get the attribute tier. 
+   * 
+   * @returns {AttributeTier}
+   */
+  getAttributeLevelTier(level = 0) {
+    if (level < 3) {
+      return ATTRIBUTE_TIERS.underdeveloped;
+    } else if (level < 6) {
+      return ATTRIBUTE_TIERS.average;
+    } else {
+      return ATTRIBUTE_TIERS.exceptional;
+    }
+  }
+
+  /**
+   * Returns the advancement requirements for the given level of an attribute. 
    * 
    * @param {Number} level The level for which to get the advancement requirements. 
    * 
-   * @returns {LevelAdvancement}
+   * @returns {Number}
    */
   getAttributeAdvancementRequirements(level = 0) {
-    return new LevelAdvancement({
-      successes: (level === 0) ? undefined : (level + 1) * (level + 1) * 4,
-      failures: (level === 0) ? undefined : (level + 1) * (level + 1) * 5
-    });
+    const tier = this.getAttributeLevelTier(level);
+
+    if (tier.name === ATTRIBUTE_TIERS.underdeveloped.name) {
+      return 15 + (level * 4);
+    } else if (tier.name === ATTRIBUTE_TIERS.average.name) {
+      return (level + 3) * (level + 2);
+    } else if (tier.name === ATTRIBUTE_TIERS.exceptional.name) {
+      return (level + 4) * (level + 3);
+    } else {
+      throw new Error(`Unrecognized attribute tier ${tier.name}`);
+    }
   }
-  
+    
   /**
    * Returns the tier of the given level of a skill. 
    * 
@@ -143,20 +167,18 @@ export default class Ruleset {
   }
 
   /**
-   * Returns true, if the given face/number represents a spell-backfire-causing negative. 
+   * Returns true, if the given dice pool roll result should result in a spell-backfire. 
    * 
-   * @param {String|Number} face A die face to check whether it represents a spell-backfire-causing negative. 
+   * @param {DicePoolResult} rollResult 
    * 
    * @returns {Boolean}
-   * 
-   * @throws {Error} Thrown, if the given face is outside the valid range of 0 (inclusive) to 6 (inclusive).
    */
-  causesBackfire(face) {
-    const int = parseInt(face);
-
-    if (int < 0 || int > 6) throw new Error("Die face count out of range [0-6]");
-
-    return int < 3;
+  rollCausesBackfire(rollResult) {
+    if (rollResult.outcomeType === DiceOutcomeTypes.FAILURE) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   /**

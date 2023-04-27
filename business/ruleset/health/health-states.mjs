@@ -49,11 +49,11 @@ export class HealthState {
  * @property {HealthState} berserk 
  * @property {HealthState} burning 
  * @property {HealthState} bleeding 
- * @property {HealthState} dazed 
  * @property {HealthState} deathsDoor 
  * @property {HealthState} dissolving 
  * @property {HealthState} drugAddicted 
  * @property {HealthState} electrified 
+ * @property {HealthState} exhausted 
  * @property {HealthState} frostbitten 
  * @property {HealthState} grappled 
  * @property {HealthState} hasted 
@@ -87,11 +87,6 @@ export const HEALTH_STATES = {
     localizableName: "ambersteel.character.health.states.bleeding",
     limit: 0,
   }),
-  dazed: new HealthState({
-    name: "dazed",
-    localizableName: "ambersteel.character.health.states.dazed",
-    limit: 1,
-  }),
   deathsDoor: new HealthState({
     name: "deathsDoor",
     localizableName: "ambersteel.character.health.states.death",
@@ -110,6 +105,11 @@ export const HEALTH_STATES = {
   electrified: new HealthState({
     name: "electrified",
     localizableName: "ambersteel.character.health.states.electrified",
+    limit: 1,
+  }),
+  exhausted: new HealthState({
+    name: "exhausted",
+    localizableName: "ambersteel.character.health.states.exhausted",
     limit: 1,
   }),
   frostbitten: new HealthState({

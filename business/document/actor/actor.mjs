@@ -66,6 +66,14 @@ export class AmbersteelActor extends Actor {
 
     return super._preCreate(data, options, user);
   }
+
+  /** @override */
+  getRollData() {
+    const baseInitiative = this.getTransientObject().baseInitiative;
+    return {
+      baseInitiative: baseInitiative,
+    };
+  }
   
   /**
    * Invalidates the cached transient object instance, causing a new one to be instantiated at the next access. 

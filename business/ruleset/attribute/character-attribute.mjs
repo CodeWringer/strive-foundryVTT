@@ -1,4 +1,3 @@
-import LevelAdvancement from "../level-advancement.mjs";
 import Ruleset from "../ruleset.mjs";
 import { SummedDataComponent } from "../summed-data.mjs";
 import { SummedData } from "../summed-data.mjs";
@@ -11,18 +10,10 @@ import { ATTRIBUTES } from "./attributes.mjs";
  * @property {String} name Internal name. 
  * @property {String} localizableName Localization key for the full name. 
  * @property {String} localizableAbbreviation Localization key for the abbreviated name. 
- * @property {LevelAdvancement} advancementRequirements The current requirements 
- * to advance the attribute. 
+ * @property {Number} advancementRequirements The number of tests required to advance the attribute. 
  * * Read-only. 
- * @property {Number} advancementRequirements.successes
- * * Read-only. 
- * @property {Number} advancementRequirements.failures
- * * Read-only. 
- * @property {LevelAdvancement} advancementProgress The current progress towards 
+ * @property {Number} advancementProgress The current progress towards 
  * advancing the attribute. 
- * * Read-only. 
- * @property {Number} advancementProgress.successes
- * @property {Number} advancementProgress.failures
  * @property {Number} level The current raw level of the attribute. 
  * @property {Number} moddedLevel The current modified level of the attribute. 
  */
@@ -64,44 +55,25 @@ export default class CharacterAttribute {
   }
 
   /**
-   * @type {LevelAdvancement}
+   * @type {Number}
    */
-  get advancementProgress() {
-    const thiz = this;
-    return {
-      get successes() { return parseInt(thiz._actor.system.attributes[thiz._attributeGroupName][thiz.name].successes); },
-      set successes(value) {
-        thiz._actor.update({
-          system: {
-            attributes: {
-              [thiz._attributeGroupName]: {
-                [thiz.name]: {
-                  successes: value
-                }
-              }
+  get advancementProgress() { return parseInt(this._actor.system.attributes[this._attributeGroupName][this.name].progress ?? "0"); }
+  set advancementProgress(value) {
+    this._actor.update({
+      system: {
+        attributes: {
+          [this._attributeGroupName]: {
+            [this.name]: {
+              progress: value
             }
           }
-        }); 
-      },
-      get failures() { return parseInt(thiz._actor.system.attributes[thiz._attributeGroupName][thiz.name].failures); },
-      set failures(value) {
-        thiz._actor.update({
-          system: {
-            attributes: {
-              [thiz._attributeGroupName]: {
-                [thiz.name]: {
-                  failures: value
-                }
-              }
-            }
-          }
-        }); 
-      },
-    };
+        }
+      }
+    }); 
   }
 
   /**
-   * @type {LevelAdvancement}
+   * @type {Number}
    * @readonly
    */
   get advancementRequirements() { return new Ruleset().getAttributeAdvancementRequirements(this.level); }

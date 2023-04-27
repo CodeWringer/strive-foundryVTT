@@ -8,6 +8,8 @@ import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
 import RollDialog from "../../dialog/roll-dialog/roll-dialog.mjs";
 import VisibilitySingleChoiceDialog from "../../dialog/visibility-single-choice-dialog/visibility-single-choice-dialog.mjs";
+import { DiceOutcomeTypes } from "../../../business/dice/dice-outcome-types.mjs";
+import Ruleset from "../../../business/ruleset/ruleset.mjs";
 
 /**
  * A button that allows performing a dice roll and then sending the result to the chat. 
@@ -185,6 +187,17 @@ export default class ButtonRollViewModel extends ButtonViewModel {
             bonusDice: dialog.bonusDice ?? 0,
           });
           thiz._lastRollResult = rollResult;
+
+          // In case of a skill - also determine whether to show this as a backfire. 
+          let showBackFire = false;
+          if (this.target.type === "skill") {
+            // Only consider skills with the "magicSchool" property. 
+            if (this.target.isMagicSchool === true) {
+              if (new Ruleset().rollCausesBackfire(rollResult) === true) {
+                showBackFire = true;
+              }
+            }
+          }
       
           // Display roll result. 
           await DiceUtil.sendDiceResultToChat({
@@ -196,6 +209,7 @@ export default class ButtonRollViewModel extends ButtonViewModel {
             actor: thiz.actor,
             visibilityMode: dialog.visibilityMode,
             diceComposition: diceComposition,
+            showBackFire: showBackFire,
           });
         }
       }).renderAndAwait(true);

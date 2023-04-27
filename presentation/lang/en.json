@@ -104,8 +104,8 @@
         "moddedLevel": "Modified Level",
         "moddedLevelAbbreviation": "Mod.",
         "requirements": {
-          "label": "Required Successes/Failures",
-          "abbreviation": "Req. S/F",
+          "label": "Required",
+          "abbreviation": "Req.",
           "success": {
             "label": "Successes",
             "abbreviation": "S"
@@ -113,6 +113,14 @@
           "failure": {
             "label": "Failures",
             "abbreviation": "F"
+          },
+          "successAndFailure": {
+            "label": "Required Successes/Failures",
+            "abbreviation": "Req. S/F"
+          },
+          "progress": {
+            "label": "Progress",
+            "abbreviation": "Prog."
           }
         }
       },
@@ -291,6 +299,15 @@
         "arcana": {
           "label": "Arcana",
           "abbreviation": "Arc"
+        },
+        "tier": {
+          "underdeveloped": "Underdeveloped",
+          "average": "Average",
+          "exceptional": "Exceptional"
+        },
+        "initiative": {
+          "initiative": "Initiative",
+          "baseInitiative": "Base Initiative"
         }
       },
       "biography": {
@@ -438,11 +455,11 @@
           "berserk": "Berserk",
           "burning": "Burning",
           "bleeding": "Bleeding",
-          "dazed": "Dazed",
           "death": "Death's Door",
           "dissolving": "Dissolving",
           "drugAddicted": "Drug-Addicted",
           "electrified": "Electrified",
+          "exhausted": "Exhausted",
           "frostbitten": "Frostbitten",
           "grappled": "Grappled",
           "hasted": "Hasted",
@@ -620,6 +637,10 @@
         "label": "Failure",
         "degree": "Degree of Failure"
       },
+      "partial": {
+        "label": "Partial",
+        "degree": "Degree of partial Success"
+      },
       "positive": {
         "plural": "Positives",
         "singular": "Positive"
@@ -637,6 +658,9 @@
           "placeholder": "Strength / Sneak / etc."
         },
         "placeholder": "0 / Opposed+-0 / etc."
+      },
+      "backFire": {
+        "label": "Backfire"
       },
       "bonusDice": "Bonus Dice",
       "doRoll": "Roll Dice",

@@ -3,6 +3,7 @@ import { DiceOutcomeTypes } from '../../dice/dice-outcome-types.mjs';
 import CharacterAssetSlotGroup from '../../ruleset/asset/character-asset-slot-group.mjs';
 import CharacterAssetSlot from '../../ruleset/asset/character-asset-slot.mjs';
 import { ATTRIBUTE_GROUPS } from '../../ruleset/attribute/attribute-groups.mjs';
+import { ATTRIBUTES } from '../../ruleset/attribute/attributes.mjs';
 import CharacterAttributeGroup from '../../ruleset/attribute/character-attribute-group.mjs';
 import { CharacterHealthState } from '../../ruleset/health/character-health-state.mjs';
 import { HEALTH_STATES } from '../../ruleset/health/health-states.mjs';
@@ -22,6 +23,8 @@ import TransientBaseActor from './transient-base-actor.mjs';
  * of the character. 
  * * Read-only. 
  * @property {Array<CharacterAttribute>} attributes The attributes of the character. 
+ * * Read-only. 
+ * @property {Number} baseInitiative 
  * * Read-only. 
  * @property {Object} person
  * * Read-only. 
@@ -295,6 +298,18 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
   }
 
   /**
+   * @type {Number}
+   * @readonly
+   */
+  get baseInitiative() {
+    const perceptionLevel = this.attributes.find(it => it.name === ATTRIBUTES.perception.name).moddedLevel;
+    const intelligenceLevel = this.attributes.find(it => it.name === ATTRIBUTES.intelligence.name).moddedLevel;
+    const empathyLevel = this.attributes.find(it => it.name === ATTRIBUTES.empathy.name).moddedLevel;
+
+    return perceptionLevel + intelligenceLevel + empathyLevel;
+  }
+
+  /**
    * @param {Actor} document An encapsulated actor instance. 
    * 
    * @throws {Error} Thrown, if `document` is `undefined`. 
@@ -324,10 +339,10 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
   /**
    * Sets the level of the attribute with the given name. 
    * 
-   * @param {String} attName Internal name of an attribute, e.g. `"magicSense"`. 
+   * @param {String} attName Internal name of an attribute, e.g. `"strength"`. 
    * @param {Number | undefined} newValue Value to set the attribute to, e.g. `4`. 
    * * Default `0`
-   * @param {Boolean | undefined} resetProgress If true, will also reset successes and failures. 
+   * @param {Boolean | undefined} resetProgress If true, will also reset advancement progress. 
    * * Default `true`
    * 
    * @async
@@ -339,8 +354,7 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
     if (resetProgress === true) {
       await this.document.update({
         [`${propertyPath}.level`]: newValue,
-        [`${propertyPath}.successes`]: 0,
-        [`${propertyPath}.failures`]: 0
+        [`${propertyPath}.progress`]: 0
       });
     } else {
       await this.document.update({
@@ -350,15 +364,17 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
   }
 
   /**
-   * Adds success/failure progress to an attribute. 
+   * Adds advancement progress to an attribute. 
    * 
    * Also auto-levels up the attribute, if 'autoLevel' is set to true. 
    * 
    * @param {DiceOutcomeTypes} outcomeType The test outcome to work with. 
-   * @param {String | undefined} attName Optional. Internal name of an attribute, e.g. 'magicSense'. 
-   * @param {Boolean | undefined} autoLevel Optional. If true, will auto-level up. Default false
+   * @param {String | undefined} attName Optional. Internal name of an attribute, 
+   * e.g. `"strength"`. 
+   * @param {Boolean | undefined} autoLevel Optional. If true, will auto-level up. 
+   * Default `false`
    * @param {Boolean | undefined} resetProgress Optional. If true, will also reset 
-   * successes and failures, if `autoLevel` is also true and a level automatically 
+   * advancement progress, if `autoLevel` is also true and a level automatically 
    * incremented. 
    * * Default `true`
    * 
@@ -378,24 +394,15 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
 
     const attribute = this.attributes.find(it => it.name === attName);
 
-    let successes = attribute.advancementProgress.successes;
-    let failures = attribute.advancementProgress.failures;
+    let progress = attribute.advancementProgress + 1;
     let level = attribute.level;
 
-    if (outcomeType === DiceOutcomeTypes.SUCCESS) {
-      successes++;
-    } else {
-      failures++;
-    }
-
     if (autoLevel === true) {
-      if (successes >= attribute.advancementRequirements.successes
-        && failures >= attribute.advancementRequirements.failures) {
+      if (progress >= attribute.advancementRequirements) {
         level++;
 
         if (resetProgress === true) {
-          successes = 0;
-          failures = 0;
+          progress = 0;
         }
       }
     }
@@ -408,8 +415,7 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
           [groupName]: {
             [attName]: {
               level: level,
-              successes: successes,
-              failures: failures,
+              progress: progress,
             }
           }
         }

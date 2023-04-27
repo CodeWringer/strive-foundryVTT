@@ -55,7 +55,7 @@ cssClass: {undefined | String}
     {{!-- Advancement Requirements --}}
     <div class="flex flex-row margin-b-md{{#if (neq viewModel.showAdvancedData true)}} hidden{{/if}}">
       <div class="width-min-xl">
-        {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.advancement.requirements.abbreviation"}}{{/label}}
+        {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.advancement.requirements.successAndFailure.abbreviation"}}{{/label}}
       </div>
       <div class="width-min-md">
         {{#> readOnlyValue}}{{viewModel.successes}} / {{viewModel.failures}}{{/readOnlyValue}}
