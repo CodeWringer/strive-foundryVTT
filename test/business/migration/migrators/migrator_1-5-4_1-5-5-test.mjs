@@ -160,6 +160,22 @@ function createNewAttributeData() {
   };
 }
 
+function createOldHealthData() {
+  return {
+    health: {
+      states: ["berserk", "dazed", "electrified"]
+    }
+  }
+}
+
+function createNewHealthData() {
+  return {
+    health: {
+      states: ["berserk", "exhausted", "electrified"]
+    }
+  }
+}
+
 describe("Migrator_1_5_4__1_5_5", () => {
   /**
    * Plain actor
@@ -201,50 +217,114 @@ describe("Migrator_1_5_4__1_5_5", () => {
         actorIdNpcPreV10_1,
         `name_${actorIdNpcPreV10_1}`,
         "npc",
-        createOldAttributeData(),
+        {
+          ...createOldAttributeData(),
+          ...createOldHealthData(),
+        },
         true
       ),
       createMockDocumentActor(
         actorIdNpcPostV10_1,
         `name_${actorIdNpcPostV10_1}`,
         "npc",
-        createOldAttributeData(),
+        {
+          ...createOldAttributeData(),
+          ...createOldHealthData(),
+        },
         false
       ),
       createMockDocumentActor(
         actorIdNpcPostV10_2,
         `name_${actorIdNpcPostV10_2}`,
         "npc",
-        createNewAttributeData(),
+        {
+          ...createNewAttributeData(),
+          ...createNewHealthData(),
+        },
         false
       ),
       createMockDocumentActor(
         actorIdPcPreV10_1,
         `name_${actorIdPcPreV10_1}`,
         "pc",
-        createOldAttributeData(),
+        {
+          ...createOldAttributeData(),
+          ...createOldHealthData(),
+        },
         true
       ),
       createMockDocumentActor(
         actorIdPcPostV10_1,
         `name_${actorIdPcPostV10_1}`,
         "pc",
-        createOldAttributeData(),
+        {
+          ...createOldAttributeData(),
+          ...createOldHealthData(),
+        },
         false
       ),
       createMockDocumentActor(
         actorIdPcPostV10_2,
         `name_${actorIdPcPostV10_2}`,
         "pc",
-        createNewAttributeData(),
+        {
+          ...createNewAttributeData(),
+          ...createNewHealthData(),
+        },
         false
       ),
     ];
 
+    const throwingSkillId = "m9u2l71cg9791dwR";
+    const packs = [
+      {
+        index: {
+          size: 1,
+          entries: [
+            {
+              _id: throwingSkillId
+            }
+          ],
+          [Symbol.iterator]: function*() {
+            return this.entries;
+          },
+        },
+        metadata: {
+          packageType: "system",
+          type: "Item",
+        },
+        getDocument: (id) => {
+          if (id === throwingSkillId) {
+            return {
+              id: throwingSkillId,
+              name: "Throwing",
+              type: "skill",
+              img: "path/to/file.svg",
+              system: {
+                abilities: {},
+                category: "category",
+                description: "A description",
+                displayOrders: {},
+                headState: "full",
+                gmNotes: "gm notes",
+                properties: [],
+                relatedAttribute: "agility",
+                isCustom: false,
+                level: 3,
+                moddedLevel: 4,
+                successes: 15,
+                failures: 3,
+              }
+            }
+          }
+        }
+      }
+    ]
+
     globalThis.MIGRATORS = [];
     globalThis.game = {
       actors: MigratorTestBase.createMockWorldCollection("Actor", actors),
-      packs: MigratorTestBase.createMockWorldCollection("Pack"),
+      packs: MigratorTestBase.createMockWorldCollection("Pack", packs),
       items: MigratorTestBase.createMockWorldCollection("Item"),
       journal: MigratorTestBase.createMockWorldCollection("Journal"),
       tables: MigratorTestBase.createMockWorldCollection("RollTable"),
@@ -266,7 +346,7 @@ describe("Migrator_1_5_4__1_5_5", () => {
 
     game.actors.get(actorIdPlain).update.should.not.have.been.called();
     
-    game.actors.get(actorIdNpcPreV10_1).update.should.have.been.called();
+    game.actors.get(actorIdNpcPreV10_1).update.should.have.been.calledOnce();
     game.actors.get(actorIdNpcPreV10_1).update.should.have.been.calledWith({
       data: {
         data: {
@@ -332,12 +412,15 @@ describe("Migrator_1_5_4__1_5_5", () => {
                 progress: 43,
               },
             },
+          },
+          health: {
+            states: ["berserk", "electrified", "exhausted"]
           }
         }
       }
     }, { render: false });
     
-    game.actors.get(actorIdNpcPostV10_1).update.should.have.been.called();
+    game.actors.get(actorIdNpcPostV10_1).update.should.have.been.calledOnce();
     game.actors.get(actorIdNpcPostV10_1).update.should.have.been.calledWith({
       system: {
         attributes: {
@@ -402,6 +485,9 @@ describe("Migrator_1_5_4__1_5_5", () => {
               progress: 43,
             },
           },
+        },
+        health: {
+          states: ["berserk", "electrified", "exhausted"]
         }
       }
     }, { render: false });
@@ -409,7 +495,7 @@ describe("Migrator_1_5_4__1_5_5", () => {
     game.actors.get(actorIdNpcPostV10_2).update.should.not.have.been.called();
     game.ambersteel.logger.logWarn.should.have.been.called();
     
-    game.actors.get(actorIdPcPreV10_1).update.should.have.been.called();
+    game.actors.get(actorIdPcPreV10_1).update.should.have.been.calledOnce();
     game.actors.get(actorIdPcPreV10_1).update.should.have.been.calledWith({
       data: {
         data: {
@@ -475,12 +561,15 @@ describe("Migrator_1_5_4__1_5_5", () => {
                 progress: 43,
               },
             },
+          },
+          health: {
+            states: ["berserk", "electrified", "exhausted"]
           }
         }
       }
     }, { render: false });
     
-    game.actors.get(actorIdPcPostV10_1).update.should.have.been.called();
+    game.actors.get(actorIdPcPostV10_1).update.should.have.been.calledOnce();
     game.actors.get(actorIdPcPostV10_1).update.should.have.been.calledWith({
       system: {
         attributes: {
@@ -545,12 +634,14 @@ describe("Migrator_1_5_4__1_5_5", () => {
               progress: 43,
             },
           },
+        },
+        health: {
+          states: ["berserk", "electrified", "exhausted"]
         }
       }
     }, { render: false });
 
     game.actors.get(actorIdPcPostV10_2).update.should.not.have.been.called();
     game.ambersteel.logger.logWarn.should.have.been.calledTwice();
-
   });
 });

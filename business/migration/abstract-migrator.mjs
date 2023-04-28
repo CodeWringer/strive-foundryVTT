@@ -217,4 +217,31 @@ export default class AbstractMigrator {
 
     await toReplace.update(dto);
   }
+  
+  /**
+   * Returns the data object of the given document instance. 
+   * 
+   * @param {Document} document A raw document instance. 
+   * 
+   * @returns {Object} The data object. I. e. `data.data` or `system`. 
+   * 
+   * @protected
+   */
+  _getData(document) {
+    return (document.system ?? document.data.data);
+  }
+
+  /**
+   * Returns the data path of the given document instance. 
+   * 
+   * @param {Document} document A raw document instance. 
+   * 
+   * @returns {String} The data path. I. e. `"data.data"` or `"system"`. 
+   * 
+   * @protected
+   */
+  _getDataPath(document) {
+    const hasSystem = document.system !== undefined && document.system !== null;
+    return (hasSystem === true) ? "system" : "data.data";
+  }
 }

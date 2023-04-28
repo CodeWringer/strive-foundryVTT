@@ -5,6 +5,8 @@ import VersionCode from "../version-code.mjs";
 import * as PropertyUtility from "../../util/property-utility.mjs";
 import DocumentFetcher from "../../document/document-fetcher/document-fetcher.mjs";
 import { DOCUMENT_COLLECTION_SOURCES } from "../../document/document-fetcher/document-collection-source.mjs";
+import { arrayContains, arrayTakeUnless } from "../../util/array-utility.mjs";
+import { HEALTH_STATES } from "../../ruleset/health/health-states.mjs";
 
 export default class Migrator_1_5_4__1_5_5 extends AbstractMigrator {
   /** @override */
@@ -79,11 +81,12 @@ export default class Migrator_1_5_4__1_5_5 extends AbstractMigrator {
           physical: {},
           mental: {},
           social: {},
-        }
+        },
       };
 
       let migratable = true;
 
+      // Collect attribute updates. 
       for (const attributeDefinition of attributeDefinitions) {
         const attributeData = actorData.attributes[attributeDefinition.group][attributeDefinition.attribute];
         
@@ -101,35 +104,87 @@ export default class Migrator_1_5_4__1_5_5 extends AbstractMigrator {
         }
       }
 
+      // Collect health state updates. 
+      const priorHealthStateName = "dazed";
+
+      if (arrayContains(actorData.health.states, priorHealthStateName) === true) {
+        updateDelta.health = {
+          states: arrayTakeUnless(actorData.health.states, (it) => {
+            return it === priorHealthStateName;
+          }),
+        }
+        updateDelta.health.states.push(HEALTH_STATES.exhausted.name);
+      }
+
       if (migratable === true) {
         // Do the update. 
         const dataPath = this._getDataPath(actor);
         await this.updater.updateByPath(actor, dataPath, updateDelta, false);
       }
     }
-  }
 
-  /**
-   * Returns the data object of the given document instance. 
-   * 
-   * @param {Document} document A raw document instance. 
-   * 
-   * @returns {Object} The data object. I. e. `data.data` or `system`. 
-   */
-  _getData(document) {
-    return (document.system ?? document.data.data);
-  }
+    const throwingSkillId = "m9u2l71cg9791dwR";
+    let throwingSkillFromPack = await this._fetcher.find({
+      id: throwingSkillId,
+      documentType: "Item",
+      contentType: "skill",
+      source: DOCUMENT_COLLECTION_SOURCES.systemCompendia,
+      searchEmbedded: false,
+      includeLocked: true,
+    });
+    if (throwingSkillFromPack === undefined) {
+      // Try again. Perhaps the id changed?
+      game.ambersteel.logger.logWarn(`Id of "Throwing" skill "${throwingSkillId}" changed unexpectedly and can no longer be found!`);
+      throwingSkillFromPack = await this._fetcher.find({
+        name: "Throwing",
+        documentType: "Item",
+        contentType: "skill",
+        source: DOCUMENT_COLLECTION_SOURCES.systemCompendia,
+        searchEmbedded: false,
+        includeLocked: true,
+      });
+    }
+    if (throwingSkillFromPack === undefined) {
+      // Cannot migrate skill!
+      game.ambersteel.logger.logWarn('"Throwing" skill cannot be migrated, as it is missing from the system compendium!');
+      return;
+    }
 
-  /**
-   * Returns the data path of the given document instance. 
-   * 
-   * @param {Document} document A raw document instance. 
-   * 
-   * @returns {String} The data path. I. e. `"data.data"` or `"system"`. 
-   */
-  _getDataPath(document) {
-    const hasSystem = document.system !== undefined && document.system !== null;
-    return (hasSystem === true) ? "system" : "data.data";
+    // Collect embedded document updates.
+    for (const actor of editableActors) {
+      // Exchange "Weapon-Throwing" with "Throwing". 
+      const weaponThrowingSkill = actor.items.find(it => it.name === "Weapon-Throwing");
+      if (weaponThrowingSkill !== undefined) {
+        const skillData = this._getData(weaponThrowingSkill);
+        const level = skillData.level;
+        const moddedLevel = skillData.moddedLevel;
+        const successes = skillData.successes;
+        const failures = skillData.failures;
+
+        await weaponThrowingSkill.delete();
+        await Item.create({
+          id: throwingSkillFromPack.id,
+          name: throwingSkillFromPack.name,
+          type: throwingSkillFromPack.type,
+          img: throwingSkillFromPack.img,
+          system: {
+            abilities: throwingSkillFromPack.abilities,
+            category: throwingSkillFromPack.category,
+            description: throwingSkillFromPack.description,
+            displayOrders: throwingSkillFromPack.displayOrders,
+            headState: throwingSkillFromPack.headState,
+            gmNotes: throwingSkillFromPack.gmNotes,
+            properties: throwingSkillFromPack.properties,
+            relatedAttribute: throwingSkillFromPack.relatedAttribute,
+            isCustom: false,
+            level: level,
+            moddedLevel: moddedLevel,
+            successes: successes,
+            failures: failures,
+          }
+        }, { parent: actor });
+      }
+    }
   }
 }
 
