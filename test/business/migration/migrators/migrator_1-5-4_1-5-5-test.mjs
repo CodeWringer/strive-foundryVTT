@@ -275,10 +275,56 @@ describe("Migrator_1_5_4__1_5_5", () => {
       ),
     ];
 
+    const throwingSkillId = "m9u2l71cg9791dwR";
+    const packs = [
+      {
+        index: {
+          size: 1,
+          entries: [
+            {
+              _id: throwingSkillId
+            }
+          ],
+          [Symbol.iterator]: function*() {
+            return this.entries;
+          },
+        },
+        metadata: {
+          packageType: "system",
+          type: "Item",
+        },
+        getDocument: (id) => {
+          if (id === throwingSkillId) {
+            return {
+              id: throwingSkillId,
+              name: "Throwing",
+              type: "skill",
+              img: "path/to/file.svg",
+              system: {
+                abilities: {},
+                category: "category",
+                description: "A description",
+                displayOrders: {},
+                headState: "full",
+                gmNotes: "gm notes",
+                properties: [],
+                relatedAttribute: "agility",
+                isCustom: false,
+                level: 3,
+                moddedLevel: 4,
+                successes: 15,
+                failures: 3,
+              }
+            }
+          }
+        }
+      }
+    ]
+
     globalThis.MIGRATORS = [];
     globalThis.game = {
       actors: MigratorTestBase.createMockWorldCollection("Actor", actors),
-      packs: MigratorTestBase.createMockWorldCollection("Pack"),
+      packs: MigratorTestBase.createMockWorldCollection("Pack", packs),
       items: MigratorTestBase.createMockWorldCollection("Item"),
       journal: MigratorTestBase.createMockWorldCollection("Journal"),
       tables: MigratorTestBase.createMockWorldCollection("RollTable"),
