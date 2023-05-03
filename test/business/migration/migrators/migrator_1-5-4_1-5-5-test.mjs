@@ -6,6 +6,7 @@ import VersionCode from '../../../../business/migration/version-code.mjs';
 import * as MigratorTestBase from './migrator-test-base.mjs';
 import Migrator_1_5_4__1_5_5 from '../../../../business/migration/migrators/migrator_1-5-4_1-5-5.mjs';
 import { BaseLoggingStrategy } from '../../../../business/logging/base-logging-strategy.mjs';
+import { DOCUMENT_COLLECTION_SOURCES } from '../../../../business/document/document-fetcher/document-collection-source.mjs';
 
 /**
  * Creates a new mock document of type "Actor" and returns it. 
@@ -205,8 +206,13 @@ describe("Migrator_1_5_4__1_5_5", () => {
    * PC post-v10; New data
    */
   const actorIdPcPostV10_2 = "actorIdPcPostV10_2";
+  /**
+   * ID of the "Throwing" skill. Must be kept synchronous with the actual 
+   * ID of the skill! 
+   */
+  const throwingSkillId = "m9u2l71cg9791dwR";
 
-  beforeEach(function () {
+  before(function () {
     const actors = [
       createMockDocumentActor(
         actorIdPlain,
@@ -275,10 +281,55 @@ describe("Migrator_1_5_4__1_5_5", () => {
       ),
     ];
 
+    const packs = [
+      {
+        index: {
+          size: 1,
+          entries: [
+            {
+              _id: throwingSkillId
+            }
+          ],
+          [Symbol.iterator]: function*() {
+            return this.entries;
+          },
+        },
+        metadata: {
+          packageType: "system",
+          type: "Item",
+        },
+        getDocument: (id) => {
+          if (id === throwingSkillId) {
+            return {
+              id: throwingSkillId,
+              name: "Throwing",
+              type: "skill",
+              img: "path/to/file.svg",
+              system: {
+                abilities: {},
+                category: "category",
+                description: "A description",
+                displayOrders: {},
+                headState: "full",
+                gmNotes: "gm notes",
+                properties: [],
+                relatedAttribute: "agility",
+                isCustom: false,
+                level: 3,
+                moddedLevel: 4,
+                successes: 15,
+                failures: 3,
+              }
+            }
+          }
+        }
+      }
+    ]
+
     globalThis.MIGRATORS = [];
     globalThis.game = {
       actors: MigratorTestBase.createMockWorldCollection("Actor", actors),
-      packs: MigratorTestBase.createMockWorldCollection("Pack"),
+      packs: MigratorTestBase.createMockWorldCollection("Pack", packs),
       items: MigratorTestBase.createMockWorldCollection("Item"),
       journal: MigratorTestBase.createMockWorldCollection("Journal"),
       tables: MigratorTestBase.createMockWorldCollection("RollTable"),
@@ -288,10 +339,30 @@ describe("Migrator_1_5_4__1_5_5", () => {
     };
   });
 
+  after(() => {
+    globalThis.MIGRATORS = undefined;
+    globalThis.game = undefined;
+  });
+
   it("migrates correctly", async () => {
     // Given
     const given = new Migrator_1_5_4__1_5_5();
     // Setup
+    given._fetcher = sinon.stub(given.fetcher);
+    given._fetcher.findAll = (args) => {
+      if (args.documentType === "Actor"
+      && args.source === DOCUMENT_COLLECTION_SOURCES.all
+      && args.includeLocked === false) {
+        return globalThis.game.actors.values();
+      }
+    };
+    given._fetcher.find = (args) => {
+      if (args.documentType === "Item"
+      && args.id === throwingSkillId) {
+        return globalThis.game.packs.values().next();
+      }
+    }
+
     MigratorTestBase.setup("1.5.4");
     // When
     await given.migrate();

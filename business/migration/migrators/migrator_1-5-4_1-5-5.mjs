@@ -122,6 +122,69 @@ export default class Migrator_1_5_4__1_5_5 extends AbstractMigrator {
         await this.updater.updateByPath(actor, dataPath, updateDelta, false);
       }
     }
+
+    const throwingSkillId = "m9u2l71cg9791dwR";
+    let throwingSkillFromPack = await this.fetcher.find({
+      id: throwingSkillId,
+      documentType: "Item",
+      contentType: "skill",
+      source: DOCUMENT_COLLECTION_SOURCES.systemCompendia,
+      searchEmbedded: false,
+      includeLocked: true,
+    });
+    if (throwingSkillFromPack === undefined) {
+      // Try again. Perhaps the id changed?
+      game.ambersteel.logger.logWarn(`Id of "Throwing" skill "${throwingSkillId}" changed unexpectedly and can no longer be found!`);
+      throwingSkillFromPack = await this.fetcher.find({
+        name: "Throwing",
+        documentType: "Item",
+        contentType: "skill",
+        source: DOCUMENT_COLLECTION_SOURCES.systemCompendia,
+        searchEmbedded: false,
+        includeLocked: true,
+      });
+    }
+    if (throwingSkillFromPack === undefined) {
+      // Cannot migrate skill!
+      game.ambersteel.logger.logWarn('"Throwing" skill cannot be migrated, as it is missing from the system compendium!');
+      return;
+    }
+
+    // Collect embedded document updates.
+    for (const actor of editableActors) {
+      // Exchange "Weapon-Throwing" with "Throwing". 
+      const weaponThrowingSkill = actor.items.find(it => it.name === "Weapon-Throwing");
+      if (weaponThrowingSkill !== undefined) {
+        const skillData = this._getData(weaponThrowingSkill);
+        const level = skillData.level;
+        const moddedLevel = skillData.moddedLevel;
+        const successes = skillData.successes;
+        const failures = skillData.failures;
+
+        await weaponThrowingSkill.delete();
+        await Item.create({
+          id: throwingSkillFromPack.id,
+          name: throwingSkillFromPack.name,
+          type: throwingSkillFromPack.type,
+          img: throwingSkillFromPack.img,
+          system: {
+            abilities: throwingSkillFromPack.abilities,
+            category: throwingSkillFromPack.category,
+            description: throwingSkillFromPack.description,
+            displayOrders: throwingSkillFromPack.displayOrders,
+            headState: throwingSkillFromPack.headState,
+            gmNotes: throwingSkillFromPack.gmNotes,
+            properties: throwingSkillFromPack.properties,
+            relatedAttribute: throwingSkillFromPack.relatedAttribute,
+            isCustom: false,
+            level: level,
+            moddedLevel: moddedLevel,
+            successes: successes,
+            failures: failures,
+          }
+        }, { parent: actor });
+      }
+    }
   }
 }
 
