@@ -124,7 +124,7 @@ export default class Migrator_1_5_4__1_5_5 extends AbstractMigrator {
     }
 
     const throwingSkillId = "m9u2l71cg9791dwR";
-    let throwingSkillFromPack = await this._fetcher.find({
+    let throwingSkillFromPack = await this.fetcher.find({
       id: throwingSkillId,
       documentType: "Item",
       contentType: "skill",
@@ -135,7 +135,7 @@ export default class Migrator_1_5_4__1_5_5 extends AbstractMigrator {
     if (throwingSkillFromPack === undefined) {
       // Try again. Perhaps the id changed?
       game.ambersteel.logger.logWarn(`Id of "Throwing" skill "${throwingSkillId}" changed unexpectedly and can no longer be found!`);
-      throwingSkillFromPack = await this._fetcher.find({
+      throwingSkillFromPack = await this.fetcher.find({
         name: "Throwing",
         documentType: "Item",
         contentType: "skill",
