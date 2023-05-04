@@ -46,7 +46,7 @@ const CSS_CLASS_OBSTACLE = "roll-obstacle";
  * @param {Number} ops.obstacle The obstacle to roll against. 
  * @param {Number} ops.bonusDice An additional number of dice to roll. 
  * 
- * @returns {DicePoolResultResult} The results of the roll
+ * @returns {DicePoolResult} The results of the roll
  */
 export function rollDicePool(ops = {}) {
   ops = {
@@ -126,6 +126,7 @@ export function rollDicePool(ops = {}) {
  * @param {VisibilityMode | undefined} args.visibilityMode Optional. Sets the visibility of the chat message. 
  * * Default `VISIBILITY_MODES.public`. 
  * @param {String | undefined} args.diceComposition Optional. A localized string showing the composition of dice. 
+ * @param {Boolean | undefined} args.showBackFire Optional. If true, will show the spell-backfire label.
  * 
  * @returns {Promise<any>}
  * 
@@ -170,6 +171,7 @@ export async function sendDiceResultToChat(args = {}) {
     primaryImage: args.primaryImage,
     secondaryTitle: args.secondaryTitle,
     secondaryImage: args.secondaryImage,
+    showBackFire: args.showBackFire,
   });
 
   return ChatUtil.sendToChat({

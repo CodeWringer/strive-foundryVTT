@@ -3,6 +3,8 @@ import sinon from 'sinon';
 import 'should-sinon';
 import Ruleset from '../../../business/ruleset/ruleset.mjs';
 import { ATTRIBUTE_TIERS } from '../../../business/ruleset/attribute/attribute-tier.mjs';
+import DicePoolResult from '../../../business/dice/dice-pool-result.mjs';
+import { DiceOutcomeTypes } from '../../../business/dice/dice-outcome-types.mjs';
 
 describe("Ruleset", () => {
   describe("getAssetSlotBonus", () => {
@@ -177,6 +179,52 @@ describe("Ruleset", () => {
       const r = new Ruleset().getAttributeAdvancementRequirements(givenLevel);
       // Then
       r.should.be.eql(132);
+    });
+  });
+
+  describe("rollCausesBackfire", () => {
+    it("Returns true on dice roll failure", () => {
+      // Given
+      const given = new DicePoolResult({
+        outcomeType: DiceOutcomeTypes.FAILURE,
+      });
+      // When
+      const r = new Ruleset().rollCausesBackfire(given);
+      // Then
+      r.should.be.eql(true);
+    });
+
+    it("Returns false on dice roll success", () => {
+      // Given
+      const given = new DicePoolResult({
+        outcomeType: DiceOutcomeTypes.SUCCESS,
+      });
+      // When
+      const r = new Ruleset().rollCausesBackfire(given);
+      // Then
+      r.should.be.eql(false);
+    });
+
+    it("Returns false on dice roll partial", () => {
+      // Given
+      const given = new DicePoolResult({
+        outcomeType: DiceOutcomeTypes.PARTIAL,
+      });
+      // When
+      const r = new Ruleset().rollCausesBackfire(given);
+      // Then
+      r.should.be.eql(false);
+    });
+
+    it("Returns false on dice roll none", () => {
+      // Given
+      const given = new DicePoolResult({
+        outcomeType: DiceOutcomeTypes.NONE,
+      });
+      // When
+      const r = new Ruleset().rollCausesBackfire(given);
+      // Then
+      r.should.be.eql(false);
     });
   });
 });
