@@ -153,7 +153,7 @@ export default class ButtonRollViewModel extends ButtonViewModel {
           required: true,
           defaultValue: (VISIBILITY_MODES.asArray[0]),
           specificArgs: {
-            options: VISIBILITY_MODES.asArray,
+            options: VISIBILITY_MODES.asChoices,
             adapter: new ChoiceAdapter({
               toChoiceOption: (obj) => { return VISIBILITY_MODES.asChoices.find(it => it.value === obj.name); },
               fromChoiceOption: (choice) => { return VISIBILITY_MODES.asArray.find(it => it.name === choice.value); }
@@ -260,7 +260,7 @@ export default class ButtonRollViewModel extends ButtonViewModel {
         required: true,
         defaultValue: (ROLL_DICE_MODIFIER_TYPES.asArray[0]),
         specificArgs: {
-          options: ROLL_DICE_MODIFIER_TYPES.asArray,
+          options: ROLL_DICE_MODIFIER_TYPES.asChoices,
           adapter: new ChoiceAdapter({
             toChoiceOption: (obj) => { return ROLL_DICE_MODIFIER_TYPES.asChoices.find(it => it.value === obj.name); },
             fromChoiceOption: (choice) => { return ROLL_DICE_MODIFIER_TYPES.asArray.find(it => it.name === choice.value); }
@@ -288,9 +288,9 @@ export default class ButtonRollViewModel extends ButtonViewModel {
     }
 
     const diceModifier = dialog[inputRollDiceModifier];
-    if (diceModifier.name === ROLL_DICE_MODIFIER_TYPES.halfRoundedDown.name) {
+    if (diceModifier === ROLL_DICE_MODIFIER_TYPES.halfRoundedDown.name) {
       numberOfDice = parseInt(Math.floor(numberOfDice / 2.0));
-    } else if (diceModifier.name === ROLL_DICE_MODIFIER_TYPES.halfRoundedUp.name) {
+    } else if (diceModifier === ROLL_DICE_MODIFIER_TYPES.halfRoundedUp.name) {
       numberOfDice = parseInt(Math.ceil(numberOfDice / 2.0));
     }
 
