@@ -93,8 +93,10 @@ export const SKILL_HEAD_STATES = {
  * to advance the skill. 
  * @property {LevelAdvancement} advancementProgress The current progress towards 
  * advancing the skill. 
- * @property {Number} level The current raw level of the skill. 
- * @property {Number} modifiedLevel The current modified level of the skill. 
+ * @property {Number} level The current raw level. 
+ * @property {Number} levelModifier The current level modifier. This number can be negative. 
+ * @property {Number} modifiedLevel The current modified level. 
+ * * Read-only. 
  * @property {Attribute} relatedAttribute The attribute that serves as the basis 
  * for this skill. 
  * @property {Array<SkillAbility>} abilities The array of skill abilities of this skill. 
@@ -154,14 +156,20 @@ export default class TransientSkill extends TransientBaseItem {
   /**
    * @type {Number}
    */
-  get modifiedLevel() {
-    return parseInt(this.document.system.modifiedLevel ?? "0");
+  get levelModifier() {
+    return parseInt(this.document.system.levelModifier ?? "0");
   }
-  set modifiedLevel(value) {
-    this.document.system.modifiedLevel = value;
-    this.updateByPath("system.modifiedLevel", value);
+  set levelModifier(value) {
+    this.document.system.levelModifier = value;
+    this.updateByPath("system.levelModifier", value);
   }
   
+  /**
+   * @type {Number}
+   * @readonly
+   */
+  get modifiedLevel() { return (this.level + this.levelModifier); }
+
   /**
    * @type {LevelAdvancement}
    */

@@ -42,12 +42,17 @@ cssClass: {undefined | String}
       <div class="width-md{{#if (neq viewModel.showLevel true)}} hidden{{/if}}">
         {{> inputNumberSpinner viewModel=viewModel.vmNsLevel }}
       </div>
-      {{!-- Modified Level --}}
+      {{!-- Level Modifier --}}
       <div class="margin-l-sm{{#if (neq viewModel.showAdvancedData true)}} hidden{{/if}}">
-        {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.advancement.modifiedLevelAbbreviation"}}{{/label}}
+        {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.advancement.levelModAbbreviation"}}{{/label}}
       </div>
       <div class="width-md{{#if (neq viewModel.showAdvancedData true)}} hidden{{/if}}">
-        {{> inputNumberSpinner viewModel=viewModel.vmNsmodifiedLevel }}
+        {{> inputNumberSpinner viewModel=viewModel.vmNsLevelModifier }}
+      </div>
+      {{!-- Modified Level --}}
+      <div class="width-md flex flex-middle{{#if (neq viewModel.showAdvancedData true)}} hidden{{/if}}">
+        <span class="pad-md font-bold">=</span>
+        {{#> readOnlyValue cssClass="width-min-md"}}{{viewModel.modifiedLevel}}{{/readOnlyValue}}
       </div>
     </div>
     {{!-- Spacer --}}

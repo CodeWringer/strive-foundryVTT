@@ -14,9 +14,9 @@ import { ATTRIBUTES } from "./attributes.mjs";
  * * Read-only. 
  * @property {Number} advancementProgress The current progress towards 
  * advancing the attribute. 
- * @property {Number} level The current raw level of the attribute. 
- * @property {Number} levelModifier The current level modifier. 
- * @property {Number} modifiedLevel The current modified level of the attribute. 
+ * @property {Number} level The current raw level. 
+ * @property {Number} levelModifier The current level modifier. This number can be negative. 
+ * @property {Number} modifiedLevel The current modified level. 
  * * Read-only. 
  */
 export default class CharacterAttribute {
@@ -58,6 +58,7 @@ export default class CharacterAttribute {
 
   /**
    * @type {Number}
+   * @readonly
    */
   get modifiedLevel() { return (this.level + this.levelModifier); }
 

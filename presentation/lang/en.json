@@ -101,8 +101,8 @@
     "character": {
       "advancement": {
         "level": "Level",
-        "moddedLevel": "Modified Level",
-        "moddedLevelAbbreviation": "Modified",
+        "modifiedLevel": "Modified Level",
+        "modifiedLevelAbbreviation": "Modified",
         "levelMod": "Level Modifier",
         "levelModAbbreviation": "Mod.",
         "requirements": {

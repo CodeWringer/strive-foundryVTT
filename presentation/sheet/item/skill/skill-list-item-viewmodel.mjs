@@ -74,6 +74,12 @@ export default class SkillListItemViewModel extends SkillViewModel {
   get showAdvancedData() { return this.document.headState.name === SKILL_HEAD_STATES.full.name; }
 
   /**
+   * @type {Number}
+   * @readonly
+   */
+  get modifiedLevel() { return this.document.modifiedLevel; }
+
+  /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
    * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 
    * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 
@@ -178,12 +184,11 @@ export default class SkillListItemViewModel extends SkillViewModel {
       propertyPath: "level",
       min: 0,
     });
-    this.vmNsmodifiedLevel = factory.createVmNumberSpinner({
+    this.vmNsLevelModifier = factory.createVmNumberSpinner({
       parent: thiz,
-      id: "vmNsmodifiedLevel",
+      id: "vmNsLevelModifier",
       propertyOwner: thiz.document,
-      propertyPath: "modifiedLevel",
-      min: 0,
+      propertyPath: "levelModifier",
     });
     this.vmNsSuccesses = factory.createVmNumberSpinner({
       parent: thiz,
