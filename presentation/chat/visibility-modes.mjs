@@ -1,4 +1,4 @@
-import { getAsChoices } from "../../business/util/constants-utility.mjs";
+import { getAsArray, getAsChoices } from "../../business/util/constants-utility.mjs";
 
 /**
  * Represents a chat message visibility mode. 
@@ -23,6 +23,7 @@ export class VisibilityMode {
  * 
  * @property {Array<ChoiceOption>} asChoices The constants of this type, as an array 
  * of `ChoiceOption`s. 
+ * @property {Array<VisibilityMode>} asArray The constants of this type, as an array. 
  * 
  * @constant
  */
@@ -41,8 +42,14 @@ export const VISIBILITY_MODES = {
   }),
   get asChoices() {
     if (this._asChoices === undefined) {
-      this._asChoices = getAsChoices(this, ["asChoices", "_asChoices"]);
+      this._asChoices = getAsChoices(this, ["asChoices", "_asChoices", "asArray", "_asArray"]);
     }
     return this._asChoices;
+  },
+  get asArray() {
+    if (this._asArray === undefined) {
+      this._asArray = getAsArray(this, ["asChoices", "_asChoices", "asArray", "_asArray"]);
+    }
+    return this._asArray;
   },
 };
