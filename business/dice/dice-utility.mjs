@@ -51,7 +51,7 @@ const CSS_CLASS_OBSTACLE = "roll-obstacle";
  * @param {Number | undefined} ops.bonusDice An additional number of dice to roll. 
  * * Default `0`
  * @param {RollDiceModifierType | undefined} ops.diceModifier A dice number modifier. 
- * * Default `ROLL_DICE_MODIFIER_TYPES.none`
+ * * Default `ROLL_DICE_MODIFIER_TYPES.NONE`
  * 
  * @returns {DicePoolResult} The results of the roll
  */
@@ -59,13 +59,13 @@ export function rollDicePool(ops = {}) {
   let numberOfDice = ops.numberOfDice ?? 0;
   const obstacle = ops.obstacle ?? 0;
   const bonusDice = ops.bonusDice ?? 0;
-  const diceModifier = ops.diceModifier ?? ROLL_DICE_MODIFIER_TYPES.none;
+  const diceModifier = ops.diceModifier ?? ROLL_DICE_MODIFIER_TYPES.NONE;
 
   // Get modified number of dice to roll. 
 
-  if (diceModifier.name === ROLL_DICE_MODIFIER_TYPES.halfRoundedDown.name) {
+  if (diceModifier.name === ROLL_DICE_MODIFIER_TYPES.HALF_ROUNDED_DOWN.name) {
     numberOfDice = parseInt(Math.floor(numberOfDice / 2.0));
-  } else if (diceModifier.name === ROLL_DICE_MODIFIER_TYPES.halfRoundedUp.name) {
+  } else if (diceModifier.name === ROLL_DICE_MODIFIER_TYPES.HALF_ROUNDED_UP.name) {
     numberOfDice = parseInt(Math.ceil(numberOfDice / 2.0));
   }
 

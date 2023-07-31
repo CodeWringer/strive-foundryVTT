@@ -18,9 +18,9 @@ export class RollDiceModifierType {
 /**
  * Represents all defined roll types. 
  * 
- * @property {RollModifyingType} none No modification. All available dice will be rolled. 
- * @property {RollModifyingType} halfRoundedDown Half the dice, rounded down, will be rolled. 
- * @property {RollModifyingType} halfRoundedUp Half the dice, rounded up, will be rolled. 
+ * @property {RollModifyingType} NONE No modification. All available dice will be rolled. 
+ * @property {RollModifyingType} HALF_ROUNDED_DOWN Half the dice, rounded down, will be rolled. 
+ * @property {RollModifyingType} HALF_ROUNDED_UP Half the dice, rounded up, will be rolled. 
  * 
  * @property {Array<ChoiceOption>} asChoices The constants of this type, as an array 
  * of `ChoiceOption`s. 
@@ -29,15 +29,15 @@ export class RollDiceModifierType {
  * @constant
  */
 export const ROLL_DICE_MODIFIER_TYPES = {
-  none: new RollDiceModifierType({
+  NONE: new RollDiceModifierType({
     name: "none",
     localizableName: "ambersteel.roll.diceModifiers.none"
   }),
-  halfRoundedDown: new RollDiceModifierType({
+  HALF_ROUNDED_DOWN: new RollDiceModifierType({
     name: "halfRoundedDown",
     localizableName: "ambersteel.roll.diceModifiers.halfRoundedDown"
   }),
-  halfRoundedUp: new RollDiceModifierType({
+  HALF_ROUNDED_UP: new RollDiceModifierType({
     name: "halfRoundedUp",
     localizableName: "ambersteel.roll.diceModifiers.halfRoundedUp"
   }),

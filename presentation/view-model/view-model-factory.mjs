@@ -340,7 +340,7 @@ export default class ViewModelFactory {
    * which will be displayed in exception log entries, to aid debugging. 
    * @param {Object} args.target The target object to affect.  
    * @param {String | undefined} args.propertyPath Optional. Property path identifying a property that contains a roll-formula. 
-   * IMPORTANT: If this argument is left undefined, then the target object MUST define a method 'getRollData()', which returns a {SummedData} instance. 
+   * IMPORTANT: If this argument is left undefined, then the target object MUST define a method 'getRollData()', which returns a {Sum} instance. 
    * @param {RollType} args.rollType Determines the kind of roll to try and make. 
    * @param {Function | undefined} args.callback Defines an asynchronous callback that is invoked upon completion of the button's own callback. 
    * @param {String | undefined} args.primaryChatTitle Primary title to display above the roll result in the chat message. 

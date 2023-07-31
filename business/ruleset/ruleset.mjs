@@ -1,6 +1,6 @@
 import LevelAdvancement from "./level-advancement.mjs";
 import { ATTRIBUTE_GROUPS } from "./attribute/attribute-groups.mjs";
-import { SummedData, SummedDataComponent } from "./summed-data.mjs";
+import { Sum, SumComponent } from "./summed-data.mjs";
 import { SkillTier, SKILL_TIERS } from "./skill/skill-tier.mjs";
 import { ATTRIBUTE_TIERS, AttributeTier } from "./attribute/attribute-tier.mjs";
 import DicePoolResult from "../dice/dice-pool-result.mjs";
@@ -268,7 +268,7 @@ export default class Ruleset {
    * 
    * @param {Actor} actor 
    * 
-   * @returns {SummedData} The maximum magic stamina of the given actor. 
+   * @returns {Sum} The maximum magic stamina of the given actor. 
    * 
    * @throws {Error} Thrown, if the given actor is not of type `"pc"` or `"npc"`. 
    */
@@ -286,11 +286,11 @@ export default class Ruleset {
       if (transientSkill.isMagicSchool !== true) continue;
 
       const skillLevel = transientSkill.level;
-      components.push(new SummedDataComponent(transientSkill.name, transientSkill.localizableName, skillLevel));
+      components.push(new SumComponent(transientSkill.name, transientSkill.localizableName, skillLevel));
       total += skillLevel;
     }
 
-    return new SummedData(parseInt(Math.ceil(total / 2)), components);
+    return new Sum(parseInt(Math.ceil(total / 2)), components); // TODO: 323
   }
 
   /**

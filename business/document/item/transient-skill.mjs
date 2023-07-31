@@ -1,7 +1,7 @@
 import { TEMPLATES } from "../../../presentation/templatePreloader.mjs";
 import { createUUID } from "../../util/uuid-utility.mjs";
 import SkillChatMessageViewModel from "../../../presentation/sheet/item/skill/skill-chat-message-viewmodel.mjs";
-import { SummedData, SummedDataComponent } from "../../ruleset/summed-data.mjs";
+import { SumComponent, Sum } from "../../ruleset/summed-data.mjs";
 import DamageAndType from "../../ruleset/skill/damage-and-type.mjs";
 import { DiceOutcomeTypes } from "../../dice/dice-outcome-types.mjs";
 import PreparedChatData from "../../../presentation/chat/prepared-chat-data.mjs";
@@ -434,7 +434,7 @@ export default class TransientSkill extends TransientBaseItem {
   /**
    * Returns the component(s) to do a roll using this skill. 
    * 
-   * @returns {SummedData}
+   * @returns {Sum}
    */
   getRollData() {
     if (this.headState.name === SKILL_HEAD_STATES.full.name) {
@@ -442,16 +442,16 @@ export default class TransientSkill extends TransientBaseItem {
       const characterAttribute = new CharacterAttribute(actor, this.relatedAttribute.name);
       const compositionObj = new Ruleset().getSkillTestNumberOfDice(this.modifiedLevel, characterAttribute.modifiedLevel);
   
-      return new SummedData(compositionObj.totalDiceCount, [
-        new SummedDataComponent(this.relatedAttribute.name, characterAttribute.localizableName, compositionObj.attributeDiceCount),
-        new SummedDataComponent(this.name, this.name, compositionObj.skillDiceCount),
+      return new Sum([
+        new SumComponent(this.relatedAttribute.name, characterAttribute.localizableName, compositionObj.attributeDiceCount),
+        new SumComponent(this.name, this.name, compositionObj.skillDiceCount),
       ]);
     } else if (this.headState.name === SKILL_HEAD_STATES.level_only.name) {
-      return new SummedData(this.level, [
-        new SummedDataComponent(this.name, this.name, this.level),
+      return new Sum([
+        new SumComponent(this.name, this.name, this.level),
       ]);
     } else {
-      return new SummedData(0, []);
+      return new Sum();
     }
   }
 

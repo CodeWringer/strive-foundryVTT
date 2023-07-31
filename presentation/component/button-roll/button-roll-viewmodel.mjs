@@ -13,6 +13,7 @@ import { VISIBILITY_MODES } from "../../chat/visibility-modes.mjs";
 import ChoiceAdapter from "../input-choice/choice-adapter.mjs";
 import { ROLL_DICE_MODIFIER_TYPES } from "../../../business/dice/roll-dice-modifier-types.mjs";
 import DynamicInputDefinition from "../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
+import { Sum } from "../../../business/ruleset/summed-data.mjs";
 
 /**
  * A button that allows performing a dice roll and then sending the result to the chat. 
@@ -106,7 +107,7 @@ export default class ButtonRollViewModel extends ButtonViewModel {
    * 
    * @param {String} args.rollType The internal name of a `RollType` that Determines the kind of roll to try and make. 
    * @param {String | undefined} args.propertyPath Optional. Property path identifying a property that contains a roll-formula. 
-   * IMPORTANT: If this argument is left undefined, then the target object MUST define a method 'getRollData()', which returns a {SummedData} instance. 
+   * IMPORTANT: If this argument is left undefined, then the target object MUST define a method 'getRollData()', which returns a {Sum} instance. 
    * @param {String | undefined} primaryChatTitle Primary title to display above the roll result in the chat message. 
    * @param {String | undefined} primaryChatImage Primary image to display above the roll result in the chat message. 
    * @param {String | undefined} secondaryChatTitle Primary title to display above the roll result in the chat message. 
@@ -177,7 +178,7 @@ export default class ButtonRollViewModel extends ButtonViewModel {
    * 
    * The list is comma-separated and surrounded by parentheses. 
    * 
-   * @param {SummedData} rollData 
+   * @param {Sum} rollData 
    * @param {Number | String} bonusDice 
    * 
    * @returns {String} The joined and comma-separated dice component strings. 
@@ -287,6 +288,7 @@ export default class ButtonRollViewModel extends ButtonViewModel {
     } else if (this.propertyPath === undefined) {
       const propertyValue = PropUtil.getNestedPropertyValue(this.target, this.propertyPath);
       numberOfDice = parseInt(propertyValue);
+      diceCompositionString = `(${numberOfDice})`
     } else {
       throw new Error("InvalidStateException: Neither 'propertyPath' nor 'getRollData()' is defined");
     }
