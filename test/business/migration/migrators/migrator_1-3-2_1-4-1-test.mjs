@@ -76,11 +76,7 @@ describe("Migrator_1_3_2__1_4_1", () => {
   const skillName0 = "A Skill 0";
   const skillName1 = "A Skill 1";
 
-  it("migrates correctly", async () => {
-    // Given
-    const given = new Migrator_1_3_2__1_4_1();
-    MigratorTestBase.setup("1.3.2");
-    // Setup
+  before(() => {
     const actors = [
       createMockDocumentActor(
         actorId0,
@@ -207,7 +203,19 @@ describe("Migrator_1_3_2__1_4_1", () => {
         logger: sinon.createStubInstance(BaseLoggingStrategy),
       },
     };
-    MigratorTestBase.mockGameSystemVersion("1.3.2");
+    
+    MigratorTestBase.setup("1.3.2");
+  });
+
+  after(() => {
+    globalThis.MIGRATORS = undefined;
+    globalThis.game = undefined;
+    MigratorTestBase.tearDown();
+  });
+
+  it("migrates correctly", async () => {
+    // Given
+    const given = new Migrator_1_3_2__1_4_1();
     // When
     await given.migrate();
     // Then

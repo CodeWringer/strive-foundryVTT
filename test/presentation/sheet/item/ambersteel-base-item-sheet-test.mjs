@@ -4,7 +4,7 @@ import 'should-sinon';
 import AmbersteelBaseItemSheet from '../../../../presentation/sheet/item/ambersteel-base-item-sheet.mjs';
 
 describe("AmbersteelBaseItemSheet", () => {
-  beforeEach((done) => {
+  before(() => {
     globalThis.game = {
       ambersteel: {
         viewModels: new Map(),
@@ -12,8 +12,10 @@ describe("AmbersteelBaseItemSheet", () => {
         enableViewModelCaching: false,
       },
     };
+  });
 
-    done();
+  after(() => {
+    globalThis.game = undefined;
   });
 
   describe("template", () => {
