@@ -2,7 +2,6 @@ import { ROLL_TYPES } from "../../../business/dice/roll-types.mjs";
 import { SOUNDS_CONSTANTS } from "../../audio/sounds.mjs";
 import { TEMPLATES } from "../../templatePreloader.mjs";
 import * as ChatUtil from "../../chat/chat-utility.mjs";
-import * as DiceUtil from "../../../business/dice/dice-utility.mjs";
 import * as PropUtil from "../../../business/util/property-utility.mjs";
 import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
