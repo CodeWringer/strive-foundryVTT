@@ -15,7 +15,9 @@ import { ATTRIBUTES } from "./attributes.mjs";
  * @property {Number} advancementProgress The current progress towards 
  * advancing the attribute. 
  * @property {Number} level The current raw level of the attribute. 
+ * @property {Number} levelModifier The current level modifier. 
  * @property {Number} modifiedLevel The current modified level of the attribute. 
+ * * Read-only. 
  */
 export default class CharacterAttribute {
   /**
@@ -39,20 +41,25 @@ export default class CharacterAttribute {
   /**
    * @type {Number}
    */
-  get modifiedLevel() { return parseInt(this._actor.system.attributes[this._attributeGroupName][this.name].modifiedLevel ?? "0"); }
-  set modifiedLevel(value) {
+  get levelModifier() { return parseInt(this._actor.system.attributes[this._attributeGroupName][this.name].levelModifier ?? "0"); }
+  set levelModifier(value) {
     this._actor.update({
       system: {
         attributes: {
           [this._attributeGroupName]: {
             [this.name]: {
-              modifiedLevel: value
+              levelModifier: value
             }
           }
         }
       }
     }); 
   }
+
+  /**
+   * @type {Number}
+   */
+  get modifiedLevel() { return (this.level + this.levelModifier); }
 
   /**
    * @type {Number}
