@@ -5,6 +5,7 @@ import { SkillTier, SKILL_TIERS } from "./skill/skill-tier.mjs";
 import { ATTRIBUTE_TIERS, AttributeTier } from "./attribute/attribute-tier.mjs";
 import DicePoolResult from "../dice/dice-pool-result.mjs";
 import { DiceOutcomeTypes } from "../dice/dice-outcome-types.mjs";
+import { DICE_POOL_RESULT_TYPES, DicePoolRollResult } from "../dice/dice-pool.mjs";
 
 /**
  * Provides all the ruleset-specifics. 
@@ -169,12 +170,12 @@ export default class Ruleset {
   /**
    * Returns true, if the given dice pool roll result should result in a spell-backfire. 
    * 
-   * @param {DicePoolResult} rollResult 
+   * @param {DicePoolRollResult} rollResult 
    * 
    * @returns {Boolean}
    */
   rollCausesBackfire(rollResult) {
-    if (rollResult.outcomeType === DiceOutcomeTypes.FAILURE) {
+    if (rollResult.outcomeType.name === DICE_POOL_RESULT_TYPES.FAILURE.name) {
       return true;
     } else {
       return false;

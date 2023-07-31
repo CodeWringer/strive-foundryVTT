@@ -13,7 +13,8 @@ import { VISIBILITY_MODES } from "../../chat/visibility-modes.mjs";
 import ChoiceAdapter from "../input-choice/choice-adapter.mjs";
 import { ROLL_DICE_MODIFIER_TYPES } from "../../../business/dice/roll-dice-modifier-types.mjs";
 import DynamicInputDefinition from "../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
-import { Sum } from "../../../business/ruleset/summed-data.mjs";
+import { Sum, SumComponent } from "../../../business/ruleset/summed-data.mjs";
+import DicePool, { DicePoolRollResult } from "../../../business/dice/dice-pool.mjs";
 
 /**
  * A button that allows performing a dice roll and then sending the result to the chat. 
@@ -77,13 +78,13 @@ export default class ButtonRollViewModel extends ButtonViewModel {
   get actor() { return this._actor; }
 
   /**
-   * @type {DicePoolResult | Object | undefined}
+   * @type {DicePoolRollResult | Object | undefined}
    * @private
    */
   _lastRollResult = undefined;
   /**
    * Returns the last rolled result. Or returns undefined, if no roll has been made, yet. 
-   * @type {DicePoolResult | undefined}
+   * @type {DicePoolRollResult | undefined}
    * @readonly
    */
   get lastRollResult() { return this._lastRollResult; }
@@ -174,26 +175,6 @@ export default class ButtonRollViewModel extends ButtonViewModel {
   }
 
   /**
-   * Returns a string for display of the dice components. 
-   * 
-   * The list is comma-separated and surrounded by parentheses. 
-   * 
-   * @param {Sum} rollData 
-   * @param {Number | String} bonusDice 
-   * 
-   * @returns {String} The joined and comma-separated dice component strings. 
-   */
-  _getJoinedDiceCompositionString(rollData, bonusDice) {
-    let joinedRollData = "";
-    for (const entry of rollData.components) {
-      joinedRollData = `${joinedRollData}${entry.value} ${game.i18n.localize(entry.localizableName)}, `
-    }
-    joinedRollData = `${joinedRollData}${bonusDice} ${game.i18n.localize("ambersteel.roll.bonusDice")}`;
-
-    return `(${joinedRollData})`;
-  }
-
-  /**
    * 
    * @param {DynamicInputDialog} dialog 
    * 
@@ -278,28 +259,19 @@ export default class ButtonRollViewModel extends ButtonViewModel {
 
     if (dialog.confirmed !== true) return;
 
-    let numberOfDice = 0;
-    let diceCompositionString = undefined;
-
-    if (this.target.getRollData !== undefined) {
-      const rollData = this.target.getRollData();
-      numberOfDice = rollData.total;
-      diceCompositionString = this._getJoinedDiceCompositionString(rollData, dialog.bonusDice ?? 0);
-    } else if (this.propertyPath === undefined) {
-      const propertyValue = PropUtil.getNestedPropertyValue(this.target, this.propertyPath);
-      numberOfDice = parseInt(propertyValue);
-      diceCompositionString = `(${numberOfDice})`
-    } else {
-      throw new Error("InvalidStateException: Neither 'propertyPath' nor 'getRollData()' is defined");
+    if (this.target.getRollData === undefined) {
+      throw new Error("NullPointerException: 'getRollData()' is undefined");
     }
 
     // Do roll. 
-    const rollResult = DiceUtil.rollDicePool({
-      numberOfDice: numberOfDice, 
+    const rollData = this.target.getRollData();
+    const rollResult = new DicePool({
+      dice: rollData.components,
+      bonus: [new SumComponent("bonus", "ambersteel.roll.bonusDice", parseInt(dialog[inputBonusDice]))],
       obstacle: parseInt(dialog[inputObstacle]),
-      bonusDice: parseInt(dialog[inputBonusDice]),
-      diceModifier: ROLL_DICE_MODIFIER_TYPES.asArray.find(it => it.name === dialog[inputRollDiceModifier]),
-    });
+      modifier: ROLL_DICE_MODIFIER_TYPES.asArray.find(it => it.name === dialog[inputRollDiceModifier]),
+    }).roll();
+
     this._lastRollResult = rollResult;
 
     // In case of a skill - also determine whether to show this as a backfire. 
@@ -313,16 +285,13 @@ export default class ButtonRollViewModel extends ButtonViewModel {
       }
     }
 
-    // Display roll result. 
-    await DiceUtil.sendDiceResultToChat({
-      rollResult: rollResult,
+    rollResult.sendToChat({
+      visibilityMode: VISIBILITY_MODES.asArray.find(it => it.name === dialog[this.inputVisibility]),
+      actor: this.actor,
       primaryTitle: this.primaryChatTitle,
       primaryImage: this.primaryChatImage,
       secondaryTitle: this.secondaryChatTitle,
       secondaryImage: this.secondaryChatImage,
-      actor: this.actor,
-      visibilityMode: dialog.visibilityMode,
-      diceComposition: diceCompositionString,
       showBackFire: showBackFire,
     });
   }

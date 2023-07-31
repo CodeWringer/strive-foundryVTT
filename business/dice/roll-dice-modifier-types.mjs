@@ -1,4 +1,5 @@
 import { getAsArray, getAsChoices } from "../util/constants-utility.mjs";
+import { validateOrThrow } from "../util/validation-utility.mjs";
 
 /**
  * Represents a roll dice modifying type. 
@@ -12,6 +13,7 @@ export class RollDiceModifierType {
   constructor(args = {}) {
     this.name = args.name;
     this.localizableName = args.localizableName;
+    validateOrThrow(args, ["name", "localizableName"]);
   }
 }
 
