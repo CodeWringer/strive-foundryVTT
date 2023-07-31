@@ -84,7 +84,7 @@ export default class DicePool {
         degree = positives.length - this.obstacle;
       } else if (positives.length > 0) { // Partial failure
         outcomeType = DICE_POOL_RESULT_TYPES.PARTIAL;
-        degree = negatives.length - this.obstacle;
+        degree = positives.length;
       } else {
         outcomeType = DICE_POOL_RESULT_TYPES.FAILURE;
       }
