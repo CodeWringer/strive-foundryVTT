@@ -29,7 +29,7 @@ export default class AttributeTableViewModel extends ViewModel {
    * @type {Array<Object>}
    */
   attributeViewModels = [];
-  
+
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
    * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 
@@ -40,7 +40,7 @@ export default class AttributeTableViewModel extends ViewModel {
    * @param {Boolean | undefined} args.isSendable If true, the document represented by the sheet can be sent to chat. 
    * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document. 
    * 
-   * @param {TransientBaseActor} args.document
+   * @param {TransientBaseCharacterActor} args.document
    * @param {Array<CharacterAttribute>} args.attributes
    * @param {String} args.attributeGroupName
    * @param {String} args.localizableAttributeGroupName
@@ -66,6 +66,7 @@ export default class AttributeTableViewModel extends ViewModel {
         localizableName: attribute.localizableName,
         localizableAbbreviation: attribute.localizableAbbreviation,
         requiredProgress: attribute.advancementRequirements,
+        modifiedLevel: attribute.modifiedLevel,
         vmBtnRoll: factory.createVmBtnRoll({
           parent: thiz,
           id: `vmBtnRoll-${attribute.name}`,
@@ -83,12 +84,11 @@ export default class AttributeTableViewModel extends ViewModel {
           propertyPath: "level",
           min: 0,
         }),
-        vmNsModdedLevel: factory.createVmNumberSpinner({
+        vmNsLevelModifier: factory.createVmNumberSpinner({
           parent: thiz,
-          id: `vmNsModdedLevel-${attribute.name}`,
+          id: `vmNsLevelModifier-${attribute.name}`,
           propertyOwner: attribute,
-          propertyPath: "moddedLevel",
-          min: 0,
+          propertyPath: "levelModifier",
         }),
         vmNsProgress: factory.createVmNumberSpinner({
           parent: thiz,

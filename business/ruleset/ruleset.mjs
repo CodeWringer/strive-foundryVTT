@@ -247,7 +247,7 @@ export default class Ruleset {
     const type = actor.type.toLowerCase();
     if (type !== "pc" && type !== "npc") throw new Error("Only PC and NPC type actors allowed");
 
-    const attributeLevel = parseInt(actor.system.attributes.physical.strength.moddedLevel);
+    const attributeLevel = parseInt(actor.system.attributes.physical.strength.modifiedLevel);
     return attributeLevel * 3;
   }
 
@@ -259,7 +259,7 @@ export default class Ruleset {
    * @returns {Number}
    */
   getAssetSlotBonus(actor) {
-    const strengthLevel = parseInt(actor.system.attributes.physical.strength.moddedLevel);
+    const strengthLevel = parseInt(actor.system.attributes.physical.strength.modifiedLevel);
     return Math.max(0, Math.floor((strengthLevel - 1) / 3));
   }
 
@@ -277,7 +277,7 @@ export default class Ruleset {
     if (type !== "pc" && type !== "npc") throw new Error("Only PC and NPC type actors allowed");
 
     const attributeArcana = actor.system.attributes.mental.arcana;
-    let total = attributeArcana.moddedLevel;
+    let total = attributeArcana.modifiedLevel;
     const components = [];
 
     const skills = actor.items.filter(it => it.type === "skill");

@@ -44,10 +44,10 @@ cssClass: {undefined | String}
       </div>
       {{!-- Modified Level --}}
       <div class="margin-l-sm{{#if (neq viewModel.showAdvancedData true)}} hidden{{/if}}">
-        {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.advancement.moddedLevelAbbreviation"}}{{/label}}
+        {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.advancement.modifiedLevelAbbreviation"}}{{/label}}
       </div>
       <div class="width-md{{#if (neq viewModel.showAdvancedData true)}} hidden{{/if}}">
-        {{> inputNumberSpinner viewModel=viewModel.vmNsModdedLevel }}
+        {{> inputNumberSpinner viewModel=viewModel.vmNsmodifiedLevel }}
       </div>
     </div>
     {{!-- Spacer --}}

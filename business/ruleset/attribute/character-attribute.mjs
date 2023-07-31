@@ -15,7 +15,7 @@ import { ATTRIBUTES } from "./attributes.mjs";
  * @property {Number} advancementProgress The current progress towards 
  * advancing the attribute. 
  * @property {Number} level The current raw level of the attribute. 
- * @property {Number} moddedLevel The current modified level of the attribute. 
+ * @property {Number} modifiedLevel The current modified level of the attribute. 
  */
 export default class CharacterAttribute {
   /**
@@ -39,14 +39,14 @@ export default class CharacterAttribute {
   /**
    * @type {Number}
    */
-  get moddedLevel() { return parseInt(this._actor.system.attributes[this._attributeGroupName][this.name].moddedLevel ?? "0"); }
-  set moddedLevel(value) {
+  get modifiedLevel() { return parseInt(this._actor.system.attributes[this._attributeGroupName][this.name].modifiedLevel ?? "0"); }
+  set modifiedLevel(value) {
     this._actor.update({
       system: {
         attributes: {
           [this._attributeGroupName]: {
             [this.name]: {
-              moddedLevel: value
+              modifiedLevel: value
             }
           }
         }
@@ -110,8 +110,8 @@ export default class CharacterAttribute {
    * @returns {SummedData}
    */
   getRollData() {
-    return new SummedData(this.moddedLevel, [
-      new SummedDataComponent(this.name, this.localizableName, this.moddedLevel)
+    return new SummedData(this.modifiedLevel, [
+      new SummedDataComponent(this.name, this.localizableName, this.modifiedLevel)
     ]);
   }
 

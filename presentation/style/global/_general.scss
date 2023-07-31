@@ -26,6 +26,9 @@
   &-lg {
     padding: $padding-lg !important;
   }
+  &-xl {
+    padding: $padding-xl !important;
+  }
 
   &-b {
     &-xs {
@@ -39,6 +42,9 @@
     }
     &-lg {
       padding-bottom: $padding-lg !important;
+    }
+    &-xl {
+      padding-bottom: $padding-xl !important;
     }
   }
   &-t {
@@ -54,6 +60,9 @@
     &-lg {
       padding-top: $padding-lg !important;
     }
+    &-xl {
+      padding-top: $padding-xl !important;
+    }
   }
   &-l {
     &-xs {
@@ -68,6 +77,9 @@
     &-lg {
       padding-left: $padding-lg !important;
     }
+    &-xl {
+      padding-left: $padding-xl !important;
+    }
   }
   &-r {
     &-xs {
@@ -81,6 +93,9 @@
     }
     &-lg {
       padding-right: $padding-lg !important;
+    }
+    &-xl {
+      padding-right: $padding-xl !important;
     }
   }
 }

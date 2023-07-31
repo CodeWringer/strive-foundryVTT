@@ -94,7 +94,7 @@ export const SKILL_HEAD_STATES = {
  * @property {LevelAdvancement} advancementProgress The current progress towards 
  * advancing the skill. 
  * @property {Number} level The current raw level of the skill. 
- * @property {Number} moddedLevel The current modified level of the skill. 
+ * @property {Number} modifiedLevel The current modified level of the skill. 
  * @property {Attribute} relatedAttribute The attribute that serves as the basis 
  * for this skill. 
  * @property {Array<SkillAbility>} abilities The array of skill abilities of this skill. 
@@ -154,12 +154,12 @@ export default class TransientSkill extends TransientBaseItem {
   /**
    * @type {Number}
    */
-  get moddedLevel() {
-    return parseInt(this.document.system.moddedLevel ?? "0");
+  get modifiedLevel() {
+    return parseInt(this.document.system.modifiedLevel ?? "0");
   }
-  set moddedLevel(value) {
-    this.document.system.moddedLevel = value;
-    this.updateByPath("system.moddedLevel", value);
+  set modifiedLevel(value) {
+    this.document.system.modifiedLevel = value;
+    this.updateByPath("system.modifiedLevel", value);
   }
   
   /**
@@ -426,7 +426,7 @@ export default class TransientSkill extends TransientBaseItem {
     if (this.headState.name === SKILL_HEAD_STATES.full.name) {
       const actor = (this.owningDocument ?? {}).document;
       const characterAttribute = new CharacterAttribute(actor, this.relatedAttribute.name);
-      const compositionObj = new Ruleset().getSkillTestNumberOfDice(this.moddedLevel, characterAttribute.moddedLevel);
+      const compositionObj = new Ruleset().getSkillTestNumberOfDice(this.modifiedLevel, characterAttribute.modifiedLevel);
   
       return new SummedData(compositionObj.totalDiceCount, [
         new SummedDataComponent(this.relatedAttribute.name, characterAttribute.localizableName, compositionObj.attributeDiceCount),

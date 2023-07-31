@@ -102,7 +102,9 @@
       "advancement": {
         "level": "Level",
         "moddedLevel": "Modified Level",
-        "moddedLevelAbbreviation": "Mod.",
+        "moddedLevelAbbreviation": "Modified",
+        "levelMod": "Level Modifier",
+        "levelModAbbreviation": "Mod.",
         "requirements": {
           "label": "Required",
           "abbreviation": "Req.",
