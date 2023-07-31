@@ -6,6 +6,7 @@ import Ruleset from "../ruleset/ruleset.mjs";
 import * as ValidationUtil from "../util/validation-utility.mjs";
 import { DiceOutcomeTypes } from "./dice-outcome-types.mjs";
 import DicePoolResult from "./dice-pool-result.mjs";
+import { ROLL_DICE_MODIFIER_TYPES, RollDiceModifierType } from "./roll-dice-modifier-types.mjs";
 
 /**
  * Localization key of the obstacle abbreviation. 
@@ -42,31 +43,40 @@ const CSS_CLASS_OBSTACLE = "roll-obstacle";
 /**
  * Rolls the given number of dice and returns the results of the roll. 
  * 
- * @param {Object} ops Options argument.
- * @param {Number} ops.numberOfDice The number of dice to roll. 
- * @param {Number} ops.obstacle The obstacle to roll against. 
- * @param {Number} ops.bonusDice An additional number of dice to roll. 
+ * @param {Object | undefined} ops Options argument.
+ * @param {Number | undefined} ops.numberOfDice The number of dice to roll. 
+ * * Default `0`
+ * @param {Number | undefined} ops.obstacle The obstacle to roll against. 
+ * * Default `0`
+ * @param {Number | undefined} ops.bonusDice An additional number of dice to roll. 
+ * * Default `0`
+ * @param {RollDiceModifierType | undefined} ops.diceModifier A dice number modifier. 
+ * * Default `ROLL_DICE_MODIFIER_TYPES.none`
  * 
  * @returns {DicePoolResult} The results of the roll
  */
 export function rollDicePool(ops = {}) {
-  ops = {
-    numberOfDice: 0,
-    obstacle: 0,
-    bonusDice: 0,
-    ...ops
-  };
-  ValidationUtil.validateOrThrow(ops, ["numberOfDice", "obstacle", "bonusDice"]);
+  let numberOfDice = ops.numberOfDice ?? 0;
+  const obstacle = ops.obstacle ?? 0;
+  const bonusDice = ops.bonusDice ?? 0;
+  const diceModifier = ops.diceModifier ?? ROLL_DICE_MODIFIER_TYPES.none;
 
-  // Get number of dice to roll. 
-  const numberOfDice = ops.numberOfDice + ops.bonusDice;
+  // Get modified number of dice to roll. 
+
+  if (diceModifier.name === ROLL_DICE_MODIFIER_TYPES.halfRoundedDown.name) {
+    numberOfDice = parseInt(Math.floor(numberOfDice / 2.0));
+  } else if (diceModifier.name === ROLL_DICE_MODIFIER_TYPES.halfRoundedUp.name) {
+    numberOfDice = parseInt(Math.ceil(numberOfDice / 2.0));
+  }
+
+  numberOfDice += bonusDice;
 
   // Early exit if no dice to roll. 
   if (numberOfDice <= 0) {
     return new DicePoolResult({
       numberOfDice: numberOfDice,
-      obstacle: ops.obstacle,
-      bonusDice: ops.bonusDice,
+      obstacle: obstacle,
+      bonusDice: bonusDice,
     });
   }
 
@@ -91,26 +101,26 @@ export function rollDicePool(ops = {}) {
   // Determine outcome type and degree of success/failure. 
   let outcomeType = undefined;
   let degree = 0;
-  if (ops.obstacle <= 0) { // Ob 0 test?
+  if (obstacle <= 0) { // Ob 0 test?
     outcomeType = DiceOutcomeTypes.NONE;
-  } else if (positives.length >= ops.obstacle) { // Complete success
+  } else if (positives.length >= obstacle) { // Complete success
     outcomeType = DiceOutcomeTypes.SUCCESS;
-    degree = positives.length - ops.obstacle;
+    degree = positives.length - obstacle;
   } else if (positives.length > 0) { // Partial failure
     outcomeType = DiceOutcomeTypes.PARTIAL;
-    degree = negatives.length - ops.obstacle;
+    degree = negatives.length - obstacle;
   } else {
     outcomeType = DiceOutcomeTypes.FAILURE;
   }
 
   return new DicePoolResult({
     numberOfDice: numberOfDice,
-    obstacle: ops.obstacle,
+    obstacle: obstacle,
     positives: positives,
     negatives: negatives,
     outcomeType: outcomeType,
     degree: degree,
-    bonusDice: ops.bonusDice,
+    bonusDice: bonusDice,
   });
 }
 

@@ -173,12 +173,16 @@ export default class ButtonRollViewModel extends ButtonViewModel {
   }
 
   /**
+   * Returns a string for display of the dice components. 
+   * 
+   * The list is comma-separated and surrounded by parentheses. 
+   * 
    * @param {SummedData} rollData 
    * @param {Number | String} bonusDice 
+   * 
    * @returns {String} The joined and comma-separated dice component strings. 
-   * @async
    */
-  _getJoinedDiceComposition(rollData, bonusDice) {
+  _getJoinedDiceCompositionString(rollData, bonusDice) {
     let joinedRollData = "";
     for (const entry of rollData.components) {
       joinedRollData = `${joinedRollData}${entry.value} ${game.i18n.localize(entry.localizableName)}, `
@@ -274,12 +278,12 @@ export default class ButtonRollViewModel extends ButtonViewModel {
     if (dialog.confirmed !== true) return;
 
     let numberOfDice = 0;
-    let diceComposition = undefined;
+    let diceCompositionString = undefined;
 
     if (this.target.getRollData !== undefined) {
       const rollData = this.target.getRollData();
       numberOfDice = rollData.total;
-      diceComposition = this._getJoinedDiceComposition(rollData, dialog.bonusDice ?? 0);
+      diceCompositionString = this._getJoinedDiceCompositionString(rollData, dialog.bonusDice ?? 0);
     } else if (this.propertyPath === undefined) {
       const propertyValue = PropUtil.getNestedPropertyValue(this.target, this.propertyPath);
       numberOfDice = parseInt(propertyValue);
@@ -287,18 +291,12 @@ export default class ButtonRollViewModel extends ButtonViewModel {
       throw new Error("InvalidStateException: Neither 'propertyPath' nor 'getRollData()' is defined");
     }
 
-    const diceModifier = dialog[inputRollDiceModifier];
-    if (diceModifier === ROLL_DICE_MODIFIER_TYPES.halfRoundedDown.name) {
-      numberOfDice = parseInt(Math.floor(numberOfDice / 2.0));
-    } else if (diceModifier === ROLL_DICE_MODIFIER_TYPES.halfRoundedUp.name) {
-      numberOfDice = parseInt(Math.ceil(numberOfDice / 2.0));
-    }
-
     // Do roll. 
     const rollResult = DiceUtil.rollDicePool({
       numberOfDice: numberOfDice, 
-      obstacle: dialog.obstacle ?? 0,
-      bonusDice: dialog.bonusDice ?? 0,
+      obstacle: parseInt(dialog[inputObstacle]),
+      bonusDice: parseInt(dialog[inputBonusDice]),
+      diceModifier: ROLL_DICE_MODIFIER_TYPES.asArray.find(it => it.name === dialog[inputRollDiceModifier]),
     });
     this._lastRollResult = rollResult;
 
@@ -322,7 +320,7 @@ export default class ButtonRollViewModel extends ButtonViewModel {
       secondaryImage: this.secondaryChatImage,
       actor: this.actor,
       visibilityMode: dialog.visibilityMode,
-      diceComposition: diceComposition,
+      diceComposition: diceCompositionString,
       showBackFire: showBackFire,
     });
   }
