@@ -3,8 +3,6 @@ import { ATTRIBUTE_GROUPS } from "./attribute/attribute-groups.mjs";
 import { Sum, SumComponent } from "./summed-data.mjs";
 import { SkillTier, SKILL_TIERS } from "./skill/skill-tier.mjs";
 import { ATTRIBUTE_TIERS, AttributeTier } from "./attribute/attribute-tier.mjs";
-import DicePoolResult from "../dice/dice-pool-result.mjs";
-import { DiceOutcomeTypes } from "../dice/dice-outcome-types.mjs";
 import { DICE_POOL_RESULT_TYPES, DicePoolRollResult } from "../dice/dice-pool.mjs";
 import { ATTRIBUTES } from "./attribute/attributes.mjs";
 

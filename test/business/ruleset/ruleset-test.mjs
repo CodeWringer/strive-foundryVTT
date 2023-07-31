@@ -3,8 +3,6 @@ import sinon from 'sinon';
 import 'should-sinon';
 import Ruleset from '../../../business/ruleset/ruleset.mjs';
 import { ATTRIBUTE_TIERS } from '../../../business/ruleset/attribute/attribute-tier.mjs';
-import DicePoolResult from '../../../business/dice/dice-pool-result.mjs';
-import { DiceOutcomeTypes } from '../../../business/dice/dice-outcome-types.mjs';
 import { DICE_POOL_RESULT_TYPES } from '../../../business/dice/dice-pool.mjs';
 
 describe("Ruleset", () => {

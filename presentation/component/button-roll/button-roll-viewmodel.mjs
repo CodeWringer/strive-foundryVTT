@@ -27,7 +27,7 @@ import DicePool, { DicePoolRollResult } from "../../../business/dice/dice-pool.m
  * @property {String} secondaryChatTitle Primary title to display above the roll result in the chat message. 
  * @property {String} secondaryChatImage Primary image to display above the roll result in the chat message. 
  * @property {Actor | undefined} actor Actor associated with the roll result. 
- * @property {DicePoolResult | Object | undefined} lastRollResult The last rolled result. Or undefined, if no roll has been made, yet. 
+ * @property {DicePoolRollResult | Object | undefined} lastRollResult The last rolled result. Or undefined, if no roll has been made, yet. 
  */
 export default class ButtonRollViewModel extends ButtonViewModel {
   static get TEMPLATE() { return TEMPLATES.COMPONENT_BUTTON_ROLL; }

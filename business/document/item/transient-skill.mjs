@@ -3,7 +3,6 @@ import { createUUID } from "../../util/uuid-utility.mjs";
 import SkillChatMessageViewModel from "../../../presentation/sheet/item/skill/skill-chat-message-viewmodel.mjs";
 import { SumComponent, Sum } from "../../ruleset/summed-data.mjs";
 import DamageAndType from "../../ruleset/skill/damage-and-type.mjs";
-import { DiceOutcomeTypes } from "../../dice/dice-outcome-types.mjs";
 import PreparedChatData from "../../../presentation/chat/prepared-chat-data.mjs";
 import { DAMAGE_TYPES } from "../../ruleset/damage-types.mjs";
 import { SOUNDS_CONSTANTS } from "../../../presentation/audio/sounds.mjs";
@@ -329,7 +328,7 @@ export default class TransientSkill extends TransientBaseItem {
    * 
    * Also auto-levels up the skill, if 'autoLevel' is set to true. 
    * 
-   * @param {DiceOutcomeTypes} outcomeType The test outcome to work with. 
+   * @param {DicePoolRollResultType} outcomeType The test outcome to work with. 
    * @param {Boolean | undefined} autoLevel Optional. If true, will auto-level up. 
    * * Default `false`
    * @param {Boolean | undefined} resetProgress Optional. If true, will also reset 
@@ -346,12 +345,12 @@ export default class TransientSkill extends TransientBaseItem {
       game.ambersteel.logger.logWarn("outcomeType is undefined");
       return;
     }
-    if (outcomeType === DiceOutcomeTypes.NONE) {
+    if (outcomeType === DICE_POOL_RESULT_TYPES.NONE) {
       // Do not advance anything for a "none" result. 
       return;
     }
 
-    if (outcomeType === DiceOutcomeTypes.SUCCESS) {
+    if (outcomeType === DICE_POOL_RESULT_TYPES.SUCCESS) {
       this.advancementProgress.successes++;
     } else {
       this.advancementProgress.failures++;
@@ -419,9 +418,9 @@ export default class TransientSkill extends TransientBaseItem {
   }
 
   /**
-   * Advances the skill, based on the given `DicePoolResult`. 
+   * Advances the skill, based on the given `DicePoolRollResult`. 
    * 
-   * @param {DicePoolResult | undefined} rollResult 
+   * @param {DicePoolRollResult | undefined} rollResult 
    * 
    * @async
    */

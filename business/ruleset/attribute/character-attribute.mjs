@@ -132,7 +132,7 @@ export default class CharacterAttribute {
    * Advances the represented attribute on the owning actor, based on the given 
    * roll's outcome. 
    * 
-   * @param {DicePoolResult | undefined} diceResult A dice roll result. 
+   * @param {DicePoolRollResult | undefined} diceResult A dice roll result. 
    * 
    * @async
    */
