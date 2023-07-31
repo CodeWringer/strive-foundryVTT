@@ -42,6 +42,7 @@ const CSS_CLASS_OBSTACLE = "roll-obstacle";
 /**
  * Rolls the given number of dice and returns the results of the roll. 
  * 
+ * @param {Object} ops Options argument.
  * @param {Number} ops.numberOfDice The number of dice to roll. 
  * @param {Number} ops.obstacle The obstacle to roll against. 
  * @param {Number} ops.bonusDice An additional number of dice to roll. 
