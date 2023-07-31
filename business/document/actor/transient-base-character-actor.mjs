@@ -302,9 +302,9 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
    * @readonly
    */
   get baseInitiative() {
-    const perceptionLevel = this.attributes.find(it => it.name === ATTRIBUTES.perception.name).moddedLevel;
-    const intelligenceLevel = this.attributes.find(it => it.name === ATTRIBUTES.intelligence.name).moddedLevel;
-    const empathyLevel = this.attributes.find(it => it.name === ATTRIBUTES.empathy.name).moddedLevel;
+    const perceptionLevel = this.attributes.find(it => it.name === ATTRIBUTES.perception.name).modifiedLevel;
+    const intelligenceLevel = this.attributes.find(it => it.name === ATTRIBUTES.intelligence.name).modifiedLevel;
+    const empathyLevel = this.attributes.find(it => it.name === ATTRIBUTES.empathy.name).modifiedLevel;
 
     return perceptionLevel + intelligenceLevel + empathyLevel;
   }

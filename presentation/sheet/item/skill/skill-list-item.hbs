@@ -30,10 +30,6 @@ cssClass: {undefined | String}
   </div>
   {{!-- Row --}}
   <div class="flex flex-row">
-    {{!-- Related Attribute --}}
-    <div class="width-min-xxl{{#if (neq viewModel.showAdvancedData true)}} hidden{{/if}}">
-      {{> inputDropDown viewModel=viewModel.vmDdRelatedAttribute }}
-    </div>
     {{!-- Level --}}
     <div class="flex flex-row margin-b-md">
       <div class="width-min-lg{{#if (neq viewModel.showLevel true)}} hidden{{/if}}">
@@ -42,12 +38,17 @@ cssClass: {undefined | String}
       <div class="width-md{{#if (neq viewModel.showLevel true)}} hidden{{/if}}">
         {{> inputNumberSpinner viewModel=viewModel.vmNsLevel }}
       </div>
-      {{!-- Modified Level --}}
+      {{!-- Level Modifier --}}
       <div class="margin-l-sm{{#if (neq viewModel.showAdvancedData true)}} hidden{{/if}}">
-        {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.advancement.moddedLevelAbbreviation"}}{{/label}}
+        {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.advancement.levelModAbbreviation"}}{{/label}}
       </div>
       <div class="width-md{{#if (neq viewModel.showAdvancedData true)}} hidden{{/if}}">
-        {{> inputNumberSpinner viewModel=viewModel.vmNsModdedLevel }}
+        {{> inputNumberSpinner viewModel=viewModel.vmNsLevelModifier }}
+      </div>
+      {{!-- Modified Level --}}
+      <div class="width-md flex flex-middle{{#if (neq viewModel.showAdvancedData true)}} hidden{{/if}}">
+        <span class="pad-md font-bold">=</span>
+        {{#> readOnlyValue cssClass="width-min-md font-size-lg flex flex-center"}}{{viewModel.modifiedLevel}}{{/readOnlyValue}}
       </div>
     </div>
     {{!-- Spacer --}}
@@ -84,6 +85,15 @@ cssClass: {undefined | String}
   {{!-- Description --}}
   <div class="flex flex-column margin-b-md border-solid-t-sm border-solid-b-sm{{#if (neq viewModel.showAdvancedData true)}} hidden{{/if}}">
     {{> inputRichText viewModel=viewModel.vmRtDescription }}
+  </div>
+  {{!-- Related Attribute --}}
+  <div class="flex flex-row margin-b-sm{{#if (neq viewModel.showAdvancedData true)}} hidden{{/if}}">
+    <span class="width-min-xl">
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.skill.relatedAttribute"}}{{/label}}
+    </span>
+    <span>
+      {{> inputDropDown viewModel=viewModel.vmDdRelatedAttribute }}
+    </span>  
   </div>
   {{!-- Row --}}
   {{!-- Properties --}}

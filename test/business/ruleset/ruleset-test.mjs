@@ -18,7 +18,7 @@ describe("Ruleset", () => {
           attributes: {
             physical: {
               strength: {
-                moddedLevel: givenLevel,
+                modifiedLevel: givenLevel,
               }
             }
           }
@@ -40,7 +40,7 @@ describe("Ruleset", () => {
           attributes: {
             physical: {
               strength: {
-                moddedLevel: givenLevel,
+                modifiedLevel: givenLevel,
               }
             }
           }
@@ -62,7 +62,7 @@ describe("Ruleset", () => {
           attributes: {
             physical: {
               strength: {
-                moddedLevel: givenLevel,
+                modifiedLevel: givenLevel,
               }
             }
           }
@@ -84,7 +84,7 @@ describe("Ruleset", () => {
           attributes: {
             physical: {
               strength: {
-                moddedLevel: givenLevel,
+                modifiedLevel: givenLevel,
               }
             }
           }

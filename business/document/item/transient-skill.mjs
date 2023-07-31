@@ -93,8 +93,10 @@ export const SKILL_HEAD_STATES = {
  * to advance the skill. 
  * @property {LevelAdvancement} advancementProgress The current progress towards 
  * advancing the skill. 
- * @property {Number} level The current raw level of the skill. 
- * @property {Number} moddedLevel The current modified level of the skill. 
+ * @property {Number} level The current raw level. 
+ * @property {Number} levelModifier The current level modifier. This number can be negative. 
+ * @property {Number} modifiedLevel The current modified level. 
+ * * Read-only. 
  * @property {Attribute} relatedAttribute The attribute that serves as the basis 
  * for this skill. 
  * @property {Array<SkillAbility>} abilities The array of skill abilities of this skill. 
@@ -154,14 +156,26 @@ export default class TransientSkill extends TransientBaseItem {
   /**
    * @type {Number}
    */
-  get moddedLevel() {
-    return parseInt(this.document.system.moddedLevel ?? "0");
+  get levelModifier() {
+    return parseInt(this.document.system.levelModifier ?? "0");
   }
-  set moddedLevel(value) {
-    this.document.system.moddedLevel = value;
-    this.updateByPath("system.moddedLevel", value);
+  set levelModifier(value) {
+    this.document.system.levelModifier = value;
+    this.updateByPath("system.levelModifier", value);
   }
   
+  /**
+   * @type {Number}
+   * @readonly
+   */
+  get modifiedLevel() {
+    if (this.level > 0) {
+      return Math.max(this.level + this.levelModifier, 1);
+    } else {
+      return Math.max(this.level + this.levelModifier, 0)
+    }
+  }
+
   /**
    * @type {LevelAdvancement}
    */
@@ -426,7 +440,7 @@ export default class TransientSkill extends TransientBaseItem {
     if (this.headState.name === SKILL_HEAD_STATES.full.name) {
       const actor = (this.owningDocument ?? {}).document;
       const characterAttribute = new CharacterAttribute(actor, this.relatedAttribute.name);
-      const compositionObj = new Ruleset().getSkillTestNumberOfDice(this.moddedLevel, characterAttribute.moddedLevel);
+      const compositionObj = new Ruleset().getSkillTestNumberOfDice(this.modifiedLevel, characterAttribute.modifiedLevel);
   
       return new SummedData(compositionObj.totalDiceCount, [
         new SummedDataComponent(this.relatedAttribute.name, characterAttribute.localizableName, compositionObj.attributeDiceCount),

@@ -14,8 +14,10 @@ import { ATTRIBUTES } from "./attributes.mjs";
  * * Read-only. 
  * @property {Number} advancementProgress The current progress towards 
  * advancing the attribute. 
- * @property {Number} level The current raw level of the attribute. 
- * @property {Number} moddedLevel The current modified level of the attribute. 
+ * @property {Number} level The current raw level. 
+ * @property {Number} levelModifier The current level modifier. This number can be negative. 
+ * @property {Number} modifiedLevel The current modified level. 
+ * * Read-only. 
  */
 export default class CharacterAttribute {
   /**
@@ -39,19 +41,31 @@ export default class CharacterAttribute {
   /**
    * @type {Number}
    */
-  get moddedLevel() { return parseInt(this._actor.system.attributes[this._attributeGroupName][this.name].moddedLevel ?? "0"); }
-  set moddedLevel(value) {
+  get levelModifier() { return parseInt(this._actor.system.attributes[this._attributeGroupName][this.name].levelModifier ?? "0"); }
+  set levelModifier(value) {
     this._actor.update({
       system: {
         attributes: {
           [this._attributeGroupName]: {
             [this.name]: {
-              moddedLevel: value
+              levelModifier: value
             }
           }
         }
       }
     }); 
+  }
+
+  /**
+   * @type {Number}
+   * @readonly
+   */
+  get modifiedLevel() {
+    if (this.level > 0) {
+      return Math.max(this.level + this.levelModifier, 1);
+    } else {
+      return Math.max(this.level + this.levelModifier, 0)
+    }
   }
 
   /**
@@ -110,8 +124,8 @@ export default class CharacterAttribute {
    * @returns {SummedData}
    */
   getRollData() {
-    return new SummedData(this.moddedLevel, [
-      new SummedDataComponent(this.name, this.localizableName, this.moddedLevel)
+    return new SummedData(this.modifiedLevel, [
+      new SummedDataComponent(this.name, this.localizableName, this.modifiedLevel)
     ]);
   }
 
