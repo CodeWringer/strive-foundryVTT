@@ -60,7 +60,13 @@ export default class CharacterAttribute {
    * @type {Number}
    * @readonly
    */
-  get modifiedLevel() { return (Math.max(this.level + this.levelModifier, 0)); }
+  get modifiedLevel() {
+    if (this.level > 0) {
+      return Math.max(this.level + this.levelModifier, 1);
+    } else {
+      return Math.max(this.level + this.levelModifier, 0)
+    }
+  }
 
   /**
    * @type {Number}
