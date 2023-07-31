@@ -5,6 +5,7 @@ import Ruleset from '../../../business/ruleset/ruleset.mjs';
 import { ATTRIBUTE_TIERS } from '../../../business/ruleset/attribute/attribute-tier.mjs';
 import DicePoolResult from '../../../business/dice/dice-pool-result.mjs';
 import { DiceOutcomeTypes } from '../../../business/dice/dice-outcome-types.mjs';
+import { DICE_POOL_RESULT_TYPES } from '../../../business/dice/dice-pool.mjs';
 
 describe("Ruleset", () => {
   describe("getAssetSlotBonus", () => {
@@ -185,9 +186,9 @@ describe("Ruleset", () => {
   describe("rollCausesBackfire", () => {
     it("Returns true on dice roll failure", () => {
       // Given
-      const given = new DicePoolResult({
-        outcomeType: DiceOutcomeTypes.FAILURE,
-      });
+      const given = {
+        outcomeType: DICE_POOL_RESULT_TYPES.FAILURE,
+      };
       // When
       const r = new Ruleset().rollCausesBackfire(given);
       // Then
@@ -196,9 +197,9 @@ describe("Ruleset", () => {
 
     it("Returns false on dice roll success", () => {
       // Given
-      const given = new DicePoolResult({
-        outcomeType: DiceOutcomeTypes.SUCCESS,
-      });
+      const given = {
+        outcomeType: DICE_POOL_RESULT_TYPES.SUCCESS,
+      };
       // When
       const r = new Ruleset().rollCausesBackfire(given);
       // Then
@@ -207,9 +208,9 @@ describe("Ruleset", () => {
 
     it("Returns false on dice roll partial", () => {
       // Given
-      const given = new DicePoolResult({
-        outcomeType: DiceOutcomeTypes.PARTIAL,
-      });
+      const given = {
+        outcomeType: DICE_POOL_RESULT_TYPES.PARTIAL,
+      };
       // When
       const r = new Ruleset().rollCausesBackfire(given);
       // Then
@@ -218,9 +219,9 @@ describe("Ruleset", () => {
 
     it("Returns false on dice roll none", () => {
       // Given
-      const given = new DicePoolResult({
-        outcomeType: DiceOutcomeTypes.NONE,
-      });
+      const given = {
+        outcomeType: DICE_POOL_RESULT_TYPES.NONE,
+      };
       // When
       const r = new Ruleset().rollCausesBackfire(given);
       // Then
