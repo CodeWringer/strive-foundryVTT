@@ -652,6 +652,15 @@
         "singular": "Negative"
       },
       "numberOfDice": "Number of dice",
+      "diceModifier": {
+        "singular": "Dice Modifier",
+        "plural": "Dice Modifiers"
+      },
+      "diceModifiers": {
+        "none": "None",
+        "halfRoundedDown": "Halved, rounded down",
+        "halfRoundedUp": "Halved, rounded up"
+      },
       "obstacle": {
         "label": "Obstacle",
         "abbreviation": "Ob",
@@ -666,7 +675,7 @@
       },
       "bonusDice": "Bonus Dice",
       "doRoll": "Roll Dice",
-      "query": "Select Obstacle and Bonus Dice"
+      "query": "Prepare Dice Roll"
     },
     "attackType": {
       "label": "Attack Type",
