@@ -168,7 +168,7 @@ export default class TransientSkill extends TransientBaseItem {
    * @type {Number}
    * @readonly
    */
-  get modifiedLevel() { return (this.level + this.levelModifier); }
+  get modifiedLevel() { return (Math.max(this.level + this.levelModifier, 0)); }
 
   /**
    * @type {LevelAdvancement}
