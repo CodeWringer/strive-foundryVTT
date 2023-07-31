@@ -68,7 +68,7 @@ describe("Migrator_1_5_1__1_5_2", () => {
   const reaction1 = "instinct_1";
   const reaction2 = "instinct_2";
 
-  beforeEach(function() {
+  before(function() {
     const actors = [
       createMockDocumentActor(
         actorId0,
@@ -118,6 +118,14 @@ describe("Migrator_1_5_1__1_5_2", () => {
         logger: sinon.createStubInstance(BaseLoggingStrategy),
       },
     };
+
+    MigratorTestBase.setup("1.5.1");
+  });
+
+  after(() => {
+    globalThis.MIGRATORS = undefined;
+    globalThis.game = undefined;
+    MigratorTestBase.tearDown();
   });
 
   it("migrates correctly", async () => {

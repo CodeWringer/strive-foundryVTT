@@ -7,12 +7,16 @@ import { BaseLoggingStrategy } from '../../../../business/logging/base-logging-s
 
 describe("TransientSkill", () => {
 
-  beforeEach(function () {
+  before(() => {
     globalThis.game = {
       ambersteel: {
         logger: sinon.createStubInstance(BaseLoggingStrategy),
       },
     };
+  });
+
+  after(() => {
+    globalThis.game = undefined;
   });
 
   describe("isMagicSchool", () => {

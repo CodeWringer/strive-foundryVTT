@@ -26,12 +26,16 @@ describe("AttributeTier", () => {
 });
 
 describe("ATTRIBUTE_TIERS", () => {
-  beforeEach(() => {
+  before(() => {
     globalThis.game = {
       i18n: {
         localize: sinon.fake(),
       },
     };
+  });
+
+  after(() => {
+    globalThis.game = undefined;
   });
 
   it("has expected fields", () => {

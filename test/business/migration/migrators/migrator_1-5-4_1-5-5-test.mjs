@@ -337,11 +337,14 @@ describe("Migrator_1_5_4__1_5_5", () => {
         logger: sinon.createStubInstance(BaseLoggingStrategy),
       },
     };
+    
+    MigratorTestBase.setup("1.5.4");
   });
 
   after(() => {
     globalThis.MIGRATORS = undefined;
     globalThis.game = undefined;
+    MigratorTestBase.tearDown();
   });
 
   it("migrates correctly", async () => {

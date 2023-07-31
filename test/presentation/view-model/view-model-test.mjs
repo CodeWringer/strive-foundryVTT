@@ -2,9 +2,22 @@ import should from 'should';
 import sinon from 'sinon';
 import 'should-sinon';
 import ViewModel from '../../../presentation/view-model/view-model.mjs';
+import { BaseLoggingStrategy } from '../../../business/logging/base-logging-strategy.mjs';
 
 describe("ViewModel", function() {
   const givenViewStateSource = new Map();
+
+  before(() => {
+    globalThis.game = {
+      ambersteel: {
+        logger: sinon.createStubInstance(BaseLoggingStrategy),
+      },
+    };
+  });
+
+  after(() => {
+    globalThis.game = undefined;
+  });
 
   describe("parent", function() {
     describe("isParentOf", function() {

@@ -4,6 +4,11 @@ export function setup(versionString) {
   mockGameSystemVersion(versionString);
 }
 
+export function tearDown() {
+  globalThis.game = null;
+  globalThis.game = undefined;
+}
+
 /**
  * Sets up the game system version. 
  * 

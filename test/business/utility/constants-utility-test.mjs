@@ -4,14 +4,16 @@ import 'should-sinon';
 import { getAsArray, getAsChoices } from '../../../business/util/constants-utility.mjs';
 
 describe("constants-utility", () => {
-  beforeEach((done) => {
+  before(() => {
     globalThis.game = {
       i18n: {
         localize: (s) => { return "Berserk"; }
       }
     };
+  });
 
-    done();
+  after(() => {
+    globalThis.game = undefined;
   });
 
   describe("getAsChoices", () => {

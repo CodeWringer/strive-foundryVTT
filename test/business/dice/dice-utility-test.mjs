@@ -7,6 +7,10 @@ import DicePoolResult from '../../../business/dice/dice-pool-result.mjs';
 
 describe("dice-utility", () => {
   describe("rollDicePool", () => {
+    after(() => {
+      globalThis.Die = undefined;
+    });
+
     it("1 die and 0 obstacle yields no result", () => {
       // Given
       const givenNumberOfDice = 1;

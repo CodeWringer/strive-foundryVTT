@@ -172,7 +172,7 @@ describe("Migrator_1_5_2__1_5_3", () => {
 
   const givenOtherProperty = "some_other_property";
 
-  beforeEach(function() {
+  before(function() {
     const actors = [
       createMockDocumentActor(
         actorId0,
@@ -346,6 +346,14 @@ describe("Migrator_1_5_2__1_5_3", () => {
         logger: sinon.createStubInstance(BaseLoggingStrategy),
       },
     };
+    
+    MigratorTestBase.setup("1.5.2");
+  });
+
+  after(() => {
+    globalThis.MIGRATORS = undefined;
+    globalThis.game = undefined;
+    MigratorTestBase.tearDown();
   });
 
   it("migrates correctly", async () => {
