@@ -11,7 +11,35 @@ import DynamicInputDialogViewModel from './dynamic-input-dialog-viewmodel.mjs';
  * 
  * @extends ConfirmableModalDialog
  * 
- * @property {Array<DynamicInputDefinition>} inputDefinitions
+ * @property {Array<DynamicInputDefinition>} inputDefinitions The list of input fields 
+ * to include. 
+ * 
+ * @example
+ ```JS
+const dialog = await new DynamicInputDialog({
+  localizedTitle: StringUtil.format(
+    game.i18n.localize("ambersteel.general.input.queryFor"), 
+    game.i18n.localize("ambersteel.character.asset.slot.label"), 
+  ),
+  inputDefinitions: [
+    new DynamicInputDefinition({
+      type: DYNAMIC_INPUT_TYPES.DROP_DOWN,
+      name: inputChoices,
+      localizableLabel: "ambersteel.general.name",
+      required: true,
+      defaultValue: (thiz.availableAssets[0] ?? {}).id,
+      specificArgs: {
+        options: this._getAssetsAsChoices(),
+        adapter: this.choiceAdapter,
+      }
+    }),
+  ],
+}).renderAndAwait(true);
+
+if (dialog.confirmed !== true) return;
+
+const assetIdToAlot = dialog[inputChoices];
+ ```
  */
 export default class DynamicInputDialog extends ConfirmableModalDialog {
   /** @override */

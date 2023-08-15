@@ -72,7 +72,6 @@ export const TEMPLATES = {
   DICE_ROLL_CHAT_MESSAGE: `${basePathPresentation}/dice/roll.hbs`,
   // --- Dialogs
   DIALOG_MODAL: `${basePathPresentation}/dialog/modal-dialog/modal-dialog.hbs`,
-  DIALOG_ROLL: `${basePathPresentation}/dialog/roll-dialog/roll-dialog.hbs`,
   DIALOG_PLAIN: `${basePathPresentation}/dialog/plain-dialog/plain-dialog.hbs`,
   DIALOG_PLAIN_CONFIRMABLE: `${basePathPresentation}/dialog/plain-confirmable-dialog/plain-confirmable-dialog.hbs`,
   DIALOG_SINGLE_CHOICE: `${basePathPresentation}/dialog/single-choice-dialog/single-choice-dialog.hbs`,

@@ -1,10 +1,10 @@
 import LevelAdvancement from "./level-advancement.mjs";
 import { ATTRIBUTE_GROUPS } from "./attribute/attribute-groups.mjs";
-import { SummedData, SummedDataComponent } from "./summed-data.mjs";
+import { Sum, SumComponent } from "./summed-data.mjs";
 import { SkillTier, SKILL_TIERS } from "./skill/skill-tier.mjs";
 import { ATTRIBUTE_TIERS, AttributeTier } from "./attribute/attribute-tier.mjs";
-import DicePoolResult from "../dice/dice-pool-result.mjs";
-import { DiceOutcomeTypes } from "../dice/dice-outcome-types.mjs";
+import { DICE_POOL_RESULT_TYPES, DicePoolRollResult } from "../dice/dice-pool.mjs";
+import { ATTRIBUTES } from "./attribute/attributes.mjs";
 
 /**
  * Provides all the ruleset-specifics. 
@@ -169,12 +169,12 @@ export default class Ruleset {
   /**
    * Returns true, if the given dice pool roll result should result in a spell-backfire. 
    * 
-   * @param {DicePoolResult} rollResult 
+   * @param {DicePoolRollResult} rollResult 
    * 
    * @returns {Boolean}
    */
   rollCausesBackfire(rollResult) {
-    if (rollResult.outcomeType === DiceOutcomeTypes.FAILURE) {
+    if (rollResult.outcomeType.name === DICE_POOL_RESULT_TYPES.FAILURE.name) {
       return true;
     } else {
       return false;
@@ -266,9 +266,11 @@ export default class Ruleset {
   /**
    * Returns an object containing the maximum magic stamina, as well as the details of how it came to be. 
    * 
+   * Not returning a `Sum` is intentional, because the total must deviate from the components' actual sum! 
+   * 
    * @param {Actor} actor 
    * 
-   * @returns {SummedData} The maximum magic stamina of the given actor. 
+   * @returns {Number} The maximum magic stamina of the given actor. 
    * 
    * @throws {Error} Thrown, if the given actor is not of type `"pc"` or `"npc"`. 
    */
@@ -276,7 +278,8 @@ export default class Ruleset {
     const type = actor.type.toLowerCase();
     if (type !== "pc" && type !== "npc") throw new Error("Only PC and NPC type actors allowed");
 
-    const attributeArcana = actor.system.attributes.mental.arcana;
+    const transientActor = actor.getTransientObject();
+    const attributeArcana = transientActor.attributes.find(it => it.name === ATTRIBUTES.arcana.name);
     let total = attributeArcana.modifiedLevel;
     const components = [];
 
@@ -286,11 +289,14 @@ export default class Ruleset {
       if (transientSkill.isMagicSchool !== true) continue;
 
       const skillLevel = transientSkill.level;
-      components.push(new SummedDataComponent(transientSkill.name, transientSkill.localizableName, skillLevel));
+      components.push(new SumComponent(transientSkill.name, transientSkill.localizableName, skillLevel));
       total += skillLevel;
     }
 
-    return new SummedData(parseInt(Math.ceil(total / 2)), components);
+    return {
+      total: parseInt(Math.ceil(total / 2)),
+      components: components,
+    };
   }
 
   /**

@@ -1,5 +1,5 @@
 import { TEMPLATES } from '../../../presentation/templatePreloader.mjs';
-import { DiceOutcomeTypes } from '../../dice/dice-outcome-types.mjs';
+import { DICE_POOL_RESULT_TYPES } from '../../dice/dice-pool.mjs';
 import CharacterAssetSlotGroup from '../../ruleset/asset/character-asset-slot-group.mjs';
 import CharacterAssetSlot from '../../ruleset/asset/character-asset-slot.mjs';
 import { ATTRIBUTE_GROUPS } from '../../ruleset/attribute/attribute-groups.mjs';
@@ -324,9 +324,9 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
   }
 
   /**
-   * Advances the skill, based on the given {DicePoolResult}. 
+   * Advances the skill, based on the given {DicePoolRollResult}. 
    * 
-   * @param {DicePoolResult} rollResult 
+   * @param {DicePoolRollResult} rollResult 
    * @param {String} itemId The id of the skill item to advance. 
    * 
    * @async
@@ -368,7 +368,7 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
    * 
    * Also auto-levels up the attribute, if 'autoLevel' is set to true. 
    * 
-   * @param {DiceOutcomeTypes} outcomeType The test outcome to work with. 
+   * @param {DicePoolRollResultType} outcomeType The test outcome to work with. 
    * @param {String | undefined} attName Optional. Internal name of an attribute, 
    * e.g. `"strength"`. 
    * @param {Boolean | undefined} autoLevel Optional. If true, will auto-level up. 
@@ -387,7 +387,7 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
       game.ambersteel.logger.logWarn("outcomeType is undefined");
       return;
     }
-    if (outcomeType === DiceOutcomeTypes.NONE) {
+    if (outcomeType === DICE_POOL_RESULT_TYPES.NONE) {
       // Do not advance anything for a "none" result. 
       return;
     }

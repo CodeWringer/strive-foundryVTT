@@ -1,6 +1,5 @@
 import Ruleset from "../ruleset.mjs";
-import { SummedDataComponent } from "../summed-data.mjs";
-import { SummedData } from "../summed-data.mjs";
+import { Sum, SumComponent } from "../summed-data.mjs";
 import { ATTRIBUTE_GROUPS } from "./attribute-groups.mjs";
 import { ATTRIBUTES } from "./attributes.mjs";
 
@@ -121,11 +120,11 @@ export default class CharacterAttribute {
   /**
    * Returns the component(s) to do a roll using this attribute. 
    * 
-   * @returns {SummedData}
+   * @returns {Sum}
    */
   getRollData() {
-    return new SummedData(this.modifiedLevel, [
-      new SummedDataComponent(this.name, this.localizableName, this.modifiedLevel)
+    return new Sum([
+      new SumComponent(this.name, this.localizableName, this.modifiedLevel)
     ]);
   }
 
@@ -133,7 +132,7 @@ export default class CharacterAttribute {
    * Advances the represented attribute on the owning actor, based on the given 
    * roll's outcome. 
    * 
-   * @param {DicePoolResult | undefined} diceResult A dice roll result. 
+   * @param {DicePoolRollResult | undefined} diceResult A dice roll result. 
    * 
    * @async
    */
