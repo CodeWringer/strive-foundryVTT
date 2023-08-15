@@ -4,6 +4,7 @@ import 'should-sinon';
 import { SumComponent } from '../../../business/ruleset/summed-data.mjs';
 import DicePool, { DICE_POOL_RESULT_TYPES, DicePoolRollResult } from '../../../business/dice/dice-pool.mjs';
 import { ROLL_DICE_MODIFIER_TYPES } from '../../../business/dice/roll-dice-modifier-types.mjs';
+import { VISIBILITY_MODES } from '../../../presentation/chat/visibility-modes.mjs';
 
 /**
  * Mocks the global `Die` definition. 
@@ -34,10 +35,25 @@ function mockDie(mockedResults) {
 }
 
 describe("DicePool", () => {
-  after(() => {
-    globalThis.Die = undefined;
+  before((done) => {
+    globalThis.game = {
+      i18n: sinon.fake(),
+      ambersteel: {
+        logger: sinon.fake(),
+      },
+    };
+
+    done();
   });
 
+  after((done) => {
+    globalThis.Die = undefined;
+    globalThis.game = undefined;
+    globalThis.ChatMessage = undefined;
+
+    done();
+  });
+  
   describe("roll", () => {
     it("rolls with 3 dice from one component, no bonus and no modifier as expected", () => {
       // Given
@@ -268,6 +284,41 @@ describe("DicePool", () => {
         degree: 1,
       }));
     });
+  });
 
+  describe("sendToChat", () => {
+    it("sends the given DicePoolRollResult to chat", () => {
+      // Given
+      const givenDice = [
+        new SumComponent("a1", "a2", 3)
+      ];
+      const givenObstacle = 1;
+      const givenBonus = [
+        new SumComponent("b1", "b2", 2)
+      ];
+      const givenModifer = ROLL_DICE_MODIFIER_TYPES.NONE;
+      const given = new DicePoolRollResult({
+        unmodifiedDice: 3,
+        unmodifiedBonus: 2,
+        unmodifiedTotal: 5,
+        modifiedDice: 3,
+        modifiedBonus: 2,
+        modifiedTotal: 5,
+        dice: givenDice,
+        bonus: givenBonus,
+        obstacle: givenObstacle,
+        modifier: givenModifer,
+        positives: [5, 6],
+        negatives: [3, 1, 2],
+        outcomeType: DICE_POOL_RESULT_TYPES.SUCCESS,
+        degree: 1,
+      });
+      const givenChatArgs = {
+        visibilityMode: VISIBILITY_MODES.self,
+        showBackFire: true,
+      };
+      // Then
+      given.sendToChat(givenChatArgs);
+    });
   });
 });
