@@ -18,6 +18,7 @@ import { isBlankOrUndefined, isObject } from "../../util/validation-utility.mjs"
 import { SKILL_PROPERTIES } from "./item-properties.mjs";
 import { arrayContains } from "../../util/array-utility.mjs";
 import { getAsArray, getAsChoices } from "../../util/constants-utility.mjs";
+import { DICE_POOL_RESULT_TYPES } from "../../dice/dice-pool.mjs";
 
 /**
  * Represents a skill type document's "head" state. 
