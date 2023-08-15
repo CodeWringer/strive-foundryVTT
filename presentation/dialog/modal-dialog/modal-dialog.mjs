@@ -51,7 +51,7 @@ export default class ModalDialog extends Application {
     return mergeObject(super.defaultOptions, {
       popOut: true,
       resizable: false,
-      classes: [DIALOG_ELEMENT_CLASS, "width-min-xl", "height-min-sm"],
+      classes: [DIALOG_ELEMENT_CLASS, "width-min-lg", "height-min-sm"],
       minimizable: false,
       height: "unset",
     });

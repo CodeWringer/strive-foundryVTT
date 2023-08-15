@@ -8,19 +8,19 @@
 
   &.width-min {
     &-sm {
-      min-width: 150px;
-    }
-    &-md {
       min-width: 200px;
     }
-    &-lg {
-      min-width: 250px;
-    }
-    &-xl {
+    &-md {
       min-width: 300px;
     }
+    &-lg {
+      min-width: 400px;
+    }
+    &-xl {
+      min-width: 500px;
+    }
     &-xxl {
-      min-width: 350px;
+      min-width: 700px;
     }
   }
 
