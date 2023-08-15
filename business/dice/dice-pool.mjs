@@ -178,23 +178,6 @@ export class DicePoolRollResult {
    * @param {Number} degree The degree of success or failure. 
    */
   constructor(args = {}) {
-    this.unmodifiedDice = args.unmodifiedDice;
-    this.unmodifiedBonus = args.unmodifiedBonus;
-    this.unmodifiedTotal = args.unmodifiedTotal;
-    this.modifiedDice = args.modifiedDice;
-    this.modifiedBonus = args.modifiedBonus;
-    this.modifiedTotal = args.modifiedTotal;
-
-    this.dice = args.dice;
-    this.bonus = args.bonus;
-
-    this.obstacle = args.obstacle;
-    this.modifier = args.modifier;
-    this.positives = args.positives;
-    this.negatives = args.negatives;
-    this.outcomeType = args.outcomeType;
-    this.degree = args.degree;
-
     validateOrThrow(args, [
       "unmodifiedDice",
       "unmodifiedBonus",
@@ -211,6 +194,23 @@ export class DicePoolRollResult {
       "outcomeType",
       "degree",
     ]);
+
+    this.unmodifiedDice = args.unmodifiedDice;
+    this.unmodifiedBonus = args.unmodifiedBonus;
+    this.unmodifiedTotal = args.unmodifiedTotal;
+    this.modifiedDice = args.modifiedDice;
+    this.modifiedBonus = args.modifiedBonus;
+    this.modifiedTotal = args.modifiedTotal;
+
+    this.dice = args.dice;
+    this.bonus = args.bonus;
+
+    this.obstacle = args.obstacle;
+    this.modifier = args.modifier;
+    this.positives = args.positives;
+    this.negatives = args.negatives;
+    this.outcomeType = args.outcomeType;
+    this.degree = args.degree;
   }
 
   /**
@@ -312,9 +312,10 @@ export class DicePoolRollResult {
  */
 export class DicePoolRollResultType {
   constructor(args = {}) {
+    validateOrThrow(args, ["name", "localizableName"]);
+    
     this.name = args.name;
     this.localizableName = args.localizableName;
-    validateOrThrow(args, ["name", "localizableName"]);
   }
 }
 
