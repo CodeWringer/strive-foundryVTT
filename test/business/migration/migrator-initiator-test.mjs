@@ -6,6 +6,8 @@ import { WorldSystemVersion } from '../../../business/migration/world-system-ver
 import VersionCode from '../../../business/migration/version-code.mjs';
 import * as MigratorTestBase from './migrators/migrator-test-base.mjs';
 import { BaseLoggingStrategy } from '../../../business/logging/base-logging-strategy.mjs';
+import Migrator_1_5_3__1_5_4 from '../../../business/migration/migrators/migrator_1-5-3_1-5-4.mjs';
+import Migrator_1_5_4__1_5_5 from '../../../business/migration/migrators/migrator_1-5-4_1-5-5.mjs';
 
 /**
  * Mocks the active and world system versions. 
@@ -62,11 +64,18 @@ describe("MigratorInitiator", () => {
   });
 
   it("is applicable with world system version 1.5.3 and active version 1.5.5", () => {
-    // Setup
-    _mockVersions("1.5.3", "1.5.5");
-    
     // Given
     const given = new MigratorInitiator();
+    
+    // Setup
+    _mockVersions("1.5.3", "1.5.5");
+
+    given._getMigrators = () => {
+      return [
+        new Migrator_1_5_3__1_5_4(),
+        new Migrator_1_5_4__1_5_5(),
+      ];
+    };
 
     // When
     const r = given.isApplicable();
@@ -76,11 +85,18 @@ describe("MigratorInitiator", () => {
   });
 
   it("is NOT applicable with world system version 1.5.5 and active version 1.5.5", () => {
+    // Given
+    const given = new MigratorInitiator();
+    
     // Setup
     _mockVersions("1.5.5", "1.5.5");
     
-    // Given
-    const given = new MigratorInitiator();
+    given._getMigrators = () => {
+      return [
+        new Migrator_1_5_3__1_5_4(),
+        new Migrator_1_5_4__1_5_5(),
+      ];
+    };
 
     // When
     const r = given.isApplicable();
@@ -90,11 +106,18 @@ describe("MigratorInitiator", () => {
   });
 
   it("migrates from 1.5.3 up to 1.5.5 in one go", async () => {
+    // Given
+    const given = new MigratorInitiator();
+    
     // Setup
     _mockVersions("1.5.3", "1.5.5");
 
-    // Given
-    const given = new MigratorInitiator();
+    given._getMigrators = () => {
+      return [
+        new Migrator_1_5_3__1_5_4(),
+        new Migrator_1_5_4__1_5_5(),
+      ];
+    };
 
     // When
     const finalMigrationVersion = given.finalMigrationVersion;
