@@ -50,7 +50,7 @@ export default class AbstractMigrator {
    * @returns {Boolean} True, if this migrator can be applied to the current world system version. 
    */
   isApplicable() {
-    const version = WorldSystemVersion.version;
+    const version = WorldSystemVersion.get();
     
     const majorApplies = version.major === this.targetVersion.major;
     const minorApplies = version.minor === this.targetVersion.minor;
@@ -73,7 +73,7 @@ export default class AbstractMigrator {
     await this._doWork(args);
     
     // Update world system version. 
-    WorldSystemVersion.version = this.migratedVersion;
+    await WorldSystemVersion.set(this.migratedVersion);
   }
   
   /**

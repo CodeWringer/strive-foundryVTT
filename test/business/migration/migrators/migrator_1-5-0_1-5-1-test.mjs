@@ -23,6 +23,6 @@ describe("Migrator_1_5_0__1_5_1", () => {
     // When
     await given.migrate();
     // Then
-    WorldSystemVersion.version.should.deepEqual(new VersionCode(1, 5, 1))
+    WorldSystemVersion.get().should.deepEqual(new VersionCode(1, 5, 1))
   });
 });

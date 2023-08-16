@@ -1,17 +1,19 @@
 import { MIGRATORS } from './migrators.mjs';
 // Imports for the migrators, to populate the `MIGRATORS` list. 
-import Migrator_0_3_0__0_3_1 from './migrators/migrator_0-3-0_0-3-1.mjs';
-import Migrator_0_3_1__1_0_0 from './migrators/migrator_0-3-1_1-0-0.mjs';
-import Migrator_1_0_0__1_1_0 from './migrators/migrator_1-0-0_1-1-0.mjs';
-import Migrator_1_1_0__1_2_2 from './migrators/migrator_1-1-0_1-2-2.mjs';
-import Migrator_1_2_2__1_3_0 from './migrators/migrator_1-2-2_1-3-0.mjs';
-import Migrator_1_3_0__1_3_1 from './migrators/migrator_1-3-0_1-3-1.mjs';
-import Migrator_1_3_1__1_3_2 from './migrators/migrator_1-3-1_1-3-2.mjs';
-import Migrator_1_3_2__1_4_1 from './migrators/migrator_1-3-2_1-4-1.mjs';
-import Migrator_1_4_1__1_5_0 from './migrators/migrator_1-4-1_1-5-0.mjs';
-import Migrator_1_5_0__1_5_1 from './migrators/migrator_1-5-0_1-5-1.mjs';
+import './migrators/migrator_0-3-0_0-3-1.mjs';
+import './migrators/migrator_0-3-1_1-0-0.mjs';
+import './migrators/migrator_1-0-0_1-1-0.mjs';
+import './migrators/migrator_1-1-0_1-2-2.mjs';
+import './migrators/migrator_1-2-2_1-3-0.mjs';
+import './migrators/migrator_1-3-0_1-3-1.mjs';
+import './migrators/migrator_1-3-1_1-3-2.mjs';
+import './migrators/migrator_1-3-2_1-4-1.mjs';
+import './migrators/migrator_1-4-1_1-5-0.mjs';
+import './migrators/migrator_1-5-0_1-5-1.mjs';
 import './migrators/migrator_1-5-1_1-5-2.mjs';
 import './migrators/migrator_1-5-2_1-5-3.mjs';
+import './migrators/migrator_1-5-3_1-5-4.mjs';
+import './migrators/migrator_1-5-4_1-5-5.mjs';
 // Other imports. 
 import VersionCode from './version-code.mjs';
 

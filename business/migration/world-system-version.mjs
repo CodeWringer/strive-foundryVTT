@@ -34,38 +34,28 @@ class WorldSystemVersionType {
   get _settingName() { return "worldSystemVersion"; }
 
   /**
-   * Gets the version represented by this object. 
-   * @type {VersionCode}
-   */
-  get version() { return this._get(); }
-  /**
-   * Sets the version represented by this object. 
-   * 
-   * **IMPORTANT**: This automatically sets the 
-   * @param {VersionCode} value
-   */
-  set version(value) { this._set(value); }
-
-  /**
    * Sets and persists the given version as the world system version. 
+   * 
    * @param {VersionCode} version The version to set. 
+   * 
+   * @async
    */
-  _set(version) {
+  async set(version) {
     this._ensureSetting();
 
     // Set the world system version.
-    game.settings.set(this._settingNamespace, this._settingKey, version.toString()); 
+    await game.settings.set(this._settingNamespace, this._settingKey, version.toString()); 
   }
 
   /**
    * Returns the world system version. 
+   * 
    * @returns {VersionCode}
-   * @private
    */
-  _get() {
+  get() {
     this._ensureSetting();
-
     const worldSystemVersion = game.settings.get(this._settingNamespace, this._settingKey); 
+    
     return VersionCode.fromString(worldSystemVersion);
   }
 
