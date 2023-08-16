@@ -219,7 +219,7 @@ describe("Migrator_1_3_2__1_4_1", () => {
     // When
     await given.migrate();
     // Then
-    WorldSystemVersion.version.should.deepEqual(new VersionCode(1, 4, 1))
+    WorldSystemVersion.get().should.deepEqual(new VersionCode(1, 4, 1))
 
     game.actors.get(actorId0).update.should.not.have.been.called();
     

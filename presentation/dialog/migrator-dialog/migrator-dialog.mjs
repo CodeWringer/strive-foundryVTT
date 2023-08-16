@@ -48,7 +48,7 @@ export default class MigratorDialog extends ModalDialog {
 
     this.migrator = new MigratorInitiator();
 
-    this.worldVersionString = WorldSystemVersion.version.toString();
+    this.worldVersionString = WorldSystemVersion.get().toString();
     this.worldVersionMigratedString = this.migrator.finalMigrationVersion.toString();
   }
 
