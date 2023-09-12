@@ -13,8 +13,9 @@ import { isBlankOrUndefined } from "../../../business/util/validation-utility.mj
 import { isDefined } from "../../../business/util/validation-utility.mjs";
 
 /**
- * @property {Array<DynamicInputDefinition>} inputDefinitions
- * @property {Array<DynamicInputDialogControl>} controls
+ * @property {Array<DynamicInputDefinition>} inputDefinitions The list of input definitions of 
+ * this dynamic dialog. 
+ * @property {Array<DynamicInputDialogControl>} controls The list of input control instances. 
  * 
  * @extends ViewModel
  */
@@ -35,6 +36,7 @@ export default class DynamicInputDialogViewModel extends ViewModel {
 
     this.controls = [];
     for (const definition of this.inputDefinitions) {
+      // Create the underlying data field on the view model. 
       this[definition.name] = definition.defaultValue;
 
       let viewModel;

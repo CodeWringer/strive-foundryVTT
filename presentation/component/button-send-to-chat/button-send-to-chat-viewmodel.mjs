@@ -3,6 +3,7 @@ import * as ChatUtil from "../../chat/chat-utility.mjs";
 import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
 import VisibilitySingleChoiceDialog from "../../dialog/visibility-single-choice-dialog/visibility-single-choice-dialog.mjs";
+import { VISIBILITY_MODES } from "../../chat/visibility-modes.mjs";
 
 /**
  * A button that allows sending a document or one of its properties to the chat. 
@@ -93,7 +94,8 @@ export default class ButtonSendToChatViewModel extends ButtonViewModel {
     await new VisibilitySingleChoiceDialog({
       closeCallback: (dialog) => {
         if (dialog.confirmed !== true) return;
-        const visibilityMode = dialog.visibilityMode;
+        const visibilityModeChoice = dialog.visibilityMode;
+        const visibilityMode = VISIBILITY_MODES.asArray.find(it => it.name === visibilityModeChoice.value);
         
         if (thiz.propertyPath !== undefined) {
           if (thiz.target.sendPropertyToChat !== undefined) {
