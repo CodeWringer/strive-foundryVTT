@@ -4,6 +4,16 @@ import 'should-sinon';
 import { getElementValue, setElementValue } from '../../../presentation/sheet/sheet-utility.mjs';
 
 describe("sheet-utility", () => {
+  before(() => {
+    globalThis.$ = (element) => {
+      const r = [element];
+      r.find = () => {
+        return element.options;
+      }
+      return r;
+    }
+  });
+
   describe("getElementValue", () => {
     it("correctly gets the value of the given select element", () => {
       // Given
