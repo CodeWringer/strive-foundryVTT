@@ -91,9 +91,5 @@ export function enrichData(context) {
  * @returns {HTMLElement} The un-wrappped element
  */
 function unwrapJQueryElement(element) {
-  if (element[0] !== undefined) {
-    return element[0];
-  } else {
-    return element;
-  }
+  return $(element)[0];
 }
