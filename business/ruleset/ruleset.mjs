@@ -247,7 +247,9 @@ export default class Ruleset {
     const type = actor.type.toLowerCase();
     if (type !== "pc" && type !== "npc") throw new Error("Only PC and NPC type actors allowed");
 
-    const attributeLevel = parseInt(actor.system.attributes.physical.strength.modifiedLevel);
+    const transientActor = actor.getTransientObject();
+    const attribute = transientActor.attributes.find(it => it.name === ATTRIBUTES.strength.name);
+    const attributeLevel = attribute.modifiedLevel;
     return attributeLevel * 3;
   }
 
@@ -259,8 +261,13 @@ export default class Ruleset {
    * @returns {Number}
    */
   getAssetSlotBonus(actor) {
-    const strengthLevel = parseInt(actor.system.attributes.physical.strength.modifiedLevel);
-    return Math.max(0, Math.floor((strengthLevel - 1) / 3));
+    const type = actor.type.toLowerCase();
+    if (type !== "pc" && type !== "npc") throw new Error("Only PC and NPC type actors allowed");
+
+    const transientActor = actor.getTransientObject();
+    const attribute = transientActor.attributes.find(it => it.name === ATTRIBUTES.strength.name);
+    const attributeLevel = attribute.modifiedLevel;
+    return Math.max(0, Math.floor((attributeLevel - 1) / 3));
   }
 
   /**
