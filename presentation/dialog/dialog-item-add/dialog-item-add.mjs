@@ -59,7 +59,7 @@ export default class AddItemDialog extends ConfirmableModalDialog {
    * @readonly
    * @type {String}
    */
-  get selected() { return getElementValue(this._html.find(SELECTOR_ITEM_SELECT)[0]); }
+  get selected() { return getElementValue(this._html.find(SELECTOR_ITEM_SELECT)); }
 
   /**
    * Returns the current value of the "is custom" checkbox element. 
@@ -67,7 +67,7 @@ export default class AddItemDialog extends ConfirmableModalDialog {
    * @readonly
    * @type {Boolean}
    */
-  get isCustomChecked() { return getElementValue(this._html.find(SELECTOR_IS_CUSTOM)[0]); }
+  get isCustomChecked() { return getElementValue(this._html.find(SELECTOR_IS_CUSTOM)); }
 
   /**
    * @param {Object} options 

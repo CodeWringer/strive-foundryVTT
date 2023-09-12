@@ -1,4 +1,5 @@
 import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
+import { setElementValue } from "../../sheet/sheet-utility.mjs";
 import { TEMPLATES } from "../../templatePreloader.mjs";
 import InputViewModel from "../../view-model/input-view-model.mjs";
 
@@ -80,12 +81,14 @@ export default class InputNumberSpinnerViewModel extends InputViewModel {
   _onClickNumberSpinnerUp(event) {
     const newValue = parseInt(this.value) + 1;
     if (this.max !== undefined && newValue > this.max) return;
-    this.value = newValue;
+    setElementValue(this.element, newValue);
+    this.value = newValue; // Does NOT trigger `InputViewModel._onEdit` and thus is safe!
   }
 
   _onClickNumberSpinnerDown(event) {
     const newValue = parseInt(this.value) - 1;
     if (this.min !== undefined && newValue < this.min) return;
-    this.value = newValue;
+    setElementValue(this.element, newValue);
+    this.value = newValue; // Does NOT trigger `InputViewModel._onEdit` and thus is safe!
   }
 }

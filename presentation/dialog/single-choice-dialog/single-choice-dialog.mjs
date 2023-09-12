@@ -54,7 +54,7 @@ export default class SingleChoiceDialog extends ConfirmableModalDialog {
    * @type {ChoiceOption}
    */
   get selected() { 
-    const choiceKey = getElementValue(this._html.find(SELECTOR_ITEM_SELECT)[0]);
+    const choiceKey = getElementValue(this._html.find(SELECTOR_ITEM_SELECT));
     return this.choices.find(it => it.value == choiceKey);
   }
   /**
