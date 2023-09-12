@@ -1,6 +1,7 @@
 import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import { SOUNDS_CONSTANTS } from "../../audio/sounds.mjs";
 import * as ChatUtil from "../../chat/chat-utility.mjs";
+import { VISIBILITY_MODES } from "../../chat/visibility-modes.mjs";
 import VisibilitySingleChoiceDialog from "../../dialog/visibility-single-choice-dialog/visibility-single-choice-dialog.mjs";
 import { TEMPLATES } from "../../templatePreloader.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
@@ -101,10 +102,13 @@ export default class DiceRollListViewModel extends ViewModel {
           rolls: rolls,
         });
 
+        const visibilityModeChoice = dialog.visibilityMode;
+        const visibilityMode = VISIBILITY_MODES.asArray.find(it => it.name === visibilityModeChoice.value);
+
         return ChatUtil.sendToChat({
           renderedContent: renderedContent,
           sound: SOUNDS_CONSTANTS.DICE_ROLL,
-          visibilityMode: dialog.visibilityMode,
+          visibilityMode: visibilityMode,
         });
       },
     });
