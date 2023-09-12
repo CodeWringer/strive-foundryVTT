@@ -1,5 +1,6 @@
 import GetShowFancyFontUseCase from '../../../business/use-case/get-show-fancy-font-use-case.mjs';
 import { validateOrThrow } from '../../../business/util/validation-utility.mjs';
+import ChoiceOption from '../../component/input-choice/choice-option.mjs';
 import { setSelectedOptionByValue } from '../../sheet/sheet-utility.mjs';
 import { getElementValue } from '../../sheet/sheet-utility.mjs';
 import { TEMPLATES } from '../../templatePreloader.mjs';
@@ -60,16 +61,16 @@ export default class SingleChoiceDialog extends ConfirmableModalDialog {
   /**
    * Sets the currently selected choice, based on the given value. 
    * 
-   * @param {String} value The value to set. 
+   * @param {ChoiceOption} value The value to set. 
    */
   set selected(value) {
-    setSelectedOptionByValue(this._html.find(SELECTOR_ITEM_SELECT), value);
+    setSelectedOptionByValue(this._html.find(SELECTOR_ITEM_SELECT), value.value);
   }
 
   /**
    * The value to set initially. 
    * 
-   * @type {String}
+   * @type {ChoiceOption}
    * @private
    */
   _initialValue = undefined;

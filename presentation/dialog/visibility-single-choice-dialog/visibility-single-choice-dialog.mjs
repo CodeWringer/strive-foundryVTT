@@ -41,7 +41,7 @@ export default class VisibilitySingleChoiceDialog extends SingleChoiceDialog {
    * @type {ChoiceOption}
    */
   get visibilityMode() {
-    return this.choices.find(it => it.name === this.selected.value);
+    return this.choices.find(it => it.value === this.selected.value);
   }
 
   /**

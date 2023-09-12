@@ -47,8 +47,11 @@ export function setElementValue(element, value) {
  */
 export function setSelectedOptionByValue(selectElement, valueToSelect){
   const pureElement = unwrapJQueryElement(selectElement);
+
+  const jQueryElement = $(selectElement);
+  const optionElements = jQueryElement.find('option');
+  
   try {
-    const optionElements = pureElement.find('option');
     for(let i = 0; i < optionElements.length; i++) {
       const optionElement = optionElements[i];
       if (optionElement.value == valueToSelect) {
