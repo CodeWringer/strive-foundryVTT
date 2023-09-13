@@ -56,6 +56,12 @@ li.roll.die.d6.roll-failure {
 li.roll.die.d6.roll-success {
   color: #18520b;
 }
+li.roll.die.d6.roll-missing {
+  background-color: transparent;
+  border-style: dashed;
+  border-color: rgba(0, 0, 0, 0.16);
+  border-width: 0.15rem;
+}
 
 .dice-result {
   font-size: 1.1rem;
