@@ -142,6 +142,14 @@ const CSS_CLASS_NEGATIVE = "roll-failure";
 const CSS_CLASS_OBSTACLE = "roll-obstacle";
 
 /**
+ * CSS class of a missing die result. 
+ * 
+ * @type {String}
+ * @constant
+ */
+const CSS_CLASS_MISSING_DIE = "roll-missing";
+
+/**
  * Represents the result of a dice pool roll. 
  * 
  * @property {Number} unmodifiedDice
@@ -234,12 +242,18 @@ export class DicePoolRollResult {
     const negativesForRendering = this.negatives.map(it => { return {cssClass: CSS_CLASS_NEGATIVE, content: it}; });
     const combinedResultsForRendering = positivesForRendering.concat(negativesForRendering);
 
-    // Insert obstacle threshold. 
+    const missingDiceCount = Math.max(this.obstacle - combinedResultsForRendering.length, 0);
     const obstacleForRendering = { cssClass: CSS_CLASS_OBSTACLE, content: `${game.i18n.localize(LOCALIZABLE_OBSTACLE_ABBREVIATION)} ${this.obstacle}` }
-
+    
     if (this.obstacle >= combinedResultsForRendering.length) { // Obstacle greater than number of dice rolled. 
+      // Insert "missing" dice. 
+      for (let i = 0; i < missingDiceCount; i++) {
+        combinedResultsForRendering.push({ cssClass: CSS_CLASS_MISSING_DIE, content: "" });
+      }
+      // Insert obstacle threshold. 
       combinedResultsForRendering.push(obstacleForRendering);
     } else { // Obstacle less than or equal to number of dice rolled. 
+      // Insert obstacle threshold. 
       combinedResultsForRendering.splice(this.obstacle, 0, obstacleForRendering);
     }
 
@@ -254,6 +268,7 @@ export class DicePoolRollResult {
       numberOfDice: totalNumberOfDice,
       positives: this.positives.length,
       negatives: this.negatives.length,
+      missingDiceCount: missingDiceCount,
       diceComposition: diceComposition,
       primaryTitle: args.primaryTitle,
       primaryImage: args.primaryImage,

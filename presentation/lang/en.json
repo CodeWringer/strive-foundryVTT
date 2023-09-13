@@ -651,6 +651,10 @@
         "plural": "Negatives",
         "singular": "Negative"
       },
+      "missing": {
+        "plural": "Missing",
+        "singular": "Missing"
+      },
       "numberOfDice": "Number of dice",
       "diceModifier": {
         "singular": "Dice Modifier",
