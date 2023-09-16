@@ -274,6 +274,10 @@ export default class SortableListViewModel extends ViewModel {
   }
 
   /**
+   * Fetches and returns the list of ordered item IDs from the data source. 
+   * 
+   * Culls missing IDs and adds new IDs from the given view model list. 
+   * 
    * @returns {Array<String>}
    * 
    * @private
@@ -281,7 +285,7 @@ export default class SortableListViewModel extends ViewModel {
   _getOrderedIdList() {
     const result = [];
 
-    // The ordered IDs currently stroed on the document. 
+    // The ordered IDs currently stored on the document. 
     const existingIds = this.indexDataSource.getAll();
 
     // Cull removed entries. 
@@ -294,9 +298,7 @@ export default class SortableListViewModel extends ViewModel {
 
     // Add new entries.
     for (const listItemViewModel of this.listItemViewModels) {
-      if (arrayContains(result, listItemViewModel.entityId) === true) {
-        continue;
-      } else {
+      if (arrayContains(result, listItemViewModel.entityId) !== true) {
         result.push(listItemViewModel.entityId);
       }
     }
