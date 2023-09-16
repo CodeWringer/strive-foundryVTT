@@ -33,8 +33,9 @@ export default class DocumentListItemOrderDataSource extends AbstractListItemOrd
     // the list item orders can no longer be persisted. 
     const parent = this.document.owningDocument;
     if (parent !== null && parent !== undefined) {
-      const existsOnParent = parent.items.find(it => it === this.document.id) !== undefined;
-      if (existsOnParent !== true) return;
+      const itemOnParent = parent.items.find(it => it.id === this.document.id);
+      const isMissingOnParent = itemOnParent === undefined;
+      if (isMissingOnParent === true) return;
     }
 
     const newDisplayOrders = {
