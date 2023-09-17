@@ -165,15 +165,20 @@ export default class ButtonRollViewModel extends ButtonViewModel {
     });
 
     if (this.rollType === ROLL_TYPES.generic.name) {
-      this._doGenericRoll(dialog);
+      await this._doGenericRoll(dialog);
     } else if (this.rollType === ROLL_TYPES.dicePool.name) {
-      this._doDicePoolRoll(dialog);
+      await this._doDicePoolRoll(dialog);
     } else {
       throw new Error(`InvalidStateException: Invalid rollType '${this.rollType}'`);
     }
   }
 
   /**
+   * Uses the given dialog to prompt the user for roll data and then performs a generic roll, 
+   * if the user confirmed. 
+   * 
+   * The result is automatically sent to chat. 
+   * 
    * 
    * @param {DynamicInputDialog} dialog 
    * 
@@ -207,6 +212,10 @@ export default class ButtonRollViewModel extends ButtonViewModel {
   }
 
   /**
+   * Uses the given dialog to prompt the user for roll data and then performs a dice pool roll, 
+   * if the user confirmed. 
+   * 
+   * The result is automatically sent to chat. 
    * 
    * @param {DynamicInputDialog} dialog 
    * 
