@@ -471,6 +471,7 @@
           "prone": "Prone",
           "rooted": "Rooted",
           "terrified": "Terrified",
+          "stunned": "Stunned",
           "unconscious": "Unconscious"
         }
       },
