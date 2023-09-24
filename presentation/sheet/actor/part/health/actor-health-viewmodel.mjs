@@ -100,6 +100,14 @@ export default class ActorHealthViewModel extends ViewModel {
   get isToughnessTestRequired() { return new Ruleset().isToughnessTestRequired(this.document.document); }
   
   /**
+   * Returns `true`, if the character is near death. 
+   * 
+   * @type {Boolean}
+   * @readonly
+   */
+  get isDeathNear() { return this.injuryCount >= this.maxInjuryCount; }
+  
+  /**
    * @type {String}
    * @readonly
    */
