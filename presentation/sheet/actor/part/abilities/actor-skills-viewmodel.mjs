@@ -1,4 +1,5 @@
 import { validateOrThrow } from "../../../../../business/util/validation-utility.mjs"
+import ButtonViewModel from "../../../../component/button/button-viewmodel.mjs"
 import DocumentListItemOrderDataSource from "../../../../component/sortable-list/document-list-item-order-datasource.mjs"
 import SortableListViewModel from "../../../../component/sortable-list/sortable-list-viewmodel.mjs"
 import { TEMPLATES } from "../../../../templatePreloader.mjs"
@@ -95,6 +96,29 @@ export default class ActorSkillsViewModel extends ViewModel {
         localizableType: "ambersteel.character.skill.known.singular",
         localizableDialogTitle: "ambersteel.character.skill.known.add.query",
       }),
+    });
+
+    this.vmBtnResetExercisedLearningSkills = new ButtonViewModel({
+      id: "vmBtnResetExercisedLearningSkills",
+      parent: this,
+      isEditable: this.isEditable,
+      localizableTitle: "ambersteel.character.advancement.exercised.reset",
+      onClick: () => {
+        thiz.document.skills.learning.forEach(skill => {
+          skill.advancementProgress.exercised = false;
+        });
+      }
+    });
+    this.vmBtnResetExercisedKnownSkills = new ButtonViewModel({
+      id: "vmBtnResetExercisedKnownSkills",
+      parent: this,
+      isEditable: this.isEditable,
+      localizableTitle: "ambersteel.character.advancement.exercised.reset",
+      onClick: () => {
+        thiz.document.skills.known.forEach(skill => {
+          skill.advancementProgress.exercised = false;
+        });
+      }
     });
   }
 
