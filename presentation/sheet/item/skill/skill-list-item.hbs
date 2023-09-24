@@ -80,6 +80,15 @@ cssClass: {undefined | String}
         {{> inputNumberSpinner viewModel=viewModel.vmNsFailures }}
       </div>
     </div>
+    {{!-- Exercised --}}
+    <div class="flex flex-row margin-b-md margin-l-lg{{#if (neq viewModel.showAdvancedData true)}} hidden{{/if}}">
+      <div class="flex flex-center font-size-lg">
+        <i class="fas fa-dumbbell"></i>
+      </div>
+      <div class="width-sm">
+        {{> buttonCheckbox viewModel=viewModel.vmExercised }}
+      </div>
+    </div>
   </div>
   {{!-- Row --}}
   {{!-- Description --}}

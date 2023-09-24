@@ -1,0 +1,11 @@
+{{!-- Required context:
+viewModel: {ButtonCheckBoxViewModel}
+cssClass: {String | undefined}
+--}}
+<input 
+  class="custom-system-button component-button-checkbox{{#if viewModel.value}} active{{/if}}{{#if viewModel.isEditable}}{{else}} disabled{{/if}}{{cssClass}}" 
+  title="{{viewModel.localizedTitle}}" 
+  id="{{viewModel.id}}" 
+  type="checkbox" 
+  {{#if viewModel.value}}checked{{/if}}
+  >

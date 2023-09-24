@@ -53,6 +53,7 @@ export const TEMPLATES = {
   COMPONENT_BUTTON_TOGGLE: `${basePathComponent}/button-toggle/button-toggle.hbs`,
   COMPONENT_BUTTON_TOGGLE_ICON: `${basePathComponent}/button-toggle-icon/button-toggle-icon.hbs`,
   COMPONENT_BUTTON_CONTEXT_MENU: `${basePathComponent}/button-context-menu/button-context-menu.hbs`,
+  COMPONENT_BUTTON_CHECKBOX: `${basePathComponent}/button-checkbox/button-checkbox.hbs`,
   // Composite
   COMPONENT_SORTABLE_LIST: `${basePathComponent}/sortable-list/sortable-list.hbs`,
   COMPONENT_SIMPLE_LIST: `${basePathComponent}/simple-list/simple-list.hbs`,
