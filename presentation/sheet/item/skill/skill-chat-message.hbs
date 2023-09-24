@@ -39,6 +39,22 @@ cssClass: {undefined | String}
   <div class="sheet-block scrollable-height-md{{#if (eq viewModel.isHeadless true)}} hidden{{/if}}">
     {{> lazyRichText viewModel=viewModel.vmLazyDescription}}
   </div>
+  {{!-- Prerequisites --}}
+  <div class="flex flex-column margin-b-sm{{#if (neq viewModel.showPrerequisites true)}} hidden{{/if}}">
+    {{#> header3 showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.skill.prerequisite.plural"}}{{/header3}}
+    <ul class="unstyled-list">
+      {{#each viewModel.prerequisites as |prerequisite index|}}
+      <li class="flex flex-row flex-middle sheet-block">
+        <span class="flex flex-row flex-grow">
+          {{prerequisite.name}}
+        </span>
+        <span class="width-md flex flex-center">
+          {{prerequisite.minimumLevel}}
+        </span>
+      </li>
+      {{/each}}
+    </ul>
+  </div>
   {{!-- Skill Abilites --}}
   {{#if viewModel.hasAbilities}}
     <div data-vis-group="{{viewModel.id}}-abilities" class="{{#if viewModel.skillAbilitiesInitiallyVisible}}{{else}}hidden{{/if}}">

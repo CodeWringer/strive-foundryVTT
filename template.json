@@ -221,7 +221,8 @@
       "failures": 0,
       "abilities": {},
       "category": "",
-      "headState": "full"
+      "headState": "full",
+      "prerequisites": []
     },
     "fate-card": {
       "templates": ["base"],

@@ -19,6 +19,7 @@ import { SKILL_PROPERTIES } from "./item-properties.mjs";
 import { arrayContains } from "../../util/array-utility.mjs";
 import { getAsArray, getAsChoices } from "../../util/constants-utility.mjs";
 import { DICE_POOL_RESULT_TYPES } from "../../dice/dice-pool.mjs";
+import SkillPrerequisite from "../../ruleset/skill/skill-prerequisite.mjs";
 
 /**
  * Represents a skill type document's "head" state. 
@@ -251,6 +252,28 @@ export default class TransientSkill extends TransientBaseItem {
   set headState(value) {
     this.document.system.headState = value.name;
     this.updateByPath("system.headState", value.name);
+  }
+
+  /**
+   * Returns the list of prerequisite skills. 
+   * 
+   * @type {Array<SkillPrerequisite>}
+   */
+  get prerequisites() {
+    if (this.document.system.prerequisites === undefined) {
+      return [];
+    } else {
+      return this.document.system.prerequisites; 
+    }
+  }
+  /**
+   * Sets the list of prerequisite skills. 
+   * 
+   * @type {Array<SkillPrerequisite>}
+   * @param {Array<SkillPrerequisite>} value
+   */
+  set prerequisites(value) {
+    this.updateByPath("system.prerequisites", value);
   }
   
   /**

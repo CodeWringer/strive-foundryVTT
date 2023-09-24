@@ -61,6 +61,27 @@ export default class SkillChatMessageViewModel extends ViewModel {
   get isHeadless() { return this.document.headState.name !== SKILL_HEAD_STATES.full.name; }
 
   /**
+   * Returns true, if the list of prerequisites should be rendered. 
+   * @type {Boolean}
+   * @readonly
+   */
+  get showPrerequisites() { return this.document.prerequisites !== undefined && this.document.prerequisites.length > 0; }
+
+  /**
+   * @type {Array<Object>}
+   * @readonly
+   */
+  get prerequisites() {
+    return this.document.prerequisites.map(it => {
+      return {
+        id: it.id,
+        name: it.name,
+        minimumLevel: it.minimumLevel,
+      };
+    });
+  }
+
+  /**
    * @type {Boolean}
    * @default false
    */

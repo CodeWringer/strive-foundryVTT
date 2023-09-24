@@ -1,13 +1,17 @@
 import { SKILL_PROPERTIES } from "../../../../business/document/item/item-properties.mjs";
 import { ATTRIBUTES } from "../../../../business/ruleset/attribute/attributes.mjs";
+import SkillPrerequisite from "../../../../business/ruleset/skill/skill-prerequisite.mjs";
 import { isDefined } from "../../../../business/util/validation-utility.mjs";
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs";
 import ButtonViewModel from "../../../component/button/button-viewmodel.mjs";
 import ChoiceAdapter from "../../../component/input-choice/choice-adapter.mjs";
 import InputPropertiesViewModel from "../../../component/input-properties/input-properties-viewmodel.mjs";
+import SimpleListItemViewModel from "../../../component/simple-list/simple-list-item-viewmodel.mjs";
+import SimpleListViewModel from "../../../component/simple-list/simple-list-viewmodel.mjs";
 import { TEMPLATES } from "../../../templatePreloader.mjs"
 import ViewModelFactory from "../../../view-model/view-model-factory.mjs";
 import SkillAbilityTableViewModel from "../skill-ability/skill-ability-table-viewmodel.mjs"
+import SkillPrerequisiteListItemViewModel from "./skill-prerequisite-list-item-viewmodel.mjs";
 import { querySkillConfiguration } from "./skill-utils.mjs";
 import SkillViewModel from "./skill-viewmodel.mjs";
 
@@ -27,6 +31,12 @@ export default class SkillItemSheetViewModel extends SkillViewModel {
    * @readonly
    */
   get isSkillAbilityListVisible() { return (this.isEditable === true) || this.document.abilities.length !== 0 }
+
+  /**
+   * @type {String}
+   * @readonly
+   */
+  get prerequisiteListItemTemplate() { return SkillPrerequisiteListItemViewModel.TEMPLATE; }
 
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
@@ -133,6 +143,24 @@ export default class SkillItemSheetViewModel extends SkillViewModel {
       isEditable: this.isEditable,
       systemProperties: SKILL_PROPERTIES.asArray,
     });
+
+    this.prerequisiteViewModels = [];
+    this.prerequisiteViewModels = this._getPrerequisiteViewModels();
+
+    this.vmPrerequisiteList = new SimpleListViewModel({
+      id: "vmPrerequisiteList",
+      parent: this,
+      isEditable: this.isEditable,
+      isSendable: this.isSendable,
+      isOwner: this.isOwner,
+      contentItemViewModels: this.prerequisiteViewModels,
+      contentItemTemplate: this.prerequisiteListItemTemplate,
+      onAddClick: this._onClickAddPrerequisite.bind(this),
+      onRemoveClick: this._onClickRemovePrerequisite.bind(this),
+      isItemAddable: true,
+      isItemRemovable: true,
+      localizedAddLabel: game.i18n.localize("ambersteel.general.add"),
+    });
   }
 
   /** @override */
@@ -145,5 +173,72 @@ export default class SkillItemSheetViewModel extends SkillViewModel {
     });
 
     return updates;
+  }
+
+  /**
+   * @returns {Array<SkillPrerequisiteListItemViewModel>}
+   * 
+   * @private
+   */
+  _getPrerequisiteViewModels() {
+    const result = [];
+    const thiz = this;
+
+    const prerequisites = this.document.prerequisites;
+    for (let index = 0; index < prerequisites.length; index++) {
+      const prerequisite = prerequisites[index];
+
+      const vm = new SkillPrerequisiteListItemViewModel({
+        id: `vmPrerequisite${index}`,
+        isEditable: this.isEditable,
+        stateId: prerequisite.id,
+        stateName: prerequisite.name,
+        stateMinimumLevel: (prerequisite.minimumLevel ?? 0),
+        onChange: (state) => {
+          thiz._updatePrerequisitesFromViewModels();
+        }
+      });
+      result.push(vm);
+    }
+    return result;
+  }
+
+  /**
+   * Event handler for when a new skill prerequisite is added. 
+   * 
+   * @private
+   */
+  _onClickAddPrerequisite() {
+    const safeCopy = this.document.prerequisites.concat([]);
+    safeCopy.push(new SkillPrerequisite());
+    this.document.prerequisites = safeCopy;
+  }
+
+  /**
+   * Event handler for when a skill prerequisite is to be removed. 
+   * 
+   * @param {SimpleListItemViewModel} viewModel
+   * 
+   * @private
+   */
+  _onClickRemovePrerequisite(viewModel) {
+    const index = this.prerequisiteViewModels.indexOf(viewModel.itemViewModel);
+    const safeCopy = this.document.prerequisites.concat([]);
+    safeCopy.splice(index, 1);
+    this.document.prerequisites = safeCopy;
+  }
+
+  /**
+   * Updates the remote prerequisites array with the states gathered from `this.prerequisiteViewModels`. 
+   * 
+   * @private
+   */
+  _updatePrerequisitesFromViewModels() {
+    const result = [];
+
+    this.prerequisiteViewModels.forEach(viewModel => {
+      result.push(viewModel.state);
+    });
+    this.document.prerequisites = result;
   }
 }

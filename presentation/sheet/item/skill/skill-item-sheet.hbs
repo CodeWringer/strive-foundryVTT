@@ -54,6 +54,11 @@ cssClass: {undefined | String}
     {{#> header3 showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.general.description"}}{{/header3}}
     {{> inputRichText viewModel=viewModel.vmRtDescription }}
   </div>
+  {{!-- Prerequisites --}}
+  <div class="sheet-block flex flex-column">
+    {{#> header2 showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.skill.prerequisite.plural"}}{{/header2}}
+    {{> simpleList viewModel=viewModel.vmPrerequisiteList}}
+  </div>
   {{!-- Skill Abilites --}}
   <h3{{#if viewModel.showFancyFont}} class="fancy-font"{{/if}}>{{localize "ambersteel.character.skill.ability.plural"}}</h3>
   {{> "systems/ambersteel/presentation/sheet/item/skill-ability/skill-ability-table.hbs" viewModel=viewModel.vmSkillAbilityTable cssClass=(ifThenElse viewModel.isSkillAbilityListVisible "" "hidden") }}

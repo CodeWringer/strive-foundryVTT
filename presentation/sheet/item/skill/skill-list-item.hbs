@@ -96,6 +96,26 @@ cssClass: {undefined | String}
     </span>  
   </div>
   {{!-- Row --}}
+  {{!-- Prerequisites --}}
+  <div class="flex flex-column margin-b-sm{{#if (or (neq viewModel.showAdvancedData true) (neq viewModel.showPrerequisites true))}} hidden{{/if}}">
+    {{#> header3 showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.skill.prerequisite.plural"}}{{/header3}}
+    <ul class="unstyled-list">
+      {{#each viewModel.prerequisites as |prerequisite index|}}
+      <li class="flex flex-row flex-middle">
+        <span class="flex flex-row flex-grow">
+          {{#> readOnlyValue cssClass="flex flex-center"}}{{prerequisite.name}}{{/readOnlyValue}}
+        </span>
+        <span style="width: 144px">
+          {{#> label showFancyFont=../viewModel.showFancyFont}}{{localize "ambersteel.character.advancement.minimum"}}{{/label}}
+        </span>
+        <span class="width-md">
+          {{#> readOnlyValue cssClass="font-size-md flex flex-center"}}{{prerequisite.minimumLevel}}{{/readOnlyValue}}
+        </span>
+      </li>
+      {{/each}}
+    </ul>
+  </div>
+  {{!-- Row --}}
   {{!-- Properties --}}
   <div class="flex flex-row margin-b-sm{{#if (neq viewModel.showAdvancedData true)}} hidden{{/if}}">
     <span class="width-min-xl">
