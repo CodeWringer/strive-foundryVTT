@@ -6,6 +6,18 @@ cssClass: {undefined | String}
   {{#> header1 showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.health.healthStats"}}{{/header1}}
   {{!-- General health stats --}}
   <div class="flex flex-column">
+    {{!-- Death Warning --}}
+    <div class="hint-card error flex margin-b-md font-size-lg{{#if viewModel.isDeathNear}}{{else}} hidden{{/if}}">
+      <div class="flex flex-center">
+        <i class="fas fa-skull"></i>
+      </div>
+      <div class="flex-grow flex flex-center">
+        <span>{{localize "ambersteel.rules.hintDeathIsNear"}}</span>
+      </div>
+      <div class="flex flex-center">
+        <i class="fas fa-skull"></i>
+      </div>
+    </div>
   {{!-- Row 1 --}}
     <div class="grid-3col grid-gap-md margin-b-md">
       {{!-- Col 1 --}}
@@ -95,7 +107,20 @@ cssClass: {undefined | String}
       </div>
     </div>
   </div>
-  <div class="hint-card warn flex margin-b-md {{#if viewModel.isToughnessTestRequired}}{{else}}hidden{{/if}}">
+  {{!-- Death Warning --}}
+  <div class="hint-card error flex margin-b-md font-size-lg{{#if viewModel.isDeathNear}}{{else}} hidden{{/if}}">
+    <div class="flex flex-center">
+      <i class="fas fa-skull"></i>
+    </div>
+    <div class="flex-grow flex flex-center">
+      <span>{{localize "ambersteel.rules.hintDeathIsNear"}}</span>
+    </div>
+    <div class="flex flex-center">
+      <i class="fas fa-skull"></i>
+    </div>
+  </div>
+  {{!-- Toughness Test Warning --}}
+  <div class="hint-card warn flex margin-b-md{{#if viewModel.isToughnessTestRequired}}{{else}} hidden{{/if}}">
     <div class="flex flex-center hint-card-icon">
       <i class="fas fa-exclamation"></i>
     </div>
