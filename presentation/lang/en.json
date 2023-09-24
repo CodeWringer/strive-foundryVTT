@@ -57,6 +57,7 @@
       "description": "Description",
       "edit": "Edit",
       "formula": "Formula",
+      "id": "ID",
       "increment": "Increment",
       "input": {
         "validationFailed": "The following required fields failed validation. Ensure required fields have a valid value.",
@@ -105,6 +106,7 @@
         "modifiedLevelAbbreviation": "Modified",
         "levelMod": "Level Modifier",
         "levelModAbbreviation": "Mod.",
+        "minimum": "Minimum Level",
         "requirements": {
           "label": "Required",
           "abbreviation": "Req.",
@@ -597,6 +599,10 @@
           }
         },
         "plural": "Skills",
+        "prerequisite": {
+          "singular": "Prerequisite",
+          "plural": "Prerequisites"
+        },
         "relatedAttribute": "Related Attribute",
         "singular": "Skill",
         "properties": {

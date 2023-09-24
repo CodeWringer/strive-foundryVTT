@@ -58,6 +58,13 @@ export default class SkillListItemViewModel extends SkillViewModel {
   get showLevel() { return this.document.headState.name === SKILL_HEAD_STATES.full.name || this.document.headState.name === SKILL_HEAD_STATES.level_only.name; }
   
   /**
+   * Returns true, if the list of prerequisites should be rendered. 
+   * @type {Boolean}
+   * @readonly
+   */
+  get showPrerequisites() { return this.document.prerequisites !== undefined && this.document.prerequisites.length > 0; }
+
+  /**
    * Returns true, if advanced data should be rendered. 
    * 
    * This entails: 
@@ -78,6 +85,20 @@ export default class SkillListItemViewModel extends SkillViewModel {
    * @readonly
    */
   get modifiedLevel() { return this.document.modifiedLevel; }
+  
+  /**
+   * @type {Array<Object>}
+   * @readonly
+   */
+  get prerequisites() {
+    return this.document.prerequisites.map(it => {
+      return {
+        id: it.id,
+        name: it.name,
+        minimumLevel: it.minimumLevel,
+      };
+    });
+  }
 
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
