@@ -301,7 +301,7 @@ export default class Ruleset {
     }
 
     return {
-      total: parseInt(Math.ceil(total / 2)),
+      total: total,
       components: components,
     };
   }
