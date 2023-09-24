@@ -62,6 +62,7 @@ export class HealthState {
  * @property {HealthState} poisoned 
  * @property {HealthState} prone 
  * @property {HealthState} rooted 
+ * @property {HealthState} stunned
  * @property {HealthState} terrified 
  * @property {HealthState} unconscious 
  * 
@@ -151,6 +152,11 @@ export const HEALTH_STATES = {
     name: "rooted",
     localizableName: "ambersteel.character.health.states.rooted",
     limit: 1,
+  }),
+  stunned: new HealthState({
+    name: "stunned",
+    localizableName: "ambersteel.character.health.states.stunned",
+    limit: 0,
   }),
   terrified: new HealthState({
     name: "terrified",
