@@ -243,7 +243,7 @@ export default class ButtonRollViewModel extends ButtonViewModel {
       new DynamicInputDefinition({
         type: DYNAMIC_INPUT_TYPES.LABEL,
         name: "diceCompositionLabel",
-        localizedLabel: `<p>${game.i18n.localize("ambersteel.roll.numberOfDice")}: ${rollData.total}</p><p>${diceComposition}</p>`,
+        localizedLabel: `<p>${game.i18n.localize("ambersteel.roll.numberOfDice")}: ${rollData.total}</p><p class="font-size-sm">${diceComposition}</p>`,
         showFancyFont: false,
       }),
       new DynamicInputDefinition({
