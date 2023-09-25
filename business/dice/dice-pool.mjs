@@ -296,11 +296,19 @@ export class DicePoolRollResult {
   getJoinedDiceCompositionString() {
     let joinedRollData = "";
 
-    for (const entry of this.dice) {
-      joinedRollData = `${joinedRollData}${entry.value} ${game.i18n.localize(entry.localizableName)}, `
+    for (let i = 0; i < this.dice.length; i++) {
+      const diceComponent = this.dice[i];
+      joinedRollData = `${joinedRollData}${diceComponent.value} ${game.i18n.localize(diceComponent.localizableName)}`;
+
+      if (i < this.dice.length - 1) {
+        joinedRollData = `${joinedRollData}, `;
+      }
     }
 
-    joinedRollData = `${joinedRollData}${this.modifiedBonus} ${game.i18n.localize("ambersteel.roll.bonusDice")}`;
+    // Include the bonus dice, but only if there are any. 
+    if (this.modifiedBonus !== undefined && this.modifiedBonus !== 0) {
+      joinedRollData = `${joinedRollData}, ${this.modifiedBonus} ${game.i18n.localize("ambersteel.roll.bonusDice")}`;
+    }
 
     return `(${joinedRollData})`;
   }
