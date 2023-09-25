@@ -211,12 +211,36 @@ export default class ViewModel {
   get isGM() { return game.user.isGM; }
   
   /**
-   * If true, show the 'fancy' font. 
+   * An internal override of the `showFancyFont` field. 
+   * 
+   * If undefined, `showFancyFont` will return the global setting, otherwise, 
+   * returns this value. 
+   * 
+   * @type {Boolean | undefined}
+   * @private
+   */
+  _showFancyFont = undefined;
+  /**
+   * If true, use the 'fancy' font. 
    * 
    * @type {Boolean}
    * @readonly
    */
-  get showFancyFont() { return new GetShowFancyFontUseCase().invoke(); };
+  get showFancyFont() {
+    if (this._showFancyFont === undefined) {
+      return new GetShowFancyFontUseCase().invoke();
+    } else {
+      return this._showFancyFont;
+    }
+  };
+  /**
+   * Sets or unsets the `fancy font` override. 
+   * 
+   * @param {Boolean | undefined}
+   */
+  set showFancyFont(value) {
+    this._showFancyFont = value;
+  }
 
   /**
    * Name or path of a contextual template, which will be displayed in exception log entries, to aid debugging. 

@@ -105,9 +105,16 @@ export default class DynamicInputDialogViewModel extends ViewModel {
           isEditable: true,
           placeholder: definition.specificArgs.placeholder,
         });
+      } else if (definition.type === DYNAMIC_INPUT_TYPES.LABEL) {
+        viewModel = new ViewModel({
+          id: definition.name,
+          parent: this,
+        });
       } else {
         throw new Error(`Invalid input type: "${definition.type}"`);
       }
+
+      viewModel.showFancyFont = definition.showFancyFont ?? false
 
       let validationFunc = definition.validationFunc;
       if (validationFunc === undefined && definition.required === true) {

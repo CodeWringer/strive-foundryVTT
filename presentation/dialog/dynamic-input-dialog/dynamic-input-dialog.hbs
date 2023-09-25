@@ -5,11 +5,12 @@ viewModel: {Array<DynamicInputDialogViewModel>}
   {{#each viewModel.controls as |control index|}}
   <div class="flex flex-row sheet-block">
     <div class="flex flex-row flex-grow">
-      {{#> label showFancyFont=viewModel.showFancyFont}}{{control.definition.localizedLabel}}{{/label}}
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{{control.definition.localizedLabel}}}{{/label}}
       {{#if control.definition.required}}
         <span><b>*</b></span>
       {{/if}}
     </div>
+    {{#if (neq control.definition.type "LABEL")}}
     <div class="flex-grow">
       {{#if (eq control.definition.type "DROP_DOWN")}}
         {{> inputDropDown viewModel=control.viewModel}}
@@ -33,6 +34,7 @@ viewModel: {Array<DynamicInputDialogViewModel>}
         {{> inputTextField viewModel=control.viewModel}}
       {{/if}}
     </div>
+    {{/if}}
   </div>
   {{/each}}
   <div id="required-input-warning" class="hint-card error hidden">

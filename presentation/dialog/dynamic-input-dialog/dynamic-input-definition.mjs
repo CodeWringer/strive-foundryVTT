@@ -7,8 +7,9 @@ import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
  * by this name. 
  * @property {String | undefined} localizableLabel Localization key for a companion 
  * label. 
- * @property {String | undefined} localizedLabel Localized label. 
+ * @property {String} localizedLabel Localized text for a companion label. 
  * * Read-only. 
+ * * Returns an empty string if no label text or key was defined. 
  * @property {Object | undefined} specificArgs Arguments specific to the type 
  * of represented input control. 
  * @property {Boolean} required If true, the represented input must have a valid 
@@ -22,10 +23,12 @@ import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
  */
 export default class DynamicInputDefinition {
   get localizedLabel() {
-    if(this.localizableLabel === undefined) {
-      return undefined;
-    } else {
+    if (this._localizedLabel !== undefined) {
+      return this._localizedLabel;
+    } else if(this.localizableLabel !== undefined) {
       return game.i18n.localize(this.localizableLabel);
+    } else {
+      return "";
     }
   }
 
@@ -36,6 +39,9 @@ export default class DynamicInputDefinition {
    * by this name. 
    * @param {String | undefined} args.localizableLabel Localization key for a companion 
    * label. 
+   * @param {String | undefined} args.localizedLabel Localized text for a companion 
+   * label. 
+   * * If set, then this value overrides `localizableLabel`!
    * @param {Object | undefined} args.specificArgs Arguments specific to the type 
    * of represented input control. 
    * @param {Boolean | undefined} args.required If true, the represented input must have a valid 
@@ -47,6 +53,9 @@ export default class DynamicInputDefinition {
    * * Receives the current value of the control as its input and must return a boolean 
    * value. `true` signalizes a successful validation without errors, while `false` 
    * indicates validation failed. 
+   * @param {Boolean | undefined} args.showFancyFont If true, will render labels using the 
+   * fancy font. 
+   * * Default `false`
    */
   constructor(args = {}) {
     validateOrThrow(args, ["type", "name"]);
@@ -54,9 +63,11 @@ export default class DynamicInputDefinition {
     this.type = args.type;
     this.name = args.name;
     this.localizableLabel = args.localizableLabel;
+    this._localizedLabel = args.localizedLabel;
     this.specificArgs = args.specificArgs ?? {};
     this.required = args.required ?? false;
     this.defaultValue = args.defaultValue;
     this.validationFunc = args.validationFunc;
+    this.showFancyFont = args.showFancyFont ?? false;
   }
 }
