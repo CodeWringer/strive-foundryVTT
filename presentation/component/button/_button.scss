@@ -19,20 +19,6 @@
   }
 }
 
-@mixin button-square {
-  width: $line-height;
-  height: $line-height;
-  max-width: $line-height;
-  max-height: $line-height;
-
-  > a.button {
-    padding: 0;
-    margin: 0;
-    width: 100%;
-    height: 100%;
-  }
-}
-
 .button {
   padding: 0;
   margin: 0;
@@ -55,7 +41,7 @@
   }
   
   &.square {
-    @include button-square();
+    aspect-ratio: 1/1;
   }
 
   &.fill {

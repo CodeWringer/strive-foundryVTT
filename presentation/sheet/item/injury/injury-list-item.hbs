@@ -6,7 +6,7 @@ cssClass: {undefined | String}
   {{!-- Row 1 --}}
   <div class="flex flex-row flex-middle list-item-header">
     {{!-- Send to chat --}}
-    {{> buttonSendToChat viewModel=viewModel.vmBtnSendToChat }}
+    {{> buttonSendToChat viewModel=viewModel.vmBtnSendToChat cssClass="" }}
     {{!-- Name --}}
     <span class="width-min-xl">
       {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.health.injury.singular"}}{{/label}}
@@ -22,7 +22,7 @@ cssClass: {undefined | String}
       {{> inputRadioButtonGroup viewModel=viewModel.vmRbgState }}
     </div>
     {{!-- Delete --}}
-    {{> buttonDelete viewModel=viewModel.vmBtnDelete }}
+    {{> buttonDelete viewModel=viewModel.vmBtnDelete cssClass="" }}
   </div>
   {{!-- Row 2 --}}
   <div class="flex flex-row">

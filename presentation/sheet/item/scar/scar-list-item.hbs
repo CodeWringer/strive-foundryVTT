@@ -6,7 +6,7 @@ cssClass: {undefined | String}
   {{!-- Row 1 --}}
   <div class="flex flex-row flex-middle list-item-header">
     {{!-- Send to chat --}}
-    {{> buttonSendToChat viewModel=viewModel.vmBtnSendToChat }}
+    {{> buttonSendToChat viewModel=viewModel.vmBtnSendToChat cssClass="" }}
     {{!-- Name --}}
     <span class="width-min-xl">
       {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.health.scar.singular"}}{{/label}}
@@ -18,7 +18,7 @@ cssClass: {undefined | String}
       {{> inputTextField viewModel=viewModel.vmTfName cssClass="list-item-header" }}
     </div>
     {{!-- Delete --}}
-    {{> buttonDelete viewModel=viewModel.vmBtnDelete }}
+    {{> buttonDelete viewModel=viewModel.vmBtnDelete cssClass="" }}
   </div>
   {{!-- Row 2 --}}
   {{!-- Limit --}}

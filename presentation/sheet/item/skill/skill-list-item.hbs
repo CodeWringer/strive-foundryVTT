@@ -6,9 +6,9 @@ cssClass: {undefined | String}
   {{!-- Row --}}
   <div class="flex flex-row flex-middle list-item-header">
     {{!-- Roll --}}
-    {{> buttonRoll viewModel=viewModel.vmBtnRoll }}
+    {{> buttonRoll viewModel=viewModel.vmBtnRoll cssClass="" }}
     {{!-- Send to chat --}}
-    {{> buttonSendToChat viewModel=viewModel.vmBtnSendToChat }}
+    {{> buttonSendToChat viewModel=viewModel.vmBtnSendToChat cssClass="" }}
     {{!-- Name --}}
     <span class="width-min-xl">
       {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.skill.singular"}}{{/label}}
@@ -20,13 +20,13 @@ cssClass: {undefined | String}
       {{> inputTextField viewModel=viewModel.vmTfName cssClass="list-item-header" }}
     </div>
     {{!-- Configure --}}
-    {{#> button viewModel=viewModel.vmBtnEdit square=true }}
+    {{#> button viewModel=viewModel.vmBtnEdit square=true cssClass="" }}
       <div class="button light square flex flex-center">
         <i class="fas fa-cog"></i>
       </div>
     {{/button}}
     {{!-- Delete --}}
-    {{> buttonDelete viewModel=viewModel.vmBtnDelete }}
+    {{> buttonDelete viewModel=viewModel.vmBtnDelete cssClass="" }}
   </div>
   {{!-- Row --}}
   <div class="flex flex-row margin-b-md">

@@ -7,9 +7,9 @@ cssClass: {undefined | String}
   <div class="flex flex-row">
     <div class="flex flex-grow">
       {{!-- Roll --}}
-      {{> buttonRoll viewModel=viewModel.vmBtnRoll }}
+      {{> buttonRoll viewModel=viewModel.vmBtnRoll cssClass="" }}
       {{!-- Send to chat --}}
-      {{> buttonSendToChat viewModel=viewModel.vmBtnSendToChat }}
+      {{> buttonSendToChat viewModel=viewModel.vmBtnSendToChat cssClass="" }}
       {{!-- Name --}}
       <span class="width-min-xl">
         {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.general.name"}}{{/label}}
@@ -20,9 +20,9 @@ cssClass: {undefined | String}
       </h4>
     </div>
     {{!-- Context Menu --}}
-    {{> buttonContextMenu viewModel=viewModel.vmBtnContextMenu }}
+    {{> buttonContextMenu viewModel=viewModel.vmBtnContextMenu cssClass="" }}
     {{!-- Delete --}}
-    {{> buttonDelete viewModel=viewModel.vmBtnDelete }}
+    {{> buttonDelete viewModel=viewModel.vmBtnDelete cssClass="" }}
   </div>
   {{!-- Row --}}
   {{!-- Description --}}
