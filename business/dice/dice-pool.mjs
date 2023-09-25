@@ -257,8 +257,8 @@ export class DicePoolRollResult {
       combinedResultsForRendering.splice(this.obstacle, 0, obstacleForRendering);
     }
 
-    const diceComposition = this._getJoinedDiceCompositionString(this.dice, this.bonus);
-    const totalNumberOfDice = this._getTotalNumberOfDiceString();
+    const diceComposition = this.getJoinedDiceCompositionString(this.dice, this.bonus);
+    const totalNumberOfDice = this.getTotalNumberOfDiceString();
 
     // Render the results. 
     const renderedContent = await renderTemplate(TEMPLATES.DICE_ROLL_CHAT_MESSAGE, {
@@ -293,7 +293,7 @@ export class DicePoolRollResult {
    * 
    * @returns {String} The joined and comma-separated dice component strings. 
    */
-  _getJoinedDiceCompositionString() {
+  getJoinedDiceCompositionString() {
     let joinedRollData = "";
 
     for (const entry of this.dice) {
@@ -310,7 +310,7 @@ export class DicePoolRollResult {
    * 
    * @returns {String} 
    */
-  _getTotalNumberOfDiceString() {
+  getTotalNumberOfDiceString() {
     if (this.modifier.name === ROLL_DICE_MODIFIER_TYPES.NONE.name) {
       return `${this.unmodifiedTotal}`;
     } else {

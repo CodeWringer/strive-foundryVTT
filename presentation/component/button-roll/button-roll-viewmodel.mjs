@@ -223,13 +223,29 @@ export default class ButtonRollViewModel extends ButtonViewModel {
    * @async
    */
   async _doDicePoolRoll(dialog) {
-    // Input definitions specific to dice pool rolls. 
+    if (this.target.getRollData === undefined) {
+      throw new Error("NullPointerException: 'getRollData()' is undefined");
+    }
 
+    const rollData = this.target.getRollData();
+    const dicePoolForCompositionHint = new DicePool({
+      dice: rollData.components,
+      obstacle: 0,
+    }).roll();
+    const diceComposition = dicePoolForCompositionHint.getJoinedDiceCompositionString();
+    
+    // Input definitions specific to dice pool rolls. 
     const inputObstacle = "inputObstacle";
     const inputBonusDice = "inputBonusDice";
     const inputRollDiceModifier = "inputRollDiceModifier";
 
     dialog.inputDefinitions.splice(0, 0, 
+      new DynamicInputDefinition({
+        type: DYNAMIC_INPUT_TYPES.LABEL,
+        name: "diceCompositionLabel",
+        localizedLabel: `<p>${game.i18n.localize("ambersteel.roll.numberOfDice")}: ${rollData.total}</p><p>${diceComposition}</p>`,
+        showFancyFont: false,
+      }),
       new DynamicInputDefinition({
         type: DYNAMIC_INPUT_TYPES.NUMBER_SPINNER,
         name: inputObstacle,
@@ -264,15 +280,9 @@ export default class ButtonRollViewModel extends ButtonViewModel {
     );
 
     await dialog.renderAndAwait(true);
-
     if (dialog.confirmed !== true) return;
 
-    if (this.target.getRollData === undefined) {
-      throw new Error("NullPointerException: 'getRollData()' is undefined");
-    }
-
     // Do roll. 
-    const rollData = this.target.getRollData();
     const rollResult = new DicePool({
       dice: rollData.components,
       bonus: [new SumComponent("bonus", "ambersteel.roll.bonusDice", parseInt(dialog[inputBonusDice]))],
