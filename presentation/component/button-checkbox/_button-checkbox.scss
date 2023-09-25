@@ -1,3 +1,40 @@
-input.component-button-checkbox {
-  background-color: transparent;
+label.component-button-checkbox {
+  > input[type=checkbox] {
+    display: none;
+  }
+
+  > span {
+    height: 1.2rem;
+    width: 1.2rem;
+    border: 2px solid $c-border-dark;
+    border-radius: 4px;
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+
+    &.checked {
+      background-color: $c-bg-dark;
+      color: $c-black;
+    }
+
+    &:hover {
+      filter: drop-shadow(0 0 4px $c-button-highlight);
+    }
+  }
+
+  &.disabled {
+    > span {
+      background: repeating-linear-gradient(45deg, rgba(0,0,0,0.07), transparent, rgba(0,0,0,0.07) 10px);
+      cursor: unset;
+
+      &.checked {
+        background-color: $c-bg-dark;
+        color: $c-black;
+      }
+
+      &:hover {
+        filter: unset;
+      }
+    }
+  }
 }
