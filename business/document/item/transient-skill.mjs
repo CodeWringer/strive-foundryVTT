@@ -213,10 +213,12 @@ export default class TransientSkill extends TransientBaseItem {
   set advancementProgress(value) {
     this.document.system.successes = value.successes;
     this.document.system.failures = value.failures;
+    this.document.system.exercised = value.exercised;
     this.update({
       system: {
         successes: value.successes,
-        failures: value.failures
+        failures: value.failures,
+        exercised: value.exercised
       }
     });
   }
