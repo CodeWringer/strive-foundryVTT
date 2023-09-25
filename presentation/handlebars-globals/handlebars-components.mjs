@@ -9,6 +9,7 @@ import ButtonToggleIconViewModel from "../component/button-toggle-icon/button-to
 import ButtonToggleVisibilityViewModel from "../component/button-toggle-visibility/button-toggle-visibility-viewmodel.mjs";
 import ButtonToggleViewModel from "../component/button-toggle/button-toggle-viewmodel.mjs";
 import ButtonViewModel from "../component/button/button-viewmodel.mjs";
+import ButtonCheckBoxViewModel from "../component/button-checkbox/button-checkbox-viewmodel.mjs";
 import DamageDefinitionListItemViewModel from "../component/damage-definition-list/damage-definition-list-item-viewmodel.mjs";
 import DamageDefinitionListViewModel from "../component/damage-definition-list/damage-definition-list-viewmodel.mjs";
 import DiceRollListViewModel from "../component/dice-roll-list/dice-roll-list-viewmodel.mjs";
@@ -42,6 +43,7 @@ export function initHandlebarsComponents() {
   ButtonToggleViewModel.registerHandlebarsPartial();
   ButtonToggleIconViewModel.registerHandlebarsPartial();
   ButtonToggleVisibilityViewModel.registerHandlebarsPartial();
+  ButtonCheckBoxViewModel.registerHandlebarsPartial();
   DamageDefinitionListViewModel.registerHandlebarsPartial();
   DamageDefinitionListItemViewModel.registerHandlebarsPartial();
   DiceRollListViewModel.registerHandlebarsPartial();

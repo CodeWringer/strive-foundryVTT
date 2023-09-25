@@ -3,6 +3,7 @@ import { SKILL_HEAD_STATES } from "../../../../business/document/item/transient-
 import { ATTRIBUTES } from "../../../../business/ruleset/attribute/attributes.mjs"
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs"
 import { isDefined } from "../../../../business/util/validation-utility.mjs"
+import ButtonCheckBoxViewModel from "../../../component/button-checkbox/button-checkbox-viewmodel.mjs"
 import ButtonViewModel from "../../../component/button/button-viewmodel.mjs"
 import ChoiceAdapter from "../../../component/input-choice/choice-adapter.mjs"
 import InputPropertiesViewModel from "../../../component/input-properties/input-properties-viewmodel.mjs"
@@ -224,6 +225,13 @@ export default class SkillListItemViewModel extends SkillViewModel {
       propertyOwner: thiz.document,
       propertyPath: "advancementProgress.failures",
       min: 0,
+    });
+    this.vmExercised = new ButtonCheckBoxViewModel({
+      id: "vmExercised",
+      parent: this,
+      isEditable: this.isEditable,
+      target: thiz.document,
+      propertyPath: "advancementProgress.exercised",
     });
     if (this.showSkillAbilities === true) {
       this.vmSkillAbilityTable = new SkillAbilityTableViewModel({

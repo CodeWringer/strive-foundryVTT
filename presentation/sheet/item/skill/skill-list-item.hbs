@@ -29,9 +29,9 @@ cssClass: {undefined | String}
     {{> buttonDelete viewModel=viewModel.vmBtnDelete }}
   </div>
   {{!-- Row --}}
-  <div class="flex flex-row">
+  <div class="flex flex-row margin-b-md">
     {{!-- Level --}}
-    <div class="flex flex-row margin-b-md">
+    <div class="flex flex-row">
       <div class="width-min-lg{{#if (neq viewModel.showLevel true)}} hidden{{/if}}">
         {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.advancement.level"}}{{/label}}
       </div>
@@ -54,7 +54,7 @@ cssClass: {undefined | String}
     {{!-- Spacer --}}
     <div class="flex-grow"></div>
     {{!-- Advancement Requirements --}}
-    <div class="flex flex-row margin-b-md{{#if (neq viewModel.showAdvancedData true)}} hidden{{/if}}">
+    <div class="flex flex-row{{#if (neq viewModel.showAdvancedData true)}} hidden{{/if}}">
       <div class="width-min-xl">
         {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.advancement.requirements.successAndFailure.abbreviation"}}{{/label}}
       </div>
@@ -63,7 +63,7 @@ cssClass: {undefined | String}
       </div>
     </div>
     {{!-- Successes --}}
-    <div class="flex flex-row margin-b-md{{#if (neq viewModel.showAdvancedData true)}} hidden{{/if}}">
+    <div class="flex flex-row{{#if (neq viewModel.showAdvancedData true)}} hidden{{/if}}">
       <div class="width-min-l margin-l-sm">
         {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.advancement.requirements.success.abbreviation"}}{{/label}}
       </div>
@@ -72,12 +72,21 @@ cssClass: {undefined | String}
       </div>
     </div>
     {{!-- Failures --}}
-    <div class="flex flex-row margin-b-md{{#if (neq viewModel.showAdvancedData true)}} hidden{{/if}}">
+    <div class="flex flex-row{{#if (neq viewModel.showAdvancedData true)}} hidden{{/if}}">
       <div class="width-min-l margin-l-sm">
         {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.advancement.requirements.failure.abbreviation"}}{{/label}}
       </div>
       <div class="width-md">
         {{> inputNumberSpinner viewModel=viewModel.vmNsFailures }}
+      </div>
+    </div>
+    {{!-- Exercised --}}
+    <div class="flex flex-row margin-l-lg{{#if (neq viewModel.showAdvancedData true)}} hidden{{/if}}">
+      <div class="flex flex-center font-size-lg">
+        <i class="fas fa-dumbbell"></i>
+      </div>
+      <div class="flex flex-center width-sm">
+        {{> buttonCheckbox viewModel=viewModel.vmExercised }}
       </div>
     </div>
   </div>

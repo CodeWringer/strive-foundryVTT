@@ -43,61 +43,72 @@
             "agility": {
               "level": 1,
               "levelModifier": 0,
-              "progress": 0
+              "progress": 0,
+              "exercised": false
             },
             "endurance": {
               "level": 1,
               "levelModifier": 0,
-              "progress": 0
+              "progress": 0,
+              "exercised": false
             },
             "perception": {
               "level": 1,
               "levelModifier": 0,
-              "progress": 0
+              "progress": 0,
+              "exercised": false
             },
             "strength": {
               "level": 1,
               "levelModifier": 0,
-              "progress": 0
+              "progress": 0,
+              "exercised": false
             },
             "toughness": {
               "level": 1,
               "levelModifier": 0,
-              "progress": 0
+              "progress": 0,
+              "exercised": false
             }
           },
           "mental": {
             "intelligence": {
               "level": 1,
               "levelModifier": 0,
-              "progress": 0
+              "progress": 0,
+              "exercised": false
             },
             "wisdom": {
               "level": 1,
               "levelModifier": 0,
-              "progress": 0
+              "progress": 0,
+              "exercised": false
             },
             "arcana": {
               "level": 0,
               "levelModifier": 0,
-              "progress": 0
+              "progress": 0,
+              "exercised": false
             }
           },
           "social": {
             "empathy": {
               "level": 1,
               "levelModifier": 0,
-              "progress": 0
+              "progress": 0,
+              "exercised": false
             },
             "oratory": {
               "level": 1,
               "levelModifier": 0,
-              "progress": 0
+              "progress": 0,
+              "exercised": false
             },
             "willpower": {
               "level": 1,
               "levelModifier": 0,
-              "progress": 0
+              "progress": 0,
+              "exercised": false
             }
           }
         },
@@ -222,7 +233,8 @@
       "abilities": {},
       "category": "",
       "headState": "full",
-      "prerequisites": []
+      "prerequisites": [],
+      "exercised": false
     },
     "fate-card": {
       "templates": ["base"],
