@@ -62,3 +62,11 @@
     display: block;
   }
 }
+
+button.button.spaced {
+  margin-right: $padding-md;
+
+  &:last-child {
+    margin-right: unset;
+  }
+}
