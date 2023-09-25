@@ -69,7 +69,9 @@ export default class AttributeTableViewModel extends ViewModel {
       localizableTitle: "ambersteel.character.advancement.exercised.reset",
       onClick: () => {
         thiz.attributes.forEach(attribute => {
-          attribute.exercised = false;
+          if (attribute.exercised !== false) {
+            attribute.exercised = false;
+          }
         });
       }
     });

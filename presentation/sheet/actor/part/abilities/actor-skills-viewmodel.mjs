@@ -105,7 +105,9 @@ export default class ActorSkillsViewModel extends ViewModel {
       localizableTitle: "ambersteel.character.advancement.exercised.reset",
       onClick: () => {
         thiz.document.skills.learning.forEach(skill => {
-          skill.advancementProgress.exercised = false;
+          if (skill.advancementProgress.exercised !== false) {
+            skill.advancementProgress.exercised = false;
+          }
         });
       }
     });
@@ -116,7 +118,9 @@ export default class ActorSkillsViewModel extends ViewModel {
       localizableTitle: "ambersteel.character.advancement.exercised.reset",
       onClick: () => {
         thiz.document.skills.known.forEach(skill => {
-          skill.advancementProgress.exercised = false;
+          if (skill.advancementProgress.exercised !== false) {
+            skill.advancementProgress.exercised = false;
+          }
         });
       }
     });
