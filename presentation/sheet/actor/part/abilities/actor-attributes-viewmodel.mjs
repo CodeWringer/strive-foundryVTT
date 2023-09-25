@@ -2,6 +2,7 @@ import { validateOrThrow } from "../../../../../business/util/validation-utility
 import { TEMPLATES } from "../../../../templatePreloader.mjs";
 import ViewModel from "../../../../view-model/view-model.mjs";
 import AttributeTableViewModel from "./actor-attribute-table-viewmodel.mjs";
+import ButtonViewModel from "../../../../component/button/button-viewmodel.mjs";
 
 export default class ActorAttributesViewModel extends ViewModel {
   /** @override */
@@ -39,6 +40,20 @@ export default class ActorAttributesViewModel extends ViewModel {
 
     // Child view models. 
     const thiz = this;
+
+    this.vmBtnResetExercised = new ButtonViewModel({
+      id: "vmBtnResetExercised",
+      parent: this,
+      isEditable: this.isEditable,
+      localizableTitle: "ambersteel.character.advancement.exercised.reset",
+      onClick: () => {
+        thiz.document.attributes.forEach(attribute => {
+          if (attribute.exercised !== false) {
+            attribute.exercised = false;
+          }
+        });
+      }
+    });
 
     const physicalAttributes = this.document.attributeGroups.find(it => it.name === "physical");
     this.attributesPhysicalViewModel = new AttributeTableViewModel({

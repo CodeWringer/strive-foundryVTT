@@ -26,11 +26,9 @@ cssClass: {undefined | String}
         {{localize "ambersteel.character.advancement.requirements.progress.abbreviation"}}
       </th>
       <th class="attribute-column-requirements">
-        {{#> button viewModel=viewModel.vmBtnResetExercised}}
-          <div class="button light square flex flex-center">
-            <i class="fas fa-dumbbell"></i>
-          </div>
-        {{/button}}
+        <div class="flex flex-center font-size-lg">
+          <i class="fas fa-dumbbell"></i>
+        </div>
       </th>
     </tr>
     {{#each viewModel.attributeViewModels as |vm index|}}

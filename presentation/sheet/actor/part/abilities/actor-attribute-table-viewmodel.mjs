@@ -1,6 +1,5 @@
 import { validateOrThrow } from "../../../../../business/util/validation-utility.mjs";
 import ButtonCheckBoxViewModel from "../../../../component/button-checkbox/button-checkbox-viewmodel.mjs";
-import ButtonViewModel from "../../../../component/button/button-viewmodel.mjs";
 import { TEMPLATES } from "../../../../templatePreloader.mjs";
 import ViewModelFactory from "../../../../view-model/view-model-factory.mjs";
 import ViewModel from "../../../../view-model/view-model.mjs";
@@ -61,20 +60,6 @@ export default class AttributeTableViewModel extends ViewModel {
     
     const thiz = this;
     const factory = new ViewModelFactory();
-
-    this.vmBtnResetExercised = new ButtonViewModel({
-      id: "vmBtnResetExercised",
-      parent: this,
-      isEditable: this.isEditable,
-      localizableTitle: "ambersteel.character.advancement.exercised.reset",
-      onClick: () => {
-        thiz.attributes.forEach(attribute => {
-          if (attribute.exercised !== false) {
-            attribute.exercised = false;
-          }
-        });
-      }
-    });
 
     for (const attribute of this.attributes) {
       thiz.attributeViewModels.push({

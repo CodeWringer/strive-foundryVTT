@@ -3,7 +3,12 @@ viewModel: {ActorAttributesViewModel}
 cssClass: {undefined | String}
 --}}
 <section class="{{cssClass}}">
-  {{#> header1 showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.attribute.plural"}}{{/header1}}
+  {{#> header1 showFancyFont=viewModel.showFancyFont cssClass="flex flex-row"}}
+    <span class="flex-grow">{{localize "ambersteel.character.attribute.plural"}}</span>
+    {{#> button viewModel=viewModel.vmBtnResetExercised cssClass="flex flex-center"}}
+      <i class="fas fa-dumbbell"></i>
+    {{/button}}
+  {{/header1}}
   {{#with viewModel.attributeTableTemplate as | template |}}
     {{> (template) viewModel=../viewModel.attributesPhysicalViewModel }}
     {{> (template) viewModel=../viewModel.attributesMentalViewModel }}
