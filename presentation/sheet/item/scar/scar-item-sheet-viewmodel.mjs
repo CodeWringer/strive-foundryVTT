@@ -49,12 +49,11 @@ export default class ScarItemSheetViewModel extends ViewModel {
       target: thiz.document,
       isEditable: thiz.isEditable || thiz.isGM,
     });
-    this.vmNsLimit = factory.createVmNumberSpinner({
+    this.vmLimit = factory.createVmTextField({
       parent: thiz,
-      id: "vmNsLimit",
+      id: "vmLimit",
       propertyOwner: thiz.document,
       propertyPath: "limit",
-      min: 0,
     });
     this.vmRtDescription = factory.createVmRichText({
       parent: thiz,

@@ -50,18 +50,24 @@ export default class InjuryItemSheetViewModel extends ViewModel {
       target: thiz.document,
       isEditable: thiz.isEditable || thiz.isGM,
     });
-    this.vmNsLimit = factory.createVmNumberSpinner({
+    this.vmLimit = factory.createVmTextField({
       parent: thiz,
-      id: "vmNsLimit",
+      id: "vmLimit",
       propertyOwner: thiz.document,
       propertyPath: "limit",
-      min: 0,
+      placeholder: "ambersteel.character.health.injury.limit.placeholder",
     });
     this.vmTfTimeToHeal = factory.createVmTextField({
       parent: thiz,
       id: "vmTfTimeToHeal",
       propertyOwner: thiz.document,
       propertyPath: "timeToHeal",
+    });
+    this.vmScar = factory.createVmTextField({
+      parent: thiz,
+      id: "vmScar",
+      propertyOwner: thiz.document,
+      propertyPath: "scar",
     });
     this.vmRtDescription = factory.createVmRichText({
       parent: thiz,

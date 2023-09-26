@@ -409,7 +409,10 @@
             "label": "Delete Injury",
             "query": "Confirm Deletion of Injury"
           },
-          "limit": "Limit",
+          "limit": {
+            "label": "Limit",
+            "placeholder": "Arm Count / 2 / None (/)"
+          },
           "maximum": "Max. Injuries",
           "plural": "Injuries",
           "singular": "Injury",

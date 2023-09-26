@@ -255,7 +255,8 @@
       "templates": ["base"],
       "state": "active",
       "timeToHeal": "",
-      "limit": 0
+      "limit": "",
+      "scar": ""
     },
     "illness": {
       "templates": ["base"],
@@ -269,7 +270,7 @@
     },
     "scar": {
       "templates": ["base"],
-      "limit": 0
+      "limit": ""
     }
   }
 }

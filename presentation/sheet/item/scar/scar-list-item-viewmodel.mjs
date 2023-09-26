@@ -62,12 +62,11 @@ export default class ScarListItemViewModel extends ViewModel {
       propertyOwner: thiz.document,
       propertyPath: "description",
     });
-    this.vmNsLimit = factory.createVmNumberSpinner({
+    this.vmLimit = factory.createVmTextField({
       parent: thiz,
-      id: "vmNsLimit",
+      id: "vmLimit",
       propertyOwner: thiz.document,
       propertyPath: "limit",
-      min: 0,
     });
   }
 

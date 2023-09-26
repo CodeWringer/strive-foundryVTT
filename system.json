@@ -50,9 +50,51 @@
       "type": "Item"
     },
     {
-      "name": "injuries",
-      "label": "Injuries",
-      "path": "packs/injuries.db",
+      "name": "injuries-acid",
+      "label": "Injuries (Acid)",
+      "path": "packs/injuries-acid.db",
+      "type": "Item"
+    },
+    {
+      "name": "injuries-burning",
+      "label": "Injuries (Burning)",
+      "path": "packs/injuries-burning.db",
+      "type": "Item"
+    },
+    {
+      "name": "injuries-crushing",
+      "label": "Injuries (Crushing)",
+      "path": "packs/injuries-crushing.db",
+      "type": "Item"
+    },
+    {
+      "name": "injuries-electrical",
+      "label": "Injuries (Electrical)",
+      "path": "packs/injuries-electrical.db",
+      "type": "Item"
+    },
+    {
+      "name": "injuries-freezing",
+      "label": "Injuries (Freezing)",
+      "path": "packs/injuries-freezing.db",
+      "type": "Item"
+    },
+    {
+      "name": "injuries-piercing",
+      "label": "Injuries (Piercing)",
+      "path": "packs/injuries-piercing.db",
+      "type": "Item"
+    },
+    {
+      "name": "injuries-poison",
+      "label": "Injuries (Poison)",
+      "path": "packs/injuries-poison.db",
+      "type": "Item"
+    },
+    {
+      "name": "injuries-slashing",
+      "label": "Injuries (Slashing)",
+      "path": "packs/injuries-slashing.db",
       "type": "Item"
     },
     {

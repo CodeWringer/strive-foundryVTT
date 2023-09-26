@@ -19,10 +19,10 @@ cssClass: {undefined | String}
   {{!-- Limit --}}
   <div class="sheet-block grid-3col grid-gap-md margin-b-md">
     <div class="flex flex-middle flex-right">
-      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.health.injury.limit"}}{{/label}}
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.health.injury.limit.label"}}{{/label}}
     </div>
     <div class="grid-span-2">
-      {{> inputNumberSpinner viewModel=viewModel.vmNsLimit }}
+      {{> inputTextField viewModel=viewModel.vmLimit }}
     </div>
   </div>
   {{!-- Description --}}

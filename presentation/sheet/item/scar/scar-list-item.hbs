@@ -22,12 +22,12 @@ cssClass: {undefined | String}
   </div>
   {{!-- Row 2 --}}
   {{!-- Limit --}}
-  <div class="flex flex-row">
+  <div class="flex flex-row flex-grow">
     <div class="width-min-xl">
-      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.health.injury.limit"}}{{/label}}
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.health.injury.limit.label"}}{{/label}}
     </div>
-    <div class="width-md">
-      {{> inputNumberSpinner viewModel=viewModel.vmNsLimit }}
+    <div class="width-md flex-grow">
+      {{> inputTextField viewModel=viewModel.vmLimit }}
     </div>
   </div>
   {{!-- Row 3 --}}
