@@ -24,10 +24,10 @@ export default class RollFormulaResolver {
    * visibility mode and the dialog used for user interaction. 
    * 
    * @param {Array<Object>} formulaContainers Object instances containing rollable formulae. 
-   * * These object **must** expose a function named `resolveFormula`, which returns a `String`, 
+   * * These objects **must** expose a function named `resolveFormula`, which returns a `String`, 
    * which represents a roll formula. E. g. `"5D5 + 2"` or e. g. `"@SI + 5D3"`. The user will be 
    * prompted to enter a value for any reference that this method doesn't resolve. 
-   * * These object *should* expose a property named `localizedLabel`, which returns a `String`,
+   * * These objects *should* expose a property named `localizedLabel`, which returns a `String`,
    * which represents the localized label of the roll total. 
    * 
    * @returns {Object} Contains the evaluated and resolved rolls, as well as the picked visibility 
