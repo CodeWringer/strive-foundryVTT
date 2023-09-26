@@ -242,11 +242,13 @@ export default class RollFormulaResolver {
       const unresolvedReferencesOfFormula = formula.formula.match(REGEX_PATTERN_PROPERTY_PATHS);
       if (unresolvedReferencesOfFormula !== undefined && unresolvedReferencesOfFormula !== null) {
         // There are unresolved references. 
+        
         unresolvedReferencesOfFormula.forEach(unresolvedReferenceOfFormula => {
           const lowerCaseUnresolvedReference = unresolvedReferenceOfFormula.toLowerCase();
-          if (unresolvedReferences.find(it => it == lowerCaseUnresolvedReference) === undefined) {
+          const referenceWithoutAt = lowerCaseUnresolvedReference.substring(1);
+
+          if (unresolvedReferences.find(it => it == referenceWithoutAt) === undefined) {
             // Include the same unresolved reference only once. 
-            const referenceWithoutAt = lowerCaseUnresolvedReference.substring(1);
             unresolvedReferences.push(referenceWithoutAt);
           }
         });
