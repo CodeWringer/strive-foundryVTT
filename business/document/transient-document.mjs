@@ -457,10 +457,10 @@ export default class TransientDocument {
       
       const match = this._resolveReference(lowercaseReference, comparableReference, propertyPath);
       if (match === undefined) {
-        // In case no match was found, a 0 is returned. 
-        // This is done to ensure the damage roll can still technically function 
-        // without throwing an error. 
-        result.set(lowercaseReference, 0);
+        // In case no match was found, undefined is returned. 
+        // The caller will have to come up with a mechanism to 
+        // handle such cases. 
+        result.set(lowercaseReference, undefined);
       } else {
         result.set(lowercaseReference, match);
       }
