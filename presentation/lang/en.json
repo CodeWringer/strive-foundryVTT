@@ -351,11 +351,11 @@
           "fatePoints": {
             "minor": {
               "label": "Minor Fate Points",
-              "abbreviation": "miFP"
+              "abbreviation": "MiFP"
             },
             "major": {
               "label": "Major Fate Points",
-              "abbreviation": "maFP"
+              "abbreviation": "MaFP"
             },
             "ambition": {
               "label": "Ambition Fate Points",
