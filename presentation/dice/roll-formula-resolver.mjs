@@ -154,8 +154,16 @@ export default class RollFormulaResolver {
   _resolveReferences(formula, userResolvedReferences) {
     let resolvedFormula = formula;
     for (const [key, value] of userResolvedReferences) {
-      const regExpReplace = new RegExp(`@${key}`, "gi");
-      resolvedFormula = resolvedFormula.replace(regExpReplace, value);
+      // First round of replacements - this ensures dice formulae are nice and flush, 
+      // as otherwise FoundryVTT's dice roller complains. What that means is that 
+      // instead of '@SI D4', FoundryVTT requires e. g. '3D4'. White-space between 
+      // the number of dice and the 'D' cause an error. 
+      resolvedFormula = resolvedFormula.replace(new RegExp(`@${key}\\s*(?=[dD][0-9]+)`, "gi"), value);
+      
+      // Second round of replacements - this time, the replacement is simple. Assuming 
+      // that all 'XDY' statements have been handled, now any other statements, e. g. 
+      // '@SI + 3' can be handled. 
+      resolvedFormula = resolvedFormula.replace(new RegExp(`@${key}`, "gi"), value);
     }
     return resolvedFormula;
   }
