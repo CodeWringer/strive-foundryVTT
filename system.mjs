@@ -1,3 +1,6 @@
+// Root Globals
+import { SYSTEM_ID } from "./system-id.mjs";
+import { WorldSystemVersion } from "./business/migration/world-system-version.mjs";
 // Handlebars
 import { TEMPLATES, preloadHandlebarsTemplates } from "./presentation/templatePreloader.mjs";
 import { initHandlebarsHelpers, initHandlebarsPartials } from "./presentation/handlebars-globals/handlebars-globals.mjs";
@@ -85,7 +88,6 @@ import './presentation/sheet/actor/part/health/actor-health-viewmodel.mjs';
 import './presentation/sheet/actor/part/actor-personals-viewmodel.mjs';
 // View model factory
 import './presentation/view-model/view-model-factory.mjs';
-import { SYSTEM_ID } from "./system-id.mjs";
 
 /* -------------------------------------------- */
 /*  Initialization                              */
@@ -208,6 +210,8 @@ Hooks.once("ready", function() {
     }
   } else {
     game.ambersteel.logger.logVerbose("Version up to date - skipping migrations");
+    // Ensure the current system version is saved. 
+    WorldSystemVersion.set(migrator.finalMigrationVersion);
   }
 });
 
