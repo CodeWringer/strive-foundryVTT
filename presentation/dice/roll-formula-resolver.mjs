@@ -216,9 +216,6 @@ export default class RollFormulaResolver {
         localizableLabel: unresolvedReference,
         required: true,
         defaultValue: "",
-        specificArgs: {
-          placeholder: "ambersteel.damageDefinition.infoPlainFormulae"
-        }
       }));
     }
 
