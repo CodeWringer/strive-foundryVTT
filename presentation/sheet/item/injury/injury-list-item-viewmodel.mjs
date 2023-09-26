@@ -87,12 +87,18 @@ export default class InjuryListItemViewModel extends ViewModel {
       target: thiz.document,
       withDialog: true,
     })
-    this.vmNsLimit = factory.createVmNumberSpinner({
+    this.vmLimit = factory.createVmTextField({
       parent: thiz,
       id: "vmNsLimit",
       propertyOwner: thiz.document,
       propertyPath: "limit",
-      min: 0,
+      placeholder: "ambersteel.character.health.injury.limit.placeholder",
+    });
+    this.vmScar = factory.createVmTextField({
+      parent: thiz,
+      id: "vmScar",
+      propertyOwner: thiz.document,
+      propertyPath: "scar",
     });
     this.vmTfTimeToHeal = factory.createVmTextField({
       parent: thiz,

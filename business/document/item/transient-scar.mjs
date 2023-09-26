@@ -21,11 +21,14 @@ export default class TransientScar extends TransientBaseItem {
   get chatMessageTemplate() { return TEMPLATES.SCAR_CHAT_MESSAGE; }
 
   /**
-   * @type {Number}
+   * @type {String}
    */
   get limit() {
-    return parseInt(this.document.system.limit);
+    return this.document.system.limit;
   }
+  /**
+   * @param {String} value
+   */
   set limit(value) {
     this.document.system.limit = value;
     this.updateByPath("system.limit", value);

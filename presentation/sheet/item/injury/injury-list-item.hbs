@@ -27,23 +27,33 @@ cssClass: {undefined | String}
   {{!-- Row 2 --}}
   <div class="flex flex-row">
     {{!-- Limit --}}
-    <div class="flex flex-row">
-      <span class="width-min-xl">
-        {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.health.injury.limit"}}{{/label}}
+    <div class="flex flex-row flex-grow">
+      <span>
+        {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.health.injury.limit.label"}}{{/label}}
       </span>
-      <span class="width-md">
-        {{> inputNumberSpinner viewModel=viewModel.vmNsLimit }}
+      <span class="width-md flex-grow">
+        {{> inputTextField viewModel=viewModel.vmLimit }}
       </span>
     </div>
     {{!-- Spacer --}}
-    <div class="width-xs"></div>
+    <div class="margin-r-lg"></div>
     {{!-- Time to heal --}}
     <div class="flex flex-row flex-grow">
-      <span class="width-min-xl">
+      <span>
         {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.health.timeToHeal"}}{{/label}}
       </span>
       <span class="width-min-xl flex-grow">
         {{> inputTextField viewModel=viewModel.vmTfTimeToHeal }}
+      </span>
+    </div>
+    {{!-- Spacer --}}
+    <div class="margin-r-lg"></div>
+    <div class="flex flex-row flex-grow">
+      <span>
+        {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.health.scar.singular"}}{{/label}}
+      </span>
+      <span class="width-md flex-grow">
+        {{> inputTextField viewModel=viewModel.vmScar }}
       </span>
     </div>
   </div>

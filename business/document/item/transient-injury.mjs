@@ -13,7 +13,8 @@ import { createUUID } from "../../util/uuid-utility.mjs";
  * 
  * @property {String} state
  * @property {String} timeToHeal
- * @property {Number} limit
+ * @property {String} limit 
+ * @property {String} scar 
  */
 export default class TransientInjury extends TransientBaseItem {
   /** @override */
@@ -45,14 +46,31 @@ export default class TransientInjury extends TransientBaseItem {
   }
   
   /**
-   * @type {Number}
+   * @type {String}
    */
   get limit() {
-    return parseInt(this.document.system.limit);
+    return this.document.system.limit;
   }
+  /**
+   * @param {String} value
+   */
   set limit(value) {
     this.document.system.limit = value;
     this.updateByPath("system.limit", value);
+  }
+  
+  /**
+   * @type {String}
+   */
+  get scar() {
+    return this.document.system.scar;
+  }
+  /**
+   * @param {String} value
+   */
+  set scar(value) {
+    this.document.system.scar = value;
+    this.updateByPath("system.scar", value);
   }
   
   /** @override */

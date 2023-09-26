@@ -38,7 +38,7 @@ export default class ScarChatMessageViewModel extends ViewModel {
   allowPickupBy = [];
 
   /**
-   * @type {Number}
+   * @type {String}
    * @readonly
    */
   get limit() { return this.document.limit; }
