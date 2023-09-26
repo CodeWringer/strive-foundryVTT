@@ -88,11 +88,14 @@ export default class DamageDefinitionListViewModel extends ViewModel {
 
           if (resolvedReferences !== undefined) {
             for (const [key, value] of resolvedReferences) {
+              // Skip unresolvable values. These are returned as-is. 
+              if (value === undefined) continue;
+
               // This replaces every reference of the current type, e. g. `"@strength"` with the 
               // current level or value of the thing, if possible. 
               // If a value cannot be determined, it will default to "0". 
               const regExpReplace = new RegExp(key, "gi");
-              const replaceValue = (value.level ?? value.value) ?? (isNumber(value) === true ? value : "0");
+              const replaceValue = ((value.modifiedLevel ?? value.level) ?? value.value) ?? (isNumber(value) === true ? value : "0");
               resolvedDamage = resolvedDamage.replace(regExpReplace, replaceValue);
             }
           }

@@ -1,8 +1,7 @@
 import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import { SOUNDS_CONSTANTS } from "../../audio/sounds.mjs";
 import * as ChatUtil from "../../chat/chat-utility.mjs";
-import { VISIBILITY_MODES } from "../../chat/visibility-modes.mjs";
-import VisibilitySingleChoiceDialog from "../../dialog/visibility-single-choice-dialog/visibility-single-choice-dialog.mjs";
+import RollFormulaResolver from "../../dice/roll-formula-resolver.mjs";
 import { TEMPLATES } from "../../templatePreloader.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
@@ -22,13 +21,13 @@ import ButtonViewModel from "../button/button-viewmodel.mjs";
  */
 export default class DiceRollListViewModel extends ViewModel {
   static get TEMPLATE() { return TEMPLATES.DICE_ROLL_LIST; }
-  
+
   /**
    * Registers the Handlebars partial for this component. 
    * 
    * @static
   */
- static registerHandlebarsPartial() {
+  static registerHandlebarsPartial() {
     Handlebars.registerPartial('diceRollList', `{{> "${DiceRollListViewModel.TEMPLATE}"}}`);
   }
 
@@ -36,7 +35,7 @@ export default class DiceRollListViewModel extends ViewModel {
    * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
    * @param {Array<ViewModel>} args.formulaViewModels View model instances of formula list items. 
    * * These view models **must** expose a function named `resolveFormula`, which returns a `String`, 
-   * which represents a fully resolved and rollable formula. E. g. `"5D5 + 2"`. 
+   * which represents a roll formula. E. g. `"5D5 + 2"` or e. g. `"@SI + 5D3"`. 
    * * These view models *should* expose a property named `localizedLabel`, which returns a `String`,
    * which represents the localized label of the roll total. 
    * @param {String} args.formulaListItemTemplate Template of the formula list item. 
@@ -53,64 +52,29 @@ export default class DiceRollListViewModel extends ViewModel {
     this.chatTitle = args.chatTitle;
 
     const thiz = this;
-    
+
     this.vmBtnRoll = new ButtonViewModel({
       id: "vmBtnRoll",
       parent: thiz,
       isEditable: thiz.isEditable,
       localizableTitle: "ambersteel.roll.doRoll",
       onClick: async (html, isOwner, isEditable) => {
-        const dialog = await new VisibilitySingleChoiceDialog().renderAndAwait(true);
-        if (dialog.confirmed !== true) return;
+        const evaluatedFormulae = await new RollFormulaResolver().evaluateFormulae(thiz.formulaViewModels);
 
-        const rolls = [];
-        for (const viewModel of thiz.formulaViewModels) {
-          const resolvedFormula = viewModel.resolveFormula();
-          const formulaRollResult = new Roll(resolvedFormula);
-          await formulaRollResult.evaluate({ async: true });
-
-          // Get an array of each dice term. 
-          const diceResults = [];
-          for (const term of formulaRollResult.terms) {
-            if (term.values !== undefined) {
-              for (const value of term.values) {
-                diceResults.push({
-                  value: value,
-                  isDiceResult: true,
-                });
-              }
-            } else {
-              diceResults.push({
-                value: term.total,
-                isDiceResult: false,
-              });
-            }
-          }
-
-          const obj = {
-            formula: resolvedFormula,
-            rollTotal: formulaRollResult.total,
-            diceResults: diceResults,
-            localizedLabel: viewModel.localizedLabel,
-          };
-          rolls.push(obj);
-        }
+        if (evaluatedFormulae === undefined) return; // User canceled. 
 
         // Render the results. 
         const renderedContent = await renderTemplate(thiz.chatMessageTemplate, {
           title: thiz.chatTitle,
-          rolls: rolls,
+          rolls: evaluatedFormulae.rolls,
         });
-
-        const visibilityModeChoice = dialog.visibilityMode;
-        const visibilityMode = VISIBILITY_MODES.asArray.find(it => it.name === visibilityModeChoice.value);
 
         return ChatUtil.sendToChat({
           renderedContent: renderedContent,
           sound: SOUNDS_CONSTANTS.DICE_ROLL,
-          visibilityMode: visibilityMode,
+          visibilityMode: evaluatedFormulae.visibilityMode,
         });
-      },
+      }
     });
   }
 }
