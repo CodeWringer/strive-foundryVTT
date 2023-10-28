@@ -25,11 +25,6 @@ cssClass: {undefined | String}
       <th class="attribute-column-progress">
         {{localize "ambersteel.character.advancement.requirements.progress.abbreviation"}}
       </th>
-      <th class="attribute-column-requirements">
-        <div class="flex flex-center font-size-lg">
-          <i class="fas fa-dumbbell"></i>
-        </div>
-      </th>
     </tr>
     {{#each viewModel.attributeViewModels as |vm index|}}
     <tr class="item attribute-item" data-att-group-name="{{../viewModel.attributeGroupName}}"
@@ -58,9 +53,6 @@ cssClass: {undefined | String}
       </td>
       <td class="attribute-column-progress">
         {{> inputNumberSpinner viewModel=vm.vmNsProgress }}
-      </td>
-      <td class="attribute-column-requirements">
-        {{> buttonCheckbox viewModel=vm.vmExercised }}
       </td>
     </tr>
     {{/each}}

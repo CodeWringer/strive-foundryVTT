@@ -197,32 +197,15 @@ export default class TransientSkill extends TransientBaseItem {
         thiz.document.system.failures = value;
         thiz.updateByPath("system.failures", value);
       },
-      /**
-       * Returns true, if the skill has been exercised. 
-       * 
-       * @type {Boolean}
-       */
-      get exercised() { return thiz.document.system.exercised === true; },
-      /**
-       * Sets whether the skill has been exercised. 
-       * 
-       * @param {Boolean} value
-       */
-      set exercised(value) {
-        thiz.document.system.exercised = value;
-        thiz.updateByPath("system.exercised", value);
-      },
     };
   }
   set advancementProgress(value) {
     this.document.system.successes = value.successes;
     this.document.system.failures = value.failures;
-    this.document.system.exercised = value.exercised;
     this.update({
       system: {
         successes: value.successes,
         failures: value.failures,
-        exercised: value.exercised
       }
     });
   }

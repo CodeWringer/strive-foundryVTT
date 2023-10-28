@@ -98,13 +98,6 @@ export default class AttributeTableViewModel extends ViewModel {
           propertyPath: "advancementProgress",
           min: 0,
         }),
-        vmExercised: new ButtonCheckBoxViewModel({
-          id: `vmExercised-${attribute.name}`,
-          parent: this,
-          isEditable: this.isEditable,
-          target: attribute,
-          propertyPath: "exercised",
-        }),
       });
     }
   }
