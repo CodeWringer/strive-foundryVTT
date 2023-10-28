@@ -97,33 +97,6 @@ export default class ActorSkillsViewModel extends ViewModel {
         localizableDialogTitle: "ambersteel.character.skill.known.add.query",
       }),
     });
-
-    this.vmBtnResetExercisedLearningSkills = new ButtonViewModel({
-      id: "vmBtnResetExercisedLearningSkills",
-      parent: this,
-      isEditable: this.isEditable,
-      localizableTitle: "ambersteel.character.advancement.exercised.reset",
-      onClick: () => {
-        thiz.document.skills.learning.forEach(skill => {
-          if (skill.advancementProgress.exercised !== false) {
-            skill.advancementProgress.exercised = false;
-          }
-        });
-      }
-    });
-    this.vmBtnResetExercisedKnownSkills = new ButtonViewModel({
-      id: "vmBtnResetExercisedKnownSkills",
-      parent: this,
-      isEditable: this.isEditable,
-      localizableTitle: "ambersteel.character.advancement.exercised.reset",
-      onClick: () => {
-        thiz.document.skills.known.forEach(skill => {
-          if (skill.advancementProgress.exercised !== false) {
-            skill.advancementProgress.exercised = false;
-          }
-        });
-      }
-    });
   }
 
   /**

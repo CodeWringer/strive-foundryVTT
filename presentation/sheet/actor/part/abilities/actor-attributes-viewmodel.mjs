@@ -41,20 +41,6 @@ export default class ActorAttributesViewModel extends ViewModel {
     // Child view models. 
     const thiz = this;
 
-    this.vmBtnResetExercised = new ButtonViewModel({
-      id: "vmBtnResetExercised",
-      parent: this,
-      isEditable: this.isEditable,
-      localizableTitle: "ambersteel.character.advancement.exercised.reset",
-      onClick: () => {
-        thiz.document.attributes.forEach(attribute => {
-          if (attribute.exercised !== false) {
-            attribute.exercised = false;
-          }
-        });
-      }
-    });
-
     const physicalAttributes = this.document.attributeGroups.find(it => it.name === "physical");
     this.attributesPhysicalViewModel = new AttributeTableViewModel({
       ...args, 

@@ -236,13 +236,6 @@ export default class SkillListItemViewModel extends SkillViewModel {
       propertyPath: "advancementProgress.failures",
       min: 0,
     });
-    this.vmExercised = new ButtonCheckBoxViewModel({
-      id: "vmExercised",
-      parent: this,
-      isEditable: this.isEditable,
-      target: thiz.document,
-      propertyPath: "advancementProgress.exercised",
-    });
     if (this.showSkillAbilities === true) {
       this.vmSkillAbilityTable = new SkillAbilityTableViewModel({
         id: "vmSkillAbilityTable",

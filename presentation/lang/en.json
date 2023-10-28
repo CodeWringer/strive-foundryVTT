@@ -107,10 +107,6 @@
         "levelMod": "Level Modifier",
         "levelModAbbreviation": "Mod.",
         "minimum": "Minimum Level",
-        "exercised": {
-          "label": "Exercised",
-          "reset": "Reset exercised state"
-        },
         "requirements": {
           "label": "Required",
           "abbreviation": "Req.",
