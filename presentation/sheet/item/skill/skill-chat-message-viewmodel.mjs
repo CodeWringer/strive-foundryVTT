@@ -58,7 +58,7 @@ export default class SkillChatMessageViewModel extends ViewModel {
    * @type {Boolean}
    * @readonly
    */
-  get isHeadless() { return this.document.headState.name !== SKILL_HEAD_STATES.full.name; }
+  get isHeadless() { return this.document.headState.name !== SKILL_HEAD_STATES.FULL.name; }
 
   /**
    * Returns true, if the list of prerequisites should be rendered. 

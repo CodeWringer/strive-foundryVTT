@@ -59,15 +59,19 @@ export class SkillHeadState {
  * @constant
  */
 export const SKILL_HEAD_STATES = {
-  full: new SkillHeadState({
+  FULL: new SkillHeadState({
     name: "full",
     localizableName: "ambersteel.character.skill.headStates.full",
   }),
-  level_only: new SkillHeadState({
+  BASICS: new SkillHeadState({
+    name: "basics",
+    localizableName: "ambersteel.character.skill.headStates.basics",
+  }),
+  LEVEL_ONLY: new SkillHeadState({
     name: "level_only",
     localizableName: "ambersteel.character.skill.headStates.level_only",
   }),
-  headless: new SkillHeadState({
+  HEADLESS: new SkillHeadState({
     name: "headless",
     localizableName: "ambersteel.character.skill.headStates.headless",
   }),
@@ -261,7 +265,7 @@ export default class TransientSkill extends TransientBaseItem {
    */
   get headState() {
     if (this.document.system.headState === undefined) {
-      return SKILL_HEAD_STATES.full;
+      return SKILL_HEAD_STATES.FULL;
     } else {
       return SKILL_HEAD_STATES.asArray.find(it => it.name === this.document.system.headState); 
     }
@@ -477,7 +481,8 @@ export default class TransientSkill extends TransientBaseItem {
    * @returns {Sum}
    */
   getRollData() {
-    if (this.headState.name === SKILL_HEAD_STATES.full.name) {
+    if (this.headState.name === SKILL_HEAD_STATES.FULL.name
+      || this.headState.name === SKILL_HEAD_STATES.BASICS.name) {
       const actor = (this.owningDocument ?? {}).document;
       const characterAttribute = new CharacterAttribute(actor, this.relatedAttribute.name);
       const compositionObj = new Ruleset().getSkillTestNumberOfDice(this.modifiedLevel, characterAttribute.modifiedLevel);
@@ -486,7 +491,7 @@ export default class TransientSkill extends TransientBaseItem {
         new SumComponent(this.relatedAttribute.name, characterAttribute.localizableName, compositionObj.attributeDiceCount),
         new SumComponent(this.name, this.name, compositionObj.skillDiceCount),
       ]);
-    } else if (this.headState.name === SKILL_HEAD_STATES.level_only.name) {
+    } else if (this.headState.name === SKILL_HEAD_STATES.LEVEL_ONLY.name) {
       return new Sum([
         new SumComponent(this.name, this.name, this.level),
       ]);
