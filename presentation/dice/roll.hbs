@@ -15,6 +15,11 @@ secondaryTitle: {String | undefined}
 secondaryImage: {String | undefined}
 cssClass: {undefined | String}
 showBackFire: {Boolean | String}
+obstacle: {Number}
+isObstacleRolled: {Boolean}
+numberOfObstacleDice: {Number | undefined}
+obstacleRolls: {Array<Object> | undefined}
+rolledObstacle: {Number | undefined}
 --}}
 <div class="dice-roll-chat-message-container{{#if cssClass}} {{cssClass}}{{/if}}">
   {{!-- Header --}}
@@ -47,6 +52,24 @@ showBackFire: {Boolean | String}
         </h2>
       {{/if}}
     </div>
+  {{/if}}
+  {{!-- Obstacle (if rolled for) --}}
+  {{#if isObstacleRolled}}
+  <div class="sheet-block">
+    <div class="dice-number">
+      {{localize "ambersteel.roll.obstacle.numberOfDice"}}: {{numberOfObstacleDice}}
+    </div>
+    <div class="dice-rolls-container">
+      <ol class="dice-rolls">
+        {{#each obstacleRolls as | obstacleRoll |}}
+          <li class="roll die d6 {{obstacleRoll.cssClass}}">{{obstacleRoll.content}}</li>
+        {{/each}}
+      </ol>
+    </div>
+    <div>
+      {{localize "ambersteel.roll.obstacle.result"}}: {{rolledObstacle}} + 1 = {{obstacle}}
+    </div>
+  </div>
   {{/if}}
   {{!-- Dice --}}
   <div class="dice-number">
@@ -88,8 +111,8 @@ showBackFire: {Boolean | String}
       </div>
     {{/if}}
     <div class="dice-degree">
-      <span>{{localize "ambersteel.roll.positive.plural"}}: {{positives}}</span>
-      <span>{{localize "ambersteel.roll.negative.plural"}}: {{negatives}}</span>
+      <span>{{localize "ambersteel.roll.positive.plural"}}: {{positives}},</span>
+      <span>{{localize "ambersteel.roll.negative.plural"}}: {{negatives}},</span>
       <span>{{localize "ambersteel.roll.missing.plural"}}: {{missingDiceCount}}</span>
     </div>
   </div>

@@ -16,13 +16,15 @@ import * as ChatUtil from "../../presentation/chat/chat-utility.mjs";
  * * Default `0`
  * @property {RollDiceModifierType | undefined} modifier A dice number modifier. 
  * * Default `ROLL_DICE_MODIFIER_TYPES.NONE`
-*/
+ */
 export default class DicePool {
   /**
    * @param {Object} args The arguments object. 
    * @param {Array<SumComponent> | undefined} args.dice The dice composition for use in the roll. 
    * @param {Array<SumComponent> | undefined} args.bonus The bonus dice composition for use in the roll. 
-   * @param {Number} args.obstacle The obstacle to roll against. 
+   * @param {Number | String} args.obstacle The obstacle to roll against. 
+   * Can either be a flat number (e. g. `3`) or a simple formula (e. g. `"3D"`). 
+   * * Does **not** accept complex formulae. E. g. `"3D4 + 3"` will **not** work! 
    * * Default `0`
    * @param {RollDiceModifierType | undefined} args.modifier A dice number modifier. 
    * * Default `ROLL_DICE_MODIFIER_TYPES.NONE`
@@ -40,8 +42,10 @@ export default class DicePool {
    * Calling this method again will produce different results every time. 
    * 
    * @returns {DicePoolRollResult}
+   * 
+   * @async
    */
-  roll() {
+  async roll() {
     // Determine the number of dice to roll with. 
     const diceSum = new Sum(this.dice);
     let modifiedDiceSum = diceSum.total;
@@ -58,6 +62,8 @@ export default class DicePool {
     const negatives = [];
     let outcomeType = DICE_POOL_RESULT_TYPES.NONE;
     let degree = 0;
+    let obstacle = 0;
+    let obstacleRolls;
 
     // Only try to do any rolls, if there are dice to roll. 
     if (totalNumberOfDice > 0) {
@@ -75,13 +81,27 @@ export default class DicePool {
           negatives.push(face);
         }
       }
+
+      // Determine if Ob must be rolled. 
+      const rgxObstacleDice = new RegExp("^\\d+[dD]$");
+      const match = `${this.obstacle}`.match(rgxObstacleDice); // To ensure it is a string that can be matched. 
+      if (match === undefined || match === null) {
+        obstacle = parseInt(this.obstacle);
+      } else {
+        const diceFormula = `${match[0]}6`; // Yields e. g. 3D6
+        const roll = await new Roll(diceFormula).evaluate();
+        obstacleRolls = roll.dice[0].results.map(it => it.result);
+        const rs = new Ruleset();
+        const positives = obstacleRolls.filter(it => rs.isPositive(it));
+        obstacle = positives.length + 1;
+      }
       
       // Determine outcome type and degree of success/failure. 
-      if (this.obstacle < 1) { // Ob 0 test?
+      if (obstacle < 1) { // Ob 0 test?
         outcomeType = DICE_POOL_RESULT_TYPES.NONE;
-      } else if (positives.length >= this.obstacle) { // Complete success
+      } else if (positives.length >= obstacle) { // Complete success
         outcomeType = DICE_POOL_RESULT_TYPES.SUCCESS;
-        degree = positives.length - this.obstacle;
+        degree = positives.length - obstacle;
       } else if (positives.length > 0) { // Partial failure
         outcomeType = DICE_POOL_RESULT_TYPES.PARTIAL;
         degree = positives.length;
@@ -99,7 +119,8 @@ export default class DicePool {
       modifiedDice: modifiedDiceSum,
       modifiedBonus: bonusSum.total,
       modifiedTotal: totalNumberOfDice,
-      obstacle: this.obstacle,
+      obstacle: obstacle,
+      obstacleRolls: obstacleRolls,
       modifier: this.modifier,
       positives: positives,
       negatives: negatives,
@@ -166,6 +187,8 @@ const CSS_CLASS_MISSING_DIE = "roll-missing";
  * @property {Array<Number>} negatives The negatives composition and total. 
  * @property {DicePoolRollResultType} outcomeType The result of this roll for use in a test. 
  * @property {Number} degree The degree of success or failure. 
+ * @property {Array<Number> | undefined} args.obstacleRolls The dice results of the obstacle roll, if 
+ * it was rolled for. 
  */
 export class DicePoolRollResult {
   /**
@@ -184,6 +207,8 @@ export class DicePoolRollResult {
    * @param {Array<Number>} negatives The negatives composition and total. 
    * @param {DicePoolRollResultType} outcomeType The result of this roll for use in a test. 
    * @param {Number} degree The degree of success or failure. 
+   * @param {Array<Number> | undefined} args.obstacleRolls The dice results of the obstacle roll, if 
+   * it was rolled for. 
    */
   constructor(args = {}) {
     validateOrThrow(args, [
@@ -214,6 +239,8 @@ export class DicePoolRollResult {
     this.bonus = args.bonus;
 
     this.obstacle = args.obstacle;
+    this.obstacleRolls = args.obstacleRolls;
+
     this.modifier = args.modifier;
     this.positives = args.positives;
     this.negatives = args.negatives;
@@ -260,6 +287,27 @@ export class DicePoolRollResult {
     const diceComposition = this.getJoinedDiceCompositionString(this.dice, this.bonus);
     const totalNumberOfDice = this.getTotalNumberOfDiceString();
 
+    let numberOfObstacleDice;
+    let obstacleRollsForDisplay;
+    let rolledObstacle;
+    const isObstacleRolled = this.obstacleRolls !== undefined && this.obstacleRolls.length > 0;
+    if (isObstacleRolled === true) {
+      numberOfObstacleDice = this.obstacleRolls.length;
+      obstacleRollsForDisplay = this.obstacleRolls
+        .concat([]) // Makes a safe copy.
+        .sort()
+        .reverse()
+        .map(face => { 
+          return {
+            cssClass: new Ruleset().isPositive(face) === true ? CSS_CLASS_NEGATIVE : CSS_CLASS_POSITIVE,
+            content: face,
+          };
+        });
+      rolledObstacle = this.obstacleRolls
+        .filter(face => new Ruleset().isPositive(face))
+        .length;
+    }
+
     // Render the results. 
     const renderedContent = await renderTemplate(TEMPLATES.DICE_ROLL_CHAT_MESSAGE, {
       resultsForDisplay: combinedResultsForRendering,
@@ -275,6 +323,11 @@ export class DicePoolRollResult {
       secondaryTitle: args.secondaryTitle,
       secondaryImage: args.secondaryImage,
       showBackFire: args.showBackFire,
+      obstacle: this.obstacle,
+      isObstacleRolled: isObstacleRolled,
+      obstacleRolls: obstacleRollsForDisplay,
+      numberOfObstacleDice: numberOfObstacleDice,
+      rolledObstacle: rolledObstacle,
     });
 
     return ChatUtil.sendToChat({
