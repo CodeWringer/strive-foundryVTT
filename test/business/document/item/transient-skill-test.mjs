@@ -149,21 +149,21 @@ describe("TransientSkill", () => {
         // When
         const r = given.headState;
         // Then
-        r.should.be.eql(SKILL_HEAD_STATES.full);
+        r.should.be.eql(SKILL_HEAD_STATES.FULL);
       });
 
       it("returns parsed 'headless'", () => {
         // Given
         const givenDocument = {
           system: {
-            headState: SKILL_HEAD_STATES.headless.name,
+            headState: SKILL_HEAD_STATES.HEADLESS.name,
           }
         };
         const given = new TransientSkill(givenDocument);
         // When
         const r = given.headState;
         // Then
-        r.should.be.eql(SKILL_HEAD_STATES.headless);
+        r.should.be.eql(SKILL_HEAD_STATES.HEADLESS);
       });
     });
 
@@ -176,12 +176,12 @@ describe("TransientSkill", () => {
         };
         const given = new TransientSkill(givenDocument);
         // When
-        given.headState = SKILL_HEAD_STATES.level_only;
+        given.headState = SKILL_HEAD_STATES.LEVEL_ONLY;
         // Then
         givenDocument.update.should.have.been.calledOnce();
         givenDocument.update.should.have.been.calledWith({
           system: {
-            headState: SKILL_HEAD_STATES.level_only.name,
+            headState: SKILL_HEAD_STATES.LEVEL_ONLY.name,
           }
         }, { render: true });
       });

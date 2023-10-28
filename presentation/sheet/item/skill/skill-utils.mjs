@@ -32,7 +32,7 @@ export async function querySkillConfiguration(skill) {
         name: inputHeadState,
         localizableLabel: "ambersteel.character.skill.headState",
         required: true,
-        defaultValue: (skill.headState ?? SKILL_HEAD_STATES.full),
+        defaultValue: (skill.headState ?? SKILL_HEAD_STATES.FULL),
         specificArgs: {
           options: SKILL_HEAD_STATES.asChoices,
           adapter: new ChoiceAdapter({

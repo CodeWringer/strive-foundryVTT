@@ -56,9 +56,9 @@ export default class SkillListItemViewModel extends SkillViewModel {
    * @type {Boolean}
    * @readonly
    */
-  get showLevel() { return this.document.headState.name === SKILL_HEAD_STATES.full.name 
-    || this.document.headState.name === SKILL_HEAD_STATES.level_only.name
-    || this.document.headState.name === SKILL_HEAD_STATES.basics.name; }
+  get showLevel() { return this.document.headState.name === SKILL_HEAD_STATES.FULL.name 
+    || this.document.headState.name === SKILL_HEAD_STATES.LEVEL_ONLY.name
+    || this.document.headState.name === SKILL_HEAD_STATES.BASICS.name; }
   
   /**
    * Returns true, if the list of prerequisites should be rendered. 
@@ -80,7 +80,7 @@ export default class SkillListItemViewModel extends SkillViewModel {
    * @type {Boolean}
    * @readonly
    */
-  get showAdvancedData() { return this.document.headState.name === SKILL_HEAD_STATES.full.name; }
+  get showAdvancedData() { return this.document.headState.name === SKILL_HEAD_STATES.FULL.name; }
 
   /**
    * Returns true, if related attribute should be rendered. 
@@ -88,8 +88,8 @@ export default class SkillListItemViewModel extends SkillViewModel {
    * @type {Boolean}
    * @readonly
    */
-  get showRelatedAttribute() { return this.document.headState.name === SKILL_HEAD_STATES.full.name 
-    || this.document.headState.name === SKILL_HEAD_STATES.basics.name; }
+  get showRelatedAttribute() { return this.document.headState.name === SKILL_HEAD_STATES.FULL.name 
+    || this.document.headState.name === SKILL_HEAD_STATES.BASICS.name; }
 
   /**
    * @type {Number}
