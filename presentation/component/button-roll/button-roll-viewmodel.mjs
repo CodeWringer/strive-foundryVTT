@@ -228,7 +228,7 @@ export default class ButtonRollViewModel extends ButtonViewModel {
     }
 
     const rollData = this.target.getRollData();
-    const dicePoolForCompositionHint = new DicePool({
+    const dicePoolForCompositionHint = await new DicePool({
       dice: rollData.components,
       obstacle: 0,
     }).roll();
@@ -247,13 +247,13 @@ export default class ButtonRollViewModel extends ButtonViewModel {
         showFancyFont: false,
       }),
       new DynamicInputDefinition({
-        type: DYNAMIC_INPUT_TYPES.NUMBER_SPINNER,
+        type: DYNAMIC_INPUT_TYPES.TEXTFIELD,
         name: inputObstacle,
         localizableLabel: "ambersteel.roll.obstacle.abbreviation",
         required: true,
-        defaultValue: 0,
+        defaultValue: "",
         specificArgs: {
-          min: 0,
+          placeholder: "3 / 3D",
         },
       }),
       new DynamicInputDefinition({
@@ -283,10 +283,10 @@ export default class ButtonRollViewModel extends ButtonViewModel {
     if (dialog.confirmed !== true) return;
 
     // Do roll. 
-    const rollResult = new DicePool({
+    const rollResult = await new DicePool({
       dice: rollData.components,
       bonus: [new SumComponent("bonus", "ambersteel.roll.bonusDice", parseInt(dialog[inputBonusDice]))],
-      obstacle: parseInt(dialog[inputObstacle]),
+      obstacle: dialog[inputObstacle],
       modifier: ROLL_DICE_MODIFIER_TYPES.asArray.find(it => it.name === dialog[inputRollDiceModifier]),
     }).roll();
 

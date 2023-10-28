@@ -55,7 +55,7 @@ describe("DicePool", () => {
   });
   
   describe("roll", () => {
-    it("rolls with 3 dice from one component, no bonus and no modifier as expected", () => {
+    it("rolls with 3 dice from one component, no bonus and no modifier as expected", async () => {
       // Given
       const givenDice = [
         new SumComponent("a1", "a2", 3)
@@ -72,7 +72,7 @@ describe("DicePool", () => {
       // Setup
       mockDie([5, 3, 1]);
       // When
-      const r = given.roll();
+      const r = await given.roll();
       // Then
       r.should.deepEqual(new DicePoolRollResult({
         unmodifiedDice: 3,
@@ -92,7 +92,7 @@ describe("DicePool", () => {
       }));
     });
 
-    it("rolls with 3 dice from one component, no bonus and modifier half rounded down as expected", () => {
+    it("rolls with 3 dice from one component, no bonus and modifier half rounded down as expected", async () => {
       // Given
       const givenDice = [
         new SumComponent("a1", "a2", 3)
@@ -109,7 +109,7 @@ describe("DicePool", () => {
       // Setup
       mockDie([5, 3, 1]);
       // When
-      const r = given.roll();
+      const r = await given.roll();
       // Then
       r.should.deepEqual(new DicePoolRollResult({
         unmodifiedDice: 3,
@@ -129,7 +129,7 @@ describe("DicePool", () => {
       }));
     });
 
-    it("rolls with 3 dice from one component, with bonus and no modifier as expected", () => {
+    it("rolls with 3 dice from one component, with bonus and no modifier as expected", async () => {
       // Given
       const givenDice = [
         new SumComponent("a1", "a2", 3)
@@ -148,7 +148,7 @@ describe("DicePool", () => {
       // Setup
       mockDie([5, 3, 1, 2, 6]);
       // When
-      const r = given.roll();
+      const r = await given.roll();
       // Then
       r.should.deepEqual(new DicePoolRollResult({
         unmodifiedDice: 3,
@@ -168,7 +168,7 @@ describe("DicePool", () => {
       }));
     });
 
-    it("rolls failure as expected", () => {
+    it("rolls failure as expected", async () => {
       // Given
       const givenDice = [
         new SumComponent("a1", "a2", 3)
@@ -187,7 +187,7 @@ describe("DicePool", () => {
       // Setup
       mockDie([1, 3, 1, 2, 4]);
       // When
-      const r = given.roll();
+      const r = await given.roll();
       // Then
       r.should.deepEqual(new DicePoolRollResult({
         unmodifiedDice: 3,
@@ -207,7 +207,7 @@ describe("DicePool", () => {
       }));
     });
 
-    it("rolls partial as expected", () => {
+    it("rolls partial as expected", async () => {
       // Given
       const givenDice = [
         new SumComponent("a1", "a2", 3)
@@ -226,7 +226,7 @@ describe("DicePool", () => {
       // Setup
       mockDie([5, 3, 1, 2, 4]);
       // When
-      const r = given.roll();
+      const r = await given.roll();
       // Then
       r.should.deepEqual(new DicePoolRollResult({
         unmodifiedDice: 3,
@@ -246,7 +246,7 @@ describe("DicePool", () => {
       }));
     });
 
-    it("rolls success as expected", () => {
+    it("rolls success as expected", async () => {
       // Given
       const givenDice = [
         new SumComponent("a1", "a2", 3)
@@ -265,7 +265,7 @@ describe("DicePool", () => {
       // Setup
       mockDie([5, 3, 1, 2, 6]);
       // When
-      const r = given.roll();
+      const r = await given.roll();
       // Then
       r.should.deepEqual(new DicePoolRollResult({
         unmodifiedDice: 3,
