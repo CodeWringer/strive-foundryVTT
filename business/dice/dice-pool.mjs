@@ -84,14 +84,15 @@ export default class DicePool {
 
       // Determine if Ob must be rolled. 
       const rgxObstacleDice = new RegExp("^\\d+[dD]$");
-      const match = `${this.obstacle}`.match(rgxObstacleDice);
+      const match = `${this.obstacle}`.match(rgxObstacleDice); // To ensure it is a string that can be matched. 
       if (match === undefined || match === null) {
         obstacle = parseInt(this.obstacle);
       } else {
-        const diceFormula = `${match[0]}6`;
+        const diceFormula = `${match[0]}6`; // Yields e. g. 3D6
         const roll = await new Roll(diceFormula).evaluate();
         obstacleRolls = roll.dice[0].results.map(it => it.result);
-        const positives = obstacleRolls.filter(it => new Ruleset().isPositive(it));
+        const rs = new Ruleset();
+        const positives = obstacleRolls.filter(it => rs.isPositive(it));
         obstacle = positives.length + 1;
       }
       
