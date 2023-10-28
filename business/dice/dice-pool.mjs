@@ -62,7 +62,7 @@ export default class DicePool {
     let outcomeType = DICE_POOL_RESULT_TYPES.NONE;
     let degree = 0;
     let obstacle = 0;
-    const obstacleRolls = [];
+    let obstacleRolls;
 
     // Only try to do any rolls, if there are dice to roll. 
     if (totalNumberOfDice > 0) {
@@ -285,6 +285,27 @@ export class DicePoolRollResult {
     const diceComposition = this.getJoinedDiceCompositionString(this.dice, this.bonus);
     const totalNumberOfDice = this.getTotalNumberOfDiceString();
 
+    let numberOfObstacleDice;
+    let obstacleRollsForDisplay;
+    let rolledObstacle;
+    const isObstacleRolled = this.obstacleRolls !== undefined && this.obstacleRolls.length > 0;
+    if (isObstacleRolled === true) {
+      numberOfObstacleDice = this.obstacleRolls.length;
+      obstacleRollsForDisplay = this.obstacleRolls
+        .concat([]) // Makes a safe copy.
+        .sort()
+        .reverse()
+        .map(face => { 
+          return {
+            cssClass: new Ruleset().isPositive(face) === true ? CSS_CLASS_NEGATIVE : CSS_CLASS_POSITIVE,
+            content: face,
+          };
+        });
+      rolledObstacle = this.obstacleRolls
+        .filter(face => new Ruleset().isPositive(face))
+        .length;
+    }
+
     // Render the results. 
     const renderedContent = await renderTemplate(TEMPLATES.DICE_ROLL_CHAT_MESSAGE, {
       resultsForDisplay: combinedResultsForRendering,
@@ -300,6 +321,11 @@ export class DicePoolRollResult {
       secondaryTitle: args.secondaryTitle,
       secondaryImage: args.secondaryImage,
       showBackFire: args.showBackFire,
+      obstacle: this.obstacle,
+      isObstacleRolled: isObstacleRolled,
+      obstacleRolls: obstacleRollsForDisplay,
+      numberOfObstacleDice: numberOfObstacleDice,
+      rolledObstacle: rolledObstacle,
     });
 
     return ChatUtil.sendToChat({

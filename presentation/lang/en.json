@@ -679,6 +679,8 @@
       "obstacle": {
         "label": "Obstacle",
         "abbreviation": "Ob",
+        "numberOfDice": "Obstacle dice",
+        "result": "Obstacle result",
         "opposedBy": {
           "label": "Opposed By",
           "placeholder": "Strength / Sneak / etc."
