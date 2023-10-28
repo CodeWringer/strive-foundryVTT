@@ -125,7 +125,7 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
   get person() {
     const thiz = this;
     return {
-      get age() { return parseInt(thiz.document.system.person.age); },
+      get age() { return thiz.document.system.person.age; },
       set age(value) { thiz.updateByPath("system.person.age", value); },
 
       get species() { return thiz.document.system.person.species; },
@@ -144,7 +144,6 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
       set biography(value) { thiz.updateByPath("system.person.biography", value); },
     };
   }
-  
 
   /**
    * @type {Object}
