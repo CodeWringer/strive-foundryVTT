@@ -63,6 +63,10 @@ export const SKILL_HEAD_STATES = {
     name: "full",
     localizableName: "ambersteel.character.skill.headStates.full",
   }),
+  basics: new SkillHeadState({
+    name: "basics",
+    localizableName: "ambersteel.character.skill.headStates.basics",
+  }),
   level_only: new SkillHeadState({
     name: "level_only",
     localizableName: "ambersteel.character.skill.headStates.level_only",
@@ -477,7 +481,8 @@ export default class TransientSkill extends TransientBaseItem {
    * @returns {Sum}
    */
   getRollData() {
-    if (this.headState.name === SKILL_HEAD_STATES.full.name) {
+    if (this.headState.name === SKILL_HEAD_STATES.full.name
+      || this.headState.name === SKILL_HEAD_STATES.basics.name) {
       const actor = (this.owningDocument ?? {}).document;
       const characterAttribute = new CharacterAttribute(actor, this.relatedAttribute.name);
       const compositionObj = new Ruleset().getSkillTestNumberOfDice(this.modifiedLevel, characterAttribute.modifiedLevel);

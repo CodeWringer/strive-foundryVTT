@@ -576,6 +576,7 @@
         "headState": "Head State",
         "headStates": {
           "full": "Full",
+          "basics": "Basics",
           "level_only": "Level Only",
           "headless": "Headless"
         },

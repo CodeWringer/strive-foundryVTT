@@ -96,7 +96,7 @@ cssClass: {undefined | String}
     {{> inputRichText viewModel=viewModel.vmRtDescription }}
   </div>
   {{!-- Related Attribute --}}
-  <div class="flex flex-row margin-b-sm{{#if (neq viewModel.showAdvancedData true)}} hidden{{/if}}">
+  <div class="flex flex-row margin-b-sm{{#if (neq viewModel.showRelatedAttribute true)}} hidden{{/if}}">
     <span class="width-min-xl">
       {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.skill.relatedAttribute"}}{{/label}}
     </span>

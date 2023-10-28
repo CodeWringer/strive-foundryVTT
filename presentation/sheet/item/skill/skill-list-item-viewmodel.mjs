@@ -56,7 +56,9 @@ export default class SkillListItemViewModel extends SkillViewModel {
    * @type {Boolean}
    * @readonly
    */
-  get showLevel() { return this.document.headState.name === SKILL_HEAD_STATES.full.name || this.document.headState.name === SKILL_HEAD_STATES.level_only.name; }
+  get showLevel() { return this.document.headState.name === SKILL_HEAD_STATES.full.name 
+    || this.document.headState.name === SKILL_HEAD_STATES.level_only.name
+    || this.document.headState.name === SKILL_HEAD_STATES.basics.name; }
   
   /**
    * Returns true, if the list of prerequisites should be rendered. 
@@ -69,7 +71,6 @@ export default class SkillListItemViewModel extends SkillViewModel {
    * Returns true, if advanced data should be rendered. 
    * 
    * This entails: 
-   * * related attribute
    * * modified level
    * * advancement requirements
    * * advancement progress
@@ -80,6 +81,15 @@ export default class SkillListItemViewModel extends SkillViewModel {
    * @readonly
    */
   get showAdvancedData() { return this.document.headState.name === SKILL_HEAD_STATES.full.name; }
+
+  /**
+   * Returns true, if related attribute should be rendered. 
+   * 
+   * @type {Boolean}
+   * @readonly
+   */
+  get showRelatedAttribute() { return this.document.headState.name === SKILL_HEAD_STATES.full.name 
+    || this.document.headState.name === SKILL_HEAD_STATES.basics.name; }
 
   /**
    * @type {Number}
