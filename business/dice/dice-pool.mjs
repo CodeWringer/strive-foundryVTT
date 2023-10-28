@@ -24,6 +24,7 @@ export default class DicePool {
    * @param {Array<SumComponent> | undefined} args.bonus The bonus dice composition for use in the roll. 
    * @param {Number | String} args.obstacle The obstacle to roll against. 
    * Can either be a flat number (e. g. `3`) or a simple formula (e. g. `"3D"`). 
+   * * Does **not** accept complex formulae. E. g. `"3D4 + 3"` will **not** work! 
    * * Default `0`
    * @param {RollDiceModifierType | undefined} args.modifier A dice number modifier. 
    * * Default `ROLL_DICE_MODIFIER_TYPES.NONE`
