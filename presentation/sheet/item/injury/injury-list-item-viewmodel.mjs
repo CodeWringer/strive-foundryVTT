@@ -112,6 +112,42 @@ export default class InjuryListItemViewModel extends ViewModel {
       propertyOwner: thiz.document,
       propertyPath: "description",
     });
+    this.vmTreatmentSkill = factory.createVmTextField({
+      parent: thiz,
+      id: "vmTreatmentSkill",
+      propertyOwner: thiz.document,
+      propertyPath: "treatmentSkill",
+    });
+    this.vmRequiredSupplies = factory.createVmTextField({
+      parent: thiz,
+      id: "vmRequiredSupplies",
+      propertyOwner: thiz.document,
+      propertyPath: "requiredSupplies",
+    });
+    this.vmObstaclePatchUp = factory.createVmTextField({
+      parent: thiz,
+      id: "vmObstaclePatchUp",
+      propertyOwner: thiz.document,
+      propertyPath: "obstaclePatchUp",
+    });
+    this.vmObstacleTreatment = factory.createVmTextField({
+      parent: thiz,
+      id: "vmObstacleTreatment",
+      propertyOwner: thiz.document,
+      propertyPath: "obstacleTreatment",
+    });
+    this.vmTimeToHealTreated = factory.createVmTextField({
+      parent: thiz,
+      id: "vmTimeToHealTreated",
+      propertyOwner: thiz.document,
+      propertyPath: "timeToHealTreated",
+    });
+    this.vmSelfPatchUp = factory.createVmTextField({
+      parent: thiz,
+      id: "vmSelfPatchUp",
+      propertyOwner: thiz.document,
+      propertyPath: "selfPatchUp",
+    });
   }
 
   /** @override */

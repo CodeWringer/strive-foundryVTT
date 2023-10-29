@@ -366,6 +366,11 @@
         "timeToHeal": "Time to heal",
         "treatment": "Treatment",
         "treatmentSkill": "Treatment Skill",
+        "timeToHealTreated": "Treated Heal Time Reduction",
+        "selfPatchUp": "Self Patch-Up",
+        "requiredSupplies": "Required Supplies",
+        "obstaclePatchUp": "Ob Patch-Up",
+        "obstacleTreatment": "Ob Treatment",
         "exhaustion": {
           "label": "Exhaustion",
           "maximum": "Max. Exhaustion"
