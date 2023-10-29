@@ -96,7 +96,7 @@ export const HEALTH_STATES = {
   dissolving: new HealthState({
     name: "dissolving",
     localizableName: "ambersteel.character.health.states.dissolving",
-    limit: 1,
+    limit: 0,
   }),
   drugAddicted: new HealthState({
     name: "drugAddicted",
