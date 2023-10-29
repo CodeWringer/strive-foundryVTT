@@ -62,6 +62,12 @@
       "type": "Item"
     },
     {
+      "name": "injuries-bludgeoning",
+      "label": "Injuries (Bludgeoning)",
+      "path": "packs/injuries-bludgeoning.db",
+      "type": "Item"
+    },
+    {
       "name": "injuries-burning",
       "label": "Injuries (Burning)",
       "path": "packs/injuries-burning.db",
