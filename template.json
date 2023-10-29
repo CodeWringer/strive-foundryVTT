@@ -243,8 +243,14 @@
       "templates": ["base"],
       "state": "active",
       "timeToHeal": "",
+      "timeToHealTreated": "",
       "limit": "",
-      "scar": ""
+      "scar": "",
+      "selfPatchUp": "",
+      "treatmentSkill": "",
+      "requiredSupplies": "",
+      "obstaclePatchUp": "",
+      "obstacleTreatment": ""
     },
     "illness": {
       "templates": ["base"],
