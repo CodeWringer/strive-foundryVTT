@@ -20,6 +20,7 @@ export class DamageType {
  * 
  * @property {DamageType} none A placeholder damage type. 
  * @property {DamageType} acid The "acid" damage type. 
+ * @property {DamageType} bleeding The "bleeding" damage type. 
  * @property {DamageType} bludgeoning The "bludgeoning" damage type. 
  * @property {DamageType} burning The "burning" damage type. 
  * @property {DamageType} crushing The "crushing" damage type. 
@@ -44,6 +45,11 @@ export const DAMAGE_TYPES = {
     name: "acid",
     localizableName: "ambersteel.damageType.acid.label",
     localizableAbbreviation: "ambersteel.damageType.acid.abbreviation"
+  }),
+  bleeding: new DamageType({
+    name: "bleeding",
+    localizableName: "ambersteel.damageType.bleeding.label",
+    localizableAbbreviation: "ambersteel.damageType.bleeding.abbreviation"
   }),
   bludgeoning: new DamageType({
     name: "bludgeoning",
