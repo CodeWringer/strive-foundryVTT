@@ -6,6 +6,7 @@ import { Sum, SumComponent } from "../ruleset/summed-data.mjs";
 import { validateOrThrow } from "../util/validation-utility.mjs";
 import { ROLL_DICE_MODIFIER_TYPES, RollDiceModifierType } from "./roll-dice-modifier-types.mjs";
 import * as ChatUtil from "../../presentation/chat/chat-utility.mjs";
+import * as ConstantsUtils from "../util/constants-utility.mjs";
 
 /**
  * Represents a dice pool. 
@@ -404,10 +405,6 @@ export class DicePoolRollResultType {
  * @property {DicePoolRollResultType} FAILURE The test was a complete failure. 
  * @property {DicePoolRollResultType} PARTIAL The test was a partial failure. Not enough for a success, but not as bad as a complete failure. 
  * 
- * @property {Array<ChoiceOption>} asChoices The constants of this type, as an array 
- * of `ChoiceOption`s. 
- * @property {Array<VisibilityMode>} asArray The constants of this type, as an array. 
- * 
  * @constant
  */
 export const DICE_POOL_RESULT_TYPES = {
@@ -427,16 +424,5 @@ export const DICE_POOL_RESULT_TYPES = {
     name: "partial",
     localizableName: "ambersteel.roll.partial.label",
   }),
-  get asChoices() {
-    if (this._asChoices === undefined) {
-      this._asChoices = getAsChoices(this, ["asChoices", "_asChoices", "asArray", "_asArray"]);
-    }
-    return this._asChoices;
-  },
-  get asArray() {
-    if (this._asArray === undefined) {
-      this._asArray = getAsArray(this, ["asChoices", "_asChoices", "asArray", "_asArray"]);
-    }
-    return this._asArray;
-  },
 }
+ConstantsUtils.enrichConstant(DICE_POOL_RESULT_TYPES);

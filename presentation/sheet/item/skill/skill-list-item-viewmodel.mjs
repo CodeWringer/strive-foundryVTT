@@ -1,12 +1,12 @@
-import { SKILL_PROPERTIES } from "../../../../business/document/item/item-properties.mjs"
 import { SKILL_HEAD_STATES } from "../../../../business/document/item/transient-skill.mjs"
 import { ATTRIBUTES } from "../../../../business/ruleset/attribute/attributes.mjs"
+import { SKILL_TAGS } from "../../../../business/tags/system-tags.mjs"
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs"
 import { isDefined } from "../../../../business/util/validation-utility.mjs"
 import ButtonCheckBoxViewModel from "../../../component/button-checkbox/button-checkbox-viewmodel.mjs"
 import ButtonViewModel from "../../../component/button/button-viewmodel.mjs"
 import ChoiceAdapter from "../../../component/input-choice/choice-adapter.mjs"
-import InputPropertiesViewModel from "../../../component/input-properties/input-properties-viewmodel.mjs"
+import InputTagsViewModel from "../../../component/input-tags/input-tags-viewmodel.mjs"
 import { TEMPLATES } from "../../../templatePreloader.mjs"
 import ViewModelFactory from "../../../view-model/view-model-factory.mjs"
 import SkillAbilityTableViewModel from "../skill-ability/skill-ability-table-viewmodel.mjs"
@@ -21,7 +21,7 @@ export default class SkillListItemViewModel extends SkillViewModel {
    * @type {Array<ChoiceOption>}
    * @readonly
    */
-  get attributeOptions() { return ATTRIBUTES.asChoices; }
+  get attributeOptions() { return ATTRIBUTES.asChoices(); }
 
   /**
    * Returns true, if the skill ability list should be visible. 
@@ -75,7 +75,7 @@ export default class SkillListItemViewModel extends SkillViewModel {
    * * advancement requirements
    * * advancement progress
    * * description
-   * * properties list
+   * * tags list
    * * category
    * @type {Boolean}
    * @readonly
@@ -193,9 +193,9 @@ export default class SkillListItemViewModel extends SkillViewModel {
       adapter: new ChoiceAdapter({
         toChoiceOption(obj) {
           if (isDefined(obj) === true) {
-            return ATTRIBUTES.asChoices.find(it => it.value === obj.name);
+            return ATTRIBUTES.asChoices().find(it => it.value === obj.name);
           } else {
-            return ATTRIBUTES.asChoices.find(it => it.value === "none");
+            return ATTRIBUTES.asChoices().find(it => it.value === "none");
           }
         },
         fromChoiceOption(option) {
@@ -254,13 +254,13 @@ export default class SkillListItemViewModel extends SkillViewModel {
       propertyOwner: thiz.document,
       propertyPath: "description",
     });
-    this.vmProperties = new InputPropertiesViewModel({
-      id: "vmProperties",
+    this.vmTags = new InputTagsViewModel({
+      id: "vmTags",
       parent: this,
-      propertyPath: "properties",
+      propertyPath: "tags",
       propertyOwner: this.document,
       isEditable: this.isEditable,
-      systemProperties: SKILL_PROPERTIES.asArray,
+      systemTags: SKILL_TAGS.asArray(),
     });
   }
 

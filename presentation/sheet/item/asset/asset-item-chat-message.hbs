@@ -43,9 +43,9 @@ cssClass: {undefined | String}
       {{viewModel.document.maxQuantity}}
     </div>
   </div>
-  {{!-- Properties --}}
-  <div class="flex flex-row sheet-block margin-b-md{{#if viewModel.hasProperties}}{{else}} hidden{{/if}}">
-    {{> inputProperties viewModel=viewModel.vmProperties}}
+  {{!-- Tags --}}
+  <div class="flex flex-row sheet-block margin-b-md{{#if viewModel.hasTags}}{{else}} hidden{{/if}}">
+    {{> inputTags viewModel=viewModel.vmTags }}
   </div>
   {{!-- Description --}}
   <div class="sheet-block scrollable-height-md">

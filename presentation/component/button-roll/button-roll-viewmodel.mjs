@@ -152,12 +152,12 @@ export default class ButtonRollViewModel extends ButtonViewModel {
           name: this.inputVisibility,
           localizableLabel: "ambersteel.general.messageVisibility.label",
           required: true,
-          defaultValue: (VISIBILITY_MODES.asArray[0]),
+          defaultValue: (VISIBILITY_MODES.asArray()[0]),
           specificArgs: {
-            options: VISIBILITY_MODES.asChoices,
+            options: VISIBILITY_MODES.asChoices(),
             adapter: new ChoiceAdapter({
-              toChoiceOption: (obj) => { return VISIBILITY_MODES.asChoices.find(it => it.value === obj.name); },
-              fromChoiceOption: (choice) => { return VISIBILITY_MODES.asArray.find(it => it.name === choice.value); }
+              toChoiceOption: (obj) => { return VISIBILITY_MODES.asChoices().find(it => it.value === obj.name); },
+              fromChoiceOption: (choice) => { return VISIBILITY_MODES.asArray().find(it => it.name === choice.value); }
             }),
           }
         }),
@@ -268,12 +268,12 @@ export default class ButtonRollViewModel extends ButtonViewModel {
         name: inputRollDiceModifier,
         localizableLabel: "ambersteel.roll.diceModifier.plural",
         required: true,
-        defaultValue: (ROLL_DICE_MODIFIER_TYPES.asArray[0]),
+        defaultValue: (ROLL_DICE_MODIFIER_TYPES.asArray()[0]),
         specificArgs: {
-          options: ROLL_DICE_MODIFIER_TYPES.asChoices,
+          options: ROLL_DICE_MODIFIER_TYPES.asChoices(),
           adapter: new ChoiceAdapter({
-            toChoiceOption: (obj) => { return ROLL_DICE_MODIFIER_TYPES.asChoices.find(it => it.value === obj.name); },
-            fromChoiceOption: (choice) => { return ROLL_DICE_MODIFIER_TYPES.asArray.find(it => it.name === choice.value); }
+            toChoiceOption: (obj) => { return ROLL_DICE_MODIFIER_TYPES.asChoices().find(it => it.value === obj.name); },
+            fromChoiceOption: (choice) => { return ROLL_DICE_MODIFIER_TYPES.asArray().find(it => it.name === choice.value); }
           }),
         }
       }),
@@ -287,7 +287,7 @@ export default class ButtonRollViewModel extends ButtonViewModel {
       dice: rollData.components,
       bonus: [new SumComponent("bonus", "ambersteel.roll.bonusDice", parseInt(dialog[inputBonusDice]))],
       obstacle: dialog[inputObstacle],
-      modifier: ROLL_DICE_MODIFIER_TYPES.asArray.find(it => it.name === dialog[inputRollDiceModifier]),
+      modifier: ROLL_DICE_MODIFIER_TYPES.asArray().find(it => it.name === dialog[inputRollDiceModifier]),
     }).roll();
 
     this._lastRollResult = rollResult;
@@ -304,7 +304,7 @@ export default class ButtonRollViewModel extends ButtonViewModel {
     }
 
     rollResult.sendToChat({
-      visibilityMode: VISIBILITY_MODES.asArray.find(it => it.name === dialog[this.inputVisibility]),
+      visibilityMode: VISIBILITY_MODES.asArray().find(it => it.name === dialog[this.inputVisibility]),
       actor: this.actor,
       primaryTitle: this.primaryChatTitle,
       primaryImage: this.primaryChatImage,

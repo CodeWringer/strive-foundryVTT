@@ -95,7 +95,7 @@ export default class ButtonSendToChatViewModel extends ButtonViewModel {
       closeCallback: (dialog) => {
         if (dialog.confirmed !== true) return;
         const visibilityModeChoice = dialog.visibilityMode;
-        const visibilityMode = VISIBILITY_MODES.asArray.find(it => it.name === visibilityModeChoice.value);
+        const visibilityMode = VISIBILITY_MODES.asArray().find(it => it.name === visibilityModeChoice.value);
         
         if (thiz.propertyPath !== undefined) {
           if (thiz.target.sendPropertyToChat !== undefined) {

@@ -1,4 +1,4 @@
-import { getAsChoices } from "../../util/constants-utility.mjs";
+import * as ConstantsUtils from "../../util/constants-utility.mjs";
 
 /**
  * Represents a character attribute. 
@@ -29,9 +29,6 @@ export class Attribute {
  * @property {Attribute} empathy A character's "empathy" attribute. 
  * @property {Attribute} oratory A character's "oratory" attribute. 
  * @property {Attribute} willpower A character's "willpower" attribute. 
- * 
- * @property {Array<ChoiceOption>} asChoices The constants of this type, as an array 
- * of `ChoiceOption`s. 
  * 
  * @constant
  */
@@ -91,10 +88,5 @@ export const ATTRIBUTES = {
     localizableName: "ambersteel.character.attribute.willpower.label",
     localizableAbbreviation: "ambersteel.character.attribute.willpower.abbreviation"
   }),
-  get asChoices() {
-    if (this._asChoices === undefined) {
-      this._asChoices = getAsChoices(this, ["asChoices", "_asChoices"]);
-    }
-    return this._asChoices;
-  },
 };
+ConstantsUtils.enrichConstant(ATTRIBUTES);

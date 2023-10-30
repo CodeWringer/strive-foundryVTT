@@ -16,7 +16,7 @@ import DiceRollListViewModel from "../component/dice-roll-list/dice-roll-list-vi
 import InputDropDownViewModel from "../component/input-dropdown/input-dropdown-viewmodel.mjs";
 import InputImageViewModel from "../component/input-image/input-image-viewmodel.mjs";
 import InputNumberSpinnerViewModel from "../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
-import InputPropertiesViewModel from "../component/input-properties/input-properties-viewmodel.mjs";
+import InputTagsViewModel from "../component/input-tags/input-tags-viewmodel.mjs";
 import InputRadioButtonGroupViewModel from "../component/input-radio-button-group/input-radio-button-group-viewmodel.mjs";
 import InputRichTextViewModel from "../component/input-rich-text/input-rich-text-viewmodel.mjs";
 import InputTextareaViewModel from "../component/input-textarea/input-textarea-viewmodel.mjs";
@@ -50,7 +50,7 @@ export function initHandlebarsComponents() {
   InputDropDownViewModel.registerHandlebarsPartial();
   InputImageViewModel.registerHandlebarsPartial();
   InputNumberSpinnerViewModel.registerHandlebarsPartial();
-  InputPropertiesViewModel.registerHandlebarsPartial();
+  InputTagsViewModel.registerHandlebarsPartial();
   InputRadioButtonGroupViewModel.registerHandlebarsPartial();
   InputRichTextViewModel.registerHandlebarsPartial();
   InputTextareaViewModel.registerHandlebarsPartial();

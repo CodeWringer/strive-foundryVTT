@@ -34,13 +34,13 @@ export async function querySkillConfiguration(skill) {
         required: true,
         defaultValue: (skill.headState ?? SKILL_HEAD_STATES.FULL),
         specificArgs: {
-          options: SKILL_HEAD_STATES.asChoices,
+          options: SKILL_HEAD_STATES.asChoices(),
           adapter: new ChoiceAdapter({
             toChoiceOption: (obj) => { return new ChoiceOption({
               value: obj.name,
               localizedValue: game.i18n.localize(obj.localizableName),
             }); },
-            fromChoiceOption: (choice) => { return SKILL_HEAD_STATES.asArray.find(it => it.name === choice.value); }
+            fromChoiceOption: (choice) => { return SKILL_HEAD_STATES.asArray().find(it => it.name === choice.value); }
           }),
         }
       }),
@@ -49,7 +49,7 @@ export async function querySkillConfiguration(skill) {
   
   if (dialog.confirmed !== true) return;
 
-  const headState = SKILL_HEAD_STATES.asArray.find(it => it.name === dialog[inputHeadState]);
+  const headState = SKILL_HEAD_STATES.asArray().find(it => it.name === dialog[inputHeadState]);
 
   return {
     headState: headState,

@@ -1,5 +1,5 @@
 import { TEMPLATES } from "../../../presentation/templatePreloader.mjs";
-import DocumentProperty from "../document-property.mjs";
+import Tag from "../../tags/tag.mjs";
 import TransientDocument from "../transient-document.mjs";
 
 /**
@@ -19,12 +19,12 @@ import TransientDocument from "../transient-document.mjs";
  * @abstract
  * @extends TransientDocument
  * 
- * @property {TransientBaseActor | undefined} owningDocument Another document that 
- * this document is embedded in. 
- * @property {Array<DocumentProperty>} properties An array of the current document 
- * properties of this document. 
- * @property {Array<DocumentProperty>} acceptedProperties Returns an array of accepted 
- * document properties. 
+ * @property {TransientBaseActor | undefined} owningDocument Another 
+ * document that this document is embedded in. 
+ * @property {Array<Tag>} tags An array of the current 
+ * tags of this document. 
+ * @property {Array<Tag>} acceptedTags Returns an array of accepted 
+ * tags. 
  * * Read-only. 
  * * virtual. 
  * * Default `[]`.
@@ -37,44 +37,43 @@ export default class TransientBaseItem extends TransientDocument {
   get chatMessageTemplate() { return TEMPLATES.ASSET_CHAT_MESSAGE; }
 
   /**
-   * An array of the current document properties of this document. 
+   * An array of the current tags of this document. 
    * 
-   * @type {Array<DocumentProperty>}
+   * @type {Array<Tag>}
    */
-  get properties() {
-    const ids = this.document.system.properties ?? [];
-    const accepted = this.acceptedProperties;
+  get tags() {
+    const ids = (this.document.system.tags ?? this.document.system.properties) ?? [];
     const result = [];
 
     for (const id of ids) {
-      let property = accepted.find(it => it.id === id);
-      if (property === undefined) {
-        property = new DocumentProperty({
+      let tag = this.acceptedTags.find(it => it.id === id);
+      if (tag === undefined) {
+        tag = new Tag({
           id: id,
           localizableName: id,
         });
       }
-      result.push(property);
+      result.push(tag);
     }
 
     return result;
   }
-  set properties(value) {
+  set tags(value) {
     const ids = value.map(it => it.id);
 
-    this.document.system.properties = ids;
-    this.updateByPath("system.properties", ids);
+    this.document.system.tags = ids;
+    this.updateByPath("system.tags", ids);
   }
   
   /**
-   * Returns an array of accepted document properties. 
+   * Returns an array of accepted tags. 
    * 
-   * @type {Array<DocumentProperty>}
+   * @type {Array<Tag>}
    * @readonly
    * @virtual
    * @default []
    */
-  get acceptedProperties() { return []; }
+  get acceptedTags() { return []; }
 
   /**
    * Another document that this document is embedded in. 

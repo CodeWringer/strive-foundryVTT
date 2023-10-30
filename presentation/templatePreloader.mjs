@@ -39,8 +39,8 @@ export const TEMPLATES = {
   COMPONENT_INPUT_RADIO_BUTTON_GROUP: `${basePathComponent}/input-radio-button-group/input-radio-button-group.hbs`,
   COMPONENT_INPUT_IMAGE: `${basePathComponent}/input-image/input-image.hbs`,
   COMPONENT_INPUT_RICH_TEXT: `${basePathComponent}/input-rich-text/input-rich-text.hbs`,
-  COMPONENT_INPUT_PROPERTIES: `${basePathComponent}/input-properties/input-properties.hbs`,
-  COMPONENT_INPUT_PROPERTY_PILL: `${basePathComponent}/input-properties/input-property-pill.hbs`,
+  COMPONENT_INPUT_TAGS: `${basePathComponent}/input-tags/input-tags.hbs`,
+  COMPONENT_INPUT_TAG: `${basePathComponent}/input-tags/input-tag-pill.hbs`,
   // Buttons
   COMPONENT_BUTTON: `${basePathComponent}/button/button.hbs`,
   COMPONENT_BUTTON_ADD: `${basePathComponent}/button-add/button-add.hbs`,

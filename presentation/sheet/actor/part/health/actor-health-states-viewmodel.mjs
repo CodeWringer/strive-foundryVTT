@@ -72,7 +72,7 @@ export default class ActorHealthStatesViewModel extends ViewModel {
     // Get all system-defined health states. 
     // If a particular health state is already on the character, then that instance 
     // will be taken, instead of a new "blank" instance. 
-    const systemHealthStates = HEALTH_STATES.asArray.map((healthState) => {
+    const systemHealthStates = HEALTH_STATES.asArray().map((healthState) => {
       const characterHealthState = characterHealthStates.find(it => it.name === healthState.name);
       if (characterHealthState === undefined) {
         return new CharacterHealthState({

@@ -63,7 +63,7 @@ export default class VisibilitySingleChoiceDialog extends SingleChoiceDialog {
     super({...options,
       localizedTitle: options.localizedTitle ?? game.i18n.localize(DIALOG_TITLE),
       localizedLabel: options.localizedLabel ?? game.i18n.localize(LABEL),
-      choices: VISIBILITY_MODES.asChoices
+      choices: VISIBILITY_MODES.asChoices()
     });
   }
 }

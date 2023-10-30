@@ -44,7 +44,7 @@ export default class DamageDefinitionListItemViewModel extends ViewModel {
    * @type {Array<ChoiceOption>}
    * @readonly
    */
-  get damageTypeOptions() { return DAMAGE_TYPES.asChoices; }
+  get damageTypeOptions() { return DAMAGE_TYPES.asChoices(); }
   
   /**
    * Returns the localization key of the deletion button hint. 
@@ -99,9 +99,9 @@ export default class DamageDefinitionListItemViewModel extends ViewModel {
       adapter: new ChoiceAdapter({
         toChoiceOption(obj) {
           if (isDefined(obj) === true) {
-            return DAMAGE_TYPES.asChoices.find(it => it.value === obj.name);
+            return DAMAGE_TYPES.asChoices().find(it => it.value === obj.name);
           } else {
-            return DAMAGE_TYPES.asChoices.find(it => it.value === "none");
+            return DAMAGE_TYPES.asChoices().find(it => it.value === "none");
           }
         },
         fromChoiceOption(option) {

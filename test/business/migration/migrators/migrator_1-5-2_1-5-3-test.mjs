@@ -3,8 +3,8 @@ import sinon from 'sinon';
 import 'should-sinon';
 import Migrator_1_5_2__1_5_3 from '../../../../business/migration/migrators/migrator_1-5-2_1-5-3.mjs';
 import { BaseLoggingStrategy } from '../../../../business/logging/base-logging-strategy.mjs';
-import { SKILL_PROPERTIES } from '../../../../business/document/item/item-properties.mjs';
 import * as MigratorTestBase from './migrator-test-base.mjs';
+import { SKILL_TAGS } from '../../../../business/tags/system-tags.mjs';
 
 /**
  * Creates a new mock document of type "Actor" and returns it. 
@@ -319,7 +319,7 @@ describe("Migrator_1_5_2__1_5_3", () => {
           "skill",
           {
             isMagicSchool: true,
-            properties: [givenOtherProperty, SKILL_PROPERTIES.MAGIC_SCHOOL.id],
+            properties: [givenOtherProperty, SKILL_TAGS.MAGIC_SCHOOL.id],
           },
           true
         ),
@@ -329,7 +329,7 @@ describe("Migrator_1_5_2__1_5_3", () => {
           "skill",
           {
             isMagicSchool: true,
-            properties: [givenOtherProperty, SKILL_PROPERTIES.MAGIC_SCHOOL.id],
+            properties: [givenOtherProperty, SKILL_TAGS.MAGIC_SCHOOL.id],
           },
           false
         ),
@@ -429,7 +429,7 @@ describe("Migrator_1_5_2__1_5_3", () => {
     game.items.get(givenSkillId1).update.getCall(0).should.have.been.calledWith({
       data: {
         data: {
-          properties: [SKILL_PROPERTIES.MAGIC_SCHOOL.id],
+          properties: [SKILL_TAGS.MAGIC_SCHOOL.id],
         }
       }
     });
@@ -444,7 +444,7 @@ describe("Migrator_1_5_2__1_5_3", () => {
     game.items.get(givenSkillId2).update.should.have.been.calledTwice();
     game.items.get(givenSkillId2).update.getCall(0).should.have.been.calledWith({
       system: {
-        properties: [SKILL_PROPERTIES.MAGIC_SCHOOL.id],
+        properties: [SKILL_TAGS.MAGIC_SCHOOL.id],
       }
     });
     game.items.get(givenSkillId2).update.getCall(1).should.have.been.calledWith({
@@ -457,7 +457,7 @@ describe("Migrator_1_5_2__1_5_3", () => {
     game.items.get(givenSkillId3).update.getCall(0).should.have.been.calledWith({
       data: {
         data: {
-          properties: [givenOtherProperty, SKILL_PROPERTIES.MAGIC_SCHOOL.id],
+          properties: [givenOtherProperty, SKILL_TAGS.MAGIC_SCHOOL.id],
         }
       }
     });
@@ -472,7 +472,7 @@ describe("Migrator_1_5_2__1_5_3", () => {
     game.items.get(givenSkillId4).update.should.have.been.calledTwice();
     game.items.get(givenSkillId4).update.getCall(0).should.have.been.calledWith({
       system: {
-        properties: [givenOtherProperty, SKILL_PROPERTIES.MAGIC_SCHOOL.id],
+        properties: [givenOtherProperty, SKILL_TAGS.MAGIC_SCHOOL.id],
       }
     });
     game.items.get(givenSkillId4).update.getCall(1).should.have.been.calledWith({

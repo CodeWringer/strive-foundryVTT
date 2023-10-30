@@ -62,7 +62,7 @@ export default class RollFormulaResolver {
 
     return {
       rolls: rolls,
-      visibilityMode: VISIBILITY_MODES.asArray.find(it => it.name === dialog[this.inputNameVisibility]),
+      visibilityMode: VISIBILITY_MODES.asArray().find(it => it.name === dialog[this.inputNameVisibility]),
       dialog: dialog,
     };
   }
@@ -194,12 +194,12 @@ export default class RollFormulaResolver {
         name: inputNameVisibility,
         localizableLabel: "ambersteel.general.messageVisibility.label",
         required: true,
-        defaultValue: (VISIBILITY_MODES.asArray[0]),
+        defaultValue: (VISIBILITY_MODES.asArray()[0]),
         specificArgs: {
-          options: VISIBILITY_MODES.asChoices,
+          options: VISIBILITY_MODES.asChoices(),
           adapter: new ChoiceAdapter({
-            toChoiceOption: (obj) => { return VISIBILITY_MODES.asChoices.find(it => it.value === obj.name); },
-            fromChoiceOption: (choice) => { return VISIBILITY_MODES.asArray.find(it => it.name === choice.value); }
+            toChoiceOption: (obj) => { return VISIBILITY_MODES.asChoices().find(it => it.value === obj.name); },
+            fromChoiceOption: (choice) => { return VISIBILITY_MODES.asArray().find(it => it.name === choice.value); }
           }),
         }
       }),

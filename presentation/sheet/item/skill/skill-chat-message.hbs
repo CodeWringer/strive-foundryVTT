@@ -31,9 +31,9 @@ cssClass: {undefined | String}
       {{viewModel.document.category}}
     </div>
   </div>
-  {{!-- Properties --}}
-  <div class="flex flex-row sheet-block margin-b-md{{#if (or (neq viewModel.hasProperties true) (eq viewModel.isHeadless true))}} hidden{{/if}}">
-    {{> inputProperties viewModel=viewModel.vmProperties}}
+  {{!-- Tags --}}
+  <div class="flex flex-row sheet-block margin-b-md{{#if (or (neq viewModel.hasTags true) (eq viewModel.isHeadless true))}} hidden{{/if}}">
+    {{> inputTags viewModel=viewModel.vmTags }}
   </div>
   {{!-- Description --}}
   <div class="sheet-block scrollable-height-md{{#if (eq viewModel.isHeadless true)}} hidden{{/if}}">

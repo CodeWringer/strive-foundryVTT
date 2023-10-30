@@ -1,4 +1,4 @@
-import { getAsArray, getAsChoices } from "../../util/constants-utility.mjs";
+import * as ConstantsUtils from "../../util/constants-utility.mjs";
 import { validateOrThrow } from "../../util/validation-utility.mjs";
 
 /**
@@ -33,10 +33,6 @@ export class SkillTier {
  * @property {SkillTier} apprentice 
  * @property {SkillTier} master 
  * 
- * @property {Array<ChoiceOption>} asChoices The constants of this type, as an array 
- * of `ChoiceOption`s. 
- * @property {Array<SkillTier>} asArray The constants of this type, as an array. 
- * 
  * @constant
  */
 export const SKILL_TIERS = {
@@ -52,16 +48,5 @@ export const SKILL_TIERS = {
     name: "master",
     localizableName: "ambersteel.character.skill.tier.master",
   }),
-  get asChoices() {
-    if (this._asChoices === undefined) {
-      this._asChoices = getAsChoices(this, ["asChoices", "_asChoices", "asArray", "_asArray"]);
-    }
-    return this._asChoices;
-  },
-  get asArray() {
-    if (this._asArray === undefined) {
-      this._asArray = getAsArray(this, ["asChoices", "_asChoices", "asArray", "_asArray"]);
-    }
-    return this._asArray;
-  }
 };
+ConstantsUtils.enrichConstant(SKILL_TIERS);

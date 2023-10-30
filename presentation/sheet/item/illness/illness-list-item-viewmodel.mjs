@@ -19,7 +19,7 @@ export default class IllnessListItemViewModel extends ViewModel {
    */
   get stateOptions() {
     if (this._stateOptions === undefined) {
-      this._stateOptions = ILLNESS_STATES.asChoices.map((choiceOption) => {
+      this._stateOptions = ILLNESS_STATES.asChoices().map((choiceOption) => {
         const html = `<i class="${choiceOption.icon}"></i>`;
         return new StatefulChoiceOption({
           value: choiceOption.value,

@@ -5,9 +5,9 @@ import TransientBaseItem from "./transient-base-item.mjs";
 import AssetChatMessageViewModel from "../../../presentation/sheet/item/asset/asset-chat-message-viewmodel.mjs";
 import { TEMPLATES } from "../../../presentation/templatePreloader.mjs";
 import { createUUID } from "../../util/uuid-utility.mjs";
-import { ASSET_PROPERTIES } from "./item-properties.mjs";
 import CharacterAssetSlot from "../../ruleset/asset/character-asset-slot.mjs";
 import { arrayTakeUnless } from "../../util/array-utility.mjs";
+import { ASSET_TAGS } from "../../tags/system-tags.mjs";
 
 /**
  * Represents the full transient data of an asset. 
@@ -18,7 +18,8 @@ import { arrayTakeUnless } from "../../util/array-utility.mjs";
  * @property {Number} maxQuantity
  * @property {Boolean} isOnPerson
  * @property {Number} bulk
- * @property {Boolean} isProperty
+ * @property {Boolean} isProperty Returns `true`, if the asset is in the 
+ * "property" section on a character sheet. 
  * * Read-only
  * @property {Boolean} isLuggage
  * * Read-only
@@ -77,9 +78,12 @@ export default class TransientAsset extends TransientBaseItem {
   }
 
   /** @override */
-  get acceptedProperties() { return ASSET_PROPERTIES.asArray; }
+  get acceptedTags() { return ASSET_TAGS.asArray(); }
 
   /**
+   * Returns `true`, if the asset is in the "property" section on a 
+   * character sheet. 
+   * 
    * @type {Boolean}
    * @readonly
    */

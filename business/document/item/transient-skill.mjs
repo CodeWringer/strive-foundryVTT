@@ -15,11 +15,11 @@ import CharacterAttribute from "../../ruleset/attribute/character-attribute.mjs"
 import { ATTACK_TYPES } from "../../ruleset/skill/attack-types.mjs";
 import { ATTRIBUTES } from "../../ruleset/attribute/attributes.mjs";
 import { isBlankOrUndefined, isObject } from "../../util/validation-utility.mjs";
-import { SKILL_PROPERTIES } from "./item-properties.mjs";
 import { arrayContains } from "../../util/array-utility.mjs";
-import { getAsArray, getAsChoices } from "../../util/constants-utility.mjs";
+import * as ConstantsUtils from "../../util/constants-utility.mjs";
 import { DICE_POOL_RESULT_TYPES } from "../../dice/dice-pool.mjs";
 import SkillPrerequisite from "../../ruleset/skill/skill-prerequisite.mjs";
+import { SKILL_TAGS } from "../../tags/system-tags.mjs";
 
 /**
  * Represents a skill type document's "head" state. 
@@ -75,19 +75,8 @@ export const SKILL_HEAD_STATES = {
     name: "headless",
     localizableName: "ambersteel.character.skill.headStates.headless",
   }),
-  get asChoices() {
-    if (this._asChoices === undefined) {
-      this._asChoices = getAsChoices(this, ["asChoices", "_asChoices", "asArray", "_asArray"]);
-    }
-    return this._asChoices;
-  },
-  get asArray() {
-    if (this._asArray === undefined) {
-      this._asArray = getAsArray(this, ["asChoices", "_asChoices", "asArray", "_asArray"]);
-    }
-    return this._asArray;
-  }
 }
+ConstantsUtils.enrichConstant(SKILL_HEAD_STATES);
 
 /**
  * Represents the full transient data of a skill. 
@@ -214,23 +203,23 @@ export default class TransientSkill extends TransientBaseItem {
    * @type {Boolean}
    */
   get isMagicSchool() {
-    return arrayContains((this.document.system.properties ?? []), SKILL_PROPERTIES.MAGIC_SCHOOL.id);
+    return arrayContains(((this.document.system.tags ?? this.document.system.properties) ?? []), SKILL_TAGS.MAGIC_SCHOOL.id);
   }
   set isMagicSchool(value) {
-    const properties = (this.document.system.properties ?? []).concat([]); // Local-copy
-    const index = properties.indexOf(SKILL_PROPERTIES.MAGIC_SCHOOL.id);
+    const tags = ((this.document.system.tags ?? this.document.system.properties) ?? []).concat([]); 
+    const index = tags.indexOf(SKILL_TAGS.MAGIC_SCHOOL.id);
 
     if (value === true && index < 0) {
-      properties.push(SKILL_PROPERTIES.MAGIC_SCHOOL.id);
-      this.updateByPath("system.properties", properties);
+      tags.push(SKILL_TAGS.MAGIC_SCHOOL.id);
+      this.updateByPath("system.tags", tags);
     } else if (value !== true && index > -1) {
-      properties.splice(index, 1);
-      this.updateByPath("system.properties", properties);
+      tags.splice(index, 1);
+      this.updateByPath("system.tags", tags);
     }
   }
   
   /** @override */
-  get acceptedProperties() { return SKILL_PROPERTIES.asArray; }
+  get acceptedTags() { return SKILL_TAGS.asArray(); }
 
   /**
    * @type {Array<SkillAbility>}
@@ -250,7 +239,7 @@ export default class TransientSkill extends TransientBaseItem {
     if (this.document.system.headState === undefined) {
       return SKILL_HEAD_STATES.FULL;
     } else {
-      return SKILL_HEAD_STATES.asArray.find(it => it.name === this.document.system.headState); 
+      return SKILL_HEAD_STATES.asArray().find(it => it.name === this.document.system.headState); 
     }
   }
   set headState(value) {
