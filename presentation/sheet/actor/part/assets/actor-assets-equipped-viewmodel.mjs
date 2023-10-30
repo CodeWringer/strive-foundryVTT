@@ -77,7 +77,7 @@ export default class ActorAssetsEquippedViewModel extends ViewModel {
             new DynamicInputDefinition({
               type: DYNAMIC_INPUT_TYPES.TEXTFIELD,
               name: inputName,
-              localizableLabel: "ambersteel.general.name",
+              localizedLabel: game.i18n.localize("ambersteel.general.name"),
               required: true,
               defaultValue: "New Asset Slot Group"
             }),

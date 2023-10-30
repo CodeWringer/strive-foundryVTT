@@ -150,7 +150,7 @@ export default class ButtonRollViewModel extends ButtonViewModel {
         new DynamicInputDefinition({
           type: DYNAMIC_INPUT_TYPES.DROP_DOWN,
           name: this.inputVisibility,
-          localizableLabel: "ambersteel.general.messageVisibility.label",
+          localizedLabel: game.i18n.localize("ambersteel.general.messageVisibility.label"),
           required: true,
           defaultValue: (VISIBILITY_MODES.asArray()[0]),
           specificArgs: {
@@ -249,7 +249,7 @@ export default class ButtonRollViewModel extends ButtonViewModel {
       new DynamicInputDefinition({
         type: DYNAMIC_INPUT_TYPES.TEXTFIELD,
         name: inputObstacle,
-        localizableLabel: "ambersteel.roll.obstacle.abbreviation",
+        localizedLabel:game.i18n.localize( "ambersteel.roll.obstacle.abbreviation"),
         required: true,
         defaultValue: "",
         specificArgs: {
@@ -259,14 +259,14 @@ export default class ButtonRollViewModel extends ButtonViewModel {
       new DynamicInputDefinition({
         type: DYNAMIC_INPUT_TYPES.NUMBER_SPINNER,
         name: inputBonusDice,
-        localizableLabel: "ambersteel.roll.bonusDice",
+        localizedLabel:game.i18n.localize( "ambersteel.roll.bonusDice"),
         required: true,
         defaultValue: 0,
       }),
       new DynamicInputDefinition({
         type: DYNAMIC_INPUT_TYPES.DROP_DOWN,
         name: inputRollDiceModifier,
-        localizableLabel: "ambersteel.roll.diceModifier.plural",
+        localizedLabel: game.i18n.localize("ambersteel.roll.diceModifier.plural"),
         required: true,
         defaultValue: (ROLL_DICE_MODIFIER_TYPES.asArray()[0]),
         specificArgs: {

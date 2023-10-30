@@ -215,7 +215,7 @@ export default class AssetListItemViewModel extends ViewModel {
         new DynamicInputDefinition({
           type: DYNAMIC_INPUT_TYPES.DROP_DOWN,
           name: inputSlots,
-          localizableLabel: "ambersteel.character.asset.slot.label",
+          localizedLabel: game.i18n.localize("ambersteel.character.asset.slot.label"),
           specificArgs: {
             options: availableSlotChoices,
             adapter: adapter,
