@@ -7,11 +7,11 @@ import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
 import Ruleset from "../../../business/ruleset/ruleset.mjs";
 import DynamicInputDialog from "../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
-import { DYNAMIC_INPUT_TYPES } from "../../dialog/dynamic-input-dialog/dynamic-input-types.mjs";
+import DynamicInputDefinition from "../../dynamic-input/dynamic-input-definition.mjs";
+import { DYNAMIC_INPUT_TYPES } from "../../dynamic-input/dynamic-input-types.mjs";
 import { VISIBILITY_MODES } from "../../chat/visibility-modes.mjs";
 import ChoiceAdapter from "../input-choice/choice-adapter.mjs";
 import { ROLL_DICE_MODIFIER_TYPES } from "../../../business/dice/roll-dice-modifier-types.mjs";
-import DynamicInputDefinition from "../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
 import { Sum, SumComponent } from "../../../business/ruleset/summed-data.mjs";
 import DicePool, { DicePoolRollResult } from "../../../business/dice/dice-pool.mjs";
 

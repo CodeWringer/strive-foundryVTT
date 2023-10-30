@@ -6,9 +6,9 @@ import ButtonDeleteViewModel from "../../../../component/button-delete/button-de
 import ButtonViewModel from "../../../../component/button/button-viewmodel.mjs";
 import ChoiceAdapter from "../../../../component/input-choice/choice-adapter.mjs";
 import ChoiceOption from "../../../../component/input-choice/choice-option.mjs";
-import DynamicInputDefinition from "../../../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
 import DynamicInputDialog from "../../../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
-import { DYNAMIC_INPUT_TYPES } from "../../../../dialog/dynamic-input-dialog/dynamic-input-types.mjs";
+import DynamicInputDefinition from "../../../../dynamic-input/dynamic-input-definition.mjs";
+import { DYNAMIC_INPUT_TYPES } from "../../../../dynamic-input/dynamic-input-types.mjs";
 import { TEMPLATES } from "../../../../templatePreloader.mjs";
 import ViewModel from "../../../../view-model/view-model.mjs";
 import AssetListItemViewModel from "../../../item/asset/asset-list-item-viewmodel.mjs";

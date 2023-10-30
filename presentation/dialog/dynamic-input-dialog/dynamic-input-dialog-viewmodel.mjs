@@ -1,6 +1,6 @@
 import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import { TEMPLATES } from "../../templatePreloader.mjs";
-import { DYNAMIC_INPUT_TYPES } from "./dynamic-input-types.mjs";
+import { DYNAMIC_INPUT_TYPES } from "../../dynamic-input/dynamic-input-types.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
 import InputDropDownViewModel from "../../component/input-dropdown/input-dropdown-viewmodel.mjs";
 import InputImageViewModel from "../../component/input-image/input-image-viewmodel.mjs";

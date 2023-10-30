@@ -1,4 +1,4 @@
-import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
+import { validateOrThrow } from "../../business/util/validation-utility.mjs";
 
 /**
  * Represents an input control definition for a `DynamicInputDialog`. 

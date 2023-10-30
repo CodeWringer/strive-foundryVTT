@@ -1,7 +1,7 @@
 import * as StringUtil from "../../../../../business/util/string-utility.mjs";
-import DynamicInputDefinition from "../../../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
 import DynamicInputDialog from "../../../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
-import { DYNAMIC_INPUT_TYPES } from "../../../../dialog/dynamic-input-dialog/dynamic-input-types.mjs";
+import DynamicInputDefinition from "../../../../dynamic-input/dynamic-input-definition.mjs";
+import { DYNAMIC_INPUT_TYPES } from "../../../../dynamic-input/dynamic-input-types.mjs";
 
 /**
  * Queries the user for input for a character asset slot and returns the 

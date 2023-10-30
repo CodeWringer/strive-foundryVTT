@@ -1,9 +1,9 @@
 import { REGEX_PATTERN_PROPERTY_PATHS } from "../../business/document/transient-document.mjs";
 import { VISIBILITY_MODES } from "../chat/visibility-modes.mjs";
 import ChoiceAdapter from "../component/input-choice/choice-adapter.mjs";
-import DynamicInputDefinition from "../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
 import DynamicInputDialog from "../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
-import { DYNAMIC_INPUT_TYPES } from "../dialog/dynamic-input-dialog/dynamic-input-types.mjs";
+import DynamicInputDefinition from "../dynamic-input/dynamic-input-definition.mjs";
+import { DYNAMIC_INPUT_TYPES } from "../dynamic-input/dynamic-input-types.mjs";
 
 /**
  * Provides a means to fully resolve roll formulae. 

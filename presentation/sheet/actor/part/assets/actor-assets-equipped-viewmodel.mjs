@@ -3,9 +3,9 @@ import * as StringUtil from "../../../../../business/util/string-utility.mjs";
 import { createUUID } from "../../../../../business/util/uuid-utility.mjs";
 import { validateOrThrow } from "../../../../../business/util/validation-utility.mjs"
 import ButtonViewModel from "../../../../component/button/button-viewmodel.mjs";
-import DynamicInputDefinition from "../../../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
 import DynamicInputDialog from "../../../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
-import { DYNAMIC_INPUT_TYPES } from "../../../../dialog/dynamic-input-dialog/dynamic-input-types.mjs";
+import DynamicInputDefinition from "../../../../dynamic-input/dynamic-input-definition.mjs";
+import { DYNAMIC_INPUT_TYPES } from "../../../../dynamic-input/dynamic-input-types.mjs";
 import { TEMPLATES } from "../../../../templatePreloader.mjs"
 import ViewModel from "../../../../view-model/view-model.mjs"
 import ActorAssetSlotGroupViewModel from "./actor-asset-slot-group-viewmodel.mjs";
