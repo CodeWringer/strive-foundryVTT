@@ -1,9 +1,10 @@
 import { validateOrThrow } from "../../business/util/validation-utility.mjs";
+import { DYNAMIC_INPUT_TYPES } from "./dynamic-input-types.mjs";
 
 /**
  * Represents an input control definition. 
  * 
- * @property {DYNAMIC_INPUT_TYPES} type
+ * @property {DYNAMIC_INPUT_TYPES} type The type of control this represents. 
  * @property {String} name Internal name. The value of the input will be referencable 
  * by this name. 
  * @property {String} localizedLabel Localized text for a companion label. 
