@@ -94,8 +94,8 @@
         "moveDown": "Move down",
         "moveByDragging": "Move by dragging"
       },
-      "properties": {
-        "label": "Properties"
+      "tags": {
+        "label": "Tags"
       },
       "propertyPath": "Property path"
     },

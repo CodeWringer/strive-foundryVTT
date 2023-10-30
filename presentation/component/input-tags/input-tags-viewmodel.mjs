@@ -1,16 +1,16 @@
-import DocumentProperty from "../../../business/document/document-property.mjs";
+import Tag from "../../../business/tags/tag.mjs";
 import { setNestedPropertyValue } from "../../../business/util/property-utility.mjs";
 import { getNestedPropertyValue } from "../../../business/util/property-utility.mjs";
 import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import { TEMPLATES } from "../../templatePreloader.mjs";
 import InputViewModel from "../../view-model/input-view-model.mjs";
 import InputTextFieldViewModel from "../input-textfield/input-textfield-viewmodel.mjs";
-import InputPropertyPillViewModel from "./input-property-pill-viewmodel.mjs";
+import InputTagPillViewModel from "./input-tag-pill-viewmodel.mjs";
 
 /**
- * Represents an input field for a dynamic number of properties. 
+ * Represents an input field for a dynamic number of tags. 
  * 
- * A user can select from a given list of properties, as well as define new properties, simply by typing them. 
+ * A user can select from a given list of tags, as well as define new tags, simply by typing them. 
  * 
  * @extends InputViewModel
  * 
@@ -18,16 +18,16 @@ import InputPropertyPillViewModel from "./input-property-pill-viewmodel.mjs";
  * * Read-only. 
  * @property {Object} propertyOwner
  * * Read-only. 
- * @property {Array<DocumentProperty>} systemProperties An array 
- * of document properties to offer the user for auto-completion. 
- * @property {Array<InputPropertyPillViewModel>} propertyViewModels
+ * @property {Array<Tag>} systemTags An array 
+ * of tags to offer the user for auto-completion. 
+ * @property {Array<InputTagPillViewModel>} tagViewModels
  * * Read-only. 
  * @property {String} templatePill
  * * Read-only. 
  */
-export default class InputPropertiesViewModel extends InputViewModel {
+export default class InputTagsViewModel extends InputViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.COMPONENT_INPUT_PROPERTIES; }
+  static get TEMPLATE() { return TEMPLATES.COMPONENT_INPUT_TAGS; }
 
   /**
    * Registers the Handlebars partial for this component. 
@@ -35,33 +35,33 @@ export default class InputPropertiesViewModel extends InputViewModel {
    * @static
    */
   static registerHandlebarsPartial() {
-    Handlebars.registerPartial('inputProperties', `{{> "${InputPropertiesViewModel.TEMPLATE}"}}`);
+    Handlebars.registerPartial('inputTags', `{{> "${InputTagsViewModel.TEMPLATE}"}}`);
   }
 
   /**
    * @type {String}
    * @readonly
    */
-  get templatePill() { return InputPropertyPillViewModel.TEMPLATE; }
+  get templatePill() { return InputTagPillViewModel.TEMPLATE; }
 
   get newEntry() { return ""; }
   set newEntry(value) {
-    // Try to find a matching property by id. 
+    // Try to find a matching tag by id. 
     // Search case-insensitively and replace spaces with underscores, so users needn't know the internal IDs and can 
     // instead simply type the exact text they may find on other documents and expect it to work. 
-    let documentProperty = this.systemProperties.find(it => it.id.toLowerCase() === value.toLowerCase().replace(" ", "_"));
-    if (documentProperty === undefined) {
-      documentProperty = new DocumentProperty({
+    let tag = this.systemTags.find(it => it.id.toLowerCase() === value.toLowerCase().replace(" ", "_"));
+    if (tag === undefined) {
+      tag = new Tag({
         id: value,
       });
     }
 
-    const properties = getNestedPropertyValue(this.propertyOwner, this.propertyPath);
-    // Prevent adding the same document property twice. 
-    if (properties.find(it => it.id === documentProperty.id) !== undefined) return;
+    const tags = getNestedPropertyValue(this.propertyOwner, this.propertyPath);
+    // Prevent adding the same tag twice. 
+    if (tags.find(it => it.id === tag.id) !== undefined) return;
 
-    properties.push(documentProperty);
-    setNestedPropertyValue(this.propertyOwner, this.propertyPath, properties);
+    tags.push(tag);
+    setNestedPropertyValue(this.propertyOwner, this.propertyPath, tags);
   }
 
   /**
@@ -72,8 +72,8 @@ export default class InputPropertiesViewModel extends InputViewModel {
    * @param {Object} args.propertyOwner An object on which to to look up the value. 
    * @param {Boolean | undefined} args.isEditable Optional. If true, input(s) will be in edit mode. If false, input(s) will be in read-only mode.
    * 
-   * @param {Array<DocumentProperty> | undefined} args.systemProperties Optional. An array 
-   * of document properties to offer the user for auto-completion. 
+   * @param {Array<Tag> | undefined} args.systemTags Optional. An array 
+   * of tags to offer the user for auto-completion. 
    */
   constructor(args = {}) {
     super(args);
@@ -81,10 +81,10 @@ export default class InputPropertiesViewModel extends InputViewModel {
 
     this.propertyPath = args.propertyPath;
     this.propertyOwner = args.propertyOwner;
-    this.systemProperties = args.systemProperties ?? [];
+    this.systemTags = args.systemTags ?? [];
 
-    this.propertyViewModels = [];
-    this.propertyViewModels = this._getPropertyViewModels();
+    this.tagViewModels = [];
+    this.tagViewModels = this._getTagViewModels();
 
     this.vmAddNew = new InputTextFieldViewModel({
       id: "vmAddNew",
@@ -100,34 +100,34 @@ export default class InputPropertiesViewModel extends InputViewModel {
    * @param 
    * 
    * @param {Object} args
-   * @param {Array<DocumentProperty> | undefined} args.systemProperties Optional. An array 
-   * of document properties to offer the user for auto-completion. 
+   * @param {Array<Tag> | undefined} args.systemTags Optional. An array 
+   * of tags to offer the user for auto-completion. 
    */
   update(args = {}) {
-    this.systemProperties = args.systemProperties ?? this.systemProperties;
+    this.systemTags = args.systemTags ?? this.systemTags;
 
-    const newProperties = this._getPropertyViewModels();
-    this._cullObsolete(this.propertyViewModels, newProperties);
-    this.propertyViewModels = newProperties;
+    const newTags = this._getTagViewModels();
+    this._cullObsolete(this.tagViewModels, newTags);
+    this.tagViewModels = newTags;
 
     super.update(args);
   }
 
   /**
-   * @returns {Array<InputPropertyPillViewModel>}
+   * @returns {Array<InputTagPillViewModel>}
    * 
    * @private
    */
-  _getPropertyViewModels() {
+  _getTagViewModels() {
     return this._getViewModels(
       getNestedPropertyValue(this.propertyOwner, this.propertyPath), 
-      this.propertyViewModels,
-      (args) => { return new InputPropertyPillViewModel({
+      this.tagViewModels,
+      (args) => { return new InputTagPillViewModel({
         id: args.document.id,
         parent: this,
         propertyPath: this.propertyPath,
         propertyOwner: this.propertyOwner,
-        documentProperty: args.document,
+        tag: args.document,
         isEditable: args.isEditable,
       }); }
     );

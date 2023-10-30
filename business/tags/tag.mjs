@@ -1,7 +1,7 @@
 import { validateOrThrow } from "../util/validation-utility.mjs";
 
 /**
- * Represents a document property. 
+ * Represents a tag. 
  * 
  * These are user-definable *tags*, in the context of their document. 
  * For example, for an asset, expected properties would be things like 
@@ -10,9 +10,8 @@ import { validateOrThrow } from "../util/validation-utility.mjs";
  * @property {String} id Unique identifier. 
  * @property {String | undefined} localizableName A localization key. 
  */
-export default class DocumentProperty {
+export default class Tag {
   /**
-   * 
    * @param {Object} args 
    * @param {String} args.id Unique identifier. 
    * @param {String | undefined} args.localizableName A localization key. 

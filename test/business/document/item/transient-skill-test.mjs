@@ -2,8 +2,8 @@ import should from 'should';
 import sinon from 'sinon';
 import 'should-sinon';
 import TransientSkill, { SKILL_HEAD_STATES } from '../../../../business/document/item/transient-skill.mjs';
-import { SKILL_PROPERTIES } from '../../../../business/document/item/item-properties.mjs';
 import { BaseLoggingStrategy } from '../../../../business/logging/base-logging-strategy.mjs';
+import { SKILL_TAGS } from '../../../../business/tags/system-tags.mjs';
 
 describe("TransientSkill", () => {
 
@@ -51,7 +51,7 @@ describe("TransientSkill", () => {
         // Given
         const givenDocument = {
           system: {
-            properties: [SKILL_PROPERTIES.MAGIC_SCHOOL.id]
+            properties: [SKILL_TAGS.MAGIC_SCHOOL.id]
           }
         };
         const given = new TransientSkill(givenDocument);
@@ -76,7 +76,7 @@ describe("TransientSkill", () => {
         givenDocument.update.should.have.been.calledOnce();
         givenDocument.update.should.have.been.calledWith({
           system: {
-            properties: [SKILL_PROPERTIES.MAGIC_SCHOOL.id],
+            properties: [SKILL_TAGS.MAGIC_SCHOOL.id],
           }
         }, { render: true });
       });
@@ -96,7 +96,7 @@ describe("TransientSkill", () => {
         givenDocument.update.should.have.been.calledOnce();
         givenDocument.update.should.have.been.calledWith({
           system: {
-            properties: [SKILL_PROPERTIES.MAGIC_SCHOOL.id],
+            properties: [SKILL_TAGS.MAGIC_SCHOOL.id],
           }
         }, { render: true });
       });
@@ -105,7 +105,7 @@ describe("TransientSkill", () => {
         // Given
         const givenDocument = {
           system: {
-            properties: [SKILL_PROPERTIES.MAGIC_SCHOOL.id],
+            properties: [SKILL_TAGS.MAGIC_SCHOOL.id],
           },
           update: sinon.fake(),
         };
@@ -125,7 +125,7 @@ describe("TransientSkill", () => {
         // Given
         const givenDocument = {
           system: {
-            properties: [SKILL_PROPERTIES.MAGIC_SCHOOL.id],
+            properties: [SKILL_TAGS.MAGIC_SCHOOL.id],
           },
           update: sinon.fake(),
         };

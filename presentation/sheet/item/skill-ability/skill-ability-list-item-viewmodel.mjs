@@ -26,7 +26,7 @@ export default class SkillAbilityListItemViewModel extends ViewModel {
    * @type {Array<ChoiceOption>}
    * @readonly
    */
-  get attackTypeOptions() { return ATTACK_TYPES.asChoices; }
+  get attackTypeOptions() { return ATTACK_TYPES.asChoices(); }
 
   /**
    * @type {Boolean}
@@ -173,9 +173,9 @@ export default class SkillAbilityListItemViewModel extends ViewModel {
       adapter: new ChoiceAdapter({
         toChoiceOption(obj) {
           if (isDefined(obj) === true) {
-            return ATTACK_TYPES.asChoices.find(it => it.value === obj.name);
+            return ATTACK_TYPES.asChoices().find(it => it.value === obj.name);
           } else {
-            return ATTACK_TYPES.asChoices.find(it => it.value === "none");
+            return ATTACK_TYPES.asChoices().find(it => it.value === "none");
           }
         },
         fromChoiceOption(option) {

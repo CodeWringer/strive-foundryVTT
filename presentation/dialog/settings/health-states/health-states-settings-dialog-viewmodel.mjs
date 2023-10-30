@@ -145,7 +145,7 @@ export default class HealthStatesSettingsDialogViewModel extends ViewModel {
    * @private
    */
   _getHealthStateVisibilityViewModels() {
-    const states = HEALTH_STATES.asArray;
+    const states = HEALTH_STATES.asArray();
     const result = states.map(healthState => new VisibilityToggleListItem({
       id: healthState.name,
       localizedName: game.i18n.localize(healthState.localizableName),

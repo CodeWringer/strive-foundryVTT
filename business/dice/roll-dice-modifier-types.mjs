@@ -1,4 +1,4 @@
-import { getAsArray, getAsChoices } from "../util/constants-utility.mjs";
+import * as ConstantsUtils from "../util/constants-utility.mjs";
 import { validateOrThrow } from "../util/validation-utility.mjs";
 
 /**
@@ -24,10 +24,6 @@ export class RollDiceModifierType {
  * @property {RollModifyingType} HALF_ROUNDED_DOWN Half the dice, rounded down, will be rolled. 
  * @property {RollModifyingType} HALF_ROUNDED_UP Half the dice, rounded up, will be rolled. 
  * 
- * @property {Array<ChoiceOption>} asChoices The constants of this type, as an array 
- * of `ChoiceOption`s. 
- * @property {Array<VisibilityMode>} asArray The constants of this type, as an array. 
- * 
  * @constant
  */
 export const ROLL_DICE_MODIFIER_TYPES = {
@@ -43,16 +39,5 @@ export const ROLL_DICE_MODIFIER_TYPES = {
     name: "halfRoundedUp",
     localizableName: "ambersteel.roll.diceModifiers.halfRoundedUp"
   }),
-  get asChoices() {
-    if (this._asChoices === undefined) {
-      this._asChoices = getAsChoices(this, ["asChoices", "_asChoices", "asArray", "_asArray"]);
-    }
-    return this._asChoices;
-  },
-  get asArray() {
-    if (this._asArray === undefined) {
-      this._asArray = getAsArray(this, ["asChoices", "_asChoices", "asArray", "_asArray"]);
-    }
-    return this._asArray;
-  },
 }
+ConstantsUtils.enrichConstant(ROLL_DICE_MODIFIER_TYPES);

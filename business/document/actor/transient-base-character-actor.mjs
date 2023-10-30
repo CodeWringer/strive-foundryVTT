@@ -432,12 +432,8 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
   _getAttributeGroups() {
     const result = [];
 
-    for (const groupDefName in ATTRIBUTE_GROUPS) {
-      const groupDef = ATTRIBUTE_GROUPS[groupDefName];
-      // Skip any convenience members, such as `asChoices`.
-      if (groupDef.name === undefined) continue;
-
-      result.push(new CharacterAttributeGroup(this.document, groupDef.name));
+    for (const attributeGroup of ATTRIBUTE_GROUPS.asArray()) {
+      result.push(new CharacterAttributeGroup(this.document, attributeGroup.name));
     }
 
     return result;

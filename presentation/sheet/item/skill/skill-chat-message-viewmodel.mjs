@@ -1,8 +1,8 @@
-import { SKILL_HEAD_STATES } from "../../../../business/document/item/transient-skill.mjs"
+import TransientSkill, { SKILL_HEAD_STATES } from "../../../../business/document/item/transient-skill.mjs"
 import { ATTRIBUTES } from "../../../../business/ruleset/attribute/attributes.mjs"
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs"
 import ButtonToggleVisibilityViewModel from "../../../component/button-toggle-visibility/button-toggle-visibility-viewmodel.mjs"
-import InputPropertiesViewModel from "../../../component/input-properties/input-properties-viewmodel.mjs"
+import InputTagsViewModel from "../../../component/input-tags/input-tags-viewmodel.mjs"
 import LazyRichTextViewModel from "../../../component/lazy-rich-text/lazy-rich-text-viewmodel.mjs"
 import { TEMPLATES } from "../../../templatePreloader.mjs"
 import ViewModel from "../../../view-model/view-model.mjs"
@@ -25,7 +25,7 @@ export default class SkillChatMessageViewModel extends ViewModel {
    * @type {Boolean}
    * @readonly
    */
-  get hasProperties() { return this.document.properties.length > 0; }
+  get hasTags() { return this.document.tags.length > 0; }
 
   /**
    * @type {String}
@@ -38,7 +38,7 @@ export default class SkillChatMessageViewModel extends ViewModel {
    * @readonly
    */
   get relatedAttribute() {
-    const options = ATTRIBUTES.asChoices;
+    const options = ATTRIBUTES.asChoices();
     return options.find(it => { return it.value === this.document.relatedAttribute.name }).localizedValue;
   }
   
@@ -140,10 +140,10 @@ export default class SkillChatMessageViewModel extends ViewModel {
       isOwner: this.isOwner,
       renderableContent: this.document.description,
     });
-    this.vmProperties = new InputPropertiesViewModel({
-      id: "vmProperties",
+    this.vmTags = new InputTagsViewModel({
+      id: "vmTags",
       parent: this,
-      propertyPath: "properties",
+      propertyPath: "tags",
       propertyOwner: this.document,
       isEditable: false,
     });

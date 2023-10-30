@@ -1,4 +1,4 @@
-import { getAsChoices } from "../../util/constants-utility.mjs";
+import * as ConstantsUtils from "../../util/constants-utility.mjs";
 
 /**
  * Represents a shield type. 
@@ -21,9 +21,6 @@ export class ShieldType {
  * @property {ShieldType} heaterShield 
  * @property {ShieldType} kiteShield 
  * 
- * @property {Array<ChoiceOption>} asChoices The constants of this type, as an array 
- * of `ChoiceOption`s. 
- * 
  * @constant
  */
 export const SHIELD_TYPES = {
@@ -43,10 +40,5 @@ export const SHIELD_TYPES = {
     name: "kiteShield",
     localizableName: "ambersteel.character.asset.type.shield.kiteShield"
   }),
-  get asChoices() {
-    if (this._asChoices === undefined) {
-      this._asChoices = getAsChoices(this, ["asChoices", "_asChoices"]);
-    }
-    return this._asChoices;
-  },
 };
+ConstantsUtils.enrichConstant(SHIELD_TYPES);

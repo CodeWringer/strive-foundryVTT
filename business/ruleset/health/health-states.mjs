@@ -1,4 +1,4 @@
-import { getAsArray, getAsChoices } from "../../util/constants-utility.mjs";
+import * as ConstantsUtils from "../../util/constants-utility.mjs";
 import { validateOrThrow } from "../../util/validation-utility.mjs";
 
 /**
@@ -65,10 +65,6 @@ export class HealthState {
  * @property {HealthState} stunned
  * @property {HealthState} terrified 
  * @property {HealthState} unconscious 
- * 
- * @property {Array<ChoiceOption>} asChoices The constants of this type, as an array 
- * of `ChoiceOption`s. 
- * @property {Array<HealthState>} asArray The constants of this type, as an array. 
  * 
  * @constant
  */
@@ -168,16 +164,5 @@ export const HEALTH_STATES = {
     localizableName: "ambersteel.character.health.states.unconscious",
     limit: 1,
   }),
-  get asChoices() {
-    if (this._asChoices === undefined) {
-      this._asChoices = getAsChoices(this, ["asChoices", "_asChoices", "asArray", "_asArray"]);
-    }
-    return this._asChoices;
-  },
-  get asArray() {
-    if (this._asArray === undefined) {
-      this._asArray = getAsArray(this, ["asChoices", "_asChoices", "asArray", "_asArray"]);
-    }
-    return this._asArray;
-  }
 };
+ConstantsUtils.enrichConstant(HEALTH_STATES);

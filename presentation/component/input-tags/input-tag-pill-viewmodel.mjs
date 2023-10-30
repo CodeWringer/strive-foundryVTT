@@ -7,44 +7,43 @@ import ViewModel from "../../view-model/view-model.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
 
 /**
- * Represents an input field for a dynamic number of properties. 
- * 
- * A user can select from a given list of properties, as well as define new properties, simply by typing them. 
+ * Represents a single `Tag`. 
  * 
  * @extends ViewModel
  * 
- * @property {DocumentProperty} documentProperty
+ * @property {Tag} tag The represented tag. 
  * * Read-only. 
- * @property {String} localizedName
+ * @property {String} localizedName Returns the localized label of the tag. 
  * * Read-only. 
  * @property {String} propertyPath The path used to look up the value. 
  * @property {Object} propertyOwner An object on which to to look up the value. 
  */
-export default class InputPropertyPillViewModel extends ViewModel {
+export default class InputTagPillViewModel extends ViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.COMPONENT_INPUT_PROPERTY_PILL; }
+  static get TEMPLATE() { return TEMPLATES.COMPONENT_INPUT_TAG; }
 
   get localizedName() {
-    if (isDefined(this.documentProperty.localizableName) === true) {
-      return game.i18n.localize(this.documentProperty.localizableName);
+    if (isDefined(this.tag.localizableName) === true) {
+      return game.i18n.localize(this.tag.localizableName);
     } else {
-      return this.documentProperty.id;
+      return this.tag.id;
     }
   }
 
   /**
+   * @param {Object} args
    * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
    * @param {String} args.propertyPath The path used to look up the value. 
    * @param {Object} args.propertyOwner An object on which to to look up the value. 
-   * @param {DocumentProperty} args.documentProperty
+   * @param {Tag} args.tag The tag to represent. 
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["propertyPath", "propertyOwner", "documentProperty"]);
+    validateOrThrow(args, ["propertyPath", "propertyOwner", "tag"]);
 
     this.propertyPath = args.propertyPath;
     this.propertyOwner = args.propertyOwner;
-    this.documentProperty = args.documentProperty;
+    this.tag = args.tag;
 
     const thiz = this;
     
@@ -54,20 +53,20 @@ export default class InputPropertyPillViewModel extends ViewModel {
       isEditable: this.isEditable,
       localizableTitle: "ambersteel.general.delete.label",
       onClick: () => {
-        const properties = getNestedPropertyValue(this.propertyOwner, this.propertyPath);
+        const tags = getNestedPropertyValue(this.propertyOwner, this.propertyPath);
         let index = -1;
-        for (let i = 0; i < properties.length; i++) {
-          const property = properties[i];
-          if (property.id === thiz.documentProperty.id) {
+        for (let i = 0; i < tags.length; i++) {
+          const tag = tags[i];
+          if (tag.id === thiz.tag.id) {
             index = i;
             break;
           }
         }
         if (index < 0) {
-          game.ambersteel.logger.logWarn(`Attempting to delete document property '${thiz.documentProperty.id}' failed! Document property not on 'propertyOwner'`);
+          game.ambersteel.logger.logWarn(`Attempting to delete tag '${thiz.tag.id}' failed! Tag not on 'propertyOwner'`);
         } else {
-          properties.splice(index, 1);
-          setNestedPropertyValue(thiz.propertyOwner, thiz.propertyPath, properties);
+          tags.splice(index, 1);
+          setNestedPropertyValue(thiz.propertyOwner, thiz.propertyPath, tags);
         }
       }
     });

@@ -1,7 +1,7 @@
-import { ASSET_PROPERTIES } from "../../../../business/document/item/item-properties.mjs"
+import { ASSET_TAGS } from "../../../../business/tags/system-tags.mjs"
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs"
 import { TAKE_ITEM_CONTEXT_TYPES } from "../../../component/button-take-item/button-take-item-viewmodel.mjs"
-import InputPropertiesViewModel from "../../../component/input-properties/input-properties-viewmodel.mjs"
+import InputTagsViewModel from "../../../component/input-tags/input-tags-viewmodel.mjs"
 import { TEMPLATES } from "../../../templatePreloader.mjs"
 import ViewModelFactory from "../../../view-model/view-model-factory.mjs"
 import ViewModel from "../../../view-model/view-model.mjs"
@@ -85,13 +85,13 @@ export default class AssetItemSheetViewModel extends ViewModel {
       propertyOwner: thiz.document,
       propertyPath: "description",
     });
-    this.vmProperties = new InputPropertiesViewModel({
-      id: "vmProperties",
+    this.vmTags = new InputTagsViewModel({
+      id: "vmTags",
       parent: this,
-      propertyPath: "properties",
+      propertyPath: "tags",
       propertyOwner: this.document,
       isEditable: this.isEditable,
-      systemProperties: ASSET_PROPERTIES.asArray,
+      systemTags: ASSET_TAGS.asArray(),
     });
   }
 

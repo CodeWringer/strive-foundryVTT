@@ -1,4 +1,4 @@
-import { getAsArray, getAsChoices } from "../../business/util/constants-utility.mjs";
+import * as ConstantsUtils from "../../business/util/constants-utility.mjs";
 
 /**
  * Represents a chat message visibility mode. 
@@ -21,10 +21,6 @@ export class VisibilityMode {
  * @property {VisibilityMode} gm Only visible to the user themself and 
  * all game master users. 
  * 
- * @property {Array<ChoiceOption>} asChoices The constants of this type, as an array 
- * of `ChoiceOption`s. 
- * @property {Array<VisibilityMode>} asArray The constants of this type, as an array. 
- * 
  * @constant
  */
 export const VISIBILITY_MODES = {
@@ -40,16 +36,5 @@ export const VISIBILITY_MODES = {
     name: "gm",
     localizableName: "ambersteel.general.messageVisibility.gm.label"
   }),
-  get asChoices() {
-    if (this._asChoices === undefined) {
-      this._asChoices = getAsChoices(this, ["asChoices", "_asChoices", "asArray", "_asArray"]);
-    }
-    return this._asChoices;
-  },
-  get asArray() {
-    if (this._asArray === undefined) {
-      this._asArray = getAsArray(this, ["asChoices", "_asChoices", "asArray", "_asArray"]);
-    }
-    return this._asArray;
-  },
 };
+ConstantsUtils.enrichConstant(VISIBILITY_MODES);

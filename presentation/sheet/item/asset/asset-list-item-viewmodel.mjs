@@ -1,12 +1,12 @@
-import { ASSET_PROPERTIES } from "../../../../business/document/item/item-properties.mjs"
 import TransientAsset from "../../../../business/document/item/transient-asset.mjs"
 import CharacterAssetSlot from "../../../../business/ruleset/asset/character-asset-slot.mjs"
+import { ASSET_TAGS } from "../../../../business/tags/system-tags.mjs"
 import { arrayTakeUnless } from "../../../../business/util/array-utility.mjs"
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs"
 import ButtonViewModel from "../../../component/button/button-viewmodel.mjs"
 import ChoiceAdapter from "../../../component/input-choice/choice-adapter.mjs"
 import ChoiceOption from "../../../component/input-choice/choice-option.mjs"
-import InputPropertiesViewModel from "../../../component/input-properties/input-properties-viewmodel.mjs"
+import InputTagsViewModel from "../../../component/input-tags/input-tags-viewmodel.mjs"
 import DynamicInputDefinition from "../../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs"
 import DynamicInputDialog from "../../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs"
 import { DYNAMIC_INPUT_TYPES } from "../../../dialog/dynamic-input-dialog/dynamic-input-types.mjs"
@@ -146,13 +146,13 @@ export default class AssetListItemViewModel extends ViewModel {
       propertyOwner: thiz.document,
       propertyPath: "description",
     });
-    this.vmProperties = new InputPropertiesViewModel({
-      id: "vmProperties",
+    this.vmTags = new InputTagsViewModel({
+      id: "vmTags",
       parent: this,
-      propertyPath: "properties",
+      propertyPath: "tags",
       propertyOwner: this.document,
       isEditable: this.isEditable,
-      systemProperties: ASSET_PROPERTIES.asArray,
+      systemTags: ASSET_TAGS.asArray(),
     });
   }
 

@@ -47,13 +47,13 @@ export default class SkillAbilityTableViewModel extends ViewModel {
    * @type {Array<ChoiceOption>}
    * @readonly
    */
-  get attackTypeOptions() { return ATTACK_TYPES.asChoices; }
+  get attackTypeOptions() { return ATTACK_TYPES.asChoices(); }
 
   /**
    * @type {Array<ChoiceOption>}
    * @readonly
    */
-  get damageTypeOptions() { return DAMAGE_TYPES.asChoices; }
+  get damageTypeOptions() { return DAMAGE_TYPES.asChoices(); }
 
   /**
    * @type {Array<SkillAbilityListItemViewModel>}
