@@ -135,6 +135,8 @@ export const TEMPLATES = {
   SCAR_CHAT_MESSAGE: `${basePathPresentation}/sheet/item/scar/scar-chat-message.hbs`,
   SCAR_ITEM_SHEET: `${basePathPresentation}/sheet/item/scar/scar-item-sheet.hbs`,
   SCAR_LIST_ITEM: `${basePathPresentation}/sheet/item/scar/scar-list-item.hbs`,
+  // Layout
+  LAYOUT: `${basePathPresentation}/layout/layout.hbs`,
 }
 
 /**

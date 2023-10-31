@@ -1,0 +1,11 @@
+{{!-- 
+viewModel: LayoutViewModel
+--}}
+<div{{#if viewModel.cssClass}} class="{{viewModel.cssClass}}"{{/if}}
+  style="{{viewModel.style}}">
+  {{#each viewModel.contentViewModels as |contentViewModel index|}}
+    {{#with contentViewModel.template as |template|}}
+      {{> (template) viewModel=../contentViewModel }}
+    {{/with}}
+  {{/each}}
+</div>
