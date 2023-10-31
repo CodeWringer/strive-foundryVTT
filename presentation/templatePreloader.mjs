@@ -102,6 +102,9 @@ export const TEMPLATES = {
   ACTOR_BIOGRAPHY: `${basePathPresentation}/sheet/actor/part/actor-biography.hbs`,
   ACTOR_CHAT_MESSAGE: `${basePathPresentation}/sheet/actor/actor-chat-message.hbs`,
   // --- Item
+  ITEM_SHEET: `${basePathPresentation}/sheet/item/item-sheet.hbs`,
+  ITEM_CHAT_MESSAGE: `${basePathPresentation}/sheet/item/item-chat-message.hbs`,
+  ITEM_LIST_ITEM: `${basePathPresentation}/sheet/item/item-list-item.hbs`,
   // Asset
   ASSET_SHEET: `${basePathPresentation}/sheet/item/asset/asset-item-sheet.hbs`,
   ASSET_CHAT_MESSAGE: `${basePathPresentation}/sheet/item/asset/asset-item-chat-message.hbs`,
