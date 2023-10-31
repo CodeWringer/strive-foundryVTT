@@ -1,4 +1,3 @@
-import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import { TEMPLATES } from "../../templatePreloader.mjs";
 import InputViewModel from "../../view-model/input-view-model.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
@@ -80,17 +79,8 @@ export default class InputRichTextViewModel extends InputViewModel {
     this._editor.resetContent(this.value);
   }
 
-  /**
-   * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
-   * 
-   * @param {String} args.propertyPath The path used to look up the value. 
-   * @param {Object} args.propertyOwner An object on which to to look up the value. 
-   * @param {Boolean | undefined} args.isEditable Optional. If true, input(s) will be in edit mode. If false, input(s) will be in read-only mode.
-   * @param {String | undefined} args.contextTemplate Optional. Name or path of a template that embeds this input component. 
-   */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["propertyPath", "propertyOwner"]);
 
     const thiz = this;
 
@@ -107,8 +97,8 @@ export default class InputRichTextViewModel extends InputViewModel {
   }
 
   /** @override */
-  async activateListeners(html, isOwner, isEditable) {
-    await super.activateListeners(html, isOwner, isEditable);
+  async activateListeners(html) {
+    await super.activateListeners(html);
 
     this._elementButtonEditMode = this.element.find(".component-rich-text-editbutton");
     this._elementEditor = this.element.find(".component-rich-text");

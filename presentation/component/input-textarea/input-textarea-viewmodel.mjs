@@ -1,4 +1,3 @@
-import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import { TEMPLATES } from "../../templatePreloader.mjs";
 import InputViewModel from "../../view-model/input-view-model.mjs";
 
@@ -43,20 +42,12 @@ export default class InputTextareaViewModel extends InputViewModel {
   get localizedPlaceholder() { return (this._placeholder !== undefined && this._placeholder !== null) ? game.i18n.localize(this._placeholder) : ""; }
   
   /**
-   * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
-   * 
-   * @param {String} args.propertyPath The path used to look up the value. 
-   * @param {Object} args.propertyOwner An object on which to to look up the value. 
-   * @param {Boolean | undefined} args.isEditable Optional. If true, input(s) will be in edit mode. If false, input(s) will be in read-only mode.
-   * @param {String | undefined} args.contextTemplate Optional. Name or path of a template that embeds this input component. 
-   * @param {String | undefined} args.localizableTitle Optional. The localizable title (tooltip). 
-   * 
+   * @param {Object} args
    * @param {Boolean | undefined} args.spellcheck Optional. Sets whether spell checking is enabled. 
    * @param {String | undefined} args.placeholder Optional. Sets a placeholder text to display while the textfield is empty. 
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["propertyPath", "propertyOwner"]);
 
     this.spellcheck = args.spellcheck ?? false;
     this._placeholder = args.placeholder ?? "";

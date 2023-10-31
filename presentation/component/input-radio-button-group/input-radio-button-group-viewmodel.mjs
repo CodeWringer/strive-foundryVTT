@@ -9,6 +9,7 @@ import StatefulChoiceOption from "../input-choice/stateful-choice-option.mjs";
  * @extends InputViewModel
  * 
  * @property {StatefulChoiceOption} selected Gets the currently selected option. 
+ * * Read-only
  * @property {Array<StatefulChoiceOption>} options Gets the options available to the radio button group. 
  */
 export default class InputRadioButtonGroupViewModel extends InputViewModel {
@@ -36,19 +37,11 @@ export default class InputRadioButtonGroupViewModel extends InputViewModel {
 
   /**
    * @param {Object} args
-   * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
-   * 
-   * @param {String} args.propertyPath The path used to look up the value. 
-   * @param {Object} args.propertyOwner An object on which to to look up the value. 
-   * @param {Boolean | undefined} args.isEditable Optional. If true, input(s) will be in edit mode. If false, input(s) will be in read-only mode.
-   * @param {String | undefined} args.contextTemplate Optional. Name or path of a template that embeds this input component. 
-   * @param {String | undefined} args.localizableTitle Optional. The localizable title (tooltip). 
-   * 
    * @param {Array<StatefulChoiceOption>} args.options The options available to the radio button group. 
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["propertyPath", "propertyOwner", "options"]);
+    validateOrThrow(args, ["options"]);
 
     this.options = args.options;
   }
@@ -58,8 +51,8 @@ export default class InputRadioButtonGroupViewModel extends InputViewModel {
    * 
    * @throws {Error} NullPointerException Thrown if the radio button container could not be found. 
    */
-  async activateListeners(html, isOwner, isEditable) {
-    await super.activateListeners(html, isOwner, isEditable);
+  async activateListeners(html) {
+    await super.activateListeners(html);
 
     if (isEditable !== true) return;
 

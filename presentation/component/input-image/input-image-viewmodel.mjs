@@ -1,4 +1,3 @@
-import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import { TEMPLATES } from "../../templatePreloader.mjs";
 import InputViewModel from "../../view-model/input-view-model.mjs";
 
@@ -22,27 +21,13 @@ export default class InputImageViewModel extends InputViewModel {
     Handlebars.registerPartial('inputImage', `{{> "${InputImageViewModel.TEMPLATE}"}}`);
   }
 
-  /**
-   * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
-   * 
-   * @param {String} args.propertyPath The path used to look up the value. 
-   * @param {Object} args.propertyOwner An object on which to to look up the value. 
-   * @param {Boolean | undefined} args.isEditable Optional. If true, input(s) will be in edit mode. If false, input(s) will be in read-only mode.
-   * @param {String | undefined} args.contextTemplate Optional. Name or path of a template that embeds this input component. 
-   * @param {String | undefined} args.localizableTitle Optional. The localizable title (tooltip). 
-   */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["propertyPath", "propertyOwner"]);
   }
 
-  /**
-   * @override
-   * 
-   * @throws {Error} NullPointerException Thrown if the element could not be found on the DOM. 
-   */
-  async activateListeners(html, isOwner, isEditable) {
-    await super.activateListeners(html, isOwner, isEditable);
+  /** @override */
+  async activateListeners(html) {
+    await super.activateListeners(html);
     
     this.element.click(this._onClick.bind(this, html, isOwner, this.isEditable));
   }

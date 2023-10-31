@@ -1,7 +1,4 @@
 import Tag from "../../../business/tags/tag.mjs";
-import { setNestedPropertyValue } from "../../../business/util/property-utility.mjs";
-import { getNestedPropertyValue } from "../../../business/util/property-utility.mjs";
-import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import { TEMPLATES } from "../../templatePreloader.mjs";
 import InputViewModel from "../../view-model/input-view-model.mjs";
 import InputTextFieldViewModel from "../input-textfield/input-textfield-viewmodel.mjs";
@@ -14,10 +11,6 @@ import InputTagPillViewModel from "./input-tag-pill-viewmodel.mjs";
  * 
  * @extends InputViewModel
  * 
- * @property {String} propertyPath
- * * Read-only. 
- * @property {Object} propertyOwner
- * * Read-only. 
  * @property {Array<Tag>} systemTags An array 
  * of tags to offer the user for auto-completion. 
  * @property {Array<InputTagPillViewModel>} tagViewModels
@@ -44,43 +37,14 @@ export default class InputTagsViewModel extends InputViewModel {
    */
   get templatePill() { return InputTagPillViewModel.TEMPLATE; }
 
-  get newEntry() { return ""; }
-  set newEntry(value) {
-    // Try to find a matching tag by id. 
-    // Search case-insensitively and replace spaces with underscores, so users needn't know the internal IDs and can 
-    // instead simply type the exact text they may find on other documents and expect it to work. 
-    let tag = this.systemTags.find(it => it.id.toLowerCase() === value.toLowerCase().replace(" ", "_"));
-    if (tag === undefined) {
-      tag = new Tag({
-        id: value,
-      });
-    }
-
-    const tags = getNestedPropertyValue(this.propertyOwner, this.propertyPath);
-    // Prevent adding the same tag twice. 
-    if (tags.find(it => it.id === tag.id) !== undefined) return;
-
-    tags.push(tag);
-    setNestedPropertyValue(this.propertyOwner, this.propertyPath, tags);
-  }
-
   /**
    * @param {Object} args
-   * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
-   * 
-   * @param {String} args.propertyPath The path used to look up the value. 
-   * @param {Object} args.propertyOwner An object on which to to look up the value. 
-   * @param {Boolean | undefined} args.isEditable Optional. If true, input(s) will be in edit mode. If false, input(s) will be in read-only mode.
-   * 
    * @param {Array<Tag> | undefined} args.systemTags Optional. An array 
    * of tags to offer the user for auto-completion. 
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["propertyPath", "propertyOwner"]);
 
-    this.propertyPath = args.propertyPath;
-    this.propertyOwner = args.propertyOwner;
     this.systemTags = args.systemTags ?? [];
 
     this.tagViewModels = [];
@@ -89,10 +53,32 @@ export default class InputTagsViewModel extends InputViewModel {
     this.vmAddNew = new InputTextFieldViewModel({
       id: "vmAddNew",
       parent: this,
-      propertyPath: "newEntry",
-      propertyOwner: this,
       isEditable: this.isEditable,
       requireConfirmation: true,
+      onChange: (value) => {
+        // Do nothing on empty value. This is the case when the user cancels. 
+        if (value.trim().length === 0) return;
+
+        // Try to find a matching tag by id. 
+        // Search case-insensitively and replace spaces with underscores, so users needn't know the internal IDs and can 
+        // instead simply type the exact text they may find on other documents and expect it to work. 
+        let tag = this.systemTags.find(it => it.id.toLowerCase() === value.toLowerCase().replace(" ", "_"));
+        if (tag === undefined) {
+          // Not a system tag - so a new one. 
+          tag = new Tag({
+            id: value,
+            localizableName: value,
+          });
+        }
+
+        const tags = this.value.concat([]); // safe copy
+        // Prevent adding the same tag twice. 
+        if (tags.find(it => it.id === tag.id) !== undefined) return;
+
+        tags.push(tag);
+
+        this.value = tags;
+      },
     });
   }
 
@@ -106,30 +92,53 @@ export default class InputTagsViewModel extends InputViewModel {
   update(args = {}) {
     this.systemTags = args.systemTags ?? this.systemTags;
 
-    const newTags = this._getTagViewModels();
-    this._cullObsolete(this.tagViewModels, newTags);
-    this.tagViewModels = newTags;
+    const newTagViewModels = this._getTagViewModels();
+    this._cullObsolete(this.tagViewModels, newTagViewModels);
+    this.tagViewModels = newTagViewModels;
 
     super.update(args);
   }
 
   /**
+   * Creates and returns the child view models of the contained tags. 
+   * 
    * @returns {Array<InputTagPillViewModel>}
    * 
    * @private
    */
   _getTagViewModels() {
     return this._getViewModels(
-      getNestedPropertyValue(this.propertyOwner, this.propertyPath), 
+      this.value, 
       this.tagViewModels,
-      (args) => { return new InputTagPillViewModel({
-        id: args.document.id,
-        parent: this,
-        propertyPath: this.propertyPath,
-        propertyOwner: this.propertyOwner,
-        tag: args.document,
-        isEditable: args.isEditable,
-      }); }
+      (args) => {
+        return new InputTagPillViewModel({
+          id: args.document.id,
+          parent: this,
+          tag: args.document,
+          isEditable: args.isEditable,
+          onDelete: (tag) => {
+            this._deleteTag(tag);
+          }
+        }); 
+      }
     );
+  }
+  
+  /**
+   * Deletes the given tag. 
+   * 
+   * @param {Tag} tag The tag to delete. 
+   * 
+   * @private
+   */
+  _deleteTag(tag) {
+    const tags = this.value.concat([]); // safe copy
+    const index = tags.findIndex(it => it.id === tag.id);
+    if (index < 0) {
+      game.ambersteel.logger.logWarn(`Attempting to delete tag '${tag.id}' failed!`);
+    } else {
+      tags.splice(index, 1);
+      this.value = tags;
+    }
   }
 }

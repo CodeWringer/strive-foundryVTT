@@ -67,8 +67,6 @@ export const TEMPLATES = {
   COMPONENT_VISIBILITY_TOGGLE_LIST: `${basePathComponent}/visibility-toggle-list/visibility-toggle-list.hbs`,
   COMPONENT_VISIBILITY_TOGGLE_LIST_ITEM: `${basePathComponent}/visibility-toggle-list/visibility-toggle-list-item.hbs`,
   COMPONENT_HINT_CARD: `${basePathComponent}/hint-card/hint-card.hbs`,
-  // GM
-  COMPONENT_GM_NOTES: `${basePathComponent}/section-gm-notes/section-gm-notes.hbs`,
   // Dice
   DICE_ROLL_CHAT_MESSAGE: `${basePathPresentation}/dice/roll.hbs`,
   // --- Dialogs
