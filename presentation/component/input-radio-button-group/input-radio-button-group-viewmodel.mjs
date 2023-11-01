@@ -68,7 +68,7 @@ export default class InputRadioButtonGroupViewModel extends InputViewModel {
   async activateListeners(html) {
     await super.activateListeners(html);
 
-    if (isEditable !== true) return;
+    if (this.isEditable !== true) return;
 
     const radioButtonContainer = this.element.find(".radio-button-container");
 

@@ -89,8 +89,8 @@ export default class ButtonContextMenuViewModel extends ButtonViewModel {
   }
 
   /** @override */
-  async activateListeners(html, isOwner, isEditable) {
-    await super.activateListeners(html, isOwner, isEditable);
+  async activateListeners(html) {
+    await super.activateListeners(html);
 
     this.html = html;
     this._contextMenu = new ContextMenu(html, this.id, this.menuItems);

@@ -86,14 +86,12 @@ export default class ViewModelCollection {
    * Registers events on elements of the given DOM. 
    * 
    * @param {Object} html DOM of the sheet for which to register listeners. 
-   * @param {Boolean} isOwner
-   * @param {Boolean} isEditable
    * 
    * @throws {Error} NullPointerException - Thrown, if an element is missing an 'id'-attribute. 
    * 
    * @async
    */
-  async activateListeners(html, isOwner, isEditable) {
+  async activateListeners(html) {
     const inputs = this._getAllInputs(html);
     const buttons = this._getAllButtons(html);
     const elements = [];
@@ -111,7 +109,7 @@ export default class ViewModelCollection {
       // Remove from global collection and add to this. 
       const vm = this._pullFromGlobal(id);
       // Activate DOM event listeners of view model. 
-      await vm.activateListeners(html, isOwner, isEditable);
+      await vm.activateListeners(html);
     }
   }
 
