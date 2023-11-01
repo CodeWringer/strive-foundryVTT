@@ -10,6 +10,11 @@ import InputChoiceViewModel from "./input-choice-viewmodel.mjs";
  * @property {Array<ChoiceOption>} options Gets the options available. 
  * * Read-only. 
  * 
+ * @method onChange Callback that is invoked when the value changes. 
+ * Receives the following arguments: 
+ * * `oldValue: {ChoiceOption}`
+ * * `newValue: {ChoiceOption}`
+ * 
  * @abstract
  */
 export default class InputSingleChoiceViewModel extends InputChoiceViewModel {
@@ -18,6 +23,10 @@ export default class InputSingleChoiceViewModel extends InputChoiceViewModel {
    * @param {ChoiceOption} args.value The current value. 
    * @param {Array<ChoiceOption>} args.options The options available to the drop-down. 
    * @param {ChoiceAdapter} args.adapter A `ChoiceOption` adapter. 
+   * @param {Function | undefined} args.onChange Callback that is invoked 
+   * when the value changes. Receives two arguments: 
+   * * `oldValue: {ChoiceOption}`
+   * * `newValue: {ChoiceOption}`
    */
   constructor(args = {}) {
     super(args);

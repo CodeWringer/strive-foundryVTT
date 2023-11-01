@@ -9,6 +9,7 @@ import InputViewModel from "../../view-model/input-view-model.mjs";
  * 
  * @extends InputViewModel
  * 
+ * @property {Number} value The current value. 
  * @property {Number | undefined} min Gets the minimum value. 
  * @property {Number | undefined} max Gets the maximum value. 
  * @property {Boolean} hasMin Returns true, if the minimum value is defined. 
@@ -17,6 +18,10 @@ import InputViewModel from "../../view-model/input-view-model.mjs";
  * * Read-only
  * @property {Number} step Gets the increment/decrement step size. 
  * 
+ * @method onChange Callback that is invoked when the value changes. 
+ * Receives the following arguments: 
+ * * `oldValue: {Number}`
+ * * `newValue: {Number}`
  */
 export default class InputNumberSpinnerViewModel extends InputViewModel {
   /** @override */
@@ -46,13 +51,20 @@ export default class InputNumberSpinnerViewModel extends InputViewModel {
 
   /**
    * @param {Object} args
+   * @param {Number | undefined} args.value The current value. 
+   * * default `0`
    * @param {Number | undefined} args.min Optional. The minimum value. 
    * @param {Number | undefined} args.max Optional. The maximum value. 
    * @param {Number | undefined} args.step Optional. The increment/decrement step size. 
+   * @param {Function | undefined} args.onChange Callback that is invoked 
+   * when the value changes. Receives two arguments: 
+   * * `oldValue: {Number}`
+   * * `newValue: {Number}`
    */
   constructor(args = {}) {
     super(args);
 
+    this._value = args.value ?? 0;
     this.min = args.min ?? undefined;
     this.max = args.max ?? undefined;
     this.step = args.step ?? 1;

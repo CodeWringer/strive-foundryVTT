@@ -1,4 +1,3 @@
-import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import { TEMPLATES } from "../../templatePreloader.mjs";
 import InputViewModel from "../../view-model/input-view-model.mjs";
 
@@ -7,7 +6,13 @@ import InputViewModel from "../../view-model/input-view-model.mjs";
  * 
  * @extends InputViewModel
  * 
+ * @property {String} value The current value. 
  * @property {String} placeholder A localized placeholder text to display while the textfield is empty. 
+ * 
+  * @method onChange Callback that is invoked when the value changes. 
+ * Receives the following arguments: 
+ * * `oldValue: {String}`
+ * * `newValue: {String}`
  */
 export default class InputTextFieldViewModel extends InputViewModel {
   /** @override */
@@ -23,14 +28,21 @@ export default class InputTextFieldViewModel extends InputViewModel {
   }
 
   /**
-   * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
-   * @param {Boolean | undefined} args.isEditable Optional. If true, input(s) will be in edit mode. If false, input(s) will be in read-only mode.
+   * @param {Object} args 
+   * @param {String | undefined} args.id Unique ID of this view model instance. 
+   * @param {Boolean | undefined} args.isEditable If true, input(s) will be in edit mode. If false, input(s) will be in read-only mode.
    * 
-   * @param {String | undefined} args.placeholder Optional. A placeholder text to display while the textfield is empty. 
+   * @param {String | undefined} args.value The current value. 
+   * @param {String | undefined} args.placeholder A placeholder text to display while the textfield is empty. 
+   * @param {Function | undefined} args.onChange Callback that is invoked 
+   * when the value changes. Receives two arguments: 
+   * * `oldValue: {String}`
+   * * `newValue: {String}`
    */
   constructor(args = {}) {
     super(args);
 
+    this._value = args.value ?? "";
     this._placeholder = args.placeholder ?? "";
   }
 }

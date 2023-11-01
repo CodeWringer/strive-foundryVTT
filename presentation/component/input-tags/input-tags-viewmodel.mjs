@@ -11,12 +11,18 @@ import InputTagPillViewModel from "./input-tag-pill-viewmodel.mjs";
  * 
  * @extends InputViewModel
  * 
+ * @property {Array<Tag>} value The current value. 
  * @property {Array<Tag>} systemTags An array 
  * of tags to offer the user for auto-completion. 
  * @property {Array<InputTagPillViewModel>} tagViewModels
  * * Read-only. 
  * @property {String} templatePill
  * * Read-only. 
+ * 
+ * @method onChange Callback that is invoked when the value changes. 
+ * Receives the following arguments: 
+ * * `oldValue: {Array<Tag>}`
+ * * `newValue: {Array<Tag>}`
  */
 export default class InputTagsViewModel extends InputViewModel {
   /** @override */
@@ -39,14 +45,20 @@ export default class InputTagsViewModel extends InputViewModel {
 
   /**
    * @param {Object} args
+   * @param {Array<Tag> | undefined} args.value 
    * @param {Array<Tag> | undefined} args.systemTags Optional. An array 
    * of tags to offer the user for auto-completion. 
+   * @param {Function | undefined} args.onChange Callback that is invoked 
+   * when the value changes. Receives two arguments: 
+   * * `oldValue: {Array<Tag>}`
+   * * `newValue: {Array<Tag>}`
    */
   constructor(args = {}) {
     super(args);
 
     this.systemTags = args.systemTags ?? [];
 
+    this._value = args.value ?? [];
     this.tagViewModels = [];
     this.tagViewModels = this._getTagViewModels();
 

@@ -8,9 +8,16 @@ import StatefulChoiceOption from "../input-choice/stateful-choice-option.mjs";
  * 
  * @extends InputViewModel
  * 
+ * @property {String} value The current value. Corresponds to a 
+ * `ChoiceOption.value` from the `options`. 
  * @property {StatefulChoiceOption} selected Gets the currently selected option. 
  * * Read-only
  * @property {Array<StatefulChoiceOption>} options Gets the options available to the radio button group. 
+ * 
+ * @method onChange Callback that is invoked when the value changes. 
+ * Receives the following arguments: 
+ * * `oldValue: {String}`
+ * * `newValue: {String}`
  */
 export default class InputRadioButtonGroupViewModel extends InputViewModel {
   /** @override */
@@ -38,12 +45,19 @@ export default class InputRadioButtonGroupViewModel extends InputViewModel {
   /**
    * @param {Object} args
    * @param {Array<StatefulChoiceOption>} args.options The options available to the radio button group. 
+   * @param {String | undefined} args.value The current value. Must correspond 
+   * to a `ChoiceOption.value` from the `options`. 
+   * @param {Function | undefined} args.onChange Callback that is invoked 
+   * when the value changes. Receives two arguments: 
+   * * `oldValue: {String}`
+   * * `newValue: {String}`
    */
   constructor(args = {}) {
     super(args);
     validateOrThrow(args, ["options"]);
 
     this.options = args.options;
+    this._value = args.value ?? (args.options.length > 0 ? args.options[0].value : "");
   }
 
   /**

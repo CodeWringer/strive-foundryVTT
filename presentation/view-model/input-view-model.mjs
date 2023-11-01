@@ -1,5 +1,3 @@
-import { setNestedPropertyValue, getNestedPropertyValue } from "../../business/util/property-utility.mjs";
-import { validateOrThrow } from "../../business/util/validation-utility.mjs";
 import { getElementValue } from "../sheet/sheet-utility.mjs";
 import ViewModel from "./view-model.mjs";
 
@@ -22,6 +20,7 @@ export const SELECTOR_READ = "custom-system-read-only";
  * @property {String} id Unique ID of this view model instance. 
  * @property {Boolean} isEditable If `true`, input(s) will 
  * be in edit mode. If `false`, will be in read-only mode.
+ * 
  * @property {String | undefined} localizedToolTip A localized text to 
  * display as a tool tip. 
  * @property {String | undefined} iconHtml Raw HTML to render as 
@@ -40,8 +39,17 @@ export const SELECTOR_READ = "custom-system-read-only";
  * * `newValue: {Any}`
  */
 export default class InputViewModel extends ViewModel {
-
+  /**
+   * Returns the current value. 
+   * 
+   * @type {Any}
+   */
   get value() { return this._value; }
+  /**
+   * Sets the current value. 
+   * 
+   * @param {Any} newValue
+   */
   set value(newValue) {
     const oldValue = this._value;
     this._value = newValue;
@@ -81,11 +89,11 @@ export default class InputViewModel extends ViewModel {
    * display as a tool tip. 
    * @param {String | undefined} args.iconHtml Raw HTML to render as 
    * an associated icon. E. g. `'<i class="fas fa-scroll"></i>'`
-   * @param {Function | undefined} args.onChange Callback that is invoked when the value changes. 
-   * * Receives two arguments: 
-   * * * `oldValue: {Any}`
-   * * * `newValue: {Any}`
    * @param {Any | undefined} args.value The current value. 
+   * @param {Function | undefined} args.onChange Callback that is invoked 
+   * when the value changes. Receives two arguments: 
+   * * `oldValue: {Any}`
+   * * `newValue: {Any}`
    */
   constructor(args = {}) {
     super(args);
@@ -105,6 +113,13 @@ export default class InputViewModel extends ViewModel {
     if (this.isEditable !== true) return;
 
     this.element.change(this._onChange.bind(this));
+  }
+  
+  /** @override */
+  dispose() {
+    this.onChange = null;
+
+    super.dispose();
   }
 
   /**

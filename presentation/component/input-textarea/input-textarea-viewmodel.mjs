@@ -6,8 +6,14 @@ import InputViewModel from "../../view-model/input-view-model.mjs";
  * 
  * @extends InputViewModel
  * 
+ * @property {String} value The current value. 
  * @property {Boolean} spellcheck Gets whether spell checking is enabled. 
  * @property {String} placeholder Gets a placeholder text to display while the textfield is empty. 
+ * 
+ * @method onChange Callback that is invoked when the value changes. 
+ * Receives the following arguments: 
+ * * `oldValue: {String}`
+ * * `newValue: {String}`
  */
 export default class InputTextareaViewModel extends InputViewModel {
   /** @override */
@@ -43,12 +49,18 @@ export default class InputTextareaViewModel extends InputViewModel {
   
   /**
    * @param {Object} args
+   * @param {String | undefined} args.value The current value. 
    * @param {Boolean | undefined} args.spellcheck Optional. Sets whether spell checking is enabled. 
    * @param {String | undefined} args.placeholder Optional. Sets a placeholder text to display while the textfield is empty. 
+   * @param {Function | undefined} args.onChange Callback that is invoked 
+   * when the value changes. Receives two arguments: 
+   * * `oldValue: {String}`
+   * * `newValue: {String}`
    */
   constructor(args = {}) {
     super(args);
 
+    this._value = args.value ?? "";
     this.spellcheck = args.spellcheck ?? false;
     this._placeholder = args.placeholder ?? "";
   }
