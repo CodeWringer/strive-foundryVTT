@@ -5,12 +5,14 @@ import { SOUNDS_CONSTANTS } from "../../../presentation/audio/sounds.mjs";
 import { ITEM_SUBTYPE } from "./item-subtype.mjs";
 import TransientBaseItem from "./transient-base-item.mjs";
 import { createUUID } from "../../util/uuid-utility.mjs";
-import { DataField, DataFieldAdapter, DataFieldPresenter, DataFieldRowLayout } from "../data-field.mjs";
+import { DataField, DataFieldAdapter } from "../data-field.mjs";
 import InputTextFieldViewModel from "../../../presentation/component/input-textfield/input-textfield-viewmodel.mjs";
 import InputRadioButtonGroupViewModel from "../../../presentation/component/input-radio-button-group/input-radio-button-group-viewmodel.mjs";
 import { INJURY_STATES } from "../../ruleset/health/injury-states.mjs";
 import StatefulChoiceOption from "../../../presentation/component/input-choice/stateful-choice-option.mjs";
-import { ColumnLayout, LayoutSize, RowLayout } from "../../../presentation/layout/layout.mjs";
+import InjurySheetPresenter from "../../../presentation/document/injury/injury-sheet-presenter.mjs";
+import InjuryListItemPresenter from "../../../presentation/document/injury/injury-list-item-presenter.mjs";
+import InjuryChatMessagePresenter from "../../../presentation/document/injury/injury-chat-message-presenter.mjs";
 
 /**
  * Represents the full transient data of an injury. 
@@ -183,139 +185,12 @@ export default class TransientInjury extends TransientBaseItem {
     this.obstacleTreatment,
   ]; }
 
-  /**
-   * Returns the layout of this type for presentation as a sheet. 
-   * 
-   * @type {Layoutable}
-   * @readonly
-   */
-  get sheetLayout() {
-    return new ColumnLayout({
-      content: [
-        new RowLayout({
-          cssClass: "header",
-          content: [
-            this.img,
-            this.name,
-            this.buttonSendToChat,
-          ],
-        }),
-        new RowLayout({
-          content: [
-            this.description,
-          ],
-        }),
-        new RowLayout({
-          content: [
-            this.treatmentSkill,
-            this.requiredSupplies,
-          ],
-        }),
-        new RowLayout({
-          content: [
-            this.obstaclePatchUp,
-            this.obstacleTreatment,
-          ],
-        }),
-        new RowLayout({
-          content: [
-            this.timeToHeal,
-            this.timeToHealTreated,
-            this.selfPatchUp,
-          ],
-        }),
-        new RowLayout({
-          content: [
-            this.scar,
-            this.limit,
-          ],
-        }),
-      ],
-    });
-  }
+  constructor(args = {}) {
+    super(args);
 
-  /**
-   * Returns the layout of this type for presentation as a list item. 
-   * 
-   * @type {Layoutable}
-   * @readonly
-   */
-  get listItemLayout() {
-    return new ColumnLayout({
-      content: [
-        new RowLayout({
-          cssClass: "header",
-          content: [
-            this.buttonSendToChat,
-            this.img,
-            this.name,
-            this.state,
-            this.buttonDelete,
-          ],
-        }),
-        new RowLayout({
-          content: [
-            this.description,
-          ],
-        }),
-        new RowLayout({
-          content: [
-            this.treatmentSkill,
-            this.requiredSupplies,
-          ],
-        }),
-        new RowLayout({
-          content: [
-            this.obstaclePatchUp,
-            this.obstacleTreatment,
-          ],
-        }),
-        new RowLayout({
-          content: [
-            this.timeToHeal,
-            this.timeToHealTreated,
-            this.selfPatchUp,
-          ],
-        }),
-        new RowLayout({
-          content: [
-            this.scar,
-            this.limit,
-          ],
-        }),
-      ],
-    });
-  }
-
-  /**
-   * Returns the layout of this type for presentation as a chat message. 
-   * 
-   * @type {Layoutable}
-   * @readonly
-   */
-  get chatMessageLayout() {
-    return new ColumnLayout({
-      content: [
-        new RowLayout({
-          cssClass: "header",
-          content: [
-            this.img,
-            this.name,
-            this.state,
-          ],
-        }),
-        this.description,
-        this.treatmentSkill,
-        this.requiredSupplies,
-        this.obstaclePatchUp,
-        this.obstacleTreatment,
-        this.timeToHeal,
-        this.timeToHealTreated,
-        this.selfPatchUp,
-        this.scar,
-        this.limit,
-      ],
-    });
+    this.sheetPresenter = new InjurySheetPresenter({ document: this });
+    this.listItemPresenter = new InjuryListItemPresenter({ document: this });
+    this.chatMessagePresenter = new InjuryChatMessagePresenter({ document: this });
   }
 
   /** @override */

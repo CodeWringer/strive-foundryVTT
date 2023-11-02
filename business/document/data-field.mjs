@@ -1,4 +1,4 @@
-import { Layoutable } from "../../presentation/layout/layout.mjs";
+import Layoutable from "../../presentation/layout/layoutable.mjs";
 import ViewModel from "../../presentation/view-model/view-model.mjs";
 import { getNestedPropertyValue, setNestedPropertyValue } from "../util/property-utility.mjs";
 import { validateOrThrow } from "../util/validation-utility.mjs";
@@ -16,10 +16,8 @@ import TransientDocument from "./transient-document.mjs";
  * `TransientDocument`). 
  * 
  * @property {String} template Template path. 
- * @property {Function} viewModelFunc Must return a new view 
- * model instance. Receives the following arguments: 
- * * `parent: {ViewModel}`
- * @property {LayoutSize} layoutSize 
+ * @property {LayoutSize} layoutSize This element's preferred size 
+ * in its parent layout. 
  * @property {String | undefined} cssClass A css class.  
  * 
  * @property {TransientDocument} document The document whose 
@@ -27,6 +25,14 @@ import TransientDocument from "./transient-document.mjs";
  * @property {String} dataPath A property path that identifies 
  * the underlying data field. 
  * E. g. `"system.health.injuries[0].name"`
+ * @property {Function} viewModelFunc Must return a new view 
+ * model instance. Receives the following arguments: 
+ * * `parent: {ViewModel}` - Is a parent view model instance. 
+ * This is expected to be the root view model instance of a 
+ * dedicated sheet, list item or chat message. 
+ * * `isOwner: {Boolean}` - Is `true`, if the current user is 
+ * the owner of the document. 
+ * * `isGM: {Boolean}` - Is `true`, if the current user is a GM. 
  * @property {DataFieldAdapter} adapter Adapts the 
  * underlying data field's value to and from a value for use in a 
  * view model instance. 
@@ -36,10 +42,8 @@ export class DataField extends Layoutable {
    * @param {Object} args 
    * 
    * @param {String} args.template Template path. 
-   * @param {Function} args.viewModelFunc Must return a new view 
-   * model instance. Receives the following arguments: 
-   * * `parent: {ViewModel}`
-   * @param {LayoutSize | undefined} args.layoutSize 
+   * @param {LayoutSize | undefined} args.layoutSize This element's 
+   * preferred size in its parent layout. 
    * @param {String | undefined} args.cssClass A css class.  
    * 
    * @param {TransientDocument} args.document The document whose 
@@ -47,16 +51,25 @@ export class DataField extends Layoutable {
    * @param {String} args.dataPath A property path that identifies 
    * the underlying data field. 
    * E. g. `"system.health.injuries[0].name"`
+   * @param {Function} args.viewModelFunc Must return a new view 
+   * model instance. Receives the following arguments: 
+   * * `parent: {ViewModel}` - Is a parent view model instance. 
+   * This is expected to be the root view model instance of a 
+   * dedicated sheet, list item or chat message. 
+   * * `isOwner: {Boolean}` - Is `true`, if the current user is 
+   * the owner of the document. 
+   * * `isGM: {Boolean}` - Is `true`, if the current user is a GM. 
    * @param {DataFieldAdapter | undefined} args.adapter Adapts the 
    * underlying data field's value to and from a value for use in a 
    * view model instance. 
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["document", "dataPath"]);
+    validateOrThrow(args, ["document", "dataPath", "viewModelFunc"]);
 
     this.document = args.document;
     this.dataPath = args.dataPath;
+    this.viewModelFunc = args.viewModelFunc;
     this.adapter = args.adapter ?? new DataFieldAdapter();
   }
 
@@ -88,16 +101,16 @@ export class DataField extends Layoutable {
    * via the view model, transforms that value to a data field compliant 
    * value and then persists it. 
    * 
-   * @param {ViewModel} parent The parent view model. 
-   * @param {Boolean} isOwner
-   * @param {Boolean} isGM
+   * @param {ViewModel} parent Is a parent view model instance. 
+   * This is expected to be the root view model instance of a 
+   * dedicated sheet, list item or chat message. 
    * 
    * @returns {ViewModel} A new view model instance. 
    * 
    * @override
    */
-  getViewModel(parent, isOwner, isGM) {
-    const vm = super.getViewModel(parent);
+  getViewModel(parent) {
+    const vm = this.viewModelFunc(parent, parent.isOwner, parent.isGM);
 
     // The initial value must be set **before** the onChange listener 
     // is hooked up, to prevent premature callback invocations. 
@@ -126,20 +139,34 @@ export class DataField extends Layoutable {
  * from the view model value to something the underlying data field 
  * can use. Receives the value as its sole argument and must return 
  * the transformed value. 
+ * @method fromDto Transforms the value from 
+ * the dto persisted on the server. For example, mapping a list of IDs 
+ * to a list of documents. 
+ * @method toDto Transforms to a dto to 
+ * persist on the server. For example, mapping a list of documents 
+ * to a list of their IDs. 
  */
 export class DataFieldAdapter {
   /**
    * @param {Object} args 
-   * @param {Function} args.toViewModelValue Transforms the value to 
-   * something the view model can use. Receives the value as its 
+   * @param {Function | undefined} args.toViewModelValue Transforms the 
+   * value to something the view model can use. Receives the value as its 
    * sole argument and must return the transformed value. 
-   * @param {Function} args.fromViewModelValue Transforms the value  
-   * from the view model value to something the underlying data field 
+   * @param {Function | undefined} args.fromViewModelValue Transforms the 
+   * value  from the view model value to something the underlying data field 
    * can use. Receives the value as its sole argument and must return 
    * the transformed value. 
+   * @param {Function | undefined} args.fromDto Transforms the value from 
+   * the dto persisted on the server. For example, mapping a list of IDs 
+   * to a list of documents. 
+   * @param {Function | undefined} args.toDto Transforms to a dto to 
+   * persist on the server. For example, mapping a list of documents 
+   * to a list of their IDs. 
    */
   constructor(args = {}) {
     this.toViewModelValue = args.toViewModelValue ?? ((value) => { return value; });
     this.fromViewModelValue = args.fromViewModelValue ?? ((value) => { return value; });
+    this.fromDto = args.fromDto ?? ((dto) => { return dto; });
+    this.toDto = args.toDto ?? ((value) => { return value; });
   }
 }

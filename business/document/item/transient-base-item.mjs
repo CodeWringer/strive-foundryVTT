@@ -1,5 +1,6 @@
 import { TEMPLATES } from "../../../presentation/templatePreloader.mjs";
 import Tag from "../../tags/tag.mjs";
+import { DataField, DataFieldAdapter } from "../data-field.mjs";
 import TransientDocument from "../transient-document.mjs";
 
 /**
@@ -21,7 +22,7 @@ import TransientDocument from "../transient-document.mjs";
  * 
  * @property {TransientBaseActor | undefined} owningDocument Another 
  * document that this document is embedded in. 
- * @property {Array<Tag>} tags An array of the current 
+ * @property {DataField< Array<Tag> >} tags An array of the current 
  * tags of this document. 
  * @property {Array<Tag>} acceptedTags Returns an array of accepted 
  * tags. 
@@ -36,34 +37,70 @@ export default class TransientBaseItem extends TransientDocument {
   /** @override */
   get chatMessageTemplate() { return TEMPLATES.ASSET_CHAT_MESSAGE; }
 
-  /**
-   * An array of the current tags of this document. 
-   * 
-   * @type {Array<Tag>}
-   */
-  get tags() {
-    const ids = (this.document.system.tags ?? this.document.system.properties) ?? [];
-    const result = [];
+  tags = new DataField({
+    document: this,
+    dataPath: "system.tags",
+    template: TODO.TEMPLATE,
+    viewModelFunc: (parent, isOwner, isGM) => {
+      // TODO
+    },
+    adapter: new DataFieldAdapter({
+      toViewModelValue: (value) => {
+        return ;
+      },
+      fromViewModelValue: (value) => {
+        return ;
+      },
+      fromDto: (dto) => {
+        // const ids = (this.document.system.tags ?? this.document.system.properties) ?? [];
+        const result = [];
 
-    for (const id of ids) {
-      let tag = this.acceptedTags.find(it => it.id === id);
-      if (tag === undefined) {
-        tag = new Tag({
-          id: id,
-          localizableName: id,
-        });
-      }
-      result.push(tag);
-    }
+        for (const id of dto) {
+          let tag = this.acceptedTags.find(it => it.id === id);
+          if (tag === undefined) {
+            tag = new Tag({
+              id: id,
+              localizableName: id,
+            });
+          }
+          result.push(tag);
+        }
 
-    return result;
-  }
-  set tags(value) {
-    const ids = value.map(it => it.id);
+        return result;
+      },
+      toDto: (value) => {
+        return value.map(it => it.id);
+      },
+    }),
+  });
+  // /**
+  //  * An array of the current tags of this document. 
+  //  * 
+  //  * @type {Array<Tag>}
+  //  */
+  // get tags() {
+  //   const ids = (this.document.system.tags ?? this.document.system.properties) ?? [];
+  //   const result = [];
 
-    this.document.system.tags = ids;
-    this.updateByPath("system.tags", ids);
-  }
+  //   for (const id of ids) {
+  //     let tag = this.acceptedTags.find(it => it.id === id);
+  //     if (tag === undefined) {
+  //       tag = new Tag({
+  //         id: id,
+  //         localizableName: id,
+  //       });
+  //     }
+  //     result.push(tag);
+  //   }
+
+  //   return result;
+  // }
+  // set tags(value) {
+  //   const ids = value.map(it => it.id);
+
+  //   this.document.system.tags = ids;
+  //   this.updateByPath("system.tags", ids);
+  // }
   
   /**
    * Returns an array of accepted tags. 
