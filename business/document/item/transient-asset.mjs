@@ -8,16 +8,20 @@ import { createUUID } from "../../util/uuid-utility.mjs";
 import CharacterAssetSlot from "../../ruleset/asset/character-asset-slot.mjs";
 import { arrayTakeUnless } from "../../util/array-utility.mjs";
 import { ASSET_TAGS } from "../../tags/system-tags.mjs";
+import { DataField } from "../data-field.mjs";
+import InputNumberSpinnerViewModel from "../../../presentation/component/input-number-spinner/input-number-spinner-viewmodel.mjs";
+import ValueAdapter from "../../util/value-adapter.mjs";
+import AssetSheetPresenter from "../../../presentation/document/asset/asset-sheet-presenter.mjs";
 
 /**
  * Represents the full transient data of an asset. 
  * 
  * @extends TransientBaseItem
  * 
- * @property {Number} quantity
- * @property {Number} maxQuantity
- * @property {Boolean} isOnPerson
- * @property {Number} bulk
+ * @property {DataField< Number >} quantity
+ * @property {DataField< Number >} maxQuantity
+ * @property {DataField< Boolean >} isOnPerson
+ * @property {DataField< Number >} bulk
  * @property {Boolean} isProperty Returns `true`, if the asset is in the 
  * "property" section on a character sheet. 
  * * Read-only
@@ -35,47 +39,63 @@ export default class TransientAsset extends TransientBaseItem {
   /** @override */
   get chatMessageTemplate() { return TEMPLATES.ASSET_CHAT_MESSAGE; }
   
-  /**
-   * @type {Number}
-   */
-  get quantity() {
-    return parseInt(this.document.system.quantity);
-  }
-  set quantity(value) {
-    this.document.system.quantity = value;
-    this.updateByPath("system.quantity", value);
-  }
+  quantity = new DataField({
+    document: this,
+    dataPaths: ["system.quantity"],
+    template: InputNumberSpinnerViewModel.TEMPLATE,
+    defaultValue: 1,
+    viewModelFunc: (parent, isOwner, isGM) => {
+      return new InputNumberSpinnerViewModel({
+        id: "quantity",
+        parent: parent,
+        localizedToolTip: game.i18n.localize("ambersteel.character.asset.quantity.label"),
+        iconHtml: '<a href="icons/svg/bones.svg"></a>',
+        min: 1,
+      }); 
+    },
+  });
   
-  /**
-   * @type {Number}
-   */
-  get maxQuantity() {
-    return parseInt(this.document.system.maxQuantity);
-  }
-  set maxQuantity(value) {
-    this.document.system.maxQuantity = value;
-    this.updateByPath("system.maxQuantity", value);
-  }
+  maxQuantity = new DataField({
+    document: this,
+    dataPaths: ["system.maxQuantity"],
+    template: InputNumberSpinnerViewModel.TEMPLATE,
+    defaultValue: 1,
+    viewModelFunc: (parent, isOwner, isGM) => {
+      return new InputNumberSpinnerViewModel({
+        id: "maxQuantity",
+        parent: parent,
+        localizedToolTip: game.i18n.localize("ambersteel.character.asset.quantity.maximum"),
+        iconHtml: '<a href="icons/svg/bones.svg"></a>',
+        min: 1,
+      }); 
+    },
+  });
   
-  /**
-   * @type {Boolean}
-   */
-  get isOnPerson() {
-    return this.document.system.isOnPerson;
-  }
-  set isOnPerson(value) {
-    this.document.system.isOnPerson = value;
-    this.updateByPath("system.isOnPerson", value);
-  }
+  isOnPerson = new DataField({
+    document: this,
+    dataPaths: ["system.isOnPerson"],
+    defaultValue: false,
+  });
 
-  /**
-   * @type {Number}
-   */
-  get bulk() { return parseInt(this.document.system.bulk); }
-  set bulk(value) {
-    this.document.system.bulk = value;
-    this.updateByPath("system.bulk", value);
-  }
+  bulk = new DataField({
+    document: this,
+    dataPaths: ["system.bulk"],
+    template: InputNumberSpinnerViewModel.TEMPLATE,
+    defaultValue: 0,
+    viewModelFunc: (parent, isOwner, isGM) => {
+      return new InputNumberSpinnerViewModel({
+        id: "bulk",
+        parent: parent,
+        localizedToolTip: game.i18n.localize("ambersteel.character.asset.bulk"),
+        iconHtml: '<a href="icons/svg/bones.svg"></a>',
+        min: 0,
+      }); 
+    },
+    dtoAdapter: new ValueAdapter({
+      to: (value) => { parseInt(value); },
+      from: (value) => { parseInt(value); },
+    })
+  });
 
   /** @override */
   get acceptedTags() { return ASSET_TAGS.asArray(); }
@@ -145,6 +165,18 @@ export default class TransientAsset extends TransientBaseItem {
    */
   constructor(document) {
     super(document);
+
+    this.tags.viewModelFunc = (parent, isOwner, isGM) => {
+      return new InputTagsViewModel({
+        id: "tags",
+        parent: parent,
+        systemTags: ASSET_TAGS.asArray(),
+      });
+    }
+
+    this.sheetPresenter = new AssetSheetPresenter({ document: this });
+    this.listItemPresenter = new AssetListItemPresenter({ document: this });
+    this.chatMessagePresenter = new AssetChatMessagePresenter({ document: this });
   }
 
   /** @override */

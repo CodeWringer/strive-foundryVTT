@@ -5,7 +5,7 @@ import { SOUNDS_CONSTANTS } from "../../../presentation/audio/sounds.mjs";
 import { ITEM_SUBTYPE } from "./item-subtype.mjs";
 import TransientBaseItem from "./transient-base-item.mjs";
 import { createUUID } from "../../util/uuid-utility.mjs";
-import { DataField, DataFieldAdapter } from "../data-field.mjs";
+import { DataField } from "../data-field.mjs";
 import InputTextFieldViewModel from "../../../presentation/component/input-textfield/input-textfield-viewmodel.mjs";
 import InputRadioButtonGroupViewModel from "../../../presentation/component/input-radio-button-group/input-radio-button-group-viewmodel.mjs";
 import { INJURY_STATES } from "../../ruleset/health/injury-states.mjs";
@@ -13,6 +13,7 @@ import StatefulChoiceOption from "../../../presentation/component/input-choice/s
 import InjurySheetPresenter from "../../../presentation/document/injury/injury-sheet-presenter.mjs";
 import InjuryListItemPresenter from "../../../presentation/document/injury/injury-list-item-presenter.mjs";
 import InjuryChatMessagePresenter from "../../../presentation/document/injury/injury-chat-message-presenter.mjs";
+import ValueAdapter from "../../util/value-adapter.mjs";
 
 /**
  * Represents the full transient data of an injury. 
@@ -39,20 +40,23 @@ export default class TransientInjury extends TransientBaseItem {
 
   state = new DataField({
     document: this,
-    dataPath: "system.state",
+    dataPaths: ["system.state"],
     template: InputRadioButtonGroupViewModel.TEMPLATE,
-    viewModelFunc: (parent, isOwner, isGM) => { return new InputRadioButtonGroupViewModel({
-      id: "state",
-      parent: parent,
-      localizedToolTip: game.i18n.localize("ambersteel.character.health.injury.state"),
-      iconHtml: '<a href="icons/svg/bones.svg"></a>',
-      options: this._getInjuryStateOptions(),
-    }); },
-    adapter: new DataFieldAdapter({
-      toViewModelValue: (value) => {
+    defaultValue: INJURY_STATES.active.name,
+    viewModelFunc: (parent, isOwner, isGM) => {
+      return new InputRadioButtonGroupViewModel({
+        id: "state",
+        parent: parent,
+        localizedToolTip: game.i18n.localize("ambersteel.character.health.injury.state"),
+        iconHtml: '<a href="icons/svg/bones.svg"></a>',
+        options: this._getInjuryStateOptions(),
+      }); 
+    },
+    viewModelAdapter: new ValueAdapter({
+      to: (value) => {
         return this._getInjuryStateOptions().find(it => it.value === value);
       },
-      fromViewModelValue: (choiceOption) => {
+      from: (choiceOption) => {
         return choiceOption.value;
       }
     }),
@@ -60,8 +64,9 @@ export default class TransientInjury extends TransientBaseItem {
   
   timeToHeal = new DataField({
     document: this,
-    dataPath: "system.timeToHeal",
+    dataPaths: ["system.timeToHeal"],
     template: InputTextFieldViewModel.TEMPLATE,
+    defaultValue: "",
     viewModelFunc: (parent, isOwner, isGM) => { return new InputTextFieldViewModel({
       id: "timeToHeal",
       parent: parent,
@@ -72,8 +77,9 @@ export default class TransientInjury extends TransientBaseItem {
   
   limit = new DataField({
     document: this,
-    dataPath: "system.limit",
+    dataPaths: ["system.limit"],
     template: InputTextFieldViewModel.TEMPLATE,
+    defaultValue: "",
     viewModelFunc: (parent, isOwner, isGM) => { return new InputTextFieldViewModel({
       id: "timeToHeal",
       parent: parent,
@@ -84,8 +90,9 @@ export default class TransientInjury extends TransientBaseItem {
   
   scar = new DataField({
     document: this,
-    dataPath: "system.scar",
+    dataPaths: ["system.scar"],
     template: InputTextFieldViewModel.TEMPLATE,
+    defaultValue: "",
     viewModelFunc: (parent, isOwner, isGM) => { return new InputTextFieldViewModel({
       id: "timeToHeal",
       parent: parent,
@@ -96,8 +103,9 @@ export default class TransientInjury extends TransientBaseItem {
   
   timeToHealTreated = new DataField({
     document: this,
-    dataPath: "system.timeToHealTreated",
+    dataPaths: ["system.timeToHealTreated"],
     template: InputTextFieldViewModel.TEMPLATE,
+    defaultValue: "",
     viewModelFunc: (parent, isOwner, isGM) => { return new InputTextFieldViewModel({
       id: "timeToHeal",
       parent: parent,
@@ -108,8 +116,9 @@ export default class TransientInjury extends TransientBaseItem {
 
   selfPatchUp = new DataField({
     document: this,
-    dataPath: "system.selfPatchUp",
+    dataPaths: ["system.selfPatchUp"],
     template: InputTextFieldViewModel.TEMPLATE,
+    defaultValue: "",
     viewModelFunc: (parent, isOwner, isGM) => { return new InputTextFieldViewModel({
       id: "timeToHeal",
       parent: parent,
@@ -120,8 +129,9 @@ export default class TransientInjury extends TransientBaseItem {
 
   treatmentSkill = new DataField({
     document: this,
-    dataPath: "system.treatmentSkill",
+    dataPaths: ["system.treatmentSkill"],
     template: InputTextFieldViewModel.TEMPLATE,
+    defaultValue: "",
     viewModelFunc: (parent, isOwner, isGM) => { return new InputTextFieldViewModel({
       id: "timeToHeal",
       parent: parent,
@@ -132,8 +142,9 @@ export default class TransientInjury extends TransientBaseItem {
 
   requiredSupplies = new DataField({
     document: this,
-    dataPath: "system.requiredSupplies",
+    dataPaths: ["system.requiredSupplies"],
     template: InputTextFieldViewModel.TEMPLATE,
+    defaultValue: "",
     viewModelFunc: (parent, isOwner, isGM) => { return new InputTextFieldViewModel({
       id: "timeToHeal",
       parent: parent,
@@ -144,8 +155,9 @@ export default class TransientInjury extends TransientBaseItem {
 
   obstaclePatchUp = new DataField({
     document: this,
-    dataPath: "system.obstaclePatchUp",
+    dataPaths: ["system.obstaclePatchUp"],
     template: InputTextFieldViewModel.TEMPLATE,
+    defaultValue: "",
     viewModelFunc: (parent, isOwner, isGM) => { return new InputTextFieldViewModel({
       id: "timeToHeal",
       parent: parent,
@@ -156,8 +168,9 @@ export default class TransientInjury extends TransientBaseItem {
 
   obstacleTreatment = new DataField({
     document: this,
-    dataPath: "system.obstacleTreatment",
+    dataPaths: ["system.obstacleTreatment"],
     template: InputTextFieldViewModel.TEMPLATE,
+    defaultValue: "",
     viewModelFunc: (parent, isOwner, isGM) => { return new InputTextFieldViewModel({
       id: "timeToHeal",
       parent: parent,

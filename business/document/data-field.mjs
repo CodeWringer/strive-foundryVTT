@@ -2,6 +2,7 @@ import Layoutable from "../../presentation/layout/layoutable.mjs";
 import ViewModel from "../../presentation/view-model/view-model.mjs";
 import { getNestedPropertyValue, setNestedPropertyValue } from "../util/property-utility.mjs";
 import { validateOrThrow } from "../util/validation-utility.mjs";
+import ValueAdapter from "../util/value-adapter.mjs";
 import TransientDocument from "./transient-document.mjs";
 
 /**
@@ -15,17 +16,23 @@ import TransientDocument from "./transient-document.mjs";
  * defined only once, in a central location (on an owning 
  * `TransientDocument`). 
  * 
- * @property {String} template Template path. 
+ * @property {String | undefined} template Template path. 
  * @property {LayoutSize} layoutSize This element's preferred size 
  * in its parent layout. 
  * @property {String | undefined} cssClass A css class.  
  * 
  * @property {TransientDocument} document The document whose 
  * system data field this object represents. 
- * @property {String} dataPath A property path that identifies 
- * the underlying data field. 
- * E. g. `"system.health.injuries[0].name"`
- * @property {Function} viewModelFunc Must return a new view 
+ * @property {Array<String>} dataPaths Property paths that identify 
+ * the underlying data field. Iterates each path in succession, 
+ * until one of them returns a non-undefined value. Useful to 
+ * support legacy data paths. Note that the order in which they 
+ * are listed in this array, is their priority. The first path is also 
+ * used for writing the data to the server. 
+ * E. g. `["system.health.injuries[0].name"]`
+ * @property {Any} defaultValue A value that is returned when 
+ * none of the `dataPaths` return a non-undefined value. 
+ * @property {Function | undefined} viewModelFunc Must return a new view 
  * model instance. Receives the following arguments: 
  * * `parent: {ViewModel}` - Is a parent view model instance. 
  * This is expected to be the root view model instance of a 
@@ -33,25 +40,33 @@ import TransientDocument from "./transient-document.mjs";
  * * `isOwner: {Boolean}` - Is `true`, if the current user is 
  * the owner of the document. 
  * * `isGM: {Boolean}` - Is `true`, if the current user is a GM. 
- * @property {DataFieldAdapter} adapter Adapts the 
+ * @property {ValueAdapter} viewModelAdapter Adapts the 
  * underlying data field's value to and from a value for use in a 
  * view model instance. 
+ * @property {ValueAdapter} dtoAdapter Converts between server-side 
+ * and business data. 
  */
 export class DataField extends Layoutable {
   /**
    * @param {Object} args 
    * 
-   * @param {String} args.template Template path. 
+   * @param {String | undefined} args.template Template path. 
    * @param {LayoutSize | undefined} args.layoutSize This element's 
    * preferred size in its parent layout. 
    * @param {String | undefined} args.cssClass A css class.  
    * 
    * @param {TransientDocument} args.document The document whose 
    * system data field this object represents. 
-   * @param {String} args.dataPath A property path that identifies 
-   * the underlying data field. 
-   * E. g. `"system.health.injuries[0].name"`
-   * @param {Function} args.viewModelFunc Must return a new view 
+   * @param {Array<String>} args.dataPaths Property paths that identify 
+   * the underlying data field. Iterates each path in succession, 
+   * until one of them returns a non-undefined value. Useful to 
+   * support legacy data paths. Note that the order in which they 
+   * are listed in this array, is their priority. The first path is also 
+   * used for writing the data to the server. 
+   * E. g. `["system.health.injuries[0].name"]`
+   * @param {Any | undefined} args.defaultValue A value that is returned when 
+   * none of the `dataPaths` return a non-undefined value. 
+   * @param {Function | undefined} args.viewModelFunc Must return a new view 
    * model instance. Receives the following arguments: 
    * * `parent: {ViewModel}` - Is a parent view model instance. 
    * This is expected to be the root view model instance of a 
@@ -59,18 +74,25 @@ export class DataField extends Layoutable {
    * * `isOwner: {Boolean}` - Is `true`, if the current user is 
    * the owner of the document. 
    * * `isGM: {Boolean}` - Is `true`, if the current user is a GM. 
-   * @param {DataFieldAdapter | undefined} args.adapter Adapts the 
+   * @param {ValueAdapter | undefined} args.viewModelAdapter Adapts the 
    * underlying data field's value to and from a value for use in a 
    * view model instance. 
+   * @param {ValueAdapter | undefined} args.dtoAdapter Adapts the 
+   * underlying data field's value to and from the server persisted data. 
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["document", "dataPath", "viewModelFunc"]);
+    validateOrThrow(args, ["document", "dataPaths"]);
+    if (this.dataPaths.length < 1) {
+      throw new Error("dataPaths must not be empty");
+    }
 
     this.document = args.document;
-    this.dataPath = args.dataPath;
+    this.dataPaths = args.dataPaths;
+    this.defaultValue = args.defaultValue;
     this.viewModelFunc = args.viewModelFunc;
-    this.adapter = args.adapter ?? new DataFieldAdapter();
+    this.viewModelAdapter = args.viewModelAdapter ?? new ValueAdapter();
+    this.dtoAdapter = args.dtoAdapter ?? new ValueAdapter();
   }
 
   /**
@@ -79,7 +101,17 @@ export class DataField extends Layoutable {
    * @returns {Any}
    */
   get() {
-    return getNestedPropertyValue(this.document, this.dataPath);
+    let dto;
+    for (const dataPath of this.dataPaths) {
+      dto = getNestedPropertyValue(this.document, dataPath);
+      if (dto !== undefined) break;
+    }
+    // Set default value, in case none of the data paths returned a value. 
+    if (dto === undefined) {
+      dto = this.defaultValue;
+    }
+
+    return this.dtoAdapter.from(dto);
   }
 
   /**
@@ -90,8 +122,11 @@ export class DataField extends Layoutable {
    * @async
    */
   async set(value) {
-    setNestedPropertyValue(this.document, this.dataPath, value);
-    await this.document.updateByPath(this.dataPath, value);
+    const transformedValue = this.dtoAdapter.to(value);
+    const dataPath = this.dataPaths[0];
+
+    setNestedPropertyValue(this.document, dataPath, transformedValue);
+    await this.document.updateByPath(dataPath, transformedValue);
   }
 
   /**
@@ -110,63 +145,19 @@ export class DataField extends Layoutable {
    * @override
    */
   getViewModel(parent) {
+    if (this.viewModelFunc === undefined) {
+      throw new Error("No view model factory function");
+    }
+
     const vm = this.viewModelFunc(parent, parent.isOwner, parent.isGM);
 
     // The initial value must be set **before** the onChange listener 
     // is hooked up, to prevent premature callback invocations. 
-    vm.value = this.adapter.toViewModelValue(this.get());
+    vm.value = this.viewModelAdapter.to(this.get());
     vm.onChange = (_, newValue) => {
-      const value = this.adapter.fromViewModelValue(newValue);
+      const value = this.viewModelAdapter.from(newValue);
       this.set(value);
     };
     return vm;
-  }
-}
-
-/**
- * Adapts the value of a `DataField` to and from the value for use 
- * in one of its view model instances. 
- * 
- * For example, when a view model's value is of type `ChoiceOption`, 
- * but the underlying data field's value is of type `String`, then 
- * this adapter will be used transform the `String` value to a 
- * `ChoiceOption` and back again. 
- * 
- * @method toViewModelValue Transforms the value to 
- * something the view model can use. Receives the value as its 
- * sole argument and must return the transformed value. 
- * @method fromViewModelValue Transforms the value  
- * from the view model value to something the underlying data field 
- * can use. Receives the value as its sole argument and must return 
- * the transformed value. 
- * @method fromDto Transforms the value from 
- * the dto persisted on the server. For example, mapping a list of IDs 
- * to a list of documents. 
- * @method toDto Transforms to a dto to 
- * persist on the server. For example, mapping a list of documents 
- * to a list of their IDs. 
- */
-export class DataFieldAdapter {
-  /**
-   * @param {Object} args 
-   * @param {Function | undefined} args.toViewModelValue Transforms the 
-   * value to something the view model can use. Receives the value as its 
-   * sole argument and must return the transformed value. 
-   * @param {Function | undefined} args.fromViewModelValue Transforms the 
-   * value  from the view model value to something the underlying data field 
-   * can use. Receives the value as its sole argument and must return 
-   * the transformed value. 
-   * @param {Function | undefined} args.fromDto Transforms the value from 
-   * the dto persisted on the server. For example, mapping a list of IDs 
-   * to a list of documents. 
-   * @param {Function | undefined} args.toDto Transforms to a dto to 
-   * persist on the server. For example, mapping a list of documents 
-   * to a list of their IDs. 
-   */
-  constructor(args = {}) {
-    this.toViewModelValue = args.toViewModelValue ?? ((value) => { return value; });
-    this.fromViewModelValue = args.fromViewModelValue ?? ((value) => { return value; });
-    this.fromDto = args.fromDto ?? ((dto) => { return dto; });
-    this.toDto = args.toDto ?? ((value) => { return value; });
   }
 }

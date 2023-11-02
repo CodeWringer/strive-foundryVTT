@@ -6,6 +6,7 @@ import ViewModel from '../../presentation/view-model/view-model.mjs';
 import { VISIBILITY_MODES } from '../../presentation/chat/visibility-modes.mjs';
 import * as PropertyUtility from "../util/property-utility.mjs";
 import DocumentUpdater from "./document-updater/document-updater.mjs";
+import DocumentPresenter from "../../presentation/document/document-presenter.mjs";
 
 /**
  * The regular expression pattern used to identify all `@`-references. 
@@ -68,6 +69,10 @@ export const REGEX_PATTERN_PROPERTY_PATH = /\.[^\s-/*+]+/i;
  * @property {String} description
  * @property {String} gmNotes
  * @property {Boolean} isCustom
+ * 
+ * @property {DocumentPresenter} sheetPresenter
+ * @property {DocumentPresenter} listItemPresenter
+ * @property {DocumentPresenter} chatMessagePresenter
  */
 export default class TransientDocument {
   /**
@@ -236,6 +241,10 @@ export default class TransientDocument {
     this.document = document;
     this.localizableName = this.name;
     this.localizableAbbreviation = this.name;
+
+    this.sheetPresenter = new DocumentPresenter({ document: this });
+    this.listItemPresenter = new DocumentPresenter({ document: this });
+    this.chatMessagePresenter = new DocumentPresenter({ document: this });
   }
 
   /**

@@ -1,10 +1,8 @@
-import { validateOrThrow } from "../../business/util/validation-utility.mjs";
-
 /**
  * Represents the abstract base class for any layout-includable 
  * type. 
  * 
- * @property {String} template Template path. 
+ * @property {String | undefined} template Template path. 
  * @property {LayoutSize} layoutSize This element's preferred size 
  * in its parent layout. 
  * @property {String | undefined} cssClass A css class. 
@@ -18,14 +16,12 @@ import { validateOrThrow } from "../../business/util/validation-utility.mjs";
 export default class Layoutable {
   /**
    * @param {Object} args 
-   * @param {String} args.template Template path. 
+   * @param {String | undefined} args.template Template path. 
    * @param {LayoutSize | undefined} args.layoutSize This element's 
    * preferred size in its parent layout. 
    * @param {String | undefined} args.cssClass A css class. 
    */
   constructor(args = {}) {
-    validateOrThrow(args, ["template"]);
-
     this.template = args.template;
     this.layoutSize = args.layoutSize ?? new LayoutSize();
     this.cssClass = args.cssClass;

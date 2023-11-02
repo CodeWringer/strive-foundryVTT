@@ -1,6 +1,8 @@
+import InputTagsViewModel from "../../../presentation/component/input-tags/input-tags-viewmodel.mjs";
 import { TEMPLATES } from "../../../presentation/templatePreloader.mjs";
 import Tag from "../../tags/tag.mjs";
-import { DataField, DataFieldAdapter } from "../data-field.mjs";
+import ValueAdapter from "../../util/value-adapter.mjs";
+import { DataField } from "../data-field.mjs";
 import TransientDocument from "../transient-document.mjs";
 
 /**
@@ -39,23 +41,20 @@ export default class TransientBaseItem extends TransientDocument {
 
   tags = new DataField({
     document: this,
-    dataPath: "system.tags",
-    template: TODO.TEMPLATE,
+    dataPaths: ["system.tags", "system.properties"],
+    template: InputTagsViewModel.TEMPLATE,
     viewModelFunc: (parent, isOwner, isGM) => {
-      // TODO
+      return new InputTagsViewModel({
+        id: "tags",
+        parent: parent,
+      });
     },
-    adapter: new DataFieldAdapter({
-      toViewModelValue: (value) => {
-        return ;
-      },
-      fromViewModelValue: (value) => {
-        return ;
-      },
-      fromDto: (dto) => {
-        // const ids = (this.document.system.tags ?? this.document.system.properties) ?? [];
+    defaultValue: [],
+    dtoAdapter: new ValueAdapter({
+      from: (value) => {
         const result = [];
-
-        for (const id of dto) {
+  
+        for (const id of value) {
           let tag = this.acceptedTags.find(it => it.id === id);
           if (tag === undefined) {
             tag = new Tag({
@@ -65,42 +64,14 @@ export default class TransientBaseItem extends TransientDocument {
           }
           result.push(tag);
         }
-
+  
         return result;
       },
-      toDto: (value) => {
+      to: (value) => {
         return value.map(it => it.id);
-      },
+      }
     }),
   });
-  // /**
-  //  * An array of the current tags of this document. 
-  //  * 
-  //  * @type {Array<Tag>}
-  //  */
-  // get tags() {
-  //   const ids = (this.document.system.tags ?? this.document.system.properties) ?? [];
-  //   const result = [];
-
-  //   for (const id of ids) {
-  //     let tag = this.acceptedTags.find(it => it.id === id);
-  //     if (tag === undefined) {
-  //       tag = new Tag({
-  //         id: id,
-  //         localizableName: id,
-  //       });
-  //     }
-  //     result.push(tag);
-  //   }
-
-  //   return result;
-  // }
-  // set tags(value) {
-  //   const ids = value.map(it => it.id);
-
-  //   this.document.system.tags = ids;
-  //   this.updateByPath("system.tags", ids);
-  // }
   
   /**
    * Returns an array of accepted tags. 

@@ -277,6 +277,14 @@ export default class TransientSkill extends TransientBaseItem {
   constructor(document) {
     super(document);
 
+    this.tags.viewModelFunc = (parent, isOwner, isGM) => {
+      return new InputTagsViewModel({
+        id: "tags",
+        parent: parent,
+        systemTags: SKILL_TAGS.asArray(),
+      });
+    }
+
     this.advancementRequirements = new Ruleset().getSkillAdvancementRequirements(this.level);
     this._abilities = this._getSkillAbilities();
   }

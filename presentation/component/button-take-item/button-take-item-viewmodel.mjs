@@ -45,6 +45,7 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
   }
 
   /**
+   * @param {Object} args
    * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
    * 
    * @param {TransientAsset} args.target The target object to affect. 
