@@ -66,7 +66,6 @@ import './presentation/component/button-toggle-icon/button-toggle-icon-viewmodel
 // Composites
 import './presentation/component/sortable-list/sortable-list-viewmodel.mjs';
 import './presentation/component/simple-list/simple-list-viewmodel.mjs';
-import './presentation/component/section-gm-notes/section-gm-notes-viewmodel.mjs';
 import './presentation/component/dice-roll-list/dice-roll-list-viewmodel.mjs';
 import './presentation/component/damage-definition-list/damage-definition-list-item-viewmodel.mjs';
 import './presentation/component/damage-definition-list/damage-definition-list-viewmodel.mjs';

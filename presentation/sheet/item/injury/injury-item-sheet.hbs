@@ -1,9 +1,0 @@
-{{!-- Parameters:
-viewModel: {InjuryItemSheetViewModel}
-cssClass: {undefined | String}
---}}
-<form class="flex flex-column{{#if cssClass}} {{cssClass}}{{/if}}" autocomplete="off">
-  {{#with viewModel.layoutViewModel.template as |template|}}
-    {{> (template) viewModel=../viewModel.layoutViewModel }}
-  {{/with}}
-</form>

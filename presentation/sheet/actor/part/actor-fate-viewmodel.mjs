@@ -2,7 +2,7 @@ import { validateOrThrow } from "../../../../business/util/validation-utility.mj
 import { TEMPLATES } from "../../../templatePreloader.mjs";
 import ViewModelFactory from "../../../view-model/view-model-factory.mjs"
 import ViewModel from "../../../view-model/view-model.mjs"
-import FateCardViewModel from "../../item/fate-card/fate-card-viewmodel.mjs"
+import FateCardListItemViewModel from "../../item/fate-card/fate-card-list-item-viewmodel.mjs";
 
 export default class ActorFateViewModel extends ViewModel {
   /** @override */
@@ -18,7 +18,7 @@ export default class ActorFateViewModel extends ViewModel {
   get fateCardCount() { return this.document.fateSystem.fateCards.length; }
 
   /**
-   * @type {Array<FateCardViewModel>}
+   * @type {Array<FateCardListItemViewModel>}
    * @readonly
    */
   fateCards = [];
@@ -91,7 +91,7 @@ export default class ActorFateViewModel extends ViewModel {
     });
 
     this.fateCards = [];
-    this.fateCards = this._getFateCardViewModels();
+    this.fateCards = this._getFateCardListItemViewModels();
   }
 
   /**
@@ -107,7 +107,7 @@ export default class ActorFateViewModel extends ViewModel {
    * @override
    */
   update(args = {}) {
-    const newFateCards = this._getFateCardViewModels();
+    const newFateCards = this._getFateCardListItemViewModels();
     this._cullObsolete(this.fateCards, newFateCards);
     this.fateCards = newFateCards;
 
@@ -115,15 +115,15 @@ export default class ActorFateViewModel extends ViewModel {
   }
 
   /**
-   * @returns {Array<FateCardViewModel>}
+   * @returns {Array<FateCardListItemViewModel>}
    * 
    * @private
    */
-  _getFateCardViewModels() {
+  _getFateCardListItemViewModels() {
     return this._getViewModels(
       this.document.fateSystem.fateCards, 
       this.fateCards,
-      (args) => { return new FateCardViewModel(args); }
+      (args) => { return new FateCardListItemViewModel(args); }
     );
   }
 }

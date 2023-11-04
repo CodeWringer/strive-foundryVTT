@@ -4,7 +4,7 @@ import ViewModel from "../../../view-model/view-model.mjs"
 
 export default class InjuryListItemViewModel extends ViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.INJURY_LIST_ITEM; }
+  static get TEMPLATE() { return TEMPLATES.ITEM_LIST_ITEM; }
 
   /** @override */
   get entityId() { return this.document.id; }

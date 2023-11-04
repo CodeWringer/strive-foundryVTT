@@ -1,11 +1,10 @@
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs";
-import LazyRichTextViewModel from "../../../component/lazy-rich-text/lazy-rich-text-viewmodel.mjs";
 import { TEMPLATES } from "../../../templatePreloader.mjs";
 import ViewModel from "../../../view-model/view-model.mjs";
 
 export default class IllnessChatMessageViewModel extends ViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.ILLNESS_CHAT_MESSAGE; }
+  static get TEMPLATE() { return TEMPLATES.ITEM_CHAT_MESSAGE; }
 
   /** @override */
   get entityId() { return this.document.id; }
@@ -27,15 +26,6 @@ export default class IllnessChatMessageViewModel extends ViewModel {
     validateOrThrow(args, ["document"]);
 
     this.document = args.document;
-    this.contextTemplate = args.contextTemplate ?? "illness-chat-message";
-
-    this.vmLazyDescription = new LazyRichTextViewModel({
-      id: "vmLazyDescription",
-      parent: this,
-      isEditable: this.isEditable,
-      isSendable: this.isSendable,
-      isOwner: this.isOwner,
-      renderableContent: this.document.description,
-    });
+    this.layoutViewModel = this.document.chatMessagePresenter.getViewModel(this);
   }
 }

@@ -1,17 +1,6 @@
 import TransientAsset from "../../../../business/document/item/transient-asset.mjs"
-import CharacterAssetSlot from "../../../../business/ruleset/asset/character-asset-slot.mjs"
-import { ASSET_TAGS } from "../../../../business/tags/system-tags.mjs"
-import { arrayTakeUnless } from "../../../../business/util/array-utility.mjs"
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs"
-import ButtonViewModel from "../../../component/button/button-viewmodel.mjs"
-import ChoiceAdapter from "../../../component/input-choice/choice-adapter.mjs"
-import ChoiceOption from "../../../component/input-choice/choice-option.mjs"
-import InputTagsViewModel from "../../../component/input-tags/input-tags-viewmodel.mjs"
-import DynamicInputDialog from "../../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs"
-import DynamicInputDefinition from "../../../dynamic-input/dynamic-input-definition.mjs"
-import { DYNAMIC_INPUT_TYPES } from "../../../dynamic-input/dynamic-input-types.mjs"
 import { TEMPLATES } from "../../../templatePreloader.mjs"
-import ViewModelFactory from "../../../view-model/view-model-factory.mjs"
 import ViewModel from "../../../view-model/view-model.mjs"
 
 /**
@@ -22,26 +11,10 @@ import ViewModel from "../../../view-model/view-model.mjs"
  */
 export default class AssetListItemViewModel extends ViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.ASSET_LIST_ITEM; }
+  static get TEMPLATE() { return TEMPLATES.ITEM_LIST_ITEM; }
 
   /** @override */
   get entityId() { return this.document.id; }
-
-  /**
-   * @type {Boolean}
-   * @readonly
-   */
-  get hideTakeAsset() {
-    return this.document.isEquipped === true;
-  }
-
-  /**
-   * @type {Boolean}
-   * @readonly
-   */
-  get hideDropAsset() {
-    return this.document.isProperty === true;
-  }
 
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
@@ -59,178 +32,98 @@ export default class AssetListItemViewModel extends ViewModel {
     validateOrThrow(args, ["document"]);
 
     this.document = args.document;
-    this.contextTemplate = args.contextTemplate ?? "item-list-item";
+    this.layoutViewModel = this.document.listItemPresenter.getViewModel(this);
 
-    const thiz = this;
-    const factory = new ViewModelFactory();
-    this._actor = this.document.owningDocument;
-
-    this.vmImg = factory.createVmImg({
-      parent: thiz,
-      id: "vmImg",
-      propertyOwner: thiz.document,
-      propertyPath: "img",
-    });
-    this.vmTfName = factory.createVmTextField({
-      parent: thiz,
-      id: "vmTfName",
-      propertyOwner: thiz.document,
-      propertyPath: "name",
-      placeholder: "ambersteel.general.name",
-    });
-    this.vmBtnSendToChat = factory.createVmBtnSendToChat({
-      parent: thiz,
-      id: "vmBtnSendToChat",
-      target: thiz.document,
-      isEditable: thiz.isEditable || thiz.isGM,
-    });
-    this.vmBtnTakeAsset = new ButtonViewModel({
-      id: "vmBtnTakeAsset",
-      parent: this,
-      isEditable: this._actor !== undefined && this.isEditable,
-      onClick: async () => {
-        // Move "up" on character sheet. 
-        if (thiz.document.isProperty === true) {
-          thiz.document.moveToLuggage();
-        } else if (thiz.document.isLuggage === true) {
-          const slot = await this._querySelectSlot();
-          if (slot !== undefined) {
-            thiz.document.moveToAssetSlot(slot);
-          }
-        }
-      },
-    });
-    this.vmBtnDropAsset = new ButtonViewModel({
-      id: "vmBtnDropAsset",
-      parent: this,
-      isEditable: this._actor !== undefined && this.isEditable,
-      onClick: async () => {
-        // Move "down" on character sheet. 
-        if (thiz.document.isEquipped === true) {
-          thiz.document.moveToLuggage();
-        } else if (thiz.document.isLuggage === true) {
-          thiz.document.moveToProperty();
-        }
-      },
-    });
-    this.vmBtnDelete = factory.createVmBtnDelete({
-      parent: thiz,
-      id: "vmBtnDelete",
-      target: thiz.document,
-      withDialog: true,
-    })
-    this.vmNsQuantity = factory.createVmNumberSpinner({
-      parent: thiz,
-      id: "vmNsQuantity",
-      propertyOwner: thiz.document,
-      propertyPath: "quantity",
-      min: 1,
-    });
-    this.vmNsMaxQuantity = factory.createVmNumberSpinner({
-      parent: thiz,
-      id: "vmNsMaxQuantity",
-      propertyOwner: thiz.document,
-      propertyPath: "maxQuantity",
-      min: 1,
-    });
-    this.vmNsBulk = factory.createVmNumberSpinner({
-      parent: thiz,
-      id: "vmNsBulk",
-      propertyOwner: thiz.document,
-      propertyPath: "bulk",
-      min: 0,
-    });
-    this.vmRtDescription = factory.createVmRichText({
-      parent: thiz,
-      id: "vmRtDescription",
-      propertyOwner: thiz.document,
-      propertyPath: "description",
-    });
-    this.vmTags = new InputTagsViewModel({
-      id: "vmTags",
-      parent: this,
-      propertyPath: "tags",
-      propertyOwner: this.document,
-      isEditable: this.isEditable,
-      systemTags: ASSET_TAGS.asArray(),
-    });
+    // this.vmBtnTakeAsset = new ButtonViewModel({
+    //   id: "vmBtnTakeAsset",
+    //   parent: this,
+    //   isEditable: this._actor !== undefined && this.isEditable,
+    //   onClick: async () => {
+    //     // Move "up" on character sheet. 
+    //     if (thiz.document.isProperty === true) {
+    //       thiz.document.moveToLuggage();
+    //     } else if (thiz.document.isLuggage === true) {
+    //       const slot = await this._querySelectSlot();
+    //       if (slot !== undefined) {
+    //         thiz.document.moveToAssetSlot(slot);
+    //       }
+    //     }
+    //   },
+    // });
+    // this.vmBtnDropAsset = new ButtonViewModel({
+    //   id: "vmBtnDropAsset",
+    //   parent: this,
+    //   isEditable: this._actor !== undefined && this.isEditable,
+    //   onClick: async () => {
+    //     // Move "down" on character sheet. 
+    //     if (thiz.document.isEquipped === true) {
+    //       thiz.document.moveToLuggage();
+    //     } else if (thiz.document.isLuggage === true) {
+    //       thiz.document.moveToProperty();
+    //     }
+    //   },
+    // });
   }
 
-  /** @override */
-  _getChildUpdates() {
-    const updates = super._getChildUpdates();
+  // /**
+  //  * @returns {CharacterAssetSlot | undefined}
+  //  * 
+  //  * @private
+  //  * @async
+  //  */
+  // async _querySelectSlot() {
+  //   if (this._actor === undefined) {
+  //     throw new Error("actor is undefined");
+  //   }
 
-    updates.set(this.vmBtnSendToChat, {
-      ...updates.get(this.vmBtnSendToChat),
-      isEditable: this.isEditable || this.isGM,
-    });
-    updates.set(this.vmBtnTakeItem, {
-      ...updates.get(this.vmBtnTakeItem),
-      isEditable: this._actor !== undefined && this.isEditable,
-    });
+  //   const availableSlots = [];
+  //   for (const group of this._actor.assets.equipmentSlotGroups) {
+  //     for (const slot of group.slots) {
+  //       availableSlots.push(slot);
+  //     }
+  //   }
 
-    return updates;
-  }
+  //   const availableSlotChoices = [];
+  //   const adapter = new ChoiceAdapter({
+  //     // obj: CharacterAssetSlot
+  //     toChoiceOption: (obj) => {
+  //       return new ChoiceOption({
+  //         value: obj.id,
+  //         localizedValue: obj.name,
+  //       });
+  //     },
+  //     fromChoiceOption: (choice) => {
+  //       return availableSlots.find(it => it.id === choice.value);
+  //     },
+  //   })
+  //   for (const slot of availableSlots) {
+  //     availableSlotChoices.push(adapter.toChoiceOption(slot));
+  //   }
 
-  /**
-   * @returns {CharacterAssetSlot | undefined}
-   * 
-   * @private
-   * @async
-   */
-  async _querySelectSlot() {
-    if (this._actor === undefined) {
-      throw new Error("actor is undefined");
-    }
+  //   const inputSlots = "inputSlots";
 
-    const availableSlots = [];
-    for (const group of this._actor.assets.equipmentSlotGroups) {
-      for (const slot of group.slots) {
-        availableSlots.push(slot);
-      }
-    }
+  //   const dialog = await new DynamicInputDialog({
+  //     easyDismissal: true,
+  //     inputDefinitions: [
+  //       new DynamicInputDefinition({
+  //         type: DYNAMIC_INPUT_TYPES.DROP_DOWN,
+  //         name: inputSlots,
+  //         localizedLabel: game.i18n.localize("ambersteel.character.asset.slot.label"),
+  //         specificArgs: {
+  //           options: availableSlotChoices,
+  //           adapter: adapter,
+  //         },
+  //         required: true,
+  //         defaultValue: availableSlots[0].id,
+  //       }),
+  //     ],
+  //   }).renderAndAwait(true);
 
-    const availableSlotChoices = [];
-    const adapter = new ChoiceAdapter({
-      // obj: CharacterAssetSlot
-      toChoiceOption: (obj) => {
-        return new ChoiceOption({
-          value: obj.id,
-          localizedValue: obj.name,
-        });
-      },
-      fromChoiceOption: (choice) => {
-        return availableSlots.find(it => it.id === choice.value);
-      },
-    })
-    for (const slot of availableSlots) {
-      availableSlotChoices.push(adapter.toChoiceOption(slot));
-    }
+  //   if (dialog.confirmed !== true) return undefined;
 
-    const inputSlots = "inputSlots";
+  //   const selectedId = dialog[inputSlots];
+  //   const assetSlot = availableSlots.find(it => it.id === selectedId);
 
-    const dialog = await new DynamicInputDialog({
-      easyDismissal: true,
-      inputDefinitions: [
-        new DynamicInputDefinition({
-          type: DYNAMIC_INPUT_TYPES.DROP_DOWN,
-          name: inputSlots,
-          localizedLabel: game.i18n.localize("ambersteel.character.asset.slot.label"),
-          specificArgs: {
-            options: availableSlotChoices,
-            adapter: adapter,
-          },
-          required: true,
-          defaultValue: availableSlots[0].id,
-        }),
-      ],
-    }).renderAndAwait(true);
-
-    if (dialog.confirmed !== true) return undefined;
-
-    const selectedId = dialog[inputSlots];
-    const assetSlot = availableSlots.find(it => it.id === selectedId);
-
-    return assetSlot;
-  }
+  //   return assetSlot;
+  // }
 }

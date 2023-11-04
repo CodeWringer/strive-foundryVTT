@@ -4,7 +4,7 @@ import ViewModel from "../../../view-model/view-model.mjs";
 
 export default class InjuryChatMessageViewModel extends ViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.INJURY_CHAT_MESSAGE; }
+  static get TEMPLATE() { return TEMPLATES.ITEM_CHAT_MESSAGE; }
 
   /** @override */
   get entityId() { return this.document.id; }

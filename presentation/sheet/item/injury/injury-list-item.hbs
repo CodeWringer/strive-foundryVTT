@@ -1,9 +1,0 @@
-{{!-- Parameters:
-viewModel: {InjuryListItemViewModel}
-cssClass: {undefined | String}
---}}
-<div class="custom-system-list-item{{#if cssClass}} {{cssClass}}{{/if}}">
-  {{#with viewModel.layoutViewModel.template as |template|}}
-    {{> (template) viewModel=../viewModel.layoutViewModel }}
-  {{/with}}
-</div>
