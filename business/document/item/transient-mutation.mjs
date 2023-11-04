@@ -10,6 +10,7 @@ import { createUUID } from "../../util/uuid-utility.mjs";
  * Represents the full transient data of a mutation. 
  * 
  * @extends TransientBaseItem
+ * 
  */
 export default class TransientMutation extends TransientBaseItem {
   /** @override */
@@ -17,6 +18,19 @@ export default class TransientMutation extends TransientBaseItem {
   
   /** @override */
   get chatMessageTemplate() { return TEMPLATES.MUTATION_CHAT_MESSAGE; }
+
+  /**
+   * @param {Item} document An encapsulated item instance. 
+   * 
+   * @throws {Error} Thrown, if `document` is `undefined`. 
+   */
+  constructor(args = {}) {
+    super(args);
+
+    this.sheetPresenter = new MutationSheetPresenter({ document: this });
+    this.listItemPresenter = new MutationListItemPresenter({ document: this });
+    this.chatMessagePresenter = new MutationChatMessagePresenter({ document: this });
+  }
 
   /** @override */
   async getChatData() {

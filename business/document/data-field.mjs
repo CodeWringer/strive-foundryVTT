@@ -16,6 +16,11 @@ import TransientDocument from "./transient-document.mjs";
  * defined only once, in a central location (on an owning 
  * `TransientDocument`). 
  * 
+ * When using a `DataField`, keep in mind that the `viewModelFunc`, 
+ * which instantiates the view model does **not** have to provide 
+ * any `onChange` or `value` arguments, as this is implicitly 
+ * handled by the `DataField`. 
+ * 
  * @property {String | undefined} template Template path. 
  * @property {LayoutSize} layoutSize This element's preferred size 
  * in its parent layout. 

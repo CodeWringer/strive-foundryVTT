@@ -81,7 +81,7 @@ export default class TransientInjury extends TransientBaseItem {
     template: InputTextFieldViewModel.TEMPLATE,
     defaultValue: "",
     viewModelFunc: (parent, isOwner, isGM) => { return new InputTextFieldViewModel({
-      id: "timeToHeal",
+      id: "limit",
       parent: parent,
       localizedToolTip: game.i18n.localize("ambersteel.character.health.injury.limit.label"),
       iconHtml: '<a href="icons/svg/bones.svg"></a>',
@@ -94,7 +94,7 @@ export default class TransientInjury extends TransientBaseItem {
     template: InputTextFieldViewModel.TEMPLATE,
     defaultValue: "",
     viewModelFunc: (parent, isOwner, isGM) => { return new InputTextFieldViewModel({
-      id: "timeToHeal",
+      id: "scar",
       parent: parent,
       localizedToolTip: game.i18n.localize("ambersteel.character.health.scar.singular"),
       iconHtml: '<a href="icons/svg/bones.svg"></a>',
@@ -107,7 +107,7 @@ export default class TransientInjury extends TransientBaseItem {
     template: InputTextFieldViewModel.TEMPLATE,
     defaultValue: "",
     viewModelFunc: (parent, isOwner, isGM) => { return new InputTextFieldViewModel({
-      id: "timeToHeal",
+      id: "timeToHealTreated",
       parent: parent,
       localizedToolTip: game.i18n.localize("ambersteel.character.health.timeToHealTreated"),
       iconHtml: '<a href="icons/svg/bones.svg"></a>',
@@ -120,7 +120,7 @@ export default class TransientInjury extends TransientBaseItem {
     template: InputTextFieldViewModel.TEMPLATE,
     defaultValue: "",
     viewModelFunc: (parent, isOwner, isGM) => { return new InputTextFieldViewModel({
-      id: "timeToHeal",
+      id: "selfPatchUp",
       parent: parent,
       localizedToolTip: game.i18n.localize("ambersteel.character.health.selfPatchUp"),
       iconHtml: '<a href="icons/svg/bones.svg"></a>',
@@ -133,7 +133,7 @@ export default class TransientInjury extends TransientBaseItem {
     template: InputTextFieldViewModel.TEMPLATE,
     defaultValue: "",
     viewModelFunc: (parent, isOwner, isGM) => { return new InputTextFieldViewModel({
-      id: "timeToHeal",
+      id: "treatmentSkill",
       parent: parent,
       localizedToolTip: game.i18n.localize("ambersteel.character.health.treatmentSkill"),
       iconHtml: '<a href="icons/svg/bones.svg"></a>',
@@ -146,7 +146,7 @@ export default class TransientInjury extends TransientBaseItem {
     template: InputTextFieldViewModel.TEMPLATE,
     defaultValue: "",
     viewModelFunc: (parent, isOwner, isGM) => { return new InputTextFieldViewModel({
-      id: "timeToHeal",
+      id: "requiredSupplies",
       parent: parent,
       localizedToolTip: game.i18n.localize("ambersteel.character.health.requiredSupplies"),
       iconHtml: '<a href="icons/svg/bones.svg"></a>',
@@ -159,7 +159,7 @@ export default class TransientInjury extends TransientBaseItem {
     template: InputTextFieldViewModel.TEMPLATE,
     defaultValue: "",
     viewModelFunc: (parent, isOwner, isGM) => { return new InputTextFieldViewModel({
-      id: "timeToHeal",
+      id: "obstaclePatchUp",
       parent: parent,
       localizedToolTip: game.i18n.localize("ambersteel.character.health.obstaclePatchUp"),
       iconHtml: '<a href="icons/svg/bones.svg"></a>',
@@ -172,7 +172,7 @@ export default class TransientInjury extends TransientBaseItem {
     template: InputTextFieldViewModel.TEMPLATE,
     defaultValue: "",
     viewModelFunc: (parent, isOwner, isGM) => { return new InputTextFieldViewModel({
-      id: "timeToHeal",
+      id: "obstacleTreatment",
       parent: parent,
       localizedToolTip: game.i18n.localize("ambersteel.character.health.obstacleTreatment"),
       iconHtml: '<a href="icons/svg/bones.svg"></a>',
@@ -180,24 +180,10 @@ export default class TransientInjury extends TransientBaseItem {
   });
   
   /**
-   * Returns an array of all data fields of this document. 
+   * @param {Item} document An encapsulated item instance. 
    * 
-   * @type {Array<DataField>}
-   * @readonly
+   * @throws {Error} Thrown, if `document` is `undefined`. 
    */
-  get dataFields() { return [
-    this.state,
-    this.timeToHeal,
-    this.limit,
-    this.scar,
-    this.timeToHealTreated,
-    this.selfPatchUp,
-    this.treatmentSkill,
-    this.requiredSupplies,
-    this.obstaclePatchUp,
-    this.obstacleTreatment,
-  ]; }
-
   constructor(args = {}) {
     super(args);
 

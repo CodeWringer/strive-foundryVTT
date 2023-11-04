@@ -5,16 +5,21 @@ import { SOUNDS_CONSTANTS } from "../../../presentation/audio/sounds.mjs";
 import { ITEM_SUBTYPE } from "./item-subtype.mjs";
 import TransientBaseItem from "./transient-base-item.mjs";
 import { createUUID } from "../../util/uuid-utility.mjs";
+import { DataField } from "../data-field.mjs";
+import InputNumberSpinnerViewModel from "../../../presentation/component/input-number-spinner/input-number-spinner-viewmodel.mjs";
 
 /**
  * Represents the full transient data of a fate card. 
  * 
  * @extends TransientBaseItem
  * 
- * @property {Object} cost
- * @property {Number} cost.miFP
- * @property {Number} cost.maFP
- * @property {Number} cost.AFP
+ * @property {DataField< Object >} costMiFP
+ * @property {DataField< Object >} costMaFP
+ * @property {DataField< Object >} costAFP
+ * @property {Object} cost Convenience accessor object for the cost. 
+ * @property {DataField< Number >} cost.miFP
+ * @property {DataField< Number >} cost.maFP
+ * @property {DataField< Number >} cost.AFP
  */
 export default class TransientFateCard extends TransientBaseItem {
   /** @override */
@@ -23,23 +28,80 @@ export default class TransientFateCard extends TransientBaseItem {
   /** @override */
   get chatMessageTemplate() { return TEMPLATES.FATE_CARD_CHAT_MESSAGE; }
  
+  costMiFP = new DataField({
+    document: this,
+    dataPaths: ["system.cost.miFP"],
+    template: InputNumberSpinnerViewModel.TEMPLATE,
+    defaultValue: 0,
+    viewModelFunc: (parent, isOwner, isGM) => {
+      return new InputNumberSpinnerViewModel({
+        id: "costMiFP",
+        parent: parent,
+        localizedToolTip: game.i18n.localize("ambersteel.character.driverSystem.fateSystem.fatePoints.minor.label"),
+        iconHtml: '<a href="icons/svg/bones.svg"></a>',
+        min: 0,
+      }); 
+    },
+  });
+ 
+  costMaFP = new DataField({
+    document: this,
+    dataPaths: ["system.cost.maFP"],
+    template: InputNumberSpinnerViewModel.TEMPLATE,
+    defaultValue: 0,
+    viewModelFunc: (parent, isOwner, isGM) => {
+      return new InputNumberSpinnerViewModel({
+        id: "costMaFP",
+        parent: parent,
+        localizedToolTip: game.i18n.localize("ambersteel.character.driverSystem.fateSystem.fatePoints.major.label"),
+        iconHtml: '<a href="icons/svg/bones.svg"></a>',
+        min: 0,
+      }); 
+    },
+  });
+ 
+  costAFP = new DataField({
+    document: this,
+    dataPaths: ["system.cost.AFP"],
+    template: InputNumberSpinnerViewModel.TEMPLATE,
+    defaultValue: 0,
+    viewModelFunc: (parent, isOwner, isGM) => {
+      return new InputNumberSpinnerViewModel({
+        id: "costAFP",
+        parent: parent,
+        localizedToolTip: game.i18n.localize("ambersteel.character.driverSystem.fateSystem.fatePoints.ambition.label"),
+        iconHtml: '<a href="icons/svg/bones.svg"></a>',
+        min: 0,
+      }); 
+    },
+  });
+
   /**
+   * Convenience accessor object for the cost. 
+   * 
    * @type {Object}
+   * @readonly
    */
   get cost() {
     const thiz = this;
     return {
-      get miFP() { return parseInt(thiz.document.system.cost.miFP); },
-      set miFP(value) { thiz.updateByPath("system.cost.miFP", value); },
-      get maFP() { return parseInt(thiz.document.system.cost.maFP); },
-      set maFP(value) { thiz.updateByPath("system.cost.maFP", value); },
-      get AFP() { return parseInt(thiz.document.system.cost.AFP); },
-      set AFP(value) { thiz.updateByPath("system.cost.AFP", value); },
+      miFP: thiz.costMiFP,
+      maFP: thiz.costMaFP,
+      AFP: thiz.costAFP,
     };
   }
-  set cost(value) {
-    this.document.system.cost = value;
-    this.updateByPath("system.cost", value);
+
+  /**
+   * @param {Item} document An encapsulated item instance. 
+   * 
+   * @throws {Error} Thrown, if `document` is `undefined`. 
+   */
+  constructor(document) {
+    super(document);
+
+    this.sheetPresenter = new FateCardSheetPresenter({ document: this });
+    this.listItemPresenter = new FateCardListItemPresenter({ document: this });
+    this.chatMessagePresenter = new FateCardChatMessagePresenter({ document: this });
   }
   
   /** @override */

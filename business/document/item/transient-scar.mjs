@@ -5,13 +5,15 @@ import { SOUNDS_CONSTANTS } from "../../../presentation/audio/sounds.mjs";
 import { ITEM_SUBTYPE } from "./item-subtype.mjs";
 import TransientBaseItem from "./transient-base-item.mjs";
 import { createUUID } from "../../util/uuid-utility.mjs";
+import { DataField } from "../data-field.mjs";
+import InputTextFieldViewModel from "../../../presentation/component/input-textfield/input-textfield-viewmodel.mjs";
 
 /**
  * Represents the full transient data of a scar. 
  * 
  * @extends TransientBaseItem
  * 
- * @property {Number} limit
+ * @property {DataField< Number >} limit
  */
 export default class TransientScar extends TransientBaseItem {
   /** @override */
@@ -20,18 +22,30 @@ export default class TransientScar extends TransientBaseItem {
   /** @override */
   get chatMessageTemplate() { return TEMPLATES.SCAR_CHAT_MESSAGE; }
 
+  limit = new DataField({
+    document: this,
+    dataPaths: ["system.limit"],
+    template: InputTextFieldViewModel.TEMPLATE,
+    defaultValue: "",
+    viewModelFunc: (parent, isOwner, isGM) => { return new InputTextFieldViewModel({
+      id: "limit",
+      parent: parent,
+      localizedToolTip: game.i18n.localize("ambersteel.character.health.injury.limit.label"),
+      iconHtml: '<a href="icons/svg/bones.svg"></a>',
+    }); },
+  });
+
   /**
-   * @type {String}
+   * @param {Item} document An encapsulated item instance. 
+   * 
+   * @throws {Error} Thrown, if `document` is `undefined`. 
    */
-  get limit() {
-    return this.document.system.limit;
-  }
-  /**
-   * @param {String} value
-   */
-  set limit(value) {
-    this.document.system.limit = value;
-    this.updateByPath("system.limit", value);
+  constructor(args = {}) {
+    super(args);
+
+    this.sheetPresenter = new ScarSheetPresenter({ document: this });
+    this.listItemPresenter = new ScarListItemPresenter({ document: this });
+    this.chatMessagePresenter = new ScarChatMessagePresenter({ document: this });
   }
 
   /** @override */

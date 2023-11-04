@@ -5,16 +5,22 @@ import { SOUNDS_CONSTANTS } from "../../../presentation/audio/sounds.mjs";
 import { ITEM_SUBTYPE } from "./item-subtype.mjs";
 import TransientBaseItem from "./transient-base-item.mjs";
 import { createUUID } from "../../util/uuid-utility.mjs";
+import { DataField } from "../data-field.mjs";
+import InputRadioButtonGroupViewModel from "../../../presentation/component/input-radio-button-group/input-radio-button-group-viewmodel.mjs";
+import InputTextFieldViewModel from "../../../presentation/component/input-textfield/input-textfield-viewmodel.mjs";
+import { ILLNESS_STATES } from "../../ruleset/health/illness-states.mjs";
+import StatefulChoiceOption from "../../../presentation/component/input-choice/stateful-choice-option.mjs";
+import ValueAdapter from "../../util/value-adapter.mjs";
 
 /**
  * Represents the full transient data of an illness. 
  * 
  * @extends TransientBaseItem
  * 
- * @property {String} state
- * @property {String} duration
- * @property {String} treatment
- * @property {String} treatmentSkill
+ * @property {DataField< String >} state
+ * @property {DataField< String >} duration
+ * @property {DataField< String >} treatment
+ * @property {DataField< String >} treatmentSkill
  */
 export default class TransientIllness extends TransientBaseItem {
   /** @override */
@@ -23,48 +29,86 @@ export default class TransientIllness extends TransientBaseItem {
   /** @override */
   get chatMessageTemplate() { return TEMPLATES.ILLNESS_CHAT_MESSAGE; }
 
+  state = new DataField({
+    document: this,
+    dataPaths: ["system.state"],
+    template: InputRadioButtonGroupViewModel.TEMPLATE,
+    defaultValue: "active",
+    viewModelFunc: (parent, isOwner, isGM) => {
+      return new InputRadioButtonGroupViewModel({
+        id: "state",
+        parent: parent,
+        localizedToolTip: game.i18n.localize("ambersteel.character.health.illness.state.label"),
+        iconHtml: '<a href="icons/svg/bones.svg"></a>',
+        options: this._getIllnessStateOptions(),
+      }); 
+    },
+    viewModelAdapter: new ValueAdapter({
+      to: (value) => {
+        return this._getIllnessStateOptions().find(it => it.value === value);
+      },
+      from: (choiceOption) => {
+        return choiceOption.value;
+      }
+    }),
+  });
+
+  duration = new DataField({
+    document: this,
+    dataPaths: ["system.duration"],
+    template: InputTextFieldViewModel.TEMPLATE,
+    defaultValue: "",
+    viewModelFunc: (parent, isOwner, isGM) => {
+      return new InputTextFieldViewModel({
+        id: "duration",
+        parent: parent,
+        localizedToolTip: game.i18n.localize("ambersteel.character.health.duration"),
+        iconHtml: '<a href="icons/svg/bones.svg"></a>',
+      }); 
+    },
+  });
+
+  treatment = new DataField({
+    document: this,
+    dataPaths: ["system.treatment"],
+    template: InputTextFieldViewModel.TEMPLATE,
+    defaultValue: "",
+    viewModelFunc: (parent, isOwner, isGM) => {
+      return new InputTextFieldViewModel({
+        id: "treatment",
+        parent: parent,
+        localizedToolTip: game.i18n.localize("ambersteel.character.health.treatment"),
+        iconHtml: '<a href="icons/svg/bones.svg"></a>',
+      }); 
+    },
+  });
+
+  treatmentSkill = new DataField({
+    document: this,
+    dataPaths: ["system.treatmentSkill"],
+    template: InputTextFieldViewModel.TEMPLATE,
+    defaultValue: "",
+    viewModelFunc: (parent, isOwner, isGM) => {
+      return new InputTextFieldViewModel({
+        id: "treatmentSkill",
+        parent: parent,
+        localizedToolTip: game.i18n.localize("ambersteel.character.health.treatmentSkill"),
+        iconHtml: '<a href="icons/svg/bones.svg"></a>',
+      }); 
+    },
+  });
+
   /**
-   * @type {String}
+   * @param {Item} document An encapsulated item instance. 
+   * 
+   * @throws {Error} Thrown, if `document` is `undefined`. 
    */
-  get state() {
-    return this.document.system.state;
-  }
-  set state(value) {
-    this.document.system.state = value;
-    this.updateByPath("system.state", value);
-  }
-  
-  /**
-   * @type {String}
-   */
-  get duration() {
-    return this.document.system.duration;
-  }
-  set duration(value) {
-    this.document.system.duration = value;
-    this.updateByPath("system.duration", value);
-  }
-  
-  /**
-   * @type {String}
-   */
-  get treatment() {
-    return this.document.system.treatment;
-  }
-  set treatment(value) {
-    this.document.system.treatment = value;
-    this.updateByPath("system.treatment", value);
-  }
-  
-  /**
-   * @type {String}
-   */
-  get treatmentSkill() {
-    return this.document.system.treatmentSkill;
-  }
-  set treatmentSkill(value) {
-    this.document.system.treatmentSkill = value;
-    this.updateByPath("system.treatmentSkill", value);
+  constructor(document) {
+    super(document);
+
+    this.sheetPresenter = new IllnessSheetPresenter({ document: this });
+    this.listItemPresenter = new IllnessListItemPresenter({ document: this });
+    this.chatMessagePresenter = new IllnessChatMessagePresenter({ document: this });
   }
   
   /** @override */
@@ -95,6 +139,24 @@ export default class TransientIllness extends TransientBaseItem {
       document: this,
       ...overrides,
     });
+  }
+
+  // TODO: Extract to more common ground?
+  /**
+   * @returns {Array<StatefulChoiceOption>}
+   * 
+   * @private
+   */
+  _getIllnessStateOptions() {
+    return ILLNESS_STATES.asChoices().map((choiceOption) => {
+      const html = `<i class="${choiceOption.icon}"></i>`;
+      return new StatefulChoiceOption({
+        value: choiceOption.value,
+        activeHtml: html,
+        tooltip: choiceOption.localizedValue,
+        inactiveHtml: html,
+      });
+    })
   }
 }
 

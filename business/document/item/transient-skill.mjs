@@ -14,12 +14,18 @@ import SkillAbility from "../../ruleset/skill/skill-ability.mjs";
 import CharacterAttribute from "../../ruleset/attribute/character-attribute.mjs";
 import { ATTACK_TYPES } from "../../ruleset/skill/attack-types.mjs";
 import { ATTRIBUTES } from "../../ruleset/attribute/attributes.mjs";
-import { isBlankOrUndefined, isObject } from "../../util/validation-utility.mjs";
 import { arrayContains } from "../../util/array-utility.mjs";
 import * as ConstantsUtils from "../../util/constants-utility.mjs";
 import { DICE_POOL_RESULT_TYPES } from "../../dice/dice-pool.mjs";
 import SkillPrerequisite from "../../ruleset/skill/skill-prerequisite.mjs";
 import { SKILL_TAGS } from "../../tags/system-tags.mjs";
+import InputDropDownViewModel from "../../../presentation/component/input-dropdown/input-dropdown-viewmodel.mjs";
+import { DataField } from "../data-field.mjs";
+import ChoiceAdapter from "../../../presentation/component/input-choice/choice-adapter.mjs";
+import ValueAdapter from "../../util/value-adapter.mjs";
+import InputTextFieldViewModel from "../../../presentation/component/input-textfield/input-textfield-viewmodel.mjs";
+import InputNumberSpinnerViewModel from "../../../presentation/component/input-number-spinner/input-number-spinner-viewmodel.mjs";
+import InputTagsViewModel from "../../../presentation/component/input-tags/input-tags-viewmodel.mjs";
 
 /**
  * Represents a skill type document's "head" state. 
@@ -83,20 +89,26 @@ ConstantsUtils.enrichConstant(SKILL_HEAD_STATES);
  * 
  * @extends TransientBaseItem
  * 
+ * @property {DataField< Number >} progressSuccesses 
+ * @property {DataField< Number >} progressFailures 
+ * @property {DataField< Number >} level The current raw level. 
+ * @property {DataField< Number >} levelModifier The current level modifier. This number can be negative. 
+ * @property {DataField< Attribute >} relatedAttribute The attribute that serves as the basis 
+ * for this skill. 
+ * @property {DataField< String >} category 
+ * @property {DataField< SkillHeadState >} headState The current degree of data fidelity to expose. 
+ * @property {DataField< Array<SkillPrerequisite> >} prerequisites 
+ * @property {DataField< Array<SkillAbility> >} abilities The array of skill abilities of this skill. 
  * @property {LevelAdvancement} advancementRequirements The current requirements 
  * to advance the skill. 
- * @property {LevelAdvancement} advancementProgress The current progress towards 
- * advancing the skill. 
- * @property {Number} level The current raw level. 
- * @property {Number} levelModifier The current level modifier. This number can be negative. 
+ * @property {LevelAdvancement} advancementProgress Convenience accessor for level 
+ * @property {DataField< Number >} advancementProgress.successes 
+ * @property {DataField< Number >} advancementProgress.failures 
+ * advancement progress. 
  * @property {Number} modifiedLevel The current modified level. 
  * * Read-only. 
- * @property {Attribute} relatedAttribute The attribute that serves as the basis 
- * for this skill. 
- * @property {Array<SkillAbility>} abilities The array of skill abilities of this skill. 
  * @property {Boolean} isMagicSchool Returns true, if the skill is considered 
  * a magic school. 
- * @property {SkillHeadState} headState The current degree of data fidelity to expose. 
  */
 export default class TransientSkill extends TransientBaseItem {
   /** @override */
@@ -105,170 +117,236 @@ export default class TransientSkill extends TransientBaseItem {
   /** @override */
   get chatMessageTemplate() { return TEMPLATES.SKILL_ITEM_CHAT_MESSAGE; }
   
-  /**
-   * @type {Attribute}
-   */
-  get relatedAttribute() {
-    let _relatedAttribute = this.document.system.relatedAttribute;
-    if (isBlankOrUndefined(_relatedAttribute) === true) {
-      _relatedAttribute = ATTRIBUTES.agility.name;
-    }
-    return ATTRIBUTES[_relatedAttribute];
-  }
-  set relatedAttribute(value) {
-    if (isObject(value)) { // This assumes an `Attribute` object was given. 
-      this.document.system.relatedAttribute = value.name;
-      this.updateByPath("system.relatedAttribute", value.name);
-    } else { // This assumes a String was given. 
-      this.document.system.relatedAttribute = value;
-      this.updateByPath("system.relatedAttribute", value);
-    }
-  }
+  relatedAttribute = new DataField({
+    document: this,
+    dataPaths: ["system.relatedAttribute"],
+    template: InputDropDownViewModel.TEMPLATE,
+    defaultValue: ATTRIBUTES.agility.name,
+    viewModelFunc: (parent, isOwner, isGM) => {
+      return new InputDropDownViewModel({
+        id: "relatedAttribute",
+        parent: parent,
+        localizedToolTip: game.i18n.localize("ambersteel.character.health.injury.limit.label"),
+        iconHtml: '<a href="icons/svg/bones.svg"></a>',
+        options: ATTRIBUTES.asChoices(),
+        adapter: new ChoiceAdapter({
+          toChoiceOption(obj) {
+            if (isDefined(obj) === true) {
+              return ATTRIBUTES.asChoices().find(it => it.value === obj.name);
+            } else {
+              return ATTRIBUTES.asChoices().find(it => it.value === "none");
+            }
+          },
+          fromChoiceOption(option) {
+            return ATTRIBUTES[option.value];
+          }
+        }),
+      });
+    },
+    dtoAdapter: new ValueAdapter({
+      from: (dto) => ATTRIBUTES[dto],
+      to: (attribute) => attribute.name,
+    }),
+  });
   
-  /**
-   * @type {String}
-   */
-  get category() {
-    return this.document.system.category;
-  }
-  set category(value) {
-    this.document.system.category = value;
-    this.updateByPath("system.category", value);
-  }
+  category = new DataField({
+    document: this,
+    dataPaths: ["system.category"],
+    template: InputTextFieldViewModel.TEMPLATE,
+    defaultValue: "",
+    viewModelFunc: (parent, isOwner, isGM) => {
+      return new InputTextFieldViewModel({
+        id: "category",
+        parent: parent,
+        localizedToolTip: game.i18n.localize("ambersteel.general.category"),
+        iconHtml: '<a href="icons/svg/bones.svg"></a>',
+      });
+    },
+  });
   
-  /**
-   * @type {Number}
-   */
-  get level() {
-    return parseInt(this.document.system.level);
-  }
-  set level(value) {
-    this.document.system.level = value;
-    this.updateByPath("system.level", value);
-  }
+  level = new DataField({
+    document: this,
+    dataPaths: ["system.level"],
+    template: InputNumberSpinnerViewModel.TEMPLATE,
+    defaultValue: 0,
+    viewModelFunc: (parent, isOwner, isGM) => {
+      return new InputNumberSpinnerViewModel({
+        id: "level",
+        parent: parent,
+        localizedToolTip: game.i18n.localize("ambersteel.character.advancement.level"),
+        iconHtml: '<a href="icons/svg/bones.svg"></a>',
+        min: 0,
+      });
+    },
+  });
   
-  /**
-   * @type {Number}
-   */
-  get levelModifier() {
-    return parseInt(this.document.system.levelModifier ?? "0");
-  }
-  set levelModifier(value) {
-    this.document.system.levelModifier = value;
-    this.updateByPath("system.levelModifier", value);
-  }
+  levelModifier = new DataField({
+    document: this,
+    dataPaths: ["system.levelModifier"],
+    template: InputNumberSpinnerViewModel.TEMPLATE,
+    defaultValue: 0,
+    viewModelFunc: (parent, isOwner, isGM) => {
+      return new InputNumberSpinnerViewModel({
+        id: "levelModifier",
+        parent: parent,
+        localizedToolTip: game.i18n.localize("ambersteel.character.advancement.levelModifier"),
+        iconHtml: '<a href="icons/svg/bones.svg"></a>',
+      });
+    },
+  });
+
+  progressSuccesses = new DataField({
+    document: this,
+    dataPaths: ["system.successes"],
+    template: InputNumberSpinnerViewModel.TEMPLATE,
+    defaultValue: 0,
+    viewModelFunc: (parent, isOwner, isGM) => {
+      return new InputNumberSpinnerViewModel({
+        id: "progressSuccesses",
+        parent: parent,
+        localizedToolTip: game.i18n.localize("ambersteel.character.advancement.requirements.success.label"),
+        iconHtml: `<span>${game.i18n.localize("ambersteel.character.advancement.requirements.success.abbreviation")}</span>`,
+      });
+    },
+  });
+
+  progressFailures = new DataField({
+    document: this,
+    dataPaths: ["system.failures"],
+    template: InputNumberSpinnerViewModel.TEMPLATE,
+    defaultValue: 0,
+    viewModelFunc: (parent, isOwner, isGM) => {
+      return new InputNumberSpinnerViewModel({
+        id: "progressFailures",
+        parent: parent,
+        localizedToolTip: game.i18n.localize("ambersteel.character.advancement.requirements.failure.label"),
+        iconHtml: `<span>${game.i18n.localize("ambersteel.character.advancement.requirements.failure.abbreviation")}</span>`,
+      });
+    },
+  });
+
+  headState = new DataField({
+    document: this,
+    dataPaths: ["system.headState"],
+    template: InputDropDownViewModel.TEMPLATE,
+    defaultValue: SKILL_HEAD_STATES.FULL,
+    viewModelFunc: (parent, isOwner, isGM) => {
+      return new InputDropDownViewModel({
+        id: "headState",
+        parent: parent,
+        localizedToolTip: game.i18n.localize("ambersteel.character.advancement.requirements.failure.label"),
+        iconHtml: `<span>${game.i18n.localize("ambersteel.character.advancement.requirements.failure.abbreviation")}</span>`,
+        options: SKILL_HEAD_STATES.asChoices(),
+        adapter: new ChoiceAdapter({
+          toChoiceOption(obj) {
+            return SKILL_HEAD_STATES.asChoices().find(it => it.value === obj.name);
+          },
+          fromChoiceOption(option) {
+            return SKILL_HEAD_STATES[option.value];
+          }
+        })
+      });
+    },
+    dtoAdapter: new ValueAdapter({
+      from: (dto) => SKILL_HEAD_STATES[dto],
+      to: (value) => value.name,
+    }),
+  });
+
+  prerequisites = new DataField({
+    document: this,
+    dataPaths: ["system.prerequisites"],
+    template: "", // TODO
+    defaultValue: [],
+    viewModelFunc: (parent, isOwner, isGM) => {
+      // TODO
+    },
+    dtoAdapter: new ValueAdapter({
+      from: (dto) => dto.map(it => SkillPrerequisite.fromDto(it)),
+      to: (value) => value.map(it => it.toDto()),
+    }),
+  });
   
+  abilities = new DataField({
+    document: this,
+    dataPaths: ["system.abilities"],
+    template: "", // TODO
+    defaultValue: [],
+    viewModelFunc: (parent, isOwner, isGM) => {
+      // TODO
+    },
+    dtoAdapter: new ValueAdapter({
+      from: (dto) => {
+        const array = [];
+        for (const propertyName in dto) {
+          if (dto.hasOwnProperty(propertyName) !== true) continue;
+          
+          array.push(SkillAbility.fromDto(dto[propertyName], this));
+        }
+        return array;
+      },
+      to: (value) => {
+        const obj = {};
+        for (const ability of value) {
+          obj[ability.id] = ability.toDto();
+        }
+  
+        return obj;
+      },
+    }),
+  });
+
   /**
    * @type {Number}
    * @readonly
    */
   get modifiedLevel() {
-    if (this.level > 0) {
-      return Math.max(this.level + this.levelModifier, 1);
+    const level = this.level.get();
+    const levelModifier = this.levelModifier.get();
+    if (level > 0) {
+      return Math.max(level + levelModifier, 1);
     } else {
-      return Math.max(this.level + this.levelModifier, 0)
+      return Math.max(level + levelModifier, 0)
     }
   }
 
   /**
+   * Convenience accessor for level advancement progress. 
+   * 
    * @type {LevelAdvancement}
    */
   get advancementProgress() {
     const thiz = this;
     return {
-      get successes() { return parseInt(thiz.document.system.successes); },
-      set successes(value) {
-        thiz.document.system.successes = value;
-        thiz.updateByPath("system.successes", value);
-      },
-      get failures() { return parseInt(thiz.document.system.failures); },
-      set failures(value) {
-        thiz.document.system.failures = value;
-        thiz.updateByPath("system.failures", value);
-      },
+      successes: thiz.successes,
+      failures: thiz.failures,
     };
-  }
-  set advancementProgress(value) {
-    this.document.system.successes = value.successes;
-    this.document.system.failures = value.failures;
-    this.update({
-      system: {
-        successes: value.successes,
-        failures: value.failures,
-      }
-    });
   }
   
   /**
    * @type {Boolean}
    */
   get isMagicSchool() {
-    return arrayContains(((this.document.system.tags ?? this.document.system.properties) ?? []), SKILL_TAGS.MAGIC_SCHOOL.id);
+    return arrayContains(this.tags.get(), SKILL_TAGS.MAGIC_SCHOOL.id);
   }
+  /**
+   * @param {Boolean} value
+   */
   set isMagicSchool(value) {
-    const tags = ((this.document.system.tags ?? this.document.system.properties) ?? []).concat([]); 
+    const tags = this.tags.get().concat([]); 
     const index = tags.indexOf(SKILL_TAGS.MAGIC_SCHOOL.id);
 
     if (value === true && index < 0) {
       tags.push(SKILL_TAGS.MAGIC_SCHOOL.id);
-      this.updateByPath("system.tags", tags);
     } else if (value !== true && index > -1) {
       tags.splice(index, 1);
-      this.updateByPath("system.tags", tags);
     }
+    this.tags.set(tags);
   }
   
   /** @override */
   get acceptedTags() { return SKILL_TAGS.asArray(); }
 
-  /**
-   * @type {Array<SkillAbility>}
-   */
-  get abilities() {
-    return this._abilities;
-  }
-  set abilities(value) {
-    this._abilities = value;
-    this.persistSkillAbilities();
-  }
-  
-  /**
-   * @type {SkillHeadState}
-   */
-  get headState() {
-    if (this.document.system.headState === undefined) {
-      return SKILL_HEAD_STATES.FULL;
-    } else {
-      return SKILL_HEAD_STATES.asArray().find(it => it.name === this.document.system.headState); 
-    }
-  }
-  set headState(value) {
-    this.document.system.headState = value.name;
-    this.updateByPath("system.headState", value.name);
-  }
-
-  /**
-   * Returns the list of prerequisite skills. 
-   * 
-   * @type {Array<SkillPrerequisite>}
-   */
-  get prerequisites() {
-    if (this.document.system.prerequisites === undefined) {
-      return [];
-    } else {
-      return this.document.system.prerequisites; 
-    }
-  }
-  /**
-   * Sets the list of prerequisite skills. 
-   * 
-   * @type {Array<SkillPrerequisite>}
-   * @param {Array<SkillPrerequisite>} value
-   */
-  set prerequisites(value) {
-    this.updateByPath("system.prerequisites", value);
-  }
-  
   /**
    * @param {Item} document An encapsulated item instance. 
    * 
@@ -285,15 +363,11 @@ export default class TransientSkill extends TransientBaseItem {
       });
     }
 
-    this.advancementRequirements = new Ruleset().getSkillAdvancementRequirements(this.level);
-    this._abilities = this._getSkillAbilities();
-  }
+    this.advancementRequirements = new Ruleset().getSkillAdvancementRequirements(this.level.get());
 
-  /** @override */
-  prepareData(context) {
-    super.prepareData(context);
-
-    context.system.relatedAttribute = context.system.relatedAttribute ?? "agility";
+    this.sheetPresenter = new SkillSheetPresenter({ document: this });
+    this.listItemPresenter = new SkillListItemPresenter({ document: this });
+    this.chatMessagePresenter = new SkillChatMessagePresenter({ document: this });
   }
 
   /** @override */
@@ -338,14 +412,12 @@ export default class TransientSkill extends TransientBaseItem {
    * @async
    */
   async setLevel(newLevel = 0, resetProgress = true) {
-    this.level = newLevel;
     this.advancementRequirements = new Ruleset().getSkillAdvancementRequirements(newLevel);
     if (resetProgress === true) {
-      this.advancementProgress.successes = 0;
-      this.advancementProgress.failures = 0;
+      await this._persistLevel(newLevel, 0, 0);
+    } else {
+      await this.level.set(newLevel);
     }
-
-    await this._persistLevel();
   };
 
   /**
@@ -375,29 +447,33 @@ export default class TransientSkill extends TransientBaseItem {
       return;
     }
 
+    let level = this.level.get();
+    let successes = this.progressSuccesses.get();
+    let failures = this.progressFailures.get();
+
     if (outcomeType === DICE_POOL_RESULT_TYPES.SUCCESS) {
-      this.advancementProgress.successes++;
+      successes++;
     } else {
-      this.advancementProgress.failures++;
+      failures++;
     }
 
     if (autoLevel === true) {
-      if (this.advancementProgress.successes >= this.advancementRequirements.successes
-        && this.advancementProgress.failures >= this.advancementRequirements.failures) {
-        this.level++;
+      if (successes >= this.advancementRequirements.successes
+        && failures >= this.advancementRequirements.failures) {
+        level++;
 
         if (resetProgress === true) {
-          this.advancementProgress.successes = 0;
-          this.advancementProgress.failures = 0;
+          successes = 0;
+          failures = 0;
         }
       }
     }
     
-    await this._persistLevel();
+    await this._persistLevel(level, successes, failures);
 
     // Progress associated attribute. 
     if (this.owningDocument !== undefined) {
-      this.owningDocument.addAttributeProgress(outcomeType, this.relatedAttribute.name, autoLevel)
+      this.owningDocument.addAttributeProgress(outcomeType, this.relatedAttribute.get().name, autoLevel)
     }
   }
 
@@ -411,14 +487,16 @@ export default class TransientSkill extends TransientBaseItem {
    * @async
    */
   async createSkillAbility(creationData) {
+    const abilities = this.abilities.get().concat([]);
+
     const newAbility = new SkillAbility({
       ...creationData,
       owningDocument: this,
-      index: this.abilities.length,
+      index: abilities.length,
     });
     
-    this.abilities.push(newAbility);
-    await this.updateByPath(`system.abilities.${newAbility.id}`, newAbility.toDto());
+    abilities.push(newAbility);
+    await this.abilities.set(abilities);
   }
 
   /**
@@ -431,15 +509,16 @@ export default class TransientSkill extends TransientBaseItem {
    * @async
    */
   async deleteSkillAbility(id) {
-    const toRemove = this.abilities.find(it => it.id === id);
+    const abilities = this.abilities.get().concat([]);
+    const index = abilities.findIndex(it => it.id === id);
 
-    if (toRemove === undefined) {
+    if (index < 0) {
       return undefined;
     }
 
-    await this.deleteByPath(`system.abilities.${id}`);
-
-    return toRemove;
+    const removed = abilities.splice(index, 1)[0];
+    await this.abilities.set(abilities);
+    return removed;
   }
 
   /**
@@ -461,100 +540,42 @@ export default class TransientSkill extends TransientBaseItem {
    * @returns {Sum}
    */
   getRollData() {
-    if (this.headState.name === SKILL_HEAD_STATES.FULL.name
-      || this.headState.name === SKILL_HEAD_STATES.BASICS.name) {
+    const headState = this.headState.get();
+    if (headState.name === SKILL_HEAD_STATES.FULL.name
+      || headState.name === SKILL_HEAD_STATES.BASICS.name) {
       const actor = (this.owningDocument ?? {}).document;
-      const characterAttribute = new CharacterAttribute(actor, this.relatedAttribute.name);
+      const characterAttribute = new CharacterAttribute(actor, this.relatedAttribute.get().name);
       const compositionObj = new Ruleset().getSkillTestNumberOfDice(this.modifiedLevel, characterAttribute.modifiedLevel);
   
       return new Sum([
-        new SumComponent(this.relatedAttribute.name, characterAttribute.localizableName, compositionObj.attributeDiceCount),
-        new SumComponent(this.name, this.name, compositionObj.skillDiceCount),
+        new SumComponent(this.relatedAttribute.get().name, characterAttribute.localizableName, compositionObj.attributeDiceCount),
+        new SumComponent(this.name.get(), this.name.get(), compositionObj.skillDiceCount),
       ]);
-    } else if (this.headState.name === SKILL_HEAD_STATES.LEVEL_ONLY.name) {
+    } else if (headState.name === SKILL_HEAD_STATES.LEVEL_ONLY.name) {
       return new Sum([
-        new SumComponent(this.name, this.name, this.level),
+        new SumComponent(this.name.get(), this.name.get(), this.level.get()),
       ]);
     } else {
       return new Sum();
     }
   }
-
-  /**
-   * Persists the current skill ability array to the data base. 
-   * 
-   * @param {Boolean | undefined} render If true, will trigger a re-render of the associated document sheet. 
-   * * Default 'true'. 
-   * 
-   * @async
-   */
-  async persistSkillAbilities(render = true) {
-    const abilitiesToPersist = {};
-
-    for (const abilityId in this.abilities) {
-      if (this.abilities.hasOwnProperty(abilityId) !== true) continue;
-
-      const ability = this.abilities[abilityId];
-
-      abilitiesToPersist[ability.id] = ability.toDto();
-    }
-
-    await this.updateByPath("system.abilities", abilitiesToPersist, render);
-  }
-
-  /**
-   * Fetches the skill abilities from the underlying document and returns 
-   * them, converted to "proper" objects. 
-   * 
-   * @returns {Array<SkillAbility>}
-   * 
-   * @private
-   */
-  _getSkillAbilities() {
-    const abilitiesOnDocument = this.document.system.abilities;
-      
-    const result = [];
-    for (const abilityId in abilitiesOnDocument) {
-      if (abilitiesOnDocument.hasOwnProperty(abilityId) !== true) continue;
-
-      const dto = abilitiesOnDocument[abilityId];
-
-      const damage = [];
-      for (const propertyName in dto.damage) {
-        if (dto.damage.hasOwnProperty(propertyName) !== true) continue;
-
-        const plainDamageObject = dto.damage[propertyName];
-
-        damage.push(new DamageAndType({
-          damage: plainDamageObject.damage ?? "0",
-          damageType: DAMAGE_TYPES[plainDamageObject.damageType] ?? DAMAGE_TYPES.none,
-        }));
-      }
-
-      const skillAbility = new SkillAbility({
-        ...dto,
-        owningDocument: this,
-        damage: damage,
-        attackType: ATTACK_TYPES[dto.attackType],
-      });
-
-      result.push(skillAbility);
-    }
-    return result;
-  }
   
   /**
-   * Persists the current level and advancement progress to the data base. 
+   * Updates the level and the progress successes and failures in bulk. 
+   * 
+   * @param {Number} level
+   * @param {Number} successes
+   * @param {Number} failures
    * 
    * @private
    * @async
    */
-  async _persistLevel() {
+  async _persistLevel(level, successes, failures) {
     await this.document.update({
       system: {
-        value: this.level,
-        successes: this.advancementProgress.successes,
-        failures: this.advancementProgress.failures
+        value: level,
+        successes: successes,
+        failures: failures
       }
     });
   }
@@ -567,7 +588,8 @@ export default class TransientSkill extends TransientBaseItem {
    */
   _resolveReference(reference, comparableReference, propertyPath) {
     // Search skill ability.
-    for (const ability of this.abilities) {
+    const abilities = this.abilities.get();
+    for (const ability of abilities) {
       const match = ability._resolveReference(reference, comparableReference, propertyPath);
       if (match !== undefined) {
         return match;
