@@ -12,6 +12,8 @@ import { DataField } from "../data-field.mjs";
 import InputNumberSpinnerViewModel from "../../../presentation/component/input-number-spinner/input-number-spinner-viewmodel.mjs";
 import ValueAdapter from "../../util/value-adapter.mjs";
 import AssetSheetPresenter from "../../../presentation/document/asset/asset-sheet-presenter.mjs";
+import AssetListItemPresenter from "../../../presentation/document/asset/asset-list-item-presenter.mjs";
+import AssetChatMessagePresenter from "../../../presentation/document/asset/asset-chat-message-presenter.mjs";
 
 /**
  * Represents the full transient data of an asset. 
