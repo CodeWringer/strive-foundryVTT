@@ -10,7 +10,7 @@ export default class Component extends Layoutable {
   /**
    * @param {Object} args 
    * 
-   * @param {String} args.template Template path. 
+   * @param {String | undefined} args.template Template path. 
    * @param {LayoutSize | undefined} args.layoutSize This element's 
    * preferred size in its parent layout. 
    * @param {String | undefined} args.cssClass A css class.  

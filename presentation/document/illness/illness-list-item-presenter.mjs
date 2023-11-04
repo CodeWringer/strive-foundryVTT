@@ -1,21 +1,21 @@
-import TransientInjury from "../../../business/document/item/transient-injury.mjs";
+import TransientIllness from "../../../business/document/item/transient-illness.mjs";
 import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import { ColumnLayout, RowLayout } from "../../layout/layout.mjs";
 import DocumentPresenter from "../document-presenter.mjs";
 
 /**
- * Presents a `TransientInjury` document in the form of a 
+ * Presents a `TransientIllness` document in the form of a 
  * embedded list item. 
  * 
- * @property {TransientInjury} document The represented 
+ * @property {TransientIllness} document The represented 
  * document instance. 
  * 
  * @extends DocumentPresenter
  */
-export default class InjuryListItemPresenter extends DocumentPresenter {
+export default class IllnessListItemPresenter extends DocumentPresenter {
   /**
    * @param {Object} args 
-   * @param {TransientInjury} args.document 
+   * @param {TransientIllness} args.document 
    */
   constructor(args = {}) {
     super(args);
@@ -41,27 +41,9 @@ export default class InjuryListItemPresenter extends DocumentPresenter {
         this.document.description,
         new RowLayout({
           content: [
+            this.document.duration,
+            this.document.treatment,
             this.document.treatmentSkill,
-            this.document.requiredSupplies,
-          ],
-        }),
-        new RowLayout({
-          content: [
-            this.document.obstaclePatchUp,
-            this.document.obstacleTreatment,
-          ],
-        }),
-        new RowLayout({
-          content: [
-            this.document.timeToHeal,
-            this.document.timeToHealTreated,
-            this.document.selfPatchUp,
-          ],
-        }),
-        new RowLayout({
-          content: [
-            this.document.scar,
-            this.document.limit,
           ],
         }),
       ],

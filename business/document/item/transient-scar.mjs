@@ -7,6 +7,9 @@ import TransientBaseItem from "./transient-base-item.mjs";
 import { createUUID } from "../../util/uuid-utility.mjs";
 import { DataField } from "../data-field.mjs";
 import InputTextFieldViewModel from "../../../presentation/component/input-textfield/input-textfield-viewmodel.mjs";
+import ScarListItemPresenter from "../../../presentation/document/scar/scar-list-item-presenter.mjs";
+import ScarSheetPresenter from "../../../presentation/document/scar/scar-sheet-presenter.mjs";
+import ScarChatMessagePresenter from "../../../presentation/document/scar/scar-chat-message-presenter.mjs";
 
 /**
  * Represents the full transient data of a scar. 

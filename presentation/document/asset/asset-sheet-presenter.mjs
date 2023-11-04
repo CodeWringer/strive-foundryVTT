@@ -39,11 +39,7 @@ export default class AssetSheetPresenter extends AssetBasePresenter {
             this.buttonTake,
           ],
         }),
-        new RowLayout({
-          content: [
-            this.document.description,
-          ],
-        }),
+        this.document.description,
         new RowLayout({
           content: [
             this.document.quantity,
@@ -51,11 +47,7 @@ export default class AssetSheetPresenter extends AssetBasePresenter {
             this.document.bulk,
           ],
         }),
-        new RowLayout({
-          content: [
-            this.document.tags,
-          ],
-        }),
+        this.document.tags,
       ],
     });
   }

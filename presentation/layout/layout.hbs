@@ -4,8 +4,13 @@ viewModel: LayoutViewModel
 <div{{#if viewModel.cssClass}} class="{{viewModel.cssClass}}"{{/if}}
   style="{{viewModel.style}}">
   {{#each viewModel.contentViewModels as |contentViewModel index|}}
+    {{#if contentViewModel.template}}
     {{#with contentViewModel.template as |template|}}
       {{> (template) viewModel=../contentViewModel }}
     {{/with}}
+    {{/if}}
+    {{#if contentViewModel.html}}
+      {{{contentViewModel.html}}}
+    {{/if}}
   {{/each}}
 </div>

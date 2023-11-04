@@ -1,21 +1,21 @@
-import TransientInjury from "../../../business/document/item/transient-injury.mjs";
+import TransientScar from "../../../business/document/item/transient-scar.mjs";
 import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import { ColumnLayout, RowLayout } from "../../layout/layout.mjs";
 import DocumentPresenter from "../document-presenter.mjs";
 
 /**
- * Presents a `TransientInjury` document in the form of a 
- * chat message. 
+ * Presents a `TransientScar` document in the form of a 
+ * dedicated sheet. 
  * 
- * @property {TransientInjury} document The represented 
+ * @property {TransientScar} document The represented 
  * document instance. 
  * 
  * @extends DocumentPresenter
  */
-export default class InjuryChatMessagePresenter extends DocumentPresenter {
+export default class ScarSheetPresenter extends DocumentPresenter {
   /**
    * @param {Object} args 
-   * @param {TransientInjury} args.document 
+   * @param {TransientScar} args.document 
    */
   constructor(args = {}) {
     super(args);
@@ -33,18 +33,10 @@ export default class InjuryChatMessagePresenter extends DocumentPresenter {
           content: [
             this.document.img,
             this.document.name,
-            this.document.state,
+            this.buttonSendToChat,
           ],
         }),
         this.document.description,
-        this.document.treatmentSkill,
-        this.document.requiredSupplies,
-        this.document.obstaclePatchUp,
-        this.document.obstacleTreatment,
-        this.document.timeToHeal,
-        this.document.timeToHealTreated,
-        this.document.selfPatchUp,
-        this.document.scar,
         this.document.limit,
       ],
     });

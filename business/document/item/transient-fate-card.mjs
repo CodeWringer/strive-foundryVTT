@@ -7,6 +7,9 @@ import TransientBaseItem from "./transient-base-item.mjs";
 import { createUUID } from "../../util/uuid-utility.mjs";
 import { DataField } from "../data-field.mjs";
 import InputNumberSpinnerViewModel from "../../../presentation/component/input-number-spinner/input-number-spinner-viewmodel.mjs";
+import FateCardSheetPresenter from "../../../presentation/document/fate-card/fate-card-sheet-presenter.mjs";
+import FateCardListItemPresenter from "../../../presentation/document/fate-card/fate-card-list-item-presenter.mjs";
+import FateCardChatMessagePresenter from "../../../presentation/document/fate-card/fate-card-chat-message-presenter.mjs";
 
 /**
  * Represents the full transient data of a fate card. 

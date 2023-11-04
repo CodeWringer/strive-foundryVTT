@@ -1,21 +1,21 @@
-import TransientInjury from "../../../business/document/item/transient-injury.mjs";
+import TransientFateCard from "../../../business/document/item/transient-fate-card.mjs";
 import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import { ColumnLayout, RowLayout } from "../../layout/layout.mjs";
 import DocumentPresenter from "../document-presenter.mjs";
 
 /**
- * Presents a `TransientInjury` document in the form of a 
+ * Presents a `TransientFateCard` document in the form of a 
  * chat message. 
  * 
- * @property {TransientInjury} document The represented 
+ * @property {TransientFateCard} document The represented 
  * document instance. 
  * 
  * @extends DocumentPresenter
  */
-export default class InjuryChatMessagePresenter extends DocumentPresenter {
+export default class FateCardChatMessagePresenter extends DocumentPresenter {
   /**
    * @param {Object} args 
-   * @param {TransientInjury} args.document 
+   * @param {TransientFateCard} args.document 
    */
   constructor(args = {}) {
     super(args);
@@ -33,19 +33,12 @@ export default class InjuryChatMessagePresenter extends DocumentPresenter {
           content: [
             this.document.img,
             this.document.name,
-            this.document.state,
           ],
         }),
         this.document.description,
-        this.document.treatmentSkill,
-        this.document.requiredSupplies,
-        this.document.obstaclePatchUp,
-        this.document.obstacleTreatment,
-        this.document.timeToHeal,
-        this.document.timeToHealTreated,
-        this.document.selfPatchUp,
-        this.document.scar,
-        this.document.limit,
+        this.document.costMiFP,
+        this.document.costMaFP,
+        this.document.costAFP,
       ],
     });
   }

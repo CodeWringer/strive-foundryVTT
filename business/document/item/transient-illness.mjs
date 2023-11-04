@@ -11,6 +11,9 @@ import InputTextFieldViewModel from "../../../presentation/component/input-textf
 import { ILLNESS_STATES } from "../../ruleset/health/illness-states.mjs";
 import StatefulChoiceOption from "../../../presentation/component/input-choice/stateful-choice-option.mjs";
 import ValueAdapter from "../../util/value-adapter.mjs";
+import IllnessSheetPresenter from "../../../presentation/document/illness/illness-sheet-presenter.mjs";
+import IllnessListItemPresenter from "../../../presentation/document/illness/illness-list-item-presenter.mjs";
+import IllnessChatMessagePresenter from "../../../presentation/document/illness/illness-chat-message-presenter.mjs";
 
 /**
  * Represents the full transient data of an illness. 

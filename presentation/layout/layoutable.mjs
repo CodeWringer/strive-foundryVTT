@@ -36,7 +36,9 @@ export default class Layoutable {
    * 
    * @returns {ViewModel} A new view model instance. 
    * 
-   * @abstract
+   * @virtual
    */
-  getViewModel(parent) { throw new Error("Not implemented"); }
+  getViewModel(parent) {
+    return undefined;
+  }
 }

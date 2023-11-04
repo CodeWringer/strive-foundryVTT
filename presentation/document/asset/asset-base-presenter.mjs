@@ -1,4 +1,5 @@
 import TransientAsset from "../../../business/document/item/transient-asset.mjs";
+import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import ButtonTakeItemViewModel from "../../component/button-take-item/button-take-item-viewmodel.mjs";
 import Component from "../../layout/component.mjs";
 import DocumentPresenter from "../document-presenter.mjs";

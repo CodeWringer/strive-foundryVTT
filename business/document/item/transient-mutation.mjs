@@ -5,6 +5,9 @@ import { SOUNDS_CONSTANTS } from "../../../presentation/audio/sounds.mjs";
 import { ITEM_SUBTYPE } from "./item-subtype.mjs";
 import TransientBaseItem from "./transient-base-item.mjs";
 import { createUUID } from "../../util/uuid-utility.mjs";
+import MutationSheetPresenter from "../../../presentation/document/mutation/mutation-sheet-presenter.mjs";
+import MutationListItemPresenter from "../../../presentation/document/mutation/mutation-list-item-presenter.mjs";
+import MutationChatMessagePresenter from "../../../presentation/document/mutation/mutation-chat-message-presenter.mjs";
 
 /**
  * Represents the full transient data of a mutation. 

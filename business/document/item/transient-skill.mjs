@@ -26,6 +26,9 @@ import ValueAdapter from "../../util/value-adapter.mjs";
 import InputTextFieldViewModel from "../../../presentation/component/input-textfield/input-textfield-viewmodel.mjs";
 import InputNumberSpinnerViewModel from "../../../presentation/component/input-number-spinner/input-number-spinner-viewmodel.mjs";
 import InputTagsViewModel from "../../../presentation/component/input-tags/input-tags-viewmodel.mjs";
+import SkillSheetPresenter from "../../../presentation/document/skill/skill-sheet-presenter.mjs";
+import SkillChatMessagePresenter from "../../../presentation/document/skill/skill-chat-message-presenter.mjs";
+import SkillListItemPresenter from "../../../presentation/document/skill/skill-list-item-presenter.mjs";
 
 /**
  * Represents a skill type document's "head" state. 
