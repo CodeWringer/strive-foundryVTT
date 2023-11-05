@@ -52,7 +52,7 @@ export default class DamageDefinitionListItemViewModel extends ViewModel {
    * @type {String}
    * @readonly
    */
-  get localizableDeletionHint() { return "ambersteel.damageDefinition.delete"; }
+  get localizedDeletionHint() { return game.i18n.localize("ambersteel.damageDefinition.delete"); }
 
   /**
    * Returns the localized label of the roll total. I. e. the localized damage type. 
@@ -114,7 +114,7 @@ export default class DamageDefinitionListItemViewModel extends ViewModel {
       id: "vmBtnDelete",
       parent: thiz,
       isEditable: thiz.isEditable,
-      localizedTooltip: this._localizableDeletionHint,
+      localizedTooltip: this.localizedDeletionHint,
       onClick: async (html, isOwner, isEditable) => {
         const damage = thiz.propertyOwner.damage;
         damage.splice(thiz.index, 1);

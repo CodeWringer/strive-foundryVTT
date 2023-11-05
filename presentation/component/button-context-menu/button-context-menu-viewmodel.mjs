@@ -55,7 +55,7 @@ export default class ButtonContextMenuViewModel extends ButtonViewModel {
    * 
    * @param {Function | String | undefined} args.callback Optional. Defines an asynchronous callback that is invoked upon completion of the button's own callback. 
    * @param {Boolean | undefined} args.isEditable Optional. If true, will be interactible. 
-   * @param {String | undefined} args.localizedTooltip Optional. The localizable title (tooltip). 
+   * @param {String | undefined} args.localizedTooltip Localized tooltip. 
    * 
    * @param {Array<Object> | undefined} menuItems An array of context menu items, 
    * which are used to populate the context menu. 

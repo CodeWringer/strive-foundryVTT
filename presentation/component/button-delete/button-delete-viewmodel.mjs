@@ -11,7 +11,7 @@ import ConfirmablePlainDialog from "../../dialog/plain-confirmable-dialog/plain-
  * 
  * @property {String | undefined} propertyPath If not undefined, will try to delete by this property path. 
  * @property {Boolean} withDialog If true, will prompt the user to confirm deletion with a dialog. 
- * @property {String} localizableDialogTitle Localization key of the title of the dialog. 
+ * @property {String} localizedDialogContent Localized content of the confirmation dialog window. 
  */
 export default class ButtonDeleteViewModel extends ButtonViewModel {
   static get TEMPLATE() { return TEMPLATES.COMPONENT_BUTTON_DELETE; }
@@ -31,11 +31,10 @@ export default class ButtonDeleteViewModel extends ButtonViewModel {
    * @param {TransientDocument} args.target The target object to affect. 
    * @param {Function | String | undefined} args.callback Optional. Defines an asynchronous callback that is invoked upon completion of the button's own callback. 
    * @param {Boolean | undefined} args.isEditable Optional. If true, will be interactible. 
-   * @param {String | undefined} args.localizedTooltip Optional. The localizable title (tooltip). 
+   * @param {String | undefined} args.localizedTooltip Localized tooltip. 
    * 
    * @param {String | undefined} args.propertyPath Optional. If not undefined, will try to delete by this property path. 
    * @param {Boolean | undefined} args.withDialog Optional. If true, will prompt the user to make a selection with a dialog. 
-   * @param {String | undefined} args.localizableDialogTitle Optional. Localization key of the confirmation dialog window. 
    */
   constructor(args = {}) {
     super(args);
@@ -44,7 +43,7 @@ export default class ButtonDeleteViewModel extends ButtonViewModel {
     this.withDialog = args.withDialog ?? false;
     this.propertyPath = args.propertyPath;
     this.localizedTooltip = args.localizedTooltip ?? game.i18n.localize("ambersteel.general.delete.label");
-    this.localizableDialogTitle = args.localizableDialogTitle ?? "ambersteel.general.delete.queryOf";
+    this.localizedDialogContent = StringUtil.format(game.i18n.localize("ambersteel.general.delete.queryOf"), this.target.name);
   }
 
   /**
@@ -66,7 +65,7 @@ export default class ButtonDeleteViewModel extends ButtonViewModel {
 
       await new ConfirmablePlainDialog({
         localizedTitle: game.i18n.localize("ambersteel.general.delete.query"),
-        localizedContent: StringUtil.format(game.i18n.localize(thiz.localizableDialogTitle), thiz.target.name),
+        localizedContent: this.localizedDialogContent,
         closeCallback: async (dialog) => {
           if (dialog.confirmed !== true) return;
           

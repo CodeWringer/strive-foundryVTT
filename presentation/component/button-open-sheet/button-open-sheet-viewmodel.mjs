@@ -26,7 +26,7 @@ export default class ButtonOpenSheetViewModel extends ButtonViewModel {
    * @param {TransientDocument} args.target The target object to affect. 
    * @param {Function | String | undefined} args.callback Optional. Defines an asynchronous callback that is invoked upon completion of the button's own callback. 
    * @param {Boolean | undefined} args.isEditable Optional. If true, will be interactible. 
-   * @param {String | undefined} args.localizedTooltip Optional. The localizable title (tooltip). 
+   * @param {String | undefined} args.localizedTooltip Localized tooltip. 
    */
   constructor(args = {}) {
     super(args);

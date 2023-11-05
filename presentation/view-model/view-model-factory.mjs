@@ -243,8 +243,7 @@ export default class ViewModelFactory {
    * @param {Object | String | undefined} args.creationData Data to pass to the item creation function. 
    * @param {String | undefined} args.localizedTooltip Localized tooltip. 
    * @param {String | undefined} args.localizedLabel 
-   * @param {String | undefined} args.localizableType Localization key of the type of thing to add. 
-   * @param {String | undefined} args.localizableDialogTitle Localization key of the title of the dialog. 
+   * @param {String | undefined} args.localizedType Localized name of the type of thing to add. 
    * 
    * @returns {ButtonAddViewModel}
    */
@@ -260,8 +259,7 @@ export default class ViewModelFactory {
       creationData: args.creationData,
       localizedTooltip: args.localizedTooltip,
       localizedLabel: args.localizedLabel,
-      localizableType: args.localizableType,
-      localizableDialogTitle: args.localizableDialogTitle,
+      localizedType: args.localizedType,
     });
   }
 

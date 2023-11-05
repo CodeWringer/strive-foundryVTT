@@ -217,7 +217,7 @@ export default class ActorAssetSlotViewModel extends ViewModel {
       target: this.assetSlot,
       withDialog: true,
       localizedTooltip: game.i18n.localize("ambersteel.character.asset.slot.delete.query"),
-      localizableDialogTitle: "ambersteel.character.asset.slot.delete.queryOf",
+      localizedDialogTitle: game.i18n.localize("ambersteel.character.asset.slot.delete.queryOf"),
       callback: async () => {
         const assetToUnassign = this.availableAssets.find(it => it.id === this.assetSlot.alottedId);
         if (assetToUnassign !== undefined) {

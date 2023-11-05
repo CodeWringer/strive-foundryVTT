@@ -15,8 +15,8 @@ import { coerce } from "../../../business/util/string-utility.mjs";
  * @property {Object} creationData Data to pass to the item creation function. 
  * @property {Boolean} showLabel If true, will show the label. 
  * @property {String | undefined} localizedLabel Localized label. 
- * @property {String | undefined} localizableType Localization key of the type of thing to add. 
- * @property {String | undefined} localizableDialogTitle Localization key of the title of the dialog. 
+ * @property {String | undefined} localizedType Localized name of the type of thing to add. 
+ * @property {String | undefined} localizedDialogTitle Localized title of the dialog. 
  * 
  */
 export default class ButtonAddViewModel extends ButtonViewModel {
@@ -48,9 +48,9 @@ export default class ButtonAddViewModel extends ButtonViewModel {
    * @param {Boolean | undefined} args.withDialog Optional. If true, will prompt the user to make a selection with a dialog. 
    * @param {Object | String | undefined} args.creationData Optional. Data to pass to the item creation function. 
    * @param {String | undefined} args.localizedTooltip Optional. Sets the tooltip text to display on cursor hover over the DOM element. 
-   * @param {String | undefined} args.localizedLabel Optional. The localizable label. 
-   * @param {String | undefined} localizableType Localization key of the type of thing to add. 
-   * @param {String | undefined} localizableDialogTitle Localization key of the title of the dialog. 
+   * @param {String | undefined} args.localizedLabel 
+   * @param {String | undefined} args.localizedType Localized name of the type of thing to add. 
+   * @param {String | undefined} args.localizedDialogTitle Localized title of the dialog. 
    */
   constructor(args = {}) {
     super(args);
@@ -60,8 +60,8 @@ export default class ButtonAddViewModel extends ButtonViewModel {
     this.withDialog = args.withDialog ?? false;
     this.creationData = args.creationData ?? Object.create(null);
     this.localizedLabel = args.localizedLabel;
-    this.localizableType = args.localizableType;
-    this.localizableDialogTitle = args.localizableDialogTitle;
+    this.localizedType = args.localizedType;
+    this.localizedDialogTitle = args.localizedDialogTitle;
 
     if (isObject(this.creationData) !== true) {
       this.creationData = this._parseCreationData(this.creationData);
@@ -115,8 +115,8 @@ export default class ButtonAddViewModel extends ButtonViewModel {
   async _createWithDialog() {
     await new AddItemDialog({
       itemType: this.creationType,
-      localizedItemLabel: game.i18n.localize(this.localizableType),
-      localizedTitle: game.i18n.localize(this.localizableDialogTitle),
+      localizedItemLabel: this.localizedType,
+      localizedTitle: this.localizedDialogTitle,
       closeCallback: async (dialog) => {
         if (dialog.confirmed !== true) return;
 

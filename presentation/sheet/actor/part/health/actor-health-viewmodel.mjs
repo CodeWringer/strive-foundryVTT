@@ -185,8 +185,7 @@ export default class ActorHealthViewModel extends ViewModel {
         creationType: "illness",
         withDialog: true,
         localizedLabel: game.i18n.localize("ambersteel.character.health.illness.add.label"),
-        localizableType: "ambersteel.character.health.illness.singular",
-        localizableDialogTitle: "ambersteel.character.health.illness.add.query",
+        localizedType: game.i18n.localize("ambersteel.character.health.illness.singular"),
       }),
     });
 
@@ -210,8 +209,7 @@ export default class ActorHealthViewModel extends ViewModel {
         creationType: "injury",
         withDialog: true,
         localizedLabel: game.i18n.localize("ambersteel.character.health.injury.add.label"),
-        localizableType: "ambersteel.character.health.injury.singular",
-        localizableDialogTitle: "ambersteel.character.health.injury.add.query",
+        localizedType: game.i18n.localize("ambersteel.character.health.injury.singular"),
       }),
     });
 
@@ -235,8 +233,7 @@ export default class ActorHealthViewModel extends ViewModel {
         creationType: "mutation",
         withDialog: true,
         localizedLabel: game.i18n.localize("ambersteel.character.health.mutation.add.label"),
-        localizableType: "ambersteel.character.health.mutation.singular",
-        localizableDialogTitle: "ambersteel.character.health.mutation.add.query",
+        localizedType: game.i18n.localize("ambersteel.character.health.mutation.singular"),
       }),
     });
 
@@ -260,8 +257,7 @@ export default class ActorHealthViewModel extends ViewModel {
         creationType: "scar",
         withDialog: true,
         localizedLabel: game.i18n.localize("ambersteel.character.health.scar.add.label"),
-        localizableType: "ambersteel.character.health.scar.singular",
-        localizableDialogTitle: "ambersteel.character.health.scar.add.query",
+        localizedType: game.i18n.localize("ambersteel.character.health.scar.singular"),
       }),
     });
   }

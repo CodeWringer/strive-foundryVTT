@@ -109,8 +109,7 @@ export default class SkillAbilityTableViewModel extends ViewModel {
         creationType: "skill-ability",
         withDialog: false,
         localizedLabel: game.i18n.localize("ambersteel.character.skill.ability.add.label"),
-        localizableType: "ambersteel.character.skill.ability.singular",
-        localizableDialogTitle: "ambersteel.character.skill.ability.add.query",
+        localizedType: game.i18n.localize("ambersteel.character.skill.ability.singular"),
       }),
     });
 

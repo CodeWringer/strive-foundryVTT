@@ -64,8 +64,7 @@ export default class ActorSkillsViewModel extends ViewModel {
         creationData: {
           level: 0
         },
-        localizableType: "ambersteel.character.skill.learning.singular",
-        localizableDialogTitle: "ambersteel.character.skill.learning.add.query",
+        localizedType: game.i18n.localize("ambersteel.character.skill.learning.singular"),
       }),
     });
 
@@ -93,8 +92,7 @@ export default class ActorSkillsViewModel extends ViewModel {
         creationData: {
           level: 1
         },
-        localizableType: "ambersteel.character.skill.known.singular",
-        localizableDialogTitle: "ambersteel.character.skill.known.add.query",
+        localizedType: game.i18n.localize("ambersteel.character.skill.known.singular"),
       }),
     });
   }
