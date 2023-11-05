@@ -483,11 +483,7 @@ export default class TransientSkill extends TransientBaseItem {
   async persistSkillAbilities(render = true) {
     const abilitiesToPersist = {};
 
-    for (const abilityId in this.abilities) {
-      if (this.abilities.hasOwnProperty(abilityId) !== true) continue;
-
-      const ability = this.abilities[abilityId];
-
+    for (const ability of this.abilities) {
       abilitiesToPersist[ability.id] = ability.toDto();
     }
 
@@ -510,27 +506,7 @@ export default class TransientSkill extends TransientBaseItem {
       if (abilitiesOnDocument.hasOwnProperty(abilityId) !== true) continue;
 
       const dto = abilitiesOnDocument[abilityId];
-
-      const damage = [];
-      for (const propertyName in dto.damage) {
-        if (dto.damage.hasOwnProperty(propertyName) !== true) continue;
-
-        const plainDamageObject = dto.damage[propertyName];
-
-        damage.push(new DamageAndType({
-          damage: plainDamageObject.damage ?? "0",
-          damageType: DAMAGE_TYPES[plainDamageObject.damageType] ?? DAMAGE_TYPES.none,
-        }));
-      }
-
-      const skillAbility = new SkillAbility({
-        ...dto,
-        owningDocument: this,
-        damage: damage,
-        attackType: ATTACK_TYPES[dto.attackType],
-      });
-
-      result.push(skillAbility);
+      result.push(SkillAbility.fromDto(dto, this));
     }
     return result;
   }

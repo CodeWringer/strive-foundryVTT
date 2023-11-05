@@ -10,6 +10,8 @@ import { VISIBILITY_MODES } from '../../../presentation/chat/visibility-modes.mj
 import { isObject } from '../../util/validation-utility.mjs';
 import { DAMAGE_TYPES } from '../damage-types.mjs';
 import { getNestedPropertyValue } from '../../util/property-utility.mjs';
+import { ATTACK_TYPES, AttackType } from './attack-types.mjs';
+import TransientSkill from '../../document/item/transient-skill.mjs';
 
 /**
  * Represents a skill ability. 
@@ -38,6 +40,39 @@ import { getNestedPropertyValue } from '../../util/property-utility.mjs';
  * @property {AttackType | Null} attackType 
  */
 export default class SkillAbility {
+  /**
+   * Converts the given `dto` to a `SkillAbility` instance and 
+   * returns it. 
+   * 
+   * @param {Object} dto 
+   * @param {TransientSkill} owningDocument 
+   * 
+   * @returns {SkillAbility}
+   * 
+   * @static
+   */
+  static fromDto(dto, owningDocument) {
+    return new SkillAbility({
+      owningDocument: owningDocument,
+      id: dto.id,
+      isCustom: dto.isCustom,
+      name: dto.name,
+      img: dto.img,
+      description: dto.description,
+      requiredLevel: dto.requiredLevel,
+      apCost: dto.apCost,
+      damage: dto.damage.map(it => new DamageAndType({
+        damage: it.damage,
+        damageType: DAMAGE_TYPES[it.damageType],
+      })),
+      condition: dto.condition,
+      distance: dto.distance,
+      obstacle: dto.obstacle,
+      opposedBy: dto.opposedBy,
+      attackType: dto.attackType === undefined ? undefined : ATTACK_TYPES[dto.attackType],
+    });
+  }
+
   /**
    * Returns the data path of this skill ability on its parent. 
    * 
