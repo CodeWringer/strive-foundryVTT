@@ -139,15 +139,15 @@ export default class InputViewModel extends ViewModel {
   }
 
   /** @override */
-  async activateListeners(html, isOwner, isEditable) {
-    await super.activateListeners(html, isOwner, isEditable);
+  async activateListeners(html) {
+    await super.activateListeners(html);
 
     this._detectElement(html);
 
     // -------------------------------------------------------------
-    if (!isOwner) return;
+    if (this.isOwner !== true) return;
     // -------------------------------------------------------------
-    if (!isEditable) return;
+    if (this.isEditable !== true) return;
 
     this.element.change(this._onEdit.bind(this));
   }

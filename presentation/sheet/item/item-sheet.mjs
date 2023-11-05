@@ -135,7 +135,7 @@ export class AmbersteelItemSheet extends ItemSheet {
     const isOwner = (this.actor ?? this.item).isOwner;
     
     await game.ambersteel.logger.logPerfAsync(this, "item.activateListeners (subType)", async () => {
-      await this.subType.activateListeners(html,);
+      await this.subType.activateListeners(html);
     });
     await game.ambersteel.logger.logPerfAsync(this, "item.activateListeners (viewModel)", async () => {
       await this.viewModel.activateListeners(html);

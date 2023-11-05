@@ -58,10 +58,10 @@ export default class InputRadioButtonGroupViewModel extends InputViewModel {
    * 
    * @throws {Error} NullPointerException Thrown if the radio button container could not be found. 
    */
-  async activateListeners(html, isOwner, isEditable) {
-    await super.activateListeners(html, isOwner, isEditable);
+  async activateListeners(html) {
+    await super.activateListeners(html);
 
-    if (isEditable !== true) return;
+    if (this.isEditable !== true) return;
 
     const radioButtonContainer = this.element.find(".radio-button-container");
 

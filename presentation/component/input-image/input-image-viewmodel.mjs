@@ -41,10 +41,10 @@ export default class InputImageViewModel extends InputViewModel {
    * 
    * @throws {Error} NullPointerException Thrown if the element could not be found on the DOM. 
    */
-  async activateListeners(html, isOwner, isEditable) {
-    await super.activateListeners(html, isOwner, isEditable);
+  async activateListeners(html) {
+    await super.activateListeners(html);
     
-    this.element.click(this._onClick.bind(this, html, isOwner, this.isEditable));
+    this.element.click(this._onClick.bind(this, html, this.isOwner, this.isEditable));
   }
   
   /**
