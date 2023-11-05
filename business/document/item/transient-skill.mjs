@@ -256,17 +256,18 @@ export default class TransientSkill extends TransientBaseItem {
     if (this.document.system.prerequisites === undefined) {
       return [];
     } else {
-      return this.document.system.prerequisites; 
+      return this.document.system.prerequisites.map(dto => 
+        SkillPrerequisite.fromDto(dto)
+      ); 
     }
   }
   /**
    * Sets the list of prerequisite skills. 
    * 
-   * @type {Array<SkillPrerequisite>}
    * @param {Array<SkillPrerequisite>} value
    */
   set prerequisites(value) {
-    this.updateByPath("system.prerequisites", value);
+    this.updateByPath("system.prerequisites", value.map(it => it.toDto()));
   }
   
   /**

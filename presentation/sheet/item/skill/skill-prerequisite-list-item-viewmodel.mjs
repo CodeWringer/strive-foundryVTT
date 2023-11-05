@@ -1,5 +1,4 @@
 import SkillPrerequisite from "../../../../business/ruleset/skill/skill-prerequisite.mjs";
-import { validateOrThrow } from "../../../../business/util/validation-utility.mjs";
 import ObservableField from "../../../../common/observables/observable-field.mjs";
 import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
 import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs";
@@ -58,12 +57,12 @@ export default class SkillPrerequisiteListItemViewModel extends ViewModel {
 
     this.onChange = args.onChange ?? (() => {});
 
-    this.stateId = new ObservableField({ value: args.stateId})
+    this.stateId = new ObservableField({ value: args.stateId })
     this.stateId.onChange((field, oldValue, newValue) => {
       this.onChange(this.state);
     });
 
-    this.stateName = new ObservableField({ value: args.stateName})
+    this.stateName = new ObservableField({ value: args.stateName })
     this.stateName.onChange((field, oldValue, newValue) => {
       this.onChange(this.state);
     });

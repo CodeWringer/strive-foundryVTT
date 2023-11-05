@@ -144,7 +144,6 @@ export default class SkillItemSheetViewModel extends SkillViewModel {
       systemTags: SKILL_TAGS.asArray(),
     });
 
-    this.prerequisiteViewModels = [];
     this.prerequisiteViewModels = this._getPrerequisiteViewModels();
 
     this.vmPrerequisiteList = new SimpleListViewModel({
@@ -209,9 +208,10 @@ export default class SkillItemSheetViewModel extends SkillViewModel {
    * @private
    */
   _onClickAddPrerequisite() {
-    const safeCopy = this.document.prerequisites.concat([]);
-    safeCopy.push(new SkillPrerequisite());
-    this.document.prerequisites = safeCopy;
+    const prerequisites = this.document.prerequisites.concat([
+      new SkillPrerequisite()
+    ]);
+    this.document.prerequisites = prerequisites;
   }
 
   /**
@@ -229,16 +229,15 @@ export default class SkillItemSheetViewModel extends SkillViewModel {
   }
 
   /**
-   * Updates the remote prerequisites array with the states gathered from `this.prerequisiteViewModels`. 
+   * Updates the remote prerequisites array with the states gathered 
+   * from `this.prerequisiteViewModels`. 
    * 
    * @private
    */
   _updatePrerequisitesFromViewModels() {
-    const result = [];
-
-    this.prerequisiteViewModels.forEach(viewModel => {
-      result.push(viewModel.state);
-    });
-    this.document.prerequisites = result;
+    const prerequisites = this.prerequisiteViewModels.map(viewModel => 
+      viewModel.state
+    );
+    this.document.prerequisites = prerequisites;
   }
 }
