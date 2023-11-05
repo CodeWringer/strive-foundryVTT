@@ -134,13 +134,12 @@ export class AmbersteelActorSheet extends ActorSheet {
     await super.activateListeners(html);
 
     const isOwner = (this.actor ?? this.item).isOwner;
-    const isEditable = this.isEditable;
 
     await game.ambersteel.logger.logPerfAsync(this, "actor.activateListeners (subType)", async () => {
-      await this.subType.activateListeners(html, isOwner, isEditable);
+      await this.subType.activateListeners(html);
     });
     await game.ambersteel.logger.logPerfAsync(this, "actor.activateListeners (viewModel)", async () => {
-      await this.viewModel.activateListeners(html, isOwner, isEditable);
+      await this.viewModel.activateListeners(html);
     });
 
     if (!isOwner) return;

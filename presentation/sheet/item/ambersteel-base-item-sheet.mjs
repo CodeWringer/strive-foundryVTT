@@ -72,12 +72,9 @@ export default class AmbersteelBaseItemSheet {
    * Register any DOM-reliant event listeners and manipulations here. 
    * 
    * @param {JQuery} html The DOM of the sheet. 
-   * @param {Boolean | undefined} isOwner If true, the current user is regarded as 
-   * the represented document's owner. 
-   * @param {Boolean | undefined} isEditable If true, the sheet will be editable. 
    * 
    * @virtual
    * @async
    */
-  async activateListeners(html, isOwner, isEditable) { /** Do nothing */}
+  async activateListeners(html) { /** Do nothing */}
 }

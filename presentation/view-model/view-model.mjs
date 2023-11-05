@@ -372,16 +372,14 @@ export default class ViewModel {
    * Registers events on elements of the given DOM. 
    * 
    * @param {Object} html DOM of the sheet for which to register listeners. 
-   * @param {Boolean} isOwner If true, registers events that require owner permission. 
-   * @param {Boolean} isEditable If true, registers events that require editing permission. 
    * 
    * @virtual
    * @async
    */
-  async activateListeners(html, isOwner, isEditable) {
+  async activateListeners(html) {
     for (const child of this.children) {
       try {
-        await child.activateListeners(html, isOwner, isEditable);
+        await child.activateListeners(html);
       } catch (error) {
         game.ambersteel.logger.logWarn(`${error.message}; ${error.stack}`);
       }

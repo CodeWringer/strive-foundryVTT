@@ -203,8 +203,8 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
   }
 
   /** @override */
-  async activateListeners(html, isOwner, isEditable) {
-    await super.activateListeners(html, isOwner, isEditable);
+  async activateListeners(html) {
+    await super.activateListeners(html);
 
     const thiz = this;
     const tabs = html.find("nav.sheet-tabs > a");
