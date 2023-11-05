@@ -1,4 +1,4 @@
-import { DAMAGE_TYPES } from "../damage-types.mjs";
+import { DAMAGE_TYPES, DamageType } from "../damage-types.mjs";
 
 /**
  * Represents the combination of damage and damage type. 
@@ -7,6 +7,7 @@ import { DAMAGE_TYPES } from "../damage-types.mjs";
  */
 export default class DamageAndType {
   /**
+   * @param {Object} args 
    * @param {String} args.damage
    * @param {DamageType} args.damageType
    */

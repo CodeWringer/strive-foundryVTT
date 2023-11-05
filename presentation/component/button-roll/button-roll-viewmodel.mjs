@@ -113,7 +113,7 @@ export default class ButtonRollViewModel extends ButtonViewModel {
    * @param {String | undefined} secondaryChatTitle Primary title to display above the roll result in the chat message. 
    * @param {String | undefined} secondaryChatImage Primary image to display above the roll result in the chat message. 
    * @param {Actor | undefined} args.actor Optional. Actor associated with the roll result. 
-   * @param {String | undefined} args.localizableTitle Optional. The localizable title (tooltip). 
+   * @param {String | undefined} args.localizedTooltip Localized tooltip. 
    */
   constructor(args = {}) {
     super(args);
@@ -126,7 +126,7 @@ export default class ButtonRollViewModel extends ButtonViewModel {
     this.secondaryChatTitle = args.secondaryChatTitle;
     this.secondaryChatImage = args.secondaryChatImage;
     this._actor = args.actor;
-    this.localizableTitle = args.localizableTitle ?? "ambersteel.roll.doRoll";
+    this.localizedTooltip = args.localizedTooltip ?? game.i18n.localize("ambersteel.roll.doRoll");
   }
 
   /**
@@ -150,7 +150,7 @@ export default class ButtonRollViewModel extends ButtonViewModel {
         new DynamicInputDefinition({
           type: DYNAMIC_INPUT_TYPES.DROP_DOWN,
           name: this.inputVisibility,
-          localizableLabel: "ambersteel.general.messageVisibility.label",
+          localizedLabel: game.i18n.localize("ambersteel.general.messageVisibility.label"),
           required: true,
           defaultValue: (VISIBILITY_MODES.asArray()[0]),
           specificArgs: {
@@ -249,7 +249,7 @@ export default class ButtonRollViewModel extends ButtonViewModel {
       new DynamicInputDefinition({
         type: DYNAMIC_INPUT_TYPES.TEXTFIELD,
         name: inputObstacle,
-        localizableLabel: "ambersteel.roll.obstacle.abbreviation",
+        localizedLabel:game.i18n.localize( "ambersteel.roll.obstacle.abbreviation"),
         required: true,
         defaultValue: "",
         specificArgs: {
@@ -259,14 +259,14 @@ export default class ButtonRollViewModel extends ButtonViewModel {
       new DynamicInputDefinition({
         type: DYNAMIC_INPUT_TYPES.NUMBER_SPINNER,
         name: inputBonusDice,
-        localizableLabel: "ambersteel.roll.bonusDice",
+        localizedLabel:game.i18n.localize( "ambersteel.roll.bonusDice"),
         required: true,
         defaultValue: 0,
       }),
       new DynamicInputDefinition({
         type: DYNAMIC_INPUT_TYPES.DROP_DOWN,
         name: inputRollDiceModifier,
-        localizableLabel: "ambersteel.roll.diceModifier.plural",
+        localizedLabel: game.i18n.localize("ambersteel.roll.diceModifier.plural"),
         required: true,
         defaultValue: (ROLL_DICE_MODIFIER_TYPES.asArray()[0]),
         specificArgs: {

@@ -55,7 +55,7 @@ export default class ButtonContextMenuViewModel extends ButtonViewModel {
    * 
    * @param {Function | String | undefined} args.callback Optional. Defines an asynchronous callback that is invoked upon completion of the button's own callback. 
    * @param {Boolean | undefined} args.isEditable Optional. If true, will be interactible. 
-   * @param {String | undefined} args.localizableTitle Optional. The localizable title (tooltip). 
+   * @param {String | undefined} args.localizedTooltip Localized tooltip. 
    * 
    * @param {Array<Object> | undefined} menuItems An array of context menu items, 
    * which are used to populate the context menu. 
@@ -74,7 +74,7 @@ export default class ButtonContextMenuViewModel extends ButtonViewModel {
     super(args);
 
     this.menuItems = args.menuItems ?? [];
-    this.localizableTitle = args.localizableTitle ?? "ambersteel.general.contextMenu";
+    this.localizedTooltip = args.localizedTooltip ?? game.i18n.localize("ambersteel.general.contextMenu");
 
     // Wrap the callback function to make it also ensure the context menu is properly closed, 
     // when the menu item is clicked. 
@@ -89,8 +89,8 @@ export default class ButtonContextMenuViewModel extends ButtonViewModel {
   }
 
   /** @override */
-  async activateListeners(html, isOwner, isEditable) {
-    await super.activateListeners(html, isOwner, isEditable);
+  async activateListeners(html) {
+    await super.activateListeners(html);
 
     this.html = html;
     this._contextMenu = new ContextMenu(html, this.id, this.menuItems);

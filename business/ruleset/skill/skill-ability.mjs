@@ -10,6 +10,8 @@ import { VISIBILITY_MODES } from '../../../presentation/chat/visibility-modes.mj
 import { isObject } from '../../util/validation-utility.mjs';
 import { DAMAGE_TYPES } from '../damage-types.mjs';
 import { getNestedPropertyValue } from '../../util/property-utility.mjs';
+import { ATTACK_TYPES, AttackType } from './attack-types.mjs';
+import TransientSkill from '../../document/item/transient-skill.mjs';
 
 /**
  * Represents a skill ability. 
@@ -38,6 +40,39 @@ import { getNestedPropertyValue } from '../../util/property-utility.mjs';
  * @property {AttackType | Null} attackType 
  */
 export default class SkillAbility {
+  /**
+   * Converts the given `dto` to a `SkillAbility` instance and 
+   * returns it. 
+   * 
+   * @param {Object} dto 
+   * @param {TransientSkill} owningDocument 
+   * 
+   * @returns {SkillAbility}
+   * 
+   * @static
+   */
+  static fromDto(dto, owningDocument) {
+    return new SkillAbility({
+      owningDocument: owningDocument,
+      id: dto.id,
+      isCustom: dto.isCustom,
+      name: dto.name,
+      img: dto.img,
+      description: dto.description,
+      requiredLevel: dto.requiredLevel,
+      apCost: dto.apCost,
+      damage: dto.damage.map(it => new DamageAndType({
+        damage: it.damage,
+        damageType: DAMAGE_TYPES[it.damageType],
+      })),
+      condition: dto.condition,
+      distance: dto.distance,
+      obstacle: dto.obstacle,
+      opposedBy: dto.opposedBy,
+      attackType: dto.attackType === undefined ? undefined : ATTACK_TYPES[dto.attackType],
+    });
+  }
+
   /**
    * Returns the data path of this skill ability on its parent. 
    * 
@@ -189,20 +224,21 @@ export default class SkillAbility {
   }
   
   /**
+   * @param {Object} args 
    * @param {TransientSkill} args.owningDocument The owning document.
-   * @param {String | undefined} args.id Optional. UUID of this instance of a skill ability. 
-   * @param {Boolean | undefined} args.isCustom Optional. 
-   * @param {String | undefined} args.name Optional. 
-   * @param {String | undefined} args.img Optional. 
-   * @param {String | undefined} args.description Optional. 
-   * @param {Number | undefined} args.requiredLevel Optional. 
-   * @param {Number | undefined} args.apCost Optional. 
-   * @param {Array<DamageAndType> | undefined} args.damage Optional. 
-   * @param {String | undefined} args.condition Optional. 
-   * @param {Number | undefined} args.distance Optional. 
-   * @param {String | undefined} args.obstacle Optional. 
-   * @param {String | undefined} args.opposedBy Optional. 
-   * @param {AttackType | undefined} args.attackType Optional. 
+   * @param {String | undefined} args.id UUID of this instance of a skill ability. 
+   * @param {Boolean | undefined} args.isCustom 
+   * @param {String | undefined} args.name 
+   * @param {String | undefined} args.img 
+   * @param {String | undefined} args.description 
+   * @param {Number | undefined} args.requiredLevel 
+   * @param {Number | undefined} args.apCost 
+   * @param {Array<DamageAndType> | undefined} args.damage 
+   * @param {String | undefined} args.condition 
+   * @param {Number | undefined} args.distance 
+   * @param {String | undefined} args.obstacle 
+   * @param {String | undefined} args.opposedBy 
+   * @param {AttackType | undefined} args.attackType 
    * 
    * @throws {Error} Thrown, if `owningDocument` is undefined. 
    */
@@ -389,7 +425,7 @@ export default class SkillAbility {
   }
 
   /**
-   * Returns a plain object based on the given object instance. 
+   * Returns a data transfer object version of this instance. 
    * 
    * IMPORTANT: To avoid problems with recursion, the `owningDocument` field 
    * **is not and must not** be included!
@@ -397,27 +433,25 @@ export default class SkillAbility {
    * @returns {Object}
    */
   toDto() {
-    const obj = Object.create(null);
-
-    obj.id = this.id;
-    obj.owningDocumentId = this.owningDocumentId;
-    obj.index = this.index;
-    obj.isCustom = this.isCustom;
-    obj.name = this.name;
-    obj.img = this.img;
-    obj.description = this.description;
-    obj.requiredLevel = this.requiredLevel;
-    obj.apCost = this.apCost;
-    obj.damage = this.damage.map(it => {
-      return { damage: it.damage, damageType: it.damageType.name }
-    });
-    obj.condition = this.condition;
-    obj.distance = this.distance;
-    obj.obstacle = this.obstacle;
-    obj.attackType = (this.attackType ?? {}).name;
-    obj.opposedBy = this.opposedBy;
-    
-    return obj;
+    return {
+      id: this.id,
+      owningDocumentId: this.owningDocumentId,
+      index: this.index,
+      isCustom: this.isCustom,
+      name: this.name,
+      img: this.img,
+      description: this.description,
+      requiredLevel: this.requiredLevel,
+      apCost: this.apCost,
+      damage: this.damage.map(it => {
+        return { damage: it.damage, damageType: it.damageType.name }
+      }),
+      condition: this.condition,
+      distance: this.distance,
+      obstacle: this.obstacle,
+      attackType: (this.attackType ?? {}).name,
+      opposedBy: this.opposedBy,
+    };
   }
   
   /**
