@@ -6,13 +6,11 @@ readOnlyCssClass: {String | undefined}
 {{#if viewModel.isEditable}}
   <select 
     class="custom-system-edit drop-down width-fill component-input-dropdown {{cssClass}}"
-    data-property-path="{{viewModel.propertyPath}}"
     name="{{viewModel.id}}"
     id="{{viewModel.id}}"
-    value="{{viewModel.value}}"
+    value="{{viewModel.value.value}}"
     title="{{viewModel.localizedTitle}}"
   >
-  {{#select viewModel.propertyPath}}
     {{#each viewModel.options as |option index|}}
       <option class="flex flex-middle" value="{{option.value}}"
         {{#if (not option.shouldDisplayValue)}}title="{{option.localizedValue}}"{{/if}}
@@ -33,8 +31,7 @@ readOnlyCssClass: {String | undefined}
         {{/if}}
       </option>
     {{/each}}
-  {{/select}}
-</select>
+  </select>
 {{else}}
   {{!-- Display read-only value --}}
   <div 

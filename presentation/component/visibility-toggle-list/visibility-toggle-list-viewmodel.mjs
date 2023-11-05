@@ -1,7 +1,6 @@
-import { getNestedPropertyValue, setNestedPropertyValue } from "../../../business/util/property-utility.mjs";
 import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import { TEMPLATES } from "../../templatePreloader.mjs";
-import ViewModel from "../../view-model/view-model.mjs";
+import InputViewModel from "../../view-model/input-view-model.mjs";
 import VisibilityToggleListItemViewModel from "./visibility-toggle-list-item-viewmodel.mjs";
 
 /**
@@ -26,22 +25,53 @@ export class VisibilityToggleListItem {
     this.localizedName = args.localizedName;
     this.value = args.value ?? false;
   }
+
+  /**
+   * Returns a new view model instance representing this type. 
+   * 
+   * @param {VisibilityToggleListViewModel} parent 
+   * 
+   * @returns {VisibilityToggleListItemViewModel}
+   */
+  getViewModel(parent) {
+    return new VisibilityToggleListItemViewModel({
+      id: this.id,
+      parent: parent,
+      value: this.value,
+      localizedLabel: this.localizedName,
+    });
+  }
 }
 
 /**
+ * @property {String} id Unique ID of this view model instance. 
+ * @property {Boolean} isEditable If `true`, input(s) will 
+ * be in edit mode. If `false`, will be in read-only mode.
+ * 
+ * @property {String | undefined} localizedToolTip A localized text to 
+ * display as a tool tip. 
+ * @property {String | undefined} iconHtml Raw HTML to render as 
+ * an associated icon. E. g. `'<i class="fas fa-scroll"></i>'`
+ * @property {String} localizedValue The current value, localized. 
+ * * Read-only
+ * @property {JQuery | HTMLElement} element The DOM element that is 
+ * associated with this view model. 
+ * * Read-only
+ * 
  * @property {String} itemTemplate
- * * Read-only
- * @property {Object} propertyOwner
- * * Read-only
- * @property {String} propertyPath
  * * Read-only
  * @property {Array<VisibilityToggleListItemViewModel>} itemViewModels
  * * Read-only
  * @property {Array<VisibilityToggleListItem>} value
  * 
- * @extends ViewModel
+ * @method onChange Callback that is invoked when the value changes. 
+ * Receives the following arguments: 
+ * * `oldValue: {Array<VisibilityToggleListItem>}`
+ * * `newValue: {Array<VisibilityToggleListItem>}`
+ * 
+ * @extends InputViewModel
  */
-export default class VisibilityToggleListViewModel extends ViewModel {
+export default class VisibilityToggleListViewModel extends InputViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.COMPONENT_VISIBILITY_TOGGLE_LIST; }
 
@@ -57,35 +87,28 @@ export default class VisibilityToggleListViewModel extends ViewModel {
   get itemTemplate() { return VisibilityToggleListItemViewModel.TEMPLATE; }
 
   /**
-   * Gets or sets the value. 
-   * 
-   * @type {Array<VisibilityToggleListItem>}
-   */
-  get value() {
-    return getNestedPropertyValue(this.propertyOwner, this.propertyPath);
-  }
-  set value(value) {
-    setNestedPropertyValue(this.propertyOwner, this.propertyPath, value);
-  }
-
-  /**
    * @param {Object} args
-   * @param {String | undefined} args.id Id used for the HTML element's id and name attributes. 
-   * @param {ViewModel | undefined} args.parent Parent ViewModel instance of this instance. 
-   * @param {Boolean | undefined} args.isEditable If true, the sheet is editable. 
-   * @param {Boolean | undefined} args.isSendable If true, the document represented by the sheet can be sent to chat. 
-   * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document. 
+   * @param {String | undefined} args.id Unique ID of this view model instance. 
+   * @param {Boolean | undefined} args.isEditable If `true`, input(s) will 
+   * be in edit mode. If `false`, will be in read-only mode.
+   * * default `false`. 
    * 
-   * @param {Object} args.propertyOwner
-   * @param {String} args.propertyPath
+   * @param {String | undefined} args.localizedToolTip A localized text to 
+   * display as a tool tip. 
+   * @param {String | undefined} args.iconHtml Raw HTML to render as 
+   * an associated icon. E. g. `'<i class="fas fa-scroll"></i>'`
+   * @param {Function | undefined} args.onChange Callback that is invoked 
+   * when the value changes. Receives two arguments: 
+   * * `oldValue: {Array<VisibilityToggleListItem>}`
+   * * `newValue: {Array<VisibilityToggleListItem>}`
+   * 
+   * @param {Array<VisibilityToggleListItem> | undefined} args.value 
+   * The current list of items. 
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["propertyOwner", "propertyPath"]);
 
-    this.propertyOwner = args.propertyOwner;
-    this.propertyPath = args.propertyPath;
-
+    this._value = args.value ?? [];
     this.itemViewModels = [];
     this.itemViewModels = this._getItemViewModels();
   }
@@ -107,30 +130,22 @@ export default class VisibilityToggleListViewModel extends ViewModel {
    * @private
    */
   _getItemViewModels() {
-    const result = [];
+    return this.value.map(item => {
+      const vm = item.getViewModel(this);
+      vm.onChange = (oldItemValue, newItemValue) => {
+        const oldItemArray = this.value.concat([]);
+        const index = oldItemArray.findIndex(it => it.id === item.id)
+        oldItemArray[index] = new VisibilityToggleListItem({
+          id: item.id,
+          localizedName: item.localizedName,
+          value: oldItemValue,
+        });
 
-    const thiz = this;
-
-    const items = this.value;
-    for (let i = 0; i < items.length; i++) {
-      const item = items[i]
-      const vm = new VisibilityToggleListItemViewModel({
-        id: item.id,
-        parent: this,
-        isEditable: this.isEditable,
-        isSendable: this.isSendable,
-        isOwner: this.isOwner,
-        propertyOwner: this,
-        propertyPath: `value[${i}].value`, // This will not propagate as expected...
-        localizedLabel: item.localizedName,
-        onChange: () => {
-          // Trigger an update of the property on the `propertyOwner`. 
-          thiz.value = this.value;
-        }
-      });
-      result.push(vm);
-    }
-
-    return result;
+        const newItemArray = this.value.concat([]);
+        
+        this.onChange(oldItemArray, newItemArray);
+      };
+      return vm;
+    });
   }
 }

@@ -6,11 +6,10 @@ readOnlyCssClass: {String | undefined}
 {{#if viewModel.isEditable}}
   <input 
     class="custom-system-edit input-width-override component-input-textfield {{cssClass}}"
-    data-property-path="{{viewModel.propertyPath}}"
     type="text"
     name="{{viewModel.id}}"
     id="{{viewModel.id}}"
-    placeholder="{{viewModel.localizedPlaceholder}}"
+    placeholder="{{viewModel.placeholder}}"
     value="{{viewModel.value}}"
     title="{{viewModel.localizedTitle}}"
   />
