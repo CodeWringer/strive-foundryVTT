@@ -57,7 +57,7 @@ export default class DiceRollListViewModel extends ViewModel {
       id: "vmBtnRoll",
       parent: thiz,
       isEditable: thiz.isEditable,
-      localizableTitle: "ambersteel.roll.doRoll",
+      localizedTooltip: game.i18n.localize("ambersteel.roll.doRoll"),
       onClick: async (html, isOwner, isEditable) => {
         const evaluatedFormulae = await new RollFormulaResolver().evaluateFormulae(thiz.formulaViewModels);
 

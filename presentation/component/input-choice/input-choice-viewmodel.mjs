@@ -23,7 +23,7 @@ export default class InputChoiceViewModel extends InputViewModel {
    * @param {Object} args.propertyOwner An object on which to to look up the value. 
    * @param {Boolean | undefined} args.isEditable Optional. If true, input(s) will be in edit mode. If false, input(s) will be in read-only mode.
    * @param {String | undefined} args.contextTemplate Optional. Name or path of a template that embeds this input component. 
-   * @param {String | undefined} args.localizableTitle Optional. The localizable title (tooltip). 
+   * @param {String | undefined} args.localizedTooltip Localized tooltip. 
    * 
    * @param {Array<ChoiceOption>} args.options The options available to the drop-down. 
    * @param {ChoiceAdapter} adapter A `ChoiceOption` adapter. 

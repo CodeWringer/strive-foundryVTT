@@ -184,9 +184,8 @@ export default class ActorHealthViewModel extends ViewModel {
         isEditable: this.isEditable,
         creationType: "illness",
         withDialog: true,
-        localizableLabel: "ambersteel.character.health.illness.add.label",
-        localizableType: "ambersteel.character.health.illness.singular",
-        localizableDialogTitle: "ambersteel.character.health.illness.add.query",
+        localizedLabel: game.i18n.localize("ambersteel.character.health.illness.add.label"),
+        localizedType: game.i18n.localize("ambersteel.character.health.illness.singular"),
       }),
     });
 
@@ -209,9 +208,8 @@ export default class ActorHealthViewModel extends ViewModel {
         isEditable: this.isEditable,
         creationType: "injury",
         withDialog: true,
-        localizableLabel: "ambersteel.character.health.injury.add.label",
-        localizableType: "ambersteel.character.health.injury.singular",
-        localizableDialogTitle: "ambersteel.character.health.injury.add.query",
+        localizedLabel: game.i18n.localize("ambersteel.character.health.injury.add.label"),
+        localizedType: game.i18n.localize("ambersteel.character.health.injury.singular"),
       }),
     });
 
@@ -234,9 +232,8 @@ export default class ActorHealthViewModel extends ViewModel {
         isEditable: this.isEditable,
         creationType: "mutation",
         withDialog: true,
-        localizableLabel: "ambersteel.character.health.mutation.add.label",
-        localizableType: "ambersteel.character.health.mutation.singular",
-        localizableDialogTitle: "ambersteel.character.health.mutation.add.query",
+        localizedLabel: game.i18n.localize("ambersteel.character.health.mutation.add.label"),
+        localizedType: game.i18n.localize("ambersteel.character.health.mutation.singular"),
       }),
     });
 
@@ -259,9 +256,8 @@ export default class ActorHealthViewModel extends ViewModel {
         isEditable: this.isEditable,
         creationType: "scar",
         withDialog: true,
-        localizableLabel: "ambersteel.character.health.scar.add.label",
-        localizableType: "ambersteel.character.health.scar.singular",
-        localizableDialogTitle: "ambersteel.character.health.scar.add.query",
+        localizedLabel: game.i18n.localize("ambersteel.character.health.scar.add.label"),
+        localizedType: game.i18n.localize("ambersteel.character.health.scar.singular"),
       }),
     });
   }

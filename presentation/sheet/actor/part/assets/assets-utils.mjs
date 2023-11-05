@@ -31,14 +31,14 @@ export async function queryAssetSlotConfiguration(assetSlot = {}) {
       new DynamicInputDefinition({
         type: DYNAMIC_INPUT_TYPES.TEXTFIELD,
         name: inputName,
-        localizableLabel: "ambersteel.general.name",
+        localizedLabel: game.i18n.localize("ambersteel.general.name"),
         required: true,
         defaultValue: (assetSlot.name ?? "New Asset Slot"),
       }),
       new DynamicInputDefinition({
         type: DYNAMIC_INPUT_TYPES.TEXTFIELD,
         name: inputAcceptedTypes,
-        localizableLabel: "ambersteel.character.asset.slot.acceptedTypes",
+        localizedLabel: game.i18n.localize("ambersteel.character.asset.slot.acceptedTypes"),
         required: true,
         defaultValue: ((assetSlot.acceptedTypes ?? []).join(", ")),
         specificArgs: {
@@ -48,7 +48,7 @@ export async function queryAssetSlotConfiguration(assetSlot = {}) {
       new DynamicInputDefinition({
         type: DYNAMIC_INPUT_TYPES.NUMBER_SPINNER,
         name: inputMaxBulk,
-        localizableLabel: "ambersteel.character.asset.maxBulk",
+        localizedLabel: game.i18n.localize("ambersteel.character.asset.maxBulk"),
         required: false,
         defaultValue: (assetSlot.maxBulk ?? 1),
         specificArgs: {

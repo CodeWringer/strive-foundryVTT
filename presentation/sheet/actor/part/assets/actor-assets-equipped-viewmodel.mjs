@@ -64,7 +64,7 @@ export default class ActorAssetsEquippedViewModel extends ViewModel {
       isEditable: this.isEditable,
       isOwner: this.isOwner,
       target: this.document,
-      localizableTitle: "ambersteel.character.asset.slot.add.label",
+      localizedTooltip: game.i18n.localize("ambersteel.character.asset.slot.add.label"),
       onClick: async () => {
         const inputName = "name";
 
@@ -77,7 +77,7 @@ export default class ActorAssetsEquippedViewModel extends ViewModel {
             new DynamicInputDefinition({
               type: DYNAMIC_INPUT_TYPES.TEXTFIELD,
               name: inputName,
-              localizableLabel: "ambersteel.general.name",
+              localizedLabel: game.i18n.localize("ambersteel.general.name"),
               required: true,
               defaultValue: "New Asset Slot Group"
             }),

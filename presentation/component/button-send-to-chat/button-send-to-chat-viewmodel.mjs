@@ -70,7 +70,7 @@ export default class ButtonSendToChatViewModel extends ButtonViewModel {
    * @param {String | undefined} args.propertyPath Optional. Property path identifying a property to send to chat. 
    * @param {String | undefined} args.chatTitle Optional. Title to display above the chat message. 
    * @param {Actor | undefined} args.actor Optional. Actor associated with the chat message. 
-   * @param {String | undefined} args.localizableTitle Optional. The localizable title (tooltip). 
+   * @param {String | undefined} args.localizedTooltip Localized tooltip. 
    */
   constructor(args = {}) {
     super(args);
@@ -79,7 +79,7 @@ export default class ButtonSendToChatViewModel extends ButtonViewModel {
     this._propertyPath = args.propertyPath;
     this._chatTitle = args.chatTitle ?? "";
     this._actor = args.actor;
-    this.localizableTitle = args.localizableTitle ?? "ambersteel.general.sendToChat";
+    this.localizedTooltip = args.localizedTooltip ?? game.i18n.localize("ambersteel.general.sendToChat");
   }
 
   /**

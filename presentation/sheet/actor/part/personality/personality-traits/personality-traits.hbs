@@ -18,10 +18,10 @@ viewModel: {PersonalityTraitsViewModel}
     <div class="flex flex-center header last personality-bright3"></div>
   {{!-- Rows --}}
   {{#each viewModel.personalityTraits as |obj index|}}
-    <div class="flex flex-middle flex-right pad-r-md border-solid-t-sm personality-dark3">{{localize obj.localizableTraitLeft}}</div>
+    <div class="flex flex-middle flex-right pad-r-md border-solid-t-sm personality-dark3">{{obj.localizedTraitLeft}}</div>
     <div class="grid-span-7 personality-radio">
       {{> inputRadioButtonGroup viewModel=obj.vmRadioButtonGroup}}
     </div>
-    <div class="flex flex-middle pad-l-md border-solid-t-sm personality-bright3">{{localize obj.localizableTraitRight}}</div>
+    <div class="flex flex-middle pad-l-md border-solid-t-sm personality-bright3">{{obj.localizedTraitRight}}</div>
   {{/each}}
 </div>

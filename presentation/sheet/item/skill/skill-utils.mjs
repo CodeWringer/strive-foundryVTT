@@ -30,7 +30,7 @@ export async function querySkillConfiguration(skill) {
       new DynamicInputDefinition({
         type: DYNAMIC_INPUT_TYPES.DROP_DOWN,
         name: inputHeadState,
-        localizableLabel: "ambersteel.character.skill.headState",
+        localizedLabel: game.i18n.localize("ambersteel.character.skill.headState"),
         required: true,
         defaultValue: (skill.headState ?? SKILL_HEAD_STATES.FULL),
         specificArgs: {
