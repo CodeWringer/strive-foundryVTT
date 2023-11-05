@@ -189,20 +189,21 @@ export default class SkillAbility {
   }
   
   /**
+   * @param {Object} args 
    * @param {TransientSkill} args.owningDocument The owning document.
-   * @param {String | undefined} args.id Optional. UUID of this instance of a skill ability. 
-   * @param {Boolean | undefined} args.isCustom Optional. 
-   * @param {String | undefined} args.name Optional. 
-   * @param {String | undefined} args.img Optional. 
-   * @param {String | undefined} args.description Optional. 
-   * @param {Number | undefined} args.requiredLevel Optional. 
-   * @param {Number | undefined} args.apCost Optional. 
-   * @param {Array<DamageAndType> | undefined} args.damage Optional. 
-   * @param {String | undefined} args.condition Optional. 
-   * @param {Number | undefined} args.distance Optional. 
-   * @param {String | undefined} args.obstacle Optional. 
-   * @param {String | undefined} args.opposedBy Optional. 
-   * @param {AttackType | undefined} args.attackType Optional. 
+   * @param {String | undefined} args.id UUID of this instance of a skill ability. 
+   * @param {Boolean | undefined} args.isCustom 
+   * @param {String | undefined} args.name 
+   * @param {String | undefined} args.img 
+   * @param {String | undefined} args.description 
+   * @param {Number | undefined} args.requiredLevel 
+   * @param {Number | undefined} args.apCost 
+   * @param {Array<DamageAndType> | undefined} args.damage 
+   * @param {String | undefined} args.condition 
+   * @param {Number | undefined} args.distance 
+   * @param {String | undefined} args.obstacle 
+   * @param {String | undefined} args.opposedBy 
+   * @param {AttackType | undefined} args.attackType 
    * 
    * @throws {Error} Thrown, if `owningDocument` is undefined. 
    */
@@ -389,7 +390,7 @@ export default class SkillAbility {
   }
 
   /**
-   * Returns a plain object based on the given object instance. 
+   * Returns a data transfer object version of this instance. 
    * 
    * IMPORTANT: To avoid problems with recursion, the `owningDocument` field 
    * **is not and must not** be included!

@@ -60,6 +60,7 @@ export default class ButtonSendToChatViewModel extends ButtonViewModel {
   get actor() { return this._actor; }
 
   /**
+   * @param {Object} args
    * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
    * 
    * @param {TransientDocument | Object} args.target The target object to affect. 

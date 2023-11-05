@@ -22,7 +22,7 @@ const DIALOG_ELEMENT_CLASS = "ambersteel-modal";
 
 /**
  * @summary
- * Represents a modal dialog. 
+ * Represents the abstract base class for system-specific custom dialogs. 
  * 
  * @description
  * Handles setting up a "backdrop" which puts focus on the dialog and which allows 
