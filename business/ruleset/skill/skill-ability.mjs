@@ -398,27 +398,25 @@ export default class SkillAbility {
    * @returns {Object}
    */
   toDto() {
-    const obj = Object.create(null);
-
-    obj.id = this.id;
-    obj.owningDocumentId = this.owningDocumentId;
-    obj.index = this.index;
-    obj.isCustom = this.isCustom;
-    obj.name = this.name;
-    obj.img = this.img;
-    obj.description = this.description;
-    obj.requiredLevel = this.requiredLevel;
-    obj.apCost = this.apCost;
-    obj.damage = this.damage.map(it => {
-      return { damage: it.damage, damageType: it.damageType.name }
-    });
-    obj.condition = this.condition;
-    obj.distance = this.distance;
-    obj.obstacle = this.obstacle;
-    obj.attackType = (this.attackType ?? {}).name;
-    obj.opposedBy = this.opposedBy;
-    
-    return obj;
+    return {
+      id: this.id,
+      owningDocumentId: this.owningDocumentId,
+      index: this.index,
+      isCustom: this.isCustom,
+      name: this.name,
+      img: this.img,
+      description: this.description,
+      requiredLevel: this.requiredLevel,
+      apCost: this.apCost,
+      damage: this.damage.map(it => {
+        return { damage: it.damage, damageType: it.damageType.name }
+      }),
+      condition: this.condition,
+      distance: this.distance,
+      obstacle: this.obstacle,
+      attackType: (this.attackType ?? {}).name,
+      opposedBy: this.opposedBy,
+    };
   }
   
   /**
