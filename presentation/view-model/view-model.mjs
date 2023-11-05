@@ -283,9 +283,9 @@ export default class ViewModel {
 
     // Even though this may seem redundant at first (see `update` method), 
     // this is more efficient than calling `update` here. 
-    this.isEditable = args.isEditable ?? false;
-    this.isSendable = args.isSendable ?? false;
-    this.isOwner = args.isOwner ?? false;
+    this.isEditable = args.isEditable ?? (args.parent !== undefined ? args.parent.isEditable : false);
+    this.isSendable = args.isSendable ?? (args.parent !== undefined ? args.parent.isSendable : false);
+    this.isOwner = args.isOwner ?? (args.parent !== undefined ? args.parent.isOwner : false);
   }
 
   /**
