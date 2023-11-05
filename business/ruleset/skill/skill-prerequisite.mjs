@@ -9,6 +9,14 @@ import { validateOrThrow } from "../../util/validation-utility.mjs";
  * @property {Number} minimumLevel The level of the prerequisite skill requirement. 
  */
 export default class SkillPrerequisite {
+  static fromDto(dto) {
+    return new SkillPrerequisite({
+      id: dto.id,
+      name: dto.name,
+      minimumLevel: dto.minimumLevel,
+    });
+  }
+
   /**
    * @param {Object} args Arguments object
    * @param {String | undefined} args.id ID of the skill. 
@@ -20,5 +28,13 @@ export default class SkillPrerequisite {
     this.id = args.id;
     this.name = args.name;
     this.minimumLevel = args.minimumLevel ?? 0;
+  }
+
+  toDto() {
+    return {
+      id: this.id,
+      name: this.name,
+      minimumLevel: this.minimumLevel,
+    };
   }
 }
