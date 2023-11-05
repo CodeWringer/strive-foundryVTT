@@ -7,6 +7,11 @@ import { VISIBILITY_MODES } from '../../presentation/chat/visibility-modes.mjs';
 import * as PropertyUtility from "../util/property-utility.mjs";
 import DocumentUpdater from "./document-updater/document-updater.mjs";
 import DocumentPresenter from "../../presentation/document/document-presenter.mjs";
+import { DataField } from "./data-field.mjs";
+import InputImageViewModel from "../../presentation/component/input-image/input-image-viewmodel.mjs";
+import InputTextFieldViewModel from "../../presentation/component/input-textfield/input-textfield-viewmodel.mjs";
+import InputRichTextViewModel from "../../presentation/component/input-rich-text/input-rich-text-viewmodel.mjs";
+import ButtonToggleViewModel from "../../presentation/component/button-toggle/button-toggle-viewmodel.mjs";
 
 /**
  * The regular expression pattern used to identify all `@`-references. 
@@ -43,6 +48,10 @@ export const REGEX_PATTERN_PROPERTY_PATH = /\.[^\s-/*+]+/i;
  * 
  * @abstract
  * 
+ * @property {DataField< String >} name Internal name. 
+ * @property {DataField< String >} img Returns the icon/image path of the document. 
+ * @property {DataField< String >} description
+ * @property {DataField< String >} gmNotes
  * @property {String} defaultImg Returns the default icon image path for this type of document. 
  * * Read-only.
  * * Abstract. 
@@ -53,12 +62,10 @@ export const REGEX_PATTERN_PROPERTY_PATH = /\.[^\s-/*+]+/i;
  * * Read-only.
  * @property {String} id Returns the id of the document. 
  * * Read-only.
- * @property {String} img Returns the icon/image path of the document. 
  * @property {Boolean} isOwner Returns true, if the current user is the owner of the document. 
  * * Read-only.
  * @property {Item | Actor} document Returns the encapsulated document instance. 
  * * Read-only.
- * @property {String} name Internal name. 
  * @property {String} localizableName Localization key for the full name. 
  * @property {String} localizableAbbreviation Localization key for the abbreviated name. 
  * @property {String} type Internal type name. E. g. `"skill"`
@@ -66,8 +73,6 @@ export const REGEX_PATTERN_PROPERTY_PATH = /\.[^\s-/*+]+/i;
  * @property {Object | undefined | null} pack A compendium pack this document is contained in. 
  * * Read-only.
  * @property {Object} displayOrders An object on which sortable lists store their entry orders. 
- * @property {String} description
- * @property {String} gmNotes
  * @property {Boolean} isCustom
  * 
  * @property {DocumentPresenter} sheetPresenter
@@ -118,34 +123,12 @@ export default class TransientDocument {
   get id() { return this.document.id; }
   
   /**
-   * The icon/image path of the document. 
-   * 
-   * @type {String}
-   */
-  get img() { return this.document.img; }
-  set img(value) {
-    this.document.img = value;
-    this.updateByPath("img", value);
-  }
-  
-  /**
    * Returns true, if the current user is the owner of the document. 
    * 
    * @type {Boolean}
    * @readonly
    */
   get isOwner() { return this.document.isOwner ?? this.document.owner ?? false; }
-
-  /**
-   * The internal name of the document. 
-   * 
-   * @type {String}
-   */
-  get name() { return this.document.name; }
-  set name(value) {
-    this.document.name = value;
-    this.updateByPath("name", value);
-  }
 
   /**
    * Returns the internal type name of the document. 
@@ -163,27 +146,57 @@ export default class TransientDocument {
    */
   get pack() { return this.document.pack; }
 
-  /**
-   * @type {String}
-   */
-  get description() {
-    return this.document.system.description;
-  }
-  set description(value) {
-    this.document.system.description = value;
-    this.updateByPath("system.description", value);
-  }
+  img = new DataField({
+    document: this,
+    dataPaths: ["img"],
+    template: InputImageViewModel.TEMPLATE,
+    defaultValue: this.defaultImg,
+    viewModelFunc: (parent, isOwner, isGM) => { return new InputImageViewModel({
+      id: "img",
+      parent: parent,
+      localizedToolTip: game.i18n.localize("ambersteel.general.image"),
+      iconHtml: '<a href="icons/svg/bones.svg"></a>',
+    }); },
+  });
   
-  /**
-   * @type {String}
-   */
-  get gmNotes() {
-    return this.document.system.gmNotes;
-  }
-  set gmNotes(value) {
-    this.document.system.gmNotes = value;
-    this.updateByPath("system.gmNotes", value);
-  }
+  name = new DataField({
+    document: this,
+    dataPaths: ["name"],
+    template: InputTextFieldViewModel.TEMPLATE,
+    defaultValue: "New",
+    viewModelFunc: (parent, isOwner, isGM) => { return new InputTextFieldViewModel({
+      id: "name",
+      parent: parent,
+      localizedToolTip: game.i18n.localize("ambersteel.general.image"),
+      iconHtml: '<a href="icons/svg/bones.svg"></a>',
+    }); },
+  });
+
+  description = new DataField({
+    document: this,
+    dataPaths: ["system.description"],
+    template: InputRichTextViewModel.TEMPLATE,
+    defaultValue: "",
+    viewModelFunc: (parent, isOwner, isGM) => { return new InputRichTextViewModel({
+      id: "description",
+      parent: parent,
+      localizedToolTip: game.i18n.localize("ambersteel.general.description"),
+      iconHtml: '<a href="icons/svg/bones.svg"></a>',
+    }); },
+  });
+  
+  gmNotes = new DataField({
+    document: this,
+    dataPaths: ["system.gmNotes"],
+    template: InputRichTextViewModel.TEMPLATE,
+    defaultValue: "",
+    viewModelFunc: (parent, isOwner, isGM) => { return new InputRichTextViewModel({
+      id: "gmNotes",
+      parent: parent,
+      localizedToolTip: game.i18n.localize("ambersteel.character.sheet.tab.gmNotes"),
+      iconHtml: '<a href="icons/svg/bones.svg"></a>',
+    }); },
+  });
   
   /**
    * @type {Boolean}
@@ -207,20 +220,6 @@ export default class TransientDocument {
   set displayOrders(value) {
     this.document.system.displayOrders = value;
     this.updateByPath("system.displayOrders", value);
-  }
-  
-  
-  /**
-   * Arbitrary notes only visible to game-masters. 
-   * 
-   * @type {String}
-   */
-  get gmNotes() {
-    return this.document.system.gmNotes;
-  }
-  set gmNotes(value) {
-    this.document.system.gmNotes = value;
-    this.updateByPath("system.gmNotes", value);
   }
   
   /**

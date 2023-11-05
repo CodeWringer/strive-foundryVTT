@@ -99,43 +99,11 @@ export const TEMPLATES = {
   ACTOR_ASSET_SLOT: `${basePathPresentation}/sheet/actor/part/assets/actor-asset-slot.hbs`,
   ACTOR_BIOGRAPHY: `${basePathPresentation}/sheet/actor/part/actor-biography.hbs`,
   ACTOR_CHAT_MESSAGE: `${basePathPresentation}/sheet/actor/actor-chat-message.hbs`,
+  ACTOR_BIOGRAPHY: `${basePathPresentation}/component/section-gm-notes/section-gm-notes.hbs`,
   // --- Item
-  ITEM_SHEET: `${basePathPresentation}/sheet/item/item-sheet.hbs`,
-  ITEM_CHAT_MESSAGE: `${basePathPresentation}/sheet/item/item-chat-message.hbs`,
-  ITEM_LIST_ITEM: `${basePathPresentation}/sheet/item/item-list-item.hbs`,
-  // Asset
-  ASSET_SHEET: `${basePathPresentation}/sheet/item/asset/asset-item-sheet.hbs`,
-  ASSET_CHAT_MESSAGE: `${basePathPresentation}/sheet/item/asset/asset-item-chat-message.hbs`,
-  ASSET_LIST_ITEM: `${basePathPresentation}/sheet/item/asset/asset-list-item.hbs`,
-  // Skill
-  SKILL_ITEM_SHEET: `${basePathPresentation}/sheet/item/skill/skill-item-sheet.hbs`,
-  SKILL_ITEM_CHAT_MESSAGE: `${basePathPresentation}/sheet/item/skill/skill-chat-message.hbs`,
-  SKILL_LIST_ITEM: `${basePathPresentation}/sheet/item/skill/skill-list-item.hbs`,
-  SKILL_PREREQUISITE_LIST_ITEM: `${basePathPresentation}/sheet/item/skill/skill-prerequisite-list-item.hbs`,
-  // Skill ability
-  SKILL_ABILITY_TABLE: `${basePathPresentation}/sheet/item/skill-ability/skill-ability-table.hbs`,
-  SKILL_ABILITY_LIST_ITEM: `${basePathPresentation}/sheet/item/skill-ability/skill-ability-list-item.hbs`,
-  SKILL_ABILITY_CHAT_MESSAGE: `${basePathPresentation}/sheet/item/skill-ability/skill-ability-chat-message.hbs`,
-  // Fate
-  FATE_CARD: `${basePathPresentation}/sheet/item/fate-card/fate-card.hbs`,
-  FATE_CARD_ITEM_SHEET: `${basePathPresentation}/sheet/item/fate-card/fate-card-item-sheet.hbs`,
-  FATE_CARD_CHAT_MESSAGE: `${basePathPresentation}/sheet/item/fate-card/fate-card-chat-message.hbs`,
-  // Injury
-  INJURY_CHAT_MESSAGE: `${basePathPresentation}/sheet/item/injury/injury-chat-message.hbs`,
-  INJURY_ITEM_SHEET: `${basePathPresentation}/sheet/item/injury/injury-item-sheet.hbs`,
-  INJURY_LIST_ITEM: `${basePathPresentation}/sheet/item/injury/injury-list-item.hbs`,
-  // Illness
-  ILLNESS_CHAT_MESSAGE: `${basePathPresentation}/sheet/item/illness/illness-chat-message.hbs`,
-  ILLNESS_ITEM_SHEET: `${basePathPresentation}/sheet/item/illness/illness-item-sheet.hbs`,
-  ILLNESS_LIST_ITEM: `${basePathPresentation}/sheet/item/illness/illness-list-item.hbs`,
-  // Mutation
-  MUTATION_CHAT_MESSAGE: `${basePathPresentation}/sheet/item/mutation/mutation-chat-message.hbs`,
-  MUTATION_ITEM_SHEET: `${basePathPresentation}/sheet/item/mutation/mutation-item-sheet.hbs`,
-  MUTATION_LIST_ITEM: `${basePathPresentation}/sheet/item/mutation/mutation-list-item.hbs`,
-  // Mutation
-  SCAR_CHAT_MESSAGE: `${basePathPresentation}/sheet/item/scar/scar-chat-message.hbs`,
-  SCAR_ITEM_SHEET: `${basePathPresentation}/sheet/item/scar/scar-item-sheet.hbs`,
-  SCAR_LIST_ITEM: `${basePathPresentation}/sheet/item/scar/scar-list-item.hbs`,
+  ITEM_SHEET: `${basePathPresentation}/sheet/item/base/item-sheet.hbs`,
+  ITEM_CHAT_MESSAGE: `${basePathPresentation}/sheet/item/base/item-chat-message.hbs`,
+  ITEM_LIST_ITEM: `${basePathPresentation}/sheet/item/base/item-list-item.hbs`,
   // Layout
   LAYOUT: `${basePathPresentation}/layout/layout.hbs`,
 }

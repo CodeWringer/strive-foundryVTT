@@ -1,4 +1,5 @@
 import { TEMPLATES } from "../templatePreloader.mjs";
+import LayoutViewModel from "./layout-viewmodel.mjs";
 import Layoutable from "./layoutable.mjs";
 
 /**
@@ -32,7 +33,7 @@ export class RowLayout extends Layoutable {
   getViewModel(parent) {
     return new LayoutViewModel({
       parent: parent,
-      style: `display: grid; grid-template-rows: ${this._getRowSizes(args.content)}`,
+      style: `display: grid; grid-template-rows: ${this._getRowSizes(this.content)}`,
     });
   }
 
@@ -83,7 +84,7 @@ export class ColumnLayout extends Layoutable {
   getViewModel(parent) {
     return new LayoutViewModel({
       parent: parent,
-      style: `display: grid; grid-template-columns: ${this._getColumnSizes(args.content)}`,
+      style: `display: grid; grid-template-columns: ${this._getColumnSizes(this.content)}`,
     });
   }
 

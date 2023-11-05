@@ -1,3 +1,5 @@
+import LayoutSize from "./layout-size.mjs";
+
 /**
  * Represents the abstract base class for any layout-includable 
  * type. 

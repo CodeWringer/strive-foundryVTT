@@ -88,7 +88,7 @@ export class DataField extends Layoutable {
   constructor(args = {}) {
     super(args);
     validateOrThrow(args, ["document", "dataPaths"]);
-    if (this.dataPaths.length < 1) {
+    if (args.dataPaths.length < 1) {
       throw new Error("dataPaths must not be empty");
     }
 
@@ -108,7 +108,7 @@ export class DataField extends Layoutable {
   get() {
     let dto;
     for (const dataPath of this.dataPaths) {
-      dto = getNestedPropertyValue(this.document, dataPath);
+      dto = getNestedPropertyValue(this.document.document, dataPath);
       if (dto !== undefined) break;
     }
     // Set default value, in case none of the data paths returned a value. 
@@ -130,7 +130,7 @@ export class DataField extends Layoutable {
     const transformedValue = this.dtoAdapter.to(value);
     const dataPath = this.dataPaths[0];
 
-    setNestedPropertyValue(this.document, dataPath, transformedValue);
+    setNestedPropertyValue(this.document.document, dataPath, transformedValue);
     await this.document.updateByPath(dataPath, transformedValue);
   }
 
