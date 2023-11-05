@@ -256,8 +256,8 @@ export default class SkillAbilityListItemViewModel extends ViewModel {
   }
 
   /** @override */
-  async activateListeners(html, isOwner, isEditable) {
-    await super.activateListeners(html, isOwner, isEditable);
+  async activateListeners(html) {
+    await super.activateListeners(html);
 
     this.damageInfoBubble = new InfoBubble({
       html: html,

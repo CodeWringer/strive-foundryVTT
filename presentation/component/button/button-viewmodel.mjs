@@ -133,8 +133,8 @@ export default class ButtonViewModel extends ViewModel {
   }
 
   /** @override */
-  async activateListeners(html, isOwner, isEditable) {
-    await super.activateListeners(html, isOwner, isEditable);
+  async activateListeners(html) {
+    await super.activateListeners(html);
     
     this._element = html.find(`.${SELECTOR_BUTTON}#${this.id}`);
     
@@ -142,7 +142,7 @@ export default class ButtonViewModel extends ViewModel {
       throw new Error(`NullPointerException: Failed to get input element with id '${this.id}'`);
     }
 
-    this.element.click(this._onClick.bind(this, html, isOwner, this.isEditable));
+    this.element.click(this._onClick.bind(this, html, this.isOwner, this.isEditable));
   }
 
   /**

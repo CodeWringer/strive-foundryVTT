@@ -129,7 +129,7 @@ export default class DynamicInputDialog extends ConfirmableModalDialog {
   async activateListeners(html) {
     await super.activateListeners(html);
 
-    await this._viewModel.activateListeners(html, true, true);
+    await this._viewModel.activateListeners(html);
   }
   
   /**

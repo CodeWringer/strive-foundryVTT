@@ -29,18 +29,6 @@ export const SELECTOR_READ = "custom-system-read-only";
  */
 export default class InputViewModel extends ViewModel {
   /**
-   * @type {Boolean}
-   * @private
-   */
-  _isEditable = false;
-  /**
-   * @type {Boolean}
-   * @readonly
-   * @throws {Error} DisposedAccessViolation Thrown if the object has been disposed. 
-   */
-  get isEditable() { return this._isEditable; }
-
-  /**
    * Name or path of a template that embeds this input component. 
    * @type {String | undefined}
    * @private
@@ -130,7 +118,6 @@ export default class InputViewModel extends ViewModel {
     super(args);
     validateOrThrow(args, ["propertyPath", "propertyOwner"]);
 
-    this._isEditable = args.isEditable ?? false;
     this.propertyPath = args.propertyPath;
     this.propertyOwner = args.propertyOwner;
     this._contextTemplate = args.contextTemplate;
@@ -139,15 +126,12 @@ export default class InputViewModel extends ViewModel {
   }
 
   /** @override */
-  async activateListeners(html, isOwner, isEditable) {
-    await super.activateListeners(html, isOwner, isEditable);
+  async activateListeners(html) {
+    await super.activateListeners(html);
 
     this._detectElement(html);
 
-    // -------------------------------------------------------------
-    if (!isOwner) return;
-    // -------------------------------------------------------------
-    if (!isEditable) return;
+    if (this.isEditable !== true) return;
 
     this.element.change(this._onEdit.bind(this));
   }

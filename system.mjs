@@ -270,7 +270,7 @@ Hooks.on("renderChatMessage", async function(message, html, data) {
     }
   }
 
-  await viewModel.activateListeners(html, viewModel.isOwner, viewModel.isEditable);
+  await viewModel.activateListeners(html);
 });
 
 Hooks.on("deleteChatMessage", function(args) {
