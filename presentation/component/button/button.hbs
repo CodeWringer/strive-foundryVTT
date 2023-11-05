@@ -7,9 +7,11 @@ heavy: {Boolean | undefined}
 --}}
 <span class="button{{#if heavy}}{{else}} light{{/if}}{{#if square}} square{{/if}}{{#if fill}} fill{{/if}}{{#if (not viewModel.isEditable)}} disabled{{/if}}{{#if cssClass}} {{cssClass}}{{else}} font-size-default{{/if}}">
   <a class="custom-system-button pad-sm fill flex flex-center" 
-    title="{{viewModel.localizedTitle}}"
     id="{{viewModel.id}}"
+    {{#if viewModel.localizedToolTip}}title="{{viewModel.localizedToolTip}}"{{/if}}
   >
+    {{#if viewModel.iconHtml}}{{{viewModel.iconHtml}}}{{/if}}
+    {{#if viewModel.localizedText}}<span{{#if viewModel.showFancyFont}} class="fancy-font"{{/if}}>{{{viewModel.localizedText}}}</span>{{/if}}
     {{> @partial-block }}
   </a>
 </span>

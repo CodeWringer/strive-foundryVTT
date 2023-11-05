@@ -52,7 +52,7 @@ export default class ButtonAddViewModel extends ButtonViewModel {
    * 
    * @param {String} args.creationType = "skill"|"skill-ability"|"fate-card"|"item"|"injury"|"illness"
    * @param {Boolean | undefined} args.withDialog Optional. If true, will prompt the user to make a selection with a dialog. 
-   * @param {Object | String | undefined} args.creationData Optional. Data to pass to the item creation function. 
+   * @param {Object | undefined} args.creationData Optional. Data to pass to the item creation function. 
    * @param {String | undefined} args.localizableTitle Optional. Sets the tooltip text to display on cursor hover over the DOM element. 
    * @param {String | undefined} args.localizableLabel Optional. The localizable label. 
    * @param {String | undefined} localizableType Localization key of the type of thing to add. 
@@ -69,10 +69,6 @@ export default class ButtonAddViewModel extends ButtonViewModel {
     this.localizableLabel = args.localizableLabel;
     this.localizableType = args.localizableType;
     this.localizableDialogTitle = args.localizableDialogTitle;
-
-    if (isObject(this.creationData) !== true) {
-      this.creationData = this._parseCreationData(this.creationData);
-    }
   }
 
   /**
@@ -84,9 +80,11 @@ export default class ButtonAddViewModel extends ButtonViewModel {
    * @throws {Error} NullPointerException - Thrown, if 'target', 'target.type' or 'creationType' is undefined. 
    * @throws {Error} InvalidArgumentException - Thrown, if trying to add a skill-ability to a non-skill-item. 
    * @throws {Error} InvalidArgumentException - Thrown, if 'creationType' is unrecognized. 
+   * 
+   * @async
    */
-  onClick(html, isOwner, isEditable) {
-    if (isEditable !== true) return;
+  async onClick() {
+    if (this.isEditable !== true) return;
 
     if (this.target === undefined || this.target.type === undefined) {
       throw new Error("NullPointerException: 'target' or 'target.type' is undefined");
@@ -109,7 +107,15 @@ export default class ButtonAddViewModel extends ButtonViewModel {
     } else if (this.withDialog === true) {
       this._createWithDialog();
     } else {
-      this._createCustom();
+      const creationData = {
+        name: `New ${this.creationType.capitalize()}`,
+        type: this.creationType,
+        system: {
+          ...this.creationData,
+          isCustom: true,
+        }
+      };
+      return await Item.create(creationData, { parent: this.target.document }); // TODO #85: This should probably be extracted to the transient-type object. 
     }
   }
 
@@ -127,14 +133,23 @@ export default class ButtonAddViewModel extends ButtonViewModel {
       closeCallback: async (dialog) => {
         if (dialog.confirmed !== true) return;
 
+        let creationData;
+
         if (dialog.isCustomChecked === true) {
-          return await this._createCustom();
+          creationData = {
+            name: `New ${this.creationType.capitalize()}`,
+            type: this.creationType,
+            system: {
+              ...this.creationData,
+              isCustom: true,
+            }
+          };
         } else {
           const templateId = dialog.selected;
           const templateItem = await new DocumentFetcher().find({
             id: templateId,
           });
-          const creationData = {
+          creationData = {
             name: templateItem !== undefined ? templateItem.name : `New ${this.creationType.capitalize()}`,
             type: templateItem !== undefined ? templateItem.type : this.creationType,
             system: {
@@ -143,49 +158,9 @@ export default class ButtonAddViewModel extends ButtonViewModel {
               isCustom: false,
             }
           };
-          return await Item.create(creationData, { parent: this.target.document }); // TODO #85: This should probably be extracted to the transient-type object. 
         }
+        return await Item.create(creationData, { parent: this.target.document }); // TODO #85: This should probably be extracted to the transient-type object. 
       },
     }).renderAndAwait(true);
-  }
-
-  /**
-   * Creates and returns a new document of the type defined on this view model and 
-   * then returns it. 
-   * 
-   * @returns The new document instance. 
-   * 
-   * @async
-   * @private
-   */
-  async _createCustom() {
-    const creationData = {
-      name: `New ${this.creationType.capitalize()}`,
-      type: this.creationType,
-      system: {
-        ...this.creationData,
-        isCustom: true,
-      }
-    };
-    return await Item.create(creationData, { parent: this.target.document }); // TODO #85: This should probably be extracted to the transient-type object. 
-  }
-
-  /**
-   * Parses the given creation data representing string and returns it as an object, instead. 
-   * @param {String} creationData Must be a string in the form "[<key1>:<value1>,<key2>:<value2>,...]"
-   * E. g. "[value:5,flag:false]"
-   * @returns {Object} The parsed creation data. 
-   */
-  _parseCreationData(creationData) {
-    const parsedCreationData = Object.create(null);
-
-    const splits = creationData.substring(1, creationData.length - 1).split(":");
-    for (let i = 0; i < splits.length; i += 2) {
-      const propertyName = splits[i];
-      const propertyValue = coerce(splits[i + 1]);
-      parsedCreationData[propertyName] = propertyValue;
-    }
-
-    return parsedCreationData;
   }
 }
