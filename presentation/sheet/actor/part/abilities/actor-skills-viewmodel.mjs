@@ -60,7 +60,7 @@ export default class ActorSkillsViewModel extends ViewModel {
         target: thiz.document,
         creationType: "skill",
         withDialog: true,
-        localizableLabel: "ambersteel.character.skill.learning.add.label",
+        localizedLabel: game.i18n.localize("ambersteel.character.skill.learning.add.label"),
         creationData: {
           level: 0
         },
@@ -89,7 +89,7 @@ export default class ActorSkillsViewModel extends ViewModel {
         isEditable: thiz.isEditable,
         creationType: "skill",
         withDialog: true,
-        localizableLabel: "ambersteel.character.skill.known.add.label",
+        localizedLabel: game.i18n.localize("ambersteel.character.skill.known.add.label"),
         creationData: {
           level: 1
         },

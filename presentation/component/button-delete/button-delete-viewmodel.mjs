@@ -31,7 +31,7 @@ export default class ButtonDeleteViewModel extends ButtonViewModel {
    * @param {TransientDocument} args.target The target object to affect. 
    * @param {Function | String | undefined} args.callback Optional. Defines an asynchronous callback that is invoked upon completion of the button's own callback. 
    * @param {Boolean | undefined} args.isEditable Optional. If true, will be interactible. 
-   * @param {String | undefined} args.localizableTitle Optional. The localizable title (tooltip). 
+   * @param {String | undefined} args.localizedTooltip Optional. The localizable title (tooltip). 
    * 
    * @param {String | undefined} args.propertyPath Optional. If not undefined, will try to delete by this property path. 
    * @param {Boolean | undefined} args.withDialog Optional. If true, will prompt the user to make a selection with a dialog. 
@@ -43,7 +43,7 @@ export default class ButtonDeleteViewModel extends ButtonViewModel {
 
     this.withDialog = args.withDialog ?? false;
     this.propertyPath = args.propertyPath;
-    this.localizableTitle = args.localizableTitle ?? "ambersteel.general.delete.label";
+    this.localizedTooltip = args.localizedTooltip ?? game.i18n.localize("ambersteel.general.delete.label");
     this.localizableDialogTitle = args.localizableDialogTitle ?? "ambersteel.general.delete.queryOf";
   }
 

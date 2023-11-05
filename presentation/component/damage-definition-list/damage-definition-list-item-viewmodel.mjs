@@ -114,7 +114,7 @@ export default class DamageDefinitionListItemViewModel extends ViewModel {
       id: "vmBtnDelete",
       parent: thiz,
       isEditable: thiz.isEditable,
-      localizableTitle: this._localizableDeletionHint,
+      localizedTooltip: this._localizableDeletionHint,
       onClick: async (html, isOwner, isEditable) => {
         const damage = thiz.propertyOwner.damage;
         damage.splice(thiz.index, 1);

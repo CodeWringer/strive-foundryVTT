@@ -14,7 +14,7 @@ import { coerce } from "../../../business/util/string-utility.mjs";
  * @property {String | undefined} creationType = "skill"|"skill-ability"|"fate-card"|"item"|"injury"|"illness"
  * @property {Object} creationData Data to pass to the item creation function. 
  * @property {Boolean} showLabel If true, will show the label. 
- * @property {String | undefined} localizableLabel The label text. 
+ * @property {String | undefined} localizedLabel Localized label. 
  * @property {String | undefined} localizableType Localization key of the type of thing to add. 
  * @property {String | undefined} localizableDialogTitle Localization key of the title of the dialog. 
  * 
@@ -35,14 +35,8 @@ export default class ButtonAddViewModel extends ButtonViewModel {
    * @type {Boolean}
    * @readonly
    */
-  get showLabel() { return isNotBlankOrUndefined(this.localizableLabel); }
+  get showLabel() { return isNotBlankOrUndefined(this.localizedLabel); }
   
-  /**
-   * @type {String}
-   * @readonly
-   */
-  get localizedLabel() { return game.i18n.localize(this.localizableLabel); }
-
   /**
    * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
    * 
@@ -53,8 +47,8 @@ export default class ButtonAddViewModel extends ButtonViewModel {
    * @param {String} args.creationType = "skill"|"skill-ability"|"fate-card"|"item"|"injury"|"illness"
    * @param {Boolean | undefined} args.withDialog Optional. If true, will prompt the user to make a selection with a dialog. 
    * @param {Object | String | undefined} args.creationData Optional. Data to pass to the item creation function. 
-   * @param {String | undefined} args.localizableTitle Optional. Sets the tooltip text to display on cursor hover over the DOM element. 
-   * @param {String | undefined} args.localizableLabel Optional. The localizable label. 
+   * @param {String | undefined} args.localizedTooltip Optional. Sets the tooltip text to display on cursor hover over the DOM element. 
+   * @param {String | undefined} args.localizedLabel Optional. The localizable label. 
    * @param {String | undefined} localizableType Localization key of the type of thing to add. 
    * @param {String | undefined} localizableDialogTitle Localization key of the title of the dialog. 
    */
@@ -65,8 +59,7 @@ export default class ButtonAddViewModel extends ButtonViewModel {
     this.creationType = args.creationType;
     this.withDialog = args.withDialog ?? false;
     this.creationData = args.creationData ?? Object.create(null);
-    this.localizableTitle = args.localizableTitle ?? "ambersteel.general.add";
-    this.localizableLabel = args.localizableLabel;
+    this.localizedLabel = args.localizedLabel;
     this.localizableType = args.localizableType;
     this.localizableDialogTitle = args.localizableDialogTitle;
 

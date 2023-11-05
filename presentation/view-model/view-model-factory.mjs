@@ -79,7 +79,7 @@ export default class ViewModelFactory {
    * @param {Object} args.propertyOwner
    * @param {String} args.propertyPath
    * @param {String | undefined} args.placeholder
-   * @param {String | undefined} args.localizableTitle Optional. Sets the tooltip text to display on cursor hover over the DOM element. 
+   * @param {String | undefined} args.localizedTooltip Localized tooltip. 
    * 
    * @returns {InputTextFieldViewModel}
    */
@@ -91,7 +91,7 @@ export default class ViewModelFactory {
       propertyOwner: args.propertyOwner,
       propertyPath: args.propertyPath,
       placeholder: args.placeholder,
-      localizableTitle: args.localizableTitle,
+      localizedTooltip: args.localizedTooltip,
     });
   }
 
@@ -111,7 +111,7 @@ export default class ViewModelFactory {
    * @param {Array<ChoiceOption>} args.options
    * @param {ChoiceAdapter} args.adapter
    * @param {Boolean | undefined} args.isEditable
-   * @param {String | undefined} args.localizableTitle Optional. Sets the tooltip text to display on cursor hover over the DOM element. 
+   * @param {String | undefined} args.localizedTooltip Localized tooltip. 
    * 
    * @returns {InputDropDownViewModel}
    */
@@ -124,7 +124,7 @@ export default class ViewModelFactory {
       propertyPath: args.propertyPath,
       options: args.options,
       adapter: args.adapter,
-      localizableTitle: args.localizableTitle,
+      localizedTooltip: args.localizedTooltip,
     });
   }
 
@@ -144,7 +144,7 @@ export default class ViewModelFactory {
    * @param {Number | undefined} args.min
    * @param {Number | undefined} args.max
    * @param {Number | undefined} args.step
-   * @param {String | undefined} args.localizableTitle Optional. Sets the tooltip text to display on cursor hover over the DOM element. 
+   * @param {String | undefined} args.localizedTooltip Localized tooltip. 
    * 
    * @returns {InputNumberSpinnerViewModel}
    */
@@ -158,7 +158,7 @@ export default class ViewModelFactory {
       min: args.min,
       max: args.max,
       step: args.step,
-      localizableTitle: args.localizableTitle,
+      localizedTooltip: args.localizedTooltip,
     });
   }
 
@@ -176,7 +176,7 @@ export default class ViewModelFactory {
    * @param {Object} args.propertyOwner
    * @param {String} args.propertyPath
    * @param {Array<StatefulChoiceOption>} args.options
-   * @param {String | undefined} args.localizableTitle Optional. Sets the tooltip text to display on cursor hover over the DOM element. 
+   * @param {String | undefined} args.localizedTooltip Localized tooltip. 
    * 
    * @returns {InputRadioButtonGroupViewModel}
    */
@@ -188,7 +188,7 @@ export default class ViewModelFactory {
       propertyOwner: args.propertyOwner,
       propertyPath: args.propertyPath,
       options: args.options,
-      localizableTitle: args.localizableTitle,
+      localizedTooltip: args.localizedTooltip,
     });
   }
 
@@ -207,7 +207,7 @@ export default class ViewModelFactory {
    * @param {String} args.propertyPath
    * @param {Boolean | undefined} args.spellcheck 
    * @param {String | undefined} args.placeholder 
-   * @param {String | undefined} args.localizableTitle Optional. Sets the tooltip text to display on cursor hover over the DOM element. 
+   * @param {String | undefined} args.localizedTooltip Localized tooltip. 
    * 
    * @returns {InputTextareaViewModel}
    */
@@ -221,7 +221,7 @@ export default class ViewModelFactory {
       propertyPath: args.propertyPath,
       spellcheck: args.spellcheck,
       placeholder: args.placeholder,
-      localizableTitle: args.localizableTitle,
+      localizedTooltip: args.localizedTooltip,
     });
   }
 
@@ -241,8 +241,8 @@ export default class ViewModelFactory {
    * @param {Function | undefined} args.callback Defines an asynchronous callback that is invoked upon completion of the button's own callback. 
    * @param {Boolean | undefined} args.withDialog If true, will prompt the user to make a selection with a dialog. 
    * @param {Object | String | undefined} args.creationData Data to pass to the item creation function. 
-   * @param {String | undefined} args.localizableTitle Optional. Sets the tooltip text to display on cursor hover over the DOM element. 
-   * @param {String | undefined} args.localizableLabel Optional. The localizable label. 
+   * @param {String | undefined} args.localizedTooltip Localized tooltip. 
+   * @param {String | undefined} args.localizedLabel 
    * @param {String | undefined} args.localizableType Localization key of the type of thing to add. 
    * @param {String | undefined} args.localizableDialogTitle Localization key of the title of the dialog. 
    * 
@@ -258,8 +258,8 @@ export default class ViewModelFactory {
       callback: args.callback,
       withDialog: args.withDialog,
       creationData: args.creationData,
-      localizableTitle: args.localizableTitle,
-      localizableLabel: args.localizableLabel,
+      localizedTooltip: args.localizedTooltip,
+      localizedLabel: args.localizedLabel,
       localizableType: args.localizableType,
       localizableDialogTitle: args.localizableDialogTitle,
     });
@@ -280,7 +280,7 @@ export default class ViewModelFactory {
    * @param {Function | undefined} args.callback Defines an asynchronous callback that is invoked upon completion of the button's own callback. 
    * @param {Boolean | undefined} args.withDialog If true, will prompt the user to make a selection with a dialog. 
    * @param {String | undefined} args.propertyPath If not undefined, will try to delete by this property path. 
-   * @param {String | undefined} args.localizableTitle Optional. Sets the tooltip text to display on cursor hover over the DOM element. 
+   * @param {String | undefined} args.localizedTooltip Localized tooltip. 
    * 
    * @returns {ButtonDeleteViewModel}
    */
@@ -294,7 +294,7 @@ export default class ViewModelFactory {
       callback: args.callback,
       withDialog: args.withDialog,
       propertyPath: args.propertyPath,
-      localizableTitle: args.localizableTitle,
+      localizedTooltip: args.localizedTooltip,
     });
   }
 
@@ -311,7 +311,7 @@ export default class ViewModelFactory {
    * which will be displayed in exception log entries, to aid debugging. 
    * @param {Object} args.target The target object to affect.  
    * @param {Function | undefined} args.callback Defines an asynchronous callback that is invoked upon completion of the button's own callback. 
-   * @param {String | undefined} args.localizableTitle Optional. Sets the tooltip text to display on cursor hover over the DOM element. 
+   * @param {String | undefined} args.localizedTooltip Localized tooltip. 
    * 
    * @returns {ButtonOpenSheetViewModel}
    */
@@ -323,7 +323,7 @@ export default class ViewModelFactory {
       ...this._getBaseArguments(args),
       target: args.target,
       callback: args.callback,
-      localizableTitle: args.localizableTitle,
+      localizedTooltip: args.localizedTooltip,
     });
   }
 
@@ -348,7 +348,7 @@ export default class ViewModelFactory {
    * @param {String | undefined} args.secondaryChatTitle Primary title to display above the roll result in the chat message. 
    * @param {String | undefined} args.secondaryChatImage Primary image to display above the roll result in the chat message. 
    * @param {Actor | undefined} args.actor Actor associated with the roll result. 
-   * @param {String | undefined} args.localizableTitle Optional. Sets the tooltip text to display on cursor hover over the DOM element. 
+   * @param {String | undefined} args.localizedTooltip Localized tooltip. 
    * 
    * @returns {ButtonRollViewModel}
    */
@@ -367,7 +367,7 @@ export default class ViewModelFactory {
       secondaryChatTitle: args.secondaryChatTitle,
       secondaryChatImage: args.secondaryChatImage,
       actor: args.actor,
-      localizableTitle: args.localizableTitle,
+      localizedTooltip: args.localizedTooltip,
     });
   }
 
@@ -387,7 +387,7 @@ export default class ViewModelFactory {
    * @param {String | undefined} args.propertyPath Property path identifying a property to send to chat. 
    * @param {String | undefined} args.chatTitle Title to display above the chat message. 
    * @param {Actor | undefined} args.actor Actor associated with the chat message. 
-   * @param {String | undefined} args.localizableTitle Optional. Sets the tooltip text to display on cursor hover over the DOM element. 
+   * @param {String | undefined} args.localizedTooltip Localized tooltip. 
    * 
    * @returns {ButtonSendToChatViewModel}
    */
@@ -402,7 +402,7 @@ export default class ViewModelFactory {
       propertyPath: args.propertyPath,
       chatTitle: args.chatTitle,
       actor: args.actor,
-      localizableTitle: args.localizableTitle,
+      localizedTooltip: args.localizedTooltip,
     });
   }
 
@@ -420,7 +420,7 @@ export default class ViewModelFactory {
    * @param {Object} args.target The target object to affect.  
    * @param {Function | undefined} args.callback Defines an asynchronous callback that is invoked upon completion of the button's own callback. 
    * @param {TAKE_ITEM_CONTEXT_TYPES} contextType
-   * @param {String | undefined} args.localizableTitle Optional. Sets the tooltip text to display on cursor hover over the DOM element. 
+   * @param {String | undefined} args.localizedTooltip Localized tooltip. 
    * 
    * @returns {ButtonTakeItemViewModel}
    */
@@ -433,7 +433,7 @@ export default class ViewModelFactory {
       target: args.target,
       callback: args.callback,
       contextType: args.contextType,
-      localizableTitle: args.localizableTitle,
+      localizedTooltip: args.localizedTooltip,
     });
   }
 
@@ -454,7 +454,7 @@ export default class ViewModelFactory {
    * Expects this id to be defined as a data-attribute. 
    * E. g. '\<div data-vis-group="1A2b3F4E"\>My content\</div\>'
    * @param {Boolean | undefined} args.toggleSelf Optional. If true, the button will also toggle visibility on itself. 
-   * @param {String | undefined} args.localizableTitle Optional. Sets the tooltip text to display on cursor hover over the DOM element. 
+   * @param {String | undefined} args.localizedTooltip Localized tooltip. 
    * 
    * @returns {ButtonToggleVisibilityViewModel}
    */
@@ -468,7 +468,7 @@ export default class ViewModelFactory {
       target: args.target,
       callback: args.callback,
       toggleSelf: args.toggleSelf,
-      localizableTitle: args.localizableTitle,
+      localizedTooltip: args.localizedTooltip,
     });
   }
 
@@ -485,7 +485,7 @@ export default class ViewModelFactory {
    * which will be displayed in exception log entries, to aid debugging. 
    * @param {Object} args.propertyOwner
    * @param {String} args.propertyPath
-   * @param {String | undefined} args.localizableTitle Optional. Sets the tooltip text to display on cursor hover over the DOM element. 
+   * @param {String | undefined} args.localizedTooltip Localized tooltip. 
    * @param {Number | undefined} args.width Optional. Sets the width of the image DOM element. Default '26'. 
    * @param {Number | undefined} args.height Optional. Sets the height of the image DOM element. Default '26'. 
    * 
@@ -499,7 +499,7 @@ export default class ViewModelFactory {
       ...this._getBaseArguments(args),
       propertyOwner: args.propertyOwner,
       propertyPath: args.propertyPath,
-      localizableTitle: args.localizableTitle,
+      localizedTooltip: args.localizedTooltip,
       width: args.width,
       height: args.height,
     });
@@ -519,7 +519,7 @@ export default class ViewModelFactory {
    * @param {Object} args.target
    * @param {String} args.propertyPath
    * @param {Boolean | undefined} args.isEditable
-   * @param {String | undefined} args.localizableTitle Optional. Sets the tooltip text to display on cursor hover over the DOM element. 
+   * @param {String | undefined} args.localizedTooltip Localized tooltip. 
    * 
    * @returns {ButtonToggleViewModel}
    */
@@ -531,7 +531,7 @@ export default class ViewModelFactory {
       ...this._getBaseArguments(args),
       target: args.target,
       propertyPath: args.propertyPath,
-      localizableTitle: args.localizableTitle,
+      localizedTooltip: args.localizedTooltip,
     });
   }
 

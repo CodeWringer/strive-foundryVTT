@@ -21,7 +21,7 @@ export const SELECTOR_BUTTON = "custom-system-button";
  * button's own callback. 
  * @property {Any} callbackData Any data to pass to the completion callback. 
  * @property {Boolean} isEditable If true, is interactible. 
- * @property {String | undefined} localizableTitle The localizable title (tooltip). 
+ * @property {String | undefined} localizedTooltip Localized tooltip. 
  * @property {String} localizedTitle The localized title (tooltip). 
  */
 export default class ButtonViewModel extends ViewModel {
@@ -81,25 +81,12 @@ export default class ButtonViewModel extends ViewModel {
   get callbackData() { return undefined; }
 
   /**
-   * The localizable title (tooltip). 
-   * @type {String | undefined}
-   */
-  localizableTitle = undefined;
-
-  /**
-   * The localized title (tooltip). 
-   * @type {String}
-   * @readonly
-   */
-  get localizedTitle() { return this.localizableTitle !== undefined ? game.i18n.localize(this.localizableTitle) : ""; }
-
-  /**
    * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
    * 
    * @param {Object | undefined} args.target Optional. The target object to affect.  
    * @param {Function | String | undefined} args.callback Optional. Defines an asynchronous callback that is invoked upon completion of the button's own callback. 
    * @param {Boolean | undefined} args.isEditable Optional. If true, will be interactible. 
-   * @param {String | undefined} args.localizableTitle Optional. The localizable title (tooltip). 
+   * @param {String | undefined} args.localizedTooltip Optional. The localizable title (tooltip). 
    * @param {Function | undefined} args.onClick Optional. The function to call on click. 
    */
   constructor(args = {}) {
@@ -108,7 +95,8 @@ export default class ButtonViewModel extends ViewModel {
     this._target = args.target;
     this.callback = this._getCallback(args.callback).bind(this._target);
     this.isEditable = args.isEditable ?? false;
-    this.localizableTitle = args.localizableTitle;
+    this.localizedTooltip = args.localizedTooltip;
+    
     if (args.onClick !== undefined) {
       this.onClick = args.onClick;
     }

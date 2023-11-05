@@ -24,7 +24,7 @@ export const SELECTOR_READ = "custom-system-read-only";
  * @property {String} propertyPath The path used to look up the value. 
  * @property {Object} propertyOwner An object on which to to look up the value. 
  * @property {Any} value Gets or sets the looked up value. 
- * @property {String | undefined} localizableTitle The localizable title (tooltip). 
+ * @property {String | undefined} localizedTooltip Localized tooltip. 
  * @property {String} localizedTitle The localized title (tooltip). 
  */
 export default class InputViewModel extends ViewModel {
@@ -34,19 +34,6 @@ export default class InputViewModel extends ViewModel {
    * @private
    */
   _contextTemplate = undefined;
-
-  /**
-   * The localizable title (tooltip). 
-   * @type {String | undefined}
-   */
-  localizableTitle = undefined;
-
-  /**
-   * The localized title (tooltip). 
-   * @type {String}
-   * @readonly
-   */
-  get localizedTitle() { return this.localizableTitle !== undefined ? game.i18n.localize(`${this.localizableTitle}`) : ""; }
 
   /**
    * @type {Any}
@@ -108,7 +95,7 @@ export default class InputViewModel extends ViewModel {
    * @param {Object} args.propertyOwner An object on which to to look up the value. 
    * @param {Boolean | undefined} args.isEditable If true, input(s) will be in edit mode. If false, input(s) will be in read-only mode.
    * @param {String | undefined} args.contextTemplate Name or path of a template that embeds this input component. 
-   * @param {String | undefined} args.localizableTitle The localizable title (tooltip). 
+   * @param {String | undefined} args.localizedTooltip Localized tooltip. 
    * @param {Function | undefined} args.onChange Callback that is invoked when the value changes. 
    * * Receives two arguments: 
    * * * `oldValue: {Any}`
@@ -121,7 +108,7 @@ export default class InputViewModel extends ViewModel {
     this.propertyPath = args.propertyPath;
     this.propertyOwner = args.propertyOwner;
     this._contextTemplate = args.contextTemplate;
-    this.localizableTitle = args.localizableTitle;
+    this.localizedTooltip = args.localizedTooltip;
     this.onChange = args.onChange ?? this.onChange;
   }
 

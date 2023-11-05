@@ -5,11 +5,7 @@ import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
  * @property {DYNAMIC_INPUT_TYPES} type
  * @property {String} name Internal name. The value of the input will be referencable 
  * by this name. 
- * @property {String | undefined} localizableLabel Localization key for a companion 
- * label. 
- * @property {String} localizedLabel Localized text for a companion label. 
- * * Read-only. 
- * * Returns an empty string if no label text or key was defined. 
+ * @property {String | undefined} localizedLabel Localized companion label. 
  * @property {Object | undefined} specificArgs Arguments specific to the type 
  * of represented input control. 
  * @property {Boolean} required If true, the represented input must have a valid 
@@ -22,26 +18,13 @@ import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
  * indicates validation failed. 
  */
 export default class DynamicInputDefinition {
-  get localizedLabel() {
-    if (this._localizedLabel !== undefined) {
-      return this._localizedLabel;
-    } else if(this.localizableLabel !== undefined) {
-      return game.i18n.localize(this.localizableLabel);
-    } else {
-      return "";
-    }
-  }
-
   /**
    * @param {Object} args 
    * @param {DYNAMIC_INPUT_TYPES} args.type
    * @param {String} args.name Internal name. The value of the input will be referencable 
    * by this name. 
-   * @param {String | undefined} args.localizableLabel Localization key for a companion 
-   * label. 
-   * @param {String | undefined} args.localizedLabel Localized text for a companion 
-   * label. 
-   * * If set, then this value overrides `localizableLabel`!
+   * @param {String | undefined} args.localizedLabel Localized companion label. 
+   * * default `""`
    * @param {Object | undefined} args.specificArgs Arguments specific to the type 
    * of represented input control. 
    * @param {Boolean | undefined} args.required If true, the represented input must have a valid 
@@ -62,8 +45,7 @@ export default class DynamicInputDefinition {
 
     this.type = args.type;
     this.name = args.name;
-    this.localizableLabel = args.localizableLabel;
-    this._localizedLabel = args.localizedLabel;
+    this.localizedLabel = args.localizedLabel ?? "";
     this.specificArgs = args.specificArgs ?? {};
     this.required = args.required ?? false;
     this.defaultValue = args.defaultValue;
