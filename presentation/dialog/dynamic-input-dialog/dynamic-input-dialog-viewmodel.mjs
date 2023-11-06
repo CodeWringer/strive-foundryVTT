@@ -44,9 +44,9 @@ export default class DynamicInputDialogViewModel extends ViewModel {
         viewModel = new InputDropDownViewModel({
           id: definition.name,
           parent: this,
-          propertyPath: definition.name,
-          propertyOwner: this,
-          isEditable: true,
+          onChange: (_, newValue) => {
+            this[definition.name] = newValue;
+          },
           options: definition.specificArgs.options,
           adapter: definition.specificArgs.adapter,
         });

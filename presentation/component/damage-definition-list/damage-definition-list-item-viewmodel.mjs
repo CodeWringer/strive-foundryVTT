@@ -2,11 +2,12 @@ import { DAMAGE_TYPES } from "../../../business/ruleset/damage-types.mjs"
 import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import { isDefined } from "../../../business/util/validation-utility.mjs";
 import { TEMPLATES } from "../../templatePreloader.mjs";
-import { getNestedPropertyValue } from "../../../business/util/property-utility.mjs";
+import { getNestedPropertyValue, setNestedPropertyValue } from "../../../business/util/property-utility.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
 import ViewModelFactory from "../../view-model/view-model-factory.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
 import ChoiceAdapter from "../input-choice/choice-adapter.mjs";
+import InputDropDownViewModel from "../input-dropdown/input-dropdown-viewmodel.mjs";
 
 /**
  * Represents the definition of a damage roll formula. 
@@ -90,12 +91,13 @@ export default class DamageDefinitionListItemViewModel extends ViewModel {
       propertyPath: `damage[${this.index}].damage`,
     });
 
-    this.vmDdDamageType = factory.createVmDropDown({
-      parent: thiz,
+    this.vmDdDamageType = new InputDropDownViewModel({
       id: "vmDdDamageType",
-      propertyOwner: this.propertyOwner,
-      propertyPath: `damage[${this.index}].damageType`,
+      parent: thiz,
       options: thiz.damageTypeOptions,
+      onChange: (oldValue, newValue) => {
+        setNestedPropertyValue(thiz.propertyOwner, `damage[${this.index}].damageType`, newValue)
+      },
       adapter: new ChoiceAdapter({
         toChoiceOption(obj) {
           if (isDefined(obj) === true) {

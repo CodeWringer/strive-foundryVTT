@@ -14,6 +14,7 @@ import SkillAbilityTableViewModel from "../skill-ability/skill-ability-table-vie
 import SkillPrerequisiteListItemViewModel from "./skill-prerequisite-list-item-viewmodel.mjs";
 import { querySkillConfiguration } from "./skill-utils.mjs";
 import SkillViewModel from "./skill-viewmodel.mjs";
+import { setNestedPropertyValue } from "../../../../business/util/property-utility.mjs";
 
 export default class SkillItemSheetViewModel extends SkillViewModel {
   /** @override */
@@ -93,12 +94,13 @@ export default class SkillItemSheetViewModel extends SkillViewModel {
       target: thiz.document,
       isEditable: thiz.isEditable || thiz.isGM,
     });
-    this.vmDdRelatedAttribute = factory.createVmDropDown({
-      parent: thiz,
+    this.vmDdRelatedAttribute = new InputDropDownViewModel({
       id: "vmDdRelatedAttribute",
-      propertyOwner: thiz.document,
-      propertyPath: "relatedAttribute",
+      parent: thiz,
       options: thiz.attributeOptions,
+      onChange: (_, newValue) => {
+        setNestedPropertyValue(thiz.document, "relatedAttribute", newValue);
+      },
       adapter: new ChoiceAdapter({
         toChoiceOption(obj) {
           if (isDefined(obj) === true) {

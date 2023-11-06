@@ -9,6 +9,7 @@ import ViewModelFactory from "../../../view-model/view-model-factory.mjs";
 import { TEMPLATES } from "../../../templatePreloader.mjs";
 import ChoiceAdapter from "../../../component/input-choice/choice-adapter.mjs";
 import DamageDefinitionListViewModel from "../../../component/damage-definition-list/damage-definition-list-viewmodel.mjs";
+import InputDropDownViewModel from "../../../component/input-dropdown/input-dropdown-viewmodel.mjs";
 
 export default class SkillAbilityListItemViewModel extends ViewModel {
   /** @override */
@@ -164,12 +165,13 @@ export default class SkillAbilityListItemViewModel extends ViewModel {
       propertyPath: "apCost",
       min: 0,
     });
-    this.vmDdAttackType = factory.createVmDropDown({
-      parent: thiz,
+    this.vmDdAttackType = new InputDropDownViewModel({
       id: "vmDdAttackType",
-      propertyOwner: skillAbility,
-      propertyPath: "attackType",
+      parent: thiz,
       options: thiz.attackTypeOptions,
+      onChange: (_, newValue) => {
+        setNestedPropertyValue(skillAbility, "attackType", newValue);
+      },
       adapter: new ChoiceAdapter({
         toChoiceOption(obj) {
           if (isDefined(obj) === true) {

@@ -20,7 +20,22 @@ import InputChoiceViewModel from "./input-choice-viewmodel.mjs";
 export default class InputSingleChoiceViewModel extends InputChoiceViewModel {
   /**
    * @param {Object} args
-   * @param {ChoiceOption} args.value The current value. 
+   * 
+   * @param {String | undefined} args.id Unique ID of this view model instance. 
+   * @param {ViewModel | undefined} args.parent Parent ViewModel instance of this instance. 
+   * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 
+   * is expected to be associated with an actor sheet or item sheet or journal entry or chat message and so on.
+   * @param {Boolean | undefined} args.isEditable If `true`, input(s) will 
+   * be in edit mode. If `false`, will be in read-only mode.
+   * * default `false`. 
+   * 
+   * @param {String | undefined} args.localizedToolTip A localized text to 
+   * display as a tool tip. 
+   * @param {String | undefined} args.iconHtml Raw HTML to render as 
+   * an associated icon. E. g. `'<i class="fas fa-scroll"></i>'`
+   * 
+   * @param {ChoiceOption | undefined} args.value The current value. 
+   * * default ist the first element of `args.options`
    * @param {Array<ChoiceOption>} args.options The options available to the drop-down. 
    * @param {ChoiceAdapter} args.adapter A `ChoiceOption` adapter. 
    * @param {Function | undefined} args.onChange Callback that is invoked 

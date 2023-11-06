@@ -96,39 +96,6 @@ export default class ViewModelFactory {
   }
 
   /**
-   * Creates a drop down view model and returns it.
-   *  
-   * @param {ViewModel | undefined} args.parent Optional. A parent `ViewModel` instance. 
-   * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
-   * @param {Boolean | undefined} args.isEditable Optional. If true, the sheet is editable. 
-   * @param {Boolean | undefined} args.isSendable Optional. If true, the document represented by the sheet can be sent to chat. 
-   * @param {Boolean | undefined} args.isOwner Optional. If true, the current user is the owner of the represented document. 
-   * @param {Boolean | undefined} args.isGM Optional. If true, the current user is a GM. 
-   * @param {String | undefined} args.contextTemplate Optional. Name or path of a contextual template, 
-   * which will be displayed in exception log entries, to aid debugging. 
-   * @param {Object} args.propertyOwner
-   * @param {String} args.propertyPath
-   * @param {Array<ChoiceOption>} args.options
-   * @param {ChoiceAdapter} args.adapter
-   * @param {Boolean | undefined} args.isEditable
-   * @param {String | undefined} args.localizedTooltip Localized tooltip. 
-   * 
-   * @returns {InputDropDownViewModel}
-   */
-  createVmDropDown(args = {}) {
-    validateOrThrow(args, ["propertyOwner", "propertyPath", "options"]);
-
-    return new InputDropDownViewModel({
-      ...this._getBaseArguments(args),
-      propertyOwner: args.propertyOwner,
-      propertyPath: args.propertyPath,
-      options: args.options,
-      adapter: args.adapter,
-      localizedTooltip: args.localizedTooltip,
-    });
-  }
-
-  /**
    * Creates a number spinner view model and returns it. 
    * 
    * @param {ViewModel | undefined} args.parent Optional. A parent `ViewModel` instance. 
