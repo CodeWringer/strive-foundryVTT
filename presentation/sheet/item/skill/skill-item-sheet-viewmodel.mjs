@@ -15,6 +15,7 @@ import SkillPrerequisiteListItemViewModel from "./skill-prerequisite-list-item-v
 import { querySkillConfiguration } from "./skill-utils.mjs";
 import SkillViewModel from "./skill-viewmodel.mjs";
 import { setNestedPropertyValue } from "../../../../business/util/property-utility.mjs";
+import InputImageViewModel from "../../../component/input-image/input-image-viewmodel.mjs";
 
 export default class SkillItemSheetViewModel extends SkillViewModel {
   /** @override */
@@ -60,11 +61,13 @@ export default class SkillItemSheetViewModel extends SkillViewModel {
     const thiz = this;
     const factory = new ViewModelFactory();
 
-    this.vmImg = factory.createVmImg({
+    this.vmImg = new InputImageViewModel({
       parent: thiz,
       id: "vmImg",
-      propertyOwner: thiz.document,
-      propertyPath: "img",
+      value: thiz.document.img,
+      onChange: (_, newValue) => {
+        thiz.document.img = newValue;
+      },
     });
     this.vmTfName = factory.createVmTextField({
       parent: thiz,

@@ -438,39 +438,6 @@ export default class ViewModelFactory {
   }
 
   /**
-   * Creates a image input view model and returns it. 
-   * 
-   * @param {ViewModel | undefined} args.parent Optional. A parent `ViewModel` instance. 
-   * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
-   * @param {Boolean | undefined} args.isEditable Optional. If true, the sheet is editable. 
-   * @param {Boolean | undefined} args.isSendable Optional. If true, the document represented by the sheet can be sent to chat. 
-   * @param {Boolean | undefined} args.isOwner Optional. If true, the current user is the owner of the represented document. 
-   * @param {Boolean | undefined} args.isGM Optional. If true, the current user is a GM. 
-   * @param {String | undefined} args.contextTemplate Optional. Name or path of a contextual template, 
-   * which will be displayed in exception log entries, to aid debugging. 
-   * @param {Object} args.propertyOwner
-   * @param {String} args.propertyPath
-   * @param {String | undefined} args.localizedTooltip Localized tooltip. 
-   * @param {Number | undefined} args.width Optional. Sets the width of the image DOM element. Default '26'. 
-   * @param {Number | undefined} args.height Optional. Sets the height of the image DOM element. Default '26'. 
-   * 
-   * @returns {InputImageViewModel}
-   */
-  createVmImg(args = {}) {
-    const thiz = this;
-    validateOrThrow(args, ["propertyOwner", "propertyPath"]);
-
-    return new InputImageViewModel({
-      ...this._getBaseArguments(args),
-      propertyOwner: args.propertyOwner,
-      propertyPath: args.propertyPath,
-      localizedTooltip: args.localizedTooltip,
-      width: args.width,
-      height: args.height,
-    });
-  }
-
-  /**
    * Creates a toggle button view model and returns it. 
    * 
    * @param {ViewModel | undefined} args.parent Optional. A parent `ViewModel` instance. 

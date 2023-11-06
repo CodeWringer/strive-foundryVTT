@@ -54,9 +54,9 @@ export default class DynamicInputDialogViewModel extends ViewModel {
         viewModel = new InputImageViewModel({
           id: definition.name,
           parent: this,
-          propertyPath: definition.name,
-          propertyOwner: this,
-          isEditable: true,
+          onChange: (_, newValue) => {
+            this[definition.name] = newValue;
+          },
         });
       } else if (definition.type === DYNAMIC_INPUT_TYPES.NUMBER_SPINNER) {
         viewModel = new InputNumberSpinnerViewModel({

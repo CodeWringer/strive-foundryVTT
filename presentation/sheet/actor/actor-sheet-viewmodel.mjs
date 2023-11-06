@@ -11,6 +11,7 @@ import ActorBiographyViewModel from "./part/actor-biography-viewmodel.mjs"
 import ActorHealthViewModel from "./part/health/actor-health-viewmodel.mjs"
 import ActorPersonalsViewModel from "./part/actor-personals-viewmodel.mjs"
 import BaseSheetViewModel from "../../view-model/base-sheet-viewmodel.mjs"
+import InputImageViewModel from "../../component/input-image/input-image-viewmodel.mjs"
 
 /**
  * @extends BaseSheetViewModel
@@ -97,11 +98,13 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
       propertyPath: "name",
       placeholder: "ambersteel.general.name",
     });
-    this.vmImg = factory.createVmImg({
+    this.vmImg = new InputImageViewModel({
       parent: thiz,
       id: "vmImg",
-      propertyOwner: thiz.document,
-      propertyPath: "img",
+      value: thiz.document.img,
+      onChange: (_, newValue) => {
+        thiz.document.img = newValue;
+      },
     });
     this.vmBtnSendToChat = factory.createVmBtnSendToChat({
       parent: this,

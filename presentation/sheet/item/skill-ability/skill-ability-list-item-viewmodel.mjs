@@ -10,6 +10,7 @@ import { TEMPLATES } from "../../../templatePreloader.mjs";
 import ChoiceAdapter from "../../../component/input-choice/choice-adapter.mjs";
 import DamageDefinitionListViewModel from "../../../component/damage-definition-list/damage-definition-list-viewmodel.mjs";
 import InputDropDownViewModel from "../../../component/input-dropdown/input-dropdown-viewmodel.mjs";
+import InputImageViewModel from "../../../component/input-image/input-image-viewmodel.mjs";
 
 export default class SkillAbilityListItemViewModel extends ViewModel {
   /** @override */
@@ -111,11 +112,13 @@ export default class SkillAbilityListItemViewModel extends ViewModel {
       target: skillAbility,
       isEditable: thiz.isEditable || thiz.isGM,
     });
-    this.vmImg = factory.createVmImg({
+    this.vmImg = new InputImageViewModel({
       parent: thiz,
       id: "vmImg",
-      propertyOwner: skillAbility,
-      propertyPath: "img",
+      value: skillAbility.img,
+      onChange: (_, newValue) => {
+        skillAbility.img = newValue;
+      },
     });
     this.vmTfName = factory.createVmTextField({
       parent: thiz,

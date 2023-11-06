@@ -6,6 +6,7 @@ import { validateOrThrow } from "../../../../business/util/validation-utility.mj
 import ButtonViewModel from "../../../component/button/button-viewmodel.mjs"
 import ChoiceAdapter from "../../../component/input-choice/choice-adapter.mjs"
 import ChoiceOption from "../../../component/input-choice/choice-option.mjs"
+import InputImageViewModel from "../../../component/input-image/input-image-viewmodel.mjs"
 import InputTagsViewModel from "../../../component/input-tags/input-tags-viewmodel.mjs"
 import DynamicInputDefinition from "../../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs"
 import DynamicInputDialog from "../../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs"
@@ -65,11 +66,13 @@ export default class AssetListItemViewModel extends ViewModel {
     const factory = new ViewModelFactory();
     this._actor = this.document.owningDocument;
 
-    this.vmImg = factory.createVmImg({
+    this.vmImg = new InputImageViewModel({
       parent: thiz,
       id: "vmImg",
-      propertyOwner: thiz.document,
-      propertyPath: "img",
+      value: thiz.document.img,
+      onChange: (_, newValue) => {
+        thiz.document.img = newValue;
+      },
     });
     this.vmTfName = factory.createVmTextField({
       parent: thiz,
