@@ -12,6 +12,7 @@ import ActorHealthViewModel from "./part/health/actor-health-viewmodel.mjs"
 import ActorPersonalsViewModel from "./part/actor-personals-viewmodel.mjs"
 import BaseSheetViewModel from "../../view-model/base-sheet-viewmodel.mjs"
 import InputImageViewModel from "../../component/input-image/input-image-viewmodel.mjs"
+import InputRichTextViewModel from "../../component/input-rich-text/input-rich-text-viewmodel.mjs"
 
 /**
  * @extends BaseSheetViewModel
@@ -182,11 +183,13 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
         },
       });
     } else {
-      this.vmRtDescription = factory.createVmRichText({
+      this.vmRtDescription = new InputRichTextViewModel({
         id: "vmRtDescription",
         parent: thiz,
-        propertyOwner: thiz.document,
-        propertyPath: "description",
+        value: thiz.document.description,
+        onChange: (_, newValue) => {
+          thiz.document.description = newValue;
+        },
       });
     }
     

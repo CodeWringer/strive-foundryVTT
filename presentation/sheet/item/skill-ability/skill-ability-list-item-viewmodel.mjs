@@ -12,6 +12,7 @@ import DamageDefinitionListViewModel from "../../../component/damage-definition-
 import InputDropDownViewModel from "../../../component/input-dropdown/input-dropdown-viewmodel.mjs";
 import InputImageViewModel from "../../../component/input-image/input-image-viewmodel.mjs";
 import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
+import InputRichTextViewModel from "../../../component/input-rich-text/input-rich-text-viewmodel.mjs";
 
 export default class SkillAbilityListItemViewModel extends ViewModel {
   /** @override */
@@ -201,11 +202,13 @@ export default class SkillAbilityListItemViewModel extends ViewModel {
       propertyPath: "condition",
       placeholder: game.i18n.localize("ambersteel.character.skill.ability.condition.placeholder"),
     });
-    this.vmRtDescription = factory.createVmRichText({
+    this.vmRtDescription = new InputRichTextViewModel({
       parent: thiz,
       id: "vmRtDescription",
-      propertyOwner: skillAbility,
-      propertyPath: "description",
+      value: skillAbility.description,
+      onChange: (_, newValue) => {
+        skillAbility.description = newValue;
+      },
     });
     this.vmBtnContextMenu = factory.createVmBtnContextMenu({
       parent: thiz,

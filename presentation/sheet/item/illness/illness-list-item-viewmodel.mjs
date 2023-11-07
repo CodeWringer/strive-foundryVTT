@@ -2,6 +2,8 @@ import { ILLNESS_STATES } from "../../../../business/ruleset/health/illness-stat
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs"
 import StatefulChoiceOption from "../../../component/input-choice/stateful-choice-option.mjs"
 import InputImageViewModel from "../../../component/input-image/input-image-viewmodel.mjs"
+import InputRadioButtonGroupViewModel from "../../../component/input-radio-button-group/input-radio-button-group-viewmodel.mjs"
+import InputRichTextViewModel from "../../../component/input-rich-text/input-rich-text-viewmodel.mjs"
 import { TEMPLATES } from "../../../templatePreloader.mjs"
 import ViewModelFactory from "../../../view-model/view-model-factory.mjs"
 import ViewModel from "../../../view-model/view-model.mjs"
@@ -70,11 +72,13 @@ export default class IllnessListItemViewModel extends ViewModel {
       propertyPath: "name",
       placeholder: "ambersteel.general.name",
     });
-    this.vmRbgState = factory.createVmRadioButtonGroup({
+    this.vmRbgState = new InputRadioButtonGroupViewModel({
       parent: thiz,
       id: "vmRbgState",
-      propertyOwner: thiz.document,
-      propertyPath: "state",
+      value: thiz.document.state,
+      onChange: (_, newValue) => {
+        thiz.document.state = newValue;
+      },
       options: thiz.stateOptions,
     })
     this.vmBtnSendToChat = factory.createVmBtnSendToChat({
@@ -107,11 +111,13 @@ export default class IllnessListItemViewModel extends ViewModel {
       propertyOwner: thiz.document,
       propertyPath: "treatment",
     });
-    this.vmRtDescription = factory.createVmRichText({
+    this.vmRtDescription = new InputRichTextViewModel({
       parent: thiz,
       id: "vmRtDescription",
-      propertyOwner: thiz.document,
-      propertyPath: "description",
+      value: thiz.document.description,
+      onChange: (_, newValue) => {
+        thiz.document.description = newValue;
+      },
     });
   }
 

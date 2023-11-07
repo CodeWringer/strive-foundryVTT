@@ -1,6 +1,6 @@
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs";
+import InputRichTextViewModel from "../../../component/input-rich-text/input-rich-text-viewmodel.mjs";
 import { TEMPLATES } from "../../../templatePreloader.mjs";
-import ViewModelFactory from "../../../view-model/view-model-factory.mjs";
 import ViewModel from "../../../view-model/view-model.mjs";
 
 export default class ActorBiographyViewModel extends ViewModel {
@@ -32,13 +32,14 @@ export default class ActorBiographyViewModel extends ViewModel {
     this.document = args.document;
     
     const thiz = this;
-    const factory = new ViewModelFactory();
 
-    this.vmRtBiography = factory.createVmRichText({
+    this.vmRtBiography = new InputRichTextViewModel({
       parent: thiz,
       id: "vmRtBiography",
-      propertyOwner: thiz.document,
-      propertyPath: "person.biography",
+      value: thiz.document.person.biography,
+      onChange: (_, newValue) => {
+        thiz.document.person.biography = newValue;
+      },
     });
   }
 }

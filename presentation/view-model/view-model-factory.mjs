@@ -96,36 +96,6 @@ export default class ViewModelFactory {
   }
 
   /**
-   * Creates a radio button group view model and returns it. 
-   * 
-   * @param {ViewModel | undefined} args.parent Optional. A parent `ViewModel` instance. 
-   * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
-   * @param {Boolean | undefined} args.isEditable Optional. If true, the sheet is editable. 
-   * @param {Boolean | undefined} args.isSendable Optional. If true, the document represented by the sheet can be sent to chat. 
-   * @param {Boolean | undefined} args.isOwner Optional. If true, the current user is the owner of the represented document. 
-   * @param {Boolean | undefined} args.isGM Optional. If true, the current user is a GM. 
-   * @param {String | undefined} args.contextTemplate Optional. Name or path of a contextual template, 
-   * which will be displayed in exception log entries, to aid debugging. 
-   * @param {Object} args.propertyOwner
-   * @param {String} args.propertyPath
-   * @param {Array<StatefulChoiceOption>} args.options
-   * @param {String | undefined} args.localizedTooltip Localized tooltip. 
-   * 
-   * @returns {InputRadioButtonGroupViewModel}
-   */
-  createVmRadioButtonGroup(args = {}) {
-    validateOrThrow(args, ["propertyOwner", "propertyPath", "options"]);
-
-    return new InputRadioButtonGroupViewModel({
-      ...this._getBaseArguments(args),
-      propertyOwner: args.propertyOwner,
-      propertyPath: args.propertyPath,
-      options: args.options,
-      localizedTooltip: args.localizedTooltip,
-    });
-  }
-
-  /**
    * Creates a text area view model and returns it. 
    * 
    * @param {ViewModel | undefined} args.parent Optional. A parent `ViewModel` instance. 
@@ -454,33 +424,6 @@ export default class ViewModelFactory {
       ...this._getBaseArguments(args),
       contextTemplate: args.contextTemplate ?? args.parent.contextTemplate,
       menuItems: args.menuItems,
-    });
-  }
-
-  /**
-   * Creates a rich text input view model and returns it. 
-   * 
-   * @param {ViewModel | undefined} args.parent Optional. A parent `ViewModel` instance. 
-   * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
-   * @param {Boolean | undefined} args.isEditable Optional. If true, the sheet is editable. 
-   * @param {Boolean | undefined} args.isSendable Optional. If true, the document represented by the sheet can be sent to chat. 
-   * @param {Boolean | undefined} args.isOwner Optional. If true, the current user is the owner of the represented document. 
-   * @param {Boolean | undefined} args.isGM Optional. If true, the current user is a GM. 
-   * @param {String | undefined} args.contextTemplate Optional. Name or path of a contextual template, 
-   * which will be displayed in exception log entries, to aid debugging. 
-   * @param {Object} args.propertyOwner
-   * @param {String} args.propertyPath
-   * @param {Boolean | undefined} args.isEditable
-   * 
-   * @returns {InputRichTextViewModel}
-   */
-  createVmRichText(args = {}) {
-    validateOrThrow(args, ["propertyOwner", "propertyPath"]);
-
-    return new InputRichTextViewModel({
-      ...this._getBaseArguments(args),
-      propertyOwner: args.propertyOwner,
-      propertyPath: args.propertyPath,
     });
   }
 }

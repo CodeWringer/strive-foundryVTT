@@ -85,9 +85,10 @@ export default class DynamicInputDialogViewModel extends ViewModel {
         viewModel = new InputRichTextViewModel({
           id: definition.name,
           parent: this,
-          propertyPath: definition.name,
-          propertyOwner: this,
-          isEditable: true,
+          value: definition.defaultValue,
+          onChange: (_, newValue) => {
+            this[definition.name] = newValue;
+          },
         });
       } else if (definition.type === DYNAMIC_INPUT_TYPES.TEXTAREA) {
         viewModel = new InputTextareaViewModel({
