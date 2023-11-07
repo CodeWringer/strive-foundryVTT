@@ -162,10 +162,11 @@ export default class AssetListItemViewModel extends ViewModel {
     this.vmTags = new InputTagsViewModel({
       id: "vmTags",
       parent: this,
-      propertyPath: "tags",
-      propertyOwner: this.document,
-      isEditable: this.isEditable,
       systemTags: ASSET_TAGS.asArray(),
+      value: this.document.tags,
+      onChange: (_, newValue) => {
+        this.document.tags = newValue;
+      },
     });
   }
 
