@@ -44,6 +44,7 @@ export default class DynamicInputDialogViewModel extends ViewModel {
         viewModel = new InputDropDownViewModel({
           id: definition.name,
           parent: this,
+          value: definition.defaultValue,
           onChange: (_, newValue) => {
             this[definition.name] = newValue;
           },
@@ -54,6 +55,7 @@ export default class DynamicInputDialogViewModel extends ViewModel {
         viewModel = new InputImageViewModel({
           id: definition.name,
           parent: this,
+          value: definition.defaultValue,
           onChange: (_, newValue) => {
             this[definition.name] = newValue;
           },
