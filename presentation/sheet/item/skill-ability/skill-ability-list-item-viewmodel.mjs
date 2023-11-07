@@ -132,7 +132,7 @@ export default class SkillAbilityListItemViewModel extends ViewModel {
       onChange: (_, newValue) => {
         skillAbility.name = newValue;
       },
-      placeholder: "ambersteel.general.name",
+      placeholder: game.i18.localize("ambersteel.general.name"),
     });
     this.vmBtnDelete = factory.createVmBtnDelete({
       parent: thiz,

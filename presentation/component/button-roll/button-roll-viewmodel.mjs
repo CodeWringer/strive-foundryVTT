@@ -249,7 +249,7 @@ export default class ButtonRollViewModel extends ButtonViewModel {
       new DynamicInputDefinition({
         type: DYNAMIC_INPUT_TYPES.TEXTFIELD,
         name: inputObstacle,
-        localizedLabel:game.i18n.localize( "ambersteel.roll.obstacle.abbreviation"),
+        localizedLabel: game.i18n.localize("ambersteel.roll.obstacle.abbreviation"),
         required: true,
         defaultValue: "",
         specificArgs: {
@@ -259,7 +259,7 @@ export default class ButtonRollViewModel extends ButtonViewModel {
       new DynamicInputDefinition({
         type: DYNAMIC_INPUT_TYPES.NUMBER_SPINNER,
         name: inputBonusDice,
-        localizedLabel:game.i18n.localize( "ambersteel.roll.bonusDice"),
+        localizedLabel: game.i18n.localize("ambersteel.roll.bonusDice"),
         required: true,
         defaultValue: 0,
       }),

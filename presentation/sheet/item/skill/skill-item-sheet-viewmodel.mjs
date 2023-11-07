@@ -78,7 +78,7 @@ export default class SkillItemSheetViewModel extends SkillViewModel {
       onChange: (_, newValue) => {
         thiz.document.name = newValue;
       },
-      placeholder: "ambersteel.general.name",
+      placeholder: game.i18.localize("ambersteel.general.name"),
     });
     this.vmBtnEdit = new ButtonViewModel({
       id: "vmBtnEdit",
@@ -129,7 +129,7 @@ export default class SkillItemSheetViewModel extends SkillViewModel {
       onChange: (_, newValue) => {
         thiz.document.category = newValue;
       },
-      placeholder: "ambersteel.general.category",
+      placeholder: game.i18.localize("ambersteel.general.category"),
     });
     this.vmRtDescription = new InputRichTextViewModel({
       parent: thiz,
