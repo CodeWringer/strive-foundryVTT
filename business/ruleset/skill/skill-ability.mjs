@@ -215,12 +215,12 @@ export default class SkillAbility {
   }
   
   /**
-   * @type {AttackType | String | null}
+   * @type {AttackType | null}
    */
   get attackType() { return this._attackType; }
   set attackType(value) {
     this._attackType = value;
-    this.owningDocument.updateByPath(`${this._pathOnParent}.attackType`, value === null ? value : (value.name ?? value));
+    this.owningDocument.updateByPath(`${this._pathOnParent}.attackType`, value === null ? null : value.name);
   }
   
   /**

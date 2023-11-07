@@ -188,10 +188,11 @@ export default class SkillAbilityListItemViewModel extends ViewModel {
     });
     this.vmDdAttackType = new InputDropDownViewModel({
       id: "vmDdAttackType",
-      parent: thiz,
-      options: thiz.attackTypeOptions,
+      parent: this,
+      options: this.attackTypeOptions,
+      value: this.attackTypeOptions.find(it => it.value === this.skillAbility.attackType.name),
       onChange: (_, newValue) => {
-        setNestedPropertyValue(skillAbility, "attackType", newValue);
+        this.skillAbility.attackType = newValue;
       },
       adapter: new ChoiceAdapter({
         toChoiceOption(obj) {

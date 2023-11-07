@@ -1,10 +1,8 @@
 import { SKILL_HEAD_STATES } from "../../../../business/document/item/transient-skill.mjs"
 import { ATTRIBUTES } from "../../../../business/ruleset/attribute/attributes.mjs"
 import { SKILL_TAGS } from "../../../../business/tags/system-tags.mjs"
-import { setNestedPropertyValue } from "../../../../business/util/property-utility.mjs"
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs"
 import { isDefined } from "../../../../business/util/validation-utility.mjs"
-import ButtonCheckBoxViewModel from "../../../component/button-checkbox/button-checkbox-viewmodel.mjs"
 import ButtonViewModel from "../../../component/button/button-viewmodel.mjs"
 import ChoiceAdapter from "../../../component/input-choice/choice-adapter.mjs"
 import InputDropDownViewModel from "../../../component/input-dropdown/input-dropdown-viewmodel.mjs"
@@ -198,8 +196,9 @@ export default class SkillListItemViewModel extends SkillViewModel {
       id: "vmDdRelatedAttribute",
       parent: thiz,
       options: thiz.attributeOptions,
+      value: thiz.attributeOptions.find(it => it.value === this.document.relatedAttribute.name),
       onChange: (_, newValue) => {
-        setNestedPropertyValue(this.document, "relatedAttribute", newValue);
+        this.document.relatedAttribute = newValue;
       },
       adapter: new ChoiceAdapter({
         toChoiceOption(obj) {

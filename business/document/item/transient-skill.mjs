@@ -13,7 +13,7 @@ import Ruleset from "../../ruleset/ruleset.mjs";
 import SkillAbility from "../../ruleset/skill/skill-ability.mjs";
 import CharacterAttribute from "../../ruleset/attribute/character-attribute.mjs";
 import { ATTACK_TYPES } from "../../ruleset/skill/attack-types.mjs";
-import { ATTRIBUTES } from "../../ruleset/attribute/attributes.mjs";
+import { ATTRIBUTES, Attribute } from "../../ruleset/attribute/attributes.mjs";
 import { isBlankOrUndefined, isObject } from "../../util/validation-utility.mjs";
 import { arrayContains } from "../../util/array-utility.mjs";
 import * as ConstantsUtils from "../../util/constants-utility.mjs";

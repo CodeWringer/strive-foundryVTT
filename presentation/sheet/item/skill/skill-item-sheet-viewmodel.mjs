@@ -14,7 +14,6 @@ import SkillAbilityTableViewModel from "../skill-ability/skill-ability-table-vie
 import SkillPrerequisiteListItemViewModel from "./skill-prerequisite-list-item-viewmodel.mjs";
 import { querySkillConfiguration } from "./skill-utils.mjs";
 import SkillViewModel from "./skill-viewmodel.mjs";
-import { setNestedPropertyValue } from "../../../../business/util/property-utility.mjs";
 import InputImageViewModel from "../../../component/input-image/input-image-viewmodel.mjs";
 import InputRichTextViewModel from "../../../component/input-rich-text/input-rich-text-viewmodel.mjs";
 import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs";
@@ -105,8 +104,9 @@ export default class SkillItemSheetViewModel extends SkillViewModel {
       id: "vmDdRelatedAttribute",
       parent: thiz,
       options: thiz.attributeOptions,
+      value: thiz.attributeOptions.find(it => it.value === this.document.relatedAttribute.name),
       onChange: (_, newValue) => {
-        setNestedPropertyValue(thiz.document, "relatedAttribute", newValue);
+        this.document.relatedAttribute = newValue;
       },
       adapter: new ChoiceAdapter({
         toChoiceOption(obj) {

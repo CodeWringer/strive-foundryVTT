@@ -45,7 +45,7 @@ export default class InputSingleChoiceViewModel extends InputChoiceViewModel {
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["value", "options", "adapter"]);
+    validateOrThrow(args, ["options", "adapter"]);
   }
   
   /**
