@@ -90,9 +90,9 @@ export default class InputNumberSpinnerViewModel extends InputViewModel {
   _onClickNumberSpinnerUp(event) {
     const newValue = parseInt(this.value) + 1;
     if (this.max !== undefined && newValue > this.max) return;
-    // Update value on the element. This implicitly invokes the value 
-    // change and event invocation. 
+    
     setElementValue(this.element, newValue);
+    this.value = newValue;
   }
 
   /**
@@ -105,8 +105,8 @@ export default class InputNumberSpinnerViewModel extends InputViewModel {
   _onClickNumberSpinnerDown(event) {
     const newValue = parseInt(this.value) - 1;
     if (this.min !== undefined && newValue < this.min) return;
-    // Update value on the element. This implicitly invokes the value 
-    // change and event invocation. 
+    
     setElementValue(this.element, newValue);
+    this.value = newValue;
   }
 }
