@@ -95,9 +95,10 @@ export default class DynamicInputDialogViewModel extends ViewModel {
         viewModel = new InputTextareaViewModel({
           id: definition.name,
           parent: this,
-          propertyPath: definition.name,
-          propertyOwner: this,
-          isEditable: true,
+          value: definition.defaultValue,
+          onChange: (_, newValue) => {
+            this[definition.name] = newValue;
+          },
           spellcheck: definition.specificArgs.spellcheck,
           placeholder: definition.specificArgs.placeholder,
         });
