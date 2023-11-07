@@ -64,7 +64,7 @@ export default class InjuryItemSheetViewModel extends ViewModel {
       onChange: (_, newValue) => {
         thiz.document.limit = newValue;
       },
-      placeholder: "ambersteel.character.health.injury.limit.placeholder",
+      placeholder: game.i18n.localize("ambersteel.character.health.injury.limit.placeholder"),
     });
     this.vmTfTimeToHeal = new InputTextFieldViewModel({
       parent: thiz,
