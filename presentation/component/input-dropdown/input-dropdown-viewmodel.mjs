@@ -6,9 +6,12 @@ import InputSingleChoiceViewModel from "../input-choice/input-single-choice-view
  * 
  * @extends InputSingleChoiceViewModel
  * 
- * @property {String} localizedValue Gets the localized version of the value. 
- * @property {ChoiceOption} selected Gets the currently selected option. 
+ * @property {ChoiceOption} value The currently selected option. 
  * @property {Array<ChoiceOption>} options Gets the options available to the drop-down. 
+ * @method onChange Callback that is invoked when the value changes. 
+ * Receives the following arguments: 
+ * * `oldValue: {ChoiceOption}`
+ * * `newValue: {ChoiceOption}`
  */
 export default class InputDropDownViewModel extends InputSingleChoiceViewModel {
   /** @override */

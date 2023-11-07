@@ -1,5 +1,6 @@
 import Ruleset from "../../../../../business/ruleset/ruleset.mjs"
 import { validateOrThrow } from "../../../../../business/util/validation-utility.mjs"
+import InputNumberSpinnerViewModel from "../../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs"
 import DocumentListItemOrderDataSource from "../../../../component/sortable-list/document-list-item-order-datasource.mjs"
 import SortableListViewModel from "../../../../component/sortable-list/sortable-list-viewmodel.mjs"
 import { TEMPLATES } from "../../../../templatePreloader.mjs"
@@ -136,24 +137,30 @@ export default class ActorHealthViewModel extends ViewModel {
     const thiz = this;
     const factory = new ViewModelFactory();
 
-    this.vmNsHp = factory.createVmNumberSpinner({
+    this.vmNsHp = new InputNumberSpinnerViewModel({
       parent: thiz,
       id: "vmNsHp",
-      propertyOwner: thiz.document,
-      propertyPath: "health.HP",
+      value: thiz.document.health.HP,
+      onChange: (_, newValue) => {
+        thiz.document.health.HP = newValue;
+      },
     });
-    this.vmNsExhaustion = factory.createVmNumberSpinner({
+    this.vmNsExhaustion = new InputNumberSpinnerViewModel({
       parent: thiz,
       id: "vmNsExhaustion",
-      propertyOwner: thiz.document,
-      propertyPath: "health.exhaustion",
+      value: thiz.document.health.exhaustion,
+      onChange: (_, newValue) => {
+        thiz.document.health.exhaustion = newValue;
+      },
       min: 0,
     });
-    this.vmNsMagicStamina = factory.createVmNumberSpinner({
+    this.vmNsMagicStamina = new InputNumberSpinnerViewModel({
       parent: thiz,
       id: "vmNsMagicStamina",
-      propertyOwner: thiz.document,
-      propertyPath: "health.magicStamina",
+      value: thiz.document.health.magicStamina,
+      onChange: (_, newValue) => {
+        thiz.document.health.magicStamina = newValue;
+      },
       min: 0,
     });
     this.vmHealthStates = new ActorHealthStatesViewModel({
@@ -184,9 +191,8 @@ export default class ActorHealthViewModel extends ViewModel {
         isEditable: this.isEditable,
         creationType: "illness",
         withDialog: true,
-        localizableLabel: "ambersteel.character.health.illness.add.label",
-        localizableType: "ambersteel.character.health.illness.singular",
-        localizableDialogTitle: "ambersteel.character.health.illness.add.query",
+        localizedLabel: game.i18n.localize("ambersteel.character.health.illness.add.label"),
+        localizedType: game.i18n.localize("ambersteel.character.health.illness.singular"),
       }),
     });
 
@@ -209,9 +215,8 @@ export default class ActorHealthViewModel extends ViewModel {
         isEditable: this.isEditable,
         creationType: "injury",
         withDialog: true,
-        localizableLabel: "ambersteel.character.health.injury.add.label",
-        localizableType: "ambersteel.character.health.injury.singular",
-        localizableDialogTitle: "ambersteel.character.health.injury.add.query",
+        localizedLabel: game.i18n.localize("ambersteel.character.health.injury.add.label"),
+        localizedType: game.i18n.localize("ambersteel.character.health.injury.singular"),
       }),
     });
 
@@ -234,9 +239,8 @@ export default class ActorHealthViewModel extends ViewModel {
         isEditable: this.isEditable,
         creationType: "mutation",
         withDialog: true,
-        localizableLabel: "ambersteel.character.health.mutation.add.label",
-        localizableType: "ambersteel.character.health.mutation.singular",
-        localizableDialogTitle: "ambersteel.character.health.mutation.add.query",
+        localizedLabel: game.i18n.localize("ambersteel.character.health.mutation.add.label"),
+        localizedType: game.i18n.localize("ambersteel.character.health.mutation.singular"),
       }),
     });
 
@@ -259,9 +263,8 @@ export default class ActorHealthViewModel extends ViewModel {
         isEditable: this.isEditable,
         creationType: "scar",
         withDialog: true,
-        localizableLabel: "ambersteel.character.health.scar.add.label",
-        localizableType: "ambersteel.character.health.scar.singular",
-        localizableDialogTitle: "ambersteel.character.health.scar.add.query",
+        localizedLabel: game.i18n.localize("ambersteel.character.health.scar.add.label"),
+        localizedType: game.i18n.localize("ambersteel.character.health.scar.singular"),
       }),
     });
   }

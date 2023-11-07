@@ -1,4 +1,7 @@
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs";
+import InputImageViewModel from "../../../component/input-image/input-image-viewmodel.mjs";
+import InputRichTextViewModel from "../../../component/input-rich-text/input-rich-text-viewmodel.mjs";
+import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs";
 import { TEMPLATES } from "../../../templatePreloader.mjs";
 import ViewModelFactory from "../../../view-model/view-model-factory.mjs";
 import ViewModel from "../../../view-model/view-model.mjs";
@@ -30,18 +33,22 @@ export default class ScarItemSheetViewModel extends ViewModel {
     const thiz = this;
     const factory = new ViewModelFactory();
 
-    this.vmImg = factory.createVmImg({
+    this.vmImg = new InputImageViewModel({
       parent: thiz,
       id: "vmImg",
-      propertyOwner: thiz.document,
-      propertyPath: "img",
+      value: thiz.document.img,
+      onChange: (_, newValue) => {
+        thiz.document.img = newValue;
+      },
     });
-    this.vmTfName = factory.createVmTextField({
+    this.vmTfName = new InputTextFieldViewModel({
       parent: thiz,
       id: "vmTfName",
-      propertyOwner: thiz.document,
-      propertyPath: "name",
-      placeholder: "ambersteel.general.name",
+      value: thiz.document.name,
+      onChange: (_, newValue) => {
+        thiz.document.name = newValue;
+      },
+      placeholder: game.i18n.localize("ambersteel.general.name"),
     });
     this.vmBtnSendToChat = factory.createVmBtnSendToChat({
       parent: thiz,
@@ -49,17 +56,21 @@ export default class ScarItemSheetViewModel extends ViewModel {
       target: thiz.document,
       isEditable: thiz.isEditable || thiz.isGM,
     });
-    this.vmLimit = factory.createVmTextField({
+    this.vmLimit = new InputTextFieldViewModel({
       parent: thiz,
       id: "vmLimit",
-      propertyOwner: thiz.document,
-      propertyPath: "limit",
+      value: thiz.document.limit,
+      onChange: (_, newValue) => {
+        thiz.document.limit = newValue;
+      },
     });
-    this.vmRtDescription = factory.createVmRichText({
+    this.vmRtDescription = new InputRichTextViewModel({
       parent: thiz,
       id: "vmRtDescription",
-      propertyOwner: thiz.document,
-      propertyPath: "description",
+      value: thiz.document.description,
+      onChange: (_, newValue) => {
+        thiz.document.description = newValue;
+      },
     });
   }
 

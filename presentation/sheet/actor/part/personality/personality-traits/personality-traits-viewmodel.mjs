@@ -7,9 +7,9 @@ import StatefulChoiceOption from "../../../../../component/input-choice/stateful
 /**
  * @property {Array<Object>} personalityTraits An array of personality traits for display. 
  * These objects must have the following fields: 
- * * `localizableTraitLeft: String`
+ * * `localizedTraitLeft: String`
  * * `vmRadioButtonGroup: InputRadioButtonGroupViewModel`
- * * `localizableTraitRight: String`
+ * * `localizedTraitRight: String`
  */
 export default class PersonalityTraitsViewModel extends ViewModel {
   /** @override */
@@ -67,16 +67,17 @@ export default class PersonalityTraitsViewModel extends ViewModel {
    */
   _getTrait(leftTrait, rightTrait, propertyName) {
     return {
-      localizableTraitLeft: `ambersteel.character.personalityTrait.traits.${leftTrait}`,
+      localizedTraitLeft: game.i18n.localize(`ambersteel.character.personalityTrait.traits.${leftTrait}`),
       vmRadioButtonGroup: new InputRadioButtonGroupViewModel({
         id: `vmRadioButtonGroup-${propertyName}`,
         parent: this,
-        isEditable: this.isEditable,
-        propertyOwner: this.document,
-        propertyPath: `personalityTraits.${propertyName}`,
+        value: this.document.personalityTraits[propertyName],
+        onChange: (_, newValue) => {
+          this.document.personalityTraits[propertyName] = newValue;
+        },
         options: this._getTraitOptions(),
       }),
-      localizableTraitRight: `ambersteel.character.personalityTrait.traits.${rightTrait}`,
+      localizedTraitRight: game.i18n.localize(`ambersteel.character.personalityTrait.traits.${rightTrait}`),
     };
   }
 

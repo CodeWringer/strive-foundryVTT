@@ -65,7 +65,7 @@ export default class ButtonToggleIconViewModel extends ButtonViewModel {
    * @param {String | undefined} args.id Unique ID of this view model instance. 
    * @param {Function | String | undefined} args.callback Defines an asynchronous callback that is invoked upon completion of the button's own callback. 
    * @param {Boolean | undefined} args.isEditable If true, will be interactible. 
-   * @param {String | undefined} args.localizableTitle The localizable title (tooltip). 
+   * @param {String | undefined} args.localizedTooltip Localized tooltip. 
    * 
    * @param {Object} args.target The target document to affect.  
    * @param {String} args.propertyPath The path used to look up the value. 

@@ -25,7 +25,7 @@ const dialog = await new DynamicInputDialog({
     new DynamicInputDefinition({
       type: DYNAMIC_INPUT_TYPES.DROP_DOWN,
       name: inputChoices,
-      localizableLabel: "ambersteel.general.name",
+      localizedLabel: game.i18n.localize("ambersteel.general.name"),
       required: true,
       defaultValue: (thiz.availableAssets[0] ?? {}).id,
       specificArgs: {
@@ -115,6 +115,8 @@ export default class DynamicInputDialog extends ConfirmableModalDialog {
     if (isDefined(this._viewModel) !== true) {
       this._viewModel = new DynamicInputDialogViewModel({
         inputDefinitions: this.inputDefinitions,
+        isEditable: true,
+        isSendable: true,
       });
     }
 

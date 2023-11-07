@@ -1,4 +1,5 @@
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs"
+import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
 import { TEMPLATES } from "../../../templatePreloader.mjs";
 import ViewModelFactory from "../../../view-model/view-model-factory.mjs"
 import ViewModel from "../../../view-model/view-model.mjs"
@@ -59,25 +60,31 @@ export default class ActorFateViewModel extends ViewModel {
     const thiz = this;
     const factory = new ViewModelFactory();
 
-    this.vmNsMifp = factory.createVmNumberSpinner({
+    this.vmNsMifp = new InputNumberSpinnerViewModel({
       parent: thiz,
       id: "vmNsMifp",
-      propertyOwner: thiz.document,
-      propertyPath: "fateSystem.miFP",
+      value: thiz.document.fateSystem.miFP,
+      onChange: (_, newValue) => {
+        thiz.document.fateSystem.miFP = newValue;
+      },
       min: 0,
     });
-    this.vmNsMafp = factory.createVmNumberSpinner({
+    this.vmNsMafp = new InputNumberSpinnerViewModel({
       parent: thiz,
       id: "vmNsMafp",
-      propertyOwner: thiz.document,
-      propertyPath: "fateSystem.maFP",
+      value: thiz.document.fateSystem.maFP,
+      onChange: (_, newValue) => {
+        thiz.document.fateSystem.maFP = newValue;
+      },
       min: 0,
     });
-    this.vmNsAfp = factory.createVmNumberSpinner({
+    this.vmNsAfp = new InputNumberSpinnerViewModel({
       parent: thiz,
       id: "vmNsAfp",
-      propertyOwner: thiz.document,
-      propertyPath: "fateSystem.AFP",
+      value: thiz.document.fateSystem.AFP,
+      onChange: (_, newValue) => {
+        thiz.document.fateSystem.AFP = newValue;
+      },
       min: 0,
     });
     this.vmBtnAddFateCard = factory.createVmBtnAdd({
@@ -86,8 +93,7 @@ export default class ActorFateViewModel extends ViewModel {
       target: thiz.document,
       creationType: "fate-card",
       withDialog: true,
-      localizableType: "ambersteel.character.driverSystem.fateSystem.fateCard.label",
-      localizableDialogTitle: "ambersteel.character.driverSystem.fateSystem.fateCard.add.query",
+      localizedType: game.i18n.localize("ambersteel.character.driverSystem.fateSystem.fateCard.label"),
     });
 
     this.fateCards = [];

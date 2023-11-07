@@ -1,4 +1,4 @@
-import { REGEX_PATTERN_PROPERTY_PATHS } from "../../business/document/transient-document.mjs";
+import AtReferencer from "../../business/referencing/at-referencer.mjs";
 import { VISIBILITY_MODES } from "../chat/visibility-modes.mjs";
 import ChoiceAdapter from "../component/input-choice/choice-adapter.mjs";
 import DynamicInputDefinition from "../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
@@ -187,12 +187,12 @@ export default class RollFormulaResolver {
       new DynamicInputDefinition({
         type: DYNAMIC_INPUT_TYPES.LABEL,
         name: "promptUnresolvedReferences",
-        localizableLabel: "ambersteel.damageDefinition.unresolvedReferences",
+        localizedLabel: game.i18n.localize("ambersteel.damageDefinition.unresolvedReferences"),
       }),
       new DynamicInputDefinition({
         type: DYNAMIC_INPUT_TYPES.DROP_DOWN,
         name: inputNameVisibility,
-        localizableLabel: "ambersteel.general.messageVisibility.label",
+        localizedLabel: game.i18n.localize("ambersteel.general.messageVisibility.label"),
         required: true,
         defaultValue: (VISIBILITY_MODES.asArray()[0]),
         specificArgs: {
@@ -213,7 +213,7 @@ export default class RollFormulaResolver {
       inputDefinitions.splice(1, 0, new DynamicInputDefinition({
         type: DYNAMIC_INPUT_TYPES.TEXTFIELD,
         name: unresolvedReference,
-        localizableLabel: unresolvedReference,
+        localizedLabel: unresolvedReference,
         required: true,
         defaultValue: "",
       }));
@@ -236,7 +236,7 @@ export default class RollFormulaResolver {
     const unresolvedReferences = [];
     for (const formula of formulae) {
       // Determine if the string contains any as yet unresolved @-references. 
-      const unresolvedReferencesOfFormula = formula.formula.match(REGEX_PATTERN_PROPERTY_PATHS);
+      const unresolvedReferencesOfFormula = formula.formula.match(AtReferencer.REGEX_PATTERN_AT_REFERENCE);
       if (unresolvedReferencesOfFormula !== undefined && unresolvedReferencesOfFormula !== null) {
         // There are unresolved references. 
         

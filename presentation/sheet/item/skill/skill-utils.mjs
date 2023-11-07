@@ -30,17 +30,18 @@ export async function querySkillConfiguration(skill) {
       new DynamicInputDefinition({
         type: DYNAMIC_INPUT_TYPES.DROP_DOWN,
         name: inputHeadState,
-        localizableLabel: "ambersteel.character.skill.headState",
+        localizedLabel: game.i18n.localize("ambersteel.character.skill.headState"),
         required: true,
-        defaultValue: (skill.headState ?? SKILL_HEAD_STATES.FULL),
+        defaultValue: SKILL_HEAD_STATES.asChoices().find(it => it.value === skill.headState.name),
         specificArgs: {
           options: SKILL_HEAD_STATES.asChoices(),
           adapter: new ChoiceAdapter({
-            toChoiceOption: (obj) => { return new ChoiceOption({
-              value: obj.name,
-              localizedValue: game.i18n.localize(obj.localizableName),
-            }); },
-            fromChoiceOption: (choice) => { return SKILL_HEAD_STATES.asArray().find(it => it.name === choice.value); }
+            toChoiceOption: (obj) => {
+              return SKILL_HEAD_STATES.asChoices().find(it => it.value === obj.name);
+            },
+            fromChoiceOption: (choice) => {
+              return SKILL_HEAD_STATES.asArray().find(it => it.name === choice.value);
+            }
           }),
         }
       }),

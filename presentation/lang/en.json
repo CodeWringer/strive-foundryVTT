@@ -59,6 +59,8 @@
       "formula": "Formula",
       "id": "ID",
       "increment": "Increment",
+      "isCustom": "Custom",
+      "image": "Image",
       "input": {
         "validationFailed": "The following required fields failed validation. Ensure required fields have a valid value.",
         "query": "Provide Data",

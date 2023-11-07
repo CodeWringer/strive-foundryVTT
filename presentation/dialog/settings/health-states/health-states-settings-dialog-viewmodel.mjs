@@ -88,11 +88,10 @@ export default class HealthStatesSettingsDialogViewModel extends ViewModel {
     this.vmVisibilityList = new VisibilityToggleListViewModel({
       id: "vmVisibilityList",
       parent: this,
-      isEditable: this.isEditable,
-      isSendable: this.isSendable,
-      isOwner: this.isOwner,
-      propertyOwner: this,
-      propertyPath: "stateVisibilityItems",
+      value: this.stateVisibilityItems,
+      onChange: (_, newValue) => {
+        this.stateVisibilityItems = newValue;
+      }
     });
     this.vmCustomList = new SimpleListViewModel({
       id: "vmCustomList",
