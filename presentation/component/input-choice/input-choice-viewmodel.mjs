@@ -1,5 +1,6 @@
 import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import InputViewModel from "../../view-model/input-view-model.mjs";
+import ChoiceOption from "./choice-option.mjs";
 
 /**
  * Represents the base type of choice inputs. 
@@ -9,6 +10,9 @@ import InputViewModel from "../../view-model/input-view-model.mjs";
  * @property {ChoiceOption} value The current value. 
  * @property {Array<ChoiceOption>} options Gets the options available. 
  * * Read-only. 
+ * @property {String} localizedValue The localized value of the current 
+ * `ChoiceOption`. 
+ * 
  * @method onChange Callback that is invoked when the value changes. 
  * Receives the following arguments: 
  * * `oldValue: {ChoiceOption}`
@@ -17,6 +21,11 @@ import InputViewModel from "../../view-model/input-view-model.mjs";
  * @abstract
  */
 export default class InputChoiceViewModel extends InputViewModel {
+  /** @override */
+  get localizedValue() {
+    return this.value.localizedValue;
+  }
+
   /**
    * @param {Object} args 
    * @param {ChoiceOption | undefined} args.value The current value. 
