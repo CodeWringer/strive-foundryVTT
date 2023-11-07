@@ -20,6 +20,7 @@ import * as ConstantsUtils from "../../util/constants-utility.mjs";
 import { DICE_POOL_RESULT_TYPES } from "../../dice/dice-pool.mjs";
 import SkillPrerequisite from "../../ruleset/skill/skill-prerequisite.mjs";
 import { SKILL_TAGS } from "../../tags/system-tags.mjs";
+import AtReferencer from "../../referencing/at-referencer.mjs";
 
 /**
  * Represents a skill type document's "head" state. 
@@ -529,21 +530,32 @@ export default class TransientSkill extends TransientBaseItem {
   }
 
   /**
-   * Searches in: 
-   * * Skill abilities
+   * Tries to resolve the given reference in the embedded documents of 
+   * this document. 
    * 
-   * @override
+   * Searches in: 
+   * * Embedded fate-cards.
+   * 
+   * This method will be called implicitly, by an `AtReferencer`, when it tries 
+   * to resolve a reference on *this* document. 
+   * 
+   * @param {String} comparableReference A comparable version of a reference. 
+   * * Comparable in the sense that underscores "_" are replaced with spaces " " 
+   * or only the last piece of a property path is returned. 
+   * * E. g. `"@Heavy_Armor"` -> `"@heavy armor"`
+   * * E. g. `"@A.B.c"` -> `"a"`
+   * @param {String | undefined} propertyPath If not undefined, a property path on 
+   * the referenced object. 
+   * * E. g. `"@A.B.c"` -> `"B.c"`
+   * 
+   * @returns {Any | undefined} The matched reference or undefined, 
+   * if no match was found. 
    */
-  _resolveReference(reference, comparableReference, propertyPath) {
-    // Search skill ability.
-    for (const ability of this.abilities) {
-      const match = ability._resolveReference(reference, comparableReference, propertyPath);
-      if (match !== undefined) {
-        return match;
-      }
-    }
-    
-    return super._resolveReference(reference, comparableReference, propertyPath);
+  resolveReference(comparableReference, propertyPath) {
+    const collectionsToSearch = [
+      this.abilities,
+    ];
+    return new AtReferencer().resolveReferenceInCollections(collectionsToSearch, comparableReference, propertyPath);
   }
 }
 
