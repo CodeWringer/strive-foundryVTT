@@ -76,9 +76,10 @@ export default class DynamicInputDialogViewModel extends ViewModel {
         viewModel = new InputRadioButtonGroupViewModel({
           id: definition.name,
           parent: this,
-          propertyPath: definition.name,
-          propertyOwner: this,
-          isEditable: true,
+          value: definition.defaultValue,
+          onChange: (_, newValue) => {
+            this[definition.name] = newValue;
+          },
           options: definition.specificArgs.options,
         });
       } else if (definition.type === DYNAMIC_INPUT_TYPES.RICH_TEXT) {
