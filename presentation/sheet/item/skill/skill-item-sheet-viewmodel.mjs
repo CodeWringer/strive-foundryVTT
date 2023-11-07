@@ -17,6 +17,7 @@ import SkillViewModel from "./skill-viewmodel.mjs";
 import { setNestedPropertyValue } from "../../../../business/util/property-utility.mjs";
 import InputImageViewModel from "../../../component/input-image/input-image-viewmodel.mjs";
 import InputRichTextViewModel from "../../../component/input-rich-text/input-rich-text-viewmodel.mjs";
+import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs";
 
 export default class SkillItemSheetViewModel extends SkillViewModel {
   /** @override */
@@ -70,11 +71,13 @@ export default class SkillItemSheetViewModel extends SkillViewModel {
         thiz.document.img = newValue;
       },
     });
-    this.vmTfName = factory.createVmTextField({
+    this.vmTfName = new InputTextFieldViewModel({
       parent: thiz,
       id: "vmTfName",
-      propertyOwner: thiz.document,
-      propertyPath: "name",
+      value: thiz.document.name,
+      onChange: (_, newValue) => {
+        thiz.document.name = newValue;
+      },
       placeholder: "ambersteel.general.name",
     });
     this.vmBtnEdit = new ButtonViewModel({
@@ -118,11 +121,13 @@ export default class SkillItemSheetViewModel extends SkillViewModel {
         }
       }),
     });
-    this.vmTfCategory = factory.createVmTextField({
+    this.vmTfCategory = new InputTextFieldViewModel({
       parent: thiz,
       id: "vmTfCategory",
-      propertyOwner: thiz.document,
-      propertyPath: "category",
+      value: thiz.document.category,
+      onChange: (_, newValue) => {
+        thiz.document.category = newValue;
+      },
       placeholder: "ambersteel.general.category",
     });
     this.vmRtDescription = new InputRichTextViewModel({

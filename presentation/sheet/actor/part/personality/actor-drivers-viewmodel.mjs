@@ -1,6 +1,6 @@
 import { validateOrThrow } from "../../../../../business/util/validation-utility.mjs";
+import InputTextFieldViewModel from "../../../../component/input-textfield/input-textfield-viewmodel.mjs";
 import { TEMPLATES } from "../../../../templatePreloader.mjs";
-import ViewModelFactory from "../../../../view-model/view-model-factory.mjs";
 import ViewModel from "../../../../view-model/view-model.mjs";
 
 export default class ActorDriversViewModel extends ViewModel {
@@ -62,32 +62,37 @@ export default class ActorDriversViewModel extends ViewModel {
     this.contextType = args.contextType ?? "actor-drivers";
 
     const thiz = this;
-    const factory = new ViewModelFactory();
 
-    this.vmTfAmbition = factory.createVmTextField({
+    this.vmTfAmbition = new InputTextFieldViewModel({
       parent: thiz,
       id: "vmTfAmbition",
-      propertyOwner: thiz.document,
-      propertyPath: "driverSystem.ambition",
+      value: thiz.document.driverSystem.ambition,
+      onChange: (_, newValue) => {
+        thiz.document.driverSystem.ambition = newValue;
+      },
       placeholder: "ambersteel.character.driverSystem.ambition",
     });
 
     for (let i = 0; i < this.aspirations.length; i++) {
-      this.aspirationViewModels.push(factory.createVmTextField({
+      this.aspirationViewModels.push(new InputTextFieldViewModel({
         parent: thiz,
         id: `vmAspiration-${i}`,
-        propertyOwner: thiz.document,
-        propertyPath: `driverSystem.aspirations._${i}`,
+        value: thiz.document.driverSystem.aspirations[`_${i}`],
+        onChange: (_, newValue) => {
+          thiz.document.driverSystem.aspirations[`_${i}`] = newValue;
+        },
         placeholder: "ambersteel.character.driverSystem.aspiration.singular",
       }));
     }
 
     for (let i = 0; i < this.reactions.length; i++) {
-      this.reactionViewModels.push(factory.createVmTextField({
+      this.reactionViewModels.push(new InputTextFieldViewModel({
         parent: thiz,
         id: `vmReaction-${i}`,
-        propertyOwner: thiz.document,
-        propertyPath: `driverSystem.reactions._${i}`,
+        value: thiz.document.driverSystem.reactions[`_${i}`],
+        onChange: (_, newValue) => {
+          thiz.document.driverSystem.reactions[`_${i}`] = newValue;
+        },
         placeholder: "ambersteel.character.driverSystem.reaction.singular",
       }));
     }

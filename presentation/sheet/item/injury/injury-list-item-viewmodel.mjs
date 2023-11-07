@@ -4,6 +4,7 @@ import StatefulChoiceOption from "../../../component/input-choice/stateful-choic
 import InputImageViewModel from "../../../component/input-image/input-image-viewmodel.mjs"
 import InputRadioButtonGroupViewModel from "../../../component/input-radio-button-group/input-radio-button-group-viewmodel.mjs"
 import InputRichTextViewModel from "../../../component/input-rich-text/input-rich-text-viewmodel.mjs"
+import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs"
 import { TEMPLATES } from "../../../templatePreloader.mjs"
 import ViewModelFactory from "../../../view-model/view-model-factory.mjs"
 import ViewModel from "../../../view-model/view-model.mjs"
@@ -65,11 +66,13 @@ export default class InjuryListItemViewModel extends ViewModel {
         thiz.document.img = newValue;
       },
     });
-    this.vmTfName = factory.createVmTextField({
+    this.vmTfName = new InputTextFieldViewModel({
       parent: thiz,
       id: "vmTfName",
-      propertyOwner: thiz.document,
-      propertyPath: "name",
+      value: thiz.document.name,
+      onChange: (_, newValue) => {
+        thiz.document.name = newValue;
+      },
       placeholder: "ambersteel.general.name",
     });
     this.vmRbgState = new InputRadioButtonGroupViewModel({
@@ -94,24 +97,30 @@ export default class InjuryListItemViewModel extends ViewModel {
       target: thiz.document,
       withDialog: true,
     })
-    this.vmLimit = factory.createVmTextField({
+    this.vmLimit = new InputTextFieldViewModel({
       parent: thiz,
       id: "vmNsLimit",
-      propertyOwner: thiz.document,
-      propertyPath: "limit",
+      value: thiz.document.limit,
+      onChange: (_, newValue) => {
+        thiz.document.limit = newValue;
+      },
       placeholder: "ambersteel.character.health.injury.limit.placeholder",
     });
-    this.vmScar = factory.createVmTextField({
+    this.vmScar = new InputTextFieldViewModel({
       parent: thiz,
       id: "vmScar",
-      propertyOwner: thiz.document,
-      propertyPath: "scar",
+      value: thiz.document.scar,
+      onChange: (_, newValue) => {
+        thiz.document.scar = newValue;
+      },
     });
-    this.vmTfTimeToHeal = factory.createVmTextField({
+    this.vmTfTimeToHeal = new InputTextFieldViewModel({
       parent: thiz,
       id: "vmTfTimeToHeal",
-      propertyOwner: thiz.document,
-      propertyPath: "timeToHeal",
+      value: thiz.document.timeToHeal,
+      onChange: (_, newValue) => {
+        thiz.document.timeToHeal = newValue;
+      },
     });
     this.vmRtDescription = new InputRichTextViewModel({
       parent: thiz,
@@ -121,41 +130,53 @@ export default class InjuryListItemViewModel extends ViewModel {
         thiz.document.description = newValue;
       },
     });
-    this.vmTreatmentSkill = factory.createVmTextField({
+    this.vmTreatmentSkill = new InputTextFieldViewModel({
       parent: thiz,
       id: "vmTreatmentSkill",
-      propertyOwner: thiz.document,
-      propertyPath: "treatmentSkill",
+      value: thiz.document.treatmentSkill,
+      onChange: (_, newValue) => {
+        thiz.document.treatmentSkill = newValue;
+      },
     });
-    this.vmRequiredSupplies = factory.createVmTextField({
+    this.vmRequiredSupplies = new InputTextFieldViewModel({
       parent: thiz,
       id: "vmRequiredSupplies",
-      propertyOwner: thiz.document,
-      propertyPath: "requiredSupplies",
+      value: thiz.document.requiredSupplies,
+      onChange: (_, newValue) => {
+        thiz.document.requiredSupplies = newValue;
+      },
     });
-    this.vmObstaclePatchUp = factory.createVmTextField({
+    this.vmObstaclePatchUp = new InputTextFieldViewModel({
       parent: thiz,
       id: "vmObstaclePatchUp",
-      propertyOwner: thiz.document,
-      propertyPath: "obstaclePatchUp",
+      value: thiz.document.obstaclePatchUp,
+      onChange: (_, newValue) => {
+        thiz.document.obstaclePatchUp = newValue;
+      },
     });
-    this.vmObstacleTreatment = factory.createVmTextField({
+    this.vmObstacleTreatment = new InputTextFieldViewModel({
       parent: thiz,
       id: "vmObstacleTreatment",
-      propertyOwner: thiz.document,
-      propertyPath: "obstacleTreatment",
+      value: thiz.document.obstacleTreatment,
+      onChange: (_, newValue) => {
+        thiz.document.obstacleTreatment = newValue;
+      },
     });
-    this.vmTimeToHealTreated = factory.createVmTextField({
+    this.vmTimeToHealTreated = new InputTextFieldViewModel({
       parent: thiz,
       id: "vmTimeToHealTreated",
-      propertyOwner: thiz.document,
-      propertyPath: "timeToHealTreated",
+      value: thiz.document.timeToHealTreated,
+      onChange: (_, newValue) => {
+        thiz.document.timeToHealTreated = newValue;
+      },
     });
-    this.vmSelfPatchUp = factory.createVmTextField({
+    this.vmSelfPatchUp = new InputTextFieldViewModel({
       parent: thiz,
       id: "vmSelfPatchUp",
-      propertyOwner: thiz.document,
-      propertyPath: "selfPatchUp",
+      value: thiz.document.selfPatchUp,
+      onChange: (_, newValue) => {
+        thiz.document.selfPatchUp = newValue;
+      },
     });
   }
 

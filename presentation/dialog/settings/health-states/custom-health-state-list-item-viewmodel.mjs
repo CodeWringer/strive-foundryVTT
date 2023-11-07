@@ -5,6 +5,7 @@ import InputTextFieldViewModel from "../../../component/input-textfield/input-te
 import { TEMPLATES } from "../../../templatePreloader.mjs";
 import ViewModel from "../../../view-model/view-model.mjs";
 
+// TODO: The observables in here should be unnecessary wiht the new input API.
 /**
  * @property {InputTextFieldViewModel} vmName
  * 
@@ -61,9 +62,10 @@ export default class CustomHealthStateListItemViewModel extends ViewModel {
     this.vmName = new InputTextFieldViewModel({
       id: "vmName",
       parent: this,
-      isEditable: this.isEditable,
-      propertyOwner: this,
-      propertyPath: "stateName.value",
+      value: this.stateName.value,
+      onChange: (_, newValue) => {
+        this.stateName.value = newValue;
+      },
     });
     this.vmLimit = new InputNumberSpinnerViewModel({
       id: "vmLimit",

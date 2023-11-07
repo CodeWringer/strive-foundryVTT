@@ -12,6 +12,7 @@ import InputImageViewModel from "../../../component/input-image/input-image-view
 import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs"
 import InputRichTextViewModel from "../../../component/input-rich-text/input-rich-text-viewmodel.mjs"
 import InputTagsViewModel from "../../../component/input-tags/input-tags-viewmodel.mjs"
+import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs"
 import { TEMPLATES } from "../../../templatePreloader.mjs"
 import ViewModelFactory from "../../../view-model/view-model-factory.mjs"
 import SkillAbilityTableViewModel from "../skill-ability/skill-ability-table-viewmodel.mjs"
@@ -146,11 +147,13 @@ export default class SkillListItemViewModel extends SkillViewModel {
         thiz.document.img = newValue;
       },
     });
-    this.vmTfName = factory.createVmTextField({
+    this.vmTfName = new InputTextFieldViewModel({
       parent: thiz,
       id: "vmTfName",
-      propertyOwner: thiz.document,
-      propertyPath: "name",
+      value: thiz.document.name,
+      onChange: (_, newValue) => {
+        thiz.document.name = newValue;
+      },
       placeholder: "ambersteel.general.name",
     });
     this.vmBtnRoll = factory.createVmBtnRoll({
@@ -211,11 +214,13 @@ export default class SkillListItemViewModel extends SkillViewModel {
         }
       }),
     });
-    this.vmTfCategory = factory.createVmTextField({
+    this.vmTfCategory = new InputTextFieldViewModel({
       parent: thiz,
       id: "vmTfCategory",
-      propertyOwner: thiz.document,
-      propertyPath: "category",
+      value: thiz.document.category,
+      onChange: (_, newValue) => {
+        thiz.document.category = newValue;
+      },
     });
     this.vmNsLevel = new InputNumberSpinnerViewModel({
       parent: thiz,

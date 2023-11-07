@@ -106,9 +106,10 @@ export default class DynamicInputDialogViewModel extends ViewModel {
         viewModel = new InputTextFieldViewModel({
           id: definition.name,
           parent: this,
-          propertyPath: definition.name,
-          propertyOwner: this,
-          isEditable: true,
+          value: definition.defaultValue,
+          onChange: (_, newValue) => {
+            this[definition.name] = newValue;
+          },
           placeholder: definition.specificArgs.placeholder,
         });
       } else if (definition.type === DYNAMIC_INPUT_TYPES.LABEL) {

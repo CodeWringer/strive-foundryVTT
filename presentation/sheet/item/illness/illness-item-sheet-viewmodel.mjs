@@ -1,6 +1,7 @@
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs";
 import InputImageViewModel from "../../../component/input-image/input-image-viewmodel.mjs";
 import InputRichTextViewModel from "../../../component/input-rich-text/input-rich-text-viewmodel.mjs";
+import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs";
 import { TEMPLATES } from "../../../templatePreloader.mjs";
 import ViewModelFactory from "../../../view-model/view-model-factory.mjs";
 import ViewModel from "../../../view-model/view-model.mjs";
@@ -41,11 +42,13 @@ export default class IllnessItemSheetViewModel extends ViewModel {
         thiz.document.img = newValue;
       },
     });
-    this.vmTfName = factory.createVmTextField({
+    this.vmTfName = new InputTextFieldViewModel({
       parent: thiz,
       id: "tf-name",
-      propertyOwner: thiz.document,
-      propertyPath: "name",
+      value: thiz.document.name,
+      onChange: (_, newValue) => {
+        thiz.document.name = newValue;
+      },
       placeholder: "ambersteel.general.name",
     });
     this.vmBtnSendToChat = factory.createVmBtnSendToChat({
@@ -54,23 +57,29 @@ export default class IllnessItemSheetViewModel extends ViewModel {
       target: thiz.document,
       isEditable: thiz.isEditable || thiz.isGM,
     });
-    this.vmTfDuration = factory.createVmTextField({
+    this.vmTfDuration = new InputTextFieldViewModel({
       parent: thiz,
       id: "tf-duration",
-      propertyOwner: thiz.document,
-      propertyPath: "duration",
+      value: thiz.document.duration,
+      onChange: (_, newValue) => {
+        thiz.document.duration = newValue;
+      },
     });
-    this.vmTfTreatmentSkill = factory.createVmTextField({
+    this.vmTfTreatmentSkill = new InputTextFieldViewModel({
       parent: thiz,
       id: "tf-treatment-skill",
-      propertyOwner: thiz.document,
-      propertyPath: "treatmentSkill",
+      value: thiz.document.treatmentSkill,
+      onChange: (_, newValue) => {
+        thiz.document.treatmentSkill = newValue;
+      },
     });
-    this.vmTfTreatment = factory.createVmTextField({
+    this.vmTfTreatment = new InputTextFieldViewModel({
       parent: thiz,
       id: "tf-treatment",
-      propertyOwner: thiz.document,
-      propertyPath: "treatment",
+      value: thiz.document.treatment,
+      onChange: (_, newValue) => {
+        thiz.document.treatment = newValue;
+      },
     });
     this.vmRtDescription = new InputRichTextViewModel({
       parent: thiz,

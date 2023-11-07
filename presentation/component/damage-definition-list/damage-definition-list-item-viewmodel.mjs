@@ -4,10 +4,10 @@ import { isDefined } from "../../../business/util/validation-utility.mjs";
 import { TEMPLATES } from "../../templatePreloader.mjs";
 import { getNestedPropertyValue, setNestedPropertyValue } from "../../../business/util/property-utility.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
-import ViewModelFactory from "../../view-model/view-model-factory.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
 import ChoiceAdapter from "../input-choice/choice-adapter.mjs";
 import InputDropDownViewModel from "../input-dropdown/input-dropdown-viewmodel.mjs";
+import InputTextFieldViewModel from "../input-textfield/input-textfield-viewmodel.mjs";
 
 /**
  * Represents the definition of a damage roll formula. 
@@ -82,13 +82,14 @@ export default class DamageDefinitionListItemViewModel extends ViewModel {
     this.resolveFormula = args.resolveFormula;
 
     const thiz = this;
-    const factory = new ViewModelFactory();
     
-    this.vmTfDamage = factory.createVmTextField({
+    this.vmTfDamage = new InputTextFieldViewModel({
       parent: thiz,
       id: "vmTfDamage",
-      propertyOwner: this.propertyOwner,
-      propertyPath: `damage[${this.index}].damage`,
+      value: thiz.propertyOwner.damage[this.index].damage,
+      onChange: (_, newValue) => {
+        thiz.propertyOwner.damage[this.index].damage = newValue;
+      },
     });
 
     this.vmDdDamageType = new InputDropDownViewModel({

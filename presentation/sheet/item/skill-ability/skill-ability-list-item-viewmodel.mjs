@@ -13,6 +13,9 @@ import InputDropDownViewModel from "../../../component/input-dropdown/input-drop
 import InputImageViewModel from "../../../component/input-image/input-image-viewmodel.mjs";
 import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
 import InputRichTextViewModel from "../../../component/input-rich-text/input-rich-text-viewmodel.mjs";
+import InputTextareaViewModel from "../../../component/input-textarea/input-textarea-viewmodel.mjs";
+import SkillAbility from "../../../../business/ruleset/skill/skill-ability.mjs";
+import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs";
 
 export default class SkillAbilityListItemViewModel extends ViewModel {
   /** @override */
@@ -122,11 +125,14 @@ export default class SkillAbilityListItemViewModel extends ViewModel {
         skillAbility.img = newValue;
       },
     });
-    this.vmTfName = factory.createVmTextField({
+    this.vmTfName = new InputTextFieldViewModel({
       parent: thiz,
       id: "vmTfName",
       propertyOwner: skillAbility,
-      propertyPath: "name",
+      value: skillAbility.name,
+      onChange: (_, newValue) => {
+        skillAbility.name = newValue;
+      },
       placeholder: "ambersteel.general.name",
     });
     this.vmBtnDelete = factory.createVmBtnDelete({
@@ -144,25 +150,32 @@ export default class SkillAbilityListItemViewModel extends ViewModel {
       },
       min: 0,
     });
-    this.vmTfObstacle = factory.createVmTextField({
+    this.vmTfObstacle = new InputTextFieldViewModel({
       parent: thiz,
       id: "vmTfObstacle",
-      propertyOwner: skillAbility,
+      value: skillAbility.obstacle,
+      onChange: (_, newValue) => {
+        skillAbility.obstacle = newValue;
+      },
       propertyPath: "obstacle",
       placeholder: game.i18n.localize("ambersteel.roll.obstacle.placeholder"),
     });
-    this.vmTfOpposedBy = factory.createVmTextField({
+    this.vmTfOpposedBy = new InputTextFieldViewModel({
       parent: thiz,
       id: "vmTfOpposedBy",
-      propertyOwner: skillAbility,
-      propertyPath: "opposedBy",
+      value: skillAbility.opposedBy,
+      onChange: (_, newValue) => {
+        skillAbility.opposedBy = newValue;
+      },
       placeholder: game.i18n.localize("ambersteel.roll.obstacle.opposedBy.placeholder"),
     });
-    this.vmTfDistance = factory.createVmTextField({
+    this.vmTfDistance = new InputTextFieldViewModel({
       parent: thiz,
       id: "vmTfDistance",
-      propertyOwner: skillAbility,
-      propertyPath: "distance",
+      value: skillAbility.distance,
+      onChange: (_, newValue) => {
+        skillAbility.distance = newValue;
+      },
       placeholder: game.i18n.localize("ambersteel.character.skill.ability.distance.placeholder"),
     });
     this.vmNsApCost = new InputNumberSpinnerViewModel({
@@ -195,11 +208,13 @@ export default class SkillAbilityListItemViewModel extends ViewModel {
       }),
     });
 
-    this.vmTaCondition = factory.createVmTextArea({
+    this.vmTaCondition = new InputTextareaViewModel({
       parent: thiz,
       id: "vmTaCondition",
-      propertyOwner: skillAbility,
-      propertyPath: "condition",
+      value: skillAbility.condition,
+      onChange: (_, newValue) => {
+        skillAbility.condition = newValue;
+      },
       placeholder: game.i18n.localize("ambersteel.character.skill.ability.condition.placeholder"),
     });
     this.vmRtDescription = new InputRichTextViewModel({
