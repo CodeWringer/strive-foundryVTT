@@ -257,12 +257,13 @@ export default class SkillAbilityListItemViewModel extends ViewModel {
 
     this.vmDamageDefinitionList = new DamageDefinitionListViewModel({
       id: `vmDamageDefinitionList`,
-      parent: thiz,
-      isEditable: thiz.isEditable,
-      isSendable: thiz.isSendable,
-      isOwner: thiz.isOwner,
-      propertyOwner: thiz.skillAbility,
-      propertyPath: "damage",
+      parent: this,
+      value: this.skillAbility.damage,
+      onChange: (_, newValue) => {
+        this.skillAbility.damage = newValue;
+      },
+      resolveFormulaContext: this._getRootOwningDocument(this.skillAbility),
+      chatTitle: `${game.i18n.localize("ambersteel.damageDefinition.label")} - ${this.skillAbility.name}`,
     });
   }
 
@@ -331,5 +332,22 @@ export default class SkillAbilityListItemViewModel extends ViewModel {
         callback: () => { propertyOwner[propertyName] = nonNullValue; },
       }
     ];
+  }
+
+  
+  /**
+   * Returns the root owning document of the skill ability, if it has one. 
+   * Otherwise, returns the skill ability itself.  
+   * 
+   * @returns {TransientDocument | SkillAbility}
+   * 
+   * @private
+   */
+  _getRootOwningDocument() {
+    if (this.skillAbility.owningDocument !== undefined) {
+      return this._getRootOwningDocument(this.skillAbility.owningDocument);
+    } else {
+      return this.skillAbility;
+    }
   }
 }
