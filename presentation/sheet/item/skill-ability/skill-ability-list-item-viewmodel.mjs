@@ -128,7 +128,6 @@ export default class SkillAbilityListItemViewModel extends ViewModel {
     this.vmTfName = new InputTextFieldViewModel({
       parent: thiz,
       id: "vmTfName",
-      propertyOwner: skillAbility,
       value: skillAbility.name,
       onChange: (_, newValue) => {
         skillAbility.name = newValue;
