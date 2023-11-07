@@ -117,11 +117,10 @@ export default class ActorHealthStatesListItemViewModel extends ViewModel {
       this.vmIntensity = new InputNumberSpinnerViewModel({
         id: "vmIntensity",
         parent: this,
-        isEditable: this.isEditable,
-        isSendable: this.isSendable,
-        isOwner: this.isOwner,
-        propertyOwner: this,
-        propertyPath: "stateIntensity.value",
+        value: this.stateIntensity.value,
+        onChange: (_, newValue) => {
+          this.stateIntensity.value = newValue;
+        },
         min: 0,
         max: (this.stateLimit > 0) ? this.stateLimit : undefined,
       });

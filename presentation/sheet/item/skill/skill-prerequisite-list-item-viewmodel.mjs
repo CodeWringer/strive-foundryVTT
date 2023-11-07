@@ -89,9 +89,10 @@ export default class SkillPrerequisiteListItemViewModel extends ViewModel {
     this.vmMinimumLevel = new InputNumberSpinnerViewModel({
       id: "vmMinimumLevel",
       parent: this,
-      isEditable: this.isEditable,
-      propertyOwner: this,
-      propertyPath: "stateMinimumLevel.value",
+      value: this.stateMinimumLevel.value,
+      onChange: (_, newValue) => {
+        this.stateMinimumLevel.value = newValue;
+      },
       min: 0,
     });
   }

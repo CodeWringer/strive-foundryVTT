@@ -11,6 +11,7 @@ import ChoiceAdapter from "../../../component/input-choice/choice-adapter.mjs";
 import DamageDefinitionListViewModel from "../../../component/damage-definition-list/damage-definition-list-viewmodel.mjs";
 import InputDropDownViewModel from "../../../component/input-dropdown/input-dropdown-viewmodel.mjs";
 import InputImageViewModel from "../../../component/input-image/input-image-viewmodel.mjs";
+import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
 
 export default class SkillAbilityListItemViewModel extends ViewModel {
   /** @override */
@@ -133,11 +134,13 @@ export default class SkillAbilityListItemViewModel extends ViewModel {
       target: skillAbility,
       withDialog: true,
     });
-    this.vmNsRequiredLevel = factory.createVmNumberSpinner({
+    this.vmNsRequiredLevel = new InputNumberSpinnerViewModel({
       parent: thiz,
       id: "vmNsRequiredLevel",
-      propertyOwner: skillAbility,
-      propertyPath: "requiredLevel",
+      value: skillAbility.requiredLevel,
+      onChange: (_, newValue) => {
+        skillAbility.requiredLevel = newValue;
+      },
       min: 0,
     });
     this.vmTfObstacle = factory.createVmTextField({
@@ -161,11 +164,13 @@ export default class SkillAbilityListItemViewModel extends ViewModel {
       propertyPath: "distance",
       placeholder: game.i18n.localize("ambersteel.character.skill.ability.distance.placeholder"),
     });
-    this.vmNsApCost = factory.createVmNumberSpinner({
+    this.vmNsApCost = new InputNumberSpinnerViewModel({
       parent: thiz,
       id: "vmNsApCost",
-      propertyOwner: skillAbility,
-      propertyPath: "apCost",
+      value: skillAbility.apCost,
+      onChange: (_, newValue) => {
+        skillAbility.apCost = newValue;
+      },
       min: 0,
     });
     this.vmDdAttackType = new InputDropDownViewModel({

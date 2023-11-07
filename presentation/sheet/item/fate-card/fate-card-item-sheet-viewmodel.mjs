@@ -1,5 +1,6 @@
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs";
 import InputImageViewModel from "../../../component/input-image/input-image-viewmodel.mjs";
+import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
 import { TEMPLATES } from "../../../templatePreloader.mjs";
 import ViewModelFactory from "../../../view-model/view-model-factory.mjs";
 import ViewModel from "../../../view-model/view-model.mjs";
@@ -54,25 +55,31 @@ export default class FateCardItemSheetViewModel extends ViewModel {
       target: thiz.document,
       isEditable: thiz.isEditable || thiz.isGM,
     });
-    this.vmNsMifp = factory.createVmNumberSpinner({
+    this.vmNsMifp = new InputNumberSpinnerViewModel({
       parent: thiz,
       id: "vmNsMifp",
-      propertyOwner: thiz.document,
-      propertyPath: "cost.miFP",
+      value: thiz.document.cost.miFP,
+      onChange: (_, newValue) => {
+        thiz.document.cost.miFP = newValue;
+      },
       min: 0,
     });
-    this.vmNsMafp = factory.createVmNumberSpinner({
+    this.vmNsMafp = new InputNumberSpinnerViewModel({
       parent: thiz,
       id: "vmNsMafp",
-      propertyOwner: thiz.document,
-      propertyPath: "cost.maFP",
+      value: thiz.document.cost.maFP,
+      onChange: (_, newValue) => {
+        thiz.document.cost.maFP = newValue;
+      },
       min: 0,
     });
-    this.vmNsAfp = factory.createVmNumberSpinner({
+    this.vmNsAfp = new InputNumberSpinnerViewModel({
       parent: thiz,
       id: "vmNsAfp",
-      propertyOwner: thiz.document,
-      propertyPath: "cost.AFP",
+      value: thiz.document.cost.AFP,
+      onChange: (_, newValue) => {
+        thiz.document.cost.AFP = newValue;
+      },
       min: 0,
     });
     this.vmRtDescription = factory.createVmRichText({

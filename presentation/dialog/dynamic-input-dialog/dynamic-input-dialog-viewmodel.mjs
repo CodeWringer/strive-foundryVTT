@@ -62,9 +62,10 @@ export default class DynamicInputDialogViewModel extends ViewModel {
         viewModel = new InputNumberSpinnerViewModel({
           id: definition.name,
           parent: this,
-          propertyPath: definition.name,
-          propertyOwner: this,
-          isEditable: true,
+          value: definition.defaultValue,
+          onChange: (_, newValue) => {
+            this[definition.name] = newValue;
+          },
           min: definition.specificArgs.min,
           max: definition.specificArgs.max,
           step: definition.specificArgs.step,

@@ -7,6 +7,7 @@ import ButtonViewModel from "../../../component/button/button-viewmodel.mjs"
 import ChoiceAdapter from "../../../component/input-choice/choice-adapter.mjs"
 import ChoiceOption from "../../../component/input-choice/choice-option.mjs"
 import InputImageViewModel from "../../../component/input-image/input-image-viewmodel.mjs"
+import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs"
 import InputTagsViewModel from "../../../component/input-tags/input-tags-viewmodel.mjs"
 import DynamicInputDefinition from "../../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs"
 import DynamicInputDialog from "../../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs"
@@ -122,25 +123,31 @@ export default class AssetListItemViewModel extends ViewModel {
       target: thiz.document,
       withDialog: true,
     })
-    this.vmNsQuantity = factory.createVmNumberSpinner({
+    this.vmNsQuantity = new InputNumberSpinnerViewModel({
       parent: thiz,
       id: "vmNsQuantity",
-      propertyOwner: thiz.document,
-      propertyPath: "quantity",
+      value: thiz.document.quantity,
+      onChange: (_, newValue) => {
+        thiz.document.quantity = newValue;
+      },
       min: 1,
     });
-    this.vmNsMaxQuantity = factory.createVmNumberSpinner({
+    this.vmNsMaxQuantity = new InputNumberSpinnerViewModel({
       parent: thiz,
       id: "vmNsMaxQuantity",
-      propertyOwner: thiz.document,
-      propertyPath: "maxQuantity",
+      value: thiz.document.maxQuantity,
+      onChange: (_, newValue) => {
+        thiz.document.maxQuantity = newValue;
+      },
       min: 1,
     });
-    this.vmNsBulk = factory.createVmNumberSpinner({
+    this.vmNsBulk = new InputNumberSpinnerViewModel({
       parent: thiz,
       id: "vmNsBulk",
-      propertyOwner: thiz.document,
-      propertyPath: "bulk",
+      value: thiz.document.bulk,
+      onChange: (_, newValue) => {
+        thiz.document.bulk = newValue;
+      },
       min: 0,
     });
     this.vmRtDescription = factory.createVmRichText({

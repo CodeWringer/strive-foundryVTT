@@ -96,40 +96,6 @@ export default class ViewModelFactory {
   }
 
   /**
-   * Creates a number spinner view model and returns it. 
-   * 
-   * @param {ViewModel | undefined} args.parent Optional. A parent `ViewModel` instance. 
-   * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
-   * @param {Boolean | undefined} args.isEditable Optional. If true, the sheet is editable. 
-   * @param {Boolean | undefined} args.isSendable Optional. If true, the document represented by the sheet can be sent to chat. 
-   * @param {Boolean | undefined} args.isOwner Optional. If true, the current user is the owner of the represented document. 
-   * @param {Boolean | undefined} args.isGM Optional. If true, the current user is a GM. 
-   * @param {String | undefined} args.contextTemplate Optional. Name or path of a contextual template, 
-   * which will be displayed in exception log entries, to aid debugging. 
-   * @param {Object} args.propertyOwner
-   * @param {String} args.propertyPath
-   * @param {Number | undefined} args.min
-   * @param {Number | undefined} args.max
-   * @param {Number | undefined} args.step
-   * @param {String | undefined} args.localizedTooltip Localized tooltip. 
-   * 
-   * @returns {InputNumberSpinnerViewModel}
-   */
-  createVmNumberSpinner(args = {}) {
-    validateOrThrow(args, ["propertyOwner", "propertyPath"]);
-
-    return new InputNumberSpinnerViewModel({
-      ...this._getBaseArguments(args),
-      propertyOwner: args.propertyOwner,
-      propertyPath: args.propertyPath,
-      min: args.min,
-      max: args.max,
-      step: args.step,
-      localizedTooltip: args.localizedTooltip,
-    });
-  }
-
-  /**
    * Creates a radio button group view model and returns it. 
    * 
    * @param {ViewModel | undefined} args.parent Optional. A parent `ViewModel` instance. 

@@ -68,9 +68,10 @@ export default class CustomHealthStateListItemViewModel extends ViewModel {
     this.vmLimit = new InputNumberSpinnerViewModel({
       id: "vmLimit",
       parent: this,
-      isEditable: this.isEditable,
-      propertyOwner: this,
-      propertyPath: "stateLimit.value",
+      value: this.stateLimit.value,
+      onChange: (_, newValue) => {
+        this.stateLimit.value = newValue;
+      },
       min: 0,
     });
   }

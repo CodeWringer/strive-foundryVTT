@@ -9,6 +9,7 @@ import ButtonViewModel from "../../../component/button/button-viewmodel.mjs"
 import ChoiceAdapter from "../../../component/input-choice/choice-adapter.mjs"
 import InputDropDownViewModel from "../../../component/input-dropdown/input-dropdown-viewmodel.mjs"
 import InputImageViewModel from "../../../component/input-image/input-image-viewmodel.mjs"
+import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs"
 import InputTagsViewModel from "../../../component/input-tags/input-tags-viewmodel.mjs"
 import { TEMPLATES } from "../../../templatePreloader.mjs"
 import ViewModelFactory from "../../../view-model/view-model-factory.mjs"
@@ -215,31 +216,39 @@ export default class SkillListItemViewModel extends SkillViewModel {
       propertyOwner: thiz.document,
       propertyPath: "category",
     });
-    this.vmNsLevel = factory.createVmNumberSpinner({
+    this.vmNsLevel = new InputNumberSpinnerViewModel({
       parent: thiz,
       id: "vmNsLevel",
-      propertyOwner: thiz.document,
-      propertyPath: "level",
+      value: thiz.document.level,
+      onChange: (_, newValue) => {
+        thiz.document.level = newValue;
+      },
       min: 0,
     });
-    this.vmNsLevelModifier = factory.createVmNumberSpinner({
+    this.vmNsLevelModifier = new InputNumberSpinnerViewModel({
       parent: thiz,
       id: "vmNsLevelModifier",
-      propertyOwner: thiz.document,
-      propertyPath: "levelModifier",
+      value: thiz.document.levelModifier,
+      onChange: (_, newValue) => {
+        thiz.document.levelModifier = newValue;
+      },
     });
-    this.vmNsSuccesses = factory.createVmNumberSpinner({
+    this.vmNsSuccesses = new InputNumberSpinnerViewModel({
       parent: thiz,
       id: "vmNsSuccesses",
-      propertyOwner: thiz.document,
-      propertyPath: "advancementProgress.successes",
+      value: thiz.document.advancementProgress.successes,
+      onChange: (_, newValue) => {
+        thiz.document.advancementProgress.successes = newValue;
+      },
       min: 0,
     });
-    this.vmNsFailures = factory.createVmNumberSpinner({
+    this.vmNsFailures = new InputNumberSpinnerViewModel({
       parent: thiz,
       id: "vmNsFailures",
-      propertyOwner: thiz.document,
-      propertyPath: "advancementProgress.failures",
+      value: thiz.document.advancementProgress.failures,
+      onChange: (_, newValue) => {
+        thiz.document.advancementProgress.failures = newValue;
+      },
       min: 0,
     });
     if (this.showSkillAbilities === true) {
