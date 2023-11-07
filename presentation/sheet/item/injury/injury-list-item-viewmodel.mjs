@@ -73,7 +73,7 @@ export default class InjuryListItemViewModel extends ViewModel {
       onChange: (_, newValue) => {
         thiz.document.name = newValue;
       },
-      placeholder: game.i18.localize("ambersteel.general.name"),
+      placeholder: game.i18n.localize("ambersteel.general.name"),
     });
     this.vmRbgState = new InputRadioButtonGroupViewModel({
       parent: thiz,
@@ -82,7 +82,7 @@ export default class InjuryListItemViewModel extends ViewModel {
       onChange: (_, newValue) => {
         thiz.document.state = newValue;
       },
-      placeholder: game.i18.localize("ambersteel.general.name"),
+      placeholder: game.i18n.localize("ambersteel.general.name"),
       options: thiz.stateOptions,
     });
     this.vmBtnSendToChat = factory.createVmBtnSendToChat({

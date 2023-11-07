@@ -152,7 +152,7 @@ export default class SkillListItemViewModel extends SkillViewModel {
       onChange: (_, newValue) => {
         thiz.document.name = newValue;
       },
-      placeholder: game.i18.localize("ambersteel.general.name"),
+      placeholder: game.i18n.localize("ambersteel.general.name"),
     });
     this.vmBtnRoll = factory.createVmBtnRoll({
       parent: thiz,

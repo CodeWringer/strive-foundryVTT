@@ -70,7 +70,7 @@ export default class ActorDriversViewModel extends ViewModel {
       onChange: (_, newValue) => {
         thiz.document.driverSystem.ambition = newValue;
       },
-      placeholder: game.i18.localize("ambersteel.character.driverSystem.ambition"),
+      placeholder: game.i18n.localize("ambersteel.character.driverSystem.ambition"),
     });
 
     for (let i = 0; i < this.aspirations.length; i++) {
@@ -81,7 +81,7 @@ export default class ActorDriversViewModel extends ViewModel {
         onChange: (_, newValue) => {
           thiz.document.driverSystem.aspirations[`_${i}`] = newValue;
         },
-        placeholder: game.i18.localize("ambersteel.character.driverSystem.aspiration.singular"),
+        placeholder: game.i18n.localize("ambersteel.character.driverSystem.aspiration.singular"),
       }));
     }
 
@@ -93,7 +93,7 @@ export default class ActorDriversViewModel extends ViewModel {
         onChange: (_, newValue) => {
           thiz.document.driverSystem.reactions[`_${i}`] = newValue;
         },
-        placeholder: game.i18.localize("ambersteel.character.driverSystem.reaction.singular"),
+        placeholder: game.i18n.localize("ambersteel.character.driverSystem.reaction.singular"),
       }));
     }
   }
