@@ -14,6 +14,10 @@ import SkillAbilityTableViewModel from "../skill-ability/skill-ability-table-vie
 import SkillPrerequisiteListItemViewModel from "./skill-prerequisite-list-item-viewmodel.mjs";
 import { querySkillConfiguration } from "./skill-utils.mjs";
 import SkillViewModel from "./skill-viewmodel.mjs";
+import InputImageViewModel from "../../../component/input-image/input-image-viewmodel.mjs";
+import InputRichTextViewModel from "../../../component/input-rich-text/input-rich-text-viewmodel.mjs";
+import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs";
+import InputDropDownViewModel from "../../../component/input-dropdown/input-dropdown-viewmodel.mjs";
 
 export default class SkillItemSheetViewModel extends SkillViewModel {
   /** @override */
@@ -59,18 +63,22 @@ export default class SkillItemSheetViewModel extends SkillViewModel {
     const thiz = this;
     const factory = new ViewModelFactory();
 
-    this.vmImg = factory.createVmImg({
+    this.vmImg = new InputImageViewModel({
       parent: thiz,
       id: "vmImg",
-      propertyOwner: thiz.document,
-      propertyPath: "img",
+      value: thiz.document.img,
+      onChange: (_, newValue) => {
+        thiz.document.img = newValue;
+      },
     });
-    this.vmTfName = factory.createVmTextField({
+    this.vmTfName = new InputTextFieldViewModel({
       parent: thiz,
       id: "vmTfName",
-      propertyOwner: thiz.document,
-      propertyPath: "name",
-      placeholder: "ambersteel.general.name",
+      value: thiz.document.name,
+      onChange: (_, newValue) => {
+        thiz.document.name = newValue;
+      },
+      placeholder: game.i18n.localize("ambersteel.general.name"),
     });
     this.vmBtnEdit = new ButtonViewModel({
       id: "vmBtnEdit",
@@ -93,12 +101,14 @@ export default class SkillItemSheetViewModel extends SkillViewModel {
       target: thiz.document,
       isEditable: thiz.isEditable || thiz.isGM,
     });
-    this.vmDdRelatedAttribute = factory.createVmDropDown({
-      parent: thiz,
+    this.vmDdRelatedAttribute = new InputDropDownViewModel({
       id: "vmDdRelatedAttribute",
-      propertyOwner: thiz.document,
-      propertyPath: "relatedAttribute",
+      parent: thiz,
       options: thiz.attributeOptions,
+      value: thiz.attributeOptions.find(it => it.value === this.document.relatedAttribute.name),
+      onChange: (_, newValue) => {
+        this.document.relatedAttribute = newValue;
+      },
       adapter: new ChoiceAdapter({
         toChoiceOption(obj) {
           if (isDefined(obj) === true) {
@@ -112,18 +122,22 @@ export default class SkillItemSheetViewModel extends SkillViewModel {
         }
       }),
     });
-    this.vmTfCategory = factory.createVmTextField({
+    this.vmTfCategory = new InputTextFieldViewModel({
       parent: thiz,
       id: "vmTfCategory",
-      propertyOwner: thiz.document,
-      propertyPath: "category",
-      placeholder: "ambersteel.general.category",
+      value: thiz.document.category,
+      onChange: (_, newValue) => {
+        thiz.document.category = newValue;
+      },
+      placeholder: game.i18n.localize("ambersteel.general.category"),
     });
-    this.vmRtDescription = factory.createVmRichText({
+    this.vmRtDescription = new InputRichTextViewModel({
       parent: thiz,
       id: "vmRtDescription",
-      propertyOwner: thiz.document,
-      propertyPath: "description",
+      value: thiz.document.description,
+      onChange: (_, newValue) => {
+        thiz.document.description = newValue;
+      },
     });
     this.vmSkillAbilityTable = new SkillAbilityTableViewModel({
       id: "vmSkillAbilityTable",
@@ -138,10 +152,11 @@ export default class SkillItemSheetViewModel extends SkillViewModel {
     this.vmTags = new InputTagsViewModel({
       id: "vmTags",
       parent: this,
-      propertyPath: "tags",
-      propertyOwner: this.document,
-      isEditable: this.isEditable,
       systemTags: SKILL_TAGS.asArray(),
+      value: this.document.tags,
+      onChange: (_, newValue) => {
+        this.document.tags = newValue;
+      },
     });
 
     this.prerequisiteViewModels = this._getPrerequisiteViewModels();

@@ -1,4 +1,3 @@
-import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import { TEMPLATES } from "../../templatePreloader.mjs";
 import InputViewModel from "../../view-model/input-view-model.mjs";
 
@@ -7,7 +6,13 @@ import InputViewModel from "../../view-model/input-view-model.mjs";
  * 
  * @extends InputViewModel
  * 
- * @property {String} placeholder Gets a placeholder text to display while the textfield is empty. 
+ * @property {String} value The current value. 
+ * @property {String} placeholder A localized placeholder text to display while the textfield is empty. 
+ * 
+ * @method onChange Callback that is invoked when the value changes. 
+ * Receives the following arguments: 
+ * * `oldValue: {String}`
+ * * `newValue: {String}`
  */
 export default class InputTextFieldViewModel extends InputViewModel {
   /** @override */
@@ -23,39 +28,21 @@ export default class InputTextFieldViewModel extends InputViewModel {
   }
 
   /**
-   * @type {String}
-   * @private
-   */
-  _placeholder = "";
-  /**
-   * The placeholder text to display when the input has no value. 
-   * @type {String}
-   * @readonly
-   */
-  get placeholder() { return this._placeholder; }
-
-  /**
-   * Returns the localized placeholder. 
-   * @type {String}
-   * @readonly
-   */
-  get localizedPlaceholder() { return (this._placeholder !== undefined && this._placeholder !== null) ? game.i18n.localize(this._placeholder) : ""; }
-  
-  /**
-   * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
+   * @param {Object} args 
+   * @param {String | undefined} args.id Unique ID of this view model instance. 
+   * @param {Boolean | undefined} args.isEditable If true, input(s) will be in edit mode. If false, input(s) will be in read-only mode.
    * 
-   * @param {String} args.propertyPath The path used to look up the value. 
-   * @param {Object} args.propertyOwner An object on which to to look up the value. 
-   * @param {Boolean | undefined} args.isEditable Optional. If true, input(s) will be in edit mode. If false, input(s) will be in read-only mode.
-   * @param {String | undefined} args.contextTemplate Optional. Name or path of a template that embeds this input component. 
-   * @param {String | undefined} args.localizedTooltip Localized tooltip. 
-   * 
-   * @param {String} args.placeholder Optional. A placeholder text to display while the textfield is empty. 
+   * @param {String | undefined} args.value The current value. 
+   * @param {String | undefined} args.placeholder A placeholder text to display while the textfield is empty. 
+   * @param {Function | undefined} args.onChange Callback that is invoked 
+   * when the value changes. Receives two arguments: 
+   * * `oldValue: {String}`
+   * * `newValue: {String}`
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["propertyPath", "propertyOwner"]);
 
-    this._placeholder = args.placeholder ?? "";
+    this._value = args.value ?? "";
+    this.placeholder = args.placeholder ?? "";
   }
 }

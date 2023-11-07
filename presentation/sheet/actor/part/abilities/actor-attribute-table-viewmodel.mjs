@@ -1,5 +1,5 @@
 import { validateOrThrow } from "../../../../../business/util/validation-utility.mjs";
-import ButtonCheckBoxViewModel from "../../../../component/button-checkbox/button-checkbox-viewmodel.mjs";
+import InputNumberSpinnerViewModel from "../../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
 import { TEMPLATES } from "../../../../templatePreloader.mjs";
 import ViewModelFactory from "../../../../view-model/view-model-factory.mjs";
 import ViewModel from "../../../../view-model/view-model.mjs";
@@ -78,24 +78,30 @@ export default class AttributeTableViewModel extends ViewModel {
           callback: "advanceByRollResult",
           document: thiz.document,
         }),
-        vmNsLevel: factory.createVmNumberSpinner({
+        vmNsLevel: new InputNumberSpinnerViewModel({
           parent: thiz,
           id: `vmNsLevel-${attribute.name}`,
-          propertyOwner: attribute,
-          propertyPath: "level",
+          value: attribute.level,
+          onChange: (_, newValue) => {
+            attribute.level = newValue;
+          },
           min: 0,
         }),
-        vmNsLevelModifier: factory.createVmNumberSpinner({
+        vmNsLevelModifier: new InputNumberSpinnerViewModel({
           parent: thiz,
           id: `vmNsLevelModifier-${attribute.name}`,
-          propertyOwner: attribute,
-          propertyPath: "levelModifier",
+          value: attribute.levelModifier,
+          onChange: (_, newValue) => {
+            attribute.levelModifier = newValue;
+          },
         }),
-        vmNsProgress: factory.createVmNumberSpinner({
+        vmNsProgress: new InputNumberSpinnerViewModel({
           parent: thiz,
           id: `vmNsProgress-${attribute.name}`,
-          propertyOwner: attribute,
-          propertyPath: "advancementProgress",
+          value: attribute.advancementProgress,
+          onChange: (_, newValue) => {
+            attribute.advancementProgress = newValue;
+          },
           min: 0,
         }),
       });

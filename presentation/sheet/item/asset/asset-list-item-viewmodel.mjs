@@ -6,7 +6,11 @@ import { validateOrThrow } from "../../../../business/util/validation-utility.mj
 import ButtonViewModel from "../../../component/button/button-viewmodel.mjs"
 import ChoiceAdapter from "../../../component/input-choice/choice-adapter.mjs"
 import ChoiceOption from "../../../component/input-choice/choice-option.mjs"
+import InputImageViewModel from "../../../component/input-image/input-image-viewmodel.mjs"
+import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs"
+import InputRichTextViewModel from "../../../component/input-rich-text/input-rich-text-viewmodel.mjs"
 import InputTagsViewModel from "../../../component/input-tags/input-tags-viewmodel.mjs"
+import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs"
 import DynamicInputDefinition from "../../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs"
 import DynamicInputDialog from "../../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs"
 import { DYNAMIC_INPUT_TYPES } from "../../../dialog/dynamic-input-dialog/dynamic-input-types.mjs"
@@ -65,18 +69,22 @@ export default class AssetListItemViewModel extends ViewModel {
     const factory = new ViewModelFactory();
     this._actor = this.document.owningDocument;
 
-    this.vmImg = factory.createVmImg({
+    this.vmImg = new InputImageViewModel({
       parent: thiz,
       id: "vmImg",
-      propertyOwner: thiz.document,
-      propertyPath: "img",
+      value: thiz.document.img,
+      onChange: (_, newValue) => {
+        thiz.document.img = newValue;
+      },
     });
-    this.vmTfName = factory.createVmTextField({
+    this.vmTfName = new InputTextFieldViewModel({
       parent: thiz,
       id: "vmTfName",
-      propertyOwner: thiz.document,
-      propertyPath: "name",
-      placeholder: "ambersteel.general.name",
+      value: thiz.document.name,
+      onChange: (_, newValue) => {
+        thiz.document.name = newValue;
+      },
+      placeholder: game.i18n.localize("ambersteel.general.name"),
     });
     this.vmBtnSendToChat = factory.createVmBtnSendToChat({
       parent: thiz,
@@ -119,40 +127,49 @@ export default class AssetListItemViewModel extends ViewModel {
       target: thiz.document,
       withDialog: true,
     })
-    this.vmNsQuantity = factory.createVmNumberSpinner({
+    this.vmNsQuantity = new InputNumberSpinnerViewModel({
       parent: thiz,
       id: "vmNsQuantity",
-      propertyOwner: thiz.document,
-      propertyPath: "quantity",
+      value: thiz.document.quantity,
+      onChange: (_, newValue) => {
+        thiz.document.quantity = newValue;
+      },
       min: 1,
     });
-    this.vmNsMaxQuantity = factory.createVmNumberSpinner({
+    this.vmNsMaxQuantity = new InputNumberSpinnerViewModel({
       parent: thiz,
       id: "vmNsMaxQuantity",
-      propertyOwner: thiz.document,
-      propertyPath: "maxQuantity",
+      value: thiz.document.maxQuantity,
+      onChange: (_, newValue) => {
+        thiz.document.maxQuantity = newValue;
+      },
       min: 1,
     });
-    this.vmNsBulk = factory.createVmNumberSpinner({
+    this.vmNsBulk = new InputNumberSpinnerViewModel({
       parent: thiz,
       id: "vmNsBulk",
-      propertyOwner: thiz.document,
-      propertyPath: "bulk",
+      value: thiz.document.bulk,
+      onChange: (_, newValue) => {
+        thiz.document.bulk = newValue;
+      },
       min: 0,
     });
-    this.vmRtDescription = factory.createVmRichText({
+    this.vmRtDescription = new InputRichTextViewModel({
       parent: thiz,
       id: "vmRtDescription",
-      propertyOwner: thiz.document,
-      propertyPath: "description",
+      value: thiz.document.description,
+      onChange: (_, newValue) => {
+        thiz.document.description = newValue;
+      },
     });
     this.vmTags = new InputTagsViewModel({
       id: "vmTags",
       parent: this,
-      propertyPath: "tags",
-      propertyOwner: this.document,
-      isEditable: this.isEditable,
       systemTags: ASSET_TAGS.asArray(),
+      value: this.document.tags,
+      onChange: (_, newValue) => {
+        this.document.tags = newValue;
+      },
     });
   }
 

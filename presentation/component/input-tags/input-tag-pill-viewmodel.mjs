@@ -1,5 +1,3 @@
-import { setNestedPropertyValue } from "../../../business/util/property-utility.mjs";
-import { getNestedPropertyValue } from "../../../business/util/property-utility.mjs";
 import { isDefined } from "../../../business/util/validation-utility.mjs";
 import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import { TEMPLATES } from "../../templatePreloader.mjs";
@@ -15,8 +13,9 @@ import ButtonViewModel from "../button/button-viewmodel.mjs";
  * * Read-only. 
  * @property {String} localizedName Returns the localized label of the tag. 
  * * Read-only. 
- * @property {String} propertyPath The path used to look up the value. 
- * @property {Object} propertyOwner An object on which to to look up the value. 
+ * 
+ * @method onDelete Callback that is invoked when the "delete" button 
+ * is clicked. Receives the tag as its sole argument. 
  */
 export default class InputTagPillViewModel extends ViewModel {
   /** @override */
@@ -33,41 +32,24 @@ export default class InputTagPillViewModel extends ViewModel {
   /**
    * @param {Object} args
    * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
-   * @param {String} args.propertyPath The path used to look up the value. 
-   * @param {Object} args.propertyOwner An object on which to to look up the value. 
    * @param {Tag} args.tag The tag to represent. 
+   * @param {Function | undefined} args.onDelete Callback that is invoked 
+   * when the "delete" button is clicked. Receives the tag as its sole argument. 
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["propertyPath", "propertyOwner", "tag"]);
+    validateOrThrow(args, ["tag"]);
 
-    this.propertyPath = args.propertyPath;
-    this.propertyOwner = args.propertyOwner;
     this.tag = args.tag;
+    this.onDelete = args.onDelete ?? ((tag) => {});
 
-    const thiz = this;
-    
     this.vmBtnDelete = new ButtonViewModel({
       id: "vmBtnDelete",
       parent: this,
       isEditable: this.isEditable,
       localizedTooltip: game.i18n.localize("ambersteel.general.delete.label"),
       onClick: () => {
-        const tags = getNestedPropertyValue(this.propertyOwner, this.propertyPath);
-        let index = -1;
-        for (let i = 0; i < tags.length; i++) {
-          const tag = tags[i];
-          if (tag.id === thiz.tag.id) {
-            index = i;
-            break;
-          }
-        }
-        if (index < 0) {
-          game.ambersteel.logger.logWarn(`Attempting to delete tag '${thiz.tag.id}' failed! Tag not on 'propertyOwner'`);
-        } else {
-          tags.splice(index, 1);
-          setNestedPropertyValue(thiz.propertyOwner, thiz.propertyPath, tags);
-        }
+        this.onDelete(this.tag);
       }
     });
   }

@@ -1,4 +1,7 @@
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs";
+import InputImageViewModel from "../../../component/input-image/input-image-viewmodel.mjs";
+import InputRichTextViewModel from "../../../component/input-rich-text/input-rich-text-viewmodel.mjs";
+import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs";
 import { TEMPLATES } from "../../../templatePreloader.mjs";
 import ViewModelFactory from "../../../view-model/view-model-factory.mjs";
 import ViewModel from "../../../view-model/view-model.mjs";
@@ -31,18 +34,22 @@ export default class InjuryItemSheetViewModel extends ViewModel {
     const thiz = this;
     const factory = new ViewModelFactory();
 
-    this.vmImg = factory.createVmImg({
+    this.vmImg = new InputImageViewModel({
       parent: thiz,
       id: "vmImg",
-      propertyOwner: thiz.document,
-      propertyPath: "img",
+      value: thiz.document.img,
+      onChange: (_, newValue) => {
+        thiz.document.img = newValue;
+      },
     });
-    this.vmTfName = factory.createVmTextField({
+    this.vmTfName = new InputTextFieldViewModel({
       parent: thiz,
       id: "vmTfName",
-      propertyOwner: thiz.document,
-      propertyPath: "name",
-      placeholder: "ambersteel.general.name",
+      value: thiz.document.name,
+      onChange: (_, newValue) => {
+        thiz.document.name = newValue;
+      },
+      placeholder: game.i18n.localize("ambersteel.general.name"),
     });
     this.vmBtnSendToChat = factory.createVmBtnSendToChat({
       parent: thiz,
@@ -50,66 +57,86 @@ export default class InjuryItemSheetViewModel extends ViewModel {
       target: thiz.document,
       isEditable: thiz.isEditable || thiz.isGM,
     });
-    this.vmLimit = factory.createVmTextField({
+    this.vmLimit = new InputTextFieldViewModel({
       parent: thiz,
       id: "vmLimit",
-      propertyOwner: thiz.document,
-      propertyPath: "limit",
-      placeholder: "ambersteel.character.health.injury.limit.placeholder",
+      value: thiz.document.limit,
+      onChange: (_, newValue) => {
+        thiz.document.limit = newValue;
+      },
+      placeholder: game.i18n.localize("ambersteel.character.health.injury.limit.placeholder"),
     });
-    this.vmTfTimeToHeal = factory.createVmTextField({
+    this.vmTfTimeToHeal = new InputTextFieldViewModel({
       parent: thiz,
       id: "vmTfTimeToHeal",
-      propertyOwner: thiz.document,
-      propertyPath: "timeToHeal",
+      value: thiz.document.timeToHeal,
+      onChange: (_, newValue) => {
+        thiz.document.timeToHeal = newValue;
+      },
     });
-    this.vmScar = factory.createVmTextField({
+    this.vmScar = new InputTextFieldViewModel({
       parent: thiz,
       id: "vmScar",
-      propertyOwner: thiz.document,
-      propertyPath: "scar",
+      value: thiz.document.scar,
+      onChange: (_, newValue) => {
+        thiz.document.scar = newValue;
+      },
     });
-    this.vmRtDescription = factory.createVmRichText({
+    this.vmRtDescription = new InputRichTextViewModel({
       parent: thiz,
       id: "vmRtDescription",
-      propertyOwner: thiz.document,
-      propertyPath: "description",
+      value: thiz.document.description,
+      onChange: (_, newValue) => {
+        thiz.document.description = newValue;
+      },
     });
-    this.vmTreatmentSkill = factory.createVmTextField({
+    this.vmTreatmentSkill = new InputTextFieldViewModel({
       parent: thiz,
       id: "vmTreatmentSkill",
-      propertyOwner: thiz.document,
-      propertyPath: "treatmentSkill",
+      value: thiz.document.treatmentSkill,
+      onChange: (_, newValue) => {
+        thiz.document.treatmentSkill = newValue;
+      },
     });
-    this.vmRequiredSupplies = factory.createVmTextField({
+    this.vmRequiredSupplies = new InputTextFieldViewModel({
       parent: thiz,
       id: "vmRequiredSupplies",
-      propertyOwner: thiz.document,
-      propertyPath: "requiredSupplies",
+      value: thiz.document.requiredSupplies,
+      onChange: (_, newValue) => {
+        thiz.document.requiredSupplies = newValue;
+      },
     });
-    this.vmObstaclePatchUp = factory.createVmTextField({
+    this.vmObstaclePatchUp = new InputTextFieldViewModel({
       parent: thiz,
       id: "vmObstaclePatchUp",
-      propertyOwner: thiz.document,
-      propertyPath: "obstaclePatchUp",
+      value: thiz.document.obstaclePatchUp,
+      onChange: (_, newValue) => {
+        thiz.document.obstaclePatchUp = newValue;
+      },
     });
-    this.vmObstacleTreatment = factory.createVmTextField({
+    this.vmObstacleTreatment = new InputTextFieldViewModel({
       parent: thiz,
       id: "vmObstacleTreatment",
-      propertyOwner: thiz.document,
-      propertyPath: "obstacleTreatment",
+      value: thiz.document.obstacleTreatment,
+      onChange: (_, newValue) => {
+        thiz.document.obstacleTreatment = newValue;
+      },
     });
-    this.vmTimeToHealTreated = factory.createVmTextField({
+    this.vmTimeToHealTreated = new InputTextFieldViewModel({
       parent: thiz,
       id: "vmTimeToHealTreated",
-      propertyOwner: thiz.document,
-      propertyPath: "timeToHealTreated",
+      value: thiz.document.timeToHealTreated,
+      onChange: (_, newValue) => {
+        thiz.document.timeToHealTreated = newValue;
+      },
     });
-    this.vmSelfPatchUp = factory.createVmTextField({
+    this.vmSelfPatchUp = new InputTextFieldViewModel({
       parent: thiz,
       id: "vmSelfPatchUp",
-      propertyOwner: thiz.document,
-      propertyPath: "selfPatchUp",
+      value: thiz.document.selfPatchUp,
+      onChange: (_, newValue) => {
+        thiz.document.selfPatchUp = newValue;
+      },
     });
   }
 

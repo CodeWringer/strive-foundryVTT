@@ -143,8 +143,10 @@ export default class SkillChatMessageViewModel extends ViewModel {
     this.vmTags = new InputTagsViewModel({
       id: "vmTags",
       parent: this,
-      propertyPath: "tags",
-      propertyOwner: this.document,
+      value: this.document.tags,
+      onChange: (_, newValue) => {
+        this.document.tags = newValue;
+      },
       isEditable: false,
     });
   }

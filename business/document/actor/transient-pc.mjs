@@ -1,3 +1,4 @@
+import AtReferencer from "../../referencing/at-referencer.mjs";
 import Ruleset from "../../ruleset/ruleset.mjs";
 import { ACTOR_SUBTYPE } from "./actor-subtype.mjs";
 import TransientBaseCharacterActor from "./transient-base-character-actor.mjs";
@@ -100,21 +101,32 @@ export default class TransientPc extends TransientBaseCharacterActor {
   }
 
   /**
-   * Searches in: 
-   * * Embedded fate-card name.
+   * Tries to resolve the given reference in the embedded documents of 
+   * this document. 
    * 
-   * @override
+   * Searches in: 
+   * * Embedded fate-cards.
+   * 
+   * This method will be called implicitly, by an `AtReferencer`, when it tries 
+   * to resolve a reference on *this* document. 
+   * 
+   * @param {String} comparableReference A comparable version of a reference. 
+   * * Comparable in the sense that underscores "_" are replaced with spaces " " 
+   * or only the last piece of a property path is returned. 
+   * * E. g. `"@Heavy_Armor"` -> `"@heavy armor"`
+   * * E. g. `"@A.B.c"` -> `"a"`
+   * @param {String | undefined} propertyPath If not undefined, a property path on 
+   * the referenced object. 
+   * * E. g. `"@A.B.c"` -> `"B.c"`
+   * 
+   * @returns {Any | undefined} The matched reference or undefined, 
+   * if no match was found. 
    */
-  _resolveReference(reference, comparableReference, propertyPath) {
-    // Search fate-cards.
-    for (const fateCard of this.fateSystem.fateCards) {
-      const match = fateCard._resolveReference(reference, comparableReference, propertyPath);
-      if (match !== undefined) {
-        return match;
-      }
-    }
-
-    return super._resolveReference(reference, comparableReference, propertyPath);
+  resolveReference(comparableReference, propertyPath) {
+    const collectionsToSearch = [
+      this.fateSystem.fateCards,
+    ];
+    return new AtReferencer().resolveReferenceInCollections(collectionsToSearch, comparableReference, propertyPath);
   }
 }
 

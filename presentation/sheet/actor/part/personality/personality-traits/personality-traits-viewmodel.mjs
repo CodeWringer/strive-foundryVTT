@@ -71,9 +71,10 @@ export default class PersonalityTraitsViewModel extends ViewModel {
       vmRadioButtonGroup: new InputRadioButtonGroupViewModel({
         id: `vmRadioButtonGroup-${propertyName}`,
         parent: this,
-        isEditable: this.isEditable,
-        propertyOwner: this.document,
-        propertyPath: `personalityTraits.${propertyName}`,
+        value: this.document.personalityTraits[propertyName],
+        onChange: (_, newValue) => {
+          this.document.personalityTraits[propertyName] = newValue;
+        },
         options: this._getTraitOptions(),
       }),
       localizedTraitRight: game.i18n.localize(`ambersteel.character.personalityTrait.traits.${rightTrait}`),

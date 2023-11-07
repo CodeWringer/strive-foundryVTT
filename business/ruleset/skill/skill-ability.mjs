@@ -9,9 +9,9 @@ import { SOUNDS_CONSTANTS } from '../../../presentation/audio/sounds.mjs';
 import { VISIBILITY_MODES } from '../../../presentation/chat/visibility-modes.mjs';
 import { isObject } from '../../util/validation-utility.mjs';
 import { DAMAGE_TYPES } from '../damage-types.mjs';
-import { getNestedPropertyValue } from '../../util/property-utility.mjs';
 import { ATTACK_TYPES, AttackType } from './attack-types.mjs';
 import TransientSkill from '../../document/item/transient-skill.mjs';
+import AtReferencer from '../../referencing/at-referencer.mjs';
 
 /**
  * Represents a skill ability. 
@@ -215,12 +215,12 @@ export default class SkillAbility {
   }
   
   /**
-   * @type {AttackType | String | null}
+   * @type {AttackType | null}
    */
   get attackType() { return this._attackType; }
   set attackType(value) {
     this._attackType = value;
-    this.owningDocument.updateByPath(`${this._pathOnParent}.attackType`, value === null ? value : (value.name ?? value));
+    this.owningDocument.updateByPath(`${this._pathOnParent}.attackType`, value === null ? null : value.name);
   }
   
   /**
@@ -453,46 +453,22 @@ export default class SkillAbility {
       opposedBy: this.opposedBy,
     };
   }
-  
-  /**
-   * Tries to return a match for the given reference. 
-   * 
-   * @param {String} reference A reference to resolve. 
-   * * E. g. `"@heavy_armor"`
-   * * Can contain property paths. E. g. `"a.b.c"`
-   * @param {String} comparableReference A comparable version of the reference. 
-   * * Comparable in the sense that underscores "_" are replaced with spaces " " 
-   * or only the last piece of a property path is returned. 
-   * * E. g. `"@Heavy_Armor"` -> `"@heavy armor"`
-   * * E. g. `"@A.B.c"` -> `"a"`
-   * @param {String | undefined} propertyPath If not undefined, a property path on 
-   * the referenced object. 
-   * * E. g. `"@A.B.c"` -> `"B.c"`
-   * 
-   * @returns {Any | undefined} The matched reference or undefined, no match was found. 
-   * 
-   * @virtual
-   * @protected
-   */
-  _resolveReference(reference, comparableReference, propertyPath) {
-    if (this.name.toLowerCase() !== comparableReference) {
-      return undefined;
-    } else if (propertyPath === undefined) {
-      return this;
-    }
 
-    // Look in own properties. 
-    try {
-      return getNestedPropertyValue(this, propertyPath);
-    } catch (error) {
-      if (error.message.startsWith("Failed to get nested property value")) {
-        // Such errors are expected for "bad" property paths and can be ignored safely. 
-        game.ambersteel.logger.logWarn(error.message);
-      } else {
-        // Any other error is re-thrown. 
-        throw error;
-      }
-    }
-    return undefined;
+  /**
+   * Returns the property values identified by the `@`-denoted references in the given string, 
+   * from this `SkillAbility`. 
+   * 
+   * @param {String} str A string containing `@`-denoted references. 
+   * * E. g. `"@strength"` or localized and capitalized `"@Stärke"`. 
+   * * Abbreviated attribute names are permitted, e. g. `"@wis"` instead of `"@wisdom"`. 
+   * * If a reference's name contains spaces, they must be replaced with underscores. 
+   * E. g. `"@Heavy_Armor"`, instead of `"@Heavy Armor"`
+   * * *Can* contain property paths! E. g. `@a_fate_card.cost.miFP`. 
+   * 
+   * @returns {Map<String, Any | undefined>} A map of the reference key, including the `@`-symbol, to its resolved reference. 
+   * * Only contains unique entries. No reference is included more than once. 
+   */
+  resolveReferences(str) {
+    return new AtReferencer().resolveReferences(str, this);
   }
 }

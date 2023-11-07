@@ -1,7 +1,7 @@
 import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import { TEMPLATES } from "../../templatePreloader.mjs";
-import ViewModelFactory from "../../view-model/view-model-factory.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
+import InputRichTextViewModel from "../input-rich-text/input-rich-text-viewmodel.mjs";
 
 /**
  * Represents a section that only game masters can access and write arbitrary content in. 
@@ -45,13 +45,14 @@ export default class GmNotesViewModel extends ViewModel {
     this.owner = args.owner;
 
     const thiz = this;
-    const factory = new ViewModelFactory();
 
-    this.vmRtGmNotes = factory.createVmRichText({
+    this.vmRtGmNotes = new InputRichTextViewModel({
       parent: thiz,
       id: "vmRtGmNotes",
-      propertyOwner: thiz.document,
-      propertyPath: "gmNotes",
+      value: thiz.document.gmNotes,
+      onChange: (_, newValue) => {
+        thiz.document.gmNotes = newValue;
+      },
     });
   }
 }

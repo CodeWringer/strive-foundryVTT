@@ -1,5 +1,6 @@
 import { TEMPLATES } from '../../../presentation/templatePreloader.mjs';
 import { DICE_POOL_RESULT_TYPES } from '../../dice/dice-pool.mjs';
+import AtReferencer from '../../referencing/at-referencer.mjs';
 import CharacterAssetSlotGroup from '../../ruleset/asset/character-asset-slot-group.mjs';
 import CharacterAssetSlot from '../../ruleset/asset/character-asset-slot.mjs';
 import { ATTRIBUTE_GROUPS } from '../../ruleset/attribute/attribute-groups.mjs';
@@ -576,6 +577,9 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
   }
 
   /**
+   * Tries to resolve the given reference in the embedded documents of 
+   * this document. 
+   * 
    * Searches in: 
    * * Attribute names.
    * * Embedded skill name.
@@ -587,9 +591,22 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
    * * Embedded scar name.
    * * Embedded asset name.
    * 
-   * @override
+   * This method will be called implicitly, by an `AtReferencer`, when it tries 
+   * to resolve a reference on *this* document. 
+   * 
+   * @param {String} comparableReference A comparable version of a reference. 
+   * * Comparable in the sense that underscores "_" are replaced with spaces " " 
+   * or only the last piece of a property path is returned. 
+   * * E. g. `"@Heavy_Armor"` -> `"@heavy armor"`
+   * * E. g. `"@A.B.c"` -> `"a"`
+   * @param {String | undefined} propertyPath If not undefined, a property path on 
+   * the referenced object. 
+   * * E. g. `"@A.B.c"` -> `"B.c"`
+   * 
+   * @returns {Any | undefined} The matched reference or undefined, 
+   * if no match was found. 
    */
-  _resolveReference(reference, comparableReference, propertyPath) {
+  resolveReference(comparableReference, propertyPath) {
     // Search attributes. 
     const attribute = this.attributes.find(it => 
       it.name === comparableReference
@@ -600,54 +617,14 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
       return attribute;
     }
 
-    // Search skill. 
-    for (const skill of this.skills.all) {
-      const match = skill._resolveReference(reference, comparableReference, propertyPath);
-      if (match !== undefined) {
-        return match;
-      }
-    }
-
-    // Search asset.
-    for (const asset of this.assets.all) {
-      const match = asset._resolveReference(reference, comparableReference, propertyPath);
-      if (match !== undefined) {
-        return match;
-      }
-    }
-
-    // Search injury.
-    for (const injury of this.health.injuries) {
-      const match = injury._resolveReference(reference, comparableReference, propertyPath);
-      if (match !== undefined) {
-        return match;
-      }
-    }
-
-    // Search illness.
-    for (const illness of this.health.illnesses) {
-      const match = illness._resolveReference(reference, comparableReference, propertyPath);
-      if (match !== undefined) {
-        return match;
-      }
-    }
-
-    // Search mutation.
-    for (const mutation of this.health.mutations) {
-      const match = mutation._resolveReference(reference, comparableReference, propertyPath);
-      if (match !== undefined) {
-        return match;
-      }
-    }
-
-    // Search scar.
-    for (const scar of this.health.scars) {
-      const match = scar._resolveReference(reference, comparableReference, propertyPath);
-      if (match !== undefined) {
-        return match;
-      }
-    }
-
-    return super._resolveReference(reference, comparableReference, propertyPath);
+    const collectionsToSearch = [
+      this.skills.all,
+      this.assets.all,
+      this.health.injuries,
+      this.health.illnesses,
+      this.health.mutations,
+      this.health.scars,
+    ];
+    return new AtReferencer().resolveReferenceInCollections(collectionsToSearch, comparableReference, propertyPath);
   }
 }
