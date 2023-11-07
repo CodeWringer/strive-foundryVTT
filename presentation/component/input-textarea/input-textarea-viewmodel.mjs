@@ -29,25 +29,6 @@ export default class InputTextareaViewModel extends InputViewModel {
   }
 
   /**
-   * @type {String}
-   * @private
-   */
-  _placeholder = "";
-  /**
-   * The placeholder text to display when the input has no value. 
-   * @type {String}
-   * @readonly
-   */
-  get placeholder() { return this._placeholder; }
-
-  /**
-   * Returns the localized placeholder. 
-   * @type {String}
-   * @readonly
-   */
-  get localizedPlaceholder() { return (this._placeholder !== undefined && this._placeholder !== null) ? game.i18n.localize(this._placeholder) : ""; }
-  
-  /**
    * @param {Object} args
    * @param {String | undefined} args.value The current value. 
    * @param {Boolean | undefined} args.spellcheck Optional. Sets whether spell checking is enabled. 
@@ -62,7 +43,7 @@ export default class InputTextareaViewModel extends InputViewModel {
 
     this._value = args.value ?? "";
     this.spellcheck = args.spellcheck ?? false;
-    this._placeholder = args.placeholder ?? "";
+    this.placeholder = args.placeholder ?? "";
   }
 
   /** @override */

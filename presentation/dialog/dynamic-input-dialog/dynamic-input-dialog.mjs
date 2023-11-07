@@ -115,6 +115,8 @@ export default class DynamicInputDialog extends ConfirmableModalDialog {
     if (isDefined(this._viewModel) !== true) {
       this._viewModel = new DynamicInputDialogViewModel({
         inputDefinitions: this.inputDefinitions,
+        isEditable: true,
+        isSendable: true,
       });
     }
 

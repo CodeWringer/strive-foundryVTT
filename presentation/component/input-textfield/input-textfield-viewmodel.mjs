@@ -9,7 +9,7 @@ import InputViewModel from "../../view-model/input-view-model.mjs";
  * @property {String} value The current value. 
  * @property {String} placeholder A localized placeholder text to display while the textfield is empty. 
  * 
-  * @method onChange Callback that is invoked when the value changes. 
+ * @method onChange Callback that is invoked when the value changes. 
  * Receives the following arguments: 
  * * `oldValue: {String}`
  * * `newValue: {String}`
@@ -43,6 +43,6 @@ export default class InputTextFieldViewModel extends InputViewModel {
     super(args);
 
     this._value = args.value ?? "";
-    this._placeholder = args.placeholder ?? "";
+    this.placeholder = args.placeholder ?? "";
   }
 }
