@@ -1,6 +1,6 @@
 import Tag from "../../../business/tags/tag.mjs";
 import { TEMPLATES } from "../../templatePreloader.mjs";
-import InputViewModel from "../../view-model/input-view-model.mjs";
+import ViewModel from "../../view-model/view-model.mjs";
 import InputTextFieldViewModel from "../input-textfield/input-textfield-viewmodel.mjs";
 import InputTagPillViewModel from "./input-tag-pill-viewmodel.mjs";
 
@@ -9,7 +9,7 @@ import InputTagPillViewModel from "./input-tag-pill-viewmodel.mjs";
  * 
  * A user can select from a given list of tags, as well as define new tags, simply by typing them. 
  * 
- * @extends InputViewModel
+ * @extends ViewModel
  * 
  * @property {Array<Tag>} value The current value. 
  * @property {Array<Tag>} systemTags An array 
@@ -24,7 +24,7 @@ import InputTagPillViewModel from "./input-tag-pill-viewmodel.mjs";
  * * `oldValue: {Array<Tag>}`
  * * `newValue: {Array<Tag>}`
  */
-export default class InputTagsViewModel extends InputViewModel {
+export default class InputTagsViewModel extends ViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.COMPONENT_INPUT_TAGS; }
 
@@ -35,6 +35,23 @@ export default class InputTagsViewModel extends InputViewModel {
    */
   static registerHandlebarsPartial() {
     Handlebars.registerPartial('inputTags', `{{> "${InputTagsViewModel.TEMPLATE}"}}`);
+  }
+
+  /**
+   * Returns the current value. 
+   * 
+   * @type {Array<Tag>}
+   */
+  get value() { return this._value; }
+  /**
+   * Sets the current value. 
+   * 
+   * @param {Array<Tag>} newValue
+   */
+  set value(newValue) {
+    const oldValue = this._value;
+    this._value = newValue;
+    this.onChange(oldValue, newValue);
   }
 
   /**
@@ -61,25 +78,25 @@ export default class InputTagsViewModel extends InputViewModel {
     this._value = args.value ?? [];
     this.tagViewModels = [];
     this.tagViewModels = this._getTagViewModels();
+    this.onChange = args.onChange ?? (() => {});
 
     this.vmAddNew = new InputTextFieldViewModel({
       id: "vmAddNew",
       parent: this,
-      isEditable: this.isEditable,
       requireConfirmation: true,
-      onChange: (value) => {
+      onChange: (oldValue, newValue) => {
         // Do nothing on empty value. This is the case when the user cancels. 
-        if (value.trim().length === 0) return;
+        if (newValue.trim().length === 0) return;
 
         // Try to find a matching tag by id. 
         // Search case-insensitively and replace spaces with underscores, so users needn't know the internal IDs and can 
         // instead simply type the exact text they may find on other documents and expect it to work. 
-        let tag = this.systemTags.find(it => it.id.toLowerCase() === value.toLowerCase().replace(" ", "_"));
+        let tag = this.systemTags.find(it => it.id.toLowerCase() === newValue.toLowerCase().replace(" ", "_"));
         if (tag === undefined) {
           // Not a system tag - so a new one. 
           tag = new Tag({
-            id: value,
-            localizableName: value,
+            id: newValue,
+            localizableName: newValue,
           });
         }
 
