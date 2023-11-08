@@ -256,7 +256,7 @@ export default class SkillAbilityListItemViewModel extends ViewModel {
       // Toggle distance
       .concat(this._createContextMenuToggleButtons("ambersteel.character.skill.ability.distance.label", thiz.skillAbility, "distance", ""))
       // Toggle attack type
-      .concat(this._createContextMenuToggleButtons("ambersteel.attackType.label", thiz.skillAbility, "attackType", ATTACK_TYPES.none.name))
+      .concat(this._createContextMenuToggleButtons("ambersteel.attackType.label", thiz.skillAbility, "attackType", ATTACK_TYPES.none))
       // Toggle condition
       .concat(this._createContextMenuToggleButtons("ambersteel.character.skill.ability.condition.label", thiz.skillAbility, "condition", "")),
     });

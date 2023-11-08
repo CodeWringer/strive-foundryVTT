@@ -61,10 +61,7 @@ export default class SkillAbility {
       description: dto.description,
       requiredLevel: dto.requiredLevel,
       apCost: dto.apCost,
-      damage: dto.damage.map(it => new DamageAndType({
-        damage: it.damage,
-        damageType: DAMAGE_TYPES[it.damageType],
-      })),
+      damage: dto.damage.map(it => DamageAndType.fromDto(it)),
       condition: dto.condition,
       distance: dto.distance,
       obstacle: dto.obstacle,
@@ -175,7 +172,7 @@ export default class SkillAbility {
   }); }
   set damage(value) {
     this._damage = value;
-    this.owningDocument.updateByPath(`${this._pathOnParent}.damage`, value);
+    this.owningDocument.updateByPath(`${this._pathOnParent}.damage`, value.map(it => it.toDto()));
   }
   
   /**
