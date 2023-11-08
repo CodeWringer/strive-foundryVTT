@@ -11,6 +11,6 @@ heavy: {Boolean | undefined}
     {{#if viewModel.localizedToolTip}}title="{{viewModel.localizedToolTip}}"{{/if}}
   >
     {{#if viewModel.iconHtml}}{{{viewModel.iconHtml}}}{{/if}}
-    {{#if viewModel.localizedText}}<span class="{{#if viewModel.showFancyFont}}fancy-font{{/if}}{{#if viewModel.iconHtml}} margin-l-md{{/if}}">{{{viewModel.localizedText}}}</span>{{/if}}
+    {{#if viewModel.localizedLabel}}<span class="{{#if viewModel.showFancyFont}}fancy-font{{/if}}{{#if viewModel.iconHtml}} margin-l-md{{/if}}">{{{viewModel.localizedLabel}}}</span>{{/if}}
   </a>
 </span>

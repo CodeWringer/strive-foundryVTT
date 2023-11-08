@@ -81,7 +81,7 @@ export default class HealthStatesSettingsDialogViewModel extends ViewModel {
       id: "vmBtnSave",
       parent: this,
       iconHtml: '<i class="fas fa-save"></i>',
-      localizedText: game.i18n.localize("ambersteel.settings.saveChanges"),
+      localizedLabel: game.i18n.localize("ambersteel.settings.saveChanges"),
       isEditable: this.isEditable,
       onClick: async () => {
         thiz.formApplication._saveSettings(this.stateSettings);

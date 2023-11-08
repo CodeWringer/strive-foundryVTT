@@ -173,7 +173,7 @@ export default class ActorAssetSlotViewModel extends ViewModel {
       parent: this,
       target: this.document,
       iconHtml: '<i class="fas fa-plus"></i>',
-      localizedText: game.i18n.localize("ambersteel.character.asset.slot.assign.label"),
+      localizedLabel: game.i18n.localize("ambersteel.character.asset.slot.assign.label"),
       localizedTooltip: game.i18n.localize("ambersteel.character.asset.slot.assign.label"),
       onClick: async () => {
         const inputChoices = "inputChoices";

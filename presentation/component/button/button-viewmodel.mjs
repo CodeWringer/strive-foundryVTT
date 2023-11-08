@@ -22,11 +22,11 @@ export const SELECTOR_BUTTON = "custom-system-button";
  * 
  * @property {String | undefined} localizedToolTip A localized text to 
  * display as a tool tip. 
- * @property {String | undefined} localizedText A localized text to 
+ * @property {String | undefined} localizedLabel A localized text to 
  * display as a button label. 
  * @property {String | undefined} iconHtml Raw HTML to render as 
  * an associated icon. E. g. `'<i class="fas fa-scroll"></i>'`
- * @property {Boolean} showFancyFont If `true`, will render the `localizedText` 
+ * @property {Boolean} showFancyFont If `true`, will render the `localizedLabel` 
  * using the "fancy font". 
  * 
  * @method onClick Asynchronous callback that is invoked when 
@@ -56,12 +56,12 @@ export default class ButtonViewModel extends ViewModel {
    * 
    * @param {String | undefined} args.localizedToolTip A localized text to 
    * display as a tool tip. 
-   * @param {String | undefined} args.localizedText A localized text to 
+   * @param {String | undefined} args.localizedLabel A localized text to 
    * display as a button label. 
    * @param {String | undefined} args.iconHtml Raw HTML to render as 
    * an associated icon. E. g. `'<i class="fas fa-scroll"></i>'`
    * @param {Boolean | undefined} args.showFancyFont If `true`, will render 
-   * the `localizedText` using the "fancy font". 
+   * the `localizedLabel` using the "fancy font". 
    * * default `false`
    * @param {Function | undefined} args.onClick Asynchronous callback that is invoked when 
    * the button is clicked. Receives the button's original click-handler as its sole 
@@ -73,7 +73,7 @@ export default class ButtonViewModel extends ViewModel {
     super(args);
 
     this.localizedToolTip = args.localizedToolTip;
-    this.localizedText = args.localizedText;
+    this.localizedLabel = args.localizedLabel;
     this.iconHtml = args.iconHtml;
     this.onClick = args.onClick ?? (() => {});
   }

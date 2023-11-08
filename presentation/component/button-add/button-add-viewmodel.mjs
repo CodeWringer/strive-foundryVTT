@@ -39,7 +39,7 @@ export default class ButtonAddViewModel extends ButtonViewModel {
    * @param {Boolean | undefined} args.isEditable Optional. If true, will be interactible. 
    * @param {String | undefined} args.localizedToolTip A localized text to 
    * display as a tool tip. 
-   * @param {String | undefined} args.localizedText A localized text to 
+   * @param {String | undefined} args.localizedLabel A localized text to 
    * display as a button label. 
    * @param {Function | undefined} args.onClick Asynchronous callback that is invoked when the button is clicked. 
    * Receives the button's original click-handler as its sole argument. In most cases, it should be called 
@@ -57,7 +57,7 @@ export default class ButtonAddViewModel extends ButtonViewModel {
     super({
       ...args,
       iconHtml: '<i class="fas fa-plus"></i>',
-      localizedText: args.localizedText,
+      localizedLabel: args.localizedLabel,
       localizedToolTip: args.localizedToolTip ?? "ambersteel.general.add",
     });
     validateOrThrow(args, ["target", "creationType"]);
