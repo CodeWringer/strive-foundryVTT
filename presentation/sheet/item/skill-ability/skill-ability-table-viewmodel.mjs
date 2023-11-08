@@ -2,11 +2,11 @@ import { DAMAGE_TYPES } from "../../../../business/ruleset/damage-types.mjs"
 import { ATTACK_TYPES } from "../../../../business/ruleset/skill/attack-types.mjs"
 import { createUUID } from "../../../../business/util/uuid-utility.mjs"
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs"
+import ButtonAddViewModel from "../../../component/button-add/button-add-viewmodel.mjs"
 import ButtonToggleVisibilityViewModel from "../../../component/button-toggle-visibility/button-toggle-visibility-viewmodel.mjs"
 import DocumentListItemOrderDataSource from "../../../component/sortable-list/document-list-item-order-datasource.mjs"
 import SortableListViewModel from "../../../component/sortable-list/sortable-list-viewmodel.mjs"
 import { TEMPLATES } from "../../../templatePreloader.mjs"
-import ViewModelFactory from "../../../view-model/view-model-factory.mjs"
 import ViewModel from "../../../view-model/view-model.mjs"
 import SkillAbilityListItemViewModel from "./skill-ability-list-item-viewmodel.mjs"
 
@@ -88,7 +88,6 @@ export default class SkillAbilityTableViewModel extends ViewModel {
     // Child view models. 
     this.contextTemplate = "skill-ability-table";
     const thiz = this;
-    const factory = new ViewModelFactory();
 
     this.abilities = [];
     this.abilities = this._getSkillAbilityViewModels();
@@ -103,7 +102,7 @@ export default class SkillAbilityTableViewModel extends ViewModel {
       }),
       listItemViewModels: this.abilities,
       listItemTemplate: TEMPLATES.SKILL_ABILITY_LIST_ITEM,
-      vmBtnAddItem: factory.createVmBtnAdd({
+      vmBtnAddItem: new ButtonAddViewModel({
         id: "vmBtnAdd",
         target: thiz.document,
         isEditable: this.isEditable,

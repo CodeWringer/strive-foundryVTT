@@ -1,9 +1,8 @@
 import { validateOrThrow } from "../../../../../business/util/validation-utility.mjs"
-import ButtonViewModel from "../../../../component/button/button-viewmodel.mjs"
+import ButtonAddViewModel from "../../../../component/button-add/button-add-viewmodel.mjs"
 import DocumentListItemOrderDataSource from "../../../../component/sortable-list/document-list-item-order-datasource.mjs"
 import SortableListViewModel from "../../../../component/sortable-list/sortable-list-viewmodel.mjs"
 import { TEMPLATES } from "../../../../templatePreloader.mjs"
-import ViewModelFactory from "../../../../view-model/view-model-factory.mjs"
 import ViewModel from "../../../../view-model/view-model.mjs"
 import SkillListItemViewModel from "../../../item/skill/skill-list-item-viewmodel.mjs"
 
@@ -38,7 +37,6 @@ export default class ActorSkillsViewModel extends ViewModel {
 
     // Child view models. 
     const thiz = this;
-    const factory = new ViewModelFactory();
 
     this.learningSkillViewModels = [];
     this.learningSkillViewModels = this._getLearningSkillViewModels();
@@ -54,7 +52,7 @@ export default class ActorSkillsViewModel extends ViewModel {
       }),
       listItemViewModels: this.learningSkillViewModels,
       listItemTemplate: TEMPLATES.SKILL_LIST_ITEM,
-      vmBtnAddItem: factory.createVmBtnAdd({
+      vmBtnAddItem: new ButtonAddViewModel({
         id: "vmBtnAddLearningSkill",
         isEditable: thiz.isEditable,
         target: thiz.document,
@@ -82,7 +80,7 @@ export default class ActorSkillsViewModel extends ViewModel {
       }),
       listItemViewModels: this.knownSkillViewModels,
       listItemTemplate: TEMPLATES.SKILL_LIST_ITEM,
-      vmBtnAddItem: factory.createVmBtnAdd({
+      vmBtnAddItem: new ButtonAddViewModel({
         id: "vmBtnAddKnownSkill",
         target: thiz.document,
         isEditable: thiz.isEditable,

@@ -5,7 +5,6 @@ import { validateOrThrow } from "../../../../business/util/validation-utility.mj
 import { isDefined } from "../../../../business/util/validation-utility.mjs";
 import InfoBubble, { InfoBubbleAutoHidingTypes, InfoBubbleAutoShowingTypes } from "../../../component/info-bubble/info-bubble.mjs";
 import ViewModel from "../../../view-model/view-model.mjs";
-import ViewModelFactory from "../../../view-model/view-model-factory.mjs";
 import { TEMPLATES } from "../../../templatePreloader.mjs";
 import ChoiceAdapter from "../../../component/input-choice/choice-adapter.mjs";
 import DamageDefinitionListViewModel from "../../../component/damage-definition-list/damage-definition-list-viewmodel.mjs";
@@ -94,7 +93,6 @@ export default class SkillAbilityListItemViewModel extends ViewModel {
     this.skillAbility = args.skillAbility;
     
     const thiz = this;
-    const factory = new ViewModelFactory();
     
     const skillAbility = this.skillAbility;
     const owningDocument = skillAbility.owningDocument;

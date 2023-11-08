@@ -15,7 +15,6 @@ import InputRichTextViewModel from "../../../component/input-rich-text/input-ric
 import InputTagsViewModel from "../../../component/input-tags/input-tags-viewmodel.mjs"
 import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs"
 import { TEMPLATES } from "../../../templatePreloader.mjs"
-import ViewModelFactory from "../../../view-model/view-model-factory.mjs"
 import SkillAbilityTableViewModel from "../skill-ability/skill-ability-table-viewmodel.mjs"
 import { querySkillConfiguration } from "./skill-utils.mjs"
 import SkillViewModel from "./skill-viewmodel.mjs"
@@ -138,7 +137,6 @@ export default class SkillListItemViewModel extends SkillViewModel {
 
     // Child view models. 
     const thiz = this;
-    const factory = new ViewModelFactory();
 
     this.vmImg = new InputImageViewModel({
       parent: thiz,
