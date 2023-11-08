@@ -67,7 +67,6 @@ export default class ButtonToggleVisibilityViewModel extends ButtonViewModel {
    * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
    * 
    * @param {Object | undefined} args.target The target object to affect. 
-   * @param {Function | String | undefined} args.callback Optional. Defines an asynchronous callback that is invoked upon completion of the button's own callback. 
    * @param {Boolean | undefined} args.isEditable Optional. If true, will be interactible. 
    * @param {String | undefined} args.localizedTooltip Localized tooltip. 
    * 
@@ -90,10 +89,10 @@ export default class ButtonToggleVisibilityViewModel extends ButtonViewModel {
 
   /**
    * @override
-   * @see {ButtonViewModel.onClick}
+   * @see {ButtonViewModel._onClick}
    * @async
    */
-  async onClick() {
+  async _onClick() {
     if (this.isEditable !== true) return;
 
     const elements = document.querySelectorAll(`[${ATTRIBUTE_VIS_GROUP}='${this._visGroup}']`);

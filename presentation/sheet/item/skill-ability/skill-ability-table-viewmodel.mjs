@@ -2,6 +2,7 @@ import { DAMAGE_TYPES } from "../../../../business/ruleset/damage-types.mjs"
 import { ATTACK_TYPES } from "../../../../business/ruleset/skill/attack-types.mjs"
 import { createUUID } from "../../../../business/util/uuid-utility.mjs"
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs"
+import ButtonToggleVisibilityViewModel from "../../../component/button-toggle-visibility/button-toggle-visibility-viewmodel.mjs"
 import DocumentListItemOrderDataSource from "../../../component/sortable-list/document-list-item-order-datasource.mjs"
 import SortableListViewModel from "../../../component/sortable-list/sortable-list-viewmodel.mjs"
 import { TEMPLATES } from "../../../templatePreloader.mjs"
@@ -113,23 +114,29 @@ export default class SkillAbilityTableViewModel extends ViewModel {
       }),
     });
 
-    this.vmBtnToggleVisibilityExpand = factory.createVmBtnToggleVisibility({
+    this.vmBtnToggleVisibilityExpand = new ButtonToggleVisibilityViewModel({
       parent: thiz,
       id: "vmBtnToggleVisibilityExpand",
       target: thiz.document,
       isEditable: true,
       visGroup: thiz.visGroupId,
       toggleSelf: true,
-      callback: thiz._toggleSkillAbilitiesInitiallyVisible.bind(thiz),
+      onClick: async (callback) => {
+        await callback();
+        await thiz._toggleSkillAbilitiesInitiallyVisible();
+      },
     });
-    this.vmBtnToggleVisibilityCollapse = factory.createVmBtnToggleVisibility({
+    this.vmBtnToggleVisibilityCollapse = new ButtonToggleVisibilityViewModel({
       parent: thiz,
       id: "vmBtnToggleVisibilityCollapse",
       target: thiz.document,
       isEditable: true,
       visGroup: thiz.visGroupId,
       toggleSelf: true,
-      callback: thiz._toggleSkillAbilitiesInitiallyVisible.bind(thiz),
+      onClick: async (callback) => {
+        await callback();
+        await thiz._toggleSkillAbilitiesInitiallyVisible();
+      },
     });
   }
 

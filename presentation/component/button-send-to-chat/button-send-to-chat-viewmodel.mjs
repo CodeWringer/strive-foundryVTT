@@ -62,7 +62,6 @@ export default class ButtonSendToChatViewModel extends ButtonViewModel {
    * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
    * 
    * @param {TransientDocument | Object} args.target The target object to affect. 
-   * @param {Function | String | undefined} args.callback Optional. Defines an asynchronous callback that is invoked upon completion of the button's own callback. 
    * @param {Boolean | undefined} args.isEditable Optional. If true, will be interactible. 
    * 
    * @param {String | undefined} args.propertyPath Optional. Property path identifying a property to send to chat. 
@@ -86,10 +85,10 @@ export default class ButtonSendToChatViewModel extends ButtonViewModel {
 
   /**
    * @override
-   * @see {ButtonViewModel.onClick}
+   * @see {ButtonViewModel._onClick}
    * @async
    */
-  async onClick() {
+  async _onClick() {
     if (this.isEditable !== true) return;
 
     const thiz = this;

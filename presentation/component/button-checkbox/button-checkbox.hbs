@@ -2,11 +2,14 @@
 viewModel: {ButtonCheckBoxViewModel}
 cssClass: {String | undefined}
 --}}
-<label class="component-button-checkbox flex flex-center{{#if viewModel.isEditable}}{{else}} disabled{{/if}}{{#if cssClass}} {{cssClass}}{{/if}}">
+<label 
+  id="{{viewModel.id}}"
+  class="component-button-checkbox flex flex-center{{#if viewModel.isEditable}}{{else}} disabled{{/if}}{{#if cssClass}} {{cssClass}}{{/if}}"
+  >
   <input 
     class="custom-system-button" 
-    title="{{viewModel.localizedTitle}}" 
-    id="{{viewModel.id}}" 
+    title="{{viewModel.localizedToolTip}}" 
+    id="{{viewModel.id}}-button" 
     type="checkbox" 
     {{#if viewModel.value}}checked{{/if}}
     >

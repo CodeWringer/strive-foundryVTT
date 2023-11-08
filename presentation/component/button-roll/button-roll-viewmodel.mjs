@@ -96,10 +96,10 @@ export default class ButtonRollViewModel extends ButtonViewModel {
   get inputVisibility() { return "inputVisibility"; }
 
   /**
+   * @param {Object} args
    * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
    * 
    * @param {TransientDocument | Object} args.target The target object to affect. 
-   * @param {Function | String | undefined} args.callback Optional. Defines an asynchronous callback that is invoked upon completion of the button's own callback. 
    * @param {Boolean | undefined} args.isEditable Optional. If true, will be interactible. 
    * 
    * @param {String} args.rollType The internal name of a `RollType` that Determines the kind of roll to try and make. 
@@ -132,7 +132,7 @@ export default class ButtonRollViewModel extends ButtonViewModel {
 
   /**
    * @override
-   * @see {ButtonViewModel.onClick}
+   * @see {ButtonViewModel._onClick}
    * @async
    * @throws {Error} InvalidStateException - Thrown, if the rollType is unrecognized. 
    * @throws {Error} InvalidStateException - Thrown, if the rollType is 'generic' and the property path
@@ -140,7 +140,7 @@ export default class ButtonRollViewModel extends ButtonViewModel {
    * @throws {Error} InvalidStateException - Thrown, if the property path is undefined and there is no 
    * 'getRollData()' method defined on the target object. 
    */
-  async onClick() {
+  async _onClick() {
     if (this.isEditable !== true) return;
 
     // Prepare the dialog. 

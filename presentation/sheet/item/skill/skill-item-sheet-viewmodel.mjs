@@ -9,7 +9,6 @@ import InputTagsViewModel from "../../../component/input-tags/input-tags-viewmod
 import SimpleListItemViewModel from "../../../component/simple-list/simple-list-item-viewmodel.mjs";
 import SimpleListViewModel from "../../../component/simple-list/simple-list-viewmodel.mjs";
 import { TEMPLATES } from "../../../templatePreloader.mjs"
-import ViewModelFactory from "../../../view-model/view-model-factory.mjs";
 import SkillAbilityTableViewModel from "../skill-ability/skill-ability-table-viewmodel.mjs"
 import SkillPrerequisiteListItemViewModel from "./skill-prerequisite-list-item-viewmodel.mjs";
 import { querySkillConfiguration } from "./skill-utils.mjs";
@@ -18,6 +17,7 @@ import InputImageViewModel from "../../../component/input-image/input-image-view
 import InputRichTextViewModel from "../../../component/input-rich-text/input-rich-text-viewmodel.mjs";
 import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs";
 import InputDropDownViewModel from "../../../component/input-dropdown/input-dropdown-viewmodel.mjs";
+import ButtonSendToChatViewModel from "../../../component/button-send-to-chat/button-send-to-chat-viewmodel.mjs";
 
 export default class SkillItemSheetViewModel extends SkillViewModel {
   /** @override */
@@ -61,7 +61,6 @@ export default class SkillItemSheetViewModel extends SkillViewModel {
 
     // Child view models. 
     const thiz = this;
-    const factory = new ViewModelFactory();
 
     this.vmImg = new InputImageViewModel({
       parent: thiz,
@@ -96,7 +95,7 @@ export default class SkillItemSheetViewModel extends SkillViewModel {
         }
       },
     });
-    this.vmBtnSendToChat = factory.createVmBtnSendToChat({
+    this.vmBtnSendToChat = new ButtonSendToChatViewModel({
       parent: thiz,
       id: "vmBtnSendToChat",
       target: thiz.document,

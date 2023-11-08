@@ -16,6 +16,10 @@ import InputRichTextViewModel from "../../../component/input-rich-text/input-ric
 import InputTextareaViewModel from "../../../component/input-textarea/input-textarea-viewmodel.mjs";
 import SkillAbility from "../../../../business/ruleset/skill/skill-ability.mjs";
 import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs";
+import ButtonRollViewModel from "../../../component/button-roll/button-roll-viewmodel.mjs";
+import ButtonContextMenuViewModel from "../../../component/button-context-menu/button-context-menu-viewmodel.mjs";
+import ButtonSendToChatViewModel from "../../../component/button-send-to-chat/button-send-to-chat-viewmodel.mjs";
+import ButtonDeleteViewModel from "../../../component/button-delete/button-delete-viewmodel.mjs";
 
 export default class SkillAbilityListItemViewModel extends ViewModel {
   /** @override */
@@ -97,7 +101,7 @@ export default class SkillAbilityListItemViewModel extends ViewModel {
     this._actor = ((thiz.skillAbility.owningDocument ?? {}).owningDocument ?? {}).document;
     const actor = this._actor;
 
-    this.vmBtnRoll = factory.createVmBtnRoll({
+    this.vmBtnRoll = new ButtonRollViewModel({
       parent: thiz,
       id: "vmBtnRoll",
       target: owningDocument,
@@ -107,11 +111,14 @@ export default class SkillAbilityListItemViewModel extends ViewModel {
       secondaryChatTitle: game.i18n.localize(owningDocument.name),
       secondaryChatImage: owningDocument.img,
       rollType: "dice-pool",
-      callback: "advanceByRollResult",
+      onClick: async (callback) => {
+        await callback();
+        await owningDocument.advanceByRollResult();
+      },
       actor: actor,
       isEditable: (thiz.isEditable || thiz.isGM) && actor !== undefined,
     });
-    this.vmBtnSendToChat = factory.createVmBtnSendToChat({
+    this.vmBtnSendToChat = new ButtonSendToChatViewModel({
       parent: thiz,
       id: "vmBtnSendToChat",
       target: skillAbility,
@@ -134,7 +141,7 @@ export default class SkillAbilityListItemViewModel extends ViewModel {
       },
       placeholder: game.i18n.localize("ambersteel.general.name"),
     });
-    this.vmBtnDelete = factory.createVmBtnDelete({
+    this.vmBtnDelete = new ButtonDeleteViewModel({
       parent: thiz,
       id: "vmBtnDelete",
       target: skillAbility,
@@ -225,7 +232,7 @@ export default class SkillAbilityListItemViewModel extends ViewModel {
         skillAbility.description = newValue;
       },
     });
-    this.vmBtnContextMenu = factory.createVmBtnContextMenu({
+    this.vmBtnContextMenu = new ButtonContextMenuViewModel({
       parent: thiz,
       id: "vmBtnContextMenu",
       menuItems: [

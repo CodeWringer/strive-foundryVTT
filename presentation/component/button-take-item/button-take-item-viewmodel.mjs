@@ -45,7 +45,6 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
    * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
    * 
    * @param {TransientAsset} args.target The target object to affect. 
-   * @param {Function | String | undefined} args.callback Optional. Defines an asynchronous callback that is invoked upon completion of the button's own callback. 
    * @param {Boolean | undefined} args.isEditable Optional. If true, will be interactible. 
    * @param {String | undefined} args.localizedTooltip Localized tooltip. 
    * 
@@ -70,14 +69,14 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
 
   /**
    * @override
-   * @see {ButtonViewModel.onClick}
+   * @see {ButtonViewModel._onClick}
    * 
    * @throws {Error} NullPointerException - Thrown, if the actor to pick up the item could not be found. 
    * @throws {Error} NullPointerException - Thrown, if the item could not be found/wasn't defined. 
    * 
    * @async
    */
-  async onClick() {
+  async _onClick() {
     if (this.isEditable !== true) return;
 
     let assetDocument = this.target;

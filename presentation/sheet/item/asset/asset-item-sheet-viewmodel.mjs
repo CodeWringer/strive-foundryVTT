@@ -1,13 +1,13 @@
 import { ASSET_TAGS } from "../../../../business/tags/system-tags.mjs"
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs"
-import { TAKE_ITEM_CONTEXT_TYPES } from "../../../component/button-take-item/button-take-item-viewmodel.mjs"
+import ButtonSendToChatViewModel from "../../../component/button-send-to-chat/button-send-to-chat-viewmodel.mjs"
+import ButtonTakeItemViewModel, { TAKE_ITEM_CONTEXT_TYPES } from "../../../component/button-take-item/button-take-item-viewmodel.mjs"
 import InputImageViewModel from "../../../component/input-image/input-image-viewmodel.mjs"
 import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs"
 import InputRichTextViewModel from "../../../component/input-rich-text/input-rich-text-viewmodel.mjs"
 import InputTagsViewModel from "../../../component/input-tags/input-tags-viewmodel.mjs"
 import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs"
 import { TEMPLATES } from "../../../templatePreloader.mjs"
-import ViewModelFactory from "../../../view-model/view-model-factory.mjs"
 import ViewModel from "../../../view-model/view-model.mjs"
 
 export default class AssetItemSheetViewModel extends ViewModel {
@@ -35,7 +35,6 @@ export default class AssetItemSheetViewModel extends ViewModel {
     this.document = args.document;
     this.contextTemplate = args.contextTemplate ?? "item-item-sheet";
     const thiz = this;
-    const factory = new ViewModelFactory();
 
     this.vmImg = new InputImageViewModel({
       parent: thiz,
@@ -54,13 +53,13 @@ export default class AssetItemSheetViewModel extends ViewModel {
       },
       placeholder: game.i18n.localize("ambersteel.general.name"),
     });
-    this.vmBtnSendToChat = factory.createVmBtnSendToChat({
+    this.vmBtnSendToChat = new ButtonSendToChatViewModel({
       parent: thiz,
       id: "vmBtnSendToChat",
       target: thiz.document,
       isEditable: thiz.isEditable || thiz.isGM,
     });
-    this.vmBtnTakeItem = factory.createVmBtnTakeItem({
+    this.vmBtnTakeItem = new ButtonTakeItemViewModel({
       parent: thiz,
       id: "vmBtnTakeItem",
       target: thiz.document,

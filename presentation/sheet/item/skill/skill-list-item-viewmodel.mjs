@@ -3,6 +3,9 @@ import { ATTRIBUTES } from "../../../../business/ruleset/attribute/attributes.mj
 import { SKILL_TAGS } from "../../../../business/tags/system-tags.mjs"
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs"
 import { isDefined } from "../../../../business/util/validation-utility.mjs"
+import ButtonDeleteViewModel from "../../../component/button-delete/button-delete-viewmodel.mjs"
+import ButtonRollViewModel from "../../../component/button-roll/button-roll-viewmodel.mjs"
+import ButtonSendToChatViewModel from "../../../component/button-send-to-chat/button-send-to-chat-viewmodel.mjs"
 import ButtonViewModel from "../../../component/button/button-viewmodel.mjs"
 import ChoiceAdapter from "../../../component/input-choice/choice-adapter.mjs"
 import InputDropDownViewModel from "../../../component/input-dropdown/input-dropdown-viewmodel.mjs"
@@ -154,7 +157,7 @@ export default class SkillListItemViewModel extends SkillViewModel {
       },
       placeholder: game.i18n.localize("ambersteel.general.name"),
     });
-    this.vmBtnRoll = factory.createVmBtnRoll({
+    this.vmBtnRoll = new ButtonRollViewModel({
       parent: thiz,
       id: "vmBtnRoll",
       target: thiz.document,
@@ -162,16 +165,19 @@ export default class SkillListItemViewModel extends SkillViewModel {
       primaryChatTitle: game.i18n.localize(thiz.document.name),
       primaryChatImage: thiz.document.img,
       rollType: "dice-pool",
-      callback: "advanceByRollResult",
+      onClick: async (callback) => {
+        await callback();
+        thiz.document.advanceByRollResult();
+      },
       actor: thiz.document.owningDocument.document,
     })
-    this.vmBtnSendToChat = factory.createVmBtnSendToChat({
+    this.vmBtnSendToChat = new ButtonSendToChatViewModel({
       parent: thiz,
       id: "vmBtnSendToChat",
       target: thiz.document,
       isEditable: thiz.isEditable || thiz.isGM,
     });
-    this.vmBtnDelete = factory.createVmBtnDelete({
+    this.vmBtnDelete = new ButtonDeleteViewModel({
       parent: thiz,
       id: "vmBtnDelete",
       target: thiz.document,

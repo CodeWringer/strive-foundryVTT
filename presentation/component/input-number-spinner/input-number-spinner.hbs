@@ -15,7 +15,7 @@ readOnlyCssClass: {String | undefined}
     {{#if viewModel.hasMin}}min="{{viewModel.min}}"{{/if}}
     {{#if viewModel.hasMax}}max="{{viewModel.max}}"{{/if}}
     step="{{viewModel.step}}"
-    title="{{viewModel.localizedTitle}}"
+    title="{{viewModel.localizedToolTip}}"
   />
   <div class="spinner-button-container">
     <a class="button-spinner button-spinner-up" title="{{localize ambersteel.labels.increment}}">

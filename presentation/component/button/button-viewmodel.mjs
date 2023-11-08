@@ -29,7 +29,11 @@ export const SELECTOR_BUTTON = "custom-system-button";
  * @property {Boolean} showFancyFont If `true`, will render the `localizedText` 
  * using the "fancy font". 
  * 
- * @method onClick Asynchronous callback that is invoked when the button is clicked. Receives no arguments. 
+ * @method onClick Asynchronous callback that is invoked when 
+ * the button is clicked. Receives the button's original click-handler as its sole 
+ * argument. In most cases, it should be called and `await`ed before one's own 
+ * click handling logic. But in case the original logic is unwanted, the method 
+ * can be ignored. 
  */
 export default class ButtonViewModel extends ViewModel {
   /** @override */
@@ -59,7 +63,10 @@ export default class ButtonViewModel extends ViewModel {
    * the `localizedText` using the "fancy font". 
    * * default `false`
    * @param {Function | undefined} args.onClick Asynchronous callback that is invoked when 
-   * the button is clicked. Receives no arguments. 
+   * the button is clicked. Receives the button's original click-handler as its sole 
+   * argument. In most cases, it should be called and `await`ed before one's own 
+   * click handling logic. But in case the original logic is unwanted, the method 
+   * can be ignored. 
    */
   constructor(args = {}) {
     super(args);
@@ -67,23 +74,25 @@ export default class ButtonViewModel extends ViewModel {
     this.localizedToolTip = args.localizedToolTip;
     this.localizedText = args.localizedText;
     this.iconHtml = args.iconHtml;
-    this.onClick = args.onClick ?? this.onClick;
+    this.onClick = args.onClick ?? (() => {});
   }
 
   /** @override */
   async activateListeners(html) {
     await super.activateListeners(html);
 
-    this.element.click(this.onClick.bind(this));
+    this.element.click(async () => {
+      await this.onClick(this._onClick);
+    });
   }
 
   /**
-   * Asynchronous callback that is invoked upon click on the button. 
+   * Internal asynchronous callback that is invoked upon click. 
    * 
    * @async
    * @virtual
    */
-  async onClick() {
+  async _onClick() {
     // Implementation up to ineriting types.
   }
 }

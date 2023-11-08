@@ -66,7 +66,7 @@ export default class ButtonAddViewModel extends ButtonViewModel {
    * Handle creating a new Owned Item for the actor using initial data defined in the HTML dataset
    * 
    * @override
-   * @see {ButtonViewModel.onClick}
+   * @see {ButtonViewModel._onClick}
    * 
    * @throws {Error} NullPointerException - Thrown, if 'target', 'target.type' or 'creationType' is undefined. 
    * @throws {Error} InvalidArgumentException - Thrown, if trying to add a skill-ability to a non-skill-item. 
@@ -74,7 +74,7 @@ export default class ButtonAddViewModel extends ButtonViewModel {
    * 
    * @async
    */
-  async onClick() {
+  async _onClick() {
     if (this.isEditable !== true) return;
 
     if (this.target === undefined || this.target.type === undefined) {
