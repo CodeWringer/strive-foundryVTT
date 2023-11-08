@@ -58,7 +58,7 @@ export default class ButtonAddViewModel extends ButtonViewModel {
       ...args,
       iconHtml: '<i class="fas fa-plus"></i>',
       localizedLabel: args.localizedLabel,
-      localizedToolTip: args.localizedToolTip ?? "ambersteel.general.add",
+      localizedToolTip: args.localizedToolTip ?? game.i18n.localize("ambersteel.general.add"),
     });
     validateOrThrow(args, ["target", "creationType"]);
 
@@ -109,7 +109,7 @@ export default class ButtonAddViewModel extends ButtonViewModel {
       let creationData;
 
       if (this.withDialog === true) {
-        creationData = this._getCreationDataWithDialog();
+        creationData = await this._getCreationDataWithDialog();
       } else {
         creationData = {
           name: `New ${this.creationType.capitalize()}`,
@@ -163,7 +163,7 @@ export default class ButtonAddViewModel extends ButtonViewModel {
           name: inputChoices,
           localizedLabel: this.localizedType,
           required: true,
-          defaultValue: options[0],
+          defaultValue: customChoice.value,
           specificArgs: {
             options: options,
             adapter: new ChoiceAdapter({
@@ -177,7 +177,7 @@ export default class ButtonAddViewModel extends ButtonViewModel {
 
     if (dialog.confirmed !== true) return;
 
-    const selectedValue = dialog[inputChoices].value;
+    const selectedValue = dialog[inputChoices];
     let creationData;
     if (selectedValue === customChoice.value) {
       creationData = {
