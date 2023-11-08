@@ -41,6 +41,7 @@ export const TEMPLATES = {
   COMPONENT_INPUT_RICH_TEXT: `${basePathComponent}/input-rich-text/input-rich-text.hbs`,
   COMPONENT_INPUT_TAGS: `${basePathComponent}/input-tags/input-tags.hbs`,
   COMPONENT_INPUT_TAG: `${basePathComponent}/input-tags/input-tag-pill.hbs`,
+  COMPONENT_INPUT_TOGGLE: `${basePathComponent}/input-toggle/input-toggle.hbs`,
   // Buttons
   COMPONENT_BUTTON: `${basePathComponent}/button/button.hbs`,
   COMPONENT_BUTTON_ADD: `${basePathComponent}/button-add/button-add.hbs`,

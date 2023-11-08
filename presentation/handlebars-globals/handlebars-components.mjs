@@ -7,7 +7,6 @@ import ButtonSendToChatViewModel from "../component/button-send-to-chat/button-s
 import ButtonTakeItemViewModel from "../component/button-take-item/button-take-item-viewmodel.mjs";
 import ButtonToggleIconViewModel from "../component/button-toggle-icon/button-toggle-icon-viewmodel.mjs";
 import ButtonToggleVisibilityViewModel from "../component/button-toggle-visibility/button-toggle-visibility-viewmodel.mjs";
-import ButtonToggleViewModel from "../component/button-toggle/button-toggle-viewmodel.mjs";
 import ButtonViewModel from "../component/button/button-viewmodel.mjs";
 import ButtonCheckBoxViewModel from "../component/button-checkbox/button-checkbox-viewmodel.mjs";
 import DamageDefinitionListItemViewModel from "../component/damage-definition-list/damage-definition-list-item-viewmodel.mjs";
@@ -27,6 +26,7 @@ import SimpleListViewModel from "../component/simple-list/simple-list-viewmodel.
 import SortableListViewModel from "../component/sortable-list/sortable-list-viewmodel.mjs";
 import VisibilityToggleListViewModel from "../component/visibility-toggle-list/visibility-toggle-list-viewmodel.mjs";
 import ModalDialog from "../dialog/modal-dialog/modal-dialog.mjs";
+import InputToggleViewModel from "../component/input-toggle/input-toggle-viewmodel.mjs";
 
 /**
  * Registers the Handlebars partials of the components. 
@@ -40,7 +40,6 @@ export function initHandlebarsComponents() {
   ButtonRollViewModel.registerHandlebarsPartial();
   ButtonSendToChatViewModel.registerHandlebarsPartial();
   ButtonTakeItemViewModel.registerHandlebarsPartial();
-  ButtonToggleViewModel.registerHandlebarsPartial();
   ButtonToggleIconViewModel.registerHandlebarsPartial();
   ButtonToggleVisibilityViewModel.registerHandlebarsPartial();
   ButtonCheckBoxViewModel.registerHandlebarsPartial();
@@ -55,6 +54,7 @@ export function initHandlebarsComponents() {
   InputRichTextViewModel.registerHandlebarsPartial();
   InputTextareaViewModel.registerHandlebarsPartial();
   InputTextFieldViewModel.registerHandlebarsPartial();
+  InputToggleViewModel.registerHandlebarsPartial();
   LazyLoadViewModel.registerHandlebarsPartial();
   LazyRichTextViewModel.registerHandlebarsPartial();
   SimpleListViewModel.registerHandlebarsPartial();

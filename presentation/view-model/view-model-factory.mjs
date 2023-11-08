@@ -7,7 +7,6 @@ import ButtonRollViewModel from "../component/button-roll/button-roll-viewmodel.
 import ButtonSendToChatViewModel from "../component/button-send-to-chat/button-send-to-chat-viewmodel.mjs"
 import ButtonTakeItemViewModel from "../component/button-take-item/button-take-item-viewmodel.mjs"
 import ButtonToggleVisibilityViewModel from "../component/button-toggle-visibility/button-toggle-visibility-viewmodel.mjs"
-import ButtonToggleViewModel from "../component/button-toggle/button-toggle-viewmodel.mjs"
 
 /**
  * @summary
@@ -116,7 +115,6 @@ export default class ViewModelFactory {
    * @returns {ButtonDeleteViewModel}
    */
   createVmBtnDelete(args = {}) {
-    const thiz = this;
     validateOrThrow(args, ["target"]);
 
     return new ButtonDeleteViewModel({
@@ -147,7 +145,6 @@ export default class ViewModelFactory {
    * @returns {ButtonOpenSheetViewModel}
    */
   createVmBtnOpenSheet(args = {}) {
-    const thiz = this;
     validateOrThrow(args, ["target"]);
 
     return new ButtonOpenSheetViewModel({
@@ -184,7 +181,6 @@ export default class ViewModelFactory {
    * @returns {ButtonRollViewModel}
    */
   createVmBtnRoll(args = {}) {
-    const thiz = this;
     validateOrThrow(args, ["target", "rollType"]);
 
     return new ButtonRollViewModel({
@@ -223,7 +219,6 @@ export default class ViewModelFactory {
    * @returns {ButtonSendToChatViewModel}
    */
   createVmBtnSendToChat(args = {}) {
-    const thiz = this;
     validateOrThrow(args, ["target"]);
 
     return new ButtonSendToChatViewModel({
@@ -256,7 +251,6 @@ export default class ViewModelFactory {
    * @returns {ButtonTakeItemViewModel}
    */
   createVmBtnTakeItem(args = {}) {
-    const thiz = this;
     validateOrThrow(args, ["target", "contextType"]);
 
     return new ButtonTakeItemViewModel({
@@ -290,7 +284,6 @@ export default class ViewModelFactory {
    * @returns {ButtonToggleVisibilityViewModel}
    */
   createVmBtnToggleVisibility(args = {}) {
-    const thiz = this;
     validateOrThrow(args, ["visGroup"]);
 
     return new ButtonToggleVisibilityViewModel({
@@ -299,36 +292,6 @@ export default class ViewModelFactory {
       target: args.target,
       callback: args.callback,
       toggleSelf: args.toggleSelf,
-      localizedTooltip: args.localizedTooltip,
-    });
-  }
-
-  /**
-   * Creates a toggle button view model and returns it. 
-   * 
-   * @param {ViewModel | undefined} args.parent Optional. A parent `ViewModel` instance. 
-   * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
-   * @param {Boolean | undefined} args.isEditable Optional. If true, the sheet is editable. 
-   * @param {Boolean | undefined} args.isSendable Optional. If true, the document represented by the sheet can be sent to chat. 
-   * @param {Boolean | undefined} args.isOwner Optional. If true, the current user is the owner of the represented document. 
-   * @param {Boolean | undefined} args.isGM Optional. If true, the current user is a GM. 
-   * @param {String | undefined} args.contextTemplate Optional. Name or path of a contextual template, 
-   * which will be displayed in exception log entries, to aid debugging. 
-   * @param {Object} args.target
-   * @param {String} args.propertyPath
-   * @param {Boolean | undefined} args.isEditable
-   * @param {String | undefined} args.localizedTooltip Localized tooltip. 
-   * 
-   * @returns {ButtonToggleViewModel}
-   */
-  createVmBtnToggle(args = {}) {
-    const thiz = this;
-    validateOrThrow(args, ["target", "propertyPath"]);
-
-    return new ButtonToggleViewModel({
-      ...this._getBaseArguments(args),
-      target: args.target,
-      propertyPath: args.propertyPath,
       localizedTooltip: args.localizedTooltip,
     });
   }
