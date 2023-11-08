@@ -106,6 +106,7 @@ export default class ActorAssetsViewModel extends ViewModel {
       listItemTemplate: TEMPLATES.ASSET_LIST_ITEM,
       vmBtnAddItem: new ButtonAddViewModel({
         id: "vmBtnAddItem",
+        parent: this,
         target: thiz.document,
         isEditable: thiz.isEditable,
         creationType: "item",
@@ -129,6 +130,7 @@ export default class ActorAssetsViewModel extends ViewModel {
       listItemTemplate: TEMPLATES.ASSET_LIST_ITEM,
       vmBtnAddItem: new ButtonAddViewModel({
         id: "vmBtnAddItem",
+        parent: this,
         target: thiz.document,
         isEditable: thiz.isEditable,
         creationType: "item",

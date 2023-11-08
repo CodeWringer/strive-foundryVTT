@@ -104,6 +104,7 @@ export default class SkillAbilityTableViewModel extends ViewModel {
       listItemTemplate: TEMPLATES.SKILL_ABILITY_LIST_ITEM,
       vmBtnAddItem: new ButtonAddViewModel({
         id: "vmBtnAdd",
+        parent: this,
         target: thiz.document,
         isEditable: this.isEditable,
         creationType: "skill-ability",

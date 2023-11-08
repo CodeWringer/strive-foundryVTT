@@ -186,6 +186,7 @@ export default class ActorHealthViewModel extends ViewModel {
       listItemTemplate: TEMPLATES.ILLNESS_LIST_ITEM,
       vmBtnAddItem: new ButtonAddViewModel({
         id: "vmBtnAddIllness",
+        parent: this,
         target: thiz.document,
         isEditable: this.isEditable,
         creationType: "illness",
@@ -210,6 +211,7 @@ export default class ActorHealthViewModel extends ViewModel {
       listItemTemplate: TEMPLATES.INJURY_LIST_ITEM,
       vmBtnAddItem: new ButtonAddViewModel({
         id: "vmBtnAddInjury",
+        parent: this,
         target: thiz.document,
         isEditable: this.isEditable,
         creationType: "injury",
@@ -234,6 +236,7 @@ export default class ActorHealthViewModel extends ViewModel {
       listItemTemplate: TEMPLATES.MUTATION_LIST_ITEM,
       vmBtnAddItem: new ButtonAddViewModel({
         id: "vmBtnAddMutation",
+        parent: this,
         target: thiz.document,
         isEditable: this.isEditable,
         creationType: "mutation",
@@ -258,6 +261,7 @@ export default class ActorHealthViewModel extends ViewModel {
       listItemTemplate: TEMPLATES.SCAR_LIST_ITEM,
       vmBtnAddItem: new ButtonAddViewModel({
         id: "vmBtnAddScar",
+        parent: this,
         target: thiz.document,
         isEditable: this.isEditable,
         creationType: "scar",

@@ -54,6 +54,7 @@ export default class ActorSkillsViewModel extends ViewModel {
       listItemTemplate: TEMPLATES.SKILL_LIST_ITEM,
       vmBtnAddItem: new ButtonAddViewModel({
         id: "vmBtnAddLearningSkill",
+        parent: this,
         isEditable: thiz.isEditable,
         target: thiz.document,
         creationType: "skill",
@@ -82,6 +83,7 @@ export default class ActorSkillsViewModel extends ViewModel {
       listItemTemplate: TEMPLATES.SKILL_LIST_ITEM,
       vmBtnAddItem: new ButtonAddViewModel({
         id: "vmBtnAddKnownSkill",
+        parent: this,
         target: thiz.document,
         isEditable: thiz.isEditable,
         creationType: "skill",
