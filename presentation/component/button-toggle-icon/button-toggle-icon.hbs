@@ -2,14 +2,6 @@
 viewModel: {ButtonToggleIconViewModel}
 cssClass: {String | undefined}
 --}}
-<a 
-  class="custom-system-button button light square flex flex-center{{#if viewModel.isEditable}}{{else}} disabled{{/if}}{{cssClass}}" 
-  title="{{viewModel.localizedTitle}}" 
-  id="{{viewModel.id}}" 
->
-  {{#if viewModel.value}}
-    <span>{{{viewModel.iconActive}}}</span>
-  {{else}}
-    <span>{{{viewModel.iconInactive}}}</span>
-  {{/if}}
-</a>
+<div id="{{viewModel.id}}">
+  {{> button viewModel=viewModel.vmButton }}
+</div>

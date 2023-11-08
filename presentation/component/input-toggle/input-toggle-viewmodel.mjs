@@ -1,6 +1,5 @@
 import { TEMPLATES } from "../../templatePreloader.mjs";
 import InputViewModel from "../../view-model/input-view-model.mjs";
-import { SELECTOR_BUTTON } from "../button/button-viewmodel.mjs";
 
 /**
  * Toggles a boolean value via a "knob" button. 
@@ -48,7 +47,7 @@ export default class InputToggleViewModel extends InputViewModel {
   async activateListeners(html) {
     await super.activateListeners(html);
 
-    html.find(`.${SELECTOR_BUTTON}#${this.id}-button`).click(() => {
+    html.find(`#${this.id}-button`).click(() => {
       if (this.isEditable !== true) return;
       
       this.value = !this.value;

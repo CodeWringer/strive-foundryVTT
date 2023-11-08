@@ -44,9 +44,7 @@ export const TEMPLATES = {
   COMPONENT_INPUT_TOGGLE: `${basePathComponent}/input-toggle/input-toggle.hbs`,
   // Buttons
   COMPONENT_BUTTON: `${basePathComponent}/button/button.hbs`,
-  COMPONENT_BUTTON_ADD: `${basePathComponent}/button-add/button-add.hbs`,
   COMPONENT_BUTTON_TOGGLE_VISIBILITY: `${basePathComponent}/button-toggle-visibility/button-toggle-visibility.hbs`,
-  COMPONENT_BUTTON_TOGGLE: `${basePathComponent}/button-toggle/button-toggle.hbs`,
   COMPONENT_BUTTON_TOGGLE_ICON: `${basePathComponent}/button-toggle-icon/button-toggle-icon.hbs`,
   COMPONENT_BUTTON_CHECKBOX: `${basePathComponent}/button-checkbox/button-checkbox.hbs`,
   // Composite

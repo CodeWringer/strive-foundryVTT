@@ -1,13 +1,14 @@
-import { HealthState, HEALTH_STATES } from "../../../../business/ruleset/health/health-states.mjs";
+import { HEALTH_STATES } from "../../../../business/ruleset/health/health-states.mjs";
 import LoadHealthStatesSettingUseCase from "../../../../business/use-case/load-health-states-setting-use-case.mjs";
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs";
 import ButtonViewModel from "../../../component/button/button-viewmodel.mjs";
 import SimpleListItemViewModel from "../../../component/simple-list/simple-list-item-viewmodel.mjs";
 import SimpleListViewModel from "../../../component/simple-list/simple-list-viewmodel.mjs";
-import VisibilityToggleListViewModel, { VisibilityToggleListItem } from "../../../component/visibility-toggle-list/visibility-toggle-list-viewmodel.mjs";
+import VisibilityToggleListViewModel from "../../../component/visibility-toggle-list/visibility-toggle-list-viewmodel.mjs";
 import { TEMPLATES } from "../../../templatePreloader.mjs";
 import ViewModel from "../../../view-model/view-model.mjs";
 import CustomHealthStateListItemViewModel from "./custom-health-state-list-item-viewmodel.mjs";
+import { HealthStateVisibilityItem } from "./health-state-visibility-item.mjs";
 
 /**
  * @extends ViewModel
@@ -16,7 +17,7 @@ import CustomHealthStateListItemViewModel from "./custom-health-state-list-item-
  * * Private
  * * Cached
  * @property {Array<ViewModel>} stateViewModels
- * @property {Array<VisibilityToggleListItem>} stateVisibilityItems
+ * @property {Array<HealthStateVisibilityItem>} stateVisibilityItems
  * @property {Array<HealthState>} customHealthStates
  */
 export default class HealthStatesSettingsDialogViewModel extends ViewModel {
@@ -24,7 +25,7 @@ export default class HealthStatesSettingsDialogViewModel extends ViewModel {
   static get TEMPLATE() { return TEMPLATES.DIALOG_SETTINGS_HEALTH_STATES; }
 
   /**
-   * @type {Array<VisibilityToggleListItem>}
+   * @type {Array<HealthStateVisibilityItem>}
    */
   get stateVisibilityItems() { return this._stateVisibilityItems; }
   set stateVisibilityItems(value) {
@@ -141,13 +142,13 @@ export default class HealthStatesSettingsDialogViewModel extends ViewModel {
   }
 
   /**
-   * @returns {Array<VisibilityToggleListItem>}
+   * @returns {Array<HealthStateVisibilityItem>}
    * 
    * @private
    */
   _getHealthStateVisibilityViewModels() {
     const states = HEALTH_STATES.asArray();
-    const result = states.map(healthState => new VisibilityToggleListItem({
+    const result = states.map(healthState => new HealthStateVisibilityItem({
       id: healthState.name,
       localizedName: game.i18n.localize(healthState.localizableName),
       value: this.stateSettings.hidden.find(stateName => stateName === healthState.name) === undefined,

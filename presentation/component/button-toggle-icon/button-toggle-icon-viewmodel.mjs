@@ -1,21 +1,27 @@
-import { getNestedPropertyValue,setNestedPropertyValue } from "../../../business/util/property-utility.mjs";
 import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import { TEMPLATES } from "../../templatePreloader.mjs";
+import InputViewModel from "../../view-model/input-view-model.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
 
 /**
  * A button that allows toggling a specific boolean value. 
  * 
- * Toggles between two given 
+ * Toggles between two given icons, based on the boolean value. 
  * 
- * @extends ButtonViewModel
+ * @extends InputViewModel
  * 
- * @property {Object} target An object on which to look for a property 
- * identified by the given `propertyPath`. 
- * @property {String} propertyPath The path identifying the boolean value. 
  * @property {Boolean} value The value of the boolean property. 
+ * @property {String} iconActive An HTML-String of the "active" icon. 
+   * * E. g. `"<i class="fas fa-eye"></i>"`
+ * @property {String} iconInactive An HTML-String of the "inactive" icon. 
+   * * E. g. `"<i class="fas fa-eye-slash"></i>"`
+ * 
+ * @method onChange Callback that is invoked when the value changes. 
+ * Receives the following arguments: 
+ * * `oldValue: {Boolean}`
+ * * `newValue: {Boolean}`
  */
-export default class ButtonToggleIconViewModel extends ButtonViewModel {
+export default class ButtonToggleIconViewModel extends InputViewModel {
   static get TEMPLATE() { return TEMPLATES.COMPONENT_BUTTON_TOGGLE_ICON; }
   
   /**
@@ -28,47 +34,16 @@ export default class ButtonToggleIconViewModel extends ButtonViewModel {
   }
 
   /**
-   * Returns the current value of the property. 
-   * 
-   * @type {Boolean}
-   */
-  get value() {
-    try {
-      return getNestedPropertyValue(this.target, this.propertyPath);
-    } catch (error) {
-      if (this._contextTemplate !== undefined) {
-        throw new Error(`[${this._contextTemplate}] IllegalStateException: ${error.message}`);
-      } else {
-        throw error;
-      }
-    }
-  }
-  /**
-   * Sets the value of the property. 
-   * 
-   * @param {Boolean} newValue
-   */
-  set value(newValue) {
-    try {
-      setNestedPropertyValue(this.target, this.propertyPath, newValue);
-    } catch (error) {
-      if (this._contextTemplate !== undefined) {
-        throw new Error(`[${this._contextTemplate}] IllegalStateException: ${error.message}`);
-      } else {
-        throw error;
-      }
-    }
-  }
-
-  /**
-   * @param {Object} args
+   * @param {Object} args 
    * @param {String | undefined} args.id Unique ID of this view model instance. 
-   * @param {Function | String | undefined} args.callback Defines an asynchronous callback that is invoked upon completion of the button's own callback. 
-   * @param {Boolean | undefined} args.isEditable If true, will be interactible. 
-   * @param {String | undefined} args.localizedTooltip Localized tooltip. 
+   * @param {Boolean | undefined} args.isEditable If true, input(s) will be in edit mode. If false, input(s) will be in read-only mode.
    * 
-   * @param {Object} args.target The target document to affect.  
-   * @param {String} args.propertyPath The path used to look up the value. 
+   * @param {Boolean | undefined} args.value The current value. 
+   * * default `false` 
+   * @param {Function | undefined} args.onChange Callback that is invoked 
+   * when the value changes. Receives two arguments: 
+   * * `oldValue: {String}`
+   * * `newValue: {String}`
    * @param {String} args.iconActive An HTML-String of the "active" icon. 
    * * E. g. `"<i class="fas fa-eye"></i>"`
    * @param {String} args.iconInactive An HTML-String of the "inactive" icon. 
@@ -76,18 +51,22 @@ export default class ButtonToggleIconViewModel extends ButtonViewModel {
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["propertyPath", "target", "iconActive", "iconInactive"]);
+    validateOrThrow(args, ["iconActive", "iconInactive"]);
 
-    this.target = args.target;
-    this.propertyPath = args.propertyPath;
+    this._value = args.value ?? false;
     this.iconActive = args.iconActive;
     this.iconInactive = args.iconInactive;
-  }
 
-  /** @override */
-  async onClick() {
-    if (this.isEditable !== true) return;
+    this.vmButton = new ButtonViewModel({
+      id: "vmButton",
+      parent: this,
+      iconHtml: this.value === true ? this.iconActive : this.iconInactive,
+      localizedToolTip: args.localizedToolTip,
+      onClick: () => {
+        if (this.isEditable !== true) return;
     
-    this.value = !this.value;
+        this.value = !this.value;
+      }
+    });
   }
 }

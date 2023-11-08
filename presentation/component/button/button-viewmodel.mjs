@@ -16,7 +16,10 @@ export const SELECTOR_BUTTON = "custom-system-button";
  * 
  * @property {String} id Unique ID of this view model instance. 
  * @property {Boolean} isEditable If true, is interactible. 
- * @property {JQuery | HTMLElement} element The button element on the DOM. 
+ * @property {JQuery | HTMLElement} element The DOM element that is 
+ * associated with this view model. 
+ * * Read-only
+ * 
  * @property {String | undefined} localizedToolTip A localized text to 
  * display as a tool tip. 
  * @property {String | undefined} localizedText A localized text to 
@@ -40,18 +43,6 @@ export default class ButtonViewModel extends ViewModel {
   static registerHandlebarsPartial() {
     Handlebars.registerPartial('button', `{{> "${ButtonViewModel.TEMPLATE}"}}`);
   }
-
-  /**
-   * @type {JQuery | HTMLElement}
-   * @private
-   */
-  _element = undefined;
-  /**
-   * Returns the HTMLElement that is associated with this view model. 
-   * @type {JQuery | HTMLElement}
-   * @readonly
-   */
-  get element() { return this._element; }
 
   /**
    * @param {Object} args
@@ -82,12 +73,6 @@ export default class ButtonViewModel extends ViewModel {
   /** @override */
   async activateListeners(html) {
     await super.activateListeners(html);
-    
-    this._element = html.find(`.${SELECTOR_BUTTON}#${this.id}`);
-    
-    if (this._element === undefined || this._element === null || this._element.length === 0) {
-      throw new Error(`NullPointerException: Failed to get input element with id '${this.id}'`);
-    }
 
     this.element.click(this.onClick.bind(this));
   }

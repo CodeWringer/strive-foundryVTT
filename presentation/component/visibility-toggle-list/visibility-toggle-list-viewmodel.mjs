@@ -1,47 +1,7 @@
-import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
+import { HealthStateVisibilityItem } from "../../dialog/settings/health-states/health-state-visibility-item.mjs";
 import { TEMPLATES } from "../../templatePreloader.mjs";
 import InputViewModel from "../../view-model/input-view-model.mjs";
 import VisibilityToggleListItemViewModel from "./visibility-toggle-list-item-viewmodel.mjs";
-
-/**
- * Represents a visibility list item. 
- * 
- * @property {String} id Unique ID of this entry. 
- * @property {String} localizedName A localized name for display. 
- * @property {Boolean} value Gets or sets the value. 
- */
-export class VisibilityToggleListItem {
-  /**
-   * @param {Object} args 
-   * @param {String} args.id Unique ID of this entry. 
-   * @param {String} args.localizedName A localized name for display. 
-   * @param {Boolean | undefined} args.value The initial value. 
-   * * Default `false`
-   */
-  constructor(args = {}) {
-    validateOrThrow(args, ["id", "localizedName"]);
-
-    this.id = args.id;
-    this.localizedName = args.localizedName;
-    this.value = args.value ?? false;
-  }
-
-  /**
-   * Returns a new view model instance representing this type. 
-   * 
-   * @param {VisibilityToggleListViewModel} parent 
-   * 
-   * @returns {VisibilityToggleListItemViewModel}
-   */
-  getViewModel(parent) {
-    return new VisibilityToggleListItemViewModel({
-      id: this.id,
-      parent: parent,
-      value: this.value,
-      localizedLabel: this.localizedName,
-    });
-  }
-}
 
 /**
  * @property {String} id Unique ID of this view model instance. 
@@ -62,12 +22,12 @@ export class VisibilityToggleListItem {
  * * Read-only
  * @property {Array<VisibilityToggleListItemViewModel>} itemViewModels
  * * Read-only
- * @property {Array<VisibilityToggleListItem>} value
+ * @property {Array<HealthStateVisibilityItem>} value
  * 
  * @method onChange Callback that is invoked when the value changes. 
  * Receives the following arguments: 
- * * `oldValue: {Array<VisibilityToggleListItem>}`
- * * `newValue: {Array<VisibilityToggleListItem>}`
+ * * `oldValue: {Array<HealthStateVisibilityItem>}`
+ * * `newValue: {Array<HealthStateVisibilityItem>}`
  * 
  * @extends InputViewModel
  */
@@ -99,17 +59,15 @@ export default class VisibilityToggleListViewModel extends InputViewModel {
    * an associated icon. E. g. `'<i class="fas fa-scroll"></i>'`
    * @param {Function | undefined} args.onChange Callback that is invoked 
    * when the value changes. Receives two arguments: 
-   * * `oldValue: {Array<VisibilityToggleListItem>}`
-   * * `newValue: {Array<VisibilityToggleListItem>}`
+   * * `oldValue: {Array<HealthStateVisibilityItem>}`
+   * * `newValue: {Array<HealthStateVisibilityItem>}`
    * 
-   * @param {Array<VisibilityToggleListItem> | undefined} args.value 
-   * The current list of items. 
+   * @param {Array<HealthStateVisibilityItem> | undefined} args.value 
    */
   constructor(args = {}) {
     super(args);
 
     this._value = args.value ?? [];
-    this.itemViewModels = [];
     this.itemViewModels = this._getItemViewModels();
   }
 
@@ -118,7 +76,6 @@ export default class VisibilityToggleListViewModel extends InputViewModel {
     for (const vm of this.itemViewModels) {
       vm.dispose();
     }
-    this.itemViewModels = [];
     this.itemViewModels = this._getItemViewModels();
 
     super.update(args);
@@ -130,22 +87,33 @@ export default class VisibilityToggleListViewModel extends InputViewModel {
    * @private
    */
   _getItemViewModels() {
-    return this.value.map(item => {
-      const vm = item.getViewModel(this);
-      vm.onChange = (oldItemValue, newItemValue) => {
-        const oldItemArray = this.value.concat([]);
-        const index = oldItemArray.findIndex(it => it.id === item.id)
-        oldItemArray[index] = new VisibilityToggleListItem({
-          id: item.id,
-          localizedName: item.localizedName,
-          value: oldItemValue,
-        });
+    return this.value.map(item => 
+      new VisibilityToggleListItemViewModel({
+        id: `${item.id}-toggle`,
+        parent: this,
+        value: item.value,
+        localizedLabel: item.localizedName,
+        onChange: (oldValue, newValue) => {
+          // Preserve the old value for use by consumers of the onChange callback. 
+          const oldItemArray = this.value.concat([]);
+          const index = oldItemArray.findIndex(it => it.id === item.id)
+          oldItemArray[index] = new HealthStateVisibilityItem({
+            id: item.id,
+            localizedName: item.localizedName,
+            value: oldValue,
+          });
 
-        const newItemArray = this.value.concat([]);
-        
-        this.onChange(oldItemArray, newItemArray);
-      };
-      return vm;
-    });
+          // Update the new value in the list. 
+          const newItemArray = this.value.concat([]);
+          newItemArray[index] = new HealthStateVisibilityItem({
+            id: item.id,
+            localizedName: item.localizedName,
+            value: newValue,
+          });
+
+          this.onChange(oldItemArray, newItemArray);
+        }
+      })
+    );
   }
 }
