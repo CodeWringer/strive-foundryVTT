@@ -1,4 +1,3 @@
-import { TEMPLATES } from "../../templatePreloader.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
 
 /**
@@ -12,8 +11,6 @@ import ButtonViewModel from "../button/button-viewmodel.mjs";
  * @see https://foundryvtt.com/api/ContextMenu.html
  */
 export default class ButtonContextMenuViewModel extends ButtonViewModel {
-  static get TEMPLATE() { return TEMPLATES.COMPONENT_BUTTON_CONTEXT_MENU; }
-
   /**
    * Registers the Handlebars partial for this component. 
    * 
@@ -71,7 +68,10 @@ export default class ButtonContextMenuViewModel extends ButtonViewModel {
    * {Function} callback A callback function to trigger when the entry of the menu is clicked
    */
   constructor(args = {}) {
-    super(args);
+    super({
+      ...args,
+      iconHtml: '<i class="fas fa-bars"></i>',
+    });
 
     this.menuItems = args.menuItems ?? [];
     this.localizedTooltip = args.localizedTooltip ?? game.i18n.localize("ambersteel.general.contextMenu");
@@ -101,8 +101,8 @@ export default class ButtonContextMenuViewModel extends ButtonViewModel {
    * @see {ButtonViewModel.onClick}
    * @async
    */
-  async onClick(html, isOwner, isEditable) {
-    if (isEditable !== true) return;
+  async onClick() {
+    if (this.isEditable !== true) return;
 
     // Show context menu below button. 
     this.isShown = !this.isShown;

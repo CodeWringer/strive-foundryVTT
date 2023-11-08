@@ -1,6 +1,5 @@
 import * as StringUtil from "../../../business/util/string-utility.mjs"
 import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
-import { TEMPLATES } from "../../templatePreloader.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
 import ConfirmablePlainDialog from "../../dialog/plain-confirmable-dialog/plain-confirmable-dialog.mjs";
 
@@ -14,8 +13,6 @@ import ConfirmablePlainDialog from "../../dialog/plain-confirmable-dialog/plain-
  * @property {String} localizedDialogContent Localized content of the confirmation dialog window. 
  */
 export default class ButtonDeleteViewModel extends ButtonViewModel {
-  static get TEMPLATE() { return TEMPLATES.COMPONENT_BUTTON_DELETE; }
-  
   /**
    * Registers the Handlebars partial for this component. 
    * 
@@ -37,9 +34,13 @@ export default class ButtonDeleteViewModel extends ButtonViewModel {
    * @param {Boolean | undefined} args.withDialog Optional. If true, will prompt the user to make a selection with a dialog. 
    */
   constructor(args = {}) {
-    super(args);
+    super({
+      ...args,
+      iconHtml: '<i class="fas fa-trash"></i>',
+    });
     validateOrThrow(args, ["target"]);
 
+    this.target = args.target;
     this.withDialog = args.withDialog ?? false;
     this.propertyPath = args.propertyPath;
     this.localizedTooltip = args.localizedTooltip ?? game.i18n.localize("ambersteel.general.delete.label");
@@ -53,8 +54,8 @@ export default class ButtonDeleteViewModel extends ButtonViewModel {
    * @throws {Error} NullPointerException - Thrown, if 'target' is undefined. 
    * @throws {Error} NullPointerException - Thrown, if trying to delete by property path and 'target.deleteByPath' is undefined. 
    */
-  async onClick(html, isOwner, isEditable) {
-    if (isEditable !== true) return;
+  async onClick() {
+    if (this.isEditable !== true) return;
 
     if (this.target === undefined) {
       throw new Error("NullPointerException: 'target' or 'target.type' is undefined");

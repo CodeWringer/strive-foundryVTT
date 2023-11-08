@@ -8,13 +8,6 @@ import ButtonSendToChatViewModel from "../component/button-send-to-chat/button-s
 import ButtonTakeItemViewModel from "../component/button-take-item/button-take-item-viewmodel.mjs"
 import ButtonToggleVisibilityViewModel from "../component/button-toggle-visibility/button-toggle-visibility-viewmodel.mjs"
 import ButtonToggleViewModel from "../component/button-toggle/button-toggle-viewmodel.mjs"
-import InputDropDownViewModel from "../component/input-dropdown/input-dropdown-viewmodel.mjs"
-import InputImageViewModel from "../component/input-image/input-image-viewmodel.mjs"
-import InputNumberSpinnerViewModel from "../component/input-number-spinner/input-number-spinner-viewmodel.mjs"
-import InputRadioButtonGroupViewModel from "../component/input-radio-button-group/input-radio-button-group-viewmodel.mjs"
-import InputRichTextViewModel from "../component/input-rich-text/input-rich-text-viewmodel.mjs"
-import InputTextareaViewModel from "../component/input-textarea/input-textarea-viewmodel.mjs"
-import InputTextFieldViewModel from "../component/input-textfield/input-textfield-viewmodel.mjs"
 
 /**
  * @summary
@@ -98,7 +91,7 @@ export default class ViewModelFactory {
       withDialog: args.withDialog,
       creationData: args.creationData,
       localizedTooltip: args.localizedTooltip,
-      localizedLabel: args.localizedLabel,
+      localizedText: args.localizedLabel,
       localizedType: args.localizedType,
     });
   }

@@ -11,12 +11,6 @@ viewModel: HealthStatesSettingsDialogViewModel
     {{> simpleList viewModel=viewModel.vmCustomList}}
   </div>
   <div>
-    {{#> button viewModel=viewModel.vmBtnSave}}
-      <div class="flex flex-middle flex-center pad-md button-full fill">
-        <i class="fas fa-save"></i>
-        <span style="width: 5px;"></span>
-        <span>{{localize "ambersteel.settings.saveChanges"}}</span>
-      </div>
-    {{/button}}
+    {{> button viewModel=viewModel.vmBtnSave cssClass="flex flex-middle flex-center pad-md button-full fill" }}
   </div>
 </section>

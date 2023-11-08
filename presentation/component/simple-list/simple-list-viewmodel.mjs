@@ -70,8 +70,6 @@ export default class SimpleListViewModel extends ViewModel {
     this.onAddClick = args.onAddClick ?? this.onAddClick;
     this.onRemoveClick = args.onRemoveClick ?? this.onRemoveClick;
 
-    const thiz = this;
-
     this.itemViewModels = [];
     this.itemViewModels = this._getItemViewModels();
 
@@ -79,6 +77,8 @@ export default class SimpleListViewModel extends ViewModel {
       this.vmBtnAddItem = new ButtonViewModel({
         id: "vmBtnAddItem",
         parent: this,
+        iconHtml: '<i class="fas fa-plus"></i>',
+        localizedText: this.localizedAddLabel,
         isEditable: this.isEditable,
         onClick: this.onAddClick,
       });

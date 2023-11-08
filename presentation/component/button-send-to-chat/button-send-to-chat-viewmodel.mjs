@@ -15,8 +15,6 @@ import { VISIBILITY_MODES } from "../../chat/visibility-modes.mjs";
  * @property {Actor | undefined} actor Actor associated with the chat message. 
  */
 export default class ButtonSendToChatViewModel extends ButtonViewModel {
-  static get TEMPLATE() { return TEMPLATES.COMPONENT_BUTTON_SEND_TO_CHAT; }
-
   /**
    * Registers the Handlebars partial for this component. 
    * 
@@ -73,9 +71,13 @@ export default class ButtonSendToChatViewModel extends ButtonViewModel {
    * @param {String | undefined} args.localizedTooltip Localized tooltip. 
    */
   constructor(args = {}) {
-    super(args);
+    super({
+      ...args,
+      iconHtml: '<i class="fas fa-comments"></i>',
+    });
     validateOrThrow(args, ["target"]);
 
+    this.target = args.target;
     this._propertyPath = args.propertyPath;
     this._chatTitle = args.chatTitle ?? "";
     this._actor = args.actor;
@@ -87,8 +89,8 @@ export default class ButtonSendToChatViewModel extends ButtonViewModel {
    * @see {ButtonViewModel.onClick}
    * @async
    */
-  async onClick(html, isOwner, isEditable) {
-    if (isEditable !== true) return;
+  async onClick() {
+    if (this.isEditable !== true) return;
 
     const thiz = this;
 

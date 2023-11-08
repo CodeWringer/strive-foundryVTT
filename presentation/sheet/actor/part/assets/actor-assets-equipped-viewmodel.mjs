@@ -29,12 +29,6 @@ export default class ActorAssetsEquippedViewModel extends ViewModel {
   get assetSlotGroupTemplate() { return TEMPLATES.ACTOR_ASSET_SLOT_GROUP; }
   
   /**
-   * @type {String}
-   * @readonly
-   */
-  get localizedAddSlotGroupLabel() { return game.i18n.localize("ambersteel.character.asset.slot.group.add.label"); }
-
-  /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
    * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 
    * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 
@@ -60,10 +54,9 @@ export default class ActorAssetsEquippedViewModel extends ViewModel {
     this.vmBtnAddSlotGroup = new ButtonViewModel({
       id: "vmBtnAddSlotGroup",
       parent: this,
-      isSendable: this.isSendable,
-      isEditable: this.isEditable,
-      isOwner: this.isOwner,
       target: this.document,
+      iconHtml: '<i class="fas fa-plus"></i>',
+      localizedText: game.i18n.localize("ambersteel.character.asset.slot.group.add.label"),
       localizedTooltip: game.i18n.localize("ambersteel.character.asset.slot.add.label"),
       onClick: async () => {
         const inputName = "name";

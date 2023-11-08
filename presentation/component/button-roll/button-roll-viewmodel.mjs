@@ -1,6 +1,5 @@
 import { ROLL_TYPES } from "../../../business/dice/roll-types.mjs";
 import { SOUNDS_CONSTANTS } from "../../audio/sounds.mjs";
-import { TEMPLATES } from "../../templatePreloader.mjs";
 import * as ChatUtil from "../../chat/chat-utility.mjs";
 import * as PropUtil from "../../../business/util/property-utility.mjs";
 import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
@@ -12,7 +11,7 @@ import { VISIBILITY_MODES } from "../../chat/visibility-modes.mjs";
 import ChoiceAdapter from "../input-choice/choice-adapter.mjs";
 import { ROLL_DICE_MODIFIER_TYPES } from "../../../business/dice/roll-dice-modifier-types.mjs";
 import DynamicInputDefinition from "../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
-import { Sum, SumComponent } from "../../../business/ruleset/summed-data.mjs";
+import { SumComponent } from "../../../business/ruleset/summed-data.mjs";
 import DicePool, { DicePoolRollResult } from "../../../business/dice/dice-pool.mjs";
 
 /**
@@ -30,8 +29,6 @@ import DicePool, { DicePoolRollResult } from "../../../business/dice/dice-pool.m
  * @property {DicePoolRollResult | Object | undefined} lastRollResult The last rolled result. Or undefined, if no roll has been made, yet. 
  */
 export default class ButtonRollViewModel extends ButtonViewModel {
-  static get TEMPLATE() { return TEMPLATES.COMPONENT_BUTTON_ROLL; }
-
   /**
    * Registers the Handlebars partial for this component. 
    * 
@@ -116,9 +113,13 @@ export default class ButtonRollViewModel extends ButtonViewModel {
    * @param {String | undefined} args.localizedTooltip Localized tooltip. 
    */
   constructor(args = {}) {
-    super(args);
+    super({
+      ...args,
+      iconHtml: '<i class="fas fa-dice-three"></i>',
+    });
     validateOrThrow(args, ["target", "rollType"]);
 
+    this.target = args.target;
     this._propertyPath = args.propertyPath;
     this._rollType = args.rollType;
     this.primaryChatTitle = args.primaryChatTitle;
@@ -139,8 +140,8 @@ export default class ButtonRollViewModel extends ButtonViewModel {
    * @throws {Error} InvalidStateException - Thrown, if the property path is undefined and there is no 
    * 'getRollData()' method defined on the target object. 
    */
-  async onClick(html, isOwner, isEditable) {
-    if (isEditable !== true) return;
+  async onClick() {
+    if (this.isEditable !== true) return;
 
     // Prepare the dialog. 
     // By default, it allows selection of the visibility mode. 

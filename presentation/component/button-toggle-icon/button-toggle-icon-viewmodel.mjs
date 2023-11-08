@@ -78,14 +78,15 @@ export default class ButtonToggleIconViewModel extends ButtonViewModel {
     super(args);
     validateOrThrow(args, ["propertyPath", "target", "iconActive", "iconInactive"]);
 
+    this.target = args.target;
     this.propertyPath = args.propertyPath;
     this.iconActive = args.iconActive;
     this.iconInactive = args.iconInactive;
   }
 
   /** @override */
-  async onClick(html, isOwner, isEditable) {
-    if (isEditable !== true) return;
+  async onClick() {
+    if (this.isEditable !== true) return;
     
     this.value = !this.value;
   }

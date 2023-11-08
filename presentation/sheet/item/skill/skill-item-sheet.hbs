@@ -11,11 +11,7 @@ cssClass: {undefined | String}
           {{> inputTextField viewModel=viewModel.vmTfName }}
         </h1>
         {{!-- Configure --}}
-        {{#> button viewModel=viewModel.vmBtnEdit square=true }}
-          <div class="button light square flex flex-center">
-            <i class="fas fa-cog"></i>
-          </div>
-        {{/button}}
+        {{> button viewModel=viewModel.vmBtnEdit square=true }}
         <div class="flex flex-center">
           {{> buttonSendToChat viewModel=viewModel.vmBtnSendToChat }}
         </div>

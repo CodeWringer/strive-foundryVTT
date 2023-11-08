@@ -1,8 +1,6 @@
-import { TEMPLATES } from "../../templatePreloader.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
 import ChoiceOption from "../input-choice/choice-option.mjs";
 import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
-import PlainDialog from "../../dialog/plain-dialog/plain-dialog.mjs";
 import SingleChoiceDialog from "../../dialog/single-choice-dialog/single-choice-dialog.mjs";
 import DocumentFetcher from "../../../business/document/document-fetcher/document-fetcher.mjs";
 import { isString } from "../../../business/util/validation-utility.mjs";
@@ -33,8 +31,6 @@ export const TAKE_ITEM_CONTEXT_TYPES = {
  * In the context "item-sheet", a copy of the item in question will be added to the current player's actor, or an actor chosen by a GM. 
  */
 export default class ButtonTakeItemViewModel extends ButtonViewModel {
-  static get TEMPLATE() { return TEMPLATES.COMPONENT_BUTTON_TAKE_ITEM; }
-
   /**
    * Registers the Handlebars partial for this component. 
    * 
@@ -61,9 +57,13 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
    * In the context "item-sheet", a copy of the item in question will be added to the current player's actor, or an actor chosen by a GM. 
    */
   constructor(args = {}) {
-    super(args);
+    super({
+      ...args,
+      iconHtml: '<i class="ambersteel-icon ico-take-item"></i>',
+    });
     validateOrThrow(args, ["target", "contextType"]);
 
+    this.target = args.target;
     this.contextType = args.contextType;
     this.localizedTooltip = args.localizedTooltip ?? game.i18n.localize("ambersteel.character.asset.takeToPerson");
   }
@@ -77,8 +77,8 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
    * 
    * @async
    */
-  async onClick(html, isOwner, isEditable) {
-    if (isEditable !== true) return;
+  async onClick() {
+    if (this.isEditable !== true) return;
 
     let assetDocument = this.target;
     if (isString(this.target) === true) { // Item id provided. 

@@ -82,6 +82,7 @@ export default class ButtonToggleVisibilityViewModel extends ButtonViewModel {
     super(args);
     validateOrThrow(args, ["visGroup"]);
 
+    this.target = args.target;
     this._visGroup = args.visGroup ?? createUUID();
     this._toggleSelf = args.toggleSelf ?? false;
     this.localizedTooltip = args.localizedTooltip ?? game.i18n.localize("ambersteel.general.toggleVisibility");
@@ -92,8 +93,8 @@ export default class ButtonToggleVisibilityViewModel extends ButtonViewModel {
    * @see {ButtonViewModel.onClick}
    * @async
    */
-  async onClick(html, isOwner, isEditable) {
-    if (isEditable !== true) return;
+  async onClick() {
+    if (this.isEditable !== true) return;
 
     const elements = document.querySelectorAll(`[${ATTRIBUTE_VIS_GROUP}='${this._visGroup}']`);
 

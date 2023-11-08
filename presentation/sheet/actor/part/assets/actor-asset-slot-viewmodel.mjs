@@ -148,10 +148,8 @@ export default class ActorAssetSlotViewModel extends ViewModel {
     this.vmBtnEdit = new ButtonViewModel({
       id: "vmBtnEdit",
       parent: this,
-      isSendable: this.isSendable,
-      isEditable: this.isEditable,
-      isOwner: this.isOwner,
       target: this.document,
+      iconHtml: '<i class="fas fa-cog"></i>',
       localizedTooltip: game.i18n.localize("ambersteel.character.asset.slot.edit"),
       onClick: async () => {
         const delta = await queryAssetSlotConfiguration(this.assetSlot);
@@ -173,10 +171,9 @@ export default class ActorAssetSlotViewModel extends ViewModel {
     this.vmBtnAssign = new ButtonViewModel({
       id: "vmBtnAssign",
       parent: this,
-      isSendable: this.isSendable,
-      isEditable: this.isEditable,
-      isOwner: this.isOwner,
       target: this.document,
+      iconHtml: '<i class="fas fa-plus"></i>',
+      localizedText: game.i18n.localize("ambersteel.character.asset.slot.assign.label"),
       localizedTooltip: game.i18n.localize("ambersteel.character.asset.slot.assign.label"),
       onClick: async () => {
         const inputChoices = "inputChoices";

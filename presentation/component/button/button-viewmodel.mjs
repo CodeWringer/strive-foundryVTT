@@ -38,7 +38,7 @@ export default class ButtonViewModel extends ViewModel {
    * @static
    */
   static registerHandlebarsPartial() {
-    Handlebars.registerPartial('button', `{{#> "${ButtonViewModel.TEMPLATE}"}}{{> @partial-block }}{{/"${ButtonViewModel.TEMPLATE}"}}`);
+    Handlebars.registerPartial('button', `{{> "${ButtonViewModel.TEMPLATE}"}}`);
   }
 
   /**
@@ -54,6 +54,7 @@ export default class ButtonViewModel extends ViewModel {
   get element() { return this._element; }
 
   /**
+   * @param {Object} args
    * @param {String | undefined} args.id Unique ID of this view model instance. 
    * @param {Boolean | undefined} args.isEditable If true, will be interactible. 
    * 
@@ -76,7 +77,7 @@ export default class ButtonViewModel extends ViewModel {
     this.localizedText = args.localizedText;
     this.iconHtml = args.iconHtml;
     this.showFancyFont = args.showFancyFont ?? false;
-    this.onClick = args.onClick ?? (async () => {});
+    this.onClick = args.onClick ?? this.onClick;
   }
 
   /** @override */
@@ -89,6 +90,16 @@ export default class ButtonViewModel extends ViewModel {
       throw new Error(`NullPointerException: Failed to get input element with id '${this.id}'`);
     }
 
-    this.element.click(this._onClick.bind(this, html, this.isOwner, this.isEditable));
+    this.element.click(this.onClick.bind(this));
+  }
+
+  /**
+   * Asynchronous callback that is invoked upon click on the button. 
+   * 
+   * @async
+   * @virtual
+   */
+  async onClick() {
+    // Implementation up to ineriting types.
   }
 }

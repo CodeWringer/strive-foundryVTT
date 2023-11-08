@@ -87,6 +87,7 @@ export default class SkillItemSheetViewModel extends SkillViewModel {
       isEditable: this.isEditable,
       isOwner: this.isOwner,
       target: this.document,
+      iconHtml: '<i class="fas fa-cog"></i>',
       localizedTooltip: game.i18n.localize("ambersteel.general.edit"),
       onClick: async () => {
         const delta = await querySkillConfiguration(this.document);

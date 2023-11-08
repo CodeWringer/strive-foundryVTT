@@ -1,6 +1,5 @@
 import DocumentFetcher from "../../../business/document/document-fetcher/document-fetcher.mjs";
 import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
-import { TEMPLATES } from "../../templatePreloader.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
 
 /**
@@ -9,8 +8,6 @@ import ButtonViewModel from "../button/button-viewmodel.mjs";
  * @extends ButtonViewModel
  */
 export default class ButtonOpenSheetViewModel extends ButtonViewModel {
-  static get TEMPLATE() { return TEMPLATES.COMPONENT_BUTTON_OPEN_SHEET; }
-  
   /**
    * Registers the Handlebars partial for this component. 
    * 
@@ -29,9 +26,13 @@ export default class ButtonOpenSheetViewModel extends ButtonViewModel {
    * @param {String | undefined} args.localizedTooltip Localized tooltip. 
    */
   constructor(args = {}) {
-    super(args);
+    super({
+      ...args,
+      iconHtml: '<i class="fas fa-external-link-alt"></i>',
+    });
     validateOrThrow(args, ["target"]);
 
+    this.target = args.target;
     this.localizedTooltip = args.localizedTooltip ?? game.i18n.localize("ambersteel.general.openSheet");
   }
 
@@ -42,8 +43,8 @@ export default class ButtonOpenSheetViewModel extends ButtonViewModel {
    * @throws {Error} NullPointerException - Thrown, if 'target' is undefined. 
    * @throws {Error} NullPointerException - Thrown, if trying to delete by property path and 'target.deleteByPath' is undefined. 
    */
-  async onClick(html, isOwner, isEditable) {
-    if (isEditable !== true) return;
+  async onClick() {
+    if (this.isEditable !== true) return;
 
     const toShow = await new DocumentFetcher().find({
       id: this.target.id ?? this.target,

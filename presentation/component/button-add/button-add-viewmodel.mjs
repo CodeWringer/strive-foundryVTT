@@ -1,9 +1,11 @@
-import { TEMPLATES } from '../../templatePreloader.mjs';
 import ButtonViewModel from '../button/button-viewmodel.mjs';
-import AddItemDialog from '../../dialog/dialog-item-add/dialog-item-add.mjs';
-import { validateOrThrow, isObject, isNotBlankOrUndefined } from "../../../business/util/validation-utility.mjs";
+import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import DocumentFetcher from "../../../business/document/document-fetcher/document-fetcher.mjs";
-import { coerce } from "../../../business/util/string-utility.mjs";
+import DynamicInputDialog from '../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs';
+import DynamicInputDefinition from '../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs';
+import { DYNAMIC_INPUT_TYPES } from '../../dialog/dynamic-input-dialog/dynamic-input-types.mjs';
+import ChoiceAdapter from '../input-choice/choice-adapter.mjs';
+import ChoiceOption from '../input-choice/choice-option.mjs';
 
 /**
  * A button that allows adding a newly created embedded document to a specific actor. 
@@ -11,57 +13,51 @@ import { coerce } from "../../../business/util/string-utility.mjs";
  * @extends ButtonViewModel
  * 
  * @property {Boolean} withDialog If true, will prompt the user to make a selection with a dialog. 
- * @property {String | undefined} creationType = "skill"|"skill-ability"|"fate-card"|"item"|"injury"|"illness"
+ * @property {String} creationType `"skill" | "skill-ability" | "fate-card" | "item" | "injury" | "illness"`
  * @property {Object} creationData Data to pass to the item creation function. 
- * @property {Boolean} showLabel If true, will show the label. 
- * @property {String | undefined} localizedLabel Localized label. 
  * @property {String | undefined} localizedType Localized name of the type of thing to add. 
  * @property {String | undefined} localizedDialogTitle Localized title of the dialog. 
  * 
  */
 export default class ButtonAddViewModel extends ButtonViewModel {
-  static get TEMPLATE() { return TEMPLATES.COMPONENT_BUTTON_ADD; }
-  
   /**
    * Registers the Handlebars partial for this component. 
    * 
    * @static
    */
   static registerHandlebarsPartial() {
-    Handlebars.registerPartial('buttonAdd', `{{> "${ButtonAddViewModel.TEMPLATE}"}}`);
+    Handlebars.registerPartial('buttonAdd', `{{> "${super.TEMPLATE}"}}`);
   }
 
   /**
-   * @type {Boolean}
-   * @readonly
-   */
-  get showLabel() { return isNotBlankOrUndefined(this.localizedLabel); }
-  
-  /**
+   * @param {Object} args 
    * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
+   * @param {Boolean | undefined} args.isEditable Optional. If true, will be interactible. 
+   * @param {String | undefined} args.localizedToolTip A localized text to 
+   * display as a tool tip. 
+   * @property {String | undefined} args.localizedText A localized text to 
+   * display as a button label. 
    * 
    * @param {TransientDocument} args.target The target object to affect. 
-   * @param {Function | String | undefined} args.callback Optional. Defines an asynchronous callback that is invoked upon completion of the button's own callback. 
-   * @param {Boolean | undefined} args.isEditable Optional. If true, will be interactible. 
-   * 
-   * @param {String} args.creationType = "skill"|"skill-ability"|"fate-card"|"item"|"injury"|"illness"
+   * @param {String} args.creationType `"skill" | "skill-ability" | "fate-card" | "item" | "injury" | "illness"`
    * @param {Boolean | undefined} args.withDialog Optional. If true, will prompt the user to make a selection with a dialog. 
    * @param {Object | undefined} args.creationData Optional. Data to pass to the item creation function. 
-   * @param {String | undefined} args.localizedTooltip Optional. Sets the tooltip text to display on cursor hover over the DOM element. 
-   * @param {String | undefined} args.localizedLabel 
    * @param {String | undefined} args.localizedType Localized name of the type of thing to add. 
    * @param {String | undefined} args.localizedDialogTitle Localized title of the dialog. 
    */
   constructor(args = {}) {
-    super(args);
+    super({
+      ...args,
+      iconHtml: '<i class="fas fa-plus"></i>',
+      localizedText: args.localizedText,
+      localizedToolTip: args.localizedToolTip ?? "ambersteel.general.add",
+    });
     validateOrThrow(args, ["target", "creationType"]);
 
+    this.target = args.target;
     this.creationType = args.creationType;
     this.withDialog = args.withDialog ?? false;
     this.creationData = args.creationData ?? Object.create(null);
-
-    this.localizedTooltip = args.localizedTooltip ?? "ambersteel.general.add";
-    this.localizedLabel = args.localizedLabel;
     this.localizedType = args.localizedType;
     this.localizedDialogTitle = args.localizedDialogTitle;
   }
@@ -99,10 +95,82 @@ export default class ButtonAddViewModel extends ButtonViewModel {
         isCustom: true
       };
       this.target.createSkillAbility(creationData);
-    } else if (this.withDialog === true) {
-      this._createWithDialog();
     } else {
-      const creationData = {
+      let creationData;
+
+      if (this.withDialog === true) {
+        creationData = this._getCreationDataWithDialog();
+      } else {
+        creationData = {
+          name: `New ${this.creationType.capitalize()}`,
+          type: this.creationType,
+          system: {
+            ...this.creationData,
+            isCustom: true,
+          }
+        };
+      }
+
+      return await Item.create(creationData, { parent: this.target.document }); // TODO #85: This should probably be extracted to the transient-type object. 
+    }
+  }
+
+  /**
+   * Prompts the user to pick a specific document to add to the target, 
+   * via a dialog and returns the creation data of the selected document. 
+   * 
+   * @returns {Object} The creation data the user implicitly picked. 
+   * 
+   * @async
+   * @private
+   */
+  async _getCreationDataWithDialog() {
+    const documentIndices = new DocumentFetcher().getIndices({
+      documentType: "Item",
+      contentType: this.creationType,
+    });
+
+    const customChoice = new ChoiceOption({
+      value: "custom",
+      localizedValue: game.i18n.localize("ambersteel.general.custom"),
+    });
+
+    const options = [
+      customChoice,
+    ].concat(documentIndices.map(documentIndex => 
+      new ChoiceOption({
+        value: documentIndex.id,
+        localizedValue: documentIndex.name,
+      })
+    ));
+
+    const inputChoices = "inputChoices";
+    const dialog = await new DynamicInputDialog({
+      localizedTitle: this.localizedDialogTitle,
+      inputDefinitions: [
+        new DynamicInputDefinition({
+          type: DYNAMIC_INPUT_TYPES.DROP_DOWN,
+          name: inputChoices,
+          localizedLabel: this.localizedType,
+          required: true,
+          defaultValue: options[0],
+          specificArgs: {
+            options: options,
+            adapter: new ChoiceAdapter({
+              toChoiceOption: (obj) => options.find(it => it.value === obj.id),
+              fromChoiceOption: (choice) => documentIndices.find(it => it.id === choice.value),
+            }),
+          },
+        }),
+      ],
+    }).renderAndAwait(true);
+
+    if (dialog.confirmed !== true) return;
+
+    const selectedValue = dialog[inputChoices].value;
+    let creationData;
+    if (selectedValue === customChoice.value) {
+      creationData = {
         name: `New ${this.creationType.capitalize()}`,
         type: this.creationType,
         system: {
@@ -110,52 +178,24 @@ export default class ButtonAddViewModel extends ButtonViewModel {
           isCustom: true,
         }
       };
-      return await Item.create(creationData, { parent: this.target.document }); // TODO #85: This should probably be extracted to the transient-type object. 
-    }
-  }
-
-  /**
-   * Prompts the user to pick a specific document to add to the target, via a dialog. 
-   * 
-   * @async
-   * @private
-   */
-  async _createWithDialog() {
-    await new AddItemDialog({
-      itemType: this.creationType,
-      localizedItemLabel: this.localizedType,
-      localizedTitle: this.localizedDialogTitle,
-      closeCallback: async (dialog) => {
-        if (dialog.confirmed !== true) return;
-
-        let creationData;
-
-        if (dialog.isCustomChecked === true) {
-          creationData = {
-            name: `New ${this.creationType.capitalize()}`,
-            type: this.creationType,
-            system: {
-              ...this.creationData,
-              isCustom: true,
-            }
-          };
-        } else {
-          const templateId = dialog.selected;
-          const templateItem = await new DocumentFetcher().find({
-            id: templateId,
-          });
-          creationData = {
-            name: templateItem !== undefined ? templateItem.name : `New ${this.creationType.capitalize()}`,
-            type: templateItem !== undefined ? templateItem.type : this.creationType,
-            system: {
-              ...(templateItem !== undefined ? templateItem.system : {}),
-              ...this.creationData,
-              isCustom: false,
-            }
-          };
+    } else {
+      const templateItem = await new DocumentFetcher().find({
+        id: selectedValue,
+      });
+      if (templateItem === undefined) {
+        throw new Error("Template item could not be found");
+      }
+      creationData = {
+        name: templateItem.name,
+        type: templateItem.type,
+        system: {
+          ...templateItem.system,
+          ...this.creationData,
+          isCustom: false,
         }
-        return await Item.create(creationData, { parent: this.target.document }); // TODO #85: This should probably be extracted to the transient-type object. 
-      },
-    }).renderAndAwait(true);
+      };
+    }
+
+    return creationData;
   }
 }

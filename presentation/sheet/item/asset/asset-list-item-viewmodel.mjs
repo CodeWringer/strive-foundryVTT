@@ -96,6 +96,7 @@ export default class AssetListItemViewModel extends ViewModel {
       id: "vmBtnTakeAsset",
       parent: this,
       isEditable: this._actor !== undefined && this.isEditable,
+      iconHtml: '<i class="ambersteel-icon ico-take-item"></i>',
       onClick: async () => {
         // Move "up" on character sheet. 
         if (thiz.document.isProperty === true) {
@@ -112,6 +113,7 @@ export default class AssetListItemViewModel extends ViewModel {
       id: "vmBtnDropAsset",
       parent: this,
       isEditable: this._actor !== undefined && this.isEditable,
+      iconHtml: '<i class="ambersteel-icon ico-drop-item"></i>',
       onClick: async () => {
         // Move "down" on character sheet. 
         if (thiz.document.isEquipped === true) {
