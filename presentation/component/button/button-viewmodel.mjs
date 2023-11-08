@@ -34,6 +34,7 @@ export const SELECTOR_BUTTON = "custom-system-button";
  * argument. In most cases, it should be called and `await`ed before one's own 
  * click handling logic. But in case the original logic is unwanted, the method 
  * can be ignored. 
+ * * May return a value, if the inheriting type supports it. 
  */
 export default class ButtonViewModel extends ViewModel {
   /** @override */
@@ -55,7 +56,7 @@ export default class ButtonViewModel extends ViewModel {
    * 
    * @param {String | undefined} args.localizedToolTip A localized text to 
    * display as a tool tip. 
-   * @property {String | undefined} args.localizedText A localized text to 
+   * @param {String | undefined} args.localizedText A localized text to 
    * display as a button label. 
    * @param {String | undefined} args.iconHtml Raw HTML to render as 
    * an associated icon. E. g. `'<i class="fas fa-scroll"></i>'`
@@ -82,12 +83,16 @@ export default class ButtonViewModel extends ViewModel {
     await super.activateListeners(html);
 
     this.element.click(async () => {
-      await this.onClick(this._onClick);
+      return await this.onClick(this._onClick.bind(this));
     });
   }
 
   /**
    * Internal asynchronous callback that is invoked upon click. 
+   * 
+   * Can return a value, if the button supports it. 
+   * 
+   * @returns {Any | undefined} 
    * 
    * @async
    * @virtual

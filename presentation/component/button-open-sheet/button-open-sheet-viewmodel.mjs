@@ -6,6 +6,11 @@ import ButtonViewModel from "../button/button-viewmodel.mjs";
  * A button that allows opening a specific document's sheet. 
  * 
  * @extends ButtonViewModel
+ * 
+ * @method onClick Asynchronous callback that is invoked when the button is clicked. 
+ * Receives the button's original click-handler as its sole argument. In most cases, it should be called 
+ * and awaited before one's own click handling logic. But in case the original logic is unwanted, the method can be ignored.
+ * * Returns nothing. 
  */
 export default class ButtonOpenSheetViewModel extends ButtonViewModel {
   /**
@@ -18,11 +23,16 @@ export default class ButtonOpenSheetViewModel extends ButtonViewModel {
   }
 
   /**
+   * @param {Object} args
    * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
-   * 
-   * @param {TransientDocument} args.target The target object to affect. 
    * @param {Boolean | undefined} args.isEditable Optional. If true, will be interactible. 
    * @param {String | undefined} args.localizedTooltip Localized tooltip. 
+   * @param {Function | undefined} args.onClick Asynchronous callback that is invoked when the button is clicked. 
+   * Receives the button's original click-handler as its sole argument. In most cases, it should be called 
+   * and awaited before one's own click handling logic. But in case the original logic is unwanted, the method can be ignored.
+   * * Returns nothing. 
+   * 
+   * @param {TransientDocument} args.target The target object to affect. 
    */
   constructor(args = {}) {
     super({

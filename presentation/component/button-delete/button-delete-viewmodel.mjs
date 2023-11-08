@@ -11,6 +11,11 @@ import ConfirmablePlainDialog from "../../dialog/plain-confirmable-dialog/plain-
  * @property {String | undefined} propertyPath If not undefined, will try to delete by this property path. 
  * @property {Boolean} withDialog If true, will prompt the user to confirm deletion with a dialog. 
  * @property {String} localizedDialogContent Localized content of the confirmation dialog window. 
+ * 
+ * @method onClick Asynchronous callback that is invoked when the button is clicked. 
+ * Receives the button's original click-handler as its sole argument. In most cases, it should be called 
+ * and awaited before one's own click handling logic. But in case the original logic is unwanted, the method can be ignored.
+ * * Returns nothing. 
  */
 export default class ButtonDeleteViewModel extends ButtonViewModel {
   /**
@@ -23,12 +28,16 @@ export default class ButtonDeleteViewModel extends ButtonViewModel {
   }
 
   /**
+   * @param {Object} args
    * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
-   * 
-   * @param {TransientDocument} args.target The target object to affect. 
    * @param {Boolean | undefined} args.isEditable Optional. If true, will be interactible. 
    * @param {String | undefined} args.localizedTooltip Localized tooltip. 
+   * @param {Function | undefined} args.onClick Asynchronous callback that is invoked when the button is clicked. 
+   * Receives the button's original click-handler as its sole argument. In most cases, it should be called 
+   * and awaited before one's own click handling logic. But in case the original logic is unwanted, the method can be ignored.
+   * * Returns nothing. 
    * 
+   * @param {TransientDocument} args.target The target object to affect. 
    * @param {String | undefined} args.propertyPath Optional. If not undefined, will try to delete by this property path. 
    * @param {Boolean | undefined} args.withDialog Optional. If true, will prompt the user to make a selection with a dialog. 
    */

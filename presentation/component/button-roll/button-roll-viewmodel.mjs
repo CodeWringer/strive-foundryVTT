@@ -27,6 +27,11 @@ import DicePool, { DicePoolRollResult } from "../../../business/dice/dice-pool.m
  * @property {String} secondaryChatImage Primary image to display above the roll result in the chat message. 
  * @property {Actor | undefined} actor Actor associated with the roll result. 
  * @property {DicePoolRollResult | Object | undefined} lastRollResult The last rolled result. Or undefined, if no roll has been made, yet. 
+ * 
+ * @method onClick Asynchronous callback that is invoked when the button is clicked. 
+ * Receives the button's original click-handler as its sole argument. In most cases, it should be called 
+ * and awaited before one's own click handling logic. But in case the original logic is unwanted, the method can be ignored.
+ * * Returns `{DicePoolRollResult | Object}` - The rolled result. 
  */
 export default class ButtonRollViewModel extends ButtonViewModel {
   /**
@@ -101,6 +106,10 @@ export default class ButtonRollViewModel extends ButtonViewModel {
    * 
    * @param {TransientDocument | Object} args.target The target object to affect. 
    * @param {Boolean | undefined} args.isEditable Optional. If true, will be interactible. 
+   * @param {Function | undefined} args.onClick Asynchronous callback that is invoked when the button is clicked. 
+   * Receives the button's original click-handler as its sole argument. In most cases, it should be called 
+   * and awaited before one's own click handling logic. But in case the original logic is unwanted, the method can be ignored.
+   * * Returns `{DicePoolRollResult | Object}` - The rolled result. 
    * 
    * @param {String} args.rollType The internal name of a `RollType` that Determines the kind of roll to try and make. 
    * @param {String | undefined} args.propertyPath Optional. Property path identifying a property that contains a roll-formula. 
@@ -131,6 +140,8 @@ export default class ButtonRollViewModel extends ButtonViewModel {
   }
 
   /**
+   * @returns {DicePoolRollResult | Object} The rolled result. 
+   * 
    * @override
    * @see {ButtonViewModel._onClick}
    * @async
@@ -166,9 +177,9 @@ export default class ButtonRollViewModel extends ButtonViewModel {
     });
 
     if (this.rollType === ROLL_TYPES.generic.name) {
-      await this._doGenericRoll(dialog);
+      return await this._doGenericRoll(dialog);
     } else if (this.rollType === ROLL_TYPES.dicePool.name) {
-      await this._doDicePoolRoll(dialog);
+      return await this._doDicePoolRoll(dialog);
     } else {
       throw new Error(`InvalidStateException: Invalid rollType '${this.rollType}'`);
     }
@@ -182,6 +193,8 @@ export default class ButtonRollViewModel extends ButtonViewModel {
    * 
    * 
    * @param {DynamicInputDialog} dialog 
+   * 
+   * @returns {Object} The rolled result. 
    * 
    * @private
    * @async
@@ -210,6 +223,8 @@ export default class ButtonRollViewModel extends ButtonViewModel {
       sound: SOUNDS_CONSTANTS.DICE_ROLL,
       visibilityMode: dialog.visibilityMode
     });
+
+    return rollResult;
   }
 
   /**
@@ -219,6 +234,8 @@ export default class ButtonRollViewModel extends ButtonViewModel {
    * The result is automatically sent to chat. 
    * 
    * @param {DynamicInputDialog} dialog 
+   * 
+   * @returns {DicePoolRollResult} The rolled result. 
    * 
    * @private
    * @async
@@ -313,5 +330,7 @@ export default class ButtonRollViewModel extends ButtonViewModel {
       secondaryImage: this.secondaryChatImage,
       showBackFire: showBackFire,
     });
+
+    return rollResult;
   }
 }

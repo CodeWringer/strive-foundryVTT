@@ -1,4 +1,3 @@
-import { TEMPLATES } from "../../templatePreloader.mjs";
 import * as ChatUtil from "../../chat/chat-utility.mjs";
 import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
@@ -13,6 +12,11 @@ import { VISIBILITY_MODES } from "../../chat/visibility-modes.mjs";
  * @property {String | undefined} propertyPath Property path identifying a property to send to chat. 
  * @property {String} chatTitle Title to display above the chat message. 
  * @property {Actor | undefined} actor Actor associated with the chat message. 
+ * 
+ * @method onClick Asynchronous callback that is invoked when the button is clicked. 
+ * Receives the button's original click-handler as its sole argument. In most cases, it should be called 
+ * and awaited before one's own click handling logic. But in case the original logic is unwanted, the method can be ignored.
+ * * Returns nothing. 
  */
 export default class ButtonSendToChatViewModel extends ButtonViewModel {
   /**
@@ -63,6 +67,10 @@ export default class ButtonSendToChatViewModel extends ButtonViewModel {
    * 
    * @param {TransientDocument | Object} args.target The target object to affect. 
    * @param {Boolean | undefined} args.isEditable Optional. If true, will be interactible. 
+   * @param {Function | undefined} args.onClick Asynchronous callback that is invoked when the button is clicked. 
+   * Receives the button's original click-handler as its sole argument. In most cases, it should be called 
+   * and awaited before one's own click handling logic. But in case the original logic is unwanted, the method can be ignored.
+   * * Returns nothing. 
    * 
    * @param {String | undefined} args.propertyPath Optional. Property path identifying a property to send to chat. 
    * @param {String | undefined} args.chatTitle Optional. Title to display above the chat message. 

@@ -18,6 +18,10 @@ import ChoiceOption from '../input-choice/choice-option.mjs';
  * @property {String | undefined} localizedType Localized name of the type of thing to add. 
  * @property {String | undefined} localizedDialogTitle Localized title of the dialog. 
  * 
+ * @method onClick Asynchronous callback that is invoked when the button is clicked. 
+ * Receives the button's original click-handler as its sole argument. In most cases, it should be called 
+ * and awaited before one's own click handling logic. But in case the original logic is unwanted, the method can be ignored.
+ * * Returns `{Item | SkillAbility}` - The created `Item` document or `SkillAbility`. 
  */
 export default class ButtonAddViewModel extends ButtonViewModel {
   /**
@@ -35,8 +39,12 @@ export default class ButtonAddViewModel extends ButtonViewModel {
    * @param {Boolean | undefined} args.isEditable Optional. If true, will be interactible. 
    * @param {String | undefined} args.localizedToolTip A localized text to 
    * display as a tool tip. 
-   * @property {String | undefined} args.localizedText A localized text to 
+   * @param {String | undefined} args.localizedText A localized text to 
    * display as a button label. 
+   * @param {Function | undefined} args.onClick Asynchronous callback that is invoked when the button is clicked. 
+   * Receives the button's original click-handler as its sole argument. In most cases, it should be called 
+   * and awaited before one's own click handling logic. But in case the original logic is unwanted, the method can be ignored.
+   * * Returns `{Item | SkillAbility}` - The created `Item` document or `SkillAbility`. 
    * 
    * @param {TransientDocument} args.target The target object to affect. 
    * @param {String} args.creationType `"skill" | "skill-ability" | "fate-card" | "item" | "injury" | "illness"`
@@ -64,6 +72,8 @@ export default class ButtonAddViewModel extends ButtonViewModel {
 
   /**
    * Handle creating a new Owned Item for the actor using initial data defined in the HTML dataset
+   * 
+   * @returns {Item | SkillAbility} The created `Item` document or `SkillAbility`. 
    * 
    * @override
    * @see {ButtonViewModel._onClick}
@@ -94,7 +104,7 @@ export default class ButtonAddViewModel extends ButtonViewModel {
         ...this.creationData,
         isCustom: true
       };
-      this.target.createSkillAbility(creationData);
+      return await this.target.createSkillAbility(creationData);
     } else {
       let creationData;
 

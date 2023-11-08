@@ -7,6 +7,11 @@ import InputViewModel from "../../view-model/input-view-model.mjs";
  * @extends InputViewModel
  * 
  * @property {Boolean} value The value of the boolean property. 
+ * 
+ * @method onChange Callback that is invoked when the value changes. 
+ * Receives the following arguments: 
+ * * `oldValue: {Boolean}`
+ * * `newValue: {Boolean}`
  */
 export default class ButtonCheckBoxViewModel extends InputViewModel {
   static get TEMPLATE() { return TEMPLATES.COMPONENT_BUTTON_CHECKBOX; }
@@ -26,15 +31,14 @@ export default class ButtonCheckBoxViewModel extends InputViewModel {
    * @param {Boolean | undefined} args.isEditable If `true`, input(s) will 
    * be in edit mode. If `false`, will be in read-only mode.
    * * default `false`. 
-   * 
    * @param {String | undefined} args.localizedToolTip A localized text to 
    * display as a tool tip. 
    * @param {Boolean | undefined} args.value The current value. 
    * * default `false`
    * @param {Function | undefined} args.onChange Callback that is invoked 
    * when the value changes. Receives two arguments: 
-   * * `oldValue: {Any}`
-   * * `newValue: {Any}`
+   * * `oldValue: {Boolean}`
+   * * `newValue: {Boolean}`
    */
   constructor(args = {}) {
     super(args);

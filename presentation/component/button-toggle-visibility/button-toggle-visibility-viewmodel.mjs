@@ -28,6 +28,11 @@ export const ATTRIBUTE_VIS_GROUP = "data-vis-group";
  * * Expects this id to be defined as a data-attribute. 
  * * E. g. `'<div data-vis-group="1A2b3F4E">My content</div>'`
  * @property {Boolean} toggleSelf If true, the button will also toggle visibility on itself. 
+ * 
+ * @method onClick Asynchronous callback that is invoked when the button is clicked. 
+ * Receives the button's original click-handler as its sole argument. In most cases, it should be called 
+ * and awaited before one's own click handling logic. But in case the original logic is unwanted, the method can be ignored.
+ * * Returns nothing. 
  */
 export default class ButtonToggleVisibilityViewModel extends ButtonViewModel {
   static get TEMPLATE() { return TEMPLATES.COMPONENT_BUTTON_TOGGLE_VISIBILITY; }
@@ -65,14 +70,16 @@ export default class ButtonToggleVisibilityViewModel extends ButtonViewModel {
 
   /**
    * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
-   * 
-   * @param {Object | undefined} args.target The target object to affect. 
    * @param {Boolean | undefined} args.isEditable Optional. If true, will be interactible. 
    * @param {String | undefined} args.localizedTooltip Localized tooltip. 
+   * @param {Function | undefined} args.onClick Asynchronous callback that is invoked when the button is clicked. 
+   * Receives the button's original click-handler as its sole argument. In most cases, it should be called 
+   * and awaited before one's own click handling logic. But in case the original logic is unwanted, the method can be ignored.
+   * * Returns nothing. 
    * 
+   * @param {Object | undefined} args.target The target object to affect. 
    * @param {String | undefined} args.visGroup Id or name to group the visiblity of elements by. 
    * Expects this id to be defined as a data-attribute. 
-   * 
    * E. g. `<div data-vis-group="1A2b3F4E">My content</div>`. 
    * @param {Boolean | undefined} args.toggleSelf Optional. If true, the button will also toggle visibility on itself. 
    * * Default `false`. 

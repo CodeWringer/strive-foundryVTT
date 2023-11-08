@@ -25,10 +25,14 @@ export const TAKE_ITEM_CONTEXT_TYPES = {
  * 
  * @property {TAKE_ITEM_CONTEXT_TYPES} contextType Represents the context of where this button view model is embedded. 
  * Depending on this value, the behavior of the button changes. 
+ * * In the context "chat-message", the item in question will be moved to the current player's actor, or an actor chosen by a GM. 
+ * * In the context "list-item", TODO #196
+ * * In the context "item-sheet", a copy of the item in question will be added to the current player's actor, or an actor chosen by a GM. 
  * 
- * In the context "chat-message", the item in question will be moved to the current player's actor, or an actor chosen by a GM. 
- * In the context "list-item", TODO #196
- * In the context "item-sheet", a copy of the item in question will be added to the current player's actor, or an actor chosen by a GM. 
+ * @method onClick Asynchronous callback that is invoked when the button is clicked. 
+ * Receives the button's original click-handler as its sole argument. In most cases, it should be called 
+ * and awaited before one's own click handling logic. But in case the original logic is unwanted, the method can be ignored.
+ * * Returns nothing. 
  */
 export default class ButtonTakeItemViewModel extends ButtonViewModel {
   /**
@@ -43,11 +47,14 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
   /**
    * @param {Object} args
    * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
-   * 
-   * @param {TransientAsset} args.target The target object to affect. 
    * @param {Boolean | undefined} args.isEditable Optional. If true, will be interactible. 
    * @param {String | undefined} args.localizedTooltip Localized tooltip. 
+   * @param {Function | undefined} args.onClick Asynchronous callback that is invoked when the button is clicked. 
+   * Receives the button's original click-handler as its sole argument. In most cases, it should be called 
+   * and awaited before one's own click handling logic. But in case the original logic is unwanted, the method can be ignored.
+   * * Returns nothing. 
    * 
+   * @param {TransientAsset} args.target The target object to affect. 
    * @param {TAKE_ITEM_CONTEXT_TYPES} contextType Represents the context of where this button view model is embedded. 
    * Depending on this value, the behavior of the button changes. 
    * 
