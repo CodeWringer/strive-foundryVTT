@@ -1,9 +1,11 @@
-import { TEMPLATES } from '../../templatePreloader.mjs';
 import ButtonViewModel from '../button/button-viewmodel.mjs';
-import AddItemDialog from '../../dialog/dialog-item-add/dialog-item-add.mjs';
-import { validateOrThrow, isObject, isNotBlankOrUndefined } from "../../../business/util/validation-utility.mjs";
+import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import DocumentFetcher from "../../../business/document/document-fetcher/document-fetcher.mjs";
-import { coerce } from "../../../business/util/string-utility.mjs";
+import DynamicInputDialog from '../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs';
+import DynamicInputDefinition from '../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs';
+import { DYNAMIC_INPUT_TYPES } from '../../dialog/dynamic-input-dialog/dynamic-input-types.mjs';
+import ChoiceAdapter from '../input-choice/choice-adapter.mjs';
+import ChoiceOption from '../input-choice/choice-option.mjs';
 
 /**
  * A button that allows adding a newly created embedded document to a specific actor. 
@@ -11,75 +13,79 @@ import { coerce } from "../../../business/util/string-utility.mjs";
  * @extends ButtonViewModel
  * 
  * @property {Boolean} withDialog If true, will prompt the user to make a selection with a dialog. 
- * @property {String | undefined} creationType = "skill"|"skill-ability"|"fate-card"|"item"|"injury"|"illness"
+ * @property {String} creationType `"skill" | "skill-ability" | "fate-card" | "item" | "injury" | "illness"`
  * @property {Object} creationData Data to pass to the item creation function. 
- * @property {Boolean} showLabel If true, will show the label. 
- * @property {String | undefined} localizedLabel Localized label. 
  * @property {String | undefined} localizedType Localized name of the type of thing to add. 
  * @property {String | undefined} localizedDialogTitle Localized title of the dialog. 
  * 
+ * @method onClick Asynchronous callback that is invoked when the button is clicked. 
+ * Receives the button's original click-handler as its sole argument. In most cases, it should be called 
+ * and awaited before one's own click handling logic. But in case the original logic is unwanted, the method can be ignored.
+ * * Returns `{Item | SkillAbility}` - The created `Item` document or `SkillAbility`. 
  */
 export default class ButtonAddViewModel extends ButtonViewModel {
-  static get TEMPLATE() { return TEMPLATES.COMPONENT_BUTTON_ADD; }
-  
   /**
    * Registers the Handlebars partial for this component. 
    * 
    * @static
    */
   static registerHandlebarsPartial() {
-    Handlebars.registerPartial('buttonAdd', `{{> "${ButtonAddViewModel.TEMPLATE}"}}`);
+    Handlebars.registerPartial('buttonAdd', `{{> "${super.TEMPLATE}"}}`);
   }
 
   /**
-   * @type {Boolean}
-   * @readonly
-   */
-  get showLabel() { return isNotBlankOrUndefined(this.localizedLabel); }
-  
-  /**
+   * @param {Object} args 
    * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
+   * @param {Boolean | undefined} args.isEditable Optional. If true, will be interactible. 
+   * @param {String | undefined} args.localizedToolTip A localized text to 
+   * display as a tool tip. 
+   * @param {String | undefined} args.localizedLabel A localized text to 
+   * display as a button label. 
+   * @param {Function | undefined} args.onClick Asynchronous callback that is invoked when the button is clicked. 
+   * Receives the button's original click-handler as its sole argument. In most cases, it should be called 
+   * and awaited before one's own click handling logic. But in case the original logic is unwanted, the method can be ignored.
+   * * Returns `{Item | SkillAbility}` - The created `Item` document or `SkillAbility`. 
    * 
    * @param {TransientDocument} args.target The target object to affect. 
-   * @param {Function | String | undefined} args.callback Optional. Defines an asynchronous callback that is invoked upon completion of the button's own callback. 
-   * @param {Boolean | undefined} args.isEditable Optional. If true, will be interactible. 
-   * 
-   * @param {String} args.creationType = "skill"|"skill-ability"|"fate-card"|"item"|"injury"|"illness"
+   * @param {String} args.creationType `"skill" | "skill-ability" | "fate-card" | "item" | "injury" | "illness"`
    * @param {Boolean | undefined} args.withDialog Optional. If true, will prompt the user to make a selection with a dialog. 
-   * @param {Object | String | undefined} args.creationData Optional. Data to pass to the item creation function. 
-   * @param {String | undefined} args.localizedTooltip Optional. Sets the tooltip text to display on cursor hover over the DOM element. 
-   * @param {String | undefined} args.localizedLabel 
+   * @param {Object | undefined} args.creationData Optional. Data to pass to the item creation function. 
    * @param {String | undefined} args.localizedType Localized name of the type of thing to add. 
    * @param {String | undefined} args.localizedDialogTitle Localized title of the dialog. 
    */
   constructor(args = {}) {
-    super(args);
+    super({
+      ...args,
+      iconHtml: '<i class="fas fa-plus"></i>',
+      localizedLabel: args.localizedLabel,
+      localizedToolTip: args.localizedToolTip ?? game.i18n.localize("ambersteel.general.add"),
+    });
     validateOrThrow(args, ["target", "creationType"]);
 
+    this.target = args.target;
     this.creationType = args.creationType;
     this.withDialog = args.withDialog ?? false;
     this.creationData = args.creationData ?? Object.create(null);
-    this.localizedLabel = args.localizedLabel;
     this.localizedType = args.localizedType;
     this.localizedDialogTitle = args.localizedDialogTitle;
-
-    if (isObject(this.creationData) !== true) {
-      this.creationData = this._parseCreationData(this.creationData);
-    }
   }
 
   /**
    * Handle creating a new Owned Item for the actor using initial data defined in the HTML dataset
    * 
+   * @returns {Item | SkillAbility} The created `Item` document or `SkillAbility`. 
+   * 
    * @override
-   * @see {ButtonViewModel.onClick}
+   * @see {ButtonViewModel._onClick}
    * 
    * @throws {Error} NullPointerException - Thrown, if 'target', 'target.type' or 'creationType' is undefined. 
    * @throws {Error} InvalidArgumentException - Thrown, if trying to add a skill-ability to a non-skill-item. 
    * @throws {Error} InvalidArgumentException - Thrown, if 'creationType' is unrecognized. 
+   * 
+   * @async
    */
-  onClick(html, isOwner, isEditable) {
-    if (isEditable !== true) return;
+  async _onClick() {
+    if (this.isEditable !== true) return;
 
     if (this.target === undefined || this.target.type === undefined) {
       throw new Error("NullPointerException: 'target' or 'target.type' is undefined");
@@ -98,87 +104,108 @@ export default class ButtonAddViewModel extends ButtonViewModel {
         ...this.creationData,
         isCustom: true
       };
-      this.target.createSkillAbility(creationData);
-    } else if (this.withDialog === true) {
-      this._createWithDialog();
+      return await this.target.createSkillAbility(creationData);
     } else {
-      this._createCustom();
-    }
-  }
+      let creationData;
 
-  /**
-   * Prompts the user to pick a specific document to add to the target, via a dialog. 
-   * 
-   * @async
-   * @private
-   */
-  async _createWithDialog() {
-    await new AddItemDialog({
-      itemType: this.creationType,
-      localizedItemLabel: this.localizedType,
-      localizedTitle: this.localizedDialogTitle,
-      closeCallback: async (dialog) => {
-        if (dialog.confirmed !== true) return;
-
-        if (dialog.isCustomChecked === true) {
-          return await this._createCustom();
-        } else {
-          const templateId = dialog.selected;
-          const templateItem = await new DocumentFetcher().find({
-            id: templateId,
-          });
-          const creationData = {
-            name: templateItem !== undefined ? templateItem.name : `New ${this.creationType.capitalize()}`,
-            type: templateItem !== undefined ? templateItem.type : this.creationType,
-            system: {
-              ...(templateItem !== undefined ? templateItem.system : {}),
-              ...this.creationData,
-              isCustom: false,
-            }
-          };
-          return await Item.create(creationData, { parent: this.target.document }); // TODO #85: This should probably be extracted to the transient-type object. 
-        }
-      },
-    }).renderAndAwait(true);
-  }
-
-  /**
-   * Creates and returns a new document of the type defined on this view model and 
-   * then returns it. 
-   * 
-   * @returns The new document instance. 
-   * 
-   * @async
-   * @private
-   */
-  async _createCustom() {
-    const creationData = {
-      name: `New ${this.creationType.capitalize()}`,
-      type: this.creationType,
-      system: {
-        ...this.creationData,
-        isCustom: true,
+      if (this.withDialog === true) {
+        creationData = await this._getCreationDataWithDialog();
+      } else {
+        creationData = {
+          name: `New ${this.creationType.capitalize()}`,
+          type: this.creationType,
+          system: {
+            ...this.creationData,
+            isCustom: true,
+          }
+        };
       }
-    };
-    return await Item.create(creationData, { parent: this.target.document }); // TODO #85: This should probably be extracted to the transient-type object. 
+
+      return await Item.create(creationData, { parent: this.target.document }); // TODO #85: This should probably be extracted to the transient-type object. 
+    }
   }
 
   /**
-   * Parses the given creation data representing string and returns it as an object, instead. 
-   * @param {String} creationData Must be a string in the form "[<key1>:<value1>,<key2>:<value2>,...]"
-   * E. g. "[value:5,flag:false]"
-   * @returns {Object} The parsed creation data. 
+   * Prompts the user to pick a specific document to add to the target, 
+   * via a dialog and returns the creation data of the selected document. 
+   * 
+   * @returns {Object} The creation data the user implicitly picked. 
+   * 
+   * @async
+   * @private
    */
-  _parseCreationData(creationData) {
-    const parsedCreationData = Object.create(null);
+  async _getCreationDataWithDialog() {
+    const documentIndices = new DocumentFetcher().getIndices({
+      documentType: "Item",
+      contentType: this.creationType,
+    });
 
-    const splits = creationData.substring(1, creationData.length - 1).split(":");
-    for (let i = 0; i < splits.length; i += 2) {
-      const propertyName = splits[i];
-      const propertyValue = coerce(splits[i + 1]);
-      parsedCreationData[propertyName] = propertyValue;
+    const customChoice = new ChoiceOption({
+      value: "custom",
+      localizedValue: game.i18n.localize("ambersteel.general.custom"),
+    });
+
+    const options = [
+      customChoice,
+    ].concat(documentIndices.map(documentIndex => 
+      new ChoiceOption({
+        value: documentIndex.id,
+        localizedValue: documentIndex.name,
+      })
+    ));
+
+    const inputChoices = "inputChoices";
+    const dialog = await new DynamicInputDialog({
+      localizedTitle: this.localizedDialogTitle,
+      inputDefinitions: [
+        new DynamicInputDefinition({
+          type: DYNAMIC_INPUT_TYPES.DROP_DOWN,
+          name: inputChoices,
+          localizedLabel: this.localizedType,
+          required: true,
+          defaultValue: customChoice.value,
+          specificArgs: {
+            options: options,
+            adapter: new ChoiceAdapter({
+              toChoiceOption: (obj) => options.find(it => it.value === obj.id),
+              fromChoiceOption: (choice) => documentIndices.find(it => it.id === choice.value),
+            }),
+          },
+        }),
+      ],
+    }).renderAndAwait(true);
+
+    if (dialog.confirmed !== true) return;
+
+    const selectedValue = dialog[inputChoices];
+    let creationData;
+    if (selectedValue === customChoice.value) {
+      creationData = {
+        name: `New ${this.creationType.capitalize()}`,
+        type: this.creationType,
+        system: {
+          ...this.creationData,
+          isCustom: true,
+        }
+      };
+    } else {
+      const templateItem = await new DocumentFetcher().find({
+        id: selectedValue,
+      });
+      if (templateItem === undefined) {
+        throw new Error("Template item could not be found");
+      }
+      creationData = {
+        name: templateItem.name,
+        type: templateItem.type,
+        system: {
+          ...templateItem.system,
+          ...this.creationData,
+          isCustom: false,
+        }
+      };
     }
 
-    return parsedCreationData;
+    return creationData;
   }
 }

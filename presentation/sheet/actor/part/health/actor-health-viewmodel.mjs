@@ -1,10 +1,10 @@
 import Ruleset from "../../../../../business/ruleset/ruleset.mjs"
 import { validateOrThrow } from "../../../../../business/util/validation-utility.mjs"
+import ButtonAddViewModel from "../../../../component/button-add/button-add-viewmodel.mjs"
 import InputNumberSpinnerViewModel from "../../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs"
 import DocumentListItemOrderDataSource from "../../../../component/sortable-list/document-list-item-order-datasource.mjs"
 import SortableListViewModel from "../../../../component/sortable-list/sortable-list-viewmodel.mjs"
 import { TEMPLATES } from "../../../../templatePreloader.mjs"
-import ViewModelFactory from "../../../../view-model/view-model-factory.mjs"
 import ViewModel from "../../../../view-model/view-model.mjs"
 import IllnessListItemViewModel from "../../../item/illness/illness-list-item-viewmodel.mjs"
 import InjuryListItemViewModel from "../../../item/injury/injury-list-item-viewmodel.mjs"
@@ -135,7 +135,6 @@ export default class ActorHealthViewModel extends ViewModel {
     this.contextType = args.contextType ?? "actor-health";
 
     const thiz = this;
-    const factory = new ViewModelFactory();
 
     this.vmNsHp = new InputNumberSpinnerViewModel({
       parent: thiz,
@@ -185,8 +184,9 @@ export default class ActorHealthViewModel extends ViewModel {
       }),
       listItemViewModels: this.illnesses,
       listItemTemplate: TEMPLATES.ILLNESS_LIST_ITEM,
-      vmBtnAddItem: factory.createVmBtnAdd({
+      vmBtnAddItem: new ButtonAddViewModel({
         id: "vmBtnAddIllness",
+        parent: this,
         target: thiz.document,
         isEditable: this.isEditable,
         creationType: "illness",
@@ -209,8 +209,9 @@ export default class ActorHealthViewModel extends ViewModel {
       }),
       listItemViewModels: this.injuries,
       listItemTemplate: TEMPLATES.INJURY_LIST_ITEM,
-      vmBtnAddItem: factory.createVmBtnAdd({
+      vmBtnAddItem: new ButtonAddViewModel({
         id: "vmBtnAddInjury",
+        parent: this,
         target: thiz.document,
         isEditable: this.isEditable,
         creationType: "injury",
@@ -233,8 +234,9 @@ export default class ActorHealthViewModel extends ViewModel {
       }),
       listItemViewModels: this.mutations,
       listItemTemplate: TEMPLATES.MUTATION_LIST_ITEM,
-      vmBtnAddItem: factory.createVmBtnAdd({
+      vmBtnAddItem: new ButtonAddViewModel({
         id: "vmBtnAddMutation",
+        parent: this,
         target: thiz.document,
         isEditable: this.isEditable,
         creationType: "mutation",
@@ -257,8 +259,9 @@ export default class ActorHealthViewModel extends ViewModel {
       }),
       listItemViewModels: this.scars,
       listItemTemplate: TEMPLATES.SCAR_LIST_ITEM,
-      vmBtnAddItem: factory.createVmBtnAdd({
+      vmBtnAddItem: new ButtonAddViewModel({
         id: "vmBtnAddScar",
+        parent: this,
         target: thiz.document,
         isEditable: this.isEditable,
         creationType: "scar",

@@ -413,6 +413,8 @@ export default class TransientSkill extends TransientBaseItem {
     
     this.abilities.push(newAbility);
     await this.updateByPath(`system.abilities.${newAbility.id}`, newAbility.toDto());
+
+    return newAbility;
   }
 
   /**

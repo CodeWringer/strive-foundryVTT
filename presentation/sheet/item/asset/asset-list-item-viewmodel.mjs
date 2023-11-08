@@ -1,8 +1,9 @@
 import TransientAsset from "../../../../business/document/item/transient-asset.mjs"
 import CharacterAssetSlot from "../../../../business/ruleset/asset/character-asset-slot.mjs"
 import { ASSET_TAGS } from "../../../../business/tags/system-tags.mjs"
-import { arrayTakeUnless } from "../../../../business/util/array-utility.mjs"
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs"
+import ButtonDeleteViewModel from "../../../component/button-delete/button-delete-viewmodel.mjs"
+import ButtonSendToChatViewModel from "../../../component/button-send-to-chat/button-send-to-chat-viewmodel.mjs"
 import ButtonViewModel from "../../../component/button/button-viewmodel.mjs"
 import ChoiceAdapter from "../../../component/input-choice/choice-adapter.mjs"
 import ChoiceOption from "../../../component/input-choice/choice-option.mjs"
@@ -15,7 +16,6 @@ import DynamicInputDefinition from "../../../dialog/dynamic-input-dialog/dynamic
 import DynamicInputDialog from "../../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs"
 import { DYNAMIC_INPUT_TYPES } from "../../../dialog/dynamic-input-dialog/dynamic-input-types.mjs"
 import { TEMPLATES } from "../../../templatePreloader.mjs"
-import ViewModelFactory from "../../../view-model/view-model-factory.mjs"
 import ViewModel from "../../../view-model/view-model.mjs"
 
 /**
@@ -66,7 +66,6 @@ export default class AssetListItemViewModel extends ViewModel {
     this.contextTemplate = args.contextTemplate ?? "item-list-item";
 
     const thiz = this;
-    const factory = new ViewModelFactory();
     this._actor = this.document.owningDocument;
 
     this.vmImg = new InputImageViewModel({
@@ -86,7 +85,7 @@ export default class AssetListItemViewModel extends ViewModel {
       },
       placeholder: game.i18n.localize("ambersteel.general.name"),
     });
-    this.vmBtnSendToChat = factory.createVmBtnSendToChat({
+    this.vmBtnSendToChat = new ButtonSendToChatViewModel({
       parent: thiz,
       id: "vmBtnSendToChat",
       target: thiz.document,
@@ -96,6 +95,7 @@ export default class AssetListItemViewModel extends ViewModel {
       id: "vmBtnTakeAsset",
       parent: this,
       isEditable: this._actor !== undefined && this.isEditable,
+      iconHtml: '<i class="ambersteel-icon ico-take-item"></i>',
       onClick: async () => {
         // Move "up" on character sheet. 
         if (thiz.document.isProperty === true) {
@@ -112,6 +112,7 @@ export default class AssetListItemViewModel extends ViewModel {
       id: "vmBtnDropAsset",
       parent: this,
       isEditable: this._actor !== undefined && this.isEditable,
+      iconHtml: '<i class="ambersteel-icon ico-drop-item"></i>',
       onClick: async () => {
         // Move "down" on character sheet. 
         if (thiz.document.isEquipped === true) {
@@ -121,7 +122,7 @@ export default class AssetListItemViewModel extends ViewModel {
         }
       },
     });
-    this.vmBtnDelete = factory.createVmBtnDelete({
+    this.vmBtnDelete = new ButtonDeleteViewModel({
       parent: thiz,
       id: "vmBtnDelete",
       target: thiz.document,

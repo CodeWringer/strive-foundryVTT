@@ -1,6 +1,5 @@
 import * as StringUtil from "../../../business/util/string-utility.mjs"
 import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
-import { TEMPLATES } from "../../templatePreloader.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
 import ConfirmablePlainDialog from "../../dialog/plain-confirmable-dialog/plain-confirmable-dialog.mjs";
 
@@ -12,10 +11,13 @@ import ConfirmablePlainDialog from "../../dialog/plain-confirmable-dialog/plain-
  * @property {String | undefined} propertyPath If not undefined, will try to delete by this property path. 
  * @property {Boolean} withDialog If true, will prompt the user to confirm deletion with a dialog. 
  * @property {String} localizedDialogContent Localized content of the confirmation dialog window. 
+ * 
+ * @method onClick Asynchronous callback that is invoked when the button is clicked. 
+ * Receives the button's original click-handler as its sole argument. In most cases, it should be called 
+ * and awaited before one's own click handling logic. But in case the original logic is unwanted, the method can be ignored.
+ * * Returns nothing. 
  */
 export default class ButtonDeleteViewModel extends ButtonViewModel {
-  static get TEMPLATE() { return TEMPLATES.COMPONENT_BUTTON_DELETE; }
-  
   /**
    * Registers the Handlebars partial for this component. 
    * 
@@ -26,20 +28,27 @@ export default class ButtonDeleteViewModel extends ButtonViewModel {
   }
 
   /**
+   * @param {Object} args
    * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
-   * 
-   * @param {TransientDocument} args.target The target object to affect. 
-   * @param {Function | String | undefined} args.callback Optional. Defines an asynchronous callback that is invoked upon completion of the button's own callback. 
    * @param {Boolean | undefined} args.isEditable Optional. If true, will be interactible. 
    * @param {String | undefined} args.localizedTooltip Localized tooltip. 
+   * @param {Function | undefined} args.onClick Asynchronous callback that is invoked when the button is clicked. 
+   * Receives the button's original click-handler as its sole argument. In most cases, it should be called 
+   * and awaited before one's own click handling logic. But in case the original logic is unwanted, the method can be ignored.
+   * * Returns nothing. 
    * 
+   * @param {TransientDocument} args.target The target object to affect. 
    * @param {String | undefined} args.propertyPath Optional. If not undefined, will try to delete by this property path. 
    * @param {Boolean | undefined} args.withDialog Optional. If true, will prompt the user to make a selection with a dialog. 
    */
   constructor(args = {}) {
-    super(args);
+    super({
+      ...args,
+      iconHtml: '<i class="fas fa-trash"></i>',
+    });
     validateOrThrow(args, ["target"]);
 
+    this.target = args.target;
     this.withDialog = args.withDialog ?? false;
     this.propertyPath = args.propertyPath;
     this.localizedTooltip = args.localizedTooltip ?? game.i18n.localize("ambersteel.general.delete.label");
@@ -48,13 +57,13 @@ export default class ButtonDeleteViewModel extends ButtonViewModel {
 
   /**
    * @override
-   * @see {ButtonViewModel.onClick}
+   * @see {ButtonViewModel._onClick}
    * @async
    * @throws {Error} NullPointerException - Thrown, if 'target' is undefined. 
    * @throws {Error} NullPointerException - Thrown, if trying to delete by property path and 'target.deleteByPath' is undefined. 
    */
-  async onClick(html, isOwner, isEditable) {
-    if (isEditable !== true) return;
+  async _onClick() {
+    if (this.isEditable !== true) return;
 
     if (this.target === undefined) {
       throw new Error("NullPointerException: 'target' or 'target.type' is undefined");

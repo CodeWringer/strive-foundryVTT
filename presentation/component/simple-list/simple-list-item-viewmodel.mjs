@@ -42,6 +42,7 @@ export default class SimpleListItemViewModel extends ViewModel {
       id: "vmBtnRemove",
       parent: this,
       isEditable: this.isEditable,
+      iconHtml: '<i class="fas fa-trash"></i>',
       onClick: this.onRemoveClick,
     });
   }

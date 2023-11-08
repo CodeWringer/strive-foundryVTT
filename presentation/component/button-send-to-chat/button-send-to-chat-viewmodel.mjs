@@ -1,4 +1,3 @@
-import { TEMPLATES } from "../../templatePreloader.mjs";
 import * as ChatUtil from "../../chat/chat-utility.mjs";
 import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
@@ -13,10 +12,13 @@ import { VISIBILITY_MODES } from "../../chat/visibility-modes.mjs";
  * @property {String | undefined} propertyPath Property path identifying a property to send to chat. 
  * @property {String} chatTitle Title to display above the chat message. 
  * @property {Actor | undefined} actor Actor associated with the chat message. 
+ * 
+ * @method onClick Asynchronous callback that is invoked when the button is clicked. 
+ * Receives the button's original click-handler as its sole argument. In most cases, it should be called 
+ * and awaited before one's own click handling logic. But in case the original logic is unwanted, the method can be ignored.
+ * * Returns nothing. 
  */
 export default class ButtonSendToChatViewModel extends ButtonViewModel {
-  static get TEMPLATE() { return TEMPLATES.COMPONENT_BUTTON_SEND_TO_CHAT; }
-
   /**
    * Registers the Handlebars partial for this component. 
    * 
@@ -64,8 +66,11 @@ export default class ButtonSendToChatViewModel extends ButtonViewModel {
    * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
    * 
    * @param {TransientDocument | Object} args.target The target object to affect. 
-   * @param {Function | String | undefined} args.callback Optional. Defines an asynchronous callback that is invoked upon completion of the button's own callback. 
    * @param {Boolean | undefined} args.isEditable Optional. If true, will be interactible. 
+   * @param {Function | undefined} args.onClick Asynchronous callback that is invoked when the button is clicked. 
+   * Receives the button's original click-handler as its sole argument. In most cases, it should be called 
+   * and awaited before one's own click handling logic. But in case the original logic is unwanted, the method can be ignored.
+   * * Returns nothing. 
    * 
    * @param {String | undefined} args.propertyPath Optional. Property path identifying a property to send to chat. 
    * @param {String | undefined} args.chatTitle Optional. Title to display above the chat message. 
@@ -73,9 +78,13 @@ export default class ButtonSendToChatViewModel extends ButtonViewModel {
    * @param {String | undefined} args.localizedTooltip Localized tooltip. 
    */
   constructor(args = {}) {
-    super(args);
+    super({
+      ...args,
+      iconHtml: '<i class="fas fa-comments"></i>',
+    });
     validateOrThrow(args, ["target"]);
 
+    this.target = args.target;
     this._propertyPath = args.propertyPath;
     this._chatTitle = args.chatTitle ?? "";
     this._actor = args.actor;
@@ -84,11 +93,11 @@ export default class ButtonSendToChatViewModel extends ButtonViewModel {
 
   /**
    * @override
-   * @see {ButtonViewModel.onClick}
+   * @see {ButtonViewModel._onClick}
    * @async
    */
-  async onClick(html, isOwner, isEditable) {
-    if (isEditable !== true) return;
+  async _onClick() {
+    if (this.isEditable !== true) return;
 
     const thiz = this;
 

@@ -1,7 +1,8 @@
+import CharacterAttribute from "../../../../../business/ruleset/attribute/character-attribute.mjs";
 import { validateOrThrow } from "../../../../../business/util/validation-utility.mjs";
+import ButtonRollViewModel from "../../../../component/button-roll/button-roll-viewmodel.mjs";
 import InputNumberSpinnerViewModel from "../../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
 import { TEMPLATES } from "../../../../templatePreloader.mjs";
-import ViewModelFactory from "../../../../view-model/view-model-factory.mjs";
 import ViewModel from "../../../../view-model/view-model.mjs";
 
 export default class AttributeTableViewModel extends ViewModel {
@@ -59,7 +60,6 @@ export default class AttributeTableViewModel extends ViewModel {
     this.contextType = args.contextType ?? "component-attribute-table";
     
     const thiz = this;
-    const factory = new ViewModelFactory();
 
     for (const attribute of this.attributes) {
       thiz.attributeViewModels.push({
@@ -68,15 +68,18 @@ export default class AttributeTableViewModel extends ViewModel {
         localizableAbbreviation: attribute.localizableAbbreviation,
         requiredProgress: attribute.advancementRequirements,
         modifiedLevel: attribute.modifiedLevel,
-        vmBtnRoll: factory.createVmBtnRoll({
+        vmBtnRoll: new ButtonRollViewModel({
           parent: thiz,
           id: `vmBtnRoll-${attribute.name}`,
           target: attribute,
           propertyPath: undefined,
           primaryChatTitle: game.i18n.localize(attribute.localizableName),
           rollType: "dice-pool",
-          callback: "advanceByRollResult",
-          document: thiz.document,
+          onClick: async (callback) => {
+            const r = await callback();
+            await attribute.advanceByRollResult(r);
+          },
+          actor: thiz.document,
         }),
         vmNsLevel: new InputNumberSpinnerViewModel({
           parent: thiz,

@@ -61,13 +61,11 @@ export default class VisibilityToggleListItemViewModel extends InputViewModel {
     this.btnToggle = new ButtonToggleIconViewModel({
       id: "btnToggle",
       parent: this,
-      isEditable: this.isEditable,
-      isSendable: this.isSendable,
-      isOwner: this.isOwner,
+      value: this.value,
       iconActive: '<i class="fas fa-eye"></i>',
       iconInactive: '<i class="fas fa-eye-slash"></i>',
-      onClick: () => {
-        this.value = !this.value;
+      onChange: (_, newValue) => {
+        this.value = newValue;
       },
     });
   }

@@ -1,7 +1,6 @@
 import LazyLoadViewModel from "../../component/lazy-load/lazy-load-viewmodel.mjs"
 import GmNotesViewModel from "../../component/section-gm-notes/section-gm-notes-viewmodel.mjs"
 import { TEMPLATES } from "../../templatePreloader.mjs"
-import ViewModelFactory from "../../view-model/view-model-factory.mjs"
 import ViewModel from "../../view-model/view-model.mjs"
 import ActorAssetsViewModel from "./part/assets/actor-assets-viewmodel.mjs"
 import ActorAttributesViewModel from "./part/abilities/actor-attributes-viewmodel.mjs"
@@ -14,6 +13,7 @@ import BaseSheetViewModel from "../../view-model/base-sheet-viewmodel.mjs"
 import InputImageViewModel from "../../component/input-image/input-image-viewmodel.mjs"
 import InputRichTextViewModel from "../../component/input-rich-text/input-rich-text-viewmodel.mjs"
 import InputTextFieldViewModel from "../../component/input-textfield/input-textfield-viewmodel.mjs"
+import ButtonSendToChatViewModel from "../../component/button-send-to-chat/button-send-to-chat-viewmodel.mjs"
 
 /**
  * @extends BaseSheetViewModel
@@ -91,7 +91,6 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
     this.contextTemplate = args.contextTemplate ?? "actor-character-sheet";
 
     const thiz = this;
-    const factory = new ViewModelFactory();
 
     this.vmTfName = new InputTextFieldViewModel({
       parent: thiz,
@@ -110,7 +109,7 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
         thiz.document.img = newValue;
       },
     });
-    this.vmBtnSendToChat = factory.createVmBtnSendToChat({
+    this.vmBtnSendToChat = new ButtonSendToChatViewModel({
       parent: this,
       id: "vmBtnSendToChat",
       target: thiz.document,

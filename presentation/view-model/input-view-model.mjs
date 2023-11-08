@@ -20,6 +20,9 @@ export const SELECTOR_READ = "custom-system-read-only";
  * @property {String} id Unique ID of this view model instance. 
  * @property {Boolean} isEditable If `true`, input(s) will 
  * be in edit mode. If `false`, will be in read-only mode.
+ * @property {JQuery | HTMLElement} element The DOM element that is 
+ * associated with this view model. 
+ * * Read-only
  * 
  * @property {String | undefined} localizedToolTip A localized text to 
  * display as a tool tip. 
@@ -28,9 +31,6 @@ export const SELECTOR_READ = "custom-system-read-only";
  * @property {Any | undefined} value The current value. 
  * * Upon change, invokes the `onChange` callback. 
  * @property {String} localizedValue The current value, localized. 
- * * Read-only
- * @property {JQuery | HTMLElement} element The DOM element that is 
- * associated with this view model. 
  * * Read-only
  * 
  * @method onChange Callback that is invoked when the value changes. 
@@ -68,17 +68,6 @@ export default class InputViewModel extends ViewModel {
   }
 
   /**
-   * @type {JQuery | HTMLElement}
-   * @private
-   */
-  _element = undefined;
-  /**
-   * @type {JQuery | HTMLElement}
-   * @readonly
-   */
-  get element() { return this._element; }
-
-  /**
    * @param {Object} args
    * @param {String | undefined} args.id Unique ID of this view model instance. 
    * @param {Boolean | undefined} args.isEditable If `true`, input(s) will 
@@ -108,8 +97,6 @@ export default class InputViewModel extends ViewModel {
   async activateListeners(html) {
     await super.activateListeners(html);
 
-    this._element = this._detectElement(html);
-
     if (this.isEditable !== true) return;
 
     this.element.change(this._onChange.bind(this));
@@ -120,29 +107,6 @@ export default class InputViewModel extends ViewModel {
     this.onChange = null;
 
     super.dispose();
-  }
-
-  /**
-   * Finds and returns the associated DOM element, if possible. 
-   * 
-   * @param {Any} html 
-   * 
-   * @returns {JQuery | undefined} The element. 
-   * 
-   * @protected
-   */
-  _detectElement(html) {
-    let element = html.find(`.${SELECTOR_EDIT}#${this.id}`);
-    
-    if (element === undefined || element === null || element.length === 0) {
-      element = html.find(`.${SELECTOR_READ}#${this.id}`);
-    }
-    
-    if (element === undefined || element === null || element.length === 0) {
-      throw new Error(`NullPointerException: Failed to get input element with id '${this.id}'`);
-    }
-
-    return element;
   }
 
   /**

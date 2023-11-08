@@ -251,6 +251,16 @@ export default class ViewModel {
   contextTemplate = undefined;
 
   /**
+   * Returns the element. 
+   * 
+   * Note: Only available **after** the *first* call to `activateListeners`! 
+   * 
+   * @type {JQuery}
+   * @readonly
+   */
+  get element() { return this._element; }
+
+  /**
    * @param {Object} args The arguments object. 
    * @param {String | undefined} args.id Unique ID of this view model instance. 
    * 
@@ -377,6 +387,12 @@ export default class ViewModel {
    * @async
    */
   async activateListeners(html) {
+    this._element = html.find(`#${this.id}`);
+
+    if (this._element === undefined || this._element === null || this._element.length === 0) {
+      game.ambersteel.logger.logWarn(`Failed to get element with id '${this.id}'`);
+    }
+
     for (const child of this.children) {
       try {
         await child.activateListeners(html);
@@ -640,5 +656,4 @@ export default class ViewModel {
       }
     }
   }
-
 }

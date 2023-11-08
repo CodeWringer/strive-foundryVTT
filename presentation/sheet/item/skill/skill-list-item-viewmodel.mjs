@@ -3,6 +3,9 @@ import { ATTRIBUTES } from "../../../../business/ruleset/attribute/attributes.mj
 import { SKILL_TAGS } from "../../../../business/tags/system-tags.mjs"
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs"
 import { isDefined } from "../../../../business/util/validation-utility.mjs"
+import ButtonDeleteViewModel from "../../../component/button-delete/button-delete-viewmodel.mjs"
+import ButtonRollViewModel from "../../../component/button-roll/button-roll-viewmodel.mjs"
+import ButtonSendToChatViewModel from "../../../component/button-send-to-chat/button-send-to-chat-viewmodel.mjs"
 import ButtonViewModel from "../../../component/button/button-viewmodel.mjs"
 import ChoiceAdapter from "../../../component/input-choice/choice-adapter.mjs"
 import InputDropDownViewModel from "../../../component/input-dropdown/input-dropdown-viewmodel.mjs"
@@ -12,7 +15,6 @@ import InputRichTextViewModel from "../../../component/input-rich-text/input-ric
 import InputTagsViewModel from "../../../component/input-tags/input-tags-viewmodel.mjs"
 import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs"
 import { TEMPLATES } from "../../../templatePreloader.mjs"
-import ViewModelFactory from "../../../view-model/view-model-factory.mjs"
 import SkillAbilityTableViewModel from "../skill-ability/skill-ability-table-viewmodel.mjs"
 import { querySkillConfiguration } from "./skill-utils.mjs"
 import SkillViewModel from "./skill-viewmodel.mjs"
@@ -135,7 +137,6 @@ export default class SkillListItemViewModel extends SkillViewModel {
 
     // Child view models. 
     const thiz = this;
-    const factory = new ViewModelFactory();
 
     this.vmImg = new InputImageViewModel({
       parent: thiz,
@@ -154,7 +155,7 @@ export default class SkillListItemViewModel extends SkillViewModel {
       },
       placeholder: game.i18n.localize("ambersteel.general.name"),
     });
-    this.vmBtnRoll = factory.createVmBtnRoll({
+    this.vmBtnRoll = new ButtonRollViewModel({
       parent: thiz,
       id: "vmBtnRoll",
       target: thiz.document,
@@ -162,16 +163,19 @@ export default class SkillListItemViewModel extends SkillViewModel {
       primaryChatTitle: game.i18n.localize(thiz.document.name),
       primaryChatImage: thiz.document.img,
       rollType: "dice-pool",
-      callback: "advanceByRollResult",
+      onClick: async (callback) => {
+        const r = await callback();
+        await thiz.document.advanceByRollResult(r);
+      },
       actor: thiz.document.owningDocument.document,
     })
-    this.vmBtnSendToChat = factory.createVmBtnSendToChat({
+    this.vmBtnSendToChat = new ButtonSendToChatViewModel({
       parent: thiz,
       id: "vmBtnSendToChat",
       target: thiz.document,
       isEditable: thiz.isEditable || thiz.isGM,
     });
-    this.vmBtnDelete = factory.createVmBtnDelete({
+    this.vmBtnDelete = new ButtonDeleteViewModel({
       parent: thiz,
       id: "vmBtnDelete",
       target: thiz.document,
@@ -180,10 +184,8 @@ export default class SkillListItemViewModel extends SkillViewModel {
     this.vmBtnEdit = new ButtonViewModel({
       id: "vmBtnEdit",
       parent: this,
-      isSendable: this.isSendable,
-      isEditable: this.isEditable,
-      isOwner: this.isOwner,
       target: this.document,
+      iconHtml: '<i class="fas fa-cog"></i>',
       localizedTooltip: game.i18n.localize("ambersteel.general.edit"),
       onClick: async () => {
         const delta = await querySkillConfiguration(this.document);

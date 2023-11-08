@@ -85,8 +85,6 @@ import './presentation/sheet/actor/part/actor-biography-viewmodel.mjs';
 import './presentation/sheet/actor/part/actor-fate-viewmodel.mjs';
 import './presentation/sheet/actor/part/health/actor-health-viewmodel.mjs';
 import './presentation/sheet/actor/part/actor-personals-viewmodel.mjs';
-// View model factory
-import './presentation/view-model/view-model-factory.mjs';
 
 /* -------------------------------------------- */
 /*  Initialization                              */

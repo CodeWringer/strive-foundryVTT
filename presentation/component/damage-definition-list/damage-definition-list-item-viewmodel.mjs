@@ -115,6 +115,7 @@ export default class DamageDefinitionListItemViewModel extends InputViewModel {
       parent: thiz,
       isEditable: thiz.isEditable,
       localizedTooltip: this.localizedDeletionHint,
+      iconHtml: '<i class="fas fa-trash"></i>',
       onClick: this.onDelete,
     });
   }

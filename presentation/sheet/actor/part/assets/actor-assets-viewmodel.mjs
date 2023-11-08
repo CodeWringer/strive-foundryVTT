@@ -1,9 +1,9 @@
 import TransientBaseCharacterActor from "../../../../../business/document/actor/transient-base-character-actor.mjs"
 import { validateOrThrow } from "../../../../../business/util/validation-utility.mjs"
+import ButtonAddViewModel from "../../../../component/button-add/button-add-viewmodel.mjs"
 import DocumentListItemOrderDataSource from "../../../../component/sortable-list/document-list-item-order-datasource.mjs"
 import SortableListViewModel from "../../../../component/sortable-list/sortable-list-viewmodel.mjs"
 import { TEMPLATES } from "../../../../templatePreloader.mjs"
-import ViewModelFactory from "../../../../view-model/view-model-factory.mjs"
 import ViewModel from "../../../../view-model/view-model.mjs"
 import AssetListItemViewModel from "../../../item/asset/asset-list-item-viewmodel.mjs"
 import ActorAssetsEquippedViewModel from "./actor-assets-equipped-viewmodel.mjs"
@@ -82,7 +82,6 @@ export default class ActorAssetsViewModel extends ViewModel {
     this.contextType = args.contextType ?? "actor-assets";
 
     const thiz = this;
-    const factory = new ViewModelFactory();
 
     this.vmEquipped = new ActorAssetsEquippedViewModel({
       id: "vmEquipped",
@@ -105,8 +104,9 @@ export default class ActorAssetsViewModel extends ViewModel {
       }),
       listItemViewModels: this.luggageViewModels,
       listItemTemplate: TEMPLATES.ASSET_LIST_ITEM,
-      vmBtnAddItem: factory.createVmBtnAdd({
+      vmBtnAddItem: new ButtonAddViewModel({
         id: "vmBtnAddItem",
+        parent: this,
         target: thiz.document,
         isEditable: thiz.isEditable,
         creationType: "item",
@@ -128,8 +128,9 @@ export default class ActorAssetsViewModel extends ViewModel {
       }),
       listItemViewModels: this.propertyViewModels,
       listItemTemplate: TEMPLATES.ASSET_LIST_ITEM,
-      vmBtnAddItem: factory.createVmBtnAdd({
+      vmBtnAddItem: new ButtonAddViewModel({
         id: "vmBtnAddItem",
+        parent: this,
         target: thiz.document,
         isEditable: thiz.isEditable,
         creationType: "item",

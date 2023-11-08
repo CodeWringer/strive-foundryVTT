@@ -1,7 +1,7 @@
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs"
+import ButtonAddViewModel from "../../../component/button-add/button-add-viewmodel.mjs";
 import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
 import { TEMPLATES } from "../../../templatePreloader.mjs";
-import ViewModelFactory from "../../../view-model/view-model-factory.mjs"
 import ViewModel from "../../../view-model/view-model.mjs"
 import FateCardViewModel from "../../item/fate-card/fate-card-viewmodel.mjs"
 
@@ -58,7 +58,6 @@ export default class ActorFateViewModel extends ViewModel {
     this.contextType = args.contextType ?? "actor-fate";
 
     const thiz = this;
-    const factory = new ViewModelFactory();
 
     this.vmNsMifp = new InputNumberSpinnerViewModel({
       parent: thiz,
@@ -87,7 +86,7 @@ export default class ActorFateViewModel extends ViewModel {
       },
       min: 0,
     });
-    this.vmBtnAddFateCard = factory.createVmBtnAdd({
+    this.vmBtnAddFateCard = new ButtonAddViewModel({
       parent: thiz,
       id: "vmBtnAddFateCard",
       target: thiz.document,

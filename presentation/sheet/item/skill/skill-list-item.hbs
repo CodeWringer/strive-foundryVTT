@@ -20,11 +20,7 @@ cssClass: {undefined | String}
       {{> inputTextField viewModel=viewModel.vmTfName cssClass="list-item-header" }}
     </div>
     {{!-- Configure --}}
-    {{#> button viewModel=viewModel.vmBtnEdit square=true cssClass="" }}
-      <div class="button light square flex flex-center">
-        <i class="fas fa-cog"></i>
-      </div>
-    {{/button}}
+    {{> button viewModel=viewModel.vmBtnEdit square=true cssClass="" }}
     {{!-- Delete --}}
     {{> buttonDelete viewModel=viewModel.vmBtnDelete cssClass="" }}
   </div>

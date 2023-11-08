@@ -9,7 +9,7 @@ readOnlyCssClass: {String | undefined}
   name="{{viewModel.id}}"
   id="{{viewModel.id}}"
   value="{{viewModel.value}}"
-  title="{{viewModel.localizedTitle}}"
+  title="{{viewModel.localizedToolTip}}"
 >
   {{#each viewModel.options as |option index|}}
     <div class="radio-button-container flex flex-row flex-grow{{#if (../viewModel.isSelectedOption ../viewModel option)}} active{{/if}}">

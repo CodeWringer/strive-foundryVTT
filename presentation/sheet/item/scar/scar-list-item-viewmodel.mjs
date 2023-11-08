@@ -1,10 +1,11 @@
 import TransientScar from "../../../../business/document/item/transient-scar.mjs";
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs";
+import ButtonDeleteViewModel from "../../../component/button-delete/button-delete-viewmodel.mjs";
+import ButtonSendToChatViewModel from "../../../component/button-send-to-chat/button-send-to-chat-viewmodel.mjs";
 import InputImageViewModel from "../../../component/input-image/input-image-viewmodel.mjs";
 import InputRichTextViewModel from "../../../component/input-rich-text/input-rich-text-viewmodel.mjs";
 import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs";
 import { TEMPLATES } from "../../../templatePreloader.mjs";
-import ViewModelFactory from "../../../view-model/view-model-factory.mjs";
 import ViewModel from "../../../view-model/view-model.mjs";
 
 export default class ScarListItemViewModel extends ViewModel {
@@ -32,7 +33,6 @@ export default class ScarListItemViewModel extends ViewModel {
     this.document = args.document;
     this.contextTemplate = args.contextTemplate ?? "scar-list-item";
     const thiz = this;
-    const factory = new ViewModelFactory();
 
     this.vmImg = new InputImageViewModel({
       parent: thiz,
@@ -51,13 +51,13 @@ export default class ScarListItemViewModel extends ViewModel {
       },
       placeholder: game.i18n.localize("ambersteel.general.name"),
     });
-    this.vmBtnSendToChat = factory.createVmBtnSendToChat({
+    this.vmBtnSendToChat = new ButtonSendToChatViewModel({
       parent: thiz,
       id: "vmBtnSendToChat",
       target: thiz.document,
       isEditable: thiz.isEditable || thiz.isGM,
     });
-    this.vmBtnDelete = factory.createVmBtnDelete({
+    this.vmBtnDelete = new ButtonDeleteViewModel({
       parent: thiz,
       id: "vmBtnDelete",
       target: thiz.document,

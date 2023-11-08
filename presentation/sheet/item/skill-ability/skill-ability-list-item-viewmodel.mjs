@@ -5,7 +5,6 @@ import { validateOrThrow } from "../../../../business/util/validation-utility.mj
 import { isDefined } from "../../../../business/util/validation-utility.mjs";
 import InfoBubble, { InfoBubbleAutoHidingTypes, InfoBubbleAutoShowingTypes } from "../../../component/info-bubble/info-bubble.mjs";
 import ViewModel from "../../../view-model/view-model.mjs";
-import ViewModelFactory from "../../../view-model/view-model-factory.mjs";
 import { TEMPLATES } from "../../../templatePreloader.mjs";
 import ChoiceAdapter from "../../../component/input-choice/choice-adapter.mjs";
 import DamageDefinitionListViewModel from "../../../component/damage-definition-list/damage-definition-list-viewmodel.mjs";
@@ -16,6 +15,10 @@ import InputRichTextViewModel from "../../../component/input-rich-text/input-ric
 import InputTextareaViewModel from "../../../component/input-textarea/input-textarea-viewmodel.mjs";
 import SkillAbility from "../../../../business/ruleset/skill/skill-ability.mjs";
 import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs";
+import ButtonRollViewModel from "../../../component/button-roll/button-roll-viewmodel.mjs";
+import ButtonContextMenuViewModel from "../../../component/button-context-menu/button-context-menu-viewmodel.mjs";
+import ButtonSendToChatViewModel from "../../../component/button-send-to-chat/button-send-to-chat-viewmodel.mjs";
+import ButtonDeleteViewModel from "../../../component/button-delete/button-delete-viewmodel.mjs";
 
 export default class SkillAbilityListItemViewModel extends ViewModel {
   /** @override */
@@ -90,14 +93,13 @@ export default class SkillAbilityListItemViewModel extends ViewModel {
     this.skillAbility = args.skillAbility;
     
     const thiz = this;
-    const factory = new ViewModelFactory();
     
     const skillAbility = this.skillAbility;
     const owningDocument = skillAbility.owningDocument;
     this._actor = ((thiz.skillAbility.owningDocument ?? {}).owningDocument ?? {}).document;
     const actor = this._actor;
 
-    this.vmBtnRoll = factory.createVmBtnRoll({
+    this.vmBtnRoll = new ButtonRollViewModel({
       parent: thiz,
       id: "vmBtnRoll",
       target: owningDocument,
@@ -107,11 +109,14 @@ export default class SkillAbilityListItemViewModel extends ViewModel {
       secondaryChatTitle: game.i18n.localize(owningDocument.name),
       secondaryChatImage: owningDocument.img,
       rollType: "dice-pool",
-      callback: "advanceByRollResult",
+      onClick: async (callback) => {
+        const r = await callback();
+        await owningDocument.advanceByRollResult(r);
+      },
       actor: actor,
       isEditable: (thiz.isEditable || thiz.isGM) && actor !== undefined,
     });
-    this.vmBtnSendToChat = factory.createVmBtnSendToChat({
+    this.vmBtnSendToChat = new ButtonSendToChatViewModel({
       parent: thiz,
       id: "vmBtnSendToChat",
       target: skillAbility,
@@ -134,7 +139,7 @@ export default class SkillAbilityListItemViewModel extends ViewModel {
       },
       placeholder: game.i18n.localize("ambersteel.general.name"),
     });
-    this.vmBtnDelete = factory.createVmBtnDelete({
+    this.vmBtnDelete = new ButtonDeleteViewModel({
       parent: thiz,
       id: "vmBtnDelete",
       target: skillAbility,
@@ -225,7 +230,7 @@ export default class SkillAbilityListItemViewModel extends ViewModel {
         skillAbility.description = newValue;
       },
     });
-    this.vmBtnContextMenu = factory.createVmBtnContextMenu({
+    this.vmBtnContextMenu = new ButtonContextMenuViewModel({
       parent: thiz,
       id: "vmBtnContextMenu",
       menuItems: [
@@ -251,7 +256,7 @@ export default class SkillAbilityListItemViewModel extends ViewModel {
       // Toggle distance
       .concat(this._createContextMenuToggleButtons("ambersteel.character.skill.ability.distance.label", thiz.skillAbility, "distance", ""))
       // Toggle attack type
-      .concat(this._createContextMenuToggleButtons("ambersteel.attackType.label", thiz.skillAbility, "attackType", ATTACK_TYPES.none.name))
+      .concat(this._createContextMenuToggleButtons("ambersteel.attackType.label", thiz.skillAbility, "attackType", ATTACK_TYPES.none))
       // Toggle condition
       .concat(this._createContextMenuToggleButtons("ambersteel.character.skill.ability.condition.label", thiz.skillAbility, "condition", "")),
     });

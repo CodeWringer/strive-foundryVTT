@@ -9,15 +9,11 @@ cssClass: {undefined | String}
     {{> buttonSendToChat viewModel=viewModel.vmBtnSendToChat cssClass="" }}
     {{!-- Pick up --}}
     <span{{#if viewModel.hideTakeAsset}} class="hidden"{{/if}}>
-      {{#> button viewModel=viewModel.vmBtnTakeAsset square=true cssClass="" }}
-        <i class="ambersteel-icon ico-take-item"></i>
-      {{/button}}
+      {{> button viewModel=viewModel.vmBtnTakeAsset square=true cssClass="" }}
     </span>
     {{!-- Drop --}}
     <span{{#if viewModel.hideDropAsset}} class="hidden"{{/if}}>
-      {{#> button viewModel=viewModel.vmBtnDropAsset square=true cssClass="" }}
-        <i class="ambersteel-icon ico-drop-item"></i>
-      {{/button}}
+      {{> button viewModel=viewModel.vmBtnDropAsset square=true cssClass="" }}
     </span>
     {{!-- Name --}}
     <span class="width-min-xl">

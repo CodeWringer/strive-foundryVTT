@@ -1,4 +1,3 @@
-import { TEMPLATES } from "../../templatePreloader.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
 
 /**
@@ -9,11 +8,14 @@ import ButtonViewModel from "../button/button-viewmodel.mjs";
  * @property {Array<ContextMenuItem>} menuItems An array of {ContextMenuItem} instances, 
  * which are used to populate the context menu. 
  * 
+ * @method onClick Asynchronous callback that is invoked when the button is clicked. 
+ * Receives the button's original click-handler as its sole argument. In most cases, it should be called 
+ * and awaited before one's own click handling logic. But in case the original logic is unwanted, the method can be ignored.
+ * * Returns nothing.
+ * 
  * @see https://foundryvtt.com/api/ContextMenu.html
  */
 export default class ButtonContextMenuViewModel extends ButtonViewModel {
-  static get TEMPLATE() { return TEMPLATES.COMPONENT_BUTTON_CONTEXT_MENU; }
-
   /**
    * Registers the Handlebars partial for this component. 
    * 
@@ -51,27 +53,28 @@ export default class ButtonContextMenuViewModel extends ButtonViewModel {
   }
 
   /**
+   * @param {Object} args
    * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
-   * 
-   * @param {Function | String | undefined} args.callback Optional. Defines an asynchronous callback that is invoked upon completion of the button's own callback. 
    * @param {Boolean | undefined} args.isEditable Optional. If true, will be interactible. 
    * @param {String | undefined} args.localizedTooltip Localized tooltip. 
    * 
    * @param {Array<Object> | undefined} menuItems An array of context menu items, 
-   * which are used to populate the context menu. 
+   * which are used to populate the context menu. The items can have the following properties: 
+   * * `{String} name` - The displayed item name
+   * * `{String} icon` An icon glyph HTML string
+   * * `{Function} condition` A function which returns a Boolean for whether or not to display the item
+   * * `{Function} callback` A callback function to trigger when the entry of the menu is clicked
    * 
-   * The items can have the following properties: 
-   * 
-   * {String} name The displayed item name
-   * 
-   * {String} icon An icon glyph HTML string
-   * 
-   * {Function} condition A function which returns a Boolean for whether or not to display the item
-   * 
-   * {Function} callback A callback function to trigger when the entry of the menu is clicked
+   * @param {Function | undefined} args.onClick Asynchronous callback that is invoked when the button is clicked. 
+   * Receives the button's original click-handler as its sole argument. In most cases, it should be called 
+   * and awaited before one's own click handling logic. But in case the original logic is unwanted, the method can be ignored.
+   * * Returns nothing. 
    */
   constructor(args = {}) {
-    super(args);
+    super({
+      ...args,
+      iconHtml: '<i class="fas fa-bars"></i>',
+    });
 
     this.menuItems = args.menuItems ?? [];
     this.localizedTooltip = args.localizedTooltip ?? game.i18n.localize("ambersteel.general.contextMenu");
@@ -98,11 +101,11 @@ export default class ButtonContextMenuViewModel extends ButtonViewModel {
 
   /**
    * @override
-   * @see {ButtonViewModel.onClick}
+   * @see {ButtonViewModel._onClick}
    * @async
    */
-  async onClick(html, isOwner, isEditable) {
-    if (isEditable !== true) return;
+  async _onClick() {
+    if (this.isEditable !== true) return;
 
     // Show context menu below button. 
     this.isShown = !this.isShown;

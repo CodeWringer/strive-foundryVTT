@@ -14,12 +14,7 @@ viewModel: SimpleListViewModel
     <div class="fill flex flex-row flex-right">
       {{!-- Add button --}}
       <div>
-        {{#> button viewModel=viewModel.vmBtnAddItem fill=true}}
-          <span{{#if ../viewModel.showFancyFont}} class="fancy-font"{{/if}}>{{../viewModel.localizedAddLabel}}</span>
-          <div class="button light square flex flex-center">
-            <i class="fas fa-plus"></i>
-          </div>
-        {{/button}}
+        {{> button viewModel=viewModel.vmBtnAddItem fill=true }}
       </div>
     </div>
   </li>
