@@ -75,7 +75,9 @@ export default class ButtonViewModel extends ViewModel {
     this.localizedToolTip = args.localizedToolTip;
     this.localizedLabel = args.localizedLabel;
     this.iconHtml = args.iconHtml;
-    this.onClick = args.onClick ?? (() => {});
+    this.onClick = args.onClick ?? (async (callback) => {
+      await callback();
+    });
   }
 
   /** @override */
