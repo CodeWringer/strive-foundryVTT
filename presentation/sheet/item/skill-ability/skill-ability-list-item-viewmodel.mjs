@@ -195,9 +195,9 @@ export default class SkillAbilityListItemViewModel extends ViewModel {
       id: "vmDdAttackType",
       parent: this,
       options: this.attackTypeOptions,
-      value: this.skillAbility.attackType === null ? undefined : this.attackTypeOptions.find(it => it.value === this.skillAbility.attackType.name),
+      value: isDefined(this.skillAbility.attackType) ? this.attackTypeOptions.find(it => it.value === this.skillAbility.attackType.name) : undefined,
       onChange: (_, newValue) => {
-        this.skillAbility.attackType = newValue;
+        this.skillAbility.attackType = ATTACK_TYPES[newValue];
       },
       adapter: new ChoiceAdapter({
         toChoiceOption(obj) {

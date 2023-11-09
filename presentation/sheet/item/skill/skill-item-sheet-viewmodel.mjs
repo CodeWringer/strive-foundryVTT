@@ -98,36 +98,6 @@ export default class SkillItemSheetViewModel extends SkillViewModel {
         }
       },
     });
-    this.vmBtnContextMenu = new ButtonContextMenuViewModel({
-      id: "vmBtnContextMenu",
-      parent: this,
-      menuItems: [
-        // Add damage
-        {
-          name: game.i18n.localize("ambersteel.damageDefinition.add"),
-          icon: '<i class="fas fa-plus"></i>',
-          condition: () => { return true; }, // TODO #388 superfluous?
-          callback: () => {
-            const damage = thiz.document.damage.concat([]);
-            damage.push(new DamageAndType({
-              damage: "",
-              damageType: DAMAGE_TYPES.none.name,
-            }));
-            thiz.document.damage = damage;
-          },
-        },
-      ]
-      // Toggle obstacle
-      .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.roll.obstacle.label", this.document, "obstacle", ""))
-      // Toggle opposed by
-      .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.roll.obstacle.opposedBy.label", this.document, "opposedBy", ""))
-      // Toggle distance
-      .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.character.skill.ability.distance.label", this.document, "distance", ""))
-      // Toggle attack type
-      .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.attackType.label", this.document, "attackType", ATTACK_TYPES.none))
-      // Toggle condition
-      .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.character.skill.ability.condition.label", this.document, "condition", "")),
-    });
     this.vmBtnSendToChat = new ButtonSendToChatViewModel({
       parent: thiz,
       id: "vmBtnSendToChat",
