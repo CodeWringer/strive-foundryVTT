@@ -20,6 +20,7 @@ import InputDropDownViewModel from "../../../component/input-dropdown/input-drop
 import ButtonSendToChatViewModel from "../../../component/button-send-to-chat/button-send-to-chat-viewmodel.mjs";
 import ButtonContextMenuViewModel from "../../../component/button-context-menu/button-context-menu-viewmodel.mjs";
 import DamageAndType from "../../../../business/ruleset/skill/damage-and-type.mjs";
+import { ATTACK_TYPES } from "../../../../business/ruleset/skill/attack-types.mjs";
 
 export default class SkillItemSheetViewModel extends SkillViewModel {
   /** @override */
