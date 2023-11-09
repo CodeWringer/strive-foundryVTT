@@ -12,6 +12,8 @@ cssClass: {undefined | String}
         </h1>
         {{!-- Configure --}}
         {{> button viewModel=viewModel.vmBtnEdit square=true }}
+        {{!-- Context Menu --}}
+        {{> buttonContextMenu viewModel=viewModel.vmBtnContextMenu cssClass="" }}
         <div class="flex flex-center">
           {{> buttonSendToChat viewModel=viewModel.vmBtnSendToChat }}
         </div>

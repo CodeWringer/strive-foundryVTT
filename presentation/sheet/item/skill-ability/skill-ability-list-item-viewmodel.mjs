@@ -238,9 +238,9 @@ export default class SkillAbilityListItemViewModel extends ViewModel {
         {
           name: game.i18n.localize("ambersteel.damageDefinition.add"),
           icon: '<i class="fas fa-plus"></i>',
-          condition: () => { return true; },
+          condition: () => { return true; }, // TODO #388 superfluous?
           callback: () => {
-            const damage = thiz.skillAbility.damage ?? [];
+            const damage = thiz.skillAbility.damage.concat([]);
             damage.push(new DamageAndType({
               damage: "",
               damageType: DAMAGE_TYPES.none.name,
@@ -250,15 +250,15 @@ export default class SkillAbilityListItemViewModel extends ViewModel {
         },
       ]
       // Toggle obstacle
-      .concat(this._createContextMenuToggleButtons("ambersteel.roll.obstacle.label", thiz.skillAbility, "obstacle", ""))
+      .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.roll.obstacle.label", thiz.skillAbility, "obstacle", ""))
       // Toggle opposed by
-      .concat(this._createContextMenuToggleButtons("ambersteel.roll.obstacle.opposedBy.label", thiz.skillAbility, "opposedBy", ""))
+      .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.roll.obstacle.opposedBy.label", thiz.skillAbility, "opposedBy", ""))
       // Toggle distance
-      .concat(this._createContextMenuToggleButtons("ambersteel.character.skill.ability.distance.label", thiz.skillAbility, "distance", ""))
+      .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.character.skill.ability.distance.label", thiz.skillAbility, "distance", ""))
       // Toggle attack type
-      .concat(this._createContextMenuToggleButtons("ambersteel.attackType.label", thiz.skillAbility, "attackType", ATTACK_TYPES.none))
+      .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.attackType.label", thiz.skillAbility, "attackType", ATTACK_TYPES.none))
       // Toggle condition
-      .concat(this._createContextMenuToggleButtons("ambersteel.character.skill.ability.condition.label", thiz.skillAbility, "condition", "")),
+      .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.character.skill.ability.condition.label", thiz.skillAbility, "condition", "")),
     });
 
     this.vmDamageDefinitionList = new DamageDefinitionListViewModel({
@@ -309,38 +309,6 @@ export default class SkillAbilityListItemViewModel extends ViewModel {
     this.damageInfoBubble.remove();
   }
 
-  /**
-   * Returns two button definitions for a button to "toggle" a property value to be 
-   * null or non-null. 
-   * 
-   * @param {String} label The button's localizable label. 
-   * @param {Object} propertyOwner Parent object of the property. 
-   * @param {String} propertyName Name of the property. 
-   * @param {Any} nonNullValue Value to set on the property that is non-null. 
-   * 
-   * @returns {Array<Object>} Two button definitions. One for each state of the toggle button. 
-   * 
-   * @private
-   */
-  _createContextMenuToggleButtons(label, propertyOwner, propertyName, nonNullValue) {
-    const localizedLabel = game.i18n.localize(label);
-    return [
-      {
-        name: localizedLabel,
-        icon: '<i class="fas fa-check"></i>',
-        condition: () => { return isDefined(propertyOwner[propertyName]) === true; },
-        callback: () => { propertyOwner[propertyName] = null; },
-      },
-      {
-        name: localizedLabel,
-        icon: '',
-        condition: () => { return isDefined(propertyOwner[propertyName]) !== true; },
-        callback: () => { propertyOwner[propertyName] = nonNullValue; },
-      }
-    ];
-  }
-
-  
   /**
    * Returns the root owning document of the skill ability, if it has one. 
    * Otherwise, returns the skill ability itself.  

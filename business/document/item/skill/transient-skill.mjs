@@ -14,7 +14,7 @@ import SkillAbility from "./skill-ability.mjs";
 import CharacterAttribute from "../../../ruleset/attribute/character-attribute.mjs";
 import { ATTACK_TYPES } from "../../../ruleset/skill/attack-types.mjs";
 import { ATTRIBUTES, Attribute } from "../../../ruleset/attribute/attributes.mjs";
-import { isBlankOrUndefined, isObject } from "../../../util/validation-utility.mjs";
+import { isBlankOrUndefined, isDefined, isObject } from "../../../util/validation-utility.mjs";
 import { arrayContains } from "../../../util/array-utility.mjs";
 import * as ConstantsUtils from "../../../util/constants-utility.mjs";
 import { DICE_POOL_RESULT_TYPES } from "../../../dice/dice-pool.mjs";
@@ -98,6 +98,14 @@ ConstantsUtils.enrichConstant(SKILL_HEAD_STATES);
  * @property {Boolean} isMagicSchool Returns true, if the skill is considered 
  * a magic school. 
  * @property {SkillHeadState} headState The current degree of data fidelity to expose. 
+ * 
+ * @property {Number | undefined} apCost 
+ * @property {Array<DamageAndType>} damage
+ * @property {String | undefined} condition 
+ * @property {Number | undefined} distance 
+ * @property {String | undefined} obstacle 
+ * @property {String | undefined} opposedBy 
+ * @property {AttackType | undefined} attackType 
  */
 export default class TransientSkill extends TransientBaseItem {
   /** @override */
@@ -270,7 +278,112 @@ export default class TransientSkill extends TransientBaseItem {
   set prerequisites(value) {
     this.updateByPath("system.prerequisites", value.map(it => it.toDto()));
   }
+
+  get apCost() {
+    const value = this.document.system.apCost;
+    if (isDefined(value)) {
+      return value;
+    } else {
+      return undefined;
+    }
+  }
+  set apCost(value) {
+    if (isDefined(value)) {
+      this.updateByPath("system.apCost", value);
+    } else {
+      this.updateByPath("system.apCost", null);
+    }
+  }
+
+  get damage() {
+    return (this.document.system.damage ?? []).map(dto => 
+      DamageAndType.fromDto(dto)
+    );
+  }
+  set damage(value) {
+    this.updateByPath("system.damage", value.map(it => it.toDto()));
+  }
   
+  get condition() {
+    const value = this.document.system.condition;
+    if (isDefined(value)) {
+      return value;
+    } else {
+      return undefined;
+    }
+  }
+  set condition(value) {
+    if (isDefined(value)) {
+      this.updateByPath("system.condition", value);
+    } else {
+      this.updateByPath("system.condition", null);
+    }
+  }
+  
+  get distance() {
+    const value = this.document.system.distance;
+    if (isDefined(value)) {
+      return value;
+    } else {
+      return undefined;
+    }
+  }
+  set distance(value) {
+    if (isDefined(value)) {
+      this.updateByPath("system.distance", value);
+    } else {
+      this.updateByPath("system.distance", null);
+    }
+  }
+  
+  get obstacle() {
+    const value = this.document.system.obstacle;
+    if (isDefined(value)) {
+      return value;
+    } else {
+      return undefined;
+    }
+  }
+  set obstacle(value) {
+    if (isDefined(value)) {
+      this.updateByPath("system.obstacle", value);
+    } else {
+      this.updateByPath("system.obstacle", null);
+    }
+  }
+  
+  get opposedBy() {
+    const value = this.document.system.opposedBy;
+    if (isDefined(value)) {
+      return value;
+    } else {
+      return undefined;
+    }
+  }
+  set opposedBy(value) {
+    if (isDefined(value)) {
+      this.updateByPath("system.opposedBy", value);
+    } else {
+      this.updateByPath("system.opposedBy", null);
+    }
+  }
+  
+  get attackType() {
+    const value = this.document.system.attackType;
+    if (isDefined(value)) {
+      return ATTACK_TYPES[value];
+    } else {
+      return undefined;
+    }
+  }
+  set attackType(value) {
+    if (isDefined(value)) {
+      this.updateByPath("system.attackType", value.name);
+    } else {
+      this.updateByPath("system.attackType", null);
+    }
+  }
+
   /**
    * @param {Item} document An encapsulated item instance. 
    * 

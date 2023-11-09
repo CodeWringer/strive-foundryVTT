@@ -7,8 +7,6 @@ import { createUUID } from '../../../util/uuid-utility.mjs';
 import DamageAndType from '../../../ruleset/skill/damage-and-type.mjs';
 import { SOUNDS_CONSTANTS } from '../../../../presentation/audio/sounds.mjs';
 import { VISIBILITY_MODES } from '../../../../presentation/chat/visibility-modes.mjs';
-import { isObject } from '../../../util/validation-utility.mjs';
-import { DAMAGE_TYPES } from '../../../ruleset/damage-types.mjs';
 import { ATTACK_TYPES, AttackType } from '../../../ruleset/skill/attack-types.mjs';
 import TransientSkill from './transient-skill.mjs';
 import AtReferencer from '../../../referencing/at-referencer.mjs';
@@ -144,32 +142,7 @@ export default class SkillAbility {
   /**
    * @type {Array<DamageAndType>} 
    */
-  get damage() { return this._damage.map(it => {
-    const thiz = this;
-    return {
-      get damage() { return it.damage; },
-      set damage(value) {
-        it.damage = value;
-        const damageToPersist = thiz.damage.map(it => {
-          return { damage: it.damage, damageType: it.damageType.name }
-        });
-        thiz.owningDocument.updateByPath(`${thiz._pathOnParent}.damage`, damageToPersist);
-      },
-
-      get damageType() { return it.damageType; },
-      set damageType(value) {
-        if (isObject(value)) {
-          it.damageType = value; 
-        } else {
-          it.damageType = DAMAGE_TYPES[value]; 
-        }
-        const damageToPersist = thiz.damage.map(it => {
-          return { damage: it.damage, damageType: it.damageType.name }
-        });
-        thiz.owningDocument.updateByPath(`${thiz._pathOnParent}.damage`, damageToPersist);
-      },
-    }
-  }); }
+  get damage() { return this._damage; }
   set damage(value) {
     this._damage = value;
     this.owningDocument.updateByPath(`${this._pathOnParent}.damage`, value.map(it => it.toDto()));

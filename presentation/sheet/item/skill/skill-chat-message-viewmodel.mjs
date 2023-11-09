@@ -83,6 +83,12 @@ export default class SkillChatMessageViewModel extends ViewModel {
 
   /**
    * @type {Boolean}
+   * @readonly
+   */
+  get showDamage() { return this.document.damage.length > 0 }
+
+  /**
+   * @type {Boolean}
    * @default false
    */
   skillAbilitiesInitiallyVisible = false;
