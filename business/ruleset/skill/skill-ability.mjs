@@ -10,7 +10,7 @@ import { VISIBILITY_MODES } from '../../../presentation/chat/visibility-modes.mj
 import { isObject } from '../../util/validation-utility.mjs';
 import { DAMAGE_TYPES } from '../damage-types.mjs';
 import { ATTACK_TYPES, AttackType } from './attack-types.mjs';
-import TransientSkill from '../../document/item/transient-skill.mjs';
+import TransientSkill from '../../document/item/skill/transient-skill.mjs';
 import AtReferencer from '../../referencing/at-referencer.mjs';
 
 /**

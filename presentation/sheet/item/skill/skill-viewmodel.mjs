@@ -1,4 +1,4 @@
-import TransientSkill from "../../../../business/document/item/transient-skill.mjs";
+import TransientSkill from "../../../../business/document/item/skill/transient-skill.mjs";
 import { createUUID } from "../../../../business/util/uuid-utility.mjs";
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs";
 import ViewModel from "../../../view-model/view-model.mjs";

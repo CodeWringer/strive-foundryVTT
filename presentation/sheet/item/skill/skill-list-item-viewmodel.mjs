@@ -1,4 +1,4 @@
-import { SKILL_HEAD_STATES } from "../../../../business/document/item/transient-skill.mjs"
+import { SKILL_HEAD_STATES } from "../../../../business/document/item/skill/transient-skill.mjs"
 import { ATTRIBUTES } from "../../../../business/ruleset/attribute/attributes.mjs"
 import { SKILL_TAGS } from "../../../../business/tags/system-tags.mjs"
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs"
