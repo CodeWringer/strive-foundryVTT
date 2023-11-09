@@ -1,17 +1,17 @@
-import { TEMPLATES } from '../../../presentation/templatePreloader.mjs';
-import * as ChatUtil from '../../../presentation/chat/chat-utility.mjs';
-import { validateOrThrow } from '../../util/validation-utility.mjs';
-import PreparedChatData from '../../../presentation/chat/prepared-chat-data.mjs';
-import SkillAbilityChatMessageViewModel from '../../../presentation/sheet/item/skill-ability/skill-ability-chat-message-viewmodel.mjs';
-import { createUUID } from '../../util/uuid-utility.mjs';
-import DamageAndType from './damage-and-type.mjs';
-import { SOUNDS_CONSTANTS } from '../../../presentation/audio/sounds.mjs';
-import { VISIBILITY_MODES } from '../../../presentation/chat/visibility-modes.mjs';
-import { isObject } from '../../util/validation-utility.mjs';
-import { DAMAGE_TYPES } from '../damage-types.mjs';
-import { ATTACK_TYPES, AttackType } from './attack-types.mjs';
-import TransientSkill from '../../document/item/skill/transient-skill.mjs';
-import AtReferencer from '../../referencing/at-referencer.mjs';
+import { TEMPLATES } from '../../../../presentation/templatePreloader.mjs';
+import * as ChatUtil from '../../../../presentation/chat/chat-utility.mjs';
+import { validateOrThrow } from '../../../util/validation-utility.mjs';
+import PreparedChatData from '../../../../presentation/chat/prepared-chat-data.mjs';
+import SkillAbilityChatMessageViewModel from '../../../../presentation/sheet/item/skill-ability/skill-ability-chat-message-viewmodel.mjs';
+import { createUUID } from '../../../util/uuid-utility.mjs';
+import DamageAndType from '../../../ruleset/skill/damage-and-type.mjs';
+import { SOUNDS_CONSTANTS } from '../../../../presentation/audio/sounds.mjs';
+import { VISIBILITY_MODES } from '../../../../presentation/chat/visibility-modes.mjs';
+import { isObject } from '../../../util/validation-utility.mjs';
+import { DAMAGE_TYPES } from '../../../ruleset/damage-types.mjs';
+import { ATTACK_TYPES, AttackType } from '../../../ruleset/skill/attack-types.mjs';
+import TransientSkill from './transient-skill.mjs';
+import AtReferencer from '../../../referencing/at-referencer.mjs';
 
 /**
  * Represents a skill ability. 

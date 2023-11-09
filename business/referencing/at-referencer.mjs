@@ -1,5 +1,5 @@
 import TransientDocument from "../document/transient-document.mjs";
-import SkillAbility from "../ruleset/skill/skill-ability.mjs";
+import SkillAbility from "../document/item/skill/skill-ability.mjs";
 
 /**
  * Provides a means of resolving "@"-references, using a given document. 

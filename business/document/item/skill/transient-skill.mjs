@@ -10,7 +10,7 @@ import { ITEM_SUBTYPE } from "../item-subtype.mjs";
 import TransientBaseItem from "../transient-base-item.mjs";
 import LevelAdvancement from "../../../ruleset/level-advancement.mjs";
 import Ruleset from "../../../ruleset/ruleset.mjs";
-import SkillAbility from "../../../ruleset/skill/skill-ability.mjs";
+import SkillAbility from "./skill-ability.mjs";
 import CharacterAttribute from "../../../ruleset/attribute/character-attribute.mjs";
 import { ATTACK_TYPES } from "../../../ruleset/skill/attack-types.mjs";
 import { ATTRIBUTES, Attribute } from "../../../ruleset/attribute/attributes.mjs";
