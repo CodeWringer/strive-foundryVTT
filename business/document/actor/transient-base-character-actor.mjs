@@ -9,6 +9,7 @@ import CharacterAttributeGroup from '../../ruleset/attribute/character-attribute
 import { CharacterHealthState } from '../../ruleset/health/character-health-state.mjs';
 import { HEALTH_STATES } from '../../ruleset/health/health-states.mjs';
 import Ruleset from '../../ruleset/ruleset.mjs';
+import { SKILL_TAGS } from '../../tags/system-tags.mjs';
 import LoadHealthStatesSettingUseCase from '../../use-case/load-health-states-setting-use-case.mjs';
 import { createUUID } from '../../util/uuid-utility.mjs';
 import { isDefined } from '../../util/validation-utility.mjs';
@@ -42,6 +43,8 @@ import TransientBaseActor from './transient-base-actor.mjs';
  * @property {Array<TransientSkill>} skills.learning Returns all learning skills of the character. 
  * * Read-only. 
  * @property {Array<TransientSkill>} skills.known Returns all known skills of the character. 
+ * * Read-only. 
+ * @property {Array<TransientSkill>} skills.innate Returns all innate skills of the character. 
  * * Read-only. 
  * @property {Object} health
  * * Read-only. 
@@ -222,6 +225,12 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
       get all() { return thiz.items.filter(it => it.type === "skill"); },
       get learning() { return thiz.items.filter(it => it.type === "skill" && it.level < 1); },
       get known() { return thiz.items.filter(it => it.type === "skill" && it.level > 0); },
+      get innate() { return thiz.items.filter(it => 
+        it.type === "skill" 
+        && ((it.system.tags ?? it.system.properties) ?? [])
+          .find(tag => tag.id === SKILL_TAGS.INNATE.id) !== undefined
+        ); 
+      },
     };
   }
 
