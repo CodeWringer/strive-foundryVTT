@@ -6,6 +6,7 @@ import { createUUID } from "../../../../business/util/uuid-utility.mjs";
 import { isDefined, validateOrThrow } from "../../../../business/util/validation-utility.mjs";
 import ButtonContextMenuViewModel from "../../../component/button-context-menu/button-context-menu-viewmodel.mjs";
 import DamageDefinitionListViewModel from "../../../component/damage-definition-list/damage-definition-list-viewmodel.mjs";
+import InfoBubble, { InfoBubbleAutoHidingTypes, InfoBubbleAutoShowingTypes } from "../../../component/info-bubble/info-bubble.mjs";
 import ChoiceAdapter from "../../../component/input-choice/choice-adapter.mjs";
 import InputDropDownViewModel from "../../../component/input-dropdown/input-dropdown-viewmodel.mjs";
 import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
@@ -163,6 +164,19 @@ export default class SkillViewModel extends ViewModel {
       },
       resolveFormulaContext: this._getRootOwningDocument(this.document),
       chatTitle: `${game.i18n.localize("ambersteel.damageDefinition.label")} - ${this.document.name}`,
+    });
+  }
+
+  /** @override */
+  async activateListeners(html) {
+    await super.activateListeners(html);
+
+    this.damageInfoBubble = new InfoBubble({
+      html: html,
+      text: game.i18n.localize("ambersteel.damageDefinition.infoFormulae"),
+      parent: html.find(`#${this.id}-damage-info`),
+      autoShowType: InfoBubbleAutoShowingTypes.MOUSE_ENTER,
+      autoHideType: InfoBubbleAutoHidingTypes.MOUSE_LEAVE,
     });
   }
 
