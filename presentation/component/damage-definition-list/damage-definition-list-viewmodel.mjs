@@ -71,8 +71,10 @@ export default class DamageDefinitionListViewModel extends InputViewModel {
         parent: thiz,
         value: damageDefinition,
         localizedLabel: game.i18n.localize(damageDefinition.damageType.localizableName),
-        onChange: (_, newValue) => {
-          this.value[i] = newValue;
+        onChange: (_, newItemValue) => {
+          const newDamageDefinitions = this.value.concat([]);
+          newDamageDefinitions[i] = newItemValue;
+          this.value = newDamageDefinitions;
         },
         onDelete: () => {
           const newDamageDefinitions = damageDefinitions.concat([]);

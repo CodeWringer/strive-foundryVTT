@@ -84,7 +84,10 @@ export default class DamageDefinitionListItemViewModel extends InputViewModel {
       id: "vmTfDamage",
       value: this.value.damage,
       onChange: (_, newValue) => {
-        this.value.damage = newValue;
+        this.value = new DamageAndType({
+          damage: newValue,
+          damageType: this.value.damageType,
+        });
       },
     });
 
@@ -94,7 +97,10 @@ export default class DamageDefinitionListItemViewModel extends InputViewModel {
       options: this.damageTypeOptions,
       value: this.damageTypeOptions.find(it => it.value === this.value.damageType.name),
       onChange: (_, newValue) => {
-        this.value.damageType = newValue;
+        this.value = new DamageAndType({
+          damage: this.value.damage,
+          damageType: DAMAGE_TYPES[newValue],
+        });
       },
       adapter: new ChoiceAdapter({
         toChoiceOption(obj) {
