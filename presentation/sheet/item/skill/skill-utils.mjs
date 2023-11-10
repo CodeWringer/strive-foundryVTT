@@ -1,5 +1,5 @@
 import * as StringUtil from "../../../../business/util/string-utility.mjs";
-import TransientSkill, { SKILL_HEAD_STATES } from "../../../../business/document/item/transient-skill.mjs";
+import TransientSkill, { SKILL_HEAD_STATES } from "../../../../business/document/item/skill/transient-skill.mjs";
 import DynamicInputDefinition from "../../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
 import DynamicInputDialog from "../../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
 import { DYNAMIC_INPUT_TYPES } from "../../../dialog/dynamic-input-dialog/dynamic-input-types.mjs";

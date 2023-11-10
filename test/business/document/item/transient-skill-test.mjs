@@ -1,7 +1,7 @@
 import should from 'should';
 import sinon from 'sinon';
 import 'should-sinon';
-import TransientSkill, { SKILL_HEAD_STATES } from '../../../../business/document/item/transient-skill.mjs';
+import TransientSkill, { SKILL_HEAD_STATES } from '../../../../business/document/item/skill/transient-skill.mjs';
 import { BaseLoggingStrategy } from '../../../../business/logging/base-logging-strategy.mjs';
 import { SKILL_TAGS } from '../../../../business/tags/system-tags.mjs';
 

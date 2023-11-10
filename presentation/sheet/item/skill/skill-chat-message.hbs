@@ -55,6 +55,99 @@ cssClass: {undefined | String}
       {{/each}}
     </ul>
   </div>
+  {{!-- apCost --}}
+  {{#if viewModel.document.apCost}}
+  <div class="flex flex-row sheet-block margin-b-md">
+    <div class="width-min-xxl">
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.skill.ability.apCost"}}{{/label}}
+    </div>
+    <div class="flex-grow">
+      {{viewModel.document.apCost}}
+    </div>
+  </div>
+  {{/if}}
+  {{!-- Obstacle --}}
+  {{#if viewModel.document.obstacle}}
+  <div class="flex flex-row sheet-block margin-b-md">
+    <div class="width-min-xxl">
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.roll.obstacle.abbreviation"}}{{/label}}
+    </div>
+    <div class="flex-grow">
+      {{viewModel.document.obstacle}}
+    </div>
+  </div>
+  {{/if}}
+  {{!-- Opposed By --}}
+  {{#if viewModel.document.opposedBy}}
+  <div class="flex flex-row sheet-block margin-b-md">
+    <div class="width-min-xxl">
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.roll.obstacle.opposedBy.label"}}{{/label}}
+    </div>
+    <div class="flex-grow">
+      {{viewModel.document.opposedBy}}
+    </div>
+  </div>
+  {{/if}}
+  {{!-- Condition --}}
+  {{#if viewModel.document.condition}}
+  <div class="flex flex-row sheet-block margin-b-md">
+    <div class="width-min-xxl">
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.skill.ability.condition.label"}}{{/label}}
+    </div>
+    <div class="flex-grow">
+      {{localize viewModel.document.condition}}
+    </div>
+  </div>
+  {{/if}}
+  {{!-- attackType --}}
+  {{#if viewModel.document.attackType}}
+  <div class="flex flex-row sheet-block margin-b-md">
+    <div class="width-min-xxl">
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.attackType.label"}}{{/label}}
+    </div>
+    <div class="flex-grow">
+      {{localize viewModel.document.attackType.localizableName}}
+    </div>
+  </div>
+  {{/if}}
+  {{!-- distance --}}
+  {{#if viewModel.document.distance}}
+  <div class="flex flex-row sheet-block margin-b-md">
+    <div class="width-min-xxl">
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.skill.ability.distance.label"}}{{/label}}
+    </div>
+    <div class="flex-grow">
+      {{viewModel.document.distance}}
+    </div>
+  </div>
+  {{/if}}
+  {{!-- Damage --}}
+  {{#if viewModel.showDamage}}
+  <ol class="unstyled-list">
+    {{#each viewModel.document.damage as |entry index|}}
+      <li class="ambersteel-list-row sheet-block flex flex-column margin-b-md">
+        {{!-- Damage formula --}}
+        <div class="flex flex-row">
+          <div class="width-min-xxl{{#if ../viewModel.showFancyFont}} fancy-font{{/if}}">
+            {{localize "ambersteel.damageDefinition.label"}}
+          </div>
+          <span class="width-min-xxl">
+            {{entry.damage}}
+          </span>
+        </div>
+        {{!-- Damage type --}}
+        <div class="flex flex-row">
+          <div class="width-min-xxl{{#if ../viewModel.showFancyFont}} fancy-font{{/if}}">
+            {{localize "ambersteel.damageType.label"}}
+          </div>
+          <span class="width-xxl">
+            {{localize entry.damageType.localizableName}}
+          </span>
+        </div>
+      </li>
+    {{/each}}
+  </ol>
+  {{/if}}
   {{!-- Skill Abilites --}}
   {{#if viewModel.hasAbilities}}
     <div data-vis-group="{{viewModel.id}}-abilities" class="{{#if viewModel.skillAbilitiesInitiallyVisible}}{{else}}hidden{{/if}}">

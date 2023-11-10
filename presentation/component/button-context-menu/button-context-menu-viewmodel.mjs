@@ -1,3 +1,4 @@
+import { isDefined } from "../../../business/util/validation-utility.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
 
 /**
@@ -23,6 +24,35 @@ export default class ButtonContextMenuViewModel extends ButtonViewModel {
    */
   static registerHandlebarsPartial() {
     Handlebars.registerPartial('buttonContextMenu', `{{> "${ButtonContextMenuViewModel.TEMPLATE}"}}`);
+  }
+
+  /**
+   * Returns two button definitions for a button to "toggle" a property value to be 
+   * null or non-null. 
+   * 
+   * @param {String} label The button's localizable label. 
+   * @param {Object} propertyOwner Parent object of the property. 
+   * @param {String} propertyName Name of the property. 
+   * @param {Any} nonNullValue Value to set on the property that is non-null. 
+   * 
+   * @returns {Array<Object>} Two button definitions. One for each state of the toggle button. 
+   */
+  static createToggleButtons(label, propertyOwner, propertyName, nonNullValue) {
+    const localizedLabel = game.i18n.localize(label);
+    return [
+      {
+        name: localizedLabel,
+        icon: '<i class="fas fa-check"></i>',
+        condition: () => { return isDefined(propertyOwner[propertyName]) === true; },
+        callback: () => { propertyOwner[propertyName] = null; },
+      },
+      {
+        name: localizedLabel,
+        icon: '',
+        condition: () => { return isDefined(propertyOwner[propertyName]) !== true; },
+        callback: () => { propertyOwner[propertyName] = nonNullValue; },
+      }
+    ];
   }
 
   /**
@@ -120,13 +150,15 @@ export default class ButtonContextMenuViewModel extends ButtonViewModel {
   _ensureContextMenuWithin(outerHtml) {
     if (this.isShown !== true) return;
 
-    const contextMenuElement = outerHtml.find(`#${this.id} nav#context-menu`);
+    const wrappedOuterHtml = $(outerHtml);
+    const contextMenuElement = wrappedOuterHtml.find(`#${this.id} nav#context-menu`);
 
     if (contextMenuElement === undefined || contextMenuElement === null || contextMenuElement.length === 0) {
       game.ambersteel.logger.logWarn("NullPointerException: ContextMenu: Failed to get context menu element")
+      return;
     }
 
-    const outerBounds = outerHtml[0].getBoundingClientRect();
+    const outerBounds = wrappedOuterHtml[0].getBoundingClientRect();
     const contextMenuBounds = contextMenuElement[0].getBoundingClientRect();
 
     if (contextMenuBounds.right > outerBounds.right) {

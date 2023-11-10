@@ -12,9 +12,10 @@ cssClass: {undefined | String}
         </h1>
         {{!-- Configure --}}
         {{> button viewModel=viewModel.vmBtnEdit square=true }}
-        <div class="flex flex-center">
-          {{> buttonSendToChat viewModel=viewModel.vmBtnSendToChat }}
-        </div>
+        {{!-- Context Menu --}}
+        {{> buttonContextMenu viewModel=viewModel.vmBtnContextMenu cssClass="" }}
+        {{!-- SendToChat --}}
+        {{> buttonSendToChat viewModel=viewModel.vmBtnSendToChat }}
       </div>
     </div>
   </header>
@@ -49,6 +50,69 @@ cssClass: {undefined | String}
   <div class="sheet-block flex flex-column margin-b-md">
     {{#> header3 showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.general.description"}}{{/header3}}
     {{> inputRichText viewModel=viewModel.vmRtDescription }}
+  </div>
+  {{!-- apCost --}}
+  <div class="sheet-block grid-3col grid-gap-md margin-b-md{{#if viewModel.hideApCost}} hidden{{/if}}">
+    <div class="flex-grow">
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.skill.ability.apCost"}}{{/label}}
+    </div>
+    <div class="grid-span-2">
+      {{> inputNumberSpinner viewModel=viewModel.vmNsApCost }}
+    </div>
+  </div>
+  {{!-- Obstacle --}}
+  <div class="sheet-block grid-3col grid-gap-md margin-b-md{{#if viewModel.hideObstacle}} hidden{{/if}}">
+    <div class="flex-grow">
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.roll.obstacle.abbreviation"}}{{/label}}
+    </div>
+    <div class="grid-span-2">
+      {{> inputTextField viewModel=viewModel.vmTfObstacle }}
+    </div>
+  </div>
+  {{!-- Opposed By --}}
+  <div class="sheet-block grid-3col grid-gap-md margin-b-md{{#if viewModel.hideOpposedBy}} hidden{{/if}}">
+    <div class="flex-grow">
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.roll.obstacle.opposedBy.label"}}{{/label}}
+    </div>
+    <div class="grid-span-2">
+      {{> inputTextField viewModel=viewModel.vmTfOpposedBy }}
+    </div>
+  </div>
+  {{!-- Distance --}}
+  <div class="sheet-block grid-3col grid-gap-md margin-b-md{{#if viewModel.hideObstacle}} hidden{{/if}}">
+    <div class="flex-grow">
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.skill.ability.distance.label"}}{{/label}}
+    </div>
+    <div class="grid-span-2">
+      {{> inputTextField viewModel=viewModel.vmTfDistance }}
+    </div>
+  </div>
+  {{!-- Attack type --}}
+  <div class="sheet-block grid-3col grid-gap-md margin-b-md{{#if viewModel.hideDistance}} hidden{{/if}}">
+    <div class="flex-grow">
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.attackType.label"}}{{/label}}
+    </div>
+    <div class="grid-span-2">
+      {{> inputDropDown viewModel=viewModel.vmDdAttackType }}
+    </div>
+  </div>
+  {{!-- Condition --}}
+  <div class="sheet-block grid-3col grid-gap-md margin-b-md{{#if viewModel.hideCondition}} hidden{{/if}}">
+    <div class="flex-grow">
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.skill.ability.condition.label"}}{{/label}}
+    </div>
+    <div class="grid-span-2">
+      {{> inputTextarea viewModel=viewModel.vmTaCondition }}
+    </div>
+  </div>
+  {{!-- Damage --}}
+  <div class="flex flex-row{{#if viewModel.hideDamage}} hidden{{/if}}">
+    <div class="flex flex-center">
+      <span class="button light square font-size-default flex flex-center" id="{{viewModel.id}}-damage-info">
+        <i class="far fa-question-circle info-button"></i>
+      </span>
+    </div>
+    {{> damageDefinitionList viewModel=viewModel.vmDamageDefinitionList}}
   </div>
   {{!-- Prerequisites --}}
   <div class="sheet-block flex flex-column">
