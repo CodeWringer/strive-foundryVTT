@@ -67,6 +67,8 @@ export default class SkillViewModel extends ViewModel {
           },
         },
       ]
+      // Toggle ap cost
+      .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.character.skill.ability.apCost", this.document, "apCost", 0))
       // Toggle obstacle
       .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.roll.obstacle.label", this.document, "obstacle", ""))
       // Toggle opposed by

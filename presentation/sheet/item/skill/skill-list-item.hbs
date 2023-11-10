@@ -94,6 +94,73 @@ cssClass: {undefined | String}
     </span>  
   </div>
   {{!-- Row --}}
+  <div class="grid grid-2col grid-gap-md">
+    {{!-- AP cost --}}
+    <div class="fill flex flex-row{{#if viewModel.hideApCost}} hidden{{/if}}">
+      <div class="flex-grow">
+        {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.skill.ability.apCost"}}{{/label}}
+      </div>
+      <div class="width-md">
+        {{> inputNumberSpinner viewModel=viewModel.vmNsApCost }}
+      </div>
+    </div>
+    {{!-- Lots of optional content here --}}
+    {{!-- Obstacle --}}
+    <div class="fill flex flex-row{{#if viewModel.hideObstacle}} hidden{{/if}}">
+      <div class="width-min-lg">
+        {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.roll.obstacle.abbreviation"}}{{/label}}
+      </div>
+      <div class="flex-grow">
+        {{> inputTextField viewModel=viewModel.vmTfObstacle }}
+      </div>
+    </div>
+    {{!-- Opposed By --}}
+    <div class="fill flex flex-row{{#if viewModel.hideOpposedBy}} hidden{{/if}}">
+      <div class="width-min-lg">
+        {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.roll.obstacle.opposedBy.label"}}{{/label}}
+      </div>
+      <div class="flex-grow">
+        {{> inputTextField viewModel=viewModel.vmTfOpposedBy }}
+      </div>
+    </div>
+    {{!-- Distance --}}
+    <div class="fill flex flex-row{{#if viewModel.hideDistance}} hidden{{/if}}">
+      <div class="width-min-lg">
+        {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.skill.ability.distance.label"}}{{/label}}
+      </div>
+      <div class="flex-grow">
+        {{> inputTextField viewModel=viewModel.vmTfDistance }}
+      </div>
+    </div>
+    {{!-- Attack type --}}
+    <div class="fill flex flex-row{{#if viewModel.hideAttackType}} hidden{{/if}}">
+      <div class="width-min-lg">
+        {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.attackType.label"}}{{/label}}
+      </div>
+      <div class="flex-grow">
+        {{> inputDropDown viewModel=viewModel.vmDdAttackType }}
+      </div>
+    </div>
+    {{!-- Condition --}}
+    <div class="fill flex flex-row{{#if viewModel.hideCondition}} hidden{{/if}}">
+      <div class="width-min-lg">
+        {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.skill.ability.condition.label"}}{{/label}}
+      </div>
+      <div class="flex-grow">
+        {{> inputTextarea viewModel=viewModel.vmTaCondition }}
+      </div>
+    </div>
+  </div>
+  {{!-- Damage --}}
+  <div class="flex flex-row{{#if viewModel.hideDamage}} hidden{{/if}}">
+    <div class="flex flex-center">
+      <span class="button light square font-size-default flex flex-center" id="{{viewModel.id}}-damage-info">
+        <i class="far fa-question-circle info-button"></i>
+      </span>
+    </div>
+    {{> damageDefinitionList viewModel=viewModel.vmDamageDefinitionList}}
+  </div>
+  {{!-- Row --}}
   {{!-- Prerequisites --}}
   <div class="flex flex-column margin-b-sm{{#if (or (neq viewModel.showAdvancedData true) (neq viewModel.showPrerequisites true))}} hidden{{/if}}">
     {{#> header3 showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.skill.prerequisite.plural"}}{{/header3}}
