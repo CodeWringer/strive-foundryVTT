@@ -223,12 +223,19 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
     const thiz = this;
     return {
       get all() { return thiz.items.filter(it => it.type === "skill"); },
-      get learning() { return thiz.items.filter(it => it.type === "skill" && it.level < 1); },
-      get known() { return thiz.items.filter(it => it.type === "skill" && it.level > 0); },
+      get learning() { return thiz.items.filter(it => 
+        it.type === "skill" && it.level < 1
+          && it.tags.find(tag => tag.id === SKILL_TAGS.INNATE.id) === undefined
+        ); 
+      },
+      get known() { return thiz.items.filter(it => 
+        it.type === "skill" && it.level > 0
+          && it.tags.find(tag => tag.id === SKILL_TAGS.INNATE.id) === undefined
+        ); 
+      },
       get innate() { return thiz.items.filter(it => 
         it.type === "skill" 
-        && ((it.system.tags ?? it.system.properties) ?? [])
-          .find(tag => tag.id === SKILL_TAGS.INNATE.id) !== undefined
+        && it.tags.find(tag => tag.id === SKILL_TAGS.INNATE.id) !== undefined
         ); 
       },
     };
