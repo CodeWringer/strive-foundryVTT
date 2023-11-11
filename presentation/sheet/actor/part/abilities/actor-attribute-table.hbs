@@ -5,12 +5,11 @@ cssClass: {undefined | String}
 <table id="{{viewModel.id}}" class="attribute-table">
   <tbody>
     <tr class="header-row{{#if viewModel.showFancyFont}} fancy-font{{/if}}">
-      <th class="attribute-column-roll"></th>
       <th class="attribute-column-name">
         {{#if viewModel.headerInteractible}}
-        <a id="{{viewModel.id}}-header">{{localize viewModel.localizableAttributeGroupName}}</a>
+        <a id="{{viewModel.id}}-header" class="font-size-lg">{{localize viewModel.localizableAttributeGroupName}}</a>
         {{else}}
-        <span>{{localize viewModel.localizableAttributeGroupName}}</span>
+        <span class="font-size-lg">{{localize viewModel.localizableAttributeGroupName}}</span>
         {{/if}}
       </th>
       <th class="attribute-column-abbreviation"></th>
@@ -35,11 +34,9 @@ cssClass: {undefined | String}
     {{#each viewModel.attributeViewModels as |vm index|}}
     <tr class="item attribute-item" data-att-group-name="{{../viewModel.attributeGroupName}}"
       data-att-name="{{vm.attributeName}}">
-      <td class="attribute-column-roll">
-        {{> buttonRoll viewModel=vm.vmBtnRoll }}
-      </td>
       <td class="attribute-column-name font-size-default flex{{#if ../viewModel.showFancyFont}} fancy-font{{/if}}">
-        {{localize vm.localizableName}}
+        {{> buttonRoll viewModel=vm.vmBtnRoll }}
+        <span class="pad-l-md flex flex-middle">{{localize vm.localizableName}}</span>
       </td>
       <td class="attribute-column-abbreviation font-size-default{{#if ../viewModel.showFancyFont}} fancy-font{{/if}}">
         [{{localize vm.localizableAbbreviation}}]
