@@ -93,6 +93,7 @@ export const TEMPLATES = {
   ACTOR_ASSET_SLOT: `${basePathPresentation}/sheet/actor/part/assets/actor-asset-slot.hbs`,
   ACTOR_BIOGRAPHY: `${basePathPresentation}/sheet/actor/part/actor-biography.hbs`,
   ACTOR_CHAT_MESSAGE: `${basePathPresentation}/sheet/actor/actor-chat-message.hbs`,
+  CHALLENGE_RATING: `${basePathPresentation}/sheet/actor/part/abilities/challenge-rating.hbs`,
   // --- Item
   // Asset
   ASSET_SHEET: `${basePathPresentation}/sheet/item/asset/asset-item-sheet.hbs`,

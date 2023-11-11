@@ -105,6 +105,10 @@
       "advancement": {
         "label": "Advancement",
         "level": "Level",
+        "challengeRating": {
+          "label": "Challenge Rating",
+          "abbreviation": "CR"
+        },
         "modifiedLevel": "Modified Level",
         "modifiedLevelAbbreviation": "Modified",
         "levelMod": "Level Modifier",

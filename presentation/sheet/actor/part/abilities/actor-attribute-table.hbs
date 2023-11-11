@@ -2,12 +2,16 @@
 viewModel: {AttributeTableViewModel}
 cssClass: {undefined | String}
 --}}
-<table class="attribute-table">
+<table id="{{viewModel.id}}" class="attribute-table">
   <tbody>
     <tr class="header-row{{#if viewModel.showFancyFont}} fancy-font{{/if}}">
       <th class="attribute-column-roll"></th>
       <th class="attribute-column-name">
-        {{localize viewModel.localizableAttributeGroupName}}
+        {{#if viewModel.headerInteractible}}
+        <a id="{{viewModel.id}}-header">{{localize viewModel.localizableAttributeGroupName}}</a>
+        {{else}}
+        <span>{{localize viewModel.localizableAttributeGroupName}}</span>
+        {{/if}}
       </th>
       <th class="attribute-column-abbreviation"></th>
       <th class="attribute-column-level">

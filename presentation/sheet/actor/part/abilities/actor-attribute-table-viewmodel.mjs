@@ -5,6 +5,19 @@ import InputNumberSpinnerViewModel from "../../../../component/input-number-spin
 import { TEMPLATES } from "../../../../templatePreloader.mjs";
 import ViewModel from "../../../../view-model/view-model.mjs";
 
+/**
+ * @extends ViewModel
+ * 
+ * @property {Array<CharacterAttribute>} attributes
+ * @property {String} attributeGroupName
+ * @property {String} localizableAttributeGroupName
+ * @property {Boolean} isNPC
+ * * Read-only
+ * @property {Boolean} showChallengeRating
+ * @property {Boolean} headerInteractible
+ * 
+ * @method onHeaderClicked Callback that is invoked when the header is clicked. 
+ */
 export default class AttributeTableViewModel extends ViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.ACTOR_ATTRIBUTE_TABLE; }
@@ -28,12 +41,19 @@ export default class AttributeTableViewModel extends ViewModel {
   localizableAttributeGroupName = undefined;
 
   /**
+   * A list of attribute describing objects. Contains the view model instances 
+   * to use to render each attribute. These objects have the following properties: 
+   * * `{ButtonRollViewModel} vmBtnRoll`
+   * * `{InputNumberSpinnerViewModel} vmNsLevel`
+   * * `{InputNumberSpinnerViewModel} vmNsLevelModifier`
+   * * `{InputNumberSpinnerViewModel | undefined} vmNsProgress`
+   * 
    * @type {Array<Object>}
    */
   attributeViewModels = [];
 
   /**
-   * Returns true, if the actor is a non-player character. 
+   * Returns `true`, if the actor is a non-player character. 
    * 
    * @type {Boolean}
    */
@@ -48,6 +68,7 @@ export default class AttributeTableViewModel extends ViewModel {
   get showAdvancementProgression() { return (this.isNPC && this.document.progressionVisible === true); }
 
   /**
+   * @param {Object} args
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
    * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 
    * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 
@@ -61,6 +82,12 @@ export default class AttributeTableViewModel extends ViewModel {
    * @param {Array<CharacterAttribute>} args.attributes
    * @param {String} args.attributeGroupName
    * @param {String} args.localizableAttributeGroupName
+   * @param {Boolean | undefined} args.showChallengeRating
+   * * default `false`
+   * @param {Boolean | undefined} args.headerInteractible
+   * * default `false`
+   * @param {Function | undefined} args.onHeaderClicked Callback that is invoked when 
+   * the header is clicked. 
    * 
    * @throws {Error} ArgumentException - Thrown, if any of the mandatory arguments aren't defined. 
    */
@@ -73,6 +100,9 @@ export default class AttributeTableViewModel extends ViewModel {
     this.attributeGroupName = args.attributeGroupName;
     this.localizableAttributeGroupName = args.localizableAttributeGroupName;
     this.contextType = args.contextType ?? "component-attribute-table";
+    this.showChallengeRating = args.showChallengeRating ?? false;
+    this.headerInteractible = args.headerInteractible ?? false;
+    this.onHeaderClicked = args.onHeaderClicked ?? (() => {});
     
     const thiz = this;
 
@@ -122,6 +152,17 @@ export default class AttributeTableViewModel extends ViewModel {
           },
           min: 0,
         }),
+      });
+    }
+  }
+
+  /** @override */
+  activateListeners(html) {
+    super.activateListeners(html);
+
+    if (this.headerInteractible === true) {
+      html.find(`#${this.id}-header`).click(() => {
+        this.onHeaderClicked();
       });
     }
   }

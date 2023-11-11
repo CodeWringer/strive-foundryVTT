@@ -1,4 +1,4 @@
-import { isDefined } from "../../util/validation-utility.mjs";
+import KeyValuePair from "../../../common/key-value-pair.mjs";
 import { ACTOR_SUBTYPE } from "./actor-subtype.mjs";
 import TransientBaseCharacterActor from "./transient-base-character-actor.mjs";
 
@@ -11,19 +11,9 @@ import TransientBaseCharacterActor from "./transient-base-character-actor.mjs";
  * * default `true`
  * @property {Boolean} progressionVisible
  * * default `false`
- * @property {Boolean} physicalAttributesVisible
- * * default `false`
- * @property {Boolean} mentalAttributesVisible
- * * default `false`
- * @property {Boolean} socialAttributesVisible
- * * default `false`
  * 
- * @property {Number | undefined} physicalChallengeRating
- * * default `undefined`
- * @property {Number | undefined} mentalChallengeRating
- * * default `undefined`
- * @property {Number | undefined} socialChallengeRating
- * * default `undefined`
+ * @property {Array<KeyValuePair>} challengeRatings
+ * @property {Array<KeyValuePair>} attributeGroupExpansionStates 
  */
 export default class TransientNpc extends TransientBaseCharacterActor {
   get personalityVisible() {
@@ -40,70 +30,22 @@ export default class TransientNpc extends TransientBaseCharacterActor {
     this.updateByPath("system.progressionVisible", value);
   }
 
-  get physicalAttributesVisible() {
-    return this.document.system.physicalAttributesVisible ?? false;
+  get challengeRatings() {
+    return (this.document.system.challengeRatings ?? []).map(dto => 
+      KeyValuePair.fromDto(dto)
+    );
   }
-  set physicalAttributesVisible(value) {
-    this.updateByPath("system.physicalAttributesVisible", value);
-  }
-
-  get mentalAttributesVisible() {
-    return this.document.system.mentalAttributesVisible ?? false;
-  }
-  set mentalAttributesVisible(value) {
-    this.updateByPath("system.mentalAttributesVisible", value);
+  set challengeRatings(value) {
+    this.updateByPath("system.challengeRatings", value.map(it => it.toDto()));
   }
 
-  get socialAttributesVisible() {
-    return this.document.system.socialAttributesVisible ?? false;
+  get attributeGroupExpansionStates() {
+    return (this.document.system.attributeGroupExpansionStates ?? []).map(dto => 
+      KeyValuePair.fromDto(dto)
+    );
   }
-  set socialAttributesVisible(value) {
-    this.updateByPath("system.socialAttributesVisible", value);
-  }
-
-  get physicalChallengeRating() {
-    if (isDefined(this.document.system.physicalChallengeRating)) {
-      return this.document.system.physicalChallengeRating;
-    } else {
-      return undefined;
-    }
-  }
-  set physicalChallengeRating(value) {
-    if (isDefined(value)) {
-      this.updateByPath("system.physicalChallengeRating", value);
-    } else {
-      this.updateByPath("system.physicalChallengeRating", null);
-    }
-  }
-
-  get mentalChallengeRating() {
-    if (isDefined(this.document.system.mentalChallengeRating)) {
-      return this.document.system.mentalChallengeRating;
-    } else {
-      return undefined;
-    }
-  }
-  set mentalChallengeRating(value) {
-    if (isDefined(value)) {
-      this.updateByPath("system.mentalChallengeRating", value);
-    } else {
-      this.updateByPath("system.mentalChallengeRating", null);
-    }
-  }
-
-  get socialChallengeRating() {
-    if (isDefined(this.document.system.socialChallengeRating)) {
-      return this.document.system.socialChallengeRating;
-    } else {
-      return undefined;
-    }
-  }
-  set socialChallengeRating(value) {
-    if (isDefined(value)) {
-      this.updateByPath("system.socialChallengeRating", value);
-    } else {
-      this.updateByPath("system.socialChallengeRating", null);
-    }
+  set attributeGroupExpansionStates(value) {
+    this.updateByPath("system.attributeGroupExpansionStates", value.map(it => it.toDto()));
   }
 }
 
