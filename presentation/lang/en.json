@@ -103,6 +103,7 @@
     },
     "character": {
       "advancement": {
+        "label": "Advancement",
         "level": "Level",
         "modifiedLevel": "Modified Level",
         "modifiedLevelAbbreviation": "Modified",

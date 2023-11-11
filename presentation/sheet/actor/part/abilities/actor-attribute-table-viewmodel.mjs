@@ -33,6 +33,21 @@ export default class AttributeTableViewModel extends ViewModel {
   attributeViewModels = [];
 
   /**
+   * Returns true, if the actor is a non-player character. 
+   * 
+   * @type {Boolean}
+   */
+  get isNPC() { return this.document.type === "npc"; }
+
+  /**
+   * Returns `true`, if the advancement progress is to be hidden. 
+   * 
+   * @type {Boolean}
+   * @readonly
+   */
+  get showAdvancementProgression() { return (this.isNPC && this.document.progressionVisible === true); }
+
+  /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
    * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 
    * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 
@@ -98,7 +113,7 @@ export default class AttributeTableViewModel extends ViewModel {
             attribute.levelModifier = newValue;
           },
         }),
-        vmNsProgress: new InputNumberSpinnerViewModel({
+        vmNsProgress: this.showAdvancementProgression !== true ? undefined : new InputNumberSpinnerViewModel({
           parent: thiz,
           id: `vmNsProgress-${attribute.name}`,
           value: attribute.advancementProgress,

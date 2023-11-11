@@ -132,6 +132,8 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
       menuItems: []
       // Toggle personality
       .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.character.sheet.tab.personality", this.document, "personalityVisible", true, false))
+      // Toggle progression
+      .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.character.advancement.label", this.document, "progressionVisible", true, false))
     });
     this.vmBtnSendToChat = new ButtonSendToChatViewModel({
       parent: this,

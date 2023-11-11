@@ -19,12 +19,14 @@ cssClass: {undefined | String}
       <th class="attribute-column-level">
         {{!-- Deliberately no label here, to avoid overloading the table header. --}}
       </th>
-      <th class="attribute-column-requirements">
-        {{localize "ambersteel.character.advancement.requirements.abbreviation"}}
-      </th>
-      <th class="attribute-column-progress">
-        {{localize "ambersteel.character.advancement.requirements.progress.abbreviation"}}
-      </th>
+      {{#if viewModel.showAdvancementProgression}}
+        <th class="attribute-column-requirements">
+          {{localize "ambersteel.character.advancement.requirements.abbreviation"}}
+        </th>
+        <th class="attribute-column-progress">
+          {{localize "ambersteel.character.advancement.requirements.progress.abbreviation"}}
+        </th>
+      {{/if}}
     </tr>
     {{#each viewModel.attributeViewModels as |vm index|}}
     <tr class="item attribute-item" data-att-group-name="{{../viewModel.attributeGroupName}}"
@@ -48,12 +50,14 @@ cssClass: {undefined | String}
         <span class="pad-md font-bold">=</span>
         {{#> readOnlyValue cssClass="width-min-md font-size-lg flex flex-center"}}{{vm.modifiedLevel}}{{/readOnlyValue}}
       </td>
-      <td class="attribute-column-requirements">
-        {{#> readOnlyValue}}{{vm.requiredProgress}}{{/readOnlyValue}}
-      </td>
-      <td class="attribute-column-progress">
-        {{> inputNumberSpinner viewModel=vm.vmNsProgress }}
-      </td>
+      {{#if ../viewModel.showAdvancementProgression}}
+        <td class="attribute-column-requirements">
+          {{#> readOnlyValue}}{{vm.requiredProgress}}{{/readOnlyValue}}
+        </td>
+        <td class="attribute-column-progress">
+          {{> inputNumberSpinner viewModel=vm.vmNsProgress }}
+        </td>
+      {{/if}}
     </tr>
     {{/each}}
   </tbody>
