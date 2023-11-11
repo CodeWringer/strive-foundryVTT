@@ -14,6 +14,7 @@ import InputImageViewModel from "../../component/input-image/input-image-viewmod
 import InputRichTextViewModel from "../../component/input-rich-text/input-rich-text-viewmodel.mjs"
 import InputTextFieldViewModel from "../../component/input-textfield/input-textfield-viewmodel.mjs"
 import ButtonSendToChatViewModel from "../../component/button-send-to-chat/button-send-to-chat-viewmodel.mjs"
+import ButtonContextMenuViewModel from "../../component/button-context-menu/button-context-menu-viewmodel.mjs"
 
 /**
  * @extends BaseSheetViewModel
@@ -70,6 +71,22 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
    * @readonly
    */
   get templatePersonals() { return TEMPLATES.ACTOR_PERSONALS; }
+  
+  /**
+   * Returns the CSS class for use in the context menu. 
+   * 
+   * @type {String}
+   * @readonly
+   */
+  get contextMenuClass() { return this.isNPC ? "" : "hidden"; };
+
+  /**
+   * Returns `true`, if the personality tab is to be shown. 
+   * 
+   * @type {Boolean}
+   * @readonly
+   */
+  get showPersonality() { return (this.isPC || (this.document.personalityVisible ?? false)); }
 
   /**
    * @param {Object} args
@@ -109,6 +126,13 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
         thiz.document.img = newValue;
       },
     });
+    this.vmBtnContextMenu = new ButtonContextMenuViewModel({
+      id: "vmBtnContextMenu",
+      parent: this,
+      menuItems: []
+      // Toggle personality
+      .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.character.sheet.tab.personality", this.document, "personalityVisible", true, false))
+    });
     this.vmBtnSendToChat = new ButtonSendToChatViewModel({
       parent: this,
       id: "vmBtnSendToChat",
@@ -142,7 +166,7 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
           id: "skills", 
         },
       });
-      if (args.document.type === 'pc') {
+      if (this.showPersonality === true) {
         this.personalityViewModel = new LazyLoadViewModel({
           id: "lazyPersonality",
           parent: thiz,
