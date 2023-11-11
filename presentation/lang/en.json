@@ -584,6 +584,19 @@
           "level_only": "Level Only",
           "headless": "Headless"
         },
+        "innate": {
+          "label": "Innate Skills",
+          "plural": "Innate Skills",
+          "singular": "Innate Skill",
+          "add": {
+            "label": "Add Innate Skill",
+            "query": "Select Innate Skill to Add"
+          },
+          "delete": {
+            "label": "Delete Innate Skill",
+            "query": "Confirm Deletion of Innate Skill"
+          }
+        },
         "known": {
           "label": "Known Skills",
           "plural": "Known Skills",
