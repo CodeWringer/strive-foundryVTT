@@ -1,3 +1,4 @@
+import { SKILL_TAGS } from "../../../../../business/tags/system-tags.mjs"
 import { validateOrThrow } from "../../../../../business/util/validation-utility.mjs"
 import ButtonAddViewModel from "../../../../component/button-add/button-add-viewmodel.mjs"
 import DocumentListItemOrderDataSource from "../../../../component/sortable-list/document-list-item-order-datasource.mjs"
@@ -12,6 +13,14 @@ export default class ActorSkillsViewModel extends ViewModel {
 
   /** @override */
   get entityId() { return this.document.id; }
+
+  /**
+   * Returns `true`, if there innate skills are to be hidden. 
+   * 
+   * @type {Boolean}
+   * @readonly
+   */
+  get hideInnateSkills() { return this.innateSkillViewModels.length === 0; }
 
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
@@ -37,6 +46,24 @@ export default class ActorSkillsViewModel extends ViewModel {
 
     // Child view models. 
     const thiz = this;
+
+    this.innateSkillViewModels = [];
+    this.innateSkillViewModels = this._getInnateSkillViewModels();
+    if (this.hideInnateSkills === false) {
+      this.vmInnateSkillList = new SortableListViewModel({
+        id: "vmInnateSkillList",
+        parent: thiz,
+        isEditable: thiz.isEditable,
+        isSendable: thiz.isSendable,
+        contextTemplate: thiz.contextTemplate,
+        indexDataSource: new DocumentListItemOrderDataSource({
+          document: thiz.document,
+          listName: "innateSkills",
+        }),
+        listItemViewModels: this.innateSkillViewModels,
+        listItemTemplate: TEMPLATES.SKILL_LIST_ITEM,
+      });
+    }
 
     this.learningSkillViewModels = [];
     this.learningSkillViewModels = this._getLearningSkillViewModels();
@@ -110,6 +137,11 @@ export default class ActorSkillsViewModel extends ViewModel {
    * @override
    */
   update(args = {}) {
+    // Innate skills
+    const newInnateSkills = this._getInnateSkillViewModels();
+    this._cullObsolete(this.innateSkillViewModels, newInnateSkills);
+    this.innateSkillViewModels = newInnateSkills;
+    
     // Known skills
     const newKnownSkills = this._getKnownSkillViewModels();
     this._cullObsolete(this.knownSkillViewModels, newKnownSkills);
@@ -138,6 +170,20 @@ export default class ActorSkillsViewModel extends ViewModel {
     
     return updates;
   }
+  
+  /**
+   * @returns {Array<SkillListItemViewModel>}
+   * 
+   * @private
+   */
+  _getInnateSkillViewModels() {
+    return this._getViewModels(
+      this.document.skills.innate, 
+      this.innateSkillViewModels,
+      (args) => { return new SkillListItemViewModel(args); }
+    );
+  }
+  
   
   /**
    * @returns {Array<SkillListItemViewModel>}

@@ -2,7 +2,14 @@
 viewModel: {ActorSkillsViewModel}
 cssClass: {undefined | String}
 --}}
-<section class="{{cssClass}}">
+<section id="{{viewModel.id}}" class="{{cssClass}}">
+  {{!-- Innate Skills --}}
+  {{#if viewModel.hideInnateSkills}}<div class="hidden">{{/if}}
+    {{#> header1 showFancyFont=viewModel.showFancyFont cssClass="flex flex-row"}}
+      <span class="flex-grow">{{localize "ambersteel.character.skill.innate.label"}}</span>
+    {{/header1}}
+    {{> sortableList viewModel=viewModel.vmInnateSkillList prominentItemStyling=true }}
+  {{#if viewModel.hideInnateSkills}}</div>{{/if}}
   {{!-- Learning Skills --}}
   {{#> header1 showFancyFont=viewModel.showFancyFont cssClass="flex flex-row"}}
     <span class="flex-grow">{{localize "ambersteel.character.skill.learning.label"}}</span>
