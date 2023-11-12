@@ -298,3 +298,28 @@ Hooks.on("deleteChatMessage", function(args) {
     game.ambersteel.viewModels.remove(vmId);
   }
 });
+
+Hooks.on("hoverToken", function(token) {
+  if (token.actor.type === "npc") {
+    if (token.hover) {
+      // Display challenge ratings.
+
+      // Gather challenge ratings. 
+      const actor = token.actor.getTransientObject();
+      const challengeRatings = [];
+      for (const attributeGroup of actor.attributeGroups) {
+        const expansionState = (actor.attributeGroupExpansionStates.find(it => it.key === attributeGroup.name) ?? {}).value ?? false;
+        if (expansionState === false) {
+          const challengeRating = (actor.challengeRatings.find(it => it.key === attributeGroup.name) ?? {}).value ?? 0;
+          challengeRatings.push(`${game.i18n.localize(attributeGroup.localizableAbbreviation)} ${game.i18n.localize("ambersteel.character.advancement.challengeRating.abbreviation")} ${challengeRating}`);
+        }
+      };
+  
+      // Display challenge ratings. 
+      console.log(challengeRatings);
+    } else {
+      // Hide challenge ratings.
+      console.log(token.hover);
+    }
+  }
+});
