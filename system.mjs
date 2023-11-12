@@ -85,6 +85,7 @@ import './presentation/sheet/actor/part/actor-biography-viewmodel.mjs';
 import './presentation/sheet/actor/part/actor-fate-viewmodel.mjs';
 import './presentation/sheet/actor/part/health/actor-health-viewmodel.mjs';
 import './presentation/sheet/actor/part/actor-personals-viewmodel.mjs';
+import AmbersteelTokenHud from "./presentation/token/token-hud.mjs";
 
 /* -------------------------------------------- */
 /*  Initialization                              */
@@ -297,6 +298,11 @@ Hooks.on("deleteChatMessage", function(args) {
     // Remove the view model from the global collection. 
     game.ambersteel.viewModels.remove(vmId);
   }
+});
+
+Hooks.on('canvasReady', (canvas) => {
+  // render custom token hud
+  canvas.hud.token = new AmbersteelTokenHud();
 });
 
 Hooks.on("hoverToken", function(token) {
