@@ -589,8 +589,7 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
   }
 
   /**
-   * Tries to resolve the given reference in the embedded documents of 
-   * this document. 
+   * @override
    * 
    * Searches in: 
    * * Attribute names.
@@ -602,21 +601,6 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
    * * Embedded mutation name.
    * * Embedded scar name.
    * * Embedded asset name.
-   * 
-   * This method will be called implicitly, by an `AtReferencer`, when it tries 
-   * to resolve a reference on *this* document. 
-   * 
-   * @param {String} comparableReference A comparable version of a reference. 
-   * * Comparable in the sense that underscores "_" are replaced with spaces " " 
-   * or only the last piece of a property path is returned. 
-   * * E. g. `"@Heavy_Armor"` -> `"@heavy armor"`
-   * * E. g. `"@A.B.c"` -> `"a"`
-   * @param {String | undefined} propertyPath If not undefined, a property path on 
-   * the referenced object. 
-   * * E. g. `"@A.B.c"` -> `"B.c"`
-   * 
-   * @returns {Any | undefined} The matched reference or undefined, 
-   * if no match was found. 
    */
   resolveReference(comparableReference, propertyPath) {
     // Search attributes. 

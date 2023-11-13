@@ -68,7 +68,7 @@ ConstantsUtils.enrichConstant(ATTRIBUTE_GROUPS);
  * 
  * @param {String} attributeName Name of the attribute whose group to return. 
  * 
- * @returns {AttributeGroup}
+ * @returns {AttributeGroup | undefined}
  */
 export function getGroupForAttributeByName(attributeName) {
   for (const attributeGroup of ATTRIBUTE_GROUPS.asArray()) {
@@ -81,4 +81,5 @@ export function getGroupForAttributeByName(attributeName) {
       }
     }
   }
+  return undefined;
 }

@@ -106,6 +106,25 @@ export default class TransientNpc extends TransientBaseCharacterActor {
   getCrFor(attributeGroupName) {
     return (this.challengeRatings.find(it => it.key === attributeGroupName) ?? {}).value ?? 0;
   }
+
+  /**
+   * @override
+   * 
+   * Searches in: 
+   * * Challenge ratings.
+   */
+  resolveReference(comparableReference, propertyPath) {
+    // Attempt to resolve a challenge rating. 
+    const attributeGroup = getGroupForAttributeByName(comparableReference);
+    if (attributeGroup !== undefined) {
+      const isCrActive = this.getIsCrActiveFor(attributeGroup.name);
+      if (isCrActive === true) {
+        return this.getCrFor(attributeGroup.name);
+      }
+    }
+    
+    return super.resolveReference(comparableReference, propertyPath);
+  }
 }
 
 ACTOR_SUBTYPE.set("npc", (document) => { return new TransientNpc(document) });
