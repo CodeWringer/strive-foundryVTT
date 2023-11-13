@@ -62,3 +62,23 @@ export const ATTRIBUTE_GROUPS = {
   }),
 };
 ConstantsUtils.enrichConstant(ATTRIBUTE_GROUPS);
+
+/**
+ * Returns the attribute group which contains an attribute with the given name. 
+ * 
+ * @param {String} attributeName Name of the attribute whose group to return. 
+ * 
+ * @returns {AttributeGroup}
+ */
+export function getGroupForAttributeByName(attributeName) {
+  for (const attributeGroup of ATTRIBUTE_GROUPS.asArray()) {
+    for (const propertyName in attributeGroup.attributes) {
+      if (attributeGroup.attributes.hasOwnProperty(propertyName) !== true) continue;
+
+      const hasAttribute = attributeGroup.attributes[propertyName].name === attributeName;
+      if (hasAttribute === true) {
+        return attributeGroup;
+      }
+    }
+  }
+}

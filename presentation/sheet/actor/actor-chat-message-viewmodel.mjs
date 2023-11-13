@@ -77,7 +77,7 @@ export default class ActorChatMessageViewModel extends ViewModel {
     this.challengeRatings = [];
     if (this.isNPC === true) {
       for (const attributeGroup of this.document.attributeGroups) {
-        const isExpanded = ((this.document.attributeGroupExpansionStates.find(it => it.key === attributeGroup.name) ?? {}).value) ?? false;
+        const isExpanded = this.document.getIsExpandedFor(attributeGroup.name);
         if (isExpanded === true) continue;
 
         const challengeRating = ((this.document.challengeRatings.find(it => it.key === attributeGroup.name) ?? {}).value) ?? 0;

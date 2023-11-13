@@ -68,7 +68,7 @@ export default class ActorAttributesViewModel extends ViewModel {
     let template;
     let viewModel;
 
-    const isExpanded = (this.isPC === true || (this.isNPC === true && this._getExpansion(attributeGroup.name) === true));
+    const isExpanded = (this.isPC === true || (this.isNPC === true && this.document.getIsExpandedFor(attributeGroup.name) === true));
 
     if (isExpanded === true) {
       template = AttributeTableViewModel.TEMPLATE;
@@ -84,7 +84,7 @@ export default class ActorAttributesViewModel extends ViewModel {
         headerInteractible: this.isNPC === true,
         onHeaderClicked: () => {
           if (this.isNPC === true) {
-            const expansion = this._getExpansion(attributeGroup.name);
+            const expansion = this.document.getIsExpandedFor(attributeGroup.name);
             this._setExpansion(attributeGroup.name, !expansion);
           }
         },
@@ -99,7 +99,7 @@ export default class ActorAttributesViewModel extends ViewModel {
         localizedLabel: game.i18n.localize(attributeGroup.localizableName),
         onClicked: () => {
           if (this.isNPC === true) {
-            const expansion = this._getExpansion(attributeGroup.name);
+            const expansion = this.document.getIsExpandedFor(attributeGroup.name);
             this._setExpansion(attributeGroup.name, !expansion);
           }
         },
@@ -150,20 +150,6 @@ export default class ActorAttributesViewModel extends ViewModel {
     this.document.challengeRatings = challengeRatings;
   }
 
-  /**
-   * Returns the expanded state of an attribute group with the given name. 
-   * 
-   * @param {String} attributeGroupName 
-   * 
-   * @returns {Boolean}
-   * 
-   * @private
-   */
-  _getExpansion(attributeGroupName) {
-    return (this.document.attributeGroupExpansionStates.find(it => it.key === attributeGroupName) ?? {}).value 
-      ?? false;
-  }
-  
   /**
    * Sets the expanded state of an attribute group with the given name. 
    * 

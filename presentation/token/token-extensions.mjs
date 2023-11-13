@@ -39,8 +39,8 @@ export default class TokenExtensions {
     let lastChallengeRating;
     let allTheSameChallengeRating = true;
     for (const attributeGroup of actor.attributeGroups) {
-      const expansionState = (actor.attributeGroupExpansionStates.find(it => it.key === attributeGroup.name) ?? {}).value ?? false;
-      if (expansionState !== false) continue;
+      const isCrActive = actor.getIsCrActiveFor(attributeGroup.name);
+      if (isCrActive !== true) continue;
 
       const challengeRating = (actor.challengeRatings.find(it => it.key === attributeGroup.name) ?? {}).value ?? 0;
       challengeRatings.push({
