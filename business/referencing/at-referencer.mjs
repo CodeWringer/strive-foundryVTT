@@ -94,7 +94,16 @@ export default class AtReferencer {
       // Ensure underscores are replaced with spaces. 
       comparableReference = comparableReference.replaceAll("_", " ");
       
-      const match = this.resolveReference(document, comparableReference, propertyPath);
+      // In case the document is embedded, choose the owning document to search in. 
+      let searchDocument = document; // .owningDocument === undefined ? document : document.owningDocument;
+      if (document.owningDocument !== undefined && document.owningDocument.owningDocument !== undefined) {
+        // Given document is a skill ability. 
+        searchDocument = document.owningDocument.owningDocument;
+      } else if (document.owningDocument !== undefined) {
+        searchDocument = document.owningDocument;
+      }
+
+      const match = this.resolveReference(searchDocument, comparableReference, propertyPath);
       result.set(lowercaseReference, match);
     }
 
@@ -119,10 +128,8 @@ export default class AtReferencer {
    * if no match was found. 
    */
   resolveReference(document, comparableReference, propertyPath) {
-    if (document.name.toLowerCase() !== comparableReference) {
-      return undefined;
-    } else if (propertyPath === undefined) {
-      return document;
+    if (document.name.toLowerCase() === comparableReference) {
+      return document.name;
     }
 
     // If the document defines a resolution function, let it make its 
