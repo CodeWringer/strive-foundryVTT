@@ -23,6 +23,7 @@ import { VISIBILITY_MODES } from "./presentation/chat/visibility-modes.mjs";
 // Utility
 import ChoiceOption from "./presentation/component/input-choice/choice-option.mjs";
 import DocumentFetcher from "./business/document/document-fetcher/document-fetcher.mjs";
+import TokenExtensions from "./presentation/token/token-extensions.mjs";
 // Migration
 import MigratorInitiator from "./business/migration/migrator-initiator.mjs";
 import MigratorDialog from "./presentation/dialog/migrator-dialog/migrator-dialog.mjs";
@@ -85,7 +86,6 @@ import './presentation/sheet/actor/part/actor-biography-viewmodel.mjs';
 import './presentation/sheet/actor/part/actor-fate-viewmodel.mjs';
 import './presentation/sheet/actor/part/health/actor-health-viewmodel.mjs';
 import './presentation/sheet/actor/part/actor-personals-viewmodel.mjs';
-import AmbersteelTokenHud from "./presentation/token/token-hud.mjs";
 
 /* -------------------------------------------- */
 /*  Initialization                              */
@@ -300,32 +300,6 @@ Hooks.on("deleteChatMessage", function(args) {
   }
 });
 
-Hooks.on('canvasReady', (canvas) => {
-  // render custom token hud
-  canvas.hud.token = new AmbersteelTokenHud();
-});
-
 Hooks.on("hoverToken", function(token) {
-  if (token.actor.type === "npc") {
-    if (token.hover) {
-      // Display challenge ratings.
-
-      // Gather challenge ratings. 
-      const actor = token.actor.getTransientObject();
-      const challengeRatings = [];
-      for (const attributeGroup of actor.attributeGroups) {
-        const expansionState = (actor.attributeGroupExpansionStates.find(it => it.key === attributeGroup.name) ?? {}).value ?? false;
-        if (expansionState === false) {
-          const challengeRating = (actor.challengeRatings.find(it => it.key === attributeGroup.name) ?? {}).value ?? 0;
-          challengeRatings.push(`${game.i18n.localize(attributeGroup.localizableAbbreviation)} ${game.i18n.localize("ambersteel.character.advancement.challengeRating.abbreviation")} ${challengeRating}`);
-        }
-      };
-  
-      // Display challenge ratings. 
-      console.log(challengeRatings);
-    } else {
-      // Hide challenge ratings.
-      console.log(token.hover);
-    }
-  }
+  new TokenExtensions().handleTokenHover(token);
 });
