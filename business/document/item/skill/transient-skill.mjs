@@ -21,6 +21,7 @@ import { DICE_POOL_RESULT_TYPES } from "../../../dice/dice-pool.mjs";
 import SkillPrerequisite from "../../../ruleset/skill/skill-prerequisite.mjs";
 import { SKILL_TAGS } from "../../../tags/system-tags.mjs";
 import AtReferencer from "../../../referencing/at-referencer.mjs";
+import { getGroupForAttributeByName } from "../../../ruleset/attribute/attribute-groups.mjs";
 
 /**
  * Represents a skill type document's "head" state. 
@@ -172,11 +173,28 @@ export default class TransientSkill extends TransientBaseItem {
    * @readonly
    */
   get modifiedLevel() {
-    if (this.level > 0) {
-      return Math.max(this.level + this.levelModifier, 1);
+    let level = this.dependsOnActiveCr === true ? this.crLevel : this.level;
+
+    if (level > 0) {
+      return Math.max(level + this.levelModifier, 1);
     } else {
-      return Math.max(this.level + this.levelModifier, 0)
+      return Math.max(level + this.levelModifier, 0)
     }
+  }
+
+  /**
+   * Returns the challenge rating of the related attribute, for use as 
+   * the skill's level. 
+   * 
+   * @type {Number}
+   * @readonly
+   */
+  get crLevel() {
+    if (this.owningDocument !== undefined) {
+      const group = getGroupForAttributeByName(this.relatedAttribute.name);
+      return this.owningDocument.getCrFor(group.name);
+    }
+    return 0;
   }
 
   /**
@@ -381,6 +399,23 @@ export default class TransientSkill extends TransientBaseItem {
       this.updateByPath("system.attackType", value.name);
     } else {
       this.updateByPath("system.attackType", null);
+    }
+  }
+
+  /**
+   * Returns `true`, if the skill's related attribute is part of a group for which 
+   * a challenge rating is active. 
+   * 
+   * @type {Boolean}
+   * @readonly
+   */
+  get dependsOnActiveCr() {
+    const owningDocument = this.owningDocument;
+    if (owningDocument !== undefined && owningDocument.type === "npc") {
+      const group = getGroupForAttributeByName(this.relatedAttribute.name);
+      return owningDocument.getIsCrActiveFor(group.name);
+    } else {
+      return false;
     }
   }
 

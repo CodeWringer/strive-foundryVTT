@@ -1,4 +1,5 @@
 import TransientSkill, { SKILL_HEAD_STATES } from "../../../../business/document/item/skill/transient-skill.mjs"
+import { getGroupForAttributeByName } from "../../../../business/ruleset/attribute/attribute-groups.mjs"
 import { ATTRIBUTES } from "../../../../business/ruleset/attribute/attributes.mjs"
 import { SKILL_TAGS } from "../../../../business/tags/system-tags.mjs"
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs"
@@ -117,6 +118,10 @@ export default class SkillListItemViewModel extends SkillViewModel {
     });
   }
 
+  /**
+   * @type {Boolean}
+   * @readonly
+   */
   get showAdvancementProgression() {
     if (isDefined(this.document.owningDocument) === true) {
       const type = this.document.owningDocument.type;
@@ -238,7 +243,8 @@ export default class SkillListItemViewModel extends SkillViewModel {
     this.vmNsLevel = new InputNumberSpinnerViewModel({
       parent: thiz,
       id: "vmNsLevel",
-      value: thiz.document.level,
+      value: this.document.dependsOnActiveCr === true ? this.document.crLevel : this.document.level,
+      isEditable: this.document.dependsOnActiveCr === true ? false : this.isEditable,
       onChange: (_, newValue) => {
         thiz.document.level = newValue;
       },
