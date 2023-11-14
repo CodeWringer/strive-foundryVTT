@@ -113,7 +113,7 @@ export default class LazyLoadViewModel extends ViewModel {
   }
 
   /** @override */
-  async activateListeners(html, isOwner, isEditable) {
+  async activateListeners(html) {
     // First of all, cache the DOM we're working with. The getters rely on it. 
     this._html = html;
 
@@ -126,7 +126,7 @@ export default class LazyLoadViewModel extends ViewModel {
       this.element.append(this._renderedContent);
     }
 
-    await super.activateListeners(html, isOwner, isEditable);
+    await super.activateListeners(html);
   }
 
   /**
@@ -157,7 +157,7 @@ export default class LazyLoadViewModel extends ViewModel {
       this.element.append(this._renderedContent);
   
       // *After* DOM manipulations the wrapped view model may attach its event listeners. 
-      await this.viewModel.activateListeners(this.element, this.viewModel.isOwner, this.viewModel.isEditable);
+      await this.viewModel.activateListeners(this.element);
     }
   }
 

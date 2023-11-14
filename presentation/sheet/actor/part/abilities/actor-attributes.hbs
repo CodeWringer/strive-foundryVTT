@@ -2,16 +2,17 @@
 viewModel: {ActorAttributesViewModel}
 cssClass: {undefined | String}
 --}}
-<section class="{{cssClass}}">
+<section id="{{viewModel.id}}"{{#if cssClass}} class="{{cssClass}}"{{/if}}>
   {{#> header1 showFancyFont=viewModel.showFancyFont cssClass="flex flex-row"}}
     <span class="flex-grow">{{localize "ambersteel.character.attribute.plural"}}</span>
-    {{#> button viewModel=viewModel.vmBtnResetExercised cssClass="flex flex-center"}}
-      <i class="fas fa-dumbbell"></i>
-    {{/button}}
   {{/header1}}
-  {{#with viewModel.attributeTableTemplate as | template |}}
-    {{> (template) viewModel=../viewModel.attributesPhysicalViewModel }}
-    {{> (template) viewModel=../viewModel.attributesMentalViewModel }}
-    {{> (template) viewModel=../viewModel.attributesSocialViewModel }}
-  {{/with}}
+  <ul class="unstyled-list alternating-rows">
+  {{#each viewModel.attributeGroups as |attributeGroup|}}
+    <li>
+    {{#with attributeGroup.template as | template |}}
+      {{> (template) viewModel=attributeGroup.viewModel }}
+    {{/with}}
+    </li>
+  {{/each}}
+  </ul>
 </section>

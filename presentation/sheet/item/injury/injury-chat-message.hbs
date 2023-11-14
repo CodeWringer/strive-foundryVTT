@@ -13,6 +13,69 @@ cssClass: {undefined | String}
     </div>
     {{#> header2 showFancyFont=viewModel.showFancyFont cssClass="flex-grow"}}{{viewModel.document.name}}{{/header2}}
   </div>
+  {{!-- treatmentSkill --}}
+  <div class="flex flex-row sheet-block margin-b-md">
+    <div class="width-min-xxl">
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.health.treatmentSkill"}}{{/label}}
+    </div>
+    <div class="flex-grow">
+      {{viewModel.document.treatmentSkill}}
+    </div>
+  </div>
+  {{!-- requiredSupplies --}}
+  <div class="flex flex-row sheet-block margin-b-md">
+    <div class="width-min-xxl">
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.health.requiredSupplies"}}{{/label}}
+    </div>
+    <div class="flex-grow">
+      {{viewModel.document.requiredSupplies}}
+    </div>
+  </div>
+  {{!-- obstaclePatchUp --}}
+  <div class="flex flex-row sheet-block margin-b-md">
+    <div class="width-min-xxl">
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.health.obstaclePatchUp"}}{{/label}}
+    </div>
+    <div class="flex-grow">
+      {{viewModel.document.obstaclePatchUp}}
+    </div>
+  </div>
+  {{!-- obstacleTreatment --}}
+  <div class="flex flex-row sheet-block margin-b-md">
+    <div class="width-min-xxl">
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.health.obstacleTreatment"}}{{/label}}
+    </div>
+    <div class="flex-grow">
+      {{viewModel.document.obstacleTreatment}}
+    </div>
+  </div>
+  {{!-- timeToHeal --}}
+  <div class="flex flex-row sheet-block margin-b-md">
+    <div class="width-min-xxl">
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.health.timeToHeal"}}{{/label}}
+    </div>
+    <div class="flex-grow">
+      {{viewModel.document.timeToHeal}}
+    </div>
+  </div>
+  {{!-- timeToHealTreated --}}
+  <div class="flex flex-row sheet-block margin-b-md">
+    <div class="width-min-xxl">
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.health.timeToHealTreated"}}{{/label}}
+    </div>
+    <div class="flex-grow">
+      {{viewModel.document.timeToHealTreated}}
+    </div>
+  </div>
+  {{!-- selfPatchUp --}}
+  <div class="flex flex-row sheet-block margin-b-md">
+    <div class="width-min-xxl">
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.health.selfPatchUp"}}{{/label}}
+    </div>
+    <div class="flex-grow">
+      {{viewModel.document.selfPatchUp}}
+    </div>
+  </div>
   {{!-- Limit --}}
   <div class="flex flex-row sheet-block margin-b-md">
     <div class="width-min-xxl">
@@ -20,15 +83,6 @@ cssClass: {undefined | String}
     </div>
     <div class="flex-grow">
       {{viewModel.document.limit}}
-    </div>
-  </div>
-  {{!-- Time to heal --}}
-  <div class="flex flex-row sheet-block margin-b-md">
-    <div class="width-min-xxl">
-      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.health.timeToHeal"}}{{/label}}
-    </div>
-    <div class="flex-grow">
-      {{viewModel.document.timeToHeal}}
     </div>
   </div>
   {{!-- Scar --}}

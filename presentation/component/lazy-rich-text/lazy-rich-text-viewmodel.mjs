@@ -57,7 +57,7 @@ export default class LazyRichTextViewModel extends ViewModel {
   }
 
   /** @override */
-  async activateListeners(html, isOwner, isEditable) {
+  async activateListeners(html) {
     const element = html.find(`#${this.id}`);
 
     if (this._renderedContent === undefined || this._invalidated === true) {
@@ -66,7 +66,7 @@ export default class LazyRichTextViewModel extends ViewModel {
       element.empty();
       element.append(this._renderedContent);
       
-      await super.activateListeners(html, isOwner, isEditable);
+      await super.activateListeners(html);
     }
   }
 

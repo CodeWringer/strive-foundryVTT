@@ -1,6 +1,6 @@
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs";
+import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs";
 import { TEMPLATES } from "../../../templatePreloader.mjs";
-import ViewModelFactory from "../../../view-model/view-model-factory.mjs";
 import ViewModel from "../../../view-model/view-model.mjs";
 
 export default class ActorPersonalsViewModel extends ViewModel {
@@ -32,35 +32,42 @@ export default class ActorPersonalsViewModel extends ViewModel {
     this.contextType = args.contextType ?? "actor-personals";
 
     const thiz = this;
-    const factory = new ViewModelFactory();
 
-    this.vmTfSpecies = factory.createVmTextField({
+    this.vmTfSpecies = new InputTextFieldViewModel({
       parent: thiz,
       id: "vmTfSpecies",
-      propertyOwner: thiz.document,
-      propertyPath: "person.species",
-      placeholder: "ambersteel.character.personals.species",
+      value: thiz.document.person.species,
+      onChange: (_, newValue) => {
+        thiz.document.person.species = newValue;
+      },
+      placeholder: game.i18n.localize("ambersteel.character.personals.species"),
     });
-    this.vmTfCulture = factory.createVmTextField({
+    this.vmTfCulture = new InputTextFieldViewModel({
       parent: thiz,
       id: "vmTfCulture",
-      propertyOwner: thiz.document,
-      propertyPath: "person.culture",
-      placeholder: "ambersteel.character.personals.culture",
+      value: thiz.document.person.culture,
+      onChange: (_, newValue) => {
+        thiz.document.person.culture = newValue;
+      },
+      placeholder: game.i18n.localize("ambersteel.character.personals.culture"),
     });
-    this.vmTfSex = factory.createVmTextField({
+    this.vmTfSex = new InputTextFieldViewModel({
       parent: thiz,
       id: "vmTfSex",
-      propertyOwner: thiz.document,
-      propertyPath: "person.sex",
-      placeholder: "ambersteel.character.personals.sex",
+      value: thiz.document.person.sex,
+      onChange: (_, newValue) => {
+        thiz.document.person.sex = newValue;
+      },
+      placeholder: game.i18n.localize("ambersteel.character.personals.sex"),
     });
-    this.vmTfAge = factory.createVmTextField({
+    this.vmTfAge = new InputTextFieldViewModel({
       parent: thiz,
       id: "vmTfAge",
-      propertyOwner: thiz.document,
-      propertyPath: "person.age",
-      placeholder: "ambersteel.character.personals.age",
+      value: thiz.document.person.age,
+      onChange: (_, newValue) => {
+        thiz.document.person.age = newValue;
+      },
+      placeholder: game.i18n.localize("ambersteel.character.personals.age"),
     });
   }
 }

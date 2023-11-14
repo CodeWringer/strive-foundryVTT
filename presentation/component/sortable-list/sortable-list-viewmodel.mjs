@@ -67,6 +67,14 @@ export default class SortableListViewModel extends ViewModel {
   orderedIdList = [];
 
   /**
+   * Returns `true`, if there is an "add" button view model. 
+   * 
+   * @type {Boolean}
+   * @readonly
+   */
+  get hasAddButton() { return this.vmBtnAddItem !== undefined; }
+
+  /**
    * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
    * 
    * @param {Boolean | undefined} args.isEditable Optional. If true, input(s) will be in edit mode. If false, input(s) will be in read-only mode.
@@ -75,11 +83,11 @@ export default class SortableListViewModel extends ViewModel {
    * @param {AbstractListItemIndexDataSource} args.indexDataSource The data source of the indices. 
    * @param {Array<ViewModel>} args.listItemViewModels A list of item view models.
    * @param {String} args.listItemTemplate The absolute path of the template to use for list items. 
-   * @param {ViewModel} args.vmBtnAddItem View model of the add item button. 
+   * @param {ViewModel | undefined} args.vmBtnAddItem View model of the add item button. 
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["indexDataSource", "listItemViewModels", "listItemTemplate", "vmBtnAddItem"]);
+    validateOrThrow(args, ["indexDataSource", "listItemViewModels", "listItemTemplate"]);
 
     this.indexDataSource = args.indexDataSource;
     this.contextTemplate = args.contextTemplate ?? "sortable-list";
@@ -91,9 +99,11 @@ export default class SortableListViewModel extends ViewModel {
       listItemViewModel.parent = this;
     }
 
-    // Prepare given "add" button. 
+    // Prepare given "add" button, if necessary. 
     this.vmBtnAddItem = args.vmBtnAddItem;
-    this.vmBtnAddItem.parent = this;
+    if (this.vmBtnAddItem !== undefined) {
+      this.vmBtnAddItem.parent = this;
+    }
 
     this.orderedIdList = this._getOrderedIdList();
 
@@ -173,29 +183,33 @@ export default class SortableListViewModel extends ViewModel {
         parent: thiz,
         isEditable: upButtonsDisabled ?? thiz.isEditable,
         id: `${id}-vmBtnMoveTop`,
+        iconHtml: '<i class="fas fa-angle-double-up"></i>',
         onClick: () => { thiz._moveToTop(id); },
-        localizableTitle: "ambersteel.general.ordering.moveToTop",
+        localizedTooltip: game.i18n.localize("ambersteel.general.ordering.moveToTop"),
       }),
       vmBtnMoveUp: new ButtonViewModel({
         parent: thiz,
         isEditable: upButtonsDisabled ?? thiz.isEditable,
         id: `${id}-vmBtnMoveUp`,
+        iconHtml: '<i class="fas fa-angle-up"></i>',
         onClick: () => { thiz._moveUp(id); },
-        localizableTitle: "ambersteel.general.ordering.moveUp",
+        localizedTooltip: game.i18n.localize("ambersteel.general.ordering.moveUp"),
       }),
       vmBtnMoveDown: new ButtonViewModel({
         parent: thiz,
         isEditable: downButtonsDisabled ?? thiz.isEditable,
         id: `${id}-vmBtnMoveDown`,
+        iconHtml: '<i class="fas fa-angle-down"></i>',
         onClick: () => { thiz._moveDown(id); },
-        localizableTitle: "ambersteel.general.ordering.moveDown",
+        localizedTooltip: game.i18n.localize("ambersteel.general.ordering.moveDown"),
       }),
       vmBtnMoveBottom: new ButtonViewModel({
         parent: thiz,
         isEditable: downButtonsDisabled ?? thiz.isEditable,
         id: `${id}-vmBtnMoveBottom`,
+        iconHtml: '<i class="fas fa-angle-double-down"></i>',
         onClick: () => { thiz._moveToBottom(id); },
-        localizableTitle: "ambersteel.general.ordering.moveToBottom",
+        localizedTooltip: game.i18n.localize("ambersteel.general.ordering.moveToBottom"),
       }),
       listItemViewModel: itemViewModel,
     });

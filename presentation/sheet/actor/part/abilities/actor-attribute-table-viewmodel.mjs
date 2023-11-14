@@ -1,9 +1,23 @@
+import CharacterAttribute from "../../../../../business/ruleset/attribute/character-attribute.mjs";
 import { validateOrThrow } from "../../../../../business/util/validation-utility.mjs";
-import ButtonCheckBoxViewModel from "../../../../component/button-checkbox/button-checkbox-viewmodel.mjs";
+import ButtonRollViewModel from "../../../../component/button-roll/button-roll-viewmodel.mjs";
+import InputNumberSpinnerViewModel from "../../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
 import { TEMPLATES } from "../../../../templatePreloader.mjs";
-import ViewModelFactory from "../../../../view-model/view-model-factory.mjs";
 import ViewModel from "../../../../view-model/view-model.mjs";
 
+/**
+ * @extends ViewModel
+ * 
+ * @property {Array<CharacterAttribute>} attributes
+ * @property {String} attributeGroupName
+ * @property {String} localizableAttributeGroupName
+ * @property {Boolean} isNPC
+ * * Read-only
+ * @property {Boolean} showChallengeRating
+ * @property {Boolean} headerInteractible
+ * 
+ * @method onHeaderClicked Callback that is invoked when the header is clicked. 
+ */
 export default class AttributeTableViewModel extends ViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.ACTOR_ATTRIBUTE_TABLE; }
@@ -27,11 +41,34 @@ export default class AttributeTableViewModel extends ViewModel {
   localizableAttributeGroupName = undefined;
 
   /**
+   * A list of attribute describing objects. Contains the view model instances 
+   * to use to render each attribute. These objects have the following properties: 
+   * * `{ButtonRollViewModel} vmBtnRoll`
+   * * `{InputNumberSpinnerViewModel} vmNsLevel`
+   * * `{InputNumberSpinnerViewModel} vmNsLevelModifier`
+   * * `{InputNumberSpinnerViewModel | undefined} vmNsProgress`
+   * 
    * @type {Array<Object>}
    */
   attributeViewModels = [];
 
   /**
+   * Returns `true`, if the actor is a non-player character. 
+   * 
+   * @type {Boolean}
+   */
+  get isNPC() { return this.document.type === "npc"; }
+
+  /**
+   * Returns `true`, if the advancement progress is to be hidden. 
+   * 
+   * @type {Boolean}
+   * @readonly
+   */
+  get showAdvancementProgression() { return (this.isNPC && this.document.progressionVisible === true); }
+
+  /**
+   * @param {Object} args
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
    * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 
    * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 
@@ -45,6 +82,12 @@ export default class AttributeTableViewModel extends ViewModel {
    * @param {Array<CharacterAttribute>} args.attributes
    * @param {String} args.attributeGroupName
    * @param {String} args.localizableAttributeGroupName
+   * @param {Boolean | undefined} args.showChallengeRating
+   * * default `false`
+   * @param {Boolean | undefined} args.headerInteractible
+   * * default `false`
+   * @param {Function | undefined} args.onHeaderClicked Callback that is invoked when 
+   * the header is clicked. 
    * 
    * @throws {Error} ArgumentException - Thrown, if any of the mandatory arguments aren't defined. 
    */
@@ -57,9 +100,11 @@ export default class AttributeTableViewModel extends ViewModel {
     this.attributeGroupName = args.attributeGroupName;
     this.localizableAttributeGroupName = args.localizableAttributeGroupName;
     this.contextType = args.contextType ?? "component-attribute-table";
+    this.showChallengeRating = args.showChallengeRating ?? false;
+    this.headerInteractible = args.headerInteractible ?? false;
+    this.onHeaderClicked = args.onHeaderClicked ?? (() => {});
     
     const thiz = this;
-    const factory = new ViewModelFactory();
 
     for (const attribute of this.attributes) {
       thiz.attributeViewModels.push({
@@ -68,43 +113,56 @@ export default class AttributeTableViewModel extends ViewModel {
         localizableAbbreviation: attribute.localizableAbbreviation,
         requiredProgress: attribute.advancementRequirements,
         modifiedLevel: attribute.modifiedLevel,
-        vmBtnRoll: factory.createVmBtnRoll({
+        vmBtnRoll: new ButtonRollViewModel({
           parent: thiz,
           id: `vmBtnRoll-${attribute.name}`,
           target: attribute,
           propertyPath: undefined,
           primaryChatTitle: game.i18n.localize(attribute.localizableName),
           rollType: "dice-pool",
-          callback: "advanceByRollResult",
-          document: thiz.document,
+          onClick: async (callback) => {
+            const r = await callback();
+            await attribute.advanceByRollResult(r);
+          },
+          actor: thiz.document,
         }),
-        vmNsLevel: factory.createVmNumberSpinner({
+        vmNsLevel: new InputNumberSpinnerViewModel({
           parent: thiz,
           id: `vmNsLevel-${attribute.name}`,
-          propertyOwner: attribute,
-          propertyPath: "level",
+          value: attribute.level,
+          onChange: (_, newValue) => {
+            attribute.level = newValue;
+          },
           min: 0,
         }),
-        vmNsLevelModifier: factory.createVmNumberSpinner({
+        vmNsLevelModifier: new InputNumberSpinnerViewModel({
           parent: thiz,
           id: `vmNsLevelModifier-${attribute.name}`,
-          propertyOwner: attribute,
-          propertyPath: "levelModifier",
+          value: attribute.levelModifier,
+          onChange: (_, newValue) => {
+            attribute.levelModifier = newValue;
+          },
         }),
-        vmNsProgress: factory.createVmNumberSpinner({
+        vmNsProgress: this.showAdvancementProgression !== true ? undefined : new InputNumberSpinnerViewModel({
           parent: thiz,
           id: `vmNsProgress-${attribute.name}`,
-          propertyOwner: attribute,
-          propertyPath: "advancementProgress",
+          value: attribute.advancementProgress,
+          onChange: (_, newValue) => {
+            attribute.advancementProgress = newValue;
+          },
           min: 0,
         }),
-        vmExercised: new ButtonCheckBoxViewModel({
-          id: `vmExercised-${attribute.name}`,
-          parent: this,
-          isEditable: this.isEditable,
-          target: attribute,
-          propertyPath: "exercised",
-        }),
+      });
+    }
+  }
+
+  /** @override */
+  activateListeners(html) {
+    super.activateListeners(html);
+
+    if (this.headerInteractible === true) {
+      html.find(`#${this.id}-header`).click(() => {
+        this.onHeaderClicked();
       });
     }
   }

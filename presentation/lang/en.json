@@ -59,6 +59,8 @@
       "formula": "Formula",
       "id": "ID",
       "increment": "Increment",
+      "isCustom": "Custom",
+      "image": "Image",
       "input": {
         "validationFailed": "The following required fields failed validation. Ensure required fields have a valid value.",
         "query": "Provide Data",
@@ -94,23 +96,24 @@
         "moveDown": "Move down",
         "moveByDragging": "Move by dragging"
       },
-      "properties": {
-        "label": "Properties"
+      "tags": {
+        "label": "Tags"
       },
       "propertyPath": "Property path"
     },
     "character": {
       "advancement": {
+        "label": "Advancement",
         "level": "Level",
+        "challengeRating": {
+          "label": "Challenge Rating",
+          "abbreviation": "CR"
+        },
         "modifiedLevel": "Modified Level",
         "modifiedLevelAbbreviation": "Modified",
         "levelMod": "Level Modifier",
         "levelModAbbreviation": "Mod.",
         "minimum": "Minimum Level",
-        "exercised": {
-          "label": "Exercised",
-          "reset": "Reset exercised state"
-        },
         "requirements": {
           "label": "Required",
           "abbreviation": "Req.",
@@ -370,6 +373,11 @@
         "timeToHeal": "Time to heal",
         "treatment": "Treatment",
         "treatmentSkill": "Treatment Skill",
+        "timeToHealTreated": "Treated Heal Time Reduction",
+        "selfPatchUp": "Self Patch-Up",
+        "requiredSupplies": "Required Supplies",
+        "obstaclePatchUp": "Ob Patch-Up",
+        "obstacleTreatment": "Ob Treatment",
         "exhaustion": {
           "label": "Exhaustion",
           "maximum": "Max. Exhaustion"
@@ -573,11 +581,18 @@
           "label": "Delete Skill",
           "query": "Confirm Deletion of Skill"
         },
-        "headState": "Head State",
-        "headStates": {
-          "full": "Full",
-          "level_only": "Level Only",
-          "headless": "Headless"
+        "innate": {
+          "label": "Innate Skills",
+          "plural": "Innate Skills",
+          "singular": "Innate Skill",
+          "add": {
+            "label": "Add Innate Skill",
+            "query": "Select Innate Skill to Add"
+          },
+          "delete": {
+            "label": "Delete Innate Skill",
+            "query": "Confirm Deletion of Innate Skill"
+          }
         },
         "known": {
           "label": "Known Skills",
@@ -682,6 +697,8 @@
       "obstacle": {
         "label": "Obstacle",
         "abbreviation": "Ob",
+        "numberOfDice": "Obstacle dice",
+        "result": "Obstacle result",
         "opposedBy": {
           "label": "Opposed By",
           "placeholder": "Strength / Sneak / etc."
@@ -712,8 +729,8 @@
       }
     },
     "damageDefinition": {
-      "add": "Add Damage Definition",
-      "delete": "Delete Damage Definition",
+      "add": "Add Damage",
+      "delete": "Delete Damage",
       "label": "Damage",
       "infoFormulae": "It is possible to reference this character's attributes and other skills or skill abilities. To reference, type the '@'-symbol, immediately followed by the name of the reference, e. g. '@strength' or '@int' or '@acrobatics'. If the reference's name contains spaces, they must be replaced with underscores, e. g. '@Heavy_Armor' instead of '@Heavy Armor'.",
       "infoPlainFormulae": "Any plain formula, i. e. not containing any '@'-references.",
@@ -737,6 +754,10 @@
       "piercing": {
         "label": "Piercing",
         "abbreviation": "Pierce"
+      },
+      "bleeding": {
+        "label": "Bleeding",
+        "abbreviation": "Bleed"
       },
       "bludgeoning": {
         "label": "Bludgeoning",

@@ -16,6 +16,69 @@ cssClass: {undefined | String}
       </div>
     </div>
   </header>
+  {{!-- treatmentSkill --}}
+  <div class="sheet-block grid-3col grid-gap-md margin-b-md">
+    <div class="flex flex-middle flex-right">
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.health.treatmentSkill"}}{{/label}}
+    </div>
+    <div class="grid-span-2">
+      {{> inputTextField viewModel=viewModel.vmTreatmentSkill }}
+    </div>
+  </div>
+  {{!-- requiredSupplies --}}
+  <div class="sheet-block grid-3col grid-gap-md margin-b-md">
+    <div class="flex flex-middle flex-right">
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.health.requiredSupplies"}}{{/label}}
+    </div>
+    <div class="grid-span-2">
+      {{> inputTextField viewModel=viewModel.vmRequiredSupplies }}
+    </div>
+  </div>
+  {{!-- obstaclePatchUp --}}
+  <div class="sheet-block grid-3col grid-gap-md margin-b-md">
+    <div class="flex flex-middle flex-right">
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.health.obstaclePatchUp"}}{{/label}}
+    </div>
+    <div class="grid-span-2">
+      {{> inputTextField viewModel=viewModel.vmObstaclePatchUp }}
+    </div>
+  </div>
+  {{!-- obstacleTreatment --}}
+  <div class="sheet-block grid-3col grid-gap-md margin-b-md">
+    <div class="flex flex-middle flex-right">
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.health.obstacleTreatment"}}{{/label}}
+    </div>
+    <div class="grid-span-2">
+      {{> inputTextField viewModel=viewModel.vmObstacleTreatment }}
+    </div>
+  </div>
+  {{!-- timeToHeal --}}
+  <div class="sheet-block grid-3col grid-gap-md margin-b-md">
+    <div class="flex flex-middle flex-right">
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.health.timeToHeal"}}{{/label}}
+    </div>
+    <div class="grid-span-2">
+      {{> inputTextField viewModel=viewModel.vmTfTimeToHeal }}
+    </div>
+  </div>
+  {{!-- timeToHealTreated --}}
+  <div class="sheet-block grid-3col grid-gap-md margin-b-md">
+    <div class="flex flex-middle flex-right">
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.health.timeToHealTreated"}}{{/label}}
+    </div>
+    <div class="grid-span-2">
+      {{> inputTextField viewModel=viewModel.vmTimeToHealTreated }}
+    </div>
+  </div>
+  {{!-- selfPatchUp --}}
+  <div class="sheet-block grid-3col grid-gap-md margin-b-md">
+    <div class="flex flex-middle flex-right">
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.health.selfPatchUp"}}{{/label}}
+    </div>
+    <div class="grid-span-2">
+      {{> inputTextField viewModel=viewModel.vmSelfPatchUp }}
+    </div>
+  </div>
   {{!-- Limit --}}
   <div class="sheet-block grid-3col grid-gap-md margin-b-md">
     <div class="flex flex-middle flex-right">
@@ -23,15 +86,6 @@ cssClass: {undefined | String}
     </div>
     <div class="grid-span-2">
       {{> inputTextField viewModel=viewModel.vmLimit }}
-    </div>
-  </div>
-  {{!-- Time to heal --}}
-  <div class="sheet-block grid-3col grid-gap-md margin-b-md">
-    <div class="flex flex-middle flex-right">
-      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.health.timeToHeal"}}{{/label}}
-    </div>
-    <div class="grid-span-2">
-      {{> inputTextField viewModel=viewModel.vmTfTimeToHeal }}
     </div>
   </div>
   {{!-- Scar --}}

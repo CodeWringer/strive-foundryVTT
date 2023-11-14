@@ -1,9 +1,8 @@
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs"
-import { TAKE_ITEM_CONTEXT_TYPES } from "../../../component/button-take-item/button-take-item-viewmodel.mjs"
-import InputPropertiesViewModel from "../../../component/input-properties/input-properties-viewmodel.mjs"
+import ButtonTakeItemViewModel, { TAKE_ITEM_CONTEXT_TYPES } from "../../../component/button-take-item/button-take-item-viewmodel.mjs"
+import InputTagsViewModel from "../../../component/input-tags/input-tags-viewmodel.mjs"
 import LazyRichTextViewModel from "../../../component/lazy-rich-text/lazy-rich-text-viewmodel.mjs"
 import { TEMPLATES } from "../../../templatePreloader.mjs"
-import ViewModelFactory from "../../../view-model/view-model-factory.mjs"
 import ViewModel from "../../../view-model/view-model.mjs"
 
 export default class AssetChatMessageViewModel extends ViewModel {
@@ -17,7 +16,7 @@ export default class AssetChatMessageViewModel extends ViewModel {
    * @type {Boolean}
    * @readonly
    */
-  get hasProperties() { return this.document.properties.length > 0; }
+  get hasTags() { return this.document.tags.length > 0; }
 
   /**
    * @type {Boolean}
@@ -72,9 +71,8 @@ export default class AssetChatMessageViewModel extends ViewModel {
 
     this.contextTemplate = args.contextTemplate ?? "item-chat-message";
     const thiz = this;
-    const factory = new ViewModelFactory();
 
-    this.vmBtnTakeItem = factory.createVmBtnTakeItem({
+    this.vmBtnTakeItem = new ButtonTakeItemViewModel({
       parent: thiz,
       id: "vmBtnTakeItem",
       target: thiz.document,
@@ -88,11 +86,13 @@ export default class AssetChatMessageViewModel extends ViewModel {
       isOwner: this.isOwner,
       renderableContent: this.document.description,
     });
-    this.vmProperties = new InputPropertiesViewModel({
-      id: "vmProperties",
+    this.vmTags = new InputTagsViewModel({
+      id: "vmTags",
       parent: this,
-      propertyPath: "properties",
-      propertyOwner: this.document,
+      value: this.document.tags,
+      onChange: (_, newValue) => {
+        this.document.tags = newValue;
+      },
       isEditable: false,
     });
   }

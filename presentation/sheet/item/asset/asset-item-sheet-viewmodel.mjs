@@ -1,9 +1,13 @@
-import { ASSET_PROPERTIES } from "../../../../business/document/item/item-properties.mjs"
+import { ASSET_TAGS } from "../../../../business/tags/system-tags.mjs"
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs"
-import { TAKE_ITEM_CONTEXT_TYPES } from "../../../component/button-take-item/button-take-item-viewmodel.mjs"
-import InputPropertiesViewModel from "../../../component/input-properties/input-properties-viewmodel.mjs"
+import ButtonSendToChatViewModel from "../../../component/button-send-to-chat/button-send-to-chat-viewmodel.mjs"
+import ButtonTakeItemViewModel, { TAKE_ITEM_CONTEXT_TYPES } from "../../../component/button-take-item/button-take-item-viewmodel.mjs"
+import InputImageViewModel from "../../../component/input-image/input-image-viewmodel.mjs"
+import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs"
+import InputRichTextViewModel from "../../../component/input-rich-text/input-rich-text-viewmodel.mjs"
+import InputTagsViewModel from "../../../component/input-tags/input-tags-viewmodel.mjs"
+import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs"
 import { TEMPLATES } from "../../../templatePreloader.mjs"
-import ViewModelFactory from "../../../view-model/view-model-factory.mjs"
 import ViewModel from "../../../view-model/view-model.mjs"
 
 export default class AssetItemSheetViewModel extends ViewModel {
@@ -31,67 +35,79 @@ export default class AssetItemSheetViewModel extends ViewModel {
     this.document = args.document;
     this.contextTemplate = args.contextTemplate ?? "item-item-sheet";
     const thiz = this;
-    const factory = new ViewModelFactory();
 
-    this.vmImg = factory.createVmImg({
+    this.vmImg = new InputImageViewModel({
       parent: thiz,
       id: "vmImg",
-      propertyOwner: thiz.document,
-      propertyPath: "img",
+      value: thiz.document.img,
+      onChange: (_, newValue) => {
+        thiz.document.img = newValue;
+      },
     });
-    this.vmTfName = factory.createVmTextField({
+    this.vmTfName = new InputTextFieldViewModel({
       parent: thiz,
       id: "vmTfName",
-      propertyOwner: thiz.document,
-      propertyPath: "name",
-      placeholder: "ambersteel.general.name",
+      value: thiz.document.name,
+      onChange: (_, newValue) => {
+        thiz.document.name = newValue;
+      },
+      placeholder: game.i18n.localize("ambersteel.general.name"),
     });
-    this.vmBtnSendToChat = factory.createVmBtnSendToChat({
+    this.vmBtnSendToChat = new ButtonSendToChatViewModel({
       parent: thiz,
       id: "vmBtnSendToChat",
       target: thiz.document,
       isEditable: thiz.isEditable || thiz.isGM,
     });
-    this.vmBtnTakeItem = factory.createVmBtnTakeItem({
+    this.vmBtnTakeItem = new ButtonTakeItemViewModel({
       parent: thiz,
       id: "vmBtnTakeItem",
       target: thiz.document,
       contextType: TAKE_ITEM_CONTEXT_TYPES.itemSheet
     });
-    this.vmNsQuantity = factory.createVmNumberSpinner({
+    this.vmNsQuantity = new InputNumberSpinnerViewModel({
       parent: thiz,
       id: "vmNsQuantity",
-      propertyOwner: thiz.document,
-      propertyPath: "quantity",
+      value: thiz.document.quantity,
+      onChange: (_, newValue) => {
+        thiz.document.quantity = newValue;
+      },
       min: 1,
     });
-    this.vmNsMaxQuantity = factory.createVmNumberSpinner({
+    this.vmNsMaxQuantity = new InputNumberSpinnerViewModel({
       parent: thiz,
       id: "vmNsMaxQuantity",
-      propertyOwner: thiz.document,
-      propertyPath: "maxQuantity",
+      value: thiz.document.maxQuantity,
+      onChange: (_, newValue) => {
+        thiz.document.maxQuantity = newValue;
+      },
       min: 1,
     });
-    this.vmNsBulk = factory.createVmNumberSpinner({
+    this.vmNsBulk = new InputNumberSpinnerViewModel({
       parent: thiz,
       id: "vmNsBulk",
-      propertyOwner: thiz.document,
-      propertyPath: "bulk",
+      value: thiz.document.bulk,
+      onChange: (_, newValue) => {
+        thiz.document.bulk = newValue;
+      },
       min: 0,
     });
-    this.vmRtDescription = factory.createVmRichText({
+    this.vmRtDescription = new InputRichTextViewModel({
       parent: thiz,
       id: "vmRtDescription",
-      propertyOwner: thiz.document,
-      propertyPath: "description",
+      value: thiz.document.description,
+      onChange: (_, newValue) => {
+        thiz.document.description = newValue;
+      },
     });
-    this.vmProperties = new InputPropertiesViewModel({
-      id: "vmProperties",
+    this.vmTags = new InputTagsViewModel({
+      id: "vmTags",
       parent: this,
-      propertyPath: "properties",
-      propertyOwner: this.document,
-      isEditable: this.isEditable,
-      systemProperties: ASSET_PROPERTIES.asArray,
+      systemTags: ASSET_TAGS.asArray(),
+      value: this.document.tags,
+      onChange: (_, newValue) => {
+        this.document.tags = newValue;
+      },
     });
   }
 

@@ -148,11 +148,9 @@ export default class ActorAssetSlotViewModel extends ViewModel {
     this.vmBtnEdit = new ButtonViewModel({
       id: "vmBtnEdit",
       parent: this,
-      isSendable: this.isSendable,
-      isEditable: this.isEditable,
-      isOwner: this.isOwner,
       target: this.document,
-      localizableTitle: "ambersteel.character.asset.slot.edit",
+      iconHtml: '<i class="fas fa-cog"></i>',
+      localizedTooltip: game.i18n.localize("ambersteel.character.asset.slot.edit"),
       onClick: async () => {
         const delta = await queryAssetSlotConfiguration(this.assetSlot);
         await this.assetSlot.update(delta);
@@ -173,11 +171,10 @@ export default class ActorAssetSlotViewModel extends ViewModel {
     this.vmBtnAssign = new ButtonViewModel({
       id: "vmBtnAssign",
       parent: this,
-      isSendable: this.isSendable,
-      isEditable: this.isEditable,
-      isOwner: this.isOwner,
       target: this.document,
-      localizableTitle: "ambersteel.character.asset.slot.assign.label",
+      iconHtml: '<i class="fas fa-plus"></i>',
+      localizedLabel: game.i18n.localize("ambersteel.character.asset.slot.assign.label"),
+      localizedTooltip: game.i18n.localize("ambersteel.character.asset.slot.assign.label"),
       onClick: async () => {
         const inputChoices = "inputChoices";
 
@@ -190,7 +187,7 @@ export default class ActorAssetSlotViewModel extends ViewModel {
             new DynamicInputDefinition({
               type: DYNAMIC_INPUT_TYPES.DROP_DOWN,
               name: inputChoices,
-              localizableLabel: "ambersteel.general.name",
+              localizedLabel: game.i18n.localize("ambersteel.general.name"),
               required: true,
               defaultValue: (thiz.availableAssets[0] ?? {}).id,
               specificArgs: {
@@ -216,8 +213,8 @@ export default class ActorAssetSlotViewModel extends ViewModel {
       isEditable: this.isEditable,
       target: this.assetSlot,
       withDialog: true,
-      localizableTitle: "ambersteel.character.asset.slot.delete.query",
-      localizableDialogTitle: "ambersteel.character.asset.slot.delete.queryOf",
+      localizedTooltip: game.i18n.localize("ambersteel.character.asset.slot.delete.query"),
+      localizedDialogTitle: game.i18n.localize("ambersteel.character.asset.slot.delete.queryOf"),
       callback: async () => {
         const assetToUnassign = this.availableAssets.find(it => it.id === this.assetSlot.alottedId);
         if (assetToUnassign !== undefined) {

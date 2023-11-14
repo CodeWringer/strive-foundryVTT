@@ -1,15 +1,15 @@
-import { TEMPLATES } from '../../../presentation/templatePreloader.mjs';
-import * as ChatUtil from '../../../presentation/chat/chat-utility.mjs';
-import { validateOrThrow } from '../../util/validation-utility.mjs';
-import PreparedChatData from '../../../presentation/chat/prepared-chat-data.mjs';
-import SkillAbilityChatMessageViewModel from '../../../presentation/sheet/item/skill-ability/skill-ability-chat-message-viewmodel.mjs';
-import { createUUID } from '../../util/uuid-utility.mjs';
-import DamageAndType from './damage-and-type.mjs';
-import { SOUNDS_CONSTANTS } from '../../../presentation/audio/sounds.mjs';
-import { VISIBILITY_MODES } from '../../../presentation/chat/visibility-modes.mjs';
-import { isObject } from '../../util/validation-utility.mjs';
-import { DAMAGE_TYPES } from '../damage-types.mjs';
-import { getNestedPropertyValue } from '../../util/property-utility.mjs';
+import { TEMPLATES } from '../../../../presentation/templatePreloader.mjs';
+import * as ChatUtil from '../../../../presentation/chat/chat-utility.mjs';
+import { validateOrThrow } from '../../../util/validation-utility.mjs';
+import PreparedChatData from '../../../../presentation/chat/prepared-chat-data.mjs';
+import SkillAbilityChatMessageViewModel from '../../../../presentation/sheet/item/skill-ability/skill-ability-chat-message-viewmodel.mjs';
+import { createUUID } from '../../../util/uuid-utility.mjs';
+import DamageAndType from '../../../ruleset/skill/damage-and-type.mjs';
+import { SOUNDS_CONSTANTS } from '../../../../presentation/audio/sounds.mjs';
+import { VISIBILITY_MODES } from '../../../../presentation/chat/visibility-modes.mjs';
+import { ATTACK_TYPES, AttackType } from '../../../ruleset/skill/attack-types.mjs';
+import TransientSkill from './transient-skill.mjs';
+import AtReferencer from '../../../referencing/at-referencer.mjs';
 
 /**
  * Represents a skill ability. 
@@ -38,6 +38,36 @@ import { getNestedPropertyValue } from '../../util/property-utility.mjs';
  * @property {AttackType | Null} attackType 
  */
 export default class SkillAbility {
+  /**
+   * Converts the given `dto` to a `SkillAbility` instance and 
+   * returns it. 
+   * 
+   * @param {Object} dto 
+   * @param {TransientSkill} owningDocument 
+   * 
+   * @returns {SkillAbility}
+   * 
+   * @static
+   */
+  static fromDto(dto, owningDocument) {
+    return new SkillAbility({
+      owningDocument: owningDocument,
+      id: dto.id,
+      isCustom: dto.isCustom,
+      name: dto.name,
+      img: dto.img,
+      description: dto.description,
+      requiredLevel: dto.requiredLevel,
+      apCost: dto.apCost,
+      damage: dto.damage.map(it => DamageAndType.fromDto(it)),
+      condition: dto.condition,
+      distance: dto.distance,
+      obstacle: dto.obstacle,
+      opposedBy: dto.opposedBy,
+      attackType: dto.attackType === undefined ? undefined : ATTACK_TYPES[dto.attackType],
+    });
+  }
+
   /**
    * Returns the data path of this skill ability on its parent. 
    * 
@@ -112,35 +142,10 @@ export default class SkillAbility {
   /**
    * @type {Array<DamageAndType>} 
    */
-  get damage() { return this._damage.map(it => {
-    const thiz = this;
-    return {
-      get damage() { return it.damage; },
-      set damage(value) {
-        it.damage = value;
-        const damageToPersist = thiz.damage.map(it => {
-          return { damage: it.damage, damageType: it.damageType.name }
-        });
-        thiz.owningDocument.updateByPath(`${thiz._pathOnParent}.damage`, damageToPersist);
-      },
-
-      get damageType() { return it.damageType; },
-      set damageType(value) {
-        if (isObject(value)) {
-          it.damageType = value; 
-        } else {
-          it.damageType = DAMAGE_TYPES[value]; 
-        }
-        const damageToPersist = thiz.damage.map(it => {
-          return { damage: it.damage, damageType: it.damageType.name }
-        });
-        thiz.owningDocument.updateByPath(`${thiz._pathOnParent}.damage`, damageToPersist);
-      },
-    }
-  }); }
+  get damage() { return this._damage; }
   set damage(value) {
     this._damage = value;
-    this.owningDocument.updateByPath(`${this._pathOnParent}.damage`, value);
+    this.owningDocument.updateByPath(`${this._pathOnParent}.damage`, value.map(it => it.toDto()));
   }
   
   /**
@@ -180,29 +185,30 @@ export default class SkillAbility {
   }
   
   /**
-   * @type {AttackType | String | null}
+   * @type {AttackType | null}
    */
   get attackType() { return this._attackType; }
   set attackType(value) {
     this._attackType = value;
-    this.owningDocument.updateByPath(`${this._pathOnParent}.attackType`, value === null ? value : (value.name ?? value));
+    this.owningDocument.updateByPath(`${this._pathOnParent}.attackType`, value === null ? null : value.name);
   }
   
   /**
+   * @param {Object} args 
    * @param {TransientSkill} args.owningDocument The owning document.
-   * @param {String | undefined} args.id Optional. UUID of this instance of a skill ability. 
-   * @param {Boolean | undefined} args.isCustom Optional. 
-   * @param {String | undefined} args.name Optional. 
-   * @param {String | undefined} args.img Optional. 
-   * @param {String | undefined} args.description Optional. 
-   * @param {Number | undefined} args.requiredLevel Optional. 
-   * @param {Number | undefined} args.apCost Optional. 
-   * @param {Array<DamageAndType> | undefined} args.damage Optional. 
-   * @param {String | undefined} args.condition Optional. 
-   * @param {Number | undefined} args.distance Optional. 
-   * @param {String | undefined} args.obstacle Optional. 
-   * @param {String | undefined} args.opposedBy Optional. 
-   * @param {AttackType | undefined} args.attackType Optional. 
+   * @param {String | undefined} args.id UUID of this instance of a skill ability. 
+   * @param {Boolean | undefined} args.isCustom 
+   * @param {String | undefined} args.name 
+   * @param {String | undefined} args.img 
+   * @param {String | undefined} args.description 
+   * @param {Number | undefined} args.requiredLevel 
+   * @param {Number | undefined} args.apCost 
+   * @param {Array<DamageAndType> | undefined} args.damage 
+   * @param {String | undefined} args.condition 
+   * @param {Number | undefined} args.distance 
+   * @param {String | undefined} args.obstacle 
+   * @param {String | undefined} args.opposedBy 
+   * @param {AttackType | undefined} args.attackType 
    * 
    * @throws {Error} Thrown, if `owningDocument` is undefined. 
    */
@@ -389,7 +395,7 @@ export default class SkillAbility {
   }
 
   /**
-   * Returns a plain object based on the given object instance. 
+   * Returns a data transfer object version of this instance. 
    * 
    * IMPORTANT: To avoid problems with recursion, the `owningDocument` field 
    * **is not and must not** be included!
@@ -397,68 +403,42 @@ export default class SkillAbility {
    * @returns {Object}
    */
   toDto() {
-    const obj = Object.create(null);
-
-    obj.id = this.id;
-    obj.owningDocumentId = this.owningDocumentId;
-    obj.index = this.index;
-    obj.isCustom = this.isCustom;
-    obj.name = this.name;
-    obj.img = this.img;
-    obj.description = this.description;
-    obj.requiredLevel = this.requiredLevel;
-    obj.apCost = this.apCost;
-    obj.damage = this.damage.map(it => {
-      return { damage: it.damage, damageType: it.damageType.name }
-    });
-    obj.condition = this.condition;
-    obj.distance = this.distance;
-    obj.obstacle = this.obstacle;
-    obj.attackType = (this.attackType ?? {}).name;
-    obj.opposedBy = this.opposedBy;
-    
-    return obj;
+    return {
+      id: this.id,
+      owningDocumentId: this.owningDocumentId,
+      index: this.index,
+      isCustom: this.isCustom,
+      name: this.name,
+      img: this.img,
+      description: this.description,
+      requiredLevel: this.requiredLevel,
+      apCost: this.apCost,
+      damage: this.damage.map(it => {
+        return { damage: it.damage, damageType: it.damageType.name }
+      }),
+      condition: this.condition,
+      distance: this.distance,
+      obstacle: this.obstacle,
+      attackType: (this.attackType ?? {}).name,
+      opposedBy: this.opposedBy,
+    };
   }
-  
-  /**
-   * Tries to return a match for the given reference. 
-   * 
-   * @param {String} reference A reference to resolve. 
-   * * E. g. `"@heavy_armor"`
-   * * Can contain property paths. E. g. `"a.b.c"`
-   * @param {String} comparableReference A comparable version of the reference. 
-   * * Comparable in the sense that underscores "_" are replaced with spaces " " 
-   * or only the last piece of a property path is returned. 
-   * * E. g. `"@Heavy_Armor"` -> `"@heavy armor"`
-   * * E. g. `"@A.B.c"` -> `"a"`
-   * @param {String | undefined} propertyPath If not undefined, a property path on 
-   * the referenced object. 
-   * * E. g. `"@A.B.c"` -> `"B.c"`
-   * 
-   * @returns {Any | undefined} The matched reference or undefined, no match was found. 
-   * 
-   * @virtual
-   * @protected
-   */
-  _resolveReference(reference, comparableReference, propertyPath) {
-    if (this.name.toLowerCase() !== comparableReference) {
-      return undefined;
-    } else if (propertyPath === undefined) {
-      return this;
-    }
 
-    // Look in own properties. 
-    try {
-      return getNestedPropertyValue(this, propertyPath);
-    } catch (error) {
-      if (error.message.startsWith("Failed to get nested property value")) {
-        // Such errors are expected for "bad" property paths and can be ignored safely. 
-        game.ambersteel.logger.logWarn(error.message);
-      } else {
-        // Any other error is re-thrown. 
-        throw error;
-      }
-    }
-    return undefined;
+  /**
+   * Returns the property values identified by the `@`-denoted references in the given string, 
+   * from this `SkillAbility`. 
+   * 
+   * @param {String} str A string containing `@`-denoted references. 
+   * * E. g. `"@strength"` or localized and capitalized `"@Stärke"`. 
+   * * Abbreviated attribute names are permitted, e. g. `"@wis"` instead of `"@wisdom"`. 
+   * * If a reference's name contains spaces, they must be replaced with underscores. 
+   * E. g. `"@Heavy_Armor"`, instead of `"@Heavy Armor"`
+   * * *Can* contain property paths! E. g. `@a_fate_card.cost.miFP`. 
+   * 
+   * @returns {Map<String, Any | undefined>} A map of the reference key, including the `@`-symbol, to its resolved reference. 
+   * * Only contains unique entries. No reference is included more than once. 
+   */
+  resolveReferences(str) {
+    return new AtReferencer().resolveReferences(str, this);
   }
 }

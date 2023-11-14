@@ -14,12 +14,7 @@ cssClass: {undefined | String}
     <li class="ambersteel-list-row ambersteel-list-footer">
       <div class="fill flex flex-row flex-right">
         <div>
-          {{#> button viewModel=viewModel.vmBtnAddSlotGroup}}
-            <span{{#if ../viewModel.showFancyFont}} class="fancy-font"{{/if}}>{{../viewModel.localizedAddSlotGroupLabel}}</span>
-            <div class="button light square flex flex-center">
-              <i class="fas fa-plus"></i>
-            </div>
-          {{/button}}
+          {{> button viewModel=viewModel.vmBtnAddSlotGroup }}
         </div>
       </div>
     </li>

@@ -4,7 +4,7 @@ import TransientFateCard from "./transient-fate-card.mjs";
 import TransientIllness from "./transient-illness.mjs";
 import TransientInjury from "./transient-injury.mjs";
 import TransientMutation from "./transient-mutation.mjs";
-import TransientSkill from "./transient-skill.mjs";
+import TransientSkill from "./skill/transient-skill.mjs";
 import TransientScar from "./transient-scar.mjs";
 
 /**

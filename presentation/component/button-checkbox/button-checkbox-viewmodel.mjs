@@ -1,19 +1,19 @@
-import { getNestedPropertyValue,setNestedPropertyValue } from "../../../business/util/property-utility.mjs";
-import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import { TEMPLATES } from "../../templatePreloader.mjs";
-import ButtonViewModel from "../button/button-viewmodel.mjs";
+import InputViewModel from "../../view-model/input-view-model.mjs";
 
 /**
- * A button that allows changing a specific boolean value on a `TransientDocument` 
- * instance, identified by the `propertyPath`. 
+ * A button that allows toggling a boolean value with a check box. 
  * 
- * @extends ButtonViewModel
+ * @extends InputViewModel
  * 
- * @property {TransientDocument} target A document instance. 
- * @property {String} propertyPath The path identifying the boolean value. 
  * @property {Boolean} value The value of the boolean property. 
+ * 
+ * @method onChange Callback that is invoked when the value changes. 
+ * Receives the following arguments: 
+ * * `oldValue: {Boolean}`
+ * * `newValue: {Boolean}`
  */
-export default class ButtonCheckBoxViewModel extends ButtonViewModel {
+export default class ButtonCheckBoxViewModel extends InputViewModel {
   static get TEMPLATE() { return TEMPLATES.COMPONENT_BUTTON_CHECKBOX; }
 
   /**
@@ -26,59 +26,34 @@ export default class ButtonCheckBoxViewModel extends ButtonViewModel {
   }
 
   /**
-   * Returns the current value of the property. 
-   * 
-   * @type {Boolean}
-   */
-  get value() {
-    try {
-      return getNestedPropertyValue(this.target, this.propertyPath);
-    } catch (error) {
-      if (this._contextTemplate !== undefined) {
-        throw new Error(`[${this._contextTemplate}] IllegalStateException: ${error.message}`);
-      } else {
-        throw error;
-      }
-    }
-  }
-  /**
-   * Sets the value of the property. 
-   * 
-   * @param {Boolean} newValue
-   */
-  set value(newValue) {
-    try {
-      setNestedPropertyValue(this.target, this.propertyPath, newValue);
-    } catch (error) {
-      if (this._contextTemplate !== undefined) {
-        throw new Error(`[${this._contextTemplate}] IllegalStateException: ${error.message}`);
-      } else {
-        throw error;
-      }
-    }
-  }
-
-  /**
-   * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
-   * 
-   * @param {TransientDocument} args.target Optional. The target document to affect.  
-   * @param {Function | String | undefined} args.callback Optional. Defines an asynchronous callback that is invoked upon completion of the button's own callback. 
-   * @param {Boolean | undefined} args.isEditable Optional. If true, will be interactible. 
-   * @param {String | undefined} args.localizableTitle Optional. The localizable title (tooltip). 
-   * 
-   * @param {String} args.propertyPath The path used to look up the value. 
+   * @param {Object} args
+   * @param {String | undefined} args.id Unique ID of this view model instance. 
+   * @param {Boolean | undefined} args.isEditable If `true`, input(s) will 
+   * be in edit mode. If `false`, will be in read-only mode.
+   * * default `false`. 
+   * @param {String | undefined} args.localizedToolTip A localized text to 
+   * display as a tool tip. 
+   * @param {Boolean | undefined} args.value The current value. 
+   * * default `false`
+   * @param {Function | undefined} args.onChange Callback that is invoked 
+   * when the value changes. Receives two arguments: 
+   * * `oldValue: {Boolean}`
+   * * `newValue: {Boolean}`
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["propertyPath", "target"]);
 
-    this.propertyPath = args.propertyPath;
+    this._value = args.value ?? false;
   }
 
   /** @override */
-  async onClick(html, isOwner, isEditable) {
-    if (isEditable !== true) return;
+  async activateListeners(html) {
+    await super.activateListeners(html);
+
+    html.find(`#${this.id}-button`).click(() => {
+      if (this.isEditable !== true) return;
     
-    this.value = !this.value;
+      this.value = !this.value;
+    });
   }
 }

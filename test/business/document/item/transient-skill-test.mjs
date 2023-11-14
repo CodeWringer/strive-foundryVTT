@@ -1,9 +1,9 @@
 import should from 'should';
 import sinon from 'sinon';
 import 'should-sinon';
-import TransientSkill, { SKILL_HEAD_STATES } from '../../../../business/document/item/transient-skill.mjs';
-import { SKILL_PROPERTIES } from '../../../../business/document/item/item-properties.mjs';
+import TransientSkill, { SKILL_HEAD_STATES } from '../../../../business/document/item/skill/transient-skill.mjs';
 import { BaseLoggingStrategy } from '../../../../business/logging/base-logging-strategy.mjs';
+import { SKILL_TAGS } from '../../../../business/tags/system-tags.mjs';
 
 describe("TransientSkill", () => {
 
@@ -51,7 +51,7 @@ describe("TransientSkill", () => {
         // Given
         const givenDocument = {
           system: {
-            properties: [SKILL_PROPERTIES.MAGIC_SCHOOL.id]
+            properties: [SKILL_TAGS.MAGIC_SCHOOL.id]
           }
         };
         const given = new TransientSkill(givenDocument);
@@ -76,7 +76,7 @@ describe("TransientSkill", () => {
         givenDocument.update.should.have.been.calledOnce();
         givenDocument.update.should.have.been.calledWith({
           system: {
-            properties: [SKILL_PROPERTIES.MAGIC_SCHOOL.id],
+            properties: [SKILL_TAGS.MAGIC_SCHOOL.id],
           }
         }, { render: true });
       });
@@ -96,7 +96,7 @@ describe("TransientSkill", () => {
         givenDocument.update.should.have.been.calledOnce();
         givenDocument.update.should.have.been.calledWith({
           system: {
-            properties: [SKILL_PROPERTIES.MAGIC_SCHOOL.id],
+            properties: [SKILL_TAGS.MAGIC_SCHOOL.id],
           }
         }, { render: true });
       });
@@ -105,7 +105,7 @@ describe("TransientSkill", () => {
         // Given
         const givenDocument = {
           system: {
-            properties: [SKILL_PROPERTIES.MAGIC_SCHOOL.id],
+            properties: [SKILL_TAGS.MAGIC_SCHOOL.id],
           },
           update: sinon.fake(),
         };
@@ -125,7 +125,7 @@ describe("TransientSkill", () => {
         // Given
         const givenDocument = {
           system: {
-            properties: [SKILL_PROPERTIES.MAGIC_SCHOOL.id],
+            properties: [SKILL_TAGS.MAGIC_SCHOOL.id],
           },
           update: sinon.fake(),
         };
@@ -134,56 +134,6 @@ describe("TransientSkill", () => {
         given.isMagicSchool = true;
         // Then
         givenDocument.update.should.not.have.been.called();
-      });
-    });
-  });
-
-  describe("headState", () => {
-    describe("get", () => {
-      it("returns 'full' on uninitialized data", () => {
-        // Given
-        const givenDocument = {
-          system: {}
-        };
-        const given = new TransientSkill(givenDocument);
-        // When
-        const r = given.headState;
-        // Then
-        r.should.be.eql(SKILL_HEAD_STATES.full);
-      });
-
-      it("returns parsed 'headless'", () => {
-        // Given
-        const givenDocument = {
-          system: {
-            headState: SKILL_HEAD_STATES.headless.name,
-          }
-        };
-        const given = new TransientSkill(givenDocument);
-        // When
-        const r = given.headState;
-        // Then
-        r.should.be.eql(SKILL_HEAD_STATES.headless);
-      });
-    });
-
-    describe("set", () => {
-      it("sets 'level_only' with expected update", () => {
-        // Given
-        const givenDocument = {
-          system: {},
-          update: sinon.fake(),
-        };
-        const given = new TransientSkill(givenDocument);
-        // When
-        given.headState = SKILL_HEAD_STATES.level_only;
-        // Then
-        givenDocument.update.should.have.been.calledOnce();
-        givenDocument.update.should.have.been.calledWith({
-          system: {
-            headState: SKILL_HEAD_STATES.level_only.name,
-          }
-        }, { render: true });
       });
     });
   });

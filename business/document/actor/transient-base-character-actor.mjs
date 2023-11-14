@@ -1,5 +1,6 @@
 import { TEMPLATES } from '../../../presentation/templatePreloader.mjs';
 import { DICE_POOL_RESULT_TYPES } from '../../dice/dice-pool.mjs';
+import AtReferencer from '../../referencing/at-referencer.mjs';
 import CharacterAssetSlotGroup from '../../ruleset/asset/character-asset-slot-group.mjs';
 import CharacterAssetSlot from '../../ruleset/asset/character-asset-slot.mjs';
 import { ATTRIBUTE_GROUPS } from '../../ruleset/attribute/attribute-groups.mjs';
@@ -8,6 +9,7 @@ import CharacterAttributeGroup from '../../ruleset/attribute/character-attribute
 import { CharacterHealthState } from '../../ruleset/health/character-health-state.mjs';
 import { HEALTH_STATES } from '../../ruleset/health/health-states.mjs';
 import Ruleset from '../../ruleset/ruleset.mjs';
+import { SKILL_TAGS } from '../../tags/system-tags.mjs';
 import LoadHealthStatesSettingUseCase from '../../use-case/load-health-states-setting-use-case.mjs';
 import { createUUID } from '../../util/uuid-utility.mjs';
 import { isDefined } from '../../util/validation-utility.mjs';
@@ -41,6 +43,8 @@ import TransientBaseActor from './transient-base-actor.mjs';
  * @property {Array<TransientSkill>} skills.learning Returns all learning skills of the character. 
  * * Read-only. 
  * @property {Array<TransientSkill>} skills.known Returns all known skills of the character. 
+ * * Read-only. 
+ * @property {Array<TransientSkill>} skills.innate Returns all innate skills of the character. 
  * * Read-only. 
  * @property {Object} health
  * * Read-only. 
@@ -125,7 +129,7 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
   get person() {
     const thiz = this;
     return {
-      get age() { return parseInt(thiz.document.system.person.age); },
+      get age() { return thiz.document.system.person.age; },
       set age(value) { thiz.updateByPath("system.person.age", value); },
 
       get species() { return thiz.document.system.person.species; },
@@ -144,7 +148,6 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
       set biography(value) { thiz.updateByPath("system.person.biography", value); },
     };
   }
-  
 
   /**
    * @type {Object}
@@ -220,8 +223,21 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
     const thiz = this;
     return {
       get all() { return thiz.items.filter(it => it.type === "skill"); },
-      get learning() { return thiz.items.filter(it => it.type === "skill" && it.level < 1); },
-      get known() { return thiz.items.filter(it => it.type === "skill" && it.level > 0); },
+      get learning() { return thiz.items.filter(it => 
+        it.type === "skill" && it.level < 1
+          && it.tags.find(tag => tag.id === SKILL_TAGS.INNATE.id) === undefined
+        ); 
+      },
+      get known() { return thiz.items.filter(it => 
+        it.type === "skill" && it.level > 0
+          && it.tags.find(tag => tag.id === SKILL_TAGS.INNATE.id) === undefined
+        ); 
+      },
+      get innate() { return thiz.items.filter(it => 
+        it.type === "skill" 
+        && it.tags.find(tag => tag.id === SKILL_TAGS.INNATE.id) !== undefined
+        ); 
+      },
     };
   }
 
@@ -431,17 +447,9 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
    * @private
    */
   _getAttributeGroups() {
-    const result = [];
-
-    for (const groupDefName in ATTRIBUTE_GROUPS) {
-      const groupDef = ATTRIBUTE_GROUPS[groupDefName];
-      // Skip any convenience members, such as `asChoices`.
-      if (groupDef.name === undefined) continue;
-
-      result.push(new CharacterAttributeGroup(this.document, groupDef.name));
-    }
-
-    return result;
+    return ATTRIBUTE_GROUPS.asArray().map(attributeGroup => 
+      new CharacterAttributeGroup(this.document, attributeGroup.name)
+    );
   }
   
   /**
@@ -581,6 +589,8 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
   }
 
   /**
+   * @override
+   * 
    * Searches in: 
    * * Attribute names.
    * * Embedded skill name.
@@ -591,10 +601,8 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
    * * Embedded mutation name.
    * * Embedded scar name.
    * * Embedded asset name.
-   * 
-   * @override
    */
-  _resolveReference(reference, comparableReference, propertyPath) {
+  resolveReference(comparableReference, propertyPath) {
     // Search attributes. 
     const attribute = this.attributes.find(it => 
       it.name === comparableReference
@@ -605,54 +613,14 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
       return attribute;
     }
 
-    // Search skill. 
-    for (const skill of this.skills.all) {
-      const match = skill._resolveReference(reference, comparableReference, propertyPath);
-      if (match !== undefined) {
-        return match;
-      }
-    }
-
-    // Search asset.
-    for (const asset of this.assets.all) {
-      const match = asset._resolveReference(reference, comparableReference, propertyPath);
-      if (match !== undefined) {
-        return match;
-      }
-    }
-
-    // Search injury.
-    for (const injury of this.health.injuries) {
-      const match = injury._resolveReference(reference, comparableReference, propertyPath);
-      if (match !== undefined) {
-        return match;
-      }
-    }
-
-    // Search illness.
-    for (const illness of this.health.illnesses) {
-      const match = illness._resolveReference(reference, comparableReference, propertyPath);
-      if (match !== undefined) {
-        return match;
-      }
-    }
-
-    // Search mutation.
-    for (const mutation of this.health.mutations) {
-      const match = mutation._resolveReference(reference, comparableReference, propertyPath);
-      if (match !== undefined) {
-        return match;
-      }
-    }
-
-    // Search scar.
-    for (const scar of this.health.scars) {
-      const match = scar._resolveReference(reference, comparableReference, propertyPath);
-      if (match !== undefined) {
-        return match;
-      }
-    }
-
-    return super._resolveReference(reference, comparableReference, propertyPath);
+    const collectionsToSearch = [
+      this.skills.all,
+      this.assets.all,
+      this.health.injuries,
+      this.health.illnesses,
+      this.health.mutations,
+      this.health.scars,
+    ];
+    return new AtReferencer().resolveReferenceInCollections(collectionsToSearch, comparableReference, propertyPath);
   }
 }

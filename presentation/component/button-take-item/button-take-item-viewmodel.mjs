@@ -1,8 +1,6 @@
-import { TEMPLATES } from "../../templatePreloader.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
 import ChoiceOption from "../input-choice/choice-option.mjs";
 import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
-import PlainDialog from "../../dialog/plain-dialog/plain-dialog.mjs";
 import SingleChoiceDialog from "../../dialog/single-choice-dialog/single-choice-dialog.mjs";
 import DocumentFetcher from "../../../business/document/document-fetcher/document-fetcher.mjs";
 import { isString } from "../../../business/util/validation-utility.mjs";
@@ -27,14 +25,16 @@ export const TAKE_ITEM_CONTEXT_TYPES = {
  * 
  * @property {TAKE_ITEM_CONTEXT_TYPES} contextType Represents the context of where this button view model is embedded. 
  * Depending on this value, the behavior of the button changes. 
+ * * In the context "chat-message", the item in question will be moved to the current player's actor, or an actor chosen by a GM. 
+ * * In the context "list-item", TODO #196
+ * * In the context "item-sheet", a copy of the item in question will be added to the current player's actor, or an actor chosen by a GM. 
  * 
- * In the context "chat-message", the item in question will be moved to the current player's actor, or an actor chosen by a GM. 
- * In the context "list-item", TODO #196
- * In the context "item-sheet", a copy of the item in question will be added to the current player's actor, or an actor chosen by a GM. 
+ * @method onClick Asynchronous callback that is invoked when the button is clicked. 
+ * Receives the button's original click-handler as its sole argument. In most cases, it should be called 
+ * and awaited before one's own click handling logic. But in case the original logic is unwanted, the method can be ignored.
+ * * Returns nothing. 
  */
 export default class ButtonTakeItemViewModel extends ButtonViewModel {
-  static get TEMPLATE() { return TEMPLATES.COMPONENT_BUTTON_TAKE_ITEM; }
-
   /**
    * Registers the Handlebars partial for this component. 
    * 
@@ -45,13 +45,16 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
   }
 
   /**
+   * @param {Object} args
    * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
+   * @param {Boolean | undefined} args.isEditable Optional. If true, will be interactible. 
+   * @param {String | undefined} args.localizedTooltip Localized tooltip. 
+   * @param {Function | undefined} args.onClick Asynchronous callback that is invoked when the button is clicked. 
+   * Receives the button's original click-handler as its sole argument. In most cases, it should be called 
+   * and awaited before one's own click handling logic. But in case the original logic is unwanted, the method can be ignored.
+   * * Returns nothing. 
    * 
    * @param {TransientAsset} args.target The target object to affect. 
-   * @param {Function | String | undefined} args.callback Optional. Defines an asynchronous callback that is invoked upon completion of the button's own callback. 
-   * @param {Boolean | undefined} args.isEditable Optional. If true, will be interactible. 
-   * @param {String | undefined} args.localizableTitle Optional. The localizable title (tooltip). 
-   * 
    * @param {TAKE_ITEM_CONTEXT_TYPES} contextType Represents the context of where this button view model is embedded. 
    * Depending on this value, the behavior of the button changes. 
    * 
@@ -60,24 +63,28 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
    * In the context "item-sheet", a copy of the item in question will be added to the current player's actor, or an actor chosen by a GM. 
    */
   constructor(args = {}) {
-    super(args);
+    super({
+      ...args,
+      iconHtml: '<i class="ambersteel-icon ico-take-item"></i>',
+    });
     validateOrThrow(args, ["target", "contextType"]);
 
+    this.target = args.target;
     this.contextType = args.contextType;
-    this.localizableTitle = args.localizableTitle ?? "ambersteel.character.asset.takeToPerson";
+    this.localizedTooltip = args.localizedTooltip ?? game.i18n.localize("ambersteel.character.asset.takeToPerson");
   }
 
   /**
    * @override
-   * @see {ButtonViewModel.onClick}
+   * @see {ButtonViewModel._onClick}
    * 
    * @throws {Error} NullPointerException - Thrown, if the actor to pick up the item could not be found. 
    * @throws {Error} NullPointerException - Thrown, if the item could not be found/wasn't defined. 
    * 
    * @async
    */
-  async onClick(html, isOwner, isEditable) {
-    if (isEditable !== true) return;
+  async _onClick() {
+    if (this.isEditable !== true) return;
 
     let assetDocument = this.target;
     if (isString(this.target) === true) { // Item id provided. 

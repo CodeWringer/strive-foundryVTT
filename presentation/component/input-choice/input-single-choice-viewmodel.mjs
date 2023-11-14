@@ -6,57 +6,46 @@ import InputChoiceViewModel from "./input-choice-viewmodel.mjs";
  * 
  * @extends InputChoiceViewModel
  * 
- * @property {String} localizedValue Gets the localized version of the value. 
- * * Read-only. 
- * @property {ChoiceOption} selected Gets or sets the currently 
- * selected options. 
+ * @property {ChoiceOption} value The current value. 
  * @property {Array<ChoiceOption>} options Gets the options available. 
  * * Read-only. 
- * @property {ChoiceAdapter} adapter A `ChoiceOption` adapter. 
- * * Often times, the actual value of a field on a document is not of type `ChoiceOption`, 
- * but rather some other business type. This adapter allows mapping to and from `ChoiceOption`s,
- * based on those actual values.
+ * 
+ * @method onChange Callback that is invoked when the value changes. 
+ * Receives the following arguments: 
+ * * `oldValue: {ChoiceOption}`
+ * * `newValue: {ChoiceOption}`
  * 
  * @abstract
  */
 export default class InputSingleChoiceViewModel extends InputChoiceViewModel {
   /**
-   * Returns the currently selected option. 
+   * @param {Object} args
    * 
-   * @type {ChoiceOption}
-   * @readonly
-   */
-  get selected() {
-    const valueAsChoice = this.adapter.toChoiceOption(this.value);
-    return this.options.find(option => option.value === valueAsChoice.value);
-  }
-
-  /**
-   * Returns the localized value. 
+   * @param {String | undefined} args.id Unique ID of this view model instance. 
+   * @param {ViewModel | undefined} args.parent Parent ViewModel instance of this instance. 
+   * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 
+   * is expected to be associated with an actor sheet or item sheet or journal entry or chat message and so on.
+   * @param {Boolean | undefined} args.isEditable If `true`, input(s) will 
+   * be in edit mode. If `false`, will be in read-only mode.
+   * * default `false`. 
    * 
-   * @type {String}
-   * @readonly
-   * @override
-   */
-  get localizedValue() {
-    return this.selected.localizedValue ?? "";
-  }
-
-  /**
-   * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
+   * @param {String | undefined} args.localizedToolTip A localized text to 
+   * display as a tool tip. 
+   * @param {String | undefined} args.iconHtml Raw HTML to render as 
+   * an associated icon. E. g. `'<i class="fas fa-scroll"></i>'`
    * 
-   * @param {String} args.propertyPath The path used to look up the value. 
-   * @param {Object} args.propertyOwner An object on which to to look up the value. 
-   * @param {Boolean | undefined} args.isEditable Optional. If true, input(s) will be in edit mode. If false, input(s) will be in read-only mode.
-   * @param {String | undefined} args.contextTemplate Optional. Name or path of a template that embeds this input component. 
-   * @param {String | undefined} args.localizableTitle Optional. The localizable title (tooltip). 
-   * 
+   * @param {ChoiceOption | undefined} args.value The current value. 
+   * * default ist the first element of `args.options`
    * @param {Array<ChoiceOption>} args.options The options available to the drop-down. 
-   * @param {ChoiceAdapter} adapter A `ChoiceOption` adapter. 
+   * @param {ChoiceAdapter} args.adapter A `ChoiceOption` adapter. 
+   * @param {Function | undefined} args.onChange Callback that is invoked 
+   * when the value changes. Receives two arguments: 
+   * * `oldValue: {ChoiceOption}`
+   * * `newValue: {ChoiceOption}`
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["propertyPath", "propertyOwner", "options", "adapter"]);
+    validateOrThrow(args, ["options", "adapter"]);
   }
   
   /**
@@ -64,18 +53,17 @@ export default class InputSingleChoiceViewModel extends InputChoiceViewModel {
    * 
    * @throws {Error} UnknownException Thrown if the current option could not be set correctly. 
    */
-  async activateListeners(html, isOwner, isEditable) {
-    await super.activateListeners(html, isOwner, isEditable);
+  async activateListeners(html) {
+    await super.activateListeners(html);
 
-    if (isEditable !== true) return;
+    if (this.isEditable !== true) return;
     
     // Ensure correct option of drop-down is set. 
     try {
       const optionElements = this.element.find('option');
-      const choice = this.adapter.toChoiceOption(this.value);
       for(let i = 0; i < optionElements.length; i++) {
         const optionElement = optionElements[i];
-        if (optionElement.value === choice.value) {
+        if (optionElement.value === this.value.value) {
           this.element[0].selectedIndex = i;
           break;
         }

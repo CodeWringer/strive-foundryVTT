@@ -22,8 +22,8 @@ import Ruleset from "./business/ruleset/ruleset.mjs";
 import { VISIBILITY_MODES } from "./presentation/chat/visibility-modes.mjs";
 // Utility
 import ChoiceOption from "./presentation/component/input-choice/choice-option.mjs";
-import { getAsChoices } from "./business/util/constants-utility.mjs";
 import DocumentFetcher from "./business/document/document-fetcher/document-fetcher.mjs";
+import TokenExtensions from "./presentation/token/token-extensions.mjs";
 // Migration
 import MigratorInitiator from "./business/migration/migrator-initiator.mjs";
 import MigratorDialog from "./presentation/dialog/migrator-dialog/migrator-dialog.mjs";
@@ -86,8 +86,6 @@ import './presentation/sheet/actor/part/actor-biography-viewmodel.mjs';
 import './presentation/sheet/actor/part/actor-fate-viewmodel.mjs';
 import './presentation/sheet/actor/part/health/actor-health-viewmodel.mjs';
 import './presentation/sheet/actor/part/actor-personals-viewmodel.mjs';
-// View model factory
-import './presentation/view-model/view-model-factory.mjs';
 
 /* -------------------------------------------- */
 /*  Initialization                              */
@@ -271,7 +269,7 @@ Hooks.on("renderChatMessage", async function(message, html, data) {
     }
   }
 
-  await viewModel.activateListeners(html, viewModel.isOwner, viewModel.isEditable);
+  await viewModel.activateListeners(html);
 });
 
 Hooks.on("deleteChatMessage", function(args) {
@@ -300,4 +298,8 @@ Hooks.on("deleteChatMessage", function(args) {
     // Remove the view model from the global collection. 
     game.ambersteel.viewModels.remove(vmId);
   }
+});
+
+Hooks.on("hoverToken", function(token) {
+  new TokenExtensions().handleTokenHover(token);
 });

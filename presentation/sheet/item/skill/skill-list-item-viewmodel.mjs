@@ -1,16 +1,20 @@
-import { SKILL_PROPERTIES } from "../../../../business/document/item/item-properties.mjs"
-import { SKILL_HEAD_STATES } from "../../../../business/document/item/transient-skill.mjs"
+import TransientSkill from "../../../../business/document/item/skill/transient-skill.mjs"
 import { ATTRIBUTES } from "../../../../business/ruleset/attribute/attributes.mjs"
+import { SKILL_TAGS } from "../../../../business/tags/system-tags.mjs"
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs"
 import { isDefined } from "../../../../business/util/validation-utility.mjs"
-import ButtonCheckBoxViewModel from "../../../component/button-checkbox/button-checkbox-viewmodel.mjs"
-import ButtonViewModel from "../../../component/button/button-viewmodel.mjs"
+import ButtonDeleteViewModel from "../../../component/button-delete/button-delete-viewmodel.mjs"
+import ButtonRollViewModel from "../../../component/button-roll/button-roll-viewmodel.mjs"
+import ButtonSendToChatViewModel from "../../../component/button-send-to-chat/button-send-to-chat-viewmodel.mjs"
 import ChoiceAdapter from "../../../component/input-choice/choice-adapter.mjs"
-import InputPropertiesViewModel from "../../../component/input-properties/input-properties-viewmodel.mjs"
+import InputDropDownViewModel from "../../../component/input-dropdown/input-dropdown-viewmodel.mjs"
+import InputImageViewModel from "../../../component/input-image/input-image-viewmodel.mjs"
+import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs"
+import InputRichTextViewModel from "../../../component/input-rich-text/input-rich-text-viewmodel.mjs"
+import InputTagsViewModel from "../../../component/input-tags/input-tags-viewmodel.mjs"
+import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs"
 import { TEMPLATES } from "../../../templatePreloader.mjs"
-import ViewModelFactory from "../../../view-model/view-model-factory.mjs"
 import SkillAbilityTableViewModel from "../skill-ability/skill-ability-table-viewmodel.mjs"
-import { querySkillConfiguration } from "./skill-utils.mjs"
 import SkillViewModel from "./skill-viewmodel.mjs"
 
 export default class SkillListItemViewModel extends SkillViewModel {
@@ -21,7 +25,7 @@ export default class SkillListItemViewModel extends SkillViewModel {
    * @type {Array<ChoiceOption>}
    * @readonly
    */
-  get attributeOptions() { return ATTRIBUTES.asChoices; }
+  get attributeOptions() { return ATTRIBUTES.asChoices(); }
 
   /**
    * Returns true, if the skill ability list should be visible. 
@@ -52,34 +56,11 @@ export default class SkillListItemViewModel extends SkillViewModel {
   get showSkillAbilities() { return this.isEditable === true || this.document.abilities.length > 0; }
   
   /**
-   * Returns true, if the level should be rendered. 
-   * @type {Boolean}
-   * @readonly
-   */
-  get showLevel() { return this.document.headState.name === SKILL_HEAD_STATES.full.name || this.document.headState.name === SKILL_HEAD_STATES.level_only.name; }
-  
-  /**
    * Returns true, if the list of prerequisites should be rendered. 
    * @type {Boolean}
    * @readonly
    */
   get showPrerequisites() { return this.document.prerequisites !== undefined && this.document.prerequisites.length > 0; }
-
-  /**
-   * Returns true, if advanced data should be rendered. 
-   * 
-   * This entails: 
-   * * related attribute
-   * * modified level
-   * * advancement requirements
-   * * advancement progress
-   * * description
-   * * properties list
-   * * category
-   * @type {Boolean}
-   * @readonly
-   */
-  get showAdvancedData() { return this.document.headState.name === SKILL_HEAD_STATES.full.name; }
 
   /**
    * @type {Number}
@@ -102,6 +83,22 @@ export default class SkillListItemViewModel extends SkillViewModel {
   }
 
   /**
+   * @type {Boolean}
+   * @readonly
+   */
+  get showAdvancementProgression() {
+    if (isDefined(this.document.owningDocument) === true) {
+      const type = this.document.owningDocument.type;
+      if (type === "npc" && this.document.owningDocument.progressionVisible === true) {
+        return true;
+      } else if (type === "pc") {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
    * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 
    * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 
@@ -121,22 +118,25 @@ export default class SkillListItemViewModel extends SkillViewModel {
 
     // Child view models. 
     const thiz = this;
-    const factory = new ViewModelFactory();
 
-    this.vmImg = factory.createVmImg({
+    this.vmImg = new InputImageViewModel({
       parent: thiz,
       id: "vmImg",
-      propertyOwner: thiz.document,
-      propertyPath: "img",
+      value: thiz.document.img,
+      onChange: (_, newValue) => {
+        thiz.document.img = newValue;
+      },
     });
-    this.vmTfName = factory.createVmTextField({
+    this.vmTfName = new InputTextFieldViewModel({
       parent: thiz,
       id: "vmTfName",
-      propertyOwner: thiz.document,
-      propertyPath: "name",
-      placeholder: "ambersteel.general.name",
+      value: thiz.document.name,
+      onChange: (_, newValue) => {
+        thiz.document.name = newValue;
+      },
+      placeholder: game.i18n.localize("ambersteel.general.name"),
     });
-    this.vmBtnRoll = factory.createVmBtnRoll({
+    this.vmBtnRoll = new ButtonRollViewModel({
       parent: thiz,
       id: "vmBtnRoll",
       target: thiz.document,
@@ -144,48 +144,38 @@ export default class SkillListItemViewModel extends SkillViewModel {
       primaryChatTitle: game.i18n.localize(thiz.document.name),
       primaryChatImage: thiz.document.img,
       rollType: "dice-pool",
-      callback: "advanceByRollResult",
+      onClick: async (callback) => {
+        const r = await callback();
+        await thiz.document.advanceByRollResult(r);
+      },
       actor: thiz.document.owningDocument.document,
     })
-    this.vmBtnSendToChat = factory.createVmBtnSendToChat({
+    this.vmBtnSendToChat = new ButtonSendToChatViewModel({
       parent: thiz,
       id: "vmBtnSendToChat",
       target: thiz.document,
       isEditable: thiz.isEditable || thiz.isGM,
     });
-    this.vmBtnDelete = factory.createVmBtnDelete({
+    this.vmBtnDelete = new ButtonDeleteViewModel({
       parent: thiz,
       id: "vmBtnDelete",
       target: thiz.document,
       withDialog: true,
     });
-    this.vmBtnEdit = new ButtonViewModel({
-      id: "vmBtnEdit",
-      parent: this,
-      isSendable: this.isSendable,
-      isEditable: this.isEditable,
-      isOwner: this.isOwner,
-      target: this.document,
-      localizableTitle: "ambersteel.general.edit",
-      onClick: async () => {
-        const delta = await querySkillConfiguration(this.document);
-        if (delta !== undefined) {
-          this.document.headState = delta.headState;
-        }
-      },
-    });
-    this.vmDdRelatedAttribute = factory.createVmDropDown({
-      parent: thiz,
+    this.vmDdRelatedAttribute = new InputDropDownViewModel({
       id: "vmDdRelatedAttribute",
-      propertyOwner: thiz.document,
-      propertyPath: "relatedAttribute",
+      parent: thiz,
       options: thiz.attributeOptions,
+      value: thiz.attributeOptions.find(it => it.value === this.document.relatedAttribute.name),
+      onChange: (_, newValue) => {
+        this.document.relatedAttribute = newValue;
+      },
       adapter: new ChoiceAdapter({
         toChoiceOption(obj) {
           if (isDefined(obj) === true) {
-            return ATTRIBUTES.asChoices.find(it => it.value === obj.name);
+            return ATTRIBUTES.asChoices().find(it => it.value === obj.name);
           } else {
-            return ATTRIBUTES.asChoices.find(it => it.value === "none");
+            return ATTRIBUTES.asChoices().find(it => it.value === "none");
           }
         },
         fromChoiceOption(option) {
@@ -193,46 +183,52 @@ export default class SkillListItemViewModel extends SkillViewModel {
         }
       }),
     });
-    this.vmTfCategory = factory.createVmTextField({
+    this.vmTfCategory = new InputTextFieldViewModel({
       parent: thiz,
       id: "vmTfCategory",
-      propertyOwner: thiz.document,
-      propertyPath: "category",
+      value: thiz.document.category,
+      onChange: (_, newValue) => {
+        thiz.document.category = newValue;
+      },
     });
-    this.vmNsLevel = factory.createVmNumberSpinner({
+    this.vmNsLevel = new InputNumberSpinnerViewModel({
       parent: thiz,
       id: "vmNsLevel",
-      propertyOwner: thiz.document,
-      propertyPath: "level",
+      value: this.document.dependsOnActiveCr === true ? this.document.crLevel : this.document.level,
+      isEditable: this.document.dependsOnActiveCr === true ? false : this.isEditable,
+      onChange: (_, newValue) => {
+        thiz.document.level = newValue;
+      },
       min: 0,
     });
-    this.vmNsLevelModifier = factory.createVmNumberSpinner({
+    this.vmNsLevelModifier = new InputNumberSpinnerViewModel({
       parent: thiz,
       id: "vmNsLevelModifier",
-      propertyOwner: thiz.document,
-      propertyPath: "levelModifier",
+      value: thiz.document.levelModifier,
+      onChange: (_, newValue) => {
+        thiz.document.levelModifier = newValue;
+      },
     });
-    this.vmNsSuccesses = factory.createVmNumberSpinner({
-      parent: thiz,
-      id: "vmNsSuccesses",
-      propertyOwner: thiz.document,
-      propertyPath: "advancementProgress.successes",
-      min: 0,
-    });
-    this.vmNsFailures = factory.createVmNumberSpinner({
-      parent: thiz,
-      id: "vmNsFailures",
-      propertyOwner: thiz.document,
-      propertyPath: "advancementProgress.failures",
-      min: 0,
-    });
-    this.vmExercised = new ButtonCheckBoxViewModel({
-      id: "vmExercised",
-      parent: this,
-      isEditable: this.isEditable,
-      target: thiz.document,
-      propertyPath: "advancementProgress.exercised",
-    });
+    if (this.showAdvancementProgression) {
+      this.vmNsSuccesses = new InputNumberSpinnerViewModel({
+        parent: thiz,
+        id: "vmNsSuccesses",
+        value: thiz.document.advancementProgress.successes,
+        onChange: (_, newValue) => {
+          thiz.document.advancementProgress.successes = newValue;
+        },
+        min: 0,
+      });
+      this.vmNsFailures = new InputNumberSpinnerViewModel({
+        parent: thiz,
+        id: "vmNsFailures",
+        value: thiz.document.advancementProgress.failures,
+        onChange: (_, newValue) => {
+          thiz.document.advancementProgress.failures = newValue;
+        },
+        min: 0,
+      });
+    }
     if (this.showSkillAbilities === true) {
       this.vmSkillAbilityTable = new SkillAbilityTableViewModel({
         id: "vmSkillAbilityTable",
@@ -245,19 +241,22 @@ export default class SkillListItemViewModel extends SkillViewModel {
         visGroupId: thiz.visGroupId,
       });
     }
-    this.vmRtDescription = factory.createVmRichText({
+    this.vmRtDescription = new InputRichTextViewModel({
       parent: thiz,
       id: "vmRtDescription",
-      propertyOwner: thiz.document,
-      propertyPath: "description",
+      value: thiz.document.description,
+      onChange: (_, newValue) => {
+        thiz.document.description = newValue;
+      },
     });
-    this.vmProperties = new InputPropertiesViewModel({
-      id: "vmProperties",
+    this.vmTags = new InputTagsViewModel({
+      id: "vmTags",
       parent: this,
-      propertyPath: "properties",
-      propertyOwner: this.document,
-      isEditable: this.isEditable,
-      systemProperties: SKILL_PROPERTIES.asArray,
+      systemTags: SKILL_TAGS.asArray(),
+      value: this.document.tags,
+      onChange: (_, newValue) => {
+        this.document.tags = newValue;
+      },
     });
   }
 

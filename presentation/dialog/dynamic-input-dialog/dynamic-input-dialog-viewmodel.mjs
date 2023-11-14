@@ -44,9 +44,10 @@ export default class DynamicInputDialogViewModel extends ViewModel {
         viewModel = new InputDropDownViewModel({
           id: definition.name,
           parent: this,
-          propertyPath: definition.name,
-          propertyOwner: this,
-          isEditable: true,
+          value: definition.defaultValue,
+          onChange: (_, newValue) => {
+            this[definition.name] = newValue;
+          },
           options: definition.specificArgs.options,
           adapter: definition.specificArgs.adapter,
         });
@@ -54,17 +55,19 @@ export default class DynamicInputDialogViewModel extends ViewModel {
         viewModel = new InputImageViewModel({
           id: definition.name,
           parent: this,
-          propertyPath: definition.name,
-          propertyOwner: this,
-          isEditable: true,
+          value: definition.defaultValue,
+          onChange: (_, newValue) => {
+            this[definition.name] = newValue;
+          },
         });
       } else if (definition.type === DYNAMIC_INPUT_TYPES.NUMBER_SPINNER) {
         viewModel = new InputNumberSpinnerViewModel({
           id: definition.name,
           parent: this,
-          propertyPath: definition.name,
-          propertyOwner: this,
-          isEditable: true,
+          value: definition.defaultValue,
+          onChange: (_, newValue) => {
+            this[definition.name] = newValue;
+          },
           min: definition.specificArgs.min,
           max: definition.specificArgs.max,
           step: definition.specificArgs.step,
@@ -73,26 +76,29 @@ export default class DynamicInputDialogViewModel extends ViewModel {
         viewModel = new InputRadioButtonGroupViewModel({
           id: definition.name,
           parent: this,
-          propertyPath: definition.name,
-          propertyOwner: this,
-          isEditable: true,
+          value: definition.defaultValue,
+          onChange: (_, newValue) => {
+            this[definition.name] = newValue;
+          },
           options: definition.specificArgs.options,
         });
       } else if (definition.type === DYNAMIC_INPUT_TYPES.RICH_TEXT) {
         viewModel = new InputRichTextViewModel({
           id: definition.name,
           parent: this,
-          propertyPath: definition.name,
-          propertyOwner: this,
-          isEditable: true,
+          value: definition.defaultValue,
+          onChange: (_, newValue) => {
+            this[definition.name] = newValue;
+          },
         });
       } else if (definition.type === DYNAMIC_INPUT_TYPES.TEXTAREA) {
         viewModel = new InputTextareaViewModel({
           id: definition.name,
           parent: this,
-          propertyPath: definition.name,
-          propertyOwner: this,
-          isEditable: true,
+          value: definition.defaultValue,
+          onChange: (_, newValue) => {
+            this[definition.name] = newValue;
+          },
           spellcheck: definition.specificArgs.spellcheck,
           placeholder: definition.specificArgs.placeholder,
         });
@@ -100,9 +106,10 @@ export default class DynamicInputDialogViewModel extends ViewModel {
         viewModel = new InputTextFieldViewModel({
           id: definition.name,
           parent: this,
-          propertyPath: definition.name,
-          propertyOwner: this,
-          isEditable: true,
+          value: definition.defaultValue,
+          onChange: (_, newValue) => {
+            this[definition.name] = newValue;
+          },
           placeholder: definition.specificArgs.placeholder,
         });
       } else if (definition.type === DYNAMIC_INPUT_TYPES.LABEL) {

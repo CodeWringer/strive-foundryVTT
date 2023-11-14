@@ -1,19 +1,21 @@
-import { SKILL_PROPERTIES } from "../../../../business/document/item/item-properties.mjs";
+import { SKILL_TAGS } from "../../../../business/tags/system-tags.mjs";
 import { ATTRIBUTES } from "../../../../business/ruleset/attribute/attributes.mjs";
 import SkillPrerequisite from "../../../../business/ruleset/skill/skill-prerequisite.mjs";
 import { isDefined } from "../../../../business/util/validation-utility.mjs";
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs";
-import ButtonViewModel from "../../../component/button/button-viewmodel.mjs";
 import ChoiceAdapter from "../../../component/input-choice/choice-adapter.mjs";
-import InputPropertiesViewModel from "../../../component/input-properties/input-properties-viewmodel.mjs";
+import InputTagsViewModel from "../../../component/input-tags/input-tags-viewmodel.mjs";
 import SimpleListItemViewModel from "../../../component/simple-list/simple-list-item-viewmodel.mjs";
 import SimpleListViewModel from "../../../component/simple-list/simple-list-viewmodel.mjs";
 import { TEMPLATES } from "../../../templatePreloader.mjs"
-import ViewModelFactory from "../../../view-model/view-model-factory.mjs";
 import SkillAbilityTableViewModel from "../skill-ability/skill-ability-table-viewmodel.mjs"
 import SkillPrerequisiteListItemViewModel from "./skill-prerequisite-list-item-viewmodel.mjs";
-import { querySkillConfiguration } from "./skill-utils.mjs";
 import SkillViewModel from "./skill-viewmodel.mjs";
+import InputImageViewModel from "../../../component/input-image/input-image-viewmodel.mjs";
+import InputRichTextViewModel from "../../../component/input-rich-text/input-rich-text-viewmodel.mjs";
+import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs";
+import InputDropDownViewModel from "../../../component/input-dropdown/input-dropdown-viewmodel.mjs";
+import ButtonSendToChatViewModel from "../../../component/button-send-to-chat/button-send-to-chat-viewmodel.mjs";
 
 export default class SkillItemSheetViewModel extends SkillViewModel {
   /** @override */
@@ -23,7 +25,7 @@ export default class SkillItemSheetViewModel extends SkillViewModel {
    * @type {Array<ChoiceOption>}
    * @readonly
    */
-  get attributeOptions() { return ATTRIBUTES.asChoices; }
+  get attributeOptions() { return ATTRIBUTES.asChoices(); }
 
   /**
    * Returns true, if the skill ability list should be visible. 
@@ -57,54 +59,44 @@ export default class SkillItemSheetViewModel extends SkillViewModel {
 
     // Child view models. 
     const thiz = this;
-    const factory = new ViewModelFactory();
 
-    this.vmImg = factory.createVmImg({
+    this.vmImg = new InputImageViewModel({
       parent: thiz,
       id: "vmImg",
-      propertyOwner: thiz.document,
-      propertyPath: "img",
-    });
-    this.vmTfName = factory.createVmTextField({
-      parent: thiz,
-      id: "vmTfName",
-      propertyOwner: thiz.document,
-      propertyPath: "name",
-      placeholder: "ambersteel.general.name",
-    });
-    this.vmBtnEdit = new ButtonViewModel({
-      id: "vmBtnEdit",
-      parent: this,
-      isSendable: this.isSendable,
-      isEditable: this.isEditable,
-      isOwner: this.isOwner,
-      target: this.document,
-      localizableTitle: "ambersteel.general.edit",
-      onClick: async () => {
-        const delta = await querySkillConfiguration(this.document);
-        if (delta !== undefined) {
-          this.document.headState = delta.headState;
-        }
+      value: thiz.document.img,
+      onChange: (_, newValue) => {
+        thiz.document.img = newValue;
       },
     });
-    this.vmBtnSendToChat = factory.createVmBtnSendToChat({
+    this.vmTfName = new InputTextFieldViewModel({
+      parent: thiz,
+      id: "vmTfName",
+      value: thiz.document.name,
+      onChange: (_, newValue) => {
+        thiz.document.name = newValue;
+      },
+      placeholder: game.i18n.localize("ambersteel.general.name"),
+    });
+    this.vmBtnSendToChat = new ButtonSendToChatViewModel({
       parent: thiz,
       id: "vmBtnSendToChat",
       target: thiz.document,
       isEditable: thiz.isEditable || thiz.isGM,
     });
-    this.vmDdRelatedAttribute = factory.createVmDropDown({
-      parent: thiz,
+    this.vmDdRelatedAttribute = new InputDropDownViewModel({
       id: "vmDdRelatedAttribute",
-      propertyOwner: thiz.document,
-      propertyPath: "relatedAttribute",
+      parent: thiz,
       options: thiz.attributeOptions,
+      value: thiz.attributeOptions.find(it => it.value === this.document.relatedAttribute.name),
+      onChange: (_, newValue) => {
+        this.document.relatedAttribute = newValue;
+      },
       adapter: new ChoiceAdapter({
         toChoiceOption(obj) {
           if (isDefined(obj) === true) {
-            return ATTRIBUTES.asChoices.find(it => it.value === obj.name);
+            return ATTRIBUTES.asChoices().find(it => it.value === obj.name);
           } else {
-            return ATTRIBUTES.asChoices.find(it => it.value === "none");
+            return ATTRIBUTES.asChoices().find(it => it.value === "none");
           }
         },
         fromChoiceOption(option) {
@@ -112,18 +104,22 @@ export default class SkillItemSheetViewModel extends SkillViewModel {
         }
       }),
     });
-    this.vmTfCategory = factory.createVmTextField({
+    this.vmTfCategory = new InputTextFieldViewModel({
       parent: thiz,
       id: "vmTfCategory",
-      propertyOwner: thiz.document,
-      propertyPath: "category",
-      placeholder: "ambersteel.general.category",
+      value: thiz.document.category,
+      onChange: (_, newValue) => {
+        thiz.document.category = newValue;
+      },
+      placeholder: game.i18n.localize("ambersteel.general.category"),
     });
-    this.vmRtDescription = factory.createVmRichText({
+    this.vmRtDescription = new InputRichTextViewModel({
       parent: thiz,
       id: "vmRtDescription",
-      propertyOwner: thiz.document,
-      propertyPath: "description",
+      value: thiz.document.description,
+      onChange: (_, newValue) => {
+        thiz.document.description = newValue;
+      },
     });
     this.vmSkillAbilityTable = new SkillAbilityTableViewModel({
       id: "vmSkillAbilityTable",
@@ -135,16 +131,16 @@ export default class SkillItemSheetViewModel extends SkillViewModel {
       skillAbilitiesInitiallyVisible: true,
       visGroupId: thiz.visGroupId,
     });
-    this.vmProperties = new InputPropertiesViewModel({
-      id: "vmProperties",
+    this.vmTags = new InputTagsViewModel({
+      id: "vmTags",
       parent: this,
-      propertyPath: "properties",
-      propertyOwner: this.document,
-      isEditable: this.isEditable,
-      systemProperties: SKILL_PROPERTIES.asArray,
+      systemTags: SKILL_TAGS.asArray(),
+      value: this.document.tags,
+      onChange: (_, newValue) => {
+        this.document.tags = newValue;
+      },
     });
 
-    this.prerequisiteViewModels = [];
     this.prerequisiteViewModels = this._getPrerequisiteViewModels();
 
     this.vmPrerequisiteList = new SimpleListViewModel({
@@ -209,9 +205,10 @@ export default class SkillItemSheetViewModel extends SkillViewModel {
    * @private
    */
   _onClickAddPrerequisite() {
-    const safeCopy = this.document.prerequisites.concat([]);
-    safeCopy.push(new SkillPrerequisite());
-    this.document.prerequisites = safeCopy;
+    const prerequisites = this.document.prerequisites.concat([
+      new SkillPrerequisite()
+    ]);
+    this.document.prerequisites = prerequisites;
   }
 
   /**
@@ -229,16 +226,15 @@ export default class SkillItemSheetViewModel extends SkillViewModel {
   }
 
   /**
-   * Updates the remote prerequisites array with the states gathered from `this.prerequisiteViewModels`. 
+   * Updates the remote prerequisites array with the states gathered 
+   * from `this.prerequisiteViewModels`. 
    * 
    * @private
    */
   _updatePrerequisitesFromViewModels() {
-    const result = [];
-
-    this.prerequisiteViewModels.forEach(viewModel => {
-      result.push(viewModel.state);
-    });
-    this.document.prerequisites = result;
+    const prerequisites = this.prerequisiteViewModels.map(viewModel => 
+      viewModel.state
+    );
+    this.document.prerequisites = prerequisites;
   }
 }

@@ -1,4 +1,3 @@
-import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import { TEMPLATES } from "../../templatePreloader.mjs";
 import InputViewModel from "../../view-model/input-view-model.mjs";
 
@@ -7,8 +6,14 @@ import InputViewModel from "../../view-model/input-view-model.mjs";
  * 
  * @extends InputViewModel
  * 
+ * @property {String} value The current value. 
  * @property {Boolean} spellcheck Gets whether spell checking is enabled. 
  * @property {String} placeholder Gets a placeholder text to display while the textfield is empty. 
+ * 
+ * @method onChange Callback that is invoked when the value changes. 
+ * Receives the following arguments: 
+ * * `oldValue: {String}`
+ * * `newValue: {String}`
  */
 export default class InputTextareaViewModel extends InputViewModel {
   /** @override */
@@ -24,49 +29,28 @@ export default class InputTextareaViewModel extends InputViewModel {
   }
 
   /**
-   * @type {String}
-   * @private
-   */
-  _placeholder = "";
-  /**
-   * The placeholder text to display when the input has no value. 
-   * @type {String}
-   * @readonly
-   */
-  get placeholder() { return this._placeholder; }
-
-  /**
-   * Returns the localized placeholder. 
-   * @type {String}
-   * @readonly
-   */
-  get localizedPlaceholder() { return (this._placeholder !== undefined && this._placeholder !== null) ? game.i18n.localize(this._placeholder) : ""; }
-  
-  /**
-   * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
-   * 
-   * @param {String} args.propertyPath The path used to look up the value. 
-   * @param {Object} args.propertyOwner An object on which to to look up the value. 
-   * @param {Boolean | undefined} args.isEditable Optional. If true, input(s) will be in edit mode. If false, input(s) will be in read-only mode.
-   * @param {String | undefined} args.contextTemplate Optional. Name or path of a template that embeds this input component. 
-   * @param {String | undefined} args.localizableTitle Optional. The localizable title (tooltip). 
-   * 
+   * @param {Object} args
+   * @param {String | undefined} args.value The current value. 
    * @param {Boolean | undefined} args.spellcheck Optional. Sets whether spell checking is enabled. 
    * @param {String | undefined} args.placeholder Optional. Sets a placeholder text to display while the textfield is empty. 
+   * @param {Function | undefined} args.onChange Callback that is invoked 
+   * when the value changes. Receives two arguments: 
+   * * `oldValue: {String}`
+   * * `newValue: {String}`
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["propertyPath", "propertyOwner"]);
 
+    this._value = args.value ?? "";
     this.spellcheck = args.spellcheck ?? false;
-    this._placeholder = args.placeholder ?? "";
+    this.placeholder = args.placeholder ?? "";
   }
 
   /** @override */
-  async activateListeners(html, isOwner, isEditable) {
-    await super.activateListeners(html, isOwner, isEditable);
+  async activateListeners(html) {
+    await super.activateListeners(html);
 
-    if (isEditable !== true && this.isEditable !== true) return;
+    if (this.isEditable !== true) return;
 
     this.element.each(function() {
       // This counter-acts a rather bothersome quirk of Handlebars. Turns out, if a partial containing a 

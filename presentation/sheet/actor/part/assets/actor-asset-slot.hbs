@@ -7,12 +7,7 @@ cssClass: {undefined | String}
   <div class="flex flex-row">
     {{!-- Assign Asset --}}
     <div{{#if viewModel.hasAsset}} class="hidden"{{/if}}>
-      {{#> button viewModel=viewModel.vmBtnAssign}}
-        <span{{#if ../viewModel.showFancyFont}} class="fancy-font"{{/if}}>{{localize "ambersteel.character.asset.slot.assign.label"}}</span>
-        <div class="button light square flex flex-center">
-          <i class="fas fa-plus"></i>
-        </div>
-      {{/button}}
+      {{> button viewModel=viewModel.vmBtnAssign }}
     </div>
     <div style="width: 50px"></div>
     {{!-- Slot Bulk --}}
@@ -23,12 +18,8 @@ cssClass: {undefined | String}
       </span>
     </div>
     <div class="flex flex-grow"></div>
-    {{#> button viewModel=viewModel.vmBtnEdit}}
-      <div class="button light square flex flex-center">
-        <i class="fas fa-cog"></i>
-      </div>
-    {{/button}}
-    {{> buttonDelete viewModel=viewModel.vmBtnDelete}}
+    {{> button viewModel=viewModel.vmBtnEdit }}
+    {{> buttonDelete viewModel=viewModel.vmBtnDelete }}
   </div>
   {{#if viewModel.hasAsset}}
   <div>

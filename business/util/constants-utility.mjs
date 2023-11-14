@@ -1,6 +1,30 @@
 import ChoiceOption from "../../presentation/component/input-choice/choice-option.mjs";
 
 /**
+ * Names of the properties to skip when invoking "getAsChoices" or 
+ * "getAsArray". 
+ * 
+ * @type {Array<String>}
+ * @constant
+ */
+const excludes = ["asChoices", "_asChoices", "asArray", "_asArray"];
+
+/**
+ * Enriches the given constants object, by adding a "asChoices" and 
+ * a "asArray" method to it. 
+ * 
+ * @param {Object} constantsObject Any constants object.
+ */
+export function enrichConstant(constantsObject) {
+  constantsObject.asChoices = function() {
+    return getAsChoices(constantsObject, excludes);
+  };
+  constantsObject.asArray = function() {
+    return getAsArray(constantsObject, excludes);
+  };
+}
+
+/**
 * Returns an array of `ChoiceOption`s, based on the given constants object. 
 * 
 * @param {Object} constantsObject Any constants object.
@@ -11,18 +35,18 @@ import ChoiceOption from "../../presentation/component/input-choice/choice-optio
 * @returns {Array<ChoiceOption>}
 */
 export function getAsChoices(constantsObject, exclude) {
-	return _getAs(constantsObject, exclude, (entry) => {
-		const localizedName = entry.localizableName !== undefined ? game.i18n.localize(entry.localizableName) : undefined;
-		const icon = entry.icon;
+  return _getAs(constantsObject, exclude, (entry) => {
+    const localizedName = entry.localizableName !== undefined ? game.i18n.localize(entry.localizableName) : undefined;
+    const icon = entry.icon;
 
-		return new ChoiceOption({
-			value: entry.name,
-			localizedValue: localizedName,
-			icon: icon,
-			shouldDisplayValue: localizedName !== undefined ? true : false,
-			shouldDisplayIcon: icon !== undefined ? true : false,
-		});
-	});
+    return new ChoiceOption({
+      value: entry.name,
+      localizedValue: localizedName,
+      icon: icon,
+      shouldDisplayValue: localizedName !== undefined ? true : false,
+      shouldDisplayIcon: icon !== undefined ? true : false,
+    });
+  });
 }
 
 /**
@@ -35,9 +59,9 @@ export function getAsChoices(constantsObject, exclude) {
 * @returns {Array<Any>}
 */
 export function getAsArray(constantsObject, exclude) {
-	return _getAs(constantsObject, exclude, (entry) => {
-		return entry
-	});
+  return _getAs(constantsObject, exclude, (entry) => {
+    return entry
+  });
 }
 
 /**
@@ -52,15 +76,15 @@ export function getAsArray(constantsObject, exclude) {
  * @returns {Array<Object>}
  */
 function _getAs(constantsObject, exclude, func) {
-	const result = [];
+  const result = [];
 
-	for (const entryName in constantsObject) {
-		if (constantsObject.hasOwnProperty(entryName) !== true) continue;
-		if ((exclude ?? []).find(it => it === entryName) !== undefined) continue;
+  for (const entryName in constantsObject) {
+    if (constantsObject.hasOwnProperty(entryName) !== true) continue;
+    if ((exclude ?? []).find(it => it === entryName) !== undefined) continue;
 
-		const entry = constantsObject[entryName];
-		result.push(func(entry));
-	}
+    const entry = constantsObject[entryName];
+    result.push(func(entry));
+  }
 
-	return result;
+  return result;
 }

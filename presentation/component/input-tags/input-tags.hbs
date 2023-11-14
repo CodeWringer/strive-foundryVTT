@@ -4,7 +4,7 @@ cssClass: {String | undefined}
 readOnlyCssClass: {String | undefined}
 --}}
 <ul id="{{viewModel.id}}" class="custom-system-edit unstyled-list compact fill flex flex-row flex-wrap">
-  {{#each viewModel.propertyViewModels as |vm key|}}
+  {{#each viewModel.tagViewModels as |vm key|}}
   {{#with ../viewModel.templatePill as | template |}}
   <li>
     {{> (template) viewModel=vm}}

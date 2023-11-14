@@ -9,11 +9,10 @@ readOnlyCssClass: {String | undefined}
       class="custom-system-edit component-input-textarea {{cssClass}}"
       style="grid-area: 1 / 1 / 2/ 2;"
       spellcheck="{{viewModel.spellcheck}}"
-      data-property-path="{{viewModel.propertyPath}}"
       name="{{viewModel.id}}"
       id="{{viewModel.id}}"
       placeholder="{{viewModel.localizedPlaceholder}}"
-      title="{{viewModel.localizedTitle}}"
+      title="{{viewModel.localizedToolTip}}"
       >{{viewModel.value}}</textarea>
     <div 
       class="textarea-auto-resize-sibling"

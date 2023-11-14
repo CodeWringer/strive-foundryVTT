@@ -13,8 +13,14 @@ import { createUUID } from "../../util/uuid-utility.mjs";
  * 
  * @property {String} state
  * @property {String} timeToHeal
+ * @property {String} timeToHealTreated
  * @property {String} limit 
  * @property {String} scar 
+ * @property {String} selfPatchUp 
+ * @property {String} treatmentSkill 
+ * @property {String} requiredSupplies 
+ * @property {String} obstaclePatchUp 
+ * @property {String} obstacleTreatment 
  */
 export default class TransientInjury extends TransientBaseItem {
   /** @override */
@@ -71,6 +77,90 @@ export default class TransientInjury extends TransientBaseItem {
   set scar(value) {
     this.document.system.scar = value;
     this.updateByPath("system.scar", value);
+  }
+  
+  /**
+   * @type {String}
+   */
+  get timeToHealTreated() {
+    return this.document.system.timeToHealTreated;
+  }
+  /**
+   * @param {String} value
+   */
+  set timeToHealTreated(value) {
+    this.document.system.timeToHealTreated = value;
+    this.updateByPath("system.timeToHealTreated", value);
+  }
+  
+  /**
+   * @type {String}
+   */
+  get selfPatchUp() {
+    return this.document.system.selfPatchUp;
+  }
+  /**
+   * @param {String} value
+   */
+  set selfPatchUp(value) {
+    this.document.system.selfPatchUp = value;
+    this.updateByPath("system.selfPatchUp", value);
+  }
+  
+  /**
+   * @type {String}
+   */
+  get treatmentSkill() {
+    return this.document.system.treatmentSkill;
+  }
+  /**
+   * @param {String} value
+   */
+  set treatmentSkill(value) {
+    this.document.system.treatmentSkill = value;
+    this.updateByPath("system.treatmentSkill", value);
+  }
+  
+  /**
+   * @type {String}
+   */
+  get requiredSupplies() {
+    return this.document.system.requiredSupplies;
+  }
+  /**
+   * @param {String} value
+   */
+  set requiredSupplies(value) {
+    this.document.system.requiredSupplies = value;
+    this.updateByPath("system.requiredSupplies", value);
+  }
+  
+  /**
+   * @type {String}
+   */
+  get obstaclePatchUp() {
+    return this.document.system.obstaclePatchUp;
+  }
+  /**
+   * @param {String} value
+   */
+  set obstaclePatchUp(value) {
+    this.document.system.obstaclePatchUp = value;
+    this.updateByPath("system.obstaclePatchUp", value);
+  }
+  
+  /**
+   * @type {String}
+   */
+  get obstacleTreatment() {
+    return this.document.system.obstacleTreatment;
+  }
+  /**
+   * @param {String} value
+   */
+  set obstacleTreatment(value) {
+    this.document.system.obstacleTreatment = value;
+    this.updateByPath("system.obstacleTreatment", value);
   }
   
   /** @override */

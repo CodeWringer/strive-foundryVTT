@@ -1,4 +1,3 @@
-import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import { TEMPLATES } from "../../templatePreloader.mjs";
 import InputViewModel from "../../view-model/input-view-model.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
@@ -7,6 +6,13 @@ import ButtonViewModel from "../button/button-viewmodel.mjs";
  * Represents a rich-text-editor. 
  * 
  * Internally, this works as a wrapper to a tinyMCE editor, the way FoundryVTT includes it. 
+ * 
+ * @property {String} value The current value. 
+ * 
+ * @method onChange Callback that is invoked when the value changes. 
+ * Receives the following arguments: 
+ * * `oldValue: {String}`
+ * * `newValue: {String}`
  * 
  * @extends InputViewModel
  */
@@ -81,34 +87,37 @@ export default class InputRichTextViewModel extends InputViewModel {
   }
 
   /**
-   * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
+   * @param {Object} args 
+   * @param {String | undefined} args.id Unique ID of this view model instance. 
+   * @param {Boolean | undefined} args.isEditable If true, input(s) will be in edit mode. If false, input(s) will be in read-only mode.
    * 
-   * @param {String} args.propertyPath The path used to look up the value. 
-   * @param {Object} args.propertyOwner An object on which to to look up the value. 
-   * @param {Boolean | undefined} args.isEditable Optional. If true, input(s) will be in edit mode. If false, input(s) will be in read-only mode.
-   * @param {String | undefined} args.contextTemplate Optional. Name or path of a template that embeds this input component. 
+   * @param {String | undefined} args.value The current value. 
+   * @param {Function | undefined} args.onChange Callback that is invoked 
+   * when the value changes. Receives two arguments: 
+   * * `oldValue: {String}`
+   * * `newValue: {String}`
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["propertyPath", "propertyOwner"]);
 
-    const thiz = this;
+    this._value = args.value ?? "";
 
     this.vmBtnEditMode = new ButtonViewModel({
       id: "vmBtnEditMode",
-      parent: thiz,
-      isEditable: thiz.isEditable,
+      parent: this,
+      iconHtml: '<i class="fas fa-edit"></i>',
+      isEditable: this.isEditable,
     });
-    this.vmBtnEditMode.onClick = async (html, isOwner, isEditable) => {
-      if (isEditable !== true) return;
+    this.vmBtnEditMode._onClick = async () => {
+      if (this.isEditable !== true) return;
       
-      thiz.isInEditMode = true;
+      this.isInEditMode = true;
     }
   }
 
   /** @override */
-  async activateListeners(html, isOwner, isEditable) {
-    await super.activateListeners(html, isOwner, isEditable);
+  async activateListeners(html) {
+    await super.activateListeners(html);
 
     this._elementButtonEditMode = this.element.find(".component-rich-text-editbutton");
     this._elementEditor = this.element.find(".component-rich-text");

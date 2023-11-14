@@ -3,6 +3,7 @@ import { isDefined } from '../../../business/util/validation-utility.mjs';
 import { TEMPLATES } from '../../templatePreloader.mjs';
 import ConfirmableModalDialog from '../confirmable-modal-dialog/confirmable-modal-dialog.mjs';
 import DialogButtonDefinition from '../dialog-button-definition.mjs';
+import DynamicInputDefinition from './dynamic-input-definition.mjs';
 import DynamicInputDialogViewModel from './dynamic-input-dialog-viewmodel.mjs';
 
 /**
@@ -25,12 +26,15 @@ const dialog = await new DynamicInputDialog({
     new DynamicInputDefinition({
       type: DYNAMIC_INPUT_TYPES.DROP_DOWN,
       name: inputChoices,
-      localizableLabel: "ambersteel.general.name",
+      localizedLabel: game.i18n.localize("ambersteel.general.name"),
       required: true,
-      defaultValue: (thiz.availableAssets[0] ?? {}).id,
+      defaultValue: assets[0].id,
       specificArgs: {
-        options: this._getAssetsAsChoices(),
-        adapter: this.choiceAdapter,
+        options: assetChoices(),
+        adapter: new ChoiceAdapter({
+          toChoiceOption: (obj) => assetChoices.find(it => it.value === obj.id),
+          fromChoiceOption: (choice) => assets.find(it => it.id === choice.value),
+        }),
       }
     }),
   ],
@@ -115,6 +119,8 @@ export default class DynamicInputDialog extends ConfirmableModalDialog {
     if (isDefined(this._viewModel) !== true) {
       this._viewModel = new DynamicInputDialogViewModel({
         inputDefinitions: this.inputDefinitions,
+        isEditable: true,
+        isSendable: true,
       });
     }
 
@@ -129,7 +135,7 @@ export default class DynamicInputDialog extends ConfirmableModalDialog {
   async activateListeners(html) {
     await super.activateListeners(html);
 
-    await this._viewModel.activateListeners(html, true, true);
+    await this._viewModel.activateListeners(html);
   }
   
   /**

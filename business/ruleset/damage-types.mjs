@@ -1,4 +1,4 @@
-import { getAsChoices } from "../util/constants-utility.mjs";
+import * as ConstantsUtils from "../util/constants-utility.mjs";
 
 /**
  * Represents a damage type. 
@@ -20,6 +20,7 @@ export class DamageType {
  * 
  * @property {DamageType} none A placeholder damage type. 
  * @property {DamageType} acid The "acid" damage type. 
+ * @property {DamageType} bleeding The "bleeding" damage type. 
  * @property {DamageType} bludgeoning The "bludgeoning" damage type. 
  * @property {DamageType} burning The "burning" damage type. 
  * @property {DamageType} crushing The "crushing" damage type. 
@@ -28,9 +29,6 @@ export class DamageType {
  * @property {DamageType} piercing The "piercing" damage type. 
  * @property {DamageType} poison The "poison" damage type. 
  * @property {DamageType} slashing The "slashing" damage type. 
- * 
- * @property {Array<ChoiceOption>} asChoices The constants of this type, as an array 
- * of `ChoiceOption`s. 
  * 
  * @constant
  */
@@ -44,6 +42,11 @@ export const DAMAGE_TYPES = {
     name: "acid",
     localizableName: "ambersteel.damageType.acid.label",
     localizableAbbreviation: "ambersteel.damageType.acid.abbreviation"
+  }),
+  bleeding: new DamageType({
+    name: "bleeding",
+    localizableName: "ambersteel.damageType.bleeding.label",
+    localizableAbbreviation: "ambersteel.damageType.bleeding.abbreviation"
   }),
   bludgeoning: new DamageType({
     name: "bludgeoning",
@@ -85,10 +88,5 @@ export const DAMAGE_TYPES = {
     localizableName: "ambersteel.damageType.slashing.label",
     localizableAbbreviation: "ambersteel.damageType.slashing.abbreviation"
   }),
-  get asChoices() {
-    if (this._asChoices === undefined) {
-      this._asChoices = getAsChoices(this, ["asChoices", "_asChoices"]);
-    }
-    return this._asChoices;
-  },
 };
+ConstantsUtils.enrichConstant(DAMAGE_TYPES);

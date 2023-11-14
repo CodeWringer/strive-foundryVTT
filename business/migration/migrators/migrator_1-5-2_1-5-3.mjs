@@ -1,7 +1,7 @@
 import { DOCUMENT_COLLECTION_SOURCES } from "../../document/document-fetcher/document-collection-source.mjs";
 import DocumentFetcher from "../../document/document-fetcher/document-fetcher.mjs";
 import DocumentUpdater from "../../document/document-updater/document-updater.mjs";
-import { SKILL_PROPERTIES } from "../../document/item/item-properties.mjs";
+import { SKILL_TAGS } from "../../tags/system-tags.mjs";
 import { arrayContains } from "../../util/array-utility.mjs";
 import * as PropertyUtility from "../../util/property-utility.mjs";
 import AbstractMigrator from "../abstract-migrator.mjs";
@@ -101,8 +101,8 @@ export default class Migrator_1_5_2__1_5_3 extends AbstractMigrator {
       // Migrate from `isMagicSchool` field to the more generic properties list. 
       const isMagicSchool = (systemData.isMagicSchool === true);
       if (isMagicSchool === true) {
-        if (arrayContains(properties, SKILL_PROPERTIES.MAGIC_SCHOOL.id) !== true) {
-          properties.push(SKILL_PROPERTIES.MAGIC_SCHOOL.id);
+        if (arrayContains(properties, SKILL_TAGS.MAGIC_SCHOOL.id) !== true) {
+          properties.push(SKILL_TAGS.MAGIC_SCHOOL.id);
           await this.updater.updateByPath(skill, `${dataPath}.properties`, properties, false);
         }
       }

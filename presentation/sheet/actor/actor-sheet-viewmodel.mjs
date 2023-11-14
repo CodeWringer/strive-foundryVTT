@@ -1,7 +1,6 @@
 import LazyLoadViewModel from "../../component/lazy-load/lazy-load-viewmodel.mjs"
 import GmNotesViewModel from "../../component/section-gm-notes/section-gm-notes-viewmodel.mjs"
 import { TEMPLATES } from "../../templatePreloader.mjs"
-import ViewModelFactory from "../../view-model/view-model-factory.mjs"
 import ViewModel from "../../view-model/view-model.mjs"
 import ActorAssetsViewModel from "./part/assets/actor-assets-viewmodel.mjs"
 import ActorAttributesViewModel from "./part/abilities/actor-attributes-viewmodel.mjs"
@@ -11,6 +10,11 @@ import ActorBiographyViewModel from "./part/actor-biography-viewmodel.mjs"
 import ActorHealthViewModel from "./part/health/actor-health-viewmodel.mjs"
 import ActorPersonalsViewModel from "./part/actor-personals-viewmodel.mjs"
 import BaseSheetViewModel from "../../view-model/base-sheet-viewmodel.mjs"
+import InputImageViewModel from "../../component/input-image/input-image-viewmodel.mjs"
+import InputRichTextViewModel from "../../component/input-rich-text/input-rich-text-viewmodel.mjs"
+import InputTextFieldViewModel from "../../component/input-textfield/input-textfield-viewmodel.mjs"
+import ButtonSendToChatViewModel from "../../component/button-send-to-chat/button-send-to-chat-viewmodel.mjs"
+import ButtonContextMenuViewModel from "../../component/button-context-menu/button-context-menu-viewmodel.mjs"
 
 /**
  * @extends BaseSheetViewModel
@@ -67,6 +71,22 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
    * @readonly
    */
   get templatePersonals() { return TEMPLATES.ACTOR_PERSONALS; }
+  
+  /**
+   * Returns the CSS class for use in the context menu. 
+   * 
+   * @type {String}
+   * @readonly
+   */
+  get contextMenuClass() { return this.isNPC ? "" : "hidden"; };
+
+  /**
+   * Returns `true`, if the personality tab is to be shown. 
+   * 
+   * @type {Boolean}
+   * @readonly
+   */
+  get showPersonality() { return (this.isPC || (this.document.personalityVisible ?? false)); }
 
   /**
    * @param {Object} args
@@ -88,22 +108,34 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
     this.contextTemplate = args.contextTemplate ?? "actor-character-sheet";
 
     const thiz = this;
-    const factory = new ViewModelFactory();
 
-    this.vmTfName = factory.createVmTextField({
+    this.vmTfName = new InputTextFieldViewModel({
       parent: thiz,
       id: "vmTfName",
-      propertyOwner: thiz.document,
-      propertyPath: "name",
-      placeholder: "ambersteel.general.name",
+      value: thiz.document.name,
+      onChange: (_, newValue) => {
+        thiz.document.name = newValue;
+      },
+      placeholder: game.i18n.localize("ambersteel.general.name"),
     });
-    this.vmImg = factory.createVmImg({
+    this.vmImg = new InputImageViewModel({
       parent: thiz,
       id: "vmImg",
-      propertyOwner: thiz.document,
-      propertyPath: "img",
+      value: thiz.document.img,
+      onChange: (_, newValue) => {
+        thiz.document.img = newValue;
+      },
     });
-    this.vmBtnSendToChat = factory.createVmBtnSendToChat({
+    this.vmBtnContextMenu = new ButtonContextMenuViewModel({
+      id: "vmBtnContextMenu",
+      parent: this,
+      menuItems: []
+      // Toggle personality
+      .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.character.sheet.tab.personality", this.document, "personalityVisible", true, false))
+      // Toggle progression
+      .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.character.advancement.label", this.document, "progressionVisible", true, false))
+    });
+    this.vmBtnSendToChat = new ButtonSendToChatViewModel({
       parent: this,
       id: "vmBtnSendToChat",
       target: thiz.document,
@@ -136,7 +168,7 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
           id: "skills", 
         },
       });
-      if (args.document.type === 'pc') {
+      if (this.showPersonality === true) {
         this.personalityViewModel = new LazyLoadViewModel({
           id: "lazyPersonality",
           parent: thiz,
@@ -179,11 +211,13 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
         },
       });
     } else {
-      this.vmRtDescription = factory.createVmRichText({
+      this.vmRtDescription = new InputRichTextViewModel({
         id: "vmRtDescription",
         parent: thiz,
-        propertyOwner: thiz.document,
-        propertyPath: "description",
+        value: thiz.document.description,
+        onChange: (_, newValue) => {
+          thiz.document.description = newValue;
+        },
       });
     }
     
@@ -203,8 +237,8 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
   }
 
   /** @override */
-  async activateListeners(html, isOwner, isEditable) {
-    await super.activateListeners(html, isOwner, isEditable);
+  async activateListeners(html) {
+    await super.activateListeners(html);
 
     const thiz = this;
     const tabs = html.find("nav.sheet-tabs > a");

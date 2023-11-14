@@ -2,31 +2,33 @@ import { DAMAGE_TYPES } from "../../../business/ruleset/damage-types.mjs"
 import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import { isDefined } from "../../../business/util/validation-utility.mjs";
 import { TEMPLATES } from "../../templatePreloader.mjs";
-import { getNestedPropertyValue } from "../../../business/util/property-utility.mjs";
-import ViewModel from "../../view-model/view-model.mjs";
-import ViewModelFactory from "../../view-model/view-model-factory.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
 import ChoiceAdapter from "../input-choice/choice-adapter.mjs";
+import InputDropDownViewModel from "../input-dropdown/input-dropdown-viewmodel.mjs";
+import InputTextFieldViewModel from "../input-textfield/input-textfield-viewmodel.mjs";
+import InputViewModel from "../../view-model/input-view-model.mjs";
+import DamageAndType from "../../../business/ruleset/skill/damage-and-type.mjs";
 
 /**
  * Represents the definition of a damage roll formula. 
  * 
- * @extends ViewModel
+ * @extends InputViewModel
  * 
+ * @property {DamageAndType} value 
  * @property {Array<ChoiceOption>} damageTypeOptions An array of damage type choices. 
  * * Read-only.
- * @property {Object} propertyOwner The transient document whose damage definition this is. 
- * @property {Number} index The index of this damage definition, in the array of damage 
- * definitions on the `propertyOwner`. 
  * @property {String} localizedLabel Returns the localized label of the roll total. 
  * I. e. the localized damage type. 
  * * Read-only. 
  * 
- * @property {ViewModel} vmTfDamage
- * @property {ViewModel} vmDdDamageType
- * @property {ViewModel} vmBtnDelete
+ * @method onChange Callback that is invoked when the value changes. 
+ * Receives the following arguments: 
+ * * `oldValue: {DamageAndType}`
+ * * `newValue: {DamageAndType}`
+ * @method onDelete Callback that is invoked when delete button is clicked. 
+ * Receives no arguments. 
  */
-export default class DamageDefinitionListItemViewModel extends ViewModel {
+export default class DamageDefinitionListItemViewModel extends InputViewModel {
   static get TEMPLATE() { return TEMPLATES.COMPONENT_DAMAGE_DEFINITION_LIST_ITEM; }
 
   /**
@@ -44,7 +46,7 @@ export default class DamageDefinitionListItemViewModel extends ViewModel {
    * @type {Array<ChoiceOption>}
    * @readonly
    */
-  get damageTypeOptions() { return DAMAGE_TYPES.asChoices; }
+  get damageTypeOptions() { return DAMAGE_TYPES.asChoices(); }
   
   /**
    * Returns the localization key of the deletion button hint. 
@@ -52,56 +54,60 @@ export default class DamageDefinitionListItemViewModel extends ViewModel {
    * @type {String}
    * @readonly
    */
-  get localizableDeletionHint() { return "ambersteel.damageDefinition.delete"; }
+  get localizedDeletionHint() { return game.i18n.localize("ambersteel.damageDefinition.delete"); }
 
   /**
-   * Returns the localized label of the roll total. I. e. the localized damage type. 
-   * 
-   * @type {String}
-   * @readonly
-   */
-  get localizedLabel() { return game.i18n.localize(
-    getNestedPropertyValue(this.propertyOwner, `damage[${this.index}].damageType.localizableName`)
-  ); }
-  
-  /**
-   * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
-   * @param {Object} args.propertyOwner The transient document whose damage definition this is. 
-   * @param {Number} args.index The index of this damage definition, in the array of damage 
-   * definitions on the `propertyOwner`. 
+   * @param {DamageAndType} args.value 
    * @param {Function} args.resolveFormula A function which resolves the damage definition's 
    * formula and returns it. 
+   * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
+   * @param {String | undefined} args.localizedLabel 
+   * @param {Function | undefined} args.onChange Callback that is invoked 
+   * when the value changes. Receives two arguments: 
+   * * `oldValue: {DamageAndType}`
+   * * `newValue: {DamageAndType}`
+   * @param {Function | undefined} args.onDelete Callback that is invoked when delete 
+   * button is clicked. Receives no arguments. 
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["propertyOwner", "index", "resolveFormula"]);
+    validateOrThrow(args, ["value", "resolveFormula"]);
 
-    this.propertyOwner = args.propertyOwner;
-    this.index = args.index;
+    this.localizedLabel = args.localizedLabel;
     this.resolveFormula = args.resolveFormula;
+    this.onDelete = args.onDelete ?? (async () => {});
 
     const thiz = this;
-    const factory = new ViewModelFactory();
     
-    this.vmTfDamage = factory.createVmTextField({
-      parent: thiz,
+    this.vmTfDamage = new InputTextFieldViewModel({
+      parent: this,
       id: "vmTfDamage",
-      propertyOwner: this.propertyOwner,
-      propertyPath: `damage[${this.index}].damage`,
+      value: this.value.damage,
+      onChange: (_, newValue) => {
+        this.value = new DamageAndType({
+          damage: newValue,
+          damageType: this.value.damageType,
+        });
+      },
     });
 
-    this.vmDdDamageType = factory.createVmDropDown({
-      parent: thiz,
+    this.vmDdDamageType = new InputDropDownViewModel({
       id: "vmDdDamageType",
-      propertyOwner: this.propertyOwner,
-      propertyPath: `damage[${this.index}].damageType`,
-      options: thiz.damageTypeOptions,
+      parent: this,
+      options: this.damageTypeOptions,
+      value: this.damageTypeOptions.find(it => it.value === this.value.damageType.name),
+      onChange: (_, newValue) => {
+        this.value = new DamageAndType({
+          damage: this.value.damage,
+          damageType: DAMAGE_TYPES[newValue],
+        });
+      },
       adapter: new ChoiceAdapter({
         toChoiceOption(obj) {
           if (isDefined(obj) === true) {
-            return DAMAGE_TYPES.asChoices.find(it => it.value === obj.name);
+            return thiz.damageTypeOptions.find(it => it.value === obj.name);
           } else {
-            return DAMAGE_TYPES.asChoices.find(it => it.value === "none");
+            return thiz.damageTypeOptions.find(it => it.value === "none");
           }
         },
         fromChoiceOption(option) {
@@ -114,12 +120,9 @@ export default class DamageDefinitionListItemViewModel extends ViewModel {
       id: "vmBtnDelete",
       parent: thiz,
       isEditable: thiz.isEditable,
-      localizableTitle: this._localizableDeletionHint,
-      onClick: async (html, isOwner, isEditable) => {
-        const damage = thiz.propertyOwner.damage;
-        damage.splice(thiz.index, 1);
-        thiz.propertyOwner.damage = damage;
-      },
+      localizedTooltip: this.localizedDeletionHint,
+      iconHtml: '<i class="fas fa-trash"></i>',
+      onClick: this.onDelete,
     });
   }
 

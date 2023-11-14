@@ -7,7 +7,6 @@ readOnlyCssClass: {String | undefined}
 <span class="spinner-container component-input-number-spinner">
   <input 
     class="custom-system-edit spinner {{cssClass}}"
-    data-property-path="{{viewModel.propertyPath}}"
     type="number"
     data-dtype="Number"
     name="{{viewModel.id}}"
@@ -16,15 +15,15 @@ readOnlyCssClass: {String | undefined}
     {{#if viewModel.hasMin}}min="{{viewModel.min}}"{{/if}}
     {{#if viewModel.hasMax}}max="{{viewModel.max}}"{{/if}}
     step="{{viewModel.step}}"
-    title="{{viewModel.localizedTitle}}"
+    title="{{viewModel.localizedToolTip}}"
   />
   <div class="spinner-button-container">
-      <a class="button-spinner button-spinner-up" title="{{localize ambersteel.labels.increment}}">
-          <i class="fas fa-caret-up"></i>
-      </a>
-      <a class="button-spinner button-spinner-down" title="{{localize ambersteel.labels.decrement}}">
-          <i class="fas fa-caret-down"></i>
-      </a>
+    <a class="button-spinner button-spinner-up" title="{{localize ambersteel.labels.increment}}">
+      <i class="fas fa-caret-up"></i>
+    </a>
+    <a class="button-spinner button-spinner-down" title="{{localize ambersteel.labels.decrement}}">
+      <i class="fas fa-caret-down"></i>
+    </a>
   </div>
 </span>
 {{else}}

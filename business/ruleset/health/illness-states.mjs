@@ -1,4 +1,4 @@
-import { getAsChoices } from "../../util/constants-utility.mjs";
+import * as ConstantsUtils from "../../util/constants-utility.mjs";
 
 /**
  * Represents an illness state. 
@@ -22,9 +22,6 @@ export class IllnessState {
  * @property {IllnessState} active 
  * @property {IllnessState} treated
  * 
- * @property {Array<ChoiceOption>} asChoices The constants of this type, as an array 
- * of `ChoiceOption`s. 
- * 
  * @constant
  */
 export const ILLNESS_STATES = {
@@ -38,10 +35,5 @@ export const ILLNESS_STATES = {
     localizableName: "ambersteel.character.health.illness.state.treated.label",
     icon: "fas fa-mortar-pestle"
   }),
-  get asChoices() {
-    if (this._asChoices === undefined) {
-      this._asChoices = getAsChoices(this, ["asChoices", "_asChoices"]);
-    }
-    return this._asChoices;
-  },
 };
+ConstantsUtils.enrichConstant(ILLNESS_STATES);

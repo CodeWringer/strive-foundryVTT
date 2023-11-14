@@ -1,6 +1,5 @@
 import { ROLL_TYPES } from "../../../business/dice/roll-types.mjs";
 import { SOUNDS_CONSTANTS } from "../../audio/sounds.mjs";
-import { TEMPLATES } from "../../templatePreloader.mjs";
 import * as ChatUtil from "../../chat/chat-utility.mjs";
 import * as PropUtil from "../../../business/util/property-utility.mjs";
 import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
@@ -12,7 +11,7 @@ import { VISIBILITY_MODES } from "../../chat/visibility-modes.mjs";
 import ChoiceAdapter from "../input-choice/choice-adapter.mjs";
 import { ROLL_DICE_MODIFIER_TYPES } from "../../../business/dice/roll-dice-modifier-types.mjs";
 import DynamicInputDefinition from "../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
-import { Sum, SumComponent } from "../../../business/ruleset/summed-data.mjs";
+import { SumComponent } from "../../../business/ruleset/summed-data.mjs";
 import DicePool, { DicePoolRollResult } from "../../../business/dice/dice-pool.mjs";
 
 /**
@@ -28,10 +27,13 @@ import DicePool, { DicePoolRollResult } from "../../../business/dice/dice-pool.m
  * @property {String} secondaryChatImage Primary image to display above the roll result in the chat message. 
  * @property {Actor | undefined} actor Actor associated with the roll result. 
  * @property {DicePoolRollResult | Object | undefined} lastRollResult The last rolled result. Or undefined, if no roll has been made, yet. 
+ * 
+ * @method onClick Asynchronous callback that is invoked when the button is clicked. 
+ * Receives the button's original click-handler as its sole argument. In most cases, it should be called 
+ * and awaited before one's own click handling logic. But in case the original logic is unwanted, the method can be ignored.
+ * * Returns `{DicePoolRollResult | Object}` - The rolled result. 
  */
 export default class ButtonRollViewModel extends ButtonViewModel {
-  static get TEMPLATE() { return TEMPLATES.COMPONENT_BUTTON_ROLL; }
-
   /**
    * Registers the Handlebars partial for this component. 
    * 
@@ -99,11 +101,15 @@ export default class ButtonRollViewModel extends ButtonViewModel {
   get inputVisibility() { return "inputVisibility"; }
 
   /**
+   * @param {Object} args
    * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
    * 
    * @param {TransientDocument | Object} args.target The target object to affect. 
-   * @param {Function | String | undefined} args.callback Optional. Defines an asynchronous callback that is invoked upon completion of the button's own callback. 
    * @param {Boolean | undefined} args.isEditable Optional. If true, will be interactible. 
+   * @param {Function | undefined} args.onClick Asynchronous callback that is invoked when the button is clicked. 
+   * Receives the button's original click-handler as its sole argument. In most cases, it should be called 
+   * and awaited before one's own click handling logic. But in case the original logic is unwanted, the method can be ignored.
+   * * Returns `{DicePoolRollResult | Object}` - The rolled result. 
    * 
    * @param {String} args.rollType The internal name of a `RollType` that Determines the kind of roll to try and make. 
    * @param {String | undefined} args.propertyPath Optional. Property path identifying a property that contains a roll-formula. 
@@ -113,12 +119,16 @@ export default class ButtonRollViewModel extends ButtonViewModel {
    * @param {String | undefined} secondaryChatTitle Primary title to display above the roll result in the chat message. 
    * @param {String | undefined} secondaryChatImage Primary image to display above the roll result in the chat message. 
    * @param {Actor | undefined} args.actor Optional. Actor associated with the roll result. 
-   * @param {String | undefined} args.localizableTitle Optional. The localizable title (tooltip). 
+   * @param {String | undefined} args.localizedTooltip Localized tooltip. 
    */
   constructor(args = {}) {
-    super(args);
+    super({
+      ...args,
+      iconHtml: '<i class="fas fa-dice-three"></i>',
+    });
     validateOrThrow(args, ["target", "rollType"]);
 
+    this.target = args.target;
     this._propertyPath = args.propertyPath;
     this._rollType = args.rollType;
     this.primaryChatTitle = args.primaryChatTitle;
@@ -126,12 +136,14 @@ export default class ButtonRollViewModel extends ButtonViewModel {
     this.secondaryChatTitle = args.secondaryChatTitle;
     this.secondaryChatImage = args.secondaryChatImage;
     this._actor = args.actor;
-    this.localizableTitle = args.localizableTitle ?? "ambersteel.roll.doRoll";
+    this.localizedTooltip = args.localizedTooltip ?? game.i18n.localize("ambersteel.roll.doRoll");
   }
 
   /**
+   * @returns {DicePoolRollResult | Object} The rolled result. 
+   * 
    * @override
-   * @see {ButtonViewModel.onClick}
+   * @see {ButtonViewModel._onClick}
    * @async
    * @throws {Error} InvalidStateException - Thrown, if the rollType is unrecognized. 
    * @throws {Error} InvalidStateException - Thrown, if the rollType is 'generic' and the property path
@@ -139,8 +151,8 @@ export default class ButtonRollViewModel extends ButtonViewModel {
    * @throws {Error} InvalidStateException - Thrown, if the property path is undefined and there is no 
    * 'getRollData()' method defined on the target object. 
    */
-  async onClick(html, isOwner, isEditable) {
-    if (isEditable !== true) return;
+  async _onClick() {
+    if (this.isEditable !== true) return;
 
     // Prepare the dialog. 
     // By default, it allows selection of the visibility mode. 
@@ -150,14 +162,14 @@ export default class ButtonRollViewModel extends ButtonViewModel {
         new DynamicInputDefinition({
           type: DYNAMIC_INPUT_TYPES.DROP_DOWN,
           name: this.inputVisibility,
-          localizableLabel: "ambersteel.general.messageVisibility.label",
+          localizedLabel: game.i18n.localize("ambersteel.general.messageVisibility.label"),
           required: true,
-          defaultValue: (VISIBILITY_MODES.asArray[0]),
+          defaultValue: (VISIBILITY_MODES.asArray()[0]),
           specificArgs: {
-            options: VISIBILITY_MODES.asChoices,
+            options: VISIBILITY_MODES.asChoices(),
             adapter: new ChoiceAdapter({
-              toChoiceOption: (obj) => { return VISIBILITY_MODES.asChoices.find(it => it.value === obj.name); },
-              fromChoiceOption: (choice) => { return VISIBILITY_MODES.asArray.find(it => it.name === choice.value); }
+              toChoiceOption: (obj) => { return VISIBILITY_MODES.asChoices().find(it => it.value === obj.name); },
+              fromChoiceOption: (choice) => { return VISIBILITY_MODES.asArray().find(it => it.name === choice.value); }
             }),
           }
         }),
@@ -165,9 +177,9 @@ export default class ButtonRollViewModel extends ButtonViewModel {
     });
 
     if (this.rollType === ROLL_TYPES.generic.name) {
-      await this._doGenericRoll(dialog);
+      return await this._doGenericRoll(dialog);
     } else if (this.rollType === ROLL_TYPES.dicePool.name) {
-      await this._doDicePoolRoll(dialog);
+      return await this._doDicePoolRoll(dialog);
     } else {
       throw new Error(`InvalidStateException: Invalid rollType '${this.rollType}'`);
     }
@@ -181,6 +193,8 @@ export default class ButtonRollViewModel extends ButtonViewModel {
    * 
    * 
    * @param {DynamicInputDialog} dialog 
+   * 
+   * @returns {Object} The rolled result. 
    * 
    * @private
    * @async
@@ -209,6 +223,8 @@ export default class ButtonRollViewModel extends ButtonViewModel {
       sound: SOUNDS_CONSTANTS.DICE_ROLL,
       visibilityMode: dialog.visibilityMode
     });
+
+    return rollResult;
   }
 
   /**
@@ -219,6 +235,8 @@ export default class ButtonRollViewModel extends ButtonViewModel {
    * 
    * @param {DynamicInputDialog} dialog 
    * 
+   * @returns {DicePoolRollResult} The rolled result. 
+   * 
    * @private
    * @async
    */
@@ -228,7 +246,7 @@ export default class ButtonRollViewModel extends ButtonViewModel {
     }
 
     const rollData = this.target.getRollData();
-    const dicePoolForCompositionHint = new DicePool({
+    const dicePoolForCompositionHint = await new DicePool({
       dice: rollData.components,
       obstacle: 0,
     }).roll();
@@ -247,33 +265,33 @@ export default class ButtonRollViewModel extends ButtonViewModel {
         showFancyFont: false,
       }),
       new DynamicInputDefinition({
-        type: DYNAMIC_INPUT_TYPES.NUMBER_SPINNER,
+        type: DYNAMIC_INPUT_TYPES.TEXTFIELD,
         name: inputObstacle,
-        localizableLabel: "ambersteel.roll.obstacle.abbreviation",
+        localizedLabel: game.i18n.localize("ambersteel.roll.obstacle.abbreviation"),
         required: true,
-        defaultValue: 0,
+        defaultValue: "",
         specificArgs: {
-          min: 0,
+          placeholder: "3 / 3D",
         },
       }),
       new DynamicInputDefinition({
         type: DYNAMIC_INPUT_TYPES.NUMBER_SPINNER,
         name: inputBonusDice,
-        localizableLabel: "ambersteel.roll.bonusDice",
+        localizedLabel: game.i18n.localize("ambersteel.roll.bonusDice"),
         required: true,
         defaultValue: 0,
       }),
       new DynamicInputDefinition({
         type: DYNAMIC_INPUT_TYPES.DROP_DOWN,
         name: inputRollDiceModifier,
-        localizableLabel: "ambersteel.roll.diceModifier.plural",
+        localizedLabel: game.i18n.localize("ambersteel.roll.diceModifier.plural"),
         required: true,
-        defaultValue: (ROLL_DICE_MODIFIER_TYPES.asArray[0]),
+        defaultValue: (ROLL_DICE_MODIFIER_TYPES.asArray()[0]),
         specificArgs: {
-          options: ROLL_DICE_MODIFIER_TYPES.asChoices,
+          options: ROLL_DICE_MODIFIER_TYPES.asChoices(),
           adapter: new ChoiceAdapter({
-            toChoiceOption: (obj) => { return ROLL_DICE_MODIFIER_TYPES.asChoices.find(it => it.value === obj.name); },
-            fromChoiceOption: (choice) => { return ROLL_DICE_MODIFIER_TYPES.asArray.find(it => it.name === choice.value); }
+            toChoiceOption: (obj) => { return ROLL_DICE_MODIFIER_TYPES.asChoices().find(it => it.value === obj.name); },
+            fromChoiceOption: (choice) => { return ROLL_DICE_MODIFIER_TYPES.asArray().find(it => it.name === choice.value); }
           }),
         }
       }),
@@ -283,11 +301,11 @@ export default class ButtonRollViewModel extends ButtonViewModel {
     if (dialog.confirmed !== true) return;
 
     // Do roll. 
-    const rollResult = new DicePool({
+    const rollResult = await new DicePool({
       dice: rollData.components,
       bonus: [new SumComponent("bonus", "ambersteel.roll.bonusDice", parseInt(dialog[inputBonusDice]))],
-      obstacle: parseInt(dialog[inputObstacle]),
-      modifier: ROLL_DICE_MODIFIER_TYPES.asArray.find(it => it.name === dialog[inputRollDiceModifier]),
+      obstacle: dialog[inputObstacle],
+      modifier: ROLL_DICE_MODIFIER_TYPES.asArray().find(it => it.name === dialog[inputRollDiceModifier]),
     }).roll();
 
     this._lastRollResult = rollResult;
@@ -304,7 +322,7 @@ export default class ButtonRollViewModel extends ButtonViewModel {
     }
 
     rollResult.sendToChat({
-      visibilityMode: VISIBILITY_MODES.asArray.find(it => it.name === dialog[this.inputVisibility]),
+      visibilityMode: VISIBILITY_MODES.asArray().find(it => it.name === dialog[this.inputVisibility]),
       actor: this.actor,
       primaryTitle: this.primaryChatTitle,
       primaryImage: this.primaryChatImage,
@@ -312,5 +330,7 @@ export default class ButtonRollViewModel extends ButtonViewModel {
       secondaryImage: this.secondaryChatImage,
       showBackFire: showBackFire,
     });
+
+    return rollResult;
   }
 }

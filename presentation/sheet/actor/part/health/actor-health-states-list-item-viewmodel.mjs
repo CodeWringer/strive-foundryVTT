@@ -2,8 +2,8 @@ import { CharacterHealthState } from "../../../../../business/ruleset/health/cha
 import { arrayTakeUnless } from "../../../../../business/util/array-utility.mjs";
 import { validateOrThrow } from "../../../../../business/util/validation-utility.mjs";
 import ObservableField from "../../../../../common/observables/observable-field.mjs";
-import ButtonToggleViewModel from "../../../../component/button-toggle/button-toggle-viewmodel.mjs";
 import InputNumberSpinnerViewModel from "../../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
+import InputToggleViewModel from "../../../../component/input-toggle/input-toggle-viewmodel.mjs";
 import { TEMPLATES } from "../../../../templatePreloader.mjs"
 import ViewModel from "../../../../view-model/view-model.mjs"
 
@@ -103,25 +103,23 @@ export default class ActorHealthStatesListItemViewModel extends ViewModel {
 
     this.stateLimit = args.stateLimit ?? 0;
 
-    this.btnToggle = new ButtonToggleViewModel({
+    this.btnToggle = new InputToggleViewModel({
       id: "btnToggle",
       parent: this,
-      isEditable: this.isEditable,
-      isSendable: this.isSendable,
-      isOwner: this.isOwner,
-      target: this,
-      propertyPath: "activeState.value",
+      value: this.activeState.value,
+      onChange: (_, newValue) => {
+        this.activeState.value = newValue;
+      },
     });
 
     if (this.showIntensity === true) {
       this.vmIntensity = new InputNumberSpinnerViewModel({
         id: "vmIntensity",
         parent: this,
-        isEditable: this.isEditable,
-        isSendable: this.isSendable,
-        isOwner: this.isOwner,
-        propertyOwner: this,
-        propertyPath: "stateIntensity.value",
+        value: this.stateIntensity.value,
+        onChange: (_, newValue) => {
+          this.stateIntensity.value = newValue;
+        },
         min: 0,
         max: (this.stateLimit > 0) ? this.stateLimit : undefined,
       });

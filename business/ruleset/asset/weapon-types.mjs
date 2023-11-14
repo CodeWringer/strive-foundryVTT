@@ -1,4 +1,4 @@
-import { getAsChoices } from "../../util/constants-utility.mjs";
+import * as ConstantsUtils from "../../util/constants-utility.mjs";
 
 /**
  * Represents a weapon type. 
@@ -33,9 +33,6 @@ export class WeaponType {
  * @property {WeaponType} warBow
  * @property {WeaponType} crossbow
  * @property {WeaponType} firearm
- * 
- * @property {Array<ChoiceOption>} asChoices The constants of this type, as an array 
- * of `ChoiceOption`s. 
  * 
  * @constant
  */
@@ -108,10 +105,5 @@ export const WEAPON_TYPES = {
     name: "firearm",
     localizableName: "ambersteel.character.asset.type.weapon.firearm"
   }),
-  get asChoices() {
-    if (this._asChoices === undefined) {
-      this._asChoices = getAsChoices(this, ["asChoices", "_asChoices"]);
-    }
-    return this._asChoices;
-  },
 };
+ConstantsUtils.enrichConstant(WEAPON_TYPES);

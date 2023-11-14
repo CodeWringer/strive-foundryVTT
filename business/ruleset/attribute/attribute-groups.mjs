@@ -1,4 +1,4 @@
-import { getAsChoices } from "../../util/constants-utility.mjs";
+import * as ConstantsUtils from "../../util/constants-utility.mjs";
 import { ATTRIBUTES } from "./attributes.mjs";
 
 /**
@@ -24,9 +24,6 @@ export class AttributeGroup {
  * @property {AttributeGroup} physical A group of all "physical" attributes. 
  * @property {AttributeGroup} mental A group of all "mental" attributes. 
  * @property {AttributeGroup} social A group of all "social" attributes. 
- * 
- * @property {Array<ChoiceOption>} asChoices The constants of this type, as an array 
- * of `ChoiceOption`s. 
  * 
  * @constant
  */
@@ -63,10 +60,26 @@ export const ATTRIBUTE_GROUPS = {
       willpower: ATTRIBUTES.willpower,
     }
   }),
-  get asChoices() {
-    if (this._asChoices === undefined) {
-      this._asChoices = getAsChoices(this, ["asChoices", "_asChoices"]);
-    }
-    return this._asChoices;
-  },
 };
+ConstantsUtils.enrichConstant(ATTRIBUTE_GROUPS);
+
+/**
+ * Returns the attribute group which contains an attribute with the given name. 
+ * 
+ * @param {String} attributeName Name of the attribute whose group to return. 
+ * 
+ * @returns {AttributeGroup | undefined}
+ */
+export function getGroupForAttributeByName(attributeName) {
+  for (const attributeGroup of ATTRIBUTE_GROUPS.asArray()) {
+    for (const propertyName in attributeGroup.attributes) {
+      if (attributeGroup.attributes.hasOwnProperty(propertyName) !== true) continue;
+
+      const hasAttribute = attributeGroup.attributes[propertyName].name === attributeName;
+      if (hasAttribute === true) {
+        return attributeGroup;
+      }
+    }
+  }
+  return undefined;
+}

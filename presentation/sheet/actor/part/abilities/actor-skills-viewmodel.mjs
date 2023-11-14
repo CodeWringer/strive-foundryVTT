@@ -1,9 +1,9 @@
+import { SKILL_TAGS } from "../../../../../business/tags/system-tags.mjs"
 import { validateOrThrow } from "../../../../../business/util/validation-utility.mjs"
-import ButtonViewModel from "../../../../component/button/button-viewmodel.mjs"
+import ButtonAddViewModel from "../../../../component/button-add/button-add-viewmodel.mjs"
 import DocumentListItemOrderDataSource from "../../../../component/sortable-list/document-list-item-order-datasource.mjs"
 import SortableListViewModel from "../../../../component/sortable-list/sortable-list-viewmodel.mjs"
 import { TEMPLATES } from "../../../../templatePreloader.mjs"
-import ViewModelFactory from "../../../../view-model/view-model-factory.mjs"
 import ViewModel from "../../../../view-model/view-model.mjs"
 import SkillListItemViewModel from "../../../item/skill/skill-list-item-viewmodel.mjs"
 
@@ -13,6 +13,14 @@ export default class ActorSkillsViewModel extends ViewModel {
 
   /** @override */
   get entityId() { return this.document.id; }
+
+  /**
+   * Returns `true`, if there innate skills are to be hidden. 
+   * 
+   * @type {Boolean}
+   * @readonly
+   */
+  get hideInnateSkills() { return this.innateSkillViewModels.length === 0; }
 
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
@@ -38,7 +46,24 @@ export default class ActorSkillsViewModel extends ViewModel {
 
     // Child view models. 
     const thiz = this;
-    const factory = new ViewModelFactory();
+
+    this.innateSkillViewModels = [];
+    this.innateSkillViewModels = this._getInnateSkillViewModels();
+    if (this.hideInnateSkills === false) {
+      this.vmInnateSkillList = new SortableListViewModel({
+        id: "vmInnateSkillList",
+        parent: thiz,
+        isEditable: thiz.isEditable,
+        isSendable: thiz.isSendable,
+        contextTemplate: thiz.contextTemplate,
+        indexDataSource: new DocumentListItemOrderDataSource({
+          document: thiz.document,
+          listName: "innateSkills",
+        }),
+        listItemViewModels: this.innateSkillViewModels,
+        listItemTemplate: TEMPLATES.SKILL_LIST_ITEM,
+      });
+    }
 
     this.learningSkillViewModels = [];
     this.learningSkillViewModels = this._getLearningSkillViewModels();
@@ -54,18 +79,18 @@ export default class ActorSkillsViewModel extends ViewModel {
       }),
       listItemViewModels: this.learningSkillViewModels,
       listItemTemplate: TEMPLATES.SKILL_LIST_ITEM,
-      vmBtnAddItem: factory.createVmBtnAdd({
+      vmBtnAddItem: new ButtonAddViewModel({
         id: "vmBtnAddLearningSkill",
+        parent: this,
         isEditable: thiz.isEditable,
         target: thiz.document,
         creationType: "skill",
         withDialog: true,
-        localizableLabel: "ambersteel.character.skill.learning.add.label",
+        localizedLabel: game.i18n.localize("ambersteel.character.skill.learning.add.label"),
         creationData: {
           level: 0
         },
-        localizableType: "ambersteel.character.skill.learning.singular",
-        localizableDialogTitle: "ambersteel.character.skill.learning.add.query",
+        localizedType: game.i18n.localize("ambersteel.character.skill.learning.singular"),
       }),
     });
 
@@ -83,46 +108,19 @@ export default class ActorSkillsViewModel extends ViewModel {
       }),
       listItemViewModels: this.knownSkillViewModels,
       listItemTemplate: TEMPLATES.SKILL_LIST_ITEM,
-      vmBtnAddItem: factory.createVmBtnAdd({
+      vmBtnAddItem: new ButtonAddViewModel({
         id: "vmBtnAddKnownSkill",
+        parent: this,
         target: thiz.document,
         isEditable: thiz.isEditable,
         creationType: "skill",
         withDialog: true,
-        localizableLabel: "ambersteel.character.skill.known.add.label",
+        localizedLabel: game.i18n.localize("ambersteel.character.skill.known.add.label"),
         creationData: {
           level: 1
         },
-        localizableType: "ambersteel.character.skill.known.singular",
-        localizableDialogTitle: "ambersteel.character.skill.known.add.query",
+        localizedType: game.i18n.localize("ambersteel.character.skill.known.singular"),
       }),
-    });
-
-    this.vmBtnResetExercisedLearningSkills = new ButtonViewModel({
-      id: "vmBtnResetExercisedLearningSkills",
-      parent: this,
-      isEditable: this.isEditable,
-      localizableTitle: "ambersteel.character.advancement.exercised.reset",
-      onClick: () => {
-        thiz.document.skills.learning.forEach(skill => {
-          if (skill.advancementProgress.exercised !== false) {
-            skill.advancementProgress.exercised = false;
-          }
-        });
-      }
-    });
-    this.vmBtnResetExercisedKnownSkills = new ButtonViewModel({
-      id: "vmBtnResetExercisedKnownSkills",
-      parent: this,
-      isEditable: this.isEditable,
-      localizableTitle: "ambersteel.character.advancement.exercised.reset",
-      onClick: () => {
-        thiz.document.skills.known.forEach(skill => {
-          if (skill.advancementProgress.exercised !== false) {
-            skill.advancementProgress.exercised = false;
-          }
-        });
-      }
     });
   }
 
@@ -139,6 +137,11 @@ export default class ActorSkillsViewModel extends ViewModel {
    * @override
    */
   update(args = {}) {
+    // Innate skills
+    const newInnateSkills = this._getInnateSkillViewModels();
+    this._cullObsolete(this.innateSkillViewModels, newInnateSkills);
+    this.innateSkillViewModels = newInnateSkills;
+    
     // Known skills
     const newKnownSkills = this._getKnownSkillViewModels();
     this._cullObsolete(this.knownSkillViewModels, newKnownSkills);
@@ -167,6 +170,20 @@ export default class ActorSkillsViewModel extends ViewModel {
     
     return updates;
   }
+  
+  /**
+   * @returns {Array<SkillListItemViewModel>}
+   * 
+   * @private
+   */
+  _getInnateSkillViewModels() {
+    return this._getViewModels(
+      this.document.skills.innate, 
+      this.innateSkillViewModels,
+      (args) => { return new SkillListItemViewModel(args); }
+    );
+  }
+  
   
   /**
    * @returns {Array<SkillListItemViewModel>}

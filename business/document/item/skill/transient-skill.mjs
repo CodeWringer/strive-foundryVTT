@@ -1,89 +1,27 @@
-import { TEMPLATES } from "../../../presentation/templatePreloader.mjs";
-import { createUUID } from "../../util/uuid-utility.mjs";
-import SkillChatMessageViewModel from "../../../presentation/sheet/item/skill/skill-chat-message-viewmodel.mjs";
-import { SumComponent, Sum } from "../../ruleset/summed-data.mjs";
-import DamageAndType from "../../ruleset/skill/damage-and-type.mjs";
-import PreparedChatData from "../../../presentation/chat/prepared-chat-data.mjs";
-import { DAMAGE_TYPES } from "../../ruleset/damage-types.mjs";
-import { SOUNDS_CONSTANTS } from "../../../presentation/audio/sounds.mjs";
-import { ITEM_SUBTYPE } from "./item-subtype.mjs";
-import TransientBaseItem from "./transient-base-item.mjs";
-import LevelAdvancement from "../../ruleset/level-advancement.mjs";
-import Ruleset from "../../ruleset/ruleset.mjs";
-import SkillAbility from "../../ruleset/skill/skill-ability.mjs";
-import CharacterAttribute from "../../ruleset/attribute/character-attribute.mjs";
-import { ATTACK_TYPES } from "../../ruleset/skill/attack-types.mjs";
-import { ATTRIBUTES } from "../../ruleset/attribute/attributes.mjs";
-import { isBlankOrUndefined, isObject } from "../../util/validation-utility.mjs";
-import { SKILL_PROPERTIES } from "./item-properties.mjs";
-import { arrayContains } from "../../util/array-utility.mjs";
-import { getAsArray, getAsChoices } from "../../util/constants-utility.mjs";
-import { DICE_POOL_RESULT_TYPES } from "../../dice/dice-pool.mjs";
-import SkillPrerequisite from "../../ruleset/skill/skill-prerequisite.mjs";
-
-/**
- * Represents a skill type document's "head" state. 
- * 
- * A head state of a skill determines how much data fidelity its 
- * associated skill exposes and makes interactible to the user. 
- * 
- * @property {String} name Internal name. 
- * @property {String | undefined} localizableName Localization key. 
- * @property {String | undefined} icon CSS class of an icon. 
- * * E. g. `"fas fa-virus"`
- */
-export class SkillHeadState {
-  /**
-   * @param {Object} args
-   * @param {String} args.name Internal name. 
-   * @param {String | undefined} args.localizableName Localization key. 
-   * @param {String | undefined} args.icon CSS class of an icon. 
-   * * E. g. `"fas fa-virus"`
-   */
-  constructor(args = {}) {
-    this.name = args.name;
-    this.localizableName = args.localizableName;
-    this.icon = args.icon;
-  }
-}
-
-/**
- * Represents the defined skill head states. 
- * 
- * @property {HealthState} full All of the skills data is available. 
- * @property {HealthState} level_only Only name, icon, unmodified level and 
- * skill ability list are exposed. 
- * @property {HealthState} headless Only name, icon and skill ability 
- * list are exposed. 
- * 
- * @constant
- */
-export const SKILL_HEAD_STATES = {
-  full: new SkillHeadState({
-    name: "full",
-    localizableName: "ambersteel.character.skill.headStates.full",
-  }),
-  level_only: new SkillHeadState({
-    name: "level_only",
-    localizableName: "ambersteel.character.skill.headStates.level_only",
-  }),
-  headless: new SkillHeadState({
-    name: "headless",
-    localizableName: "ambersteel.character.skill.headStates.headless",
-  }),
-  get asChoices() {
-    if (this._asChoices === undefined) {
-      this._asChoices = getAsChoices(this, ["asChoices", "_asChoices", "asArray", "_asArray"]);
-    }
-    return this._asChoices;
-  },
-  get asArray() {
-    if (this._asArray === undefined) {
-      this._asArray = getAsArray(this, ["asChoices", "_asChoices", "asArray", "_asArray"]);
-    }
-    return this._asArray;
-  }
-}
+import { TEMPLATES } from "../../../../presentation/templatePreloader.mjs";
+import { createUUID } from "../../../util/uuid-utility.mjs";
+import SkillChatMessageViewModel from "../../../../presentation/sheet/item/skill/skill-chat-message-viewmodel.mjs";
+import { SumComponent, Sum } from "../../../ruleset/summed-data.mjs";
+import DamageAndType from "../../../ruleset/skill/damage-and-type.mjs";
+import PreparedChatData from "../../../../presentation/chat/prepared-chat-data.mjs";
+import { DAMAGE_TYPES } from "../../../ruleset/damage-types.mjs";
+import { SOUNDS_CONSTANTS } from "../../../../presentation/audio/sounds.mjs";
+import { ITEM_SUBTYPE } from "../item-subtype.mjs";
+import TransientBaseItem from "../transient-base-item.mjs";
+import LevelAdvancement from "../../../ruleset/level-advancement.mjs";
+import Ruleset from "../../../ruleset/ruleset.mjs";
+import SkillAbility from "./skill-ability.mjs";
+import CharacterAttribute from "../../../ruleset/attribute/character-attribute.mjs";
+import { ATTACK_TYPES } from "../../../ruleset/skill/attack-types.mjs";
+import { ATTRIBUTES, Attribute } from "../../../ruleset/attribute/attributes.mjs";
+import { isBlankOrUndefined, isDefined, isObject } from "../../../util/validation-utility.mjs";
+import { arrayContains } from "../../../util/array-utility.mjs";
+import * as ConstantsUtils from "../../../util/constants-utility.mjs";
+import { DICE_POOL_RESULT_TYPES } from "../../../dice/dice-pool.mjs";
+import SkillPrerequisite from "../../../ruleset/skill/skill-prerequisite.mjs";
+import { SKILL_TAGS } from "../../../tags/system-tags.mjs";
+import AtReferencer from "../../../referencing/at-referencer.mjs";
+import { getGroupForAttributeByName } from "../../../ruleset/attribute/attribute-groups.mjs";
 
 /**
  * Represents the full transient data of a skill. 
@@ -103,7 +41,14 @@ export const SKILL_HEAD_STATES = {
  * @property {Array<SkillAbility>} abilities The array of skill abilities of this skill. 
  * @property {Boolean} isMagicSchool Returns true, if the skill is considered 
  * a magic school. 
- * @property {SkillHeadState} headState The current degree of data fidelity to expose. 
+ * 
+ * @property {Number | undefined} apCost 
+ * @property {Array<DamageAndType>} damage
+ * @property {String | undefined} condition 
+ * @property {Number | undefined} distance 
+ * @property {String | undefined} obstacle 
+ * @property {String | undefined} opposedBy 
+ * @property {AttackType | undefined} attackType 
  */
 export default class TransientSkill extends TransientBaseItem {
   /** @override */
@@ -170,11 +115,28 @@ export default class TransientSkill extends TransientBaseItem {
    * @readonly
    */
   get modifiedLevel() {
-    if (this.level > 0) {
-      return Math.max(this.level + this.levelModifier, 1);
+    let level = this.dependsOnActiveCr === true ? this.crLevel : this.level;
+
+    if (level > 0) {
+      return Math.max(level + this.levelModifier, 1);
     } else {
-      return Math.max(this.level + this.levelModifier, 0)
+      return Math.max(level + this.levelModifier, 0)
     }
+  }
+
+  /**
+   * Returns the challenge rating of the related attribute, for use as 
+   * the skill's level. 
+   * 
+   * @type {Number}
+   * @readonly
+   */
+  get crLevel() {
+    if (this.owningDocument !== undefined) {
+      const group = getGroupForAttributeByName(this.relatedAttribute.name);
+      return this.owningDocument.getCrFor(group.name);
+    }
+    return 0;
   }
 
   /**
@@ -193,32 +155,15 @@ export default class TransientSkill extends TransientBaseItem {
         thiz.document.system.failures = value;
         thiz.updateByPath("system.failures", value);
       },
-      /**
-       * Returns true, if the skill has been exercised. 
-       * 
-       * @type {Boolean}
-       */
-      get exercised() { return thiz.document.system.exercised === true; },
-      /**
-       * Sets whether the skill has been exercised. 
-       * 
-       * @param {Boolean} value
-       */
-      set exercised(value) {
-        thiz.document.system.exercised = value;
-        thiz.updateByPath("system.exercised", value);
-      },
     };
   }
   set advancementProgress(value) {
     this.document.system.successes = value.successes;
     this.document.system.failures = value.failures;
-    this.document.system.exercised = value.exercised;
     this.update({
       system: {
         successes: value.successes,
         failures: value.failures,
-        exercised: value.exercised
       }
     });
   }
@@ -227,23 +172,23 @@ export default class TransientSkill extends TransientBaseItem {
    * @type {Boolean}
    */
   get isMagicSchool() {
-    return arrayContains((this.document.system.properties ?? []), SKILL_PROPERTIES.MAGIC_SCHOOL.id);
+    return arrayContains(((this.document.system.tags ?? this.document.system.properties) ?? []), SKILL_TAGS.MAGIC_SCHOOL.id);
   }
   set isMagicSchool(value) {
-    const properties = (this.document.system.properties ?? []).concat([]); // Local-copy
-    const index = properties.indexOf(SKILL_PROPERTIES.MAGIC_SCHOOL.id);
+    const tags = ((this.document.system.tags ?? this.document.system.properties) ?? []).concat([]); 
+    const index = tags.indexOf(SKILL_TAGS.MAGIC_SCHOOL.id);
 
     if (value === true && index < 0) {
-      properties.push(SKILL_PROPERTIES.MAGIC_SCHOOL.id);
-      this.updateByPath("system.properties", properties);
+      tags.push(SKILL_TAGS.MAGIC_SCHOOL.id);
+      this.updateByPath("system.tags", tags);
     } else if (value !== true && index > -1) {
-      properties.splice(index, 1);
-      this.updateByPath("system.properties", properties);
+      tags.splice(index, 1);
+      this.updateByPath("system.tags", tags);
     }
   }
   
   /** @override */
-  get acceptedProperties() { return SKILL_PROPERTIES.asArray; }
+  get acceptedTags() { return SKILL_TAGS.asArray(); }
 
   /**
    * @type {Array<SkillAbility>}
@@ -257,21 +202,6 @@ export default class TransientSkill extends TransientBaseItem {
   }
   
   /**
-   * @type {SkillHeadState}
-   */
-  get headState() {
-    if (this.document.system.headState === undefined) {
-      return SKILL_HEAD_STATES.full;
-    } else {
-      return SKILL_HEAD_STATES.asArray.find(it => it.name === this.document.system.headState); 
-    }
-  }
-  set headState(value) {
-    this.document.system.headState = value.name;
-    this.updateByPath("system.headState", value.name);
-  }
-
-  /**
    * Returns the list of prerequisite skills. 
    * 
    * @type {Array<SkillPrerequisite>}
@@ -280,19 +210,142 @@ export default class TransientSkill extends TransientBaseItem {
     if (this.document.system.prerequisites === undefined) {
       return [];
     } else {
-      return this.document.system.prerequisites; 
+      return this.document.system.prerequisites.map(dto => 
+        SkillPrerequisite.fromDto(dto)
+      ); 
     }
   }
   /**
    * Sets the list of prerequisite skills. 
    * 
-   * @type {Array<SkillPrerequisite>}
    * @param {Array<SkillPrerequisite>} value
    */
   set prerequisites(value) {
-    this.updateByPath("system.prerequisites", value);
+    this.updateByPath("system.prerequisites", value.map(it => it.toDto()));
+  }
+
+  get apCost() {
+    const value = this.document.system.apCost;
+    if (isDefined(value)) {
+      return value;
+    } else {
+      return undefined;
+    }
+  }
+  set apCost(value) {
+    if (isDefined(value)) {
+      this.updateByPath("system.apCost", value);
+    } else {
+      this.updateByPath("system.apCost", null);
+    }
+  }
+
+  get damage() {
+    return (this.document.system.damage ?? []).map(dto => 
+      DamageAndType.fromDto(dto)
+    );
+  }
+  set damage(value) {
+    this.updateByPath("system.damage", value.map(it => it.toDto()));
   }
   
+  get condition() {
+    const value = this.document.system.condition;
+    if (isDefined(value)) {
+      return value;
+    } else {
+      return undefined;
+    }
+  }
+  set condition(value) {
+    if (isDefined(value)) {
+      this.updateByPath("system.condition", value);
+    } else {
+      this.updateByPath("system.condition", null);
+    }
+  }
+  
+  get distance() {
+    const value = this.document.system.distance;
+    if (isDefined(value)) {
+      return value;
+    } else {
+      return undefined;
+    }
+  }
+  set distance(value) {
+    if (isDefined(value)) {
+      this.updateByPath("system.distance", value);
+    } else {
+      this.updateByPath("system.distance", null);
+    }
+  }
+  
+  get obstacle() {
+    const value = this.document.system.obstacle;
+    if (isDefined(value)) {
+      return value;
+    } else {
+      return undefined;
+    }
+  }
+  set obstacle(value) {
+    if (isDefined(value)) {
+      this.updateByPath("system.obstacle", value);
+    } else {
+      this.updateByPath("system.obstacle", null);
+    }
+  }
+  
+  get opposedBy() {
+    const value = this.document.system.opposedBy;
+    if (isDefined(value)) {
+      return value;
+    } else {
+      return undefined;
+    }
+  }
+  set opposedBy(value) {
+    if (isDefined(value)) {
+      this.updateByPath("system.opposedBy", value);
+    } else {
+      this.updateByPath("system.opposedBy", null);
+    }
+  }
+  
+  get attackType() {
+    const value = this.document.system.attackType;
+    if (isDefined(value)) {
+      return ATTACK_TYPES[value];
+    } else {
+      return undefined;
+    }
+  }
+  set attackType(value) {
+    if (isDefined(value)) {
+      this.updateByPath("system.attackType", value.name);
+    } else {
+      this.updateByPath("system.attackType", null);
+    }
+  }
+
+  /**
+   * Returns `true`, if the skill's related attribute is part of a group for which 
+   * a challenge rating is active. 
+   * 
+   * @type {Boolean}
+   * @readonly
+   */
+  get dependsOnActiveCr() {
+    const owningDocument = this.owningDocument;
+    if (owningDocument !== undefined && owningDocument.type === "npc") {
+      const group = getGroupForAttributeByName(this.relatedAttribute.name);
+      return owningDocument.getIsCrActiveFor(group.name);
+    } else {
+      return false;
+    }
+  }
+
   /**
    * @param {Item} document An encapsulated item instance. 
    * 
@@ -435,6 +488,8 @@ export default class TransientSkill extends TransientBaseItem {
     
     this.abilities.push(newAbility);
     await this.updateByPath(`system.abilities.${newAbility.id}`, newAbility.toDto());
+
+    return newAbility;
   }
 
   /**
@@ -477,22 +532,14 @@ export default class TransientSkill extends TransientBaseItem {
    * @returns {Sum}
    */
   getRollData() {
-    if (this.headState.name === SKILL_HEAD_STATES.full.name) {
-      const actor = (this.owningDocument ?? {}).document;
-      const characterAttribute = new CharacterAttribute(actor, this.relatedAttribute.name);
-      const compositionObj = new Ruleset().getSkillTestNumberOfDice(this.modifiedLevel, characterAttribute.modifiedLevel);
-  
-      return new Sum([
-        new SumComponent(this.relatedAttribute.name, characterAttribute.localizableName, compositionObj.attributeDiceCount),
-        new SumComponent(this.name, this.name, compositionObj.skillDiceCount),
-      ]);
-    } else if (this.headState.name === SKILL_HEAD_STATES.level_only.name) {
-      return new Sum([
-        new SumComponent(this.name, this.name, this.level),
-      ]);
-    } else {
-      return new Sum();
-    }
+    const actor = (this.owningDocument ?? {}).document;
+    const characterAttribute = new CharacterAttribute(actor, this.relatedAttribute.name);
+    const compositionObj = new Ruleset().getSkillTestNumberOfDice(this.modifiedLevel, characterAttribute.modifiedLevel);
+
+    return new Sum([
+      new SumComponent(this.relatedAttribute.name, characterAttribute.localizableName, compositionObj.attributeDiceCount),
+      new SumComponent(this.name, this.name, compositionObj.skillDiceCount),
+    ]);
   }
 
   /**
@@ -506,11 +553,7 @@ export default class TransientSkill extends TransientBaseItem {
   async persistSkillAbilities(render = true) {
     const abilitiesToPersist = {};
 
-    for (const abilityId in this.abilities) {
-      if (this.abilities.hasOwnProperty(abilityId) !== true) continue;
-
-      const ability = this.abilities[abilityId];
-
+    for (const ability of this.abilities) {
       abilitiesToPersist[ability.id] = ability.toDto();
     }
 
@@ -533,27 +576,7 @@ export default class TransientSkill extends TransientBaseItem {
       if (abilitiesOnDocument.hasOwnProperty(abilityId) !== true) continue;
 
       const dto = abilitiesOnDocument[abilityId];
-
-      const damage = [];
-      for (const propertyName in dto.damage) {
-        if (dto.damage.hasOwnProperty(propertyName) !== true) continue;
-
-        const plainDamageObject = dto.damage[propertyName];
-
-        damage.push(new DamageAndType({
-          damage: plainDamageObject.damage ?? "0",
-          damageType: DAMAGE_TYPES[plainDamageObject.damageType] ?? DAMAGE_TYPES.none,
-        }));
-      }
-
-      const skillAbility = new SkillAbility({
-        ...dto,
-        owningDocument: this,
-        damage: damage,
-        attackType: ATTACK_TYPES[dto.attackType],
-      });
-
-      result.push(skillAbility);
+      result.push(SkillAbility.fromDto(dto, this));
     }
     return result;
   }
@@ -575,21 +598,21 @@ export default class TransientSkill extends TransientBaseItem {
   }
 
   /**
-   * Searches in: 
-   * * Skill abilities
-   * 
    * @override
+   * 
+   * Also searches in: 
+   * * Embedded skill abilities
    */
-  _resolveReference(reference, comparableReference, propertyPath) {
-    // Search skill ability.
-    for (const ability of this.abilities) {
-      const match = ability._resolveReference(reference, comparableReference, propertyPath);
-      if (match !== undefined) {
-        return match;
-      }
+  resolveReference(comparableReference, propertyPath) {
+    const collectionsToSearch = [
+      this.abilities,
+    ];
+    const r = new AtReferencer().resolveReferenceInCollections(collectionsToSearch, comparableReference, propertyPath);
+    if (r !== undefined) {
+      return r;
     }
-    
-    return super._resolveReference(reference, comparableReference, propertyPath);
+
+    return super.resolveReference(comparableReference, propertyPath);
   }
 }
 

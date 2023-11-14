@@ -24,20 +24,60 @@ cssClass: {undefined | String}
     {{!-- Delete --}}
     {{> buttonDelete viewModel=viewModel.vmBtnDelete cssClass="" }}
   </div>
-  {{!-- Row 2 --}}
+  {{!-- Row --}}
+  {{!-- Description --}}
+  <div class="flex flex-row border-solid-t-sm border-solid-b-sm">
+    {{> inputRichText viewModel=viewModel.vmRtDescription }}
+  </div>
+  {{!-- Row --}}
   <div class="flex flex-row">
-    {{!-- Limit --}}
+    {{!-- treatmentSkill --}}
     <div class="flex flex-row flex-grow">
       <span>
-        {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.health.injury.limit.label"}}{{/label}}
+        {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.health.treatmentSkill"}}{{/label}}
       </span>
       <span class="width-md flex-grow">
-        {{> inputTextField viewModel=viewModel.vmLimit }}
+        {{> inputTextField viewModel=viewModel.vmTreatmentSkill }}
       </span>
     </div>
     {{!-- Spacer --}}
     <div class="margin-r-lg"></div>
-    {{!-- Time to heal --}}
+    {{!-- requiredSupplies --}}
+    <div class="flex flex-row flex-grow">
+      <span>
+        {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.health.requiredSupplies"}}{{/label}}
+      </span>
+      <span class="width-md flex-grow">
+        {{> inputTextField viewModel=viewModel.vmRequiredSupplies }}
+      </span>
+    </div>
+  </div>
+  {{!-- Row --}}
+  <div class="flex flex-row">
+    {{!-- obstaclePatchUp --}}
+    <div class="flex flex-row flex-grow">
+      <span>
+        {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.health.obstaclePatchUp"}}{{/label}}
+      </span>
+      <span class="width-min-xl flex-grow">
+        {{> inputTextField viewModel=viewModel.vmObstaclePatchUp }}
+      </span>
+    </div>
+    {{!-- Spacer --}}
+    <div class="margin-r-lg"></div>
+    {{!-- obstacleTreatment --}}
+    <div class="flex flex-row flex-grow">
+      <span>
+        {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.health.obstacleTreatment"}}{{/label}}
+      </span>
+      <span class="width-md flex-grow">
+        {{> inputTextField viewModel=viewModel.vmObstacleTreatment }}
+      </span>
+    </div>
+  </div>
+  {{!-- Row --}}
+  <div class="flex flex-row">
+    {{!-- timeToHeal --}}
     <div class="flex flex-row flex-grow">
       <span>
         {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.health.timeToHeal"}}{{/label}}
@@ -48,6 +88,30 @@ cssClass: {undefined | String}
     </div>
     {{!-- Spacer --}}
     <div class="margin-r-lg"></div>
+    {{!-- timeToHealTreated --}}
+    <div class="flex flex-row flex-grow">
+      <span>
+        {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.health.timeToHealTreated"}}{{/label}}
+      </span>
+      <span class="width-min-xl flex-grow">
+        {{> inputTextField viewModel=viewModel.vmTimeToHealTreated }}
+      </span>
+    </div>
+    {{!-- Spacer --}}
+    <div class="margin-r-lg"></div>
+    {{!-- selfPatchUp --}}
+    <div class="flex flex-row flex-grow">
+      <span>
+        {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.health.selfPatchUp"}}{{/label}}
+      </span>
+      <span class="width-min-xl flex-grow">
+        {{> inputTextField viewModel=viewModel.vmSelfPatchUp }}
+      </span>
+    </div>
+  </div>
+  {{!-- Row --}}
+  <div class="flex flex-row">
+    {{!-- scar --}}
     <div class="flex flex-row flex-grow">
       <span>
         {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.health.scar.singular"}}{{/label}}
@@ -56,10 +120,16 @@ cssClass: {undefined | String}
         {{> inputTextField viewModel=viewModel.vmScar }}
       </span>
     </div>
-  </div>
-  {{!-- Row 3 --}}
-  {{!-- Description --}}
-  <div class="flex flex-row border-solid-t-sm border-solid-b-sm">
-    {{> inputRichText viewModel=viewModel.vmRtDescription }}
+    {{!-- Spacer --}}
+    <div class="margin-r-lg"></div>
+    {{!-- limit --}}
+    <div class="flex flex-row flex-grow">
+      <span>
+        {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.health.injury.limit.label"}}{{/label}}
+      </span>
+      <span class="width-md flex-grow">
+        {{> inputTextField viewModel=viewModel.vmLimit }}
+      </span>
+    </div>
   </div>
 </div>

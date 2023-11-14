@@ -1,11 +1,11 @@
 import SkillPrerequisite from "../../../../business/ruleset/skill/skill-prerequisite.mjs";
-import { validateOrThrow } from "../../../../business/util/validation-utility.mjs";
 import ObservableField from "../../../../common/observables/observable-field.mjs";
 import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
 import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs";
 import { TEMPLATES } from "../../../templatePreloader.mjs";
 import ViewModel from "../../../view-model/view-model.mjs";
 
+// TODO: The observables in here should be unnecessary wiht the new input API.
 /**
  * @property {InputTextFieldViewModel} vmName
  * @property {InputTextFieldViewModel} vmId
@@ -58,12 +58,12 @@ export default class SkillPrerequisiteListItemViewModel extends ViewModel {
 
     this.onChange = args.onChange ?? (() => {});
 
-    this.stateId = new ObservableField({ value: args.stateId})
+    this.stateId = new ObservableField({ value: args.stateId })
     this.stateId.onChange((field, oldValue, newValue) => {
       this.onChange(this.state);
     });
 
-    this.stateName = new ObservableField({ value: args.stateName})
+    this.stateName = new ObservableField({ value: args.stateName })
     this.stateName.onChange((field, oldValue, newValue) => {
       this.onChange(this.state);
     });
@@ -76,23 +76,26 @@ export default class SkillPrerequisiteListItemViewModel extends ViewModel {
     this.vmId = new InputTextFieldViewModel({
       id: "vmId",
       parent: this,
-      isEditable: this.isEditable,
-      propertyOwner: this,
-      propertyPath: "stateId.value",
+      value: this.stateId.value,
+      onChange: (_, newValue) => {
+        this.stateId.value = newValue;
+      },
     });
     this.vmName = new InputTextFieldViewModel({
       id: "vmName",
       parent: this,
-      isEditable: this.isEditable,
-      propertyOwner: this,
-      propertyPath: "stateName.value",
+      value: this.stateName.value,
+      onChange: (_, newValue) => {
+        this.stateName.value = newValue;
+      },
     });
     this.vmMinimumLevel = new InputNumberSpinnerViewModel({
       id: "vmMinimumLevel",
       parent: this,
-      isEditable: this.isEditable,
-      propertyOwner: this,
-      propertyPath: "stateMinimumLevel.value",
+      value: this.stateMinimumLevel.value,
+      onChange: (_, newValue) => {
+        this.stateMinimumLevel.value = newValue;
+      },
       min: 0,
     });
   }

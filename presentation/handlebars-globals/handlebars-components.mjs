@@ -7,7 +7,6 @@ import ButtonSendToChatViewModel from "../component/button-send-to-chat/button-s
 import ButtonTakeItemViewModel from "../component/button-take-item/button-take-item-viewmodel.mjs";
 import ButtonToggleIconViewModel from "../component/button-toggle-icon/button-toggle-icon-viewmodel.mjs";
 import ButtonToggleVisibilityViewModel from "../component/button-toggle-visibility/button-toggle-visibility-viewmodel.mjs";
-import ButtonToggleViewModel from "../component/button-toggle/button-toggle-viewmodel.mjs";
 import ButtonViewModel from "../component/button/button-viewmodel.mjs";
 import ButtonCheckBoxViewModel from "../component/button-checkbox/button-checkbox-viewmodel.mjs";
 import DamageDefinitionListItemViewModel from "../component/damage-definition-list/damage-definition-list-item-viewmodel.mjs";
@@ -16,7 +15,7 @@ import DiceRollListViewModel from "../component/dice-roll-list/dice-roll-list-vi
 import InputDropDownViewModel from "../component/input-dropdown/input-dropdown-viewmodel.mjs";
 import InputImageViewModel from "../component/input-image/input-image-viewmodel.mjs";
 import InputNumberSpinnerViewModel from "../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
-import InputPropertiesViewModel from "../component/input-properties/input-properties-viewmodel.mjs";
+import InputTagsViewModel from "../component/input-tags/input-tags-viewmodel.mjs";
 import InputRadioButtonGroupViewModel from "../component/input-radio-button-group/input-radio-button-group-viewmodel.mjs";
 import InputRichTextViewModel from "../component/input-rich-text/input-rich-text-viewmodel.mjs";
 import InputTextareaViewModel from "../component/input-textarea/input-textarea-viewmodel.mjs";
@@ -27,6 +26,7 @@ import SimpleListViewModel from "../component/simple-list/simple-list-viewmodel.
 import SortableListViewModel from "../component/sortable-list/sortable-list-viewmodel.mjs";
 import VisibilityToggleListViewModel from "../component/visibility-toggle-list/visibility-toggle-list-viewmodel.mjs";
 import ModalDialog from "../dialog/modal-dialog/modal-dialog.mjs";
+import InputToggleViewModel from "../component/input-toggle/input-toggle-viewmodel.mjs";
 
 /**
  * Registers the Handlebars partials of the components. 
@@ -40,7 +40,6 @@ export function initHandlebarsComponents() {
   ButtonRollViewModel.registerHandlebarsPartial();
   ButtonSendToChatViewModel.registerHandlebarsPartial();
   ButtonTakeItemViewModel.registerHandlebarsPartial();
-  ButtonToggleViewModel.registerHandlebarsPartial();
   ButtonToggleIconViewModel.registerHandlebarsPartial();
   ButtonToggleVisibilityViewModel.registerHandlebarsPartial();
   ButtonCheckBoxViewModel.registerHandlebarsPartial();
@@ -50,11 +49,12 @@ export function initHandlebarsComponents() {
   InputDropDownViewModel.registerHandlebarsPartial();
   InputImageViewModel.registerHandlebarsPartial();
   InputNumberSpinnerViewModel.registerHandlebarsPartial();
-  InputPropertiesViewModel.registerHandlebarsPartial();
+  InputTagsViewModel.registerHandlebarsPartial();
   InputRadioButtonGroupViewModel.registerHandlebarsPartial();
   InputRichTextViewModel.registerHandlebarsPartial();
   InputTextareaViewModel.registerHandlebarsPartial();
   InputTextFieldViewModel.registerHandlebarsPartial();
+  InputToggleViewModel.registerHandlebarsPartial();
   LazyLoadViewModel.registerHandlebarsPartial();
   LazyRichTextViewModel.registerHandlebarsPartial();
   SimpleListViewModel.registerHandlebarsPartial();

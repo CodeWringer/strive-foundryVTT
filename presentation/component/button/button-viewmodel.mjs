@@ -1,4 +1,3 @@
-import { isFunction } from "../../../business/util/validation-utility.mjs";
 import { TEMPLATES } from "../../templatePreloader.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
 
@@ -15,14 +14,27 @@ export const SELECTOR_BUTTON = "custom-system-button";
  * 
  * @extends ViewModel
  * 
- * @property {JQuery | HTMLElement} element The button element on the DOM. 
- * @property {Object | undefined} target The target object to affect.  
- * @property {Function} callback An asynchronous callback that is invoked upon completion of the 
- * button's own callback. 
- * @property {Any} callbackData Any data to pass to the completion callback. 
+ * @property {String} id Unique ID of this view model instance. 
  * @property {Boolean} isEditable If true, is interactible. 
- * @property {String | undefined} localizableTitle The localizable title (tooltip). 
- * @property {String} localizedTitle The localized title (tooltip). 
+ * @property {JQuery | HTMLElement} element The DOM element that is 
+ * associated with this view model. 
+ * * Read-only
+ * 
+ * @property {String | undefined} localizedToolTip A localized text to 
+ * display as a tool tip. 
+ * @property {String | undefined} localizedLabel A localized text to 
+ * display as a button label. 
+ * @property {String | undefined} iconHtml Raw HTML to render as 
+ * an associated icon. E. g. `'<i class="fas fa-scroll"></i>'`
+ * @property {Boolean} showFancyFont If `true`, will render the `localizedLabel` 
+ * using the "fancy font". 
+ * 
+ * @method onClick Asynchronous callback that is invoked when 
+ * the button is clicked. Receives the button's original click-handler as its sole 
+ * argument. In most cases, it should be called and `await`ed before one's own 
+ * click handling logic. But in case the original logic is unwanted, the method 
+ * can be ignored. 
+ * * May return a value, if the inheriting type supports it. 
  */
 export default class ButtonViewModel extends ViewModel {
   /** @override */
@@ -34,144 +46,60 @@ export default class ButtonViewModel extends ViewModel {
    * @static
    */
   static registerHandlebarsPartial() {
-    Handlebars.registerPartial('button', `{{#> "${ButtonViewModel.TEMPLATE}"}}{{> @partial-block }}{{/"${ButtonViewModel.TEMPLATE}"}}`);
+    Handlebars.registerPartial('button', `{{> "${ButtonViewModel.TEMPLATE}"}}`);
   }
 
   /**
-   * @type {JQuery | HTMLElement}
-   * @private
-   */
-  _element = undefined;
-  /**
-   * Returns the HTMLElement that is associated with this view model. 
-   * @type {JQuery | HTMLElement}
-   * @readonly
-   */
-  get element() { return this._element; }
-
-  /**
-   * @type {Object | undefined}
-   * @private
-   */
-  _target = undefined;
-  /**
-   * @type {Object | undefined}
-   * @readonly
-   */
-  get target() { return this._target; }
-
-  /**
-   * Defines an asynchronous callback that is invoked upon completion of the button's own callback. 
-   * @type {Function}
-   */
-  callback = undefined;
-
-  /**
-   * Returns data to pass to the callback function, if one is defined. 
+   * @param {Object} args
+   * @param {String | undefined} args.id Unique ID of this view model instance. 
+   * @param {Boolean | undefined} args.isEditable If true, will be interactible. 
    * 
-   * This getter is to be overridden by inheriting types! 
-   * 
-   * @type {Any | undefined}
-   * @default undefined
-   * 
-   * @protected
-   * @virtual
-   * @readonly
-   */
-  get callbackData() { return undefined; }
-
-  /**
-   * The localizable title (tooltip). 
-   * @type {String | undefined}
-   */
-  localizableTitle = undefined;
-
-  /**
-   * The localized title (tooltip). 
-   * @type {String}
-   * @readonly
-   */
-  get localizedTitle() { return this.localizableTitle !== undefined ? game.i18n.localize(this.localizableTitle) : ""; }
-
-  /**
-   * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
-   * 
-   * @param {Object | undefined} args.target Optional. The target object to affect.  
-   * @param {Function | String | undefined} args.callback Optional. Defines an asynchronous callback that is invoked upon completion of the button's own callback. 
-   * @param {Boolean | undefined} args.isEditable Optional. If true, will be interactible. 
-   * @param {String | undefined} args.localizableTitle Optional. The localizable title (tooltip). 
-   * @param {Function | undefined} args.onClick Optional. The function to call on click. 
+   * @param {String | undefined} args.localizedToolTip A localized text to 
+   * display as a tool tip. 
+   * @param {String | undefined} args.localizedLabel A localized text to 
+   * display as a button label. 
+   * @param {String | undefined} args.iconHtml Raw HTML to render as 
+   * an associated icon. E. g. `'<i class="fas fa-scroll"></i>'`
+   * @param {Boolean | undefined} args.showFancyFont If `true`, will render 
+   * the `localizedLabel` using the "fancy font". 
+   * * default `false`
+   * @param {Function | undefined} args.onClick Asynchronous callback that is invoked when 
+   * the button is clicked. Receives the button's original click-handler as its sole 
+   * argument. In most cases, it should be called and `await`ed before one's own 
+   * click handling logic. But in case the original logic is unwanted, the method 
+   * can be ignored. 
    */
   constructor(args = {}) {
     super(args);
 
-    this._target = args.target;
-    this.callback = this._getCallback(args.callback).bind(this._target);
-    this.isEditable = args.isEditable ?? false;
-    this.localizableTitle = args.localizableTitle;
-    if (args.onClick !== undefined) {
-      this.onClick = args.onClick;
-    }
-  }
-
-  /**
-   * @param {Function | String | undefined} callback 
-   * @private
-   * @returns {Function}
-   * @throws {Error} Thrown, on an invalid callback value, e. g. `null`. 
-   */
-  _getCallback(callback) {
-    if (typeof(callback) === "string") {
-      return this.target[callback];
-    } else if (callback === undefined) {
-      return (async (args) => {});
-    } else if (isFunction(callback)) {
-      return callback;
-    } else {
-      throw new Error("Invalid callback");
-    }
+    this.localizedToolTip = args.localizedToolTip;
+    this.localizedLabel = args.localizedLabel;
+    this.iconHtml = args.iconHtml;
+    this.onClick = args.onClick ?? (async (callback) => {
+      await callback();
+    });
   }
 
   /** @override */
-  async activateListeners(html, isOwner, isEditable) {
-    await super.activateListeners(html, isOwner, isEditable);
-    
-    this._element = html.find(`.${SELECTOR_BUTTON}#${this.id}`);
-    
-    if (this._element === undefined || this._element === null || this._element.length === 0) {
-      throw new Error(`NullPointerException: Failed to get input element with id '${this.id}'`);
-    }
+  async activateListeners(html) {
+    await super.activateListeners(html);
 
-    this.element.click(this._onClick.bind(this, html, isOwner, this.isEditable));
+    this.element.click(async () => {
+      return await this.onClick(this._onClick.bind(this));
+    });
   }
 
   /**
-   * Callback function, which is invoked when the user clicks on the button. 
+   * Internal asynchronous callback that is invoked upon click. 
    * 
-   * Must be overridden by inheriting types!
-   * @param {Object} html DOM of the sheet for which to register listeners. 
-   * @param {Boolean} isOwner If true, registers events that require owner permission. 
-   * @param {Boolean} isEditable If true, registers events that require editing permission. 
-   * @abstract
+   * Can return a value, if the button supports it. 
+   * 
+   * @returns {Any | undefined} 
+   * 
    * @async
+   * @virtual
    */
-  async onClick(html, isOwner, isEditable) {
-    throw new Error("NotImplementedException");
-  }
-
-  /**
-   * @param event 
-   * @private
-   * @async
-   */
-  async _onClick(html, isOwner, isEditable, event) {
-    event.preventDefault();
-
-    if (this.isEditable !== true) return;
-
-    await this.onClick(html, isOwner, isEditable);
-    if (this.callback !== undefined && this.callback !== null) {
-      await this.callback(this.callbackData);
-    }
+  async _onClick() {
+    // Implementation up to ineriting types.
   }
 }

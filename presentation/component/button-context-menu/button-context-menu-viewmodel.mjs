@@ -1,4 +1,4 @@
-import { TEMPLATES } from "../../templatePreloader.mjs";
+import { isDefined } from "../../../business/util/validation-utility.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
 
 /**
@@ -9,11 +9,14 @@ import ButtonViewModel from "../button/button-viewmodel.mjs";
  * @property {Array<ContextMenuItem>} menuItems An array of {ContextMenuItem} instances, 
  * which are used to populate the context menu. 
  * 
+ * @method onClick Asynchronous callback that is invoked when the button is clicked. 
+ * Receives the button's original click-handler as its sole argument. In most cases, it should be called 
+ * and awaited before one's own click handling logic. But in case the original logic is unwanted, the method can be ignored.
+ * * Returns nothing.
+ * 
  * @see https://foundryvtt.com/api/ContextMenu.html
  */
 export default class ButtonContextMenuViewModel extends ButtonViewModel {
-  static get TEMPLATE() { return TEMPLATES.COMPONENT_BUTTON_CONTEXT_MENU; }
-
   /**
    * Registers the Handlebars partial for this component. 
    * 
@@ -21,6 +24,52 @@ export default class ButtonContextMenuViewModel extends ButtonViewModel {
    */
   static registerHandlebarsPartial() {
     Handlebars.registerPartial('buttonContextMenu', `{{> "${ButtonContextMenuViewModel.TEMPLATE}"}}`);
+  }
+
+  /**
+   * Returns two button definitions for a button to "toggle" a property value. 
+   * 
+   * @param {String} label The button's localizable label. 
+   * @param {Object} propertyOwner Parent object of the property. 
+   * @param {String} propertyName Name of the property. 
+   * @param {Any} activeValue Value to set on the property that is set when 
+   * the toggle is active. 
+   * @param {Any} inactiveValue Value to set on the property that is set when 
+   * the toggle is inactive. 
+   * * default `null`
+   * 
+   * @returns {Array<Object>} Two button definitions. One for each state of the toggle button. 
+   */
+  static createToggleButtons(label, propertyOwner, propertyName, activeValue, inactiveValue = null) {
+    const localizedLabel = game.i18n.localize(label);
+    return [
+      {
+        name: localizedLabel,
+        icon: '<i class="fas fa-check"></i>',
+        condition: () => {
+          const value = propertyOwner[propertyName];
+          if (typeof(value) === "boolean") {
+            return value === true;
+          } else {
+            return isDefined(value) === true;
+          }
+        },
+        callback: () => { propertyOwner[propertyName] = inactiveValue; },
+      },
+      {
+        name: localizedLabel,
+        icon: '',
+        condition: () => {
+          const value = propertyOwner[propertyName];
+          if (typeof(value) === "boolean") {
+            return value === false;
+          } else {
+            return isDefined(value) === false;
+          }
+        },
+        callback: () => { propertyOwner[propertyName] = activeValue; },
+      }
+    ];
   }
 
   /**
@@ -51,30 +100,31 @@ export default class ButtonContextMenuViewModel extends ButtonViewModel {
   }
 
   /**
+   * @param {Object} args
    * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
-   * 
-   * @param {Function | String | undefined} args.callback Optional. Defines an asynchronous callback that is invoked upon completion of the button's own callback. 
    * @param {Boolean | undefined} args.isEditable Optional. If true, will be interactible. 
-   * @param {String | undefined} args.localizableTitle Optional. The localizable title (tooltip). 
+   * @param {String | undefined} args.localizedTooltip Localized tooltip. 
    * 
    * @param {Array<Object> | undefined} menuItems An array of context menu items, 
-   * which are used to populate the context menu. 
+   * which are used to populate the context menu. The items can have the following properties: 
+   * * `{String} name` - The displayed item name
+   * * `{String} icon` An icon glyph HTML string
+   * * `{Function} condition` A function which returns a Boolean for whether or not to display the item
+   * * `{Function} callback` A callback function to trigger when the entry of the menu is clicked
    * 
-   * The items can have the following properties: 
-   * 
-   * {String} name The displayed item name
-   * 
-   * {String} icon An icon glyph HTML string
-   * 
-   * {Function} condition A function which returns a Boolean for whether or not to display the item
-   * 
-   * {Function} callback A callback function to trigger when the entry of the menu is clicked
+   * @param {Function | undefined} args.onClick Asynchronous callback that is invoked when the button is clicked. 
+   * Receives the button's original click-handler as its sole argument. In most cases, it should be called 
+   * and awaited before one's own click handling logic. But in case the original logic is unwanted, the method can be ignored.
+   * * Returns nothing. 
    */
   constructor(args = {}) {
-    super(args);
+    super({
+      ...args,
+      iconHtml: '<i class="fas fa-bars"></i>',
+    });
 
     this.menuItems = args.menuItems ?? [];
-    this.localizableTitle = args.localizableTitle ?? "ambersteel.general.contextMenu";
+    this.localizedTooltip = args.localizedTooltip ?? game.i18n.localize("ambersteel.general.contextMenu");
 
     // Wrap the callback function to make it also ensure the context menu is properly closed, 
     // when the menu item is clicked. 
@@ -89,8 +139,8 @@ export default class ButtonContextMenuViewModel extends ButtonViewModel {
   }
 
   /** @override */
-  async activateListeners(html, isOwner, isEditable) {
-    await super.activateListeners(html, isOwner, isEditable);
+  async activateListeners(html) {
+    await super.activateListeners(html);
 
     this.html = html;
     this._contextMenu = new ContextMenu(html, this.id, this.menuItems);
@@ -98,11 +148,11 @@ export default class ButtonContextMenuViewModel extends ButtonViewModel {
 
   /**
    * @override
-   * @see {ButtonViewModel.onClick}
+   * @see {ButtonViewModel._onClick}
    * @async
    */
-  async onClick(html, isOwner, isEditable) {
-    if (isEditable !== true) return;
+  async _onClick() {
+    if (this.isEditable !== true) return;
 
     // Show context menu below button. 
     this.isShown = !this.isShown;
@@ -117,13 +167,15 @@ export default class ButtonContextMenuViewModel extends ButtonViewModel {
   _ensureContextMenuWithin(outerHtml) {
     if (this.isShown !== true) return;
 
-    const contextMenuElement = outerHtml.find(`#${this.id} nav#context-menu`);
+    const wrappedOuterHtml = $(outerHtml);
+    const contextMenuElement = wrappedOuterHtml.find(`#${this.id} nav#context-menu`);
 
     if (contextMenuElement === undefined || contextMenuElement === null || contextMenuElement.length === 0) {
       game.ambersteel.logger.logWarn("NullPointerException: ContextMenu: Failed to get context menu element")
+      return;
     }
 
-    const outerBounds = outerHtml[0].getBoundingClientRect();
+    const outerBounds = wrappedOuterHtml[0].getBoundingClientRect();
     const contextMenuBounds = contextMenuElement[0].getBoundingClientRect();
 
     if (contextMenuBounds.right > outerBounds.right) {

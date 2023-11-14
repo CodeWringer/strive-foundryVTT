@@ -92,27 +92,6 @@ export default class CharacterAttribute {
  get advancementRequirements() { return new Ruleset().getAttributeAdvancementRequirements(this.level); }
 
   /**
-  * @type {Boolean}
-  */
-  get exercised() { return this._actor.system.attributes[this._attributeGroupName][this.name].exercised === true; }
-  /**
-  * @param {Boolean} value
-  */
-  set exercised(value) {
-    this._actor.update({
-      system: {
-        attributes: {
-          [this._attributeGroupName]: {
-            [this.name]: {
-              exercised: value
-            }
-          }
-        }
-      }
-    }); 
-  }
- 
-  /**
    * @param {AmbersteelActor} actor The actor for which to gather 
    * attribute data. 
    * @param {String} name Internal name of the attribute. 

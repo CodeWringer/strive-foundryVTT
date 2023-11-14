@@ -251,6 +251,16 @@ export default class ViewModel {
   contextTemplate = undefined;
 
   /**
+   * Returns the element. 
+   * 
+   * Note: Only available **after** the *first* call to `activateListeners`! 
+   * 
+   * @type {JQuery}
+   * @readonly
+   */
+  get element() { return this._element; }
+
+  /**
    * @param {Object} args The arguments object. 
    * @param {String | undefined} args.id Unique ID of this view model instance. 
    * 
@@ -274,7 +284,7 @@ export default class ViewModel {
    * * Default `game.ambersteel.viewStates`. 
    */
   constructor(args = {}) {
-    this._id = args.id ?? createUUID();
+    this._id = this.sanitizeId(args.id ?? createUUID());
     
     this.parent = args.parent;
 
@@ -283,9 +293,9 @@ export default class ViewModel {
 
     // Even though this may seem redundant at first (see `update` method), 
     // this is more efficient than calling `update` here. 
-    this.isEditable = args.isEditable ?? false;
-    this.isSendable = args.isSendable ?? false;
-    this.isOwner = args.isOwner ?? false;
+    this.isEditable = args.isEditable ?? (args.parent !== undefined ? args.parent.isEditable : false);
+    this.isSendable = args.isSendable ?? (args.parent !== undefined ? args.parent.isSendable : false);
+    this.isOwner = args.isOwner ?? (args.parent !== undefined ? args.parent.isOwner : false);
   }
 
   /**
@@ -372,16 +382,20 @@ export default class ViewModel {
    * Registers events on elements of the given DOM. 
    * 
    * @param {Object} html DOM of the sheet for which to register listeners. 
-   * @param {Boolean} isOwner If true, registers events that require owner permission. 
-   * @param {Boolean} isEditable If true, registers events that require editing permission. 
    * 
    * @virtual
    * @async
    */
-  async activateListeners(html, isOwner, isEditable) {
+  async activateListeners(html) {
+    this._element = html.find(`#${this.id}`);
+
+    if (this._element === undefined || this._element === null || this._element.length === 0) {
+      game.ambersteel.logger.logWarn(`Failed to get element with id '${this.id}'`);
+    }
+
     for (const child of this.children) {
       try {
-        await child.activateListeners(html, isOwner, isEditable);
+        await child.activateListeners(html);
       } catch (error) {
         game.ambersteel.logger.logWarn(`${error.message}; ${error.stack}`);
       }
@@ -583,6 +597,27 @@ export default class ViewModel {
   }
 
   /**
+   * Returns a sanitized version of the given ID. Sanitizes by stripping out invalid characters. 
+   * 
+   * @param {String} id 
+   * 
+   * @returns {String}
+   */
+  sanitizeId(id) {
+    const rgxUnacceptedChars = new RegExp("[^a-zA-z0-9-]", "g");
+    const matches = id.match(rgxUnacceptedChars);
+    let sanitized = id;
+
+    if (matches === null) return sanitized;
+
+    for (const match of matches) {
+      const index = sanitized.indexOf(match);
+      sanitized = sanitized.substring(0, index) + sanitized.substring(index + 1);
+    }
+    return sanitized;
+  }
+
+  /**
    * Returns an array of view model instances that have either been fetched 
    * from the `currentList` or newly instantiated, using the `factoryFunc`. 
    * 
@@ -642,5 +677,4 @@ export default class ViewModel {
       }
     }
   }
-
 }

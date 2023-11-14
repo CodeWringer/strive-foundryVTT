@@ -2,21 +2,27 @@
 viewModel: {DamageDefinitionListItemViewModel}
 cssClass: {String | undefined}
 --}}
-<div class="fill flex flex-row{{#if cssClass}} {{cssClass}}{{/if}}">
-  {{!-- Damage formula --}}
-  <div class="width-min-xl">
-    {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.damageDefinition.label"}}{{/label}}
+<div class="flex flex-row flex-grow{{#if cssClass}} {{cssClass}}{{/if}}">
+  <div class="grid grid-2col grid-gap-md">
+    <div class="flex flex-row">
+      {{!-- Damage formula --}}
+      <div class="width-min-xl">
+        {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.damageDefinition.label"}}{{/label}}
+      </div>
+      <span class="width-min-xxl flex-grow">
+        {{> inputTextField viewModel=viewModel.vmTfDamage }}
+      </span>
+    </div>
+    <div class="flex flex-row">
+      {{!-- Damage type --}}
+      <div class="width-min-xxl">
+        {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.damageType.label"}}{{/label}}
+      </div>
+      <span class="width-min-xxl flex-grow">
+        {{> inputDropDown viewModel=viewModel.vmDdDamageType }}
+      </span>
+      {{!-- Delete button --}}
+    </div>
   </div>
-  <span class="width-min-xxl flex-grow">
-    {{> inputTextField viewModel=viewModel.vmTfDamage }}
-  </span>
-  {{!-- Damage type --}}
-  <div class="width-min-xxl">
-    {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.damageType.label"}}{{/label}}
-  </div>
-  <span class="width-xxl">
-    {{> inputDropDown viewModel=viewModel.vmDdDamageType }}
-  </span>
-  {{!-- Delete button --}}
-  {{#> button viewModel=viewModel.vmBtnDelete }}<i class="fas fa-trash"></i>{{/button}}
+  {{> button viewModel=viewModel.vmBtnDelete }}
 </div>

@@ -1,4 +1,4 @@
-import { getAsChoices } from "../../util/constants-utility.mjs";
+import * as ConstantsUtils from "../../util/constants-utility.mjs";
 
 /**
  * Represents an attack type. 
@@ -8,6 +8,12 @@ import { getAsChoices } from "../../util/constants-utility.mjs";
  * @property {String} localizableAbbreviation Localization key for the abbreviation. 
  */
 export class AttackType {
+  /**
+   * @param {Object} args 
+   * @param {String} args.name 
+   * @param {String} args.localizableName 
+   * @param {String} args.localizableAbbreviation 
+   */
   constructor(args = {}) {
     this.name = args.name;
     this.localizableName = args.localizableName;
@@ -22,9 +28,6 @@ export class AttackType {
  * @property {AttackType} singleTarget
  * @property {AttackType} areaOfEffect
  * @property {AttackType} multipleSingleTarget
- * 
- * @property {Array<ChoiceOption>} asChoices The constants of this type, as an array 
- * of `ChoiceOption`s. 
  * 
  * @constant
  */
@@ -49,10 +52,5 @@ export const ATTACK_TYPES = {
     localizableName: "ambersteel.attackType.multipleSingleTarget.label",
     localizableAbbreviation: "ambersteel.attackType.multipleSingleTarget.abbreviation"
   }),
-  get asChoices() {
-    if (this._asChoices === undefined) {
-      this._asChoices = getAsChoices(this, ["asChoices", "_asChoices"]);
-    }
-    return this._asChoices;
-  },
 };
+ConstantsUtils.enrichConstant(ATTACK_TYPES);

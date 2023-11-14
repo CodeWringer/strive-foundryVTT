@@ -1,9 +1,10 @@
 import Ruleset from "../../../../../business/ruleset/ruleset.mjs"
 import { validateOrThrow } from "../../../../../business/util/validation-utility.mjs"
+import ButtonAddViewModel from "../../../../component/button-add/button-add-viewmodel.mjs"
+import InputNumberSpinnerViewModel from "../../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs"
 import DocumentListItemOrderDataSource from "../../../../component/sortable-list/document-list-item-order-datasource.mjs"
 import SortableListViewModel from "../../../../component/sortable-list/sortable-list-viewmodel.mjs"
 import { TEMPLATES } from "../../../../templatePreloader.mjs"
-import ViewModelFactory from "../../../../view-model/view-model-factory.mjs"
 import ViewModel from "../../../../view-model/view-model.mjs"
 import IllnessListItemViewModel from "../../../item/illness/illness-list-item-viewmodel.mjs"
 import InjuryListItemViewModel from "../../../item/injury/injury-list-item-viewmodel.mjs"
@@ -134,26 +135,31 @@ export default class ActorHealthViewModel extends ViewModel {
     this.contextType = args.contextType ?? "actor-health";
 
     const thiz = this;
-    const factory = new ViewModelFactory();
 
-    this.vmNsHp = factory.createVmNumberSpinner({
+    this.vmNsHp = new InputNumberSpinnerViewModel({
       parent: thiz,
       id: "vmNsHp",
-      propertyOwner: thiz.document,
-      propertyPath: "health.HP",
+      value: thiz.document.health.HP,
+      onChange: (_, newValue) => {
+        thiz.document.health.HP = newValue;
+      },
     });
-    this.vmNsExhaustion = factory.createVmNumberSpinner({
+    this.vmNsExhaustion = new InputNumberSpinnerViewModel({
       parent: thiz,
       id: "vmNsExhaustion",
-      propertyOwner: thiz.document,
-      propertyPath: "health.exhaustion",
+      value: thiz.document.health.exhaustion,
+      onChange: (_, newValue) => {
+        thiz.document.health.exhaustion = newValue;
+      },
       min: 0,
     });
-    this.vmNsMagicStamina = factory.createVmNumberSpinner({
+    this.vmNsMagicStamina = new InputNumberSpinnerViewModel({
       parent: thiz,
       id: "vmNsMagicStamina",
-      propertyOwner: thiz.document,
-      propertyPath: "health.magicStamina",
+      value: thiz.document.health.magicStamina,
+      onChange: (_, newValue) => {
+        thiz.document.health.magicStamina = newValue;
+      },
       min: 0,
     });
     this.vmHealthStates = new ActorHealthStatesViewModel({
@@ -178,15 +184,15 @@ export default class ActorHealthViewModel extends ViewModel {
       }),
       listItemViewModels: this.illnesses,
       listItemTemplate: TEMPLATES.ILLNESS_LIST_ITEM,
-      vmBtnAddItem: factory.createVmBtnAdd({
+      vmBtnAddItem: new ButtonAddViewModel({
         id: "vmBtnAddIllness",
+        parent: this,
         target: thiz.document,
         isEditable: this.isEditable,
         creationType: "illness",
         withDialog: true,
-        localizableLabel: "ambersteel.character.health.illness.add.label",
-        localizableType: "ambersteel.character.health.illness.singular",
-        localizableDialogTitle: "ambersteel.character.health.illness.add.query",
+        localizedLabel: game.i18n.localize("ambersteel.character.health.illness.add.label"),
+        localizedType: game.i18n.localize("ambersteel.character.health.illness.singular"),
       }),
     });
 
@@ -203,15 +209,15 @@ export default class ActorHealthViewModel extends ViewModel {
       }),
       listItemViewModels: this.injuries,
       listItemTemplate: TEMPLATES.INJURY_LIST_ITEM,
-      vmBtnAddItem: factory.createVmBtnAdd({
+      vmBtnAddItem: new ButtonAddViewModel({
         id: "vmBtnAddInjury",
+        parent: this,
         target: thiz.document,
         isEditable: this.isEditable,
         creationType: "injury",
         withDialog: true,
-        localizableLabel: "ambersteel.character.health.injury.add.label",
-        localizableType: "ambersteel.character.health.injury.singular",
-        localizableDialogTitle: "ambersteel.character.health.injury.add.query",
+        localizedLabel: game.i18n.localize("ambersteel.character.health.injury.add.label"),
+        localizedType: game.i18n.localize("ambersteel.character.health.injury.singular"),
       }),
     });
 
@@ -228,15 +234,15 @@ export default class ActorHealthViewModel extends ViewModel {
       }),
       listItemViewModels: this.mutations,
       listItemTemplate: TEMPLATES.MUTATION_LIST_ITEM,
-      vmBtnAddItem: factory.createVmBtnAdd({
+      vmBtnAddItem: new ButtonAddViewModel({
         id: "vmBtnAddMutation",
+        parent: this,
         target: thiz.document,
         isEditable: this.isEditable,
         creationType: "mutation",
         withDialog: true,
-        localizableLabel: "ambersteel.character.health.mutation.add.label",
-        localizableType: "ambersteel.character.health.mutation.singular",
-        localizableDialogTitle: "ambersteel.character.health.mutation.add.query",
+        localizedLabel: game.i18n.localize("ambersteel.character.health.mutation.add.label"),
+        localizedType: game.i18n.localize("ambersteel.character.health.mutation.singular"),
       }),
     });
 
@@ -253,15 +259,15 @@ export default class ActorHealthViewModel extends ViewModel {
       }),
       listItemViewModels: this.scars,
       listItemTemplate: TEMPLATES.SCAR_LIST_ITEM,
-      vmBtnAddItem: factory.createVmBtnAdd({
+      vmBtnAddItem: new ButtonAddViewModel({
         id: "vmBtnAddScar",
+        parent: this,
         target: thiz.document,
         isEditable: this.isEditable,
         creationType: "scar",
         withDialog: true,
-        localizableLabel: "ambersteel.character.health.scar.add.label",
-        localizableType: "ambersteel.character.health.scar.singular",
-        localizableDialogTitle: "ambersteel.character.health.scar.add.query",
+        localizedLabel: game.i18n.localize("ambersteel.character.health.scar.add.label"),
+        localizedType: game.i18n.localize("ambersteel.character.health.scar.singular"),
       }),
     });
   }

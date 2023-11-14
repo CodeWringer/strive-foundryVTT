@@ -2,10 +2,11 @@ import { DAMAGE_TYPES } from "../../../../business/ruleset/damage-types.mjs"
 import { ATTACK_TYPES } from "../../../../business/ruleset/skill/attack-types.mjs"
 import { createUUID } from "../../../../business/util/uuid-utility.mjs"
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs"
+import ButtonAddViewModel from "../../../component/button-add/button-add-viewmodel.mjs"
+import ButtonToggleVisibilityViewModel from "../../../component/button-toggle-visibility/button-toggle-visibility-viewmodel.mjs"
 import DocumentListItemOrderDataSource from "../../../component/sortable-list/document-list-item-order-datasource.mjs"
 import SortableListViewModel from "../../../component/sortable-list/sortable-list-viewmodel.mjs"
 import { TEMPLATES } from "../../../templatePreloader.mjs"
-import ViewModelFactory from "../../../view-model/view-model-factory.mjs"
 import ViewModel from "../../../view-model/view-model.mjs"
 import SkillAbilityListItemViewModel from "./skill-ability-list-item-viewmodel.mjs"
 
@@ -47,13 +48,13 @@ export default class SkillAbilityTableViewModel extends ViewModel {
    * @type {Array<ChoiceOption>}
    * @readonly
    */
-  get attackTypeOptions() { return ATTACK_TYPES.asChoices; }
+  get attackTypeOptions() { return ATTACK_TYPES.asChoices(); }
 
   /**
    * @type {Array<ChoiceOption>}
    * @readonly
    */
-  get damageTypeOptions() { return DAMAGE_TYPES.asChoices; }
+  get damageTypeOptions() { return DAMAGE_TYPES.asChoices(); }
 
   /**
    * @type {Array<SkillAbilityListItemViewModel>}
@@ -87,7 +88,6 @@ export default class SkillAbilityTableViewModel extends ViewModel {
     // Child view models. 
     this.contextTemplate = "skill-ability-table";
     const thiz = this;
-    const factory = new ViewModelFactory();
 
     this.abilities = [];
     this.abilities = this._getSkillAbilityViewModels();
@@ -102,35 +102,41 @@ export default class SkillAbilityTableViewModel extends ViewModel {
       }),
       listItemViewModels: this.abilities,
       listItemTemplate: TEMPLATES.SKILL_ABILITY_LIST_ITEM,
-      vmBtnAddItem: factory.createVmBtnAdd({
+      vmBtnAddItem: new ButtonAddViewModel({
         id: "vmBtnAdd",
+        parent: this,
         target: thiz.document,
         isEditable: this.isEditable,
         creationType: "skill-ability",
         withDialog: false,
-        localizableLabel: "ambersteel.character.skill.ability.add.label",
-        localizableType: "ambersteel.character.skill.ability.singular",
-        localizableDialogTitle: "ambersteel.character.skill.ability.add.query",
+        localizedLabel: game.i18n.localize("ambersteel.character.skill.ability.add.label"),
+        localizedType: game.i18n.localize("ambersteel.character.skill.ability.singular"),
       }),
     });
 
-    this.vmBtnToggleVisibilityExpand = factory.createVmBtnToggleVisibility({
+    this.vmBtnToggleVisibilityExpand = new ButtonToggleVisibilityViewModel({
       parent: thiz,
       id: "vmBtnToggleVisibilityExpand",
       target: thiz.document,
       isEditable: true,
       visGroup: thiz.visGroupId,
       toggleSelf: true,
-      callback: thiz._toggleSkillAbilitiesInitiallyVisible.bind(thiz),
+      onClick: async (callback) => {
+        await callback();
+        await thiz._toggleSkillAbilitiesInitiallyVisible();
+      },
     });
-    this.vmBtnToggleVisibilityCollapse = factory.createVmBtnToggleVisibility({
+    this.vmBtnToggleVisibilityCollapse = new ButtonToggleVisibilityViewModel({
       parent: thiz,
       id: "vmBtnToggleVisibilityCollapse",
       target: thiz.document,
       isEditable: true,
       visGroup: thiz.visGroupId,
       toggleSelf: true,
-      callback: thiz._toggleSkillAbilitiesInitiallyVisible.bind(thiz),
+      onClick: async (callback) => {
+        await callback();
+        await thiz._toggleSkillAbilitiesInitiallyVisible();
+      },
     });
   }
 
