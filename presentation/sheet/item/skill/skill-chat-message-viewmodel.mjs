@@ -1,4 +1,4 @@
-import TransientSkill, { SKILL_HEAD_STATES } from "../../../../business/document/item/skill/transient-skill.mjs"
+import TransientSkill from "../../../../business/document/item/skill/transient-skill.mjs"
 import { ATTRIBUTES } from "../../../../business/ruleset/attribute/attributes.mjs"
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs"
 import ButtonToggleVisibilityViewModel from "../../../component/button-toggle-visibility/button-toggle-visibility-viewmodel.mjs"
@@ -47,18 +47,6 @@ export default class SkillChatMessageViewModel extends ViewModel {
    * @readonly
    */
   get templateSkillAbility() { return TEMPLATES.SKILL_ABILITY_CHAT_MESSAGE; }
-
-  /**
-   * Returns true, if advanced data should be hidden. 
-   * 
-   * This entails: 
-   * * related attribute
-   * * description
-   * * category
-   * @type {Boolean}
-   * @readonly
-   */
-  get isHeadless() { return this.document.headState.name !== SKILL_HEAD_STATES.FULL.name; }
 
   /**
    * Returns true, if the list of prerequisites should be rendered. 

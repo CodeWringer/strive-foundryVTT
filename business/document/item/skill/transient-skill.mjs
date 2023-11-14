@@ -24,63 +24,6 @@ import AtReferencer from "../../../referencing/at-referencer.mjs";
 import { getGroupForAttributeByName } from "../../../ruleset/attribute/attribute-groups.mjs";
 
 /**
- * Represents a skill type document's "head" state. 
- * 
- * A head state of a skill determines how much data fidelity its 
- * associated skill exposes and makes interactible to the user. 
- * 
- * @property {String} name Internal name. 
- * @property {String | undefined} localizableName Localization key. 
- * @property {String | undefined} icon CSS class of an icon. 
- * * E. g. `"fas fa-virus"`
- */
-export class SkillHeadState {
-  /**
-   * @param {Object} args
-   * @param {String} args.name Internal name. 
-   * @param {String | undefined} args.localizableName Localization key. 
-   * @param {String | undefined} args.icon CSS class of an icon. 
-   * * E. g. `"fas fa-virus"`
-   */
-  constructor(args = {}) {
-    this.name = args.name;
-    this.localizableName = args.localizableName;
-    this.icon = args.icon;
-  }
-}
-
-/**
- * Represents the defined skill head states. 
- * 
- * @property {HealthState} full All of the skills data is available. 
- * @property {HealthState} level_only Only name, icon, unmodified level and 
- * skill ability list are exposed. 
- * @property {HealthState} headless Only name, icon and skill ability 
- * list are exposed. 
- * 
- * @constant
- */
-export const SKILL_HEAD_STATES = {
-  FULL: new SkillHeadState({
-    name: "full",
-    localizableName: "ambersteel.character.skill.headStates.full",
-  }),
-  BASICS: new SkillHeadState({
-    name: "basics",
-    localizableName: "ambersteel.character.skill.headStates.basics",
-  }),
-  LEVEL_ONLY: new SkillHeadState({
-    name: "level_only",
-    localizableName: "ambersteel.character.skill.headStates.level_only",
-  }),
-  HEADLESS: new SkillHeadState({
-    name: "headless",
-    localizableName: "ambersteel.character.skill.headStates.headless",
-  }),
-}
-ConstantsUtils.enrichConstant(SKILL_HEAD_STATES);
-
-/**
  * Represents the full transient data of a skill. 
  * 
  * @extends TransientBaseItem
@@ -98,7 +41,6 @@ ConstantsUtils.enrichConstant(SKILL_HEAD_STATES);
  * @property {Array<SkillAbility>} abilities The array of skill abilities of this skill. 
  * @property {Boolean} isMagicSchool Returns true, if the skill is considered 
  * a magic school. 
- * @property {SkillHeadState} headState The current degree of data fidelity to expose. 
  * 
  * @property {Number | undefined} apCost 
  * @property {Array<DamageAndType>} damage
@@ -259,21 +201,6 @@ export default class TransientSkill extends TransientBaseItem {
     this.persistSkillAbilities();
   }
   
-  /**
-   * @type {SkillHeadState}
-   */
-  get headState() {
-    if (this.document.system.headState === undefined) {
-      return SKILL_HEAD_STATES.FULL;
-    } else {
-      return SKILL_HEAD_STATES.asArray().find(it => it.name === this.document.system.headState); 
-    }
-  }
-  set headState(value) {
-    this.document.system.headState = value.name;
-    this.updateByPath("system.headState", value.name);
-  }
-
   /**
    * Returns the list of prerequisite skills. 
    * 
@@ -605,23 +532,14 @@ export default class TransientSkill extends TransientBaseItem {
    * @returns {Sum}
    */
   getRollData() {
-    if (this.headState.name === SKILL_HEAD_STATES.FULL.name
-      || this.headState.name === SKILL_HEAD_STATES.BASICS.name) {
-      const actor = (this.owningDocument ?? {}).document;
-      const characterAttribute = new CharacterAttribute(actor, this.relatedAttribute.name);
-      const compositionObj = new Ruleset().getSkillTestNumberOfDice(this.modifiedLevel, characterAttribute.modifiedLevel);
-  
-      return new Sum([
-        new SumComponent(this.relatedAttribute.name, characterAttribute.localizableName, compositionObj.attributeDiceCount),
-        new SumComponent(this.name, this.name, compositionObj.skillDiceCount),
-      ]);
-    } else if (this.headState.name === SKILL_HEAD_STATES.LEVEL_ONLY.name) {
-      return new Sum([
-        new SumComponent(this.name, this.name, this.level),
-      ]);
-    } else {
-      return new Sum();
-    }
+    const actor = (this.owningDocument ?? {}).document;
+    const characterAttribute = new CharacterAttribute(actor, this.relatedAttribute.name);
+    const compositionObj = new Ruleset().getSkillTestNumberOfDice(this.modifiedLevel, characterAttribute.modifiedLevel);
+
+    return new Sum([
+      new SumComponent(this.relatedAttribute.name, characterAttribute.localizableName, compositionObj.attributeDiceCount),
+      new SumComponent(this.name, this.name, compositionObj.skillDiceCount),
+    ]);
   }
 
   /**

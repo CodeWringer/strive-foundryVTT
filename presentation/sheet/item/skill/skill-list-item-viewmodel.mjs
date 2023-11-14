@@ -1,5 +1,4 @@
-import TransientSkill, { SKILL_HEAD_STATES } from "../../../../business/document/item/skill/transient-skill.mjs"
-import { getGroupForAttributeByName } from "../../../../business/ruleset/attribute/attribute-groups.mjs"
+import TransientSkill from "../../../../business/document/item/skill/transient-skill.mjs"
 import { ATTRIBUTES } from "../../../../business/ruleset/attribute/attributes.mjs"
 import { SKILL_TAGS } from "../../../../business/tags/system-tags.mjs"
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs"
@@ -7,7 +6,6 @@ import { isDefined } from "../../../../business/util/validation-utility.mjs"
 import ButtonDeleteViewModel from "../../../component/button-delete/button-delete-viewmodel.mjs"
 import ButtonRollViewModel from "../../../component/button-roll/button-roll-viewmodel.mjs"
 import ButtonSendToChatViewModel from "../../../component/button-send-to-chat/button-send-to-chat-viewmodel.mjs"
-import ButtonViewModel from "../../../component/button/button-viewmodel.mjs"
 import ChoiceAdapter from "../../../component/input-choice/choice-adapter.mjs"
 import InputDropDownViewModel from "../../../component/input-dropdown/input-dropdown-viewmodel.mjs"
 import InputImageViewModel from "../../../component/input-image/input-image-viewmodel.mjs"
@@ -17,7 +15,6 @@ import InputTagsViewModel from "../../../component/input-tags/input-tags-viewmod
 import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs"
 import { TEMPLATES } from "../../../templatePreloader.mjs"
 import SkillAbilityTableViewModel from "../skill-ability/skill-ability-table-viewmodel.mjs"
-import { querySkillConfiguration } from "./skill-utils.mjs"
 import SkillViewModel from "./skill-viewmodel.mjs"
 
 export default class SkillListItemViewModel extends SkillViewModel {
@@ -59,44 +56,11 @@ export default class SkillListItemViewModel extends SkillViewModel {
   get showSkillAbilities() { return this.isEditable === true || this.document.abilities.length > 0; }
   
   /**
-   * Returns true, if the level should be rendered. 
-   * @type {Boolean}
-   * @readonly
-   */
-  get showLevel() { return this.document.headState.name === SKILL_HEAD_STATES.FULL.name 
-    || this.document.headState.name === SKILL_HEAD_STATES.LEVEL_ONLY.name
-    || this.document.headState.name === SKILL_HEAD_STATES.BASICS.name; }
-  
-  /**
    * Returns true, if the list of prerequisites should be rendered. 
    * @type {Boolean}
    * @readonly
    */
   get showPrerequisites() { return this.document.prerequisites !== undefined && this.document.prerequisites.length > 0; }
-
-  /**
-   * Returns true, if advanced data should be rendered. 
-   * 
-   * This entails: 
-   * * modified level
-   * * advancement requirements
-   * * advancement progress
-   * * description
-   * * tags list
-   * * category
-   * @type {Boolean}
-   * @readonly
-   */
-  get showAdvancedData() { return this.document.headState.name === SKILL_HEAD_STATES.FULL.name; }
-
-  /**
-   * Returns true, if related attribute should be rendered. 
-   * 
-   * @type {Boolean}
-   * @readonly
-   */
-  get showRelatedAttribute() { return this.document.headState.name === SKILL_HEAD_STATES.FULL.name 
-    || this.document.headState.name === SKILL_HEAD_STATES.BASICS.name; }
 
   /**
    * @type {Number}
@@ -197,19 +161,6 @@ export default class SkillListItemViewModel extends SkillViewModel {
       id: "vmBtnDelete",
       target: thiz.document,
       withDialog: true,
-    });
-    this.vmBtnEdit = new ButtonViewModel({
-      id: "vmBtnEdit",
-      parent: this,
-      target: this.document,
-      iconHtml: '<i class="fas fa-cog"></i>',
-      localizedTooltip: game.i18n.localize("ambersteel.general.edit"),
-      onClick: async () => {
-        const delta = await querySkillConfiguration(this.document);
-        if (delta !== undefined) {
-          this.document.headState = delta.headState;
-        }
-      },
     });
     this.vmDdRelatedAttribute = new InputDropDownViewModel({
       id: "vmDdRelatedAttribute",

@@ -19,8 +19,6 @@ cssClass: {undefined | String}
     <div class="flex-grow margin-r-md">
       {{> inputTextField viewModel=viewModel.vmTfName cssClass="list-item-header" }}
     </div>
-    {{!-- Configure --}}
-    {{> button viewModel=viewModel.vmBtnEdit square=true cssClass="" }}
     {{!-- Context Menu --}}
     {{> buttonContextMenu viewModel=viewModel.vmBtnContextMenu cssClass="" }}
     {{!-- Delete --}}
@@ -30,21 +28,21 @@ cssClass: {undefined | String}
   <div class="flex flex-row margin-b-md">
     {{!-- Level --}}
     <div class="flex flex-row">
-      <div class="width-min-lg{{#if (neq viewModel.showLevel true)}} hidden{{/if}}">
+      <div class="width-min-lg">
         {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.advancement.level"}}{{/label}}
       </div>
-      <div class="width-md{{#if (neq viewModel.showLevel true)}} hidden{{/if}}">
+      <div class="width-md">
         {{> inputNumberSpinner viewModel=viewModel.vmNsLevel }}
       </div>
       {{!-- Level Modifier --}}
-      <div class="margin-l-sm{{#if (neq viewModel.showAdvancedData true)}} hidden{{/if}}">
+      <div class="margin-l-sm">
         {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.advancement.levelModAbbreviation"}}{{/label}}
       </div>
-      <div class="width-md{{#if (neq viewModel.showAdvancedData true)}} hidden{{/if}}">
+      <div class="width-md">
         {{> inputNumberSpinner viewModel=viewModel.vmNsLevelModifier }}
       </div>
       {{!-- Modified Level --}}
-      <div class="width-md flex flex-middle{{#if (neq viewModel.showAdvancedData true)}} hidden{{/if}}">
+      <div class="width-md flex flex-middle">
         <span class="pad-md font-bold">=</span>
         {{#> readOnlyValue cssClass="width-min-md font-size-lg flex flex-center"}}{{viewModel.modifiedLevel}}{{/readOnlyValue}}
       </div>
@@ -53,7 +51,7 @@ cssClass: {undefined | String}
     {{!-- Spacer --}}
     <div class="flex-grow"></div>
     {{!-- Advancement Requirements --}}
-    <div class="flex flex-row{{#if (neq viewModel.showAdvancedData true)}} hidden{{/if}}">
+    <div class="flex flex-row">
       <div class="width-min-xl">
         {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.advancement.requirements.successAndFailure.abbreviation"}}{{/label}}
       </div>
@@ -62,7 +60,7 @@ cssClass: {undefined | String}
       </div>
     </div>
     {{!-- Successes --}}
-    <div class="flex flex-row{{#if (neq viewModel.showAdvancedData true)}} hidden{{/if}}">
+    <div class="flex flex-row">
       <div class="width-min-l margin-l-sm">
         {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.advancement.requirements.success.abbreviation"}}{{/label}}
       </div>
@@ -71,7 +69,7 @@ cssClass: {undefined | String}
       </div>
     </div>
     {{!-- Failures --}}
-    <div class="flex flex-row{{#if (neq viewModel.showAdvancedData true)}} hidden{{/if}}">
+    <div class="flex flex-row">
       <div class="width-min-l margin-l-sm">
         {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.advancement.requirements.failure.abbreviation"}}{{/label}}
       </div>
@@ -83,11 +81,11 @@ cssClass: {undefined | String}
   </div>
   {{!-- Row --}}
   {{!-- Description --}}
-  <div class="flex flex-column margin-b-md border-solid-t-sm border-solid-b-sm{{#if (neq viewModel.showAdvancedData true)}} hidden{{/if}}">
+  <div class="flex flex-column margin-b-md border-solid-t-sm border-solid-b-sm">
     {{> inputRichText viewModel=viewModel.vmRtDescription }}
   </div>
   {{!-- Related Attribute --}}
-  <div class="flex flex-row margin-b-sm{{#if (neq viewModel.showRelatedAttribute true)}} hidden{{/if}}">
+  <div class="flex flex-row margin-b-sm">
     <span class="width-min-xl">
       {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.skill.relatedAttribute"}}{{/label}}
     </span>
@@ -164,7 +162,7 @@ cssClass: {undefined | String}
   </div>
   {{!-- Row --}}
   {{!-- Prerequisites --}}
-  <div class="flex flex-column margin-b-sm{{#if (or (neq viewModel.showAdvancedData true) (neq viewModel.showPrerequisites true))}} hidden{{/if}}">
+  <div class="flex flex-column margin-b-sm{{#if (neq viewModel.showPrerequisites true)}} hidden{{/if}}">
     {{#> header3 showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.skill.prerequisite.plural"}}{{/header3}}
     <ul class="unstyled-list">
       {{#each viewModel.prerequisites as |prerequisite index|}}
@@ -184,7 +182,7 @@ cssClass: {undefined | String}
   </div>
   {{!-- Row --}}
   {{!-- Tags --}}
-  <div class="flex flex-row margin-b-sm{{#if (neq viewModel.showAdvancedData true)}} hidden{{/if}}">
+  <div class="flex flex-row margin-b-sm">
     <span class="width-min-xl">
       {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.general.tags.label"}}{{/label}}
     </span>
@@ -193,7 +191,7 @@ cssClass: {undefined | String}
     </span>
   </div>
   {{!-- Row --}}
-  <div class="flex flex-row{{#if (neq viewModel.showAdvancedData true)}} hidden{{/if}}">
+  <div class="flex flex-row">
     {{!-- Category --}}
     <div class="width-min-xl">
       {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.general.category"}}{{/label}}

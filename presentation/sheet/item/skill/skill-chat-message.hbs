@@ -14,7 +14,7 @@ cssClass: {undefined | String}
     {{#> header2 showFancyFont=viewModel.showFancyFont cssClass="flex-grow"}}{{viewModel.document.name}}{{/header2}}
   </div>
   {{!-- Related Attribute --}}
-  <div class="flex flex-row sheet-block margin-b-md{{#if (eq viewModel.isHeadless true)}} hidden{{/if}}">
+  <div class="flex flex-row sheet-block margin-b-md">
     <div class="width-min-xxl">
       {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.attribute.singular"}}{{/label}}
     </div>
@@ -23,7 +23,7 @@ cssClass: {undefined | String}
     </div>
   </div>
   {{!-- Category --}}
-  <div class="flex flex-row sheet-block margin-b-md{{#if (eq viewModel.isHeadless true)}} hidden{{/if}}">
+  <div class="flex flex-row sheet-block margin-b-md">
     <div class="width-min-xxl">
       {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.general.category"}}{{/label}}
     </div>
@@ -32,11 +32,11 @@ cssClass: {undefined | String}
     </div>
   </div>
   {{!-- Tags --}}
-  <div class="flex flex-row sheet-block margin-b-md{{#if (or (neq viewModel.hasTags true) (eq viewModel.isHeadless true))}} hidden{{/if}}">
+  <div class="flex flex-row sheet-block margin-b-md{{#if (neq viewModel.hasTags true)}} hidden{{/if}}">
     {{> inputTags viewModel=viewModel.vmTags }}
   </div>
   {{!-- Description --}}
-  <div class="sheet-block scrollable-height-md{{#if (eq viewModel.isHeadless true)}} hidden{{/if}}">
+  <div class="sheet-block scrollable-height-md">
     {{> lazyRichText viewModel=viewModel.vmLazyDescription}}
   </div>
   {{!-- Prerequisites --}}

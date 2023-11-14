@@ -3,7 +3,6 @@ import { ATTRIBUTES } from "../../../../business/ruleset/attribute/attributes.mj
 import SkillPrerequisite from "../../../../business/ruleset/skill/skill-prerequisite.mjs";
 import { isDefined } from "../../../../business/util/validation-utility.mjs";
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs";
-import ButtonViewModel from "../../../component/button/button-viewmodel.mjs";
 import ChoiceAdapter from "../../../component/input-choice/choice-adapter.mjs";
 import InputTagsViewModel from "../../../component/input-tags/input-tags-viewmodel.mjs";
 import SimpleListItemViewModel from "../../../component/simple-list/simple-list-item-viewmodel.mjs";
@@ -11,16 +10,12 @@ import SimpleListViewModel from "../../../component/simple-list/simple-list-view
 import { TEMPLATES } from "../../../templatePreloader.mjs"
 import SkillAbilityTableViewModel from "../skill-ability/skill-ability-table-viewmodel.mjs"
 import SkillPrerequisiteListItemViewModel from "./skill-prerequisite-list-item-viewmodel.mjs";
-import { querySkillConfiguration } from "./skill-utils.mjs";
 import SkillViewModel from "./skill-viewmodel.mjs";
 import InputImageViewModel from "../../../component/input-image/input-image-viewmodel.mjs";
 import InputRichTextViewModel from "../../../component/input-rich-text/input-rich-text-viewmodel.mjs";
 import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs";
 import InputDropDownViewModel from "../../../component/input-dropdown/input-dropdown-viewmodel.mjs";
 import ButtonSendToChatViewModel from "../../../component/button-send-to-chat/button-send-to-chat-viewmodel.mjs";
-import ButtonContextMenuViewModel from "../../../component/button-context-menu/button-context-menu-viewmodel.mjs";
-import DamageAndType from "../../../../business/ruleset/skill/damage-and-type.mjs";
-import { ATTACK_TYPES } from "../../../../business/ruleset/skill/attack-types.mjs";
 
 export default class SkillItemSheetViewModel extends SkillViewModel {
   /** @override */
@@ -81,22 +76,6 @@ export default class SkillItemSheetViewModel extends SkillViewModel {
         thiz.document.name = newValue;
       },
       placeholder: game.i18n.localize("ambersteel.general.name"),
-    });
-    this.vmBtnEdit = new ButtonViewModel({
-      id: "vmBtnEdit",
-      parent: this,
-      isSendable: this.isSendable,
-      isEditable: this.isEditable,
-      isOwner: this.isOwner,
-      target: this.document,
-      iconHtml: '<i class="fas fa-cog"></i>',
-      localizedTooltip: game.i18n.localize("ambersteel.general.edit"),
-      onClick: async () => {
-        const delta = await querySkillConfiguration(this.document);
-        if (delta !== undefined) {
-          this.document.headState = delta.headState;
-        }
-      },
     });
     this.vmBtnSendToChat = new ButtonSendToChatViewModel({
       parent: thiz,
