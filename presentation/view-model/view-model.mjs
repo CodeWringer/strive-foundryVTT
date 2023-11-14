@@ -284,7 +284,7 @@ export default class ViewModel {
    * * Default `game.ambersteel.viewStates`. 
    */
   constructor(args = {}) {
-    this._id = args.id ?? createUUID();
+    this._id = this.sanitizeId(args.id ?? createUUID());
     
     this.parent = args.parent;
 
@@ -594,6 +594,27 @@ export default class ViewModel {
     } else {
       return this.isParentOf(viewModel.parent);
     }
+  }
+
+  /**
+   * Returns a sanitized version of the given ID. Sanitizes by stripping out invalid characters. 
+   * 
+   * @param {String} id 
+   * 
+   * @returns {String}
+   */
+  sanitizeId(id) {
+    const rgxUnacceptedChars = new RegExp("[^a-zA-z0-9-]", "g");
+    const matches = id.match(rgxUnacceptedChars);
+    let sanitized = id;
+
+    if (matches === null) return sanitized;
+
+    for (const match of matches) {
+      const index = sanitized.indexOf(match);
+      sanitized = sanitized.substring(0, index) + sanitized.substring(index + 1);
+    }
+    return sanitized;
   }
 
   /**
