@@ -59,7 +59,7 @@ export default class DiceRollListViewModel extends ViewModel {
       isEditable: thiz.isEditable,
       localizedTooltip: game.i18n.localize("ambersteel.roll.doRoll"),
       iconHtml: '<i class="fas fa-dice-three"></i>',
-      onClick: async (html, isOwner, isEditable) => {
+      onClick: async () => {
         const evaluatedFormulae = await new RollFormulaResolver().evaluateFormulae(thiz.formulaViewModels);
 
         if (evaluatedFormulae === undefined) return; // User canceled. 
