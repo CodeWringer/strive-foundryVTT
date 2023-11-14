@@ -49,6 +49,7 @@ cssClass: {undefined | String}
         {{#> readOnlyValue cssClass="width-min-md font-size-lg flex flex-center"}}{{viewModel.modifiedLevel}}{{/readOnlyValue}}
       </div>
     </div>
+    {{#if viewModel.showAdvancementProgression}}
     {{!-- Spacer --}}
     <div class="flex-grow"></div>
     {{!-- Advancement Requirements --}}
@@ -78,6 +79,7 @@ cssClass: {undefined | String}
         {{> inputNumberSpinner viewModel=viewModel.vmNsFailures }}
       </div>
     </div>
+    {{/if}}
   </div>
   {{!-- Row --}}
   {{!-- Description --}}

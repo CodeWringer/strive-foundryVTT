@@ -121,6 +121,9 @@ export default class ButtonAddViewModel extends ButtonViewModel {
         };
       }
 
+      // Check if the user canceled. 
+      if (creationData === undefined) return;
+
       return await Item.create(creationData, { parent: this.target.document }); // TODO #85: This should probably be extracted to the transient-type object. 
     }
   }
@@ -129,7 +132,8 @@ export default class ButtonAddViewModel extends ButtonViewModel {
    * Prompts the user to pick a specific document to add to the target, 
    * via a dialog and returns the creation data of the selected document. 
    * 
-   * @returns {Object} The creation data the user implicitly picked. 
+   * @returns {Object | undefined} The creation data the user implicitly picked. 
+   * Returns `undefined`, if the user canceled. 
    * 
    * @async
    * @private
@@ -175,7 +179,7 @@ export default class ButtonAddViewModel extends ButtonViewModel {
       ],
     }).renderAndAwait(true);
 
-    if (dialog.confirmed !== true) return;
+    if (dialog.confirmed !== true) return undefined;
 
     const selectedValue = dialog[inputChoices];
     let creationData;

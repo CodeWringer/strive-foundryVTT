@@ -31,6 +31,13 @@ export default class ActorPersonalityViewModel extends ViewModel {
   get fateTemplate() { return TEMPLATES.ACTOR_FATE; }
 
   /**
+   * Returns true, if the actor is a player character. 
+   * 
+   * @type {Boolean}
+   */
+  get isPC() { return this.document.type === "pc"; }
+  
+  /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
    * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 
    * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 
@@ -63,21 +70,23 @@ export default class ActorPersonalityViewModel extends ViewModel {
       isOwner: this.isOwner,
       document: this.document,
     });
-    this.driversViewModel = new ActorDriversViewModel({
-      ...args,
-      id: "drivers",
-      parent: thiz,
-      isSendable: this.isSendable,
-      isEditable: this.isEditable,
-      isOwner: this.isOwner,
-    });
-    this.fateViewModel = new ActorFateViewModel({
-      ...args,
-      id: "fate",
-      parent: thiz,
-      isSendable: this.isSendable,
-      isEditable: this.isEditable,
-      isOwner: this.isOwner,
-    });
+    if (this.isPC) {
+      this.driversViewModel = new ActorDriversViewModel({
+        ...args,
+        id: "drivers",
+        parent: thiz,
+        isSendable: this.isSendable,
+        isEditable: this.isEditable,
+        isOwner: this.isOwner,
+      });
+      this.fateViewModel = new ActorFateViewModel({
+        ...args,
+        id: "fate",
+        parent: thiz,
+        isSendable: this.isSendable,
+        isEditable: this.isEditable,
+        isOwner: this.isOwner,
+      });
+    }
   }
 }

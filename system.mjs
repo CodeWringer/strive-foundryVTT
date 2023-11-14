@@ -23,6 +23,7 @@ import { VISIBILITY_MODES } from "./presentation/chat/visibility-modes.mjs";
 // Utility
 import ChoiceOption from "./presentation/component/input-choice/choice-option.mjs";
 import DocumentFetcher from "./business/document/document-fetcher/document-fetcher.mjs";
+import TokenExtensions from "./presentation/token/token-extensions.mjs";
 // Migration
 import MigratorInitiator from "./business/migration/migrator-initiator.mjs";
 import MigratorDialog from "./presentation/dialog/migrator-dialog/migrator-dialog.mjs";
@@ -297,4 +298,8 @@ Hooks.on("deleteChatMessage", function(args) {
     // Remove the view model from the global collection. 
     game.ambersteel.viewModels.remove(vmId);
   }
+});
+
+Hooks.on("hoverToken", function(token) {
+  new TokenExtensions().handleTokenHover(token);
 });

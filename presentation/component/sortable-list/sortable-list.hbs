@@ -26,12 +26,14 @@ prominentItemStyling: {Boolean | undefined}
     {{/with}}
   </li>
   {{/each}}
+  {{!-- Add button --}}
+  {{#if viewModel.hasAddButton}}
   <li class="ambersteel-list-row ambersteel-list-footer{{#if (eq viewModel.isEditable false)}} hidden{{/if}}">
     <div class="fill flex flex-row flex-right">
-      {{!-- Add button --}}
       <div>
         {{> buttonAdd viewModel=viewModel.vmBtnAddItem fill=true }}
       </div>
     </div>
   </li>
+  {{/if}}
 </ol>

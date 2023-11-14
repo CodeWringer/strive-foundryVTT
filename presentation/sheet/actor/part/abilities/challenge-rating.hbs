@@ -1,0 +1,17 @@
+{{!--
+viewModel: {ChallengeRatingViewModel}
+cssClass: {String}
+--}}
+<div id="{{viewModel.id}}" class="flex flex-row flex-middle pad-md{{#if cssClass}} {{cssClass}}{{/if}}">
+  <a id="{{viewModel.id}}-header" class="flex-grow">
+    <span class="flex-grow flex-center font-size-lg font-bold{{#if viewModel.showFancyFont}} fancy-font{{/if}}">{{viewModel.localizedLabel}}</span>
+  </a>
+  <div class="flex flex-row flex-middle">
+    <div class="width-min-lg">
+      {{#> label showFancyFont=viewModel.showFancyFont for=viewModel.vmCr.id}}{{localize "ambersteel.character.advancement.challengeRating.abbreviation"}}{{/label}}
+    </div>
+    <div class="width-md margin-l-md">
+      {{> inputNumberSpinner viewModel=viewModel.vmCr }}
+    </div>
+  </div>
+</div>

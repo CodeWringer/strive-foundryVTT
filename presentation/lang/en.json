@@ -103,7 +103,12 @@
     },
     "character": {
       "advancement": {
+        "label": "Advancement",
         "level": "Level",
+        "challengeRating": {
+          "label": "Challenge Rating",
+          "abbreviation": "CR"
+        },
         "modifiedLevel": "Modified Level",
         "modifiedLevelAbbreviation": "Modified",
         "levelMod": "Level Modifier",
@@ -582,6 +587,19 @@
           "basics": "Basics",
           "level_only": "Level Only",
           "headless": "Headless"
+        },
+        "innate": {
+          "label": "Innate Skills",
+          "plural": "Innate Skills",
+          "singular": "Innate Skill",
+          "add": {
+            "label": "Add Innate Skill",
+            "query": "Select Innate Skill to Add"
+          },
+          "delete": {
+            "label": "Delete Innate Skill",
+            "query": "Confirm Deletion of Innate Skill"
+          }
         },
         "known": {
           "label": "Known Skills",

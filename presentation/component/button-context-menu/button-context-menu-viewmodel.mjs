@@ -27,30 +27,47 @@ export default class ButtonContextMenuViewModel extends ButtonViewModel {
   }
 
   /**
-   * Returns two button definitions for a button to "toggle" a property value to be 
-   * null or non-null. 
+   * Returns two button definitions for a button to "toggle" a property value. 
    * 
    * @param {String} label The button's localizable label. 
    * @param {Object} propertyOwner Parent object of the property. 
    * @param {String} propertyName Name of the property. 
-   * @param {Any} nonNullValue Value to set on the property that is non-null. 
+   * @param {Any} activeValue Value to set on the property that is set when 
+   * the toggle is active. 
+   * @param {Any} inactiveValue Value to set on the property that is set when 
+   * the toggle is inactive. 
+   * * default `null`
    * 
    * @returns {Array<Object>} Two button definitions. One for each state of the toggle button. 
    */
-  static createToggleButtons(label, propertyOwner, propertyName, nonNullValue) {
+  static createToggleButtons(label, propertyOwner, propertyName, activeValue, inactiveValue = null) {
     const localizedLabel = game.i18n.localize(label);
     return [
       {
         name: localizedLabel,
         icon: '<i class="fas fa-check"></i>',
-        condition: () => { return isDefined(propertyOwner[propertyName]) === true; },
-        callback: () => { propertyOwner[propertyName] = null; },
+        condition: () => {
+          const value = propertyOwner[propertyName];
+          if (typeof(value) === "boolean") {
+            return value === true;
+          } else {
+            return isDefined(value) === true;
+          }
+        },
+        callback: () => { propertyOwner[propertyName] = inactiveValue; },
       },
       {
         name: localizedLabel,
         icon: '',
-        condition: () => { return isDefined(propertyOwner[propertyName]) !== true; },
-        callback: () => { propertyOwner[propertyName] = nonNullValue; },
+        condition: () => {
+          const value = propertyOwner[propertyName];
+          if (typeof(value) === "boolean") {
+            return value === false;
+          } else {
+            return isDefined(value) === false;
+          }
+        },
+        callback: () => { propertyOwner[propertyName] = activeValue; },
       }
     ];
   }

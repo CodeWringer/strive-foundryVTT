@@ -67,6 +67,14 @@ export default class SortableListViewModel extends ViewModel {
   orderedIdList = [];
 
   /**
+   * Returns `true`, if there is an "add" button view model. 
+   * 
+   * @type {Boolean}
+   * @readonly
+   */
+  get hasAddButton() { return this.vmBtnAddItem !== undefined; }
+
+  /**
    * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
    * 
    * @param {Boolean | undefined} args.isEditable Optional. If true, input(s) will be in edit mode. If false, input(s) will be in read-only mode.
@@ -75,11 +83,11 @@ export default class SortableListViewModel extends ViewModel {
    * @param {AbstractListItemIndexDataSource} args.indexDataSource The data source of the indices. 
    * @param {Array<ViewModel>} args.listItemViewModels A list of item view models.
    * @param {String} args.listItemTemplate The absolute path of the template to use for list items. 
-   * @param {ViewModel} args.vmBtnAddItem View model of the add item button. 
+   * @param {ViewModel | undefined} args.vmBtnAddItem View model of the add item button. 
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["indexDataSource", "listItemViewModels", "listItemTemplate", "vmBtnAddItem"]);
+    validateOrThrow(args, ["indexDataSource", "listItemViewModels", "listItemTemplate"]);
 
     this.indexDataSource = args.indexDataSource;
     this.contextTemplate = args.contextTemplate ?? "sortable-list";
@@ -91,9 +99,11 @@ export default class SortableListViewModel extends ViewModel {
       listItemViewModel.parent = this;
     }
 
-    // Prepare given "add" button. 
+    // Prepare given "add" button, if necessary. 
     this.vmBtnAddItem = args.vmBtnAddItem;
-    this.vmBtnAddItem.parent = this;
+    if (this.vmBtnAddItem !== undefined) {
+      this.vmBtnAddItem.parent = this;
+    }
 
     this.orderedIdList = this._getOrderedIdList();
 

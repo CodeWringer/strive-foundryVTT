@@ -1,4 +1,5 @@
-import { SKILL_HEAD_STATES } from "../../../../business/document/item/skill/transient-skill.mjs"
+import TransientSkill, { SKILL_HEAD_STATES } from "../../../../business/document/item/skill/transient-skill.mjs"
+import { getGroupForAttributeByName } from "../../../../business/ruleset/attribute/attribute-groups.mjs"
 import { ATTRIBUTES } from "../../../../business/ruleset/attribute/attributes.mjs"
 import { SKILL_TAGS } from "../../../../business/tags/system-tags.mjs"
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs"
@@ -118,6 +119,22 @@ export default class SkillListItemViewModel extends SkillViewModel {
   }
 
   /**
+   * @type {Boolean}
+   * @readonly
+   */
+  get showAdvancementProgression() {
+    if (isDefined(this.document.owningDocument) === true) {
+      const type = this.document.owningDocument.type;
+      if (type === "npc" && this.document.owningDocument.progressionVisible === true) {
+        return true;
+      } else if (type === "pc") {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
    * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 
    * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 
@@ -226,7 +243,8 @@ export default class SkillListItemViewModel extends SkillViewModel {
     this.vmNsLevel = new InputNumberSpinnerViewModel({
       parent: thiz,
       id: "vmNsLevel",
-      value: thiz.document.level,
+      value: this.document.dependsOnActiveCr === true ? this.document.crLevel : this.document.level,
+      isEditable: this.document.dependsOnActiveCr === true ? false : this.isEditable,
       onChange: (_, newValue) => {
         thiz.document.level = newValue;
       },
@@ -240,24 +258,26 @@ export default class SkillListItemViewModel extends SkillViewModel {
         thiz.document.levelModifier = newValue;
       },
     });
-    this.vmNsSuccesses = new InputNumberSpinnerViewModel({
-      parent: thiz,
-      id: "vmNsSuccesses",
-      value: thiz.document.advancementProgress.successes,
-      onChange: (_, newValue) => {
-        thiz.document.advancementProgress.successes = newValue;
-      },
-      min: 0,
-    });
-    this.vmNsFailures = new InputNumberSpinnerViewModel({
-      parent: thiz,
-      id: "vmNsFailures",
-      value: thiz.document.advancementProgress.failures,
-      onChange: (_, newValue) => {
-        thiz.document.advancementProgress.failures = newValue;
-      },
-      min: 0,
-    });
+    if (this.showAdvancementProgression) {
+      this.vmNsSuccesses = new InputNumberSpinnerViewModel({
+        parent: thiz,
+        id: "vmNsSuccesses",
+        value: thiz.document.advancementProgress.successes,
+        onChange: (_, newValue) => {
+          thiz.document.advancementProgress.successes = newValue;
+        },
+        min: 0,
+      });
+      this.vmNsFailures = new InputNumberSpinnerViewModel({
+        parent: thiz,
+        id: "vmNsFailures",
+        value: thiz.document.advancementProgress.failures,
+        onChange: (_, newValue) => {
+          thiz.document.advancementProgress.failures = newValue;
+        },
+        min: 0,
+      });
+    }
     if (this.showSkillAbilities === true) {
       this.vmSkillAbilityTable = new SkillAbilityTableViewModel({
         id: "vmSkillAbilityTable",

@@ -9,6 +9,7 @@ import CharacterAttributeGroup from '../../ruleset/attribute/character-attribute
 import { CharacterHealthState } from '../../ruleset/health/character-health-state.mjs';
 import { HEALTH_STATES } from '../../ruleset/health/health-states.mjs';
 import Ruleset from '../../ruleset/ruleset.mjs';
+import { SKILL_TAGS } from '../../tags/system-tags.mjs';
 import LoadHealthStatesSettingUseCase from '../../use-case/load-health-states-setting-use-case.mjs';
 import { createUUID } from '../../util/uuid-utility.mjs';
 import { isDefined } from '../../util/validation-utility.mjs';
@@ -42,6 +43,8 @@ import TransientBaseActor from './transient-base-actor.mjs';
  * @property {Array<TransientSkill>} skills.learning Returns all learning skills of the character. 
  * * Read-only. 
  * @property {Array<TransientSkill>} skills.known Returns all known skills of the character. 
+ * * Read-only. 
+ * @property {Array<TransientSkill>} skills.innate Returns all innate skills of the character. 
  * * Read-only. 
  * @property {Object} health
  * * Read-only. 
@@ -220,8 +223,21 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
     const thiz = this;
     return {
       get all() { return thiz.items.filter(it => it.type === "skill"); },
-      get learning() { return thiz.items.filter(it => it.type === "skill" && it.level < 1); },
-      get known() { return thiz.items.filter(it => it.type === "skill" && it.level > 0); },
+      get learning() { return thiz.items.filter(it => 
+        it.type === "skill" && it.level < 1
+          && it.tags.find(tag => tag.id === SKILL_TAGS.INNATE.id) === undefined
+        ); 
+      },
+      get known() { return thiz.items.filter(it => 
+        it.type === "skill" && it.level > 0
+          && it.tags.find(tag => tag.id === SKILL_TAGS.INNATE.id) === undefined
+        ); 
+      },
+      get innate() { return thiz.items.filter(it => 
+        it.type === "skill" 
+        && it.tags.find(tag => tag.id === SKILL_TAGS.INNATE.id) !== undefined
+        ); 
+      },
     };
   }
 
@@ -431,13 +447,9 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
    * @private
    */
   _getAttributeGroups() {
-    const result = [];
-
-    for (const attributeGroup of ATTRIBUTE_GROUPS.asArray()) {
-      result.push(new CharacterAttributeGroup(this.document, attributeGroup.name));
-    }
-
-    return result;
+    return ATTRIBUTE_GROUPS.asArray().map(attributeGroup => 
+      new CharacterAttributeGroup(this.document, attributeGroup.name)
+    );
   }
   
   /**
@@ -577,8 +589,7 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
   }
 
   /**
-   * Tries to resolve the given reference in the embedded documents of 
-   * this document. 
+   * @override
    * 
    * Searches in: 
    * * Attribute names.
@@ -590,21 +601,6 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
    * * Embedded mutation name.
    * * Embedded scar name.
    * * Embedded asset name.
-   * 
-   * This method will be called implicitly, by an `AtReferencer`, when it tries 
-   * to resolve a reference on *this* document. 
-   * 
-   * @param {String} comparableReference A comparable version of a reference. 
-   * * Comparable in the sense that underscores "_" are replaced with spaces " " 
-   * or only the last piece of a property path is returned. 
-   * * E. g. `"@Heavy_Armor"` -> `"@heavy armor"`
-   * * E. g. `"@A.B.c"` -> `"a"`
-   * @param {String | undefined} propertyPath If not undefined, a property path on 
-   * the referenced object. 
-   * * E. g. `"@A.B.c"` -> `"B.c"`
-   * 
-   * @returns {Any | undefined} The matched reference or undefined, 
-   * if no match was found. 
    */
   resolveReference(comparableReference, propertyPath) {
     // Search attributes. 
