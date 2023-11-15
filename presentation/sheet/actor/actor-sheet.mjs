@@ -156,7 +156,7 @@ export class AmbersteelActorSheet extends ActorSheet {
 
   /** @override */
   async _onDropItem(event, data) {
-    const templateId = data.uuid.split(".")[1];
+    const templateId = data.uuid.substring(data.uuid.lastIndexOf(".") + 1);
 
     const docFetcher = new DocumentFetcher();
     const templateItem = await docFetcher.find({
