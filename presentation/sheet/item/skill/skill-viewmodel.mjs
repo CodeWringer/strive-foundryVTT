@@ -173,8 +173,9 @@ export default class SkillViewModel extends ViewModel {
 
     this.damageInfoBubble = new InfoBubble({
       html: html,
-      text: game.i18n.localize("ambersteel.damageDefinition.infoFormulae"),
-      parent: html.find(`#${this.id}-damage-info`),
+      map: [
+        { element: html.find(`#${this.id}-damage-info`), text: game.i18n.localize("ambersteel.damageDefinition.infoFormulae") },
+      ],
       autoShowType: InfoBubbleAutoShowingTypes.MOUSE_ENTER,
       autoHideType: InfoBubbleAutoHidingTypes.MOUSE_LEAVE,
     });
