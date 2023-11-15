@@ -1,4 +1,5 @@
 import AtReferencer from "../../business/referencing/at-referencer.mjs";
+import { isDefined } from "../../business/util/validation-utility.mjs";
 import { VISIBILITY_MODES } from "../chat/visibility-modes.mjs";
 import ChoiceAdapter from "../component/input-choice/choice-adapter.mjs";
 import DynamicInputDefinition from "../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
@@ -81,10 +82,24 @@ export default class RollFormulaResolver {
    * @private
    */
   async _evaluateAndResolveRolls(formulae, userResolvedReferences) {
+    const rgxDiceAndWhitespace = new RegExp("(?<m>(?<dice>\\d+)\\s+(?<d>[dD]))");
+
     const rolls = [];
     for (const formula of formulae) {
       // Resolve and evaluate the roll formula. 
-      const resolvedFormula = this._resolveReferences(formula.formula, userResolvedReferences);
+      let resolvedFormula = this._resolveReferences(formula.formula, userResolvedReferences);
+
+      let hasMatches = false;
+      do {
+        let match = resolvedFormula.match(rgxDiceAndWhitespace);
+        if (isDefined(match)) {
+          resolvedFormula = `${resolvedFormula.substring(0, match.index)}${match.groups.dice}${match.groups.d}${resolvedFormula.substring(match.index + match.groups.m.length)}`;
+          hasMatches = true;
+        } else {
+          hasMatches = false;
+        }
+      } while (hasMatches);
+
       const formulaRollResult = new Roll(resolvedFormula);
       await formulaRollResult.evaluate({ async: true });
 
