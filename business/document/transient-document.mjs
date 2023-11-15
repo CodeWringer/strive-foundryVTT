@@ -412,4 +412,20 @@ export default class TransientDocument {
    * @virtual
    */
   resolveReference(comparableReference, propertyPath) { /** Implementation up to inheriting types. */ }
+
+  /**
+   * Returns *this*. 
+   * 
+   * This is a convenience so a user of documents doesn't 
+   * have to check whether their actor or item reference is a transient 
+   * object and if not, get the transient object, if they want to 
+   * access transient object properties. Instead, a user may simply call 
+   * this method on any actor or item and get a transient document 
+   * reference to work with. 
+   * 
+   * @returns {TransientDocument} 
+   */
+  getTransientObject() {
+    return this;
+  }
 }

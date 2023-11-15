@@ -1,10 +1,11 @@
 import LevelAdvancement from "./level-advancement.mjs";
-import { ATTRIBUTE_GROUPS } from "./attribute/attribute-groups.mjs";
+import { getGroupForAttributeByName } from "./attribute/attribute-groups.mjs";
 import { Sum, SumComponent } from "./summed-data.mjs";
 import { SkillTier, SKILL_TIERS } from "./skill/skill-tier.mjs";
 import { ATTRIBUTE_TIERS, AttributeTier } from "./attribute/attribute-tier.mjs";
 import { DICE_POOL_RESULT_TYPES, DicePoolRollResult } from "../dice/dice-pool.mjs";
-import { ATTRIBUTES } from "./attribute/attributes.mjs";
+import { ATTRIBUTES, Attribute } from "./attribute/attributes.mjs";
+import TransientSkill from "../document/item/skill/transient-skill.mjs";
 
 /**
  * Provides all the ruleset-specifics. 
@@ -122,14 +123,7 @@ export default class Ruleset {
    * @returns {String} Name of the attribute group, e. g. `"physical"`. 
    */
   getAttributeGroupName(attributeName) {
-    const attGroups = ATTRIBUTE_GROUPS;
-    for (const attGroupName in attGroups) {
-      for (const attName in attGroups[attGroupName].attributes) {
-        if (attName == attributeName) {
-          return attGroupName;
-        }
-      }
-    }
+    return getGroupForAttributeByName(attributeName).name;
   }
 
   /**
@@ -192,11 +186,15 @@ export default class Ruleset {
    */
   getCharacterMaximumHp(actor) {
     const type = actor.type.toLowerCase();
-    if (type !== "pc" && type !== "npc") throw new Error("Only PC and NPC type actors allowed");
+
+    if (type !== "pc" && type !== "npc") {
+      throw new Error("Only PC and NPC type actors supported");
+    }
 
     const injuryCount = (actor.items.filter(it => it.type === "injury")).length;
-    const attributeToughness = actor.system.attributes.physical.toughness;
-    return (attributeToughness.level * 4) - (injuryCount * 2);
+    const level = this.getEffectiveAttributeRawLevel(ATTRIBUTES.toughness, actor);
+
+    return (parseInt(level) * 4) - (injuryCount * 2);
   }
 
   /**
@@ -210,10 +208,13 @@ export default class Ruleset {
    */
   getCharacterMaximumInjuries(actor) {
     const type = actor.type.toLowerCase();
-    if (type !== "pc" && type !== "npc") throw new Error("Only PC and NPC type actors allowed");
+    if (type !== "pc" && type !== "npc") {
+      throw new Error("Only PC and NPC type actors supported");
+    }
 
-    const attribute = actor.system.attributes.physical.toughness;
-    return Math.max(attribute.level, 1);
+    const level = this.getEffectiveAttributeRawLevel(ATTRIBUTES.toughness, actor);
+
+    return Math.max(parseInt(level), 1);
   }
 
   /**
@@ -227,11 +228,14 @@ export default class Ruleset {
    */
   getCharacterMaximumExhaustion(actor) {
     const type = actor.type.toLowerCase();
-    if (type !== "pc" && type !== "npc") throw new Error("Only PC and NPC type actors allowed");
+    if (type !== "pc" && type !== "npc") {
+      throw new Error("Only PC and NPC type actors supported");
+    }
     
-    const attributeLevel = parseInt(actor.system.attributes.physical.endurance.level);
     const base = 1;
-    return base + attributeLevel;
+    const level = this.getEffectiveAttributeRawLevel(ATTRIBUTES.endurance, actor);
+
+    return base + parseInt(level);
   }
   
   /**
@@ -247,10 +251,9 @@ export default class Ruleset {
     const type = actor.type.toLowerCase();
     if (type !== "pc" && type !== "npc") throw new Error("Only PC and NPC type actors allowed");
 
-    const transientActor = actor.getTransientObject();
-    const attribute = transientActor.attributes.find(it => it.name === ATTRIBUTES.strength.name);
-    const attributeLevel = attribute.modifiedLevel;
-    return attributeLevel * 3;
+    const level = this.getEffectiveAttributeModifiedLevel(ATTRIBUTES.strength, actor);
+
+    return level * 3;
   }
 
   /**
@@ -264,10 +267,9 @@ export default class Ruleset {
     const type = actor.type.toLowerCase();
     if (type !== "pc" && type !== "npc") throw new Error("Only PC and NPC type actors allowed");
 
-    const transientActor = actor.getTransientObject();
-    const attribute = transientActor.attributes.find(it => it.name === ATTRIBUTES.strength.name);
-    const attributeLevel = attribute.modifiedLevel;
-    return Math.max(0, Math.floor((attributeLevel - 1) / 3));
+    const level = this.getEffectiveAttributeModifiedLevel(ATTRIBUTES.strength, actor);
+
+    return Math.max(0, Math.floor((level - 1) / 3));
   }
 
   /**
@@ -285,17 +287,19 @@ export default class Ruleset {
     const type = actor.type.toLowerCase();
     if (type !== "pc" && type !== "npc") throw new Error("Only PC and NPC type actors allowed");
 
-    const transientActor = actor.getTransientObject();
-    const attributeArcana = transientActor.attributes.find(it => it.name === ATTRIBUTES.arcana.name);
-    let total = attributeArcana.modifiedLevel;
-    const components = [];
+    const arcanaLevel = this.getEffectiveAttributeModifiedLevel(ATTRIBUTES.arcana, actor);
+    let total = arcanaLevel;
+    
+    const components = [
+      new SumComponent(ATTRIBUTES.arcana.name, ATTRIBUTES.arcana.localizableName, arcanaLevel),
+    ];
 
     const skills = actor.items.filter(it => it.type === "skill");
     for (const skill of skills) {
       const transientSkill = skill.getTransientObject();
       if (transientSkill.isMagicSchool !== true) continue;
 
-      const skillLevel = transientSkill.level;
+      const skillLevel = this.getEffectiveSkillModifiedLevel(skill, actor);
       components.push(new SumComponent(transientSkill.name, transientSkill.localizableName, skillLevel));
       total += skillLevel;
     }
@@ -335,5 +339,103 @@ export default class Ruleset {
     } else {
       return false;
     }
+  }
+  
+  /**
+   * Returns the effective raw level of the given actor for the given 
+   * attribute. 
+   * 
+   * For NPCs, the effective level can be determined by a challenge 
+   * rating, if one is active. For PCs, the raw attribute level 
+   * is picked. 
+   * 
+   * @param {Attribute} attribute The attribute whose effective level 
+   * is to be returned. 
+   * @param {Actor} actor The actor whose attribute it is. 
+   * 
+   * @returns {Number} The raw level. 
+   */
+  getEffectiveAttributeRawLevel(attribute, actor) {
+    const type = actor.type.toLowerCase();
+    if (type !== "pc" && type !== "npc") {
+      throw new Error("Only PC and NPC type actors supported");
+    }
+
+    const attributeGroup = getGroupForAttributeByName(attribute.name);
+    let level = actor.system.attributes[attributeGroup.name][attribute.name].level;
+
+    if (type === "npc") {
+      const transientNpc = actor.getTransientObject();
+      if (transientNpc.getIsCrActiveFor(attributeGroup.name) === true) {
+        level = transientNpc.getCrFor(attributeGroup.name);
+      }
+    }
+
+    return level;
+  }
+  
+  /**
+   * Returns the effective modified level of the given actor for the 
+   * given attribute. 
+   * 
+   * For NPCs, the effective level can be determined by a challenge 
+   * rating, if one is active. For PCs, the raw attribute level 
+   * is picked. 
+   * 
+   * @param {Attribute} attribute The attribute whose effective level 
+   * is to be returned. 
+   * @param {Actor} actor The actor whose attribute it is. 
+   * 
+   * @returns {Number} The modified level. 
+   */
+  getEffectiveAttributeModifiedLevel(attribute, actor) {
+    const type = actor.type.toLowerCase();
+    if (type !== "pc" && type !== "npc") {
+      throw new Error("Only PC and NPC type actors supported");
+    }
+
+    const transientActor = actor.getTransientObject();
+    const characterAttribute = transientActor.attributes.find(it => it.name === attribute.name);
+    let level = characterAttribute.modifiedLevel;
+
+    const attributeGroup = getGroupForAttributeByName(attribute.name);
+
+    if (type === "npc") {
+      if (transientActor.getIsCrActiveFor(attributeGroup.name) === true) {
+        level = transientActor.getCrFor(attributeGroup.name);
+      }
+    }
+
+    return level;
+  }
+
+  /**
+   * Returns the effective modified level of the given actor for the 
+   * given skill. 
+   * 
+   * For NPCs, the effective level can be determined by a challenge 
+   * rating, if one is active. For PCs, the raw skill level 
+   * is picked. 
+   * 
+   * @param {Item | TransientSkill} skill The skill whose effective level 
+   * is to be returned. 
+   * @param {Actor} actor The actor whose skill it is. 
+   * 
+   * @returns {Number} The modified level. 
+   */
+  getEffectiveSkillModifiedLevel(skill, actor) {
+    const transientSkill = skill.getTransientObject();
+    let level = transientSkill.modifiedLevel;
+
+    if (actor.type === "npc") {
+      const attributeGroup = getGroupForAttributeByName(transientSkill.relatedAttribute.name);
+      const transientActor = actor.getTransientObject();
+
+      if (transientActor.getIsCrActiveFor(attributeGroup.name) === true) {
+        level = transientActor.getCrFor(attributeGroup.name);
+      }
+    }
+
+    return level;
   }
 }
