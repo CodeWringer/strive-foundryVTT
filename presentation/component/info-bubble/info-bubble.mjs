@@ -1,8 +1,12 @@
 /**
  * Represents a floating "info bubble" to display to the user. 
  * 
+ * This type is primarily expected to be instantiated in an `activateListeners` method, 
+ * where the DOM is available and because the `InfoBubble` attempts to register 
+ * any event handling as soon as it is instantiated. 
+ * 
  * @property {JQuery} html Root element of the `FormApplication`. 
- * @property {JQuery | undefined} parent The element beneath which to show the info bubble. 
+ * @property {JQuery} parent The element beneath which to show the info bubble. 
  * @property {String} text The text to show in the info bubble. 
  * 
  * @property {InfoBubbleAutoShowingTypes} autoShowType Defines if and when to automatically show the info bubble. 
@@ -16,8 +20,9 @@
  * // Immediately shown with auto-removal on any input. 
  * const infoBubble = new InfoBubble({
  *   html: html,
- *   parent: html.find("#my-dom-element-id"),
- *   text: game.i18n.localize("words.to.localize"),
+ *   map: [
+ *     { element: html.find("#my-dom-element-id"), text: game.i18n.localize("words.to.localize") }
+ *   ],
  *   autoHideType: InfoBubbleAutoHidingTypes.ANY_INPUT,
  *   onHide: () => { infoBubble.remove(); },
  * });
@@ -29,9 +34,10 @@
  * // Automatic show and hide with infinite lifetime. 
  * new InfoBubble({
  *   html: html,
- *   parent: html.find("#my-dom-element-id"),
- *   text: game.i18n.localize("words.to.localize"),
- *   autoShowType: InfoBubbleAutoShowingTypes.MOUSE_ENTER,
+ *   map: [
+ *     { element: html.find("#my-dom-element-id"), text: game.i18n.localize("words.to.localize") }
+ *   ],
+ *   autoShowType: InfoBubbleAutoHidingTypes.MOUSE_ENTER,
  *   autoHideType: InfoBubbleAutoHidingTypes.MOUSE_LEAVE,
  * });
  * ```
@@ -50,7 +56,7 @@ export default class InfoBubble {
    * @type {String}
    * @private
    */
-  _eventNameSpace = "ambersteel-info-bubble";
+  _eventNameSpace = "wg-info-bubble";
   
   /**
    * A random id for use in event-linking, to ensure the correct event listeners are removed, 
@@ -61,23 +67,16 @@ export default class InfoBubble {
   _id = foundry.utils.randomID(16);
 
   /**
-   * The text to display. 
-   * @type {String}
-   * @private
-   */
-  _text = "";
-  get text() { return this._text; }
-  set text(value) {
-    this._text = value;
-    this._element.text(value);
-  }
-
-  /**
    * Event handlers are added to remove the element again, when the cursor moves or any other input is made. 
    * @param {Object} args The arguments object. 
    * @param {JQuery} args.html Root element of the `FormApplication`. 
-   * @param {JQuery | undefined} args.parent The element beneath which to show the info bubble. 
-   * @param {String} args.text The text to show in the info bubble. 
+   * @param {Array<Object>} args.map A map of elements and the localized text to associate them with. 
+   * Every element in this map will be eligible to show this info bubble. If `autoShowType` and 
+   * `autoHideType` are set, this map defines the elements the info bubble will be automatically 
+   * shown for. 
+   * * Elements must have the following properties: 
+   * * * `element: {JQuery}` - the element to associate the text with. 
+   * * * `text: {String}` - the localized text to show. 
    * @param {InfoBubbleAutoShowingTypes | undefined} args.autoShowType Defines if and when to automatically show the info bubble. 
    * * Default `InfoBubbleAutoShowingTypes.NONE`
    * @param {InfoBubbleAutoHidingTypes | undefined} args.autoHideType Defines if and when to automatically hide the info bubble. 
@@ -87,8 +86,7 @@ export default class InfoBubble {
    */
   constructor(args = {}) {
     this.html = args.html;
-    this.parent = args.parent;
-    this._text = args.text;
+    this.map = args.map ?? [];
 
     this.autoShowType = args.autoShowType ?? InfoBubbleAutoShowingTypes.NONE;
     this.autoHideType = args.autoHideType ?? InfoBubbleAutoHidingTypes.NONE;
@@ -96,32 +94,29 @@ export default class InfoBubble {
     this.onShow = args.onShow ?? (() => {});
     this.onHide = args.onHide ?? (() => {});
 
-    this._element = $(this.html.add(`<span class="info-bubble hidden">${this.text}</span>`)[1]);
+    this._element = $(this.html.add(`<span class="wg-info-bubble hidden" id="${this._id}"></span>`)[1]);
     this.html.append(this._element);
 
     this._activateListeners();
   }
 
   /**
-   * Manually shows the info bubble beneath the given element. 
+   * Manually shows the info bubble. 
    * 
-   * Calling this method is not necessary, if an automatic show type other 
-   * than `NONE` is defined. 
+   * Calling this method is not necessary, if an automatic show type other than `NONE` is defined. 
    * 
-   * @param {JQuery | undefined} element The element beneath which to show the info bubble. 
+   * @param {JQuery} element The element for which to show the info bubble. 
+   * @param {String} text The text to use. 
    */
-  show(element) {
-    if (element === undefined && this.parent === undefined) {
-      throw new Error("No parent defined");
-    }
-
+  show(element, text) {
+    this._element.text(text);
+    
     // Important: The hidden class must be removed first, as otherwise the element's width and height will 
     // show up as `0` in the calculations below. 
     this._element.removeClass("hidden");
 
-    const workingElement = (element ?? this.parent);
-    const parentPos = workingElement.position();
-    const parentSize = { width: workingElement.outerWidth(), height: workingElement.outerHeight() };
+    const parentPos = element.position();
+    const parentSize = { width: element.outerWidth(), height: element.outerHeight() };
     
     const bubbleSize = { width: this._element.outerWidth(), height: this._element.outerHeight() };
 
@@ -129,6 +124,19 @@ export default class InfoBubble {
     const y = parentPos.top - bubbleSize.height;
 
     this._element[0].style = `left: ${x}px; top: ${y}px;`;
+
+    if(this.autoHideType === InfoBubbleAutoHidingTypes.ANY_INPUT) {
+      element.on(`keydown.${this._eventNameSpace}.${this._id}`, () => {
+        element.off(`keydown.${this._eventNameSpace}.${this._id}`);
+        this.hide();
+      });
+    }
+    if (this.autoHideType === InfoBubbleAutoHidingTypes.ANY_INPUT || this.autoHideType === InfoBubbleAutoHidingTypes.MOUSE_LEAVE) {
+      element.on(`mouseleave.${this._eventNameSpace}.${this._id}`, () => {
+        element.off(`mouseleave.${this._eventNameSpace}.${this._id}`);
+        this.hide();
+      });
+    }
 
     this.onShow();
   }
@@ -159,25 +167,24 @@ export default class InfoBubble {
    * @private
    */
   _activateListeners() {
-    if (this.parent === undefined) {
-      return;
-    }
-
-    if (this.autoShowType === InfoBubbleAutoShowingTypes.MOUSE_ENTER) {
-      this.parent.on(`mouseenter.${this._eventNameSpace}.${this._id}`, () => {
-        this.show();
-      });
+    for (const entry of this.map) {
+      if (this.autoShowType === InfoBubbleAutoShowingTypes.MOUSE_ENTER) {
+        entry.element.on(`mouseenter.${this._eventNameSpace}.${this._id}`, () => {
+          this.show(entry.element, entry.text);
+        });
+      }
+      if (this.autoHideType === InfoBubbleAutoHidingTypes.MOUSE_LEAVE) {
+        entry.element.on(`mouseleave.${this._eventNameSpace}.${this._id}`, () => {
+          this.hide();
+        });
+      } 
     }
 
     if(this.autoHideType === InfoBubbleAutoHidingTypes.ANY_INPUT) {
-      this.html.on(`mousemove.${this._eventNameSpace}.${this._id}`, () => {
-        this.hide();
-      });
       this.html.on(`keydown.${this._eventNameSpace}.${this._id}`, () => {
         this.hide();
       });
-    } else if (this.autoHideType === InfoBubbleAutoHidingTypes.MOUSE_LEAVE) {
-      this.parent.on(`mouseleave.${this._eventNameSpace}.${this._id}`, () => {
+      this.html.on(`mousemove.${this._eventNameSpace}.${this._id}`, () => {
         this.hide();
       });
     }
@@ -192,11 +199,10 @@ export default class InfoBubble {
     this.html.off(`mousemove.${this._eventNameSpace}.${this._id}`);
     this.html.off(`keydown.${this._eventNameSpace}.${this._id}`);
 
-    if (this.parent === undefined) {
-      return;
+    for (const entry of this.map) {
+      entry.element.off(`mouseleave.${this._eventNameSpace}.${this._id}`);
+      entry.element.off(`mouseenter.${this._eventNameSpace}.${this._id}`);
     }
-    this.parent.off(`mouseleave.${this._eventNameSpace}.${this._id}`);
-    this.parent.off(`mouseenter.${this._eventNameSpace}.${this._id}`);
   }
 }
 
