@@ -6,7 +6,6 @@
  * any event handling as soon as it is instantiated. 
  * 
  * @property {JQuery} html Root element of the `FormApplication`. 
- * @property {JQuery} parent The element beneath which to show the info bubble. 
  * @property {String} text The text to show in the info bubble. 
  * 
  * @property {InfoBubbleAutoShowingTypes} autoShowType Defines if and when to automatically show the info bubble. 
