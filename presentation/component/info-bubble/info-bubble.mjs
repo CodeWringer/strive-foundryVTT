@@ -56,7 +56,7 @@ export default class InfoBubble {
    * @type {String}
    * @private
    */
-  _eventNameSpace = "wg-info-bubble";
+  _eventNameSpace = "info-bubble";
   
   /**
    * A random id for use in event-linking, to ensure the correct event listeners are removed, 
@@ -94,7 +94,7 @@ export default class InfoBubble {
     this.onShow = args.onShow ?? (() => {});
     this.onHide = args.onHide ?? (() => {});
 
-    this._element = $(this.html.add(`<span class="wg-info-bubble hidden" id="${this._id}"></span>`)[1]);
+    this._element = $(this.html.add(`<span class="info-bubble hidden" id="${this._id}"></span>`)[1]);
     this.html.append(this._element);
 
     this._activateListeners();
