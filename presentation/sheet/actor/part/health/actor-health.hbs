@@ -61,7 +61,8 @@ cssClass: {undefined | String}
       {{!-- Col 3 --}}
       <div class="sheet-block">
         <div class="flex flex-row">
-          <div class="flex-grow">
+          <div class="flex flex-row flex-grow">
+            <i id="{{viewModel.id}}-max-magic-stamina-info" class="far fa-question-circle info-button"></i>
             {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.magic.stamina.maximum"}}{{/label}}
           </div>
           <span class="width-md">
