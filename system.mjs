@@ -86,6 +86,8 @@ import './presentation/sheet/actor/part/actor-biography-viewmodel.mjs';
 import './presentation/sheet/actor/part/actor-fate-viewmodel.mjs';
 import './presentation/sheet/actor/part/health/actor-health-viewmodel.mjs';
 import './presentation/sheet/actor/part/actor-personals-viewmodel.mjs';
+import { isDefined } from "./business/util/validation-utility.mjs";
+import { preloadPixiTextures } from "./presentation/pixi/pixi-preloader.mjs";
 
 /* -------------------------------------------- */
 /*  Initialization                              */
@@ -183,6 +185,9 @@ Hooks.once('setup', function() {
   initHandlebarsPartials();
   // Initialize component Handlebars partials. 
   initHandlebarsComponents();
+
+  // Preload PIXI textures. 
+  preloadPixiTextures();
 });
 
 Hooks.once("ready", function() {
@@ -302,4 +307,8 @@ Hooks.on("deleteChatMessage", function(args) {
 
 Hooks.on("hoverToken", function(token) {
   new TokenExtensions().handleTokenHover(token);
+});
+
+Hooks.on("drawToken", function(token) {
+  new TokenExtensions().handleTokenCombatant(token);
 });

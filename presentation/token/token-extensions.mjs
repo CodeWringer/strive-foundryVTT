@@ -1,8 +1,13 @@
+import { isDefined } from "../../business/util/validation-utility.mjs";
+import { TEXTURES } from "../pixi/pixi-preloader.mjs";
+
 /**
  * Provides token utilities. 
  */
 export default class TokenExtensions {
   /**
+   * Handles token hover extensions. 
+   * 
    * @param {Token} token 
    * 
    * @see https://foundryvtt.com/api/classes/client.Token.html
@@ -92,10 +97,84 @@ export default class TokenExtensions {
    * @see https://foundryvtt.com/api/classes/client.Token.html
    */
   hideChallengeRatings(token) {
-    if (token.challengeRatings !== undefined) {
+    if (isDefined(token.challengeRatings)) {
       token.removeChild(token.challengeRatings);
       token.challengeRatings = undefined;
     }
   }
-}
 
+  /**
+   * Handles combatant token extensions. 
+   * 
+   * @param {Token} token 
+   * 
+   * @see https://foundryvtt.com/api/classes/client.Token.html
+   */
+  handleTokenCombatant(token) {
+    if (isDefined(token.combatant) === true && isDefined(token.actionPoints) === false) {
+      this.drawActionPoints(token);
+    } else if (isDefined(token.combatant) === false && isDefined(token.actionPoints) === true) {
+      this.hideActionPoints(token);
+    }
+  }
+
+  /**
+   * Adds an interactible action point bar to the given token. 
+   * 
+   * @param {Token} token 
+   * 
+   * @see https://foundryvtt.com/api/classes/client.Token.html
+   */
+  drawActionPoints(token) {
+    const funCreateSprite = function(index, full, size) {
+      let actionPointSprite;
+      if (full) {
+        actionPointSprite = new PIXI.Sprite(
+          PIXI.Loader.shared.resources[TEXTURES.ACTION_POINT_FULL].texture
+        );
+      } else {
+        actionPointSprite = new PIXI.Sprite(
+          PIXI.Loader.shared.resources[TEXTURES.ACTION_POINT_EMPTY].texture
+        );
+      }
+      actionPointSprite.width = size.w;
+      actionPointSprite.height = size.h;
+      actionPointSprite.position.set(index * size.w, 0);
+
+      return actionPointSprite;
+    };
+
+    const actor = token.actor.getTransientObject();
+
+    const size = { w: 32, h: 32 };
+    token.actionPoints = new PIXI.Container();
+    token.position.set(0, token.h - size.h);
+
+    const maxActionPoints = actor.maxActionPoints ?? 5; // TODO #392: for NPCs, AP should be configurable. 
+    const currentActionPoints = actor.actionPoints ?? 0; // TODO #392: for NPCs, AP should be configurable. 
+    for (let i = 0; i < currentActionPoints; i++) {
+      const sprite = funCreateSprite(i, true, size);
+      token.actionPoints.addChild(sprite);
+    }
+    for (let i = currentActionPoints; i < maxActionPoints; i++) {
+      const sprite = funCreateSprite(i, false, size);
+      token.actionPoints.addChild(sprite);
+    }
+
+    token.addChild(token.actionPoints);
+  }
+  
+  /**
+   * Removes the interactible action point bar from the given token. 
+   * 
+   * @param {Token} token 
+   * 
+   * @see https://foundryvtt.com/api/classes/client.Token.html
+   */
+  hideActionPoints(token) {
+    if (isDefined(token.actionPoints)) {
+      token.removeChild(token.actionPoints);
+      token.actionPoints = undefined;
+    }
+  }
+}
