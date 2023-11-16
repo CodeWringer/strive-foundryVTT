@@ -126,39 +126,61 @@ export default class TokenExtensions {
    * @see https://foundryvtt.com/api/classes/client.Token.html
    */
   drawActionPoints(token) {
-    const funCreateSprite = function(index, full, size) {
-      let actionPointSprite;
-      if (full) {
-        actionPointSprite = new PIXI.Sprite(
-          PIXI.Loader.shared.resources[TEXTURES.ACTION_POINT_FULL].texture
-        );
-      } else {
-        actionPointSprite = new PIXI.Sprite(
-          PIXI.Loader.shared.resources[TEXTURES.ACTION_POINT_EMPTY].texture
-        );
-      }
-      actionPointSprite.width = size.w;
-      actionPointSprite.height = size.h;
-      actionPointSprite.position.set(index * size.w, 0);
+    const transientActor = token.actor.getTransientObject();
 
-      return actionPointSprite;
-    };
-
-    const actor = token.actor.getTransientObject();
-
-    const size = { w: 32, h: 32 };
+    const actionPointsPerColumn = 5;
+    const size = { w: token.w / actionPointsPerColumn, h: token.h / actionPointsPerColumn };
     token.actionPoints = new PIXI.Container();
-    token.position.set(0, token.h - size.h);
 
-    const maxActionPoints = actor.maxActionPoints ?? 5; // TODO #392: for NPCs, AP should be configurable. 
-    const currentActionPoints = actor.actionPoints ?? 0; // TODO #392: for NPCs, AP should be configurable. 
-    for (let i = 0; i < currentActionPoints; i++) {
-      const sprite = funCreateSprite(i, true, size);
+    const maxActionPoints = transientActor.maxActionPoints;
+    const unspentActionPoints = transientActor.actionPoints;
+    const spentActionPoints = Math.max(0, maxActionPoints - unspentActionPoints);
+
+    // Add unspent action points. 
+    const sprites = [];
+    for (let i = 0; i < unspentActionPoints; i++) {
+      const sprite = new PIXI.Sprite(
+        PIXI.Loader.shared.resources[TEXTURES.ACTION_POINT_FULL].texture
+      );
       token.actionPoints.addChild(sprite);
+      sprites.push(sprite);
     }
-    for (let i = currentActionPoints; i < maxActionPoints; i++) {
-      const sprite = funCreateSprite(i, false, size);
+    // Add spent action points. 
+    for (let i = 0; i < spentActionPoints; i++) {
+      const sprite = new PIXI.Sprite(
+        PIXI.Loader.shared.resources[TEXTURES.ACTION_POINT_EMPTY].texture
+      );
       token.actionPoints.addChild(sprite);
+      sprites.push(sprite);
+    }
+
+    for (let index = 0; index < sprites.length; index++) {
+      const sprite = sprites[index];
+
+      sprite.width = size.w;
+      sprite.height = size.h;
+      sprite.position.set(0, index * sprite.height);
+      sprite.interactive = true;
+      sprite.on('click', (event) => {
+        transientActor.actionPoints = index + 1;
+      });
+      sprite.on('mouseover', (event) => {
+        for (let j = 0; j <= index; j++) {
+          sprites[j].texture = PIXI.Loader.shared.resources[TEXTURES.ACTION_POINT_FULL].texture;
+        }
+        for (let j = index + 1; j < sprites.length; j++) {
+          sprites[j].texture = PIXI.Loader.shared.resources[TEXTURES.ACTION_POINT_EMPTY].texture;
+        }
+      });
+      sprite.on('mouseout', (event) => {
+          const unspentActionPoints = transientActor.actionPoints ?? 3; // TODO #392: AP should be configurable.
+          for (let j = 0; j < unspentActionPoints; j++) {
+            sprites[j].texture = PIXI.Loader.shared.resources[TEXTURES.ACTION_POINT_FULL].texture;
+          }
+          for (let j = unspentActionPoints; j < sprites.length; j++) {
+            sprites[j].texture = PIXI.Loader.shared.resources[TEXTURES.ACTION_POINT_EMPTY].texture;
+          }
+      });
     }
 
     token.addChild(token.actionPoints);
