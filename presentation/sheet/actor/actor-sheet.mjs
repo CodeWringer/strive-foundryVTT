@@ -178,19 +178,29 @@ export class AmbersteelActorSheet extends ActorSheet {
       }
     };
 
-    if (this.actor.type === "npc") {
-      const npcData = this.actor.getTransientObject();
-      if (npcData.progressionVisible === false) {
-        creationData.system.level = 1;
+    if (templateItem.type === "skill") {
+      // For NPCs, ensure skills have at least level one, if they have no advancement progression enabled. 
+      if (this.actor.type === "npc") {
+        const npcData = this.actor.getTransientObject();
+        if (npcData.progressionVisible === false) {
+          creationData.system.level = 1;
+        }
+      }
+
+      // Update an existing skill, is possible. Only skills support this behavior, as only skills are 
+      // expected to be unique on a character. 
+      const existingItem = this.actor.items.find(it => it.id === templateId || it.name === templateItem.name);
+      if (existingItem !== undefined) {
+        creationData.system.level = existingItem.system.level;
+        creationData.system.levelModifier = existingItem.system.levelModifier;
+        creationData.system.successes = existingItem.system.successes;
+        creationData.system.failures = existingItem.system.failures;
+
+        await existingItem.update(creationData);
+        return existingItem;
       }
     }
 
-    const existingItem = this.actor.items.find(it => it.id === templateId || it.name === templateItem.name);
-    if (existingItem === undefined) {
-      return await Item.create(creationData, { parent: this.actor });
-    } else {
-      await existingItem.update(creationData);
-      return existingItem;
-    }
+    return await Item.create(creationData, { parent: this.actor });
   }
 }
