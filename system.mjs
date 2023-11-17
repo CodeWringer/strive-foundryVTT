@@ -312,3 +312,15 @@ Hooks.on("hoverToken", function(token) {
 Hooks.on("drawToken", function(token) {
   new TokenExtensions().handleTokenCombatant(token);
 });
+
+Hooks.on("refreshToken", function(token) {
+  new TokenExtensions().handleTokenCombatant(token);
+});
+
+Hooks.on("createCombatant", function(...args) {
+  console.log("createCombatant");
+});
+
+Hooks.on("deleteCombatant", function(...args) {
+  console.log("deleteCombatant");
+});

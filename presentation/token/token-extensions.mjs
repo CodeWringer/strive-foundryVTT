@@ -13,6 +13,10 @@ export default class TokenExtensions {
    * @see https://foundryvtt.com/api/classes/client.Token.html
    */
   handleTokenHover(token) {
+    if (token.inCombat) {
+      this._updateActionPointSprites(token);
+    }
+
     if (token.actor.type !== "npc") return;
 
     const displayWhen = token.document.displayName;
@@ -111,9 +115,9 @@ export default class TokenExtensions {
    * @see https://foundryvtt.com/api/classes/client.Token.html
    */
   handleTokenCombatant(token) {
-    if (isDefined(token.combatant) === true && isDefined(token.actionPoints) === false) {
+    if (token.inCombat === true && isDefined(token.actionPoints) === false) {
       this.drawActionPoints(token);
-    } else if (isDefined(token.combatant) === false && isDefined(token.actionPoints) === true) {
+    } else if (token.inCombat === false && isDefined(token.actionPoints) === true) {
       this.hideActionPoints(token);
     }
   }
@@ -161,25 +165,20 @@ export default class TokenExtensions {
       sprite.height = size.h;
       sprite.position.set(0, index * sprite.height);
       sprite.interactive = true;
-      sprite.on('click', (event) => {
-        transientActor.actionPoints = index + 1;
+      sprite.cursor = "pointer";
+      sprite.on("click", (event) => {
+        if (!token.isOwner && !game.user.isGM) return;
+        const newUnspentActionPoints = index + 1;
+        transientActor.actionPoints = newUnspentActionPoints;
+        this._updateActionPointSprites(token, newUnspentActionPoints);
       });
-      sprite.on('mouseover', (event) => {
-        for (let j = 0; j <= index; j++) {
-          sprites[j].texture = PIXI.Loader.shared.resources[TEXTURES.ACTION_POINT_FULL].texture;
-        }
-        for (let j = index + 1; j < sprites.length; j++) {
-          sprites[j].texture = PIXI.Loader.shared.resources[TEXTURES.ACTION_POINT_EMPTY].texture;
-        }
+      sprite.on("pointerover", (event) => {
+        if (!token.isOwner && !game.user.isGM) return;
+        
+        this._updateActionPointSprites(token, index + 1);
       });
-      sprite.on('mouseout', (event) => {
-          const unspentActionPoints = transientActor.actionPoints ?? 3; // TODO #392: AP should be configurable.
-          for (let j = 0; j < unspentActionPoints; j++) {
-            sprites[j].texture = PIXI.Loader.shared.resources[TEXTURES.ACTION_POINT_FULL].texture;
-          }
-          for (let j = unspentActionPoints; j < sprites.length; j++) {
-            sprites[j].texture = PIXI.Loader.shared.resources[TEXTURES.ACTION_POINT_EMPTY].texture;
-          }
+      sprite.on("pointerout", (event) => {
+        this._updateActionPointSprites(token);
       });
     }
 
@@ -197,6 +196,29 @@ export default class TokenExtensions {
     if (isDefined(token.actionPoints)) {
       token.removeChild(token.actionPoints);
       token.actionPoints = undefined;
+    }
+  }
+
+  /**
+   * 
+   * @param {Token} token 
+   * @param {Number} unspentActionPoints 
+   * 
+   * @private
+   */
+  _updateActionPointSprites(token, unspentActionPoints) {
+    if (isDefined(unspentActionPoints) === false) {
+      const transientActor = token.actor.getTransientObject();
+      unspentActionPoints = transientActor.actionPoints;
+    }
+
+    const sprites = token.actionPoints.children;
+
+    for (let i = 0; i < unspentActionPoints; i++) {
+      sprites[i].texture = PIXI.Loader.shared.resources[TEXTURES.ACTION_POINT_FULL].texture;
+    }
+    for (let i = unspentActionPoints; i < sprites.length; i++) {
+      sprites[i].texture = PIXI.Loader.shared.resources[TEXTURES.ACTION_POINT_EMPTY].texture;
     }
   }
 }
