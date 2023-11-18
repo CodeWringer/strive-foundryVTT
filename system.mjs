@@ -86,8 +86,8 @@ import './presentation/sheet/actor/part/actor-biography-viewmodel.mjs';
 import './presentation/sheet/actor/part/actor-fate-viewmodel.mjs';
 import './presentation/sheet/actor/part/health/actor-health-viewmodel.mjs';
 import './presentation/sheet/actor/part/actor-personals-viewmodel.mjs';
-import { isDefined } from "./business/util/validation-utility.mjs";
 import { preloadPixiTextures } from "./presentation/pixi/pixi-preloader.mjs";
+import CustomCombatTracker from "./presentation/combat/custom-combat-tracker.mjs";
 
 /* -------------------------------------------- */
 /*  Initialization                              */
@@ -156,9 +156,12 @@ Hooks.once('init', function() {
     decimals: 2
   };
 
-  // Define custom Document classes on global CONFIG variable provided by FoundryVTT.
+  // Override document classes. 
   CONFIG.Actor.documentClass = AmbersteelActor;
   CONFIG.Item.documentClass = AmbersteelItem;
+
+  // Override combat tracker. 
+  CONFIG.ui.combat = CustomCombatTracker;
 
   // Register sheet application classes. 
   Actors.unregisterSheet("core", ActorSheet);
@@ -167,6 +170,9 @@ Hooks.once('init', function() {
   Items.unregisterSheet("core", ItemSheet);
   Items.registerSheet(SYSTEM_ID, AmbersteelItemSheet, { makeDefault: true });
 
+  // Preload PIXI textures. 
+  preloadPixiTextures();
+  
   // Preload Handlebars templates.
   return preloadHandlebarsTemplates();
 });
@@ -185,9 +191,6 @@ Hooks.once('setup', function() {
   initHandlebarsPartials();
   // Initialize component Handlebars partials. 
   initHandlebarsComponents();
-
-  // Preload PIXI textures. 
-  preloadPixiTextures();
 });
 
 Hooks.once("ready", function() {
@@ -322,10 +325,10 @@ Hooks.on("updateToken", function(document, change, options, userId) {
   new TokenExtensions().handleTokenCombatant(document.object);
 });
 
-// Hooks.on("createCombatant", function(...args) {
-//   console.log("createCombatant");
-// });
+Hooks.on("createCombatant", function(document, options, userId) {
+  new TokenExtensions().handleTokenCombatant(document.token.object);
+});
 
-// Hooks.on("deleteCombatant", function(...args) {
-//   console.log("deleteCombatant");
-// });
+Hooks.on("deleteCombatant", function(document, options, userId) {
+  new TokenExtensions().handleTokenCombatant(document.token.object);
+});

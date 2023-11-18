@@ -1,0 +1,11 @@
+{{!--
+viewModel: {CombatTrackerActionPointsViewModel}
+--}}
+<div id="{{viewModel.id}}" class="flex flex-row combatant-action-points">
+  {{#if viewModel.isEditable}}
+  <a id="{{viewModel.id}}-empty-ap" style="width: 21px; height: 21px;">
+    <img class="combatant-action-point" style="width: 21px; height: 21px; position: absolute;" src="systems/ambersteel/presentation/image/action-point-empty.png" />
+    <i class="fas fa-x" style="width: 21px; height: 21px; position: absolute; padding: 4px;"></i>
+  </a>
+  {{/if}}
+</div>
