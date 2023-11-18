@@ -13,10 +13,6 @@ export default class TokenExtensions {
    * @see https://foundryvtt.com/api/classes/client.Token.html
    */
   handleTokenHover(token) {
-    if (token.inCombat) {
-      this._updateActionPointSprites(token);
-    }
-
     if (token.actor.type !== "npc") return;
 
     const displayWhen = token.document.displayName;
@@ -132,57 +128,77 @@ export default class TokenExtensions {
   drawActionPoints(token) {
     const transientActor = token.actor.getTransientObject();
 
-    const actionPointsPerColumn = 5;
-    const size = { w: token.w / actionPointsPerColumn, h: token.h / actionPointsPerColumn };
+    const margin = 5;
+
+    // Container
     token.actionPoints = new PIXI.Container();
 
-    const maxActionPoints = transientActor.maxActionPoints;
-    const unspentActionPoints = transientActor.actionPoints;
-    const spentActionPoints = Math.max(0, maxActionPoints - unspentActionPoints);
+    console.log(token);
 
-    // Add unspent action points. 
-    const sprites = [];
-    for (let i = 0; i < unspentActionPoints; i++) {
-      const sprite = new PIXI.Sprite(
-        PIXI.Loader.shared.resources[TEXTURES.ACTION_POINT_FULL].texture
-      );
-      token.actionPoints.addChild(sprite);
-      sprites.push(sprite);
-    }
-    // Add spent action points. 
-    for (let i = 0; i < spentActionPoints; i++) {
-      const sprite = new PIXI.Sprite(
-        PIXI.Loader.shared.resources[TEXTURES.ACTION_POINT_EMPTY].texture
-      );
-      token.actionPoints.addChild(sprite);
-      sprites.push(sprite);
+    // Action points sprite
+    const sprite = new PIXI.Sprite(
+      PIXI.Loader.shared.resources[TEXTURES.ACTION_POINT_EMPTY].texture
+    );
+    if (transientActor.actionPoints > 0) {
+      sprite.texture = PIXI.Loader.shared.resources[TEXTURES.ACTION_POINT_FULL].texture;
     }
 
-    for (let index = 0; index < sprites.length; index++) {
-      const sprite = sprites[index];
+    // Caret left
+    const caretLeft = new PIXI.Sprite(
+      PIXI.Loader.shared.resources[TEXTURES.CARET_LEFT].texture
+    );
+    caretLeft.interactive = true;
+    caretLeft.on("click", (event) => {
+      if (!token.isOwner && !game.user.isGM) return;
+      
+      const newActionPoints = Math.max(0, transientActor.actionPoints - 1);
+      transientActor.actionPoints = newActionPoints;
+      this._updateActionPoints(token, newActionPoints);
+    });
+    caretLeft.width = caretLeft.width / 2;
+    caretLeft.height = caretLeft.height / 2;
+    caretLeft.position.set(0, (sprite.height / 2) - (caretLeft.height / 2));
+    token.actionPoints.caretLeft = caretLeft;
+    token.actionPoints.addChild(caretLeft);
+    
+    // Action points sprite arrangement
+    sprite.position.set(caretLeft.x + caretLeft.width + margin, 0);
+    token.actionPoints.sprite = sprite;
+    token.actionPoints.addChild(sprite);
 
-      sprite.width = size.w;
-      sprite.height = size.h;
-      sprite.position.set(0, index * sprite.height);
-      sprite.interactive = true;
-      sprite.cursor = "pointer";
-      sprite.on("click", (event) => {
-        if (!token.isOwner && !game.user.isGM) return;
-        const newUnspentActionPoints = index + 1;
-        transientActor.actionPoints = newUnspentActionPoints;
-        this._updateActionPointSprites(token, newUnspentActionPoints);
-      });
-      sprite.on("pointerover", (event) => {
-        if (!token.isOwner && !game.user.isGM) return;
-        
-        this._updateActionPointSprites(token, index + 1);
-      });
-      sprite.on("pointerout", (event) => {
-        this._updateActionPointSprites(token);
-      });
-    }
+    // Action points text
+    const style = token._getTextStyle();
+    const text = new PreciseText(transientActor.actionPoints, style);
+    text.anchor.set(0.5, 0.5);
+    text.position.set(sprite.x + sprite.width / 2, sprite.y + sprite.height / 2);
+    token.actionPoints.text = text;
+    token.actionPoints.addChild(text);
+
+    // Caret right
+    const caretRight = new PIXI.Sprite(
+      PIXI.Loader.shared.resources[TEXTURES.CARET_RIGHT].texture
+    );
+    caretRight.interactive = true;
+    caretRight.on("click", (event) => {
+      if (!token.isOwner && !game.user.isGM) return;
+
+      const newActionPoints = Math.min(transientActor.maxActionPoints, transientActor.actionPoints + 1);
+      transientActor.actionPoints = newActionPoints;
+      this._updateActionPoints(token, newActionPoints);
+    });
+    caretRight.width = caretRight.width / 2;
+    caretRight.height = caretRight.height / 2;
+    caretRight.position.set(sprite.x + sprite.width + margin, (sprite.height / 2) - (caretRight.height / 2));
+    token.actionPoints.caretRight = caretRight;
+    token.actionPoints.addChild(caretRight);
 
     token.addChild(token.actionPoints);
+
+    // Container arrangement
+    const heightRatio = token.actionPoints.height / token.actionPoints.width;
+    token.actionPoints.width = token.w;
+    token.actionPoints.height = token.w * heightRatio;
+    token.actionPoints.y = token.h - token.actionPoints.height;
   }
   
   /**
@@ -200,25 +216,20 @@ export default class TokenExtensions {
   }
 
   /**
-   * 
    * @param {Token} token 
-   * @param {Number} unspentActionPoints 
+   * @param {Number} newActionPoints
    * 
    * @private
    */
-  _updateActionPointSprites(token, unspentActionPoints) {
-    if (isDefined(unspentActionPoints) === false) {
-      const transientActor = token.actor.getTransientObject();
-      unspentActionPoints = transientActor.actionPoints;
-    }
+  _updateActionPoints(token, newActionPoints) {
+    if (isDefined(token.actionPoints)) {
+      token.actionPoints.text.text = newActionPoints;
 
-    const sprites = token.actionPoints.children;
-
-    for (let i = 0; i < unspentActionPoints; i++) {
-      sprites[i].texture = PIXI.Loader.shared.resources[TEXTURES.ACTION_POINT_FULL].texture;
-    }
-    for (let i = unspentActionPoints; i < sprites.length; i++) {
-      sprites[i].texture = PIXI.Loader.shared.resources[TEXTURES.ACTION_POINT_EMPTY].texture;
+      if (newActionPoints === 0) {
+        token.actionPoints.sprite.texture = PIXI.Loader.shared.resources[TEXTURES.ACTION_POINT_EMPTY].texture;
+      } else {
+        token.actionPoints.sprite.texture = PIXI.Loader.shared.resources[TEXTURES.ACTION_POINT_FULL].texture;
+      }
     }
   }
 }
