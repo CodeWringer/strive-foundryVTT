@@ -19,19 +19,35 @@ export default class CombatTrackerActionPointsViewModel extends ViewModel {
     validateOrThrow(args, ["document"]);
 
     this.document = args.document;
+    this.actionPoints = [];
+    const transientActor = this.document.getTransientObject();
+    for (let i = 0; i < transientActor.maxActionPoints; i++) {
+      this.actionPoints.push({
+        id: `${this.id}-${i}`,
+        full: i < transientActor.actionPoints,
+        value: i + 1,
+      });
+    }
   }
 
   /** @override */
   activateListeners(html) {
     super.activateListeners(html);
 
+    const transientActor = this.document.getTransientObject();
+
     if (this.isEditable === true) {
       html.find(`#${this.id}-empty-ap`).click(async (event) => {
         event.preventDefault();
 
-        const transientActor = this.document.getTransientObject();
         transientActor.actionPoints = 0;
       });
+
+      for (let i = 0; i < transientActor.maxActionPoints; i++) {
+        html.find(`#${this.id}-${i}`).click(async (event) => {
+          transientActor.actionPoints = i + 1;
+        });
+      }
     }
   }
 }

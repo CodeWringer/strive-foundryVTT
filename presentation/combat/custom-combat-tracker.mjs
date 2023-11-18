@@ -1,4 +1,3 @@
-import DocumentFetcher from "../../business/document/document-fetcher/document-fetcher.mjs";
 import { isDefined } from "../../business/util/validation-utility.mjs";
 import { TEMPLATES } from "../templatePreloader.mjs";
 import CombatTrackerActionPointsViewModel from "./combat-tracker-action-points-viewmodel.mjs";
@@ -18,8 +17,6 @@ export default class CustomCombatTracker extends CombatTracker {
 
   /** @override */
   async getData(options) {
-    const docFetcher = new DocumentFetcher();
-
     // Reset view models.
     this.actionPointsViewModels = [];
 

@@ -88,6 +88,7 @@ import './presentation/sheet/actor/part/health/actor-health-viewmodel.mjs';
 import './presentation/sheet/actor/part/actor-personals-viewmodel.mjs';
 import { preloadPixiTextures } from "./presentation/pixi/pixi-preloader.mjs";
 import CustomCombatTracker from "./presentation/combat/custom-combat-tracker.mjs";
+import { isDefined } from "./business/util/validation-utility.mjs";
 
 /* -------------------------------------------- */
 /*  Initialization                              */
@@ -323,6 +324,12 @@ Hooks.on("refreshToken", function(token) {
 Hooks.on("updateToken", function(document, change, options, userId) {
   new TokenExtensions().handleTokenHover(document.object);
   new TokenExtensions().handleTokenCombatant(document.object);
+});
+
+Hooks.on("updateActor", function(document, change, options, userId) {
+  if (isDefined(document.token) && document.token.inCombat) {
+    ui.combat?.render();
+  }
 });
 
 Hooks.on("createCombatant", function(document, options, userId) {
