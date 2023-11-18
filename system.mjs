@@ -328,7 +328,3 @@ Hooks.on("updateToken", function(document, change, options, userId) {
 Hooks.on("createCombatant", function(document, options, userId) {
   new TokenExtensions().handleTokenCombatant(document.token.object);
 });
-
-Hooks.on("deleteCombatant", function(document, options, userId) {
-  new TokenExtensions().handleTokenCombatant(document.token.object);
-});

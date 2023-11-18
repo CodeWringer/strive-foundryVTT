@@ -112,6 +112,8 @@ export default class TokenExtensions {
    * @see https://foundryvtt.com/api/classes/client.Token.html
    */
   handleTokenCombatant(token) {
+    if (token.actor.type === "plain") return;
+    
     if (token.inCombat === true) {
       if (isDefined(token.actionPoints) === true) {
         const actionPoints = token.actor.getTransientObject().actionPoints;

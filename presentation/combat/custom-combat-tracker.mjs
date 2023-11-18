@@ -26,16 +26,16 @@ export default class CustomCombatTracker extends CombatTracker {
     const data = await super.getData(options);
     // Extend the "turns" data. 
     for (const turn of data.turns) {
-      const document = await docFetcher.find({
-        id: turn.id,
-        documentType: "Actor",
-      });
+      // Find the combatant actor whose entry this is. 
+      const combatant = this._getCombatant(turn.id);
+      const document = combatant.actor;
 
       if (isDefined(document) !== true) {
         game.ambersteel.logger.logWarn("Failed to get combatant actor");
         continue;
       }
 
+      turn.renderActionPoints = document.type !== "plain";
       turn.actionPointsTemplate = TEMPLATES.COMBAT_TRACKER_ACTION_POINTS;
       const viewModel = new CombatTrackerActionPointsViewModel({
         document: document,
@@ -54,6 +54,22 @@ export default class CustomCombatTracker extends CombatTracker {
 
     for (const viewModel of this.actionPointsViewModels) {
       viewModel.activateListeners(html);
+    }
+  }
+
+  /**
+   * Fetches and returns the combatant with the given ID. 
+   * 
+   * @param {String} id Id of the combatant to fetch. 
+   * 
+   * @returns {Combatant | undefined}
+   * 
+   * @private
+   */
+  _getCombatant(id) {
+    for (const combat of this.combats) {
+      const combatant = combat.combatants.find(it => it.id === id);
+      if (isDefined(combatant)) return combatant;
     }
   }
 }
