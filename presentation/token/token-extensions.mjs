@@ -112,8 +112,13 @@ export default class TokenExtensions {
    * @see https://foundryvtt.com/api/classes/client.Token.html
    */
   handleTokenCombatant(token) {
-    if (token.inCombat === true && isDefined(token.actionPoints) === false) {
-      this.drawActionPoints(token);
+    if (token.inCombat === true) {
+      if (isDefined(token.actionPoints) === true) {
+        const actionPoints = token.actor.getTransientObject().actionPoints;
+        this._updateActionPoints(token, actionPoints);
+      } else {
+        this.drawActionPoints(token);
+      }
     } else if (token.inCombat === false && isDefined(token.actionPoints) === true) {
       this.hideActionPoints(token);
     }
@@ -133,8 +138,6 @@ export default class TokenExtensions {
 
     // Container
     token.actionPoints = new PIXI.Container();
-
-    console.log(token);
 
     // Action points sprite
     const sprite = new PIXI.Sprite(

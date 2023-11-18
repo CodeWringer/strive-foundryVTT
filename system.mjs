@@ -317,10 +317,15 @@ Hooks.on("refreshToken", function(token) {
   new TokenExtensions().handleTokenCombatant(token);
 });
 
-Hooks.on("createCombatant", function(...args) {
-  console.log("createCombatant");
+Hooks.on("updateToken", function(document, change, options, userId) {
+  new TokenExtensions().handleTokenHover(document.object);
+  new TokenExtensions().handleTokenCombatant(document.object);
 });
 
-Hooks.on("deleteCombatant", function(...args) {
-  console.log("deleteCombatant");
-});
+// Hooks.on("createCombatant", function(...args) {
+//   console.log("createCombatant");
+// });
+
+// Hooks.on("deleteCombatant", function(...args) {
+//   console.log("deleteCombatant");
+// });
