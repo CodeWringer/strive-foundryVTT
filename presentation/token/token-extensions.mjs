@@ -20,10 +20,9 @@ export default class TokenExtensions {
     const isOwner = token.actor.isOwner || game.user.isGM;
 
     if (((displayWhen == 10 || displayWhen == 20 || displayWhen == 40) && isOwner) || (displayWhen == 30 || displayWhen == 50)) {
+      this.hideChallengeRatings(token);
       if (token.hover) {
         this.drawChallengeRatings(token);
-      } else {
-        this.hideChallengeRatings(token);
       }
     }
   }
