@@ -148,7 +148,6 @@ export default class ActorAssetSlotViewModel extends ViewModel {
     this.vmBtnEdit = new ButtonViewModel({
       id: "vmBtnEdit",
       parent: this,
-      target: this.document,
       iconHtml: '<i class="fas fa-cog"></i>',
       localizedTooltip: game.i18n.localize("ambersteel.character.asset.slot.edit"),
       onClick: async () => {
