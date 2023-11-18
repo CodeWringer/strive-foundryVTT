@@ -32,9 +32,9 @@ export default class TransientNpc extends TransientBaseCharacterActor {
       const attributeGroup = getGroupForAttributeByName(attributeName);
       const isCrActive = this.getIsCrActiveFor(attributeGroup.name);
       if (isCrActive === true) {
-        baseInitiative += this.getCrFor(attributeGroup.name);
+        baseInitiative += parseInt(this.getCrFor(attributeGroup.name));
       } else {
-        baseInitiative += this.attributes.find(it => it.name === attributeName).modifiedLevel;
+        baseInitiative += parseInt(this.attributes.find(it => it.name === attributeName).modifiedLevel);
       }
     }
 
