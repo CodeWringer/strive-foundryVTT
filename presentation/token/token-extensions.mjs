@@ -19,8 +19,9 @@ export default class TokenExtensions {
     const displayWhen = token.document.displayName;
     const isOwner = token.actor.isOwner || game.user.isGM;
 
-    if (((displayWhen == 10 || displayWhen == 20 || displayWhen == 40) && isOwner) || (displayWhen == 30 || displayWhen == 50)) {
-      this.hideChallengeRatings(token);
+    this.hideChallengeRatings(token);
+    if (((displayWhen == CONST.TOKEN_DISPLAY_MODES.CONTROL || displayWhen == CONST.TOKEN_DISPLAY_MODES.OWNER_HOVER || displayWhen == CONST.TOKEN_DISPLAY_MODES.OWNER) && isOwner) 
+      || (displayWhen == CONST.TOKEN_DISPLAY_MODES.HOVER || displayWhen == CONST.TOKEN_DISPLAY_MODES.ALWAYS)) {
       if (token.hover) {
         this.drawChallengeRatings(token);
       }
@@ -134,6 +135,7 @@ export default class TokenExtensions {
     const transientActor = token.actor.getTransientObject();
 
     const margin = 5;
+    let x = 0;
 
     // Container
     token.actionPoints = new PIXI.Container();
@@ -147,26 +149,30 @@ export default class TokenExtensions {
     }
 
     // Caret left
-    const caretLeft = new PixiButton({
-      texture: PIXI.Loader.shared.resources[TEXTURES.CARET_LEFT].texture,
-      onClick: () => {
-        if (!token.isOwner && !game.user.isGM) return;
-        
-        const newActionPoints = Math.max(0, transientActor.actionPoints - 1);
-        transientActor.actionPoints = newActionPoints;
-        this._updateActionPoints(token, newActionPoints);
-      },
-    });
-    caretLeft.width = caretLeft.width / 2;
-    caretLeft.height = caretLeft.height / 2;
-    caretLeft.position.set(0, (sprite.height / 2) - (caretLeft.height / 2));
-    token.actionPoints.caretLeft = caretLeft;
-    token.actionPoints.addChild(caretLeft.wrapped);
+    if (token.isOwner || game.user.isGM) {
+      const caretLeft = new PixiButton({
+        texture: PIXI.Loader.shared.resources[TEXTURES.CARET_LEFT].texture,
+        onClick: () => {
+          if (!token.isOwner && !game.user.isGM) return;
+          
+          const newActionPoints = Math.max(0, transientActor.actionPoints - 1);
+          transientActor.actionPoints = newActionPoints;
+          this._updateActionPoints(token, newActionPoints);
+        },
+      });
+      caretLeft.width = caretLeft.width / 2;
+      caretLeft.height = caretLeft.height / 2;
+      caretLeft.position.set(x, (sprite.height / 2) - (caretLeft.height / 2));
+      token.actionPoints.caretLeft = caretLeft;
+      token.actionPoints.addChild(caretLeft.wrapped);
+      x = caretLeft.x + caretLeft.width + margin;
+    }
     
     // Action points sprite arrangement
-    sprite.position.set(caretLeft.x + caretLeft.width + margin, 0);
+    sprite.position.set(x, 0);
     token.actionPoints.sprite = sprite;
     token.actionPoints.addChild(sprite);
+    x = sprite.x + sprite.width;
 
     // Action points text
     const style = token._getTextStyle();
@@ -178,29 +184,31 @@ export default class TokenExtensions {
     token.actionPoints.addChild(text);
 
     // Caret right
-    const caretRight = new PixiButton({
-      texture: PIXI.Loader.shared.resources[TEXTURES.CARET_RIGHT].texture,
-      onClick: () => {
-        if (!token.isOwner && !game.user.isGM) return;
-        
-        const newActionPoints = Math.min(transientActor.maxActionPoints, transientActor.actionPoints + 1);
-        transientActor.actionPoints = newActionPoints;
-        this._updateActionPoints(token, newActionPoints);
-      },
-    });
-    caretRight.width = caretRight.width / 2;
-    caretRight.height = caretRight.height / 2;
-    caretRight.position.set(sprite.x + sprite.width + margin, (sprite.height / 2) - (caretRight.height / 2));
-    token.actionPoints.caretRight = caretRight;
-    token.actionPoints.addChild(caretRight.wrapped);
+    if (token.isOwner || game.user.isGM) {
+      const caretRight = new PixiButton({
+        texture: PIXI.Loader.shared.resources[TEXTURES.CARET_RIGHT].texture,
+        onClick: () => {
+          if (!token.isOwner && !game.user.isGM) return;
+          
+          const newActionPoints = Math.min(transientActor.maxActionPoints, transientActor.actionPoints + 1);
+          transientActor.actionPoints = newActionPoints;
+          this._updateActionPoints(token, newActionPoints);
+        },
+      });
+      caretRight.width = caretRight.width / 2;
+      caretRight.height = caretRight.height / 2;
+      caretRight.position.set(x + margin, (sprite.height / 2) - (caretRight.height / 2));
+      token.actionPoints.caretRight = caretRight;
+      token.actionPoints.addChild(caretRight.wrapped);
+    }
 
     token.addChild(token.actionPoints);
 
     // Container arrangement
-    const heightRatio = token.actionPoints.height / token.actionPoints.width;
-    const containerScale = 0.8;
-    token.actionPoints.width = token.w * containerScale;
-    token.actionPoints.height = token.actionPoints.width * heightRatio;
+    const finalHeight = token.h * 0.40;
+    const ratio = finalHeight / token.actionPoints.height;
+    token.actionPoints.width = token.actionPoints.width * ratio;
+    token.actionPoints.height = finalHeight;
     token.actionPoints.x = (token.w / 2) - (token.actionPoints.width / 2);
   }
   
