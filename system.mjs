@@ -335,3 +335,7 @@ Hooks.on("updateActor", function(document, change, options, userId) {
 Hooks.on("createCombatant", function(document, options, userId) {
   new TokenExtensions().handleTokenCombatant(document.token.object);
 });
+
+Hooks.on("renderCombatTracker", function(document, options, userId) {
+  new TokenExtensions().updateTokenCombatants();
+});

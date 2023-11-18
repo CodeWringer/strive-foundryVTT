@@ -112,6 +112,8 @@ export default class TokenExtensions {
    * @see https://foundryvtt.com/api/classes/client.Token.html
    */
   handleTokenCombatant(token) {
+    if (isDefined(token) !== true) return;
+    if (isDefined(token.actor) !== true) return;
     if (token.actor.type === "plain") return;
     
     if (token.inCombat === true) {
@@ -123,6 +125,17 @@ export default class TokenExtensions {
       }
     } else if (token.inCombat === false && isDefined(token.actionPoints) === true) {
       this.hideActionPoints(token);
+    }
+  }
+
+  /**
+   * Updates all combatant tokens. 
+   * 
+   * This re-renders the action points. 
+   */
+  updateTokenCombatants() {
+    for (const tokenDocument of game.scenes.active.tokens.values()) {
+      this.handleTokenCombatant(tokenDocument.object);
     }
   }
 
