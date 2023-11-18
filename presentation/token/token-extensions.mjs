@@ -155,6 +155,11 @@ export default class TokenExtensions {
       transientActor.actionPoints = newActionPoints;
       this._updateActionPoints(token, newActionPoints);
     });
+    caretLeft.on("pointerover", (event) => {
+      if (!token.isOwner && !game.user.isGM) return;
+
+      
+    });
     caretLeft.width = caretLeft.width / 2;
     caretLeft.height = caretLeft.height / 2;
     caretLeft.position.set(0, (sprite.height / 2) - (caretLeft.height / 2));
@@ -170,6 +175,7 @@ export default class TokenExtensions {
     const style = token._getTextStyle();
     const text = new PreciseText(transientActor.actionPoints, style);
     text.anchor.set(0.5, 0.5);
+    text.scale.set(1.2, 1.2);
     text.position.set(sprite.x + sprite.width / 2, sprite.y + sprite.height / 2);
     token.actionPoints.text = text;
     token.actionPoints.addChild(text);
@@ -196,9 +202,10 @@ export default class TokenExtensions {
 
     // Container arrangement
     const heightRatio = token.actionPoints.height / token.actionPoints.width;
-    token.actionPoints.width = token.w;
-    token.actionPoints.height = token.w * heightRatio;
-    token.actionPoints.y = token.h - token.actionPoints.height;
+    const containerScale = 0.8;
+    token.actionPoints.width = token.w * containerScale;
+    token.actionPoints.height = token.actionPoints.width * heightRatio;
+    token.actionPoints.x = (token.w / 2) - (token.actionPoints.width / 2);
   }
   
   /**
