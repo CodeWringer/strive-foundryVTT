@@ -1,4 +1,5 @@
 import { isDefined } from "../../business/util/validation-utility.mjs";
+import { PixiButton } from "../pixi/pixi-button.mjs";
 import { TEXTURES } from "../pixi/pixi-preloader.mjs";
 
 /**
@@ -144,27 +145,21 @@ export default class TokenExtensions {
     }
 
     // Caret left
-    const caretLeft = new PIXI.Sprite(
-      PIXI.Loader.shared.resources[TEXTURES.CARET_LEFT].texture
-    );
-    caretLeft.interactive = true;
-    caretLeft.on("click", (event) => {
-      if (!token.isOwner && !game.user.isGM) return;
-      
-      const newActionPoints = Math.max(0, transientActor.actionPoints - 1);
-      transientActor.actionPoints = newActionPoints;
-      this._updateActionPoints(token, newActionPoints);
-    });
-    caretLeft.on("pointerover", (event) => {
-      if (!token.isOwner && !game.user.isGM) return;
-
-      
+    const caretLeft = new PixiButton({
+      texture: PIXI.Loader.shared.resources[TEXTURES.CARET_LEFT].texture,
+      onClick: () => {
+        if (!token.isOwner && !game.user.isGM) return;
+        
+        const newActionPoints = Math.max(0, transientActor.actionPoints - 1);
+        transientActor.actionPoints = newActionPoints;
+        this._updateActionPoints(token, newActionPoints);
+      },
     });
     caretLeft.width = caretLeft.width / 2;
     caretLeft.height = caretLeft.height / 2;
     caretLeft.position.set(0, (sprite.height / 2) - (caretLeft.height / 2));
     token.actionPoints.caretLeft = caretLeft;
-    token.actionPoints.addChild(caretLeft);
+    token.actionPoints.addChild(caretLeft.wrapped);
     
     // Action points sprite arrangement
     sprite.position.set(caretLeft.x + caretLeft.width + margin, 0);
@@ -181,22 +176,21 @@ export default class TokenExtensions {
     token.actionPoints.addChild(text);
 
     // Caret right
-    const caretRight = new PIXI.Sprite(
-      PIXI.Loader.shared.resources[TEXTURES.CARET_RIGHT].texture
-    );
-    caretRight.interactive = true;
-    caretRight.on("click", (event) => {
-      if (!token.isOwner && !game.user.isGM) return;
-
-      const newActionPoints = Math.min(transientActor.maxActionPoints, transientActor.actionPoints + 1);
-      transientActor.actionPoints = newActionPoints;
-      this._updateActionPoints(token, newActionPoints);
+    const caretRight = new PixiButton({
+      texture: PIXI.Loader.shared.resources[TEXTURES.CARET_RIGHT].texture,
+      onClick: () => {
+        if (!token.isOwner && !game.user.isGM) return;
+        
+        const newActionPoints = Math.min(transientActor.maxActionPoints, transientActor.actionPoints + 1);
+        transientActor.actionPoints = newActionPoints;
+        this._updateActionPoints(token, newActionPoints);
+      },
     });
     caretRight.width = caretRight.width / 2;
     caretRight.height = caretRight.height / 2;
     caretRight.position.set(sprite.x + sprite.width + margin, (sprite.height / 2) - (caretRight.height / 2));
     token.actionPoints.caretRight = caretRight;
-    token.actionPoints.addChild(caretRight);
+    token.actionPoints.addChild(caretRight.wrapped);
 
     token.addChild(token.actionPoints);
 
