@@ -37,7 +37,7 @@ export default class CustomCombatTracker extends CombatTracker {
       turn.renderActionPoints = document.type !== "plain";
       turn.actionPointsTemplate = TEMPLATES.COMBAT_TRACKER_ACTION_POINTS;
       const viewModel = new CombatTrackerActionPointsViewModel({
-        id: `${document.id}-aplist`,
+        id: `${turn.id}-aplist`,
         document: document,
         isEditable: document.isOwner || game.user.isGM,
       });
