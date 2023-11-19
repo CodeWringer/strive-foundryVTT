@@ -114,6 +114,8 @@ import TransientBaseActor from './transient-base-actor.mjs';
  * @property {Number} personalityTraits.vengefulOrForgiving
  * * Read-only
  * * Ranges from -3 to +3
+ * @property {Number} maxActionPoints
+ * @property {Number} actionPoints
  */
 export default class TransientBaseCharacterActor extends TransientBaseActor {
   /** @override */
@@ -312,6 +314,12 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
       get maxBulk() { return new Ruleset().getCharacterCarryingCapacity(thiz.document); },
     };
   }
+
+  get maxActionPoints() { return this.document.system.maxActionPoints ?? 5; }
+  set maxActionPoints(value) { this.updateByPath("system.maxActionPoints", value); }
+
+  get actionPoints() { return this.document.system.actionPoints ?? 3; }
+  set actionPoints(value) { this.updateByPath("system.actionPoints", value); }
 
   /**
    * @type {Number}

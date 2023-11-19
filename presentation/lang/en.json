@@ -101,7 +101,13 @@
       },
       "propertyPath": "Property path"
     },
+    "actionPoint": {
+      "singular": "Action Point",
+      "plural": "Action Points",
+      "max": "Maximum Action Points"
+    },
     "character": {
+      "edit": "Configure Character",
       "advancement": {
         "label": "Advancement",
         "level": "Level",

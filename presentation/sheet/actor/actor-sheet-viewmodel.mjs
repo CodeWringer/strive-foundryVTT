@@ -15,6 +15,10 @@ import InputRichTextViewModel from "../../component/input-rich-text/input-rich-t
 import InputTextFieldViewModel from "../../component/input-textfield/input-textfield-viewmodel.mjs"
 import ButtonSendToChatViewModel from "../../component/button-send-to-chat/button-send-to-chat-viewmodel.mjs"
 import ButtonContextMenuViewModel from "../../component/button-context-menu/button-context-menu-viewmodel.mjs"
+import ButtonViewModel from "../../component/button/button-viewmodel.mjs"
+import DynamicInputDialog from "../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs"
+import DynamicInputDefinition from "../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs"
+import { DYNAMIC_INPUT_TYPES } from "../../dialog/dynamic-input-dialog/dynamic-input-types.mjs"
 
 /**
  * @extends BaseSheetViewModel
@@ -126,6 +130,36 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
         thiz.document.img = newValue;
       },
     });
+    if (this.isNPC || this.isPC) {
+      this.vmBtnConfigure = new ButtonViewModel({
+        id: "vmBtnConfigure",
+        parent: this,
+        iconHtml: '<i class="fas fa-cog"></i>',
+        localizedTooltip: game.i18n.localize("ambersteel.character.edit"),
+        onClick: async () => {
+          const inputMaxActionPoints = "inputMaxActionPoints";
+          const dialog = await new DynamicInputDialog({
+            localizedTitle: game.i18n.localize("ambersteel.character.edit"),
+            inputDefinitions: [
+              new DynamicInputDefinition({
+                type: DYNAMIC_INPUT_TYPES.NUMBER_SPINNER,
+                name: inputMaxActionPoints,
+                localizedLabel: game.i18n.localize("ambersteel.actionPoint.max"),
+                specificArgs: {
+                  min: 0,
+                },
+                defaultValue: this.document.maxActionPoints,
+              }),
+            ],
+          }).renderAndAwait(true);
+  
+          if (dialog.confirmed !== true) return;
+  
+          const maxActionPoints = parseInt(dialog[inputMaxActionPoints]);
+          this.document.maxActionPoints = maxActionPoints;
+        },
+      });
+    }
     this.vmBtnContextMenu = new ButtonContextMenuViewModel({
       id: "vmBtnContextMenu",
       parent: this,
