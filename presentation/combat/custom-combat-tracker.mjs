@@ -30,11 +30,14 @@ export default class CustomCombatTracker extends CombatTracker {
       if (isDefined(document) !== true) {
         game.ambersteel.logger.logWarn("Failed to get combatant actor");
         continue;
+      } else if (document.type === "plain") {
+        continue;
       }
 
       turn.renderActionPoints = document.type !== "plain";
       turn.actionPointsTemplate = TEMPLATES.COMBAT_TRACKER_ACTION_POINTS;
       const viewModel = new CombatTrackerActionPointsViewModel({
+        id: `${document.id}-aplist`,
         document: document,
         isEditable: document.isOwner || game.user.isGM,
       });
