@@ -2,9 +2,9 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
-   width="210mm"
-   height="297mm"
-   viewBox="0 0 210 297"
+   width="63.83976mm"
+   height="63.83976mm"
+   viewBox="0 0 63.83976 63.83976"
    version="1.1"
    id="svg1"
    inkscape:version="1.3 (0e150ed6c4, 2023-07-21)"
@@ -27,12 +27,12 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#505050"
      inkscape:document-units="mm"
-     inkscape:zoom="2.6077495"
-     inkscape:cx="358.73844"
-     inkscape:cy="397.46916"
-     inkscape:window-width="1920"
-     inkscape:window-height="1017"
-     inkscape:window-x="1912"
+     inkscape:zoom="1.3038748"
+     inkscape:cx="36.813352"
+     inkscape:cy="103.15408"
+     inkscape:window-width="2560"
+     inkscape:window-height="1377"
+     inkscape:window-x="-8"
      inkscape:window-y="-8"
      inkscape:window-maximized="1"
      inkscape:current-layer="layer1" /><defs
@@ -166,7 +166,7 @@
        cy="102.25552"
        fx="99.313843"
        fy="102.25552"
-       r="28.043067"
+       r="28.043068"
        gradientUnits="userSpaceOnUse"
        gradientTransform="matrix(0.71266861,0.68412292,-0.69251132,0.72140701,-99.278594,-39.455205)" /><linearGradient
        inkscape:collect="always"
@@ -246,7 +246,8 @@
        gradientUnits="userSpaceOnUse" /></defs><g
      inkscape:label="Ebene 1"
      inkscape:groupmode="layer"
-     id="layer1"><g
+     id="layer1"
+     transform="translate(-67.393963,-70.335644)"><g
        id="g41"
        inkscape:label="Filling"
        style="display:inline"><circle
