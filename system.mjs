@@ -310,20 +310,20 @@ Hooks.on("deleteChatMessage", function(args) {
 });
 
 Hooks.on("hoverToken", function(token) {
-  new TokenExtensions().handleTokenHover(token);
+  TokenExtensions.updateTokenHover(token);
 });
 
 Hooks.on("drawToken", function(token) {
-  new TokenExtensions().handleTokenCombatant(token);
+  TokenExtensions.updateTokenCombatant(token);
 });
 
 Hooks.on("refreshToken", function(token) {
-  new TokenExtensions().handleTokenCombatant(token);
+  TokenExtensions.updateTokenCombatant(token);
 });
 
 Hooks.on("updateToken", function(document, change, options, userId) {
-  new TokenExtensions().handleTokenHover(document.object);
-  new TokenExtensions().handleTokenCombatant(document.object);
+  TokenExtensions.updateTokenHover(document.object);
+  TokenExtensions.updateTokenCombatant(document.object);
 });
 
 Hooks.on("updateActor", function(document, change, options, userId) {
@@ -333,9 +333,9 @@ Hooks.on("updateActor", function(document, change, options, userId) {
 });
 
 Hooks.on("createCombatant", function(document, options, userId) {
-  new TokenExtensions().handleTokenCombatant(document.token.object);
+  TokenExtensions.updateTokenCombatant(document.token.object);
 });
 
 Hooks.on("renderCombatTracker", function(document, options, userId) {
-  new TokenExtensions().updateTokenCombatants();
+  TokenExtensions.updateTokenCombatants();
 });

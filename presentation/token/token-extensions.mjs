@@ -12,18 +12,20 @@ export default class TokenExtensions {
    * @param {Token} token 
    * 
    * @see https://foundryvtt.com/api/classes/client.Token.html
+   * 
+   * @static
    */
-  handleTokenHover(token) {
+  static updateTokenHover(token) {
     if (token.actor.type !== "npc") return;
 
     const displayWhen = token.document.displayName;
     const isOwner = token.actor.isOwner || game.user.isGM;
 
-    this.hideChallengeRatings(token);
+    TokenExtensions._hideChallengeRatings(token);
     if (((displayWhen == CONST.TOKEN_DISPLAY_MODES.CONTROL || displayWhen == CONST.TOKEN_DISPLAY_MODES.OWNER_HOVER || displayWhen == CONST.TOKEN_DISPLAY_MODES.OWNER) && isOwner) 
       || (displayWhen == CONST.TOKEN_DISPLAY_MODES.HOVER || displayWhen == CONST.TOKEN_DISPLAY_MODES.ALWAYS)) {
       if (token.hover) {
-        this.drawChallengeRatings(token);
+        TokenExtensions._showChallengeRatings(token);
       }
     }
   }
@@ -35,8 +37,11 @@ export default class TokenExtensions {
    * @param {Token} token 
    * 
    * @see https://foundryvtt.com/api/classes/client.Token.html
+   * 
+   * @static
+   * @private
    */
-  drawChallengeRatings(token) {
+  static _showChallengeRatings(token) {
     // Get the system's actor extensions object. 
     const actor = token.actor.getTransientObject();
     
@@ -96,8 +101,11 @@ export default class TokenExtensions {
    * @param {Token} token 
    * 
    * @see https://foundryvtt.com/api/classes/client.Token.html
+   * 
+   * @private
+   * @static
    */
-  hideChallengeRatings(token) {
+  static _hideChallengeRatings(token) {
     if (isDefined(token.challengeRatings)) {
       token.removeChild(token.challengeRatings);
       token.challengeRatings = undefined;
@@ -110,8 +118,10 @@ export default class TokenExtensions {
    * @param {Token} token 
    * 
    * @see https://foundryvtt.com/api/classes/client.Token.html
+   * 
+   * @static
    */
-  handleTokenCombatant(token) {
+  static updateTokenCombatant(token) {
     if (isDefined(token) !== true) return;
     if (isDefined(token.actor) !== true) return;
     if (token.actor.type === "plain") return;
@@ -119,12 +129,12 @@ export default class TokenExtensions {
     if (token.inCombat === true) {
       if (isDefined(token.actionPoints) === true) {
         const actionPoints = token.actor.getTransientObject().actionPoints;
-        this._updateActionPoints(token, actionPoints);
+        TokenExtensions._updateActionPoints(token, actionPoints);
       } else {
-        this.drawActionPoints(token);
+        TokenExtensions._showActionPoints(token);
       }
     } else if (token.inCombat === false && isDefined(token.actionPoints) === true) {
-      this.hideActionPoints(token);
+      TokenExtensions._hideActionPoints(token);
     }
   }
 
@@ -132,10 +142,12 @@ export default class TokenExtensions {
    * Updates all combatant tokens. 
    * 
    * This re-renders the action points. 
+   * 
+   * @static
    */
-  updateTokenCombatants() {
+  static updateTokenCombatants() {
     for (const tokenDocument of game.scenes.active.tokens.values()) {
-      this.handleTokenCombatant(tokenDocument.object);
+      TokenExtensions.updateTokenCombatant(tokenDocument.object);
     }
   }
 
@@ -145,8 +157,11 @@ export default class TokenExtensions {
    * @param {Token} token 
    * 
    * @see https://foundryvtt.com/api/classes/client.Token.html
+   * 
+   * @private
+   * @static
    */
-  drawActionPoints(token) {
+  static _showActionPoints(token) {
     const transientActor = token.actor.getTransientObject();
 
     const margin = 5;
@@ -172,7 +187,7 @@ export default class TokenExtensions {
           
           const newActionPoints = Math.max(0, transientActor.actionPoints - 1);
           transientActor.actionPoints = newActionPoints;
-          this._updateActionPoints(token, newActionPoints);
+          TokenExtensions._updateActionPoints(token, newActionPoints);
         },
       });
       caretLeft.width = caretLeft.width / 2;
@@ -207,7 +222,7 @@ export default class TokenExtensions {
           
           const newActionPoints = Math.min(transientActor.maxActionPoints, transientActor.actionPoints + 1);
           transientActor.actionPoints = newActionPoints;
-          this._updateActionPoints(token, newActionPoints);
+          TokenExtensions._updateActionPoints(token, newActionPoints);
         },
       });
       caretRight.width = caretRight.width / 2;
@@ -233,8 +248,11 @@ export default class TokenExtensions {
    * @param {Token} token 
    * 
    * @see https://foundryvtt.com/api/classes/client.Token.html
+   * 
+   * @private
+   * @static
    */
-  hideActionPoints(token) {
+  static _hideActionPoints(token) {
     if (isDefined(token.actionPoints)) {
       token.removeChild(token.actionPoints);
       token.actionPoints = undefined;
@@ -246,8 +264,9 @@ export default class TokenExtensions {
    * @param {Number} newActionPoints
    * 
    * @private
+   * @static
    */
-  _updateActionPoints(token, newActionPoints) {
+  static _updateActionPoints(token, newActionPoints) {
     if (isDefined(token.actionPoints)) {
       token.actionPoints.text.text = newActionPoints;
 
