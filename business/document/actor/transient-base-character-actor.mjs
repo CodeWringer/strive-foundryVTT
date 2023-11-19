@@ -316,7 +316,14 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
   }
 
   get maxActionPoints() { return this.document.system.maxActionPoints ?? 5; }
-  set maxActionPoints(value) { this.updateByPath("system.maxActionPoints", value); }
+  set maxActionPoints(value) {
+    this.update({
+      system: {
+        maxActionPoints: value,
+        actionPoints: Math.min(value, this.actionPoints),
+      }
+    });
+  }
 
   get actionPoints() { return this.document.system.actionPoints ?? 3; }
   set actionPoints(value) { this.updateByPath("system.actionPoints", value); }
