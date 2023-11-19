@@ -318,6 +318,7 @@ Hooks.on("drawToken", function(token) {
 });
 
 Hooks.on("refreshToken", function(token) {
+  TokenExtensions.updateTokenHover(token);
   TokenExtensions.updateTokenCombatant(token);
 });
 
