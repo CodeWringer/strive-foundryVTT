@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="64"
+   height="64"
+   viewBox="0 0 16.933333 16.933333"
+   version="1.1"
+   id="svg1"
+   xml:space="preserve"
+   inkscape:version="1.3 (0e150ed6c4, 2023-07-21)"
+   sodipodi:docname="strongarm-solid.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"><sodipodi:namedview
+     id="namedview1"
+     pagecolor="#505050"
+     bordercolor="#eeeeee"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#505050"
+     inkscape:document-units="mm"
+     inkscape:zoom="11.702245"
+     inkscape:cx="29.524249"
+     inkscape:cy="32.856943"
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
+     inkscape:window-x="1912"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" /><defs
+     id="defs1" /><g
+     inkscape:label="Ebene 1"
+     inkscape:groupmode="layer"
+     id="layer1"><path
+       id="path1"
+       style="display:inline;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.869346;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       d="M 6.4205986,1.2191015 C 5.5494856,1.2093101 4.5092908,1.5185283 3.3354354,2.0799588 2.7995416,2.5365915 2.5435175,2.8591498 1.8234064,4.5931128 1.103295,6.3270754 -0.04777939,9.3682483 0.41157688,12.016323 0.57155863,12.801304 0.39222629,12.94605 1.460906,13.119986 l 0.01357,-0.01357 c 3.0112946,1.879381 7.0677195,2.033569 8.530907,1.684076 l 3.320738,-0.646633 c 0.733589,0.167953 1.431549,0.555534 2.023948,1.570598 h 0.718242 L 16.626936,7.3028327 C 14.67005,7.440736 12.61925,7.3414307 11.302186,9.0788815 9.680971,8.1353723 7.8970626,7.4048885 4.5528607,9.8089969 5.2142593,7.7873047 4.9090296,5.8513408 4.3575972,3.9375089 5.1723437,4.2825947 5.9473838,4.6950457 6.9384712,4.7355422 8.1548175,3.9687118 8.3887753,2.9314961 7.960633,1.7098072 7.5341928,1.3831444 7.0166244,1.2257945 6.4205986,1.2191015 Z m 4.4876644,9.3845325 0.0068,0.07131 c -1.403471,1.398821 -4.2264778,1.66864 -6.0226036,0.185075 2.0406518,0.825169 4.0423524,0.632787 6.0158136,-0.256388 z"
+       sodipodi:nodetypes="cccccccccccccccccccccc"
+       inkscape:label="Strongarm" /></g></svg>
