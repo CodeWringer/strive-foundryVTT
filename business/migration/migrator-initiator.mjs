@@ -18,6 +18,7 @@ import './migrators/migrator_1-5-5_1-5-6.mjs';
 import './migrators/migrator_1-5-6_1-5-7.mjs';
 import './migrators/migrator_1-5-7_1-5-8.mjs';
 import './migrators/migrator_1-5-8_1-5-9.mjs';
+import './migrators/migrator_1-5-9_1-5-10.mjs';
 // Other imports. 
 import VersionCode from './version-code.mjs';
 
