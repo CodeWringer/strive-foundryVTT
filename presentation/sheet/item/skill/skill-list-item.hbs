@@ -25,26 +25,33 @@ cssClass: {undefined | String}
     {{> buttonDelete viewModel=viewModel.vmBtnDelete cssClass="" }}
   </div>
   {{!-- Row --}}
-  <div class="flex flex-row margin-b-md">
+  <div class="flex flex-row margin-b-md auto-margin-h">
+    {{!-- Related Attribute --}}
+    <div class="flex flex-row margin-b-sm">
+      <i class="ico ico-related-attribute-solid dark" title="{{localize "ambersteel.character.skill.relatedAttribute"}}"></i>
+      <span class="width-xxl">
+        {{> inputDropDown viewModel=viewModel.vmDdRelatedAttribute }}
+      </span>  
+    </div>
     {{!-- Level --}}
-    <div class="flex flex-row">
-      <div class="width-min-lg">
-        {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.advancement.level"}}{{/label}}
-      </div>
-      <div class="width-md">
-        {{> inputNumberSpinner viewModel=viewModel.vmNsLevel }}
+    <div class="flex flex-row auto-margin-h">
+      <div class="flex flex-row">
+        <i class="ico ico-level-solid dark" title="{{localize "ambersteel.character.advancement.level"}}"></i>
+        <div class="width-sm">
+          {{> inputNumberSpinner viewModel=viewModel.vmNsLevel }}
+        </div>
       </div>
       {{!-- Level Modifier --}}
-      <div class="margin-l-sm">
-        {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.advancement.levelModAbbreviation"}}{{/label}}
-      </div>
-      <div class="width-md">
-        {{> inputNumberSpinner viewModel=viewModel.vmNsLevelModifier }}
+      <div class="flex flex-row">
+        <i class="ico ico-level-modifier-solid dark" title="{{localize "ambersteel.character.advancement.modifier.label"}}"></i>
+        <div class="width-sm">
+          {{> inputNumberSpinner viewModel=viewModel.vmNsLevelModifier }}
+        </div>
       </div>
       {{!-- Modified Level --}}
-      <div class="width-md flex flex-middle">
-        <span class="pad-md font-bold">=</span>
-        {{#> readOnlyValue cssClass="width-min-md font-size-lg flex flex-center"}}{{viewModel.modifiedLevel}}{{/readOnlyValue}}
+      <div class="flex flex-middle">
+        <span class="pad-t-md pad-b-md pad-r-md font-bold font-bold">=</span>
+        {{#> readOnlyValue cssClass="width-sm font-size-lg flex flex-center"}}{{viewModel.modifiedLevel}}{{/readOnlyValue}}
       </div>
     </div>
     {{#if viewModel.showAdvancementProgression}}
@@ -83,15 +90,6 @@ cssClass: {undefined | String}
   {{!-- Description --}}
   <div class="flex flex-column margin-b-md border-solid-t-sm border-solid-b-sm">
     {{> inputRichText viewModel=viewModel.vmRtDescription }}
-  </div>
-  {{!-- Related Attribute --}}
-  <div class="flex flex-row margin-b-sm">
-    <span class="width-min-xl">
-      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.skill.relatedAttribute"}}{{/label}}
-    </span>
-    <span>
-      {{> inputDropDown viewModel=viewModel.vmDdRelatedAttribute }}
-    </span>  
   </div>
   {{!-- Row --}}
   <div class="grid grid-2col grid-gap-md">

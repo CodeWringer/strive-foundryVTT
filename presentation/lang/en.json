@@ -116,10 +116,11 @@
           "abbreviation": "CR"
         },
         "modifiedLevel": "Modified Level",
-        "modifiedLevelAbbreviation": "Modified",
-        "levelMod": "Level Modifier",
-        "levelModAbbreviation": "Mod.",
         "minimum": "Minimum Level",
+        "modifier": {
+          "label": "Level Modifier",
+          "abbreviation": "Mod."
+        },
         "requirements": {
           "label": "Required",
           "abbreviation": "Req.",
