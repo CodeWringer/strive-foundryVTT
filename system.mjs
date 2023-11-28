@@ -328,9 +328,7 @@ Hooks.on("updateToken", function(document, change, options, userId) {
 });
 
 Hooks.on("updateActor", function(document, change, options, userId) {
-  if (isDefined(document.token) && document.token.inCombat) {
-    ui.combat?.render();
-  }
+  ui.combat?.render();
 });
 
 Hooks.on("createCombatant", function(document, options, userId) {

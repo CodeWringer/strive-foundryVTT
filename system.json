@@ -2,7 +2,7 @@
   "id": "ambersteel",
   "title": "Ambersteel",
   "description": "The Ambersteel system for FoundryVTT",
-  "version": "1.5.10",
+  "version": "1.5.11",
   "compatibility": {
     "minimum": 10,
     "maximum": 10,
