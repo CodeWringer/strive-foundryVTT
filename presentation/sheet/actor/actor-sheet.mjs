@@ -6,6 +6,7 @@ import AmbersteelPcActorSheet from "./ambersteel-pc-actor-sheet.mjs";
 import * as SheetUtil from "../sheet-utility.mjs";
 import { SYSTEM_ID } from "../../../system-id.mjs";
 import { isDefined } from "../../../business/util/validation-utility.mjs";
+import DocumentFetcher from "../../../business/document/document-fetcher/document-fetcher.mjs";
 
 export class AmbersteelActorSheet extends ActorSheet {
   /**
@@ -133,23 +134,11 @@ export class AmbersteelActorSheet extends ActorSheet {
   async activateListeners(html) {
     await super.activateListeners(html);
 
-    const isOwner = (this.actor ?? this.item).isOwner;
-
     await game.ambersteel.logger.logPerfAsync(this, "actor.activateListeners (subType)", async () => {
       await this.subType.activateListeners(html);
     });
     await game.ambersteel.logger.logPerfAsync(this, "actor.activateListeners (viewModel)", async () => {
       await this.viewModel.activateListeners(html);
-    });
-
-    if (!isOwner) return;
-
-    // Drag events for macros.
-    const handler = ev => this._onDragStart(ev);
-    html.find('li.item').each((i, li) => {
-      if (li.classList.contains("inventory-header")) return;
-      li.setAttribute("draggable", true);
-      li.addEventListener("dragstart", handler, false);
     });
   }
 
@@ -163,5 +152,55 @@ export class AmbersteelActorSheet extends ActorSheet {
     }
     
     return super.close();
+  }
+
+  /** @override */
+  async _onDropItem(event, data) {
+    const templateId = data.uuid.substring(data.uuid.lastIndexOf(".") + 1);
+
+    const docFetcher = new DocumentFetcher();
+    const templateItem = await docFetcher.find({
+      id: templateId,
+      documentType: data.type,
+      includeLocked: true,
+    });
+
+    if (templateItem === undefined) {
+      return false;
+    }
+
+    const creationData = {
+      name: templateItem.name,
+      type: templateItem.type,
+      system: {
+        ...templateItem.system,
+        isCustom: false,
+      }
+    };
+
+    if (templateItem.type === "skill") {
+      // For NPCs, ensure skills have at least level one, if they have no advancement progression enabled. 
+      if (this.actor.type === "npc") {
+        const npcData = this.actor.getTransientObject();
+        if (npcData.progressionVisible === false) {
+          creationData.system.level = 1;
+        }
+      }
+
+      // Update an existing skill, is possible. Only skills support this behavior, as only skills are 
+      // expected to be unique on a character. 
+      const existingItem = this.actor.items.find(it => it.id === templateId || it.name === templateItem.name);
+      if (existingItem !== undefined) {
+        creationData.system.level = existingItem.system.level;
+        creationData.system.levelModifier = existingItem.system.levelModifier;
+        creationData.system.successes = existingItem.system.successes;
+        creationData.system.failures = existingItem.system.failures;
+
+        await existingItem.update(creationData);
+        return existingItem;
+      }
+    }
+
+    return await Item.create(creationData, { parent: this.actor });
   }
 }

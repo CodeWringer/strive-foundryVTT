@@ -11,10 +11,12 @@ cssClass: {undefined | String}
     {{> sortableList viewModel=viewModel.vmInnateSkillList prominentItemStyling=true }}
   {{#if viewModel.hideInnateSkills}}</div>{{/if}}
   {{!-- Learning Skills --}}
-  {{#> header1 showFancyFont=viewModel.showFancyFont cssClass="flex flex-row"}}
-    <span class="flex-grow">{{localize "ambersteel.character.skill.learning.label"}}</span>
-  {{/header1}}
-  {{> sortableList viewModel=viewModel.vmLearningSkillList prominentItemStyling=true }}
+  {{#if viewModel.hideLearningSkills}}<div class="hidden">{{/if}}
+    {{#> header1 showFancyFont=viewModel.showFancyFont cssClass="flex flex-row"}}
+      <span class="flex-grow">{{localize "ambersteel.character.skill.learning.label"}}</span>
+    {{/header1}}
+    {{> sortableList viewModel=viewModel.vmLearningSkillList prominentItemStyling=true }}
+  {{#if viewModel.hideLearningSkills}}</div>{{/if}}
   {{!-- Known Skills --}}
   {{#> header1 showFancyFont=viewModel.showFancyFont cssClass="flex flex-row"}}
     <span class="flex-grow">{{localize "ambersteel.character.skill.known.label"}}</span>

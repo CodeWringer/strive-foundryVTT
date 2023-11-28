@@ -1,0 +1,18 @@
+.combatant-action-point {
+  width: 21px; 
+  height: 21px;
+  position: relative;
+  text-align: center;
+}
+
+.combatant-action-point-image {
+  display: block;
+}
+
+.combatant-action-point-label {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  line-height: 21px;
+  transform: translate(-50%, -50%);
+}

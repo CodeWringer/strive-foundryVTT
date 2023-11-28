@@ -114,6 +114,8 @@ import TransientBaseActor from './transient-base-actor.mjs';
  * @property {Number} personalityTraits.vengefulOrForgiving
  * * Read-only
  * * Ranges from -3 to +3
+ * @property {Number} maxActionPoints
+ * @property {Number} actionPoints
  */
 export default class TransientBaseCharacterActor extends TransientBaseActor {
   /** @override */
@@ -313,14 +315,27 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
     };
   }
 
+  get maxActionPoints() { return this.document.system.maxActionPoints ?? 5; }
+  set maxActionPoints(value) {
+    this.update({
+      system: {
+        maxActionPoints: value,
+        actionPoints: Math.min(value, this.actionPoints),
+      }
+    });
+  }
+
+  get actionPoints() { return this.document.system.actionPoints ?? 3; }
+  set actionPoints(value) { this.updateByPath("system.actionPoints", value); }
+
   /**
    * @type {Number}
    * @readonly
    */
   get baseInitiative() {
-    const perceptionLevel = this.attributes.find(it => it.name === ATTRIBUTES.perception.name).modifiedLevel;
-    const intelligenceLevel = this.attributes.find(it => it.name === ATTRIBUTES.intelligence.name).modifiedLevel;
-    const empathyLevel = this.attributes.find(it => it.name === ATTRIBUTES.empathy.name).modifiedLevel;
+    const perceptionLevel = parseInt(this.attributes.find(it => it.name === ATTRIBUTES.perception.name).modifiedLevel);
+    const intelligenceLevel = parseInt(this.attributes.find(it => it.name === ATTRIBUTES.intelligence.name).modifiedLevel);
+    const empathyLevel = parseInt(this.attributes.find(it => it.name === ATTRIBUTES.empathy.name).modifiedLevel);
 
     return perceptionLevel + intelligenceLevel + empathyLevel;
   }

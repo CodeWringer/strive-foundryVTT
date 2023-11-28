@@ -1,6 +1,6 @@
 {
   "name": "ambersteel",
-  "version": "1.5.9",
+  "version": "1.5.10",
   "description": "Ambersteel FoundryVTT development environment",
   "scripts": {
     "build": "node ./npm-scripts/build.mjs",

@@ -51,3 +51,21 @@
 .flex-middle {
   align-items: center;
 }
+
+.flex-gap {
+  &-xs {
+    gap: $padding-xs;
+  }
+  &-sm {
+    gap: $padding-sm;
+  }
+  &-md {
+    gap: $padding-md;
+  }
+  &-lg {
+    gap: $padding-lg;
+  }
+  &-xl {
+    gap: $padding-xl;
+  }
+}

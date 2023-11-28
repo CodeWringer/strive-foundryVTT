@@ -1,0 +1,19 @@
+{{!--
+viewModel: {CombatTrackerActionPointsViewModel}
+--}}
+<div id="{{viewModel.id}}" class="flex flex-row flex-wrap flex-gap-sm margin-b-md combatant-action-points">
+  {{#if viewModel.isEditable}}
+  <a id="{{viewModel.id}}-empty-ap" class="combatant-action-point">
+    <div class="combatant-action-point-image-container">
+      <img class="combatant-action-point-image" style="width: 100%; height: 100%;" src="systems/ambersteel/presentation/image/action-point-empty.png" />
+      <div class="combatant-action-point-label">0</div>
+    </div>
+  </a>
+  {{/if}}
+  {{#each viewModel.actionPoints as |actionPoint index|}}
+  <{{#if ../viewModel.isEditable}}a{{else}}div{{/if}} id="{{actionPoint.id}}" class="combatant-action-point">
+    <img class="combatant-action-point-image" style="width: 100%; height: 100%;" src="{{#if actionPoint.full}}systems/ambersteel/presentation/image/action-point-full.png{{else}}systems/ambersteel/presentation/image/action-point-empty.png{{/if}}" />
+    <div class="combatant-action-point-label">{{actionPoint.value}}</div>
+  </{{#if ../viewModel.isEditable}}a{{else}}div{{/if}}>
+  {{/each}}
+</div>

@@ -86,6 +86,9 @@ import './presentation/sheet/actor/part/actor-biography-viewmodel.mjs';
 import './presentation/sheet/actor/part/actor-fate-viewmodel.mjs';
 import './presentation/sheet/actor/part/health/actor-health-viewmodel.mjs';
 import './presentation/sheet/actor/part/actor-personals-viewmodel.mjs';
+import { preloadPixiTextures } from "./presentation/pixi/pixi-preloader.mjs";
+import CustomCombatTracker from "./presentation/combat/custom-combat-tracker.mjs";
+import { isDefined } from "./business/util/validation-utility.mjs";
 
 /* -------------------------------------------- */
 /*  Initialization                              */
@@ -154,9 +157,12 @@ Hooks.once('init', function() {
     decimals: 2
   };
 
-  // Define custom Document classes on global CONFIG variable provided by FoundryVTT.
+  // Override document classes. 
   CONFIG.Actor.documentClass = AmbersteelActor;
   CONFIG.Item.documentClass = AmbersteelItem;
+
+  // Override combat tracker. 
+  CONFIG.ui.combat = CustomCombatTracker;
 
   // Register sheet application classes. 
   Actors.unregisterSheet("core", ActorSheet);
@@ -165,6 +171,9 @@ Hooks.once('init', function() {
   Items.unregisterSheet("core", ItemSheet);
   Items.registerSheet(SYSTEM_ID, AmbersteelItemSheet, { makeDefault: true });
 
+  // Preload PIXI textures. 
+  preloadPixiTextures();
+  
   // Preload Handlebars templates.
   return preloadHandlebarsTemplates();
 });
@@ -301,5 +310,33 @@ Hooks.on("deleteChatMessage", function(args) {
 });
 
 Hooks.on("hoverToken", function(token) {
-  new TokenExtensions().handleTokenHover(token);
+  TokenExtensions.updateTokenHover(token);
+});
+
+Hooks.on("drawToken", function(token) {
+  TokenExtensions.updateTokenCombatant(token);
+});
+
+Hooks.on("refreshToken", function(token) {
+  TokenExtensions.updateTokenHover(token);
+  TokenExtensions.updateTokenCombatant(token);
+});
+
+Hooks.on("updateToken", function(document, change, options, userId) {
+  TokenExtensions.updateTokenHover(document.object);
+  TokenExtensions.updateTokenCombatant(document.object);
+});
+
+Hooks.on("updateActor", function(document, change, options, userId) {
+  if (isDefined(document.token) && document.token.inCombat) {
+    ui.combat?.render();
+  }
+});
+
+Hooks.on("createCombatant", function(document, options, userId) {
+  TokenExtensions.updateTokenCombatant(document.token.object);
+});
+
+Hooks.on("renderCombatTracker", function(document, options, userId) {
+  TokenExtensions.updateTokenCombatants();
 });

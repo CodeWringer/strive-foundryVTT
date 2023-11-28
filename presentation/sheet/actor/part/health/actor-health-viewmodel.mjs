@@ -1,6 +1,7 @@
 import Ruleset from "../../../../../business/ruleset/ruleset.mjs"
 import { validateOrThrow } from "../../../../../business/util/validation-utility.mjs"
 import ButtonAddViewModel from "../../../../component/button-add/button-add-viewmodel.mjs"
+import InfoBubble, { InfoBubbleAutoHidingTypes, InfoBubbleAutoShowingTypes } from "../../../../component/info-bubble/info-bubble.mjs"
 import InputNumberSpinnerViewModel from "../../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs"
 import DocumentListItemOrderDataSource from "../../../../component/sortable-list/document-list-item-order-datasource.mjs"
 import SortableListViewModel from "../../../../component/sortable-list/sortable-list-viewmodel.mjs"
@@ -269,6 +270,24 @@ export default class ActorHealthViewModel extends ViewModel {
         localizedLabel: game.i18n.localize("ambersteel.character.health.scar.add.label"),
         localizedType: game.i18n.localize("ambersteel.character.health.scar.singular"),
       }),
+    });
+  }
+  
+  /** @override */
+  activateListeners(html) {
+    super.activateListeners(html);
+    
+    const composition = new Ruleset().getCharacterMaximumMagicStamina(this.document.document).components
+      .map(component => {
+        return `${game.i18n.localize(component.localizableName)} ${component.value}`;
+      }).join(" + ");
+    this.maxMagicStaminaInfoBubble = new InfoBubble({
+      html: html,
+      map: [
+        { element: html.find(`#${this.id}-max-magic-stamina-info`), text: composition },
+      ],
+      autoShowType: InfoBubbleAutoShowingTypes.MOUSE_ENTER,
+      autoHideType: InfoBubbleAutoHidingTypes.MOUSE_LEAVE,
     });
   }
 

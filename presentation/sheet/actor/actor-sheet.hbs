@@ -11,6 +11,10 @@ cssClass: {undefined | String}
         <h1 class="header-name flex-grow{{#if viewModel.showFancyFont}} fancy-font{{/if}}">
           {{> inputTextField viewModel=viewModel.vmTfName }}
         </h1>
+        {{!-- Configure --}}
+        {{#if (or viewModel.isNPC viewModel.isPC)}}
+          {{> button viewModel=viewModel.vmBtnConfigure }}
+        {{/if}}
         {{!-- Context Menu --}}
         {{> buttonContextMenu viewModel=viewModel.vmBtnContextMenu cssClass=viewModel.contextMenuClass }}
         <div class="flex flex-center {{#if viewModel.isSendable}}{{else}}hidden{{/if}}">

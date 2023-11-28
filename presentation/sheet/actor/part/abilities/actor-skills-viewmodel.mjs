@@ -15,12 +15,20 @@ export default class ActorSkillsViewModel extends ViewModel {
   get entityId() { return this.document.id; }
 
   /**
-   * Returns `true`, if there innate skills are to be hidden. 
+   * Returns `true`, if innate skills are to be hidden. 
    * 
    * @type {Boolean}
    * @readonly
    */
   get hideInnateSkills() { return this.innateSkillViewModels.length === 0; }
+
+  /**
+   * Returns `true`, if learning skills are to be hidden. 
+   * 
+   * @type {Boolean}
+   * @readonly
+   */
+  get hideLearningSkills() { return this.document.progressionVisible === false; }
 
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
