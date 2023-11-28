@@ -6,18 +6,23 @@ cssClass: {undefined | String}
   <tbody>
     <tr class="header-row{{#if viewModel.showFancyFont}} fancy-font{{/if}}">
       <th class="attribute-column-name">
-        {{#if viewModel.headerInteractible}}
-        <a id="{{viewModel.id}}-header" class="font-size-lg">{{localize viewModel.localizableAttributeGroupName}}</a>
-        {{else}}
-        <span class="font-size-lg">{{localize viewModel.localizableAttributeGroupName}}</span>
-        {{/if}}
+        <div class="flex flex-row flex-middle auto-margin-h">
+          {{#if viewModel.iconClass}}
+          <i class="ico {{viewModel.iconClass}} dark"></i>
+          {{/if}}
+          {{#if viewModel.headerInteractible}}
+          <a id="{{viewModel.id}}-header" class="font-size-lg">{{localize viewModel.localizableAttributeGroupName}}</a>
+          {{else}}
+          <span class="font-size-lg">{{localize viewModel.localizableAttributeGroupName}}</span>
+          {{/if}}
+        </div>
       </th>
       <th class="attribute-column-abbreviation"></th>
       <th class="attribute-column-level">
         {{localize "ambersteel.character.advancement.level"}}
       </th>
       <th class="attribute-column-level">
-        {{localize "ambersteel.character.advancement.levelModAbbreviation"}}
+        {{localize "ambersteel.character.advancement.modifier.abbreviation"}}
       </th>
       <th class="attribute-column-level">
         {{!-- Deliberately no label here, to avoid overloading the table header. --}}

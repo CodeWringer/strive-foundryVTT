@@ -15,6 +15,8 @@ import ViewModel from "../../../../view-model/view-model.mjs";
  * * Read-only
  * @property {Boolean} showChallengeRating
  * @property {Boolean} headerInteractible
+ * @property {String | undefined} iconClass CSS class of the icon to display. 
+ * E. g. `"ico-strongarm-solid"` or `"fas fa-brain"`
  * 
  * @method onHeaderClicked Callback that is invoked when the header is clicked. 
  */
@@ -88,6 +90,8 @@ export default class AttributeTableViewModel extends ViewModel {
    * * default `false`
    * @param {Function | undefined} args.onHeaderClicked Callback that is invoked when 
    * the header is clicked. 
+   * @param {String | undefined} args.iconClass CSS class of the icon to display. 
+   * E. g. `"ico-strongarm-solid"` or `"fas fa-brain"`
    * 
    * @throws {Error} ArgumentException - Thrown, if any of the mandatory arguments aren't defined. 
    */
@@ -103,6 +107,7 @@ export default class AttributeTableViewModel extends ViewModel {
     this.showChallengeRating = args.showChallengeRating ?? false;
     this.headerInteractible = args.headerInteractible ?? false;
     this.onHeaderClicked = args.onHeaderClicked ?? (() => {});
+    this.iconClass = args.iconClass;
     
     const thiz = this;
 
