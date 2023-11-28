@@ -65,7 +65,7 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
   constructor(args = {}) {
     super({
       ...args,
-      iconHtml: '<i class="ambersteel-icon ico-take-item"></i>',
+      iconHtml: '<i class="ico dark interactible ico-take-item"></i>',
     });
     validateOrThrow(args, ["target", "contextType"]);
 

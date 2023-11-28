@@ -1,223 +1,194 @@
-.ambersteel-icon {
-  filter: brightness(0);
-  &:hover {
-    filter: brightness(0) drop-shadow(0 0 4px $c-button-highlight);
+$size: 26px;
+
+.ico {
+  height: $size;
+  display: inline-block;
+  aspect-ratio: 1/1;
+
+  &.dark {
+    filter: brightness(0);
   }
+  
+  &.interactible {
+    &:hover {
+      filter: drop-shadow(0 0 4px $c-button-highlight);
+
+      &.dark {
+        filter: brightness(0) drop-shadow(0 0 4px $c-button-highlight);
+      }
+    }
+  }
+}
+
+i.stackable {
+  position: relative;
+}
+
+i.stacked {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  font-size: 0.5rem;
+  padding: 1px;
+  border-radius: 4px;
 }
 
 .ico-attack-type-aoe-solid {
   background: url("/systems/ambersteel/presentation/image/attack-type-aoe-solid.svg");
   background-size: cover;
-  width: 24px;
-  height: 24px;
 }
 
 .ico-attack-type-multi-solid {
   background: url("/systems/ambersteel/presentation/image/attack-type-multi-solid.svg");
   background-size: cover;
-  width: 24px;
-  height: 24px;
 }
 
 .ico-attack-type-single-solid {
   background: url("/systems/ambersteel/presentation/image/attack-type-single-solid.svg");
   background-size: cover;
-  width: 24px;
-  height: 24px;
 }
 
 .ico-barrier-solid {
   background: url("/systems/ambersteel/presentation/image/barrier-solid.svg");
   background-size: cover;
-  width: 24px;
-  height: 24px;
 }
 
 .ico-brain-line {
   background: url("/systems/ambersteel/presentation/image/brain-line.svg");
   background-size: cover;
-  width: 24px;
-  height: 24px;
 }
 
 .ico-chain-links-solid {
   background: url("/systems/ambersteel/presentation/image/chain-links-solid.svg");
   background-size: cover;
-  width: 24px;
-  height: 24px;
 }
 
 .ico-crossed-circle-solid {
   background: url("/systems/ambersteel/presentation/image/crossed-circle-solid.svg");
   background-size: cover;
-  width: 24px;
-  height: 24px;
 }
 
 .ico-damage-roll-solid {
   background: url("/systems/ambersteel/presentation/image/damage-roll-solid.svg");
   background-size: cover;
-  width: 24px;
-  height: 24px;
 }
 
 .ico-damage-type-acid-solid {
   background: url("/systems/ambersteel/presentation/image/damage-type-acid-solid.svg");
   background-size: cover;
-  width: 24px;
-  height: 24px;
 }
 
 .ico-damage-type-bleeding-solid {
   background: url("/systems/ambersteel/presentation/image/damage-type-bleeding-solid.svg");
   background-size: cover;
-  width: 24px;
-  height: 24px;
 }
 
 .ico-damage-type-bludgeon-solid {
   background: url("/systems/ambersteel/presentation/image/damage-type-bludgeon-solid.svg");
   background-size: cover;
-  width: 24px;
-  height: 24px;
 }
 
 .ico-damage-type-burning-solid {
   background: url("/systems/ambersteel/presentation/image/damage-type-burning-solid.svg");
   background-size: cover;
-  width: 24px;
-  height: 24px;
 }
 
 .ico-damage-type-crushing-solid {
   background: url("/systems/ambersteel/presentation/image/damage-type-crushing-solid.svg");
   background-size: cover;
-  width: 24px;
-  height: 24px;
 }
 
 .ico-damage-type-electrical-solid {
   background: url("/systems/ambersteel/presentation/image/damage-type-electrical-solid.svg");
   background-size: cover;
-  width: 24px;
-  height: 24px;
 }
 
 .ico-damage-type-freezing-solid {
   background: url("/systems/ambersteel/presentation/image/damage-type-freezing-solid.svg");
   background-size: cover;
-  width: 24px;
-  height: 24px;
 }
 
 .ico-damage-type-piercing-solid {
   background: url("/systems/ambersteel/presentation/image/damage-type-piercing-solid.svg");
   background-size: cover;
-  width: 24px;
-  height: 24px;
 }
 
 .ico-damage-type-poisoning-solid {
   background: url("/systems/ambersteel/presentation/image/damage-type-poisoning-solid.svg");
   background-size: cover;
-  width: 24px;
-  height: 24px;
 }
 
 .ico-damage-type-slash-solid {
   background: url("/systems/ambersteel/presentation/image/damage-type-slash-solid.svg");
   background-size: cover;
-  width: 24px;
-  height: 24px;
 }
 
 .ico-distance-solid {
   background: url("/systems/ambersteel/presentation/image/distance-solid.svg");
   background-size: cover;
-  width: 24px;
-  height: 24px;
 }
 
 .ico-double-crossed-circle-solid {
   background: url("/systems/ambersteel/presentation/image/double-crossed-circle-solid.svg");
   background-size: cover;
-  width: 24px;
-  height: 24px;
 }
 
 .ico-take-item {
   background: url("/systems/ambersteel/presentation/image/take-item.svg");
   background-size: cover;
-  width: 24px;
-  height: 24px;
 }
 
 .ico-drop-item {
   background: url("/systems/ambersteel/presentation/image/hand-holding-box-down-solid.svg");
   background-size: cover;
-  width: 24px;
-  height: 24px;
 }
 
 .ico-related-attribute-solid {
   background: url("/systems/ambersteel/presentation/image/related-attribute-solid.svg");
   background-size: cover;
-  width: 48px;
-  height: 48px;
 }
 
 .ico-strongarm-solid {
   background: url("/systems/ambersteel/presentation/image/strongarm-solid.svg");
   background-size: cover;
-  width: 48px;
-  height: 48px;
 }
 
 .ico-brain-solid {
   background: url("/systems/ambersteel/presentation/image/brain-solid.svg");
   background-size: cover;
-  width: 48px;
-  height: 48px;
 }
 
 .ico-hand-shake-bicolor {
   background: url("/systems/ambersteel/presentation/image/hand-shake-bicolor.svg");
   background-size: cover;
-  width: 48px;
-  height: 48px;
 }
 
 .ico-hand-shake-solid {
   background: url("/systems/ambersteel/presentation/image/hand-shake-solid.svg");
   background-size: cover;
-  width: 48px;
-  height: 48px;
 }
 
-.ico-hand-tags-solid {
-  background: url("/systems/ambersteel/presentation/image/hand-tags-solid.svg");
+.ico-hashtag-solid {
+  background: url("/systems/ambersteel/presentation/image/hashtag-solid.svg");
   background-size: cover;
-  width: 48px;
-  height: 48px;
 }
 
-.ico-hand-hashtag-solid {
-  background: url("/systems/ambersteel/presentation/image/hand-hashtag-solid.svg");
+.ico-level-modifier-solid {
+  background: url("/systems/ambersteel/presentation/image/level-modifier-solid.svg");
   background-size: cover;
-  width: 48px;
-  height: 48px;
+}
+
+.ico-level-solid {
+  background: url("/systems/ambersteel/presentation/image/level-solid.svg");
+  background-size: cover;
 }
 
 .ico-wall-corner-solid {
   background: url("/systems/ambersteel/presentation/image/wall-corner-solid.svg");
   background-size: cover;
-  width: 48px;
-  height: 48px;
 }
 
 .ico-wall-solid {
   background: url("/systems/ambersteel/presentation/image/wall-solid.svg");
   background-size: cover;
-  width: 48px;
-  height: 48px;
 }
