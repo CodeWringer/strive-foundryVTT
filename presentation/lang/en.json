@@ -102,6 +102,7 @@
       "propertyPath": "Property path"
     },
     "actionPoint": {
+      "abbreviation": "AP",
       "singular": "Action Point",
       "plural": "Action Points",
       "max": "Maximum Action Points"

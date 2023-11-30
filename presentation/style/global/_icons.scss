@@ -4,6 +4,7 @@ $size: 26px;
   height: $size;
   display: inline-block;
   aspect-ratio: 1/1;
+  font-size: $size;
 
   &.dark {
     filter: brightness(0);
@@ -165,6 +166,11 @@ i.stacked {
 
 .ico-hand-shake-solid {
   background: url("/systems/ambersteel/presentation/image/hand-shake-solid.svg");
+  background-size: cover;
+}
+
+.ico-tags-solid {
+  background: url("/systems/ambersteel/presentation/image/tags-solid.svg");
   background-size: cover;
 }
 

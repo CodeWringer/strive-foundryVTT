@@ -25,13 +25,11 @@ cssClass: {undefined | String}
     {{> buttonDelete viewModel=viewModel.vmBtnDelete cssClass="" }}
   </div>
   {{!-- Row --}}
-  <div class="flex flex-row margin-b-md auto-margin-h">
+  <div class="flex flex-row flex-wrap margin-b-md auto-margin-h">
     {{!-- Related Attribute --}}
     <div class="flex flex-row margin-b-sm">
       <i class="ico ico-related-attribute-solid dark" title="{{localize "ambersteel.character.skill.relatedAttribute"}}"></i>
-      <span class="width-xxl">
-        {{> inputDropDown viewModel=viewModel.vmDdRelatedAttribute }}
-      </span>  
+      {{> inputDropDown viewModel=viewModel.vmDdRelatedAttribute }}
     </div>
     {{!-- Level --}}
     <div class="flex flex-row auto-margin-h">
@@ -92,28 +90,24 @@ cssClass: {undefined | String}
     {{> inputRichText viewModel=viewModel.vmRtDescription }}
   </div>
   {{!-- Row --}}
-  <div class="grid grid-2col grid-gap-md">
+  <div class="flex flex-row flex-wrap auto-margin">
     {{!-- AP cost --}}
-    <div class="fill flex flex-row{{#if viewModel.hideApCost}} hidden{{/if}}">
-      <div class="flex-grow">
-        {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.skill.ability.apCost"}}{{/label}}
-      </div>
-      <div class="width-md">
-        {{> inputNumberSpinner viewModel=viewModel.vmNsApCost }}
-      </div>
+    <div class="flex flex-row{{#if viewModel.hideApCost}} hidden{{/if}}">
+      {{#> labeledControl viewModel=viewModel.vmNsApCost localizedLabel=(localize "ambersteel.actionPoint.abbreviation") }}
+        <div class="width-sm">
+          {{> inputNumberSpinner }}
+        </div>
+      {{/labeledControl}}
     </div>
     {{!-- Lots of optional content here --}}
     {{!-- Obstacle --}}
-    <div class="fill flex flex-row{{#if viewModel.hideObstacle}} hidden{{/if}}">
-      <div class="width-min-lg">
-        {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.roll.obstacle.abbreviation"}}{{/label}}
-      </div>
-      <div class="flex-grow">
-        {{> inputTextField viewModel=viewModel.vmTfObstacle }}
-      </div>
+    <div class="flex flex-row{{#if viewModel.hideObstacle}} hidden{{/if}}">
+      {{#> labeledControl viewModel=viewModel.vmTfObstacle localizedLabel=(localize "ambersteel.roll.obstacle.abbreviation") cssClass="flex-grow" }}
+        {{> inputTextField }}
+      {{/labeledControl}}
     </div>
     {{!-- Opposed By --}}
-    <div class="fill flex flex-row{{#if viewModel.hideOpposedBy}} hidden{{/if}}">
+    <div class="flex flex-row{{#if viewModel.hideOpposedBy}} hidden{{/if}}">
       <div class="width-min-lg">
         {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.roll.obstacle.opposedBy.label"}}{{/label}}
       </div>
@@ -122,7 +116,7 @@ cssClass: {undefined | String}
       </div>
     </div>
     {{!-- Distance --}}
-    <div class="fill flex flex-row{{#if viewModel.hideDistance}} hidden{{/if}}">
+    <div class="flex flex-row{{#if viewModel.hideDistance}} hidden{{/if}}">
       <div class="width-min-lg">
         {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.skill.ability.distance.label"}}{{/label}}
       </div>
@@ -131,7 +125,7 @@ cssClass: {undefined | String}
       </div>
     </div>
     {{!-- Attack type --}}
-    <div class="fill flex flex-row{{#if viewModel.hideAttackType}} hidden{{/if}}">
+    <div class="flex flex-row{{#if viewModel.hideAttackType}} hidden{{/if}}">
       <div class="width-min-lg">
         {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.attackType.label"}}{{/label}}
       </div>
@@ -140,7 +134,7 @@ cssClass: {undefined | String}
       </div>
     </div>
     {{!-- Condition --}}
-    <div class="fill flex flex-row{{#if viewModel.hideCondition}} hidden{{/if}}">
+    <div class="flex flex-row{{#if viewModel.hideCondition}} hidden{{/if}}">
       <div class="width-min-lg">
         {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.skill.ability.condition.label"}}{{/label}}
       </div>
@@ -179,24 +173,19 @@ cssClass: {undefined | String}
     </ul>
   </div>
   {{!-- Row --}}
-  {{!-- Tags --}}
-  <div class="flex flex-row margin-b-sm">
-    <span class="width-min-xl">
-      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.general.tags.label"}}{{/label}}
-    </span>
-    <span class="flex flex-grow">
-      {{> inputTags viewModel=viewModel.vmTags }}
-    </span>
-  </div>
-  {{!-- Row --}}
+  {{!-- Category --}}
   <div class="flex flex-row">
-    {{!-- Category --}}
-    <div class="width-min-xl">
-      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.general.category"}}{{/label}}
-    </div>
+    <i class="ico fas fa-folder" title="{{localize "ambersteel.general.category"}}"></i>
     <div class="width-xxl">
       {{> inputTextField viewModel=viewModel.vmTfCategory }}
     </div>
+  </div>
+  {{!-- Tags --}}
+  <div class="flex flex-row margin-b-sm">
+    <i class="ico ico-tags-solid dark" title="{{localize "ambersteel.general.tags.label"}}"></i>
+    <span class="flex flex-grow">
+      {{> inputTags viewModel=viewModel.vmTags }}
+    </span>
   </div>
   {{!-- Row --}}
   {{!-- Skill Abilites --}}

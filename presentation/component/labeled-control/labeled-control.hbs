@@ -1,0 +1,16 @@
+{{!--
+viewModel: ViewModel
+cssClass: String | undefined
+iconClass: String | undefined
+localizedLabel: String | undefined
+localizedIconToolTip: String | undefined
+--}}
+<div class="flex flex-row flex-middle auto-margin-h{{#if cssClass}} {{cssClass}}{{/if}}">
+  {{#if iconClass}}
+  <i class="ico {{iconClass}} dark"{{#if localizedIconToolTip}} title="{{localizedIconToolTip}}"{{/if}}></i>
+  {{/if}}
+  {{#if localizedLabel}}
+  <label class="font-size-default{{#if viewModel.showFancyFont}} fancy-font{{/if}}" for="{{viewModel.id}}">{{localizedLabel}}</label>
+  {{/if}}
+  {{> @partial-block viewModel=viewModel}}
+</div>

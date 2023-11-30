@@ -31,6 +31,7 @@ export const TEMPLATES = {
   COMPONENT_HEADER_PRIMARY: `${basePathComponent}/label/header/primary-header-label.hbs`,
   COMPONENT_HEADER_SECONDARY: `${basePathComponent}/label/header/secondary-header-label.hbs`,
   COMPONENT_HEADER_TERTIARY: `${basePathComponent}/label/header/tertiary-header-label.hbs`,
+  COMPONENT_LABELED_CONTROL: `${basePathComponent}/labeled-control/labeled-control.hbs`,
   // Inputs
   COMPONENT_INPUT_TEXTFIELD: `${basePathComponent}/input-textfield/input-textfield.hbs`,
   COMPONENT_INPUT_DROPDOWN: `${basePathComponent}/input-dropdown/input-dropdown.hbs`,
