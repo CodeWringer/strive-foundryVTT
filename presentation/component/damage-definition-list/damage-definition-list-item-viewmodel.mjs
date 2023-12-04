@@ -57,6 +57,38 @@ export default class DamageDefinitionListItemViewModel extends InputViewModel {
   get localizedDeletionHint() { return game.i18n.localize("ambersteel.damageDefinition.delete"); }
 
   /**
+   * Returns the CSS class of the icon that represents the current damage type. 
+   * 
+   * @type {String}
+   * @readonly
+   */
+  get damageTypeIconClass() {
+    if (this.value.damageType.name === DAMAGE_TYPES.acid.name) {
+      return "ico-damage-type-acid-solid";
+    } else if (this.value.damageType.name === DAMAGE_TYPES.bleeding.name) {
+      return "ico-damage-type-bleeding-solid";
+    } else if (this.value.damageType.name === DAMAGE_TYPES.bludgeoning.name) {
+      return "ico-damage-type-bludgeon-solid";
+    } else if (this.value.damageType.name === DAMAGE_TYPES.burning.name) {
+      return "ico-damage-type-burning-solid";
+    } else if (this.value.damageType.name === DAMAGE_TYPES.crushing.name) {
+      return "ico-damage-type-crushing-solid";
+    } else if (this.value.damageType.name === DAMAGE_TYPES.electrical.name) {
+      return "ico-damage-type-electrical-solid";
+    } else if (this.value.damageType.name === DAMAGE_TYPES.freezing.name) {
+      return "ico-damage-type-freezing-solid";
+    } else if (this.value.damageType.name === DAMAGE_TYPES.piercing.name) {
+      return "ico-damage-type-piercing-solid";
+    } else if (this.value.damageType.name === DAMAGE_TYPES.poison.name) {
+      return "ico-damage-type-poisoning-solid";
+    } else if (this.value.damageType.name === DAMAGE_TYPES.slashing.name) {
+      return "ico-damage-type-slash-solid";
+    } else {
+      return "ico-crossed-circle-solid";
+    }
+  }
+
+  /**
    * @param {DamageAndType} args.value 
    * @param {Function} args.resolveFormula A function which resolves the damage definition's 
    * formula and returns it. 

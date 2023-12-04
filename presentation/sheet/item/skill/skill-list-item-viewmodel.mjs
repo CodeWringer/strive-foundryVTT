@@ -241,6 +241,7 @@ export default class SkillListItemViewModel extends SkillViewModel {
         visGroupId: thiz.visGroupId,
       });
     }
+    this.skillAbilitiesTemplate = SkillAbilityTableViewModel.TEMPLATE;
     this.vmRtDescription = new InputRichTextViewModel({
       parent: thiz,
       id: "vmRtDescription",

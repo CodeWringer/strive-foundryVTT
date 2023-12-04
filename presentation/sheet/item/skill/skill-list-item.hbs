@@ -26,61 +26,54 @@ cssClass: {undefined | String}
   </div>
   {{!-- Row --}}
   <div class="flex flex-row flex-wrap margin-b-md auto-margin-h">
-    {{!-- Related Attribute --}}
-    <div class="flex flex-row margin-b-sm">
-      <i class="ico ico-related-attribute-solid dark" title="{{localize "ambersteel.character.skill.relatedAttribute"}}"></i>
-      {{> inputDropDown viewModel=viewModel.vmDdRelatedAttribute }}
-    </div>
-    {{!-- Level --}}
-    <div class="flex flex-row auto-margin-h">
-      <div class="flex flex-row">
-        <i class="ico ico-level-solid dark" title="{{localize "ambersteel.character.advancement.level"}}"></i>
-        <div class="width-sm">
-          {{> inputNumberSpinner viewModel=viewModel.vmNsLevel }}
+    <div class="flex flex-row flex-grow flex-middle auto-margin-h sheet-block">
+      {{!-- Related Attribute --}}
+      {{#> labeledControl viewModel=viewModel.vmDdRelatedAttribute localizedIconToolTip=(localize "ambersteel.character.skill.relatedAttribute") iconClass="ico-related-attribute-solid" cssClass="flex-grow" }}
+        {{> inputDropDown }}
+      {{/labeledControl}}
+      {{!-- Level --}}
+      <div class="flex flex-row auto-margin-h">
+        {{#> labeledControl viewModel=viewModel.vmNsLevel localizedIconToolTip=(localize "ambersteel.character.advancement.level") iconClass="ico-level-solid" }}
+          <div class="width-sm">
+            {{> inputNumberSpinner }}
+          </div>
+        {{/labeledControl}}
+        {{!-- Level Modifier --}}
+        {{#> labeledControl viewModel=viewModel.vmNsLevelModifier localizedIconToolTip=(localize "ambersteel.character.advancement.modifier.label") iconClass="ico-level-modifier-solid" }}
+          <div class="width-sm">
+            {{> inputNumberSpinner }}
+          </div>
+        {{/labeledControl}}
+        {{!-- Modified Level --}}
+        <div class="flex flex-middle">
+          <span class="pad-t-md pad-b-md pad-r-md font-bold font-bold">=</span>
+          {{#> readOnlyValue cssClass="width-sm font-size-lg flex flex-center"}}{{viewModel.modifiedLevel}}{{/readOnlyValue}}
         </div>
-      </div>
-      {{!-- Level Modifier --}}
-      <div class="flex flex-row">
-        <i class="ico ico-level-modifier-solid dark" title="{{localize "ambersteel.character.advancement.modifier.label"}}"></i>
-        <div class="width-sm">
-          {{> inputNumberSpinner viewModel=viewModel.vmNsLevelModifier }}
-        </div>
-      </div>
-      {{!-- Modified Level --}}
-      <div class="flex flex-middle">
-        <span class="pad-t-md pad-b-md pad-r-md font-bold font-bold">=</span>
-        {{#> readOnlyValue cssClass="width-sm font-size-lg flex flex-center"}}{{viewModel.modifiedLevel}}{{/readOnlyValue}}
       </div>
     </div>
     {{#if viewModel.showAdvancementProgression}}
-    {{!-- Spacer --}}
-    <div class="flex-grow"></div>
     {{!-- Advancement Requirements --}}
-    <div class="flex flex-row">
-      <div class="width-min-xl">
-        {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.advancement.requirements.successAndFailure.abbreviation"}}{{/label}}
+    <div class="flex flex-row flex-middle auto-margin-h sheet-block">
+      <div class="flex flex-row">
+        <div class="width-min-xl">
+          {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.advancement.requirements.successAndFailure.abbreviation"}}{{/label}}
+        </div>
+        <div class="width-min-md">
+          {{#> readOnlyValue}}{{viewModel.successes}} / {{viewModel.failures}}{{/readOnlyValue}}
+        </div>
       </div>
-      <div class="width-min-md">
-        {{#> readOnlyValue}}{{viewModel.successes}} / {{viewModel.failures}}{{/readOnlyValue}}
-      </div>
-    </div>
-    {{!-- Successes --}}
-    <div class="flex flex-row">
-      <div class="width-min-l margin-l-sm">
-        {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.advancement.requirements.success.abbreviation"}}{{/label}}
-      </div>
-      <div class="width-md">
-        {{> inputNumberSpinner viewModel=viewModel.vmNsSuccesses }}
-      </div>
-    </div>
-    {{!-- Failures --}}
-    <div class="flex flex-row">
-      <div class="width-min-l margin-l-sm">
-        {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.advancement.requirements.failure.abbreviation"}}{{/label}}
-      </div>
-      <div class="width-md">
-        {{> inputNumberSpinner viewModel=viewModel.vmNsFailures }}
-      </div>
+      {{!-- Successes --}}
+      {{#> labeledControl viewModel=viewModel.vmNsSuccesses localizedLabel=(localize "ambersteel.character.advancement.requirements.success.abbreviation") }}
+        <div class="width-md">
+          {{> inputNumberSpinner }}
+        </div>
+      {{/labeledControl}}
+      {{!-- Failures --}}
+      {{#> labeledControl viewModel=viewModel.vmNsFailures localizedLabel=(localize "ambersteel.character.advancement.requirements.failure.abbreviation") }}
+        <div class="width-md">
+          {{> inputNumberSpinner }}
+        </div>
+      {{/labeledControl}}
     </div>
     {{/if}}
   </div>
@@ -90,61 +83,47 @@ cssClass: {undefined | String}
     {{> inputRichText viewModel=viewModel.vmRtDescription }}
   </div>
   {{!-- Row --}}
-  <div class="flex flex-row flex-wrap auto-margin">
+  <div class="grid-2col grid-gap-sm">
+    {{!-- Lots of optional content here --}}
     {{!-- AP cost --}}
-    <div class="flex flex-row{{#if viewModel.hideApCost}} hidden{{/if}}">
-      {{#> labeledControl viewModel=viewModel.vmNsApCost localizedLabel=(localize "ambersteel.actionPoint.abbreviation") }}
-        <div class="width-sm">
-          {{> inputNumberSpinner }}
-        </div>
+    <div class="{{#if viewModel.hideApCost}} hidden{{/if}}">
+      {{#> labeledControl viewModel=viewModel.vmNsApCost localizedIconToolTip=(localize "ambersteel.actionPoint.abbreviation") iconClass="ico-action-point-solid" cssClass="" }}
+        {{> inputNumberSpinner }}
       {{/labeledControl}}
     </div>
-    {{!-- Lots of optional content here --}}
+    {{!-- Condition --}}
+    <div class="{{#if viewModel.hideCondition}} hidden{{/if}}">
+      {{#> labeledControl viewModel=viewModel.vmCondition localizedIconToolTip=(localize "ambersteel.character.skill.ability.condition.label") iconClass="ico-condition-solid" cssClass="flex-grow" }}
+        {{> inputTextField }}
+      {{/labeledControl}}
+    </div>
     {{!-- Obstacle --}}
-    <div class="flex flex-row{{#if viewModel.hideObstacle}} hidden{{/if}}">
-      {{#> labeledControl viewModel=viewModel.vmTfObstacle localizedLabel=(localize "ambersteel.roll.obstacle.abbreviation") cssClass="flex-grow" }}
+    <div{{#if viewModel.hideObstacle}} class="hidden"{{/if}}>
+      {{#> labeledControl viewModel=viewModel.vmTfObstacle localizedIconToolTip=(localize "ambersteel.roll.obstacle.abbreviation") iconClass="ico-obstacle-solid" cssClass="flex-grow" }}
         {{> inputTextField }}
       {{/labeledControl}}
     </div>
     {{!-- Opposed By --}}
-    <div class="flex flex-row{{#if viewModel.hideOpposedBy}} hidden{{/if}}">
-      <div class="width-min-lg">
-        {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.roll.obstacle.opposedBy.label"}}{{/label}}
-      </div>
-      <div class="flex-grow">
-        {{> inputTextField viewModel=viewModel.vmTfOpposedBy }}
-      </div>
+    <div{{#if viewModel.hideOpposedBy}} class="hidden"{{/if}}>
+      {{#> labeledControl viewModel=viewModel.vmTfOpposedBy localizedIconToolTip=(localize "ambersteel.roll.obstacle.opposedBy.label") iconClass="ico-opposed-by-solid" cssClass="" }}
+        {{> inputTextField }}
+      {{/labeledControl}}
     </div>
     {{!-- Distance --}}
-    <div class="flex flex-row{{#if viewModel.hideDistance}} hidden{{/if}}">
-      <div class="width-min-lg">
-        {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.skill.ability.distance.label"}}{{/label}}
-      </div>
-      <div class="flex-grow">
-        {{> inputTextField viewModel=viewModel.vmTfDistance }}
-      </div>
+    <div{{#if viewModel.hideDistance}} class="hidden"{{/if}}>
+      {{#> labeledControl viewModel=viewModel.vmTfDistance localizedIconToolTip=(localize "ambersteel.character.skill.ability.distance.label") iconClass="ico-distance-solid" cssClass="" }}
+        {{> inputTextField }}
+      {{/labeledControl}}
     </div>
     {{!-- Attack type --}}
-    <div class="flex flex-row{{#if viewModel.hideAttackType}} hidden{{/if}}">
-      <div class="width-min-lg">
-        {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.attackType.label"}}{{/label}}
-      </div>
-      <div class="flex-grow">
-        {{> inputDropDown viewModel=viewModel.vmDdAttackType }}
-      </div>
-    </div>
-    {{!-- Condition --}}
-    <div class="flex flex-row{{#if viewModel.hideCondition}} hidden{{/if}}">
-      <div class="width-min-lg">
-        {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.skill.ability.condition.label"}}{{/label}}
-      </div>
-      <div class="flex-grow">
-        {{> inputTextarea viewModel=viewModel.vmTaCondition }}
-      </div>
+    <div{{#if viewModel.hideAttackType}} class="hidden"{{/if}}>
+      {{#> labeledControl viewModel=viewModel.vmDdAttackType localizedIconToolTip=(localize "ambersteel.attackType.label") iconClass=viewModel.attackTypeIconClass cssClass="" }}
+        {{> inputDropDown }}
+      {{/labeledControl}}
     </div>
   </div>
   {{!-- Damage --}}
-  <div class="flex flex-row{{#if viewModel.hideDamage}} hidden{{/if}}">
+  <div class="flex flex-row sheet-block{{#if viewModel.hideDamage}} hidden{{/if}}">
     <div class="flex flex-center">
       <span class="button light square font-size-default flex flex-center" id="{{viewModel.id}}-damage-info">
         <i class="far fa-question-circle info-button"></i>
@@ -173,24 +152,23 @@ cssClass: {undefined | String}
     </ul>
   </div>
   {{!-- Row --}}
-  {{!-- Category --}}
-  <div class="flex flex-row">
-    <i class="ico fas fa-folder" title="{{localize "ambersteel.general.category"}}"></i>
-    <div class="width-xxl">
-      {{> inputTextField viewModel=viewModel.vmTfCategory }}
-    </div>
-  </div>
-  {{!-- Tags --}}
-  <div class="flex flex-row margin-b-sm">
-    <i class="ico ico-tags-solid dark" title="{{localize "ambersteel.general.tags.label"}}"></i>
-    <span class="flex flex-grow">
-      {{> inputTags viewModel=viewModel.vmTags }}
-    </span>
+    <div class="flex flex-row flex-middle auto-margin-h sheet-block">
+    {{!-- Category --}}
+    {{#> labeledControl viewModel=viewModel.vmTfCategory localizedIconToolTip=(localize "ambersteel.general.category") iconClass="fas fa-folder" cssClass="" }}
+      <div class="width-xxl">
+        {{> inputTextField }}
+      </div>
+    {{/labeledControl}}
+    {{!-- Tags --}}
+    {{#> labeledControl viewModel=viewModel.vmTags localizedIconToolTip=(localize "ambersteel.general.tags.label") iconClass="ico-tags-solid" cssClass="" }}
+      {{> inputTags }}
+    {{/labeledControl}}
   </div>
   {{!-- Row --}}
   {{!-- Skill Abilites --}}
   {{#if viewModel.showSkillAbilities}}
-  {{#> header3 showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.skill.ability.plural"}}{{/header3}}
-  {{> "systems/ambersteel/presentation/sheet/item/skill-ability/skill-ability-table.hbs" viewModel=viewModel.vmSkillAbilityTable cssClass=(ifThenElse viewModel.isSkillAbilityListVisible "" "hidden") }}
+    {{#with viewModel.skillAbilitiesTemplate as |template|}}
+    {{> (template) viewModel=../viewModel.vmSkillAbilityTable }}
+    {{/with}}
   {{/if}}
 </div>

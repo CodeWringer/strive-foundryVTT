@@ -3,7 +3,7 @@ viewModel: {InputTextFieldViewModel}
 cssClass: {String | undefined}
 readOnlyCssClass: {String | undefined}
 --}}
-<ul id="{{viewModel.id}}" class="custom-system-edit unstyled-list compact fill flex flex-row flex-wrap">
+<ul id="{{viewModel.id}}" class="custom-system-edit unstyled-list compact fill flex flex-row flex-wrap auto-margin">
   {{#each viewModel.tagViewModels as |vm key|}}
   {{#with ../viewModel.templatePill as | template |}}
   <li>

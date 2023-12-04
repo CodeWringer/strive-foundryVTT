@@ -8,12 +8,31 @@ import ChoiceAdapter from '../input-choice/choice-adapter.mjs';
 import ChoiceOption from '../input-choice/choice-option.mjs';
 
 /**
+ * @constant
+ * 
+ * @property {String} SKILL
+ * @property {String} SKILL_ABILITY
+ * @property {String} FATE_CARD
+ * @property {String} ASSET
+ * @property {String} INJURY
+ * @property {String} ILLNESS
+ */
+export const ADD_BUTTON_CREATION_TYPES = {
+  SKILL: "skill",
+  SKILL_ABILITY: "skill-ability",
+  FATE_CARD: "fate-card",
+  ASSET: "item",
+  INJURY: "injury",
+  ILLNESS: "illness",
+};
+
+/**
  * A button that allows adding a newly created embedded document to a specific actor. 
  * 
  * @extends ButtonViewModel
  * 
  * @property {Boolean} withDialog If true, will prompt the user to make a selection with a dialog. 
- * @property {String} creationType `"skill" | "skill-ability" | "fate-card" | "item" | "injury" | "illness"`
+ * @property {String} creationType One of the values of `ADD_BUTTON_CREATION_TYPES`. 
  * @property {Object} creationData Data to pass to the item creation function. 
  * @property {String | undefined} localizedType Localized name of the type of thing to add. 
  * @property {String | undefined} localizedDialogTitle Localized title of the dialog. 
@@ -47,8 +66,9 @@ export default class ButtonAddViewModel extends ButtonViewModel {
    * * Returns `{Item | SkillAbility}` - The created `Item` document or `SkillAbility`. 
    * 
    * @param {TransientDocument} args.target The target object to affect. 
-   * @param {String} args.creationType `"skill" | "skill-ability" | "fate-card" | "item" | "injury" | "illness"`
+   * @param {String} args.creationType One of the values of `ADD_BUTTON_CREATION_TYPES`. 
    * @param {Boolean | undefined} args.withDialog Optional. If true, will prompt the user to make a selection with a dialog. 
+   * * default `false`
    * @param {Object | undefined} args.creationData Optional. Data to pass to the item creation function. 
    * @param {String | undefined} args.localizedType Localized name of the type of thing to add. 
    * @param {String | undefined} args.localizedDialogTitle Localized title of the dialog. 
@@ -96,7 +116,7 @@ export default class ButtonAddViewModel extends ButtonViewModel {
 
     // Special case, because skill abilities aren't items - they're objects contained in an array, 
     // referenced by a property of a skill-item.
-    if (this.creationType === "skill-ability") {
+    if (this.creationType === ADD_BUTTON_CREATION_TYPES.SKILL_ABILITY) {
       if (this.target.type !== "skill") {
         throw new Error("InvalidArgumentException: Cannot add item of type 'skill-ability' to non-'skill'-type item!");
       }

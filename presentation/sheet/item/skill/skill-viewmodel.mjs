@@ -25,6 +25,28 @@ export default class SkillViewModel extends ViewModel {
   get entityId() { return this.document.id; }
 
   /**
+   * Returns the CSS class of the icon that represents the current attack type. 
+   * 
+   * @type {String}
+   * @readonly
+   */
+  get attackTypeIconClass() {
+    if (isDefined(this.document.attackType)) {
+      if (this.document.attackType.name === ATTACK_TYPES.areaOfEffect.name) {
+        return "ico-attack-type-aoe-solid";
+      } else if (this.document.attackType.name === ATTACK_TYPES.multipleSingleTarget.name) {
+        return "ico-attack-type-multi-solid";
+      } else if (this.document.attackType.name === ATTACK_TYPES.singleTarget.name) {
+        return "ico-attack-type-single-solid";
+      } else {
+        return "ico-crossed-circle-solid";
+      }
+    } else {
+      return "";
+    }
+  }
+
+  /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
    * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 
    * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 
@@ -145,9 +167,9 @@ export default class SkillViewModel extends ViewModel {
       }),
     });
     this.hideCondition = !isDefined(this.document.condition);
-    this.vmTaCondition = new InputTextareaViewModel({
+    this.vmCondition = new InputTextFieldViewModel({
       parent: thiz,
-      id: "vmTaCondition",
+      id: "vmCondition",
       value: this.document.condition,
       onChange: (_, newValue) => {
         this.document.condition = newValue;
