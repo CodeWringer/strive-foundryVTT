@@ -577,7 +577,7 @@
             "placeholder": "3' / 1m / 0 / etc."
           },
           "newDefaultName": "New Skill Ability",
-          "requirement": "At Level",
+          "requirement": "Required Skill Level",
           "singular": "Skill Ability",
           "plural": "Skill Abilities"
         },

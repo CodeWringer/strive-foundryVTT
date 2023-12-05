@@ -90,3 +90,36 @@ export const DAMAGE_TYPES = {
   }),
 };
 ConstantsUtils.enrichConstant(DAMAGE_TYPES);
+
+/**
+ * Returns the CSS class of the icon that represents the given damage type. 
+ * 
+ * @param {DamageType} damageType 
+ * 
+ * @returns {String}
+ */
+export function getDamageTypeIconClass(damageType) {
+  if (damageType.name === DAMAGE_TYPES.acid.name) {
+    return "ico-damage-type-acid-solid";
+  } else if (damageType.name === DAMAGE_TYPES.bleeding.name) {
+    return "ico-damage-type-bleeding-solid";
+  } else if (damageType.name === DAMAGE_TYPES.bludgeoning.name) {
+    return "ico-damage-type-bludgeon-solid";
+  } else if (damageType.name === DAMAGE_TYPES.burning.name) {
+    return "ico-damage-type-burning-solid";
+  } else if (damageType.name === DAMAGE_TYPES.crushing.name) {
+    return "ico-damage-type-crushing-solid";
+  } else if (damageType.name === DAMAGE_TYPES.electrical.name) {
+    return "ico-damage-type-electrical-solid";
+  } else if (damageType.name === DAMAGE_TYPES.freezing.name) {
+    return "ico-damage-type-freezing-solid";
+  } else if (damageType.name === DAMAGE_TYPES.piercing.name) {
+    return "ico-damage-type-piercing-solid";
+  } else if (damageType.name === DAMAGE_TYPES.poison.name) {
+    return "ico-damage-type-poisoning-solid";
+  } else if (damageType.name === DAMAGE_TYPES.slashing.name) {
+    return "ico-damage-type-slash-solid";
+  } else {
+    return "ico-crossed-circle-solid";
+  }
+}

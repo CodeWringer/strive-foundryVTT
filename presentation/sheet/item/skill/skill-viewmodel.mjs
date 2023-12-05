@@ -1,6 +1,6 @@
 import TransientSkill from "../../../../business/document/item/skill/transient-skill.mjs";
 import { DAMAGE_TYPES } from "../../../../business/ruleset/damage-types.mjs";
-import { ATTACK_TYPES } from "../../../../business/ruleset/skill/attack-types.mjs";
+import { ATTACK_TYPES, getAttackTypeIconClass } from "../../../../business/ruleset/skill/attack-types.mjs";
 import DamageAndType from "../../../../business/ruleset/skill/damage-and-type.mjs";
 import { createUUID } from "../../../../business/util/uuid-utility.mjs";
 import { isDefined, validateOrThrow } from "../../../../business/util/validation-utility.mjs";
@@ -10,7 +10,6 @@ import InfoBubble, { InfoBubbleAutoHidingTypes, InfoBubbleAutoShowingTypes } fro
 import ChoiceAdapter from "../../../component/input-choice/choice-adapter.mjs";
 import InputDropDownViewModel from "../../../component/input-dropdown/input-dropdown-viewmodel.mjs";
 import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
-import InputTextareaViewModel from "../../../component/input-textarea/input-textarea-viewmodel.mjs";
 import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs";
 import ViewModel from "../../../view-model/view-model.mjs";
 
@@ -32,15 +31,7 @@ export default class SkillViewModel extends ViewModel {
    */
   get attackTypeIconClass() {
     if (isDefined(this.document.attackType)) {
-      if (this.document.attackType.name === ATTACK_TYPES.areaOfEffect.name) {
-        return "ico-attack-type-aoe-solid";
-      } else if (this.document.attackType.name === ATTACK_TYPES.multipleSingleTarget.name) {
-        return "ico-attack-type-multi-solid";
-      } else if (this.document.attackType.name === ATTACK_TYPES.singleTarget.name) {
-        return "ico-attack-type-single-solid";
-      } else {
-        return "ico-crossed-circle-solid";
-      }
+      return getAttackTypeIconClass(this.document.attackType);
     } else {
       return "";
     }

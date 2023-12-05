@@ -1,5 +1,5 @@
 import { DAMAGE_TYPES } from "../../../../business/ruleset/damage-types.mjs";
-import { ATTACK_TYPES } from "../../../../business/ruleset/skill/attack-types.mjs";
+import { ATTACK_TYPES, getAttackTypeIconClass } from "../../../../business/ruleset/skill/attack-types.mjs";
 import DamageAndType from "../../../../business/ruleset/skill/damage-and-type.mjs";
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs";
 import { isDefined } from "../../../../business/util/validation-utility.mjs";
@@ -73,6 +73,20 @@ export default class SkillAbilityListItemViewModel extends ViewModel {
    * @readonly
    */
   get hideDamage() { return this.skillAbility.damage.length < 1; }
+
+  /**
+   * Returns the CSS class of the icon that represents the current attack type. 
+   * 
+   * @type {String}
+   * @readonly
+   */
+  get attackTypeIconClass() {
+    if (isDefined(this.skillAbility.attackType)) {
+      return getAttackTypeIconClass(this.skillAbility.attackType);
+    } else {
+      return "";
+    }
+  }
 
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
@@ -213,9 +227,9 @@ export default class SkillAbilityListItemViewModel extends ViewModel {
       }),
     });
 
-    this.vmTaCondition = new InputTextareaViewModel({
+    this.vmCondition = new InputTextareaViewModel({
       parent: thiz,
-      id: "vmTaCondition",
+      id: "vmCondition",
       value: skillAbility.condition,
       onChange: (_, newValue) => {
         skillAbility.condition = newValue;

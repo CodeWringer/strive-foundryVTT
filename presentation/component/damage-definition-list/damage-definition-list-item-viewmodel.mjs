@@ -1,4 +1,4 @@
-import { DAMAGE_TYPES } from "../../../business/ruleset/damage-types.mjs"
+import { DAMAGE_TYPES, getDamageTypeIconClass } from "../../../business/ruleset/damage-types.mjs"
 import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import { isDefined } from "../../../business/util/validation-utility.mjs";
 import { TEMPLATES } from "../../templatePreloader.mjs";
@@ -63,29 +63,7 @@ export default class DamageDefinitionListItemViewModel extends InputViewModel {
    * @readonly
    */
   get damageTypeIconClass() {
-    if (this.value.damageType.name === DAMAGE_TYPES.acid.name) {
-      return "ico-damage-type-acid-solid";
-    } else if (this.value.damageType.name === DAMAGE_TYPES.bleeding.name) {
-      return "ico-damage-type-bleeding-solid";
-    } else if (this.value.damageType.name === DAMAGE_TYPES.bludgeoning.name) {
-      return "ico-damage-type-bludgeon-solid";
-    } else if (this.value.damageType.name === DAMAGE_TYPES.burning.name) {
-      return "ico-damage-type-burning-solid";
-    } else if (this.value.damageType.name === DAMAGE_TYPES.crushing.name) {
-      return "ico-damage-type-crushing-solid";
-    } else if (this.value.damageType.name === DAMAGE_TYPES.electrical.name) {
-      return "ico-damage-type-electrical-solid";
-    } else if (this.value.damageType.name === DAMAGE_TYPES.freezing.name) {
-      return "ico-damage-type-freezing-solid";
-    } else if (this.value.damageType.name === DAMAGE_TYPES.piercing.name) {
-      return "ico-damage-type-piercing-solid";
-    } else if (this.value.damageType.name === DAMAGE_TYPES.poison.name) {
-      return "ico-damage-type-poisoning-solid";
-    } else if (this.value.damageType.name === DAMAGE_TYPES.slashing.name) {
-      return "ico-damage-type-slash-solid";
-    } else {
-      return "ico-crossed-circle-solid";
-    }
+    return getDamageTypeIconClass(this.value.damageType);
   }
 
   /**

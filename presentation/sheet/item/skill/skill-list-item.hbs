@@ -87,7 +87,7 @@ cssClass: {undefined | String}
     {{!-- Lots of optional content here --}}
     {{!-- AP cost --}}
     <div class="{{#if viewModel.hideApCost}} hidden{{/if}}">
-      {{#> labeledControl viewModel=viewModel.vmNsApCost localizedIconToolTip=(localize "ambersteel.actionPoint.abbreviation") iconClass="ico-action-point-solid" cssClass="" }}
+      {{#> labeledControl viewModel=viewModel.vmNsApCost localizedIconToolTip=(localize "ambersteel.actionPoint.plural") iconClass="ico-action-point-solid" cssClass="" }}
         {{> inputNumberSpinner }}
       {{/labeledControl}}
     </div>
@@ -99,7 +99,7 @@ cssClass: {undefined | String}
     </div>
     {{!-- Obstacle --}}
     <div{{#if viewModel.hideObstacle}} class="hidden"{{/if}}>
-      {{#> labeledControl viewModel=viewModel.vmTfObstacle localizedIconToolTip=(localize "ambersteel.roll.obstacle.abbreviation") iconClass="ico-obstacle-solid" cssClass="flex-grow" }}
+      {{#> labeledControl viewModel=viewModel.vmTfObstacle localizedIconToolTip=(localize "ambersteel.roll.obstacle.label") iconClass="ico-obstacle-solid" cssClass="flex-grow" }}
         {{> inputTextField }}
       {{/labeledControl}}
     </div>
@@ -152,7 +152,7 @@ cssClass: {undefined | String}
     </ul>
   </div>
   {{!-- Row --}}
-    <div class="flex flex-row flex-middle auto-margin-h sheet-block">
+  <div class="flex flex-row flex-middle auto-margin-h sheet-block">
     {{!-- Category --}}
     {{#> labeledControl viewModel=viewModel.vmTfCategory localizedIconToolTip=(localize "ambersteel.general.category") iconClass="fas fa-folder" cssClass="" }}
       <div class="width-xxl">

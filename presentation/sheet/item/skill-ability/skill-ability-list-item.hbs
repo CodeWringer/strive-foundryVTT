@@ -25,79 +25,68 @@ cssClass: {undefined | String}
     {{> buttonDelete viewModel=viewModel.vmBtnDelete cssClass="" }}
   </div>
   {{!-- Row --}}
+  <div class="flex flex-row flex-wrap margin-b-md auto-margin-h">
+    <div class="flex flex-row flex-middle auto-margin-h sheet-block">
+      {{!-- AP cost --}}
+      {{#> labeledControl viewModel=viewModel.vmNsApCost localizedIconToolTip=(localize "ambersteel.actionPoint.plural") iconClass="ico-action-point-solid" cssClass="" }}
+        <div class="width-sm">
+          {{> inputNumberSpinner }}
+        </div>
+      {{/labeledControl}}
+      {{!-- Required Level --}}
+      {{#> labeledControl viewModel=viewModel.vmNsRequiredLevel localizedIconToolTip=(localize "ambersteel.character.skill.ability.requirement") iconClass="ico-level-solid" cssClass="" }}
+        <div class="width-sm">
+          {{> inputNumberSpinner }}
+        </div>
+      {{/labeledControl}}
+    </div>
+  </div>
+  {{!-- Row --}}
   {{!-- Description --}}
   <div class="flex flex-column margin-b-md border-solid-t-sm border-solid-b-sm">
     {{> inputRichText viewModel=viewModel.vmRtDescription }}
   </div>
   {{!-- Row --}}
-  <div class="grid grid-2col grid-gap-md">
-    {{!-- Required Level --}}
-    <div class="fill flex flex-row">
-      <div class="flex-grow">
-        {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.skill.ability.requirement"}}{{/label}}
-      </div>
-      <div class="width-md">
-        {{> inputNumberSpinner viewModel=viewModel.vmNsRequiredLevel }}
-      </div>
-    </div>
-    {{!-- AP cost --}}
-    <div class="fill flex flex-row">
-      <div class="flex-grow">
-        {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.skill.ability.apCost"}}{{/label}}
-      </div>
-      <div class="width-md">
-        {{> inputNumberSpinner viewModel=viewModel.vmNsApCost }}
-      </div>
-    </div>
+  <div class="grid-2col grid-gap-sm">
     {{!-- Lots of optional content here --}}
     {{!-- Obstacle --}}
-    <div class="fill flex flex-row{{#if viewModel.hideObstacle}} hidden{{/if}}">
-      <div class="width-min-lg">
-        {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.roll.obstacle.abbreviation"}}{{/label}}
-      </div>
-      <div class="flex-grow">
-        {{> inputTextField viewModel=viewModel.vmTfObstacle }}
-      </div>
+    <div{{#if viewModel.hideObstacle}} class="hidden"{{/if}}>
+      {{#> labeledControl viewModel=viewModel.vmTfObstacle localizedIconToolTip=(localize "ambersteel.roll.obstacle.label") iconClass="ico-obstacle-solid" cssClass="flex-grow" }}
+        {{> inputTextField }}
+      {{/labeledControl}}
     </div>
     {{!-- Opposed By --}}
-    <div class="fill flex flex-row{{#if viewModel.hideOpposedBy}} hidden{{/if}}">
-      <div class="width-min-lg">
-        {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.roll.obstacle.opposedBy.label"}}{{/label}}
-      </div>
-      <div class="flex-grow">
-        {{> inputTextField viewModel=viewModel.vmTfOpposedBy }}
-      </div>
+    <div{{#if viewModel.hideOpposedBy}} class="hidden"{{/if}}>
+      {{#> labeledControl viewModel=viewModel.vmTfOpposedBy localizedIconToolTip=(localize "ambersteel.roll.obstacle.opposedBy.label") iconClass="ico-opposed-by-solid" cssClass="" }}
+        {{> inputTextField }}
+      {{/labeledControl}}
+    </div>
+    {{!-- Condition --}}
+    <div class="{{#if viewModel.hideCondition}} hidden{{/if}}">
+      {{#> labeledControl viewModel=viewModel.vmCondition localizedIconToolTip=(localize "ambersteel.character.skill.ability.condition.label") iconClass="ico-condition-solid" cssClass="flex-grow" }}
+        {{> inputTextField }}
+      {{/labeledControl}}
     </div>
     {{!-- Distance --}}
-    <div class="fill flex flex-row{{#if viewModel.hideDistance}} hidden{{/if}}">
-      <div class="width-min-lg">
-        {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.skill.ability.distance.label"}}{{/label}}
-      </div>
-      <div class="flex-grow">
-        {{> inputTextField viewModel=viewModel.vmTfDistance }}
-      </div>
+    <div{{#if viewModel.hideDistance}} class="hidden"{{/if}}>
+      {{#> labeledControl viewModel=viewModel.vmTfDistance localizedIconToolTip=(localize "ambersteel.character.skill.ability.distance.label") iconClass="ico-distance-solid" cssClass="" }}
+        {{> inputTextField }}
+      {{/labeledControl}}
     </div>
     {{!-- Attack type --}}
-    <div class="fill flex flex-row{{#if viewModel.hideAttackType}} hidden{{/if}}">
-      <div class="width-min-lg">
-        {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.attackType.label"}}{{/label}}
-      </div>
-      <div class="flex-grow">
-        {{> inputDropDown viewModel=viewModel.vmDdAttackType }}
-      </div>
+    <div{{#if viewModel.hideAttackType}} class="hidden"{{/if}}>
+      {{#> labeledControl viewModel=viewModel.vmDdAttackType localizedIconToolTip=(localize "ambersteel.attackType.label") iconClass=viewModel.attackTypeIconClass cssClass="" }}
+        {{> inputDropDown }}
+      {{/labeledControl}}
     </div>
   </div>
   {{!-- Damage --}}
-  <div class="flex flex-row{{#if viewModel.hideDamage}} hidden{{/if}}">
+  <div class="flex flex-row sheet-block{{#if viewModel.hideDamage}} hidden{{/if}}">
     <div class="flex flex-center">
       <span class="button light square font-size-default flex flex-center" id="{{viewModel.id}}-damage-info">
         <i class="far fa-question-circle info-button"></i>
       </span>
     </div>
     {{> damageDefinitionList viewModel=viewModel.vmDamageDefinitionList}}
-  </div>
-  {{!-- Condition --}}
-  <div class="flex flex-column margin-t-md{{#if viewModel.hideCondition}} hidden{{/if}}">
-    {{> inputTextarea viewModel=viewModel.vmTaCondition }}
   </div>
 </div>
