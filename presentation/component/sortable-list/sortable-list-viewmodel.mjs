@@ -9,10 +9,8 @@ import ButtonViewModel from "../button/button-viewmodel.mjs";
  * This object groups the view models of one list item, to pass through to the UI. 
  * 
  * @property {String} id 
- * @property {ViewModel} vmBtnMoveTop 
  * @property {ViewModel} vmBtnMoveUp 
  * @property {ViewModel} vmBtnMoveDown 
- * @property {ViewModel} vmBtnMoveBottom 
  * @property {ViewModel} listItemViewModel 
  * 
  * @private
@@ -20,10 +18,8 @@ import ButtonViewModel from "../button/button-viewmodel.mjs";
 class SortableListViewModelGroup {
   constructor(args = {}) {
     this.id = args.id;
-    this.vmBtnMoveTop = args.vmBtnMoveTop;
     this.vmBtnMoveUp = args.vmBtnMoveUp;
     this.vmBtnMoveDown = args.vmBtnMoveDown;
-    this.vmBtnMoveBottom = args.vmBtnMoveBottom;
     this.listItemViewModel = args.listItemViewModel;
   }
 }
@@ -146,10 +142,8 @@ export default class SortableListViewModel extends ViewModel {
 
     // Clean up of previous ui data. 
     for (const itemViewModelGroup of this.itemViewModelGroups) {
-      itemViewModelGroup.vmBtnMoveTop.parent = undefined;
       itemViewModelGroup.vmBtnMoveUp.parent = undefined;
       itemViewModelGroup.vmBtnMoveDown.parent = undefined;
-      itemViewModelGroup.vmBtnMoveBottom.parent = undefined;
     }
     // Generate new data for the ui. 
     this.itemViewModelGroups = this._generateViewModelGroups();
@@ -179,20 +173,18 @@ export default class SortableListViewModel extends ViewModel {
     const thiz = this;
     return new SortableListViewModelGroup({
       id: id,
-      vmBtnMoveTop: new ButtonViewModel({
-        parent: thiz,
-        isEditable: upButtonsDisabled ?? thiz.isEditable,
-        id: `${id}-vmBtnMoveTop`,
-        iconHtml: '<i class="fas fa-angle-double-up"></i>',
-        onClick: () => { thiz._moveToTop(id); },
-        localizedTooltip: game.i18n.localize("ambersteel.general.ordering.moveToTop"),
-      }),
       vmBtnMoveUp: new ButtonViewModel({
         parent: thiz,
         isEditable: upButtonsDisabled ?? thiz.isEditable,
         id: `${id}-vmBtnMoveUp`,
         iconHtml: '<i class="fas fa-angle-up"></i>',
-        onClick: () => { thiz._moveUp(id); },
+        onClick: (event) => {
+          if (event.ctrlKey || event.shiftKey) {
+            thiz._moveToTop(id);
+          } else {
+            thiz._moveUp(id);
+          }
+        },
         localizedTooltip: game.i18n.localize("ambersteel.general.ordering.moveUp"),
       }),
       vmBtnMoveDown: new ButtonViewModel({
@@ -200,16 +192,14 @@ export default class SortableListViewModel extends ViewModel {
         isEditable: downButtonsDisabled ?? thiz.isEditable,
         id: `${id}-vmBtnMoveDown`,
         iconHtml: '<i class="fas fa-angle-down"></i>',
-        onClick: () => { thiz._moveDown(id); },
+        onClick: (event) => {
+          if (event.ctrlKey || event.shiftKey) {
+            thiz._moveToBottom(id);
+          } else {
+            thiz._moveDown(id);
+          }
+        },
         localizedTooltip: game.i18n.localize("ambersteel.general.ordering.moveDown"),
-      }),
-      vmBtnMoveBottom: new ButtonViewModel({
-        parent: thiz,
-        isEditable: downButtonsDisabled ?? thiz.isEditable,
-        id: `${id}-vmBtnMoveBottom`,
-        iconHtml: '<i class="fas fa-angle-double-down"></i>',
-        onClick: () => { thiz._moveToBottom(id); },
-        localizedTooltip: game.i18n.localize("ambersteel.general.ordering.moveToBottom"),
       }),
       listItemViewModel: itemViewModel,
     });
