@@ -37,10 +37,9 @@ export const ADD_BUTTON_CREATION_TYPES = {
  * @property {String | undefined} localizedType Localized name of the type of thing to add. 
  * @property {String | undefined} localizedDialogTitle Localized title of the dialog. 
  * 
- * @method onClick Asynchronous callback that is invoked when the button is clicked. 
- * Receives the button's original click-handler as its sole argument. In most cases, it should be called 
- * and awaited before one's own click handling logic. But in case the original logic is unwanted, the method can be ignored.
- * * Returns `{Item | SkillAbility}` - The created `Item` document or `SkillAbility`. 
+ * @method onClick Asynchronous callback that is invoked when the button is clicked. Arguments: 
+ * * `event: Event`
+ * * `data: Item | SkillAbility` - The created `Item` document or `SkillAbility`. 
  */
 export default class ButtonAddViewModel extends ButtonViewModel {
   /**
@@ -54,22 +53,21 @@ export default class ButtonAddViewModel extends ButtonViewModel {
 
   /**
    * @param {Object} args 
-   * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
-   * @param {Boolean | undefined} args.isEditable Optional. If true, will be interactible. 
+   * @param {String | undefined} args.id Unique ID of this view model instance. 
+   * @param {Boolean | undefined} args.isEditable If true, will be interactible. 
    * @param {String | undefined} args.localizedToolTip A localized text to 
    * display as a tool tip. 
    * @param {String | undefined} args.localizedLabel A localized text to 
    * display as a button label. 
-   * @param {Function | undefined} args.onClick Asynchronous callback that is invoked when the button is clicked. 
-   * Receives the button's original click-handler as its sole argument. In most cases, it should be called 
-   * and awaited before one's own click handling logic. But in case the original logic is unwanted, the method can be ignored.
-   * * Returns `{Item | SkillAbility}` - The created `Item` document or `SkillAbility`. 
+   * @param {Function | undefined} args.onClick Asynchronous callback that is invoked when the button is clicked. Arguments: 
+   * * `event: Event`
+   * * `data: Item | SkillAbility` - The created `Item` document or `SkillAbility`. 
    * 
    * @param {TransientDocument} args.target The target object to affect. 
    * @param {String} args.creationType One of the values of `ADD_BUTTON_CREATION_TYPES`. 
-   * @param {Boolean | undefined} args.withDialog Optional. If true, will prompt the user to make a selection with a dialog. 
+   * @param {Boolean | undefined} args.withDialog If true, will prompt the user to make a selection with a dialog. 
    * * default `false`
-   * @param {Object | undefined} args.creationData Optional. Data to pass to the item creation function. 
+   * @param {Object | undefined} args.creationData Data to pass to the item creation function. 
    * @param {String | undefined} args.localizedType Localized name of the type of thing to add. 
    * @param {String | undefined} args.localizedDialogTitle Localized title of the dialog. 
    */
@@ -93,18 +91,19 @@ export default class ButtonAddViewModel extends ButtonViewModel {
   /**
    * Handle creating a new Owned Item for the actor using initial data defined in the HTML dataset
    * 
-   * @returns {Item | SkillAbility} The created `Item` document or `SkillAbility`. 
+   * @param {Event} event
    * 
-   * @override
-   * @see {ButtonViewModel._onClick}
+   * @returns {Item | SkillAbility} The created `Item` document or `SkillAbility`. 
    * 
    * @throws {Error} NullPointerException - Thrown, if 'target', 'target.type' or 'creationType' is undefined. 
    * @throws {Error} InvalidArgumentException - Thrown, if trying to add a skill-ability to a non-skill-item. 
    * @throws {Error} InvalidArgumentException - Thrown, if 'creationType' is unrecognized. 
    * 
    * @async
+   * @protected
+   * @override
    */
-  async _onClick() {
+  async _onClick(event) {
     if (this.isEditable !== true) return;
 
     if (this.target === undefined || this.target.type === undefined) {

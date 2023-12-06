@@ -138,8 +138,7 @@ export default class SkillAbilityTableViewModel extends ViewModel {
       isEditable: true,
       visGroup: thiz.visGroupId,
       toggleSelf: false,
-      onClick: async (callback) => {
-        await callback();
+      onClick: async (event, data) => {
         this.isExpanded = !this.isExpanded;
       },
     });
@@ -150,8 +149,7 @@ export default class SkillAbilityTableViewModel extends ViewModel {
       isEditable: true,
       visGroup: thiz.visGroupId,
       toggleSelf: true,
-      onClick: async (callback) => {
-        await callback();
+      onClick: async (event, data) => {
         this.isExpanded = !this.isExpanded;
       },
     });

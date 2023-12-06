@@ -144,9 +144,8 @@ export default class SkillListItemViewModel extends SkillViewModel {
       primaryChatTitle: game.i18n.localize(thiz.document.name),
       primaryChatImage: thiz.document.img,
       rollType: "dice-pool",
-      onClick: async (callback) => {
-        const r = await callback();
-        await thiz.document.advanceByRollResult(r);
+      onClick: async (event, data) => {
+        await thiz.document.advanceByRollResult(data);
       },
       actor: thiz.document.owningDocument.document,
     })

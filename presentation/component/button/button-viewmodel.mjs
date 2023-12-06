@@ -30,11 +30,10 @@ export const SELECTOR_BUTTON = "custom-system-button";
  * using the "fancy font". 
  * 
  * @method onClick Asynchronous callback that is invoked when 
- * the button is clicked. Receives the button's original click-handler as its sole 
- * argument. In most cases, it should be called and `await`ed before one's own 
- * click handling logic. But in case the original logic is unwanted, the method 
- * can be ignored. 
- * * May return a value, if the inheriting type supports it. 
+ * the button is clicked. Arguments: 
+ * * `event: Event`
+ * * `data: any | undefined` - Returned data of the click callback, if 
+ * there is any. 
  */
 export default class ButtonViewModel extends ViewModel {
   /** @override */
@@ -64,10 +63,10 @@ export default class ButtonViewModel extends ViewModel {
    * the `localizedLabel` using the "fancy font". 
    * * default `false`
    * @param {Function | undefined} args.onClick Asynchronous callback that is invoked when 
-   * the button is clicked. Receives the button's original click-handler as its sole 
-   * argument. In most cases, it should be called and `await`ed before one's own 
-   * click handling logic. But in case the original logic is unwanted, the method 
-   * can be ignored. 
+   * the button is clicked. Arguments: 
+   * * `event: Event`
+   * * `data: any | undefined` - Returned data of the click callback, if 
+   * there is any. 
    */
   constructor(args = {}) {
     super(args);
@@ -75,31 +74,34 @@ export default class ButtonViewModel extends ViewModel {
     this.localizedToolTip = args.localizedToolTip;
     this.localizedLabel = args.localizedLabel;
     this.iconHtml = args.iconHtml;
-    this.onClick = args.onClick ?? (async (callback) => {
-      await callback();
-    });
+    this.onClick = args.onClick ?? (async (event, data) => {});
   }
 
   /** @override */
   async activateListeners(html) {
     await super.activateListeners(html);
 
-    this.element.click(async () => {
-      return await this.onClick(this._onClick.bind(this));
+    this.element.click(async (event) => {
+      event.preventDefault(); // Prevents side-effects from event-bubbling. 
+
+      const data = await this._onClick(event);
+      await this.onClick(event, data);
     });
   }
 
   /**
-   * Internal asynchronous callback that is invoked upon click. 
+   * Internal click callback for use in inheriting types. 
    * 
-   * Can return a value, if the button supports it. 
+   * @param {Event} event 
    * 
-   * @returns {Any | undefined} 
+   * @returns {any | undefined} A value, if the inheriting type's implementation 
+   * returns one. 
    * 
    * @async
+   * @protected
    * @virtual
    */
-  async _onClick() {
-    // Implementation up to ineriting types.
+  async _onClick(event) {
+    // Implementation up to inheriting types. 
   }
 }

@@ -123,9 +123,8 @@ export default class SkillAbilityListItemViewModel extends ViewModel {
       secondaryChatTitle: game.i18n.localize(owningDocument.name),
       secondaryChatImage: owningDocument.img,
       rollType: "dice-pool",
-      onClick: async (callback) => {
-        const r = await callback();
-        await owningDocument.advanceByRollResult(r);
+      onClick: async (event, data) => {
+        await owningDocument.advanceByRollResult(data);
       },
       actor: actor,
       isEditable: (thiz.isEditable || thiz.isGM) && actor !== undefined,

@@ -13,10 +13,9 @@ import { VISIBILITY_MODES } from "../../chat/visibility-modes.mjs";
  * @property {String} chatTitle Title to display above the chat message. 
  * @property {Actor | undefined} actor Actor associated with the chat message. 
  * 
- * @method onClick Asynchronous callback that is invoked when the button is clicked. 
- * Receives the button's original click-handler as its sole argument. In most cases, it should be called 
- * and awaited before one's own click handling logic. But in case the original logic is unwanted, the method can be ignored.
- * * Returns nothing. 
+ * @method onClick Asynchronous callback that is invoked when the button is clicked. Arguments: 
+ * * `event: Event`
+ * * `data: undefined`
  */
 export default class ButtonSendToChatViewModel extends ButtonViewModel {
   /**
@@ -63,18 +62,19 @@ export default class ButtonSendToChatViewModel extends ButtonViewModel {
 
   /**
    * @param {Object} args
-   * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
+   * @param {String | undefined} args.id Unique ID of this view model instance. 
+   * @param {Boolean | undefined} args.isEditable If true, will be interactible. 
+   * @param {String | undefined} args.localizedToolTip A localized text to 
+   * display as a tool tip. 
+   * @param {String | undefined} args.localizedLabel A localized text to 
+   * display as a button label. 
+   * @param {Function | undefined} args.onClick Asynchronous callback that is invoked when the button is clicked. Arguments: 
+   * * `event: Event`
+   * * `data: undefined`
    * 
-   * @param {TransientDocument | Object} args.target The target object to affect. 
-   * @param {Boolean | undefined} args.isEditable Optional. If true, will be interactible. 
-   * @param {Function | undefined} args.onClick Asynchronous callback that is invoked when the button is clicked. 
-   * Receives the button's original click-handler as its sole argument. In most cases, it should be called 
-   * and awaited before one's own click handling logic. But in case the original logic is unwanted, the method can be ignored.
-   * * Returns nothing. 
-   * 
-   * @param {String | undefined} args.propertyPath Optional. Property path identifying a property to send to chat. 
-   * @param {String | undefined} args.chatTitle Optional. Title to display above the chat message. 
-   * @param {Actor | undefined} args.actor Optional. Actor associated with the chat message. 
+   * @param {String | undefined} args.propertyPath Property path identifying a property to send to chat. 
+   * @param {String | undefined} args.chatTitle Title to display above the chat message. 
+   * @param {Actor | undefined} args.actor Actor associated with the chat message. 
    * @param {String | undefined} args.localizedTooltip Localized tooltip. 
    */
   constructor(args = {}) {
@@ -92,11 +92,13 @@ export default class ButtonSendToChatViewModel extends ButtonViewModel {
   }
 
   /**
-   * @override
-   * @see {ButtonViewModel._onClick}
+   * @param {Event} event
+   * 
    * @async
+   * @protected
+   * @override
    */
-  async _onClick() {
+  async _onClick(event) {
     if (this.isEditable !== true) return;
 
     const thiz = this;

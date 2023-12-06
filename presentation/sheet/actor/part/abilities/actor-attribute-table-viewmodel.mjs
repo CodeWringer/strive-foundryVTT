@@ -125,9 +125,8 @@ export default class AttributeTableViewModel extends ViewModel {
           propertyPath: undefined,
           primaryChatTitle: game.i18n.localize(attribute.localizableName),
           rollType: "dice-pool",
-          onClick: async (callback) => {
-            const r = await callback();
-            await attribute.advanceByRollResult(r);
+          onClick: async (event, data) => {
+            await attribute.advanceByRollResult(data);
           },
           actor: thiz.document,
         }),
