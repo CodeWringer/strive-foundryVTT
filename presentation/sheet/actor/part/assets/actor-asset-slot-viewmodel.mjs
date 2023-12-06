@@ -186,7 +186,7 @@ export default class ActorAssetSlotViewModel extends ViewModel {
             new DynamicInputDefinition({
               type: DYNAMIC_INPUT_TYPES.DROP_DOWN,
               name: inputChoices,
-              localizedLabel: game.i18n.localize("ambersteel.general.name"),
+              localizedLabel: game.i18n.localize("ambersteel.general.name.label"),
               required: true,
               defaultValue: (thiz.availableAssets[0] ?? {}).id,
               specificArgs: {

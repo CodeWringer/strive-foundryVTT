@@ -6,6 +6,7 @@ import { isDefined } from "../../../../business/util/validation-utility.mjs"
 import ButtonDeleteViewModel from "../../../component/button-delete/button-delete-viewmodel.mjs"
 import ButtonRollViewModel from "../../../component/button-roll/button-roll-viewmodel.mjs"
 import ButtonSendToChatViewModel from "../../../component/button-send-to-chat/button-send-to-chat-viewmodel.mjs"
+import ButtonViewModel from "../../../component/button/button-viewmodel.mjs"
 import ChoiceAdapter from "../../../component/input-choice/choice-adapter.mjs"
 import InputDropDownViewModel from "../../../component/input-dropdown/input-dropdown-viewmodel.mjs"
 import InputImageViewModel from "../../../component/input-image/input-image-viewmodel.mjs"
@@ -14,6 +15,7 @@ import InputRichTextViewModel from "../../../component/input-rich-text/input-ric
 import InputTagsViewModel from "../../../component/input-tags/input-tags-viewmodel.mjs"
 import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs"
 import { TEMPLATES } from "../../../templatePreloader.mjs"
+import { CONTEXT_TYPES } from "../../context-types.mjs"
 import SkillAbilityTableViewModel from "../skill-ability/skill-ability-table-viewmodel.mjs"
 import SkillViewModel from "./skill-viewmodel.mjs"
 
@@ -99,6 +101,41 @@ export default class SkillListItemViewModel extends SkillViewModel {
   }
 
   /**
+   * @type {Boolean}
+   * @private
+   */
+  _isExpanded = false;
+  /**
+   * @type {Boolean}
+   */
+  get isExpanded() { return this._isExpanded; }
+  set isExpanded(value) {
+    this._isExpanded = value;
+    this.writeViewState();
+
+    const contentElement = this.element.find(`#${this.id}-content`);
+    if (value === true) {
+      contentElement.removeClass("hidden");
+      contentElement.animate({
+        height: "100%"
+      }, 300, () => {
+      });
+    } else {
+      contentElement.animate({
+        height: "0%"
+      }, 300, () => {
+        contentElement.addClass("hidden");
+      });
+    }
+  }
+
+  /**
+   * @type {String}
+   * @readonly
+   */
+  get context() { return CONTEXT_TYPES.LIST_ITEM; }
+
+  /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
    * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 
    * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 
@@ -116,6 +153,9 @@ export default class SkillListItemViewModel extends SkillViewModel {
     validateOrThrow(args, ["document"]);
     this.contextTemplate = args.contextTemplate ?? "skill-list-item";
 
+    this.registerViewStateProperty("_isExpanded");
+    this.readViewState();
+
     // Child view models. 
     const thiz = this;
 
@@ -127,14 +167,13 @@ export default class SkillListItemViewModel extends SkillViewModel {
         thiz.document.img = newValue;
       },
     });
-    this.vmTfName = new InputTextFieldViewModel({
-      parent: thiz,
-      id: "vmTfName",
-      value: thiz.document.name,
-      onChange: (_, newValue) => {
-        thiz.document.name = newValue;
+    this.vmHeaderButton = new ButtonViewModel({
+      id: "vmHeaderButton",
+      parent: this,
+      localizedLabel: this.document.name,
+      onClick: () => {
+        this.isExpanded = !this.isExpanded;
       },
-      placeholder: game.i18n.localize("ambersteel.general.name"),
     });
     this.vmBtnRoll = new ButtonRollViewModel({
       parent: thiz,
@@ -258,6 +297,19 @@ export default class SkillListItemViewModel extends SkillViewModel {
         this.document.tags = newValue;
       },
     });
+  }
+
+  /** @override */
+  activateListeners(html) {
+    super.activateListeners(html);
+
+    new ContextMenu(html, this.vmHeaderButton.id, [
+      {
+        name: game.i18n.localize("ambersteel.general.name.edit"),
+        icon: '<i class="fas fa-edit"></i>',
+        callback: this.queryEditName.bind(this),
+      },
+    ]);
   }
 
   /** @override */

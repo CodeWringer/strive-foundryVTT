@@ -138,15 +138,14 @@ export default class LazyLoadViewModel extends ViewModel {
   async render() {
     // Ensure a view model instance exists. 
     if (this.viewModel === undefined) {
-      this.viewModel = this.viewModelFactoryFunction(this.viewModelArgs);
-      this.viewModel.parent = this;
+      this.viewModel = this.viewModelFactoryFunction({
+        ...this.viewModelArgs,
+        parent: this,
+      });
     }
 
     // Render as needed. 
     if (this._renderedContent === undefined || this._invalidated === true) {
-      // Make sure the child view model reads its view state, **before** its content is rendered. 
-      this.viewModel.readAllViewState();
-
       this._renderedContent = await renderTemplate(this.template, {
         viewModel: this.viewModel,
       });

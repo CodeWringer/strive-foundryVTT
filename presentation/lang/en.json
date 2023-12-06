@@ -79,7 +79,11 @@
           "label": "Game-Master"
         }
       },
-      "name": "Name",
+      "name": {
+        "label": "Name",
+        "edit": "Edit Name",
+        "editOf": "Edit Name of %s"
+      },
       "none": {
         "label": "None",
         "abbreviation": "N/A"

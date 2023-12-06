@@ -2,6 +2,7 @@ import TransientSkill from "../../../../business/document/item/skill/transient-s
 import { DAMAGE_TYPES } from "../../../../business/ruleset/damage-types.mjs";
 import { ATTACK_TYPES, getAttackTypeIconClass } from "../../../../business/ruleset/skill/attack-types.mjs";
 import DamageAndType from "../../../../business/ruleset/skill/damage-and-type.mjs";
+import { format } from "../../../../business/util/string-utility.mjs";
 import { createUUID } from "../../../../business/util/uuid-utility.mjs";
 import { isDefined, validateOrThrow } from "../../../../business/util/validation-utility.mjs";
 import ButtonContextMenuViewModel from "../../../component/button-context-menu/button-context-menu-viewmodel.mjs";
@@ -11,7 +12,11 @@ import ChoiceAdapter from "../../../component/input-choice/choice-adapter.mjs";
 import InputDropDownViewModel from "../../../component/input-dropdown/input-dropdown-viewmodel.mjs";
 import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
 import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs";
+import DynamicInputDefinition from "../../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
+import DynamicInputDialog from "../../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
+import { DYNAMIC_INPUT_TYPES } from "../../../dialog/dynamic-input-dialog/dynamic-input-types.mjs";
 import ViewModel from "../../../view-model/view-model.mjs";
+import { CONTEXT_TYPES } from "../../context-types.mjs";
 
 export default class SkillViewModel extends ViewModel {
   /**
@@ -66,11 +71,17 @@ export default class SkillViewModel extends ViewModel {
       id: "vmBtnContextMenu",
       parent: this,
       menuItems: [
+        // Edit name
+        {
+          name: game.i18n.localize("ambersteel.general.name.edit"),
+          icon: '<i class="fas fa-edit"></i>',
+          condition: this.context === CONTEXT_TYPES.LIST_ITEM,
+          callback: this.queryEditName.bind(this),
+        },
         // Add damage
         {
           name: game.i18n.localize("ambersteel.damageDefinition.add"),
           icon: '<i class="fas fa-plus"></i>',
-          condition: () => { return true; }, // TODO #388 superfluous?
           callback: () => {
             const damage = thiz.document.damage.concat([]);
             damage.push(new DamageAndType({
@@ -192,6 +203,35 @@ export default class SkillViewModel extends ViewModel {
       autoShowType: InfoBubbleAutoShowingTypes.MOUSE_ENTER,
       autoHideType: InfoBubbleAutoHidingTypes.MOUSE_LEAVE,
     });
+  }
+
+  /**
+   * Prompts the user to enter a name and applies it. 
+   * 
+   * @protected
+   */
+  async queryEditName() {
+    const inputName = "inputName";
+
+    const dialog = await new DynamicInputDialog({
+      localizedTitle: `${format(game.i18n.localize("ambersteel.general.name.editOf"), this.document.name)}`,
+      inputDefinitions: [
+        new DynamicInputDefinition({
+          type: DYNAMIC_INPUT_TYPES.TEXTFIELD,
+          name: inputName,
+          localizedLabel: game.i18n.localize("ambersteel.general.name.label"),
+          required: true,
+          defaultValue: this.document.name,
+          validationFunc: (str) => {
+            return str.trim().length > 0;
+          },
+        }),
+      ],
+    }).renderAndAwait(true);
+
+    if (dialog.confirmed !== true) return;
+
+    this.document.name = dialog[inputName];
   }
 
   /**

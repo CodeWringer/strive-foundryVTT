@@ -17,9 +17,9 @@ import GetShowFancyFontUseCase from "../../business/use-case/get-show-fancy-font
  * For example, in order to determine whether an element in the ui template should be visible, instead of having 
  * if-blocks inside the template which check for many conditions, there is a simple if block that only queries 
  * one boolean value from the view model. E. g.: 
- * 
+ * ```HTML
  * {{#if viewModel.isHpVisible}}<span>viewModel.HP</span>{{/if}}
- * 
+ * ```
  * The advantage of this is to keep ui-logic outside of ui templates, where Handlebars would take over executing 
  * its helper functions. Those helper functions are very difficult to debug, as it is difficult to keep track 
  * of where they're actually being called. With a view model, it is immediately apparent which template 
@@ -43,7 +43,33 @@ import GetShowFancyFontUseCase from "../../business/use-case/get-show-fancy-font
  * 
  * IMPORTANT: Persistent state can only be achieved, if the IDs of the child view models 
  * always remain the same. This implies that the parent view model must create its child view models and 
- * pass in explicit IDs for them to use. 
+ * pass in explicit IDs for them to use. E. g.:
+ * ```JS
+ * constructor() {
+ *   this.vmChild = new ViewModel({
+ *     id: "myChild",
+ *     parent: this,
+ *   });
+ * }
+ * ```
+ * 
+ * @example
+ * Register a view state property for automatic storing and restoring after re-renders. 
+ * ```JS
+ * _isExpanded = false;
+ * 
+ * [...]
+ * 
+ * constructor() {
+ *   this.registerViewStateProperty("_isExpanded");
+ * }
+ * 
+ * [...]
+ * 
+ * // Some other code, maybe an event callback.
+ * this._isExpanded = true;
+ * this.writeViewState(); // Must be called explicitly to persist the view state change. 
+ * ```
  * 
  * @property {String} id Unique ID of this view model instance. 
  * * Read-only. 
@@ -296,6 +322,9 @@ export default class ViewModel {
     this.isEditable = args.isEditable ?? (args.parent !== undefined ? args.parent.isEditable : false);
     this.isSendable = args.isSendable ?? (args.parent !== undefined ? args.parent.isSendable : false);
     this.isOwner = args.isOwner ?? (args.parent !== undefined ? args.parent.isOwner : false);
+
+    // Read view state.
+    this.readAllViewState();
   }
 
   /**

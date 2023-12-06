@@ -83,7 +83,7 @@ export default class AssetListItemViewModel extends ViewModel {
       onChange: (_, newValue) => {
         thiz.document.name = newValue;
       },
-      placeholder: game.i18n.localize("ambersteel.general.name"),
+      placeholder: game.i18n.localize("ambersteel.general.name.label"),
     });
     this.vmBtnSendToChat = new ButtonSendToChatViewModel({
       parent: thiz,
