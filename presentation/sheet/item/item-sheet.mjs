@@ -120,8 +120,8 @@ export class AmbersteelItemSheet extends ItemSheet {
     game.ambersteel.logger.logPerf(this, "item.getData (getViewModel)", () => {
       this._viewModel = this.subType.getViewModel(context, context.item, this);
     });
-    game.ambersteel.logger.logPerf(this, "item.getData (readViewState)", () => {
-      this._viewModel.readViewState();
+    game.ambersteel.logger.logPerf(this, "item.getData (readAllViewState)", () => {
+      this._viewModel.readAllViewState();
     });
     context.viewModel = this._viewModel;
     

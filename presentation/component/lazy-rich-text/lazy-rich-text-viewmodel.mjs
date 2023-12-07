@@ -61,6 +61,7 @@ export default class LazyRichTextViewModel extends ViewModel {
     const element = html.find(`#${this.id}`);
 
     if (this._renderedContent === undefined || this._invalidated === true) {
+      this.readAllViewState();
       this._renderedContent = await TextEditor.enrichHTML(this.renderableContent, { async: true, secrets: this.isEditable });
 
       element.empty();

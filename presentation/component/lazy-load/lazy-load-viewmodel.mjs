@@ -143,6 +143,7 @@ export default class LazyLoadViewModel extends ViewModel {
         parent: this,
       });
     }
+    this.viewModel.readAllViewState();
 
     // Render as needed. 
     if (this._renderedContent === undefined || this._invalidated === true) {

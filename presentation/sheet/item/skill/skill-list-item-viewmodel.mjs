@@ -154,7 +154,6 @@ export default class SkillListItemViewModel extends SkillViewModel {
     this.contextTemplate = args.contextTemplate ?? "skill-list-item";
 
     this.registerViewStateProperty("_isExpanded");
-    this.readViewState();
 
     // Child view models. 
     const thiz = this;
