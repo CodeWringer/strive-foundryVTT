@@ -303,7 +303,7 @@ export default class SkillListItemViewModel extends SkillViewModel {
   activateListeners(html) {
     super.activateListeners(html);
 
-    new ContextMenu(html, this.vmHeaderButton.id, [
+    new ContextMenu(html, `#${this.vmHeaderButton.id}`, [
       {
         name: game.i18n.localize("ambersteel.general.name.edit"),
         icon: '<i class="fas fa-edit"></i>',
