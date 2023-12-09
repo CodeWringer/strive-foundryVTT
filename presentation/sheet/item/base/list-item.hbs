@@ -1,0 +1,29 @@
+{{!-- Parameters:
+viewModel: {BaseListItemViewModel}
+cssClass: {undefined | String}
+--}}
+<div id="{{viewModel.id}}" class="custom-system-list-item{{#if cssClass}} {{cssClass}}{{/if}}">
+  {{!-- Header Row --}}
+  <div class="flex flex-row flex-middle list-item-header">
+
+    {{!-- Send to chat --}}
+    {{> buttonSendToChat viewModel=viewModel.vmBtnSendToChat cssClass="" }}
+    {{!-- Identity --}}
+    <div class="list-item-header-img">
+      {{> inputImage viewModel=viewModel.vmImg cssClass="custom-icon-sm" }}
+    </div>
+    {{#> button viewModel=viewModel.vmHeaderButton leftAlign=true cssClass="flex-grow pad-l-md font-size-lg font-bold" }}{{/button}}
+    {{!-- Context Menu --}}
+    {{> buttonContextMenu viewModel=viewModel.vmBtnContextMenu cssClass="" }}
+    {{!-- Delete --}}
+    {{> buttonDelete viewModel=viewModel.vmBtnDelete cssClass="" }}
+  </div>
+  <div id="{{viewModel.id}}-content" {{#if viewModel.isExpanded}}class="" style="height: 100%;"{{else}}class="hidden" style="height: 0%;"{{/if}}>
+    {{!-- Row --}}
+    {{!-- Description --}}
+    <div class="flex flex-row border-solid-t-sm border-solid-b-sm">
+      {{> inputRichText viewModel=viewModel.vmRtDescription cssClass="fill" }}
+    </div>
+    {{> @partial-block viewModel=viewModel }}
+  </div>
+</div>

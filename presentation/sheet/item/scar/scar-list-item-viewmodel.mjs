@@ -1,14 +1,11 @@
 import TransientScar from "../../../../business/document/item/transient-scar.mjs";
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs";
-import ButtonDeleteViewModel from "../../../component/button-delete/button-delete-viewmodel.mjs";
-import ButtonSendToChatViewModel from "../../../component/button-send-to-chat/button-send-to-chat-viewmodel.mjs";
-import InputImageViewModel from "../../../component/input-image/input-image-viewmodel.mjs";
-import InputRichTextViewModel from "../../../component/input-rich-text/input-rich-text-viewmodel.mjs";
 import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs";
 import { TEMPLATES } from "../../../templatePreloader.mjs";
 import ViewModel from "../../../view-model/view-model.mjs";
+import BaseListItemViewModel from "../base/base-list-item-viewmodel.mjs";
 
-export default class ScarListItemViewModel extends ViewModel {
+export default class ScarListItemViewModel extends BaseListItemViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.SCAR_LIST_ITEM; }
 
@@ -34,43 +31,6 @@ export default class ScarListItemViewModel extends ViewModel {
     this.contextTemplate = args.contextTemplate ?? "scar-list-item";
     const thiz = this;
 
-    this.vmImg = new InputImageViewModel({
-      parent: thiz,
-      id: "vmImg",
-      value: thiz.document.img,
-      onChange: (_, newValue) => {
-        thiz.document.img = newValue;
-      },
-    });
-    this.vmTfName = new InputTextFieldViewModel({
-      parent: thiz,
-      id: "vmTfName",
-      value: thiz.document.name,
-      onChange: (_, newValue) => {
-        thiz.document.name = newValue;
-      },
-      placeholder: game.i18n.localize("ambersteel.general.name.label"),
-    });
-    this.vmBtnSendToChat = new ButtonSendToChatViewModel({
-      parent: thiz,
-      id: "vmBtnSendToChat",
-      target: thiz.document,
-      isEditable: thiz.isEditable || thiz.isGM,
-    });
-    this.vmBtnDelete = new ButtonDeleteViewModel({
-      parent: thiz,
-      id: "vmBtnDelete",
-      target: thiz.document,
-      withDialog: true,
-    })
-    this.vmRtDescription = new InputRichTextViewModel({
-      parent: thiz,
-      id: "vmRtDescription",
-      value: thiz.document.description,
-      onChange: (_, newValue) => {
-        thiz.document.description = newValue;
-      },
-    });
     this.vmLimit = new InputTextFieldViewModel({
       parent: thiz,
       id: "vmLimit",
@@ -79,17 +39,5 @@ export default class ScarListItemViewModel extends ViewModel {
         thiz.document.limit = newValue;
       },
     });
-  }
-
-  /** @override */
-  _getChildUpdates() {
-    const updates = super._getChildUpdates();
-
-    updates.set(this.vmBtnSendToChat, {
-      ...updates.get(this.vmBtnSendToChat),
-      isEditable: this.isEditable || this.isGM,
-    });
-
-    return updates;
   }
 }
