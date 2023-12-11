@@ -2,7 +2,6 @@
 viewModel: {BaseListItemViewModel}
 cssClass: {undefined | String}
 --}}
-{{log viewModel}}
 <div id="{{viewModel.id}}" class="custom-system-list-item{{#if cssClass}} {{cssClass}}{{/if}}">
   {{!-- Header Row --}}
   <div class="flex flex-row flex-middle list-item-header">
@@ -18,7 +17,12 @@ cssClass: {undefined | String}
     <div class="list-item-header-img">
       {{> inputImage viewModel=viewModel.vmImg cssClass="custom-icon-sm" }}
     </div>
-    {{#> button viewModel=viewModel.vmHeaderButton leftAlign=true cssClass="flex-grow pad-l-md font-size-lg font-bold" }}{{/button}}
+    {{#> button viewModel=viewModel.vmHeaderButton leftAlign=true cssClass="flex-grow pad-l-md font-size-lg font-bold" }}
+    <div class="flex flex-grow flex-center">
+      <i id="{{../viewModel.id}}-expansion-indicator-up" class="fas fa-angle-double-up{{#if ../viewModel.isExpanded}}{{else}} hidden{{/if}}"></i>
+      <i id="{{../viewModel.id}}-expansion-indicator-down" class="fas fa-angle-double-down{{#if ../viewModel.isExpanded}} hidden{{/if}}"></i>
+    </div>
+    {{/button}}
     {{!-- Secondary header buttons --}}
     {{#each viewModel.secondaryHeaderButtons as |button|}}
       {{#with button.template as |template|}}

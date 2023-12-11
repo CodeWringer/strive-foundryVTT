@@ -63,18 +63,24 @@ export default class BaseListItemViewModel extends ViewModel {
     this.writeViewState();
 
     const contentElement = this.element.find(`#${this.id}-content`);
+    const expansionUpIndicatorElement = this.element.find(`#${this.id}-expansion-indicator-up`);
+    const expansionDownIndicatorElement = this.element.find(`#${this.id}-expansion-indicator-down`);
     if (value === true) {
       contentElement.removeClass("hidden");
       contentElement.animate({
         height: "100%"
       }, 300, () => {
       });
+      expansionUpIndicatorElement.removeClass("hidden");
+      expansionDownIndicatorElement.addClass("hidden");
     } else {
       contentElement.animate({
         height: "0%"
       }, 300, () => {
         contentElement.addClass("hidden");
       });
+      expansionUpIndicatorElement.addClass("hidden");
+      expansionDownIndicatorElement.removeClass("hidden");
     }
   }
 
