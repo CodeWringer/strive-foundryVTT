@@ -1,4 +1,5 @@
 import TransientDocument from "../../../../business/document/transient-document.mjs";
+import { format } from "../../../../business/util/string-utility.mjs";
 import { isDefined, validateOrThrow } from "../../../../business/util/validation-utility.mjs";
 import ButtonContextMenuViewModel from "../../../component/button-context-menu/button-context-menu-viewmodel.mjs";
 import ButtonDeleteViewModel from "../../../component/button-delete/button-delete-viewmodel.mjs";
@@ -48,6 +49,12 @@ export default class BaseListItemViewModel extends ViewModel {
 
   /** @override */
   get entityId() { return this.document.id; }
+
+  /**
+   * @type {String}
+   * @readonly
+   */
+  get context() { return CONTEXT_TYPES.LIST_ITEM; }
 
   /**
    * @type {Boolean}
@@ -100,6 +107,8 @@ export default class BaseListItemViewModel extends ViewModel {
     super(args);
     validateOrThrow(args, ["document"]);
 
+    this.registerViewStateProperty("_isExpanded");
+
     this.document = args.document;
 
     this.dataFields = this.getDataFields();
@@ -140,6 +149,19 @@ export default class BaseListItemViewModel extends ViewModel {
         this.document.description = newValue;
       },
     });
+  }
+
+  /** @override */
+  activateListeners(html) {
+    super.activateListeners(html);
+
+    new ContextMenu(html, `#${this.vmHeaderButton.id}`, [
+      {
+        name: game.i18n.localize("ambersteel.general.name.edit"),
+        icon: '<i class="fas fa-edit"></i>',
+        callback: this.queryEditName.bind(this),
+      },
+    ]);
   }
 
   /**
