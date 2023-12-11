@@ -11,31 +11,7 @@ import { DYNAMIC_INPUT_TYPES } from "../../../dialog/dynamic-input-dialog/dynami
 import { TEMPLATES } from "../../../templatePreloader.mjs";
 import ViewModel from "../../../view-model/view-model.mjs";
 import { CONTEXT_TYPES } from "../../context-types.mjs";
-
-/**
- * Represents a header button definition of a list item. 
- * 
- * @property {String} template
- * @property {ViewModel} viewModel
- * @property {String} cssClass
- */
-export class HeaderButtonDefinition {
-  /**
-   * @param {Object} args 
-   * @param {String} args.template 
-   * @param {ViewModel} args.viewModel 
-   * @param {String | undefined} args.cssClass 
-   * * default `""`
-   */
-  constructor(args = {}) {
-    validateOrThrow(args, ["template", "viewModel"]);
-
-    this.template = args.template;
-    this.viewModel = args.viewModel;
-
-    this.cssClass = args.cssClass ?? "";
-  }
-}
+import { TemplatedComponent } from "./templated-component.mjs";
 
 /**
  * Represents the abstract base class for all view models that represent 
@@ -43,13 +19,20 @@ export class HeaderButtonDefinition {
  * 
  * @abstract
  * 
- * @property {Array<HeaderButtonDefinition>} primaryHeaderButtons An array of the primary 
+ * @property {Array<TemplatedComponent>} primaryHeaderButtons An array of the primary 
  * header buttons. 
  * * Note that each of the provided view model instances will be available for access on 
  * this view model instance, as a property whose name is the id of the provided 
  * view model instance. 
- * @property {Array<HeaderButtonDefinition>} secondaryHeaderButtons An array of the secondary  
+ * @property {Array<TemplatedComponent>} secondaryHeaderButtons An array of the secondary  
  * header buttons. 
+ * * Note that each of the provided view model instances will be available for access on 
+ * this view model instance, as a property whose name is the id of the provided 
+ * view model instance. 
+ * @property {additionalHeaderContent | undefined} additionalHeaderContent Additional 
+ * header content. Will not be collapsible and will be rendered directly beneath the 
+ * header. 
+ * @property {Array<TemplatedComponent>} dataFields 
  * * Note that each of the provided view model instances will be available for access on 
  * this view model instance, as a property whose name is the id of the provided 
  * view model instance. 
@@ -72,25 +55,30 @@ export default class BaseListItemViewModel extends ViewModel {
    * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document. 
    * 
    * @param {TransientDocument} args.document 
-   * @param {Array<HeaderButtonDefinition> | undefined} args.primaryHeaderButtons An override of the primary 
+   * @param {Array<TemplatedComponent> | undefined} args.primaryHeaderButtons An override of the primary 
    * header buttons. 
    * * By default, contains a send to chat button. 
    * * Note that providing this argument implies having to provide **all** the button definitions, including 
    * the default. 
-   * @param {Array<HeaderButtonDefinition> | undefined} args.secondaryHeaderButtons An override of the secondary 
+   * @param {Array<TemplatedComponent> | undefined} args.secondaryHeaderButtons An override of the secondary 
    * header buttons. 
    * * By default, contains a context menu and delete button. 
    * * Note that providing this argument implies having to provide **all** the button definitions, including 
    * the default. 
+   * @param {TemplatedComponent | undefined} args.additionalHeaderContent 
+   * @param {Array<TemplatedComponent> | undefined} args.dataFields 
+   * * default `[]`
    */
   constructor(args = {}) {
     super(args);
     validateOrThrow(args, ["document"]);
 
     this.document = args.document;
+    this.dataFields = args.dataFields ?? [];
+    this._ensureViewModelsAsProperties(this.dataFields);
 
     this.primaryHeaderButtons = (args.primaryHeaderButtons ?? [
-      new HeaderButtonDefinition({
+      new TemplatedComponent({
         template: ButtonSendToChatViewModel.TEMPLATE,
         viewModel: new ButtonSendToChatViewModel({
           id: "vmBtnSendToChat",
@@ -99,13 +87,10 @@ export default class BaseListItemViewModel extends ViewModel {
         }),
       }),
     ]);
-
-    for (const definition of this.primaryHeaderButtons) {
-      this[definition.viewModel.id] = definition.viewModel;
-    }
+    this._ensureViewModelsAsProperties(this.primaryHeaderButtons);
 
     this.secondaryHeaderButtons = (args.primaryHeaderButtons ?? [
-      new HeaderButtonDefinition({
+      new TemplatedComponent({
         template: ButtonContextMenuViewModel.TEMPLATE,
         viewModel: new ButtonContextMenuViewModel({
           id: "vmBtnContextMenu",
@@ -121,7 +106,7 @@ export default class BaseListItemViewModel extends ViewModel {
           ],
         }),
       }),
-      new HeaderButtonDefinition({
+      new TemplatedComponent({
         template: ButtonDeleteViewModel.TEMPLATE,
         viewModel: new ButtonDeleteViewModel({
           parent: this,
@@ -131,10 +116,7 @@ export default class BaseListItemViewModel extends ViewModel {
         }),
       }),
     ]);
-
-    for (const definition of this.secondaryHeaderButtons) {
-      this[definition.viewModel.id] = definition.viewModel;
-    }
+    this._ensureViewModelsAsProperties(this.secondaryHeaderButtons);
 
     this.vmImg = new InputImageViewModel({
       parent: this,
@@ -181,5 +163,20 @@ export default class BaseListItemViewModel extends ViewModel {
     if (dialog.confirmed !== true) return;
 
     this.document.name = dialog[inputName];
+  }
+
+  /**
+   * Adds the given definitions' view models as accessible properties on *this* view 
+   * model instance. 
+   * 
+   * @param {Array<TemplatedComponent> | undefined} definitions The definitions whose view models 
+   * are to be added as properties. 
+   * 
+   * @private
+   */
+  _ensureViewModelsAsProperties(definitions = []) {
+    for (const definition of definitions) {
+      this[definition.viewModel.id] = definition.viewModel;
+    }
   }
 }
