@@ -2,14 +2,15 @@
 viewModel: {BaseListItemViewModel}
 cssClass: {undefined | String}
 --}}
+{{log viewModel}}
 <div id="{{viewModel.id}}" class="custom-system-list-item{{#if cssClass}} {{cssClass}}{{/if}}">
   {{!-- Header Row --}}
   <div class="flex flex-row flex-middle list-item-header">
     {{!-- Primary header buttons --}}
     {{#each viewModel.primaryHeaderButtons as |button|}}
       {{#with button.template as |template|}}
-        <div class="{{#if ../dataField.isHidden}}hidden{{/if}}">
-          {{> (template) viewModel=../button.viewModel cssClass=../button.cssClass }}
+        <div class="{{#if button.isHidden}}hidden{{/if}}">
+          {{> (template) viewModel=button.viewModel cssClass=button.cssClass }}
         </div>
       {{/with}}
     {{/each}}
@@ -21,34 +22,36 @@ cssClass: {undefined | String}
     {{!-- Secondary header buttons --}}
     {{#each viewModel.secondaryHeaderButtons as |button|}}
       {{#with button.template as |template|}}
-        <div class="{{#if ../dataField.isHidden}}hidden{{/if}}">
-          {{> (template) viewModel=../button.viewModel cssClass=../button.cssClass }}
+        <div class="{{#if button.isHidden}}hidden{{/if}}">
+          {{> (template) viewModel=button.viewModel cssClass=button.cssClass }}
         </div>
       {{/with}}
     {{/each}}
   </div>
   {{!-- Additional header content --}}
   {{#if viewModel.additionalHeaderContent}}
+    <div class="{{#if viewModel.additionalHeaderContent.isHidden}}hidden{{/if}}">
     {{#with viewModel.additionalHeaderContent.template as |template|}}
-      {{> (template) viewModel=../viewModel.additionalHeaderContent.viewModel cssClass=../viewModel.additionalHeaderContent.cssClass }}
+      {{> (template) viewModel=viewModel.additionalHeaderContent.viewModel cssClass=viewModel.additionalHeaderContent.cssClass }}
     {{/with}}
-  {{/if}}
-  <div id="{{viewModel.id}}-content" {{#if viewModel.isExpanded}}class="" style="height: 100%;"{{else}}class="hidden" style="height: 0%;"{{/if}}>
-    {{!-- Row --}}
-    {{!-- Description --}}
-    <div class="flex flex-row border-solid-t-sm border-solid-b-sm">
-      {{> inputRichText viewModel=viewModel.vmRtDescription cssClass="fill" }}
     </div>
-    {{!-- Row --}}
+  {{/if}}
+  {{!-- Description --}}
+  <div class="flex flex-row border-solid-t-sm border-solid-b-sm">
+    {{> inputRichText viewModel=viewModel.vmRtDescription cssClass="fill" }}
+  </div>
+  <div id="{{viewModel.id}}-content" {{#if viewModel.isExpanded}}class="" style="height: 100%;"{{else}}class="hidden" style="height: 0%;"{{/if}}>
     <div class="grid-2col grid-gap-sm">
       {{#each viewModel.dataFields as |dataField|}}
         {{#with dataField.template as |template|}}
-          <div class="{{#if ../dataField.isHidden}}hidden{{/if}}">
-            {{> (template) viewModel=../dataField.viewModel cssClass=../dataField.cssClass }}
+          <div class="{{#if dataField.isHidden}}hidden{{/if}}">
+            {{> (template) viewModel=dataField.viewModel cssClass=dataField.cssClass }}
           </div>
         {{/with}}
       {{/each}}
     </div>
+    {{#if @partial-block}}
     {{> @partial-block viewModel=viewModel }}
+    {{/if}}
   </div>
 </div>

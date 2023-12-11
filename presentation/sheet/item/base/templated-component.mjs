@@ -1,3 +1,5 @@
+import { validateOrThrow } from "../../../../business/util/validation-utility.mjs";
+
 /**
  * Represents the definition of a component. 
  * 

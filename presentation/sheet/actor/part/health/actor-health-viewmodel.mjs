@@ -259,7 +259,7 @@ export default class ActorHealthViewModel extends ViewModel {
         listName: "scars",
       }),
       listItemViewModels: this.scars,
-      listItemTemplate: TEMPLATES.SCAR_LIST_ITEM,
+      listItemTemplate: ScarListItemViewModel.TEMPLATE,
       vmBtnAddItem: new ButtonAddViewModel({
         id: "vmBtnAddScar",
         parent: this,

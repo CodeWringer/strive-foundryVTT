@@ -1,8 +1,9 @@
 import TransientDocument from "../../../../business/document/transient-document.mjs";
-import { validateOrThrow } from "../../../../business/util/validation-utility.mjs";
+import { isDefined, validateOrThrow } from "../../../../business/util/validation-utility.mjs";
 import ButtonContextMenuViewModel from "../../../component/button-context-menu/button-context-menu-viewmodel.mjs";
 import ButtonDeleteViewModel from "../../../component/button-delete/button-delete-viewmodel.mjs";
 import ButtonSendToChatViewModel from "../../../component/button-send-to-chat/button-send-to-chat-viewmodel.mjs";
+import ButtonViewModel from "../../../component/button/button-viewmodel.mjs";
 import InputImageViewModel from "../../../component/input-image/input-image-viewmodel.mjs";
 import InputRichTextViewModel from "../../../component/input-rich-text/input-rich-text-viewmodel.mjs";
 import DynamicInputDefinition from "../../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
@@ -17,7 +18,11 @@ import { TemplatedComponent } from "./templated-component.mjs";
  * Represents the abstract base class for all view models that represent 
  * a list item. 
  * 
- * @abstract
+ * @abstract Inheriting types should override: 
+ * * `getDataFields`
+ * * `getPrimaryHeaderButtons`
+ * * `getSecondaryHeaderButtons`
+ * * `getAdditionalHeaderContent`
  * 
  * @property {Array<TemplatedComponent>} primaryHeaderButtons An array of the primary 
  * header buttons. 
@@ -45,6 +50,35 @@ export default class BaseListItemViewModel extends ViewModel {
   get entityId() { return this.document.id; }
 
   /**
+   * @type {Boolean}
+   * @private
+   */
+  _isExpanded = false;
+  /**
+   * @type {Boolean}
+   */
+  get isExpanded() { return this._isExpanded; }
+  set isExpanded(value) {
+    this._isExpanded = value;
+    this.writeViewState();
+
+    const contentElement = this.element.find(`#${this.id}-content`);
+    if (value === true) {
+      contentElement.removeClass("hidden");
+      contentElement.animate({
+        height: "100%"
+      }, 300, () => {
+      });
+    } else {
+      contentElement.animate({
+        height: "0%"
+      }, 300, () => {
+        contentElement.addClass("hidden");
+      });
+    }
+  }
+
+  /**
    * @param {Object} args 
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
    * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 
@@ -55,29 +89,78 @@ export default class BaseListItemViewModel extends ViewModel {
    * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document. 
    * 
    * @param {TransientDocument} args.document 
-   * @param {Array<TemplatedComponent> | undefined} args.primaryHeaderButtons An override of the primary 
-   * header buttons. 
-   * * By default, contains a send to chat button. 
-   * * Note that providing this argument implies having to provide **all** the button definitions, including 
-   * the default. 
-   * @param {Array<TemplatedComponent> | undefined} args.secondaryHeaderButtons An override of the secondary 
-   * header buttons. 
-   * * By default, contains a context menu and delete button. 
-   * * Note that providing this argument implies having to provide **all** the button definitions, including 
-   * the default. 
-   * @param {TemplatedComponent | undefined} args.additionalHeaderContent 
-   * @param {Array<TemplatedComponent> | undefined} args.dataFields 
-   * * default `[]`
    */
   constructor(args = {}) {
     super(args);
     validateOrThrow(args, ["document"]);
 
     this.document = args.document;
-    this.dataFields = args.dataFields ?? [];
+
+    this.dataFields = this.getDataFields();
     this._ensureViewModelsAsProperties(this.dataFields);
 
-    this.primaryHeaderButtons = (args.primaryHeaderButtons ?? [
+    this.primaryHeaderButtons = this.getPrimaryHeaderButtons();
+    this._ensureViewModelsAsProperties(this.primaryHeaderButtons);
+    
+    this.secondaryHeaderButtons = this.getSecondaryHeaderButtons();
+    this._ensureViewModelsAsProperties(this.secondaryHeaderButtons);
+    
+    this.additionalHeaderContent = this.getAdditionalHeaderContent();
+    if (isDefined(this.additionalHeaderContent)) {
+      this._ensureViewModelsAsProperties([this.additionalHeaderContent]);
+    }
+
+    this.vmImg = new InputImageViewModel({
+      parent: this,
+      id: "vmImg",
+      value: this.document.img,
+      onChange: (_, newValue) => {
+        this.document.img = newValue;
+      },
+    });
+    this.vmHeaderButton = new ButtonViewModel({
+      id: "vmHeaderButton",
+      parent: this,
+      localizedLabel: this.document.name,
+      onClick: () => {
+        this.isExpanded = !this.isExpanded;
+      },
+    });
+    this.vmRtDescription = new InputRichTextViewModel({
+      parent: this,
+      id: "vmRtDescription",
+      value: this.document.description,
+      onChange: (_, newValue) => {
+        this.document.description = newValue;
+      },
+    });
+  }
+
+  /**
+   * Returns the data field definitions that will be rendered as two fields 
+   * per row, in the collapsible content area. 
+   * 
+   * @returns {Array<TemplatedComponent>}
+   * 
+   * @virtual
+   * @protected
+   */
+  getDataFields() {
+    return [];
+  }
+
+  /**
+   * Returns the definitions of the primary header buttons. 
+   * * By default, contains a send to chat button. 
+   * 
+   * @returns {Array<TemplatedComponent>}
+   * 
+   * @virtual
+   * @protected
+   */
+  getPrimaryHeaderButtons() {
+    return [
+      // Send to chat button
       new TemplatedComponent({
         template: ButtonSendToChatViewModel.TEMPLATE,
         viewModel: new ButtonSendToChatViewModel({
@@ -86,10 +169,21 @@ export default class BaseListItemViewModel extends ViewModel {
           target: this.document,
         }),
       }),
-    ]);
-    this._ensureViewModelsAsProperties(this.primaryHeaderButtons);
+    ]; 
+  }
 
-    this.secondaryHeaderButtons = (args.primaryHeaderButtons ?? [
+  /**
+   * Returns the definitions of the secondary header buttons. 
+   * * By default, contains a context menu and delete button. 
+   * 
+   * @returns {Array<TemplatedComponent>}
+   * 
+   * @virtual
+   * @protected
+   */
+  getSecondaryHeaderButtons() {
+    return [
+      // Context menu button
       new TemplatedComponent({
         template: ButtonContextMenuViewModel.TEMPLATE,
         viewModel: new ButtonContextMenuViewModel({
@@ -106,6 +200,7 @@ export default class BaseListItemViewModel extends ViewModel {
           ],
         }),
       }),
+      // Delete button
       new TemplatedComponent({
         template: ButtonDeleteViewModel.TEMPLATE,
         viewModel: new ButtonDeleteViewModel({
@@ -115,25 +210,19 @@ export default class BaseListItemViewModel extends ViewModel {
           withDialog: true,
         }),
       }),
-    ]);
-    this._ensureViewModelsAsProperties(this.secondaryHeaderButtons);
-
-    this.vmImg = new InputImageViewModel({
-      parent: this,
-      id: "vmImg",
-      value: this.document.img,
-      onChange: (_, newValue) => {
-        this.document.img = newValue;
-      },
-    });
-    this.vmRtDescription = new InputRichTextViewModel({
-      parent: this,
-      id: "vmRtDescription",
-      value: this.document.description,
-      onChange: (_, newValue) => {
-        this.document.description = newValue;
-      },
-    });
+    ]; 
+  }
+  
+  /**
+   * Returns the definition of the additional header content. 
+   * 
+   * @returns {TemplatedComponent | undefined}
+   * 
+   * @virtual
+   * @protected
+   */
+  getAdditionalHeaderContent() {
+    return undefined;
   }
 
   /**
@@ -176,7 +265,7 @@ export default class BaseListItemViewModel extends ViewModel {
    */
   _ensureViewModelsAsProperties(definitions = []) {
     for (const definition of definitions) {
-      this[definition.viewModel.id] = definition.viewModel;
+      this[definition.viewModel._id] = definition.viewModel;
     }
   }
 }
