@@ -10,7 +10,6 @@ import SimpleListViewModel from "../../../component/simple-list/simple-list-view
 import { TEMPLATES } from "../../../templatePreloader.mjs"
 import SkillAbilityTableViewModel from "../skill-ability/skill-ability-table-viewmodel.mjs"
 import SkillPrerequisiteListItemViewModel from "./skill-prerequisite-list-item-viewmodel.mjs";
-import SkillViewModel from "./skill-viewmodel.mjs";
 import InputImageViewModel from "../../../component/input-image/input-image-viewmodel.mjs";
 import InputRichTextViewModel from "../../../component/input-rich-text/input-rich-text-viewmodel.mjs";
 import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs";
@@ -19,11 +18,21 @@ import ButtonSendToChatViewModel from "../../../component/button-send-to-chat/bu
 import ButtonContextMenuViewModel from "../../../component/button-context-menu/button-context-menu-viewmodel.mjs";
 import DamageAndType from "../../../../business/ruleset/skill/damage-and-type.mjs";
 import { DAMAGE_TYPES } from "../../../../business/ruleset/damage-types.mjs";
-import { ATTACK_TYPES } from "../../../../business/ruleset/skill/attack-types.mjs";
+import { ATTACK_TYPES, getAttackTypeIconClass } from "../../../../business/ruleset/skill/attack-types.mjs";
+import ViewModel from "../../../view-model/view-model.mjs";
+import DynamicInputDialog from "../../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
+import DynamicInputDefinition from "../../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
+import { DYNAMIC_INPUT_TYPES } from "../../../dialog/dynamic-input-dialog/dynamic-input-types.mjs";
+import InfoBubble, { InfoBubbleAutoHidingTypes, InfoBubbleAutoShowingTypes } from "../../../component/info-bubble/info-bubble.mjs";
+import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
+import DamageDefinitionListViewModel from "../../../component/damage-definition-list/damage-definition-list-viewmodel.mjs";
 
-export default class SkillItemSheetViewModel extends SkillViewModel {
+export default class SkillItemSheetViewModel extends ViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.SKILL_ITEM_SHEET; }
+
+  /** @override */
+  get entityId() { return this.document.id; }
 
   /**
    * @type {Array<ChoiceOption>}
@@ -45,6 +54,62 @@ export default class SkillItemSheetViewModel extends SkillViewModel {
   get prerequisiteListItemTemplate() { return SkillPrerequisiteListItemViewModel.TEMPLATE; }
 
   /**
+   * @type {Boolean}
+   * @readonly
+   */
+  get hideObstacle() { return !isDefined(this.document.obstacle); }
+
+  /**
+   * @type {Boolean}
+   * @readonly
+   */
+  get hideOpposedBy() { return !isDefined(this.document.opposedBy); }
+
+  /**
+   * @type {Boolean}
+   * @readonly
+   */
+  get hideDistance() { return !isDefined(this.document.distance); }
+
+  /**
+   * @type {Boolean}
+   * @readonly
+   */
+  get hideApCost() { return !isDefined(this.document.apCost); }
+
+  /**
+   * @type {Boolean}
+   * @readonly
+   */
+  get hideAttackType() { return !isDefined(this.document.attackType); }
+
+  /**
+   * @type {Boolean}
+   * @readonly
+   */
+  get hideCondition() { return !isDefined(this.document.condition); }
+
+  /**
+   * @type {Boolean}
+   * @readonly
+   */
+  get hideDamage() { return this.document.damage.length === 0; }
+
+  /**
+   * Returns the CSS class of the icon that represents the current attack type. 
+   * 
+   * @type {String}
+   * @readonly
+   */
+  get attackTypeIconClass() {
+    if (isDefined(this.document.attackType)) {
+      return getAttackTypeIconClass(this.document.attackType);
+    } else {
+      return "";
+    }
+  }
+
+  /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
    * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 
    * 
@@ -59,17 +124,15 @@ export default class SkillItemSheetViewModel extends SkillViewModel {
     super(args);
     validateOrThrow(args, ["document"]);
 
-    this.contextTemplate = args.contextTemplate ?? "skill-item-sheet";
+    this.document = args.document;
 
     // Child view models. 
-    const thiz = this;
-
     this.vmImg = new InputImageViewModel({
-      parent: thiz,
+      parent: this,
       id: "vmImg",
-      value: thiz.document.img,
+      value: this.document.img,
       onChange: (_, newValue) => {
-        thiz.document.img = newValue;
+        this.document.img = newValue;
       },
     });
     this.vmBtnContextMenu = new ButtonContextMenuViewModel({
@@ -81,12 +144,12 @@ export default class SkillItemSheetViewModel extends SkillViewModel {
           name: game.i18n.localize("ambersteel.damageDefinition.add"),
           icon: '<i class="fas fa-plus"></i>',
           callback: () => {
-            const damage = thiz.document.damage.concat([]);
+            const damage = this.document.damage.concat([]);
             damage.push(new DamageAndType({
               damage: "",
               damageType: DAMAGE_TYPES.none.name,
             }));
-            thiz.document.damage = damage;
+            this.document.damage = damage;
           },
         },
       ]
@@ -104,25 +167,25 @@ export default class SkillItemSheetViewModel extends SkillViewModel {
       .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.character.skill.ability.condition.label", this.document, "condition", "")),
     });
     this.vmTfName = new InputTextFieldViewModel({
-      parent: thiz,
+      parent: this,
       id: "vmTfName",
-      value: thiz.document.name,
+      value: this.document.name,
       onChange: (_, newValue) => {
-        thiz.document.name = newValue;
+        this.document.name = newValue;
       },
       placeholder: game.i18n.localize("ambersteel.general.name.label"),
     });
     this.vmBtnSendToChat = new ButtonSendToChatViewModel({
-      parent: thiz,
+      parent: this,
       id: "vmBtnSendToChat",
-      target: thiz.document,
-      isEditable: thiz.isEditable || thiz.isGM,
+      target: this.document,
+      isEditable: this.isEditable || this.isGM,
     });
     this.vmDdRelatedAttribute = new InputDropDownViewModel({
       id: "vmDdRelatedAttribute",
-      parent: thiz,
-      options: thiz.attributeOptions,
-      value: thiz.attributeOptions.find(it => it.value === this.document.relatedAttribute.name),
+      parent: this,
+      options: this.attributeOptions,
+      value: this.attributeOptions.find(it => it.value === this.document.relatedAttribute.name),
       onChange: (_, newValue) => {
         this.document.relatedAttribute = newValue;
       },
@@ -140,31 +203,27 @@ export default class SkillItemSheetViewModel extends SkillViewModel {
       }),
     });
     this.vmTfCategory = new InputTextFieldViewModel({
-      parent: thiz,
+      parent: this,
       id: "vmTfCategory",
-      value: thiz.document.category,
+      value: this.document.category,
       onChange: (_, newValue) => {
-        thiz.document.category = newValue;
+        this.document.category = newValue;
       },
       placeholder: game.i18n.localize("ambersteel.general.category"),
     });
     this.vmRtDescription = new InputRichTextViewModel({
-      parent: thiz,
+      parent: this,
       id: "vmRtDescription",
-      value: thiz.document.description,
+      value: this.document.description,
       onChange: (_, newValue) => {
-        thiz.document.description = newValue;
+        this.document.description = newValue;
       },
     });
     this.vmSkillAbilityTable = new SkillAbilityTableViewModel({
       id: "vmSkillAbilityTable",
-      parent: thiz,
-      isEditable: thiz.isEditable,
-      isSendable: thiz.isSendable,
-      isOwner: thiz.isOwner,
-      document: thiz.document,
+      parent: this,
+      document: this.document,
       skillAbilitiesInitiallyVisible: true,
-      visGroupId: thiz.visGroupId,
     });
     this.vmTags = new InputTagsViewModel({
       id: "vmTags",
@@ -174,6 +233,83 @@ export default class SkillItemSheetViewModel extends SkillViewModel {
       onChange: (_, newValue) => {
         this.document.tags = newValue;
       },
+    });
+    this.vmTfObstacle = new InputTextFieldViewModel({
+      parent: this,
+      id: "vmTfObstacle",
+      value: this.document.obstacle,
+      onChange: (_, newValue) => {
+        this.document.obstacle = newValue;
+      },
+      propertyPath: "obstacle",
+      placeholder: game.i18n.localize("ambersteel.roll.obstacle.placeholder"),
+    });
+    this.vmTfOpposedBy = new InputTextFieldViewModel({
+      parent: this,
+      id: "vmTfOpposedBy",
+      value: this.document.opposedBy,
+      onChange: (_, newValue) => {
+        this.document.opposedBy = newValue;
+      },
+      placeholder: game.i18n.localize("ambersteel.roll.obstacle.opposedBy.placeholder"),
+    });
+    this.vmTfDistance = new InputTextFieldViewModel({
+      parent: this,
+      id: "vmTfDistance",
+      value: this.document.distance,
+      onChange: (_, newValue) => {
+        this.document.distance = newValue;
+      },
+      placeholder: game.i18n.localize("ambersteel.character.skill.ability.distance.placeholder"),
+    });
+    this.vmNsApCost = new InputNumberSpinnerViewModel({
+      parent: this,
+      id: "vmNsApCost",
+      value: this.document.apCost,
+      onChange: (_, newValue) => {
+        this.document.apCost = newValue;
+      },
+      min: 0,
+    });
+    this.vmDdAttackType = new InputDropDownViewModel({
+      id: "vmDdAttackType",
+      parent: this,
+      options: ATTACK_TYPES.asChoices(),
+      value: isDefined(this.document.attackType) ? ATTACK_TYPES.asChoices().find(it => it.value === this.document.attackType.name) : undefined,
+      onChange: (_, newValue) => {
+        this.document.attackType = ATTACK_TYPES[newValue];
+      },
+      adapter: new ChoiceAdapter({
+        toChoiceOption(obj) {
+          if (isDefined(obj) === true) {
+            return ATTACK_TYPES.asChoices().find(it => it.value === obj.name);
+          } else {
+            return ATTACK_TYPES.asChoices().find(it => it.value === "none");
+          }
+        },
+        fromChoiceOption(option) {
+          return ATTACK_TYPES[option.value];
+        }
+      }),
+    });
+    this.vmCondition = new InputTextFieldViewModel({
+      parent: this,
+      id: "vmCondition",
+      value: this.document.condition,
+      onChange: (_, newValue) => {
+        this.document.condition = newValue;
+      },
+      placeholder: game.i18n.localize("ambersteel.character.skill.ability.condition.placeholder"),
+    });
+    this.vmDamageDefinitionList = new DamageDefinitionListViewModel({
+      id: `vmDamageDefinitionList`,
+      parent: this,
+      value: this.document.damage,
+      onChange: (_, newValue) => {
+        this.document.damage = newValue;
+      },
+      resolveFormulaContext: this._getRootOwningDocument(this.document),
+      chatTitle: `${game.i18n.localize("ambersteel.damageDefinition.label")} - ${this.document.name}`,
     });
 
     this.prerequisiteViewModels = this._getPrerequisiteViewModels();
@@ -191,6 +327,49 @@ export default class SkillItemSheetViewModel extends SkillViewModel {
       isItemAddable: true,
       isItemRemovable: true,
       localizedAddLabel: game.i18n.localize("ambersteel.general.add"),
+    });
+  }
+
+  /**
+   * Prompts the user to enter a name and applies it. 
+   * 
+   * @protected
+   */
+  async queryEditName() {
+    const inputName = "inputName";
+
+    const dialog = await new DynamicInputDialog({
+      localizedTitle: `${format(game.i18n.localize("ambersteel.general.name.editOf"), this.document.name)}`,
+      inputDefinitions: [
+        new DynamicInputDefinition({
+          type: DYNAMIC_INPUT_TYPES.TEXTFIELD,
+          name: inputName,
+          localizedLabel: game.i18n.localize("ambersteel.general.name.label"),
+          required: true,
+          defaultValue: this.document.name,
+          validationFunc: (str) => {
+            return str.trim().length > 0;
+          },
+        }),
+      ],
+    }).renderAndAwait(true);
+
+    if (dialog.confirmed !== true) return;
+
+    this.document.name = dialog[inputName];
+  }
+
+  /** @override */
+  async activateListeners(html) {
+    await super.activateListeners(html);
+
+    this.damageInfoBubble = new InfoBubble({
+      html: html,
+      map: [
+        { element: html.find(`#${this.id}-damage-info`), text: game.i18n.localize("ambersteel.damageDefinition.infoFormulae") },
+      ],
+      autoShowType: InfoBubbleAutoShowingTypes.MOUSE_ENTER,
+      autoHideType: InfoBubbleAutoHidingTypes.MOUSE_LEAVE,
     });
   }
 
@@ -213,7 +392,6 @@ export default class SkillItemSheetViewModel extends SkillViewModel {
    */
   _getPrerequisiteViewModels() {
     const result = [];
-    const thiz = this;
 
     const prerequisites = this.document.prerequisites;
     for (let index = 0; index < prerequisites.length; index++) {
@@ -226,7 +404,7 @@ export default class SkillItemSheetViewModel extends SkillViewModel {
         stateName: prerequisite.name,
         stateMinimumLevel: (prerequisite.minimumLevel ?? 0),
         onChange: (state) => {
-          thiz._updatePrerequisitesFromViewModels();
+          this._updatePrerequisitesFromViewModels();
         }
       });
       result.push(vm);
@@ -244,6 +422,22 @@ export default class SkillItemSheetViewModel extends SkillViewModel {
       new SkillPrerequisite()
     ]);
     this.document.prerequisites = prerequisites;
+  }
+
+  /**
+   * Returns the root owning document of the skill, if it has one. 
+   * Otherwise, returns the skill itself.  
+   * 
+   * @returns {TransientDocument | TransientSkill}
+   * 
+   * @private
+   */
+  _getRootOwningDocument() {
+    if (this.document.owningDocument !== undefined) {
+      return this.document.owningDocument;
+    } else {
+      return this.document;
+    }
   }
 
   /**

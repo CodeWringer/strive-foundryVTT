@@ -266,7 +266,6 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
         isOwner: this.isOwner,
         document: this.document,
         skillAbilitiesInitiallyVisible: false,
-        visGroupId: this.visGroupId,
       });
     }
     this.skillAbilitiesTemplate = SkillAbilityTableViewModel.TEMPLATE;
