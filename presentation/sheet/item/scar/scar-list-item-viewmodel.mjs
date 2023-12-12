@@ -1,6 +1,5 @@
 import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs";
-import BaseListItemViewModel from "../base/base-list-item-viewmodel.mjs";
-import { TemplatedComponent } from "../base/templated-component.mjs";
+import BaseListItemViewModel, { DataFieldComponent } from "../base/base-list-item-viewmodel.mjs";
 
 /**
  * @property {TransientScar} document
@@ -9,7 +8,7 @@ export default class ScarListItemViewModel extends BaseListItemViewModel {
   /** @override */
   getDataFields() {
     return [
-      new TemplatedComponent({
+      new DataFieldComponent({
         template: InputTextFieldViewModel.TEMPLATE,
         viewModel: new InputTextFieldViewModel({
           parent: this,
@@ -19,6 +18,8 @@ export default class ScarListItemViewModel extends BaseListItemViewModel {
             this.document.limit = newValue;
           },
         }),
+        localizedIconToolTip: game.i18n.localize("ambersteel.character.health.injury.limit.label"),
+        iconClass: "",
       }),
     ];
   }

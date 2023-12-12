@@ -16,6 +16,10 @@ import InputRichTextViewModel from "../../../component/input-rich-text/input-ric
 import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs";
 import InputDropDownViewModel from "../../../component/input-dropdown/input-dropdown-viewmodel.mjs";
 import ButtonSendToChatViewModel from "../../../component/button-send-to-chat/button-send-to-chat-viewmodel.mjs";
+import ButtonContextMenuViewModel from "../../../component/button-context-menu/button-context-menu-viewmodel.mjs";
+import DamageAndType from "../../../../business/ruleset/skill/damage-and-type.mjs";
+import { DAMAGE_TYPES } from "../../../../business/ruleset/damage-types.mjs";
+import { ATTACK_TYPES } from "../../../../business/ruleset/skill/attack-types.mjs";
 
 export default class SkillItemSheetViewModel extends SkillViewModel {
   /** @override */
@@ -67,6 +71,37 @@ export default class SkillItemSheetViewModel extends SkillViewModel {
       onChange: (_, newValue) => {
         thiz.document.img = newValue;
       },
+    });
+    this.vmBtnContextMenu = new ButtonContextMenuViewModel({
+      id: "vmBtnContextMenu",
+      parent: this,
+      menuItems: [
+        // Add damage
+        {
+          name: game.i18n.localize("ambersteel.damageDefinition.add"),
+          icon: '<i class="fas fa-plus"></i>',
+          callback: () => {
+            const damage = thiz.document.damage.concat([]);
+            damage.push(new DamageAndType({
+              damage: "",
+              damageType: DAMAGE_TYPES.none.name,
+            }));
+            thiz.document.damage = damage;
+          },
+        },
+      ]
+      // Toggle ap cost
+      .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.character.skill.ability.apCost", this.document, "apCost", 0))
+      // Toggle obstacle
+      .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.roll.obstacle.label", this.document, "obstacle", ""))
+      // Toggle opposed by
+      .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.roll.obstacle.opposedBy.label", this.document, "opposedBy", ""))
+      // Toggle distance
+      .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.character.skill.ability.distance.label", this.document, "distance", ""))
+      // Toggle attack type
+      .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.attackType.label", this.document, "attackType", ATTACK_TYPES.none))
+      // Toggle condition
+      .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.character.skill.ability.condition.label", this.document, "condition", "")),
     });
     this.vmTfName = new InputTextFieldViewModel({
       parent: thiz,

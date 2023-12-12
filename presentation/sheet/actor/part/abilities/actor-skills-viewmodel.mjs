@@ -69,7 +69,7 @@ export default class ActorSkillsViewModel extends ViewModel {
           listName: "innateSkills",
         }),
         listItemViewModels: this.innateSkillViewModels,
-        listItemTemplate: TEMPLATES.SKILL_LIST_ITEM,
+        listItemTemplate: SkillListItemViewModel.TEMPLATE,
       });
     }
 
@@ -86,7 +86,7 @@ export default class ActorSkillsViewModel extends ViewModel {
         listName: "learningSkills",
       }),
       listItemViewModels: this.learningSkillViewModels,
-      listItemTemplate: TEMPLATES.SKILL_LIST_ITEM,
+      listItemTemplate: SkillListItemViewModel.TEMPLATE,
       vmBtnAddItem: new ButtonAddViewModel({
         id: "vmBtnAddLearningSkill",
         parent: this,
@@ -115,7 +115,7 @@ export default class ActorSkillsViewModel extends ViewModel {
         listName: "knownSkills",
       }),
       listItemViewModels: this.knownSkillViewModels,
-      listItemTemplate: TEMPLATES.SKILL_LIST_ITEM,
+      listItemTemplate: SkillListItemViewModel.TEMPLATE,
       vmBtnAddItem: new ButtonAddViewModel({
         id: "vmBtnAddKnownSkill",
         parent: this,

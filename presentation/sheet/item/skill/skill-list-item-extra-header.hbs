@@ -1,0 +1,55 @@
+{{!-- Parameters:
+viewModel: {SkillListItemViewModel}
+--}}
+<div class="flex flex-row flex-wrap margin-b-md auto-margin-h">
+  <div class="flex flex-row flex-grow flex-middle auto-margin-h sheet-block">
+    {{!-- Related Attribute --}}
+    {{#> labeledControl viewModel=viewModel.vmDdRelatedAttribute localizedIconToolTip=(localize "ambersteel.character.skill.relatedAttribute") iconClass="ico-related-attribute-solid" cssClass="flex-grow" }}
+      {{> inputDropDown }}
+    {{/labeledControl}}
+    {{!-- Level --}}
+    <div class="flex flex-row auto-margin-h">
+      {{#> labeledControl viewModel=viewModel.vmNsLevel localizedIconToolTip=(localize "ambersteel.character.advancement.level") iconClass="ico-level-solid" }}
+        <div class="width-sm">
+          {{> inputNumberSpinner }}
+        </div>
+      {{/labeledControl}}
+      {{!-- Level Modifier --}}
+      {{#> labeledControl viewModel=viewModel.vmNsLevelModifier localizedIconToolTip=(localize "ambersteel.character.advancement.modifier.label") iconClass="ico-level-modifier-solid" }}
+        <div class="width-sm">
+          {{> inputNumberSpinner }}
+        </div>
+      {{/labeledControl}}
+      {{!-- Modified Level --}}
+      <div class="flex flex-middle">
+        <span class="pad-t-md pad-b-md pad-r-md font-bold font-bold">=</span>
+        {{#> readOnlyValue cssClass="width-sm font-size-lg flex flex-center"}}{{viewModel.modifiedLevel}}{{/readOnlyValue}}
+      </div>
+    </div>
+  </div>
+  {{#if viewModel.showAdvancementProgression}}
+  {{!-- Advancement Requirements --}}
+  <div class="flex flex-row flex-middle auto-margin-h sheet-block">
+    <div class="flex flex-row">
+      <div class="width-min-xl">
+        {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.advancement.requirements.successAndFailure.abbreviation"}}{{/label}}
+      </div>
+      <div class="width-min-md">
+        {{#> readOnlyValue}}{{viewModel.successes}} / {{viewModel.failures}}{{/readOnlyValue}}
+      </div>
+    </div>
+    {{!-- Successes --}}
+    {{#> labeledControl viewModel=viewModel.vmNsSuccesses localizedLabel=(localize "ambersteel.character.advancement.requirements.success.abbreviation") }}
+      <div class="width-md">
+        {{> inputNumberSpinner }}
+      </div>
+    {{/labeledControl}}
+    {{!-- Failures --}}
+    {{#> labeledControl viewModel=viewModel.vmNsFailures localizedLabel=(localize "ambersteel.character.advancement.requirements.failure.abbreviation") }}
+      <div class="width-md">
+        {{> inputNumberSpinner }}
+      </div>
+    {{/labeledControl}}
+  </div>
+  {{/if}}
+</div>

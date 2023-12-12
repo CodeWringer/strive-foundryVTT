@@ -36,7 +36,7 @@ cssClass: {undefined | String}
   {{#if viewModel.additionalHeaderContent}}
     <div class="{{#if viewModel.additionalHeaderContent.isHidden}}hidden{{/if}}">
     {{#with viewModel.additionalHeaderContent.template as |template|}}
-      {{> (template) viewModel=viewModel.additionalHeaderContent.viewModel cssClass=viewModel.additionalHeaderContent.cssClass }}
+      {{> (template) viewModel=../viewModel.additionalHeaderContent.viewModel cssClass=../viewModel.additionalHeaderContent.cssClass }}
     {{/with}}
     </div>
   {{/if}}
@@ -49,13 +49,19 @@ cssClass: {undefined | String}
       {{#each viewModel.dataFields as |dataField|}}
         {{#with dataField.template as |template|}}
           <div class="{{#if dataField.isHidden}}hidden{{/if}}">
-            {{> (template) viewModel=dataField.viewModel cssClass=dataField.cssClass }}
+            {{#> labeledControl viewModel=dataField.viewModel localizedIconToolTip=dataField.localizedIconToolTip localizedLabel=dataField.localizedLabel iconClass=dataField.iconClass }}
+              {{> (template) }}
+            {{/labeledControl}}
           </div>
         {{/with}}
       {{/each}}
     </div>
-    {{#if @partial-block}}
-    {{> @partial-block viewModel=viewModel }}
+    {{#if viewModel.additionalContent}}
+      <div class="{{#if viewModel.additionalContent.isHidden}}hidden{{/if}}">
+      {{#with viewModel.additionalContent.template as |template|}}
+        {{> (template) viewModel=../viewModel.additionalContent.viewModel cssClass=../viewModel.additionalContent.cssClass }}
+      {{/with}}
+      </div>
     {{/if}}
   </div>
 </div>

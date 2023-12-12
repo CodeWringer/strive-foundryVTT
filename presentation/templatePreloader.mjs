@@ -104,7 +104,8 @@ export const TEMPLATES = {
   // Skill
   SKILL_ITEM_SHEET: `${basePathPresentation}/sheet/item/skill/skill-item-sheet.hbs`,
   SKILL_ITEM_CHAT_MESSAGE: `${basePathPresentation}/sheet/item/skill/skill-chat-message.hbs`,
-  SKILL_LIST_ITEM: `${basePathPresentation}/sheet/item/skill/skill-list-item.hbs`,
+  SKILL_LIST_ITEM_EXTRA_CONTENT: `${basePathPresentation}/sheet/item/skill/skill-list-item-extra-content.hbs`,
+  SKILL_LIST_ITEM_EXTRA_HEADER: `${basePathPresentation}/sheet/item/skill/skill-list-item-extra-header.hbs`,
   SKILL_PREREQUISITE_LIST_ITEM: `${basePathPresentation}/sheet/item/skill/skill-prerequisite-list-item.hbs`,
   // Skill ability
   SKILL_ABILITY_TABLE: `${basePathPresentation}/sheet/item/skill-ability/skill-ability-table.hbs`,

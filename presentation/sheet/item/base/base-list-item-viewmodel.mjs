@@ -13,7 +13,6 @@ import { DYNAMIC_INPUT_TYPES } from "../../../dialog/dynamic-input-dialog/dynami
 import { TEMPLATES } from "../../../templatePreloader.mjs";
 import ViewModel from "../../../view-model/view-model.mjs";
 import { CONTEXT_TYPES } from "../../context-types.mjs";
-import { TemplatedComponent } from "./templated-component.mjs";
 
 /**
  * Represents the abstract base class for all view models that represent 
@@ -23,6 +22,7 @@ import { TemplatedComponent } from "./templated-component.mjs";
  * * `getDataFields`
  * * `getPrimaryHeaderButtons`
  * * `getSecondaryHeaderButtons`
+ * * `getAdditionalContent`
  * * `getAdditionalHeaderContent`
  * 
  * @property {Array<TemplatedComponent>} primaryHeaderButtons An array of the primary 
@@ -124,6 +124,11 @@ export default class BaseListItemViewModel extends ViewModel {
     if (isDefined(this.additionalHeaderContent)) {
       this._ensureViewModelsAsProperties([this.additionalHeaderContent]);
     }
+    
+    this.additionalContent = this.getAdditionalContent();
+    if (isDefined(this.additionalContent)) {
+      this._ensureViewModelsAsProperties([this.additionalContent]);
+    }
 
     this.vmImg = new InputImageViewModel({
       parent: this,
@@ -168,7 +173,7 @@ export default class BaseListItemViewModel extends ViewModel {
    * Returns the data field definitions that will be rendered as two fields 
    * per row, in the collapsible content area. 
    * 
-   * @returns {Array<TemplatedComponent>}
+   * @returns {Array<DataFieldComponent>}
    * 
    * @virtual
    * @protected
@@ -242,7 +247,7 @@ export default class BaseListItemViewModel extends ViewModel {
   }
   
   /**
-   * Returns the definition of the additional header content. 
+   * Returns the definition of the additional header content, if there is one. 
    * 
    * @returns {TemplatedComponent | undefined}
    * 
@@ -250,6 +255,18 @@ export default class BaseListItemViewModel extends ViewModel {
    * @protected
    */
   getAdditionalHeaderContent() {
+    return undefined;
+  }
+  
+  /**
+   * Returns the definition of the additional content, if there is one. 
+   * 
+   * @returns {TemplatedComponent | undefined}
+   * 
+   * @virtual
+   * @protected
+   */
+  getAdditionalContent() {
     return undefined;
   }
 
@@ -283,6 +300,22 @@ export default class BaseListItemViewModel extends ViewModel {
   }
 
   /**
+   * Returns the root owning document of the list item, if it has one. 
+   * Otherwise, returns the list item itself.  
+   * 
+   * @returns {TransientDocument}
+   * 
+   * @protected
+   */
+  getRootOwningDocument() {
+    if (this.document.owningDocument !== undefined) {
+      return this.document.owningDocument;
+    } else {
+      return this.document;
+    }
+  }
+
+  /**
    * Adds the given definitions' view models as accessible properties on *this* view 
    * model instance. 
    * 
@@ -293,7 +326,75 @@ export default class BaseListItemViewModel extends ViewModel {
    */
   _ensureViewModelsAsProperties(definitions = []) {
     for (const definition of definitions) {
+      // Check to prevent recursive self-adding. 
+      // This is a risk for additional content, which may 
+      // reference *this* view model instance. 
+      if (definition.viewModel == this) continue;
+
+      // Add the property to *this* view model instance. 
       this[definition.viewModel._id] = definition.viewModel;
     }
+  }
+}
+
+/**
+ * Represents the definition of a component. 
+ * 
+ * @property {String} template
+ * @property {ViewModel} viewModel
+ * @property {String} cssClass
+ * @property {Boolean} isHidden
+ */
+export class TemplatedComponent {
+  /**
+   * @param {Object} args 
+   * @param {String} args.template 
+   * @param {ViewModel} args.viewModel 
+   * @param {String | undefined} args.cssClass 
+   * * default `""`
+   * @param {Boolean | undefined} args.isHidden 
+   * * default `false`
+   */
+  constructor(args = {}) {
+    validateOrThrow(args, ["template", "viewModel"]);
+
+    this.template = args.template;
+    this.viewModel = args.viewModel;
+
+    this.cssClass = args.cssClass ?? "";
+    this.isHidden = args.isHidden ?? false;
+  }
+}
+
+/**
+ * Represents the definition of a data field component. 
+ * 
+ * @property {String} template
+ * @property {ViewModel} viewModel
+ * @property {String} cssClass
+ * @property {Boolean} isHidden
+ * @property {String | undefined} localizedIconToolTip
+ * @property {String | undefined} localizedLabel
+ * @property {String | undefined} iconClass
+ */
+export class DataFieldComponent extends TemplatedComponent {
+  /**
+   * @param {Object} args 
+   * @param {String} args.template 
+   * @param {ViewModel} args.viewModel 
+   * @param {String | undefined} args.cssClass 
+   * * default `""`
+   * @param {Boolean | undefined} args.isHidden 
+   * * default `false`
+   * @param {String | undefined} args.localizedIconToolTip 
+   * @param {String | undefined} args.localizedLabel 
+   * @param {String | undefined} args.iconClass 
+   */
+  constructor(args = {}) {
+    super(args);
+
+    this.localizedIconToolTip = args.localizedIconToolTip;
+    this.localizedLabel = args.localizedLabel;
+    this.iconClass = args.iconClass;
   }
 }

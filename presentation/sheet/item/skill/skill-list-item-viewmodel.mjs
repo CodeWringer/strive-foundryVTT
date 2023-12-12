@@ -1,28 +1,26 @@
 import TransientSkill from "../../../../business/document/item/skill/transient-skill.mjs"
 import { ATTRIBUTES } from "../../../../business/ruleset/attribute/attributes.mjs"
+import { DAMAGE_TYPES } from "../../../../business/ruleset/damage-types.mjs"
+import { ATTACK_TYPES, getAttackTypeIconClass } from "../../../../business/ruleset/skill/attack-types.mjs"
+import DamageAndType from "../../../../business/ruleset/skill/damage-and-type.mjs"
 import { SKILL_TAGS } from "../../../../business/tags/system-tags.mjs"
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs"
 import { isDefined } from "../../../../business/util/validation-utility.mjs"
+import ButtonContextMenuViewModel from "../../../component/button-context-menu/button-context-menu-viewmodel.mjs"
 import ButtonDeleteViewModel from "../../../component/button-delete/button-delete-viewmodel.mjs"
 import ButtonRollViewModel from "../../../component/button-roll/button-roll-viewmodel.mjs"
-import ButtonSendToChatViewModel from "../../../component/button-send-to-chat/button-send-to-chat-viewmodel.mjs"
-import ButtonViewModel from "../../../component/button/button-viewmodel.mjs"
+import DamageDefinitionListViewModel from "../../../component/damage-definition-list/damage-definition-list-viewmodel.mjs"
+import InfoBubble, { InfoBubbleAutoHidingTypes, InfoBubbleAutoShowingTypes } from "../../../component/info-bubble/info-bubble.mjs"
 import ChoiceAdapter from "../../../component/input-choice/choice-adapter.mjs"
 import InputDropDownViewModel from "../../../component/input-dropdown/input-dropdown-viewmodel.mjs"
-import InputImageViewModel from "../../../component/input-image/input-image-viewmodel.mjs"
 import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs"
-import InputRichTextViewModel from "../../../component/input-rich-text/input-rich-text-viewmodel.mjs"
 import InputTagsViewModel from "../../../component/input-tags/input-tags-viewmodel.mjs"
 import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs"
 import { TEMPLATES } from "../../../templatePreloader.mjs"
-import { CONTEXT_TYPES } from "../../context-types.mjs"
+import BaseListItemViewModel, { DataFieldComponent, TemplatedComponent } from "../base/base-list-item-viewmodel.mjs"
 import SkillAbilityTableViewModel from "../skill-ability/skill-ability-table-viewmodel.mjs"
-import SkillViewModel from "./skill-viewmodel.mjs"
 
-export default class SkillListItemViewModel extends SkillViewModel {
-  /** @override */
-  static get TEMPLATE() { return TEMPLATES.SKILL_LIST_ITEM; }
-
+export default class SkillListItemViewModel extends BaseListItemViewModel {
   /**
    * @type {Array<ChoiceOption>}
    * @readonly
@@ -101,39 +99,60 @@ export default class SkillListItemViewModel extends SkillViewModel {
   }
 
   /**
-   * @type {Boolean}
-   * @private
+   * Returns the CSS class of the icon that represents the current attack type. 
+   * 
+   * @type {String}
+   * @readonly
    */
-  _isExpanded = false;
-  /**
-   * @type {Boolean}
-   */
-  get isExpanded() { return this._isExpanded; }
-  set isExpanded(value) {
-    this._isExpanded = value;
-    this.writeViewState();
-
-    const contentElement = this.element.find(`#${this.id}-content`);
-    if (value === true) {
-      contentElement.removeClass("hidden");
-      contentElement.animate({
-        height: "100%"
-      }, 300, () => {
-      });
+  get attackTypeIconClass() {
+    if (isDefined(this.document.attackType)) {
+      return getAttackTypeIconClass(this.document.attackType);
     } else {
-      contentElement.animate({
-        height: "0%"
-      }, 300, () => {
-        contentElement.addClass("hidden");
-      });
+      return "";
     }
   }
 
   /**
-   * @type {String}
+   * @type {Boolean}
    * @readonly
    */
-  get context() { return CONTEXT_TYPES.LIST_ITEM; }
+  get hideObstacle() { return !isDefined(this.document.obstacle); }
+
+  /**
+   * @type {Boolean}
+   * @readonly
+   */
+  get hideOpposedBy() { return !isDefined(this.document.opposedBy); }
+
+  /**
+   * @type {Boolean}
+   * @readonly
+   */
+  get hideDistance() { return !isDefined(this.document.distance); }
+
+  /**
+   * @type {Boolean}
+   * @readonly
+   */
+  get hideApCost() { return !isDefined(this.document.apCost); }
+
+  /**
+   * @type {Boolean}
+   * @readonly
+   */
+  get hideAttackType() { return !isDefined(this.document.attackType); }
+
+  /**
+   * @type {Boolean}
+   * @readonly
+   */
+  get hideCondition() { return !isDefined(this.document.condition); }
+
+  /**
+   * @type {Boolean}
+   * @readonly
+   */
+  get hideDamage() { return this.document.damage.length === 0; }
 
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
@@ -151,59 +170,12 @@ export default class SkillListItemViewModel extends SkillViewModel {
   constructor(args = {}) {
     super(args);
     validateOrThrow(args, ["document"]);
-    this.contextTemplate = args.contextTemplate ?? "skill-list-item";
 
-    this.registerViewStateProperty("_isExpanded");
-
-    // Child view models. 
-    const thiz = this;
-
-    this.vmImg = new InputImageViewModel({
-      parent: thiz,
-      id: "vmImg",
-      value: thiz.document.img,
-      onChange: (_, newValue) => {
-        thiz.document.img = newValue;
-      },
-    });
-    this.vmHeaderButton = new ButtonViewModel({
-      id: "vmHeaderButton",
-      parent: this,
-      localizedLabel: this.document.name,
-      onClick: () => {
-        this.isExpanded = !this.isExpanded;
-      },
-    });
-    this.vmBtnRoll = new ButtonRollViewModel({
-      parent: thiz,
-      id: "vmBtnRoll",
-      target: thiz.document,
-      propertyPath: undefined,
-      primaryChatTitle: game.i18n.localize(thiz.document.name),
-      primaryChatImage: thiz.document.img,
-      rollType: "dice-pool",
-      onClick: async (event, data) => {
-        await thiz.document.advanceByRollResult(data);
-      },
-      actor: thiz.document.owningDocument.document,
-    })
-    this.vmBtnSendToChat = new ButtonSendToChatViewModel({
-      parent: thiz,
-      id: "vmBtnSendToChat",
-      target: thiz.document,
-      isEditable: thiz.isEditable || thiz.isGM,
-    });
-    this.vmBtnDelete = new ButtonDeleteViewModel({
-      parent: thiz,
-      id: "vmBtnDelete",
-      target: thiz.document,
-      withDialog: true,
-    });
     this.vmDdRelatedAttribute = new InputDropDownViewModel({
       id: "vmDdRelatedAttribute",
-      parent: thiz,
-      options: thiz.attributeOptions,
-      value: thiz.attributeOptions.find(it => it.value === this.document.relatedAttribute.name),
+      parent: this,
+      options: this.attributeOptions,
+      value: this.attributeOptions.find(it => it.value === this.document.relatedAttribute.name),
       onChange: (_, newValue) => {
         this.document.relatedAttribute = newValue;
       },
@@ -221,70 +193,11 @@ export default class SkillListItemViewModel extends SkillViewModel {
       }),
     });
     this.vmTfCategory = new InputTextFieldViewModel({
-      parent: thiz,
+      parent: this,
       id: "vmTfCategory",
-      value: thiz.document.category,
+      value: this.document.category,
       onChange: (_, newValue) => {
-        thiz.document.category = newValue;
-      },
-    });
-    this.vmNsLevel = new InputNumberSpinnerViewModel({
-      parent: thiz,
-      id: "vmNsLevel",
-      value: this.document.dependsOnActiveCr === true ? this.document.crLevel : this.document.level,
-      isEditable: this.document.dependsOnActiveCr === true ? false : this.isEditable,
-      onChange: (_, newValue) => {
-        thiz.document.level = newValue;
-      },
-      min: 0,
-    });
-    this.vmNsLevelModifier = new InputNumberSpinnerViewModel({
-      parent: thiz,
-      id: "vmNsLevelModifier",
-      value: thiz.document.levelModifier,
-      onChange: (_, newValue) => {
-        thiz.document.levelModifier = newValue;
-      },
-    });
-    if (this.showAdvancementProgression) {
-      this.vmNsSuccesses = new InputNumberSpinnerViewModel({
-        parent: thiz,
-        id: "vmNsSuccesses",
-        value: thiz.document.advancementProgress.successes,
-        onChange: (_, newValue) => {
-          thiz.document.advancementProgress.successes = newValue;
-        },
-        min: 0,
-      });
-      this.vmNsFailures = new InputNumberSpinnerViewModel({
-        parent: thiz,
-        id: "vmNsFailures",
-        value: thiz.document.advancementProgress.failures,
-        onChange: (_, newValue) => {
-          thiz.document.advancementProgress.failures = newValue;
-        },
-        min: 0,
-      });
-    }
-    if (this.showSkillAbilities === true) {
-      this.vmSkillAbilityTable = new SkillAbilityTableViewModel({
-        id: "vmSkillAbilityTable",
-        parent: thiz,
-        isEditable: thiz.isEditable,
-        isSendable: thiz.isSendable,
-        isOwner: thiz.isOwner,
-        document: thiz.document,
-        skillAbilitiesInitiallyVisible: false,
-        visGroupId: thiz.visGroupId,
-      });
-    }
-    this.skillAbilitiesTemplate = SkillAbilityTableViewModel.TEMPLATE;
-    this.vmRtDescription = new InputRichTextViewModel({
-      parent: thiz,
-      id: "vmRtDescription",
-      value: thiz.document.description,
-      onChange: (_, newValue) => {
-        thiz.document.description = newValue;
+        this.document.category = newValue;
       },
     });
     this.vmTags = new InputTagsViewModel({
@@ -296,30 +209,285 @@ export default class SkillListItemViewModel extends SkillViewModel {
         this.document.tags = newValue;
       },
     });
-  }
-
-  /** @override */
-  activateListeners(html) {
-    super.activateListeners(html);
-
-    new ContextMenu(html, `#${this.vmHeaderButton.id}`, [
-      {
-        name: game.i18n.localize("ambersteel.general.name.edit"),
-        icon: '<i class="fas fa-edit"></i>',
-        callback: this.queryEditName.bind(this),
+    this.vmNsLevel = new InputNumberSpinnerViewModel({
+      parent: this,
+      id: "vmNsLevel",
+      value: this.document.dependsOnActiveCr === true ? this.document.crLevel : this.document.level,
+      isEditable: this.document.dependsOnActiveCr === true ? false : this.isEditable,
+      onChange: (_, newValue) => {
+        this.document.level = newValue;
       },
-    ]);
+      min: 0,
+    });
+    this.vmNsLevelModifier = new InputNumberSpinnerViewModel({
+      parent: this,
+      id: "vmNsLevelModifier",
+      value: this.document.levelModifier,
+      onChange: (_, newValue) => {
+        this.document.levelModifier = newValue;
+      },
+    });
+    if (this.showAdvancementProgression) {
+      this.vmNsSuccesses = new InputNumberSpinnerViewModel({
+        parent: this,
+        id: "vmNsSuccesses",
+        value: this.document.advancementProgress.successes,
+        onChange: (_, newValue) => {
+          this.document.advancementProgress.successes = newValue;
+        },
+        min: 0,
+      });
+      this.vmNsFailures = new InputNumberSpinnerViewModel({
+        parent: this,
+        id: "vmNsFailures",
+        value: this.document.advancementProgress.failures,
+        onChange: (_, newValue) => {
+          this.document.advancementProgress.failures = newValue;
+        },
+        min: 0,
+      });
+    }
+    this.vmDamageDefinitionList = new DamageDefinitionListViewModel({
+      id: `vmDamageDefinitionList`,
+      parent: this,
+      value: this.document.damage,
+      onChange: (_, newValue) => {
+        this.document.damage = newValue;
+      },
+      resolveFormulaContext: this.getRootOwningDocument(this.document),
+      chatTitle: `${game.i18n.localize("ambersteel.damageDefinition.label")} - ${this.document.name}`,
+    });
+    if (this.showSkillAbilities === true) {
+      this.vmSkillAbilityTable = new SkillAbilityTableViewModel({
+        id: "vmSkillAbilityTable",
+        parent: this,
+        isEditable: this.isEditable,
+        isSendable: this.isSendable,
+        isOwner: this.isOwner,
+        document: this.document,
+        skillAbilitiesInitiallyVisible: false,
+        visGroupId: this.visGroupId,
+      });
+    }
+    this.skillAbilitiesTemplate = SkillAbilityTableViewModel.TEMPLATE;
   }
 
   /** @override */
-  _getChildUpdates() {
-    const updates = super._getChildUpdates();
+  getDataFields() {
+    return [
+      new DataFieldComponent({
+        template: InputNumberSpinnerViewModel.TEMPLATE,
+        viewModel: new InputNumberSpinnerViewModel({
+          parent: this,
+          id: "vmApCost",
+          value: this.document.apCost,
+          onChange: (_, newValue) => {
+            this.document.apCost = newValue;
+          },
+          min: 0,
+        }),
+        isHidden: this.hideApCost,
+        localizedIconToolTip: game.i18n.localize("ambersteel.actionPoint.plural"),
+        iconClass: "ico-action-point-solid",
+      }),
+      new DataFieldComponent({
+        template: InputTextFieldViewModel.TEMPLATE,
+        viewModel: new InputTextFieldViewModel({
+          parent: this,
+          id: "vmCondition",
+          value: this.document.condition,
+          onChange: (_, newValue) => {
+            this.document.condition = newValue;
+          },
+        }),
+        isHidden: this.hideCondition,
+        placeholder: game.i18n.localize("ambersteel.character.skill.ability.condition.placeholder"),
+        localizedIconToolTip: game.i18n.localize("ambersteel.character.skill.ability.condition.label"),
+        iconClass: "ico-condition-solid",
+      }),
+      new DataFieldComponent({
+        template: InputTextFieldViewModel.TEMPLATE,
+        viewModel: new InputTextFieldViewModel({
+          parent: this,
+          id: "vmObstacle",
+          value: this.document.obstacle,
+          onChange: (_, newValue) => {
+            this.document.obstacle = newValue;
+          },
+          propertyPath: "obstacle",
+        }),
+        isHidden: this.hideObstacle,
+        placeholder: game.i18n.localize("ambersteel.roll.obstacle.placeholder"),
+        localizedIconToolTip: game.i18n.localize("ambersteel.roll.obstacle.label"),
+        iconClass: "ico-obstacle-solid",
+      }),
+      new DataFieldComponent({
+        template: InputTextFieldViewModel.TEMPLATE,
+        viewModel: new InputTextFieldViewModel({
+          parent: this,
+          id: "vmOpposedBy",
+          value: this.document.opposedBy,
+          onChange: (_, newValue) => {
+            this.document.opposedBy = newValue;
+          },
+        }),
+        isHidden: this.hideOpposedBy,
+        placeholder: game.i18n.localize("ambersteel.roll.obstacle.opposedBy.placeholder"),
+        localizedIconToolTip: game.i18n.localize("ambersteel.roll.obstacle.opposedBy.label"),
+        iconClass: "ico-opposed-by-solid",
+      }),
+      new DataFieldComponent({
+        template: InputTextFieldViewModel.TEMPLATE,
+        viewModel: new InputTextFieldViewModel({
+          parent: this,
+          id: "vmDistance",
+          value: this.document.distance,
+          onChange: (_, newValue) => {
+            this.document.distance = newValue;
+          },
+        }),
+        isHidden: this.hideDistance,
+        placeholder: game.i18n.localize("ambersteel.character.skill.ability.distance.placeholder"),
+        localizedIconToolTip: game.i18n.localize("ambersteel.character.skill.ability.distance.label"),
+        iconClass: "ico-distance-solid",
+      }),
+      new DataFieldComponent({
+        template: InputDropDownViewModel.TEMPLATE,
+        viewModel: new InputDropDownViewModel({
+          id: "vmAttackType",
+          parent: this,
+          options: ATTACK_TYPES.asChoices(),
+          value: isDefined(this.document.attackType) ? ATTACK_TYPES.asChoices().find(it => it.value === this.document.attackType.name) : undefined,
+          onChange: (_, newValue) => {
+            this.document.attackType = ATTACK_TYPES[newValue];
+          },
+          adapter: new ChoiceAdapter({
+            toChoiceOption(obj) {
+              if (isDefined(obj) === true) {
+                return ATTACK_TYPES.asChoices().find(it => it.value === obj.name);
+              } else {
+                return ATTACK_TYPES.asChoices().find(it => it.value === "none");
+              }
+            },
+            fromChoiceOption(option) {
+              return ATTACK_TYPES[option.value];
+            }
+          }),
+        }),
+        isHidden: this.hideAttackType,
+        localizedIconToolTip: game.i18n.localize("ambersteel.attackType.label"),
+        iconClass: this.attackTypeIconClass,
+      }),
+    ];
+  }
 
-    updates.set(this.vmBtnSendToChat, {
-      ...updates.get(this.vmBtnSendToChat),
-      isEditable: this.isEditable || this.isGM,
+  /** @override */
+  async activateListeners(html) {
+    await super.activateListeners(html);
+
+    this.damageInfoBubble = new InfoBubble({
+      html: html,
+      map: [
+        { element: html.find(`#${this.id}-damage-info`), text: game.i18n.localize("ambersteel.damageDefinition.infoFormulae") },
+      ],
+      autoShowType: InfoBubbleAutoShowingTypes.MOUSE_ENTER,
+      autoHideType: InfoBubbleAutoHidingTypes.MOUSE_LEAVE,
     });
+  }
 
-    return updates;
+  /** @override */
+  getPrimaryHeaderButtons() {
+    const inherited = super.getPrimaryHeaderButtons();
+    return [
+      new TemplatedComponent({
+        template: ButtonRollViewModel.TEMPLATE,
+        viewModel: new ButtonRollViewModel({
+          parent: this,
+          id: "vmBtnRoll",
+          target: this.document,
+          propertyPath: undefined,
+          primaryChatTitle: game.i18n.localize(this.document.name),
+          primaryChatImage: this.document.img,
+          rollType: "dice-pool",
+          onClick: async (event, data) => {
+            await this.document.advanceByRollResult(data);
+          },
+          actor: this.document.owningDocument.document,
+        }),
+      }),
+    ].concat(inherited);
+  }
+
+  /** @override */
+  getSecondaryHeaderButtons() {
+    return [
+      // Context menu button
+      new TemplatedComponent({
+        template: ButtonContextMenuViewModel.TEMPLATE,
+        viewModel: new ButtonContextMenuViewModel({
+          id: "vmBtnContextMenu",
+          parent: this,
+          menuItems: [
+            // Edit name
+            {
+              name: game.i18n.localize("ambersteel.general.name.edit"),
+              icon: '<i class="fas fa-edit"></i>',
+              callback: this.queryEditName.bind(this),
+            },
+            // Add damage
+            {
+              name: game.i18n.localize("ambersteel.damageDefinition.add"),
+              icon: '<i class="fas fa-plus"></i>',
+              callback: () => {
+                const damage = this.document.damage.concat([]);
+                damage.push(new DamageAndType({
+                  damage: "",
+                  damageType: DAMAGE_TYPES.none.name,
+                }));
+                this.document.damage = damage;
+              },
+            },
+          ]
+          // Toggle ap cost
+          .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.character.skill.ability.apCost", this.document, "apCost", 0))
+          // Toggle obstacle
+          .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.roll.obstacle.label", this.document, "obstacle", ""))
+          // Toggle opposed by
+          .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.roll.obstacle.opposedBy.label", this.document, "opposedBy", ""))
+          // Toggle distance
+          .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.character.skill.ability.distance.label", this.document, "distance", ""))
+          // Toggle attack type
+          .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.attackType.label", this.document, "attackType", ATTACK_TYPES.none))
+          // Toggle condition
+          .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.character.skill.ability.condition.label", this.document, "condition", "")),
+        }),
+      }),
+      // Delete button
+      new TemplatedComponent({
+        template: ButtonDeleteViewModel.TEMPLATE,
+        viewModel: new ButtonDeleteViewModel({
+          parent: this,
+          id: "vmBtnDelete",
+          target: this.document,
+          withDialog: true,
+        }),
+      }),
+    ]; 
+  }
+
+  /** @override */
+  getAdditionalHeaderContent() {
+    return new TemplatedComponent({
+      template: TEMPLATES.SKILL_LIST_ITEM_EXTRA_HEADER,
+      viewModel: this,
+    });
+  }
+
+  /** @override */
+  getAdditionalContent() {
+    return new TemplatedComponent({
+      template: TEMPLATES.SKILL_LIST_ITEM_EXTRA_CONTENT,
+      viewModel: this,
+    });
   }
 }
