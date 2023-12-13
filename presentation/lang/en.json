@@ -183,6 +183,7 @@
           "weapon": "Weapon"
         },
         "takeToPerson": "Take (to person)",
+        "dropFromPerson": "Drop (from person)",
         "remote": "Property",
         "carryingCapacity": {
           "label": "Carrying Capacity (in bulk)",

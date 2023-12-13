@@ -100,7 +100,7 @@ export const TEMPLATES = {
   // Asset
   ASSET_SHEET: `${basePathPresentation}/sheet/item/asset/asset-item-sheet.hbs`,
   ASSET_CHAT_MESSAGE: `${basePathPresentation}/sheet/item/asset/asset-item-chat-message.hbs`,
-  ASSET_LIST_ITEM: `${basePathPresentation}/sheet/item/asset/asset-list-item.hbs`,
+  ASSET_LIST_ITEM_EXTRA_HEADER: `${basePathPresentation}/sheet/item/asset/asset-list-item-extra-header.hbs`,
   // Skill
   SKILL_ITEM_SHEET: `${basePathPresentation}/sheet/item/skill/skill-item-sheet.hbs`,
   SKILL_ITEM_CHAT_MESSAGE: `${basePathPresentation}/sheet/item/skill/skill-chat-message.hbs`,
@@ -118,15 +118,13 @@ export const TEMPLATES = {
   // Injury
   INJURY_CHAT_MESSAGE: `${basePathPresentation}/sheet/item/injury/injury-chat-message.hbs`,
   INJURY_ITEM_SHEET: `${basePathPresentation}/sheet/item/injury/injury-item-sheet.hbs`,
-  INJURY_LIST_ITEM: `${basePathPresentation}/sheet/item/injury/injury-list-item.hbs`,
   // Illness
   ILLNESS_CHAT_MESSAGE: `${basePathPresentation}/sheet/item/illness/illness-chat-message.hbs`,
   ILLNESS_ITEM_SHEET: `${basePathPresentation}/sheet/item/illness/illness-item-sheet.hbs`,
-  ILLNESS_LIST_ITEM: `${basePathPresentation}/sheet/item/illness/illness-list-item.hbs`,
+  ILLNESS_LIST_ITEM_EXTRA_HEADER: `${basePathPresentation}/sheet/item/illness/illness-list-item-extra-header.hbs`,
   // Mutation
   MUTATION_CHAT_MESSAGE: `${basePathPresentation}/sheet/item/mutation/mutation-chat-message.hbs`,
   MUTATION_ITEM_SHEET: `${basePathPresentation}/sheet/item/mutation/mutation-item-sheet.hbs`,
-  MUTATION_LIST_ITEM: `${basePathPresentation}/sheet/item/mutation/mutation-list-item.hbs`,
   // Mutation
   SCAR_CHAT_MESSAGE: `${basePathPresentation}/sheet/item/scar/scar-chat-message.hbs`,
   SCAR_ITEM_SHEET: `${basePathPresentation}/sheet/item/scar/scar-item-sheet.hbs`,

@@ -184,7 +184,7 @@ export default class ActorHealthViewModel extends ViewModel {
         listName: "illnesses",
       }),
       listItemViewModels: this.illnesses,
-      listItemTemplate: TEMPLATES.ILLNESS_LIST_ITEM,
+      listItemTemplate: IllnessListItemViewModel.TEMPLATE,
       vmBtnAddItem: new ButtonAddViewModel({
         id: "vmBtnAddIllness",
         parent: this,
@@ -209,7 +209,7 @@ export default class ActorHealthViewModel extends ViewModel {
         listName: "injuries",
       }),
       listItemViewModels: this.injuries,
-      listItemTemplate: TEMPLATES.INJURY_LIST_ITEM,
+      listItemTemplate: InjuryListItemViewModel.TEMPLATE,
       vmBtnAddItem: new ButtonAddViewModel({
         id: "vmBtnAddInjury",
         parent: this,
@@ -234,7 +234,7 @@ export default class ActorHealthViewModel extends ViewModel {
         listName: "mutations",
       }),
       listItemViewModels: this.mutations,
-      listItemTemplate: TEMPLATES.MUTATION_LIST_ITEM,
+      listItemTemplate: MutationListItemViewModel.TEMPLATE,
       vmBtnAddItem: new ButtonAddViewModel({
         id: "vmBtnAddMutation",
         parent: this,

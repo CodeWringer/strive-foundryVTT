@@ -103,7 +103,7 @@ export default class ActorAssetsViewModel extends ViewModel {
         listName: "property",
       }),
       listItemViewModels: this.luggageViewModels,
-      listItemTemplate: TEMPLATES.ASSET_LIST_ITEM,
+      listItemTemplate: AssetListItemViewModel.TEMPLATE,
       vmBtnAddItem: new ButtonAddViewModel({
         id: "vmBtnAddItem",
         parent: this,
@@ -127,7 +127,7 @@ export default class ActorAssetsViewModel extends ViewModel {
         listName: "property",
       }),
       listItemViewModels: this.propertyViewModels,
-      listItemTemplate: TEMPLATES.ASSET_LIST_ITEM,
+      listItemTemplate: AssetListItemViewModel.TEMPLATE,
       vmBtnAddItem: new ButtonAddViewModel({
         id: "vmBtnAddItem",
         parent: this,
