@@ -313,7 +313,6 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
           onChange: (_, newValue) => {
             this.document.obstacle = newValue;
           },
-          propertyPath: "obstacle",
         }),
         isHidden: this.hideObstacle,
         placeholder: game.i18n.localize("ambersteel.roll.obstacle.placeholder"),

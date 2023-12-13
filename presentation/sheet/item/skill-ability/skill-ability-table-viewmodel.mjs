@@ -118,7 +118,7 @@ export default class SkillAbilityTableViewModel extends ViewModel {
         listName: "abilities",
       }),
       listItemViewModels: this.abilities,
-      listItemTemplate: TEMPLATES.SKILL_ABILITY_LIST_ITEM,
+      listItemTemplate: SkillAbilityListItemViewModel.TEMPLATE,
       vmBtnAddItem: new ButtonAddViewModel({
         id: "vmBtnAdd",
         parent: this,
@@ -200,7 +200,7 @@ export default class SkillAbilityTableViewModel extends ViewModel {
         isEditable: this.isEditable,
         isSendable: this.isSendable,
         isOwner: this.isOwner,
-        skillAbility: skillAbility,
+        document: skillAbility,
       });
       result.push(vm);
       this[vm._id] = vm;
