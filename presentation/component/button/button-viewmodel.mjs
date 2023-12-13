@@ -84,8 +84,10 @@ export default class ButtonViewModel extends ViewModel {
     this.element.click(async (event) => {
       event.preventDefault(); // Prevents side-effects from event-bubbling. 
 
-      const data = await this._onClick(event);
-      await this.onClick(event, data);
+      if (this.isEditable === true) {
+        const data = await this._onClick(event);
+        await this.onClick(event, data);
+      }
     });
   }
 
