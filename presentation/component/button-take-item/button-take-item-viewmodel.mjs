@@ -40,7 +40,7 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
    * @static
    */
   static registerHandlebarsPartial() {
-    Handlebars.registerPartial('buttonTakeItem', `{{#> "${ButtonTakeItemViewModel.TEMPLATE}"}}{{> @partial-block }}{{/"${ButtonTakeItemViewModel.TEMPLATE}"}}`);
+    Handlebars.registerPartial('buttonTakeItem', `{{> "${ButtonTakeItemViewModel.TEMPLATE}"}}`);
   }
 
   /**
