@@ -92,6 +92,17 @@ export default class BaseListItemViewModel extends ViewModel {
   }
 
   /**
+   * Returns `true`, if the expansion controls should be enabled. 
+   * 
+   * @type {Boolean}
+   * @readonly
+   */
+  get enableExpansion() {
+    return (this.dataFields ?? []).length > 0
+      || this.additionalContent !== undefined;
+  }
+
+  /**
    * @param {Object} args 
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
    * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 
@@ -138,14 +149,16 @@ export default class BaseListItemViewModel extends ViewModel {
         this.document.img = newValue;
       },
     });
-    this.vmHeaderButton = new ButtonViewModel({
-      id: "vmHeaderButton",
-      parent: this,
-      localizedLabel: this.document.name,
-      onClick: () => {
-        this.isExpanded = !this.isExpanded;
-      },
-    });
+    if (this.enableExpansion === true) {
+      this.vmHeaderButton = new ButtonViewModel({
+        id: "vmHeaderButton",
+        parent: this,
+        localizedLabel: this.document.name,
+        onClick: () => {
+          this.isExpanded = !this.isExpanded;
+        },
+      });
+    }
     this.vmRtDescription = new InputRichTextViewModel({
       parent: this,
       id: "vmRtDescription",
@@ -160,7 +173,7 @@ export default class BaseListItemViewModel extends ViewModel {
   activateListeners(html) {
     super.activateListeners(html);
 
-    new ContextMenu(html, `#${this.vmHeaderButton.id}`, [
+    new ContextMenu(html, `#${this.id}-name-area`, [
       {
         name: game.i18n.localize("ambersteel.general.name.edit"),
         icon: '<i class="fas fa-edit"></i>',
@@ -200,6 +213,7 @@ export default class BaseListItemViewModel extends ViewModel {
           id: "vmBtnSendToChat",
           parent: this,
           target: this.document,
+          localizedToolTip: game.i18n.localize("ambersteel.general.sendToChat"),
         }),
       }),
     ]; 
@@ -222,6 +236,7 @@ export default class BaseListItemViewModel extends ViewModel {
         viewModel: new ButtonContextMenuViewModel({
           id: "vmBtnContextMenu",
           parent: this,
+          localizedToolTip: game.i18n.localize("ambersteel.general.contextMenu"),
           menuItems: [
             // Edit name
             {
@@ -241,6 +256,7 @@ export default class BaseListItemViewModel extends ViewModel {
           id: "vmBtnDelete",
           target: this.document,
           withDialog: true,
+          localizedToolTip: game.i18n.localize("ambersteel.general.delete.label"),
         }),
       }),
     ]; 

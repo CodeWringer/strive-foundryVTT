@@ -17,12 +17,18 @@ cssClass: {undefined | String}
     <div class="list-item-header-img">
       {{> inputImage viewModel=viewModel.vmImg cssClass="custom-icon-sm" }}
     </div>
-    {{#> button viewModel=viewModel.vmHeaderButton leftAlign=true cssClass="flex-grow pad-l-md font-size-lg font-bold" }}
-    <div class="flex flex-grow flex-center">
-      <i id="{{../viewModel.id}}-expansion-indicator-up" class="fas fa-angle-double-up{{#if ../viewModel.isExpanded}}{{else}} hidden{{/if}}"></i>
-      <i id="{{../viewModel.id}}-expansion-indicator-down" class="fas fa-angle-double-down{{#if ../viewModel.isExpanded}} hidden{{/if}}"></i>
+    <div id="{{viewModel.id}}-name-area" class="flex-grow">
+      {{#if viewModel.enableExpansion}}
+        {{#> button viewModel=viewModel.vmHeaderButton leftAlign=true cssClass="flex-grow pad-l-md font-size-lg font-bold" }}
+        <div class="margin-l-md">
+          <i id="{{../viewModel.id}}-expansion-indicator-up" class="fas fa-angle-double-up{{#if ../viewModel.isExpanded}}{{else}} hidden{{/if}}"></i>
+          <i id="{{../viewModel.id}}-expansion-indicator-down" class="fas fa-angle-double-down{{#if ../viewModel.isExpanded}} hidden{{/if}}"></i>
+        </div>
+        {{/button}}
+      {{else}}
+        <span class="flex-grow pad-l-md font-size-lg font-bold{{#if viewModel.showFancyFont}} fancy-font{{/if}}">{{viewModel.document.name}}</span>
+      {{/if}}
     </div>
-    {{/button}}
     {{!-- Secondary header buttons --}}
     {{#each viewModel.secondaryHeaderButtons as |button|}}
       {{#with button.template as |template|}}
@@ -48,7 +54,7 @@ cssClass: {undefined | String}
     <div class="grid-2col grid-gap-sm">
       {{#each viewModel.dataFields as |dataField|}}
         {{#with dataField.template as |template|}}
-          <div class="{{#if dataField.isHidden}}hidden{{/if}}">
+          <div class="{{dataField.cssClass}}{{#if dataField.isHidden}}hidden{{/if}}">
             {{#> labeledControl viewModel=dataField.viewModel localizedIconToolTip=dataField.localizedIconToolTip localizedLabel=dataField.localizedLabel iconClass=dataField.iconClass }}
               {{> (template) }}
             {{/labeledControl}}
