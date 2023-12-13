@@ -174,13 +174,15 @@ export default class BaseListItemViewModel extends ViewModel {
   activateListeners(html) {
     super.activateListeners(html);
 
-    new ContextMenu(html, `#${this.id}-name-area`, [
-      {
-        name: game.i18n.localize("ambersteel.general.name.edit"),
-        icon: '<i class="fas fa-edit"></i>',
-        callback: this.queryEditName.bind(this),
-      },
-    ]);
+    if (this.isEditable === true) {
+      new ContextMenu(html, `#${this.id}-name-area`, [
+        {
+          name: game.i18n.localize("ambersteel.general.name.edit"),
+          icon: '<i class="fas fa-edit"></i>',
+          callback: this.queryEditName.bind(this),
+        },
+      ]);
+    }
   }
 
   /**
