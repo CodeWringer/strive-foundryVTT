@@ -158,6 +158,7 @@ export default class BaseListItemViewModel extends ViewModel {
         onClick: () => {
           this.isExpanded = !this.isExpanded;
         },
+        isEditable: true, // Even those without editing right should be able to see nested content. 
       });
     }
     this.vmRtDescription = new InputRichTextViewModel({
