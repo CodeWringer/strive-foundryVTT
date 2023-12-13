@@ -98,7 +98,8 @@ export default class BaseListItemViewModel extends ViewModel {
    * @readonly
    */
   get enableExpansion() {
-    return (this.dataFields ?? []).length > 0
+    const dataFields = (this.dataFields ?? []);
+    return (dataFields.length > 0 && dataFields.find(it => it.isHidden === false) !== undefined)
       || this.additionalContent !== undefined;
   }
 
