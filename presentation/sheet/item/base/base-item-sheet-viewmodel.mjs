@@ -1,15 +1,8 @@
-import TransientDocument from "../../../../business/document/transient-document.mjs";
-import { format } from "../../../../business/util/string-utility.mjs";
 import { isDefined, validateOrThrow } from "../../../../business/util/validation-utility.mjs";
-import ButtonContextMenuViewModel from "../../../component/button-context-menu/button-context-menu-viewmodel.mjs";
-import ButtonDeleteViewModel from "../../../component/button-delete/button-delete-viewmodel.mjs";
 import ButtonSendToChatViewModel from "../../../component/button-send-to-chat/button-send-to-chat-viewmodel.mjs";
-import ButtonViewModel from "../../../component/button/button-viewmodel.mjs";
 import InputImageViewModel from "../../../component/input-image/input-image-viewmodel.mjs";
 import InputRichTextViewModel from "../../../component/input-rich-text/input-rich-text-viewmodel.mjs";
-import DynamicInputDefinition from "../../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
-import DynamicInputDialog from "../../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
-import { DYNAMIC_INPUT_TYPES } from "../../../dialog/dynamic-input-dialog/dynamic-input-types.mjs";
+import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs";
 import { TEMPLATES } from "../../../templatePreloader.mjs";
 import ViewModel from "../../../view-model/view-model.mjs";
 import { CONTEXT_TYPES } from "../../context-types.mjs";
@@ -18,7 +11,7 @@ import { TemplatedComponent } from "./templated-component.mjs";
 
 /**
  * Represents the abstract base class for all view models that represent 
- * a list item. 
+ * an item sheet. 
  * 
  * @abstract Inheriting types should override: 
  * * `getDataFields`
@@ -45,10 +38,10 @@ import { TemplatedComponent } from "./templated-component.mjs";
  * this view model instance, as a property whose name is the id of the provided 
  * view model instance. 
  */
-export default class BaseListItemViewModel extends ViewModel {
+export default class BaseItemSheetViewModel extends ViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.BASE_LIST_ITEM; }
-
+  static get TEMPLATE() { return TEMPLATES.BASE_ITEM_SHEET; }
+  
   /** @override */
   get entityId() { return this.document.id; }
 
@@ -56,54 +49,7 @@ export default class BaseListItemViewModel extends ViewModel {
    * @type {String}
    * @readonly
    */
-  get context() { return CONTEXT_TYPES.LIST_ITEM; }
-
-  /**
-   * @type {Boolean}
-   * @private
-   */
-  _isExpanded = false;
-  /**
-   * @type {Boolean}
-   */
-  get isExpanded() { return this._isExpanded; }
-  set isExpanded(value) {
-    this._isExpanded = value;
-    this.writeViewState();
-
-    const contentElement = this.element.find(`#${this.id}-content`);
-    const expansionUpIndicatorElement = this.element.find(`#${this.id}-expansion-indicator-up`);
-    const expansionDownIndicatorElement = this.element.find(`#${this.id}-expansion-indicator-down`);
-    if (value === true) {
-      contentElement.removeClass("hidden");
-      contentElement.animate({
-        height: "100%"
-      }, 300, () => {
-      });
-      expansionUpIndicatorElement.removeClass("hidden");
-      expansionDownIndicatorElement.addClass("hidden");
-    } else {
-      contentElement.animate({
-        height: "0%"
-      }, 300, () => {
-        contentElement.addClass("hidden");
-      });
-      expansionUpIndicatorElement.addClass("hidden");
-      expansionDownIndicatorElement.removeClass("hidden");
-    }
-  }
-
-  /**
-   * Returns `true`, if the expansion controls should be enabled. 
-   * 
-   * @type {Boolean}
-   * @readonly
-   */
-  get enableExpansion() {
-    const dataFields = (this.dataFields ?? []);
-    return (dataFields.length > 0 && dataFields.find(it => it.isHidden === false) !== undefined)
-      || this.additionalContent !== undefined;
-  }
+  get context() { return CONTEXT_TYPES.SHEET; }
 
   /**
    * @param {Object} args 
@@ -120,8 +66,6 @@ export default class BaseListItemViewModel extends ViewModel {
   constructor(args = {}) {
     super(args);
     validateOrThrow(args, ["document"]);
-
-    this.registerViewStateProperty("_isExpanded");
 
     this.document = args.document;
 
@@ -152,17 +96,15 @@ export default class BaseListItemViewModel extends ViewModel {
         this.document.img = newValue;
       },
     });
-    if (this.enableExpansion === true) {
-      this.vmHeaderButton = new ButtonViewModel({
-        id: "vmHeaderButton",
-        parent: this,
-        localizedLabel: this.document.name,
-        onClick: () => {
-          this.isExpanded = !this.isExpanded;
-        },
-        isEditable: true, // Even those without editing right should be able to see nested content. 
-      });
-    }
+    this.vmTfName = new InputTextFieldViewModel({
+      parent: this,
+      id: "vmTfName",
+      value: this.document.name,
+      onChange: (_, newValue) => {
+        this.document.name = newValue;
+      },
+      placeholder: game.i18n.localize("ambersteel.general.name.label"),
+    });
     this.vmRtDescription = new InputRichTextViewModel({
       parent: this,
       id: "vmRtDescription",
@@ -171,21 +113,6 @@ export default class BaseListItemViewModel extends ViewModel {
         this.document.description = newValue;
       },
     });
-  }
-
-  /** @override */
-  activateListeners(html) {
-    super.activateListeners(html);
-
-    if (this.isEditable === true) {
-      new ContextMenu(html, `#${this.id}-name-area`, [
-        {
-          name: game.i18n.localize("ambersteel.general.name.edit"),
-          icon: '<i class="fas fa-edit"></i>',
-          callback: this.queryEditName.bind(this),
-        },
-      ]);
-    }
   }
 
   /**
@@ -211,6 +138,18 @@ export default class BaseListItemViewModel extends ViewModel {
    * @protected
    */
   getPrimaryHeaderButtons() {
+    return []; 
+  }
+
+  /**
+   * Returns the definitions of the secondary header buttons. 
+   * 
+   * @returns {Array<TemplatedComponent>}
+   * 
+   * @virtual
+   * @protected
+   */
+  getSecondaryHeaderButtons() {
     return [
       // Send to chat button
       new TemplatedComponent({
@@ -220,49 +159,6 @@ export default class BaseListItemViewModel extends ViewModel {
           parent: this,
           target: this.document,
           localizedToolTip: game.i18n.localize("ambersteel.general.sendToChat"),
-        }),
-      }),
-    ]; 
-  }
-
-  /**
-   * Returns the definitions of the secondary header buttons. 
-   * * By default, contains a context menu and delete button. 
-   * 
-   * @returns {Array<TemplatedComponent>}
-   * 
-   * @virtual
-   * @protected
-   */
-  getSecondaryHeaderButtons() {
-    return [
-      // Context menu button
-      new TemplatedComponent({
-        template: ButtonContextMenuViewModel.TEMPLATE,
-        viewModel: new ButtonContextMenuViewModel({
-          id: "vmBtnContextMenu",
-          parent: this,
-          localizedToolTip: game.i18n.localize("ambersteel.general.contextMenu"),
-          menuItems: [
-            // Edit name
-            {
-              name: game.i18n.localize("ambersteel.general.name.edit"),
-              icon: '<i class="fas fa-edit"></i>',
-              condition: this.context === CONTEXT_TYPES.LIST_ITEM,
-              callback: this.queryEditName.bind(this),
-            },
-          ],
-        }),
-      }),
-      // Delete button
-      new TemplatedComponent({
-        template: ButtonDeleteViewModel.TEMPLATE,
-        viewModel: new ButtonDeleteViewModel({
-          parent: this,
-          id: "vmBtnDelete",
-          target: this.document,
-          withDialog: true,
-          localizedToolTip: game.i18n.localize("ambersteel.general.delete.label"),
         }),
       }),
     ]; 
@@ -290,35 +186,6 @@ export default class BaseListItemViewModel extends ViewModel {
    */
   getAdditionalContent() {
     return undefined;
-  }
-
-  /**
-   * Prompts the user to enter a name and applies it. 
-   * 
-   * @protected
-   */
-  async queryEditName() {
-    const inputName = "inputName";
-
-    const dialog = await new DynamicInputDialog({
-      localizedTitle: `${format(game.i18n.localize("ambersteel.general.name.editOf"), this.document.name)}`,
-      inputDefinitions: [
-        new DynamicInputDefinition({
-          type: DYNAMIC_INPUT_TYPES.TEXTFIELD,
-          name: inputName,
-          localizedLabel: game.i18n.localize("ambersteel.general.name.label"),
-          required: true,
-          defaultValue: this.document.name,
-          validationFunc: (str) => {
-            return str.trim().length > 0;
-          },
-        }),
-      ],
-    }).renderAndAwait(true);
-
-    if (dialog.confirmed !== true) return;
-
-    this.document.name = dialog[inputName];
   }
 
   /**

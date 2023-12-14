@@ -1,0 +1,54 @@
+{{!-- Parameters:
+viewModel: {BaseItemSheetViewModel}
+cssClass: {undefined | String}
+--}}
+<form id="{{viewModel.id}}" class="{{cssClass}}" autocomplete="off">
+  <header class="sheet-header">
+    <div class="flex flex-column flex-grow">
+      <div class="flex flex-row flex-middle">
+        {{!-- Primary header buttons --}}
+        {{#each viewModel.primaryHeaderButtons as |button|}}
+          {{#with button.template as |template|}}
+            <div class="{{#if button.isHidden}}hidden{{/if}}">
+              {{> (template) viewModel=button.viewModel cssClass=button.cssClass }}
+            </div>
+          {{/with}}
+        {{/each}}
+        {{!-- Identity --}}
+        <h1 class="header-name">
+          {{> inputTextField viewModel=viewModel.vmTfName }}
+        </h1>
+        {{!-- Secondary header buttons --}}
+        {{#each viewModel.secondaryHeaderButtons as |button|}}
+          {{#with button.template as |template|}}
+            <div class="{{#if button.isHidden}}hidden{{/if}}">
+              {{> (template) viewModel=button.viewModel cssClass=button.cssClass }}
+            </div>
+          {{/with}}
+        {{/each}}
+      </div>
+    </div>
+  </header>
+  {{!-- Description --}}
+  <div class="sheet-block flex flex-column margin-b-md">
+    {{> inputRichText viewModel=viewModel.vmRtDescription }}
+  </div>
+  <div class="grid-2col grid-gap-sm">
+    {{#each viewModel.dataFields as |dataField|}}
+      {{#with dataField.template as |template|}}
+        <div class="{{dataField.cssClass}}{{#if dataField.isHidden}}hidden{{/if}}">
+          {{#> labeledControl viewModel=dataField.viewModel localizedIconToolTip=dataField.localizedIconToolTip localizedLabel=dataField.localizedLabel iconClass=dataField.iconClass }}
+            {{> (template) }}
+          {{/labeledControl}}
+        </div>
+      {{/with}}
+    {{/each}}
+  </div>
+  {{#if viewModel.additionalContent}}
+    <div class="{{#if viewModel.additionalContent.isHidden}}hidden{{/if}}">
+    {{#with viewModel.additionalContent.template as |template|}}
+      {{> (template) viewModel=../viewModel.additionalContent.viewModel cssClass=../viewModel.additionalContent.cssClass }}
+    {{/with}}
+    </div>
+  {{/if}}
+</form>

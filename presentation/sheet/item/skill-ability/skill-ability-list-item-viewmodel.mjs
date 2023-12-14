@@ -15,7 +15,9 @@ import InputTextFieldViewModel from "../../../component/input-textfield/input-te
 import ButtonRollViewModel from "../../../component/button-roll/button-roll-viewmodel.mjs";
 import ButtonContextMenuViewModel from "../../../component/button-context-menu/button-context-menu-viewmodel.mjs";
 import ButtonDeleteViewModel from "../../../component/button-delete/button-delete-viewmodel.mjs";
-import BaseListItemViewModel, { DataFieldComponent, TemplatedComponent } from "../base/base-list-item-viewmodel.mjs";
+import BaseListItemViewModel from "../base/base-list-item-viewmodel.mjs";
+import { DataFieldComponent } from "../base/datafield-component.mjs";
+import { TemplatedComponent } from "../base/templated-component.mjs";
 
 /**
  * @property {SkillAbility} document 

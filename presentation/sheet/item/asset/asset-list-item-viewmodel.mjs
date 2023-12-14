@@ -12,7 +12,9 @@ import DynamicInputDialog from "../../../dialog/dynamic-input-dialog/dynamic-inp
 import { DYNAMIC_INPUT_TYPES } from "../../../dialog/dynamic-input-dialog/dynamic-input-types.mjs"
 import { TEMPLATES } from "../../../templatePreloader.mjs"
 import ViewModel from "../../../view-model/view-model.mjs"
-import BaseListItemViewModel, { DataFieldComponent, TemplatedComponent } from "../base/base-list-item-viewmodel.mjs"
+import BaseListItemViewModel from "../base/base-list-item-viewmodel.mjs"
+import { DataFieldComponent } from "../base/datafield-component.mjs"
+import { TemplatedComponent } from "../base/templated-component.mjs"
 
 /**
  * @property {TransientAsset} document

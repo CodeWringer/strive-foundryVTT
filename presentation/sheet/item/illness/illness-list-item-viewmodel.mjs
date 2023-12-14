@@ -1,15 +1,11 @@
 import { ILLNESS_STATES } from "../../../../business/ruleset/health/illness-states.mjs"
-import { validateOrThrow } from "../../../../business/util/validation-utility.mjs"
-import ButtonDeleteViewModel from "../../../component/button-delete/button-delete-viewmodel.mjs"
-import ButtonSendToChatViewModel from "../../../component/button-send-to-chat/button-send-to-chat-viewmodel.mjs"
 import StatefulChoiceOption from "../../../component/input-choice/stateful-choice-option.mjs"
-import InputImageViewModel from "../../../component/input-image/input-image-viewmodel.mjs"
 import InputRadioButtonGroupViewModel from "../../../component/input-radio-button-group/input-radio-button-group-viewmodel.mjs"
-import InputRichTextViewModel from "../../../component/input-rich-text/input-rich-text-viewmodel.mjs"
 import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs"
 import { TEMPLATES } from "../../../templatePreloader.mjs"
-import ViewModel from "../../../view-model/view-model.mjs"
-import BaseListItemViewModel, { DataFieldComponent, TemplatedComponent } from "../base/base-list-item-viewmodel.mjs"
+import BaseListItemViewModel from "../base/base-list-item-viewmodel.mjs"
+import { DataFieldComponent } from "../base/datafield-component.mjs"
+import { TemplatedComponent } from "../base/templated-component.mjs"
 
 /**
  * @property {TransientIllness} document
