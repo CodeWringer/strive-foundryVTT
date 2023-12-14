@@ -63,7 +63,7 @@ export default class IllnessListItemViewModel extends BaseListItemViewModel {
           },
         }),
         localizedIconToolTip: game.i18n.localize("ambersteel.character.health.treatmentSkill"),
-        iconClass: "",
+        iconClass: "ico-skill-solid",
       }),
       new DataFieldComponent({
         template: InputTextFieldViewModel.TEMPLATE,
@@ -76,7 +76,7 @@ export default class IllnessListItemViewModel extends BaseListItemViewModel {
           },
         }),
         localizedIconToolTip: game.i18n.localize("ambersteel.character.health.treatment"),
-        iconClass: "",
+        iconClass: "ico-treatment-solid",
       }),
     ];
   }

@@ -19,7 +19,7 @@ export default class ScarListItemViewModel extends BaseListItemViewModel {
           },
         }),
         localizedIconToolTip: game.i18n.localize("ambersteel.character.health.injury.limit.label"),
-        iconClass: "",
+        iconClass: "ico-limit-solid",
       }),
     ];
   }

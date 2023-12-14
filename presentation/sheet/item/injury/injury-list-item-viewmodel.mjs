@@ -43,7 +43,7 @@ export default class InjuryListItemViewModel extends BaseListItemViewModel {
           },
         }),
         localizedIconToolTip: game.i18n.localize("ambersteel.character.health.treatmentSkill"),
-        iconClass: "",
+        iconClass: "ico-skill-solid",
       }),
       new DataFieldComponent({
         template: InputTextFieldViewModel.TEMPLATE,
@@ -56,7 +56,7 @@ export default class InjuryListItemViewModel extends BaseListItemViewModel {
           },
         }),
         localizedIconToolTip: game.i18n.localize("ambersteel.character.health.requiredSupplies"),
-        iconClass: "",
+        iconClass: "ico-medical-supplies-solid",
       }),
       new DataFieldComponent({
         template: InputTextFieldViewModel.TEMPLATE,
@@ -69,7 +69,7 @@ export default class InjuryListItemViewModel extends BaseListItemViewModel {
           },
         }),
         localizedIconToolTip: game.i18n.localize("ambersteel.character.health.obstaclePatchUp"),
-        iconClass: "",
+        iconClass: "ico-obstacle-patch-up-solid",
       }),
       new DataFieldComponent({
         template: InputTextFieldViewModel.TEMPLATE,
@@ -82,7 +82,7 @@ export default class InjuryListItemViewModel extends BaseListItemViewModel {
           },
         }),
         localizedIconToolTip: game.i18n.localize("ambersteel.character.health.obstacleTreatment"),
-        iconClass: "",
+        iconClass: "ico-obstacle-treatment-solid",
       }),
       new DataFieldComponent({
         template: InputTextFieldViewModel.TEMPLATE,
@@ -95,7 +95,7 @@ export default class InjuryListItemViewModel extends BaseListItemViewModel {
           },
         }),
         localizedIconToolTip: game.i18n.localize("ambersteel.character.health.timeToHeal"),
-        iconClass: "",
+        iconClass: "ico-time-to-heal-solid",
       }),
       new DataFieldComponent({
         template: InputTextFieldViewModel.TEMPLATE,
@@ -108,7 +108,7 @@ export default class InjuryListItemViewModel extends BaseListItemViewModel {
           },
         }),
         localizedIconToolTip: game.i18n.localize("ambersteel.character.health.timeToHealTreated"),
-        iconClass: "",
+        iconClass: "ico-time-to-heal-treated-solid",
       }),
       new DataFieldComponent({
         template: InputTextFieldViewModel.TEMPLATE,
@@ -121,7 +121,7 @@ export default class InjuryListItemViewModel extends BaseListItemViewModel {
           },
         }),
         localizedIconToolTip: game.i18n.localize("ambersteel.character.health.selfPatchUp"),
-        iconClass: "",
+        iconClass: "ico-self-patch-up-solid",
       }),
       new DataFieldComponent({
         template: InputTextFieldViewModel.TEMPLATE,
@@ -134,7 +134,7 @@ export default class InjuryListItemViewModel extends BaseListItemViewModel {
           },
         }),
         localizedIconToolTip: game.i18n.localize("ambersteel.character.health.scar.singular"),
-        iconClass: "",
+        iconClass: "ico-scar-solid",
       }),
       new DataFieldComponent({
         template: InputTextFieldViewModel.TEMPLATE,
@@ -148,7 +148,7 @@ export default class InjuryListItemViewModel extends BaseListItemViewModel {
           placeholder: game.i18n.localize("ambersteel.character.health.injury.limit.placeholder"),
         }),
         localizedIconToolTip: game.i18n.localize("ambersteel.character.health.injury.limit.label"),
-        iconClass: "",
+        iconClass: "ico-limit-solid",
       }),
     ];
   }
