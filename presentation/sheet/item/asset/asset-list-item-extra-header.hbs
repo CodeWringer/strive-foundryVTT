@@ -4,17 +4,17 @@ viewModel: {IllnessListItemViewModel}
 <div class="flex flex-row flex-wrap margin-b-md auto-margin-h">
   <div class="flex flex-row flex-grow flex-middle auto-margin-h sheet-block">
     {{!-- Quantity --}}
-    {{#> labeledControl viewModel=viewModel.vmQuantity localizedIconToolTip=(localize "ambersteel.character.asset.quantity.label") iconClass="ico-related-attribute-solid" cssClass="flex-grow" }}
+    {{#> labeledControl viewModel=viewModel.vmQuantity localizedIconToolTip=(localize "ambersteel.character.asset.quantity.label") iconClass="ico-quantity-solid" cssClass="flex-grow" }}
       {{> inputNumberSpinner }}
     {{/labeledControl}}
     {{!-- Max Quantity --}}
-    {{#> labeledControl viewModel=viewModel.vmMaxQuantity localizedIconToolTip=(localize "ambersteel.character.asset.quantity.maximum") iconClass="ico-related-attribute-solid" cssClass="flex-grow" }}
+    {{#> labeledControl viewModel=viewModel.vmMaxQuantity localizedIconToolTip=(localize "ambersteel.character.asset.quantity.maximum") iconClass="ico-limit-solid" cssClass="flex-grow" }}
       {{> inputNumberSpinner }}
     {{/labeledControl}}
   </div>
   <div class="flex flex-row flex-grow flex-middle auto-margin-h sheet-block">
     {{!-- Bulk --}}
-    {{#> labeledControl viewModel=viewModel.vmBulk localizedIconToolTip=(localize "ambersteel.character.asset.bulk") iconClass="ico-related-attribute-solid" cssClass="flex-grow" }}
+    {{#> labeledControl viewModel=viewModel.vmBulk localizedIconToolTip=(localize "ambersteel.character.asset.bulk") iconClass="ico-bulk-solid" cssClass="flex-grow" }}
       {{> inputNumberSpinner }}
     {{/labeledControl}}
     {{!-- Spacer --}}
