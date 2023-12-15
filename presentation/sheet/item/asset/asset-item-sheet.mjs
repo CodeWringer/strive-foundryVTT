@@ -1,4 +1,3 @@
-import { TEMPLATES } from "../../../templatePreloader.mjs";
 import { ITEM_SHEET_SUBTYPE } from "../item-sheet-subtype.mjs";
 import AmbersteelBaseItemSheet from "../ambersteel-base-item-sheet.mjs";
 import AssetItemSheetViewModel from "./asset-item-sheet-viewmodel.mjs";
@@ -6,9 +5,9 @@ import AssetItemSheetViewModel from "./asset-item-sheet-viewmodel.mjs";
 /**
  * Represents an "asset" type item sheet. 
  */
-export default class AmbersteelAssetItemSheet extends AmbersteelBaseItemSheet {
+export default class AssetItemSheet extends AmbersteelBaseItemSheet {
   /** @override */
-  get template() { return TEMPLATES.ASSET_SHEET;  }
+  get template() { return AssetItemSheetViewModel.TEMPLATE;  }
   
   /** @override */
   get title() { return game.i18n.localize("ambersteel.character.asset.singular"); }
@@ -26,4 +25,4 @@ export default class AmbersteelAssetItemSheet extends AmbersteelBaseItemSheet {
   }
 }
 
-ITEM_SHEET_SUBTYPE.set("item", new AmbersteelAssetItemSheet());
+ITEM_SHEET_SUBTYPE.set("item", new AssetItemSheet());

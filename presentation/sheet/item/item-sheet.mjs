@@ -1,6 +1,6 @@
 import { ITEM_SHEET_SUBTYPE } from "./item-sheet-subtype.mjs";
 // Imports of specific item sheet "sub-types", to ensure their imports cause the `ITEM_SHEET_SUBTYPE` map to be populated. 
-import AmbersteelAssetItemSheet from "./asset/ambersteel-asset-item-sheet.mjs";
+import AssetItemSheet from "./asset/asset-item-sheet.mjs";
 import AmbersteelSkillItemSheet from "./skill/ambersteel-skill-item-sheet.mjs";
 import AmbersteelInjuryItemSheet from "./injury/ambersteel-injury-item-sheet.mjs";
 import AmbersteelIllnessItemSheet from "./illness/ambersteel-illness-item-sheet.mjs";
