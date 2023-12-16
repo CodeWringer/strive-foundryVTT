@@ -55,6 +55,13 @@ export default class AttributeTableViewModel extends ViewModel {
   attributeViewModels = [];
 
   /**
+   * Returns `true`, if the actor is a player character. 
+   * 
+   * @type {Boolean}
+   */
+  get isPC() { return this.document.type === "pc"; }
+
+  /**
    * Returns `true`, if the actor is a non-player character. 
    * 
    * @type {Boolean}
@@ -67,7 +74,7 @@ export default class AttributeTableViewModel extends ViewModel {
    * @type {Boolean}
    * @readonly
    */
-  get showAdvancementProgression() { return (this.isNPC && this.document.progressionVisible === true); }
+  get showAdvancementProgression() { return (this.isPC === true) || (this.isNPC && this.document.progressionVisible === true); }
 
   /**
    * @param {Object} args
