@@ -1,3 +1,4 @@
+import CharacterAssetSlotGroup from "../../../../../business/ruleset/asset/character-asset-slot-group.mjs";
 import * as StringUtil from "../../../../../business/util/string-utility.mjs";
 import { createUUID } from "../../../../../business/util/uuid-utility.mjs";
 import { isDefined } from "../../../../../business/util/validation-utility.mjs";
@@ -175,6 +176,7 @@ export default class ActorAssetSlotGroupViewModel extends ViewModel {
         isEditable: this.isEditable,
         isSendable: this.isSendable,
         isOwner: this.isOwner,
+        showSlotBulk: this.group.slots.length > 1,
       }); }
     );
   }

@@ -110,8 +110,6 @@ export default class HealthStatesSettingsDialogViewModel extends ViewModel {
       isItemRemovable: true,
       localizedAddLabel: game.i18n.localize("ambersteel.settings.healthStates.add.label"),
     });
-
-    this.readViewState();
   }
 
   /** @override */

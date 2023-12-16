@@ -1,16 +1,13 @@
 {{!-- Required context:
 viewModel: {ButtonToggleVisibilityViewModel}
 cssClass: {String | undefined}
-fill: {Boolean | undefined}
 --}}
-<span class="component-button-toggle-visibility button light{{#if fill}} fill{{/if}}{{#if (not viewModel.isEditable)}} disabled{{/if}}{{#if cssClass}} {{cssClass}}{{else}} font-size-default{{/if}}"
+<a class="custom-system-button flex flex-center{{#if (not viewModel.isEditable)}} disabled{{/if}}{{#if cssClass}} {{cssClass}}{{/if}}" 
+  title="{{viewModel.localizedToolTip}}" 
+  id="{{viewModel.id}}"
   {{#if viewModel.toggleSelf}}
   data-vis-group="{{viewModel.visGroup}}"
   {{/if}}
-  >
-  <a class="custom-system-button pad-sm fill flex flex-center" 
-    title="{{viewModel.localizedToolTip}}" 
-    id="{{viewModel.id}}"
   >
     {{> @partial-block }}
   </a>

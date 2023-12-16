@@ -8,6 +8,8 @@ import CharacterAttribute from "./character-attribute.mjs";
  * @property {String} localizableName Localization key for the full name. 
  * @property {String} localizableAbbreviation Localization key for the abbreviated name. 
  * @property {Array<CharacterAttribute>} attributes Attributes contained in the group. 
+ * @property {String | undefined} iconClass CSS class of the icon to display. 
+ * E. g. `"ico-strongarm-solid"` or `"fas fa-brain"`
  */
 export default class CharacterAttributeGroup {
   /**
@@ -28,6 +30,7 @@ export default class CharacterAttributeGroup {
 
     this.localizableName = groupDef.localizableName;
     this.localizableAbbreviation = groupDef.localizableAbbreviation;
+    this.iconClass = groupDef.iconClass;
 
     this.attributes = [];
     for (const attributeName in groupDef.attributes) {

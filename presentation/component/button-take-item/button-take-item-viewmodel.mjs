@@ -29,10 +29,9 @@ export const TAKE_ITEM_CONTEXT_TYPES = {
  * * In the context "list-item", TODO #196
  * * In the context "item-sheet", a copy of the item in question will be added to the current player's actor, or an actor chosen by a GM. 
  * 
- * @method onClick Asynchronous callback that is invoked when the button is clicked. 
- * Receives the button's original click-handler as its sole argument. In most cases, it should be called 
- * and awaited before one's own click handling logic. But in case the original logic is unwanted, the method can be ignored.
- * * Returns nothing. 
+ * @method onClick Asynchronous callback that is invoked when the button is clicked. Arguments: 
+ * * `event: Event`
+ * * `data: undefined`
  */
 export default class ButtonTakeItemViewModel extends ButtonViewModel {
   /**
@@ -41,21 +40,23 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
    * @static
    */
   static registerHandlebarsPartial() {
-    Handlebars.registerPartial('buttonTakeItem', `{{#> "${ButtonTakeItemViewModel.TEMPLATE}"}}{{> @partial-block }}{{/"${ButtonTakeItemViewModel.TEMPLATE}"}}`);
+    Handlebars.registerPartial('buttonTakeItem', `{{> "${ButtonTakeItemViewModel.TEMPLATE}"}}`);
   }
 
   /**
    * @param {Object} args
-   * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
-   * @param {Boolean | undefined} args.isEditable Optional. If true, will be interactible. 
-   * @param {String | undefined} args.localizedTooltip Localized tooltip. 
-   * @param {Function | undefined} args.onClick Asynchronous callback that is invoked when the button is clicked. 
-   * Receives the button's original click-handler as its sole argument. In most cases, it should be called 
-   * and awaited before one's own click handling logic. But in case the original logic is unwanted, the method can be ignored.
-   * * Returns nothing. 
+   * @param {String | undefined} args.id Unique ID of this view model instance. 
+   * @param {Boolean | undefined} args.isEditable If true, will be interactible. 
+   * @param {String | undefined} args.localizedToolTip A localized text to 
+   * display as a tool tip. 
+   * @param {String | undefined} args.localizedLabel A localized text to 
+   * display as a button label. 
+   * @param {Function | undefined} args.onClick Asynchronous callback that is invoked when the button is clicked. Arguments: 
+   * * `event: Event`
+   * * `data: undefined`
    * 
    * @param {TransientAsset} args.target The target object to affect. 
-   * @param {TAKE_ITEM_CONTEXT_TYPES} contextType Represents the context of where this button view model is embedded. 
+   * @param {TAKE_ITEM_CONTEXT_TYPES} args.contextType Represents the context of where this button view model is embedded. 
    * Depending on this value, the behavior of the button changes. 
    * 
    * In the context "chat-message", the item in question will be moved to the current player's actor, or an actor chosen by a GM. 
@@ -65,7 +66,7 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
   constructor(args = {}) {
     super({
       ...args,
-      iconHtml: '<i class="ambersteel-icon ico-take-item"></i>',
+      iconHtml: '<i class="ico dark interactible ico-take-item"></i>',
     });
     validateOrThrow(args, ["target", "contextType"]);
 
@@ -75,15 +76,16 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
   }
 
   /**
-   * @override
-   * @see {ButtonViewModel._onClick}
+   * @param {Event} event
    * 
    * @throws {Error} NullPointerException - Thrown, if the actor to pick up the item could not be found. 
    * @throws {Error} NullPointerException - Thrown, if the item could not be found/wasn't defined. 
    * 
    * @async
+   * @protected
+   * @override
    */
-  async _onClick() {
+  async _onClick(event) {
     if (this.isEditable !== true) return;
 
     let assetDocument = this.target;

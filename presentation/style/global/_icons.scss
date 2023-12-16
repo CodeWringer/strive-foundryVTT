@@ -1,20 +1,283 @@
-.ambersteel-icon {
-  filter: brightness(0);
-  &:hover {
-    filter: brightness(0) drop-shadow(0 0 4px $c-button-highlight);
+$size: 26px;
+
+.ico {
+  height: $size;
+  display: inline-block;
+  aspect-ratio: 1/1;
+  font-size: $size;
+
+  &.dark {
+    filter: brightness(0);
+  }
+  
+  &.interactible {
+    &:hover {
+      filter: drop-shadow(0 0 4px $c-button-highlight);
+
+      &.disabled {
+        filter: brightness(0.3);
+      }
+
+      &.dark {
+        filter: brightness(0) drop-shadow(0 0 4px $c-button-highlight);
+
+        &.disabled {
+          filter: brightness(0.3);
+        }
+      }
+    }
   }
 }
 
-.ico-take-item {
-  background: url("/systems/ambersteel/presentation/image/take-item.svg");
+i.stackable {
+  position: relative;
+}
+
+i.stacked {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  font-size: 0.5rem;
+  padding: 1px;
+  border-radius: 4px;
+}
+
+.ico-action-point-solid {
+  background: url("/systems/ambersteel/presentation/image/action-point-solid.svg");
   background-size: cover;
-  width: 24px;
-  height: 24px;
+}
+
+.ico-attack-type-aoe-solid {
+  background: url("/systems/ambersteel/presentation/image/attack-type-aoe-solid.svg");
+  background-size: cover;
+}
+
+.ico-attack-type-multi-solid {
+  background: url("/systems/ambersteel/presentation/image/attack-type-multi-solid.svg");
+  background-size: cover;
+}
+
+.ico-attack-type-single-solid {
+  background: url("/systems/ambersteel/presentation/image/attack-type-single-solid.svg");
+  background-size: cover;
+}
+
+.ico-bulk-solid {
+  background: url("/systems/ambersteel/presentation/image/bulk-solid.svg");
+  background-size: cover;
+}
+
+.ico-condition-solid {
+  background: url("/systems/ambersteel/presentation/image/condition-solid.svg");
+  background-size: cover;
+}
+
+.ico-brain-line {
+  background: url("/systems/ambersteel/presentation/image/brain-line.svg");
+  background-size: cover;
+}
+
+.ico-chain-links-solid {
+  background: url("/systems/ambersteel/presentation/image/chain-links-solid.svg");
+  background-size: cover;
+}
+
+.ico-crossed-circle-solid {
+  background: url("/systems/ambersteel/presentation/image/crossed-circle-solid.svg");
+  background-size: cover;
+}
+
+.ico-damage-roll-solid {
+  background: url("/systems/ambersteel/presentation/image/damage-roll-solid.svg");
+  background-size: cover;
+}
+
+.ico-damage-type-acid-solid {
+  background: url("/systems/ambersteel/presentation/image/damage-type-acid-solid.svg");
+  background-size: cover;
+}
+
+.ico-damage-type-bleeding-solid {
+  background: url("/systems/ambersteel/presentation/image/damage-type-bleeding-solid.svg");
+  background-size: cover;
+}
+
+.ico-damage-type-bludgeon-solid {
+  background: url("/systems/ambersteel/presentation/image/damage-type-bludgeon-solid.svg");
+  background-size: cover;
+}
+
+.ico-damage-type-burning-solid {
+  background: url("/systems/ambersteel/presentation/image/damage-type-burning-solid.svg");
+  background-size: cover;
+}
+
+.ico-damage-type-crushing-solid {
+  background: url("/systems/ambersteel/presentation/image/damage-type-crushing-solid.svg");
+  background-size: cover;
+}
+
+.ico-damage-type-electrical-solid {
+  background: url("/systems/ambersteel/presentation/image/damage-type-electrical-solid.svg");
+  background-size: cover;
+}
+
+.ico-damage-type-freezing-solid {
+  background: url("/systems/ambersteel/presentation/image/damage-type-freezing-solid.svg");
+  background-size: cover;
+}
+
+.ico-damage-type-piercing-solid {
+  background: url("/systems/ambersteel/presentation/image/damage-type-piercing-solid.svg");
+  background-size: cover;
+}
+
+.ico-damage-type-poisoning-solid {
+  background: url("/systems/ambersteel/presentation/image/damage-type-poisoning-solid.svg");
+  background-size: cover;
+}
+
+.ico-damage-type-slash-solid {
+  background: url("/systems/ambersteel/presentation/image/damage-type-slash-solid.svg");
+  background-size: cover;
+}
+
+.ico-distance-solid {
+  background: url("/systems/ambersteel/presentation/image/distance-solid.svg");
+  background-size: cover;
+}
+
+.ico-double-crossed-circle-solid {
+  background: url("/systems/ambersteel/presentation/image/double-crossed-circle-solid.svg");
+  background-size: cover;
+}
+
+.ico-duration-solid {
+  background: url("/systems/ambersteel/presentation/image/duration-solid.svg");
+  background-size: cover;
 }
 
 .ico-drop-item {
   background: url("/systems/ambersteel/presentation/image/hand-holding-box-down-solid.svg");
   background-size: cover;
-  width: 24px;
-  height: 24px;
+}
+
+.ico-related-attribute-solid {
+  background: url("/systems/ambersteel/presentation/image/related-attribute-solid.svg");
+  background-size: cover;
+}
+
+.ico-strongarm-solid {
+  background: url("/systems/ambersteel/presentation/image/strongarm-solid.svg");
+  background-size: cover;
+}
+
+.ico-skill-solid {
+  background: url("/systems/ambersteel/presentation/image/skill-solid.svg");
+  background-size: cover;
+}
+
+.ico-take-item {
+  background: url("/systems/ambersteel/presentation/image/take-item.svg");
+  background-size: cover;
+}
+
+.ico-time-to-heal-solid {
+  background: url("/systems/ambersteel/presentation/image/time-to-heal-solid.svg");
+  background-size: cover;
+}
+
+.ico-time-to-heal-treated-solid {
+  background: url("/systems/ambersteel/presentation/image/time-to-heal-treated-solid.svg");
+  background-size: cover;
+}
+
+.ico-treatment-solid {
+  background: url("/systems/ambersteel/presentation/image/treatment-solid.svg");
+  background-size: cover;
+}
+
+.ico-brain-solid {
+  background: url("/systems/ambersteel/presentation/image/brain-solid.svg");
+  background-size: cover;
+}
+
+.ico-hand-shake-bicolor {
+  background: url("/systems/ambersteel/presentation/image/hand-shake-bicolor.svg");
+  background-size: cover;
+}
+
+.ico-hand-shake-solid {
+  background: url("/systems/ambersteel/presentation/image/hand-shake-solid.svg");
+  background-size: cover;
+}
+
+.ico-tags-solid {
+  background: url("/systems/ambersteel/presentation/image/tags-solid.svg");
+  background-size: cover;
+}
+
+.ico-hashtag-solid {
+  background: url("/systems/ambersteel/presentation/image/hashtag-solid.svg");
+  background-size: cover;
+}
+
+.ico-level-modifier-solid {
+  background: url("/systems/ambersteel/presentation/image/level-modifier-solid.svg");
+  background-size: cover;
+}
+
+.ico-level-solid {
+  background: url("/systems/ambersteel/presentation/image/level-solid.svg");
+  background-size: cover;
+}
+
+.ico-limit-solid {
+  background: url("/systems/ambersteel/presentation/image/limit-solid.svg");
+  background-size: cover;
+}
+
+.ico-max-bulk-solid {
+  background: url("/systems/ambersteel/presentation/image/max-bulk-solid.svg");
+  background-size: cover;
+}
+
+.ico-medical-supplies-solid {
+  background: url("/systems/ambersteel/presentation/image/medical-supplies-solid.svg");
+  background-size: cover;
+}
+
+.ico-obstacle-solid {
+  background: url("/systems/ambersteel/presentation/image/obstacle-solid.svg");
+  background-size: cover;
+}
+
+.ico-obstacle-patch-up-solid {
+  background: url("/systems/ambersteel/presentation/image/obstacle-patch-up-solid.svg");
+  background-size: cover;
+}
+
+.ico-obstacle-treatment-solid {
+  background: url("/systems/ambersteel/presentation/image/obstacle-treatment-solid.svg");
+  background-size: cover;
+}
+
+.ico-opposed-by-solid {
+  background: url("/systems/ambersteel/presentation/image/opposed-by-solid.svg");
+  background-size: cover;
+}
+
+.ico-quantity-solid {
+  background: url("/systems/ambersteel/presentation/image/quantity-solid.svg");
+  background-size: cover;
+}
+
+.ico-scar-solid {
+  background: url("/systems/ambersteel/presentation/image/scar-solid.svg");
+  background-size: cover;
+}
+
+.ico-self-patch-up-solid {
+  background: url("/systems/ambersteel/presentation/image/self-patch-up-solid.svg");
+  background-size: cover;
 }

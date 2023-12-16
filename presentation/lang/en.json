@@ -79,7 +79,11 @@
           "label": "Game-Master"
         }
       },
-      "name": "Name",
+      "name": {
+        "label": "Name",
+        "edit": "Edit Name",
+        "editOf": "Edit Name of %s"
+      },
       "none": {
         "label": "None",
         "abbreviation": "N/A"
@@ -102,6 +106,7 @@
       "propertyPath": "Property path"
     },
     "actionPoint": {
+      "abbreviation": "AP",
       "singular": "Action Point",
       "plural": "Action Points",
       "max": "Maximum Action Points"
@@ -116,10 +121,11 @@
           "abbreviation": "CR"
         },
         "modifiedLevel": "Modified Level",
-        "modifiedLevelAbbreviation": "Modified",
-        "levelMod": "Level Modifier",
-        "levelModAbbreviation": "Mod.",
         "minimum": "Minimum Level",
+        "modifier": {
+          "label": "Level Modifier",
+          "abbreviation": "Mod."
+        },
         "requirements": {
           "label": "Required",
           "abbreviation": "Req.",
@@ -177,6 +183,7 @@
           "weapon": "Weapon"
         },
         "takeToPerson": "Take (to person)",
+        "dropFromPerson": "Drop (from person)",
         "remote": "Property",
         "carryingCapacity": {
           "label": "Carrying Capacity (in bulk)",
@@ -382,8 +389,8 @@
         "timeToHealTreated": "Treated Heal Time Reduction",
         "selfPatchUp": "Self Patch-Up",
         "requiredSupplies": "Required Supplies",
-        "obstaclePatchUp": "Ob Patch-Up",
-        "obstacleTreatment": "Ob Treatment",
+        "obstaclePatchUp": "Obstacle Patch-Up",
+        "obstacleTreatment": "Obstacle Treatment",
         "exhaustion": {
           "label": "Exhaustion",
           "maximum": "Max. Exhaustion"
@@ -575,7 +582,7 @@
             "placeholder": "3' / 1m / 0 / etc."
           },
           "newDefaultName": "New Skill Ability",
-          "requirement": "At Level",
+          "requirement": "Required Skill Level",
           "singular": "Skill Ability",
           "plural": "Skill Abilities"
         },

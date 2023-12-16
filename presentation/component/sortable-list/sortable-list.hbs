@@ -9,7 +9,6 @@ prominentItemStyling: {Boolean | undefined}
   {{#each viewModel.itemViewModelGroups as |itemViewModelGroup key|}}
   <li id="{{itemViewModelGroup.id}}" class="ambersteel-list-row sortable-list-item sheet-block flex flex-row{{#if ../prominentItemStyling}} heavy-border-t{{/if}}">
     <div class="component-list-item-order-controls{{#if (neq ../viewModel.isEditable true)}} hidden{{/if}}">
-      {{> button viewModel=itemViewModelGroup.vmBtnMoveTop fill=false }}
       {{> button viewModel=itemViewModelGroup.vmBtnMoveUp fill=false }}
       {{!-- TODO #116: Implement the grab handle --}}
       <div class="flex-grow"></div>
@@ -19,7 +18,6 @@ prominentItemStyling: {Boolean | undefined}
         <i class="fas fa-grip-vertical"></i>
       </a> --}}
       {{> button viewModel=itemViewModelGroup.vmBtnMoveDown fill=false }}
-      {{> button viewModel=itemViewModelGroup.vmBtnMoveBottom fill=false }}
     </div>
     {{#with ../viewModel.listItemTemplate as | template |}}
       {{> (template) viewModel=itemViewModelGroup.listItemViewModel cssClass="flex-grow" }}

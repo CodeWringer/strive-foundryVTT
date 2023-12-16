@@ -121,8 +121,8 @@ export class AmbersteelActorSheet extends ActorSheet {
     game.ambersteel.logger.logPerf(this, "actor.getData (getViewModel)", () => {
       this._viewModel = this.subType.getViewModel(context, context.actor, this);
     });
-    game.ambersteel.logger.logPerf(this, "actor.getData (readViewState)", () => {
-      this._viewModel.readViewState();
+    game.ambersteel.logger.logPerf(this, "actor.getData (readAllViewState)", () => {
+      this._viewModel.readAllViewState();
     });
 
     context.viewModel = this._viewModel;

@@ -46,6 +46,7 @@ export function initHandlebarsPartials() {
   Handlebars.registerPartial('header2', `{{#> "${TEMPLATES.COMPONENT_HEADER_SECONDARY}"}}{{> @partial-block}}{{/"${TEMPLATES.COMPONENT_HEADER_SECONDARY}"}}`);
   Handlebars.registerPartial('header3', `{{#> "${TEMPLATES.COMPONENT_HEADER_TERTIARY}"}}{{> @partial-block}}{{/"${TEMPLATES.COMPONENT_HEADER_TERTIARY}"}}`);
   Handlebars.registerPartial('hintCard', `{{#> "${TEMPLATES.COMPONENT_HINT_CARD}"}}{{> @partial-block}}{{/"${TEMPLATES.COMPONENT_HINT_CARD}"}}`);
+  Handlebars.registerPartial('labeledControl', `{{#> "${TEMPLATES.COMPONENT_LABELED_CONTROL}"}}{{> @partial-block}}{{/"${TEMPLATES.COMPONENT_LABELED_CONTROL}"}}`);
 }
 
 /**

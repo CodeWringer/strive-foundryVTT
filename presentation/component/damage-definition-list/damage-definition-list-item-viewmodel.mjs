@@ -1,4 +1,4 @@
-import { DAMAGE_TYPES } from "../../../business/ruleset/damage-types.mjs"
+import { DAMAGE_TYPES, getDamageTypeIconClass } from "../../../business/ruleset/damage-types.mjs"
 import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import { isDefined } from "../../../business/util/validation-utility.mjs";
 import { TEMPLATES } from "../../templatePreloader.mjs";
@@ -55,6 +55,16 @@ export default class DamageDefinitionListItemViewModel extends InputViewModel {
    * @readonly
    */
   get localizedDeletionHint() { return game.i18n.localize("ambersteel.damageDefinition.delete"); }
+
+  /**
+   * Returns the CSS class of the icon that represents the current damage type. 
+   * 
+   * @type {String}
+   * @readonly
+   */
+  get damageTypeIconClass() {
+    return getDamageTypeIconClass(this.value.damageType);
+  }
 
   /**
    * @param {DamageAndType} args.value 

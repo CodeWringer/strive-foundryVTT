@@ -1,7 +1,7 @@
 {{!--
 viewModel: SimpleListViewModel
 --}}
-<ul id="{{viewModel.id}}" class="unstyled-list">
+<ul id="{{viewModel.id}}" class="unstyled-list auto-margin-v">
   {{#each viewModel.itemViewModels as |vm index|}}
   {{#with ../viewModel.itemTemplate as |template|}}
     <li class="flex flex-row">

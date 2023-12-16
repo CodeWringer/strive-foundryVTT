@@ -31,7 +31,7 @@ export async function queryAssetSlotConfiguration(assetSlot = {}) {
       new DynamicInputDefinition({
         type: DYNAMIC_INPUT_TYPES.TEXTFIELD,
         name: inputName,
-        localizedLabel: game.i18n.localize("ambersteel.general.name"),
+        localizedLabel: game.i18n.localize("ambersteel.general.name.label"),
         required: true,
         defaultValue: (assetSlot.name ?? "New Asset Slot"),
       }),

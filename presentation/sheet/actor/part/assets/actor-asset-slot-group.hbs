@@ -10,13 +10,14 @@ cssClass: {undefined | String}
       <span style="width: 2rem"></span>
       {{!-- Slot Group Bulk --}}
       <div class="flex flex-row flex-middle font-size-sm">
-        {{#> label showFancyFont=viewModel.showFancyFont cssClass=" "}}{{localize "ambersteel.character.asset.bulk"}}{{/label}}
+        <i class="ico dark ico-bulk-solid" title="{{localize "ambersteel.character.asset.bulk"}}"></i>
         <span class="flex flex-row flex-middle">
           {{#> admonishReadOnlyValue cssClass="pad-l-md pad-r-md" admonish=viewModel.hasExceededBulk}}{{viewModel.group.currentBulk}} / {{viewModel.group.maxBulk}}{{/admonishReadOnlyValue}}
         </span>
+        <i class="ico dark ico-max-bulk-solid" title="{{localize "ambersteel.character.asset.maxBulk"}}"></i>
       </div>
       {{!-- Edit Controls --}}
-      <div class="flex flex-row flex-grow flex-right">
+      <div class="flex flex-row flex-grow flex-right font-size-default">
         <div>
           {{> buttonContextMenu viewModel=viewModel.vmBtnEdit}}
         </div>
