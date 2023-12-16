@@ -103,7 +103,7 @@ export const TEMPLATES = {
   ASSET_CHAT_MESSAGE: `${basePathPresentation}/sheet/item/asset/asset-item-chat-message.hbs`,
   ASSET_LIST_ITEM_EXTRA_HEADER: `${basePathPresentation}/sheet/item/asset/asset-list-item-extra-header.hbs`,
   // Skill
-  SKILL_ITEM_SHEET: `${basePathPresentation}/sheet/item/skill/skill-item-sheet.hbs`,
+  SKILL_ITEM_SHEET_EXTRA_CONTENT: `${basePathPresentation}/sheet/item/skill/skill-item-sheet-extra-content.hbs`,
   SKILL_ITEM_CHAT_MESSAGE: `${basePathPresentation}/sheet/item/skill/skill-chat-message.hbs`,
   SKILL_LIST_ITEM_EXTRA_CONTENT: `${basePathPresentation}/sheet/item/skill/skill-list-item-extra-content.hbs`,
   SKILL_LIST_ITEM_EXTRA_HEADER: `${basePathPresentation}/sheet/item/skill/skill-list-item-extra-header.hbs`,
@@ -115,21 +115,16 @@ export const TEMPLATES = {
   SKILL_ABILITY_CHAT_MESSAGE: `${basePathPresentation}/sheet/item/skill-ability/skill-ability-chat-message.hbs`,
   // Fate
   FATE_CARD: `${basePathPresentation}/sheet/item/fate-card/fate-card.hbs`,
-  FATE_CARD_ITEM_SHEET: `${basePathPresentation}/sheet/item/fate-card/fate-card-item-sheet.hbs`,
   FATE_CARD_CHAT_MESSAGE: `${basePathPresentation}/sheet/item/fate-card/fate-card-chat-message.hbs`,
   // Injury
   INJURY_CHAT_MESSAGE: `${basePathPresentation}/sheet/item/injury/injury-chat-message.hbs`,
-  INJURY_ITEM_SHEET: `${basePathPresentation}/sheet/item/injury/injury-item-sheet.hbs`,
   // Illness
   ILLNESS_CHAT_MESSAGE: `${basePathPresentation}/sheet/item/illness/illness-chat-message.hbs`,
-  ILLNESS_ITEM_SHEET: `${basePathPresentation}/sheet/item/illness/illness-item-sheet.hbs`,
   ILLNESS_LIST_ITEM_EXTRA_HEADER: `${basePathPresentation}/sheet/item/illness/illness-list-item-extra-header.hbs`,
   // Mutation
   MUTATION_CHAT_MESSAGE: `${basePathPresentation}/sheet/item/mutation/mutation-chat-message.hbs`,
-  MUTATION_ITEM_SHEET: `${basePathPresentation}/sheet/item/mutation/mutation-item-sheet.hbs`,
   // Mutation
   SCAR_CHAT_MESSAGE: `${basePathPresentation}/sheet/item/scar/scar-chat-message.hbs`,
-  SCAR_ITEM_SHEET: `${basePathPresentation}/sheet/item/scar/scar-item-sheet.hbs`,
   // UI
   COMBAT_TRACKER: `${basePathPresentation}/combat/combat-tracker.hbs`,
   COMBAT_TRACKER_ACTION_POINTS: `${basePathPresentation}/combat/combat-tracker-action-points.hbs`,

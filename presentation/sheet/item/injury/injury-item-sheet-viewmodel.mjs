@@ -1,153 +1,132 @@
-import { validateOrThrow } from "../../../../business/util/validation-utility.mjs";
-import ButtonSendToChatViewModel from "../../../component/button-send-to-chat/button-send-to-chat-viewmodel.mjs";
-import InputImageViewModel from "../../../component/input-image/input-image-viewmodel.mjs";
-import InputRichTextViewModel from "../../../component/input-rich-text/input-rich-text-viewmodel.mjs";
 import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs";
-import { TEMPLATES } from "../../../templatePreloader.mjs";
-import ViewModel from "../../../view-model/view-model.mjs";
+import BaseItemSheetViewModel from "../base/base-item-sheet-viewmodel.mjs";
+import { DataFieldComponent } from "../base/datafield-component.mjs";
 
-export default class InjuryItemSheetViewModel extends ViewModel {
+/**
+ * @property {TransientInjury} document 
+ */
+export default class InjuryItemSheetViewModel extends BaseItemSheetViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.INJURY_ITEM_SHEET; }
-
-  /** @override */
-  get entityId() { return this.document.id; }
-
-  /**
-   * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
-   * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 
-   * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 
-   * is expected to be associated with an actor sheet or item sheet or journal entry or chat message and so on.
-   * 
-   * @param {Boolean | undefined} args.isEditable If true, the sheet is editable. 
-   * @param {Boolean | undefined} args.isSendable If true, the document represented by the sheet can be sent to chat. 
-   * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document. 
-   * 
-   * @param {TransientInjury} args.document
-   */
-  constructor(args = {}) {
-    super(args);
-    validateOrThrow(args, ["document"]);
-
-    this.document = args.document;
-    this.contextTemplate = args.contextTemplate ?? "injury-item-sheet";
-    const thiz = this;
-
-    this.vmImg = new InputImageViewModel({
-      parent: thiz,
-      id: "vmImg",
-      value: thiz.document.img,
-      onChange: (_, newValue) => {
-        thiz.document.img = newValue;
-      },
-    });
-    this.vmTfName = new InputTextFieldViewModel({
-      parent: thiz,
-      id: "vmTfName",
-      value: thiz.document.name,
-      onChange: (_, newValue) => {
-        thiz.document.name = newValue;
-      },
-      placeholder: game.i18n.localize("ambersteel.general.name.label"),
-    });
-    this.vmBtnSendToChat = new ButtonSendToChatViewModel({
-      parent: thiz,
-      id: "vmBtnSendToChat",
-      target: thiz.document,
-      isEditable: thiz.isEditable || thiz.isGM,
-    });
-    this.vmLimit = new InputTextFieldViewModel({
-      parent: thiz,
-      id: "vmLimit",
-      value: thiz.document.limit,
-      onChange: (_, newValue) => {
-        thiz.document.limit = newValue;
-      },
-      placeholder: game.i18n.localize("ambersteel.character.health.injury.limit.placeholder"),
-    });
-    this.vmTfTimeToHeal = new InputTextFieldViewModel({
-      parent: thiz,
-      id: "vmTfTimeToHeal",
-      value: thiz.document.timeToHeal,
-      onChange: (_, newValue) => {
-        thiz.document.timeToHeal = newValue;
-      },
-    });
-    this.vmScar = new InputTextFieldViewModel({
-      parent: thiz,
-      id: "vmScar",
-      value: thiz.document.scar,
-      onChange: (_, newValue) => {
-        thiz.document.scar = newValue;
-      },
-    });
-    this.vmRtDescription = new InputRichTextViewModel({
-      parent: thiz,
-      id: "vmRtDescription",
-      value: thiz.document.description,
-      onChange: (_, newValue) => {
-        thiz.document.description = newValue;
-      },
-    });
-    this.vmTreatmentSkill = new InputTextFieldViewModel({
-      parent: thiz,
-      id: "vmTreatmentSkill",
-      value: thiz.document.treatmentSkill,
-      onChange: (_, newValue) => {
-        thiz.document.treatmentSkill = newValue;
-      },
-    });
-    this.vmRequiredSupplies = new InputTextFieldViewModel({
-      parent: thiz,
-      id: "vmRequiredSupplies",
-      value: thiz.document.requiredSupplies,
-      onChange: (_, newValue) => {
-        thiz.document.requiredSupplies = newValue;
-      },
-    });
-    this.vmObstaclePatchUp = new InputTextFieldViewModel({
-      parent: thiz,
-      id: "vmObstaclePatchUp",
-      value: thiz.document.obstaclePatchUp,
-      onChange: (_, newValue) => {
-        thiz.document.obstaclePatchUp = newValue;
-      },
-    });
-    this.vmObstacleTreatment = new InputTextFieldViewModel({
-      parent: thiz,
-      id: "vmObstacleTreatment",
-      value: thiz.document.obstacleTreatment,
-      onChange: (_, newValue) => {
-        thiz.document.obstacleTreatment = newValue;
-      },
-    });
-    this.vmTimeToHealTreated = new InputTextFieldViewModel({
-      parent: thiz,
-      id: "vmTimeToHealTreated",
-      value: thiz.document.timeToHealTreated,
-      onChange: (_, newValue) => {
-        thiz.document.timeToHealTreated = newValue;
-      },
-    });
-    this.vmSelfPatchUp = new InputTextFieldViewModel({
-      parent: thiz,
-      id: "vmSelfPatchUp",
-      value: thiz.document.selfPatchUp,
-      onChange: (_, newValue) => {
-        thiz.document.selfPatchUp = newValue;
-      },
-    });
-  }
-
-  /** @override */
-  _getChildUpdates() {
-    const updates = super._getChildUpdates();
-
-    updates.set(this.vmBtnSendToChat, {
-      ...updates.get(this.vmBtnSendToChat),
-      isEditable: this.isEditable || this.isGM,
-    });
-
-    return updates;
+  getDataFields() {
+    return [
+      new DataFieldComponent({
+        template: InputTextFieldViewModel.TEMPLATE,
+        viewModel: new InputTextFieldViewModel({
+          parent: this,
+          id: "vmTreatmentSkill",
+          value: this.document.treatmentSkill,
+          onChange: (_, newValue) => {
+            this.document.treatmentSkill = newValue;
+          },
+        }),
+        localizedIconToolTip: game.i18n.localize("ambersteel.character.health.treatmentSkill"),
+        iconClass: "ico-skill-solid",
+      }),
+      new DataFieldComponent({
+        template: InputTextFieldViewModel.TEMPLATE,
+        viewModel: new InputTextFieldViewModel({
+          parent: this,
+          id: "vmRequiredSupplies",
+          value: this.document.requiredSupplies,
+          onChange: (_, newValue) => {
+            this.document.requiredSupplies = newValue;
+          },
+        }),
+        localizedIconToolTip: game.i18n.localize("ambersteel.character.health.requiredSupplies"),
+        iconClass: "ico-medical-supplies-solid",
+      }),
+      new DataFieldComponent({
+        template: InputTextFieldViewModel.TEMPLATE,
+        viewModel: new InputTextFieldViewModel({
+          parent: this,
+          id: "vmObstaclePatchUp",
+          value: this.document.obstaclePatchUp,
+          onChange: (_, newValue) => {
+            this.document.obstaclePatchUp = newValue;
+          },
+        }),
+        localizedIconToolTip: game.i18n.localize("ambersteel.character.health.obstaclePatchUp"),
+        iconClass: "ico-obstacle-patch-up-solid",
+      }),
+      new DataFieldComponent({
+        template: InputTextFieldViewModel.TEMPLATE,
+        viewModel: new InputTextFieldViewModel({
+          parent: this,
+          id: "vmObstacleTreatment",
+          value: this.document.obstacleTreatment,
+          onChange: (_, newValue) => {
+            this.document.obstacleTreatment = newValue;
+          },
+        }),
+        localizedIconToolTip: game.i18n.localize("ambersteel.character.health.obstacleTreatment"),
+        iconClass: "ico-obstacle-treatment-solid",
+      }),
+      new DataFieldComponent({
+        template: InputTextFieldViewModel.TEMPLATE,
+        viewModel: new InputTextFieldViewModel({
+          parent: this,
+          id: "vmTfTimeToHeal",
+          value: this.document.timeToHeal,
+          onChange: (_, newValue) => {
+            this.document.timeToHeal = newValue;
+          },
+        }),
+        localizedIconToolTip: game.i18n.localize("ambersteel.character.health.timeToHeal"),
+        iconClass: "ico-time-to-heal-solid",
+      }),
+      new DataFieldComponent({
+        template: InputTextFieldViewModel.TEMPLATE,
+        viewModel: new InputTextFieldViewModel({
+          parent: this,
+          id: "vmTimeToHealTreated",
+          value: this.document.timeToHealTreated,
+          onChange: (_, newValue) => {
+            this.document.timeToHealTreated = newValue;
+          },
+        }),
+        localizedIconToolTip: game.i18n.localize("ambersteel.character.health.timeToHealTreated"),
+        iconClass: "ico-time-to-heal-treated-solid",
+      }),
+      new DataFieldComponent({
+        template: InputTextFieldViewModel.TEMPLATE,
+        viewModel: new InputTextFieldViewModel({
+          parent: this,
+          id: "vmSelfPatchUp",
+          value: this.document.selfPatchUp,
+          onChange: (_, newValue) => {
+            this.document.selfPatchUp = newValue;
+          },
+        }),
+        localizedIconToolTip: game.i18n.localize("ambersteel.character.health.selfPatchUp"),
+        iconClass: "ico-self-patch-up-solid",
+      }),
+      new DataFieldComponent({
+        template: InputTextFieldViewModel.TEMPLATE,
+        viewModel: new InputTextFieldViewModel({
+          parent: this,
+          id: "vmScar",
+          value: this.document.scar,
+          onChange: (_, newValue) => {
+            this.document.scar = newValue;
+          },
+        }),
+        localizedIconToolTip: game.i18n.localize("ambersteel.character.health.scar.singular"),
+        iconClass: "ico-scar-solid",
+      }),
+      new DataFieldComponent({
+        template: InputTextFieldViewModel.TEMPLATE,
+        viewModel: new InputTextFieldViewModel({
+          parent: this,
+          id: "vmNsLimit",
+          value: this.document.limit,
+          onChange: (_, newValue) => {
+            this.document.limit = newValue;
+          },
+          placeholder: game.i18n.localize("ambersteel.character.health.injury.limit.placeholder"),
+        }),
+        localizedIconToolTip: game.i18n.localize("ambersteel.character.health.injury.limit.label"),
+        iconClass: "ico-limit-solid",
+      }),
+    ];
   }
 }

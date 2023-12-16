@@ -15,6 +15,7 @@ cssClass: {undefined | String}
           {{/with}}
         {{/each}}
         {{!-- Identity --}}
+        {{> inputImage viewModel=viewModel.vmImg cssClass="custom-icon-md" }}
         <h1 class="header-name">
           {{> inputTextField viewModel=viewModel.vmTfName }}
         </h1>
