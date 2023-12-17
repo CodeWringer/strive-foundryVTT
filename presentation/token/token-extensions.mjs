@@ -267,14 +267,15 @@ export default class TokenExtensions {
    * @static
    */
   static _updateActionPoints(token, newActionPoints) {
-    if (isDefined(token.actionPoints)) {
-      token.actionPoints.text.text = newActionPoints;
+    this._hideActionPoints(token);
+    this._showActionPoints(token);
 
-      if (newActionPoints === 0) {
-        token.actionPoints.sprite.texture = PIXI.Loader.shared.resources[TEXTURES.ACTION_POINT_EMPTY].texture;
-      } else {
-        token.actionPoints.sprite.texture = PIXI.Loader.shared.resources[TEXTURES.ACTION_POINT_FULL].texture;
-      }
+    token.actionPoints.text.text = newActionPoints;
+
+    if (newActionPoints === 0) {
+      token.actionPoints.sprite.texture = PIXI.Loader.shared.resources[TEXTURES.ACTION_POINT_EMPTY].texture;
+    } else {
+      token.actionPoints.sprite.texture = PIXI.Loader.shared.resources[TEXTURES.ACTION_POINT_FULL].texture;
     }
   }
 }

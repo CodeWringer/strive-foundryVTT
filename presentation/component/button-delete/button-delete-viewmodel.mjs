@@ -12,10 +12,9 @@ import ConfirmablePlainDialog from "../../dialog/plain-confirmable-dialog/plain-
  * @property {Boolean} withDialog If true, will prompt the user to confirm deletion with a dialog. 
  * @property {String} localizedDialogContent Localized content of the confirmation dialog window. 
  * 
- * @method onClick Asynchronous callback that is invoked when the button is clicked. 
- * Receives the button's original click-handler as its sole argument. In most cases, it should be called 
- * and awaited before one's own click handling logic. But in case the original logic is unwanted, the method can be ignored.
- * * Returns nothing. 
+ * @method onClick Asynchronous callback that is invoked when the button is clicked. Arguments: 
+ * * `event: Event`
+ * * `data: undefined`
  */
 export default class ButtonDeleteViewModel extends ButtonViewModel {
   /**
@@ -29,17 +28,19 @@ export default class ButtonDeleteViewModel extends ButtonViewModel {
 
   /**
    * @param {Object} args
-   * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
-   * @param {Boolean | undefined} args.isEditable Optional. If true, will be interactible. 
-   * @param {String | undefined} args.localizedTooltip Localized tooltip. 
-   * @param {Function | undefined} args.onClick Asynchronous callback that is invoked when the button is clicked. 
-   * Receives the button's original click-handler as its sole argument. In most cases, it should be called 
-   * and awaited before one's own click handling logic. But in case the original logic is unwanted, the method can be ignored.
-   * * Returns nothing. 
+   * @param {String | undefined} args.id Unique ID of this view model instance. 
+   * @param {Boolean | undefined} args.isEditable If true, will be interactible. 
+   * @param {String | undefined} args.localizedToolTip A localized text to 
+   * display as a tool tip. 
+   * @param {String | undefined} args.localizedLabel A localized text to 
+   * display as a button label. 
+   * @param {Function | undefined} args.onClick Asynchronous callback that is invoked when the button is clicked. Arguments: 
+   * * `event: Event`
+   * * `data: undefined`
    * 
    * @param {TransientDocument} args.target The target object to affect. 
-   * @param {String | undefined} args.propertyPath Optional. If not undefined, will try to delete by this property path. 
-   * @param {Boolean | undefined} args.withDialog Optional. If true, will prompt the user to make a selection with a dialog. 
+   * @param {String | undefined} args.propertyPath If not undefined, will try to delete by this property path. 
+   * @param {Boolean | undefined} args.withDialog If true, will prompt the user to make a selection with a dialog. 
    */
   constructor(args = {}) {
     super({
@@ -56,13 +57,16 @@ export default class ButtonDeleteViewModel extends ButtonViewModel {
   }
 
   /**
-   * @override
-   * @see {ButtonViewModel._onClick}
-   * @async
+   * @param {Event} event
+   * 
    * @throws {Error} NullPointerException - Thrown, if 'target' is undefined. 
    * @throws {Error} NullPointerException - Thrown, if trying to delete by property path and 'target.deleteByPath' is undefined. 
+   * 
+   * @async
+   * @protected
+   * @override
    */
-  async _onClick() {
+  async _onClick(event) {
     if (this.isEditable !== true) return;
 
     if (this.target === undefined) {

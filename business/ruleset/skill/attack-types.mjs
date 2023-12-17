@@ -54,3 +54,22 @@ export const ATTACK_TYPES = {
   }),
 };
 ConstantsUtils.enrichConstant(ATTACK_TYPES);
+
+/**
+ * Returns the CSS class of the icon that represents the given attack type. 
+ * 
+ * @param {AttackType} attackType 
+ * 
+ * @returns {String}
+ */
+export function getAttackTypeIconClass(attackType) {
+  if (attackType.name === ATTACK_TYPES.areaOfEffect.name) {
+    return "ico-attack-type-aoe-solid";
+  } else if (attackType.name === ATTACK_TYPES.multipleSingleTarget.name) {
+    return "ico-attack-type-multi-solid";
+  } else if (attackType.name === ATTACK_TYPES.singleTarget.name) {
+    return "ico-attack-type-single-solid";
+  } else {
+    return "ico-crossed-circle-solid";
+  }
+}

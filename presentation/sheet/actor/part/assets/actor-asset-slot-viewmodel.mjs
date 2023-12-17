@@ -124,6 +124,7 @@ export default class ActorAssetSlotViewModel extends ViewModel {
   }
 
   /**
+   * @param {Object} args 
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
    * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 
    * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 
@@ -134,6 +135,8 @@ export default class ActorAssetSlotViewModel extends ViewModel {
    * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document. 
    * 
    * @param {CharacterAssetSlot} args.assetSlot
+   * @param {Boolean | undefined} args.showSlotBulk If `true`, will render bulk for the slot. 
+   * * default `false`
    * 
    * @throws {Error} ArgumentException - Thrown, if any of the mandatory arguments aren't defined. 
    */
@@ -142,6 +145,7 @@ export default class ActorAssetSlotViewModel extends ViewModel {
     validateOrThrow(args, ["assetSlot"]);
 
     this.assetSlot = args.assetSlot;
+    this.showSlotBulk = args.showSlotBulk ?? false;
 
     const thiz = this;
 
@@ -186,7 +190,7 @@ export default class ActorAssetSlotViewModel extends ViewModel {
             new DynamicInputDefinition({
               type: DYNAMIC_INPUT_TYPES.DROP_DOWN,
               name: inputChoices,
-              localizedLabel: game.i18n.localize("ambersteel.general.name"),
+              localizedLabel: game.i18n.localize("ambersteel.general.name.label"),
               required: true,
               defaultValue: (thiz.availableAssets[0] ?? {}).id,
               specificArgs: {

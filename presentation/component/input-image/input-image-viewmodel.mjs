@@ -46,16 +46,18 @@ export default class InputImageViewModel extends InputViewModel {
   async activateListeners(html) {
     await super.activateListeners(html);
     
-    this.element.click(this._onClick.bind(this, html, this.isOwner, this.isEditable));
+    this.element.click(this._onClick.bind(this));
   }
   
   /**
-   * @param event 
+   * @param {Event} event 
+   * 
+   * @see https://foundryvtt.com/api/global.html#FilePickerOptions
+   * 
    * @private
    * @async
-   * @see https://foundryvtt.com/api/global.html#FilePickerOptions
    */
-  async _onClick(html, isOwner, isEditable, event) {
+  async _onClick(event) {
     event.preventDefault();
 
     const thiz = this;

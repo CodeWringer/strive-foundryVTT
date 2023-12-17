@@ -63,6 +63,7 @@ export default class HealthStatesSettingsDialog extends FormApplication {
       formApplication: this,
     });
     context.viewModel = this._viewModel;
+    this._viewModel.readAllViewState();
 
     return context;
   }

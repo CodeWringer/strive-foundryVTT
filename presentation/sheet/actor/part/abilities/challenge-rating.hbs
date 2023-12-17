@@ -3,7 +3,10 @@ viewModel: {ChallengeRatingViewModel}
 cssClass: {String}
 --}}
 <div id="{{viewModel.id}}" class="flex flex-row flex-middle pad-md{{#if cssClass}} {{cssClass}}{{/if}}">
-  <a id="{{viewModel.id}}-header" class="flex-grow">
+  <a id="{{viewModel.id}}-header" class="flex flex-grow flex-middle auto-margin-h">
+    {{#if viewModel.iconClass}}
+    <i class="ico {{viewModel.iconClass}} dark"></i>
+    {{/if}}
     <span class="flex-grow flex-center font-size-lg font-bold{{#if viewModel.showFancyFont}} fancy-font{{/if}}">{{viewModel.localizedLabel}}</span>
   </a>
   <div class="flex flex-row flex-middle">

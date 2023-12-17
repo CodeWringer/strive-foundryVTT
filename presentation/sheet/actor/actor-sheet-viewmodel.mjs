@@ -120,7 +120,7 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
       onChange: (_, newValue) => {
         thiz.document.name = newValue;
       },
-      placeholder: game.i18n.localize("ambersteel.general.name"),
+      placeholder: game.i18n.localize("ambersteel.general.name.label"),
     });
     this.vmImg = new InputImageViewModel({
       parent: thiz,

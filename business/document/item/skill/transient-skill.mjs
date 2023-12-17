@@ -532,14 +532,21 @@ export default class TransientSkill extends TransientBaseItem {
    * @returns {Sum}
    */
   getRollData() {
-    const actor = (this.owningDocument ?? {}).document;
-    const characterAttribute = new CharacterAttribute(actor, this.relatedAttribute.name);
-    const compositionObj = new Ruleset().getSkillTestNumberOfDice(this.modifiedLevel, characterAttribute.modifiedLevel);
+    if (this.dependsOnActiveCr === true) {
+      const group = getGroupForAttributeByName(this.relatedAttribute.name);
+      return new Sum([
+        new SumComponent(group.name, group.localizableName, this.modifiedLevel),
+      ]);
+    } else {
+      const actor = (this.owningDocument ?? {}).document;
+      const characterAttribute = new CharacterAttribute(actor, this.relatedAttribute.name);
+      const compositionObj = new Ruleset().getSkillTestNumberOfDice(this.modifiedLevel, characterAttribute.modifiedLevel);
 
-    return new Sum([
-      new SumComponent(this.relatedAttribute.name, characterAttribute.localizableName, compositionObj.attributeDiceCount),
-      new SumComponent(this.name, this.name, compositionObj.skillDiceCount),
-    ]);
+      return new Sum([
+        new SumComponent(this.relatedAttribute.name, characterAttribute.localizableName, compositionObj.attributeDiceCount),
+        new SumComponent(this.name, this.name, compositionObj.skillDiceCount),
+      ]);
+    }
   }
 
   /**

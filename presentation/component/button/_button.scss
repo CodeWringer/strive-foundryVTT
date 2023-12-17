@@ -1,28 +1,6 @@
-@mixin button-disabled {
-  a.custom-system-button {
-    cursor: default;
-    background-color: unset;
-    color: black;
-    opacity: 50%;
-    text-shadow: unset;
-
-    &:hover {
-      filter: unset;
-    }
-
-    i.ambersteel-icon {
-      filter: opacity(50);
-      &:hover {
-        filter: unset;
-      }
-    }
-  }
-}
-
 .button {
   padding: 0;
   margin: 0;
-  font-size: 1rem;
   min-height: $line-height;
   min-width: $line-height;
   border-radius: 3px;
@@ -37,7 +15,13 @@
   }
 
   &.disabled {
-    @include button-disabled();
+    a.custom-system-button {
+      cursor: default;
+      background-color: unset;
+      color: black;
+      opacity: 50%;
+      text-shadow: unset;
+    }
   }
   
   &.square {

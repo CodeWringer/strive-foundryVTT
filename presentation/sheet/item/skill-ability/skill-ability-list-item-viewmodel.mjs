@@ -1,5 +1,5 @@
 import { DAMAGE_TYPES } from "../../../../business/ruleset/damage-types.mjs";
-import { ATTACK_TYPES } from "../../../../business/ruleset/skill/attack-types.mjs";
+import { ATTACK_TYPES, getAttackTypeIconClass } from "../../../../business/ruleset/skill/attack-types.mjs";
 import DamageAndType from "../../../../business/ruleset/skill/damage-and-type.mjs";
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs";
 import { isDefined } from "../../../../business/util/validation-utility.mjs";
@@ -9,29 +9,20 @@ import { TEMPLATES } from "../../../templatePreloader.mjs";
 import ChoiceAdapter from "../../../component/input-choice/choice-adapter.mjs";
 import DamageDefinitionListViewModel from "../../../component/damage-definition-list/damage-definition-list-viewmodel.mjs";
 import InputDropDownViewModel from "../../../component/input-dropdown/input-dropdown-viewmodel.mjs";
-import InputImageViewModel from "../../../component/input-image/input-image-viewmodel.mjs";
 import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
-import InputRichTextViewModel from "../../../component/input-rich-text/input-rich-text-viewmodel.mjs";
-import InputTextareaViewModel from "../../../component/input-textarea/input-textarea-viewmodel.mjs";
 import SkillAbility from "../../../../business/document/item/skill/skill-ability.mjs";
 import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs";
 import ButtonRollViewModel from "../../../component/button-roll/button-roll-viewmodel.mjs";
 import ButtonContextMenuViewModel from "../../../component/button-context-menu/button-context-menu-viewmodel.mjs";
-import ButtonSendToChatViewModel from "../../../component/button-send-to-chat/button-send-to-chat-viewmodel.mjs";
 import ButtonDeleteViewModel from "../../../component/button-delete/button-delete-viewmodel.mjs";
+import BaseListItemViewModel from "../base/base-list-item-viewmodel.mjs";
+import { DataFieldComponent } from "../base/datafield-component.mjs";
+import { TemplatedComponent } from "../base/templated-component.mjs";
 
-export default class SkillAbilityListItemViewModel extends ViewModel {
-  /** @override */
-  static get TEMPLATE() { return TEMPLATES.SKILL_ABILITY_LIST_ITEM; }
-
-  /**
-   * @type {SkillAbility}
-   */
-  skillAbility = undefined;
-
-  /** @override */
-  get entityId() { return this.skillAbility.id; }
-
+/**
+ * @property {SkillAbility} document 
+ */
+export default class SkillAbilityListItemViewModel extends BaseListItemViewModel {
   /**
    * @type {Array<ChoiceOption>}
    * @readonly
@@ -42,37 +33,51 @@ export default class SkillAbilityListItemViewModel extends ViewModel {
    * @type {Boolean}
    * @readonly
    */
-  get hideObstacle() { return isDefined(this.skillAbility.obstacle) !== true; }
+  get hideObstacle() { return isDefined(this.document.obstacle) !== true; }
 
   /**
    * @type {Boolean}
    * @readonly
    */
-  get hideOpposedBy() { return isDefined(this.skillAbility.opposedBy) !== true; }
+  get hideOpposedBy() { return isDefined(this.document.opposedBy) !== true; }
 
   /**
    * @type {Boolean}
    * @readonly
    */
-  get hideCondition() { return isDefined(this.skillAbility.condition) !== true; }
+  get hideCondition() { return isDefined(this.document.condition) !== true; }
 
   /**
    * @type {Boolean}
    * @readonly
    */
-  get hideDistance() { return isDefined(this.skillAbility.distance) !== true; }
+  get hideDistance() { return isDefined(this.document.distance) !== true; }
 
   /**
    * @type {Boolean}
    * @readonly
    */
-  get hideAttackType() { return isDefined(this.skillAbility.attackType) !== true; }
+  get hideAttackType() { return isDefined(this.document.attackType) !== true; }
 
   /**
    * @type {Boolean}
    * @readonly
    */
-  get hideDamage() { return this.skillAbility.damage.length < 1; }
+  get hideDamage() { return this.document.damage.length < 1; }
+
+  /**
+   * Returns the CSS class of the icon that represents the current attack type. 
+   * 
+   * @type {String}
+   * @readonly
+   */
+  get attackTypeIconClass() {
+    if (isDefined(this.document.attackType)) {
+      return getAttackTypeIconClass(this.document.attackType);
+    } else {
+      return "";
+    }
+  }
 
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
@@ -80,213 +85,40 @@ export default class SkillAbilityListItemViewModel extends ViewModel {
    * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 
    * is expected to be associated with an actor sheet or item sheet or journal entry or chat message and so on.
    * 
-   * @param {SkillAbility} args.skillAbility 
-   * @param {Boolean | undefined} args.isEditable If true, the sheet is editable. 
-   * @param {Boolean | undefined} args.isSendable If true, the document represented by the sheet can be sent to chat. 
-   * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document. 
+   * @param {SkillAbility} args.document 
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["skillAbility"]);
+    validateOrThrow(args, ["document"]);
 
-    this.contextTemplate = args.contextTemplate ?? "skill-ability-list-item";
-    this.skillAbility = args.skillAbility;
-    
-    const thiz = this;
-    
-    const skillAbility = this.skillAbility;
-    const owningDocument = skillAbility.owningDocument;
-    this._actor = ((thiz.skillAbility.owningDocument ?? {}).owningDocument ?? {}).document;
-    const actor = this._actor;
-
-    this.vmBtnRoll = new ButtonRollViewModel({
-      parent: thiz,
-      id: "vmBtnRoll",
-      target: owningDocument,
-      propertyPath: undefined,
-      primaryChatTitle: game.i18n.localize(skillAbility.name),
-      primaryChatImage: skillAbility.img,
-      secondaryChatTitle: game.i18n.localize(owningDocument.name),
-      secondaryChatImage: owningDocument.img,
-      rollType: "dice-pool",
-      onClick: async (callback) => {
-        const r = await callback();
-        await owningDocument.advanceByRollResult(r);
-      },
-      actor: actor,
-      isEditable: (thiz.isEditable || thiz.isGM) && actor !== undefined,
-    });
-    this.vmBtnSendToChat = new ButtonSendToChatViewModel({
-      parent: thiz,
-      id: "vmBtnSendToChat",
-      target: skillAbility,
-      isEditable: thiz.isEditable || thiz.isGM,
-    });
-    this.vmImg = new InputImageViewModel({
-      parent: thiz,
-      id: "vmImg",
-      value: skillAbility.img,
-      onChange: (_, newValue) => {
-        skillAbility.img = newValue;
-      },
-    });
-    this.vmTfName = new InputTextFieldViewModel({
-      parent: thiz,
-      id: "vmTfName",
-      value: skillAbility.name,
-      onChange: (_, newValue) => {
-        skillAbility.name = newValue;
-      },
-      placeholder: game.i18n.localize("ambersteel.general.name"),
-    });
-    this.vmBtnDelete = new ButtonDeleteViewModel({
-      parent: thiz,
-      id: "vmBtnDelete",
-      target: skillAbility,
-      withDialog: true,
-    });
     this.vmNsRequiredLevel = new InputNumberSpinnerViewModel({
-      parent: thiz,
+      parent: this,
       id: "vmNsRequiredLevel",
-      value: skillAbility.requiredLevel,
+      value: this.document.requiredLevel,
       onChange: (_, newValue) => {
-        skillAbility.requiredLevel = newValue;
+        this.document.requiredLevel = newValue;
       },
       min: 0,
-    });
-    this.vmTfObstacle = new InputTextFieldViewModel({
-      parent: thiz,
-      id: "vmTfObstacle",
-      value: skillAbility.obstacle,
-      onChange: (_, newValue) => {
-        skillAbility.obstacle = newValue;
-      },
-      propertyPath: "obstacle",
-      placeholder: game.i18n.localize("ambersteel.roll.obstacle.placeholder"),
-    });
-    this.vmTfOpposedBy = new InputTextFieldViewModel({
-      parent: thiz,
-      id: "vmTfOpposedBy",
-      value: skillAbility.opposedBy,
-      onChange: (_, newValue) => {
-        skillAbility.opposedBy = newValue;
-      },
-      placeholder: game.i18n.localize("ambersteel.roll.obstacle.opposedBy.placeholder"),
-    });
-    this.vmTfDistance = new InputTextFieldViewModel({
-      parent: thiz,
-      id: "vmTfDistance",
-      value: skillAbility.distance,
-      onChange: (_, newValue) => {
-        skillAbility.distance = newValue;
-      },
-      placeholder: game.i18n.localize("ambersteel.character.skill.ability.distance.placeholder"),
     });
     this.vmNsApCost = new InputNumberSpinnerViewModel({
-      parent: thiz,
+      parent: this,
       id: "vmNsApCost",
-      value: skillAbility.apCost,
+      value: this.document.apCost,
       onChange: (_, newValue) => {
-        skillAbility.apCost = newValue;
+        this.document.apCost = newValue;
       },
       min: 0,
     });
-    this.vmDdAttackType = new InputDropDownViewModel({
-      id: "vmDdAttackType",
-      parent: this,
-      options: this.attackTypeOptions,
-      value: isDefined(this.skillAbility.attackType) ? this.attackTypeOptions.find(it => it.value === this.skillAbility.attackType.name) : undefined,
-      onChange: (_, newValue) => {
-        this.skillAbility.attackType = ATTACK_TYPES[newValue];
-      },
-      adapter: new ChoiceAdapter({
-        toChoiceOption(obj) {
-          if (isDefined(obj) === true) {
-            return ATTACK_TYPES.asChoices().find(it => it.value === obj.name);
-          } else {
-            return ATTACK_TYPES.asChoices().find(it => it.value === "none");
-          }
-        },
-        fromChoiceOption(option) {
-          return ATTACK_TYPES[option.value];
-        }
-      }),
-    });
-
-    this.vmTaCondition = new InputTextareaViewModel({
-      parent: thiz,
-      id: "vmTaCondition",
-      value: skillAbility.condition,
-      onChange: (_, newValue) => {
-        skillAbility.condition = newValue;
-      },
-      placeholder: game.i18n.localize("ambersteel.character.skill.ability.condition.placeholder"),
-    });
-    this.vmRtDescription = new InputRichTextViewModel({
-      parent: thiz,
-      id: "vmRtDescription",
-      value: skillAbility.description,
-      onChange: (_, newValue) => {
-        skillAbility.description = newValue;
-      },
-    });
-    this.vmBtnContextMenu = new ButtonContextMenuViewModel({
-      parent: thiz,
-      id: "vmBtnContextMenu",
-      menuItems: [
-        // Add damage
-        {
-          name: game.i18n.localize("ambersteel.damageDefinition.add"),
-          icon: '<i class="fas fa-plus"></i>',
-          condition: () => { return true; }, // TODO #388 superfluous?
-          callback: () => {
-            const damage = thiz.skillAbility.damage.concat([]);
-            damage.push(new DamageAndType({
-              damage: "",
-              damageType: DAMAGE_TYPES.none.name,
-            }));
-            thiz.skillAbility.damage = damage;
-          },
-        },
-      ]
-      // Toggle obstacle
-      .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.roll.obstacle.label", thiz.skillAbility, "obstacle", ""))
-      // Toggle opposed by
-      .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.roll.obstacle.opposedBy.label", thiz.skillAbility, "opposedBy", ""))
-      // Toggle distance
-      .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.character.skill.ability.distance.label", thiz.skillAbility, "distance", ""))
-      // Toggle attack type
-      .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.attackType.label", thiz.skillAbility, "attackType", ATTACK_TYPES.none))
-      // Toggle condition
-      .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.character.skill.ability.condition.label", thiz.skillAbility, "condition", "")),
-    });
-
     this.vmDamageDefinitionList = new DamageDefinitionListViewModel({
       id: `vmDamageDefinitionList`,
       parent: this,
-      value: this.skillAbility.damage,
+      value: this.document.damage,
       onChange: (_, newValue) => {
-        this.skillAbility.damage = newValue;
+        this.document.damage = newValue;
       },
-      resolveFormulaContext: this._getRootOwningDocument(this.skillAbility),
-      chatTitle: `${game.i18n.localize("ambersteel.damageDefinition.label")} - ${this.skillAbility.name}`,
+      resolveFormulaContext: this.getRootOwningDocument(this.document),
+      chatTitle: `${game.i18n.localize("ambersteel.damageDefinition.formula")} - ${this.document.name}`,
     });
-  }
-
-  /** @override */
-  _getChildUpdates() {
-    const updates = super._getChildUpdates();
-
-    updates.set(this.vmBtnSendToChat, {
-      ...updates.get(this.vmBtnSendToChat),
-      isEditable: this.isEditable || this.isGM,
-    });
-    updates.set(this.vmBtnRoll, {
-      ...updates.get(this.vmBtnRoll),
-      isEditable: (this.isEditable || this.isGM) && this._actor !== undefined,
-    });
-
-    return updates;
   }
 
   /** @override */
@@ -304,25 +136,200 @@ export default class SkillAbilityListItemViewModel extends ViewModel {
   }
 
   /** @override */
+  getDataFields() {
+    return [
+      new DataFieldComponent({
+        template: InputTextFieldViewModel.TEMPLATE,
+        viewModel: new InputTextFieldViewModel({
+          parent: this,
+          id: "vmObstacle",
+          value: this.document.obstacle,
+          onChange: (_, newValue) => {
+            this.document.obstacle = newValue;
+          },
+        }),
+        isHidden: this.hideObstacle,
+        placeholder: game.i18n.localize("ambersteel.roll.obstacle.placeholder"),
+        localizedIconToolTip: game.i18n.localize("ambersteel.roll.obstacle.label"),
+        iconClass: "ico-obstacle-solid",
+      }),
+      new DataFieldComponent({
+        template: InputTextFieldViewModel.TEMPLATE,
+        viewModel: new InputTextFieldViewModel({
+          parent: this,
+          id: "vmOpposedBy",
+          value: this.document.opposedBy,
+          onChange: (_, newValue) => {
+            this.document.opposedBy = newValue;
+          },
+        }),
+        isHidden: this.hideOpposedBy,
+        placeholder: game.i18n.localize("ambersteel.roll.obstacle.opposedBy.placeholder"),
+        localizedIconToolTip: game.i18n.localize("ambersteel.roll.obstacle.opposedBy.label"),
+        iconClass: "ico-opposed-by-solid",
+      }),
+      new DataFieldComponent({
+        template: InputTextFieldViewModel.TEMPLATE,
+        viewModel: new InputTextFieldViewModel({
+          parent: this,
+          id: "vmCondition",
+          value: this.document.condition,
+          onChange: (_, newValue) => {
+            this.document.condition = newValue;
+          },
+        }),
+        isHidden: this.hideCondition,
+        placeholder: game.i18n.localize("ambersteel.character.skill.ability.condition.placeholder"),
+        localizedIconToolTip: game.i18n.localize("ambersteel.character.skill.ability.condition.label"),
+        iconClass: "ico-condition-solid",
+      }),
+      new DataFieldComponent({
+        template: InputTextFieldViewModel.TEMPLATE,
+        viewModel: new InputTextFieldViewModel({
+          parent: this,
+          id: "vmDistance",
+          value: this.document.distance,
+          onChange: (_, newValue) => {
+            this.document.distance = newValue;
+          },
+        }),
+        isHidden: this.hideDistance,
+        placeholder: game.i18n.localize("ambersteel.character.skill.ability.distance.placeholder"),
+        localizedIconToolTip: game.i18n.localize("ambersteel.character.skill.ability.distance.label"),
+        iconClass: "ico-distance-solid",
+      }),
+      new DataFieldComponent({
+        template: InputDropDownViewModel.TEMPLATE,
+        viewModel: new InputDropDownViewModel({
+          id: "vmAttackType",
+          parent: this,
+          options: ATTACK_TYPES.asChoices(),
+          value: isDefined(this.document.attackType) ? ATTACK_TYPES.asChoices().find(it => it.value === this.document.attackType.name) : undefined,
+          onChange: (_, newValue) => {
+            this.document.attackType = ATTACK_TYPES[newValue];
+          },
+          adapter: new ChoiceAdapter({
+            toChoiceOption(obj) {
+              if (isDefined(obj) === true) {
+                return ATTACK_TYPES.asChoices().find(it => it.value === obj.name);
+              } else {
+                return ATTACK_TYPES.asChoices().find(it => it.value === "none");
+              }
+            },
+            fromChoiceOption(option) {
+              return ATTACK_TYPES[option.value];
+            }
+          }),
+        }),
+        isHidden: this.hideAttackType,
+        localizedIconToolTip: game.i18n.localize("ambersteel.attackType.label"),
+        iconClass: this.attackTypeIconClass,
+      }),
+    ];
+  }
+
+  /** @override */
+  getPrimaryHeaderButtons() {
+    const inherited = super.getPrimaryHeaderButtons();
+    const owningDocument = this.getRootOwningDocument();
+    return [
+      new TemplatedComponent({
+        template: ButtonRollViewModel.TEMPLATE,
+        viewModel: new ButtonRollViewModel({
+          parent: this,
+          id: "vmBtnRoll",
+          target: owningDocument,
+          propertyPath: undefined,
+          primaryChatTitle: game.i18n.localize(this.document.name),
+          primaryChatImage: this.document.img,
+          secondaryChatTitle: game.i18n.localize(owningDocument.name),
+          secondaryChatImage: owningDocument.img,
+          rollType: "dice-pool",
+          onClick: async (event, data) => {
+            await owningDocument.advanceByRollResult(data);
+          },
+          actor: owningDocument,
+        }),
+      }),
+    ].concat(inherited);
+  }
+
+  /** @override */
+  getSecondaryHeaderButtons() {
+    return [
+      // Context menu button
+      new TemplatedComponent({
+        template: ButtonContextMenuViewModel.TEMPLATE,
+        viewModel: new ButtonContextMenuViewModel({
+          id: "vmBtnContextMenu",
+          parent: this,
+          menuItems: [
+            // Edit name
+            {
+              name: game.i18n.localize("ambersteel.general.name.edit"),
+              icon: '<i class="fas fa-edit"></i>',
+              callback: this.queryEditName.bind(this),
+            },
+            // Add damage
+            {
+              name: game.i18n.localize("ambersteel.damageDefinition.add"),
+              icon: '<i class="fas fa-plus"></i>',
+              callback: () => {
+                const damage = this.document.damage.concat([]);
+                damage.push(new DamageAndType({
+                  damage: "",
+                  damageType: DAMAGE_TYPES.none.name,
+                }));
+                this.document.damage = damage;
+              },
+            },
+          ]
+          // Toggle obstacle
+          .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.roll.obstacle.label", this.document, "obstacle", ""))
+          // Toggle opposed by
+          .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.roll.obstacle.opposedBy.label", this.document, "opposedBy", ""))
+          // Toggle distance
+          .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.character.skill.ability.distance.label", this.document, "distance", ""))
+          // Toggle attack type
+          .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.attackType.label", this.document, "attackType", ATTACK_TYPES.none))
+          // Toggle condition
+          .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.character.skill.ability.condition.label", this.document, "condition", "")),
+        }),
+      }),
+      // Delete button
+      new TemplatedComponent({
+        template: ButtonDeleteViewModel.TEMPLATE,
+        viewModel: new ButtonDeleteViewModel({
+          parent: this,
+          id: "vmBtnDelete",
+          target: this.document,
+          withDialog: true,
+        }),
+      }),
+    ]; 
+  }
+
+  /** @override */
+  getAdditionalHeaderContent() {
+    return new TemplatedComponent({
+      template: TEMPLATES.SKILL_ABILITY_LIST_ITEM_EXTRA_HEADER,
+      viewModel: this,
+    });
+  }
+
+  /** @override */
+  getAdditionalContent() {
+    if (this.hideDamage === false) {
+      return new TemplatedComponent({
+        template: TEMPLATES.SKILL_ABILITY_LIST_ITEM_EXTRA_CONTENT,
+        viewModel: this,
+      });
+    }
+  }
+  /** @override */
   dispose() {
     super.dispose();
 
     this.damageInfoBubble.remove();
-  }
-
-  /**
-   * Returns the root owning document of the skill ability, if it has one. 
-   * Otherwise, returns the skill ability itself.  
-   * 
-   * @returns {TransientDocument | SkillAbility}
-   * 
-   * @private
-   */
-  _getRootOwningDocument() {
-    if (this.skillAbility.owningDocument !== undefined) {
-      return this.skillAbility.owningDocument;
-    } else {
-      return this.skillAbility;
-    }
   }
 }

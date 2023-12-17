@@ -9,7 +9,8 @@ import ViewModel from "../../../../view-model/view-model.mjs";
  * @property {Number} challengeRating The challenge rating. Changing this value invokes 
  * the `onChallengeRatingChanged` callback. 
  * @property {String} localizedLabel Returns the localized name of the attribute group. 
- * * Read-only
+ * @property {String | undefined} iconClass CSS class of the icon to display. 
+ * E. g. `"ico-strongarm-solid"` or `"fas fa-brain"`
  * @method onClicked Callback that is invoked when the element is clicked. 
  * @method onChallengeRatingChanged Callback that is invoked when the challenge 
  * rating value changes. 
@@ -34,6 +35,8 @@ export default class ChallengeRatingViewModel extends ViewModel {
    * 
    * @param {Number} args.challengeRating
    * @param {String} args.localizedLabel
+   * @param {String | undefined} args.iconClass CSS class of the icon to display. 
+   * E. g. `"ico-strongarm-solid"` or `"fas fa-brain"`
    * @param {Function | undefined} args.onClicked Callback that is invoked when 
    * the element is clicked. 
    * @param {Function | undefined} args.onChallengeRatingChanged Callback that 
@@ -47,6 +50,7 @@ export default class ChallengeRatingViewModel extends ViewModel {
     this.localizedLabel = args.localizedLabel;
     this.onClicked = args.onClicked ?? (() => {});
     this.onChallengeRatingChanged = args.onChallengeRatingChanged ?? (() => {});
+    this.iconClass = args.iconClass;
 
     this.vmCr = new InputNumberSpinnerViewModel({
       parent: this,

@@ -3,7 +3,7 @@ viewModel: CustomHealthStateListItemViewModel
 --}}
 <div class="flex flex-row flex-grow flex-middle">
   {{!-- Name --}}
-  {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.general.name"}}{{/label}}
+  {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.general.name.label"}}{{/label}}
   <span class="flex-grow">
     {{> inputTextField viewModel=viewModel.vmName}}
   </span>

@@ -2,7 +2,7 @@ import { DAMAGE_TYPES } from "../../../../business/ruleset/damage-types.mjs"
 import { ATTACK_TYPES } from "../../../../business/ruleset/skill/attack-types.mjs"
 import { createUUID } from "../../../../business/util/uuid-utility.mjs"
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs"
-import ButtonAddViewModel from "../../../component/button-add/button-add-viewmodel.mjs"
+import ButtonAddViewModel, { ADD_BUTTON_CREATION_TYPES } from "../../../component/button-add/button-add-viewmodel.mjs"
 import ButtonToggleVisibilityViewModel from "../../../component/button-toggle-visibility/button-toggle-visibility-viewmodel.mjs"
 import DocumentListItemOrderDataSource from "../../../component/sortable-list/document-list-item-order-datasource.mjs"
 import SortableListViewModel from "../../../component/sortable-list/sortable-list-viewmodel.mjs"
@@ -24,15 +24,24 @@ export default class SkillAbilityTableViewModel extends ViewModel {
    * @type {Boolean}
    * @private
    */
-  _skillAbilitiesInitiallyVisible = false;
+  _isExpanded = false;
   /**
    * @type {Boolean}
    */
-  get skillAbilitiesInitiallyVisible() {
-    return this._skillAbilitiesInitiallyVisible;
+  get isExpanded() {
+    return this._isExpanded;
   }
-  set skillAbilitiesInitiallyVisible(value) {
-    this._skillAbilitiesInitiallyVisible = value;
+  set isExpanded(value) {
+    this._isExpanded = value;
+
+    const headerExpansionButtonIcon = this.element.find(`#${this.vmToggleExpansion1.id}-icon`);
+    if (value === true) {
+      headerExpansionButtonIcon.addClass("fa-angle-double-up");
+      headerExpansionButtonIcon.removeClass("fa-angle-double-down");
+    } else {
+      headerExpansionButtonIcon.addClass("fa-angle-double-down");
+      headerExpansionButtonIcon.removeClass("fa-angle-double-up");
+    }
 
     // Immediately write view state. 
     this.writeViewState();
@@ -81,13 +90,21 @@ export default class SkillAbilityTableViewModel extends ViewModel {
     // Own properties.
     this.document = args.document;
     this.visGroupId = args.visGroupId ?? createUUID();
-    this._skillAbilitiesInitiallyVisible = args.skillAbilitiesInitiallyVisible ?? false;
+    this._isExpanded = args.skillAbilitiesInitiallyVisible ?? false;
     
-    this.registerViewStateProperty("_skillAbilitiesInitiallyVisible");
+    this.registerViewStateProperty("_isExpanded");
 
     // Child view models. 
     this.contextTemplate = "skill-ability-table";
     const thiz = this;
+
+    this.vmAddSkillAbility = new ButtonAddViewModel({
+      id: "vmAddSkillAbility",
+      parent: this,
+      localizedToolTip: game.i18n.localize("ambersteel.character.skill.ability.add.label"),
+      target: this.document,
+      creationType: ADD_BUTTON_CREATION_TYPES.SKILL_ABILITY,
+    });
 
     this.abilities = [];
     this.abilities = this._getSkillAbilityViewModels();
@@ -101,7 +118,7 @@ export default class SkillAbilityTableViewModel extends ViewModel {
         listName: "abilities",
       }),
       listItemViewModels: this.abilities,
-      listItemTemplate: TEMPLATES.SKILL_ABILITY_LIST_ITEM,
+      listItemTemplate: SkillAbilityListItemViewModel.TEMPLATE,
       vmBtnAddItem: new ButtonAddViewModel({
         id: "vmBtnAdd",
         parent: this,
@@ -114,28 +131,26 @@ export default class SkillAbilityTableViewModel extends ViewModel {
       }),
     });
 
-    this.vmBtnToggleVisibilityExpand = new ButtonToggleVisibilityViewModel({
+    this.vmToggleExpansion1 = new ButtonToggleVisibilityViewModel({
       parent: thiz,
-      id: "vmBtnToggleVisibilityExpand",
+      id: "vmToggleExpansion1",
       target: thiz.document,
       isEditable: true,
       visGroup: thiz.visGroupId,
-      toggleSelf: true,
-      onClick: async (callback) => {
-        await callback();
-        await thiz._toggleSkillAbilitiesInitiallyVisible();
+      toggleSelf: false,
+      onClick: async (event, data) => {
+        this.isExpanded = !this.isExpanded;
       },
     });
-    this.vmBtnToggleVisibilityCollapse = new ButtonToggleVisibilityViewModel({
+    this.vmToggleExpansion2 = new ButtonToggleVisibilityViewModel({
       parent: thiz,
-      id: "vmBtnToggleVisibilityCollapse",
+      id: "vmToggleExpansion2",
       target: thiz.document,
       isEditable: true,
       visGroup: thiz.visGroupId,
       toggleSelf: true,
-      onClick: async (callback) => {
-        await callback();
-        await thiz._toggleSkillAbilitiesInitiallyVisible();
+      onClick: async (event, data) => {
+        this.isExpanded = !this.isExpanded;
       },
     });
   }
@@ -185,18 +200,11 @@ export default class SkillAbilityTableViewModel extends ViewModel {
         isEditable: this.isEditable,
         isSendable: this.isSendable,
         isOwner: this.isOwner,
-        skillAbility: skillAbility,
+        document: skillAbility,
       });
       result.push(vm);
       this[vm._id] = vm;
     }
     return result;
-  }
-
-  /**
-   * @private
-   */
-  async _toggleSkillAbilitiesInitiallyVisible() {
-    this.skillAbilitiesInitiallyVisible = !this.skillAbilitiesInitiallyVisible;
   }
 }

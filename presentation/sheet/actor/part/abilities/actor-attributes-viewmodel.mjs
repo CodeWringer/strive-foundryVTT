@@ -82,6 +82,7 @@ export default class ActorAttributesViewModel extends ViewModel {
         localizableAttributeGroupName: attributeGroup.localizableName,
         parent: this,
         headerInteractible: this.isNPC === true,
+        iconClass: attributeGroup.iconClass,
         onHeaderClicked: () => {
           if (this.isNPC === true) {
             const expansion = this.document.getIsExpandedFor(attributeGroup.name);
@@ -97,6 +98,7 @@ export default class ActorAttributesViewModel extends ViewModel {
         parent: this,
         challengeRating: this._getChallengeRating(attributeGroup.name),
         localizedLabel: game.i18n.localize(attributeGroup.localizableName),
+        iconClass: attributeGroup.iconClass,
         onClicked: () => {
           if (this.isNPC === true) {
             const expansion = this.document.getIsExpandedFor(attributeGroup.name);

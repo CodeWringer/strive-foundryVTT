@@ -1,0 +1,33 @@
+{{!-- Parameters:
+viewModel: {SkillItemSheetViewModel}
+--}}
+{{!-- Row --}}
+{{!-- Damage --}}
+<div class="flex flex-row sheet-block{{#if viewModel.hideDamage}} hidden{{/if}}">
+  <div class="flex flex-center">
+    <span class="button light square font-size-default flex flex-center" id="{{viewModel.id}}-damage-info">
+      <i class="far fa-question-circle info-button"></i>
+    </span>
+  </div>
+  {{> damageDefinitionList viewModel=viewModel.vmDamageDefinitionList}}
+</div>
+{{!-- Row --}}
+<div class="flex flex-row flex-middle auto-margin-h sheet-block">
+  {{!-- Category --}}
+  {{#> labeledControl viewModel=viewModel.vmTfCategory localizedIconToolTip=(localize "ambersteel.general.category") iconClass="ico-category-solid" cssClass="" }}
+    <div class="width-xxl">
+      {{> inputTextField }}
+    </div>
+  {{/labeledControl}}
+  {{!-- Tags --}}
+  {{#> labeledControl viewModel=viewModel.vmTags localizedIconToolTip=(localize "ambersteel.general.tags.label") iconClass="ico-tags-solid" cssClass="" }}
+    {{> inputTags }}
+  {{/labeledControl}}
+</div>
+{{!-- Prerequisites --}}
+<div class="sheet-block flex flex-column">
+  {{#> header3 showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.skill.prerequisite.plural"}}{{/header3}}
+  {{> simpleList viewModel=viewModel.vmPrerequisiteList}}
+</div>
+{{!-- Skill Abilites --}}
+{{> "systems/ambersteel/presentation/sheet/item/skill-ability/skill-ability-table.hbs" viewModel=viewModel.vmSkillAbilityTable cssClass=(ifThenElse viewModel.isSkillAbilityListVisible "" "hidden") }}

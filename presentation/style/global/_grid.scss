@@ -95,7 +95,8 @@
 .grid-span-11 { grid-column-end: span 11 }
 .grid-span-12 { grid-column-end: span 12 }
 
-.grid-gap-sm { gap: 3px; }
-.grid-gap-md { gap: 6px; }
-.grid-gap-lg { gap: 9px; }
-.grid-gap-xl { gap: 12px; }
+.grid-gap-xs { gap: $padding-xs; }
+.grid-gap-sm { gap: $padding-sm; }
+.grid-gap-md { gap: $padding-md; }
+.grid-gap-lg { gap: $padding-lg; }
+.grid-gap-xl { gap: $padding-xl; }

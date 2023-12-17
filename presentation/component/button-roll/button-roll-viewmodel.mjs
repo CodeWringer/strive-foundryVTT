@@ -28,10 +28,9 @@ import DicePool, { DicePoolRollResult } from "../../../business/dice/dice-pool.m
  * @property {Actor | undefined} actor Actor associated with the roll result. 
  * @property {DicePoolRollResult | Object | undefined} lastRollResult The last rolled result. Or undefined, if no roll has been made, yet. 
  * 
- * @method onClick Asynchronous callback that is invoked when the button is clicked. 
- * Receives the button's original click-handler as its sole argument. In most cases, it should be called 
- * and awaited before one's own click handling logic. But in case the original logic is unwanted, the method can be ignored.
- * * Returns `{DicePoolRollResult | Object}` - The rolled result. 
+ * @method onClick Asynchronous callback that is invoked when the button is clicked. Arguments: 
+ * * `event: Event`
+ * * `data: DicePoolRollResult | Object` - The rolled result. 
  */
 export default class ButtonRollViewModel extends ButtonViewModel {
   /**
@@ -102,23 +101,25 @@ export default class ButtonRollViewModel extends ButtonViewModel {
 
   /**
    * @param {Object} args
-   * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
+   * @param {String | undefined} args.id Unique ID of this view model instance. 
+   * @param {Boolean | undefined} args.isEditable If true, will be interactible. 
+   * @param {String | undefined} args.localizedToolTip A localized text to 
+   * display as a tool tip. 
+   * @param {String | undefined} args.localizedLabel A localized text to 
+   * display as a button label. 
+   * @param {Function | undefined} args.onClick Asynchronous callback that is invoked when the button is clicked. Arguments: 
+   * * `event: Event`
+   * * `data: DicePoolRollResult | Object` - The rolled result. 
    * 
    * @param {TransientDocument | Object} args.target The target object to affect. 
-   * @param {Boolean | undefined} args.isEditable Optional. If true, will be interactible. 
-   * @param {Function | undefined} args.onClick Asynchronous callback that is invoked when the button is clicked. 
-   * Receives the button's original click-handler as its sole argument. In most cases, it should be called 
-   * and awaited before one's own click handling logic. But in case the original logic is unwanted, the method can be ignored.
-   * * Returns `{DicePoolRollResult | Object}` - The rolled result. 
-   * 
    * @param {String} args.rollType The internal name of a `RollType` that Determines the kind of roll to try and make. 
-   * @param {String | undefined} args.propertyPath Optional. Property path identifying a property that contains a roll-formula. 
-   * IMPORTANT: If this argument is left undefined, then the target object MUST define a method 'getRollData()', which returns a {Sum} instance. 
-   * @param {String | undefined} primaryChatTitle Primary title to display above the roll result in the chat message. 
-   * @param {String | undefined} primaryChatImage Primary image to display above the roll result in the chat message. 
-   * @param {String | undefined} secondaryChatTitle Primary title to display above the roll result in the chat message. 
-   * @param {String | undefined} secondaryChatImage Primary image to display above the roll result in the chat message. 
-   * @param {Actor | undefined} args.actor Optional. Actor associated with the roll result. 
+   * @param {String | undefined} args.propertyPath Property path identifying a property that contains a roll-formula. 
+   * IMPORTANT: If this argument is left undefined, then the target object MUST define a method 'getRollData()', which returns a `Sum` instance. 
+   * @param {String | undefined} args.primaryChatTitle Primary title to display above the roll result in the chat message. 
+   * @param {String | undefined} args.primaryChatImage Primary image to display above the roll result in the chat message. 
+   * @param {String | undefined} args.secondaryChatTitle Primary title to display above the roll result in the chat message. 
+   * @param {String | undefined} args.secondaryChatImage Primary image to display above the roll result in the chat message. 
+   * @param {Actor | undefined} args.actor  Actor associated with the roll result. 
    * @param {String | undefined} args.localizedTooltip Localized tooltip. 
    */
   constructor(args = {}) {
@@ -140,18 +141,21 @@ export default class ButtonRollViewModel extends ButtonViewModel {
   }
 
   /**
+   * @param {Event} event
+   * 
    * @returns {DicePoolRollResult | Object} The rolled result. 
    * 
-   * @override
-   * @see {ButtonViewModel._onClick}
-   * @async
    * @throws {Error} InvalidStateException - Thrown, if the rollType is unrecognized. 
    * @throws {Error} InvalidStateException - Thrown, if the rollType is 'generic' and the property path
    * is undefined. 
    * @throws {Error} InvalidStateException - Thrown, if the property path is undefined and there is no 
    * 'getRollData()' method defined on the target object. 
+   * 
+   * @async
+   * @protected
+   * @override
    */
-  async _onClick() {
+  async _onClick(event) {
     if (this.isEditable !== true) return;
 
     // Prepare the dialog. 

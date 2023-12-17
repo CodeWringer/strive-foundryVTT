@@ -244,6 +244,35 @@
   }
 }
 
+.auto-margin {
+  > * {
+    margin-right: 6px;
+    margin-bottom: 6px;
+  }
+  > :last-child {
+    margin-right: 0;
+    margin-bottom: 0;
+  }
+
+  &-h {
+    > * {
+      margin-right: 6px;
+    }
+    > :last-child {
+      margin-right: 0;
+    }
+  }
+  
+  &-v {
+    > * {
+      margin-bottom: 6px;
+    }
+    > :last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
 .scrollable-height {
   &-sm {
     overflow-x: hidden;

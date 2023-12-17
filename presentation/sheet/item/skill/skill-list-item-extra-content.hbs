@@ -1,0 +1,53 @@
+{{!-- Parameters:
+viewModel: {SkillListItemViewModel}
+--}}
+{{!-- Row --}}
+{{!-- Damage --}}
+<div class="flex flex-row sheet-block{{#if viewModel.hideDamage}} hidden{{/if}}">
+  <div class="flex flex-center">
+    <span class="button light square font-size-default flex flex-center" id="{{viewModel.id}}-damage-info">
+      <i class="far fa-question-circle info-button"></i>
+    </span>
+  </div>
+  {{> damageDefinitionList viewModel=viewModel.vmDamageDefinitionList}}
+</div>
+{{!-- Row --}}
+{{!-- Prerequisites --}}
+<div class="flex flex-column margin-b-sm{{#if (neq viewModel.showPrerequisites true)}} hidden{{/if}}">
+  {{#> header3 showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.skill.prerequisite.plural"}}{{/header3}}
+  <ul class="unstyled-list auto-margin-v">
+    {{#each viewModel.prerequisites as |prerequisite index|}}
+    <li class="flex flex-row flex-middle">
+      <span class="flex flex-row flex-grow">
+        {{#> readOnlyValue cssClass="flex flex-center"}}{{prerequisite.name}}{{/readOnlyValue}}
+      </span>
+      <span style="width: 144px">
+        {{#> label showFancyFont=../viewModel.showFancyFont}}{{localize "ambersteel.character.advancement.minimum"}}{{/label}}
+      </span>
+      <span class="width-md">
+        {{#> readOnlyValue cssClass="font-size-md flex flex-center"}}{{prerequisite.minimumLevel}}{{/readOnlyValue}}
+      </span>
+    </li>
+    {{/each}}
+  </ul>
+</div>
+{{!-- Row --}}
+<div class="flex flex-row flex-middle auto-margin-h sheet-block">
+  {{!-- Category --}}
+  {{#> labeledControl viewModel=viewModel.vmTfCategory localizedIconToolTip=(localize "ambersteel.general.category") iconClass="ico-category-solid" cssClass="" }}
+    <div class="width-xxl">
+      {{> inputTextField }}
+    </div>
+  {{/labeledControl}}
+  {{!-- Tags --}}
+  {{#> labeledControl viewModel=viewModel.vmTags localizedIconToolTip=(localize "ambersteel.general.tags.label") iconClass="ico-tags-solid" cssClass="" }}
+    {{> inputTags }}
+  {{/labeledControl}}
+</div>
+{{!-- Row --}}
+{{!-- Skill Abilites --}}
+{{#if viewModel.showSkillAbilities}}
+  {{#with viewModel.skillAbilitiesTemplate as |template|}}
+  {{> (template) viewModel=../viewModel.vmSkillAbilityTable }}
+  {{/with}}
+{{/if}}

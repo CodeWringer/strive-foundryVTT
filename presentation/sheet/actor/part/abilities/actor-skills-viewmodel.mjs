@@ -1,6 +1,8 @@
+import { SEARCH_MODES, Search, SearchItem } from "../../../../../business/search/search.mjs"
 import { SKILL_TAGS } from "../../../../../business/tags/system-tags.mjs"
 import { validateOrThrow } from "../../../../../business/util/validation-utility.mjs"
 import ButtonAddViewModel from "../../../../component/button-add/button-add-viewmodel.mjs"
+import InputSearchTextViewModel from "../../../../component/input-search/input-search-viewmodel.mjs"
 import DocumentListItemOrderDataSource from "../../../../component/sortable-list/document-list-item-order-datasource.mjs"
 import SortableListViewModel from "../../../../component/sortable-list/sortable-list-viewmodel.mjs"
 import { TEMPLATES } from "../../../../templatePreloader.mjs"
@@ -55,6 +57,64 @@ export default class ActorSkillsViewModel extends ViewModel {
     // Child view models. 
     const thiz = this;
 
+    this.vmSearch = new InputSearchTextViewModel({
+      id: "vmSearch",
+      parent: this,
+      isEditable: true,
+      onChange: (_, newValue) => {
+        const skills = this.document.skills.innate
+          .concat(this.document.skills.learning)
+          .concat(this.document.skills.known);
+
+        let innateListElements = [];
+        if (this.hideInnateSkills === false) {
+          innateListElements = this.vmInnateSkillList.element.find("> li");
+        }
+        
+        const knownListElements = this.vmKnownSkillList.element.find("> li");
+
+        let learningListElements = [];
+        if (this.hideLearningSkills === false) {
+          learningListElements = this.vmLearningSkillList.element.find("> li");
+        }
+
+        const elements = [];
+        for (const element of innateListElements) {
+          elements.push(element);
+        }
+        for (const element of knownListElements) {
+          elements.push(element);
+        }
+        for (const element of learningListElements) {
+          elements.push(element);
+        }
+
+        const trimmedSearchTerm = newValue.trim();
+        const searchItems = skills.map(it => new SearchItem({
+            id: it.id,
+            term: it.name,
+          }));
+
+        if (trimmedSearchTerm.length > 0) {
+          const results = new Search().search(searchItems, trimmedSearchTerm, SEARCH_MODES.STRICT_CASE_INSENSITIVE);
+
+          for (const result of results) {
+            const element = elements.find(it => it.id === result.id);
+            if (result.score > 0) {
+              $(element).removeClass("hidden");
+            } else {
+              $(element).addClass("hidden");
+            }
+          }
+        } else {
+          // Reset visibilities. 
+          for (const element of elements) {
+            $(element).removeClass("hidden");
+          }
+        }
+      },
+    });
+
     this.innateSkillViewModels = [];
     this.innateSkillViewModels = this._getInnateSkillViewModels();
     if (this.hideInnateSkills === false) {
@@ -69,7 +129,7 @@ export default class ActorSkillsViewModel extends ViewModel {
           listName: "innateSkills",
         }),
         listItemViewModels: this.innateSkillViewModels,
-        listItemTemplate: TEMPLATES.SKILL_LIST_ITEM,
+        listItemTemplate: SkillListItemViewModel.TEMPLATE,
       });
     }
 
@@ -86,7 +146,7 @@ export default class ActorSkillsViewModel extends ViewModel {
         listName: "learningSkills",
       }),
       listItemViewModels: this.learningSkillViewModels,
-      listItemTemplate: TEMPLATES.SKILL_LIST_ITEM,
+      listItemTemplate: SkillListItemViewModel.TEMPLATE,
       vmBtnAddItem: new ButtonAddViewModel({
         id: "vmBtnAddLearningSkill",
         parent: this,
@@ -115,7 +175,7 @@ export default class ActorSkillsViewModel extends ViewModel {
         listName: "knownSkills",
       }),
       listItemViewModels: this.knownSkillViewModels,
-      listItemTemplate: TEMPLATES.SKILL_LIST_ITEM,
+      listItemTemplate: SkillListItemViewModel.TEMPLATE,
       vmBtnAddItem: new ButtonAddViewModel({
         id: "vmBtnAddKnownSkill",
         parent: this,

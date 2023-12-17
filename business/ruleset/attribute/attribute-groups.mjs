@@ -8,6 +8,8 @@ import { ATTRIBUTES } from "./attributes.mjs";
  * @property {String} localizableName Localization key. 
  * @property {String} localizableAbbreviation Localization key for the abbreviation. 
  * @property {Object} attributes Attributes contained in the group. 
+ * @property {String | undefined} iconClass CSS class of the icon to display. 
+ * E. g. `"ico-strongarm-solid"` or `"fas fa-brain"`
  */
 export class AttributeGroup {
   constructor(args = {}) {
@@ -15,6 +17,7 @@ export class AttributeGroup {
     this.localizableName = args.localizableName;
     this.localizableAbbreviation = args.localizableAbbreviation;
     this.attributes = args.attributes;
+    this.iconClass = args.iconClass;
   }
 }
 
@@ -32,6 +35,7 @@ export const ATTRIBUTE_GROUPS = {
     name: "physical",
     localizableName: "ambersteel.character.attributeGroup.physical.label",
     localizableAbbreviation: "ambersteel.character.attributeGroup.physical.abbreviation",
+    iconClass: "ico-strongarm-solid",
     attributes: {
       agility: ATTRIBUTES.agility,
       endurance: ATTRIBUTES.endurance,
@@ -44,6 +48,7 @@ export const ATTRIBUTE_GROUPS = {
     name: "mental",
     localizableName: "ambersteel.character.attributeGroup.mental.label",
     localizableAbbreviation: "ambersteel.character.attributeGroup.mental.abbreviation",
+    iconClass: "ico-brain-solid",
     attributes: {
       intelligence: ATTRIBUTES.intelligence,
       wisdom: ATTRIBUTES.wisdom,
@@ -54,6 +59,7 @@ export const ATTRIBUTE_GROUPS = {
     name: "social",
     localizableName: "ambersteel.character.attributeGroup.social.label",
     localizableAbbreviation: "ambersteel.character.attributeGroup.social.abbreviation",
+    iconClass: "ico-hand-shake-solid",
     attributes: {
       empathy: ATTRIBUTES.empathy,
       oratory: ATTRIBUTES.oratory,
