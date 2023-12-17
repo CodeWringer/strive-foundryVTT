@@ -3,6 +3,7 @@ viewModel: {ActorSkillsViewModel}
 cssClass: {undefined | String}
 --}}
 <section id="{{viewModel.id}}" class="{{cssClass}}">
+  {{> inputSearch viewModel=viewModel.vmSearch }}
   {{!-- Innate Skills --}}
   {{#if viewModel.hideInnateSkills}}<div class="hidden">{{/if}}
     {{#> header1 showFancyFont=viewModel.showFancyFont cssClass="flex flex-row"}}
