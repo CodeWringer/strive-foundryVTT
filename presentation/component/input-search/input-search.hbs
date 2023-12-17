@@ -1,0 +1,13 @@
+{{!-- Required context:
+viewModel: {InputSearchTextViewModel}
+cssClass: {String | undefined}
+--}}
+<div
+  class="custom-system-edit flex flex-row flex-middle{{#if cssClass}} {{cssClass}}{{/if}}" 
+  id="{{viewModel.id}}-container" 
+>
+  <label for="{{viewModel.id}}" class="flex flex-center pad-sm margin-r-md">
+    <i class="fas fa-search"></i>
+  </label>
+  <input id="{{viewModel.id}}" style="text-align: center;" type="text" name="search" value="{{viewModel.value}}" placeholder="{{localize "ambersteel.general.search"}}" autocomplete="off">
+</div>
