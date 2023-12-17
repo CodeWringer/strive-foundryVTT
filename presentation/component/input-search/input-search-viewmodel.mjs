@@ -43,4 +43,17 @@ export default class InputSearchTextViewModel extends InputViewModel {
 
     this._value = args.value ?? "";
   }
+
+  /** @override */
+  activateListeners(html) {
+    super.activateListeners(html);
+
+    this.element.keydown((event) => {
+      if (event.keyCode === 13) {
+        event.preventDefault();
+        this._onChange(event);
+        return false;
+      }
+    });
+  }
 }
