@@ -5,7 +5,7 @@ cssClass: {String | undefined}
 <div class="flex flex-row flex-grow{{#if cssClass}} {{cssClass}}{{/if}}">
   <div class="grid grid-2col grid-gap-md">
     {{!-- Damage formula --}}
-    {{#> labeledControl viewModel=viewModel.vmTfDamage localizedIconToolTip=(localize "ambersteel.damageDefinition.label") iconClass="ico-damage-roll-solid" cssClass="" }}
+    {{#> labeledControl viewModel=viewModel.vmTfDamage localizedIconToolTip=(localize "ambersteel.damageDefinition.formula") iconClass="ico-damage-roll-solid" cssClass="" }}
       {{> inputTextField }}
     {{/labeledControl}}
     {{!-- Damage type --}}

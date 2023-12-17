@@ -257,7 +257,7 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
         this.document.damage = newValue;
       },
       resolveFormulaContext: this.getRootOwningDocument(this.document),
-      chatTitle: `${game.i18n.localize("ambersteel.damageDefinition.label")} - ${this.document.name}`,
+      chatTitle: `${game.i18n.localize("ambersteel.damageDefinition.formula")} - ${this.document.name}`,
     });
     if (this.showSkillAbilities === true) {
       this.vmSkillAbilityTable = new SkillAbilityTableViewModel({

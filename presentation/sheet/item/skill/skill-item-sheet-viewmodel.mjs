@@ -285,7 +285,7 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
         this.document.damage = newValue;
       },
       resolveFormulaContext: this._getRootOwningDocument(this.document),
-      chatTitle: `${game.i18n.localize("ambersteel.damageDefinition.label")} - ${this.document.name}`,
+      chatTitle: `${game.i18n.localize("ambersteel.damageDefinition.formula")} - ${this.document.name}`,
     });
 
     this.prerequisiteViewModels = this._getPrerequisiteViewModels();
