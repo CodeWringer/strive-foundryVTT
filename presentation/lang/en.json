@@ -261,6 +261,10 @@
             "crossbow": "Crossbow",
             "firearm": "Firearm"
           }
+        },
+        "location": {
+          "label": "Location",
+          "placeholder": "Home / At camp / etc."
         }
       },
       "attributeGroup": {

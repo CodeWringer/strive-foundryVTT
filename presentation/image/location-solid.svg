@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="48"
+   height="48"
+   viewBox="0 0 48 48"
+   version="1.1"
+   id="svg1"
+   xml:space="preserve"
+   inkscape:version="1.3 (0e150ed6c4, 2023-07-21)"
+   sodipodi:docname="location-solid.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"><sodipodi:namedview
+     id="namedview1"
+     pagecolor="#505050"
+     bordercolor="#eeeeee"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#505050"
+     inkscape:document-units="px"
+     inkscape:zoom="15.839192"
+     inkscape:cx="19.918946"
+     inkscape:cy="27.937031"
+     inkscape:window-width="2560"
+     inkscape:window-height="1377"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" /><defs
+     id="defs1" /><g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"><rect
+       style="display:none;fill:none;stroke:#000000;stroke-width:8;stroke-dasharray:none;stroke-opacity:1"
+       id="rect1"
+       width="48"
+       height="48"
+       x="0"
+       y="0"
+       inkscape:label="border spacer"
+       sodipodi:insensitive="true" /><path
+       style="fill:none;stroke:#ffffff;stroke-width:3.68008;stroke-linecap:round;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1"
+       d="m 7.1387565,42.231115 c 9.6715015,-6.400517 24.2887105,-6.254623 33.7224865,0"
+       id="path1"
+       sodipodi:nodetypes="cc" /><path
+       id="path2"
+       style="fill:#ffffff;stroke-width:4.9681;stroke-linecap:round;stroke-linejoin:round;fill-opacity:1"
+       d="m 24.407631,3.9288451 c -4.949396,-1e-7 -8.961975,4.0125776 -8.961975,8.9619749 0,4.949396 4.410874,16.362736 8.961975,21.109105 4.418334,-4.679987 8.961974,-16.159709 8.961974,-21.109105 0,-4.9493973 -4.012578,-8.961975 -8.961974,-8.9619749 z m 0,3.778651 a 4.2715184,4.2715184 0 0 1 4.271518,4.2715189 4.2715184,4.2715184 0 0 1 -4.271518,4.271518 4.2715184,4.2715184 0 0 1 -4.271519,-4.271518 4.2715184,4.2715184 0 0 1 4.271519,-4.2715189 z" /></g></svg>
