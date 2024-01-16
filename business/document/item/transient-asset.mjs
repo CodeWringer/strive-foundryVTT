@@ -18,6 +18,7 @@ import { ASSET_TAGS } from "../../tags/system-tags.mjs";
  * @property {Number} maxQuantity
  * @property {Boolean} isOnPerson
  * @property {Number} bulk
+ * @property {String} location
  * @property {Boolean} isProperty Returns `true`, if the asset is in the 
  * "property" section on a character sheet. 
  * * Read-only
@@ -75,6 +76,15 @@ export default class TransientAsset extends TransientBaseItem {
   set bulk(value) {
     this.document.system.bulk = value;
     this.updateByPath("system.bulk", value);
+  }
+
+  /**
+   * @type {String}
+   */
+  get location() { return this.document.system.location; }
+  set location(value) {
+    this.document.system.location = value;
+    this.updateByPath("system.location", value);
   }
 
   /** @override */
