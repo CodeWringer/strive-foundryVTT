@@ -199,6 +199,9 @@
     &-lg {
       margin-top: $padding-lg;
     }
+    &-xl {
+      margin-top: $padding-xl;
+    }
   }
   &-b {
     &-xs {
@@ -212,6 +215,9 @@
     }
     &-lg {
       margin-bottom: $padding-lg;
+    }
+    &-xl {
+      margin-bottom: $padding-xl;
     }
   }
   &-l {
@@ -227,6 +233,9 @@
     &-lg {
       margin-left: $padding-lg;
     }
+    &-xl {
+      margin-left: $padding-xl;
+    }
   }
   &-r {
     &-xs {
@@ -240,6 +249,9 @@
     }
     &-lg {
       margin-right: $padding-lg;
+    }
+    &-xl {
+      margin-right: $padding-xl;
     }
   }
 }
