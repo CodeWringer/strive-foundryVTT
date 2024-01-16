@@ -13,11 +13,9 @@ cssClass: {undefined | String}
     {{!-- Slot Bulk --}}
     {{#if viewModel.showSlotBulk}}
     <div class="flex flex-row flex-middle font-size-xs">
-      <i class="ico dark ico-bulk-solid" title="{{localize "ambersteel.character.asset.bulk"}}"></i>
       <span class="flex flex-row flex-middle">
         {{#> admonishReadOnlyValue cssClass="pad-l-md pad-r-md" admonish=viewModel.hasExceededBulk}}{{viewModel.currentBulk}} / {{viewModel.moddedMaxBulk}}{{/admonishReadOnlyValue}}
       </span>
-      <i class="ico dark ico-max-bulk-solid" title="{{localize "ambersteel.character.asset.maxBulk"}}"></i>
     </div>
     {{/if}}
     <div class="flex flex-grow"></div>
