@@ -300,7 +300,7 @@ export class DicePoolRollResult {
         .reverse()
         .map(face => { 
           return {
-            cssClass: new Ruleset().isPositive(face) === true ? CSS_CLASS_NEGATIVE : CSS_CLASS_POSITIVE,
+            cssClass: new Ruleset().isPositive(face) === true ? CSS_CLASS_POSITIVE : CSS_CLASS_NEGATIVE,
             content: face,
           };
         });
