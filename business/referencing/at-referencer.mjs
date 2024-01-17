@@ -47,8 +47,8 @@ export default class AtReferencer {
     const result = new Map();
 
     // Get all references from the given string. 
-    const references = this._getReferencesIn(str);
-    if (references === undefined) {
+    const references = this.getReferencesIn(str);
+    if (references.length === 0) {
       return result;
     }
     
@@ -196,18 +196,16 @@ export default class AtReferencer {
   /**
    * Returns all `@` denoted references in the given string. 
    * 
-   * Returns `undefined`, if no references could be found. 
+   * Returns an empty array, if no references could be found. 
    * 
    * @param {String} str A string to look in for references. 
    * 
-   * @returns {Array<Object> | undefined}
-   * 
-   * @private
+   * @returns {Array<String>}
    */
-  _getReferencesIn(str) {
+  getReferencesIn(str) {
     const references = str.match(AtReferencer.REGEX_PATTERN_AT_REFERENCE);
     if (references === undefined || references === null) {
-      return undefined;
+      return [];
     } else {
       return references;
     }
