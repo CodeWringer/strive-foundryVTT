@@ -95,14 +95,16 @@ export default class DicePool {
     // Determine outcome type and degree of success/failure. 
     let degree = 0;
     let outcomeType = DICE_POOL_RESULT_TYPES.NONE; // Ob 0 or invalid test. 
-    if (positives.length >= obstacle) { // Complete success
-      outcomeType = DICE_POOL_RESULT_TYPES.SUCCESS;
-      degree = positives.length - obstacle;
-    } else if (positives.length > 0) { // Partial failure
-      outcomeType = DICE_POOL_RESULT_TYPES.PARTIAL;
-      degree = positives.length;
-    } else {
-      outcomeType = DICE_POOL_RESULT_TYPES.FAILURE;
+    if (obstacle > 0) {
+      if (positives.length >= obstacle) { // Complete success
+        outcomeType = DICE_POOL_RESULT_TYPES.SUCCESS;
+        degree = positives.length - obstacle;
+      } else if (positives.length > 0) { // Partial failure
+        outcomeType = DICE_POOL_RESULT_TYPES.PARTIAL;
+        degree = positives.length;
+      } else {
+        outcomeType = DICE_POOL_RESULT_TYPES.FAILURE;
+      }
     }
 
     return new DicePoolRollResult({
