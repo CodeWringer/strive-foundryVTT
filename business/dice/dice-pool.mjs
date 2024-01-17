@@ -3,7 +3,7 @@ import { VISIBILITY_MODES, VisibilityMode } from "../../presentation/chat/visibi
 import { TEMPLATES } from "../../presentation/templatePreloader.mjs";
 import Ruleset from "../ruleset/ruleset.mjs";
 import { Sum, SumComponent } from "../ruleset/summed-data.mjs";
-import { validateOrThrow } from "../util/validation-utility.mjs";
+import { isDefined, validateOrThrow } from "../util/validation-utility.mjs";
 import { ROLL_DICE_MODIFIER_TYPES, RollDiceModifierType } from "./roll-dice-modifier-types.mjs";
 import * as ChatUtil from "../../presentation/chat/chat-utility.mjs";
 import * as ConstantsUtils from "../util/constants-utility.mjs";
@@ -84,7 +84,13 @@ export default class DicePool {
     const evaluatedObstacle = await new RollFormulaResolver({
       formula: this.obstacle,
     }).evaluate();
-    const obstacle = parseInt(evaluatedObstacle.positiveTotal) + 1;
+    let obstacle = evaluatedObstacle.rawTotal;
+
+    const rgxIsPlainNumber = new RegExp("^\\d+$");
+    const isPlainObstacleNumber = isDefined(evaluatedObstacle.formula.match(rgxIsPlainNumber));
+    if (isPlainObstacleNumber !== true) {
+      obstacle = parseInt(evaluatedObstacle.positiveTotal) + 1;
+    }
 
     // Determine outcome type and degree of success/failure. 
     let degree = 0;
@@ -274,7 +280,9 @@ export class DicePoolRollResult {
 
     const diceComposition = this.getJoinedDiceCompositionString(this.dice, this.bonus);
     const totalNumberOfDice = this.getTotalNumberOfDiceString();
-    const isObstacleRolled = true; // TODO
+
+    const rgxIsPlainNumber = new RegExp("^\\d+$");
+    const isObstacleRolled = isDefined(this.evaluatedObstacle.formula.match(rgxIsPlainNumber)) === false;
     const evaluatedObstacleForDisplay = await this.evaluatedObstacle.renderForDisplay();
 
     // Render the results. 

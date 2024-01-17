@@ -18,7 +18,7 @@ export default class RollFormulaResolver {
    * @static
    * @type {RegExp}
    */
-  static REGEX_DIRTY_DIE = new RegExp("(?<dice>\\d+)\\s*(?<d>[dD])\\s*(?<face>\\d*)", "g");
+  static REGEX_DIRTY_DIE = new RegExp("(?<match>(?<dice>\\d+)\\s*(?<d>[dD])\\s*(?<face>\\d*))", "g");
 
   /**
    * Returns a regexp that can be used to identify a single well-formed die expression. 
@@ -64,10 +64,10 @@ export default class RollFormulaResolver {
     let previousMatch = undefined;
     for (const match of matches) {
       const diceFaceCount = match.groups.face.length > 0 ? match.groups.face : "6";
-      const composedDiceStatement = `${match.groups.dice}${match.groups.d}${diceFaceCount}`;
+      const composedDiceStatement = `${match.groups.dice}D${diceFaceCount}`;
 
       if (isDefined(previousMatch)) {
-        const snippet = atFreeFormula.substring(previousMatch.index + previousMatch.length, match.index).trim();
+        const snippet = atFreeFormula.substring(previousMatch.index + previousMatch.groups.match.length, match.index).trim();
         if (snippet.length > 0) {
           snippets.push(snippet);
         }
@@ -82,7 +82,7 @@ export default class RollFormulaResolver {
       previousMatch = match;
     }
     if (isDefined(previousMatch)) {
-      const snippet = atFreeFormula.substring(previousMatch.index + previousMatch.length).trim();
+      const snippet = atFreeFormula.substring(previousMatch.index + previousMatch.groups.match.length).trim();
       if (snippet.length > 0) {
         snippets.push(snippet);
       }

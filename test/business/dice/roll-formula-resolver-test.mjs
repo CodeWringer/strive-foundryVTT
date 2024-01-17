@@ -29,6 +29,30 @@ describe("RollFormulaResolver", () => {
       r.should.be.eql(expected);
     });
 
+    it("resolves '3d' to '3D6'", () => {
+      // Given
+      const formula = "3d";
+      const expected = "3D6";
+      // When
+      const r = new RollFormulaResolver({
+        formula: formula,
+      }).resolve();
+      // Then
+      r.should.be.eql(expected);
+    });
+
+    it("resolves '3d + 2' to '3D6 + 2'", () => {
+      // Given
+      const formula = "3d + 2";
+      const expected = "3D6 + 2";
+      // When
+      const r = new RollFormulaResolver({
+        formula: formula,
+      }).resolve();
+      // Then
+      r.should.be.eql(expected);
+    });
+
     it("resolves '3D3' to '3D3'", () => {
       // Given
       const formula = "3D3";
