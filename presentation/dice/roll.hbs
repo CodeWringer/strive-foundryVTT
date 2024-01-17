@@ -17,9 +17,8 @@ cssClass: {undefined | String}
 showBackFire: {Boolean | String}
 obstacle: {Number}
 isObstacleRolled: {Boolean}
-numberOfObstacleDice: {Number | undefined}
-obstacleRolls: {Array<Object> | undefined}
-rolledObstacle: {Number | undefined}
+evaluatedObstacle: {EvaluatedRollFormula}
+evaluatedObstacleForDisplay: {String}
 --}}
 <div class="dice-roll-chat-message-container{{#if cssClass}} {{cssClass}}{{/if}}">
   {{!-- Header --}}
@@ -56,19 +55,15 @@ rolledObstacle: {Number | undefined}
   {{!-- Obstacle (if rolled for) --}}
   {{#if isObstacleRolled}}
   <div class="sheet-block">
-    <div class="dice-number">
-      {{localize "ambersteel.roll.obstacle.numberOfDice"}}: {{numberOfObstacleDice}}
-    </div>
+    <p>
+      {{evaluatedObstacle.formula}}
+    </p>
     <div class="dice-rolls-container">
-      <ol class="dice-rolls">
-        {{#each obstacleRolls as | obstacleRoll |}}
-          <li class="roll die d6 {{obstacleRoll.cssClass}}">{{obstacleRoll.content}}</li>
-        {{/each}}
-      </ol>
+      {{{evaluatedObstacleForDisplay}}}
     </div>
-    <div>
-      {{localize "ambersteel.roll.obstacle.result"}}: {{rolledObstacle}} + 1 = {{obstacle}}
-    </div>
+    <p>
+      {{localize "ambersteel.roll.obstacle.abbreviation"}}: {{evaluatedObstacle.positiveTotal}} + 1 = {{obstacle}}
+    </p>
   </div>
   {{/if}}
   {{!-- Dice --}}
