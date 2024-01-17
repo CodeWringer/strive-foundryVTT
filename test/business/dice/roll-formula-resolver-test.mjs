@@ -5,6 +5,18 @@ import RollFormulaResolver from '../../../business/dice/roll-formula-resolver.mj
 
 describe("RollFormulaResolver", () => {
   describe("resolve", () => {
+    it("resolves '0' to '0'", () => {
+      // Given
+      const formula = "0";
+      const expected = "0";
+      // When
+      const r = new RollFormulaResolver({
+        formula: formula,
+      }).resolve();
+      // Then
+      r.should.be.eql(expected);
+    });
+
     it("resolves '3D' to '3D6'", () => {
       // Given
       const formula = "3D";
@@ -43,8 +55,8 @@ describe("RollFormulaResolver", () => {
 
     it("resolves '3 D + 2 D' to '3D6 + 2D6'", () => {
       // Given
-      const formula = "3 D + 2 D";
-      const expected = "3D6 + 2D6";
+      const formula = "3 D - 1 + 2 D";
+      const expected = "3D6 - 1 + 2D6";
       // When
       const r = new RollFormulaResolver({
         formula: formula,
