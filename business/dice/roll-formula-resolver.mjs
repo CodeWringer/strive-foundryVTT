@@ -183,7 +183,7 @@ export class EvaluatedRollFormula {
    * @async
    */
   async renderForDisplay() {
-    let result = '<div class="flex flex-row flex-middle">';
+    let result = '<div class="flex flex-row flex-middle flex-wrap">';
     
     for (const term of this.terms) {
       if (isDefined(term.positives)) {
