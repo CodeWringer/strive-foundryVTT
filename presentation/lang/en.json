@@ -487,12 +487,12 @@
           "singular": "Scar"
         },
         "state": {
-          "label": "Health State",
+          "label": "Condition",
           "intensity": "Intensity",
           "limit": "Limit"
         },
         "states": {
-          "label": "States",
+          "label": "Conditions",
           "berserk": "Berserk",
           "burning": "Burning",
           "bleeding": "Bleeding",
@@ -818,12 +818,12 @@
         "hint": "Toggles debug mode on - increases log verbosity, at the cost of performance."
       },
       "healthStates": {
-        "label": "Health State Customization",
-        "hint": "Allows defining new and hiding system default health states.",
-        "configureSystemDefaults": "Configure system health state visibilities",
-        "configureCustom": "Define custom health states",
+        "label": "Condition Customization",
+        "hint": "Allows defining new and hiding system default conditions.",
+        "configureSystemDefaults": "Configure system condition visibilities",
+        "configureCustom": "Define custom conditions",
         "add": {
-          "label": "Add Custom Health State"
+          "label": "Add Custom Condition"
         }
       }
     }
