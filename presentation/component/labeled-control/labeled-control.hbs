@@ -7,7 +7,7 @@ localizedIconToolTip: String | undefined
 --}}
 <div class="flex flex-row flex-middle{{#if cssClass}} {{cssClass}}{{/if}}">
   {{#if (or iconClass localizedLabel)}}
-  <label class="flex flex-middle margin-r-sm font-size-default{{#if viewModel.showFancyFont}} fancy-font{{/if}}" for="{{viewModel.id}}">
+  <label class="flex flex-middle {{#if localizedLabel}}margin-r-lg{{else}}margin-r-sm{{/if}} font-size-default{{#if viewModel.showFancyFont}} fancy-font{{/if}}" for="{{viewModel.id}}">
     {{#if iconClass}}
     <i class="ico {{iconClass}} dark"{{#if localizedIconToolTip}} title="{{localizedIconToolTip}}"{{/if}}></i>
     {{/if}}

@@ -1,6 +1,7 @@
 import KeyValuePair from "../../../common/key-value-pair.mjs";
 import { getGroupForAttributeByName } from "../../ruleset/attribute/attribute-groups.mjs";
 import { ATTRIBUTES } from "../../ruleset/attribute/attributes.mjs";
+import ChallengeRating from "../../ruleset/attribute/challenge-rating.mjs";
 import { ACTOR_SUBTYPE } from "./actor-subtype.mjs";
 import TransientBaseCharacterActor from "./transient-base-character-actor.mjs";
 
@@ -14,8 +15,8 @@ import TransientBaseCharacterActor from "./transient-base-character-actor.mjs";
  * @property {Boolean} progressionVisible
  * * default `false`
  * 
- * @property {Array<KeyValuePair>} challengeRatings
- * @property {Array<KeyValuePair>} attributeGroupExpansionStates 
+ * @property {Array<KeyValuePair<String, ChallengeRating>>} challengeRatings
+ * @property {Array<KeyValuePair<String, Boolean>>} attributeGroupExpansionStates 
  */
 export default class TransientNpc extends TransientBaseCharacterActor {
   /** @override */
@@ -32,7 +33,7 @@ export default class TransientNpc extends TransientBaseCharacterActor {
       const attributeGroup = getGroupForAttributeByName(attributeName);
       const isCrActive = this.getIsCrActiveFor(attributeGroup.name);
       if (isCrActive === true) {
-        baseInitiative += parseInt(this.getCrFor(attributeGroup.name));
+        baseInitiative += parseInt(this.getCrFor(attributeGroup.name).modified);
       } else {
         baseInitiative += parseInt(this.attributes.find(it => it.name === attributeName).modifiedLevel);
       }
@@ -57,9 +58,12 @@ export default class TransientNpc extends TransientBaseCharacterActor {
 
   get challengeRatings() {
     return (this.document.system.challengeRatings ?? []).map(dto => 
-      KeyValuePair.fromDto(dto)
+      new KeyValuePair(dto.key, ChallengeRating.fromDto(dto.value))
     );
   }
+  /**
+   * @param {Array<KeyValuePair<String, ChallengeRating>>} value
+   */
   set challengeRatings(value) {
     this.updateByPath("system.challengeRatings", value.map(it => it.toDto()));
   }
@@ -101,10 +105,10 @@ export default class TransientNpc extends TransientBaseCharacterActor {
    * 
    * @param {String} attributeGroupName Name of the attribute group. 
    * 
-   * @returns {Number}
+   * @returns {ChallengeRating}
    */
   getCrFor(attributeGroupName) {
-    return (this.challengeRatings.find(it => it.key === attributeGroupName) ?? {}).value ?? 0;
+    return ((this.challengeRatings.find(it => it.key === attributeGroupName) ?? {}).value ?? new ChallengeRating());
   }
 
   /**
@@ -119,7 +123,7 @@ export default class TransientNpc extends TransientBaseCharacterActor {
     if (attributeGroup !== undefined) {
       const isCrActive = this.getIsCrActiveFor(attributeGroup.name);
       if (isCrActive === true) {
-        return this.getCrFor(attributeGroup.name);
+        return this.getCrFor(attributeGroup.name).modified;
       }
     }
     

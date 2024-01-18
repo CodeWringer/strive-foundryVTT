@@ -80,10 +80,10 @@ export default class ActorChatMessageViewModel extends ViewModel {
         const isExpanded = this.document.getIsExpandedFor(attributeGroup.name);
         if (isExpanded === true) continue;
 
-        const challengeRating = ((this.document.challengeRatings.find(it => it.key === attributeGroup.name) ?? {}).value) ?? 0;
+        const challengeRating = this.document.getCrFor(attributeGroup.name);
         this.challengeRatings.push({
           localizedLabel: game.i18n.localize(attributeGroup.localizableName),
-          value: challengeRating,
+          value: challengeRating.modified,
         });
       }
     }

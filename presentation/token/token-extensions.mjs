@@ -43,6 +43,7 @@ export default class TokenExtensions {
    */
   static _showChallengeRatings(token) {
     // Get the system's actor extensions object. 
+    // This is assumed to be a npc type actor. 
     const actor = token.actor.getTransientObject();
     
     // Gather challenge ratings. 
@@ -53,7 +54,7 @@ export default class TokenExtensions {
       const isCrActive = actor.getIsCrActiveFor(attributeGroup.name);
       if (isCrActive !== true) continue;
 
-      const challengeRating = (actor.challengeRatings.find(it => it.key === attributeGroup.name) ?? {}).value ?? 0;
+      const challengeRating = actor.getCrFor(attributeGroup.name).modified;
       challengeRatings.push({
         attributeGroup: attributeGroup,
         value: challengeRating,

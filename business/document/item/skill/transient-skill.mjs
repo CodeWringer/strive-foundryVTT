@@ -134,7 +134,7 @@ export default class TransientSkill extends TransientBaseItem {
   get crLevel() {
     if (this.owningDocument !== undefined) {
       const group = getGroupForAttributeByName(this.relatedAttribute.name);
-      return this.owningDocument.getCrFor(group.name);
+      return this.owningDocument.getCrFor(group.name).modified;
     }
     return 0;
   }

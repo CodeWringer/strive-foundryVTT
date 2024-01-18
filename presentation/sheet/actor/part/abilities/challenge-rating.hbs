@@ -9,12 +9,23 @@ cssClass: {String}
     {{/if}}
     <span class="flex-grow flex-center font-size-lg font-bold{{#if viewModel.showFancyFont}} fancy-font{{/if}}">{{viewModel.localizedLabel}}</span>
   </a>
-  <div class="flex flex-row flex-middle">
-    <div class="width-min-lg">
-      {{#> label showFancyFont=viewModel.showFancyFont for=viewModel.vmCr.id}}{{localize "ambersteel.character.advancement.challengeRating.abbreviation"}}{{/label}}
-    </div>
-    <div class="width-md margin-l-md">
-      {{> inputNumberSpinner viewModel=viewModel.vmCr }}
+  <div class="flex flex-row auto-margin-h">
+    {{!-- CR --}}
+    {{#> labeledControl viewModel=viewModel.vmCr localizedLabel=(localize "ambersteel.character.advancement.challengeRating.abbreviation") }}
+      <div class="width-sm">
+        {{> inputNumberSpinner }}
+      </div>
+    {{/labeledControl}}
+    {{!-- CR Modifier --}}
+    {{#> labeledControl viewModel=viewModel.vmCrModifier localizedIconToolTip=(localize "ambersteel.character.advancement.challengeRating.modifier.label") iconClass="ico-modifier-solid" }}
+      <div class="width-sm">
+        {{> inputNumberSpinner }}
+      </div>
+    {{/labeledControl}}
+    {{!-- Modified CR --}}
+    <div class="flex flex-middle">
+      <span class="pad-t-md pad-b-md pad-r-md font-bold font-bold">=</span>
+      {{#> readOnlyValue cssClass="width-sm font-size-lg flex flex-center"}}{{viewModel.challengeRating.modified}}{{/readOnlyValue}}
     </div>
   </div>
 </div>
