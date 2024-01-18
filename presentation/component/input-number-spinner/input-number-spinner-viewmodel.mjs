@@ -36,6 +36,15 @@ export default class InputNumberSpinnerViewModel extends InputViewModel {
     Handlebars.registerPartial('inputNumberSpinner', `{{> "${InputNumberSpinnerViewModel.TEMPLATE}"}}`);
   }
 
+  /** @override */
+  get value() { return parseInt(this._value); }
+  /** @override */
+  set value(newValue) {
+    const oldValue = this._value;
+    this._value = parseInt(newValue);
+    this.onChange(oldValue, this._value);
+  }
+
   /**
    * Returns true, if the minimum value is defined. 
    * @type {Boolean}
