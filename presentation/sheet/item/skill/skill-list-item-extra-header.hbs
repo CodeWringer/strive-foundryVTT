@@ -7,8 +7,8 @@ viewModel: {SkillListItemViewModel}
     {{#> labeledControl viewModel=viewModel.vmDdRelatedAttribute localizedIconToolTip=(localize "ambersteel.character.skill.relatedAttribute") iconClass="ico-related-attribute-solid" cssClass="flex-grow" }}
       {{> inputDropDown }}
     {{/labeledControl}}
-    {{!-- Level --}}
     <div class="flex flex-row auto-margin-h">
+      {{!-- Level --}}
       {{#> labeledControl viewModel=viewModel.vmNsLevel localizedIconToolTip=(localize "ambersteel.character.advancement.level") iconClass="ico-level-solid" }}
         <div class="width-sm">
           {{> inputNumberSpinner }}
