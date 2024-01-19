@@ -6,7 +6,7 @@ import InputTagsViewModel from "../../../component/input-tags/input-tags-viewmod
 import LazyRichTextViewModel from "../../../component/lazy-rich-text/lazy-rich-text-viewmodel.mjs"
 import { TEMPLATES } from "../../../templatePreloader.mjs"
 import ViewModel from "../../../view-model/view-model.mjs"
-import SkillAbilityChatMessageViewModel from "../skill-ability/skill-ability-chat-message-viewmodel.mjs"
+import ExpertiseChatMessageViewModel from "../expertise/expertise-chat-message-viewmodel.mjs"
 
 export default class SkillChatMessageViewModel extends ViewModel {
   /** @override */
@@ -19,7 +19,7 @@ export default class SkillChatMessageViewModel extends ViewModel {
    * @type {Boolean}
    * @readonly
    */
-  get hasAbilities() { return this.document.abilities.length !== 0; }
+  get hasExpertises() { return this.document.expertises.length !== 0; }
   
   /**
    * @type {Boolean}
@@ -31,7 +31,7 @@ export default class SkillChatMessageViewModel extends ViewModel {
    * @type {String}
    * @readonly
    */
-  get visGroupId() { return `${this.id}-skill-ability-table-visgroup`; }
+  get visGroupId() { return `${this.id}-expertise-table-visgroup`; }
   
   /**
    * @type {String}
@@ -46,7 +46,7 @@ export default class SkillChatMessageViewModel extends ViewModel {
    * @type {String}
    * @readonly
    */
-  get templateSkillAbility() { return TEMPLATES.SKILL_ABILITY_CHAT_MESSAGE; }
+  get templateExpertise() { return TEMPLATES.EXPERTISE_CHAT_MESSAGE; }
 
   /**
    * Returns true, if the list of prerequisites should be rendered. 
@@ -79,12 +79,12 @@ export default class SkillChatMessageViewModel extends ViewModel {
    * @type {Boolean}
    * @default false
    */
-  skillAbilitiesInitiallyVisible = false;
+  expertisesInitiallyVisible = false;
 
   /**
-   * @type {Array<SkillAbilityChatMessageViewModel>}
+   * @type {Array<ExpertiseChatMessageViewModel>}
    */
-  skillAbilityViewModels = [];
+  expertiseViewModels = [];
 
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
@@ -104,7 +104,7 @@ export default class SkillChatMessageViewModel extends ViewModel {
     
     this.document = args.document;
 
-    this.skillAbilityViewModels = this.document.abilities.map(it => it.getChatViewModel({
+    this.expertiseViewModels = this.document.expertises.map(it => it.getChatViewModel({
       showParentSkill: false,
     }));
 
@@ -114,7 +114,7 @@ export default class SkillChatMessageViewModel extends ViewModel {
       isEditable: true,
       isSendable: this.isSendable,
       isOwner: this.isOwner,
-      visGroup: `${this.id}-abilities`,
+      visGroup: `${this.id}-expertises`,
       toggleSelf: true,
     });
     this.vmBtnToggleVisibilityCollapse = new ButtonToggleVisibilityViewModel({
@@ -123,7 +123,7 @@ export default class SkillChatMessageViewModel extends ViewModel {
       isEditable: true,
       isSendable: this.isSendable,
       isOwner: this.isOwner,
-      visGroup: `${this.id}-abilities`,
+      visGroup: `${this.id}-expertises`,
       toggleSelf: true,
     });
     this.vmLazyDescription = new LazyRichTextViewModel({

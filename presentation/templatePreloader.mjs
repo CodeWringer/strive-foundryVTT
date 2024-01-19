@@ -109,11 +109,11 @@ export const TEMPLATES = {
   SKILL_LIST_ITEM_EXTRA_CONTENT: `${basePathPresentation}/sheet/item/skill/skill-list-item-extra-content.hbs`,
   SKILL_LIST_ITEM_EXTRA_HEADER: `${basePathPresentation}/sheet/item/skill/skill-list-item-extra-header.hbs`,
   SKILL_PREREQUISITE_LIST_ITEM: `${basePathPresentation}/sheet/item/skill/skill-prerequisite-list-item.hbs`,
-  // Skill ability
-  SKILL_ABILITY_TABLE: `${basePathPresentation}/sheet/item/skill-ability/skill-ability-table.hbs`,
-  SKILL_ABILITY_LIST_ITEM_EXTRA_CONTENT: `${basePathPresentation}/sheet/item/skill-ability/skill-ability-list-item-extra-content.hbs`,
-  SKILL_ABILITY_LIST_ITEM_EXTRA_HEADER: `${basePathPresentation}/sheet/item/skill-ability/skill-ability-list-item-extra-header.hbs`,
-  SKILL_ABILITY_CHAT_MESSAGE: `${basePathPresentation}/sheet/item/skill-ability/skill-ability-chat-message.hbs`,
+  // Expertise
+  EXPERTISE_TABLE: `${basePathPresentation}/sheet/item/expertise/expertise-table.hbs`,
+  EXPERTISE_LIST_ITEM_EXTRA_CONTENT: `${basePathPresentation}/sheet/item/expertise/expertise-list-item-extra-content.hbs`,
+  EXPERTISE_LIST_ITEM_EXTRA_HEADER: `${basePathPresentation}/sheet/item/expertise/expertise-list-item-extra-header.hbs`,
+  EXPERTISE_CHAT_MESSAGE: `${basePathPresentation}/sheet/item/expertise/expertise-chat-message.hbs`,
   // Fate
   FATE_CARD: `${basePathPresentation}/sheet/item/fate-card/fate-card.hbs`,
   FATE_CARD_CHAT_MESSAGE: `${basePathPresentation}/sheet/item/fate-card/fate-card-chat-message.hbs`,

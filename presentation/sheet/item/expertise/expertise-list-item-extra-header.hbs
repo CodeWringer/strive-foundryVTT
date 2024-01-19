@@ -1,5 +1,5 @@
 {{!-- Parameters:
-viewModel: {SkillAbilityListItemViewModel}
+viewModel: {ExpertiseListItemViewModel}
 --}}
 <div class="flex flex-row flex-wrap margin-b-md auto-margin-h">
   <div class="flex flex-row flex-middle auto-margin-h sheet-block">
@@ -10,7 +10,7 @@ viewModel: {SkillAbilityListItemViewModel}
       </div>
     {{/labeledControl}}
     {{!-- Required Level --}}
-    {{#> labeledControl viewModel=viewModel.vmNsRequiredLevel localizedIconToolTip=(localize "ambersteel.character.skill.ability.requirement") iconClass="ico-level-solid" cssClass="" }}
+    {{#> labeledControl viewModel=viewModel.vmNsRequiredLevel localizedIconToolTip=(localize "ambersteel.character.skill.expertise.requirement") iconClass="ico-level-solid" cssClass="" }}
       <div class="width-sm">
         {{> inputNumberSpinner }}
       </div>

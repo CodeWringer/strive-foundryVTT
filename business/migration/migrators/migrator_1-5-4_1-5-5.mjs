@@ -168,7 +168,7 @@ export default class Migrator_1_5_4__1_5_5 extends AbstractMigrator {
           type: throwingSkillFromPack.type,
           img: throwingSkillFromPack.img,
           system: {
-            abilities: throwingSkillFromPack.abilities,
+            abilities: throwingSkillFromPack.expertises,
             category: throwingSkillFromPack.category,
             description: throwingSkillFromPack.description,
             displayOrders: throwingSkillFromPack.displayOrders,

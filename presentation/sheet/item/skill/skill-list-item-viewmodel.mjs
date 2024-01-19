@@ -20,8 +20,11 @@ import { TEMPLATES } from "../../../templatePreloader.mjs"
 import BaseListItemViewModel from "../base/base-list-item-viewmodel.mjs"
 import { DataFieldComponent } from "../base/datafield-component.mjs"
 import { TemplatedComponent } from "../base/templated-component.mjs"
-import SkillAbilityTableViewModel from "../skill-ability/skill-ability-table-viewmodel.mjs"
+import ExpertiseTableViewModel from "../expertise/expertise-table-viewmodel.mjs"
 
+/**
+ * @property {TransientSkill} document
+ */
 export default class SkillListItemViewModel extends BaseListItemViewModel {
   /**
    * @type {Array<ChoiceOption>}
@@ -30,11 +33,11 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
   get attributeOptions() { return ATTRIBUTES.asChoices(); }
 
   /**
-   * Returns true, if the skill ability list should be visible. 
+   * Returns true, if the expertise list should be visible. 
    * @type {Boolean}
    * @readonly
    */
-  get isSkillAbilityListVisible() { return (this.isEditable === true) || this.document.abilities.length !== 0 }
+  get isExpertiseListVisible() { return (this.isEditable === true) || this.document.expertises.length !== 0 }
 
   /**
    * Returns the current number of successes. 
@@ -51,11 +54,11 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
   get failures() { return this.document.advancementRequirements.failures; }
 
   /**
-   * Returns true, if the skill ability list should be rendered. 
+   * Returns true, if the expertise list should be rendered. 
    * @type {Boolean}
    * @readonly
    */
-  get showSkillAbilities() { return this.isEditable === true || this.document.abilities.length > 0; }
+  get showExpertises() { return this.isEditable === true || this.document.expertises.length > 0; }
   
   /**
    * Returns true, if the list of prerequisites should be rendered. 
@@ -259,18 +262,18 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
       resolveFormulaContext: this.getRootOwningDocument(this.document),
       chatTitle: `${game.i18n.localize("ambersteel.damageDefinition.formula")} - ${this.document.name}`,
     });
-    if (this.showSkillAbilities === true) {
-      this.vmSkillAbilityTable = new SkillAbilityTableViewModel({
-        id: "vmSkillAbilityTable",
+    if (this.showExpertises === true) {
+      this.vmExpertiseTable = new ExpertiseTableViewModel({
+        id: "vmExpertiseTable",
         parent: this,
         isEditable: this.isEditable,
         isSendable: this.isSendable,
         isOwner: this.isOwner,
         document: this.document,
-        skillAbilitiesInitiallyVisible: true,
+        expertisesInitiallyVisible: true,
       });
     }
-    this.skillAbilitiesTemplate = SkillAbilityTableViewModel.TEMPLATE;
+    this.expertisesTemplate = ExpertiseTableViewModel.TEMPLATE;
   }
 
   /** @override */
@@ -302,8 +305,8 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
           },
         }),
         isHidden: this.hideCondition,
-        placeholder: game.i18n.localize("ambersteel.character.skill.ability.condition.placeholder"),
-        localizedIconToolTip: game.i18n.localize("ambersteel.character.skill.ability.condition.label"),
+        placeholder: game.i18n.localize("ambersteel.character.skill.expertise.condition.placeholder"),
+        localizedIconToolTip: game.i18n.localize("ambersteel.character.skill.expertise.condition.label"),
         iconClass: "ico-condition-solid",
       }),
       new DataFieldComponent({
@@ -347,8 +350,8 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
           },
         }),
         isHidden: this.hideDistance,
-        placeholder: game.i18n.localize("ambersteel.character.skill.ability.distance.placeholder"),
-        localizedIconToolTip: game.i18n.localize("ambersteel.character.skill.ability.distance.label"),
+        placeholder: game.i18n.localize("ambersteel.character.skill.expertise.distance.placeholder"),
+        localizedIconToolTip: game.i18n.localize("ambersteel.character.skill.expertise.distance.label"),
         iconClass: "ico-distance-solid",
       }),
       new DataFieldComponent({
@@ -449,17 +452,17 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
             },
           ]
           // Toggle ap cost
-          .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.character.skill.ability.apCost", this.document, "apCost", 0))
+          .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.character.skill.expertise.apCost", this.document, "apCost", 0))
           // Toggle obstacle
           .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.roll.obstacle.label", this.document, "obstacle", ""))
           // Toggle opposed by
           .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.roll.obstacle.opposedBy.label", this.document, "opposedBy", ""))
           // Toggle distance
-          .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.character.skill.ability.distance.label", this.document, "distance", ""))
+          .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.character.skill.expertise.distance.label", this.document, "distance", ""))
           // Toggle attack type
           .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.attackType.label", this.document, "attackType", ATTACK_TYPES.none))
           // Toggle condition
-          .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.character.skill.ability.condition.label", this.document, "condition", "")),
+          .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.character.skill.expertise.condition.label", this.document, "condition", "")),
         }),
       }),
       // Delete button

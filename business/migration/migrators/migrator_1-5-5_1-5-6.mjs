@@ -220,7 +220,7 @@ export default class Migrator_1_5_5__1_5_6 extends AbstractMigrator {
       name: definition.name,
       img: definition.img,
       system: {
-        abilities: definition.abilities,
+        abilities: definition.expertises,
         category: definition.category,
         description: definition.description,
         displayOrders: definition.displayOrders,

@@ -130,8 +130,8 @@ export default class Migrator_1_3_2__1_4_1 extends AbstractMigrator {
 
     // Replace "value" with "level" on every skill.
     for (const skill of skills) {
-      // Ensure skill abilities are updated to now be stored on an object, instead of an array. 
-      await skill.getTransientObject().persistSkillAbilities(false);
+      // Ensure expertises are updated to now be stored on an object, instead of an array. 
+      await skill.getTransientObject().persistExpertises(false);
 
       const skillData = (skill.system ?? skill.data.data);
       

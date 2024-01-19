@@ -11,7 +11,7 @@ import ChoiceOption from '../input-choice/choice-option.mjs';
  * @constant
  * 
  * @property {String} SKILL
- * @property {String} SKILL_ABILITY
+ * @property {String} EXPERTISE
  * @property {String} FATE_CARD
  * @property {String} ASSET
  * @property {String} INJURY
@@ -19,7 +19,7 @@ import ChoiceOption from '../input-choice/choice-option.mjs';
  */
 export const ADD_BUTTON_CREATION_TYPES = {
   SKILL: "skill",
-  SKILL_ABILITY: "skill-ability",
+  EXPERTISE: "expertise",
   FATE_CARD: "fate-card",
   ASSET: "item",
   INJURY: "injury",
@@ -39,7 +39,7 @@ export const ADD_BUTTON_CREATION_TYPES = {
  * 
  * @method onClick Asynchronous callback that is invoked when the button is clicked. Arguments: 
  * * `event: Event`
- * * `data: Item | SkillAbility` - The created `Item` document or `SkillAbility`. 
+ * * `data: Item | Expertise` - The created `Item` document or `Expertise`. 
  */
 export default class ButtonAddViewModel extends ButtonViewModel {
   /**
@@ -61,7 +61,7 @@ export default class ButtonAddViewModel extends ButtonViewModel {
    * display as a button label. 
    * @param {Function | undefined} args.onClick Asynchronous callback that is invoked when the button is clicked. Arguments: 
    * * `event: Event`
-   * * `data: Item | SkillAbility` - The created `Item` document or `SkillAbility`. 
+   * * `data: Item | Expertise` - The created `Item` document or `Expertise`. 
    * 
    * @param {TransientDocument} args.target The target object to affect. 
    * @param {String} args.creationType One of the values of `ADD_BUTTON_CREATION_TYPES`. 
@@ -93,10 +93,10 @@ export default class ButtonAddViewModel extends ButtonViewModel {
    * 
    * @param {Event} event
    * 
-   * @returns {Item | SkillAbility} The created `Item` document or `SkillAbility`. 
+   * @returns {Item | Expertise} The created `Item` document or `Expertise`. 
    * 
    * @throws {Error} NullPointerException - Thrown, if 'target', 'target.type' or 'creationType' is undefined. 
-   * @throws {Error} InvalidArgumentException - Thrown, if trying to add a skill-ability to a non-skill-item. 
+   * @throws {Error} InvalidArgumentException - Thrown, if trying to add an expertise to a non-skill-item. 
    * @throws {Error} InvalidArgumentException - Thrown, if 'creationType' is unrecognized. 
    * 
    * @async
@@ -113,17 +113,17 @@ export default class ButtonAddViewModel extends ButtonViewModel {
       throw new Error("NullPointerException: 'creationType' is undefined");
     }
 
-    // Special case, because skill abilities aren't items - they're objects contained in an array, 
+    // Special case, because expertises aren't items - they're objects contained in an array, 
     // referenced by a property of a skill-item.
-    if (this.creationType === ADD_BUTTON_CREATION_TYPES.SKILL_ABILITY) {
+    if (this.creationType === ADD_BUTTON_CREATION_TYPES.EXPERTISE) {
       if (this.target.type !== "skill") {
-        throw new Error("InvalidArgumentException: Cannot add item of type 'skill-ability' to non-'skill'-type item!");
+        throw new Error("InvalidArgumentException: Cannot add item of type 'expertise' to non-'skill'-type item!");
       }
       const creationData = {
         ...this.creationData,
         isCustom: true
       };
-      return await this.target.createSkillAbility(creationData);
+      return await this.target.createExpertise(creationData);
     } else {
       let creationData;
 
