@@ -574,12 +574,12 @@
       "skill": {
         "ability": {
           "add": {
-            "label": "Add Skill Ability",
-            "query": "Select Skill Ability to Add"
+            "label": "Add Expertise",
+            "query": "Select Expertise to Add"
           },
           "delete": {
-            "label": "Delete Skill Ability",
-            "query": "Confirm Deletion of Skill Ability"
+            "label": "Delete Expertise",
+            "query": "Confirm Deletion of Expertise"
           },
           "apCost": "AP Cost",
           "condition": {
@@ -590,10 +590,10 @@
             "label": "Distance",
             "placeholder": "3' / 1m / 0 / etc."
           },
-          "newDefaultName": "New Skill Ability",
+          "newDefaultName": "New Expertise",
           "requirement": "Required Skill Level",
-          "singular": "Skill Ability",
-          "plural": "Skill Abilities"
+          "singular": "Expertise",
+          "plural": "Expertises"
         },
         "add": {
           "label": "Add Skill",
@@ -755,7 +755,7 @@
       "delete": "Delete Damage",
       "label": "Damage",
       "formula": "Damage Formula",
-      "infoFormulae": "It is possible to reference this character's attributes and other skills or skill abilities. To reference, type the '@'-symbol, immediately followed by the name of the reference, e. g. '@strength' or '@int' or '@acrobatics'. If the reference's name contains spaces, they must be replaced with underscores, e. g. '@Heavy_Armor' instead of '@Heavy Armor'.",
+      "infoFormulae": "It is possible to reference this character's attributes and other skills or expertises. To reference, type the '@'-symbol, immediately followed by the name of the reference, e. g. '@strength' or '@int' or '@acrobatics'. If the reference's name contains spaces, they must be replaced with underscores, e. g. '@Heavy_Armor' instead of '@Heavy Armor'.",
       "infoPlainFormulae": "Any plain formula, i. e. not containing any '@'-references.",
       "unresolvedReferences": "Unresolved references"
     },
