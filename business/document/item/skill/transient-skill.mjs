@@ -10,7 +10,7 @@ import { ITEM_SUBTYPE } from "../item-subtype.mjs";
 import TransientBaseItem from "../transient-base-item.mjs";
 import LevelAdvancement from "../../../ruleset/level-advancement.mjs";
 import Ruleset from "../../../ruleset/ruleset.mjs";
-import SkillAbility from "./skill-ability.mjs";
+import Expertise from "./expertise.mjs";
 import CharacterAttribute from "../../../ruleset/attribute/character-attribute.mjs";
 import { ATTACK_TYPES } from "../../../ruleset/skill/attack-types.mjs";
 import { ATTRIBUTES, Attribute } from "../../../ruleset/attribute/attributes.mjs";
@@ -38,7 +38,7 @@ import { getGroupForAttributeByName } from "../../../ruleset/attribute/attribute
  * * Read-only. 
  * @property {Attribute} relatedAttribute The attribute that serves as the basis 
  * for this skill. 
- * @property {Array<SkillAbility>} abilities The array of skill abilities of this skill. 
+ * @property {Array<Expertise>} expertises The array of expertises of this skill. 
  * @property {Boolean} isMagicSchool Returns true, if the skill is considered 
  * a magic school. 
  * 
@@ -191,14 +191,14 @@ export default class TransientSkill extends TransientBaseItem {
   get acceptedTags() { return SKILL_TAGS.asArray(); }
 
   /**
-   * @type {Array<SkillAbility>}
+   * @type {Array<Expertise>}
    */
-  get abilities() {
-    return this._abilities;
+  get expertises() {
+    return this._expertises;
   }
-  set abilities(value) {
-    this._abilities = value;
-    this.persistSkillAbilities();
+  set expertises(value) {
+    this._expertises = value;
+    this.persistExpertises();
   }
   
   /**
@@ -355,7 +355,7 @@ export default class TransientSkill extends TransientBaseItem {
     super(document);
 
     this.advancementRequirements = new Ruleset().getSkillAdvancementRequirements(this.level);
-    this._abilities = this._getSkillAbilities();
+    this._expertises = this._getExpertises();
   }
 
   /** @override */
@@ -471,38 +471,38 @@ export default class TransientSkill extends TransientBaseItem {
   }
 
   /**
-   * Adds a new skill ability. 
+   * Adds a new expertise. 
    * 
    * @param {Object} creationData Additional data to set on creation. 
    * 
-   * @returns {SkillAbility} The newly created `SkillAbility` instance. 
+   * @returns {Expertise} The newly created `Expertise` instance. 
    * 
    * @async
    */
-  async createSkillAbility(creationData) {
-    const newAbility = new SkillAbility({
+  async createExpertise(creationData) {
+    const newExpertise = new Expertise({
       ...creationData,
       owningDocument: this,
-      index: this.abilities.length,
+      index: this.expertises.length,
     });
     
-    this.abilities.push(newAbility);
-    await this.updateByPath(`system.abilities.${newAbility.id}`, newAbility.toDto());
+    this.expertises.push(newExpertise);
+    await this.updateByPath(`system.abilities.${newExpertise.id}`, newExpertise.toDto());
 
-    return newAbility;
+    return newExpertise;
   }
 
   /**
-   * Deletes the skill ability at the given index. 
+   * Deletes the expertise at the given index. 
    * 
-   * @param id ID of the skill ability to delete. 
+   * @param id ID of the expertise to delete. 
    * 
-   * @returns {SkillAbility} The `SkillAbility` instance that was removed. 
+   * @returns {Expertise} The `Expertise` instance that was removed. 
    * 
    * @async
    */
-  async deleteSkillAbility(id) {
-    const toRemove = this.abilities.find(it => it.id === id);
+  async deleteExpertise(id) {
+    const toRemove = this.expertises.find(it => it.id === id);
 
     if (toRemove === undefined) {
       return undefined;
@@ -550,40 +550,40 @@ export default class TransientSkill extends TransientBaseItem {
   }
 
   /**
-   * Persists the current skill ability array to the data base. 
+   * Persists the current expertise array to the data base. 
    * 
    * @param {Boolean | undefined} render If true, will trigger a re-render of the associated document sheet. 
    * * Default 'true'. 
    * 
    * @async
    */
-  async persistSkillAbilities(render = true) {
-    const abilitiesToPersist = {};
+  async persistExpertises(render = true) {
+    const expertisesToPersist = {};
 
-    for (const ability of this.abilities) {
-      abilitiesToPersist[ability.id] = ability.toDto();
+    for (const expertise of this.expertises) {
+      expertisesToPersist[expertise.id] = expertise.toDto();
     }
 
-    await this.updateByPath("system.abilities", abilitiesToPersist, render);
+    await this.updateByPath("system.abilities", expertisesToPersist, render);
   }
 
   /**
-   * Fetches the skill abilities from the underlying document and returns 
+   * Fetches the expertises from the underlying document and returns 
    * them, converted to "proper" objects. 
    * 
-   * @returns {Array<SkillAbility>}
+   * @returns {Array<Expertise>}
    * 
    * @private
    */
-  _getSkillAbilities() {
-    const abilitiesOnDocument = this.document.system.abilities;
+  _getExpertises() {
+    const expertisesOnDocument = this.document.system.abilities;
       
     const result = [];
-    for (const abilityId in abilitiesOnDocument) {
-      if (abilitiesOnDocument.hasOwnProperty(abilityId) !== true) continue;
+    for (const expertiseId in expertisesOnDocument) {
+      if (expertisesOnDocument.hasOwnProperty(expertiseId) !== true) continue;
 
-      const dto = abilitiesOnDocument[abilityId];
-      result.push(SkillAbility.fromDto(dto, this));
+      const dto = expertisesOnDocument[expertiseId];
+      result.push(Expertise.fromDto(dto, this));
     }
     return result;
   }
@@ -608,11 +608,11 @@ export default class TransientSkill extends TransientBaseItem {
    * @override
    * 
    * Also searches in: 
-   * * Embedded skill abilities
+   * * Embedded expertises
    */
   resolveReference(comparableReference, propertyPath) {
     const collectionsToSearch = [
-      this.abilities,
+      this.expertises,
     ];
     const r = new AtReferencer().resolveReferenceInCollections(collectionsToSearch, comparableReference, propertyPath);
     if (r !== undefined) {

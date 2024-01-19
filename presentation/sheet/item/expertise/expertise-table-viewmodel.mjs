@@ -8,11 +8,11 @@ import DocumentListItemOrderDataSource from "../../../component/sortable-list/do
 import SortableListViewModel from "../../../component/sortable-list/sortable-list-viewmodel.mjs"
 import { TEMPLATES } from "../../../templatePreloader.mjs"
 import ViewModel from "../../../view-model/view-model.mjs"
-import SkillAbilityListItemViewModel from "./skill-ability-list-item-viewmodel.mjs"
+import ExpertiseListItemViewModel from "./expertise-list-item-viewmodel.mjs"
 
-export default class SkillAbilityTableViewModel extends ViewModel {
+export default class ExpertiseTableViewModel extends ViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.SKILL_ABILITY_TABLE; }
+  static get TEMPLATE() { return TEMPLATES.EXPERTISE_TABLE; }
 
   /**
    * @type {TransientSkill}
@@ -66,10 +66,10 @@ export default class SkillAbilityTableViewModel extends ViewModel {
   get damageTypeOptions() { return DAMAGE_TYPES.asChoices(); }
 
   /**
-   * @type {Array<SkillAbilityListItemViewModel>}
+   * @type {Array<ExpertiseListItemViewModel>}
    * @readonly
    */
-  abilities = [];
+  expertises = [];
 
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
@@ -81,7 +81,7 @@ export default class SkillAbilityTableViewModel extends ViewModel {
    * 
    * @param {TransientSkill} args.document
    * @param {String | undefined} args.visGroupId
-   * @param {Boolean | undefined} args.skillAbilitiesInitiallyVisible
+   * @param {Boolean | undefined} args.expertisesInitiallyVisible
    */
   constructor(args = {}) {
     super(args);
@@ -90,44 +90,44 @@ export default class SkillAbilityTableViewModel extends ViewModel {
     // Own properties.
     this.document = args.document;
     this.visGroupId = args.visGroupId ?? createUUID();
-    this._isExpanded = args.skillAbilitiesInitiallyVisible ?? false;
+    this._isExpanded = args.expertisesInitiallyVisible ?? false;
     
     this.registerViewStateProperty("_isExpanded");
 
     // Child view models. 
-    this.contextTemplate = "skill-ability-table";
+    this.contextTemplate = "expertise-table";
     const thiz = this;
 
-    this.vmAddSkillAbility = new ButtonAddViewModel({
-      id: "vmAddSkillAbility",
+    this.vmAddExpertise = new ButtonAddViewModel({
+      id: "vmAddExpertise",
       parent: this,
-      localizedToolTip: game.i18n.localize("ambersteel.character.skill.ability.add.label"),
+      localizedToolTip: game.i18n.localize("ambersteel.character.skill.expertise.add.label"),
       target: this.document,
-      creationType: ADD_BUTTON_CREATION_TYPES.SKILL_ABILITY,
+      creationType: ADD_BUTTON_CREATION_TYPES.EXPERTISE,
     });
 
-    this.abilities = [];
-    this.abilities = this._getSkillAbilityViewModels();
+    this.expertises = [];
+    this.expertises = this._getExpertiseViewModels();
 
-    this.vmSkillAbilities = new SortableListViewModel({
+    this.vmExpertises = new SortableListViewModel({
       parent: thiz,
       isEditable: args.isEditable ?? thiz.isEditable,
-      id: "vmSkillAbilities",
+      id: "vmExpertises",
       indexDataSource: new DocumentListItemOrderDataSource({
         document: thiz.document,
-        listName: "abilities",
+        listName: "expertises",
       }),
-      listItemViewModels: this.abilities,
-      listItemTemplate: SkillAbilityListItemViewModel.TEMPLATE,
+      listItemViewModels: this.expertises,
+      listItemTemplate: ExpertiseListItemViewModel.TEMPLATE,
       vmBtnAddItem: new ButtonAddViewModel({
         id: "vmBtnAdd",
         parent: this,
         target: thiz.document,
         isEditable: this.isEditable,
-        creationType: "skill-ability",
+        creationType: "expertise",
         withDialog: false,
-        localizedLabel: game.i18n.localize("ambersteel.character.skill.ability.add.label"),
-        localizedType: game.i18n.localize("ambersteel.character.skill.ability.singular"),
+        localizedLabel: game.i18n.localize("ambersteel.character.skill.expertise.add.label"),
+        localizedType: game.i18n.localize("ambersteel.character.skill.expertise.singular"),
       }),
     });
 
@@ -168,7 +168,7 @@ export default class SkillAbilityTableViewModel extends ViewModel {
    * @override
    */
   update(args = {}) {
-    this.abilities = this._getSkillAbilityViewModels();
+    this.expertises = this._getExpertiseViewModels();
 
     super.update(args);
   }
@@ -177,9 +177,9 @@ export default class SkillAbilityTableViewModel extends ViewModel {
   _getChildUpdates() {
     const updates = super._getChildUpdates();
 
-    updates.set(this.vmSkillAbilities, {
-      ...updates.get(this.vmSkillAbilities),
-      listItemViewModels: this.abilities,
+    updates.set(this.vmExpertises, {
+      ...updates.get(this.vmExpertises),
+      listItemViewModels: this.expertises,
       isEditable: args.isEditable ?? thiz.isEditable,
     });
     
@@ -187,20 +187,20 @@ export default class SkillAbilityTableViewModel extends ViewModel {
   }
 
   /**
-   * @returns {Array<SkillAbilityListItemViewModel>}
+   * @returns {Array<ExpertiseListItemViewModel>}
    * 
    * @private
    */
-  _getSkillAbilityViewModels() {
+  _getExpertiseViewModels() {
     const result = [];
-    const skillAbilities = this.document.abilities;
-    for (const skillAbility of skillAbilities) {
-      const vm = new SkillAbilityListItemViewModel({
-        id: skillAbility.id,
+    const expertises = this.document.expertises;
+    for (const expertise of expertises) {
+      const vm = new ExpertiseListItemViewModel({
+        id: expertise.id,
         isEditable: this.isEditable,
         isSendable: this.isSendable,
         isOwner: this.isOwner,
-        document: skillAbility,
+        document: expertise,
       });
       result.push(vm);
       this[vm._id] = vm;

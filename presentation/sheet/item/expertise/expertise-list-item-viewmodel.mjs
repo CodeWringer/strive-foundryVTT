@@ -10,7 +10,7 @@ import ChoiceAdapter from "../../../component/input-choice/choice-adapter.mjs";
 import DamageDefinitionListViewModel from "../../../component/damage-definition-list/damage-definition-list-viewmodel.mjs";
 import InputDropDownViewModel from "../../../component/input-dropdown/input-dropdown-viewmodel.mjs";
 import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
-import SkillAbility from "../../../../business/document/item/skill/skill-ability.mjs";
+import Expertise from "../../../../business/document/item/skill/expertise.mjs";
 import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs";
 import ButtonRollViewModel from "../../../component/button-roll/button-roll-viewmodel.mjs";
 import ButtonContextMenuViewModel from "../../../component/button-context-menu/button-context-menu-viewmodel.mjs";
@@ -20,9 +20,9 @@ import { DataFieldComponent } from "../base/datafield-component.mjs";
 import { TemplatedComponent } from "../base/templated-component.mjs";
 
 /**
- * @property {SkillAbility} document 
+ * @property {Expertise} document 
  */
-export default class SkillAbilityListItemViewModel extends BaseListItemViewModel {
+export default class ExpertiseListItemViewModel extends BaseListItemViewModel {
   /**
    * @type {Array<ChoiceOption>}
    * @readonly
@@ -85,7 +85,7 @@ export default class SkillAbilityListItemViewModel extends BaseListItemViewModel
    * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 
    * is expected to be associated with an actor sheet or item sheet or journal entry or chat message and so on.
    * 
-   * @param {SkillAbility} args.document 
+   * @param {Expertise} args.document 
    */
   constructor(args = {}) {
     super(args);
@@ -179,8 +179,8 @@ export default class SkillAbilityListItemViewModel extends BaseListItemViewModel
           },
         }),
         isHidden: this.hideCondition,
-        placeholder: game.i18n.localize("ambersteel.character.skill.ability.condition.placeholder"),
-        localizedIconToolTip: game.i18n.localize("ambersteel.character.skill.ability.condition.label"),
+        placeholder: game.i18n.localize("ambersteel.character.skill.expertise.condition.placeholder"),
+        localizedIconToolTip: game.i18n.localize("ambersteel.character.skill.expertise.condition.label"),
         iconClass: "ico-condition-solid",
       }),
       new DataFieldComponent({
@@ -194,8 +194,8 @@ export default class SkillAbilityListItemViewModel extends BaseListItemViewModel
           },
         }),
         isHidden: this.hideDistance,
-        placeholder: game.i18n.localize("ambersteel.character.skill.ability.distance.placeholder"),
-        localizedIconToolTip: game.i18n.localize("ambersteel.character.skill.ability.distance.label"),
+        placeholder: game.i18n.localize("ambersteel.character.skill.expertise.distance.placeholder"),
+        localizedIconToolTip: game.i18n.localize("ambersteel.character.skill.expertise.distance.label"),
         iconClass: "ico-distance-solid",
       }),
       new DataFieldComponent({
@@ -289,11 +289,11 @@ export default class SkillAbilityListItemViewModel extends BaseListItemViewModel
           // Toggle opposed by
           .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.roll.obstacle.opposedBy.label", this.document, "opposedBy", ""))
           // Toggle distance
-          .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.character.skill.ability.distance.label", this.document, "distance", ""))
+          .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.character.skill.expertise.distance.label", this.document, "distance", ""))
           // Toggle attack type
           .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.attackType.label", this.document, "attackType", ATTACK_TYPES.none))
           // Toggle condition
-          .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.character.skill.ability.condition.label", this.document, "condition", "")),
+          .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.character.skill.expertise.condition.label", this.document, "condition", "")),
         }),
       }),
       // Delete button
@@ -312,7 +312,7 @@ export default class SkillAbilityListItemViewModel extends BaseListItemViewModel
   /** @override */
   getAdditionalHeaderContent() {
     return new TemplatedComponent({
-      template: TEMPLATES.SKILL_ABILITY_LIST_ITEM_EXTRA_HEADER,
+      template: TEMPLATES.EXPERTISE_LIST_ITEM_EXTRA_HEADER,
       viewModel: this,
     });
   }
@@ -321,7 +321,7 @@ export default class SkillAbilityListItemViewModel extends BaseListItemViewModel
   getAdditionalContent() {
     if (this.hideDamage === false) {
       return new TemplatedComponent({
-        template: TEMPLATES.SKILL_ABILITY_LIST_ITEM_EXTRA_CONTENT,
+        template: TEMPLATES.EXPERTISE_LIST_ITEM_EXTRA_CONTENT,
         viewModel: this,
       });
     }

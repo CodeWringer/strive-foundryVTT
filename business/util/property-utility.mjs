@@ -54,7 +54,7 @@ export function splitPropertyPath(propertyPath) {
  * @param {String} path The property path. 
  *        Separate properties with dot-notation. 
  *        Access arrays with bracket-notation. 
- *        E. g. "abilities[4].name"
+ *        E. g. "expertises[4].name"
  * @returns {Any} If the property in question is an object, returns that object, 
  * otherwise, returns the value of the property. 
  */
@@ -76,7 +76,7 @@ export function getNestedPropertyValue(obj, path) {
  * @param {String} path The property path. 
  *        Separate properties with dot-notation. 
  *        Access arrays with bracket-notation. 
- *        E. g. "abilities[4].name"
+ *        E. g. "expertises[4].name"
  * @param {Any} value The value to set. 
  * @throws {Error} InvalidParameterException If the given path doesn't resolve to a property. 
  * @throws {Error} UnknownException If updating the property failed. 
@@ -105,7 +105,7 @@ export function setNestedPropertyValue(obj, path, value) {
  * @param {String} path The property path. 
  *        Separate properties with dot-notation. 
  *        Access arrays with bracket-notation. 
- *        E. g. "abilities[4].name"
+ *        E. g. "expertises[4].name"
  * @throws {Error} InvalidParameterException If the given path doesn't resolve to a property. 
  * @throws {Error} UnknownException If deleting the property failed. 
  */
@@ -145,7 +145,7 @@ export function hasProperty(obj, prop) {
  * @param {String} propertyPath The property path. 
  *        Separate properties with dot-notation. 
  *        Access arrays with bracket-notation. 
- *        E. g. "abilities[4].name"
+ *        E. g. "expertises[4].name"
  * @param {Any} value The value to set, if it isn't already defined. 
  */
 export function ensureNestedProperty(obj, propertyPath, value) {

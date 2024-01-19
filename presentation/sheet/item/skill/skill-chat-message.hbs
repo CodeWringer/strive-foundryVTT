@@ -59,7 +59,7 @@ cssClass: {undefined | String}
   {{#if viewModel.document.apCost}}
   <div class="flex flex-row sheet-block margin-b-md">
     <div class="width-min-xxl">
-      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.skill.ability.apCost"}}{{/label}}
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.skill.expertise.apCost"}}{{/label}}
     </div>
     <div class="flex-grow">
       {{viewModel.document.apCost}}
@@ -92,7 +92,7 @@ cssClass: {undefined | String}
   {{#if viewModel.document.condition}}
   <div class="flex flex-row sheet-block margin-b-md">
     <div class="width-min-xxl">
-      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.skill.ability.condition.label"}}{{/label}}
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.skill.expertise.condition.label"}}{{/label}}
     </div>
     <div class="flex-grow">
       {{localize viewModel.document.condition}}
@@ -114,7 +114,7 @@ cssClass: {undefined | String}
   {{#if viewModel.document.distance}}
   <div class="flex flex-row sheet-block margin-b-md">
     <div class="width-min-xxl">
-      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.skill.ability.distance.label"}}{{/label}}
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.skill.expertise.distance.label"}}{{/label}}
     </div>
     <div class="flex-grow">
       {{viewModel.document.distance}}
@@ -148,20 +148,20 @@ cssClass: {undefined | String}
     {{/each}}
   </ol>
   {{/if}}
-  {{!-- Skill Abilites --}}
-  {{#if viewModel.hasAbilities}}
-    <div data-vis-group="{{viewModel.id}}-abilities" class="{{#if viewModel.skillAbilitiesInitiallyVisible}}{{else}}hidden{{/if}}">
-    {{#with viewModel.templateSkillAbility as | template |}}
-    {{#each ../viewModel.skillAbilityViewModels as |vm index|}}
+  {{!-- Expertises --}}
+  {{#if viewModel.hasExpertises}}
+    <div data-vis-group="{{viewModel.id}}-expertises" class="{{#if viewModel.expertisesInitiallyVisible}}{{else}}hidden{{/if}}">
+    {{#with viewModel.templateExpertise as | template |}}
+    {{#each ../viewModel.expertiseViewModels as |vm index|}}
       {{> (template) viewModel=vm}}
     {{/each}}
     {{/with}}
     </div>
     <div class="line-height">
-      {{#> buttonToggleVisibility viewModel=viewModel.vmBtnToggleVisibilityExpand fill=true cssClass=(ifThenElse viewModel.skillAbilitiesInitiallyVisible "hidden" "") }}
+      {{#> buttonToggleVisibility viewModel=viewModel.vmBtnToggleVisibilityExpand fill=true cssClass=(ifThenElse viewModel.expertisesInitiallyVisible "hidden" "") }}
         <i class="fas fa-angle-double-down"></i>
       {{/buttonToggleVisibility}}
-      {{#> buttonToggleVisibility viewModel=viewModel.vmBtnToggleVisibilityCollapse fill=true cssClass=(ifThenElse viewModel.skillAbilitiesInitiallyVisible "" "hidden") }}
+      {{#> buttonToggleVisibility viewModel=viewModel.vmBtnToggleVisibilityCollapse fill=true cssClass=(ifThenElse viewModel.expertisesInitiallyVisible "" "hidden") }}
         <i class="fas fa-angle-double-up"></i>
       {{/buttonToggleVisibility}}
     </div>

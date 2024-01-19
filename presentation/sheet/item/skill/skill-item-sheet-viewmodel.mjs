@@ -6,7 +6,7 @@ import ChoiceAdapter from "../../../component/input-choice/choice-adapter.mjs";
 import InputTagsViewModel from "../../../component/input-tags/input-tags-viewmodel.mjs";
 import SimpleListItemViewModel from "../../../component/simple-list/simple-list-item-viewmodel.mjs";
 import SimpleListViewModel from "../../../component/simple-list/simple-list-viewmodel.mjs";
-import SkillAbilityTableViewModel from "../skill-ability/skill-ability-table-viewmodel.mjs"
+import ExpertiseTableViewModel from "../expertise/expertise-table-viewmodel.mjs"
 import SkillPrerequisiteListItemViewModel from "./skill-prerequisite-list-item-viewmodel.mjs";
 import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs";
 import InputDropDownViewModel from "../../../component/input-dropdown/input-dropdown-viewmodel.mjs";
@@ -34,11 +34,11 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
   get attributeOptions() { return ATTRIBUTES.asChoices(); }
 
   /**
-   * Returns true, if the skill ability list should be visible. 
+   * Returns true, if the expertise list should be visible. 
    * @type {Boolean}
    * @readonly
    */
-  get isSkillAbilityListVisible() { return (this.isEditable === true) || this.document.abilities.length !== 0 }
+  get isExpertiseListVisible() { return (this.isEditable === true) || this.document.expertises.length !== 0 }
 
   /**
    * @type {String}
@@ -158,8 +158,8 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
           },
         }),
         isHidden: this.hideCondition,
-        placeholder: game.i18n.localize("ambersteel.character.skill.ability.condition.placeholder"),
-        localizedIconToolTip: game.i18n.localize("ambersteel.character.skill.ability.condition.label"),
+        placeholder: game.i18n.localize("ambersteel.character.skill.expertise.condition.placeholder"),
+        localizedIconToolTip: game.i18n.localize("ambersteel.character.skill.expertise.condition.label"),
         iconClass: "ico-condition-solid",
       }),
       new DataFieldComponent({
@@ -203,8 +203,8 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
           },
         }),
         isHidden: this.hideDistance,
-        placeholder: game.i18n.localize("ambersteel.character.skill.ability.distance.placeholder"),
-        localizedIconToolTip: game.i18n.localize("ambersteel.character.skill.ability.distance.label"),
+        placeholder: game.i18n.localize("ambersteel.character.skill.expertise.distance.placeholder"),
+        localizedIconToolTip: game.i18n.localize("ambersteel.character.skill.expertise.distance.label"),
         iconClass: "ico-distance-solid",
       }),
       new DataFieldComponent({
@@ -252,11 +252,11 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
   constructor(args = {}) {
     super(args);
 
-    this.vmSkillAbilityTable = new SkillAbilityTableViewModel({
-      id: "vmSkillAbilityTable",
+    this.vmExpertiseTable = new ExpertiseTableViewModel({
+      id: "vmExpertiseTable",
       parent: this,
       document: this.document,
-      skillAbilitiesInitiallyVisible: true,
+      expertisesInitiallyVisible: true,
     });
     this.vmTfCategory = new InputTextFieldViewModel({
       parent: this,
@@ -331,17 +331,17 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
             },
           ]
           // Toggle ap cost
-          .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.character.skill.ability.apCost", this.document, "apCost", 0))
+          .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.character.skill.expertise.apCost", this.document, "apCost", 0))
           // Toggle obstacle
           .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.roll.obstacle.label", this.document, "obstacle", ""))
           // Toggle opposed by
           .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.roll.obstacle.opposedBy.label", this.document, "opposedBy", ""))
           // Toggle distance
-          .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.character.skill.ability.distance.label", this.document, "distance", ""))
+          .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.character.skill.expertise.distance.label", this.document, "distance", ""))
           // Toggle attack type
           .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.attackType.label", this.document, "attackType", ATTACK_TYPES.none))
           // Toggle condition
-          .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.character.skill.ability.condition.label", this.document, "condition", "")),
+          .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.character.skill.expertise.condition.label", this.document, "condition", "")),
         }),
       }),
     ]; 

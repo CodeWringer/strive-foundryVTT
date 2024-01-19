@@ -258,12 +258,12 @@ Hooks.on("renderChatMessage", async function(message, html, data) {
   let viewModel = game.ambersteel.viewModels.get(vmId);
   if (viewModel === undefined) {
     // Create new instance of a view model to associate with the chat message. 
-    if (dataset.abilityId !== undefined) {
-      // Create a skill ability chat view model. 
-      const skillAbilityId = dataset.abilityId;
+    if (dataset.expertiseId !== undefined) {
+      // Create an expertise chat view model. 
+      const expertiseId = dataset.expertiseId;
       const skillDocument = document.getTransientObject();
-      const skillAbility = skillDocument.abilities.find(it => it.id === skillAbilityId);
-      viewModel = skillAbility.getChatViewModel({ id: vmId });
+      const expertise = skillDocument.expertises.find(it => it.id === expertiseId);
+      viewModel = expertise.getChatViewModel({ id: vmId });
     } else {
       viewModel = document.getTransientObject().getChatViewModel({ id: vmId });
     }
