@@ -287,7 +287,7 @@ export default class Ruleset {
     const type = actor.type.toLowerCase();
     if (type !== "pc" && type !== "npc") throw new Error("Only PC and NPC type actors allowed");
 
-    const arcanaLevel = this.getEffectiveAttributeModifiedLevel(ATTRIBUTES.arcana, actor);
+    const arcanaLevel = this.getEffectiveAttributeModifiedLevel(ATTRIBUTES.arcana, actor) * 2;
     let total = arcanaLevel;
     
     const components = [
