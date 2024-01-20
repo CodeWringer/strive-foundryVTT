@@ -308,6 +308,7 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
 
   /** @override */
   getSecondaryHeaderButtons() {
+    const inherited = super.getSecondaryHeaderButtons();
     return [
       // Context menu button
       new TemplatedComponent({
@@ -344,7 +345,7 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
           .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.character.skill.expertise.condition.label", this.document, "condition", "")),
         }),
       }),
-    ]; 
+    ].concat(inherited);
   }
 
   /** @override */
