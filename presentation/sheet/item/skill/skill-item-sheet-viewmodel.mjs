@@ -128,7 +128,7 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
             }
           }),
         }),
-        isHidden: this.hideApCost,
+        isHidden: false,
         localizedIconToolTip: game.i18n.localize("ambersteel.character.skill.relatedAttribute"),
         iconClass: "ico-related-attribute-solid",
       }),
