@@ -72,12 +72,12 @@ export const HEALTH_STATES = {
   berserk: new HealthState({
     name: "berserk",
     localizableName: "ambersteel.character.health.states.berserk",
-    limit: 1,
+    limit: 0,
   }),
   burning: new HealthState({
     name: "burning",
     localizableName: "ambersteel.character.health.states.burning",
-    limit: 1,
+    limit: 0,
   }),
   bleeding: new HealthState({
     name: "bleeding",
@@ -102,7 +102,7 @@ export const HEALTH_STATES = {
   electrified: new HealthState({
     name: "electrified",
     localizableName: "ambersteel.character.health.states.electrified",
-    limit: 1,
+    limit: 0,
   }),
   exhausted: new HealthState({
     name: "exhausted",
@@ -112,7 +112,7 @@ export const HEALTH_STATES = {
   frostbitten: new HealthState({
     name: "frostbitten",
     localizableName: "ambersteel.character.health.states.frostbitten",
-    limit: 2,
+    limit: 0,
   }),
   grappled: new HealthState({
     name: "grappled",
@@ -127,12 +127,12 @@ export const HEALTH_STATES = {
   jealous: new HealthState({
     name: "jealous",
     localizableName: "ambersteel.character.health.states.jealous",
-    limit: 1,
+    limit: 0,
   }),
   pacified: new HealthState({
     name: "pacified",
     localizableName: "ambersteel.character.health.states.pacified",
-    limit: 1,
+    limit: 0,
   }),
   poisoned: new HealthState({
     name: "poisoned",
@@ -157,7 +157,7 @@ export const HEALTH_STATES = {
   terrified: new HealthState({
     name: "terrified",
     localizableName: "ambersteel.character.health.states.terrified",
-    limit: 1,
+    limit: 0,
   }),
   unconscious: new HealthState({
     name: "unconscious",
