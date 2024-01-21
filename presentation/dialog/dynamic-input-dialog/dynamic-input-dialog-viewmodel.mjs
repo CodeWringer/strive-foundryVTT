@@ -11,6 +11,7 @@ import InputTextareaViewModel from "../../component/input-textarea/input-textare
 import InputTextFieldViewModel from "../../component/input-textfield/input-textfield-viewmodel.mjs";
 import { isBlankOrUndefined } from "../../../business/util/validation-utility.mjs";
 import { isDefined } from "../../../business/util/validation-utility.mjs";
+import SimpleListViewModel from "../../component/simple-list/simple-list-viewmodel.mjs";
 
 /**
  * @property {Array<DynamicInputDefinition>} inputDefinitions The list of input definitions of 
@@ -26,6 +27,7 @@ export default class DynamicInputDialogViewModel extends ViewModel {
   /**
    * @param {Object} args 
    * @param {Array<DynamicInputDefinition>} args.inputDefinitions
+   * @param {Application} args.ui The dialog that owns this view model. 
    */
   constructor(args = {}) {
     super(args);
@@ -33,6 +35,7 @@ export default class DynamicInputDialogViewModel extends ViewModel {
     validateOrThrow(args, ["inputDefinitions"]);
 
     this.inputDefinitions = args.inputDefinitions;
+    this.ui = args.ui;
 
     this.controls = [];
     for (const definition of this.inputDefinitions) {
@@ -117,6 +120,33 @@ export default class DynamicInputDialogViewModel extends ViewModel {
           id: definition.name,
           parent: this,
         });
+      } else if (definition.type === DYNAMIC_INPUT_TYPES.SIMPLE_LIST) {
+        const values = this[definition.name];
+
+        const viewModels = [];
+        for (let index = 0; index < values.length; index++) {
+          const vm = definition.specificArgs.contentItemViewModelFactory(index, values);
+          viewModels.push(vm);
+        }
+
+        viewModel = new SimpleListViewModel({
+          id: definition.name,
+          parent: this,
+          contentItemViewModels: viewModels,
+          contentItemTemplate: definition.specificArgs.contentItemTemplate,
+          onAddClick: () => {
+            values.push(definition.specificArgs.newItemDefaultValue);
+            this.ui.render(true);
+          },
+          onRemoveClick: (_, index) => {
+            values.splice(index, 1);
+            this.ui.render(true);
+          },
+          isItemAddable: definition.specificArgs.isItemAddable,
+          isItemRemovable: definition.specificArgs.isItemRemovable,
+          localizedAddLabel: definition.specificArgs.localizedAddLabel,
+        });
+        viewModel.value = values;
       } else {
         throw new Error(`Invalid input type: "${definition.type}"`);
       }

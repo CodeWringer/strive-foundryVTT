@@ -1,5 +1,4 @@
 import { SKILL_TAGS } from "../../../../business/tags/system-tags.mjs";
-import { ATTRIBUTES } from "../../../../business/ruleset/attribute/attributes.mjs";
 import SkillPrerequisite from "../../../../business/ruleset/skill/skill-prerequisite.mjs";
 import { isDefined } from "../../../../business/util/validation-utility.mjs";
 import ChoiceAdapter from "../../../component/input-choice/choice-adapter.mjs";
@@ -22,17 +21,13 @@ import { DataFieldComponent } from "../base/datafield-component.mjs";
 import { TemplatedComponent } from "../base/templated-component.mjs";
 import { TEMPLATES } from "../../../templatePreloader.mjs";
 import TransientSkill from "../../../../business/document/item/skill/transient-skill.mjs";
+import BaseAttributeListItemViewModel from "./base-attribute/base-attribute-list-item-viewmodel.mjs";
+import { ATTRIBUTES } from "../../../../business/ruleset/attribute/attributes.mjs";
 
 /**
  * @property {TransientSkill} document
  */
 export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
-  /**
-   * @type {Array<ChoiceOption>}
-   * @readonly
-   */
-  get attributeOptions() { return ATTRIBUTES.asChoices(); }
-
   /**
    * Returns true, if the expertise list should be visible. 
    * @type {Boolean}
@@ -45,6 +40,12 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
    * @readonly
    */
   get prerequisiteListItemTemplate() { return SkillPrerequisiteListItemViewModel.TEMPLATE; }
+
+  /**
+   * @type {String}
+   * @readonly
+   */
+  get baseAttributeListItemTemplate() { return BaseAttributeListItemViewModel.TEMPLATE; }
 
   /**
    * @type {Boolean}
@@ -105,33 +106,6 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
   /** @override */
   getDataFields() {
     return [
-      new DataFieldComponent({
-        template: InputDropDownViewModel.TEMPLATE,
-        viewModel: new InputDropDownViewModel({
-          id: "vmDdRelatedAttribute",
-          parent: this,
-          options: this.attributeOptions,
-          value: this.attributeOptions.find(it => it.value === this.document.relatedAttribute.name),
-          onChange: (_, newValue) => {
-            this.document.relatedAttribute = newValue;
-          },
-          adapter: new ChoiceAdapter({
-            toChoiceOption(obj) {
-              if (isDefined(obj) === true) {
-                return ATTRIBUTES.asChoices().find(it => it.value === obj.name);
-              } else {
-                return ATTRIBUTES.asChoices().find(it => it.value === "none");
-              }
-            },
-            fromChoiceOption(option) {
-              return ATTRIBUTES[option.value];
-            }
-          }),
-        }),
-        isHidden: this.hideApCost,
-        localizedIconToolTip: game.i18n.localize("ambersteel.character.skill.relatedAttribute"),
-        iconClass: "ico-related-attribute-solid",
-      }),
       new DataFieldComponent({
         template: InputNumberSpinnerViewModel.TEMPLATE,
         viewModel: new InputNumberSpinnerViewModel({
@@ -288,8 +262,32 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
       chatTitle: `${game.i18n.localize("ambersteel.damageDefinition.formula")} - ${this.document.name}`,
     });
 
-    this.prerequisiteViewModels = this._getPrerequisiteViewModels();
+    this.baseAttributeViewModels = this._getBaseAttributeViewModels();
+    this.vmBaseAttributeList = new SimpleListViewModel({
+      id: "vmBaseAttributeList",
+      parent: this,
+      isEditable: this.isEditable,
+      isSendable: this.isSendable,
+      isOwner: this.isOwner,
+      contentItemViewModels: this.baseAttributeViewModels,
+      contentItemTemplate: this.baseAttributeListItemTemplate,
+      onAddClick: () => {
+        const baseAttributes = this.document.baseAttributes.concat([
+          ATTRIBUTES.agility
+        ]);
+        this.document.baseAttributes = baseAttributes;
+      },
+      onRemoveClick: (_, index) => {
+        const newBaseAttributes = this.document.baseAttributes.concat([]);
+        newBaseAttributes.splice(index, 1);
+        this.document.baseAttributes = newBaseAttributes;
+      },
+      isItemAddable: this.isEditable,
+      isItemRemovable: (this.isEditable && this.baseAttributeViewModels.length > 1),
+      localizedAddLabel: game.i18n.localize("ambersteel.general.add"),
+    });
 
+    this.prerequisiteViewModels = this._getPrerequisiteViewModels();
     this.vmPrerequisiteList = new SimpleListViewModel({
       id: "vmPrerequisiteList",
       parent: this,
@@ -298,16 +296,26 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
       isOwner: this.isOwner,
       contentItemViewModels: this.prerequisiteViewModels,
       contentItemTemplate: this.prerequisiteListItemTemplate,
-      onAddClick: this._onClickAddPrerequisite.bind(this),
-      onRemoveClick: this._onClickRemovePrerequisite.bind(this),
-      isItemAddable: true,
-      isItemRemovable: true,
+      onAddClick: () => {
+        const prerequisites = this.document.prerequisites.concat([
+          new SkillPrerequisite()
+        ]);
+        this.document.prerequisites = prerequisites;
+      },
+      onRemoveClick: (_, index) => {
+        const newPrerequisites = this.document.prerequisites.concat([]);
+        newPrerequisites.splice(index, 1);
+        this.document.prerequisites = newPrerequisites;
+      },
+      isItemAddable: this.isEditable,
+      isItemRemovable: this.isEditable,
       localizedAddLabel: game.i18n.localize("ambersteel.general.add"),
     });
   }
 
   /** @override */
   getSecondaryHeaderButtons() {
+    const inherited = super.getSecondaryHeaderButtons();
     return [
       // Context menu button
       new TemplatedComponent({
@@ -344,7 +352,7 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
           .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.character.skill.expertise.condition.label", this.document, "condition", "")),
         }),
       }),
-    ]; 
+    ].concat(inherited);
   }
 
   /** @override */
@@ -387,9 +395,12 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
         stateId: prerequisite.id,
         stateName: prerequisite.name,
         stateMinimumLevel: (prerequisite.minimumLevel ?? 0),
-        onChange: (state) => {
-          this._updatePrerequisitesFromViewModels();
-        }
+        onChange: () => {
+          const prerequisites = this.prerequisiteViewModels.map(viewModel => 
+            viewModel.state
+          );
+          this.document.prerequisites = prerequisites;
+        },
       });
       result.push(vm);
     }
@@ -397,15 +408,31 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
   }
 
   /**
-   * Event handler for when a new skill prerequisite is added. 
+   * @returns {Array<BaseAttributeListItemViewModel>}
    * 
    * @private
    */
-  _onClickAddPrerequisite() {
-    const prerequisites = this.document.prerequisites.concat([
-      new SkillPrerequisite()
-    ]);
-    this.document.prerequisites = prerequisites;
+  _getBaseAttributeViewModels() {
+    const result = [];
+
+    const attributes = this.document.baseAttributes;
+    for (let index = 0; index < attributes.length; index++) {
+      const attribute = attributes[index];
+
+      const vm = new BaseAttributeListItemViewModel({
+        id: `vmAttribute${index}`,
+        isEditable: this.isEditable,
+        attribute: attribute,
+        onChange: (newAttributeValueName) => {
+          const newAttributeValue = ATTRIBUTES[newAttributeValueName];
+          const newBaseAttributes = this.document.baseAttributes.concat([]);
+          newBaseAttributes[index] = newAttributeValue;
+          this.document.baseAttributes = newBaseAttributes;
+        },
+      });
+      result.push(vm);
+    }
+    return result;
   }
 
   /**
@@ -422,32 +449,5 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
     } else {
       return this.document;
     }
-  }
-
-  /**
-   * Event handler for when a skill prerequisite is to be removed. 
-   * 
-   * @param {SimpleListItemViewModel} viewModel
-   * 
-   * @private
-   */
-  _onClickRemovePrerequisite(viewModel) {
-    const index = this.prerequisiteViewModels.indexOf(viewModel.itemViewModel);
-    const safeCopy = this.document.prerequisites.concat([]);
-    safeCopy.splice(index, 1);
-    this.document.prerequisites = safeCopy;
-  }
-
-  /**
-   * Updates the remote prerequisites array with the states gathered 
-   * from `this.prerequisiteViewModels`. 
-   * 
-   * @private
-   */
-  _updatePrerequisitesFromViewModels() {
-    const prerequisites = this.prerequisiteViewModels.map(viewModel => 
-      viewModel.state
-    );
-    this.document.prerequisites = prerequisites;
   }
 }

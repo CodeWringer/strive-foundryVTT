@@ -1,5 +1,5 @@
 import TransientSkill from "../../../../business/document/item/skill/transient-skill.mjs"
-import { ATTRIBUTES } from "../../../../business/ruleset/attribute/attributes.mjs"
+import { ATTRIBUTES, Attribute } from "../../../../business/ruleset/attribute/attributes.mjs"
 import { DAMAGE_TYPES } from "../../../../business/ruleset/damage-types.mjs"
 import { ATTACK_TYPES, getAttackTypeIconClass } from "../../../../business/ruleset/skill/attack-types.mjs"
 import DamageAndType from "../../../../business/ruleset/skill/damage-and-type.mjs"
@@ -9,29 +9,30 @@ import { isDefined } from "../../../../business/util/validation-utility.mjs"
 import ButtonContextMenuViewModel from "../../../component/button-context-menu/button-context-menu-viewmodel.mjs"
 import ButtonDeleteViewModel from "../../../component/button-delete/button-delete-viewmodel.mjs"
 import ButtonRollViewModel from "../../../component/button-roll/button-roll-viewmodel.mjs"
+import ButtonViewModel from "../../../component/button/button-viewmodel.mjs"
 import DamageDefinitionListViewModel from "../../../component/damage-definition-list/damage-definition-list-viewmodel.mjs"
 import InfoBubble, { InfoBubbleAutoHidingTypes, InfoBubbleAutoShowingTypes } from "../../../component/info-bubble/info-bubble.mjs"
 import ChoiceAdapter from "../../../component/input-choice/choice-adapter.mjs"
+import ChoiceOption from "../../../component/input-choice/choice-option.mjs"
 import InputDropDownViewModel from "../../../component/input-dropdown/input-dropdown-viewmodel.mjs"
 import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs"
 import InputTagsViewModel from "../../../component/input-tags/input-tags-viewmodel.mjs"
 import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs"
+import DynamicInputDialog from "../../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs"
 import { TEMPLATES } from "../../../templatePreloader.mjs"
 import BaseListItemViewModel from "../base/base-list-item-viewmodel.mjs"
 import { DataFieldComponent } from "../base/datafield-component.mjs"
 import { TemplatedComponent } from "../base/templated-component.mjs"
 import ExpertiseTableViewModel from "../expertise/expertise-table-viewmodel.mjs"
+import * as StringUtil from "../../../../business/util/string-utility.mjs"
+import DynamicInputDefinition from "../../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs"
+import { DYNAMIC_INPUT_TYPES } from "../../../dialog/dynamic-input-dialog/dynamic-input-types.mjs"
+import BaseAttributeListItemViewModel from "./base-attribute/base-attribute-list-item-viewmodel.mjs"
 
 /**
  * @property {TransientSkill} document
  */
 export default class SkillListItemViewModel extends BaseListItemViewModel {
-  /**
-   * @type {Array<ChoiceOption>}
-   * @readonly
-   */
-  get attributeOptions() { return ATTRIBUTES.asChoices(); }
-
   /**
    * Returns true, if the expertise list should be visible. 
    * @type {Boolean}
@@ -176,21 +177,24 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
     super(args);
     validateOrThrow(args, ["document"]);
 
-    this.vmDdRelatedAttribute = new InputDropDownViewModel({
-      id: "vmDdRelatedAttribute",
+    const attributeOptions = this.document.baseAttributes.map(baseAttribute => 
+      new ChoiceOption({
+        value: baseAttribute.name,
+        localizedValue: game.i18n.localize(baseAttribute.localizableName),
+      })
+    );
+    this.vmActiveAttribute = new InputDropDownViewModel({
+      id: "vmActiveAttribute",
       parent: this,
-      options: this.attributeOptions,
-      value: this.attributeOptions.find(it => it.value === this.document.relatedAttribute.name),
+      isEditable: (this.isEditable && attributeOptions.length > 1),
+      options: attributeOptions,
+      value: attributeOptions.find(it => it.value === this.document.activeBaseAttribute.name),
       onChange: (_, newValue) => {
-        this.document.relatedAttribute = newValue;
+        this.document.activeBaseAttribute = ATTRIBUTES[newValue];
       },
       adapter: new ChoiceAdapter({
         toChoiceOption(obj) {
-          if (isDefined(obj) === true) {
-            return ATTRIBUTES.asChoices().find(it => it.value === obj.name);
-          } else {
-            return ATTRIBUTES.asChoices().find(it => it.value === "none");
-          }
+          return attributeOptions.find(it => it.value === obj.name);
         },
         fromChoiceOption(option) {
           return ATTRIBUTES[option.value];
@@ -424,6 +428,21 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
   /** @override */
   getSecondaryHeaderButtons() {
     return [
+      // Edit button
+      new TemplatedComponent({
+        template: ButtonViewModel.TEMPLATE,
+        viewModel: new ButtonViewModel({
+          id: "vmBtnEdit",
+          parent: this,
+          iconHtml: '<i class="fas fa-cog"></i>',
+          localizedTooltip: game.i18n.localize("ambersteel.general.edit"),
+          onClick: async () => {
+            const delta = await this._queryAttributesConfiguration();
+            if (isDefined(delta) !== true) return;
+            this.document.baseAttributes = delta;
+          },
+        }),
+      }),
       // Context menu button
       new TemplatedComponent({
         template: ButtonContextMenuViewModel.TEMPLATE,
@@ -492,5 +511,60 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
       template: TEMPLATES.SKILL_LIST_ITEM_EXTRA_CONTENT,
       viewModel: this,
     });
+  }
+
+  /**
+   * Prompts the user to configure the base attributes of the skill and 
+   * returns the updated list. 
+   * 
+   * @returns {Array<Attribute>}
+   * 
+   * @private
+   * @async
+   */
+  async _queryAttributesConfiguration() {
+    const inputAttributes = "attributes";
+    const baseAttributes = this.document.baseAttributes.concat([]); // Safe copy
+
+    const dialog = await new DynamicInputDialog({
+      localizedTitle: StringUtil.format(
+        game.i18n.localize("ambersteel.general.input.queryFor"), 
+        this.document.name, 
+      ),
+      inputDefinitions: [
+        new DynamicInputDefinition({
+          type: DYNAMIC_INPUT_TYPES.SIMPLE_LIST,
+          name: inputAttributes,
+          localizedLabel: game.i18n.localize("ambersteel.character.attribute.plural"),
+          required: true,
+          defaultValue: baseAttributes,
+          validationFunc: (value) => {
+            return value.length > 0;
+          },
+          specificArgs: {
+            contentItemTemplate: BaseAttributeListItemViewModel.TEMPLATE,
+            contentItemViewModelFactory: (index, attributes) => {
+              return new BaseAttributeListItemViewModel({
+                id: `vmAttribute${index}`,
+                isEditable: true,
+                attribute: attributes[index],
+                onChange: (newAttributeValueName) => {
+                  const newAttributeValue = ATTRIBUTES[newAttributeValueName];
+                  attributes[index] = newAttributeValue;
+                },
+              })
+            },
+            newItemDefaultValue: ATTRIBUTES.agility,
+            isItemAddable: this.isEditable,
+            isItemRemovable: this.isEditable,
+            localizedAddLabel: game.i18n.localize("ambersteel.general.add"),
+          },
+        }),
+      ],
+    }).renderAndAwait(true);
+    
+    if (dialog.confirmed !== true) return;
+  
+    return dialog[inputAttributes];
   }
 }

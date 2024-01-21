@@ -37,9 +37,9 @@ export default class SkillChatMessageViewModel extends ViewModel {
    * @type {String}
    * @readonly
    */
-  get relatedAttribute() {
-    const options = ATTRIBUTES.asChoices();
-    return options.find(it => { return it.value === this.document.relatedAttribute.name }).localizedValue;
+  get baseAttributes() {
+    const baseAttributeAbbreviations = this.document.baseAttributes.map(attribute => game.i18n.localize(attribute.localizableAbbreviation));
+    return `(${baseAttributeAbbreviations.join(" / ")})`;
   }
   
   /**

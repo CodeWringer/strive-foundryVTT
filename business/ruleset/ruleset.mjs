@@ -15,15 +15,15 @@ export default class Ruleset {
    * Returns the number of dice for a skill test. 
    * 
    * @param {Number} skillLevel A skill level. 
-   * @param {Number} relatedAttributeLevel Level of the skill related attribute. 
+   * @param {Number} activeBaseAttribute Level of the active base attribute. 
    * 
    * @returns {Object} { totalDiceCount: {Number}, skillDiceCount: {Number}, attributeDiceCount: {Number} }
    */
-  getSkillTestNumberOfDice(skillLevel, relatedAttributeLevel) {
+  getSkillTestNumberOfDice(skillLevel, activeBaseAttribute) {
     return {
-      totalDiceCount: skillLevel + relatedAttributeLevel,
+      totalDiceCount: skillLevel + activeBaseAttribute,
       skillDiceCount: skillLevel,
-      attributeDiceCount: relatedAttributeLevel
+      attributeDiceCount: activeBaseAttribute
     };
   }
 
@@ -425,7 +425,7 @@ export default class Ruleset {
     const transientSkill = skill.getTransientObject();
 
     if (actor.type === "npc") {
-      const attributeGroup = getGroupForAttributeByName(transientSkill.relatedAttribute.name);
+      const attributeGroup = getGroupForAttributeByName(transientSkill.activeBaseAttribute.name);
       const transientActor = actor.getTransientObject();
 
       if (transientActor.getIsCrActiveFor(attributeGroup.name) === true) {
