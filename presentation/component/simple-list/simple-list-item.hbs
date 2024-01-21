@@ -2,12 +2,14 @@
 viewModel: SimpleListViewModel
 --}}
 {{!-- The item's content --}}
-{{#with viewModel.itemTemplate as |template|}}
-  <div class="flex flex-grow">
-    {{> (template) viewModel=../viewModel.itemViewModel}}
+<div id="{{viewModel.id}}" class="flex flex-row flex-grow">
+  {{#with viewModel.itemTemplate as |template|}}
+    <div class="flex flex-grow">
+      {{> (template) viewModel=../viewModel.itemViewModel}}
+    </div>
+  {{/with}}
+  {{!-- Remove button --}}
+  <div class="button light square {{#if viewModel.isRemovable}}{{else}} hidden{{/if}}">
+    {{> button viewModel=viewModel.vmBtnRemove fill=true }}
   </div>
-{{/with}}
-{{!-- Remove button --}}
-<div class="button light square {{#if viewModel.isRemovable}}{{else}} hidden{{/if}}">
-  {{> button viewModel=viewModel.vmBtnRemove fill=true }}
 </div>

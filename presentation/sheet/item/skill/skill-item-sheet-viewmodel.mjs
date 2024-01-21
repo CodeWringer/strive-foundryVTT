@@ -277,8 +277,7 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
         ]);
         this.document.baseAttributes = baseAttributes;
       },
-      onRemoveClick: (viewModelToRemove) => {
-        const index = this.baseAttributeViewModels.indexOf(viewModelToRemove.itemViewModel);
+      onRemoveClick: (_, index) => {
         const newBaseAttributes = this.document.baseAttributes.concat([]);
         newBaseAttributes.splice(index, 1);
         this.document.baseAttributes = newBaseAttributes;
@@ -303,8 +302,7 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
         ]);
         this.document.prerequisites = prerequisites;
       },
-      onRemoveClick: (viewModelToRemove) => {
-        const index = this.prerequisiteViewModels.indexOf(viewModelToRemove.itemViewModel);
+      onRemoveClick: (_, index) => {
         const newPrerequisites = this.document.prerequisites.concat([]);
         newPrerequisites.splice(index, 1);
         this.document.prerequisites = newPrerequisites;
@@ -422,7 +420,7 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
       const attribute = attributes[index];
 
       const vm = new BaseAttributeListItemViewModel({
-        id: `vmPrerequisite${index}`,
+        id: `vmAttribute${index}`,
         isEditable: this.isEditable,
         attribute: attribute,
         onChange: (newAttributeValueName) => {
