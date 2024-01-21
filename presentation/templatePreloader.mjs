@@ -109,6 +109,7 @@ export const TEMPLATES = {
   SKILL_LIST_ITEM_EXTRA_CONTENT: `${basePathPresentation}/sheet/item/skill/skill-list-item-extra-content.hbs`,
   SKILL_LIST_ITEM_EXTRA_HEADER: `${basePathPresentation}/sheet/item/skill/skill-list-item-extra-header.hbs`,
   SKILL_PREREQUISITE_LIST_ITEM: `${basePathPresentation}/sheet/item/skill/skill-prerequisite-list-item.hbs`,
+  SKILL_BASE_ATTRIBUTE_LIST_ITEM: `${basePathPresentation}/sheet/item/skill/base-attribute/base-attribute-list-item.hbs`,
   // Expertise
   EXPERTISE_TABLE: `${basePathPresentation}/sheet/item/expertise/expertise-table.hbs`,
   EXPERTISE_LIST_ITEM_EXTRA_CONTENT: `${basePathPresentation}/sheet/item/expertise/expertise-list-item-extra-content.hbs`,

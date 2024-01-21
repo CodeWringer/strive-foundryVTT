@@ -12,6 +12,7 @@ import ButtonRollViewModel from "../../../component/button-roll/button-roll-view
 import DamageDefinitionListViewModel from "../../../component/damage-definition-list/damage-definition-list-viewmodel.mjs"
 import InfoBubble, { InfoBubbleAutoHidingTypes, InfoBubbleAutoShowingTypes } from "../../../component/info-bubble/info-bubble.mjs"
 import ChoiceAdapter from "../../../component/input-choice/choice-adapter.mjs"
+import ChoiceOption from "../../../component/input-choice/choice-option.mjs"
 import InputDropDownViewModel from "../../../component/input-dropdown/input-dropdown-viewmodel.mjs"
 import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs"
 import InputTagsViewModel from "../../../component/input-tags/input-tags-viewmodel.mjs"
@@ -26,12 +27,6 @@ import ExpertiseTableViewModel from "../expertise/expertise-table-viewmodel.mjs"
  * @property {TransientSkill} document
  */
 export default class SkillListItemViewModel extends BaseListItemViewModel {
-  /**
-   * @type {Array<ChoiceOption>}
-   * @readonly
-   */
-  get attributeOptions() { return ATTRIBUTES.asChoices(); }
-
   /**
    * Returns true, if the expertise list should be visible. 
    * @type {Boolean}
@@ -176,21 +171,24 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
     super(args);
     validateOrThrow(args, ["document"]);
 
-    this.vmDdRelatedAttribute = new InputDropDownViewModel({
-      id: "vmDdRelatedAttribute",
+    const attributeOptions = this.document.baseAttributes.map(baseAttribute => 
+      new ChoiceOption({
+        value: baseAttribute.name,
+        localizedValue: game.i18n.localize(baseAttribute.localizableName),
+      })
+    );
+    this.vmActiveAttribute = new InputDropDownViewModel({
+      id: "vmActiveAttribute",
       parent: this,
-      options: this.attributeOptions,
-      value: this.attributeOptions.find(it => it.value === this.document.relatedAttribute.name),
+      isEditable: (this.isEditable && attributeOptions.length > 1),
+      options: attributeOptions,
+      value: attributeOptions.find(it => it.value === this.document.activeBaseAttribute.name),
       onChange: (_, newValue) => {
-        this.document.relatedAttribute = newValue;
+        this.document.activeBaseAttribute = ATTRIBUTES[newValue];
       },
       adapter: new ChoiceAdapter({
         toChoiceOption(obj) {
-          if (isDefined(obj) === true) {
-            return ATTRIBUTES.asChoices().find(it => it.value === obj.name);
-          } else {
-            return ATTRIBUTES.asChoices().find(it => it.value === "none");
-          }
+          return attributeOptions.find(it => it.value === obj.name);
         },
         fromChoiceOption(option) {
           return ATTRIBUTES[option.value];
