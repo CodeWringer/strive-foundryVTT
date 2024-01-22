@@ -23,6 +23,18 @@
  * * `specificArgs`: 
  * * * `placeholder: {String | undefined}` Optional. A placeholder text to display while the textfield is empty. 
  * @property {String} LABEL Allows no input to be made. Is used only to display information to the user. 
+ * @property {String} SIMPLE_LIST Allows editing a dynamic number of entries in a list. 
+ * * The `defaultValue` is expected to be the list of values. For example, this could be 
+ * a list of attributes. 
+ * * `specificArgs`: 
+ * * * `contentItemTemplate: {String}` 
+ * * * `contentItemViewModelFactory: {Function}` The factory function used to get view model 
+ * instances. Receives the current index as first and the values array as second argument. 
+ * Is expected to return a new view model instance. 
+ * * * `newItemDefaultValue: {Any}` 
+ * * * `isItemAddable: {Boolean | undefined}` 
+ * * * `isItemRemovable: {Boolean | undefined}` 
+ * * * `localizedAddLabel: {String | undefined}` 
  * 
  * @constant
  */
@@ -35,4 +47,5 @@ export const DYNAMIC_INPUT_TYPES = {
   TEXTAREA: "TEXTAREA",
   TEXTFIELD: "TEXTFIELD",
   LABEL: "LABEL",
+  SIMPLE_LIST: "SIMPLE_LIST",
 }

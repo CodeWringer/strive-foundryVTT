@@ -13,13 +13,13 @@ cssClass: {undefined | String}
     </div>
     {{#> header2 showFancyFont=viewModel.showFancyFont cssClass="flex-grow"}}{{viewModel.document.name}}{{/header2}}
   </div>
-  {{!-- Related Attribute --}}
+  {{!-- Attribute --}}
   <div class="flex flex-row sheet-block margin-b-md">
     <div class="width-min-xxl">
-      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.attribute.singular"}}{{/label}}
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.attribute.plural"}}{{/label}}
     </div>
     <div class="flex-grow">
-      {{viewModel.relatedAttribute}}
+      {{viewModel.baseAttributes}}
     </div>
   </div>
   {{!-- Category --}}

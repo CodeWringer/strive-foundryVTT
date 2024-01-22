@@ -207,11 +207,11 @@ export default class HealthStatesSettingsDialogViewModel extends ViewModel {
    * Event handler for when a custom health state is to be removed. 
    * 
    * @param {SimpleListItemViewModel} viewModel
+   * @param {Number} index
    * 
    * @private
    */
-  _onClickRemoveCustomHealthState(viewModel) {
-    const index = this.customHealthStateViewModels.indexOf(viewModel.itemViewModel);
+  _onClickRemoveCustomHealthState(_, index) {
     this.stateSettings.custom.splice(index, 1);
     this._renderFormApplication();
   }

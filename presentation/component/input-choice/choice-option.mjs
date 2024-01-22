@@ -96,7 +96,9 @@ export default class ChoiceOption {
    * * E.g. `"systems/ambersteel/presentation/image/texture.svg"`
    * * E.g. `"fas fa-plus"`
    * @param {Boolean | undefined} args.shouldDisplayValue Optional. Sets whether the value should be displayed. Default true. 
+   * * default `true`
    * @param {Boolean | undefined} args.shouldDisplayIcon Optional. Sets whether the icon should be displayed. Default true. 
+   * * default `true`
    * @param {Boolean | undefined} args.displayHtmlOverride Optional. Sets the raw HTML to display as the content. 
    */
   constructor(args = {}) {

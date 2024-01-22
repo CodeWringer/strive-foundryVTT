@@ -647,7 +647,6 @@
           "singular": "Prerequisite",
           "plural": "Prerequisites"
         },
-        "relatedAttribute": "Related Attribute",
         "singular": "Skill",
         "properties": {
           "magicSchool": "Magic School",
