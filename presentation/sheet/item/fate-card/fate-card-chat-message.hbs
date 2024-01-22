@@ -3,6 +3,7 @@ viewModel: {FateCardChatMessageViewModel}
 cssClass: {undefined | String}
 --}}
 <section class="custom-system-chat-message fate-card{{#if cssClass}} {{cssClass}}{{/if}}"
+  id="{{viewModel.id}}"
   data-view-model-id="{{viewModel.id}}"
   data-document-id="{{viewModel.document.id}}"
 >
