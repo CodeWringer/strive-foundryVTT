@@ -105,6 +105,7 @@ export default class SkillChatMessageViewModel extends ViewModel {
     this.document = args.document;
 
     this.expertiseViewModels = this.document.expertises.map(it => it.getChatViewModel({
+      id: it.id,
       parent: this,
       showParentSkill: false,
     }));
