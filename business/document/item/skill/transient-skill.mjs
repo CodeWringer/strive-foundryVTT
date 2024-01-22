@@ -411,17 +411,36 @@ export default class TransientSkill extends TransientBaseItem {
     });
   }
 
-  /** @override */
+  /**
+   * Returns an instance of a view model for use in a chat message. 
+   * 
+   * @param {Object | undefined} overrides Optional. An object that allows overriding any of the view model properties. 
+   * @param {ViewModel | undefined} overrides.parent A parent view model instance. 
+   * In case this is an embedded document, such as an expertise, this value must be supplied 
+   * for proper function. 
+   * @param {String | undefined} overrides.id
+   * * default is a new UUID.
+   * @param {Boolean | undefined} overrides.isEditable
+   * * default `false`
+   * @param {Boolean | undefined} overrides.isSendable
+   * * default `false`
+   * @param {Boolean | undefined} overrides.showParentSkill Optional. If true, will show the parent skill name and icon, if possible. 
+   * * default `true`
+   * 
+   * @returns {ExpertiseChatMessageViewModel}
+   * 
+   * @override
+   */
   getChatViewModel(overrides = {}) {
     return new SkillChatMessageViewModel({
-      id: `${this.id}-${createUUID()}`,
-      isEditable: false,
-      isSendable: false,
+      id: overrides.id,
+      parent: overrides.parent,
+      isEditable: overrides.isEditable ?? false,
+      isSendable: overrides.isSendable ?? false,
       isOwner: this.isOwner,
       isGM: game.user.isGM,
       document: this,
       visGroupId: createUUID(),
-      ...overrides,
     });
   }
 

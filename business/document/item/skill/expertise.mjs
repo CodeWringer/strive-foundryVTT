@@ -10,6 +10,7 @@ import { VISIBILITY_MODES } from '../../../../presentation/chat/visibility-modes
 import { ATTACK_TYPES, AttackType } from '../../../ruleset/skill/attack-types.mjs';
 import TransientSkill from './transient-skill.mjs';
 import AtReferencer from '../../../referencing/at-referencer.mjs';
+import ViewModel from '../../../../presentation/view-model/view-model.mjs';
 
 /**
  * Represents an expertise. 
@@ -267,29 +268,34 @@ export default class Expertise {
    * Returns an instance of a view model for use in a chat message. 
    * 
    * @param {Object | undefined} overrides Optional. An object that allows overriding any of the view model properties. 
+   * @param {ViewModel | undefined} overrides.parent A parent view model instance. 
+   * In case this is an embedded document, such as an expertise, this value must be supplied 
+   * for proper function. 
    * @param {String | undefined} overrides.id
+   * * default is a new UUID.
    * @param {Boolean | undefined} overrides.isEditable
+   * * default `false`
    * @param {Boolean | undefined} overrides.isSendable
-   * @param {Boolean | undefined} overrides.isOwner
-   * @param {Boolean | undefined} overrides.isGM
+   * * default `false`
    * @param {Boolean | undefined} overrides.showParentSkill Optional. If true, will show the parent skill name and icon, if possible. 
-   * * Default `true`
+   * * default `true`
    * 
    * @returns {ExpertiseChatMessageViewModel}
    * 
-   * @virtual
+   * @override
    */
   getChatViewModel(overrides = {}) {
     const actor = (this.owningDocument.owningDocument !== undefined) ? 
       this.owningDocument.owningDocument.document : undefined;
 
     return new ExpertiseChatMessageViewModel({
-      id: `${this.id}-${createUUID()}`,
-      isEditable: false,
-      isSendable: false,
+      id: overrides.id,
+      parent: overrides.parent,
+      isEditable: overrides.isEditable ?? false,
+      isSendable: overrides.isSendable ?? false,
+      showParentSkill: overrides.showParentSkill ?? true,
       isOwner: this.owningDocument.isOwner,
       isGM: game.user.isGM,
-      ...overrides,
       expertise: this,
       actor: actor,
     });
