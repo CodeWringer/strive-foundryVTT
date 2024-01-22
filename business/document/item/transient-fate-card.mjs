@@ -79,7 +79,7 @@ export default class TransientFateCard extends TransientBaseItem {
    */
   getChatViewModel(overrides = {}) {
     return new FateCardChatMessageViewModel({
-      id: overrides.id ?? `${this.id}-${createUUID()}`,
+      id: overrides.id,
       parent: overrides.parent,
       isEditable: overrides.isEditable ?? false,
       isSendable: overrides.isSendable ?? false,

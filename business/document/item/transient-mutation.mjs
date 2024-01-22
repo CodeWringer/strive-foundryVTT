@@ -55,7 +55,7 @@ export default class TransientMutation extends TransientBaseItem {
    */
   getChatViewModel(overrides = {}) {
     return new MutationChatMessageViewModel({
-      id: overrides.id ?? `${this.id}-${createUUID()}`,
+      id: overrides.id,
       parent: overrides.parent,
       isEditable: overrides.isEditable ?? false,
       isSendable: overrides.isSendable ?? false,
