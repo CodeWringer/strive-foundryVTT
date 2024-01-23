@@ -1,4 +1,5 @@
 import { validateOrThrow } from "../../business/util/validation-utility.mjs";
+import { getPixiTexture } from "./pixi-preloader.mjs";
 
 /**
  * Represents a clickable sprite, with hover state. 
@@ -61,51 +62,38 @@ export class PixiButton {
     this.onClick = args.onClick ?? (() => {});
 
     this._wrapped = new PIXI.Container();
-    this._wrapped.interactive = true;
-    this._wrapped.on("click", (event) => {
-      this.onClick();
-    });
-    this._wrapped.on("pointerover", (event) => {
-      this._showHover();
-    });
-    this._wrapped.on("pointerout", (event) => {
-      this._hideHover();
-    });
-
-    this._spriteIcon = new PIXI.Sprite.from(args.texture);
-    // this._spriteIcon.anchor.set(0.5, 0.5);
-    this._wrapped.addChild(this._spriteIcon);
     
-    this._spriteHover = new PIXI.Sprite.from(args.texture);
+    // Actual sprite. 
+    this._spriteIcon = new PIXI.Sprite(args.texture);
+
+    this._spriteIcon.eventMode = "static";
+    this._spriteIcon.cursor = "pointer";
+    
+    // Hover sprite. 
+    this._spriteHover = new PIXI.Sprite(args.texture);
     this._spriteHover.anchor.set(0.5, 0.5);
     this._spriteHover.position.set(this._spriteIcon.width / 2, this._spriteIcon.height / 2);
     this._spriteHover.scale.set(1.4, 1.4);
     this._spriteHover.tint = 0xd23d3d;
+    this._spriteHover.alpha = 0.0;
     const blurStrength = 4;
     const blurQuality = 4;
     this._spriteHover.filters = [
       new PIXI.filters.BlurFilter(blurStrength, blurQuality)
     ];
-  }
+    this._wrapped.addChild(this._spriteHover);
+    this._wrapped.addChild(this._spriteIcon);
 
-  /**
-   * Shows the hover effect. 
-   * 
-   * @private
-   */
-  _showHover() {
-    // Prevent adding the hover sprite more than once. 
-    if (this._wrapped.children.find(it => it == this._spriteHover) !== undefined) return;
-
-    this._wrapped.addChildAt(this._spriteHover, 0);
-  }
-
-  /**
-   * Hides the hover effect. 
-   * 
-   * @private
-   */
-  _hideHover() {
-    this._wrapped.removeChild(this._spriteHover);
+    this._spriteIcon.on("click", (event) => {
+      this.onClick();
+    })
+    .on("pointerover", (event) => {
+      console.log("pointerover");
+      this._spriteHover.alpha = 0.8;
+    })
+    .on("pointerout", (event) => {
+      console.log("pointerout");
+      this._spriteHover.alpha = 0.0;
+    });
   }
 }
