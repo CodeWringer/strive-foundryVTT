@@ -724,7 +724,8 @@
           "label": "Opposed By",
           "placeholder": "Strength / Sneak / etc."
         },
-        "placeholder": "0 / Opposed+-0 / etc."
+        "placeholder": "0 / Opposed+-0 / etc.",
+        "rollForPlaceholder": "3 / 3D / 2d + 1 / 2D6 - 1D3"
       },
       "backFire": {
         "label": "Backfire"
