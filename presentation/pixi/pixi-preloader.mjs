@@ -40,6 +40,9 @@ export async function preloadPixiTextures() {
 /**
  * Fetches and returns the PIXI texture identified by the given key. 
  * 
+ * Abstracts away the exact access mechanism, so that changes in PIXI's API 
+ * only impact **this** piece of code. 
+ * 
  * @param {String} key One of the `TEXTURES` constants that identify 
  * one of the textures. 
  * 
