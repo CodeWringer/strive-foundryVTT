@@ -88,11 +88,9 @@ export class PixiButton {
       this.onClick();
     })
     .on("pointerover", (event) => {
-      console.log("pointerover");
       this._spriteHover.alpha = 0.8;
     })
     .on("pointerout", (event) => {
-      console.log("pointerout");
       this._spriteHover.alpha = 0.0;
     });
   }
