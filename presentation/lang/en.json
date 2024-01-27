@@ -187,8 +187,12 @@
           "veryLongReach": "Very Long Reach",
           "weapon": "Weapon"
         },
-        "takeToPerson": "Take (to person)",
-        "dropFromPerson": "Drop (from person)",
+        "take": "Take",
+        "takeToLuggage": "Take to luggage",
+        "takeToEquipped": "Take to equipment",
+        "dropToLuggage": "Drop to luggage",
+        "dropToProperty": "Drop to property",
+        "drop": "Drop",
         "remote": "Property",
         "carryingCapacity": {
           "label": "Carrying Capacity (in bulk)",

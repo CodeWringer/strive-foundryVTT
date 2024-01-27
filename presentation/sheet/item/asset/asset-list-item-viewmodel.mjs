@@ -115,6 +115,20 @@ export default class AssetListItemViewModel extends BaseListItemViewModel {
   getPrimaryHeaderButtons() {
     const thiz = this;
 
+    let takeLabel = "ambersteel.character.asset.take";
+    if (this.document.isLuggage) {
+      takeLabel = "ambersteel.character.asset.takeToEquipped";
+    } else if (this.document.isProperty) {
+      takeLabel = "ambersteel.character.asset.takeToLuggage";
+    }
+
+    let dropLabel = "ambersteel.character.asset.drop";
+    if (this.document.isEquipped) {
+      dropLabel = "ambersteel.character.asset.dropToLuggage";
+    } else if (this.document.isLuggage) {
+      dropLabel = "ambersteel.character.asset.dropToProperty";
+    }
+
     return super.getPrimaryHeaderButtons().concat([
       new TemplatedComponent({
         template: ButtonViewModel.TEMPLATE,
@@ -123,7 +137,7 @@ export default class AssetListItemViewModel extends BaseListItemViewModel {
           parent: this,
           isEditable: this.getRootOwningDocument() !== undefined && this.isEditable,
           iconHtml: '<i class="ico dark interactible ico-take-item"></i>',
-          localizedToolTip: game.i18n.localize("ambersteel.character.asset.takeToPerson"),
+          localizedToolTip: game.i18n.localize(takeLabel),
           onClick: async () => {
             // Move "up" on character sheet. 
             if (thiz.document.isProperty === true) {
@@ -145,7 +159,7 @@ export default class AssetListItemViewModel extends BaseListItemViewModel {
           parent: this,
           isEditable: this.getRootOwningDocument() !== undefined && this.isEditable,
           iconHtml: '<i class="ico dark interactible ico-drop-item"></i>',
-          localizedToolTip: game.i18n.localize("ambersteel.character.asset.dropFromPerson"),
+          localizedToolTip: game.i18n.localize(dropLabel),
           onClick: async () => {
             // Move "down" on character sheet. 
             if (thiz.document.isEquipped === true) {
