@@ -828,7 +828,8 @@
         "configureCustom": "Define custom conditions",
         "add": {
           "label": "Add Custom Condition"
-        }
+        },
+        "newDefaultName": "New Health State"
       }
     }
   }
