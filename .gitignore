@@ -7,8 +7,16 @@ debug.log
 node_modules/
 npm-debug.log
 
-# Foundry
+# FoundryVTT
 *.lock
+## Keep around until v12 of FoundryVTT for compatibility with version 10. 
+packs/**/LOG
+packs/**/CURRENT
+packs/**/LOCK
+packs/**/MANIFEST-*
+packs/**/*.log
+packs/**/*.ldb
+packs/**/LOG.old
 
 # Generated
 build/

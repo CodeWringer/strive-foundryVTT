@@ -1,14 +1,14 @@
 {
-  "ACTOR.TypePc": "PC",
-  "ACTOR.TypeNpc": "NPC",
-  "ACTOR.TypePlain": "Plain Actor",
-  "ITEM.TypeItem": "Asset",
-  "ITEM.TypeSkill": "Skill",
-  "ITEM.TypeFate-card": "Fate-Card",
-  "ITEM.TypeInjury": "Injury",
-  "ITEM.TypeIllness": "Illness",
-  "ITEM.TypeMutation": "Mutation",
-  "ITEM.TypeScar": "Scar",
+  "TYPES.Actor.pc": "PC",
+  "TYPES.Actor.npc": "NPC",
+  "TYPES.Actor.plain": "Plain Actor",
+  "TYPES.Item.item": "Asset",
+  "TYPES.Item.skill": "Skill",
+  "TYPES.Item.fate-card": "Fate-Card",
+  "TYPES.Item.injury": "Injury",
+  "TYPES.Item.illness": "Illness",
+  "TYPES.Item.mutation": "Mutation",
+  "TYPES.Item.scar": "Scar",
   "ambersteel": {
     "migration": {
       "title": "Data Migration",
@@ -187,8 +187,12 @@
           "veryLongReach": "Very Long Reach",
           "weapon": "Weapon"
         },
-        "takeToPerson": "Take (to person)",
-        "dropFromPerson": "Drop (from person)",
+        "take": "Take",
+        "takeToLuggage": "Take to luggage",
+        "takeToEquipped": "Take to equipment",
+        "dropToLuggage": "Drop to luggage",
+        "dropToProperty": "Drop to property",
+        "drop": "Drop",
         "remote": "Property",
         "carryingCapacity": {
           "label": "Carrying Capacity (in bulk)",
@@ -724,7 +728,8 @@
           "label": "Opposed By",
           "placeholder": "Strength / Sneak / etc."
         },
-        "placeholder": "0 / Opposed+-0 / etc."
+        "placeholder": "0 / Opposed+-0 / etc.",
+        "rollForPlaceholder": "3 / 3D / 2d + 1 / 2D6 - 1D3"
       },
       "backFire": {
         "label": "Backfire"
@@ -823,7 +828,8 @@
         "configureCustom": "Define custom conditions",
         "add": {
           "label": "Add Custom Condition"
-        }
+        },
+        "newDefaultName": "New Health State"
       }
     }
   }
