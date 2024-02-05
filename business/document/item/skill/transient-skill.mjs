@@ -103,7 +103,17 @@ export default class TransientSkill extends TransientBaseItem {
    * @type {Attribute}
    */
   get activeBaseAttribute() {
-    return ((ATTRIBUTES[this.document.system.activeBaseAttribute]) ?? this.baseAttributes[0]);
+    const systemActiveBaseAttribute = this.document.system.activeBaseAttribute;
+    const containedInBaseAttributes = (this.baseAttributes.find(it => it.name === systemActiveBaseAttribute) !== undefined);
+    
+    if (containedInBaseAttributes === true) {
+      return ATTRIBUTES[systemActiveBaseAttribute];
+    } else if (this.baseAttributes.length > 0) {
+      return this.baseAttributes[0];
+    } else {
+      game.ambersteel.logger.logWarn(`List of base attributes is empty for skill '${this.id}' - '${this.name}'`);
+      return ATTRIBUTES.agility;
+    }
   }
   /**
    * @param {Attribute} value
