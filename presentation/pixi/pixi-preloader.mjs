@@ -1,4 +1,4 @@
-import VersionCode from "../../business/migration/version-code.mjs";
+import { FOUNDRY_10_PIXI_VERSION, PIXI_VERSION } from "./pixi-globals.mjs";
 
 const BASE_PATH = "systems/ambersteel/presentation/image";
 
@@ -25,20 +25,6 @@ export const TEXTURES = {
  * @type {Map<String, PIXI.Texture>}
  */
 const preloadedTextures = new Map();
-
-/**
- * @type {VersionCode}
- * @constant
- * @readonly
- */
-const PIXI_VERSION = VersionCode.fromString(PIXI.VERSION);
-
-/**
- * @type {VersionCode}
- * @constant
- * @readonly
- */
-const FOUNDRY_10_PIXI_VERSION = new VersionCode(6, 5, 2);
 
 /**
  * Preloads all custom PIXI textures and caches them for synchronous access later. 
