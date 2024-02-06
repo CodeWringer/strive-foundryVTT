@@ -275,7 +275,7 @@ export default class ButtonRollViewModel extends ButtonViewModel {
         required: true,
         defaultValue: "",
         specificArgs: {
-          placeholder: "3 / 3D",
+          placeholder: game.i18n.localize("ambersteel.roll.obstacle.rollForPlaceholder"),
         },
       }),
       new DynamicInputDefinition({

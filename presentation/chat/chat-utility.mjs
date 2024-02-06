@@ -73,7 +73,7 @@ export async function sendPropertyToChat(args = {}) {
 
   const prop = getNestedPropertyValue(args.obj, args.propertyPath);
   if (prop.type !== undefined) {
-    if (prop.type === "skill-ability") {
+    if (prop.type === "expertise") {
       await prop.sendToChat({
         visibilityMode: visibilityMode,
       });

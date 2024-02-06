@@ -11,6 +11,11 @@ viewModel: {SkillItemSheetViewModel}
   </div>
   {{> damageDefinitionList viewModel=viewModel.vmDamageDefinitionList}}
 </div>
+{{!-- Attributes --}}
+<div class="sheet-block flex flex-column">
+  {{#> header3 showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.attribute.plural"}}{{/header3}}
+  {{> simpleList viewModel=viewModel.vmBaseAttributeList}}
+</div>
 {{!-- Row --}}
 <div class="flex flex-row flex-middle auto-margin-h sheet-block">
   {{!-- Category --}}
@@ -29,5 +34,5 @@ viewModel: {SkillItemSheetViewModel}
   {{#> header3 showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.skill.prerequisite.plural"}}{{/header3}}
   {{> simpleList viewModel=viewModel.vmPrerequisiteList}}
 </div>
-{{!-- Skill Abilites --}}
-{{> "systems/ambersteel/presentation/sheet/item/skill-ability/skill-ability-table.hbs" viewModel=viewModel.vmSkillAbilityTable cssClass=(ifThenElse viewModel.isSkillAbilityListVisible "" "hidden") }}
+{{!-- Expertises --}}
+{{> "systems/ambersteel/presentation/sheet/item/expertise/expertise-table.hbs" viewModel=viewModel.vmExpertiseTable cssClass=(ifThenElse viewModel.isExpertiseListVisible "" "hidden") }}

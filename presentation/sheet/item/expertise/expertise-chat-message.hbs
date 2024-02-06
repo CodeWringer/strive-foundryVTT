@@ -1,11 +1,12 @@
 {{!-- Parameters:
-viewModel: {SkillAbilityChatMessageViewModel}
+viewModel: {ExpertiseChatMessageViewModel}
 cssClass: {undefined | String}
 --}}
 <section class="custom-system-chat-message{{#if cssClass}} {{cssClass}}{{/if}}" 
+  id="{{viewModel.id}}"
   data-view-model-id="{{viewModel.id}}"
   data-document-id="{{viewModel.owningDocumentId}}"
-  data-ability-id="{{viewModel.skillAbility.id}}"
+  data-expertise-id="{{viewModel.expertise.id}}"
 >
   {{!-- Header --}}
   {{#if viewModel.showParentSkill}}
@@ -22,26 +23,26 @@ cssClass: {undefined | String}
   {{/if}}
   <div class="flex flex-row">
     <div class="flex flex-center">
-      <img class="inline-img header-image margin-r-sm" name="img" src="{{viewModel.skillAbility.img}}" title="{{viewModel.skillAbility.name}}" height="26" width="26" />
+      <img class="inline-img header-image margin-r-sm" name="img" src="{{viewModel.expertise.img}}" title="{{viewModel.expertise.name}}" height="26" width="26" />
     </div>
-    {{#> header2 showFancyFont=viewModel.showFancyFont cssClass="flex-grow"}}{{viewModel.skillAbility.name}}{{/header2}}
+    {{#> header2 showFancyFont=viewModel.showFancyFont cssClass="flex-grow"}}{{viewModel.expertise.name}}{{/header2}}
   </div>
   {{!-- Required level --}}
   <div class="flex flex-row sheet-block margin-b-md">
     <div class="width-min-xxl">
-      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.skill.ability.requirement"}}{{/label}}
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.skill.expertise.requirement"}}{{/label}}
     </div>
     <div class="flex-grow">
-      {{viewModel.skillAbility.requiredLevel}}
+      {{viewModel.expertise.requiredLevel}}
     </div>
   </div>
   {{!-- apCost --}}
   <div class="flex flex-row sheet-block margin-b-md">
     <div class="width-min-xxl">
-      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.skill.ability.apCost"}}{{/label}}
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.skill.expertise.apCost"}}{{/label}}
     </div>
     <div class="flex-grow">
-      {{viewModel.skillAbility.apCost}}
+      {{viewModel.expertise.apCost}}
     </div>
   </div>
   {{!-- Obstacle --}}
@@ -50,7 +51,7 @@ cssClass: {undefined | String}
       {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.roll.obstacle.abbreviation"}}{{/label}}
     </div>
     <div class="flex-grow">
-      {{viewModel.skillAbility.obstacle}}
+      {{viewModel.expertise.obstacle}}
     </div>
   </div>
   {{!-- Opposed By --}}
@@ -59,16 +60,16 @@ cssClass: {undefined | String}
       {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.roll.obstacle.opposedBy.label"}}{{/label}}
     </div>
     <div class="flex-grow">
-      {{viewModel.skillAbility.opposedBy}}
+      {{viewModel.expertise.opposedBy}}
     </div>
   </div>
   {{!-- Condition --}}
   <div class="flex flex-row sheet-block margin-b-md{{#if viewModel.hideCondition}} hidden{{/if}}">
     <div class="width-min-xxl">
-      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.skill.ability.condition.label"}}{{/label}}
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.skill.expertise.condition.label"}}{{/label}}
     </div>
     <div class="flex-grow">
-      {{localize viewModel.skillAbility.condition}}
+      {{localize viewModel.expertise.condition}}
     </div>
   </div>
   {{!-- attackType --}}
@@ -83,15 +84,15 @@ cssClass: {undefined | String}
   {{!-- distance --}}
   <div class="flex flex-row sheet-block margin-b-md{{#if viewModel.hideDistance}} hidden{{/if}}">
     <div class="width-min-xxl">
-      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.skill.ability.distance.label"}}{{/label}}
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.skill.expertise.distance.label"}}{{/label}}
     </div>
     <div class="flex-grow">
-      {{viewModel.skillAbility.distance}}
+      {{viewModel.expertise.distance}}
     </div>
   </div>
   {{!-- Damage --}}
   <ol class="unstyled-list{{#if viewModel.hideDamage}} hidden{{/if}}">
-    {{#each viewModel.skillAbility.damage as |entry index|}}
+    {{#each viewModel.expertise.damage as |entry index|}}
       <li class="ambersteel-list-row sheet-block flex flex-column margin-b-md">
         {{!-- Damage formula --}}
         <div class="flex flex-row">
@@ -115,7 +116,7 @@ cssClass: {undefined | String}
     {{/each}}
   </ol>
   {{!-- Description --}}
-  <div class="sheet-block scrollable-height-md">
+  <div class="sheet-block">
     {{> lazyRichText viewModel=viewModel.vmLazyDescription}}
   </div>
 </section>

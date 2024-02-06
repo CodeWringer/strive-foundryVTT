@@ -45,9 +45,9 @@ viewModel: {SkillListItemViewModel}
   {{/labeledControl}}
 </div>
 {{!-- Row --}}
-{{!-- Skill Abilites --}}
-{{#if viewModel.showSkillAbilities}}
-  {{#with viewModel.skillAbilitiesTemplate as |template|}}
-  {{> (template) viewModel=../viewModel.vmSkillAbilityTable }}
+{{!-- Expertises --}}
+{{#if viewModel.showExpertises}}
+  {{#with viewModel.expertisesTemplate as |template|}}
+  {{> (template) viewModel=../viewModel.vmExpertiseTable }}
   {{/with}}
 {{/if}}

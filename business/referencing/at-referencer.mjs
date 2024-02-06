@@ -1,5 +1,5 @@
 import TransientDocument from "../document/transient-document.mjs";
-import SkillAbility from "../document/item/skill/skill-ability.mjs";
+import Expertise from "../document/item/skill/expertise.mjs";
 import { getNestedPropertyValue } from "../util/property-utility.mjs";
 
 /**
@@ -37,7 +37,7 @@ export default class AtReferencer {
    * * If a reference's name contains spaces, they must be replaced with underscores. 
    * E. g. `"@Heavy_Armor"`, instead of `"@Heavy Armor"`
    * * *Can* contain property paths! E. g. `@a_fate_card.cost.miFP`. 
-   * @param {TransientDocument | SkillAbility | Object} document The document 
+   * @param {TransientDocument | Expertise | Object} document The document 
    * to look for references in. 
    * 
    * @returns {Map<String, Any | undefined>} A map of the reference key, including the `@`-symbol, to its resolved reference. 
@@ -47,8 +47,8 @@ export default class AtReferencer {
     const result = new Map();
 
     // Get all references from the given string. 
-    const references = this._getReferencesIn(str);
-    if (references === undefined) {
+    const references = this.getReferencesIn(str);
+    if (references.length === 0) {
       return result;
     }
     
@@ -98,7 +98,7 @@ export default class AtReferencer {
       // In case the document is embedded, choose the owning document to search in. 
       let searchDocument = document; // .owningDocument === undefined ? document : document.owningDocument;
       if (document.owningDocument !== undefined && document.owningDocument.owningDocument !== undefined) {
-        // Given document is a skill ability. 
+        // Given document is an expertise. 
         searchDocument = document.owningDocument.owningDocument;
       } else if (document.owningDocument !== undefined) {
         searchDocument = document.owningDocument;
@@ -114,7 +114,7 @@ export default class AtReferencer {
   /**
    * Tries to return a match for the given reference, within the given document. 
    * 
-   * @param {TransientDocument | SkillAbility | Object} document The document 
+   * @param {TransientDocument | Expertise | Object} document The document 
    * to look for references in. 
    * @param {String} comparableReference A comparable version of a reference. 
    * * Comparable in the sense that underscores "_" are replaced with spaces " " 
@@ -166,7 +166,7 @@ export default class AtReferencer {
    * as the `AtReferencer` won't find them, by default. They must be explicitly 
    * searched in, with *this* method. 
    * 
-   * @param {Array<Array<TransientDocument | SkillAbility | Object>>} collectionsToSearch 
+   * @param {Array<Array<TransientDocument | Expertise | Object>>} collectionsToSearch 
    * The collections to search in. 
    * @param {String} comparableReference A comparable version of a reference. 
    * * Comparable in the sense that underscores "_" are replaced with spaces " " 
@@ -196,18 +196,16 @@ export default class AtReferencer {
   /**
    * Returns all `@` denoted references in the given string. 
    * 
-   * Returns `undefined`, if no references could be found. 
+   * Returns an empty array, if no references could be found. 
    * 
    * @param {String} str A string to look in for references. 
    * 
-   * @returns {Array<Object> | undefined}
-   * 
-   * @private
+   * @returns {Array<String>}
    */
-  _getReferencesIn(str) {
+  getReferencesIn(str) {
     const references = str.match(AtReferencer.REGEX_PATTERN_AT_REFERENCE);
     if (references === undefined || references === null) {
-      return undefined;
+      return [];
     } else {
       return references;
     }

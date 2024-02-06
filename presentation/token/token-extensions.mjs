@@ -1,9 +1,11 @@
 import { isDefined } from "../../business/util/validation-utility.mjs";
 import { PixiButton } from "../pixi/pixi-button.mjs";
-import { TEXTURES } from "../pixi/pixi-preloader.mjs";
+import { TEXTURES, getPixiTexture } from "../pixi/pixi-preloader.mjs";
 
 /**
  * Provides token utilities. 
+ * 
+ * Can add challenge ratings and action point controls to tokens. 
  */
 export default class TokenExtensions {
   /**
@@ -43,6 +45,7 @@ export default class TokenExtensions {
    */
   static _showChallengeRatings(token) {
     // Get the system's actor extensions object. 
+    // This is assumed to be a npc type actor. 
     const actor = token.actor.getTransientObject();
     
     // Gather challenge ratings. 
@@ -53,7 +56,7 @@ export default class TokenExtensions {
       const isCrActive = actor.getIsCrActiveFor(attributeGroup.name);
       if (isCrActive !== true) continue;
 
-      const challengeRating = (actor.challengeRatings.find(it => it.key === attributeGroup.name) ?? {}).value ?? 0;
+      const challengeRating = actor.getCrFor(attributeGroup.name).modified;
       challengeRatings.push({
         attributeGroup: attributeGroup,
         value: challengeRating,
@@ -131,10 +134,11 @@ export default class TokenExtensions {
         const actionPoints = token.actor.getTransientObject().actionPoints;
         TokenExtensions._updateActionPoints(token, actionPoints);
       } else {
-        TokenExtensions._showActionPoints(token);
+        TokenExtensions._removeActionPointControls(token);
+        TokenExtensions._addActionPointControls(token);
       }
     } else if (token.inCombat === false && isDefined(token.actionPoints) === true) {
-      TokenExtensions._hideActionPoints(token);
+      TokenExtensions._removeActionPointControls(token);
     }
   }
 
@@ -161,7 +165,7 @@ export default class TokenExtensions {
    * @private
    * @static
    */
-  static _showActionPoints(token) {
+  static _addActionPointControls(token) {
     const transientActor = token.actor.getTransientObject();
 
     const margin = 5;
@@ -172,16 +176,16 @@ export default class TokenExtensions {
 
     // Action points sprite
     const sprite = new PIXI.Sprite(
-      PIXI.Loader.shared.resources[TEXTURES.ACTION_POINT_EMPTY].texture
+      getPixiTexture(TEXTURES.ACTION_POINT_EMPTY)
     );
     if (transientActor.actionPoints > 0) {
-      sprite.texture = PIXI.Loader.shared.resources[TEXTURES.ACTION_POINT_FULL].texture;
+      sprite.texture = getPixiTexture(TEXTURES.ACTION_POINT_FULL);
     }
 
     // Caret left
     if (token.isOwner || game.user.isGM) {
       const caretLeft = new PixiButton({
-        texture: PIXI.Loader.shared.resources[TEXTURES.CARET_LEFT].texture,
+        texture: getPixiTexture(TEXTURES.CARET_LEFT),
         onClick: () => {
           if (!token.isOwner && !game.user.isGM) return;
           
@@ -216,7 +220,7 @@ export default class TokenExtensions {
     // Caret right
     if (token.isOwner || game.user.isGM) {
       const caretRight = new PixiButton({
-        texture: PIXI.Loader.shared.resources[TEXTURES.CARET_RIGHT].texture,
+        texture: getPixiTexture(TEXTURES.CARET_RIGHT),
         onClick: () => {
           if (!token.isOwner && !game.user.isGM) return;
           
@@ -252,7 +256,7 @@ export default class TokenExtensions {
    * @private
    * @static
    */
-  static _hideActionPoints(token) {
+  static _removeActionPointControls(token) {
     if (isDefined(token.actionPoints)) {
       token.removeChild(token.actionPoints);
       token.actionPoints = undefined;
@@ -260,6 +264,11 @@ export default class TokenExtensions {
   }
 
   /**
+   * Updates the given token's current action point display. 
+   * 
+   * That means updating the texture and number, based on the current 
+   * action point count. 
+   * 
    * @param {Token} token 
    * @param {Number} newActionPoints
    * 
@@ -267,15 +276,16 @@ export default class TokenExtensions {
    * @static
    */
   static _updateActionPoints(token, newActionPoints) {
-    this._hideActionPoints(token);
-    this._showActionPoints(token);
+    if (isDefined(token.actionPoints) !== true) return;
+    if (isDefined(token.actionPoints.text) !== true) return;
+    if (isDefined(token.actionPoints.text.text) !== true) return;
 
     token.actionPoints.text.text = newActionPoints;
 
     if (newActionPoints === 0) {
-      token.actionPoints.sprite.texture = PIXI.Loader.shared.resources[TEXTURES.ACTION_POINT_EMPTY].texture;
+      token.actionPoints.sprite.texture = getPixiTexture(TEXTURES.ACTION_POINT_EMPTY);
     } else {
-      token.actionPoints.sprite.texture = PIXI.Loader.shared.resources[TEXTURES.ACTION_POINT_FULL].texture;
+      token.actionPoints.sprite.texture = getPixiTexture(TEXTURES.ACTION_POINT_FULL);
     }
   }
 }

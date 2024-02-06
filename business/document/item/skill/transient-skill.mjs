@@ -10,7 +10,7 @@ import { ITEM_SUBTYPE } from "../item-subtype.mjs";
 import TransientBaseItem from "../transient-base-item.mjs";
 import LevelAdvancement from "../../../ruleset/level-advancement.mjs";
 import Ruleset from "../../../ruleset/ruleset.mjs";
-import SkillAbility from "./skill-ability.mjs";
+import Expertise from "./expertise.mjs";
 import CharacterAttribute from "../../../ruleset/attribute/character-attribute.mjs";
 import { ATTACK_TYPES } from "../../../ruleset/skill/attack-types.mjs";
 import { ATTRIBUTES, Attribute } from "../../../ruleset/attribute/attributes.mjs";
@@ -36,9 +36,10 @@ import { getGroupForAttributeByName } from "../../../ruleset/attribute/attribute
  * @property {Number} levelModifier The current level modifier. This number can be negative. 
  * @property {Number} modifiedLevel The current modified level. 
  * * Read-only. 
- * @property {Attribute} relatedAttribute The attribute that serves as the basis 
- * for this skill. 
- * @property {Array<SkillAbility>} abilities The array of skill abilities of this skill. 
+ * @property {Array<Attribute>} baseAttributes Base attributes of the skill. 
+ * * Must always contain at least one entry. By default, this is agility. 
+ * @property {Attribute} activeBaseAttribute The currently set base attribute. 
+ * @property {Array<Expertise>} expertises The array of expertises of this skill. 
  * @property {Boolean} isMagicSchool Returns true, if the skill is considered 
  * a magic school. 
  * 
@@ -58,23 +59,68 @@ export default class TransientSkill extends TransientBaseItem {
   get chatMessageTemplate() { return TEMPLATES.SKILL_ITEM_CHAT_MESSAGE; }
   
   /**
+   * @type {Array<Attribute>}
+   */
+  get baseAttributes() {
+    const baseAttributeNames = this.document.system.baseAttributes ?? [];
+    const attributes = baseAttributeNames
+      .map(attributeName => ATTRIBUTES[attributeName])
+      .filter(it => isDefined(it));
+    
+    // Safe-guard - there must always be at least one base attribute. 
+    if (attributes.length === 0) {
+      attributes.push(ATTRIBUTES.agility);
+    }
+
+    return attributes;
+  }
+  /**
+   * Sets the given list of base attributes. 
+   * 
+   * Also ensures that the active base attribute is one of these values. 
+   * 
+   * @param {Array<Attribute>} value
+   */
+  set baseAttributes(value) {
+    const baseAttributeNames = value.map(attribute => attribute.name);
+    this.document.system.baseAttributes = baseAttributeNames;
+
+    const newListContainsActive = isDefined(baseAttributeNames.find(it => it === this.activeBaseAttribute.name));
+    if (newListContainsActive === true) {
+      this.updateByPath("system.baseAttributes", baseAttributeNames);
+    } else {
+      // Also update the active base attribute. 
+      this.update({
+        system: {
+          baseAttributes: baseAttributeNames,
+          activeBaseAttribute: baseAttributeNames[0],
+        }
+      });
+    }
+  }
+  
+  /**
    * @type {Attribute}
    */
-  get relatedAttribute() {
-    let _relatedAttribute = this.document.system.relatedAttribute;
-    if (isBlankOrUndefined(_relatedAttribute) === true) {
-      _relatedAttribute = ATTRIBUTES.agility.name;
+  get activeBaseAttribute() {
+    const systemActiveBaseAttribute = this.document.system.activeBaseAttribute;
+    const containedInBaseAttributes = (this.baseAttributes.find(it => it.name === systemActiveBaseAttribute) !== undefined);
+    
+    if (containedInBaseAttributes === true) {
+      return ATTRIBUTES[systemActiveBaseAttribute];
+    } else if (this.baseAttributes.length > 0) {
+      return this.baseAttributes[0];
+    } else {
+      game.ambersteel.logger.logWarn(`List of base attributes is empty for skill '${this.id}' - '${this.name}'`);
+      return ATTRIBUTES.agility;
     }
-    return ATTRIBUTES[_relatedAttribute];
   }
-  set relatedAttribute(value) {
-    if (isObject(value)) { // This assumes an `Attribute` object was given. 
-      this.document.system.relatedAttribute = value.name;
-      this.updateByPath("system.relatedAttribute", value.name);
-    } else { // This assumes a String was given. 
-      this.document.system.relatedAttribute = value;
-      this.updateByPath("system.relatedAttribute", value);
-    }
+  /**
+   * @param {Attribute} value
+   */
+  set activeBaseAttribute(value) {
+    this.document.system.activeBaseAttribute = value.name;
+    this.updateByPath("system.activeBaseAttribute", value.name);
   }
   
   /**
@@ -125,7 +171,7 @@ export default class TransientSkill extends TransientBaseItem {
   }
 
   /**
-   * Returns the challenge rating of the related attribute, for use as 
+   * Returns the challenge rating of the active base attribute, for use as 
    * the skill's level. 
    * 
    * @type {Number}
@@ -133,8 +179,8 @@ export default class TransientSkill extends TransientBaseItem {
    */
   get crLevel() {
     if (this.owningDocument !== undefined) {
-      const group = getGroupForAttributeByName(this.relatedAttribute.name);
-      return this.owningDocument.getCrFor(group.name);
+      const group = getGroupForAttributeByName(this.activeBaseAttribute.name);
+      return this.owningDocument.getCrFor(group.name).modified;
     }
     return 0;
   }
@@ -191,14 +237,14 @@ export default class TransientSkill extends TransientBaseItem {
   get acceptedTags() { return SKILL_TAGS.asArray(); }
 
   /**
-   * @type {Array<SkillAbility>}
+   * @type {Array<Expertise>}
    */
-  get abilities() {
-    return this._abilities;
+  get expertises() {
+    return this._expertises;
   }
-  set abilities(value) {
-    this._abilities = value;
-    this.persistSkillAbilities();
+  set expertises(value) {
+    this._expertises = value;
+    this.persistExpertises();
   }
   
   /**
@@ -330,7 +376,7 @@ export default class TransientSkill extends TransientBaseItem {
   }
 
   /**
-   * Returns `true`, if the skill's related attribute is part of a group for which 
+   * Returns `true`, if the skill's active base attribute is part of a group for which 
    * a challenge rating is active. 
    * 
    * @type {Boolean}
@@ -339,7 +385,7 @@ export default class TransientSkill extends TransientBaseItem {
   get dependsOnActiveCr() {
     const owningDocument = this.owningDocument;
     if (owningDocument !== undefined && owningDocument.type === "npc") {
-      const group = getGroupForAttributeByName(this.relatedAttribute.name);
+      const group = getGroupForAttributeByName(this.activeBaseAttribute.name);
       return owningDocument.getIsCrActiveFor(group.name);
     } else {
       return false;
@@ -355,14 +401,7 @@ export default class TransientSkill extends TransientBaseItem {
     super(document);
 
     this.advancementRequirements = new Ruleset().getSkillAdvancementRequirements(this.level);
-    this._abilities = this._getSkillAbilities();
-  }
-
-  /** @override */
-  prepareData(context) {
-    super.prepareData(context);
-
-    context.system.relatedAttribute = context.system.relatedAttribute ?? "agility";
+    this._expertises = this._getExpertises();
   }
 
   /** @override */
@@ -382,17 +421,36 @@ export default class TransientSkill extends TransientBaseItem {
     });
   }
 
-  /** @override */
+  /**
+   * Returns an instance of a view model for use in a chat message. 
+   * 
+   * @param {Object | undefined} overrides Optional. An object that allows overriding any of the view model properties. 
+   * @param {ViewModel | undefined} overrides.parent A parent view model instance. 
+   * In case this is an embedded document, such as an expertise, this value must be supplied 
+   * for proper function. 
+   * @param {String | undefined} overrides.id
+   * * default is a new UUID.
+   * @param {Boolean | undefined} overrides.isEditable
+   * * default `false`
+   * @param {Boolean | undefined} overrides.isSendable
+   * * default `false`
+   * @param {Boolean | undefined} overrides.showParentSkill Optional. If true, will show the parent skill name and icon, if possible. 
+   * * default `true`
+   * 
+   * @returns {ExpertiseChatMessageViewModel}
+   * 
+   * @override
+   */
   getChatViewModel(overrides = {}) {
     return new SkillChatMessageViewModel({
-      id: `${this.id}-${createUUID()}`,
-      isEditable: false,
-      isSendable: false,
+      id: overrides.id,
+      parent: overrides.parent,
+      isEditable: overrides.isEditable ?? false,
+      isSendable: overrides.isSendable ?? false,
       isOwner: this.isOwner,
       isGM: game.user.isGM,
       document: this,
       visGroupId: createUUID(),
-      ...overrides,
     });
   }
 
@@ -466,43 +524,43 @@ export default class TransientSkill extends TransientBaseItem {
 
     // Progress associated attribute. 
     if (this.owningDocument !== undefined) {
-      this.owningDocument.addAttributeProgress(outcomeType, this.relatedAttribute.name, autoLevel)
+      this.owningDocument.addAttributeProgress(outcomeType, this.activeBaseAttribute.name, autoLevel)
     }
   }
 
   /**
-   * Adds a new skill ability. 
+   * Adds a new expertise. 
    * 
    * @param {Object} creationData Additional data to set on creation. 
    * 
-   * @returns {SkillAbility} The newly created `SkillAbility` instance. 
+   * @returns {Expertise} The newly created `Expertise` instance. 
    * 
    * @async
    */
-  async createSkillAbility(creationData) {
-    const newAbility = new SkillAbility({
+  async createExpertise(creationData) {
+    const newExpertise = new Expertise({
       ...creationData,
       owningDocument: this,
-      index: this.abilities.length,
+      index: this.expertises.length,
     });
     
-    this.abilities.push(newAbility);
-    await this.updateByPath(`system.abilities.${newAbility.id}`, newAbility.toDto());
+    this.expertises.push(newExpertise);
+    await this.updateByPath(`system.abilities.${newExpertise.id}`, newExpertise.toDto());
 
-    return newAbility;
+    return newExpertise;
   }
 
   /**
-   * Deletes the skill ability at the given index. 
+   * Deletes the expertise at the given index. 
    * 
-   * @param id ID of the skill ability to delete. 
+   * @param id ID of the expertise to delete. 
    * 
-   * @returns {SkillAbility} The `SkillAbility` instance that was removed. 
+   * @returns {Expertise} The `Expertise` instance that was removed. 
    * 
    * @async
    */
-  async deleteSkillAbility(id) {
-    const toRemove = this.abilities.find(it => it.id === id);
+  async deleteExpertise(id) {
+    const toRemove = this.expertises.find(it => it.id === id);
 
     if (toRemove === undefined) {
       return undefined;
@@ -533,57 +591,57 @@ export default class TransientSkill extends TransientBaseItem {
    */
   getRollData() {
     if (this.dependsOnActiveCr === true) {
-      const group = getGroupForAttributeByName(this.relatedAttribute.name);
+      const group = getGroupForAttributeByName(this.activeBaseAttribute.name);
       return new Sum([
         new SumComponent(group.name, group.localizableName, this.modifiedLevel),
       ]);
     } else {
       const actor = (this.owningDocument ?? {}).document;
-      const characterAttribute = new CharacterAttribute(actor, this.relatedAttribute.name);
+      const characterAttribute = new CharacterAttribute(actor, this.activeBaseAttribute.name);
       const compositionObj = new Ruleset().getSkillTestNumberOfDice(this.modifiedLevel, characterAttribute.modifiedLevel);
 
       return new Sum([
-        new SumComponent(this.relatedAttribute.name, characterAttribute.localizableName, compositionObj.attributeDiceCount),
+        new SumComponent(this.activeBaseAttribute.name, characterAttribute.localizableName, compositionObj.attributeDiceCount),
         new SumComponent(this.name, this.name, compositionObj.skillDiceCount),
       ]);
     }
   }
 
   /**
-   * Persists the current skill ability array to the data base. 
+   * Persists the current expertise array to the data base. 
    * 
    * @param {Boolean | undefined} render If true, will trigger a re-render of the associated document sheet. 
    * * Default 'true'. 
    * 
    * @async
    */
-  async persistSkillAbilities(render = true) {
-    const abilitiesToPersist = {};
+  async persistExpertises(render = true) {
+    const expertisesToPersist = {};
 
-    for (const ability of this.abilities) {
-      abilitiesToPersist[ability.id] = ability.toDto();
+    for (const expertise of this.expertises) {
+      expertisesToPersist[expertise.id] = expertise.toDto();
     }
 
-    await this.updateByPath("system.abilities", abilitiesToPersist, render);
+    await this.updateByPath("system.abilities", expertisesToPersist, render);
   }
 
   /**
-   * Fetches the skill abilities from the underlying document and returns 
+   * Fetches the expertises from the underlying document and returns 
    * them, converted to "proper" objects. 
    * 
-   * @returns {Array<SkillAbility>}
+   * @returns {Array<Expertise>}
    * 
    * @private
    */
-  _getSkillAbilities() {
-    const abilitiesOnDocument = this.document.system.abilities;
+  _getExpertises() {
+    const expertisesOnDocument = this.document.system.abilities;
       
     const result = [];
-    for (const abilityId in abilitiesOnDocument) {
-      if (abilitiesOnDocument.hasOwnProperty(abilityId) !== true) continue;
+    for (const expertiseId in expertisesOnDocument) {
+      if (expertisesOnDocument.hasOwnProperty(expertiseId) !== true) continue;
 
-      const dto = abilitiesOnDocument[abilityId];
-      result.push(SkillAbility.fromDto(dto, this));
+      const dto = expertisesOnDocument[expertiseId];
+      result.push(Expertise.fromDto(dto, this));
     }
     return result;
   }
@@ -608,11 +666,11 @@ export default class TransientSkill extends TransientBaseItem {
    * @override
    * 
    * Also searches in: 
-   * * Embedded skill abilities
+   * * Embedded expertises
    */
   resolveReference(comparableReference, propertyPath) {
     const collectionsToSearch = [
-      this.abilities,
+      this.expertises,
     ];
     const r = new AtReferencer().resolveReferenceInCollections(collectionsToSearch, comparableReference, propertyPath);
     if (r !== undefined) {

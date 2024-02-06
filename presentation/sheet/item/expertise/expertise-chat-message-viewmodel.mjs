@@ -5,67 +5,67 @@ import LazyRichTextViewModel from "../../../component/lazy-rich-text/lazy-rich-t
 import { TEMPLATES } from "../../../templatePreloader.mjs"
 import ViewModel from "../../../view-model/view-model.mjs"
 
-export default class SkillAbilityChatMessageViewModel extends ViewModel {
+export default class ExpertiseChatMessageViewModel extends ViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.SKILL_ABILITY_CHAT_MESSAGE; }
+  static get TEMPLATE() { return TEMPLATES.EXPERTISE_CHAT_MESSAGE; }
 
   /**
-   * @type {SkillAbility}
+   * @type {Expertise}
    */
-  skillAbility = undefined;
+  expertise = undefined;
   
   /** @override */
-  get entityId() { return this.skillAbility.id; }
+  get entityId() { return this.expertise.id; }
 
   /**
    * @type {String}
    */
-  get owningDocumentId() { return this.skillAbility.owningDocument.id; }
+  get owningDocumentId() { return this.expertise.owningDocument.id; }
 
   /**
    * @type {Boolean}
    * @readonly
    */
-  get hideObstacle() { return isDefined(this.skillAbility.obstacle) !== true; }
+  get hideObstacle() { return isDefined(this.expertise.obstacle) !== true; }
 
   /**
    * @type {Boolean}
    * @readonly
    */
-  get hideOpposedBy() { return isDefined(this.skillAbility.opposedBy) !== true; }
+  get hideOpposedBy() { return isDefined(this.expertise.opposedBy) !== true; }
   
   /**
    * @type {Boolean}
    * @readonly
    */
-  get hideCondition() { return isDefined(this.skillAbility.condition) !== true; }
+  get hideCondition() { return isDefined(this.expertise.condition) !== true; }
   
   /**
    * @type {Boolean}
    * @readonly
    */
-  get hideDistance() { return isDefined(this.skillAbility.distance) !== true; }
+  get hideDistance() { return isDefined(this.expertise.distance) !== true; }
   
   /**
    * @type {Boolean}
    * @readonly
    */
-  get hideAttackType() { return isDefined(this.skillAbility.attackType) !== true; }
+  get hideAttackType() { return isDefined(this.expertise.attackType) !== true; }
   
   /**
    * @type {Boolean}
    * @readonly
    */
-  get hideDamage() { return this.skillAbility.damage.length <= 0; }
+  get hideDamage() { return this.expertise.damage.length <= 0; }
 
   /**
    * @type {String}
    * @readonly
    */
   get localizedAttackType() {
-    if (isDefined(this.skillAbility.attackType) !== true) return "";
+    if (isDefined(this.expertise.attackType) !== true) return "";
 
-    const localizableName = this.skillAbility.attackType.localizableName;
+    const localizableName = this.expertise.attackType.localizableName;
     return game.i18n.localize(localizableName);
   };
 
@@ -79,7 +79,7 @@ export default class SkillAbilityChatMessageViewModel extends ViewModel {
    * @type {String}
    * @readonly
    */
-  get parentSkillName() { return this.skillAbility.owningDocument.name; }
+  get parentSkillName() { return this.expertise.owningDocument.name; }
 
   /**
    * @type {Boolean}
@@ -91,7 +91,7 @@ export default class SkillAbilityChatMessageViewModel extends ViewModel {
    * @type {String}
    * @readonly
    */
-  get parentSkillImage() { return this.skillAbility.owningDocument.img; }
+  get parentSkillImage() { return this.expertise.owningDocument.img; }
 
   /**
    * @type {Boolean}
@@ -105,7 +105,7 @@ export default class SkillAbilityChatMessageViewModel extends ViewModel {
    * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 
    * is expected to be associated with an actor sheet or item sheet or journal entry or chat message and so on.
    * 
-   * @param {SkillAbility} args.skillAbility 
+   * @param {Expertise} args.expertise 
    * @param {Boolean | undefined} args.isEditable Optional. If true, the sheet is editable. 
    * @param {Boolean | undefined} args.isSendable Optional. If true, the document represented by the sheet can be sent to chat. 
    * @param {Boolean | undefined} args.isOwner Optional. If true, the current user is the owner of the represented document. 
@@ -116,7 +116,7 @@ export default class SkillAbilityChatMessageViewModel extends ViewModel {
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["skillAbility"]);
+    validateOrThrow(args, ["expertise"]);
 
     this._isEditable = args.isEditable ?? false;
     this._isSendable = args.isSendable ?? false;
@@ -124,7 +124,7 @@ export default class SkillAbilityChatMessageViewModel extends ViewModel {
     this._contextTemplate = args.contextTemplate;
     this._showParentSkill = args.showParentSkill ?? true;
 
-    this.skillAbility = args.skillAbility;
+    this.expertise = args.expertise;
 
     this.vmLazyDescription = new LazyRichTextViewModel({
       id: "vmLazyDescription",
@@ -132,7 +132,7 @@ export default class SkillAbilityChatMessageViewModel extends ViewModel {
       isEditable: this.isEditable,
       isSendable: this.isSendable,
       isOwner: this.isOwner,
-      renderableContent: this.skillAbility.description,
+      renderableContent: this.expertise.description,
     });
   }
 }

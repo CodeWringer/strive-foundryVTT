@@ -6,8 +6,14 @@ import * as ConstantsUtils from "../../util/constants-utility.mjs";
  * @property {String} name Internal name. 
  * @property {String} localizableName Localization key. 
  * @property {String} localizableAbbreviation Localization key for the abbreviation. 
- */
+*/
 export class Attribute {
+  /**
+   * @param {Object} args 
+   * @param {String} args.name Internal name. 
+   * @param {String} args.localizableName Localization key. 
+   * @param {String} args.localizableAbbreviation Localization key for the abbreviation. 
+   */
   constructor(args = {}) {
     this.name = args.name;
     this.localizableName = args.localizableName;

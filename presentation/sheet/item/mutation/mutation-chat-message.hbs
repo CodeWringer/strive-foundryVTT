@@ -3,6 +3,7 @@ viewModel: {MutationChatMessageViewModel}
 cssClass: {undefined | String}
 --}}
 <section class="custom-system-chat-message{{#if cssClass}} {{cssClass}}{{/if}}" 
+  id="{{viewModel.id}}"
   data-view-model-id="{{viewModel.id}}"
   data-document-id="{{viewModel.entityId}}"
 >
@@ -14,7 +15,7 @@ cssClass: {undefined | String}
     {{#> header2 showFancyFont=viewModel.showFancyFont cssClass="flex-grow"}}{{viewModel.document.name}}{{/header2}}
   </div>
   {{!-- Description --}}
-  <div class="sheet-block scrollable-height-md">
+  <div class="sheet-block">
     {{> lazyRichText viewModel=viewModel.vmLazyDescription}}
   </div>
 </section>

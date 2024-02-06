@@ -2,7 +2,6 @@ import { HEALTH_STATES } from "../../../../business/ruleset/health/health-states
 import LoadHealthStatesSettingUseCase from "../../../../business/use-case/load-health-states-setting-use-case.mjs";
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs";
 import ButtonViewModel from "../../../component/button/button-viewmodel.mjs";
-import SimpleListItemViewModel from "../../../component/simple-list/simple-list-item-viewmodel.mjs";
 import SimpleListViewModel from "../../../component/simple-list/simple-list-viewmodel.mjs";
 import VisibilityToggleListViewModel from "../../../component/visibility-toggle-list/visibility-toggle-list-viewmodel.mjs";
 import { TEMPLATES } from "../../../templatePreloader.mjs";
@@ -13,12 +12,14 @@ import { HealthStateVisibilityItem } from "./health-state-visibility-item.mjs";
 /**
  * @extends ViewModel
  * 
- * @property {Object} stateSettings
+ * @property {Object} stateSettings Represents the current health settings. 
+ * * Has the following properties: 
+ * * * `{Array<String>} hidden` - A list of health condition IDs to hide on character sheets. 
+ * * * `{Array<Object>} custom` - A list of custom health conditions to add to character sheets. 
  * * Private
  * * Cached
  * @property {Array<ViewModel>} stateViewModels
  * @property {Array<HealthStateVisibilityItem>} stateVisibilityItems
- * @property {Array<HealthState>} customHealthStates
  */
 export default class HealthStatesSettingsDialogViewModel extends ViewModel {
   /** @override */
@@ -65,8 +66,9 @@ export default class HealthStatesSettingsDialogViewModel extends ViewModel {
     // Register cachable view state properties. 
     this.registerViewStateProperty("stateSettings");
     
-    // Build initial visibility states, based on the world setting. 
+    // Load state. 
     this.stateSettings = new LoadHealthStatesSettingUseCase().invoke();
+    this.readAllViewState();
 
     // Prepare data for system default health state visibilities. 
     this._stateVisibilityItems = this._getHealthStateVisibilityViewModels();
@@ -104,8 +106,17 @@ export default class HealthStatesSettingsDialogViewModel extends ViewModel {
       isOwner: this.isOwner,
       contentItemViewModels: this.customHealthStateViewModels,
       contentItemTemplate: this.customHealthStateListItemTemplate,
-      onAddClick: this._onClickAddCustomHealthState.bind(this),
-      onRemoveClick: this._onClickRemoveCustomHealthState.bind(this),
+      onAddClick: () => {
+        this.stateSettings.custom.push({
+          name: game.i18n.localize("ambersteel.settings.healthStates.newDefaultName"),
+          limit: 0,
+        });
+        this._renderFormApplication();
+      },
+      onRemoveClick: (_, index) => {
+        this.stateSettings.custom.splice(index, 1);
+        this._renderFormApplication();
+      },
       isItemAddable: true,
       isItemRemovable: true,
       localizedAddLabel: game.i18n.localize("ambersteel.settings.healthStates.add.label"),
@@ -161,10 +172,10 @@ export default class HealthStatesSettingsDialogViewModel extends ViewModel {
    */
   _getCustomHealthStateViewModels() {
     const result = [];
-    const thiz = this;
 
-    for (let index = 0; index < this.stateSettings.custom.length; index++) {
-      const customHealthState = this.stateSettings.custom[index];
+    const customHealthStates = this.stateSettings.custom;
+    for (let index = 0; index < customHealthStates.length; index++) {
+      const customHealthState = customHealthStates[index];
       const vm = new CustomHealthStateListItemViewModel({
         id: `name${index}`,
         isEditable: this.isEditable,
@@ -172,7 +183,7 @@ export default class HealthStatesSettingsDialogViewModel extends ViewModel {
         stateLimit: (customHealthState.limit ?? 0),
         onChange: (state) => {
           this.stateSettings.custom[index] = state;
-          thiz._renderFormApplication();
+          this._renderFormApplication();
         }
       });
       result.push(vm);
@@ -187,32 +198,6 @@ export default class HealthStatesSettingsDialogViewModel extends ViewModel {
    */
   _renderFormApplication() {
     this.writeAllViewState();
-    this.formApplication.render();
-  }
-
-  /**
-   * Event handler for when a new custom health state is added. 
-   * 
-   * @private
-   */
-  _onClickAddCustomHealthState() {
-    this.stateSettings.custom.push({
-      name: "New Health State",
-      limit: 0,
-    });
-    this._renderFormApplication();
-  }
-
-  /**
-   * Event handler for when a custom health state is to be removed. 
-   * 
-   * @param {SimpleListItemViewModel} viewModel
-   * 
-   * @private
-   */
-  _onClickRemoveCustomHealthState(viewModel) {
-    const index = this.customHealthStateViewModels.indexOf(viewModel.itemViewModel);
-    this.stateSettings.custom.splice(index, 1);
-    this._renderFormApplication();
+    this.formApplication.render(true);
   }
 }

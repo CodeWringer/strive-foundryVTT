@@ -3,6 +3,7 @@ viewModel: {IllnessChatMessageViewModel}
 cssClass: {undefined | String}
 --}}
 <section class="custom-system-chat-message{{#if cssClass}} {{cssClass}}{{/if}}" 
+  id="{{viewModel.id}}"
   data-view-model-id="{{viewModel.id}}"
   data-document-id="{{viewModel.entityId}}"
 >
@@ -41,7 +42,7 @@ cssClass: {undefined | String}
     </div>
   </div>
   {{!-- Description --}}
-  <div class="sheet-block scrollable-height-md">
+  <div class="sheet-block">
   {{> lazyRichText viewModel=viewModel.vmLazyDescription}}
   </div>
 </section>

@@ -2,33 +2,28 @@
 viewModel: {ActorAssetSlotViewModel}
 cssClass: {undefined | String}
 --}}
-<div class="ambersteel-asset-slot flex flex-column{{#if cssClass}} {{cssClass}}{{/if}}">
+<div class="ambersteel-asset-slot flex flex-row{{#if cssClass}} {{cssClass}}{{/if}}">
   {{!-- Header Row --}}
-  <div class="flex flex-row">
-    {{!-- Assign Asset --}}
-    <div{{#if viewModel.hasAsset}} class="hidden"{{/if}}>
-      {{> button viewModel=viewModel.vmBtnAssign }}
-    </div>
-    <div style="width: 50px"></div>
-    {{!-- Slot Bulk --}}
-    {{#if viewModel.showSlotBulk}}
-    <div class="flex flex-row flex-middle font-size-xs">
-      <i class="ico dark ico-bulk-solid" title="{{localize "ambersteel.character.asset.bulk"}}"></i>
-      <span class="flex flex-row flex-middle">
-        {{#> admonishReadOnlyValue cssClass="pad-l-md pad-r-md" admonish=viewModel.hasExceededBulk}}{{viewModel.currentBulk}} / {{viewModel.moddedMaxBulk}}{{/admonishReadOnlyValue}}
-      </span>
-      <i class="ico dark ico-max-bulk-solid" title="{{localize "ambersteel.character.asset.maxBulk"}}"></i>
-    </div>
-    {{/if}}
-    <div class="flex flex-grow"></div>
-    {{> button viewModel=viewModel.vmBtnEdit }}
-    {{> buttonDelete viewModel=viewModel.vmBtnDelete }}
-  </div>
   {{#if viewModel.hasAsset}}
   <div>
     {{#with viewModel.assetListItemTemplate as |template|}}
       {{> (template) viewModel=../viewModel.assetListItemViewModel}}
     {{/with}}
   </div>
+  {{else}}
+  {{!-- Assign Asset --}}
+  {{> button viewModel=viewModel.vmBtnAssign leftAlign=true cssClass="flex-grow font-size-default" }}
   {{/if}}
+  <div class="flex flex-column margin-l-sm pad-l-sm border-solid-l-md">
+    {{!-- Slot Bulk --}}
+    {{#if viewModel.showSlotBulk}}
+    <div class="flex flex-row flex-middle font-size-xs">
+      <span class="flex flex-row flex-middle">
+        {{#> admonishReadOnlyValue cssClass="flex flex-center width-min-md" admonish=viewModel.hasExceededBulk}}{{viewModel.currentBulk}} / {{viewModel.moddedMaxBulk}}{{/admonishReadOnlyValue}}
+      </span>
+    </div>
+    {{/if}}
+    {{> button viewModel=viewModel.vmBtnEdit }}
+    {{> buttonDelete viewModel=viewModel.vmBtnDelete }}
+  </div>
 </div>

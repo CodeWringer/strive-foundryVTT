@@ -609,7 +609,7 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
    * Searches in: 
    * * Attribute names.
    * * Embedded skill name.
-   * * Embedded skill ability name.
+   * * Embedded expertise name.
    * * Embedded asset name.
    * * Embedded injury name.
    * * Embedded illness name.

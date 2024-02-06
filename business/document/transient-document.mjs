@@ -249,6 +249,7 @@ export default class TransientDocument {
    * * Default 'true'. 
    * 
    * @async
+   * @protected
    */
   async deleteByPath(propertyPath, render = true) {
     await this._updater.deleteByPath(this.document, propertyPath, render);
@@ -277,9 +278,11 @@ export default class TransientDocument {
    * @param {Object} delta The update delta to persist. 
    * @param {Boolean} render If true, will trigger a re-render of the associated document sheet. 
    * * Default 'true'. 
+   * 
+   * @async
    */
   async update(delta, render = true) {
-    this.document.update(delta, { render: render });
+    await this.document.update(delta, { render: render });
   }
 
   /**
@@ -309,11 +312,15 @@ export default class TransientDocument {
    * Returns an instance of a view model for use in a chat message. 
    * 
    * @param {Object | undefined} overrides Optional. An object that allows overriding any of the view model properties. 
+   * @param {ViewModel | undefined} overrides.parent A parent view model instance. 
+   * In case this is an embedded document, such as an expertise, this value must be supplied 
+   * for proper function. 
    * @param {String | undefined} overrides.id
+   * * default is a new UUID.
    * @param {Boolean | undefined} overrides.isEditable
+   * * default `false`
    * @param {Boolean | undefined} overrides.isSendable
-   * @param {Boolean | undefined} overrides.isOwner
-   * @param {Boolean | undefined} overrides.isGM
+   * * default `false`
    * 
    * @returns {ViewModel}
    * 
@@ -321,12 +328,12 @@ export default class TransientDocument {
    */
   getChatViewModel(overrides = {}) {
     return new ViewModel({
-      id: `${this.id}-${createUUID()}`,
-      isEditable: false,
-      isSendable: false,
+      id: overrides.id,
+      parent: overrides.parent,
+      isEditable: overrides.isEditable ?? false,
+      isSendable: overrides.isSendable ?? false,
       isOwner: this.isOwner,
       isGM: game.user.isGM,
-      ...overrides,
     });
   }
 

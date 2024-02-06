@@ -15,15 +15,15 @@ export default class Ruleset {
    * Returns the number of dice for a skill test. 
    * 
    * @param {Number} skillLevel A skill level. 
-   * @param {Number} relatedAttributeLevel Level of the skill related attribute. 
+   * @param {Number} activeBaseAttribute Level of the active base attribute. 
    * 
    * @returns {Object} { totalDiceCount: {Number}, skillDiceCount: {Number}, attributeDiceCount: {Number} }
    */
-  getSkillTestNumberOfDice(skillLevel, relatedAttributeLevel) {
+  getSkillTestNumberOfDice(skillLevel, activeBaseAttribute) {
     return {
-      totalDiceCount: skillLevel + relatedAttributeLevel,
+      totalDiceCount: skillLevel + activeBaseAttribute,
       skillDiceCount: skillLevel,
-      attributeDiceCount: relatedAttributeLevel
+      attributeDiceCount: activeBaseAttribute
     };
   }
 
@@ -287,7 +287,7 @@ export default class Ruleset {
     const type = actor.type.toLowerCase();
     if (type !== "pc" && type !== "npc") throw new Error("Only PC and NPC type actors allowed");
 
-    const arcanaLevel = this.getEffectiveAttributeModifiedLevel(ATTRIBUTES.arcana, actor);
+    const arcanaLevel = this.getEffectiveAttributeModifiedLevel(ATTRIBUTES.arcana, actor) * 2;
     let total = arcanaLevel;
     
     const components = [
@@ -362,15 +362,15 @@ export default class Ruleset {
     }
 
     const attributeGroup = getGroupForAttributeByName(attribute.name);
-    let level = actor.system.attributes[attributeGroup.name][attribute.name].level;
-
+    
     if (type === "npc") {
       const transientNpc = actor.getTransientObject();
       if (transientNpc.getIsCrActiveFor(attributeGroup.name) === true) {
-        level = transientNpc.getCrFor(attributeGroup.name);
+        return transientNpc.getCrFor(attributeGroup.name).value;
       }
     }
-
+    
+    const level = actor.system.attributes[attributeGroup.name][attribute.name].level;
     return level;
   }
   
@@ -395,18 +395,16 @@ export default class Ruleset {
     }
 
     const transientActor = actor.getTransientObject();
-    const characterAttribute = transientActor.attributes.find(it => it.name === attribute.name);
-    let level = characterAttribute.modifiedLevel;
-
-    const attributeGroup = getGroupForAttributeByName(attribute.name);
-
+    
     if (type === "npc") {
+      const attributeGroup = getGroupForAttributeByName(attribute.name);
       if (transientActor.getIsCrActiveFor(attributeGroup.name) === true) {
-        level = transientActor.getCrFor(attributeGroup.name);
+        return transientActor.getCrFor(attributeGroup.name).modified;
       }
     }
-
-    return level;
+    
+    const characterAttribute = transientActor.attributes.find(it => it.name === attribute.name);
+    return characterAttribute.modifiedLevel;
   }
 
   /**
@@ -425,17 +423,16 @@ export default class Ruleset {
    */
   getEffectiveSkillModifiedLevel(skill, actor) {
     const transientSkill = skill.getTransientObject();
-    let level = transientSkill.modifiedLevel;
 
     if (actor.type === "npc") {
-      const attributeGroup = getGroupForAttributeByName(transientSkill.relatedAttribute.name);
+      const attributeGroup = getGroupForAttributeByName(transientSkill.activeBaseAttribute.name);
       const transientActor = actor.getTransientObject();
 
       if (transientActor.getIsCrActiveFor(attributeGroup.name) === true) {
-        level = transientActor.getCrFor(attributeGroup.name);
+        return transientActor.getCrFor(attributeGroup.name).modified;
       }
     }
 
-    return level;
+    return transientSkill.modifiedLevel;
   }
 }

@@ -1,6 +1,5 @@
 import { SEARCH_MODES, Search, SearchItem } from "../../../../../business/search/search.mjs"
-import { SKILL_TAGS } from "../../../../../business/tags/system-tags.mjs"
-import { validateOrThrow } from "../../../../../business/util/validation-utility.mjs"
+import { isDefined, validateOrThrow } from "../../../../../business/util/validation-utility.mjs"
 import ButtonAddViewModel from "../../../../component/button-add/button-add-viewmodel.mjs"
 import InputSearchTextViewModel from "../../../../component/input-search/input-search-viewmodel.mjs"
 import DocumentListItemOrderDataSource from "../../../../component/sortable-list/document-list-item-order-datasource.mjs"
@@ -22,7 +21,7 @@ export default class ActorSkillsViewModel extends ViewModel {
    * @type {Boolean}
    * @readonly
    */
-  get hideInnateSkills() { return this.innateSkillViewModels.length === 0; }
+  get hideInnateSkills() { return (this.innateSkillViewModels ?? []).length === 0; }
 
   /**
    * Returns `true`, if learning skills are to be hidden. 
@@ -31,6 +30,29 @@ export default class ActorSkillsViewModel extends ViewModel {
    * @readonly
    */
   get hideLearningSkills() { return this.document.progressionVisible === false; }
+
+  /**
+   * @type {String}
+   * @private
+   */
+  _searchTerm = "";
+  /**
+   * @type {String}
+   */
+  get searchTerm() {
+    return this._searchTerm;
+  }
+  set searchTerm(value) {
+    this._searchTerm = value;
+    if (isDefined(this.vmSearch)) {
+      this.vmSearch.value = value;
+    }
+
+    this._filterSkills(value);
+
+    // Immediately write view state. 
+    this.writeViewState();
+  }
 
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
@@ -54,6 +76,10 @@ export default class ActorSkillsViewModel extends ViewModel {
     // Own properties.
     this.document = args.document;
 
+    // View state.
+    this.registerViewStateProperty("_searchTerm");
+    this.readViewState();
+
     // Child view models. 
     const thiz = this;
 
@@ -61,56 +87,10 @@ export default class ActorSkillsViewModel extends ViewModel {
       id: "vmSearch",
       parent: this,
       isEditable: true,
-      onChange: (_, newValue) => {
-        const skills = this.document.skills.innate
-          .concat(this.document.skills.learning)
-          .concat(this.document.skills.known);
-
-        let innateListElements = [];
-        if (this.hideInnateSkills === false) {
-          innateListElements = this.vmInnateSkillList.element.find("> li");
-        }
-        
-        const knownListElements = this.vmKnownSkillList.element.find("> li");
-
-        let learningListElements = [];
-        if (this.hideLearningSkills === false) {
-          learningListElements = this.vmLearningSkillList.element.find("> li");
-        }
-
-        const elements = [];
-        for (const element of innateListElements) {
-          elements.push(element);
-        }
-        for (const element of knownListElements) {
-          elements.push(element);
-        }
-        for (const element of learningListElements) {
-          elements.push(element);
-        }
-
-        const trimmedSearchTerm = newValue.trim();
-        const searchItems = skills.map(it => new SearchItem({
-            id: it.id,
-            term: it.name,
-          }));
-
-        if (trimmedSearchTerm.length > 0) {
-          const results = new Search().search(searchItems, trimmedSearchTerm, SEARCH_MODES.STRICT_CASE_INSENSITIVE);
-
-          for (const result of results) {
-            const element = elements.find(it => it.id === result.id);
-            if (result.score > 0) {
-              $(element).removeClass("hidden");
-            } else {
-              $(element).addClass("hidden");
-            }
-          }
-        } else {
-          // Reset visibilities. 
-          for (const element of elements) {
-            $(element).removeClass("hidden");
-          }
+      value: this.searchTerm,
+      onChange: (oldValue, newValue) => {
+        if (oldValue != newValue) {
+          this.searchTerm = newValue;
         }
       },
     });
@@ -224,6 +204,13 @@ export default class ActorSkillsViewModel extends ViewModel {
   }
 
   /** @override */
+  async activateListeners(html) {
+    await super.activateListeners(html);
+
+    this._filterSkills(this.searchTerm);
+  }
+
+  /** @override */
   _getChildUpdates() {
     const updates = super._getChildUpdates();
 
@@ -277,5 +264,65 @@ export default class ActorSkillsViewModel extends ViewModel {
       this.knownSkillViewModels,
       (args) => { return new SkillListItemViewModel(args); }
     );
+  }
+
+  /**
+   * Filters the skills by the given search term. 
+   * 
+   * @param {String} searchTerm 
+   * 
+   * @private
+   */
+  _filterSkills(searchTerm) {
+    const skills = this.document.skills.innate
+      .concat(this.document.skills.learning)
+      .concat(this.document.skills.known);
+
+    let innateListElements = [];
+    if (this.hideInnateSkills === false) {
+      innateListElements = this.vmInnateSkillList.element.find("> li");
+    }
+    
+    const knownListElements = this.vmKnownSkillList.element.find("> li");
+
+    let learningListElements = [];
+    if (this.hideLearningSkills === false) {
+      learningListElements = this.vmLearningSkillList.element.find("> li");
+    }
+
+    const elements = [];
+    for (const element of innateListElements) {
+      elements.push(element);
+    }
+    for (const element of knownListElements) {
+      elements.push(element);
+    }
+    for (const element of learningListElements) {
+      elements.push(element);
+    }
+
+    const trimmedSearchTerm = searchTerm.trim();
+    const searchItems = skills.map(it => new SearchItem({
+        id: it.id,
+        term: it.name,
+      }));
+
+    if (trimmedSearchTerm.length > 0) {
+      const results = new Search().search(searchItems, trimmedSearchTerm, SEARCH_MODES.STRICT_CASE_INSENSITIVE);
+
+      for (const result of results) {
+        const element = elements.find(it => it.id === result.id);
+        if (result.score > 0) {
+          $(element).removeClass("hidden");
+        } else {
+          $(element).addClass("hidden");
+        }
+      }
+    } else {
+      // Reset visibilities. 
+      for (const element of elements) {
+        $(element).removeClass("hidden");
+      }
+    }
   }
 }

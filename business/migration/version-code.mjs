@@ -33,4 +33,43 @@ export default class VersionCode {
   toString() {
     return `${this.major}.${this.minor}.${this.patch}`;
   }
+
+  /**
+   * Returns true, if this version code is greater than the given version code. 
+   * 
+   * @param {VersionCode} otherVersion The version code to compare against. 
+   * 
+   * @returns `true`, if this version code is greater than the given version code. 
+   */
+  greaterThan(otherVersion) {
+    return this.major > otherVersion.major
+      || this.minor > otherVersion.minor
+      || this.patch > otherVersion.patch;
+  }
+
+  /**
+   * Returns true, if this version code is lesser than the given version code. 
+   * 
+   * @param {VersionCode} otherVersion The version code to compare against. 
+   * 
+   * @returns `true`, if this version code is lesser than the given version code. 
+   */
+  lesserThan(otherVersion) {
+    return this.major < otherVersion.major
+      || this.minor < otherVersion.minor
+      || this.patch < otherVersion.patch;
+  }
+
+  /**
+   * Returns true, if this version code is equal to the given version code. 
+   * 
+   * @param {VersionCode} otherVersion The version code to compare against. 
+   * 
+   * @returns `true`, if this version code is equal to the given version code. 
+   */
+  equals(otherVersion) {
+    return this.major === otherVersion.major
+      && this.minor === otherVersion.minor
+      && this.patch === otherVersion.patch;
+  }
 }

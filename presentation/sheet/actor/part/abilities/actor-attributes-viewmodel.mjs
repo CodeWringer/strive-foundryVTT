@@ -6,6 +6,7 @@ import AttributeTableViewModel from "./actor-attribute-table-viewmodel.mjs";
 import TransientBaseCharacterActor from "../../../../../business/document/actor/transient-base-character-actor.mjs";
 import CharacterAttributeGroup from "../../../../../business/ruleset/attribute/character-attribute-group.mjs";
 import KeyValuePair from "../../../../../common/key-value-pair.mjs";
+import ChallengeRating from "../../../../../business/ruleset/attribute/challenge-rating.mjs";
 
 export default class ActorAttributesViewModel extends ViewModel {
   /** @override */
@@ -93,10 +94,11 @@ export default class ActorAttributesViewModel extends ViewModel {
     } else {
       template = ChallengeRatingViewModel.TEMPLATE;
 
+      const challengeRating = this.document.getCrFor(attributeGroup.name);
       viewModel = new ChallengeRatingViewModel({
         id: attributeGroup.name,
         parent: this,
-        challengeRating: this._getChallengeRating(attributeGroup.name),
+        challengeRating: challengeRating,
         localizedLabel: game.i18n.localize(attributeGroup.localizableName),
         iconClass: attributeGroup.iconClass,
         onClicked: () => {
@@ -118,35 +120,21 @@ export default class ActorAttributesViewModel extends ViewModel {
   }
 
   /**
-   * Returns the challenge rating of an attribute group with the given name. 
-   * 
-   * @param {String} attributeGroupName 
-   * 
-   * @returns {Number}
-   * 
-   * @private
-   */
-  _getChallengeRating(attributeGroupName) {
-    return (this.document.challengeRatings.find(it => it.key === attributeGroupName) ?? {}).value 
-      ?? 0;
-  }
-
-  /**
    * Sets the challenge rating of an attribute group with the given name. 
    * 
    * @param {String} attributeGroupName 
-   * @param {Number} value 
+   * @param {ChallengeRating} challengeRating 
    * 
    * @private
    */
-  _setChallengeRating(attributeGroupName, value) {
+  _setChallengeRating(attributeGroupName, challengeRating) {
     const challengeRatings = this.document.challengeRatings.concat([]);
 
-    const challengeRating = challengeRatings.find(it => it.key === attributeGroupName);
-    if (challengeRating === undefined) {
-      challengeRatings.push(new KeyValuePair(attributeGroupName, value));
+    const kvpair = challengeRatings.find(it => it.key === attributeGroupName);
+    if (kvpair === undefined) {
+      challengeRatings.push(new KeyValuePair(attributeGroupName, challengeRating));
     } else {
-      challengeRating.value = value;
+      kvpair.value = challengeRating;
     }
 
     this.document.challengeRatings = challengeRatings;

@@ -72,7 +72,7 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
 
     this.target = args.target;
     this.contextType = args.contextType;
-    this.localizedTooltip = args.localizedTooltip ?? game.i18n.localize("ambersteel.character.asset.takeToPerson");
+    this.localizedTooltip = args.localizedTooltip ?? game.i18n.localize("ambersteel.character.asset.take");
   }
 
   /**

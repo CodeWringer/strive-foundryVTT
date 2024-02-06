@@ -214,7 +214,8 @@
     },
     "skill": {
       "templates": ["base"],
-      "relatedAttribute": "agility",
+      "activeBaseAttribute": "agility",
+      "baseAttributes": ["agility"],
       "level": 0,
       "levelModifier": 0,
       "successes": 0,
@@ -236,7 +237,8 @@
       "quantity": 1,
       "maxQuantity": 1,
       "bulk": 1,
-      "isOnPerson": false
+      "isOnPerson": false,
+      "location": ""
     },
     "injury": {
       "templates": ["base"],

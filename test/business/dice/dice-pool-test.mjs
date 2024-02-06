@@ -5,6 +5,7 @@ import { SumComponent } from '../../../business/ruleset/summed-data.mjs';
 import DicePool, { DICE_POOL_RESULT_TYPES, DicePoolRollResult } from '../../../business/dice/dice-pool.mjs';
 import { ROLL_DICE_MODIFIER_TYPES } from '../../../business/dice/roll-dice-modifier-types.mjs';
 import { VISIBILITY_MODES } from '../../../presentation/chat/visibility-modes.mjs';
+import { EvaluatedRollFormula } from '../../../business/dice/roll-formula-resolver.mjs';
 
 /**
  * Mocks the global `Die` definition. 
@@ -31,6 +32,38 @@ function mockDie(mockedResults) {
         };
       },
     }
+  }
+}
+
+/**
+ * Mocks the global `Roll` definition. 
+ * 
+ * @param {Array<Object>} mockedResult Mocked terms to return. Each must expose the 
+ * following properties:
+ * * `total: {Number}`
+ * * `terms: {Array<Number>}`
+ */
+function mockRoll(input, mockedResult) {
+  if (globalThis.RollMocks === undefined) {
+    globalThis.RollMocks = new Map();
+  }
+  let total = 0;
+  for (const term of mockedResult) {
+    total += term.total;
+  }
+  globalThis.RollMocks.set(input, {
+    terms: mockedResult,
+    total: total,
+  });
+
+  if (globalThis.Roll === undefined) {
+    globalThis.Roll = function(input) {
+      return {
+        evaluate: function() {
+          return globalThis.RollMocks.get(input);
+        },
+      };
+    };
   }
 }
 
@@ -66,11 +99,12 @@ describe("DicePool", () => {
       const given = new DicePool({
         dice: givenDice,
         bonus: givenBonus,
-        obstacle: givenObstacle,
+        obstacle: "0",
         modifier: givenModifer,
       });
       // Setup
       mockDie([5, 3, 1]);
+      mockRoll(givenObstacle + "", [{ values: [givenObstacle], total: givenObstacle }]);
       // When
       const r = await given.roll();
       // Then
@@ -83,7 +117,13 @@ describe("DicePool", () => {
         modifiedTotal: 3,
         dice: givenDice,
         bonus: givenBonus,
-        obstacle: givenObstacle,
+        obstacle: 0,
+        evaluatedObstacle: new EvaluatedRollFormula({
+          formula: givenObstacle + "",
+          terms: [givenObstacle],
+          rawTotal: givenObstacle,
+          positiveTotal: givenObstacle,
+        }),
         modifier: givenModifer,
         positives: [5],
         negatives: [3, 1],
@@ -108,6 +148,7 @@ describe("DicePool", () => {
       });
       // Setup
       mockDie([5, 3, 1]);
+      mockRoll(givenObstacle + "", [{ values: [givenObstacle], total: givenObstacle }]);
       // When
       const r = await given.roll();
       // Then
@@ -121,6 +162,12 @@ describe("DicePool", () => {
         dice: givenDice,
         bonus: givenBonus,
         obstacle: givenObstacle,
+        evaluatedObstacle: new EvaluatedRollFormula({
+          formula: givenObstacle + "",
+          terms: [givenObstacle],
+          rawTotal: givenObstacle,
+          positiveTotal: givenObstacle,
+        }),
         modifier: givenModifer,
         positives: [5],
         negatives: [],
@@ -147,6 +194,7 @@ describe("DicePool", () => {
       });
       // Setup
       mockDie([5, 3, 1, 2, 6]);
+      mockRoll(givenObstacle + "", [{ values: [givenObstacle], total: givenObstacle }]);
       // When
       const r = await given.roll();
       // Then
@@ -160,6 +208,12 @@ describe("DicePool", () => {
         dice: givenDice,
         bonus: givenBonus,
         obstacle: givenObstacle,
+        evaluatedObstacle: new EvaluatedRollFormula({
+          formula: givenObstacle + "",
+          terms: [givenObstacle],
+          rawTotal: givenObstacle,
+          positiveTotal: givenObstacle,
+        }),
         modifier: givenModifer,
         positives: [5, 6],
         negatives: [3, 1, 2],
@@ -186,6 +240,7 @@ describe("DicePool", () => {
       });
       // Setup
       mockDie([1, 3, 1, 2, 4]);
+      mockRoll(givenObstacle + "", [{ values: [givenObstacle], total: givenObstacle }]);
       // When
       const r = await given.roll();
       // Then
@@ -199,6 +254,12 @@ describe("DicePool", () => {
         dice: givenDice,
         bonus: givenBonus,
         obstacle: givenObstacle,
+        evaluatedObstacle: new EvaluatedRollFormula({
+          formula: givenObstacle + "",
+          terms: [givenObstacle],
+          rawTotal: givenObstacle,
+          positiveTotal: givenObstacle,
+        }),
         modifier: givenModifer,
         positives: [],
         negatives: [1, 3, 1, 2, 4],
@@ -225,6 +286,7 @@ describe("DicePool", () => {
       });
       // Setup
       mockDie([5, 3, 1, 2, 4]);
+      mockRoll(givenObstacle + "", [{ values: [givenObstacle], total: givenObstacle }]);
       // When
       const r = await given.roll();
       // Then
@@ -238,6 +300,12 @@ describe("DicePool", () => {
         dice: givenDice,
         bonus: givenBonus,
         obstacle: givenObstacle,
+        evaluatedObstacle: new EvaluatedRollFormula({
+          formula: givenObstacle + "",
+          terms: [givenObstacle],
+          rawTotal: givenObstacle,
+          positiveTotal: givenObstacle,
+        }),
         modifier: givenModifer,
         positives: [5],
         negatives: [3, 1, 2, 4],
@@ -264,6 +332,7 @@ describe("DicePool", () => {
       });
       // Setup
       mockDie([5, 3, 1, 2, 6]);
+      mockRoll(givenObstacle + "", [{ values: [givenObstacle], total: givenObstacle }]);
       // When
       const r = await given.roll();
       // Then
@@ -277,6 +346,12 @@ describe("DicePool", () => {
         dice: givenDice,
         bonus: givenBonus,
         obstacle: givenObstacle,
+        evaluatedObstacle: new EvaluatedRollFormula({
+          formula: givenObstacle + "",
+          terms: [givenObstacle],
+          rawTotal: givenObstacle,
+          positiveTotal: givenObstacle,
+        }),
         modifier: givenModifer,
         positives: [5, 6],
         negatives: [3, 1, 2],
@@ -307,6 +382,12 @@ describe("DicePool", () => {
         dice: givenDice,
         bonus: givenBonus,
         obstacle: givenObstacle,
+        evaluatedObstacle: new EvaluatedRollFormula({
+          formula: givenObstacle + "",
+          terms: [givenObstacle],
+          rawTotal: givenObstacle,
+          positiveTotal: givenObstacle,
+        }),
         modifier: givenModifer,
         positives: [5, 6],
         negatives: [3, 1, 2],

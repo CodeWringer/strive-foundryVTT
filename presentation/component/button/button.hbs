@@ -12,7 +12,7 @@ leftAlign: {Boolean | undefined}
     {{#if viewModel.localizedToolTip}}title="{{viewModel.localizedToolTip}}"{{/if}}
   >
     {{#if viewModel.iconHtml}}{{{viewModel.iconHtml}}}{{/if}}
-    {{#if viewModel.localizedLabel}}<span class="{{#if viewModel.showFancyFont}}fancy-font{{/if}}{{#if viewModel.iconHtml}} margin-l-md{{/if}}">{{{viewModel.localizedLabel}}}</span>{{/if}}
+    {{#if viewModel.localizedLabel}}<span class="{{#if viewModel.showFancyFont}}fancy-font{{/if}}{{#if viewModel.iconHtml}} margin-l-md{{/if}}">{{viewModel.localizedLabel}}</span>{{/if}}
     {{#if @partial-block}}
     {{> @partial-block }}
     {{/if}}

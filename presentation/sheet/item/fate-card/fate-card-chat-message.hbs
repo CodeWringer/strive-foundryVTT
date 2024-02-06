@@ -3,6 +3,7 @@ viewModel: {FateCardChatMessageViewModel}
 cssClass: {undefined | String}
 --}}
 <section class="custom-system-chat-message fate-card{{#if cssClass}} {{cssClass}}{{/if}}"
+  id="{{viewModel.id}}"
   data-view-model-id="{{viewModel.id}}"
   data-document-id="{{viewModel.document.id}}"
 >
@@ -14,7 +15,7 @@ cssClass: {undefined | String}
     {{#> header2 showFancyFont=viewModel.showFancyFont cssClass="flex-grow"}}{{viewModel.document.name}}{{/header2}}
   </div>
   {{!-- Description --}}
-  <div class="fill pad-md scrollable-height-md">
+  <div class="fill pad-md">
     {{> lazyRichText viewModel=viewModel.vmLazyDescription}}
   </div>
 </section>

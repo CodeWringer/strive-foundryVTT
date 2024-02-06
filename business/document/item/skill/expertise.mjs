@@ -2,7 +2,7 @@ import { TEMPLATES } from '../../../../presentation/templatePreloader.mjs';
 import * as ChatUtil from '../../../../presentation/chat/chat-utility.mjs';
 import { validateOrThrow } from '../../../util/validation-utility.mjs';
 import PreparedChatData from '../../../../presentation/chat/prepared-chat-data.mjs';
-import SkillAbilityChatMessageViewModel from '../../../../presentation/sheet/item/skill-ability/skill-ability-chat-message-viewmodel.mjs';
+import ExpertiseChatMessageViewModel from '../../../../presentation/sheet/item/expertise/expertise-chat-message-viewmodel.mjs';
 import { createUUID } from '../../../util/uuid-utility.mjs';
 import DamageAndType from '../../../ruleset/skill/damage-and-type.mjs';
 import { SOUNDS_CONSTANTS } from '../../../../presentation/audio/sounds.mjs';
@@ -10,9 +10,10 @@ import { VISIBILITY_MODES } from '../../../../presentation/chat/visibility-modes
 import { ATTACK_TYPES, AttackType } from '../../../ruleset/skill/attack-types.mjs';
 import TransientSkill from './transient-skill.mjs';
 import AtReferencer from '../../../referencing/at-referencer.mjs';
+import ViewModel from '../../../../presentation/view-model/view-model.mjs';
 
 /**
- * Represents a skill ability. 
+ * Represents an expertise. 
  * 
  * Is **always** a child object of a skill document. 
  * 
@@ -22,10 +23,10 @@ import AtReferencer from '../../../referencing/at-referencer.mjs';
  * * Read-only. 
  * @property {String} type Returns the content type of this "document". 
  * * Read-only. 
- * @property {String} id UUID of this instance of a skill ability. 
+ * @property {String} id UUID of this instance of an expertise. 
  * * Read-only. 
- * @property {Boolean} isCustom If `true`, this skill ability was added by a user. 
- * @property {String} name Name of the skill ability. 
+ * @property {Boolean} isCustom If `true`, this expertise was added by a user. 
+ * @property {String} name Name of the expertise. 
  * @property {String} img A relative url to an image resource on the server. 
  * @property {String} description 
  * @property {Number} requiredLevel 
@@ -37,20 +38,20 @@ import AtReferencer from '../../../referencing/at-referencer.mjs';
  * @property {String | Null} opposedBy 
  * @property {AttackType | Null} attackType 
  */
-export default class SkillAbility {
+export default class Expertise {
   /**
-   * Converts the given `dto` to a `SkillAbility` instance and 
+   * Converts the given `dto` to a `Expertise` instance and 
    * returns it. 
    * 
    * @param {Object} dto 
    * @param {TransientSkill} owningDocument 
    * 
-   * @returns {SkillAbility}
+   * @returns {Expertise}
    * 
    * @static
    */
   static fromDto(dto, owningDocument) {
-    return new SkillAbility({
+    return new Expertise({
       owningDocument: owningDocument,
       id: dto.id,
       isCustom: dto.isCustom,
@@ -69,7 +70,7 @@ export default class SkillAbility {
   }
 
   /**
-   * Returns the data path of this skill ability on its parent. 
+   * Returns the data path of this expertise on its parent. 
    * 
    * @type {String}
    * @private
@@ -83,7 +84,7 @@ export default class SkillAbility {
    * @type {String}
    * @readonly
    */
-  get type() { return "skill-ability"; }
+  get type() { return "expertise"; }
 
   /**
    * @type {Boolean}
@@ -196,7 +197,7 @@ export default class SkillAbility {
   /**
    * @param {Object} args 
    * @param {TransientSkill} args.owningDocument The owning document.
-   * @param {String | undefined} args.id UUID of this instance of a skill ability. 
+   * @param {String | undefined} args.id UUID of this instance of an expertise. 
    * @param {Boolean | undefined} args.isCustom 
    * @param {String | undefined} args.name 
    * @param {String | undefined} args.img 
@@ -221,7 +222,7 @@ export default class SkillAbility {
     this.id = args.id ?? createUUID();
 
     this._isCustom = args.isCustom ?? false;
-    this._name = args.name ?? game.i18n.localize("ambersteel.character.skill.ability.newDefaultName");
+    this._name = args.name ?? game.i18n.localize("ambersteel.character.skill.expertise.newDefaultName");
     this._img = args.img ?? "icons/svg/book.svg";
     this._description = args.description ?? "";
     this._requiredLevel = args.requiredLevel ?? 0;
@@ -239,7 +240,7 @@ export default class SkillAbility {
    * @type {String}
    * @readonly
    */
-  get chatMessageTemplate() { return TEMPLATES.SKILL_ABILITY_CHAT_MESSAGE; }
+  get chatMessageTemplate() { return TEMPLATES.EXPERTISE_CHAT_MESSAGE; }
   
   /**
    * Base implementation of returning data for a chat message, based on this item. 
@@ -267,36 +268,41 @@ export default class SkillAbility {
    * Returns an instance of a view model for use in a chat message. 
    * 
    * @param {Object | undefined} overrides Optional. An object that allows overriding any of the view model properties. 
+   * @param {ViewModel | undefined} overrides.parent A parent view model instance. 
+   * In case this is an embedded document, such as an expertise, this value must be supplied 
+   * for proper function. 
    * @param {String | undefined} overrides.id
+   * * default is a new UUID.
    * @param {Boolean | undefined} overrides.isEditable
+   * * default `false`
    * @param {Boolean | undefined} overrides.isSendable
-   * @param {Boolean | undefined} overrides.isOwner
-   * @param {Boolean | undefined} overrides.isGM
+   * * default `false`
    * @param {Boolean | undefined} overrides.showParentSkill Optional. If true, will show the parent skill name and icon, if possible. 
-   * * Default `true`
+   * * default `true`
    * 
-   * @returns {SkillAbilityChatMessageViewModel}
+   * @returns {ExpertiseChatMessageViewModel}
    * 
-   * @virtual
+   * @override
    */
   getChatViewModel(overrides = {}) {
     const actor = (this.owningDocument.owningDocument !== undefined) ? 
       this.owningDocument.owningDocument.document : undefined;
 
-    return new SkillAbilityChatMessageViewModel({
-      id: `${this.id}-${createUUID()}`,
-      isEditable: false,
-      isSendable: false,
+    return new ExpertiseChatMessageViewModel({
+      id: overrides.id,
+      parent: overrides.parent,
+      isEditable: overrides.isEditable ?? false,
+      isSendable: overrides.isSendable ?? false,
+      showParentSkill: overrides.showParentSkill ?? true,
       isOwner: this.owningDocument.isOwner,
       isGM: game.user.isGM,
-      ...overrides,
-      skillAbility: this,
+      expertise: this,
       actor: actor,
     });
   }
 
   /**
-   * Sends this `SkillAbility` to chat. 
+   * Sends this `Expertise` to chat. 
    * 
    * @param {VisibilityMode} visibilityMode Determines the visibility of the chat message. 
    * 
@@ -312,14 +318,14 @@ export default class SkillAbility {
   }
 
   /**
-   * Deletes this `SkillAbility`. 
+   * Deletes this `Expertise`. 
    * 
-   * @returns {Boolean} True, if the `SkillAbility` could be removed. 
+   * @returns {Boolean} True, if the `Expertise` could be removed. 
    */
   delete() {
     if (this.owningDocument === undefined) return false;
 
-    this.owningDocument.deleteSkillAbility(this.id);
+    this.owningDocument.deleteExpertise(this.id);
 
     return true;
   }
@@ -352,9 +358,9 @@ export default class SkillAbility {
   }
 
   /**
-   * Updates a property of this SkillAbility on the parent item, identified via the given path. 
+   * Updates a property of this Expertise on the parent item, identified via the given path. 
    * 
-   * @param {String} propertyPath Path leading to the property to update, on the SkillAbility. 
+   * @param {String} propertyPath Path leading to the property to update, on the Expertise. 
    *        Array-accessing via brackets is supported. Property-accessing via brackets is *not* supported. 
    *        E.g.: "system.attributes[0].level"
    * @param {any} newValue The value to assign to the property. 
@@ -373,7 +379,7 @@ export default class SkillAbility {
   }
 
   /**
-   * Deletes a property on the skill ability, via the given path. 
+   * Deletes a property on the expertise, via the given path. 
    * 
    * @param {String} propertyPath Path leading to the property to delete, on the given document entity. 
    *        Array-accessing via brackets is supported. Property-accessing via brackets is *not* supported. 
@@ -426,7 +432,7 @@ export default class SkillAbility {
 
   /**
    * Returns the property values identified by the `@`-denoted references in the given string, 
-   * from this `SkillAbility`. 
+   * from this `Expertise`. 
    * 
    * @param {String} str A string containing `@`-denoted references. 
    * * E. g. `"@strength"` or localized and capitalized `"@Stärke"`. 

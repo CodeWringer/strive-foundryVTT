@@ -1,6 +1,6 @@
 {
   "name": "ambersteel",
-  "version": "1.5.12",
+  "version": "1.6.0",
   "description": "Ambersteel FoundryVTT development environment",
   "scripts": {
     "build": "node ./npm-scripts/build.mjs",
@@ -12,7 +12,7 @@
   "browserslist": [
     "last 3 versions"
   ],
-  "author": "Nicolas Haase",
+  "author": "Nicolas H.",
   "license": "MIT",
   "private": true,
   "devDependencies": {

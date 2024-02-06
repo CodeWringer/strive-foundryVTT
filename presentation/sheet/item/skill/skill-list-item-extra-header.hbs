@@ -3,12 +3,12 @@ viewModel: {SkillListItemViewModel}
 --}}
 <div class="flex flex-row flex-wrap margin-b-md auto-margin-h">
   <div class="flex flex-row flex-grow flex-middle auto-margin-h sheet-block">
-    {{!-- Related Attribute --}}
-    {{#> labeledControl viewModel=viewModel.vmDdRelatedAttribute localizedIconToolTip=(localize "ambersteel.character.skill.relatedAttribute") iconClass="ico-related-attribute-solid" cssClass="flex-grow" }}
+    {{!-- Active Attribute --}}
+    {{#> labeledControl viewModel=viewModel.vmActiveAttribute localizedIconToolTip=(localize "ambersteel.character.attribute.singular") iconClass="ico-related-attribute-solid" cssClass="flex-grow" }}
       {{> inputDropDown }}
     {{/labeledControl}}
-    {{!-- Level --}}
     <div class="flex flex-row auto-margin-h">
+      {{!-- Level --}}
       {{#> labeledControl viewModel=viewModel.vmNsLevel localizedIconToolTip=(localize "ambersteel.character.advancement.level") iconClass="ico-level-solid" }}
         <div class="width-sm">
           {{> inputNumberSpinner }}
