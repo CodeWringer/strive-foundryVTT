@@ -40,12 +40,15 @@ export default class Migrator_1_5_13__1_6_0 extends AbstractMigrator {
    */
   async _updateSkillAttributes(skillDocument) {
     const relatedAttribute = skillDocument.system.relatedAttribute;
-    if (isDefined(relatedAttribute) === false) {
+    const baseAttributes = skillDocument.system.baseAttributes ?? [relatedAttribute];
+    const activeBaseAttribute = skillDocument.system.activeBaseAttribute ?? relatedAttribute;
+
+    if (isDefined(relatedAttribute)) {
       await skillDocument.update({
-        baseAttributes: [relatedAttribute], 
-        activeBaseAttribute: relatedAttribute,
+        baseAttributes: baseAttributes, 
+        activeBaseAttribute: activeBaseAttribute,
         "-=relatedAttribute": null,
-      }, false);
+      });
     }
   }
 }
