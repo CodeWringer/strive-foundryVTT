@@ -249,6 +249,7 @@ export default class TransientDocument {
    * * Default 'true'. 
    * 
    * @async
+   * @protected
    */
   async deleteByPath(propertyPath, render = true) {
     await this._updater.deleteByPath(this.document, propertyPath, render);
@@ -277,9 +278,11 @@ export default class TransientDocument {
    * @param {Object} delta The update delta to persist. 
    * @param {Boolean} render If true, will trigger a re-render of the associated document sheet. 
    * * Default 'true'. 
+   * 
+   * @async
    */
   async update(delta, render = true) {
-    this.document.update(delta, { render: render });
+    await this.document.update(delta, { render: render });
   }
 
   /**

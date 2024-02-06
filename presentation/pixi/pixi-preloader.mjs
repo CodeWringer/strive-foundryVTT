@@ -1,3 +1,5 @@
+import { FOUNDRY_10_PIXI_VERSION, PIXI_VERSION } from "./pixi-globals.mjs";
+
 const BASE_PATH = "systems/ambersteel/presentation/image";
 
 /**
@@ -30,10 +32,19 @@ const preloadedTextures = new Map();
  * @async
  */
 export async function preloadPixiTextures() {
-  for (const propertyName in TEXTURES) {
-    const url = TEXTURES[propertyName];
-    const texture = await PIXI.Assets.load(url);
-    preloadedTextures.set(url, texture);
+  if (PIXI_VERSION.greaterThan(FOUNDRY_10_PIXI_VERSION)) {
+    for (const propertyName in TEXTURES) {
+      const url = TEXTURES[propertyName];
+      const texture = await PIXI.Assets.load(url);
+      preloadedTextures.set(url, texture);
+    }
+  } else {
+    await PIXI.Loader.shared
+      .add(TEXTURES.ACTION_POINT_EMPTY)
+      .add(TEXTURES.ACTION_POINT_FULL)
+      .add(TEXTURES.CARET_LEFT)
+      .add(TEXTURES.CARET_RIGHT)
+      .load();
   }
 }
 
@@ -49,5 +60,9 @@ export async function preloadPixiTextures() {
  * @returns {Object}
  */
 export function getPixiTexture(key) {
-  return preloadedTextures.get(key);
+  if (PIXI_VERSION.greaterThan(FOUNDRY_10_PIXI_VERSION)) {
+    return preloadedTextures.get(key);
+  } else {
+    return PIXI.Loader.shared.resources[key].texture;
+  }
 }
