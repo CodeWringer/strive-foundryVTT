@@ -1,3 +1,5 @@
+import VersionCode from "../../business/migration/version-code.mjs";
+
 const BASE_PATH = "systems/ambersteel/presentation/image";
 
 /**
@@ -25,15 +27,38 @@ export const TEXTURES = {
 const preloadedTextures = new Map();
 
 /**
+ * @type {VersionCode}
+ * @constant
+ * @readonly
+ */
+const PIXI_VERSION = VersionCode.fromString(PIXI.VERSION);
+
+/**
+ * @type {VersionCode}
+ * @constant
+ * @readonly
+ */
+const FOUNDRY_10_PIXI_VERSION = new VersionCode(6, 5, 2);
+
+/**
  * Preloads all custom PIXI textures and caches them for synchronous access later. 
  * 
  * @async
  */
 export async function preloadPixiTextures() {
-  for (const propertyName in TEXTURES) {
-    const url = TEXTURES[propertyName];
-    const texture = await PIXI.Assets.load(url);
-    preloadedTextures.set(url, texture);
+  if (PIXI_VERSION.greaterThan(FOUNDRY_10_PIXI_VERSION)) {
+    for (const propertyName in TEXTURES) {
+      const url = TEXTURES[propertyName];
+      const texture = await PIXI.Assets.load(url);
+      preloadedTextures.set(url, texture);
+    }
+  } else {
+    await PIXI.Loader.shared
+      .add(TEXTURES.ACTION_POINT_EMPTY)
+      .add(TEXTURES.ACTION_POINT_FULL)
+      .add(TEXTURES.CARET_LEFT)
+      .add(TEXTURES.CARET_RIGHT)
+      .load();
   }
 }
 
@@ -49,5 +74,9 @@ export async function preloadPixiTextures() {
  * @returns {Object}
  */
 export function getPixiTexture(key) {
-  return preloadedTextures.get(key);
+  if (PIXI_VERSION.greaterThan(FOUNDRY_10_PIXI_VERSION)) {
+    return preloadedTextures.get(key);
+  } else {
+    return PIXI.Loader.shared.resources[key].texture;
+  }
 }

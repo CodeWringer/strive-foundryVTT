@@ -277,6 +277,8 @@ export default class TokenExtensions {
    */
   static _updateActionPoints(token, newActionPoints) {
     if (isDefined(token.actionPoints) !== true) return;
+    if (isDefined(token.actionPoints.text) !== true) return;
+    if (isDefined(token.actionPoints.text.text) !== true) return;
 
     token.actionPoints.text.text = newActionPoints;
 
