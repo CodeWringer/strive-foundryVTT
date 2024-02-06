@@ -1,5 +1,5 @@
 import { validateOrThrow } from "../../business/util/validation-utility.mjs";
-import { getPixiTexture } from "./pixi-preloader.mjs";
+import { FOUNDRY_10_PIXI_VERSION, PIXI_VERSION } from "./pixi-globals.mjs";
 
 /**
  * Represents a clickable sprite, with hover state. 
@@ -66,7 +66,11 @@ export class PixiButton {
     // Actual sprite. 
     this._spriteIcon = new PIXI.Sprite(args.texture);
 
-    this._spriteIcon.eventMode = "static";
+    if (PIXI_VERSION.greaterThan(FOUNDRY_10_PIXI_VERSION)) {
+      this._spriteIcon.eventMode = "static";
+    } else {
+      this._spriteIcon.interactive = true;
+    }
     this._spriteIcon.cursor = "pointer";
     
     // Hover sprite. 
