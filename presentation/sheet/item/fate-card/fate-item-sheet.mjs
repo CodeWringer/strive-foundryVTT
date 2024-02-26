@@ -1,5 +1,4 @@
 import GameSystemBaseItemSheet from "../game-system-base-item-sheet.mjs";
-import { ITEM_SHEET_SUBTYPE } from "../item-sheet-subtype.mjs";
 import FateCardItemSheetViewModel from "./fate-card-item-sheet-viewmodel.mjs";
 
 export default class FateItemSheet extends GameSystemBaseItemSheet {
@@ -21,5 +20,3 @@ export default class FateItemSheet extends GameSystemBaseItemSheet {
     });
   }
 }
-
-ITEM_SHEET_SUBTYPE.set("fate-card", new FateItemSheet());

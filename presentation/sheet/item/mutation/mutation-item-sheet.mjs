@@ -1,5 +1,4 @@
 import GameSystemBaseItemSheet from "../game-system-base-item-sheet.mjs";
-import { ITEM_SHEET_SUBTYPE } from "../item-sheet-subtype.mjs";
 import MutationItemSheetViewModel from "./mutation-item-sheet-viewmodel.mjs";
 
 export default class MutationItemSheet extends GameSystemBaseItemSheet {
@@ -21,5 +20,3 @@ export default class MutationItemSheet extends GameSystemBaseItemSheet {
     });
   }
 }
-
-ITEM_SHEET_SUBTYPE.set("mutation", new MutationItemSheet());

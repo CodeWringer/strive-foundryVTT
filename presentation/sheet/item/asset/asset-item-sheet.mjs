@@ -1,4 +1,3 @@
-import { ITEM_SHEET_SUBTYPE } from "../item-sheet-subtype.mjs";
 import GameSystemBaseItemSheet from "../game-system-base-item-sheet.mjs";
 import AssetItemSheetViewModel from "./asset-item-sheet-viewmodel.mjs";
 
@@ -24,5 +23,3 @@ export default class AssetItemSheet extends GameSystemBaseItemSheet {
     });
   }
 }
-
-ITEM_SHEET_SUBTYPE.set("item", new AssetItemSheet());

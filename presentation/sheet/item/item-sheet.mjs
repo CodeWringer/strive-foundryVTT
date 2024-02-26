@@ -1,13 +1,4 @@
 import { ITEM_SHEET_SUBTYPE } from "./item-sheet-subtype.mjs";
-// Imports of specific item sheet "sub-types", to ensure their imports cause the `ITEM_SHEET_SUBTYPE` map to be populated. 
-import AssetItemSheet from "./asset/asset-item-sheet.mjs";
-import SkillItemSheet from "./skill/skill-item-sheet.mjs";
-import InjuryItemSheet from "./injury/injury-item-sheet.mjs";
-import IllnessItemSheet from "./illness/illness-item-sheet.mjs";
-import MutationItemSheet from "./mutation/mutation-item-sheet.mjs";
-import ScarItemSheet from "./scar/scar-item-sheet.mjs";
-import FateItemSheet from "./fate-card/fate-item-sheet.mjs";
-// Other imports
 import * as SheetUtil from "../sheet-utility.mjs";
 import { SYSTEM_ID } from "../../../system-id.mjs";
 

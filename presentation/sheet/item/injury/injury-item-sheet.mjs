@@ -1,5 +1,4 @@
 import GameSystemBaseItemSheet from "../game-system-base-item-sheet.mjs";
-import { ITEM_SHEET_SUBTYPE } from "../item-sheet-subtype.mjs";
 import InjuryItemSheetViewModel from "./injury-item-sheet-viewmodel.mjs";
 
 export default class InjuryItemSheet extends GameSystemBaseItemSheet {
@@ -21,5 +20,3 @@ export default class InjuryItemSheet extends GameSystemBaseItemSheet {
     });
   }
 }
-
-ITEM_SHEET_SUBTYPE.set("injury", new InjuryItemSheet());

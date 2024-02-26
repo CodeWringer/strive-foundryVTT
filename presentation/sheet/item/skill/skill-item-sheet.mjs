@@ -1,5 +1,4 @@
 import GameSystemBaseItemSheet from "../game-system-base-item-sheet.mjs";
-import { ITEM_SHEET_SUBTYPE } from "../item-sheet-subtype.mjs";
 import SkillItemSheetViewModel from "./skill-item-sheet-viewmodel.mjs";
 
 export default class SkillItemSheet extends GameSystemBaseItemSheet {
@@ -21,5 +20,3 @@ export default class SkillItemSheet extends GameSystemBaseItemSheet {
     });
   }
 }
-
-ITEM_SHEET_SUBTYPE.set("skill", new SkillItemSheet());
