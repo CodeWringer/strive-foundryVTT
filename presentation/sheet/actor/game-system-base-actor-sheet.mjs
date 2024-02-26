@@ -1,5 +1,4 @@
 import { TEMPLATES } from "../../templatePreloader.mjs";
-import { ACTOR_SHEET_SUBTYPE } from "./actor-sheet-subtype.mjs";
 import ActorSheetViewModel from "./actor-sheet-viewmodel.mjs";
 
 /**
@@ -88,5 +87,3 @@ export default class GameSystemBaseActorSheet {
    */
   async activateListeners(html) { /** Do nothing */}
 }
-
-ACTOR_SHEET_SUBTYPE.set("plain", new GameSystemBaseActorSheet());
