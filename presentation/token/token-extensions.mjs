@@ -74,10 +74,10 @@ export default class TokenExtensions {
     // Determine text to display.
     const challengeRatingsForDisplay = [];
     if (allTheSameChallengeRating === true) {
-      challengeRatingsForDisplay.push(`${game.i18n.localize("ambersteel.character.advancement.challengeRating.abbreviation")} ${lastChallengeRating}`);
+      challengeRatingsForDisplay.push(`${game.i18n.localize("system.character.advancement.challengeRating.abbreviation")} ${lastChallengeRating}`);
     } else {
       for (const challengeRating of challengeRatings) {
-        challengeRatingsForDisplay.push(`${game.i18n.localize(challengeRating.attributeGroup.localizableAbbreviation)} ${game.i18n.localize("ambersteel.character.advancement.challengeRating.abbreviation")} ${challengeRating.value}`);
+        challengeRatingsForDisplay.push(`${game.i18n.localize(challengeRating.attributeGroup.localizableAbbreviation)} ${game.i18n.localize("system.character.advancement.challengeRating.abbreviation")} ${challengeRating.value}`);
       }
     }
 

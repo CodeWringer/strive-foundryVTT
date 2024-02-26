@@ -111,8 +111,8 @@ export default class ActorAssetsViewModel extends ViewModel {
         isEditable: thiz.isEditable,
         creationType: "item",
         withDialog: true,
-        localizedLabel: game.i18n.localize("ambersteel.character.asset.add.label"),
-        localizedType: game.i18n.localize("ambersteel.character.asset.singular"),
+        localizedLabel: game.i18n.localize("system.character.asset.add.label"),
+        localizedType: game.i18n.localize("system.character.asset.singular"),
       }),
     });
 
@@ -135,8 +135,8 @@ export default class ActorAssetsViewModel extends ViewModel {
         isEditable: thiz.isEditable,
         creationType: "item",
         withDialog: true,
-        localizedLabel: game.i18n.localize("ambersteel.character.asset.add.label"),
-        localizedType: game.i18n.localize("ambersteel.character.asset.singular"),
+        localizedLabel: game.i18n.localize("system.character.asset.add.label"),
+        localizedType: game.i18n.localize("system.character.asset.singular"),
       }),
     });
   }

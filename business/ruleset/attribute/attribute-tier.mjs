@@ -38,15 +38,15 @@ export class AttributeTier {
 export const ATTRIBUTE_TIERS = {
   underdeveloped: new AttributeTier({
     name: "underdeveloped",
-    localizableName: "ambersteel.character.attribute.tier.underdeveloped",
+    localizableName: "system.character.attribute.tier.underdeveloped",
   }),
   average: new AttributeTier({
     name: "average",
-    localizableName: "ambersteel.character.attribute.tier.average",
+    localizableName: "system.character.attribute.tier.average",
   }),
   exceptional: new AttributeTier({
     name: "exceptional",
-    localizableName: "ambersteel.character.attribute.tier.exceptional",
+    localizableName: "system.character.attribute.tier.exceptional",
   }),
 };
 ConstantsUtils.enrichConstant(ATTRIBUTE_TIERS);

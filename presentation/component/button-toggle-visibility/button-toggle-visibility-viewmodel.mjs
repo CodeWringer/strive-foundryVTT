@@ -93,7 +93,7 @@ export default class ButtonToggleVisibilityViewModel extends ButtonViewModel {
     this.target = args.target;
     this._visGroup = args.visGroup ?? createUUID();
     this._toggleSelf = args.toggleSelf ?? false;
-    this.localizedTooltip = args.localizedTooltip ?? game.i18n.localize("ambersteel.general.toggleVisibility");
+    this.localizedTooltip = args.localizedTooltip ?? game.i18n.localize("system.general.toggleVisibility");
   }
 
   /**

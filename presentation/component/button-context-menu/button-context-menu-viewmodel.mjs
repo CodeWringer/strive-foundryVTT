@@ -124,7 +124,7 @@ export default class ButtonContextMenuViewModel extends ButtonViewModel {
     });
 
     this.menuItems = args.menuItems ?? [];
-    this.localizedTooltip = args.localizedTooltip ?? game.i18n.localize("ambersteel.general.contextMenu");
+    this.localizedTooltip = args.localizedTooltip ?? game.i18n.localize("system.general.contextMenu");
 
     // Wrap the callback function to make it also ensure the context menu is properly closed, 
     // when the menu item is clicked. 
@@ -173,7 +173,7 @@ export default class ButtonContextMenuViewModel extends ButtonViewModel {
     const contextMenuElement = wrappedOuterHtml.find(`#${this.id} nav#context-menu`);
 
     if (contextMenuElement === undefined || contextMenuElement === null || contextMenuElement.length === 0) {
-      game.ambersteel.logger.logWarn("NullPointerException: ContextMenu: Failed to get context menu element")
+      game.strive.logger.logWarn("NullPointerException: ContextMenu: Failed to get context menu element")
       return;
     }
 

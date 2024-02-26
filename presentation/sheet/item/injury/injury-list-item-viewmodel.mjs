@@ -44,7 +44,7 @@ export default class InjuryListItemViewModel extends BaseListItemViewModel {
             this.document.treatmentSkill = newValue;
           },
         }),
-        localizedIconToolTip: game.i18n.localize("ambersteel.character.health.treatmentSkill"),
+        localizedIconToolTip: game.i18n.localize("system.character.health.treatmentSkill"),
         iconClass: "ico-skill-solid",
       }),
       new DataFieldComponent({
@@ -57,7 +57,7 @@ export default class InjuryListItemViewModel extends BaseListItemViewModel {
             this.document.requiredSupplies = newValue;
           },
         }),
-        localizedIconToolTip: game.i18n.localize("ambersteel.character.health.requiredSupplies"),
+        localizedIconToolTip: game.i18n.localize("system.character.health.requiredSupplies"),
         iconClass: "ico-medical-supplies-solid",
       }),
       new DataFieldComponent({
@@ -70,7 +70,7 @@ export default class InjuryListItemViewModel extends BaseListItemViewModel {
             this.document.obstaclePatchUp = newValue;
           },
         }),
-        localizedIconToolTip: game.i18n.localize("ambersteel.character.health.obstaclePatchUp"),
+        localizedIconToolTip: game.i18n.localize("system.character.health.obstaclePatchUp"),
         iconClass: "ico-obstacle-patch-up-solid",
       }),
       new DataFieldComponent({
@@ -83,7 +83,7 @@ export default class InjuryListItemViewModel extends BaseListItemViewModel {
             this.document.obstacleTreatment = newValue;
           },
         }),
-        localizedIconToolTip: game.i18n.localize("ambersteel.character.health.obstacleTreatment"),
+        localizedIconToolTip: game.i18n.localize("system.character.health.obstacleTreatment"),
         iconClass: "ico-obstacle-treatment-solid",
       }),
       new DataFieldComponent({
@@ -96,7 +96,7 @@ export default class InjuryListItemViewModel extends BaseListItemViewModel {
             this.document.timeToHeal = newValue;
           },
         }),
-        localizedIconToolTip: game.i18n.localize("ambersteel.character.health.timeToHeal"),
+        localizedIconToolTip: game.i18n.localize("system.character.health.timeToHeal"),
         iconClass: "ico-time-to-heal-solid",
       }),
       new DataFieldComponent({
@@ -109,7 +109,7 @@ export default class InjuryListItemViewModel extends BaseListItemViewModel {
             this.document.timeToHealTreated = newValue;
           },
         }),
-        localizedIconToolTip: game.i18n.localize("ambersteel.character.health.timeToHealTreated"),
+        localizedIconToolTip: game.i18n.localize("system.character.health.timeToHealTreated"),
         iconClass: "ico-time-to-heal-treated-solid",
       }),
       new DataFieldComponent({
@@ -122,7 +122,7 @@ export default class InjuryListItemViewModel extends BaseListItemViewModel {
             this.document.selfPatchUp = newValue;
           },
         }),
-        localizedIconToolTip: game.i18n.localize("ambersteel.character.health.selfPatchUp"),
+        localizedIconToolTip: game.i18n.localize("system.character.health.selfPatchUp"),
         iconClass: "ico-self-patch-up-solid",
       }),
       new DataFieldComponent({
@@ -135,7 +135,7 @@ export default class InjuryListItemViewModel extends BaseListItemViewModel {
             this.document.scar = newValue;
           },
         }),
-        localizedIconToolTip: game.i18n.localize("ambersteel.character.health.scar.singular"),
+        localizedIconToolTip: game.i18n.localize("system.character.health.scar.singular"),
         iconClass: "ico-scar-solid",
       }),
       new DataFieldComponent({
@@ -147,9 +147,9 @@ export default class InjuryListItemViewModel extends BaseListItemViewModel {
           onChange: (_, newValue) => {
             this.document.limit = newValue;
           },
-          placeholder: game.i18n.localize("ambersteel.character.health.injury.limit.placeholder"),
+          placeholder: game.i18n.localize("system.character.health.injury.limit.placeholder"),
         }),
-        localizedIconToolTip: game.i18n.localize("ambersteel.character.health.injury.limit.label"),
+        localizedIconToolTip: game.i18n.localize("system.character.health.injury.limit.label"),
         iconClass: "ico-limit-solid",
       }),
     ];

@@ -1,5 +1,4 @@
 import { TEMPLATES } from "../../templatePreloader.mjs";
-import { ACTOR_SHEET_SUBTYPE } from "./actor-sheet-subtype.mjs";
 import ActorSheetViewModel from "./actor-sheet-viewmodel.mjs";
 
 /**
@@ -9,7 +8,7 @@ import ActorSheetViewModel from "./actor-sheet-viewmodel.mjs";
  * 
  * This particular type also doubles as the definition for the actor of type `"plain"`. 
  */
-export default class AmbersteelBaseActorSheet {
+export default class GameSystemBaseActorSheet {
   /**
    * Returns the template path. 
    * @type {String} Path to the template. 
@@ -23,12 +22,12 @@ export default class AmbersteelBaseActorSheet {
    * @type {String}
    * @readonly
    */
-  get title() { return game.i18n.localize("ambersteel.general.actor.plain.label"); }
+  get title() { return game.i18n.localize("system.general.actor.plain.label"); }
 
   /**
    * Returns a view model for the given document. 
    * 
-   * Supports caching the view model instance, based on the `game.ambersteel.enableViewModelCaching` value. 
+   * Supports caching the view model instance, based on the `game.strive.enableViewModelCaching` value. 
    * 
    * @param {Object} context A context object provided by FoundryVTT. 
    * @param {TransientDocument} document A transient document instance of "this" type of item sheet. 
@@ -39,11 +38,11 @@ export default class AmbersteelBaseActorSheet {
    * @protected
    */
   getViewModel(context, document, sheet) {
-    let viewModel = game.ambersteel.viewModels.get(document.id);
+    let viewModel = game.strive.viewModels.get(document.id);
     if (viewModel === undefined) {
       viewModel = this._getViewModel(context, document, sheet);
-      if (game.ambersteel.enableViewModelCaching === true) {
-        game.ambersteel.viewModels.set(document.id, viewModel);
+      if (game.strive.enableViewModelCaching === true) {
+        game.strive.viewModels.set(document.id, viewModel);
       }
     } else {
       viewModel.update({
@@ -88,5 +87,3 @@ export default class AmbersteelBaseActorSheet {
    */
   async activateListeners(html) { /** Do nothing */}
 }
-
-ACTOR_SHEET_SUBTYPE.set("plain", new AmbersteelBaseActorSheet());

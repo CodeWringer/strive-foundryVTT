@@ -46,7 +46,7 @@ export default class LazyLoadViewModel extends ViewModel {
    * @readonly
    */
   get shimmerElement() {
-    const element = this._html.find(`#${this.id} > .ambersteel-shimmer`);
+    const element = this._html.find(`#${this.id} > .strive-shimmer`);
     if (element.length < 1) {
       return undefined;
     } else {

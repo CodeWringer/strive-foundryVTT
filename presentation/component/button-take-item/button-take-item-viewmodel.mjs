@@ -72,7 +72,7 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
 
     this.target = args.target;
     this.contextType = args.contextType;
-    this.localizedTooltip = args.localizedTooltip ?? game.i18n.localize("ambersteel.character.asset.take");
+    this.localizedTooltip = args.localizedTooltip ?? game.i18n.localize("system.character.asset.take");
   }
 
   /**
@@ -159,8 +159,8 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
     }
 
     const dialog = await new SingleChoiceDialog({
-      localizedTitle: game.i18n.localize("ambersteel.general.actor.query"),
-      localizedLabel: game.i18n.localize("ambersteel.general.actor.label"),
+      localizedTitle: game.i18n.localize("system.general.actor.query"),
+      localizedLabel: game.i18n.localize("system.general.actor.label"),
       choices: choices,
     }).renderAndAwait(true);
 

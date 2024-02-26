@@ -7,20 +7,20 @@ cssClass: {undefined | String}
   {{!-- Innate Skills --}}
   {{#if viewModel.hideInnateSkills}}<div class="hidden">{{/if}}
     {{#> header1 showFancyFont=viewModel.showFancyFont cssClass="flex flex-row"}}
-      <span class="flex-grow">{{localize "ambersteel.character.skill.innate.label"}}</span>
+      <span class="flex-grow">{{localize "system.character.skill.innate.label"}}</span>
     {{/header1}}
     {{> sortableList viewModel=viewModel.vmInnateSkillList prominentItemStyling=true }}
   {{#if viewModel.hideInnateSkills}}</div>{{/if}}
   {{!-- Learning Skills --}}
   {{#if viewModel.hideLearningSkills}}<div class="hidden">{{/if}}
     {{#> header1 showFancyFont=viewModel.showFancyFont cssClass="flex flex-row"}}
-      <span class="flex-grow">{{localize "ambersteel.character.skill.learning.label"}}</span>
+      <span class="flex-grow">{{localize "system.character.skill.learning.label"}}</span>
     {{/header1}}
     {{> sortableList viewModel=viewModel.vmLearningSkillList prominentItemStyling=true }}
   {{#if viewModel.hideLearningSkills}}</div>{{/if}}
   {{!-- Known Skills --}}
   {{#> header1 showFancyFont=viewModel.showFancyFont cssClass="flex flex-row"}}
-    <span class="flex-grow">{{localize "ambersteel.character.skill.known.label"}}</span>
+    <span class="flex-grow">{{localize "system.character.skill.known.label"}}</span>
   {{/header1}}
   {{> sortableList viewModel=viewModel.vmKnownSkillList prominentItemStyling=true }}
 </section>

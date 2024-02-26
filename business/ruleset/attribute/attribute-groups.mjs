@@ -33,8 +33,8 @@ export class AttributeGroup {
 export const ATTRIBUTE_GROUPS = {
   physical: new AttributeGroup({
     name: "physical",
-    localizableName: "ambersteel.character.attributeGroup.physical.label",
-    localizableAbbreviation: "ambersteel.character.attributeGroup.physical.abbreviation",
+    localizableName: "system.character.attributeGroup.physical.label",
+    localizableAbbreviation: "system.character.attributeGroup.physical.abbreviation",
     iconClass: "ico-strongarm-solid",
     attributes: {
       agility: ATTRIBUTES.agility,
@@ -46,8 +46,8 @@ export const ATTRIBUTE_GROUPS = {
   }),
   mental: new AttributeGroup({
     name: "mental",
-    localizableName: "ambersteel.character.attributeGroup.mental.label",
-    localizableAbbreviation: "ambersteel.character.attributeGroup.mental.abbreviation",
+    localizableName: "system.character.attributeGroup.mental.label",
+    localizableAbbreviation: "system.character.attributeGroup.mental.abbreviation",
     iconClass: "ico-brain-solid",
     attributes: {
       intelligence: ATTRIBUTES.intelligence,
@@ -57,8 +57,8 @@ export const ATTRIBUTE_GROUPS = {
   }),
   social: new AttributeGroup({
     name: "social",
-    localizableName: "ambersteel.character.attributeGroup.social.label",
-    localizableAbbreviation: "ambersteel.character.attributeGroup.social.abbreviation",
+    localizableName: "system.character.attributeGroup.social.label",
+    localizableAbbreviation: "system.character.attributeGroup.social.abbreviation",
     iconClass: "ico-hand-shake-solid",
     attributes: {
       empathy: ATTRIBUTES.empathy,

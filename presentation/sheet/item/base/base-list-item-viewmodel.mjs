@@ -180,7 +180,7 @@ export default class BaseListItemViewModel extends ViewModel {
     if (this.isEditable === true) {
       new ContextMenu(html, `#${this.id}-name-area`, [
         {
-          name: game.i18n.localize("ambersteel.general.name.edit"),
+          name: game.i18n.localize("system.general.name.edit"),
           icon: '<i class="fas fa-edit"></i>',
           callback: this.queryEditName.bind(this),
         },
@@ -219,7 +219,7 @@ export default class BaseListItemViewModel extends ViewModel {
           id: "vmBtnSendToChat",
           parent: this,
           target: this.document,
-          localizedToolTip: game.i18n.localize("ambersteel.general.sendToChat"),
+          localizedToolTip: game.i18n.localize("system.general.sendToChat"),
         }),
       }),
     ]; 
@@ -242,11 +242,11 @@ export default class BaseListItemViewModel extends ViewModel {
         viewModel: new ButtonContextMenuViewModel({
           id: "vmBtnContextMenu",
           parent: this,
-          localizedToolTip: game.i18n.localize("ambersteel.general.contextMenu"),
+          localizedToolTip: game.i18n.localize("system.general.contextMenu"),
           menuItems: [
             // Edit name
             {
-              name: game.i18n.localize("ambersteel.general.name.edit"),
+              name: game.i18n.localize("system.general.name.edit"),
               icon: '<i class="fas fa-edit"></i>',
               condition: this.context === CONTEXT_TYPES.LIST_ITEM,
               callback: this.queryEditName.bind(this),
@@ -262,7 +262,7 @@ export default class BaseListItemViewModel extends ViewModel {
           id: "vmBtnDelete",
           target: this.document,
           withDialog: true,
-          localizedToolTip: game.i18n.localize("ambersteel.general.delete.label"),
+          localizedToolTip: game.i18n.localize("system.general.delete.label"),
         }),
       }),
     ]; 
@@ -301,12 +301,12 @@ export default class BaseListItemViewModel extends ViewModel {
     const inputName = "inputName";
 
     const dialog = await new DynamicInputDialog({
-      localizedTitle: `${format(game.i18n.localize("ambersteel.general.name.editOf"), this.document.name)}`,
+      localizedTitle: `${format(game.i18n.localize("system.general.name.editOf"), this.document.name)}`,
       inputDefinitions: [
         new DynamicInputDefinition({
           type: DYNAMIC_INPUT_TYPES.TEXTFIELD,
           name: inputName,
-          localizedLabel: game.i18n.localize("ambersteel.general.name.label"),
+          localizedLabel: game.i18n.localize("system.general.name.label"),
           required: true,
           defaultValue: this.document.name,
           validationFunc: (str) => {

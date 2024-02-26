@@ -176,7 +176,7 @@ export default class TransientInjury extends TransientBaseItem {
       actor: (this.owningDocument ?? {}).document, 
       sound: SOUNDS_CONSTANTS.NOTIFY,
       viewModel: vm,
-      flavor: game.i18n.localize("ambersteel.character.health.injury.singular"),
+      flavor: game.i18n.localize("system.character.health.injury.singular"),
     });
   }
 

@@ -28,7 +28,7 @@ export default class PlainDialog extends ModalDialog {
       },
       cssClass: "primary-button",
       iconCssClass: "fas fa-check",
-      localizedLabel: game.i18n.localize("ambersteel.general.ok"),
+      localizedLabel: game.i18n.localize("system.general.ok"),
     }),
   ]; }
 

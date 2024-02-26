@@ -88,7 +88,7 @@ export default class ButtonSendToChatViewModel extends ButtonViewModel {
     this._propertyPath = args.propertyPath;
     this._chatTitle = args.chatTitle ?? "";
     this._actor = args.actor;
-    this.localizedTooltip = args.localizedTooltip ?? game.i18n.localize("ambersteel.general.sendToChat");
+    this.localizedTooltip = args.localizedTooltip ?? game.i18n.localize("system.general.sendToChat");
   }
 
   /**

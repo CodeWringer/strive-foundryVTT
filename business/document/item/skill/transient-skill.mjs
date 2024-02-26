@@ -111,7 +111,7 @@ export default class TransientSkill extends TransientBaseItem {
     } else if (this.baseAttributes.length > 0) {
       return this.baseAttributes[0];
     } else {
-      game.ambersteel.logger.logWarn(`List of base attributes is empty for skill '${this.id}' - '${this.name}'`);
+      game.strive.logger.logWarn(`List of base attributes is empty for skill '${this.id}' - '${this.name}'`);
       return ATTRIBUTES.agility;
     }
   }
@@ -417,7 +417,7 @@ export default class TransientSkill extends TransientBaseItem {
       actor: (this.owningDocument ?? {}).document, 
       sound: SOUNDS_CONSTANTS.NOTIFY,
       viewModel: vm,
-      flavor: game.i18n.localize("ambersteel.character.skill.singular"),
+      flavor: game.i18n.localize("system.character.skill.singular"),
     });
   }
 
@@ -494,7 +494,7 @@ export default class TransientSkill extends TransientBaseItem {
    */
   async addProgress(outcomeType, autoLevel = false, resetProgress = true) {
     if (outcomeType === undefined) {
-      game.ambersteel.logger.logWarn("outcomeType is undefined");
+      game.strive.logger.logWarn("outcomeType is undefined");
       return;
     }
     if (outcomeType === DICE_POOL_RESULT_TYPES.NONE) {

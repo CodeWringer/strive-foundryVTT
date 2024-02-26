@@ -46,7 +46,7 @@ export default class RollFormulaResolver {
 
     // Render the dialog and prompt the user to enter values for unresolved references.
     const dialog = await new DynamicInputDialog({
-      localizedTitle: game.i18n.localize("ambersteel.roll.query"),
+      localizedTitle: game.i18n.localize("system.roll.query"),
       inputDefinitions: inputDefinitions,
     }).renderAndAwait(true);
 
@@ -202,12 +202,12 @@ export default class RollFormulaResolver {
       new DynamicInputDefinition({
         type: DYNAMIC_INPUT_TYPES.LABEL,
         name: "promptUnresolvedReferences",
-        localizedLabel: game.i18n.localize("ambersteel.damageDefinition.unresolvedReferences"),
+        localizedLabel: game.i18n.localize("system.damageDefinition.unresolvedReferences"),
       }),
       new DynamicInputDefinition({
         type: DYNAMIC_INPUT_TYPES.DROP_DOWN,
         name: inputNameVisibility,
-        localizedLabel: game.i18n.localize("ambersteel.general.messageVisibility.label"),
+        localizedLabel: game.i18n.localize("system.general.messageVisibility.label"),
         required: true,
         defaultValue: (VISIBILITY_MODES.asArray()[0]),
         specificArgs: {

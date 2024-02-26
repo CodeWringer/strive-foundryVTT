@@ -67,7 +67,7 @@ export default class PersonalityTraitsViewModel extends ViewModel {
    */
   _getTrait(leftTrait, rightTrait, propertyName) {
     return {
-      localizedTraitLeft: game.i18n.localize(`ambersteel.character.personalityTrait.traits.${leftTrait}`),
+      localizedTraitLeft: game.i18n.localize(`system.character.personalityTrait.traits.${leftTrait}`),
       vmRadioButtonGroup: new InputRadioButtonGroupViewModel({
         id: `vmRadioButtonGroup-${propertyName}`,
         parent: this,
@@ -77,7 +77,7 @@ export default class PersonalityTraitsViewModel extends ViewModel {
         },
         options: this._getTraitOptions(),
       }),
-      localizedTraitRight: game.i18n.localize(`ambersteel.character.personalityTrait.traits.${rightTrait}`),
+      localizedTraitRight: game.i18n.localize(`system.character.personalityTrait.traits.${rightTrait}`),
     };
   }
 

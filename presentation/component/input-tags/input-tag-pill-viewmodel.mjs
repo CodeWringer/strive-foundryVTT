@@ -48,7 +48,7 @@ export default class InputTagPillViewModel extends ViewModel {
       parent: this,
       iconHtml: '<i class="fas fa-times"></i>',
       isEditable: this.isEditable,
-      localizedTooltip: game.i18n.localize("ambersteel.general.delete.label"),
+      localizedTooltip: game.i18n.localize("system.general.delete.label"),
       onClick: () => {
         this.onDelete(this.tag);
       }

@@ -1,7 +1,7 @@
 {
-  "id": "ambersteel",
-  "title": "Ambersteel",
-  "description": "The Ambersteel system for FoundryVTT",
+  "id": "strive",
+  "title": "STRIVE",
+  "description": "The STRIVE system for FoundryVTT",
   "version": "1.6.0",
   "compatibility": {
     "minimum": 10,
@@ -16,7 +16,7 @@
 		}
 	],
   "esmodules": ["system.mjs"],
-  "styles": ["presentation/style/ambersteel.css"],
+  "styles": ["presentation/style/game-system.css"],
   "scripts": [],
   "packs": [
     {
@@ -139,8 +139,8 @@
   "gridUnits": "ft",
   "primaryTokenAttribute": null,
   "secondaryTokenAttribute": null,
-  "url": "https://github.com/CodeWringer/ambersteel-foundryVTT",
-  "manifest": "https://github.com/CodeWringer/ambersteel-foundryVTT/releases/latest/download/system.json",
-  "download": "https://github.com/CodeWringer/ambersteel-foundryVTT/releases/latest/download/system.zip",
+  "url": "https://github.com/CodeWringer/strive-foundryVTT",
+  "manifest": "https://github.com/CodeWringer/strive-foundryVTT/releases/latest/download/system.json",
+  "download": "https://github.com/CodeWringer/strive-foundryVTT/releases/latest/download/system.zip",
   "license": "LICENSE.txt"
 }

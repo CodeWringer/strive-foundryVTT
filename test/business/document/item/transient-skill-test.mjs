@@ -9,7 +9,7 @@ describe("TransientSkill", () => {
 
   before(() => {
     globalThis.game = {
-      ambersteel: {
+      strive: {
         logger: sinon.createStubInstance(BaseLoggingStrategy),
       },
     };

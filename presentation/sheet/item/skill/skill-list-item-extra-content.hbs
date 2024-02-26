@@ -14,7 +14,7 @@ viewModel: {SkillListItemViewModel}
 {{!-- Row --}}
 {{!-- Prerequisites --}}
 <div class="flex flex-column margin-b-sm{{#if (neq viewModel.showPrerequisites true)}} hidden{{/if}}">
-  {{#> header3 showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.skill.prerequisite.plural"}}{{/header3}}
+  {{#> header3 showFancyFont=viewModel.showFancyFont}}{{localize "system.character.skill.prerequisite.plural"}}{{/header3}}
   <ul class="unstyled-list auto-margin-v">
     {{#each viewModel.prerequisites as |prerequisite index|}}
     <li class="flex flex-row flex-middle">
@@ -22,7 +22,7 @@ viewModel: {SkillListItemViewModel}
         {{#> readOnlyValue cssClass="flex flex-center"}}{{prerequisite.name}}{{/readOnlyValue}}
       </span>
       <span style="width: 144px">
-        {{#> label showFancyFont=../viewModel.showFancyFont}}{{localize "ambersteel.character.advancement.minimum"}}{{/label}}
+        {{#> label showFancyFont=../viewModel.showFancyFont}}{{localize "system.character.advancement.minimum"}}{{/label}}
       </span>
       <span class="width-md">
         {{#> readOnlyValue cssClass="font-size-md flex flex-center"}}{{prerequisite.minimumLevel}}{{/readOnlyValue}}
@@ -34,13 +34,13 @@ viewModel: {SkillListItemViewModel}
 {{!-- Row --}}
 <div class="flex flex-row flex-middle auto-margin-h sheet-block">
   {{!-- Category --}}
-  {{#> labeledControl viewModel=viewModel.vmTfCategory localizedIconToolTip=(localize "ambersteel.general.category") iconClass="ico-category-solid" cssClass="" }}
+  {{#> labeledControl viewModel=viewModel.vmTfCategory localizedIconToolTip=(localize "system.general.category") iconClass="ico-category-solid" cssClass="" }}
     <div class="width-xxl">
       {{> inputTextField }}
     </div>
   {{/labeledControl}}
   {{!-- Tags --}}
-  {{#> labeledControl viewModel=viewModel.vmTags localizedIconToolTip=(localize "ambersteel.general.tags.label") iconClass="ico-tags-solid" cssClass="" }}
+  {{#> labeledControl viewModel=viewModel.vmTags localizedIconToolTip=(localize "system.general.tags.label") iconClass="ico-tags-solid" cssClass="" }}
     {{> inputTags }}
   {{/labeledControl}}
 </div>

@@ -92,7 +92,7 @@ export default class ActorFateViewModel extends ViewModel {
       target: thiz.document,
       creationType: "fate-card",
       withDialog: true,
-      localizedType: game.i18n.localize("ambersteel.character.driverSystem.fateSystem.fateCard.label"),
+      localizedType: game.i18n.localize("system.character.driverSystem.fateSystem.fateCard.label"),
     });
 
     this.fateCards = [];

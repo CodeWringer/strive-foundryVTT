@@ -165,7 +165,7 @@ export default class InputRichTextViewModel extends InputViewModel {
       statusbar: false,
       menubar: false,
       content_css: "/css/mce.css",
-      content_style: '@font-face { font-family: "Black-Chancery"; src: url("systems/ambersteel/presentation/font/BLKCHCRY.TTF") format("truetype"); }',
+      content_style: '@font-face { font-family: "Black-Chancery"; src: url("systems/strive/presentation/font/BLKCHCRY.TTF") format("truetype"); }',
       style_formats_merge: true,
       style_formats: [
         {

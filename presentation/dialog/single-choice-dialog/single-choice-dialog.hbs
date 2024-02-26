@@ -10,7 +10,7 @@ showFancyFont: {Boolean | undefined}
     {{#> label showFancyFont=showFancyFont}}{{localizedLabel}}{{/label}}
   </div>
   <div class="flex">
-    <select id="selection" class="ambersteel-item-select" data-property-path="selected">
+    <select id="selection" class="strive-item-select" data-property-path="selected">
       {{#select selected.value}}
       {{#each choices as |choice key|}}
       <option value="{{choice.value}}">{{choice.localizedValue}}</option>

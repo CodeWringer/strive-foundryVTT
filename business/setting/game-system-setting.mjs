@@ -18,7 +18,7 @@ import { validateOrThrow } from "../util/validation-utility.mjs";
  * * E. g. `"fas fa-bars"`. 
  * @property {Boolean} restricted If `true`, only a GM may open the `menu`. 
  */
-export default class AmbersteelSetting {
+export default class GameSystemSetting {
   /**
    * @param {Object} args 
    * @param {String} key An internal name by which to identify the setting. 

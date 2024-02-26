@@ -19,14 +19,14 @@ import DynamicInputDialogViewModel from './dynamic-input-dialog-viewmodel.mjs';
  ```JS
 const dialog = await new DynamicInputDialog({
   localizedTitle: StringUtil.format(
-    game.i18n.localize("ambersteel.general.input.queryFor"), 
-    game.i18n.localize("ambersteel.character.asset.slot.label"), 
+    game.i18n.localize("system.general.input.queryFor"), 
+    game.i18n.localize("system.character.asset.slot.label"), 
   ),
   inputDefinitions: [
     new DynamicInputDefinition({
       type: DYNAMIC_INPUT_TYPES.DROP_DOWN,
       name: inputChoices,
-      localizedLabel: game.i18n.localize("ambersteel.general.name.label"),
+      localizedLabel: game.i18n.localize("system.general.name.label"),
       required: true,
       defaultValue: assets[0].id,
       specificArgs: {
@@ -79,7 +79,7 @@ export default class DynamicInputDialog extends ConfirmableModalDialog {
       },
       cssClass: "primary-button",
       iconCssClass: "fas fa-check",
-      localizedLabel: game.i18n.localize("ambersteel.general.confirm"),
+      localizedLabel: game.i18n.localize("system.general.confirm"),
     }),
     new DialogButtonDefinition({
       id: "cancel",
@@ -88,7 +88,7 @@ export default class DynamicInputDialog extends ConfirmableModalDialog {
       },
       cssClass: "secondary-button",
       iconCssClass: "fas fa-times",
-      localizedLabel: game.i18n.localize("ambersteel.general.cancel"),
+      localizedLabel: game.i18n.localize("system.general.cancel"),
     }),
   ]; }
 

@@ -20,7 +20,7 @@ cssClass: {undefined | String}
   {{!-- Quantity --}}
   <div class="sheet-block grid-3col grid-gap-md margin-b-md">
     <div class="flex flex-middle flex-right">
-      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.asset.quantity.label"}}{{/label}}
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "system.character.asset.quantity.label"}}{{/label}}
     </div>
     <div class="grid-span-2">
       {{> inputNumberSpinner viewModel=viewModel.vmNsQuantity }}
@@ -29,7 +29,7 @@ cssClass: {undefined | String}
   {{!-- Max quantity --}}
   <div class="sheet-block grid-3col grid-gap-md margin-b-md">
     <div class="flex flex-middle flex-right">
-      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.asset.quantity.maximum"}}{{/label}}
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "system.character.asset.quantity.maximum"}}{{/label}}
     </div>
     <div class="grid-span-2">
       {{> inputNumberSpinner viewModel=viewModel.vmNsMaxQuantity }}
@@ -38,7 +38,7 @@ cssClass: {undefined | String}
   {{!-- Bulk --}}
   <div class="sheet-block grid-3col grid-gap-md margin-b-md">
     <div class="flex flex-middle flex-right">
-      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.asset.bulk"}}{{/label}}
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "system.character.asset.bulk"}}{{/label}}
     </div>
     <div class="grid-span-2">
       {{> inputNumberSpinner viewModel=viewModel.vmNsBulk }}
@@ -47,7 +47,7 @@ cssClass: {undefined | String}
   {{!-- Tags --}}
   <div class="sheet-block grid-3col grid-gap-md margin-b-md">
     <div class="flex flex-middle flex-right">
-      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.general.tags.label"}}{{/label}}
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "system.general.tags.label"}}{{/label}}
     </div>
     <div class="grid-span-2">
       {{> inputTags viewModel=viewModel.vmTags }}
@@ -55,7 +55,7 @@ cssClass: {undefined | String}
   </div>
   {{!-- Description --}}
   <div class="sheet-block flex flex-column flex-grow">
-    {{#> header3 showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.general.description"}}{{/header3}}
+    {{#> header3 showFancyFont=viewModel.showFancyFont}}{{localize "system.general.description"}}{{/header3}}
     {{> inputRichText viewModel=viewModel.vmRtDescription }}
   </div>
 </form>

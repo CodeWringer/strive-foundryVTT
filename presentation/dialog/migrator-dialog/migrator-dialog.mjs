@@ -9,7 +9,7 @@ import ModalDialog from "../modal-dialog/modal-dialog.mjs";
  * @type {String}
  * @constant
  */
-const DIALOG_TITLE = "ambersteel.migration.title";
+const DIALOG_TITLE = "system.migration.title";
 
 /**
  * Encapsulates the main migration dialog. 
@@ -82,7 +82,7 @@ export default class MigratorDialog extends ModalDialog {
    */
   async _beginMigration(html) {
     const thiz = this;
-    game.ambersteel.logger.logDebug("Commencing migration");
+    game.strive.logger.logDebug("Commencing migration");
 
     html.find("#section-initial").toggleClass("hidden");
     html.find("#section-progress").toggleClass("hidden");

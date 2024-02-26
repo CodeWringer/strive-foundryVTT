@@ -164,7 +164,7 @@ export default class InputTagsViewModel extends ViewModel {
     const tags = this.value.concat([]); // safe copy
     const index = tags.findIndex(it => it.id === tag.id);
     if (index < 0) {
-      game.ambersteel.logger.logWarn(`Attempting to delete tag '${tag.id}' failed!`);
+      game.strive.logger.logWarn(`Attempting to delete tag '${tag.id}' failed!`);
     } else {
       tags.splice(index, 1);
       this.value = tags;

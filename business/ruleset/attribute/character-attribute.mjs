@@ -1,3 +1,4 @@
+import { GameSystemActor } from "../../document/actor/actor.mjs";
 import Ruleset from "../ruleset.mjs";
 import { Sum, SumComponent } from "../summed-data.mjs";
 import { ATTRIBUTE_GROUPS } from "./attribute-groups.mjs";
@@ -92,7 +93,7 @@ export default class CharacterAttribute {
  get advancementRequirements() { return new Ruleset().getAttributeAdvancementRequirements(this.level); }
 
   /**
-   * @param {AmbersteelActor} actor The actor for which to gather 
+   * @param {GameSystemActor} actor The actor for which to gather 
    * attribute data. 
    * @param {String} name Internal name of the attribute. 
    * * E. g. `"strength"`

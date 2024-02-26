@@ -76,7 +76,7 @@ export default class ButtonAddViewModel extends ButtonViewModel {
       ...args,
       iconHtml: '<i class="fas fa-plus"></i>',
       localizedLabel: args.localizedLabel,
-      localizedToolTip: args.localizedToolTip ?? game.i18n.localize("ambersteel.general.add"),
+      localizedToolTip: args.localizedToolTip ?? game.i18n.localize("system.general.add"),
     });
     validateOrThrow(args, ["target", "creationType"]);
 
@@ -165,7 +165,7 @@ export default class ButtonAddViewModel extends ButtonViewModel {
 
     const customChoice = new ChoiceOption({
       value: "custom",
-      localizedValue: game.i18n.localize("ambersteel.general.custom"),
+      localizedValue: game.i18n.localize("system.general.custom"),
     });
 
     const options = [

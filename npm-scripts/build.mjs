@@ -42,7 +42,7 @@ export default async function build() {
 async function transpileSass() {
   console.log("Transpiling css");
 
-  const fileName = "ambersteel";
+  const fileName = "game-system";
 
   const css = compile(`presentation/style/${fileName}.scss`).css;
   const cssDestPath = `presentation/style/${fileName}.css`;

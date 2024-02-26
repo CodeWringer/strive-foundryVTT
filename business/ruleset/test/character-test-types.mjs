@@ -33,26 +33,26 @@ export class CharacterTestType {
 export const CHARACTER_TEST_TYPES = {
   binary: new CharacterTestType({
     name: "binary",
-    localizableName: "ambersteel.character.testType.binary.label",
+    localizableName: "system.character.testType.binary.label",
   }),
   stepped: new CharacterTestType({
     name: "stepped",
-    localizableName: "ambersteel.character.testType.stepped.label",
+    localizableName: "system.character.testType.stepped.label",
   }),
   graduated: new CharacterTestType({
     name: "graduated",
-    localizableName: "ambersteel.character.testType.graduated.label",
+    localizableName: "system.character.testType.graduated.label",
   }),
   failableGraduated: new CharacterTestType({
     name: "failableGraduated",
-    localizableName: "ambersteel.character.testType.failableGraduated.label",
+    localizableName: "system.character.testType.failableGraduated.label",
   }),
   creative: new CharacterTestType({
     name: "creative",
-    localizableName: "ambersteel.character.testType.creative.label",
+    localizableName: "system.character.testType.creative.label",
   }),
   opposed: new CharacterTestType({
     name: "opposed",
-    localizableName: "ambersteel.character.testType.opposed.label",
+    localizableName: "system.character.testType.opposed.label",
   }),
 }

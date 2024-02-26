@@ -1,4 +1,4 @@
-import AmbersteelSettings from "../setting/ambersteel-settings.mjs";
+import GameSystemSettings from "../setting/game-system-settings.mjs";
 import VersionCode from "./version-code.mjs";
 
 /**
@@ -15,7 +15,7 @@ class WorldSystemVersionType {
    * @private
    * @readonly
    */
-  get _settingNamespace() { return AmbersteelSettings.SETTINGS_NAMESPACE; }
+  get _settingNamespace() { return GameSystemSettings.SETTINGS_NAMESPACE; }
   
   /**
    * The FoundryVTT setting key for the world version. 

@@ -1,3 +1,4 @@
+import { GameSystemActor } from "../../document/actor/actor.mjs";
 import { ATTRIBUTE_GROUPS } from "./attribute-groups.mjs";
 import CharacterAttribute from "./character-attribute.mjs";
 
@@ -13,7 +14,7 @@ import CharacterAttribute from "./character-attribute.mjs";
  */
 export default class CharacterAttributeGroup {
   /**
-   * @param {AmbersteelActor} actor The actor for which to gather 
+   * @param {GameSystemActor} actor The actor for which to gather 
    * attribute group data. 
    * @param {String} name Internal name of the attribute group. 
    * * E. g. `"physical"`

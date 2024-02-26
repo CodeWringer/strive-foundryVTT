@@ -22,7 +22,7 @@ export default class Migrator_1_5_5__1_5_6 extends AbstractMigrator {
     if (this._updater === undefined) {
       this._updater = new DocumentUpdater({
         propertyUtility: PropertyUtility,
-        logger: game.ambersteel.logger,
+        logger: game.strive.logger,
       });
     }
     return this._updater;
@@ -74,7 +74,7 @@ export default class Migrator_1_5_5__1_5_6 extends AbstractMigrator {
         includeLocked: true,
       });
       if (this._intimidationSkillDefinition === undefined) {
-        game.ambersteel.logger.logWarn('"Intimidation" skill cannot be migrated, as it is missing from the system compendium!');
+        game.strive.logger.logWarn('"Intimidation" skill cannot be migrated, as it is missing from the system compendium!');
       }
     }
     return this._intimidationSkillDefinition;
@@ -96,7 +96,7 @@ export default class Migrator_1_5_5__1_5_6 extends AbstractMigrator {
         includeLocked: true,
       });
       if (this._unarmedSkillDefinition === undefined) {
-        game.ambersteel.logger.logWarn('"Unarmed Combat" skill cannot be migrated, as it is missing from the system compendium!');
+        game.strive.logger.logWarn('"Unarmed Combat" skill cannot be migrated, as it is missing from the system compendium!');
       }
     }
     return this._unarmedSkillDefinition;

@@ -18,7 +18,7 @@ import TransientScar from "./transient-scar.mjs";
  * 
  * @see TransientBaseItem
  */
-export class AmbersteelItem extends Item {
+export class GameSystemItem extends Item {
   /**
    * Returns the default icon image path for this type of object. 
    * @type {String}
@@ -55,7 +55,7 @@ export class AmbersteelItem extends Item {
         throw new Error(`InvalidTypeException: Item subtype ${this.type} is unrecognized!`);
       }
 
-      game.ambersteel.logger.logPerf(this, "item.getTransientObject (non-cached)", () => {
+      game.strive.logger.logPerf(this, "item.getTransientObject (non-cached)", () => {
         this._transientObject = factoryFunction(this);
       });
     }

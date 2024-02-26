@@ -38,7 +38,7 @@ export default class ConfirmableModalDialog extends ModalDialog {
       },
       cssClass: "primary-button",
       iconCssClass: "fas fa-check",
-      localizedLabel: game.i18n.localize("ambersteel.general.confirm"),
+      localizedLabel: game.i18n.localize("system.general.confirm"),
     }),
     new DialogButtonDefinition({
       id: "cancel",
@@ -47,7 +47,7 @@ export default class ConfirmableModalDialog extends ModalDialog {
       },
       cssClass: "secondary-button",
       iconCssClass: "fas fa-times",
-      localizedLabel: game.i18n.localize("ambersteel.general.cancel"),
+      localizedLabel: game.i18n.localize("system.general.cancel"),
     }),
   ]; }
 

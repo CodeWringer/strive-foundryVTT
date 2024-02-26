@@ -58,7 +58,7 @@ export default class IllnessListItemViewModel extends BaseListItemViewModel {
             this.document.treatmentSkill = newValue;
           },
         }),
-        localizedIconToolTip: game.i18n.localize("ambersteel.character.health.treatmentSkill"),
+        localizedIconToolTip: game.i18n.localize("system.character.health.treatmentSkill"),
         iconClass: "ico-skill-solid",
       }),
       new DataFieldComponent({
@@ -71,7 +71,7 @@ export default class IllnessListItemViewModel extends BaseListItemViewModel {
             this.document.treatment = newValue;
           },
         }),
-        localizedIconToolTip: game.i18n.localize("ambersteel.character.health.treatment"),
+        localizedIconToolTip: game.i18n.localize("system.character.health.treatment"),
         iconClass: "ico-treatment-solid",
       }),
     ];

@@ -2,18 +2,18 @@
 viewModel: {ActorAssetSlotGroupViewModel}
 cssClass: {undefined | String}
 --}}
-<div class="ambersteel-asset-slot-group flex flex-column flex-grow{{#if cssClass}} {{cssClass}}{{/if}}">
+<div class="strive-asset-slot-group flex flex-column flex-grow{{#if cssClass}} {{cssClass}}{{/if}}">
   {{!-- Header Row --}}
   <div class="flex flex-row flex-grow">
     {{#> header2 showFancyFont=false cssClass="flex flex-row flex-grow flex-middle asset-slot-header"}}
       {{#> label showFancyFont=viewModel.showFancyFont cssClass="width-min-xl font-size-xl"}}{{viewModel.localizedName}}{{/label}}
       {{!-- Slot Group Bulk --}}
       <div class="flex flex-row flex-middle font-size-sm margin-l-xl">
-        <i class="ico dark ico-bulk-solid" title="{{localize "ambersteel.character.asset.bulk"}}"></i>
+        <i class="ico dark ico-bulk-solid" title="{{localize "system.character.asset.bulk"}}"></i>
         <span class="flex flex-row flex-middle">
           {{#> admonishReadOnlyValue cssClass="pad-l-md pad-r-md" admonish=viewModel.hasExceededBulk}}{{viewModel.group.currentBulk}} / {{viewModel.group.maxBulk}}{{/admonishReadOnlyValue}}
         </span>
-        <i class="ico dark ico-max-bulk-solid" title="{{localize "ambersteel.character.asset.maxBulk"}}"></i>
+        <i class="ico dark ico-max-bulk-solid" title="{{localize "system.character.asset.maxBulk"}}"></i>
       </div>
       {{!-- Edit Controls --}}
       <div class="flex flex-row flex-grow flex-right font-size-default">

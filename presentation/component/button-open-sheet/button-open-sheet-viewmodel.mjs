@@ -43,7 +43,7 @@ export default class ButtonOpenSheetViewModel extends ButtonViewModel {
     validateOrThrow(args, ["target"]);
 
     this.target = args.target;
-    this.localizedTooltip = args.localizedTooltip ?? game.i18n.localize("ambersteel.general.openSheet");
+    this.localizedTooltip = args.localizedTooltip ?? game.i18n.localize("system.general.openSheet");
   }
 
   /**
@@ -67,7 +67,7 @@ export default class ButtonOpenSheetViewModel extends ButtonViewModel {
     });
 
     if (toShow === undefined) {
-      game.ambersteel.logger.logWarn(`NullPointerException: Failed to find document '${this.target}' to open sheet`);
+      game.strive.logger.logWarn(`NullPointerException: Failed to find document '${this.target}' to open sheet`);
       return;
     }
     toShow.sheet.render(true);

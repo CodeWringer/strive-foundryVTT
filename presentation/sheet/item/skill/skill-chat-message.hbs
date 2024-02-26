@@ -17,7 +17,7 @@ cssClass: {undefined | String}
   {{!-- Attribute --}}
   <div class="flex flex-row sheet-block margin-b-md">
     <div class="width-min-xxl">
-      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.attribute.plural"}}{{/label}}
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "system.character.attribute.plural"}}{{/label}}
     </div>
     <div class="flex-grow">
       {{viewModel.baseAttributes}}
@@ -26,7 +26,7 @@ cssClass: {undefined | String}
   {{!-- Category --}}
   <div class="flex flex-row sheet-block margin-b-md">
     <div class="width-min-xxl">
-      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.general.category"}}{{/label}}
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "system.general.category"}}{{/label}}
     </div>
     <div class="flex-grow">
       {{viewModel.document.category}}
@@ -42,7 +42,7 @@ cssClass: {undefined | String}
   </div>
   {{!-- Prerequisites --}}
   <div class="flex flex-column margin-b-sm{{#if (neq viewModel.showPrerequisites true)}} hidden{{/if}}">
-    {{#> header3 showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.skill.prerequisite.plural"}}{{/header3}}
+    {{#> header3 showFancyFont=viewModel.showFancyFont}}{{localize "system.character.skill.prerequisite.plural"}}{{/header3}}
     <ul class="unstyled-list">
       {{#each viewModel.prerequisites as |prerequisite index|}}
       <li class="flex flex-row flex-middle sheet-block">
@@ -60,7 +60,7 @@ cssClass: {undefined | String}
   {{#if viewModel.document.apCost}}
   <div class="flex flex-row sheet-block margin-b-md">
     <div class="width-min-xxl">
-      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.skill.expertise.apCost"}}{{/label}}
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "system.character.skill.expertise.apCost"}}{{/label}}
     </div>
     <div class="flex-grow">
       {{viewModel.document.apCost}}
@@ -71,7 +71,7 @@ cssClass: {undefined | String}
   {{#if viewModel.document.obstacle}}
   <div class="flex flex-row sheet-block margin-b-md">
     <div class="width-min-xxl">
-      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.roll.obstacle.abbreviation"}}{{/label}}
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "system.roll.obstacle.abbreviation"}}{{/label}}
     </div>
     <div class="flex-grow">
       {{viewModel.document.obstacle}}
@@ -82,7 +82,7 @@ cssClass: {undefined | String}
   {{#if viewModel.document.opposedBy}}
   <div class="flex flex-row sheet-block margin-b-md">
     <div class="width-min-xxl">
-      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.roll.obstacle.opposedBy.label"}}{{/label}}
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "system.roll.obstacle.opposedBy.label"}}{{/label}}
     </div>
     <div class="flex-grow">
       {{viewModel.document.opposedBy}}
@@ -93,7 +93,7 @@ cssClass: {undefined | String}
   {{#if viewModel.document.condition}}
   <div class="flex flex-row sheet-block margin-b-md">
     <div class="width-min-xxl">
-      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.skill.expertise.condition.label"}}{{/label}}
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "system.character.skill.expertise.condition.label"}}{{/label}}
     </div>
     <div class="flex-grow">
       {{localize viewModel.document.condition}}
@@ -104,7 +104,7 @@ cssClass: {undefined | String}
   {{#if viewModel.document.attackType}}
   <div class="flex flex-row sheet-block margin-b-md">
     <div class="width-min-xxl">
-      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.attackType.label"}}{{/label}}
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "system.attackType.label"}}{{/label}}
     </div>
     <div class="flex-grow">
       {{localize viewModel.document.attackType.localizableName}}
@@ -115,7 +115,7 @@ cssClass: {undefined | String}
   {{#if viewModel.document.distance}}
   <div class="flex flex-row sheet-block margin-b-md">
     <div class="width-min-xxl">
-      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.skill.expertise.distance.label"}}{{/label}}
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "system.character.skill.expertise.distance.label"}}{{/label}}
     </div>
     <div class="flex-grow">
       {{viewModel.document.distance}}
@@ -126,11 +126,11 @@ cssClass: {undefined | String}
   {{#if viewModel.showDamage}}
   <ol class="unstyled-list">
     {{#each viewModel.document.damage as |entry index|}}
-      <li class="ambersteel-list-row sheet-block flex flex-column margin-b-md">
+      <li class="strive-list-row sheet-block flex flex-column margin-b-md">
         {{!-- Damage formula --}}
         <div class="flex flex-row">
           <div class="width-min-xxl{{#if ../viewModel.showFancyFont}} fancy-font{{/if}}">
-            {{localize "ambersteel.damageDefinition.formula"}}
+            {{localize "system.damageDefinition.formula"}}
           </div>
           <span class="width-min-xxl">
             {{entry.damage}}
@@ -139,7 +139,7 @@ cssClass: {undefined | String}
         {{!-- Damage type --}}
         <div class="flex flex-row">
           <div class="width-min-xxl{{#if ../viewModel.showFancyFont}} fancy-font{{/if}}">
-            {{localize "ambersteel.damageType.label"}}
+            {{localize "system.damageType.label"}}
           </div>
           <span class="width-xxl">
             {{localize entry.damageType.localizableName}}

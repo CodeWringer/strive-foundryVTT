@@ -120,7 +120,7 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
       onChange: (_, newValue) => {
         thiz.document.name = newValue;
       },
-      placeholder: game.i18n.localize("ambersteel.general.name.label"),
+      placeholder: game.i18n.localize("system.general.name.label"),
     });
     this.vmImg = new InputImageViewModel({
       parent: thiz,
@@ -135,16 +135,16 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
         id: "vmBtnConfigure",
         parent: this,
         iconHtml: '<i class="fas fa-cog"></i>',
-        localizedTooltip: game.i18n.localize("ambersteel.character.edit"),
+        localizedTooltip: game.i18n.localize("system.character.edit"),
         onClick: async () => {
           const inputMaxActionPoints = "inputMaxActionPoints";
           const dialog = await new DynamicInputDialog({
-            localizedTitle: game.i18n.localize("ambersteel.character.edit"),
+            localizedTitle: game.i18n.localize("system.character.edit"),
             inputDefinitions: [
               new DynamicInputDefinition({
                 type: DYNAMIC_INPUT_TYPES.NUMBER_SPINNER,
                 name: inputMaxActionPoints,
-                localizedLabel: game.i18n.localize("ambersteel.actionPoint.max"),
+                localizedLabel: game.i18n.localize("system.actionPoint.max"),
                 specificArgs: {
                   min: 0,
                 },
@@ -165,9 +165,9 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
       parent: this,
       menuItems: []
       // Toggle personality
-      .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.character.sheet.tab.personality", this.document, "personalityVisible", true, false))
+      .concat(ButtonContextMenuViewModel.createToggleButtons("system.character.sheet.tab.personality", this.document, "personalityVisible", true, false))
       // Toggle progression
-      .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.character.advancement.label", this.document, "progressionVisible", true, false))
+      .concat(ButtonContextMenuViewModel.createToggleButtons("system.character.advancement.label", this.document, "progressionVisible", true, false))
     });
     this.vmBtnSendToChat = new ButtonSendToChatViewModel({
       parent: this,

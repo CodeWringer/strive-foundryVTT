@@ -13,26 +13,26 @@ viewModel: {SkillItemSheetViewModel}
 </div>
 {{!-- Attributes --}}
 <div class="sheet-block flex flex-column">
-  {{#> header3 showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.attribute.plural"}}{{/header3}}
+  {{#> header3 showFancyFont=viewModel.showFancyFont}}{{localize "system.character.attribute.plural"}}{{/header3}}
   {{> simpleList viewModel=viewModel.vmBaseAttributeList}}
 </div>
 {{!-- Row --}}
 <div class="flex flex-row flex-middle auto-margin-h sheet-block">
   {{!-- Category --}}
-  {{#> labeledControl viewModel=viewModel.vmTfCategory localizedIconToolTip=(localize "ambersteel.general.category") iconClass="ico-category-solid" cssClass="" }}
+  {{#> labeledControl viewModel=viewModel.vmTfCategory localizedIconToolTip=(localize "system.general.category") iconClass="ico-category-solid" cssClass="" }}
     <div class="width-xxl">
       {{> inputTextField }}
     </div>
   {{/labeledControl}}
   {{!-- Tags --}}
-  {{#> labeledControl viewModel=viewModel.vmTags localizedIconToolTip=(localize "ambersteel.general.tags.label") iconClass="ico-tags-solid" cssClass="" }}
+  {{#> labeledControl viewModel=viewModel.vmTags localizedIconToolTip=(localize "system.general.tags.label") iconClass="ico-tags-solid" cssClass="" }}
     {{> inputTags }}
   {{/labeledControl}}
 </div>
 {{!-- Prerequisites --}}
 <div class="sheet-block flex flex-column">
-  {{#> header3 showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.skill.prerequisite.plural"}}{{/header3}}
+  {{#> header3 showFancyFont=viewModel.showFancyFont}}{{localize "system.character.skill.prerequisite.plural"}}{{/header3}}
   {{> simpleList viewModel=viewModel.vmPrerequisiteList}}
 </div>
 {{!-- Expertises --}}
-{{> "systems/ambersteel/presentation/sheet/item/expertise/expertise-table.hbs" viewModel=viewModel.vmExpertiseTable cssClass=(ifThenElse viewModel.isExpertiseListVisible "" "hidden") }}
+{{> "systems/strive/presentation/sheet/item/expertise/expertise-table.hbs" viewModel=viewModel.vmExpertiseTable cssClass=(ifThenElse viewModel.isExpertiseListVisible "" "hidden") }}

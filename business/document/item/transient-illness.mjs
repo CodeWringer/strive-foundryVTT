@@ -80,7 +80,7 @@ export default class TransientIllness extends TransientBaseItem {
       actor: (this.owningDocument ?? {}).document, 
       sound: SOUNDS_CONSTANTS.NOTIFY,
       viewModel: vm,
-      flavor: game.i18n.localize("ambersteel.character.health.illness.singular"),
+      flavor: game.i18n.localize("system.character.health.illness.singular"),
     });
   }
 

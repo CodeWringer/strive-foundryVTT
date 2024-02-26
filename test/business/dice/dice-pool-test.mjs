@@ -71,7 +71,7 @@ describe("DicePool", () => {
   before((done) => {
     globalThis.game = {
       i18n: sinon.fake(),
-      ambersteel: {
+      strive: {
         logger: sinon.fake(),
       },
     };

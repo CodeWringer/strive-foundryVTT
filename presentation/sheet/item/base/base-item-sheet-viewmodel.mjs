@@ -103,7 +103,7 @@ export default class BaseItemSheetViewModel extends ViewModel {
       onChange: (_, newValue) => {
         this.document.name = newValue;
       },
-      placeholder: game.i18n.localize("ambersteel.general.name.label"),
+      placeholder: game.i18n.localize("system.general.name.label"),
     });
     this.vmRtDescription = new InputRichTextViewModel({
       parent: this,
@@ -158,7 +158,7 @@ export default class BaseItemSheetViewModel extends ViewModel {
           id: "vmBtnSendToChat",
           parent: this,
           target: this.document,
-          localizedToolTip: game.i18n.localize("ambersteel.general.sendToChat"),
+          localizedToolTip: game.i18n.localize("system.general.sendToChat"),
         }),
       }),
     ]; 

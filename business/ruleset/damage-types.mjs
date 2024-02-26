@@ -35,58 +35,58 @@ export class DamageType {
 export const DAMAGE_TYPES = {
   none: new DamageType({
     name: "none",
-    localizableName: "ambersteel.general.none.label",
-    localizableAbbreviation: "ambersteel.general.none.abbreviation"
+    localizableName: "system.general.none.label",
+    localizableAbbreviation: "system.general.none.abbreviation"
   }),
   acid: new DamageType({
     name: "acid",
-    localizableName: "ambersteel.damageType.acid.label",
-    localizableAbbreviation: "ambersteel.damageType.acid.abbreviation"
+    localizableName: "system.damageType.acid.label",
+    localizableAbbreviation: "system.damageType.acid.abbreviation"
   }),
   bleeding: new DamageType({
     name: "bleeding",
-    localizableName: "ambersteel.damageType.bleeding.label",
-    localizableAbbreviation: "ambersteel.damageType.bleeding.abbreviation"
+    localizableName: "system.damageType.bleeding.label",
+    localizableAbbreviation: "system.damageType.bleeding.abbreviation"
   }),
   bludgeoning: new DamageType({
     name: "bludgeoning",
-    localizableName: "ambersteel.damageType.bludgeoning.label",
-    localizableAbbreviation: "ambersteel.damageType.bludgeoning.abbreviation"
+    localizableName: "system.damageType.bludgeoning.label",
+    localizableAbbreviation: "system.damageType.bludgeoning.abbreviation"
   }),
   burning: new DamageType({
     name: "burning",
-    localizableName: "ambersteel.damageType.burning.label",
-    localizableAbbreviation: "ambersteel.damageType.burning.abbreviation"
+    localizableName: "system.damageType.burning.label",
+    localizableAbbreviation: "system.damageType.burning.abbreviation"
   }),
   crushing: new DamageType({
     name: "crushing",
-    localizableName: "ambersteel.damageType.crushing.label",
-    localizableAbbreviation: "ambersteel.damageType.crushing.abbreviation"
+    localizableName: "system.damageType.crushing.label",
+    localizableAbbreviation: "system.damageType.crushing.abbreviation"
   }),
   electrical: new DamageType({
     name: "electrical",
-    localizableName: "ambersteel.damageType.electrical.label",
-    localizableAbbreviation: "ambersteel.damageType.electrical.abbreviation"
+    localizableName: "system.damageType.electrical.label",
+    localizableAbbreviation: "system.damageType.electrical.abbreviation"
   }),
   freezing: new DamageType({
     name: "freezing",
-    localizableName: "ambersteel.damageType.freezing.label",
-    localizableAbbreviation: "ambersteel.damageType.freezing.abbreviation"
+    localizableName: "system.damageType.freezing.label",
+    localizableAbbreviation: "system.damageType.freezing.abbreviation"
   }),
   piercing: new DamageType({
     name: "piercing",
-    localizableName: "ambersteel.damageType.piercing.label",
-    localizableAbbreviation: "ambersteel.damageType.piercing.abbreviation"
+    localizableName: "system.damageType.piercing.label",
+    localizableAbbreviation: "system.damageType.piercing.abbreviation"
   }),
   poison: new DamageType({
     name: "poison",
-    localizableName: "ambersteel.damageType.poison.label",
-    localizableAbbreviation: "ambersteel.damageType.poison.abbreviation"
+    localizableName: "system.damageType.poison.label",
+    localizableAbbreviation: "system.damageType.poison.abbreviation"
   }),
   slashing: new DamageType({
     name: "slashing",
-    localizableName: "ambersteel.damageType.slashing.label",
-    localizableAbbreviation: "ambersteel.damageType.slashing.abbreviation"
+    localizableName: "system.damageType.slashing.label",
+    localizableAbbreviation: "system.damageType.slashing.abbreviation"
   }),
 };
 ConstantsUtils.enrichConstant(DAMAGE_TYPES);

@@ -134,11 +134,11 @@ export default class ActorSkillsViewModel extends ViewModel {
         target: thiz.document,
         creationType: "skill",
         withDialog: true,
-        localizedLabel: game.i18n.localize("ambersteel.character.skill.learning.add.label"),
+        localizedLabel: game.i18n.localize("system.character.skill.learning.add.label"),
         creationData: {
           level: 0
         },
-        localizedType: game.i18n.localize("ambersteel.character.skill.learning.singular"),
+        localizedType: game.i18n.localize("system.character.skill.learning.singular"),
       }),
     });
 
@@ -163,11 +163,11 @@ export default class ActorSkillsViewModel extends ViewModel {
         isEditable: thiz.isEditable,
         creationType: "skill",
         withDialog: true,
-        localizedLabel: game.i18n.localize("ambersteel.character.skill.known.add.label"),
+        localizedLabel: game.i18n.localize("system.character.skill.known.add.label"),
         creationData: {
           level: 1
         },
-        localizedType: game.i18n.localize("ambersteel.character.skill.known.singular"),
+        localizedType: game.i18n.localize("system.character.skill.known.singular"),
       }),
     });
   }

@@ -101,7 +101,7 @@ export default class ExpertiseTableViewModel extends ViewModel {
     this.vmAddExpertise = new ButtonAddViewModel({
       id: "vmAddExpertise",
       parent: this,
-      localizedToolTip: game.i18n.localize("ambersteel.character.skill.expertise.add.label"),
+      localizedToolTip: game.i18n.localize("system.character.skill.expertise.add.label"),
       target: this.document,
       creationType: ADD_BUTTON_CREATION_TYPES.EXPERTISE,
     });
@@ -126,8 +126,8 @@ export default class ExpertiseTableViewModel extends ViewModel {
         isEditable: this.isEditable,
         creationType: "expertise",
         withDialog: false,
-        localizedLabel: game.i18n.localize("ambersteel.character.skill.expertise.add.label"),
-        localizedType: game.i18n.localize("ambersteel.character.skill.expertise.singular"),
+        localizedLabel: game.i18n.localize("system.character.skill.expertise.add.label"),
+        localizedType: game.i18n.localize("system.character.skill.expertise.singular"),
       }),
     });
 

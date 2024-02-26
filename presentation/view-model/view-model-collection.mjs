@@ -122,10 +122,10 @@ export default class ViewModelCollection {
    * @private
    */
   _pullFromGlobal(id) {
-    const vm = game.ambersteel.viewModels.get(id);
+    const vm = game.strive.viewModels.get(id);
 
     if (vm !== undefined) {
-      game.ambersteel.viewModels.remove(id);
+      game.strive.viewModels.remove(id);
       this.set(id, vm);
       return vm;
     } else {

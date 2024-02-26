@@ -1,20 +1,11 @@
 import { ITEM_SHEET_SUBTYPE } from "./item-sheet-subtype.mjs";
-// Imports of specific item sheet "sub-types", to ensure their imports cause the `ITEM_SHEET_SUBTYPE` map to be populated. 
-import AssetItemSheet from "./asset/asset-item-sheet.mjs";
-import SkillItemSheet from "./skill/skill-item-sheet.mjs";
-import InjuryItemSheet from "./injury/injury-item-sheet.mjs";
-import IllnessItemSheet from "./illness/illness-item-sheet.mjs";
-import MutationItemSheet from "./mutation/mutation-item-sheet.mjs";
-import ScarItemSheet from "./scar/scar-item-sheet.mjs";
-import FateItemSheet from "./fate-card/fate-item-sheet.mjs";
-// Other imports
 import * as SheetUtil from "../sheet-utility.mjs";
 import { SYSTEM_ID } from "../../../system-id.mjs";
 
-export class AmbersteelItemSheet extends ItemSheet {
+export class GameSystemItemSheet extends ItemSheet {
   /**
    * Type-dependent object which pseudo-extends the logic of this object. 
-   * @type {AmbersteelBaseItemSheet}
+   * @type {GameSystemBaseItemSheet}
    * @readonly
    */
   get subType() {
@@ -117,10 +108,10 @@ export class AmbersteelItemSheet extends ItemSheet {
     SheetUtil.enrichData(context);
 
     // Prepare a new view model instance. 
-    game.ambersteel.logger.logPerf(this, "item.getData (getViewModel)", () => {
+    game.strive.logger.logPerf(this, "item.getData (getViewModel)", () => {
       this._viewModel = this.subType.getViewModel(context, context.item, this);
     });
-    game.ambersteel.logger.logPerf(this, "item.getData (readAllViewState)", () => {
+    game.strive.logger.logPerf(this, "item.getData (readAllViewState)", () => {
       this._viewModel.readAllViewState();
     });
     context.viewModel = this._viewModel;
@@ -134,10 +125,10 @@ export class AmbersteelItemSheet extends ItemSheet {
 
     const isOwner = (this.actor ?? this.item).isOwner;
     
-    await game.ambersteel.logger.logPerfAsync(this, "item.activateListeners (subType)", async () => {
+    await game.strive.logger.logPerfAsync(this, "item.activateListeners (subType)", async () => {
       await this.subType.activateListeners(html);
     });
-    await game.ambersteel.logger.logPerfAsync(this, "item.activateListeners (viewModel)", async () => {
+    await game.strive.logger.logPerfAsync(this, "item.activateListeners (viewModel)", async () => {
       await this.viewModel.activateListeners(html);
     });
 

@@ -9,7 +9,7 @@ describe("ViewModel", function() {
 
   before(() => {
     globalThis.game = {
-      ambersteel: {
+      strive: {
         logger: sinon.createStubInstance(BaseLoggingStrategy),
       },
     };

@@ -11,13 +11,13 @@ cssClass: {String}
   </a>
   <div class="flex flex-row auto-margin-h">
     {{!-- CR --}}
-    {{#> labeledControl viewModel=viewModel.vmCr localizedLabel=(localize "ambersteel.character.advancement.challengeRating.abbreviation") }}
+    {{#> labeledControl viewModel=viewModel.vmCr localizedLabel=(localize "system.character.advancement.challengeRating.abbreviation") }}
       <div class="width-sm">
         {{> inputNumberSpinner }}
       </div>
     {{/labeledControl}}
     {{!-- CR Modifier --}}
-    {{#> labeledControl viewModel=viewModel.vmCrModifier localizedIconToolTip=(localize "ambersteel.character.advancement.challengeRating.modifier.label") iconClass="ico-modifier-solid" }}
+    {{#> labeledControl viewModel=viewModel.vmCrModifier localizedIconToolTip=(localize "system.character.advancement.challengeRating.modifier.label") iconClass="ico-modifier-solid" }}
       <div class="width-sm">
         {{> inputNumberSpinner }}
       </div>

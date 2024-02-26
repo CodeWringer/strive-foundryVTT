@@ -1,12 +1,12 @@
 import { SYSTEM_ID } from "../../system-id.mjs";
-import AmbersteelSetting from "./ambersteel-setting.mjs";
+import GameSystemSetting from "./game-system-setting.mjs";
 
 /**
  * Defines the base contract for system-specific settings. 
  * 
  * @abstract
  */
-export default class AmbersteelSettings {
+export default class GameSystemSettings {
   /**
   * The FoundryVTT setting key for the system. 
   * 
@@ -21,7 +21,7 @@ export default class AmbersteelSettings {
   /**
    * A list of the registered/known/available settings. 
    * 
-   * @type {Array<AmbersteelSetting>}
+   * @type {Array<GameSystemSetting>}
    * @private
    * @virtual
    */
@@ -36,7 +36,7 @@ export default class AmbersteelSettings {
   set(settingKey, value) {
     this._ensureSetting(settingKey, value);
     
-    game.settings.set(AmbersteelSettings.SETTINGS_NAMESPACE, settingKey, value); 
+    game.settings.set(GameSystemSettings.SETTINGS_NAMESPACE, settingKey, value); 
   }
   
   /**
@@ -48,7 +48,7 @@ export default class AmbersteelSettings {
   get(settingKey) {
     this._ensureSetting(settingKey);
     
-    return game.settings.get(AmbersteelSettings.SETTINGS_NAMESPACE, settingKey); 
+    return game.settings.get(GameSystemSettings.SETTINGS_NAMESPACE, settingKey); 
   }
   
   /**
@@ -71,7 +71,7 @@ export default class AmbersteelSettings {
     }
 
     // Ensures the setting is registered and available. 
-    game.settings.register(AmbersteelSettings.SETTINGS_NAMESPACE, settingKey, {
+    game.settings.register(GameSystemSettings.SETTINGS_NAMESPACE, settingKey, {
       name: setting.name,
       hint: setting.hint,
       scope: setting.scope,
@@ -82,7 +82,7 @@ export default class AmbersteelSettings {
 
     // If the setting requires a menu, ensure it is registered. 
     if (setting.menu !== undefined) {
-      game.settings.registerMenu(AmbersteelSettings.SETTINGS_NAMESPACE, `${settingKey}Menu`, {
+      game.settings.registerMenu(GameSystemSettings.SETTINGS_NAMESPACE, `${settingKey}Menu`, {
         name: setting.name,
         hint: setting.hint,
         label: setting.name,

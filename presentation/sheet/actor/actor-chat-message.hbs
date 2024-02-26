@@ -22,7 +22,7 @@ cssClass: {undefined | String}
           {{challengeRating.localizedLabel}}
         </div>
         <div class="flex-grow">
-          <span class="margin-r-md">{{localize "ambersteel.character.advancement.challengeRating.abbreviation"}}</span>
+          <span class="margin-r-md">{{localize "system.character.advancement.challengeRating.abbreviation"}}</span>
           <span>{{challengeRating.value}}</span>
         </div>
       </div>
@@ -34,7 +34,7 @@ cssClass: {undefined | String}
     {{#if viewModel.showSpecies}}
       <div class="flex flex-row sheet-block margin-b-md">
         <div class="width-min-xl{{#if viewModel.showFancyFont}} fancy-font{{/if}}">
-          {{localize "ambersteel.character.personals.species"}}
+          {{localize "system.character.personals.species"}}
         </div>
         <div class="flex-grow">
           {{viewModel.document.person.species}}
@@ -44,7 +44,7 @@ cssClass: {undefined | String}
     {{#if viewModel.showCulture}}
       <div class="flex flex-row sheet-block margin-b-md">
         <div class="width-min-xl{{#if viewModel.showFancyFont}} fancy-font{{/if}}">
-          {{localize "ambersteel.character.personals.culture"}}
+          {{localize "system.character.personals.culture"}}
         </div>
         <div class="flex-grow">
           {{viewModel.document.person.culture}}
@@ -54,7 +54,7 @@ cssClass: {undefined | String}
     {{#if viewModel.showSex}}
       <div class="flex flex-row sheet-block margin-b-md">
         <div class="width-min-xl{{#if viewModel.showFancyFont}} fancy-font{{/if}}">
-          {{localize "ambersteel.character.personals.sex"}}
+          {{localize "system.character.personals.sex"}}
         </div>
         <div class="flex-grow">
           {{viewModel.document.person.sex}}
@@ -64,7 +64,7 @@ cssClass: {undefined | String}
     {{#if viewModel.showAge}}
       <div class="flex flex-row sheet-block margin-b-md">
         <div class="width-min-xl{{#if viewModel.showFancyFont}} fancy-font{{/if}}">
-          {{localize "ambersteel.character.personals.age"}}
+          {{localize "system.character.personals.age"}}
         </div>
         <div class="flex-grow">
           {{viewModel.document.person.age}}
@@ -74,7 +74,7 @@ cssClass: {undefined | String}
     {{!-- Biography --}}
     <div class="sheet-block">
       <h3 class="width-min-xl{{#if viewModel.showFancyFont}} fancy-font{{/if}}">
-        {{localize "ambersteel.character.biography.label"}}
+        {{localize "system.character.biography.label"}}
       </h3>
       {{> lazyRichText viewModel=viewModel.vmLazyBiography}}
     </div>
@@ -82,7 +82,7 @@ cssClass: {undefined | String}
     {{!-- Description --}}
     <div class="sheet-block">
       <h3 class="width-min-xl{{#if viewModel.showFancyFont}} fancy-font{{/if}}">
-        {{localize "ambersteel.general.description"}}
+        {{localize "system.general.description"}}
       </h3>
       {{> lazyRichText viewModel=viewModel.vmLazyDescription}}
     </div>

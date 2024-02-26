@@ -54,7 +54,7 @@ export default class DamageDefinitionListItemViewModel extends InputViewModel {
    * @type {String}
    * @readonly
    */
-  get localizedDeletionHint() { return game.i18n.localize("ambersteel.damageDefinition.delete"); }
+  get localizedDeletionHint() { return game.i18n.localize("system.damageDefinition.delete"); }
 
   /**
    * Returns the CSS class of the icon that represents the current damage type. 

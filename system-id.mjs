@@ -4,7 +4,7 @@
  * @type {String}
  * @constant
  */
-export const SYSTEM_ID = "ambersteel";
+export const SYSTEM_ID = "strive";
 
 /**
  * The title/name of the game rule system. 
@@ -12,4 +12,4 @@ export const SYSTEM_ID = "ambersteel";
  * @type {String}
  * @constant
  */
-export const SYSTEM_TITLE = "Ambersteel";
+export const SYSTEM_TITLE = "STRIVE";

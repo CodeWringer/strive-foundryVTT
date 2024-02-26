@@ -214,7 +214,7 @@ export default class TransientDocument {
 
     this._updater = new DocumentUpdater({
       propertyUtility: PropertyUtility,
-      logger: game.ambersteel.logger,
+      logger: game.strive.logger,
     });
 
     this.document = document;

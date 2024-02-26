@@ -118,7 +118,7 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
           min: 0,
         }),
         isHidden: this.hideApCost,
-        localizedIconToolTip: game.i18n.localize("ambersteel.actionPoint.plural"),
+        localizedIconToolTip: game.i18n.localize("system.actionPoint.plural"),
         iconClass: "ico-action-point-solid",
       }),
       new DataFieldComponent({
@@ -132,8 +132,8 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
           },
         }),
         isHidden: this.hideCondition,
-        placeholder: game.i18n.localize("ambersteel.character.skill.expertise.condition.placeholder"),
-        localizedIconToolTip: game.i18n.localize("ambersteel.character.skill.expertise.condition.label"),
+        placeholder: game.i18n.localize("system.character.skill.expertise.condition.placeholder"),
+        localizedIconToolTip: game.i18n.localize("system.character.skill.expertise.condition.label"),
         iconClass: "ico-condition-solid",
       }),
       new DataFieldComponent({
@@ -147,8 +147,8 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
           },
         }),
         isHidden: this.hideObstacle,
-        placeholder: game.i18n.localize("ambersteel.roll.obstacle.placeholder"),
-        localizedIconToolTip: game.i18n.localize("ambersteel.roll.obstacle.label"),
+        placeholder: game.i18n.localize("system.roll.obstacle.placeholder"),
+        localizedIconToolTip: game.i18n.localize("system.roll.obstacle.label"),
         iconClass: "ico-obstacle-solid",
       }),
       new DataFieldComponent({
@@ -162,8 +162,8 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
           },
         }),
         isHidden: this.hideOpposedBy,
-        placeholder: game.i18n.localize("ambersteel.roll.obstacle.opposedBy.placeholder"),
-        localizedIconToolTip: game.i18n.localize("ambersteel.roll.obstacle.opposedBy.label"),
+        placeholder: game.i18n.localize("system.roll.obstacle.opposedBy.placeholder"),
+        localizedIconToolTip: game.i18n.localize("system.roll.obstacle.opposedBy.label"),
         iconClass: "ico-opposed-by-solid",
       }),
       new DataFieldComponent({
@@ -177,8 +177,8 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
           },
         }),
         isHidden: this.hideDistance,
-        placeholder: game.i18n.localize("ambersteel.character.skill.expertise.distance.placeholder"),
-        localizedIconToolTip: game.i18n.localize("ambersteel.character.skill.expertise.distance.label"),
+        placeholder: game.i18n.localize("system.character.skill.expertise.distance.placeholder"),
+        localizedIconToolTip: game.i18n.localize("system.character.skill.expertise.distance.label"),
         iconClass: "ico-distance-solid",
       }),
       new DataFieldComponent({
@@ -205,7 +205,7 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
           }),
         }),
         isHidden: this.hideAttackType,
-        localizedIconToolTip: game.i18n.localize("ambersteel.attackType.label"),
+        localizedIconToolTip: game.i18n.localize("system.attackType.label"),
         iconClass: this.attackTypeIconClass,
       }),
     ];
@@ -239,7 +239,7 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
       onChange: (_, newValue) => {
         this.document.category = newValue;
       },
-      placeholder: game.i18n.localize("ambersteel.general.category"),
+      placeholder: game.i18n.localize("system.general.category"),
     });
     this.vmTags = new InputTagsViewModel({
       id: "vmTags",
@@ -259,7 +259,7 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
         this.document.damage = newValue;
       },
       resolveFormulaContext: this._getRootOwningDocument(this.document),
-      chatTitle: `${game.i18n.localize("ambersteel.damageDefinition.formula")} - ${this.document.name}`,
+      chatTitle: `${game.i18n.localize("system.damageDefinition.formula")} - ${this.document.name}`,
     });
 
     this.baseAttributeViewModels = this._getBaseAttributeViewModels();
@@ -284,7 +284,7 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
       },
       isItemAddable: this.isEditable,
       isItemRemovable: (this.isEditable && this.baseAttributeViewModels.length > 1),
-      localizedAddLabel: game.i18n.localize("ambersteel.general.add"),
+      localizedAddLabel: game.i18n.localize("system.general.add"),
     });
 
     this.prerequisiteViewModels = this._getPrerequisiteViewModels();
@@ -309,7 +309,7 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
       },
       isItemAddable: this.isEditable,
       isItemRemovable: this.isEditable,
-      localizedAddLabel: game.i18n.localize("ambersteel.general.add"),
+      localizedAddLabel: game.i18n.localize("system.general.add"),
     });
   }
 
@@ -326,7 +326,7 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
           menuItems: [
             // Add damage
             {
-              name: game.i18n.localize("ambersteel.damageDefinition.add"),
+              name: game.i18n.localize("system.damageDefinition.add"),
               icon: '<i class="fas fa-plus"></i>',
               callback: () => {
                 const damage = this.document.damage.concat([]);
@@ -339,17 +339,17 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
             },
           ]
           // Toggle ap cost
-          .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.character.skill.expertise.apCost", this.document, "apCost", 0))
+          .concat(ButtonContextMenuViewModel.createToggleButtons("system.character.skill.expertise.apCost", this.document, "apCost", 0))
           // Toggle obstacle
-          .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.roll.obstacle.label", this.document, "obstacle", ""))
+          .concat(ButtonContextMenuViewModel.createToggleButtons("system.roll.obstacle.label", this.document, "obstacle", ""))
           // Toggle opposed by
-          .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.roll.obstacle.opposedBy.label", this.document, "opposedBy", ""))
+          .concat(ButtonContextMenuViewModel.createToggleButtons("system.roll.obstacle.opposedBy.label", this.document, "opposedBy", ""))
           // Toggle distance
-          .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.character.skill.expertise.distance.label", this.document, "distance", ""))
+          .concat(ButtonContextMenuViewModel.createToggleButtons("system.character.skill.expertise.distance.label", this.document, "distance", ""))
           // Toggle attack type
-          .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.attackType.label", this.document, "attackType", ATTACK_TYPES.none))
+          .concat(ButtonContextMenuViewModel.createToggleButtons("system.attackType.label", this.document, "attackType", ATTACK_TYPES.none))
           // Toggle condition
-          .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.character.skill.expertise.condition.label", this.document, "condition", "")),
+          .concat(ButtonContextMenuViewModel.createToggleButtons("system.character.skill.expertise.condition.label", this.document, "condition", "")),
         }),
       }),
     ].concat(inherited);
@@ -370,7 +370,7 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
     this.damageInfoBubble = new InfoBubble({
       html: html,
       map: [
-        { element: html.find(`#${this.id}-damage-info`), text: game.i18n.localize("ambersteel.damageDefinition.infoFormulae") },
+        { element: html.find(`#${this.id}-damage-info`), text: game.i18n.localize("system.damageDefinition.infoFormulae") },
       ],
       autoShowType: InfoBubbleAutoShowingTypes.MOUSE_ENTER,
       autoHideType: InfoBubbleAutoHidingTypes.MOUSE_LEAVE,
