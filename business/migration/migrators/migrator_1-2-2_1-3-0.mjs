@@ -1,6 +1,5 @@
 import DocumentFetcher from "../../document/document-fetcher/document-fetcher.mjs";
 import AbstractMigrator from "../abstract-migrator.mjs";
-import { MIGRATORS } from "../migrators.mjs";
 import VersionCode from "../version-code.mjs";
 
 export default class Migrator_1_2_2__1_3_0 extends AbstractMigrator {
@@ -114,5 +113,3 @@ export default class Migrator_1_2_2__1_3_0 extends AbstractMigrator {
     }
   }
 }
-
-MIGRATORS.push(new Migrator_1_2_2__1_3_0());

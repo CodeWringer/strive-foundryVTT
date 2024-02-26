@@ -1,6 +1,5 @@
 import DocumentUpdater from "../../document/document-updater/document-updater.mjs";
 import AbstractMigrator from "../abstract-migrator.mjs";
-import { MIGRATORS } from "../migrators.mjs";
 import VersionCode from "../version-code.mjs";
 import * as PropertyUtility from "../../util/property-utility.mjs";
 import DocumentFetcher from "../../document/document-fetcher/document-fetcher.mjs";
@@ -187,5 +186,3 @@ export default class Migrator_1_5_4__1_5_5 extends AbstractMigrator {
     }
   }
 }
-
-MIGRATORS.push(new Migrator_1_5_4__1_5_5());

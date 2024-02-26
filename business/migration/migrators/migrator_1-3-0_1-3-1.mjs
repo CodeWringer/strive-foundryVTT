@@ -1,7 +1,6 @@
 import { DOCUMENT_COLLECTION_SOURCES } from "../../document/document-fetcher/document-collection-source.mjs";
 import DocumentFetcher from "../../document/document-fetcher/document-fetcher.mjs";
 import AbstractMigrator from "../abstract-migrator.mjs";
-import { MIGRATORS } from "../migrators.mjs";
 import VersionCode from "../version-code.mjs";
 
 export default class Migrator_1_3_0__1_3_1 extends AbstractMigrator {
@@ -113,5 +112,3 @@ export default class Migrator_1_3_0__1_3_1 extends AbstractMigrator {
     }
   }
 }
-
-MIGRATORS.push(new Migrator_1_3_0__1_3_1());

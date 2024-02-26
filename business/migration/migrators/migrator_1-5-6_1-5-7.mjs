@@ -1,5 +1,4 @@
 import AbstractMigrator from "../abstract-migrator.mjs";
-import { MIGRATORS } from "../migrators.mjs";
 import VersionCode from "../version-code.mjs";
 
 export default class Migrator_1_5_6__1_5_7 extends AbstractMigrator {
@@ -14,5 +13,3 @@ export default class Migrator_1_5_6__1_5_7 extends AbstractMigrator {
     // Maintenance release. No migrations needed. 
   }
 }
-
-MIGRATORS.push(new Migrator_1_5_6__1_5_7());

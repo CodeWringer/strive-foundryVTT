@@ -2,7 +2,6 @@ import { DOCUMENT_COLLECTION_SOURCES } from "../../document/document-fetcher/doc
 import DocumentFetcher from "../../document/document-fetcher/document-fetcher.mjs";
 import DocumentUpdater from "../../document/document-updater/document-updater.mjs";
 import AbstractMigrator from "../abstract-migrator.mjs";
-import { MIGRATORS } from "../migrators.mjs";
 import VersionCode from "../version-code.mjs";
 import * as PropertyUtility from "../../util/property-utility.mjs";
 
@@ -237,5 +236,3 @@ export default class Migrator_1_5_5__1_5_6 extends AbstractMigrator {
     await this.updater.updateByPath(skillOfActor, dataPath, updateDelta, false);
   }
 }
-
-MIGRATORS.push(new Migrator_1_5_5__1_5_6());
