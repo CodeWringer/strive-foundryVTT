@@ -14,7 +14,7 @@ import TransientPlainActor from "./transient-plain-actor.mjs";
  * 
  * @see TransientBaseActor
  */
-export class AmbersteelActor extends Actor {
+export class GameSystemActor extends Actor {
   /**
    * Returns the default icon image path for this type of actor. 
    * @type {String}
@@ -51,7 +51,7 @@ export class AmbersteelActor extends Actor {
         throw new Error(`InvalidTypeException: Actor subtype ${this.type} is unrecognized!`);
       }
 
-      game.ambersteel.logger.logPerf(this, "actor.getTransientObject (non-cached)", () => {
+      game.strive.logger.logPerf(this, "actor.getTransientObject (non-cached)", () => {
         this._transientObject = factoryFunction(this);
       });
     }

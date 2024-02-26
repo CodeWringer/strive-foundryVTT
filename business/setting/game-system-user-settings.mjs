@@ -1,11 +1,11 @@
-import AmbersteelSetting from "./ambersteel-setting.mjs";
-import AmbersteelSettings from "./ambersteel-settings.mjs";
+import GameSystemSetting from "./game-system-setting.mjs";
+import GameSystemSettings from "./game-system-settings.mjs";
 import { SettingScopes } from "./setting-scopes.mjs";
 
 /**
  * Defines the settings specific to a user. 
  */
-export default class AmbersteelUserSettings extends AmbersteelSettings {
+export default class GameSystemUserSettings extends GameSystemSettings {
   /**
    * @static
    * @type {String}
@@ -24,19 +24,19 @@ export default class AmbersteelUserSettings extends AmbersteelSettings {
     super();
 
     this._settings.push(
-      new AmbersteelSetting({
-        key: AmbersteelUserSettings.KEY_SHOW_FANCY_FONT,
-        name: game.i18n.localize("ambersteel.settings.fancyFont.label"),
-        hint: game.i18n.localize("ambersteel.settings.fancyFont.hint"),
+      new GameSystemSetting({
+        key: GameSystemUserSettings.KEY_SHOW_FANCY_FONT,
+        name: game.i18n.localize("system.settings.fancyFont.label"),
+        hint: game.i18n.localize("system.settings.fancyFont.hint"),
         scope: SettingScopes.USER,
         config: true,
         default: true,
         type: Boolean,
       }),
-      new AmbersteelSetting({
-        key: AmbersteelUserSettings.KEY_TOGGLE_DEBUG,
-        name: game.i18n.localize("ambersteel.settings.toggleDebug.label"),
-        hint: game.i18n.localize("ambersteel.settings.toggleDebug.hint"),
+      new GameSystemSetting({
+        key: GameSystemUserSettings.KEY_TOGGLE_DEBUG,
+        name: game.i18n.localize("system.settings.toggleDebug.label"),
+        hint: game.i18n.localize("system.settings.toggleDebug.hint"),
         scope: SettingScopes.USER,
         config: true,
         default: false,

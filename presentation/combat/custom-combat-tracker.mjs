@@ -28,7 +28,7 @@ export default class CustomCombatTracker extends CombatTracker {
       const document = combatant.actor;
 
       if (isDefined(document) !== true) {
-        game.ambersteel.logger.logWarn("Failed to get combatant actor");
+        game.strive.logger.logWarn("Failed to get combatant actor");
         continue;
       } else if (document.type === "plain") {
         continue;

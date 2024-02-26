@@ -150,7 +150,7 @@ export default class AtReferencer {
     } catch (error) {
       if (error.message.startsWith("Failed to get nested property value")) {
         // Such errors are expected for "bad" property paths and can be ignored safely. 
-        game.ambersteel.logger.logWarn(error.message);
+        game.strive.logger.logWarn(error.message);
       } else {
         // Any other error is re-thrown. 
         throw error;

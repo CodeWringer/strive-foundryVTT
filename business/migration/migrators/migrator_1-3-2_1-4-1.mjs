@@ -22,7 +22,7 @@ export default class Migrator_1_3_2__1_4_1 extends AbstractMigrator {
     if (this._updater === undefined) {
       this._updater = new DocumentUpdater({
         propertyUtility: PropertyUtility,
-        logger: game.ambersteel.logger,
+        logger: game.strive.logger,
       });
     }
     return this._updater;

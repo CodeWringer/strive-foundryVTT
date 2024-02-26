@@ -26,19 +26,19 @@ export class ShieldType {
 export const SHIELD_TYPES = {
   buckler: new ShieldType({
     name: "buckler",
-    localizableName: "ambersteel.character.asset.type.shield.buckler"
+    localizableName: "system.character.asset.type.shield.buckler"
   }),
   roundShield: new ShieldType({
     name: "roundShield",
-    localizableName: "ambersteel.character.asset.type.shield.roundShield"
+    localizableName: "system.character.asset.type.shield.roundShield"
   }),
   heaterShield: new ShieldType({
     name: "heaterShield",
-    localizableName: "ambersteel.character.asset.type.shield.heaterShield"
+    localizableName: "system.character.asset.type.shield.heaterShield"
   }),
   kiteShield: new ShieldType({
     name: "kiteShield",
-    localizableName: "ambersteel.character.asset.type.shield.kiteShield"
+    localizableName: "system.character.asset.type.shield.kiteShield"
   }),
 };
 ConstantsUtils.enrichConstant(SHIELD_TYPES);

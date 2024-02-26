@@ -137,7 +137,7 @@ export default class ButtonRollViewModel extends ButtonViewModel {
     this.secondaryChatTitle = args.secondaryChatTitle;
     this.secondaryChatImage = args.secondaryChatImage;
     this._actor = args.actor;
-    this.localizedTooltip = args.localizedTooltip ?? game.i18n.localize("ambersteel.roll.doRoll");
+    this.localizedTooltip = args.localizedTooltip ?? game.i18n.localize("system.roll.doRoll");
   }
 
   /**
@@ -161,12 +161,12 @@ export default class ButtonRollViewModel extends ButtonViewModel {
     // Prepare the dialog. 
     // By default, it allows selection of the visibility mode. 
     const dialog = new DynamicInputDialog({
-      localizedTitle: game.i18n.localize("ambersteel.roll.query"),
+      localizedTitle: game.i18n.localize("system.roll.query"),
       inputDefinitions: [
         new DynamicInputDefinition({
           type: DYNAMIC_INPUT_TYPES.DROP_DOWN,
           name: this.inputVisibility,
-          localizedLabel: game.i18n.localize("ambersteel.general.messageVisibility.label"),
+          localizedLabel: game.i18n.localize("system.general.messageVisibility.label"),
           required: true,
           defaultValue: (VISIBILITY_MODES.asArray()[0]),
           specificArgs: {
@@ -265,30 +265,30 @@ export default class ButtonRollViewModel extends ButtonViewModel {
       new DynamicInputDefinition({
         type: DYNAMIC_INPUT_TYPES.LABEL,
         name: "diceCompositionLabel",
-        localizedLabel: `<p>${game.i18n.localize("ambersteel.roll.numberOfDice")}: ${rollData.total}</p><p class="font-size-sm">${diceComposition}</p>`,
+        localizedLabel: `<p>${game.i18n.localize("system.roll.numberOfDice")}: ${rollData.total}</p><p class="font-size-sm">${diceComposition}</p>`,
         showFancyFont: false,
       }),
       new DynamicInputDefinition({
         type: DYNAMIC_INPUT_TYPES.TEXTFIELD,
         name: inputObstacle,
-        localizedLabel: game.i18n.localize("ambersteel.roll.obstacle.abbreviation"),
+        localizedLabel: game.i18n.localize("system.roll.obstacle.abbreviation"),
         required: true,
         defaultValue: "",
         specificArgs: {
-          placeholder: game.i18n.localize("ambersteel.roll.obstacle.rollForPlaceholder"),
+          placeholder: game.i18n.localize("system.roll.obstacle.rollForPlaceholder"),
         },
       }),
       new DynamicInputDefinition({
         type: DYNAMIC_INPUT_TYPES.NUMBER_SPINNER,
         name: inputBonusDice,
-        localizedLabel: game.i18n.localize("ambersteel.roll.bonusDice"),
+        localizedLabel: game.i18n.localize("system.roll.bonusDice"),
         required: true,
         defaultValue: 0,
       }),
       new DynamicInputDefinition({
         type: DYNAMIC_INPUT_TYPES.DROP_DOWN,
         name: inputRollDiceModifier,
-        localizedLabel: game.i18n.localize("ambersteel.roll.diceModifier.plural"),
+        localizedLabel: game.i18n.localize("system.roll.diceModifier.plural"),
         required: true,
         defaultValue: (ROLL_DICE_MODIFIER_TYPES.asArray()[0]),
         specificArgs: {
@@ -307,7 +307,7 @@ export default class ButtonRollViewModel extends ButtonViewModel {
     // Do roll. 
     const rollResult = await new DicePool({
       dice: rollData.components,
-      bonus: [new SumComponent("bonus", "ambersteel.roll.bonusDice", parseInt(dialog[inputBonusDice]))],
+      bonus: [new SumComponent("bonus", "system.roll.bonusDice", parseInt(dialog[inputBonusDice]))],
       obstacle: dialog[inputObstacle],
       modifier: ROLL_DICE_MODIFIER_TYPES.asArray().find(it => it.name === dialog[inputRollDiceModifier]),
     }).roll();

@@ -24,7 +24,7 @@ export default class AssetItemSheetViewModel extends BaseItemSheetViewModel {
           },
           min: 1,
         }),
-        localizedIconToolTip: game.i18n.localize("ambersteel.character.asset.quantity.label"),
+        localizedIconToolTip: game.i18n.localize("system.character.asset.quantity.label"),
         iconClass: "ico-quantity-solid",
       }),
       new DataFieldComponent({
@@ -38,7 +38,7 @@ export default class AssetItemSheetViewModel extends BaseItemSheetViewModel {
           },
           min: 1,
         }),
-        localizedIconToolTip: game.i18n.localize("ambersteel.character.asset.quantity.maximum"),
+        localizedIconToolTip: game.i18n.localize("system.character.asset.quantity.maximum"),
         iconClass: "ico-limit-solid",
       }),
       new DataFieldComponent({
@@ -52,7 +52,7 @@ export default class AssetItemSheetViewModel extends BaseItemSheetViewModel {
           },
           min: 0,
         }),
-        localizedIconToolTip: game.i18n.localize("ambersteel.character.asset.bulk"),
+        localizedIconToolTip: game.i18n.localize("system.character.asset.bulk"),
         iconClass: "ico-bulk-solid",
       }),
       new DataFieldComponent({
@@ -66,7 +66,7 @@ export default class AssetItemSheetViewModel extends BaseItemSheetViewModel {
             this.document.tags = newValue;
           },
         }),
-        localizedIconToolTip: game.i18n.localize("ambersteel.general.tags.label"),
+        localizedIconToolTip: game.i18n.localize("system.general.tags.label"),
         iconClass: "ico-tags-solid",
         cssClass: "grid-span-2",
       }),

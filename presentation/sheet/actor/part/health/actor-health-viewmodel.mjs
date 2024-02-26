@@ -192,8 +192,8 @@ export default class ActorHealthViewModel extends ViewModel {
         isEditable: this.isEditable,
         creationType: "illness",
         withDialog: true,
-        localizedLabel: game.i18n.localize("ambersteel.character.health.illness.add.label"),
-        localizedType: game.i18n.localize("ambersteel.character.health.illness.singular"),
+        localizedLabel: game.i18n.localize("system.character.health.illness.add.label"),
+        localizedType: game.i18n.localize("system.character.health.illness.singular"),
       }),
     });
 
@@ -217,8 +217,8 @@ export default class ActorHealthViewModel extends ViewModel {
         isEditable: this.isEditable,
         creationType: "injury",
         withDialog: true,
-        localizedLabel: game.i18n.localize("ambersteel.character.health.injury.add.label"),
-        localizedType: game.i18n.localize("ambersteel.character.health.injury.singular"),
+        localizedLabel: game.i18n.localize("system.character.health.injury.add.label"),
+        localizedType: game.i18n.localize("system.character.health.injury.singular"),
       }),
     });
 
@@ -242,8 +242,8 @@ export default class ActorHealthViewModel extends ViewModel {
         isEditable: this.isEditable,
         creationType: "mutation",
         withDialog: true,
-        localizedLabel: game.i18n.localize("ambersteel.character.health.mutation.add.label"),
-        localizedType: game.i18n.localize("ambersteel.character.health.mutation.singular"),
+        localizedLabel: game.i18n.localize("system.character.health.mutation.add.label"),
+        localizedType: game.i18n.localize("system.character.health.mutation.singular"),
       }),
     });
 
@@ -267,8 +267,8 @@ export default class ActorHealthViewModel extends ViewModel {
         isEditable: this.isEditable,
         creationType: "scar",
         withDialog: true,
-        localizedLabel: game.i18n.localize("ambersteel.character.health.scar.add.label"),
-        localizedType: game.i18n.localize("ambersteel.character.health.scar.singular"),
+        localizedLabel: game.i18n.localize("system.character.health.scar.add.label"),
+        localizedType: game.i18n.localize("system.character.health.scar.singular"),
       }),
     });
   }

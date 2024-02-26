@@ -24,7 +24,7 @@ export default class DocumentUpdater {
    * @param {Object} args 
    * @param {Object} args.propertyUtility A named import "instance" of the `property-utility.mjs`. 
    * @param {BaseLoggingStrategy | undefined} args.logger A logger instance. 
-   * * Default `game.ambersteel.logger`. 
+   * * Default `game.strive.logger`. 
    * 
    * @throws If `args.propertyUtility` is undefined. 
    */
@@ -32,7 +32,7 @@ export default class DocumentUpdater {
     validateOrThrow(args, ["propertyUtility"]);
 
     this._propertyUtility = args.propertyUtility;
-    this._logger = args.logger ?? game.ambersteel.logger;
+    this._logger = args.logger ?? game.strive.logger;
   }
 
   /**

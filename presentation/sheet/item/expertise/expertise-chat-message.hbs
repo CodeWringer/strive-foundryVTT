@@ -30,7 +30,7 @@ cssClass: {undefined | String}
   {{!-- Required level --}}
   <div class="flex flex-row sheet-block margin-b-md">
     <div class="width-min-xxl">
-      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.skill.expertise.requirement"}}{{/label}}
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "system.character.skill.expertise.requirement"}}{{/label}}
     </div>
     <div class="flex-grow">
       {{viewModel.expertise.requiredLevel}}
@@ -39,7 +39,7 @@ cssClass: {undefined | String}
   {{!-- apCost --}}
   <div class="flex flex-row sheet-block margin-b-md">
     <div class="width-min-xxl">
-      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.skill.expertise.apCost"}}{{/label}}
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "system.character.skill.expertise.apCost"}}{{/label}}
     </div>
     <div class="flex-grow">
       {{viewModel.expertise.apCost}}
@@ -48,7 +48,7 @@ cssClass: {undefined | String}
   {{!-- Obstacle --}}
   <div class="flex flex-row sheet-block margin-b-md{{#if viewModel.hideObstacle}} hidden{{/if}}">
     <div class="width-min-xxl">
-      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.roll.obstacle.abbreviation"}}{{/label}}
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "system.roll.obstacle.abbreviation"}}{{/label}}
     </div>
     <div class="flex-grow">
       {{viewModel.expertise.obstacle}}
@@ -57,7 +57,7 @@ cssClass: {undefined | String}
   {{!-- Opposed By --}}
   <div class="flex flex-row sheet-block margin-b-md{{#if viewModel.hideOpposedBy}} hidden{{/if}}">
     <div class="width-min-xxl">
-      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.roll.obstacle.opposedBy.label"}}{{/label}}
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "system.roll.obstacle.opposedBy.label"}}{{/label}}
     </div>
     <div class="flex-grow">
       {{viewModel.expertise.opposedBy}}
@@ -66,7 +66,7 @@ cssClass: {undefined | String}
   {{!-- Condition --}}
   <div class="flex flex-row sheet-block margin-b-md{{#if viewModel.hideCondition}} hidden{{/if}}">
     <div class="width-min-xxl">
-      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.skill.expertise.condition.label"}}{{/label}}
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "system.character.skill.expertise.condition.label"}}{{/label}}
     </div>
     <div class="flex-grow">
       {{localize viewModel.expertise.condition}}
@@ -75,7 +75,7 @@ cssClass: {undefined | String}
   {{!-- attackType --}}
   <div class="flex flex-row sheet-block margin-b-md{{#if viewModel.hideAttackType}} hidden{{/if}}">
     <div class="width-min-xxl">
-      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.attackType.label"}}{{/label}}
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "system.attackType.label"}}{{/label}}
     </div>
     <div class="flex-grow">
       {{viewModel.localizedAttackType}}
@@ -84,7 +84,7 @@ cssClass: {undefined | String}
   {{!-- distance --}}
   <div class="flex flex-row sheet-block margin-b-md{{#if viewModel.hideDistance}} hidden{{/if}}">
     <div class="width-min-xxl">
-      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.skill.expertise.distance.label"}}{{/label}}
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "system.character.skill.expertise.distance.label"}}{{/label}}
     </div>
     <div class="flex-grow">
       {{viewModel.expertise.distance}}
@@ -93,11 +93,11 @@ cssClass: {undefined | String}
   {{!-- Damage --}}
   <ol class="unstyled-list{{#if viewModel.hideDamage}} hidden{{/if}}">
     {{#each viewModel.expertise.damage as |entry index|}}
-      <li class="ambersteel-list-row sheet-block flex flex-column margin-b-md">
+      <li class="strive-list-row sheet-block flex flex-column margin-b-md">
         {{!-- Damage formula --}}
         <div class="flex flex-row">
           <div class="width-min-xxl{{#if ../viewModel.showFancyFont}} fancy-font{{/if}}">
-            {{localize "ambersteel.damageDefinition.formula"}}
+            {{localize "system.damageDefinition.formula"}}
           </div>
           <span class="width-min-xxl">
             {{entry.damage}}
@@ -106,7 +106,7 @@ cssClass: {undefined | String}
         {{!-- Damage type --}}
         <div class="flex flex-row">
           <div class="width-min-xxl{{#if ../viewModel.showFancyFont}} fancy-font{{/if}}">
-            {{localize "ambersteel.damageType.label"}}
+            {{localize "system.damageType.label"}}
           </div>
           <span class="width-xxl">
             {{localize entry.damageType.localizableName}}

@@ -222,7 +222,7 @@ export default class Expertise {
     this.id = args.id ?? createUUID();
 
     this._isCustom = args.isCustom ?? false;
-    this._name = args.name ?? game.i18n.localize("ambersteel.character.skill.expertise.newDefaultName");
+    this._name = args.name ?? game.i18n.localize("system.character.skill.expertise.newDefaultName");
     this._img = args.img ?? "icons/svg/book.svg";
     this._description = args.description ?? "";
     this._requiredLevel = args.requiredLevel ?? 0;

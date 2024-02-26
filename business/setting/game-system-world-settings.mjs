@@ -1,12 +1,12 @@
 import HealthStatesSettingsDialog from "../../presentation/dialog/settings/health-states/health-states-settings-dialog.mjs";
-import AmbersteelSetting from "./ambersteel-setting.mjs";
-import AmbersteelSettings from "./ambersteel-settings.mjs";
+import GameSystemSetting from "./game-system-setting.mjs";
+import GameSystemSettings from "./game-system-settings.mjs";
 import { SettingScopes } from "./setting-scopes.mjs";
 
 /**
  * Defines the settings specific to a user. 
  */
-export default class AmbersteelWorldSettings extends AmbersteelSettings {
+export default class GameSystemWorldSettings extends GameSystemSettings {
   /**
    * @static
    * @type {String}
@@ -18,10 +18,10 @@ export default class AmbersteelWorldSettings extends AmbersteelSettings {
     super();
 
     this._settings.push(
-      new AmbersteelSetting({
-        key: AmbersteelWorldSettings.KEY_CUSTOM_HEALTH_STATES,
-        name: game.i18n.localize("ambersteel.settings.healthStates.label"),
-        hint: game.i18n.localize("ambersteel.settings.healthStates.hint"),
+      new GameSystemSetting({
+        key: GameSystemWorldSettings.KEY_CUSTOM_HEALTH_STATES,
+        name: game.i18n.localize("system.settings.healthStates.label"),
+        hint: game.i18n.localize("system.settings.healthStates.hint"),
         scope: SettingScopes.WORLD,
         config: false,
         default: {

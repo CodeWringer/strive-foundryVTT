@@ -41,58 +41,58 @@ export class Attribute {
 export const ATTRIBUTES = {
   agility: new Attribute({
     name: "agility",
-    localizableName: "ambersteel.character.attribute.agility.label",
-    localizableAbbreviation: "ambersteel.character.attribute.agility.abbreviation"
+    localizableName: "system.character.attribute.agility.label",
+    localizableAbbreviation: "system.character.attribute.agility.abbreviation"
   }),
   endurance: new Attribute({
     name: "endurance",
-    localizableName: "ambersteel.character.attribute.endurance.label",
-    localizableAbbreviation: "ambersteel.character.attribute.endurance.abbreviation"
+    localizableName: "system.character.attribute.endurance.label",
+    localizableAbbreviation: "system.character.attribute.endurance.abbreviation"
   }),
   perception: new Attribute({
     name: "perception",
-    localizableName: "ambersteel.character.attribute.perception.label",
-    localizableAbbreviation: "ambersteel.character.attribute.perception.abbreviation"
+    localizableName: "system.character.attribute.perception.label",
+    localizableAbbreviation: "system.character.attribute.perception.abbreviation"
   }),
   strength: new Attribute({
     name: "strength",
-    localizableName: "ambersteel.character.attribute.strength.label",
-    localizableAbbreviation: "ambersteel.character.attribute.strength.abbreviation"
+    localizableName: "system.character.attribute.strength.label",
+    localizableAbbreviation: "system.character.attribute.strength.abbreviation"
   }),
   toughness: new Attribute({
     name: "toughness",
-    localizableName: "ambersteel.character.attribute.toughness.label",
-    localizableAbbreviation: "ambersteel.character.attribute.toughness.abbreviation"
+    localizableName: "system.character.attribute.toughness.label",
+    localizableAbbreviation: "system.character.attribute.toughness.abbreviation"
   }),
   intelligence: new Attribute({
     name: "intelligence",
-    localizableName: "ambersteel.character.attribute.intelligence.label",
-    localizableAbbreviation: "ambersteel.character.attribute.intelligence.abbreviation"
+    localizableName: "system.character.attribute.intelligence.label",
+    localizableAbbreviation: "system.character.attribute.intelligence.abbreviation"
   }),
   wisdom: new Attribute({
     name: "wisdom",
-    localizableName: "ambersteel.character.attribute.wisdom.label",
-    localizableAbbreviation: "ambersteel.character.attribute.wisdom.abbreviation"
+    localizableName: "system.character.attribute.wisdom.label",
+    localizableAbbreviation: "system.character.attribute.wisdom.abbreviation"
   }),
   arcana: new Attribute({
     name: "arcana",
-    localizableName: "ambersteel.character.attribute.arcana.label",
-    localizableAbbreviation: "ambersteel.character.attribute.arcana.abbreviation"
+    localizableName: "system.character.attribute.arcana.label",
+    localizableAbbreviation: "system.character.attribute.arcana.abbreviation"
   }),
   empathy: new Attribute({
     name: "empathy",
-    localizableName: "ambersteel.character.attribute.empathy.label",
-    localizableAbbreviation: "ambersteel.character.attribute.empathy.abbreviation"
+    localizableName: "system.character.attribute.empathy.label",
+    localizableAbbreviation: "system.character.attribute.empathy.abbreviation"
   }),
   oratory: new Attribute({
     name: "oratory",
-    localizableName: "ambersteel.character.attribute.oratory.label",
-    localizableAbbreviation: "ambersteel.character.attribute.oratory.abbreviation"
+    localizableName: "system.character.attribute.oratory.label",
+    localizableAbbreviation: "system.character.attribute.oratory.abbreviation"
   }),
   willpower: new Attribute({
     name: "willpower",
-    localizableName: "ambersteel.character.attribute.willpower.label",
-    localizableAbbreviation: "ambersteel.character.attribute.willpower.abbreviation"
+    localizableName: "system.character.attribute.willpower.label",
+    localizableAbbreviation: "system.character.attribute.willpower.abbreviation"
   }),
 };
 ConstantsUtils.enrichConstant(ATTRIBUTES);

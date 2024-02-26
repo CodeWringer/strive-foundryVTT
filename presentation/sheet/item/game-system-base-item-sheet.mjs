@@ -5,7 +5,7 @@
  * 
  * @abstract
  */
-export default class AmbersteelBaseItemSheet {
+export default class GameSystemBaseItemSheet {
   /**
    * Returns the template path. 
    * 
@@ -27,7 +27,7 @@ export default class AmbersteelBaseItemSheet {
   /**
    * Returns a view model for the given document. 
    * 
-   * Supports caching the view model instance, based on the `game.ambersteel.enableViewModelCaching` value. 
+   * Supports caching the view model instance, based on the `game.strive.enableViewModelCaching` value. 
    * 
    * @param {Object} context A context object provided by FoundryVTT. 
    * @param {TransientDocument} document A transient document instance of "this" type of item sheet. 
@@ -38,11 +38,11 @@ export default class AmbersteelBaseItemSheet {
    * @protected
    */
   getViewModel(context, document, sheet) {
-    let viewModel = game.ambersteel.viewModels.get(document.id);
+    let viewModel = game.strive.viewModels.get(document.id);
     if (viewModel === undefined) {
       viewModel = this._getViewModel(context, document, sheet);
-      if (game.ambersteel.enableViewModelCaching === true) {
-        game.ambersteel.viewModels.set(document.id, viewModel);
+      if (game.strive.enableViewModelCaching === true) {
+        game.strive.viewModels.set(document.id, viewModel);
       }
     } else {
       viewModel.update({

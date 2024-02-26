@@ -24,21 +24,21 @@ export async function queryAssetSlotConfiguration(assetSlot = {}) {
 
   const dialog = await new DynamicInputDialog({
     localizedTitle: StringUtil.format(
-      game.i18n.localize("ambersteel.general.input.queryFor"), 
-      game.i18n.localize("ambersteel.character.asset.slot.label"), 
+      game.i18n.localize("system.general.input.queryFor"), 
+      game.i18n.localize("system.character.asset.slot.label"), 
     ),
     inputDefinitions: [
       new DynamicInputDefinition({
         type: DYNAMIC_INPUT_TYPES.TEXTFIELD,
         name: inputName,
-        localizedLabel: game.i18n.localize("ambersteel.general.name.label"),
+        localizedLabel: game.i18n.localize("system.general.name.label"),
         required: true,
         defaultValue: (assetSlot.name ?? "New Asset Slot"),
       }),
       new DynamicInputDefinition({
         type: DYNAMIC_INPUT_TYPES.TEXTFIELD,
         name: inputAcceptedTypes,
-        localizedLabel: game.i18n.localize("ambersteel.character.asset.slot.acceptedTypes"),
+        localizedLabel: game.i18n.localize("system.character.asset.slot.acceptedTypes"),
         required: true,
         defaultValue: ((assetSlot.acceptedTypes ?? []).join(", ")),
         specificArgs: {
@@ -48,7 +48,7 @@ export async function queryAssetSlotConfiguration(assetSlot = {}) {
       new DynamicInputDefinition({
         type: DYNAMIC_INPUT_TYPES.NUMBER_SPINNER,
         name: inputMaxBulk,
-        localizedLabel: game.i18n.localize("ambersteel.character.asset.maxBulk"),
+        localizedLabel: game.i18n.localize("system.character.asset.maxBulk"),
         required: false,
         defaultValue: (assetSlot.maxBulk ?? 1),
         specificArgs: {

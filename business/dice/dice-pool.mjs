@@ -133,7 +133,7 @@ export default class DicePool {
  * @type {String}
  * @constant
  */
-const LOCALIZABLE_OBSTACLE_ABBREVIATION = "ambersteel.roll.obstacle.abbreviation";
+const LOCALIZABLE_OBSTACLE_ABBREVIATION = "system.roll.obstacle.abbreviation";
 
 /**
  * CSS class of a positive die result. 
@@ -338,7 +338,7 @@ export class DicePoolRollResult {
 
     // Include the bonus dice, but only if there are any. 
     if (this.modifiedBonus !== undefined && this.modifiedBonus !== 0) {
-      joinedRollData = `${joinedRollData}, ${this.modifiedBonus} ${game.i18n.localize("ambersteel.roll.bonusDice")}`;
+      joinedRollData = `${joinedRollData}, ${this.modifiedBonus} ${game.i18n.localize("system.roll.bonusDice")}`;
     }
 
     return `(${joinedRollData})`;
@@ -387,19 +387,19 @@ export class DicePoolRollResultType {
 export const DICE_POOL_RESULT_TYPES = {
   NONE: new DicePoolRollResultType({
     name: "none",
-    localizableName: "ambersteel.general.none.label",
+    localizableName: "system.general.none.label",
   }),
   SUCCESS: new DicePoolRollResultType({
     name: "success",
-    localizableName: "ambersteel.roll.success.label",
+    localizableName: "system.roll.success.label",
   }),
   FAILURE: new DicePoolRollResultType({
     name: "failure",
-    localizableName: "ambersteel.roll.failure.label",
+    localizableName: "system.roll.failure.label",
   }),
   PARTIAL: new DicePoolRollResultType({
     name: "partial",
-    localizableName: "ambersteel.roll.partial.label",
+    localizableName: "system.roll.partial.label",
   }),
 }
 ConstantsUtils.enrichConstant(DICE_POOL_RESULT_TYPES);

@@ -1,8 +1,8 @@
-# Ambersteel System
+# STRIVE FoundryVTT System
 
-This is the Ambersteel table-top role-playing game system for FoundryVTT. 
+This is the **STRIVE** table-top role-playing game system for FoundryVTT. 
 
-See also the companion repository that contains the ruleset: https://github.com/CodeWringer/ambersteel
+See also the companion repository that contains the ruleset: https://github.com/CodeWringer/strive-ttrpg
 
 # Build & Deploy
 1. Create a new `Migrator`, which will sync any loaded world's version to the new system version. 

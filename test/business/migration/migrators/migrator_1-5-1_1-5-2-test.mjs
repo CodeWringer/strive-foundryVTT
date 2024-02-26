@@ -114,7 +114,7 @@ describe("Migrator_1_5_1__1_5_2", () => {
       items: MigratorTestBase.createMockWorldCollection("Item"),
       journal: MigratorTestBase.createMockWorldCollection("Journal"),
       tables: MigratorTestBase.createMockWorldCollection("RollTable"),
-      ambersteel: {
+      strive: {
         logger: sinon.createStubInstance(BaseLoggingStrategy),
       },
     };

@@ -9,7 +9,7 @@
   "TYPES.Item.illness": "Illness",
   "TYPES.Item.mutation": "Mutation",
   "TYPES.Item.scar": "Scar",
-  "ambersteel": {
+  "system": {
     "migration": {
       "title": "Data Migration",
       "titleMigrationRequired": "Data Migration Required",

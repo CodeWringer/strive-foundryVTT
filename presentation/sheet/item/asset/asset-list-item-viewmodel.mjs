@@ -83,7 +83,7 @@ export default class AssetListItemViewModel extends BaseListItemViewModel {
       parent: this,
       id: "vmLocation",
       value: this.document.location,
-      placeholder: game.i18n.localize("ambersteel.character.asset.location.placeholder"),
+      placeholder: game.i18n.localize("system.character.asset.location.placeholder"),
       onChange: (_, newValue) => {
         this.document.location = newValue;
       },
@@ -104,7 +104,7 @@ export default class AssetListItemViewModel extends BaseListItemViewModel {
             this.document.tags = newValue;
           },
         }),
-        localizedIconToolTip: game.i18n.localize("ambersteel.general.tags.label"),
+        localizedIconToolTip: game.i18n.localize("system.general.tags.label"),
         iconClass: "ico-tags-solid",
         cssClass: "grid-span-2",
       }),
@@ -115,18 +115,18 @@ export default class AssetListItemViewModel extends BaseListItemViewModel {
   getPrimaryHeaderButtons() {
     const thiz = this;
 
-    let takeLabel = "ambersteel.character.asset.take";
+    let takeLabel = "system.character.asset.take";
     if (this.document.isLuggage) {
-      takeLabel = "ambersteel.character.asset.takeToEquipped";
+      takeLabel = "system.character.asset.takeToEquipped";
     } else if (this.document.isProperty) {
-      takeLabel = "ambersteel.character.asset.takeToLuggage";
+      takeLabel = "system.character.asset.takeToLuggage";
     }
 
-    let dropLabel = "ambersteel.character.asset.drop";
+    let dropLabel = "system.character.asset.drop";
     if (this.document.isEquipped) {
-      dropLabel = "ambersteel.character.asset.dropToLuggage";
+      dropLabel = "system.character.asset.dropToLuggage";
     } else if (this.document.isLuggage) {
-      dropLabel = "ambersteel.character.asset.dropToProperty";
+      dropLabel = "system.character.asset.dropToProperty";
     }
 
     return super.getPrimaryHeaderButtons().concat([
@@ -228,7 +228,7 @@ export default class AssetListItemViewModel extends BaseListItemViewModel {
         new DynamicInputDefinition({
           type: DYNAMIC_INPUT_TYPES.DROP_DOWN,
           name: inputSlots,
-          localizedLabel: game.i18n.localize("ambersteel.character.asset.slot.label"),
+          localizedLabel: game.i18n.localize("system.character.asset.slot.label"),
           specificArgs: {
             options: availableSlotChoices,
             adapter: adapter,

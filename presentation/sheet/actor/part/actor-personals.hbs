@@ -5,16 +5,16 @@ cssClass: {undefined | String}
 <section class="{{cssClass}}">
   <div class="flex sheet-block">
     <div class="flex flex-column">
-      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.personals.species"}}{{/label}}
-      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.personals.sex"}}{{/label}}
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "system.character.personals.species"}}{{/label}}
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "system.character.personals.sex"}}{{/label}}
     </div>
     <div class="flex flex-column flex-grow">
       {{> inputTextField viewModel=viewModel.vmTfSpecies }}
       {{> inputTextField viewModel=viewModel.vmTfSex }}
     </div>
     <div class="flex flex-column margin-l-md">
-      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.personals.culture"}}{{/label}}
-      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.character.personals.age"}}{{/label}}
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "system.character.personals.culture"}}{{/label}}
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "system.character.personals.age"}}{{/label}}
     </div>
     <div class="flex flex-column flex-grow">
       {{> inputTextField viewModel=viewModel.vmTfCulture }}

@@ -7,7 +7,7 @@ prominentItemStyling: {Boolean | undefined}
     id={{viewModel.id}}
   >
   {{#each viewModel.itemViewModelGroups as |itemViewModelGroup key|}}
-  <li id="{{itemViewModelGroup.id}}" class="ambersteel-list-row sortable-list-item sheet-block flex flex-row{{#if ../prominentItemStyling}} heavy-border-t{{/if}}">
+  <li id="{{itemViewModelGroup.id}}" class="strive-list-row sortable-list-item sheet-block flex flex-row{{#if ../prominentItemStyling}} heavy-border-t{{/if}}">
     <div class="component-list-item-order-controls{{#if (neq ../viewModel.isEditable true)}} hidden{{/if}}">
       {{> button viewModel=itemViewModelGroup.vmBtnMoveUp fill=false }}
       {{!-- TODO #116: Implement the grab handle --}}
@@ -26,7 +26,7 @@ prominentItemStyling: {Boolean | undefined}
   {{/each}}
   {{!-- Add button --}}
   {{#if viewModel.hasAddButton}}
-  <li class="ambersteel-list-row ambersteel-list-footer{{#if (eq viewModel.isEditable false)}} hidden{{/if}}">
+  <li class="strive-list-row strive-list-footer{{#if (eq viewModel.isEditable false)}} hidden{{/if}}">
     <div class="fill flex flex-row flex-right">
       <div>
         {{> buttonAdd viewModel=viewModel.vmBtnAddItem fill=true }}

@@ -170,7 +170,7 @@ export default class TransientAsset extends TransientBaseItem {
       actor: (this.owningDocument ?? {}).document, 
       sound: SOUNDS_CONSTANTS.NOTIFY,
       viewModel: vm,
-      flavor: game.i18n.localize("ambersteel.character.asset.singular"),
+      flavor: game.i18n.localize("system.character.asset.singular"),
     });
   }
 

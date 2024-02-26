@@ -83,7 +83,7 @@ export default class HealthStatesSettingsDialogViewModel extends ViewModel {
       id: "vmBtnSave",
       parent: this,
       iconHtml: '<i class="fas fa-save"></i>',
-      localizedLabel: game.i18n.localize("ambersteel.settings.saveChanges"),
+      localizedLabel: game.i18n.localize("system.settings.saveChanges"),
       isEditable: this.isEditable,
       onClick: async () => {
         thiz.formApplication._saveSettings(this.stateSettings);
@@ -108,7 +108,7 @@ export default class HealthStatesSettingsDialogViewModel extends ViewModel {
       contentItemTemplate: this.customHealthStateListItemTemplate,
       onAddClick: () => {
         this.stateSettings.custom.push({
-          name: game.i18n.localize("ambersteel.settings.healthStates.newDefaultName"),
+          name: game.i18n.localize("system.settings.healthStates.newDefaultName"),
           limit: 0,
         });
         this._renderFormApplication();
@@ -119,7 +119,7 @@ export default class HealthStatesSettingsDialogViewModel extends ViewModel {
       },
       isItemAddable: true,
       isItemRemovable: true,
-      localizedAddLabel: game.i18n.localize("ambersteel.settings.healthStates.add.label"),
+      localizedAddLabel: game.i18n.localize("system.settings.healthStates.add.label"),
     });
   }
 

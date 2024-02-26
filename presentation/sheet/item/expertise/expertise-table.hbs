@@ -5,7 +5,7 @@ cssClass: {undefined | String}
 <div id="{{viewModel.id}}">
   {{#> header3 showFancyFont=viewModel.showFancyFont cssClass="flex flex-row flex-middle" }}
     {{#> buttonToggleVisibility viewModel=viewModel.vmToggleExpansion1 fill=true cssClass="flex-grow" }}
-      <span>{{localize "ambersteel.character.skill.expertise.plural"}}</span>
+      <span>{{localize "system.character.skill.expertise.plural"}}</span>
       <div class="flex flex-center flex-grow">
         <i id="{{../viewModel.vmToggleExpansion1.id}}-icon" class="fas {{#if ../viewModel.isExpanded}}fa-angle-double-up{{else}}fa-angle-double-down{{/if}}"></i>
       </div>

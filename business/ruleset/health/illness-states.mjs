@@ -27,12 +27,12 @@ export class IllnessState {
 export const ILLNESS_STATES = {
   active: new IllnessState({
     name: "active",
-    localizableName: "ambersteel.character.health.illness.state.active.label",
+    localizableName: "system.character.health.illness.state.active.label",
     icon: "fas fa-virus"
   }),
   treated: new IllnessState({
     name: "treated",
-    localizableName: "ambersteel.character.health.illness.state.treated.label",
+    localizableName: "system.character.health.illness.state.treated.label",
     icon: "fas fa-mortar-pestle"
   }),
 };

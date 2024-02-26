@@ -1,12 +1,12 @@
 import should from 'should';
 import sinon from 'sinon';
 import 'should-sinon';
-import AmbersteelBaseItemSheet from '../../../../presentation/sheet/item/ambersteel-base-item-sheet.mjs';
+import GameSystemBaseItemSheet from '../../../../presentation/sheet/item/game-system-base-item-sheet.mjs';
 
-describe("AmbersteelBaseItemSheet", () => {
+describe("GameSystemBaseItemSheet", () => {
   before(() => {
     globalThis.game = {
-      ambersteel: {
+      strive: {
         viewModels: new Map(),
         viewStates: new Map(),
         enableViewModelCaching: false,
@@ -21,7 +21,7 @@ describe("AmbersteelBaseItemSheet", () => {
   describe("template", () => {
     it("throws error when not implemented", () => {
       // Given
-      const given = new AmbersteelBaseItemSheet();
+      const given = new GameSystemBaseItemSheet();
       const call = sinon.spy(() => { given.template; });
       // Then
       call.should.throw();
@@ -31,7 +31,7 @@ describe("AmbersteelBaseItemSheet", () => {
   describe("title", () => {
     it("throws error when not implemented", () => {
       // Given
-      const given = new AmbersteelBaseItemSheet();
+      const given = new GameSystemBaseItemSheet();
       const call = sinon.spy(() => { given.title; });
       // Then
       call.should.throw();
@@ -41,7 +41,7 @@ describe("AmbersteelBaseItemSheet", () => {
   describe("getViewModel", () => {
     it("returns new instance when enableViewModelCaching = false", () => {
       // Given
-      game.ambersteel.enableViewModelCaching = false;
+      game.strive.enableViewModelCaching = false;
 
       const givenContext = {
         isEditable: true,
@@ -53,7 +53,7 @@ describe("AmbersteelBaseItemSheet", () => {
         id: givenDocumentId,
       }
       
-      const given = new AmbersteelBaseItemSheet();
+      const given = new GameSystemBaseItemSheet();
 
       const spyUpdate = sinon.spy(() => {});
       const spyGetViewModel = sinon.spy(() => {
@@ -78,7 +78,7 @@ describe("AmbersteelBaseItemSheet", () => {
 
     it("returns new instance when enableViewModelCaching = true", () => {
       // Given
-      game.ambersteel.enableViewModelCaching = true;
+      game.strive.enableViewModelCaching = true;
 
       const givenContext = {
         isEditable: true,
@@ -90,7 +90,7 @@ describe("AmbersteelBaseItemSheet", () => {
         id: givenDocumentId,
       }
       
-      const given = new AmbersteelBaseItemSheet();
+      const given = new GameSystemBaseItemSheet();
 
       const spyUpdate = sinon.spy(() => {});
       const spyGetViewModel = sinon.spy(() => {

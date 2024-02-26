@@ -185,7 +185,7 @@ export default class SortableListViewModel extends ViewModel {
             thiz._moveUp(id);
           }
         },
-        localizedTooltip: game.i18n.localize("ambersteel.general.ordering.moveUp"),
+        localizedTooltip: game.i18n.localize("system.general.ordering.moveUp"),
       }),
       vmBtnMoveDown: new ButtonViewModel({
         parent: thiz,
@@ -199,7 +199,7 @@ export default class SortableListViewModel extends ViewModel {
             thiz._moveDown(id);
           }
         },
-        localizedTooltip: game.i18n.localize("ambersteel.general.ordering.moveDown"),
+        localizedTooltip: game.i18n.localize("system.general.ordering.moveDown"),
       }),
       listItemViewModel: itemViewModel,
     });

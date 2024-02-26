@@ -1,13 +1,13 @@
 /**
- * String partial `"systems/ambersteel"`. 
+ * String partial `"systems/strive"`. 
  * 
  * @type {String}
  * @constant
  */
-const basePath = "systems/ambersteel";
+const basePath = "systems/strive";
 
 /**
- * String partial `"systems/ambersteel/presentation"`. 
+ * String partial `"systems/strive/presentation"`. 
  * 
  * @type {String}
  * @constant
@@ -15,7 +15,7 @@ const basePath = "systems/ambersteel";
 const basePathPresentation = `${basePath}/presentation`;
 
 /**
- * String partial `"systems/ambersteel/presentation/component"`. 
+ * String partial `"systems/strive/presentation/component"`. 
  * 
  * @type {String}
  * @constant

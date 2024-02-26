@@ -1,13 +1,13 @@
-import AmbersteelBaseItemSheet from "../ambersteel-base-item-sheet.mjs";
+import GameSystemBaseItemSheet from "../game-system-base-item-sheet.mjs";
 import { ITEM_SHEET_SUBTYPE } from "../item-sheet-subtype.mjs";
 import ScarItemSheetViewModel from "./scar-item-sheet-viewmodel.mjs";
 
-export default class ScarItemSheet extends AmbersteelBaseItemSheet {
+export default class ScarItemSheet extends GameSystemBaseItemSheet {
   /** @override */
   get template() { return ScarItemSheetViewModel.TEMPLATE; }
 
   /** @override */
-  get title() { return game.i18n.localize("ambersteel.character.health.scar.singular"); }
+  get title() { return game.i18n.localize("system.character.health.scar.singular"); }
 
   /** @override */
   _getViewModel(context, document, sheet) {

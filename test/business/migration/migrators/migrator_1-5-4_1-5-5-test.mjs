@@ -333,7 +333,7 @@ describe("Migrator_1_5_4__1_5_5", () => {
       items: MigratorTestBase.createMockWorldCollection("Item"),
       journal: MigratorTestBase.createMockWorldCollection("Journal"),
       tables: MigratorTestBase.createMockWorldCollection("RollTable"),
-      ambersteel: {
+      strive: {
         logger: sinon.createStubInstance(BaseLoggingStrategy),
       },
     };
@@ -521,7 +521,7 @@ describe("Migrator_1_5_4__1_5_5", () => {
     }, { render: false });
 
     game.actors.get(actorIdNpcPostV10_2).update.should.not.have.been.called();
-    game.ambersteel.logger.logWarn.should.have.been.called();
+    game.strive.logger.logWarn.should.have.been.called();
     
     game.actors.get(actorIdPcPreV10_1).update.should.have.been.calledOnce();
     game.actors.get(actorIdPcPreV10_1).update.should.have.been.calledWith({
@@ -670,6 +670,6 @@ describe("Migrator_1_5_4__1_5_5", () => {
     }, { render: false });
 
     game.actors.get(actorIdPcPostV10_2).update.should.not.have.been.called();
-    game.ambersteel.logger.logWarn.should.have.been.calledTwice();
+    game.strive.logger.logWarn.should.have.been.calledTwice();
   });
 });

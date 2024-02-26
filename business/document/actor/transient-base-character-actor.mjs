@@ -17,7 +17,7 @@ import TransientBaseActor from './transient-base-actor.mjs';
 
 /**
  * Represents the base contract for a "specific" actor "sub-type" that 
- * represents a "character", in the way the Ambersteel rule set regards them. 
+ * represents a "character", in the way the rule set regards them. 
  * 
  * @extends TransientBaseActor
  * 
@@ -415,7 +415,7 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
    */
   async addAttributeProgress(outcomeType, attName = undefined, autoLevel = false, resetProgress = true) {
     if (outcomeType === undefined) {
-      game.ambersteel.logger.logWarn("outcomeType is undefined");
+      game.strive.logger.logWarn("outcomeType is undefined");
       return;
     }
     if (outcomeType === DICE_POOL_RESULT_TYPES.NONE) {
@@ -502,7 +502,7 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
         if (isDefined(slot.alottedId) === true) {
           const asset = this._allAssets.find(asset => asset.id === slot.alottedId);
           if (asset === undefined) {
-            game.ambersteel.logger.logWarn("NullReferenceException: equipped asset could not be found on actor");
+            game.strive.logger.logWarn("NullReferenceException: equipped asset could not be found on actor");
             slot.alottedId = null;
           } else {
             equipmentIds.push(slot.alottedId);
@@ -586,7 +586,7 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
         // in older versions, custom health states were defined as a string, instead of object. 
         definition = stateSettings.custom.find(it => (it.name ?? it) === entry.name);
         if (definition === undefined) {
-          game.ambersteel.logger.logWarn(`Failed to get health state definition '${entry.name}'`);
+          game.strive.logger.logWarn(`Failed to get health state definition '${entry.name}'`);
           continue;
         }
       }

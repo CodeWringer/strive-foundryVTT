@@ -1,6 +1,6 @@
 import { FOUNDRY_10_PIXI_VERSION, PIXI_VERSION } from "./pixi-globals.mjs";
 
-const BASE_PATH = "systems/ambersteel/presentation/image";
+const BASE_PATH = "systems/strive/presentation/image";
 
 /**
  * Constants of all the image texture urls for use with PixiJS.

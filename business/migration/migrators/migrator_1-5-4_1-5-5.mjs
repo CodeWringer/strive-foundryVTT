@@ -24,7 +24,7 @@ export default class Migrator_1_5_4__1_5_5 extends AbstractMigrator {
     if (this._updater === undefined) {
       this._updater = new DocumentUpdater({
         propertyUtility: PropertyUtility,
-        logger: game.ambersteel.logger,
+        logger: game.strive.logger,
       });
     }
     return this._updater;
@@ -98,7 +98,7 @@ export default class Migrator_1_5_4__1_5_5 extends AbstractMigrator {
             progress: progress,
           };
         } else {
-          game.ambersteel.logger.logWarn(`Skipping actor attribute migration for actor '${actor.name}' because of missing 'successes' and 'failures' field`);
+          game.strive.logger.logWarn(`Skipping actor attribute migration for actor '${actor.name}' because of missing 'successes' and 'failures' field`);
           migratable = false;
           break;
         }
@@ -134,7 +134,7 @@ export default class Migrator_1_5_4__1_5_5 extends AbstractMigrator {
     });
     if (throwingSkillFromPack === undefined) {
       // Try again. Perhaps the id changed?
-      game.ambersteel.logger.logWarn(`Id of "Throwing" skill "${throwingSkillId}" changed unexpectedly and can no longer be found!`);
+      game.strive.logger.logWarn(`Id of "Throwing" skill "${throwingSkillId}" changed unexpectedly and can no longer be found!`);
       throwingSkillFromPack = await this.fetcher.find({
         name: "Throwing",
         documentType: "Item",
@@ -146,7 +146,7 @@ export default class Migrator_1_5_4__1_5_5 extends AbstractMigrator {
     }
     if (throwingSkillFromPack === undefined) {
       // Cannot migrate skill!
-      game.ambersteel.logger.logWarn('"Throwing" skill cannot be migrated, as it is missing from the system compendium!');
+      game.strive.logger.logWarn('"Throwing" skill cannot be migrated, as it is missing from the system compendium!');
       return;
     }
 

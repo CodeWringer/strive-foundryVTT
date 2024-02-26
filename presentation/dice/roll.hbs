@@ -62,13 +62,13 @@ evaluatedObstacleForDisplay: {String}
       {{{evaluatedObstacleForDisplay}}}
     </div>
     <p>
-      {{localize "ambersteel.roll.obstacle.abbreviation"}}: {{evaluatedObstacle.positiveTotal}} + 1 = {{obstacle}}
+      {{localize "system.roll.obstacle.abbreviation"}}: {{evaluatedObstacle.positiveTotal}} + 1 = {{obstacle}}
     </p>
   </div>
   {{/if}}
   {{!-- Dice --}}
   <div class="dice-number">
-    {{localize "ambersteel.roll.numberOfDice"}}: {{numberOfDice}}
+    {{localize "system.roll.numberOfDice"}}: {{numberOfDice}}
   </div>
   {{#if diceComposition}}
     <div class="dice-composition">
@@ -86,29 +86,29 @@ evaluatedObstacleForDisplay: {String}
   <div class="dice-result-container">
     {{#if (eq outcomeType "SUCCESS")}}
       <div class="dice-result success">
-        {{localize "ambersteel.roll.success.label"}}!
+        {{localize "system.roll.success.label"}}!
       </div>
     {{/if}}
     {{#if (eq outcomeType "PARTIAL")}}
       <div class="dice-result partial">
-        {{localize "ambersteel.roll.partial.label"}}!
+        {{localize "system.roll.partial.label"}}!
       </div>
     {{/if}}
     {{#if (eq outcomeType "FAILURE")}}
       <div class="dice-result failure">
-        {{localize "ambersteel.roll.failure.label"}}!
+        {{localize "system.roll.failure.label"}}!
       </div>
     {{/if}}
     {{#if showBackFire}}
       <div class="dice-result failure flex flex-row flex-middle">
         <i class="fas fa-exclamation-triangle"></i>
-        <span class="margin-l-md">{{localize "ambersteel.roll.backFire.label"}}!</span>
+        <span class="margin-l-md">{{localize "system.roll.backFire.label"}}!</span>
       </div>
     {{/if}}
     <div class="dice-degree">
-      <span>{{localize "ambersteel.roll.positive.plural"}}: {{positives}},</span>
-      <span>{{localize "ambersteel.roll.negative.plural"}}: {{negatives}},</span>
-      <span>{{localize "ambersteel.roll.missing.plural"}}: {{missingDiceCount}}</span>
+      <span>{{localize "system.roll.positive.plural"}}: {{positives}},</span>
+      <span>{{localize "system.roll.negative.plural"}}: {{negatives}},</span>
+      <span>{{localize "system.roll.missing.plural"}}: {{missingDiceCount}}</span>
     </div>
   </div>
 </div>
