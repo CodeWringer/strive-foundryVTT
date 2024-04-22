@@ -198,7 +198,7 @@ export default class ActorSkillsViewModel extends ViewModel {
     this.vmSortInnate = new SortControlsViewModel({
       id: "vmSortInnate",
       parent: this,
-      definitions: this._getSkillSortingOptions("innate"),
+      definitions: this._getSkillSortingOptions(),
       onClick: async (_, definition, ascending) => {
         this._sortSkills(definition.id, ascending, this.vmInnateSkillList);
       },
@@ -206,7 +206,7 @@ export default class ActorSkillsViewModel extends ViewModel {
     this.vmSortLearning = new SortControlsViewModel({
       id: "vmSortLearning",
       parent: this,
-      definitions: this._getSkillSortingOptions("learning"),
+      definitions: this._getSkillSortingOptions(),
       onClick: async (_, definition, ascending) => {
         this._sortSkills(definition.id, ascending, this.vmLearningSkillList);
       },
@@ -214,7 +214,7 @@ export default class ActorSkillsViewModel extends ViewModel {
     this.vmSortKnown = new SortControlsViewModel({
       id: "vmSortKnown",
       parent: this,
-      definitions: this._getSkillSortingOptions("known"),
+      definitions: this._getSkillSortingOptions(),
       onClick: async (_, definition, ascending) => {
         this._sortSkills(definition.id, ascending, this.vmKnownSkillList);
       },
