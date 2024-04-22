@@ -102,7 +102,9 @@
         "moveByDragging": "Move by dragging"
       },
       "sort": {
-        "sortBy": "Sort by '%s'"
+        "sortBy": "Sort by '%s'",
+        "sortAscendingBy": "Sort ascending by '%s'",
+        "sortDescendingBy": "Sort descending by '%s'"
       },
       "tags": {
         "label": "Tags"
