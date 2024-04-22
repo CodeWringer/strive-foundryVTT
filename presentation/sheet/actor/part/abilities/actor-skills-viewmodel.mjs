@@ -195,8 +195,6 @@ export default class ActorSkillsViewModel extends ViewModel {
       }),
     });
     
-    this._sortStates 
-
     this.vmSortInnate = new SortControlsViewModel({
       id: "vmSortInnate",
       parent: this,
