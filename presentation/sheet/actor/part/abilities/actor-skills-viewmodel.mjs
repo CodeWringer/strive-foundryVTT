@@ -3,7 +3,7 @@ import * as StringUtils from "../../../../../business/util/string-utility.mjs"
 import { isDefined, validateOrThrow } from "../../../../../business/util/validation-utility.mjs"
 import ButtonAddViewModel from "../../../../component/button-add/button-add-viewmodel.mjs"
 import InputSearchTextViewModel from "../../../../component/input-search/input-search-viewmodel.mjs"
-import SortControlsViewModel, { SORTING_STATE, SortingDefinition } from "../../../../component/sort-controls/sort-controls-viewmodel.mjs"
+import SortControlsViewModel, { SortingDefinition } from "../../../../component/sort-controls/sort-controls-viewmodel.mjs"
 import DocumentListItemOrderDataSource from "../../../../component/sortable-list/document-list-item-order-datasource.mjs"
 import SortableListViewModel from "../../../../component/sortable-list/sortable-list-viewmodel.mjs"
 import { TEMPLATES } from "../../../../templatePreloader.mjs"
@@ -201,24 +201,24 @@ export default class ActorSkillsViewModel extends ViewModel {
       id: "vmSortInnate",
       parent: this,
       definitions: this._getSkillSortingDefinitions("innate"),
-      onClick: async (_, definition) => {
-        this._sortSkills(definition, this.vmInnateSkillList);
+      onClick: async (_, definition, ascending) => {
+        this._sortSkills(definition.id, ascending, this.vmInnateSkillList);
       },
     });
     this.vmSortLearning = new SortControlsViewModel({
       id: "vmSortLearning",
       parent: this,
       definitions: this._getSkillSortingDefinitions("learning"),
-      onClick: async (_, definition) => {
-        this._sortSkills(definition, this.vmLearningSkillList);
+      onClick: async (_, definition, ascending) => {
+        this._sortSkills(definition.id, ascending, this.vmLearningSkillList);
       },
     });
     this.vmSortKnown = new SortControlsViewModel({
       id: "vmSortKnown",
       parent: this,
       definitions: this._getSkillSortingDefinitions("known"),
-      onClick: async (_, definition) => {
-        this._sortSkills(definition, this.vmKnownSkillList);
+      onClick: async (_, definition, ascending) => {
+        this._sortSkills(definition.id, ascending, this.vmKnownSkillList);
       },
     });
   }
@@ -414,23 +414,25 @@ export default class ActorSkillsViewModel extends ViewModel {
    * Sorts in-place the given list of skill list item view models, based on the given 
    * sorting defintion. 
    * 
-   * @param {SortingDefinition} sortingDefinition 
-   * @param {Array<SkillListItemViewModel>} list 
+   * @param {String} sortingDefinitionId ID of the sorting definition.  
+   * @param {Boolean} ascending If true, will sort in ascending fashion, otherwise will sort in 
+   * descending fashion. 
+   * @param {Array<SkillListItemViewModel>} list The list to sort. 
    * 
    * @private
    */
-  _sortSkills(sortingDefinition, list) {
+  _sortSkills(sortingDefinitionId, ascending, list) {
     list.sort((a, b) => {
-      if (sortingDefinition.id == ActorSkillsViewModel.ID_SORT_BY_LEVEL) {
-        if (sortingDefinition.state === SORTING_STATE.ASCENDING) {
+      if (sortingDefinitionId == ActorSkillsViewModel.ID_SORT_BY_LEVEL) {
+        if (ascending === true) {
           return this._compareLevel(false, a, b);
-        } else if (sortingDefinition.state === SORTING_STATE.DESCENDING) {
+        } else if (ascending === false) {
           return this._compareLevel(true, a, b);
         }
-      } else if (sortingDefinition.id == ActorSkillsViewModel.ID_SORT_BY_NAME) {
-        if (sortingDefinition.state === SORTING_STATE.ASCENDING) {
+      } else if (sortingDefinitionId == ActorSkillsViewModel.ID_SORT_BY_NAME) {
+        if (ascending === true) {
           return a.document.name.localeCompare(b.document.name);
-        } else if (sortingDefinition.state === SORTING_STATE.DESCENDING) {
+        } else if (ascending === false) {
           return b.document.name.localeCompare(a.document.name);
         }
       }
@@ -438,26 +440,28 @@ export default class ActorSkillsViewModel extends ViewModel {
   }
 
   /**
-   * 
-   * @param {String} key 
-   * 
    * @returns {Array<SortingDefinition>}
    * 
    * @private
    */
-  _getSkillSortingDefinitions(key) {
-    const localizedSortByLabel = game.i18n.localize("system.general.sort.sortBy");
+  _getSkillSortingDefinitions() {
+    const localizedSortAscendingByLabel = game.i18n.localize("system.general.sort.sortAscendingBy");
+    const localizedSortDescendingByLabel = game.i18n.localize("system.general.sort.sortDescendingBy");
+
     const definitions = [
       new SortingDefinition({
         id: ActorSkillsViewModel.ID_SORT_BY_LEVEL,
-        iconHtml: '<i class="ico ico-level-solid dark"></i>',
-        localizedLabel: game.i18n.localize("system.character.advancement.level"),
-        localizedToolTip: StringUtils.format(localizedSortByLabel, game.i18n.localize("system.character.advancement.level")),
+        iconHtml: '<i class="ico ico-level-solid dark pad-r-sm"></i>',
+        localizedToolTip: game.i18n.localize("system.character.advancement.level"),
+        localizedToolTipSortAscending: StringUtils.format(localizedSortAscendingByLabel, game.i18n.localize("system.character.advancement.level")),
+        localizedToolTipSortDescending: StringUtils.format(localizedSortDescendingByLabel, game.i18n.localize("system.character.advancement.level")),
       }),
       new SortingDefinition({
         id: ActorSkillsViewModel.ID_SORT_BY_NAME,
-        localizedLabel: game.i18n.localize("system.general.name.label"),
-        localizedToolTip: StringUtils.format(localizedSortByLabel, game.i18n.localize("system.general.name.label")),
+        iconHtml: '<i class="ico ico-tags-solid dark pad-r-sm"></i>',
+        localizedToolTip: game.i18n.localize("system.general.name.label"),
+        localizedToolTipSortAscending: StringUtils.format(localizedSortAscendingByLabel, game.i18n.localize("system.general.name.label")),
+        localizedToolTipSortDescending: StringUtils.format(localizedSortDescendingByLabel, game.i18n.localize("system.general.name.label")),
       }),
     ];
 
