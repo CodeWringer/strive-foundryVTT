@@ -4,7 +4,7 @@ import GameSystemSettings from "./game-system-settings.mjs";
 import { SettingScopes } from "./setting-scopes.mjs";
 
 /**
- * Defines the settings specific to a user. 
+ * Defines the settings specific to a world. 
  */
 export default class GameSystemWorldSettings extends GameSystemSettings {
   /**
