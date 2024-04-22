@@ -1,0 +1,12 @@
+{{!--
+viewModel: SortControlsViewModel
+--}}
+<div id="{{viewModel.id}}" class="flex flex-row auto-margin-h sheet-block">
+  {{#each viewModel.presentableViewModels as |vm|}}
+    <div class="sheet-block">
+      {{#> button viewModel=vm.viewModel}}
+        <span id="{{vm.viewModel.id}}-symbol" class="flex flex-center margin-l-md">{{{vm.symbol}}}</span>
+      {{/button}}
+    </div>
+  {{/each}}
+</div>

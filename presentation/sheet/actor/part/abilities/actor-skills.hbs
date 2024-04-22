@@ -8,6 +8,9 @@ cssClass: {undefined | String}
   {{#if viewModel.hideInnateSkills}}<div class="hidden">{{/if}}
     {{#> header1 showFancyFont=viewModel.showFancyFont cssClass="flex flex-row"}}
       <span class="flex-grow">{{localize "system.character.skill.innate.label"}}</span>
+      {{#with viewModel.sortControlsTemplate as |template|}}
+        {{> (template) viewModel=../viewModel.vmSortInnate }}
+      {{/with}}
     {{/header1}}
     {{> sortableList viewModel=viewModel.vmInnateSkillList prominentItemStyling=true }}
   {{#if viewModel.hideInnateSkills}}</div>{{/if}}
@@ -15,12 +18,18 @@ cssClass: {undefined | String}
   {{#if viewModel.hideLearningSkills}}<div class="hidden">{{/if}}
     {{#> header1 showFancyFont=viewModel.showFancyFont cssClass="flex flex-row"}}
       <span class="flex-grow">{{localize "system.character.skill.learning.label"}}</span>
+      {{#with viewModel.sortControlsTemplate as |template|}}
+        {{> (template) viewModel=../viewModel.vmSortLearning }}
+      {{/with}}
     {{/header1}}
     {{> sortableList viewModel=viewModel.vmLearningSkillList prominentItemStyling=true }}
   {{#if viewModel.hideLearningSkills}}</div>{{/if}}
   {{!-- Known Skills --}}
   {{#> header1 showFancyFont=viewModel.showFancyFont cssClass="flex flex-row"}}
     <span class="flex-grow">{{localize "system.character.skill.known.label"}}</span>
+    {{#with viewModel.sortControlsTemplate as |template|}}
+      {{> (template) viewModel=../viewModel.vmSortKnown }}
+    {{/with}}
   {{/header1}}
   {{> sortableList viewModel=viewModel.vmKnownSkillList prominentItemStyling=true }}
 </section>

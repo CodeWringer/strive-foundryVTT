@@ -1,7 +1,9 @@
 import { SEARCH_MODES, Search, SearchItem } from "../../../../../business/search/search.mjs"
+import * as StringUtils from "../../../../../business/util/string-utility.mjs"
 import { isDefined, validateOrThrow } from "../../../../../business/util/validation-utility.mjs"
 import ButtonAddViewModel from "../../../../component/button-add/button-add-viewmodel.mjs"
 import InputSearchTextViewModel from "../../../../component/input-search/input-search-viewmodel.mjs"
+import SortControlsViewModel, { SORTING_STATE, SortingDefinition } from "../../../../component/sort-controls/sort-controls-viewmodel.mjs"
 import DocumentListItemOrderDataSource from "../../../../component/sortable-list/document-list-item-order-datasource.mjs"
 import SortableListViewModel from "../../../../component/sortable-list/sortable-list-viewmodel.mjs"
 import { TEMPLATES } from "../../../../templatePreloader.mjs"
@@ -11,6 +13,22 @@ import SkillListItemViewModel from "../../../item/skill/skill-list-item-viewmode
 export default class ActorSkillsViewModel extends ViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.ACTOR_SKILLS; }
+
+  /**
+   * Returns the sorting definition id to sort by level. 
+   * 
+   * @readonly
+   * @static
+   */
+  static get ID_SORT_BY_LEVEL() { return "level"; };
+
+  /**
+   * Returns the sorting definition id to sort by name. 
+   * 
+   * @readonly
+   * @static
+   */
+  static get ID_SORT_BY_NAME() { return "name"; };
 
   /** @override */
   get entityId() { return this.document.id; }
@@ -30,6 +48,12 @@ export default class ActorSkillsViewModel extends ViewModel {
    * @readonly
    */
   get hideLearningSkills() { return this.document.progressionVisible === false; }
+  
+  /**
+   * @type {String}
+   * @readonly
+   */
+  get sortControlsTemplate() { return SortControlsViewModel.TEMPLATE; }
 
   /**
    * @type {String}
@@ -169,6 +193,33 @@ export default class ActorSkillsViewModel extends ViewModel {
         },
         localizedType: game.i18n.localize("system.character.skill.known.singular"),
       }),
+    });
+    
+    this._sortStates 
+
+    this.vmSortInnate = new SortControlsViewModel({
+      id: "vmSortInnate",
+      parent: this,
+      definitions: this._getSkillSortingDefinitions("innate"),
+      onClick: async (_, definition) => {
+        this._sortSkills(definition, this.vmInnateSkillList);
+      },
+    });
+    this.vmSortLearning = new SortControlsViewModel({
+      id: "vmSortLearning",
+      parent: this,
+      definitions: this._getSkillSortingDefinitions("learning"),
+      onClick: async (_, definition) => {
+        this._sortSkills(definition, this.vmLearningSkillList);
+      },
+    });
+    this.vmSortKnown = new SortControlsViewModel({
+      id: "vmSortKnown",
+      parent: this,
+      definitions: this._getSkillSortingDefinitions("known"),
+      onClick: async (_, definition) => {
+        this._sortSkills(definition, this.vmKnownSkillList);
+      },
     });
   }
 
@@ -324,5 +375,92 @@ export default class ActorSkillsViewModel extends ViewModel {
         $(element).removeClass("hidden");
       }
     }
+  }
+
+  /**
+   * Compares the raw level of two given skill list item view models' underlying `TransientSkill` and returns 
+   * a number usable in a sorting function. 
+   * 
+   * @param {Boolean} descending If `true`, will return results suitable for sorting in a descending fashion, 
+   * otherwise, returns results suitable for sorting in an ascending fashion. 
+   * @param {SkillListItemViewModel} a A skill list item view model instance. 
+   * @param {SkillListItemViewModel} b Another skill list item view model instance. 
+   * 
+   * @returns {Number} `-1` | `0` | `1`
+   * 
+   * @private
+   */
+  _compareLevel(descending = false, a, b) {
+    if (descending === true) {
+      if (a.document.level < b.document.level) {
+        return 1;
+      } else if (a.document.level > b.document.level) {
+        return -1;
+      } else {
+        return 0;
+      }
+    } else {
+      if (a.document.level > b.document.level) {
+        return 1;
+      } else if (a.document.level < b.document.level) {
+        return -1;
+      } else {
+        return 0;
+      }
+    }
+  }
+
+  /**
+   * Sorts in-place the given list of skill list item view models, based on the given 
+   * sorting defintion. 
+   * 
+   * @param {SortingDefinition} sortingDefinition 
+   * @param {Array<SkillListItemViewModel>} list 
+   * 
+   * @private
+   */
+  _sortSkills(sortingDefinition, list) {
+    list.sort((a, b) => {
+      if (sortingDefinition.id == ActorSkillsViewModel.ID_SORT_BY_LEVEL) {
+        if (sortingDefinition.state === SORTING_STATE.ASCENDING) {
+          return this._compareLevel(false, a, b);
+        } else if (sortingDefinition.state === SORTING_STATE.DESCENDING) {
+          return this._compareLevel(true, a, b);
+        }
+      } else if (sortingDefinition.id == ActorSkillsViewModel.ID_SORT_BY_NAME) {
+        if (sortingDefinition.state === SORTING_STATE.ASCENDING) {
+          return a.document.name.localeCompare(b.document.name);
+        } else if (sortingDefinition.state === SORTING_STATE.DESCENDING) {
+          return b.document.name.localeCompare(a.document.name);
+        }
+      }
+    });
+  }
+
+  /**
+   * 
+   * @param {String} key 
+   * 
+   * @returns {Array<SortingDefinition>}
+   * 
+   * @private
+   */
+  _getSkillSortingDefinitions(key) {
+    const localizedSortByLabel = game.i18n.localize("system.general.sort.sortBy");
+    const definitions = [
+      new SortingDefinition({
+        id: ActorSkillsViewModel.ID_SORT_BY_LEVEL,
+        iconHtml: '<i class="ico ico-level-solid dark"></i>',
+        localizedLabel: game.i18n.localize("system.character.advancement.level"),
+        localizedToolTip: StringUtils.format(localizedSortByLabel, game.i18n.localize("system.character.advancement.level")),
+      }),
+      new SortingDefinition({
+        id: ActorSkillsViewModel.ID_SORT_BY_NAME,
+        localizedLabel: game.i18n.localize("system.general.name.label"),
+        localizedToolTip: StringUtils.format(localizedSortByLabel, game.i18n.localize("system.general.name.label")),
+      }),
+    ];
+
+    return definitions;
   }
 }

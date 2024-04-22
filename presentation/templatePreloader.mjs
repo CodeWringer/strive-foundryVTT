@@ -51,6 +51,7 @@ export const TEMPLATES = {
   COMPONENT_BUTTON_CHECKBOX: `${basePathComponent}/button-checkbox/button-checkbox.hbs`,
   // Composite
   COMPONENT_SORTABLE_LIST: `${basePathComponent}/sortable-list/sortable-list.hbs`,
+  COMPONENT_SORT_CONTROLS: `${basePathComponent}/sort-controls/sort-controls.hbs`,
   COMPONENT_SIMPLE_LIST: `${basePathComponent}/simple-list/simple-list.hbs`,
   COMPONENT_SIMPLE_LIST_ITEM: `${basePathComponent}/simple-list/simple-list-item.hbs`,
   DICE_ROLL_LIST: `${basePathComponent}/dice-roll-list/dice-roll-list.hbs`,
