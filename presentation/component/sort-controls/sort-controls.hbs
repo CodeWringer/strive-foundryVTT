@@ -1,12 +1,18 @@
 {{!--
 viewModel: SortControlsViewModel
+cssClass: String | undefined
 --}}
-<div id="{{viewModel.id}}" class="flex flex-row auto-margin-h sheet-block">
-  {{#each viewModel.presentableViewModels as |vm|}}
-    <div class="sheet-block">
-      {{#> button viewModel=vm.viewModel}}
-        <span id="{{vm.viewModel.id}}-symbol" class="flex flex-center margin-l-md">{{{vm.symbol}}}</span>
-      {{/button}}
-    </div>
+<span id="{{viewModel.id}}" class="flex flex-row auto-margin-h{{#if cssClass}} {{cssClass}}{{/if}}">
+  {{#each viewModel.definitionViewModels as |vm|}}
+    <span class="flex flex-row flex-middle auto-margin-h sheet-block">
+      {{#if definition.iconHtml}}
+      <span class="flex flex-center"{{#if definition.localizedToolTip}} title="{{definition.localizedToolTip}}"{{/if}}>{{{definition.iconHtml}}}</span>
+      {{/if}}
+      {{#if definition.localizedLabel}}<span>{{definition.localizedLabel}}</span>{{/if}}
+      <span class="flex flex-row flex-middle border-solid-l-sm">
+        {{#> button viewModel=vm.vmSortAscending cssClass="override"}}{{/button}}
+        {{#> button viewModel=vm.vmSortDescending cssClass="override"}}{{/button}}
+      </span>
+    </span>
   {{/each}}
-</div>
+</span>
