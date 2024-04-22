@@ -31,6 +31,11 @@
   &.fill {
     display: block;
   }
+
+  &.override {
+    min-width: unset;
+    min-height: unset;
+  }
 }
 
 button.button.spaced {

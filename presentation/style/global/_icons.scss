@@ -7,7 +7,7 @@ $size: 26px;
   font-size: $size;
 
   &.dark {
-    filter: brightness(0);
+    filter: brightness(0.3);
   }
   
   &.interactible {
@@ -294,5 +294,15 @@ i.stacked {
 
 .ico-self-patch-up-solid {
   background: url("/systems/strive/presentation/image/self-patch-up-solid.svg");
+  background-size: cover;
+}
+
+.ico-ascending-solid {
+  background: url("/systems/strive/presentation/image/ascending-solid.svg");
+  background-size: cover;
+}
+
+.ico-descending-solid {
+  background: url("/systems/strive/presentation/image/descending-solid.svg");
   background-size: cover;
 }
