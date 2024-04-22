@@ -18,12 +18,12 @@ export default class SortControlsViewModel extends ViewModel {
    * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
    * @param {Boolean | undefined} args.isEditable Optional. If true, input(s) will be in edit mode. If false, input(s) will be in read-only mode.
    * 
-   * @param {Array<SortingDefinition> | undefined} args.definitions A list of sortable property definitions.  
+   * @param {Array<SortingOption> | undefined} args.definitions A list of sortable property definitions.  
    * @param {Function | undefined} args.onClick Asynchronous callback that is invoked when a sort button is clicked. 
    * Does **not** perform any sorting! That task is delegated to the user of this class! 
    * Arguments: 
    * * `event: Event`
-   * * `definition: SortingDefinition`
+   * * `definition: SortingOption`
    * * `ascending: Boolean` - If true, the user clicked the button to sort in ascending fashion. 
    */
   constructor(args = {}) {
@@ -68,7 +68,7 @@ export default class SortControlsViewModel extends ViewModel {
  * @property {String | undefined} localizedToolTipSortAscending A localized tooltip for the button to sort ascending. 
  * @property {String | undefined} localizedToolTipSortDescending A localized tooltip for the button to sort descending. 
  */
-export class SortingDefinition {
+export class SortingOption {
   /**
    * @param {Object} args 
    * @param {String} args.id An ID by which to identify this definition. 
