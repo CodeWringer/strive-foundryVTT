@@ -85,7 +85,12 @@ cssClass: {undefined | String}
     {{/with}}
   </div>
   {{!-- Injuries --}}
-  {{#> header1 showFancyFont=viewModel.showFancyFont}}{{localize "system.character.health.injury.plural"}}{{/header1}}
+  {{#> header1 showFancyFont=viewModel.showFancyFont}}
+    <span>{{localize "system.character.health.injury.plural"}}</span>
+    {{#with viewModel.sortControlsTemplate as |template|}}
+      {{> (template) viewModel=../viewModel.vmSortInjuries cssClass="font-size-default" }}
+    {{/with}}
+  {{/header1}}
   <div class="grid-2col grid-gap-md margin-b-md">
     <div class="sheet-block">
       <div class="flex flex-row">
@@ -131,7 +136,12 @@ cssClass: {undefined | String}
   </div>
   {{> sortableList viewModel=viewModel.vmInjuryList prominentItemStyling=true }}
   {{!-- Illnesses --}}
-  {{#> header1 showFancyFont=viewModel.showFancyFont}}{{localize "system.character.health.illness.plural"}}{{/header1}}
+  {{#> header1 showFancyFont=viewModel.showFancyFont}}
+    <span>{{localize "system.character.health.illness.plural"}}</span>
+    {{#with viewModel.sortControlsTemplate as |template|}}
+      {{> (template) viewModel=../viewModel.vmSortIllnesses cssClass="font-size-default" }}
+    {{/with}}
+  {{/header1}}
   <div class="grid-2col grid-gap-md margin-b-md">
     <div></div>
     <div class="sheet-block">
@@ -147,7 +157,12 @@ cssClass: {undefined | String}
   </div>
   {{> sortableList viewModel=viewModel.vmIllnessList prominentItemStyling=true }}
   {{!-- Mutations --}}
-  {{#> header1 showFancyFont=viewModel.showFancyFont}}{{localize "system.character.health.mutation.plural"}}{{/header1}}
+  {{#> header1 showFancyFont=viewModel.showFancyFont}}
+    <span>{{localize "system.character.health.mutation.plural"}}</span>
+    {{#with viewModel.sortControlsTemplate as |template|}}
+      {{> (template) viewModel=../viewModel.vmSortMutations cssClass="font-size-default" }}
+    {{/with}}
+  {{/header1}}
   <div class="grid-2col grid-gap-md margin-b-md">
     <div></div>
     <div class="sheet-block">
@@ -163,7 +178,12 @@ cssClass: {undefined | String}
   </div>
   {{> sortableList viewModel=viewModel.vmMutationList prominentItemStyling=true }}
   {{!-- Scars --}}
-  {{#> header1 showFancyFont=viewModel.showFancyFont}}{{localize "system.character.health.scar.plural"}}{{/header1}}
+  {{#> header1 showFancyFont=viewModel.showFancyFont}}
+    <span>{{localize "system.character.health.scar.plural"}}</span>
+    {{#with viewModel.sortControlsTemplate as |template|}}
+      {{> (template) viewModel=../viewModel.vmSortScars cssClass="font-size-default" }}
+    {{/with}}
+  {{/header1}}
   <div class="grid-2col grid-gap-md margin-b-md">
     <div></div>
     <div class="sheet-block">

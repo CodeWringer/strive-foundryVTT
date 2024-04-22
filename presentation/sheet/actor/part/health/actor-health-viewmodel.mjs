@@ -1,8 +1,10 @@
+import { INJURY_STATES } from "../../../../../business/ruleset/health/injury-states.mjs"
 import Ruleset from "../../../../../business/ruleset/ruleset.mjs"
 import { validateOrThrow } from "../../../../../business/util/validation-utility.mjs"
 import ButtonAddViewModel from "../../../../component/button-add/button-add-viewmodel.mjs"
 import InfoBubble, { InfoBubbleAutoHidingTypes, InfoBubbleAutoShowingTypes } from "../../../../component/info-bubble/info-bubble.mjs"
 import InputNumberSpinnerViewModel from "../../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs"
+import SortControlsViewModel, { SortingOption } from "../../../../component/sort-controls/sort-controls-viewmodel.mjs"
 import DocumentListItemOrderDataSource from "../../../../component/sortable-list/document-list-item-order-datasource.mjs"
 import SortableListViewModel from "../../../../component/sortable-list/sortable-list-viewmodel.mjs"
 import { TEMPLATES } from "../../../../templatePreloader.mjs"
@@ -19,6 +21,22 @@ import ActorHealthStatesViewModel from "./actor-health-states-viewmodel.mjs"
 export default class ActorHealthViewModel extends ViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.ACTOR_HEALTH; }
+
+  /**
+   * Returns the sorting definition id to sort by treatment state. 
+   * 
+   * @readonly
+   * @private
+   */
+  get idSortByTreatmentState() { return "treatmentState"; };
+
+  /**
+   * Returns the sorting definition id to sort by name. 
+   * 
+   * @readonly
+   * @private
+   */
+  get idSortByName() { return "name"; };
 
   /** @override */
   get entityId() { return this.document.id; }
@@ -70,6 +88,12 @@ export default class ActorHealthViewModel extends ViewModel {
    * @readonly
    */
   get maxInjuryCount() { return this.document.health.maxInjuries; }
+
+  /**
+   * @type {String}
+   * @readonly
+   */
+  get sortControlsTemplate() { return SortControlsViewModel.TEMPLATE; }
 
   /**
    * @type {Array<IllnessListItemViewModel>}
@@ -271,6 +295,42 @@ export default class ActorHealthViewModel extends ViewModel {
         localizedType: game.i18n.localize("system.character.health.scar.singular"),
       }),
     });
+
+    this.vmSortInjuries = new SortControlsViewModel({
+      id: "vmSortInjuries",
+      parent: this,
+      definitions: this._getInjurySortingOptions(),
+      onClick: async (_, definition, ascending) => {
+        this._sortInjuries(definition.id, ascending, this.vmInjuryList);
+      },
+    });
+
+    this.vmSortIllnesses = new SortControlsViewModel({
+      id: "vmSortIllnesses",
+      parent: this,
+      definitions: this._getIllnessSortingOptions(),
+      onClick: async (_, definition, ascending) => {
+        this._sortIllnesses(definition.id, ascending, this.vmIllnessList);
+      },
+    });
+
+    this.vmSortMutations = new SortControlsViewModel({
+      id: "vmSortMutations",
+      parent: this,
+      definitions: this._getMutationSortingOptions(),
+      onClick: async (_, definition, ascending) => {
+        this._sortMutations(definition.id, ascending, this.vmMutationList);
+      },
+    });
+
+    this.vmSortScars = new SortControlsViewModel({
+      id: "vmSortScars",
+      parent: this,
+      definitions: this._getScarSortingOptions(),
+      onClick: async (_, definition, ascending) => {
+        this._sortScars(definition.id, ascending, this.vmScarList);
+      },
+    });
   }
   
   /** @override */
@@ -401,5 +461,135 @@ export default class ActorHealthViewModel extends ViewModel {
       this.scars,
       (args) => { return new ScarListItemViewModel(args); }
     );
+  }
+  
+  /**
+   * Compares the raw level of two given injury/illness list item view models' underlying `TransientDocument` and returns 
+   * a number usable in a sorting function. 
+   * 
+   * @param {Boolean} descending If `true`, will return results suitable for sorting in a descending fashion, 
+   * otherwise, returns results suitable for sorting in an ascending fashion. 
+   * @param {InjuryListItemViewModel | IllnessListItemViewModel} a An list item view model instance. 
+   * @param {InjuryListItemViewModel | IllnessListItemViewModel} b Another list item view model instance. 
+   * 
+   * @returns {Number} `-1` | `0` | `1`
+   * 
+   * @private
+   */
+  _compareTreatment(descending = false, a, b) {
+    let r = 0;
+    if (a.document.state === INJURY_STATES.active.name && b.document.state !== INJURY_STATES.active.name) {
+      r = -1;
+    } else if (a.document.state === INJURY_STATES.patchedUp.name && b.document.state === INJURY_STATES.active.name) {
+      r = 1;
+    } else if (a.document.state === INJURY_STATES.patchedUp.name && b.document.state === INJURY_STATES.treated.name) {
+      r = -1;
+    } else if (a.document.state === INJURY_STATES.treated.name && b.document.state !== INJURY_STATES.treated.name) {
+      r = 1;
+    }
+    if (descending) {
+      return r * -1;
+    } else {
+      return r;
+    }
+  }
+
+  /**
+   * Sorts in-place the given list of injury list item view models, based on the given 
+   * sorting defintion. 
+   * 
+   * @param {String} sortingDefinitionId ID of the sorting definition.  
+   * @param {Boolean} ascending If true, will sort in ascending fashion, otherwise will sort in 
+   * descending fashion. 
+   * @param {Array<InjuryListItemViewModel>} list The list to sort. 
+   * 
+   * @private
+   */
+  _sortInjuries(sortingDefinitionId, ascending, list) {
+    list.sort((a, b) => {
+      if (sortingDefinitionId == ActorHealthViewModel.ID_SORT_BY_LEVEL) {
+        if (ascending === true) {
+          return this._compareTreatment(false, a, b);
+        } else if (ascending === false) {
+          return this._compareTreatment(true, a, b);
+        }
+      } else if (sortingDefinitionId == ActorHealthViewModel.ID_SORT_BY_NAME) {
+        if (ascending === true) {
+          return a.document.name.localeCompare(b.document.name);
+        } else if (ascending === false) {
+          return b.document.name.localeCompare(a.document.name);
+        }
+      }
+    });
+  }
+
+  /**
+   * @returns {Array<SortingOption>}
+   * 
+   * @private
+   */
+  _getInjurySortingOptions() {
+    return [
+      new SortingOption({
+        id: this.idSortByName,
+        iconHtml: '<i class="ico ico-tags-solid dark pad-r-sm"></i>',
+        localizedToolTip: game.i18n.localize("system.general.name.label"),
+      }),
+      new SortingOption({
+        id: this.idSortByTreatmentState,
+        iconHtml: '<i class="fas fa-mortar-pestle pad-r-sm"></i>',
+        localizedToolTip: game.i18n.localize("system.character.health.treatment"),
+      }),
+    ];
+  }
+
+  /**
+   * @returns {Array<SortingOption>}
+   * 
+   * @private
+   */
+  _getIllnessSortingOptions() {
+    return [
+      new SortingOption({
+        id: this.idSortByName,
+        iconHtml: '<i class="ico ico-tags-solid dark pad-r-sm"></i>',
+        localizedToolTip: game.i18n.localize("system.general.name.label"),
+      }),
+      new SortingOption({
+        id: this.idSortByTreatmentState,
+        iconHtml: '<i class="fas fa-mortar-pestle pad-r-sm"></i>',
+        localizedToolTip: game.i18n.localize("system.character.health.treatment"),
+      }),
+    ];
+  }
+
+  /**
+   * @returns {Array<SortingOption>}
+   * 
+   * @private
+   */
+  _getMutationSortingOptions() {
+    return [
+      new SortingOption({
+        id: this.idSortByName,
+        iconHtml: '<i class="ico ico-tags-solid dark pad-r-sm"></i>',
+        localizedToolTip: game.i18n.localize("system.general.name.label"),
+      }),
+    ];
+  }
+
+  /**
+   * @returns {Array<SortingOption>}
+   * 
+   * @private
+   */
+  _getScarSortingOptions() {
+    return [
+      new SortingOption({
+        id: this.idSortByName,
+        iconHtml: '<i class="ico ico-tags-solid dark pad-r-sm"></i>',
+        localizedToolTip: game.i18n.localize("system.general.name.label"),
+      }),
+    ];
   }
 }

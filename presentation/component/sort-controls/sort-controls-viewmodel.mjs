@@ -1,4 +1,5 @@
-import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
+import { format } from "../../../business/util/string-utility.mjs";
+import { isDefined, validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import { TEMPLATES } from "../../templatePreloader.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
@@ -66,7 +67,9 @@ export default class SortControlsViewModel extends ViewModel {
  * @property {String | undefined} localizedLabel A localized label. 
  * @property {String | undefined} localizedToolTip A localized tooltip for the icon. 
  * @property {String | undefined} localizedToolTipSortAscending A localized tooltip for the button to sort ascending. 
+ * * Acts as an override. If undefined, uses the `localizedToolTip` in a composite string. 
  * @property {String | undefined} localizedToolTipSortDescending A localized tooltip for the button to sort descending. 
+ * * Acts as an override. If undefined, uses the `localizedToolTip` in a composite string. 
  */
 export class SortingOption {
   /**
@@ -76,7 +79,9 @@ export class SortingOption {
    * @param {String | undefined} args.localizedLabel A localized label. 
    * @param {String | undefined} args.localizedToolTip A localized tooltip for the icon. 
    * @param {String | undefined} args.localizedToolTipSortAscending A localized tooltip for the button to sort ascending. 
+   * * Acts as an override. If undefined, uses the `localizedToolTip` in a composite string. 
    * @param {String | undefined} args.localizedToolTipSortDescending A localized tooltip for the button to sort descending. 
+   * * Acts as an override. If undefined, uses the `localizedToolTip` in a composite string. 
    */
   constructor(args = {}) {
     validateOrThrow(args, ["id"]);
@@ -85,7 +90,17 @@ export class SortingOption {
     this.iconHtml = args.iconHtml;
     this.localizedLabel = args.localizedLabel;
     this.localizedToolTip = args.localizedToolTip;
-    this.localizedToolTipSortAscending = args.localizedToolTipSortAscending;
-    this.localizedToolTipSortDescending = args.localizedToolTipSortDescending;
+
+    if (isDefined(args.localizedToolTipSortAscending)) {
+      this.localizedToolTipSortAscending = args.localizedToolTipSortAscending;
+    } else if (isDefined(args.localizedToolTip)) {
+      this.localizedToolTipSortAscending = format(game.i18n.localize("system.general.sort.sortAscendingBy"), args.localizedToolTip);
+    }
+
+    if (isDefined(args.localizedToolTipSortDescending)) {
+      this.localizedToolTipSortDescending = args.localizedToolTipSortDescending;
+    } else if (isDefined(args.localizedToolTip)) {
+      this.localizedToolTipSortDescending = format(game.i18n.localize("system.general.sort.sortDescendingBy"), args.localizedToolTip);
+    }
   }
 }

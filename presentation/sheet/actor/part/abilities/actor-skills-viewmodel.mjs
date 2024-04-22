@@ -1,5 +1,4 @@
 import { SEARCH_MODES, Search, SearchItem } from "../../../../../business/search/search.mjs"
-import * as StringUtils from "../../../../../business/util/string-utility.mjs"
 import { isDefined, validateOrThrow } from "../../../../../business/util/validation-utility.mjs"
 import ButtonAddViewModel from "../../../../component/button-add/button-add-viewmodel.mjs"
 import InputSearchTextViewModel from "../../../../component/input-search/input-search-viewmodel.mjs"
@@ -18,17 +17,17 @@ export default class ActorSkillsViewModel extends ViewModel {
    * Returns the sorting definition id to sort by level. 
    * 
    * @readonly
-   * @static
+   * @private
    */
-  static get ID_SORT_BY_LEVEL() { return "level"; };
+  get idSortByLevel() { return "level"; };
 
   /**
    * Returns the sorting definition id to sort by name. 
    * 
    * @readonly
-   * @static
+   * @private
    */
-  static get ID_SORT_BY_NAME() { return "name"; };
+  get idSortByName() { return "name"; };
 
   /** @override */
   get entityId() { return this.document.id; }
@@ -389,22 +388,16 @@ export default class ActorSkillsViewModel extends ViewModel {
    * @private
    */
   _compareLevel(descending = false, a, b) {
-    if (descending === true) {
-      if (a.document.level < b.document.level) {
-        return 1;
-      } else if (a.document.level > b.document.level) {
-        return -1;
-      } else {
-        return 0;
-      }
+    let r = 0;
+    if (a.document.level < b.document.level) {
+      r = -1;
+    } else if (a.document.level > b.document.level) {
+      r = 1;
+    }
+    if (descending) {
+      return r * -1;
     } else {
-      if (a.document.level > b.document.level) {
-        return 1;
-      } else if (a.document.level < b.document.level) {
-        return -1;
-      } else {
-        return 0;
-      }
+      return r;
     }
   }
 
@@ -421,13 +414,13 @@ export default class ActorSkillsViewModel extends ViewModel {
    */
   _sortSkills(sortingOptionId, ascending, list) {
     list.sort((a, b) => {
-      if (sortingOptionId == ActorSkillsViewModel.ID_SORT_BY_LEVEL) {
+      if (sortingOptionId == this.idSortByLevel) {
         if (ascending === true) {
           return this._compareLevel(false, a, b);
         } else if (ascending === false) {
           return this._compareLevel(true, a, b);
         }
-      } else if (sortingOptionId == ActorSkillsViewModel.ID_SORT_BY_NAME) {
+      } else if (sortingOptionId == this.idSortByName) {
         if (ascending === true) {
           return a.document.name.localeCompare(b.document.name);
         } else if (ascending === false) {
@@ -443,26 +436,17 @@ export default class ActorSkillsViewModel extends ViewModel {
    * @private
    */
   _getSkillSortingOptions() {
-    const localizedSortAscendingByLabel = game.i18n.localize("system.general.sort.sortAscendingBy");
-    const localizedSortDescendingByLabel = game.i18n.localize("system.general.sort.sortDescendingBy");
-
-    const definitions = [
+    return [
       new SortingOption({
-        id: ActorSkillsViewModel.ID_SORT_BY_LEVEL,
-        iconHtml: '<i class="ico ico-level-solid dark pad-r-sm"></i>',
-        localizedToolTip: game.i18n.localize("system.character.advancement.level"),
-        localizedToolTipSortAscending: StringUtils.format(localizedSortAscendingByLabel, game.i18n.localize("system.character.advancement.level")),
-        localizedToolTipSortDescending: StringUtils.format(localizedSortDescendingByLabel, game.i18n.localize("system.character.advancement.level")),
-      }),
-      new SortingOption({
-        id: ActorSkillsViewModel.ID_SORT_BY_NAME,
+        id: this.idSortByName,
         iconHtml: '<i class="ico ico-tags-solid dark pad-r-sm"></i>',
         localizedToolTip: game.i18n.localize("system.general.name.label"),
-        localizedToolTipSortAscending: StringUtils.format(localizedSortAscendingByLabel, game.i18n.localize("system.general.name.label")),
-        localizedToolTipSortDescending: StringUtils.format(localizedSortDescendingByLabel, game.i18n.localize("system.general.name.label")),
+      }),
+      new SortingOption({
+        id: this.idSortByLevel,
+        iconHtml: '<i class="ico ico-level-solid dark pad-r-sm"></i>',
+        localizedToolTip: game.i18n.localize("system.character.advancement.level"),
       }),
     ];
-
-    return definitions;
   }
 }
