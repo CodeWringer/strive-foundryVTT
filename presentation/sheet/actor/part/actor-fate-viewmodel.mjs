@@ -37,6 +37,12 @@ export default class ActorFateViewModel extends ViewModel {
   get fateCardTemplate() { return TEMPLATES.FATE_CARD; }
 
   /**
+   * @type {Boolean}
+   * @readonly
+   */
+  get hasExceededFateCardLimit() { return (this.document.fateSystem.fateCards.length > 5); }
+
+  /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
    * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 
    * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 
@@ -95,7 +101,6 @@ export default class ActorFateViewModel extends ViewModel {
       localizedType: game.i18n.localize("system.character.driverSystem.fateSystem.fateCard.label"),
     });
 
-    this.fateCards = [];
     this.fateCards = this._getFateCardViewModels();
   }
 

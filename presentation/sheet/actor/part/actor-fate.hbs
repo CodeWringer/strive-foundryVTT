@@ -2,8 +2,8 @@
 viewModel: {ActorFateViewModel}
 cssClass: {undefined | String}
 --}}
-<section class="{{cssClass}}">
-  <div class="grid-3col grid-gap-md margin-b-md">
+<section class="auto-margin-v{{#if cssClass}} {{cssClass}}{{/if}}">
+  <div class="grid-3col grid-gap-md">
     <div class="sheet-block flex flex-row flex-middle flex-right">
       {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "system.character.driverSystem.fateSystem.fatePoints.minor.label"}}{{/label}}
       <div class="width-md flex-right">
@@ -23,6 +23,9 @@ cssClass: {undefined | String}
       </div>
     </div>
   </div>
+  {{#if viewModel.hasExceededFateCardLimit}}
+    {{#> admonishReadOnlyValue cssClass="pad-l-md pad-r-md" admonish=true}}{{localize "system.character.driverSystem.fateSystem.fateCard.limitExceededAdmonish"}}{{/admonishReadOnlyValue}}
+  {{/if}}
   <div class="flex" style="flex-wrap: wrap;">
     {{#each viewModel.fateCards as |cardViewModel key|}}
     <div class="fate-card-actor-container">

@@ -375,7 +375,8 @@
             "delete": {
               "label": "Delete Fate Card",
               "query": "Confirm Deletion of Fate Card"
-            }
+            },
+            "limitExceededAdmonish": "You have exceeded the maximum number of allowed fate cards! You must not have more than 5 cards!"
           },
           "fatePoints": {
             "minor": {
