@@ -1,6 +1,7 @@
 import TransientBaseCharacterActor from "../../../../../business/document/actor/transient-base-character-actor.mjs"
 import { validateOrThrow } from "../../../../../business/util/validation-utility.mjs"
 import ButtonAddViewModel from "../../../../component/button-add/button-add-viewmodel.mjs"
+import SortControlsViewModel, { SortingOption } from "../../../../component/sort-controls/sort-controls-viewmodel.mjs"
 import DocumentListItemOrderDataSource from "../../../../component/sortable-list/document-list-item-order-datasource.mjs"
 import SortableListViewModel from "../../../../component/sortable-list/sortable-list-viewmodel.mjs"
 import { TEMPLATES } from "../../../../templatePreloader.mjs"
@@ -59,6 +60,12 @@ export default class ActorAssetsViewModel extends ViewModel {
       return false;
     }
   }
+
+  /**
+   * @type {String}
+   * @readonly
+   */
+  get sortControlsTemplate() { return SortControlsViewModel.TEMPLATE; }
 
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
@@ -138,6 +145,54 @@ export default class ActorAssetsViewModel extends ViewModel {
         localizedLabel: game.i18n.localize("system.character.asset.add.label"),
         localizedType: game.i18n.localize("system.character.asset.singular"),
       }),
+    });
+
+    this.vmSortLuggage = new SortControlsViewModel({
+      id: "vmSortLuggage",
+      parent: this,
+      options: [
+        new SortingOption({
+          iconHtml: '<i class="ico ico-tags-solid dark"></i>',
+          localizedToolTip: game.i18n.localize("system.general.name.label"),
+          sortingFunc: (a, b) => {
+            return a.document.name.localeCompare(b.document.name);
+          },
+        }),
+        new SortingOption({
+          iconHtml: '<i class="ico ico-bulk-solid dark"></i>',
+          localizedToolTip: game.i18n.localize("system.character.asset.bulk"),
+          sortingFunc: (a, b) => {
+            return a.document.compareBulk(b.document);
+          },
+        }),
+      ],
+      onSort: (_, provideSortable) => {
+        provideSortable(this.vmLuggageList);
+      },
+    });
+
+    this.vmSortProperty = new SortControlsViewModel({
+      id: "vmSortProperty",
+      parent: this,
+      options: [
+        new SortingOption({
+          iconHtml: '<i class="ico ico-tags-solid dark"></i>',
+          localizedToolTip: game.i18n.localize("system.general.name.label"),
+          sortingFunc: (a, b) => {
+            return a.document.name.localeCompare(b.document.name);
+          },
+        }),
+        new SortingOption({
+          iconHtml: '<i class="ico ico-bulk-solid dark"></i>',
+          localizedToolTip: game.i18n.localize("system.character.asset.bulk"),
+          sortingFunc: (a, b) => {
+            return a.document.compareBulk(b.document);
+          },
+        }),
+      ],
+      onSort: (_, provideSortable) => {
+        provideSortable(this.vmPropertyList);
+      },
     });
   }
   

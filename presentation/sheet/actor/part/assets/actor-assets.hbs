@@ -2,40 +2,56 @@
 viewModel: {ActorAssetsViewModel}
 cssClass: {undefined | String}
 --}}
-<section class="{{cssClass}}">
+<section id="{{viewModel.id}}" class="auto-margin-v-xl{{#if cssClass}} {{cssClass}}{{/if}}">
   {{!-- Worn & Equipped --}}
-  {{#> header1 showFancyFont=viewModel.showFancyFont}}{{localize "system.character.asset.equipped"}}{{/header1}}
-  {{#with viewModel.templateEquipped as | template |}}
-  {{> (template) viewModel=../viewModel.vmEquipped}}
-  {{/with}}
-  {{!-- Luggage --}}
-  {{#> header1 showFancyFont=viewModel.showFancyFont}}{{localize "system.character.asset.luggage"}}{{/header1}}
-  <div class="grid-2col grid-gap-md margin-b-md">
-    {{!-- Maximum bulk --}}
-    <div class="sheet-block">
-      <div class="flex flex-row">
-        <div class="flex-grow">
-          {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "system.character.asset.carryingCapacity.label"}}{{/label}}
-        </div>
-        <span class="width-md">
-          {{#> readOnlyValue}}{{viewModel.maxBulk}}{{/readOnlyValue}}
-        </span>
-      </div>
-    </div>
-    {{!-- Current bulk --}}
-    <div class="sheet-block">
-      <div class="flex flex-row">
-        <div class="flex-grow">
-          {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "system.character.asset.carryingCapacity.used"}}{{/label}}
-        </div>
-        <span class="flex flex-row flex-middle width-md">
-          {{#> admonishReadOnlyValue admonish=viewModel.hasExceededBulk}}{{viewModel.currentBulk}}{{/admonishReadOnlyValue}}
-        </span>
-      </div>
-    </div>
+  <div>
+    {{#> header1 showFancyFont=viewModel.showFancyFont}}{{localize "system.character.asset.equipped"}}{{/header1}}
+    {{#with viewModel.templateEquipped as | template |}}
+    {{> (template) viewModel=../viewModel.vmEquipped}}
+    {{/with}}
   </div>
-  {{> sortableList viewModel=viewModel.vmLuggageList prominentItemStyling=true }}
+  {{!-- Luggage --}}
+  <div class="auto-margin-v-md">
+    {{#> header1 showFancyFont=viewModel.showFancyFont cssClass="flex flex-row" }}
+      <span class="flex-grow">{{localize "system.character.asset.luggage"}}</span>
+      {{#with viewModel.sortControlsTemplate as |template|}}
+        {{> (template) viewModel=../viewModel.vmSortLuggage cssClass="font-size-default" }}
+      {{/with}}
+    {{/header1}}
+    <div class="grid-2col grid-gap-md">
+      {{!-- Maximum bulk --}}
+      <div class="sheet-block">
+        <div class="flex flex-row">
+          <div class="flex-grow">
+            {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "system.character.asset.carryingCapacity.label"}}{{/label}}
+          </div>
+          <span class="width-md">
+            {{#> readOnlyValue}}{{viewModel.maxBulk}}{{/readOnlyValue}}
+          </span>
+        </div>
+      </div>
+      {{!-- Current bulk --}}
+      <div class="sheet-block">
+        <div class="flex flex-row">
+          <div class="flex-grow">
+            {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "system.character.asset.carryingCapacity.used"}}{{/label}}
+          </div>
+          <span class="flex flex-row flex-middle width-md">
+            {{#> admonishReadOnlyValue admonish=viewModel.hasExceededBulk}}{{viewModel.currentBulk}}{{/admonishReadOnlyValue}}
+          </span>
+        </div>
+      </div>
+    </div>
+    {{> sortableList viewModel=viewModel.vmLuggageList prominentItemStyling=true }}
+  </div>
   {{!-- Property --}}
-  {{#> header1 showFancyFont=viewModel.showFancyFont}}{{localize "system.character.asset.property"}}{{/header1}}
-  {{> sortableList viewModel=viewModel.vmPropertyList prominentItemStyling=true }}
+  <div class="auto-margin-v-md">
+    {{#> header1 showFancyFont=viewModel.showFancyFont cssClass="flex flex-row" }}
+      <span class="flex-grow">{{localize "system.character.asset.property"}}</span>
+      {{#with viewModel.sortControlsTemplate as |template|}}
+        {{> (template) viewModel=../viewModel.vmSortProperty cssClass="font-size-default" }}
+      {{/with}}
+    {{/header1}}
+    {{> sortableList viewModel=viewModel.vmPropertyList prominentItemStyling=true }}
+  </div>
 </section>
