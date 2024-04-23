@@ -64,9 +64,10 @@ export default class SortControlsViewModel extends ViewModel {
     this.options = args.options ?? [];
     this.compact = args.compact ?? false;
 
-    this.optionViewModels = this.options.map(option => {
-      const index = this.options.indexOf(option);
-
+    this.optionViewModels = [];
+    for (let index = 0; index < this.options.length; index++) {
+      const option = this.options[index];
+      
       let localizedToolTipSortAscending = option.localizedToolTipSortAscending;
       let localizedToolTipSortDescending = option.localizedToolTipSortDescending;
       if (this.compact === true) {
@@ -85,7 +86,7 @@ export default class SortControlsViewModel extends ViewModel {
         }
       }
 
-      return {
+      this.optionViewModels.push({
         option: option,
         vmSortAscending: new ButtonViewModel({
           id: `${index}-ascending`,
@@ -110,8 +111,8 @@ export default class SortControlsViewModel extends ViewModel {
             });
           },
         }),
-      };
-    });
+      });
+    };
   }
 
   /** @override */

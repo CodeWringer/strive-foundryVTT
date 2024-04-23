@@ -63,7 +63,7 @@ export const KEYBOARD = {
       arr = this._keyDownListeners.get(keyCode);
     }
 
-    arr = arr.concat({
+    arr.push({
       handler: handler,
       data: data,
     });
@@ -115,7 +115,7 @@ export const KEYBOARD = {
       arr = this._keyUpListeners.get(keyCode);
     }
 
-    arr = arr.concat({
+    arr.push({
       handler: handler,
       data: data,
     });
