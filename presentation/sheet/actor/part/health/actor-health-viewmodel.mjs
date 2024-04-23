@@ -283,22 +283,7 @@ export default class ActorHealthViewModel extends ViewModel {
     this.vmSortInjuries = new SortControlsViewModel({
       id: "vmSortInjuries",
       parent: this,
-      options: [
-        new SortingOption({
-          iconHtml: '<i class="ico ico-tags-solid dark"></i>',
-          localizedToolTip: game.i18n.localize("system.general.name.label"),
-          sortingFunc: (a, b) => {
-            return a.document.name.localeCompare(b.document.name);
-          },
-        }),
-        new SortingOption({
-          iconHtml: '<i class="fas fa-mortar-pestle pad-r-sm"></i>',
-          localizedToolTip: game.i18n.localize("system.character.health.treatment"),
-          sortingFunc: (a, b) => {
-            return a.document.compareTreatment(b.document);
-          },
-        }),
-      ],
+      options: this._getTreatableSortingOptions(),
       compact: true,
       onSort: (_, provideSortable) => {
         provideSortable(this.vmInjuryList);
@@ -308,22 +293,7 @@ export default class ActorHealthViewModel extends ViewModel {
     this.vmSortIllnesses = new SortControlsViewModel({
       id: "vmSortIllnesses",
       parent: this,
-      options: [
-        new SortingOption({
-          iconHtml: '<i class="ico ico-tags-solid dark"></i>',
-          localizedToolTip: game.i18n.localize("system.general.name.label"),
-          sortingFunc: (a, b) => {
-            return a.document.name.localeCompare(b.document.name);
-          },
-        }),
-        new SortingOption({
-          iconHtml: '<i class="fas fa-mortar-pestle pad-r-sm"></i>',
-          localizedToolTip: game.i18n.localize("system.character.health.treatment"),
-          sortingFunc: (a, b) => {
-            return a.document.compareTreatment(b.document);
-          },
-        }),
-      ],
+      options: this._getTreatableSortingOptions(),
       compact: true,
       onSort: (_, provideSortable) => {
         provideSortable(this.vmIllnessList);
@@ -333,15 +303,7 @@ export default class ActorHealthViewModel extends ViewModel {
     this.vmSortMutations = new SortControlsViewModel({
       id: "vmSortMutations",
       parent: this,
-      options: [
-        new SortingOption({
-          iconHtml: '<i class="ico ico-tags-solid dark"></i>',
-          localizedToolTip: game.i18n.localize("system.general.name.label"),
-          sortingFunc: (a, b) => {
-            return a.document.name.localeCompare(b.document.name);
-          },
-        }),
-      ],
+      options: this._getNameSortingOptions(),
       compact: true,
       onSort: (_, provideSortable) => {
         provideSortable(this.vmMutationList);
@@ -351,15 +313,7 @@ export default class ActorHealthViewModel extends ViewModel {
     this.vmSortScars = new SortControlsViewModel({
       id: "vmSortScars",
       parent: this,
-      options: [
-        new SortingOption({
-          iconHtml: '<i class="ico ico-tags-solid dark"></i>',
-          localizedToolTip: game.i18n.localize("system.general.name.label"),
-          sortingFunc: (a, b) => {
-            return a.document.name.localeCompare(b.document.name);
-          },
-        }),
-      ],
+      options: this._getNameSortingOptions(),
       compact: true,
       onSort: (_, provideSortable) => {
         provideSortable(this.vmScarList);
@@ -495,5 +449,50 @@ export default class ActorHealthViewModel extends ViewModel {
       this.scars,
       (args) => { return new ScarListItemViewModel(args); }
     );
+  }
+
+  /**
+   * Returns the `SortingOption`s for the injury and illness lists. 
+   * 
+   * @returns {Array<SortingOption>}
+   * 
+   * @private
+   */
+  _getTreatableSortingOptions() {
+    return [
+      new SortingOption({
+        iconHtml: '<i class="ico ico-tags-solid dark"></i>',
+        localizedToolTip: game.i18n.localize("system.general.name.label"),
+        sortingFunc: (a, b) => {
+          return a.document.name.localeCompare(b.document.name);
+        },
+      }),
+      new SortingOption({
+        iconHtml: '<i class="fas fa-mortar-pestle pad-r-sm"></i>',
+        localizedToolTip: game.i18n.localize("system.character.health.treatment"),
+        sortingFunc: (a, b) => {
+          return a.document.compareTreatment(b.document);
+        },
+      }),
+    ];
+  }
+
+  /**
+   * Returns the `SortingOption`s for the mutation and scar lists. 
+   * 
+   * @returns {Array<SortingOption>}
+   * 
+   * @private
+   */
+  _getNameSortingOptions() {
+    return [
+      new SortingOption({
+        iconHtml: '<i class="ico ico-tags-solid dark"></i>',
+        localizedToolTip: game.i18n.localize("system.general.name.label"),
+        sortingFunc: (a, b) => {
+          return a.document.name.localeCompare(b.document.name);
+        },
+      }),
+    ];
   }
 }
