@@ -12,6 +12,7 @@ import InputTextFieldViewModel from "../../component/input-textfield/input-textf
 import { isBlankOrUndefined } from "../../../business/util/validation-utility.mjs";
 import { isDefined } from "../../../business/util/validation-utility.mjs";
 import SimpleListViewModel from "../../component/simple-list/simple-list-viewmodel.mjs";
+import InputToggleViewModel from "../../component/input-toggle/input-toggle-viewmodel.mjs";
 
 /**
  * @property {Array<DynamicInputDefinition>} inputDefinitions The list of input definitions of 
@@ -147,6 +148,15 @@ export default class DynamicInputDialogViewModel extends ViewModel {
           localizedAddLabel: definition.specificArgs.localizedAddLabel,
         });
         viewModel.value = values;
+      } else if (definition.type === DYNAMIC_INPUT_TYPES.TOGGLE) {
+        viewModel = new InputToggleViewModel({
+          id: definition.name,
+          parent: this,
+          value: definition.defaultValue,
+          onChange: (_, newValue) => {
+            this[definition.name] = newValue;
+          },
+        });
       } else {
         throw new Error(`Invalid input type: "${definition.type}"`);
       }

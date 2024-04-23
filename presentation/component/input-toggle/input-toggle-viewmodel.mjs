@@ -51,6 +51,13 @@ export default class InputToggleViewModel extends InputViewModel {
       if (this.isEditable !== true) return;
       
       this.value = !this.value;
+      if (this.value === true) {
+        html.find(`button.component-button-toggle`).addClass("active");
+        html.find(`span.component-button-toggle-knob`).addClass("active");
+      } else {
+        html.find(`button.component-button-toggle`).removeClass("active");
+        html.find(`span.component-button-toggle-knob`).removeClass("active");
+      }
     });
   }
 }

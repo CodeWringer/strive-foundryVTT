@@ -35,6 +35,7 @@
  * * * `isItemAddable: {Boolean | undefined}` 
  * * * `isItemRemovable: {Boolean | undefined}` 
  * * * `localizedAddLabel: {String | undefined}` 
+ * @property {String} TOGGLE Toggles a boolean value. 
  * 
  * @constant
  */
@@ -48,4 +49,5 @@ export const DYNAMIC_INPUT_TYPES = {
   TEXTFIELD: "TEXTFIELD",
   LABEL: "LABEL",
   SIMPLE_LIST: "SIMPLE_LIST",
+  TOGGLE: "TOGGLE",
 }
