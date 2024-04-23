@@ -1,12 +1,12 @@
-import GameSystemUserSettings from "../../business/setting/game-system-user-settings.mjs";
 import GameSystemWorldSettings from "../../business/setting/game-system-world-settings.mjs";
 
 /**
- * @summary
- * This class represents FoundryVTT's `Combat` document type. 
+ * This class extends FoundryVTT's `Combat` document type. 
  */
 export class GameSystemCombat extends Combat {
   /**
+   * After the usual turn logic has been completed, handles action point refilling. 
+   * 
    * @async
    * @override
    */
