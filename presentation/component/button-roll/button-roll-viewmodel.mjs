@@ -1,4 +1,4 @@
-import { ROLL_TYPES } from "../../../business/dice/roll-types.mjs";
+import { ROLL_TYPES, RollType } from "../../../business/dice/roll-types.mjs";
 import { SOUNDS_CONSTANTS } from "../../audio/sounds.mjs";
 import * as ChatUtil from "../../chat/chat-utility.mjs";
 import * as PropUtil from "../../../business/util/property-utility.mjs";
@@ -112,7 +112,8 @@ export default class ButtonRollViewModel extends ButtonViewModel {
    * * `data: DicePoolRollResult | Object` - The rolled result. 
    * 
    * @param {TransientDocument | Object} args.target The target object to affect. 
-   * @param {String} args.rollType The internal name of a `RollType` that Determines the kind of roll to try and make. 
+   * @param {RollType} args.rollType The internal name of a `RollType` that Determines the kind of roll to try and make.
+   * See `ROLL_TYPES` 
    * @param {String | undefined} args.propertyPath Property path identifying a property that contains a roll-formula. 
    * IMPORTANT: If this argument is left undefined, then the target object MUST define a method 'getRollData()', which returns a `Sum` instance. 
    * @param {String | undefined} args.primaryChatTitle Primary title to display above the roll result in the chat message. 
@@ -120,7 +121,6 @@ export default class ButtonRollViewModel extends ButtonViewModel {
    * @param {String | undefined} args.secondaryChatTitle Primary title to display above the roll result in the chat message. 
    * @param {String | undefined} args.secondaryChatImage Primary image to display above the roll result in the chat message. 
    * @param {Actor | undefined} args.actor  Actor associated with the roll result. 
-   * @param {String | undefined} args.localizedTooltip Localized tooltip. 
    */
   constructor(args = {}) {
     super({

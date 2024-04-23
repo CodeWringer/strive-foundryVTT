@@ -3,6 +3,8 @@ viewModel: {ChallengeRatingViewModel}
 cssClass: {String}
 --}}
 <div id="{{viewModel.id}}" class="flex flex-row flex-middle pad-md{{#if cssClass}} {{cssClass}}{{/if}}">
+  {{!-- Roll --}}
+  {{> buttonRoll viewModel=viewModel.vmRoll }}
   <a id="{{viewModel.id}}-header" class="flex flex-grow flex-middle auto-margin-h">
     {{#if viewModel.iconClass}}
     <i class="ico {{viewModel.iconClass}} dark"></i>

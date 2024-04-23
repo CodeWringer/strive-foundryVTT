@@ -101,6 +101,7 @@ export default class ActorAttributesViewModel extends ViewModel {
         challengeRating: challengeRating,
         localizedLabel: game.i18n.localize(attributeGroup.localizableName),
         iconClass: attributeGroup.iconClass,
+        actor: this.document,
         onClicked: () => {
           if (this.isNPC === true) {
             const expansion = this.document.getIsExpandedFor(attributeGroup.name);
