@@ -285,7 +285,7 @@ export default class ActorHealthViewModel extends ViewModel {
       parent: this,
       options: [
         new SortingOption({
-          iconHtml: '<i class="ico ico-tags-solid dark pad-r-sm"></i>',
+          iconHtml: '<i class="ico ico-tags-solid dark"></i>',
           localizedToolTip: game.i18n.localize("system.general.name.label"),
           sortingFunc: (a, b) => {
             return a.document.name.localeCompare(b.document.name);
@@ -309,7 +309,7 @@ export default class ActorHealthViewModel extends ViewModel {
       parent: this,
       options: [
         new SortingOption({
-          iconHtml: '<i class="ico ico-tags-solid dark pad-r-sm"></i>',
+          iconHtml: '<i class="ico ico-tags-solid dark"></i>',
           localizedToolTip: game.i18n.localize("system.general.name.label"),
           sortingFunc: (a, b) => {
             return a.document.name.localeCompare(b.document.name);
@@ -333,7 +333,7 @@ export default class ActorHealthViewModel extends ViewModel {
       parent: this,
       options: [
         new SortingOption({
-          iconHtml: '<i class="ico ico-tags-solid dark pad-r-sm"></i>',
+          iconHtml: '<i class="ico ico-tags-solid dark"></i>',
           localizedToolTip: game.i18n.localize("system.general.name.label"),
           sortingFunc: (a, b) => {
             return a.document.name.localeCompare(b.document.name);
@@ -350,7 +350,7 @@ export default class ActorHealthViewModel extends ViewModel {
       parent: this,
       options: [
         new SortingOption({
-          iconHtml: '<i class="ico ico-tags-solid dark pad-r-sm"></i>',
+          iconHtml: '<i class="ico ico-tags-solid dark"></i>',
           localizedToolTip: game.i18n.localize("system.general.name.label"),
           sortingFunc: (a, b) => {
             return a.document.name.localeCompare(b.document.name);

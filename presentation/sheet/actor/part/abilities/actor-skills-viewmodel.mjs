@@ -366,14 +366,14 @@ export default class ActorSkillsViewModel extends ViewModel {
   _getSkillSortingOptions() {
     return [
       new SortingOption({
-        iconHtml: '<i class="ico ico-tags-solid dark pad-r-sm"></i>',
+        iconHtml: '<i class="ico ico-tags-solid dark"></i>',
         localizedToolTip: game.i18n.localize("system.general.name.label"),
         sortingFunc: (a, b) => {
           return a.document.name.localeCompare(b.document.name);
         },
       }),
       new SortingOption({
-        iconHtml: '<i class="ico ico-level-solid dark pad-r-sm"></i>',
+        iconHtml: '<i class="ico ico-level-solid dark"></i>',
         localizedToolTip: game.i18n.localize("system.character.advancement.level"),
         sortingFunc: (a, b) => {
           return a.document.compareLevel(b.document);
