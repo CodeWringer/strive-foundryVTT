@@ -107,7 +107,7 @@ export default class ActorAssetsViewModel extends ViewModel {
       isEditable: this.isEditable,
       indexDataSource: new DocumentListItemOrderDataSource({
         document: thiz.document,
-        listName: "property",
+        listName: "luggage",
       }),
       listItemViewModels: this.luggageViewModels,
       listItemTemplate: AssetListItemViewModel.TEMPLATE,
