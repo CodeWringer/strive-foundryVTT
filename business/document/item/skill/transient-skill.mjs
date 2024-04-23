@@ -640,6 +640,8 @@ export default class TransientSkill extends TransientBaseItem {
       return -1;
     } else if (this.level > other.level) {
       return 1;
+    } else {
+      return 0;
     }
   }
 

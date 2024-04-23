@@ -280,7 +280,13 @@ export default class TransientAsset extends TransientBaseItem {
    * is more than / greater than `other`. 
    */
   compareBulk(other) {
-    return this.bulk - other.bulk;
+    if (this.bulk < other.bulk) {
+      return -1;
+    } else if (this.bulk > other.bulk) {
+      return 1;
+    } else {
+      return 0;
+    }
   }
 
   /**

@@ -129,6 +129,8 @@ export default class TransientIllness extends TransientBaseItem {
       return -1;
     } else if (this.state === ILLNESS_STATES.treated.name && other.state !== ILLNESS_STATES.treated.name) {
       return 1;
+    } else {
+      return 0;
     }
   }
 }

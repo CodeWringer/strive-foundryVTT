@@ -230,6 +230,8 @@ export default class TransientInjury extends TransientBaseItem {
       return -1;
     } else if (this.state === INJURY_STATES.treated.name && other.state !== INJURY_STATES.treated.name) {
       return 1;
+    } else {
+      return 0;
     }
   }
 }
