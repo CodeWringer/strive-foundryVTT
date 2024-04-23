@@ -10,14 +10,18 @@ cssClass: String | undefined
         {{#if option.option.iconHtml}}
         <span class="flex flex-center"{{#if option.option.localizedToolTip}} title="{{option.option.localizedToolTip}}"{{/if}}>{{{option.option.iconHtml}}}</span>
         {{/if}}
-        {{#if option.option.localizedLabel}}
+        {{#if (and option.option.localizedLabel (not ../viewModel.compact))}}
         <span>{{option.option.localizedLabel}}</span>
         {{/if}}
       </span>
       {{/if}}
       <span class="flex flex-row flex-middle">
-        {{#> button viewModel=option.vmSortAscending cssClass="override"}}{{/button}}
-        {{#> button viewModel=option.vmSortDescending cssClass="override"}}{{/button}}
+        {{#> button viewModel=option.vmSortAscending cssClass="override sort-ascending"}}{{/button}}
+        {{#if ../viewModel.compact}}
+        {{#> button viewModel=option.vmSortDescending cssClass="override sort-descending hidden"}}{{/button}}
+        {{else}}
+        {{#> button viewModel=option.vmSortDescending cssClass="override sort-descending"}}{{/button}}
+        {{/if}}
       </span>
     </span>
   {{/each}}
