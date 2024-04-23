@@ -116,7 +116,9 @@
       "abbreviation": "AP",
       "singular": "Action Point",
       "plural": "Action Points",
-      "max": "Maximum Action Points"
+      "max": "Maximum Action Points",
+      "refill": "Action Point Regain",
+      "allowRefill": "Automatic Action Point Regain"
     },
     "character": {
       "edit": "Configure Character",
@@ -820,8 +822,12 @@
     },
     "settings": {
       "saveChanges": "Save Changes",
+      "autoActionPointRefill": {
+        "label": "Automatic AP Refilling",
+        "hint": "If checked, action points will refill for a character at the start of every combat turn."
+      },
       "fancyFont": {
-        "label": "Fancy font",
+        "label": "Fancy Font",
         "hint": "Toggles the 'fancy' font off or on."
       },
       "toggleDebug": {

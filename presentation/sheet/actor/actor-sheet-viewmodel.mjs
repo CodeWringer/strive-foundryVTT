@@ -138,6 +138,9 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
         localizedTooltip: game.i18n.localize("system.character.edit"),
         onClick: async () => {
           const inputMaxActionPoints = "inputMaxActionPoints";
+          const inputRefillActionPoints = "inputRefillActionPoints";
+          const inputAllowRefillActionPoints = "inputAllowRefillActionPoints";
+
           const dialog = await new DynamicInputDialog({
             localizedTitle: game.i18n.localize("system.character.edit"),
             inputDefinitions: [
@@ -150,6 +153,21 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
                 },
                 defaultValue: this.document.maxActionPoints,
               }),
+              new DynamicInputDefinition({
+                type: DYNAMIC_INPUT_TYPES.NUMBER_SPINNER,
+                name: inputRefillActionPoints,
+                localizedLabel: game.i18n.localize("system.actionPoint.refill"),
+                specificArgs: {
+                  min: 0,
+                },
+                defaultValue: this.document.actionPointRefill,
+              }),
+              new DynamicInputDefinition({
+                type: DYNAMIC_INPUT_TYPES.TOGGLE,
+                name: inputAllowRefillActionPoints,
+                localizedLabel: game.i18n.localize("system.actionPoint.allowRefill"),
+                defaultValue: this.document.allowAutomaticActionPointRefill,
+              }),
             ],
           }).renderAndAwait(true);
   
@@ -157,6 +175,12 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
   
           const maxActionPoints = parseInt(dialog[inputMaxActionPoints]);
           this.document.maxActionPoints = maxActionPoints;
+  
+          const refillActionPoints = parseInt(dialog[inputRefillActionPoints]);
+          this.document.actionPointRefill = refillActionPoints;
+  
+          const allowRefillActionPoints = dialog[inputAllowRefillActionPoints] == true;
+          this.document.allowAutomaticActionPointRefill = allowRefillActionPoints;
         },
       });
     }

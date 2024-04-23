@@ -2,7 +2,6 @@ import { TEMPLATES } from '../../../presentation/templatePreloader.mjs';
 import { DICE_POOL_RESULT_TYPES } from '../../dice/dice-pool.mjs';
 import AtReferencer from '../../referencing/at-referencer.mjs';
 import CharacterAssetSlotGroup from '../../ruleset/asset/character-asset-slot-group.mjs';
-import CharacterAssetSlot from '../../ruleset/asset/character-asset-slot.mjs';
 import { ATTRIBUTE_GROUPS } from '../../ruleset/attribute/attribute-groups.mjs';
 import { ATTRIBUTES } from '../../ruleset/attribute/attributes.mjs';
 import CharacterAttributeGroup from '../../ruleset/attribute/character-attribute-group.mjs';
@@ -11,7 +10,6 @@ import { HEALTH_STATES } from '../../ruleset/health/health-states.mjs';
 import Ruleset from '../../ruleset/ruleset.mjs';
 import { SKILL_TAGS } from '../../tags/system-tags.mjs';
 import LoadHealthStatesSettingUseCase from '../../use-case/load-health-states-setting-use-case.mjs';
-import { createUUID } from '../../util/uuid-utility.mjs';
 import { isDefined } from '../../util/validation-utility.mjs';
 import TransientBaseActor from './transient-base-actor.mjs';
 
@@ -114,8 +112,10 @@ import TransientBaseActor from './transient-base-actor.mjs';
  * @property {Number} personalityTraits.vengefulOrForgiving
  * * Read-only
  * * Ranges from -3 to +3
- * @property {Number} maxActionPoints
- * @property {Number} actionPoints
+ * @property {Number} maxActionPoints The maximum number of action points allowed for this character. 
+ * @property {Number} actionPointRefill The number of action points regained each turn for this character. 
+ * @property {Boolean} allowAutomaticActionPointRefill If `true`, automatic AP refilling is enabled for this character. 
+ * @property {Number} actionPoints The current number of action points of this character. 
  */
 export default class TransientBaseCharacterActor extends TransientBaseActor {
   /** @override */
@@ -324,6 +324,12 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
       }
     });
   }
+
+  get actionPointRefill() { return this.document.system.actionPointRefill ?? 3; }
+  set actionPointRefill(value) { this.updateByPath("system.actionPointRefill", value); }
+
+  get allowAutomaticActionPointRefill() { return this.document.system.allowAutomaticActionPointRefill ?? true; }
+  set allowAutomaticActionPointRefill(value) { this.updateByPath("system.allowAutomaticActionPointRefill", value); }
 
   get actionPoints() { return this.document.system.actionPoints ?? 3; }
   set actionPoints(value) { this.updateByPath("system.actionPoints", value); }

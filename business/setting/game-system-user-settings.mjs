@@ -11,14 +11,14 @@ export default class GameSystemUserSettings extends GameSystemSettings {
    * @type {String}
    * @readonly
    */
-  static get KEY_SHOW_FANCY_FONT() { return "showFancyFont"; }
+  static get KEY_SHOW_FANCY_FONT() { return "userShowFancyFont"; }
 
   /**
    * @static
    * @type {String}
    * @readonly
    */
-  static get KEY_TOGGLE_DEBUG() { return "toggleDebug"; }
+  static get KEY_TOGGLE_DEBUG() { return "userToggleDebug"; }
 
   constructor() {
     super();
