@@ -1,5 +1,10 @@
+import { ROLL_TYPES } from "../../../../../business/dice/roll-types.mjs";
+import { GameSystemActor } from "../../../../../business/document/actor/actor.mjs";
+import TransientBaseCharacterActor from "../../../../../business/document/actor/transient-base-character-actor.mjs";
 import ChallengeRating from "../../../../../business/ruleset/attribute/challenge-rating.mjs";
+import { Sum, SumComponent } from "../../../../../business/ruleset/summed-data.mjs";
 import { validateOrThrow } from "../../../../../business/util/validation-utility.mjs";
+import ButtonRollViewModel from "../../../../component/button-roll/button-roll-viewmodel.mjs";
 import InputNumberSpinnerViewModel from "../../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
 import { TEMPLATES } from "../../../../templatePreloader.mjs";
 import ViewModel from "../../../../view-model/view-model.mjs";
@@ -42,6 +47,8 @@ export default class ChallengeRatingViewModel extends ViewModel {
    * the element is clicked. 
    * @param {Function | undefined} args.onChallengeRatingChanged Callback that 
    * is invoked when the challenge rating modifier value changes. 
+   * @param {TransientBaseCharacterActor | undefined} args.actor The actor whose challenge 
+   * rating this is. 
    */
   constructor(args = {}) {
     super(args);
@@ -52,7 +59,18 @@ export default class ChallengeRatingViewModel extends ViewModel {
     this.iconClass = args.iconClass;
     this.onClicked = args.onClicked ?? (() => {});
     this.onChallengeRatingChanged = args.onChallengeRatingChanged ?? (() => {});
+    this.actor = args.actor;
 
+    this.vmRoll = new ButtonRollViewModel({
+      id: "vmRoll",
+      parent: this,
+      target: this,
+      rollType: ROLL_TYPES.dicePool.name,
+      localizedToolTip: game.i18n.localize("system.roll.doRoll"),
+      primaryChatTitle: this.localizedLabel,
+      primaryChatImage: (this.actor ?? {}).img,
+      secondaryChatTitle: (this.actor ?? {}).name,
+    });
     this.vmCr = new InputNumberSpinnerViewModel({
       parent: this,
       id: "vmCr",
@@ -87,5 +105,16 @@ export default class ChallengeRatingViewModel extends ViewModel {
     html.find(`#${this.id}-header`).click(() => {
       this.onClicked();
     });
+  }
+  
+  /**
+   * Returns the component(s) to do a roll using this challenge rating. 
+   * 
+   * @returns {Sum}
+   */
+  getRollData() {
+    return new Sum([
+      new SumComponent(this.id, this.localizedLabel, this.challengeRating.modified)
+    ]);
   }
 }
