@@ -1,6 +1,7 @@
 import { ITEM_SHEET_SUBTYPE } from "./item-sheet-subtype.mjs";
 import * as SheetUtil from "../sheet-utility.mjs";
 import { SYSTEM_ID } from "../../../system-id.mjs";
+import ViewModel from "../../view-model/view-model.mjs";
 
 export class GameSystemItemSheet extends ItemSheet {
   /**
@@ -148,8 +149,9 @@ export class GameSystemItemSheet extends ItemSheet {
    * @see https://foundryvtt.com/api/FormApplication.html#close
    */
   async close() {
-    if (this._viewModel !== undefined && this._viewModel !== null) {
-      this._viewModel.writeViewState();
+    if (this.viewModel !== undefined && this.viewModel !== null) {
+      this.viewModel.writeViewState();
+      this.viewModel.dispose();
     }
     
     return super.close();

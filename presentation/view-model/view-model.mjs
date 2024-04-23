@@ -166,14 +166,14 @@ export default class ViewModel {
     }
 
     // Remove from previous parent. 
-    if (this._parent !== undefined) {
+    if (ValidationUtil.isDefined(this._parent) && ValidationUtil.isDefined(this._parent.children)) {
       const index = this._parent.children.indexOf(this);
       this._parent.children.splice(index, 1);
     }
 
     // Add to new parent. 
     this._parent = value;
-    if (this._parent !== undefined) {
+    if (ValidationUtil.isDefined(this._parent) && ValidationUtil.isDefined(this._parent.children)) {
       this._parent.children.push(this);
     }
   }
