@@ -101,6 +101,12 @@
         "moveDown": "Move down",
         "moveByDragging": "Move by dragging"
       },
+      "sort": {
+        "sortBy": "Sort by '%s'",
+        "sortAscendingBy": "Sort ascending by '%s'",
+        "sortDescendingBy": "Sort descending by '%s'",
+        "hintReverseKey": "Holding the 'Alt' key reverses the sorting direction."
+      },
       "tags": {
         "label": "Tags"
       },

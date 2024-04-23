@@ -44,14 +44,7 @@ export default class SortableListViewModel extends ViewModel {
   }
 
   /**
-   * An array of view models that belong to the entries. 
-   * 
-   * @type {Array<SortableListViewModelGroup>}
-   */
-  itemViewModelGroups = [];
-
-  /**
-   * This is a list of ids, in the order that they should be rendered in the list. 
+   * This is a list of `entityId`s, in the order that they should be rendered in the list. 
    * 
    * It is possible this list contains obsolete information, for example after an item 
    * is deleted, its entry in this list must also be removed. Or a new item might have 
@@ -60,7 +53,14 @@ export default class SortableListViewModel extends ViewModel {
    * @type {Array<String>}
    * @private
    */
-  orderedIdList = [];
+  _orderedIdList = [];
+
+  /**
+   * An array of view models that belong to the entries. 
+   * 
+   * @type {Array<SortableListViewModelGroup>}
+   */
+  itemViewModelGroups = [];
 
   /**
    * Returns `true`, if there is an "add" button view model. 
@@ -101,7 +101,7 @@ export default class SortableListViewModel extends ViewModel {
       this.vmBtnAddItem.parent = this;
     }
 
-    this.orderedIdList = this._getOrderedIdList();
+    this._orderedIdList = this._getOrderedIdList();
 
     // Generate data for the ui. 
     this.itemViewModelGroups = this._generateViewModelGroups();
@@ -138,7 +138,7 @@ export default class SortableListViewModel extends ViewModel {
       listItemViewModel.parent = this;
     }
 
-    this.orderedIdList = this._getOrderedIdList();
+    this._orderedIdList = this._getOrderedIdList();
 
     // Clean up of previous ui data. 
     for (const itemViewModelGroup of this.itemViewModelGroups) {
@@ -159,6 +159,35 @@ export default class SortableListViewModel extends ViewModel {
     super.dispose();
   }
 
+  /**
+   * Sorts the list in-place, based on the results returned by the given sorting function, 
+   * which receives two view model instances to compare, just like the `Array.sort` function. 
+   * 
+   * @param {Function} sortingFunc The sorting function. Should return an integer value, based on the equality
+   * of the arguments. Must return either `-1`, `0` or `1`. Receives view model instances of the represented 
+   * list items as arguments. Arguments:
+   * * `a: {ViewModel}`
+   * * `b: {ViewModel}`
+   * 
+   * @example
+   * ```JS
+   * mySortableList.sort((a, b) => {
+   *   return a.document.name.localeCompare(b.document.name);
+   * });
+   * ```
+   * 
+   */
+  sort(sortingFunc) {
+    const newViewModelList = this.listItemViewModels.concat([]); // Safe copy
+    newViewModelList.sort(sortingFunc);
+
+    this._orderedIdList = newViewModelList.map(vm => 
+      vm.entityId
+    );
+
+    this._storeItemOrder();
+  }
+ 
   /**
    * Returns a `SortableListViewModelGroup` instance, based on the given id and item view model. 
    * 
@@ -213,12 +242,12 @@ export default class SortableListViewModel extends ViewModel {
   _generateViewModelGroups() {
     const result = [];
 
-    for (let i = 0; i < this.orderedIdList.length; i++) {
-      const id = this.orderedIdList[i];
+    for (let i = 0; i < this._orderedIdList.length; i++) {
+      const id = this._orderedIdList[i];
       const listItemViewModel = this.listItemViewModels.find(it => it.entityId === id);
 
       const upButtonsEnabled = i > 0;
-      const downButtonsEnabled = i < this.orderedIdList.length - 1;
+      const downButtonsEnabled = i < this._orderedIdList.length - 1;
 
       const itemViewModelGroup = this._generateViewModelGroup(id, listItemViewModel, upButtonsEnabled, downButtonsEnabled);
       result.push(itemViewModelGroup);
@@ -233,7 +262,7 @@ export default class SortableListViewModel extends ViewModel {
    * @private
    */
   _storeItemOrder(render = true) {
-    this.indexDataSource.setAll(this.orderedIdList, render);
+    this.indexDataSource.setAll(this._orderedIdList, render);
   }
 
   /**
@@ -243,7 +272,7 @@ export default class SortableListViewModel extends ViewModel {
    * @async
    */
   async _moveToTop(id) {
-    moveArrayElement(this.orderedIdList, id, 0);
+    moveArrayElement(this._orderedIdList, id, 0);
     this._storeItemOrder();
   }
 
@@ -253,7 +282,7 @@ export default class SortableListViewModel extends ViewModel {
    * @async
    */
   async _moveUp(id) {
-    moveArrayElementBy(this.orderedIdList, id, -1);
+    moveArrayElementBy(this._orderedIdList, id, -1);
     this._storeItemOrder();
   }
 
@@ -263,7 +292,7 @@ export default class SortableListViewModel extends ViewModel {
    * @async
    */
   async _moveDown(id) {
-    moveArrayElementBy(this.orderedIdList, id, 1);
+    moveArrayElementBy(this._orderedIdList, id, 1);
     this._storeItemOrder();
   }
 
@@ -273,7 +302,7 @@ export default class SortableListViewModel extends ViewModel {
    * @async
    */
   async _moveToBottom(id) {
-    moveArrayElement(this.orderedIdList, id, this.orderedIdList.length - 1);
+    moveArrayElement(this._orderedIdList, id, this._orderedIdList.length - 1);
     this._storeItemOrder();
   }
 

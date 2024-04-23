@@ -88,6 +88,7 @@ import './presentation/sheet/actor/part/health/actor-health-viewmodel.mjs';
 import './presentation/sheet/actor/part/actor-personals-viewmodel.mjs';
 import { preloadPixiTextures } from "./presentation/pixi/pixi-preloader.mjs";
 import CustomCombatTracker from "./presentation/combat/custom-combat-tracker.mjs";
+import { KEYBOARD } from "./presentation/keyboard/keyboard.mjs";
 
 /* -------------------------------------------- */
 /*  Initialization                              */
@@ -198,6 +199,9 @@ Hooks.once("ready", function() {
 
   // Debug mode setting. 
   game.strive.debug = new LoadDebugSettingUseCase().invoke();
+
+  // Global event handling setup.
+  KEYBOARD.init();
 
   // Migration check. 
   const migrator = new MigratorInitiator();

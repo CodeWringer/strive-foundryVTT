@@ -2,25 +2,40 @@
 viewModel: {ActorSkillsViewModel}
 cssClass: {undefined | String}
 --}}
-<section id="{{viewModel.id}}" class="{{cssClass}}">
+<section id="{{viewModel.id}}" class="auto-margin-v-xl{{#if cssClass}} {{cssClass}}{{/if}}">
   {{> inputSearch viewModel=viewModel.vmSearch }}
   {{!-- Innate Skills --}}
   {{#if viewModel.hideInnateSkills}}<div class="hidden">{{/if}}
-    {{#> header1 showFancyFont=viewModel.showFancyFont cssClass="flex flex-row"}}
-      <span class="flex-grow">{{localize "system.character.skill.innate.label"}}</span>
-    {{/header1}}
-    {{> sortableList viewModel=viewModel.vmInnateSkillList prominentItemStyling=true }}
+    <div>
+      {{#> header1 showFancyFont=viewModel.showFancyFont cssClass="flex flex-row"}}
+        <span class="flex-grow">{{localize "system.character.skill.innate.label"}}</span>
+        {{#with viewModel.sortControlsTemplate as |template|}}
+          {{> (template) viewModel=../viewModel.vmSortInnate cssClass="font-size-default" }}
+        {{/with}}
+      {{/header1}}
+      {{> sortableList viewModel=viewModel.vmInnateSkillList prominentItemStyling=true }}
+    </div>
   {{#if viewModel.hideInnateSkills}}</div>{{/if}}
   {{!-- Learning Skills --}}
   {{#if viewModel.hideLearningSkills}}<div class="hidden">{{/if}}
-    {{#> header1 showFancyFont=viewModel.showFancyFont cssClass="flex flex-row"}}
-      <span class="flex-grow">{{localize "system.character.skill.learning.label"}}</span>
-    {{/header1}}
-    {{> sortableList viewModel=viewModel.vmLearningSkillList prominentItemStyling=true }}
+    <div>
+      {{#> header1 showFancyFont=viewModel.showFancyFont cssClass="flex flex-row"}}
+        <span class="flex-grow">{{localize "system.character.skill.learning.label"}}</span>
+        {{#with viewModel.sortControlsTemplate as |template|}}
+          {{> (template) viewModel=../viewModel.vmSortLearning cssClass="font-size-default" }}
+        {{/with}}
+      {{/header1}}
+      {{> sortableList viewModel=viewModel.vmLearningSkillList prominentItemStyling=true }}
+    </div>
   {{#if viewModel.hideLearningSkills}}</div>{{/if}}
   {{!-- Known Skills --}}
-  {{#> header1 showFancyFont=viewModel.showFancyFont cssClass="flex flex-row"}}
-    <span class="flex-grow">{{localize "system.character.skill.known.label"}}</span>
-  {{/header1}}
-  {{> sortableList viewModel=viewModel.vmKnownSkillList prominentItemStyling=true }}
+  <div>
+    {{#> header1 showFancyFont=viewModel.showFancyFont cssClass="flex flex-row"}}
+      <span class="flex-grow">{{localize "system.character.skill.known.label"}}</span>
+      {{#with viewModel.sortControlsTemplate as |template|}}
+        {{> (template) viewModel=../viewModel.vmSortKnown cssClass="font-size-default" }}
+      {{/with}}
+    {{/header1}}
+    {{> sortableList viewModel=viewModel.vmKnownSkillList prominentItemStyling=true }}
+  </div>
 </section>

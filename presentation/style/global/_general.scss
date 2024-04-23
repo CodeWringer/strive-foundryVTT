@@ -258,8 +258,8 @@
 
 .auto-margin {
   > * {
-    margin-right: 6px;
-    margin-bottom: 6px;
+    margin-right: $padding-md;
+    margin-bottom: $padding-md;
   }
   > :last-child {
     margin-right: 0;
@@ -268,19 +268,99 @@
 
   &-h {
     > * {
-      margin-right: 6px;
+      margin-right: $padding-md;
     }
     > :last-child {
       margin-right: 0;
     }
+    &-xs {
+      > * {
+        margin-right: $padding-xs;
+      }
+      > :last-child {
+        margin-right: 0;
+      }
+    }
+    &-sm {
+      > * {
+        margin-right: $padding-sm;
+      }
+      > :last-child {
+        margin-right: 0;
+      }
+    }
+    &-md {
+      > * {
+        margin-right: $padding-md;
+      }
+      > :last-child {
+        margin-right: 0;
+      }
+    }
+    &-lg {
+      > * {
+        margin-right: $padding-lg;
+      }
+      > :last-child {
+        margin-right: 0;
+      }
+    }
+    &-xl {
+      > * {
+        margin-right: $padding-xl;
+      }
+      > :last-child {
+        margin-right: 0;
+      }
+    }
   }
-  
+
   &-v {
     > * {
-      margin-bottom: 6px;
+      margin-bottom: $padding-md;
     }
     > :last-child {
       margin-bottom: 0;
+    }
+    &-xs {
+      > * {
+        margin-bottom: $padding-xs;
+      }
+      > :last-child {
+        margin-bottom: 0;
+      }
+    }
+    &-sm {
+      > * {
+        margin-bottom: $padding-sm;
+      }
+      > :last-child {
+        margin-bottom: 0;
+      }
+    }
+    &-md {
+      > * {
+        margin-bottom: $padding-md;
+      }
+      > :last-child {
+        margin-bottom: 0;
+      }
+    }
+    &-lg {
+      > * {
+        margin-bottom: $padding-lg;
+      }
+      > :last-child {
+        margin-bottom: 0;
+      }
+    }
+    &-xl {
+      > * {
+        margin-bottom: $padding-xl;
+      }
+      > :last-child {
+        margin-bottom: 0;
+      }
     }
   }
 }
