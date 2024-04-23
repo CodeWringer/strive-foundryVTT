@@ -9,6 +9,9 @@ npm-debug.log
 
 # FoundryVTT
 *.lock
+packs/*.log
+packs/LOG
+packs/LOG.old
 
 # Generated
 build/
