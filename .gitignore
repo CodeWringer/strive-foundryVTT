@@ -12,6 +12,8 @@ npm-debug.log
 packs/*.log
 packs/LOG
 packs/LOG.old
+packs/CURRENT
+packs/MANIFEST-*
 
 # Generated
 build/
