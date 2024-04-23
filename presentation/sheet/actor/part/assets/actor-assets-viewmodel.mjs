@@ -150,22 +150,7 @@ export default class ActorAssetsViewModel extends ViewModel {
     this.vmSortLuggage = new SortControlsViewModel({
       id: "vmSortLuggage",
       parent: this,
-      options: [
-        new SortingOption({
-          iconHtml: '<i class="ico ico-tags-solid dark"></i>',
-          localizedToolTip: game.i18n.localize("system.general.name.label"),
-          sortingFunc: (a, b) => {
-            return a.document.name.localeCompare(b.document.name);
-          },
-        }),
-        new SortingOption({
-          iconHtml: '<i class="ico ico-bulk-solid dark"></i>',
-          localizedToolTip: game.i18n.localize("system.character.asset.bulk"),
-          sortingFunc: (a, b) => {
-            return a.document.compareBulk(b.document);
-          },
-        }),
-      ],
+      options: this._getAssetSortingOptions(),
       compact: true,
       onSort: (_, provideSortable) => {
         provideSortable(this.vmLuggageList);
@@ -175,22 +160,7 @@ export default class ActorAssetsViewModel extends ViewModel {
     this.vmSortProperty = new SortControlsViewModel({
       id: "vmSortProperty",
       parent: this,
-      options: [
-        new SortingOption({
-          iconHtml: '<i class="ico ico-tags-solid dark"></i>',
-          localizedToolTip: game.i18n.localize("system.general.name.label"),
-          sortingFunc: (a, b) => {
-            return a.document.name.localeCompare(b.document.name);
-          },
-        }),
-        new SortingOption({
-          iconHtml: '<i class="ico ico-bulk-solid dark"></i>',
-          localizedToolTip: game.i18n.localize("system.character.asset.bulk"),
-          sortingFunc: (a, b) => {
-            return a.document.compareBulk(b.document);
-          },
-        }),
-      ],
+      options: this._getAssetSortingOptions(),
       compact: true,
       onSort: (_, provideSortable) => {
         provideSortable(this.vmPropertyList);
@@ -261,5 +231,29 @@ export default class ActorAssetsViewModel extends ViewModel {
     }
 
     return result;
+  }
+
+  /**
+   * @returns {Array<SortingOption>}
+   * 
+   * @private
+   */
+  _getAssetSortingOptions() {
+    return [
+      new SortingOption({
+        iconHtml: '<i class="ico ico-tags-solid dark"></i>',
+        localizedToolTip: game.i18n.localize("system.general.name.label"),
+        sortingFunc: (a, b) => {
+          return a.document.name.localeCompare(b.document.name);
+        },
+      }),
+      new SortingOption({
+        iconHtml: '<i class="ico ico-bulk-solid dark"></i>',
+        localizedToolTip: game.i18n.localize("system.character.asset.bulk"),
+        sortingFunc: (a, b) => {
+          return a.document.compareBulk(b.document);
+        },
+      }),
+    ];
   }
 }
