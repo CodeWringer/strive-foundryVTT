@@ -4,7 +4,7 @@
   "description": "The STRIVE system for FoundryVTT",
   "version": "1.6.1",
   "compatibility": {
-    "minimum": 10,
+    "minimum": 11,
     "maximum": 11,
     "verified": 11.315
   },
@@ -22,109 +22,109 @@
     {
       "name": "assets",
       "label": "Assets",
-      "path": "packs/assets.db",
+      "path": "packs/assets",
       "type": "Item"
     },
     {
       "name": "fantasyassets",
       "label": "Fantasy Assets",
-      "path": "packs/fantasy-assets.db",
+      "path": "packs/fantasy-assets",
       "type": "Item"
     },
     {
       "name": "fatecards",
       "label": "Fate Cards",
-      "path": "packs/fate-cards.db",
+      "path": "packs/fate-cards",
       "type": "Item"
     },
     {
       "name": "illnesses",
       "label": "Illnessess",
-      "path": "packs/illnesses.db",
+      "path": "packs/illnesses",
       "type": "Item"
     },
     {
       "name": "injuries-acid",
       "label": "Injuries (Acid)",
-      "path": "packs/injuries-acid.db",
+      "path": "packs/injuries-acid",
       "type": "Item"
     },
     {
       "name": "injuries-bleeding",
       "label": "Injuries (Bleeding)",
-      "path": "packs/injuries-bleeding.db",
+      "path": "packs/injuries-bleeding",
       "type": "Item"
     },
     {
       "name": "injuries-bludgeoning",
       "label": "Injuries (Bludgeoning)",
-      "path": "packs/injuries-bludgeoning.db",
+      "path": "packs/injuries-bludgeoning",
       "type": "Item"
     },
     {
       "name": "injuries-burning",
       "label": "Injuries (Burning)",
-      "path": "packs/injuries-burning.db",
+      "path": "packs/injuries-burning",
       "type": "Item"
     },
     {
       "name": "injuries-crushing",
       "label": "Injuries (Crushing)",
-      "path": "packs/injuries-crushing.db",
+      "path": "packs/injuries-crushing",
       "type": "Item"
     },
     {
       "name": "injuries-electrical",
       "label": "Injuries (Electrical)",
-      "path": "packs/injuries-electrical.db",
+      "path": "packs/injuries-electrical",
       "type": "Item"
     },
     {
       "name": "injuries-freezing",
       "label": "Injuries (Freezing)",
-      "path": "packs/injuries-freezing.db",
+      "path": "packs/injuries-freezing",
       "type": "Item"
     },
     {
       "name": "injuries-piercing",
       "label": "Injuries (Piercing)",
-      "path": "packs/injuries-piercing.db",
+      "path": "packs/injuries-piercing",
       "type": "Item"
     },
     {
       "name": "injuries-poison",
       "label": "Injuries (Poison)",
-      "path": "packs/injuries-poison.db",
+      "path": "packs/injuries-poison",
       "type": "Item"
     },
     {
       "name": "injuries-slashing",
       "label": "Injuries (Slashing)",
-      "path": "packs/injuries-slashing.db",
+      "path": "packs/injuries-slashing",
       "type": "Item"
     },
     {
       "name": "skills",
       "label": "Skills",
-      "path": "packs/skills.db",
+      "path": "packs/skills",
       "type": "Item"
     },
     {
       "name": "mutations",
       "label": "Mutations",
-      "path": "packs/mutations.db",
+      "path": "packs/mutations",
       "type": "Item"
     },
     {
       "name": "scars",
       "label": "Scars",
-      "path": "packs/scars.db",
+      "path": "packs/scars",
       "type": "Item"
     },
     {
       "name": "rolltables",
       "label": "RollTables",
-      "path": "packs/rolltables.db",
+      "path": "packs/rolltables",
       "type": "RollTable"
     }
   ],
