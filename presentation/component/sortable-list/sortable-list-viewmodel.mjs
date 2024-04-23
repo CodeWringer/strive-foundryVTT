@@ -160,8 +160,14 @@ export default class SortableListViewModel extends ViewModel {
   }
 
   /**
-   * Sorts the list in place, based on the results returned by the given sorting function, 
+   * Sorts the list in-place, based on the results returned by the given sorting function, 
    * which receives two view model instances to compare, just like the `Array.sort` function. 
+   * 
+   * @param {Function} sortingFunc The sorting function. Should return an integer value, based on the equality
+   * of the arguments. Must return either `-1`, `0` or `1`. Receives view model instances of the represented 
+   * list items as arguments. Arguments:
+   * * `a: {ViewModel}`
+   * * `b: {ViewModel}`
    * 
    * @example
    * ```JS
@@ -170,11 +176,6 @@ export default class SortableListViewModel extends ViewModel {
    * });
    * ```
    * 
-   * @param {Function} sortingFunc The sorting function. Should return an integer value, based on the equality
-   * of the arguments. Must return either `-1`, `0` or `1`. Receives view model instances of the represented 
-   * list items as arguments. Arguments:
-   * * `a: {ViewModel}`
-   * * `b: {ViewModel}`
    */
   sort(sortingFunc) {
     const newViewModelList = this.listItemViewModels.concat([]); // Safe copy
