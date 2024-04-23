@@ -460,11 +460,7 @@ export default class ViewModel {
       ) {
         this[propertyName].dispose();
       }
-      // Set property to null, thus 'hopefully' freeing its referenced value up for garbage collection. 
-      this[propertyName] = undefined;
     }
-    // Ensure methods cannot be called again. 
-    this.dispose = () => { /** Do nothing. */ };
   }
 
   /**
@@ -507,7 +503,7 @@ export default class ViewModel {
    * @virtual
    */
   getViewState() {
-    if (this.viewStateFields.length < 1) {
+    if ((this.viewStateFields ?? []).length < 1) {
       return undefined;
     }
 
