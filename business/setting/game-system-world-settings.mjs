@@ -13,6 +13,13 @@ export default class GameSystemWorldSettings extends GameSystemSettings {
    * @readonly
    */
   static get KEY_CUSTOM_HEALTH_STATES() { return "customHealthStates"; }
+ 
+  /**
+   * @static
+   * @type {String}
+   * @readonly
+   */
+  static get KEY_AUTO_REFILL_ACTION_POINTS() { return "autoRefillActionPoints"; }
 
   constructor() {
     super();
@@ -31,6 +38,15 @@ export default class GameSystemWorldSettings extends GameSystemSettings {
         type: Object,
         menu: HealthStatesSettingsDialog,
         restricted: true,
+      }),
+      new GameSystemSetting({
+        key: GameSystemWorldSettings.KEY_AUTO_REFILL_ACTION_POINTS,
+        name: game.i18n.localize("system.settings.autoActionPointRefill.label"),
+        hint: game.i18n.localize("system.settings.autoActionPointRefill.hint"),
+        scope: SettingScopes.WORLD,
+        config: true,
+        default: true,
+        type: Boolean,
       }),
     );
   }

@@ -15,7 +15,7 @@ viewModel: {Array<DynamicInputDialogViewModel>}
     {{!-- Spacer --}}
     <div class="margin-r-md"></div>
     {{!-- Input controls --}}
-    <div class="flex-grow">
+    <div class="flex flex-middle flex-grow">
       {{#if (eq control.definition.type "DROP_DOWN")}}
         {{> inputDropDown viewModel=control.viewModel}}
       {{/if}}
@@ -39,6 +39,9 @@ viewModel: {Array<DynamicInputDialogViewModel>}
       {{/if}}
       {{#if (eq control.definition.type "SIMPLE_LIST")}}
         {{> simpleList viewModel=control.viewModel}}
+      {{/if}}
+      {{#if (eq control.definition.type "TOGGLE")}}
+        {{> inputToggle viewModel=control.viewModel}}
       {{/if}}
     </div>
     {{/if}}

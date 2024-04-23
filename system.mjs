@@ -36,6 +36,7 @@ import { ACTOR_SUBTYPE } from "./business/document/actor/actor-subtype.mjs";
 import { GameSystemActor } from "./business/document/actor/actor.mjs";
 import { ITEM_SUBTYPE } from "./business/document/item/item-subtype.mjs";
 import { GameSystemItem } from "./business/document/item/item.mjs";
+import { GameSystemCombat } from "./presentation/combat/game-system-combat.mjs";
 // Sheet classes
 import { GameSystemActorSheet } from "./presentation/sheet/actor/actor-sheet.mjs";
 import { GameSystemItemSheet } from "./presentation/sheet/item/item-sheet.mjs";
@@ -158,6 +159,7 @@ Hooks.once('init', function() {
   // Override document classes. 
   CONFIG.Actor.documentClass = GameSystemActor;
   CONFIG.Item.documentClass = GameSystemItem;
+  CONFIG.Combat.documentClass = GameSystemCombat;
 
   // Override combat tracker. 
   CONFIG.ui.combat = CustomCombatTracker;
