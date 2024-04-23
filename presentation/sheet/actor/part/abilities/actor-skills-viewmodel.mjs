@@ -182,6 +182,7 @@ export default class ActorSkillsViewModel extends ViewModel {
       id: "vmSortInnate",
       parent: this,
       options: this._getSkillSortingOptions(),
+      compact: true,
       onSort: (_, provideSortable) => {
         provideSortable(this.vmInnateSkillList);
       },
@@ -190,6 +191,7 @@ export default class ActorSkillsViewModel extends ViewModel {
       id: "vmSortLearning",
       parent: this,
       options: this._getSkillSortingOptions(),
+      compact: true,
       onSort: (_, provideSortable) => {
         provideSortable(this.vmLearningSkillList);
       },
@@ -198,6 +200,7 @@ export default class ActorSkillsViewModel extends ViewModel {
       id: "vmSortKnown",
       parent: this,
       options: this._getSkillSortingOptions(),
+      compact: true,
       onSort: (_, provideSortable) => {
         provideSortable(this.vmKnownSkillList);
       },

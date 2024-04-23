@@ -166,6 +166,7 @@ export default class ActorAssetsViewModel extends ViewModel {
           },
         }),
       ],
+      compact: true,
       onSort: (_, provideSortable) => {
         provideSortable(this.vmLuggageList);
       },
@@ -190,6 +191,7 @@ export default class ActorAssetsViewModel extends ViewModel {
           },
         }),
       ],
+      compact: true,
       onSort: (_, provideSortable) => {
         provideSortable(this.vmPropertyList);
       },

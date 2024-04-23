@@ -299,6 +299,7 @@ export default class ActorHealthViewModel extends ViewModel {
           },
         }),
       ],
+      compact: true,
       onSort: (_, provideSortable) => {
         provideSortable(this.vmInjuryList);
       },
@@ -323,6 +324,7 @@ export default class ActorHealthViewModel extends ViewModel {
           },
         }),
       ],
+      compact: true,
       onSort: (_, provideSortable) => {
         provideSortable(this.vmIllnessList);
       },
@@ -340,6 +342,7 @@ export default class ActorHealthViewModel extends ViewModel {
           },
         }),
       ],
+      compact: true,
       onSort: (_, provideSortable) => {
         provideSortable(this.vmMutationList);
       },
@@ -357,6 +360,7 @@ export default class ActorHealthViewModel extends ViewModel {
           },
         }),
       ],
+      compact: true,
       onSort: (_, provideSortable) => {
         provideSortable(this.vmScarList);
       },
