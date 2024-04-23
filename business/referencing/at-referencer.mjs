@@ -96,7 +96,7 @@ export default class AtReferencer {
       comparableReference = comparableReference.replaceAll("_", " ");
       
       // In case the document is embedded, choose the owning document to search in. 
-      let searchDocument = document; // .owningDocument === undefined ? document : document.owningDocument;
+      let searchDocument = document;
       if (document.owningDocument !== undefined && document.owningDocument.owningDocument !== undefined) {
         // Given document is an expertise. 
         searchDocument = document.owningDocument.owningDocument;

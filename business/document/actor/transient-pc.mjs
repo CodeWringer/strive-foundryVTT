@@ -1,5 +1,6 @@
 import AtReferencer from "../../referencing/at-referencer.mjs";
 import Ruleset from "../../ruleset/ruleset.mjs";
+import { isDefined } from "../../util/validation-utility.mjs";
 import { ACTOR_SUBTYPE } from "./actor-subtype.mjs";
 import TransientBaseCharacterActor from "./transient-base-character-actor.mjs";
 
@@ -126,7 +127,13 @@ export default class TransientPc extends TransientBaseCharacterActor {
     const collectionsToSearch = [
       this.fateSystem.fateCards,
     ];
-    return new AtReferencer().resolveReferenceInCollections(collectionsToSearch, comparableReference, propertyPath);
+    const r = new AtReferencer().resolveReferenceInCollections(collectionsToSearch, comparableReference, propertyPath);
+
+    if (isDefined(r)) {
+      return r;
+    } else {
+      return super.resolveReference(comparableReference, propertyPath);
+    }
   }
 }
 
