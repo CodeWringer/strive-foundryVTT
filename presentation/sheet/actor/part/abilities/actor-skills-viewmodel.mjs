@@ -13,22 +13,6 @@ export default class ActorSkillsViewModel extends ViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.ACTOR_SKILLS; }
 
-  /**
-   * Returns the sorting definition id to sort by level. 
-   * 
-   * @readonly
-   * @private
-   */
-  get idSortByLevel() { return "level"; };
-
-  /**
-   * Returns the sorting definition id to sort by name. 
-   * 
-   * @readonly
-   * @private
-   */
-  get idSortByName() { return "name"; };
-
   /** @override */
   get entityId() { return this.document.id; }
 
@@ -197,25 +181,25 @@ export default class ActorSkillsViewModel extends ViewModel {
     this.vmSortInnate = new SortControlsViewModel({
       id: "vmSortInnate",
       parent: this,
-      definitions: this._getSkillSortingOptions(),
-      onClick: async (_, definition, ascending) => {
-        this._sortSkills(definition.id, ascending, this.vmInnateSkillList);
+      options: this._getSkillSortingOptions(),
+      onSort: (_, provideSortable) => {
+        provideSortable(this.vmInnateSkillList);
       },
     });
     this.vmSortLearning = new SortControlsViewModel({
       id: "vmSortLearning",
       parent: this,
-      definitions: this._getSkillSortingOptions(),
-      onClick: async (_, definition, ascending) => {
-        this._sortSkills(definition.id, ascending, this.vmLearningSkillList);
+      options: this._getSkillSortingOptions(),
+      onSort: (_, provideSortable) => {
+        provideSortable(this.vmLearningSkillList);
       },
     });
     this.vmSortKnown = new SortControlsViewModel({
       id: "vmSortKnown",
       parent: this,
-      definitions: this._getSkillSortingOptions(),
-      onClick: async (_, definition, ascending) => {
-        this._sortSkills(definition.id, ascending, this.vmKnownSkillList);
+      options: this._getSkillSortingOptions(),
+      onSort: (_, provideSortable) => {
+        provideSortable(this.vmKnownSkillList);
       },
     });
   }
@@ -375,62 +359,6 @@ export default class ActorSkillsViewModel extends ViewModel {
   }
 
   /**
-   * Compares the raw level of two given skill list item view models' underlying `TransientSkill` and returns 
-   * a number usable in a sorting function. 
-   * 
-   * @param {Boolean} descending If `true`, will return results suitable for sorting in a descending fashion, 
-   * otherwise, returns results suitable for sorting in an ascending fashion. 
-   * @param {SkillListItemViewModel} a A skill list item view model instance. 
-   * @param {SkillListItemViewModel} b Another skill list item view model instance. 
-   * 
-   * @returns {Number} `-1` | `0` | `1`
-   * 
-   * @private
-   */
-  _compareLevel(descending = false, a, b) {
-    let r = 0;
-    if (a.document.level < b.document.level) {
-      r = -1;
-    } else if (a.document.level > b.document.level) {
-      r = 1;
-    }
-    if (descending) {
-      return r * -1;
-    } else {
-      return r;
-    }
-  }
-
-  /**
-   * Sorts in-place the given list of skill list item view models, based on the given 
-   * sorting defintion. 
-   * 
-   * @param {String} sortingOptionId ID of the sorting option.  
-   * @param {Boolean} ascending If true, will sort in ascending fashion, otherwise will sort in 
-   * descending fashion. 
-   * @param {Array<SkillListItemViewModel>} list The list to sort. 
-   * 
-   * @private
-   */
-  _sortSkills(sortingOptionId, ascending, list) {
-    list.sort((a, b) => {
-      if (sortingOptionId == this.idSortByLevel) {
-        if (ascending === true) {
-          return this._compareLevel(false, a, b);
-        } else if (ascending === false) {
-          return this._compareLevel(true, a, b);
-        }
-      } else if (sortingOptionId == this.idSortByName) {
-        if (ascending === true) {
-          return a.document.name.localeCompare(b.document.name);
-        } else if (ascending === false) {
-          return b.document.name.localeCompare(a.document.name);
-        }
-      }
-    });
-  }
-
-  /**
    * @returns {Array<SortingOption>}
    * 
    * @private
@@ -438,14 +366,18 @@ export default class ActorSkillsViewModel extends ViewModel {
   _getSkillSortingOptions() {
     return [
       new SortingOption({
-        id: this.idSortByName,
         iconHtml: '<i class="ico ico-tags-solid dark pad-r-sm"></i>',
         localizedToolTip: game.i18n.localize("system.general.name.label"),
+        sortingFunc: (a, b) => {
+          return a.document.name.localeCompare(b.document.name);
+        },
       }),
       new SortingOption({
-        id: this.idSortByLevel,
         iconHtml: '<i class="ico ico-level-solid dark pad-r-sm"></i>',
         localizedToolTip: game.i18n.localize("system.character.advancement.level"),
+        sortingFunc: (a, b) => {
+          return a.document.compareLevel(b.document);
+        },
       }),
     ];
   }

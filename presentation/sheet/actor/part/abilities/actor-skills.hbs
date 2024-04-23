@@ -2,7 +2,7 @@
 viewModel: {ActorSkillsViewModel}
 cssClass: {undefined | String}
 --}}
-<section id="{{viewModel.id}}" class="auto-margin-v-lg{{#if cssClass}} {{cssClass}}{{/if}}">
+<section id="{{viewModel.id}}" class="auto-margin-v-xl{{#if cssClass}} {{cssClass}}{{/if}}">
   {{> inputSearch viewModel=viewModel.vmSearch }}
   {{!-- Innate Skills --}}
   {{#if viewModel.hideInnateSkills}}<div class="hidden">{{/if}}

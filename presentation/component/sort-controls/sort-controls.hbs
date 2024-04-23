@@ -3,15 +3,22 @@ viewModel: SortControlsViewModel
 cssClass: String | undefined
 --}}
 <span id="{{viewModel.id}}" class="flex flex-row auto-margin-h{{#if cssClass}} {{cssClass}}{{/if}}">
-  {{#each viewModel.definitionViewModels as |vm|}}
-    <span class="flex flex-row flex-middle auto-margin-h sheet-block">
-      {{#if definition.iconHtml}}
-      <span class="flex flex-center"{{#if definition.localizedToolTip}} title="{{definition.localizedToolTip}}"{{/if}}>{{{definition.iconHtml}}}</span>
+  {{#each viewModel.optionViewModels as |option|}}
+    <span class="flex flex-row auto-margin-h sheet-block">
+      {{log option}}
+      {{#if (or option.option.iconHtml option.option.localizedLabel)}}
+      <span class="flex flex-row flex-middle auto-margin-h border-solid-r-sm">
+        {{#if option.option.iconHtml}}
+        <span class="flex flex-center"{{#if option.option.localizedToolTip}} title="{{option.option.localizedToolTip}}"{{/if}}>{{{option.option.iconHtml}}}</span>
+        {{/if}}
+        {{#if option.option.localizedLabel}}
+        <span>{{option.option.localizedLabel}}</span>
+        {{/if}}
+      </span>
       {{/if}}
-      {{#if definition.localizedLabel}}<span>{{definition.localizedLabel}}</span>{{/if}}
-      <span class="flex flex-row flex-middle border-solid-l-sm">
-        {{#> button viewModel=vm.vmSortAscending cssClass="override"}}{{/button}}
-        {{#> button viewModel=vm.vmSortDescending cssClass="override"}}{{/button}}
+      <span class="flex flex-row flex-middle">
+        {{#> button viewModel=option.vmSortAscending cssClass="override"}}{{/button}}
+        {{#> button viewModel=option.vmSortDescending cssClass="override"}}{{/button}}
       </span>
     </span>
   {{/each}}

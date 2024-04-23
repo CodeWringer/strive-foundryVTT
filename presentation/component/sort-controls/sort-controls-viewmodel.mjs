@@ -19,50 +19,89 @@ export default class SortControlsViewModel extends ViewModel {
    * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
    * @param {Boolean | undefined} args.isEditable Optional. If true, input(s) will be in edit mode. If false, input(s) will be in read-only mode.
    * 
-   * @param {Array<SortingOption> | undefined} args.definitions A list of sortable property definitions.  
-   * @param {Function | undefined} args.onClick Asynchronous callback that is invoked when a sort button is clicked. 
-   * Does **not** perform any sorting! That task is delegated to the user of this class! 
-   * Arguments: 
+   * @param {Array<SortingOption> | undefined} args.options A list of sorting options. 
+   * @param {Function | undefined} args.onSort Callback that is invoked when a sort button is clicked. 
    * * `event: Event`
-   * * `definition: SortingOption`
-   * * `ascending: Boolean` - If true, the user clicked the button to sort in ascending fashion. 
+   * * `provideSortable: Function` - Must be invoked by the user and receive a single argument: 
+   * * * `sortable: Array<Any> | Object` - The list to sort **in-place**! If type is `Object`, then the object **must** provide a `sort`-method! 
+   * 
+   * @example
+   * ```JS
+   * this.vmSortInnate = new SortControlsViewModel({
+   *   id: "vmSortInnate",
+   *   parent: this,
+   *   options: [
+   *     new SortingOption({
+   *       iconHtml: '<i class="ico ico-tags-solid dark pad-r-sm"></i>',
+   *       localizedToolTip: game.i18n.localize("system.general.name.label"),
+   *       sortingFunc: (a, b) => {
+   *         return a.document.name.localeCompare(b.document.name);
+   *       },
+   *     }),
+   *   ],
+   *   onSort: (_, provideSortable) => {
+   *     provideSortable(this.vmInnateSkillList);
+   *   },
+   *  });
+   * ```
    */
   constructor(args = {}) {
     super(args);
 
-    this.onClick = args.onClick ?? (async () => { });
-    this.definitions = args.definitions ?? [];
+    this.onSort = args.onSort ?? (() => {});
+    this.options = args.options ?? [];
 
-    this.definitionViewModels = this.definitions.map(definition => {
+    this.optionViewModels = this.options.map(option => {
+      const index = this.options.indexOf(option);
       return {
-        definition: definition,
+        option: option,
         vmSortAscending: new ButtonViewModel({
-          id: `${definition.id}-ascending`,
+          id: `${index}-ascending`,
           parent: this,
-          localizedToolTip: definition.localizedToolTipSortAscending,
+          localizedToolTip: option.localizedToolTipSortAscending,
           iconHtml: '<i class="ico interactible dark ico-ascending-solid"></i>',
-          onClick: async (event) => {
-            this.onClick(event, definition, true);
+          onClick: (event) => {
+            this.onSort(event, (sortable) => {
+              sortable.sort(option.sortingFunc);
+            });
           },
         }),
         vmSortDescending: new ButtonViewModel({
-          id: `${definition.id}-descending`,
+          id: `${index}-descending`,
           parent: this,
-          localizedToolTip: definition.localizedToolTipSortDescending,
+          localizedToolTip: option.localizedToolTipSortDescending,
           iconHtml: '<i class="ico interactible dark ico-descending-solid"></i>',
-          onClick: async (event) => {
-            this.onClick(event, definition, false);
+          onClick: (event) => {
+            this.onSort(event, (sortable) => {
+              const reverseSort = this._getReverseSortFunc(option.sortingFunc);
+              sortable.sort(reverseSort);
+            });
           },
         }),
       };
     });
+  }
+
+  /**
+   * Wraps the given function in a new function which reverses the result, useful for 'descending' sorting. 
+   * 
+   * @param {Function<Number>} sortingFunc A function with which to do comparisons. Must return a numeric result, 
+   * the same way `Array.sort` does. Allowed numbers are `-1`, `0` and `1`. 
+   * 
+   * @returns {Function<Number>} 
+   */
+  _getReverseSortFunc(sortingFunc) {
+    return (a, b) => {
+      return sortingFunc(b, a);
+    }  
   }
 }
 
 /**
  * Represents a sortable property of a document. 
  * 
- * @property {String} id An ID by which to identify this definition. 
+ * @property {Function<Number>} sortingFunc A function with which to do comparisons. Must return a numeric result, 
+ * the same way `Array.sort` does. Allowed numbers are `-1`, `0` and `1`. 
  * @property {String | undefined} iconHtml An HTML literal to display as icon before the label. 
  * @property {String | undefined} localizedLabel A localized label. 
  * @property {String | undefined} localizedToolTip A localized tooltip for the icon. 
@@ -74,7 +113,8 @@ export default class SortControlsViewModel extends ViewModel {
 export class SortingOption {
   /**
    * @param {Object} args 
-   * @param {String} args.id An ID by which to identify this definition. 
+   * @param {Function<Number>} args.sortingFunc A function with which to do comparisons. Must return a numeric result, 
+   * the same way `Array.sort` does. Allowed numbers are `-1`, `0` and `1`. 
    * @param {String | undefined} args.iconHtml An HTML literal to display as icon before the label. 
    * @param {String | undefined} args.localizedLabel A localized label. 
    * @param {String | undefined} args.localizedToolTip A localized tooltip for the icon. 
@@ -84,9 +124,9 @@ export class SortingOption {
    * * Acts as an override. If undefined, uses the `localizedToolTip` in a composite string. 
    */
   constructor(args = {}) {
-    validateOrThrow(args, ["id"]);
+    validateOrThrow(args, ["sortingFunc"]);
 
-    this.id = args.id;
+    this.sortingFunc = args.sortingFunc;
     this.iconHtml = args.iconHtml;
     this.localizedLabel = args.localizedLabel;
     this.localizedToolTip = args.localizedToolTip;

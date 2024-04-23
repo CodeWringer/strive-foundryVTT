@@ -5,6 +5,7 @@ import { SOUNDS_CONSTANTS } from "../../../presentation/audio/sounds.mjs";
 import { ITEM_SUBTYPE } from "./item-subtype.mjs";
 import TransientBaseItem from "./transient-base-item.mjs";
 import { createUUID } from "../../util/uuid-utility.mjs";
+import { INJURY_STATES } from "../../ruleset/health/injury-states.mjs";
 
 /**
  * Represents the full transient data of an injury. 
@@ -208,6 +209,28 @@ export default class TransientInjury extends TransientBaseItem {
       isGM: game.user.isGM,
       document: this,
     });
+  }
+  
+  /**
+   * Compares the treatment state of this instance with a given instance and returns a numeric comparison result. 
+   * 
+   * @param {TransientInjury} other Another instance to compare with. 
+   * 
+   * @returns {Number} `-1` | `0` | `1`
+   * 
+   * `-1` means that this entity is less than / smaller than `other`, while `0` means equality and `1` means it 
+   * is more than / greater than `other`. 
+   */
+  compareTreatment(other) {
+    if (this.state === INJURY_STATES.active.name && other.state !== INJURY_STATES.active.name) {
+      return -1;
+    } else if (this.state === INJURY_STATES.patchedUp.name && other.state === INJURY_STATES.active.name) {
+      return 1;
+    } else if (this.state === INJURY_STATES.patchedUp.name && other.state === INJURY_STATES.treated.name) {
+      return -1;
+    } else if (this.state === INJURY_STATES.treated.name && other.state !== INJURY_STATES.treated.name) {
+      return 1;
+    }
   }
 }
 
