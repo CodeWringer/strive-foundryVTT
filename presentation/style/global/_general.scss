@@ -258,8 +258,8 @@
 
 .auto-margin {
   > * {
-    margin-right: 6px;
-    margin-bottom: 6px;
+    margin-right: $padding-md;
+    margin-bottom: $padding-md;
   }
   > :last-child {
     margin-right: 0;
@@ -268,7 +268,7 @@
 
   &-h {
     > * {
-      margin-right: 6px;
+      margin-right: $padding-md;
     }
     > :last-child {
       margin-right: 0;
