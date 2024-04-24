@@ -2,7 +2,7 @@
 viewModel: {ActorDriversViewModel}
 cssClass: {undefined | String}
 --}}
-<section class="{{cssClass}}">
+<section id="{{viewModel.id}}" class="{{cssClass}}">
   {{#> header3 showFancyFont=viewModel.showFancyFont}}{{localize "system.character.driverSystem.ambition"}}{{/header3}}
   <div class="margin-b-md">
     {{> inputTextField viewModel=viewModel.vmTfAmbition }}

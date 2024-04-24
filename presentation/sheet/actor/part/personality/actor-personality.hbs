@@ -2,7 +2,7 @@
 viewModel: {ActorPersonalityViewModel}
 cssClass: {undefined | String}
 --}}
-<section class="{{cssClass}}">
+<section id="{{viewModel.id}}" class="{{cssClass}}">
   {{#> header1 showFancyFont=viewModel.showFancyFont}}{{localize "system.character.personalityTrait.plural"}}{{/header1}}
   {{#with viewModel.personalityTraitsTemplate as | template |}}
     {{> (template) viewModel=../viewModel.personalityTraitsViewModel }}

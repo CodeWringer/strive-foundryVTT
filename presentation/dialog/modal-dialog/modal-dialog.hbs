@@ -1,16 +1,18 @@
 {{!-- Required context:
 buttons: {Array<DialogButtonDefinition>}
 --}}
-<div>
-  {{> @partial-block }}
-</div>
-<div class="flex flex-row">
-  {{#each buttons as |button index|}}
-  <button id="{{button.id}}" class="button spaced flex flex-center{{#if button.cssClass}} {{button.cssClass}}{{/if}}">
-    <span class="pad-l-md pad-r-md">
-      {{#if button.iconCssClass}}<i class="{{button.iconCssClass}}"></i>{{/if}}
-    </span>
-    <span>{{button.localizedLabel}}</span>
-  </button>
-  {{/each}}
-</div>
+<section id="{{viewModel.id}}">
+  <div>
+    {{> @partial-block }}
+  </div>
+  <div class="flex flex-row">
+    {{#each buttons as |button index|}}
+    <button id="{{button.id}}" class="button spaced flex flex-center{{#if button.cssClass}} {{button.cssClass}}{{/if}}">
+      <span class="pad-l-md pad-r-md">
+        {{#if button.iconCssClass}}<i class="{{button.iconCssClass}}"></i>{{/if}}
+      </span>
+      <span>{{button.localizedLabel}}</span>
+    </button>
+    {{/each}}
+  </div>
+</section>

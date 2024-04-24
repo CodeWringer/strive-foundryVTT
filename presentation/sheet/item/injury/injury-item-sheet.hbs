@@ -2,7 +2,7 @@
 viewModel: {InjuryItemSheetViewModel}
 cssClass: {undefined | String}
 --}}
-<form class="flex flex-column{{#if cssClass}} {{cssClass}}{{/if}}" autocomplete="off">
+<form id="{{viewModel.id}}" class="flex flex-column{{#if cssClass}} {{cssClass}}{{/if}}" autocomplete="off">
   <header class="sheet-header">
     <div class="flex flex-column flex-grow">
       <div class="flex flex-row">

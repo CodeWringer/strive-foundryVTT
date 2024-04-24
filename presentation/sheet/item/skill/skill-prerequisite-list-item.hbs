@@ -1,7 +1,7 @@
 {{!--
 viewModel: SkillPrerequisiteListItemViewModel
 --}}
-<div class="flex flex-row flex-grow flex-middle">
+<div id="{{viewModel.id}}" class="flex flex-row flex-grow flex-middle">
   {{!-- Name --}}
   {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "system.general.name.label"}}{{/label}}
   <span class="flex-grow">

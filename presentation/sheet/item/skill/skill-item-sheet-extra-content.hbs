@@ -1,38 +1,40 @@
 {{!-- Parameters:
 viewModel: {SkillItemSheetViewModel}
 --}}
-{{!-- Row --}}
-{{!-- Damage --}}
-<div class="flex flex-row sheet-block{{#if viewModel.hideDamage}} hidden{{/if}}">
-  <div class="flex flex-center">
-    <span class="button light square font-size-default flex flex-center" id="{{viewModel.id}}-damage-info">
-      <i class="far fa-question-circle info-button"></i>
-    </span>
-  </div>
-  {{> damageDefinitionList viewModel=viewModel.vmDamageDefinitionList}}
-</div>
-{{!-- Attributes --}}
-<div class="sheet-block flex flex-column">
-  {{#> header3 showFancyFont=viewModel.showFancyFont}}{{localize "system.character.attribute.plural"}}{{/header3}}
-  {{> simpleList viewModel=viewModel.vmBaseAttributeList}}
-</div>
-{{!-- Row --}}
-<div class="flex flex-row flex-middle auto-margin-h sheet-block">
-  {{!-- Category --}}
-  {{#> labeledControl viewModel=viewModel.vmTfCategory localizedIconToolTip=(localize "system.general.category") iconClass="ico-category-solid" cssClass="" }}
-    <div class="width-xxl">
-      {{> inputTextField }}
+<section id="{{viewModel.id}}">
+  {{!-- Row --}}
+  {{!-- Damage --}}
+  <div class="flex flex-row sheet-block{{#if viewModel.hideDamage}} hidden{{/if}}">
+    <div class="flex flex-center">
+      <span class="button light square font-size-default flex flex-center" id="{{viewModel.id}}-damage-info">
+        <i class="far fa-question-circle info-button"></i>
+      </span>
     </div>
-  {{/labeledControl}}
-  {{!-- Tags --}}
-  {{#> labeledControl viewModel=viewModel.vmTags localizedIconToolTip=(localize "system.general.tags.label") iconClass="ico-tags-solid" cssClass="" }}
-    {{> inputTags }}
-  {{/labeledControl}}
-</div>
-{{!-- Prerequisites --}}
-<div class="sheet-block flex flex-column">
-  {{#> header3 showFancyFont=viewModel.showFancyFont}}{{localize "system.character.skill.prerequisite.plural"}}{{/header3}}
-  {{> simpleList viewModel=viewModel.vmPrerequisiteList}}
-</div>
-{{!-- Expertises --}}
-{{> "systems/strive/presentation/sheet/item/expertise/expertise-table.hbs" viewModel=viewModel.vmExpertiseTable cssClass=(ifThenElse viewModel.isExpertiseListVisible "" "hidden") }}
+    {{> damageDefinitionList viewModel=viewModel.vmDamageDefinitionList}}
+  </div>
+  {{!-- Attributes --}}
+  <div class="sheet-block flex flex-column">
+    {{#> header3 showFancyFont=viewModel.showFancyFont}}{{localize "system.character.attribute.plural"}}{{/header3}}
+    {{> simpleList viewModel=viewModel.vmBaseAttributeList}}
+  </div>
+  {{!-- Row --}}
+  <div class="flex flex-row flex-middle auto-margin-h sheet-block">
+    {{!-- Category --}}
+    {{#> labeledControl viewModel=viewModel.vmTfCategory localizedIconToolTip=(localize "system.general.category") iconClass="ico-category-solid" cssClass="" }}
+      <div class="width-xxl">
+        {{> inputTextField }}
+      </div>
+    {{/labeledControl}}
+    {{!-- Tags --}}
+    {{#> labeledControl viewModel=viewModel.vmTags localizedIconToolTip=(localize "system.general.tags.label") iconClass="ico-tags-solid" cssClass="" }}
+      {{> inputTags }}
+    {{/labeledControl}}
+  </div>
+  {{!-- Prerequisites --}}
+  <div class="sheet-block flex flex-column">
+    {{#> header3 showFancyFont=viewModel.showFancyFont}}{{localize "system.character.skill.prerequisite.plural"}}{{/header3}}
+    {{> simpleList viewModel=viewModel.vmPrerequisiteList}}
+  </div>
+  {{!-- Expertises --}}
+  {{> "systems/strive/presentation/sheet/item/expertise/expertise-table.hbs" viewModel=viewModel.vmExpertiseTable cssClass=(ifThenElse viewModel.isExpertiseListVisible "" "hidden") }}
+</section>

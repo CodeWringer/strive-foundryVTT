@@ -1,7 +1,7 @@
 {{!-- Parameters:
 viewModel: {SkillListItemViewModel}
 --}}
-<div class="flex flex-row flex-wrap margin-b-md auto-margin-h">
+<div id="{{viewModel.id}}" class="flex flex-row flex-wrap margin-b-md auto-margin-h">
   <div class="flex flex-row flex-grow flex-middle auto-margin-h sheet-block">
     {{!-- Active Attribute --}}
     {{#> labeledControl viewModel=viewModel.vmActiveAttribute localizedIconToolTip=(localize "system.character.attribute.singular") iconClass="ico-related-attribute-solid" cssClass="flex-grow" }}

@@ -2,7 +2,7 @@
 viewModel: {ActorAssetsEquippedViewModel}
 cssClass: {undefined | String}
 --}}
-<section{{#if cssClass}} class="{{cssClass}}"{{/if}}>
+<section id="{{viewModel.id}}"{{#if cssClass}} class="{{cssClass}}"{{/if}}>
   <ul class="unstyled-list">
     {{#each viewModel.assetSlotGroupViewModels as |vm index|}}
     {{#with ../viewModel.assetSlotGroupTemplate as | template |}}
