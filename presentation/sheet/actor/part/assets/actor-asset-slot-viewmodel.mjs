@@ -265,13 +265,8 @@ export default class ActorAssetSlotViewModel extends ViewModel {
    * @private
    */
   _getAssetsAsChoices() {
-    const result = [];
-    const assets = this.availableAssets;
-
-    for (const asset of assets) {
-      result.push(this.choiceAdapter.toChoiceOption(asset));
-    }
-
-    return result;
+    return this.availableAssets
+      .map(asset => this.choiceAdapter.toChoiceOption(asset))
+      .sort((a, b) => a.localizedValue.localeCompare(b.localizedValue));
   }
 }
