@@ -476,59 +476,6 @@ export default class TransientSkill extends TransientBaseItem {
   };
 
   /**
-   * Adds success/failure progress to the skill. 
-   * 
-   * Also auto-levels up the skill, if 'autoLevel' is set to true. 
-   * 
-   * @param {DicePoolRollResultType} outcomeType The test outcome to work with. 
-   * @param {Boolean | undefined} autoLevel Optional. If true, will auto-level up. 
-   * * Default `false`
-   * @param {Boolean | undefined} resetProgress Optional. If true, will also reset 
-   * successes and failures, if `autoLevel` is also true and a level automatically 
-   * incremented. 
-   * * Default `true`
-   * 
-   * @throws {Error} Thrown, if `outcomeType` is undefined. 
-   * 
-   * @async
-   */
-  async addProgress(outcomeType, autoLevel = false, resetProgress = true) {
-    if (outcomeType === undefined) {
-      game.strive.logger.logWarn("outcomeType is undefined");
-      return;
-    }
-    if (outcomeType === DICE_POOL_RESULT_TYPES.NONE) {
-      // Do not advance anything for a "none" result. 
-      return;
-    }
-
-    if (outcomeType === DICE_POOL_RESULT_TYPES.SUCCESS) {
-      this.advancementProgress.successes++;
-    } else {
-      this.advancementProgress.failures++;
-    }
-
-    if (autoLevel === true) {
-      if (this.advancementProgress.successes >= this.advancementRequirements.successes
-        && this.advancementProgress.failures >= this.advancementRequirements.failures) {
-        this.level++;
-
-        if (resetProgress === true) {
-          this.advancementProgress.successes = 0;
-          this.advancementProgress.failures = 0;
-        }
-      }
-    }
-    
-    await this._persistLevel();
-
-    // Progress associated attribute. 
-    if (this.owningDocument !== undefined) {
-      this.owningDocument.addAttributeProgress(outcomeType, this.activeBaseAttribute.name, autoLevel)
-    }
-  }
-
-  /**
    * Adds a new expertise. 
    * 
    * @param {Object} creationData Additional data to set on creation. 
@@ -569,19 +516,6 @@ export default class TransientSkill extends TransientBaseItem {
     await this.deleteByPath(`system.abilities.${id}`);
 
     return toRemove;
-  }
-
-  /**
-   * Advances the skill, based on the given `DicePoolRollResult`. 
-   * 
-   * @param {DicePoolRollResult | undefined} rollResult 
-   * 
-   * @async
-   */
-  async advanceByRollResult(rollResult) {
-    if (rollResult !== undefined) {
-      this.addProgress(rollResult.outcomeType);
-    }
   }
 
   /**

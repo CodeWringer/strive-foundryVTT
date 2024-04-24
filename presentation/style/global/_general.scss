@@ -257,109 +257,69 @@
 }
 
 .auto-margin {
-  > * {
+  > *:not(:last-child) {
     margin-right: $padding-md;
     margin-bottom: $padding-md;
   }
-  > :last-child {
-    margin-right: 0;
-    margin-bottom: 0;
-  }
 
   &-h {
-    > * {
+    > *:not(:last-child) {
       margin-right: $padding-md;
     }
-    > :last-child {
-      margin-right: 0;
-    }
     &-xs {
-      > * {
+      > *:not(:last-child) {
         margin-right: $padding-xs;
-      }
-      > :last-child {
-        margin-right: 0;
       }
     }
     &-sm {
-      > * {
+      > *:not(:last-child) {
         margin-right: $padding-sm;
-      }
-      > :last-child {
-        margin-right: 0;
       }
     }
     &-md {
-      > * {
+      > *:not(:last-child) {
         margin-right: $padding-md;
-      }
-      > :last-child {
-        margin-right: 0;
       }
     }
     &-lg {
-      > * {
+      > *:not(:last-child) {
         margin-right: $padding-lg;
-      }
-      > :last-child {
-        margin-right: 0;
       }
     }
     &-xl {
-      > * {
+      > *:not(:last-child) {
         margin-right: $padding-xl;
-      }
-      > :last-child {
-        margin-right: 0;
       }
     }
   }
 
   &-v {
-    > * {
+    > *:not(:last-child) {
       margin-bottom: $padding-md;
     }
-    > :last-child {
-      margin-bottom: 0;
-    }
     &-xs {
-      > * {
+      > *:not(:last-child) {
         margin-bottom: $padding-xs;
-      }
-      > :last-child {
-        margin-bottom: 0;
       }
     }
     &-sm {
-      > * {
+      > *:not(:last-child) {
         margin-bottom: $padding-sm;
-      }
-      > :last-child {
-        margin-bottom: 0;
       }
     }
     &-md {
-      > * {
+      > *:not(:last-child) {
         margin-bottom: $padding-md;
-      }
-      > :last-child {
-        margin-bottom: 0;
       }
     }
     &-lg {
-      > * {
+      > *:not(:last-child) {
         margin-bottom: $padding-lg;
-      }
-      > :last-child {
-        margin-bottom: 0;
       }
     }
     &-xl {
-      > * {
+      > *:not(:last-child) {
         margin-bottom: $padding-xl;
-      }
-      > :last-child {
-        margin-bottom: 0;
       }
     }
   }
