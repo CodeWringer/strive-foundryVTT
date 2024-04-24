@@ -39,6 +39,7 @@ export function initHandlebarsHelpers() {
  * * `hintCard` - accepts child content.
  */
 export function initHandlebarsPartials() {
+  Handlebars.registerPartial('verticalLine', `{{#> "${TEMPLATES.COMPONENT_VERTICAL_LINE}"}}{{/"${TEMPLATES.COMPONENT_VERTICAL_LINE}"}}`);
   Handlebars.registerPartial('label', `{{#> "${TEMPLATES.COMPONENT_LABEL}"}}{{> @partial-block}}{{/"${TEMPLATES.COMPONENT_LABEL}"}}`);
   Handlebars.registerPartial('readOnlyValue', `{{#> "${TEMPLATES.COMPONENT_LABEL_READ_ONLY_VALUE}"}}{{> @partial-block}}{{/"${TEMPLATES.COMPONENT_LABEL_READ_ONLY_VALUE}"}}`);
   Handlebars.registerPartial('admonishReadOnlyValue', `{{#> "${TEMPLATES.COMPONENT_LABEL_ADMONISHING_READ_ONLY_VALUE}"}}{{> @partial-block}}{{/"${TEMPLATES.COMPONENT_LABEL_ADMONISHING_READ_ONLY_VALUE}"}}`);

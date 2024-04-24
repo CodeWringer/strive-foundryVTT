@@ -24,6 +24,7 @@ const basePathComponent = `${basePathPresentation}/component`;
 
 export const TEMPLATES = {
   // --- Components
+  COMPONENT_VERTICAL_LINE: `${basePathComponent}/vertical-line/vertical-line.hbs`,
   // Labels
   COMPONENT_LABEL: `${basePathComponent}/label/label.hbs`,
   COMPONENT_LABEL_READ_ONLY_VALUE: `${basePathComponent}/label/read-only-value.hbs`,
