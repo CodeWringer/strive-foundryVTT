@@ -2,7 +2,7 @@
 viewModel: {ActorPersonalsViewModel}
 cssClass: {undefined | String}
 --}}
-<section class="{{cssClass}}">
+<section id="{{viewModel.id}}" class="{{cssClass}}">
   <div class="flex sheet-block">
     <div class="flex flex-column">
       {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "system.character.personals.species"}}{{/label}}

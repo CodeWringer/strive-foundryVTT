@@ -2,7 +2,7 @@
 viewModel: {ActorHealthStatesViewModel}
 cssClass: {undefined | String}
 --}}
-<div class="sheet-block">
+<div id="{{viewModel.id}}" class="sheet-block">
   {{#> header3 showFancyFont=viewModel.showFancyFont}}{{localize "system.character.health.states.label"}}{{/header3}}
   <div class="grid-3col">
     {{#each viewModel.stateViewModels as |vm index|}}

@@ -2,7 +2,7 @@
 viewModel: {DiceRollListViewModel}
 cssClass: {String | undefined}
 --}}
-<div class="flex flex-row{{#if cssClass}} {{cssClass}}{{/if}}">
+<div id="{{viewModel.id}}" class="flex flex-row{{#if cssClass}} {{cssClass}}{{/if}}">
   <div class="width-sm flex flex-center border-solid-r-md">
     {{> button viewModel=viewModel.vmBtnRoll }}
   </div>

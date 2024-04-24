@@ -2,7 +2,7 @@
 viewModel: {ActorFateViewModel}
 cssClass: {undefined | String}
 --}}
-<section class="auto-margin-v{{#if cssClass}} {{cssClass}}{{/if}}">
+<section id="{{viewModel.id}}" class="auto-margin-v{{#if cssClass}} {{cssClass}}{{/if}}">
   <div class="grid-3col grid-gap-md">
     <div class="sheet-block flex flex-row flex-middle flex-right">
       {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "system.character.driverSystem.fateSystem.fatePoints.minor.label"}}{{/label}}

@@ -2,7 +2,7 @@
 viewModel: {ActorAssetSlotViewModel}
 cssClass: {undefined | String}
 --}}
-<div class="strive-asset-slot flex flex-row{{#if cssClass}} {{cssClass}}{{/if}}">
+<div id="{{viewModel.id}}" class="strive-asset-slot flex flex-row{{#if cssClass}} {{cssClass}}{{/if}}">
   {{!-- Header Row --}}
   {{#if viewModel.hasAsset}}
   <div class="flex-grow">

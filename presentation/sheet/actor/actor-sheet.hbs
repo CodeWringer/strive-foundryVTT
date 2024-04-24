@@ -2,7 +2,7 @@
 viewModel: {ActorSheetViewModel}
 cssClass: {undefined | String}
 --}}
-<form class="{{viewModel.document.type}} flexcol{{#if cssClass}} {{cssClass}}{{/if}}" autocomplete="off">
+<form id="{{viewModel.id}}" class="{{viewModel.document.type}} flexcol{{#if cssClass}} {{cssClass}}{{/if}}" autocomplete="off">
   {{!-- Sheet Header --}}
   <header class="sheet-header">
     {{> inputImage viewModel=viewModel.vmImg cssClass="profile-img" }}

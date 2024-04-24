@@ -2,7 +2,7 @@
 viewModel: {ActorBiographyViewModel}
 cssClass: {undefined | String}
 --}}
-<section class="fill{{#if cssClass}} {{cssClass}}{{/if}}">
+<section id="{{viewModel.id}}" class="fill{{#if cssClass}} {{cssClass}}{{/if}}">
   <div class="sheet-block fill">
     {{> inputRichText viewModel=viewModel.vmRtBiography }}
   </div>
