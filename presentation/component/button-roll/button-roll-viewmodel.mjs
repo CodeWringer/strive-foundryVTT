@@ -137,7 +137,7 @@ export default class ButtonRollViewModel extends ButtonViewModel {
     this.secondaryChatTitle = args.secondaryChatTitle;
     this.secondaryChatImage = args.secondaryChatImage;
     this._actor = args.actor;
-    this.localizedTooltip = args.localizedTooltip ?? game.i18n.localize("system.roll.doRoll");
+    this.localizedTooltip = args.localizedToolTip ?? game.i18n.localize("system.roll.doRoll");
   }
 
   /**

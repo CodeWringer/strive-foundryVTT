@@ -280,9 +280,6 @@ export class DicePoolRollResult {
       combinedResultsForRendering.splice(this.obstacle, 0, obstacleForRendering);
     }
 
-    const diceComposition = this.getJoinedDiceCompositionString(this.dice, this.bonus);
-    const totalNumberOfDice = this.getTotalNumberOfDiceString();
-
     const rgxIsPlainNumber = new RegExp("^\\d+$");
     const isObstacleRolled = isDefined(this.evaluatedObstacle.formula.match(rgxIsPlainNumber)) === false;
     const evaluatedObstacleForDisplay = await this.evaluatedObstacle.renderForDisplay();
@@ -292,11 +289,11 @@ export class DicePoolRollResult {
       resultsForDisplay: combinedResultsForRendering,
       outcomeType: this.outcomeType.name.toUpperCase(),
       degree: this.degree,
-      numberOfDice: totalNumberOfDice,
+      numberOfDice: this.getTotalNumberOfDiceString(),
       positives: this.positives.length,
       negatives: this.negatives.length,
       missingDiceCount: missingDiceCount,
-      diceComposition: diceComposition,
+      diceComposition: this.getJoinedDiceCompositionString(this.dice, this.bonus),
       primaryTitle: args.primaryTitle,
       primaryImage: args.primaryImage,
       secondaryTitle: args.secondaryTitle,
@@ -353,7 +350,7 @@ export class DicePoolRollResult {
     if (this.modifier.name === ROLL_DICE_MODIFIER_TYPES.NONE.name) {
       return `${this.unmodifiedTotal}`;
     } else {
-      return `${this.modifiedTotal}/${this.unmodifiedTotal}`;
+      return `${this.modifiedTotal} / ${this.unmodifiedTotal}`;
     }
   }
 }
