@@ -168,14 +168,13 @@ export default class ButtonAddViewModel extends ButtonViewModel {
       localizedValue: game.i18n.localize("system.general.custom"),
     });
 
-    const options = [
-      customChoice,
-    ].concat(documentIndices.map(documentIndex => 
+    const options = documentIndices.map(documentIndex => 
       new ChoiceOption({
         value: documentIndex.id,
-        localizedValue: documentIndex.name,
+        localizedValue: `${documentIndex.name} (${documentIndex.sourceName})`,
       })
-    ));
+    ).sort((a, b) => a.localizedValue.localeCompare(b.localizedValue));
+    options.splice(0, 0, customChoice);
 
     const inputChoices = "inputChoices";
     const dialog = await new DynamicInputDialog({
