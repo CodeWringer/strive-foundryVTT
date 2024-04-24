@@ -1,5 +1,4 @@
 import { ROLL_TYPES } from "../../../../../business/dice/roll-types.mjs";
-import { GameSystemActor } from "../../../../../business/document/actor/actor.mjs";
 import TransientBaseCharacterActor from "../../../../../business/document/actor/transient-base-character-actor.mjs";
 import ChallengeRating from "../../../../../business/ruleset/attribute/challenge-rating.mjs";
 import { Sum, SumComponent } from "../../../../../business/ruleset/summed-data.mjs";

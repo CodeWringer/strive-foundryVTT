@@ -361,19 +361,6 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
   }
 
   /**
-   * Advances the skill, based on the given {DicePoolRollResult}. 
-   * 
-   * @param {DicePoolRollResult} rollResult 
-   * @param {String} itemId The id of the skill item to advance. 
-   * 
-   * @async
-   */
-  async advanceSkillBasedOnRollResult(rollResult, itemId) {
-    const oSkill = this.skills.find(it => it.id === itemId);
-    oSkill.addProgress(rollResult.outcomeType, true);
-  }
-
-  /**
    * Sets the level of the attribute with the given name. 
    * 
    * @param {String} attName Internal name of an attribute, e.g. `"strength"`. 
@@ -398,66 +385,6 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
         [`${propertyPath}.level`]: newValue,
       });
     }
-  }
-
-  /**
-   * Adds advancement progress to an attribute. 
-   * 
-   * Also auto-levels up the attribute, if 'autoLevel' is set to true. 
-   * 
-   * @param {DicePoolRollResultType} outcomeType The test outcome to work with. 
-   * @param {String | undefined} attName Optional. Internal name of an attribute, 
-   * e.g. `"strength"`. 
-   * @param {Boolean | undefined} autoLevel Optional. If true, will auto-level up. 
-   * Default `false`
-   * @param {Boolean | undefined} resetProgress Optional. If true, will also reset 
-   * advancement progress, if `autoLevel` is also true and a level automatically 
-   * incremented. 
-   * * Default `true`
-   * 
-   * @throws {Error} Thrown, if `outcomeType` is undefined. 
-   * 
-   * @async
-   */
-  async addAttributeProgress(outcomeType, attName = undefined, autoLevel = false, resetProgress = true) {
-    if (outcomeType === undefined) {
-      game.strive.logger.logWarn("outcomeType is undefined");
-      return;
-    }
-    if (outcomeType === DICE_POOL_RESULT_TYPES.NONE) {
-      // Do not advance anything for a "none" result. 
-      return;
-    }
-
-    const attribute = this.attributes.find(it => it.name === attName);
-
-    let progress = attribute.advancementProgress + 1;
-    let level = attribute.level;
-
-    if (autoLevel === true) {
-      if (progress >= attribute.advancementRequirements) {
-        level++;
-
-        if (resetProgress === true) {
-          progress = 0;
-        }
-      }
-    }
-
-    const groupName = new Ruleset().getAttributeGroupName(attName);
-
-    await this.document.update({
-      system: {
-        attributes: {
-          [groupName]: {
-            [attName]: {
-              level: level,
-              progress: progress,
-            }
-          }
-        }
-      }
-    });
   }
 
   /**

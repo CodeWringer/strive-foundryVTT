@@ -130,20 +130,6 @@ export default class CharacterAttribute {
   }
 
   /**
-   * Advances the represented attribute on the owning actor, based on the given 
-   * roll's outcome. 
-   * 
-   * @param {DicePoolRollResult | undefined} diceResult A dice roll result. 
-   * 
-   * @async
-   */
-  async advanceByRollResult(diceResult) {
-    if (diceResult !== undefined) {
-      await this._actor.getTransientObject().addAttributeProgress(diceResult.outcomeType, this.name);
-    }
-  }
-
-  /**
    * Returns the name of the containing attribute group. 
    * 
    * @param {String} name Internal name of the attribute. 

@@ -416,9 +416,6 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
           primaryChatTitle: game.i18n.localize(this.document.name),
           primaryChatImage: this.document.img,
           rollType: "dice-pool",
-          onClick: async (event, data) => {
-            await this.document.advanceByRollResult(data);
-          },
           actor: this.document.owningDocument.document,
         }),
       }),
