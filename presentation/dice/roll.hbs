@@ -69,9 +69,9 @@ evaluatedObstacleForDisplay: {String}
   {{!-- Dice --}}
   <div class="flex flex-row flex-middle flex-grow flex-wrap auto-margin-h-md">
     {{!-- Number of dice --}}
-    <span class="strive-pill grid-3col font-size-default" title="{{localize "system.roll.numberOfDice"}}">
+    <span class="strive-pill flex flex-row font-size-default" title="{{localize "system.roll.numberOfDice"}}">
       <div class="flex flex-center"><i class="fas fa-dice-three"></i></div>
-      <div class="flex flex-center">{{> verticalLine}}</div>
+      <div class="flex flex-center margin-l-md margin-r-md">{{> verticalLine}}</div>
       <div class="flex flex-center"><span class="dice-number">{{numberOfDice}}</span></div>
     </span>
     {{!-- Dice composition --}}
@@ -106,22 +106,22 @@ evaluatedObstacleForDisplay: {String}
     {{/if}}
     <div class="flex flex-row flex-center flex-wrap auto-margin-h-lg auto-margin-h-sm font-size-default">
       {{!-- Positives --}}
-      <span class="strive-pill grid-3col font-size-default" title="{{localize "system.roll.positive.plural"}}">
+      <span class="strive-pill flex flex-row font-size-default" title="{{localize "system.roll.positive.plural"}}">
         <div class="flex flex-center"><i class="ico dark ico-dice-check-solid" style="width: 1rem; height: 1rem;"></i></div>
-        <div class="flex flex-center">{{> verticalLine}}</div>
+        <div class="flex flex-center margin-l-md margin-r-md">{{> verticalLine}}</div>
         <div class="flex flex-center"><span class="dice-number">{{positives}}</span></div>
       </span>
       {{!-- Negatives --}}
-      <span class="strive-pill grid-3col font-size-default" title="{{localize "system.roll.negative.plural"}}">
+      <span class="strive-pill flex flex-row font-size-default" title="{{localize "system.roll.negative.plural"}}">
         <div class="flex flex-center"><i class="ico dark ico-dice-times-solid" style="width: 1rem; height: 1rem;"></i></div>
-        <div class="flex flex-center">{{> verticalLine}}</div>
+        <div class="flex flex-center margin-l-md margin-r-md">{{> verticalLine}}</div>
         <div class="flex flex-center"><span class="dice-number">{{negatives}}</span></div>
       </span>
       {{!-- Missing --}}
       {{#if (neq missingDiceCount 0)}}
-      <span class="strive-pill grid-3col font-size-default" title="{{localize "system.roll.missing.plural"}}">
+      <span class="strive-pill flex flex-row font-size-default" title="{{localize "system.roll.missing.plural"}}">
         <div class="flex flex-center"><i class="ico dark ico-dice-void-line" style="width: 1rem; height: 1rem;"></i></div>
-        <div class="flex flex-center">{{> verticalLine}}</div>
+        <div class="flex flex-center margin-l-md margin-r-md">{{> verticalLine}}</div>
         <div class="flex flex-center"><span class="dice-number">{{missingDiceCount}}</span></div>
       </span>
       {{/if}}
