@@ -50,9 +50,6 @@ import { ACTOR_TYPES } from "../../actor/actor-types.mjs";
  */
 export default class TransientSkill extends TransientBaseItem {
   /** @override */
-  static get TYPE() { return "skill"; }
-
-  /** @override */
   get defaultImg() { return "icons/svg/book.svg"; }
   
   /** @override */
