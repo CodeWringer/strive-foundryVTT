@@ -69,4 +69,4 @@ export default class TransientMutation extends TransientBaseItem {
   }
 }
 
-ITEM_SUBTYPE.set("mutation", (document) => { return new TransientMutation(document) });
+ITEM_SUBTYPE.set(TransientMutation.TYPE, (document) => { return new TransientMutation(document) });
