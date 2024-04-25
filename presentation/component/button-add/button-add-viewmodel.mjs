@@ -21,7 +21,7 @@ export const ADD_BUTTON_CREATION_TYPES = {
   SKILL: "skill",
   EXPERTISE: "expertise",
   FATE_CARD: "fate-card",
-  ASSET: "item",
+  ASSET: TransientAsset.TYPE,
   INJURY: "injury",
   ILLNESS: "illness",
 };

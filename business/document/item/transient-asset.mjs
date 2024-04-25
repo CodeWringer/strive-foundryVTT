@@ -31,6 +31,9 @@ import { ASSET_TAGS } from "../../tags/system-tags.mjs";
  */
 export default class TransientAsset extends TransientBaseItem {
   /** @override */
+  static get TYPE() { return "item"; }
+
+  /** @override */
   get defaultImg() { return "icons/svg/item-bag.svg"; }
   
   /** @override */
@@ -318,4 +321,4 @@ export default class TransientAsset extends TransientBaseItem {
   }
 }
 
-ITEM_SUBTYPE.set("item", (document) => { return new TransientAsset(document) });
+ITEM_SUBTYPE.set(TransientAsset.TYPE, (document) => { return new TransientAsset(document) });

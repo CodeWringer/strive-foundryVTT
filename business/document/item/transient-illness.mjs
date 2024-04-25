@@ -18,6 +18,9 @@ import { ILLNESS_STATES } from "../../ruleset/health/illness-states.mjs";
  */
 export default class TransientIllness extends TransientBaseItem {
   /** @override */
+  static get TYPE() { return "illness"; }
+
+  /** @override */
   get defaultImg() { return "icons/svg/poison.svg"; }
 
   /** @override */

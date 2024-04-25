@@ -95,9 +95,9 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
   get showAdvancementProgression() {
     if (isDefined(this.document.owningDocument) === true) {
       const type = this.document.owningDocument.type;
-      if (type === "npc" && this.document.owningDocument.progressionVisible === true) {
+      if (type === TransientNpc.TYPE && this.document.owningDocument.progressionVisible === true) {
         return true;
-      } else if (type === "pc") {
+      } else if (type === TransientPc.TYPE) {
         return true;
       }
     }

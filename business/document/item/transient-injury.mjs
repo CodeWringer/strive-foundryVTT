@@ -25,6 +25,9 @@ import { INJURY_STATES } from "../../ruleset/health/injury-states.mjs";
  */
 export default class TransientInjury extends TransientBaseItem {
   /** @override */
+  static get TYPE() { return "injury"; }
+
+  /** @override */
   get defaultImg() { return "icons/svg/bones.svg"; }
 
   /** @override */

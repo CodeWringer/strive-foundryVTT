@@ -8,7 +8,7 @@ import GameSystemPcActorSheet from "./game-system-pc-actor-sheet.mjs";
  * @readonly
  */
 export const ACTOR_SHEET_SUBTYPE = new Map([
-  ["plain", new GameSystemBaseActorSheet()],
-  ["npc", new GameSystemNpcActorSheet()],
-  ["pc", new GameSystemPcActorSheet()],
+  [TransientPlainActor.TYPE, new GameSystemBaseActorSheet()],
+  [TransientNpc.TYPE, new GameSystemNpcActorSheet()],
+  [TransientPc.TYPE, new GameSystemPcActorSheet()],
 ]);

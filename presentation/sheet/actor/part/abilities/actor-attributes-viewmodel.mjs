@@ -19,13 +19,13 @@ export default class ActorAttributesViewModel extends ViewModel {
    * @type {Boolean}
    * @readonly
    */
-  get isPC() { return this.document.type === "pc"; }
+  get isPC() { return this.document.type === TransientPc.TYPE; }
   
   /**
    * @type {Boolean}
    * @readonly
    */
-  get isNPC() { return this.document.type === "npc"; }
+  get isNPC() { return this.document.type === TransientNpc.TYPE; }
 
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 

@@ -12,7 +12,7 @@ import SkillItemSheet from "./skill/skill-item-sheet.mjs";
  * @readonly
  */
 export const ITEM_SHEET_SUBTYPE = new Map([
-  ["item", new AssetItemSheet()],
+  [TransientAsset.TYPE, new AssetItemSheet()],
   ["skill", new SkillItemSheet()],
   ["scar", new ScarItemSheet()],
   ["mutation", new MutationItemSheet()],

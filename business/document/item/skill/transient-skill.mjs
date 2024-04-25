@@ -22,6 +22,7 @@ import SkillPrerequisite from "../../../ruleset/skill/skill-prerequisite.mjs";
 import { SKILL_TAGS } from "../../../tags/system-tags.mjs";
 import AtReferencer from "../../../referencing/at-referencer.mjs";
 import { getGroupForAttributeByName } from "../../../ruleset/attribute/attribute-groups.mjs";
+import TransientNpc from "../../actor/transient-npc.mjs";
 
 /**
  * Represents the full transient data of a skill. 
@@ -384,7 +385,7 @@ export default class TransientSkill extends TransientBaseItem {
    */
   get dependsOnActiveCr() {
     const owningDocument = this.owningDocument;
-    if (owningDocument !== undefined && owningDocument.type === "npc") {
+    if (owningDocument !== undefined && owningDocument.type === TransientNpc.TYPE) {
       const group = getGroupForAttributeByName(this.activeBaseAttribute.name);
       return owningDocument.getIsCrActiveFor(group.name);
     } else {

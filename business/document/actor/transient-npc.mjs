@@ -20,6 +20,9 @@ import TransientBaseCharacterActor from "./transient-base-character-actor.mjs";
  */
 export default class TransientNpc extends TransientBaseCharacterActor {
   /** @override */
+  static get TYPE() { return "npc"; }
+
+  /** @override */
   get baseInitiative() {
     const attributesToSum = [
       ATTRIBUTES.perception.name,
@@ -131,4 +134,4 @@ export default class TransientNpc extends TransientBaseCharacterActor {
   }
 }
 
-ACTOR_SUBTYPE.set("npc", (document) => { return new TransientNpc(document) });
+ACTOR_SUBTYPE.set(TransientNpc.TYPE, (document) => { return new TransientNpc(document) });

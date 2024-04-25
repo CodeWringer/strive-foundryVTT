@@ -7,7 +7,8 @@ import TransientBaseActor from "./transient-base-actor.mjs";
  * @extends TransientBaseActor
  */
 export default class TransientPlainActor extends TransientBaseActor {
-  // Currently has no specific behavior. 
+  /** @override */
+  static get TYPE() { return "plain"; }
 }
 
-ACTOR_SUBTYPE.set("plain", (document) => { return new TransientPlainActor(document) });
+ACTOR_SUBTYPE.set(TransientPlainActor.TYPE, (document) => { return new TransientPlainActor(document) });

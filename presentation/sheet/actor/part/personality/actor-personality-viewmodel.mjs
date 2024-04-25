@@ -35,7 +35,7 @@ export default class ActorPersonalityViewModel extends ViewModel {
    * 
    * @type {Boolean}
    */
-  get isPC() { return this.document.type === "pc"; }
+  get isPC() { return this.document.type === TransientPc.TYPE; }
   
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 

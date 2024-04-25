@@ -13,6 +13,9 @@ import { createUUID } from "../../util/uuid-utility.mjs";
  */
 export default class TransientMutation extends TransientBaseItem {
   /** @override */
+  static get TYPE() { return "mutation"; }
+
+  /** @override */
   get defaultImg() { return "icons/svg/ice-aura.svg"; }
   
   /** @override */

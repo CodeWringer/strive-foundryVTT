@@ -6,6 +6,8 @@ import { ATTRIBUTE_TIERS, AttributeTier } from "./attribute/attribute-tier.mjs";
 import { DICE_POOL_RESULT_TYPES, DicePoolRollResult } from "../dice/dice-pool.mjs";
 import { ATTRIBUTES, Attribute } from "./attribute/attributes.mjs";
 import TransientSkill from "../document/item/skill/transient-skill.mjs";
+import TransientNpc from "../document/actor/transient-npc.mjs";
+import TransientPc from "../document/actor/transient-pc.mjs";
 
 /**
  * Provides all the ruleset-specifics. 
@@ -187,7 +189,7 @@ export default class Ruleset {
   getCharacterMaximumHp(actor) {
     const type = actor.type.toLowerCase();
 
-    if (type !== "pc" && type !== "npc") {
+    if (type !== TransientPc.TYPE && type !== TransientNpc.TYPE) {
       throw new Error("Only PC and NPC type actors supported");
     }
 
@@ -208,7 +210,7 @@ export default class Ruleset {
    */
   getCharacterMaximumInjuries(actor) {
     const type = actor.type.toLowerCase();
-    if (type !== "pc" && type !== "npc") {
+    if (type !== TransientPc.TYPE && type !== TransientNpc.TYPE) {
       throw new Error("Only PC and NPC type actors supported");
     }
 
@@ -228,7 +230,7 @@ export default class Ruleset {
    */
   getCharacterMaximumExhaustion(actor) {
     const type = actor.type.toLowerCase();
-    if (type !== "pc" && type !== "npc") {
+    if (type !== TransientPc.TYPE && type !== TransientNpc.TYPE) {
       throw new Error("Only PC and NPC type actors supported");
     }
     
@@ -249,7 +251,7 @@ export default class Ruleset {
    */
   getCharacterCarryingCapacity(actor) {
     const type = actor.type.toLowerCase();
-    if (type !== "pc" && type !== "npc") throw new Error("Only PC and NPC type actors allowed");
+    if (type !== TransientPc.TYPE && type !== TransientNpc.TYPE) throw new Error("Only PC and NPC type actors allowed");
 
     const level = this.getEffectiveAttributeModifiedLevel(ATTRIBUTES.strength, actor);
 
@@ -265,7 +267,7 @@ export default class Ruleset {
    */
   getAssetSlotBonus(actor) {
     const type = actor.type.toLowerCase();
-    if (type !== "pc" && type !== "npc") throw new Error("Only PC and NPC type actors allowed");
+    if (type !== TransientPc.TYPE && type !== TransientNpc.TYPE) throw new Error("Only PC and NPC type actors allowed");
 
     const level = this.getEffectiveAttributeModifiedLevel(ATTRIBUTES.strength, actor);
 
@@ -285,7 +287,7 @@ export default class Ruleset {
    */
   getCharacterMaximumMagicStamina(actor) {
     const type = actor.type.toLowerCase();
-    if (type !== "pc" && type !== "npc") throw new Error("Only PC and NPC type actors allowed");
+    if (type !== TransientPc.TYPE && type !== TransientNpc.TYPE) throw new Error("Only PC and NPC type actors allowed");
 
     const arcanaLevel = this.getEffectiveAttributeModifiedLevel(ATTRIBUTES.arcana, actor) * 2;
     let total = arcanaLevel;
@@ -330,7 +332,7 @@ export default class Ruleset {
    */
   isToughnessTestRequired(actor) {
     const type = actor.type.toLowerCase();
-    if (type !== "pc" && type !== "npc") throw new Error("Only PC and NPC type actors allowed");
+    if (type !== TransientPc.TYPE && type !== TransientNpc.TYPE) throw new Error("Only PC and NPC type actors allowed");
 
     const maxInjuries = this.getCharacterMaximumInjuries(actor);
     const injuryCount = (actor.items.filter(it => it.type === "injury")).length;
@@ -357,13 +359,13 @@ export default class Ruleset {
    */
   getEffectiveAttributeRawLevel(attribute, actor) {
     const type = actor.type.toLowerCase();
-    if (type !== "pc" && type !== "npc") {
+    if (type !== TransientPc.TYPE && type !== TransientNpc.TYPE) {
       throw new Error("Only PC and NPC type actors supported");
     }
 
     const attributeGroup = getGroupForAttributeByName(attribute.name);
     
-    if (type === "npc") {
+    if (type === TransientNpc.TYPE) {
       const transientNpc = actor.getTransientObject();
       if (transientNpc.getIsCrActiveFor(attributeGroup.name) === true) {
         return transientNpc.getCrFor(attributeGroup.name).value;
@@ -390,13 +392,13 @@ export default class Ruleset {
    */
   getEffectiveAttributeModifiedLevel(attribute, actor) {
     const type = actor.type.toLowerCase();
-    if (type !== "pc" && type !== "npc") {
+    if (type !== TransientPc.TYPE && type !== TransientNpc.TYPE) {
       throw new Error("Only PC and NPC type actors supported");
     }
 
     const transientActor = actor.getTransientObject();
     
-    if (type === "npc") {
+    if (type === TransientNpc.TYPE) {
       const attributeGroup = getGroupForAttributeByName(attribute.name);
       if (transientActor.getIsCrActiveFor(attributeGroup.name) === true) {
         return transientActor.getCrFor(attributeGroup.name).modified;
@@ -424,7 +426,7 @@ export default class Ruleset {
   getEffectiveSkillModifiedLevel(skill, actor) {
     const transientSkill = skill.getTransientObject();
 
-    if (actor.type === "npc") {
+    if (actor.type === TransientNpc.TYPE) {
       const attributeGroup = getGroupForAttributeByName(transientSkill.activeBaseAttribute.name);
       const transientActor = actor.getTransientObject();
 

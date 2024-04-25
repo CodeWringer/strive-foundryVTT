@@ -1,3 +1,5 @@
+import TransientNpc from "../../../business/document/actor/transient-npc.mjs";
+import TransientPc from "../../../business/document/actor/transient-pc.mjs";
 import { isNotBlankOrUndefined } from "../../../business/util/validation-utility.mjs";
 import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import LazyRichTextViewModel from "../../component/lazy-rich-text/lazy-rich-text-viewmodel.mjs";
@@ -15,19 +17,19 @@ export default class ActorChatMessageViewModel extends ViewModel {
    * Is true, if the actor is a player character. 
    * @type {Boolean}
    */
-  get isPC() { return this.document.type === "pc"; }
+  get isPC() { return this.document.type === TransientPc.TYPE; }
   
   /**
    * Is true, if the actor is a non-player character. 
    * @type {Boolean}
    */
-  get isNPC() { return this.document.type === "npc"; }
+  get isNPC() { return this.document.type === TransientNpc.TYPE; }
 
   /**
    * Is true, if the actor is a plain actor. 
    * @type {Boolean}
    */
-  get isPlain() { return this.document.type === "plain"; }
+  get isPlain() { return this.document.type === TransientPlainActor.TYPE; }
 
   /***
    * @type {Boolean}
@@ -88,7 +90,7 @@ export default class ActorChatMessageViewModel extends ViewModel {
       }
     }
 
-    if (this.document.type !== "plain") {
+    if (this.document.type !== TransientPlainActor.TYPE) {
       this.vmLazyBiography = new LazyRichTextViewModel({
         id: "vmLazyBiography",
         parent: this,

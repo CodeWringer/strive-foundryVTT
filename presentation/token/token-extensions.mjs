@@ -18,7 +18,7 @@ export default class TokenExtensions {
    * @static
    */
   static updateTokenHover(token) {
-    if (token.actor.type !== "npc") return;
+    if (token.actor.type !== TransientNpc.TYPE) return;
 
     const displayWhen = token.document.displayName;
     const isOwner = token.actor.isOwner || game.user.isGM;
@@ -127,7 +127,7 @@ export default class TokenExtensions {
   static updateTokenCombatant(token) {
     if (isDefined(token) !== true) return;
     if (isDefined(token.actor) !== true) return;
-    if (token.actor.type === "plain") return;
+    if (token.actor.type === TransientPlainActor.TYPE) return;
     
     if (token.inCombat === true) {
       if (isDefined(token.actionPoints) === true) {

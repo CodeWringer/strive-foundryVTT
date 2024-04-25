@@ -18,6 +18,9 @@ import { createUUID } from "../../util/uuid-utility.mjs";
  */
 export default class TransientFateCard extends TransientBaseItem {
   /** @override */
+  static get TYPE() { return "fate-card"; }
+
+  /** @override */
   get defaultImg() { return "icons/svg/wing.svg"; }
   
   /** @override */

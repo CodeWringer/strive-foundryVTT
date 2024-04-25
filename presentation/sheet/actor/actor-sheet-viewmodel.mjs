@@ -44,21 +44,21 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
    * 
    * @type {Boolean}
    */
-  get isPC() { return this.document.type === "pc"; }
+  get isPC() { return this.document.type === TransientPc.TYPE; }
   
   /**
    * Returns true, if the actor is a non-player character. 
    * 
    * @type {Boolean}
    */
-  get isNPC() { return this.document.type === "npc"; }
+  get isNPC() { return this.document.type === TransientNpc.TYPE; }
 
   /**
    * Returns true, if the actor is a plain actor. 
    * 
    * @type {Boolean}
    */
-  get isPlain() { return this.document.type === "plain"; }
+  get isPlain() { return this.document.type === TransientPlainActor.TYPE; }
 
   /**
    * Returns true, if the navigation is to be shown. 

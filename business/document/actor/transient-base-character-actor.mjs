@@ -424,7 +424,7 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
    * @private
    */
   _prepareAssetsData() {
-    this._allAssets = this.items.filter(it => it.type === "item");
+    this._allAssets = this.items.filter(it => it.type === TransientAsset.TYPE);
     this._equipmentSlotGroups = this._getEquipmentSlotGroups();
 
     // Worn & Equipped

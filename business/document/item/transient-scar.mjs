@@ -15,6 +15,9 @@ import { createUUID } from "../../util/uuid-utility.mjs";
  */
 export default class TransientScar extends TransientBaseItem {
   /** @override */
+  static get TYPE() { return "scar"; }
+
+  /** @override */
   get defaultImg() { return "icons/svg/deaf.svg"; }
   
   /** @override */

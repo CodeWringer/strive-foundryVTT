@@ -59,14 +59,14 @@ export default class AttributeTableViewModel extends ViewModel {
    * 
    * @type {Boolean}
    */
-  get isPC() { return this.document.type === "pc"; }
+  get isPC() { return this.document.type === TransientPc.TYPE; }
 
   /**
    * Returns `true`, if the actor is a non-player character. 
    * 
    * @type {Boolean}
    */
-  get isNPC() { return this.document.type === "npc"; }
+  get isNPC() { return this.document.type === TransientNpc.TYPE; }
 
   /**
    * Returns `true`, if the advancement progress is to be hidden. 

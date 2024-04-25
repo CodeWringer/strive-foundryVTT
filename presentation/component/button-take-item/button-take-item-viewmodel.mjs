@@ -93,7 +93,7 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
       assetDocument = await new DocumentFetcher().find({
         id: this.target,
         documentType: "Item",
-        contentType: "item"
+        contentType: TransientAsset.TYPE
       });
     }
 

@@ -34,6 +34,9 @@ import TransientBaseCharacterActor from "./transient-base-character-actor.mjs";
  * @property {Number} fateSystem.AFP
  */
 export default class TransientPc extends TransientBaseCharacterActor {
+  /** @override */
+  static get TYPE() { return "pc"; }
+
   /**
    * @type {Object}
    * @readonly
@@ -137,4 +140,4 @@ export default class TransientPc extends TransientBaseCharacterActor {
   }
 }
 
-ACTOR_SUBTYPE.set("pc", (document) => { return new TransientPc(document) });
+ACTOR_SUBTYPE.set(TransientPc.TYPE, (document) => { return new TransientPc(document) });
