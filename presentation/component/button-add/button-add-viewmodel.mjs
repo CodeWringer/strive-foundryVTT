@@ -100,7 +100,7 @@ export default class ButtonAddViewModel extends ButtonViewModel {
     // Special case, because expertises aren't items - they're objects contained in an array, 
     // referenced by a property of a skill-item.
     if (this.creationType === Expertise.TYPE) {
-      if (this.target.type !== "skill") {
+      if (this.target.type !== TransientSkill.TYPE) {
         throw new Error("InvalidArgumentException: Cannot add item of type 'expertise' to non-'skill'-type item!");
       }
       const creationData = {

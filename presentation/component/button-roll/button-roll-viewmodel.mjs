@@ -316,7 +316,7 @@ export default class ButtonRollViewModel extends ButtonViewModel {
 
     // In case of a skill - also determine whether to show this as a backfire. 
     let showBackFire = false;
-    if (this.target.type === "skill") {
+    if (this.target.type === TransientSkill.TYPE) {
       // Only consider skills with the "magicSchool" property. 
       if (this.target.isMagicSchool === true) {
         if (new Ruleset().rollCausesBackfire(rollResult) === true) {

@@ -139,7 +139,7 @@ export default class ActorSkillsViewModel extends ViewModel {
         parent: this,
         isEditable: thiz.isEditable,
         target: thiz.document,
-        creationType: "skill",
+        creationType: TransientSkill.TYPE,
         withDialog: true,
         localizedLabel: game.i18n.localize("system.character.skill.learning.add.label"),
         creationData: {
@@ -168,7 +168,7 @@ export default class ActorSkillsViewModel extends ViewModel {
         parent: this,
         target: thiz.document,
         isEditable: thiz.isEditable,
-        creationType: "skill",
+        creationType: TransientSkill.TYPE,
         withDialog: true,
         localizedLabel: game.i18n.localize("system.character.skill.known.add.label"),
         creationData: {

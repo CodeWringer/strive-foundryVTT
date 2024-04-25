@@ -177,7 +177,7 @@ export class GameSystemActorSheet extends ActorSheet {
       }
     };
 
-    if (templateItem.type === "skill") {
+    if (templateItem.type === TransientSkill.TYPE) {
       // For NPCs, ensure skills have at least level one, if they have no advancement progression enabled. 
       if (this.actor.type === TransientNpc.TYPE) {
         const npcData = this.actor.getTransientObject();

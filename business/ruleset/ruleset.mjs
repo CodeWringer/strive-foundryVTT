@@ -296,7 +296,7 @@ export default class Ruleset {
       new SumComponent(ATTRIBUTES.arcana.name, ATTRIBUTES.arcana.localizableName, arcanaLevel),
     ];
 
-    const skills = actor.items.filter(it => it.type === "skill");
+    const skills = actor.items.filter(it => it.type === TransientSkill.TYPE);
     for (const skill of skills) {
       const transientSkill = skill.getTransientObject();
       if (transientSkill.isMagicSchool !== true) continue;

@@ -54,6 +54,9 @@ import TransientNpc from "../../actor/transient-npc.mjs";
  */
 export default class TransientSkill extends TransientBaseItem {
   /** @override */
+  static get TYPE() { return "skill"; }
+
+  /** @override */
   get defaultImg() { return "icons/svg/book.svg"; }
   
   /** @override */
@@ -636,4 +639,4 @@ export default class TransientSkill extends TransientBaseItem {
   }
 }
 
-ITEM_SUBTYPE.set("skill", (document) => { return new TransientSkill(document) });
+ITEM_SUBTYPE.set(TransientSkill.TYPE, (document) => { return new TransientSkill(document) });
