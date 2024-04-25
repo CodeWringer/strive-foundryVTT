@@ -1,5 +1,4 @@
 import { ITEM_TYPES } from "../../../../../business/document/item/item-types.mjs"
-import TransientSkill from "../../../../../business/document/item/skill/transient-skill.mjs"
 import { SEARCH_MODES, Search, SearchItem } from "../../../../../business/search/search.mjs"
 import { isDefined, validateOrThrow } from "../../../../../business/util/validation-utility.mjs"
 import ButtonAddViewModel from "../../../../component/button-add/button-add-viewmodel.mjs"

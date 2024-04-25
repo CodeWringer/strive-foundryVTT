@@ -13,7 +13,6 @@ import { ROLL_DICE_MODIFIER_TYPES } from "../../../business/dice/roll-dice-modif
 import DynamicInputDefinition from "../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
 import { SumComponent } from "../../../business/ruleset/summed-data.mjs";
 import DicePool, { DicePoolRollResult } from "../../../business/dice/dice-pool.mjs";
-import TransientSkill from "../../../business/document/item/skill/transient-skill.mjs";
 import { ITEM_TYPES } from "../../../business/document/item/item-types.mjs";
 
 /**

@@ -5,7 +5,6 @@ import { SYSTEM_ID } from "../../../system-id.mjs";
 import { isDefined } from "../../../business/util/validation-utility.mjs";
 import DocumentFetcher from "../../../business/document/document-fetcher/document-fetcher.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
-import TransientSkill from "../../../business/document/item/skill/transient-skill.mjs";
 import { ACTOR_TYPES } from "../../../business/document/actor/actor-types.mjs";
 import { ITEM_TYPES } from "../../../business/document/item/item-types.mjs";
 
