@@ -40,6 +40,16 @@ import ViewModel from '../../../../presentation/view-model/view-model.mjs';
  */
 export default class Expertise {
   /**
+   * Globally usable constant of the internal type name of this entity. 
+   * 
+   * @type {String}
+   * @static
+   * @readonly
+   * @abstract
+   */
+  static get TYPE() { return "expertise"; }
+
+  /**
    * Converts the given `dto` to a `Expertise` instance and 
    * returns it. 
    * 
@@ -84,7 +94,7 @@ export default class Expertise {
    * @type {String}
    * @readonly
    */
-  get type() { return "expertise"; }
+  get type() { return Expertise.TYPE; }
 
   /**
    * @type {Boolean}

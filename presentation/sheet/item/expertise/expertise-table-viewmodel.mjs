@@ -1,8 +1,9 @@
+import Expertise from "../../../../business/document/item/skill/expertise.mjs"
 import { DAMAGE_TYPES } from "../../../../business/ruleset/damage-types.mjs"
 import { ATTACK_TYPES } from "../../../../business/ruleset/skill/attack-types.mjs"
 import { createUUID } from "../../../../business/util/uuid-utility.mjs"
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs"
-import ButtonAddViewModel, { ADD_BUTTON_CREATION_TYPES } from "../../../component/button-add/button-add-viewmodel.mjs"
+import ButtonAddViewModel from "../../../component/button-add/button-add-viewmodel.mjs"
 import ButtonToggleVisibilityViewModel from "../../../component/button-toggle-visibility/button-toggle-visibility-viewmodel.mjs"
 import DocumentListItemOrderDataSource from "../../../component/sortable-list/document-list-item-order-datasource.mjs"
 import SortableListViewModel from "../../../component/sortable-list/sortable-list-viewmodel.mjs"
@@ -103,7 +104,7 @@ export default class ExpertiseTableViewModel extends ViewModel {
       parent: this,
       localizedToolTip: game.i18n.localize("system.character.skill.expertise.add.label"),
       target: this.document,
-      creationType: ADD_BUTTON_CREATION_TYPES.EXPERTISE,
+      creationType: Expertise.TYPE,
     });
 
     this.expertises = [];
@@ -124,7 +125,7 @@ export default class ExpertiseTableViewModel extends ViewModel {
         parent: this,
         target: thiz.document,
         isEditable: this.isEditable,
-        creationType: "expertise",
+        creationType: Expertise.TYPE,
         withDialog: false,
         localizedLabel: game.i18n.localize("system.character.skill.expertise.add.label"),
         localizedType: game.i18n.localize("system.character.skill.expertise.singular"),
