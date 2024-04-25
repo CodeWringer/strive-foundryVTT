@@ -1,4 +1,3 @@
-import { ACTOR_SUBTYPE } from "./actor-subtype.mjs";
 import TransientBaseActor from "./transient-base-actor.mjs";
 
 /**
@@ -7,8 +6,5 @@ import TransientBaseActor from "./transient-base-actor.mjs";
  * @extends TransientBaseActor
  */
 export default class TransientPlainActor extends TransientBaseActor {
-  /** @override */
-  static get TYPE() { return "plain"; }
+  // No specific behavior. 
 }
-
-ACTOR_SUBTYPE.set(TransientPlainActor.TYPE, (document) => { return new TransientPlainActor(document) });

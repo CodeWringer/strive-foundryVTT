@@ -2,7 +2,6 @@ import { TEMPLATES } from "../../../presentation/templatePreloader.mjs";
 import IllnessChatMessageViewModel from "../../../presentation/sheet/item/illness/illness-chat-message-viewmodel.mjs";
 import PreparedChatData from "../../../presentation/chat/prepared-chat-data.mjs";
 import { SOUNDS_CONSTANTS } from "../../../presentation/audio/sounds.mjs";
-import { ITEM_SUBTYPE } from "./item-subtype.mjs";
 import TransientBaseItem from "./transient-base-item.mjs";
 import { ILLNESS_STATES } from "../../ruleset/health/illness-states.mjs";
 
@@ -17,9 +16,6 @@ import { ILLNESS_STATES } from "../../ruleset/health/illness-states.mjs";
  * @property {String} treatmentSkill
  */
 export default class TransientIllness extends TransientBaseItem {
-  /** @override */
-  static get TYPE() { return "illness"; }
-
   /** @override */
   get defaultImg() { return "icons/svg/poison.svg"; }
 
@@ -137,5 +133,3 @@ export default class TransientIllness extends TransientBaseItem {
     }
   }
 }
-
-ITEM_SUBTYPE.set(TransientIllness.TYPE, (document) => { return new TransientIllness(document) });

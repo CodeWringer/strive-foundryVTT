@@ -1,7 +1,6 @@
-import ActorChatMessageViewModel from '../../../presentation/sheet/actor/actor-chat-message-viewmodel.mjs';
 import { TEMPLATES } from '../../../presentation/templatePreloader.mjs';
-import { createUUID } from '../../util/uuid-utility.mjs';
 import TransientDocument from "../transient-document.mjs";
+import ActorChatMessageViewModel from '../../../presentation/sheet/actor/actor-chat-message-viewmodel.mjs';
 
 /**
  * @summary
@@ -30,16 +29,6 @@ import TransientDocument from "../transient-document.mjs";
  * * Read-only. 
  */
 export default class TransientBaseActor extends TransientDocument {
-  /**
-   * Globally usable constant of the internal type name of this entity. 
-   * 
-   * @type {String}
-   * @static
-   * @readonly
-   * @abstract
-   */
-  static get TYPE() { throw new Error("Not implemented"); }
-  
   /**
    * Returns the default icon image path for this type of actor. 
    * 

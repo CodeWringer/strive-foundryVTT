@@ -2,9 +2,7 @@ import { TEMPLATES } from "../../../presentation/templatePreloader.mjs";
 import ScarChatMessageViewModel from "../../../presentation/sheet/item/scar/scar-chat-message-viewmodel.mjs";
 import PreparedChatData from "../../../presentation/chat/prepared-chat-data.mjs";
 import { SOUNDS_CONSTANTS } from "../../../presentation/audio/sounds.mjs";
-import { ITEM_SUBTYPE } from "./item-subtype.mjs";
 import TransientBaseItem from "./transient-base-item.mjs";
-import { createUUID } from "../../util/uuid-utility.mjs";
 
 /**
  * Represents the full transient data of a scar. 
@@ -14,9 +12,6 @@ import { createUUID } from "../../util/uuid-utility.mjs";
  * @property {Number} limit
  */
 export default class TransientScar extends TransientBaseItem {
-  /** @override */
-  static get TYPE() { return "scar"; }
-
   /** @override */
   get defaultImg() { return "icons/svg/deaf.svg"; }
   
@@ -84,5 +79,3 @@ export default class TransientScar extends TransientBaseItem {
     });
   }
 }
-
-ITEM_SUBTYPE.set(TransientScar.TYPE, (document) => { return new TransientScar(document) });

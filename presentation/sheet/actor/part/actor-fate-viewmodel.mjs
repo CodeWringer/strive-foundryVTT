@@ -1,4 +1,4 @@
-import TransientFateCard from "../../../../business/document/item/transient-fate-card.mjs";
+import { ITEM_TYPES } from "../../../../business/document/item/item-types.mjs";
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs"
 import ButtonAddViewModel from "../../../component/button-add/button-add-viewmodel.mjs";
 import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
@@ -97,7 +97,7 @@ export default class ActorFateViewModel extends ViewModel {
       parent: thiz,
       id: "vmBtnAddFateCard",
       target: thiz.document,
-      creationType: TransientFateCard.TYPE,
+      creationType: ITEM_TYPES.FATE_CARD,
       withDialog: true,
       localizedType: game.i18n.localize("system.character.driverSystem.fateSystem.fateCard.label"),
     });

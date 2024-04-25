@@ -2,9 +2,7 @@ import { TEMPLATES } from "../../../presentation/templatePreloader.mjs";
 import FateCardChatMessageViewModel from "../../../presentation/sheet/item/fate-card/fate-card-chat-message-viewmodel.mjs";
 import PreparedChatData from "../../../presentation/chat/prepared-chat-data.mjs";
 import { SOUNDS_CONSTANTS } from "../../../presentation/audio/sounds.mjs";
-import { ITEM_SUBTYPE } from "./item-subtype.mjs";
 import TransientBaseItem from "./transient-base-item.mjs";
-import { createUUID } from "../../util/uuid-utility.mjs";
 
 /**
  * Represents the full transient data of a fate card. 
@@ -17,9 +15,6 @@ import { createUUID } from "../../util/uuid-utility.mjs";
  * @property {Number} cost.AFP
  */
 export default class TransientFateCard extends TransientBaseItem {
-  /** @override */
-  static get TYPE() { return "fate-card"; }
-
   /** @override */
   get defaultImg() { return "icons/svg/wing.svg"; }
   
@@ -92,5 +87,3 @@ export default class TransientFateCard extends TransientBaseItem {
     });
   }
 }
-
-ITEM_SUBTYPE.set(TransientFateCard.TYPE, (document) => { return new TransientFateCard(document) });

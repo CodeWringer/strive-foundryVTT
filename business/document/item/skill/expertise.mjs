@@ -11,6 +11,7 @@ import { ATTACK_TYPES, AttackType } from '../../../ruleset/skill/attack-types.mj
 import TransientSkill from './transient-skill.mjs';
 import AtReferencer from '../../../referencing/at-referencer.mjs';
 import ViewModel from '../../../../presentation/view-model/view-model.mjs';
+import { ITEM_TYPES } from '../item-types.mjs';
 
 /**
  * Represents an expertise. 
@@ -39,16 +40,6 @@ import ViewModel from '../../../../presentation/view-model/view-model.mjs';
  * @property {AttackType | Null} attackType 
  */
 export default class Expertise {
-  /**
-   * Globally usable constant of the internal type name of this entity. 
-   * 
-   * @type {String}
-   * @static
-   * @readonly
-   * @abstract
-   */
-  static get TYPE() { return "expertise"; }
-
   /**
    * Converts the given `dto` to a `Expertise` instance and 
    * returns it. 
@@ -94,7 +85,7 @@ export default class Expertise {
    * @type {String}
    * @readonly
    */
-  get type() { return Expertise.TYPE; }
+  get type() { return ITEM_TYPES.EXPERTISE; }
 
   /**
    * @type {Boolean}

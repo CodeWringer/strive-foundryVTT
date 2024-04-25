@@ -5,8 +5,9 @@ import { SYSTEM_ID } from "../../../system-id.mjs";
 import { isDefined } from "../../../business/util/validation-utility.mjs";
 import DocumentFetcher from "../../../business/document/document-fetcher/document-fetcher.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
-import TransientNpc from "../../../business/document/actor/transient-npc.mjs";
 import TransientSkill from "../../../business/document/item/skill/transient-skill.mjs";
+import { ACTOR_TYPES } from "../../../business/document/actor/actor-types.mjs";
+import { ITEM_TYPES } from "../../../business/document/item/item-types.mjs";
 
 export class GameSystemActorSheet extends ActorSheet {
   /**
@@ -179,9 +180,9 @@ export class GameSystemActorSheet extends ActorSheet {
       }
     };
 
-    if (templateItem.type === TransientSkill.TYPE) {
+    if (templateItem.type === ITEM_TYPES.SKILL) {
       // For NPCs, ensure skills have at least level one, if they have no advancement progression enabled. 
-      if (this.actor.type === TransientNpc.TYPE) {
+      if (this.actor.type === ACTOR_TYPES.NPC) {
         const npcData = this.actor.getTransientObject();
         if (npcData.progressionVisible === false) {
           creationData.system.level = 1;

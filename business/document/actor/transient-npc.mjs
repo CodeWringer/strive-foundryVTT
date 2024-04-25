@@ -2,7 +2,6 @@ import KeyValuePair from "../../../common/key-value-pair.mjs";
 import { getGroupForAttributeByName } from "../../ruleset/attribute/attribute-groups.mjs";
 import { ATTRIBUTES } from "../../ruleset/attribute/attributes.mjs";
 import ChallengeRating from "../../ruleset/attribute/challenge-rating.mjs";
-import { ACTOR_SUBTYPE } from "./actor-subtype.mjs";
 import TransientBaseCharacterActor from "./transient-base-character-actor.mjs";
 
 /**
@@ -19,9 +18,6 @@ import TransientBaseCharacterActor from "./transient-base-character-actor.mjs";
  * @property {Array<KeyValuePair<String, Boolean>>} attributeGroupExpansionStates 
  */
 export default class TransientNpc extends TransientBaseCharacterActor {
-  /** @override */
-  static get TYPE() { return "npc"; }
-
   /** @override */
   get baseInitiative() {
     const attributesToSum = [
@@ -133,5 +129,3 @@ export default class TransientNpc extends TransientBaseCharacterActor {
     return super.resolveReference(comparableReference, propertyPath);
   }
 }
-
-ACTOR_SUBTYPE.set(TransientNpc.TYPE, (document) => { return new TransientNpc(document) });

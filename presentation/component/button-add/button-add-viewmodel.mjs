@@ -7,7 +7,7 @@ import { DYNAMIC_INPUT_TYPES } from '../../dialog/dynamic-input-dialog/dynamic-i
 import ChoiceAdapter from '../input-choice/choice-adapter.mjs';
 import ChoiceOption from '../input-choice/choice-option.mjs';
 import Expertise from '../../../business/document/item/skill/expertise.mjs';
-import TransientSkill from '../../../business/document/item/skill/transient-skill.mjs';
+import { ITEM_TYPES } from '../../../business/document/item/item-types.mjs';
 
 /**
  * A button that allows adding a newly created embedded document to a specific actor. 
@@ -100,8 +100,8 @@ export default class ButtonAddViewModel extends ButtonViewModel {
 
     // Special case, because expertises aren't items - they're objects contained in an array, 
     // referenced by a property of a skill-item.
-    if (this.creationType === Expertise.TYPE) {
-      if (this.target.type !== TransientSkill.TYPE) {
+    if (this.creationType === ITEM_TYPES.EXPERTISE) {
+      if (this.target.type !== ITEM_TYPES.SKILL) {
         throw new Error("InvalidArgumentException: Cannot add item of type 'expertise' to non-'skill'-type item!");
       }
       const creationData = {

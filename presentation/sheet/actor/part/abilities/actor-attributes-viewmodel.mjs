@@ -7,8 +7,7 @@ import TransientBaseCharacterActor from "../../../../../business/document/actor/
 import CharacterAttributeGroup from "../../../../../business/ruleset/attribute/character-attribute-group.mjs";
 import KeyValuePair from "../../../../../common/key-value-pair.mjs";
 import ChallengeRating from "../../../../../business/ruleset/attribute/challenge-rating.mjs";
-import TransientNpc from "../../../../../business/document/actor/transient-npc.mjs";
-import TransientPc from "../../../../../business/document/actor/transient-pc.mjs";
+import { ACTOR_TYPES } from "../../../../../business/document/actor/actor-types.mjs";
 
 export default class ActorAttributesViewModel extends ViewModel {
   /** @override */
@@ -21,13 +20,13 @@ export default class ActorAttributesViewModel extends ViewModel {
    * @type {Boolean}
    * @readonly
    */
-  get isPC() { return this.document.type === TransientPc.TYPE; }
+  get isPC() { return this.document.type === ACTOR_TYPES.PC; }
   
   /**
    * @type {Boolean}
    * @readonly
    */
-  get isNPC() { return this.document.type === TransientNpc.TYPE; }
+  get isNPC() { return this.document.type === ACTOR_TYPES.NPC; }
 
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 

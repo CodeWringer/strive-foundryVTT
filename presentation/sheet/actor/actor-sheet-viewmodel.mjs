@@ -19,9 +19,7 @@ import ButtonViewModel from "../../component/button/button-viewmodel.mjs"
 import DynamicInputDialog from "../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs"
 import DynamicInputDefinition from "../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs"
 import { DYNAMIC_INPUT_TYPES } from "../../dialog/dynamic-input-dialog/dynamic-input-types.mjs"
-import TransientNpc from "../../../business/document/actor/transient-npc.mjs"
-import TransientPc from "../../../business/document/actor/transient-pc.mjs"
-import TransientPlainActor from "../../../business/document/actor/transient-plain-actor.mjs"
+import { ACTOR_TYPES } from "../../../business/document/actor/actor-types.mjs"
 
 /**
  * @extends BaseSheetViewModel
@@ -47,21 +45,21 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
    * 
    * @type {Boolean}
    */
-  get isPC() { return this.document.type === TransientPc.TYPE; }
+  get isPC() { return this.document.type === ACTOR_TYPES.PC; }
   
   /**
    * Returns true, if the actor is a non-player character. 
    * 
    * @type {Boolean}
    */
-  get isNPC() { return this.document.type === TransientNpc.TYPE; }
+  get isNPC() { return this.document.type === ACTOR_TYPES.NPC; }
 
   /**
    * Returns true, if the actor is a plain actor. 
    * 
    * @type {Boolean}
    */
-  get isPlain() { return this.document.type === TransientPlainActor.TYPE; }
+  get isPlain() { return this.document.type === ACTOR_TYPES.PLAIN; }
 
   /**
    * Returns true, if the navigation is to be shown. 

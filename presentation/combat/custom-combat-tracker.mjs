@@ -1,4 +1,4 @@
-import TransientPlainActor from "../../business/document/actor/transient-plain-actor.mjs";
+import { ACTOR_TYPES } from "../../business/document/actor/actor-types.mjs";
 import { isDefined } from "../../business/util/validation-utility.mjs";
 import { TEMPLATES } from "../templatePreloader.mjs";
 import CombatTrackerActionPointsViewModel from "./combat-tracker-action-points-viewmodel.mjs";
@@ -31,11 +31,11 @@ export default class CustomCombatTracker extends CombatTracker {
       if (isDefined(document) !== true) {
         game.strive.logger.logWarn("Failed to get combatant actor");
         continue;
-      } else if (document.type === TransientPlainActor.TYPE) {
+      } else if (document.type === ACTOR_TYPES.PLAIN) {
         continue;
       }
 
-      turn.renderActionPoints = document.type !== TransientPlainActor.TYPE;
+      turn.renderActionPoints = document.type !== ACTOR_TYPES.PLAIN;
       turn.actionPointsTemplate = TEMPLATES.COMBAT_TRACKER_ACTION_POINTS;
       const viewModel = new CombatTrackerActionPointsViewModel({
         id: `${turn.id}-aplist`,

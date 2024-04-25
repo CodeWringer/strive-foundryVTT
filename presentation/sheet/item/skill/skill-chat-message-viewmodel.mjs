@@ -1,5 +1,4 @@
 import TransientSkill from "../../../../business/document/item/skill/transient-skill.mjs"
-import { ATTRIBUTES } from "../../../../business/ruleset/attribute/attributes.mjs"
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs"
 import ButtonToggleVisibilityViewModel from "../../../component/button-toggle-visibility/button-toggle-visibility-viewmodel.mjs"
 import InputTagsViewModel from "../../../component/input-tags/input-tags-viewmodel.mjs"

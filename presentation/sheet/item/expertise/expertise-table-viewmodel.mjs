@@ -1,4 +1,4 @@
-import Expertise from "../../../../business/document/item/skill/expertise.mjs"
+import { ITEM_TYPES } from "../../../../business/document/item/item-types.mjs"
 import { DAMAGE_TYPES } from "../../../../business/ruleset/damage-types.mjs"
 import { ATTACK_TYPES } from "../../../../business/ruleset/skill/attack-types.mjs"
 import { createUUID } from "../../../../business/util/uuid-utility.mjs"
@@ -104,7 +104,7 @@ export default class ExpertiseTableViewModel extends ViewModel {
       parent: this,
       localizedToolTip: game.i18n.localize("system.character.skill.expertise.add.label"),
       target: this.document,
-      creationType: Expertise.TYPE,
+      creationType: ITEM_TYPES.EXPERTISE,
     });
 
     this.expertises = [];
@@ -125,7 +125,7 @@ export default class ExpertiseTableViewModel extends ViewModel {
         parent: this,
         target: thiz.document,
         isEditable: this.isEditable,
-        creationType: Expertise.TYPE,
+        creationType: ITEM_TYPES.EXPERTISE,
         withDialog: false,
         localizedLabel: game.i18n.localize("system.character.skill.expertise.add.label"),
         localizedType: game.i18n.localize("system.character.skill.expertise.singular"),

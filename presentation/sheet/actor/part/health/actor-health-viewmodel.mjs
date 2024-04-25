@@ -1,8 +1,4 @@
-import TransientIllness from "../../../../../business/document/item/transient-illness.mjs"
-import TransientInjury from "../../../../../business/document/item/transient-injury.mjs"
-import TransientMutation from "../../../../../business/document/item/transient-mutation.mjs"
-import TransientScar from "../../../../../business/document/item/transient-scar.mjs"
-import { INJURY_STATES } from "../../../../../business/ruleset/health/injury-states.mjs"
+import { ITEM_TYPES } from "../../../../../business/document/item/item-types.mjs"
 import Ruleset from "../../../../../business/ruleset/ruleset.mjs"
 import { validateOrThrow } from "../../../../../business/util/validation-utility.mjs"
 import ButtonAddViewModel from "../../../../component/button-add/button-add-viewmodel.mjs"
@@ -202,7 +198,7 @@ export default class ActorHealthViewModel extends ViewModel {
         parent: this,
         target: thiz.document,
         isEditable: this.isEditable,
-        creationType: TransientIllness.TYPE,
+        creationType: ITEM_TYPES.ILLNESS,
         withDialog: true,
         localizedLabel: game.i18n.localize("system.character.health.illness.add.label"),
         localizedType: game.i18n.localize("system.character.health.illness.singular"),
@@ -227,7 +223,7 @@ export default class ActorHealthViewModel extends ViewModel {
         parent: this,
         target: thiz.document,
         isEditable: this.isEditable,
-        creationType: TransientInjury.TYPE,
+        creationType: ITEM_TYPES.INJURY,
         withDialog: true,
         localizedLabel: game.i18n.localize("system.character.health.injury.add.label"),
         localizedType: game.i18n.localize("system.character.health.injury.singular"),
@@ -252,7 +248,7 @@ export default class ActorHealthViewModel extends ViewModel {
         parent: this,
         target: thiz.document,
         isEditable: this.isEditable,
-        creationType: TransientMutation.TYPE,
+        creationType: ITEM_TYPES.MUTATION,
         withDialog: true,
         localizedLabel: game.i18n.localize("system.character.health.mutation.add.label"),
         localizedType: game.i18n.localize("system.character.health.mutation.singular"),
@@ -277,7 +273,7 @@ export default class ActorHealthViewModel extends ViewModel {
         parent: this,
         target: thiz.document,
         isEditable: this.isEditable,
-        creationType: TransientScar.TYPE,
+        creationType: ITEM_TYPES.SCAR,
         withDialog: true,
         localizedLabel: game.i18n.localize("system.character.health.scar.add.label"),
         localizedType: game.i18n.localize("system.character.health.scar.singular"),

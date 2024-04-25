@@ -1,10 +1,4 @@
-import TransientSkill from "../../../business/document/item/skill/transient-skill.mjs";
-import TransientAsset from "../../../business/document/item/transient-asset.mjs";
-import TransientFateCard from "../../../business/document/item/transient-fate-card.mjs";
-import TransientIllness from "../../../business/document/item/transient-illness.mjs";
-import TransientInjury from "../../../business/document/item/transient-injury.mjs";
-import TransientMutation from "../../../business/document/item/transient-mutation.mjs";
-import TransientScar from "../../../business/document/item/transient-scar.mjs";
+import { ITEM_TYPES } from "../../../business/document/item/item-types.mjs";
 import AssetItemSheet from "./asset/asset-item-sheet.mjs";
 import FateItemSheet from "./fate-card/fate-item-sheet.mjs";
 import IllnessItemSheet from "./illness/illness-item-sheet.mjs";
@@ -19,11 +13,11 @@ import SkillItemSheet from "./skill/skill-item-sheet.mjs";
  * @readonly
  */
 export const ITEM_SHEET_SUBTYPE = new Map([
-  [TransientAsset.TYPE, new AssetItemSheet()],
-  [TransientSkill.TYPE, new SkillItemSheet()],
-  [TransientScar.TYPE, new ScarItemSheet()],
-  [TransientMutation.TYPE, new MutationItemSheet()],
-  [TransientInjury.TYPE, new InjuryItemSheet()],
-  [TransientIllness.TYPE, new IllnessItemSheet()],
-  [TransientFateCard.TYPE, new FateItemSheet()],
+  [ITEM_TYPES.ASSET, new AssetItemSheet()],
+  [ITEM_TYPES.SKILL, new SkillItemSheet()],
+  [ITEM_TYPES.SCAR, new ScarItemSheet()],
+  [ITEM_TYPES.MUTATION, new MutationItemSheet()],
+  [ITEM_TYPES.INJURY, new InjuryItemSheet()],
+  [ITEM_TYPES.ILLNESS, new IllnessItemSheet()],
+  [ITEM_TYPES.FATE_CARD, new FateItemSheet()],
 ]);

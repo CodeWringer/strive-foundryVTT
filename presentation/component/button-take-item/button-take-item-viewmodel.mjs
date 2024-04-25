@@ -5,6 +5,7 @@ import SingleChoiceDialog from "../../dialog/single-choice-dialog/single-choice-
 import DocumentFetcher from "../../../business/document/document-fetcher/document-fetcher.mjs";
 import { isString } from "../../../business/util/validation-utility.mjs";
 import TransientAsset from "../../../business/document/item/transient-asset.mjs";
+import { ITEM_TYPES } from "../../../business/document/item/item-types.mjs";
 
 /**
  * @property {String} chatMessage
@@ -94,7 +95,7 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
       assetDocument = await new DocumentFetcher().find({
         id: this.target,
         documentType: "Item",
-        contentType: TransientAsset.TYPE
+        contentType: ITEM_TYPES.ASSET
       });
     }
 

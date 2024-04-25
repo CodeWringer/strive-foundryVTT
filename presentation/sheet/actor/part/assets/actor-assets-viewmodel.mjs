@@ -1,4 +1,5 @@
 import TransientBaseCharacterActor from "../../../../../business/document/actor/transient-base-character-actor.mjs"
+import { ITEM_TYPES } from "../../../../../business/document/item/item-types.mjs"
 import TransientAsset from "../../../../../business/document/item/transient-asset.mjs"
 import { validateOrThrow } from "../../../../../business/util/validation-utility.mjs"
 import ButtonAddViewModel from "../../../../component/button-add/button-add-viewmodel.mjs"
@@ -117,7 +118,7 @@ export default class ActorAssetsViewModel extends ViewModel {
         parent: this,
         target: thiz.document,
         isEditable: thiz.isEditable,
-        creationType: TransientAsset.TYPE,
+        creationType: ITEM_TYPES.ASSET,
         withDialog: true,
         localizedLabel: game.i18n.localize("system.character.asset.add.label"),
         localizedType: game.i18n.localize("system.character.asset.singular"),
@@ -141,7 +142,7 @@ export default class ActorAssetsViewModel extends ViewModel {
         parent: this,
         target: thiz.document,
         isEditable: thiz.isEditable,
-        creationType: TransientAsset.TYPE,
+        creationType: ITEM_TYPES.ASSET,
         withDialog: true,
         localizedLabel: game.i18n.localize("system.character.asset.add.label"),
         localizedType: game.i18n.localize("system.character.asset.singular"),

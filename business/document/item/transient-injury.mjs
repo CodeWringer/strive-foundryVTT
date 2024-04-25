@@ -2,9 +2,7 @@ import { TEMPLATES } from "../../../presentation/templatePreloader.mjs";
 import InjuryChatMessageViewModel from "../../../presentation/sheet/item/injury/injury-chat-message-viewmodel.mjs";
 import PreparedChatData from "../../../presentation/chat/prepared-chat-data.mjs";
 import { SOUNDS_CONSTANTS } from "../../../presentation/audio/sounds.mjs";
-import { ITEM_SUBTYPE } from "./item-subtype.mjs";
 import TransientBaseItem from "./transient-base-item.mjs";
-import { createUUID } from "../../util/uuid-utility.mjs";
 import { INJURY_STATES } from "../../ruleset/health/injury-states.mjs";
 
 /**
@@ -24,9 +22,6 @@ import { INJURY_STATES } from "../../ruleset/health/injury-states.mjs";
  * @property {String} obstacleTreatment 
  */
 export default class TransientInjury extends TransientBaseItem {
-  /** @override */
-  static get TYPE() { return "injury"; }
-
   /** @override */
   get defaultImg() { return "icons/svg/bones.svg"; }
 
@@ -238,5 +233,3 @@ export default class TransientInjury extends TransientBaseItem {
     }
   }
 }
-
-ITEM_SUBTYPE.set(TransientInjury.TYPE, (document) => { return new TransientInjury(document) });
