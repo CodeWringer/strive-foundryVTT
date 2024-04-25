@@ -239,4 +239,4 @@ export default class TransientInjury extends TransientBaseItem {
   }
 }
 
-ITEM_SUBTYPE.set("injury", (document) => { return new TransientInjury(document) });
+ITEM_SUBTYPE.set(TransientInjury.TYPE, (document) => { return new TransientInjury(document) });

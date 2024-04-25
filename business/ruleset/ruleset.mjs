@@ -193,7 +193,7 @@ export default class Ruleset {
       throw new Error("Only PC and NPC type actors supported");
     }
 
-    const injuryCount = (actor.items.filter(it => it.type === "injury")).length;
+    const injuryCount = (actor.items.filter(it => it.type === TransientInjury.TYPE)).length;
     const level = this.getEffectiveAttributeRawLevel(ATTRIBUTES.toughness, actor);
 
     return (parseInt(level) * 4) - (injuryCount * 2);
@@ -335,7 +335,7 @@ export default class Ruleset {
     if (type !== TransientPc.TYPE && type !== TransientNpc.TYPE) throw new Error("Only PC and NPC type actors allowed");
 
     const maxInjuries = this.getCharacterMaximumInjuries(actor);
-    const injuryCount = (actor.items.filter(it => it.type === "injury")).length;
+    const injuryCount = (actor.items.filter(it => it.type === TransientInjury.TYPE)).length;
     if (injuryCount > 0 && injuryCount >= Math.floor(maxInjuries / 2)) {
       return true;
     } else {
