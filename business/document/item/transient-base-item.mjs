@@ -30,6 +30,16 @@ import TransientDocument from "../transient-document.mjs";
  * * Default `[]`.
  */
 export default class TransientBaseItem extends TransientDocument {
+  /**
+   * Globally usable constant of the internal type name of this entity. 
+   * 
+   * @type {String}
+   * @static
+   * @readonly
+   * @abstract
+   */
+  static get TYPE() { throw new Error("Not implemented"); }
+
   /** @override */
   get defaultImg() { return "icons/svg/item-bag.svg"; }
   

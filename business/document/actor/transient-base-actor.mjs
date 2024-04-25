@@ -31,6 +31,16 @@ import TransientDocument from "../transient-document.mjs";
  */
 export default class TransientBaseActor extends TransientDocument {
   /**
+   * Globally usable constant of the internal type name of this entity. 
+   * 
+   * @type {String}
+   * @static
+   * @readonly
+   * @abstract
+   */
+  static get TYPE() { throw new Error("Not implemented"); }
+  
+  /**
    * Returns the default icon image path for this type of actor. 
    * 
    * @type {String}
