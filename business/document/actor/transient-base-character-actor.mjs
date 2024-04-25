@@ -253,7 +253,7 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
       get injuries() { return thiz.items.filter(it => it.type === TransientInjury.TYPE); },
       get illnesses() { return thiz.items.filter(it => it.type === TransientIllness.TYPE); },
       get mutations() { return thiz.items.filter(it => it.type === TransientMutation.TYPE); },
-      get scars() { return thiz.items.filter(it => it.type === "scar"); },
+      get scars() { return thiz.items.filter(it => it.type === TransientScar.TYPE); },
 
       get HP() { return parseInt(thiz.document.system.health.HP); },
       set HP(value) { thiz.updateByPath("system.health.HP", value); },

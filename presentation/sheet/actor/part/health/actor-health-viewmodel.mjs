@@ -273,7 +273,7 @@ export default class ActorHealthViewModel extends ViewModel {
         parent: this,
         target: thiz.document,
         isEditable: this.isEditable,
-        creationType: "scar",
+        creationType: TransientScar.TYPE,
         withDialog: true,
         localizedLabel: game.i18n.localize("system.character.health.scar.add.label"),
         localizedType: game.i18n.localize("system.character.health.scar.singular"),

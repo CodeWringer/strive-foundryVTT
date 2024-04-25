@@ -14,7 +14,7 @@ import SkillItemSheet from "./skill/skill-item-sheet.mjs";
 export const ITEM_SHEET_SUBTYPE = new Map([
   [TransientAsset.TYPE, new AssetItemSheet()],
   [TransientSkill.TYPE, new SkillItemSheet()],
-  ["scar", new ScarItemSheet()],
+  [TransientScar.TYPE, new ScarItemSheet()],
   [TransientMutation.TYPE, new MutationItemSheet()],
   [TransientInjury.TYPE, new InjuryItemSheet()],
   [TransientIllness.TYPE, new IllnessItemSheet()],

@@ -85,4 +85,4 @@ export default class TransientScar extends TransientBaseItem {
   }
 }
 
-ITEM_SUBTYPE.set("scar", (document) => { return new TransientScar(document) });
+ITEM_SUBTYPE.set(TransientScar.TYPE, (document) => { return new TransientScar(document) });
