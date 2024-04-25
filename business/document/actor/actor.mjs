@@ -1,4 +1,5 @@
-import { ACTOR_SUBTYPE } from './actor-subtype.mjs';
+import { ACTOR_TYPES } from "./actor-types.mjs";
+import TransientBaseActor from "./transient-base-actor.mjs";
 import TransientNpc from "./transient-npc.mjs";
 import TransientPc from "./transient-pc.mjs";
 import TransientPlainActor from "./transient-plain-actor.mjs";
@@ -15,6 +16,22 @@ import TransientPlainActor from "./transient-plain-actor.mjs";
  * @see TransientBaseActor
  */
 export class GameSystemActor extends Actor {
+  /**
+   * Returns a map of `Actor` sub-types and their factory functions. 
+   * 
+   * @type {Map<String, Function<TransientBaseActor>>}
+   * @static
+   * @readonly
+   * @private
+   */
+  static get SUB_TYPES() {
+    const r = new Map();
+    r.set(ACTOR_TYPES.NPC, (document) => { return new TransientNpc(document) });
+    r.set(ACTOR_TYPES.PC, (document) => { return new TransientPc(document) });
+    r.set(ACTOR_TYPES.PLAIN, (document) => { return new TransientPlainActor(document) });
+    return r;
+  }
+
   /**
    * Returns the default icon image path for this type of actor. 
    * @type {String}
@@ -45,7 +62,7 @@ export class GameSystemActor extends Actor {
    */
   getTransientObject() {
     if (this._transientObject === undefined) {
-      const factoryFunction = ACTOR_SUBTYPE.get(this.type);
+      const factoryFunction = GameSystemActor.SUB_TYPES.get(this.type);
       
       if (factoryFunction === undefined) {
         throw new Error(`InvalidTypeException: Actor subtype ${this.type} is unrecognized!`);

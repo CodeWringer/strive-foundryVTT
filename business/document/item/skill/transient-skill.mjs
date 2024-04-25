@@ -4,9 +4,7 @@ import SkillChatMessageViewModel from "../../../../presentation/sheet/item/skill
 import { SumComponent, Sum } from "../../../ruleset/summed-data.mjs";
 import DamageAndType from "../../../ruleset/skill/damage-and-type.mjs";
 import PreparedChatData from "../../../../presentation/chat/prepared-chat-data.mjs";
-import { DAMAGE_TYPES } from "../../../ruleset/damage-types.mjs";
 import { SOUNDS_CONSTANTS } from "../../../../presentation/audio/sounds.mjs";
-import { ITEM_SUBTYPE } from "../item-subtype.mjs";
 import TransientBaseItem from "../transient-base-item.mjs";
 import LevelAdvancement from "../../../ruleset/level-advancement.mjs";
 import Ruleset from "../../../ruleset/ruleset.mjs";
@@ -14,14 +12,13 @@ import Expertise from "./expertise.mjs";
 import CharacterAttribute from "../../../ruleset/attribute/character-attribute.mjs";
 import { ATTACK_TYPES } from "../../../ruleset/skill/attack-types.mjs";
 import { ATTRIBUTES, Attribute } from "../../../ruleset/attribute/attributes.mjs";
-import { isBlankOrUndefined, isDefined, isObject } from "../../../util/validation-utility.mjs";
+import { isDefined } from "../../../util/validation-utility.mjs";
 import { arrayContains } from "../../../util/array-utility.mjs";
-import * as ConstantsUtils from "../../../util/constants-utility.mjs";
-import { DICE_POOL_RESULT_TYPES } from "../../../dice/dice-pool.mjs";
 import SkillPrerequisite from "../../../ruleset/skill/skill-prerequisite.mjs";
 import { SKILL_TAGS } from "../../../tags/system-tags.mjs";
 import AtReferencer from "../../../referencing/at-referencer.mjs";
 import { getGroupForAttributeByName } from "../../../ruleset/attribute/attribute-groups.mjs";
+import { ACTOR_TYPES } from "../../actor/actor-types.mjs";
 
 /**
  * Represents the full transient data of a skill. 
@@ -384,7 +381,7 @@ export default class TransientSkill extends TransientBaseItem {
    */
   get dependsOnActiveCr() {
     const owningDocument = this.owningDocument;
-    if (owningDocument !== undefined && owningDocument.type === "npc") {
+    if (owningDocument !== undefined && owningDocument.type === ACTOR_TYPES.NPC) {
       const group = getGroupForAttributeByName(this.activeBaseAttribute.name);
       return owningDocument.getIsCrActiveFor(group.name);
     } else {
@@ -634,5 +631,3 @@ export default class TransientSkill extends TransientBaseItem {
     return super.resolveReference(comparableReference, propertyPath);
   }
 }
-
-ITEM_SUBTYPE.set("skill", (document) => { return new TransientSkill(document) });

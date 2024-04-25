@@ -1,3 +1,4 @@
+import { ITEM_TYPES } from "../../../../../business/document/item/item-types.mjs"
 import { SEARCH_MODES, Search, SearchItem } from "../../../../../business/search/search.mjs"
 import { isDefined, validateOrThrow } from "../../../../../business/util/validation-utility.mjs"
 import ButtonAddViewModel from "../../../../component/button-add/button-add-viewmodel.mjs"
@@ -139,7 +140,7 @@ export default class ActorSkillsViewModel extends ViewModel {
         parent: this,
         isEditable: thiz.isEditable,
         target: thiz.document,
-        creationType: "skill",
+        creationType: ITEM_TYPES.SKILL,
         withDialog: true,
         localizedLabel: game.i18n.localize("system.character.skill.learning.add.label"),
         creationData: {
@@ -168,7 +169,7 @@ export default class ActorSkillsViewModel extends ViewModel {
         parent: this,
         target: thiz.document,
         isEditable: thiz.isEditable,
-        creationType: "skill",
+        creationType: ITEM_TYPES.SKILL,
         withDialog: true,
         localizedLabel: game.i18n.localize("system.character.skill.known.add.label"),
         creationData: {

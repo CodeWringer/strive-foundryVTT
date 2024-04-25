@@ -28,6 +28,7 @@ import * as StringUtil from "../../../../business/util/string-utility.mjs"
 import DynamicInputDefinition from "../../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs"
 import { DYNAMIC_INPUT_TYPES } from "../../../dialog/dynamic-input-dialog/dynamic-input-types.mjs"
 import BaseAttributeListItemViewModel from "./base-attribute/base-attribute-list-item-viewmodel.mjs"
+import { ACTOR_TYPES } from "../../../../business/document/actor/actor-types.mjs"
 
 /**
  * @property {TransientSkill} document
@@ -95,9 +96,9 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
   get showAdvancementProgression() {
     if (isDefined(this.document.owningDocument) === true) {
       const type = this.document.owningDocument.type;
-      if (type === "npc" && this.document.owningDocument.progressionVisible === true) {
+      if (type === ACTOR_TYPES.NPC && this.document.owningDocument.progressionVisible === true) {
         return true;
-      } else if (type === "pc") {
+      } else if (type === ACTOR_TYPES.PC) {
         return true;
       }
     }

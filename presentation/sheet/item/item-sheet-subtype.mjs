@@ -1,3 +1,4 @@
+import { ITEM_TYPES } from "../../../business/document/item/item-types.mjs";
 import AssetItemSheet from "./asset/asset-item-sheet.mjs";
 import FateItemSheet from "./fate-card/fate-item-sheet.mjs";
 import IllnessItemSheet from "./illness/illness-item-sheet.mjs";
@@ -12,11 +13,11 @@ import SkillItemSheet from "./skill/skill-item-sheet.mjs";
  * @readonly
  */
 export const ITEM_SHEET_SUBTYPE = new Map([
-  ["item", new AssetItemSheet()],
-  ["skill", new SkillItemSheet()],
-  ["scar", new ScarItemSheet()],
-  ["mutation", new MutationItemSheet()],
-  ["injury", new InjuryItemSheet()],
-  ["illness", new IllnessItemSheet()],
-  ["fate-card", new FateItemSheet()],
+  [ITEM_TYPES.ASSET, new AssetItemSheet()],
+  [ITEM_TYPES.SKILL, new SkillItemSheet()],
+  [ITEM_TYPES.SCAR, new ScarItemSheet()],
+  [ITEM_TYPES.MUTATION, new MutationItemSheet()],
+  [ITEM_TYPES.INJURY, new InjuryItemSheet()],
+  [ITEM_TYPES.ILLNESS, new IllnessItemSheet()],
+  [ITEM_TYPES.FATE_CARD, new FateItemSheet()],
 ]);

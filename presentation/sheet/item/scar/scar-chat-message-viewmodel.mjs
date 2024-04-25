@@ -1,6 +1,5 @@
 import TransientScar from "../../../../business/document/item/transient-scar.mjs";
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs";
-import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
 import LazyRichTextViewModel from "../../../component/lazy-rich-text/lazy-rich-text-viewmodel.mjs";
 import { TEMPLATES } from "../../../templatePreloader.mjs";
 import ViewModel from "../../../view-model/view-model.mjs";

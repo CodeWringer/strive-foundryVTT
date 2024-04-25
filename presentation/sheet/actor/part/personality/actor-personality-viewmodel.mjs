@@ -4,6 +4,7 @@ import ViewModel from "../../../../view-model/view-model.mjs"
 import ActorDriversViewModel from "./actor-drivers-viewmodel.mjs"
 import ActorFateViewModel from "../actor-fate-viewmodel.mjs"
 import PersonalityTraitsViewModel from "./personality-traits/personality-traits-viewmodel.mjs"
+import { ACTOR_TYPES } from "../../../../../business/document/actor/actor-types.mjs"
 
 export default class ActorPersonalityViewModel extends ViewModel {
   /** @override */
@@ -35,7 +36,7 @@ export default class ActorPersonalityViewModel extends ViewModel {
    * 
    * @type {Boolean}
    */
-  get isPC() { return this.document.type === "pc"; }
+  get isPC() { return this.document.type === ACTOR_TYPES.PC; }
   
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 

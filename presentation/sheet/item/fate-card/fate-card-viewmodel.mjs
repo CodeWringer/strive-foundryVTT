@@ -1,3 +1,5 @@
+import { ITEM_TYPES } from "../../../../business/document/item/item-types.mjs";
+import TransientFateCard from "../../../../business/document/item/transient-fate-card.mjs";
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs";
 import ButtonDeleteViewModel from "../../../component/button-delete/button-delete-viewmodel.mjs";
 import ButtonSendToChatViewModel from "../../../component/button-send-to-chat/button-send-to-chat-viewmodel.mjs";
@@ -31,7 +33,7 @@ export default class FateCardViewModel extends ViewModel {
     validateOrThrow(args, ["document"]);
 
     this.document = args.document;
-    this.contextTemplate = args.contextTemplate ?? "fate-card";
+    this.contextTemplate = args.contextTemplate ?? ITEM_TYPES.FATE_CARD;
 
     const thiz = this;
 

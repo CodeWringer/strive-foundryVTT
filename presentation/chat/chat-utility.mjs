@@ -1,3 +1,4 @@
+import { ITEM_TYPES } from "../../business/document/item/item-types.mjs";
 import { getNestedPropertyValue } from "../../business/util/property-utility.mjs";
 import { validateOrThrow } from "../../business/util/validation-utility.mjs";
 import { SOUNDS_CONSTANTS } from "../audio/sounds.mjs";
@@ -73,7 +74,7 @@ export async function sendPropertyToChat(args = {}) {
 
   const prop = getNestedPropertyValue(args.obj, args.propertyPath);
   if (prop.type !== undefined) {
-    if (prop.type === "expertise") {
+    if (prop.type === ITEM_TYPES.EXPERTISE) {
       await prop.sendToChat({
         visibilityMode: visibilityMode,
       });

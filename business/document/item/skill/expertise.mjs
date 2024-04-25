@@ -11,6 +11,7 @@ import { ATTACK_TYPES, AttackType } from '../../../ruleset/skill/attack-types.mj
 import TransientSkill from './transient-skill.mjs';
 import AtReferencer from '../../../referencing/at-referencer.mjs';
 import ViewModel from '../../../../presentation/view-model/view-model.mjs';
+import { ITEM_TYPES } from '../item-types.mjs';
 
 /**
  * Represents an expertise. 
@@ -84,7 +85,7 @@ export default class Expertise {
    * @type {String}
    * @readonly
    */
-  get type() { return "expertise"; }
+  get type() { return ITEM_TYPES.EXPERTISE; }
 
   /**
    * @type {Boolean}

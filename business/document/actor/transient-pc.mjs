@@ -1,7 +1,7 @@
 import AtReferencer from "../../referencing/at-referencer.mjs";
 import Ruleset from "../../ruleset/ruleset.mjs";
 import { isDefined } from "../../util/validation-utility.mjs";
-import { ACTOR_SUBTYPE } from "./actor-subtype.mjs";
+import { ITEM_TYPES } from "../item/item-types.mjs";
 import TransientBaseCharacterActor from "./transient-base-character-actor.mjs";
 
 /**
@@ -77,7 +77,7 @@ export default class TransientPc extends TransientBaseCharacterActor {
     const thiz = this;
     
     return {
-      get fateCards() { return thiz.items.filter(it => it.type === "fate-card"); },
+      get fateCards() { return thiz.items.filter(it => it.type === ITEM_TYPES.FATE_CARD); },
       get maxFateCards() { return new Ruleset().getMaximumFateCards(); },
       get remainingFateCards() { return this.maxFateCards - this.fateCards.length; },
 
@@ -136,5 +136,3 @@ export default class TransientPc extends TransientBaseCharacterActor {
     }
   }
 }
-
-ACTOR_SUBTYPE.set("pc", (document) => { return new TransientPc(document) });

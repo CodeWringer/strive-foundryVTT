@@ -1,5 +1,4 @@
 import { TEMPLATES } from '../../../presentation/templatePreloader.mjs';
-import { DICE_POOL_RESULT_TYPES } from '../../dice/dice-pool.mjs';
 import AtReferencer from '../../referencing/at-referencer.mjs';
 import CharacterAssetSlotGroup from '../../ruleset/asset/character-asset-slot-group.mjs';
 import { ATTRIBUTE_GROUPS } from '../../ruleset/attribute/attribute-groups.mjs';
@@ -11,6 +10,7 @@ import Ruleset from '../../ruleset/ruleset.mjs';
 import { SKILL_TAGS } from '../../tags/system-tags.mjs';
 import LoadHealthStatesSettingUseCase from '../../use-case/load-health-states-setting-use-case.mjs';
 import { isDefined } from '../../util/validation-utility.mjs';
+import { ITEM_TYPES } from '../item/item-types.mjs';
 import TransientBaseActor from './transient-base-actor.mjs';
 
 /**
@@ -224,19 +224,19 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
   get skills() {
     const thiz = this;
     return {
-      get all() { return thiz.items.filter(it => it.type === "skill"); },
+      get all() { return thiz.items.filter(it => it.type === ITEM_TYPES.SKILL); },
       get learning() { return thiz.items.filter(it => 
-        it.type === "skill" && it.level < 1
+        it.type === ITEM_TYPES.SKILL && it.level < 1
           && it.tags.find(tag => tag.id === SKILL_TAGS.INNATE.id) === undefined
         ); 
       },
       get known() { return thiz.items.filter(it => 
-        it.type === "skill" && it.level > 0
+        it.type === ITEM_TYPES.SKILL && it.level > 0
           && it.tags.find(tag => tag.id === SKILL_TAGS.INNATE.id) === undefined
         ); 
       },
       get innate() { return thiz.items.filter(it => 
-        it.type === "skill" 
+        it.type === ITEM_TYPES.SKILL 
         && it.tags.find(tag => tag.id === SKILL_TAGS.INNATE.id) !== undefined
         ); 
       },
@@ -250,10 +250,10 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
   get health() {
     const thiz = this;
     return {
-      get injuries() { return thiz.items.filter(it => it.type === "injury"); },
-      get illnesses() { return thiz.items.filter(it => it.type === "illness"); },
-      get mutations() { return thiz.items.filter(it => it.type === "mutation"); },
-      get scars() { return thiz.items.filter(it => it.type === "scar"); },
+      get injuries() { return thiz.items.filter(it => it.type === ITEM_TYPES.INJURY); },
+      get illnesses() { return thiz.items.filter(it => it.type === ITEM_TYPES.ILLNESS); },
+      get mutations() { return thiz.items.filter(it => it.type === ITEM_TYPES.MUTATION); },
+      get scars() { return thiz.items.filter(it => it.type === ITEM_TYPES.SCAR); },
 
       get HP() { return parseInt(thiz.document.system.health.HP); },
       set HP(value) { thiz.updateByPath("system.health.HP", value); },
@@ -424,7 +424,7 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
    * @private
    */
   _prepareAssetsData() {
-    this._allAssets = this.items.filter(it => it.type === "item");
+    this._allAssets = this.items.filter(it => it.type === ITEM_TYPES.ASSET);
     this._equipmentSlotGroups = this._getEquipmentSlotGroups();
 
     // Worn & Equipped

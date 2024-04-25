@@ -1,3 +1,4 @@
+import { ACTOR_TYPES } from "../../../../../business/document/actor/actor-types.mjs";
 import CharacterAttribute from "../../../../../business/ruleset/attribute/character-attribute.mjs";
 import { validateOrThrow } from "../../../../../business/util/validation-utility.mjs";
 import ButtonRollViewModel from "../../../../component/button-roll/button-roll-viewmodel.mjs";
@@ -59,14 +60,14 @@ export default class AttributeTableViewModel extends ViewModel {
    * 
    * @type {Boolean}
    */
-  get isPC() { return this.document.type === "pc"; }
+  get isPC() { return this.document.type === ACTOR_TYPES.PC; }
 
   /**
    * Returns `true`, if the actor is a non-player character. 
    * 
    * @type {Boolean}
    */
-  get isNPC() { return this.document.type === "npc"; }
+  get isNPC() { return this.document.type === ACTOR_TYPES.NPC; }
 
   /**
    * Returns `true`, if the advancement progress is to be hidden. 

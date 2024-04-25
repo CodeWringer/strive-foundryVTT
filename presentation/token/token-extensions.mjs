@@ -1,3 +1,4 @@
+import { ACTOR_TYPES } from "../../business/document/actor/actor-types.mjs";
 import { isDefined } from "../../business/util/validation-utility.mjs";
 import { PixiButton } from "../pixi/pixi-button.mjs";
 import { TEXTURES, getPixiTexture } from "../pixi/pixi-preloader.mjs";
@@ -18,7 +19,7 @@ export default class TokenExtensions {
    * @static
    */
   static updateTokenHover(token) {
-    if (token.actor.type !== "npc") return;
+    if (token.actor.type !== ACTOR_TYPES.NPC) return;
 
     const displayWhen = token.document.displayName;
     const isOwner = token.actor.isOwner || game.user.isGM;
@@ -127,7 +128,7 @@ export default class TokenExtensions {
   static updateTokenCombatant(token) {
     if (isDefined(token) !== true) return;
     if (isDefined(token.actor) !== true) return;
-    if (token.actor.type === "plain") return;
+    if (token.actor.type === ACTOR_TYPES.PLAIN) return;
     
     if (token.inCombat === true) {
       if (isDefined(token.actionPoints) === true) {

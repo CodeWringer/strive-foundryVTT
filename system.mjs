@@ -32,9 +32,7 @@ import LoadDebugSettingUseCase from "./business/use-case/load-debug-setting-use-
 import PlainDialog from "./presentation/dialog/plain-dialog/plain-dialog.mjs";
 import "./presentation/dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
 // Document classes
-import { ACTOR_SUBTYPE } from "./business/document/actor/actor-subtype.mjs";
 import { GameSystemActor } from "./business/document/actor/actor.mjs";
-import { ITEM_SUBTYPE } from "./business/document/item/item-subtype.mjs";
 import { GameSystemItem } from "./business/document/item/item.mjs";
 import { GameSystemCombat } from "./presentation/combat/game-system-combat.mjs";
 // Sheet classes

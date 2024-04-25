@@ -1,10 +1,8 @@
 import PreparedChatData from "../../../presentation/chat/prepared-chat-data.mjs";
 import { SOUNDS_CONSTANTS } from "../../../presentation/audio/sounds.mjs";
-import { ITEM_SUBTYPE } from "./item-subtype.mjs";
 import TransientBaseItem from "./transient-base-item.mjs";
 import AssetChatMessageViewModel from "../../../presentation/sheet/item/asset/asset-chat-message-viewmodel.mjs";
 import { TEMPLATES } from "../../../presentation/templatePreloader.mjs";
-import { createUUID } from "../../util/uuid-utility.mjs";
 import CharacterAssetSlot from "../../ruleset/asset/character-asset-slot.mjs";
 import { arrayTakeUnless } from "../../util/array-utility.mjs";
 import { ASSET_TAGS } from "../../tags/system-tags.mjs";
@@ -317,5 +315,3 @@ export default class TransientAsset extends TransientBaseItem {
     }
   }
 }
-
-ITEM_SUBTYPE.set("item", (document) => { return new TransientAsset(document) });

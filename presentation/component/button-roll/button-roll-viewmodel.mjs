@@ -13,6 +13,7 @@ import { ROLL_DICE_MODIFIER_TYPES } from "../../../business/dice/roll-dice-modif
 import DynamicInputDefinition from "../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
 import { SumComponent } from "../../../business/ruleset/summed-data.mjs";
 import DicePool, { DicePoolRollResult } from "../../../business/dice/dice-pool.mjs";
+import { ITEM_TYPES } from "../../../business/document/item/item-types.mjs";
 
 /**
  * A button that allows performing a dice roll and then sending the result to the chat. 
@@ -316,7 +317,7 @@ export default class ButtonRollViewModel extends ButtonViewModel {
 
     // In case of a skill - also determine whether to show this as a backfire. 
     let showBackFire = false;
-    if (this.target.type === "skill") {
+    if (this.target.type === ITEM_TYPES.SKILL) {
       // Only consider skills with the "magicSchool" property. 
       if (this.target.isMagicSchool === true) {
         if (new Ruleset().rollCausesBackfire(rollResult) === true) {
