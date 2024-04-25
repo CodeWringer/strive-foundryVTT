@@ -28,15 +28,15 @@ export class GameSystemItem extends Item {
    * @private
    */
   static get SUB_TYPES() {
-    const r = new Map();
-    r.set(ITEM_TYPES.ASSET, (document) => { return new TransientAsset(document) });
-    r.set(ITEM_TYPES.FATE_CARD, (document) => { return new TransientFateCard(document) });
-    r.set(ITEM_TYPES.ILLNESS, (document) => { return new TransientIllness(document) });
-    r.set(ITEM_TYPES.INJURY, (document) => { return new TransientInjury(document) });
-    r.set(ITEM_TYPES.MUTATION, (document) => { return new TransientMutation(document) });
-    r.set(ITEM_TYPES.SCAR, (document) => { return new TransientScar(document) });
-    r.set(ITEM_TYPES.SKILL, (document) => { return new TransientSkill(document) });
-    return r;
+    return new Map([
+      [ITEM_TYPES.ASSET, (document) => { return new TransientAsset(document) }],
+      [ITEM_TYPES.FATE_CARD, (document) => { return new TransientFateCard(document) }],
+      [ITEM_TYPES.ILLNESS, (document) => { return new TransientIllness(document) }],
+      [ITEM_TYPES.INJURY, (document) => { return new TransientInjury(document) }],
+      [ITEM_TYPES.MUTATION, (document) => { return new TransientMutation(document) }],
+      [ITEM_TYPES.SCAR, (document) => { return new TransientScar(document) }],
+      [ITEM_TYPES.SKILL, (document) => { return new TransientSkill(document) }],
+    ]);
   }
 
   /**

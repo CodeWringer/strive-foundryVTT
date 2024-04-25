@@ -1,9 +1,36 @@
-import { ITEM_SHEET_SUBTYPE } from "./item-sheet-subtype.mjs";
 import * as SheetUtil from "../sheet-utility.mjs";
 import { SYSTEM_ID } from "../../../system-id.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
+import { ITEM_TYPES } from "../../../business/document/item/item-types.mjs";
+import AssetItemSheet from "./asset/asset-item-sheet.mjs";
+import FateItemSheet from "./fate-card/fate-item-sheet.mjs";
+import IllnessItemSheet from "./illness/illness-item-sheet.mjs";
+import InjuryItemSheet from "./injury/injury-item-sheet.mjs";
+import MutationItemSheet from "./mutation/mutation-item-sheet.mjs";
+import ScarItemSheet from "./scar/scar-item-sheet.mjs";
+import SkillItemSheet from "./skill/skill-item-sheet.mjs";
 
 export class GameSystemItemSheet extends ItemSheet {
+  /**
+   * Returns a map of `ItemSheet` sub-types and their factory functions. 
+   * 
+   * @type {Map<String, Function<TransientBaseActor>>}
+   * @static
+   * @readonly
+   * @private
+   */
+    static get SUB_TYPES() {
+      return new Map([
+        [ITEM_TYPES.ASSET, new AssetItemSheet()],
+        [ITEM_TYPES.SKILL, new SkillItemSheet()],
+        [ITEM_TYPES.SCAR, new ScarItemSheet()],
+        [ITEM_TYPES.MUTATION, new MutationItemSheet()],
+        [ITEM_TYPES.INJURY, new InjuryItemSheet()],
+        [ITEM_TYPES.ILLNESS, new IllnessItemSheet()],
+        [ITEM_TYPES.FATE_CARD, new FateItemSheet()],
+      ]);
+    }
+
   /**
    * Type-dependent object which pseudo-extends the logic of this object. 
    * @type {GameSystemBaseItemSheet}
@@ -11,7 +38,7 @@ export class GameSystemItemSheet extends ItemSheet {
    */
   get subType() {
     const type = this.item.type;
-    const enhancer = ITEM_SHEET_SUBTYPE.get(type);
+    const enhancer = GameSystemItemSheet.SUB_TYPES.get(type);
     
     if (enhancer === undefined) {
       throw new Error(`InvalidTypeException: Item sheet subtype ${type} is unrecognized!`);

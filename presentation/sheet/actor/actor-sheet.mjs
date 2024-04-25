@@ -1,5 +1,6 @@
-import { ACTOR_SHEET_SUBTYPE } from "./actor-sheet-subtype.mjs";
 import GameSystemBaseActorSheet from "./game-system-base-actor-sheet.mjs";
+import GameSystemNpcActorSheet from "./game-system-npc-actor-sheet.mjs";
+import GameSystemPcActorSheet from "./game-system-pc-actor-sheet.mjs";
 import * as SheetUtil from "../sheet-utility.mjs";
 import { SYSTEM_ID } from "../../../system-id.mjs";
 import { isDefined } from "../../../business/util/validation-utility.mjs";
@@ -10,13 +11,29 @@ import { ITEM_TYPES } from "../../../business/document/item/item-types.mjs";
 
 export class GameSystemActorSheet extends ActorSheet {
   /**
+   * Returns a map of `ActorSheet` sub-types and their factory functions. 
+   * 
+   * @type {Map<String, Function<TransientBaseActor>>}
+   * @static
+   * @readonly
+   * @private
+   */
+  static get SUB_TYPES() {
+    return new Map([
+      [ACTOR_TYPES.PLAIN, new GameSystemBaseActorSheet()],
+      [ACTOR_TYPES.NPC, new GameSystemNpcActorSheet()],
+      [ACTOR_TYPES.PC, new GameSystemPcActorSheet()],
+    ]);
+  }
+
+  /**
    * Type-dependent object which pseudo-extends the logic of this object. 
    * @type {GameSystemBaseActorSheet}
    * @readonly
    */
   get subType() {
     const type = this.actor.type;
-    const enhancer = ACTOR_SHEET_SUBTYPE.get(type);
+    const enhancer = GameSystemActorSheet.SUB_TYPES.get(type);
     
     if (enhancer === undefined) {
       throw new Error(`InvalidTypeException: Actor sheet subtype ${type} is unrecognized!`);
