@@ -25,11 +25,11 @@ export class GameSystemActor extends Actor {
    * @private
    */
   static get SUB_TYPES() {
-    const r = new Map();
-    r.set(ACTOR_TYPES.NPC, (document) => { return new TransientNpc(document) });
-    r.set(ACTOR_TYPES.PC, (document) => { return new TransientPc(document) });
-    r.set(ACTOR_TYPES.PLAIN, (document) => { return new TransientPlainActor(document) });
-    return r;
+    return new Map([
+      [ACTOR_TYPES.NPC, (document) => { return new TransientNpc(document) }],
+      [ACTOR_TYPES.PC, (document) => { return new TransientPc(document) }],
+      [ACTOR_TYPES.PLAIN, (document) => { return new TransientPlainActor(document) }],
+    ]);
   }
 
   /**
