@@ -93,4 +93,4 @@ export default class TransientFateCard extends TransientBaseItem {
   }
 }
 
-ITEM_SUBTYPE.set("fate-card", (document) => { return new TransientFateCard(document) });
+ITEM_SUBTYPE.set(TransientFateCard.TYPE, (document) => { return new TransientFateCard(document) });

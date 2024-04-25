@@ -20,7 +20,7 @@ import ChoiceOption from '../input-choice/choice-option.mjs';
 export const ADD_BUTTON_CREATION_TYPES = {
   SKILL: "skill",
   EXPERTISE: "expertise",
-  FATE_CARD: "fate-card",
+  FATE_CARD: TransientFateCard.TYPE,
   ASSET: TransientAsset.TYPE,
   INJURY: "injury",
   ILLNESS: "illness",

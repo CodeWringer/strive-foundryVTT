@@ -96,7 +96,7 @@ export default class ActorFateViewModel extends ViewModel {
       parent: thiz,
       id: "vmBtnAddFateCard",
       target: thiz.document,
-      creationType: "fate-card",
+      creationType: TransientFateCard.TYPE,
       withDialog: true,
       localizedType: game.i18n.localize("system.character.driverSystem.fateSystem.fateCard.label"),
     });

@@ -31,7 +31,7 @@ export default class FateCardViewModel extends ViewModel {
     validateOrThrow(args, ["document"]);
 
     this.document = args.document;
-    this.contextTemplate = args.contextTemplate ?? "fate-card";
+    this.contextTemplate = args.contextTemplate ?? TransientFateCard.TYPE;
 
     const thiz = this;
 

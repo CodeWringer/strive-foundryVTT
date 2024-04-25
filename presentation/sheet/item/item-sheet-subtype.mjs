@@ -18,5 +18,5 @@ export const ITEM_SHEET_SUBTYPE = new Map([
   ["mutation", new MutationItemSheet()],
   ["injury", new InjuryItemSheet()],
   ["illness", new IllnessItemSheet()],
-  ["fate-card", new FateItemSheet()],
+  [TransientFateCard.TYPE, new FateItemSheet()],
 ]);
