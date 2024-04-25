@@ -11,6 +11,11 @@ import Ruleset from '../../ruleset/ruleset.mjs';
 import { SKILL_TAGS } from '../../tags/system-tags.mjs';
 import LoadHealthStatesSettingUseCase from '../../use-case/load-health-states-setting-use-case.mjs';
 import { isDefined } from '../../util/validation-utility.mjs';
+import TransientSkill from '../item/skill/transient-skill.mjs';
+import TransientIllness from '../item/transient-illness.mjs';
+import TransientInjury from '../item/transient-injury.mjs';
+import TransientMutation from '../item/transient-mutation.mjs';
+import TransientScar from '../item/transient-scar.mjs';
 import TransientBaseActor from './transient-base-actor.mjs';
 
 /**

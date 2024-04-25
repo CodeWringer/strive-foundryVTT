@@ -5,6 +5,8 @@ import { SYSTEM_ID } from "../../../system-id.mjs";
 import { isDefined } from "../../../business/util/validation-utility.mjs";
 import DocumentFetcher from "../../../business/document/document-fetcher/document-fetcher.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
+import TransientNpc from "../../../business/document/actor/transient-npc.mjs";
+import TransientSkill from "../../../business/document/item/skill/transient-skill.mjs";
 
 export class GameSystemActorSheet extends ActorSheet {
   /**

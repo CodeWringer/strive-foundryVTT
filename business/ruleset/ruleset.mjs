@@ -8,6 +8,7 @@ import { ATTRIBUTES, Attribute } from "./attribute/attributes.mjs";
 import TransientSkill from "../document/item/skill/transient-skill.mjs";
 import TransientNpc from "../document/actor/transient-npc.mjs";
 import TransientPc from "../document/actor/transient-pc.mjs";
+import TransientInjury from "../document/item/transient-injury.mjs";
 
 /**
  * Provides all the ruleset-specifics. 

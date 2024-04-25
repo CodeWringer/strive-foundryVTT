@@ -7,6 +7,8 @@ import TransientBaseCharacterActor from "../../../../../business/document/actor/
 import CharacterAttributeGroup from "../../../../../business/ruleset/attribute/character-attribute-group.mjs";
 import KeyValuePair from "../../../../../common/key-value-pair.mjs";
 import ChallengeRating from "../../../../../business/ruleset/attribute/challenge-rating.mjs";
+import TransientNpc from "../../../../../business/document/actor/transient-npc.mjs";
+import TransientPc from "../../../../../business/document/actor/transient-pc.mjs";
 
 export default class ActorAttributesViewModel extends ViewModel {
   /** @override */

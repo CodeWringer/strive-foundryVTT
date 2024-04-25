@@ -19,6 +19,9 @@ import ButtonViewModel from "../../component/button/button-viewmodel.mjs"
 import DynamicInputDialog from "../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs"
 import DynamicInputDefinition from "../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs"
 import { DYNAMIC_INPUT_TYPES } from "../../dialog/dynamic-input-dialog/dynamic-input-types.mjs"
+import TransientNpc from "../../../business/document/actor/transient-npc.mjs"
+import TransientPc from "../../../business/document/actor/transient-pc.mjs"
+import TransientPlainActor from "../../../business/document/actor/transient-plain-actor.mjs"
 
 /**
  * @extends BaseSheetViewModel

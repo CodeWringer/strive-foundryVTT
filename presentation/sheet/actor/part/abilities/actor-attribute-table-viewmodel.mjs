@@ -1,3 +1,5 @@
+import TransientNpc from "../../../../../business/document/actor/transient-npc.mjs";
+import TransientPc from "../../../../../business/document/actor/transient-pc.mjs";
 import CharacterAttribute from "../../../../../business/ruleset/attribute/character-attribute.mjs";
 import { validateOrThrow } from "../../../../../business/util/validation-utility.mjs";
 import ButtonRollViewModel from "../../../../component/button-roll/button-roll-viewmodel.mjs";

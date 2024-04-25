@@ -7,6 +7,7 @@ import { DYNAMIC_INPUT_TYPES } from '../../dialog/dynamic-input-dialog/dynamic-i
 import ChoiceAdapter from '../input-choice/choice-adapter.mjs';
 import ChoiceOption from '../input-choice/choice-option.mjs';
 import Expertise from '../../../business/document/item/skill/expertise.mjs';
+import TransientSkill from '../../../business/document/item/skill/transient-skill.mjs';
 
 /**
  * A button that allows adding a newly created embedded document to a specific actor. 

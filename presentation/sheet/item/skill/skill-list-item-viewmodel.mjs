@@ -28,6 +28,8 @@ import * as StringUtil from "../../../../business/util/string-utility.mjs"
 import DynamicInputDefinition from "../../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs"
 import { DYNAMIC_INPUT_TYPES } from "../../../dialog/dynamic-input-dialog/dynamic-input-types.mjs"
 import BaseAttributeListItemViewModel from "./base-attribute/base-attribute-list-item-viewmodel.mjs"
+import TransientNpc from "../../../../business/document/actor/transient-npc.mjs"
+import TransientPc from "../../../../business/document/actor/transient-pc.mjs"
 
 /**
  * @property {TransientSkill} document

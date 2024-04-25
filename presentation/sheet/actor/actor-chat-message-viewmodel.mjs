@@ -1,5 +1,6 @@
 import TransientNpc from "../../../business/document/actor/transient-npc.mjs";
 import TransientPc from "../../../business/document/actor/transient-pc.mjs";
+import TransientPlainActor from "../../../business/document/actor/transient-plain-actor.mjs";
 import { isNotBlankOrUndefined } from "../../../business/util/validation-utility.mjs";
 import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import LazyRichTextViewModel from "../../component/lazy-rich-text/lazy-rich-text-viewmodel.mjs";

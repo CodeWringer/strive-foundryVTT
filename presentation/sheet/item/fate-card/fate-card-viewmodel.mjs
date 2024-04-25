@@ -1,3 +1,4 @@
+import TransientFateCard from "../../../../business/document/item/transient-fate-card.mjs";
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs";
 import ButtonDeleteViewModel from "../../../component/button-delete/button-delete-viewmodel.mjs";
 import ButtonSendToChatViewModel from "../../../component/button-send-to-chat/button-send-to-chat-viewmodel.mjs";

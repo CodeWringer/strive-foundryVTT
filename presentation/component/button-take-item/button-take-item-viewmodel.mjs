@@ -4,6 +4,7 @@ import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import SingleChoiceDialog from "../../dialog/single-choice-dialog/single-choice-dialog.mjs";
 import DocumentFetcher from "../../../business/document/document-fetcher/document-fetcher.mjs";
 import { isString } from "../../../business/util/validation-utility.mjs";
+import TransientAsset from "../../../business/document/item/transient-asset.mjs";
 
 /**
  * @property {String} chatMessage

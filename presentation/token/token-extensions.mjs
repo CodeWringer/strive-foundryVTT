@@ -1,3 +1,5 @@
+import TransientNpc from "../../business/document/actor/transient-npc.mjs";
+import TransientPlainActor from "../../business/document/actor/transient-plain-actor.mjs";
 import { isDefined } from "../../business/util/validation-utility.mjs";
 import { PixiButton } from "../pixi/pixi-button.mjs";
 import { TEXTURES, getPixiTexture } from "../pixi/pixi-preloader.mjs";

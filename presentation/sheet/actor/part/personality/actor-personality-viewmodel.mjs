@@ -4,6 +4,7 @@ import ViewModel from "../../../../view-model/view-model.mjs"
 import ActorDriversViewModel from "./actor-drivers-viewmodel.mjs"
 import ActorFateViewModel from "../actor-fate-viewmodel.mjs"
 import PersonalityTraitsViewModel from "./personality-traits/personality-traits-viewmodel.mjs"
+import TransientPc from "../../../../../business/document/actor/transient-pc.mjs"
 
 export default class ActorPersonalityViewModel extends ViewModel {
   /** @override */

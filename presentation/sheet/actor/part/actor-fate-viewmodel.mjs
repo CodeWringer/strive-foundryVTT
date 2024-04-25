@@ -1,3 +1,4 @@
+import TransientFateCard from "../../../../business/document/item/transient-fate-card.mjs";
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs"
 import ButtonAddViewModel from "../../../component/button-add/button-add-viewmodel.mjs";
 import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";

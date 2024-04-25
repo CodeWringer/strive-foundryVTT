@@ -1,3 +1,4 @@
+import TransientPlainActor from "../../business/document/actor/transient-plain-actor.mjs";
 import { isDefined } from "../../business/util/validation-utility.mjs";
 import { TEMPLATES } from "../templatePreloader.mjs";
 import CombatTrackerActionPointsViewModel from "./combat-tracker-action-points-viewmodel.mjs";

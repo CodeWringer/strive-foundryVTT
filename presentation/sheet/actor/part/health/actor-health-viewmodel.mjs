@@ -1,3 +1,7 @@
+import TransientIllness from "../../../../../business/document/item/transient-illness.mjs"
+import TransientInjury from "../../../../../business/document/item/transient-injury.mjs"
+import TransientMutation from "../../../../../business/document/item/transient-mutation.mjs"
+import TransientScar from "../../../../../business/document/item/transient-scar.mjs"
 import { INJURY_STATES } from "../../../../../business/ruleset/health/injury-states.mjs"
 import Ruleset from "../../../../../business/ruleset/ruleset.mjs"
 import { validateOrThrow } from "../../../../../business/util/validation-utility.mjs"

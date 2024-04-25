@@ -1,3 +1,6 @@
+import TransientNpc from "../../../business/document/actor/transient-npc.mjs";
+import TransientPc from "../../../business/document/actor/transient-pc.mjs";
+import TransientPlainActor from "../../../business/document/actor/transient-plain-actor.mjs";
 import GameSystemBaseActorSheet from "./game-system-base-actor-sheet.mjs";
 import GameSystemNpcActorSheet from "./game-system-npc-actor-sheet.mjs";
 import GameSystemPcActorSheet from "./game-system-pc-actor-sheet.mjs";
