@@ -103,6 +103,12 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
     }
   }
 
+  /**
+   * @type {String}
+   * @readonly
+   */
+  get templateExpertiseTable() { return ExpertiseTableViewModel.TEMPLATE; }
+
   /** @override */
   getDataFields() {
     return [

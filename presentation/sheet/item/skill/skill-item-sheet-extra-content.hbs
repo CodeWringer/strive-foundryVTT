@@ -36,5 +36,7 @@ viewModel: {SkillItemSheetViewModel}
     {{> simpleList viewModel=viewModel.vmPrerequisiteList}}
   </div>
   {{!-- Expertises --}}
-  {{> "systems/strive/presentation/sheet/item/expertise/expertise-table.hbs" viewModel=viewModel.vmExpertiseTable cssClass=(ifThenElse viewModel.isExpertiseListVisible "" "hidden") }}
+  {{#with viewModel.templateExpertiseTable as | template |}}
+    {{> (template) viewModel=../viewModel.vmExpertiseTable cssClass=(ifThenElse ../viewModel.isExpertiseListVisible "" "hidden") }}
+  {{/with}}
 </section>
