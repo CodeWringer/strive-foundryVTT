@@ -198,7 +198,7 @@ export default class ActorHealthViewModel extends ViewModel {
         parent: this,
         target: thiz.document,
         isEditable: this.isEditable,
-        creationType: "illness",
+        creationType: TransientIllness.TYPE,
         withDialog: true,
         localizedLabel: game.i18n.localize("system.character.health.illness.add.label"),
         localizedType: game.i18n.localize("system.character.health.illness.singular"),

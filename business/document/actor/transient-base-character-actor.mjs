@@ -251,7 +251,7 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
     const thiz = this;
     return {
       get injuries() { return thiz.items.filter(it => it.type === "injury"); },
-      get illnesses() { return thiz.items.filter(it => it.type === "illness"); },
+      get illnesses() { return thiz.items.filter(it => it.type === TransientIllness.TYPE); },
       get mutations() { return thiz.items.filter(it => it.type === "mutation"); },
       get scars() { return thiz.items.filter(it => it.type === "scar"); },
 

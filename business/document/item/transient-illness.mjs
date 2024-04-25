@@ -138,4 +138,4 @@ export default class TransientIllness extends TransientBaseItem {
   }
 }
 
-ITEM_SUBTYPE.set("illness", (document) => { return new TransientIllness(document) });
+ITEM_SUBTYPE.set(TransientIllness.TYPE, (document) => { return new TransientIllness(document) });
