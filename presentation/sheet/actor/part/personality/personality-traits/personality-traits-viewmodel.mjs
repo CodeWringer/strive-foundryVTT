@@ -1,6 +1,6 @@
 import { TEMPLATES } from "../../../../../templatePreloader.mjs";
 import { validateOrThrow } from "../../../../../../business/util/validation-utility.mjs";
-import InputRadioButtonGroupViewModel from "../../../../../component/input-radio-button-group/input-radio-button-group-viewmodel.mjs";
+import InputRadioButtonGroupViewModel from "../../../../../component/input-choice/input-radio-button-group/input-radio-button-group-viewmodel.mjs";
 import ViewModel from "../../../../../view-model/view-model.mjs";
 import StatefulChoiceOption from "../../../../../component/input-choice/stateful-choice-option.mjs";
 

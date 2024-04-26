@@ -1,6 +1,6 @@
 import { INJURY_STATES } from "../../../../business/ruleset/health/injury-states.mjs"
 import StatefulChoiceOption from "../../../component/input-choice/stateful-choice-option.mjs"
-import InputRadioButtonGroupViewModel from "../../../component/input-radio-button-group/input-radio-button-group-viewmodel.mjs"
+import InputRadioButtonGroupViewModel from "../../../component/input-choice/input-radio-button-group/input-radio-button-group-viewmodel.mjs"
 import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs"
 import BaseListItemViewModel from "../base/base-list-item-viewmodel.mjs"
 import { DataFieldComponent } from "../base/datafield-component.mjs"

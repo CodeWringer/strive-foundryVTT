@@ -1,7 +1,7 @@
-import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
-import { TEMPLATES } from "../../templatePreloader.mjs";
-import InputViewModel from "../../view-model/input-view-model.mjs";
-import StatefulChoiceOption from "../input-choice/stateful-choice-option.mjs";
+import { validateOrThrow } from "../../../../business/util/validation-utility.mjs";
+import { TEMPLATES } from "../../../templatePreloader.mjs";
+import InputViewModel from "../../../view-model/input-view-model.mjs";
+import StatefulChoiceOption from "../stateful-choice-option.mjs";
 
 /**
  * Represents a radio-button-group. The user can select one of a defined list of options. 

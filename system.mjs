@@ -51,9 +51,9 @@ import ViewModelCollection from './presentation/view-model/view-model-collection
 import './presentation/view-model/input-view-model.mjs';
 import './presentation/component/input-textfield/input-textfield-viewmodel.mjs';
 import './presentation/component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs';
+import './presentation/component/input-choice/input-radio-button-group/input-radio-button-group-viewmodel.mjs';
 import './presentation/component/input-number-spinner/input-number-spinner-viewmodel.mjs';
 import './presentation/component/input-textarea/input-textarea-viewmodel.mjs';
-import './presentation/component/input-radio-button-group/input-radio-button-group-viewmodel.mjs';
 import './presentation/component/button/button-viewmodel.mjs';
 import './presentation/component/button-add/button-add-viewmodel.mjs';
 import './presentation/component/button-delete/button-delete-viewmodel.mjs';

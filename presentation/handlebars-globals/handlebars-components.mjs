@@ -16,7 +16,7 @@ import InputDropDownViewModel from "../component/input-choice/input-dropdown/inp
 import InputImageViewModel from "../component/input-image/input-image-viewmodel.mjs";
 import InputNumberSpinnerViewModel from "../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
 import InputTagsViewModel from "../component/input-tags/input-tags-viewmodel.mjs";
-import InputRadioButtonGroupViewModel from "../component/input-radio-button-group/input-radio-button-group-viewmodel.mjs";
+import InputRadioButtonGroupViewModel from "../component/input-choice/input-radio-button-group/input-radio-button-group-viewmodel.mjs";
 import InputRichTextViewModel from "../component/input-rich-text/input-rich-text-viewmodel.mjs";
 import InputTextareaViewModel from "../component/input-textarea/input-textarea-viewmodel.mjs";
 import InputTextFieldViewModel from "../component/input-textfield/input-textfield-viewmodel.mjs";
