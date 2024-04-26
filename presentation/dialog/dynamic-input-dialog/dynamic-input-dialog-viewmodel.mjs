@@ -2,7 +2,7 @@ import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import { TEMPLATES } from "../../templatePreloader.mjs";
 import { DYNAMIC_INPUT_TYPES } from "./dynamic-input-types.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
-import InputDropDownViewModel from "../../component/input-dropdown/input-dropdown-viewmodel.mjs";
+import InputDropDownViewModel from "../../component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
 import InputImageViewModel from "../../component/input-image/input-image-viewmodel.mjs";
 import InputNumberSpinnerViewModel from "../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
 import InputRadioButtonGroupViewModel from "../../component/input-radio-button-group/input-radio-button-group-viewmodel.mjs";

@@ -8,7 +8,7 @@ import ViewModel from "../../../view-model/view-model.mjs";
 import { TEMPLATES } from "../../../templatePreloader.mjs";
 import ChoiceAdapter from "../../../component/input-choice/choice-adapter.mjs";
 import DamageDefinitionListViewModel from "../../../component/damage-definition-list/damage-definition-list-viewmodel.mjs";
-import InputDropDownViewModel from "../../../component/input-dropdown/input-dropdown-viewmodel.mjs";
+import InputDropDownViewModel from "../../../component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
 import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
 import Expertise from "../../../../business/document/item/skill/expertise.mjs";
 import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs";

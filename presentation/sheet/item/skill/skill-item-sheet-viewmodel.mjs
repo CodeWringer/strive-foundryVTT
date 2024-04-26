@@ -8,7 +8,7 @@ import SimpleListViewModel from "../../../component/simple-list/simple-list-view
 import ExpertiseTableViewModel from "../expertise/expertise-table-viewmodel.mjs"
 import SkillPrerequisiteListItemViewModel from "./skill-prerequisite-list-item-viewmodel.mjs";
 import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs";
-import InputDropDownViewModel from "../../../component/input-dropdown/input-dropdown-viewmodel.mjs";
+import InputDropDownViewModel from "../../../component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
 import ButtonContextMenuViewModel from "../../../component/button-context-menu/button-context-menu-viewmodel.mjs";
 import DamageAndType from "../../../../business/ruleset/skill/damage-and-type.mjs";
 import { DAMAGE_TYPES } from "../../../../business/ruleset/damage-types.mjs";

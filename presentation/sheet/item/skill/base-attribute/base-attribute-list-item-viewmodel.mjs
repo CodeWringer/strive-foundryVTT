@@ -1,6 +1,6 @@
 import { ATTRIBUTES, Attribute } from "../../../../../business/ruleset/attribute/attributes.mjs";
 import ChoiceAdapter from "../../../../component/input-choice/choice-adapter.mjs";
-import InputDropDownViewModel from "../../../../component/input-dropdown/input-dropdown-viewmodel.mjs";
+import InputDropDownViewModel from "../../../../component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
 import { TEMPLATES } from "../../../../templatePreloader.mjs";
 import ViewModel from "../../../../view-model/view-model.mjs";
 

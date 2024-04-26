@@ -12,7 +12,7 @@ import ButtonCheckBoxViewModel from "../component/button-checkbox/button-checkbo
 import DamageDefinitionListItemViewModel from "../component/damage-definition-list/damage-definition-list-item-viewmodel.mjs";
 import DamageDefinitionListViewModel from "../component/damage-definition-list/damage-definition-list-viewmodel.mjs";
 import DiceRollListViewModel from "../component/dice-roll-list/dice-roll-list-viewmodel.mjs";
-import InputDropDownViewModel from "../component/input-dropdown/input-dropdown-viewmodel.mjs";
+import InputDropDownViewModel from "../component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
 import InputImageViewModel from "../component/input-image/input-image-viewmodel.mjs";
 import InputNumberSpinnerViewModel from "../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
 import InputTagsViewModel from "../component/input-tags/input-tags-viewmodel.mjs";

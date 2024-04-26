@@ -50,7 +50,7 @@ import ViewModelCollection from './presentation/view-model/view-model-collection
 // Components
 import './presentation/view-model/input-view-model.mjs';
 import './presentation/component/input-textfield/input-textfield-viewmodel.mjs';
-import './presentation/component/input-dropdown/input-dropdown-viewmodel.mjs';
+import './presentation/component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs';
 import './presentation/component/input-number-spinner/input-number-spinner-viewmodel.mjs';
 import './presentation/component/input-textarea/input-textarea-viewmodel.mjs';
 import './presentation/component/input-radio-button-group/input-radio-button-group-viewmodel.mjs';
