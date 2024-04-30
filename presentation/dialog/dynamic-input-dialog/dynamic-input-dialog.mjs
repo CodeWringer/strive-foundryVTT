@@ -16,34 +16,40 @@ import DynamicInputDialogViewModel from './dynamic-input-dialog-viewmodel.mjs';
  * to include. 
  * 
  * @example
- ```JS
-const dialog = await new DynamicInputDialog({
-  localizedTitle: StringUtil.format(
-    game.i18n.localize("system.general.input.queryFor"), 
-    game.i18n.localize("system.character.asset.slot.label"), 
-  ),
-  inputDefinitions: [
-    new DynamicInputDefinition({
-      type: DYNAMIC_INPUT_TYPES.DROP_DOWN,
-      name: inputChoices,
-      localizedLabel: game.i18n.localize("system.general.name.label"),
-      required: true,
-      defaultValue: assets[0].id,
-      specificArgs: {
-        options: assetChoices(),
-        adapter: new ChoiceAdapter({
-          toChoiceOption: (obj) => assetChoices.find(it => it.value === obj.id),
-          fromChoiceOption: (choice) => assets.find(it => it.id === choice.value),
-        }),
-      }
-    }),
-  ],
-}).renderAndAwait(true);
-
-if (dialog.confirmed !== true) return;
-
-const assetIdToAlot = dialog[inputChoices];
- ```
+ * ```JS
+ * const myAssets = [
+ *   { id: 0, name: "Bob" },
+ * ];
+ * const assetChoices = [
+ *   new ChoiceOption({
+ *     value: myAssets[0].id,
+ *     localizedValue: myAssets[0].name,
+ *   }),
+ * ];
+ * 
+ * const dialog = await new DynamicInputDialog({
+ *   localizedTitle: StringUtil.format(
+ *     game.i18n.localize("system.general.input.queryFor"), 
+ *     game.i18n.localize("system.character.asset.slot.label"), 
+ *   ),
+ *   inputDefinitions: [
+ *     new DynamicInputDefinition({
+ *       type: DYNAMIC_INPUT_TYPES.DROP_DOWN,
+ *       name: "inputChoices",
+ *       localizedLabel: game.i18n.localize("system.general.name.label"),
+ *       required: true,
+ *       defaultValue: assetChoices[0], // This must be of type `ChoiceOption`! 
+ *       specificArgs: {
+ *         options: assetChoices, // This must be of type `Array<ChoiceOption>`! 
+ *       }
+ *     }),
+ *   ],
+ * }).renderAndAwait(true); 
+ * 
+ * if (dialog.confirmed !== true) return; 
+ * 
+ * const asset = myAssets.find(it => it.id === dialog["inputChoices"].value);
+ * ```
  */
 export default class DynamicInputDialog extends ConfirmableModalDialog {
   /** @override */

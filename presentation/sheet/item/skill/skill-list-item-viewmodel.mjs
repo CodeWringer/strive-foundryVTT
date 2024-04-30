@@ -12,9 +12,8 @@ import ButtonRollViewModel from "../../../component/button-roll/button-roll-view
 import ButtonViewModel from "../../../component/button/button-viewmodel.mjs"
 import DamageDefinitionListViewModel from "../../../component/damage-definition-list/damage-definition-list-viewmodel.mjs"
 import InfoBubble, { InfoBubbleAutoHidingTypes, InfoBubbleAutoShowingTypes } from "../../../component/info-bubble/info-bubble.mjs"
-import ChoiceAdapter from "../../../component/input-choice/choice-adapter.mjs"
 import ChoiceOption from "../../../component/input-choice/choice-option.mjs"
-import InputDropDownViewModel from "../../../component/input-dropdown/input-dropdown-viewmodel.mjs"
+import InputDropDownViewModel from "../../../component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs"
 import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs"
 import InputTagsViewModel from "../../../component/input-tags/input-tags-viewmodel.mjs"
 import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs"
@@ -191,16 +190,8 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
       options: attributeOptions,
       value: attributeOptions.find(it => it.value === this.document.activeBaseAttribute.name),
       onChange: (_, newValue) => {
-        this.document.activeBaseAttribute = ATTRIBUTES[newValue];
+        this.document.activeBaseAttribute = ATTRIBUTES[newValue.value];
       },
-      adapter: new ChoiceAdapter({
-        toChoiceOption(obj) {
-          return attributeOptions.find(it => it.value === obj.name);
-        },
-        fromChoiceOption(option) {
-          return ATTRIBUTES[option.value];
-        }
-      }),
     });
     this.vmTfCategory = new InputTextFieldViewModel({
       parent: this,
@@ -283,6 +274,8 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
 
   /** @override */
   getDataFields() {
+    const attackTypeChoices = ATTACK_TYPES.asChoices();
+
     return [
       new DataFieldComponent({
         template: InputNumberSpinnerViewModel.TEMPLATE,
@@ -364,23 +357,11 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
         viewModel: new InputDropDownViewModel({
           id: "vmAttackType",
           parent: this,
-          options: ATTACK_TYPES.asChoices(),
-          value: isDefined(this.document.attackType) ? ATTACK_TYPES.asChoices().find(it => it.value === this.document.attackType.name) : undefined,
+          options: attackTypeChoices,
+          value: isDefined(this.document.attackType) ? attackTypeChoices.find(it => it.value === this.document.attackType.name) : attackTypeChoices.find(it => it.value === ATTACK_TYPES.none.name),
           onChange: (_, newValue) => {
-            this.document.attackType = ATTACK_TYPES[newValue];
+            this.document.attackType = ATTACK_TYPES[newValue.value];
           },
-          adapter: new ChoiceAdapter({
-            toChoiceOption(obj) {
-              if (isDefined(obj) === true) {
-                return ATTACK_TYPES.asChoices().find(it => it.value === obj.name);
-              } else {
-                return ATTACK_TYPES.asChoices().find(it => it.value === "none");
-              }
-            },
-            fromChoiceOption(option) {
-              return ATTACK_TYPES[option.value];
-            }
-          }),
         }),
         isHidden: this.hideAttackType,
         localizedIconToolTip: game.i18n.localize("system.attackType.label"),
@@ -546,9 +527,8 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
                 id: `vmAttribute${index}`,
                 isEditable: true,
                 attribute: attributes[index],
-                onChange: (newAttributeValueName) => {
-                  const newAttributeValue = ATTRIBUTES[newAttributeValueName];
-                  attributes[index] = newAttributeValue;
+                onChange: (newAttribute) => {
+                  attributes[index] = newAttribute;
                 },
               })
             },

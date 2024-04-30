@@ -1,10 +1,8 @@
 import { DAMAGE_TYPES, getDamageTypeIconClass } from "../../../business/ruleset/damage-types.mjs"
 import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
-import { isDefined } from "../../../business/util/validation-utility.mjs";
 import { TEMPLATES } from "../../templatePreloader.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
-import ChoiceAdapter from "../input-choice/choice-adapter.mjs";
-import InputDropDownViewModel from "../input-dropdown/input-dropdown-viewmodel.mjs";
+import InputDropDownViewModel from "../input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
 import InputTextFieldViewModel from "../input-textfield/input-textfield-viewmodel.mjs";
 import InputViewModel from "../../view-model/input-view-model.mjs";
 import DamageAndType from "../../../business/ruleset/skill/damage-and-type.mjs";
@@ -109,21 +107,9 @@ export default class DamageDefinitionListItemViewModel extends InputViewModel {
       onChange: (_, newValue) => {
         this.value = new DamageAndType({
           damage: this.value.damage,
-          damageType: DAMAGE_TYPES[newValue],
+          damageType: DAMAGE_TYPES[newValue.value],
         });
       },
-      adapter: new ChoiceAdapter({
-        toChoiceOption(obj) {
-          if (isDefined(obj) === true) {
-            return thiz.damageTypeOptions.find(it => it.value === obj.name);
-          } else {
-            return thiz.damageTypeOptions.find(it => it.value === "none");
-          }
-        },
-        fromChoiceOption(option) {
-          return DAMAGE_TYPES[option.value];
-        }
-      }),
     });
 
     this.vmBtnDelete = new ButtonViewModel({

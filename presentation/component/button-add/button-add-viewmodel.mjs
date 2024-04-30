@@ -4,7 +4,6 @@ import DocumentFetcher from "../../../business/document/document-fetcher/documen
 import DynamicInputDialog from '../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs';
 import DynamicInputDefinition from '../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs';
 import { DYNAMIC_INPUT_TYPES } from '../../dialog/dynamic-input-dialog/dynamic-input-types.mjs';
-import ChoiceAdapter from '../input-choice/choice-adapter.mjs';
 import ChoiceOption from '../input-choice/choice-option.mjs';
 import Expertise from '../../../business/document/item/skill/expertise.mjs';
 import { ITEM_TYPES } from '../../../business/document/item/item-types.mjs';
@@ -170,13 +169,9 @@ export default class ButtonAddViewModel extends ButtonViewModel {
           name: inputChoices,
           localizedLabel: this.localizedType,
           required: true,
-          defaultValue: customChoice.value,
+          defaultValue: customChoice,
           specificArgs: {
             options: options,
-            adapter: new ChoiceAdapter({
-              toChoiceOption: (obj) => options.find(it => it.value === obj.id),
-              fromChoiceOption: (choice) => documentIndices.find(it => it.id === choice.value),
-            }),
           },
         }),
       ],
@@ -184,7 +179,7 @@ export default class ButtonAddViewModel extends ButtonViewModel {
 
     if (dialog.confirmed !== true) return undefined;
 
-    const selectedValue = dialog[inputChoices];
+    const selectedValue = dialog[inputChoices].value;
     let creationData;
     if (selectedValue === customChoice.value) {
       creationData = {

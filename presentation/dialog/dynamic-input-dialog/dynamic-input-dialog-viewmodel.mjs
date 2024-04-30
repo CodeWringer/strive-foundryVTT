@@ -2,10 +2,10 @@ import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import { TEMPLATES } from "../../templatePreloader.mjs";
 import { DYNAMIC_INPUT_TYPES } from "./dynamic-input-types.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
-import InputDropDownViewModel from "../../component/input-dropdown/input-dropdown-viewmodel.mjs";
+import InputDropDownViewModel from "../../component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
 import InputImageViewModel from "../../component/input-image/input-image-viewmodel.mjs";
 import InputNumberSpinnerViewModel from "../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
-import InputRadioButtonGroupViewModel from "../../component/input-radio-button-group/input-radio-button-group-viewmodel.mjs";
+import InputRadioButtonGroupViewModel from "../../component/input-choice/input-radio-button-group/input-radio-button-group-viewmodel.mjs";
 import InputRichTextViewModel from "../../component/input-rich-text/input-rich-text-viewmodel.mjs";
 import InputTextareaViewModel from "../../component/input-textarea/input-textarea-viewmodel.mjs";
 import InputTextFieldViewModel from "../../component/input-textfield/input-textfield-viewmodel.mjs";
@@ -13,6 +13,7 @@ import { isBlankOrUndefined } from "../../../business/util/validation-utility.mj
 import { isDefined } from "../../../business/util/validation-utility.mjs";
 import SimpleListViewModel from "../../component/simple-list/simple-list-viewmodel.mjs";
 import InputToggleViewModel from "../../component/input-toggle/input-toggle-viewmodel.mjs";
+import DynamicInputDefinition from "./dynamic-input-definition.mjs";
 
 /**
  * @property {Array<DynamicInputDefinition>} inputDefinitions The list of input definitions of 
@@ -53,7 +54,6 @@ export default class DynamicInputDialogViewModel extends ViewModel {
             this[definition.name] = newValue;
           },
           options: definition.specificArgs.options,
-          adapter: definition.specificArgs.adapter,
         });
       } else if (definition.type === DYNAMIC_INPUT_TYPES.IMAGE) {
         viewModel = new InputImageViewModel({

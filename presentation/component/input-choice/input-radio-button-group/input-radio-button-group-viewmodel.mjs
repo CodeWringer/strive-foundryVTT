@@ -1,28 +1,25 @@
-import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
-import { TEMPLATES } from "../../templatePreloader.mjs";
-import InputViewModel from "../../view-model/input-view-model.mjs";
-import StatefulChoiceOption from "../input-choice/stateful-choice-option.mjs";
+import { isDefined, validateOrThrow } from "../../../../business/util/validation-utility.mjs";
+import { TEMPLATES } from "../../../templatePreloader.mjs";
+import InputChoiceViewModel from "../input-choice-viewmodel.mjs";
+import StatefulChoiceOption from "../stateful-choice-option.mjs";
 
 /**
  * Represents a radio-button-group. The user can select one of a defined list of options. 
  * 
- * @extends InputViewModel
+ * @extends InputChoiceViewModel
  * 
- * @property {String} value The current value. Corresponds to a 
- * `ChoiceOption.value` from the `options`. 
- * @property {StatefulChoiceOption} selected Gets the currently selected option. 
- * * Read-only
+ * @property {StatefulChoiceOption} value The current value. 
  * @property {Array<StatefulChoiceOption>} options Gets the options available to the radio button group. 
  * 
  * @method onChange Callback that is invoked when the value changes. 
  * Receives the following arguments: 
- * * `oldValue: {String}`
- * * `newValue: {String}`
+ * * `oldValue: {StatefulChoiceOption}`
+ * * `newValue: {StatefulChoiceOption}`
  */
-export default class InputRadioButtonGroupViewModel extends InputViewModel {
+export default class InputRadioButtonGroupViewModel extends InputChoiceViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.COMPONENT_INPUT_RADIO_BUTTON_GROUP; }
-  
+
   /**
    * Registers the Handlebars partial for this component. 
    * 
@@ -33,31 +30,21 @@ export default class InputRadioButtonGroupViewModel extends InputViewModel {
   }
 
   /**
-   * Returns the currently selected option. 
-   * 
-   * @type {StatefulChoiceOption}
-   * @readonly
-   */
-  get selected() {
-    return this.options.find(option => option.value === this.value);
-  }
-
-  /**
    * @param {Object} args
    * @param {Array<StatefulChoiceOption>} args.options The options available to the radio button group. 
    * @param {String | undefined} args.value The current value. Must correspond 
    * to a `ChoiceOption.value` from the `options`. 
    * @param {Function | undefined} args.onChange Callback that is invoked 
    * when the value changes. Receives two arguments: 
-   * * `oldValue: {String}`
-   * * `newValue: {String}`
+   * * `oldValue: {StatefulChoiceOption}`
+   * * `newValue: {StatefulChoiceOption}`
    */
   constructor(args = {}) {
     super(args);
     validateOrThrow(args, ["options"]);
 
-    this.options = args.options;
-    this._value = args.value ?? (args.options.length > 0 ? args.options[0].value : "");
+    // Ensure the active option has its isActive flag set accordingly. 
+    this.value.isActive = true;
   }
 
   /**
@@ -80,25 +67,18 @@ export default class InputRadioButtonGroupViewModel extends InputViewModel {
     for (const radioButton of radioButtons) {
       // Hook up events on radio button options. 
       radioButton.onchange = (event) => {
-        this.value = event.currentTarget.value;
+        const option = this.options.find(it => it.value === event.currentTarget.value);
+        if (isDefined(option)) {
+          this.value = option;
+        } else {
+          game.strive.logger.logWarn("Failed to get selected radio button option");
+        }
       }
     }
   }
 
-  /**
-   * Returns true, if the given `StatefulChoiceOption` represents the 
-   * current selection of the given `InputRadioButtonGroupViewModel`. 
-   * 
-   * @param {InputRadioButtonGroupViewModel} viewModel 
-   * @param {StatefulChoiceOption} option The option to check. 
-   * 
-   * @returns {Boolean}
-   */
-  isSelectedOption(viewModel, option) {
-    if (viewModel.value === option.value) {
-      return true;
-    } else {
-      return false;
-    }
+  /** @override */
+  _onChange(event) {
+    // Overridden to prevent the onChange callback to be invoked (again by the inherited type). 
   }
 }

@@ -1,6 +1,6 @@
 import { ILLNESS_STATES } from "../../../../business/ruleset/health/illness-states.mjs"
 import StatefulChoiceOption from "../../../component/input-choice/stateful-choice-option.mjs"
-import InputRadioButtonGroupViewModel from "../../../component/input-radio-button-group/input-radio-button-group-viewmodel.mjs"
+import InputRadioButtonGroupViewModel from "../../../component/input-choice/input-radio-button-group/input-radio-button-group-viewmodel.mjs"
 import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs"
 import { TEMPLATES } from "../../../templatePreloader.mjs"
 import BaseListItemViewModel from "../base/base-list-item-viewmodel.mjs"
@@ -85,11 +85,11 @@ export default class IllnessListItemViewModel extends BaseListItemViewModel {
         viewModel: new InputRadioButtonGroupViewModel({
           parent: this,
           id: "vmRbgState",
-          value: this.document.state,
-          onChange: (_, newValue) => {
-            this.document.state = newValue;
-          },
           options: this.stateOptions,
+          value: this.stateOptions.find(it => it.value === this.document.state),
+          onChange: (_, newValue) => {
+            this.document.state = newValue.value;
+          },
         }),
       }),
     ]);

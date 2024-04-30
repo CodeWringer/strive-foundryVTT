@@ -2,7 +2,6 @@
  * @property {String} DROP_DOWN A drop-down that allows picking a single item from a list. 
  * * `specificArgs`: 
  * * * `options: {Array<ChoiceOption>}` The options available to the drop-down. 
- * * * `adapter: {ChoiceAdapter}` A `ChoiceOption` adapter. 
  * @property {String} IMAGE Displays and allows picking an image. 
  * @property {String} NUMBER_SPINNER Provides only numeric input, with buttons for easy 
  * incrementation and decrementation. 
