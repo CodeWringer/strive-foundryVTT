@@ -1,28 +1,25 @@
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs";
 import { TEMPLATES } from "../../../templatePreloader.mjs";
-import InputViewModel from "../../../view-model/input-view-model.mjs";
+import InputChoiceViewModel from "../input-choice-viewmodel.mjs";
 import StatefulChoiceOption from "../stateful-choice-option.mjs";
 
 /**
  * Represents a radio-button-group. The user can select one of a defined list of options. 
  * 
- * @extends InputViewModel
+ * @extends InputChoiceViewModel
  * 
- * @property {String} value The current value. Corresponds to a 
- * `ChoiceOption.value` from the `options`. 
- * @property {StatefulChoiceOption} selected Gets the currently selected option. 
- * * Read-only
+ * @property {StatefulChoiceOption} value The current value. 
  * @property {Array<StatefulChoiceOption>} options Gets the options available to the radio button group. 
  * 
  * @method onChange Callback that is invoked when the value changes. 
  * Receives the following arguments: 
- * * `oldValue: {String}`
- * * `newValue: {String}`
+ * * `oldValue: {StatefulChoiceOption}`
+ * * `newValue: {StatefulChoiceOption}`
  */
-export default class InputRadioButtonGroupViewModel extends InputViewModel {
+export default class InputRadioButtonGroupViewModel extends InputChoiceViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.COMPONENT_INPUT_RADIO_BUTTON_GROUP; }
-  
+
   /**
    * Registers the Handlebars partial for this component. 
    * 
@@ -33,24 +30,14 @@ export default class InputRadioButtonGroupViewModel extends InputViewModel {
   }
 
   /**
-   * Returns the currently selected option. 
-   * 
-   * @type {StatefulChoiceOption}
-   * @readonly
-   */
-  get selected() {
-    return this.options.find(option => option.value === this.value);
-  }
-
-  /**
    * @param {Object} args
    * @param {Array<StatefulChoiceOption>} args.options The options available to the radio button group. 
    * @param {String | undefined} args.value The current value. Must correspond 
    * to a `ChoiceOption.value` from the `options`. 
    * @param {Function | undefined} args.onChange Callback that is invoked 
    * when the value changes. Receives two arguments: 
-   * * `oldValue: {String}`
-   * * `newValue: {String}`
+   * * `oldValue: {StatefulChoiceOption}`
+   * * `newValue: {StatefulChoiceOption}`
    */
   constructor(args = {}) {
     super(args);
@@ -80,7 +67,8 @@ export default class InputRadioButtonGroupViewModel extends InputViewModel {
     for (const radioButton of radioButtons) {
       // Hook up events on radio button options. 
       radioButton.onchange = (event) => {
-        this.value = event.currentTarget.value;
+        const option = this.options.find(it => it.value === event.currentTarget.value);
+        this.value = option;
       }
     }
   }
@@ -93,8 +81,10 @@ export default class InputRadioButtonGroupViewModel extends InputViewModel {
    * @param {StatefulChoiceOption} option The option to check. 
    * 
    * @returns {Boolean}
+   * 
+   * @protected Only for use in the template. 
    */
-  isSelectedOption(viewModel, option) {
+  _isSelectedOption(viewModel, option) {
     if (viewModel.value === option.value) {
       return true;
     } else {
