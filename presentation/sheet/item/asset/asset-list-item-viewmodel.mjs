@@ -3,7 +3,6 @@ import CharacterAssetSlot from "../../../../business/ruleset/asset/character-ass
 import { ASSET_TAGS } from "../../../../business/tags/system-tags.mjs"
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs"
 import ButtonViewModel from "../../../component/button/button-viewmodel.mjs"
-import ChoiceAdapter from "../../../component/input-choice/choice-adapter.mjs"
 import ChoiceOption from "../../../component/input-choice/choice-option.mjs"
 import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs"
 import InputTagsViewModel from "../../../component/input-tags/input-tags-viewmodel.mjs"
@@ -203,22 +202,12 @@ export default class AssetListItemViewModel extends BaseListItemViewModel {
       }
     }
 
-    const availableSlotChoices = [];
-    const adapter = new ChoiceAdapter({
-      // obj: CharacterAssetSlot
-      toChoiceOption: (obj) => {
-        return new ChoiceOption({
-          value: obj.id,
-          localizedValue: obj.name,
-        });
-      },
-      fromChoiceOption: (choice) => {
-        return availableSlots.find(it => it.id === choice.value);
-      },
-    })
-    for (const slot of availableSlots) {
-      availableSlotChoices.push(adapter.toChoiceOption(slot));
-    }
+    const availableSlotChoices = availableSlots.map(slot => {
+      return new ChoiceOption({
+        value: slot.id,
+        localizedValue: slot.name,
+      });
+    });
 
     const inputSlots = "inputSlots";
 
@@ -229,19 +218,18 @@ export default class AssetListItemViewModel extends BaseListItemViewModel {
           type: DYNAMIC_INPUT_TYPES.DROP_DOWN,
           name: inputSlots,
           localizedLabel: game.i18n.localize("system.character.asset.slot.label"),
+          required: true,
+          defaultValue: availableSlotChoices.length > 0 ? availableSlotChoices[0] : undefined,
           specificArgs: {
             options: availableSlotChoices,
-            adapter: adapter,
           },
-          required: true,
-          defaultValue: availableSlots[0].id,
         }),
       ],
     }).renderAndAwait(true);
 
     if (dialog.confirmed !== true) return undefined;
 
-    const selectedId = dialog[inputSlots];
+    const selectedId = dialog[inputSlots].value;
     const assetSlot = availableSlots.find(it => it.id === selectedId);
 
     return assetSlot;

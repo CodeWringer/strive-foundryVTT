@@ -1,5 +1,4 @@
 import { ATTRIBUTES, Attribute } from "../../../../../business/ruleset/attribute/attributes.mjs";
-import ChoiceAdapter from "../../../../component/input-choice/choice-adapter.mjs";
 import InputDropDownViewModel from "../../../../component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
 import { TEMPLATES } from "../../../../templatePreloader.mjs";
 import ViewModel from "../../../../view-model/view-model.mjs";
@@ -36,16 +35,9 @@ export default class BaseAttributeListItemViewModel extends ViewModel {
       options: attributeChoices,
       value: attributeChoices.find(it => it.value === this.attribute.name),
       onChange: (_, newValue) => {
-        this.onChange(newValue);
+        const newAttribute = ATTRIBUTES[newValue.value];
+        this.onChange(newAttribute);
       },
-      adapter: new ChoiceAdapter({
-        toChoiceOption(obj) {
-          return attributeChoices.find(it => it.value === obj.name);
-        },
-        fromChoiceOption(option) {
-          return ATTRIBUTES[option.value];
-        }
-      }),
     });
   }
 }

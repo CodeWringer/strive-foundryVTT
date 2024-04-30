@@ -163,11 +163,11 @@ export default class InjuryListItemViewModel extends BaseListItemViewModel {
         viewModel: new InputRadioButtonGroupViewModel({
           parent: this,
           id: "vmRbgState",
-          value: this.document.state,
-          onChange: (_, newValue) => {
-            this.document.state = newValue;
-          },
           options: this.stateOptions,
+          value: this.stateOptions.find(it => it.value === this.document.state),
+          onChange: (_, newValue) => {
+            this.document.state = newValue.value;
+          },
         }),
       }),
     ]);

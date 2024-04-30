@@ -4,7 +4,6 @@ import * as StringUtil from "../../../../../business/util/string-utility.mjs";
 import { isDefined, validateOrThrow } from "../../../../../business/util/validation-utility.mjs";
 import ButtonDeleteViewModel from "../../../../component/button-delete/button-delete-viewmodel.mjs";
 import ButtonViewModel from "../../../../component/button/button-viewmodel.mjs";
-import ChoiceAdapter from "../../../../component/input-choice/choice-adapter.mjs";
 import ChoiceOption from "../../../../component/input-choice/choice-option.mjs";
 import DynamicInputDefinition from "../../../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
 import DynamicInputDialog from "../../../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
@@ -160,17 +159,6 @@ export default class ActorAssetSlotViewModel extends ViewModel {
       },
     });
 
-    this.choiceAdapter = new ChoiceAdapter({
-      toChoiceOption: (obj) => {
-        return new ChoiceOption({
-          value: obj.id,
-          localizedValue: obj.name,
-        });
-      },
-      fromChoiceOption: (option) => {
-        return thiz.availableAssets.find(it => it.id === option.value);
-      },
-    });
     this.vmBtnAssign = new ButtonViewModel({
       id: "vmBtnAssign",
       parent: this,
@@ -180,6 +168,7 @@ export default class ActorAssetSlotViewModel extends ViewModel {
       localizedTooltip: game.i18n.localize("system.character.asset.slot.assign.label"),
       onClick: async () => {
         const inputChoices = "inputChoices";
+        const assetChoices = this._getAssetsAsChoices();
 
         const dialog = await new DynamicInputDialog({
           localizedTitle: StringUtil.format(
@@ -192,10 +181,9 @@ export default class ActorAssetSlotViewModel extends ViewModel {
               name: inputChoices,
               localizedLabel: game.i18n.localize("system.general.name.label"),
               required: true,
-              defaultValue: (thiz.availableAssets[0] ?? {}).id,
+              defaultValue: assetChoices.length > 0 ? assetChoices[0] : undefined,
               specificArgs: {
-                options: this._getAssetsAsChoices(),
-                adapter: this.choiceAdapter,
+                options: assetChoices,
               }
             }),
           ],
@@ -204,7 +192,7 @@ export default class ActorAssetSlotViewModel extends ViewModel {
         if (dialog.confirmed !== true) return;
         
         // Assign the asset to the slot, via its `moveToAssetSlot` method. 
-        const assetIdToAlot = dialog[inputChoices];
+        const assetIdToAlot = dialog[inputChoices].value;
         const assetToAlot = this.availableAssets.find(it => it.id === assetIdToAlot);
         assetToAlot.moveToAssetSlot(this.assetSlot);
       },
@@ -266,7 +254,12 @@ export default class ActorAssetSlotViewModel extends ViewModel {
    */
   _getAssetsAsChoices() {
     return this.availableAssets
-      .map(asset => this.choiceAdapter.toChoiceOption(asset))
+      .map(asset => {
+        return new ChoiceOption({
+          value: asset.id,
+          localizedValue: asset.name,
+        });
+      })
       .sort((a, b) => a.localizedValue.localeCompare(b.localizedValue));
   }
 }

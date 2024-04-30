@@ -13,6 +13,7 @@ import { isBlankOrUndefined } from "../../../business/util/validation-utility.mj
 import { isDefined } from "../../../business/util/validation-utility.mjs";
 import SimpleListViewModel from "../../component/simple-list/simple-list-viewmodel.mjs";
 import InputToggleViewModel from "../../component/input-toggle/input-toggle-viewmodel.mjs";
+import DynamicInputDefinition from "./dynamic-input-definition.mjs";
 
 /**
  * @property {Array<DynamicInputDefinition>} inputDefinitions The list of input definitions of 
@@ -53,7 +54,6 @@ export default class DynamicInputDialogViewModel extends ViewModel {
             this[definition.name] = newValue;
           },
           options: definition.specificArgs.options,
-          adapter: definition.specificArgs.adapter,
         });
       } else if (definition.type === DYNAMIC_INPUT_TYPES.IMAGE) {
         viewModel = new InputImageViewModel({

@@ -1,9 +1,7 @@
 import { SKILL_TAGS } from "../../../../business/tags/system-tags.mjs";
 import SkillPrerequisite from "../../../../business/ruleset/skill/skill-prerequisite.mjs";
 import { isDefined } from "../../../../business/util/validation-utility.mjs";
-import ChoiceAdapter from "../../../component/input-choice/choice-adapter.mjs";
 import InputTagsViewModel from "../../../component/input-tags/input-tags-viewmodel.mjs";
-import SimpleListItemViewModel from "../../../component/simple-list/simple-list-item-viewmodel.mjs";
 import SimpleListViewModel from "../../../component/simple-list/simple-list-viewmodel.mjs";
 import ExpertiseTableViewModel from "../expertise/expertise-table-viewmodel.mjs"
 import SkillPrerequisiteListItemViewModel from "./skill-prerequisite-list-item-viewmodel.mjs";
@@ -111,6 +109,8 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
 
   /** @override */
   getDataFields() {
+    const attackTypeChoices = ATTACK_TYPES.asChoices();
+
     return [
       new DataFieldComponent({
         template: InputNumberSpinnerViewModel.TEMPLATE,
@@ -192,23 +192,11 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
         viewModel: new InputDropDownViewModel({
           id: "vmAttackType",
           parent: this,
-          options: ATTACK_TYPES.asChoices(),
-          value: isDefined(this.document.attackType) ? ATTACK_TYPES.asChoices().find(it => it.value === this.document.attackType.name) : undefined,
+          options: attackTypeChoices,
+          value: isDefined(this.document.attackType) ? attackTypeChoices.find(it => it.value === this.document.attackType.name) : attackTypeChoices.find(it => it.value === ATTACK_TYPES.none.name),
           onChange: (_, newValue) => {
-            this.document.attackType = ATTACK_TYPES[newValue];
+            this.document.attackType = ATTACK_TYPES[newValue.value];
           },
-          adapter: new ChoiceAdapter({
-            toChoiceOption(obj) {
-              if (isDefined(obj) === true) {
-                return ATTACK_TYPES.asChoices().find(it => it.value === obj.name);
-              } else {
-                return ATTACK_TYPES.asChoices().find(it => it.value === "none");
-              }
-            },
-            fromChoiceOption(option) {
-              return ATTACK_TYPES[option.value];
-            }
-          }),
         }),
         isHidden: this.hideAttackType,
         localizedIconToolTip: game.i18n.localize("system.attackType.label"),
@@ -429,10 +417,9 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
         id: `vmAttribute${index}`,
         isEditable: this.isEditable,
         attribute: attribute,
-        onChange: (newAttributeValueName) => {
-          const newAttributeValue = ATTRIBUTES[newAttributeValueName];
+        onChange: (newAttribute) => {
           const newBaseAttributes = this.document.baseAttributes.concat([]);
-          newBaseAttributes[index] = newAttributeValue;
+          newBaseAttributes[index] = newAttribute;
           this.document.baseAttributes = newBaseAttributes;
         },
       });

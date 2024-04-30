@@ -1,4 +1,4 @@
-import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
+import { isDefined, validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import { isNumber } from "../../../business/util/validation-utility.mjs";
 import { TEMPLATES } from "../../templatePreloader.mjs";
 import DiceRollListViewModel from "../dice-roll-list/dice-roll-list-viewmodel.mjs";
@@ -72,6 +72,8 @@ export default class DamageDefinitionListViewModel extends InputViewModel {
         value: damageDefinition,
         localizedLabel: game.i18n.localize(damageDefinition.damageType.localizableName),
         onChange: (_, newItemValue) => {
+          if (isDefined(newItemValue) !== true) return;
+          
           const newDamageDefinitions = this.value.concat([]);
           newDamageDefinitions[i] = newItemValue;
           this.value = newDamageDefinitions;

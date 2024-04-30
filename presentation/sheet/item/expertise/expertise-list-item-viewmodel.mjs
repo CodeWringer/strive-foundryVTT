@@ -6,7 +6,6 @@ import { isDefined } from "../../../../business/util/validation-utility.mjs";
 import InfoBubble, { InfoBubbleAutoHidingTypes, InfoBubbleAutoShowingTypes } from "../../../component/info-bubble/info-bubble.mjs";
 import ViewModel from "../../../view-model/view-model.mjs";
 import { TEMPLATES } from "../../../templatePreloader.mjs";
-import ChoiceAdapter from "../../../component/input-choice/choice-adapter.mjs";
 import DamageDefinitionListViewModel from "../../../component/damage-definition-list/damage-definition-list-viewmodel.mjs";
 import InputDropDownViewModel from "../../../component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
 import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
@@ -137,6 +136,8 @@ export default class ExpertiseListItemViewModel extends BaseListItemViewModel {
 
   /** @override */
   getDataFields() {
+    const attackTypeChoices = ATTACK_TYPES.asChoices();
+
     return [
       new DataFieldComponent({
         template: InputTextFieldViewModel.TEMPLATE,
@@ -203,23 +204,11 @@ export default class ExpertiseListItemViewModel extends BaseListItemViewModel {
         viewModel: new InputDropDownViewModel({
           id: "vmAttackType",
           parent: this,
-          options: ATTACK_TYPES.asChoices(),
-          value: isDefined(this.document.attackType) ? ATTACK_TYPES.asChoices().find(it => it.value === this.document.attackType.name) : undefined,
+          options: attackTypeChoices,
+          value: isDefined(this.document.attackType) ? attackTypeChoices.find(it => it.value === this.document.attackType.name) : attackTypeChoices.find(it => it.value === ATTACK_TYPES.none.name),
           onChange: (_, newValue) => {
-            this.document.attackType = ATTACK_TYPES[newValue];
+            this.document.attackType = ATTACK_TYPES[newValue.value];
           },
-          adapter: new ChoiceAdapter({
-            toChoiceOption(obj) {
-              if (isDefined(obj) === true) {
-                return ATTACK_TYPES.asChoices().find(it => it.value === obj.name);
-              } else {
-                return ATTACK_TYPES.asChoices().find(it => it.value === "none");
-              }
-            },
-            fromChoiceOption(option) {
-              return ATTACK_TYPES[option.value];
-            }
-          }),
         }),
         isHidden: this.hideAttackType,
         localizedIconToolTip: game.i18n.localize("system.attackType.label"),

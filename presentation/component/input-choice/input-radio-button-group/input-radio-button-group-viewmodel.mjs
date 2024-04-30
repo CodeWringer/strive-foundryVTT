@@ -1,4 +1,4 @@
-import { validateOrThrow } from "../../../../business/util/validation-utility.mjs";
+import { isDefined, validateOrThrow } from "../../../../business/util/validation-utility.mjs";
 import { TEMPLATES } from "../../../templatePreloader.mjs";
 import InputChoiceViewModel from "../input-choice-viewmodel.mjs";
 import StatefulChoiceOption from "../stateful-choice-option.mjs";
@@ -43,8 +43,8 @@ export default class InputRadioButtonGroupViewModel extends InputChoiceViewModel
     super(args);
     validateOrThrow(args, ["options"]);
 
-    this.options = args.options;
-    this._value = args.value ?? (args.options.length > 0 ? args.options[0].value : "");
+    // Ensure the active option has its isActive flag set accordingly. 
+    this.value.isActive = true;
   }
 
   /**
@@ -68,27 +68,17 @@ export default class InputRadioButtonGroupViewModel extends InputChoiceViewModel
       // Hook up events on radio button options. 
       radioButton.onchange = (event) => {
         const option = this.options.find(it => it.value === event.currentTarget.value);
-        this.value = option;
+        if (isDefined(option)) {
+          this.value = option;
+        } else {
+          game.strive.logger.logWarn("Failed to get selected radio button option");
+        }
       }
     }
   }
 
-  /**
-   * Returns true, if the given `StatefulChoiceOption` represents the 
-   * current selection of the given `InputRadioButtonGroupViewModel`. 
-   * 
-   * @param {InputRadioButtonGroupViewModel} viewModel 
-   * @param {StatefulChoiceOption} option The option to check. 
-   * 
-   * @returns {Boolean}
-   * 
-   * @protected Only for use in the template. 
-   */
-  _isSelectedOption(viewModel, option) {
-    if (viewModel.value === option.value) {
-      return true;
-    } else {
-      return false;
-    }
+  /** @override */
+  _onChange(event) {
+    // Overridden to prevent the onChange callback to be invoked (again by the inherited type). 
   }
 }

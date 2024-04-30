@@ -8,7 +8,6 @@ import Ruleset from "../../../business/ruleset/ruleset.mjs";
 import DynamicInputDialog from "../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
 import { DYNAMIC_INPUT_TYPES } from "../../dialog/dynamic-input-dialog/dynamic-input-types.mjs";
 import { VISIBILITY_MODES } from "../../chat/visibility-modes.mjs";
-import ChoiceAdapter from "../input-choice/choice-adapter.mjs";
 import { ROLL_DICE_MODIFIER_TYPES } from "../../../business/dice/roll-dice-modifier-types.mjs";
 import DynamicInputDefinition from "../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
 import { SumComponent } from "../../../business/ruleset/summed-data.mjs";
@@ -169,13 +168,9 @@ export default class ButtonRollViewModel extends ButtonViewModel {
           name: this.inputVisibility,
           localizedLabel: game.i18n.localize("system.general.messageVisibility.label"),
           required: true,
-          defaultValue: (VISIBILITY_MODES.asArray()[0]),
+          defaultValue: VISIBILITY_MODES.asChoices().find(it => it.value === VISIBILITY_MODES.public.name),
           specificArgs: {
             options: VISIBILITY_MODES.asChoices(),
-            adapter: new ChoiceAdapter({
-              toChoiceOption: (obj) => { return VISIBILITY_MODES.asChoices().find(it => it.value === obj.name); },
-              fromChoiceOption: (choice) => { return VISIBILITY_MODES.asArray().find(it => it.name === choice.value); }
-            }),
           }
         }),
       ],
@@ -226,7 +221,7 @@ export default class ButtonRollViewModel extends ButtonViewModel {
       flavor: this.primaryChatTitle,
       actor: this.actor,
       sound: SOUNDS_CONSTANTS.DICE_ROLL,
-      visibilityMode: dialog.visibilityMode
+      visibilityMode: VISIBILITY_MODES[dialog[this.inputVisibility].value],
     });
 
     return rollResult;
@@ -291,13 +286,9 @@ export default class ButtonRollViewModel extends ButtonViewModel {
         name: inputRollDiceModifier,
         localizedLabel: game.i18n.localize("system.roll.diceModifier.plural"),
         required: true,
-        defaultValue: (ROLL_DICE_MODIFIER_TYPES.asArray()[0]),
+        defaultValue: ROLL_DICE_MODIFIER_TYPES.asChoices().find(it => it.value === ROLL_DICE_MODIFIER_TYPES.NONE.name),
         specificArgs: {
           options: ROLL_DICE_MODIFIER_TYPES.asChoices(),
-          adapter: new ChoiceAdapter({
-            toChoiceOption: (obj) => { return ROLL_DICE_MODIFIER_TYPES.asChoices().find(it => it.value === obj.name); },
-            fromChoiceOption: (choice) => { return ROLL_DICE_MODIFIER_TYPES.asArray().find(it => it.name === choice.value); }
-          }),
         }
       }),
     );
@@ -310,7 +301,7 @@ export default class ButtonRollViewModel extends ButtonViewModel {
       dice: rollData.components,
       bonus: [new SumComponent("bonus", "system.roll.bonusDice", parseInt(dialog[inputBonusDice]))],
       obstacle: dialog[inputObstacle],
-      modifier: ROLL_DICE_MODIFIER_TYPES.asArray().find(it => it.name === dialog[inputRollDiceModifier]),
+      modifier: ROLL_DICE_MODIFIER_TYPES.asArray().find(it => it.name === dialog[inputRollDiceModifier].value),
     }).roll();
 
     this._lastRollResult = rollResult;
@@ -327,7 +318,7 @@ export default class ButtonRollViewModel extends ButtonViewModel {
     }
 
     rollResult.sendToChat({
-      visibilityMode: VISIBILITY_MODES.asArray().find(it => it.name === dialog[this.inputVisibility]),
+      visibilityMode: VISIBILITY_MODES[dialog[this.inputVisibility].value],
       actor: this.actor,
       primaryTitle: this.primaryChatTitle,
       primaryImage: this.primaryChatImage,

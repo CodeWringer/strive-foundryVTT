@@ -12,7 +12,7 @@ readOnlyCssClass: {String | undefined}
   title="{{viewModel.localizedToolTip}}"
 >
   {{#each viewModel.options as |option index|}}
-    <div class="radio-button-container flex flex-row flex-grow{{#if (../viewModel._isSelectedOption ../viewModel option)}} active{{/if}}">
+    <div class="radio-button-container flex flex-row flex-grow{{#if option.isActive}} active{{/if}}">
       {{#if ../viewModel.isEditable}}
         <input 
           type="radio" 
@@ -26,7 +26,7 @@ readOnlyCssClass: {String | undefined}
         for="{{../viewModel.id}}-{{option.value}}"
         {{#if option.tooltip}}title="{{option.tooltip}}"{{/if}}
       >
-      {{#if (../viewModel._isSelectedOption ../viewModel option)}}
+      {{#if option.isActive}}
         {{{option.activeHtml}}}
       {{else}}
         {{{option.inactiveHtml}}}
