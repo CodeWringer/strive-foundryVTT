@@ -8,6 +8,8 @@ import { ROLL_DICE_MODIFIER_TYPES, RollDiceModifierType } from "./roll-dice-modi
 import * as ChatUtil from "../../presentation/chat/chat-utility.mjs";
 import * as ConstantsUtils from "../util/constants-utility.mjs";
 import RollFormulaResolver, { EvaluatedRollFormula } from "./roll-formula-resolver.mjs";
+import { GameSystemActor } from "../document/actor/actor.mjs";
+import { ACTOR_TYPES } from "../document/actor/actor-types.mjs";
 
 /**
  * Represents a dice pool. 
@@ -251,7 +253,7 @@ export class DicePoolRollResult {
    * @param {VisibilityMode | undefined} args.visibilityMode Determines the visibility of the chat message. 
    * * Default `VISIBILITY_MODES.public`
    * @param {String | undefined} args.flavor The flavor text / subtitle of the message. 
-   * @param {String | undefined} args.actor The actor to associate with the message. 
+   * @param {GameSystemActor | undefined} args.actor The actor to associate with the message. 
    * @param {String | undefined} args.primaryTitle A primary title. 
    * @param {String | undefined} args.primaryImage An image url for the primary title. 
    * @param {String | undefined} args.secondaryTitle A secondary title. 
@@ -284,6 +286,16 @@ export class DicePoolRollResult {
     const isObstacleRolled = isDefined(this.evaluatedObstacle.formula.match(rgxIsPlainNumber)) === false;
     const evaluatedObstacleForDisplay = await this.evaluatedObstacle.renderForDisplay();
 
+    let showReminder = false;
+    if (isDefined(args.actor) === true) {
+      const transientActor = args.actor.getTransientObject();
+      if (transientActor.type === ACTOR_TYPES.PC) {
+        showReminder = true;
+      } else if (transientActor.type === ACTOR_TYPES.NPC) {
+        showReminder = transientActor.progressionVisible;
+      }
+    }
+
     // Render the results. 
     const renderedContent = await renderTemplate(TEMPLATES.DICE_ROLL_CHAT_MESSAGE, {
       resultsForDisplay: combinedResultsForRendering,
@@ -303,6 +315,7 @@ export class DicePoolRollResult {
       isObstacleRolled: isObstacleRolled,
       evaluatedObstacle: this.evaluatedObstacle,
       evaluatedObstacleForDisplay: evaluatedObstacleForDisplay,
+      showReminder: showReminder,
     });
 
     return ChatUtil.sendToChat({
