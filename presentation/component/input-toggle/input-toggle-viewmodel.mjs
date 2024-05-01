@@ -47,16 +47,16 @@ export default class InputToggleViewModel extends InputViewModel {
   async activateListeners(html) {
     await super.activateListeners(html);
 
-    html.find(`#${this.id}-button`).click(() => {
+    this.element.find(`#${this.id}-button`).click(() => {
       if (this.isEditable !== true) return;
       
       this.value = !this.value;
       if (this.value === true) {
-        html.find(`button.component-button-toggle`).addClass("active");
-        html.find(`span.component-button-toggle-knob`).addClass("active");
+        this.element.find(`button.component-button-toggle`).addClass("active");
+        this.element.find(`span.component-button-toggle-knob`).addClass("active");
       } else {
-        html.find(`button.component-button-toggle`).removeClass("active");
-        html.find(`span.component-button-toggle-knob`).removeClass("active");
+        this.element.find(`button.component-button-toggle`).removeClass("active");
+        this.element.find(`span.component-button-toggle-knob`).removeClass("active");
       }
     });
   }
