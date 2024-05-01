@@ -141,59 +141,72 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
           const inputMaxActionPoints = "inputMaxActionPoints";
           const inputRefillActionPoints = "inputRefillActionPoints";
           const inputAllowRefillActionPoints = "inputAllowRefillActionPoints";
+          const inputEnablePersonality = "inputEnablePersonality";
+          const inputEnableProgression = "inputEnableProgression";
 
-          const dialog = await new DynamicInputDialog({
-            localizedTitle: game.i18n.localize("system.character.edit"),
-            inputDefinitions: [
-              new DynamicInputDefinition({
-                type: DYNAMIC_INPUT_TYPES.NUMBER_SPINNER,
-                name: inputMaxActionPoints,
-                localizedLabel: game.i18n.localize("system.actionPoint.max"),
-                specificArgs: {
-                  min: 0,
-                },
-                defaultValue: this.document.maxActionPoints,
-              }),
-              new DynamicInputDefinition({
-                type: DYNAMIC_INPUT_TYPES.NUMBER_SPINNER,
-                name: inputRefillActionPoints,
-                localizedLabel: game.i18n.localize("system.actionPoint.refill"),
-                specificArgs: {
-                  min: 0,
-                },
-                defaultValue: this.document.actionPointRefill,
-              }),
+          const inputDefinitions = [
+            new DynamicInputDefinition({
+              type: DYNAMIC_INPUT_TYPES.NUMBER_SPINNER,
+              name: inputMaxActionPoints,
+              localizedLabel: game.i18n.localize("system.actionPoint.max"),
+              specificArgs: {
+                min: 0,
+              },
+              defaultValue: this.document.maxActionPoints,
+            }),
+            new DynamicInputDefinition({
+              type: DYNAMIC_INPUT_TYPES.NUMBER_SPINNER,
+              name: inputRefillActionPoints,
+              localizedLabel: game.i18n.localize("system.actionPoint.refill"),
+              specificArgs: {
+                min: 0,
+              },
+              defaultValue: this.document.actionPointRefill,
+            }),
+            new DynamicInputDefinition({
+              type: DYNAMIC_INPUT_TYPES.TOGGLE,
+              name: inputAllowRefillActionPoints,
+              localizedLabel: game.i18n.localize("system.actionPoint.allowRefill"),
+              defaultValue: this.document.allowAutomaticActionPointRefill,
+            }),
+          ];
+
+          if (this.isNPC) {
+            inputDefinitions.push(
               new DynamicInputDefinition({
                 type: DYNAMIC_INPUT_TYPES.TOGGLE,
-                name: inputAllowRefillActionPoints,
-                localizedLabel: game.i18n.localize("system.actionPoint.allowRefill"),
-                defaultValue: this.document.allowAutomaticActionPointRefill,
-              }),
-            ],
+                name: inputEnablePersonality,
+                localizedLabel: game.i18n.localize("system.character.sheet.tab.personality"),
+                defaultValue: this.document.personalityVisible,
+              })
+            );
+            inputDefinitions.push(
+              new DynamicInputDefinition({
+                type: DYNAMIC_INPUT_TYPES.TOGGLE,
+                name: inputEnableProgression,
+                localizedLabel: game.i18n.localize("system.character.advancement.label"),
+                defaultValue: this.document.progressionVisible,
+              })
+            );
+          }
+          const dialog = await new DynamicInputDialog({
+            localizedTitle: game.i18n.localize("system.character.edit"),
+            inputDefinitions: inputDefinitions,
           }).renderAndAwait(true);
   
           if (dialog.confirmed !== true) return;
   
-          const maxActionPoints = parseInt(dialog[inputMaxActionPoints]);
-          this.document.maxActionPoints = maxActionPoints;
-  
-          const refillActionPoints = parseInt(dialog[inputRefillActionPoints]);
-          this.document.actionPointRefill = refillActionPoints;
-  
-          const allowRefillActionPoints = dialog[inputAllowRefillActionPoints] == true;
-          this.document.allowAutomaticActionPointRefill = allowRefillActionPoints;
+          this.document.maxActionPoints = parseInt(dialog[inputMaxActionPoints]);
+          this.document.actionPointRefill = parseInt(dialog[inputRefillActionPoints]);
+          this.document.allowAutomaticActionPointRefill = dialog[inputAllowRefillActionPoints] == true;
+
+          if (this.isNPC) {
+            this.document.personalityVisible = dialog[inputEnablePersonality] == true;
+            this.document.progressionVisible = dialog[inputEnableProgression] == true;
+          }
         },
       });
     }
-    this.vmBtnContextMenu = new ButtonContextMenuViewModel({
-      id: "vmBtnContextMenu",
-      parent: this,
-      menuItems: []
-      // Toggle personality
-      .concat(ButtonContextMenuViewModel.createToggleButtons("system.character.sheet.tab.personality", this.document, "personalityVisible", true, false))
-      // Toggle progression
-      .concat(ButtonContextMenuViewModel.createToggleButtons("system.character.advancement.label", this.document, "progressionVisible", true, false))
-    });
     this.vmBtnSendToChat = new ButtonSendToChatViewModel({
       parent: this,
       id: "vmBtnSendToChat",

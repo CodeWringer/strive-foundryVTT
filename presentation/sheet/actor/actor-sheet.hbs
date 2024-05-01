@@ -15,8 +15,7 @@ cssClass: {undefined | String}
         {{#if (or viewModel.isNPC viewModel.isPC)}}
           {{> button viewModel=viewModel.vmBtnConfigure }}
         {{/if}}
-        {{!-- Context Menu --}}
-        {{> buttonContextMenu viewModel=viewModel.vmBtnContextMenu cssClass=viewModel.contextMenuClass }}
+        {{!-- SendToChat --}}
         <div class="flex flex-center {{#if viewModel.isSendable}}{{else}}hidden{{/if}}">
           {{> buttonSendToChat viewModel=viewModel.vmBtnSendToChat }}
         </div>
