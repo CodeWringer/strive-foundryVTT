@@ -36,7 +36,7 @@ export default class ButtonToggleIconViewModel extends ButtonViewModel {
    */
   get value() { return this._value; }
   /**
-   * Returns the current toggle state. 
+   * Sets the toggle state and updates the rendered icon. 
    * 
    * @type {Boolean}
    */
