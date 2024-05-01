@@ -234,8 +234,9 @@ export default class ExpertiseListItemViewModel extends BaseListItemViewModel {
           secondaryChatTitle: game.i18n.localize(owningDocument.name),
           secondaryChatImage: owningDocument.img,
           rollType: "dice-pool",
-          actor: owningDocument,
+          actor: owningDocument.owningDocument,
         }),
+        isHidden: isDefined(owningDocument.owningDocument) === false,
       }),
     ].concat(inherited);
   }
