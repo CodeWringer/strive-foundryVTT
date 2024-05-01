@@ -30,8 +30,24 @@ export default class ButtonToggleIconViewModel extends ButtonViewModel {
   }
 
   /**
+   * Returns the current toggle state. 
+   * 
+   * @type {Boolean}
+   */
+  get value() { return this._value; }
+  /**
+   * Returns the current toggle state. 
+   * 
+   * @type {Boolean}
+   */
+  set value(newValue) {
+    this._value = newValue;
+    this._updateIcon();
+  }
+
+  /**
    * @param {Object} args 
-   * @param {Boolean | undefined} args.value The current value. 
+   * @param {Boolean | undefined} args.value The toggle state. 
    * * default `false` 
    * @param {String} args.iconActive An HTML-String of the "active" icon. 
    * * E. g. `"<i class="fas fa-eye"></i>"`
@@ -46,7 +62,7 @@ export default class ButtonToggleIconViewModel extends ButtonViewModel {
     super(args);
     validateOrThrow(args, ["iconActive", "iconInactive"]);
 
-    this.value = args.value ?? false;
+    this._value = args.value ?? false;
     this.iconActive = args.iconActive;
     this.iconInactive = args.iconInactive;
 
@@ -58,9 +74,6 @@ export default class ButtonToggleIconViewModel extends ButtonViewModel {
     if (this.isEditable !== true) return;
     
     this.value = !this.value;
-
-    this.iconHtml = this._getIconHtml();
-    this.element.find(`span#${this.id}-icon`).html(this.iconHtml);
 
     return this.value;
   }
@@ -75,5 +88,15 @@ export default class ButtonToggleIconViewModel extends ButtonViewModel {
   _getIconHtml() {
     const icon = this.value === true ? this.iconActive : this.iconInactive;
     return `<span id="${this.id}-icon">${icon}</span>`;
+  }
+
+  /**
+   * Synchronizes the icon HTML with the current toggle state. 
+   * 
+   * @private
+   */
+  _updateIcon() {
+    this.iconHtml = this._getIconHtml();
+    this.element.find(`span#${this.id}-icon`).html(this.iconHtml);
   }
 }
