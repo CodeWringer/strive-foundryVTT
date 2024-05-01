@@ -35,13 +35,14 @@ export default class ExpertiseTableViewModel extends ViewModel {
   set isExpanded(value) {
     this._isExpanded = value;
 
-    const headerExpansionButtonIcon = this.element.find(`#${this.vmToggleExpansion1.id}-icon`);
+    // Synchronize the toggle buttons. 
+    this.vmToggleExpansion1.value = value;
+    this.vmToggleExpansion2.value = value;
+    // Hide the second expansion toggle button if the expertise list is currently hidden. 
     if (value === true) {
-      headerExpansionButtonIcon.addClass("fa-angle-double-up");
-      headerExpansionButtonIcon.removeClass("fa-angle-double-down");
+      this.vmToggleExpansion2.element.parent().removeClass("hidden");
     } else {
-      headerExpansionButtonIcon.addClass("fa-angle-double-down");
-      headerExpansionButtonIcon.removeClass("fa-angle-double-up");
+      this.vmToggleExpansion2.element.parent().addClass("hidden");
     }
 
     // Immediately write view state. 
@@ -135,10 +136,11 @@ export default class ExpertiseTableViewModel extends ViewModel {
     this.vmToggleExpansion1 = new ButtonToggleVisibilityViewModel({
       parent: thiz,
       id: "vmToggleExpansion1",
-      target: thiz.document,
       isEditable: true,
+      value: this.isExpanded,
+      iconInactive: '<i class="fas fa-angle-double-down"></i>',
+      iconActive: '<i class="fas fa-angle-double-up"></i>',
       visGroup: thiz.visGroupId,
-      toggleSelf: false,
       onClick: async (event, data) => {
         this.isExpanded = !this.isExpanded;
       },
@@ -146,10 +148,11 @@ export default class ExpertiseTableViewModel extends ViewModel {
     this.vmToggleExpansion2 = new ButtonToggleVisibilityViewModel({
       parent: thiz,
       id: "vmToggleExpansion2",
-      target: thiz.document,
       isEditable: true,
+      value: this.isExpanded,
+      iconInactive: '<i class="fas fa-angle-double-down"></i>',
+      iconActive: '<i class="fas fa-angle-double-up"></i>',
       visGroup: thiz.visGroupId,
-      toggleSelf: true,
       onClick: async (event, data) => {
         this.isExpanded = !this.isExpanded;
       },

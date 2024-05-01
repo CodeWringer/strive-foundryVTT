@@ -64,7 +64,7 @@ export default class VisibilityToggleListItemViewModel extends InputViewModel {
       value: this.value,
       iconActive: '<i class="fas fa-eye"></i>',
       iconInactive: '<i class="fas fa-eye-slash"></i>',
-      onChange: (_, newValue) => {
+      onClick: (_, newValue) => {
         this.value = newValue;
       },
     });
