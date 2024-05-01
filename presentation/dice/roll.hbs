@@ -19,6 +19,7 @@ obstacle: {Number}
 isObstacleRolled: {Boolean}
 evaluatedObstacle: {EvaluatedRollFormula}
 evaluatedObstacleForDisplay: {String}
+showReminder: {Boolean}
 --}}
 <div class="dice-roll-chat-message-container auto-margin-v-sm{{#if cssClass}} {{cssClass}}{{/if}}">
   {{!-- Header --}}
@@ -128,5 +129,7 @@ evaluatedObstacleForDisplay: {String}
     </div>
   </div>
   {{!-- Reminder --}}
+  {{#if showReminder}}
   <p class="border-solid-t-sm" style="text-align: center;">{{localize "system.roll.reminder"}}</p>
+  {{/if}}
 </div>
