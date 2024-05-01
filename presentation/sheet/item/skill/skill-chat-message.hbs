@@ -159,12 +159,7 @@ cssClass: {undefined | String}
     {{/with}}
     </div>
     <div class="line-height">
-      {{#> buttonToggleVisibility viewModel=viewModel.vmBtnToggleVisibilityExpand fill=true cssClass=(ifThenElse viewModel.expertisesInitiallyVisible "hidden" "") }}
-        <i class="fas fa-angle-double-down"></i>
-      {{/buttonToggleVisibility}}
-      {{#> buttonToggleVisibility viewModel=viewModel.vmBtnToggleVisibilityCollapse fill=true cssClass=(ifThenElse viewModel.expertisesInitiallyVisible "" "hidden") }}
-        <i class="fas fa-angle-double-up"></i>
-      {{/buttonToggleVisibility}}
+      {{> buttonToggleVisibility viewModel=viewModel.vmExpertiseVisibilityToggle }}
     </div>
   {{/if}}
 </section>
