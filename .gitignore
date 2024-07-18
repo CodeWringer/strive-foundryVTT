@@ -10,11 +10,8 @@ npm-debug.log
 # FoundryVTT
 *.lock
 packs/**/*.log
-packs/**/LOCK
 packs/**/LOG
 packs/**/LOG.old
-packs/**/CURRENT
-packs/**/MANIFEST-*
 
 # Generated
 build/
