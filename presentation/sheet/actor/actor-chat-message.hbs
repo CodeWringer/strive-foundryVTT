@@ -17,17 +17,16 @@ cssClass: {undefined | String}
     </h2>
   </div>
   {{#if viewModel.isNPC}}
-    {{#each viewModel.challengeRatings as |challengeRating|}}
-      <div class="grid grid-3col sheet-block margin-b-md">
-        <div class="width-min-xl grid-span-2{{#if viewModel.showFancyFont}} fancy-font{{/if}}">
-          {{challengeRating.localizedLabel}}
+    {{#if viewModel.challengeRating}}
+      <div class="flex flex-row sheet-block margin-b-md">
+        <div class="width-min-xl{{#if viewModel.showFancyFont}} fancy-font{{/if}}">
+          {{localize "system.character.advancement.challengeRating.label"}}
         </div>
         <div class="flex-grow">
-          <span class="margin-r-md">{{localize "system.character.advancement.challengeRating.abbreviation"}}</span>
-          <span>{{challengeRating.value}}</span>
+          <span>{{viewModel.challengeRating.value}}</span>
         </div>
       </div>
-    {{/each}}
+    {{/if}}
   {{/if}}
   {{#if (eq viewModel.isPlain false)}}
     {{!-- Personals --}}

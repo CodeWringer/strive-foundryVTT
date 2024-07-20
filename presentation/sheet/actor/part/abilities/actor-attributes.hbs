@@ -6,13 +6,8 @@ cssClass: {undefined | String}
   {{#> header1 showFancyFont=viewModel.showFancyFont cssClass="flex flex-row"}}
     <span class="flex-grow">{{localize "system.character.attribute.plural"}}</span>
   {{/header1}}
-  <ul class="unstyled-list alternating-rows">
-  {{#each viewModel.attributeGroups as |attributeGroup|}}
-    <li>
-    {{#with attributeGroup.template as | template |}}
-      {{> (template) viewModel=attributeGroup.viewModel }}
-    {{/with}}
-    </li>
-  {{/each}}
+  {{#with viewModel.childTemplate as | template |}}
+    {{> (template) viewModel=../viewModel.vmChild }}
+  {{/with}}
   </ul>
 </section>

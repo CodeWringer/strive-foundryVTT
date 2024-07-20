@@ -283,20 +283,6 @@
           "placeholder": "Home / At camp / etc."
         }
       },
-      "attributeGroup": {
-        "physical": {
-          "label": "Physical Attributes",
-          "abbreviation": "Physical"
-        },
-        "mental": {
-          "label": "Mental Attributes",
-          "abbreviation": "Mental"
-        },
-        "social": {
-          "label": "Social Attributes",
-          "abbreviation": "Social"
-        }
-      },
       "attribute": {
         "singular": "Attribute",
         "plural": "Attributes",
@@ -305,13 +291,13 @@
           "label": "Agility",
           "abbreviation": "Agi"
         },
-        "endurance": {
-          "label": "Endurance",
-          "abbreviation": "End"
+        "arcana": {
+          "label": "Arcana",
+          "abbreviation": "Arc"
         },
-        "perception": {
-          "label": "Perception",
-          "abbreviation": "Perc"
+        "awareness": {
+          "label": "Awareness",
+          "abbreviation": "Awar"
         },
         "strength": {
           "label": "Strength",
@@ -321,29 +307,9 @@
           "label": "Toughness",
           "abbreviation": "Tough"
         },
-        "intelligence": {
-          "label": "Intelligence",
-          "abbreviation": "Int"
-        },
-        "wisdom": {
-          "label": "Wisdom",
-          "abbreviation": "Wis"
-        },
-        "empathy": {
-          "label": "Empathy",
-          "abbreviation": "Emp"
-        },
-        "oratory": {
-          "label": "Oratory",
-          "abbreviation": "Ora"
-        },
-        "willpower": {
-          "label": "Willpower",
-          "abbreviation": "Will"
-        },
-        "arcana": {
-          "label": "Arcana",
-          "abbreviation": "Arc"
+        "wit": {
+          "label": "Wit",
+          "abbreviation": "Wit"
         },
         "tier": {
           "underdeveloped": "Underdeveloped",

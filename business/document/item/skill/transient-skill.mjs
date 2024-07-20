@@ -17,7 +17,6 @@ import { arrayContains } from "../../../util/array-utility.mjs";
 import SkillPrerequisite from "../../../ruleset/skill/skill-prerequisite.mjs";
 import { SKILL_TAGS } from "../../../tags/system-tags.mjs";
 import AtReferencer from "../../../referencing/at-referencer.mjs";
-import { getGroupForAttributeByName } from "../../../ruleset/attribute/attribute-groups.mjs";
 import { ACTOR_TYPES } from "../../actor/actor-types.mjs";
 
 /**
@@ -158,7 +157,7 @@ export default class TransientSkill extends TransientBaseItem {
    * @readonly
    */
   get modifiedLevel() {
-    let level = this.dependsOnActiveCr === true ? this.crLevel : this.level;
+    let level = this.dependsOnActiveCr === true ? (this.crLevel ?? 0) : this.level;
 
     if (level > 0) {
       return Math.max(level + this.levelModifier, 1);
@@ -168,18 +167,21 @@ export default class TransientSkill extends TransientBaseItem {
   }
 
   /**
-   * Returns the challenge rating of the active base attribute, for use as 
-   * the skill's level. 
+   * Returns the challenge rating of the active owning actor, for use as 
+   * the skill's level. Or if no actor or challenge rating is defined, returns undefined; 
    * 
-   * @type {Number}
+   * @type {Number | undefined}
    * @readonly
    */
   get crLevel() {
-    if (this.owningDocument !== undefined) {
-      const group = getGroupForAttributeByName(this.activeBaseAttribute.name);
-      return this.owningDocument.getCrFor(group.name).modified;
+    const owningDocument = this.owningDocument;
+    if (owningDocument !== undefined 
+      && owningDocument.type === ACTOR_TYPES.NPC
+      && isDefined(owningDocument.challengeRating)) {
+      return owningDocument.challengeRating.modified;
+    } else {
+      return undefined;
     }
-    return 0;
   }
 
   /**
@@ -373,7 +375,7 @@ export default class TransientSkill extends TransientBaseItem {
   }
 
   /**
-   * Returns `true`, if the skill's active base attribute is part of a group for which 
+   * Returns `true`, if the skill's embedded on an actor for which 
    * a challenge rating is active. 
    * 
    * @type {Boolean}
@@ -381,9 +383,10 @@ export default class TransientSkill extends TransientBaseItem {
    */
   get dependsOnActiveCr() {
     const owningDocument = this.owningDocument;
-    if (owningDocument !== undefined && owningDocument.type === ACTOR_TYPES.NPC) {
-      const group = getGroupForAttributeByName(this.activeBaseAttribute.name);
-      return owningDocument.getIsCrActiveFor(group.name);
+    if (owningDocument !== undefined 
+      && owningDocument.type === ACTOR_TYPES.NPC
+      && isDefined(owningDocument.challengeRating)) {
+      return true;
     } else {
       return false;
     }
@@ -522,9 +525,8 @@ export default class TransientSkill extends TransientBaseItem {
    */
   getRollData() {
     if (this.dependsOnActiveCr === true) {
-      const group = getGroupForAttributeByName(this.activeBaseAttribute.name);
       return new Sum([
-        new SumComponent(group.name, group.localizableName, this.modifiedLevel),
+        new SumComponent("challengeRating", "system.character.advancement.challengeRating", this.modifiedLevel),
       ]);
     } else {
       const actor = (this.owningDocument ?? {}).document;

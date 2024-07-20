@@ -1,14 +1,16 @@
-import { validateOrThrow } from "../../../../../business/util/validation-utility.mjs";
+import { isDefined, validateOrThrow } from "../../../../../business/util/validation-utility.mjs";
 import { TEMPLATES } from "../../../../templatePreloader.mjs";
 import ViewModel from "../../../../view-model/view-model.mjs";
 import ChallengeRatingViewModel from "./challenge-rating-viewmodel.mjs";
 import AttributeTableViewModel from "./actor-attribute-table-viewmodel.mjs";
 import TransientBaseCharacterActor from "../../../../../business/document/actor/transient-base-character-actor.mjs";
-import CharacterAttributeGroup from "../../../../../business/ruleset/attribute/character-attribute-group.mjs";
-import KeyValuePair from "../../../../../common/key-value-pair.mjs";
 import ChallengeRating from "../../../../../business/ruleset/attribute/challenge-rating.mjs";
 import { ACTOR_TYPES } from "../../../../../business/document/actor/actor-types.mjs";
 
+/**
+ * @property {String} childTemplate
+ * @property {ViewModel} vmChild
+ */
 export default class ActorAttributesViewModel extends ViewModel {
   /** @override */
   static get TEMPLATE() { return TEMPLATES.ACTOR_ATTRIBUTES; }
@@ -50,116 +52,39 @@ export default class ActorAttributesViewModel extends ViewModel {
     this.document = args.document;
 
     // Child view models. 
-    this.attributeGroups = this.document.attributeGroups.map(attributeGroup => 
-      this._getAttributeGroupRenderData(attributeGroup)
-    );
-  }
-
-  /**
-   * Returns render data for the given attribute group. 
-   * 
-   * @param {CharacterAttributeGroup} attributeGroup 
-   * 
-   * @returns {Object} An object containing the render data. Has the following properties: 
-   * * `{String} template`
-   * * `{ViewModel} viewModel`
-   * 
-   * @private
-   */
-  _getAttributeGroupRenderData(attributeGroup) {
-    let template;
-    let viewModel;
-
-    const isExpanded = (this.isPC === true || (this.isNPC === true && this.document.getIsExpandedFor(attributeGroup.name) === true));
-
+    const isExpanded = (this.isPC === true || (this.isNPC === true && this.document.isChallengeRatingEnabled === false));
     if (isExpanded === true) {
-      template = AttributeTableViewModel.TEMPLATE;
-
-      viewModel = new AttributeTableViewModel({
-        id: attributeGroup.name,
+      this.childTemplate = AttributeTableViewModel.TEMPLATE;
+      this.vmChild = new AttributeTableViewModel({
+        id: "vmChild",
         parent: this,
         document: this.document,
-        attributes: attributeGroup.attributes,
-        attributeGroupName: attributeGroup.name,
-        localizableAttributeGroupName: attributeGroup.localizableName,
+        attributes: this.document.attributes,
         parent: this,
         headerInteractible: this.isNPC === true,
-        iconClass: attributeGroup.iconClass,
         onHeaderClicked: () => {
           if (this.isNPC === true) {
-            const expansion = this.document.getIsExpandedFor(attributeGroup.name);
-            this._setExpansion(attributeGroup.name, !expansion);
+            this.document.isChallengeRatingEnabled = true;
           }
         },
       });
     } else {
-      template = ChallengeRatingViewModel.TEMPLATE;
-
-      const challengeRating = this.document.getCrFor(attributeGroup.name);
-      viewModel = new ChallengeRatingViewModel({
-        id: attributeGroup.name,
+      this.childTemplate = ChallengeRatingViewModel.TEMPLATE;
+      this.vmChild = new ChallengeRatingViewModel({
+        id: "vmChild",
         parent: this,
-        challengeRating: challengeRating,
-        localizedLabel: game.i18n.localize(attributeGroup.localizableName),
-        iconClass: attributeGroup.iconClass,
+        challengeRating: this.document.challengeRating,
+        localizedLabel: game.i18n.localize("system.character.advancement.challengeRating.label"),
         actor: this.document,
         onClicked: () => {
           if (this.isNPC === true) {
-            const expansion = this.document.getIsExpandedFor(attributeGroup.name);
-            this._setExpansion(attributeGroup.name, !expansion);
+            this.document.isChallengeRatingEnabled = false;
           }
         },
         onChallengeRatingChanged: (_, newValue) => {
-          this._setChallengeRating(attributeGroup.name, newValue);
+          this.document.challengeRating = newValue;
         },
       });
     }
-
-    return {
-      template: template,
-      viewModel: viewModel,
-    };
-  }
-
-  /**
-   * Sets the challenge rating of an attribute group with the given name. 
-   * 
-   * @param {String} attributeGroupName 
-   * @param {ChallengeRating} challengeRating 
-   * 
-   * @private
-   */
-  _setChallengeRating(attributeGroupName, challengeRating) {
-    const challengeRatings = this.document.challengeRatings.concat([]);
-
-    const kvpair = challengeRatings.find(it => it.key === attributeGroupName);
-    if (kvpair === undefined) {
-      challengeRatings.push(new KeyValuePair(attributeGroupName, challengeRating));
-    } else {
-      kvpair.value = challengeRating;
-    }
-
-    this.document.challengeRatings = challengeRatings;
-  }
-
-  /**
-   * Sets the expanded state of an attribute group with the given name. 
-   * 
-   * @param {String} attributeGroupName 
-   * @param {Boolean} value 
-   * 
-   * @private
-   */
-  _setExpansion(attributeGroupName, value) {
-    const expansions = this.document.attributeGroupExpansionStates.concat([]);
-
-    const expansion = expansions.find(it => it.key === attributeGroupName);
-    if (expansion === undefined) {
-      expansions.push(new KeyValuePair(attributeGroupName, value));
-    } else {
-      expansion.value = value;
-    }
-
-    this.document.attributeGroupExpansionStates = expansions;
   }
 }

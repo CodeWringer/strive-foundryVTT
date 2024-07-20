@@ -1,5 +1,4 @@
 import LevelAdvancement from "./level-advancement.mjs";
-import { getGroupForAttributeByName } from "./attribute/attribute-groups.mjs";
 import { SumComponent } from "./summed-data.mjs";
 import { SkillTier, SKILL_TIERS } from "./skill/skill-tier.mjs";
 import { ATTRIBUTE_TIERS, AttributeTier } from "./attribute/attribute-tier.mjs";
@@ -8,6 +7,7 @@ import { ATTRIBUTES, Attribute } from "./attribute/attributes.mjs";
 import TransientSkill from "../document/item/skill/transient-skill.mjs";
 import { ACTOR_TYPES } from "../document/actor/actor-types.mjs";
 import { ITEM_TYPES } from "../document/item/item-types.mjs";
+import { isDefined } from "../util/validation-utility.mjs";
 
 /**
  * Provides all the ruleset-specifics. 
@@ -115,17 +115,6 @@ export default class Ruleset {
       successes: successes,
       failures: failures
     });
-  }
-
-  /**
-   * Returns the name of the attribute group containing the given attribute. 
-   * 
-   * @param {String} attributeName Internal name of an attribute, e.g. `"arcana"`. 
-   * 
-   * @returns {String} Name of the attribute group, e. g. `"physical"`. 
-   */
-  getAttributeGroupName(attributeName) {
-    return getGroupForAttributeByName(attributeName).name;
   }
 
   /**
@@ -363,17 +352,14 @@ export default class Ruleset {
       throw new Error("Only PC and NPC type actors supported");
     }
 
-    const attributeGroup = getGroupForAttributeByName(attribute.name);
+    const transientActor = actor.getTransientObject();
     
-    if (type === ACTOR_TYPES.NPC) {
-      const transientNpc = actor.getTransientObject();
-      if (transientNpc.getIsCrActiveFor(attributeGroup.name) === true) {
-        return transientNpc.getCrFor(attributeGroup.name).value;
-      }
+    if (type === ACTOR_TYPES.NPC && (isDefined(transientActor.challengeRating))) {
+      return transientActor.challengeRating.value;
     }
     
-    const level = actor.system.attributes[attributeGroup.name][attribute.name].level;
-    return level;
+    const characterAttribute = transientActor.attributes.find(it => it.name === attribute.name);
+    return characterAttribute.level;
   }
   
   /**
@@ -381,8 +367,7 @@ export default class Ruleset {
    * given attribute. 
    * 
    * For NPCs, the effective level can be determined by a challenge 
-   * rating, if one is active. For PCs, the raw attribute level 
-   * is picked. 
+   * rating, if one is active. 
    * 
    * @param {Attribute} attribute The attribute whose effective level 
    * is to be returned. 
@@ -398,11 +383,8 @@ export default class Ruleset {
 
     const transientActor = actor.getTransientObject();
     
-    if (type === ACTOR_TYPES.NPC) {
-      const attributeGroup = getGroupForAttributeByName(attribute.name);
-      if (transientActor.getIsCrActiveFor(attributeGroup.name) === true) {
-        return transientActor.getCrFor(attributeGroup.name).modified;
-      }
+    if (type === ACTOR_TYPES.NPC && (isDefined(transientActor.challengeRating))) {
+      return transientActor.challengeRating.modified;
     }
     
     const characterAttribute = transientActor.attributes.find(it => it.name === attribute.name);
@@ -424,17 +406,18 @@ export default class Ruleset {
    * @returns {Number} The modified level. 
    */
   getEffectiveSkillModifiedLevel(skill, actor) {
-    const transientSkill = skill.getTransientObject();
-
-    if (actor.type === ACTOR_TYPES.NPC) {
-      const attributeGroup = getGroupForAttributeByName(transientSkill.activeBaseAttribute.name);
-      const transientActor = actor.getTransientObject();
-
-      if (transientActor.getIsCrActiveFor(attributeGroup.name) === true) {
-        return transientActor.getCrFor(attributeGroup.name).modified;
-      }
+    const type = actor.type.toLowerCase();
+    if (type !== ACTOR_TYPES.PC && type !== ACTOR_TYPES.NPC) {
+      throw new Error("Only PC and NPC type actors supported");
     }
 
+    const transientActor = actor.getTransientObject();
+
+    if (type === ACTOR_TYPES.NPC && (isDefined(transientActor.challengeRating))) {
+      return transientActor.challengeRating.modified;
+    }
+    
+    const transientSkill = skill.getTransientObject();
     return transientSkill.modifiedLevel;
   }
 }

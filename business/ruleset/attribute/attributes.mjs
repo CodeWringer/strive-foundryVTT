@@ -25,16 +25,11 @@ export class Attribute {
  * Represents the defined character attributes.
  * 
  * @property {Attribute} agility A character's "agility" attribute. 
- * @property {Attribute} endurance A character's "endurance" attribute. 
- * @property {Attribute} perception A character's "perception" attribute. 
+ * @property {Attribute} awareness A character's "awareness" attribute. 
+ * @property {Attribute} arcana A character's "arcana" attribute. 
  * @property {Attribute} strength A character's "strength" attribute. 
  * @property {Attribute} toughness A character's "toughness" attribute. 
- * @property {Attribute} intelligence A character's "intelligence" attribute. 
- * @property {Attribute} wisdom A character's "wisdom" attribute. 
- * @property {Attribute} arcana A character's "arcana" attribute. 
- * @property {Attribute} empathy A character's "empathy" attribute. 
- * @property {Attribute} oratory A character's "oratory" attribute. 
- * @property {Attribute} willpower A character's "willpower" attribute. 
+ * @property {Attribute} wit A character's "wit" attribute. 
  * 
  * @constant
  */
@@ -44,15 +39,15 @@ export const ATTRIBUTES = {
     localizableName: "system.character.attribute.agility.label",
     localizableAbbreviation: "system.character.attribute.agility.abbreviation"
   }),
-  endurance: new Attribute({
-    name: "endurance",
-    localizableName: "system.character.attribute.endurance.label",
-    localizableAbbreviation: "system.character.attribute.endurance.abbreviation"
+  arcana: new Attribute({
+    name: "arcana",
+    localizableName: "system.character.attribute.arcana.label",
+    localizableAbbreviation: "system.character.attribute.arcana.abbreviation"
   }),
-  perception: new Attribute({
-    name: "perception",
-    localizableName: "system.character.attribute.perception.label",
-    localizableAbbreviation: "system.character.attribute.perception.abbreviation"
+  awareness: new Attribute({
+    name: "awareness",
+    localizableName: "system.character.attribute.awareness.label",
+    localizableAbbreviation: "system.character.attribute.awareness.abbreviation"
   }),
   strength: new Attribute({
     name: "strength",
@@ -64,35 +59,10 @@ export const ATTRIBUTES = {
     localizableName: "system.character.attribute.toughness.label",
     localizableAbbreviation: "system.character.attribute.toughness.abbreviation"
   }),
-  intelligence: new Attribute({
-    name: "intelligence",
-    localizableName: "system.character.attribute.intelligence.label",
-    localizableAbbreviation: "system.character.attribute.intelligence.abbreviation"
-  }),
-  wisdom: new Attribute({
-    name: "wisdom",
-    localizableName: "system.character.attribute.wisdom.label",
-    localizableAbbreviation: "system.character.attribute.wisdom.abbreviation"
-  }),
-  arcana: new Attribute({
-    name: "arcana",
-    localizableName: "system.character.attribute.arcana.label",
-    localizableAbbreviation: "system.character.attribute.arcana.abbreviation"
-  }),
-  empathy: new Attribute({
-    name: "empathy",
-    localizableName: "system.character.attribute.empathy.label",
-    localizableAbbreviation: "system.character.attribute.empathy.abbreviation"
-  }),
-  oratory: new Attribute({
-    name: "oratory",
-    localizableName: "system.character.attribute.oratory.label",
-    localizableAbbreviation: "system.character.attribute.oratory.abbreviation"
-  }),
-  willpower: new Attribute({
-    name: "willpower",
-    localizableName: "system.character.attribute.willpower.label",
-    localizableAbbreviation: "system.character.attribute.willpower.abbreviation"
+  wit: new Attribute({
+    name: "wit",
+    localizableName: "system.character.attribute.wit.label",
+    localizableAbbreviation: "system.character.attribute.wit.abbreviation"
   }),
 };
 ConstantsUtils.enrichConstant(ATTRIBUTES);

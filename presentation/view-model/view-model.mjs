@@ -449,18 +449,6 @@ export default class ViewModel {
       }
     }
     this.children = undefined;
-
-    // Set properties of this view model to null. 
-    for (const propertyName in this) {
-      // Call dispose on any property that supports it. 
-      if (ValidationUtil.isObject(this[propertyName]) 
-        && this[propertyName].dispose !== undefined
-        && propertyName !== "parent"
-        && propertyName !== "_parent"
-      ) {
-        this[propertyName].dispose();
-      }
-    }
   }
 
   /**

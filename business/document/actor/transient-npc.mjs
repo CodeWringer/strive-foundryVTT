@@ -1,7 +1,5 @@
-import KeyValuePair from "../../../common/key-value-pair.mjs";
-import { getGroupForAttributeByName } from "../../ruleset/attribute/attribute-groups.mjs";
-import { ATTRIBUTES } from "../../ruleset/attribute/attributes.mjs";
 import ChallengeRating from "../../ruleset/attribute/challenge-rating.mjs";
+import { isDefined } from "../../util/validation-utility.mjs";
 import TransientBaseCharacterActor from "./transient-base-character-actor.mjs";
 
 /**
@@ -13,32 +11,17 @@ import TransientBaseCharacterActor from "./transient-base-character-actor.mjs";
  * * default `true`
  * @property {Boolean} progressionVisible
  * * default `false`
- * 
- * @property {Array<KeyValuePair<String, ChallengeRating>>} challengeRatings
- * @property {Array<KeyValuePair<String, Boolean>>} attributeGroupExpansionStates 
+ * @property {ChallengeRating} challengeRating
+ * @property {Boolean} isChallengeRatingEnabled
  */
 export default class TransientNpc extends TransientBaseCharacterActor {
   /** @override */
   get baseInitiative() {
-    const attributesToSum = [
-      ATTRIBUTES.perception.name,
-      ATTRIBUTES.intelligence.name,
-      ATTRIBUTES.empathy.name,
-    ];
-
-    let baseInitiative = 0;
-
-    for (const attributeName of attributesToSum) {
-      const attributeGroup = getGroupForAttributeByName(attributeName);
-      const isCrActive = this.getIsCrActiveFor(attributeGroup.name);
-      if (isCrActive === true) {
-        baseInitiative += parseInt(this.getCrFor(attributeGroup.name).modified);
-      } else {
-        baseInitiative += parseInt(this.attributes.find(it => it.name === attributeName).modifiedLevel);
-      }
+    if (this.isChallengeRatingEnabled) {
+      return (this.challengeRating.value * 3);
+    } else {
+      return super.baseInitiative;
     }
-
-    return baseInitiative;
   }
 
   get personalityVisible() {
@@ -55,77 +38,46 @@ export default class TransientNpc extends TransientBaseCharacterActor {
     this.updateByPath("system.progressionVisible", value);
   }
 
-  get challengeRatings() {
-    return (this.document.system.challengeRatings ?? []).map(dto => 
-      new KeyValuePair(dto.key, ChallengeRating.fromDto(dto.value))
-    );
+  get challengeRating() {
+    if (isDefined(this.document.system.challengeRating)) {
+      return ChallengeRating.fromDto(this.document.system.challengeRating);
+    } else {
+      return new ChallengeRating({
+        value: 1,
+        modifier: 0,
+      });
+    }
   }
   /**
-   * @param {Array<KeyValuePair<String, ChallengeRating>>} value
+   * @param {ChallengeRating} value
    */
-  set challengeRatings(value) {
-    this.updateByPath("system.challengeRatings", value.map(it => it.toDto()));
+  set challengeRating(value) {
+    this.updateByPath("system.challengeRating", value.toDto());
   }
 
-  get attributeGroupExpansionStates() {
-    return (this.document.system.attributeGroupExpansionStates ?? []).map(dto => 
-      KeyValuePair.fromDto(dto)
-    );
+  get isChallengeRatingEnabled() {
+    return this.document.system.isChallengeRatingEnabled ?? false;
   }
-  set attributeGroupExpansionStates(value) {
-    this.updateByPath("system.attributeGroupExpansionStates", value.map(it => it.toDto()));
-  }
-
   /**
-   * Returns `true`, if the attribute group with the given name has an 
-   * **active** challenge rating set. 
-   * 
-   * @param {String} attributeGroupName Name of the attribute group. 
-   * 
-   * @returns {Boolean}
+   * @param {Boolean} newValue
    */
-  getIsCrActiveFor(attributeGroupName) {
-    return !this.getIsExpandedFor(attributeGroupName);
-  }
-
-  /**
-   * Returns `true`, if the attribute group with the given name is expanded. 
-   * 
-   * @param {String} attributeGroupName Name of the attribute group. 
-   * 
-   * @returns {Boolean}
-   */
-  getIsExpandedFor(attributeGroupName) {
-    return ((this.attributeGroupExpansionStates.find(it => it.key === attributeGroupName) ?? {}).value ?? false);
-  }
-
-  /**
-   * Returns the challenge rating of the attribute group with the given name. 
-   * 
-   * @param {String} attributeGroupName Name of the attribute group. 
-   * 
-   * @returns {ChallengeRating}
-   */
-  getCrFor(attributeGroupName) {
-    return ((this.challengeRatings.find(it => it.key === attributeGroupName) ?? {}).value ?? new ChallengeRating());
+  set isChallengeRatingEnabled(newValue) {
+    this.updateByPath("system.isChallengeRatingEnabled", newValue);
   }
 
   /**
    * @override
    * 
    * Searches in: 
-   * * Challenge ratings.
+   * * Attributes under consideration of the challenge rating, if it is defined. 
    */
   resolveReference(comparableReference, propertyPath) {
     // Attempt to resolve a challenge rating. 
-    const attributeGroup = getGroupForAttributeByName(comparableReference);
-    if (attributeGroup !== undefined) {
-      const isCrActive = this.getIsCrActiveFor(attributeGroup.name);
-      if (isCrActive === true) {
-        return this.getCrFor(attributeGroup.name).modified;
-      }
+    const isAttributeReference = this.attributes.find(it => it.name === comparableReference) !== undefined;
+    if (isAttributeReference === true && isDefined(this.challengeRating)) {
+      return this.challengeRating;
+    } else {
+      return super.resolveReference(comparableReference, propertyPath);
     }
-    
-    return super.resolveReference(comparableReference, propertyPath);
   }
 }
