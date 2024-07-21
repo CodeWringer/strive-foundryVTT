@@ -1,10 +1,9 @@
-import { isDefined, validateOrThrow } from "../../../../../business/util/validation-utility.mjs";
+import { validateOrThrow } from "../../../../../business/util/validation-utility.mjs";
 import { TEMPLATES } from "../../../../templatePreloader.mjs";
 import ViewModel from "../../../../view-model/view-model.mjs";
 import ChallengeRatingViewModel from "./challenge-rating-viewmodel.mjs";
 import AttributeTableViewModel from "./actor-attribute-table-viewmodel.mjs";
 import TransientBaseCharacterActor from "../../../../../business/document/actor/transient-base-character-actor.mjs";
-import ChallengeRating from "../../../../../business/ruleset/attribute/challenge-rating.mjs";
 import { ACTOR_TYPES } from "../../../../../business/document/actor/actor-types.mjs";
 
 /**
