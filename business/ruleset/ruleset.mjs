@@ -22,7 +22,7 @@ export default class Ruleset {
   getAttributeLevelTier(level = 0) {
     if (level < 3) {
       return ATTRIBUTE_TIERS.underdeveloped;
-    } else if (level < 6) {
+    } else if (level < 5) {
       return ATTRIBUTE_TIERS.average;
     } else {
       return ATTRIBUTE_TIERS.exceptional;
@@ -340,8 +340,8 @@ export default class Ruleset {
     if (type === ACTOR_TYPES.NPC && (transientActor.isChallengeRatingEnabled)) {
       return transientActor.challengeRating.value;
     } else {
-    const characterAttribute = transientActor.attributes.find(it => it.name === attribute.name);
-    return characterAttribute.level;
+      const characterAttribute = transientActor.attributes.find(it => it.name === attribute.name);
+      return characterAttribute.level;
     }
   }
   
@@ -369,8 +369,8 @@ export default class Ruleset {
     if (type === ACTOR_TYPES.NPC && (transientActor.isChallengeRatingEnabled)) {
       return transientActor.challengeRating.modified;
     } else {
-    const characterAttribute = transientActor.attributes.find(it => it.name === attribute.name);
-    return characterAttribute.modifiedLevel;
+      const characterAttribute = transientActor.attributes.find(it => it.name === attribute.name);
+      return characterAttribute.modifiedLevel;
     }
   }
 
@@ -399,8 +399,8 @@ export default class Ruleset {
     if (type === ACTOR_TYPES.NPC && (transientActor.isChallengeRatingEnabled)) {
       return transientActor.challengeRating.modified;
     } else {
-    const transientSkill = skill.getTransientObject();
-    return transientSkill.modifiedLevel;
+      const transientSkill = skill.getTransientObject();
+      return transientSkill.modifiedLevel;
     }
   }
 }
