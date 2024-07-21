@@ -471,6 +471,7 @@ export default class TransientSkill extends TransientBaseItem {
     if (this.dependsOnActiveCr === true) {
       return new Sum([
         new SumComponent("challengeRating", "system.character.advancement.challengeRating.label", this.owningDocument.challengeRating.modified),
+        new SumComponent(this.name, "system.character.advancement.modifier.label", this.levelModifier),
       ]);
     } else {
       const actor = (this.owningDocument ?? {}).document;
