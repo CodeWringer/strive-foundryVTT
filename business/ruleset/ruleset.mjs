@@ -207,7 +207,7 @@ export default class Ruleset {
     }
     
     const base = 1;
-    const level = this.getEffectiveAttributeRawLevel(ATTRIBUTES.endurance, actor);
+    const level = this.getEffectiveAttributeRawLevel(ATTRIBUTES.toughness, actor);
 
     return base + parseInt(level);
   }
