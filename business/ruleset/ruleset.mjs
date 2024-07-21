@@ -7,28 +7,11 @@ import { ATTRIBUTES, Attribute } from "./attribute/attributes.mjs";
 import TransientSkill from "../document/item/skill/transient-skill.mjs";
 import { ACTOR_TYPES } from "../document/actor/actor-types.mjs";
 import { ITEM_TYPES } from "../document/item/item-types.mjs";
-import { isDefined } from "../util/validation-utility.mjs";
 
 /**
  * Provides all the ruleset-specifics. 
  */
 export default class Ruleset {
-  /**
-   * Returns the number of dice for a skill test. 
-   * 
-   * @param {Number} skillLevel A skill level. 
-   * @param {Number} activeBaseAttribute Level of the active base attribute. 
-   * 
-   * @returns {Object} { totalDiceCount: {Number}, skillDiceCount: {Number}, attributeDiceCount: {Number} }
-   */
-  getSkillTestNumberOfDice(skillLevel, activeBaseAttribute) {
-    return {
-      totalDiceCount: skillLevel + activeBaseAttribute,
-      skillDiceCount: skillLevel,
-      attributeDiceCount: activeBaseAttribute
-    };
-  }
-
   /**
    * Returns the tier of the given level of an attribute. 
    * 
@@ -354,12 +337,12 @@ export default class Ruleset {
 
     const transientActor = actor.getTransientObject();
     
-    if (type === ACTOR_TYPES.NPC && (isDefined(transientActor.challengeRating))) {
+    if (type === ACTOR_TYPES.NPC && (transientActor.isChallengeRatingEnabled)) {
       return transientActor.challengeRating.value;
-    }
-    
+    } else {
     const characterAttribute = transientActor.attributes.find(it => it.name === attribute.name);
     return characterAttribute.level;
+    }
   }
   
   /**
@@ -383,12 +366,12 @@ export default class Ruleset {
 
     const transientActor = actor.getTransientObject();
     
-    if (type === ACTOR_TYPES.NPC && (isDefined(transientActor.challengeRating))) {
+    if (type === ACTOR_TYPES.NPC && (transientActor.isChallengeRatingEnabled)) {
       return transientActor.challengeRating.modified;
-    }
-    
+    } else {
     const characterAttribute = transientActor.attributes.find(it => it.name === attribute.name);
     return characterAttribute.modifiedLevel;
+    }
   }
 
   /**
@@ -413,11 +396,11 @@ export default class Ruleset {
 
     const transientActor = actor.getTransientObject();
 
-    if (type === ACTOR_TYPES.NPC && (isDefined(transientActor.challengeRating))) {
+    if (type === ACTOR_TYPES.NPC && (transientActor.isChallengeRatingEnabled)) {
       return transientActor.challengeRating.modified;
-    }
-    
+    } else {
     const transientSkill = skill.getTransientObject();
     return transientSkill.modifiedLevel;
+    }
   }
 }

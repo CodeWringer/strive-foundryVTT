@@ -1,7 +1,7 @@
 /**
- * @param {Number} value
- * @param {Number} modifier
- * @param {Number} modified
+ * @param {Number} value The current "level" or raw challenge rating. 
+ * @param {Number} modifier Modifier to add or subtract to/from the raw challenge rating. 
+ * @param {Number} modified Sum of `value` and `modifier`. 
  * * read-only
  */
 export default class ChallengeRating {
@@ -13,6 +13,7 @@ export default class ChallengeRating {
   }
 
   /**
+   * Sum of `value` and `modifier`. 
    * @type {Number}
    * @readonly
    */

@@ -183,7 +183,6 @@
     },
     "skill": {
       "templates": ["base"],
-      "activeBaseAttribute": "agility",
       "baseAttributes": ["agility"],
       "level": 0,
       "levelModifier": 0,
