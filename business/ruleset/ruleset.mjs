@@ -40,11 +40,11 @@ export default class Ruleset {
     const tier = this.getAttributeLevelTier(level);
 
     if (tier.name === ATTRIBUTE_TIERS.underdeveloped.name) {
-      return 15 + (level * 4);
+      return level * 10;
     } else if (tier.name === ATTRIBUTE_TIERS.average.name) {
-      return (level + 3) * (level + 2);
+      return level * 7;
     } else if (tier.name === ATTRIBUTE_TIERS.exceptional.name) {
-      return (level + 4) * (level + 3);
+      return level * 8;
     } else {
       throw new Error(`Unrecognized attribute tier ${tier.name}`);
     }
@@ -85,11 +85,11 @@ export default class Ruleset {
       successes = 6;
       failures = 9;
     } else if (tier.name === SKILL_TIERS.apprentice.name) {
-      successes = (level + 1) * 2;
-      failures = (level + 1) * 3;
+      successes = level + 1;
+      failures = (level * 2) + 1;
     } else if (tier.name === SKILL_TIERS.master.name) {
-      successes = level * level;
-      failures = (level + 1) * (level + 1);
+      successes = level + 2;
+      failures = (level * 2) + 2;
     } else {
       throw new Error(`Unrecognized skill tier ${tier.name}`);
     }
