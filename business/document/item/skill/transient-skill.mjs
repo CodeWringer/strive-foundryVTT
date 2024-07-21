@@ -119,28 +119,12 @@ export default class TransientSkill extends TransientBaseItem {
    * @readonly
    */
   get modifiedLevel() {
-    let level = this.dependsOnActiveCr === true ? (this.crLevel ?? 0) : this.level;
+    const level = this.dependsOnActiveCr === true ? (this.owningDocument.challengeRating.modified) : this.level;
 
     if (level > 0) {
       return Math.max(level + this.levelModifier, 1);
     } else {
       return Math.max(level + this.levelModifier, 0)
-    }
-  }
-
-  /**
-   * Returns the challenge rating of the active owning actor, for use as 
-   * the skill's level. Or if no actor or challenge rating is defined, returns undefined; 
-   * 
-   * @type {Number | undefined}
-   * @readonly
-   */
-  get crLevel() {
-    const owningDocument = this.owningDocument;
-    if (this.dependsOnActiveCr === true) {
-      return owningDocument.challengeRating.modified;
-    } else {
-      return undefined;
     }
   }
 
