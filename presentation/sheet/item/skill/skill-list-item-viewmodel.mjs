@@ -196,7 +196,7 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
     this.vmNsLevel = new InputNumberSpinnerViewModel({
       parent: this,
       id: "vmNsLevel",
-      value: this.document.dependsOnActiveCr === true ? this.document.crLevel : this.document.level,
+      value: this.document.dependsOnActiveCr === true ? (this.document.crLevel ?? 0) : this.document.level,
       isEditable: this.document.dependsOnActiveCr === true ? false : this.isEditable,
       onChange: (_, newValue) => {
         this.document.level = newValue;
