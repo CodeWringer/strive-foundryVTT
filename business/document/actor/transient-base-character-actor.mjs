@@ -398,9 +398,9 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
   _getAttributes() {
     const result = [];
 
-    for (const attributeName in this.document.system.attributes) {
+    for (const attribute of ATTRIBUTES.asArray()) {
       try {
-        result.push(new CharacterAttribute(this.document, attributeName));
+        result.push(new CharacterAttribute(this.document, attribute.name));
       } catch (error) {
         game.strive.logger.logError(error);
       }
