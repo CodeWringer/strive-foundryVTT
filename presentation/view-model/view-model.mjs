@@ -166,14 +166,14 @@ export default class ViewModel {
     }
 
     // Remove from previous parent. 
-    if (this._parent !== undefined) {
+    if (ValidationUtil.isDefined(this._parent) && ValidationUtil.isDefined(this._parent.children)) {
       const index = this._parent.children.indexOf(this);
       this._parent.children.splice(index, 1);
     }
 
     // Add to new parent. 
     this._parent = value;
-    if (this._parent !== undefined) {
+    if (ValidationUtil.isDefined(this._parent) && ValidationUtil.isDefined(this._parent.children)) {
       this._parent.children.push(this);
     }
   }
@@ -307,7 +307,7 @@ export default class ViewModel {
    * @param {String | undefined} args.contextTemplate Name or path of a contextual template, 
    * which will be displayed in exception log entries, to aid debugging.
    * @param {Map<String, Object>} args.viewStateSource The data source for view state objects. 
-   * * Default `game.ambersteel.viewStates`. 
+   * * Default `game.strive.viewStates`. 
    */
   constructor(args = {}) {
     this._id = this.sanitizeId(args.id ?? createUUID());
@@ -315,7 +315,7 @@ export default class ViewModel {
     this.parent = args.parent;
 
     this.contextTemplate = args.contextTemplate;
-    this._viewStateSource = args.viewStateSource ?? game.ambersteel.viewStates;
+    this._viewStateSource = args.viewStateSource ?? game.strive.viewStates;
 
     // Even though this may seem redundant at first (see `update` method), 
     // this is more efficient than calling `update` here. 
@@ -416,14 +416,14 @@ export default class ViewModel {
     this._element = html.find(`#${this.id}`);
 
     if (this._element === undefined || this._element === null || this._element.length === 0) {
-      game.ambersteel.logger.logWarn(`Failed to get element with id '${this.id}'`);
+      game.strive.logger.logWarn(`Failed to get element with id '${this.id}'`);
     }
 
     for (const child of this.children) {
       try {
         await child.activateListeners(html);
       } catch (error) {
-        game.ambersteel.logger.logWarn(`${error.message}; ${error.stack}`);
+        game.strive.logger.logWarn(`${error.message}; ${error.stack}`);
       }
     }
   }
@@ -444,27 +444,11 @@ export default class ViewModel {
         try {
           child.dispose();
         } catch (error) {
-          game.ambersteel.logger.logWarn(error);
+          game.strive.logger.logWarn(error);
         }
       }
     }
     this.children = undefined;
-
-    // Set properties of this view model to null. 
-    for (const propertyName in this) {
-      // Call dispose on any property that supports it. 
-      if (ValidationUtil.isObject(this[propertyName]) 
-        && this[propertyName].dispose !== undefined
-        && propertyName !== "parent"
-        && propertyName !== "_parent"
-      ) {
-        this[propertyName].dispose();
-      }
-      // Set property to null, thus 'hopefully' freeing its referenced value up for garbage collection. 
-      this[propertyName] = undefined;
-    }
-    // Ensure methods cannot be called again. 
-    this.dispose = () => { /** Do nothing. */ };
   }
 
   /**
@@ -507,7 +491,7 @@ export default class ViewModel {
    * @virtual
    */
   getViewState() {
-    if (this.viewStateFields.length < 1) {
+    if ((this.viewStateFields ?? []).length < 1) {
       return undefined;
     }
 

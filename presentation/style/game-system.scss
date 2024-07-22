@@ -1,0 +1,67 @@
+// Add custom fonts by visiting and search https://fonts.google.com
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+@font-face {
+  font-family: 'Black-Chancery';
+  src: url('../font/BLKCHCRY.TTF') format('truetype');
+}
+
+/* Utilities */
+@import 'utils/typography';
+@import 'utils/colors';
+@import 'utils/variables';
+
+/* Global styles */
+@import 'global/window';
+@import 'global/grid';
+@import 'global/flex';
+@import 'global/roll';
+@import 'global/general';
+@import 'global/icons';
+@import 'global/borders';
+@import 'global/headers';
+@import 'global/image';
+@import 'global/list';
+@import 'global/sheet';
+
+/* Global and composable component styles */
+@import 'components/input';
+@import 'components/pill';
+/* Specific components styles */
+@import '../component/button/button';
+@import '../component/button-checkbox/button-checkbox';
+@import '../component/input-toggle/input-toggle';
+@import '../component/info-bubble/info-bubble';
+@import '../component/section-gm-notes/gm-notes';
+@import '../component/hint-card/hint-card';
+@import '../component/input-image/input-image';
+@import '../component/label/label';
+@import '../component/lazy-load/lazy-load';
+@import '../component/sortable-list/list-item-order-controls';
+@import '../component/input-choice/input-radio-button-group/input-radio-button';
+@import '../component/input-rich-text/input-rich-text';
+@import '../component/input-number-spinner/input-number-spinner';
+@import '../component/input-textfield/input-textfield';
+@import '../component/input-textarea/input-textarea';
+@import '../component/vertical-line/vertical-line';
+@import '../combat/combat-tracker';
+
+/* Sheets / Documents */
+@import '../sheet/actor/part/assets/actor-asset-slot';
+@import '../sheet/actor/actor-sheet';
+@import '../sheet/item/fate-card/fate-card';
+@import '../sheet/actor/part/personality/personality-traits/personality-traits';
+@import '../sheet/actor/part/abilities/actor-attribute-table';
+@import '../sheet/item/expertise/expertise';
+
+/* Dialog */
+@import '../dialog/dialog';
+
+/* Overrides */
+// Overrides of default or FoundryVTT introduced styles. 
+@import 'global/overrides/editor';
+@import 'global/overrides/textfield';
+@import 'global/overrides/context-menu';
+
+/* Animations */
+@import 'anims/spinner';

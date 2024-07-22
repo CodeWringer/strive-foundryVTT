@@ -48,7 +48,7 @@ export default class HealthStatesSettingsDialog extends FormApplication {
    * @type {String}
    * @readonly
    */
-  get title() { return game.i18n.localize("ambersteel.settings.healthStates.label"); }
+  get title() { return game.i18n.localize("system.settings.healthStates.label"); }
 
   /** @override */
   getData() {
@@ -72,7 +72,7 @@ export default class HealthStatesSettingsDialog extends FormApplication {
   async activateListeners(html) {
     await super.activateListeners(html);
 
-    await game.ambersteel.logger.logPerfAsync(this, "HealthStatesSettingsDialog.activateListeners (viewModel)", async () => {
+    await game.strive.logger.logPerfAsync(this, "HealthStatesSettingsDialog.activateListeners (viewModel)", async () => {
       await this.viewModel.activateListeners(html);
     });
   }

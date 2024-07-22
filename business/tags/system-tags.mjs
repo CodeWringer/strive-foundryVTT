@@ -27,71 +27,71 @@ import * as ConstantsUtils from "../util/constants-utility.mjs";
 export const ASSET_TAGS = {
   LONG_REACH: new Tag({
     id: "LONG_REACH",
-    localizableName: "ambersteel.character.asset.properties.longReach"
+    localizableName: "system.character.asset.properties.longReach"
   }),
   VERY_LONG_REACH: new Tag({
     id: "VERY_LONG_REACH",
-    localizableName: "ambersteel.character.asset.properties.veryLongReach"
+    localizableName: "system.character.asset.properties.veryLongReach"
   }),
   RANGE: new Tag({
     id: "RANGE",
-    localizableName: "ambersteel.character.asset.properties.range"
+    localizableName: "system.character.asset.properties.range"
   }),
   RANGE_ONLY: new Tag({
     id: "RANGE_ONLY",
-    localizableName: "ambersteel.character.asset.properties.rangeOnly"
+    localizableName: "system.character.asset.properties.rangeOnly"
   }),
   PREFER_RANGE: new Tag({
     id: "PREFER_RANGE",
-    localizableName: "ambersteel.character.asset.properties.preferRange"
+    localizableName: "system.character.asset.properties.preferRange"
   }),
   MELEE: new Tag({
     id: "MELEE",
-    localizableName: "ambersteel.character.asset.properties.melee"
+    localizableName: "system.character.asset.properties.melee"
   }),
   MELEE_ONLY: new Tag({
     id: "MELEE_ONLY",
-    localizableName: "ambersteel.character.asset.properties.meleeOnly"
+    localizableName: "system.character.asset.properties.meleeOnly"
   }),
   PREFER_MELEE: new Tag({
     id: "PREFER_MELEE",
-    localizableName: "ambersteel.character.asset.properties.preferMelee"
+    localizableName: "system.character.asset.properties.preferMelee"
   }),
   AMBERSTEEL_LINED: new Tag({
     id: "AMBERSTEEL_LINED",
-    localizableName: "ambersteel.character.asset.properties.ambersteelLined"
+    localizableName: "system.character.asset.properties.ambersteelLined"
   }),
   AMBERSTEEL_PLATED: new Tag({
     id: "AMBERSTEEL_PLATED",
-    localizableName: "ambersteel.character.asset.properties.ambersteelPlated"
+    localizableName: "system.character.asset.properties.ambersteelPlated"
   }),
   AMBERSTEEL_FORGED: new Tag({
     id: "AMBERSTEEL_FORGED",
-    localizableName: "ambersteel.character.asset.properties.ambersteelForged"
+    localizableName: "system.character.asset.properties.ambersteelForged"
   }),
   EXHAUSTING_TO_WIELD: new Tag({
     id: "EXHAUSTING_TO_WIELD",
-    localizableName: "ambersteel.character.asset.properties.exhaustingToWield"
+    localizableName: "system.character.asset.properties.exhaustingToWield"
   }),
   HOLDABLE: new Tag({
     id: "HOLDABLE",
-    localizableName: "ambersteel.character.asset.properties.holdable"
+    localizableName: "system.character.asset.properties.holdable"
   }),
   ARMOR: new Tag({
     id: "ARMOR",
-    localizableName: "ambersteel.character.asset.properties.armor"
+    localizableName: "system.character.asset.properties.armor"
   }),
   CLOTHING: new Tag({
     id: "CLOTHING",
-    localizableName: "ambersteel.character.asset.properties.clothing"
+    localizableName: "system.character.asset.properties.clothing"
   }),
   COUNTER_ATTACK: new Tag({
     id: "COUNTER_ATTACK",
-    localizableName: "ambersteel.character.asset.properties.counterAttack"
+    localizableName: "system.character.asset.properties.counterAttack"
   }),
   WEAPON: new Tag({
     id: "WEAPON",
-    localizableName: "ambersteel.character.asset.properties.weapon"
+    localizableName: "system.character.asset.properties.weapon"
   }),
 }
 ConstantsUtils.enrichConstant(ASSET_TAGS);
@@ -107,11 +107,11 @@ ConstantsUtils.enrichConstant(ASSET_TAGS);
 export const SKILL_TAGS = {
   MAGIC_SCHOOL: new Tag({
     id: "MAGIC_SCHOOL",
-    localizableName: "ambersteel.character.skill.properties.magicSchool"
+    localizableName: "system.character.skill.properties.magicSchool"
   }),
   INNATE: new Tag({
     id: "INNATE",
-    localizableName: "ambersteel.character.skill.properties.innate"
+    localizableName: "system.character.skill.properties.innate"
   }),
 }
 ConstantsUtils.enrichConstant(SKILL_TAGS);

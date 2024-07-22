@@ -1,5 +1,5 @@
 import { CharacterHealthState } from "../../../../../business/ruleset/health/character-health-state.mjs";
-import { HealthState, HEALTH_STATES } from "../../../../../business/ruleset/health/health-states.mjs";
+import { HEALTH_STATES } from "../../../../../business/ruleset/health/health-states.mjs";
 import LoadHealthStatesSettingUseCase from "../../../../../business/use-case/load-health-states-setting-use-case.mjs";
 import { validateOrThrow } from "../../../../../business/util/validation-utility.mjs";
 import { TEMPLATES } from "../../../../templatePreloader.mjs"

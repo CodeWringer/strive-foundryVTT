@@ -2,14 +2,14 @@
 viewModel: {DamageDefinitionListItemViewModel}
 cssClass: {String | undefined}
 --}}
-<div class="flex flex-row flex-grow{{#if cssClass}} {{cssClass}}{{/if}}">
+<div id="{{viewModel.id}}" class="flex flex-row flex-grow{{#if cssClass}} {{cssClass}}{{/if}}">
   <div class="grid grid-2col grid-gap-md">
     {{!-- Damage formula --}}
-    {{#> labeledControl viewModel=viewModel.vmTfDamage localizedIconToolTip=(localize "ambersteel.damageDefinition.formula") iconClass="ico-damage-roll-solid" cssClass="" }}
+    {{#> labeledControl viewModel=viewModel.vmTfDamage localizedIconToolTip=(localize "system.damageDefinition.formula") iconClass="ico-damage-roll-solid" cssClass="" }}
       {{> inputTextField }}
     {{/labeledControl}}
     {{!-- Damage type --}}
-    {{#> labeledControl viewModel=viewModel.vmDdDamageType localizedIconToolTip=(localize "ambersteel.damageType.label") iconClass=viewModel.damageTypeIconClass cssClass="" }}
+    {{#> labeledControl viewModel=viewModel.vmDdDamageType localizedIconToolTip=(localize "system.damageType.label") iconClass=viewModel.damageTypeIconClass cssClass="" }}
       {{> inputDropDown }}
     {{/labeledControl}}
   </div>

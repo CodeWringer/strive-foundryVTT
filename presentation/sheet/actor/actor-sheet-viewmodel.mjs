@@ -19,6 +19,7 @@ import ButtonViewModel from "../../component/button/button-viewmodel.mjs"
 import DynamicInputDialog from "../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs"
 import DynamicInputDefinition from "../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs"
 import { DYNAMIC_INPUT_TYPES } from "../../dialog/dynamic-input-dialog/dynamic-input-types.mjs"
+import { ACTOR_TYPES } from "../../../business/document/actor/actor-types.mjs"
 
 /**
  * @extends BaseSheetViewModel
@@ -44,21 +45,21 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
    * 
    * @type {Boolean}
    */
-  get isPC() { return this.document.type === "pc"; }
+  get isPC() { return this.document.type === ACTOR_TYPES.PC; }
   
   /**
    * Returns true, if the actor is a non-player character. 
    * 
    * @type {Boolean}
    */
-  get isNPC() { return this.document.type === "npc"; }
+  get isNPC() { return this.document.type === ACTOR_TYPES.NPC; }
 
   /**
    * Returns true, if the actor is a plain actor. 
    * 
    * @type {Boolean}
    */
-  get isPlain() { return this.document.type === "plain"; }
+  get isPlain() { return this.document.type === ACTOR_TYPES.PLAIN; }
 
   /**
    * Returns true, if the navigation is to be shown. 
@@ -120,7 +121,7 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
       onChange: (_, newValue) => {
         thiz.document.name = newValue;
       },
-      placeholder: game.i18n.localize("ambersteel.general.name.label"),
+      placeholder: game.i18n.localize("system.general.name.label"),
     });
     this.vmImg = new InputImageViewModel({
       parent: thiz,
@@ -135,40 +136,77 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
         id: "vmBtnConfigure",
         parent: this,
         iconHtml: '<i class="fas fa-cog"></i>',
-        localizedTooltip: game.i18n.localize("ambersteel.character.edit"),
+        localizedTooltip: game.i18n.localize("system.character.edit"),
         onClick: async () => {
           const inputMaxActionPoints = "inputMaxActionPoints";
-          const dialog = await new DynamicInputDialog({
-            localizedTitle: game.i18n.localize("ambersteel.character.edit"),
-            inputDefinitions: [
+          const inputRefillActionPoints = "inputRefillActionPoints";
+          const inputAllowRefillActionPoints = "inputAllowRefillActionPoints";
+          const inputEnablePersonality = "inputEnablePersonality";
+          const inputEnableProgression = "inputEnableProgression";
+
+          const inputDefinitions = [
+            new DynamicInputDefinition({
+              type: DYNAMIC_INPUT_TYPES.NUMBER_SPINNER,
+              name: inputMaxActionPoints,
+              localizedLabel: game.i18n.localize("system.actionPoint.max"),
+              specificArgs: {
+                min: 0,
+              },
+              defaultValue: this.document.maxActionPoints,
+            }),
+            new DynamicInputDefinition({
+              type: DYNAMIC_INPUT_TYPES.NUMBER_SPINNER,
+              name: inputRefillActionPoints,
+              localizedLabel: game.i18n.localize("system.actionPoint.refill"),
+              specificArgs: {
+                min: 0,
+              },
+              defaultValue: this.document.actionPointRefill,
+            }),
+            new DynamicInputDefinition({
+              type: DYNAMIC_INPUT_TYPES.TOGGLE,
+              name: inputAllowRefillActionPoints,
+              localizedLabel: game.i18n.localize("system.actionPoint.allowRefill"),
+              defaultValue: this.document.allowAutomaticActionPointRefill,
+            }),
+          ];
+
+          if (this.isNPC) {
+            inputDefinitions.push(
               new DynamicInputDefinition({
-                type: DYNAMIC_INPUT_TYPES.NUMBER_SPINNER,
-                name: inputMaxActionPoints,
-                localizedLabel: game.i18n.localize("ambersteel.actionPoint.max"),
-                specificArgs: {
-                  min: 0,
-                },
-                defaultValue: this.document.maxActionPoints,
-              }),
-            ],
+                type: DYNAMIC_INPUT_TYPES.TOGGLE,
+                name: inputEnablePersonality,
+                localizedLabel: game.i18n.localize("system.character.sheet.tab.personality"),
+                defaultValue: this.document.personalityVisible,
+              })
+            );
+            inputDefinitions.push(
+              new DynamicInputDefinition({
+                type: DYNAMIC_INPUT_TYPES.TOGGLE,
+                name: inputEnableProgression,
+                localizedLabel: game.i18n.localize("system.character.advancement.label"),
+                defaultValue: this.document.progressionVisible,
+              })
+            );
+          }
+          const dialog = await new DynamicInputDialog({
+            localizedTitle: game.i18n.localize("system.character.edit"),
+            inputDefinitions: inputDefinitions,
           }).renderAndAwait(true);
   
           if (dialog.confirmed !== true) return;
   
-          const maxActionPoints = parseInt(dialog[inputMaxActionPoints]);
-          this.document.maxActionPoints = maxActionPoints;
+          this.document.maxActionPoints = parseInt(dialog[inputMaxActionPoints]);
+          this.document.actionPointRefill = parseInt(dialog[inputRefillActionPoints]);
+          this.document.allowAutomaticActionPointRefill = dialog[inputAllowRefillActionPoints] == true;
+
+          if (this.isNPC) {
+            this.document.personalityVisible = dialog[inputEnablePersonality] == true;
+            this.document.progressionVisible = dialog[inputEnableProgression] == true;
+          }
         },
       });
     }
-    this.vmBtnContextMenu = new ButtonContextMenuViewModel({
-      id: "vmBtnContextMenu",
-      parent: this,
-      menuItems: []
-      // Toggle personality
-      .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.character.sheet.tab.personality", this.document, "personalityVisible", true, false))
-      // Toggle progression
-      .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.character.advancement.label", this.document, "progressionVisible", true, false))
-    });
     this.vmBtnSendToChat = new ButtonSendToChatViewModel({
       parent: this,
       id: "vmBtnSendToChat",

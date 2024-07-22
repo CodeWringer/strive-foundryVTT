@@ -25,15 +25,15 @@ export class ArmorType {
 export const ARMOR_TYPES = {
   light: new ArmorType({
     name: "light",
-    localizableName: "ambersteel.character.asset.type.armor.light"
+    localizableName: "system.character.asset.type.armor.light"
   }),
   medium: new ArmorType({
     name: "medium",
-    localizableName: "ambersteel.character.asset.type.armor.medium"
+    localizableName: "system.character.asset.type.armor.medium"
   }),
   heavy: new ArmorType({
     name: "heavy",
-    localizableName: "ambersteel.character.asset.type.armor.heavy"
+    localizableName: "system.character.asset.type.armor.heavy"
   }),
 };
 ConstantsUtils.enrichConstant(ARMOR_TYPES);

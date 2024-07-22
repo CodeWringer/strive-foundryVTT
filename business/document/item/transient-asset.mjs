@@ -1,10 +1,8 @@
 import PreparedChatData from "../../../presentation/chat/prepared-chat-data.mjs";
 import { SOUNDS_CONSTANTS } from "../../../presentation/audio/sounds.mjs";
-import { ITEM_SUBTYPE } from "./item-subtype.mjs";
 import TransientBaseItem from "./transient-base-item.mjs";
 import AssetChatMessageViewModel from "../../../presentation/sheet/item/asset/asset-chat-message-viewmodel.mjs";
 import { TEMPLATES } from "../../../presentation/templatePreloader.mjs";
-import { createUUID } from "../../util/uuid-utility.mjs";
 import CharacterAssetSlot from "../../ruleset/asset/character-asset-slot.mjs";
 import { arrayTakeUnless } from "../../util/array-utility.mjs";
 import { ASSET_TAGS } from "../../tags/system-tags.mjs";
@@ -170,7 +168,7 @@ export default class TransientAsset extends TransientBaseItem {
       actor: (this.owningDocument ?? {}).document, 
       sound: SOUNDS_CONSTANTS.NOTIFY,
       viewModel: vm,
-      flavor: game.i18n.localize("ambersteel.character.asset.singular"),
+      flavor: game.i18n.localize("system.character.asset.singular"),
     });
   }
 
@@ -270,6 +268,26 @@ export default class TransientAsset extends TransientBaseItem {
   }
 
   /**
+   * Compares the bulk of this instance with a given instance and returns a numeric comparison result. 
+   * 
+   * @param {TransientAsset} other Another instance to compare with. 
+   * 
+   * @returns {Number} `-1` | `0` | `1`
+   * 
+   * `-1` means that this entity is less than / smaller than `other`, while `0` means equality and `1` means it 
+   * is more than / greater than `other`. 
+   */
+  compareBulk(other) {
+    if (this.bulk < other.bulk) {
+      return -1;
+    } else if (this.bulk > other.bulk) {
+      return 1;
+    } else {
+      return 0;
+    }
+  }
+
+  /**
    * Removes the asset from its currently assigned slot, if possible. 
    * 
    * @private
@@ -297,5 +315,3 @@ export default class TransientAsset extends TransientBaseItem {
     }
   }
 }
-
-ITEM_SUBTYPE.set("item", (document) => { return new TransientAsset(document) });

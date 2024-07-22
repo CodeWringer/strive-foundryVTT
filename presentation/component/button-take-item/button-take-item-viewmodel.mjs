@@ -4,6 +4,8 @@ import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import SingleChoiceDialog from "../../dialog/single-choice-dialog/single-choice-dialog.mjs";
 import DocumentFetcher from "../../../business/document/document-fetcher/document-fetcher.mjs";
 import { isString } from "../../../business/util/validation-utility.mjs";
+import TransientAsset from "../../../business/document/item/transient-asset.mjs";
+import { ITEM_TYPES } from "../../../business/document/item/item-types.mjs";
 
 /**
  * @property {String} chatMessage
@@ -72,7 +74,7 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
 
     this.target = args.target;
     this.contextType = args.contextType;
-    this.localizedTooltip = args.localizedTooltip ?? game.i18n.localize("ambersteel.character.asset.take");
+    this.localizedTooltip = args.localizedTooltip ?? game.i18n.localize("system.character.asset.take");
   }
 
   /**
@@ -93,7 +95,7 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
       assetDocument = await new DocumentFetcher().find({
         id: this.target,
         documentType: "Item",
-        contentType: "item"
+        contentType: ITEM_TYPES.ASSET
       });
     }
 
@@ -159,8 +161,8 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
     }
 
     const dialog = await new SingleChoiceDialog({
-      localizedTitle: game.i18n.localize("ambersteel.general.actor.query"),
-      localizedLabel: game.i18n.localize("ambersteel.general.actor.label"),
+      localizedTitle: game.i18n.localize("system.general.actor.query"),
+      localizedLabel: game.i18n.localize("system.general.actor.label"),
       choices: choices,
     }).renderAndAwait(true);
 

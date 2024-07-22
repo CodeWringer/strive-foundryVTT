@@ -1,10 +1,10 @@
-import { ITEM_SUBTYPE } from './item-subtype.mjs';
+import { ITEM_TYPES } from "./item-types.mjs";
+import TransientSkill from "./skill/transient-skill.mjs";
 import TransientAsset from "./transient-asset.mjs";
 import TransientFateCard from "./transient-fate-card.mjs";
 import TransientIllness from "./transient-illness.mjs";
 import TransientInjury from "./transient-injury.mjs";
 import TransientMutation from "./transient-mutation.mjs";
-import TransientSkill from "./skill/transient-skill.mjs";
 import TransientScar from "./transient-scar.mjs";
 
 /**
@@ -18,7 +18,27 @@ import TransientScar from "./transient-scar.mjs";
  * 
  * @see TransientBaseItem
  */
-export class AmbersteelItem extends Item {
+export class GameSystemItem extends Item {
+  /**
+   * Returns a map of `Item` sub-types and their factory functions. 
+   * 
+   * @type {Map<String, Function<TransientBaseActor>>}
+   * @static
+   * @readonly
+   * @private
+   */
+  static get SUB_TYPES() {
+    return new Map([
+      [ITEM_TYPES.ASSET, (document) => { return new TransientAsset(document) }],
+      [ITEM_TYPES.FATE_CARD, (document) => { return new TransientFateCard(document) }],
+      [ITEM_TYPES.ILLNESS, (document) => { return new TransientIllness(document) }],
+      [ITEM_TYPES.INJURY, (document) => { return new TransientInjury(document) }],
+      [ITEM_TYPES.MUTATION, (document) => { return new TransientMutation(document) }],
+      [ITEM_TYPES.SCAR, (document) => { return new TransientScar(document) }],
+      [ITEM_TYPES.SKILL, (document) => { return new TransientSkill(document) }],
+    ]);
+  }
+
   /**
    * Returns the default icon image path for this type of object. 
    * @type {String}
@@ -49,13 +69,13 @@ export class AmbersteelItem extends Item {
    */
   getTransientObject() {
     if (this._transientObject === undefined) {
-      const factoryFunction = ITEM_SUBTYPE.get(this.type);
+      const factoryFunction = GameSystemItem.SUB_TYPES.get(this.type);
       
       if (factoryFunction === undefined) {
         throw new Error(`InvalidTypeException: Item subtype ${this.type} is unrecognized!`);
       }
 
-      game.ambersteel.logger.logPerf(this, "item.getTransientObject (non-cached)", () => {
+      game.strive.logger.logPerf(this, "item.getTransientObject (non-cached)", () => {
         this._transientObject = factoryFunction(this);
       });
     }

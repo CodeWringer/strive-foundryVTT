@@ -1,6 +1,9 @@
 import TransientBaseCharacterActor from "../../../../../business/document/actor/transient-base-character-actor.mjs"
+import { ITEM_TYPES } from "../../../../../business/document/item/item-types.mjs"
+import TransientAsset from "../../../../../business/document/item/transient-asset.mjs"
 import { validateOrThrow } from "../../../../../business/util/validation-utility.mjs"
 import ButtonAddViewModel from "../../../../component/button-add/button-add-viewmodel.mjs"
+import SortControlsViewModel, { SortingOption } from "../../../../component/sort-controls/sort-controls-viewmodel.mjs"
 import DocumentListItemOrderDataSource from "../../../../component/sortable-list/document-list-item-order-datasource.mjs"
 import SortableListViewModel from "../../../../component/sortable-list/sortable-list-viewmodel.mjs"
 import { TEMPLATES } from "../../../../templatePreloader.mjs"
@@ -61,6 +64,12 @@ export default class ActorAssetsViewModel extends ViewModel {
   }
 
   /**
+   * @type {String}
+   * @readonly
+   */
+  get sortControlsTemplate() { return SortControlsViewModel.TEMPLATE; }
+
+  /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
    * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 
    * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 
@@ -100,7 +109,7 @@ export default class ActorAssetsViewModel extends ViewModel {
       isEditable: this.isEditable,
       indexDataSource: new DocumentListItemOrderDataSource({
         document: thiz.document,
-        listName: "property",
+        listName: "luggage",
       }),
       listItemViewModels: this.luggageViewModels,
       listItemTemplate: AssetListItemViewModel.TEMPLATE,
@@ -109,10 +118,10 @@ export default class ActorAssetsViewModel extends ViewModel {
         parent: this,
         target: thiz.document,
         isEditable: thiz.isEditable,
-        creationType: "item",
+        creationType: ITEM_TYPES.ASSET,
         withDialog: true,
-        localizedLabel: game.i18n.localize("ambersteel.character.asset.add.label"),
-        localizedType: game.i18n.localize("ambersteel.character.asset.singular"),
+        localizedLabel: game.i18n.localize("system.character.asset.add.label"),
+        localizedType: game.i18n.localize("system.character.asset.singular"),
       }),
     });
 
@@ -133,11 +142,31 @@ export default class ActorAssetsViewModel extends ViewModel {
         parent: this,
         target: thiz.document,
         isEditable: thiz.isEditable,
-        creationType: "item",
+        creationType: ITEM_TYPES.ASSET,
         withDialog: true,
-        localizedLabel: game.i18n.localize("ambersteel.character.asset.add.label"),
-        localizedType: game.i18n.localize("ambersteel.character.asset.singular"),
+        localizedLabel: game.i18n.localize("system.character.asset.add.label"),
+        localizedType: game.i18n.localize("system.character.asset.singular"),
       }),
+    });
+
+    this.vmSortLuggage = new SortControlsViewModel({
+      id: "vmSortLuggage",
+      parent: this,
+      options: this._getAssetSortingOptions(),
+      compact: true,
+      onSort: (_, provideSortable) => {
+        provideSortable(this.vmLuggageList);
+      },
+    });
+
+    this.vmSortProperty = new SortControlsViewModel({
+      id: "vmSortProperty",
+      parent: this,
+      options: this._getAssetSortingOptions(),
+      compact: true,
+      onSort: (_, provideSortable) => {
+        provideSortable(this.vmPropertyList);
+      },
     });
   }
   
@@ -204,5 +233,29 @@ export default class ActorAssetsViewModel extends ViewModel {
     }
 
     return result;
+  }
+
+  /**
+   * @returns {Array<SortingOption>}
+   * 
+   * @private
+   */
+  _getAssetSortingOptions() {
+    return [
+      new SortingOption({
+        iconHtml: '<i class="ico ico-tags-solid dark"></i>',
+        localizedToolTip: game.i18n.localize("system.general.name.label"),
+        sortingFunc: (a, b) => {
+          return a.document.name.localeCompare(b.document.name);
+        },
+      }),
+      new SortingOption({
+        iconHtml: '<i class="ico ico-bulk-solid dark"></i>',
+        localizedToolTip: game.i18n.localize("system.character.asset.bulk"),
+        sortingFunc: (a, b) => {
+          return a.document.compareBulk(b.document);
+        },
+      }),
+    ];
   }
 }

@@ -8,6 +8,8 @@ import { ROLL_DICE_MODIFIER_TYPES, RollDiceModifierType } from "./roll-dice-modi
 import * as ChatUtil from "../../presentation/chat/chat-utility.mjs";
 import * as ConstantsUtils from "../util/constants-utility.mjs";
 import RollFormulaResolver, { EvaluatedRollFormula } from "./roll-formula-resolver.mjs";
+import { GameSystemActor } from "../document/actor/actor.mjs";
+import { ACTOR_TYPES } from "../document/actor/actor-types.mjs";
 
 /**
  * Represents a dice pool. 
@@ -133,7 +135,7 @@ export default class DicePool {
  * @type {String}
  * @constant
  */
-const LOCALIZABLE_OBSTACLE_ABBREVIATION = "ambersteel.roll.obstacle.abbreviation";
+const LOCALIZABLE_OBSTACLE_ABBREVIATION = "system.roll.obstacle.abbreviation";
 
 /**
  * CSS class of a positive die result. 
@@ -251,7 +253,7 @@ export class DicePoolRollResult {
    * @param {VisibilityMode | undefined} args.visibilityMode Determines the visibility of the chat message. 
    * * Default `VISIBILITY_MODES.public`
    * @param {String | undefined} args.flavor The flavor text / subtitle of the message. 
-   * @param {String | undefined} args.actor The actor to associate with the message. 
+   * @param {GameSystemActor | undefined} args.actor The actor to associate with the message. 
    * @param {String | undefined} args.primaryTitle A primary title. 
    * @param {String | undefined} args.primaryImage An image url for the primary title. 
    * @param {String | undefined} args.secondaryTitle A secondary title. 
@@ -280,23 +282,30 @@ export class DicePoolRollResult {
       combinedResultsForRendering.splice(this.obstacle, 0, obstacleForRendering);
     }
 
-    const diceComposition = this.getJoinedDiceCompositionString(this.dice, this.bonus);
-    const totalNumberOfDice = this.getTotalNumberOfDiceString();
-
     const rgxIsPlainNumber = new RegExp("^\\d+$");
     const isObstacleRolled = isDefined(this.evaluatedObstacle.formula.match(rgxIsPlainNumber)) === false;
     const evaluatedObstacleForDisplay = await this.evaluatedObstacle.renderForDisplay();
+
+    let showReminder = false;
+    if (isDefined(args.actor) === true) {
+      const transientActor = args.actor.getTransientObject();
+      if (transientActor.type === ACTOR_TYPES.PC) {
+        showReminder = true;
+      } else if (transientActor.type === ACTOR_TYPES.NPC) {
+        showReminder = transientActor.progressionVisible;
+      }
+    }
 
     // Render the results. 
     const renderedContent = await renderTemplate(TEMPLATES.DICE_ROLL_CHAT_MESSAGE, {
       resultsForDisplay: combinedResultsForRendering,
       outcomeType: this.outcomeType.name.toUpperCase(),
       degree: this.degree,
-      numberOfDice: totalNumberOfDice,
+      numberOfDice: this.getTotalNumberOfDiceString(),
       positives: this.positives.length,
       negatives: this.negatives.length,
       missingDiceCount: missingDiceCount,
-      diceComposition: diceComposition,
+      diceComposition: this.getJoinedDiceCompositionString(this.dice, this.bonus),
       primaryTitle: args.primaryTitle,
       primaryImage: args.primaryImage,
       secondaryTitle: args.secondaryTitle,
@@ -306,6 +315,7 @@ export class DicePoolRollResult {
       isObstacleRolled: isObstacleRolled,
       evaluatedObstacle: this.evaluatedObstacle,
       evaluatedObstacleForDisplay: evaluatedObstacleForDisplay,
+      showReminder: showReminder,
     });
 
     return ChatUtil.sendToChat({
@@ -338,7 +348,7 @@ export class DicePoolRollResult {
 
     // Include the bonus dice, but only if there are any. 
     if (this.modifiedBonus !== undefined && this.modifiedBonus !== 0) {
-      joinedRollData = `${joinedRollData}, ${this.modifiedBonus} ${game.i18n.localize("ambersteel.roll.bonusDice")}`;
+      joinedRollData = `${joinedRollData}, ${this.modifiedBonus} ${game.i18n.localize("system.roll.bonusDice")}`;
     }
 
     return `(${joinedRollData})`;
@@ -353,7 +363,7 @@ export class DicePoolRollResult {
     if (this.modifier.name === ROLL_DICE_MODIFIER_TYPES.NONE.name) {
       return `${this.unmodifiedTotal}`;
     } else {
-      return `${this.modifiedTotal}/${this.unmodifiedTotal}`;
+      return `${this.modifiedTotal} / ${this.unmodifiedTotal}`;
     }
   }
 }
@@ -387,19 +397,19 @@ export class DicePoolRollResultType {
 export const DICE_POOL_RESULT_TYPES = {
   NONE: new DicePoolRollResultType({
     name: "none",
-    localizableName: "ambersteel.general.none.label",
+    localizableName: "system.general.none.label",
   }),
   SUCCESS: new DicePoolRollResultType({
     name: "success",
-    localizableName: "ambersteel.roll.success.label",
+    localizableName: "system.roll.success.label",
   }),
   FAILURE: new DicePoolRollResultType({
     name: "failure",
-    localizableName: "ambersteel.roll.failure.label",
+    localizableName: "system.roll.failure.label",
   }),
   PARTIAL: new DicePoolRollResultType({
     name: "partial",
-    localizableName: "ambersteel.roll.partial.label",
+    localizableName: "system.roll.partial.label",
   }),
 }
 ConstantsUtils.enrichConstant(DICE_POOL_RESULT_TYPES);

@@ -3,7 +3,6 @@ import CharacterAssetSlot from "../../../../business/ruleset/asset/character-ass
 import { ASSET_TAGS } from "../../../../business/tags/system-tags.mjs"
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs"
 import ButtonViewModel from "../../../component/button/button-viewmodel.mjs"
-import ChoiceAdapter from "../../../component/input-choice/choice-adapter.mjs"
 import ChoiceOption from "../../../component/input-choice/choice-option.mjs"
 import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs"
 import InputTagsViewModel from "../../../component/input-tags/input-tags-viewmodel.mjs"
@@ -83,7 +82,7 @@ export default class AssetListItemViewModel extends BaseListItemViewModel {
       parent: this,
       id: "vmLocation",
       value: this.document.location,
-      placeholder: game.i18n.localize("ambersteel.character.asset.location.placeholder"),
+      placeholder: game.i18n.localize("system.character.asset.location.placeholder"),
       onChange: (_, newValue) => {
         this.document.location = newValue;
       },
@@ -104,7 +103,7 @@ export default class AssetListItemViewModel extends BaseListItemViewModel {
             this.document.tags = newValue;
           },
         }),
-        localizedIconToolTip: game.i18n.localize("ambersteel.general.tags.label"),
+        localizedIconToolTip: game.i18n.localize("system.general.tags.label"),
         iconClass: "ico-tags-solid",
         cssClass: "grid-span-2",
       }),
@@ -115,18 +114,18 @@ export default class AssetListItemViewModel extends BaseListItemViewModel {
   getPrimaryHeaderButtons() {
     const thiz = this;
 
-    let takeLabel = "ambersteel.character.asset.take";
+    let takeLabel = "system.character.asset.take";
     if (this.document.isLuggage) {
-      takeLabel = "ambersteel.character.asset.takeToEquipped";
+      takeLabel = "system.character.asset.takeToEquipped";
     } else if (this.document.isProperty) {
-      takeLabel = "ambersteel.character.asset.takeToLuggage";
+      takeLabel = "system.character.asset.takeToLuggage";
     }
 
-    let dropLabel = "ambersteel.character.asset.drop";
+    let dropLabel = "system.character.asset.drop";
     if (this.document.isEquipped) {
-      dropLabel = "ambersteel.character.asset.dropToLuggage";
+      dropLabel = "system.character.asset.dropToLuggage";
     } else if (this.document.isLuggage) {
-      dropLabel = "ambersteel.character.asset.dropToProperty";
+      dropLabel = "system.character.asset.dropToProperty";
     }
 
     return super.getPrimaryHeaderButtons().concat([
@@ -203,22 +202,12 @@ export default class AssetListItemViewModel extends BaseListItemViewModel {
       }
     }
 
-    const availableSlotChoices = [];
-    const adapter = new ChoiceAdapter({
-      // obj: CharacterAssetSlot
-      toChoiceOption: (obj) => {
-        return new ChoiceOption({
-          value: obj.id,
-          localizedValue: obj.name,
-        });
-      },
-      fromChoiceOption: (choice) => {
-        return availableSlots.find(it => it.id === choice.value);
-      },
-    })
-    for (const slot of availableSlots) {
-      availableSlotChoices.push(adapter.toChoiceOption(slot));
-    }
+    const availableSlotChoices = availableSlots.map(slot => {
+      return new ChoiceOption({
+        value: slot.id,
+        localizedValue: slot.name,
+      });
+    });
 
     const inputSlots = "inputSlots";
 
@@ -228,20 +217,19 @@ export default class AssetListItemViewModel extends BaseListItemViewModel {
         new DynamicInputDefinition({
           type: DYNAMIC_INPUT_TYPES.DROP_DOWN,
           name: inputSlots,
-          localizedLabel: game.i18n.localize("ambersteel.character.asset.slot.label"),
+          localizedLabel: game.i18n.localize("system.character.asset.slot.label"),
+          required: true,
+          defaultValue: availableSlotChoices.length > 0 ? availableSlotChoices[0] : undefined,
           specificArgs: {
             options: availableSlotChoices,
-            adapter: adapter,
           },
-          required: true,
-          defaultValue: availableSlots[0].id,
         }),
       ],
     }).renderAndAwait(true);
 
     if (dialog.confirmed !== true) return undefined;
 
-    const selectedId = dialog[inputSlots];
+    const selectedId = dialog[inputSlots].value;
     const assetSlot = availableSlots.find(it => it.id === selectedId);
 
     return assetSlot;

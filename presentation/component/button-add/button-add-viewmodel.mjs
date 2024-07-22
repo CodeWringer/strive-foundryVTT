@@ -4,27 +4,9 @@ import DocumentFetcher from "../../../business/document/document-fetcher/documen
 import DynamicInputDialog from '../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs';
 import DynamicInputDefinition from '../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs';
 import { DYNAMIC_INPUT_TYPES } from '../../dialog/dynamic-input-dialog/dynamic-input-types.mjs';
-import ChoiceAdapter from '../input-choice/choice-adapter.mjs';
 import ChoiceOption from '../input-choice/choice-option.mjs';
-
-/**
- * @constant
- * 
- * @property {String} SKILL
- * @property {String} EXPERTISE
- * @property {String} FATE_CARD
- * @property {String} ASSET
- * @property {String} INJURY
- * @property {String} ILLNESS
- */
-export const ADD_BUTTON_CREATION_TYPES = {
-  SKILL: "skill",
-  EXPERTISE: "expertise",
-  FATE_CARD: "fate-card",
-  ASSET: "item",
-  INJURY: "injury",
-  ILLNESS: "illness",
-};
+import Expertise from '../../../business/document/item/skill/expertise.mjs';
+import { ITEM_TYPES } from '../../../business/document/item/item-types.mjs';
 
 /**
  * A button that allows adding a newly created embedded document to a specific actor. 
@@ -32,7 +14,8 @@ export const ADD_BUTTON_CREATION_TYPES = {
  * @extends ButtonViewModel
  * 
  * @property {Boolean} withDialog If true, will prompt the user to make a selection with a dialog. 
- * @property {String} creationType One of the values of `ADD_BUTTON_CREATION_TYPES`. 
+ * @property {String} creationType Must be the internal type name of the type of document to create. 
+ * E. g. `"skill"` or `"expertise"` or `"npc"` and so on.
  * @property {Object} creationData Data to pass to the item creation function. 
  * @property {String | undefined} localizedType Localized name of the type of thing to add. 
  * @property {String | undefined} localizedDialogTitle Localized title of the dialog. 
@@ -64,7 +47,8 @@ export default class ButtonAddViewModel extends ButtonViewModel {
    * * `data: Item | Expertise` - The created `Item` document or `Expertise`. 
    * 
    * @param {TransientDocument} args.target The target object to affect. 
-   * @param {String} args.creationType One of the values of `ADD_BUTTON_CREATION_TYPES`. 
+   * @param {String} args.creationType Must be the internal type name of the type of document to create. 
+   * E. g. `"skill"` or `"expertise"` or `"npc"` and so on.
    * @param {Boolean | undefined} args.withDialog If true, will prompt the user to make a selection with a dialog. 
    * * default `false`
    * @param {Object | undefined} args.creationData Data to pass to the item creation function. 
@@ -76,7 +60,7 @@ export default class ButtonAddViewModel extends ButtonViewModel {
       ...args,
       iconHtml: '<i class="fas fa-plus"></i>',
       localizedLabel: args.localizedLabel,
-      localizedToolTip: args.localizedToolTip ?? game.i18n.localize("ambersteel.general.add"),
+      localizedToolTip: args.localizedToolTip ?? game.i18n.localize("system.general.add"),
     });
     validateOrThrow(args, ["target", "creationType"]);
 
@@ -115,8 +99,8 @@ export default class ButtonAddViewModel extends ButtonViewModel {
 
     // Special case, because expertises aren't items - they're objects contained in an array, 
     // referenced by a property of a skill-item.
-    if (this.creationType === ADD_BUTTON_CREATION_TYPES.EXPERTISE) {
-      if (this.target.type !== "skill") {
+    if (this.creationType === ITEM_TYPES.EXPERTISE) {
+      if (this.target.type !== ITEM_TYPES.SKILL) {
         throw new Error("InvalidArgumentException: Cannot add item of type 'expertise' to non-'skill'-type item!");
       }
       const creationData = {
@@ -165,17 +149,16 @@ export default class ButtonAddViewModel extends ButtonViewModel {
 
     const customChoice = new ChoiceOption({
       value: "custom",
-      localizedValue: game.i18n.localize("ambersteel.general.custom"),
+      localizedValue: game.i18n.localize("system.general.custom"),
     });
 
-    const options = [
-      customChoice,
-    ].concat(documentIndices.map(documentIndex => 
+    const options = documentIndices.map(documentIndex => 
       new ChoiceOption({
         value: documentIndex.id,
-        localizedValue: documentIndex.name,
+        localizedValue: `${documentIndex.name} (${documentIndex.sourceName})`,
       })
-    ));
+    ).sort((a, b) => a.localizedValue.localeCompare(b.localizedValue));
+    options.splice(0, 0, customChoice);
 
     const inputChoices = "inputChoices";
     const dialog = await new DynamicInputDialog({
@@ -186,13 +169,9 @@ export default class ButtonAddViewModel extends ButtonViewModel {
           name: inputChoices,
           localizedLabel: this.localizedType,
           required: true,
-          defaultValue: customChoice.value,
+          defaultValue: customChoice,
           specificArgs: {
             options: options,
-            adapter: new ChoiceAdapter({
-              toChoiceOption: (obj) => options.find(it => it.value === obj.id),
-              fromChoiceOption: (choice) => documentIndices.find(it => it.id === choice.value),
-            }),
           },
         }),
       ],
@@ -200,7 +179,7 @@ export default class ButtonAddViewModel extends ButtonViewModel {
 
     if (dialog.confirmed !== true) return undefined;
 
-    const selectedValue = dialog[inputChoices];
+    const selectedValue = dialog[inputChoices].value;
     let creationData;
     if (selectedValue === customChoice.value) {
       creationData = {

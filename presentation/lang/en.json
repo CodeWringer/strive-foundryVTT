@@ -9,7 +9,7 @@
   "TYPES.Item.illness": "Illness",
   "TYPES.Item.mutation": "Mutation",
   "TYPES.Item.scar": "Scar",
-  "ambersteel": {
+  "system": {
     "migration": {
       "title": "Data Migration",
       "titleMigrationRequired": "Data Migration Required",
@@ -101,6 +101,12 @@
         "moveDown": "Move down",
         "moveByDragging": "Move by dragging"
       },
+      "sort": {
+        "sortBy": "Sort by '%s'",
+        "sortAscendingBy": "Sort ascending by '%s'",
+        "sortDescendingBy": "Sort descending by '%s'",
+        "hintReverseKey": "Holding the 'Alt' key reverses the sorting direction."
+      },
       "tags": {
         "label": "Tags"
       },
@@ -110,7 +116,9 @@
       "abbreviation": "AP",
       "singular": "Action Point",
       "plural": "Action Points",
-      "max": "Maximum Action Points"
+      "max": "Maximum Action Points",
+      "refill": "Action Point Regain",
+      "allowRefill": "Automatic Action Point Regain"
     },
     "character": {
       "edit": "Configure Character",
@@ -275,20 +283,6 @@
           "placeholder": "Home / At camp / etc."
         }
       },
-      "attributeGroup": {
-        "physical": {
-          "label": "Physical Attributes",
-          "abbreviation": "Physical"
-        },
-        "mental": {
-          "label": "Mental Attributes",
-          "abbreviation": "Mental"
-        },
-        "social": {
-          "label": "Social Attributes",
-          "abbreviation": "Social"
-        }
-      },
       "attribute": {
         "singular": "Attribute",
         "plural": "Attributes",
@@ -297,13 +291,13 @@
           "label": "Agility",
           "abbreviation": "Agi"
         },
-        "endurance": {
-          "label": "Endurance",
-          "abbreviation": "End"
+        "arcana": {
+          "label": "Arcana",
+          "abbreviation": "Arc"
         },
-        "perception": {
-          "label": "Perception",
-          "abbreviation": "Perc"
+        "awareness": {
+          "label": "Awareness",
+          "abbreviation": "Awar"
         },
         "strength": {
           "label": "Strength",
@@ -313,29 +307,9 @@
           "label": "Toughness",
           "abbreviation": "Tough"
         },
-        "intelligence": {
-          "label": "Intelligence",
-          "abbreviation": "Int"
-        },
-        "wisdom": {
-          "label": "Wisdom",
-          "abbreviation": "Wis"
-        },
-        "empathy": {
-          "label": "Empathy",
-          "abbreviation": "Emp"
-        },
-        "oratory": {
-          "label": "Oratory",
-          "abbreviation": "Ora"
-        },
-        "willpower": {
-          "label": "Willpower",
-          "abbreviation": "Will"
-        },
-        "arcana": {
-          "label": "Arcana",
-          "abbreviation": "Arc"
+        "wit": {
+          "label": "Wit",
+          "abbreviation": "Wit"
         },
         "tier": {
           "underdeveloped": "Underdeveloped",
@@ -375,7 +349,8 @@
             "delete": {
               "label": "Delete Fate Card",
               "query": "Confirm Deletion of Fate Card"
-            }
+            },
+            "limitExceededAdmonish": "You have exceeded the maximum number of allowed fate cards! You must not have more than 5 cards!"
           },
           "fatePoints": {
             "minor": {
@@ -685,6 +660,7 @@
       }
     },
     "roll": {
+      "reminder": "Don't forget to note progress on your attribute and/or skill!",
       "success": {
         "label": "Success",
         "degree": "Degree of Success"
@@ -813,8 +789,12 @@
     },
     "settings": {
       "saveChanges": "Save Changes",
+      "autoActionPointRefill": {
+        "label": "Automatic AP Refilling",
+        "hint": "If checked, action points will refill for a character at the start of every combat turn."
+      },
       "fancyFont": {
-        "label": "Fancy font",
+        "label": "Fancy Font",
         "hint": "Toggles the 'fancy' font off or on."
       },
       "toggleDebug": {

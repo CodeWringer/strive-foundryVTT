@@ -4,7 +4,7 @@
  * @property {String} value The actual value. 
  * @property {String | undefined} localizedValue The text that represents the value, to display to the user. 
  * @property {String | undefined} icon A (relative) icon file path or a FontAwwesome icon class. 
- * * E.g. `"systems/ambersteel/presentation/image/texture.svg"`
+ * * E.g. `"systems/strive/presentation/image/texture.svg"`
  * * E.g. `"fas fa-plus"`
  * @property {Boolean} shouldDisplayValue Gets or sets whether the value should be displayed. 
  * @property {Boolean} shouldDisplayIcon Gets or sets whether the icon should be displayed. 
@@ -45,7 +45,7 @@ export default class ChoiceOption {
   /**
    * A (relative) icon file path or a FontAwwesome icon class. 
    * 
-   * * E.g. `"systems/ambersteel/presentation/image/texture.svg"`
+   * * E.g. `"systems/strive/presentation/image/texture.svg"`
    * * E.g. `"fas fa-plus"`
    * @type {String | undefined}
    * @readonly
@@ -93,7 +93,7 @@ export default class ChoiceOption {
    * @param {String | undefined} args.localizedValue Optional. The text that represents the value, 
    * to display to the user. 
    * @param {String | undefined} args.icon Optional. A (relative) icon file path or a FontAwwesome icon class. 
-   * * E.g. `"systems/ambersteel/presentation/image/texture.svg"`
+   * * E.g. `"systems/strive/presentation/image/texture.svg"`
    * * E.g. `"fas fa-plus"`
    * @param {Boolean | undefined} args.shouldDisplayValue Optional. Sets whether the value should be displayed. Default true. 
    * * default `true`

@@ -7,7 +7,6 @@ import { initHandlebarsHelpers, initHandlebarsPartials } from "./presentation/ha
 import { initHandlebarsComponents } from "./presentation/handlebars-globals/handlebars-components.mjs";
 // Ruleset
 import { ATTRIBUTES } from "./business/ruleset/attribute/attributes.mjs";
-import { ATTRIBUTE_GROUPS } from "./business/ruleset/attribute/attribute-groups.mjs";
 import { DAMAGE_TYPES } from "./business/ruleset/damage-types.mjs";
 import { ATTACK_TYPES } from "./business/ruleset/skill/attack-types.mjs";
 import { SHIELD_TYPES } from "./business/ruleset/asset/shield-types.mjs";
@@ -32,29 +31,28 @@ import LoadDebugSettingUseCase from "./business/use-case/load-debug-setting-use-
 import PlainDialog from "./presentation/dialog/plain-dialog/plain-dialog.mjs";
 import "./presentation/dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
 // Document classes
-import { ACTOR_SUBTYPE } from "./business/document/actor/actor-subtype.mjs";
-import { AmbersteelActor } from "./business/document/actor/actor.mjs";
-import { ITEM_SUBTYPE } from "./business/document/item/item-subtype.mjs";
-import { AmbersteelItem } from "./business/document/item/item.mjs";
+import { GameSystemActor } from "./business/document/actor/actor.mjs";
+import { GameSystemItem } from "./business/document/item/item.mjs";
+import { GameSystemCombat } from "./presentation/combat/game-system-combat.mjs";
 // Sheet classes
-import { AmbersteelActorSheet } from "./presentation/sheet/actor/actor-sheet.mjs";
-import { AmbersteelItemSheet } from "./presentation/sheet/item/item-sheet.mjs";
+import { GameSystemActorSheet } from "./presentation/sheet/actor/actor-sheet.mjs";
+import { GameSystemItemSheet } from "./presentation/sheet/item/item-sheet.mjs";
 // Import logging classes
 import { BaseLoggingStrategy, LogLevels } from "./business/logging/base-logging-strategy.mjs";
 import { ConsoleLoggingStrategy } from "./business/logging/console-logging-strategy.mjs";
 // Import settings classes
-import AmbersteelUserSettings from "./business/setting/ambersteel-user-settings.mjs";
-import AmbersteelWorldSettings from "./business/setting/ambersteel-world-settings.mjs";
+import GameSystemUserSettings from "./business/setting/game-system-user-settings.mjs";
+import GameSystemWorldSettings from "./business/setting/game-system-world-settings.mjs";
 // Import view models
 import './presentation/view-model/view-model.mjs';
 import ViewModelCollection from './presentation/view-model/view-model-collection.mjs';
 // Components
 import './presentation/view-model/input-view-model.mjs';
 import './presentation/component/input-textfield/input-textfield-viewmodel.mjs';
-import './presentation/component/input-dropdown/input-dropdown-viewmodel.mjs';
+import './presentation/component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs';
+import './presentation/component/input-choice/input-radio-button-group/input-radio-button-group-viewmodel.mjs';
 import './presentation/component/input-number-spinner/input-number-spinner-viewmodel.mjs';
 import './presentation/component/input-textarea/input-textarea-viewmodel.mjs';
-import './presentation/component/input-radio-button-group/input-radio-button-group-viewmodel.mjs';
 import './presentation/component/button/button-viewmodel.mjs';
 import './presentation/component/button-add/button-add-viewmodel.mjs';
 import './presentation/component/button-delete/button-delete-viewmodel.mjs';
@@ -88,7 +86,8 @@ import './presentation/sheet/actor/part/health/actor-health-viewmodel.mjs';
 import './presentation/sheet/actor/part/actor-personals-viewmodel.mjs';
 import { preloadPixiTextures } from "./presentation/pixi/pixi-preloader.mjs";
 import CustomCombatTracker from "./presentation/combat/custom-combat-tracker.mjs";
-import { isDefined } from "./business/util/validation-utility.mjs";
+import { KEYBOARD } from "./presentation/keyboard/keyboard.mjs";
+import VersionCode from "./business/migration/version-code.mjs";
 
 /* -------------------------------------------- */
 /*  Initialization                              */
@@ -99,9 +98,7 @@ Hooks.once('init', function() {
   window.DocumentFetcher = DocumentFetcher;
 
   // Add system specific logic to global namespace. 
-  game.ambersteel = {
-    AmbersteelActor,
-    AmbersteelItem,
+  game.strive = {
     /**
      * 
      * @type {BaseLoggingStrategy}
@@ -158,18 +155,19 @@ Hooks.once('init', function() {
   };
 
   // Override document classes. 
-  CONFIG.Actor.documentClass = AmbersteelActor;
-  CONFIG.Item.documentClass = AmbersteelItem;
+  CONFIG.Actor.documentClass = GameSystemActor;
+  CONFIG.Item.documentClass = GameSystemItem;
+  CONFIG.Combat.documentClass = GameSystemCombat;
 
   // Override combat tracker. 
   CONFIG.ui.combat = CustomCombatTracker;
 
   // Register sheet application classes. 
   Actors.unregisterSheet("core", ActorSheet);
-  Actors.registerSheet(SYSTEM_ID, AmbersteelActorSheet, { makeDefault: true });
+  Actors.registerSheet(SYSTEM_ID, GameSystemActorSheet, { makeDefault: true });
   
   Items.unregisterSheet("core", ItemSheet);
-  Items.registerSheet(SYSTEM_ID, AmbersteelItemSheet, { makeDefault: true });
+  Items.registerSheet(SYSTEM_ID, GameSystemItemSheet, { makeDefault: true });
 
   // Preload PIXI textures. 
   preloadPixiTextures();
@@ -183,7 +181,7 @@ Hooks.once('setup', function() {
   CONFIG.fontDefinitions["BlackChancery"] = {
     editor: true,
     fonts: [
-      { urls: ["systems/ambersteel/presentation/font/BLKCHCRY.TTF"] },
+      { urls: ["systems/strive/presentation/font/BLKCHCRY.TTF"] },
     ]
   };
 
@@ -196,11 +194,14 @@ Hooks.once('setup', function() {
 
 Hooks.once("ready", function() {
   // Settings initialization.
-  new AmbersteelUserSettings().ensureAllSettings();
-  new AmbersteelWorldSettings().ensureAllSettings();
+  new GameSystemUserSettings().ensureAllSettings();
+  new GameSystemWorldSettings().ensureAllSettings();
 
   // Debug mode setting. 
-  game.ambersteel.debug = new LoadDebugSettingUseCase().invoke();
+  game.strive.debug = new LoadDebugSettingUseCase().invoke();
+
+  // Global event handling setup.
+  KEYBOARD.init();
 
   // Migration check. 
   const migrator = new MigratorInitiator();
@@ -211,14 +212,24 @@ Hooks.once("ready", function() {
     } else {
       // Display warning to non-GM. 
       new PlainDialog({
-        localizedTitle: game.i18n.localize("ambersteel.migration.titleMigrationRequired"),
-        localizedContent: game.i18n.localize("ambersteel.migration.migrationRequiredUserWarning"),
+        localizedTitle: game.i18n.localize("system.migration.titleMigrationRequired"),
+        localizedContent: game.i18n.localize("system.migration.migrationRequiredUserWarning"),
       }).render(true);
     }
   } else {
-    game.ambersteel.logger.logVerbose("Version up to date - skipping migrations");
+    game.strive.logger.logVerbose("Version up to date - skipping migrations");
     // Ensure the current system version is saved. 
     WorldSystemVersion.set(migrator.finalMigrationVersion);
+  }
+
+  if (game.strive.debug) {
+    window.runMigration = async function(fromVersion) {
+      // Fake world system version. Without this, migrators might not run. 
+      const fakeVersion = VersionCode.fromString(fromVersion);
+      await WorldSystemVersion.set(fakeVersion);
+      
+      new MigratorDialog().render(true);
+    };
   }
 });
 
@@ -251,11 +262,11 @@ Hooks.on("renderChatMessage", async function(message, html, data) {
   });
 
   if (document === undefined) {
-    game.ambersteel.logger.logWarn(`renderChatMessage: Failed to get document represented by chat message`);
+    game.strive.logger.logWarn(`renderChatMessage: Failed to get document represented by chat message`);
     return;
   }
   
-  let viewModel = game.ambersteel.viewModels.get(vmId);
+  let viewModel = game.strive.viewModels.get(vmId);
   if (viewModel === undefined) {
     // Create new instance of a view model to associate with the chat message. 
     if (dataset.expertiseId !== undefined) {
@@ -269,12 +280,12 @@ Hooks.on("renderChatMessage", async function(message, html, data) {
     }
 
     if (viewModel === undefined) {
-      game.ambersteel.logger.logWarn(`renderChatMessage: Failed to create view model for chat message`);
+      game.strive.logger.logWarn(`renderChatMessage: Failed to create view model for chat message`);
       return;
     }
     // Ensure the view model is stored in the global collection. 
-    if (game.ambersteel.enableViewModelCaching === true) {
-      game.ambersteel.viewModels.set(vmId, viewModel);
+    if (game.strive.enableViewModelCaching === true) {
+      game.strive.viewModels.set(vmId, viewModel);
     }
   }
 
@@ -290,7 +301,7 @@ Hooks.on("deleteChatMessage", function(args) {
     const vmId = match[1];
 
     // Dispose the view model, if it supports it. 
-    const vm = game.ambersteel.viewModels.get(vmId);
+    const vm = game.strive.viewModels.get(vmId);
 
     if (vm === undefined) return;
 
@@ -300,12 +311,12 @@ Hooks.on("deleteChatMessage", function(args) {
       } catch (error) {
         // It may already be disposed, in which case it might throw an error. 
         // Of course, if it is already disposed, the error isn't actually a problem. 
-        game.ambersteel.logger.logVerbose(error);
+        game.strive.logger.logVerbose(error);
       }
     }
 
     // Remove the view model from the global collection. 
-    game.ambersteel.viewModels.remove(vmId);
+    game.strive.viewModels.remove(vmId);
   }
 });
 

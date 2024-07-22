@@ -1,7 +1,9 @@
+import { ITEM_TYPES } from "../../../../../business/document/item/item-types.mjs"
 import { SEARCH_MODES, Search, SearchItem } from "../../../../../business/search/search.mjs"
 import { isDefined, validateOrThrow } from "../../../../../business/util/validation-utility.mjs"
 import ButtonAddViewModel from "../../../../component/button-add/button-add-viewmodel.mjs"
 import InputSearchTextViewModel from "../../../../component/input-search/input-search-viewmodel.mjs"
+import SortControlsViewModel, { SortingOption } from "../../../../component/sort-controls/sort-controls-viewmodel.mjs"
 import DocumentListItemOrderDataSource from "../../../../component/sortable-list/document-list-item-order-datasource.mjs"
 import SortableListViewModel from "../../../../component/sortable-list/sortable-list-viewmodel.mjs"
 import { TEMPLATES } from "../../../../templatePreloader.mjs"
@@ -30,6 +32,12 @@ export default class ActorSkillsViewModel extends ViewModel {
    * @readonly
    */
   get hideLearningSkills() { return this.document.progressionVisible === false; }
+  
+  /**
+   * @type {String}
+   * @readonly
+   */
+  get sortControlsTemplate() { return SortControlsViewModel.TEMPLATE; }
 
   /**
    * @type {String}
@@ -132,13 +140,13 @@ export default class ActorSkillsViewModel extends ViewModel {
         parent: this,
         isEditable: thiz.isEditable,
         target: thiz.document,
-        creationType: "skill",
+        creationType: ITEM_TYPES.SKILL,
         withDialog: true,
-        localizedLabel: game.i18n.localize("ambersteel.character.skill.learning.add.label"),
+        localizedLabel: game.i18n.localize("system.character.skill.learning.add.label"),
         creationData: {
           level: 0
         },
-        localizedType: game.i18n.localize("ambersteel.character.skill.learning.singular"),
+        localizedType: game.i18n.localize("system.character.skill.learning.singular"),
       }),
     });
 
@@ -161,14 +169,42 @@ export default class ActorSkillsViewModel extends ViewModel {
         parent: this,
         target: thiz.document,
         isEditable: thiz.isEditable,
-        creationType: "skill",
+        creationType: ITEM_TYPES.SKILL,
         withDialog: true,
-        localizedLabel: game.i18n.localize("ambersteel.character.skill.known.add.label"),
+        localizedLabel: game.i18n.localize("system.character.skill.known.add.label"),
         creationData: {
           level: 1
         },
-        localizedType: game.i18n.localize("ambersteel.character.skill.known.singular"),
+        localizedType: game.i18n.localize("system.character.skill.known.singular"),
       }),
+    });
+    
+    this.vmSortInnate = new SortControlsViewModel({
+      id: "vmSortInnate",
+      parent: this,
+      options: this._getSkillSortingOptions(),
+      compact: true,
+      onSort: (_, provideSortable) => {
+        provideSortable(this.vmInnateSkillList);
+      },
+    });
+    this.vmSortLearning = new SortControlsViewModel({
+      id: "vmSortLearning",
+      parent: this,
+      options: this._getSkillSortingOptions(),
+      compact: true,
+      onSort: (_, provideSortable) => {
+        provideSortable(this.vmLearningSkillList);
+      },
+    });
+    this.vmSortKnown = new SortControlsViewModel({
+      id: "vmSortKnown",
+      parent: this,
+      options: this._getSkillSortingOptions(),
+      compact: true,
+      onSort: (_, provideSortable) => {
+        provideSortable(this.vmKnownSkillList);
+      },
     });
   }
 
@@ -324,5 +360,29 @@ export default class ActorSkillsViewModel extends ViewModel {
         $(element).removeClass("hidden");
       }
     }
+  }
+
+  /**
+   * @returns {Array<SortingOption>}
+   * 
+   * @private
+   */
+  _getSkillSortingOptions() {
+    return [
+      new SortingOption({
+        iconHtml: '<i class="ico ico-tags-solid dark"></i>',
+        localizedToolTip: game.i18n.localize("system.general.name.label"),
+        sortingFunc: (a, b) => {
+          return a.document.name.localeCompare(b.document.name);
+        },
+      }),
+      new SortingOption({
+        iconHtml: '<i class="ico ico-level-solid dark"></i>',
+        localizedToolTip: game.i18n.localize("system.character.advancement.level"),
+        sortingFunc: (a, b) => {
+          return a.document.compareLevel(b.document);
+        },
+      }),
+    ];
   }
 }

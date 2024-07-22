@@ -1,0 +1,42 @@
+{{!-- Required context:
+viewModel: {InputDropDownViewModel}
+cssClass: {String | undefined}
+readOnlyCssClass: {String | undefined}
+--}}
+{{#if viewModel.isEditable}}
+  <select 
+    class="custom-system-edit drop-down width-fill component-input-dropdown {{cssClass}}"
+    name="{{viewModel.id}}"
+    id="{{viewModel.id}}"
+    value="{{viewModel.value.value}}"
+    title="{{viewModel.localizedToolTip}}"
+  >
+    {{#each viewModel.options as |option index|}}
+      <option class="flex flex-middle" value="{{option.value}}"
+        {{#if (not option.shouldDisplayValue)}}title="{{option.localizedValue}}"{{/if}}
+      >
+        {{#if option.displayHtmlOverride}}
+          {{{option.displayHtmlOverride}}}
+        {{else}}
+          {{#if option.shouldDisplayIcon}}
+            {{#if option.iconIsFontAwesome}}
+              <i class="{{option.icon}}"></i>
+            {{else}}
+              <img class="radio-button-icon" src="{{option.icon}}" />
+            {{/if}}
+          {{/if}}
+          {{#if option.shouldDisplayValue}}
+            <span>{{option.localizedValue}}</span>
+          {{/if}}
+        {{/if}}
+      </option>
+    {{/each}}
+  </select>
+{{else}}
+  {{!-- Display read-only value --}}
+  <div 
+    class="custom-system-read-only pad-sm fill component-input-dropdown {{readOnlyCssClass}}" 
+    name="{{viewModel.id}}"
+    id="{{viewModel.id}}"
+  >{{viewModel.localizedValue}}</div>
+{{/if}}

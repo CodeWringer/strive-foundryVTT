@@ -1,6 +1,5 @@
 import DocumentFetcher from "../../document/document-fetcher/document-fetcher.mjs";
 import AbstractMigrator from "../abstract-migrator.mjs";
-import { MIGRATORS } from "../migrators.mjs";
 import VersionCode from "../version-code.mjs";
 
 export default class Migrator_1_2_2__1_3_0 extends AbstractMigrator {
@@ -23,7 +22,7 @@ export default class Migrator_1_2_2__1_3_0 extends AbstractMigrator {
   async _updateSkills() {
     // Get all "skill" containing system compendia. 
     const packs = [
-      game.packs.get("ambersteel.skills"),
+      game.packs.get("strive.skills"),
     ];
 
     // Get all editable actors from world and compendia. 
@@ -50,11 +49,11 @@ export default class Migrator_1_2_2__1_3_0 extends AbstractMigrator {
   async _updateItems() {
     // Get all "item" containing system compendia. 
     const packs = [
-      game.packs.get("ambersteel.armors"),
-      game.packs.get("ambersteel.shields"),
-      game.packs.get("ambersteel.supplies-and-stuff"),
-      game.packs.get("ambersteel.valuables"),
-      game.packs.get("ambersteel.weapons"),
+      game.packs.get("strive.armors"),
+      game.packs.get("strive.shields"),
+      game.packs.get("strive.supplies-and-stuff"),
+      game.packs.get("strive.valuables"),
+      game.packs.get("strive.weapons"),
     ];
 
     // Get all editable actors from world and compendia. 
@@ -114,5 +113,3 @@ export default class Migrator_1_2_2__1_3_0 extends AbstractMigrator {
     }
   }
 }
-
-MIGRATORS.push(new Migrator_1_2_2__1_3_0());

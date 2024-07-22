@@ -5,7 +5,6 @@ import { SKILL_TAGS } from "../../tags/system-tags.mjs";
 import { arrayContains } from "../../util/array-utility.mjs";
 import * as PropertyUtility from "../../util/property-utility.mjs";
 import AbstractMigrator from "../abstract-migrator.mjs";
-import { MIGRATORS } from "../migrators.mjs";
 import VersionCode from "../version-code.mjs";
 
 export default class Migrator_1_5_2__1_5_3 extends AbstractMigrator {
@@ -24,7 +23,7 @@ export default class Migrator_1_5_2__1_5_3 extends AbstractMigrator {
     if (this._updater === undefined) {
       this._updater = new DocumentUpdater({
         propertyUtility: PropertyUtility,
-        logger: game.ambersteel.logger,
+        logger: game.strive.logger,
       });
     }
     return this._updater;
@@ -111,5 +110,3 @@ export default class Migrator_1_5_2__1_5_3 extends AbstractMigrator {
     }
   }
 }
-
-MIGRATORS.push(new Migrator_1_5_2__1_5_3());

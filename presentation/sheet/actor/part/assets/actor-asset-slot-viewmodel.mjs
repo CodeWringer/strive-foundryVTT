@@ -4,7 +4,6 @@ import * as StringUtil from "../../../../../business/util/string-utility.mjs";
 import { isDefined, validateOrThrow } from "../../../../../business/util/validation-utility.mjs";
 import ButtonDeleteViewModel from "../../../../component/button-delete/button-delete-viewmodel.mjs";
 import ButtonViewModel from "../../../../component/button/button-viewmodel.mjs";
-import ChoiceAdapter from "../../../../component/input-choice/choice-adapter.mjs";
 import ChoiceOption from "../../../../component/input-choice/choice-option.mjs";
 import DynamicInputDefinition from "../../../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
 import DynamicInputDialog from "../../../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
@@ -153,49 +152,38 @@ export default class ActorAssetSlotViewModel extends ViewModel {
       id: "vmBtnEdit",
       parent: this,
       iconHtml: '<i class="fas fa-cog"></i>',
-      localizedTooltip: game.i18n.localize("ambersteel.character.asset.slot.edit"),
+      localizedTooltip: game.i18n.localize("system.character.asset.slot.edit"),
       onClick: async () => {
         const delta = await queryAssetSlotConfiguration(this.assetSlot);
         await this.assetSlot.update(delta);
       },
     });
 
-    this.choiceAdapter = new ChoiceAdapter({
-      toChoiceOption: (obj) => {
-        return new ChoiceOption({
-          value: obj.id,
-          localizedValue: obj.name,
-        });
-      },
-      fromChoiceOption: (option) => {
-        return thiz.availableAssets.find(it => it.id === option.value);
-      },
-    });
     this.vmBtnAssign = new ButtonViewModel({
       id: "vmBtnAssign",
       parent: this,
       target: this.document,
       iconHtml: '<i class="fas fa-plus"></i>',
-      localizedLabel: game.i18n.localize("ambersteel.character.asset.slot.assign.label"),
-      localizedTooltip: game.i18n.localize("ambersteel.character.asset.slot.assign.label"),
+      localizedLabel: game.i18n.localize("system.character.asset.slot.assign.label"),
+      localizedTooltip: game.i18n.localize("system.character.asset.slot.assign.label"),
       onClick: async () => {
         const inputChoices = "inputChoices";
+        const assetChoices = this._getAssetsAsChoices();
 
         const dialog = await new DynamicInputDialog({
           localizedTitle: StringUtil.format(
-            game.i18n.localize("ambersteel.general.input.queryFor"), 
-            game.i18n.localize("ambersteel.character.asset.slot.label"), 
+            game.i18n.localize("system.general.input.queryFor"), 
+            game.i18n.localize("system.character.asset.slot.label"), 
           ),
           inputDefinitions: [
             new DynamicInputDefinition({
               type: DYNAMIC_INPUT_TYPES.DROP_DOWN,
               name: inputChoices,
-              localizedLabel: game.i18n.localize("ambersteel.general.name.label"),
+              localizedLabel: game.i18n.localize("system.general.name.label"),
               required: true,
-              defaultValue: (thiz.availableAssets[0] ?? {}).id,
+              defaultValue: assetChoices.length > 0 ? assetChoices[0] : undefined,
               specificArgs: {
-                options: this._getAssetsAsChoices(),
-                adapter: this.choiceAdapter,
+                options: assetChoices,
               }
             }),
           ],
@@ -204,7 +192,7 @@ export default class ActorAssetSlotViewModel extends ViewModel {
         if (dialog.confirmed !== true) return;
         
         // Assign the asset to the slot, via its `moveToAssetSlot` method. 
-        const assetIdToAlot = dialog[inputChoices];
+        const assetIdToAlot = dialog[inputChoices].value;
         const assetToAlot = this.availableAssets.find(it => it.id === assetIdToAlot);
         assetToAlot.moveToAssetSlot(this.assetSlot);
       },
@@ -216,8 +204,8 @@ export default class ActorAssetSlotViewModel extends ViewModel {
       isEditable: this.isEditable,
       target: this.assetSlot,
       withDialog: true,
-      localizedTooltip: game.i18n.localize("ambersteel.character.asset.slot.delete.query"),
-      localizedDialogTitle: game.i18n.localize("ambersteel.character.asset.slot.delete.queryOf"),
+      localizedTooltip: game.i18n.localize("system.character.asset.slot.delete.query"),
+      localizedDialogTitle: game.i18n.localize("system.character.asset.slot.delete.queryOf"),
       callback: async () => {
         const assetToUnassign = this.availableAssets.find(it => it.id === this.assetSlot.alottedId);
         if (assetToUnassign !== undefined) {
@@ -265,13 +253,13 @@ export default class ActorAssetSlotViewModel extends ViewModel {
    * @private
    */
   _getAssetsAsChoices() {
-    const result = [];
-    const assets = this.availableAssets;
-
-    for (const asset of assets) {
-      result.push(this.choiceAdapter.toChoiceOption(asset));
-    }
-
-    return result;
+    return this.availableAssets
+      .map(asset => {
+        return new ChoiceOption({
+          value: asset.id,
+          localizedValue: asset.name,
+        });
+      })
+      .sort((a, b) => a.localizedValue.localeCompare(b.localizedValue));
   }
 }

@@ -1,29 +1,23 @@
 import { TEMPLATES } from '../../../presentation/templatePreloader.mjs';
-import { DICE_POOL_RESULT_TYPES } from '../../dice/dice-pool.mjs';
 import AtReferencer from '../../referencing/at-referencer.mjs';
 import CharacterAssetSlotGroup from '../../ruleset/asset/character-asset-slot-group.mjs';
-import CharacterAssetSlot from '../../ruleset/asset/character-asset-slot.mjs';
-import { ATTRIBUTE_GROUPS } from '../../ruleset/attribute/attribute-groups.mjs';
 import { ATTRIBUTES } from '../../ruleset/attribute/attributes.mjs';
-import CharacterAttributeGroup from '../../ruleset/attribute/character-attribute-group.mjs';
+import CharacterAttribute from '../../ruleset/attribute/character-attribute.mjs';
 import { CharacterHealthState } from '../../ruleset/health/character-health-state.mjs';
 import { HEALTH_STATES } from '../../ruleset/health/health-states.mjs';
 import Ruleset from '../../ruleset/ruleset.mjs';
 import { SKILL_TAGS } from '../../tags/system-tags.mjs';
 import LoadHealthStatesSettingUseCase from '../../use-case/load-health-states-setting-use-case.mjs';
-import { createUUID } from '../../util/uuid-utility.mjs';
 import { isDefined } from '../../util/validation-utility.mjs';
+import { ITEM_TYPES } from '../item/item-types.mjs';
 import TransientBaseActor from './transient-base-actor.mjs';
 
 /**
  * Represents the base contract for a "specific" actor "sub-type" that 
- * represents a "character", in the way the Ambersteel rule set regards them. 
+ * represents a "character", in the way the rule set regards them. 
  * 
  * @extends TransientBaseActor
  * 
- * @property {Array<CharacterAttributeGroup>} attributeGroups The grouped attributes 
- * of the character. 
- * * Read-only. 
  * @property {Array<CharacterAttribute>} attributes The attributes of the character. 
  * * Read-only. 
  * @property {Number} baseInitiative 
@@ -114,8 +108,10 @@ import TransientBaseActor from './transient-base-actor.mjs';
  * @property {Number} personalityTraits.vengefulOrForgiving
  * * Read-only
  * * Ranges from -3 to +3
- * @property {Number} maxActionPoints
- * @property {Number} actionPoints
+ * @property {Number} maxActionPoints The maximum number of action points allowed for this character. 
+ * @property {Number} actionPointRefill The number of action points regained each turn for this character. 
+ * @property {Boolean} allowAutomaticActionPointRefill If `true`, automatic AP refilling is enabled for this character. 
+ * @property {Number} actionPoints The current number of action points of this character. 
  */
 export default class TransientBaseCharacterActor extends TransientBaseActor {
   /** @override */
@@ -224,19 +220,19 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
   get skills() {
     const thiz = this;
     return {
-      get all() { return thiz.items.filter(it => it.type === "skill"); },
+      get all() { return thiz.items.filter(it => it.type === ITEM_TYPES.SKILL); },
       get learning() { return thiz.items.filter(it => 
-        it.type === "skill" && it.level < 1
+        it.type === ITEM_TYPES.SKILL && it.level < 1
           && it.tags.find(tag => tag.id === SKILL_TAGS.INNATE.id) === undefined
         ); 
       },
       get known() { return thiz.items.filter(it => 
-        it.type === "skill" && it.level > 0
+        it.type === ITEM_TYPES.SKILL && it.level > 0
           && it.tags.find(tag => tag.id === SKILL_TAGS.INNATE.id) === undefined
         ); 
       },
       get innate() { return thiz.items.filter(it => 
-        it.type === "skill" 
+        it.type === ITEM_TYPES.SKILL 
         && it.tags.find(tag => tag.id === SKILL_TAGS.INNATE.id) !== undefined
         ); 
       },
@@ -250,10 +246,10 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
   get health() {
     const thiz = this;
     return {
-      get injuries() { return thiz.items.filter(it => it.type === "injury"); },
-      get illnesses() { return thiz.items.filter(it => it.type === "illness"); },
-      get mutations() { return thiz.items.filter(it => it.type === "mutation"); },
-      get scars() { return thiz.items.filter(it => it.type === "scar"); },
+      get injuries() { return thiz.items.filter(it => it.type === ITEM_TYPES.INJURY); },
+      get illnesses() { return thiz.items.filter(it => it.type === ITEM_TYPES.ILLNESS); },
+      get mutations() { return thiz.items.filter(it => it.type === ITEM_TYPES.MUTATION); },
+      get scars() { return thiz.items.filter(it => it.type === ITEM_TYPES.SCAR); },
 
       get HP() { return parseInt(thiz.document.system.health.HP); },
       set HP(value) { thiz.updateByPath("system.health.HP", value); },
@@ -325,6 +321,12 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
     });
   }
 
+  get actionPointRefill() { return this.document.system.actionPointRefill ?? 3; }
+  set actionPointRefill(value) { this.updateByPath("system.actionPointRefill", value); }
+
+  get allowAutomaticActionPointRefill() { return this.document.system.allowAutomaticActionPointRefill ?? true; }
+  set allowAutomaticActionPointRefill(value) { this.updateByPath("system.allowAutomaticActionPointRefill", value); }
+
   get actionPoints() { return this.document.system.actionPoints ?? 3; }
   set actionPoints(value) { this.updateByPath("system.actionPoints", value); }
 
@@ -333,11 +335,18 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
    * @readonly
    */
   get baseInitiative() {
-    const perceptionLevel = parseInt(this.attributes.find(it => it.name === ATTRIBUTES.perception.name).modifiedLevel);
-    const intelligenceLevel = parseInt(this.attributes.find(it => it.name === ATTRIBUTES.intelligence.name).modifiedLevel);
-    const empathyLevel = parseInt(this.attributes.find(it => it.name === ATTRIBUTES.empathy.name).modifiedLevel);
+    const attributesToSum = [
+      this.attributes.find(it => it.name === ATTRIBUTES.agility.name),
+      this.attributes.find(it => it.name === ATTRIBUTES.awareness.name),
+      this.attributes.find(it => it.name === ATTRIBUTES.wit.name),
+    ];
 
-    return perceptionLevel + intelligenceLevel + empathyLevel;
+    let result = 0;
+    attributesToSum.forEach(attribute => {
+      result += parseInt(attribute.modifiedLevel);
+    });
+
+    return result;
   }
 
   /**
@@ -348,23 +357,9 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
   constructor(document) {
     super(document);
 
-    this.attributeGroups = this._getAttributeGroups();
     this.attributes = this._getAttributes();
     this._prepareAssetsData();
     this._healthStates = this._getHealthStates();
-  }
-
-  /**
-   * Advances the skill, based on the given {DicePoolRollResult}. 
-   * 
-   * @param {DicePoolRollResult} rollResult 
-   * @param {String} itemId The id of the skill item to advance. 
-   * 
-   * @async
-   */
-  async advanceSkillBasedOnRollResult(rollResult, itemId) {
-    const oSkill = this.skills.find(it => it.id === itemId);
-    oSkill.addProgress(rollResult.outcomeType, true);
   }
 
   /**
@@ -379,8 +374,7 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
    * @async
    */
   async setAttributeLevel(attName, newValue = 0, resetProgress = true) {
-    const groupName = new Ruleset().getAttributeGroupName(attName);
-    const propertyPath = `system.attributes.${groupName}.${attName}`;
+    const propertyPath = `system.attributes.${attName}`;
 
     if (resetProgress === true) {
       await this.document.update({
@@ -395,79 +389,6 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
   }
 
   /**
-   * Adds advancement progress to an attribute. 
-   * 
-   * Also auto-levels up the attribute, if 'autoLevel' is set to true. 
-   * 
-   * @param {DicePoolRollResultType} outcomeType The test outcome to work with. 
-   * @param {String | undefined} attName Optional. Internal name of an attribute, 
-   * e.g. `"strength"`. 
-   * @param {Boolean | undefined} autoLevel Optional. If true, will auto-level up. 
-   * Default `false`
-   * @param {Boolean | undefined} resetProgress Optional. If true, will also reset 
-   * advancement progress, if `autoLevel` is also true and a level automatically 
-   * incremented. 
-   * * Default `true`
-   * 
-   * @throws {Error} Thrown, if `outcomeType` is undefined. 
-   * 
-   * @async
-   */
-  async addAttributeProgress(outcomeType, attName = undefined, autoLevel = false, resetProgress = true) {
-    if (outcomeType === undefined) {
-      game.ambersteel.logger.logWarn("outcomeType is undefined");
-      return;
-    }
-    if (outcomeType === DICE_POOL_RESULT_TYPES.NONE) {
-      // Do not advance anything for a "none" result. 
-      return;
-    }
-
-    const attribute = this.attributes.find(it => it.name === attName);
-
-    let progress = attribute.advancementProgress + 1;
-    let level = attribute.level;
-
-    if (autoLevel === true) {
-      if (progress >= attribute.advancementRequirements) {
-        level++;
-
-        if (resetProgress === true) {
-          progress = 0;
-        }
-      }
-    }
-
-    const groupName = new Ruleset().getAttributeGroupName(attName);
-
-    await this.document.update({
-      system: {
-        attributes: {
-          [groupName]: {
-            [attName]: {
-              level: level,
-              progress: progress,
-            }
-          }
-        }
-      }
-    });
-  }
-
-  /**
-   * Returns the grouped attributes of the character. 
-   * 
-   * @returns {Array<CharacterAttributeGroup>}
-   * 
-   * @private
-   */
-  _getAttributeGroups() {
-    return ATTRIBUTE_GROUPS.asArray().map(attributeGroup => 
-      new CharacterAttributeGroup(this.document, attributeGroup.name)
-    );
-  }
-  
-  /**
    * Returns the attributes of the character. 
    * 
    * @returns {Array<CharacterAttribute>}
@@ -477,10 +398,11 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
   _getAttributes() {
     const result = [];
 
-    const attributeGroups = this._getAttributeGroups();
-    for(const attributeGroup of attributeGroups) {
-      for (const attribute of attributeGroup.attributes) {
-        result.push(attribute);
+    for (const attribute of ATTRIBUTES.asArray()) {
+      try {
+        result.push(new CharacterAttribute(this.document, attribute.name));
+      } catch (error) {
+        game.strive.logger.logError(error);
       }
     }
 
@@ -491,7 +413,7 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
    * @private
    */
   _prepareAssetsData() {
-    this._allAssets = this.items.filter(it => it.type === "item");
+    this._allAssets = this.items.filter(it => it.type === ITEM_TYPES.ASSET);
     this._equipmentSlotGroups = this._getEquipmentSlotGroups();
 
     // Worn & Equipped
@@ -502,7 +424,7 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
         if (isDefined(slot.alottedId) === true) {
           const asset = this._allAssets.find(asset => asset.id === slot.alottedId);
           if (asset === undefined) {
-            game.ambersteel.logger.logWarn("NullReferenceException: equipped asset could not be found on actor");
+            game.strive.logger.logWarn("NullReferenceException: equipped asset could not be found on actor");
             slot.alottedId = null;
           } else {
             equipmentIds.push(slot.alottedId);
@@ -586,7 +508,7 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
         // in older versions, custom health states were defined as a string, instead of object. 
         definition = stateSettings.custom.find(it => (it.name ?? it) === entry.name);
         if (definition === undefined) {
-          game.ambersteel.logger.logWarn(`Failed to get health state definition '${entry.name}'`);
+          game.strive.logger.logWarn(`Failed to get health state definition '${entry.name}'`);
           continue;
         }
       }

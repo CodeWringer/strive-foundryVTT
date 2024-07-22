@@ -11,33 +11,33 @@ cssClass: {undefined | String}
           <i class="ico {{viewModel.iconClass}} dark"></i>
           {{/if}}
           {{#if viewModel.headerInteractible}}
-          <a id="{{viewModel.id}}-header" class="font-size-lg">{{localize viewModel.localizableAttributeGroupName}}</a>
+          <a id="{{viewModel.id}}-header" class="font-size-lg">{{localize "system.character.attribute.plural"}}</a>
           {{else}}
-          <span class="font-size-lg">{{localize viewModel.localizableAttributeGroupName}}</span>
+          <span class="font-size-lg">{{localize "system.character.attribute.plural"}}</span>
           {{/if}}
         </div>
       </th>
       <th class="attribute-column-abbreviation"></th>
       <th class="attribute-column-level">
-        {{localize "ambersteel.character.advancement.level"}}
+        {{localize "system.character.advancement.level"}}
       </th>
       <th class="attribute-column-level">
-        {{localize "ambersteel.character.advancement.modifier.abbreviation"}}
+        {{localize "system.character.advancement.modifier.abbreviation"}}
       </th>
       <th class="attribute-column-level">
         {{!-- Deliberately no label here, to avoid overloading the table header. --}}
       </th>
       {{#if viewModel.showAdvancementProgression}}
         <th class="attribute-column-requirements">
-          {{localize "ambersteel.character.advancement.requirements.abbreviation"}}
+          {{localize "system.character.advancement.requirements.abbreviation"}}
         </th>
         <th class="attribute-column-progress">
-          {{localize "ambersteel.character.advancement.requirements.progress.abbreviation"}}
+          {{localize "system.character.advancement.requirements.progress.abbreviation"}}
         </th>
       {{/if}}
     </tr>
     {{#each viewModel.attributeViewModels as |vm index|}}
-    <tr class="item attribute-item" data-att-group-name="{{../viewModel.attributeGroupName}}"
+    <tr class="item attribute-item"
       data-att-name="{{vm.attributeName}}">
       <td class="attribute-column-name font-size-default flex{{#if ../viewModel.showFancyFont}} fancy-font{{/if}}">
         {{> buttonRoll viewModel=vm.vmBtnRoll }}

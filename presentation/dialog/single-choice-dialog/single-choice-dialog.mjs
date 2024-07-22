@@ -13,7 +13,7 @@ import ConfirmableModalDialog from '../confirmable-modal-dialog/confirmable-moda
  * @constant
  * @private
  */
-const DIALOG_TITLE = "ambersteel.general.select";
+const DIALOG_TITLE = "system.general.select";
 
 /**
  * The CSS selector of the drop-down element. 
@@ -22,7 +22,7 @@ const DIALOG_TITLE = "ambersteel.general.select";
  * @readonly
  * @private
  */
-const SELECTOR_ITEM_SELECT = ".ambersteel-item-select";
+const SELECTOR_ITEM_SELECT = ".strive-item-select";
 
 /**
  * Represents a dialog for the selection of **one** from several possible choices. 

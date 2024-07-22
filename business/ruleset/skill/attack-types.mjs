@@ -34,23 +34,23 @@ export class AttackType {
 export const ATTACK_TYPES = {
   none: new AttackType({
     name: "none",
-    localizableName: "ambersteel.general.none.label",
-    localizableAbbreviation: "ambersteel.general.none.abbreviation"
+    localizableName: "system.general.none.label",
+    localizableAbbreviation: "system.general.none.abbreviation"
   }),
   singleTarget: new AttackType({
     name: "singleTarget",
-    localizableName: "ambersteel.attackType.singleTarget.label",
-    localizableAbbreviation: "ambersteel.attackType.singleTarget.abbreviation"
+    localizableName: "system.attackType.singleTarget.label",
+    localizableAbbreviation: "system.attackType.singleTarget.abbreviation"
   }),
   areaOfEffect: new AttackType({
     name: "areaOfEffect",
-    localizableName: "ambersteel.attackType.areaOfEffect.label",
-    localizableAbbreviation: "ambersteel.attackType.areaOfEffect.abbreviation"
+    localizableName: "system.attackType.areaOfEffect.label",
+    localizableAbbreviation: "system.attackType.areaOfEffect.abbreviation"
   }),
   multipleSingleTarget: new AttackType({
     name: "multipleSingleTarget",
-    localizableName: "ambersteel.attackType.multipleSingleTarget.label",
-    localizableAbbreviation: "ambersteel.attackType.multipleSingleTarget.abbreviation"
+    localizableName: "system.attackType.multipleSingleTarget.label",
+    localizableAbbreviation: "system.attackType.multipleSingleTarget.abbreviation"
   }),
 };
 ConstantsUtils.enrichConstant(ATTACK_TYPES);

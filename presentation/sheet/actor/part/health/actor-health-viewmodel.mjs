@@ -1,8 +1,10 @@
+import { ITEM_TYPES } from "../../../../../business/document/item/item-types.mjs"
 import Ruleset from "../../../../../business/ruleset/ruleset.mjs"
 import { validateOrThrow } from "../../../../../business/util/validation-utility.mjs"
 import ButtonAddViewModel from "../../../../component/button-add/button-add-viewmodel.mjs"
 import InfoBubble, { InfoBubbleAutoHidingTypes, InfoBubbleAutoShowingTypes } from "../../../../component/info-bubble/info-bubble.mjs"
 import InputNumberSpinnerViewModel from "../../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs"
+import SortControlsViewModel, { SortingOption } from "../../../../component/sort-controls/sort-controls-viewmodel.mjs"
 import DocumentListItemOrderDataSource from "../../../../component/sortable-list/document-list-item-order-datasource.mjs"
 import SortableListViewModel from "../../../../component/sortable-list/sortable-list-viewmodel.mjs"
 import { TEMPLATES } from "../../../../templatePreloader.mjs"
@@ -70,6 +72,12 @@ export default class ActorHealthViewModel extends ViewModel {
    * @readonly
    */
   get maxInjuryCount() { return this.document.health.maxInjuries; }
+
+  /**
+   * @type {String}
+   * @readonly
+   */
+  get sortControlsTemplate() { return SortControlsViewModel.TEMPLATE; }
 
   /**
    * @type {Array<IllnessListItemViewModel>}
@@ -190,10 +198,10 @@ export default class ActorHealthViewModel extends ViewModel {
         parent: this,
         target: thiz.document,
         isEditable: this.isEditable,
-        creationType: "illness",
+        creationType: ITEM_TYPES.ILLNESS,
         withDialog: true,
-        localizedLabel: game.i18n.localize("ambersteel.character.health.illness.add.label"),
-        localizedType: game.i18n.localize("ambersteel.character.health.illness.singular"),
+        localizedLabel: game.i18n.localize("system.character.health.illness.add.label"),
+        localizedType: game.i18n.localize("system.character.health.illness.singular"),
       }),
     });
 
@@ -215,10 +223,10 @@ export default class ActorHealthViewModel extends ViewModel {
         parent: this,
         target: thiz.document,
         isEditable: this.isEditable,
-        creationType: "injury",
+        creationType: ITEM_TYPES.INJURY,
         withDialog: true,
-        localizedLabel: game.i18n.localize("ambersteel.character.health.injury.add.label"),
-        localizedType: game.i18n.localize("ambersteel.character.health.injury.singular"),
+        localizedLabel: game.i18n.localize("system.character.health.injury.add.label"),
+        localizedType: game.i18n.localize("system.character.health.injury.singular"),
       }),
     });
 
@@ -240,10 +248,10 @@ export default class ActorHealthViewModel extends ViewModel {
         parent: this,
         target: thiz.document,
         isEditable: this.isEditable,
-        creationType: "mutation",
+        creationType: ITEM_TYPES.MUTATION,
         withDialog: true,
-        localizedLabel: game.i18n.localize("ambersteel.character.health.mutation.add.label"),
-        localizedType: game.i18n.localize("ambersteel.character.health.mutation.singular"),
+        localizedLabel: game.i18n.localize("system.character.health.mutation.add.label"),
+        localizedType: game.i18n.localize("system.character.health.mutation.singular"),
       }),
     });
 
@@ -265,11 +273,51 @@ export default class ActorHealthViewModel extends ViewModel {
         parent: this,
         target: thiz.document,
         isEditable: this.isEditable,
-        creationType: "scar",
+        creationType: ITEM_TYPES.SCAR,
         withDialog: true,
-        localizedLabel: game.i18n.localize("ambersteel.character.health.scar.add.label"),
-        localizedType: game.i18n.localize("ambersteel.character.health.scar.singular"),
+        localizedLabel: game.i18n.localize("system.character.health.scar.add.label"),
+        localizedType: game.i18n.localize("system.character.health.scar.singular"),
       }),
+    });
+
+    this.vmSortInjuries = new SortControlsViewModel({
+      id: "vmSortInjuries",
+      parent: this,
+      options: this._getTreatableSortingOptions(),
+      compact: true,
+      onSort: (_, provideSortable) => {
+        provideSortable(this.vmInjuryList);
+      },
+    });
+
+    this.vmSortIllnesses = new SortControlsViewModel({
+      id: "vmSortIllnesses",
+      parent: this,
+      options: this._getTreatableSortingOptions(),
+      compact: true,
+      onSort: (_, provideSortable) => {
+        provideSortable(this.vmIllnessList);
+      },
+    });
+
+    this.vmSortMutations = new SortControlsViewModel({
+      id: "vmSortMutations",
+      parent: this,
+      options: this._getNameSortingOptions(),
+      compact: true,
+      onSort: (_, provideSortable) => {
+        provideSortable(this.vmMutationList);
+      },
+    });
+
+    this.vmSortScars = new SortControlsViewModel({
+      id: "vmSortScars",
+      parent: this,
+      options: this._getNameSortingOptions(),
+      compact: true,
+      onSort: (_, provideSortable) => {
+        provideSortable(this.vmScarList);
+      },
     });
   }
   
@@ -401,5 +449,50 @@ export default class ActorHealthViewModel extends ViewModel {
       this.scars,
       (args) => { return new ScarListItemViewModel(args); }
     );
+  }
+
+  /**
+   * Returns the `SortingOption`s for the injury and illness lists. 
+   * 
+   * @returns {Array<SortingOption>}
+   * 
+   * @private
+   */
+  _getTreatableSortingOptions() {
+    return [
+      new SortingOption({
+        iconHtml: '<i class="ico ico-tags-solid dark"></i>',
+        localizedToolTip: game.i18n.localize("system.general.name.label"),
+        sortingFunc: (a, b) => {
+          return a.document.name.localeCompare(b.document.name);
+        },
+      }),
+      new SortingOption({
+        iconHtml: '<i class="fas fa-mortar-pestle pad-r-sm"></i>',
+        localizedToolTip: game.i18n.localize("system.character.health.treatment"),
+        sortingFunc: (a, b) => {
+          return a.document.compareTreatment(b.document);
+        },
+      }),
+    ];
+  }
+
+  /**
+   * Returns the `SortingOption`s for the mutation and scar lists. 
+   * 
+   * @returns {Array<SortingOption>}
+   * 
+   * @private
+   */
+  _getNameSortingOptions() {
+    return [
+      new SortingOption({
+        iconHtml: '<i class="ico ico-tags-solid dark"></i>',
+        localizedToolTip: game.i18n.localize("system.general.name.label"),
+        sortingFunc: (a, b) => {
+          return a.document.name.localeCompare(b.document.name);
+        },
+      }),
+    ];
   }
 }

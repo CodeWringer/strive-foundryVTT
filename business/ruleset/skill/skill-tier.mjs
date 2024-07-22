@@ -38,15 +38,15 @@ export class SkillTier {
 export const SKILL_TIERS = {
   dabbling: new SkillTier({
     name: "dabbling",
-    localizableName: "ambersteel.character.skill.tier.dabbling",
+    localizableName: "system.character.skill.tier.dabbling",
   }),
   apprentice: new SkillTier({
     name: "apprentice",
-    localizableName: "ambersteel.character.skill.tier.apprentice",
+    localizableName: "system.character.skill.tier.apprentice",
   }),
   master: new SkillTier({
     name: "master",
-    localizableName: "ambersteel.character.skill.tier.master",
+    localizableName: "system.character.skill.tier.master",
   }),
 };
 ConstantsUtils.enrichConstant(SKILL_TIERS);

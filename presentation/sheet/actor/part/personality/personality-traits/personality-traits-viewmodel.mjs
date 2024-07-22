@@ -1,6 +1,6 @@
 import { TEMPLATES } from "../../../../../templatePreloader.mjs";
-import { validateOrThrow } from "../../../../../../business/util/validation-utility.mjs";
-import InputRadioButtonGroupViewModel from "../../../../../component/input-radio-button-group/input-radio-button-group-viewmodel.mjs";
+import { isDefined, validateOrThrow } from "../../../../../../business/util/validation-utility.mjs";
+import InputRadioButtonGroupViewModel from "../../../../../component/input-choice/input-radio-button-group/input-radio-button-group-viewmodel.mjs";
 import ViewModel from "../../../../../view-model/view-model.mjs";
 import StatefulChoiceOption from "../../../../../component/input-choice/stateful-choice-option.mjs";
 
@@ -66,18 +66,23 @@ export default class PersonalityTraitsViewModel extends ViewModel {
    * @private
    */
   _getTrait(leftTrait, rightTrait, propertyName) {
+    const valueOfDocument = `${this.document.personalityTraits[propertyName]}`;
+    const options = this._getTraitOptions();
+
     return {
-      localizedTraitLeft: game.i18n.localize(`ambersteel.character.personalityTrait.traits.${leftTrait}`),
+      localizedTraitLeft: game.i18n.localize(`system.character.personalityTrait.traits.${leftTrait}`),
       vmRadioButtonGroup: new InputRadioButtonGroupViewModel({
         id: `vmRadioButtonGroup-${propertyName}`,
         parent: this,
-        value: this.document.personalityTraits[propertyName],
+        options: options,
+        value: options.find(it => it.value === valueOfDocument),
         onChange: (_, newValue) => {
-          this.document.personalityTraits[propertyName] = newValue;
+          if (isDefined(newValue)) {
+            this.document.personalityTraits[propertyName] = parseInt(newValue.value);
+          }
         },
-        options: this._getTraitOptions(),
       }),
-      localizedTraitRight: game.i18n.localize(`ambersteel.character.personalityTrait.traits.${rightTrait}`),
+      localizedTraitRight: game.i18n.localize(`system.character.personalityTrait.traits.${rightTrait}`),
     };
   }
 
@@ -89,37 +94,37 @@ export default class PersonalityTraitsViewModel extends ViewModel {
   _getTraitOptions() {
     return [
       new StatefulChoiceOption({
-        value: -3,
+        value: "-3",
         activeHtml: "X",
         inactiveHtml: "",
       }),
       new StatefulChoiceOption({
-        value: -2,
+        value: "-2",
         activeHtml: "X",
         inactiveHtml: "",
       }),
       new StatefulChoiceOption({
-        value: -1,
+        value: "-1",
         activeHtml: "X",
         inactiveHtml: "",
       }),
       new StatefulChoiceOption({
-        value: 0,
+        value: "0",
         activeHtml: "X",
         inactiveHtml: "",
       }),
       new StatefulChoiceOption({
-        value: 1,
+        value: "1",
         activeHtml: "X",
         inactiveHtml: "",
       }),
       new StatefulChoiceOption({
-        value: 2,
+        value: "2",
         activeHtml: "X",
         inactiveHtml: "",
       }),
       new StatefulChoiceOption({
-        value: 3,
+        value: "3",
         activeHtml: "X",
         inactiveHtml: "",
       }),

@@ -1,13 +1,13 @@
 /**
- * String partial `"systems/ambersteel"`. 
+ * String partial `"systems/strive"`. 
  * 
  * @type {String}
  * @constant
  */
-const basePath = "systems/ambersteel";
+const basePath = "systems/strive";
 
 /**
- * String partial `"systems/ambersteel/presentation"`. 
+ * String partial `"systems/strive/presentation"`. 
  * 
  * @type {String}
  * @constant
@@ -15,7 +15,7 @@ const basePath = "systems/ambersteel";
 const basePathPresentation = `${basePath}/presentation`;
 
 /**
- * String partial `"systems/ambersteel/presentation/component"`. 
+ * String partial `"systems/strive/presentation/component"`. 
  * 
  * @type {String}
  * @constant
@@ -24,6 +24,7 @@ const basePathComponent = `${basePathPresentation}/component`;
 
 export const TEMPLATES = {
   // --- Components
+  COMPONENT_VERTICAL_LINE: `${basePathComponent}/vertical-line/vertical-line.hbs`,
   // Labels
   COMPONENT_LABEL: `${basePathComponent}/label/label.hbs`,
   COMPONENT_LABEL_READ_ONLY_VALUE: `${basePathComponent}/label/read-only-value.hbs`,
@@ -34,10 +35,10 @@ export const TEMPLATES = {
   COMPONENT_LABELED_CONTROL: `${basePathComponent}/labeled-control/labeled-control.hbs`,
   // Inputs
   COMPONENT_INPUT_TEXTFIELD: `${basePathComponent}/input-textfield/input-textfield.hbs`,
-  COMPONENT_INPUT_DROPDOWN: `${basePathComponent}/input-dropdown/input-dropdown.hbs`,
+  COMPONENT_INPUT_DROPDOWN: `${basePathComponent}/input-choice/input-dropdown/input-dropdown.hbs`,
+  COMPONENT_INPUT_RADIO_BUTTON_GROUP: `${basePathComponent}/input-choice/input-radio-button-group/input-radio-button-group.hbs`,
   COMPONENT_INPUT_NUMBER_SPINNER: `${basePathComponent}/input-number-spinner/input-number-spinner.hbs`,
   COMPONENT_INPUT_TEXTAREA: `${basePathComponent}/input-textarea/input-textarea.hbs`,
-  COMPONENT_INPUT_RADIO_BUTTON_GROUP: `${basePathComponent}/input-radio-button-group/input-radio-button-group.hbs`,
   COMPONENT_INPUT_IMAGE: `${basePathComponent}/input-image/input-image.hbs`,
   COMPONENT_INPUT_RICH_TEXT: `${basePathComponent}/input-rich-text/input-rich-text.hbs`,
   COMPONENT_INPUT_SEARCH: `${basePathComponent}/input-search/input-search.hbs`,
@@ -46,11 +47,10 @@ export const TEMPLATES = {
   COMPONENT_INPUT_TOGGLE: `${basePathComponent}/input-toggle/input-toggle.hbs`,
   // Buttons
   COMPONENT_BUTTON: `${basePathComponent}/button/button.hbs`,
-  COMPONENT_BUTTON_TOGGLE_VISIBILITY: `${basePathComponent}/button-toggle-visibility/button-toggle-visibility.hbs`,
-  COMPONENT_BUTTON_TOGGLE_ICON: `${basePathComponent}/button-toggle-icon/button-toggle-icon.hbs`,
   COMPONENT_BUTTON_CHECKBOX: `${basePathComponent}/button-checkbox/button-checkbox.hbs`,
   // Composite
   COMPONENT_SORTABLE_LIST: `${basePathComponent}/sortable-list/sortable-list.hbs`,
+  COMPONENT_SORT_CONTROLS: `${basePathComponent}/sort-controls/sort-controls.hbs`,
   COMPONENT_SIMPLE_LIST: `${basePathComponent}/simple-list/simple-list.hbs`,
   COMPONENT_SIMPLE_LIST_ITEM: `${basePathComponent}/simple-list/simple-list-item.hbs`,
   DICE_ROLL_LIST: `${basePathComponent}/dice-roll-list/dice-roll-list.hbs`,

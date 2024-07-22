@@ -9,7 +9,7 @@ import { TEMPLATES } from "../../templatePreloader.mjs";
  * @constant
  * @private
  */
-const BACKDROP_ELEMENT_CLASS = "ambersteel-modal-backdrop";
+const BACKDROP_ELEMENT_CLASS = "strive-modal-backdrop";
 
 /**
  * Styling class of the dialog element. 
@@ -18,7 +18,7 @@ const BACKDROP_ELEMENT_CLASS = "ambersteel-modal-backdrop";
  * @constant
  * @private
  */
-const DIALOG_ELEMENT_CLASS = "ambersteel-modal";
+const DIALOG_ELEMENT_CLASS = "strive-modal";
 
 /**
  * @summary

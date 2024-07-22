@@ -1,4 +1,5 @@
-import { isNotBlankOrUndefined } from "../../../business/util/validation-utility.mjs";
+import { ACTOR_TYPES } from "../../../business/document/actor/actor-types.mjs";
+import { isDefined, isNotBlankOrUndefined } from "../../../business/util/validation-utility.mjs";
 import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import LazyRichTextViewModel from "../../component/lazy-rich-text/lazy-rich-text-viewmodel.mjs";
 import { TEMPLATES } from "../../templatePreloader.mjs";
@@ -15,19 +16,19 @@ export default class ActorChatMessageViewModel extends ViewModel {
    * Is true, if the actor is a player character. 
    * @type {Boolean}
    */
-  get isPC() { return this.document.type === "pc"; }
+  get isPC() { return this.document.type === ACTOR_TYPES.PC; }
   
   /**
    * Is true, if the actor is a non-player character. 
    * @type {Boolean}
    */
-  get isNPC() { return this.document.type === "npc"; }
+  get isNPC() { return this.document.type === ACTOR_TYPES.NPC; }
 
   /**
    * Is true, if the actor is a plain actor. 
    * @type {Boolean}
    */
-  get isPlain() { return this.document.type === "plain"; }
+  get isPlain() { return this.document.type === ACTOR_TYPES.PLAIN; }
 
   /***
    * @type {Boolean}
@@ -52,8 +53,8 @@ export default class ActorChatMessageViewModel extends ViewModel {
    * @readonly
    */
   get showAge() { 
-    const value = this.document.person.age;
-    return value !== 0 && value !== "0" && isNotBlankOrUndefined(value);
+    const age = this.document.person.age;
+    return age !== 0 && age !== "0" && isNotBlankOrUndefined(age);
   }
 
   /**
@@ -74,21 +75,13 @@ export default class ActorChatMessageViewModel extends ViewModel {
     this.contextTemplate = args.contextTemplate ?? "actor-chat-message";
     
     this.document = args.document;
-    this.challengeRatings = [];
     if (this.isNPC === true) {
-      for (const attributeGroup of this.document.attributeGroups) {
-        const isExpanded = this.document.getIsExpandedFor(attributeGroup.name);
-        if (isExpanded === true) continue;
-
-        const challengeRating = this.document.getCrFor(attributeGroup.name);
-        this.challengeRatings.push({
-          localizedLabel: game.i18n.localize(attributeGroup.localizableName),
-          value: challengeRating.modified,
-        });
+      if (this.document.isChallengeRatingEnabled) {
+        this.challengeRating = this.document.challengeRating;
       }
     }
 
-    if (this.document.type !== "plain") {
+    if (this.document.type !== ACTOR_TYPES.PLAIN) {
       this.vmLazyBiography = new LazyRichTextViewModel({
         id: "vmLazyBiography",
         parent: this,

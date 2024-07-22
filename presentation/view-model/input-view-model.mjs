@@ -1,3 +1,4 @@
+import { isDefined } from "../../business/util/validation-utility.mjs";
 import { getElementValue } from "../sheet/sheet-utility.mjs";
 import ViewModel from "./view-model.mjs";
 
@@ -114,10 +115,15 @@ export default class InputViewModel extends ViewModel {
    * 
    * @param {Event} event 
    * 
-   * @private
+   * @protected
    */
   _onChange(event) {
     const newValue = getElementValue(event.currentTarget);
+
+    if (isDefined(newValue) !== true) {
+      game.strive.logger.logWarn(`Failed to get element's value - is '${newValue}' valid?`);
+    }
+
     this.value = newValue;
   }
 }

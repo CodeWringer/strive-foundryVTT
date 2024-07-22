@@ -2,9 +2,7 @@ import { TEMPLATES } from "../../../presentation/templatePreloader.mjs";
 import MutationChatMessageViewModel from "../../../presentation/sheet/item/mutation/mutation-chat-message-viewmodel.mjs";
 import PreparedChatData from "../../../presentation/chat/prepared-chat-data.mjs";
 import { SOUNDS_CONSTANTS } from "../../../presentation/audio/sounds.mjs";
-import { ITEM_SUBTYPE } from "./item-subtype.mjs";
 import TransientBaseItem from "./transient-base-item.mjs";
-import { createUUID } from "../../util/uuid-utility.mjs";
 
 /**
  * Represents the full transient data of a mutation. 
@@ -31,7 +29,7 @@ export default class TransientMutation extends TransientBaseItem {
       actor: (this.owningDocument ?? {}).document, 
       sound: SOUNDS_CONSTANTS.NOTIFY,
       viewModel: vm,
-      flavor: game.i18n.localize("ambersteel.character.health.mutation.singular"),
+      flavor: game.i18n.localize("system.character.health.mutation.singular"),
     });
   }
 
@@ -65,5 +63,3 @@ export default class TransientMutation extends TransientBaseItem {
     });
   }
 }
-
-ITEM_SUBTYPE.set("mutation", (document) => { return new TransientMutation(document) });

@@ -2,4 +2,11 @@
 cssClass: {undefined | String}
 admonish: {Boolean | undefined}
 --}}
-<div class="custom-system-read-only pad-sm fill{{#if admonish}} hint-card error{{/if}}{{#if cssClass}} {{cssClass}}{{/if}}">{{#if admonish}}<i class="fas fa-exclamation-triangle"></i> {{/if}}{{> @partial-block}}</div>
+<div class="custom-system-read-only pad-sm fill flex flex-row auto-margin-h{{#if admonish}} hint-card error{{/if}}{{#if cssClass}} {{cssClass}}{{/if}}">
+  {{#if admonish}}
+  <div class="flex flex-center">
+    <i class="fas fa-exclamation-triangle"></i>
+  </div>
+  {{/if}}
+  <span class="flex flex-center flex-grow">{{> @partial-block}}</span>
+</div>

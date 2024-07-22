@@ -56,21 +56,21 @@ export default class ActorAssetsEquippedViewModel extends ViewModel {
       parent: this,
       target: this.document,
       iconHtml: '<i class="fas fa-plus"></i>',
-      localizedLabel: game.i18n.localize("ambersteel.character.asset.slot.group.add.label"),
-      localizedTooltip: game.i18n.localize("ambersteel.character.asset.slot.add.label"),
+      localizedLabel: game.i18n.localize("system.character.asset.slot.group.add.label"),
+      localizedTooltip: game.i18n.localize("system.character.asset.slot.add.label"),
       onClick: async () => {
         const inputName = "name";
 
         const dialog = await new DynamicInputDialog({
           localizedTitle: StringUtil.format(
-            game.i18n.localize("ambersteel.general.input.queryFor"), 
-            game.i18n.localize("ambersteel.character.asset.slot.group.label"), 
+            game.i18n.localize("system.general.input.queryFor"), 
+            game.i18n.localize("system.character.asset.slot.group.label"), 
           ),
           inputDefinitions: [
             new DynamicInputDefinition({
               type: DYNAMIC_INPUT_TYPES.TEXTFIELD,
               name: inputName,
-              localizedLabel: game.i18n.localize("ambersteel.general.name.label"),
+              localizedLabel: game.i18n.localize("system.general.name.label"),
               required: true,
               defaultValue: "New Asset Slot Group"
             }),

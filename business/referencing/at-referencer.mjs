@@ -96,7 +96,7 @@ export default class AtReferencer {
       comparableReference = comparableReference.replaceAll("_", " ");
       
       // In case the document is embedded, choose the owning document to search in. 
-      let searchDocument = document; // .owningDocument === undefined ? document : document.owningDocument;
+      let searchDocument = document;
       if (document.owningDocument !== undefined && document.owningDocument.owningDocument !== undefined) {
         // Given document is an expertise. 
         searchDocument = document.owningDocument.owningDocument;
@@ -150,7 +150,7 @@ export default class AtReferencer {
     } catch (error) {
       if (error.message.startsWith("Failed to get nested property value")) {
         // Such errors are expected for "bad" property paths and can be ignored safely. 
-        game.ambersteel.logger.logWarn(error.message);
+        game.strive.logger.logWarn(error.message);
       } else {
         // Any other error is re-thrown. 
         throw error;

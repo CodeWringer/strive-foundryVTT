@@ -3,6 +3,8 @@ viewModel: {ChallengeRatingViewModel}
 cssClass: {String}
 --}}
 <div id="{{viewModel.id}}" class="flex flex-row flex-middle pad-md{{#if cssClass}} {{cssClass}}{{/if}}">
+  {{!-- Roll --}}
+  {{> buttonRoll viewModel=viewModel.vmRoll }}
   <a id="{{viewModel.id}}-header" class="flex flex-grow flex-middle auto-margin-h">
     {{#if viewModel.iconClass}}
     <i class="ico {{viewModel.iconClass}} dark"></i>
@@ -11,13 +13,13 @@ cssClass: {String}
   </a>
   <div class="flex flex-row auto-margin-h">
     {{!-- CR --}}
-    {{#> labeledControl viewModel=viewModel.vmCr localizedLabel=(localize "ambersteel.character.advancement.challengeRating.abbreviation") }}
+    {{#> labeledControl viewModel=viewModel.vmCr localizedLabel=(localize "system.character.advancement.challengeRating.abbreviation") }}
       <div class="width-sm">
         {{> inputNumberSpinner }}
       </div>
     {{/labeledControl}}
     {{!-- CR Modifier --}}
-    {{#> labeledControl viewModel=viewModel.vmCrModifier localizedIconToolTip=(localize "ambersteel.character.advancement.challengeRating.modifier.label") iconClass="ico-modifier-solid" }}
+    {{#> labeledControl viewModel=viewModel.vmCrModifier localizedIconToolTip=(localize "system.character.advancement.challengeRating.modifier.label") iconClass="ico-modifier-solid" }}
       <div class="width-sm">
         {{> inputNumberSpinner }}
       </div>

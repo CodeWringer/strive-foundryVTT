@@ -3,7 +3,7 @@ viewModel: BaseAttributeListItemViewModel
 --}}
 <div id="{{viewModel.id}}" class="flex flex-row flex-grow flex-middle">
   {{!-- Attribute --}}
-  {{#> labeledControl viewModel=viewModel.vmAttribute localizedIconToolTip=(localize "ambersteel.character.attribute.singular") iconClass="ico-related-attribute-solid" cssClass="flex-grow" }}
+  {{#> labeledControl viewModel=viewModel.vmAttribute localizedIconToolTip=(localize "system.character.attribute.singular") iconClass="ico-related-attribute-solid" cssClass="flex-grow" }}
     {{> inputDropDown }}
   {{/labeledControl}}
 </div>

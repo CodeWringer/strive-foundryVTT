@@ -1,10 +1,10 @@
 {{!-- Parameters:
 viewModel: {IllnessListItemViewModel}
 --}}
-<div class="flex flex-row flex-wrap margin-b-md auto-margin-h">
+<div id="{{viewModel.id}}" class="flex flex-row flex-wrap margin-b-md auto-margin-h">
   <div class="flex flex-row flex-grow flex-middle auto-margin-h sheet-block">
     {{!-- Duration --}}
-    {{#> labeledControl viewModel=viewModel.vmDuration localizedIconToolTip=(localize "ambersteel.character.health.duration") iconClass="ico-duration-solid" cssClass="flex-grow" }}
+    {{#> labeledControl viewModel=viewModel.vmDuration localizedIconToolTip=(localize "system.character.health.duration") iconClass="ico-duration-solid" cssClass="flex-grow" }}
       {{> inputTextField }}
     {{/labeledControl}}
   </div>

@@ -2,9 +2,7 @@ import { TEMPLATES } from "../../../presentation/templatePreloader.mjs";
 import ScarChatMessageViewModel from "../../../presentation/sheet/item/scar/scar-chat-message-viewmodel.mjs";
 import PreparedChatData from "../../../presentation/chat/prepared-chat-data.mjs";
 import { SOUNDS_CONSTANTS } from "../../../presentation/audio/sounds.mjs";
-import { ITEM_SUBTYPE } from "./item-subtype.mjs";
 import TransientBaseItem from "./transient-base-item.mjs";
-import { createUUID } from "../../util/uuid-utility.mjs";
 
 /**
  * Represents the full transient data of a scar. 
@@ -47,7 +45,7 @@ export default class TransientScar extends TransientBaseItem {
       actor: (this.owningDocument ?? {}).document, 
       sound: SOUNDS_CONSTANTS.NOTIFY,
       viewModel: vm,
-      flavor: game.i18n.localize("ambersteel.character.health.scar.singular"),
+      flavor: game.i18n.localize("system.character.health.scar.singular"),
     });
   }
 
@@ -81,5 +79,3 @@ export default class TransientScar extends TransientBaseItem {
     });
   }
 }
-
-ITEM_SUBTYPE.set("scar", (document) => { return new TransientScar(document) });

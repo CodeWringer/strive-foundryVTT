@@ -1,4 +1,4 @@
-import AmbersteelWorldSettings from "../setting/ambersteel-world-settings.mjs";
+import GameSystemWorldSettings from "../setting/game-system-world-settings.mjs";
 import AbstractUseCase from "./abstract-use-case.mjs";
 
 export default class SetHealthStatesSettingUseCase extends AbstractUseCase {
@@ -8,7 +8,7 @@ export default class SetHealthStatesSettingUseCase extends AbstractUseCase {
    * @returns {Object}
    */
   invoke(args) {
-    const ds = new AmbersteelWorldSettings();
-    return ds.set(AmbersteelWorldSettings.KEY_CUSTOM_HEALTH_STATES, args);
+    const ds = new GameSystemWorldSettings();
+    return ds.set(GameSystemWorldSettings.KEY_CUSTOM_HEALTH_STATES, args);
   }
 }

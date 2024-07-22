@@ -29,15 +29,15 @@ export class RollDiceModifierType {
 export const ROLL_DICE_MODIFIER_TYPES = {
   NONE: new RollDiceModifierType({
     name: "none",
-    localizableName: "ambersteel.roll.diceModifiers.none"
+    localizableName: "system.roll.diceModifiers.none"
   }),
   HALF_ROUNDED_DOWN: new RollDiceModifierType({
     name: "halfRoundedDown",
-    localizableName: "ambersteel.roll.diceModifiers.halfRoundedDown"
+    localizableName: "system.roll.diceModifiers.halfRoundedDown"
   }),
   HALF_ROUNDED_UP: new RollDiceModifierType({
     name: "halfRoundedUp",
-    localizableName: "ambersteel.roll.diceModifiers.halfRoundedUp"
+    localizableName: "system.roll.diceModifiers.halfRoundedUp"
   }),
 }
 ConstantsUtils.enrichConstant(ROLL_DICE_MODIFIER_TYPES);

@@ -1,5 +1,4 @@
 import TransientSkill from "../../../../business/document/item/skill/transient-skill.mjs"
-import { ATTRIBUTES } from "../../../../business/ruleset/attribute/attributes.mjs"
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs"
 import ButtonToggleVisibilityViewModel from "../../../component/button-toggle-visibility/button-toggle-visibility-viewmodel.mjs"
 import InputTagsViewModel from "../../../component/input-tags/input-tags-viewmodel.mjs"
@@ -110,23 +109,14 @@ export default class SkillChatMessageViewModel extends ViewModel {
       showParentSkill: false,
     }));
 
-    this.vmBtnToggleVisibilityExpand = new ButtonToggleVisibilityViewModel({
-      id: "vmBtnToggleVisibilityExpand",
+    this.vmExpertiseVisibilityToggle = new ButtonToggleVisibilityViewModel({
+      id: "vmExpertiseVisibilityToggle",
       parent: this,
       isEditable: true,
-      isSendable: this.isSendable,
-      isOwner: this.isOwner,
+      value: this.expertisesInitiallyVisible,
+      iconInactive: '<i class="fas fa-angle-double-down"></i>',
+      iconActive: '<i class="fas fa-angle-double-up"></i>',
       visGroup: `${this.id}-expertises`,
-      toggleSelf: true,
-    });
-    this.vmBtnToggleVisibilityCollapse = new ButtonToggleVisibilityViewModel({
-      id: "vmBtnToggleVisibilityCollapse",
-      parent: this,
-      isEditable: true,
-      isSendable: this.isSendable,
-      isOwner: this.isOwner,
-      visGroup: `${this.id}-expertises`,
-      toggleSelf: true,
     });
     this.vmLazyDescription = new LazyRichTextViewModel({
       id: "vmLazyDescription",

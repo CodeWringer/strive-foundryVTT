@@ -2,7 +2,7 @@
 viewModel: {MutationItemSheetViewModel}
 cssClass: {undefined | String}
 --}}
-<form class="flex flex-column{{#if cssClass}} {{cssClass}}{{/if}}" autocomplete="off">
+<form id="{{viewModel.id}}" class="flex flex-column{{#if cssClass}} {{cssClass}}{{/if}}" autocomplete="off">
   <header class="sheet-header">
     <div class="flex flex-column flex-grow">
       <div class="flex flex-row">
@@ -18,7 +18,7 @@ cssClass: {undefined | String}
   </header>
   {{!-- Description --}}
   <div class="sheet-block flex flex-column flex-grow">
-    {{#> header3 showFancyFont=viewModel.showFancyFont}}{{localize "ambersteel.general.description"}}{{/header3}}
+    {{#> header3 showFancyFont=viewModel.showFancyFont}}{{localize "system.general.description"}}{{/header3}}
     {{> inputRichText viewModel=viewModel.vmRtDescription }}
   </div>
 </form>

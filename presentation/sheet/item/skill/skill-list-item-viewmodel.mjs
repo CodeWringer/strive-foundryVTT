@@ -12,9 +12,7 @@ import ButtonRollViewModel from "../../../component/button-roll/button-roll-view
 import ButtonViewModel from "../../../component/button/button-viewmodel.mjs"
 import DamageDefinitionListViewModel from "../../../component/damage-definition-list/damage-definition-list-viewmodel.mjs"
 import InfoBubble, { InfoBubbleAutoHidingTypes, InfoBubbleAutoShowingTypes } from "../../../component/info-bubble/info-bubble.mjs"
-import ChoiceAdapter from "../../../component/input-choice/choice-adapter.mjs"
-import ChoiceOption from "../../../component/input-choice/choice-option.mjs"
-import InputDropDownViewModel from "../../../component/input-dropdown/input-dropdown-viewmodel.mjs"
+import InputDropDownViewModel from "../../../component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs"
 import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs"
 import InputTagsViewModel from "../../../component/input-tags/input-tags-viewmodel.mjs"
 import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs"
@@ -28,6 +26,7 @@ import * as StringUtil from "../../../../business/util/string-utility.mjs"
 import DynamicInputDefinition from "../../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs"
 import { DYNAMIC_INPUT_TYPES } from "../../../dialog/dynamic-input-dialog/dynamic-input-types.mjs"
 import BaseAttributeListItemViewModel from "./base-attribute/base-attribute-list-item-viewmodel.mjs"
+import { ACTOR_TYPES } from "../../../../business/document/actor/actor-types.mjs"
 
 /**
  * @property {TransientSkill} document
@@ -95,9 +94,9 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
   get showAdvancementProgression() {
     if (isDefined(this.document.owningDocument) === true) {
       const type = this.document.owningDocument.type;
-      if (type === "npc" && this.document.owningDocument.progressionVisible === true) {
+      if (type === ACTOR_TYPES.NPC && this.document.owningDocument.progressionVisible === true) {
         return true;
-      } else if (type === "pc") {
+      } else if (type === ACTOR_TYPES.PC) {
         return true;
       }
     }
@@ -177,30 +176,6 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
     super(args);
     validateOrThrow(args, ["document"]);
 
-    const attributeOptions = this.document.baseAttributes.map(baseAttribute => 
-      new ChoiceOption({
-        value: baseAttribute.name,
-        localizedValue: game.i18n.localize(baseAttribute.localizableName),
-      })
-    );
-    this.vmActiveAttribute = new InputDropDownViewModel({
-      id: "vmActiveAttribute",
-      parent: this,
-      isEditable: (this.isEditable && attributeOptions.length > 1),
-      options: attributeOptions,
-      value: attributeOptions.find(it => it.value === this.document.activeBaseAttribute.name),
-      onChange: (_, newValue) => {
-        this.document.activeBaseAttribute = ATTRIBUTES[newValue];
-      },
-      adapter: new ChoiceAdapter({
-        toChoiceOption(obj) {
-          return attributeOptions.find(it => it.value === obj.name);
-        },
-        fromChoiceOption(option) {
-          return ATTRIBUTES[option.value];
-        }
-      }),
-    });
     this.vmTfCategory = new InputTextFieldViewModel({
       parent: this,
       id: "vmTfCategory",
@@ -218,10 +193,12 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
         this.document.tags = newValue;
       },
     });
+
+    const level = this.document.dependsOnActiveCr === true ? (this.document.owningDocument.challengeRating.modified) : this.document.level;
     this.vmNsLevel = new InputNumberSpinnerViewModel({
       parent: this,
       id: "vmNsLevel",
-      value: this.document.dependsOnActiveCr === true ? this.document.crLevel : this.document.level,
+      value: level,
       isEditable: this.document.dependsOnActiveCr === true ? false : this.isEditable,
       onChange: (_, newValue) => {
         this.document.level = newValue;
@@ -264,7 +241,7 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
         this.document.damage = newValue;
       },
       resolveFormulaContext: this.getRootOwningDocument(this.document),
-      chatTitle: `${game.i18n.localize("ambersteel.damageDefinition.formula")} - ${this.document.name}`,
+      chatTitle: `${game.i18n.localize("system.damageDefinition.formula")} - ${this.document.name}`,
     });
     if (this.showExpertises === true) {
       this.vmExpertiseTable = new ExpertiseTableViewModel({
@@ -282,6 +259,8 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
 
   /** @override */
   getDataFields() {
+    const attackTypeChoices = ATTACK_TYPES.asChoices();
+
     return [
       new DataFieldComponent({
         template: InputNumberSpinnerViewModel.TEMPLATE,
@@ -295,7 +274,7 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
           min: 0,
         }),
         isHidden: this.hideApCost,
-        localizedIconToolTip: game.i18n.localize("ambersteel.actionPoint.plural"),
+        localizedIconToolTip: game.i18n.localize("system.actionPoint.plural"),
         iconClass: "ico-action-point-solid",
       }),
       new DataFieldComponent({
@@ -309,8 +288,8 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
           },
         }),
         isHidden: this.hideCondition,
-        placeholder: game.i18n.localize("ambersteel.character.skill.expertise.condition.placeholder"),
-        localizedIconToolTip: game.i18n.localize("ambersteel.character.skill.expertise.condition.label"),
+        placeholder: game.i18n.localize("system.character.skill.expertise.condition.placeholder"),
+        localizedIconToolTip: game.i18n.localize("system.character.skill.expertise.condition.label"),
         iconClass: "ico-condition-solid",
       }),
       new DataFieldComponent({
@@ -324,8 +303,8 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
           },
         }),
         isHidden: this.hideObstacle,
-        placeholder: game.i18n.localize("ambersteel.roll.obstacle.placeholder"),
-        localizedIconToolTip: game.i18n.localize("ambersteel.roll.obstacle.label"),
+        placeholder: game.i18n.localize("system.roll.obstacle.placeholder"),
+        localizedIconToolTip: game.i18n.localize("system.roll.obstacle.label"),
         iconClass: "ico-obstacle-solid",
       }),
       new DataFieldComponent({
@@ -339,8 +318,8 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
           },
         }),
         isHidden: this.hideOpposedBy,
-        placeholder: game.i18n.localize("ambersteel.roll.obstacle.opposedBy.placeholder"),
-        localizedIconToolTip: game.i18n.localize("ambersteel.roll.obstacle.opposedBy.label"),
+        placeholder: game.i18n.localize("system.roll.obstacle.opposedBy.placeholder"),
+        localizedIconToolTip: game.i18n.localize("system.roll.obstacle.opposedBy.label"),
         iconClass: "ico-opposed-by-solid",
       }),
       new DataFieldComponent({
@@ -354,8 +333,8 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
           },
         }),
         isHidden: this.hideDistance,
-        placeholder: game.i18n.localize("ambersteel.character.skill.expertise.distance.placeholder"),
-        localizedIconToolTip: game.i18n.localize("ambersteel.character.skill.expertise.distance.label"),
+        placeholder: game.i18n.localize("system.character.skill.expertise.distance.placeholder"),
+        localizedIconToolTip: game.i18n.localize("system.character.skill.expertise.distance.label"),
         iconClass: "ico-distance-solid",
       }),
       new DataFieldComponent({
@@ -363,26 +342,14 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
         viewModel: new InputDropDownViewModel({
           id: "vmAttackType",
           parent: this,
-          options: ATTACK_TYPES.asChoices(),
-          value: isDefined(this.document.attackType) ? ATTACK_TYPES.asChoices().find(it => it.value === this.document.attackType.name) : undefined,
+          options: attackTypeChoices,
+          value: isDefined(this.document.attackType) ? attackTypeChoices.find(it => it.value === this.document.attackType.name) : attackTypeChoices.find(it => it.value === ATTACK_TYPES.none.name),
           onChange: (_, newValue) => {
-            this.document.attackType = ATTACK_TYPES[newValue];
+            this.document.attackType = ATTACK_TYPES[newValue.value];
           },
-          adapter: new ChoiceAdapter({
-            toChoiceOption(obj) {
-              if (isDefined(obj) === true) {
-                return ATTACK_TYPES.asChoices().find(it => it.value === obj.name);
-              } else {
-                return ATTACK_TYPES.asChoices().find(it => it.value === "none");
-              }
-            },
-            fromChoiceOption(option) {
-              return ATTACK_TYPES[option.value];
-            }
-          }),
         }),
         isHidden: this.hideAttackType,
-        localizedIconToolTip: game.i18n.localize("ambersteel.attackType.label"),
+        localizedIconToolTip: game.i18n.localize("system.attackType.label"),
         iconClass: this.attackTypeIconClass,
       }),
     ];
@@ -395,7 +362,7 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
     this.damageInfoBubble = new InfoBubble({
       html: html,
       map: [
-        { element: html.find(`#${this.id}-damage-info`), text: game.i18n.localize("ambersteel.damageDefinition.infoFormulae") },
+        { element: html.find(`#${this.id}-damage-info`), text: game.i18n.localize("system.damageDefinition.infoFormulae") },
       ],
       autoShowType: InfoBubbleAutoShowingTypes.MOUSE_ENTER,
       autoHideType: InfoBubbleAutoHidingTypes.MOUSE_LEAVE,
@@ -416,9 +383,6 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
           primaryChatTitle: game.i18n.localize(this.document.name),
           primaryChatImage: this.document.img,
           rollType: "dice-pool",
-          onClick: async (event, data) => {
-            await this.document.advanceByRollResult(data);
-          },
           actor: this.document.owningDocument.document,
         }),
       }),
@@ -435,7 +399,7 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
           id: "vmBtnEdit",
           parent: this,
           iconHtml: '<i class="fas fa-cog"></i>',
-          localizedTooltip: game.i18n.localize("ambersteel.general.edit"),
+          localizedTooltip: game.i18n.localize("system.general.edit"),
           onClick: async () => {
             const delta = await this._queryAttributesConfiguration();
             if (isDefined(delta) !== true) return;
@@ -452,13 +416,13 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
           menuItems: [
             // Edit name
             {
-              name: game.i18n.localize("ambersteel.general.name.edit"),
+              name: game.i18n.localize("system.general.name.edit"),
               icon: '<i class="fas fa-edit"></i>',
               callback: this.queryEditName.bind(this),
             },
             // Add damage
             {
-              name: game.i18n.localize("ambersteel.damageDefinition.add"),
+              name: game.i18n.localize("system.damageDefinition.add"),
               icon: '<i class="fas fa-plus"></i>',
               callback: () => {
                 const damage = this.document.damage.concat([]);
@@ -471,17 +435,17 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
             },
           ]
           // Toggle ap cost
-          .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.character.skill.expertise.apCost", this.document, "apCost", 0))
+          .concat(ButtonContextMenuViewModel.createToggleButtons("system.character.skill.expertise.apCost", this.document, "apCost", 0))
           // Toggle obstacle
-          .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.roll.obstacle.label", this.document, "obstacle", ""))
+          .concat(ButtonContextMenuViewModel.createToggleButtons("system.roll.obstacle.label", this.document, "obstacle", ""))
           // Toggle opposed by
-          .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.roll.obstacle.opposedBy.label", this.document, "opposedBy", ""))
+          .concat(ButtonContextMenuViewModel.createToggleButtons("system.roll.obstacle.opposedBy.label", this.document, "opposedBy", ""))
           // Toggle distance
-          .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.character.skill.expertise.distance.label", this.document, "distance", ""))
+          .concat(ButtonContextMenuViewModel.createToggleButtons("system.character.skill.expertise.distance.label", this.document, "distance", ""))
           // Toggle attack type
-          .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.attackType.label", this.document, "attackType", ATTACK_TYPES.none))
+          .concat(ButtonContextMenuViewModel.createToggleButtons("system.attackType.label", this.document, "attackType", ATTACK_TYPES.none))
           // Toggle condition
-          .concat(ButtonContextMenuViewModel.createToggleButtons("ambersteel.character.skill.expertise.condition.label", this.document, "condition", "")),
+          .concat(ButtonContextMenuViewModel.createToggleButtons("system.character.skill.expertise.condition.label", this.document, "condition", "")),
         }),
       }),
       // Delete button
@@ -528,14 +492,14 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
 
     const dialog = await new DynamicInputDialog({
       localizedTitle: StringUtil.format(
-        game.i18n.localize("ambersteel.general.input.queryFor"), 
+        game.i18n.localize("system.general.input.queryFor"), 
         this.document.name, 
       ),
       inputDefinitions: [
         new DynamicInputDefinition({
           type: DYNAMIC_INPUT_TYPES.SIMPLE_LIST,
           name: inputAttributes,
-          localizedLabel: game.i18n.localize("ambersteel.character.attribute.plural"),
+          localizedLabel: game.i18n.localize("system.character.attribute.plural"),
           required: true,
           defaultValue: baseAttributes,
           validationFunc: (value) => {
@@ -548,16 +512,15 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
                 id: `vmAttribute${index}`,
                 isEditable: true,
                 attribute: attributes[index],
-                onChange: (newAttributeValueName) => {
-                  const newAttributeValue = ATTRIBUTES[newAttributeValueName];
-                  attributes[index] = newAttributeValue;
+                onChange: (newAttribute) => {
+                  attributes[index] = newAttribute;
                 },
               })
             },
             newItemDefaultValue: ATTRIBUTES.agility,
             isItemAddable: this.isEditable,
             isItemRemovable: this.isEditable,
-            localizedAddLabel: game.i18n.localize("ambersteel.general.add"),
+            localizedAddLabel: game.i18n.localize("system.general.add"),
           },
         }),
       ],

@@ -19,8 +19,9 @@ obstacle: {Number}
 isObstacleRolled: {Boolean}
 evaluatedObstacle: {EvaluatedRollFormula}
 evaluatedObstacleForDisplay: {String}
+showReminder: {Boolean}
 --}}
-<div class="dice-roll-chat-message-container{{#if cssClass}} {{cssClass}}{{/if}}">
+<div class="dice-roll-chat-message-container auto-margin-v-sm{{#if cssClass}} {{cssClass}}{{/if}}">
   {{!-- Header --}}
   {{!-- Secondary Title --}}
   {{#if (or (neq secondaryTitle undefined) (neq secondaryImage undefined))}}
@@ -62,19 +63,24 @@ evaluatedObstacleForDisplay: {String}
       {{{evaluatedObstacleForDisplay}}}
     </div>
     <p>
-      {{localize "ambersteel.roll.obstacle.abbreviation"}}: {{evaluatedObstacle.positiveTotal}} + 1 = {{obstacle}}
+      {{localize "system.roll.obstacle.abbreviation"}}: {{evaluatedObstacle.positiveTotal}} + 1 = {{obstacle}}
     </p>
   </div>
   {{/if}}
   {{!-- Dice --}}
-  <div class="dice-number">
-    {{localize "ambersteel.roll.numberOfDice"}}: {{numberOfDice}}
+  <div class="flex flex-row flex-middle flex-grow flex-wrap auto-margin-h-md">
+    {{!-- Number of dice --}}
+    <span class="strive-pill flex flex-row font-size-default" title="{{localize "system.roll.numberOfDice"}}">
+      <div class="flex flex-center"><i class="fas fa-dice-three"></i></div>
+      <div class="flex flex-center margin-l-md margin-r-md">{{> verticalLine}}</div>
+      <div class="flex flex-center"><span class="dice-number">{{numberOfDice}}</span></div>
+    </span>
+    {{!-- Dice composition --}}
+    {{#if diceComposition}}
+    <div class="dice-composition">{{diceComposition}}</div>
+    {{/if}}
   </div>
-  {{#if diceComposition}}
-    <div class="dice-composition">
-      {{diceComposition}}
-    </div>
-  {{/if}}
+  {{!-- Individual dice results --}}
   <div class="dice-rolls-container">
     <ol class="dice-rolls">
       {{#each resultsForDisplay as | resultForDisplay |}}
@@ -83,32 +89,47 @@ evaluatedObstacleForDisplay: {String}
     </ol>
   </div>
   {{!-- Outcome --}}
-  <div class="dice-result-container">
+  <div class="dice-result-container auto-margin-v-md">
     {{#if (eq outcomeType "SUCCESS")}}
-      <div class="dice-result success">
-        {{localize "ambersteel.roll.success.label"}}!
-      </div>
+      <div class="dice-result success">{{localize "system.roll.success.label"}}!</div>
     {{/if}}
     {{#if (eq outcomeType "PARTIAL")}}
-      <div class="dice-result partial">
-        {{localize "ambersteel.roll.partial.label"}}!
-      </div>
+      <div class="dice-result partial">{{localize "system.roll.partial.label"}}!</div>
     {{/if}}
     {{#if (eq outcomeType "FAILURE")}}
-      <div class="dice-result failure">
-        {{localize "ambersteel.roll.failure.label"}}!
-      </div>
+      <div class="dice-result failure">{{localize "system.roll.failure.label"}}!</div>
     {{/if}}
     {{#if showBackFire}}
       <div class="dice-result failure flex flex-row flex-middle">
         <i class="fas fa-exclamation-triangle"></i>
-        <span class="margin-l-md">{{localize "ambersteel.roll.backFire.label"}}!</span>
+        <span class="margin-l-md">{{localize "system.roll.backFire.label"}}!</span>
       </div>
     {{/if}}
-    <div class="dice-degree">
-      <span>{{localize "ambersteel.roll.positive.plural"}}: {{positives}},</span>
-      <span>{{localize "ambersteel.roll.negative.plural"}}: {{negatives}},</span>
-      <span>{{localize "ambersteel.roll.missing.plural"}}: {{missingDiceCount}}</span>
+    <div class="flex flex-row flex-center flex-wrap auto-margin-h-lg auto-margin-h-sm font-size-default">
+      {{!-- Positives --}}
+      <span class="strive-pill flex flex-row font-size-default" title="{{localize "system.roll.positive.plural"}}">
+        <div class="flex flex-center"><i class="ico dark ico-dice-check-solid" style="width: 1rem; height: 1rem;"></i></div>
+        <div class="flex flex-center margin-l-md margin-r-md">{{> verticalLine}}</div>
+        <div class="flex flex-center"><span class="dice-number">{{positives}}</span></div>
+      </span>
+      {{!-- Negatives --}}
+      <span class="strive-pill flex flex-row font-size-default" title="{{localize "system.roll.negative.plural"}}">
+        <div class="flex flex-center"><i class="ico dark ico-dice-times-solid" style="width: 1rem; height: 1rem;"></i></div>
+        <div class="flex flex-center margin-l-md margin-r-md">{{> verticalLine}}</div>
+        <div class="flex flex-center"><span class="dice-number">{{negatives}}</span></div>
+      </span>
+      {{!-- Missing --}}
+      {{#if (neq missingDiceCount 0)}}
+      <span class="strive-pill flex flex-row font-size-default" title="{{localize "system.roll.missing.plural"}}">
+        <div class="flex flex-center"><i class="ico dark ico-dice-void-line" style="width: 1rem; height: 1rem;"></i></div>
+        <div class="flex flex-center margin-l-md margin-r-md">{{> verticalLine}}</div>
+        <div class="flex flex-center"><span class="dice-number">{{missingDiceCount}}</span></div>
+      </span>
+      {{/if}}
     </div>
   </div>
+  {{!-- Reminder --}}
+  {{#if showReminder}}
+  <p class="border-solid-t-sm" style="text-align: center;">{{localize "system.roll.reminder"}}</p>
+  {{/if}}
 </div>

@@ -1,3 +1,4 @@
+import { ITEM_TYPES } from "../../../../business/document/item/item-types.mjs";
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs"
 import ButtonAddViewModel from "../../../component/button-add/button-add-viewmodel.mjs";
 import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
@@ -35,6 +36,12 @@ export default class ActorFateViewModel extends ViewModel {
    * @readonly
    */
   get fateCardTemplate() { return TEMPLATES.FATE_CARD; }
+
+  /**
+   * @type {Boolean}
+   * @readonly
+   */
+  get hasExceededFateCardLimit() { return (this.document.fateSystem.fateCards.length > 5); }
 
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
@@ -90,12 +97,11 @@ export default class ActorFateViewModel extends ViewModel {
       parent: thiz,
       id: "vmBtnAddFateCard",
       target: thiz.document,
-      creationType: "fate-card",
+      creationType: ITEM_TYPES.FATE_CARD,
       withDialog: true,
-      localizedType: game.i18n.localize("ambersteel.character.driverSystem.fateSystem.fateCard.label"),
+      localizedType: game.i18n.localize("system.character.driverSystem.fateSystem.fateCard.label"),
     });
 
-    this.fateCards = [];
     this.fateCards = this._getFateCardViewModels();
   }
 

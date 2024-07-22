@@ -1,5 +1,4 @@
 import * as ChatUtil from "../../presentation/chat/chat-utility.mjs";
-import { createUUID } from '../util/uuid-utility.mjs';
 import PreparedChatData from '../../presentation/chat/prepared-chat-data.mjs';
 import { SOUNDS_CONSTANTS } from '../../presentation/audio/sounds.mjs';
 import ViewModel from '../../presentation/view-model/view-model.mjs';
@@ -214,7 +213,7 @@ export default class TransientDocument {
 
     this._updater = new DocumentUpdater({
       propertyUtility: PropertyUtility,
-      logger: game.ambersteel.logger,
+      logger: game.strive.logger,
     });
 
     this.document = document;

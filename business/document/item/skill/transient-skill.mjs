@@ -4,9 +4,7 @@ import SkillChatMessageViewModel from "../../../../presentation/sheet/item/skill
 import { SumComponent, Sum } from "../../../ruleset/summed-data.mjs";
 import DamageAndType from "../../../ruleset/skill/damage-and-type.mjs";
 import PreparedChatData from "../../../../presentation/chat/prepared-chat-data.mjs";
-import { DAMAGE_TYPES } from "../../../ruleset/damage-types.mjs";
 import { SOUNDS_CONSTANTS } from "../../../../presentation/audio/sounds.mjs";
-import { ITEM_SUBTYPE } from "../item-subtype.mjs";
 import TransientBaseItem from "../transient-base-item.mjs";
 import LevelAdvancement from "../../../ruleset/level-advancement.mjs";
 import Ruleset from "../../../ruleset/ruleset.mjs";
@@ -14,14 +12,12 @@ import Expertise from "./expertise.mjs";
 import CharacterAttribute from "../../../ruleset/attribute/character-attribute.mjs";
 import { ATTACK_TYPES } from "../../../ruleset/skill/attack-types.mjs";
 import { ATTRIBUTES, Attribute } from "../../../ruleset/attribute/attributes.mjs";
-import { isBlankOrUndefined, isDefined, isObject } from "../../../util/validation-utility.mjs";
+import { isDefined } from "../../../util/validation-utility.mjs";
 import { arrayContains } from "../../../util/array-utility.mjs";
-import * as ConstantsUtils from "../../../util/constants-utility.mjs";
-import { DICE_POOL_RESULT_TYPES } from "../../../dice/dice-pool.mjs";
 import SkillPrerequisite from "../../../ruleset/skill/skill-prerequisite.mjs";
 import { SKILL_TAGS } from "../../../tags/system-tags.mjs";
 import AtReferencer from "../../../referencing/at-referencer.mjs";
-import { getGroupForAttributeByName } from "../../../ruleset/attribute/attribute-groups.mjs";
+import { ACTOR_TYPES } from "../../actor/actor-types.mjs";
 
 /**
  * Represents the full transient data of a skill. 
@@ -37,8 +33,7 @@ import { getGroupForAttributeByName } from "../../../ruleset/attribute/attribute
  * @property {Number} modifiedLevel The current modified level. 
  * * Read-only. 
  * @property {Array<Attribute>} baseAttributes Base attributes of the skill. 
- * * Must always contain at least one entry. By default, this is agility. 
- * @property {Attribute} activeBaseAttribute The currently set base attribute. 
+ * * Must always contain at least one entry. By default, this is the first attribute as per the `ATTRIBUTES` definiton. 
  * @property {Array<Expertise>} expertises The array of expertises of this skill. 
  * @property {Boolean} isMagicSchool Returns true, if the skill is considered 
  * a magic school. 
@@ -69,7 +64,7 @@ export default class TransientSkill extends TransientBaseItem {
     
     // Safe-guard - there must always be at least one base attribute. 
     if (attributes.length === 0) {
-      attributes.push(ATTRIBUTES.agility);
+      attributes.push(ATTRIBUTES.asArray()[0]);
     }
 
     return attributes;
@@ -77,50 +72,13 @@ export default class TransientSkill extends TransientBaseItem {
   /**
    * Sets the given list of base attributes. 
    * 
-   * Also ensures that the active base attribute is one of these values. 
-   * 
    * @param {Array<Attribute>} value
    */
   set baseAttributes(value) {
     const baseAttributeNames = value.map(attribute => attribute.name);
     this.document.system.baseAttributes = baseAttributeNames;
 
-    const newListContainsActive = isDefined(baseAttributeNames.find(it => it === this.activeBaseAttribute.name));
-    if (newListContainsActive === true) {
-      this.updateByPath("system.baseAttributes", baseAttributeNames);
-    } else {
-      // Also update the active base attribute. 
-      this.update({
-        system: {
-          baseAttributes: baseAttributeNames,
-          activeBaseAttribute: baseAttributeNames[0],
-        }
-      });
-    }
-  }
-  
-  /**
-   * @type {Attribute}
-   */
-  get activeBaseAttribute() {
-    const systemActiveBaseAttribute = this.document.system.activeBaseAttribute;
-    const containedInBaseAttributes = (this.baseAttributes.find(it => it.name === systemActiveBaseAttribute) !== undefined);
-    
-    if (containedInBaseAttributes === true) {
-      return ATTRIBUTES[systemActiveBaseAttribute];
-    } else if (this.baseAttributes.length > 0) {
-      return this.baseAttributes[0];
-    } else {
-      game.ambersteel.logger.logWarn(`List of base attributes is empty for skill '${this.id}' - '${this.name}'`);
-      return ATTRIBUTES.agility;
-    }
-  }
-  /**
-   * @param {Attribute} value
-   */
-  set activeBaseAttribute(value) {
-    this.document.system.activeBaseAttribute = value.name;
-    this.updateByPath("system.activeBaseAttribute", value.name);
+    this.updateByPath("system.baseAttributes", baseAttributeNames);
   }
   
   /**
@@ -161,28 +119,13 @@ export default class TransientSkill extends TransientBaseItem {
    * @readonly
    */
   get modifiedLevel() {
-    let level = this.dependsOnActiveCr === true ? this.crLevel : this.level;
+    const level = this.dependsOnActiveCr === true ? (this.owningDocument.challengeRating.modified) : this.level;
 
     if (level > 0) {
       return Math.max(level + this.levelModifier, 1);
     } else {
       return Math.max(level + this.levelModifier, 0)
     }
-  }
-
-  /**
-   * Returns the challenge rating of the active base attribute, for use as 
-   * the skill's level. 
-   * 
-   * @type {Number}
-   * @readonly
-   */
-  get crLevel() {
-    if (this.owningDocument !== undefined) {
-      const group = getGroupForAttributeByName(this.activeBaseAttribute.name);
-      return this.owningDocument.getCrFor(group.name).modified;
-    }
-    return 0;
   }
 
   /**
@@ -376,7 +319,7 @@ export default class TransientSkill extends TransientBaseItem {
   }
 
   /**
-   * Returns `true`, if the skill's active base attribute is part of a group for which 
+   * Returns `true`, if the skill's embedded on an actor for which 
    * a challenge rating is active. 
    * 
    * @type {Boolean}
@@ -384,9 +327,10 @@ export default class TransientSkill extends TransientBaseItem {
    */
   get dependsOnActiveCr() {
     const owningDocument = this.owningDocument;
-    if (owningDocument !== undefined && owningDocument.type === "npc") {
-      const group = getGroupForAttributeByName(this.activeBaseAttribute.name);
-      return owningDocument.getIsCrActiveFor(group.name);
+    if (isDefined(owningDocument) 
+      && owningDocument.type === ACTOR_TYPES.NPC
+      && owningDocument.isChallengeRatingEnabled) {
+      return true;
     } else {
       return false;
     }
@@ -417,7 +361,7 @@ export default class TransientSkill extends TransientBaseItem {
       actor: (this.owningDocument ?? {}).document, 
       sound: SOUNDS_CONSTANTS.NOTIFY,
       viewModel: vm,
-      flavor: game.i18n.localize("ambersteel.character.skill.singular"),
+      flavor: game.i18n.localize("system.character.skill.singular"),
     });
   }
 
@@ -476,59 +420,6 @@ export default class TransientSkill extends TransientBaseItem {
   };
 
   /**
-   * Adds success/failure progress to the skill. 
-   * 
-   * Also auto-levels up the skill, if 'autoLevel' is set to true. 
-   * 
-   * @param {DicePoolRollResultType} outcomeType The test outcome to work with. 
-   * @param {Boolean | undefined} autoLevel Optional. If true, will auto-level up. 
-   * * Default `false`
-   * @param {Boolean | undefined} resetProgress Optional. If true, will also reset 
-   * successes and failures, if `autoLevel` is also true and a level automatically 
-   * incremented. 
-   * * Default `true`
-   * 
-   * @throws {Error} Thrown, if `outcomeType` is undefined. 
-   * 
-   * @async
-   */
-  async addProgress(outcomeType, autoLevel = false, resetProgress = true) {
-    if (outcomeType === undefined) {
-      game.ambersteel.logger.logWarn("outcomeType is undefined");
-      return;
-    }
-    if (outcomeType === DICE_POOL_RESULT_TYPES.NONE) {
-      // Do not advance anything for a "none" result. 
-      return;
-    }
-
-    if (outcomeType === DICE_POOL_RESULT_TYPES.SUCCESS) {
-      this.advancementProgress.successes++;
-    } else {
-      this.advancementProgress.failures++;
-    }
-
-    if (autoLevel === true) {
-      if (this.advancementProgress.successes >= this.advancementRequirements.successes
-        && this.advancementProgress.failures >= this.advancementRequirements.failures) {
-        this.level++;
-
-        if (resetProgress === true) {
-          this.advancementProgress.successes = 0;
-          this.advancementProgress.failures = 0;
-        }
-      }
-    }
-    
-    await this._persistLevel();
-
-    // Progress associated attribute. 
-    if (this.owningDocument !== undefined) {
-      this.owningDocument.addAttributeProgress(outcomeType, this.activeBaseAttribute.name, autoLevel)
-    }
-  }
-
-  /**
    * Adds a new expertise. 
    * 
    * @param {Object} creationData Additional data to set on creation. 
@@ -572,38 +463,32 @@ export default class TransientSkill extends TransientBaseItem {
   }
 
   /**
-   * Advances the skill, based on the given `DicePoolRollResult`. 
-   * 
-   * @param {DicePoolRollResult | undefined} rollResult 
-   * 
-   * @async
-   */
-  async advanceByRollResult(rollResult) {
-    if (rollResult !== undefined) {
-      this.addProgress(rollResult.outcomeType);
-    }
-  }
-
-  /**
    * Returns the component(s) to do a roll using this skill. 
    * 
    * @returns {Sum}
    */
   getRollData() {
     if (this.dependsOnActiveCr === true) {
-      const group = getGroupForAttributeByName(this.activeBaseAttribute.name);
       return new Sum([
-        new SumComponent(group.name, group.localizableName, this.modifiedLevel),
+        new SumComponent("challengeRating", "system.character.advancement.challengeRating.label", this.owningDocument.challengeRating.modified),
+        new SumComponent(this.name, "system.character.advancement.modifier.label", this.levelModifier),
       ]);
     } else {
       const actor = (this.owningDocument ?? {}).document;
-      const characterAttribute = new CharacterAttribute(actor, this.activeBaseAttribute.name);
-      const compositionObj = new Ruleset().getSkillTestNumberOfDice(this.modifiedLevel, characterAttribute.modifiedLevel);
+      
+      // Accumulate the dice from base attributes. 
+      const components = [];
+      for (const attribute of this.baseAttributes) {
+        const characterAttribute = new CharacterAttribute(actor, attribute.name);
+        const attributeComponent = new SumComponent(characterAttribute.name, characterAttribute.localizableName, characterAttribute.modifiedLevel);
+        components.push(attributeComponent);
+      }
+      // Lastly, add the skill's own dice. 
+      components.push(
+        new SumComponent(this.name, this.name, this.modifiedLevel)
+      );
 
-      return new Sum([
-        new SumComponent(this.activeBaseAttribute.name, characterAttribute.localizableName, compositionObj.attributeDiceCount),
-        new SumComponent(this.name, this.name, compositionObj.skillDiceCount),
-      ]);
+      return new Sum(components);
     }
   }
 
@@ -623,6 +508,26 @@ export default class TransientSkill extends TransientBaseItem {
     }
 
     await this.updateByPath("system.abilities", expertisesToPersist, render);
+  }
+
+  /**
+   * Compares the raw level of this instance with a given instance and returns a numeric comparison result. 
+   * 
+   * @param {TransientSkill} other Another instance to compare with. 
+   * 
+   * @returns {Number} `-1` | `0` | `1`
+   * 
+   * `-1` means that this entity is less than / smaller than `other`, while `0` means equality and `1` means it 
+   * is more than / greater than `other`. 
+   */
+  compareLevel(other) {
+    if (this.level < other.level) {
+      return -1;
+    } else if (this.level > other.level) {
+      return 1;
+    } else {
+      return 0;
+    }
   }
 
   /**
@@ -680,5 +585,3 @@ export default class TransientSkill extends TransientBaseItem {
     return super.resolveReference(comparableReference, propertyPath);
   }
 }
-
-ITEM_SUBTYPE.set("skill", (document) => { return new TransientSkill(document) });

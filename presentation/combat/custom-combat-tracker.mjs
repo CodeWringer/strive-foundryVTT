@@ -1,3 +1,4 @@
+import { ACTOR_TYPES } from "../../business/document/actor/actor-types.mjs";
 import { isDefined } from "../../business/util/validation-utility.mjs";
 import { TEMPLATES } from "../templatePreloader.mjs";
 import CombatTrackerActionPointsViewModel from "./combat-tracker-action-points-viewmodel.mjs";
@@ -28,13 +29,13 @@ export default class CustomCombatTracker extends CombatTracker {
       const document = combatant.actor;
 
       if (isDefined(document) !== true) {
-        game.ambersteel.logger.logWarn("Failed to get combatant actor");
+        game.strive.logger.logWarn("Failed to get combatant actor");
         continue;
-      } else if (document.type === "plain") {
+      } else if (document.type === ACTOR_TYPES.PLAIN) {
         continue;
       }
 
-      turn.renderActionPoints = document.type !== "plain";
+      turn.renderActionPoints = document.type !== ACTOR_TYPES.PLAIN;
       turn.actionPointsTemplate = TEMPLATES.COMBAT_TRACKER_ACTION_POINTS;
       const viewModel = new CombatTrackerActionPointsViewModel({
         id: `${turn.id}-aplist`,

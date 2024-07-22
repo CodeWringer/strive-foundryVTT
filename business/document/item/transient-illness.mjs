@@ -2,9 +2,8 @@ import { TEMPLATES } from "../../../presentation/templatePreloader.mjs";
 import IllnessChatMessageViewModel from "../../../presentation/sheet/item/illness/illness-chat-message-viewmodel.mjs";
 import PreparedChatData from "../../../presentation/chat/prepared-chat-data.mjs";
 import { SOUNDS_CONSTANTS } from "../../../presentation/audio/sounds.mjs";
-import { ITEM_SUBTYPE } from "./item-subtype.mjs";
 import TransientBaseItem from "./transient-base-item.mjs";
-import { createUUID } from "../../util/uuid-utility.mjs";
+import { ILLNESS_STATES } from "../../ruleset/health/illness-states.mjs";
 
 /**
  * Represents the full transient data of an illness. 
@@ -80,7 +79,7 @@ export default class TransientIllness extends TransientBaseItem {
       actor: (this.owningDocument ?? {}).document, 
       sound: SOUNDS_CONSTANTS.NOTIFY,
       viewModel: vm,
-      flavor: game.i18n.localize("ambersteel.character.health.illness.singular"),
+      flavor: game.i18n.localize("system.character.health.illness.singular"),
     });
   }
 
@@ -113,6 +112,24 @@ export default class TransientIllness extends TransientBaseItem {
       document: this,
     });
   }
+  
+  /**
+   * Compares the treatment state of this instance with a given instance and returns a numeric comparison result. 
+   * 
+   * @param {TransientIllness} other Another instance to compare with. 
+   * 
+   * @returns {Number} `-1` | `0` | `1`
+   * 
+   * `-1` means that this entity is less than / smaller than `other`, while `0` means equality and `1` means it 
+   * is more than / greater than `other`. 
+   */
+  compareTreatment(other) {
+    if (this.state === ILLNESS_STATES.active.name && other.state !== ILLNESS_STATES.active.name) {
+      return -1;
+    } else if (this.state === ILLNESS_STATES.treated.name && other.state !== ILLNESS_STATES.treated.name) {
+      return 1;
+    } else {
+      return 0;
+    }
+  }
 }
-
-ITEM_SUBTYPE.set("illness", (document) => { return new TransientIllness(document) });

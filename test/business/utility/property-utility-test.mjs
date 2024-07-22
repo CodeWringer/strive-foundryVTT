@@ -102,7 +102,7 @@ describe('property-utility', function() {
       const path = "";
       const newValue = 42;
       global.game = {
-        ambersteel: {
+        strive: {
           logger: sinon.spy()
         }
       }

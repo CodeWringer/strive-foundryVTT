@@ -2,10 +2,10 @@
 viewModel: {ActorAssetSlotViewModel}
 cssClass: {undefined | String}
 --}}
-<div class="ambersteel-asset-slot flex flex-row{{#if cssClass}} {{cssClass}}{{/if}}">
+<div id="{{viewModel.id}}" class="strive-asset-slot flex flex-row{{#if cssClass}} {{cssClass}}{{/if}}">
   {{!-- Header Row --}}
   {{#if viewModel.hasAsset}}
-  <div>
+  <div class="flex-grow">
     {{#with viewModel.assetListItemTemplate as |template|}}
       {{> (template) viewModel=../viewModel.assetListItemViewModel}}
     {{/with}}

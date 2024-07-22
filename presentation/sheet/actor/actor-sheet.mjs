@@ -1,22 +1,39 @@
-import { ACTOR_SHEET_SUBTYPE } from "./actor-sheet-subtype.mjs";
-// Imports of specific actor sheet "sub-types", to ensure their imports cause the `ACTOR_SHEET_SUBTYPE` map to be populated. 
-import AmbersteelBaseActorSheet from "./ambersteel-base-actor-sheet.mjs";
-import AmbersteelNpcActorSheet from "./ambersteel-npc-actor-sheet.mjs";
-import AmbersteelPcActorSheet from "./ambersteel-pc-actor-sheet.mjs";
+import GameSystemBaseActorSheet from "./game-system-base-actor-sheet.mjs";
+import GameSystemNpcActorSheet from "./game-system-npc-actor-sheet.mjs";
+import GameSystemPcActorSheet from "./game-system-pc-actor-sheet.mjs";
 import * as SheetUtil from "../sheet-utility.mjs";
 import { SYSTEM_ID } from "../../../system-id.mjs";
 import { isDefined } from "../../../business/util/validation-utility.mjs";
 import DocumentFetcher from "../../../business/document/document-fetcher/document-fetcher.mjs";
+import ViewModel from "../../view-model/view-model.mjs";
+import { ACTOR_TYPES } from "../../../business/document/actor/actor-types.mjs";
+import { ITEM_TYPES } from "../../../business/document/item/item-types.mjs";
 
-export class AmbersteelActorSheet extends ActorSheet {
+export class GameSystemActorSheet extends ActorSheet {
+  /**
+   * Returns a map of `ActorSheet` sub-types and their factory functions. 
+   * 
+   * @type {Map<String, Function<TransientBaseActor>>}
+   * @static
+   * @readonly
+   * @private
+   */
+  static get SUB_TYPES() {
+    return new Map([
+      [ACTOR_TYPES.PLAIN, new GameSystemBaseActorSheet()],
+      [ACTOR_TYPES.NPC, new GameSystemNpcActorSheet()],
+      [ACTOR_TYPES.PC, new GameSystemPcActorSheet()],
+    ]);
+  }
+
   /**
    * Type-dependent object which pseudo-extends the logic of this object. 
-   * @type {AmbersteelBaseActorSheet}
+   * @type {GameSystemBaseActorSheet}
    * @readonly
    */
   get subType() {
     const type = this.actor.type;
-    const enhancer = ACTOR_SHEET_SUBTYPE.get(type);
+    const enhancer = GameSystemActorSheet.SUB_TYPES.get(type);
     
     if (enhancer === undefined) {
       throw new Error(`InvalidTypeException: Actor sheet subtype ${type} is unrecognized!`);
@@ -118,10 +135,10 @@ export class AmbersteelActorSheet extends ActorSheet {
     SheetUtil.enrichData(context);
 
     // Prepare a new view model instance. 
-    game.ambersteel.logger.logPerf(this, "actor.getData (getViewModel)", () => {
+    game.strive.logger.logPerf(this, "actor.getData (getViewModel)", () => {
       this._viewModel = this.subType.getViewModel(context, context.actor, this);
     });
-    game.ambersteel.logger.logPerf(this, "actor.getData (readAllViewState)", () => {
+    game.strive.logger.logPerf(this, "actor.getData (readAllViewState)", () => {
       this._viewModel.readAllViewState();
     });
 
@@ -134,10 +151,10 @@ export class AmbersteelActorSheet extends ActorSheet {
   async activateListeners(html) {
     await super.activateListeners(html);
 
-    await game.ambersteel.logger.logPerfAsync(this, "actor.activateListeners (subType)", async () => {
+    await game.strive.logger.logPerfAsync(this, "actor.activateListeners (subType)", async () => {
       await this.subType.activateListeners(html);
     });
-    await game.ambersteel.logger.logPerfAsync(this, "actor.activateListeners (viewModel)", async () => {
+    await game.strive.logger.logPerfAsync(this, "actor.activateListeners (viewModel)", async () => {
       await this.viewModel.activateListeners(html);
     });
   }
@@ -147,8 +164,9 @@ export class AmbersteelActorSheet extends ActorSheet {
    * @see https://foundryvtt.com/api/FormApplication.html#close
    */
   async close() {
-    if (this._viewModel !== undefined && this._viewModel !== null) {
-      this._viewModel.writeViewState();
+    if (this.viewModel !== undefined && this.viewModel !== null) {
+      this.viewModel.writeViewState();
+      this.viewModel.dispose();
     }
     
     return super.close();
@@ -178,9 +196,9 @@ export class AmbersteelActorSheet extends ActorSheet {
       }
     };
 
-    if (templateItem.type === "skill") {
+    if (templateItem.type === ITEM_TYPES.SKILL) {
       // For NPCs, ensure skills have at least level one, if they have no advancement progression enabled. 
-      if (this.actor.type === "npc") {
+      if (this.actor.type === ACTOR_TYPES.NPC) {
         const npcData = this.actor.getTransientObject();
         if (npcData.progressionVisible === false) {
           creationData.system.level = 1;

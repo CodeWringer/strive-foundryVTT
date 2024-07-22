@@ -1,0 +1,28 @@
+{{!--
+viewModel: SortControlsViewModel
+cssClass: String | undefined
+--}}
+<span id="{{viewModel.id}}" class="flex flex-row auto-margin-h{{#if cssClass}} {{cssClass}}{{/if}}">
+  {{#each viewModel.optionViewModels as |option|}}
+    <span class="flex flex-row auto-margin-h sheet-block">
+      {{#if (or option.option.iconHtml option.option.localizedLabel)}}
+      <span class="flex flex-row flex-middle auto-margin-h pad-r-md border-solid-r-sm">
+        {{#if option.option.iconHtml}}
+        <span class="flex flex-center"{{#if option.option.localizedToolTip}} title="{{option.option.localizedToolTip}}"{{/if}}>{{{option.option.iconHtml}}}</span>
+        {{/if}}
+        {{#if (and option.option.localizedLabel (not ../viewModel.compact))}}
+        <span>{{option.option.localizedLabel}}</span>
+        {{/if}}
+      </span>
+      {{/if}}
+      <span class="flex flex-row flex-middle">
+        {{#> button viewModel=option.vmSortAscending cssClass="override sort-ascending"}}{{/button}}
+        {{#if ../viewModel.compact}}
+        {{#> button viewModel=option.vmSortDescending cssClass="override sort-descending hidden"}}{{/button}}
+        {{else}}
+        {{#> button viewModel=option.vmSortDescending cssClass="override sort-descending"}}{{/button}}
+        {{/if}}
+      </span>
+    </span>
+  {{/each}}
+</span>

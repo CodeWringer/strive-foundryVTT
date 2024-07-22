@@ -1,4 +1,4 @@
-import { ROLL_TYPES } from "../../../business/dice/roll-types.mjs";
+import { ROLL_TYPES, RollType } from "../../../business/dice/roll-types.mjs";
 import { SOUNDS_CONSTANTS } from "../../audio/sounds.mjs";
 import * as ChatUtil from "../../chat/chat-utility.mjs";
 import * as PropUtil from "../../../business/util/property-utility.mjs";
@@ -8,11 +8,11 @@ import Ruleset from "../../../business/ruleset/ruleset.mjs";
 import DynamicInputDialog from "../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
 import { DYNAMIC_INPUT_TYPES } from "../../dialog/dynamic-input-dialog/dynamic-input-types.mjs";
 import { VISIBILITY_MODES } from "../../chat/visibility-modes.mjs";
-import ChoiceAdapter from "../input-choice/choice-adapter.mjs";
 import { ROLL_DICE_MODIFIER_TYPES } from "../../../business/dice/roll-dice-modifier-types.mjs";
 import DynamicInputDefinition from "../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
 import { SumComponent } from "../../../business/ruleset/summed-data.mjs";
 import DicePool, { DicePoolRollResult } from "../../../business/dice/dice-pool.mjs";
+import { ITEM_TYPES } from "../../../business/document/item/item-types.mjs";
 
 /**
  * A button that allows performing a dice roll and then sending the result to the chat. 
@@ -112,7 +112,8 @@ export default class ButtonRollViewModel extends ButtonViewModel {
    * * `data: DicePoolRollResult | Object` - The rolled result. 
    * 
    * @param {TransientDocument | Object} args.target The target object to affect. 
-   * @param {String} args.rollType The internal name of a `RollType` that Determines the kind of roll to try and make. 
+   * @param {RollType} args.rollType The internal name of a `RollType` that Determines the kind of roll to try and make.
+   * See `ROLL_TYPES` 
    * @param {String | undefined} args.propertyPath Property path identifying a property that contains a roll-formula. 
    * IMPORTANT: If this argument is left undefined, then the target object MUST define a method 'getRollData()', which returns a `Sum` instance. 
    * @param {String | undefined} args.primaryChatTitle Primary title to display above the roll result in the chat message. 
@@ -120,7 +121,6 @@ export default class ButtonRollViewModel extends ButtonViewModel {
    * @param {String | undefined} args.secondaryChatTitle Primary title to display above the roll result in the chat message. 
    * @param {String | undefined} args.secondaryChatImage Primary image to display above the roll result in the chat message. 
    * @param {Actor | undefined} args.actor  Actor associated with the roll result. 
-   * @param {String | undefined} args.localizedTooltip Localized tooltip. 
    */
   constructor(args = {}) {
     super({
@@ -137,7 +137,7 @@ export default class ButtonRollViewModel extends ButtonViewModel {
     this.secondaryChatTitle = args.secondaryChatTitle;
     this.secondaryChatImage = args.secondaryChatImage;
     this._actor = args.actor;
-    this.localizedTooltip = args.localizedTooltip ?? game.i18n.localize("ambersteel.roll.doRoll");
+    this.localizedTooltip = args.localizedToolTip ?? game.i18n.localize("system.roll.doRoll");
   }
 
   /**
@@ -161,20 +161,16 @@ export default class ButtonRollViewModel extends ButtonViewModel {
     // Prepare the dialog. 
     // By default, it allows selection of the visibility mode. 
     const dialog = new DynamicInputDialog({
-      localizedTitle: game.i18n.localize("ambersteel.roll.query"),
+      localizedTitle: game.i18n.localize("system.roll.query"),
       inputDefinitions: [
         new DynamicInputDefinition({
           type: DYNAMIC_INPUT_TYPES.DROP_DOWN,
           name: this.inputVisibility,
-          localizedLabel: game.i18n.localize("ambersteel.general.messageVisibility.label"),
+          localizedLabel: game.i18n.localize("system.general.messageVisibility.label"),
           required: true,
-          defaultValue: (VISIBILITY_MODES.asArray()[0]),
+          defaultValue: VISIBILITY_MODES.asChoices().find(it => it.value === VISIBILITY_MODES.public.name),
           specificArgs: {
             options: VISIBILITY_MODES.asChoices(),
-            adapter: new ChoiceAdapter({
-              toChoiceOption: (obj) => { return VISIBILITY_MODES.asChoices().find(it => it.value === obj.name); },
-              fromChoiceOption: (choice) => { return VISIBILITY_MODES.asArray().find(it => it.name === choice.value); }
-            }),
           }
         }),
       ],
@@ -225,7 +221,7 @@ export default class ButtonRollViewModel extends ButtonViewModel {
       flavor: this.primaryChatTitle,
       actor: this.actor,
       sound: SOUNDS_CONSTANTS.DICE_ROLL,
-      visibilityMode: dialog.visibilityMode
+      visibilityMode: VISIBILITY_MODES[dialog[this.inputVisibility].value],
     });
 
     return rollResult;
@@ -265,38 +261,34 @@ export default class ButtonRollViewModel extends ButtonViewModel {
       new DynamicInputDefinition({
         type: DYNAMIC_INPUT_TYPES.LABEL,
         name: "diceCompositionLabel",
-        localizedLabel: `<p>${game.i18n.localize("ambersteel.roll.numberOfDice")}: ${rollData.total}</p><p class="font-size-sm">${diceComposition}</p>`,
+        localizedLabel: `<p>${game.i18n.localize("system.roll.numberOfDice")}: ${rollData.total}</p><p class="font-size-sm">${diceComposition}</p>`,
         showFancyFont: false,
       }),
       new DynamicInputDefinition({
         type: DYNAMIC_INPUT_TYPES.TEXTFIELD,
         name: inputObstacle,
-        localizedLabel: game.i18n.localize("ambersteel.roll.obstacle.abbreviation"),
+        localizedLabel: game.i18n.localize("system.roll.obstacle.abbreviation"),
         required: true,
         defaultValue: "",
         specificArgs: {
-          placeholder: game.i18n.localize("ambersteel.roll.obstacle.rollForPlaceholder"),
+          placeholder: game.i18n.localize("system.roll.obstacle.rollForPlaceholder"),
         },
       }),
       new DynamicInputDefinition({
         type: DYNAMIC_INPUT_TYPES.NUMBER_SPINNER,
         name: inputBonusDice,
-        localizedLabel: game.i18n.localize("ambersteel.roll.bonusDice"),
+        localizedLabel: game.i18n.localize("system.roll.bonusDice"),
         required: true,
         defaultValue: 0,
       }),
       new DynamicInputDefinition({
         type: DYNAMIC_INPUT_TYPES.DROP_DOWN,
         name: inputRollDiceModifier,
-        localizedLabel: game.i18n.localize("ambersteel.roll.diceModifier.plural"),
+        localizedLabel: game.i18n.localize("system.roll.diceModifier.plural"),
         required: true,
-        defaultValue: (ROLL_DICE_MODIFIER_TYPES.asArray()[0]),
+        defaultValue: ROLL_DICE_MODIFIER_TYPES.asChoices().find(it => it.value === ROLL_DICE_MODIFIER_TYPES.NONE.name),
         specificArgs: {
           options: ROLL_DICE_MODIFIER_TYPES.asChoices(),
-          adapter: new ChoiceAdapter({
-            toChoiceOption: (obj) => { return ROLL_DICE_MODIFIER_TYPES.asChoices().find(it => it.value === obj.name); },
-            fromChoiceOption: (choice) => { return ROLL_DICE_MODIFIER_TYPES.asArray().find(it => it.name === choice.value); }
-          }),
         }
       }),
     );
@@ -307,16 +299,16 @@ export default class ButtonRollViewModel extends ButtonViewModel {
     // Do roll. 
     const rollResult = await new DicePool({
       dice: rollData.components,
-      bonus: [new SumComponent("bonus", "ambersteel.roll.bonusDice", parseInt(dialog[inputBonusDice]))],
+      bonus: [new SumComponent("bonus", "system.roll.bonusDice", parseInt(dialog[inputBonusDice]))],
       obstacle: dialog[inputObstacle],
-      modifier: ROLL_DICE_MODIFIER_TYPES.asArray().find(it => it.name === dialog[inputRollDiceModifier]),
+      modifier: ROLL_DICE_MODIFIER_TYPES.asArray().find(it => it.name === dialog[inputRollDiceModifier].value),
     }).roll();
 
     this._lastRollResult = rollResult;
 
     // In case of a skill - also determine whether to show this as a backfire. 
     let showBackFire = false;
-    if (this.target.type === "skill") {
+    if (this.target.type === ITEM_TYPES.SKILL) {
       // Only consider skills with the "magicSchool" property. 
       if (this.target.isMagicSchool === true) {
         if (new Ruleset().rollCausesBackfire(rollResult) === true) {
@@ -326,7 +318,7 @@ export default class ButtonRollViewModel extends ButtonViewModel {
     }
 
     rollResult.sendToChat({
-      visibilityMode: VISIBILITY_MODES.asArray().find(it => it.name === dialog[this.inputVisibility]),
+      visibilityMode: VISIBILITY_MODES[dialog[this.inputVisibility].value],
       actor: this.actor,
       primaryTitle: this.primaryChatTitle,
       primaryImage: this.primaryChatImage,

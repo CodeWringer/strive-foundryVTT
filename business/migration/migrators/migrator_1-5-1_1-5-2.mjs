@@ -3,7 +3,6 @@ import DocumentFetcher from "../../document/document-fetcher/document-fetcher.mj
 import DocumentUpdater from "../../document/document-updater/document-updater.mjs";
 import * as PropertyUtility from "../../util/property-utility.mjs";
 import AbstractMigrator from "../abstract-migrator.mjs";
-import { MIGRATORS } from "../migrators.mjs";
 import VersionCode from "../version-code.mjs";
 
 export default class Migrator_1_5_1__1_5_2 extends AbstractMigrator {
@@ -22,7 +21,7 @@ export default class Migrator_1_5_1__1_5_2 extends AbstractMigrator {
     if (this._updater === undefined) {
       this._updater = new DocumentUpdater({
         propertyUtility: PropertyUtility,
-        logger: game.ambersteel.logger,
+        logger: game.strive.logger,
       });
     }
     return this._updater;
@@ -69,5 +68,3 @@ export default class Migrator_1_5_1__1_5_2 extends AbstractMigrator {
     }
   }
 }
-
-MIGRATORS.push(new Migrator_1_5_1__1_5_2());

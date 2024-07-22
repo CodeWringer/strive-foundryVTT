@@ -26,15 +26,15 @@ export class VisibilityMode {
 export const VISIBILITY_MODES = {
   public: new VisibilityMode({
     name: "public",
-    localizableName: "ambersteel.general.messageVisibility.public.label"
+    localizableName: "system.general.messageVisibility.public.label"
   }),
   self: new VisibilityMode({
     name: "self",
-    localizableName: "ambersteel.general.messageVisibility.self.label"
+    localizableName: "system.general.messageVisibility.self.label"
   }),
   gm: new VisibilityMode({
     name: "gm",
-    localizableName: "ambersteel.general.messageVisibility.gm.label"
+    localizableName: "system.general.messageVisibility.gm.label"
   }),
 };
 ConstantsUtils.enrichConstant(VISIBILITY_MODES);

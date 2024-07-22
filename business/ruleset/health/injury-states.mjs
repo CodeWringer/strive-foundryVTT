@@ -28,17 +28,17 @@ export class InjuryState {
 export const INJURY_STATES = {
   active: new InjuryState({
     name: "active",
-    localizableName: "ambersteel.character.health.injury.state.active.label",
+    localizableName: "system.character.health.injury.state.active.label",
     icon: "fas fa-bone"
   }),
   patchedUp: new InjuryState({
     name: "patchedUp",
-    localizableName: "ambersteel.character.health.injury.state.patchedUp.label",
+    localizableName: "system.character.health.injury.state.patchedUp.label",
     icon: "fas fa-band-aid"
   }),
   treated: new InjuryState({
     name: "treated",
-    localizableName: "ambersteel.character.health.injury.state.treated.label",
+    localizableName: "system.character.health.injury.state.treated.label",
     icon: "fas fa-mortar-pestle"
   }),
 };

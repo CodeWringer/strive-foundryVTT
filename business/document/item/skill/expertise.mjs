@@ -11,6 +11,7 @@ import { ATTACK_TYPES, AttackType } from '../../../ruleset/skill/attack-types.mj
 import TransientSkill from './transient-skill.mjs';
 import AtReferencer from '../../../referencing/at-referencer.mjs';
 import ViewModel from '../../../../presentation/view-model/view-model.mjs';
+import { ITEM_TYPES } from '../item-types.mjs';
 
 /**
  * Represents an expertise. 
@@ -84,7 +85,7 @@ export default class Expertise {
    * @type {String}
    * @readonly
    */
-  get type() { return "expertise"; }
+  get type() { return ITEM_TYPES.EXPERTISE; }
 
   /**
    * @type {Boolean}
@@ -222,7 +223,7 @@ export default class Expertise {
     this.id = args.id ?? createUUID();
 
     this._isCustom = args.isCustom ?? false;
-    this._name = args.name ?? game.i18n.localize("ambersteel.character.skill.expertise.newDefaultName");
+    this._name = args.name ?? game.i18n.localize("system.character.skill.expertise.newDefaultName");
     this._img = args.img ?? "icons/svg/book.svg";
     this._description = args.description ?? "";
     this._requiredLevel = args.requiredLevel ?? 0;

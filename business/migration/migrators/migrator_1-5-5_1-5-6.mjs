@@ -2,7 +2,6 @@ import { DOCUMENT_COLLECTION_SOURCES } from "../../document/document-fetcher/doc
 import DocumentFetcher from "../../document/document-fetcher/document-fetcher.mjs";
 import DocumentUpdater from "../../document/document-updater/document-updater.mjs";
 import AbstractMigrator from "../abstract-migrator.mjs";
-import { MIGRATORS } from "../migrators.mjs";
 import VersionCode from "../version-code.mjs";
 import * as PropertyUtility from "../../util/property-utility.mjs";
 
@@ -22,7 +21,7 @@ export default class Migrator_1_5_5__1_5_6 extends AbstractMigrator {
     if (this._updater === undefined) {
       this._updater = new DocumentUpdater({
         propertyUtility: PropertyUtility,
-        logger: game.ambersteel.logger,
+        logger: game.strive.logger,
       });
     }
     return this._updater;
@@ -74,7 +73,7 @@ export default class Migrator_1_5_5__1_5_6 extends AbstractMigrator {
         includeLocked: true,
       });
       if (this._intimidationSkillDefinition === undefined) {
-        game.ambersteel.logger.logWarn('"Intimidation" skill cannot be migrated, as it is missing from the system compendium!');
+        game.strive.logger.logWarn('"Intimidation" skill cannot be migrated, as it is missing from the system compendium!');
       }
     }
     return this._intimidationSkillDefinition;
@@ -96,7 +95,7 @@ export default class Migrator_1_5_5__1_5_6 extends AbstractMigrator {
         includeLocked: true,
       });
       if (this._unarmedSkillDefinition === undefined) {
-        game.ambersteel.logger.logWarn('"Unarmed Combat" skill cannot be migrated, as it is missing from the system compendium!');
+        game.strive.logger.logWarn('"Unarmed Combat" skill cannot be migrated, as it is missing from the system compendium!');
       }
     }
     return this._unarmedSkillDefinition;
@@ -237,5 +236,3 @@ export default class Migrator_1_5_5__1_5_6 extends AbstractMigrator {
     await this.updater.updateByPath(skillOfActor, dataPath, updateDelta, false);
   }
 }
-
-MIGRATORS.push(new Migrator_1_5_5__1_5_6());

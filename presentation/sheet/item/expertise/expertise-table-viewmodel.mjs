@@ -1,8 +1,9 @@
+import { ITEM_TYPES } from "../../../../business/document/item/item-types.mjs"
 import { DAMAGE_TYPES } from "../../../../business/ruleset/damage-types.mjs"
 import { ATTACK_TYPES } from "../../../../business/ruleset/skill/attack-types.mjs"
 import { createUUID } from "../../../../business/util/uuid-utility.mjs"
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs"
-import ButtonAddViewModel, { ADD_BUTTON_CREATION_TYPES } from "../../../component/button-add/button-add-viewmodel.mjs"
+import ButtonAddViewModel from "../../../component/button-add/button-add-viewmodel.mjs"
 import ButtonToggleVisibilityViewModel from "../../../component/button-toggle-visibility/button-toggle-visibility-viewmodel.mjs"
 import DocumentListItemOrderDataSource from "../../../component/sortable-list/document-list-item-order-datasource.mjs"
 import SortableListViewModel from "../../../component/sortable-list/sortable-list-viewmodel.mjs"
@@ -34,13 +35,14 @@ export default class ExpertiseTableViewModel extends ViewModel {
   set isExpanded(value) {
     this._isExpanded = value;
 
-    const headerExpansionButtonIcon = this.element.find(`#${this.vmToggleExpansion1.id}-icon`);
+    // Synchronize the toggle buttons. 
+    this.vmToggleExpansion1.value = value;
+    this.vmToggleExpansion2.value = value;
+    // Hide the second expansion toggle button if the expertise list is currently hidden. 
     if (value === true) {
-      headerExpansionButtonIcon.addClass("fa-angle-double-up");
-      headerExpansionButtonIcon.removeClass("fa-angle-double-down");
+      this.vmToggleExpansion2.element.parent().removeClass("hidden");
     } else {
-      headerExpansionButtonIcon.addClass("fa-angle-double-down");
-      headerExpansionButtonIcon.removeClass("fa-angle-double-up");
+      this.vmToggleExpansion2.element.parent().addClass("hidden");
     }
 
     // Immediately write view state. 
@@ -101,9 +103,9 @@ export default class ExpertiseTableViewModel extends ViewModel {
     this.vmAddExpertise = new ButtonAddViewModel({
       id: "vmAddExpertise",
       parent: this,
-      localizedToolTip: game.i18n.localize("ambersteel.character.skill.expertise.add.label"),
+      localizedToolTip: game.i18n.localize("system.character.skill.expertise.add.label"),
       target: this.document,
-      creationType: ADD_BUTTON_CREATION_TYPES.EXPERTISE,
+      creationType: ITEM_TYPES.EXPERTISE,
     });
 
     this.expertises = [];
@@ -124,20 +126,21 @@ export default class ExpertiseTableViewModel extends ViewModel {
         parent: this,
         target: thiz.document,
         isEditable: this.isEditable,
-        creationType: "expertise",
+        creationType: ITEM_TYPES.EXPERTISE,
         withDialog: false,
-        localizedLabel: game.i18n.localize("ambersteel.character.skill.expertise.add.label"),
-        localizedType: game.i18n.localize("ambersteel.character.skill.expertise.singular"),
+        localizedLabel: game.i18n.localize("system.character.skill.expertise.add.label"),
+        localizedType: game.i18n.localize("system.character.skill.expertise.singular"),
       }),
     });
 
     this.vmToggleExpansion1 = new ButtonToggleVisibilityViewModel({
       parent: thiz,
       id: "vmToggleExpansion1",
-      target: thiz.document,
       isEditable: true,
+      value: this.isExpanded,
+      iconInactive: '<i class="fas fa-angle-double-down"></i>',
+      iconActive: '<i class="fas fa-angle-double-up"></i>',
       visGroup: thiz.visGroupId,
-      toggleSelf: false,
       onClick: async (event, data) => {
         this.isExpanded = !this.isExpanded;
       },
@@ -145,10 +148,11 @@ export default class ExpertiseTableViewModel extends ViewModel {
     this.vmToggleExpansion2 = new ButtonToggleVisibilityViewModel({
       parent: thiz,
       id: "vmToggleExpansion2",
-      target: thiz.document,
       isEditable: true,
+      value: this.isExpanded,
+      iconInactive: '<i class="fas fa-angle-double-down"></i>',
+      iconActive: '<i class="fas fa-angle-double-up"></i>',
       visGroup: thiz.visGroupId,
-      toggleSelf: true,
       onClick: async (event, data) => {
         this.isExpanded = !this.isExpanded;
       },

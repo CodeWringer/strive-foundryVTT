@@ -1,7 +1,6 @@
 import AtReferencer from "../../business/referencing/at-referencer.mjs";
 import { isDefined } from "../../business/util/validation-utility.mjs";
 import { VISIBILITY_MODES } from "../chat/visibility-modes.mjs";
-import ChoiceAdapter from "../component/input-choice/choice-adapter.mjs";
 import DynamicInputDefinition from "../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
 import DynamicInputDialog from "../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
 import { DYNAMIC_INPUT_TYPES } from "../dialog/dynamic-input-dialog/dynamic-input-types.mjs";
@@ -46,7 +45,7 @@ export default class RollFormulaResolver {
 
     // Render the dialog and prompt the user to enter values for unresolved references.
     const dialog = await new DynamicInputDialog({
-      localizedTitle: game.i18n.localize("ambersteel.roll.query"),
+      localizedTitle: game.i18n.localize("system.roll.query"),
       inputDefinitions: inputDefinitions,
     }).renderAndAwait(true);
 
@@ -63,7 +62,7 @@ export default class RollFormulaResolver {
 
     return {
       rolls: rolls,
-      visibilityMode: VISIBILITY_MODES.asArray().find(it => it.name === dialog[this.inputNameVisibility]),
+      visibilityMode: VISIBILITY_MODES[dialog[this.inputNameVisibility].value],
       dialog: dialog,
     };
   }
@@ -202,20 +201,16 @@ export default class RollFormulaResolver {
       new DynamicInputDefinition({
         type: DYNAMIC_INPUT_TYPES.LABEL,
         name: "promptUnresolvedReferences",
-        localizedLabel: game.i18n.localize("ambersteel.damageDefinition.unresolvedReferences"),
+        localizedLabel: game.i18n.localize("system.damageDefinition.unresolvedReferences"),
       }),
       new DynamicInputDefinition({
         type: DYNAMIC_INPUT_TYPES.DROP_DOWN,
         name: inputNameVisibility,
-        localizedLabel: game.i18n.localize("ambersteel.general.messageVisibility.label"),
+        localizedLabel: game.i18n.localize("system.general.messageVisibility.label"),
         required: true,
-        defaultValue: (VISIBILITY_MODES.asArray()[0]),
+        defaultValue: VISIBILITY_MODES.asChoices().find(it => it.value === VISIBILITY_MODES.public.name),
         specificArgs: {
           options: VISIBILITY_MODES.asChoices(),
-          adapter: new ChoiceAdapter({
-            toChoiceOption: (obj) => { return VISIBILITY_MODES.asChoices().find(it => it.value === obj.name); },
-            fromChoiceOption: (choice) => { return VISIBILITY_MODES.asArray().find(it => it.name === choice.value); }
-          }),
         }
       }),
     ];

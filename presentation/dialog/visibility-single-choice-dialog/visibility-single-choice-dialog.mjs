@@ -9,7 +9,7 @@ import SingleChoiceDialog from '../single-choice-dialog/single-choice-dialog.mjs
  * @constant
  * @private
  */
-const DIALOG_TITLE = "ambersteel.general.messageVisibility.query";
+const DIALOG_TITLE = "system.general.messageVisibility.query";
 
 /**
  * The localization key of the choices label. 
@@ -18,7 +18,7 @@ const DIALOG_TITLE = "ambersteel.general.messageVisibility.query";
  * @constant
  * @private
  */
-const LABEL = "ambersteel.general.messageVisibility.label";
+const LABEL = "system.general.messageVisibility.label";
 
 /**
  * Represents a dialog for the selection of **one** from several possible visibility modes. 
