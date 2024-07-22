@@ -10,8 +10,6 @@ import ViewModel from "../../../../view-model/view-model.mjs";
  * @extends ViewModel
  * 
  * @property {Array<CharacterAttribute>} attributes
- * @property {String} attributeGroupName
- * @property {String} localizableAttributeGroupName
  * @property {Boolean} isNPC
  * * Read-only
  * @property {Boolean} showChallengeRating
@@ -32,16 +30,6 @@ export default class AttributeTableViewModel extends ViewModel {
    * @type {Array<CharacterAttribute>}
    */
   attributes = [];
-
-  /**
-   * @type {String}
-   */
-  attributeGroupName = undefined;
-
-  /**
-   * @type {String}
-   */
-  localizableAttributeGroupName = undefined;
 
   /**
    * A list of attribute describing objects. Contains the view model instances 
@@ -90,8 +78,6 @@ export default class AttributeTableViewModel extends ViewModel {
    * 
    * @param {TransientBaseCharacterActor} args.document
    * @param {Array<CharacterAttribute>} args.attributes
-   * @param {String} args.attributeGroupName
-   * @param {String} args.localizableAttributeGroupName
    * @param {Boolean | undefined} args.showChallengeRating
    * * default `false`
    * @param {Boolean | undefined} args.headerInteractible
@@ -105,38 +91,34 @@ export default class AttributeTableViewModel extends ViewModel {
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["document", "attributes", "attributeGroupName", "localizableAttributeGroupName"]);
+    validateOrThrow(args, ["document", "attributes"]);
 
     this.document = args.document;
     this.attributes = args.attributes;
-    this.attributeGroupName = args.attributeGroupName;
-    this.localizableAttributeGroupName = args.localizableAttributeGroupName;
     this.contextType = args.contextType ?? "component-attribute-table";
     this.showChallengeRating = args.showChallengeRating ?? false;
     this.headerInteractible = args.headerInteractible ?? false;
     this.onHeaderClicked = args.onHeaderClicked ?? (() => {});
     this.iconClass = args.iconClass;
     
-    const thiz = this;
-
     for (const attribute of this.attributes) {
-      thiz.attributeViewModels.push({
+      this.attributeViewModels.push({
         attributeName: attribute.name,
         localizableName: attribute.localizableName,
         localizableAbbreviation: attribute.localizableAbbreviation,
         requiredProgress: attribute.advancementRequirements,
         modifiedLevel: attribute.modifiedLevel,
         vmBtnRoll: new ButtonRollViewModel({
-          parent: thiz,
+          parent: this,
           id: `vmBtnRoll-${attribute.name}`,
           target: attribute,
           propertyPath: undefined,
           primaryChatTitle: game.i18n.localize(attribute.localizableName),
           rollType: "dice-pool",
-          actor: thiz.document,
+          actor: this.document,
         }),
         vmNsLevel: new InputNumberSpinnerViewModel({
-          parent: thiz,
+          parent: this,
           id: `vmNsLevel-${attribute.name}`,
           value: attribute.level,
           onChange: (_, newValue) => {
@@ -145,7 +127,7 @@ export default class AttributeTableViewModel extends ViewModel {
           min: 0,
         }),
         vmNsLevelModifier: new InputNumberSpinnerViewModel({
-          parent: thiz,
+          parent: this,
           id: `vmNsLevelModifier-${attribute.name}`,
           value: attribute.levelModifier,
           onChange: (_, newValue) => {
@@ -153,7 +135,7 @@ export default class AttributeTableViewModel extends ViewModel {
           },
         }),
         vmNsProgress: this.showAdvancementProgression !== true ? undefined : new InputNumberSpinnerViewModel({
-          parent: thiz,
+          parent: this,
           id: `vmNsProgress-${attribute.name}`,
           value: attribute.advancementProgress,
           onChange: (_, newValue) => {

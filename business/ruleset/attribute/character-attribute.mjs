@@ -1,12 +1,13 @@
 import { GameSystemActor } from "../../document/actor/actor.mjs";
 import Ruleset from "../ruleset.mjs";
 import { Sum, SumComponent } from "../summed-data.mjs";
-import { ATTRIBUTE_GROUPS } from "./attribute-groups.mjs";
 import { ATTRIBUTES } from "./attributes.mjs";
 
 /**
  * Represents a specific character's specific attribute. 
  * 
+ * @property {GameSystemActor} _actor Private actor reference. 
+ * * Private
  * @property {String} name Internal name. 
  * @property {String} localizableName Localization key for the full name. 
  * @property {String} localizableAbbreviation Localization key for the abbreviated name. 
@@ -23,15 +24,13 @@ export default class CharacterAttribute {
   /**
    * @type {Number}
    */
-  get level() { return parseInt(this._actor.system.attributes[this._attributeGroupName][this.name].level); }
+  get level() { return parseInt(this._actor.system.attributes[this.name].level); }
   set level(value) {
     this._actor.update({
       system: {
         attributes: {
-          [this._attributeGroupName]: {
-            [this.name]: {
-              level: value
-            }
+          [this.name]: {
+            level: value
           }
         }
       }
@@ -41,15 +40,13 @@ export default class CharacterAttribute {
   /**
    * @type {Number}
    */
-  get levelModifier() { return parseInt(this._actor.system.attributes[this._attributeGroupName][this.name].levelModifier ?? "0"); }
+  get levelModifier() { return parseInt(this._actor.system.attributes[this.name].levelModifier ?? "0"); }
   set levelModifier(value) {
     this._actor.update({
       system: {
         attributes: {
-          [this._attributeGroupName]: {
-            [this.name]: {
-              levelModifier: value
-            }
+          [this.name]: {
+            levelModifier: value
           }
         }
       }
@@ -71,15 +68,13 @@ export default class CharacterAttribute {
   /**
    * @type {Number}
    */
-  get advancementProgress() { return parseInt(this._actor.system.attributes[this._attributeGroupName][this.name].progress ?? "0"); }
+  get advancementProgress() { return parseInt(this._actor.system.attributes[this.name].progress ?? "0"); }
   set advancementProgress(value) {
     this._actor.update({
       system: {
         attributes: {
-          [this._attributeGroupName]: {
-            [this.name]: {
-              progress: value
-            }
+          [this.name]: {
+            progress: value
           }
         }
       }
@@ -110,12 +105,6 @@ export default class CharacterAttribute {
 
     this.localizableName = attributeDef.localizableName;
     this.localizableAbbreviation = attributeDef.localizableAbbreviation;
-
-    this._attributeGroupName = CharacterAttribute.getAttributeGroupName(name);
-
-    if (this._attributeGroupName === undefined) {
-      throw new Error(`Failed to get global attribute group name for '${name}'`);
-    }
   }
 
   /**
@@ -127,31 +116,5 @@ export default class CharacterAttribute {
     return new Sum([
       new SumComponent(this.name, this.localizableName, this.modifiedLevel)
     ]);
-  }
-
-  /**
-   * Returns the name of the containing attribute group. 
-   * 
-   * @param {String} name Internal name of the attribute. 
-   * * E. g. `"strength"`
-   * 
-   * @returns {String | undefined}
-   * 
-   * @private
-   */
-  static getAttributeGroupName(name) {
-    for (const groupDefName in ATTRIBUTE_GROUPS) {
-      const groupDef = ATTRIBUTE_GROUPS[groupDefName];
-      // Skip any convenience members, such as `asChoices`.
-      if (groupDef.name === undefined) continue;
-      
-      for (const attributeDefName in groupDef.attributes) {
-        const attributeDef = groupDef.attributes[attributeDefName];
-        if (attributeDef.name === name) {
-          return groupDef.name;
-        }
-      }
-    }
-    return undefined;
   }
 }

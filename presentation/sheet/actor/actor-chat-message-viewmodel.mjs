@@ -1,5 +1,5 @@
 import { ACTOR_TYPES } from "../../../business/document/actor/actor-types.mjs";
-import { isNotBlankOrUndefined } from "../../../business/util/validation-utility.mjs";
+import { isDefined, isNotBlankOrUndefined } from "../../../business/util/validation-utility.mjs";
 import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import LazyRichTextViewModel from "../../component/lazy-rich-text/lazy-rich-text-viewmodel.mjs";
 import { TEMPLATES } from "../../templatePreloader.mjs";
@@ -53,8 +53,8 @@ export default class ActorChatMessageViewModel extends ViewModel {
    * @readonly
    */
   get showAge() { 
-    const value = this.document.person.age;
-    return value !== 0 && value !== "0" && isNotBlankOrUndefined(value);
+    const age = this.document.person.age;
+    return age !== 0 && age !== "0" && isNotBlankOrUndefined(age);
   }
 
   /**
@@ -75,17 +75,9 @@ export default class ActorChatMessageViewModel extends ViewModel {
     this.contextTemplate = args.contextTemplate ?? "actor-chat-message";
     
     this.document = args.document;
-    this.challengeRatings = [];
     if (this.isNPC === true) {
-      for (const attributeGroup of this.document.attributeGroups) {
-        const isExpanded = this.document.getIsExpandedFor(attributeGroup.name);
-        if (isExpanded === true) continue;
-
-        const challengeRating = this.document.getCrFor(attributeGroup.name);
-        this.challengeRatings.push({
-          localizedLabel: game.i18n.localize(attributeGroup.localizableName),
-          value: challengeRating.modified,
-        });
+      if (this.document.isChallengeRatingEnabled) {
+        this.challengeRating = this.document.challengeRating;
       }
     }
 

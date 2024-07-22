@@ -24,11 +24,11 @@ export default class TokenExtensions {
     const displayWhen = token.document.displayName;
     const isOwner = token.actor.isOwner || game.user.isGM;
 
-    TokenExtensions._hideChallengeRatings(token);
+    TokenExtensions._hideChallengeRating(token);
     if (((displayWhen == CONST.TOKEN_DISPLAY_MODES.CONTROL || displayWhen == CONST.TOKEN_DISPLAY_MODES.OWNER_HOVER || displayWhen == CONST.TOKEN_DISPLAY_MODES.OWNER) && isOwner) 
       || (displayWhen == CONST.TOKEN_DISPLAY_MODES.HOVER || displayWhen == CONST.TOKEN_DISPLAY_MODES.ALWAYS)) {
       if (token.hover) {
-        TokenExtensions._showChallengeRatings(token);
+        TokenExtensions._showChallengeRating(token);
       }
     }
   }
@@ -44,59 +44,18 @@ export default class TokenExtensions {
    * @static
    * @private
    */
-  static _showChallengeRatings(token) {
-    // Get the system's actor extensions object. 
-    // This is assumed to be a npc type actor. 
+  static _showChallengeRating(token) {
     const actor = token.actor.getTransientObject();
     
-    // Gather challenge ratings. 
-    const challengeRatings = [];
-    let lastChallengeRating;
-    let allTheSameChallengeRating = true;
-    for (const attributeGroup of actor.attributeGroups) {
-      const isCrActive = actor.getIsCrActiveFor(attributeGroup.name);
-      if (isCrActive !== true) continue;
+    if (actor.isChallengeRatingEnabled) {
+      const text = `${game.i18n.localize("system.character.advancement.challengeRating.abbreviation")} ${actor.challengeRating.modified}`;
 
-      const challengeRating = actor.getCrFor(attributeGroup.name).modified;
-      challengeRatings.push({
-        attributeGroup: attributeGroup,
-        value: challengeRating,
-      });
+      token.challengeRating = new PreciseText(text, token._getTextStyle());
+      token.challengeRating.anchor.set(0.5, 0);
+      token.challengeRating.position.set(token.w / 2, token.h + token.challengeRating.height);
 
-      if (lastChallengeRating === undefined) {
-        lastChallengeRating = challengeRating;
-      } else if (lastChallengeRating !== challengeRating) {
-        allTheSameChallengeRating = false;
-      }
-    };
-
-    if (challengeRatings.length === 0) return; // No CRs to display. 
-    
-    // Determine text to display.
-    const challengeRatingsForDisplay = [];
-    if (allTheSameChallengeRating === true) {
-      challengeRatingsForDisplay.push(`${game.i18n.localize("system.character.advancement.challengeRating.abbreviation")} ${lastChallengeRating}`);
-    } else {
-      for (const challengeRating of challengeRatings) {
-        challengeRatingsForDisplay.push(`${game.i18n.localize(challengeRating.attributeGroup.localizableAbbreviation)} ${game.i18n.localize("system.character.advancement.challengeRating.abbreviation")} ${challengeRating.value}`);
-      }
+      token.addChild(token.challengeRating);
     }
-
-    // Display challenge ratings. 
-    const style = token._getTextStyle();
-    token.challengeRatings = new PIXI.Container();
-  
-    for (let i = 0; i < challengeRatingsForDisplay.length; i++) {
-      const challengeRating = challengeRatingsForDisplay[i];
-  
-      const text = new PreciseText(challengeRating, style);
-      text.anchor.set(0.5, 0);
-      text.position.set(token.w / 2, (token.h + text.height) + (text.height * i));
-  
-      token.challengeRatings.addChild(text);
-    }
-  
-    token.addChild(token.challengeRatings);
   }
   
   /**
@@ -109,10 +68,10 @@ export default class TokenExtensions {
    * @private
    * @static
    */
-  static _hideChallengeRatings(token) {
-    if (isDefined(token.challengeRatings)) {
-      token.removeChild(token.challengeRatings);
-      token.challengeRatings = undefined;
+  static _hideChallengeRating(token) {
+    if (isDefined(token.challengeRating)) {
+      token.removeChild(token.challengeRating);
+      token.challengeRating = undefined;
     }
   }
 

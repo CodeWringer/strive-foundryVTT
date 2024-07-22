@@ -1,9 +1,8 @@
 import { TEMPLATES } from '../../../presentation/templatePreloader.mjs';
 import AtReferencer from '../../referencing/at-referencer.mjs';
 import CharacterAssetSlotGroup from '../../ruleset/asset/character-asset-slot-group.mjs';
-import { ATTRIBUTE_GROUPS } from '../../ruleset/attribute/attribute-groups.mjs';
 import { ATTRIBUTES } from '../../ruleset/attribute/attributes.mjs';
-import CharacterAttributeGroup from '../../ruleset/attribute/character-attribute-group.mjs';
+import CharacterAttribute from '../../ruleset/attribute/character-attribute.mjs';
 import { CharacterHealthState } from '../../ruleset/health/character-health-state.mjs';
 import { HEALTH_STATES } from '../../ruleset/health/health-states.mjs';
 import Ruleset from '../../ruleset/ruleset.mjs';
@@ -19,9 +18,6 @@ import TransientBaseActor from './transient-base-actor.mjs';
  * 
  * @extends TransientBaseActor
  * 
- * @property {Array<CharacterAttributeGroup>} attributeGroups The grouped attributes 
- * of the character. 
- * * Read-only. 
  * @property {Array<CharacterAttribute>} attributes The attributes of the character. 
  * * Read-only. 
  * @property {Number} baseInitiative 
@@ -339,11 +335,18 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
    * @readonly
    */
   get baseInitiative() {
-    const perceptionLevel = parseInt(this.attributes.find(it => it.name === ATTRIBUTES.perception.name).modifiedLevel);
-    const intelligenceLevel = parseInt(this.attributes.find(it => it.name === ATTRIBUTES.intelligence.name).modifiedLevel);
-    const empathyLevel = parseInt(this.attributes.find(it => it.name === ATTRIBUTES.empathy.name).modifiedLevel);
+    const attributesToSum = [
+      this.attributes.find(it => it.name === ATTRIBUTES.agility.name),
+      this.attributes.find(it => it.name === ATTRIBUTES.awareness.name),
+      this.attributes.find(it => it.name === ATTRIBUTES.wit.name),
+    ];
 
-    return perceptionLevel + intelligenceLevel + empathyLevel;
+    let result = 0;
+    attributesToSum.forEach(attribute => {
+      result += parseInt(attribute.modifiedLevel);
+    });
+
+    return result;
   }
 
   /**
@@ -354,7 +357,6 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
   constructor(document) {
     super(document);
 
-    this.attributeGroups = this._getAttributeGroups();
     this.attributes = this._getAttributes();
     this._prepareAssetsData();
     this._healthStates = this._getHealthStates();
@@ -372,8 +374,7 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
    * @async
    */
   async setAttributeLevel(attName, newValue = 0, resetProgress = true) {
-    const groupName = new Ruleset().getAttributeGroupName(attName);
-    const propertyPath = `system.attributes.${groupName}.${attName}`;
+    const propertyPath = `system.attributes.${attName}`;
 
     if (resetProgress === true) {
       await this.document.update({
@@ -388,19 +389,6 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
   }
 
   /**
-   * Returns the grouped attributes of the character. 
-   * 
-   * @returns {Array<CharacterAttributeGroup>}
-   * 
-   * @private
-   */
-  _getAttributeGroups() {
-    return ATTRIBUTE_GROUPS.asArray().map(attributeGroup => 
-      new CharacterAttributeGroup(this.document, attributeGroup.name)
-    );
-  }
-  
-  /**
    * Returns the attributes of the character. 
    * 
    * @returns {Array<CharacterAttribute>}
@@ -410,10 +398,11 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
   _getAttributes() {
     const result = [];
 
-    const attributeGroups = this._getAttributeGroups();
-    for(const attributeGroup of attributeGroups) {
-      for (const attribute of attributeGroup.attributes) {
-        result.push(attribute);
+    for (const attribute of ATTRIBUTES.asArray()) {
+      try {
+        result.push(new CharacterAttribute(this.document, attribute.name));
+      } catch (error) {
+        game.strive.logger.logError(error);
       }
     }
 

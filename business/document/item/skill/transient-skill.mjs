@@ -17,7 +17,6 @@ import { arrayContains } from "../../../util/array-utility.mjs";
 import SkillPrerequisite from "../../../ruleset/skill/skill-prerequisite.mjs";
 import { SKILL_TAGS } from "../../../tags/system-tags.mjs";
 import AtReferencer from "../../../referencing/at-referencer.mjs";
-import { getGroupForAttributeByName } from "../../../ruleset/attribute/attribute-groups.mjs";
 import { ACTOR_TYPES } from "../../actor/actor-types.mjs";
 
 /**
@@ -34,8 +33,7 @@ import { ACTOR_TYPES } from "../../actor/actor-types.mjs";
  * @property {Number} modifiedLevel The current modified level. 
  * * Read-only. 
  * @property {Array<Attribute>} baseAttributes Base attributes of the skill. 
- * * Must always contain at least one entry. By default, this is agility. 
- * @property {Attribute} activeBaseAttribute The currently set base attribute. 
+ * * Must always contain at least one entry. By default, this is the first attribute as per the `ATTRIBUTES` definiton. 
  * @property {Array<Expertise>} expertises The array of expertises of this skill. 
  * @property {Boolean} isMagicSchool Returns true, if the skill is considered 
  * a magic school. 
@@ -66,7 +64,7 @@ export default class TransientSkill extends TransientBaseItem {
     
     // Safe-guard - there must always be at least one base attribute. 
     if (attributes.length === 0) {
-      attributes.push(ATTRIBUTES.agility);
+      attributes.push(ATTRIBUTES.asArray()[0]);
     }
 
     return attributes;
@@ -74,50 +72,13 @@ export default class TransientSkill extends TransientBaseItem {
   /**
    * Sets the given list of base attributes. 
    * 
-   * Also ensures that the active base attribute is one of these values. 
-   * 
    * @param {Array<Attribute>} value
    */
   set baseAttributes(value) {
     const baseAttributeNames = value.map(attribute => attribute.name);
     this.document.system.baseAttributes = baseAttributeNames;
 
-    const newListContainsActive = isDefined(baseAttributeNames.find(it => it === this.activeBaseAttribute.name));
-    if (newListContainsActive === true) {
-      this.updateByPath("system.baseAttributes", baseAttributeNames);
-    } else {
-      // Also update the active base attribute. 
-      this.update({
-        system: {
-          baseAttributes: baseAttributeNames,
-          activeBaseAttribute: baseAttributeNames[0],
-        }
-      });
-    }
-  }
-  
-  /**
-   * @type {Attribute}
-   */
-  get activeBaseAttribute() {
-    const systemActiveBaseAttribute = this.document.system.activeBaseAttribute;
-    const containedInBaseAttributes = (this.baseAttributes.find(it => it.name === systemActiveBaseAttribute) !== undefined);
-    
-    if (containedInBaseAttributes === true) {
-      return ATTRIBUTES[systemActiveBaseAttribute];
-    } else if (this.baseAttributes.length > 0) {
-      return this.baseAttributes[0];
-    } else {
-      game.strive.logger.logWarn(`List of base attributes is empty for skill '${this.id}' - '${this.name}'`);
-      return ATTRIBUTES.agility;
-    }
-  }
-  /**
-   * @param {Attribute} value
-   */
-  set activeBaseAttribute(value) {
-    this.document.system.activeBaseAttribute = value.name;
-    this.updateByPath("system.activeBaseAttribute", value.name);
+    this.updateByPath("system.baseAttributes", baseAttributeNames);
   }
   
   /**
@@ -158,28 +119,13 @@ export default class TransientSkill extends TransientBaseItem {
    * @readonly
    */
   get modifiedLevel() {
-    let level = this.dependsOnActiveCr === true ? this.crLevel : this.level;
+    const level = this.dependsOnActiveCr === true ? (this.owningDocument.challengeRating.modified) : this.level;
 
     if (level > 0) {
       return Math.max(level + this.levelModifier, 1);
     } else {
       return Math.max(level + this.levelModifier, 0)
     }
-  }
-
-  /**
-   * Returns the challenge rating of the active base attribute, for use as 
-   * the skill's level. 
-   * 
-   * @type {Number}
-   * @readonly
-   */
-  get crLevel() {
-    if (this.owningDocument !== undefined) {
-      const group = getGroupForAttributeByName(this.activeBaseAttribute.name);
-      return this.owningDocument.getCrFor(group.name).modified;
-    }
-    return 0;
   }
 
   /**
@@ -373,7 +319,7 @@ export default class TransientSkill extends TransientBaseItem {
   }
 
   /**
-   * Returns `true`, if the skill's active base attribute is part of a group for which 
+   * Returns `true`, if the skill's embedded on an actor for which 
    * a challenge rating is active. 
    * 
    * @type {Boolean}
@@ -381,9 +327,10 @@ export default class TransientSkill extends TransientBaseItem {
    */
   get dependsOnActiveCr() {
     const owningDocument = this.owningDocument;
-    if (owningDocument !== undefined && owningDocument.type === ACTOR_TYPES.NPC) {
-      const group = getGroupForAttributeByName(this.activeBaseAttribute.name);
-      return owningDocument.getIsCrActiveFor(group.name);
+    if (isDefined(owningDocument) 
+      && owningDocument.type === ACTOR_TYPES.NPC
+      && owningDocument.isChallengeRatingEnabled) {
+      return true;
     } else {
       return false;
     }
@@ -522,19 +469,26 @@ export default class TransientSkill extends TransientBaseItem {
    */
   getRollData() {
     if (this.dependsOnActiveCr === true) {
-      const group = getGroupForAttributeByName(this.activeBaseAttribute.name);
       return new Sum([
-        new SumComponent(group.name, group.localizableName, this.modifiedLevel),
+        new SumComponent("challengeRating", "system.character.advancement.challengeRating.label", this.owningDocument.challengeRating.modified),
+        new SumComponent(this.name, "system.character.advancement.modifier.label", this.levelModifier),
       ]);
     } else {
       const actor = (this.owningDocument ?? {}).document;
-      const characterAttribute = new CharacterAttribute(actor, this.activeBaseAttribute.name);
-      const compositionObj = new Ruleset().getSkillTestNumberOfDice(this.modifiedLevel, characterAttribute.modifiedLevel);
+      
+      // Accumulate the dice from base attributes. 
+      const components = [];
+      for (const attribute of this.baseAttributes) {
+        const characterAttribute = new CharacterAttribute(actor, attribute.name);
+        const attributeComponent = new SumComponent(characterAttribute.name, characterAttribute.localizableName, characterAttribute.modifiedLevel);
+        components.push(attributeComponent);
+      }
+      // Lastly, add the skill's own dice. 
+      components.push(
+        new SumComponent(this.name, this.name, this.modifiedLevel)
+      );
 
-      return new Sum([
-        new SumComponent(this.activeBaseAttribute.name, characterAttribute.localizableName, compositionObj.attributeDiceCount),
-        new SumComponent(this.name, this.name, compositionObj.skillDiceCount),
-      ]);
+      return new Sum(components);
     }
   }
 

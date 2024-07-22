@@ -12,7 +12,6 @@ import ButtonRollViewModel from "../../../component/button-roll/button-roll-view
 import ButtonViewModel from "../../../component/button/button-viewmodel.mjs"
 import DamageDefinitionListViewModel from "../../../component/damage-definition-list/damage-definition-list-viewmodel.mjs"
 import InfoBubble, { InfoBubbleAutoHidingTypes, InfoBubbleAutoShowingTypes } from "../../../component/info-bubble/info-bubble.mjs"
-import ChoiceOption from "../../../component/input-choice/choice-option.mjs"
 import InputDropDownViewModel from "../../../component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs"
 import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs"
 import InputTagsViewModel from "../../../component/input-tags/input-tags-viewmodel.mjs"
@@ -177,22 +176,6 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
     super(args);
     validateOrThrow(args, ["document"]);
 
-    const attributeOptions = this.document.baseAttributes.map(baseAttribute => 
-      new ChoiceOption({
-        value: baseAttribute.name,
-        localizedValue: game.i18n.localize(baseAttribute.localizableName),
-      })
-    );
-    this.vmActiveAttribute = new InputDropDownViewModel({
-      id: "vmActiveAttribute",
-      parent: this,
-      isEditable: (this.isEditable && attributeOptions.length > 1),
-      options: attributeOptions,
-      value: attributeOptions.find(it => it.value === this.document.activeBaseAttribute.name),
-      onChange: (_, newValue) => {
-        this.document.activeBaseAttribute = ATTRIBUTES[newValue.value];
-      },
-    });
     this.vmTfCategory = new InputTextFieldViewModel({
       parent: this,
       id: "vmTfCategory",
@@ -210,10 +193,12 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
         this.document.tags = newValue;
       },
     });
+
+    const level = this.document.dependsOnActiveCr === true ? (this.document.owningDocument.challengeRating.modified) : this.document.level;
     this.vmNsLevel = new InputNumberSpinnerViewModel({
       parent: this,
       id: "vmNsLevel",
-      value: this.document.dependsOnActiveCr === true ? this.document.crLevel : this.document.level,
+      value: level,
       isEditable: this.document.dependsOnActiveCr === true ? false : this.isEditable,
       onChange: (_, newValue) => {
         this.document.level = newValue;

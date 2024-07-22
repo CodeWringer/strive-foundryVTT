@@ -39,7 +39,7 @@
     },
     {
       "name": "illnesses",
-      "label": "Illnessess",
+      "label": "Illnesses",
       "path": "packs/illnesses",
       "type": "Item"
     },

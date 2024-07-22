@@ -11,9 +11,9 @@ import ViewModel from "../../../../view-model/view-model.mjs";
 /**
  * @extends ViewModel
  * 
- * @property {challengeRating} challengeRating The challenge rating. Changing this value invokes 
+ * @property {ChallengeRating} challengeRating The challenge rating. Changing this value invokes 
  * the `onChallengeRatingChanged` callback. 
- * @property {String} localizedLabel Returns the localized name of the attribute group. 
+ * @property {String} localizedLabel The localized label. 
  * @property {String | undefined} iconClass CSS class of the icon to display. 
  * E. g. `"ico-strongarm-solid"` or `"fas fa-brain"`
  * @method onClicked Callback that is invoked when the element is clicked. 
@@ -39,7 +39,7 @@ export default class ChallengeRatingViewModel extends ViewModel {
    * is expected to be associated with an actor sheet or item sheet or journal entry or chat message and so on.
    * 
    * @param {ChallengeRating} args.challengeRating
-   * @param {String} args.localizedLabel
+   * @param {String} args.localizedLabel The localized label. 
    * @param {String | undefined} args.iconClass CSS class of the icon to display. 
    * E. g. `"ico-strongarm-solid"` or `"fas fa-brain"`
    * @param {Function | undefined} args.onClicked Callback that is invoked when 
@@ -81,7 +81,7 @@ export default class ChallengeRatingViewModel extends ViewModel {
         });
         this.challengeRating = newChallengeRating;
       },
-      min: 0,
+      min: 1,
     });
     this.vmCrModifier = new InputNumberSpinnerViewModel({
       parent: this,
