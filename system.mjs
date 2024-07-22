@@ -87,6 +87,7 @@ import './presentation/sheet/actor/part/actor-personals-viewmodel.mjs';
 import { preloadPixiTextures } from "./presentation/pixi/pixi-preloader.mjs";
 import CustomCombatTracker from "./presentation/combat/custom-combat-tracker.mjs";
 import { KEYBOARD } from "./presentation/keyboard/keyboard.mjs";
+import VersionCode from "./business/migration/version-code.mjs";
 
 /* -------------------------------------------- */
 /*  Initialization                              */
@@ -219,6 +220,16 @@ Hooks.once("ready", function() {
     game.strive.logger.logVerbose("Version up to date - skipping migrations");
     // Ensure the current system version is saved. 
     WorldSystemVersion.set(migrator.finalMigrationVersion);
+  }
+
+  if (game.strive.debug) {
+    window.runMigration = async function(fromVersion) {
+      // Fake world system version. Without this, migrators might not run. 
+      const fakeVersion = VersionCode.fromString(fromVersion);
+      await WorldSystemVersion.set(fakeVersion);
+      
+      new MigratorDialog().render(true);
+    };
   }
 });
 
