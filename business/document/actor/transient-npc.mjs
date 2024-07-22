@@ -74,7 +74,7 @@ export default class TransientNpc extends TransientBaseCharacterActor {
   resolveReference(comparableReference, propertyPath) {
     // Attempt to resolve a challenge rating. 
     const isAttributeReference = this.attributes.find(it => it.name === comparableReference) !== undefined;
-    if (isAttributeReference === true && isDefined(this.challengeRating)) {
+    if (isAttributeReference === true && this.isChallengeRatingEnabled === true) {
       return this.challengeRating;
     } else {
       return super.resolveReference(comparableReference, propertyPath);
