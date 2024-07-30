@@ -128,15 +128,6 @@ cssClass: {undefined | String}
         <i class="fas fa-skull"></i>
       </div>
     </div>
-    {{!-- Toughness Test Warning --}}
-    <div class="hint-card warn flex{{#if viewModel.isToughnessTestRequired}}{{else}} hidden{{/if}}">
-      <div class="flex flex-center hint-card-icon">
-        <i class="fas fa-exclamation"></i>
-      </div>
-      <div class="flex-grow">
-        <span>{{localize "system.rules.hintToughnessTestRequired"}}</span>
-      </div>
-    </div>
     {{> sortableList viewModel=viewModel.vmInjuryList prominentItemStyling=true }}
   </div>
   {{!-- Illnesses --}}

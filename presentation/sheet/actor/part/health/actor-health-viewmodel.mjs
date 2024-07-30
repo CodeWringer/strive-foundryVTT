@@ -104,12 +104,6 @@ export default class ActorHealthViewModel extends ViewModel {
   scars = [];
 
   /**
-   * @type {Boolean}
-   * @readonly
-   */
-  get isToughnessTestRequired() { return new Ruleset().isToughnessTestRequired(this.document.document); }
-  
-  /**
    * Returns `true`, if the character is near death. 
    * 
    * @type {Boolean}

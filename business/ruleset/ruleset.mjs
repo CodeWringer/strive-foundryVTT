@@ -292,28 +292,6 @@ export default class Ruleset {
   getMaximumFateCards() {
     return 5;
   }
-
-  /**
-   * Returns true, if the given actor must do toughness tests, whenever they suffer an injury. 
-   * 
-   * @param {Actor} actor 
-   * 
-   * @returns {Boolean} True, if any further injury requires a toughness test. 
-   * 
-   * @throws {Error} Thrown, if the given actor is not of type `"pc"` or `"npc"`. 
-   */
-  isToughnessTestRequired(actor) {
-    const type = actor.type.toLowerCase();
-    if (type !== ACTOR_TYPES.PC && type !== ACTOR_TYPES.NPC) throw new Error("Only PC and NPC type actors allowed");
-
-    const maxInjuries = this.getCharacterMaximumInjuries(actor);
-    const injuryCount = (actor.items.filter(it => it.type === ITEM_TYPES.INJURY)).length;
-    if (injuryCount > 0 && injuryCount >= Math.floor(maxInjuries / 2)) {
-      return true;
-    } else {
-      return false;
-    }
-  }
   
   /**
    * Returns the effective raw level of the given actor for the given 
