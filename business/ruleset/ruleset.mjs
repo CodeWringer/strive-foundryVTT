@@ -168,7 +168,8 @@ export default class Ruleset {
     const injuryCount = (actor.items.filter(it => it.type === ITEM_TYPES.INJURY)).length;
     const level = this.getEffectiveAttributeRawLevel(ATTRIBUTES.toughness, actor);
 
-    return (parseInt(level) * 4) - (injuryCount * 2);
+    const base = 8;
+    return base + (parseInt(level) * 2) - (injuryCount * 2);
   }
 
   /**
@@ -292,7 +293,7 @@ export default class Ruleset {
   getMaximumFateCards() {
     return 5;
   }
-  
+
   /**
    * Returns the effective raw level of the given actor for the given 
    * attribute. 
