@@ -74,6 +74,23 @@
       "type": "RollTable"
     }
   ],
+  "packFolders": [
+    {
+      "name": "STRIVE",
+      "sorting": "m",
+      "packs": [
+        "assets",
+        "fantasyassets",
+        "fatecards",
+        "illnesses",
+        "injuries",
+        "skills",
+        "mutations",
+        "scars",
+        "rolltables"
+      ]
+    }
+  ],
   "languages": [
     {
       "lang": "en",
