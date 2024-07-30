@@ -8,7 +8,7 @@ import TransientBaseCharacterActor from "./transient-base-character-actor.mjs";
  * @extends TransientBaseCharacterActor
  * 
  * @property {Boolean} personalityVisible
- * * default `true`
+ * * default `false`
  * @property {Boolean} progressionVisible
  * * default `false`
  * @property {ChallengeRating} challengeRating
@@ -25,7 +25,7 @@ export default class TransientNpc extends TransientBaseCharacterActor {
   }
 
   get personalityVisible() {
-    return this.document.system.personalityVisible ?? true;
+    return this.document.system.personalityVisible ?? false;
   }
   set personalityVisible(value) {
     this.updateByPath("system.personalityVisible", value);
