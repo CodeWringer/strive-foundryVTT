@@ -766,10 +766,6 @@
         "label": "Bludgeoning",
         "abbreviation": "Bludgeon"
       },
-      "crushing": {
-        "label": "Crushing",
-        "abbreviation": "Crush"
-      },
       "poison": {
         "label": "Poison",
         "abbreviation": "Poison"

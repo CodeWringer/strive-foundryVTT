@@ -68,12 +68,6 @@
       "type": "Item"
     },
     {
-      "name": "injuries-crushing",
-      "label": "Injuries (Crushing)",
-      "path": "packs/injuries-crushing",
-      "type": "Item"
-    },
-    {
       "name": "injuries-electrical",
       "label": "Injuries (Electrical)",
       "path": "packs/injuries-electrical",
