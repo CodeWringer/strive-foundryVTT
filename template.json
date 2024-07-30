@@ -72,9 +72,13 @@
         },
         "health": {
           "maxHP": 0,
+          "maxHpModifier": 0,
           "HP": 0,
           "exhaustion": 0,
+          "maxExhaustionModifier": 0,
           "magicStamina": 0,
+          "maxMagicStaminaModifier": 0,
+          "maxInjuriesModifier": 0,
           "states": []
         },
         "assets": {

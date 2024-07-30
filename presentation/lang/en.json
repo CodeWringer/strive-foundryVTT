@@ -79,6 +79,10 @@
           "label": "Game-Master"
         }
       },
+      "modifier": {
+        "label": "Modifier",
+        "abbreviation": "Mod."
+      },
       "name": {
         "label": "Name",
         "edit": "Edit Name",

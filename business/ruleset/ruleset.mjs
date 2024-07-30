@@ -254,7 +254,7 @@ export default class Ruleset {
    * 
    * @param {Actor} actor 
    * 
-   * @returns {Number} The maximum magic stamina of the given actor. 
+   * @returns {Object} The maximum magic stamina of the given actor. 
    * 
    * @throws {Error} Thrown, if the given actor is not of type `"pc"` or `"npc"`. 
    */

@@ -53,7 +53,19 @@ export default class ActorHealthViewModel extends ViewModel {
    * @type {Number}
    * @readonly
    */
-  get maxHP() { return this.document.health.maxHP; }
+  get modifiedMaxHp() { return this.document.health.modifiedMaxHp; }
+
+  /**
+   * @type {Number}
+   * @readonly
+   */
+  get modifiedMaxExhaustion() { return this.document.health.modifiedMaxExhaustion; }
+
+  /**
+   * @type {Number}
+   * @readonly
+   */
+  get modifiedMaxMagicStamina() { return this.document.health.modifiedMaxMagicStamina; }
 
   /**
    * @type {Number}
@@ -71,7 +83,13 @@ export default class ActorHealthViewModel extends ViewModel {
    * @type {Number}
    * @readonly
    */
-  get maxInjuryCount() { return this.document.health.maxInjuries; }
+  get maxInjuries() { return this.document.health.maxInjuries; }
+
+  /**
+   * @type {Number}
+   * @readonly
+   */
+  get modifiedMaxInjuries() { return this.document.health.modifiedMaxInjuries; }
 
   /**
    * @type {String}
@@ -109,7 +127,7 @@ export default class ActorHealthViewModel extends ViewModel {
    * @type {Boolean}
    * @readonly
    */
-  get isDeathNear() { return this.injuryCount >= this.maxInjuryCount; }
+  get isDeathNear() { return this.injuryCount >= this.modifiedMaxInjuries; }
   
   /**
    * @type {String}
@@ -137,34 +155,88 @@ export default class ActorHealthViewModel extends ViewModel {
     this.document = args.document;
     this.contextType = args.contextType ?? "actor-health";
 
-    const thiz = this;
+    // HP
+    this.vmMaxHp = new InputNumberSpinnerViewModel({
+      parent: this,
+      id: "vmMaxHp",
+      value: this.document.health.maxHP,
+      isEditable: false,
+    });
+    this.vmMaxHpModifier = new InputNumberSpinnerViewModel({
+      parent: this,
+      id: "vmMaxHpModifier",
+      value: this.document.health.maxHpModifier,
+      onChange: (_, newValue) => {
+        this.document.health.maxHpModifier = newValue;
+      },
+    });
+    this.vmHp = new InputNumberSpinnerViewModel({
+      parent: this,
+      id: "vmHp",
+      value: this.document.health.HP,
+      onChange: (_, newValue) => {
+        this.document.health.HP = newValue;
+      },
+    });
+    // Exhaustion
+    this.vmMaxExhaustion = new InputNumberSpinnerViewModel({
+      parent: this,
+      id: "vmMaxExhaustion",
+      value: this.document.health.maxExhaustion,
+      isEditable: false,
+    });
+    this.vmMaxExhaustionModifier = new InputNumberSpinnerViewModel({
+      parent: this,
+      id: "vmMaxExhaustionModifier",
+      value: this.document.health.maxExhaustionModifier,
+      onChange: (_, newValue) => {
+        this.document.health.maxExhaustionModifier = newValue;
+      },
+    });
+    this.vmExhaustion = new InputNumberSpinnerViewModel({
+      parent: this,
+      id: "vmExhaustion",
+      value: this.document.health.exhaustion,
+      onChange: (_, newValue) => {
+        this.document.health.exhaustion = newValue;
+      },
+      min: 0,
+    });
+    // Magic Stamina
+    this.vmMaxMagicStamina = new InputNumberSpinnerViewModel({
+      parent: this,
+      id: "vmMaxMagicStamina",
+      value: this.document.health.maxMagicStamina.total,
+      isEditable: false,
+    });
+    this.vmMaxMagicStaminaModifier = new InputNumberSpinnerViewModel({
+      parent: this,
+      id: "vmMaxMagicStaminaModifier",
+      value: this.document.health.maxMagicStaminaModifier,
+      onChange: (_, newValue) => {
+        this.document.health.maxMagicStaminaModifier = newValue;
+      },
+    });
+    this.vmMagicStamina = new InputNumberSpinnerViewModel({
+      parent: this,
+      id: "vmMagicStamina",
+      value: this.document.health.magicStamina,
+      onChange: (_, newValue) => {
+        this.document.health.magicStamina = newValue;
+      },
+      min: 0,
+    });
 
-    this.vmNsHp = new InputNumberSpinnerViewModel({
-      parent: thiz,
-      id: "vmNsHp",
-      value: thiz.document.health.HP,
+    // Injury
+    this.vmMaxInjuriesModifier = new InputNumberSpinnerViewModel({
+      parent: this,
+      id: "vmMaxInjuriesModifier",
+      value: this.document.health.maxInjuriesModifier,
       onChange: (_, newValue) => {
-        thiz.document.health.HP = newValue;
+        this.document.health.maxInjuriesModifier = newValue;
       },
     });
-    this.vmNsExhaustion = new InputNumberSpinnerViewModel({
-      parent: thiz,
-      id: "vmNsExhaustion",
-      value: thiz.document.health.exhaustion,
-      onChange: (_, newValue) => {
-        thiz.document.health.exhaustion = newValue;
-      },
-      min: 0,
-    });
-    this.vmNsMagicStamina = new InputNumberSpinnerViewModel({
-      parent: thiz,
-      id: "vmNsMagicStamina",
-      value: thiz.document.health.magicStamina,
-      onChange: (_, newValue) => {
-        thiz.document.health.magicStamina = newValue;
-      },
-      min: 0,
-    });
+
     this.vmHealthStates = new ActorHealthStatesViewModel({
       id: "vmHealthStates",
       parent: this,
@@ -178,11 +250,11 @@ export default class ActorHealthViewModel extends ViewModel {
     this.illnesses = [];
     this.illnesses = this._getIllnessViewModels();
     this.vmIllnessList = new SortableListViewModel({
-      parent: thiz,
-      isEditable: args.isEditable ?? thiz.isEditable,
+      parent: this,
+      isEditable: args.isEditable ?? this.isEditable,
       id: "vmIllnessList",
       indexDataSource: new DocumentListItemOrderDataSource({
-        document: thiz.document,
+        document: this.document,
         listName: "illnesses",
       }),
       listItemViewModels: this.illnesses,
@@ -190,7 +262,7 @@ export default class ActorHealthViewModel extends ViewModel {
       vmBtnAddItem: new ButtonAddViewModel({
         id: "vmBtnAddIllness",
         parent: this,
-        target: thiz.document,
+        target: this.document,
         isEditable: this.isEditable,
         creationType: ITEM_TYPES.ILLNESS,
         withDialog: true,
@@ -203,11 +275,11 @@ export default class ActorHealthViewModel extends ViewModel {
     this.injuries = [];
     this.injuries = this._getInjuryViewModels();
     this.vmInjuryList = new SortableListViewModel({
-      parent: thiz,
-      isEditable: args.isEditable ?? thiz.isEditable,
+      parent: this,
+      isEditable: args.isEditable ?? this.isEditable,
       id: "vmInjuryList",
       indexDataSource: new DocumentListItemOrderDataSource({
-        document: thiz.document,
+        document: this.document,
         listName: "injuries",
       }),
       listItemViewModels: this.injuries,
@@ -215,7 +287,7 @@ export default class ActorHealthViewModel extends ViewModel {
       vmBtnAddItem: new ButtonAddViewModel({
         id: "vmBtnAddInjury",
         parent: this,
-        target: thiz.document,
+        target: this.document,
         isEditable: this.isEditable,
         creationType: ITEM_TYPES.INJURY,
         withDialog: true,
@@ -228,11 +300,11 @@ export default class ActorHealthViewModel extends ViewModel {
     this.mutations = [];
     this.mutations = this._getMutationViewModels();
     this.vmMutationList = new SortableListViewModel({
-      parent: thiz,
-      isEditable: args.isEditable ?? thiz.isEditable,
+      parent: this,
+      isEditable: args.isEditable ?? this.isEditable,
       id: "vmMutationList",
       indexDataSource: new DocumentListItemOrderDataSource({
-        document: thiz.document,
+        document: this.document,
         listName: "mutations",
       }),
       listItemViewModels: this.mutations,
@@ -240,7 +312,7 @@ export default class ActorHealthViewModel extends ViewModel {
       vmBtnAddItem: new ButtonAddViewModel({
         id: "vmBtnAddMutation",
         parent: this,
-        target: thiz.document,
+        target: this.document,
         isEditable: this.isEditable,
         creationType: ITEM_TYPES.MUTATION,
         withDialog: true,
@@ -253,11 +325,11 @@ export default class ActorHealthViewModel extends ViewModel {
     this.scars = [];
     this.scars = this._getScarViewModels();
     this.vmScarList = new SortableListViewModel({
-      parent: thiz,
-      isEditable: args.isEditable ?? thiz.isEditable,
+      parent: this,
+      isEditable: args.isEditable ?? this.isEditable,
       id: "vmScarList",
       indexDataSource: new DocumentListItemOrderDataSource({
-        document: thiz.document,
+        document: this.document,
         listName: "scars",
       }),
       listItemViewModels: this.scars,
@@ -265,7 +337,7 @@ export default class ActorHealthViewModel extends ViewModel {
       vmBtnAddItem: new ButtonAddViewModel({
         id: "vmBtnAddScar",
         parent: this,
-        target: thiz.document,
+        target: this.document,
         isEditable: this.isEditable,
         creationType: ITEM_TYPES.SCAR,
         withDialog: true,
