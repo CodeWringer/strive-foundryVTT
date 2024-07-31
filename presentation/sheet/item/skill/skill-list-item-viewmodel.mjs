@@ -173,7 +173,10 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
    * @param {String | undefined} args.visGroupId
    */
   constructor(args = {}) {
-    super(args);
+    super({
+      ...args,
+      title: `${args.document.name} (${args.document.baseAttributes.map(it => game.i18n.localize(it.localizableAbbreviation)).join("/")})`
+    });
     validateOrThrow(args, ["document"]);
 
     this.vmTfCategory = new InputTextFieldViewModel({

@@ -6,7 +6,7 @@ export default class MutationItemSheet extends GameSystemBaseItemSheet {
   get template() { return MutationItemSheetViewModel.TEMPLATE; }
 
   /** @override */
-  get title() { return game.i18n.localize("system.character.health.mutation.singular"); }
+  get localizedType() { return game.i18n.localize("system.character.health.mutation.singular"); }
 
   /** @override */
   _getViewModel(context, document, sheet) {

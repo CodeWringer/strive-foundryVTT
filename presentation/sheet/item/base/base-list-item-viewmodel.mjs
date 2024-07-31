@@ -116,6 +116,8 @@ export default class BaseListItemViewModel extends ViewModel {
    * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document. 
    * 
    * @param {TransientDocument} args.document 
+   * @param {String | undefined} args.title
+   * * default `args.document.name`
    */
   constructor(args = {}) {
     super(args);
@@ -124,6 +126,7 @@ export default class BaseListItemViewModel extends ViewModel {
     this.registerViewStateProperty("_isExpanded");
 
     this.document = args.document;
+    this.title = args.title ?? args.document.name;
 
     this.dataFields = this.getDataFields();
     this._ensureViewModelsAsProperties(this.dataFields);
@@ -156,7 +159,7 @@ export default class BaseListItemViewModel extends ViewModel {
       this.vmHeaderButton = new ButtonViewModel({
         id: "vmHeaderButton",
         parent: this,
-        localizedLabel: this.document.name,
+        localizedLabel: this.title,
         onClick: () => {
           this.isExpanded = !this.isExpanded;
         },
@@ -301,7 +304,7 @@ export default class BaseListItemViewModel extends ViewModel {
     const inputName = "inputName";
 
     const dialog = await new DynamicInputDialog({
-      localizedTitle: `${format(game.i18n.localize("system.general.name.editOf"), this.document.name)}`,
+      localizedTitle: `${format(game.i18n.localize("system.general.name.editOf"), this.title)}`,
       inputDefinitions: [
         new DynamicInputDefinition({
           type: DYNAMIC_INPUT_TYPES.TEXTFIELD,

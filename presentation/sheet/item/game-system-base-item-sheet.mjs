@@ -16,13 +16,23 @@ export default class GameSystemBaseItemSheet {
   get template() { throw new Error("NotImplementedException"); }
 
   /**
-   * Returns the localized title of this sheet type. 
+   * Returns the localized type of this sheet. 
    * 
    * @type {String}
    * @readonly
    * @abstract
    */
-  get title() { throw new Error("NotImplementedException"); }
+  get localizedType() { throw new Error("NotImplementedException"); }
+
+  /**
+   * Returns the localized title of this sheet. 
+   * 
+   * @param {Object} item
+   * @returns {String}
+   * @readonly
+   * @abstract
+   */
+  getTitle(item) { return `${this.localizedType} - ${item.name}` }
 
   /**
    * Returns a view model for the given document. 
