@@ -274,8 +274,7 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
     rows.forEach(row => {
         let rowInnerHtmlContent = "";
         row.forEach(column => {
-            const columnHtmlContent = `<div class="pad-sm">${column}</div>`;
-            rowInnerHtmlContent = `${rowInnerHtmlContent}${columnHtmlContent}`
+            rowInnerHtmlContent = `${rowInnerHtmlContent}${column}`
         });
         const rowHtmlContent = `<div class="grid grid-gap-sm" style="${gridStyle}">${rowInnerHtmlContent}</div>`;
         newHtmlContent = `${newHtmlContent}${rowHtmlContent}`
@@ -294,10 +293,10 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
 
     // Generate first row. 
     const firstRowColumns = [
-        ""
+        "<span></span>"
     ];
     for (let ob = 1; ob <= uiState.obLimit; ob++) {
-        firstRowColumns.push(`<b>Ob ${ob}</b>`);
+        firstRowColumns.push(`<span class="pad-sm"><b>Ob ${ob}</b></span>`);
     }
 
     const rows = [
@@ -306,7 +305,7 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
 
     for (let numberOfDice = 1; numberOfDice <= uiState.diceLimit; numberOfDice++) {
         const columns = [
-            `<b>${numberOfDice}D${uiState.dieFaces}</b>`
+            `<span class="pad-sm"><b>${numberOfDice}D${uiState.dieFaces}</b></span>`
         ];
 
         for (let ob = 1; ob <= uiState.obLimit; ob++) {
@@ -319,7 +318,8 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
                 sampleSize: uiState.sampleSize
             });
             const successLikelihood = Math.round((successes / uiState.sampleSize) * 100);
-            columns.push(`${successLikelihood}%`)
+            const barDiagram = `<span style="width: ${successLikelihood}%; background-color: rgb(122, 122, 122); height: 1em;"></span>`;
+            columns.push(`<div class="grid grid-gap-sm" style="grid-template-columns: 1fr 2fr;"><span>${successLikelihood}%</span>${barDiagram}</div>`)
         }
 
         rows.push(columns);
