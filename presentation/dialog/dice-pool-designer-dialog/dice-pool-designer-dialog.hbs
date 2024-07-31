@@ -6,7 +6,7 @@ viewModel: DicePoolDesignerDialogViewModel
   <div class="grid-3col grid-gap-md">
     {{!-- Positive Threshold --}}
     <div class="flex flex-row flex-middle sheet-block">
-      <span>Positive Threshold (inclusive)</span>
+      <span>Positive Threshold</span>
       {{> inputSlider viewModel=viewModel.vmSuccessThresholdSlider cssClass="flex-grow pad-md"}}
       <span class="width-md">
         {{> inputNumberSpinner viewModel=viewModel.vmSuccessThreshold cssClass=""}}
@@ -39,9 +39,13 @@ viewModel: DicePoolDesignerDialogViewModel
         {{> inputNumberSpinner viewModel=viewModel.vmFaces cssClass=""}}
       </span>
     </div>
-    {{!-- Dice Limit --}}
+    {{!-- Modifier --}}
     <div class="flex flex-row flex-middle sheet-block">
-
+      <span>Modifier</span>
+      {{> inputSlider viewModel=viewModel.vmModifierSlider cssClass="flex-grow pad-md"}}
+      <span class="width-md">
+        {{> inputNumberSpinner viewModel=viewModel.vmModifier cssClass=""}}
+      </span>
     </div>
     {{!-- Sample Size --}}
     <div class="flex flex-row flex-middle sheet-block">

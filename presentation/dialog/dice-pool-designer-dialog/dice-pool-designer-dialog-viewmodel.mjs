@@ -31,6 +31,7 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
    * @property {Number} value.obLimit 
    * @property {Number} value.diceLimit 
    * @property {Number} value.sampleSize 
+   * @property {Number} value.modifier Number of automatic positives/negatives. 
    * 
    * @type {Object}
    * @private
@@ -41,6 +42,7 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
       obLimit: 10,
       diceLimit: 20,
       sampleSize: 1000,
+      modifier: 0,
     }
   });
 
@@ -109,6 +111,7 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
         parent: this,
         value: this._uiState.value.diceLimit,
         min: 1,
+        max: 30,
         onChange: (_, newValue) => {
             this._uiState.value = {
                 ...this._uiState.value,
@@ -135,6 +138,7 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
         parent: this,
         value: this._uiState.value.obLimit,
         min: 1,
+        max: 30,
         onChange: (_, newValue) => {
             this._uiState.value = {
                 ...this._uiState.value,
@@ -160,11 +164,39 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
         id: "vmFaces",
         parent: this,
         value: this._uiState.value.dieFaces,
-        min: 1,
+        min: 2,
+        max: 20,
         onChange: (_, newValue) => {
             this._uiState.value = {
                 ...this._uiState.value,
                 dieFaces: newValue,
+            };
+        },
+    });
+
+    this.vmModifierSlider = new InputSliderViewModel({
+        id: "vmModifierSlider",
+        parent: this,
+        min: -20,
+        max: 20,
+        value: this._uiState.value.modifier,
+        onChange: (_, newValue) => {
+            this._uiState.value = {
+                ...this._uiState.value,
+                modifier: newValue,
+            };
+        },
+    });
+    this.vmModifier = new InputNumberSpinnerViewModel({
+        id: "vmModifier",
+        parent: this,
+        value: this._uiState.value.modifier,
+        min: -20,
+        max: 20,
+        onChange: (_, newValue) => {
+            this._uiState.value = {
+                ...this._uiState.value,
+                modifier: newValue,
             };
         },
     });
@@ -210,6 +242,9 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
 
         setElementValue(this.vmFacesSlider.element, newValue.dieFaces);
         setElementValue(this.vmFaces.element, newValue.dieFaces);
+
+        setElementValue(this.vmModifierSlider.element, newValue.modifier);
+        setElementValue(this.vmModifier.element, newValue.modifier);
 
         setElementValue(this.vmSampleSizeSlider.element, newValue.sampleSize);
         setElementValue(this.vmSampleSize.element, newValue.sampleSize);
@@ -275,7 +310,14 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
         ];
 
         for (let ob = 1; ob <= uiState.obLimit; ob++) {
-            const successes = this._rollDiceAndCountSuccesses(uiState.dieFaces, ob, numberOfDice, uiState.successThreshold, uiState.sampleSize);
+            const successes = this._rollDiceAndCountSuccesses({
+                faces: uiState.dieFaces, 
+                ob: ob, 
+                numberOfDice: numberOfDice, 
+                successThreshold: uiState.successThreshold, 
+                modifier: uiState.modifier, 
+                sampleSize: uiState.sampleSize
+            });
             const successLikelihood = Math.round((successes / uiState.sampleSize) * 100);
             columns.push(`${successLikelihood}%`)
         }
@@ -290,31 +332,38 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
    * enough of the faces are at or above `successThreshold` and returns the total number 
    * of such occurrences. 
    * 
-   * @param {Number} faces 
-   * @param {Number} ob 
-   * @param {Number} numberOfDice 
-   * @param {Number} successThreshold 
-   * @param {Number} sampleSize 
+   * Adds automatic positives or negatives, if `modifier` is != 0. 
+   * 
+   * @param {Object} args 
+   * @param {Number} args.faces 
+   * @param {Number} args.ob 
+   * @param {Number} args.numberOfDice 
+   * @param {Number} args.successThreshold 
+   * @param {Number} args.modifier 
+   * @param {Number} args.sampleSize 
    * * default `100`
    * 
    * @returns {Number} The amount of times enough dice were successes to meet the Ob. 
    */
-  _rollDiceAndCountSuccesses(faces, ob, numberOfDice, successThreshold, sampleSize = 100) {
+  _rollDiceAndCountSuccesses(args = {}) {
     let successes = 0;
 
-    for (let sample = 0; sample < sampleSize; sample++) {
-        const rolledDice = new Die({ faces: faces, number: numberOfDice }).evaluate().results;
+    for (let sample = 0; sample < args.sampleSize; sample++) {
+        const rolledDice = new Die({ faces: args.faces, number: args.numberOfDice }).evaluate().results;
         let successesInRoll = 0;
     
         // Analyze face of every rolled die. 
         for (const rolledDie of rolledDice) {
             const face = parseInt(rolledDie.result);
-            if (face >= successThreshold) {
+            if (face >= args.successThreshold) {
                 successesInRoll++;
             }
         }
 
-        if (successesInRoll >= ob) {
+        // Modifier.
+        successesInRoll += args.modifier;
+
+        if (successesInRoll >= args.ob) {
             successes++;
         }
     }
