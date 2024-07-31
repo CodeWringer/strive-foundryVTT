@@ -53,6 +53,9 @@ export default class TransientSkill extends TransientBaseItem {
   /** @override */
   get chatMessageTemplate() { return TEMPLATES.SKILL_ITEM_CHAT_MESSAGE; }
   
+  /** @override */
+  get nameForDisplay() { return `${this.document.name} (${this.baseAttributes.map(it => game.i18n.localize(it.localizableAbbreviation)).join("/")})`; }
+  
   /**
    * @type {Array<Attribute>}
    */

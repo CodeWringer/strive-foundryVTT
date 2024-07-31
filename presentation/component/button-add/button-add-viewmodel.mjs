@@ -147,18 +147,31 @@ export default class ButtonAddViewModel extends ButtonViewModel {
       contentType: this.creationType,
     });
 
+    const documents = new Map;
+    for (let i = 0; i < documentIndices.length; i++) {
+      const id = documentIndices[i].id;
+      const document = await new DocumentFetcher().find({
+        id: id,
+      });
+      documents.set(id, document);
+    }
+
     const customChoice = new ChoiceOption({
       value: "custom",
       localizedValue: game.i18n.localize("system.general.custom"),
     });
 
-    const options = documentIndices.map(documentIndex => 
-      new ChoiceOption({
+    const options = documentIndices.map(documentIndex => {
+      const document = documents.get(documentIndex.id);
+      const documentNameForDisplay = ((document ?? {}).getTransientObject() ?? {}).nameForDisplay ?? documentIndex.name;
+
+      return new ChoiceOption({
         value: documentIndex.id,
-        localizedValue: `${documentIndex.name} (${documentIndex.sourceName})`,
-      })
-    ).sort((a, b) => a.localizedValue.localeCompare(b.localizedValue));
-    options.splice(0, 0, customChoice);
+        localizedValue:  `${documentNameForDisplay}   (${documentIndex.sourceName})`,
+      });
+    });
+    const sortedOptions = options.sort((a, b) => a.localizedValue.localeCompare(b.localizedValue));
+    sortedOptions.splice(0, 0, customChoice);
 
     const inputChoices = "inputChoices";
     const dialog = await new DynamicInputDialog({
@@ -171,7 +184,7 @@ export default class ButtonAddViewModel extends ButtonViewModel {
           required: true,
           defaultValue: customChoice,
           specificArgs: {
-            options: options,
+            options: sortedOptions,
           },
         }),
       ],

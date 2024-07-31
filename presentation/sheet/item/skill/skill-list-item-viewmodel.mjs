@@ -175,7 +175,7 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
   constructor(args = {}) {
     super({
       ...args,
-      title: `${args.document.name} (${args.document.baseAttributes.map(it => game.i18n.localize(it.localizableAbbreviation)).join("/")})`
+      title: args.document.nameForDisplay,
     });
     validateOrThrow(args, ["document"]);
 
