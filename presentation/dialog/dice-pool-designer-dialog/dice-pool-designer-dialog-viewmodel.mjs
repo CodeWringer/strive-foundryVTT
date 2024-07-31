@@ -231,17 +231,18 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
    */
   _updateTable() {
     const columnCount = this._uiState.value.obLimit + 1;
-    $(this._diceProbabilityTableElement).attr("style", `grid-column: span ${columnCount} / span ${columnCount}; grid-template-columns: repeat(${columnCount}, minmax(0, 1fr));`);
 
+    const gridStyle = `grid-column: span ${columnCount} / span ${columnCount}; grid-template-columns: repeat(${columnCount}, minmax(0, 1fr));`;
     let newHtmlContent = "";
 
     const rows = this._getTableRows();
     rows.forEach(row => {
-        let rowHtmlContent = "";
+        let rowInnerHtmlContent = "";
         row.forEach(column => {
-            const columnHtmlContent = `<div>${column}</div>`;
-            rowHtmlContent = `${rowHtmlContent}${columnHtmlContent}`
-        }) 
+            const columnHtmlContent = `<div class="pad-sm">${column}</div>`;
+            rowInnerHtmlContent = `${rowInnerHtmlContent}${columnHtmlContent}`
+        });
+        const rowHtmlContent = `<div class="grid grid-gap-sm" style="${gridStyle}">${rowInnerHtmlContent}</div>`;
         newHtmlContent = `${newHtmlContent}${rowHtmlContent}`
     });
 
@@ -258,10 +259,10 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
 
     // Generate first row. 
     const firstRowColumns = [
-        "<div></div>"
+        ""
     ];
     for (let ob = 1; ob <= uiState.obLimit; ob++) {
-        firstRowColumns.push(`Ob ${ob}`);
+        firstRowColumns.push(`<b>Ob ${ob}</b>`);
     }
 
     const rows = [
@@ -270,7 +271,7 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
 
     for (let numberOfDice = 1; numberOfDice <= uiState.diceLimit; numberOfDice++) {
         const columns = [
-            `${numberOfDice}D${uiState.dieFaces}`
+            `<b>${numberOfDice}D${uiState.dieFaces}</b>`
         ];
 
         for (let ob = 1; ob <= uiState.obLimit; ob++) {
