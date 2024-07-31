@@ -42,6 +42,7 @@ export const TEMPLATES = {
   COMPONENT_INPUT_IMAGE: `${basePathComponent}/input-image/input-image.hbs`,
   COMPONENT_INPUT_RICH_TEXT: `${basePathComponent}/input-rich-text/input-rich-text.hbs`,
   COMPONENT_INPUT_SEARCH: `${basePathComponent}/input-search/input-search.hbs`,
+  COMPONENT_INPUT_SLIDER: `${basePathComponent}/input-slider/input-slider.hbs`,
   COMPONENT_INPUT_TAGS: `${basePathComponent}/input-tags/input-tags.hbs`,
   COMPONENT_INPUT_TAG: `${basePathComponent}/input-tags/input-tag-pill.hbs`,
   COMPONENT_INPUT_TOGGLE: `${basePathComponent}/input-toggle/input-toggle.hbs`,
@@ -73,6 +74,7 @@ export const TEMPLATES = {
   DIALOG_SINGLE_CHOICE: `${basePathPresentation}/dialog/single-choice-dialog/single-choice-dialog.hbs`,
   DIALOG_MIGRATOR: `${basePathPresentation}/dialog/migrator-dialog/migrator-dialog.hbs`,
   DIALOG_DYNAMIC_INPUT: `${basePathPresentation}/dialog/dynamic-input-dialog/dynamic-input-dialog.hbs`,
+  DIALOG_DICE_POOL_DESIGNER: `${basePathPresentation}/dialog/dice-pool-designer-dialog/dice-pool-designer-dialog.hbs`,
   // --- Settings Dialogs
   DIALOG_SETTINGS_HEALTH_STATES: `${basePathPresentation}/dialog/settings/health-states/health-states-settings-dialog.hbs`,
   CUSTOM_HEALTH_STATE_LIST_ITEM: `${basePathPresentation}/dialog/settings/health-states/custom-health-state-list-item.hbs`,

@@ -28,6 +28,7 @@ import VisibilityToggleListViewModel from "../component/visibility-toggle-list/v
 import ModalDialog from "../dialog/modal-dialog/modal-dialog.mjs";
 import InputToggleViewModel from "../component/input-toggle/input-toggle-viewmodel.mjs";
 import InputSearchTextViewModel from "../component/input-search/input-search-viewmodel.mjs";
+import InputSliderViewModel from "../component/input-slider/input-slider-viewmodel.mjs";
 
 /**
  * Registers the Handlebars partials of the components. 
@@ -62,5 +63,6 @@ export function initHandlebarsComponents() {
   SortableListViewModel.registerHandlebarsPartial();
   VisibilityToggleListViewModel.registerHandlebarsPartial();
   InputSearchTextViewModel.registerHandlebarsPartial();
+  InputSliderViewModel.registerHandlebarsPartial();
   ModalDialog.registerHandlebarsPartial();
 }

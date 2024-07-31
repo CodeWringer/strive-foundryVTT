@@ -59,12 +59,49 @@ export default class InputNumberSpinnerViewModel extends InputViewModel {
   get hasMax() { return this.max !== undefined; }
 
   /**
+   * @type {Number}
+   */
+  get min() { return this._min; }
+  /**
+   * @param {Number} value
+   */
+  set min(value) {
+    this._min = value;
+    $(this.element).attr("min", value);
+  }
+
+  /**
+   * @type {Number}
+   */
+  get max() { return this._max; }
+  /**
+   * @param {Number} value
+   */
+  set max(value) {
+    this._max = value;
+    $(this.element).attr("max", value);
+  }
+
+  /**
+   * @type {Number}
+   */
+  get step() { return this._step; }
+  /**
+   * @param {Number} value
+   */
+  set step(value) {
+    this._step = value;
+    $(this.element).attr("step", value);
+  }
+
+  /**
    * @param {Object} args
    * @param {Number | undefined} args.value The current value. 
    * * default `0`
    * @param {Number | undefined} args.min Optional. The minimum value. 
    * @param {Number | undefined} args.max Optional. The maximum value. 
    * @param {Number | undefined} args.step Optional. The increment/decrement step size. 
+   * * default `1`
    * @param {Function | undefined} args.onChange Callback that is invoked 
    * when the value changes. Receives two arguments: 
    * * `oldValue: {Number}`
@@ -74,9 +111,9 @@ export default class InputNumberSpinnerViewModel extends InputViewModel {
     super(args);
 
     this._value = args.value ?? 0;
-    this.min = args.min ?? undefined;
-    this.max = args.max ?? undefined;
-    this.step = args.step ?? 1;
+    this._min = args.min ?? undefined;
+    this._max = args.max ?? undefined;
+    this._step = args.step ?? 1;
   }
 
   /** @override */

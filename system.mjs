@@ -88,6 +88,7 @@ import { preloadPixiTextures } from "./presentation/pixi/pixi-preloader.mjs";
 import CustomCombatTracker from "./presentation/combat/custom-combat-tracker.mjs";
 import { KEYBOARD } from "./presentation/keyboard/keyboard.mjs";
 import VersionCode from "./business/migration/version-code.mjs";
+import DicePoolDesignerDialog from "./presentation/dialog/dice-pool-designer-dialog/dice-pool-designer-dialog.mjs";
 
 /* -------------------------------------------- */
 /*  Initialization                              */
@@ -230,6 +231,8 @@ Hooks.once("ready", function() {
       
       new MigratorDialog().render(true);
     };
+
+    window.DicePoolDesignerDialog = DicePoolDesignerDialog;
   }
 });
 
