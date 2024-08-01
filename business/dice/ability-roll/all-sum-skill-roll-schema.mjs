@@ -99,6 +99,8 @@ export class AllSumSkillRollSchema extends SkillRollSchema {
    * 
    * @param {TransientSkill} skillDocument 
    * @returns {Array<SumComponent>}
+   * 
+   * @private
    */
   _getDiceComponents(skillDocument) {
     if (skillDocument.dependsOnActiveCr === true) {

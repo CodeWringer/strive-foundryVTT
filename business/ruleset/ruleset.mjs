@@ -10,6 +10,7 @@ import { SkillRollSchema } from "../dice/ability-roll/skill-roll-schema.mjs";
 import { AllSumSkillRollSchema } from "../dice/ability-roll/all-sum-skill-roll-schema.mjs";
 import { RollSchema } from "../dice/roll-schema.mjs";
 import { AttributeRollSchema } from "../dice/ability-roll/attribute-roll-schema.mjs";
+import { AttributeAndSkillRollSchema } from "../dice/ability-roll/attribute-and-skill-roll-schema/attribute-and-skill-roll-schema.mjs";
 
 /**
  * Provides all the ruleset-specifics. 
@@ -377,7 +378,7 @@ export default class Ruleset {
    * @returns {SkillRollSchema}
    */
   getSkillRollSchema() {
-    return new AllSumSkillRollSchema(); 
+    return new AttributeAndSkillRollSchema(); 
   }
 
   /**
