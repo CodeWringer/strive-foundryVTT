@@ -4,9 +4,9 @@ viewModel: DicePoolDesignerDialogViewModel
 <section id="{{viewModel.id}}">
   {{!-- Row --}}
   <div class="grid-3col grid-gap-md">
-    {{!-- Positive Threshold --}}
+    {{!-- Hit Threshold --}}
     <div class="flex flex-row flex-middle sheet-block">
-      <span>Positive Threshold</span>
+      <span>Hit Threshold</span>
       {{> inputSlider viewModel=viewModel.vmSuccessThresholdSlider cssClass="flex-grow pad-md"}}
       <span class="width-md">
         {{> inputNumberSpinner viewModel=viewModel.vmSuccessThreshold cssClass=""}}

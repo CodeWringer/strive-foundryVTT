@@ -62,8 +62,8 @@ export default class DicePool {
 
     const bonusSum = new Sum(this.bonus);
     const totalNumberOfDice = modifiedDiceSum + bonusSum.total;
-    const positives = [];
-    const negatives = [];
+    const hits = [];
+    const misses = [];
 
     // Only try to do any rolls, if there are dice to roll. 
     if (totalNumberOfDice > 0) {
@@ -74,10 +74,10 @@ export default class DicePool {
       const ruleset = new Ruleset();
       for (const result of results) {
         const face = result.result;
-        if (ruleset.isPositive(face)) {
-          positives.push(face);
+        if (ruleset.isHit(face)) {
+          hits.push(face);
         } else {
-          negatives.push(face);
+          misses.push(face);
         }
       }
     }
@@ -91,19 +91,19 @@ export default class DicePool {
     const rgxIsPlainNumber = new RegExp("^\\d+$");
     const isPlainObstacleNumber = isDefined(evaluatedObstacle.formula.match(rgxIsPlainNumber));
     if (isPlainObstacleNumber !== true) {
-      obstacle = parseInt(evaluatedObstacle.positiveTotal) + 1;
+      obstacle = parseInt(evaluatedObstacle.hitTotal) + 1;
     }
 
     // Determine outcome type and degree of success/failure. 
     let degree = 0;
     let outcomeType = DICE_POOL_RESULT_TYPES.NONE; // Ob 0 or invalid test. 
     if (obstacle > 0) {
-      if (positives.length >= obstacle) { // Complete success
+      if (hits.length >= obstacle) { // Complete success
         outcomeType = DICE_POOL_RESULT_TYPES.SUCCESS;
-        degree = positives.length - obstacle;
-      } else if (positives.length > 0) { // Partial failure
+        degree = hits.length - obstacle;
+      } else if (hits.length > 0) { // Partial failure
         outcomeType = DICE_POOL_RESULT_TYPES.PARTIAL;
-        degree = positives.length;
+        degree = hits.length;
       } else {
         outcomeType = DICE_POOL_RESULT_TYPES.FAILURE;
       }
@@ -121,8 +121,8 @@ export default class DicePool {
       obstacle: obstacle,
       evaluatedObstacle: evaluatedObstacle,
       modifier: this.modifier,
-      positives: positives,
-      negatives: negatives,
+      hits: hits,
+      misses: misses,
       outcomeType: outcomeType,
       degree: degree,
     });
@@ -138,20 +138,20 @@ export default class DicePool {
 const LOCALIZABLE_OBSTACLE_ABBREVIATION = "system.roll.obstacle.abbreviation";
 
 /**
- * CSS class of a positive die result. 
+ * CSS class of a hit die result. 
  * 
  * @type {String}
  * @constant
  */
-export const CSS_CLASS_POSITIVE = "roll-success";
+export const CSS_CLASS_HIT = "roll-success";
 
 /**
- * CSS class of a negative die result. 
+ * CSS class of a miss die result. 
  * 
  * @type {String}
  * @constant
  */
-export const CSS_CLASS_NEGATIVE = "roll-failure";
+export const CSS_CLASS_MISS = "roll-failure";
 
 /**
  * CSS class of the obstacle value. 
@@ -183,8 +183,8 @@ export const CSS_CLASS_MISSING_DIE = "roll-missing";
  * @property {Number} obstacle The obstacle that was rolled against. 
  * @property {EvaluatedRollFormula} evaluatedObstacle The dice results of the obstacle roll. 
  * @property {RollDiceModifierType} modifier The used dice modifier. 
- * @property {Array<Number>} positives The positives composition and total. 
- * @property {Array<Number>} negatives The negatives composition and total. 
+ * @property {Array<Number>} hits The hits composition and total. 
+ * @property {Array<Number>} misses The misses composition and total. 
  * @property {DicePoolRollResultType} outcomeType The result of this roll for use in a test. 
  * @property {Number} degree The degree of success or failure. 
  */
@@ -202,8 +202,8 @@ export class DicePoolRollResult {
    * @param {Number} args.obstacle The obstacle that was rolled against. 
    * @param {EvaluatedRollFormula} args.evaluatedObstacle The dice results of the obstacle roll. 
    * @param {RollDiceModifierType} args.modifier The used dice modifier. 
-   * @param {Array<Number>} args.positives The positives composition and total. 
-   * @param {Array<Number>} args.negatives The negatives composition and total. 
+   * @param {Array<Number>} args.hits The hits composition and total. 
+   * @param {Array<Number>} args.misses The misses composition and total. 
    * @param {DicePoolRollResultType} args.outcomeType The result of this roll for use in a test. 
    * @param {Number} args.degree The degree of success or failure. 
    */
@@ -220,8 +220,8 @@ export class DicePoolRollResult {
       "obstacle", 
       "evaluatedObstacle", 
       "modifier", 
-      "positives", 
-      "negatives", 
+      "hits", 
+      "misses", 
       "outcomeType",
       "degree",
     ]);
@@ -240,8 +240,8 @@ export class DicePoolRollResult {
     this.evaluatedObstacle = args.evaluatedObstacle;
 
     this.modifier = args.modifier;
-    this.positives = args.positives;
-    this.negatives = args.negatives;
+    this.hits = args.hits;
+    this.misses = args.misses;
     this.outcomeType = args.outcomeType;
     this.degree = args.degree;
   }
@@ -263,9 +263,9 @@ export class DicePoolRollResult {
    * @async
    */
   async sendToChat(args = {}) {
-    const positivesForRendering = this.positives.map(it => { return {cssClass: CSS_CLASS_POSITIVE, content: it}; });
-    const negativesForRendering = this.negatives.map(it => { return {cssClass: CSS_CLASS_NEGATIVE, content: it}; });
-    const combinedResultsForRendering = positivesForRendering.concat(negativesForRendering);
+    const hitsForRendering = this.hits.map(it => { return {cssClass: CSS_CLASS_HIT, content: it}; });
+    const missesForRendering = this.misses.map(it => { return {cssClass: CSS_CLASS_MISS, content: it}; });
+    const combinedResultsForRendering = hitsForRendering.concat(missesForRendering);
 
     const missingDiceCount = Math.max(this.obstacle - combinedResultsForRendering.length, 0);
     const obstacleForRendering = { cssClass: CSS_CLASS_OBSTACLE, content: `${game.i18n.localize(LOCALIZABLE_OBSTACLE_ABBREVIATION)} ${this.obstacle}` }
@@ -302,8 +302,8 @@ export class DicePoolRollResult {
       outcomeType: this.outcomeType.name.toUpperCase(),
       degree: this.degree,
       numberOfDice: this.getTotalNumberOfDiceString(),
-      positives: this.positives.length,
-      negatives: this.negatives.length,
+      hits: this.hits.length,
+      misses: this.misses.length,
       missingDiceCount: missingDiceCount,
       diceComposition: this.getJoinedDiceCompositionString(this.dice, this.bonus),
       primaryTitle: args.primaryTitle,

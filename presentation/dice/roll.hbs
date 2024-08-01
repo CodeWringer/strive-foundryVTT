@@ -6,8 +6,8 @@ resultsForDisplay: {Array<Object>} = {
 outcomeType: {String}
 degree: {String | Number}
 numberOfDice: {String | Number}
-positives: {String | Number}
-negatives: {String | Number}
+hits: {String | Number}
+misses: {String | Number}
 diceComposition: {String}
 primaryTitle: {String | undefined}
 primaryImage: {String | undefined}
@@ -63,7 +63,7 @@ showReminder: {Boolean}
       {{{evaluatedObstacleForDisplay}}}
     </div>
     <p>
-      {{localize "system.roll.obstacle.abbreviation"}}: {{evaluatedObstacle.positiveTotal}} + 1 = {{obstacle}}
+      {{localize "system.roll.obstacle.abbreviation"}}: {{evaluatedObstacle.hitTotal}} + 1 = {{obstacle}}
     </p>
   </div>
   {{/if}}
@@ -106,17 +106,17 @@ showReminder: {Boolean}
       </div>
     {{/if}}
     <div class="flex flex-row flex-center flex-wrap auto-margin-h-lg auto-margin-h-sm font-size-default">
-      {{!-- Positives --}}
-      <span class="strive-pill flex flex-row font-size-default" title="{{localize "system.roll.positive.plural"}}">
+      {{!-- Hits --}}
+      <span class="strive-pill flex flex-row font-size-default" title="{{localize "system.roll.hit.plural"}}">
         <div class="flex flex-center"><i class="ico dark ico-dice-check-solid" style="width: 1rem; height: 1rem;"></i></div>
         <div class="flex flex-center margin-l-md margin-r-md">{{> verticalLine}}</div>
-        <div class="flex flex-center"><span class="dice-number">{{positives}}</span></div>
+        <div class="flex flex-center"><span class="dice-number">{{hits}}</span></div>
       </span>
-      {{!-- Negatives --}}
-      <span class="strive-pill flex flex-row font-size-default" title="{{localize "system.roll.negative.plural"}}">
+      {{!-- Misses --}}
+      <span class="strive-pill flex flex-row font-size-default" title="{{localize "system.roll.miss.plural"}}">
         <div class="flex flex-center"><i class="ico dark ico-dice-times-solid" style="width: 1rem; height: 1rem;"></i></div>
         <div class="flex flex-center margin-l-md margin-r-md">{{> verticalLine}}</div>
-        <div class="flex flex-center"><span class="dice-number">{{negatives}}</span></div>
+        <div class="flex flex-center"><span class="dice-number">{{misses}}</span></div>
       </span>
       {{!-- Missing --}}
       {{#if (neq missingDiceCount 0)}}

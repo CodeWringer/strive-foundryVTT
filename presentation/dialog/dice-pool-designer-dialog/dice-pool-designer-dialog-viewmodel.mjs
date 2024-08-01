@@ -31,7 +31,7 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
    * @property {Number} value.obLimit 
    * @property {Number} value.diceLimit 
    * @property {Number} value.sampleSize 
-   * @property {Number} value.modifier Number of automatic positives/negatives. 
+   * @property {Number} value.modifier Number of automatic hits/misses. 
    * 
    * @type {Object}
    * @private
@@ -332,7 +332,7 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
    * enough of the faces are at or above `successThreshold` and returns the total number 
    * of such occurrences. 
    * 
-   * Adds automatic positives or negatives, if `modifier` is != 0. 
+   * Adds automatic hits or misses, if `modifier` is != 0. 
    * 
    * @param {Object} args 
    * @param {Number} args.faces 

@@ -677,13 +677,13 @@
         "label": "Partial",
         "degree": "Degree of partial Success"
       },
-      "positive": {
-        "plural": "Positives",
-        "singular": "Positive"
+      "Hit": {
+        "plural": "Hits",
+        "singular": "Hit"
       },
-      "negative": {
-        "plural": "Negatives",
-        "singular": "Negative"
+      "Miss": {
+        "plural": "Misses",
+        "singular": "Miss"
       },
       "missing": {
         "plural": "Missing",

@@ -101,15 +101,15 @@ export default class Ruleset {
   }
 
   /**
-   * Returns true, if the given face/number represents a positive (= success).
+   * Returns true, if the given face/number represents a hit.
    * 
-   * @param {String | Number} face A die face to check whether it represents a positive (= success).
+   * @param {String | Number} face A die face to check whether it represents a hit.
    * 
    * @returns {Boolean}
    * 
    * @throws {Error} Thrown, if the given face is outside the valid range of 0 (inclusive) to 6 (inclusive).
    */
-  isPositive(face) {
+  isHit(face) {
     const int = parseInt(face);
 
     if (int < 0 || int > 6) throw new Error("Die face count out of range [0-6]");
@@ -118,15 +118,15 @@ export default class Ruleset {
   }
 
   /**
-   * Returns true, if the given face/number represents a negative (= failure).
+   * Returns true, if the given face/number represents a miss.
    * 
-   * @param {String | Number} face A die face to check whether it represents a negative (= failure).
+   * @param {String | Number} face A die face to check whether it represents a miss.
    * 
    * @returns {Boolean}
    * 
    * @throws {Error} Thrown, if the given face is outside the valid range of 0 (inclusive) to 6 (inclusive).
    */
-  isNegative(face) {
+  isMiss(face) {
     const int = parseInt(face);
 
     if (int < 0 || int > 6) throw new Error("Die face count out of range [0-6]");
