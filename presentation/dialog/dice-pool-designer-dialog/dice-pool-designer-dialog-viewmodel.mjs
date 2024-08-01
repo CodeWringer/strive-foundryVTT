@@ -32,6 +32,8 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
    * @property {Number} value.diceLimit 
    * @property {Number} value.sampleSize 
    * @property {Number} value.modifier Number of automatic hits/misses. 
+   * @property {Number} value.compensationPoints The number of faces that misses will be turned 
+   * to the next higher face, until they score a hit. 
    * 
    * @type {Object}
    * @private
@@ -43,6 +45,7 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
       diceLimit: 20,
       sampleSize: 1000,
       modifier: 0,
+      compensationPoints: 0,
     }
   });
 
@@ -220,10 +223,39 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
         parent: this,
         value: this._uiState.value.sampleSize,
         min: 1,
+        max: 10000,
+        step: 100,
         onChange: (_, newValue) => {
             this._uiState.value = {
                 ...this._uiState.value,
                 sampleSize: newValue,
+            };
+        },
+    });
+
+    this.vmCompensationPointsSlider = new InputSliderViewModel({
+        id: "vmCompensationPointsSlider",
+        parent: this,
+        min: 0,
+        max: 20,
+        value: this._uiState.value.compensationPoints,
+        onChange: (_, newValue) => {
+            this._uiState.value = {
+                ...this._uiState.value,
+                compensationPoints: newValue,
+            };
+        },
+    });
+    this.vmCompensationPoints = new InputNumberSpinnerViewModel({
+        id: "vmCompensationPoints",
+        parent: this,
+        value: this._uiState.value.compensationPoints,
+        min: 0,
+        max: 20,
+        onChange: (_, newValue) => {
+            this._uiState.value = {
+                ...this._uiState.value,
+                compensationPoints: newValue,
             };
         },
     });
@@ -248,6 +280,9 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
 
         setElementValue(this.vmSampleSizeSlider.element, newValue.sampleSize);
         setElementValue(this.vmSampleSize.element, newValue.sampleSize);
+
+        setElementValue(this.vmCompensationPointsSlider.element, newValue.compensationPoints);
+        setElementValue(this.vmCompensationPoints.element, newValue.compensationPoints);
 
         this._updateTable();
     });
@@ -315,7 +350,8 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
                 numberOfDice: numberOfDice, 
                 successThreshold: uiState.successThreshold, 
                 modifier: uiState.modifier, 
-                sampleSize: uiState.sampleSize
+                sampleSize: uiState.sampleSize,
+                compensationPoints: uiState.compensationPoints,
             });
             const successLikelihood = Math.round((successes / uiState.sampleSize) * 100);
             const barDiagram = `<span style="width: ${successLikelihood}%; background-color: rgb(122, 122, 122); height: 1em;"></span>`;
@@ -340,6 +376,8 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
    * @param {Number} args.numberOfDice 
    * @param {Number} args.successThreshold 
    * @param {Number} args.modifier 
+   * @param {Number} args.compensationPoints 
+   * * default `0`
    * @param {Number} args.sampleSize 
    * * default `100`
    * 
@@ -350,17 +388,33 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
 
     for (let sample = 0; sample < args.sampleSize; sample++) {
         const rolledDice = new Die({ faces: args.faces, number: args.numberOfDice }).evaluate().results;
+        const rolledFaces = rolledDice.map(die => parseInt(die.result));
         let successesInRoll = 0;
+
+        // Sort faces ascending.
+        const sortedRolledFaces = rolledFaces.sort();
     
-        // Analyze face of every rolled die. 
-        for (const rolledDie of rolledDice) {
-            const face = parseInt(rolledDie.result);
+        // Analyze faces starting at the back to look at the highest numbers first. 
+        let remainingCompensationPoints = args.compensationPoints ?? 0;
+        for (let i = sortedRolledFaces.length - 1; i >= 0; i--) {
+            const face = sortedRolledFaces[i];
             if (face >= args.successThreshold) {
                 successesInRoll++;
+            } else if (remainingCompensationPoints > 0) {
+                const delta = args.successThreshold - face;
+                const compensationDelta = remainingCompensationPoints - delta;
+                if (compensationDelta < 0) {
+                    break;
+                } else {
+                    successesInRoll++;
+                    remainingCompensationPoints = compensationDelta;
+                }
+            } else {
+                break;
             }
         }
 
-        // Modifier.
+        // Add modifier.
         successesInRoll += args.modifier;
 
         if (successesInRoll >= args.ob) {

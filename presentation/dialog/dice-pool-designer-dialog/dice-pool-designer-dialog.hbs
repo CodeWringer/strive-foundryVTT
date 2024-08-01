@@ -57,5 +57,22 @@ viewModel: DicePoolDesignerDialogViewModel
     </div>
   </div>
   {{!-- Row --}}
+  <div class="grid-3col grid-gap-md">
+    {{!-- Compensation Points --}}
+    <div class="flex flex-row flex-middle sheet-block">
+      <span>Compensation Points</span>
+      {{> inputSlider viewModel=viewModel.vmCompensationPointsSlider cssClass="flex-grow pad-md"}}
+      <span class="width-md">
+        {{> inputNumberSpinner viewModel=viewModel.vmCompensationPoints cssClass=""}}
+      </span>
+    </div>
+    {{!--  --}}
+    <div class="flex flex-row flex-middle sheet-block">
+    </div>
+    {{!--  --}}
+    <div class="flex flex-row flex-middle sheet-block">
+    </div>
+  </div>
+  {{!-- Row --}}
   <div id="predictions-table" class="flex flex-column alternating-rows sheet-block"></div>
 </section>
