@@ -1,7 +1,7 @@
 import AtReferencer from "../referencing/at-referencer.mjs";
 import Ruleset from "../ruleset/ruleset.mjs";
 import { isDefined, validateOrThrow } from "../util/validation-utility.mjs";
-import { CSS_CLASS_MISS, CSS_CLASS_HIT } from "./dice-pool.mjs";
+import { DICE_CONSTANTS } from "./dice-constants.mjs";
 
 /**
  * Provides a means to fully resolve roll formulae. 
@@ -162,7 +162,7 @@ export class EvaluatedRollFormula {
    * @param {Object} args 
    * @param {String} args.formula The formula. 
    * * E. g. `"2D6 + 3 + 4D6"`
-   * @param {String | D6Group} args.terms The expression terms, in order. 
+   * @param {Array<String | D6Group>} args.terms The expression terms, in order. 
    * @param {Number} args.rawTotal The raw total of all rolled dice, without 
    * regard for hits or misses. 
    * * E. g. `[2, 5] + 3 + [1, 6, 2, 3] = 22`
@@ -190,10 +190,10 @@ export class EvaluatedRollFormula {
         // It's a d6 group. 
         let diceRolls = "";
         for (const hit of term.hits) {
-          diceRolls = `${diceRolls}<li class="roll die d6 ${CSS_CLASS_HIT}">${hit}</li>`
+          diceRolls = `${diceRolls}<li class="roll die d6 ${DICE_CONSTANTS.CSS_CLASS_HIT}">${hit}</li>`
         }
         for (const miss of term.misses) {
-          diceRolls = `${diceRolls}<li class="roll die d6 ${CSS_CLASS_MISS}">${miss}</li>`
+          diceRolls = `${diceRolls}<li class="roll die d6 ${DICE_CONSTANTS.CSS_CLASS_MISS}">${miss}</li>`
         }
         result = `${result}<ol class="dice-rolls">${diceRolls}</ol>`;
 

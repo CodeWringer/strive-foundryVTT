@@ -1,5 +1,6 @@
 import { ACTOR_TYPES } from "../../../../../business/document/actor/actor-types.mjs";
 import CharacterAttribute from "../../../../../business/ruleset/attribute/character-attribute.mjs";
+import Ruleset from "../../../../../business/ruleset/ruleset.mjs";
 import { validateOrThrow } from "../../../../../business/util/validation-utility.mjs";
 import ButtonRollViewModel from "../../../../component/button-roll/button-roll-viewmodel.mjs";
 import InputNumberSpinnerViewModel from "../../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
@@ -112,9 +113,9 @@ export default class AttributeTableViewModel extends ViewModel {
           parent: this,
           id: `vmBtnRoll-${attribute.name}`,
           target: attribute,
+          rollSchema: new Ruleset().getAttributeRollSchema(),
           propertyPath: undefined,
           primaryChatTitle: game.i18n.localize(attribute.localizableName),
-          rollType: "dice-pool",
           actor: this.document,
         }),
         vmNsLevel: new InputNumberSpinnerViewModel({

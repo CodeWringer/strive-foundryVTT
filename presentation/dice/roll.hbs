@@ -14,10 +14,10 @@ primaryImage: {String | undefined}
 secondaryTitle: {String | undefined}
 secondaryImage: {String | undefined}
 cssClass: {undefined | String}
-showBackFire: {Boolean | String}
+additionalContent: {String}
 obstacle: {Number}
 isObstacleRolled: {Boolean}
-evaluatedObstacle: {EvaluatedRollFormula}
+obstacleFormula: {String}
 evaluatedObstacleForDisplay: {String}
 showReminder: {Boolean}
 --}}
@@ -57,13 +57,13 @@ showReminder: {Boolean}
   {{#if isObstacleRolled}}
   <div class="sheet-block">
     <p>
-      {{evaluatedObstacle.formula}}
+      {{obstacleFormula}}
     </p>
     <div class="dice-rolls-container">
       {{{evaluatedObstacleForDisplay}}}
     </div>
     <p>
-      {{localize "system.roll.obstacle.abbreviation"}}: {{evaluatedObstacle.hitTotal}} + 1 = {{obstacle}}
+      {{localize "system.roll.obstacle.abbreviation"}}: {{obstacle}} + 1 = {{obstacle}}
     </p>
   </div>
   {{/if}}
@@ -99,12 +99,6 @@ showReminder: {Boolean}
     {{#if (eq outcomeType "FAILURE")}}
       <div class="dice-result failure">{{localize "system.roll.failure.label"}}!</div>
     {{/if}}
-    {{#if showBackFire}}
-      <div class="dice-result failure flex flex-row flex-middle">
-        <i class="fas fa-exclamation-triangle"></i>
-        <span class="margin-l-md">{{localize "system.roll.backFire.label"}}!</span>
-      </div>
-    {{/if}}
     <div class="flex flex-row flex-center flex-wrap auto-margin-h-lg auto-margin-h-sm font-size-default">
       {{!-- Hits --}}
       <span class="strive-pill flex flex-row font-size-default" title="{{localize "system.roll.hit.plural"}}">
@@ -131,5 +125,9 @@ showReminder: {Boolean}
   {{!-- Reminder --}}
   {{#if showReminder}}
   <p class="border-solid-t-sm" style="text-align: center;">{{localize "system.roll.reminder"}}</p>
+  {{/if}}
+  {{!-- Additional Content --}}
+  {{#if additionalContent}}
+  <p class="border-solid-t-sm" style="text-align: center;">{{{additionalContent}}}</p>
   {{/if}}
 </div>

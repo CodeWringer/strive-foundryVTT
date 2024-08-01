@@ -27,6 +27,7 @@ import DynamicInputDefinition from "../../../dialog/dynamic-input-dialog/dynamic
 import { DYNAMIC_INPUT_TYPES } from "../../../dialog/dynamic-input-dialog/dynamic-input-types.mjs"
 import BaseAttributeListItemViewModel from "./base-attribute/base-attribute-list-item-viewmodel.mjs"
 import { ACTOR_TYPES } from "../../../../business/document/actor/actor-types.mjs"
+import Ruleset from "../../../../business/ruleset/ruleset.mjs"
 
 /**
  * @property {TransientSkill} document
@@ -382,10 +383,10 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
           parent: this,
           id: "vmBtnRoll",
           target: this.document,
+          rollSchema: new Ruleset().getSkillRollSchema(),
           propertyPath: undefined,
           primaryChatTitle: game.i18n.localize(this.document.name),
           primaryChatImage: this.document.img,
-          rollType: "dice-pool",
           actor: this.document.owningDocument.document,
         }),
       }),

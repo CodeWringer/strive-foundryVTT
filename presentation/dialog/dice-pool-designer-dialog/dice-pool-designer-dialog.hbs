@@ -7,9 +7,9 @@ viewModel: DicePoolDesignerDialogViewModel
     {{!-- Hit Threshold --}}
     <div class="flex flex-row flex-middle sheet-block">
       <span>Hit Threshold</span>
-      {{> inputSlider viewModel=viewModel.vmSuccessThresholdSlider cssClass="flex-grow pad-md"}}
+      {{> inputSlider viewModel=viewModel.vmHitThresholdSlider cssClass="flex-grow pad-md"}}
       <span class="width-md">
-        {{> inputNumberSpinner viewModel=viewModel.vmSuccessThreshold cssClass=""}}
+        {{> inputNumberSpinner viewModel=viewModel.vmHitThreshold cssClass=""}}
       </span>
     </div>
     {{!-- Dice Limit --}}

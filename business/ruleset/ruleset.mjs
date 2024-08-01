@@ -2,11 +2,14 @@ import LevelAdvancement from "./level-advancement.mjs";
 import { SumComponent } from "./summed-data.mjs";
 import { SkillTier, SKILL_TIERS } from "./skill/skill-tier.mjs";
 import { ATTRIBUTE_TIERS, AttributeTier } from "./attribute/attribute-tier.mjs";
-import { DICE_POOL_RESULT_TYPES, DicePoolRollResult } from "../dice/dice-pool.mjs";
 import { ATTRIBUTES, Attribute } from "./attribute/attributes.mjs";
 import TransientSkill from "../document/item/skill/transient-skill.mjs";
 import { ACTOR_TYPES } from "../document/actor/actor-types.mjs";
 import { ITEM_TYPES } from "../document/item/item-types.mjs";
+import { SkillRollSchema } from "../dice/ability-roll/skill-roll-schema.mjs";
+import { AllSumSkillRollSchema } from "../dice/ability-roll/all-sum-skill-roll-schema.mjs";
+import { RollSchema } from "../dice/roll-schema.mjs";
+import { AttributeRollSchema } from "../dice/ability-roll/attribute-roll-schema.mjs";
 
 /**
  * Provides all the ruleset-specifics. 
@@ -132,21 +135,6 @@ export default class Ruleset {
     if (int < 0 || int > 6) throw new Error("Die face count out of range [0-6]");
 
     return int < 5;
-  }
-
-  /**
-   * Returns true, if the given dice pool roll result should result in a spell-backfire. 
-   * 
-   * @param {DicePoolRollResult} rollResult 
-   * 
-   * @returns {Boolean}
-   */
-  rollCausesBackfire(rollResult) {
-    if (rollResult.outcomeType.name === DICE_POOL_RESULT_TYPES.FAILURE.name) {
-      return true;
-    } else {
-      return false;
-    }
   }
 
   /**
@@ -381,5 +369,23 @@ export default class Ruleset {
       const transientSkill = skill.getTransientObject();
       return transientSkill.modifiedLevel;
     }
+  }
+
+  /**
+   * Returns the default skill roll schema. 
+   * 
+   * @returns {SkillRollSchema}
+   */
+  getSkillRollSchema() {
+    return new AllSumSkillRollSchema(); 
+  }
+
+  /**
+   * Returns the default skill roll schema. 
+   * 
+   * @returns {RollSchema}
+   */
+  getAttributeRollSchema() {
+    return new AttributeRollSchema();
   }
 }

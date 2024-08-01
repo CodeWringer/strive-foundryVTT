@@ -677,11 +677,11 @@
         "label": "Partial",
         "degree": "Degree of partial Success"
       },
-      "Hit": {
+      "hit": {
         "plural": "Hits",
         "singular": "Hit"
       },
-      "Miss": {
+      "miss": {
         "plural": "Misses",
         "singular": "Miss"
       },

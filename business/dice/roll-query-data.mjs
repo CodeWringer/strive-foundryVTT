@@ -1,0 +1,38 @@
+import { VISIBILITY_MODES, VisibilityMode } from "../../presentation/chat/visibility-modes.mjs";
+import { validateOrThrow } from "../util/validation-utility.mjs";
+import { ROLL_DICE_MODIFIER_TYPES, RollDiceModifierType } from "./roll-dice-modifier-types.mjs";
+
+/**
+ * Holds the data queried from the user via `SkillRollSchema.queryRollData()`. 
+ * 
+ * @property {String} ob The obstacle formula. The formula must be resolved, before 
+ * it can be evaluated! 
+ * @property {Number} bonusDice Additional dice to roll or if negative, the number of 
+ * dice to take away for a roll. 
+ * @property {VisibilityMode} visbilityMode The selected visibility mode for the chat message. 
+ * @property {RollDiceModifierType} rollModifier The selected roll modifier. 
+ */
+export default class RollQueryData {
+  /**
+   * Holds the data queried from the user via `SkillRollSchema.queryRollData()`. 
+   * 
+   * @param {Object} args
+   * @param {String} args.ob The obstacle formula. The formula must be resolved, before 
+   * it can be evaluated! 
+   * @param {Number | undefined} args.bonusDice Additional dice to roll or if negative, the number of 
+   * dice to take away for a roll. 
+   * * default `0`
+   * @param {VisibilityMode | undefined} args.visbilityMode The selected visibility mode for the chat message. 
+   * * default `VISIBILITY_MODES.public`
+   * @param {RollDiceModifierType | undefined} args.rollModifier The selected roll modifier. 
+   * * default `ROLL_DICE_MODIFIER_TYPES.NONE`
+   */
+  constructor(args = {}) {
+    validateOrThrow(args, ["ob"]);
+
+    this.ob = args.ob;
+    this.bonusDice = args.bonusDice ?? 0;
+    this.visbilityMode = args.visbilityMode ?? VISIBILITY_MODES.public;
+    this.rollModifier = args.rollModifier ?? ROLL_DICE_MODIFIER_TYPES.NONE;
+  }
+}

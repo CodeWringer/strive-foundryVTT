@@ -1,6 +1,7 @@
 import { GameSystemActor } from "../../document/actor/actor.mjs";
+import TransientBaseCharacterActor from "../../document/actor/transient-base-character-actor.mjs";
+import { validateOrThrow } from "../../util/validation-utility.mjs";
 import Ruleset from "../ruleset.mjs";
-import { Sum, SumComponent } from "../summed-data.mjs";
 import { ATTRIBUTES } from "./attributes.mjs";
 
 /**
@@ -18,6 +19,8 @@ import { ATTRIBUTES } from "./attributes.mjs";
  * @property {Number} level The current raw level. 
  * @property {Number} levelModifier The current level modifier. This number can be negative. 
  * @property {Number} modifiedLevel The current modified level. 
+ * * Read-only. 
+ * @property {Number} owningActor The owning character actor. 
  * * Read-only. 
  */
 export default class CharacterAttribute {
@@ -82,10 +85,20 @@ export default class CharacterAttribute {
   }
   
   /**
+   * The current progress towards advancing the attribute. 
+   * 
    * @type {Number}
    * @readonly
-  */
- get advancementRequirements() { return new Ruleset().getAttributeAdvancementRequirements(this.level); }
+   */
+  get advancementRequirements() { return new Ruleset().getAttributeAdvancementRequirements(this.level); }
+  
+  /**
+   * The owning character actor. 
+   * 
+   * @type {TransientBaseCharacterActor}
+   * @readonly
+   */
+  get owningActor() { return this._actor.getTransientObject(); }
 
   /**
    * @param {GameSystemActor} actor The actor for which to gather 
@@ -94,6 +107,8 @@ export default class CharacterAttribute {
    * * E. g. `"strength"`
    */
   constructor(actor, name) {
+    validateOrThrow({ a: actor, n: name}, ["a", "n"]);
+
     this._actor = actor;
     this.name = name;
 
@@ -105,16 +120,5 @@ export default class CharacterAttribute {
 
     this.localizableName = attributeDef.localizableName;
     this.localizableAbbreviation = attributeDef.localizableAbbreviation;
-  }
-
-  /**
-   * Returns the component(s) to do a roll using this attribute. 
-   * 
-   * @returns {Sum}
-   */
-  getRollData() {
-    return new Sum([
-      new SumComponent(this.name, this.localizableName, this.modifiedLevel)
-    ]);
   }
 }

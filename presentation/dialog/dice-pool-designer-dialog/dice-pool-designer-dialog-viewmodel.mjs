@@ -18,15 +18,15 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
    * ```JS
    * this._uiState.value = {
    *   ...this._uiState.value,
-   *   successThreshold: newValue,
+   *   hitThreshold: newValue,
    * };
    * ```
    * 
    * @property {Object} value 
    * @property {Number} value.dieFaces The number of faces on a die. 
    * * default `6`
-   * @property {Number} value.successThreshold Sets the lower bound of faces that are considered 
-   * successes. Any face turning up this number and numbers above, are considered successes. 
+   * @property {Number} value.hitThreshold Sets the lower bound of faces that are considered 
+   * hits. Any face turning up this number and numbers above, are considered hits. 
    * * default `5`
    * @property {Number} value.obLimit 
    * @property {Number} value.diceLimit 
@@ -40,7 +40,7 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
    */
   _uiState = new ObservableField({ value: {
       dieFaces: 6,
-      successThreshold: 5,
+      hitThreshold: 5,
       obLimit: 10,
       diceLimit: 20,
       sampleSize: 1000,
@@ -69,29 +69,29 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
 
     this.registerViewStateProperty("_uiState");
 
-    this.vmSuccessThresholdSlider = new InputSliderViewModel({
-        id: "vmSuccessThresholdSlider",
+    this.vmHitThresholdSlider = new InputSliderViewModel({
+        id: "vmHitThresholdSlider",
         parent: this,
         min: 1,
         max: this._uiState.value.dieFaces,
-        value: this._uiState.value.successThreshold,
+        value: this._uiState.value.hitThreshold,
         onChange: (_, newValue) => {
             this._uiState.value = {
                 ...this._uiState.value,
-                successThreshold: newValue,
+                hitThreshold: newValue,
             };
         },
     });
-    this.vmSuccessThreshold = new InputNumberSpinnerViewModel({
-        id: "vmSuccessThreshold",
+    this.vmHitThreshold = new InputNumberSpinnerViewModel({
+        id: "vmHitThreshold",
         parent: this,
         min: 1,
         max: this._uiState.value.dieFaces,
-        value: this._uiState.value.successThreshold,
+        value: this._uiState.value.hitThreshold,
         onChange: (_, newValue) => {
             this._uiState.value = {
                 ...this._uiState.value,
-                successThreshold: newValue,
+                hitThreshold: newValue,
             };
         },
     });
@@ -261,10 +261,10 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
     });
 
     this._uiState.onChange((_1, _2, newValue) => {
-        setElementValue(this.vmSuccessThreshold.element, newValue.successThreshold);
-        setElementValue(this.vmSuccessThresholdSlider.element, newValue.successThreshold);
-        this.vmSuccessThreshold.max = newValue.dieFaces;
-        this.vmSuccessThresholdSlider.max = newValue.dieFaces;
+        setElementValue(this.vmHitThreshold.element, newValue.hitThreshold);
+        setElementValue(this.vmHitThresholdSlider.element, newValue.hitThreshold);
+        this.vmHitThreshold.max = newValue.dieFaces;
+        this.vmHitThresholdSlider.max = newValue.dieFaces;
         
         setElementValue(this.vmDiceLimitSlider.element, newValue.diceLimit);
         setElementValue(this.vmDiceLimit.element, newValue.diceLimit);
@@ -344,16 +344,16 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
         ];
 
         for (let ob = 1; ob <= uiState.obLimit; ob++) {
-            const successes = this._rollDiceAndCountSuccesses({
+            const hits = this._rollDiceAndCountHits({
                 faces: uiState.dieFaces, 
                 ob: ob, 
                 numberOfDice: numberOfDice, 
-                successThreshold: uiState.successThreshold, 
+                hitThreshold: uiState.hitThreshold, 
                 modifier: uiState.modifier, 
                 sampleSize: uiState.sampleSize,
                 compensationPoints: uiState.compensationPoints,
             });
-            const successLikelihood = Math.round((successes / uiState.sampleSize) * 100);
+            const successLikelihood = Math.round((hits / uiState.sampleSize) * 100);
             const barDiagram = `<span style="width: ${successLikelihood}%; background-color: rgb(122, 122, 122); height: 1em;"></span>`;
             columns.push(`<div class="grid grid-gap-sm" style="grid-template-columns: 1fr 2fr;"><span>${successLikelihood}%</span>${barDiagram}</div>`)
         }
@@ -365,7 +365,7 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
 
   /**
    * Rolls the given `numberOfDice` dice with `faces` number of faces and compares how often 
-   * enough of the faces are at or above `successThreshold` and returns the total number 
+   * enough of the faces are at or above `hitThreshold` and returns the total number 
    * of such occurrences. 
    * 
    * Adds automatic hits or misses, if `modifier` is != 0. 
@@ -374,22 +374,22 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
    * @param {Number} args.faces 
    * @param {Number} args.ob 
    * @param {Number} args.numberOfDice 
-   * @param {Number} args.successThreshold 
+   * @param {Number} args.hitThreshold 
    * @param {Number} args.modifier 
    * @param {Number} args.compensationPoints 
    * * default `0`
    * @param {Number} args.sampleSize 
    * * default `100`
    * 
-   * @returns {Number} The amount of times enough dice were successes to meet the Ob. 
+   * @returns {Number} The amount of times enough dice were hits to meet the Ob. 
    */
-  _rollDiceAndCountSuccesses(args = {}) {
-    let successes = 0;
+  _rollDiceAndCountHits(args = {}) {
+    let hits = 0;
 
     for (let sample = 0; sample < args.sampleSize; sample++) {
         const rolledDice = new Die({ faces: args.faces, number: args.numberOfDice }).evaluate().results;
         const rolledFaces = rolledDice.map(die => parseInt(die.result));
-        let successesInRoll = 0;
+        let hitsInRoll = 0;
 
         // Sort faces ascending.
         const sortedRolledFaces = rolledFaces.sort();
@@ -398,15 +398,15 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
         let remainingCompensationPoints = args.compensationPoints ?? 0;
         for (let i = sortedRolledFaces.length - 1; i >= 0; i--) {
             const face = sortedRolledFaces[i];
-            if (face >= args.successThreshold) {
-                successesInRoll++;
+            if (face >= args.hitThreshold) {
+                hitsInRoll++;
             } else if (remainingCompensationPoints > 0) {
-                const delta = args.successThreshold - face;
+                const delta = args.hitThreshold - face;
                 const compensationDelta = remainingCompensationPoints - delta;
                 if (compensationDelta < 0) {
                     break;
                 } else {
-                    successesInRoll++;
+                    hitsInRoll++;
                     remainingCompensationPoints = compensationDelta;
                 }
             } else {
@@ -415,13 +415,13 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
         }
 
         // Add modifier.
-        successesInRoll += args.modifier;
+        hitsInRoll += args.modifier;
 
-        if (successesInRoll >= args.ob) {
-            successes++;
+        if (hitsInRoll >= args.ob) {
+            hits++;
         }
     }
 
-    return successes;
+    return hits;
   }
 }
