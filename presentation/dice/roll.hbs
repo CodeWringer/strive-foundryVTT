@@ -16,6 +16,7 @@ secondaryImage: {String | undefined}
 cssClass: {undefined | String}
 additionalContent: {String}
 obstacle: {Number}
+unmodifiedObstacle: {Number}
 isObstacleRolled: {Boolean}
 obstacleFormula: {String}
 evaluatedObstacleForDisplay: {String}
@@ -63,7 +64,7 @@ showReminder: {Boolean}
       {{{evaluatedObstacleForDisplay}}}
     </div>
     <p>
-      {{localize "system.roll.obstacle.abbreviation"}}: {{obstacle}} + 1 = {{obstacle}}
+      {{localize "system.roll.obstacle.abbreviation"}}: {{unmodifiedObstacle}} (+ 1) = {{obstacle}}
     </p>
   </div>
   {{/if}}

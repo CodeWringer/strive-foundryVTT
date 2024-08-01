@@ -139,6 +139,7 @@ export class RollResult {
       secondaryImage: args.secondaryImage,
       additionalContent: args.additionalContent,
       obstacle: obstacle,
+      unmodifiedObstacle: obstacle - 1,
       isObstacleRolled: this.resolvedObstacle.isPlainNumber === false,
       obstacleFormula: this.resolvedObstacle.obFormula,
       evaluatedObstacleForDisplay: this.resolvedObstacle.resolvedObFormula,
