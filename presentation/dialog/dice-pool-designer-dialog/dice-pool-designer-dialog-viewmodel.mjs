@@ -325,7 +325,7 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
    */
   _getTableRows() {
     const uiState = this._uiState.value;
-
+    
     // Generate first row. 
     const firstRowColumns = [
         "<span></span>"
@@ -333,7 +333,7 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
     for (let ob = 1; ob <= uiState.obLimit; ob++) {
         firstRowColumns.push(`<span class="pad-sm"><b>Ob ${ob}</b></span>`);
     }
-
+    
     const rows = [
         firstRowColumns,
     ];
@@ -344,7 +344,7 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
         ];
 
         for (let ob = 1; ob <= uiState.obLimit; ob++) {
-            const hits = this._rollDiceAndCountHits({
+            const diceResults = this._rollDiceAndAnalyze({
                 faces: uiState.dieFaces, 
                 ob: ob, 
                 numberOfDice: numberOfDice, 
@@ -353,9 +353,15 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
                 sampleSize: uiState.sampleSize,
                 compensationPoints: uiState.compensationPoints,
             });
-            const successLikelihood = Math.round((hits / uiState.sampleSize) * 100);
-            const barDiagram = `<span style="width: ${successLikelihood}%; background-color: rgb(122, 122, 122); height: 1em;"></span>`;
-            columns.push(`<div class="grid grid-gap-sm" style="grid-template-columns: 1fr 2fr;"><span>${successLikelihood}%</span>${barDiagram}</div>`)
+            const successLikelihoodHtml = `<span>${diceResults.successLikelihood}%</span>`;
+            
+            const averageHits = diceResults.averageHits;
+            const averageHitsHtml = `<span>~${averageHits}</span>`;
+
+            const barDiagram = `<span style="width: ${diceResults.successLikelihood}%; background-color: rgb(122, 122, 122); height: 1em;"></span>`;
+            const barDiagramHtml = `<span class="flex flex-middle">${barDiagram}</span>`;
+
+            columns.push(`<div class="grid grid-gap-sm" style="grid-template-columns: 2.5em 1.5em 3fr;">${successLikelihoodHtml}${averageHitsHtml}${barDiagramHtml}</div>`)
         }
 
         rows.push(columns);
@@ -364,9 +370,8 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
   }
 
   /**
-   * Rolls the given `numberOfDice` dice with `faces` number of faces and compares how often 
-   * enough of the faces are at or above `hitThreshold` and returns the total number 
-   * of such occurrences. 
+   * Rolls the given `numberOfDice` dice with `faces` number of faces and returns statistics about 
+   * the results. 
    * 
    * Adds automatic hits or misses, if `modifier` is != 0. 
    * 
@@ -381,10 +386,11 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
    * @param {Number} args.sampleSize 
    * * default `100`
    * 
-   * @returns {Number} The amount of times enough dice were hits to meet the Ob. 
+   * @returns {Object} 
    */
-  _rollDiceAndCountHits(args = {}) {
-    let hits = 0;
+  _rollDiceAndAnalyze(args = {}) {
+    let totalSuccesses = 0;
+    let totalHits = 0;
 
     for (let sample = 0; sample < args.sampleSize; sample++) {
         const rolledDice = new Die({ faces: args.faces, number: args.numberOfDice }).evaluate().results;
@@ -417,11 +423,19 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
         // Add modifier.
         hitsInRoll += args.modifier;
 
+        // Increment counters. 
+        totalHits += hitsInRoll;
+
         if (hitsInRoll >= args.ob) {
-            hits++;
+            totalSuccesses++;
         }
     }
 
-    return hits;
+    return {
+        totalSuccesses: totalSuccesses,
+        successLikelihood: Math.round((totalSuccesses / args.sampleSize) * 100),
+        totalHits: totalHits,
+        averageHits: Math.round(totalHits / args.sampleSize),
+    };
   }
 }
