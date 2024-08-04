@@ -1,0 +1,17 @@
+{{!--
+viewModel: GritPointsViewModel
+--}}
+<div id="{{viewModel.id}}" class="flex flex-row flex-wrap flex-gap-sm flex-middle sheet-block{{#if viewModel.shouldBeVisible}}{{else}} hidden{{/if}}">
+  <i class="ico dark ico-grit-line" title="{{localize "system.gritPoint.plural"}}"></i>
+  <a id="{{viewModel.id}}-grit-point-0" class="icon-with-centered-label pad-lg">
+    <span class="icon-with-centered-label-label">0</span>
+  </a>
+  {{#each viewModel.gritPoints as |gritPoint|}}
+  <a id="{{gritPoint.id}}" class="icon-with-centered-label">
+    <i
+      class="ico dark {{#if gritPoint.active}}ico-grit-point-line{{else}}ico-grit-point-void-line{{/if}} icon-with-centered-label-image"></i>
+    <span
+      class="icon-with-centered-label-label {{#if gritPoint.active}}grit-point-full{{else}}grit-point-void{{/if}}">{{gritPoint.value}}</span>
+  </a>
+  {{/each}}
+</div>

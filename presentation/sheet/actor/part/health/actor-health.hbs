@@ -77,6 +77,10 @@ cssClass: {undefined | String}
           </div>
         </div>
       </div>
+      {{!-- Grit Points --}}
+      {{#with viewModel.gritPointsTemplate as | template |}}
+        {{> (template) viewModel=../viewModel.vmGritPoints}}
+      {{/with}}
       {{!-- Conditions (formerly health states) --}}
       {{#with viewModel.healthStatesTemplate as | template |}}
         {{> (template) viewModel=../viewModel.vmHealthStates}}

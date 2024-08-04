@@ -91,6 +91,7 @@ export const TEMPLATES = {
   ACTOR_HEALTH: `${basePathPresentation}/sheet/actor/part/health/actor-health.hbs`,
   ACTOR_HEALTH_STATES: `${basePathPresentation}/sheet/actor/part/health/actor-health-states.hbs`,
   ACTOR_HEALTH_STATES_LIST_ITEM: `${basePathPresentation}/sheet/actor/part/health/actor-health-states-list-item.hbs`,
+  ACTOR_GRIT_POINTS: `${basePathPresentation}/sheet/actor/part/health/grit-points/grit-points.hbs`,
   ACTOR_ASSETS: `${basePathPresentation}/sheet/actor/part/assets/actor-assets.hbs`,
   ACTOR_ASSETS_EQUIPPED: `${basePathPresentation}/sheet/actor/part/assets/actor-assets-equipped.hbs`,
   ACTOR_ASSET_SLOT_GROUP: `${basePathPresentation}/sheet/actor/part/assets/actor-asset-slot-group.hbs`,

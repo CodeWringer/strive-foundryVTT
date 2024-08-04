@@ -14,6 +14,7 @@ import InjuryListItemViewModel from "../../../item/injury/injury-list-item-viewm
 import MutationListItemViewModel from "../../../item/mutation/mutation-list-item-viewmodel.mjs"
 import ScarListItemViewModel from "../../../item/scar/scar-list-item-viewmodel.mjs"
 import ActorHealthStatesViewModel from "./actor-health-states-viewmodel.mjs"
+import GritPointsViewModel from "./grit-points/grit-points-viewmodel.mjs"
 
 /**
  * @extends ViewModel
@@ -126,12 +127,12 @@ export default class ActorHealthViewModel extends ViewModel {
    * @readonly
    */
   get healthStatesTemplate() { return ActorHealthStatesViewModel.TEMPLATE; }
-  
+
   /**
    * @type {String}
    * @readonly
    */
-  get healthStatesTemplate() { return ActorHealthStatesViewModel.TEMPLATE; }
+  get gritPointsTemplate() { return GritPointsViewModel.TEMPLATE; }
 
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
@@ -382,6 +383,12 @@ export default class ActorHealthViewModel extends ViewModel {
       onSort: (_, provideSortable) => {
         provideSortable(this.vmScarList);
       },
+    });
+
+    this.vmGritPoints = new GritPointsViewModel({
+      id: "vmGritPoints",
+      parent: this,
+      document: this.document,
     });
   }
   
