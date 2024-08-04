@@ -124,6 +124,11 @@
       "refill": "Action Point Regain",
       "allowRefill": "Automatic Action Point Regain"
     },
+    "gritPoint": {
+      "abbreviation": "GP",
+      "singular": "Grit Point",
+      "plural": "Grit Points"
+    },
     "character": {
       "edit": "Configure Character",
       "advancement": {
