@@ -122,12 +122,10 @@ export default class ActorHealthViewModel extends ViewModel {
   scars = [];
 
   /**
-   * Returns `true`, if the character is near death. 
-   * 
-   * @type {Boolean}
+   * @type {String}
    * @readonly
    */
-  get isDeathNear() { return this.injuryCount >= this.modifiedMaxInjuries; }
+  get healthStatesTemplate() { return ActorHealthStatesViewModel.TEMPLATE; }
   
   /**
    * @type {String}

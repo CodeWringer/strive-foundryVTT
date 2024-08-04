@@ -7,19 +7,7 @@ cssClass: {undefined | String}
   <div class="auto-margin-v-md">
     {{#> header1 showFancyFont=viewModel.showFancyFont}}{{localize "system.character.health.healthStats"}}{{/header1}}
     <div class="flex flex-column auto-margin-v-md">
-      {{!-- Death Warning --}}
-      <div class="hint-card error flex font-size-lg{{#if viewModel.isDeathNear}}{{else}} hidden{{/if}}">
-        <div class="flex flex-center">
-          <i class="fas fa-skull"></i>
-        </div>
-        <div class="flex-grow flex flex-center">
-          <span>{{localize "system.rules.hintDeathIsNear"}}</span>
-        </div>
-        <div class="flex flex-center">
-          <i class="fas fa-skull"></i>
-        </div>
-      </div>
-      {{!-- Row 1 --}}
+      {{!-- Row --}}
       <div class="grid-3col grid-gap-md">
         {{!-- HP --}}
         <div class="sheet-block">
@@ -130,18 +118,6 @@ cssClass: {undefined | String}
             {{#> readOnlyValue}}{{viewModel.injuryCount}}{{/readOnlyValue}}
           </span>
         </div>
-      </div>
-    </div>
-    {{!-- Death Warning --}}
-    <div class="hint-card error flex font-size-lg{{#if viewModel.isDeathNear}}{{else}} hidden{{/if}}">
-      <div class="flex flex-center">
-        <i class="fas fa-skull"></i>
-      </div>
-      <div class="flex-grow flex flex-center">
-        <span>{{localize "system.rules.hintDeathIsNear"}}</span>
-      </div>
-      <div class="flex flex-center">
-        <i class="fas fa-skull"></i>
       </div>
     </div>
     {{> sortableList viewModel=viewModel.vmInjuryList prominentItemStyling=true }}

@@ -783,9 +783,6 @@
         "abbreviation": "Electric"
       }
     },
-    "rules": {
-      "hintDeathIsNear": "Injury limit reached - if HP reach 0 now, this character will die!"
-    },
     "settings": {
       "saveChanges": "Save Changes",
       "autoActionPointRefill": {
