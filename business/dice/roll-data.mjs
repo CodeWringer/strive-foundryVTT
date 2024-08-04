@@ -3,7 +3,7 @@ import { isDefined, validateOrThrow } from "../util/validation-utility.mjs";
 import { DICE_POOL_RESULT_TYPES } from "./dice-pool.mjs";
 import { ROLL_DICE_MODIFIER_TYPES, RollDiceModifierType } from "./roll-dice-modifier-types.mjs";
 import RollFormulaResolver from "./roll-formula-resolver.mjs";
-import { RollResult } from "./roll-result.mjs";
+import { RollInputData, RollResult, RollStepData } from "./roll-result.mjs";
 
 /**
  * @property {Number} dieFaces The number of faces on a die. 
@@ -12,7 +12,7 @@ import { RollResult } from "./roll-result.mjs";
  * @property {Number} obFormula The obstacle formula to roll against. 
  * @property {Sum} diceComponents The number of dice to roll. 
  * @property {SumComponent} bonusDiceComponent
- * @property {Number} modifier Number of automatic hits/misses. 
+ * @property {Number} hitModifier Number of automatic hits/misses. 
  * @property {Number} compensationPoints The number of miss-faces that can be turned 
  * to the next higher face, until they score a hit. 
  * @property {RollDiceModifierType} rollModifier The selected roll modifier. 
@@ -26,7 +26,7 @@ export default class RollData {
    * @param {String} args.obFormula The obstacle formula to roll against. 
    * @param {Sum} args.diceComponents The number of dice to roll. 
    * @param {SumComponent} args.bonusDiceComponent 
-   * @param {Number} args.modifier Number of automatic hits/misses. 
+   * @param {Number} args.hitModifier Number of automatic hits/misses. 
    * @param {Number} args.compensationPoints The number of miss-faces that can be turned 
    * to the next higher face, until they score a hit. 
    * @param {RollDiceModifierType} args.rollModifier The selected roll modifier. 
@@ -38,7 +38,7 @@ export default class RollData {
       "obFormula", 
       "diceComponents", 
       "bonusDiceComponent", 
-      "modifier", 
+      "hitModifier", 
       "compensationPoints",
       "rollModifier",
     ]);
@@ -48,7 +48,7 @@ export default class RollData {
     this.obFormula = args.obFormula;
     this.diceComponents = args.diceComponents;
     this.bonusDiceComponent = args.bonusDiceComponent;
-    this.modifier = args.modifier;
+    this.hitModifier = args.hitModifier;
     this.compensationPoints = args.compensationPoints;
     this.rollModifier = args.rollModifier;
   }
@@ -63,66 +63,132 @@ export default class RollData {
    * @async
    */
   async roll() {
-    const finalDiceCount = this._getFinalDiceCount();
-    const resolvedObstacle = await this._resolveOb(this.obFormula);
-    const obstacle = resolvedObstacle.ob;
-
-    const blankCount = Math.max(0, resolvedObstacle.ob - finalDiceCount);
-    const hits = [];
-    const misses = [];
-    // Only try to do any rolls, if there are dice to roll. 
-    if (finalDiceCount > 0) {
-      // Let FoundryVTT make the roll. 
-      const rolledFaces = new Die({ faces: this.dieFaces, number: finalDiceCount })
-        .evaluate().results
-        .map(it => it.result);
-
-      // Analyze results. 
-      for (const rolledFace of rolledFaces) {
-        if (rolledFace >= this.hitThreshold) {
-          hits.push(rolledFace);
-        } else {
-          misses.push(rolledFace);
-        }
-      }
-    }
-    
-    // Determine outcome type and degree of success/failure. 
-    let degree = 0;
-    let outcomeType = DICE_POOL_RESULT_TYPES.NONE; // Ob 0 or invalid test. 
-    if (obstacle > 0) {
-      if (hits.length >= obstacle) { // Complete success
-        outcomeType = DICE_POOL_RESULT_TYPES.SUCCESS;
-        degree = hits.length - obstacle;
-      } else if (hits.length > 0) { // Partial failure
-        outcomeType = DICE_POOL_RESULT_TYPES.PARTIAL;
-        degree = hits.length;
-      } else {
-        outcomeType = DICE_POOL_RESULT_TYPES.FAILURE;
-      }
-    }
-
-    // Include bonus dice, but only if there are any. 
-    let totalDiceSum = new Sum(this.diceComponents.components);
-    if (this.bonusDiceComponent.value > 0) {
-      totalDiceSum.components.push(this.bonusDiceComponent);
-    }
+    const intermediateResults = await this._rollIntermediate();
+    const results = this._finalize(intermediateResults);
 
     return new RollResult({
-      totalDice: totalDiceSum,
-      totalRolledDice: finalDiceCount,
+      inputData: new RollInputData({
+        dice: this.diceComponents,
+        bonusDice: this.bonusDiceComponent.value,
+        compensationPoints: this.compensationPoints,
+        hitModifier: this.hitModifier,
+        rollModifier: this.rollModifier,
+      }),
+      intermediateResults: intermediateResults,
+      results: results,
+    })
+  }
+
+  /**
+   * Rolls and returns the intermediate results, before compensation points 
+   * or other such modifiers are applied. 
+   * 
+   * @returns {RollStepData}
+   * 
+   * @async
+   * @private
+   */
+  async _rollIntermediate() {
+    const finalDiceCount = this._getFinalDiceCount();
+    const resolvedObstacle = await this._resolveOb(this.obFormula);
+
+    let rolledFaces = [];
+    // Only try to do any rolls, if there are dice to roll. 
+    if (finalDiceCount > 0) {
+      // Let FoundryVTT make the roll, the collect the faces and sort them in descending order. 
+      rolledFaces = new Die({ faces: this.dieFaces, number: finalDiceCount })
+      .evaluate().results
+      .map(it => it.result)
+      .sort()
+      .reverse();
+    }
+    
+    // Analyze results. 
+    const faceResults = this._evaluateFaces(rolledFaces, resolvedObstacle.ob);
+    const degreeAndOutcome = this._evaluateDegreeAndOutcome(faceResults.hits.length, resolvedObstacle.ob);
+
+    return new RollStepData({
+      faces: rolledFaces,
       resolvedObstacle: resolvedObstacle,
-      hits: hits,
-      misses: misses,
-      blankCount: blankCount,
-      degree: degree,
-      outcomeType: outcomeType,
-      rollModifier: this.rollModifier,
+      hits: faceResults.hits,
+      misses: faceResults.misses,
+      blankCount: faceResults.blankCount,
+      degree: degreeAndOutcome.degree,
+      outcomeType: degreeAndOutcome.outcomeType,
     });
   }
 
   /**
-   * Returns the total number of dice to roll. 
+   * Applies modifier and compensation points and returns the new results. 
+   * 
+   * @param {RollStepData} intermediateResults 
+   * 
+   * @returns {RollStepData}
+   * 
+   * @private
+   */
+  _finalize(intermediateResults) {
+    const modifiedFaces = intermediateResults.faces.concat([]); // Safe copy. 
+    const resolvedObstacle = intermediateResults.resolvedObstacle;
+
+    // Apply modifier. 
+    let remainingModifier = this.hitModifier;
+    if (this.hitModifier > 0) {
+      for (let i = 0; i < modifiedFaces.length; i++) {
+        if (remainingModifier === 0) break;
+
+        const face = modifiedFaces[i];
+        if (face < this.hitThreshold) {
+          modifiedFaces[i] = this.hitThreshold;
+          remainingModifier--;
+        }
+      }
+    } else if (this.hitModifier < 0) {
+      for (let i = modifiedFaces.length - 1; i >= 0; i--) {
+        if (remainingModifier === 0) break;
+
+        const face = modifiedFaces[i];
+        if (face >= this.hitThreshold) {
+          modifiedFaces[i] = 1;
+          remainingModifier++;
+        }
+      }
+    }
+
+    // Apply compensation points. 
+    let remainingCompensationPoints = this.compensationPoints;
+    for (let i = 0; i < modifiedFaces.length; i++) {
+      const face = modifiedFaces[i];
+
+      if (remainingCompensationPoints < 1) break;
+
+      const delta = this.hitThreshold - face;
+      if (delta > remainingCompensationPoints) {
+        modifiedFaces[i] = face + remainingCompensationPoints;
+        break;
+      } else if (delta > 0) {
+        modifiedFaces[i] = face + delta;
+        remainingCompensationPoints -= delta;
+      }
+    }
+
+    // Analyze results. 
+    const faceResults = this._evaluateFaces(modifiedFaces, resolvedObstacle.ob);
+    const degreeAndOutcome = this._evaluateDegreeAndOutcome(faceResults.hits.length, resolvedObstacle.ob);
+
+    return new RollStepData({
+      faces: modifiedFaces,
+      resolvedObstacle: resolvedObstacle,
+      hits: faceResults.hits,
+      misses: faceResults.misses,
+      blankCount: faceResults.blankCount,
+      degree: degreeAndOutcome.degree,
+      outcomeType: degreeAndOutcome.outcomeType,
+    });
+  }
+
+  /**
+   * Returns the actual number of dice to roll. 
    * 
    * @returns {Number} The total number of dice to roll. 
    * 
@@ -173,6 +239,70 @@ export default class RollData {
     });
   }
 
+  /**
+   * Returns the degree and outcome type, based on the given hits and obstacle. 
+   * 
+   * @param {Number} hitCount The number of hits that were scored. 
+   * @param {Number} obstacle The resolved obstacle number. 
+   * 
+   * @returns {Object} An object with the fields: 
+   * * `degree: Number`
+   * * `outcomeType: DicePoolRollResultType`
+   * 
+   * @private
+   */
+  _evaluateDegreeAndOutcome(hitCount, obstacle) {
+    let degree = 0;
+    let outcomeType = DICE_POOL_RESULT_TYPES.NONE; // Ob 0 or invalid test. 
+
+    if (obstacle > 0) {
+      if (hitCount >= obstacle) { // Complete success
+        outcomeType = DICE_POOL_RESULT_TYPES.SUCCESS;
+        degree = hitCount - obstacle;
+      } else if (hitCount > 0) { // Partial failure
+        outcomeType = DICE_POOL_RESULT_TYPES.PARTIAL;
+        degree = hitCount;
+      } else {
+        outcomeType = DICE_POOL_RESULT_TYPES.FAILURE;
+      }
+    }
+
+    return {
+      degree: degree,
+      outcomeType: outcomeType,
+    }
+  }
+
+  /**
+   * Returns the results of the given faces, sorted in descending order. 
+   * 
+   * @param {Array<Number>} rolledFaces The list of actually rolled faces. 
+   * @param {Number} obstacle The resolved obstacle number. 
+   * 
+   * @returns {Object} An object with the fields: 
+   * * `hits: Array<Number>`
+   * * `misses: Array<Number>`
+   * * `blankCount: Number`
+   * 
+   * @private
+   */
+  _evaluateFaces(rolledFaces, obstacle) {
+    const hits = [];
+    const misses = [];
+    const blankCount = Math.max(0, obstacle - rolledFaces.length);
+    for (const rolledFace of rolledFaces) {
+      if (rolledFace >= this.hitThreshold) {
+        hits.push(rolledFace);
+      } else {
+        misses.push(rolledFace);
+      }
+    }
+    return {
+      hits: hits.sort().reverse(),
+      misses: misses.sort().reverse(),
+      blankCount: blankCount,
+    }
+  }
 }
 
 /**

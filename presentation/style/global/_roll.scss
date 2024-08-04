@@ -1,6 +1,36 @@
+$die-mini-size: 1.1em;
+$c-hit: #18520b;
+$c-hit-muted: #5b7455;
+$c-miss: #712625;
+$c-miss-muted: #7b5655;
+$c-ob-muted: #666666;
+
 .dice-roll-chat-message-container {
   .dice-rolls-container {
     overflow: hidden;
+
+    &.mini {
+      li.roll.die {
+        width: $die-mini-size;
+        height: $die-mini-size;
+        line-height: $die-mini-size;
+        font-size: $die-mini-size;
+
+        &.roll-success {
+          color: $c-hit-muted;
+        }
+        &.roll-failure {
+          color: $c-miss-muted;
+        }
+      }
+
+      li.roll-obstacle {
+        height: $die-mini-size;
+        line-height: $die-mini-size;
+        font-size: $die-mini-size;
+        color: $c-ob-muted;
+      }
+    }
   }
   .dice-number {
     font-size: $font-size-default;
@@ -21,12 +51,20 @@ ol.dice-rolls {
   flex-wrap: wrap;
 }
 
-li.die.d6.roll-obstacle {
+li.roll-obstacle {
   width: auto;
+  height: 24px;
+  line-height: 24px;
   padding: 0 3px;
+  margin: 2px;
   background-color: transparent;
   border-left: 2px solid $c-border-medium;
   border-right: 2px solid $c-border-medium;
+  border-radius: 3px;
+  font-weight: bold;
+  font-size: 16px;
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.12);
 }
 
 .dice-rolls li.roll {
@@ -51,10 +89,10 @@ li.die.d6.roll-obstacle {
   }
 }
 li.roll.die.d6.roll-failure {
-  color: #712625;
+  color: $c-miss;
 }
 li.roll.die.d6.roll-success {
-  color: #18520b;
+  color: $c-hit;
 }
 li.roll.die.d6.roll-missing {
   background-color: transparent;
@@ -93,4 +131,11 @@ li.roll.die.d6.roll-missing {
 .roll-damage-value-total {
   font-weight: bold;
   font-size: $font-size-xl;
+}
+
+.roll-details-button {
+  background: rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--color-border-light-2);
+  border-radius: 3px;
+  box-shadow: 0 0 2px #FFF inset;
 }

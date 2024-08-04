@@ -36,8 +36,8 @@ export class AttributeAndSkillRollSchema extends SkillRollSchema {
       obFormula: rollQueryData.ob,
       diceComponents: new Sum(diceComponents),
       bonusDiceComponent: new SumComponent(RollSchema.BONUS_DICE_COMPONENT, "system.roll.bonusDice", rollQueryData.bonusDice),
-      modifier: 0,
-      compensationPoints: 0,
+      hitModifier: 0,
+      compensationPoints: rollQueryData.compensationPoints,
       rollModifier: rollQueryData.rollModifier,
     });
   }
@@ -53,6 +53,7 @@ export class AttributeAndSkillRollSchema extends SkillRollSchema {
     const nameInputObstacle = "inputObstacle";
     const nameInputAttribute = "inputAttribute";
     const nameInputBonusDice = "inputBonusDice";
+    const nameInputCompensationPoints = "inputCompensationPoints";
     const nameInputRollDiceModifier = "inputRollDiceModifier";
 
     const actor = document.owningDocument.document;
@@ -81,7 +82,7 @@ export class AttributeAndSkillRollSchema extends SkillRollSchema {
         name: nameInputObstacle,
         localizedLabel: game.i18n.localize("system.roll.obstacle.abbreviation"),
         required: true,
-        defaultValue: "",
+        defaultValue: "0",
         specificArgs: {
           placeholder: game.i18n.localize("system.roll.obstacle.rollForPlaceholder"),
         },
@@ -104,6 +105,13 @@ export class AttributeAndSkillRollSchema extends SkillRollSchema {
         defaultValue: 0,
       }),
       new DynamicInputDefinition({
+        type: DYNAMIC_INPUT_TYPES.NUMBER_SPINNER,
+        name: nameInputCompensationPoints,
+        localizedLabel: game.i18n.localize("system.roll.compensationPoints"),
+        required: true,
+        defaultValue: 0,
+      }),
+      new DynamicInputDefinition({
         type: DYNAMIC_INPUT_TYPES.DROP_DOWN,
         name: nameInputRollDiceModifier,
         localizedLabel: game.i18n.localize("system.roll.diceModifier.plural"),
@@ -122,6 +130,7 @@ export class AttributeAndSkillRollSchema extends SkillRollSchema {
       attribute: attributes.find(attribute => attribute.name === dialog[nameInputAttribute].value),
       ob: dialog[nameInputObstacle],
       bonusDice: parseInt(dialog[nameInputBonusDice]),
+      compensationPoints: parseInt(dialog[nameInputCompensationPoints]),
       rollModifier: ROLL_DICE_MODIFIER_TYPES.asArray().find(it => it.name === dialog[nameInputRollDiceModifier].value),
       visbilityMode: VISIBILITY_MODES.asArray().find(it => it.name === dialog[this._nameInputVisibility].value),
     });

@@ -723,7 +723,9 @@
         "label": "Backfire"
       },
       "bonusDice": "Bonus Dice",
+      "compensationPoints": "Compensation Points",
       "doRoll": "Roll Dice",
+      "hitModifier": "Hit Modifier",
       "query": "Prepare Dice Roll"
     },
     "attackType": {

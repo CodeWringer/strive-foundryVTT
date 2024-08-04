@@ -33,8 +33,8 @@ export class AttributeRollSchema extends RollSchema {
       obFormula: rollQueryData.ob,
       diceComponents: new Sum(diceComponents),
       bonusDiceComponent: new SumComponent(RollSchema.BONUS_DICE_COMPONENT, "system.roll.bonusDice", rollQueryData.bonusDice),
-      modifier: 0,
-      compensationPoints: 0,
+      hitModifier: 0,
+      compensationPoints: rollQueryData.compensationPoints,
       rollModifier: rollQueryData.rollModifier,
     });
   }
@@ -54,6 +54,7 @@ export class AttributeRollSchema extends RollSchema {
     // Input definitions specific to dice pool rolls. 
     const nameInputObstacle = "inputObstacle";
     const nameInputBonusDice = "inputBonusDice";
+    const nameInputCompensationPoints = "inputCompensationPoints";
     const nameInputRollDiceModifier = "inputRollDiceModifier";
 
     dialog.inputDefinitions.splice(0, 0, // Insert the following before the visibility drop down. 
@@ -68,7 +69,7 @@ export class AttributeRollSchema extends RollSchema {
         name: nameInputObstacle,
         localizedLabel: game.i18n.localize("system.roll.obstacle.abbreviation"),
         required: true,
-        defaultValue: "",
+        defaultValue: "0",
         specificArgs: {
           placeholder: game.i18n.localize("system.roll.obstacle.rollForPlaceholder"),
         },
@@ -77,6 +78,13 @@ export class AttributeRollSchema extends RollSchema {
         type: DYNAMIC_INPUT_TYPES.NUMBER_SPINNER,
         name: nameInputBonusDice,
         localizedLabel: game.i18n.localize("system.roll.bonusDice"),
+        required: true,
+        defaultValue: 0,
+      }),
+      new DynamicInputDefinition({
+        type: DYNAMIC_INPUT_TYPES.NUMBER_SPINNER,
+        name: nameInputCompensationPoints,
+        localizedLabel: game.i18n.localize("system.roll.compensationPoints"),
         required: true,
         defaultValue: 0,
       }),
@@ -98,6 +106,7 @@ export class AttributeRollSchema extends RollSchema {
     return new RollQueryData({
       ob: dialog[nameInputObstacle],
       bonusDice: parseInt(dialog[nameInputBonusDice]),
+      compensationPoints: parseInt(dialog[nameInputCompensationPoints]),
       rollModifier: ROLL_DICE_MODIFIER_TYPES.asArray().find(it => it.name === dialog[nameInputRollDiceModifier].value),
       visbilityMode: VISIBILITY_MODES.asArray().find(it => it.name === dialog[this._nameInputVisibility].value),
     });
