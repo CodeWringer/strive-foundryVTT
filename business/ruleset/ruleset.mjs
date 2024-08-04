@@ -157,8 +157,8 @@ export default class Ruleset {
     const injuryCount = (actor.items.filter(it => it.type === ITEM_TYPES.INJURY)).length;
     const level = this.getEffectiveAttributeRawLevel(ATTRIBUTES.toughness, actor);
 
-    const base = 8;
-    return base + (parseInt(level) * 2) - (injuryCount * 2);
+    const base = 10;
+    return Math.max(base, base + (parseInt(level) * 10) - (injuryCount * 10));
   }
 
   /**
@@ -178,7 +178,8 @@ export default class Ruleset {
 
     const level = this.getEffectiveAttributeRawLevel(ATTRIBUTES.toughness, actor);
 
-    return Math.max(parseInt(level), 1);
+    const base = 1;
+    return Math.max(base, Math.floor(base + parseInt(level) / 2.0));
   }
 
   /**
