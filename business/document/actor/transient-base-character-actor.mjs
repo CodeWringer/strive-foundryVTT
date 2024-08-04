@@ -113,6 +113,7 @@ import TransientBaseActor from './transient-base-actor.mjs';
  * @property {Boolean} allowAutomaticActionPointRefill If `true`, automatic AP refilling is enabled for this character. 
  * @property {Number} actionPoints The current number of action points of this character. 
  * @property {Number} gritPoints The current number of grit points of this character. 
+ * @property {Boolean} allowGritPoints If `true`, grit points are enabled character. 
  */
 export default class TransientBaseCharacterActor extends TransientBaseActor {
   /** @override */
@@ -364,6 +365,12 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
    */
   get gritPoints() { return this.document.system.gritPoints ?? 0; }
   set gritPoints(value) { this.updateByPath("system.gritPoints", value); }
+  
+  /**
+   * @type {Boolean}
+   */
+  get allowGritPoints() { return this.document.system.allowGritPoints ?? false; }
+  set allowGritPoints(value) { this.updateByPath("system.allowGritPoints", value); }
 
   /**
    * @type {Number}

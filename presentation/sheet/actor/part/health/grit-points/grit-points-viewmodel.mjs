@@ -1,3 +1,4 @@
+import { ACTOR_TYPES } from "../../../../../../business/document/actor/actor-types.mjs";
 import TransientBaseCharacterActor from "../../../../../../business/document/actor/transient-base-character-actor.mjs";
 import { validateOrThrow } from "../../../../../../business/util/validation-utility.mjs";
 import { TEMPLATES } from "../../../../../templatePreloader.mjs";
@@ -31,7 +32,13 @@ export default class GritPointsViewModel extends ViewModel {
    * @type {Boolean}
    * @readonly
    */
-  get shouldBeVisible() { return this.document.health.injuries.length > 0; }
+  get shouldBeVisible() {
+    if (this.document.type === ACTOR_TYPES.NPC && this.document.allowGritPoints !== true) {
+      return false;
+    } else {
+      return this.document.health.injuries.length > 0;
+    }
+  }
 
   /**
    * @param {Object} args The arguments object. 

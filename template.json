@@ -19,6 +19,8 @@
         "properties": []
       },
       "character": {
+        "allowAutomaticActionPointRefill": true,
+        "allowGritPoints": false,
         "person": {
           "age": 0,
           "species": "",
