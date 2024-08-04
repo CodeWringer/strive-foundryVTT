@@ -13,6 +13,8 @@ import ViewModel from "../../../../../view-model/view-model.mjs";
  * @property {Number} gritPointLimit 
  * * read-only
  * @property {Array<GritPoint>} gritPoints 
+ * @property {Boolean} isInCombatTracker If `true`, adds css classes for improved 
+ * rendering in the combat tracker. 
  */
 export default class GritPointsViewModel extends ViewModel {
   /** @override */
@@ -22,7 +24,13 @@ export default class GritPointsViewModel extends ViewModel {
    * @type {Number}
    * @readonly
    */
-  get gritPointLimit() { return 10; }
+  get gritPointLimit() { 
+    if (this.isInCombatTracker === true) {
+      return 5;
+    } else {
+      return 10;
+    }
+  }
 
   /**
    * Returns true, if the grit points list should be visible. 
@@ -36,7 +44,7 @@ export default class GritPointsViewModel extends ViewModel {
     if (this.document.type === ACTOR_TYPES.NPC && this.document.allowGritPoints !== true) {
       return false;
     } else {
-      return this.document.health.injuries.length > 0;
+      return true;
     }
   }
 
@@ -55,18 +63,24 @@ export default class GritPointsViewModel extends ViewModel {
    * @param {Boolean | undefined} args.isEditable If true, the view model data is editable.
    * * Default `false`. 
    * @param {TransientBaseCharacterActor} args.document 
+   * @param {Boolean} args.isInCombatTracker If `true`, adds css classes for improved 
+   * rendering in the combat tracker. 
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["document"]);
+    validateOrThrow(args, ["document", "isInCombatTracker"]);
 
     this.document = args.document;
+    this.isInCombatTracker = args.isInCombatTracker;
+
+    const gritPoints = this.document.gritPoints;
+    const gritPointsToRender = Math.max(gritPoints, this.gritPointLimit);
 
     this.gritPoints = [];
-    for (let i = 0; i < this.gritPointLimit; i++) {
+    for (let i = 0; i < gritPointsToRender; i++) {
       this.gritPoints.push(new GritPoint({
         id: `${this.id}-${i}`,
-        active: i < this.document.gritPoints,
+        active: i < gritPoints,
         value: i + 1,
       }));
     }
@@ -86,7 +100,7 @@ export default class GritPointsViewModel extends ViewModel {
     });
 
     // Set up set to value of clicked element. 
-    for (let i = 0; i < this.gritPointLimit; i++) {
+    for (let i = 0; i < this.gritPoints.length; i++) {
       html.find(`#${this.id}-${i}`).click(async (event) => {
         this.document.gritPoints = i + 1;
       });

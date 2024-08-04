@@ -9,6 +9,8 @@
   "TYPES.Item.illness": "Illness",
   "TYPES.Item.mutation": "Mutation",
   "TYPES.Item.scar": "Scar",
+  "COMBAT.ActionPoints": "Set Action Points",
+  "COMBAT.GritPoints": "Set Grit Points",
   "system": {
     "migration": {
       "title": "Data Migration",

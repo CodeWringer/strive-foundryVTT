@@ -389,6 +389,7 @@ export default class ActorHealthViewModel extends ViewModel {
       id: "vmGritPoints",
       parent: this,
       document: this.document,
+      isInCombatTracker: false,
     });
   }
   
