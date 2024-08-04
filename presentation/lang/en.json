@@ -728,6 +728,9 @@
       "hitModifier": "Hit Modifier",
       "query": "Prepare Dice Roll"
     },
+    "rules": {
+      "hintDeathsDoor": "Death's Door: You must succeed at least one toughness test out of a possible of three, at Ob equal to half your toughness, rounded up. One of these tests must be made at the end of every round. Mark your failures here. Fail all three, and perish."
+    },
     "attackType": {
       "label": "Attack Type",
       "abbreviation": "Att. Type",

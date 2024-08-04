@@ -63,6 +63,8 @@ import TransientBaseActor from './transient-base-actor.mjs';
  * @property {Number} health.magicStamina 
  * @property {Number} health.maxMagicStamina 
  * * Read-only. 
+ * @property {Number} health.deathSaves
+ * @property {Number} health.deathSaveLimit
  * @property {Object} assets
  * * Read-only. 
  * @property {Array<CharacterAssetSlotGroup>} assets.equipmentSlotGroups 
@@ -305,6 +307,14 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
         });
         thiz.updateByPath("system.health.states", dtoArray);
       },
+
+      // Death saves
+      get deathSaves() { return parseInt(thiz.document.system.health.deathSaves ?? 0); },
+      set deathSaves(value) { thiz.updateByPath("system.health.deathSaves", value); },
+
+      // Death save limit
+      get deathSaveLimit() { return parseInt(thiz.document.system.health.deathSaveLimit ?? 3); },
+      set deathSaveLimit(value) { thiz.updateByPath("system.health.deathSaveLimit", value); },
     };
   }
 

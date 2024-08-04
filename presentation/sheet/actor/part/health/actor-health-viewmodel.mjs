@@ -1,3 +1,4 @@
+import { ACTOR_TYPES } from "../../../../../business/document/actor/actor-types.mjs"
 import { ITEM_TYPES } from "../../../../../business/document/item/item-types.mjs"
 import Ruleset from "../../../../../business/ruleset/ruleset.mjs"
 import { validateOrThrow } from "../../../../../business/util/validation-utility.mjs"
@@ -14,6 +15,7 @@ import InjuryListItemViewModel from "../../../item/injury/injury-list-item-viewm
 import MutationListItemViewModel from "../../../item/mutation/mutation-list-item-viewmodel.mjs"
 import ScarListItemViewModel from "../../../item/scar/scar-list-item-viewmodel.mjs"
 import ActorHealthStatesViewModel from "./actor-health-states-viewmodel.mjs"
+import DeathsDoorViewModel from "./deaths-door/deaths-door-viewmodel.mjs"
 import GritPointsViewModel from "./grit-points/grit-points-viewmodel.mjs"
 
 /**
@@ -25,6 +27,12 @@ export default class ActorHealthViewModel extends ViewModel {
 
   /** @override */
   get entityId() { return this.document.id; }
+
+  /**
+   * @type {Boolean}
+   * @readonly
+   */
+  get isPC() { return this.document.type === ACTOR_TYPES.PC; }
 
   /**
    * @type {Number}
@@ -133,6 +141,12 @@ export default class ActorHealthViewModel extends ViewModel {
    * @readonly
    */
   get gritPointsTemplate() { return GritPointsViewModel.TEMPLATE; }
+
+  /**
+   * @type {String}
+   * @readonly
+   */
+  get deathsDoorTemplate() { return DeathsDoorViewModel.TEMPLATE; }
 
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
@@ -391,6 +405,14 @@ export default class ActorHealthViewModel extends ViewModel {
       document: this.document,
       isInCombatTracker: false,
     });
+
+    if (this.isPC) {
+      this.vmDeathsDoor = new DeathsDoorViewModel({
+        id: "vmDeathsDoor",
+        parent: this,
+        document: this.document,
+      });
+    }
   }
   
   /** @override */

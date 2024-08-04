@@ -77,6 +77,12 @@ cssClass: {undefined | String}
           </div>
         </div>
       </div>
+      {{!-- Death's Door --}}
+      {{#if viewModel.isPC}}
+      {{#with viewModel.deathsDoorTemplate as | template |}}
+        {{> (template) viewModel=../viewModel.vmDeathsDoor}}
+      {{/with}}
+      {{/if}}
       {{!-- Grit Points --}}
       {{#with viewModel.gritPointsTemplate as | template |}}
         {{> (template) viewModel=../viewModel.vmGritPoints}}

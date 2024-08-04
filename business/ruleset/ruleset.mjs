@@ -183,7 +183,7 @@ export default class Ruleset {
   }
 
   /**
-   * Returns the maximum exhaustion threshold of the given actor. 
+   * Returns the exhaustion limit of the given actor. 
    * 
    * @param {Actor} actor 
    * 

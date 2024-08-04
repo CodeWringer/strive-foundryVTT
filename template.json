@@ -81,7 +81,9 @@
           "magicStamina": 0,
           "maxMagicStaminaModifier": 0,
           "maxInjuriesModifier": 0,
-          "states": []
+          "states": [],
+          "deathSaves": 0,
+          "deathSaveLimit": 3
         },
         "assets": {
           "equipment": {
