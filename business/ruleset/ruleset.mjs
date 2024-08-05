@@ -89,11 +89,11 @@ export default class Ruleset {
       successes = 6;
       failures = 9;
     } else if (tier.name === SKILL_TIERS.apprentice.name) {
-      successes = level + 1;
-      failures = (level * 2) + 1;
+      successes = level + 3;
+      failures = (level * 2) + 4;
     } else if (tier.name === SKILL_TIERS.master.name) {
-      successes = level + 2;
-      failures = (level * 2) + 2;
+      successes = level + 4;
+      failures = (level * 2) + 5;
     } else {
       throw new Error(`Unrecognized skill tier ${tier.name}`);
     }
