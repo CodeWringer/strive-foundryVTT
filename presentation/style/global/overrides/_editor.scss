@@ -23,3 +23,16 @@ div.tox-tiered-menu {
     }
   }
 }
+
+div.custom-system-edit.component-rich-text-container {
+  code {
+    padding: 0 .4em;
+    margin: 0;
+    white-space: nowrap;
+    background-color: $c-bg-dark;
+    border-radius: 6px;
+    border: 1px solid $c-bg-dark;
+    font-family: unset;
+    font-weight: bold;
+  }
+}

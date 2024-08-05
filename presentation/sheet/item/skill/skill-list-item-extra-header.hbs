@@ -46,6 +46,12 @@ viewModel: {SkillListItemViewModel}
         {{> inputNumberSpinner }}
       </div>
     {{/labeledControl}}
+    {{!-- Advanced --}}
+    {{#> labeledControl viewModel=viewModel.vmAdvanced }}
+      <div class="width-sm">
+        {{> buttonCheckbox }}
+      </div>
+    {{/labeledControl}}
   </div>
   {{/if}}
 </div>

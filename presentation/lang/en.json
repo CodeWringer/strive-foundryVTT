@@ -9,6 +9,8 @@
   "TYPES.Item.illness": "Illness",
   "TYPES.Item.mutation": "Mutation",
   "TYPES.Item.scar": "Scar",
+  "COMBAT.ActionPoints": "Set Action Points",
+  "COMBAT.GritPoints": "Set Grit Points",
   "system": {
     "migration": {
       "title": "Data Migration",
@@ -79,6 +81,10 @@
           "label": "Game-Master"
         }
       },
+      "modifier": {
+        "label": "Modifier",
+        "abbreviation": "Mod."
+      },
       "name": {
         "label": "Name",
         "edit": "Edit Name",
@@ -123,6 +129,7 @@
     "character": {
       "edit": "Configure Character",
       "advancement": {
+        "advanced": "Advanced",
         "label": "Advancement",
         "level": "Level",
         "challengeRating": {
@@ -367,6 +374,12 @@
             }
           }
         }
+      },
+      "gritPoint": {
+        "abbreviation": "GP",
+        "singular": "Grit Point",
+        "plural": "Grit Points",
+        "toggleLabel": "Enable Grit Points"
       },
       "health": {
         "duration": "Duration",
@@ -673,13 +686,13 @@
         "label": "Partial",
         "degree": "Degree of partial Success"
       },
-      "positive": {
-        "plural": "Positives",
-        "singular": "Positive"
+      "hit": {
+        "plural": "Hits",
+        "singular": "Hit"
       },
-      "negative": {
-        "plural": "Negatives",
-        "singular": "Negative"
+      "miss": {
+        "plural": "Misses",
+        "singular": "Miss"
       },
       "missing": {
         "plural": "Missing",
@@ -711,8 +724,13 @@
         "label": "Backfire"
       },
       "bonusDice": "Bonus Dice",
+      "compensationPoints": "Compensation Points",
       "doRoll": "Roll Dice",
+      "hitModifier": "Hit Modifier",
       "query": "Prepare Dice Roll"
+    },
+    "rules": {
+      "hintDeathsDoor": "Death's Door: You must succeed at least one toughness test out of a possible of three, at Ob equal to half your toughness, rounded up. One of these tests must be made at the end of every round. Mark your failures here. Fail all three, and perish."
     },
     "attackType": {
       "label": "Attack Type",
@@ -766,10 +784,6 @@
         "label": "Bludgeoning",
         "abbreviation": "Bludgeon"
       },
-      "crushing": {
-        "label": "Crushing",
-        "abbreviation": "Crush"
-      },
       "poison": {
         "label": "Poison",
         "abbreviation": "Poison"
@@ -782,10 +796,6 @@
         "label": "Electrical",
         "abbreviation": "Electric"
       }
-    },
-    "rules": {
-      "hintToughnessTestRequired": "Half of the maximum number of injuries (rounded down) reached. Any further damage incurred requires a toughness test with Ob as high as the number of injuries to be passed. If failed, suffer +1 exhaustion.",
-      "hintDeathIsNear": "Injury limit reached - if HP reach 0 now, this character will die!"
     },
     "settings": {
       "saveChanges": "Save Changes",

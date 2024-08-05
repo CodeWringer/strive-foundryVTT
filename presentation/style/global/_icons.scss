@@ -42,6 +42,22 @@ i.stacked {
   border-radius: 4px;
 }
 
+.icon-with-centered-label {
+  position: relative;
+  text-align: center;
+
+  i.icon-with-centered-label-image, img.icon-with-centered-label-image {
+    display: block;
+  }
+
+  .icon-with-centered-label-label {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
+
 .ico-action-point-solid {
   background: url("/systems/strive/presentation/image/action-point-solid.svg");
   background-size: cover;
@@ -74,6 +90,16 @@ i.stacked {
 
 .ico-brain-line {
   background: url("/systems/strive/presentation/image/brain-line.svg");
+  background-size: cover;
+}
+
+.ico-brain-solid {
+  background: url("/systems/strive/presentation/image/brain-solid.svg");
+  background-size: cover;
+}
+
+.ico-brain-limit-solid {
+  background: url("/systems/strive/presentation/image/brain-limit-solid.svg");
   background-size: cover;
 }
 
@@ -167,8 +193,43 @@ i.stacked {
   background-size: cover;
 }
 
+.ico-grit-line {
+  background: url("/systems/strive/presentation/image/grit-line.svg");
+  background-size: cover;
+}
+
+.ico-grit-point-line {
+  background: url("/systems/strive/presentation/image/grit-point-line.svg");
+  background-size: cover;
+}
+
+.ico-grit-point-void-line {
+  background: url("/systems/strive/presentation/image/grit-point-void-line.svg");
+  background-size: cover;
+}
+
+.ico-heart-solid {
+  background: url("/systems/strive/presentation/image/heart-solid.svg");
+  background-size: cover;
+}
+
+.ico-heart-limit-solid {
+  background: url("/systems/strive/presentation/image/heart-limit-solid.svg");
+  background-size: cover;
+}
+
 .ico-location-solid {
   background: url("/systems/strive/presentation/image/location-solid.svg");
+  background-size: cover;
+}
+
+.ico-lung-solid {
+  background: url("/systems/strive/presentation/image/lung-solid.svg");
+  background-size: cover;
+}
+
+.ico-lung-limit-solid {
+  background: url("/systems/strive/presentation/image/lung-limit-solid.svg");
   background-size: cover;
 }
 

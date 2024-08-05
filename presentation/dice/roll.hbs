@@ -1,27 +1,42 @@
 {{!-- Parameters:
-resultsForDisplay: {Array<Object>} = {
-  cssClass: {String}
-  content: {String}
-}
-outcomeType: {String}
-degree: {String | Number}
-numberOfDice: {String | Number}
-positives: {String | Number}
-negatives: {String | Number}
-diceComposition: {String}
-primaryTitle: {String | undefined}
-primaryImage: {String | undefined}
-secondaryTitle: {String | undefined}
-secondaryImage: {String | undefined}
+id: String
+primaryTitle: String | undefined
+primaryImage: String | undefined
+secondaryTitle: String | undefined
+secondaryImage: String | undefined
 cssClass: {undefined | String}
-showBackFire: {Boolean | String}
-obstacle: {Number}
-isObstacleRolled: {Boolean}
-evaluatedObstacle: {EvaluatedRollFormula}
-evaluatedObstacleForDisplay: {String}
-showReminder: {Boolean}
+
+showIntermediateFaces: Boolean | undefined
+intermediateFaces: Array<Object> = {
+  cssClass: String
+  content: String
+}
+
+finalFaces: Array<Object> = {
+  cssClass: String
+  content: String
+}
+
+outcomeType: {String}
+degree: String | Number
+
+diceCount: String | Number
+hitCount: String | Number
+missCount: String | Number
+blankCount: String | Number
+
+diceComposition: String
+
+obstacle: Number
+unmodifiedObstacle: Number
+isObstacleRolled: Boolean
+obFormula: String
+resolvedObFormula: String
+
+showReminder: Boolean
+additionalContent: String
 --}}
-<div class="dice-roll-chat-message-container auto-margin-v-sm{{#if cssClass}} {{cssClass}}{{/if}}">
+<div id="{{id}}" class="dice-roll-chat-message-container auto-margin-v-sm custom-system-chat-message{{#if cssClass}} {{cssClass}}{{/if}}">
   {{!-- Header --}}
   {{!-- Secondary Title --}}
   {{#if (or (neq secondaryTitle undefined) (neq secondaryImage undefined))}}
@@ -53,38 +68,56 @@ showReminder: {Boolean}
       {{/if}}
     </div>
   {{/if}}
-  {{!-- Obstacle (if rolled for) --}}
-  {{#if isObstacleRolled}}
-  <div class="sheet-block">
-    <p>
-      {{evaluatedObstacle.formula}}
-    </p>
-    <div class="dice-rolls-container">
-      {{{evaluatedObstacleForDisplay}}}
-    </div>
-    <p>
-      {{localize "system.roll.obstacle.abbreviation"}}: {{evaluatedObstacle.positiveTotal}} + 1 = {{obstacle}}
-    </p>
-  </div>
-  {{/if}}
-  {{!-- Dice --}}
+  {{!-- Details --}}
   <div class="flex flex-row flex-middle flex-grow flex-wrap auto-margin-h-md">
     {{!-- Number of dice --}}
-    <span class="strive-pill flex flex-row font-size-default" title="{{localize "system.roll.numberOfDice"}}">
-      <div class="flex flex-center"><i class="fas fa-dice-three"></i></div>
-      <div class="flex flex-center margin-l-md margin-r-md">{{> verticalLine}}</div>
-      <div class="flex flex-center"><span class="dice-number">{{numberOfDice}}</span></div>
-    </span>
+    <a id="{{id}}-toggle-details" class="flex-grow">
+      <div class="flex flex-center roll-details-button pad-sm">
+        <span class="strive-pill flex flex-row font-size-default" title="{{localize "system.roll.numberOfDice"}}">
+          <div class="flex flex-center">
+            <i class="fas fa-dice-three"></i>
+          </div>
+          <div class="flex flex-center margin-l-md margin-r-md">
+            {{> verticalLine}}
+          </div>
+          <div class="flex flex-center">
+            <span class="dice-number">{{diceCount}}</span>
+          </div>
+        </span>
+      </div>
+    </a>
+  </div>
+  <div id="{{id}}-details" class="sheet-block hidden" style="height: 0%;">
     {{!-- Dice composition --}}
     {{#if diceComposition}}
     <div class="dice-composition">{{diceComposition}}</div>
     {{/if}}
+    {{!-- Obstacle (if rolled for) --}}
+    {{#if isObstacleRolled}}
+    <div class="border-solid-t-sm pad-t-sm margin-t-md">
+      <span>{{localize "system.roll.obstacle.abbreviation"}}: {{obFormula}}</span>
+      <div class="dice-rolls-container mini">
+        {{{resolvedObFormula}}}
+      </div>
+      <span>{{unmodifiedObstacle}} (+ 1) = {{obstacle}}</span>
+    </div>
+    {{/if}}
+    {{#if showIntermediateFaces}}
+    {{!-- Intermediate Faces --}}
+    <div class="dice-rolls-container mini border-solid-t-sm pad-t-sm margin-t-md">
+      <ol class="dice-rolls">
+        {{#each intermediateFaces as | face |}}
+          <li class="{{face.cssClass}}">{{face.content}}</li>
+        {{/each}}
+      </ol>
+    </div>
+    {{/if}}
   </div>
-  {{!-- Individual dice results --}}
+  {{!-- Final Faces --}}
   <div class="dice-rolls-container">
     <ol class="dice-rolls">
-      {{#each resultsForDisplay as | resultForDisplay |}}
-        <li class="roll die d6 {{resultForDisplay.cssClass}}">{{resultForDisplay.content}}</li>
+      {{#each finalFaces as | face |}}
+        <li class="{{face.cssClass}}">{{face.content}}</li>
       {{/each}}
     </ol>
   </div>
@@ -99,31 +132,25 @@ showReminder: {Boolean}
     {{#if (eq outcomeType "FAILURE")}}
       <div class="dice-result failure">{{localize "system.roll.failure.label"}}!</div>
     {{/if}}
-    {{#if showBackFire}}
-      <div class="dice-result failure flex flex-row flex-middle">
-        <i class="fas fa-exclamation-triangle"></i>
-        <span class="margin-l-md">{{localize "system.roll.backFire.label"}}!</span>
-      </div>
-    {{/if}}
     <div class="flex flex-row flex-center flex-wrap auto-margin-h-lg auto-margin-h-sm font-size-default">
-      {{!-- Positives --}}
-      <span class="strive-pill flex flex-row font-size-default" title="{{localize "system.roll.positive.plural"}}">
+      {{!-- Hits --}}
+      <span class="strive-pill flex flex-row font-size-default" title="{{localize "system.roll.hit.plural"}}">
         <div class="flex flex-center"><i class="ico dark ico-dice-check-solid" style="width: 1rem; height: 1rem;"></i></div>
         <div class="flex flex-center margin-l-md margin-r-md">{{> verticalLine}}</div>
-        <div class="flex flex-center"><span class="dice-number">{{positives}}</span></div>
+        <div class="flex flex-center"><span class="dice-number">{{hitCount}}</span></div>
       </span>
-      {{!-- Negatives --}}
-      <span class="strive-pill flex flex-row font-size-default" title="{{localize "system.roll.negative.plural"}}">
+      {{!-- Misses --}}
+      <span class="strive-pill flex flex-row font-size-default" title="{{localize "system.roll.miss.plural"}}">
         <div class="flex flex-center"><i class="ico dark ico-dice-times-solid" style="width: 1rem; height: 1rem;"></i></div>
         <div class="flex flex-center margin-l-md margin-r-md">{{> verticalLine}}</div>
-        <div class="flex flex-center"><span class="dice-number">{{negatives}}</span></div>
+        <div class="flex flex-center"><span class="dice-number">{{missCount}}</span></div>
       </span>
       {{!-- Missing --}}
-      {{#if (neq missingDiceCount 0)}}
+      {{#if (neq blankCount 0)}}
       <span class="strive-pill flex flex-row font-size-default" title="{{localize "system.roll.missing.plural"}}">
         <div class="flex flex-center"><i class="ico dark ico-dice-void-line" style="width: 1rem; height: 1rem;"></i></div>
         <div class="flex flex-center margin-l-md margin-r-md">{{> verticalLine}}</div>
-        <div class="flex flex-center"><span class="dice-number">{{missingDiceCount}}</span></div>
+        <div class="flex flex-center"><span class="dice-number">{{blankCount}}</span></div>
       </span>
       {{/if}}
     </div>
@@ -131,5 +158,9 @@ showReminder: {Boolean}
   {{!-- Reminder --}}
   {{#if showReminder}}
   <p class="border-solid-t-sm" style="text-align: center;">{{localize "system.roll.reminder"}}</p>
+  {{/if}}
+  {{!-- Additional Content --}}
+  {{#if additionalContent}}
+  <p class="border-solid-t-sm" style="text-align: center;">{{{additionalContent}}}</p>
   {{/if}}
 </div>

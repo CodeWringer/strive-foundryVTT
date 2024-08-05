@@ -67,10 +67,16 @@
       <img class="token-image" data-src="{{this.img}}" alt="{{this.name}}" />
       <div class="token-name flexcol">
         <h4>{{this.name}}</h4>
-        {{!-- Action points --}}
+        {{!-- Action Points --}}
         {{#if this.renderActionPoints}}
         {{#with this.actionPointsTemplate as |template|}}
           {{> (template) viewModel=../this.actionPointsViewModel }}
+        {{/with}}
+        {{/if}}
+        {{!-- Grit Points --}}
+        {{#if this.renderGritPoints}}
+        {{#with this.gritPointsTemplate as |template|}}
+          {{> (template) viewModel=../this.gritPointsViewModel cssClass="margin-b-md combat-tracker-grit-points" }}
         {{/with}}
         {{/if}}
         <div class="combatant-controls flexrow">

@@ -23,7 +23,6 @@ export class DamageType {
  * @property {DamageType} bleeding The "bleeding" damage type. 
  * @property {DamageType} bludgeoning The "bludgeoning" damage type. 
  * @property {DamageType} burning The "burning" damage type. 
- * @property {DamageType} crushing The "crushing" damage type. 
  * @property {DamageType} electrical The "electrical" damage type. 
  * @property {DamageType} freezing The "freezing" damage type. 
  * @property {DamageType} piercing The "piercing" damage type. 
@@ -57,11 +56,6 @@ export const DAMAGE_TYPES = {
     name: "burning",
     localizableName: "system.damageType.burning.label",
     localizableAbbreviation: "system.damageType.burning.abbreviation"
-  }),
-  crushing: new DamageType({
-    name: "crushing",
-    localizableName: "system.damageType.crushing.label",
-    localizableAbbreviation: "system.damageType.crushing.abbreviation"
   }),
   electrical: new DamageType({
     name: "electrical",
@@ -107,8 +101,6 @@ export function getDamageTypeIconClass(damageType) {
     return "ico-damage-type-bludgeon-solid";
   } else if (damageType.name === DAMAGE_TYPES.burning.name) {
     return "ico-damage-type-burning-solid";
-  } else if (damageType.name === DAMAGE_TYPES.crushing.name) {
-    return "ico-damage-type-crushing-solid";
   } else if (damageType.name === DAMAGE_TYPES.electrical.name) {
     return "ico-damage-type-electrical-solid";
   } else if (damageType.name === DAMAGE_TYPES.freezing.name) {

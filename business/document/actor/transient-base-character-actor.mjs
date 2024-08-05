@@ -63,6 +63,8 @@ import TransientBaseActor from './transient-base-actor.mjs';
  * @property {Number} health.magicStamina 
  * @property {Number} health.maxMagicStamina 
  * * Read-only. 
+ * @property {Number} health.deathSaves
+ * @property {Number} health.deathSaveLimit
  * @property {Object} assets
  * * Read-only. 
  * @property {Array<CharacterAssetSlotGroup>} assets.equipmentSlotGroups 
@@ -112,6 +114,8 @@ import TransientBaseActor from './transient-base-actor.mjs';
  * @property {Number} actionPointRefill The number of action points regained each turn for this character. 
  * @property {Boolean} allowAutomaticActionPointRefill If `true`, automatic AP refilling is enabled for this character. 
  * @property {Number} actionPoints The current number of action points of this character. 
+ * @property {Number} gritPoints The current number of grit points of this character. 
+ * @property {Boolean} allowGritPoints If `true`, grit points are enabled character. 
  */
 export default class TransientBaseCharacterActor extends TransientBaseActor {
   /** @override */
@@ -251,20 +255,48 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
       get mutations() { return thiz.items.filter(it => it.type === ITEM_TYPES.MUTATION); },
       get scars() { return thiz.items.filter(it => it.type === ITEM_TYPES.SCAR); },
 
-      get HP() { return parseInt(thiz.document.system.health.HP); },
+      // HP
+      get maxHP() { return new Ruleset().getCharacterMaximumHp(thiz.document) },
+      
+      get maxHpModifier() { return parseInt(thiz.document.system.health.maxHpModifier ?? 0); },
+      set maxHpModifier(value) { thiz.updateByPath("system.health.maxHpModifier", value); },
+      
+      get modifiedMaxHp() { return this.maxHP + this.maxHpModifier; },
+
+      get HP() { return parseInt(thiz.document.system.health.HP ?? 0); },
       set HP(value) { thiz.updateByPath("system.health.HP", value); },
 
-      get exhaustion() { return parseInt(thiz.document.system.health.exhaustion); },
-      set exhaustion(value) { thiz.updateByPath("system.health.exhaustion", value); },
+      // Exhaustion
+      get maxExhaustion() { return new Ruleset().getCharacterMaximumExhaustion(thiz.document) },
       
-      get magicStamina() { return parseInt(thiz.document.system.health.magicStamina); },
+      get maxExhaustionModifier() { return parseInt(thiz.document.system.health.maxExhaustionModifier ?? 0); },
+      set maxExhaustionModifier(value) { thiz.updateByPath("system.health.maxExhaustionModifier", value); },
+
+      get modifiedMaxExhaustion() { return this.maxExhaustion + this.maxExhaustionModifier; },
+
+      get exhaustion() { return parseInt(thiz.document.system.health.exhaustion ?? 0); },
+      set exhaustion(value) { thiz.updateByPath("system.health.exhaustion", value); },
+
+      // Magic Stamina
+      get maxMagicStamina() { return new Ruleset().getCharacterMaximumMagicStamina(thiz.document) },
+
+      get maxMagicStaminaModifier() { return parseInt(thiz.document.system.health.maxMagicStaminaModifier ?? 0); },
+      set maxMagicStaminaModifier(value) { thiz.updateByPath("system.health.maxMagicStaminaModifier", value); },
+
+      get modifiedMaxMagicStamina() { return this.maxMagicStamina.total + this.maxMagicStaminaModifier; },
+
+      get magicStamina() { return parseInt(thiz.document.system.health.magicStamina ?? 0); },
       set magicStamina(value) { thiz.updateByPath("system.health.magicStamina", value); },
       
-      get maxHP() { return new Ruleset().getCharacterMaximumHp(thiz.document) },
+      // Injuries
       get maxInjuries() { return new Ruleset().getCharacterMaximumInjuries(thiz.document) },
-      get maxExhaustion() { return new Ruleset().getCharacterMaximumExhaustion(thiz.document) },
-      get maxMagicStamina() { return new Ruleset().getCharacterMaximumMagicStamina(thiz.document) },
       
+      get maxInjuriesModifier() { return parseInt(thiz.document.system.health.maxInjuriesModifier ?? 0); },
+      set maxInjuriesModifier(value) { thiz.updateByPath("system.health.maxInjuriesModifier", value); },
+
+      get modifiedMaxInjuries() { return this.maxInjuries + this.maxInjuriesModifier; },
+
+      // Conditions (used to be called health states)
       get states() { return thiz._healthStates.concat([]); },
       set states(value) {
         const dtoArray = value.map((healthState) => {
@@ -275,6 +307,14 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
         });
         thiz.updateByPath("system.health.states", dtoArray);
       },
+
+      // Death saves
+      get deathSaves() { return parseInt(thiz.document.system.health.deathSaves ?? 0); },
+      set deathSaves(value) { thiz.updateByPath("system.health.deathSaves", value); },
+
+      // Death save limit
+      get deathSaveLimit() { return parseInt(thiz.document.system.health.deathSaveLimit ?? 3); },
+      set deathSaveLimit(value) { thiz.updateByPath("system.health.deathSaveLimit", value); },
     };
   }
 
@@ -329,6 +369,18 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
 
   get actionPoints() { return this.document.system.actionPoints ?? 3; }
   set actionPoints(value) { this.updateByPath("system.actionPoints", value); }
+
+  /**
+   * @type {Number}
+   */
+  get gritPoints() { return this.document.system.gritPoints ?? 0; }
+  set gritPoints(value) { this.updateByPath("system.gritPoints", value); }
+  
+  /**
+   * @type {Boolean}
+   */
+  get allowGritPoints() { return this.document.system.allowGritPoints ?? false; }
+  set allowGritPoints(value) { this.updateByPath("system.allowGritPoints", value); }
 
   /**
    * @type {Number}

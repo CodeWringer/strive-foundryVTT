@@ -1,7 +1,6 @@
 import { TEMPLATES } from "../../../../presentation/templatePreloader.mjs";
 import { createUUID } from "../../../util/uuid-utility.mjs";
 import SkillChatMessageViewModel from "../../../../presentation/sheet/item/skill/skill-chat-message-viewmodel.mjs";
-import { SumComponent, Sum } from "../../../ruleset/summed-data.mjs";
 import DamageAndType from "../../../ruleset/skill/damage-and-type.mjs";
 import PreparedChatData from "../../../../presentation/chat/prepared-chat-data.mjs";
 import { SOUNDS_CONSTANTS } from "../../../../presentation/audio/sounds.mjs";
@@ -9,7 +8,6 @@ import TransientBaseItem from "../transient-base-item.mjs";
 import LevelAdvancement from "../../../ruleset/level-advancement.mjs";
 import Ruleset from "../../../ruleset/ruleset.mjs";
 import Expertise from "./expertise.mjs";
-import CharacterAttribute from "../../../ruleset/attribute/character-attribute.mjs";
 import { ATTACK_TYPES } from "../../../ruleset/skill/attack-types.mjs";
 import { ATTRIBUTES, Attribute } from "../../../ruleset/attribute/attributes.mjs";
 import { isDefined } from "../../../util/validation-utility.mjs";
@@ -45,6 +43,7 @@ import { ACTOR_TYPES } from "../../actor/actor-types.mjs";
  * @property {String | undefined} obstacle 
  * @property {String | undefined} opposedBy 
  * @property {AttackType | undefined} attackType 
+ * @property {Boolean} advanced 
  */
 export default class TransientSkill extends TransientBaseItem {
   /** @override */
@@ -52,6 +51,9 @@ export default class TransientSkill extends TransientBaseItem {
   
   /** @override */
   get chatMessageTemplate() { return TEMPLATES.SKILL_ITEM_CHAT_MESSAGE; }
+  
+  /** @override */
+  get nameForDisplay() { return `${this.document.name} (${this.baseAttributes.map(it => game.i18n.localize(it.localizableAbbreviation)).join("/")})`; }
   
   /**
    * @type {Array<Attribute>}
@@ -317,6 +319,19 @@ export default class TransientSkill extends TransientBaseItem {
       this.updateByPath("system.attackType", null);
     }
   }
+  
+  /**
+   * @type {Boolean}
+   */
+  get advanced() {
+    return this.document.system.advanced ?? false;
+  }
+  /**
+   * @param {Boolean} value
+   */
+  set advanced(value) {
+    this.updateByPath("system.advanced", value);
+  }
 
   /**
    * Returns `true`, if the skill's embedded on an actor for which 
@@ -460,36 +475,6 @@ export default class TransientSkill extends TransientBaseItem {
     await this.deleteByPath(`system.abilities.${id}`);
 
     return toRemove;
-  }
-
-  /**
-   * Returns the component(s) to do a roll using this skill. 
-   * 
-   * @returns {Sum}
-   */
-  getRollData() {
-    if (this.dependsOnActiveCr === true) {
-      return new Sum([
-        new SumComponent("challengeRating", "system.character.advancement.challengeRating.label", this.owningDocument.challengeRating.modified),
-        new SumComponent(this.name, "system.character.advancement.modifier.label", this.levelModifier),
-      ]);
-    } else {
-      const actor = (this.owningDocument ?? {}).document;
-      
-      // Accumulate the dice from base attributes. 
-      const components = [];
-      for (const attribute of this.baseAttributes) {
-        const characterAttribute = new CharacterAttribute(actor, attribute.name);
-        const attributeComponent = new SumComponent(characterAttribute.name, characterAttribute.localizableName, characterAttribute.modifiedLevel);
-        components.push(attributeComponent);
-      }
-      // Lastly, add the skill's own dice. 
-      components.push(
-        new SumComponent(this.name, this.name, this.modifiedLevel)
-      );
-
-      return new Sum(components);
-    }
   }
 
   /**

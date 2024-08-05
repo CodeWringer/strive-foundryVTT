@@ -34,7 +34,7 @@ export default class DynamicInputDialogViewModel extends ViewModel {
   constructor(args = {}) {
     super(args);
 
-    validateOrThrow(args, ["inputDefinitions"]);
+    validateOrThrow(args, ["inputDefinitions", "ui"]);
 
     this.inputDefinitions = args.inputDefinitions;
     this.ui = args.ui;

@@ -109,7 +109,7 @@ export class GameSystemItemSheet extends ItemSheet {
    * @type {String}
    * @readonly
    */
-  get title() { return `${this.subType.title} - ${this.item.name}` }
+  get title() { return this.subType.getTitle(this.item); }
 
   /**
    * @type {ViewModel}

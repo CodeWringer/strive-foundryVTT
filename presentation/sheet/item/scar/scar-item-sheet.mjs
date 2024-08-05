@@ -6,7 +6,7 @@ export default class ScarItemSheet extends GameSystemBaseItemSheet {
   get template() { return ScarItemSheetViewModel.TEMPLATE; }
 
   /** @override */
-  get title() { return game.i18n.localize("system.character.health.scar.singular"); }
+  get localizedType() { return game.i18n.localize("system.character.health.scar.singular"); }
 
   /** @override */
   _getViewModel(context, document, sheet) {

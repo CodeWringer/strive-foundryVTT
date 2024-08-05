@@ -34,6 +34,11 @@ cssClass: {undefined | String}
         <th class="attribute-column-progress">
           {{localize "system.character.advancement.requirements.progress.abbreviation"}}
         </th>
+        <th class="attribute-column-progress">
+          <div class="flex flex-center">
+            <i class="fas fa-dumbbell" title="{{localize "system.character.advancement.advanced"}}"></i>
+          </div>
+        </th>
       {{/if}}
     </tr>
     {{#each viewModel.attributeViewModels as |vm index|}}
@@ -62,6 +67,9 @@ cssClass: {undefined | String}
         </td>
         <td class="attribute-column-progress">
           {{> inputNumberSpinner viewModel=vm.vmNsProgress }}
+        </td>
+        <td class="attribute-column-progress">
+          {{> buttonCheckbox viewModel=vm.vmAdvanced }}
         </td>
       {{/if}}
     </tr>

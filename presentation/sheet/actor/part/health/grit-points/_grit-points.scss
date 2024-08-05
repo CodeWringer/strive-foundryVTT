@@ -1,0 +1,33 @@
+a.grit-point-full {
+  span {
+    width: 70%;
+    height: 70%;
+    background-color: rgb(249 0 0 / 13%);
+  }
+  i.ico {
+    filter: brightness(0.4);
+  }
+}
+
+a.grit-point-void {
+  span {
+    width: 70%;
+    height: 70%;
+    color: $c-text-disabled;
+  }
+  i.ico {
+    filter: brightness(0.3);
+  }
+}
+
+div.combat-tracker-grit-points {
+  color: $c-text-light;
+
+  span {
+    line-height: 18px;
+  }
+
+  a.grit-point-void i.ico {
+    filter: brightness(0.1);
+  }
+}
