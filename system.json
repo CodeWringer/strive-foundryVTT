@@ -2,7 +2,7 @@
   "id": "strive",
   "title": "STRIVE",
   "description": "The STRIVE system for FoundryVTT",
-  "version": "1.6.3",
+  "version": "1.6.4",
   "compatibility": {
     "minimum": 11,
     "maximum": 11,
@@ -44,63 +44,9 @@
       "type": "Item"
     },
     {
-      "name": "injuries-acid",
-      "label": "Injuries (Acid)",
-      "path": "packs/injuries-acid",
-      "type": "Item"
-    },
-    {
-      "name": "injuries-bleeding",
-      "label": "Injuries (Bleeding)",
-      "path": "packs/injuries-bleeding",
-      "type": "Item"
-    },
-    {
-      "name": "injuries-bludgeoning",
-      "label": "Injuries (Bludgeoning)",
-      "path": "packs/injuries-bludgeoning",
-      "type": "Item"
-    },
-    {
-      "name": "injuries-burning",
-      "label": "Injuries (Burning)",
-      "path": "packs/injuries-burning",
-      "type": "Item"
-    },
-    {
-      "name": "injuries-crushing",
-      "label": "Injuries (Crushing)",
-      "path": "packs/injuries-crushing",
-      "type": "Item"
-    },
-    {
-      "name": "injuries-electrical",
-      "label": "Injuries (Electrical)",
-      "path": "packs/injuries-electrical",
-      "type": "Item"
-    },
-    {
-      "name": "injuries-freezing",
-      "label": "Injuries (Freezing)",
-      "path": "packs/injuries-freezing",
-      "type": "Item"
-    },
-    {
-      "name": "injuries-piercing",
-      "label": "Injuries (Piercing)",
-      "path": "packs/injuries-piercing",
-      "type": "Item"
-    },
-    {
-      "name": "injuries-poison",
-      "label": "Injuries (Poison)",
-      "path": "packs/injuries-poison",
-      "type": "Item"
-    },
-    {
-      "name": "injuries-slashing",
-      "label": "Injuries (Slashing)",
-      "path": "packs/injuries-slashing",
+      "name": "injuries",
+      "label": "Injuries",
+      "path": "packs/injuries",
       "type": "Item"
     },
     {
@@ -126,6 +72,23 @@
       "label": "RollTables",
       "path": "packs/rolltables",
       "type": "RollTable"
+    }
+  ],
+  "packFolders": [
+    {
+      "name": "STRIVE",
+      "sorting": "m",
+      "packs": [
+        "assets",
+        "fantasyassets",
+        "fatecards",
+        "illnesses",
+        "injuries",
+        "skills",
+        "mutations",
+        "scars",
+        "rolltables"
+      ]
     }
   ],
   "languages": [

@@ -88,6 +88,8 @@ import { preloadPixiTextures } from "./presentation/pixi/pixi-preloader.mjs";
 import CustomCombatTracker from "./presentation/combat/custom-combat-tracker.mjs";
 import { KEYBOARD } from "./presentation/keyboard/keyboard.mjs";
 import VersionCode from "./business/migration/version-code.mjs";
+import DicePoolDesignerDialog from "./presentation/dialog/dice-pool-designer-dialog/dice-pool-designer-dialog.mjs";
+import { activateRollChatMessageListeners } from "./presentation/dice/roll-chat-message.mjs";
 
 /* -------------------------------------------- */
 /*  Initialization                              */
@@ -230,6 +232,8 @@ Hooks.once("ready", function() {
       
       new MigratorDialog().render(true);
     };
+
+    window.DicePoolDesignerDialog = DicePoolDesignerDialog;
   }
 });
 
@@ -244,6 +248,8 @@ Hooks.on("renderChatMessage", async function(message, html, data) {
   // The chat message may just be a normal chat message, without any associated document. 
   // In such a case it is safe to skip any further operations, here. 
   if (element === undefined || element === null) return;
+
+  activateRollChatMessageListeners(element);
 
   // Get data set of element. This assumes the element in question to have the following data defined:
   // 'data-view-model-id' and 'data-document-id'

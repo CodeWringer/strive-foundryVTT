@@ -1,7 +1,6 @@
-import { ROLL_TYPES } from "../../../../../business/dice/roll-types.mjs";
 import TransientBaseCharacterActor from "../../../../../business/document/actor/transient-base-character-actor.mjs";
 import ChallengeRating from "../../../../../business/ruleset/attribute/challenge-rating.mjs";
-import { Sum, SumComponent } from "../../../../../business/ruleset/summed-data.mjs";
+import Ruleset from "../../../../../business/ruleset/ruleset.mjs";
 import { validateOrThrow } from "../../../../../business/util/validation-utility.mjs";
 import ButtonRollViewModel from "../../../../component/button-roll/button-roll-viewmodel.mjs";
 import InputNumberSpinnerViewModel from "../../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
@@ -64,7 +63,7 @@ export default class ChallengeRatingViewModel extends ViewModel {
       id: "vmRoll",
       parent: this,
       target: this,
-      rollType: ROLL_TYPES.dicePool.name,
+      rollSchema: new Ruleset().getAttributeRollSchema(),
       localizedToolTip: game.i18n.localize("system.roll.doRoll"),
       primaryChatTitle: this.localizedLabel,
       primaryChatImage: (this.actor ?? {}).img,
@@ -104,16 +103,5 @@ export default class ChallengeRatingViewModel extends ViewModel {
     html.find(`#${this.id}-header`).click(() => {
       this.onClicked();
     });
-  }
-  
-  /**
-   * Returns the component(s) to do a roll using this challenge rating. 
-   * 
-   * @returns {Sum}
-   */
-  getRollData() {
-    return new Sum([
-      new SumComponent(this.id, this.localizedLabel, this.challengeRating.modified)
-    ]);
   }
 }

@@ -1,7 +1,7 @@
 import AtReferencer from "../referencing/at-referencer.mjs";
 import Ruleset from "../ruleset/ruleset.mjs";
 import { isDefined, validateOrThrow } from "../util/validation-utility.mjs";
-import { CSS_CLASS_NEGATIVE, CSS_CLASS_POSITIVE } from "./dice-pool.mjs";
+import { DICE_CONSTANTS } from "./dice-constants.mjs";
 
 /**
  * Provides a means to fully resolve roll formulae. 
@@ -104,9 +104,9 @@ export default class RollFormulaResolver {
     const resolvedFormula = this.resolve();
     const evaluated = await new Roll(resolvedFormula).evaluate();
 
-    // Determine new terms wherein d6 groups are replaced with positive counts. 
+    // Determine new terms wherein d6 groups are replaced with hit counts. 
     const terms = [];
-    const positiveEvaluationTerms = [];
+    const hitEvaluationTerms = [];
     for (const term of evaluated.terms) {
       if (isDefined(term.faces) && term.faces == 6) {
         const d6Group = new D6Group({
@@ -114,21 +114,21 @@ export default class RollFormulaResolver {
           total: term.total,
         });
         terms.push(d6Group);
-        positiveEvaluationTerms.push(d6Group.positives.length);
+        hitEvaluationTerms.push(d6Group.hits.length);
       } else {
         terms.push(term.total);
-        positiveEvaluationTerms.push(term.total);
+        hitEvaluationTerms.push(term.total);
       }
     }
 
-    const positivesFormula = positiveEvaluationTerms.join("");
-    const evalutedWithPositives = await new Roll(positivesFormula).evaluate();
+    const hitsFormula = hitEvaluationTerms.join("");
+    const evalutedWithHits = await new Roll(hitsFormula).evaluate();
 
     return new EvaluatedRollFormula({
       formula: resolvedFormula,
       terms: terms,
       rawTotal: evaluated.total,
-      positiveTotal: evalutedWithPositives.total,
+      hitTotal: evalutedWithHits.total,
     });
   }
 }
@@ -138,8 +138,8 @@ export default class RollFormulaResolver {
  * 
  * @property {Array<Number>} values 
  * @property {Number} total 
- * @property {Array<Number>} positives 
- * @property {Array<Number>} negatives 
+ * @property {Array<Number>} hits 
+ * @property {Array<Number>} misses 
  */
 export class D6Group {
   /**
@@ -152,8 +152,8 @@ export class D6Group {
     this.total = args.total;
     
     const ruleset = new Ruleset();
-    this.positives = args.values.filter(it => ruleset.isPositive(it));
-    this.negatives = args.values.filter(it => ruleset.isNegative(it));
+    this.hits = args.values.filter(it => ruleset.isHit(it));
+    this.misses = args.values.filter(it => ruleset.isMiss(it));
   }
 }
 
@@ -162,19 +162,19 @@ export class EvaluatedRollFormula {
    * @param {Object} args 
    * @param {String} args.formula The formula. 
    * * E. g. `"2D6 + 3 + 4D6"`
-   * @param {String | D6Group} args.terms The expression terms, in order. 
+   * @param {Array<String | D6Group>} args.terms The expression terms, in order. 
    * @param {Number} args.rawTotal The raw total of all rolled dice, without 
-   * regard for positives or negatives. 
+   * regard for hits or misses. 
    * * E. g. `[2, 5] + 3 + [1, 6, 2, 3] = 22`
-   * @param {Number} args.positiveTotal The total when only taking the number of 
-   * positives into account. 
+   * @param {Number} args.hitTotal The total when only taking the number of 
+   * hits into account. 
    * * E. g. `[2, 5] + 3 + [1, 6, 2, 3] = 5`
    */
   constructor(args = {}) {
     this.formula = args.formula;
     this.terms = args.terms;
     this.rawTotal = args.rawTotal;
-    this.positiveTotal = args.positiveTotal;
+    this.hitTotal = args.hitTotal;
   }
 
   /**
@@ -186,14 +186,14 @@ export class EvaluatedRollFormula {
     let result = '<div class="flex flex-row flex-middle flex-wrap">';
     
     for (const term of this.terms) {
-      if (isDefined(term.positives)) {
+      if (isDefined(term.hits)) {
         // It's a d6 group. 
         let diceRolls = "";
-        for (const positive of term.positives) {
-          diceRolls = `${diceRolls}<li class="roll die d6 ${CSS_CLASS_POSITIVE}">${positive}</li>`
+        for (const hit of term.hits) {
+          diceRolls = `${diceRolls}<li class="roll die d6 ${DICE_CONSTANTS.CSS_CLASS_HIT}">${hit}</li>`
         }
-        for (const negative of term.negatives) {
-          diceRolls = `${diceRolls}<li class="roll die d6 ${CSS_CLASS_NEGATIVE}">${negative}</li>`
+        for (const miss of term.misses) {
+          diceRolls = `${diceRolls}<li class="roll die d6 ${DICE_CONSTANTS.CSS_CLASS_MISS}">${miss}</li>`
         }
         result = `${result}<ol class="dice-rolls">${diceRolls}</ol>`;
 

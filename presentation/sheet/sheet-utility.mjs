@@ -14,6 +14,8 @@ export function getElementValue(element) {
     return pureElement.options[pureElement.selectedIndex].value;
   } else if (pureElement.tagName.toLowerCase() === "input" && (pureElement.type ?? "").toLowerCase() === "checkbox") {
     return pureElement.checked;
+  } else if (pureElement.tagName.toLowerCase() === "input" && (pureElement.type ?? "").toLowerCase() === "range") {
+    return parseInt(pureElement.value);
   } else {
     return pureElement.value;
   }

@@ -14,12 +14,12 @@ import InputImageViewModel from "../../component/input-image/input-image-viewmod
 import InputRichTextViewModel from "../../component/input-rich-text/input-rich-text-viewmodel.mjs"
 import InputTextFieldViewModel from "../../component/input-textfield/input-textfield-viewmodel.mjs"
 import ButtonSendToChatViewModel from "../../component/button-send-to-chat/button-send-to-chat-viewmodel.mjs"
-import ButtonContextMenuViewModel from "../../component/button-context-menu/button-context-menu-viewmodel.mjs"
 import ButtonViewModel from "../../component/button/button-viewmodel.mjs"
 import DynamicInputDialog from "../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs"
 import DynamicInputDefinition from "../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs"
 import { DYNAMIC_INPUT_TYPES } from "../../dialog/dynamic-input-dialog/dynamic-input-types.mjs"
 import { ACTOR_TYPES } from "../../../business/document/actor/actor-types.mjs"
+import TransientBaseActor from "../../../business/document/actor/transient-base-actor.mjs"
 
 /**
  * @extends BaseSheetViewModel
@@ -104,7 +104,7 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
    * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document. 
    * @param {String | undefined} args.contextTemplate Optional. Name or path of a contextual template, 
    * which will be displayed in exception log entries, to aid debugging. 
-   * @param {TransientBaseactor} args.document The represented transient document instance. 
+   * @param {TransientBaseActor} args.document The represented transient document instance. 
    * @param {ActorSheet} args.sheet The parent sheet instance. 
    */
   constructor(args = {}) {
@@ -143,6 +143,7 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
           const inputAllowRefillActionPoints = "inputAllowRefillActionPoints";
           const inputEnablePersonality = "inputEnablePersonality";
           const inputEnableProgression = "inputEnableProgression";
+          const inputEnableGritPoints = "inputEnableGritPoints";
 
           const inputDefinitions = [
             new DynamicInputDefinition({
@@ -188,6 +189,14 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
                 defaultValue: this.document.progressionVisible,
               })
             );
+            inputDefinitions.push(
+              new DynamicInputDefinition({
+                type: DYNAMIC_INPUT_TYPES.TOGGLE,
+                name: inputEnableGritPoints,
+                localizedLabel: game.i18n.localize("system.character.gritPoint.toggleLabel"),
+                defaultValue: this.document.allowGritPoints,
+              })
+            );
           }
           const dialog = await new DynamicInputDialog({
             localizedTitle: game.i18n.localize("system.character.edit"),
@@ -203,6 +212,7 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
           if (this.isNPC) {
             this.document.personalityVisible = dialog[inputEnablePersonality] == true;
             this.document.progressionVisible = dialog[inputEnableProgression] == true;
+            this.document.allowGritPoints = dialog[inputEnableGritPoints] == true;
           }
         },
       });

@@ -6,7 +6,7 @@ export default class InjuryItemSheet extends GameSystemBaseItemSheet {
   get template() { return InjuryItemSheetViewModel.TEMPLATE; }
 
   /** @override */
-  get title() { return game.i18n.localize("system.character.health.injury.singular"); }
+  get localizedType() { return game.i18n.localize("system.character.health.injury.singular"); }
 
   /** @override */
   _getViewModel(context, document, sheet) {

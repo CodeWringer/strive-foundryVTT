@@ -7,79 +7,86 @@ cssClass: {undefined | String}
   <div class="auto-margin-v-md">
     {{#> header1 showFancyFont=viewModel.showFancyFont}}{{localize "system.character.health.healthStats"}}{{/header1}}
     <div class="flex flex-column auto-margin-v-md">
-      {{!-- Death Warning --}}
-      <div class="hint-card error flex font-size-lg{{#if viewModel.isDeathNear}}{{else}} hidden{{/if}}">
-        <div class="flex flex-center">
-          <i class="fas fa-skull"></i>
-        </div>
-        <div class="flex-grow flex flex-center">
-          <span>{{localize "system.rules.hintDeathIsNear"}}</span>
-        </div>
-        <div class="flex flex-center">
-          <i class="fas fa-skull"></i>
-        </div>
-      </div>
-      {{!-- Row 1 --}}
+      {{!-- Row --}}
       <div class="grid-3col grid-gap-md">
-        {{!-- Col 1 --}}
+        {{!-- HP --}}
         <div class="sheet-block">
-          <div class="flex flex-row">
-            <div class="flex-grow">
-              {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "system.character.health.hp.maximum"}}{{/label}}
-            </div>
+          {{!-- Max HP --}}
+          <div class="flex flex-row flex-middle flex-right">
+            {{#> labeledControl viewModel=viewModel.vmMaxHp localizedIconToolTip=(localize "system.character.health.hp.maximum") iconClass="ico-heart-limit-solid" cssClass="width-lg" }}
+              {{> inputNumberSpinner }}
+            {{/labeledControl}}
+            {{#> labeledControl viewModel=viewModel.vmMaxHpModifier localizedIconToolTip=(localize "system.general.modifier.label") iconClass="ico-modifier-solid" cssClass="width-lg" }}
+              {{> inputNumberSpinner }}
+            {{/labeledControl}}
+            <span class="pad-md font-bold">=</span>
             <span class="width-md">
-              {{#> readOnlyValue}}{{viewModel.maxHP}}{{/readOnlyValue}}
+              {{#> readOnlyValue}}{{viewModel.modifiedMaxHp}}{{/readOnlyValue}}
             </span>
           </div>
-          <div class="flex flex-row">
-            <div class="flex-grow">
-              {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "system.character.health.hp.abbreviation"}}{{/label}}
-            </div>
-            <span class="width-md">
-              {{> inputNumberSpinner viewModel=viewModel.vmNsHp }}
-            </span>
+          {{!-- Current HP --}}
+          <div class="flex flex-row flex-middle flex-right">
+            {{#> labeledControl viewModel=viewModel.vmHp localizedIconToolTip=(localize "system.character.health.hp.label") iconClass="ico-heart-solid" cssClass="width-xl" }}
+              {{> inputNumberSpinner }}
+            {{/labeledControl}}
           </div>
         </div>
-        {{!-- Col 2 --}}
+        {{!-- Exhaustion --}}
         <div class="sheet-block">
-          <div class="flex flex-row">
-            <div class="flex-grow">
-              {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "system.character.health.exhaustion.maximum"}}{{/label}}
-            </div>
+          {{!-- Max Exhaustion --}}
+          <div class="flex flex-row flex-middle flex-right">
+            {{#> labeledControl viewModel=viewModel.vmMaxExhaustion localizedIconToolTip=(localize "system.character.health.exhaustion.maximum") iconClass="ico-lung-limit-solid" cssClass="width-lg" }}
+              {{> inputNumberSpinner }}
+            {{/labeledControl}}
+            {{#> labeledControl viewModel=viewModel.vmMaxExhaustionModifier localizedIconToolTip=(localize "system.general.modifier.label") iconClass="ico-modifier-solid" cssClass="width-lg" }}
+              {{> inputNumberSpinner }}
+            {{/labeledControl}}
+            <span class="pad-md font-bold">=</span>
             <span class="width-md">
-              {{#> readOnlyValue}}{{viewModel.maxExhaustion}}{{/readOnlyValue}}
+              {{#> readOnlyValue}}{{viewModel.modifiedMaxExhaustion}}{{/readOnlyValue}}
             </span>
           </div>
-          <div class="flex flex-row">
-            <div class="flex-grow">
-              {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "system.character.health.exhaustion.label"}}{{/label}}
-            </div>
-            <span class="width-md">
-              {{> inputNumberSpinner viewModel=viewModel.vmNsExhaustion }}
-            </span>
+          {{!-- Current Exhaustion --}}
+          <div class="flex flex-row flex-middle flex-right">
+            {{#> labeledControl viewModel=viewModel.vmExhaustion localizedIconToolTip=(localize "system.character.health.exhaustion.label") iconClass="ico-lung-solid" cssClass="width-xl" }}
+              {{> inputNumberSpinner }}
+            {{/labeledControl}}
           </div>
         </div>
-        {{!-- Col 3 --}}
+        {{!-- Magic Stamina --}}
         <div class="sheet-block">
-          <div class="flex flex-row">
-            <div class="flex flex-row flex-grow">
-              <i id="{{viewModel.id}}-max-magic-stamina-info" class="far fa-question-circle info-button"></i>
-              {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "system.character.magic.stamina.maximum"}}{{/label}}
-            </div>
+          {{!-- Max Magic Stamina --}}
+          <div class="flex flex-row flex-middle flex-right">
+            <i id="{{viewModel.id}}-max-magic-stamina-info" class="far fa-question-circle info-button"></i>
+            {{#> labeledControl viewModel=viewModel.vmMaxMagicStamina localizedIconToolTip=(localize "system.character.magic.stamina.maximum") iconClass="ico-brain-limit-solid" cssClass="width-lg" }}
+              {{> inputNumberSpinner }}
+            {{/labeledControl}}
+            {{#> labeledControl viewModel=viewModel.vmMaxMagicStaminaModifier localizedIconToolTip=(localize "system.general.modifier.label") iconClass="ico-modifier-solid" cssClass="width-lg" }}
+              {{> inputNumberSpinner }}
+            {{/labeledControl}}
+            <span class="pad-md font-bold">=</span>
             <span class="width-md">
-              {{#> readOnlyValue}}{{viewModel.maxMagicStamina}}{{/readOnlyValue}}
+              {{#> readOnlyValue}}{{viewModel.modifiedMaxMagicStamina}}{{/readOnlyValue}}
             </span>
           </div>
-          <div class="flex flex-row">
-            <div class="flex-grow">
-              {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "system.character.magic.stamina.label"}}{{/label}}
-            </div>
-            <span class="width-md">
-              {{> inputNumberSpinner viewModel=viewModel.vmNsMagicStamina }}
-            </span>
+          {{!-- Current Magic Stamina --}}
+          <div class="flex flex-row flex-middle flex-right">
+            {{#> labeledControl viewModel=viewModel.vmMagicStamina localizedIconToolTip=(localize "system.character.magic.stamina.label") iconClass="ico-brain-solid" cssClass="width-xl" }}
+              {{> inputNumberSpinner }}
+            {{/labeledControl}}
           </div>
         </div>
       </div>
+      {{!-- Death's Door --}}
+      {{#if viewModel.isPC}}
+      {{#with viewModel.deathsDoorTemplate as | template |}}
+        {{> (template) viewModel=../viewModel.vmDeathsDoor}}
+      {{/with}}
+      {{/if}}
+      {{!-- Grit Points --}}
+      {{#with viewModel.gritPointsTemplate as | template |}}
+        {{> (template) viewModel=../viewModel.vmGritPoints}}
+      {{/with}}
       {{!-- Conditions (formerly health states) --}}
       {{#with viewModel.healthStatesTemplate as | template |}}
         {{> (template) viewModel=../viewModel.vmHealthStates}}
@@ -96,12 +103,19 @@ cssClass: {undefined | String}
     {{/header1}}
     <div class="grid-2col grid-gap-md">
       <div class="sheet-block">
-        <div class="flex flex-row">
+        <div class="flex flex-row flex-middle flex-right">
           <div class="flex-grow">
             {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "system.character.health.injury.maximum"}}{{/label}}
           </div>
           <span class="width-md">
-            {{#> readOnlyValue}}{{viewModel.maxInjuryCount}}{{/readOnlyValue}}
+            {{#> readOnlyValue}}{{viewModel.maxInjuries}}{{/readOnlyValue}}
+          </span>
+          {{#> labeledControl viewModel=viewModel.vmMaxInjuriesModifier localizedIconToolTip=(localize "system.general.modifier.label") iconClass="ico-modifier-solid" cssClass="width-xl" }}
+            {{> inputNumberSpinner }}
+          {{/labeledControl}}
+          <span class="pad-md font-bold">=</span>
+          <span class="width-md">
+            {{#> readOnlyValue}}{{viewModel.modifiedMaxInjuries}}{{/readOnlyValue}}
           </span>
         </div>
       </div>
@@ -114,27 +128,6 @@ cssClass: {undefined | String}
             {{#> readOnlyValue}}{{viewModel.injuryCount}}{{/readOnlyValue}}
           </span>
         </div>
-      </div>
-    </div>
-    {{!-- Death Warning --}}
-    <div class="hint-card error flex font-size-lg{{#if viewModel.isDeathNear}}{{else}} hidden{{/if}}">
-      <div class="flex flex-center">
-        <i class="fas fa-skull"></i>
-      </div>
-      <div class="flex-grow flex flex-center">
-        <span>{{localize "system.rules.hintDeathIsNear"}}</span>
-      </div>
-      <div class="flex flex-center">
-        <i class="fas fa-skull"></i>
-      </div>
-    </div>
-    {{!-- Toughness Test Warning --}}
-    <div class="hint-card warn flex{{#if viewModel.isToughnessTestRequired}}{{else}} hidden{{/if}}">
-      <div class="flex flex-center hint-card-icon">
-        <i class="fas fa-exclamation"></i>
-      </div>
-      <div class="flex-grow">
-        <span>{{localize "system.rules.hintToughnessTestRequired"}}</span>
       </div>
     </div>
     {{> sortableList viewModel=viewModel.vmInjuryList prominentItemStyling=true }}

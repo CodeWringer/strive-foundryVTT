@@ -1,6 +1,8 @@
 import { ACTOR_TYPES } from "../../../../../business/document/actor/actor-types.mjs";
 import CharacterAttribute from "../../../../../business/ruleset/attribute/character-attribute.mjs";
+import Ruleset from "../../../../../business/ruleset/ruleset.mjs";
 import { validateOrThrow } from "../../../../../business/util/validation-utility.mjs";
+import ButtonCheckBoxViewModel from "../../../../component/button-checkbox/button-checkbox-viewmodel.mjs";
 import ButtonRollViewModel from "../../../../component/button-roll/button-roll-viewmodel.mjs";
 import InputNumberSpinnerViewModel from "../../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
 import { TEMPLATES } from "../../../../templatePreloader.mjs";
@@ -112,9 +114,9 @@ export default class AttributeTableViewModel extends ViewModel {
           parent: this,
           id: `vmBtnRoll-${attribute.name}`,
           target: attribute,
+          rollSchema: new Ruleset().getAttributeRollSchema(),
           propertyPath: undefined,
           primaryChatTitle: game.i18n.localize(attribute.localizableName),
-          rollType: "dice-pool",
           actor: this.document,
         }),
         vmNsLevel: new InputNumberSpinnerViewModel({
@@ -142,6 +144,14 @@ export default class AttributeTableViewModel extends ViewModel {
             attribute.advancementProgress = newValue;
           },
           min: 0,
+        }),
+        vmAdvanced: this.showAdvancementProgression !== true ? undefined : new ButtonCheckBoxViewModel({
+          parent: this,
+          id: `vmAdvanced-${attribute.name}`,
+          value: attribute.advanced,
+          onChange: (_, newValue) => {
+            attribute.advanced = newValue;
+          },
         }),
       });
     }

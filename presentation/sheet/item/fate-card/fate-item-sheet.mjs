@@ -6,7 +6,7 @@ export default class FateItemSheet extends GameSystemBaseItemSheet {
   get template() { return FateCardItemSheetViewModel.TEMPLATE; }
 
   /** @override */
-  get title() { return game.i18n.localize("system.character.driverSystem.fateSystem.fateCard.label"); }
+  get localizedType() { return game.i18n.localize("system.character.driverSystem.fateSystem.fateCard.label"); }
 
   /** @override */
   _getViewModel(context, document, sheet) {

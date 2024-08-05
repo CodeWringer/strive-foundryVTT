@@ -6,7 +6,7 @@ export default class IllnessItemSheet extends GameSystemBaseItemSheet {
   get template() { return IllnessItemSheetViewModel.TEMPLATE; }
 
   /** @override */
-  get title() { return game.i18n.localize("system.character.health.illness.singular"); }
+  get localizedType() { return game.i18n.localize("system.character.health.illness.singular"); }
 
   /** @override */
   _getViewModel(context, document, sheet) {

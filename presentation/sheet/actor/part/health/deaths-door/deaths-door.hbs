@@ -1,0 +1,19 @@
+{{!--
+viewModel: DeathsDoorViewModel
+--}}
+<div class="hint-card error flex flex-column font-size-default{{#if viewModel.isDeathNear}}{{else}} hidden{{/if}}">
+  <div class="flex-grow flex flex-center">
+    <span>{{localize "system.rules.hintDeathsDoor"}}</span>
+  </div>
+  <div class="flex flex-row flex-center font-size-xl auto-margin-h-xl">
+    {{#each viewModel.deathSaves as |deathSave|}}
+    <a id="{{deathSave.id}}" class="flex flex-center">
+      {{#if deathSave.value}}
+      <i class="fas fa-skull"></i>
+      {{else}}
+      <i class="fa-regular fa-skull"></i>
+      {{/if}}
+    </a>
+    {{/each}}
+  </div>
+</div>

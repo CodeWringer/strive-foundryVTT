@@ -1,0 +1,78 @@
+{{!-- Required context:
+viewModel: DicePoolDesignerDialogViewModel
+--}}
+<section id="{{viewModel.id}}">
+  {{!-- Row --}}
+  <div class="grid-3col grid-gap-md">
+    {{!-- Hit Threshold --}}
+    <div class="flex flex-row flex-middle sheet-block">
+      <span>Hit Threshold</span>
+      {{> inputSlider viewModel=viewModel.vmHitThresholdSlider cssClass="flex-grow pad-md"}}
+      <span class="width-md">
+        {{> inputNumberSpinner viewModel=viewModel.vmHitThreshold cssClass=""}}
+      </span>
+    </div>
+    {{!-- Dice Limit --}}
+    <div class="flex flex-row flex-middle sheet-block">
+      <span>Dice Limit</span>
+      {{> inputSlider viewModel=viewModel.vmDiceLimitSlider cssClass="flex-grow pad-md"}}
+      <span class="width-md">
+        {{> inputNumberSpinner viewModel=viewModel.vmDiceLimit cssClass=""}}
+      </span>
+    </div>
+    {{!-- Ob Limit --}}
+    <div class="flex flex-row flex-middle sheet-block">
+      <span>Ob Limit</span>
+      {{> inputSlider viewModel=viewModel.vmObLimitSlider cssClass="flex-grow pad-md"}}
+      <span class="width-md">
+        {{> inputNumberSpinner viewModel=viewModel.vmObLimit cssClass=""}}
+      </span>
+    </div>
+  </div>
+  {{!-- Row --}}
+  <div class="grid-3col grid-gap-md">
+    {{!-- Faces Per Die --}}
+    <div class="flex flex-row flex-middle sheet-block">
+      <span>Faces Per Die</span>
+      {{> inputSlider viewModel=viewModel.vmFacesSlider cssClass="flex-grow pad-md"}}
+      <span class="width-md">
+        {{> inputNumberSpinner viewModel=viewModel.vmFaces cssClass=""}}
+      </span>
+    </div>
+    {{!-- Modifier --}}
+    <div class="flex flex-row flex-middle sheet-block">
+      <span>Modifier</span>
+      {{> inputSlider viewModel=viewModel.vmModifierSlider cssClass="flex-grow pad-md"}}
+      <span class="width-md">
+        {{> inputNumberSpinner viewModel=viewModel.vmModifier cssClass=""}}
+      </span>
+    </div>
+    {{!-- Sample Size --}}
+    <div class="flex flex-row flex-middle sheet-block">
+      <span>Sample Size</span>
+      {{> inputSlider viewModel=viewModel.vmSampleSizeSlider cssClass="flex-grow pad-md"}}
+      <span class="width-xxl">
+        {{> inputNumberSpinner viewModel=viewModel.vmSampleSize cssClass=""}}
+      </span>
+    </div>
+  </div>
+  {{!-- Row --}}
+  <div class="grid-3col grid-gap-md">
+    {{!-- Compensation Points --}}
+    <div class="flex flex-row flex-middle sheet-block">
+      <span>Compensation Points</span>
+      {{> inputSlider viewModel=viewModel.vmCompensationPointsSlider cssClass="flex-grow pad-md"}}
+      <span class="width-md">
+        {{> inputNumberSpinner viewModel=viewModel.vmCompensationPoints cssClass=""}}
+      </span>
+    </div>
+    {{!--  --}}
+    <div class="flex flex-row flex-middle sheet-block">
+    </div>
+    {{!--  --}}
+    <div class="flex flex-row flex-middle sheet-block">
+    </div>
+  </div>
+  {{!-- Row --}}
+  <div id="predictions-table" class="flex flex-column alternating-rows sheet-block"></div>
+</section>

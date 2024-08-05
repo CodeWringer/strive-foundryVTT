@@ -2,11 +2,15 @@ import LevelAdvancement from "./level-advancement.mjs";
 import { SumComponent } from "./summed-data.mjs";
 import { SkillTier, SKILL_TIERS } from "./skill/skill-tier.mjs";
 import { ATTRIBUTE_TIERS, AttributeTier } from "./attribute/attribute-tier.mjs";
-import { DICE_POOL_RESULT_TYPES, DicePoolRollResult } from "../dice/dice-pool.mjs";
 import { ATTRIBUTES, Attribute } from "./attribute/attributes.mjs";
 import TransientSkill from "../document/item/skill/transient-skill.mjs";
 import { ACTOR_TYPES } from "../document/actor/actor-types.mjs";
 import { ITEM_TYPES } from "../document/item/item-types.mjs";
+import { SkillRollSchema } from "../dice/ability-roll/skill-roll-schema.mjs";
+import { AllSumSkillRollSchema } from "../dice/ability-roll/all-sum-skill-roll-schema.mjs";
+import { RollSchema } from "../dice/roll-schema.mjs";
+import { AttributeRollSchema } from "../dice/ability-roll/attribute-roll-schema.mjs";
+import { AttributeAndSkillRollSchema } from "../dice/ability-roll/attribute-and-skill-roll-schema/attribute-and-skill-roll-schema.mjs";
 
 /**
  * Provides all the ruleset-specifics. 
@@ -85,11 +89,11 @@ export default class Ruleset {
       successes = 6;
       failures = 9;
     } else if (tier.name === SKILL_TIERS.apprentice.name) {
-      successes = level + 1;
-      failures = (level * 2) + 1;
+      successes = level + 3;
+      failures = (level * 2) + 4;
     } else if (tier.name === SKILL_TIERS.master.name) {
-      successes = level + 2;
-      failures = (level * 2) + 2;
+      successes = level + 4;
+      failures = (level * 2) + 5;
     } else {
       throw new Error(`Unrecognized skill tier ${tier.name}`);
     }
@@ -101,15 +105,15 @@ export default class Ruleset {
   }
 
   /**
-   * Returns true, if the given face/number represents a positive (= success).
+   * Returns true, if the given face/number represents a hit.
    * 
-   * @param {String | Number} face A die face to check whether it represents a positive (= success).
+   * @param {String | Number} face A die face to check whether it represents a hit.
    * 
    * @returns {Boolean}
    * 
    * @throws {Error} Thrown, if the given face is outside the valid range of 0 (inclusive) to 6 (inclusive).
    */
-  isPositive(face) {
+  isHit(face) {
     const int = parseInt(face);
 
     if (int < 0 || int > 6) throw new Error("Die face count out of range [0-6]");
@@ -118,35 +122,20 @@ export default class Ruleset {
   }
 
   /**
-   * Returns true, if the given face/number represents a negative (= failure).
+   * Returns true, if the given face/number represents a miss.
    * 
-   * @param {String | Number} face A die face to check whether it represents a negative (= failure).
+   * @param {String | Number} face A die face to check whether it represents a miss.
    * 
    * @returns {Boolean}
    * 
    * @throws {Error} Thrown, if the given face is outside the valid range of 0 (inclusive) to 6 (inclusive).
    */
-  isNegative(face) {
+  isMiss(face) {
     const int = parseInt(face);
 
     if (int < 0 || int > 6) throw new Error("Die face count out of range [0-6]");
 
     return int < 5;
-  }
-
-  /**
-   * Returns true, if the given dice pool roll result should result in a spell-backfire. 
-   * 
-   * @param {DicePoolRollResult} rollResult 
-   * 
-   * @returns {Boolean}
-   */
-  rollCausesBackfire(rollResult) {
-    if (rollResult.outcomeType.name === DICE_POOL_RESULT_TYPES.FAILURE.name) {
-      return true;
-    } else {
-      return false;
-    }
   }
 
   /**
@@ -168,7 +157,8 @@ export default class Ruleset {
     const injuryCount = (actor.items.filter(it => it.type === ITEM_TYPES.INJURY)).length;
     const level = this.getEffectiveAttributeRawLevel(ATTRIBUTES.toughness, actor);
 
-    return (parseInt(level) * 4) - (injuryCount * 2);
+    const base = 10;
+    return Math.max(base, base + (parseInt(level) * 10) - (injuryCount * 10));
   }
 
   /**
@@ -188,11 +178,12 @@ export default class Ruleset {
 
     const level = this.getEffectiveAttributeRawLevel(ATTRIBUTES.toughness, actor);
 
-    return Math.max(parseInt(level), 1);
+    const base = 1;
+    return Math.max(base, Math.floor(base + parseInt(level) / 2.0));
   }
 
   /**
-   * Returns the maximum exhaustion threshold of the given actor. 
+   * Returns the exhaustion limit of the given actor. 
    * 
    * @param {Actor} actor 
    * 
@@ -253,7 +244,7 @@ export default class Ruleset {
    * 
    * @param {Actor} actor 
    * 
-   * @returns {Number} The maximum magic stamina of the given actor. 
+   * @returns {Object} The maximum magic stamina of the given actor. 
    * 
    * @throws {Error} Thrown, if the given actor is not of type `"pc"` or `"npc"`. 
    */
@@ -293,28 +284,6 @@ export default class Ruleset {
     return 5;
   }
 
-  /**
-   * Returns true, if the given actor must do toughness tests, whenever they suffer an injury. 
-   * 
-   * @param {Actor} actor 
-   * 
-   * @returns {Boolean} True, if any further injury requires a toughness test. 
-   * 
-   * @throws {Error} Thrown, if the given actor is not of type `"pc"` or `"npc"`. 
-   */
-  isToughnessTestRequired(actor) {
-    const type = actor.type.toLowerCase();
-    if (type !== ACTOR_TYPES.PC && type !== ACTOR_TYPES.NPC) throw new Error("Only PC and NPC type actors allowed");
-
-    const maxInjuries = this.getCharacterMaximumInjuries(actor);
-    const injuryCount = (actor.items.filter(it => it.type === ITEM_TYPES.INJURY)).length;
-    if (injuryCount > 0 && injuryCount >= Math.floor(maxInjuries / 2)) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-  
   /**
    * Returns the effective raw level of the given actor for the given 
    * attribute. 
@@ -402,5 +371,23 @@ export default class Ruleset {
       const transientSkill = skill.getTransientObject();
       return transientSkill.modifiedLevel;
     }
+  }
+
+  /**
+   * Returns the default skill roll schema. 
+   * 
+   * @returns {SkillRollSchema}
+   */
+  getSkillRollSchema() {
+    return new AttributeAndSkillRollSchema(); 
+  }
+
+  /**
+   * Returns the default skill roll schema. 
+   * 
+   * @returns {RollSchema}
+   */
+  getAttributeRollSchema() {
+    return new AttributeRollSchema();
   }
 }

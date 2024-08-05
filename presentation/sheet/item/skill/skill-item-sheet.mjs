@@ -6,7 +6,10 @@ export default class SkillItemSheet extends GameSystemBaseItemSheet {
   get template() { return SkillItemSheetViewModel.TEMPLATE; }
 
   /** @override */
-  get title() { return game.i18n.localize("system.character.skill.singular"); }
+  get localizedType() { return game.i18n.localize("system.character.skill.singular"); }
+
+  /** @override */
+  getTitle(item) { return item.getTransientObject().nameForDisplay; }
 
   /** @override */
   _getViewModel(context, document, sheet) {

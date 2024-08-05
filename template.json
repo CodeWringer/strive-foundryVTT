@@ -19,6 +19,8 @@
         "properties": []
       },
       "character": {
+        "allowAutomaticActionPointRefill": true,
+        "allowGritPoints": false,
         "person": {
           "age": 0,
           "species": "",
@@ -72,10 +74,16 @@
         },
         "health": {
           "maxHP": 0,
+          "maxHpModifier": 0,
           "HP": 0,
           "exhaustion": 0,
+          "maxExhaustionModifier": 0,
           "magicStamina": 0,
-          "states": []
+          "maxMagicStaminaModifier": 0,
+          "maxInjuriesModifier": 0,
+          "states": [],
+          "deathSaves": 0,
+          "deathSaveLimit": 3
         },
         "assets": {
           "equipment": {

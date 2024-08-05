@@ -1,7 +1,11 @@
 {{!--
 viewModel: {CombatTrackerActionPointsViewModel}
 --}}
-<div id="{{viewModel.id}}" class="flex flex-row flex-wrap flex-gap-sm margin-b-md combatant-action-points">
+<div 
+  id="{{viewModel.id}}" 
+  class="flex flex-row flex-wrap flex-gap-sm margin-b-md sheet-block combatant-action-points"
+  data-tooltip="COMBAT.ActionPoints"
+  >
   {{#if viewModel.isEditable}}
   <a id="{{viewModel.id}}-empty-ap" class="combatant-action-point">
     <div class="combatant-action-point-image-container">

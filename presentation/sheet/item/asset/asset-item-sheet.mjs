@@ -9,7 +9,7 @@ export default class AssetItemSheet extends GameSystemBaseItemSheet {
   get template() { return AssetItemSheetViewModel.TEMPLATE;  }
   
   /** @override */
-  get title() { return game.i18n.localize("system.character.asset.singular"); }
+  get localizedType() { return game.i18n.localize("system.character.asset.singular"); }
 
   /** @override */
   _getViewModel(context, document, sheet) {

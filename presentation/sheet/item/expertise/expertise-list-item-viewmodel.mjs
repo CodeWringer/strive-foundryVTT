@@ -17,6 +17,7 @@ import ButtonDeleteViewModel from "../../../component/button-delete/button-delet
 import BaseListItemViewModel from "../base/base-list-item-viewmodel.mjs";
 import { DataFieldComponent } from "../base/datafield-component.mjs";
 import { TemplatedComponent } from "../base/templated-component.mjs";
+import Ruleset from "../../../../business/ruleset/ruleset.mjs";
 
 /**
  * @property {Expertise} document 
@@ -228,12 +229,12 @@ export default class ExpertiseListItemViewModel extends BaseListItemViewModel {
           parent: this,
           id: "vmBtnRoll",
           target: owningDocument,
+          rollSchema: new Ruleset().getSkillRollSchema(),
           propertyPath: undefined,
           primaryChatTitle: game.i18n.localize(this.document.name),
           primaryChatImage: this.document.img,
           secondaryChatTitle: game.i18n.localize(owningDocument.name),
           secondaryChatImage: owningDocument.img,
-          rollType: "dice-pool",
           actor: owningDocument.owningDocument,
         }),
         isHidden: isDefined(owningDocument.owningDocument) === false,

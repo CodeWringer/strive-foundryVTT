@@ -126,6 +126,14 @@ export default class TransientDocument {
   }
 
   /**
+   * The localized name of the document, for display in the ui. 
+   * 
+   * @type {String}
+   * @virtual
+   */
+  get nameForDisplay() { return this.document.name; }
+
+  /**
    * Returns the internal type name of the document. 
    * 
    * @type {String}
