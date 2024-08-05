@@ -129,6 +129,7 @@
     "character": {
       "edit": "Configure Character",
       "advancement": {
+        "advanced": "Advanced",
         "label": "Advancement",
         "level": "Level",
         "challengeRating": {

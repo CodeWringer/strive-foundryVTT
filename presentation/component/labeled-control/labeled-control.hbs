@@ -9,7 +9,9 @@ localizedIconToolTip: String | undefined
   {{#if (or iconClass localizedLabel)}}
   <label class="flex flex-middle {{#if localizedLabel}}margin-r-lg{{else}}margin-r-sm{{/if}} font-size-default{{#if viewModel.showFancyFont}} fancy-font{{/if}}" for="{{viewModel.id}}">
     {{#if iconClass}}
-    <i class="ico {{iconClass}} dark"{{#if localizedIconToolTip}} title="{{localizedIconToolTip}}"{{/if}}></i>
+    <span class="flex flex-center">
+      <i class="ico {{iconClass}} dark"{{#if localizedIconToolTip}} title="{{localizedIconToolTip}}"{{/if}}></i>
+    </span>
     {{/if}}
     {{#if localizedLabel}}
       {{localizedLabel}}

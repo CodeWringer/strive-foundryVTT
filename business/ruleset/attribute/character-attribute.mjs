@@ -22,6 +22,8 @@ import { ATTRIBUTES } from "./attributes.mjs";
  * * Read-only. 
  * @property {Number} owningActor The owning character actor. 
  * * Read-only. 
+ * @property {Boolean} advanced If `true`, then this attribute is considered advanced 
+ * this session. 
  */
 export default class CharacterAttribute {
   /**
@@ -78,6 +80,23 @@ export default class CharacterAttribute {
         attributes: {
           [this.name]: {
             progress: value
+          }
+        }
+      }
+    }); 
+  }
+  
+
+  /**
+   * @type {Boolean}
+   */
+  get advanced() { return this._actor.system.attributes[this.name].advanced ?? false; }
+  set advanced(value) {
+    this._actor.update({
+      system: {
+        attributes: {
+          [this.name]: {
+            advanced: value
           }
         }
       }

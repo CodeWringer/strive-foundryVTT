@@ -43,6 +43,7 @@ import { ACTOR_TYPES } from "../../actor/actor-types.mjs";
  * @property {String | undefined} obstacle 
  * @property {String | undefined} opposedBy 
  * @property {AttackType | undefined} attackType 
+ * @property {Boolean} advanced 
  */
 export default class TransientSkill extends TransientBaseItem {
   /** @override */
@@ -317,6 +318,19 @@ export default class TransientSkill extends TransientBaseItem {
     } else {
       this.updateByPath("system.attackType", null);
     }
+  }
+  
+  /**
+   * @type {Boolean}
+   */
+  get advanced() {
+    return this.document.system.advanced ?? false;
+  }
+  /**
+   * @param {Boolean} value
+   */
+  set advanced(value) {
+    this.updateByPath("system.advanced", value);
   }
 
   /**

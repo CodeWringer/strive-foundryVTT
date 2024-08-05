@@ -28,6 +28,7 @@ import { DYNAMIC_INPUT_TYPES } from "../../../dialog/dynamic-input-dialog/dynami
 import BaseAttributeListItemViewModel from "./base-attribute/base-attribute-list-item-viewmodel.mjs"
 import { ACTOR_TYPES } from "../../../../business/document/actor/actor-types.mjs"
 import Ruleset from "../../../../business/ruleset/ruleset.mjs"
+import ButtonCheckBoxViewModel from "../../../component/button-checkbox/button-checkbox-viewmodel.mjs"
 
 /**
  * @property {TransientSkill} document
@@ -235,6 +236,15 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
           this.document.advancementProgress.failures = newValue;
         },
         min: 0,
+      });
+      this.vmAdvanced = new ButtonCheckBoxViewModel({
+        parent: this,
+        id: "vmAdvanced",
+        value: this.document.advanced,
+        localizedToolTip: game.i18n.localize("system.character.advancement.advanced"),
+        onChange: (_, newValue) => {
+          this.document.advanced = newValue;
+        },
       });
     }
     this.vmDamageDefinitionList = new DamageDefinitionListViewModel({
