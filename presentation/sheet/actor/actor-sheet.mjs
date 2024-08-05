@@ -8,6 +8,7 @@ import DocumentFetcher from "../../../business/document/document-fetcher/documen
 import ViewModel from "../../view-model/view-model.mjs";
 import { ACTOR_TYPES } from "../../../business/document/actor/actor-types.mjs";
 import { ITEM_TYPES } from "../../../business/document/item/item-types.mjs";
+import FoundryWrapper from "../../../common/foundry-wrapper.mjs";
 
 export class GameSystemActorSheet extends ActorSheet {
   /**
@@ -82,7 +83,7 @@ export class GameSystemActorSheet extends ActorSheet {
    * @see https://foundryvtt.com/api/ActorSheet.html#.defaultOptions
    */
   static get defaultOptions() {
-    return mergeObject(super.defaultOptions, {
+    return new FoundryWrapper().mergeObject(super.defaultOptions, {
       classes: [SYSTEM_ID, "sheet", "actor"],
       width: 700,
       height: 800,

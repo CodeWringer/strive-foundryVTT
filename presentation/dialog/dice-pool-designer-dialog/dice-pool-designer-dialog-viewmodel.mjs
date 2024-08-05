@@ -1,4 +1,5 @@
 import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
+import FoundryWrapper from "../../../common/foundry-wrapper.mjs";
 import ObservableField from "../../../common/observables/observable-field.mjs";
 import InputNumberSpinnerViewModel from "../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
 import InputSliderViewModel from "../../component/input-slider/input-slider-viewmodel.mjs";
@@ -393,7 +394,7 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
     let totalHits = 0;
 
     for (let sample = 0; sample < args.sampleSize; sample++) {
-        const rolledDice = new Die({ faces: args.faces, number: args.numberOfDice }).evaluate().results;
+        const rolledDice = new FoundryWrapper().getDice(args.faces, args.numberOfDice).evaluate().results;
         const rolledFaces = rolledDice.map(die => parseInt(die.result));
         let hitsInRoll = 0;
 

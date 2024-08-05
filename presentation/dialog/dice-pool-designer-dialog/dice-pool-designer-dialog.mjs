@@ -1,3 +1,4 @@
+import FoundryWrapper from "../../../common/foundry-wrapper.mjs";
 import { TEMPLATES } from "../../templatePreloader.mjs";
 import DicePoolDesignerDialogViewModel from "./dice-pool-designer-dialog-viewmodel.mjs";
 
@@ -11,7 +12,7 @@ import DicePoolDesignerDialogViewModel from "./dice-pool-designer-dialog-viewmod
 export default class DicePoolDesignerDialog extends Application {
   /** @override */
   static get defaultOptions() {
-    return mergeObject(super.defaultOptions, {
+    return new FoundryWrapper().mergeObject(super.defaultOptions, {
       popOut: true,
       resizable: true,
       minimizable: true,
