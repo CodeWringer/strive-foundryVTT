@@ -107,5 +107,5 @@
   "url": "https://github.com/CodeWringer/strive-foundryVTT",
   "manifest": "https://github.com/CodeWringer/strive-foundryVTT/releases/latest/download/system.json",
   "download": "https://github.com/CodeWringer/strive-foundryVTT/releases/latest/download/system.zip",
-  "license": "LICENSE.txt"
+  "license": "LICENSE"
 }
