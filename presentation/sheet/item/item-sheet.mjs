@@ -9,6 +9,7 @@ import InjuryItemSheet from "./injury/injury-item-sheet.mjs";
 import MutationItemSheet from "./mutation/mutation-item-sheet.mjs";
 import ScarItemSheet from "./scar/scar-item-sheet.mjs";
 import SkillItemSheet from "./skill/skill-item-sheet.mjs";
+import FoundryWrapper from "../../../common/foundry-wrapper.mjs";
 
 export class GameSystemItemSheet extends ItemSheet {
   /**
@@ -86,7 +87,7 @@ export class GameSystemItemSheet extends ItemSheet {
    * @virtual
    */
   static get defaultOptions() {
-    return mergeObject(super.defaultOptions, {
+    return new FoundryWrapper().mergeObject(super.defaultOptions, {
       classes: [SYSTEM_ID, "sheet", "item"],
       width: 600,
       height: 480,

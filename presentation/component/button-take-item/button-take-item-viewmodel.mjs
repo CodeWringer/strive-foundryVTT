@@ -1,11 +1,13 @@
 import ButtonViewModel from "../button/button-viewmodel.mjs";
 import ChoiceOption from "../input-choice/choice-option.mjs";
 import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
-import SingleChoiceDialog from "../../dialog/single-choice-dialog/single-choice-dialog.mjs";
 import DocumentFetcher from "../../../business/document/document-fetcher/document-fetcher.mjs";
 import { isString } from "../../../business/util/validation-utility.mjs";
 import TransientAsset from "../../../business/document/item/transient-asset.mjs";
 import { ITEM_TYPES } from "../../../business/document/item/item-types.mjs";
+import DynamicInputDialog from "../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
+import DynamicInputDefinition from "../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
+import { DYNAMIC_INPUT_TYPES } from "../../dialog/dynamic-input-dialog/dynamic-input-types.mjs";
 
 /**
  * @property {String} chatMessage
@@ -153,23 +155,36 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
   async _promptSelectActor() {
     const choices = [];
     for (const actor of game.actors.values()) {
-      choices.push(new ChoiceOption({
-        value: actor.id,
-        localizedValue: actor.name,
-        icon: actor.img,
-      }));
+      choices.push(
+        new ChoiceOption({
+          value: actor.id,
+          localizedValue: actor.name,
+          icon: actor.img,
+        })
+      );
     }
 
-    const dialog = await new SingleChoiceDialog({
+    const nameInputActor = "nameInputActor";
+
+    const dialog = await new DynamicInputDialog({
       localizedTitle: game.i18n.localize("system.general.actor.query"),
-      localizedLabel: game.i18n.localize("system.general.actor.label"),
-      choices: choices,
+      inputDefinitions: [
+        new DynamicInputDefinition({
+          type: DYNAMIC_INPUT_TYPES.DROP_DOWN,
+          name: nameInputActor,
+          localizedLabel: game.i18n.localize("system.general.actor.label"),
+          required: true,
+          specificArgs: {
+            options: choices,
+          }
+        }),
+      ],
     }).renderAndAwait(true);
 
     if (dialog.confirmed !== true) {
       return undefined;
     } else {
-      return await game.actors.get(dialog.selected.value);
+      return await game.actors.get(dialog[nameInputActor].value);
     }
   }
 

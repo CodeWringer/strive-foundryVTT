@@ -2,6 +2,7 @@ import { SYSTEM_ID } from "../../../../system-id.mjs";
 import { TEMPLATES } from "../../../templatePreloader.mjs";
 import SetHealthStatesSettingUseCase from "../../../../business/use-case/set-health-states-setting-use-case.mjs";
 import HealthStatesSettingsDialogViewModel from "./health-states-settings-dialog-viewmodel.mjs";
+import FoundryWrapper from "../../../../common/foundry-wrapper.mjs";
 
 /**
  * Represents a dialog for customizing character health states globally. 
@@ -15,7 +16,7 @@ export default class HealthStatesSettingsDialog extends FormApplication {
    * @virtual
    */
   static get defaultOptions() {
-    return mergeObject(super.defaultOptions, {
+    return new FoundryWrapper().mergeObject(super.defaultOptions, {
       classes: [SYSTEM_ID, "sheet"],
       width: 600,
       height: 480,

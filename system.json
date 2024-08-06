@@ -5,8 +5,8 @@
   "version": "1.6.4",
   "compatibility": {
     "minimum": 11,
-    "maximum": 11,
-    "verified": 11.315
+    "maximum": 12,
+    "verified": 12.330
   },
   "authors": [
 		{
@@ -98,8 +98,10 @@
       "path": "presentation/lang/en.json"
     }
   ],
-  "gridDistance": 3,
-  "gridUnits": "ft",
+  "grid": {
+    "distance": 3,
+    "units": "ft"
+  },
   "primaryTokenAttribute": null,
   "secondaryTokenAttribute": null,
   "url": "https://github.com/CodeWringer/strive-foundryVTT",

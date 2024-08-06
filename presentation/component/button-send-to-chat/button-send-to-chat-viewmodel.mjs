@@ -1,8 +1,10 @@
 import * as ChatUtil from "../../chat/chat-utility.mjs";
 import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
-import VisibilitySingleChoiceDialog from "../../dialog/visibility-single-choice-dialog/visibility-single-choice-dialog.mjs";
 import { VISIBILITY_MODES } from "../../chat/visibility-modes.mjs";
+import DynamicInputDialog from "../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
+import DynamicInputDefinition from "../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
+import { DYNAMIC_INPUT_TYPES } from "../../dialog/dynamic-input-dialog/dynamic-input-types.mjs";
 
 /**
  * A button that allows sending a document or one of its properties to the chat. 
@@ -101,40 +103,52 @@ export default class ButtonSendToChatViewModel extends ButtonViewModel {
   async _onClick(event) {
     if (this.isEditable !== true) return;
 
-    const thiz = this;
+    const nameInputVisibility = "nameInputVisibility";
 
-    await new VisibilitySingleChoiceDialog({
-      closeCallback: (dialog) => {
-        if (dialog.confirmed !== true) return;
-        const visibilityModeChoice = dialog.visibilityMode;
-        const visibilityMode = VISIBILITY_MODES.asArray().find(it => it.name === visibilityModeChoice.value);
-        
-        if (thiz.propertyPath !== undefined) {
-          if (thiz.target.sendPropertyToChat !== undefined) {
-            thiz.target.sendPropertyToChat(thiz.propertyPath, visibilityMode);
-          } else {
-            ChatUtil.sendPropertyToChat({
-              obj: thiz.target,
-              propertyPath: thiz.propertyPath,
-              parent: thiz.target,
-              actor: thiz.actor,
-              visibilityMode: visibilityMode
-            });
+    const dialog = await new DynamicInputDialog({
+      localizedTitle: game.i18n.localize("system.roll.query"),
+      inputDefinitions: [
+        new DynamicInputDefinition({
+          type: DYNAMIC_INPUT_TYPES.DROP_DOWN,
+          name: nameInputVisibility,
+          localizedLabel: game.i18n.localize("system.general.messageVisibility.label"),
+          required: true,
+          defaultValue: VISIBILITY_MODES.asChoices().find(it => it.value === VISIBILITY_MODES.public.name),
+          specificArgs: {
+            options: VISIBILITY_MODES.asChoices(),
           }
-        } else {
-          if (thiz.target.sendToChat !== undefined) {
-            thiz.target.sendToChat(visibilityMode);
-          } else {
-            ChatUtil.sendPropertyToChat({
-              obj: thiz.target,
-              propertyPath: thiz.propertyPath,
-              parent: thiz.target,
-              actor: thiz.actor,
-              visibilityMode: visibilityMode
-            });
-          }
-        }
-      },
+        }),
+      ],
     }).renderAndAwait(true);
+    
+    if (dialog.confirmed !== true) return;
+
+    const visibilityMode = VISIBILITY_MODES.asArray().find(it => it.name === dialog[nameInputVisibility].value);
+    
+    if (this.propertyPath !== undefined) {
+      if (this.target.sendPropertyToChat !== undefined) {
+        this.target.sendPropertyToChat(this.propertyPath, visibilityMode);
+      } else {
+        ChatUtil.sendPropertyToChat({
+          obj: this.target,
+          propertyPath: this.propertyPath,
+          parent: this.target,
+          actor: this.actor,
+          visibilityMode: visibilityMode
+        });
+      }
+    } else {
+      if (this.target.sendToChat !== undefined) {
+        this.target.sendToChat(visibilityMode);
+      } else {
+        ChatUtil.sendPropertyToChat({
+          obj: this.target,
+          propertyPath: this.propertyPath,
+          parent: this.target,
+          actor: this.actor,
+          visibilityMode: visibilityMode
+        });
+      }
+    }
   }
 }

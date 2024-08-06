@@ -1,3 +1,4 @@
+import FoundryWrapper from "../../common/foundry-wrapper.mjs";
 import { Sum, SumComponent } from "../ruleset/summed-data.mjs";
 import { isDefined, validateOrThrow } from "../util/validation-utility.mjs";
 import { DICE_POOL_RESULT_TYPES } from "./dice-pool.mjs";
@@ -96,11 +97,13 @@ export default class RollData {
     // Only try to do any rolls, if there are dice to roll. 
     if (finalDiceCount > 0) {
       // Let FoundryVTT make the roll, the collect the faces and sort them in descending order. 
-      rolledFaces = new Die({ faces: this.dieFaces, number: finalDiceCount })
-      .evaluate().results
-      .map(it => it.result)
-      .sort()
-      .reverse();
+      const rolledDice = await new FoundryWrapper().getDice(this.dieFaces, finalDiceCount)
+        .evaluate();
+
+      rolledFaces = (rolledDice.results ?? rolledDice.values)
+        .map(it => it.result)
+        .sort()
+        .reverse();
     }
     
     // Analyze results. 

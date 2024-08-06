@@ -110,6 +110,8 @@ export default class TokenExtensions {
    * @static
    */
   static updateTokenCombatants() {
+    if (!isDefined(game.scenes.active)) return;
+
     for (const tokenDocument of game.scenes.active.tokens.values()) {
       TokenExtensions.updateTokenCombatant(tokenDocument.object);
     }
