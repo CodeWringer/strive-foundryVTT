@@ -98,8 +98,10 @@
       "path": "presentation/lang/en.json"
     }
   ],
-  "gridDistance": 3,
-  "gridUnits": "ft",
+  "grid": {
+    "distance": 3,
+    "units": "ft"
+  },
   "primaryTokenAttribute": null,
   "secondaryTokenAttribute": null,
   "url": "https://github.com/CodeWringer/strive-foundryVTT",
