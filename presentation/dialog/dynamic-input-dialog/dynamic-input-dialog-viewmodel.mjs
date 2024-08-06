@@ -42,6 +42,7 @@ export default class DynamicInputDialogViewModel extends ViewModel {
     this.controls = [];
     for (const definition of this.inputDefinitions) {
       // Create the underlying data field on the view model. 
+      // The value of this field _may_ be undefined! 
       this[definition.name] = definition.defaultValue;
 
       let viewModel;
@@ -159,6 +160,13 @@ export default class DynamicInputDialogViewModel extends ViewModel {
         });
       } else {
         throw new Error(`Invalid input type: "${definition.type}"`);
+      }
+
+      // Ensure the default value is properly set. 
+      // This has to happen _after_ control instantiation, because determining the default 
+      // value is the control's business. 
+      if (!isDefined(definition.defaultValue)) {
+        this[definition.name] = viewModel.value;
       }
 
       viewModel.showFancyFont = definition.showFancyFont ?? false
