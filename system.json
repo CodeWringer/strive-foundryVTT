@@ -26,12 +26,6 @@
       "type": "Item"
     },
     {
-      "name": "fantasyassets",
-      "label": "Fantasy Assets",
-      "path": "packs/fantasy-assets",
-      "type": "Item"
-    },
-    {
       "name": "fatecards",
       "label": "Fate Cards",
       "path": "packs/fate-cards",
@@ -80,7 +74,6 @@
       "sorting": "m",
       "packs": [
         "assets",
-        "fantasyassets",
         "fatecards",
         "illnesses",
         "injuries",
