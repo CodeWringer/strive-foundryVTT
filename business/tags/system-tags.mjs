@@ -101,14 +101,9 @@ ConstantsUtils.enrichConstant(ASSET_TAGS);
  * 
  * @constant
  * 
- * @property {Tag} MAGIC_SCHOOL
  * @property {Tag} INNATE
  */
 export const SKILL_TAGS = {
-  MAGIC_SCHOOL: new Tag({
-    id: "MAGIC_SCHOOL",
-    localizableName: "system.character.skill.properties.magicSchool"
-  }),
   INNATE: new Tag({
     id: "INNATE",
     localizableName: "system.character.skill.properties.innate"

@@ -17,7 +17,6 @@ import InputNumberSpinnerViewModel from "../../../component/input-number-spinner
 import InputTagsViewModel from "../../../component/input-tags/input-tags-viewmodel.mjs"
 import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs"
 import DynamicInputDialog from "../../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs"
-import { TEMPLATES } from "../../../templatePreloader.mjs"
 import BaseListItemViewModel from "../base/base-list-item-viewmodel.mjs"
 import { DataFieldComponent } from "../base/datafield-component.mjs"
 import { TemplatedComponent } from "../base/templated-component.mjs"
@@ -29,6 +28,7 @@ import BaseAttributeListItemViewModel from "./base-attribute/base-attribute-list
 import { ACTOR_TYPES } from "../../../../business/document/actor/actor-types.mjs"
 import Ruleset from "../../../../business/ruleset/ruleset.mjs"
 import ButtonCheckBoxViewModel from "../../../component/button-checkbox/button-checkbox-viewmodel.mjs"
+import { getExtenders } from "../../../../common/extender-util.mjs"
 
 /**
  * @property {TransientSkill} document
@@ -478,7 +478,7 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
   /** @override */
   getAdditionalHeaderContent() {
     return new TemplatedComponent({
-      template: TEMPLATES.SKILL_LIST_ITEM_EXTRA_HEADER,
+      template: game.strive.const.TEMPLATES.SKILL_LIST_ITEM_EXTRA_HEADER,
       viewModel: this,
     });
   }
@@ -486,7 +486,7 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
   /** @override */
   getAdditionalContent() {
     return new TemplatedComponent({
-      template: TEMPLATES.SKILL_LIST_ITEM_EXTRA_CONTENT,
+      template: game.strive.const.TEMPLATES.SKILL_LIST_ITEM_EXTRA_CONTENT,
       viewModel: this,
     });
   }
@@ -544,4 +544,10 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
   
     return dialog[inputAttributes];
   }
+  
+  /** @override */
+  getExtenders() {
+    return super.getExtenders().concat(getExtenders(SkillListItemViewModel));
+  }
+
 }

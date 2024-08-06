@@ -1,4 +1,3 @@
-import { TEMPLATES } from '../../templatePreloader.mjs';
 import DialogButtonDefinition from '../dialog-button-definition.mjs';
 import ModalDialog from '../modal-dialog/modal-dialog.mjs';
 
@@ -14,7 +13,7 @@ import ModalDialog from '../modal-dialog/modal-dialog.mjs';
  */
 export default class PlainDialog extends ModalDialog {
   /** @override */
-  get template() { return TEMPLATES.DIALOG_PLAIN; }
+  get template() { return game.strive.const.TEMPLATES.DIALOG_PLAIN; }
 
   /** @override */
   get id() { return "plain-dialog"; }

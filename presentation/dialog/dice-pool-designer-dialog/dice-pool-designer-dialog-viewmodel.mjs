@@ -4,12 +4,11 @@ import ObservableField from "../../../common/observables/observable-field.mjs";
 import InputNumberSpinnerViewModel from "../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
 import InputSliderViewModel from "../../component/input-slider/input-slider-viewmodel.mjs";
 import { setElementValue } from "../../sheet/sheet-utility.mjs";
-import { TEMPLATES } from "../../templatePreloader.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
 
 export default class DicePoolDesignerDialogViewModel extends ViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.DIALOG_DICE_POOL_DESIGNER; }
+  static get TEMPLATE() { return game.strive.const.TEMPLATES.DIALOG_DICE_POOL_DESIGNER; }
 
   /**
    * Observable ui state. 

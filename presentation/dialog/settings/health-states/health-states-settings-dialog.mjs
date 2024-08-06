@@ -1,5 +1,4 @@
 import { SYSTEM_ID } from "../../../../system-id.mjs";
-import { TEMPLATES } from "../../../templatePreloader.mjs";
 import SetHealthStatesSettingUseCase from "../../../../business/use-case/set-health-states-setting-use-case.mjs";
 import HealthStatesSettingsDialogViewModel from "./health-states-settings-dialog-viewmodel.mjs";
 import FoundryWrapper from "../../../../common/foundry-wrapper.mjs";
@@ -41,7 +40,7 @@ export default class HealthStatesSettingsDialog extends FormApplication {
    * @override
    * @readonly
    */
-  get template() { return TEMPLATES.DIALOG_SETTINGS_HEALTH_STATES; }
+  get template() { return game.strive.const.TEMPLATES.DIALOG_SETTINGS_HEALTH_STATES; }
 
   /**
    * Returns the localized title of this sheet. 

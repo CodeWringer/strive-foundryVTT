@@ -1,6 +1,5 @@
 import { ATTRIBUTES, Attribute } from "../../../../../business/ruleset/attribute/attributes.mjs";
 import InputDropDownViewModel from "../../../../component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
-import { TEMPLATES } from "../../../../templatePreloader.mjs";
 import ViewModel from "../../../../view-model/view-model.mjs";
 
 /**
@@ -10,7 +9,7 @@ import ViewModel from "../../../../view-model/view-model.mjs";
  */
 export default class BaseAttributeListItemViewModel extends ViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.SKILL_BASE_ATTRIBUTE_LIST_ITEM; }
+  static get TEMPLATE() { return game.strive.const.TEMPLATES.SKILL_BASE_ATTRIBUTE_LIST_ITEM; }
 
   /**
    * @param {Object} args

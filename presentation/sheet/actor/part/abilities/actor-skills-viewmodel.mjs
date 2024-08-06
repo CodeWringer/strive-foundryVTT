@@ -1,18 +1,18 @@
 import { ITEM_TYPES } from "../../../../../business/document/item/item-types.mjs"
 import { SEARCH_MODES, Search, SearchItem } from "../../../../../business/search/search.mjs"
 import { isDefined, validateOrThrow } from "../../../../../business/util/validation-utility.mjs"
+import { getExtenders } from "../../../../../common/extender-util.mjs"
 import ButtonAddViewModel from "../../../../component/button-add/button-add-viewmodel.mjs"
 import InputSearchTextViewModel from "../../../../component/input-search/input-search-viewmodel.mjs"
 import SortControlsViewModel, { SortingOption } from "../../../../component/sort-controls/sort-controls-viewmodel.mjs"
 import DocumentListItemOrderDataSource from "../../../../component/sortable-list/document-list-item-order-datasource.mjs"
 import SortableListViewModel from "../../../../component/sortable-list/sortable-list-viewmodel.mjs"
-import { TEMPLATES } from "../../../../templatePreloader.mjs"
 import ViewModel from "../../../../view-model/view-model.mjs"
 import SkillListItemViewModel from "../../../item/skill/skill-list-item-viewmodel.mjs"
 
 export default class ActorSkillsViewModel extends ViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.ACTOR_SKILLS; }
+  static get TEMPLATE() { return game.strive.const.TEMPLATES.ACTOR_SKILLS; }
 
   /** @override */
   get entityId() { return this.document.id; }
@@ -385,4 +385,10 @@ export default class ActorSkillsViewModel extends ViewModel {
       }),
     ];
   }
+  
+  /** @override */
+  getExtenders() {
+    return super.getExtenders().concat(getExtenders(ActorSkillsViewModel));
+  }
+
 }

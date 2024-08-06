@@ -1,14 +1,14 @@
 import { validateOrThrow } from "../../../../../business/util/validation-utility.mjs"
-import { TEMPLATES } from "../../../../templatePreloader.mjs"
 import ViewModel from "../../../../view-model/view-model.mjs"
 import ActorDriversViewModel from "./actor-drivers-viewmodel.mjs"
 import ActorFateViewModel from "../actor-fate-viewmodel.mjs"
 import PersonalityTraitsViewModel from "./personality-traits/personality-traits-viewmodel.mjs"
 import { ACTOR_TYPES } from "../../../../../business/document/actor/actor-types.mjs"
+import { getExtenders } from "../../../../../common/extender-util.mjs"
 
 export default class ActorPersonalityViewModel extends ViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.ACTOR_PERSONALITY; }
+  static get TEMPLATE() { return game.strive.const.TEMPLATES.ACTOR_PERSONALITY; }
 
   /** @override */
   get entityId() { return this.document.id; }
@@ -17,19 +17,19 @@ export default class ActorPersonalityViewModel extends ViewModel {
    * @type {String}
    * @readonly
    */
-  get personalityTraitsTemplate() { return TEMPLATES.ACTOR_PERSONALITY_TRAITS; }
+  get personalityTraitsTemplate() { return game.strive.const.TEMPLATES.ACTOR_PERSONALITY_TRAITS; }
 
   /**
    * @type {String}
    * @readonly
    */
-  get driversTemplate() { return TEMPLATES.ACTOR_DRIVERS; }
+  get driversTemplate() { return game.strive.const.TEMPLATES.ACTOR_DRIVERS; }
 
   /**
    * @type {String}
    * @readonly
    */
-  get fateTemplate() { return TEMPLATES.ACTOR_FATE; }
+  get fateTemplate() { return game.strive.const.TEMPLATES.ACTOR_FATE; }
 
   /**
    * Returns true, if the actor is a player character. 
@@ -90,4 +90,10 @@ export default class ActorPersonalityViewModel extends ViewModel {
       });
     }
   }
+  
+  /** @override */
+  getExtenders() {
+    return super.getExtenders().concat(getExtenders(ActorPersonalityViewModel));
+  }
+
 }

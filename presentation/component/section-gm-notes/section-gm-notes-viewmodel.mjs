@@ -1,5 +1,4 @@
 import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
-import { TEMPLATES } from "../../templatePreloader.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
 import InputRichTextViewModel from "../input-rich-text/input-rich-text-viewmodel.mjs";
 
@@ -10,7 +9,7 @@ import InputRichTextViewModel from "../input-rich-text/input-rich-text-viewmodel
  */
 export default class GmNotesViewModel extends ViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.ACTOR_BIOGRAPHY; }
+  static get TEMPLATE() { return game.strive.const.TEMPLATES.ACTOR_BIOGRAPHY; }
 
   /**
    * @type {Document}

@@ -1,7 +1,6 @@
 import MigratorInitiator from "../../../business/migration/migrator-initiator.mjs";
 import { WorldSystemVersion } from "../../../business/migration/world-system-version.mjs";
 import FoundryWrapper from "../../../common/foundry-wrapper.mjs";
-import { TEMPLATES } from "../../templatePreloader.mjs";
 import ModalDialog from "../modal-dialog/modal-dialog.mjs";
 
 /**
@@ -27,7 +26,7 @@ export default class MigratorDialog extends ModalDialog {
   }
 
   /** @override */
-  get template() { return TEMPLATES.DIALOG_MIGRATOR; }
+  get template() { return game.strive.const.TEMPLATES.DIALOG_MIGRATOR; }
 
   /** @override */
   get id() { return "migrator-dialog"; }

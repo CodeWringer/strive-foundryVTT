@@ -1,4 +1,3 @@
-import { TEMPLATES } from "../../templatePreloader.mjs";
 import ActorSheetViewModel from "./actor-sheet-viewmodel.mjs";
 
 /**
@@ -15,7 +14,7 @@ export default class GameSystemBaseActorSheet {
    * @readonly
    * @virtual
    */
-  get template() { return TEMPLATES.ACTOR_SHEET;  }
+  get template() { return game.strive.const.TEMPLATES.ACTOR_SHEET;  }
 
   /**
    * Returns the localized title of this sheet type. 

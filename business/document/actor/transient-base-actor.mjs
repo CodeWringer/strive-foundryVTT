@@ -1,6 +1,6 @@
-import { TEMPLATES } from '../../../presentation/templatePreloader.mjs';
 import TransientDocument from "../transient-document.mjs";
 import ActorChatMessageViewModel from '../../../presentation/sheet/actor/actor-chat-message-viewmodel.mjs';
+import { getExtenders } from '../../../common/extender-util.mjs';
 
 /**
  * @summary
@@ -45,7 +45,7 @@ export default class TransientBaseActor extends TransientDocument {
    * @virtual
    * @readonly
    */
-  get chatMessageTemplate() { return TEMPLATES.ACTOR_CHAT_MESSAGE; }
+  get chatMessageTemplate() { return game.strive.const.TEMPLATES.ACTOR_CHAT_MESSAGE; }
   
   /**
    * @private
@@ -102,5 +102,10 @@ export default class TransientBaseActor extends TransientDocument {
       isGM: game.user.isGM,
       document: this,
     });
+  }
+  
+  /** @override */
+  getExtenders() {
+    return super.getExtenders().concat(getExtenders(TransientBaseActor));
   }
 }

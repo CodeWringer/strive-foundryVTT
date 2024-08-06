@@ -1,8 +1,8 @@
-import { TEMPLATES } from "../../../presentation/templatePreloader.mjs";
 import MutationChatMessageViewModel from "../../../presentation/sheet/item/mutation/mutation-chat-message-viewmodel.mjs";
 import PreparedChatData from "../../../presentation/chat/prepared-chat-data.mjs";
 import { SOUNDS_CONSTANTS } from "../../../presentation/audio/sounds.mjs";
 import TransientBaseItem from "./transient-base-item.mjs";
+import { getExtenders } from "../../../common/extender-util.mjs";
 
 /**
  * Represents the full transient data of a mutation. 
@@ -14,7 +14,7 @@ export default class TransientMutation extends TransientBaseItem {
   get defaultImg() { return "icons/svg/ice-aura.svg"; }
   
   /** @override */
-  get chatMessageTemplate() { return TEMPLATES.MUTATION_CHAT_MESSAGE; }
+  get chatMessageTemplate() { return game.strive.const.TEMPLATES.MUTATION_CHAT_MESSAGE; }
 
   /** @override */
   async getChatData() {
@@ -61,5 +61,10 @@ export default class TransientMutation extends TransientBaseItem {
       isGM: game.user.isGM,
       document: this,
     });
+  }
+  
+  /** @override */
+  getExtenders() {
+    return super.getExtenders().concat(getExtenders(TransientMutation));
   }
 }

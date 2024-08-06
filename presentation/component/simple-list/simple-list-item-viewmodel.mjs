@@ -1,5 +1,4 @@
 import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
-import { TEMPLATES } from "../../templatePreloader.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
 
@@ -15,7 +14,7 @@ import ButtonViewModel from "../button/button-viewmodel.mjs";
  */
 export default class SimpleListItemViewModel extends ViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.COMPONENT_SIMPLE_LIST_ITEM; }
+  static get TEMPLATE() { return game.strive.const.TEMPLATES.COMPONENT_SIMPLE_LIST_ITEM; }
 
   /**
    * @param {Object} args

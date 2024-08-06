@@ -17,10 +17,10 @@ import DamageDefinitionListViewModel from "../../../component/damage-definition-
 import BaseItemSheetViewModel from "../base/base-item-sheet-viewmodel.mjs";
 import { DataFieldComponent } from "../base/datafield-component.mjs";
 import { TemplatedComponent } from "../base/templated-component.mjs";
-import { TEMPLATES } from "../../../templatePreloader.mjs";
 import TransientSkill from "../../../../business/document/item/skill/transient-skill.mjs";
 import BaseAttributeListItemViewModel from "./base-attribute/base-attribute-list-item-viewmodel.mjs";
 import { ATTRIBUTES } from "../../../../business/ruleset/attribute/attributes.mjs";
+import { getExtenders } from "../../../../common/extender-util.mjs";
 
 /**
  * @property {TransientSkill} document
@@ -352,7 +352,7 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
   /** @override */
   getAdditionalContent() {
     return new TemplatedComponent({
-      template: TEMPLATES.SKILL_ITEM_SHEET_EXTRA_CONTENT,
+      template: game.strive.const.TEMPLATES.SKILL_ITEM_SHEET_EXTRA_CONTENT,
       viewModel: this,
     });
   }
@@ -443,4 +443,10 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
       return this.document;
     }
   }
+  
+  /** @override */
+  getExtenders() {
+    return super.getExtenders().concat(getExtenders(SkillItemSheetViewModel));
+  }
+
 }

@@ -1,6 +1,5 @@
 import { validateOrThrow } from '../../../business/util/validation-utility.mjs';
 import { isDefined } from '../../../business/util/validation-utility.mjs';
-import { TEMPLATES } from '../../templatePreloader.mjs';
 import ConfirmableModalDialog from '../confirmable-modal-dialog/confirmable-modal-dialog.mjs';
 import DialogButtonDefinition from '../dialog-button-definition.mjs';
 import DynamicInputDefinition from './dynamic-input-definition.mjs';
@@ -53,7 +52,7 @@ import DynamicInputDialogViewModel from './dynamic-input-dialog-viewmodel.mjs';
  */
 export default class DynamicInputDialog extends ConfirmableModalDialog {
   /** @override */
-  get template() { return TEMPLATES.DIALOG_DYNAMIC_INPUT; }
+  get template() { return game.strive.const.TEMPLATES.DIALOG_DYNAMIC_INPUT; }
 
   /** @override */
   get id() { return "dynamic-input-dialog"; }

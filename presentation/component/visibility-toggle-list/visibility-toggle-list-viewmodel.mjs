@@ -1,5 +1,4 @@
 import { HealthStateVisibilityItem } from "../../dialog/settings/health-states/health-state-visibility-item.mjs";
-import { TEMPLATES } from "../../templatePreloader.mjs";
 import InputViewModel from "../../view-model/input-view-model.mjs";
 import VisibilityToggleListItemViewModel from "./visibility-toggle-list-item-viewmodel.mjs";
 
@@ -33,7 +32,7 @@ import VisibilityToggleListItemViewModel from "./visibility-toggle-list-item-vie
  */
 export default class VisibilityToggleListViewModel extends InputViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.COMPONENT_VISIBILITY_TOGGLE_LIST; }
+  static get TEMPLATE() { return game.strive.const.TEMPLATES.COMPONENT_VISIBILITY_TOGGLE_LIST; }
 
   /**
    * Registers the Handlebars partial for this component. 

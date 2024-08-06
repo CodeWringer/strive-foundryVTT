@@ -1,8 +1,8 @@
-import { TEMPLATES } from "../../../presentation/templatePreloader.mjs";
 import FateCardChatMessageViewModel from "../../../presentation/sheet/item/fate-card/fate-card-chat-message-viewmodel.mjs";
 import PreparedChatData from "../../../presentation/chat/prepared-chat-data.mjs";
 import { SOUNDS_CONSTANTS } from "../../../presentation/audio/sounds.mjs";
 import TransientBaseItem from "./transient-base-item.mjs";
+import { getExtenders } from "../../../common/extender-util.mjs";
 
 /**
  * Represents the full transient data of a fate card. 
@@ -19,7 +19,7 @@ export default class TransientFateCard extends TransientBaseItem {
   get defaultImg() { return "icons/svg/wing.svg"; }
   
   /** @override */
-  get chatMessageTemplate() { return TEMPLATES.FATE_CARD_CHAT_MESSAGE; }
+  get chatMessageTemplate() { return game.strive.const.TEMPLATES.FATE_CARD_CHAT_MESSAGE; }
  
   /**
    * @type {Object}
@@ -85,5 +85,10 @@ export default class TransientFateCard extends TransientBaseItem {
       isGM: game.user.isGM,
       document: this,
     });
+  }
+  
+  /** @override */
+  getExtenders() {
+    return super.getExtenders().concat(getExtenders(TransientFateCard));
   }
 }
