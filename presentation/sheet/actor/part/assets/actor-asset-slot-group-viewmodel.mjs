@@ -27,7 +27,7 @@ import { queryAssetSlotConfiguration } from "./assets-utils.mjs";
  */
 export default class ActorAssetSlotGroupViewModel extends ViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.ACTOR_ASSET_SLOT_GROUP; }
+  static get TEMPLATE() { return game.strive.const.TEMPLATES.ACTOR_ASSET_SLOT_GROUP; }
 
   /**
    * @type {String}

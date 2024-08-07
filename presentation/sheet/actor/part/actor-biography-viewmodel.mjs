@@ -1,11 +1,10 @@
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs";
 import InputRichTextViewModel from "../../../component/input-rich-text/input-rich-text-viewmodel.mjs";
-import { TEMPLATES } from "../../../templatePreloader.mjs";
 import ViewModel from "../../../view-model/view-model.mjs";
 
 export default class ActorBiographyViewModel extends ViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.ACTOR_BIOGRAPHY; }
+  static get TEMPLATE() { return game.strive.const.TEMPLATES.ACTOR_BIOGRAPHY; }
 
   /** @override */
   get entityId() { return this.document.id; }

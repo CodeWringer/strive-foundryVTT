@@ -1,6 +1,7 @@
 import TransientDocument from "../../../../business/document/transient-document.mjs";
 import { format } from "../../../../business/util/string-utility.mjs";
 import { isDefined, validateOrThrow } from "../../../../business/util/validation-utility.mjs";
+import { getExtenders } from "../../../../common/extender-util.mjs";
 import ButtonContextMenuViewModel from "../../../component/button-context-menu/button-context-menu-viewmodel.mjs";
 import ButtonDeleteViewModel from "../../../component/button-delete/button-delete-viewmodel.mjs";
 import ButtonSendToChatViewModel from "../../../component/button-send-to-chat/button-send-to-chat-viewmodel.mjs";
@@ -10,7 +11,6 @@ import InputRichTextViewModel from "../../../component/input-rich-text/input-ric
 import DynamicInputDefinition from "../../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
 import DynamicInputDialog from "../../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
 import { DYNAMIC_INPUT_TYPES } from "../../../dialog/dynamic-input-dialog/dynamic-input-types.mjs";
-import { TEMPLATES } from "../../../templatePreloader.mjs";
 import ViewModel from "../../../view-model/view-model.mjs";
 import { CONTEXT_TYPES } from "../../context-types.mjs";
 import { DataFieldComponent } from "./datafield-component.mjs";
@@ -47,7 +47,7 @@ import { TemplatedComponent } from "./templated-component.mjs";
  */
 export default class BaseListItemViewModel extends ViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.BASE_LIST_ITEM; }
+  static get TEMPLATE() { return game.strive.const.TEMPLATES.BASE_LIST_ITEM; }
 
   /** @override */
   get entityId() { return this.document.id; }
@@ -360,4 +360,10 @@ export default class BaseListItemViewModel extends ViewModel {
       this[definition.viewModel._id] = definition.viewModel;
     }
   }
+  
+  /** @override */
+  getExtenders() {
+    return super.getExtenders().concat(getExtenders(BaseListItemViewModel));
+  }
+
 }

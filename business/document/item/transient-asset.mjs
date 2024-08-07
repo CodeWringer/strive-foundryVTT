@@ -2,10 +2,10 @@ import PreparedChatData from "../../../presentation/chat/prepared-chat-data.mjs"
 import { SOUNDS_CONSTANTS } from "../../../presentation/audio/sounds.mjs";
 import TransientBaseItem from "./transient-base-item.mjs";
 import AssetChatMessageViewModel from "../../../presentation/sheet/item/asset/asset-chat-message-viewmodel.mjs";
-import { TEMPLATES } from "../../../presentation/templatePreloader.mjs";
 import CharacterAssetSlot from "../../ruleset/asset/character-asset-slot.mjs";
 import { arrayTakeUnless } from "../../util/array-utility.mjs";
 import { ASSET_TAGS } from "../../tags/system-tags.mjs";
+import { getExtenders } from "../../../common/extender-util.mjs";
 
 /**
  * Represents the full transient data of an asset. 
@@ -32,7 +32,7 @@ export default class TransientAsset extends TransientBaseItem {
   get defaultImg() { return "icons/svg/item-bag.svg"; }
   
   /** @override */
-  get chatMessageTemplate() { return TEMPLATES.ASSET_CHAT_MESSAGE; }
+  get chatMessageTemplate() { return game.strive.const.TEMPLATES.ASSET_CHAT_MESSAGE; }
   
   /**
    * @type {Number}
@@ -285,6 +285,11 @@ export default class TransientAsset extends TransientBaseItem {
     } else {
       return 0;
     }
+  }
+
+  /** @override */
+  getExtenders() {
+    return super.getExtenders().concat(getExtenders(TransientAsset));
   }
 
   /**

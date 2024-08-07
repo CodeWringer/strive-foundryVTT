@@ -5,6 +5,7 @@ import InputTextFieldViewModel from "../../../component/input-textfield/input-te
 import BaseListItemViewModel from "../base/base-list-item-viewmodel.mjs"
 import { DataFieldComponent } from "../base/datafield-component.mjs"
 import { TemplatedComponent } from "../base/templated-component.mjs"
+import { getExtenders } from "../../../../common/extender-util.mjs"
 
 /**
  * @property {TransientInjury} document
@@ -172,4 +173,10 @@ export default class InjuryListItemViewModel extends BaseListItemViewModel {
       }),
     ]);
   }
+  
+  /** @override */
+  getExtenders() {
+    return super.getExtenders().concat(getExtenders(InjuryListItemViewModel));
+  }
+
 }

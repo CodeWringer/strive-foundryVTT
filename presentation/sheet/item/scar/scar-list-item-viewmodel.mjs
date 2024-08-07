@@ -1,3 +1,4 @@
+import { getExtenders } from "../../../../common/extender-util.mjs";
 import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs";
 import BaseListItemViewModel from "../base/base-list-item-viewmodel.mjs";
 import { DataFieldComponent } from "../base/datafield-component.mjs";
@@ -24,4 +25,10 @@ export default class ScarListItemViewModel extends BaseListItemViewModel {
       }),
     ];
   }
+  
+  /** @override */
+  getExtenders() {
+    return super.getExtenders().concat(getExtenders(ScarListItemViewModel));
+  }
+
 }

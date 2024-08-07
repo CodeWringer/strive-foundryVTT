@@ -7,13 +7,12 @@ import ButtonAddViewModel from "../../../component/button-add/button-add-viewmod
 import ButtonToggleVisibilityViewModel from "../../../component/button-toggle-visibility/button-toggle-visibility-viewmodel.mjs"
 import DocumentListItemOrderDataSource from "../../../component/sortable-list/document-list-item-order-datasource.mjs"
 import SortableListViewModel from "../../../component/sortable-list/sortable-list-viewmodel.mjs"
-import { TEMPLATES } from "../../../templatePreloader.mjs"
 import ViewModel from "../../../view-model/view-model.mjs"
 import ExpertiseListItemViewModel from "./expertise-list-item-viewmodel.mjs"
 
 export default class ExpertiseTableViewModel extends ViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.EXPERTISE_TABLE; }
+  static get TEMPLATE() { return game.strive.const.TEMPLATES.EXPERTISE_TABLE; }
 
   /**
    * @type {TransientSkill}

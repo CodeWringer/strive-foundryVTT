@@ -1,14 +1,14 @@
 import { ITEM_TYPES } from "../../../../business/document/item/item-types.mjs";
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs"
+import { getExtenders } from "../../../../common/extender-util.mjs";
 import ButtonAddViewModel from "../../../component/button-add/button-add-viewmodel.mjs";
 import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
-import { TEMPLATES } from "../../../templatePreloader.mjs";
 import ViewModel from "../../../view-model/view-model.mjs"
 import FateCardViewModel from "../../item/fate-card/fate-card-viewmodel.mjs"
 
 export default class ActorFateViewModel extends ViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.ACTOR_FATE; }
+  static get TEMPLATE() { return game.strive.const.TEMPLATES.ACTOR_FATE; }
 
   /** @override */
   get entityId() { return this.document.id; }
@@ -35,7 +35,7 @@ export default class ActorFateViewModel extends ViewModel {
    * @type {String}
    * @readonly
    */
-  get fateCardTemplate() { return TEMPLATES.FATE_CARD; }
+  get fateCardTemplate() { return game.strive.const.TEMPLATES.FATE_CARD; }
 
   /**
    * @type {Boolean}
@@ -137,4 +137,10 @@ export default class ActorFateViewModel extends ViewModel {
       (args) => { return new FateCardViewModel(args); }
     );
   }
+  
+  /** @override */
+  getExtenders() {
+    return super.getExtenders().concat(getExtenders(ActorFateViewModel));
+  }
+
 }

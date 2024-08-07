@@ -1,5 +1,4 @@
 import { getElementValue } from "../../../sheet/sheet-utility.mjs";
-import { TEMPLATES } from "../../../templatePreloader.mjs";
 import InputChoiceViewModel from "../input-choice-viewmodel.mjs";
 
 /**
@@ -17,7 +16,7 @@ import InputChoiceViewModel from "../input-choice-viewmodel.mjs";
  */
 export default class InputDropDownViewModel extends InputChoiceViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.COMPONENT_INPUT_DROPDOWN; }
+  static get TEMPLATE() { return game.strive.const.TEMPLATES.COMPONENT_INPUT_DROPDOWN; }
 
   /**
    * Registers the Handlebars partial for this component. 

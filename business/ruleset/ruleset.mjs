@@ -1,5 +1,4 @@
 import LevelAdvancement from "./level-advancement.mjs";
-import { SumComponent } from "./summed-data.mjs";
 import { SkillTier, SKILL_TIERS } from "./skill/skill-tier.mjs";
 import { ATTRIBUTE_TIERS, AttributeTier } from "./attribute/attribute-tier.mjs";
 import { ATTRIBUTES, Attribute } from "./attribute/attributes.mjs";
@@ -7,10 +6,10 @@ import TransientSkill from "../document/item/skill/transient-skill.mjs";
 import { ACTOR_TYPES } from "../document/actor/actor-types.mjs";
 import { ITEM_TYPES } from "../document/item/item-types.mjs";
 import { SkillRollSchema } from "../dice/ability-roll/skill-roll-schema.mjs";
-import { AllSumSkillRollSchema } from "../dice/ability-roll/all-sum-skill-roll-schema.mjs";
 import { RollSchema } from "../dice/roll-schema.mjs";
 import { AttributeRollSchema } from "../dice/ability-roll/attribute-roll-schema.mjs";
 import { AttributeAndSkillRollSchema } from "../dice/ability-roll/attribute-and-skill-roll-schema/attribute-and-skill-roll-schema.mjs";
+import { isDefined } from "../util/validation-utility.mjs";
 
 /**
  * Provides all the ruleset-specifics. 
@@ -238,44 +237,6 @@ export default class Ruleset {
   }
 
   /**
-   * Returns an object containing the maximum magic stamina, as well as the details of how it came to be. 
-   * 
-   * Not returning a `Sum` is intentional, because the total must deviate from the components' actual sum! 
-   * 
-   * @param {Actor} actor 
-   * 
-   * @returns {Object} The maximum magic stamina of the given actor. 
-   * 
-   * @throws {Error} Thrown, if the given actor is not of type `"pc"` or `"npc"`. 
-   */
-  getCharacterMaximumMagicStamina(actor) {
-    const type = actor.type.toLowerCase();
-    if (type !== ACTOR_TYPES.PC && type !== ACTOR_TYPES.NPC) throw new Error("Only PC and NPC type actors allowed");
-
-    const arcanaLevel = this.getEffectiveAttributeModifiedLevel(ATTRIBUTES.arcana, actor) * 2;
-    let total = arcanaLevel;
-    
-    const components = [
-      new SumComponent(ATTRIBUTES.arcana.name, ATTRIBUTES.arcana.localizableName, arcanaLevel),
-    ];
-
-    const skills = actor.items.filter(it => it.type === ITEM_TYPES.SKILL);
-    for (const skill of skills) {
-      const transientSkill = skill.getTransientObject();
-      if (transientSkill.isMagicSchool !== true) continue;
-
-      const skillLevel = this.getEffectiveSkillModifiedLevel(skill, actor);
-      components.push(new SumComponent(transientSkill.name, transientSkill.localizableName, skillLevel));
-      total += skillLevel;
-    }
-
-    return {
-      total: total,
-      components: components,
-    };
-  }
-
-  /**
    * Returns the maximum number of fate cards that can be accrued on a character. 
    * 
    * @returns {Number} The maximum number of fate cards. 
@@ -339,6 +300,10 @@ export default class Ruleset {
       return transientActor.challengeRating.modified;
     } else {
       const characterAttribute = transientActor.attributes.find(it => it.name === attribute.name);
+      if (!isDefined(characterAttribute)) {
+        game.strive.logger.logError(`Failed to find attribute by name ${attribute.name} on actor ${transientActor.id}`);
+        return;
+      }
       return characterAttribute.modifiedLevel;
     }
   }

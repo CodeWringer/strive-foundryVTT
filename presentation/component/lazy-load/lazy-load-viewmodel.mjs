@@ -1,5 +1,4 @@
 import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
-import { TEMPLATES } from "../../templatePreloader.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
 
 /**
@@ -28,7 +27,7 @@ import ViewModel from "../../view-model/view-model.mjs";
  */
 export default class LazyLoadViewModel extends ViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.COMPONENT_LAZY_LOAD; }
+  static get TEMPLATE() { return game.strive.const.TEMPLATES.COMPONENT_LAZY_LOAD; }
 
   /**
    * Registers the Handlebars partial for this component. 

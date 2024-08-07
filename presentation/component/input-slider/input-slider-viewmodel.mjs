@@ -1,5 +1,4 @@
 import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
-import { TEMPLATES } from "../../templatePreloader.mjs";
 import InputViewModel from "../../view-model/input-view-model.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
 
@@ -20,7 +19,7 @@ import ViewModel from "../../view-model/view-model.mjs";
  * @property {Number} value 
  */
 export default class InputSliderViewModel extends InputViewModel {
-  static get TEMPLATE() { return TEMPLATES.COMPONENT_INPUT_SLIDER; }
+  static get TEMPLATE() { return game.strive.const.TEMPLATES.COMPONENT_INPUT_SLIDER; }
 
   /**
    * Registers the Handlebars partial for this component. 

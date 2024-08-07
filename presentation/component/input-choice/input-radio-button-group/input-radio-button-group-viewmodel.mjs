@@ -1,5 +1,4 @@
 import { isDefined, validateOrThrow } from "../../../../business/util/validation-utility.mjs";
-import { TEMPLATES } from "../../../templatePreloader.mjs";
 import InputChoiceViewModel from "../input-choice-viewmodel.mjs";
 import StatefulChoiceOption from "../stateful-choice-option.mjs";
 
@@ -18,7 +17,7 @@ import StatefulChoiceOption from "../stateful-choice-option.mjs";
  */
 export default class InputRadioButtonGroupViewModel extends InputChoiceViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.COMPONENT_INPUT_RADIO_BUTTON_GROUP; }
+  static get TEMPLATE() { return game.strive.const.TEMPLATES.COMPONENT_INPUT_RADIO_BUTTON_GROUP; }
 
   /**
    * Registers the Handlebars partial for this component. 

@@ -4,7 +4,6 @@ import Ruleset from "../../../../../business/ruleset/ruleset.mjs";
 import { validateOrThrow } from "../../../../../business/util/validation-utility.mjs";
 import ButtonRollViewModel from "../../../../component/button-roll/button-roll-viewmodel.mjs";
 import InputNumberSpinnerViewModel from "../../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
-import { TEMPLATES } from "../../../../templatePreloader.mjs";
 import ViewModel from "../../../../view-model/view-model.mjs";
 
 /**
@@ -21,7 +20,7 @@ import ViewModel from "../../../../view-model/view-model.mjs";
  */
 export default class ChallengeRatingViewModel extends ViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.CHALLENGE_RATING; }
+  static get TEMPLATE() { return game.strive.const.TEMPLATES.CHALLENGE_RATING; }
 
   get challengeRating() { return this._challengeRating; }
   set challengeRating(value) {

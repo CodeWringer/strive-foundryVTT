@@ -1,11 +1,11 @@
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs";
+import { getExtenders } from "../../../../common/extender-util.mjs";
 import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs";
-import { TEMPLATES } from "../../../templatePreloader.mjs";
 import ViewModel from "../../../view-model/view-model.mjs";
 
 export default class ActorPersonalsViewModel extends ViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.ACTOR_PERSONALS; }
+  static get TEMPLATE() { return game.strive.const.TEMPLATES.ACTOR_PERSONALS; }
 
   /** @override */
   get entityId() { return this.document.id; }
@@ -70,4 +70,10 @@ export default class ActorPersonalsViewModel extends ViewModel {
       placeholder: game.i18n.localize("system.character.personals.age"),
     });
   }
+  
+  /** @override */
+  getExtenders() {
+    return super.getExtenders().concat(getExtenders(ActorPersonalsViewModel));
+  }
+
 }

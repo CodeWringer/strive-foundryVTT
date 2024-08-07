@@ -1,7 +1,6 @@
 import { arrayContains } from "../../../business/util/array-utility.mjs";
 import { moveArrayElement, moveArrayElementBy } from "../../../business/util/array-utility.mjs";
 import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
-import { TEMPLATES } from "../../templatePreloader.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
 
@@ -32,7 +31,7 @@ class SortableListViewModelGroup {
  * @property {Boolean} isEditable If true, input(s) will be in edit mode. If false, input(s) will be in read-only mode.
  */
 export default class SortableListViewModel extends ViewModel {
-  static get TEMPLATE() { return TEMPLATES.COMPONENT_SORTABLE_LIST; }
+  static get TEMPLATE() { return game.strive.const.TEMPLATES.COMPONENT_SORTABLE_LIST; }
 
   /**
    * Registers the Handlebars partial for this component. 

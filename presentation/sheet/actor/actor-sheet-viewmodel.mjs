@@ -1,6 +1,5 @@
 import LazyLoadViewModel from "../../component/lazy-load/lazy-load-viewmodel.mjs"
 import GmNotesViewModel from "../../component/section-gm-notes/section-gm-notes-viewmodel.mjs"
-import { TEMPLATES } from "../../templatePreloader.mjs"
 import ViewModel from "../../view-model/view-model.mjs"
 import ActorAssetsViewModel from "./part/assets/actor-assets-viewmodel.mjs"
 import ActorAttributesViewModel from "./part/abilities/actor-attributes-viewmodel.mjs"
@@ -20,6 +19,7 @@ import DynamicInputDefinition from "../../dialog/dynamic-input-dialog/dynamic-in
 import { DYNAMIC_INPUT_TYPES } from "../../dialog/dynamic-input-dialog/dynamic-input-types.mjs"
 import { ACTOR_TYPES } from "../../../business/document/actor/actor-types.mjs"
 import TransientBaseActor from "../../../business/document/actor/transient-base-actor.mjs"
+import { getExtenders } from "../../../common/extender-util.mjs"
 
 /**
  * @extends BaseSheetViewModel
@@ -35,7 +35,7 @@ import TransientBaseActor from "../../../business/document/actor/transient-base-
 */
 export default class ActorSheetViewModel extends BaseSheetViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.ACTOR_SHEET; }
+  static get TEMPLATE() { return game.strive.const.TEMPLATES.ACTOR_SHEET; }
 
   /** @override */
   get entityId() { return this.document.id; }
@@ -75,7 +75,7 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
    * @type {String}
    * @readonly
    */
-  get templatePersonals() { return TEMPLATES.ACTOR_PERSONALS; }
+  get templatePersonals() { return game.strive.const.TEMPLATES.ACTOR_PERSONALS; }
   
   /**
    * Returns the CSS class for use in the context menu. 
@@ -233,7 +233,7 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
       this.attributesViewModel = new LazyLoadViewModel({
         id: "lazyAttributes",
         parent: thiz,
-        template: TEMPLATES.ACTOR_ATTRIBUTES,
+        template: game.strive.const.TEMPLATES.ACTOR_ATTRIBUTES,
         viewModelFactoryFunction: (args) => { return new ActorAttributesViewModel(args); },
         viewModelArgs: {
           ...args, 
@@ -243,7 +243,7 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
       this.skillsViewModel = new LazyLoadViewModel({
         id: "lazySkills",
         parent: thiz,
-        template: TEMPLATES.ACTOR_SKILLS,
+        template: game.strive.const.TEMPLATES.ACTOR_SKILLS,
         viewModelFactoryFunction: (args) => { return new ActorSkillsViewModel(args); },
         viewModelArgs: {
           ...args, 
@@ -254,7 +254,7 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
         this.personalityViewModel = new LazyLoadViewModel({
           id: "lazyPersonality",
           parent: thiz,
-          template: TEMPLATES.ACTOR_PERSONALITY,
+          template: game.strive.const.TEMPLATES.ACTOR_PERSONALITY,
           viewModelFactoryFunction: (args) => { return new ActorPersonalityViewModel(args); },
           viewModelArgs: {
             ...args, 
@@ -265,7 +265,7 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
       this.healthViewModel = new LazyLoadViewModel({
         id: "lazyHealth",
         parent: thiz,
-        template: TEMPLATES.ACTOR_HEALTH,
+        template: game.strive.const.TEMPLATES.ACTOR_HEALTH,
         viewModelFactoryFunction: (args) => { return new ActorHealthViewModel(args); },
         viewModelArgs: {
           ...args, 
@@ -275,7 +275,7 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
       this.assetsViewModel = new LazyLoadViewModel({
         id: "lazyAssets",
         parent: thiz,
-        template: TEMPLATES.ACTOR_ASSETS,
+        template: game.strive.const.TEMPLATES.ACTOR_ASSETS,
         viewModelFactoryFunction: (args) => { return new ActorAssetsViewModel(args); },
         viewModelArgs: {
           ...args, 
@@ -285,7 +285,7 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
       this.biographyViewModel = new LazyLoadViewModel({
         id: "lazyBiography",
         parent: thiz,
-        template: TEMPLATES.ACTOR_BIOGRAPHY,
+        template: game.strive.const.TEMPLATES.ACTOR_BIOGRAPHY,
         viewModelFactoryFunction: (args) => { return new ActorBiographyViewModel(args); },
         viewModelArgs: {
           ...args, 
@@ -307,7 +307,7 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
       this.gmNotesViewModel = new LazyLoadViewModel({
         id: "lazyGmNotes",
         parent: thiz,
-        template: TEMPLATES.COMPONENT_GM_NOTES,
+        template: game.strive.const.TEMPLATES.COMPONENT_GM_NOTES,
         viewModelFactoryFunction: (args) => { return new GmNotesViewModel(args); },
         viewModelArgs: {
           ...args, 
@@ -384,4 +384,10 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
       await this.gmNotesViewModel.render();
     }
   }
+  
+  /** @override */
+  getExtenders() {
+    return super.getExtenders().concat(getExtenders(ActorSheetViewModel));
+  }
+
 }

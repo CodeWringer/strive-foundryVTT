@@ -2,7 +2,6 @@ import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import { SOUNDS_CONSTANTS } from "../../audio/sounds.mjs";
 import * as ChatUtil from "../../chat/chat-utility.mjs";
 import RollFormulaResolver from "../../dice/roll-formula-resolver.mjs";
-import { TEMPLATES } from "../../templatePreloader.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
 
@@ -20,7 +19,7 @@ import ButtonViewModel from "../button/button-viewmodel.mjs";
  * @property {String | undefined} chatTitle Title to display above the chat message. 
  */
 export default class DiceRollListViewModel extends ViewModel {
-  static get TEMPLATE() { return TEMPLATES.DICE_ROLL_LIST; }
+  static get TEMPLATE() { return game.strive.const.TEMPLATES.DICE_ROLL_LIST; }
 
   /**
    * Registers the Handlebars partial for this component. 

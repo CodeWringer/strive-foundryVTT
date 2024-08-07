@@ -1,5 +1,4 @@
 import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
-import { TEMPLATES } from "../../templatePreloader.mjs";
 import { DYNAMIC_INPUT_TYPES } from "./dynamic-input-types.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
 import InputDropDownViewModel from "../../component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
@@ -24,7 +23,7 @@ import DynamicInputDefinition from "./dynamic-input-definition.mjs";
  */
 export default class DynamicInputDialogViewModel extends ViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.DIALOG_DYNAMIC_INPUT; }
+  static get TEMPLATE() { return game.strive.const.TEMPLATES.DIALOG_DYNAMIC_INPUT; }
 
   /**
    * @param {Object} args 

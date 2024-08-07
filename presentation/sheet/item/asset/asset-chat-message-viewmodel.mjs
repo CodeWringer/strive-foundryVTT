@@ -2,12 +2,11 @@ import { validateOrThrow } from "../../../../business/util/validation-utility.mj
 import ButtonTakeItemViewModel, { TAKE_ITEM_CONTEXT_TYPES } from "../../../component/button-take-item/button-take-item-viewmodel.mjs"
 import InputTagsViewModel from "../../../component/input-tags/input-tags-viewmodel.mjs"
 import LazyRichTextViewModel from "../../../component/lazy-rich-text/lazy-rich-text-viewmodel.mjs"
-import { TEMPLATES } from "../../../templatePreloader.mjs"
 import ViewModel from "../../../view-model/view-model.mjs"
 
 export default class AssetChatMessageViewModel extends ViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.ASSET_CHAT_MESSAGE; }
+  static get TEMPLATE() { return game.strive.const.TEMPLATES.ASSET_CHAT_MESSAGE; }
 
   /** @override */
   get entityId() { return this.document.id; }

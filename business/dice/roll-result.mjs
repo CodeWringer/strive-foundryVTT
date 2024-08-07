@@ -1,4 +1,3 @@
-import { TEMPLATES } from "../../presentation/templatePreloader.mjs";
 import { ACTOR_TYPES } from "../document/actor/actor-types.mjs";
 import { Sum, SumComponent } from "../ruleset/summed-data.mjs";
 import { isDefined, validateOrThrow } from "../util/validation-utility.mjs";
@@ -157,7 +156,7 @@ export class RollResult {
     }
 
     // Render the results. 
-    const renderedContent = await renderTemplate(TEMPLATES.DICE_ROLL_CHAT_MESSAGE, {
+    const renderedContent = await renderTemplate(game.strive.const.TEMPLATES.DICE_ROLL_CHAT_MESSAGE, {
       id: createUUID(),
       primaryTitle: args.primaryTitle,
       primaryImage: args.primaryImage,

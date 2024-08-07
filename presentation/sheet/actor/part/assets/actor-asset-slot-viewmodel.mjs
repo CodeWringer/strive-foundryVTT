@@ -8,7 +8,6 @@ import ChoiceOption from "../../../../component/input-choice/choice-option.mjs";
 import DynamicInputDefinition from "../../../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
 import DynamicInputDialog from "../../../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
 import { DYNAMIC_INPUT_TYPES } from "../../../../dialog/dynamic-input-dialog/dynamic-input-types.mjs";
-import { TEMPLATES } from "../../../../templatePreloader.mjs";
 import ViewModel from "../../../../view-model/view-model.mjs";
 import AssetListItemViewModel from "../../../item/asset/asset-list-item-viewmodel.mjs";
 import { queryAssetSlotConfiguration } from "./assets-utils.mjs";
@@ -41,7 +40,7 @@ import { queryAssetSlotConfiguration } from "./assets-utils.mjs";
  */
 export default class ActorAssetSlotViewModel extends ViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.ACTOR_ASSET_SLOT; }
+  static get TEMPLATE() { return game.strive.const.TEMPLATES.ACTOR_ASSET_SLOT; }
 
   /**
    * @type {TransientAsset | undefined}
