@@ -64,6 +64,10 @@ cssClass: {undefined | String}
       {{#with viewModel.gritPointsTemplate as | template |}}
         {{> (template) viewModel=../viewModel.vmGritPoints}}
       {{/with}}
+      {{!-- Armor --}}
+      {{#with viewModel.armorListItemTemplate as | template |}}
+        {{> (template) viewModel=../viewModel.vmArmorListItem }}
+      {{/with}}
       {{!-- Conditions (formerly health states) --}}
       {{#with viewModel.healthStatesTemplate as | template |}}
         {{> (template) viewModel=../viewModel.vmHealthStates}}
