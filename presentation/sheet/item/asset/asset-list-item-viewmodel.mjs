@@ -2,6 +2,7 @@ import TransientAsset from "../../../../business/document/item/transient-asset.m
 import CharacterAssetSlot from "../../../../business/ruleset/asset/character-asset-slot.mjs"
 import { ASSET_TAGS } from "../../../../business/tags/system-tags.mjs"
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs"
+import { getExtenders } from "../../../../common/extender-util.mjs"
 import ButtonViewModel from "../../../component/button/button-viewmodel.mjs"
 import ChoiceOption from "../../../component/input-choice/choice-option.mjs"
 import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs"
@@ -10,7 +11,6 @@ import InputTextFieldViewModel from "../../../component/input-textfield/input-te
 import DynamicInputDefinition from "../../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs"
 import DynamicInputDialog from "../../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs"
 import { DYNAMIC_INPUT_TYPES } from "../../../dialog/dynamic-input-dialog/dynamic-input-types.mjs"
-import { TEMPLATES } from "../../../templatePreloader.mjs"
 import ViewModel from "../../../view-model/view-model.mjs"
 import BaseListItemViewModel from "../base/base-list-item-viewmodel.mjs"
 import { DataFieldComponent } from "../base/datafield-component.mjs"
@@ -176,7 +176,7 @@ export default class AssetListItemViewModel extends BaseListItemViewModel {
   /** @override */
   getAdditionalHeaderContent() {
     return new TemplatedComponent({
-      template: TEMPLATES.ASSET_LIST_ITEM_EXTRA_HEADER,
+      template: game.strive.const.TEMPLATES.ASSET_LIST_ITEM_EXTRA_HEADER,
       viewModel: this,
     });
   }
@@ -234,4 +234,10 @@ export default class AssetListItemViewModel extends BaseListItemViewModel {
 
     return assetSlot;
   }
+  
+  /** @override */
+  getExtenders() {
+    return super.getExtenders().concat(getExtenders(AssetListItemViewModel));
+  }
+
 }

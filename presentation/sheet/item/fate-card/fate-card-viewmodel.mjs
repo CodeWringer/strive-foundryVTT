@@ -1,17 +1,17 @@
 import { ITEM_TYPES } from "../../../../business/document/item/item-types.mjs";
 import TransientFateCard from "../../../../business/document/item/transient-fate-card.mjs";
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs";
+import { getExtenders } from "../../../../common/extender-util.mjs";
 import ButtonDeleteViewModel from "../../../component/button-delete/button-delete-viewmodel.mjs";
 import ButtonSendToChatViewModel from "../../../component/button-send-to-chat/button-send-to-chat-viewmodel.mjs";
 import InputImageViewModel from "../../../component/input-image/input-image-viewmodel.mjs";
 import InputRichTextViewModel from "../../../component/input-rich-text/input-rich-text-viewmodel.mjs";
 import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs";
-import { TEMPLATES } from "../../../templatePreloader.mjs";
 import ViewModel from "../../../view-model/view-model.mjs";
 
 export default class FateCardViewModel extends ViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.FATE_CARD; }
+  static get TEMPLATE() { return game.strive.const.TEMPLATES.FATE_CARD; }
 
   /** @override */
   get entityId() { return this.document.id; }
@@ -88,4 +88,10 @@ export default class FateCardViewModel extends ViewModel {
 
     return updates;
   }
+  
+  /** @override */
+  getExtenders() {
+    return super.getExtenders().concat(getExtenders(FateCardViewModel));
+  }
+
 }

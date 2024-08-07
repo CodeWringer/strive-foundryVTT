@@ -1,7 +1,6 @@
 import { ACTOR_TYPES } from "../../../../../../business/document/actor/actor-types.mjs";
 import TransientBaseCharacterActor from "../../../../../../business/document/actor/transient-base-character-actor.mjs";
 import { validateOrThrow } from "../../../../../../business/util/validation-utility.mjs";
-import { TEMPLATES } from "../../../../../templatePreloader.mjs";
 import ViewModel from "../../../../../view-model/view-model.mjs";
 
 /**
@@ -18,7 +17,7 @@ import ViewModel from "../../../../../view-model/view-model.mjs";
  */
 export default class GritPointsViewModel extends ViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.ACTOR_GRIT_POINTS; }
+  static get TEMPLATE() { return game.strive.const.TEMPLATES.ACTOR_GRIT_POINTS; }
 
   /**
    * @type {Number}

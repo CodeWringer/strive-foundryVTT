@@ -6,7 +6,6 @@ import ButtonViewModel from "../../../../component/button/button-viewmodel.mjs";
 import DynamicInputDefinition from "../../../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
 import DynamicInputDialog from "../../../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
 import { DYNAMIC_INPUT_TYPES } from "../../../../dialog/dynamic-input-dialog/dynamic-input-types.mjs";
-import { TEMPLATES } from "../../../../templatePreloader.mjs"
 import ViewModel from "../../../../view-model/view-model.mjs"
 import ActorAssetSlotGroupViewModel from "./actor-asset-slot-group-viewmodel.mjs";
 
@@ -17,7 +16,7 @@ import ActorAssetSlotGroupViewModel from "./actor-asset-slot-group-viewmodel.mjs
  */
 export default class ActorAssetsEquippedViewModel extends ViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.ACTOR_ASSETS; }
+  static get TEMPLATE() { return game.strive.const.TEMPLATES.ACTOR_ASSETS; }
 
   /** @override */
   get entityId() { return this.document.id; }
@@ -26,7 +25,7 @@ export default class ActorAssetsEquippedViewModel extends ViewModel {
    * @type {String}
    * @readonly
    */
-  get assetSlotGroupTemplate() { return TEMPLATES.ACTOR_ASSET_SLOT_GROUP; }
+  get assetSlotGroupTemplate() { return game.strive.const.TEMPLATES.ACTOR_ASSET_SLOT_GROUP; }
   
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 

@@ -5,7 +5,6 @@ import { validateOrThrow } from "../../../../../business/util/validation-utility
 import ButtonCheckBoxViewModel from "../../../../component/button-checkbox/button-checkbox-viewmodel.mjs";
 import ButtonRollViewModel from "../../../../component/button-roll/button-roll-viewmodel.mjs";
 import InputNumberSpinnerViewModel from "../../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
-import { TEMPLATES } from "../../../../templatePreloader.mjs";
 import ViewModel from "../../../../view-model/view-model.mjs";
 
 /**
@@ -23,7 +22,7 @@ import ViewModel from "../../../../view-model/view-model.mjs";
  */
 export default class AttributeTableViewModel extends ViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.ACTOR_ATTRIBUTE_TABLE; }
+  static get TEMPLATE() { return game.strive.const.TEMPLATES.ACTOR_ATTRIBUTE_TABLE; }
 
   /** @override */
   get entityId() { return this.document.id; }

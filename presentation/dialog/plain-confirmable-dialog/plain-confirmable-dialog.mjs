@@ -1,4 +1,3 @@
-import { TEMPLATES } from '../../templatePreloader.mjs';
 import ConfirmableModalDialog from '../confirmable-modal-dialog/confirmable-modal-dialog.mjs';
 
 /**
@@ -13,7 +12,7 @@ import ConfirmableModalDialog from '../confirmable-modal-dialog/confirmable-moda
  */
 export default class ConfirmablePlainDialog extends ConfirmableModalDialog {
   /** @override */
-  get template() { return TEMPLATES.DIALOG_PLAIN_CONFIRMABLE; }
+  get template() { return game.strive.const.TEMPLATES.DIALOG_PLAIN_CONFIRMABLE; }
 
   /** @override */
   get id() { return "confirmable-plain-dialog"; }

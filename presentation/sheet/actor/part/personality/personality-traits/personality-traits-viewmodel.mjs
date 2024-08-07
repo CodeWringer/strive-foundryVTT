@@ -1,4 +1,3 @@
-import { TEMPLATES } from "../../../../../templatePreloader.mjs";
 import { isDefined, validateOrThrow } from "../../../../../../business/util/validation-utility.mjs";
 import InputRadioButtonGroupViewModel from "../../../../../component/input-choice/input-radio-button-group/input-radio-button-group-viewmodel.mjs";
 import ViewModel from "../../../../../view-model/view-model.mjs";
@@ -13,7 +12,7 @@ import StatefulChoiceOption from "../../../../../component/input-choice/stateful
  */
 export default class PersonalityTraitsViewModel extends ViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.ACTOR_PERSONALITY_TRAITS; }
+  static get TEMPLATE() { return game.strive.const.TEMPLATES.ACTOR_PERSONALITY_TRAITS; }
 
   /** @override */
   get entityId() { return this.document.id; }

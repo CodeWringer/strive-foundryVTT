@@ -1,4 +1,3 @@
-import { TEMPLATES } from '../../../../presentation/templatePreloader.mjs';
 import * as ChatUtil from '../../../../presentation/chat/chat-utility.mjs';
 import { validateOrThrow } from '../../../util/validation-utility.mjs';
 import PreparedChatData from '../../../../presentation/chat/prepared-chat-data.mjs';
@@ -241,7 +240,7 @@ export default class Expertise {
    * @type {String}
    * @readonly
    */
-  get chatMessageTemplate() { return TEMPLATES.EXPERTISE_CHAT_MESSAGE; }
+  get chatMessageTemplate() { return game.strive.const.TEMPLATES.EXPERTISE_CHAT_MESSAGE; }
   
   /**
    * Base implementation of returning data for a chat message, based on this item. 

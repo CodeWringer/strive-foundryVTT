@@ -1,3 +1,4 @@
+import { getExtenders } from "../../../common/extender-util.mjs";
 import AtReferencer from "../../referencing/at-referencer.mjs";
 import Ruleset from "../../ruleset/ruleset.mjs";
 import { isDefined } from "../../util/validation-utility.mjs";
@@ -134,5 +135,10 @@ export default class TransientPc extends TransientBaseCharacterActor {
     } else {
       return super.resolveReference(comparableReference, propertyPath);
     }
+  }
+  
+  /** @override */
+  getExtenders() {
+    return super.getExtenders().concat(getExtenders(TransientPc));
   }
 }

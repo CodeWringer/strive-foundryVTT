@@ -1,3 +1,4 @@
+import { getExtenders } from "../../../../common/extender-util.mjs";
 import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
 import BaseItemSheetViewModel from "../base/base-item-sheet-viewmodel.mjs";
 import { DataFieldComponent } from "../base/datafield-component.mjs";
@@ -53,4 +54,10 @@ export default class FateCardItemSheetViewModel extends BaseItemSheetViewModel {
       }),
     ];
   }
+  
+  /** @override */
+  getExtenders() {
+    return super.getExtenders().concat(getExtenders(FateCardItemSheetViewModel));
+  }
+
 }

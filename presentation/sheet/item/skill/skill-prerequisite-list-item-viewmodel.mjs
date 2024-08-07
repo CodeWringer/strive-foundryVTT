@@ -2,7 +2,6 @@ import SkillPrerequisite from "../../../../business/ruleset/skill/skill-prerequi
 import ObservableField from "../../../../common/observables/observable-field.mjs";
 import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
 import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs";
-import { TEMPLATES } from "../../../templatePreloader.mjs";
 import ViewModel from "../../../view-model/view-model.mjs";
 
 // TODO: The observables in here should be unnecessary wiht the new input API.
@@ -15,7 +14,7 @@ import ViewModel from "../../../view-model/view-model.mjs";
  */
 export default class SkillPrerequisiteListItemViewModel extends ViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.SKILL_PREREQUISITE_LIST_ITEM; }
+  static get TEMPLATE() { return game.strive.const.TEMPLATES.SKILL_PREREQUISITE_LIST_ITEM; }
 
   /**
    * Returns an object representation of the data. 

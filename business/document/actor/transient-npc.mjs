@@ -1,3 +1,4 @@
+import { getExtenders } from "../../../common/extender-util.mjs";
 import ChallengeRating from "../../ruleset/attribute/challenge-rating.mjs";
 import { isDefined } from "../../util/validation-utility.mjs";
 import TransientBaseCharacterActor from "./transient-base-character-actor.mjs";
@@ -79,5 +80,10 @@ export default class TransientNpc extends TransientBaseCharacterActor {
     } else {
       return super.resolveReference(comparableReference, propertyPath);
     }
+  }
+  
+  /** @override */
+  getExtenders() {
+    return super.getExtenders().concat(getExtenders(TransientNpc));
   }
 }

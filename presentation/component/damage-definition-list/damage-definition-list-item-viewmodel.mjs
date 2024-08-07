@@ -1,6 +1,5 @@
 import { DAMAGE_TYPES, getDamageTypeIconClass } from "../../../business/ruleset/damage-types.mjs"
 import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
-import { TEMPLATES } from "../../templatePreloader.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
 import InputDropDownViewModel from "../input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
 import InputTextFieldViewModel from "../input-textfield/input-textfield-viewmodel.mjs";
@@ -27,7 +26,7 @@ import DamageAndType from "../../../business/ruleset/skill/damage-and-type.mjs";
  * Receives no arguments. 
  */
 export default class DamageDefinitionListItemViewModel extends InputViewModel {
-  static get TEMPLATE() { return TEMPLATES.COMPONENT_DAMAGE_DEFINITION_LIST_ITEM; }
+  static get TEMPLATE() { return game.strive.const.TEMPLATES.COMPONENT_DAMAGE_DEFINITION_LIST_ITEM; }
 
   /**
    * Registers the Handlebars partial for this component. 

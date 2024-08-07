@@ -1,8 +1,8 @@
-import { TEMPLATES } from "../../../presentation/templatePreloader.mjs";
 import ScarChatMessageViewModel from "../../../presentation/sheet/item/scar/scar-chat-message-viewmodel.mjs";
 import PreparedChatData from "../../../presentation/chat/prepared-chat-data.mjs";
 import { SOUNDS_CONSTANTS } from "../../../presentation/audio/sounds.mjs";
 import TransientBaseItem from "./transient-base-item.mjs";
+import { getExtenders } from "../../../common/extender-util.mjs";
 
 /**
  * Represents the full transient data of a scar. 
@@ -16,7 +16,7 @@ export default class TransientScar extends TransientBaseItem {
   get defaultImg() { return "icons/svg/deaf.svg"; }
   
   /** @override */
-  get chatMessageTemplate() { return TEMPLATES.SCAR_CHAT_MESSAGE; }
+  get chatMessageTemplate() { return game.strive.const.TEMPLATES.SCAR_CHAT_MESSAGE; }
 
   /**
    * @type {String}
@@ -77,5 +77,10 @@ export default class TransientScar extends TransientBaseItem {
       isGM: game.user.isGM,
       document: this,
     });
+  }
+  
+  /** @override */
+  getExtenders() {
+    return super.getExtenders().concat(getExtenders(TransientScar));
   }
 }

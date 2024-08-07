@@ -2,11 +2,11 @@ import TransientBaseCharacterActor from "../../../../../business/document/actor/
 import { ITEM_TYPES } from "../../../../../business/document/item/item-types.mjs"
 import TransientAsset from "../../../../../business/document/item/transient-asset.mjs"
 import { validateOrThrow } from "../../../../../business/util/validation-utility.mjs"
+import { getExtenders } from "../../../../../common/extender-util.mjs"
 import ButtonAddViewModel from "../../../../component/button-add/button-add-viewmodel.mjs"
 import SortControlsViewModel, { SortingOption } from "../../../../component/sort-controls/sort-controls-viewmodel.mjs"
 import DocumentListItemOrderDataSource from "../../../../component/sortable-list/document-list-item-order-datasource.mjs"
 import SortableListViewModel from "../../../../component/sortable-list/sortable-list-viewmodel.mjs"
-import { TEMPLATES } from "../../../../templatePreloader.mjs"
 import ViewModel from "../../../../view-model/view-model.mjs"
 import AssetListItemViewModel from "../../../item/asset/asset-list-item-viewmodel.mjs"
 import ActorAssetsEquippedViewModel from "./actor-assets-equipped-viewmodel.mjs"
@@ -24,7 +24,7 @@ import ActorAssetsEquippedViewModel from "./actor-assets-equipped-viewmodel.mjs"
  */
 export default class ActorAssetsViewModel extends ViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.ACTOR_ASSETS; }
+  static get TEMPLATE() { return game.strive.const.TEMPLATES.ACTOR_ASSETS; }
 
   /** @override */
   get entityId() { return this.document.id; }
@@ -49,7 +49,7 @@ export default class ActorAssetsViewModel extends ViewModel {
    * @type {String}
    * @readonly
    */
-  get templateEquipped() { return TEMPLATES.ACTOR_ASSETS_EQUIPPED; }
+  get templateEquipped() { return game.strive.const.TEMPLATES.ACTOR_ASSETS_EQUIPPED; }
 
   /**
    * @type {Boolean}
@@ -258,4 +258,10 @@ export default class ActorAssetsViewModel extends ViewModel {
       }),
     ];
   }
+  
+  /** @override */
+  getExtenders() {
+    return super.getExtenders().concat(getExtenders(ActorAssetsViewModel));
+  }
+
 }

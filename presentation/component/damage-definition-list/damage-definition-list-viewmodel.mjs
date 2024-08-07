@@ -1,6 +1,5 @@
 import { isDefined, validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import { isNumber } from "../../../business/util/validation-utility.mjs";
-import { TEMPLATES } from "../../templatePreloader.mjs";
 import DiceRollListViewModel from "../dice-roll-list/dice-roll-list-viewmodel.mjs";
 import DamageDefinitionListItemViewModel from "./damage-definition-list-item-viewmodel.mjs";
 import InputViewModel from "../../view-model/input-view-model.mjs";
@@ -25,7 +24,7 @@ import TransientDocument from "../../../business/document/transient-document.mjs
  */
 export default class DamageDefinitionListViewModel extends InputViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.COMPONENT_DAMAGE_DEFINITION_LIST; }
+  static get TEMPLATE() { return game.strive.const.TEMPLATES.COMPONENT_DAMAGE_DEFINITION_LIST; }
   
   /**
    * Registers the Handlebars partial for this component. 
@@ -115,7 +114,7 @@ export default class DamageDefinitionListViewModel extends InputViewModel {
       isGM: thiz.isGM,
       formulaViewModels: thiz.damageDefinitionViewModels,
       formulaListItemTemplate: DamageDefinitionListItemViewModel.TEMPLATE,
-      chatMessageTemplate: TEMPLATES.DICE_ROLL_DAMAGE_CHAT_MESSAGE,
+      chatMessageTemplate: game.strive.const.TEMPLATES.DICE_ROLL_DAMAGE_CHAT_MESSAGE,
       chatTitle: this.chatTitle,
     });
   }

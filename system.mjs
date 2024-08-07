@@ -5,8 +5,8 @@ import { WorldSystemVersion } from "./business/migration/world-system-version.mj
 import { TEMPLATES, preloadHandlebarsTemplates } from "./presentation/templatePreloader.mjs";
 import { initHandlebarsHelpers, initHandlebarsPartials } from "./presentation/handlebars-globals/handlebars-globals.mjs";
 import { initHandlebarsComponents } from "./presentation/handlebars-globals/handlebars-components.mjs";
-// Ruleset
-import { ATTRIBUTES } from "./business/ruleset/attribute/attributes.mjs";
+// Constants
+import { Attribute, ATTRIBUTES } from "./business/ruleset/attribute/attributes.mjs";
 import { DAMAGE_TYPES } from "./business/ruleset/damage-types.mjs";
 import { ATTACK_TYPES } from "./business/ruleset/skill/attack-types.mjs";
 import { SHIELD_TYPES } from "./business/ruleset/asset/shield-types.mjs";
@@ -16,6 +16,10 @@ import { INJURY_STATES } from "./business/ruleset/health/injury-states.mjs";
 import { ILLNESS_STATES } from "./business/ruleset/health/illness-states.mjs";
 import { HEALTH_STATES } from "./business/ruleset/health/health-states.mjs";
 import { CHARACTER_TEST_TYPES } from "./business/ruleset/test/character-test-types.mjs";
+import { ASSET_TAGS, SKILL_TAGS } from "./business/tags/system-tags.mjs";
+import { ACTOR_TYPES } from "./business/document/actor/actor-types.mjs";
+import { ITEM_TYPES } from "./business/document/item/item-types.mjs";
+// Ruleset
 import Ruleset from "./business/ruleset/ruleset.mjs";
 // Chat constants
 import { VISIBILITY_MODES } from "./presentation/chat/visibility-modes.mjs";
@@ -23,6 +27,17 @@ import { VISIBILITY_MODES } from "./presentation/chat/visibility-modes.mjs";
 import ChoiceOption from "./presentation/component/input-choice/choice-option.mjs";
 import DocumentFetcher from "./business/document/document-fetcher/document-fetcher.mjs";
 import TokenExtensions from "./presentation/token/token-extensions.mjs";
+import * as ValidationUtil from "./business/util/validation-utility.mjs";
+import * as ArrayUtil from "./business/util/array-utility.mjs";
+import { preloadPixiTextures } from "./presentation/pixi/pixi-preloader.mjs";
+import CustomCombatTracker from "./presentation/combat/custom-combat-tracker.mjs";
+import { KEYBOARD } from "./presentation/keyboard/keyboard.mjs";
+import VersionCode from "./business/migration/version-code.mjs";
+import DicePoolDesignerDialog from "./presentation/dialog/dice-pool-designer-dialog/dice-pool-designer-dialog.mjs";
+import { activateRollChatMessageListeners } from "./presentation/dice/roll-chat-message.mjs";
+import { Sum, SumComponent } from "./business/ruleset/summed-data.mjs";
+import Tag from "./business/tags/tag.mjs";
+import InfoBubble, { InfoBubbleAutoHidingTypes, InfoBubbleAutoShowingTypes } from "./presentation/component/info-bubble/info-bubble.mjs";
 // Migration
 import MigratorInitiator from "./business/migration/migrator-initiator.mjs";
 import MigratorDialog from "./presentation/dialog/migrator-dialog/migrator-dialog.mjs";
@@ -34,6 +49,19 @@ import "./presentation/dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
 import { GameSystemActor } from "./business/document/actor/actor.mjs";
 import { GameSystemItem } from "./business/document/item/item.mjs";
 import { GameSystemCombat } from "./presentation/combat/game-system-combat.mjs";
+import TransientBaseCharacterActor from "./business/document/actor/transient-base-character-actor.mjs";
+import TransientBaseActor from "./business/document/actor/transient-base-actor.mjs";
+import TransientNpc from "./business/document/actor/transient-npc.mjs";
+import TransientPc from "./business/document/actor/transient-pc.mjs";
+import TransientPlainActor from "./business/document/actor/transient-plain-actor.mjs";
+import TransientSkill from "./business/document/item/skill/transient-skill.mjs";
+import TransientAsset from "./business/document/item/transient-asset.mjs";
+import TransientBaseItem from "./business/document/item/transient-base-item.mjs";
+import TransientFateCard from "./business/document/item/transient-fate-card.mjs";
+import TransientIllness from "./business/document/item/transient-illness.mjs";
+import TransientInjury from "./business/document/item/transient-injury.mjs";
+import TransientMutation from "./business/document/item/transient-mutation.mjs";
+import TransientScar from "./business/document/item/transient-scar.mjs";
 // Sheet classes
 import { GameSystemActorSheet } from "./presentation/sheet/actor/actor-sheet.mjs";
 import { GameSystemItemSheet } from "./presentation/sheet/item/item-sheet.mjs";
@@ -46,50 +74,72 @@ import GameSystemWorldSettings from "./business/setting/game-system-world-settin
 // Import view models
 import './presentation/view-model/view-model.mjs';
 import ViewModelCollection from './presentation/view-model/view-model-collection.mjs';
-// Components
-import './presentation/view-model/input-view-model.mjs';
-import './presentation/component/input-textfield/input-textfield-viewmodel.mjs';
-import './presentation/component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs';
-import './presentation/component/input-choice/input-radio-button-group/input-radio-button-group-viewmodel.mjs';
-import './presentation/component/input-number-spinner/input-number-spinner-viewmodel.mjs';
-import './presentation/component/input-textarea/input-textarea-viewmodel.mjs';
-import './presentation/component/button/button-viewmodel.mjs';
-import './presentation/component/button-add/button-add-viewmodel.mjs';
-import './presentation/component/button-delete/button-delete-viewmodel.mjs';
-import './presentation/component/button-open-sheet/button-open-sheet-viewmodel.mjs';
-import './presentation/component/button-roll/button-roll-viewmodel.mjs';
-import './presentation/component/button-send-to-chat/button-send-to-chat-viewmodel.mjs';
-import './presentation/component/button-toggle-visibility/button-toggle-visibility-viewmodel.mjs';
-import './presentation/component/button-take-item/button-take-item-viewmodel.mjs';
-import './presentation/component/button-toggle-icon/button-toggle-icon-viewmodel.mjs';
-// Composites
-import './presentation/component/sortable-list/sortable-list-viewmodel.mjs';
-import './presentation/component/simple-list/simple-list-viewmodel.mjs';
-import './presentation/component/section-gm-notes/section-gm-notes-viewmodel.mjs';
-import './presentation/component/dice-roll-list/dice-roll-list-viewmodel.mjs';
-import './presentation/component/damage-definition-list/damage-definition-list-item-viewmodel.mjs';
-import './presentation/component/damage-definition-list/damage-definition-list-viewmodel.mjs';
-import './presentation/component/lazy-load/lazy-load-viewmodel.mjs';
-import './presentation/component/lazy-rich-text/lazy-rich-text-viewmodel.mjs';
-import './presentation/component/visibility-toggle-list/visibility-toggle-list-viewmodel.mjs';
 // View models
-import './presentation/sheet/actor/actor-sheet-viewmodel.mjs';
+import ViewModel from "./presentation/view-model/view-model.mjs";
+// View models - Components
+import InputNumberSpinnerViewModel from "./presentation/component/input-number-spinner/input-number-spinner-viewmodel.mjs";
+import ButtonAddViewModel from "./presentation/component/button-add/button-add-viewmodel.mjs";
+import ButtonCheckBoxViewModel from "./presentation/component/button-checkbox/button-checkbox-viewmodel.mjs";
+import ButtonContextMenuViewModel from "./presentation/component/button-context-menu/button-context-menu-viewmodel.mjs";
+import ButtonDeleteViewModel from "./presentation/component/button-delete/button-delete-viewmodel.mjs";
+import ButtonOpenSheetViewModel from "./presentation/component/button-open-sheet/button-open-sheet-viewmodel.mjs";
+import VisibilityToggleListItemViewModel from "./presentation/component/visibility-toggle-list/visibility-toggle-list-item-viewmodel.mjs";
+import VisibilityToggleListViewModel from "./presentation/component/visibility-toggle-list/visibility-toggle-list-viewmodel.mjs";
+import SortableListViewModel from "./presentation/component/sortable-list/sortable-list-viewmodel.mjs";
+import SortControlsViewModel from "./presentation/component/sort-controls/sort-controls-viewmodel.mjs";
+import SimpleListItemViewModel from "./presentation/component/simple-list/simple-list-item-viewmodel.mjs";
+import SimpleListViewModel from "./presentation/component/simple-list/simple-list-viewmodel.mjs";
+import GmNotesViewModel from "./presentation/component/section-gm-notes/section-gm-notes-viewmodel.mjs";
+import LazyRichTextViewModel from "./presentation/component/lazy-rich-text/lazy-rich-text-viewmodel.mjs";
+import LazyLoadViewModel from "./presentation/component/lazy-load/lazy-load-viewmodel.mjs";
+import InputToggleViewModel from "./presentation/component/input-toggle/input-toggle-viewmodel.mjs";
+import InputTextareaViewModel from "./presentation/component/input-textarea/input-textarea-viewmodel.mjs";
+import InputTextFieldViewModel from "./presentation/component/input-textfield/input-textfield-viewmodel.mjs";
+import InputTagPillViewModel from "./presentation/component/input-tags/input-tag-pill-viewmodel.mjs";
+import InputTagsViewModel from "./presentation/component/input-tags/input-tags-viewmodel.mjs";
+import InputSliderViewModel from "./presentation/component/input-slider/input-slider-viewmodel.mjs";
+import InputSearchTextViewModel from "./presentation/component/input-search/input-search-viewmodel.mjs";
+import InputRichTextViewModel from "./presentation/component/input-rich-text/input-rich-text-viewmodel.mjs";
+import InputImageViewModel from "./presentation/component/input-image/input-image-viewmodel.mjs";
+import InputChoiceViewModel from "./presentation/component/input-choice/input-choice-viewmodel.mjs";
+import DiceRollListViewModel from "./presentation/component/dice-roll-list/dice-roll-list-viewmodel.mjs";
+import DamageDefinitionListItemViewModel from "./presentation/component/damage-definition-list/damage-definition-list-item-viewmodel.mjs";
+import DamageDefinitionListViewModel from "./presentation/component/damage-definition-list/damage-definition-list-viewmodel.mjs";
+import ButtonToggleVisibilityViewModel from "./presentation/component/button-toggle-visibility/button-toggle-visibility-viewmodel.mjs";
+import ButtonToggleIconViewModel from "./presentation/component/button-toggle-icon/button-toggle-icon-viewmodel.mjs";
+import ButtonTakeItemViewModel from "./presentation/component/button-take-item/button-take-item-viewmodel.mjs";
+import ButtonSendToChatViewModel from "./presentation/component/button-send-to-chat/button-send-to-chat-viewmodel.mjs";
+import ButtonRollViewModel from "./presentation/component/button-roll/button-roll-viewmodel.mjs";
+// View models - Actor
 import './presentation/sheet/actor/part/abilities/actor-attribute-table-viewmodel.mjs';
-import './presentation/sheet/actor/part/abilities/actor-attributes-viewmodel.mjs';
-import './presentation/sheet/actor/part/abilities/actor-skills-viewmodel.mjs';
-import './presentation/sheet/actor/part/assets/actor-assets-viewmodel.mjs';
-import './presentation/sheet/actor/part/personality/actor-personality-viewmodel.mjs';
+import ActorAttributesViewModel from "./presentation/sheet/actor/part/abilities/actor-attributes-viewmodel.mjs";
 import './presentation/sheet/actor/part/personality/actor-drivers-viewmodel.mjs';
 import './presentation/sheet/actor/part/actor-biography-viewmodel.mjs';
-import './presentation/sheet/actor/part/actor-fate-viewmodel.mjs';
-import './presentation/sheet/actor/part/health/actor-health-viewmodel.mjs';
-import './presentation/sheet/actor/part/actor-personals-viewmodel.mjs';
-import { preloadPixiTextures } from "./presentation/pixi/pixi-preloader.mjs";
-import CustomCombatTracker from "./presentation/combat/custom-combat-tracker.mjs";
-import { KEYBOARD } from "./presentation/keyboard/keyboard.mjs";
-import VersionCode from "./business/migration/version-code.mjs";
-import DicePoolDesignerDialog from "./presentation/dialog/dice-pool-designer-dialog/dice-pool-designer-dialog.mjs";
-import { activateRollChatMessageListeners } from "./presentation/dice/roll-chat-message.mjs";
+import ActorHealthViewModel from './presentation/sheet/actor/part/health/actor-health-viewmodel.mjs';
+import ActorSkillsViewModel from "./presentation/sheet/actor/part/abilities/actor-skills-viewmodel.mjs";
+import ActorAssetsViewModel from "./presentation/sheet/actor/part/assets/actor-assets-viewmodel.mjs";
+import ActorPersonalityViewModel from "./presentation/sheet/actor/part/personality/actor-personality-viewmodel.mjs";
+import ActorFateViewModel from "./presentation/sheet/actor/part/actor-fate-viewmodel.mjs";
+import ActorPersonalsViewModel from "./presentation/sheet/actor/part/actor-personals-viewmodel.mjs";
+import ActorSheetViewModel from "./presentation/sheet/actor/actor-sheet-viewmodel.mjs";
+// View models - Item
+import AssetListItemViewModel from "./presentation/sheet/item/asset/asset-list-item-viewmodel.mjs";
+import AssetItemSheetViewModel from "./presentation/sheet/item/asset/asset-item-sheet-viewmodel.mjs";
+import BaseItemSheetViewModel from "./presentation/sheet/item/base/base-item-sheet-viewmodel.mjs";
+import BaseListItemViewModel from "./presentation/sheet/item/base/base-list-item-viewmodel.mjs";
+import ExpertiseListItemViewModel from "./presentation/sheet/item/expertise/expertise-list-item-viewmodel.mjs";
+import FateCardViewModel from "./presentation/sheet/item/fate-card/fate-card-viewmodel.mjs";
+import FateCardItemSheetViewModel from "./presentation/sheet/item/fate-card/fate-card-item-sheet-viewmodel.mjs";
+import IllnessItemSheetViewModel from "./presentation/sheet/item/illness/illness-item-sheet-viewmodel.mjs";
+import IllnessListItemViewModel from "./presentation/sheet/item/illness/illness-list-item-viewmodel.mjs";
+import InjuryItemSheetViewModel from "./presentation/sheet/item/injury/injury-item-sheet-viewmodel.mjs";
+import InjuryListItemViewModel from "./presentation/sheet/item/injury/injury-list-item-viewmodel.mjs";
+import MutationItemSheetViewModel from "./presentation/sheet/item/mutation/mutation-item-sheet-viewmodel.mjs";
+import MutationListItemViewModel from "./presentation/sheet/item/mutation/mutation-list-item-viewmodel.mjs";
+import ScarItemSheetViewModel from "./presentation/sheet/item/scar/scar-item-sheet-viewmodel.mjs";
+import ScarListItemViewModel from "./presentation/sheet/item/scar/scar-list-item-viewmodel.mjs";
+import SkillItemSheetViewModel from "./presentation/sheet/item/skill/skill-item-sheet-viewmodel.mjs";
+import SkillListItemViewModel from "./presentation/sheet/item/skill/skill-list-item-viewmodel.mjs";
 
 /* -------------------------------------------- */
 /*  Initialization                              */
@@ -148,6 +198,135 @@ Hooks.once('init', function() {
      * @type {Map<String, Object>}
      */
     viewStates: new Map(),
+    /**
+     * Contains const definitions for use in modules that wish to extend the strive system. 
+     * 
+     * @type {Object}
+     */
+    const: {
+      ATTRIBUTES: ATTRIBUTES,
+      ACTOR_TYPES: ACTOR_TYPES,
+      ITEM_TYPES: ITEM_TYPES,
+      TEMPLATES: TEMPLATES,
+      ASSET_TAGS: ASSET_TAGS,
+      SKILL_TAGS: SKILL_TAGS,
+      DAMAGE_TYPES: DAMAGE_TYPES,
+      ATTACK_TYPES: ATTACK_TYPES,
+      SHIELD_TYPES: SHIELD_TYPES,
+      ARMOR_TYPES: ARMOR_TYPES,
+      WEAPON_TYPES: WEAPON_TYPES,
+      INJURY_STATES: INJURY_STATES,
+      ILLNESS_STATES: ILLNESS_STATES,
+      HEALTH_STATES: HEALTH_STATES,
+      CHARACTER_TEST_TYPES: CHARACTER_TEST_TYPES,
+      VISIBILITY_MODES: VISIBILITY_MODES,
+    },
+    /**
+     * Contains class definitions for use in modules that wish to extend the strive system. 
+     * 
+     * @type {Object}
+     */
+    classDef: {
+      Attribute: Attribute,
+      ChoiceOption: ChoiceOption,
+      InfoBubble: InfoBubble,
+      InfoBubbleAutoHidingTypes: InfoBubbleAutoHidingTypes,
+      InfoBubbleAutoShowingTypes: InfoBubbleAutoShowingTypes,
+      SumComponent: SumComponent,
+      Sum: Sum,
+      Ruleset: Ruleset,
+      Tag: Tag,
+      document: {
+        TransientBaseActor: TransientBaseActor,
+        TransientBaseCharacterActor: TransientBaseCharacterActor,
+        TransientNpc: TransientNpc,
+        TransientPc: TransientPc,
+        TransientPlainActor: TransientPlainActor,
+        TransientBaseItem: TransientBaseItem,
+        TransientSkill: TransientSkill,
+        TransientAsset: TransientAsset,
+        TransientFateCard: TransientFateCard,
+        TransientIllness: TransientIllness,
+        TransientInjury: TransientInjury,
+        TransientMutation: TransientMutation,
+        TransientScar: TransientScar,
+      },
+      viewModel: {
+        ViewModel: ViewModel,
+        ButtonAddViewModel: ButtonAddViewModel,
+        ButtonCheckBoxViewModel: ButtonCheckBoxViewModel,
+        ButtonContextMenuViewModel: ButtonContextMenuViewModel,
+        ButtonDeleteViewModel: ButtonDeleteViewModel,
+        ButtonOpenSheetViewModel: ButtonOpenSheetViewModel,
+        ButtonRollViewModel: ButtonRollViewModel,
+        ButtonSendToChatViewModel: ButtonSendToChatViewModel,
+        ButtonTakeItemViewModel: ButtonTakeItemViewModel,
+        ButtonToggleIconViewModel: ButtonToggleIconViewModel,
+        ButtonToggleVisibilityViewModel: ButtonToggleVisibilityViewModel,
+        DamageDefinitionListViewModel: DamageDefinitionListViewModel,
+        DamageDefinitionListItemViewModel: DamageDefinitionListItemViewModel,
+        DiceRollListViewModel: DiceRollListViewModel,
+        InputChoiceViewModel: InputChoiceViewModel,
+        InputImageViewModel: InputImageViewModel,
+        InputRichTextViewModel: InputRichTextViewModel,
+        InputSearchTextViewModel: InputSearchTextViewModel,
+        InputSliderViewModel: InputSliderViewModel,
+        InputTagsViewModel: InputTagsViewModel,
+        InputTagPillViewModel: InputTagPillViewModel,
+        InputTextareaViewModel: InputTextareaViewModel,
+        InputTextFieldViewModel: InputTextFieldViewModel,
+        InputToggleViewModel: InputToggleViewModel,
+        LazyLoadViewModel: LazyLoadViewModel,
+        LazyRichTextViewModel: LazyRichTextViewModel,
+        GmNotesViewModel: GmNotesViewModel,
+        SimpleListViewModel: SimpleListViewModel,
+        SimpleListItemViewModel: SimpleListItemViewModel,
+        SortControlsViewModel: SortControlsViewModel,
+        SortableListViewModel: SortableListViewModel,
+        VisibilityToggleListViewModel: VisibilityToggleListViewModel,
+        VisibilityToggleListItemViewModel: VisibilityToggleListItemViewModel,
+        InputNumberSpinnerViewModel: InputNumberSpinnerViewModel,
+        actor: {
+          ActorAttributesViewModel: ActorAttributesViewModel,
+          ActorSkillsViewModel: ActorSkillsViewModel,
+          ActorAssetsViewModel: ActorAssetsViewModel,
+          ActorHealthViewModel: ActorHealthViewModel,
+          ActorPersonalityViewModel: ActorPersonalityViewModel,
+          ActorFateViewModel: ActorFateViewModel,
+          ActorPersonalsViewModel: ActorPersonalsViewModel,
+          ActorSheetViewModel: ActorSheetViewModel,
+        },
+        item: {
+          AssetListItemViewModel: AssetListItemViewModel,
+          AssetItemSheetViewModel: AssetItemSheetViewModel,
+          BaseItemSheetViewModel: BaseItemSheetViewModel,
+          BaseListItemViewModel: BaseListItemViewModel,
+          ExpertiseListItemViewModel: ExpertiseListItemViewModel,
+          FateCardViewModel: FateCardViewModel,
+          FateCardItemSheetViewModel: FateCardItemSheetViewModel,
+          IllnessItemSheetViewModel: IllnessItemSheetViewModel,
+          IllnessListItemViewModel: IllnessListItemViewModel,
+          InjuryItemSheetViewModel: InjuryItemSheetViewModel,
+          InjuryListItemViewModel: InjuryListItemViewModel,
+          MutationItemSheetViewModel: MutationItemSheetViewModel,
+          MutationListItemViewModel: MutationListItemViewModel,
+          ScarItemSheetViewModel: ScarItemSheetViewModel,
+          ScarListItemViewModel: ScarListItemViewModel,
+          SkillItemSheetViewModel: SkillItemSheetViewModel,
+          SkillListItemViewModel: SkillListItemViewModel,
+        },
+      },
+    },
+    util: {
+      validation: ValidationUtil,
+      array: ArrayUtil,
+    },
+    /**
+     * Registered extenders. 
+     * 
+     * @type {Map<any, Array<Object>>}
+     */
+    extenders: new Map(),
   };
 
   // Set initiative formula on global CONFIG variable provided by FoundryVTT.

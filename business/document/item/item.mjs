@@ -79,7 +79,7 @@ export class GameSystemItem extends Item {
         this._transientObject = factoryFunction(this);
       });
     }
-    return this._transientObject;
+    return this._transientObject.getTransientObject();
   }
 
   /** @override */

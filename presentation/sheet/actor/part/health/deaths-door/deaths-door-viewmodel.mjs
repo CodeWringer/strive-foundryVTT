@@ -1,6 +1,5 @@
 import TransientPc from "../../../../../../business/document/actor/transient-pc.mjs";
 import { validateOrThrow } from "../../../../../../business/util/validation-utility.mjs";
-import { TEMPLATES } from "../../../../../templatePreloader.mjs";
 import ViewModel from "../../../../../view-model/view-model.mjs";
 
 /**
@@ -11,7 +10,7 @@ import ViewModel from "../../../../../view-model/view-model.mjs";
  */
 export default class DeathsDoorViewModel extends ViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.ACTOR_HEALTH_DEATH_SAVES; }
+  static get TEMPLATE() { return game.strive.const.TEMPLATES.ACTOR_HEALTH_DEATH_SAVES; }
 
   /**
    * @type {Boolean}

@@ -5,7 +5,6 @@ import { validateOrThrow } from "../../../../business/util/validation-utility.mj
 import { isDefined } from "../../../../business/util/validation-utility.mjs";
 import InfoBubble, { InfoBubbleAutoHidingTypes, InfoBubbleAutoShowingTypes } from "../../../component/info-bubble/info-bubble.mjs";
 import ViewModel from "../../../view-model/view-model.mjs";
-import { TEMPLATES } from "../../../templatePreloader.mjs";
 import DamageDefinitionListViewModel from "../../../component/damage-definition-list/damage-definition-list-viewmodel.mjs";
 import InputDropDownViewModel from "../../../component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
 import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
@@ -18,6 +17,7 @@ import BaseListItemViewModel from "../base/base-list-item-viewmodel.mjs";
 import { DataFieldComponent } from "../base/datafield-component.mjs";
 import { TemplatedComponent } from "../base/templated-component.mjs";
 import Ruleset from "../../../../business/ruleset/ruleset.mjs";
+import { getExtenders } from "../../../../common/extender-util.mjs";
 
 /**
  * @property {Expertise} document 
@@ -300,7 +300,7 @@ export default class ExpertiseListItemViewModel extends BaseListItemViewModel {
   /** @override */
   getAdditionalHeaderContent() {
     return new TemplatedComponent({
-      template: TEMPLATES.EXPERTISE_LIST_ITEM_EXTRA_HEADER,
+      template: game.strive.const.TEMPLATES.EXPERTISE_LIST_ITEM_EXTRA_HEADER,
       viewModel: this,
     });
   }
@@ -309,7 +309,7 @@ export default class ExpertiseListItemViewModel extends BaseListItemViewModel {
   getAdditionalContent() {
     if (this.hideDamage === false) {
       return new TemplatedComponent({
-        template: TEMPLATES.EXPERTISE_LIST_ITEM_EXTRA_CONTENT,
+        template: game.strive.const.TEMPLATES.EXPERTISE_LIST_ITEM_EXTRA_CONTENT,
         viewModel: this,
       });
     }
@@ -320,4 +320,10 @@ export default class ExpertiseListItemViewModel extends BaseListItemViewModel {
 
     this.damageInfoBubble.remove();
   }
+  
+  /** @override */
+  getExtenders() {
+    return super.getExtenders().concat(getExtenders(ExpertiseListItemViewModel));
+  }
+
 }

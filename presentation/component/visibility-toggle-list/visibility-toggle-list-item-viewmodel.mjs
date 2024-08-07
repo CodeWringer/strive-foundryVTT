@@ -1,5 +1,4 @@
 import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
-import { TEMPLATES } from "../../templatePreloader.mjs";
 import InputViewModel from "../../view-model/input-view-model.mjs";
 import ButtonToggleIconViewModel from "../button-toggle-icon/button-toggle-icon-viewmodel.mjs";
 
@@ -29,7 +28,7 @@ import ButtonToggleIconViewModel from "../button-toggle-icon/button-toggle-icon-
  */
 export default class VisibilityToggleListItemViewModel extends InputViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.COMPONENT_VISIBILITY_TOGGLE_LIST_ITEM; }
+  static get TEMPLATE() { return game.strive.const.TEMPLATES.COMPONENT_VISIBILITY_TOGGLE_LIST_ITEM; }
 
   /**
    * @param {Object} args

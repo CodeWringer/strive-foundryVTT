@@ -1,4 +1,4 @@
-import { TEMPLATES } from '../../../presentation/templatePreloader.mjs';
+import { getExtenders } from '../../../common/extender-util.mjs';
 import AtReferencer from '../../referencing/at-referencer.mjs';
 import CharacterAssetSlotGroup from '../../ruleset/asset/character-asset-slot-group.mjs';
 import { ATTRIBUTES } from '../../ruleset/attribute/attributes.mjs';
@@ -60,9 +60,6 @@ import TransientBaseActor from './transient-base-actor.mjs';
  * @property {Number} health.exhaustion 
  * @property {Number} health.maxExhaustion 
  * * Read-only. 
- * @property {Number} health.magicStamina 
- * @property {Number} health.maxMagicStamina 
- * * Read-only. 
  * @property {Number} health.deathSaves
  * @property {Number} health.deathSaveLimit
  * @property {Object} assets
@@ -122,7 +119,7 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
   get defaultImg() { return "icons/svg/mystery-man.svg"; }
   
   /** @override */
-  get chatMessageTemplate() { return TEMPLATES.ACTOR_CHAT_MESSAGE; }
+  get chatMessageTemplate() { return game.strive.const.TEMPLATES.ACTOR_CHAT_MESSAGE; }
 
   /**
    * @type {Object}
@@ -277,17 +274,6 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
       get exhaustion() { return parseInt(thiz.document.system.health.exhaustion ?? 0); },
       set exhaustion(value) { thiz.updateByPath("system.health.exhaustion", value); },
 
-      // Magic Stamina
-      get maxMagicStamina() { return new Ruleset().getCharacterMaximumMagicStamina(thiz.document) },
-
-      get maxMagicStaminaModifier() { return parseInt(thiz.document.system.health.maxMagicStaminaModifier ?? 0); },
-      set maxMagicStaminaModifier(value) { thiz.updateByPath("system.health.maxMagicStaminaModifier", value); },
-
-      get modifiedMaxMagicStamina() { return this.maxMagicStamina.total + this.maxMagicStaminaModifier; },
-
-      get magicStamina() { return parseInt(thiz.document.system.health.magicStamina ?? 0); },
-      set magicStamina(value) { thiz.updateByPath("system.health.magicStamina", value); },
-      
       // Injuries
       get maxInjuries() { return new Ruleset().getCharacterMaximumInjuries(thiz.document) },
       
@@ -409,7 +395,6 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
   constructor(document) {
     super(document);
 
-    this.attributes = this._getAttributes();
     this._prepareAssetsData();
     this._healthStates = this._getHealthStates();
   }
@@ -440,25 +425,14 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
     }
   }
 
-  /**
-   * Returns the attributes of the character. 
-   * 
-   * @returns {Array<CharacterAttribute>}
-   * 
-   * @private
-   */
-  _getAttributes() {
-    const result = [];
-
-    for (const attribute of ATTRIBUTES.asArray()) {
-      try {
-        result.push(new CharacterAttribute(this.document, attribute.name));
-      } catch (error) {
-        game.strive.logger.logError(error);
-      }
+  get attributes() {
+    try {
+      return game.strive.const.ATTRIBUTES.asArray().map(attribute => 
+        new CharacterAttribute(this.document, attribute.name)
+      )
+    } catch (error) {
+      game.strive.logger.logError(error);
     }
-
-    return result;
   }
 
   /**
@@ -611,5 +585,10 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
       this.health.scars,
     ];
     return new AtReferencer().resolveReferenceInCollections(collectionsToSearch, comparableReference, propertyPath);
+  }
+
+  /** @override */
+  getExtenders() {
+    return super.getExtenders().concat(getExtenders(TransientBaseCharacterActor));
   }
 }

@@ -1,4 +1,3 @@
-import { TEMPLATES } from "../../templatePreloader.mjs";
 import InputViewModel from "../../view-model/input-view-model.mjs";
 
 /**
@@ -15,7 +14,7 @@ import InputViewModel from "../../view-model/input-view-model.mjs";
  */
 export default class InputSearchTextViewModel extends InputViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.COMPONENT_INPUT_SEARCH; }
+  static get TEMPLATE() { return game.strive.const.TEMPLATES.COMPONENT_INPUT_SEARCH; }
 
   /**
    * Registers the Handlebars partial for this component. 

@@ -1,9 +1,9 @@
-import { TEMPLATES } from "../../../presentation/templatePreloader.mjs";
 import InjuryChatMessageViewModel from "../../../presentation/sheet/item/injury/injury-chat-message-viewmodel.mjs";
 import PreparedChatData from "../../../presentation/chat/prepared-chat-data.mjs";
 import { SOUNDS_CONSTANTS } from "../../../presentation/audio/sounds.mjs";
 import TransientBaseItem from "./transient-base-item.mjs";
 import { INJURY_STATES } from "../../ruleset/health/injury-states.mjs";
+import { getExtenders } from "../../../common/extender-util.mjs";
 
 /**
  * Represents the full transient data of an injury. 
@@ -26,7 +26,7 @@ export default class TransientInjury extends TransientBaseItem {
   get defaultImg() { return "icons/svg/bones.svg"; }
 
   /** @override */
-  get chatMessageTemplate() { return TEMPLATES.INJURY_CHAT_MESSAGE; }
+  get chatMessageTemplate() { return game.strive.const.TEMPLATES.INJURY_CHAT_MESSAGE; }
 
   /**
    * @type {String}
@@ -231,5 +231,10 @@ export default class TransientInjury extends TransientBaseItem {
     } else {
       return 0;
     }
+  }
+  
+  /** @override */
+  getExtenders() {
+    return super.getExtenders().concat(getExtenders(TransientInjury));
   }
 }

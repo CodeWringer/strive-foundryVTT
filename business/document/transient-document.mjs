@@ -437,9 +437,24 @@ export default class TransientDocument {
    * this method on any actor or item and get a transient document 
    * reference to work with. 
    * 
+   * Also ensures that extenders are applied! 
+   * 
    * @returns {TransientDocument} 
    */
   getTransientObject() {
+    const extenders = this.getExtenders();
+    extenders.forEach(extender => {
+      extender.extend(this);
+    });
     return this;
+  }
+
+  /**
+   * Returns extenders. 
+   * 
+   * @returns {Array<Object>}
+   */
+  getExtenders() {
+    return [];
   }
 }

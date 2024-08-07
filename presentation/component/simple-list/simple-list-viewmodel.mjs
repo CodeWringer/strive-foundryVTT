@@ -1,5 +1,4 @@
 import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
-import { TEMPLATES } from "../../templatePreloader.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
 import SimpleListItemViewModel from "./simple-list-item-viewmodel.mjs";
@@ -28,7 +27,7 @@ import SimpleListItemViewModel from "./simple-list-item-viewmodel.mjs";
  */
 export default class SimpleListViewModel extends ViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.COMPONENT_SIMPLE_LIST; }
+  static get TEMPLATE() { return game.strive.const.TEMPLATES.COMPONENT_SIMPLE_LIST; }
 
   /**
    * Registers the Handlebars partial for this component. 

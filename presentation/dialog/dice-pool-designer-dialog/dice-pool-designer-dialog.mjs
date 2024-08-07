@@ -1,5 +1,4 @@
 import FoundryWrapper from "../../../common/foundry-wrapper.mjs";
-import { TEMPLATES } from "../../templatePreloader.mjs";
 import DicePoolDesignerDialogViewModel from "./dice-pool-designer-dialog-viewmodel.mjs";
 
 /**
@@ -22,7 +21,7 @@ export default class DicePoolDesignerDialog extends Application {
   }
 
   /** @override */
-  get template() { return TEMPLATES.DIALOG_DICE_POOL_DESIGNER; }
+  get template() { return game.strive.const.TEMPLATES.DIALOG_DICE_POOL_DESIGNER; }
 
   /** @override */
   get title() { return "Dice Pool Designer"; }

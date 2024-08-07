@@ -2,7 +2,6 @@ import { CharacterHealthState } from "../../../../../business/ruleset/health/cha
 import { HEALTH_STATES } from "../../../../../business/ruleset/health/health-states.mjs";
 import LoadHealthStatesSettingUseCase from "../../../../../business/use-case/load-health-states-setting-use-case.mjs";
 import { validateOrThrow } from "../../../../../business/util/validation-utility.mjs";
-import { TEMPLATES } from "../../../../templatePreloader.mjs"
 import ViewModel from "../../../../view-model/view-model.mjs"
 import ActorHealthStatesListItemViewModel from "./actor-health-states-list-item-viewmodel.mjs";
 
@@ -16,7 +15,7 @@ import ActorHealthStatesListItemViewModel from "./actor-health-states-list-item-
  */
 export default class ActorHealthStatesViewModel extends ViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.ACTOR_HEALTH_STATES; }
+  static get TEMPLATE() { return game.strive.const.TEMPLATES.ACTOR_HEALTH_STATES; }
 
   /**
    * @type {String}

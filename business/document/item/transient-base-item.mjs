@@ -1,4 +1,4 @@
-import { TEMPLATES } from "../../../presentation/templatePreloader.mjs";
+import { getExtenders } from "../../../common/extender-util.mjs";
 import Tag from "../../tags/tag.mjs";
 import TransientDocument from "../transient-document.mjs";
 
@@ -34,7 +34,7 @@ export default class TransientBaseItem extends TransientDocument {
   get defaultImg() { return "icons/svg/item-bag.svg"; }
   
   /** @override */
-  get chatMessageTemplate() { return TEMPLATES.ASSET_CHAT_MESSAGE; }
+  get chatMessageTemplate() { return game.strive.const.TEMPLATES.ASSET_CHAT_MESSAGE; }
 
   /**
    * An array of the current tags of this document. 
@@ -86,5 +86,10 @@ export default class TransientBaseItem extends TransientDocument {
     } else {
       return undefined;
     }
+  }
+  
+  /** @override */
+  getExtenders() {
+    return super.getExtenders().concat(getExtenders(TransientBaseItem));
   }
 }

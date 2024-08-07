@@ -26,7 +26,6 @@ export class Attribute {
  * 
  * @property {Attribute} agility A character's "agility" attribute. 
  * @property {Attribute} awareness A character's "awareness" attribute. 
- * @property {Attribute} arcana A character's "arcana" attribute. 
  * @property {Attribute} strength A character's "strength" attribute. 
  * @property {Attribute} toughness A character's "toughness" attribute. 
  * @property {Attribute} wit A character's "wit" attribute. 
@@ -38,11 +37,6 @@ export const ATTRIBUTES = {
     name: "agility",
     localizableName: "system.character.attribute.agility.label",
     localizableAbbreviation: "system.character.attribute.agility.abbreviation"
-  }),
-  arcana: new Attribute({
-    name: "arcana",
-    localizableName: "system.character.attribute.arcana.label",
-    localizableAbbreviation: "system.character.attribute.arcana.abbreviation"
   }),
   awareness: new Attribute({
     name: "awareness",
