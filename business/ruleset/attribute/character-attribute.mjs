@@ -29,7 +29,7 @@ export default class CharacterAttribute {
   /**
    * @type {Number}
    */
-  get level() { return parseInt(this._actor.system.attributes[this.name].level); }
+  get level() { return parseInt((this._actor.system.attributes[this.name] ?? {}).level ?? 0); }
   set level(value) {
     this._actor.update({
       system: {
@@ -45,7 +45,7 @@ export default class CharacterAttribute {
   /**
    * @type {Number}
    */
-  get levelModifier() { return parseInt(this._actor.system.attributes[this.name].levelModifier ?? "0"); }
+  get levelModifier() { return parseInt((this._actor.system.attributes[this.name] ?? {}).levelModifier ?? 0); }
   set levelModifier(value) {
     this._actor.update({
       system: {
@@ -73,7 +73,7 @@ export default class CharacterAttribute {
   /**
    * @type {Number}
    */
-  get advancementProgress() { return parseInt(this._actor.system.attributes[this.name].progress ?? "0"); }
+  get advancementProgress() { return parseInt((this._actor.system.attributes[this.name] ?? {}).progress ?? 0); }
   set advancementProgress(value) {
     this._actor.update({
       system: {
@@ -86,11 +86,10 @@ export default class CharacterAttribute {
     }); 
   }
   
-
   /**
    * @type {Boolean}
    */
-  get advanced() { return this._actor.system.attributes[this.name].advanced ?? false; }
+  get advanced() { return (this._actor.system.attributes[this.name] ?? {}).advanced ?? false; }
   set advanced(value) {
     this._actor.update({
       system: {
