@@ -1,6 +1,6 @@
 import { ACTOR_TYPES } from "../../../../../business/document/actor/actor-types.mjs"
 import { ITEM_TYPES } from "../../../../../business/document/item/item-types.mjs"
-import { validateOrThrow } from "../../../../../business/util/validation-utility.mjs"
+import { isDefined, validateOrThrow } from "../../../../../business/util/validation-utility.mjs"
 import { getExtenders } from "../../../../../common/extender-util.mjs"
 import ButtonAddViewModel from "../../../../component/button-add/button-add-viewmodel.mjs"
 import InputNumberSpinnerViewModel from "../../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs"
@@ -8,6 +8,7 @@ import SortControlsViewModel, { SortingOption } from "../../../../component/sort
 import DocumentListItemOrderDataSource from "../../../../component/sortable-list/document-list-item-order-datasource.mjs"
 import SortableListViewModel from "../../../../component/sortable-list/sortable-list-viewmodel.mjs"
 import ViewModel from "../../../../view-model/view-model.mjs"
+import AssetListItemViewModel from "../../../item/asset/asset-list-item-viewmodel.mjs"
 import IllnessListItemViewModel from "../../../item/illness/illness-list-item-viewmodel.mjs"
 import InjuryListItemViewModel from "../../../item/injury/injury-list-item-viewmodel.mjs"
 import MutationListItemViewModel from "../../../item/mutation/mutation-list-item-viewmodel.mjs"
@@ -135,6 +136,12 @@ export default class ActorHealthViewModel extends ViewModel {
   get deathsDoorTemplate() { return DeathsDoorViewModel.TEMPLATE; }
 
   /**
+   * @type {String}
+   * @readonly
+   */
+  get armorListItemTemplate() { return AssetListItemViewModel.TEMPLATE; }
+
+  /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
    * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 
    * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 
@@ -201,6 +208,22 @@ export default class ActorHealthViewModel extends ViewModel {
       },
       min: 0,
     });
+
+    // Armor list item (if there is one). 
+    const armorAssetId = this.document.assets.equipmentSlotGroups
+      .find(assetGroup => assetGroup.name === "armor")
+      .slots[0].alottedId;
+    if (isDefined(armorAssetId)) {
+      const armorAsset = this.document.assets.all.find(asset => asset.id === armorAssetId);
+
+      this.vmArmorListItem = new AssetListItemViewModel({
+        id: "vmArmorListItem",
+        parent: this,
+        isEditable: false,
+        document: armorAsset,
+      });
+    }
+
     // Injury
     this.vmMaxInjuriesModifier = new InputNumberSpinnerViewModel({
       parent: this,
