@@ -260,7 +260,7 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
         },
     });
 
-    this._uiState.onChange((_1, _2, newValue) => {
+    this._uiState.onChange(async (_1, _2, newValue) => {
         setElementValue(this.vmHitThreshold.element, newValue.hitThreshold);
         setElementValue(this.vmHitThresholdSlider.element, newValue.hitThreshold);
         this.vmHitThreshold.max = newValue.dieFaces;
@@ -284,7 +284,7 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
         setElementValue(this.vmCompensationPointsSlider.element, newValue.compensationPoints);
         setElementValue(this.vmCompensationPoints.element, newValue.compensationPoints);
 
-        this._updateTable();
+        await this._updateTable();
     });
   }
 
@@ -293,19 +293,21 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
     await super.activateListeners(html);
 
     this._diceProbabilityTableElement = html.find("#predictions-table");
-    this._updateTable();
+    await this._updateTable();
   }
   
   /**
    * @private
+   * 
+   * @async
    */
-  _updateTable() {
+  async _updateTable() {
     const columnCount = this._uiState.value.obLimit + 1;
 
     const gridStyle = `grid-column: span ${columnCount} / span ${columnCount}; grid-template-columns: repeat(${columnCount}, minmax(0, 1fr));`;
     let newHtmlContent = "";
 
-    const rows = this._getTableRows();
+    const rows = await this._getTableRows();
     rows.forEach(row => {
         let rowInnerHtmlContent = "";
         row.forEach(column => {
@@ -322,8 +324,10 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
    * @returns {Array<Array<String | Number>>}
    * 
    * @private
+   * 
+   * @async
    */
-  _getTableRows() {
+  async _getTableRows() {
     const uiState = this._uiState.value;
     
     // Generate first row. 
@@ -344,7 +348,7 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
         ];
 
         for (let ob = 1; ob <= uiState.obLimit; ob++) {
-            const diceResults = this._rollDiceAndAnalyze({
+            const diceResults = await this._rollDiceAndAnalyze({
                 faces: uiState.dieFaces, 
                 ob: ob, 
                 numberOfDice: numberOfDice, 
@@ -387,14 +391,19 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
    * * default `100`
    * 
    * @returns {Object} 
+   * 
+   * @async
    */
-  _rollDiceAndAnalyze(args = {}) {
+  async _rollDiceAndAnalyze(args = {}) {
     let totalSuccesses = 0;
     let totalHits = 0;
 
     for (let sample = 0; sample < args.sampleSize; sample++) {
-        const rolledDice = new FoundryWrapper().getDice(args.faces, args.numberOfDice).evaluate().results;
-        const rolledFaces = rolledDice.map(die => parseInt(die.result));
+        const rolledDice = await new FoundryWrapper().getDice(args.faces, args.numberOfDice).evaluate();
+        const rolledFaces = (rolledDice.results ?? rolledDice.values)
+          .map(it => it.result)
+          .sort()
+          .reverse();
         let hitsInRoll = 0;
 
         // Sort faces ascending.
