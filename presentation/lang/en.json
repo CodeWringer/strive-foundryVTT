@@ -174,7 +174,9 @@
         },
         "delete": {
           "label": "Delete Asset",
-          "query": "Confirm Deletion of Asset"
+          "query": "Confirm Deletion of Asset",
+          "fromOwner": "Remove from owner",
+          "fromWorld": "Remove from world"
         },
         "bulk": "Bulk",
         "maxBulk": "Maximum Bulk",
