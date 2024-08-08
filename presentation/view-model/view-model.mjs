@@ -420,7 +420,11 @@ export default class ViewModel {
    * @async
    */
   async activateListeners(html) {
-    this._element = html.find(`#${this.id}`);
+    if ($(html).attr("id") == this.id) {
+      this._element = $(html);
+    } else {
+      this._element = html.find(`#${this.id}`);
+    }
 
     if (this._element === undefined || this._element === null || this._element.length === 0) {
       game.strive.logger.logWarn(`Failed to get element with id '${this.id}'`);
