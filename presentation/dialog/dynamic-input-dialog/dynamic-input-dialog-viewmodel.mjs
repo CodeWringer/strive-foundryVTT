@@ -50,8 +50,9 @@ export default class DynamicInputDialogViewModel extends ViewModel {
           id: definition.name,
           parent: this,
           value: definition.defaultValue,
-          onChange: (_, newValue) => {
+          onChange: async (oldValue, newValue) => {
             this[definition.name] = newValue;
+            await definition.onChange(oldValue, newValue, this);
           },
           options: definition.specificArgs.options,
         });
@@ -60,8 +61,9 @@ export default class DynamicInputDialogViewModel extends ViewModel {
           id: definition.name,
           parent: this,
           value: definition.defaultValue,
-          onChange: (_, newValue) => {
+          onChange: async (oldValue, newValue) => {
             this[definition.name] = newValue;
+            await definition.onChange(oldValue, newValue, this);
           },
         });
       } else if (definition.type === DYNAMIC_INPUT_TYPES.NUMBER_SPINNER) {
@@ -69,8 +71,9 @@ export default class DynamicInputDialogViewModel extends ViewModel {
           id: definition.name,
           parent: this,
           value: definition.defaultValue,
-          onChange: (_, newValue) => {
+          onChange: async (oldValue, newValue) => {
             this[definition.name] = newValue;
+            await definition.onChange(oldValue, newValue, this);
           },
           min: definition.specificArgs.min,
           max: definition.specificArgs.max,
@@ -81,8 +84,9 @@ export default class DynamicInputDialogViewModel extends ViewModel {
           id: definition.name,
           parent: this,
           value: definition.defaultValue,
-          onChange: (_, newValue) => {
+          onChange: async (oldValue, newValue) => {
             this[definition.name] = newValue;
+            await definition.onChange(oldValue, newValue, this);
           },
           options: definition.specificArgs.options,
         });
@@ -91,8 +95,9 @@ export default class DynamicInputDialogViewModel extends ViewModel {
           id: definition.name,
           parent: this,
           value: definition.defaultValue,
-          onChange: (_, newValue) => {
+          onChange: async (oldValue, newValue) => {
             this[definition.name] = newValue;
+            await definition.onChange(oldValue, newValue, this);
           },
         });
       } else if (definition.type === DYNAMIC_INPUT_TYPES.TEXTAREA) {
@@ -100,8 +105,9 @@ export default class DynamicInputDialogViewModel extends ViewModel {
           id: definition.name,
           parent: this,
           value: definition.defaultValue,
-          onChange: (_, newValue) => {
+          onChange: async (oldValue, newValue) => {
             this[definition.name] = newValue;
+            await definition.onChange(oldValue, newValue, this);
           },
           spellcheck: definition.specificArgs.spellcheck,
           placeholder: definition.specificArgs.placeholder,
@@ -111,8 +117,9 @@ export default class DynamicInputDialogViewModel extends ViewModel {
           id: definition.name,
           parent: this,
           value: definition.defaultValue,
-          onChange: (_, newValue) => {
+          onChange: async (oldValue, newValue) => {
             this[definition.name] = newValue;
+            await definition.onChange(oldValue, newValue, this);
           },
           placeholder: definition.specificArgs.placeholder,
         });
@@ -135,13 +142,17 @@ export default class DynamicInputDialogViewModel extends ViewModel {
           parent: this,
           contentItemViewModels: viewModels,
           contentItemTemplate: definition.specificArgs.contentItemTemplate,
-          onAddClick: () => {
+          onAddClick: async () => {
+            const oldValue = values.concat([]);
             values.push(definition.specificArgs.newItemDefaultValue);
             this.ui.render(true);
+            await definition.onChange(oldValue, values.concat([]), this);
           },
-          onRemoveClick: (_, index) => {
+          onRemoveClick: async (_, index) => {
+            const oldValue = values.concat([]);
             values.splice(index, 1);
             this.ui.render(true);
+            await definition.onChange(oldValue, values.concat([]), this);
           },
           isItemAddable: definition.specificArgs.isItemAddable,
           isItemRemovable: definition.specificArgs.isItemRemovable,
@@ -153,8 +164,9 @@ export default class DynamicInputDialogViewModel extends ViewModel {
           id: definition.name,
           parent: this,
           value: definition.defaultValue,
-          onChange: (_, newValue) => {
+          onChange: async (oldValue, newValue) => {
             this[definition.name] = newValue;
+            await definition.onChange(oldValue, newValue, this);
           },
         });
       } else {

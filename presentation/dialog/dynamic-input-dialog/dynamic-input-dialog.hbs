@@ -3,7 +3,11 @@ viewModel: {Array<DynamicInputDialogViewModel>}
 --}}
 {{#> dialogContent}}
   {{#each viewModel.controls as |control index|}}
-  <div class="flex flex-row sheet-block">
+  <div class="flex flex-row auto-margin-h-md sheet-block">
+    {{!-- Label only --}}
+    {{#if (eq control.definition.type "LABEL")}}
+    <div id="{{control.viewModel.id}}">{{{control.definition.localizedLabel}}}</div>
+    {{else}}
     {{!-- Label --}}
     <div class="flex flex-row flex-grow">
       {{#> label showFancyFont=viewModel.showFancyFont cssClass="flex-grow"}}{{{control.definition.localizedLabel}}}{{/label}}
@@ -11,10 +15,7 @@ viewModel: {Array<DynamicInputDialogViewModel>}
         <span class="font-size-md font-bold">*</span>
       {{/if}}
     </div>
-    {{#if (neq control.definition.type "LABEL")}}
-    {{!-- Spacer --}}
-    <div class="margin-r-md"></div>
-    {{!-- Input controls --}}
+    {{!-- Input control --}}
     <div class="flex flex-middle flex-grow">
       {{#if (eq control.definition.type "DROP_DOWN")}}
         {{> inputDropDown viewModel=control.viewModel}}
