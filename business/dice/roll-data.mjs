@@ -96,12 +96,10 @@ export default class RollData {
     let rolledFaces = [];
     // Only try to do any rolls, if there are dice to roll. 
     if (finalDiceCount > 0) {
-      // Let FoundryVTT make the roll, the collect the faces and sort them in descending order. 
-      const rolledDice = await new FoundryWrapper().getDice(this.dieFaces, finalDiceCount)
-        .evaluate();
+      // Let FoundryVTT make the roll, then collect the faces and sort them in descending order. 
+      const rolledDice = await new FoundryWrapper().getEvaluatedDice(this.dieFaces, finalDiceCount);
 
-      rolledFaces = (rolledDice.results ?? rolledDice.values)
-        .map(it => it.result)
+      rolledFaces = rolledDice
         .sort()
         .reverse();
     }
