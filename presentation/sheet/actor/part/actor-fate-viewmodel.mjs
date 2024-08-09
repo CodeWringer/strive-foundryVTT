@@ -1,14 +1,15 @@
+import DocumentFetcher from "../../../../business/document/document-fetcher/document-fetcher.mjs";
 import { ITEM_TYPES } from "../../../../business/document/item/item-types.mjs";
-import { validateOrThrow } from "../../../../business/util/validation-utility.mjs"
+import { isDefined, validateOrThrow } from "../../../../business/util/validation-utility.mjs"
+import { getExtenders } from "../../../../common/extender-util.mjs";
 import ButtonAddViewModel from "../../../component/button-add/button-add-viewmodel.mjs";
 import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
-import { TEMPLATES } from "../../../templatePreloader.mjs";
 import ViewModel from "../../../view-model/view-model.mjs"
 import FateCardViewModel from "../../item/fate-card/fate-card-viewmodel.mjs"
 
 export default class ActorFateViewModel extends ViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.ACTOR_FATE; }
+  static get TEMPLATE() { return game.strive.const.TEMPLATES.ACTOR_FATE; }
 
   /** @override */
   get entityId() { return this.document.id; }
@@ -35,7 +36,7 @@ export default class ActorFateViewModel extends ViewModel {
    * @type {String}
    * @readonly
    */
-  get fateCardTemplate() { return TEMPLATES.FATE_CARD; }
+  get fateCardTemplate() { return game.strive.const.TEMPLATES.FATE_CARD; }
 
   /**
    * @type {Boolean}
@@ -93,14 +94,43 @@ export default class ActorFateViewModel extends ViewModel {
       },
       min: 0,
     });
-    this.vmBtnAddFateCard = new ButtonAddViewModel({
-      parent: thiz,
-      id: "vmBtnAddFateCard",
-      target: thiz.document,
-      creationType: ITEM_TYPES.FATE_CARD,
-      withDialog: true,
-      localizedType: game.i18n.localize("system.character.driverSystem.fateSystem.fateCard.label"),
-    });
+
+    this.fateCardAddButtonViewModels = [];
+    for (let i = 0; i < this.remainingSlots; i++) {
+      const addViewModel = new ButtonAddViewModel({
+        parent: thiz,
+        id: `addViewModel-${i}`,
+        target: thiz.document,
+        creationType: ITEM_TYPES.FATE_CARD,
+        withDialog: true,
+        localizedType: game.i18n.localize("system.character.driverSystem.fateSystem.fateCard.label"),
+        selectionLabelMapper: async (selected) => {
+          let AFP = "?";
+          let MaFP = "?";
+          let MiFP = "?";
+  
+          if (selected.value !== "custom") {
+            const document = await new DocumentFetcher().find({
+              id: selected.value,
+              documentType: "Item",
+              contentType: ITEM_TYPES.FATE_CARD,
+              includeLocked: true,
+              searchEmbedded: false,
+            });
+  
+            if (isDefined(document)) {
+              const transientFateCard = document.getTransientObject();
+              AFP = transientFateCard.cost.AFP;
+              MaFP = transientFateCard.cost.maFP;
+              MiFP = transientFateCard.cost.miFP;
+            }
+          }
+          
+          return `Cost: ${AFP} AFP, ${MaFP} MaFP, ${MiFP} MiFP`;
+        }
+      });
+      this.fateCardAddButtonViewModels.push(addViewModel);
+    }
 
     this.fateCards = this._getFateCardViewModels();
   }
@@ -137,4 +167,10 @@ export default class ActorFateViewModel extends ViewModel {
       (args) => { return new FateCardViewModel(args); }
     );
   }
+  
+  /** @override */
+  getExtenders() {
+    return super.getExtenders().concat(getExtenders(ActorFateViewModel));
+  }
+
 }

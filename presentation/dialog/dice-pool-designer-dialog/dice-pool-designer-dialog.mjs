@@ -1,4 +1,4 @@
-import { TEMPLATES } from "../../templatePreloader.mjs";
+import FoundryWrapper from "../../../common/foundry-wrapper.mjs";
 import DicePoolDesignerDialogViewModel from "./dice-pool-designer-dialog-viewmodel.mjs";
 
 /**
@@ -11,7 +11,7 @@ import DicePoolDesignerDialogViewModel from "./dice-pool-designer-dialog-viewmod
 export default class DicePoolDesignerDialog extends Application {
   /** @override */
   static get defaultOptions() {
-    return mergeObject(super.defaultOptions, {
+    return new FoundryWrapper().mergeObject(super.defaultOptions, {
       popOut: true,
       resizable: true,
       minimizable: true,
@@ -21,7 +21,7 @@ export default class DicePoolDesignerDialog extends Application {
   }
 
   /** @override */
-  get template() { return TEMPLATES.DIALOG_DICE_POOL_DESIGNER; }
+  get template() { return game.strive.const.TEMPLATES.DIALOG_DICE_POOL_DESIGNER; }
 
   /** @override */
   get title() { return "Dice Pool Designer"; }

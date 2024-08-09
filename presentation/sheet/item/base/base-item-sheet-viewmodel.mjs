@@ -1,9 +1,9 @@
 import { isDefined, validateOrThrow } from "../../../../business/util/validation-utility.mjs";
+import { getExtenders } from "../../../../common/extender-util.mjs";
 import ButtonSendToChatViewModel from "../../../component/button-send-to-chat/button-send-to-chat-viewmodel.mjs";
 import InputImageViewModel from "../../../component/input-image/input-image-viewmodel.mjs";
 import InputRichTextViewModel from "../../../component/input-rich-text/input-rich-text-viewmodel.mjs";
 import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs";
-import { TEMPLATES } from "../../../templatePreloader.mjs";
 import ViewModel from "../../../view-model/view-model.mjs";
 import { CONTEXT_TYPES } from "../../context-types.mjs";
 import { DataFieldComponent } from "./datafield-component.mjs";
@@ -40,7 +40,7 @@ import { TemplatedComponent } from "./templated-component.mjs";
  */
 export default class BaseItemSheetViewModel extends ViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.BASE_ITEM_SHEET; }
+  static get TEMPLATE() { return game.strive.const.TEMPLATES.BASE_ITEM_SHEET; }
   
   /** @override */
   get entityId() { return this.document.id; }
@@ -224,4 +224,10 @@ export default class BaseItemSheetViewModel extends ViewModel {
       this[definition.viewModel._id] = definition.viewModel;
     }
   }
+  
+  /** @override */
+  getExtenders() {
+    return super.getExtenders().concat(getExtenders(BaseItemSheetViewModel));
+  }
+
 }

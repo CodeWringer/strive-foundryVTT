@@ -72,7 +72,7 @@ export class GameSystemActor extends Actor {
         this._transientObject = factoryFunction(this);
       });
     }
-    return this._transientObject;
+    return this._transientObject.getTransientObject();
   }
   
   /** @override */

@@ -2,12 +2,11 @@ import { isNotBlankOrUndefined } from "../../../../business/util/validation-util
 import { isDefined } from "../../../../business/util/validation-utility.mjs"
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs"
 import LazyRichTextViewModel from "../../../component/lazy-rich-text/lazy-rich-text-viewmodel.mjs"
-import { TEMPLATES } from "../../../templatePreloader.mjs"
 import ViewModel from "../../../view-model/view-model.mjs"
 
 export default class ExpertiseChatMessageViewModel extends ViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.EXPERTISE_CHAT_MESSAGE; }
+  static get TEMPLATE() { return game.strive.const.TEMPLATES.EXPERTISE_CHAT_MESSAGE; }
 
   /**
    * @type {Expertise}

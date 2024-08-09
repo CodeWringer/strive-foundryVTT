@@ -1,14 +1,14 @@
 import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
+import FoundryWrapper from "../../../common/foundry-wrapper.mjs";
 import ObservableField from "../../../common/observables/observable-field.mjs";
 import InputNumberSpinnerViewModel from "../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
 import InputSliderViewModel from "../../component/input-slider/input-slider-viewmodel.mjs";
 import { setElementValue } from "../../sheet/sheet-utility.mjs";
-import { TEMPLATES } from "../../templatePreloader.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
 
 export default class DicePoolDesignerDialogViewModel extends ViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.DIALOG_DICE_POOL_DESIGNER; }
+  static get TEMPLATE() { return game.strive.const.TEMPLATES.DIALOG_DICE_POOL_DESIGNER; }
 
   /**
    * Observable ui state. 
@@ -260,7 +260,7 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
         },
     });
 
-    this._uiState.onChange((_1, _2, newValue) => {
+    this._uiState.onChange(async (_1, _2, newValue) => {
         setElementValue(this.vmHitThreshold.element, newValue.hitThreshold);
         setElementValue(this.vmHitThresholdSlider.element, newValue.hitThreshold);
         this.vmHitThreshold.max = newValue.dieFaces;
@@ -284,7 +284,7 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
         setElementValue(this.vmCompensationPointsSlider.element, newValue.compensationPoints);
         setElementValue(this.vmCompensationPoints.element, newValue.compensationPoints);
 
-        this._updateTable();
+        await this._updateTable();
     });
   }
 
@@ -293,19 +293,21 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
     await super.activateListeners(html);
 
     this._diceProbabilityTableElement = html.find("#predictions-table");
-    this._updateTable();
+    await this._updateTable();
   }
   
   /**
    * @private
+   * 
+   * @async
    */
-  _updateTable() {
+  async _updateTable() {
     const columnCount = this._uiState.value.obLimit + 1;
 
     const gridStyle = `grid-column: span ${columnCount} / span ${columnCount}; grid-template-columns: repeat(${columnCount}, minmax(0, 1fr));`;
     let newHtmlContent = "";
 
-    const rows = this._getTableRows();
+    const rows = await this._getTableRows();
     rows.forEach(row => {
         let rowInnerHtmlContent = "";
         row.forEach(column => {
@@ -322,8 +324,10 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
    * @returns {Array<Array<String | Number>>}
    * 
    * @private
+   * 
+   * @async
    */
-  _getTableRows() {
+  async _getTableRows() {
     const uiState = this._uiState.value;
     
     // Generate first row. 
@@ -343,14 +347,19 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
             `<span class="pad-sm"><b>${numberOfDice}D${uiState.dieFaces}</b></span>`
         ];
 
+        const totalRolledFaces = [];
+        for (let sample = 0; sample < uiState.sampleSize; sample++) {
+            const rolledFaces = await new FoundryWrapper().getEvaluatedDice(uiState.dieFaces, numberOfDice);
+            rolledFaces.sort().reverse();
+            totalRolledFaces.push(rolledFaces);
+        }
+
         for (let ob = 1; ob <= uiState.obLimit; ob++) {
-            const diceResults = this._rollDiceAndAnalyze({
-                faces: uiState.dieFaces, 
+            const diceResults = await this._analyzeDice({
+                totalRolledFaces: totalRolledFaces, 
                 ob: ob, 
-                numberOfDice: numberOfDice, 
                 hitThreshold: uiState.hitThreshold, 
                 modifier: uiState.modifier, 
-                sampleSize: uiState.sampleSize,
                 compensationPoints: uiState.compensationPoints,
             });
             const successLikelihoodHtml = `<span>${diceResults.successLikelihood}%</span>`;
@@ -376,34 +385,28 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
    * Adds automatic hits or misses, if `modifier` is != 0. 
    * 
    * @param {Object} args 
-   * @param {Number} args.faces 
    * @param {Number} args.ob 
-   * @param {Number} args.numberOfDice 
+   * @param {Array<Array<Number>>} args.totalRolledFaces 
    * @param {Number} args.hitThreshold 
    * @param {Number} args.modifier 
    * @param {Number} args.compensationPoints 
    * * default `0`
-   * @param {Number} args.sampleSize 
-   * * default `100`
    * 
    * @returns {Object} 
+   * 
+   * @async
    */
-  _rollDiceAndAnalyze(args = {}) {
+  async _analyzeDice(args = {}) {
     let totalSuccesses = 0;
     let totalHits = 0;
 
-    for (let sample = 0; sample < args.sampleSize; sample++) {
-        const rolledDice = new Die({ faces: args.faces, number: args.numberOfDice }).evaluate().results;
-        const rolledFaces = rolledDice.map(die => parseInt(die.result));
+    for (let sample = 0; sample < args.totalRolledFaces.length; sample++) {
+        const rolledFaces = args.totalRolledFaces[sample];
+        
         let hitsInRoll = 0;
-
-        // Sort faces ascending.
-        const sortedRolledFaces = rolledFaces.sort();
-    
-        // Analyze faces starting at the back to look at the highest numbers first. 
         let remainingCompensationPoints = args.compensationPoints ?? 0;
-        for (let i = sortedRolledFaces.length - 1; i >= 0; i--) {
-            const face = sortedRolledFaces[i];
+        for (let i = 0; i < rolledFaces.length; i++) {
+            const face = rolledFaces[i];
             if (face >= args.hitThreshold) {
                 hitsInRoll++;
             } else if (remainingCompensationPoints > 0) {
@@ -433,9 +436,9 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
 
     return {
         totalSuccesses: totalSuccesses,
-        successLikelihood: Math.round((totalSuccesses / args.sampleSize) * 100),
+        successLikelihood: Math.round((totalSuccesses / args.totalRolledFaces.length) * 100),
         totalHits: totalHits,
-        averageHits: Math.round(totalHits / args.sampleSize),
+        averageHits: Math.round(totalHits / args.totalRolledFaces.length),
     };
   }
 }

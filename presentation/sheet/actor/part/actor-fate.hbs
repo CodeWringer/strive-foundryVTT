@@ -34,10 +34,10 @@ cssClass: {undefined | String}
       {{/with}}
     </div>
     {{/each}}
-    {{#times viewModel.remainingSlots}}
-      <div class="fate-card-actor-container fate-card flex flex-center">
-        {{> buttonAdd viewModel=../viewModel.vmBtnAddFateCard fill=true cssClass="font-size-xl" }}
-      </div>
-    {{/times}}
+    {{#each viewModel.fateCardAddButtonViewModels as |addViewModel| }}
+    <div class="fate-card-actor-container fate-card flex flex-center">
+      {{> buttonAdd viewModel=addViewModel fill=true cssClass="font-size-xl" }}
+    </div>
+    {{/each}}
   </div>
 </section>

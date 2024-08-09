@@ -2,7 +2,6 @@ import { format } from "../../../business/util/string-utility.mjs";
 import { isDefined, validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import { KEY_CODES } from "../../keyboard/key-codes.mjs";
 import { KEYBOARD } from "../../keyboard/keyboard.mjs";
-import { TEMPLATES } from "../../templatePreloader.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
 
@@ -21,7 +20,7 @@ import ButtonViewModel from "../button/button-viewmodel.mjs";
  * * * `sortable: Array<Any> | Object` - The list to sort **in-place**! If type is `Object`, then the object **must** provide a `sort`-method! 
  */
 export default class SortControlsViewModel extends ViewModel {
-  static get TEMPLATE() { return TEMPLATES.COMPONENT_SORT_CONTROLS; }
+  static get TEMPLATE() { return game.strive.const.TEMPLATES.COMPONENT_SORT_CONTROLS; }
 
   /**
    * @param {Object} args 

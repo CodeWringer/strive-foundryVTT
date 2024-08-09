@@ -1,7 +1,7 @@
 {{!--
 viewModel: DeathsDoorViewModel
 --}}
-<div class="hint-card error flex flex-column font-size-default{{#if viewModel.isDeathNear}}{{else}} hidden{{/if}}">
+<div id="{{viewModel.id}}" class="hint-card error flex flex-column font-size-default{{#if viewModel.isDeathNear}}{{else}} hidden{{/if}}">
   <div class="flex-grow flex flex-center">
     <span>{{localize "system.rules.hintDeathsDoor"}}</span>
   </div>

@@ -1,4 +1,3 @@
-import { TEMPLATES } from "../../templatePreloader.mjs";
 import InputViewModel from "../../view-model/input-view-model.mjs";
 
 /**
@@ -14,7 +13,7 @@ import InputViewModel from "../../view-model/input-view-model.mjs";
  * * `newValue: {Boolean}`
  */
 export default class ButtonCheckBoxViewModel extends InputViewModel {
-  static get TEMPLATE() { return TEMPLATES.COMPONENT_BUTTON_CHECKBOX; }
+  static get TEMPLATE() { return game.strive.const.TEMPLATES.COMPONENT_BUTTON_CHECKBOX; }
 
   /**
    * Registers the Handlebars partial for this component. 

@@ -174,7 +174,9 @@
         },
         "delete": {
           "label": "Delete Asset",
-          "query": "Confirm Deletion of Asset"
+          "query": "Confirm Deletion of Asset",
+          "fromOwner": "Remove from owner",
+          "fromWorld": "Remove from world"
         },
         "bulk": "Bulk",
         "maxBulk": "Maximum Bulk",
@@ -297,10 +299,6 @@
         "agility": {
           "label": "Agility",
           "abbreviation": "Agi"
-        },
-        "arcana": {
-          "label": "Arcana",
-          "abbreviation": "Arc"
         },
         "awareness": {
           "label": "Awareness",
@@ -506,13 +504,6 @@
           "unconscious": "Unconscious"
         }
       },
-      "magic": {
-        "stamina": {
-          "label": "Magic Stamina",
-          "maximum": "Max. Magic Stamina"
-        },
-        "school": "Magic School"
-      },
       "personals": {
         "species": "Species",
         "culture": "Culture",
@@ -554,7 +545,6 @@
       "sheet": {
         "tab": {
           "abilities": "Abilities",
-          "magic": "Magic",
           "personality": "Personality",
           "health": "Health",
           "assets": "Assets",
@@ -641,7 +631,6 @@
         },
         "singular": "Skill",
         "properties": {
-          "magicSchool": "Magic School",
           "innate": "Innate"
         },
         "tier": {

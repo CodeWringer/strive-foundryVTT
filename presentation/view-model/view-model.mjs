@@ -308,11 +308,13 @@ export default class ViewModel {
    * which will be displayed in exception log entries, to aid debugging.
    * @param {Map<String, Object>} args.viewStateSource The data source for view state objects. 
    * * Default `game.strive.viewStates`. 
+   * @param {Object | undefined} args.document An associated data document. 
    */
   constructor(args = {}) {
     this._id = this.sanitizeId(args.id ?? createUUID());
     
     this.parent = args.parent;
+    this.document = args.document;
 
     this.contextTemplate = args.contextTemplate;
     this._viewStateSource = args.viewStateSource ?? game.strive.viewStates;
@@ -322,6 +324,11 @@ export default class ViewModel {
     this.isEditable = args.isEditable ?? (args.parent !== undefined ? args.parent.isEditable : false);
     this.isSendable = args.isSendable ?? (args.parent !== undefined ? args.parent.isSendable : false);
     this.isOwner = args.isOwner ?? (args.parent !== undefined ? args.parent.isOwner : false);
+
+    const extenders = this.getExtenders();
+    extenders.forEach(extender => {
+      extender.extend(this);
+    });
   }
 
   /**
@@ -413,7 +420,11 @@ export default class ViewModel {
    * @async
    */
   async activateListeners(html) {
-    this._element = html.find(`#${this.id}`);
+    if ($(html).attr("id") == this.id) {
+      this._element = $(html);
+    } else {
+      this._element = html.find(`#${this.id}`);
+    }
 
     if (this._element === undefined || this._element === null || this._element.length === 0) {
       game.strive.logger.logWarn(`Failed to get element with id '${this.id}'`);
@@ -627,6 +638,17 @@ export default class ViewModel {
     return sanitized;
   }
 
+  /**
+   * Returns extenders. 
+   * 
+   * @returns {Array<Object>}
+   * 
+   * @protected
+   */
+  getExtenders() {
+    return [];
+  }
+  
   /**
    * Returns an array of view model instances that have either been fetched 
    * from the `currentList` or newly instantiated, using the `factoryFunc`. 

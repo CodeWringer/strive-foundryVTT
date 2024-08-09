@@ -19,7 +19,7 @@ export default class TokenExtensions {
    * @static
    */
   static updateTokenHover(token) {
-    if (token.actor.type !== ACTOR_TYPES.NPC) return;
+    if (!isDefined(token.actor) && token.actor.type !== ACTOR_TYPES.NPC) return;
 
     const displayWhen = token.document.displayName;
     const isOwner = token.actor.isOwner || game.user.isGM;
@@ -45,6 +45,8 @@ export default class TokenExtensions {
    * @private
    */
   static _showChallengeRating(token) {
+    if (!isDefined(token.actor)) return;
+
     const actor = token.actor.getTransientObject();
     
     if (actor.isChallengeRatingEnabled) {
@@ -110,6 +112,9 @@ export default class TokenExtensions {
    * @static
    */
   static updateTokenCombatants() {
+    if (!isDefined(game.scenes)) return;
+    if (!isDefined(game.scenes.active)) return;
+
     for (const tokenDocument of game.scenes.active.tokens.values()) {
       TokenExtensions.updateTokenCombatant(tokenDocument.object);
     }
@@ -126,6 +131,8 @@ export default class TokenExtensions {
    * @static
    */
   static _addActionPointControls(token) {
+    if (!isDefined(token.actor)) return;
+
     const transientActor = token.actor.getTransientObject();
 
     const margin = 5;

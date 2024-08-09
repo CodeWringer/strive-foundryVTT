@@ -1,5 +1,4 @@
 import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
-import { TEMPLATES } from "../../templatePreloader.mjs";
 import { DYNAMIC_INPUT_TYPES } from "./dynamic-input-types.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
 import InputDropDownViewModel from "../../component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
@@ -24,7 +23,7 @@ import DynamicInputDefinition from "./dynamic-input-definition.mjs";
  */
 export default class DynamicInputDialogViewModel extends ViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.DIALOG_DYNAMIC_INPUT; }
+  static get TEMPLATE() { return game.strive.const.TEMPLATES.DIALOG_DYNAMIC_INPUT; }
 
   /**
    * @param {Object} args 
@@ -42,6 +41,7 @@ export default class DynamicInputDialogViewModel extends ViewModel {
     this.controls = [];
     for (const definition of this.inputDefinitions) {
       // Create the underlying data field on the view model. 
+      // The value of this field _may_ be undefined! 
       this[definition.name] = definition.defaultValue;
 
       let viewModel;
@@ -50,8 +50,9 @@ export default class DynamicInputDialogViewModel extends ViewModel {
           id: definition.name,
           parent: this,
           value: definition.defaultValue,
-          onChange: (_, newValue) => {
+          onChange: async (oldValue, newValue) => {
             this[definition.name] = newValue;
+            await definition.onChange(oldValue, newValue, this);
           },
           options: definition.specificArgs.options,
         });
@@ -60,8 +61,9 @@ export default class DynamicInputDialogViewModel extends ViewModel {
           id: definition.name,
           parent: this,
           value: definition.defaultValue,
-          onChange: (_, newValue) => {
+          onChange: async (oldValue, newValue) => {
             this[definition.name] = newValue;
+            await definition.onChange(oldValue, newValue, this);
           },
         });
       } else if (definition.type === DYNAMIC_INPUT_TYPES.NUMBER_SPINNER) {
@@ -69,8 +71,9 @@ export default class DynamicInputDialogViewModel extends ViewModel {
           id: definition.name,
           parent: this,
           value: definition.defaultValue,
-          onChange: (_, newValue) => {
+          onChange: async (oldValue, newValue) => {
             this[definition.name] = newValue;
+            await definition.onChange(oldValue, newValue, this);
           },
           min: definition.specificArgs.min,
           max: definition.specificArgs.max,
@@ -81,8 +84,9 @@ export default class DynamicInputDialogViewModel extends ViewModel {
           id: definition.name,
           parent: this,
           value: definition.defaultValue,
-          onChange: (_, newValue) => {
+          onChange: async (oldValue, newValue) => {
             this[definition.name] = newValue;
+            await definition.onChange(oldValue, newValue, this);
           },
           options: definition.specificArgs.options,
         });
@@ -91,8 +95,9 @@ export default class DynamicInputDialogViewModel extends ViewModel {
           id: definition.name,
           parent: this,
           value: definition.defaultValue,
-          onChange: (_, newValue) => {
+          onChange: async (oldValue, newValue) => {
             this[definition.name] = newValue;
+            await definition.onChange(oldValue, newValue, this);
           },
         });
       } else if (definition.type === DYNAMIC_INPUT_TYPES.TEXTAREA) {
@@ -100,8 +105,9 @@ export default class DynamicInputDialogViewModel extends ViewModel {
           id: definition.name,
           parent: this,
           value: definition.defaultValue,
-          onChange: (_, newValue) => {
+          onChange: async (oldValue, newValue) => {
             this[definition.name] = newValue;
+            await definition.onChange(oldValue, newValue, this);
           },
           spellcheck: definition.specificArgs.spellcheck,
           placeholder: definition.specificArgs.placeholder,
@@ -111,8 +117,9 @@ export default class DynamicInputDialogViewModel extends ViewModel {
           id: definition.name,
           parent: this,
           value: definition.defaultValue,
-          onChange: (_, newValue) => {
+          onChange: async (oldValue, newValue) => {
             this[definition.name] = newValue;
+            await definition.onChange(oldValue, newValue, this);
           },
           placeholder: definition.specificArgs.placeholder,
         });
@@ -135,13 +142,17 @@ export default class DynamicInputDialogViewModel extends ViewModel {
           parent: this,
           contentItemViewModels: viewModels,
           contentItemTemplate: definition.specificArgs.contentItemTemplate,
-          onAddClick: () => {
+          onAddClick: async () => {
+            const oldValue = values.concat([]);
             values.push(definition.specificArgs.newItemDefaultValue);
             this.ui.render(true);
+            await definition.onChange(oldValue, values.concat([]), this);
           },
-          onRemoveClick: (_, index) => {
+          onRemoveClick: async (_, index) => {
+            const oldValue = values.concat([]);
             values.splice(index, 1);
             this.ui.render(true);
+            await definition.onChange(oldValue, values.concat([]), this);
           },
           isItemAddable: definition.specificArgs.isItemAddable,
           isItemRemovable: definition.specificArgs.isItemRemovable,
@@ -153,12 +164,20 @@ export default class DynamicInputDialogViewModel extends ViewModel {
           id: definition.name,
           parent: this,
           value: definition.defaultValue,
-          onChange: (_, newValue) => {
+          onChange: async (oldValue, newValue) => {
             this[definition.name] = newValue;
+            await definition.onChange(oldValue, newValue, this);
           },
         });
       } else {
         throw new Error(`Invalid input type: "${definition.type}"`);
+      }
+
+      // Ensure the default value is properly set. 
+      // This has to happen _after_ control instantiation, because determining the default 
+      // value is the control's business. 
+      if (!isDefined(definition.defaultValue)) {
+        this[definition.name] = viewModel.value;
       }
 
       viewModel.showFancyFont = definition.showFancyFont ?? false

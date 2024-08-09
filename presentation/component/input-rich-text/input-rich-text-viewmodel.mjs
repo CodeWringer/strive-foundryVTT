@@ -1,4 +1,3 @@
-import { TEMPLATES } from "../../templatePreloader.mjs";
 import InputViewModel from "../../view-model/input-view-model.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
 
@@ -18,7 +17,7 @@ import ButtonViewModel from "../button/button-viewmodel.mjs";
  */
 export default class InputRichTextViewModel extends InputViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.COMPONENT_INPUT_RICH_TEXT; }
+  static get TEMPLATE() { return game.strive.const.TEMPLATES.COMPONENT_INPUT_RICH_TEXT; }
 
   /**
    * Registers the Handlebars partial for this component. 

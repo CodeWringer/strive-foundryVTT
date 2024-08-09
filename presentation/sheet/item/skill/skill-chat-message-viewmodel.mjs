@@ -3,13 +3,12 @@ import { validateOrThrow } from "../../../../business/util/validation-utility.mj
 import ButtonToggleVisibilityViewModel from "../../../component/button-toggle-visibility/button-toggle-visibility-viewmodel.mjs"
 import InputTagsViewModel from "../../../component/input-tags/input-tags-viewmodel.mjs"
 import LazyRichTextViewModel from "../../../component/lazy-rich-text/lazy-rich-text-viewmodel.mjs"
-import { TEMPLATES } from "../../../templatePreloader.mjs"
 import ViewModel from "../../../view-model/view-model.mjs"
 import ExpertiseChatMessageViewModel from "../expertise/expertise-chat-message-viewmodel.mjs"
 
 export default class SkillChatMessageViewModel extends ViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.SKILL_ITEM_CHAT_MESSAGE; }
+  static get TEMPLATE() { return game.strive.const.TEMPLATES.SKILL_ITEM_CHAT_MESSAGE; }
 
   /** @override */
   get entityId() { return this.document.id; }
@@ -45,7 +44,7 @@ export default class SkillChatMessageViewModel extends ViewModel {
    * @type {String}
    * @readonly
    */
-  get templateExpertise() { return TEMPLATES.EXPERTISE_CHAT_MESSAGE; }
+  get templateExpertise() { return game.strive.const.TEMPLATES.EXPERTISE_CHAT_MESSAGE; }
 
   /**
    * Returns true, if the list of prerequisites should be rendered. 

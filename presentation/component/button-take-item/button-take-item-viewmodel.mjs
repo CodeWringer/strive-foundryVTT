@@ -1,11 +1,13 @@
 import ButtonViewModel from "../button/button-viewmodel.mjs";
 import ChoiceOption from "../input-choice/choice-option.mjs";
-import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
-import SingleChoiceDialog from "../../dialog/single-choice-dialog/single-choice-dialog.mjs";
+import { isDefined, validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import DocumentFetcher from "../../../business/document/document-fetcher/document-fetcher.mjs";
 import { isString } from "../../../business/util/validation-utility.mjs";
 import TransientAsset from "../../../business/document/item/transient-asset.mjs";
 import { ITEM_TYPES } from "../../../business/document/item/item-types.mjs";
+import DynamicInputDialog from "../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
+import DynamicInputDefinition from "../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
+import { DYNAMIC_INPUT_TYPES } from "../../dialog/dynamic-input-dialog/dynamic-input-types.mjs";
 
 /**
  * @property {String} chatMessage
@@ -27,9 +29,9 @@ export const TAKE_ITEM_CONTEXT_TYPES = {
  * 
  * @property {TAKE_ITEM_CONTEXT_TYPES} contextType Represents the context of where this button view model is embedded. 
  * Depending on this value, the behavior of the button changes. 
- * * In the context "chat-message", the item in question will be moved to the current player's actor, or an actor chosen by a GM. 
- * * In the context "list-item", TODO #196
- * * In the context "item-sheet", a copy of the item in question will be added to the current player's actor, or an actor chosen by a GM. 
+ * * In the context "chat-message", the asset in question will be moved to the current player's actor, or an actor chosen by a GM. 
+ * * In the context "list-item", the asset in question will be moved to the current player's actor, or an actor chosen by a GM. 
+ * * In the context "item-sheet", a copy of the asset in question will be added to the current player's actor, or an actor chosen by a GM. 
  * 
  * @method onClick Asynchronous callback that is invoked when the button is clicked. Arguments: 
  * * `event: Event`
@@ -61,9 +63,9 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
    * @param {TAKE_ITEM_CONTEXT_TYPES} args.contextType Represents the context of where this button view model is embedded. 
    * Depending on this value, the behavior of the button changes. 
    * 
-   * In the context "chat-message", the item in question will be moved to the current player's actor, or an actor chosen by a GM. 
-   * In the context "list-item", TODO #196
-   * In the context "item-sheet", a copy of the item in question will be added to the current player's actor, or an actor chosen by a GM. 
+   * In the context "chat-message", the asset in question will be moved to the current player's actor, or an actor chosen by a GM. 
+   * In the context "list-item", the asset in question will be moved to the current player's actor, or an actor chosen by a GM. 
+   * In the context "item-sheet", a copy of the asset in question will be added to the current player's actor, or an actor chosen by a GM. 
    */
   constructor(args = {}) {
     super({
@@ -74,7 +76,7 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
 
     this.target = args.target;
     this.contextType = args.contextType;
-    this.localizedTooltip = args.localizedTooltip ?? game.i18n.localize("system.character.asset.take");
+    this.localizedToolTip = args.localizedToolTip ?? game.i18n.localize("system.character.asset.take");
   }
 
   /**
@@ -90,86 +92,127 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
   async _onClick(event) {
     if (this.isEditable !== true) return;
 
-    let assetDocument = this.target;
-    if (isString(this.target) === true) { // Item id provided. 
-      assetDocument = await new DocumentFetcher().find({
-        id: this.target,
-        documentType: "Item",
-        contentType: ITEM_TYPES.ASSET
-      });
-    }
+    const assetDocument = await this._getAsset();
 
     if (assetDocument === undefined) {
       throw new Error("NullPointerException: item could not be determined");
     }
 
-    // If this is not undefined, we can be sure the item is embedded on an actor. 
-    const parentDocument = assetDocument.owningDocument;
-    // If containingPack is not null, we can be sure the item is embedded in a compendium. 
-    const containingPack = assetDocument.pack;
-    // If neither parent nor containingPack is defined, then we can be sure the item is a world item. 
+    const selections = await this._promptSelections();
 
-    // Determine target actor. 
-    const targetActor = await this._getTargetActor();
-    // If no target actor could be determined, abort any further action. 
+    const targetActor = selections.actor;
     if (targetActor === undefined) return;
     
-    if (parentDocument !== undefined) { // The item is embedded on an actor. 
-      if (this.contextType === TAKE_ITEM_CONTEXT_TYPES.chatMessage) {
+    if (isDefined(assetDocument.owningDocument)) { // The asset is embedded on an actor. 
 
-        if (parentDocument.id === targetActor.id) {
-          // If the player that owns the item tries to pick the item up, do nothing. 
-          // After all, they already have the item and therefore nothing needs to change. 
-          return;
-        }
+      if (assetDocument.owningDocument.id === targetActor.id) {
+        // If the player that owns the asset tries to pick the asset up, do nothing. 
+        // After all, they already have the asset and therefore nothing needs to change. 
+        return;
+      }
 
-        // Add copy to target actor. 
-        this._cloneWithNewParentOnPerson(assetDocument, targetActor);
+      // Add copy to target actor. 
+      this._cloneWithNewParentOnPerson(assetDocument, targetActor);
 
+      if (selections.deleteFromSource === true) {
         // Remove from source actor. 
         assetDocument.delete();
-      } else if (this.contextType === TAKE_ITEM_CONTEXT_TYPES.listItem) {
-        // TODO #196: Move to free slot?
       }
-    } else if (containingPack !== undefined && containingPack !== null) { // The item is embedded in a compendium. 
+    } else if (isDefined(assetDocument.pack)) { // The asset is embedded in a compendium. 
       // Add copy to target actor. 
       this._cloneWithNewParentOnPerson(assetDocument, targetActor);
-    } else { // The item is part of the world. 
+    } else { // The asset is part of the world. 
       // Add copy to target actor. 
       this._cloneWithNewParentOnPerson(assetDocument, targetActor);
 
-      // Remove from world. 
-      assetDocument.delete();
+      if (selections.deleteFromSource === true) {
+        // Remove from world. 
+        assetDocument.delete();
+      }
     }
   }
 
   /**
-   * Queries the user to select an actor. 
+   * Queries the user to select an actor and whether to remove the asset from the world, 
+   * if it is a world asset. 
    * 
-   * @returns {Promise<Actor | undefined>}
+   * @returns {Promise<Object>} Has the following fields: 
+   * * `actor: Actor | undefined`
+   * * `deleteFromSource: Boolean`
    * 
    * @private
    */
-  async _promptSelectActor() {
-    const choices = [];
-    for (const actor of game.actors.values()) {
-      choices.push(new ChoiceOption({
-        value: actor.id,
-        localizedValue: actor.name,
-        icon: actor.img,
-      }));
+  async _promptSelections() {
+    const inputDefinitions = [];
+    
+    const nameInputActor = "nameInputActor";
+    if (game.user.isGM) {
+      const choices = [];
+      for (const actor of game.actors.values()) {
+        choices.push(
+          new ChoiceOption({
+            value: actor.id,
+            localizedValue: actor.name,
+            icon: actor.img,
+          })
+        );
+      }
+
+      inputDefinitions.push(
+        new DynamicInputDefinition({
+          type: DYNAMIC_INPUT_TYPES.DROP_DOWN,
+          name: nameInputActor,
+          localizedLabel: game.i18n.localize("system.general.actor.label"),
+          required: true,
+          specificArgs: {
+            options: choices,
+          }
+        }),
+      );
     }
 
-    const dialog = await new SingleChoiceDialog({
+    const nameInputDeleteFromSource = "nameInputDeleteFromSource";
+    const assetDocument = await this._getAsset();
+    let assetIsRemovable = false;
+    if (isDefined(assetDocument.owningDocument)) { // Embedded -> removable from actor. 
+      inputDefinitions.push(
+        new DynamicInputDefinition({
+          type: DYNAMIC_INPUT_TYPES.TOGGLE,
+          name: nameInputDeleteFromSource,
+          localizedLabel: game.i18n.localize("system.character.asset.delete.fromOwner"),
+          required: true,
+          defaultValue: false,
+        }),
+      );
+      assetIsRemovable = true;
+    } else if (!isDefined(assetDocument.pack)) { // Not embedded and not in a pack -> removable from world. 
+      inputDefinitions.push(
+        new DynamicInputDefinition({
+          type: DYNAMIC_INPUT_TYPES.TOGGLE,
+          name: nameInputDeleteFromSource,
+          localizedLabel: game.i18n.localize("system.character.asset.delete.fromWorld"),
+          required: true,
+          defaultValue: false,
+        }),
+      );
+      assetIsRemovable = true;
+    }
+
+    const dialog = await new DynamicInputDialog({
       localizedTitle: game.i18n.localize("system.general.actor.query"),
-      localizedLabel: game.i18n.localize("system.general.actor.label"),
-      choices: choices,
+      inputDefinitions: inputDefinitions,
     }).renderAndAwait(true);
 
     if (dialog.confirmed !== true) {
-      return undefined;
+      return {
+        actor: undefined,
+        deleteFromSource: false,
+      };
     } else {
-      return await game.actors.get(dialog.selected.value);
+      return {
+        actor: game.user.isGM ? await game.actors.get(dialog[nameInputActor].value) : game.user.character,
+        deleteFromSource: assetIsRemovable ? dialog[nameInputDeleteFromSource] : false,
+      };
     }
   }
 
@@ -197,20 +240,25 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
   }
 
   /**
-   * @returns {Actor | undefined}
-   * @throws {Error} NullPointerException - thrown, if the current user is not a GM and has no set character. 
-   * @private
+   * Returns the asset item. 
+   * 
+   * @returns {Item}
+   * 
    * @async
+   * @private
    */
-  async _getTargetActor() {
-    if (game.user.isGM) {
-      return await this._promptSelectActor();
+  async _getAsset() {
+    if (isDefined(this._assetDocument)) {
+      return this._assetDocument;
+    } else if (isString(this.target) === true) { // Item id provided. 
+      this._assetDocument = await new DocumentFetcher().find({
+        id: this.target,
+        documentType: "Item",
+        contentType: ITEM_TYPES.ASSET
+      });
+      return this._assetDocument;
     } else {
-      const targetActor = game.user.character;
-      if (targetActor === undefined) {
-        throw new Error("NullPointerException: target actor could not be determined");
-      }
-      return targetActor;
+      return this.target;
     }
   }
 }

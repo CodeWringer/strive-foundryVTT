@@ -1,4 +1,3 @@
-import { TEMPLATES } from "../../templatePreloader.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
 
 /**
@@ -37,7 +36,7 @@ export const SELECTOR_BUTTON = "custom-system-button";
  */
 export default class ButtonViewModel extends ViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.COMPONENT_BUTTON; }
+  static get TEMPLATE() { return game.strive.const.TEMPLATES.COMPONENT_BUTTON; }
 
   /**
    * Registers the Handlebars partial for this component. 

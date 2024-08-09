@@ -1,5 +1,4 @@
 import Tag from "../../../business/tags/tag.mjs";
-import { TEMPLATES } from "../../templatePreloader.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
 import InputTextFieldViewModel from "../input-textfield/input-textfield-viewmodel.mjs";
 import InputTagPillViewModel from "./input-tag-pill-viewmodel.mjs";
@@ -26,7 +25,7 @@ import InputTagPillViewModel from "./input-tag-pill-viewmodel.mjs";
  */
 export default class InputTagsViewModel extends ViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.COMPONENT_INPUT_TAGS; }
+  static get TEMPLATE() { return game.strive.const.TEMPLATES.COMPONENT_INPUT_TAGS; }
 
   /**
    * Registers the Handlebars partial for this component. 

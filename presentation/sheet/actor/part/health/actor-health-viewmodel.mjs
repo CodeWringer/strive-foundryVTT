@@ -1,15 +1,14 @@
 import { ACTOR_TYPES } from "../../../../../business/document/actor/actor-types.mjs"
 import { ITEM_TYPES } from "../../../../../business/document/item/item-types.mjs"
-import Ruleset from "../../../../../business/ruleset/ruleset.mjs"
-import { validateOrThrow } from "../../../../../business/util/validation-utility.mjs"
+import { isDefined, validateOrThrow } from "../../../../../business/util/validation-utility.mjs"
+import { getExtenders } from "../../../../../common/extender-util.mjs"
 import ButtonAddViewModel from "../../../../component/button-add/button-add-viewmodel.mjs"
-import InfoBubble, { InfoBubbleAutoHidingTypes, InfoBubbleAutoShowingTypes } from "../../../../component/info-bubble/info-bubble.mjs"
 import InputNumberSpinnerViewModel from "../../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs"
 import SortControlsViewModel, { SortingOption } from "../../../../component/sort-controls/sort-controls-viewmodel.mjs"
 import DocumentListItemOrderDataSource from "../../../../component/sortable-list/document-list-item-order-datasource.mjs"
 import SortableListViewModel from "../../../../component/sortable-list/sortable-list-viewmodel.mjs"
-import { TEMPLATES } from "../../../../templatePreloader.mjs"
 import ViewModel from "../../../../view-model/view-model.mjs"
+import AssetListItemViewModel from "../../../item/asset/asset-list-item-viewmodel.mjs"
 import IllnessListItemViewModel from "../../../item/illness/illness-list-item-viewmodel.mjs"
 import InjuryListItemViewModel from "../../../item/injury/injury-list-item-viewmodel.mjs"
 import MutationListItemViewModel from "../../../item/mutation/mutation-list-item-viewmodel.mjs"
@@ -23,7 +22,7 @@ import GritPointsViewModel from "./grit-points/grit-points-viewmodel.mjs"
  */
 export default class ActorHealthViewModel extends ViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.ACTOR_HEALTH; }
+  static get TEMPLATE() { return game.strive.const.TEMPLATES.ACTOR_HEALTH; }
 
   /** @override */
   get entityId() { return this.document.id; }
@@ -74,19 +73,7 @@ export default class ActorHealthViewModel extends ViewModel {
    * @type {Number}
    * @readonly
    */
-  get modifiedMaxMagicStamina() { return this.document.health.modifiedMaxMagicStamina; }
-
-  /**
-   * @type {Number}
-   * @readonly
-   */
   get maxExhaustion() { return this.document.health.maxExhaustion; }
-
-  /**
-   * @type {Number}
-   * @readonly
-   */
-  get maxMagicStamina() { return this.document.health.maxMagicStamina.total; }
 
   /**
    * @type {Number}
@@ -147,6 +134,12 @@ export default class ActorHealthViewModel extends ViewModel {
    * @readonly
    */
   get deathsDoorTemplate() { return DeathsDoorViewModel.TEMPLATE; }
+
+  /**
+   * @type {String}
+   * @readonly
+   */
+  get armorListItemTemplate() { return AssetListItemViewModel.TEMPLATE; }
 
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
@@ -215,30 +208,21 @@ export default class ActorHealthViewModel extends ViewModel {
       },
       min: 0,
     });
-    // Magic Stamina
-    this.vmMaxMagicStamina = new InputNumberSpinnerViewModel({
-      parent: this,
-      id: "vmMaxMagicStamina",
-      value: this.document.health.maxMagicStamina.total,
-      isEditable: false,
-    });
-    this.vmMaxMagicStaminaModifier = new InputNumberSpinnerViewModel({
-      parent: this,
-      id: "vmMaxMagicStaminaModifier",
-      value: this.document.health.maxMagicStaminaModifier,
-      onChange: (_, newValue) => {
-        this.document.health.maxMagicStaminaModifier = newValue;
-      },
-    });
-    this.vmMagicStamina = new InputNumberSpinnerViewModel({
-      parent: this,
-      id: "vmMagicStamina",
-      value: this.document.health.magicStamina,
-      onChange: (_, newValue) => {
-        this.document.health.magicStamina = newValue;
-      },
-      min: 0,
-    });
+
+    // Armor list item (if there is one). 
+    const armorAssetId = this.document.assets.equipmentSlotGroups
+      .find(assetGroup => assetGroup.name === "armor")
+      .slots[0].alottedId;
+    if (isDefined(armorAssetId)) {
+      const armorAsset = this.document.assets.all.find(asset => asset.id === armorAssetId);
+
+      this.vmArmorListItem = new AssetListItemViewModel({
+        id: "vmArmorListItem",
+        parent: this,
+        isEditable: false,
+        document: armorAsset,
+      });
+    }
 
     // Injury
     this.vmMaxInjuriesModifier = new InputNumberSpinnerViewModel({
@@ -415,24 +399,6 @@ export default class ActorHealthViewModel extends ViewModel {
     }
   }
   
-  /** @override */
-  activateListeners(html) {
-    super.activateListeners(html);
-    
-    const composition = new Ruleset().getCharacterMaximumMagicStamina(this.document.document).components
-      .map(component => {
-        return `${game.i18n.localize(component.localizableName)} ${component.value}`;
-      }).join(" + ");
-    this.maxMagicStaminaInfoBubble = new InfoBubble({
-      html: html,
-      map: [
-        { element: html.find(`#${this.id}-max-magic-stamina-info`), text: composition },
-      ],
-      autoShowType: InfoBubbleAutoShowingTypes.MOUSE_ENTER,
-      autoHideType: InfoBubbleAutoHidingTypes.MOUSE_LEAVE,
-    });
-  }
-
   /**
    * Updates the data of this view model. 
    * 
@@ -467,6 +433,11 @@ export default class ActorHealthViewModel extends ViewModel {
     this.scars = newScars;
 
     super.update(args);
+  }
+
+  /** @override */
+  getExtenders() {
+    return super.getExtenders().concat(getExtenders(ActorHealthViewModel));
   }
 
   /** @override */

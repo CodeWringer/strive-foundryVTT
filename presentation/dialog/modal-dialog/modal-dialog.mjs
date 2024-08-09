@@ -1,6 +1,6 @@
 import { createUUID } from "../../../business/util/uuid-utility.mjs";
 import { isFunction } from "../../../business/util/validation-utility.mjs";
-import { TEMPLATES } from "../../templatePreloader.mjs";
+import FoundryWrapper from "../../../common/foundry-wrapper.mjs";
 
 /**
  * Styling class of the back drop element. 
@@ -48,7 +48,7 @@ const DIALOG_ELEMENT_CLASS = "strive-modal";
 export default class ModalDialog extends Application {
   /** @override */
   static get defaultOptions() {
-    return mergeObject(super.defaultOptions, {
+    return new FoundryWrapper().mergeObject(super.defaultOptions, {
       popOut: true,
       resizable: false,
       classes: [DIALOG_ELEMENT_CLASS, "width-min-lg", "height-min-sm"],
@@ -63,7 +63,7 @@ export default class ModalDialog extends Application {
    * @static
    */
   static registerHandlebarsPartial() {
-    Handlebars.registerPartial('dialogContent', `{{#> "${TEMPLATES.DIALOG_MODAL}"}}{{> @partial-block }}{{/"${TEMPLATES.DIALOG_MODAL}"}}`);
+    Handlebars.registerPartial('dialogContent', `{{#> "${game.strive.const.TEMPLATES.DIALOG_MODAL}"}}{{> @partial-block }}{{/"${game.strive.const.TEMPLATES.DIALOG_MODAL}"}}`);
   }
 
   /** @override */

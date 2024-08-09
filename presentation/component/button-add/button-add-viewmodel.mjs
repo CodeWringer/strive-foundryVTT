@@ -1,5 +1,5 @@
 import ButtonViewModel from '../button/button-viewmodel.mjs';
-import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
+import { isDefined, validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import DocumentFetcher from "../../../business/document/document-fetcher/document-fetcher.mjs";
 import DynamicInputDialog from '../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs';
 import DynamicInputDefinition from '../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs';
@@ -20,9 +20,18 @@ import { ITEM_TYPES } from '../../../business/document/item/item-types.mjs';
  * @property {String | undefined} localizedType Localized name of the type of thing to add. 
  * @property {String | undefined} localizedDialogTitle Localized title of the dialog. 
  * 
+ * @property {Function | undefined} selectionLabelMapper If not undefined, will be used 
+ * to change the content's of a label based on the currently selected entry. 
+ * Must return a string value. Arguments: 
+ * * `selected: Any`
+ * 
  * @method onClick Asynchronous callback that is invoked when the button is clicked. Arguments: 
  * * `event: Event`
  * * `data: Item | Expertise` - The created `Item` document or `Expertise`. 
+ * @method onSelectionChanged Asynchronous callback that is invoked when selection changes. Arguments: 
+ * * `dialog: DynamicInputDialog`
+ * * `selected: Document`. 
+ * * `choices: Array<ChoiceOption>`. 
  */
 export default class ButtonAddViewModel extends ButtonViewModel {
   /**
@@ -54,6 +63,15 @@ export default class ButtonAddViewModel extends ButtonViewModel {
    * @param {Object | undefined} args.creationData Data to pass to the item creation function. 
    * @param {String | undefined} args.localizedType Localized name of the type of thing to add. 
    * @param {String | undefined} args.localizedDialogTitle Localized title of the dialog. 
+   * 
+   * @param {Function | undefined} args.onSelectionChanged Asynchronous callback that is invoked when selection changes. Arguments: 
+   * * `dialog: DynamicInputDialog`
+   * * `selected: ChoiceOption`. 
+   * * `choices: Array<ChoiceOption>`. 
+   * @param {Function | undefined} args.selectionLabelMapper If not undefined, will be used 
+   * to change the content's of a label based on the currently selected entry. 
+   * Must return a string value. Arguments: 
+   * * `selected: ChoiceOption`
    */
   constructor(args = {}) {
     super({
@@ -70,6 +88,9 @@ export default class ButtonAddViewModel extends ButtonViewModel {
     this.creationData = args.creationData ?? Object.create(null);
     this.localizedType = args.localizedType;
     this.localizedDialogTitle = args.localizedDialogTitle;
+
+    this.onSelectionChanged = args.onSelectionChanged ?? (async () => {});
+    this.selectionLabelMapper = args.selectionLabelMapper;
   }
 
   /**
@@ -127,7 +148,7 @@ export default class ButtonAddViewModel extends ButtonViewModel {
       // Check if the user canceled. 
       if (creationData === undefined) return;
 
-      return await Item.create(creationData, { parent: this.target.document }); // TODO #85: This should probably be extracted to the transient-type object. 
+      return await Item.create(creationData, { parent: this.target.document }); 
     }
   }
 
@@ -173,26 +194,51 @@ export default class ButtonAddViewModel extends ButtonViewModel {
     const sortedOptions = options.sort((a, b) => a.localizedValue.localeCompare(b.localizedValue));
     sortedOptions.splice(0, 0, customChoice);
 
-    const inputChoices = "inputChoices";
+    const nameLabel = "nameLabel";
+    const nameInputChoices = "nameInputChoices";
+
+    const inputDefinitions = [
+      new DynamicInputDefinition({
+        type: DYNAMIC_INPUT_TYPES.DROP_DOWN,
+        name: nameInputChoices,
+        localizedLabel: this.localizedType,
+        required: true,
+        defaultValue: customChoice,
+        specificArgs: {
+          options: sortedOptions,
+        },
+        onChange: async (_, newValue, dialogViewModel) => {
+          await this.onSelectionChanged(newValue, sortedOptions, dialogViewModel);
+
+          if (isDefined(this.selectionLabelMapper)) {
+            const mappedLabel = await this.selectionLabelMapper(newValue);
+            $(dialogViewModel.element).find(`#${dialogViewModel.id}-${nameLabel} > p`).text(mappedLabel);
+          }
+        }
+      }),
+    ];
+
+    if (isDefined(this.selectionLabelMapper)) {
+      const mappedLabel = await this.selectionLabelMapper(customChoice);
+
+      inputDefinitions.push(
+        new DynamicInputDefinition({
+          type: DYNAMIC_INPUT_TYPES.LABEL,
+          name: nameLabel,
+          localizedLabel: `<p class="font-size-default">${mappedLabel}</p>`,
+          showFancyFont: false,
+        })
+      );
+    }
+
     const dialog = await new DynamicInputDialog({
       localizedTitle: this.localizedDialogTitle,
-      inputDefinitions: [
-        new DynamicInputDefinition({
-          type: DYNAMIC_INPUT_TYPES.DROP_DOWN,
-          name: inputChoices,
-          localizedLabel: this.localizedType,
-          required: true,
-          defaultValue: customChoice,
-          specificArgs: {
-            options: sortedOptions,
-          },
-        }),
-      ],
+      inputDefinitions: inputDefinitions,
     }).renderAndAwait(true);
 
     if (dialog.confirmed !== true) return undefined;
 
-    const selectedValue = dialog[inputChoices].value;
+    const selectedValue = dialog[nameInputChoices].value;
     let creationData;
     if (selectedValue === customChoice.value) {
       creationData = {

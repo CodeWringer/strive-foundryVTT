@@ -1,5 +1,4 @@
 import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
-import { TEMPLATES } from "../../templatePreloader.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
 
 /**
@@ -11,7 +10,7 @@ import ViewModel from "../../view-model/view-model.mjs";
  */
 export default class LazyRichTextViewModel extends ViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.COMPONENT_LAZY_LOAD_RICH_TEXT; }
+  static get TEMPLATE() { return game.strive.const.TEMPLATES.COMPONENT_LAZY_LOAD_RICH_TEXT; }
 
   /**
    * Registers the Handlebars partial for this component. 

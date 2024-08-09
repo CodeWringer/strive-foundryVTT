@@ -16,6 +16,12 @@ import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
  * * Receives the current value of the control as its input and must return a boolean 
  * value. `true` signalizes a successful validation without errors, while `false` 
  * indicates validation failed. 
+ * 
+ * @method onChange Async callback that is invoked when the 
+ * value changes. Arguments:
+ * * `oldValue: Any`
+ * * `newValue: Any`
+ * * `dialogViewModel: DynamicInputDialogViewModel`
  */
 export default class DynamicInputDefinition {
   /**
@@ -39,6 +45,11 @@ export default class DynamicInputDefinition {
    * @param {Boolean | undefined} args.showFancyFont If true, will render labels using the 
    * fancy font. 
    * * Default `false`
+   * @param {Function | undefined} args.onChange Async callback that is invoked when the 
+   * value changes. Arguments:
+   * * `oldValue: Any`
+   * * `newValue: Any`
+   * * `dialogViewModel: DynamicInputDialogViewModel`
    */
   constructor(args = {}) {
     validateOrThrow(args, ["type", "name"]);
@@ -51,5 +62,6 @@ export default class DynamicInputDefinition {
     this.defaultValue = args.defaultValue;
     this.validationFunc = args.validationFunc;
     this.showFancyFont = args.showFancyFont ?? false;
+    this.onChange = args.onChange ?? (async () => {});
   }
 }

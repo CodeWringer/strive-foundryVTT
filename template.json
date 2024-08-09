@@ -51,11 +51,6 @@
             "levelModifier": 0,
             "progress": 0
           },
-          "arcana": {
-            "level": 0,
-            "levelModifier": 0,
-            "progress": 0
-          },
           "strength": {
             "level": 1,
             "levelModifier": 0,
@@ -78,8 +73,6 @@
           "HP": 0,
           "exhaustion": 0,
           "maxExhaustionModifier": 0,
-          "magicStamina": 0,
-          "maxMagicStaminaModifier": 0,
           "maxInjuriesModifier": 0,
           "states": [],
           "deathSaves": 0,

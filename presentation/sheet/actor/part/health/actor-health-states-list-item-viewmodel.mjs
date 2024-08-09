@@ -4,7 +4,6 @@ import { validateOrThrow } from "../../../../../business/util/validation-utility
 import ObservableField from "../../../../../common/observables/observable-field.mjs";
 import InputNumberSpinnerViewModel from "../../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
 import InputToggleViewModel from "../../../../component/input-toggle/input-toggle-viewmodel.mjs";
-import { TEMPLATES } from "../../../../templatePreloader.mjs"
 import ViewModel from "../../../../view-model/view-model.mjs"
 
 /**
@@ -24,7 +23,7 @@ import ViewModel from "../../../../view-model/view-model.mjs"
  */
 export default class ActorHealthStatesListItemViewModel extends ViewModel {
   /** @override */
-  static get TEMPLATE() { return TEMPLATES.ACTOR_HEALTH_STATES_LIST_ITEM; }
+  static get TEMPLATE() { return game.strive.const.TEMPLATES.ACTOR_HEALTH_STATES_LIST_ITEM; }
 
   /**
    * Returns true, if the state can be incurred multiple times, which means the 

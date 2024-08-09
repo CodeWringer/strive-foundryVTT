@@ -1,7 +1,6 @@
 import { ACTOR_TYPES } from "../../business/document/actor/actor-types.mjs";
 import { isDefined } from "../../business/util/validation-utility.mjs";
 import GritPointsViewModel from "../sheet/actor/part/health/grit-points/grit-points-viewmodel.mjs";
-import { TEMPLATES } from "../templatePreloader.mjs";
 import CombatTrackerActionPointsViewModel from "./combat-tracker-action-points-viewmodel.mjs";
 
 /**
@@ -16,7 +15,7 @@ export default class CustomCombatTracker extends CombatTracker {
   static get defaultOptions() {
     return {
       ...CombatTracker.defaultOptions,
-      template: TEMPLATES.COMBAT_TRACKER,
+      template: game.strive.const.TEMPLATES.COMBAT_TRACKER,
     };
   }
 
@@ -43,7 +42,7 @@ export default class CustomCombatTracker extends CombatTracker {
 
       // Add action points view model. 
       turn.renderActionPoints = document.type !== ACTOR_TYPES.PLAIN;
-      turn.actionPointsTemplate = TEMPLATES.COMBAT_TRACKER_ACTION_POINTS;
+      turn.actionPointsTemplate = game.strive.const.TEMPLATES.COMBAT_TRACKER_ACTION_POINTS;
       turn.actionPointsViewModel = new CombatTrackerActionPointsViewModel({
         id: `${turn.id}-aplist`,
         document: document,
@@ -53,7 +52,7 @@ export default class CustomCombatTracker extends CombatTracker {
       
       // Add grit points view model. 
       const transientActor = document.getTransientObject();
-      turn.gritPointsTemplate = TEMPLATES.ACTOR_GRIT_POINTS;
+      turn.gritPointsTemplate = game.strive.const.TEMPLATES.ACTOR_GRIT_POINTS;
       turn.renderGritPoints = transientActor.type == ACTOR_TYPES.PC 
       || (transientActor.type == ACTOR_TYPES.NPC && transientActor.allowGritPoints === true);
 

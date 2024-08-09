@@ -1,9 +1,9 @@
-import { TEMPLATES } from "../../../presentation/templatePreloader.mjs";
 import IllnessChatMessageViewModel from "../../../presentation/sheet/item/illness/illness-chat-message-viewmodel.mjs";
 import PreparedChatData from "../../../presentation/chat/prepared-chat-data.mjs";
 import { SOUNDS_CONSTANTS } from "../../../presentation/audio/sounds.mjs";
 import TransientBaseItem from "./transient-base-item.mjs";
 import { ILLNESS_STATES } from "../../ruleset/health/illness-states.mjs";
+import { getExtenders } from "../../../common/extender-util.mjs";
 
 /**
  * Represents the full transient data of an illness. 
@@ -20,7 +20,7 @@ export default class TransientIllness extends TransientBaseItem {
   get defaultImg() { return "icons/svg/poison.svg"; }
 
   /** @override */
-  get chatMessageTemplate() { return TEMPLATES.ILLNESS_CHAT_MESSAGE; }
+  get chatMessageTemplate() { return game.strive.const.TEMPLATES.ILLNESS_CHAT_MESSAGE; }
 
   /**
    * @type {String}
@@ -131,5 +131,10 @@ export default class TransientIllness extends TransientBaseItem {
     } else {
       return 0;
     }
+  }
+
+  /** @override */
+  getExtenders() {
+    return super.getExtenders().concat(getExtenders(TransientIllness));
   }
 }

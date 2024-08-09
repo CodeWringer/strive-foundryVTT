@@ -1,4 +1,3 @@
-import { TEMPLATES } from "../../../../presentation/templatePreloader.mjs";
 import { createUUID } from "../../../util/uuid-utility.mjs";
 import SkillChatMessageViewModel from "../../../../presentation/sheet/item/skill/skill-chat-message-viewmodel.mjs";
 import DamageAndType from "../../../ruleset/skill/damage-and-type.mjs";
@@ -11,11 +10,11 @@ import Expertise from "./expertise.mjs";
 import { ATTACK_TYPES } from "../../../ruleset/skill/attack-types.mjs";
 import { ATTRIBUTES, Attribute } from "../../../ruleset/attribute/attributes.mjs";
 import { isDefined } from "../../../util/validation-utility.mjs";
-import { arrayContains } from "../../../util/array-utility.mjs";
 import SkillPrerequisite from "../../../ruleset/skill/skill-prerequisite.mjs";
 import { SKILL_TAGS } from "../../../tags/system-tags.mjs";
 import AtReferencer from "../../../referencing/at-referencer.mjs";
 import { ACTOR_TYPES } from "../../actor/actor-types.mjs";
+import { getExtenders } from "../../../../common/extender-util.mjs";
 
 /**
  * Represents the full transient data of a skill. 
@@ -33,9 +32,6 @@ import { ACTOR_TYPES } from "../../actor/actor-types.mjs";
  * @property {Array<Attribute>} baseAttributes Base attributes of the skill. 
  * * Must always contain at least one entry. By default, this is the first attribute as per the `ATTRIBUTES` definiton. 
  * @property {Array<Expertise>} expertises The array of expertises of this skill. 
- * @property {Boolean} isMagicSchool Returns true, if the skill is considered 
- * a magic school. 
- * 
  * @property {Number | undefined} apCost 
  * @property {Array<DamageAndType>} damage
  * @property {String | undefined} condition 
@@ -50,7 +46,7 @@ export default class TransientSkill extends TransientBaseItem {
   get defaultImg() { return "icons/svg/book.svg"; }
   
   /** @override */
-  get chatMessageTemplate() { return TEMPLATES.SKILL_ITEM_CHAT_MESSAGE; }
+  get chatMessageTemplate() { return game.strive.const.TEMPLATES.SKILL_ITEM_CHAT_MESSAGE; }
   
   /** @override */
   get nameForDisplay() { return `${this.document.name} (${this.baseAttributes.map(it => game.i18n.localize(it.localizableAbbreviation)).join("/")})`; }
@@ -157,25 +153,6 @@ export default class TransientSkill extends TransientBaseItem {
         failures: value.failures,
       }
     });
-  }
-  
-  /**
-   * @type {Boolean}
-   */
-  get isMagicSchool() {
-    return arrayContains(((this.document.system.tags ?? this.document.system.properties) ?? []), SKILL_TAGS.MAGIC_SCHOOL.id);
-  }
-  set isMagicSchool(value) {
-    const tags = ((this.document.system.tags ?? this.document.system.properties) ?? []).concat([]); 
-    const index = tags.indexOf(SKILL_TAGS.MAGIC_SCHOOL.id);
-
-    if (value === true && index < 0) {
-      tags.push(SKILL_TAGS.MAGIC_SCHOOL.id);
-      this.updateByPath("system.tags", tags);
-    } else if (value !== true && index > -1) {
-      tags.splice(index, 1);
-      this.updateByPath("system.tags", tags);
-    }
   }
   
   /** @override */
@@ -568,5 +545,10 @@ export default class TransientSkill extends TransientBaseItem {
     }
 
     return super.resolveReference(comparableReference, propertyPath);
+  }
+  
+  /** @override */
+  getExtenders() {
+    return super.getExtenders().concat(getExtenders(TransientSkill));
   }
 }
