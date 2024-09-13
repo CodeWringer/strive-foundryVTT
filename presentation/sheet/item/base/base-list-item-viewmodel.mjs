@@ -187,6 +187,11 @@ export default class BaseListItemViewModel extends ViewModel {
           icon: '<i class="fas fa-edit"></i>',
           callback: this.queryEditName.bind(this),
         },
+        {
+          name: game.i18n.localize("system.general.import"),
+          icon: '<i class="fas fa-download"></i>',
+          callback: this.import.bind(this),
+        },
       ]);
     }
   }
