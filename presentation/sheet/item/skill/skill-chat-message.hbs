@@ -23,15 +23,6 @@ cssClass: {undefined | String}
       {{viewModel.baseAttributes}}
     </div>
   </div>
-  {{!-- Category --}}
-  <div class="flex flex-row sheet-block margin-b-md">
-    <div class="width-min-xxl">
-      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "system.general.category"}}{{/label}}
-    </div>
-    <div class="flex-grow">
-      {{viewModel.document.category}}
-    </div>
-  </div>
   {{!-- Tags --}}
   <div class="flex flex-row sheet-block margin-b-md{{#if (neq viewModel.hasTags true)}} hidden{{/if}}">
     {{> inputTags viewModel=viewModel.vmTags }}

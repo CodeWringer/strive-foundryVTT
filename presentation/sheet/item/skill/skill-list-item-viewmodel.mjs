@@ -181,14 +181,6 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
     });
     validateOrThrow(args, ["document"]);
 
-    this.vmTfCategory = new InputTextFieldViewModel({
-      parent: this,
-      id: "vmTfCategory",
-      value: this.document.category,
-      onChange: (_, newValue) => {
-        this.document.category = newValue;
-      },
-    });
     this.vmTags = new InputTagsViewModel({
       id: "vmTags",
       parent: this,

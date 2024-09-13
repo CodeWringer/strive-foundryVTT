@@ -80,17 +80,6 @@ export default class TransientSkill extends TransientBaseItem {
   }
   
   /**
-   * @type {String}
-   */
-  get category() {
-    return this.document.system.category;
-  }
-  set category(value) {
-    this.document.system.category = value;
-    this.updateByPath("system.category", value);
-  }
-  
-  /**
    * @type {Number}
    */
   get level() {
