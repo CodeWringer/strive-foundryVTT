@@ -226,15 +226,6 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
       document: this.document,
       expertisesInitiallyVisible: true,
     });
-    this.vmTfCategory = new InputTextFieldViewModel({
-      parent: this,
-      id: "vmTfCategory",
-      value: this.document.category,
-      onChange: (_, newValue) => {
-        this.document.category = newValue;
-      },
-      placeholder: game.i18n.localize("system.general.category"),
-    });
     this.vmTags = new InputTagsViewModel({
       id: "vmTags",
       parent: this,
