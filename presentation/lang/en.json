@@ -63,6 +63,7 @@
       "increment": "Increment",
       "isCustom": "Custom",
       "image": "Image",
+      "import": "Import",
       "input": {
         "validationFailed": "The following required fields failed validation. Ensure required fields have a valid value.",
         "query": "Provide Data",

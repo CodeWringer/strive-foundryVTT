@@ -421,58 +421,38 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
           },
         }),
       }),
-      // Context menu button
-      new TemplatedComponent({
-        template: ButtonContextMenuViewModel.TEMPLATE,
-        viewModel: new ButtonContextMenuViewModel({
-          id: "vmBtnContextMenu",
-          parent: this,
-          menuItems: [
-            // Edit name
-            {
-              name: game.i18n.localize("system.general.name.edit"),
-              icon: '<i class="fas fa-edit"></i>',
-              callback: this.queryEditName.bind(this),
-            },
-            // Add damage
-            {
-              name: game.i18n.localize("system.damageDefinition.add"),
-              icon: '<i class="fas fa-plus"></i>',
-              callback: () => {
-                const damage = this.document.damage.concat([]);
-                damage.push(new DamageAndType({
-                  damage: "",
-                  damageType: DAMAGE_TYPES.none.name,
-                }));
-                this.document.damage = damage;
-              },
-            },
-          ]
-          // Toggle ap cost
-          .concat(ButtonContextMenuViewModel.createToggleButtons("system.character.skill.expertise.apCost", this.document, "apCost", 0))
-          // Toggle obstacle
-          .concat(ButtonContextMenuViewModel.createToggleButtons("system.roll.obstacle.label", this.document, "obstacle", ""))
-          // Toggle opposed by
-          .concat(ButtonContextMenuViewModel.createToggleButtons("system.roll.obstacle.opposedBy.label", this.document, "opposedBy", ""))
-          // Toggle distance
-          .concat(ButtonContextMenuViewModel.createToggleButtons("system.character.skill.expertise.distance.label", this.document, "distance", ""))
-          // Toggle attack type
-          .concat(ButtonContextMenuViewModel.createToggleButtons("system.attackType.label", this.document, "attackType", ATTACK_TYPES.none))
-          // Toggle condition
-          .concat(ButtonContextMenuViewModel.createToggleButtons("system.character.skill.expertise.condition.label", this.document, "condition", "")),
-        }),
-      }),
-      // Delete button
-      new TemplatedComponent({
-        template: ButtonDeleteViewModel.TEMPLATE,
-        viewModel: new ButtonDeleteViewModel({
-          parent: this,
-          id: "vmBtnDelete",
-          target: this.document,
-          withDialog: true,
-        }),
-      }),
-    ]; 
+    ].concat(super.getSecondaryHeaderButtons());
+  }
+
+  /** @override */
+  getContextMenuButtons() {
+    return super.getContextMenuButtons().concat([
+      // Add damage
+      {
+        name: game.i18n.localize("system.damageDefinition.add"),
+        icon: '<i class="fas fa-plus"></i>',
+        callback: () => {
+          const damage = this.document.damage.concat([]);
+          damage.push(new DamageAndType({
+            damage: "",
+            damageType: DAMAGE_TYPES.none.name,
+          }));
+          this.document.damage = damage;
+        },
+      },
+    ])
+    // Toggle ap cost
+    .concat(ButtonContextMenuViewModel.createToggleButtons("system.character.skill.expertise.apCost", this.document, "apCost", 0))
+    // Toggle obstacle
+    .concat(ButtonContextMenuViewModel.createToggleButtons("system.roll.obstacle.label", this.document, "obstacle", ""))
+    // Toggle opposed by
+    .concat(ButtonContextMenuViewModel.createToggleButtons("system.roll.obstacle.opposedBy.label", this.document, "opposedBy", ""))
+    // Toggle distance
+    .concat(ButtonContextMenuViewModel.createToggleButtons("system.character.skill.expertise.distance.label", this.document, "distance", ""))
+    // Toggle attack type
+    .concat(ButtonContextMenuViewModel.createToggleButtons("system.attackType.label", this.document, "attackType", ATTACK_TYPES.none))
+    // Toggle condition
+    .concat(ButtonContextMenuViewModel.createToggleButtons("system.character.skill.expertise.condition.label", this.document, "condition", ""));
   }
 
   /** @override */
