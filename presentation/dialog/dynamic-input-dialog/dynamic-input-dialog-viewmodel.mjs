@@ -49,6 +49,7 @@ export default class DynamicInputDialogViewModel extends ViewModel {
         viewModel = new InputDropDownViewModel({
           id: definition.name,
           parent: this,
+          isEditable: definition.isEditable ?? this.isEditable,
           value: definition.defaultValue,
           onChange: async (oldValue, newValue) => {
             this[definition.name] = newValue;
@@ -60,6 +61,7 @@ export default class DynamicInputDialogViewModel extends ViewModel {
         viewModel = new InputImageViewModel({
           id: definition.name,
           parent: this,
+          isEditable: definition.isEditable ?? this.isEditable,
           value: definition.defaultValue,
           onChange: async (oldValue, newValue) => {
             this[definition.name] = newValue;
@@ -70,6 +72,7 @@ export default class DynamicInputDialogViewModel extends ViewModel {
         viewModel = new InputNumberSpinnerViewModel({
           id: definition.name,
           parent: this,
+          isEditable: definition.isEditable ?? this.isEditable,
           value: definition.defaultValue,
           onChange: async (oldValue, newValue) => {
             this[definition.name] = newValue;
@@ -83,6 +86,7 @@ export default class DynamicInputDialogViewModel extends ViewModel {
         viewModel = new InputRadioButtonGroupViewModel({
           id: definition.name,
           parent: this,
+          isEditable: definition.isEditable ?? this.isEditable,
           value: definition.defaultValue,
           onChange: async (oldValue, newValue) => {
             this[definition.name] = newValue;
@@ -94,6 +98,7 @@ export default class DynamicInputDialogViewModel extends ViewModel {
         viewModel = new InputRichTextViewModel({
           id: definition.name,
           parent: this,
+          isEditable: definition.isEditable ?? this.isEditable,
           value: definition.defaultValue,
           onChange: async (oldValue, newValue) => {
             this[definition.name] = newValue;
@@ -104,6 +109,7 @@ export default class DynamicInputDialogViewModel extends ViewModel {
         viewModel = new InputTextareaViewModel({
           id: definition.name,
           parent: this,
+          isEditable: definition.isEditable ?? this.isEditable,
           value: definition.defaultValue,
           onChange: async (oldValue, newValue) => {
             this[definition.name] = newValue;
@@ -116,6 +122,7 @@ export default class DynamicInputDialogViewModel extends ViewModel {
         viewModel = new InputTextFieldViewModel({
           id: definition.name,
           parent: this,
+          isEditable: definition.isEditable ?? this.isEditable,
           value: definition.defaultValue,
           onChange: async (oldValue, newValue) => {
             this[definition.name] = newValue;
@@ -140,6 +147,7 @@ export default class DynamicInputDialogViewModel extends ViewModel {
         viewModel = new SimpleListViewModel({
           id: definition.name,
           parent: this,
+          isEditable: definition.isEditable ?? this.isEditable,
           contentItemViewModels: viewModels,
           contentItemTemplate: definition.specificArgs.contentItemTemplate,
           onAddClick: async () => {
@@ -163,6 +171,7 @@ export default class DynamicInputDialogViewModel extends ViewModel {
         viewModel = new InputToggleViewModel({
           id: definition.name,
           parent: this,
+          isEditable: definition.isEditable ?? this.isEditable,
           value: definition.defaultValue,
           onChange: async (oldValue, newValue) => {
             this[definition.name] = newValue;
