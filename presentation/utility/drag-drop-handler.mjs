@@ -14,8 +14,8 @@
  * over the represented element. 
  * @property {Function} dragLeaveHandler Callback that is invoked when the dragged thing 
  * is moved out of the represented element. 
- * @property {Function} dropHandler Callback that is invoked when the dragging of 
- * the element is begun. 
+ * @property {Function} dropHandler Callback that is invoked when dragged object has 
+ * been dropped. 
  */
 export class DragDropHandler {
   /**
@@ -51,6 +51,7 @@ export class DragDropHandler {
    * and trigger the drop event, if the dragged over object is of an accepted type. 
    * @param {String | undefined} args.dragOverClass CSS class to automatically add to the element 
    * when something is dragged over it. 
+   * * default `"dragover"`
    * @param {String | undefined} args.draggableElementId ID of the element that allows being dragged. 
    * * By default uses `entityId`. 
    * @param {String | undefined} args.receiverElementId ID of the element that allows receiving dragged elements. 
@@ -61,8 +62,8 @@ export class DragDropHandler {
    * over the represented element. 
    * @param {Function | undefined} args.dragLeaveHandler Callback that is invoked when the dragged thing 
    * is moved out of the represented element. 
-   * @param {Function | undefined} args.dropHandler Callback that is invoked when the dragging of 
-   * the element is begun. 
+   * @param {Function | undefined} args.dropHandler Callback that is invoked when dragged object has 
+   * been dropped. 
    */
   constructor(args = {}) {
     this.entityId = args.entityId;
