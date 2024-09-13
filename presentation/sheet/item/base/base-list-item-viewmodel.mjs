@@ -246,15 +246,7 @@ export default class BaseListItemViewModel extends ViewModel {
           id: "vmBtnContextMenu",
           parent: this,
           localizedToolTip: game.i18n.localize("system.general.contextMenu"),
-          menuItems: [
-            // Edit name
-            {
-              name: game.i18n.localize("system.general.name.edit"),
-              icon: '<i class="fas fa-edit"></i>',
-              condition: this.context === CONTEXT_TYPES.LIST_ITEM,
-              callback: this.queryEditName.bind(this),
-            },
-          ],
+          menuItems: this.getContextMenuButtons(),
         }),
       }),
       // Delete button
@@ -269,6 +261,33 @@ export default class BaseListItemViewModel extends ViewModel {
         }),
       }),
     ]; 
+  }
+
+  /**
+   * Returns the default context menu button definitions. 
+   * 
+   * @returns {Array<Object>}
+   * 
+   * @virtual
+   * @protected
+   */
+  getContextMenuButtons() {
+    return [
+      // Edit name
+      {
+        name: game.i18n.localize("system.general.name.edit"),
+        icon: '<i class="fas fa-edit"></i>',
+        condition: this.context === CONTEXT_TYPES.LIST_ITEM,
+        callback: this.queryEditName.bind(this),
+      },
+      // Import
+      {
+        name: game.i18n.localize("system.general.import"),
+        icon: '<i class="fas fa-download"></i>',
+        condition: this.context === CONTEXT_TYPES.LIST_ITEM,
+        callback: this.import.bind(this),
+      },
+    ];
   }
   
   /**
@@ -299,6 +318,7 @@ export default class BaseListItemViewModel extends ViewModel {
    * Prompts the user to enter a name and applies it. 
    * 
    * @protected
+   * @async
    */
   async queryEditName() {
     const inputName = "inputName";
@@ -322,6 +342,21 @@ export default class BaseListItemViewModel extends ViewModel {
     if (dialog.confirmed !== true) return;
 
     this.document.name = dialog[inputName];
+  }
+
+  /**
+   * Creates a deep copy of the embedded document and adds it to the world. 
+   * 
+   * @protected
+   * @async
+   */
+  async import() {
+    const creationData = {
+      name: this.document.name,
+      type: this.document.type,
+      system: this.document.document.system,
+    };
+    await Item.create(creationData);
   }
 
   /**
