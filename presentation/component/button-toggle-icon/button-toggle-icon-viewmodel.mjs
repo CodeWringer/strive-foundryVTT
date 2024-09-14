@@ -97,6 +97,6 @@ export default class ButtonToggleIconViewModel extends ButtonViewModel {
    */
   _updateIcon() {
     this.iconHtml = this._getIconHtml();
-    this.element.find(`span#${this.id}-icon`).html(this.iconHtml);
+    this.element.html(this.iconHtml);
   }
 }
