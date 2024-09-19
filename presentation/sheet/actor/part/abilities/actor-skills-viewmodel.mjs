@@ -182,7 +182,7 @@ export default class ActorSkillsViewModel extends ViewModel {
     this.vmSortInnate = new SortControlsViewModel({
       id: "vmSortInnate",
       parent: this,
-      options: this._getSkillSortingOptions(),
+      options: this._getKnownSkillSortingOptions(),
       compact: true,
       onSort: (_, provideSortable) => {
         provideSortable(this.vmInnateSkillList);
@@ -191,7 +191,7 @@ export default class ActorSkillsViewModel extends ViewModel {
     this.vmSortLearning = new SortControlsViewModel({
       id: "vmSortLearning",
       parent: this,
-      options: this._getSkillSortingOptions(),
+      options: this._getLearningSkillSortingOptions(),
       compact: true,
       onSort: (_, provideSortable) => {
         provideSortable(this.vmLearningSkillList);
@@ -200,7 +200,7 @@ export default class ActorSkillsViewModel extends ViewModel {
     this.vmSortKnown = new SortControlsViewModel({
       id: "vmSortKnown",
       parent: this,
-      options: this._getSkillSortingOptions(),
+      options: this._getKnownSkillSortingOptions(),
       compact: true,
       onSort: (_, provideSortable) => {
         provideSortable(this.vmKnownSkillList);
@@ -363,11 +363,32 @@ export default class ActorSkillsViewModel extends ViewModel {
   }
 
   /**
+   * Returns the sorting options for learning skill lists. 
+   * 
    * @returns {Array<SortingOption>}
    * 
    * @private
    */
-  _getSkillSortingOptions() {
+  _getLearningSkillSortingOptions() {
+    return [
+      new SortingOption({
+        iconHtml: '<i class="ico ico-tags-solid dark"></i>',
+        localizedToolTip: game.i18n.localize("system.general.name.label"),
+        sortingFunc: (a, b) => {
+          return a.document.name.localeCompare(b.document.name);
+        },
+      }),
+    ];
+  }
+
+  /**
+   * Returns the sorting options for known and innate skill lists. 
+   * 
+   * @returns {Array<SortingOption>}
+   * 
+   * @private
+   */
+  _getKnownSkillSortingOptions() {
     return [
       new SortingOption({
         iconHtml: '<i class="ico ico-tags-solid dark"></i>',
