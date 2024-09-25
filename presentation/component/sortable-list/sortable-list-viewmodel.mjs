@@ -70,10 +70,12 @@ export default class SortableListViewModel extends ViewModel {
   get hasAddButton() { return this.vmBtnAddItem !== undefined; }
 
   /**
-   * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
+   * @param {Object} args 
+   * @param {String | undefined} args.id Unique ID of this view model instance. 
+   * @param {ViewModel | undefined} args.parent 
    * 
-   * @param {Boolean | undefined} args.isEditable Optional. If true, input(s) will be in edit mode. If false, input(s) will be in read-only mode.
-   * @param {String | undefined} args.contextTemplate Optional. Name or path of a template that embeds this input component. 
+   * @param {Boolean | undefined} args.isEditable If true, input(s) will be in edit mode. If false, input(s) will be in read-only mode.
+   * @param {String | undefined} args.contextTemplate Name or path of a template that embeds this input component. 
    * 
    * @param {AbstractListItemIndexDataSource} args.indexDataSource The data source of the indices. 
    * @param {Array<ViewModel>} args.listItemViewModels A list of item view models.

@@ -36,7 +36,7 @@ export default class DocumentFetcher {
    * * If `id` is undefined, will pick the _first_ document whose name matches this. 
    * @param {String | undefined} filter.documentType A document type. 
    * * E. g. `"Item"` or `"Actor"`
-   * @param {String | undefined} filter.contentType A content type. 
+   * @param {ITEM_TYPES | String | undefined} filter.contentType A content type. 
    * * E. g. `"skill"` or `"npc"`
    * @param {DocumentCollectionSource | undefined} filter.source A document source to 
    * filter by. 
@@ -93,7 +93,7 @@ export default class DocumentFetcher {
    * * If `id` is undefined, will pick the _first_ document whose name matches this. 
    * @param {String | undefined} filter.documentType A document type. 
    * * E. g. `"Item"` or `"Actor"`
-   * @param {String | undefined} filter.contentType A content type. 
+   * @param {ITEM_TYPES | String | undefined} filter.contentType A content type. 
    * * E. g. `"skill"` or `"npc"`
    * @param {Boolean | undefined} filter.searchEmbedded If `true`, will also look for embedded 
    * documents. 
@@ -181,7 +181,7 @@ export default class DocumentFetcher {
    * * If `id` is undefined, will pick the _first_ document whose name matches this. 
    * @param {String | undefined} filter.documentType A document type. 
    * * E. g. `"Item"` or `"Actor"`
-   * @param {String | undefined} filter.contentType A content type. 
+   * @param {ITEM_TYPES | String | undefined} filter.contentType A content type. 
    * * E. g. `"skill"` or `"npc"`
    * @param {Boolean | undefined} filter.searchEmbedded If `true`, will also look for embedded 
    * documents. 
@@ -254,7 +254,7 @@ export default class DocumentFetcher {
    * @param {String | undefined} filter.name The name of the documents to fetch. 
    * @param {String | undefined} filter.documentType A document type. 
    * * E. g. `"Item"` or `"Actor"`
-   * @param {String | undefined} filter.contentType A content type. 
+   * @param {ITEM_TYPES | String | undefined} filter.contentType A content type. 
    * * E. g. `"skill"` or `"npc"`
    * @param {DocumentCollectionSource | undefined} filter.source A document source to 
    * filter by. 
@@ -303,7 +303,7 @@ export default class DocumentFetcher {
    * * If `id` is undefined, will pick the _first_ document whose name matches this. 
    * @param {String | undefined} filter.documentType A document type. 
    * * E. g. `"Item"` or `"Actor"`
-   * @param {String | undefined} filter.contentType A content type. 
+   * @param {ITEM_TYPES | String | undefined} filter.contentType A content type. 
    * * E. g. `"skill"` or `"npc"`
    * @param {Boolean | undefined} filter.searchEmbedded If `true`, will also look for embedded 
    * documents. 
@@ -392,7 +392,7 @@ export default class DocumentFetcher {
    * * If `id` is undefined, will pick the _first_ document whose name matches this. 
    * @param {String | undefined} filter.documentType A document type. 
    * * E. g. `"Item"` or `"Actor"`
-   * @param {String | undefined} filter.contentType A content type. 
+   * @param {ITEM_TYPES | String | undefined} filter.contentType A content type. 
    * * E. g. `"skill"` or `"npc"`
    * @param {Boolean | undefined} filter.searchEmbedded If `true`, will also look for embedded 
    * documents. 
@@ -458,7 +458,7 @@ export default class DocumentFetcher {
    * @param {String | undefined} filter.documentType A document type. 
    * * E. g. `"Item"` or `"Actor"`
    * * If undefined, `contentType` **must** be defined. 
-   * @param {String | undefined} filter.contentType A content type. 
+   * @param {ITEM_TYPES | String | undefined} filter.contentType A content type. 
    * * E. g. `"skill"` or `"npc"`
    * * If undefined, `documentType` **must** be defined. 
    * @param {DocumentCollectionSource | undefined} filter.source A document source to 
@@ -503,7 +503,7 @@ export default class DocumentFetcher {
    * @param {String | undefined} filter.documentType A document type. 
    * * E. g. `"Item"` or `"Actor"`
    * * If undefined, `contentType` **must** be defined. 
-   * @param {String | undefined} filter.contentType A content type. 
+   * @param {ITEM_TYPES | String | undefined} filter.contentType A content type. 
    * * E. g. `"skill"` or `"npc"`
    * * If undefined, `documentType` **must** be defined. 
    * @param {DocumentCollectionSource | undefined} filter.source A document source to 
@@ -570,7 +570,7 @@ export default class DocumentFetcher {
    * @param {String | undefined} filter.documentType A document type. 
    * * E. g. `"Item"` or `"Actor"`
    * * If undefined, `contentType` **must** be defined. 
-   * @param {String | undefined} filter.contentType A content type. 
+   * @param {ITEM_TYPES | String | undefined} filter.contentType A content type. 
    * * E. g. `"skill"` or `"npc"`
    * * If undefined, `documentType` **must** be defined. 
    * 
@@ -623,7 +623,7 @@ export default class DocumentFetcher {
    * * If `id` is undefined, will pick the _first_ document whose name matches this. 
    * @param {String | undefined} filter.documentType A document type. 
    * * E. g. `"Item"` or `"Actor"`
-   * @param {String | undefined} filter.contentType A content type. 
+   * @param {ITEM_TYPES | String | undefined} filter.contentType A content type. 
    * * E. g. `"skill"` or `"npc"`
    * @param {DocumentCollectionSource | undefined} filter.source A document source to 
    * filter by. 

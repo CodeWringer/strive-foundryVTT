@@ -74,6 +74,8 @@ export const TEMPLATES = {
   DIALOG_MIGRATOR: `${basePathPresentation}/dialog/migrator-dialog/migrator-dialog.hbs`,
   DIALOG_DYNAMIC_INPUT: `${basePathPresentation}/dialog/dynamic-input-dialog/dynamic-input-dialog.hbs`,
   DIALOG_DICE_POOL_DESIGNER: `${basePathPresentation}/dialog/dice-pool-designer-dialog/dice-pool-designer-dialog.hbs`,
+  DIALOG_DAMAGE_DESIGNER: `${basePathPresentation}/dialog/damage-designer-dialog/damage-designer-dialog.hbs`,
+  DIALOG_DAMAGE_DESIGNER_LIST_ITEM: `${basePathPresentation}/dialog/damage-designer-dialog/damage-designer-list-item.hbs`,
   // --- Settings Dialogs
   DIALOG_SETTINGS_HEALTH_STATES: `${basePathPresentation}/dialog/settings/health-states/health-states-settings-dialog.hbs`,
   CUSTOM_HEALTH_STATE_LIST_ITEM: `${basePathPresentation}/dialog/settings/health-states/custom-health-state-list-item.hbs`,

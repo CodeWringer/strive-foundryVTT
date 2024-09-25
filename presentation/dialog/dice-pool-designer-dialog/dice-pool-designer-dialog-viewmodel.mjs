@@ -11,6 +11,13 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
   static get TEMPLATE() { return game.strive.const.TEMPLATES.DIALOG_DICE_POOL_DESIGNER; }
 
   /**
+   * @static
+   * @readonly
+   * @type {String}
+   */
+  static get ID_TABLE_ELEMENT() { return "predictions-table"; }
+
+  /**
    * Observable ui state. 
    * 
    * @example
@@ -292,7 +299,7 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
   async activateListeners(html) {
     await super.activateListeners(html);
 
-    this._diceProbabilityTableElement = html.find("#predictions-table");
+    this._diceProbabilityTableElement = html.find(`#${DicePoolDesignerDialogViewModel.ID_TABLE_ELEMENT}`);
     await this._updateTable();
   }
   
