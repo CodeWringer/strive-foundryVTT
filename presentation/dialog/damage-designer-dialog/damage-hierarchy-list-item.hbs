@@ -1,0 +1,22 @@
+{{!--
+viewModel: DamageHierarchyListItemViewModel
+--}}
+<div id="{{viewModel.id}}">
+  <span>{{viewModel.hierarchy.name}}</span>
+  <div class="margin-l-lg">
+    <ol class="unstyled-list">
+      {{#each viewModel.findingViewModels as |vm| }}
+        {{#with ../viewModel.findingTemplate as |template| }}
+          {{> (template) viewModel=vm }}
+        {{/with}}
+      {{/each}}
+    </ol>
+    <ol class="unstyled-list">
+      {{#each viewModel.subHierarchyViewModels as |vm| }}
+        {{#with ../viewModel.hierarchyTemplate as |template| }}
+          {{> (template) viewModel=vm }}
+        {{/with}}
+      {{/each}}
+    </ol>
+  </div>
+</div>

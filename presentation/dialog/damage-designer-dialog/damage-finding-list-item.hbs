@@ -1,0 +1,16 @@
+{{!--
+viewModel: DamageFindingListItemViewModel
+--}}
+<div id="{{viewModel.id}}">
+  <div class="damage-list pad-md">
+    <span>{{viewModel.damageFindingName}}</span>
+    <span class="multiline">{{viewModel.formula}}</span>
+    {{!-- 0 --}}
+    <div class="flex flex-column">
+      <span>{{viewModel.minDamage}}</span>
+      <span>{{viewModel.meanDamage}}</span>
+      <span>{{viewModel.maxDamage}}</span>
+    </div>
+    {{!-- TODO insert values for variables like @SI --}}
+  </div>
+</div>

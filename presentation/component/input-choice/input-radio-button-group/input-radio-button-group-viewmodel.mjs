@@ -31,8 +31,7 @@ export default class InputRadioButtonGroupViewModel extends InputChoiceViewModel
   /**
    * @param {Object} args
    * @param {Array<StatefulChoiceOption>} args.options The options available to the radio button group. 
-   * @param {String | undefined} args.value The current value. Must correspond 
-   * to a `ChoiceOption.value` from the `options`. 
+   * @param {StatefulChoiceOption | undefined} args.value The current value. 
    * @param {Function | undefined} args.onChange Callback that is invoked 
    * when the value changes. Receives two arguments: 
    * * `oldValue: {StatefulChoiceOption}`

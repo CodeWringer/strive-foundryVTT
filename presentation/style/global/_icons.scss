@@ -9,6 +9,10 @@ $size: 26px;
   &.dark {
     filter: brightness(0.3);
   }
+
+  &.active {
+    filter: drop-shadow(0 0 4px $c-button-highlight);
+  }
   
   &.interactible {
     &:hover {

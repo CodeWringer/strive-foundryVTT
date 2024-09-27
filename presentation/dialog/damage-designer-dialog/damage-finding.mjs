@@ -9,14 +9,10 @@ import { isDefined } from "../../../business/util/validation-utility.mjs";
  * 
  * @property {String} name Name of the skill or Expertise. 
  * @property {String} id ID of the skill or Expertise. 
- * @property {String} sourceCollectionId ID of the containing collection. 
  * @property {Array<DamageAndType>} damage A list of raw damage formulae. 
  * These formulae may contain variables that may need to be manually fed some 
  * values. 
  * E. g. `["6D + @strength", "5 - @SI"]`
- * @property {Array<DamageFinding>} expertises A list only of all embedded Expertises 
- * that have at least one damage formula defined. Will not contain Expertises that 
- * have no damage formula. 
  * @property {TransientSkill | Expertise | undefined} document 
  */
 export class DamageFinding {
@@ -33,24 +29,17 @@ export class DamageFinding {
    * @param {Object} args 
    * @param {String} args.name Name of the skill or Expertise. 
    * @param {String} args.id ID of the skill or Expertise. 
-   * @param {String} args.sourceCollectionId ID of the containing collection. 
    * @param {Array<DamageAndType>} args.damage A list of raw damage formulae. 
    * These formulae may contain variables that may need to be manually fed some 
    * values. 
    * E. g. `["6D + @strength", "5 - @SI"]`
-   * @param {Array<DamageFinding>} args.expertises A list only of all embedded Expertises 
-   * that have at least one damage formula defined. Will not contain Expertises that 
-   * have no damage formula. 
    * @param {TransientSkill | Expertise | undefined} args.document 
    */
   constructor(args = {}) {
     this.name = args.name;
     this.id = args.id;
 
-    this.sourceCollectionId = args.sourceCollectionId;
-    
     this.damage = args.damage;
-    this.expertises = args.expertises;
     this.document = args.document;
   }
 
@@ -158,11 +147,16 @@ export class DamageFinding {
    * 
    * @param {String} formula 
    * 
-   * @returns {Number}
+   * @returns {Number | String}
    * 
    * @private
    */
   _evaluate(formula) {
-    return eval(formula);
+    try {
+      return eval(formula);
+    } catch (error) {
+      console.log(error);
+      return "error";
+    }
   }
 }

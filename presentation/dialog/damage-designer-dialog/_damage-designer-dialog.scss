@@ -1,6 +1,9 @@
 .damage-finding-header {
   background-color: $c-dark;
   color: $c-text-light;
+}
+
+.damage-list {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
 }

@@ -1,18 +1,17 @@
-import RollFormulaResolver from "../../../business/dice/roll-formula-resolver.mjs";
-import AtReferencer from "../../../business/referencing/at-referencer.mjs";
 import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
 import { DamageFinding } from "./damage-finding.mjs";
 
-export default class DamageDesignerListItemViewModel extends ViewModel {
+export default class DamageFindingListItemViewModel extends ViewModel {
   /** @override */
-  static get TEMPLATE() { return game.strive.const.TEMPLATES.DIALOG_DAMAGE_DESIGNER_LIST_ITEM; }
+  static get TEMPLATE() { return game.strive.const.TEMPLATES.DIALOG_DAMAGE_FINDING_LIST_ITEM; }
 
   /**
    * @param {Object} args 
    * @param {String | undefined} args.id
    * @param {ViewModel | undefined} args.parent
    * @param {DamageFinding} args.damageFinding
+   * @param {String | undefined} args.damageFindingName
    */
   constructor(args = {}) {
     super(args);
@@ -20,6 +19,7 @@ export default class DamageDesignerListItemViewModel extends ViewModel {
     validateOrThrow(args, ["damageFinding"]);
 
     this.damageFinding = args.damageFinding;
+    this.damageFindingName = args.damageFindingName ?? this.damageFinding.name;
     this.formula = this.damageFinding.getFullFormulaForDisplay();
     this.minDamage = this._getMinDamageForDisplay();
     this.meanDamage = this._getMeanDamageForDisplay();
@@ -71,7 +71,7 @@ export default class DamageDesignerListItemViewModel extends ViewModel {
    * @returns {String}
    */
   async render() {
-    return await renderTemplate(DamageDesignerListItemViewModel.TEMPLATE, {
+    return await renderTemplate(DamageFindingListItemViewModel.TEMPLATE, {
       viewModel: this,
     });
   }
