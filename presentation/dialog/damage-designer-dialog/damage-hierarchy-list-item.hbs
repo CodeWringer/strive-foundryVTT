@@ -1,10 +1,15 @@
 {{!--
 viewModel: DamageHierarchyListItemViewModel
 --}}
-<div id="{{viewModel.id}}">
-  <span>{{viewModel.hierarchy.name}}</span>
+<div id="{{viewModel.id}}" class="damage-list-item">
+  <a id="{{viewModel.id}}-link" class="damage-list-item-header flex flex-middle pad-l-md auto-margin-h-lg">
+    <span>{{viewModel.hierarchy.name}}</span>
+    <span style="font-size: 0.8em;">
+      <i class="fas fa-external-link-alt"></i>
+    </span>
+  </a>
   <div class="margin-l-lg">
-    <ol class="unstyled-list">
+    <ol class="unstyled-list auto-margin-v-md auto-border-b">
       {{#each viewModel.findingViewModels as |vm| }}
         {{#with ../viewModel.findingTemplate as |template| }}
           {{> (template) viewModel=vm }}

@@ -1,16 +1,18 @@
 {{!--
 viewModel: DamageFindingListItemViewModel
 --}}
-<div id="{{viewModel.id}}">
-  <div class="damage-list">
-    <span class="flex flex-middle">{{viewModel.damageFindingName}}</span>
-    <span class="flex flex-middle multiline">{{viewModel.formula}}</span>
-    {{#each viewModel.evalutedDamage as |damage|}}
-    <div class="flex flex-column flex-middle">
-      <span>{{damage.min}}</span>
-      <span>{{damage.mean}}</span>
-      <span>{{damage.max}}</span>
-    </div>
-    {{/each}}
+<div id="{{viewModel.id}}" class="damage-list pad-md">
+  <span>{{viewModel.damageFindingName}}</span>
+  <span class="flex flex-middle multiline">{{viewModel.formula}}</span>
+  {{#each viewModel.evaluatedDamage as |damage|}}
+  <div class="flex flex-column flex-center">
+    {{#if damage.hasVariableDamage}}
+    <span>{{damage.min}}</span>
+    <span>{{damage.mean}}</span>
+    <span>{{damage.max}}</span>
+    {{else}}
+    <span>{{damage.max}}</span>
+    {{/if}}
   </div>
+  {{/each}}
 </div>

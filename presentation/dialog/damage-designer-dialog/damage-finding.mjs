@@ -20,10 +20,11 @@ export class DamageFinding {
    * Returns a regex to dissect a `"xDy"` or `"xdy"` string, e. g. `"3D6"` or 
    * `"3d6"`. 
    * 
+   * @static
    * @type {RegExp}
    * @readonly
    */
-  get rgxDice() { return new RegExp(/(?<count>\d+)\s*(?<d>[dD])(?<faces>\d*)/g); }
+  static get RGX_DICE() { return new RegExp(/(?<count>\d+)\s*(?<d>[dD])(?<faces>\d*)/g); }
 
   /**
    * @param {Object} args 
@@ -137,7 +138,7 @@ export class DamageFinding {
    * @private
    */
   _replaceDice(formula, replacementType) {
-    const matches = formula.matchAll(this.rgxDice);
+    const matches = formula.matchAll(DamageFinding.RGX_DICE);
 
     let formulaWithoutDice = "";
     let lastIndex = 0;
@@ -186,14 +187,20 @@ export class DamageFinding {
    * @private
    */
   _replaceDiceAndEvaluate(formula) {
-    const minFormula = this._replaceDice(formula, DICE_REPLACEMENT_TYPES.MIN)
-    const meanFormula = this._replaceDice(formula, DICE_REPLACEMENT_TYPES.MEAN)
-    const maxFormula = this._replaceDice(formula, DICE_REPLACEMENT_TYPES.MAX)
+    const minFormula = this._replaceDice(formula, DICE_REPLACEMENT_TYPES.MIN);
+    const meanFormula = this._replaceDice(formula, DICE_REPLACEMENT_TYPES.MEAN);
+    const maxFormula = this._replaceDice(formula, DICE_REPLACEMENT_TYPES.MAX);
+
+    const min = this._tryEvaluate(minFormula);
+    const mean = this._tryEvaluate(meanFormula);
+    const max = this._tryEvaluate(maxFormula);
+    
     return new EvaluatedDamage({
       formula: formula,
-      min: this._tryEvaluate(minFormula),
-      mean: this._tryEvaluate(meanFormula),
-      max: this._tryEvaluate(maxFormula),
+      min: min,
+      mean: mean,
+      max: max,
+      hasVariableDamage: (min != mean && min != max && mean != max),
     });
   }
 }
@@ -213,6 +220,8 @@ const DICE_REPLACEMENT_TYPES = {
  * @property {Number} min 
  * @property {Number} mean 
  * @property {Number} max 
+ * @property {Boolean} hasVariableDamage If `true`, then the damage formula contains 
+ * at least one variable. E. g. `"1D8"` or `@SI D6` 
  */
 export class EvaluatedDamage {
   /**
@@ -221,11 +230,14 @@ export class EvaluatedDamage {
    * @param {Number} args.min 
    * @param {Number} args.mean 
    * @param {Number} args.max 
+   * @param {Boolean} args.hasVariableDamage If `true`, then the damage formula contains 
+   * at least one variable. E. g. `"1D8"` or `@SI D6` 
    */
   constructor(args = {}) {
     this.formula = args.formula;
     this.min = args.min;
     this.mean = args.mean;
     this.max = args.max;
+    this.hasVariableDamage = args.hasVariableDamage;
   }
 }

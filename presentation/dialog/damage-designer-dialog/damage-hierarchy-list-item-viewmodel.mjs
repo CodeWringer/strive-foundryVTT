@@ -1,4 +1,5 @@
-import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
+import DocumentFetcher from "../../../business/document/document-fetcher/document-fetcher.mjs";
+import { isDefined, validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
 import DamageFindingHierarchy from "./damage-finding-hierarchy.mjs";
 import DamageFindingListItemViewModel from "./damage-finding-list-item-viewmodel.mjs";
@@ -48,6 +49,36 @@ export default class DamageHierarchyListItemViewModel extends ViewModel {
       });
       this[vm.id] = vm;
       this.subHierarchyViewModels.push(vm);
+    });
+  }
+
+  /** @override */
+  async activateListeners(html) {
+    await super.activateListeners(html);
+
+    $(`#${this.id}-link`).click(async () => {
+      const id = this.hierarchy.id;
+      
+      let toShow;
+
+      // Check if the linked entity is a collection. 
+      toShow = game.packs.get(id);
+
+      if (isDefined(toShow)) {
+        // Show the collection. 
+        toShow.render(true);
+      }
+
+      // Check if the linked entity is a document. 
+      toShow = await new DocumentFetcher().find({
+        id: id,
+      });
+  
+      if (isDefined(toShow)) {
+        toShow.sheet.render(true);
+      } else {
+        game.strive.logger.logWarn(`Failed to find document '${id}' to open sheet`);
+      }
     });
   }
 

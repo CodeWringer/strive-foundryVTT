@@ -137,14 +137,17 @@ export default class DamageDesignerDialogViewModel extends ViewModel {
       }
 
       renderedContent = renderedDamageFindings.join("\n");
-    } else {
-      const rootVm = new DamageHierarchyListItemViewModel({
-        id: findings.hierarchy.id,
-        parent: this,
-        hierarchy: findings.hierarchy,
-      });
-      viewModels.push(rootVm);
-      renderedContent = await rootVm.render();
+    } else { // Hierarchical view
+      for await (const subHierarchy of findings.hierarchy.subHierarchies) {
+        const vm = new DamageHierarchyListItemViewModel({
+          id: subHierarchy.id,
+          parent: this,
+          hierarchy: subHierarchy,
+        });
+        viewModels.push(vm);
+        const renderedSubHierarchy = await vm.render();
+        renderedContent = `${renderedContent}\n${renderedSubHierarchy}`
+      }
     }
 
     // Manipulate the DOM. 

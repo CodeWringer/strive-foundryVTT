@@ -1,9 +1,27 @@
 .damage-finding-header {
   background-color: $c-dark;
   color: $c-text-light;
+
+  position: sticky;
+  top: -8px;
+  border-bottom: 1px solid $c-border-medium;
 }
 
 .damage-list {
   display: grid;
-  grid-template-columns: 2fr 2fr repeat(11, 3.5rem);;
+  grid-template-columns: 2fr 2fr repeat(11, 3.5rem);
+  
+  &-root {
+    background-color: $c-dark;
+    color: $c-text-light;
+  }
+
+  &-item {
+    background-color: rgba($color: #FFF, $alpha: 0.075);
+    border: 1px solid $c-dark;
+
+    &-header {
+      font-size: 1.4rem;
+    }
+  }
 }

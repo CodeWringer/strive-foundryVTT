@@ -3,26 +3,24 @@ viewModel: DamageDesignerDialogViewModel
 --}}
 <section id="{{viewModel.id}}">
   {{!-- Row --}}
-  <div class=""></div>
-  {{!-- Row --}}
-  <div class="damage-finding-header damage-list flex flex-row flex-middle grid-gap-md pad-md">
+  <div class="damage-finding-header damage-list flex flex-row flex-middle pad-md">
     <div class="flex flex-row flex-middle">
       <span>Skill / Expertise</span>
       <span class="flex-grow"></span>
       {{> inputRadioButtonGroup viewModel=viewModel.vmListViewSelection }}
     </div>
-    <span>Formula</span>
-    <span>0</span>
-    <span>1</span>
-    <span>2</span>
-    <span>3</span>
-    <span>4</span>
-    <span>5</span>
-    <span>6</span>
-    <span>7</span>
-    <span>8</span>
-    <span>9</span>
-    <span>10</span>
+    <span class="pad-l-md">Formula</span>
+    <span class="flex flex-center">0</span>
+    <span class="flex flex-center">1</span>
+    <span class="flex flex-center">2</span>
+    <span class="flex flex-center">3</span>
+    <span class="flex flex-center">4</span>
+    <span class="flex flex-center">5</span>
+    <span class="flex flex-center">6</span>
+    <span class="flex flex-center">7</span>
+    <span class="flex flex-center">8</span>
+    <span class="flex flex-center">9</span>
+    <span class="flex flex-center">10</span>
   </div>
-  <ol id="table" class="unstyled-list"></ol>
+  <ol id="table" class="unstyled-list damage-list-root auto-border-b"></ol>
 </section>

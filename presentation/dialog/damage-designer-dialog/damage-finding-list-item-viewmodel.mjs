@@ -1,6 +1,6 @@
 import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
-import { DamageFinding, EvaluatedDamage } from "./damage-finding.mjs";
+import { DamageFinding } from "./damage-finding.mjs";
 
 export default class DamageFindingListItemViewModel extends ViewModel {
   /** @override */
@@ -21,7 +21,7 @@ export default class DamageFindingListItemViewModel extends ViewModel {
     this.damageFinding = args.damageFinding;
     this.damageFindingName = args.damageFindingName ?? this.damageFinding.name;
     this.formula = this.damageFinding.getJoinedFormulaeForDisplay();
-    this.evalutedDamage = this.damageFinding.evaluate();
+    this.evaluatedDamage = this.damageFinding.evaluate();
   }
 
   /**
