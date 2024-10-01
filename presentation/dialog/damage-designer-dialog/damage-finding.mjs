@@ -23,7 +23,7 @@ export class DamageFinding {
    * @type {RegExp}
    * @readonly
    */
-  get rgxDice() { return new RegExp(/(?<count>\d+)(?<d>[dD])(?<faces>\d*)/g); }
+  get rgxDice() { return new RegExp(/(?<count>\d+)\s*(?<d>[dD])(?<faces>\d*)/g); }
 
   /**
    * @param {Object} args 
@@ -44,96 +44,110 @@ export class DamageFinding {
   }
 
   /**
-   * Returns the concatenated and localized formula, for display. 
+   * Returns the concatenated formulae. 
    * 
    * @returns {String} 
    */
-  getFullFormula() {
-    return this.damage.map(it => 
+  getJoinedFormulae() {
+    return this.damage.map(it =>
       it.damage
     ).join(" + ");
   }
 
   /**
-   * Returns the concatenated and localized formula, for display. 
+   * Returns the concatenated and localized formulae, for display. 
    * 
    * @returns {String} 
    */
-  getFullFormulaForDisplay() {
-    return this.damage.map(it => 
+  getJoinedFormulaeForDisplay() {
+    return this.damage.map(it =>
       `${it.damage} ${game.i18n.localize(it.damageType.localizableName)}`
     ).join(" + ");
   }
 
   /**
+   * Resolves and evaluates the formula
    * 
-   * @returns {String}
+   * @returns {Array<EvaluatedDamage>}
    */
-  getFullResolvedFormula() {
-    let fullFormula = this.getFullFormula();
+  evaluate() {
+    const result = [];
+
+    // May contain variables. E. g. `"1D8 + @strength + @SI"`
+    const formula = this.getJoinedFormulae();
+    // Will, in the end, no longer contain any variables. E. g. `"1 + 5 + 0"`
+    let resolvedFormula = formula;
 
     if (isDefined(this.document)) {
-      const resolvedReferences = new AtReferencer().resolveReferences(fullFormula, this.document);
+      // Resolve variables using the document. 
+      const resolvedReferences = new AtReferencer().resolveReferences(formula, this.document);
       for (const key of resolvedReferences.keys()) {
         const replacementObject = resolvedReferences.get(key);
-        let replacementValue = 0;
 
         if (isDefined(replacementObject)) {
-          replacementValue = replacementObject.modifiedLevel ?? replacementObject;
+          const replacementValue = (replacementObject.modifiedLevel ?? replacementObject.value) ?? replacementObject;
+          resolvedFormula = resolvedFormula.replace(new RegExp(key, "g"), replacementValue);
         }
-
-        fullFormula = fullFormula.replace(new RegExp(key, "g"), replacementValue);
       }
     }
 
-    return fullFormula;
-  }
+    // The next step is to ensure any as yet unresolved variables receive a value, 
+    // if there are any. 
+    const references = new AtReferencer().getReferencesIn(resolvedFormula);
+    if (references.length > 0) {
+      // Resolve variables by inserting values. 
+      for (let replacementValue = 0; replacementValue <= 10; replacementValue++) {
+        let resolvedFormulaIterated = resolvedFormula;
+        references.forEach(reference => {
+          // Iteratively, this will replace variables. E. g.:
+          // `"1D8 + @strength + @SI"` -> `"1D8 + 0 + @SI"`
+          // `"1D8 + 0 + @SI"` -> `"1D8 + 0 + 0"`
+          resolvedFormulaIterated = resolvedFormulaIterated.replace(new RegExp(reference, "g"), replacementValue);
+        });
 
-  getMinDamage() {
-    const formula = this.getFullResolvedFormula();
-
-    if (formula.length > 0) {
-      const formulaWithoutDice = this._getFormulaWithoutDice(formula, "min");
-      return this._evaluate(formulaWithoutDice);
+        // All variables have been resolved. All that is left is to insert values 
+        // for the dice. 
+        result.push(
+          this._replaceDiceAndEvaluate(resolvedFormulaIterated),
+        );
+      }
+    } else {
+      // All variables have been resolved. All that is left is to insert values 
+      // for the dice. 
+      result.push(
+        this._replaceDiceAndEvaluate(resolvedFormula),
+      );
     }
 
-    return 0;
+    return result;
   }
 
-  getMeanDamage() {
-    const formula = this.getFullResolvedFormula();
-
-    if (formula.length > 0) {
-      const formulaWithoutDice = this._getFormulaWithoutDice(formula, "mean");
-      return this._evaluate(formulaWithoutDice);
-    }
-
-    return 0;
-  }
-
-  getMaxDamage() {
-    const formula = this.getFullResolvedFormula();
-
-    if (formula.length > 0) {
-      const formulaWithoutDice = this._getFormulaWithoutDice(formula, "max");
-      return this._evaluate(formulaWithoutDice);
-    }
-
-    return 0;
-  }
-
-  _getFormulaWithoutDice(formula, replacementType) {
+  /**
+   * Replaces all dice-type variables from the given formula, based on the given 
+   * replacement type and returns the resulting formula. 
+   * 
+   * For example, with `replacementType = DICE_REPLACEMENT_TYPES.MIN`, for 
+   * `"1D8 + 3D4"`, would return `"1 + 3"`. 
+   * 
+   * @param {String} formula 
+   * @param {DICE_REPLACEMENT_TYPES} replacementType 
+   * 
+   * @returns {String}
+   * 
+   * @private
+   */
+  _replaceDice(formula, replacementType) {
     const matches = formula.matchAll(this.rgxDice);
 
     let formulaWithoutDice = "";
     let lastIndex = 0;
     for (const match of matches) {
       let n = 0;
-      if (replacementType === "min") {
+      if (replacementType === DICE_REPLACEMENT_TYPES.MIN) {
         n = parseInt(match.groups.count);
-      } else if (replacementType === "mean") {
+      } else if (replacementType === DICE_REPLACEMENT_TYPES.MEAN) {
         n = parseInt(match.groups.count) * (parseInt(match.groups.faces) / 2);
-      } else if (replacementType === "max") {
+      } else if (replacementType === DICE_REPLACEMENT_TYPES.MAX) {
         n = parseInt(match.groups.count) * parseInt(match.groups.faces);
       }
 
@@ -142,8 +156,10 @@ export class DamageFinding {
     }
     return `${formulaWithoutDice}${formula.substring(lastIndex)}`;
   }
-  
+
   /**
+   * Attempts to evaluate the given formula and if possible, returns the number 
+   * that results from it. 
    * 
    * @param {String} formula 
    * 
@@ -151,12 +167,65 @@ export class DamageFinding {
    * 
    * @private
    */
-  _evaluate(formula) {
+  _tryEvaluate(formula) {
     try {
       return eval(formula);
     } catch (error) {
       console.log(error);
-      return "error";
+      return "";
     }
+  }
+  
+  /**
+   * Evaluates the given formula and returns the result. 
+   * 
+   * @param {String} formula 
+   * 
+   * @returns {EvaluatedDamage}
+   * 
+   * @private
+   */
+  _replaceDiceAndEvaluate(formula) {
+    const minFormula = this._replaceDice(formula, DICE_REPLACEMENT_TYPES.MIN)
+    const meanFormula = this._replaceDice(formula, DICE_REPLACEMENT_TYPES.MEAN)
+    const maxFormula = this._replaceDice(formula, DICE_REPLACEMENT_TYPES.MAX)
+    return new EvaluatedDamage({
+      formula: formula,
+      min: this._tryEvaluate(minFormula),
+      mean: this._tryEvaluate(meanFormula),
+      max: this._tryEvaluate(maxFormula),
+    });
+  }
+}
+
+/**
+ * @constant
+ * @private
+ */
+const DICE_REPLACEMENT_TYPES = {
+  MIN: "MIN",
+  MEAN: "MEAN",
+  MAX: "MAX",
+}
+
+/**
+ * @property {String} formula 
+ * @property {Number} min 
+ * @property {Number} mean 
+ * @property {Number} max 
+ */
+export class EvaluatedDamage {
+  /**
+   * @param {Object} args 
+   * @param {String} args.formula 
+   * @param {Number} args.min 
+   * @param {Number} args.mean 
+   * @param {Number} args.max 
+   */
+  constructor(args = {}) {
+    this.formula = args.formula;
+    this.min = args.min;
+    this.mean = args.mean;
+    this.max = args.max;
   }
 }

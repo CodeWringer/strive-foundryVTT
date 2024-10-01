@@ -1,6 +1,6 @@
 import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
-import { DamageFinding } from "./damage-finding.mjs";
+import { DamageFinding, EvaluatedDamage } from "./damage-finding.mjs";
 
 export default class DamageFindingListItemViewModel extends ViewModel {
   /** @override */
@@ -20,49 +20,8 @@ export default class DamageFindingListItemViewModel extends ViewModel {
 
     this.damageFinding = args.damageFinding;
     this.damageFindingName = args.damageFindingName ?? this.damageFinding.name;
-    this.formula = this.damageFinding.getFullFormulaForDisplay();
-    this.minDamage = this._getMinDamageForDisplay();
-    this.meanDamage = this._getMeanDamageForDisplay();
-    this.maxDamage = this._getMaxDamageForDisplay();
-  }
-
-  /**
-   * @returns {String}
-   * 
-   * @private
-   */
-  _getMinDamageForDisplay() {
-    const n = this.damageFinding.getMinDamage();
-    if (n > 0) {
-      return n;
-    }
-    return "";
-  }
-
-  /**
-   * @returns {String}
-   * 
-   * @private
-   */
-  _getMeanDamageForDisplay() {
-    const n = this.damageFinding.getMeanDamage();
-    if (n > 0) {
-      return n;
-    }
-    return "";
-  }
-
-  /**
-   * @returns {String}
-   * 
-   * @private
-   */
-  _getMaxDamageForDisplay() {
-    const n = this.damageFinding.getMaxDamage();
-    if (n > 0) {
-      return n;
-    }
-    return "";
+    this.formula = this.damageFinding.getJoinedFormulaeForDisplay();
+    this.evalutedDamage = this.damageFinding.evaluate();
   }
 
   /**

@@ -2,15 +2,15 @@
 viewModel: DamageFindingListItemViewModel
 --}}
 <div id="{{viewModel.id}}">
-  <div class="damage-list pad-md">
-    <span>{{viewModel.damageFindingName}}</span>
-    <span class="multiline">{{viewModel.formula}}</span>
-    {{!-- 0 --}}
-    <div class="flex flex-column">
-      <span>{{viewModel.minDamage}}</span>
-      <span>{{viewModel.meanDamage}}</span>
-      <span>{{viewModel.maxDamage}}</span>
+  <div class="damage-list">
+    <span class="flex flex-middle">{{viewModel.damageFindingName}}</span>
+    <span class="flex flex-middle multiline">{{viewModel.formula}}</span>
+    {{#each viewModel.evalutedDamage as |damage|}}
+    <div class="flex flex-column flex-middle">
+      <span>{{damage.min}}</span>
+      <span>{{damage.mean}}</span>
+      <span>{{damage.max}}</span>
     </div>
-    {{!-- TODO insert values for variables like @SI --}}
+    {{/each}}
   </div>
 </div>
