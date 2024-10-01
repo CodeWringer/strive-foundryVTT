@@ -3,13 +3,11 @@ import { DOCUMENT_COLLECTION_SOURCES } from "../../../business/document/document
 import DocumentFetcher from "../../../business/document/document-fetcher/document-fetcher.mjs";
 import { ITEM_TYPES } from "../../../business/document/item/item-types.mjs";
 import { isDefined, validateOrThrow } from "../../../business/util/validation-utility.mjs";
-import FoundryWrapper from "../../../common/foundry-wrapper.mjs";
 import ObservableField from "../../../common/observables/observable-field.mjs";
+import ButtonViewModel from "../../component/button/button-viewmodel.mjs";
 import InputRadioButtonGroupViewModel from "../../component/input-choice/input-radio-button-group/input-radio-button-group-viewmodel.mjs";
 import StatefulChoiceOption from "../../component/input-choice/stateful-choice-option.mjs";
-import InputNumberSpinnerViewModel from "../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
-import InputSliderViewModel from "../../component/input-slider/input-slider-viewmodel.mjs";
-import { setElementValue } from "../../sheet/sheet-utility.mjs";
+import SortControlsViewModel, { SortingOption } from "../../component/sort-controls/sort-controls-viewmodel.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
 import DamageFindingHierarchy from "./damage-finding-hierarchy.mjs";
 import DamageFindingListItemViewModel from "./damage-finding-list-item-viewmodel.mjs";
@@ -28,6 +26,12 @@ export default class DamageDesignerDialogViewModel extends ViewModel {
   static get ID_TABLE_ELEMENT() { return "table"; }
 
   /**
+   * @type {String}
+   * @readonly
+   */
+  get sortControlsTemplate() { return SortControlsViewModel.TEMPLATE; }
+
+  /**
    * Observable ui state. 
    * 
    * @example
@@ -40,12 +44,15 @@ export default class DamageDesignerDialogViewModel extends ViewModel {
    * ```
    * 
    * @property {Object} value 
+   * @property {Object} value.findings 
+   * @property {LIST_STYLING} value.activeListStyling 
    * 
    * @type {Object}
    * @private
    */
   _uiState = new ObservableField({
     value: {
+      findings: undefined,
       activeListStyling: LIST_STYLING.HIERARCHY,
     }
   });
@@ -95,28 +102,66 @@ export default class DamageDesignerDialogViewModel extends ViewModel {
       },
     });
 
-    this._uiState.onChange(async (_1, _2, newValue) => {
-      await this._updateTable();
+    this.vmSortByName = new SortControlsViewModel({
+      id: "vmSortByName",
+      parent: this,
+      options: [
+        new SortingOption({
+          localizedToolTip: game.i18n.localize("system.general.name.label"),
+          sortingFunc: (a, b) => {
+            return a.name.localeCompare(b.name);
+          },
+        }),
+      ],
+      compact: true,
+      onSort: (_, provideSortable) => {
+        provideSortable(this);
+      },
     });
 
-    this._updateTable();
+    this._uiState.onChange(async (_1, _2, newValue) => {
+      // const findings = await this._getDamageFindings();
+      // await this._updateTable(findings);
+    });
   }
-
+  
   /** @override */
   async activateListeners(html) {
     await super.activateListeners(html);
-
+    
     this._tableElement = html.find(`#${DamageDesignerDialogViewModel.ID_TABLE_ELEMENT}`);
-    await this._updateTable();
+    const findings = await this._getDamageFindings();
+    await this._updateTable(findings);
   }
 
   /**
-   * @private
+   * Sorts the list in-place, based on the results returned by the given sorting function, 
+   * which receives two view model instances to compare, just like the `Array.sort` function. 
+   * 
+   * @param {Function} sortingFunc The sorting function. Should return an integer value, based on the equality
+   * of the arguments. Must return either `-1`, `0` or `1`. Receives view model instances of the represented 
+   * list items as arguments. Arguments:
+   * * `a: {ViewModel}`
+   * * `b: {ViewModel}`
+   * 
+   */
+  sort(sortingFunc) {
+    if (this._uiState.value.activeListStyling === LIST_STYLING.FLAT) {
+      this._uiState.value.findings.flat.sort(sortingFunc);
+    } else { // Hierarchical view
+      this._uiState.value.findings.hierarchy.sort(sortingFunc);
+    }
+    this._updateTable(this._uiState.value.findings);
+  }
+ 
+  /**
+   * @param {Object} findings 
    * 
    * @async
+   * @private
    */
-  async _updateTable() {
-    const findings = await this._getDamageFindings();
+  async _updateTable(findings) {
+    this._uiState.value.findings = findings;
 
     let renderedContent = "";
     let viewModels = [];
@@ -191,13 +236,14 @@ export default class DamageDesignerDialogViewModel extends ViewModel {
     skillDocuments.forEach(skillDocument => {
       const transientSkillDocument = skillDocument.getTransientObject();
 
+      const pack = skillDocument.pack ?? "world";
       let collectionHierarchy;
       let actorHierarchy;
       if (isDefined(transientSkillDocument.owningDocument)) { // Skill is embedded on actor. 
-        collectionHierarchy = this._getCollectionHierarchy(rootHierarchy, skillDocument.pack);
+        collectionHierarchy = this._getCollectionHierarchy(rootHierarchy, pack);
         actorHierarchy = this._getActorHierarchy(collectionHierarchy, transientSkillDocument.owningDocument);
       } else { // Skill is contained in collection. 
-        collectionHierarchy = this._getCollectionHierarchy(rootHierarchy, skillDocument.pack);
+        collectionHierarchy = this._getCollectionHierarchy(rootHierarchy, pack);
       }
 
       const skillHierarchy = new DamageFindingHierarchy({

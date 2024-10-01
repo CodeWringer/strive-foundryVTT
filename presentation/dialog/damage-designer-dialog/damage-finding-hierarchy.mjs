@@ -82,4 +82,15 @@ export default class DamageFindingHierarchy {
       this.subHierarchies.push(subHierarchy);
     }
   }
+
+  /**
+   * @param {Function} sortingFunc 
+   */
+  sort(sortingFunc) {
+    this.findings.sort(sortingFunc);
+    this.subHierarchies.sort(sortingFunc);
+    this.subHierarchies.forEach(subHierarchy => {
+      subHierarchy.sort(sortingFunc);
+    });
+  }
 }
