@@ -2,11 +2,13 @@
 viewModel: DamageDesignerDialogViewModel
 --}}
 <section id="{{viewModel.id}}">
-  {{!-- Row --}}
   <div class="damage-finding-header damage-list flex flex-row flex-middle pad-md">
-    <div class="flex flex-row flex-middle">
+    <div class="flex flex-row flex-middle auto-margin-h">
       <span>Skill / Expertise</span>
       <span class="flex-grow"></span>
+      {{#with viewModel.sortControlsTemplate as |template|}}
+        {{> (template) viewModel=../viewModel.vmSortByName }}
+      {{/with}}
       {{> inputRadioButtonGroup viewModel=viewModel.vmListViewSelection }}
     </div>
     <span class="pad-l-md">Formula</span>

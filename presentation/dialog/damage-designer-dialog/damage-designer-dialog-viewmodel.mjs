@@ -120,8 +120,7 @@ export default class DamageDesignerDialogViewModel extends ViewModel {
     });
 
     this._uiState.onChange(async (_1, _2, newValue) => {
-      // const findings = await this._getDamageFindings();
-      // await this._updateTable(findings);
+      await this._updateTable(this._uiState.value.findings);
     });
   }
   
