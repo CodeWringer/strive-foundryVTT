@@ -8,6 +8,7 @@ import ButtonViewModel from "../../component/button/button-viewmodel.mjs";
 import InputRadioButtonGroupViewModel from "../../component/input-choice/input-radio-button-group/input-radio-button-group-viewmodel.mjs";
 import StatefulChoiceOption from "../../component/input-choice/stateful-choice-option.mjs";
 import SortControlsViewModel, { SortingOption } from "../../component/sort-controls/sort-controls-viewmodel.mjs";
+import { setElementValue } from "../../sheet/sheet-utility.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
 import DamageFindingHierarchy from "./damage-finding-hierarchy.mjs";
 import DamageFindingListItemViewModel from "./damage-finding-list-item-viewmodel.mjs";
@@ -80,13 +81,13 @@ export default class DamageDesignerDialogViewModel extends ViewModel {
     const listSortingOptions = [
       new StatefulChoiceOption({
         value: LIST_STYLING.HIERARCHY,
-        activeHtml: `<i class="ico ico-list-hierarchical-solid interactible active"></i>`,
-        inactiveHtml: `<i class="ico ico-list-hierarchical-solid interactible"></i>`,
+        activeHtml: `<i class="ico ico-list-hierarchical-solid"></i>`,
+        inactiveHtml: `<i class="ico ico-list-hierarchical-solid"></i>`,
       }),
       new StatefulChoiceOption({
         value: LIST_STYLING.FLAT,
-        activeHtml: `<i class="ico ico-list-flat-solid interactible active"></i>`,
-        inactiveHtml: `<i class="ico ico-list-flat-solid interactible"></i>`,
+        activeHtml: `<i class="ico ico-list-flat-solid"></i>`,
+        inactiveHtml: `<i class="ico ico-list-flat-solid"></i>`,
       }),
     ];
     this.vmListViewSelection = new InputRadioButtonGroupViewModel({
@@ -121,6 +122,8 @@ export default class DamageDesignerDialogViewModel extends ViewModel {
 
     this._uiState.onChange(async (_1, _2, newValue) => {
       await this._updateTable(this._uiState.value.findings);
+
+      setElementValue(this.vmSortByName.element, newValue.activeListStyling);
     });
   }
   

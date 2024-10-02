@@ -67,6 +67,7 @@ export default class DamageHierarchyListItemViewModel extends ViewModel {
       if (isDefined(toShow)) {
         // Show the collection. 
         toShow.render(true);
+        return;
       }
 
       // Check if the linked entity is a document. 
