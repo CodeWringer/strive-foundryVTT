@@ -8,7 +8,7 @@ readOnlyCssClass: {String | undefined}
   class="custom-system-edit radio-button-group flex flex-row component-input-radio-button-group{{#if cssClass}} {{cssClass}}{{/if}}" 
   name="{{viewModel.id}}"
   id="{{viewModel.id}}"
-  value="{{viewModel.value}}"
+  value="{{viewModel.value.value}}"
   title="{{viewModel.localizedToolTip}}"
 >
   {{#each viewModel.options as |option index|}}
@@ -22,7 +22,7 @@ readOnlyCssClass: {String | undefined}
           value="{{option.value}}"
         />
       {{/if}}
-      <label class="flex flex-center flex-grow{{#if ../viewModel.isEditable}}{{else}} custom-system-read-only disabled{{/if}}{{#if ../viewModel.showFancyFont}} fancy-font{{/if}}" 
+      <label class="flex flex-center flex-grow{{#if ../viewModel.isEditable}} interactible{{else}} custom-system-read-only disabled{{/if}}{{#if ../viewModel.showFancyFont}} fancy-font{{/if}}" 
         for="{{../viewModel.id}}-{{option.value}}"
         {{#if option.tooltip}}title="{{option.tooltip}}"{{/if}}
       >
