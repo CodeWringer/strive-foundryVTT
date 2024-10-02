@@ -81,12 +81,11 @@ export default class DamageDesignerDialogViewModel extends ViewModel {
       new StatefulChoiceOption({
         value: LIST_STYLING.HIERARCHY,
         activeHtml: `<i class="ico ico-list-hierarchical-solid"></i>`,
-        inactiveHtml: `<i class="ico ico-list-hierarchical-solid"></i>`,
+        isActive: true,
       }),
       new StatefulChoiceOption({
         value: LIST_STYLING.FLAT,
         activeHtml: `<i class="ico ico-list-flat-solid"></i>`,
-        inactiveHtml: `<i class="ico ico-list-flat-solid"></i>`,
       }),
     ];
     this.vmListViewSelection = new InputRadioButtonGroupViewModel({
@@ -120,7 +119,7 @@ export default class DamageDesignerDialogViewModel extends ViewModel {
     });
 
     this._uiState.onChange(async (_1, _2, newValue) => {
-      await this._updateTable(this._uiState.value.findings);
+      await this._updateTable(newValue.findings);
     });
   }
   
