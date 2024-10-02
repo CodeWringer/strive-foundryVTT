@@ -191,6 +191,7 @@ export default class BaseListItemViewModel extends ViewModel {
           name: game.i18n.localize("system.general.import"),
           icon: '<i class="fas fa-download"></i>',
           callback: this.import.bind(this),
+          condition: this.isGM,
         },
       ]);
     }
@@ -289,7 +290,7 @@ export default class BaseListItemViewModel extends ViewModel {
       {
         name: game.i18n.localize("system.general.import"),
         icon: '<i class="fas fa-download"></i>',
-        condition: this.context === CONTEXT_TYPES.LIST_ITEM,
+        condition: this.context === CONTEXT_TYPES.LIST_ITEM && this.isGM,
         callback: this.import.bind(this),
       },
     ];
