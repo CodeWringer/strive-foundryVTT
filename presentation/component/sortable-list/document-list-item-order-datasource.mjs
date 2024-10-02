@@ -9,6 +9,7 @@ import { AbstractListItemOrderDataSource } from "./abstract-list-item-order-data
  */
 export default class DocumentListItemOrderDataSource extends AbstractListItemOrderDataSource {
   /**
+   * @param {Object} args
    * @param {TransientDocument} args.document The document to read from and write to. 
    * @param {String} args.listName Name of the list whose orders are to be read/written. E. g. "skills"
    */

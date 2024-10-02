@@ -27,6 +27,10 @@ $c-ico-dark-disabled: hsl(0 0% 35% / 1);
   &.disabled {
     filter: brightness($brightness-disabled);
   }
+
+  &.active {
+    filter: drop-shadow(0 0 4px $c-button-highlight);
+  }
   
   &.interactible {
     &:hover {
@@ -404,5 +408,15 @@ i.stacked {
 
 .ico-dice-void-line {
   background: url("/systems/strive/presentation/image/dice-void-line.svg");
+  background-size: cover;
+}
+
+.ico-list-flat-solid {
+  background: url("/systems/strive/presentation/image/list-flat-solid.svg");
+  background-size: cover;
+}
+
+.ico-list-hierarchical-solid {
+  background: url("/systems/strive/presentation/image/list-hierarchical-solid.svg");
   background-size: cover;
 }
