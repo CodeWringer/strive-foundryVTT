@@ -36,7 +36,10 @@ nav#nav-sheet-tabs.sheet-tabs {
   border-top: 1px solid $c-border-beige-light;
   border-bottom: 1px solid $c-border-beige-light;
   line-height: unset;
-  background-color: rgba(0, 0, 0, 0.065);
+  position: sticky;
+  top: -8px;
+  background-color: #c2c0b4;
+  z-index: 1;
 
   > a.item {
     margin: 0;
