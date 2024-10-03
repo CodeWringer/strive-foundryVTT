@@ -13,7 +13,7 @@ cssClass: {undefined | String}
           {{> (template) viewModel=../viewModel.vmSortInnate cssClass="font-size-default" }}
         {{/with}}
       {{/header1}}
-      {{> sortableList viewModel=viewModel.vmInnateSkillList prominentItemStyling=true }}
+      {{> sortableList viewModel=viewModel.vmInnateSkillList }}
     </div>
   {{#if viewModel.hideInnateSkills}}</div>{{/if}}
   {{!-- Learning Skills --}}
@@ -25,7 +25,7 @@ cssClass: {undefined | String}
           {{> (template) viewModel=../viewModel.vmSortLearning cssClass="font-size-default" }}
         {{/with}}
       {{/header1}}
-      {{> sortableList viewModel=viewModel.vmLearningSkillList prominentItemStyling=true }}
+      {{> sortableList viewModel=viewModel.vmLearningSkillList }}
     </div>
   {{#if viewModel.hideLearningSkills}}</div>{{/if}}
   {{!-- Known Skills --}}
@@ -36,6 +36,6 @@ cssClass: {undefined | String}
         {{> (template) viewModel=../viewModel.vmSortKnown cssClass="font-size-default" }}
       {{/with}}
     {{/header1}}
-    {{> sortableList viewModel=viewModel.vmKnownSkillList prominentItemStyling=true }}
+    {{> sortableList viewModel=viewModel.vmKnownSkillList }}
   </div>
 </section>

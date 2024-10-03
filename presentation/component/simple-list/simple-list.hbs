@@ -1,22 +1,20 @@
 {{!--
 viewModel: SimpleListViewModel
 --}}
-<ul id="{{viewModel.id}}" class="unstyled-list auto-margin-v">
-  {{#each viewModel.itemViewModels as |vm index|}}
-  {{#with ../viewModel.itemTemplate as |template|}}
-    <li class="flex flex-row">
-      {{> (template) viewModel=vm}}
-    </li>
-  {{/with}}
-  {{/each}}
-  {{#if viewModel.isItemAddable}}
-  <li class="strive-list-row strive-list-footer{{#if (neq viewModel.isEditable true)}} hidden{{/if}}">
-    <div class="fill flex flex-row flex-right">
-      {{!-- Add button --}}
-      <div>
-        {{> button viewModel=viewModel.vmBtnAddItem fill=true }}
-      </div>
-    </div>
-  </li>
-  {{/if}}
-</ul>
+<section id="{{viewModel.id}}">
+  <ul class="unstyled-list auto-margin-v">
+    {{#each viewModel.itemViewModels as |vm index|}}
+    {{#with ../viewModel.itemTemplate as |template|}}
+      <li class="flex flex-row">
+        {{> (template) viewModel=vm}}
+      </li>
+    {{/with}}
+    {{/each}}
+    {{#if viewModel.isItemAddable}}
+    {{/if}}
+  </ul>
+  {{!-- Add button --}}
+  <div class="fill flex flex-row flex-right{{#if (eq viewModel.isEditable false)}} hidden{{/if}}">
+    {{> button viewModel=viewModel.vmBtnAddItem }}
+  </div>
+</section>

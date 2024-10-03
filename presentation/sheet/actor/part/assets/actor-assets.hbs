@@ -42,7 +42,7 @@ cssClass: {undefined | String}
         </div>
       </div>
     </div>
-    {{> sortableList viewModel=viewModel.vmLuggageList prominentItemStyling=true }}
+    {{> sortableList viewModel=viewModel.vmLuggageList }}
   </div>
   {{!-- Property --}}
   <div class="auto-margin-v-md">
@@ -52,6 +52,6 @@ cssClass: {undefined | String}
         {{> (template) viewModel=../viewModel.vmSortProperty cssClass="font-size-default" }}
       {{/with}}
     {{/header1}}
-    {{> sortableList viewModel=viewModel.vmPropertyList prominentItemStyling=true }}
+    {{> sortableList viewModel=viewModel.vmPropertyList }}
   </div>
 </section>
