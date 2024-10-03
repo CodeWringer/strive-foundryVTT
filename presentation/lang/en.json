@@ -53,8 +53,11 @@
       "delete": {
         "delete": "Delete",
         "deleteOf": "Delete '%s'",
+        "deleteType": "Delete %s",
+        "deleteTypeOf": "Delete %s '%s'",
         "query": "Confirm Deletion",
-        "queryOf": "Confirm Deletion of '%s'"
+        "queryOf": "Confirm Deletion of '%s'",
+        "queryTypeOf": "Confirm Deletion of %s '%s'"
       },
       "description": "Description",
       "edit": "Edit",
@@ -113,6 +116,10 @@
         "sortAscendingBy": "Sort ascending by '%s'",
         "sortDescendingBy": "Sort descending by '%s'",
         "hintReverseKey": "Holding the 'Alt' key reverses the sorting direction."
+      },
+      "tag": {
+        "singular": "Tag",
+        "plural": "Tags"
       },
       "tags": {
         "label": "Tags"
@@ -228,11 +235,6 @@
           },
           "back": "Back",
           "clothing": "Clothing",
-          "delete": {
-            "label": "Delete Asset Slot",
-            "query": "Confirm Deletion of Asset Slot",
-            "queryOf": "Confirm Deletion of Asset Slot '%s'"
-          },
           "edit": "Edit",
           "hand": "Hand",
           "label": "Asset Slot",
@@ -240,11 +242,6 @@
             "label": "Asset Slot Group",
             "add": {
               "label": "Add Asset Slot Group"
-            },
-            "delete": {
-              "label": "Delete Asset Slot Group",
-              "query": "Confirm Deletion of Asset Slot Group",
-              "queryOf": "Confirm Deletion of Asset Slot Group '%s'"
             }
           }
         },
@@ -352,10 +349,6 @@
               "label": "Add Fate Card",
               "query": "Select Fate Card to Add"
             },
-            "delete": {
-              "label": "Delete Fate Card",
-              "query": "Confirm Deletion of Fate Card"
-            },
             "limitExceededAdmonish": "You have exceeded the maximum number of allowed fate cards! You must not have more than 5 cards!"
           },
           "fatePoints": {
@@ -405,10 +398,6 @@
             "label": "Add Illness",
             "query": "Select Illness to Add"
           },
-          "delete": {
-            "label": "Delete Illness",
-            "query": "Confirm Deletion of Illness"
-          },
           "plural": "Illnesses",
           "singular": "Illness",
           "state": {
@@ -425,10 +414,6 @@
           "add": {
             "label": "Add Injury",
             "query": "Select Injury to Add"
-          },
-          "delete": {
-            "label": "Delete Injury",
-            "query": "Confirm Deletion of Injury"
           },
           "limit": {
             "label": "Limit",
@@ -458,10 +443,6 @@
             "label": "Add Mutation",
             "query": "Select Mutation to Add"
           },
-          "delete": {
-            "label": "Delete Mutation",
-            "query": "Confirm Deletion of Mutation"
-          },
           "plural": "Mutations",
           "singular": "Mutation"
         },
@@ -469,10 +450,6 @@
           "add": {
             "label": "Add Scar",
             "query": "Select Scar to Add"
-          },
-          "delete": {
-            "label": "Delete Scar",
-            "query": "Confirm Deletion of Scar"
           },
           "plural": "Scars",
           "singular": "Scar"
@@ -560,10 +537,6 @@
             "label": "Add Expertise",
             "query": "Select Expertise to Add"
           },
-          "delete": {
-            "label": "Delete Expertise",
-            "query": "Confirm Deletion of Expertise"
-          },
           "apCost": "AP Cost",
           "condition": {
             "label": "Condition",
@@ -582,10 +555,6 @@
           "label": "Add Skill",
           "query": "Select Skill to Add"
         },
-        "delete": {
-          "label": "Delete Skill",
-          "query": "Confirm Deletion of Skill"
-        },
         "innate": {
           "label": "Innate Skills",
           "plural": "Innate Skills",
@@ -593,10 +562,6 @@
           "add": {
             "label": "Add Innate Skill",
             "query": "Select Innate Skill to Add"
-          },
-          "delete": {
-            "label": "Delete Innate Skill",
-            "query": "Confirm Deletion of Innate Skill"
           }
         },
         "known": {
@@ -606,10 +571,6 @@
           "add": {
             "label": "Add Known Skill",
             "query": "Select Known Skill to Add"
-          },
-          "delete": {
-            "label": "Delete Known Skill",
-            "query": "Confirm Deletion of Known Skill"
           }
         },
         "learning": {
@@ -619,10 +580,6 @@
           "add": {
             "label": "Add Learning Skill",
             "query": "Select Learning Skill to Add"
-          },
-          "delete": {
-            "label": "Delete Learning Skill",
-            "query": "Confirm Deletion of Learning Skill"
           }
         },
         "plural": "Skills",
@@ -740,7 +697,6 @@
     },
     "damageDefinition": {
       "add": "Add Damage",
-      "delete": "Delete Damage",
       "label": "Damage",
       "formula": "Damage Formula",
       "infoFormulae": "It is possible to reference this character's attributes and other skills or expertises. To reference, type the '@'-symbol, immediately followed by the name of the reference, e. g. '@strength' or '@int' or '@acrobatics'. If the reference's name contains spaces, they must be replaced with underscores, e. g. '@Heavy_Armor' instead of '@Heavy Armor'.",

@@ -203,8 +203,8 @@ export default class ActorAssetSlotViewModel extends ViewModel {
       isEditable: this.isEditable,
       target: this.assetSlot,
       withDialog: true,
-      localizedTooltip: game.i18n.localize("system.character.asset.slot.delete.query"),
-      localizedDialogTitle: game.i18n.localize("system.character.asset.slot.delete.queryOf"),
+      localizedDeletionType: game.i18n.localize("system.character.asset.slot.label"),
+      localizedDeletionTarget: this.assetSlot.name,
       callback: async () => {
         const assetToUnassign = this.availableAssets.find(it => it.id === this.assetSlot.alottedId);
         if (assetToUnassign !== undefined) {

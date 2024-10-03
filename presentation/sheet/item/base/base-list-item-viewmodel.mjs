@@ -247,7 +247,8 @@ export default class BaseListItemViewModel extends ViewModel {
 
   /**
    * Returns the definitions of the secondary header buttons. 
-   * * By default, contains a context menu and delete button. 
+   * 
+   * By default, contains a context menu and delete button. 
    * 
    * @returns {Array<TemplatedComponent>}
    * 
@@ -274,7 +275,8 @@ export default class BaseListItemViewModel extends ViewModel {
           id: "vmBtnDelete",
           target: this.document,
           withDialog: true,
-          localizedToolTip: game.i18n.localize("system.general.delete.label"),
+          localizedDeletionType: game.i18n.localize(`TYPES.Item.${this.document.type}`),
+          localizedDeletionTarget: this.document.name,
         }),
       }),
     ]; 

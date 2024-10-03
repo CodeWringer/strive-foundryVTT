@@ -124,14 +124,18 @@ export default class ActorAssetSlotGroupViewModel extends ViewModel {
           },
         },
         {
-          name: game.i18n.localize("system.character.asset.slot.group.delete.label"),
+          name: StringUtil.format(
+            game.i18n.localize("system.general.delete.deleteType"), 
+            game.i18n.localize("system.character.asset.slot.group.label")
+          ),
           icon: '<i class="fas fa-trash"></i>',
           condition: () => { return true; },
           callback: async () => {
             const dialog = await new ConfirmablePlainDialog({
               localizedTitle: game.i18n.localize("system.general.delete.query"),
               localizedContent: StringUtil.format(
-                game.i18n.localize("system.character.asset.slot.group.delete.queryOf"), 
+                game.i18n.localize("system.general.delete.queryTypeOf"),
+                game.i18n.localize("system.character.asset.slot.group.label"),
                 thiz.group.name
               ),
             }).renderAndAwait(true);
