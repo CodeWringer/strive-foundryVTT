@@ -309,12 +309,16 @@ export default class ViewModel {
    * @param {Map<String, Object>} args.viewStateSource The data source for view state objects. 
    * * Default `game.strive.viewStates`. 
    * @param {Object | undefined} args.document An associated data document. 
+   * @param {Boolean | undefined} args.showFancyFont If `true`, will render any text, where 
+   * appropriate, with the "fancy" font. 
+   * * Default is the globally configured setting. 
    */
   constructor(args = {}) {
     this._id = this.sanitizeId(args.id ?? createUUID());
     
     this.parent = args.parent;
     this.document = args.document;
+    this._showFancyFont = args.showFancyFont;
 
     this.contextTemplate = args.contextTemplate;
     this._viewStateSource = args.viewStateSource ?? game.strive.viewStates;

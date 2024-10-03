@@ -60,7 +60,6 @@ export default class ButtonViewModel extends ViewModel {
    * an associated icon. E. g. `'<i class="fas fa-scroll"></i>'`
    * @param {Boolean | undefined} args.showFancyFont If `true`, will render 
    * the `localizedLabel` using the "fancy font". 
-   * * default `false`
    * @param {Function | undefined} args.onClick Asynchronous callback that is invoked when 
    * the button is clicked. Arguments: 
    * * `event: Event`
