@@ -12,6 +12,12 @@ viewModel: {SkillItemSheetViewModel}
     </div>
     {{> damageDefinitionList viewModel=viewModel.vmDamageDefinitionList}}
   </div>
+  {{!-- Row --}}
+  {{!-- Expertises --}}
+  {{#with viewModel.templateExpertiseTable as | template |}}
+    {{> (template) viewModel=../viewModel.vmExpertiseTable cssClass=(ifThenElse ../viewModel.isExpertiseListVisible "" "hidden") }}
+  {{/with}}
+  {{!-- Row --}}
   {{!-- Attributes --}}
   <div class="sheet-block flex flex-column">
     {{#> header3 showFancyFont=viewModel.showFancyFont cssClass="flex flex-row flex-middle" }}
@@ -21,12 +27,6 @@ viewModel: {SkillItemSheetViewModel}
     {{> simpleList viewModel=viewModel.vmBaseAttributeList}}
   </div>
   {{!-- Row --}}
-  <div class="flex flex-row flex-middle auto-margin-h">
-    {{!-- Tags --}}
-    {{#> labeledControl viewModel=viewModel.vmTags localizedIconToolTip=(localize "system.general.tag.plural") iconClass="ico-tags-solid" cssClass="" }}
-      {{> inputTags }}
-    {{/labeledControl}}
-  </div>
   {{!-- Prerequisites --}}
   <div class="sheet-block flex flex-column">
     {{#> header3 showFancyFont=viewModel.showFancyFont cssClass="flex flex-row flex-middle" }}
@@ -35,8 +35,11 @@ viewModel: {SkillItemSheetViewModel}
     {{/header3}}
     {{> simpleList viewModel=viewModel.vmPrerequisiteList}}
   </div>
-  {{!-- Expertises --}}
-  {{#with viewModel.templateExpertiseTable as | template |}}
-    {{> (template) viewModel=../viewModel.vmExpertiseTable cssClass=(ifThenElse ../viewModel.isExpertiseListVisible "" "hidden") }}
-  {{/with}}
+  {{!-- Row --}}
+  <div class="flex flex-row flex-middle auto-margin-h">
+    {{!-- Tags --}}
+    {{#> labeledControl viewModel=viewModel.vmTags localizedIconToolTip=(localize "system.general.tag.plural") iconClass="ico-tags-solid" cssClass="" }}
+      {{> inputTags }}
+    {{/labeledControl}}
+  </div>
 </section>
