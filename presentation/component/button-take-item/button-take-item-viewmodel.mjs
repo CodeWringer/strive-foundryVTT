@@ -233,7 +233,13 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
       img: templateItem.img,
       system: templateItem.document.system,
     };
-    return await Item.create(itemData, { parent: parent });
+    const assetDocument = await Item.create(itemData, { parent: parent });
+    const transientActor = parent.getTransientObject();
+    transientActor.assets.luggage = transientActor.assets.luggage.concat([
+      assetDocument.getTransientObject(),
+    ]);
+
+    return assetDocument;
   }
 
   /**
