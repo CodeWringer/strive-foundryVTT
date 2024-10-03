@@ -121,9 +121,6 @@
         "singular": "Tag",
         "plural": "Tags"
       },
-      "tags": {
-        "label": "Tags"
-      },
       "propertyPath": "Property path"
     },
     "actionPoint": {

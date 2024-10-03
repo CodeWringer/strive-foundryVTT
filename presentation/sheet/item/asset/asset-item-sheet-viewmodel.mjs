@@ -67,7 +67,7 @@ export default class AssetItemSheetViewModel extends BaseItemSheetViewModel {
             this.document.tags = newValue;
           },
         }),
-        localizedIconToolTip: game.i18n.localize("system.general.tags.label"),
+        localizedIconToolTip: game.i18n.localize("system.general.tag.plural"),
         iconClass: "ico-tags-solid",
         cssClass: "grid-span-2",
       }),
