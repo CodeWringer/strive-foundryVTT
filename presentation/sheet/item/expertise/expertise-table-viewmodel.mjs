@@ -204,6 +204,7 @@ export default class ExpertiseTableViewModel extends ViewModel {
         isSendable: this.isSendable,
         isOwner: this.isOwner,
         document: expertise,
+        isExpanded: true,
       });
       result.push(vm);
       this[vm._id] = vm;
