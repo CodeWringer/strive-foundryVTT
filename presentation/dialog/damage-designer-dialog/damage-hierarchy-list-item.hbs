@@ -2,13 +2,22 @@
 viewModel: DamageHierarchyListItemViewModel
 --}}
 <div id="{{viewModel.id}}" class="damage-list-item">
-  <a id="{{viewModel.id}}-link" class="damage-list-item-header flex flex-middle pad-l-md auto-margin-h-lg">
-    <span>{{viewModel.hierarchy.name}}</span>
-    <span style="font-size: 0.8em;">
-      <i class="fas fa-external-link-alt"></i>
-    </span>
-  </a>
-  <div class="margin-l-lg">
+  {{!-- Identity --}}
+  <div class="flex flex-row auto-margin-h-xl">
+    {{#> button viewModel=viewModel.vmHeaderButton leftAlign=true cssClass="pad-l-md font-size-lg font-bold" }}
+    <div class="margin-l-md">
+      <i id="{{../viewModel.id}}-expansion-indicator-up" class="fas fa-angle-double-up{{#if ../viewModel.isExpanded}}{{else}} hidden{{/if}}"></i>
+      <i id="{{../viewModel.id}}-expansion-indicator-down" class="fas fa-angle-double-down{{#if ../viewModel.isExpanded}} hidden{{/if}}"></i>
+    </div>
+    {{/button}}
+    <a id="{{viewModel.id}}-link" class="damage-list-item-header flex flex-middle pad-l-md auto-margin-h-lg">
+      <span style="font-size: 0.8em;">
+        <i class="fas fa-external-link-alt"></i>
+      </span>
+    </a>
+  </div>
+  {{!-- Content --}}
+  <div id="{{viewModel.id}}-content" class="margin-l-lg">
     <ol class="unstyled-list auto-margin-v-md auto-border-b">
       {{#each viewModel.findingViewModels as |vm| }}
         {{#with ../viewModel.findingTemplate as |template| }}

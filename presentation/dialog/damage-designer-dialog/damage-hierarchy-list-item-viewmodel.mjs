@@ -1,5 +1,6 @@
 import DocumentFetcher from "../../../business/document/document-fetcher/document-fetcher.mjs";
 import { isDefined, validateOrThrow } from "../../../business/util/validation-utility.mjs";
+import ButtonViewModel from "../../component/button/button-viewmodel.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
 import DamageFindingHierarchy from "./damage-finding-hierarchy.mjs";
 import DamageFindingListItemViewModel from "./damage-finding-list-item-viewmodel.mjs";
@@ -17,6 +18,32 @@ export default class DamageHierarchyListItemViewModel extends ViewModel {
   get hierarchyTemplate() { return DamageHierarchyListItemViewModel.TEMPLATE; }
 
   /**
+   * @type {Boolean}
+   * @private
+   */
+  _isExpanded = true;
+  /**
+   * @type {Boolean}
+   */
+  get isExpanded() { return this._isExpanded; }
+  set isExpanded(value) {
+    this._isExpanded = value;
+
+    const contentElement = this.element.find(`#${this.id}-content`);
+    const expansionUpIndicatorElement = this.element.find(`#${this.id}-expansion-indicator-up`);
+    const expansionDownIndicatorElement = this.element.find(`#${this.id}-expansion-indicator-down`);
+    if (value === true) {
+      contentElement.removeClass("hidden");
+      expansionUpIndicatorElement.removeClass("hidden");
+      expansionDownIndicatorElement.addClass("hidden");
+    } else {
+      contentElement.addClass("hidden");
+      expansionUpIndicatorElement.addClass("hidden");
+      expansionDownIndicatorElement.removeClass("hidden");
+    }
+  }
+
+  /**
    * @param {Object} args 
    * @param {String | undefined} args.id
    * @param {ViewModel | undefined} args.parent
@@ -31,6 +58,16 @@ export default class DamageHierarchyListItemViewModel extends ViewModel {
 
     this.findingViewModels = [];
     this.subHierarchyViewModels = [];
+
+    this.vmHeaderButton = new ButtonViewModel({
+      id: "vmHeaderButton",
+      parent: this,
+      localizedLabel: this.hierarchy.name,
+      showFancyFont: false,
+      onClick: () => {
+        this.isExpanded = !this.isExpanded;
+      },
+    });
 
     this.hierarchy.findings.forEach(finding => {
       const vm = new DamageFindingListItemViewModel({
