@@ -15,6 +15,9 @@ import DamageFindingListItemViewModel from "./damage-finding-list-item-viewmodel
 import { DamageFinding } from "./damage-finding.mjs";
 import DamageHierarchyListItemViewModel from "./damage-hierarchy-list-item-viewmodel.mjs";
 
+/**
+ * @property {Array<DamageFindingHierarchy>} hierarchyViewModels
+ */
 export default class DamageDesignerDialogViewModel extends ViewModel {
   /** @override */
   static get TEMPLATE() { return game.strive.const.TEMPLATES.DIALOG_DICE_POOL_DESIGNER; }
@@ -86,6 +89,29 @@ export default class DamageDesignerDialogViewModel extends ViewModel {
       onClick: (async () => {
         const findings = await this._getDamageFindings();
         await this._updateTable(findings);
+      }),
+    });
+
+    this.vmCollapseAll = new ButtonViewModel({
+      id: "vmCollapseAll",
+      parent: this,
+      localizedToolTip: "Collapse All",
+      iconHtml: '<i class="fas fa-angle-double-up"></i>',
+      onClick: (async () => {
+        this.hierarchyViewModels.forEach(vm => {
+          vm.isExpanded = false;
+        });
+      }),
+    });
+    this.vmExpandAll = new ButtonViewModel({
+      id: "vmExpandAll",
+      parent: this,
+      localizedToolTip: "Expand All",
+      iconHtml: '<i class="fas fa-angle-double-down"></i>',
+      onClick: (async () => {
+        this.hierarchyViewModels.forEach(vm => {
+          vm.isExpanded = true;
+        });
       }),
     });
 
@@ -204,6 +230,8 @@ export default class DamageDesignerDialogViewModel extends ViewModel {
         renderedContent = `${renderedContent}\n${renderedSubHierarchy}`
       }
     }
+
+    this.hierarchyViewModels = viewModels;
 
     // Manipulate the DOM. 
     $(this._tableElement).empty();

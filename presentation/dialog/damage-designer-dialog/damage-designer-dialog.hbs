@@ -6,6 +6,14 @@ viewModel: DamageDesignerDialogViewModel
     <span class="sheet-block">
       {{> button viewModel=viewModel.vmRefresh }}
     </span>
+    <span class="flex flex-row sheet-block auto-border-r">
+      <span>
+        {{> button viewModel=viewModel.vmCollapseAll }}
+      </span>
+      <span>
+        {{> button viewModel=viewModel.vmExpandAll }}
+      </span>
+    </span>
   </div>
   <div class="damage-finding-header damage-list flex flex-row flex-middle pad-md">
     <div class="flex flex-row flex-middle auto-margin-h">
