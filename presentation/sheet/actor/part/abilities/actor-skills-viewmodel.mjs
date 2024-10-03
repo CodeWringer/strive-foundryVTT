@@ -10,6 +10,7 @@ import DocumentListItemOrderDataSource from "../../../../component/sortable-list
 import SortableListViewModel from "../../../../component/sortable-list/sortable-list-viewmodel.mjs"
 import ViewModel from "../../../../view-model/view-model.mjs"
 import SkillListItemViewModel from "../../../item/skill/skill-list-item-viewmodel.mjs"
+import * as StringUtil from "../../../../../business/util/string-utility.mjs"
 
 export default class ActorSkillsViewModel extends ViewModel {
   /** @override */
@@ -128,7 +129,10 @@ export default class ActorSkillsViewModel extends ViewModel {
               SKILL_TAGS.INNATE.id,
             ],
           },
-          localizedLabel: game.i18n.localize("system.character.skill.innate.add.label"),
+          localizedLabel: StringUtil.format(
+            game.i18n.localize("system.general.add.addType"),
+            game.i18n.localize("system.character.skill.innate.singular"),
+          ),
           localizedType: game.i18n.localize("system.character.skill.innate.singular"),
         }),
       });
@@ -145,7 +149,10 @@ export default class ActorSkillsViewModel extends ViewModel {
           SKILL_TAGS.INNATE.id,
         ],
       },
-      localizedToolTip: game.i18n.localize("system.character.skill.innate.add.label"),
+      localizedToolTip: StringUtil.format(
+        game.i18n.localize("system.general.add.addType"),
+        game.i18n.localize("system.character.skill.innate.singular"),
+      ),
       localizedType: game.i18n.localize("system.character.skill.innate.singular"),
     });
 
@@ -170,7 +177,10 @@ export default class ActorSkillsViewModel extends ViewModel {
         creationData: {
           level: 0,
         },
-        localizedLabel: game.i18n.localize("system.character.skill.learning.add.label"),
+        localizedLabel: StringUtil.format(
+          game.i18n.localize("system.general.add.addType"),
+          game.i18n.localize("system.character.skill.learning.singular"),
+        ),
         localizedType: game.i18n.localize("system.character.skill.learning.singular"),
       }),
     });
@@ -183,7 +193,10 @@ export default class ActorSkillsViewModel extends ViewModel {
       creationData: {
         level: 0,
       },
-      localizedToolTip: game.i18n.localize("system.character.skill.learning.add.label"),
+      localizedToolTip: StringUtil.format(
+        game.i18n.localize("system.general.add.addType"),
+        game.i18n.localize("system.character.skill.learning.singular"),
+      ),
       localizedType: game.i18n.localize("system.character.skill.learning.singular"),
     });
 
@@ -208,7 +221,10 @@ export default class ActorSkillsViewModel extends ViewModel {
         creationData: {
           level: 1,
         },
-        localizedLabel: game.i18n.localize("system.character.skill.known.add.label"),
+        localizedLabel: StringUtil.format(
+          game.i18n.localize("system.general.add.addType"),
+          game.i18n.localize("system.character.skill.known.singular"),
+        ),
         localizedType: game.i18n.localize("system.character.skill.known.singular"),
       }),
     });
@@ -221,7 +237,10 @@ export default class ActorSkillsViewModel extends ViewModel {
       creationData: {
         level: 1,
       },
-      localizedToolTip: game.i18n.localize("system.character.skill.known.add.label"),
+      localizedToolTip: StringUtil.format(
+        game.i18n.localize("system.general.add.addType"),
+        game.i18n.localize("system.character.skill.known.singular"),
+      ),
       localizedType: game.i18n.localize("system.character.skill.known.singular"),
     });
     

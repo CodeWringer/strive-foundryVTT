@@ -9,6 +9,7 @@ import DocumentListItemOrderDataSource from "../../../component/sortable-list/do
 import SortableListViewModel from "../../../component/sortable-list/sortable-list-viewmodel.mjs"
 import ViewModel from "../../../view-model/view-model.mjs"
 import ExpertiseListItemViewModel from "./expertise-list-item-viewmodel.mjs"
+import * as StringUtil from "../../../../business/util/string-utility.mjs"
 
 export default class ExpertiseTableViewModel extends ViewModel {
   /** @override */
@@ -104,7 +105,10 @@ export default class ExpertiseTableViewModel extends ViewModel {
       parent: this,
       target: this.document,
       creationType: ITEM_TYPES.EXPERTISE,
-      localizedToolTip: game.i18n.localize("system.character.skill.expertise.add.label"),
+      localizedToolTip: StringUtil.format(
+        game.i18n.localize("system.general.add.addType"),
+        game.i18n.localize("system.character.skill.expertise.singular"),
+      ),
       localizedType: game.i18n.localize("system.character.skill.expertise.singular"),
     });
 
@@ -128,7 +132,10 @@ export default class ExpertiseTableViewModel extends ViewModel {
         isEditable: this.isEditable,
         creationType: ITEM_TYPES.EXPERTISE,
         withDialog: false,
-        localizedLabel: game.i18n.localize("system.character.skill.expertise.add.label"),
+        localizedLabel: StringUtil.format(
+          game.i18n.localize("system.general.add.addType"),
+          game.i18n.localize("system.character.skill.expertise.singular"),
+        ),
         localizedType: game.i18n.localize("system.character.skill.expertise.singular"),
       }),
     });

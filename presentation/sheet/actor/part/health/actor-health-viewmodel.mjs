@@ -16,6 +16,7 @@ import ScarListItemViewModel from "../../../item/scar/scar-list-item-viewmodel.m
 import ActorHealthStatesViewModel from "./actor-health-states-viewmodel.mjs"
 import DeathsDoorViewModel from "./deaths-door/deaths-door-viewmodel.mjs"
 import GritPointsViewModel from "./grit-points/grit-points-viewmodel.mjs"
+import * as StringUtil from "../../../../../business/util/string-utility.mjs"
 
 /**
  * @extends ViewModel
@@ -259,7 +260,10 @@ export default class ActorHealthViewModel extends ViewModel {
         target: this.document,
         creationType: ITEM_TYPES.ILLNESS,
         withDialog: true,
-        localizedLabel: game.i18n.localize("system.character.health.illness.add.label"),
+        localizedLabel: StringUtil.format(
+          game.i18n.localize("system.general.add.addType"),
+          game.i18n.localize("system.character.health.illness.singular"),
+        ),
         localizedType: game.i18n.localize("system.character.health.illness.singular"),
       }),
     });
@@ -269,7 +273,10 @@ export default class ActorHealthViewModel extends ViewModel {
       target: this.document,
       creationType: ITEM_TYPES.ILLNESS,
       withDialog: true,
-      localizedToolTip: game.i18n.localize("system.character.health.illness.add.label"),
+      localizedToolTip: StringUtil.format(
+        game.i18n.localize("system.general.add.addType"),
+        game.i18n.localize("system.character.health.illness.singular"),
+      ),
       localizedType: game.i18n.localize("system.character.health.illness.singular"),
     });
 
@@ -291,7 +298,10 @@ export default class ActorHealthViewModel extends ViewModel {
         target: this.document,
         creationType: ITEM_TYPES.INJURY,
         withDialog: true,
-        localizedLabel: game.i18n.localize("system.character.health.injury.add.label"),
+        localizedLabel: StringUtil.format(
+          game.i18n.localize("system.general.add.addType"),
+          game.i18n.localize("system.character.health.injury.singular"),
+        ),
         localizedType: game.i18n.localize("system.character.health.injury.singular"),
       }),
     });
@@ -301,7 +311,10 @@ export default class ActorHealthViewModel extends ViewModel {
       target: this.document,
       creationType: ITEM_TYPES.INJURY,
       withDialog: true,
-      localizedToolTip: game.i18n.localize("system.character.health.injury.add.label"),
+      localizedToolTip: StringUtil.format(
+        game.i18n.localize("system.general.add.addType"),
+        game.i18n.localize("system.character.health.injury.singular"),
+      ),
       localizedType: game.i18n.localize("system.character.health.injury.singular"),
     });
 
@@ -323,7 +336,10 @@ export default class ActorHealthViewModel extends ViewModel {
         target: this.document,
         creationType: ITEM_TYPES.MUTATION,
         withDialog: true,
-        localizedLabel: game.i18n.localize("system.character.health.mutation.add.label"),
+        localizedLabel: StringUtil.format(
+          game.i18n.localize("system.general.add.addType"),
+          game.i18n.localize("system.character.health.mutation.singular"),
+        ),
         localizedType: game.i18n.localize("system.character.health.mutation.singular"),
       }),
     });
@@ -333,7 +349,10 @@ export default class ActorHealthViewModel extends ViewModel {
       target: this.document,
       creationType: ITEM_TYPES.MUTATION,
       withDialog: true,
-      localizedToolTip: game.i18n.localize("system.character.health.mutation.add.label"),
+      localizedToolTip: StringUtil.format(
+        game.i18n.localize("system.general.add.addType"),
+        game.i18n.localize("system.character.health.mutation.singular"),
+      ),
       localizedType: game.i18n.localize("system.character.health.mutation.singular"),
     });
 
@@ -355,7 +374,10 @@ export default class ActorHealthViewModel extends ViewModel {
         target: this.document,
         creationType: ITEM_TYPES.SCAR,
         withDialog: true,
-        localizedLabel: game.i18n.localize("system.character.health.scar.add.label"),
+        localizedLabel: StringUtil.format(
+          game.i18n.localize("system.general.add.addType"),
+          game.i18n.localize("system.character.health.scar.singular"),
+        ),
         localizedType: game.i18n.localize("system.character.health.scar.singular"),
       }),
     });
@@ -365,7 +387,10 @@ export default class ActorHealthViewModel extends ViewModel {
       target: this.document,
       creationType: ITEM_TYPES.SCAR,
       withDialog: true,
-      localizedToolTip: game.i18n.localize("system.character.health.scar.add.label"),
+      localizedToolTip: StringUtil.format(
+        game.i18n.localize("system.general.add.addType"),
+        game.i18n.localize("system.character.health.scar.singular"),
+      ),
       localizedType: game.i18n.localize("system.character.health.scar.singular"),
     });
 

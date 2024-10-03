@@ -21,6 +21,8 @@ import TransientSkill from "../../../../business/document/item/skill/transient-s
 import BaseAttributeListItemViewModel from "./base-attribute/base-attribute-list-item-viewmodel.mjs";
 import { ATTRIBUTES } from "../../../../business/ruleset/attribute/attributes.mjs";
 import { getExtenders } from "../../../../common/extender-util.mjs";
+import * as StringUtil from "../../../../business/util/string-utility.mjs";
+import ButtonViewModel from "../../../component/button/button-viewmodel.mjs";
 
 /**
  * @property {TransientSkill} document
@@ -269,16 +271,31 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
       },
       isItemAddable: this.isEditable,
       isItemRemovable: (this.isEditable && this.baseAttributeViewModels.length > 1),
-      localizedAddLabel: game.i18n.localize("system.general.add"),
+      localizedAddLabel: StringUtil.format(
+        game.i18n.localize("system.general.add.addType"),
+        game.i18n.localize("system.character.attribute.singular")
+      ),
+    });
+    this.vmAddAttribute2 = new ButtonViewModel({
+      id: "vmAddAttribute2",
+      parent: this,
+      iconHtml: '<i class="fas fa-plus"></i>',
+      localizedToolTip: StringUtil.format(
+        game.i18n.localize("system.general.add.addType"),
+        game.i18n.localize("system.character.attribute.singular")
+      ),
+      onClick: () => {
+        const baseAttributes = this.document.baseAttributes.concat([
+          ATTRIBUTES.agility
+        ]);
+        this.document.baseAttributes = baseAttributes;
+      },
     });
 
     this.prerequisiteViewModels = this._getPrerequisiteViewModels();
     this.vmPrerequisiteList = new SimpleListViewModel({
       id: "vmPrerequisiteList",
       parent: this,
-      isEditable: this.isEditable,
-      isSendable: this.isSendable,
-      isOwner: this.isOwner,
       contentItemViewModels: this.prerequisiteViewModels,
       contentItemTemplate: this.prerequisiteListItemTemplate,
       onAddClick: () => {
@@ -294,7 +311,25 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
       },
       isItemAddable: this.isEditable,
       isItemRemovable: this.isEditable,
-      localizedAddLabel: game.i18n.localize("system.general.add"),
+      localizedAddLabel: StringUtil.format(
+        game.i18n.localize("system.general.add.addType"),
+        game.i18n.localize("system.character.skill.prerequisite.singular")
+      ),
+    });
+    this.vmAddPrerequisite2 = new ButtonViewModel({
+      id: "vmAddPrerequisite2",
+      parent: this,
+      iconHtml: '<i class="fas fa-plus"></i>',
+      localizedToolTip: StringUtil.format(
+        game.i18n.localize("system.general.add.addType"),
+        game.i18n.localize("system.character.skill.prerequisite.singular")
+      ),
+      onClick: () => {
+        const prerequisites = this.document.prerequisites.concat([
+          new SkillPrerequisite()
+        ]);
+        this.document.prerequisites = prerequisites;
+      },
     });
   }
 
@@ -311,7 +346,10 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
           menuItems: [
             // Add damage
             {
-              name: game.i18n.localize("system.damageDefinition.add"),
+              name: StringUtil.format(
+                game.i18n.localize("system.general.add.addType"),
+                game.i18n.localize("system.damageDefinition.label")
+              ),
               icon: '<i class="fas fa-plus"></i>',
               callback: () => {
                 const damage = this.document.damage.concat([]);

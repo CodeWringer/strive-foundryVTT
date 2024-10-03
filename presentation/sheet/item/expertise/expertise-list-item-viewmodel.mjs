@@ -18,6 +18,7 @@ import { DataFieldComponent } from "../base/datafield-component.mjs";
 import { TemplatedComponent } from "../base/templated-component.mjs";
 import Ruleset from "../../../../business/ruleset/ruleset.mjs";
 import { getExtenders } from "../../../../common/extender-util.mjs";
+import * as StringUtil from "../../../../business/util/string-utility.mjs"
 
 /**
  * @property {Expertise} document 
@@ -260,7 +261,10 @@ export default class ExpertiseListItemViewModel extends BaseListItemViewModel {
             },
             // Add damage
             {
-              name: game.i18n.localize("system.damageDefinition.add"),
+              name: StringUtil.format(
+                game.i18n.localize("system.general.add.addType"),
+                game.i18n.localize("system.damageDefinition.label")
+              ),
               icon: '<i class="fas fa-plus"></i>',
               callback: () => {
                 const damage = this.document.damage.concat([]);

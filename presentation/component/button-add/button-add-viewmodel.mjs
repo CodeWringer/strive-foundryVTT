@@ -7,6 +7,7 @@ import { DYNAMIC_INPUT_TYPES } from '../../dialog/dynamic-input-dialog/dynamic-i
 import ChoiceOption from '../input-choice/choice-option.mjs';
 import Expertise from '../../../business/document/item/skill/expertise.mjs';
 import { ITEM_TYPES } from '../../../business/document/item/item-types.mjs';
+import * as StringUtil from '../../../business/util/string-utility.mjs';
 
 /**
  * A button that allows adding a newly created embedded document to a specific actor. 
@@ -62,7 +63,6 @@ export default class ButtonAddViewModel extends ButtonViewModel {
    * * default `false`
    * @param {Object | undefined} args.creationData Data to pass to the item creation function. 
    * @param {String | undefined} args.localizedType Localized name of the type of thing to add. 
-   * @param {String | undefined} args.localizedDialogTitle Localized title of the dialog. 
    * 
    * @param {Function | undefined} args.onSelectionChanged Asynchronous callback that is invoked when selection changes. Arguments: 
    * * `dialog: DynamicInputDialog`
@@ -77,8 +77,6 @@ export default class ButtonAddViewModel extends ButtonViewModel {
     super({
       ...args,
       iconHtml: '<i class="fas fa-plus"></i>',
-      localizedLabel: args.localizedLabel,
-      localizedToolTip: args.localizedToolTip ?? game.i18n.localize("system.general.add"),
     });
     validateOrThrow(args, ["target", "creationType"]);
 
@@ -87,7 +85,12 @@ export default class ButtonAddViewModel extends ButtonViewModel {
     this.withDialog = args.withDialog ?? false;
     this.creationData = args.creationData ?? Object.create(null);
     this.localizedType = args.localizedType;
-    this.localizedDialogTitle = args.localizedDialogTitle;
+    if (isDefined(this.localizedType)) {
+      this.localizedDialogTitle = StringUtil.format(
+        game.i18n.localize("system.general.add.query"),
+        this.localizedType
+      );
+    }
 
     this.onSelectionChanged = args.onSelectionChanged ?? (async () => {});
     this.selectionLabelMapper = args.selectionLabelMapper;

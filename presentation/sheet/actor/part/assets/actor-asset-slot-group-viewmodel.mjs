@@ -108,7 +108,10 @@ export default class ActorAssetSlotGroupViewModel extends ViewModel {
       isOwner: this.isOwner,
       menuItems: [
         {
-          name: game.i18n.localize("system.character.asset.slot.add.label"),
+          name: StringUtil.format(
+            game.i18n.localize("system.general.add.addType"),
+            game.i18n.localize("system.character.asset.slot.label"),
+          ),
           icon: '<i class="fas fa-plus"></i>',
           condition: () => { return true; },
           callback: async () => {

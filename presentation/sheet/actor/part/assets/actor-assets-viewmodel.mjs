@@ -10,6 +10,7 @@ import SortableListViewModel from "../../../../component/sortable-list/sortable-
 import ViewModel from "../../../../view-model/view-model.mjs"
 import AssetListItemViewModel from "../../../item/asset/asset-list-item-viewmodel.mjs"
 import ActorAssetsEquippedViewModel from "./actor-assets-equipped-viewmodel.mjs"
+import * as StringUtil from "../../../../../business/util/string-utility.mjs"
 
 /**
  * @property {TransientBaseCharacterActor} document
@@ -118,8 +119,12 @@ export default class ActorAssetsViewModel extends ViewModel {
         isEditable: this.isEditable,
         creationType: ITEM_TYPES.ASSET,
         withDialog: true,
-        localizedLabel: game.i18n.localize("system.character.asset.add.luggage"),
-        localizedType: game.i18n.localize("system.character.asset.luggage"),
+        localizedLabel: StringUtil.format(
+          game.i18n.localize("system.general.add.addTypeTo"),
+          game.i18n.localize("system.character.asset.singular"),
+          game.i18n.localize("system.character.asset.luggage"),
+        ),
+        localizedType: game.i18n.localize("system.character.asset.singular"),
         onClick: (event, data) => {
           this.document.assets.luggage = this.document.assets.luggage.concat([
             data.getTransientObject(),
@@ -134,8 +139,12 @@ export default class ActorAssetsViewModel extends ViewModel {
       isEditable: this.isEditable,
       creationType: ITEM_TYPES.ASSET,
       withDialog: true,
-      localizedToolTip: game.i18n.localize("system.character.asset.add.luggage"),
-      localizedType: game.i18n.localize("system.character.asset.luggage"),
+      localizedToolTip: StringUtil.format(
+        game.i18n.localize("system.general.add.addTypeTo"),
+        game.i18n.localize("system.character.asset.singular"),
+        game.i18n.localize("system.character.asset.luggage"),
+      ),
+      localizedType: game.i18n.localize("system.character.asset.singular"),
       onClick: (event, data) => {
         this.document.assets.luggage = this.document.assets.luggage.concat([
           data.getTransientObject(),
@@ -162,8 +171,12 @@ export default class ActorAssetsViewModel extends ViewModel {
         isEditable: this.isEditable,
         creationType: ITEM_TYPES.ASSET,
         withDialog: true,
-        localizedLabel: game.i18n.localize("system.character.asset.add.property"),
-        localizedType: game.i18n.localize("system.character.asset.property"),
+        localizedLabel: StringUtil.format(
+          game.i18n.localize("system.general.add.addTypeTo"),
+          game.i18n.localize("system.character.asset.singular"),
+          game.i18n.localize("system.character.asset.property"),
+        ),
+        localizedType: game.i18n.localize("system.character.asset.singular"),
       }),
     });
     this.vmAddProperty2 = new ButtonAddViewModel({
@@ -173,8 +186,12 @@ export default class ActorAssetsViewModel extends ViewModel {
       isEditable: this.isEditable,
       creationType: ITEM_TYPES.ASSET,
       withDialog: true,
-      localizedToolTip: game.i18n.localize("system.character.asset.add.property"),
-      localizedType: game.i18n.localize("system.character.asset.property"),
+      localizedToolTip: StringUtil.format(
+        game.i18n.localize("system.general.add.addTypeTo"),
+        game.i18n.localize("system.character.asset.singular"),
+        game.i18n.localize("system.character.asset.property"),
+      ),
+      localizedType: game.i18n.localize("system.character.asset.singular"),
     });
 
     this.vmSortLuggage = new SortControlsViewModel({
