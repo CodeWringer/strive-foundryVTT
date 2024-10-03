@@ -102,9 +102,10 @@ export default class ExpertiseTableViewModel extends ViewModel {
     this.vmAddExpertise = new ButtonAddViewModel({
       id: "vmAddExpertise",
       parent: this,
-      localizedToolTip: game.i18n.localize("system.character.skill.expertise.add.label"),
       target: this.document,
       creationType: ITEM_TYPES.EXPERTISE,
+      localizedToolTip: game.i18n.localize("system.character.skill.expertise.add.label"),
+      localizedType: game.i18n.localize("system.character.skill.expertise.singular"),
     });
 
     this.expertises = [];

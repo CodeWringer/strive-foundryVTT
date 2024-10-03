@@ -17,6 +17,7 @@ cssClass: {undefined | String}
       {{#with viewModel.sortControlsTemplate as |template|}}
         {{> (template) viewModel=../viewModel.vmSortLuggage cssClass="font-size-default" }}
       {{/with}}
+      {{> buttonAdd viewModel=viewModel.vmAddLuggage2 cssClass="font-size-lg" }}
     {{/header1}}
     <div class="grid-2col grid-gap-md">
       {{!-- Maximum bulk --}}
@@ -51,6 +52,7 @@ cssClass: {undefined | String}
       {{#with viewModel.sortControlsTemplate as |template|}}
         {{> (template) viewModel=../viewModel.vmSortProperty cssClass="font-size-default" }}
       {{/with}}
+      {{> buttonAdd viewModel=viewModel.vmAddProperty2 cssClass="font-size-lg" }}
     {{/header1}}
     {{> sortableList viewModel=viewModel.vmPropertyList }}
   </div>

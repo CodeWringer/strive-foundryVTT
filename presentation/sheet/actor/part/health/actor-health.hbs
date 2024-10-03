@@ -83,6 +83,7 @@ cssClass: {undefined | String}
       {{#with viewModel.sortControlsTemplate as |template|}}
         {{> (template) viewModel=../viewModel.vmSortInjuries cssClass="font-size-default" }}
       {{/with}}
+      {{> buttonAdd viewModel=viewModel.vmAddInjury2 cssClass="font-size-lg" }}
     {{/header1}}
     <div class="grid-2col grid-gap-md">
       <div class="sheet-block">
@@ -122,6 +123,7 @@ cssClass: {undefined | String}
       {{#with viewModel.sortControlsTemplate as |template|}}
         {{> (template) viewModel=../viewModel.vmSortIllnesses cssClass="font-size-default" }}
       {{/with}}
+      {{> buttonAdd viewModel=viewModel.vmAddIllness2 cssClass="font-size-lg" }}
     {{/header1}}
     <div class="grid-2col grid-gap-md">
       <div></div>
@@ -145,6 +147,7 @@ cssClass: {undefined | String}
       {{#with viewModel.sortControlsTemplate as |template|}}
         {{> (template) viewModel=../viewModel.vmSortMutations cssClass="font-size-default" }}
       {{/with}}
+      {{> buttonAdd viewModel=viewModel.vmAddMutation2 cssClass="font-size-lg" }}
     {{/header1}}
     <div class="grid-2col grid-gap-md">
       <div></div>
@@ -168,6 +171,7 @@ cssClass: {undefined | String}
       {{#with viewModel.sortControlsTemplate as |template|}}
         {{> (template) viewModel=../viewModel.vmSortScars cssClass="font-size-default" }}
       {{/with}}
+      {{> buttonAdd viewModel=viewModel.vmAddScar2 cssClass="font-size-lg" }}
     {{/header1}}
     <div class="grid-2col grid-gap-md">
       <div></div>

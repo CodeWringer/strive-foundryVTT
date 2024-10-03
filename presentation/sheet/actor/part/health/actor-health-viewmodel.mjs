@@ -166,7 +166,7 @@ export default class ActorHealthViewModel extends ViewModel {
       parent: this,
       id: "vmMaxHp",
       value: this.document.health.maxHP,
-      isEditable: false,
+      isEditable: false, // This should only ever be a read-only view! 
     });
     this.vmMaxHpModifier = new InputNumberSpinnerViewModel({
       parent: this,
@@ -189,7 +189,7 @@ export default class ActorHealthViewModel extends ViewModel {
       parent: this,
       id: "vmMaxExhaustion",
       value: this.document.health.maxExhaustion,
-      isEditable: false,
+      isEditable: false, // This should only ever be a read-only view! 
     });
     this.vmMaxExhaustionModifier = new InputNumberSpinnerViewModel({
       parent: this,
@@ -219,7 +219,7 @@ export default class ActorHealthViewModel extends ViewModel {
       this.vmArmorListItem = new AssetListItemViewModel({
         id: "vmArmorListItem",
         parent: this,
-        isEditable: false,
+        isEditable: false, // This should only ever be a read-only view! 
         document: armorAsset,
       });
     }
@@ -237,8 +237,6 @@ export default class ActorHealthViewModel extends ViewModel {
     this.vmHealthStates = new ActorHealthStatesViewModel({
       id: "vmHealthStates",
       parent: this,
-      isEditable: this.isEditable,
-      isSendable: this.isSendable,
       isOwner: this.isOwner,
       document: this.document,
     });
@@ -248,7 +246,6 @@ export default class ActorHealthViewModel extends ViewModel {
     this.illnesses = this._getIllnessViewModels();
     this.vmIllnessList = new SortableListViewModel({
       parent: this,
-      isEditable: args.isEditable ?? this.isEditable,
       id: "vmIllnessList",
       indexDataSource: new DocumentListItemOrderDataSource({
         document: this.document,
@@ -257,15 +254,23 @@ export default class ActorHealthViewModel extends ViewModel {
       listItemViewModels: this.illnesses,
       listItemTemplate: IllnessListItemViewModel.TEMPLATE,
       vmBtnAddItem: new ButtonAddViewModel({
-        id: "vmBtnAddIllness",
+        id: "vmAddIllness1",
         parent: this,
         target: this.document,
-        isEditable: this.isEditable,
         creationType: ITEM_TYPES.ILLNESS,
         withDialog: true,
         localizedLabel: game.i18n.localize("system.character.health.illness.add.label"),
         localizedType: game.i18n.localize("system.character.health.illness.singular"),
       }),
+    });
+    this.vmAddIllness2 = new ButtonAddViewModel({
+      id: "vmAddIllness2",
+      parent: this,
+      target: this.document,
+      creationType: ITEM_TYPES.ILLNESS,
+      withDialog: true,
+      localizedToolTip: game.i18n.localize("system.character.health.illness.add.label"),
+      localizedType: game.i18n.localize("system.character.health.illness.singular"),
     });
 
     // Prepare injuries list view models. 
@@ -273,7 +278,6 @@ export default class ActorHealthViewModel extends ViewModel {
     this.injuries = this._getInjuryViewModels();
     this.vmInjuryList = new SortableListViewModel({
       parent: this,
-      isEditable: args.isEditable ?? this.isEditable,
       id: "vmInjuryList",
       indexDataSource: new DocumentListItemOrderDataSource({
         document: this.document,
@@ -282,15 +286,23 @@ export default class ActorHealthViewModel extends ViewModel {
       listItemViewModels: this.injuries,
       listItemTemplate: InjuryListItemViewModel.TEMPLATE,
       vmBtnAddItem: new ButtonAddViewModel({
-        id: "vmBtnAddInjury",
+        id: "vmAddInjury1",
         parent: this,
         target: this.document,
-        isEditable: this.isEditable,
         creationType: ITEM_TYPES.INJURY,
         withDialog: true,
         localizedLabel: game.i18n.localize("system.character.health.injury.add.label"),
         localizedType: game.i18n.localize("system.character.health.injury.singular"),
       }),
+    });
+    this.vmAddInjury2 = new ButtonAddViewModel({
+      id: "vmAddInjury2",
+      parent: this,
+      target: this.document,
+      creationType: ITEM_TYPES.INJURY,
+      withDialog: true,
+      localizedToolTip: game.i18n.localize("system.character.health.injury.add.label"),
+      localizedType: game.i18n.localize("system.character.health.injury.singular"),
     });
 
     // Prepare mutations list view models. 
@@ -298,7 +310,6 @@ export default class ActorHealthViewModel extends ViewModel {
     this.mutations = this._getMutationViewModels();
     this.vmMutationList = new SortableListViewModel({
       parent: this,
-      isEditable: args.isEditable ?? this.isEditable,
       id: "vmMutationList",
       indexDataSource: new DocumentListItemOrderDataSource({
         document: this.document,
@@ -307,15 +318,23 @@ export default class ActorHealthViewModel extends ViewModel {
       listItemViewModels: this.mutations,
       listItemTemplate: MutationListItemViewModel.TEMPLATE,
       vmBtnAddItem: new ButtonAddViewModel({
-        id: "vmBtnAddMutation",
+        id: "vmAddMutation1",
         parent: this,
         target: this.document,
-        isEditable: this.isEditable,
         creationType: ITEM_TYPES.MUTATION,
         withDialog: true,
         localizedLabel: game.i18n.localize("system.character.health.mutation.add.label"),
         localizedType: game.i18n.localize("system.character.health.mutation.singular"),
       }),
+    });
+    this.vmAddMutation2 = new ButtonAddViewModel({
+      id: "vmAddMutation2",
+      parent: this,
+      target: this.document,
+      creationType: ITEM_TYPES.MUTATION,
+      withDialog: true,
+      localizedToolTip: game.i18n.localize("system.character.health.mutation.add.label"),
+      localizedType: game.i18n.localize("system.character.health.mutation.singular"),
     });
 
     // Prepare scars list view models. 
@@ -323,7 +342,6 @@ export default class ActorHealthViewModel extends ViewModel {
     this.scars = this._getScarViewModels();
     this.vmScarList = new SortableListViewModel({
       parent: this,
-      isEditable: args.isEditable ?? this.isEditable,
       id: "vmScarList",
       indexDataSource: new DocumentListItemOrderDataSource({
         document: this.document,
@@ -332,15 +350,23 @@ export default class ActorHealthViewModel extends ViewModel {
       listItemViewModels: this.scars,
       listItemTemplate: ScarListItemViewModel.TEMPLATE,
       vmBtnAddItem: new ButtonAddViewModel({
-        id: "vmBtnAddScar",
+        id: "vmAddScar1",
         parent: this,
         target: this.document,
-        isEditable: this.isEditable,
         creationType: ITEM_TYPES.SCAR,
         withDialog: true,
         localizedLabel: game.i18n.localize("system.character.health.scar.add.label"),
         localizedType: game.i18n.localize("system.character.health.scar.singular"),
       }),
+    });
+    this.vmAddScar2 = new ButtonAddViewModel({
+      id: "vmAddScar2",
+      parent: this,
+      target: this.document,
+      creationType: ITEM_TYPES.SCAR,
+      withDialog: true,
+      localizedToolTip: game.i18n.localize("system.character.health.scar.add.label"),
+      localizedType: game.i18n.localize("system.character.health.scar.singular"),
     });
 
     this.vmSortInjuries = new SortControlsViewModel({
@@ -402,6 +428,7 @@ export default class ActorHealthViewModel extends ViewModel {
   /**
    * Updates the data of this view model. 
    * 
+   * @param {Object} args 
    * @param {Boolean | undefined} args.isEditable If true, the view model data is editable.
    * * Default `false`. 
    * @param {Boolean | undefined} args.isSendable If true, the document represented by the sheet can be sent to chat.
