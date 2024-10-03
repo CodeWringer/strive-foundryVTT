@@ -124,7 +124,7 @@ export default class ButtonContextMenuViewModel extends ButtonViewModel {
     });
 
     this.menuItems = args.menuItems ?? [];
-    this.localizedTooltip = args.localizedTooltip ?? game.i18n.localize("system.general.contextMenu");
+    this.localizedToolTip = args.localizedToolTip ?? game.i18n.localize("system.general.contextMenu");
 
     // Wrap the callback function to make it also ensure the context menu is properly closed, 
     // when the menu item is clicked. 

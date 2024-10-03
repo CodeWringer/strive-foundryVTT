@@ -151,7 +151,7 @@ export default class ActorAssetSlotViewModel extends ViewModel {
       id: "vmBtnEdit",
       parent: this,
       iconHtml: '<i class="fas fa-cog"></i>',
-      localizedTooltip: game.i18n.localize("system.character.asset.slot.edit"),
+      localizedToolTip: game.i18n.localize("system.character.asset.slot.edit"),
       onClick: async () => {
         const delta = await queryAssetSlotConfiguration(this.assetSlot);
         await this.assetSlot.update(delta);
@@ -164,7 +164,7 @@ export default class ActorAssetSlotViewModel extends ViewModel {
       target: this.document,
       iconHtml: '<i class="fas fa-plus"></i>',
       localizedLabel: game.i18n.localize("system.character.asset.slot.assign.label"),
-      localizedTooltip: game.i18n.localize("system.character.asset.slot.assign.label"),
+      localizedToolTip: game.i18n.localize("system.character.asset.slot.assign.label"),
       onClick: async () => {
         const inputChoices = "inputChoices";
         const assetChoices = this._getAssetsAsChoices();

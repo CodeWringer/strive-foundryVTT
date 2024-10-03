@@ -136,7 +136,7 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
         id: "vmBtnConfigure",
         parent: this,
         iconHtml: '<i class="fas fa-cog"></i>',
-        localizedTooltip: game.i18n.localize("system.character.edit"),
+        localizedToolTip: game.i18n.localize("system.character.edit"),
         onClick: async () => {
           const inputMaxActionPoints = "inputMaxActionPoints";
           const inputRefillActionPoints = "inputRefillActionPoints";

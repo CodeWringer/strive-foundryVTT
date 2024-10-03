@@ -86,7 +86,7 @@ export default class ButtonToggleVisibilityViewModel extends ButtonToggleIconVie
     validateOrThrow(args, ["visGroup"]);
 
     this._visGroup = args.visGroup;
-    this.localizedTooltip = args.localizedTooltip ?? game.i18n.localize("system.general.toggleVisibility");
+    this.localizedToolTip = args.localizedToolTip ?? game.i18n.localize("system.general.toggleVisibility");
   }
 
   /**

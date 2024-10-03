@@ -405,7 +405,7 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
           id: "vmBtnEdit",
           parent: this,
           iconHtml: '<i class="fas fa-cog"></i>',
-          localizedTooltip: game.i18n.localize("system.general.edit"),
+          localizedToolTip: game.i18n.localize("system.general.edit"),
           onClick: async () => {
             const delta = await this._queryAttributesConfiguration();
             if (isDefined(delta) !== true) return;

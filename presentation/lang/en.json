@@ -51,7 +51,8 @@
       "custom": "Custom",
       "decrement": "Decrement",
       "delete": {
-        "label": "Delete",
+        "delete": "Delete",
+        "deleteOf": "Delete '%s'",
         "query": "Confirm Deletion",
         "queryOf": "Confirm Deletion of '%s'"
       },
@@ -175,8 +176,6 @@
           "query": "Select Asset to Add"
         },
         "delete": {
-          "label": "Delete Asset",
-          "query": "Confirm Deletion of Asset",
           "fromOwner": "Remove from owner",
           "fromWorld": "Remove from world"
         },

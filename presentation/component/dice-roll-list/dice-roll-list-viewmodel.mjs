@@ -56,7 +56,7 @@ export default class DiceRollListViewModel extends ViewModel {
       id: "vmBtnRoll",
       parent: thiz,
       isEditable: thiz.isEditable,
-      localizedTooltip: game.i18n.localize("system.roll.doRoll"),
+      localizedToolTip: game.i18n.localize("system.roll.doRoll"),
       iconHtml: '<i class="fas fa-dice-three"></i>',
       onClick: async () => {
         const evaluatedFormulae = await new RollFormulaResolver().evaluateFormulae(thiz.formulaViewModels);
