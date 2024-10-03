@@ -231,10 +231,7 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
       name: templateItem.name,
       type: templateItem.type,
       img: templateItem.img,
-      system: {
-        ...templateItem.document.system,
-        isOnPerson: true,
-      }
+      system: templateItem.document.system,
     };
     return await Item.create(itemData, { parent: parent });
   }

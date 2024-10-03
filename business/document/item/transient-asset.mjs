@@ -14,7 +14,6 @@ import { getExtenders } from "../../../common/extender-util.mjs";
  * 
  * @property {Number} quantity
  * @property {Number} maxQuantity
- * @property {Boolean} isOnPerson
  * @property {Number} bulk
  * @property {String} location
  * @property {Boolean} isProperty Returns `true`, if the asset is in the 
@@ -56,17 +55,6 @@ export default class TransientAsset extends TransientBaseItem {
     this.updateByPath("system.maxQuantity", value);
   }
   
-  /**
-   * @type {Boolean}
-   */
-  get isOnPerson() {
-    return this.document.system.isOnPerson;
-  }
-  set isOnPerson(value) {
-    this.document.system.isOnPerson = value;
-    this.updateByPath("system.isOnPerson", value);
-  }
-
   /**
    * @type {Number}
    */
