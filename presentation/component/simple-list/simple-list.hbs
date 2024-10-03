@@ -1,7 +1,8 @@
 {{!--
 viewModel: SimpleListViewModel
+cssClass: String | undefined
 --}}
-<section id="{{viewModel.id}}">
+<section id="{{viewModel.id}}"{{#if cssClass}} class="{{cssClass}}"{{/if}}>
   <ul class="unstyled-list auto-margin-v">
     {{#each viewModel.itemViewModels as |vm index|}}
     {{#with ../viewModel.itemTemplate as |template|}}
@@ -15,6 +16,6 @@ viewModel: SimpleListViewModel
   </ul>
   {{!-- Add button --}}
   <div class="fill flex flex-row flex-right{{#if (eq viewModel.isEditable false)}} hidden{{/if}}">
-    {{> button viewModel=viewModel.vmBtnAddItem }}
+    {{> button viewModel=viewModel.vmBtnAddItem cssClass="" }}
   </div>
 </section>
