@@ -1,6 +1,6 @@
 import { ACTOR_TYPES } from "../../../../../../business/document/actor/actor-types.mjs";
 import TransientBaseCharacterActor from "../../../../../../business/document/actor/transient-base-character-actor.mjs";
-import { validateOrThrow } from "../../../../../../business/util/validation-utility.mjs";
+import { ValidationUtil } from "../../../../../../business/util/validation-utility.mjs";
 import ViewModel from "../../../../../view-model/view-model.mjs";
 
 /**
@@ -67,7 +67,7 @@ export default class GritPointsViewModel extends ViewModel {
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["document", "isInCombatTracker"]);
+    ValidationUtil.validateOrThrow(args, ["document", "isInCombatTracker"]);
 
     this.document = args.document;
     this.isInCombatTracker = args.isInCombatTracker;
@@ -123,7 +123,7 @@ export class GritPoint {
    * * default `false`
    */
   constructor(args = {}) {
-    validateOrThrow(args, ["id", "value"]);
+    ValidationUtil.validateOrThrow(args, ["id", "value"]);
 
     this.id = args.id;
     this.value = args.value;

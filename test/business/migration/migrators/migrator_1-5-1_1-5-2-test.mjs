@@ -3,7 +3,7 @@ import sinon from 'sinon';
 import 'should-sinon';
 import Migrator_1_5_1__1_5_2 from '../../../../business/migration/migrators/migrator_1-5-1_1-5-2.mjs';
 import { BaseLoggingStrategy } from '../../../../business/logging/base-logging-strategy.mjs';
-import * as MigratorTestBase from './migrator-test-base.mjs';
+import { MigratorTestBase } from './migrator-test-base.mjs';
 
 /**
  * Creates a new mock document of type "Actor" and returns it. 

@@ -1,7 +1,7 @@
-import { getExtenders } from "../../../common/extender-util.mjs";
+import { ExtenderUtil } from "../../../common/extender-util.mjs";
 import AtReferencer from "../../referencing/at-referencer.mjs";
 import Ruleset from "../../ruleset/ruleset.mjs";
-import { isDefined } from "../../util/validation-utility.mjs";
+import { ValidationUtil } from "../../util/validation-utility.mjs";
 import { ITEM_TYPES } from "../item/item-types.mjs";
 import TransientBaseCharacterActor from "./transient-base-character-actor.mjs";
 
@@ -130,7 +130,7 @@ export default class TransientPc extends TransientBaseCharacterActor {
     ];
     const r = new AtReferencer().resolveReferenceInCollections(collectionsToSearch, comparableReference, propertyPath);
 
-    if (isDefined(r)) {
+    if (ValidationUtil.isDefined(r)) {
       return r;
     } else {
       return super.resolveReference(comparableReference, propertyPath);
@@ -139,6 +139,6 @@ export default class TransientPc extends TransientBaseCharacterActor {
   
   /** @override */
   getExtenders() {
-    return super.getExtenders().concat(getExtenders(TransientPc));
+    return super.getExtenders().concat(ExtenderUtil.getExtenders(TransientPc));
   }
 }

@@ -1,7 +1,7 @@
-import { isDefined, validateOrThrow } from "../../../../../../business/util/validation-utility.mjs";
 import InputRadioButtonGroupViewModel from "../../../../../component/input-choice/input-radio-button-group/input-radio-button-group-viewmodel.mjs";
 import ViewModel from "../../../../../view-model/view-model.mjs";
 import StatefulChoiceOption from "../../../../../component/input-choice/stateful-choice-option.mjs";
+import { ValidationUtil } from "../../../../../../business/util/validation-utility.mjs";
 
 /**
  * @property {Array<Object>} personalityTraits An array of personality traits for display. 
@@ -33,7 +33,7 @@ export default class PersonalityTraitsViewModel extends ViewModel {
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["document"]);
+    ValidationUtil.validateOrThrow(args, ["document"]);
 
     // Own properties.
     this.document = args.document;
@@ -76,7 +76,7 @@ export default class PersonalityTraitsViewModel extends ViewModel {
         options: options,
         value: options.find(it => it.value === valueOfDocument),
         onChange: (_, newValue) => {
-          if (isDefined(newValue)) {
+          if (ValidationUtil.isDefined(newValue)) {
             this.document.personalityTraits[propertyName] = parseInt(newValue.value);
           }
         },

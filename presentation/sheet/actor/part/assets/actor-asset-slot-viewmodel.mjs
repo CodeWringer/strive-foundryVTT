@@ -1,7 +1,7 @@
 import TransientBaseCharacterActor from "../../../../../business/document/actor/transient-base-character-actor.mjs";
 import CharacterAssetSlot from "../../../../../business/ruleset/asset/character-asset-slot.mjs";
-import * as StringUtil from "../../../../../business/util/string-utility.mjs";
-import { isDefined, validateOrThrow } from "../../../../../business/util/validation-utility.mjs";
+import { StringUtil } from "../../../../../business/util/string-utility.mjs";
+import { ValidationUtil } from "../../../../../business/util/validation-utility.mjs";
 import ButtonDeleteViewModel from "../../../../component/button-delete/button-delete-viewmodel.mjs";
 import ButtonViewModel from "../../../../component/button/button-viewmodel.mjs";
 import ChoiceOption from "../../../../component/input-choice/choice-option.mjs";
@@ -55,7 +55,7 @@ export default class ActorAssetSlotViewModel extends ViewModel {
    * @readonly
    */
   get hasAsset() {
-    return isDefined(this.assetSlot.alottedId) === true;
+    return ValidationUtil.isDefined(this.assetSlot.alottedId) === true;
   }
 
     /**
@@ -140,7 +140,7 @@ export default class ActorAssetSlotViewModel extends ViewModel {
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["assetSlot"]);
+    ValidationUtil.validateOrThrow(args, ["assetSlot"]);
 
     this.assetSlot = args.assetSlot;
     this.showSlotBulk = args.showSlotBulk ?? false;
@@ -232,7 +232,7 @@ export default class ActorAssetSlotViewModel extends ViewModel {
     if (this.assetListItemViewModel !== undefined) {
       this.assetListItemViewModel.dispose();
     }
-    if (isDefined(this.assetSlot.alottedId) === true) {
+    if (ValidationUtil.isDefined(this.assetSlot.alottedId) === true) {
       this.assetListItemViewModel = new AssetListItemViewModel({
         id: "assetListItemViewModel",
         parent: this,

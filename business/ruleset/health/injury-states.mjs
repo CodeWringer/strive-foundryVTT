@@ -1,4 +1,4 @@
-import * as ConstantsUtils from "../../util/constants-utility.mjs";
+import { ConstantsUtil } from "../../util/constants-utility.mjs";
 
 /**
  * Represents an injury state. 
@@ -42,4 +42,4 @@ export const INJURY_STATES = {
     icon: "fas fa-mortar-pestle"
   }),
 };
-ConstantsUtils.enrichConstant(INJURY_STATES);
+ConstantsUtil.enrichConstant(INJURY_STATES);

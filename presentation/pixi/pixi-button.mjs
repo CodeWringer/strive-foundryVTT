@@ -1,4 +1,4 @@
-import { validateOrThrow } from "../../business/util/validation-utility.mjs";
+import { ValidationUtil } from "../../business/util/validation-utility.mjs";
 import { FOUNDRY_10_PIXI_VERSION, PIXI_VERSION } from "./pixi-globals.mjs";
 
 /**
@@ -57,7 +57,7 @@ export class PixiButton {
    * @param {Function | undefined} args.onClick Callback that is invoked upon click. 
    */
   constructor(args = {}) {
-    validateOrThrow(args, ["texture"]);
+    ValidationUtil.validateOrThrow(args, ["texture"]);
 
     this.onClick = args.onClick ?? (() => {});
 

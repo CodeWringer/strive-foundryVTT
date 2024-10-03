@@ -1,5 +1,5 @@
-import { validateOrThrow } from "../util/validation-utility.mjs";
-import * as ConstantsUtils from "../util/constants-utility.mjs";
+import { ConstantsUtil } from "../util/constants-utility.mjs";
+import { ValidationUtil } from "../util/validation-utility.mjs";
 
 /**
  * Represents the total outcome of a dice pool roll. 
@@ -9,7 +9,7 @@ import * as ConstantsUtils from "../util/constants-utility.mjs";
  */
 export class DicePoolRollResultType {
   constructor(args = {}) {
-    validateOrThrow(args, ["name", "localizableName"]);
+    ValidationUtil.validateOrThrow(args, ["name", "localizableName"]);
     
     this.name = args.name;
     this.localizableName = args.localizableName;
@@ -45,4 +45,4 @@ export const DICE_POOL_RESULT_TYPES = {
     localizableName: "system.roll.partial.label",
   }),
 }
-ConstantsUtils.enrichConstant(DICE_POOL_RESULT_TYPES);
+ConstantsUtil.enrichConstant(DICE_POOL_RESULT_TYPES);

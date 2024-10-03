@@ -1,4 +1,4 @@
-import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
+import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
 
 /**
@@ -50,7 +50,7 @@ export default class LazyRichTextViewModel extends ViewModel {
   constructor(args = {}) {
     super(args);
 
-    validateOrThrow(args, ["renderableContent"]);
+    ValidationUtil.validateOrThrow(args, ["renderableContent"]);
 
     this.renderableContent = args.renderableContent;
   }
@@ -72,7 +72,7 @@ export default class LazyRichTextViewModel extends ViewModel {
 
   /** @override */
   update(args = {}) {
-    validateOrThrow(args, ["renderableContent"]);
+    ValidationUtil.validateOrThrow(args, ["renderableContent"]);
     
     this.renderableContent = args.renderableContent;
     this._invalidated = true;

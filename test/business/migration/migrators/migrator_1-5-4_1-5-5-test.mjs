@@ -3,10 +3,10 @@ import sinon from 'sinon';
 import 'should-sinon';
 import { WorldSystemVersion } from '../../../../business/migration/world-system-version.mjs';
 import VersionCode from '../../../../business/migration/version-code.mjs';
-import * as MigratorTestBase from './migrator-test-base.mjs';
 import Migrator_1_5_4__1_5_5 from '../../../../business/migration/migrators/migrator_1-5-4_1-5-5.mjs';
 import { BaseLoggingStrategy } from '../../../../business/logging/base-logging-strategy.mjs';
 import { DOCUMENT_COLLECTION_SOURCES } from '../../../../business/document/document-fetcher/document-collection-source.mjs';
+import { MigratorTestBase } from './migrator-test-base.mjs';
 
 /**
  * Creates a new mock document of type "Actor" and returns it. 

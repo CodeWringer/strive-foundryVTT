@@ -1,4 +1,4 @@
-import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
+import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
 import SimpleListItemViewModel from "./simple-list-item-viewmodel.mjs";
@@ -67,7 +67,7 @@ export default class SimpleListViewModel extends ViewModel {
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["contentItemViewModels", "contentItemTemplate"]);
+    ValidationUtil.validateOrThrow(args, ["contentItemViewModels", "contentItemTemplate"]);
 
     this.contentItemViewModels = args.contentItemViewModels;
     this.contentItemTemplate = args.contentItemTemplate;

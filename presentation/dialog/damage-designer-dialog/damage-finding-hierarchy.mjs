@@ -1,4 +1,4 @@
-import { isDefined } from "../../../business/util/validation-utility.mjs";
+import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
 import { DamageFinding } from "./damage-finding.mjs";
 
 /**
@@ -36,7 +36,7 @@ export default class DamageFindingHierarchy {
    * @returns {Boolean}
    */
   containsFinding(id) {
-    return isDefined(this.getFinding(id));
+    return ValidationUtil.isDefined(this.getFinding(id));
   }
 
   /**
@@ -68,7 +68,7 @@ export default class DamageFindingHierarchy {
    * @returns {Boolean}
    */
   containsSubHierarchy(id) {
-    return isDefined(this.getSubHierarchy(id));
+    return ValidationUtil.isDefined(this.getSubHierarchy(id));
   }
 
   /**

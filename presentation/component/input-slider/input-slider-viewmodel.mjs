@@ -1,4 +1,4 @@
-import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
+import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
 import InputViewModel from "../../view-model/input-view-model.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
 
@@ -92,7 +92,7 @@ export default class InputSliderViewModel extends InputViewModel {
   constructor(args = {}) {
     super(args);
 
-    validateOrThrow(args, ["min", "max"]);
+    ValidationUtil.validateOrThrow(args, ["min", "max"]);
 
     this._min = args.min;
     this._max = args.max;

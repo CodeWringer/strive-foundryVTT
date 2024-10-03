@@ -1,9 +1,9 @@
-import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
+import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
 import FoundryWrapper from "../../../common/foundry-wrapper.mjs";
 import ObservableField from "../../../common/observables/observable-field.mjs";
 import InputNumberSpinnerViewModel from "../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
 import InputSliderViewModel from "../../component/input-slider/input-slider-viewmodel.mjs";
-import { setElementValue } from "../../sheet/sheet-utility.mjs";
+import { SheetUtil } from "../../sheet/sheet-utility.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
 
 export default class DicePoolDesignerDialogViewModel extends ViewModel {
@@ -70,7 +70,7 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
   constructor(args = {}) {
     super(args);
 
-    validateOrThrow(args, ["ui"]);
+    ValidationUtil.validateOrThrow(args, ["ui"]);
 
     this.ui = args.ui;
     this.isEditable = true;
@@ -269,28 +269,28 @@ export default class DicePoolDesignerDialogViewModel extends ViewModel {
     });
 
     this._uiState.onChange(async (_1, _2, newValue) => {
-      setElementValue(this.vmHitThreshold.element, newValue.hitThreshold);
-      setElementValue(this.vmHitThresholdSlider.element, newValue.hitThreshold);
+      SheetUtil.setElementValue(this.vmHitThreshold.element, newValue.hitThreshold);
+      SheetUtil.setElementValue(this.vmHitThresholdSlider.element, newValue.hitThreshold);
       this.vmHitThreshold.max = newValue.dieFaces;
       this.vmHitThresholdSlider.max = newValue.dieFaces;
 
-      setElementValue(this.vmDiceLimitSlider.element, newValue.diceLimit);
-      setElementValue(this.vmDiceLimit.element, newValue.diceLimit);
+      SheetUtil.setElementValue(this.vmDiceLimitSlider.element, newValue.diceLimit);
+      SheetUtil.setElementValue(this.vmDiceLimit.element, newValue.diceLimit);
 
-      setElementValue(this.vmObLimitSlider.element, newValue.obLimit);
-      setElementValue(this.vmObLimit.element, newValue.obLimit);
+      SheetUtil.setElementValue(this.vmObLimitSlider.element, newValue.obLimit);
+      SheetUtil.setElementValue(this.vmObLimit.element, newValue.obLimit);
 
-      setElementValue(this.vmFacesSlider.element, newValue.dieFaces);
-      setElementValue(this.vmFaces.element, newValue.dieFaces);
+      SheetUtil.setElementValue(this.vmFacesSlider.element, newValue.dieFaces);
+      SheetUtil.setElementValue(this.vmFaces.element, newValue.dieFaces);
 
-      setElementValue(this.vmModifierSlider.element, newValue.modifier);
-      setElementValue(this.vmModifier.element, newValue.modifier);
+      SheetUtil.setElementValue(this.vmModifierSlider.element, newValue.modifier);
+      SheetUtil.setElementValue(this.vmModifier.element, newValue.modifier);
 
-      setElementValue(this.vmSampleSizeSlider.element, newValue.sampleSize);
-      setElementValue(this.vmSampleSize.element, newValue.sampleSize);
+      SheetUtil.setElementValue(this.vmSampleSizeSlider.element, newValue.sampleSize);
+      SheetUtil.setElementValue(this.vmSampleSize.element, newValue.sampleSize);
 
-      setElementValue(this.vmCompensationPointsSlider.element, newValue.compensationPoints);
-      setElementValue(this.vmCompensationPoints.element, newValue.compensationPoints);
+      SheetUtil.setElementValue(this.vmCompensationPointsSlider.element, newValue.compensationPoints);
+      SheetUtil.setElementValue(this.vmCompensationPoints.element, newValue.compensationPoints);
 
       await this._updateTable();
     });

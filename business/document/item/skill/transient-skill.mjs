@@ -1,4 +1,3 @@
-import { createUUID } from "../../../util/uuid-utility.mjs";
 import SkillChatMessageViewModel from "../../../../presentation/sheet/item/skill/skill-chat-message-viewmodel.mjs";
 import DamageAndType from "../../../ruleset/skill/damage-and-type.mjs";
 import PreparedChatData from "../../../../presentation/chat/prepared-chat-data.mjs";
@@ -9,12 +8,13 @@ import Ruleset from "../../../ruleset/ruleset.mjs";
 import Expertise from "./expertise.mjs";
 import { ATTACK_TYPES } from "../../../ruleset/skill/attack-types.mjs";
 import { ATTRIBUTES, Attribute } from "../../../ruleset/attribute/attributes.mjs";
-import { isDefined } from "../../../util/validation-utility.mjs";
 import SkillPrerequisite from "../../../ruleset/skill/skill-prerequisite.mjs";
 import { SKILL_TAGS } from "../../../tags/system-tags.mjs";
 import AtReferencer from "../../../referencing/at-referencer.mjs";
 import { ACTOR_TYPES } from "../../actor/actor-types.mjs";
-import { getExtenders } from "../../../../common/extender-util.mjs";
+import { ExtenderUtil } from "../../../../common/extender-util.mjs";
+import { ValidationUtil } from "../../../util/validation-utility.mjs";
+import { UuidUtil } from "../../../util/uuid-utility.mjs";
 
 /**
  * Represents the full transient data of a skill. 
@@ -58,7 +58,7 @@ export default class TransientSkill extends TransientBaseItem {
     const baseAttributeNames = this.document.system.baseAttributes ?? [];
     const attributes = baseAttributeNames
       .map(attributeName => ATTRIBUTES[attributeName])
-      .filter(it => isDefined(it));
+      .filter(it => ValidationUtil.isDefined(it));
     
     // Safe-guard - there must always be at least one base attribute. 
     if (attributes.length === 0) {
@@ -183,14 +183,14 @@ export default class TransientSkill extends TransientBaseItem {
 
   get apCost() {
     const value = this.document.system.apCost;
-    if (isDefined(value)) {
+    if (ValidationUtil.isDefined(value)) {
       return value;
     } else {
       return undefined;
     }
   }
   set apCost(value) {
-    if (isDefined(value)) {
+    if (ValidationUtil.isDefined(value)) {
       this.updateByPath("system.apCost", value);
     } else {
       this.updateByPath("system.apCost", null);
@@ -208,14 +208,14 @@ export default class TransientSkill extends TransientBaseItem {
   
   get condition() {
     const value = this.document.system.condition;
-    if (isDefined(value)) {
+    if (ValidationUtil.isDefined(value)) {
       return value;
     } else {
       return undefined;
     }
   }
   set condition(value) {
-    if (isDefined(value)) {
+    if (ValidationUtil.isDefined(value)) {
       this.updateByPath("system.condition", value);
     } else {
       this.updateByPath("system.condition", null);
@@ -224,14 +224,14 @@ export default class TransientSkill extends TransientBaseItem {
   
   get distance() {
     const value = this.document.system.distance;
-    if (isDefined(value)) {
+    if (ValidationUtil.isDefined(value)) {
       return value;
     } else {
       return undefined;
     }
   }
   set distance(value) {
-    if (isDefined(value)) {
+    if (ValidationUtil.isDefined(value)) {
       this.updateByPath("system.distance", value);
     } else {
       this.updateByPath("system.distance", null);
@@ -240,14 +240,14 @@ export default class TransientSkill extends TransientBaseItem {
   
   get obstacle() {
     const value = this.document.system.obstacle;
-    if (isDefined(value)) {
+    if (ValidationUtil.isDefined(value)) {
       return value;
     } else {
       return undefined;
     }
   }
   set obstacle(value) {
-    if (isDefined(value)) {
+    if (ValidationUtil.isDefined(value)) {
       this.updateByPath("system.obstacle", value);
     } else {
       this.updateByPath("system.obstacle", null);
@@ -256,14 +256,14 @@ export default class TransientSkill extends TransientBaseItem {
   
   get opposedBy() {
     const value = this.document.system.opposedBy;
-    if (isDefined(value)) {
+    if (ValidationUtil.isDefined(value)) {
       return value;
     } else {
       return undefined;
     }
   }
   set opposedBy(value) {
-    if (isDefined(value)) {
+    if (ValidationUtil.isDefined(value)) {
       this.updateByPath("system.opposedBy", value);
     } else {
       this.updateByPath("system.opposedBy", null);
@@ -272,14 +272,14 @@ export default class TransientSkill extends TransientBaseItem {
   
   get attackType() {
     const value = this.document.system.attackType;
-    if (isDefined(value)) {
+    if (ValidationUtil.isDefined(value)) {
       return ATTACK_TYPES[value];
     } else {
       return undefined;
     }
   }
   set attackType(value) {
-    if (isDefined(value)) {
+    if (ValidationUtil.isDefined(value)) {
       this.updateByPath("system.attackType", value.name);
     } else {
       this.updateByPath("system.attackType", null);
@@ -308,7 +308,7 @@ export default class TransientSkill extends TransientBaseItem {
    */
   get dependsOnActiveCr() {
     const owningDocument = this.owningDocument;
-    if (isDefined(owningDocument) 
+    if (ValidationUtil.isDefined(owningDocument) 
       && owningDocument.type === ACTOR_TYPES.NPC
       && owningDocument.isChallengeRatingEnabled) {
       return true;
@@ -375,7 +375,7 @@ export default class TransientSkill extends TransientBaseItem {
       isOwner: this.isOwner,
       isGM: game.user.isGM,
       document: this,
-      visGroupId: createUUID(),
+      visGroupId: UuidUtil.createUUID(),
     });
   }
 
@@ -538,6 +538,6 @@ export default class TransientSkill extends TransientBaseItem {
   
   /** @override */
   getExtenders() {
-    return super.getExtenders().concat(getExtenders(TransientSkill));
+    return super.getExtenders().concat(ExtenderUtil.getExtenders(TransientSkill));
   }
 }

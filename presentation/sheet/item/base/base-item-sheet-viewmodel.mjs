@@ -1,5 +1,5 @@
-import { isDefined, validateOrThrow } from "../../../../business/util/validation-utility.mjs";
-import { getExtenders } from "../../../../common/extender-util.mjs";
+import { ValidationUtil } from "../../../../business/util/validation-utility.mjs";
+import { ExtenderUtil } from "../../../../common/extender-util.mjs";
 import ButtonSendToChatViewModel from "../../../component/button-send-to-chat/button-send-to-chat-viewmodel.mjs";
 import InputImageViewModel from "../../../component/input-image/input-image-viewmodel.mjs";
 import InputRichTextViewModel from "../../../component/input-rich-text/input-rich-text-viewmodel.mjs";
@@ -65,7 +65,7 @@ export default class BaseItemSheetViewModel extends ViewModel {
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["document"]);
+    ValidationUtil.validateOrThrow(args, ["document"]);
 
     this.document = args.document;
 
@@ -79,12 +79,12 @@ export default class BaseItemSheetViewModel extends ViewModel {
     this._ensureViewModelsAsProperties(this.secondaryHeaderButtons);
     
     this.additionalHeaderContent = this.getAdditionalHeaderContent();
-    if (isDefined(this.additionalHeaderContent)) {
+    if (ValidationUtil.isDefined(this.additionalHeaderContent)) {
       this._ensureViewModelsAsProperties([this.additionalHeaderContent]);
     }
     
     this.additionalContent = this.getAdditionalContent();
-    if (isDefined(this.additionalContent)) {
+    if (ValidationUtil.isDefined(this.additionalContent)) {
       this._ensureViewModelsAsProperties([this.additionalContent]);
     }
 
@@ -227,7 +227,7 @@ export default class BaseItemSheetViewModel extends ViewModel {
   
   /** @override */
   getExtenders() {
-    return super.getExtenders().concat(getExtenders(BaseItemSheetViewModel));
+    return super.getExtenders().concat(ExtenderUtil.getExtenders(BaseItemSheetViewModel));
   }
 
 }

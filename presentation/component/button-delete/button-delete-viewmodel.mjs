@@ -1,7 +1,7 @@
-import * as StringUtil from "../../../business/util/string-utility.mjs"
-import { isDefined, validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
 import ConfirmablePlainDialog from "../../dialog/plain-confirmable-dialog/plain-confirmable-dialog.mjs";
+import { StringUtil } from "../../../business/util/string-utility.mjs";
+import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
 
 /**
  * A button that allows deleting a specific document. 
@@ -55,7 +55,7 @@ export default class ButtonDeleteViewModel extends ButtonViewModel {
       ...args,
       iconHtml: '<i class="fas fa-trash"></i>',
     });
-    validateOrThrow(args, ["target"]);
+    ValidationUtil.validateOrThrow(args, ["target"]);
 
     this.target = args.target;
     this.localizedDeletionTarget = args.localizedDeletionTarget ?? this.target.name;
@@ -63,7 +63,7 @@ export default class ButtonDeleteViewModel extends ButtonViewModel {
     this.withDialog = args.withDialog ?? true;
     this.propertyPath = args.propertyPath;
 
-    if (isDefined(this.localizedDeletionType)) {
+    if (ValidationUtil.isDefined(this.localizedDeletionType)) {
       this.localizedToolTip = args.localizedToolTip ?? StringUtil.format(
         game.i18n.localize("system.general.delete.deleteTypeOf"), 
         this.localizedDeletionType, 

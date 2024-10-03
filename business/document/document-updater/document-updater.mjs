@@ -1,4 +1,4 @@
-import { validateOrThrow, isFunction, isObject, isArray } from "../../util/validation-utility.mjs";
+import { ValidationUtil } from "../../util/validation-utility.mjs";
 
 /**
  * Allows updating a document's data. 
@@ -29,7 +29,7 @@ export default class DocumentUpdater {
    * @throws If `args.propertyUtility` is undefined. 
    */
   constructor(args = {}) {
-    validateOrThrow(args, ["propertyUtility"]);
+    ValidationUtil.validateOrThrow(args, ["propertyUtility"]);
 
     this._propertyUtility = args.propertyUtility;
     this._logger = args.logger ?? game.strive.logger;
@@ -121,9 +121,9 @@ export default class DocumentUpdater {
       throw new Error(`Invalid property path '${propertyPath}'`);
     }
 
-    if (isArray(newValue) === true) {
+    if (ValidationUtil.isArray(newValue) === true) {
       this._logger.logWarn(`Detected array as the value to set - consider converting the array to an object, instead, as arrays are slow to process`);
-    } else if (isFunction(newValue) === true) {
+    } else if (ValidationUtil.isFunction(newValue) === true) {
       throw new Error("Detected a function as the value to set - functions cannot be persisted!");
     }
 
@@ -152,13 +152,13 @@ export default class DocumentUpdater {
       const propertyName = propertyNames[i];
       const currentDocumentProperty = previousDocumentProperty[propertyName];
 
-      if (isFunction(currentDocumentProperty) === true) {
+      if (ValidationUtil.isFunction(currentDocumentProperty) === true) {
         throw new Error(`Detected a function as part by name '${propertyName}' of a given property path '${propertyPath}' - functions cannot be persisted!`);
-      } else if (isArray(currentDocumentProperty) === true) {
+      } else if (ValidationUtil.isArray(currentDocumentProperty) === true) {
         arrayIsPartOfPath = true;
         this._logger.logWarn(`Detected array as part by name '${propertyName}' of given property path '${propertyPath}' - consider converting the array to an object, instead, as arrays are slow to process`);
         previousDtoProperty[propertyName] = currentDocumentProperty;
-      } else if (isObject(currentDocumentProperty) === true) {
+      } else if (ValidationUtil.isObject(currentDocumentProperty) === true) {
         if (arrayIsPartOfPath === true) {
           // Because differential updates to array elements are not possible, 
           // we must get the whole object from the document. 

@@ -1,8 +1,6 @@
 import { DAMAGE_TYPES } from "../../../../business/ruleset/damage-types.mjs";
 import { ATTACK_TYPES, getAttackTypeIconClass } from "../../../../business/ruleset/skill/attack-types.mjs";
 import DamageAndType from "../../../../business/ruleset/skill/damage-and-type.mjs";
-import { validateOrThrow } from "../../../../business/util/validation-utility.mjs";
-import { isDefined } from "../../../../business/util/validation-utility.mjs";
 import InfoBubble, { InfoBubbleAutoHidingTypes, InfoBubbleAutoShowingTypes } from "../../../component/info-bubble/info-bubble.mjs";
 import ViewModel from "../../../view-model/view-model.mjs";
 import DamageDefinitionListViewModel from "../../../component/damage-definition-list/damage-definition-list-viewmodel.mjs";
@@ -17,8 +15,9 @@ import BaseListItemViewModel from "../base/base-list-item-viewmodel.mjs";
 import { DataFieldComponent } from "../base/datafield-component.mjs";
 import { TemplatedComponent } from "../base/templated-component.mjs";
 import Ruleset from "../../../../business/ruleset/ruleset.mjs";
-import { getExtenders } from "../../../../common/extender-util.mjs";
-import * as StringUtil from "../../../../business/util/string-utility.mjs"
+import { StringUtil } from "../../../../business/util/string-utility.mjs";
+import { ExtenderUtil } from "../../../../common/extender-util.mjs";
+import { ValidationUtil } from "../../../../business/util/validation-utility.mjs";
 
 /**
  * @property {Expertise} document 
@@ -34,31 +33,31 @@ export default class ExpertiseListItemViewModel extends BaseListItemViewModel {
    * @type {Boolean}
    * @readonly
    */
-  get hideObstacle() { return isDefined(this.document.obstacle) !== true; }
+  get hideObstacle() { return ValidationUtil.isDefined(this.document.obstacle) !== true; }
 
   /**
    * @type {Boolean}
    * @readonly
    */
-  get hideOpposedBy() { return isDefined(this.document.opposedBy) !== true; }
+  get hideOpposedBy() { return ValidationUtil.isDefined(this.document.opposedBy) !== true; }
 
   /**
    * @type {Boolean}
    * @readonly
    */
-  get hideCondition() { return isDefined(this.document.condition) !== true; }
+  get hideCondition() { return ValidationUtil.isDefined(this.document.condition) !== true; }
 
   /**
    * @type {Boolean}
    * @readonly
    */
-  get hideDistance() { return isDefined(this.document.distance) !== true; }
+  get hideDistance() { return ValidationUtil.isDefined(this.document.distance) !== true; }
 
   /**
    * @type {Boolean}
    * @readonly
    */
-  get hideAttackType() { return isDefined(this.document.attackType) !== true; }
+  get hideAttackType() { return ValidationUtil.isDefined(this.document.attackType) !== true; }
 
   /**
    * @type {Boolean}
@@ -73,7 +72,7 @@ export default class ExpertiseListItemViewModel extends BaseListItemViewModel {
    * @readonly
    */
   get attackTypeIconClass() {
-    if (isDefined(this.document.attackType)) {
+    if (ValidationUtil.isDefined(this.document.attackType)) {
       return getAttackTypeIconClass(this.document.attackType);
     } else {
       return "";
@@ -90,7 +89,7 @@ export default class ExpertiseListItemViewModel extends BaseListItemViewModel {
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["document"]);
+    ValidationUtil.validateOrThrow(args, ["document"]);
 
     this.vmNsRequiredLevel = new InputNumberSpinnerViewModel({
       parent: this,
@@ -207,7 +206,7 @@ export default class ExpertiseListItemViewModel extends BaseListItemViewModel {
           id: "vmAttackType",
           parent: this,
           options: attackTypeChoices,
-          value: isDefined(this.document.attackType) ? attackTypeChoices.find(it => it.value === this.document.attackType.name) : attackTypeChoices.find(it => it.value === ATTACK_TYPES.none.name),
+          value: ValidationUtil.isDefined(this.document.attackType) ? attackTypeChoices.find(it => it.value === this.document.attackType.name) : attackTypeChoices.find(it => it.value === ATTACK_TYPES.none.name),
           onChange: (_, newValue) => {
             this.document.attackType = ATTACK_TYPES[newValue.value];
           },
@@ -238,7 +237,7 @@ export default class ExpertiseListItemViewModel extends BaseListItemViewModel {
           secondaryChatImage: owningDocument.img,
           actor: owningDocument.owningDocument,
         }),
-        isHidden: isDefined(owningDocument.owningDocument) === false,
+        isHidden: ValidationUtil.isDefined(owningDocument.owningDocument) === false,
       }),
     ].concat(inherited);
   }
@@ -327,7 +326,7 @@ export default class ExpertiseListItemViewModel extends BaseListItemViewModel {
   
   /** @override */
   getExtenders() {
-    return super.getExtenders().concat(getExtenders(ExpertiseListItemViewModel));
+    return super.getExtenders().concat(ExtenderUtil.getExtenders(ExpertiseListItemViewModel));
   }
 
 }

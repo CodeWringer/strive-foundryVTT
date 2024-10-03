@@ -1,5 +1,5 @@
-import { validateOrThrow } from "../../../../../business/util/validation-utility.mjs";
-import { getExtenders } from "../../../../../common/extender-util.mjs";
+import { ValidationUtil } from "../../../../../business/util/validation-utility.mjs";
+import { ExtenderUtil } from "../../../../../common/extender-util.mjs";
 import InputTextFieldViewModel from "../../../../component/input-textfield/input-textfield-viewmodel.mjs";
 import ViewModel from "../../../../view-model/view-model.mjs";
 
@@ -56,7 +56,7 @@ export default class ActorDriversViewModel extends ViewModel {
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["document"]);
+    ValidationUtil.validateOrThrow(args, ["document"]);
 
     this.document = args.document;
     this.contextType = args.contextType ?? "actor-drivers";
@@ -100,7 +100,7 @@ export default class ActorDriversViewModel extends ViewModel {
     
   /** @override */
   getExtenders() {
-    return super.getExtenders().concat(getExtenders(ActorDriversViewModel));
+    return super.getExtenders().concat(ExtenderUtil.getExtenders(ActorDriversViewModel));
   }
 
 }

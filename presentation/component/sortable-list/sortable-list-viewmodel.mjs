@@ -1,6 +1,5 @@
-import { arrayContains } from "../../../business/util/array-utility.mjs";
-import { moveArrayElement, moveArrayElementBy } from "../../../business/util/array-utility.mjs";
-import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
+import { ArrayUtil } from "../../../business/util/array-utility.mjs";
+import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
 
@@ -84,7 +83,7 @@ export default class SortableListViewModel extends ViewModel {
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["indexDataSource", "listItemViewModels", "listItemTemplate"]);
+    ValidationUtil.validateOrThrow(args, ["indexDataSource", "listItemViewModels", "listItemTemplate"]);
 
     this.indexDataSource = args.indexDataSource;
     this.contextTemplate = args.contextTemplate ?? "sortable-list";
@@ -122,7 +121,7 @@ export default class SortableListViewModel extends ViewModel {
    * @override
    */
   update(args = {}) {
-    validateOrThrow(args, ["listItemViewModels"]);
+    ValidationUtil.validateOrThrow(args, ["listItemViewModels"]);
 
     // TODO #85: Preserve list items as possible. No need to replace all list item view models every time, if not all items have changed. 
 
@@ -273,7 +272,7 @@ export default class SortableListViewModel extends ViewModel {
    * @async
    */
   async _moveToTop(id) {
-    moveArrayElement(this._orderedIdList, id, 0);
+    ArrayUtil.moveArrayElement(this._orderedIdList, id, 0);
     this._storeItemOrder();
   }
 
@@ -283,7 +282,7 @@ export default class SortableListViewModel extends ViewModel {
    * @async
    */
   async _moveUp(id) {
-    moveArrayElementBy(this._orderedIdList, id, -1);
+    ArrayUtil.moveArrayElementBy(this._orderedIdList, id, -1);
     this._storeItemOrder();
   }
 
@@ -293,7 +292,7 @@ export default class SortableListViewModel extends ViewModel {
    * @async
    */
   async _moveDown(id) {
-    moveArrayElementBy(this._orderedIdList, id, 1);
+    ArrayUtil.moveArrayElementBy(this._orderedIdList, id, 1);
     this._storeItemOrder();
   }
 
@@ -303,7 +302,7 @@ export default class SortableListViewModel extends ViewModel {
    * @async
    */
   async _moveToBottom(id) {
-    moveArrayElement(this._orderedIdList, id, this._orderedIdList.length - 1);
+    ArrayUtil.moveArrayElement(this._orderedIdList, id, this._orderedIdList.length - 1);
     this._storeItemOrder();
   }
 
@@ -332,7 +331,7 @@ export default class SortableListViewModel extends ViewModel {
 
     // Add new entries.
     for (const listItemViewModel of this.listItemViewModels) {
-      if (arrayContains(result, listItemViewModel.entityId) !== true) {
+      if (ArrayUtil.arrayContains(result, listItemViewModel.entityId) !== true) {
         result.push(listItemViewModel.entityId);
       }
     }

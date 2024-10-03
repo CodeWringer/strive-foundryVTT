@@ -1,8 +1,5 @@
-import * as ChatUtil from '../../../../presentation/chat/chat-utility.mjs';
-import { validateOrThrow } from '../../../util/validation-utility.mjs';
 import PreparedChatData from '../../../../presentation/chat/prepared-chat-data.mjs';
 import ExpertiseChatMessageViewModel from '../../../../presentation/sheet/item/expertise/expertise-chat-message-viewmodel.mjs';
-import { createUUID } from '../../../util/uuid-utility.mjs';
 import DamageAndType from '../../../ruleset/skill/damage-and-type.mjs';
 import { SOUNDS_CONSTANTS } from '../../../../presentation/audio/sounds.mjs';
 import { VISIBILITY_MODES } from '../../../../presentation/chat/visibility-modes.mjs';
@@ -11,6 +8,9 @@ import TransientSkill from './transient-skill.mjs';
 import AtReferencer from '../../../referencing/at-referencer.mjs';
 import ViewModel from '../../../../presentation/view-model/view-model.mjs';
 import { ITEM_TYPES } from '../item-types.mjs';
+import { ChatUtil } from '../../../../presentation/chat/chat-utility.mjs';
+import { ValidationUtil } from '../../../util/validation-utility.mjs';
+import { UuidUtil } from '../../../util/uuid-utility.mjs';
 
 /**
  * Represents an expertise. 
@@ -214,12 +214,12 @@ export default class Expertise {
    * @throws {Error} Thrown, if `owningDocument` is undefined. 
    */
   constructor(args = {}) {
-    validateOrThrow(args, ["owningDocument"]);
+    ValidationUtil.validateOrThrow(args, ["owningDocument"]);
     
     this.owningDocument = args.owningDocument;
     this.owningDocumentId = args.owningDocument.id;
     
-    this.id = args.id ?? createUUID();
+    this.id = args.id ?? UuidUtil.createUUID();
 
     this._isCustom = args.isCustom ?? false;
     this._name = args.name ?? game.i18n.localize("system.character.skill.expertise.newDefaultName");

@@ -1,4 +1,4 @@
-import * as ConstantsUtils from "../../business/util/constants-utility.mjs";
+import { ConstantsUtil } from "../../business/util/constants-utility.mjs";
 
 /**
  * Represents a chat message visibility mode. 
@@ -37,4 +37,4 @@ export const VISIBILITY_MODES = {
     localizableName: "system.general.messageVisibility.gm.label"
   }),
 };
-ConstantsUtils.enrichConstant(VISIBILITY_MODES);
+ConstantsUtil.enrichConstant(VISIBILITY_MODES);

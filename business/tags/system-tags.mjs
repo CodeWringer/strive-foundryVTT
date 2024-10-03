@@ -1,5 +1,5 @@
+import { ConstantsUtil } from "../util/constants-utility.mjs";
 import Tag from "./tag.mjs";
-import * as ConstantsUtils from "../util/constants-utility.mjs";
 
 /**
  * Property constants of "item/asset" type documents. 
@@ -94,7 +94,7 @@ export const ASSET_TAGS = {
     localizableName: "system.character.asset.properties.weapon"
   }),
 }
-ConstantsUtils.enrichConstant(ASSET_TAGS);
+ConstantsUtil.enrichConstant(ASSET_TAGS);
 
 /**
  * Property constants of "skill" type documents. 
@@ -109,4 +109,4 @@ export const SKILL_TAGS = {
     localizableName: "system.character.skill.properties.innate"
   }),
 }
-ConstantsUtils.enrichConstant(SKILL_TAGS);
+ConstantsUtil.enrichConstant(SKILL_TAGS);

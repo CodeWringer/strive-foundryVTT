@@ -2,7 +2,7 @@ import should from 'should';
 import sinon from 'sinon';
 import 'should-sinon';
 import DocumentUpdater from '../../../../business/document/document-updater/document-updater.mjs';
-import * as PropertyUtility from '../../../../business/util/property-utility.mjs';
+import { PropertyUtil } from '../../../../business/util/property-utility.mjs';
 
 describe('DocumentUpdater', function() {
   // Globals
@@ -42,7 +42,7 @@ describe('DocumentUpdater', function() {
   describe("_buildDto", function() {
     it("builds an expected dto for primitive", function() {
       // Given
-      const given = new DocumentUpdater({ logger: mockedLogger, propertyUtility: PropertyUtility });
+      const given = new DocumentUpdater({ logger: mockedLogger, propertyUtility: PropertyUtil });
       const givenPath = "system.b";
       const givenNewValue = "A modified string";
       // When
@@ -57,7 +57,7 @@ describe('DocumentUpdater', function() {
 
     it("builds an expected dto for object", function() {
       // Given
-      const given = new DocumentUpdater({ logger: mockedLogger, propertyUtility: PropertyUtility });
+      const given = new DocumentUpdater({ logger: mockedLogger, propertyUtility: PropertyUtil });
       const givenPath = "system.e.eA";
       const givenNewValue = "A modified string";
       // When
@@ -74,7 +74,7 @@ describe('DocumentUpdater', function() {
 
     it("builds an expected dto for array", function() {
       // Given
-      const given = new DocumentUpdater({ logger: mockedLogger, propertyUtility: PropertyUtility });
+      const given = new DocumentUpdater({ logger: mockedLogger, propertyUtility: PropertyUtil });
       const givenPath = "system.c";
       const givenNewValue = [4, 5, 6];
       sinon.spy(mockedLogger, "logWarn");
@@ -91,7 +91,7 @@ describe('DocumentUpdater', function() {
 
     it("builds an expected dto for nested array", function() {
       // Given
-      const given = new DocumentUpdater({ logger: mockedLogger, propertyUtility: PropertyUtility });
+      const given = new DocumentUpdater({ logger: mockedLogger, propertyUtility: PropertyUtil });
       const givenDocument = {
         id: "abc123",
         name: "A document",
@@ -119,7 +119,7 @@ describe('DocumentUpdater', function() {
 
     it("builds an expected dto for property in object in array", function() {
       // Given
-      const given = new DocumentUpdater({ logger: mockedLogger, propertyUtility: PropertyUtility });
+      const given = new DocumentUpdater({ logger: mockedLogger, propertyUtility: PropertyUtil });
       const givenDocument = {
         id: "abc123",
         name: "A document",
@@ -145,7 +145,7 @@ describe('DocumentUpdater', function() {
 
     it("builds an expected dto for array in object in array", function() {
       // Given
-      const given = new DocumentUpdater({ logger: mockedLogger, propertyUtility: PropertyUtility });
+      const given = new DocumentUpdater({ logger: mockedLogger, propertyUtility: PropertyUtil });
       const givenDocument = {
         id: "abc123",
         name: "A document",
@@ -171,7 +171,7 @@ describe('DocumentUpdater', function() {
 
     it("builds an expected dto for element of array", function() {
       // Given
-      const given = new DocumentUpdater({ logger: mockedLogger, propertyUtility: PropertyUtility });
+      const given = new DocumentUpdater({ logger: mockedLogger, propertyUtility: PropertyUtil });
       const givenPath = "system.anArray[0].b";
       const givenNewValue = 55;
       sinon.spy(mockedLogger, "logWarn");
@@ -188,7 +188,7 @@ describe('DocumentUpdater', function() {
 
     it("builds an expected dto with substituted object in the path", function() {
       // Given
-      const given = new DocumentUpdater({ logger: mockedLogger, propertyUtility: PropertyUtility });
+      const given = new DocumentUpdater({ logger: mockedLogger, propertyUtility: PropertyUtil });
       const givenPath = "system.f.g";
       const givenNewValue = 55;
       const spy = sinon.spy(mockedLogger, "logWarn");
@@ -208,7 +208,7 @@ describe('DocumentUpdater', function() {
 
     it("throws on undefined path", function() {
       // Given
-      const given = new DocumentUpdater({ logger: mockedLogger, propertyUtility: PropertyUtility });
+      const given = new DocumentUpdater({ logger: mockedLogger, propertyUtility: PropertyUtil });
       const givenPath = undefined;
       const givenNewValue = 42;
       const call = () => { given._buildDto(givenDocument, givenPath, givenNewValue) }
@@ -218,7 +218,7 @@ describe('DocumentUpdater', function() {
 
     it("throws on blank path", function() {
       // Given
-      const given = new DocumentUpdater({ logger: mockedLogger, propertyUtility: PropertyUtility });
+      const given = new DocumentUpdater({ logger: mockedLogger, propertyUtility: PropertyUtil });
       const givenPath = "";
       const givenNewValue = 42;
       const call = () => { given._buildDto(givenDocument, givenPath, givenNewValue) }
@@ -228,7 +228,7 @@ describe('DocumentUpdater', function() {
 
     it("throws on function as value", function() {
       // Given
-      const given = new DocumentUpdater({ logger: mockedLogger, propertyUtility: PropertyUtility });
+      const given = new DocumentUpdater({ logger: mockedLogger, propertyUtility: PropertyUtil });
       const givenPath = "system.d";
       const givenNewValue = (() => {});
       const call = () => { given._buildDto(givenDocument, givenPath, givenNewValue) }
@@ -238,7 +238,7 @@ describe('DocumentUpdater', function() {
 
     it("throws on function in path", function() {
       // Given
-      const given = new DocumentUpdater({ logger: mockedLogger, propertyUtility: PropertyUtility });
+      const given = new DocumentUpdater({ logger: mockedLogger, propertyUtility: PropertyUtil });
       const givenPath = "aFunc.doesnotexist";
       const givenNewValue = 42;
       const call = () => { given._buildDto(givenDocument, givenPath, givenNewValue) }
@@ -248,7 +248,7 @@ describe('DocumentUpdater', function() {
 
     it("throws on primitive in path", function() {
       // Given
-      const given = new DocumentUpdater({ logger: mockedLogger, propertyUtility: PropertyUtility });
+      const given = new DocumentUpdater({ logger: mockedLogger, propertyUtility: PropertyUtil });
       const givenPath = "name.doesnotexist";
       const givenNewValue = 42;
       const call = () => { given._buildDto(givenDocument, givenPath, givenNewValue) }
@@ -260,7 +260,7 @@ describe('DocumentUpdater', function() {
   describe("updateByPath", function() {
     it("Calls underlying update", async function() {
       // Given
-      const given = new DocumentUpdater({ logger: mockedLogger, propertyUtility: PropertyUtility });
+      const given = new DocumentUpdater({ logger: mockedLogger, propertyUtility: PropertyUtil });
       const givenPath = "system.b";
       const givenNewValue = "A modified string";
       sinon.spy(givenDocument, "update");
@@ -274,7 +274,7 @@ describe('DocumentUpdater', function() {
   describe("deleteByPath", function() {
     it("Calls underlying update - element of array to remove", async function() {
       // Given
-      const given = new DocumentUpdater({ logger: mockedLogger, propertyUtility: PropertyUtility });
+      const given = new DocumentUpdater({ logger: mockedLogger, propertyUtility: PropertyUtil });
       const givenPath = "system.c[1]";
       sinon.spy(givenDocument, "update");
       // When
@@ -285,7 +285,7 @@ describe('DocumentUpdater', function() {
 
     it("Calls underlying update - property to remove", async function() {
       // Given
-      const given = new DocumentUpdater({ logger: mockedLogger, propertyUtility: PropertyUtility });
+      const given = new DocumentUpdater({ logger: mockedLogger, propertyUtility: PropertyUtil });
       const givenPath = "system.b";
       sinon.spy(givenDocument, "update");
       // When

@@ -1,6 +1,6 @@
 import { CharacterHealthState } from "../../../../../business/ruleset/health/character-health-state.mjs";
-import { arrayTakeUnless } from "../../../../../business/util/array-utility.mjs";
-import { validateOrThrow } from "../../../../../business/util/validation-utility.mjs";
+import { ArrayUtil } from "../../../../../business/util/array-utility.mjs";
+import { ValidationUtil } from "../../../../../business/util/validation-utility.mjs";
 import ObservableField from "../../../../../common/observables/observable-field.mjs";
 import InputNumberSpinnerViewModel from "../../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
 import InputToggleViewModel from "../../../../component/input-toggle/input-toggle-viewmodel.mjs";
@@ -56,7 +56,7 @@ export default class ActorHealthStatesListItemViewModel extends ViewModel {
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["document", "localizedLabel", "stateName"]);
+    ValidationUtil.validateOrThrow(args, ["document", "localizedLabel", "stateName"]);
     
     this.document = args.document;
     this.localizedLabel = args.localizedLabel;
@@ -78,7 +78,7 @@ export default class ActorHealthStatesListItemViewModel extends ViewModel {
 
       if (newValue < 1 && healthState !== undefined) {
         // Remove health state. 
-        characterHealthStates = arrayTakeUnless(
+        characterHealthStates = ArrayUtil.arrayTakeUnless(
           characterHealthStates, 
           it => it.name === this.stateName,
         );

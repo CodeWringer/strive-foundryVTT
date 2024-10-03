@@ -2,7 +2,7 @@ import Expertise from "../../../business/document/item/skill/expertise.mjs";
 import TransientSkill from "../../../business/document/item/skill/transient-skill.mjs";
 import AtReferencer from "../../../business/referencing/at-referencer.mjs";
 import DamageAndType from "../../../business/ruleset/skill/damage-and-type.mjs";
-import { isDefined } from "../../../business/util/validation-utility.mjs";
+import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
 
 /**
  * Represents a skill or Expertise which has at least one damage formula defined. 
@@ -79,13 +79,13 @@ export class DamageFinding {
     // Will, in the end, no longer contain any variables. E. g. `"1 + 5 + 0"`
     let resolvedFormula = formula;
 
-    if (isDefined(this.document)) {
+    if (ValidationUtil.isDefined(this.document)) {
       // Resolve variables using the document. 
       const resolvedReferences = new AtReferencer().resolveReferences(formula, this.document);
       for (const key of resolvedReferences.keys()) {
         const replacementObject = resolvedReferences.get(key);
 
-        if (isDefined(replacementObject)) {
+        if (ValidationUtil.isDefined(replacementObject)) {
           const replacementValue = (replacementObject.modifiedLevel ?? replacementObject.value) ?? replacementObject;
           resolvedFormula = resolvedFormula.replace(new RegExp(key, "g"), replacementValue);
         }

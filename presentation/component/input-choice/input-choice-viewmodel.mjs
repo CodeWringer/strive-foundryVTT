@@ -1,4 +1,4 @@
-import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
+import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
 import InputViewModel from "../../view-model/input-view-model.mjs";
 import ChoiceOption from "./choice-option.mjs";
 
@@ -46,7 +46,7 @@ export default class InputChoiceViewModel extends InputViewModel {
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["options"]);
+    ValidationUtil.validateOrThrow(args, ["options"]);
 
     this.options = args.options;
     this._value = args.value ?? (args.options.length > 0 ? args.options[0] : undefined);

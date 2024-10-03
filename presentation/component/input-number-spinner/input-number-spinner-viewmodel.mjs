@@ -1,4 +1,4 @@
-import { setElementValue } from "../../sheet/sheet-utility.mjs";
+import { SheetUtil } from "../../sheet/sheet-utility.mjs";
 import InputViewModel from "../../view-model/input-view-model.mjs";
 
 /**
@@ -136,7 +136,7 @@ export default class InputNumberSpinnerViewModel extends InputViewModel {
     const newValue = parseInt(this.value) + 1;
     if (this.max !== undefined && newValue > this.max) return;
     
-    setElementValue(this.element, newValue);
+    SheetUtil.setElementValue(this.element, newValue);
     this.value = newValue;
   }
 
@@ -151,7 +151,7 @@ export default class InputNumberSpinnerViewModel extends InputViewModel {
     const newValue = parseInt(this.value) - 1;
     if (this.min !== undefined && newValue < this.min) return;
     
-    setElementValue(this.element, newValue);
+    SheetUtil.setElementValue(this.element, newValue);
     this.value = newValue;
   }
 }

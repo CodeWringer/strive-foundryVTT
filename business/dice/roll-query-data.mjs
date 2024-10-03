@@ -1,5 +1,5 @@
 import { VISIBILITY_MODES, VisibilityMode } from "../../presentation/chat/visibility-modes.mjs";
-import { validateOrThrow } from "../util/validation-utility.mjs";
+import { ValidationUtil } from "../util/validation-utility.mjs";
 import { ROLL_DICE_MODIFIER_TYPES, RollDiceModifierType } from "./roll-dice-modifier-types.mjs";
 
 /**
@@ -33,7 +33,7 @@ export default class RollQueryData {
    * * default `ROLL_DICE_MODIFIER_TYPES.NONE`
    */
   constructor(args = {}) {
-    validateOrThrow(args, ["ob"]);
+    ValidationUtil.validateOrThrow(args, ["ob"]);
 
     this.ob = args.ob;
     this.bonusDice = args.bonusDice ?? 0;

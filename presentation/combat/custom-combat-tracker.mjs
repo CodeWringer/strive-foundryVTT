@@ -1,5 +1,5 @@
 import { ACTOR_TYPES } from "../../business/document/actor/actor-types.mjs";
-import { isDefined } from "../../business/util/validation-utility.mjs";
+import { ValidationUtil } from "../../business/util/validation-utility.mjs";
 import GritPointsViewModel from "../sheet/actor/part/health/grit-points/grit-points-viewmodel.mjs";
 import CombatTrackerActionPointsViewModel from "./combat-tracker-action-points-viewmodel.mjs";
 
@@ -33,7 +33,7 @@ export default class CustomCombatTracker extends CombatTracker {
       const combatant = this._getCombatant(turn.id);
       const document = combatant.actor;
 
-      if (isDefined(document) !== true) {
+      if (ValidationUtil.isDefined(document) !== true) {
         game.strive.logger.logWarn("Failed to get combatant actor");
         continue;
       } else if (document.type === ACTOR_TYPES.PLAIN) {
@@ -94,7 +94,7 @@ export default class CustomCombatTracker extends CombatTracker {
   _getCombatant(id) {
     for (const combat of this.combats) {
       const combatant = combat.combatants.find(it => it.id === id);
-      if (isDefined(combatant)) return combatant;
+      if (ValidationUtil.isDefined(combatant)) return combatant;
     }
   }
 }

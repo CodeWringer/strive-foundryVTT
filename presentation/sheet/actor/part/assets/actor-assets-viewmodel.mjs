@@ -1,8 +1,9 @@
 import TransientBaseCharacterActor from "../../../../../business/document/actor/transient-base-character-actor.mjs"
 import { ITEM_TYPES } from "../../../../../business/document/item/item-types.mjs"
 import TransientAsset from "../../../../../business/document/item/transient-asset.mjs"
-import { validateOrThrow } from "../../../../../business/util/validation-utility.mjs"
-import { getExtenders } from "../../../../../common/extender-util.mjs"
+import { StringUtil } from "../../../../../business/util/string-utility.mjs"
+import { ValidationUtil } from "../../../../../business/util/validation-utility.mjs"
+import { ExtenderUtil } from "../../../../../common/extender-util.mjs"
 import ButtonAddViewModel from "../../../../component/button-add/button-add-viewmodel.mjs"
 import SortControlsViewModel, { SortingOption } from "../../../../component/sort-controls/sort-controls-viewmodel.mjs"
 import DocumentListItemOrderDataSource from "../../../../component/sortable-list/document-list-item-order-datasource.mjs"
@@ -10,7 +11,6 @@ import SortableListViewModel from "../../../../component/sortable-list/sortable-
 import ViewModel from "../../../../view-model/view-model.mjs"
 import AssetListItemViewModel from "../../../item/asset/asset-list-item-viewmodel.mjs"
 import ActorAssetsEquippedViewModel from "./actor-assets-equipped-viewmodel.mjs"
-import * as StringUtil from "../../../../../business/util/string-utility.mjs"
 
 /**
  * @property {TransientBaseCharacterActor} document
@@ -86,7 +86,7 @@ export default class ActorAssetsViewModel extends ViewModel {
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["document"]);
+    ValidationUtil.validateOrThrow(args, ["document"]);
 
     this.document = args.document;
     this.contextType = args.contextType ?? "actor-assets";
@@ -306,7 +306,7 @@ export default class ActorAssetsViewModel extends ViewModel {
   
   /** @override */
   getExtenders() {
-    return super.getExtenders().concat(getExtenders(ActorAssetsViewModel));
+    return super.getExtenders().concat(ExtenderUtil.getExtenders(ActorAssetsViewModel));
   }
 
 }

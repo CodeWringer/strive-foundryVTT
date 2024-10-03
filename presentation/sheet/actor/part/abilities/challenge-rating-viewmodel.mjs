@@ -1,7 +1,7 @@
 import TransientBaseCharacterActor from "../../../../../business/document/actor/transient-base-character-actor.mjs";
 import ChallengeRating from "../../../../../business/ruleset/attribute/challenge-rating.mjs";
 import Ruleset from "../../../../../business/ruleset/ruleset.mjs";
-import { validateOrThrow } from "../../../../../business/util/validation-utility.mjs";
+import { ValidationUtil } from "../../../../../business/util/validation-utility.mjs";
 import ButtonRollViewModel from "../../../../component/button-roll/button-roll-viewmodel.mjs";
 import InputNumberSpinnerViewModel from "../../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
 import ViewModel from "../../../../view-model/view-model.mjs";
@@ -49,7 +49,7 @@ export default class ChallengeRatingViewModel extends ViewModel {
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["challengeRating", "localizedLabel"]);
+    ValidationUtil.validateOrThrow(args, ["challengeRating", "localizedLabel"]);
 
     this._challengeRating = args.challengeRating;
     this.localizedLabel = args.localizedLabel;

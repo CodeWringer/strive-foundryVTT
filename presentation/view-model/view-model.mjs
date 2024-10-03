@@ -1,7 +1,7 @@
-import { createUUID } from "../../business/util/uuid-utility.mjs";
-import * as PropertyUtil from "../../business/util/property-utility.mjs";
-import * as ValidationUtil from "../../business/util/validation-utility.mjs";
 import GetShowFancyFontUseCase from "../../business/use-case/get-show-fancy-font-use-case.mjs";
+import { PropertyUtil } from "../../business/util/property-utility.mjs";
+import { UuidUtil } from "../../business/util/uuid-utility.mjs";
+import { ValidationUtil } from "../../business/util/validation-utility.mjs";
 
 /**
  * @summary
@@ -314,7 +314,7 @@ export default class ViewModel {
    * * Default is the globally configured setting. 
    */
   constructor(args = {}) {
-    this._id = this.sanitizeId(args.id ?? createUUID());
+    this._id = this.sanitizeId(args.id ?? UuidUtil.createUUID());
     
     this.parent = args.parent;
     this.document = args.document;
@@ -646,7 +646,7 @@ export default class ViewModel {
       game.strive.logger.logError("Failed to sanitize the following ID");
       game.strive.logger.logError(id);
       game.strive.logger.logError(error);
-      return createUUID();
+      return UuidUtil.createUUID();
     }
   }
 

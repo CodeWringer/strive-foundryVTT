@@ -1,8 +1,8 @@
 import TransientAsset from "../../../../business/document/item/transient-asset.mjs"
 import CharacterAssetSlot from "../../../../business/ruleset/asset/character-asset-slot.mjs"
 import { ASSET_TAGS } from "../../../../business/tags/system-tags.mjs"
-import { validateOrThrow } from "../../../../business/util/validation-utility.mjs"
-import { getExtenders } from "../../../../common/extender-util.mjs"
+import { ValidationUtil } from "../../../../business/util/validation-utility.mjs"
+import { ExtenderUtil } from "../../../../common/extender-util.mjs"
 import ButtonViewModel from "../../../component/button/button-viewmodel.mjs"
 import ChoiceOption from "../../../component/input-choice/choice-option.mjs"
 import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs"
@@ -50,7 +50,7 @@ export default class AssetListItemViewModel extends BaseListItemViewModel {
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["document"]);
+    ValidationUtil.validateOrThrow(args, ["document"]);
 
     this.vmQuantity = new InputNumberSpinnerViewModel({
       parent: this,
@@ -238,7 +238,7 @@ export default class AssetListItemViewModel extends BaseListItemViewModel {
   
   /** @override */
   getExtenders() {
-    return super.getExtenders().concat(getExtenders(AssetListItemViewModel));
+    return super.getExtenders().concat(ExtenderUtil.getExtenders(AssetListItemViewModel));
   }
 
 }

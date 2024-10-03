@@ -1,4 +1,4 @@
-import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
+import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
 
 /**
@@ -104,7 +104,7 @@ export default class LazyLoadViewModel extends ViewModel {
   constructor(args = {}) {
     super(args);
 
-    validateOrThrow(args, ["template", "viewModelFactoryFunction", "viewModelArgs"]);
+    ValidationUtil.validateOrThrow(args, ["template", "viewModelFactoryFunction", "viewModelArgs"]);
 
     this.template = args.template;
     this.viewModelFactoryFunction = args.viewModelFactoryFunction;

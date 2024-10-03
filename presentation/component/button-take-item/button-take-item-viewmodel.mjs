@@ -1,13 +1,12 @@
 import ButtonViewModel from "../button/button-viewmodel.mjs";
 import ChoiceOption from "../input-choice/choice-option.mjs";
-import { isDefined, validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import DocumentFetcher from "../../../business/document/document-fetcher/document-fetcher.mjs";
-import { isString } from "../../../business/util/validation-utility.mjs";
 import TransientAsset from "../../../business/document/item/transient-asset.mjs";
 import { ITEM_TYPES } from "../../../business/document/item/item-types.mjs";
 import DynamicInputDialog from "../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
 import DynamicInputDefinition from "../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
 import { DYNAMIC_INPUT_TYPES } from "../../dialog/dynamic-input-dialog/dynamic-input-types.mjs";
+import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
 
 /**
  * @property {String} chatMessage
@@ -72,7 +71,7 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
       ...args,
       iconHtml: '<i class="ico dark interactible ico-take-item"></i>',
     });
-    validateOrThrow(args, ["target", "contextType"]);
+    ValidationUtil.validateOrThrow(args, ["target", "contextType"]);
 
     this.target = args.target;
     this.contextType = args.contextType;
@@ -103,7 +102,7 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
     const targetActor = selections.actor;
     if (targetActor === undefined) return;
     
-    if (isDefined(assetDocument.owningDocument)) { // The asset is embedded on an actor. 
+    if (ValidationUtil.isDefined(assetDocument.owningDocument)) { // The asset is embedded on an actor. 
 
       if (assetDocument.owningDocument.id === targetActor.id) {
         // If the player that owns the asset tries to pick the asset up, do nothing. 
@@ -118,7 +117,7 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
         // Remove from source actor. 
         assetDocument.delete();
       }
-    } else if (isDefined(assetDocument.pack)) { // The asset is embedded in a compendium. 
+    } else if (ValidationUtil.isDefined(assetDocument.pack)) { // The asset is embedded in a compendium. 
       // Add copy to target actor. 
       this._cloneWithNewParentOnPerson(assetDocument, targetActor);
     } else { // The asset is part of the world. 
@@ -174,7 +173,7 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
     const nameInputDeleteFromSource = "nameInputDeleteFromSource";
     const assetDocument = await this._getAsset();
     let assetIsRemovable = false;
-    if (isDefined(assetDocument.owningDocument)) { // Embedded -> removable from actor. 
+    if (ValidationUtil.isDefined(assetDocument.owningDocument)) { // Embedded -> removable from actor. 
       inputDefinitions.push(
         new DynamicInputDefinition({
           type: DYNAMIC_INPUT_TYPES.TOGGLE,
@@ -185,7 +184,7 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
         }),
       );
       assetIsRemovable = true;
-    } else if (!isDefined(assetDocument.pack)) { // Not embedded and not in a pack -> removable from world. 
+    } else if (!ValidationUtil.isDefined(assetDocument.pack)) { // Not embedded and not in a pack -> removable from world. 
       inputDefinitions.push(
         new DynamicInputDefinition({
           type: DYNAMIC_INPUT_TYPES.TOGGLE,
@@ -251,9 +250,9 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
    * @private
    */
   async _getAsset() {
-    if (isDefined(this._assetDocument)) {
+    if (ValidationUtil.isDefined(this._assetDocument)) {
       return this._assetDocument;
-    } else if (isString(this.target) === true) { // Item id provided. 
+    } else if (ValidationUtil.isString(this.target) === true) { // Item id provided. 
       this._assetDocument = await new DocumentFetcher().find({
         id: this.target,
         documentType: "Item",

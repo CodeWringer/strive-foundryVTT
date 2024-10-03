@@ -1,4 +1,4 @@
-import { getExtenders } from '../../../common/extender-util.mjs';
+import { ExtenderUtil } from '../../../common/extender-util.mjs';
 import AtReferencer from '../../referencing/at-referencer.mjs';
 import CharacterAssetSlotGroup from '../../ruleset/asset/character-asset-slot-group.mjs';
 import { ATTRIBUTES } from '../../ruleset/attribute/attributes.mjs';
@@ -8,7 +8,7 @@ import { HEALTH_STATES } from '../../ruleset/health/health-states.mjs';
 import Ruleset from '../../ruleset/ruleset.mjs';
 import { SKILL_TAGS } from '../../tags/system-tags.mjs';
 import LoadHealthStatesSettingUseCase from '../../use-case/load-health-states-setting-use-case.mjs';
-import { isDefined } from '../../util/validation-utility.mjs';
+import { ValidationUtil } from '../../util/validation-utility.mjs';
 import { ITEM_TYPES } from '../item/item-types.mjs';
 import TransientBaseActor from './transient-base-actor.mjs';
 
@@ -447,7 +447,7 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
     const equipmentAssets = [];
     for (const group of this._equipmentSlotGroups) {
       for (const slot of group.slots) {
-        if (isDefined(slot.alottedId) === true) {
+        if (ValidationUtil.isDefined(slot.alottedId) === true) {
           const asset = this._allAssets.find(asset => asset.id === slot.alottedId);
           if (asset === undefined) {
             game.strive.logger.logWarn("NullReferenceException: equipped asset could not be found on actor");
@@ -589,6 +589,6 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
 
   /** @override */
   getExtenders() {
-    return super.getExtenders().concat(getExtenders(TransientBaseCharacterActor));
+    return super.getExtenders().concat(ExtenderUtil.getExtenders(TransientBaseCharacterActor));
   }
 }

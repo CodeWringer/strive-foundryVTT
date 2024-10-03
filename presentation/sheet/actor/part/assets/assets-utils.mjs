@@ -1,4 +1,4 @@
-import * as StringUtil from "../../../../../business/util/string-utility.mjs";
+import { StringUtil } from "../../../../../business/util/string-utility.mjs";
 import DynamicInputDefinition from "../../../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
 import DynamicInputDialog from "../../../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
 import { DYNAMIC_INPUT_TYPES } from "../../../../dialog/dynamic-input-dialog/dynamic-input-types.mjs";

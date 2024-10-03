@@ -4,8 +4,6 @@ import { DAMAGE_TYPES } from "../../../../business/ruleset/damage-types.mjs"
 import { ATTACK_TYPES, getAttackTypeIconClass } from "../../../../business/ruleset/skill/attack-types.mjs"
 import DamageAndType from "../../../../business/ruleset/skill/damage-and-type.mjs"
 import { SKILL_TAGS } from "../../../../business/tags/system-tags.mjs"
-import { validateOrThrow } from "../../../../business/util/validation-utility.mjs"
-import { isDefined } from "../../../../business/util/validation-utility.mjs"
 import ButtonContextMenuViewModel from "../../../component/button-context-menu/button-context-menu-viewmodel.mjs"
 import ButtonRollViewModel from "../../../component/button-roll/button-roll-viewmodel.mjs"
 import ButtonViewModel from "../../../component/button/button-viewmodel.mjs"
@@ -20,14 +18,15 @@ import BaseListItemViewModel from "../base/base-list-item-viewmodel.mjs"
 import { DataFieldComponent } from "../base/datafield-component.mjs"
 import { TemplatedComponent } from "../base/templated-component.mjs"
 import ExpertiseTableViewModel from "../expertise/expertise-table-viewmodel.mjs"
-import * as StringUtil from "../../../../business/util/string-utility.mjs"
 import DynamicInputDefinition from "../../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs"
 import { DYNAMIC_INPUT_TYPES } from "../../../dialog/dynamic-input-dialog/dynamic-input-types.mjs"
 import BaseAttributeListItemViewModel from "./base-attribute/base-attribute-list-item-viewmodel.mjs"
 import { ACTOR_TYPES } from "../../../../business/document/actor/actor-types.mjs"
 import Ruleset from "../../../../business/ruleset/ruleset.mjs"
 import ButtonCheckBoxViewModel from "../../../component/button-checkbox/button-checkbox-viewmodel.mjs"
-import { getExtenders } from "../../../../common/extender-util.mjs"
+import { StringUtil } from "../../../../business/util/string-utility.mjs"
+import { ExtenderUtil } from "../../../../common/extender-util.mjs"
+import { ValidationUtil } from "../../../../business/util/validation-utility.mjs"
 
 /**
  * @property {TransientSkill} document
@@ -93,7 +92,7 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
    * @readonly
    */
   get showAdvancementProgression() {
-    if (isDefined(this.document.owningDocument) === true) {
+    if (ValidationUtil.isDefined(this.document.owningDocument) === true) {
       const type = this.document.owningDocument.type;
       if (type === ACTOR_TYPES.NPC && this.document.owningDocument.progressionVisible === true) {
         return true;
@@ -111,7 +110,7 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
    * @readonly
    */
   get attackTypeIconClass() {
-    if (isDefined(this.document.attackType)) {
+    if (ValidationUtil.isDefined(this.document.attackType)) {
       return getAttackTypeIconClass(this.document.attackType);
     } else {
       return "";
@@ -122,37 +121,37 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
    * @type {Boolean}
    * @readonly
    */
-  get hideObstacle() { return !isDefined(this.document.obstacle); }
+  get hideObstacle() { return !ValidationUtil.isDefined(this.document.obstacle); }
 
   /**
    * @type {Boolean}
    * @readonly
    */
-  get hideOpposedBy() { return !isDefined(this.document.opposedBy); }
+  get hideOpposedBy() { return !ValidationUtil.isDefined(this.document.opposedBy); }
 
   /**
    * @type {Boolean}
    * @readonly
    */
-  get hideDistance() { return !isDefined(this.document.distance); }
+  get hideDistance() { return !ValidationUtil.isDefined(this.document.distance); }
 
   /**
    * @type {Boolean}
    * @readonly
    */
-  get hideApCost() { return !isDefined(this.document.apCost); }
+  get hideApCost() { return !ValidationUtil.isDefined(this.document.apCost); }
 
   /**
    * @type {Boolean}
    * @readonly
    */
-  get hideAttackType() { return !isDefined(this.document.attackType); }
+  get hideAttackType() { return !ValidationUtil.isDefined(this.document.attackType); }
 
   /**
    * @type {Boolean}
    * @readonly
    */
-  get hideCondition() { return !isDefined(this.document.condition); }
+  get hideCondition() { return !ValidationUtil.isDefined(this.document.condition); }
 
   /**
    * @type {Boolean}
@@ -178,7 +177,7 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
       ...args,
       title: args.document.nameForDisplay,
     });
-    validateOrThrow(args, ["document"]);
+    ValidationUtil.validateOrThrow(args, ["document"]);
 
     this.vmTags = new InputTagsViewModel({
       id: "vmTags",
@@ -348,7 +347,7 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
           id: "vmAttackType",
           parent: this,
           options: attackTypeChoices,
-          value: isDefined(this.document.attackType) ? attackTypeChoices.find(it => it.value === this.document.attackType.name) : attackTypeChoices.find(it => it.value === ATTACK_TYPES.none.name),
+          value: ValidationUtil.isDefined(this.document.attackType) ? attackTypeChoices.find(it => it.value === this.document.attackType.name) : attackTypeChoices.find(it => it.value === ATTACK_TYPES.none.name),
           onChange: (_, newValue) => {
             this.document.attackType = ATTACK_TYPES[newValue.value];
           },
@@ -407,7 +406,7 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
           localizedToolTip: game.i18n.localize("system.general.edit"),
           onClick: async () => {
             const delta = await this._queryAttributesConfiguration();
-            if (isDefined(delta) !== true) return;
+            if (ValidationUtil.isDefined(delta) !== true) return;
             this.document.baseAttributes = delta;
           },
         }),
@@ -521,7 +520,7 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
   
   /** @override */
   getExtenders() {
-    return super.getExtenders().concat(getExtenders(SkillListItemViewModel));
+    return super.getExtenders().concat(ExtenderUtil.getExtenders(SkillListItemViewModel));
   }
 
 }

@@ -1,7 +1,7 @@
 import TransientDocument from "../../../../business/document/transient-document.mjs";
-import { format } from "../../../../business/util/string-utility.mjs";
-import { isDefined, validateOrThrow } from "../../../../business/util/validation-utility.mjs";
-import { getExtenders } from "../../../../common/extender-util.mjs";
+import { StringUtil } from "../../../../business/util/string-utility.mjs";
+import { ValidationUtil } from "../../../../business/util/validation-utility.mjs";
+import { ExtenderUtil } from "../../../../common/extender-util.mjs";
 import ButtonContextMenuViewModel from "../../../component/button-context-menu/button-context-menu-viewmodel.mjs";
 import ButtonDeleteViewModel from "../../../component/button-delete/button-delete-viewmodel.mjs";
 import ButtonSendToChatViewModel from "../../../component/button-send-to-chat/button-send-to-chat-viewmodel.mjs";
@@ -131,7 +131,7 @@ export default class BaseListItemViewModel extends ViewModel {
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["document"]);
+    ValidationUtil.validateOrThrow(args, ["document"]);
 
     this.registerViewStateProperty("_isExpanded");
 
@@ -149,12 +149,12 @@ export default class BaseListItemViewModel extends ViewModel {
     this._ensureViewModelsAsProperties(this.secondaryHeaderButtons);
     
     this.additionalHeaderContent = this.getAdditionalHeaderContent();
-    if (isDefined(this.additionalHeaderContent)) {
+    if (ValidationUtil.isDefined(this.additionalHeaderContent)) {
       this._ensureViewModelsAsProperties([this.additionalHeaderContent]);
     }
     
     this.additionalContent = this.getAdditionalContent();
-    if (isDefined(this.additionalContent)) {
+    if (ValidationUtil.isDefined(this.additionalContent)) {
       this._ensureViewModelsAsProperties([this.additionalContent]);
     }
 
@@ -343,7 +343,7 @@ export default class BaseListItemViewModel extends ViewModel {
     const inputName = "inputName";
 
     const dialog = await new DynamicInputDialog({
-      localizedTitle: `${format(game.i18n.localize("system.general.name.editOf"), this.title)}`,
+      localizedTitle: `${StringUtil.format(game.i18n.localize("system.general.name.editOf"), this.title)}`,
       inputDefinitions: [
         new DynamicInputDefinition({
           type: DYNAMIC_INPUT_TYPES.TEXTFIELD,
@@ -417,7 +417,7 @@ export default class BaseListItemViewModel extends ViewModel {
   
   /** @override */
   getExtenders() {
-    return super.getExtenders().concat(getExtenders(BaseListItemViewModel));
+    return super.getExtenders().concat(ExtenderUtil.getExtenders(BaseListItemViewModel));
   }
 
 }

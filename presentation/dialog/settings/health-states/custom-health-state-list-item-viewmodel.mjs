@@ -1,4 +1,4 @@
-import { validateOrThrow } from "../../../../business/util/validation-utility.mjs";
+import { ValidationUtil } from "../../../../business/util/validation-utility.mjs";
 import ObservableField from "../../../../common/observables/observable-field.mjs";
 import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
 import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs";
@@ -44,7 +44,7 @@ export default class CustomHealthStateListItemViewModel extends ViewModel {
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["stateName"]);
+    ValidationUtil.validateOrThrow(args, ["stateName"]);
 
     this.onChange = args.onChange ?? (() => {});
 

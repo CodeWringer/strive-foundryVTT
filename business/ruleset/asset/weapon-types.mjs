@@ -1,4 +1,4 @@
-import * as ConstantsUtils from "../../util/constants-utility.mjs";
+import { ConstantsUtil } from "../../util/constants-utility.mjs";
 
 /**
  * Represents a weapon type. 
@@ -106,4 +106,4 @@ export const WEAPON_TYPES = {
     localizableName: "system.character.asset.type.weapon.firearm"
   }),
 };
-ConstantsUtils.enrichConstant(WEAPON_TYPES);
+ConstantsUtil.enrichConstant(WEAPON_TYPES);

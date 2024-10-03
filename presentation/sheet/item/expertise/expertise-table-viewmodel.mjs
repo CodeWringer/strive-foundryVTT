@@ -1,15 +1,15 @@
 import { ITEM_TYPES } from "../../../../business/document/item/item-types.mjs"
 import { DAMAGE_TYPES } from "../../../../business/ruleset/damage-types.mjs"
 import { ATTACK_TYPES } from "../../../../business/ruleset/skill/attack-types.mjs"
-import { createUUID } from "../../../../business/util/uuid-utility.mjs"
-import { validateOrThrow } from "../../../../business/util/validation-utility.mjs"
+import { StringUtil } from "../../../../business/util/string-utility.mjs"
+import { UuidUtil } from "../../../../business/util/uuid-utility.mjs"
+import { ValidationUtil } from "../../../../business/util/validation-utility.mjs"
 import ButtonAddViewModel from "../../../component/button-add/button-add-viewmodel.mjs"
 import ButtonToggleVisibilityViewModel from "../../../component/button-toggle-visibility/button-toggle-visibility-viewmodel.mjs"
 import DocumentListItemOrderDataSource from "../../../component/sortable-list/document-list-item-order-datasource.mjs"
 import SortableListViewModel from "../../../component/sortable-list/sortable-list-viewmodel.mjs"
 import ViewModel from "../../../view-model/view-model.mjs"
 import ExpertiseListItemViewModel from "./expertise-list-item-viewmodel.mjs"
-import * as StringUtil from "../../../../business/util/string-utility.mjs"
 
 export default class ExpertiseTableViewModel extends ViewModel {
   /** @override */
@@ -87,11 +87,11 @@ export default class ExpertiseTableViewModel extends ViewModel {
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["document"]);
+    ValidationUtil.validateOrThrow(args, ["document"]);
 
     // Own properties.
     this.document = args.document;
-    this.visGroupId = args.visGroupId ?? createUUID();
+    this.visGroupId = args.visGroupId ?? UuidUtil.createUUID();
     this._isExpanded = args.expertisesInitiallyVisible ?? false;
     
     this.registerViewStateProperty("_isExpanded");
