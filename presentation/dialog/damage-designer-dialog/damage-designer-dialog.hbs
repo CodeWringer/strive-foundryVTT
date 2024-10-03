@@ -2,6 +2,11 @@
 viewModel: DamageDesignerDialogViewModel
 --}}
 <section id="{{viewModel.id}}">
+  <div class="flex flex-row flex-middle auto-margin-h sheet-block">
+    <span class="sheet-block">
+      {{> button viewModel=viewModel.vmRefresh }}
+    </span>
+  </div>
   <div class="damage-finding-header damage-list flex flex-row flex-middle pad-md">
     <div class="flex flex-row flex-middle auto-margin-h">
       <span>Skill / Expertise</span>
