@@ -2,7 +2,7 @@ import MutationChatMessageViewModel from "../../../presentation/sheet/item/mutat
 import PreparedChatData from "../../../presentation/chat/prepared-chat-data.mjs";
 import { SOUNDS_CONSTANTS } from "../../../presentation/audio/sounds.mjs";
 import TransientBaseItem from "./transient-base-item.mjs";
-import { getExtenders } from "../../../common/extender-util.mjs";
+import { ExtenderUtil } from "../../../common/extender-util.mjs";
 
 /**
  * Represents the full transient data of a mutation. 
@@ -65,6 +65,6 @@ export default class TransientMutation extends TransientBaseItem {
   
   /** @override */
   getExtenders() {
-    return super.getExtenders().concat(getExtenders(TransientMutation));
+    return super.getExtenders().concat(ExtenderUtil.getExtenders(TransientMutation));
   }
 }

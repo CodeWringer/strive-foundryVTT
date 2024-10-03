@@ -4,10 +4,10 @@ import 'should-sinon';
 import MigratorInitiator from '../../../business/migration/migrator-initiator.mjs';
 import { WorldSystemVersion } from '../../../business/migration/world-system-version.mjs';
 import VersionCode from '../../../business/migration/version-code.mjs';
-import * as MigratorTestBase from './migrators/migrator-test-base.mjs';
 import { BaseLoggingStrategy } from '../../../business/logging/base-logging-strategy.mjs';
 import Migrator_1_5_3__1_5_4 from '../../../business/migration/migrators/migrator_1-5-3_1-5-4.mjs';
 import Migrator_1_5_4__1_5_5 from '../../../business/migration/migrators/migrator_1-5-4_1-5-5.mjs';
+import { MigratorTestBase } from './migrators/migrator-test-base.mjs';
 
 /**
  * Mocks the active and world system versions. 

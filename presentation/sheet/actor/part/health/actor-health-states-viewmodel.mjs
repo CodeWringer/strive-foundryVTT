@@ -1,7 +1,7 @@
 import { CharacterHealthState } from "../../../../../business/ruleset/health/character-health-state.mjs";
 import { HEALTH_STATES } from "../../../../../business/ruleset/health/health-states.mjs";
 import LoadHealthStatesSettingUseCase from "../../../../../business/use-case/load-health-states-setting-use-case.mjs";
-import { validateOrThrow } from "../../../../../business/util/validation-utility.mjs";
+import { ValidationUtil } from "../../../../../business/util/validation-utility.mjs";
 import ViewModel from "../../../../view-model/view-model.mjs"
 import ActorHealthStatesListItemViewModel from "./actor-health-states-list-item-viewmodel.mjs";
 
@@ -38,7 +38,7 @@ export default class ActorHealthStatesViewModel extends ViewModel {
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["document"]);
+    ValidationUtil.validateOrThrow(args, ["document"]);
 
     this.document = args.document;
 

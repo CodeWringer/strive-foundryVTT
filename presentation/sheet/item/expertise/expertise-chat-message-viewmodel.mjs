@@ -1,6 +1,4 @@
-import { isNotBlankOrUndefined } from "../../../../business/util/validation-utility.mjs"
-import { isDefined } from "../../../../business/util/validation-utility.mjs"
-import { validateOrThrow } from "../../../../business/util/validation-utility.mjs"
+import { ValidationUtil } from "../../../../business/util/validation-utility.mjs";
 import LazyRichTextViewModel from "../../../component/lazy-rich-text/lazy-rich-text-viewmodel.mjs"
 import ViewModel from "../../../view-model/view-model.mjs"
 
@@ -25,31 +23,31 @@ export default class ExpertiseChatMessageViewModel extends ViewModel {
    * @type {Boolean}
    * @readonly
    */
-  get hideObstacle() { return isDefined(this.expertise.obstacle) !== true; }
+  get hideObstacle() { return ValidationUtil.isDefined(this.expertise.obstacle) !== true; }
 
   /**
    * @type {Boolean}
    * @readonly
    */
-  get hideOpposedBy() { return isDefined(this.expertise.opposedBy) !== true; }
+  get hideOpposedBy() { return ValidationUtil.isDefined(this.expertise.opposedBy) !== true; }
   
   /**
    * @type {Boolean}
    * @readonly
    */
-  get hideCondition() { return isDefined(this.expertise.condition) !== true; }
+  get hideCondition() { return ValidationUtil.isDefined(this.expertise.condition) !== true; }
   
   /**
    * @type {Boolean}
    * @readonly
    */
-  get hideDistance() { return isDefined(this.expertise.distance) !== true; }
+  get hideDistance() { return ValidationUtil.isDefined(this.expertise.distance) !== true; }
   
   /**
    * @type {Boolean}
    * @readonly
    */
-  get hideAttackType() { return isDefined(this.expertise.attackType) !== true; }
+  get hideAttackType() { return ValidationUtil.isDefined(this.expertise.attackType) !== true; }
   
   /**
    * @type {Boolean}
@@ -62,7 +60,7 @@ export default class ExpertiseChatMessageViewModel extends ViewModel {
    * @readonly
    */
   get localizedAttackType() {
-    if (isDefined(this.expertise.attackType) !== true) return "";
+    if (ValidationUtil.isDefined(this.expertise.attackType) !== true) return "";
 
     const localizableName = this.expertise.attackType.localizableName;
     return game.i18n.localize(localizableName);
@@ -72,7 +70,7 @@ export default class ExpertiseChatMessageViewModel extends ViewModel {
    * @type {Boolean}
    * @readonly
    */
-  get showParentSkillName() { return isNotBlankOrUndefined(this.parentSkillName); }
+  get showParentSkillName() { return ValidationUtil.isNotBlankOrUndefined(this.parentSkillName); }
 
   /**
    * @type {String}
@@ -84,7 +82,7 @@ export default class ExpertiseChatMessageViewModel extends ViewModel {
    * @type {Boolean}
    * @readonly
    */
-  get showParentSkillImage() { return isNotBlankOrUndefined(this.parentSkillImage); }
+  get showParentSkillImage() { return ValidationUtil.isNotBlankOrUndefined(this.parentSkillImage); }
   
   /**
    * @type {String}
@@ -115,7 +113,7 @@ export default class ExpertiseChatMessageViewModel extends ViewModel {
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["expertise"]);
+    ValidationUtil.validateOrThrow(args, ["expertise"]);
 
     this._isEditable = args.isEditable ?? false;
     this._isSendable = args.isSendable ?? false;

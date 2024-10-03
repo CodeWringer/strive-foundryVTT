@@ -2,13 +2,12 @@ import TransientBaseCharacterActor from "../../../business/document/actor/transi
 import { DOCUMENT_COLLECTION_SOURCES } from "../../../business/document/document-fetcher/document-collection-source.mjs";
 import DocumentFetcher from "../../../business/document/document-fetcher/document-fetcher.mjs";
 import { ITEM_TYPES } from "../../../business/document/item/item-types.mjs";
-import { isDefined, validateOrThrow } from "../../../business/util/validation-utility.mjs";
+import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
 import ObservableField from "../../../common/observables/observable-field.mjs";
 import ButtonViewModel from "../../component/button/button-viewmodel.mjs";
 import InputRadioButtonGroupViewModel from "../../component/input-choice/input-radio-button-group/input-radio-button-group-viewmodel.mjs";
 import StatefulChoiceOption from "../../component/input-choice/stateful-choice-option.mjs";
 import SortControlsViewModel, { SortingOption } from "../../component/sort-controls/sort-controls-viewmodel.mjs";
-import { setElementValue } from "../../sheet/sheet-utility.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
 import DamageFindingHierarchy from "./damage-finding-hierarchy.mjs";
 import DamageFindingListItemViewModel from "./damage-finding-list-item-viewmodel.mjs";
@@ -74,7 +73,7 @@ export default class DamageDesignerDialogViewModel extends ViewModel {
   constructor(args = {}) {
     super(args);
 
-    validateOrThrow(args, ["ui"]);
+    ValidationUtil.validateOrThrow(args, ["ui"]);
 
     this.ui = args.ui;
     this.isEditable = true;
@@ -277,7 +276,7 @@ export default class DamageDesignerDialogViewModel extends ViewModel {
       const pack = skillDocument.pack ?? "world";
       let collectionHierarchy;
       let actorHierarchy;
-      if (isDefined(transientSkillDocument.owningDocument)) { // Skill is embedded on actor. 
+      if (ValidationUtil.isDefined(transientSkillDocument.owningDocument)) { // Skill is embedded on actor. 
         collectionHierarchy = this._getCollectionHierarchy(rootHierarchy, pack);
         actorHierarchy = this._getActorHierarchy(collectionHierarchy, transientSkillDocument.owningDocument);
       } else { // Skill is contained in collection. 
@@ -299,7 +298,7 @@ export default class DamageDesignerDialogViewModel extends ViewModel {
 
         flat.push(skillDamageFinding);
 
-        if (isDefined(actorHierarchy)) {
+        if (ValidationUtil.isDefined(actorHierarchy)) {
           actorHierarchy.addFinding(skillDamageFinding);
           collectionHierarchy.addSubHierarchy(actorHierarchy);
         } else {
@@ -321,7 +320,7 @@ export default class DamageDesignerDialogViewModel extends ViewModel {
           flat.push(expertiseDamageFinding);
           skillHierarchy.addFinding(expertiseDamageFinding);
 
-          if (isDefined(actorHierarchy)) {
+          if (ValidationUtil.isDefined(actorHierarchy)) {
             actorHierarchy.addSubHierarchy(skillHierarchy);
             collectionHierarchy.addSubHierarchy(actorHierarchy);
           } else {
@@ -350,7 +349,7 @@ export default class DamageDesignerDialogViewModel extends ViewModel {
    */
   _getCollectionHierarchy(rootHierarchy, packId) {
     const collection = rootHierarchy.getSubHierarchy(packId);
-    if (isDefined(collection)) {
+    if (ValidationUtil.isDefined(collection)) {
       return collection;
     } else {
       return new DamageFindingHierarchy({
@@ -371,7 +370,7 @@ export default class DamageDesignerDialogViewModel extends ViewModel {
    */
   _getActorHierarchy(collectionHierarchy, actor) {
     const actorHierarchy = collectionHierarchy.getSubHierarchy(actor.id);
-    if (isDefined(actorHierarchy)) {
+    if (ValidationUtil.isDefined(actorHierarchy)) {
       return actorHierarchy;
     } else {
       return new DamageFindingHierarchy({

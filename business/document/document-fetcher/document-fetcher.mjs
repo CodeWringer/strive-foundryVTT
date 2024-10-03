@@ -1,4 +1,4 @@
-import { validateOrThrow } from "../../util/validation-utility.mjs";
+import { ValidationUtil } from "../../util/validation-utility.mjs";
 import { DOCUMENT_COLLECTION_SOURCES, DocumentCollectionSource } from "./document-collection-source.mjs";
 import { DocumentIndex } from "./document-index.mjs";
 
@@ -112,7 +112,7 @@ export default class DocumentFetcher {
    * @async
    */
   async _findInCompendia(filter = {}) {
-    validateOrThrow(filter, ["source"]);
+    ValidationUtil.validateOrThrow(filter, ["source"]);
 
     for (const pack of game.packs) {
       // Skip empty packs. 
@@ -322,7 +322,7 @@ export default class DocumentFetcher {
    * @async
    */
   async _findAllInCompendia(filter = {}) {
-    validateOrThrow(filter, ["source"]);
+    ValidationUtil.validateOrThrow(filter, ["source"]);
 
     let result = [];
 

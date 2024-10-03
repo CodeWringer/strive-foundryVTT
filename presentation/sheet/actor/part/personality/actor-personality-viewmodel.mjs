@@ -1,10 +1,10 @@
-import { validateOrThrow } from "../../../../../business/util/validation-utility.mjs"
 import ViewModel from "../../../../view-model/view-model.mjs"
 import ActorDriversViewModel from "./actor-drivers-viewmodel.mjs"
 import ActorFateViewModel from "../actor-fate-viewmodel.mjs"
 import PersonalityTraitsViewModel from "./personality-traits/personality-traits-viewmodel.mjs"
 import { ACTOR_TYPES } from "../../../../../business/document/actor/actor-types.mjs"
-import { getExtenders } from "../../../../../common/extender-util.mjs"
+import { ExtenderUtil } from "../../../../../common/extender-util.mjs"
+import { ValidationUtil } from "../../../../../business/util/validation-utility.mjs"
 
 export default class ActorPersonalityViewModel extends ViewModel {
   /** @override */
@@ -54,7 +54,7 @@ export default class ActorPersonalityViewModel extends ViewModel {
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["document"]);
+    ValidationUtil.validateOrThrow(args, ["document"]);
 
     // Own properties.
     this.document = args.document;
@@ -93,7 +93,7 @@ export default class ActorPersonalityViewModel extends ViewModel {
   
   /** @override */
   getExtenders() {
-    return super.getExtenders().concat(getExtenders(ActorPersonalityViewModel));
+    return super.getExtenders().concat(ExtenderUtil.getExtenders(ActorPersonalityViewModel));
   }
 
 }

@@ -1,5 +1,5 @@
-import * as ConstantsUtils from "../../util/constants-utility.mjs";
-import { validateOrThrow } from "../../util/validation-utility.mjs";
+import { ConstantsUtil } from "../../util/constants-utility.mjs";
+import { ValidationUtil } from "../../util/validation-utility.mjs";
 
 /**
  * Represents a general health state. 
@@ -34,7 +34,7 @@ export class HealthState {
    * * Negative values are clamped to `0`.
    */
   constructor(args = {}) {
-    validateOrThrow(args, ["name"]);
+    ValidationUtil.validateOrThrow(args, ["name"]);
 
     this.name = args.name;
     this.localizableName = args.localizableName;
@@ -165,4 +165,4 @@ export const HEALTH_STATES = {
     limit: 1,
   }),
 };
-ConstantsUtils.enrichConstant(HEALTH_STATES);
+ConstantsUtil.enrichConstant(HEALTH_STATES);

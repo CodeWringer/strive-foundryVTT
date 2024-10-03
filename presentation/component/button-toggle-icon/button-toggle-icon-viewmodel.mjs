@@ -1,4 +1,4 @@
-import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
+import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
 
 /**
@@ -60,7 +60,7 @@ export default class ButtonToggleIconViewModel extends ButtonViewModel {
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["iconActive", "iconInactive"]);
+    ValidationUtil.validateOrThrow(args, ["iconActive", "iconInactive"]);
 
     this._value = args.value ?? false;
     this.iconActive = args.iconActive;

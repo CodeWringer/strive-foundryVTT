@@ -1,4 +1,4 @@
-import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
+import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
 import { AbstractListItemOrderDataSource } from "./abstract-list-item-order-datasource.mjs";
 
 /**
@@ -15,7 +15,7 @@ export default class DocumentListItemOrderDataSource extends AbstractListItemOrd
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["document", "listName"]);
+    ValidationUtil.validateOrThrow(args, ["document", "listName"]);
 
     this.document = args.document;
     this.listName = args.listName;

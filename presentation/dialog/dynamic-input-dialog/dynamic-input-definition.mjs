@@ -1,4 +1,4 @@
-import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
+import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
 
 /**
  * Represents an input control definition for a `DynamicInputDialog`. 
@@ -57,7 +57,7 @@ export default class DynamicInputDefinition {
    * * `dialogViewModel: DynamicInputDialogViewModel`
    */
   constructor(args = {}) {
-    validateOrThrow(args, ["type", "name"]);
+    ValidationUtil.validateOrThrow(args, ["type", "name"]);
 
     this.type = args.type;
     this.name = args.name;

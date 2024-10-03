@@ -1,10 +1,9 @@
-import { isDefined, validateOrThrow } from "../../../business/util/validation-utility.mjs";
-import { isNumber } from "../../../business/util/validation-utility.mjs";
 import DiceRollListViewModel from "../dice-roll-list/dice-roll-list-viewmodel.mjs";
 import DamageDefinitionListItemViewModel from "./damage-definition-list-item-viewmodel.mjs";
 import InputViewModel from "../../view-model/input-view-model.mjs";
 import DamageAndType from "../../../business/ruleset/skill/damage-and-type.mjs";
 import TransientDocument from "../../../business/document/transient-document.mjs";
+import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
 
 /**
  * Represents a rollable list of damage definitions. 
@@ -55,7 +54,7 @@ export default class DamageDefinitionListViewModel extends InputViewModel {
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["value", "resolveFormulaContext"]);
+    ValidationUtil.validateOrThrow(args, ["value", "resolveFormulaContext"]);
 
     this.chatTitle = args.chatTitle;
     this.resolveFormulaContext = args.resolveFormulaContext;
@@ -71,7 +70,7 @@ export default class DamageDefinitionListViewModel extends InputViewModel {
         value: damageDefinition,
         localizedLabel: game.i18n.localize(damageDefinition.damageType.localizableName),
         onChange: (_, newItemValue) => {
-          if (isDefined(newItemValue) !== true) return;
+          if (ValidationUtil.isDefined(newItemValue) !== true) return;
           
           const newDamageDefinitions = this.value.concat([]);
           newDamageDefinitions[i] = newItemValue;
@@ -95,7 +94,7 @@ export default class DamageDefinitionListViewModel extends InputViewModel {
             // current level or value of the thing, if possible. 
             // If a value cannot be determined, it will default to "0". 
             const regExpReplace = new RegExp(key, "gi");
-            const replaceValue = ((value.modifiedLevel ?? value.level) ?? value.value) ?? (isNumber(value) === true ? value : "0");
+            const replaceValue = ((value.modifiedLevel ?? value.level) ?? value.value) ?? (ValidationUtil.isNumber(value) === true ? value : "0");
             resolvedDamage = resolvedDamage.replace(regExpReplace, replaceValue);
           }
 

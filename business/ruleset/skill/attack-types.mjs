@@ -1,4 +1,4 @@
-import * as ConstantsUtils from "../../util/constants-utility.mjs";
+import { ConstantsUtil } from "../../util/constants-utility.mjs";
 
 /**
  * Represents an attack type. 
@@ -53,7 +53,7 @@ export const ATTACK_TYPES = {
     localizableAbbreviation: "system.attackType.multipleSingleTarget.abbreviation"
   }),
 };
-ConstantsUtils.enrichConstant(ATTACK_TYPES);
+ConstantsUtil.enrichConstant(ATTACK_TYPES);
 
 /**
  * Returns the CSS class of the icon that represents the given attack type. 

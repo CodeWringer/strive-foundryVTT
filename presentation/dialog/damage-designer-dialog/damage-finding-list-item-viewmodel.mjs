@@ -1,4 +1,4 @@
-import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
+import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
 import { DamageFinding } from "./damage-finding.mjs";
 
@@ -16,7 +16,7 @@ export default class DamageFindingListItemViewModel extends ViewModel {
   constructor(args = {}) {
     super(args);
 
-    validateOrThrow(args, ["damageFinding"]);
+    ValidationUtil.validateOrThrow(args, ["damageFinding"]);
 
     this.damageFinding = args.damageFinding;
     this.damageFindingName = args.damageFindingName ?? this.damageFinding.name;

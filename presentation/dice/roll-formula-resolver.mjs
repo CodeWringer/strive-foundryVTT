@@ -1,5 +1,5 @@
 import AtReferencer from "../../business/referencing/at-referencer.mjs";
-import { isDefined } from "../../business/util/validation-utility.mjs";
+import { ValidationUtil } from "../../business/util/validation-utility.mjs";
 import { VISIBILITY_MODES } from "../chat/visibility-modes.mjs";
 import DynamicInputDefinition from "../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
 import DynamicInputDialog from "../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
@@ -91,7 +91,7 @@ export default class RollFormulaResolver {
       let hasMatches = false;
       do {
         let match = resolvedFormula.match(rgxDiceAndWhitespace);
-        if (isDefined(match)) {
+        if (ValidationUtil.isDefined(match)) {
           resolvedFormula = `${resolvedFormula.substring(0, match.index)}${match.groups.dice}${match.groups.d}${resolvedFormula.substring(match.index + match.groups.m.length)}`;
           hasMatches = true;
         } else {

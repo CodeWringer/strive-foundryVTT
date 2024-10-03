@@ -1,4 +1,4 @@
-import { validateOrThrow } from "../../business/util/validation-utility.mjs";
+import { ValidationUtil } from "../../business/util/validation-utility.mjs";
 import ViewModel from "../view-model/view-model.mjs";
 
 /**
@@ -16,7 +16,7 @@ export default class CombatTrackerActionPointsViewModel extends ViewModel {
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["document"]);
+    ValidationUtil.validateOrThrow(args, ["document"]);
 
     this.document = args.document;
     this.actionPoints = [];

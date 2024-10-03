@@ -1,7 +1,7 @@
 import { ACTOR_TYPES } from "../../../../../business/document/actor/actor-types.mjs";
 import CharacterAttribute from "../../../../../business/ruleset/attribute/character-attribute.mjs";
 import Ruleset from "../../../../../business/ruleset/ruleset.mjs";
-import { validateOrThrow } from "../../../../../business/util/validation-utility.mjs";
+import { ValidationUtil } from "../../../../../business/util/validation-utility.mjs";
 import ButtonCheckBoxViewModel from "../../../../component/button-checkbox/button-checkbox-viewmodel.mjs";
 import ButtonRollViewModel from "../../../../component/button-roll/button-roll-viewmodel.mjs";
 import InputNumberSpinnerViewModel from "../../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
@@ -92,7 +92,7 @@ export default class AttributeTableViewModel extends ViewModel {
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["document", "attributes"]);
+    ValidationUtil.validateOrThrow(args, ["document", "attributes"]);
 
     this.document = args.document;
     this.attributes = args.attributes;

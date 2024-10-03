@@ -1,8 +1,9 @@
 import { ITEM_TYPES } from "../../../../../business/document/item/item-types.mjs"
 import { SEARCH_MODES, Search, SearchItem } from "../../../../../business/search/search.mjs"
 import { SKILL_TAGS } from "../../../../../business/tags/system-tags.mjs"
-import { isDefined, validateOrThrow } from "../../../../../business/util/validation-utility.mjs"
-import { getExtenders } from "../../../../../common/extender-util.mjs"
+import { StringUtil } from "../../../../../business/util/string-utility.mjs"
+import { ValidationUtil } from "../../../../../business/util/validation-utility.mjs"
+import { ExtenderUtil } from "../../../../../common/extender-util.mjs"
 import ButtonAddViewModel from "../../../../component/button-add/button-add-viewmodel.mjs"
 import InputSearchTextViewModel from "../../../../component/input-search/input-search-viewmodel.mjs"
 import SortControlsViewModel, { SortingOption } from "../../../../component/sort-controls/sort-controls-viewmodel.mjs"
@@ -10,7 +11,6 @@ import DocumentListItemOrderDataSource from "../../../../component/sortable-list
 import SortableListViewModel from "../../../../component/sortable-list/sortable-list-viewmodel.mjs"
 import ViewModel from "../../../../view-model/view-model.mjs"
 import SkillListItemViewModel from "../../../item/skill/skill-list-item-viewmodel.mjs"
-import * as StringUtil from "../../../../../business/util/string-utility.mjs"
 
 export default class ActorSkillsViewModel extends ViewModel {
   /** @override */
@@ -54,7 +54,7 @@ export default class ActorSkillsViewModel extends ViewModel {
   }
   set searchTerm(value) {
     this._searchTerm = value;
-    if (isDefined(this.vmSearch)) {
+    if (ValidationUtil.isDefined(this.vmSearch)) {
       this.vmSearch.value = value;
     }
 
@@ -81,7 +81,7 @@ export default class ActorSkillsViewModel extends ViewModel {
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["document"]);
+    ValidationUtil.validateOrThrow(args, ["document"]);
 
     // Own properties.
     this.document = args.document;
@@ -475,7 +475,7 @@ export default class ActorSkillsViewModel extends ViewModel {
   
   /** @override */
   getExtenders() {
-    return super.getExtenders().concat(getExtenders(ActorSkillsViewModel));
+    return super.getExtenders().concat(ExtenderUtil.getExtenders(ActorSkillsViewModel));
   }
 
 }

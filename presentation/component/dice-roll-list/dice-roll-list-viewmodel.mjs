@@ -1,6 +1,6 @@
-import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
+import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
 import { SOUNDS_CONSTANTS } from "../../audio/sounds.mjs";
-import * as ChatUtil from "../../chat/chat-utility.mjs";
+import { ChatUtil } from "../../chat/chat-utility.mjs";
 import RollFormulaResolver from "../../dice/roll-formula-resolver.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
@@ -43,7 +43,7 @@ export default class DiceRollListViewModel extends ViewModel {
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["formulaViewModels", "formulaListItemTemplate", "chatMessageTemplate"]);
+    ValidationUtil.validateOrThrow(args, ["formulaViewModels", "formulaListItemTemplate", "chatMessageTemplate"]);
 
     this.formulaViewModels = args.formulaViewModels;
     this.formulaListItemTemplate = args.formulaListItemTemplate;

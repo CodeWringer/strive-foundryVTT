@@ -1,4 +1,4 @@
-import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
+import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
 import InputViewModel from "../../view-model/input-view-model.mjs";
 import ButtonToggleIconViewModel from "../button-toggle-icon/button-toggle-icon-viewmodel.mjs";
 
@@ -52,7 +52,7 @@ export default class VisibilityToggleListItemViewModel extends InputViewModel {
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["localizedLabel"]);
+    ValidationUtil.validateOrThrow(args, ["localizedLabel"]);
 
     this.localizedLabel = args.localizedLabel;
     this._value = args.value ?? false;

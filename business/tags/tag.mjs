@@ -1,4 +1,4 @@
-import { validateOrThrow } from "../util/validation-utility.mjs";
+import { ValidationUtil } from "../util/validation-utility.mjs";
 
 /**
  * Represents a tag. 
@@ -17,7 +17,7 @@ export default class Tag {
    * @param {String | undefined} args.localizableName A localization key. 
    */
   constructor(args = {}) {
-    validateOrThrow(args, ["id"]);
+    ValidationUtil.validateOrThrow(args, ["id"]);
 
     this.id = args.id;
     this.localizableName = args.localizableName;

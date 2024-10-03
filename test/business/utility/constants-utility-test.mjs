@@ -1,7 +1,7 @@
 import should from 'should';
 import sinon from 'sinon';
 import 'should-sinon';
-import { getAsArray, getAsChoices } from '../../../business/util/constants-utility.mjs';
+import { ConstantsUtil } from '../../../business/util/constants-utility.mjs';
 
 describe("constants-utility", () => {
   before(() => {
@@ -35,7 +35,7 @@ describe("constants-utility", () => {
         },
       };
       // When
-      const r = getAsChoices(given);
+      const r = ConstantsUtil.getAsChoices(given);
       // Then
       r.length.should.be.eql(3);
 
@@ -76,7 +76,7 @@ describe("constants-utility", () => {
         },
       };
       // When
-      const r = getAsChoices(given, ["bleeding"]);
+      const r = ConstantsUtil.getAsChoices(given, ["bleeding"]);
       // Then
       r.length.should.be.eql(2);
 
@@ -113,7 +113,7 @@ describe("constants-utility", () => {
         },
       };
       // When
-      const r = getAsArray(given);
+      const r = ConstantsUtil.getAsArray(given);
       // Then
       r.length.should.be.eql(3);
 
@@ -148,7 +148,7 @@ describe("constants-utility", () => {
         },
       };
       // When
-      const r = getAsArray(given, ["burning"]);
+      const r = ConstantsUtil.getAsArray(given, ["burning"]);
       // Then
       r.length.should.be.eql(2);
 

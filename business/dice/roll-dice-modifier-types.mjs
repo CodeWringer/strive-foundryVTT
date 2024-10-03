@@ -1,5 +1,5 @@
-import * as ConstantsUtils from "../util/constants-utility.mjs";
-import { validateOrThrow } from "../util/validation-utility.mjs";
+import { ConstantsUtil } from "../util/constants-utility.mjs";
+import { ValidationUtil } from "../util/validation-utility.mjs";
 
 /**
  * Represents a roll dice modifying type. 
@@ -13,7 +13,7 @@ export class RollDiceModifierType {
   constructor(args = {}) {
     this.name = args.name;
     this.localizableName = args.localizableName;
-    validateOrThrow(args, ["name", "localizableName"]);
+    ValidationUtil.validateOrThrow(args, ["name", "localizableName"]);
   }
 }
 
@@ -40,4 +40,4 @@ export const ROLL_DICE_MODIFIER_TYPES = {
     localizableName: "system.roll.diceModifiers.halfRoundedUp"
   }),
 }
-ConstantsUtils.enrichConstant(ROLL_DICE_MODIFIER_TYPES);
+ConstantsUtil.enrichConstant(ROLL_DICE_MODIFIER_TYPES);

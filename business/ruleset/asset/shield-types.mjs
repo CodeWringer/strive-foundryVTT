@@ -1,4 +1,4 @@
-import * as ConstantsUtils from "../../util/constants-utility.mjs";
+import { ConstantsUtil } from "../../util/constants-utility.mjs";
 
 /**
  * Represents a shield type. 
@@ -41,4 +41,4 @@ export const SHIELD_TYPES = {
     localizableName: "system.character.asset.type.shield.kiteShield"
   }),
 };
-ConstantsUtils.enrichConstant(SHIELD_TYPES);
+ConstantsUtil.enrichConstant(SHIELD_TYPES);

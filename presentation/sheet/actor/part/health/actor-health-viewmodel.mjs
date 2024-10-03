@@ -1,7 +1,8 @@
 import { ACTOR_TYPES } from "../../../../../business/document/actor/actor-types.mjs"
 import { ITEM_TYPES } from "../../../../../business/document/item/item-types.mjs"
-import { isDefined, validateOrThrow } from "../../../../../business/util/validation-utility.mjs"
-import { getExtenders } from "../../../../../common/extender-util.mjs"
+import { StringUtil } from "../../../../../business/util/string-utility.mjs"
+import { ValidationUtil } from "../../../../../business/util/validation-utility.mjs"
+import { ExtenderUtil } from "../../../../../common/extender-util.mjs"
 import ButtonAddViewModel from "../../../../component/button-add/button-add-viewmodel.mjs"
 import InputNumberSpinnerViewModel from "../../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs"
 import SortControlsViewModel, { SortingOption } from "../../../../component/sort-controls/sort-controls-viewmodel.mjs"
@@ -16,7 +17,6 @@ import ScarListItemViewModel from "../../../item/scar/scar-list-item-viewmodel.m
 import ActorHealthStatesViewModel from "./actor-health-states-viewmodel.mjs"
 import DeathsDoorViewModel from "./deaths-door/deaths-door-viewmodel.mjs"
 import GritPointsViewModel from "./grit-points/grit-points-viewmodel.mjs"
-import * as StringUtil from "../../../../../business/util/string-utility.mjs"
 
 /**
  * @extends ViewModel
@@ -157,7 +157,7 @@ export default class ActorHealthViewModel extends ViewModel {
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["document"]);
+    ValidationUtil.validateOrThrow(args, ["document"]);
 
     this.document = args.document;
     this.contextType = args.contextType ?? "actor-health";
@@ -214,7 +214,7 @@ export default class ActorHealthViewModel extends ViewModel {
     const armorAssetId = this.document.assets.equipmentSlotGroups
       .find(assetGroup => assetGroup.name === "armor")
       .slots[0].alottedId;
-    if (isDefined(armorAssetId)) {
+    if (ValidationUtil.isDefined(armorAssetId)) {
       const armorAsset = this.document.assets.all.find(asset => asset.id === armorAssetId);
 
       this.vmArmorListItem = new AssetListItemViewModel({
@@ -489,7 +489,7 @@ export default class ActorHealthViewModel extends ViewModel {
 
   /** @override */
   getExtenders() {
-    return super.getExtenders().concat(getExtenders(ActorHealthViewModel));
+    return super.getExtenders().concat(ExtenderUtil.getExtenders(ActorHealthViewModel));
   }
 
   /** @override */

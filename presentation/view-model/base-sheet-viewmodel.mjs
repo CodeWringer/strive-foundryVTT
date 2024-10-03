@@ -1,5 +1,5 @@
 import TransientDocument from "../../business/document/transient-document.mjs";
-import { validateOrThrow } from "../../business/util/validation-utility.mjs";
+import { ValidationUtil } from "../../business/util/validation-utility.mjs";
 import ViewModel from "./view-model.mjs";
 
 /**
@@ -36,7 +36,7 @@ export default class BaseSheetViewModel extends ViewModel {
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["document", "sheet"]);
+    ValidationUtil.validateOrThrow(args, ["document", "sheet"]);
 
     this.document = args.document;
     this.sheet = args.sheet;

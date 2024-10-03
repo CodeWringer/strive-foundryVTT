@@ -1,5 +1,5 @@
-import { isDefined } from "../../business/util/validation-utility.mjs";
-import { getElementValue } from "../sheet/sheet-utility.mjs";
+import { ValidationUtil } from "../../business/util/validation-utility.mjs";
+import { SheetUtil } from "../sheet/sheet-utility.mjs";
 import ViewModel from "./view-model.mjs";
 
 /**
@@ -118,9 +118,9 @@ export default class InputViewModel extends ViewModel {
    * @protected
    */
   _onChange(event) {
-    const newValue = getElementValue(event.currentTarget);
+    const newValue = SheetUtil.getElementValue(event.currentTarget);
 
-    if (isDefined(newValue) !== true) {
+    if (ValidationUtil.isDefined(newValue) !== true) {
       game.strive.logger.logWarn(`Failed to get element's value - is '${newValue}' valid?`);
     }
 

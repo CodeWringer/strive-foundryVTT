@@ -1,4 +1,4 @@
-import { validateOrThrow } from "../../../../business/util/validation-utility.mjs";
+import { ValidationUtil } from "../../../../business/util/validation-utility.mjs";
 
 /**
  * Represents a visibility list item. 
@@ -16,7 +16,7 @@ export class HealthStateVisibilityItem {
    * * Default `false`
    */
   constructor(args = {}) {
-    validateOrThrow(args, ["id", "localizedName"]);
+    ValidationUtil.validateOrThrow(args, ["id", "localizedName"]);
 
     this.id = args.id;
     this.localizedName = args.localizedName;

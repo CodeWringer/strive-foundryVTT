@@ -1,8 +1,8 @@
-import { isDefined } from "../business/util/validation-utility.mjs";
+import { ValidationUtil } from "../business/util/validation-utility.mjs";
 
 export default class FoundryWrapper {
   mergeObject(defaultOptions, overrides) {
-    if (isDefined(foundry) && isDefined(foundry.utils) && isDefined(foundry.utils.mergeObject)) { // Foundry 12
+    if (ValidationUtil.isDefined(foundry) && ValidationUtil.isDefined(foundry.utils) && ValidationUtil.isDefined(foundry.utils.mergeObject)) { // Foundry 12
       return foundry.utils.mergeObject(defaultOptions, overrides);
     } else { // Foundry 11
       return mergeObject(defaultOptions, overrides);
@@ -21,7 +21,7 @@ export default class FoundryWrapper {
    * @async
    */
   async getEvaluatedDice(faces, number) {
-    if (isDefined(foundry) && isDefined(foundry.dice) && isDefined(foundry.dice.terms) && isDefined(foundry.dice.terms.Die)) { // Foundry 12
+    if (ValidationUtil.isDefined(foundry) && ValidationUtil.isDefined(foundry.dice) && ValidationUtil.isDefined(foundry.dice.terms) && ValidationUtil.isDefined(foundry.dice.terms.Die)) { // Foundry 12
       const rolledDice = await new foundry.dice.terms.Die({ faces: faces, number: number }).evaluate();
 
       return (rolledDice.values ?? rolledDice.results.map(it => it.result));

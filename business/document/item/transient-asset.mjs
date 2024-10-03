@@ -3,9 +3,9 @@ import { SOUNDS_CONSTANTS } from "../../../presentation/audio/sounds.mjs";
 import TransientBaseItem from "./transient-base-item.mjs";
 import AssetChatMessageViewModel from "../../../presentation/sheet/item/asset/asset-chat-message-viewmodel.mjs";
 import CharacterAssetSlot from "../../ruleset/asset/character-asset-slot.mjs";
-import { arrayTakeUnless } from "../../util/array-utility.mjs";
 import { ASSET_TAGS } from "../../tags/system-tags.mjs";
-import { getExtenders } from "../../../common/extender-util.mjs";
+import { ArrayUtil } from "../../util/array-utility.mjs";
+import { ExtenderUtil } from "../../../common/extender-util.mjs";
 
 /**
  * Represents the full transient data of an asset. 
@@ -277,7 +277,7 @@ export default class TransientAsset extends TransientBaseItem {
 
   /** @override */
   getExtenders() {
-    return super.getExtenders().concat(getExtenders(TransientAsset));
+    return super.getExtenders().concat(ExtenderUtil.getExtenders(TransientAsset));
   }
 
   /**
@@ -298,7 +298,7 @@ export default class TransientAsset extends TransientBaseItem {
    * @private
    */
   _removeFromLuggageList() {
-    const newLuggageList = arrayTakeUnless(
+    const newLuggageList = ArrayUtil.arrayTakeUnless(
       this.owningDocument.assets.luggage,
       it => it.id === this.id,
     );

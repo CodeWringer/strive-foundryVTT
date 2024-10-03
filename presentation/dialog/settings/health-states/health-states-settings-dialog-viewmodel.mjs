@@ -1,6 +1,6 @@
 import { HEALTH_STATES } from "../../../../business/ruleset/health/health-states.mjs";
 import LoadHealthStatesSettingUseCase from "../../../../business/use-case/load-health-states-setting-use-case.mjs";
-import { validateOrThrow } from "../../../../business/util/validation-utility.mjs";
+import { ValidationUtil } from "../../../../business/util/validation-utility.mjs";
 import ButtonViewModel from "../../../component/button/button-viewmodel.mjs";
 import SimpleListViewModel from "../../../component/simple-list/simple-list-viewmodel.mjs";
 import VisibilityToggleListViewModel from "../../../component/visibility-toggle-list/visibility-toggle-list-viewmodel.mjs";
@@ -58,7 +58,7 @@ export default class HealthStatesSettingsDialogViewModel extends ViewModel {
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["formApplication"]);
+    ValidationUtil.validateOrThrow(args, ["formApplication"]);
 
     this.formApplication = args.formApplication;
 

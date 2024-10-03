@@ -1,4 +1,4 @@
-import { validateOrThrow } from "../util/validation-utility.mjs";
+import { ValidationUtil } from "../util/validation-utility.mjs";
 
 /**
  * Represents a known system-specific setting. 
@@ -40,7 +40,7 @@ export default class GameSystemSetting {
    * * Default `false`;
    */
   constructor(args = {}) {
-    validateOrThrow(args, ["key", "name", "scope"]);
+    ValidationUtil.validateOrThrow(args, ["key", "name", "scope"]);
 
     this.key = args.key;
     this.name = args.name;

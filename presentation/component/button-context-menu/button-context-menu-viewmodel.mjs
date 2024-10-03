@@ -1,4 +1,4 @@
-import { isDefined } from "../../../business/util/validation-utility.mjs";
+import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
 
 /**
@@ -50,7 +50,7 @@ export default class ButtonContextMenuViewModel extends ButtonViewModel {
           if (typeof(value) === "boolean") {
             return value === true;
           } else {
-            return isDefined(value) === true;
+            return ValidationUtil.isDefined(value) === true;
           }
         },
         callback: () => { propertyOwner[propertyName] = inactiveValue; },
@@ -63,7 +63,7 @@ export default class ButtonContextMenuViewModel extends ButtonViewModel {
           if (typeof(value) === "boolean") {
             return value === false;
           } else {
-            return isDefined(value) === false;
+            return ValidationUtil.isDefined(value) === false;
           }
         },
         callback: () => { propertyOwner[propertyName] = activeValue; },

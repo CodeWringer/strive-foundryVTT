@@ -1,6 +1,6 @@
 import TransientDocument from "../transient-document.mjs";
 import ActorChatMessageViewModel from '../../../presentation/sheet/actor/actor-chat-message-viewmodel.mjs';
-import { getExtenders } from '../../../common/extender-util.mjs';
+import { ExtenderUtil } from "../../../common/extender-util.mjs";
 
 /**
  * @summary
@@ -106,6 +106,6 @@ export default class TransientBaseActor extends TransientDocument {
   
   /** @override */
   getExtenders() {
-    return super.getExtenders().concat(getExtenders(TransientBaseActor));
+    return super.getExtenders().concat(ExtenderUtil.getExtenders(TransientBaseActor));
   }
 }

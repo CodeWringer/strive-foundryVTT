@@ -1,4 +1,4 @@
-import { validateOrThrow } from "../../../../business/util/validation-utility.mjs";
+import { ValidationUtil } from "../../../../business/util/validation-utility.mjs";
 import LazyRichTextViewModel from "../../../component/lazy-rich-text/lazy-rich-text-viewmodel.mjs";
 import ViewModel from "../../../view-model/view-model.mjs";
 
@@ -23,7 +23,7 @@ export default class FateCardChatMessageViewModel extends ViewModel {
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["document"]);
+    ValidationUtil.validateOrThrow(args, ["document"]);
 
     this.document = args.document;
     this.contextTemplate = args.contextTemplate ?? "fate-card-chat-message";

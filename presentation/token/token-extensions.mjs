@@ -1,5 +1,5 @@
 import { ACTOR_TYPES } from "../../business/document/actor/actor-types.mjs";
-import { isDefined } from "../../business/util/validation-utility.mjs";
+import { ValidationUtil } from "../../business/util/validation-utility.mjs";
 import { PixiButton } from "../pixi/pixi-button.mjs";
 import { TEXTURES, getPixiTexture } from "../pixi/pixi-preloader.mjs";
 
@@ -19,7 +19,7 @@ export default class TokenExtensions {
    * @static
    */
   static updateTokenHover(token) {
-    if (!isDefined(token.actor) && token.actor.type !== ACTOR_TYPES.NPC) return;
+    if (!ValidationUtil.isDefined(token.actor) && token.actor.type !== ACTOR_TYPES.NPC) return;
 
     const displayWhen = token.document.displayName;
     const isOwner = token.actor.isOwner || game.user.isGM;
@@ -45,7 +45,7 @@ export default class TokenExtensions {
    * @private
    */
   static _showChallengeRating(token) {
-    if (!isDefined(token.actor)) return;
+    if (!ValidationUtil.isDefined(token.actor)) return;
 
     const actor = token.actor.getTransientObject();
     
@@ -71,7 +71,7 @@ export default class TokenExtensions {
    * @static
    */
   static _hideChallengeRating(token) {
-    if (isDefined(token.challengeRating)) {
+    if (ValidationUtil.isDefined(token.challengeRating)) {
       token.removeChild(token.challengeRating);
       token.challengeRating = undefined;
     }
@@ -87,19 +87,19 @@ export default class TokenExtensions {
    * @static
    */
   static updateTokenCombatant(token) {
-    if (isDefined(token) !== true) return;
-    if (isDefined(token.actor) !== true) return;
+    if (ValidationUtil.isDefined(token) !== true) return;
+    if (ValidationUtil.isDefined(token.actor) !== true) return;
     if (token.actor.type === ACTOR_TYPES.PLAIN) return;
     
     if (token.inCombat === true) {
-      if (isDefined(token.actionPoints) === true) {
+      if (ValidationUtil.isDefined(token.actionPoints) === true) {
         const actionPoints = token.actor.getTransientObject().actionPoints;
         TokenExtensions._updateActionPoints(token, actionPoints);
       } else {
         TokenExtensions._removeActionPointControls(token);
         TokenExtensions._addActionPointControls(token);
       }
-    } else if (token.inCombat === false && isDefined(token.actionPoints) === true) {
+    } else if (token.inCombat === false && ValidationUtil.isDefined(token.actionPoints) === true) {
       TokenExtensions._removeActionPointControls(token);
     }
   }
@@ -112,8 +112,8 @@ export default class TokenExtensions {
    * @static
    */
   static updateTokenCombatants() {
-    if (!isDefined(game.scenes)) return;
-    if (!isDefined(game.scenes.active)) return;
+    if (!ValidationUtil.isDefined(game.scenes)) return;
+    if (!ValidationUtil.isDefined(game.scenes.active)) return;
 
     for (const tokenDocument of game.scenes.active.tokens.values()) {
       TokenExtensions.updateTokenCombatant(tokenDocument.object);
@@ -131,7 +131,7 @@ export default class TokenExtensions {
    * @static
    */
   static _addActionPointControls(token) {
-    if (!isDefined(token.actor)) return;
+    if (!ValidationUtil.isDefined(token.actor)) return;
 
     const transientActor = token.actor.getTransientObject();
 
@@ -224,7 +224,7 @@ export default class TokenExtensions {
    * @static
    */
   static _removeActionPointControls(token) {
-    if (isDefined(token.actionPoints)) {
+    if (ValidationUtil.isDefined(token.actionPoints)) {
       token.removeChild(token.actionPoints);
       token.actionPoints = undefined;
     }
@@ -243,9 +243,9 @@ export default class TokenExtensions {
    * @static
    */
   static _updateActionPoints(token, newActionPoints) {
-    if (isDefined(token.actionPoints) !== true) return;
-    if (isDefined(token.actionPoints.text) !== true) return;
-    if (isDefined(token.actionPoints.text.text) !== true) return;
+    if (ValidationUtil.isDefined(token.actionPoints) !== true) return;
+    if (ValidationUtil.isDefined(token.actionPoints.text) !== true) return;
+    if (ValidationUtil.isDefined(token.actionPoints.text.text) !== true) return;
 
     token.actionPoints.text.text = newActionPoints;
 

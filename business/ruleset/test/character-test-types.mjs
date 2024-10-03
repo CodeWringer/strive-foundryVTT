@@ -1,4 +1,4 @@
-import { validateOrThrow } from "../../util/validation-utility.mjs";
+import { ValidationUtil } from "../../util/validation-utility.mjs";
 
 /**
  * Represents a character test type. 
@@ -11,7 +11,7 @@ import { validateOrThrow } from "../../util/validation-utility.mjs";
  */
 export class CharacterTestType {
   constructor(args = {}) {
-    validateOrThrow(args, ["name", "localizableName"]);
+    ValidationUtil.validateOrThrow(args, ["name", "localizableName"]);
 
     this.name = args.name;
     this.localizableName = args.localizableName;

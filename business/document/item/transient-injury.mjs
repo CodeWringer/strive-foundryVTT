@@ -3,7 +3,7 @@ import PreparedChatData from "../../../presentation/chat/prepared-chat-data.mjs"
 import { SOUNDS_CONSTANTS } from "../../../presentation/audio/sounds.mjs";
 import TransientBaseItem from "./transient-base-item.mjs";
 import { INJURY_STATES } from "../../ruleset/health/injury-states.mjs";
-import { getExtenders } from "../../../common/extender-util.mjs";
+import { ExtenderUtil } from "../../../common/extender-util.mjs";
 
 /**
  * Represents the full transient data of an injury. 
@@ -235,6 +235,6 @@ export default class TransientInjury extends TransientBaseItem {
   
   /** @override */
   getExtenders() {
-    return super.getExtenders().concat(getExtenders(TransientInjury));
+    return super.getExtenders().concat(ExtenderUtil.getExtenders(TransientInjury));
   }
 }

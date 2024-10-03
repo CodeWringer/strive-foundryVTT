@@ -1,5 +1,5 @@
-import * as ConstantsUtils from "../../util/constants-utility.mjs";
-import { validateOrThrow } from "../../util/validation-utility.mjs";
+import { ConstantsUtil } from "../../util/constants-utility.mjs";
+import { ValidationUtil } from "../../util/validation-utility.mjs";
 
 /**
  * Represents a skill tier. 
@@ -18,7 +18,7 @@ export class SkillTier {
    * * E. g. `"fas fa-virus"`
    */
   constructor(args = {}) {
-    validateOrThrow(args, ["name"]);
+    ValidationUtil.validateOrThrow(args, ["name"]);
 
     this.name = args.name;
     this.localizableName = args.localizableName;
@@ -49,4 +49,4 @@ export const SKILL_TIERS = {
     localizableName: "system.character.skill.tier.master",
   }),
 };
-ConstantsUtils.enrichConstant(SKILL_TIERS);
+ConstantsUtil.enrichConstant(SKILL_TIERS);

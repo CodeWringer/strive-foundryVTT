@@ -1,4 +1,4 @@
-import { validateOrThrow } from "../../../../business/util/validation-utility.mjs";
+import { ValidationUtil } from "../../../../business/util/validation-utility.mjs";
 
 /**
  * Represents the definition of a component. 
@@ -19,7 +19,7 @@ export class TemplatedComponent {
    * * default `false`
    */
   constructor(args = {}) {
-    validateOrThrow(args, ["template", "viewModel"]);
+    ValidationUtil.validateOrThrow(args, ["template", "viewModel"]);
 
     this.template = args.template;
     this.viewModel = args.viewModel;

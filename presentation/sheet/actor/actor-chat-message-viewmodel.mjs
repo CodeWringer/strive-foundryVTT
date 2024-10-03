@@ -1,6 +1,5 @@
 import { ACTOR_TYPES } from "../../../business/document/actor/actor-types.mjs";
-import { isNotBlankOrUndefined } from "../../../business/util/validation-utility.mjs";
-import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
+import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
 import LazyRichTextViewModel from "../../component/lazy-rich-text/lazy-rich-text-viewmodel.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
 
@@ -33,19 +32,19 @@ export default class ActorChatMessageViewModel extends ViewModel {
    * @type {Boolean}
    * @readonly
    */
-  get showSpecies() { return isNotBlankOrUndefined(this.document.person.species); }
+  get showSpecies() { return ValidationUtil.isNotBlankOrUndefined(this.document.person.species); }
 
   /***
    * @type {Boolean}
    * @readonly
    */
-  get showCulture() { return isNotBlankOrUndefined(this.document.person.culture); }
+  get showCulture() { return ValidationUtil.isNotBlankOrUndefined(this.document.person.culture); }
 
   /***
    * @type {Boolean}
    * @readonly
    */
-  get showSex() { return isNotBlankOrUndefined(this.document.person.sex); }
+  get showSex() { return ValidationUtil.isNotBlankOrUndefined(this.document.person.sex); }
 
   /***
    * @type {Boolean}
@@ -53,7 +52,7 @@ export default class ActorChatMessageViewModel extends ViewModel {
    */
   get showAge() { 
     const age = this.document.person.age;
-    return age !== 0 && age !== "0" && isNotBlankOrUndefined(age);
+    return age !== 0 && age !== "0" && ValidationUtil.isNotBlankOrUndefined(age);
   }
 
   /**
@@ -70,7 +69,7 @@ export default class ActorChatMessageViewModel extends ViewModel {
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["document"]);
+    ValidationUtil.validateOrThrow(args, ["document"]);
     this.contextTemplate = args.contextTemplate ?? "actor-chat-message";
     
     this.document = args.document;

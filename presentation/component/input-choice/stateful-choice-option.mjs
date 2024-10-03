@@ -1,4 +1,4 @@
-import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
+import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
 import ChoiceOption from "./choice-option.mjs";
 
 /**
@@ -32,7 +32,7 @@ export default class StatefulChoiceOption extends ChoiceOption {
   constructor(args = {}) {
     super(args);
 
-    validateOrThrow(args, ["value", "activeHtml"])
+    ValidationUtil.validateOrThrow(args, ["value", "activeHtml"])
 
     this.activeHtml = args.activeHtml;
     this.tooltip = args.tooltip;

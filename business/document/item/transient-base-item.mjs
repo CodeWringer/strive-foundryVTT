@@ -1,4 +1,4 @@
-import { getExtenders } from "../../../common/extender-util.mjs";
+import { ExtenderUtil } from "../../../common/extender-util.mjs";
 import Tag from "../../tags/tag.mjs";
 import TransientDocument from "../transient-document.mjs";
 
@@ -90,6 +90,6 @@ export default class TransientBaseItem extends TransientDocument {
   
   /** @override */
   getExtenders() {
-    return super.getExtenders().concat(getExtenders(TransientBaseItem));
+    return super.getExtenders().concat(ExtenderUtil.getExtenders(TransientBaseItem));
   }
 }

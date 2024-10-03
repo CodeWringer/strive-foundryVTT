@@ -20,7 +20,7 @@ import RollQueryData from "./roll-query-data.mjs";
  *  const rollSchema = new RollSchema();
  *  const queried = await rollSchema.queryRollData(myDocument);
  * 
- *  if (isDefined(queried) === false) return; // User canceled. 
+ *  if (ValidationUtil.isDefined(queried) === false) return; // User canceled. 
  * 
  *  const rollData = await rollSchema.getRollData(myDocument, queried);
  *  const rollResult = await rollData.roll();

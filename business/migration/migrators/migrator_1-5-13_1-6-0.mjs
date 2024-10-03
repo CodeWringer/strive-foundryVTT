@@ -1,6 +1,6 @@
 import { DOCUMENT_COLLECTION_SOURCES, DocumentCollectionSource } from "../../document/document-fetcher/document-collection-source.mjs";
 import DocumentFetcher from "../../document/document-fetcher/document-fetcher.mjs";
-import { isDefined } from "../../util/validation-utility.mjs";
+import { ValidationUtil } from "../../util/validation-utility.mjs";
 import AbstractMigrator from "../abstract-migrator.mjs";
 import VersionCode from "../version-code.mjs";
 
@@ -42,7 +42,7 @@ export default class Migrator_1_5_13__1_6_0 extends AbstractMigrator {
     const baseAttributes = skillDocument.system.baseAttributes ?? [relatedAttribute];
     const activeBaseAttribute = skillDocument.system.activeBaseAttribute ?? relatedAttribute;
 
-    if (isDefined(relatedAttribute)) {
+    if (ValidationUtil.isDefined(relatedAttribute)) {
       await skillDocument.update({
         baseAttributes: baseAttributes, 
         activeBaseAttribute: activeBaseAttribute,

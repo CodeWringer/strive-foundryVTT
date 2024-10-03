@@ -1,4 +1,4 @@
-import { isDefined, validateOrThrow } from "../../../../business/util/validation-utility.mjs";
+import { ValidationUtil } from "../../../../business/util/validation-utility.mjs";
 import InputChoiceViewModel from "../input-choice-viewmodel.mjs";
 import StatefulChoiceOption from "../stateful-choice-option.mjs";
 
@@ -39,7 +39,7 @@ export default class InputRadioButtonGroupViewModel extends InputChoiceViewModel
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["options"]);
+    ValidationUtil.validateOrThrow(args, ["options"]);
 
     // Ensure the active option has its isActive flag set accordingly. 
     this.value.isActive = true;
@@ -66,7 +66,7 @@ export default class InputRadioButtonGroupViewModel extends InputChoiceViewModel
       // Hook up events on radio button options. 
       radioButton.onchange = (event) => {
         const option = this.options.find(it => it.value === event.currentTarget.value);
-        if (isDefined(option)) {
+        if (ValidationUtil.isDefined(option)) {
           this.value = option;
         } else {
           game.strive.logger.logWarn("Failed to get selected radio button option");

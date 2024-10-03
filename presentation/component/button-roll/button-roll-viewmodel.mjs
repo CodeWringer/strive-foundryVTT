@@ -1,6 +1,6 @@
-import { isDefined, validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
 import { RollResult } from "../../../business/dice/roll-result.mjs";
+import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
 
 /**
  * A button that allows performing a dice roll and then sending the result to the chat. 
@@ -64,7 +64,7 @@ export default class ButtonRollViewModel extends ButtonViewModel {
       ...args,
       iconHtml: '<i class="fas fa-dice-three"></i>',
     });
-    validateOrThrow(args, ["target", "rollSchema"]);
+    ValidationUtil.validateOrThrow(args, ["target", "rollSchema"]);
 
     this.target = args.target;
     this.rollSchema = args.rollSchema;
@@ -90,7 +90,7 @@ export default class ButtonRollViewModel extends ButtonViewModel {
 
     const queried = await this.rollSchema.queryRollData(this.target);
 
-    if (isDefined(queried) === false) return; // User canceled. 
+    if (ValidationUtil.isDefined(queried) === false) return; // User canceled. 
 
     const rollData = await this.rollSchema.getRollData(this.target, queried);
     const rollResult = await rollData.roll();

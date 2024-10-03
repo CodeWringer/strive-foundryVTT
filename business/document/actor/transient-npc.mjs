@@ -1,6 +1,6 @@
-import { getExtenders } from "../../../common/extender-util.mjs";
+import { ExtenderUtil } from "../../../common/extender-util.mjs";
 import ChallengeRating from "../../ruleset/attribute/challenge-rating.mjs";
-import { isDefined } from "../../util/validation-utility.mjs";
+import { ValidationUtil } from "../../util/validation-utility.mjs";
 import TransientBaseCharacterActor from "./transient-base-character-actor.mjs";
 
 /**
@@ -40,7 +40,7 @@ export default class TransientNpc extends TransientBaseCharacterActor {
   }
 
   get challengeRating() {
-    if (isDefined(this.document.system.challengeRating)) {
+    if (ValidationUtil.isDefined(this.document.system.challengeRating)) {
       return ChallengeRating.fromDto(this.document.system.challengeRating);
     } else {
       return new ChallengeRating({
@@ -84,6 +84,6 @@ export default class TransientNpc extends TransientBaseCharacterActor {
   
   /** @override */
   getExtenders() {
-    return super.getExtenders().concat(getExtenders(TransientNpc));
+    return super.getExtenders().concat(ExtenderUtil.getExtenders(TransientNpc));
   }
 }

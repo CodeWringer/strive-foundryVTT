@@ -1,6 +1,6 @@
 import TransientDocument from "../document/transient-document.mjs";
 import Expertise from "../document/item/skill/expertise.mjs";
-import { getNestedPropertyValue } from "../util/property-utility.mjs";
+import { PropertyUtil } from "../util/property-utility.mjs";
 
 /**
  * Provides a means of resolving "@"-references, using a given document. 
@@ -145,7 +145,7 @@ export default class AtReferencer {
     // Look in properties. 
     try {
       if (propertyPath !== undefined) {
-        return getNestedPropertyValue(document, propertyPath);
+        return PropertyUtil.getNestedPropertyValue(document, propertyPath);
       }
     } catch (error) {
       if (error.message.startsWith("Failed to get nested property value")) {
