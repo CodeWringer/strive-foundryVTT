@@ -169,6 +169,8 @@
       },
       "asset": {
         "add": {
+          "luggage": "Add Asset to Luggage",
+          "property": "Add Asset to Property",
           "label": "Add Asset",
           "query": "Select Asset to Add"
         },
