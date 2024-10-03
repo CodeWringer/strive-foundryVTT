@@ -2,6 +2,8 @@ import { isDefined } from "../../../business/util/validation-utility.mjs";
 import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
+import * as StringUtil from "../../../business/util/string-utility.mjs";
+import Tag from "../../../business/tags/tag.mjs";
 
 /**
  * Represents a single `Tag`. 
@@ -47,7 +49,11 @@ export default class InputTagPillViewModel extends ViewModel {
       parent: this,
       iconHtml: '<i class="fas fa-times"></i>',
       isEditable: this.isEditable,
-      localizedTooltip: game.i18n.localize("system.general.delete.label"),
+      localizedToolTip: StringUtil.format(
+        game.i18n.localize("system.general.delete.deleteTypeOf"),
+        game.i18n.localize("system.general.tag.singular"),
+        game.i18n.localize(this.tag.localizableName)
+      ),
       onClick: () => {
         this.onDelete(this.tag);
       }

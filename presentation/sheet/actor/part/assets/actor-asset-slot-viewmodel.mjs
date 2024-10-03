@@ -151,7 +151,7 @@ export default class ActorAssetSlotViewModel extends ViewModel {
       id: "vmBtnEdit",
       parent: this,
       iconHtml: '<i class="fas fa-cog"></i>',
-      localizedTooltip: game.i18n.localize("system.character.asset.slot.edit"),
+      localizedToolTip: game.i18n.localize("system.character.asset.slot.edit"),
       onClick: async () => {
         const delta = await queryAssetSlotConfiguration(this.assetSlot);
         await this.assetSlot.update(delta);
@@ -164,7 +164,7 @@ export default class ActorAssetSlotViewModel extends ViewModel {
       target: this.document,
       iconHtml: '<i class="fas fa-plus"></i>',
       localizedLabel: game.i18n.localize("system.character.asset.slot.assign.label"),
-      localizedTooltip: game.i18n.localize("system.character.asset.slot.assign.label"),
+      localizedToolTip: game.i18n.localize("system.character.asset.slot.assign.label"),
       onClick: async () => {
         const inputChoices = "inputChoices";
         const assetChoices = this._getAssetsAsChoices();
@@ -203,8 +203,8 @@ export default class ActorAssetSlotViewModel extends ViewModel {
       isEditable: this.isEditable,
       target: this.assetSlot,
       withDialog: true,
-      localizedTooltip: game.i18n.localize("system.character.asset.slot.delete.query"),
-      localizedDialogTitle: game.i18n.localize("system.character.asset.slot.delete.queryOf"),
+      localizedDeletionType: game.i18n.localize("system.character.asset.slot.label"),
+      localizedDeletionTarget: this.assetSlot.name,
       callback: async () => {
         const assetToUnassign = this.availableAssets.find(it => it.id === this.assetSlot.alottedId);
         if (assetToUnassign !== undefined) {

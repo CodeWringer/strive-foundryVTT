@@ -12,25 +12,34 @@ viewModel: {SkillItemSheetViewModel}
     </div>
     {{> damageDefinitionList viewModel=viewModel.vmDamageDefinitionList}}
   </div>
-  {{!-- Attributes --}}
-  <div class="sheet-block flex flex-column">
-    {{#> header3 showFancyFont=viewModel.showFancyFont}}{{localize "system.character.attribute.plural"}}{{/header3}}
-    {{> simpleList viewModel=viewModel.vmBaseAttributeList}}
-  </div>
   {{!-- Row --}}
-  <div class="flex flex-row flex-middle auto-margin-h">
-    {{!-- Tags --}}
-    {{#> labeledControl viewModel=viewModel.vmTags localizedIconToolTip=(localize "system.general.tags.label") iconClass="ico-tags-solid" cssClass="" }}
-      {{> inputTags }}
-    {{/labeledControl}}
-  </div>
-  {{!-- Prerequisites --}}
-  <div class="sheet-block flex flex-column">
-    {{#> header3 showFancyFont=viewModel.showFancyFont}}{{localize "system.character.skill.prerequisite.plural"}}{{/header3}}
-    {{> simpleList viewModel=viewModel.vmPrerequisiteList}}
-  </div>
   {{!-- Expertises --}}
   {{#with viewModel.templateExpertiseTable as | template |}}
     {{> (template) viewModel=../viewModel.vmExpertiseTable cssClass=(ifThenElse ../viewModel.isExpertiseListVisible "" "hidden") }}
   {{/with}}
+  {{!-- Row --}}
+  {{!-- Attributes --}}
+  <div class="sheet-block flex flex-column">
+    {{#> header3 showFancyFont=viewModel.showFancyFont cssClass="flex flex-row flex-middle" }}
+      <span class="flex-grow">{{localize "system.character.attribute.plural"}}</span>
+      {{> buttonAdd viewModel=viewModel.vmAddAttribute2 cssClass="font-size-default" }}
+    {{/header3}}
+    {{> simpleList viewModel=viewModel.vmBaseAttributeList}}
+  </div>
+  {{!-- Row --}}
+  {{!-- Prerequisites --}}
+  <div class="sheet-block flex flex-column">
+    {{#> header3 showFancyFont=viewModel.showFancyFont cssClass="flex flex-row flex-middle" }}
+      <span class="flex-grow">{{localize "system.character.skill.prerequisite.plural"}}</span>
+      {{> buttonAdd viewModel=viewModel.vmAddPrerequisite2 cssClass="font-size-default" }}
+    {{/header3}}
+    {{> simpleList viewModel=viewModel.vmPrerequisiteList}}
+  </div>
+  {{!-- Row --}}
+  <div class="flex flex-row flex-middle auto-margin-h">
+    {{!-- Tags --}}
+    {{#> labeledControl viewModel=viewModel.vmTags localizedIconToolTip=(localize "system.general.tag.plural") iconClass="ico-tags-solid" cssClass="" }}
+      {{> inputTags }}
+    {{/labeledControl}}
+  </div>
 </section>

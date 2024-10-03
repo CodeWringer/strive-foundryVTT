@@ -6,7 +6,7 @@ cssClass: {undefined | String}
   {{#> header3 showFancyFont=viewModel.showFancyFont cssClass="flex flex-row flex-middle" }}
     <span>{{localize "system.character.skill.expertise.plural"}}</span>
     {{> buttonToggleVisibility viewModel=viewModel.vmToggleExpansion1 cssClass="flex-grow" }}
-    {{> buttonAdd viewModel=viewModel.vmAddExpertise}}
+    {{> buttonAdd viewModel=viewModel.vmAddExpertise }}
   {{/header3}}
   <div class="expertise-list{{#if cssClass}} {{cssClass}}{{/if}}">
     <div class="{{#if viewModel.isExpanded}}{{else}}hidden{{/if}}" 
@@ -14,6 +14,6 @@ cssClass: {undefined | String}
     >
       {{> sortableList viewModel=viewModel.vmExpertises }}
     </div>
-    {{> buttonToggleVisibility viewModel=viewModel.vmToggleExpansion2 }}
+    {{> buttonToggleVisibility viewModel=viewModel.vmToggleExpansion2 cssClass=(ifThenElse viewModel.isExpanded "font-size-default" "font-size-default hidden") }}
   </div>
 </div>

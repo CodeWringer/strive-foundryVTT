@@ -2,7 +2,8 @@
 viewModel: {SkillListItemViewModel}
 --}}
 <div id="{{viewModel.id}}" class="flex flex-row flex-wrap margin-b-md auto-margin-h">
-  <div class="flex flex-row flex-grow flex-middle auto-margin-h sheet-block">
+  {{!-- Level Block --}}
+  <div class="flex flex-row flex-middle auto-margin-h sheet-block">
     <div class="flex flex-row auto-margin-h">
       {{!-- Level --}}
       {{#> labeledControl viewModel=viewModel.vmNsLevel localizedIconToolTip=(localize "system.character.advancement.level") iconClass="ico-level-solid" }}
@@ -23,13 +24,12 @@ viewModel: {SkillListItemViewModel}
       </div>
     </div>
   </div>
+  <div class="flex-grow"></div>
   {{#if viewModel.showAdvancementProgression}}
   {{!-- Advancement Requirements --}}
   <div class="flex flex-row flex-middle auto-margin-h sheet-block">
     <div class="flex flex-row">
-      <div class="width-min-xl">
-        {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "system.character.advancement.requirements.successAndFailure.abbreviation"}}{{/label}}
-      </div>
+      <i class="ico ico-dumbbell-curved-solid margin-r-sm dark" title="{{localize "system.character.advancement.requirements.successAndFailure.label"}}"></i>
       <div class="width-min-md">
         {{#> readOnlyValue}}{{viewModel.successes}} / {{viewModel.failures}}{{/readOnlyValue}}
       </div>

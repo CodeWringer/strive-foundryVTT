@@ -39,7 +39,7 @@ viewModel: {Array<DynamicInputDialogViewModel>}
         {{> inputTextField viewModel=control.viewModel}}
       {{/if}}
       {{#if (eq control.definition.type "SIMPLE_LIST")}}
-        {{> simpleList viewModel=control.viewModel}}
+        {{> simpleList viewModel=control.viewModel cssClass="flex-grow" }}
       {{/if}}
       {{#if (eq control.definition.type "TOGGLE")}}
         {{> inputToggle viewModel=control.viewModel}}

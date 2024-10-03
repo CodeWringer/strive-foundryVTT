@@ -1,9 +1,8 @@
 .component-list-item-order-controls {
   display: flex;
   flex-direction: column;
-  width: 1.8rem;
+  width: 26px;
   border-right: solid 1px #8d8d8d;
-  margin-right: 0.5rem;
 
   > a.grab-handle {
     display: inline-flex;
@@ -17,17 +16,8 @@
 }
 
 ol.sortable-list {
-  border-left: 2px solid $c-border-dark;
-
   > li.sortable-list-item {
-    margin-bottom: 1rem;
     border-radius: $border-radius-md;
     border: 1px solid $c-border-dark;
-
-    // This _shouldn't_ have to be defined here. 
-    // But this override only works if it is defined here, as it is otherwise not "specific" enough. 
-    &.heavy-border-t {
-      border-top-width: $border-radius-lg;
-    }
   }
 }

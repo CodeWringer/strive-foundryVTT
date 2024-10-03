@@ -10,6 +10,7 @@ import SortableListViewModel from "../../../../component/sortable-list/sortable-
 import ViewModel from "../../../../view-model/view-model.mjs"
 import AssetListItemViewModel from "../../../item/asset/asset-list-item-viewmodel.mjs"
 import ActorAssetsEquippedViewModel from "./actor-assets-equipped-viewmodel.mjs"
+import * as StringUtil from "../../../../../business/util/string-utility.mjs"
 
 /**
  * @property {TransientBaseCharacterActor} document
@@ -90,8 +91,6 @@ export default class ActorAssetsViewModel extends ViewModel {
     this.document = args.document;
     this.contextType = args.contextType ?? "actor-assets";
 
-    const thiz = this;
-
     this.vmEquipped = new ActorAssetsEquippedViewModel({
       id: "vmEquipped",
       parent: this,
@@ -108,23 +107,51 @@ export default class ActorAssetsViewModel extends ViewModel {
       parent: this,
       isEditable: this.isEditable,
       indexDataSource: new DocumentListItemOrderDataSource({
-        document: thiz.document,
+        document: this.document,
         listName: "luggage",
       }),
       listItemViewModels: this.luggageViewModels,
       listItemTemplate: AssetListItemViewModel.TEMPLATE,
       vmBtnAddItem: new ButtonAddViewModel({
-        id: "vmBtnAddItem",
+        id: "vmAddLuggage1",
         parent: this,
-        target: thiz.document,
-        isEditable: thiz.isEditable,
+        target: this.document,
+        isEditable: this.isEditable,
         creationType: ITEM_TYPES.ASSET,
         withDialog: true,
-        localizedLabel: game.i18n.localize("system.character.asset.add.label"),
+        localizedLabel: StringUtil.format(
+          game.i18n.localize("system.general.add.addTypeTo"),
+          game.i18n.localize("system.character.asset.singular"),
+          game.i18n.localize("system.character.asset.luggage"),
+        ),
         localizedType: game.i18n.localize("system.character.asset.singular"),
+        onClick: (event, data) => {
+          this.document.assets.luggage = this.document.assets.luggage.concat([
+            data.getTransientObject(),
+          ]);
+        },
       }),
     });
-
+    this.vmAddLuggage2 = new ButtonAddViewModel({
+      id: "vmAddLuggage2",
+      parent: this,
+      target: this.document,
+      isEditable: this.isEditable,
+      creationType: ITEM_TYPES.ASSET,
+      withDialog: true,
+      localizedToolTip: StringUtil.format(
+        game.i18n.localize("system.general.add.addTypeTo"),
+        game.i18n.localize("system.character.asset.singular"),
+        game.i18n.localize("system.character.asset.luggage"),
+      ),
+      localizedType: game.i18n.localize("system.character.asset.singular"),
+      onClick: (event, data) => {
+        this.document.assets.luggage = this.document.assets.luggage.concat([
+          data.getTransientObject(),
+        ]);
+      },
+    });
+    
     this.propertyViewModels = [];
     this.propertyViewModels = this._getAssetViewModels(this.document.assets.property, this.propertyViewModels);
     this.vmPropertyList = new SortableListViewModel({
@@ -132,21 +159,39 @@ export default class ActorAssetsViewModel extends ViewModel {
       parent: this,
       isEditable: this.isEditable,
       indexDataSource: new DocumentListItemOrderDataSource({
-        document: thiz.document,
+        document: this.document,
         listName: "property",
       }),
       listItemViewModels: this.propertyViewModels,
       listItemTemplate: AssetListItemViewModel.TEMPLATE,
       vmBtnAddItem: new ButtonAddViewModel({
-        id: "vmBtnAddItem",
+        id: "vmAddProperty1",
         parent: this,
-        target: thiz.document,
-        isEditable: thiz.isEditable,
+        target: this.document,
+        isEditable: this.isEditable,
         creationType: ITEM_TYPES.ASSET,
         withDialog: true,
-        localizedLabel: game.i18n.localize("system.character.asset.add.label"),
+        localizedLabel: StringUtil.format(
+          game.i18n.localize("system.general.add.addTypeTo"),
+          game.i18n.localize("system.character.asset.singular"),
+          game.i18n.localize("system.character.asset.property"),
+        ),
         localizedType: game.i18n.localize("system.character.asset.singular"),
       }),
+    });
+    this.vmAddProperty2 = new ButtonAddViewModel({
+      id: "vmAddProperty2",
+      parent: this,
+      target: this.document,
+      isEditable: this.isEditable,
+      creationType: ITEM_TYPES.ASSET,
+      withDialog: true,
+      localizedToolTip: StringUtil.format(
+        game.i18n.localize("system.general.add.addTypeTo"),
+        game.i18n.localize("system.character.asset.singular"),
+        game.i18n.localize("system.character.asset.property"),
+      ),
+      localizedType: game.i18n.localize("system.character.asset.singular"),
     });
 
     this.vmSortLuggage = new SortControlsViewModel({

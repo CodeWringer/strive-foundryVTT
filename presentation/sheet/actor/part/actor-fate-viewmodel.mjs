@@ -6,6 +6,7 @@ import ButtonAddViewModel from "../../../component/button-add/button-add-viewmod
 import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
 import ViewModel from "../../../view-model/view-model.mjs"
 import FateCardViewModel from "../../item/fate-card/fate-card-viewmodel.mjs"
+import * as StringUtil from "../../../../business/util/string-utility.mjs"
 
 export default class ActorFateViewModel extends ViewModel {
   /** @override */
@@ -103,6 +104,10 @@ export default class ActorFateViewModel extends ViewModel {
         target: thiz.document,
         creationType: ITEM_TYPES.FATE_CARD,
         withDialog: true,
+        localizedToolTip: StringUtil.format(
+          game.i18n.localize("system.general.add.addType"),
+          game.i18n.localize("system.character.driverSystem.fateSystem.fateCard.label"),
+        ),
         localizedType: game.i18n.localize("system.character.driverSystem.fateSystem.fateCard.label"),
         selectionLabelMapper: async (selected) => {
           let AFP = "?";

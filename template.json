@@ -205,7 +205,6 @@
       "quantity": 1,
       "maxQuantity": 1,
       "bulk": 1,
-      "isOnPerson": false,
       "location": ""
     },
     "injury": {

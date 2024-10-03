@@ -44,6 +44,7 @@ import { TemplatedComponent } from "./templated-component.mjs";
  * * Note that each of the provided view model instances will be available for access on 
  * this view model instance, as a property whose name is the id of the provided 
  * view model instance. 
+ * @property {Boolean} isExpanded If `true`, will render in expanded state. 
  */
 export default class BaseListItemViewModel extends ViewModel {
   /** @override */
@@ -64,9 +65,16 @@ export default class BaseListItemViewModel extends ViewModel {
    */
   _isExpanded = false;
   /**
+   * Returns the current expansion state. 
+   * 
    * @type {Boolean}
    */
   get isExpanded() { return this._isExpanded; }
+  /**
+   * Sets the current expansion state. 
+   * 
+   * @param {Boolean} value If `true`, will be expanded, else collapsed. 
+   */
   set isExpanded(value) {
     this._isExpanded = value;
     this.writeViewState();
@@ -111,9 +119,11 @@ export default class BaseListItemViewModel extends ViewModel {
    * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 
    * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 
    * is expected to be associated with an actor sheet or item sheet or journal entry or chat message and so on.
-   * @param {Boolean | undefined} args.isEditable If true, the sheet is editable. 
-   * @param {Boolean | undefined} args.isSendable If true, the document represented by the sheet can be sent to chat. 
-   * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document. 
+   * @param {Boolean | undefined} args.isEditable If `true`, the sheet is editable. 
+   * @param {Boolean | undefined} args.isSendable If `true`, the document represented by the sheet can be sent to chat. 
+   * @param {Boolean | undefined} args.isOwner If `true`, the current user is the owner of the represented document. 
+   * @param {Boolean | undefined} args.isExpanded If `true`, will initially render in expanded state. 
+   * * default `false`
    * 
    * @param {TransientDocument} args.document 
    * @param {String | undefined} args.title
@@ -127,6 +137,7 @@ export default class BaseListItemViewModel extends ViewModel {
 
     this.document = args.document;
     this.title = args.title ?? args.document.name;
+    this._isExpanded = args.isExpanded ?? false;
 
     this.dataFields = this.getDataFields();
     this._ensureViewModelsAsProperties(this.dataFields);
@@ -236,7 +247,8 @@ export default class BaseListItemViewModel extends ViewModel {
 
   /**
    * Returns the definitions of the secondary header buttons. 
-   * * By default, contains a context menu and delete button. 
+   * 
+   * By default, contains a context menu and delete button. 
    * 
    * @returns {Array<TemplatedComponent>}
    * 
@@ -263,7 +275,8 @@ export default class BaseListItemViewModel extends ViewModel {
           id: "vmBtnDelete",
           target: this.document,
           withDialog: true,
-          localizedToolTip: game.i18n.localize("system.general.delete.label"),
+          localizedDeletionType: game.i18n.localize(`TYPES.Item.${this.document.type}`),
+          localizedDeletionTarget: this.document.name,
         }),
       }),
     ]; 

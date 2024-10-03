@@ -7,7 +7,6 @@ import { SKILL_TAGS } from "../../../../business/tags/system-tags.mjs"
 import { validateOrThrow } from "../../../../business/util/validation-utility.mjs"
 import { isDefined } from "../../../../business/util/validation-utility.mjs"
 import ButtonContextMenuViewModel from "../../../component/button-context-menu/button-context-menu-viewmodel.mjs"
-import ButtonDeleteViewModel from "../../../component/button-delete/button-delete-viewmodel.mjs"
 import ButtonRollViewModel from "../../../component/button-roll/button-roll-viewmodel.mjs"
 import ButtonViewModel from "../../../component/button/button-viewmodel.mjs"
 import DamageDefinitionListViewModel from "../../../component/damage-definition-list/damage-definition-list-viewmodel.mjs"
@@ -257,7 +256,7 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
         isSendable: this.isSendable,
         isOwner: this.isOwner,
         document: this.document,
-        expertisesInitiallyVisible: true,
+        expertisesInitiallyVisible: this.document.expertises.length > 0,
       });
     }
     this.expertisesTemplate = ExpertiseTableViewModel.TEMPLATE;
@@ -405,7 +404,7 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
           id: "vmBtnEdit",
           parent: this,
           iconHtml: '<i class="fas fa-cog"></i>',
-          localizedTooltip: game.i18n.localize("system.general.edit"),
+          localizedToolTip: game.i18n.localize("system.general.edit"),
           onClick: async () => {
             const delta = await this._queryAttributesConfiguration();
             if (isDefined(delta) !== true) return;
@@ -421,7 +420,10 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
     return super.getContextMenuButtons().concat([
       // Add damage
       {
-        name: game.i18n.localize("system.damageDefinition.add"),
+        name: StringUtil.format(
+          game.i18n.localize("system.general.add.addType"),
+          game.i18n.localize("system.damageDefinition.label")
+        ),
         icon: '<i class="fas fa-plus"></i>',
         callback: () => {
           const damage = this.document.damage.concat([]);
@@ -506,7 +508,7 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
             newItemDefaultValue: ATTRIBUTES.agility,
             isItemAddable: this.isEditable,
             isItemRemovable: this.isEditable,
-            localizedAddLabel: game.i18n.localize("system.general.add"),
+            localizedAddLabel: game.i18n.localize("system.general.add.add"),
           },
         }),
       ],

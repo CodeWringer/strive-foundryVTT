@@ -43,7 +43,7 @@ export default class ButtonOpenSheetViewModel extends ButtonViewModel {
     validateOrThrow(args, ["target"]);
 
     this.target = args.target;
-    this.localizedTooltip = args.localizedTooltip ?? game.i18n.localize("system.general.openSheet");
+    this.localizedToolTip = args.localizedToolTip ?? game.i18n.localize("system.general.openSheet");
   }
 
   /**
