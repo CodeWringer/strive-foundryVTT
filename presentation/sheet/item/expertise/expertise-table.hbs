@@ -14,6 +14,6 @@ cssClass: {undefined | String}
     >
       {{> sortableList viewModel=viewModel.vmExpertises }}
     </div>
-    {{> buttonToggleVisibility viewModel=viewModel.vmToggleExpansion2 }}
+    {{> buttonToggleVisibility viewModel=viewModel.vmToggleExpansion2 cssClass=(ifThenElse viewModel.isExpanded "font-size-default" "font-size-default hidden") }}
   </div>
 </div>
