@@ -226,7 +226,7 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
       id: "vmExpertiseTable",
       parent: this,
       document: this.document,
-      expertisesInitiallyVisible: true,
+      expertisesInitiallyVisible: this.document.expertises.length > 0,
     });
     this.vmTags = new InputTagsViewModel({
       id: "vmTags",
