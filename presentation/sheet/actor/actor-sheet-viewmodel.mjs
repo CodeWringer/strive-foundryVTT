@@ -19,7 +19,7 @@ import DynamicInputDefinition from "../../dialog/dynamic-input-dialog/dynamic-in
 import { DYNAMIC_INPUT_TYPES } from "../../dialog/dynamic-input-dialog/dynamic-input-types.mjs"
 import { ACTOR_TYPES } from "../../../business/document/actor/actor-types.mjs"
 import TransientBaseActor from "../../../business/document/actor/transient-base-actor.mjs"
-import { getExtenders } from "../../../common/extender-util.mjs"
+import { ExtenderUtil } from "../../../common/extender-util.mjs"
 
 /**
  * @extends BaseSheetViewModel
@@ -136,7 +136,7 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
         id: "vmBtnConfigure",
         parent: this,
         iconHtml: '<i class="fas fa-cog"></i>',
-        localizedTooltip: game.i18n.localize("system.character.edit"),
+        localizedToolTip: game.i18n.localize("system.character.edit"),
         onClick: async () => {
           const inputMaxActionPoints = "inputMaxActionPoints";
           const inputRefillActionPoints = "inputRefillActionPoints";
@@ -387,7 +387,7 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
   
   /** @override */
   getExtenders() {
-    return super.getExtenders().concat(getExtenders(ActorSheetViewModel));
+    return super.getExtenders().concat(ExtenderUtil.getExtenders(ActorSheetViewModel));
   }
 
 }

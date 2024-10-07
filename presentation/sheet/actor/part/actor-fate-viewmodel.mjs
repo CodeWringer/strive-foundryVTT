@@ -1,7 +1,8 @@
 import DocumentFetcher from "../../../../business/document/document-fetcher/document-fetcher.mjs";
 import { ITEM_TYPES } from "../../../../business/document/item/item-types.mjs";
-import { isDefined, validateOrThrow } from "../../../../business/util/validation-utility.mjs"
-import { getExtenders } from "../../../../common/extender-util.mjs";
+import { StringUtil } from "../../../../business/util/string-utility.mjs";
+import { ValidationUtil } from "../../../../business/util/validation-utility.mjs";
+import { ExtenderUtil } from "../../../../common/extender-util.mjs";
 import ButtonAddViewModel from "../../../component/button-add/button-add-viewmodel.mjs";
 import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
 import ViewModel from "../../../view-model/view-model.mjs"
@@ -60,7 +61,7 @@ export default class ActorFateViewModel extends ViewModel {
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["document"]);
+    ValidationUtil.validateOrThrow(args, ["document"]);
 
     this.document = args.document;
     this.contextType = args.contextType ?? "actor-fate";
@@ -103,6 +104,10 @@ export default class ActorFateViewModel extends ViewModel {
         target: thiz.document,
         creationType: ITEM_TYPES.FATE_CARD,
         withDialog: true,
+        localizedToolTip: StringUtil.format(
+          game.i18n.localize("system.general.add.addType"),
+          game.i18n.localize("system.character.driverSystem.fateSystem.fateCard.label"),
+        ),
         localizedType: game.i18n.localize("system.character.driverSystem.fateSystem.fateCard.label"),
         selectionLabelMapper: async (selected) => {
           let AFP = "?";
@@ -118,7 +123,7 @@ export default class ActorFateViewModel extends ViewModel {
               searchEmbedded: false,
             });
   
-            if (isDefined(document)) {
+            if (ValidationUtil.isDefined(document)) {
               const transientFateCard = document.getTransientObject();
               AFP = transientFateCard.cost.AFP;
               MaFP = transientFateCard.cost.maFP;
@@ -170,7 +175,7 @@ export default class ActorFateViewModel extends ViewModel {
   
   /** @override */
   getExtenders() {
-    return super.getExtenders().concat(getExtenders(ActorFateViewModel));
+    return super.getExtenders().concat(ExtenderUtil.getExtenders(ActorFateViewModel));
   }
 
 }

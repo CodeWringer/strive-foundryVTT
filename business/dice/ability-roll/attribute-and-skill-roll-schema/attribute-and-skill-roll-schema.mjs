@@ -92,6 +92,7 @@ export class AttributeAndSkillRollSchema extends SkillRollSchema {
         name: nameInputAttribute,
         localizedLabel: game.i18n.localize("system.character.attribute.singular"),
         required: true,
+        isEditable: baseAttributeChoices.length > 1,
         defaultValue: baseAttributeChoices.find(choice => choice.value === bestAttribute.name),
         specificArgs: {
           options: baseAttributeChoices,

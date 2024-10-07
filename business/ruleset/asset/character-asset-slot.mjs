@@ -1,5 +1,5 @@
-import { createUUID } from "../../util/uuid-utility.mjs";
-import { validateOrThrow } from "../../util/validation-utility.mjs";
+import { UuidUtil } from "../../util/uuid-utility.mjs";
+import { ValidationUtil } from "../../util/validation-utility.mjs";
 import Ruleset from "../ruleset.mjs";
 
 /**
@@ -64,11 +64,11 @@ export default class CharacterAssetSlot {
    * @param {String | undefined} args.id Unique ID. 
    */
   constructor(args = {}) {
-    validateOrThrow(args, ["group"]);
+    ValidationUtil.validateOrThrow(args, ["group"]);
 
     this.group = args.group;
     this._actor = this.group.actor;
-    this.id = args.id ?? createUUID();
+    this.id = args.id ?? UuidUtil.createUUID();
   }
 
   /**

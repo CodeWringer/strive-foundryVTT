@@ -1,9 +1,9 @@
 import { DOCUMENT_COLLECTION_SOURCES } from "../../document/document-fetcher/document-collection-source.mjs";
 import DocumentFetcher from "../../document/document-fetcher/document-fetcher.mjs";
 import DocumentUpdater from "../../document/document-updater/document-updater.mjs";
+import { PropertyUtil } from "../../util/property-utility.mjs";
 import AbstractMigrator from "../abstract-migrator.mjs";
 import VersionCode from "../version-code.mjs";
-import * as PropertyUtility from "../../util/property-utility.mjs";
 
 export default class Migrator_1_5_5__1_5_6 extends AbstractMigrator {
   /** @override */
@@ -20,7 +20,7 @@ export default class Migrator_1_5_5__1_5_6 extends AbstractMigrator {
   get updater() {
     if (this._updater === undefined) {
       this._updater = new DocumentUpdater({
-        propertyUtility: PropertyUtility,
+        propertyUtility: PropertyUtil,
         logger: game.strive.logger,
       });
     }

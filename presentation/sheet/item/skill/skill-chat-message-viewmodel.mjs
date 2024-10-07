@@ -1,5 +1,5 @@
 import TransientSkill from "../../../../business/document/item/skill/transient-skill.mjs"
-import { validateOrThrow } from "../../../../business/util/validation-utility.mjs"
+import { ValidationUtil } from "../../../../business/util/validation-utility.mjs"
 import ButtonToggleVisibilityViewModel from "../../../component/button-toggle-visibility/button-toggle-visibility-viewmodel.mjs"
 import InputTagsViewModel from "../../../component/input-tags/input-tags-viewmodel.mjs"
 import LazyRichTextViewModel from "../../../component/lazy-rich-text/lazy-rich-text-viewmodel.mjs"
@@ -97,7 +97,7 @@ export default class SkillChatMessageViewModel extends ViewModel {
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["document"]);
+    ValidationUtil.validateOrThrow(args, ["document"]);
     this.contextTemplate = args.contextTemplate ?? "skill-chat-message";
     
     this.document = args.document;

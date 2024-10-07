@@ -1,5 +1,5 @@
 import DocumentFetcher from "../../../business/document/document-fetcher/document-fetcher.mjs";
-import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
+import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
 
 /**
@@ -40,10 +40,10 @@ export default class ButtonOpenSheetViewModel extends ButtonViewModel {
       ...args,
       iconHtml: '<i class="fas fa-external-link-alt"></i>',
     });
-    validateOrThrow(args, ["target"]);
+    ValidationUtil.validateOrThrow(args, ["target"]);
 
     this.target = args.target;
-    this.localizedTooltip = args.localizedTooltip ?? game.i18n.localize("system.general.openSheet");
+    this.localizedToolTip = args.localizedToolTip ?? game.i18n.localize("system.general.openSheet");
   }
 
   /**

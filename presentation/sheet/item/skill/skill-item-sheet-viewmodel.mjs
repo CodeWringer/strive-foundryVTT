@@ -1,6 +1,5 @@
 import { SKILL_TAGS } from "../../../../business/tags/system-tags.mjs";
 import SkillPrerequisite from "../../../../business/ruleset/skill/skill-prerequisite.mjs";
-import { isDefined } from "../../../../business/util/validation-utility.mjs";
 import InputTagsViewModel from "../../../component/input-tags/input-tags-viewmodel.mjs";
 import SimpleListViewModel from "../../../component/simple-list/simple-list-viewmodel.mjs";
 import ExpertiseTableViewModel from "../expertise/expertise-table-viewmodel.mjs"
@@ -20,7 +19,10 @@ import { TemplatedComponent } from "../base/templated-component.mjs";
 import TransientSkill from "../../../../business/document/item/skill/transient-skill.mjs";
 import BaseAttributeListItemViewModel from "./base-attribute/base-attribute-list-item-viewmodel.mjs";
 import { ATTRIBUTES } from "../../../../business/ruleset/attribute/attributes.mjs";
-import { getExtenders } from "../../../../common/extender-util.mjs";
+import ButtonViewModel from "../../../component/button/button-viewmodel.mjs";
+import { StringUtil } from "../../../../business/util/string-utility.mjs";
+import { ExtenderUtil } from "../../../../common/extender-util.mjs";
+import { ValidationUtil } from "../../../../business/util/validation-utility.mjs";
 
 /**
  * @property {TransientSkill} document
@@ -49,37 +51,37 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
    * @type {Boolean}
    * @readonly
    */
-  get hideObstacle() { return !isDefined(this.document.obstacle); }
+  get hideObstacle() { return !ValidationUtil.isDefined(this.document.obstacle); }
 
   /**
    * @type {Boolean}
    * @readonly
    */
-  get hideOpposedBy() { return !isDefined(this.document.opposedBy); }
+  get hideOpposedBy() { return !ValidationUtil.isDefined(this.document.opposedBy); }
 
   /**
    * @type {Boolean}
    * @readonly
    */
-  get hideDistance() { return !isDefined(this.document.distance); }
+  get hideDistance() { return !ValidationUtil.isDefined(this.document.distance); }
 
   /**
    * @type {Boolean}
    * @readonly
    */
-  get hideApCost() { return !isDefined(this.document.apCost); }
+  get hideApCost() { return !ValidationUtil.isDefined(this.document.apCost); }
 
   /**
    * @type {Boolean}
    * @readonly
    */
-  get hideAttackType() { return !isDefined(this.document.attackType); }
+  get hideAttackType() { return !ValidationUtil.isDefined(this.document.attackType); }
 
   /**
    * @type {Boolean}
    * @readonly
    */
-  get hideCondition() { return !isDefined(this.document.condition); }
+  get hideCondition() { return !ValidationUtil.isDefined(this.document.condition); }
 
   /**
    * @type {Boolean}
@@ -94,7 +96,7 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
    * @readonly
    */
   get attackTypeIconClass() {
-    if (isDefined(this.document.attackType)) {
+    if (ValidationUtil.isDefined(this.document.attackType)) {
       return getAttackTypeIconClass(this.document.attackType);
     } else {
       return "";
@@ -193,7 +195,7 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
           id: "vmAttackType",
           parent: this,
           options: attackTypeChoices,
-          value: isDefined(this.document.attackType) ? attackTypeChoices.find(it => it.value === this.document.attackType.name) : attackTypeChoices.find(it => it.value === ATTACK_TYPES.none.name),
+          value: ValidationUtil.isDefined(this.document.attackType) ? attackTypeChoices.find(it => it.value === this.document.attackType.name) : attackTypeChoices.find(it => it.value === ATTACK_TYPES.none.name),
           onChange: (_, newValue) => {
             this.document.attackType = ATTACK_TYPES[newValue.value];
           },
@@ -224,16 +226,7 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
       id: "vmExpertiseTable",
       parent: this,
       document: this.document,
-      expertisesInitiallyVisible: true,
-    });
-    this.vmTfCategory = new InputTextFieldViewModel({
-      parent: this,
-      id: "vmTfCategory",
-      value: this.document.category,
-      onChange: (_, newValue) => {
-        this.document.category = newValue;
-      },
-      placeholder: game.i18n.localize("system.general.category"),
+      expertisesInitiallyVisible: this.document.expertises.length > 0,
     });
     this.vmTags = new InputTagsViewModel({
       id: "vmTags",
@@ -278,16 +271,31 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
       },
       isItemAddable: this.isEditable,
       isItemRemovable: (this.isEditable && this.baseAttributeViewModels.length > 1),
-      localizedAddLabel: game.i18n.localize("system.general.add"),
+      localizedAddLabel: StringUtil.format(
+        game.i18n.localize("system.general.add.addType"),
+        game.i18n.localize("system.character.attribute.singular")
+      ),
+    });
+    this.vmAddAttribute2 = new ButtonViewModel({
+      id: "vmAddAttribute2",
+      parent: this,
+      iconHtml: '<i class="fas fa-plus"></i>',
+      localizedToolTip: StringUtil.format(
+        game.i18n.localize("system.general.add.addType"),
+        game.i18n.localize("system.character.attribute.singular")
+      ),
+      onClick: () => {
+        const baseAttributes = this.document.baseAttributes.concat([
+          ATTRIBUTES.agility
+        ]);
+        this.document.baseAttributes = baseAttributes;
+      },
     });
 
     this.prerequisiteViewModels = this._getPrerequisiteViewModels();
     this.vmPrerequisiteList = new SimpleListViewModel({
       id: "vmPrerequisiteList",
       parent: this,
-      isEditable: this.isEditable,
-      isSendable: this.isSendable,
-      isOwner: this.isOwner,
       contentItemViewModels: this.prerequisiteViewModels,
       contentItemTemplate: this.prerequisiteListItemTemplate,
       onAddClick: () => {
@@ -303,7 +311,25 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
       },
       isItemAddable: this.isEditable,
       isItemRemovable: this.isEditable,
-      localizedAddLabel: game.i18n.localize("system.general.add"),
+      localizedAddLabel: StringUtil.format(
+        game.i18n.localize("system.general.add.addType"),
+        game.i18n.localize("system.character.skill.prerequisite.singular")
+      ),
+    });
+    this.vmAddPrerequisite2 = new ButtonViewModel({
+      id: "vmAddPrerequisite2",
+      parent: this,
+      iconHtml: '<i class="fas fa-plus"></i>',
+      localizedToolTip: StringUtil.format(
+        game.i18n.localize("system.general.add.addType"),
+        game.i18n.localize("system.character.skill.prerequisite.singular")
+      ),
+      onClick: () => {
+        const prerequisites = this.document.prerequisites.concat([
+          new SkillPrerequisite()
+        ]);
+        this.document.prerequisites = prerequisites;
+      },
     });
   }
 
@@ -320,7 +346,10 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
           menuItems: [
             // Add damage
             {
-              name: game.i18n.localize("system.damageDefinition.add"),
+              name: StringUtil.format(
+                game.i18n.localize("system.general.add.addType"),
+                game.i18n.localize("system.damageDefinition.label")
+              ),
               icon: '<i class="fas fa-plus"></i>',
               callback: () => {
                 const damage = this.document.damage.concat([]);
@@ -446,7 +475,7 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
   
   /** @override */
   getExtenders() {
-    return super.getExtenders().concat(getExtenders(SkillItemSheetViewModel));
+    return super.getExtenders().concat(ExtenderUtil.getExtenders(SkillItemSheetViewModel));
   }
 
 }

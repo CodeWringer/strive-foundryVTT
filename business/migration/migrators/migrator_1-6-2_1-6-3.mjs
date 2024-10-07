@@ -1,8 +1,8 @@
 import DocumentFetcher from "../../document/document-fetcher/document-fetcher.mjs";
 import DocumentUpdater from "../../document/document-updater/document-updater.mjs";
+import { PropertyUtil } from "../../util/property-utility.mjs";
 import AbstractMigrator from "../abstract-migrator.mjs";
 import VersionCode from "../version-code.mjs";
-import * as PropertyUtility from "../../util/property-utility.mjs";
 
 export default class Migrator_1_6_2__1_6_3 extends AbstractMigrator {
   /** @override */
@@ -22,9 +22,9 @@ export default class Migrator_1_6_2__1_6_3 extends AbstractMigrator {
     });
 
     const docUpdater = new DocumentUpdater({
-      propertyUtility: PropertyUtility,
+      propertyUtility: PropertyUtil,
       logger: game.strive.logger,
-    })
+    });
 
     for (const actor of editableActors) {
       await docUpdater.deleteByPath(actor, "system.attributes.physical");

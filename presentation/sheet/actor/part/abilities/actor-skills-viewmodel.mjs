@@ -1,7 +1,9 @@
 import { ITEM_TYPES } from "../../../../../business/document/item/item-types.mjs"
 import { SEARCH_MODES, Search, SearchItem } from "../../../../../business/search/search.mjs"
-import { isDefined, validateOrThrow } from "../../../../../business/util/validation-utility.mjs"
-import { getExtenders } from "../../../../../common/extender-util.mjs"
+import { SKILL_TAGS } from "../../../../../business/tags/system-tags.mjs"
+import { StringUtil } from "../../../../../business/util/string-utility.mjs"
+import { ValidationUtil } from "../../../../../business/util/validation-utility.mjs"
+import { ExtenderUtil } from "../../../../../common/extender-util.mjs"
 import ButtonAddViewModel from "../../../../component/button-add/button-add-viewmodel.mjs"
 import InputSearchTextViewModel from "../../../../component/input-search/input-search-viewmodel.mjs"
 import SortControlsViewModel, { SortingOption } from "../../../../component/sort-controls/sort-controls-viewmodel.mjs"
@@ -52,7 +54,7 @@ export default class ActorSkillsViewModel extends ViewModel {
   }
   set searchTerm(value) {
     this._searchTerm = value;
-    if (isDefined(this.vmSearch)) {
+    if (ValidationUtil.isDefined(this.vmSearch)) {
       this.vmSearch.value = value;
     }
 
@@ -79,7 +81,7 @@ export default class ActorSkillsViewModel extends ViewModel {
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["document"]);
+    ValidationUtil.validateOrThrow(args, ["document"]);
 
     // Own properties.
     this.document = args.document;
@@ -89,12 +91,11 @@ export default class ActorSkillsViewModel extends ViewModel {
     this.readViewState();
 
     // Child view models. 
-    const thiz = this;
 
     this.vmSearch = new InputSearchTextViewModel({
       id: "vmSearch",
       parent: this,
-      isEditable: true,
+      isEditable: true, // Should always be true so that observers can also filter. 
       value: this.searchTerm,
       onChange: (oldValue, newValue) => {
         if (oldValue != newValue) {
@@ -108,81 +109,145 @@ export default class ActorSkillsViewModel extends ViewModel {
     if (this.hideInnateSkills === false) {
       this.vmInnateSkillList = new SortableListViewModel({
         id: "vmInnateSkillList",
-        parent: thiz,
-        isEditable: thiz.isEditable,
-        isSendable: thiz.isSendable,
-        contextTemplate: thiz.contextTemplate,
+        parent: this,
+        contextTemplate: this.contextTemplate,
         indexDataSource: new DocumentListItemOrderDataSource({
-          document: thiz.document,
+          document: this.document,
           listName: "innateSkills",
         }),
         listItemViewModels: this.innateSkillViewModels,
         listItemTemplate: SkillListItemViewModel.TEMPLATE,
+        vmBtnAddItem: new ButtonAddViewModel({
+          id: "vmAddInnateSkill1",
+          parent: this,
+          target: this.document,
+          creationType: ITEM_TYPES.SKILL,
+          withDialog: true,
+          creationData: {
+            level: 1,
+            properties: [
+              SKILL_TAGS.INNATE.id,
+            ],
+          },
+          localizedLabel: StringUtil.format(
+            game.i18n.localize("system.general.add.addType"),
+            game.i18n.localize("system.character.skill.innate.singular"),
+          ),
+          localizedType: game.i18n.localize("system.character.skill.innate.singular"),
+        }),
       });
     }
+    this.vmAddInnateSkill2 = new ButtonAddViewModel({
+      id: "vmAddInnateSkill2",
+      parent: this,
+      target: this.document,
+      creationType: ITEM_TYPES.SKILL,
+      withDialog: true,
+      creationData: {
+        level: 1,
+        properties: [
+          SKILL_TAGS.INNATE.id,
+        ],
+      },
+      localizedToolTip: StringUtil.format(
+        game.i18n.localize("system.general.add.addType"),
+        game.i18n.localize("system.character.skill.innate.singular"),
+      ),
+      localizedType: game.i18n.localize("system.character.skill.innate.singular"),
+    });
 
     this.learningSkillViewModels = [];
     this.learningSkillViewModels = this._getLearningSkillViewModels();
     this.vmLearningSkillList = new SortableListViewModel({
       id: "vmLearningSkillList",
-      parent: thiz,
-      isEditable: thiz.isEditable,
-      isSendable: thiz.isSendable,
-      contextTemplate: thiz.contextTemplate,
+      parent: this,
+      contextTemplate: this.contextTemplate,
       indexDataSource: new DocumentListItemOrderDataSource({
-        document: thiz.document,
+        document: this.document,
         listName: "learningSkills",
       }),
       listItemViewModels: this.learningSkillViewModels,
       listItemTemplate: SkillListItemViewModel.TEMPLATE,
       vmBtnAddItem: new ButtonAddViewModel({
-        id: "vmBtnAddLearningSkill",
+        id: "vmAddLearningSkill1",
         parent: this,
-        isEditable: thiz.isEditable,
-        target: thiz.document,
+        target: this.document,
         creationType: ITEM_TYPES.SKILL,
         withDialog: true,
-        localizedLabel: game.i18n.localize("system.character.skill.learning.add.label"),
         creationData: {
-          level: 0
+          level: 0,
         },
+        localizedLabel: StringUtil.format(
+          game.i18n.localize("system.general.add.addType"),
+          game.i18n.localize("system.character.skill.learning.singular"),
+        ),
         localizedType: game.i18n.localize("system.character.skill.learning.singular"),
       }),
+    });
+    this.vmAddLearningSkill2 = new ButtonAddViewModel({
+      id: "vmAddLearningSkill2",
+      parent: this,
+      target: this.document,
+      creationType: ITEM_TYPES.SKILL,
+      withDialog: true,
+      creationData: {
+        level: 0,
+      },
+      localizedToolTip: StringUtil.format(
+        game.i18n.localize("system.general.add.addType"),
+        game.i18n.localize("system.character.skill.learning.singular"),
+      ),
+      localizedType: game.i18n.localize("system.character.skill.learning.singular"),
     });
 
     this.knownSkillViewModels = [];
     this.knownSkillViewModels = this._getKnownSkillViewModels();
     this.vmKnownSkillList = new SortableListViewModel({
       id: "vmKnownSkillList",
-      parent: thiz,
-      isEditable: thiz.isEditable,
-      isSendable: thiz.isSendable,
-      contextTemplate: thiz.contextTemplate,
+      parent: this,
+      contextTemplate: this.contextTemplate,
       indexDataSource: new DocumentListItemOrderDataSource({
-        document: thiz.document,
+        document: this.document,
         listName: "knownSkills",
       }),
       listItemViewModels: this.knownSkillViewModels,
       listItemTemplate: SkillListItemViewModel.TEMPLATE,
       vmBtnAddItem: new ButtonAddViewModel({
-        id: "vmBtnAddKnownSkill",
+        id: "vmAddKnownSkill1",
         parent: this,
-        target: thiz.document,
-        isEditable: thiz.isEditable,
+        target: this.document,
         creationType: ITEM_TYPES.SKILL,
         withDialog: true,
-        localizedLabel: game.i18n.localize("system.character.skill.known.add.label"),
         creationData: {
-          level: 1
+          level: 1,
         },
+        localizedLabel: StringUtil.format(
+          game.i18n.localize("system.general.add.addType"),
+          game.i18n.localize("system.character.skill.known.singular"),
+        ),
         localizedType: game.i18n.localize("system.character.skill.known.singular"),
       }),
+    });
+    this.vmAddKnownSkill2 = new ButtonAddViewModel({
+      id: "vmAddKnownSkill2",
+      parent: this,
+      target: this.document,
+      creationType: ITEM_TYPES.SKILL,
+      withDialog: true,
+      creationData: {
+        level: 1,
+      },
+      localizedToolTip: StringUtil.format(
+        game.i18n.localize("system.general.add.addType"),
+        game.i18n.localize("system.character.skill.known.singular"),
+      ),
+      localizedType: game.i18n.localize("system.character.skill.known.singular"),
     });
     
     this.vmSortInnate = new SortControlsViewModel({
       id: "vmSortInnate",
       parent: this,
-      options: this._getSkillSortingOptions(),
+      options: this._getKnownSkillSortingOptions(),
       compact: true,
       onSort: (_, provideSortable) => {
         provideSortable(this.vmInnateSkillList);
@@ -191,7 +256,7 @@ export default class ActorSkillsViewModel extends ViewModel {
     this.vmSortLearning = new SortControlsViewModel({
       id: "vmSortLearning",
       parent: this,
-      options: this._getSkillSortingOptions(),
+      options: this._getLearningSkillSortingOptions(),
       compact: true,
       onSort: (_, provideSortable) => {
         provideSortable(this.vmLearningSkillList);
@@ -200,7 +265,7 @@ export default class ActorSkillsViewModel extends ViewModel {
     this.vmSortKnown = new SortControlsViewModel({
       id: "vmSortKnown",
       parent: this,
-      options: this._getSkillSortingOptions(),
+      options: this._getKnownSkillSortingOptions(),
       compact: true,
       onSort: (_, provideSortable) => {
         provideSortable(this.vmKnownSkillList);
@@ -211,6 +276,7 @@ export default class ActorSkillsViewModel extends ViewModel {
   /**
    * Updates the data of this view model. 
    * 
+   * @param {Object} args
    * @param {Boolean | undefined} args.isEditable If true, the view model data is editable.
    * * Default `false`. 
    * @param {Boolean | undefined} args.isSendable If true, the document represented by the sheet can be sent to chat.
@@ -363,11 +429,32 @@ export default class ActorSkillsViewModel extends ViewModel {
   }
 
   /**
+   * Returns the sorting options for learning skill lists. 
+   * 
    * @returns {Array<SortingOption>}
    * 
    * @private
    */
-  _getSkillSortingOptions() {
+  _getLearningSkillSortingOptions() {
+    return [
+      new SortingOption({
+        iconHtml: '<i class="ico ico-tags-solid dark"></i>',
+        localizedToolTip: game.i18n.localize("system.general.name.label"),
+        sortingFunc: (a, b) => {
+          return a.document.name.localeCompare(b.document.name);
+        },
+      }),
+    ];
+  }
+
+  /**
+   * Returns the sorting options for known and innate skill lists. 
+   * 
+   * @returns {Array<SortingOption>}
+   * 
+   * @private
+   */
+  _getKnownSkillSortingOptions() {
     return [
       new SortingOption({
         iconHtml: '<i class="ico ico-tags-solid dark"></i>',
@@ -388,7 +475,7 @@ export default class ActorSkillsViewModel extends ViewModel {
   
   /** @override */
   getExtenders() {
-    return super.getExtenders().concat(getExtenders(ActorSkillsViewModel));
+    return super.getExtenders().concat(ExtenderUtil.getExtenders(ActorSkillsViewModel));
   }
 
 }

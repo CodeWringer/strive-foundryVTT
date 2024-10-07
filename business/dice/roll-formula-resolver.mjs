@@ -1,6 +1,6 @@
 import AtReferencer from "../referencing/at-referencer.mjs";
 import Ruleset from "../ruleset/ruleset.mjs";
-import { isDefined, validateOrThrow } from "../util/validation-utility.mjs";
+import { ValidationUtil } from "../util/validation-utility.mjs";
 import { DICE_CONSTANTS } from "./dice-constants.mjs";
 
 /**
@@ -35,7 +35,7 @@ export default class RollFormulaResolver {
    * * E. g. `"5D5 + 2"` or `"@SI + 5D3"` or `"@SI D + 3"`
    */
   constructor(args = {}) {
-    validateOrThrow(args, ["formula"]);
+    ValidationUtil.validateOrThrow(args, ["formula"]);
 
     this.formula = args.formula + "";
   }
@@ -66,7 +66,7 @@ export default class RollFormulaResolver {
       const diceFaceCount = match.groups.face.length > 0 ? match.groups.face : "6";
       const composedDiceStatement = `${match.groups.dice}D${diceFaceCount}`;
 
-      if (isDefined(previousMatch)) {
+      if (ValidationUtil.isDefined(previousMatch)) {
         const snippet = atFreeFormula.substring(previousMatch.index + previousMatch.groups.match.length, match.index).trim();
         if (snippet.length > 0) {
           snippets.push(snippet);
@@ -81,7 +81,7 @@ export default class RollFormulaResolver {
 
       previousMatch = match;
     }
-    if (isDefined(previousMatch)) {
+    if (ValidationUtil.isDefined(previousMatch)) {
       const snippet = atFreeFormula.substring(previousMatch.index + previousMatch.groups.match.length).trim();
       if (snippet.length > 0) {
         snippets.push(snippet);
@@ -108,7 +108,7 @@ export default class RollFormulaResolver {
     const terms = [];
     const hitEvaluationTerms = [];
     for (const term of evaluated.terms) {
-      if (isDefined(term.faces) && term.faces == 6) {
+      if (ValidationUtil.isDefined(term.faces) && term.faces == 6) {
         const d6Group = new D6Group({
           values: term.values,
           total: term.total,
@@ -186,7 +186,7 @@ export class EvaluatedRollFormula {
     let result = '<div class="flex flex-row flex-middle flex-wrap">';
     
     for (const term of this.terms) {
-      if (isDefined(term.hits)) {
+      if (ValidationUtil.isDefined(term.hits)) {
         // It's a d6 group. 
         let diceRolls = "";
         for (const hit of term.hits) {

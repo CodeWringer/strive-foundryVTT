@@ -1,4 +1,4 @@
-import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
+import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
 import InputRichTextViewModel from "../input-rich-text/input-rich-text-viewmodel.mjs";
 
@@ -37,7 +37,7 @@ export default class GmNotesViewModel extends ViewModel {
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["document"]);
+    ValidationUtil.validateOrThrow(args, ["document"]);
 
     // Own properties.
     this.document = args.document;

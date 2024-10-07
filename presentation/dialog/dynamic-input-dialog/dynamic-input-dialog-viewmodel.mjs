@@ -1,4 +1,3 @@
-import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import { DYNAMIC_INPUT_TYPES } from "./dynamic-input-types.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
 import InputDropDownViewModel from "../../component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
@@ -8,11 +7,10 @@ import InputRadioButtonGroupViewModel from "../../component/input-choice/input-r
 import InputRichTextViewModel from "../../component/input-rich-text/input-rich-text-viewmodel.mjs";
 import InputTextareaViewModel from "../../component/input-textarea/input-textarea-viewmodel.mjs";
 import InputTextFieldViewModel from "../../component/input-textfield/input-textfield-viewmodel.mjs";
-import { isBlankOrUndefined } from "../../../business/util/validation-utility.mjs";
-import { isDefined } from "../../../business/util/validation-utility.mjs";
 import SimpleListViewModel from "../../component/simple-list/simple-list-viewmodel.mjs";
 import InputToggleViewModel from "../../component/input-toggle/input-toggle-viewmodel.mjs";
 import DynamicInputDefinition from "./dynamic-input-definition.mjs";
+import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
 
 /**
  * @property {Array<DynamicInputDefinition>} inputDefinitions The list of input definitions of 
@@ -33,7 +31,7 @@ export default class DynamicInputDialogViewModel extends ViewModel {
   constructor(args = {}) {
     super(args);
 
-    validateOrThrow(args, ["inputDefinitions", "ui"]);
+    ValidationUtil.validateOrThrow(args, ["inputDefinitions", "ui"]);
 
     this.inputDefinitions = args.inputDefinitions;
     this.ui = args.ui;
@@ -49,6 +47,7 @@ export default class DynamicInputDialogViewModel extends ViewModel {
         viewModel = new InputDropDownViewModel({
           id: definition.name,
           parent: this,
+          isEditable: definition.isEditable ?? this.isEditable,
           value: definition.defaultValue,
           onChange: async (oldValue, newValue) => {
             this[definition.name] = newValue;
@@ -60,6 +59,7 @@ export default class DynamicInputDialogViewModel extends ViewModel {
         viewModel = new InputImageViewModel({
           id: definition.name,
           parent: this,
+          isEditable: definition.isEditable ?? this.isEditable,
           value: definition.defaultValue,
           onChange: async (oldValue, newValue) => {
             this[definition.name] = newValue;
@@ -70,6 +70,7 @@ export default class DynamicInputDialogViewModel extends ViewModel {
         viewModel = new InputNumberSpinnerViewModel({
           id: definition.name,
           parent: this,
+          isEditable: definition.isEditable ?? this.isEditable,
           value: definition.defaultValue,
           onChange: async (oldValue, newValue) => {
             this[definition.name] = newValue;
@@ -83,6 +84,7 @@ export default class DynamicInputDialogViewModel extends ViewModel {
         viewModel = new InputRadioButtonGroupViewModel({
           id: definition.name,
           parent: this,
+          isEditable: definition.isEditable ?? this.isEditable,
           value: definition.defaultValue,
           onChange: async (oldValue, newValue) => {
             this[definition.name] = newValue;
@@ -94,6 +96,7 @@ export default class DynamicInputDialogViewModel extends ViewModel {
         viewModel = new InputRichTextViewModel({
           id: definition.name,
           parent: this,
+          isEditable: definition.isEditable ?? this.isEditable,
           value: definition.defaultValue,
           onChange: async (oldValue, newValue) => {
             this[definition.name] = newValue;
@@ -104,6 +107,7 @@ export default class DynamicInputDialogViewModel extends ViewModel {
         viewModel = new InputTextareaViewModel({
           id: definition.name,
           parent: this,
+          isEditable: definition.isEditable ?? this.isEditable,
           value: definition.defaultValue,
           onChange: async (oldValue, newValue) => {
             this[definition.name] = newValue;
@@ -116,6 +120,7 @@ export default class DynamicInputDialogViewModel extends ViewModel {
         viewModel = new InputTextFieldViewModel({
           id: definition.name,
           parent: this,
+          isEditable: definition.isEditable ?? this.isEditable,
           value: definition.defaultValue,
           onChange: async (oldValue, newValue) => {
             this[definition.name] = newValue;
@@ -140,6 +145,7 @@ export default class DynamicInputDialogViewModel extends ViewModel {
         viewModel = new SimpleListViewModel({
           id: definition.name,
           parent: this,
+          isEditable: definition.isEditable ?? this.isEditable,
           contentItemViewModels: viewModels,
           contentItemTemplate: definition.specificArgs.contentItemTemplate,
           onAddClick: async () => {
@@ -163,6 +169,7 @@ export default class DynamicInputDialogViewModel extends ViewModel {
         viewModel = new InputToggleViewModel({
           id: definition.name,
           parent: this,
+          isEditable: definition.isEditable ?? this.isEditable,
           value: definition.defaultValue,
           onChange: async (oldValue, newValue) => {
             this[definition.name] = newValue;
@@ -176,7 +183,7 @@ export default class DynamicInputDialogViewModel extends ViewModel {
       // Ensure the default value is properly set. 
       // This has to happen _after_ control instantiation, because determining the default 
       // value is the control's business. 
-      if (!isDefined(definition.defaultValue)) {
+      if (!ValidationUtil.isDefined(definition.defaultValue)) {
         this[definition.name] = viewModel.value;
       }
 
@@ -186,7 +193,7 @@ export default class DynamicInputDialogViewModel extends ViewModel {
       if (validationFunc === undefined && definition.required === true) {
         // Fallback function, for a required field only. 
         validationFunc = (value) => {
-          return isBlankOrUndefined(value) === false;
+          return ValidationUtil.isBlankOrUndefined(value) === false;
         };
       }
 
@@ -217,7 +224,7 @@ export default class DynamicInputDialogViewModel extends ViewModel {
     for (const control of this.controls) {
       const value = control.viewModel.value;
       let controlValidated = true;
-      if (isDefined(control.validationFunc) === true && control.validationFunc(value) === false) {
+      if (ValidationUtil.isDefined(control.validationFunc) === true && control.validationFunc(value) === false) {
         controlValidated = false;
       }
 
@@ -255,7 +262,7 @@ class DynamicInputDialogControl {
    * indicates validation failed. 
    */
   constructor(args = {}) {
-    validateOrThrow(args, ["definition", "viewModel"]);
+    ValidationUtil.validateOrThrow(args, ["definition", "viewModel"]);
 
     this.definition = args.definition;
     this.viewModel = args.viewModel;

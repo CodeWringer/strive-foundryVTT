@@ -1,4 +1,4 @@
-import * as ConstantsUtils from "../util/constants-utility.mjs";
+import { ConstantsUtil } from "../util/constants-utility.mjs";
 
 /**
  * Represents a damage type. 
@@ -83,7 +83,7 @@ export const DAMAGE_TYPES = {
     localizableAbbreviation: "system.damageType.slashing.abbreviation"
   }),
 };
-ConstantsUtils.enrichConstant(DAMAGE_TYPES);
+ConstantsUtil.enrichConstant(DAMAGE_TYPES);
 
 /**
  * Returns the CSS class of the icon that represents the given damage type. 

@@ -9,7 +9,7 @@ import { SkillRollSchema } from "../dice/ability-roll/skill-roll-schema.mjs";
 import { RollSchema } from "../dice/roll-schema.mjs";
 import { AttributeRollSchema } from "../dice/ability-roll/attribute-roll-schema.mjs";
 import { AttributeAndSkillRollSchema } from "../dice/ability-roll/attribute-and-skill-roll-schema/attribute-and-skill-roll-schema.mjs";
-import { isDefined } from "../util/validation-utility.mjs";
+import { ValidationUtil } from "../util/validation-utility.mjs";
 
 /**
  * Provides all the ruleset-specifics. 
@@ -300,7 +300,7 @@ export default class Ruleset {
       return transientActor.challengeRating.modified;
     } else {
       const characterAttribute = transientActor.attributes.find(it => it.name === attribute.name);
-      if (!isDefined(characterAttribute)) {
+      if (!ValidationUtil.isDefined(characterAttribute)) {
         game.strive.logger.logError(`Failed to find attribute by name ${attribute.name} on actor ${transientActor.id}`);
         return;
       }

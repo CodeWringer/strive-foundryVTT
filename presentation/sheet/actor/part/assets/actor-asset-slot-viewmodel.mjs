@@ -1,7 +1,7 @@
 import TransientBaseCharacterActor from "../../../../../business/document/actor/transient-base-character-actor.mjs";
 import CharacterAssetSlot from "../../../../../business/ruleset/asset/character-asset-slot.mjs";
-import * as StringUtil from "../../../../../business/util/string-utility.mjs";
-import { isDefined, validateOrThrow } from "../../../../../business/util/validation-utility.mjs";
+import { StringUtil } from "../../../../../business/util/string-utility.mjs";
+import { ValidationUtil } from "../../../../../business/util/validation-utility.mjs";
 import ButtonDeleteViewModel from "../../../../component/button-delete/button-delete-viewmodel.mjs";
 import ButtonViewModel from "../../../../component/button/button-viewmodel.mjs";
 import ChoiceOption from "../../../../component/input-choice/choice-option.mjs";
@@ -55,7 +55,7 @@ export default class ActorAssetSlotViewModel extends ViewModel {
    * @readonly
    */
   get hasAsset() {
-    return isDefined(this.assetSlot.alottedId) === true;
+    return ValidationUtil.isDefined(this.assetSlot.alottedId) === true;
   }
 
     /**
@@ -140,7 +140,7 @@ export default class ActorAssetSlotViewModel extends ViewModel {
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["assetSlot"]);
+    ValidationUtil.validateOrThrow(args, ["assetSlot"]);
 
     this.assetSlot = args.assetSlot;
     this.showSlotBulk = args.showSlotBulk ?? false;
@@ -151,7 +151,7 @@ export default class ActorAssetSlotViewModel extends ViewModel {
       id: "vmBtnEdit",
       parent: this,
       iconHtml: '<i class="fas fa-cog"></i>',
-      localizedTooltip: game.i18n.localize("system.character.asset.slot.edit"),
+      localizedToolTip: game.i18n.localize("system.character.asset.slot.edit"),
       onClick: async () => {
         const delta = await queryAssetSlotConfiguration(this.assetSlot);
         await this.assetSlot.update(delta);
@@ -164,7 +164,7 @@ export default class ActorAssetSlotViewModel extends ViewModel {
       target: this.document,
       iconHtml: '<i class="fas fa-plus"></i>',
       localizedLabel: game.i18n.localize("system.character.asset.slot.assign.label"),
-      localizedTooltip: game.i18n.localize("system.character.asset.slot.assign.label"),
+      localizedToolTip: game.i18n.localize("system.character.asset.slot.assign.label"),
       onClick: async () => {
         const inputChoices = "inputChoices";
         const assetChoices = this._getAssetsAsChoices();
@@ -203,8 +203,8 @@ export default class ActorAssetSlotViewModel extends ViewModel {
       isEditable: this.isEditable,
       target: this.assetSlot,
       withDialog: true,
-      localizedTooltip: game.i18n.localize("system.character.asset.slot.delete.query"),
-      localizedDialogTitle: game.i18n.localize("system.character.asset.slot.delete.queryOf"),
+      localizedDeletionType: game.i18n.localize("system.character.asset.slot.label"),
+      localizedDeletionTarget: this.assetSlot.name,
       callback: async () => {
         const assetToUnassign = this.availableAssets.find(it => it.id === this.assetSlot.alottedId);
         if (assetToUnassign !== undefined) {
@@ -232,7 +232,7 @@ export default class ActorAssetSlotViewModel extends ViewModel {
     if (this.assetListItemViewModel !== undefined) {
       this.assetListItemViewModel.dispose();
     }
-    if (isDefined(this.assetSlot.alottedId) === true) {
+    if (ValidationUtil.isDefined(this.assetSlot.alottedId) === true) {
       this.assetListItemViewModel = new AssetListItemViewModel({
         id: "assetListItemViewModel",
         parent: this,

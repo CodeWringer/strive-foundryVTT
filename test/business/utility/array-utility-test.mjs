@@ -1,6 +1,4 @@
-import { arrayContains, arrayTakeUnless, arrayTakeWhen } from "../../../business/util/array-utility.mjs";
-import { moveArrayElementBy } from "../../../business/util/array-utility.mjs";
-import { moveArrayElement } from "../../../business/util/array-utility.mjs";
+import { ArrayUtil } from "../../../business/util/array-utility.mjs";
 
 describe('array-utility', function() {
   describe('moveArrayElement', function() {
@@ -8,7 +6,7 @@ describe('array-utility', function() {
       // Given
       const arr = ["abc", "def", "ghi"];
       // When
-      moveArrayElement(arr, "def", 0);
+      ArrayUtil.moveArrayElement(arr, "def", 0);
       // Then
       arr[0].should.be.equal("def");
       arr[1].should.be.equal("abc");
@@ -19,7 +17,7 @@ describe('array-utility', function() {
       // Given
       const arr = ["abc", "def", "ghi"];
       // When
-      moveArrayElement(arr, "def", arr.length-1);
+      ArrayUtil.moveArrayElement(arr, "def", arr.length-1);
       // Then
       arr[0].should.be.equal("abc");
       arr[1].should.be.equal("ghi");
@@ -30,7 +28,7 @@ describe('array-utility', function() {
       // Given
       const arr = ["abc", "def", "ghi"];
       // When
-      moveArrayElement(arr, "abc", 1);
+      ArrayUtil.moveArrayElement(arr, "abc", 1);
       // Then
       arr[0].should.be.equal("def");
       arr[1].should.be.equal("abc");
@@ -43,7 +41,7 @@ describe('array-utility', function() {
       // Given
       const arr = ["abc", "def", "ghi"];
       // When
-      moveArrayElementBy(arr, "def", -1);
+      ArrayUtil.moveArrayElementBy(arr, "def", -1);
       // Then
       arr[0].should.be.equal("def");
       arr[1].should.be.equal("abc");
@@ -54,7 +52,7 @@ describe('array-utility', function() {
       // Given
       const arr = ["abc", "def", "ghi"];
       // When
-      moveArrayElementBy(arr, "abc", -1);
+      ArrayUtil.moveArrayElementBy(arr, "abc", -1);
       // Then
       arr[0].should.be.equal("abc");
       arr[1].should.be.equal("def");
@@ -65,7 +63,7 @@ describe('array-utility', function() {
       // Given
       const arr = ["abc", "def", "ghi"];
       // When
-      moveArrayElementBy(arr, "def", 1);
+      ArrayUtil.moveArrayElementBy(arr, "def", 1);
       // Then
       arr[0].should.be.equal("abc");
       arr[1].should.be.equal("ghi");
@@ -76,7 +74,7 @@ describe('array-utility', function() {
       // Given
       const arr = ["abc", "def", "ghi"];
       // When
-      moveArrayElementBy(arr, "ghi", 1);
+      ArrayUtil.moveArrayElementBy(arr, "ghi", 1);
       // Then
       arr[0].should.be.equal("abc");
       arr[1].should.be.equal("def");
@@ -89,7 +87,7 @@ describe('array-utility', function() {
       // Given
       const arr = ["abc", "def", "ghi"];
       // When
-      const r = arrayContains(arr, "abc");
+      const r = ArrayUtil.arrayContains(arr, "abc");
       // Then
       r.should.be.equal(true);
     });
@@ -98,7 +96,7 @@ describe('array-utility', function() {
       // Given
       const arr = ["def", "ghi"];
       // When
-      const r = arrayContains(arr, "abc");
+      const r = ArrayUtil.arrayContains(arr, "abc");
       // Then
       r.should.be.equal(false);
     });
@@ -107,7 +105,7 @@ describe('array-utility', function() {
       // Given
       const arr = [{ a: 42 }, { b: 0 }];
       // When
-      const r = arrayContains(arr, { a: 42 });
+      const r = ArrayUtil.arrayContains(arr, { a: 42 });
       // Then
       r.should.be.equal(false);
     });
@@ -117,7 +115,7 @@ describe('array-utility', function() {
       const givenObj = { a: 42 };
       const arr = [givenObj, { b: 0 }];
       // When
-      const r = arrayContains(arr, givenObj);
+      const r = ArrayUtil.arrayContains(arr, givenObj);
       // Then
       r.should.be.equal(true);
     });
@@ -128,7 +126,7 @@ describe('array-utility', function() {
       // Given
       const givenArr = [1, 2, 3, 4];
       // When
-      const r = arrayTakeWhen(givenArr, (element) => {
+      const r = ArrayUtil.arrayTakeWhen(givenArr, (element) => {
         return element !== 2;
       });
       // Then
@@ -151,7 +149,7 @@ describe('array-utility', function() {
       // Given
       const givenArr = [1, 2, 3, 4];
       // When
-      const r = arrayTakeUnless(givenArr, (element) => {
+      const r = ArrayUtil.arrayTakeUnless(givenArr, (element) => {
         return element === 2;
       });
       // Then

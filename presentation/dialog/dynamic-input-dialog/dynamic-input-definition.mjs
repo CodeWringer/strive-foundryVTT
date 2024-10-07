@@ -1,4 +1,4 @@
-import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
+import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
 
 /**
  * Represents an input control definition for a `DynamicInputDialog`. 
@@ -10,6 +10,8 @@ import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
  * of represented input control. 
  * @property {Boolean} required If true, the represented input must have a valid 
  * input, to allow dialog confirmation. 
+ * @property {Boolean} isEditable If true, enables the control. If false, renders 
+ * it in read-only mode. 
  * @property {Any | undefined} defaultValue A default value to initialize the 
  * input control with. 
  * @property {Function | undefined} validationFunc A validation function. 
@@ -36,6 +38,9 @@ export default class DynamicInputDefinition {
    * @param {Boolean | undefined} args.required If true, the represented input must have a valid 
    * input, to allow dialog confirmation. 
    * * Default `false`. 
+   * @param {Boolean | undefined} args.isEditable If true, enables the control. If false, renders 
+   * it in read-only mode. 
+   * * Default `true`. 
    * @param {Any | undefined} args.defaultValue A default value to initialize the 
    * input control with. 
    * @param {Function | undefined} args.validationFunc A validation function. 
@@ -52,13 +57,14 @@ export default class DynamicInputDefinition {
    * * `dialogViewModel: DynamicInputDialogViewModel`
    */
   constructor(args = {}) {
-    validateOrThrow(args, ["type", "name"]);
+    ValidationUtil.validateOrThrow(args, ["type", "name"]);
 
     this.type = args.type;
     this.name = args.name;
     this.localizedLabel = args.localizedLabel ?? "";
     this.specificArgs = args.specificArgs ?? {};
     this.required = args.required ?? false;
+    this.isEditable = args.isEditable ?? true;
     this.defaultValue = args.defaultValue;
     this.validationFunc = args.validationFunc;
     this.showFancyFont = args.showFancyFont ?? false;

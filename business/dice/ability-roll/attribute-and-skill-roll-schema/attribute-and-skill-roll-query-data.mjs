@@ -1,6 +1,6 @@
 import { VisibilityMode } from "../../../../presentation/chat/visibility-modes.mjs";
 import CharacterAttribute from "../../../ruleset/attribute/character-attribute.mjs";
-import { validateOrThrow } from "../../../util/validation-utility.mjs";
+import { ValidationUtil } from "../../../util/validation-utility.mjs";
 import { RollDiceModifierType } from "../../roll-dice-modifier-types.mjs";
 import RollQueryData from "../../roll-query-data.mjs";
 
@@ -42,7 +42,7 @@ export default class AttributeAndSkillRollQueryData extends RollQueryData {
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["attribute"]);
+    ValidationUtil.validateOrThrow(args, ["attribute"]);
 
     this.attribute = args.attribute;
   }

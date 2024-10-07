@@ -13,10 +13,10 @@ cssClass: {undefined | String}
         </h1>
         {{!-- Configure --}}
         {{#if (or viewModel.isNPC viewModel.isPC)}}
-          {{> button viewModel=viewModel.vmBtnConfigure }}
+          {{> button viewModel=viewModel.vmBtnConfigure cssClass="font-size-lg" }}
         {{/if}}
         {{!-- SendToChat --}}
-        <div class="flex flex-center {{#if viewModel.isSendable}}{{else}}hidden{{/if}}">
+        <div class="flex flex-center font-size-lg{{#if viewModel.isSendable}}{{else}} hidden{{/if}}">
           {{> buttonSendToChat viewModel=viewModel.vmBtnSendToChat }}
         </div>
       </div>
@@ -30,7 +30,7 @@ cssClass: {undefined | String}
 
   {{#if viewModel.showNavigation}}
     {{!-- Sheet Tab Navigation --}}
-    <nav class="sheet-tabs tabs flex flex-justify font-size-default" id="nav-sheet-tabs" data-group="primary">
+    <nav class="actor-navigation-bar sheet-tabs tabs flex flex-justify font-size-default" id="nav-sheet-tabs" data-group="primary">
       {{#if (eq viewModel.isPlain false)}}
         {{!-- Default tab is specified in actor-sheet.mjs --}}
         <a class="item flex flex-center flex-grow{{#if viewModel.showFancyFont}} fancy-font{{/if}}" data-tab="abilities"><div>{{localize "system.character.sheet.tab.abilities"}}</div></a>

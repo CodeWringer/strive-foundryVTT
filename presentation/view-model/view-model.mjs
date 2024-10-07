@@ -1,7 +1,7 @@
-import { createUUID } from "../../business/util/uuid-utility.mjs";
-import * as PropertyUtil from "../../business/util/property-utility.mjs";
-import * as ValidationUtil from "../../business/util/validation-utility.mjs";
 import GetShowFancyFontUseCase from "../../business/use-case/get-show-fancy-font-use-case.mjs";
+import { PropertyUtil } from "../../business/util/property-utility.mjs";
+import { UuidUtil } from "../../business/util/uuid-utility.mjs";
+import { ValidationUtil } from "../../business/util/validation-utility.mjs";
 
 /**
  * @summary
@@ -309,12 +309,16 @@ export default class ViewModel {
    * @param {Map<String, Object>} args.viewStateSource The data source for view state objects. 
    * * Default `game.strive.viewStates`. 
    * @param {Object | undefined} args.document An associated data document. 
+   * @param {Boolean | undefined} args.showFancyFont If `true`, will render any text, where 
+   * appropriate, with the "fancy" font. 
+   * * Default is the globally configured setting. 
    */
   constructor(args = {}) {
-    this._id = this.sanitizeId(args.id ?? createUUID());
+    this._id = this.sanitizeId(args.id ?? UuidUtil.createUUID());
     
     this.parent = args.parent;
     this.document = args.document;
+    this._showFancyFont = args.showFancyFont;
 
     this.contextTemplate = args.contextTemplate;
     this._viewStateSource = args.viewStateSource ?? game.strive.viewStates;
@@ -349,6 +353,7 @@ export default class ViewModel {
    * }
    * ```
    * 
+   * @param {Object} args 
    * @param {Boolean | undefined} args.isEditable If true, the view model data is editable.
    * * Default `false`. 
    * @param {Boolean | undefined} args.isSendable If true, the document represented by the sheet can be sent to chat.
@@ -626,16 +631,23 @@ export default class ViewModel {
    */
   sanitizeId(id) {
     const rgxUnacceptedChars = new RegExp("[^a-zA-z0-9-]", "g");
-    const matches = id.match(rgxUnacceptedChars);
-    let sanitized = id;
-
-    if (matches === null) return sanitized;
-
-    for (const match of matches) {
-      const index = sanitized.indexOf(match);
-      sanitized = sanitized.substring(0, index) + sanitized.substring(index + 1);
+    try {
+      const matches = id.match(rgxUnacceptedChars);
+      let sanitized = id;
+  
+      if (matches === null) return sanitized;
+  
+      for (const match of matches) {
+        const index = sanitized.indexOf(match);
+        sanitized = sanitized.substring(0, index) + sanitized.substring(index + 1);
+      }
+      return sanitized;
+    } catch (error) {
+      game.strive.logger.logError("Failed to sanitize the following ID");
+      game.strive.logger.logError(id);
+      game.strive.logger.logError(error);
+      return UuidUtil.createUUID();
     }
-    return sanitized;
   }
 
   /**

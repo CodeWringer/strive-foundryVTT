@@ -1,7 +1,7 @@
 import TransientDocument from "../../../../business/document/transient-document.mjs";
-import { format } from "../../../../business/util/string-utility.mjs";
-import { isDefined, validateOrThrow } from "../../../../business/util/validation-utility.mjs";
-import { getExtenders } from "../../../../common/extender-util.mjs";
+import { StringUtil } from "../../../../business/util/string-utility.mjs";
+import { ValidationUtil } from "../../../../business/util/validation-utility.mjs";
+import { ExtenderUtil } from "../../../../common/extender-util.mjs";
 import ButtonContextMenuViewModel from "../../../component/button-context-menu/button-context-menu-viewmodel.mjs";
 import ButtonDeleteViewModel from "../../../component/button-delete/button-delete-viewmodel.mjs";
 import ButtonSendToChatViewModel from "../../../component/button-send-to-chat/button-send-to-chat-viewmodel.mjs";
@@ -44,6 +44,7 @@ import { TemplatedComponent } from "./templated-component.mjs";
  * * Note that each of the provided view model instances will be available for access on 
  * this view model instance, as a property whose name is the id of the provided 
  * view model instance. 
+ * @property {Boolean} isExpanded If `true`, will render in expanded state. 
  */
 export default class BaseListItemViewModel extends ViewModel {
   /** @override */
@@ -64,9 +65,16 @@ export default class BaseListItemViewModel extends ViewModel {
    */
   _isExpanded = false;
   /**
+   * Returns the current expansion state. 
+   * 
    * @type {Boolean}
    */
   get isExpanded() { return this._isExpanded; }
+  /**
+   * Sets the current expansion state. 
+   * 
+   * @param {Boolean} value If `true`, will be expanded, else collapsed. 
+   */
   set isExpanded(value) {
     this._isExpanded = value;
     this.writeViewState();
@@ -111,9 +119,11 @@ export default class BaseListItemViewModel extends ViewModel {
    * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 
    * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 
    * is expected to be associated with an actor sheet or item sheet or journal entry or chat message and so on.
-   * @param {Boolean | undefined} args.isEditable If true, the sheet is editable. 
-   * @param {Boolean | undefined} args.isSendable If true, the document represented by the sheet can be sent to chat. 
-   * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document. 
+   * @param {Boolean | undefined} args.isEditable If `true`, the sheet is editable. 
+   * @param {Boolean | undefined} args.isSendable If `true`, the document represented by the sheet can be sent to chat. 
+   * @param {Boolean | undefined} args.isOwner If `true`, the current user is the owner of the represented document. 
+   * @param {Boolean | undefined} args.isExpanded If `true`, will initially render in expanded state. 
+   * * default `false`
    * 
    * @param {TransientDocument} args.document 
    * @param {String | undefined} args.title
@@ -121,12 +131,13 @@ export default class BaseListItemViewModel extends ViewModel {
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["document"]);
+    ValidationUtil.validateOrThrow(args, ["document"]);
 
     this.registerViewStateProperty("_isExpanded");
 
     this.document = args.document;
     this.title = args.title ?? args.document.name;
+    this._isExpanded = args.isExpanded ?? false;
 
     this.dataFields = this.getDataFields();
     this._ensureViewModelsAsProperties(this.dataFields);
@@ -138,12 +149,12 @@ export default class BaseListItemViewModel extends ViewModel {
     this._ensureViewModelsAsProperties(this.secondaryHeaderButtons);
     
     this.additionalHeaderContent = this.getAdditionalHeaderContent();
-    if (isDefined(this.additionalHeaderContent)) {
+    if (ValidationUtil.isDefined(this.additionalHeaderContent)) {
       this._ensureViewModelsAsProperties([this.additionalHeaderContent]);
     }
     
     this.additionalContent = this.getAdditionalContent();
-    if (isDefined(this.additionalContent)) {
+    if (ValidationUtil.isDefined(this.additionalContent)) {
       this._ensureViewModelsAsProperties([this.additionalContent]);
     }
 
@@ -186,6 +197,12 @@ export default class BaseListItemViewModel extends ViewModel {
           name: game.i18n.localize("system.general.name.edit"),
           icon: '<i class="fas fa-edit"></i>',
           callback: this.queryEditName.bind(this),
+        },
+        {
+          name: game.i18n.localize("system.general.import"),
+          icon: '<i class="fas fa-download"></i>',
+          callback: this.import.bind(this),
+          condition: this.isGM,
         },
       ]);
     }
@@ -230,7 +247,8 @@ export default class BaseListItemViewModel extends ViewModel {
 
   /**
    * Returns the definitions of the secondary header buttons. 
-   * * By default, contains a context menu and delete button. 
+   * 
+   * By default, contains a context menu and delete button. 
    * 
    * @returns {Array<TemplatedComponent>}
    * 
@@ -246,15 +264,7 @@ export default class BaseListItemViewModel extends ViewModel {
           id: "vmBtnContextMenu",
           parent: this,
           localizedToolTip: game.i18n.localize("system.general.contextMenu"),
-          menuItems: [
-            // Edit name
-            {
-              name: game.i18n.localize("system.general.name.edit"),
-              icon: '<i class="fas fa-edit"></i>',
-              condition: this.context === CONTEXT_TYPES.LIST_ITEM,
-              callback: this.queryEditName.bind(this),
-            },
-          ],
+          menuItems: this.getContextMenuButtons(),
         }),
       }),
       // Delete button
@@ -265,10 +275,38 @@ export default class BaseListItemViewModel extends ViewModel {
           id: "vmBtnDelete",
           target: this.document,
           withDialog: true,
-          localizedToolTip: game.i18n.localize("system.general.delete.label"),
+          localizedDeletionType: game.i18n.localize(`TYPES.Item.${this.document.type}`),
+          localizedDeletionTarget: this.document.name,
         }),
       }),
     ]; 
+  }
+
+  /**
+   * Returns the default context menu button definitions. 
+   * 
+   * @returns {Array<Object>}
+   * 
+   * @virtual
+   * @protected
+   */
+  getContextMenuButtons() {
+    return [
+      // Edit name
+      {
+        name: game.i18n.localize("system.general.name.edit"),
+        icon: '<i class="fas fa-edit"></i>',
+        condition: this.context === CONTEXT_TYPES.LIST_ITEM,
+        callback: this.queryEditName.bind(this),
+      },
+      // Import
+      {
+        name: game.i18n.localize("system.general.import"),
+        icon: '<i class="fas fa-download"></i>',
+        condition: this.context === CONTEXT_TYPES.LIST_ITEM && this.isGM,
+        callback: this.import.bind(this),
+      },
+    ];
   }
   
   /**
@@ -299,12 +337,13 @@ export default class BaseListItemViewModel extends ViewModel {
    * Prompts the user to enter a name and applies it. 
    * 
    * @protected
+   * @async
    */
   async queryEditName() {
     const inputName = "inputName";
 
     const dialog = await new DynamicInputDialog({
-      localizedTitle: `${format(game.i18n.localize("system.general.name.editOf"), this.title)}`,
+      localizedTitle: `${StringUtil.format(game.i18n.localize("system.general.name.editOf"), this.title)}`,
       inputDefinitions: [
         new DynamicInputDefinition({
           type: DYNAMIC_INPUT_TYPES.TEXTFIELD,
@@ -322,6 +361,21 @@ export default class BaseListItemViewModel extends ViewModel {
     if (dialog.confirmed !== true) return;
 
     this.document.name = dialog[inputName];
+  }
+
+  /**
+   * Creates a deep copy of the embedded document and adds it to the world. 
+   * 
+   * @protected
+   * @async
+   */
+  async import() {
+    const creationData = {
+      name: this.document.name,
+      type: this.document.type,
+      system: this.document.document.system,
+    };
+    await Item.create(creationData);
   }
 
   /**
@@ -363,7 +417,7 @@ export default class BaseListItemViewModel extends ViewModel {
   
   /** @override */
   getExtenders() {
-    return super.getExtenders().concat(getExtenders(BaseListItemViewModel));
+    return super.getExtenders().concat(ExtenderUtil.getExtenders(BaseListItemViewModel));
   }
 
 }

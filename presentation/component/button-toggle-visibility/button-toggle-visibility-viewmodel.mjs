@@ -1,4 +1,4 @@
-import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
+import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
 import ButtonToggleIconViewModel from "../button-toggle-icon/button-toggle-icon-viewmodel.mjs";
 
 /**
@@ -83,10 +83,10 @@ export default class ButtonToggleVisibilityViewModel extends ButtonToggleIconVie
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["visGroup"]);
+    ValidationUtil.validateOrThrow(args, ["visGroup"]);
 
     this._visGroup = args.visGroup;
-    this.localizedTooltip = args.localizedTooltip ?? game.i18n.localize("system.general.toggleVisibility");
+    this.localizedToolTip = args.localizedToolTip ?? game.i18n.localize("system.general.toggleVisibility");
   }
 
   /**

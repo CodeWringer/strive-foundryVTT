@@ -1,5 +1,5 @@
-import { format } from "../../../business/util/string-utility.mjs";
-import { isDefined, validateOrThrow } from "../../../business/util/validation-utility.mjs";
+import { StringUtil } from "../../../business/util/string-utility.mjs";
+import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
 import { KEY_CODES } from "../../keyboard/key-codes.mjs";
 import { KEYBOARD } from "../../keyboard/keyboard.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
@@ -72,13 +72,13 @@ export default class SortControlsViewModel extends ViewModel {
       if (this.compact === true) {
         const localizedHintReverseKey = game.i18n.localize("system.general.sort.hintReverseKey");
 
-        if (isDefined(localizedToolTipSortAscending)) {
+        if (ValidationUtil.isDefined(localizedToolTipSortAscending)) {
           localizedToolTipSortAscending = `${localizedToolTipSortAscending}. ${localizedHintReverseKey}`;
         } else {
           localizedToolTipSortAscending = localizedHintReverseKey;
         }
 
-        if (isDefined(localizedToolTipSortDescending)) {
+        if (ValidationUtil.isDefined(localizedToolTipSortDescending)) {
           localizedToolTipSortDescending = `${localizedToolTipSortDescending}. ${localizedHintReverseKey}`;
         } else {
           localizedToolTipSortDescending = localizedHintReverseKey;
@@ -205,23 +205,23 @@ export class SortingOption {
    * * Acts as an override. If undefined, uses the `localizedToolTip` in a composite string. 
    */
   constructor(args = {}) {
-    validateOrThrow(args, ["sortingFunc"]);
+    ValidationUtil.validateOrThrow(args, ["sortingFunc"]);
 
     this.sortingFunc = args.sortingFunc;
     this.iconHtml = args.iconHtml;
     this.localizedLabel = args.localizedLabel;
     this.localizedToolTip = args.localizedToolTip;
 
-    if (isDefined(args.localizedToolTipSortAscending)) {
+    if (ValidationUtil.isDefined(args.localizedToolTipSortAscending)) {
       this.localizedToolTipSortAscending = args.localizedToolTipSortAscending;
-    } else if (isDefined(args.localizedToolTip)) {
-      this.localizedToolTipSortAscending = format(game.i18n.localize("system.general.sort.sortAscendingBy"), args.localizedToolTip);
+    } else if (ValidationUtil.isDefined(args.localizedToolTip)) {
+      this.localizedToolTipSortAscending = StringUtil.format(game.i18n.localize("system.general.sort.sortAscendingBy"), args.localizedToolTip);
     }
 
-    if (isDefined(args.localizedToolTipSortDescending)) {
+    if (ValidationUtil.isDefined(args.localizedToolTipSortDescending)) {
       this.localizedToolTipSortDescending = args.localizedToolTipSortDescending;
-    } else if (isDefined(args.localizedToolTip)) {
-      this.localizedToolTipSortDescending = format(game.i18n.localize("system.general.sort.sortDescendingBy"), args.localizedToolTip);
+    } else if (ValidationUtil.isDefined(args.localizedToolTip)) {
+      this.localizedToolTipSortDescending = StringUtil.format(game.i18n.localize("system.general.sort.sortDescendingBy"), args.localizedToolTip);
     }
   }
 }

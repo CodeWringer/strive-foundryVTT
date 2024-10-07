@@ -1,7 +1,7 @@
 import should from 'should';
 import sinon from 'sinon';
 import 'should-sinon';
-import * as PropertyUtility from '../../../business/util/property-utility.mjs';
+import { PropertyUtil } from '../../../business/util/property-utility.mjs';
 
 describe('property-utility', function() {
   describe('splitPropertyPath', function() {
@@ -9,7 +9,7 @@ describe('property-utility', function() {
       // Given
       const path = "a.b";
       // When
-      const split = PropertyUtility.splitPropertyPath(path);
+      const split = PropertyUtil.splitPropertyPath(path);
       // Then
       split.length.should.be.equal(2);
       split[0].should.be.equal("a");
@@ -20,7 +20,7 @@ describe('property-utility', function() {
       // Given
       const path = "a.b[4].c";
       // When
-      const split = PropertyUtility.splitPropertyPath(path);
+      const split = PropertyUtil.splitPropertyPath(path);
       // Then
       split.length.should.be.equal(4);
       split[0].should.be.equal("a");
@@ -33,7 +33,7 @@ describe('property-utility', function() {
       // Given
       const path = "a.b[4][2].c";
       // When
-      const split = PropertyUtility.splitPropertyPath(path);
+      const split = PropertyUtil.splitPropertyPath(path);
       // Then
       split.length.should.be.equal(5);
       split[0].should.be.equal("a");
@@ -55,7 +55,7 @@ describe('property-utility', function() {
         }
       };
       // When
-      const actualValue = PropertyUtility.getNestedPropertyValue(obj, path);
+      const actualValue = PropertyUtil.getNestedPropertyValue(obj, path);
       // Then
       actualValue.should.be.equal(expectedValue)
     });
@@ -74,7 +74,7 @@ describe('property-utility', function() {
         }
       };
       // When
-      const value = PropertyUtility.getNestedPropertyValue(obj, path);
+      const value = PropertyUtil.getNestedPropertyValue(obj, path);
       // Then
       value.should.be.equal(2)
     });
@@ -89,7 +89,7 @@ describe('property-utility', function() {
       const path = "a";
       const newValue = 42;
       // When
-      PropertyUtility.setNestedPropertyValue(obj, path, newValue);
+      PropertyUtil.setNestedPropertyValue(obj, path, newValue);
       // Then
       obj.a.should.be.equal(newValue);
     });
@@ -108,7 +108,7 @@ describe('property-utility', function() {
       }
       // Then
       try {
-        PropertyUtility.setNestedPropertyValue(obj, path, newValue).should.throw();
+        PropertyUtil.setNestedPropertyValue(obj, path, newValue).should.throw();
       } catch (error) {}
     });
   });
@@ -120,7 +120,7 @@ describe('property-utility', function() {
         a: 0
       }
       // Then
-      PropertyUtility.hasProperty(obj, "a").should.be.equal(true);
+      PropertyUtil.hasProperty(obj, "a").should.be.equal(true);
     });
 
     it('successfully determines that property "c" does not exist on the object', function() {
@@ -129,7 +129,7 @@ describe('property-utility', function() {
         a: 0
       }
       // Then
-      PropertyUtility.hasProperty(obj, "c").should.be.equal(false);
+      PropertyUtil.hasProperty(obj, "c").should.be.equal(false);
     });
   });
 
@@ -139,7 +139,7 @@ describe('property-utility', function() {
       const expectedValue = 5;
       const obj = {}
       // When
-      PropertyUtility.ensureNestedProperty(obj, "a.b.c", expectedValue);
+      PropertyUtil.ensureNestedProperty(obj, "a.b.c", expectedValue);
       // Then
       obj.a.b.c.should.be.equal(expectedValue);
     });
@@ -155,7 +155,7 @@ describe('property-utility', function() {
         }
       }
       // When
-      PropertyUtility.ensureNestedProperty(obj, "a.b.c", expectedValue);
+      PropertyUtil.ensureNestedProperty(obj, "a.b.c", expectedValue);
       // Then
       obj.a.b.c.should.be.equal(expectedValue);
     });
@@ -165,7 +165,7 @@ describe('property-utility', function() {
       const expectedValue = 5;
       const obj = {}
       // When
-      PropertyUtility.ensureNestedProperty(obj, "a", expectedValue);
+      PropertyUtil.ensureNestedProperty(obj, "a", expectedValue);
       // Then
       obj.a.should.be.equal(expectedValue);
     });
@@ -177,7 +177,7 @@ describe('property-utility', function() {
         a: expectedValue
       }
       // When
-      PropertyUtility.ensureNestedProperty(obj, "a", expectedValue);
+      PropertyUtil.ensureNestedProperty(obj, "a", expectedValue);
       // Then
       obj.a.should.be.equal(expectedValue);
     });
@@ -192,7 +192,7 @@ describe('property-utility', function() {
         }
       }
       // When
-      PropertyUtility.ensureNestedProperty(obj, "a.b", differentValue);
+      PropertyUtil.ensureNestedProperty(obj, "a.b", differentValue);
       // Then
       obj.a.b.should.be.equal(expectedValue);
     });

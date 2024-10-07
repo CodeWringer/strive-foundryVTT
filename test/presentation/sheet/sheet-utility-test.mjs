@@ -1,7 +1,7 @@
 import should from 'should';
 import sinon from 'sinon';
 import 'should-sinon';
-import { getElementValue, setElementValue } from '../../../presentation/sheet/sheet-utility.mjs';
+import { SheetUtil } from '../../../presentation/sheet/sheet-utility.mjs';
 
 describe("sheet-utility", () => {
   before(() => {
@@ -28,7 +28,7 @@ describe("sheet-utility", () => {
         ],
       };
       // When
-      const r = getElementValue(givenElement);
+      const r = SheetUtil.getElementValue(givenElement);
       // Then
       r.should.be.eql(givenValue);
     });
@@ -42,7 +42,7 @@ describe("sheet-utility", () => {
         checked: givenValue,
       };
       // When
-      const r = getElementValue(givenElement);
+      const r = SheetUtil.getElementValue(givenElement);
       // Then
       r.should.be.eql(givenValue);
     });
@@ -55,7 +55,7 @@ describe("sheet-utility", () => {
         value: givenValue
       };
       // When
-      const r = getElementValue(givenElement);
+      const r = SheetUtil.getElementValue(givenElement);
       // Then
       r.should.be.eql(givenValue);
     });
@@ -77,7 +77,7 @@ describe("sheet-utility", () => {
         find: () => { return givenOptions },
       };
       // When
-      setElementValue(givenElement, givenValue);
+      SheetUtil.setElementValue(givenElement, givenValue);
       // Then
       givenElement.selectedIndex.should.be.eql(1);
     });
@@ -91,7 +91,7 @@ describe("sheet-utility", () => {
         checked: !givenValue,
       };
       // When
-      setElementValue(givenElement, givenValue);
+      SheetUtil.setElementValue(givenElement, givenValue);
       // Then
       givenElement.checked.should.be.eql(givenValue);
     });
@@ -105,7 +105,7 @@ describe("sheet-utility", () => {
         value: null
       };
       // When
-      setElementValue(givenElement, givenValue);
+      SheetUtil.setElementValue(givenElement, givenValue);
       // Then
       givenElement.value.should.be.eql(givenValue);
     });

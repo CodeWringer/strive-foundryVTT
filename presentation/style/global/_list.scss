@@ -11,16 +11,6 @@
   }
 }
 
-.strive-list-row {
-  margin-top: 2px;
-  &.strive-list-footer {
-    width: 100%;
-    display: block;
-    min-height: 26px;
-    margin-top: unset;
-  }
-}
-
 .alternating-rows {
   > :nth-child(even) {
     background-color: $c-row-even;

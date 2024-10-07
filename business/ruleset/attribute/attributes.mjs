@@ -1,4 +1,4 @@
-import * as ConstantsUtils from "../../util/constants-utility.mjs";
+import { ConstantsUtil } from "../../util/constants-utility.mjs";
 
 /**
  * Represents a character attribute. 
@@ -59,4 +59,4 @@ export const ATTRIBUTES = {
     localizableAbbreviation: "system.character.attribute.wit.abbreviation"
   }),
 };
-ConstantsUtils.enrichConstant(ATTRIBUTES);
+ConstantsUtil.enrichConstant(ATTRIBUTES);

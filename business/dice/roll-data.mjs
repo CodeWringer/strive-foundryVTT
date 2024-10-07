@@ -1,6 +1,6 @@
 import FoundryWrapper from "../../common/foundry-wrapper.mjs";
 import { Sum, SumComponent } from "../ruleset/summed-data.mjs";
-import { isDefined, validateOrThrow } from "../util/validation-utility.mjs";
+import { ValidationUtil } from "../util/validation-utility.mjs";
 import { DICE_POOL_RESULT_TYPES } from "./dice-pool.mjs";
 import { ROLL_DICE_MODIFIER_TYPES, RollDiceModifierType } from "./roll-dice-modifier-types.mjs";
 import RollFormulaResolver from "./roll-formula-resolver.mjs";
@@ -33,7 +33,7 @@ export default class RollData {
    * @param {RollDiceModifierType} args.rollModifier The selected roll modifier. 
    */
   constructor(args = {}) {
-    validateOrThrow(args, [
+    ValidationUtil.validateOrThrow(args, [
       "dieFaces", 
       "hitThreshold", 
       "obFormula", 
@@ -217,7 +217,7 @@ export default class RollData {
    */
   async _resolveOb(obFormula) {
     const rgxIsPlainNumber = new RegExp("^\\d+$");
-    const isPlainNumber = isDefined(obFormula.match(rgxIsPlainNumber));
+    const isPlainNumber = ValidationUtil.isDefined(obFormula.match(rgxIsPlainNumber));
 
     let resolvedObFormula = obFormula;
     let obstacle = 0;
@@ -323,7 +323,7 @@ export class ResolvedObstacle {
    * @param {Boolean} args.isPlainNumber 
    */
   constructor(args = {}) {
-    validateOrThrow(args, ["obFormula", "resolvedObFormula", "ob", "isPlainNumber"]);
+    ValidationUtil.validateOrThrow(args, ["obFormula", "resolvedObFormula", "ob", "isPlainNumber"]);
 
     this.obFormula = args.obFormula;
     this.resolvedObFormula = args.resolvedObFormula;

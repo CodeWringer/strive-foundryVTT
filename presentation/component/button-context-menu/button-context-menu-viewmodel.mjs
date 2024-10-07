@@ -1,4 +1,4 @@
-import { isDefined } from "../../../business/util/validation-utility.mjs";
+import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
 
 /**
@@ -50,7 +50,7 @@ export default class ButtonContextMenuViewModel extends ButtonViewModel {
           if (typeof(value) === "boolean") {
             return value === true;
           } else {
-            return isDefined(value) === true;
+            return ValidationUtil.isDefined(value) === true;
           }
         },
         callback: () => { propertyOwner[propertyName] = inactiveValue; },
@@ -63,7 +63,7 @@ export default class ButtonContextMenuViewModel extends ButtonViewModel {
           if (typeof(value) === "boolean") {
             return value === false;
           } else {
-            return isDefined(value) === false;
+            return ValidationUtil.isDefined(value) === false;
           }
         },
         callback: () => { propertyOwner[propertyName] = activeValue; },
@@ -124,7 +124,7 @@ export default class ButtonContextMenuViewModel extends ButtonViewModel {
     });
 
     this.menuItems = args.menuItems ?? [];
-    this.localizedTooltip = args.localizedTooltip ?? game.i18n.localize("system.general.contextMenu");
+    this.localizedToolTip = args.localizedToolTip ?? game.i18n.localize("system.general.contextMenu");
 
     // Wrap the callback function to make it also ensure the context menu is properly closed, 
     // when the menu item is clicked. 

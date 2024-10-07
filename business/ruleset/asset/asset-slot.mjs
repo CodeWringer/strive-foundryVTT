@@ -1,4 +1,4 @@
-import { createUUID } from "../../util/uuid-utility.mjs";
+import { UuidUtil } from "../../util/uuid-utility.mjs";
 
 /**
  * Represents an asset slot. 
@@ -24,7 +24,7 @@ export default class AssetSlot {
    * that has been alotted to this slot. 
    */
   constructor(args = {}) {
-    this.id = args.id ?? createUUID();
+    this.id = args.id ?? UuidUtil.createUUID();
     this.customName = args.customName;
     this.acceptedTypes = args.acceptedTypes ?? [];
     this.localizableName = args.localizableName;

@@ -1,4 +1,4 @@
-import * as StringUtil from "../../../business/util/string-utility.mjs"
+import { StringUtil } from "../../../business/util/string-utility.mjs";
 
 describe('string-utility', function() {
   describe('format', function() {

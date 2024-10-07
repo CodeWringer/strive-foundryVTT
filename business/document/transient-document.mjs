@@ -1,11 +1,11 @@
-import * as ChatUtil from "../../presentation/chat/chat-utility.mjs";
 import PreparedChatData from '../../presentation/chat/prepared-chat-data.mjs';
 import { SOUNDS_CONSTANTS } from '../../presentation/audio/sounds.mjs';
 import ViewModel from '../../presentation/view-model/view-model.mjs';
 import { VISIBILITY_MODES } from '../../presentation/chat/visibility-modes.mjs';
-import * as PropertyUtility from "../util/property-utility.mjs";
 import DocumentUpdater from "./document-updater/document-updater.mjs";
 import AtReferencer from "../referencing/at-referencer.mjs";
+import { ChatUtil } from '../../presentation/chat/chat-utility.mjs';
+import { PropertyUtil } from '../util/property-utility.mjs';
 
 /**
  * @summary
@@ -220,7 +220,7 @@ export default class TransientDocument {
     }
 
     this._updater = new DocumentUpdater({
-      propertyUtility: PropertyUtility,
+      propertyUtility: PropertyUtil,
       logger: game.strive.logger,
     });
 

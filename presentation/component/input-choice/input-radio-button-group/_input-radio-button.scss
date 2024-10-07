@@ -1,8 +1,6 @@
 .radio-button-group {
   border: 1px solid $c-border-input;
-  border-radius: 3px;
-  height: 26px;
-  line-height: 26px;
+  border-radius: 0.3rem;
 }
 
 .radio-button-container {
@@ -14,10 +12,12 @@
 
   > label {
     cursor: pointer;
-    padding: 0 6px;
+    padding: 4px;
     border-right: 1px solid $c-border-input;
     color: $c-text-disabled;
     background: $c-bg-light;
+    min-width: 26px;
+    min-height: 26px;
 
     &.disabled {
       cursor: default;
@@ -28,10 +28,16 @@
     border-right: none;
   }
 
-  &.active > label {
-    background: $c-bg-lightest;
-    text-shadow: 0 0 10px $c-text-highlight;
-    color: $c-text-normal;
+  &.active {
+    > label {
+      background: $c-bg-lightest;
+      text-shadow: 0 0 10px $c-text-highlight;
+      color: $c-text-normal;
+    }
+
+    i.ico {
+      filter: drop-shadow(0 0 4px $c-button-highlight);
+    }
   }
 
   img.radio-button-icon {

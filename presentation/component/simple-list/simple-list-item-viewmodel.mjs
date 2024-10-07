@@ -1,4 +1,4 @@
-import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
+import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
 
@@ -30,7 +30,7 @@ export default class SimpleListItemViewModel extends ViewModel {
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["itemViewModel", "itemTemplate"]);
+    ValidationUtil.validateOrThrow(args, ["itemViewModel", "itemTemplate"]);
 
     this.itemViewModel = args.itemViewModel;
     this.itemTemplate = args.itemTemplate;
@@ -42,6 +42,7 @@ export default class SimpleListItemViewModel extends ViewModel {
       parent: this,
       isEditable: this.isEditable,
       iconHtml: '<i class="fas fa-trash"></i>',
+      localizedToolTip: game.i18n.localize("system.general.delete.delete"),
       onClick: this.onRemoveClick,
     });
   }

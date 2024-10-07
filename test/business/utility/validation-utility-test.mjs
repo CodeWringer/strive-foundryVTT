@@ -1,4 +1,4 @@
-import * as ValidationUtility from "../../../business/util/validation-utility.mjs";
+import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
 
 describe('validation-utility', function() {
   describe('propertiesDefined', function() {
@@ -6,7 +6,7 @@ describe('validation-utility', function() {
       // Given
       const given = { a: 0, b: "c" };
       // When
-      const result = ValidationUtility.propertiesDefined(given, ["a", "b"]);
+      const result = ValidationUtil.propertiesDefined(given, ["a", "b"]);
       // Then
       result.should.be.equal(true);
     });
@@ -15,7 +15,7 @@ describe('validation-utility', function() {
       // Given
       const given = { a: 42, c: "d" };
       // When
-      const result = ValidationUtility.propertiesDefined(given, ["b"]);
+      const result = ValidationUtil.propertiesDefined(given, ["b"]);
       // Then
       result.should.be.equal(false);
     });
@@ -26,7 +26,7 @@ describe('validation-utility', function() {
       // Given
       const given = undefined;
       // When
-      const result = ValidationUtility.isDefined(given);
+      const result = ValidationUtil.isDefined(given);
       // Then
       result.should.be.equal(false);
     });
@@ -35,7 +35,7 @@ describe('validation-utility', function() {
       // Given
       const given = null;
       // When
-      const result = ValidationUtility.isDefined(given);
+      const result = ValidationUtil.isDefined(given);
       // Then
       result.should.be.equal(false);
     });
@@ -44,7 +44,7 @@ describe('validation-utility', function() {
       // Given
       const given = "abc";
       // When
-      const result = ValidationUtility.isDefined(given);
+      const result = ValidationUtil.isDefined(given);
       // Then
       result.should.be.equal(true);
     });
@@ -53,7 +53,7 @@ describe('validation-utility', function() {
       // Given
       const given = "undefined";
       // When
-      const result = ValidationUtility.isDefined(given);
+      const result = ValidationUtil.isDefined(given);
       // Then
       result.should.be.equal(true);
     });
@@ -62,7 +62,7 @@ describe('validation-utility', function() {
       // Given
       const given = "null";
       // When
-      const result = ValidationUtility.isDefined(given);
+      const result = ValidationUtil.isDefined(given);
       // Then
       result.should.be.equal(true);
     });
@@ -72,7 +72,7 @@ describe('validation-utility', function() {
     it('correctly throws', function() {
       // Given
       const given = { a: 42, b: "c" };
-      const call = () => { ValidationUtility.validateOrThrow(given, "doesntexist"); };
+      const call = () => { ValidationUtil.validateOrThrow(given, "doesntexist"); };
       // Then
       call.should.throw();
     });
@@ -80,7 +80,7 @@ describe('validation-utility', function() {
     it('does not throw', function() {
       // Given
       const given = { a: 42, b: "c" };
-      const call = () => { ValidationUtility.validateOrThrow(given, "a"); };
+      const call = () => { ValidationUtil.validateOrThrow(given, "a"); };
       // Then
       call.should.not.throw();
     });
@@ -91,7 +91,7 @@ describe('validation-utility', function() {
       // Given
       const given = { a: 42 };
       // When
-      const result = ValidationUtility.isObject(given);
+      const result = ValidationUtil.isObject(given);
       // Then
       result.should.be.equal(true);
     });
@@ -100,7 +100,7 @@ describe('validation-utility', function() {
       // Given
       const given = 42;
       // When
-      const result = ValidationUtility.isObject(given);
+      const result = ValidationUtil.isObject(given);
       // Then
       result.should.be.equal(false);
     });
@@ -109,7 +109,7 @@ describe('validation-utility', function() {
       // Given
       const given = "abc";
       // When
-      const result = ValidationUtility.isObject(given);
+      const result = ValidationUtil.isObject(given);
       // Then
       result.should.be.equal(false);
     });
@@ -118,7 +118,7 @@ describe('validation-utility', function() {
       // Given
       const given = [42];
       // When
-      const result = ValidationUtility.isObject(given);
+      const result = ValidationUtil.isObject(given);
       // Then
       result.should.be.equal(false);
     });
@@ -127,7 +127,7 @@ describe('validation-utility', function() {
       // Given
       const given = () => { return 42; };
       // When
-      const result = ValidationUtility.isObject(given);
+      const result = ValidationUtil.isObject(given);
       // Then
       result.should.be.equal(false);
     });
@@ -138,7 +138,7 @@ describe('validation-utility', function() {
       // Given
       const given = [42];
       // When
-      const result = ValidationUtility.isArray(given);
+      const result = ValidationUtil.isArray(given);
       // Then
       result.should.be.equal(true);
     });
@@ -147,7 +147,7 @@ describe('validation-utility', function() {
       // Given
       const given = 42;
       // When
-      const result = ValidationUtility.isArray(given);
+      const result = ValidationUtil.isArray(given);
       // Then
       result.should.be.equal(false);
     });
@@ -156,7 +156,7 @@ describe('validation-utility', function() {
       // Given
       const given = "abc";
       // When
-      const result = ValidationUtility.isArray(given);
+      const result = ValidationUtil.isArray(given);
       // Then
       result.should.be.equal(false);
     });
@@ -165,7 +165,7 @@ describe('validation-utility', function() {
       // Given
       const given = { a: 42 };
       // When
-      const result = ValidationUtility.isArray(given);
+      const result = ValidationUtil.isArray(given);
       // Then
       result.should.be.equal(false);
     });
@@ -174,7 +174,7 @@ describe('validation-utility', function() {
       // Given
       const given = () => { return 42; };
       // When
-      const result = ValidationUtility.isArray(given);
+      const result = ValidationUtil.isArray(given);
       // Then
       result.should.be.equal(false);
     });
@@ -185,7 +185,7 @@ describe('validation-utility', function() {
       // Given
       const given = () => { return 42; };
       // When
-      const result = ValidationUtility.isFunction(given);
+      const result = ValidationUtil.isFunction(given);
       // Then
       result.should.be.equal(true);
     });
@@ -194,7 +194,7 @@ describe('validation-utility', function() {
       // Given
       const given = 42;
       // When
-      const result = ValidationUtility.isFunction(given);
+      const result = ValidationUtil.isFunction(given);
       // Then
       result.should.be.equal(false);
     });
@@ -203,7 +203,7 @@ describe('validation-utility', function() {
       // Given
       const given = "abc";
       // When
-      const result = ValidationUtility.isFunction(given);
+      const result = ValidationUtil.isFunction(given);
       // Then
       result.should.be.equal(false);
     });
@@ -212,7 +212,7 @@ describe('validation-utility', function() {
       // Given
       const given = { a: 42 };
       // When
-      const result = ValidationUtility.isFunction(given);
+      const result = ValidationUtil.isFunction(given);
       // Then
       result.should.be.equal(false);
     });
@@ -221,7 +221,7 @@ describe('validation-utility', function() {
       // Given
       const given = [42];
       // When
-      const result = ValidationUtility.isFunction(given);
+      const result = ValidationUtil.isFunction(given);
       // Then
       result.should.be.equal(false);
     });
@@ -232,7 +232,7 @@ describe('validation-utility', function() {
       // Given
       const given = "";
       // When
-      const result = ValidationUtility.isBlankOrUndefined(given);
+      const result = ValidationUtil.isBlankOrUndefined(given);
       // Then
       result.should.be.equal(true);
     });
@@ -241,7 +241,7 @@ describe('validation-utility', function() {
       // Given
       const given = "   ";
       // When
-      const result = ValidationUtility.isBlankOrUndefined(given);
+      const result = ValidationUtil.isBlankOrUndefined(given);
       // Then
       result.should.be.equal(true);
     });
@@ -250,7 +250,7 @@ describe('validation-utility', function() {
       // Given
       const given = "  \t \r\n  ";
       // When
-      const result = ValidationUtility.isBlankOrUndefined(given);
+      const result = ValidationUtil.isBlankOrUndefined(given);
       // Then
       result.should.be.equal(true);
     });
@@ -259,7 +259,7 @@ describe('validation-utility', function() {
       // Given
       const given = undefined;
       // When
-      const result = ValidationUtility.isBlankOrUndefined(given);
+      const result = ValidationUtil.isBlankOrUndefined(given);
       // Then
       result.should.be.equal(true);
     });
@@ -268,7 +268,7 @@ describe('validation-utility', function() {
       // Given
       const given = "defined";
       // When
-      const result = ValidationUtility.isBlankOrUndefined(given);
+      const result = ValidationUtil.isBlankOrUndefined(given);
       // Then
       result.should.be.equal(false);
     });
@@ -277,7 +277,7 @@ describe('validation-utility', function() {
       // Given
       const given = 0;
       // When
-      const result = ValidationUtility.isBlankOrUndefined(given);
+      const result = ValidationUtil.isBlankOrUndefined(given);
       // Then
       result.should.be.equal(false);
     });
@@ -288,7 +288,7 @@ describe('validation-utility', function() {
       // Given
       const given = "  abc def";
       // When
-      const result = ValidationUtility.isNotBlankOrUndefined(given);
+      const result = ValidationUtil.isNotBlankOrUndefined(given);
       // Then
       result.should.be.equal(true);
     });
@@ -297,7 +297,7 @@ describe('validation-utility', function() {
       // Given
       const given = 0;
       // When
-      const result = ValidationUtility.isNotBlankOrUndefined(given);
+      const result = ValidationUtil.isNotBlankOrUndefined(given);
       // Then
       result.should.be.equal(true);
     });
@@ -306,7 +306,7 @@ describe('validation-utility', function() {
       // Given
       const given = "";
       // When
-      const result = ValidationUtility.isNotBlankOrUndefined(given);
+      const result = ValidationUtil.isNotBlankOrUndefined(given);
       // Then
       result.should.be.equal(false);
     });
@@ -315,7 +315,7 @@ describe('validation-utility', function() {
       // Given
       const given = " \t \r\n  ";
       // When
-      const result = ValidationUtility.isNotBlankOrUndefined(given);
+      const result = ValidationUtil.isNotBlankOrUndefined(given);
       // Then
       result.should.be.equal(false);
     });
@@ -326,7 +326,7 @@ describe('validation-utility', function() {
       // Given
       const given = 123;
       // When
-      const r = ValidationUtility.isNumber(given);
+      const r = ValidationUtil.isNumber(given);
       // Then
       r.should.be.equal(true);
     });
@@ -335,7 +335,7 @@ describe('validation-utility', function() {
       // Given
       const given = 123.5;
       // When
-      const r = ValidationUtility.isNumber(given);
+      const r = ValidationUtil.isNumber(given);
       // Then
       r.should.be.equal(true);
     });
@@ -344,7 +344,7 @@ describe('validation-utility', function() {
       // Given
       const given = "123";
       // When
-      const r = ValidationUtility.isNumber(given);
+      const r = ValidationUtil.isNumber(given);
       // Then
       r.should.be.equal(true);
     });
@@ -353,7 +353,7 @@ describe('validation-utility', function() {
       // Given
       const given = "0.123";
       // When
-      const r = ValidationUtility.isNumber(given);
+      const r = ValidationUtil.isNumber(given);
       // Then
       r.should.be.equal(true);
     });
@@ -362,7 +362,7 @@ describe('validation-utility', function() {
       // Given
       const given = { a: 123, b: "345" };
       // When
-      const r = ValidationUtility.isNumber(given);
+      const r = ValidationUtil.isNumber(given);
       // Then
       r.should.be.equal(false);
     });
@@ -371,7 +371,7 @@ describe('validation-utility', function() {
       // Given
       const given = () => { return 124; };
       // When
-      const r = ValidationUtility.isNumber(given);
+      const r = ValidationUtil.isNumber(given);
       // Then
       r.should.be.equal(false);
     });
@@ -382,7 +382,7 @@ describe('validation-utility', function() {
       // Given
       const given = "abc";
       // When
-      const r = ValidationUtility.isString(given);
+      const r = ValidationUtil.isString(given);
       // Then
       r.should.be.equal(true);
     });
@@ -391,7 +391,7 @@ describe('validation-utility', function() {
       // Given
       const given = "true";
       // When
-      const r = ValidationUtility.isString(given);
+      const r = ValidationUtil.isString(given);
       // Then
       r.should.be.equal(true);
     });
@@ -400,7 +400,7 @@ describe('validation-utility', function() {
       // Given
       const given = true;
       // When
-      const r = ValidationUtility.isString(given);
+      const r = ValidationUtil.isString(given);
       // Then
       r.should.be.equal(false);
     });
@@ -409,7 +409,7 @@ describe('validation-utility', function() {
       // Given
       const given = { abc: "test" };
       // When
-      const r = ValidationUtility.isString(given);
+      const r = ValidationUtil.isString(given);
       // Then
       r.should.be.equal(false);
     });
@@ -418,7 +418,7 @@ describe('validation-utility', function() {
       // Given
       const given = 34;
       // When
-      const r = ValidationUtility.isString(given);
+      const r = ValidationUtil.isString(given);
       // Then
       r.should.be.equal(false);
     });
@@ -427,7 +427,7 @@ describe('validation-utility', function() {
       // Given
       const given = -34;
       // When
-      const r = ValidationUtility.isString(given);
+      const r = ValidationUtil.isString(given);
       // Then
       r.should.be.equal(false);
     });
@@ -436,7 +436,7 @@ describe('validation-utility', function() {
       // Given
       const given = 34.245;
       // When
-      const r = ValidationUtility.isString(given);
+      const r = ValidationUtil.isString(given);
       // Then
       r.should.be.equal(false);
     });
@@ -445,7 +445,7 @@ describe('validation-utility', function() {
       // Given
       const given = -34.245;
       // When
-      const r = ValidationUtility.isString(given);
+      const r = ValidationUtil.isString(given);
       // Then
       r.should.be.equal(false);
     });
@@ -454,7 +454,7 @@ describe('validation-utility', function() {
       // Given
       const given = () => { return 5 };
       // When
-      const r = ValidationUtility.isString(given);
+      const r = ValidationUtil.isString(given);
       // Then
       r.should.be.equal(false);
     });
@@ -463,7 +463,7 @@ describe('validation-utility', function() {
       // Given
       const given = () => { return "abc" };
       // When
-      const r = ValidationUtility.isString(given);
+      const r = ValidationUtil.isString(given);
       // Then
       r.should.be.equal(false);
     });
@@ -474,7 +474,7 @@ describe('validation-utility', function() {
       // Given
       const given = [];
       // When
-      const r = ValidationUtility.isIterable(given);
+      const r = ValidationUtil.isIterable(given);
       // Then
       r.should.be.equal(true);
     });
@@ -483,7 +483,7 @@ describe('validation-utility', function() {
       // Given
       const given = [1, 2, 3];
       // When
-      const r = ValidationUtility.isIterable(given);
+      const r = ValidationUtil.isIterable(given);
       // Then
       r.should.be.equal(true);
     });
@@ -492,7 +492,7 @@ describe('validation-utility', function() {
       // Given
       const given = new Map();
       // When
-      const r = ValidationUtility.isIterable(given);
+      const r = ValidationUtil.isIterable(given);
       // Then
       r.should.be.equal(true);
     });
@@ -504,7 +504,7 @@ describe('validation-utility', function() {
       given.set("b", 2);
       given.set("c", 3);
       // When
-      const r = ValidationUtility.isIterable(given);
+      const r = ValidationUtil.isIterable(given);
       // Then
       r.should.be.equal(true);
     });
@@ -513,7 +513,7 @@ describe('validation-utility', function() {
       // Given
       const given = "abc";
       // When
-      const r = ValidationUtility.isIterable(given);
+      const r = ValidationUtil.isIterable(given);
       // Then
       r.should.be.equal(true);
     });
@@ -522,7 +522,7 @@ describe('validation-utility', function() {
       // Given
       const given = {};
       // When
-      const r = ValidationUtility.isIterable(given);
+      const r = ValidationUtil.isIterable(given);
       // Then
       r.should.be.equal(false);
     });

@@ -13,6 +13,13 @@ viewModel: {SkillListItemViewModel}
     {{> damageDefinitionList viewModel=viewModel.vmDamageDefinitionList}}
   </div>
   {{!-- Row --}}
+  {{!-- Expertises --}}
+  {{#if viewModel.showExpertises}}
+    {{#with viewModel.expertisesTemplate as |template|}}
+    {{> (template) viewModel=../viewModel.vmExpertiseTable }}
+    {{/with}}
+  {{/if}}
+  {{!-- Row --}}
   {{!-- Prerequisites --}}
   <div class="flex flex-column margin-b-sm{{#if (neq viewModel.showPrerequisites true)}} hidden{{/if}}">
     {{#> header3 showFancyFont=viewModel.showFancyFont}}{{localize "system.character.skill.prerequisite.plural"}}{{/header3}}
@@ -33,23 +40,10 @@ viewModel: {SkillListItemViewModel}
     </ul>
   </div>
   {{!-- Row --}}
-  <div class="flex flex-row flex-middle auto-margin-h sheet-block">
-    {{!-- Category --}}
-    {{#> labeledControl viewModel=viewModel.vmTfCategory localizedIconToolTip=(localize "system.general.category") iconClass="ico-category-solid" cssClass="" }}
-      <div class="width-xxl">
-        {{> inputTextField }}
-      </div>
-    {{/labeledControl}}
-    {{!-- Tags --}}
-    {{#> labeledControl viewModel=viewModel.vmTags localizedIconToolTip=(localize "system.general.tags.label") iconClass="ico-tags-solid" cssClass="" }}
+  {{!-- Tags --}}
+  <div class="flex flex-row flex-middle auto-margin-h">
+    {{#> labeledControl viewModel=viewModel.vmTags localizedIconToolTip=(localize "system.general.tag.plural") iconClass="ico-tags-solid" cssClass="" }}
       {{> inputTags }}
     {{/labeledControl}}
   </div>
-  {{!-- Row --}}
-  {{!-- Expertises --}}
-  {{#if viewModel.showExpertises}}
-    {{#with viewModel.expertisesTemplate as |template|}}
-    {{> (template) viewModel=../viewModel.vmExpertiseTable }}
-    {{/with}}
-  {{/if}}
 </section>

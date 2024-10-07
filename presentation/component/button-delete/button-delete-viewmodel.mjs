@@ -1,7 +1,7 @@
-import * as StringUtil from "../../../business/util/string-utility.mjs"
-import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
 import ConfirmablePlainDialog from "../../dialog/plain-confirmable-dialog/plain-confirmable-dialog.mjs";
+import { StringUtil } from "../../../business/util/string-utility.mjs";
+import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
 
 /**
  * A button that allows deleting a specific document. 
@@ -30,8 +30,15 @@ export default class ButtonDeleteViewModel extends ButtonViewModel {
    * @param {Object} args
    * @param {String | undefined} args.id Unique ID of this view model instance. 
    * @param {Boolean | undefined} args.isEditable If true, will be interactible. 
+   * @param {String | undefined} args.localizedDeletionTarget The localized name of the thing 
+   * to delete. 
+   * * default is to use `target.name`. 
+   * @param {String | undefined} args.localizedDeletionType The localized type of the thing 
+   * to delete. 
    * @param {String | undefined} args.localizedToolTip A localized text to 
    * display as a tool tip. 
+   * * default is to use the `localizedDeletionTarget` in a generic string or if that 
+   * is undefined, to use a completley generic string. 
    * @param {String | undefined} args.localizedLabel A localized text to 
    * display as a button label. 
    * @param {Function | undefined} args.onClick Asynchronous callback that is invoked when the button is clicked. Arguments: 
@@ -40,20 +47,43 @@ export default class ButtonDeleteViewModel extends ButtonViewModel {
    * 
    * @param {TransientDocument} args.target The target object to affect. 
    * @param {String | undefined} args.propertyPath If not undefined, will try to delete by this property path. 
-   * @param {Boolean | undefined} args.withDialog If true, will prompt the user to make a selection with a dialog. 
+   * @param {Boolean | undefined} args.withDialog If `true`, will prompt the user to make a selection with a dialog. 
+   * * default `true`
    */
   constructor(args = {}) {
     super({
       ...args,
       iconHtml: '<i class="fas fa-trash"></i>',
     });
-    validateOrThrow(args, ["target"]);
+    ValidationUtil.validateOrThrow(args, ["target"]);
 
     this.target = args.target;
-    this.withDialog = args.withDialog ?? false;
+    this.localizedDeletionTarget = args.localizedDeletionTarget ?? this.target.name;
+    this.localizedDeletionType = args.localizedDeletionType;
+    this.withDialog = args.withDialog ?? true;
     this.propertyPath = args.propertyPath;
-    this.localizedTooltip = args.localizedTooltip ?? game.i18n.localize("system.general.delete.label");
-    this.localizedDialogContent = StringUtil.format(game.i18n.localize("system.general.delete.queryOf"), this.target.name);
+
+    if (ValidationUtil.isDefined(this.localizedDeletionType)) {
+      this.localizedToolTip = args.localizedToolTip ?? StringUtil.format(
+        game.i18n.localize("system.general.delete.deleteTypeOf"), 
+        this.localizedDeletionType, 
+        this.localizedDeletionTarget
+      );
+      this.localizedDialogContent = StringUtil.format(
+        game.i18n.localize("system.general.delete.queryTypeOf"), 
+        this.localizedDeletionType, 
+        this.localizedDeletionTarget
+      );
+    } else {
+      this.localizedToolTip = args.localizedToolTip ?? StringUtil.format(
+        game.i18n.localize("system.general.delete.deleteOf"), 
+        this.localizedDeletionTarget
+      );
+      this.localizedDialogContent = StringUtil.format(
+        game.i18n.localize("system.general.delete.queryOf"), 
+        this.localizedDeletionTarget
+      );
+    }
   }
 
   /**

@@ -27,12 +27,13 @@ import { VISIBILITY_MODES } from "./presentation/chat/visibility-modes.mjs";
 import ChoiceOption from "./presentation/component/input-choice/choice-option.mjs";
 import DocumentFetcher from "./business/document/document-fetcher/document-fetcher.mjs";
 import TokenExtensions from "./presentation/token/token-extensions.mjs";
-import * as ValidationUtil from "./business/util/validation-utility.mjs";
-import * as ArrayUtil from "./business/util/array-utility.mjs";
+import { ValidationUtil } from "./business/util/validation-utility.mjs";
+import { ArrayUtil } from "./business/util/array-utility.mjs";
 import { preloadPixiTextures } from "./presentation/pixi/pixi-preloader.mjs";
 import CustomCombatTracker from "./presentation/combat/custom-combat-tracker.mjs";
 import { KEYBOARD } from "./presentation/keyboard/keyboard.mjs";
 import VersionCode from "./business/migration/version-code.mjs";
+import DamageDesignerDialog from "./presentation/dialog/damage-designer-dialog/damage-designer-dialog.mjs";
 import DicePoolDesignerDialog from "./presentation/dialog/dice-pool-designer-dialog/dice-pool-designer-dialog.mjs";
 import { activateRollChatMessageListeners } from "./presentation/dice/roll-chat-message.mjs";
 import { Sum, SumComponent } from "./business/ruleset/summed-data.mjs";
@@ -413,6 +414,7 @@ Hooks.once("ready", function() {
     };
 
     window.DicePoolDesignerDialog = DicePoolDesignerDialog;
+    window.DamageDesignerDialog = DamageDesignerDialog;
   }
 });
 

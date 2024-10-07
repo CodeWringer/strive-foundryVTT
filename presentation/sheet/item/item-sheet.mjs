@@ -1,4 +1,3 @@
-import * as SheetUtil from "../sheet-utility.mjs";
 import { SYSTEM_ID } from "../../../system-id.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
 import { ITEM_TYPES } from "../../../business/document/item/item-types.mjs";
@@ -10,6 +9,8 @@ import MutationItemSheet from "./mutation/mutation-item-sheet.mjs";
 import ScarItemSheet from "./scar/scar-item-sheet.mjs";
 import SkillItemSheet from "./skill/skill-item-sheet.mjs";
 import FoundryWrapper from "../../../common/foundry-wrapper.mjs";
+import { SheetUtil } from "../sheet-utility.mjs";
+import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
 
 export class GameSystemItemSheet extends ItemSheet {
   /**
@@ -55,7 +56,7 @@ export class GameSystemItemSheet extends ItemSheet {
    * @readonly
    */
   get contentElement() {
-    if (isDefined(this._element) !== true) return undefined;
+    if (ValidationUtil.isDefined(this._element) !== true) return undefined;
 
     return this._element.find("section.window-content");
   }
@@ -66,7 +67,7 @@ export class GameSystemItemSheet extends ItemSheet {
    * @type {Number | undefined}
    */
   get scrollValue() {
-    if (isDefined(this.contentElement) !== true) return undefined;
+    if (ValidationUtil.isDefined(this.contentElement) !== true) return undefined;
 
     return this.contentElement[0].scrollTop;
   }
@@ -76,7 +77,7 @@ export class GameSystemItemSheet extends ItemSheet {
    * @param {Number} value
    */
   set scrollValue(value) {
-    if (isDefined(this.contentElement) !== true) return;
+    if (ValidationUtil.isDefined(this.contentElement) !== true) return;
 
     this.contentElement[0].scrollTop = value;
   }

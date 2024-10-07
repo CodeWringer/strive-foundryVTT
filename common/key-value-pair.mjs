@@ -1,4 +1,4 @@
-import { isDefined } from "../business/util/validation-utility.mjs";
+import { ValidationUtil } from "../business/util/validation-utility.mjs";
 
 /**
  * Represents a value associated with a specific key. 
@@ -37,7 +37,7 @@ export default class KeyValuePair {
   toDto() {
     return {
       key: this.key,
-      value: isDefined((this.value ?? {}).toDto) ? this.value.toDto() : this.value,
+      value: ValidationUtil.isDefined((this.value ?? {}).toDto) ? this.value.toDto() : this.value,
     };
   }
 }

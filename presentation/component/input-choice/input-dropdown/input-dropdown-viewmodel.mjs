@@ -1,4 +1,4 @@
-import { getElementValue } from "../../../sheet/sheet-utility.mjs";
+import { SheetUtil } from "../../../sheet/sheet-utility.mjs";
 import InputChoiceViewModel from "../input-choice-viewmodel.mjs";
 
 /**
@@ -54,7 +54,7 @@ export default class InputDropDownViewModel extends InputChoiceViewModel {
 
   /** @override */
   _onChange(event) {
-    const newValue = getElementValue(event.currentTarget);
+    const newValue = SheetUtil.getElementValue(event.currentTarget);
     this.value = this.options.find(it => it.value === newValue);
   }
 }

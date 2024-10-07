@@ -1,14 +1,14 @@
 import { ACTOR_TYPES } from "../document/actor/actor-types.mjs";
 import { Sum, SumComponent } from "../ruleset/summed-data.mjs";
-import { isDefined, validateOrThrow } from "../util/validation-utility.mjs";
 import { DicePoolRollResultType } from "./dice-pool.mjs";
 import { ResolvedObstacle } from "./roll-data.mjs";
 import { ROLL_DICE_MODIFIER_TYPES, RollDiceModifierType } from "./roll-dice-modifier-types.mjs";
-import * as ChatUtil from "../../presentation/chat/chat-utility.mjs";
 import { SOUNDS_CONSTANTS } from "../../presentation/audio/sounds.mjs";
 import { VISIBILITY_MODES, VisibilityMode } from "../../presentation/chat/visibility-modes.mjs";
 import { DICE_CONSTANTS } from "./dice-constants.mjs";
-import { createUUID } from "../util/uuid-utility.mjs";
+import { ChatUtil } from "../../presentation/chat/chat-utility.mjs";
+import { ValidationUtil } from "../util/validation-utility.mjs";
+import { UuidUtil } from "../util/uuid-utility.mjs";
 
 /**
  * Represents the input data of a dice (pool) roll. 
@@ -37,7 +37,7 @@ export class RollInputData {
    * dice to actually roll. 
    */
   constructor(args = {}) {
-    validateOrThrow(args, [
+    ValidationUtil.validateOrThrow(args, [
       "dice",
       "bonusDice",
       "compensationPoints",
@@ -77,7 +77,7 @@ export class RollStepData {
    * @param {DicePoolRollResultType} args.outcomeType 
    */
   constructor(args = {}) {
-    validateOrThrow(args, [
+    ValidationUtil.validateOrThrow(args, [
       "faces",
       "resolvedObstacle",
       "hits",
@@ -112,7 +112,7 @@ export class RollResult {
    * @param {RollStepData} args.results
    */
   constructor(args = {}) {
-    validateOrThrow(args, [
+    ValidationUtil.validateOrThrow(args, [
       "inputData",
       "intermediateResults",
       "results",
@@ -146,7 +146,7 @@ export class RollResult {
     const resultFacesForDisplay = this._getFacesForDisplay(this.results);
 
     let showReminder = false;
-    if (isDefined(args.actor) === true) {
+    if (ValidationUtil.isDefined(args.actor) === true) {
       const transientActor = args.actor.getTransientObject();
       if (transientActor.type === ACTOR_TYPES.PC) {
         showReminder = true;
@@ -157,7 +157,7 @@ export class RollResult {
 
     // Render the results. 
     const renderedContent = await renderTemplate(game.strive.const.TEMPLATES.DICE_ROLL_CHAT_MESSAGE, {
-      id: createUUID(),
+      id: UuidUtil.createUUID(),
       primaryTitle: args.primaryTitle,
       primaryImage: args.primaryImage,
       secondaryTitle: args.secondaryTitle,

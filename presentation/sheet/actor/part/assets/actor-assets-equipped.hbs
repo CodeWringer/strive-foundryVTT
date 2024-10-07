@@ -6,17 +6,13 @@ cssClass: {undefined | String}
   <ul class="unstyled-list">
     {{#each viewModel.assetSlotGroupViewModels as |vm index|}}
     {{#with ../viewModel.assetSlotGroupTemplate as | template |}}
-    <li class="sheet-block flex margin-b-lg heavy-border-t">
+    <li class="sheet-block flex margin-b-lg">
       {{> (template) viewModel=vm}}
     </li>
     {{/with}}
     {{/each}}
-    <li class="strive-list-row strive-list-footer">
-      <div class="fill flex flex-row flex-right">
-        <div>
-          {{> button viewModel=viewModel.vmBtnAddSlotGroup }}
-        </div>
-      </div>
-    </li>
   </ul>
+  <div class="fill flex flex-row flex-right{{#if (eq viewModel.isEditable false)}} hidden{{/if}}">
+    {{> button viewModel=viewModel.vmBtnAddSlotGroup }}
+  </div>
 </section>

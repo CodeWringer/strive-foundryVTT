@@ -1,5 +1,3 @@
-import { validateOrThrow } from "../../util/validation-utility.mjs";
-
 /**
  * Describes a prerequisite skill. 
  * 

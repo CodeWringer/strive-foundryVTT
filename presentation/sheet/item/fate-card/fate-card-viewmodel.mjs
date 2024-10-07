@@ -1,7 +1,7 @@
 import { ITEM_TYPES } from "../../../../business/document/item/item-types.mjs";
 import TransientFateCard from "../../../../business/document/item/transient-fate-card.mjs";
-import { validateOrThrow } from "../../../../business/util/validation-utility.mjs";
-import { getExtenders } from "../../../../common/extender-util.mjs";
+import { ValidationUtil } from "../../../../business/util/validation-utility.mjs";
+import { ExtenderUtil } from "../../../../common/extender-util.mjs";
 import ButtonDeleteViewModel from "../../../component/button-delete/button-delete-viewmodel.mjs";
 import ButtonSendToChatViewModel from "../../../component/button-send-to-chat/button-send-to-chat-viewmodel.mjs";
 import InputImageViewModel from "../../../component/input-image/input-image-viewmodel.mjs";
@@ -30,49 +30,49 @@ export default class FateCardViewModel extends ViewModel {
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["document"]);
+    ValidationUtil.validateOrThrow(args, ["document"]);
 
     this.document = args.document;
     this.contextTemplate = args.contextTemplate ?? ITEM_TYPES.FATE_CARD;
 
-    const thiz = this;
-
     this.vmImg = new InputImageViewModel({
-      parent: thiz,
+      parent: this,
       id: "vmImg",
-      value: thiz.document.img,
+      value: this.document.img,
       onChange: (_, newValue) => {
-        thiz.document.img = newValue;
+        this.document.img = newValue;
       },
     });
     this.vmTfName = new InputTextFieldViewModel({
-      parent: thiz,
+      parent: this,
       id: "vmTfName",
-      value: thiz.document.name,
+      value: this.document.name,
       onChange: (_, newValue) => {
-        thiz.document.name = newValue;
+        this.document.name = newValue;
       },
       placeholder: game.i18n.localize("system.general.name.label"),
     });
     this.vmBtnSendToChat = new ButtonSendToChatViewModel({
-      parent: thiz,
+      parent: this,
       id: "vmBtnSendToChat",
-      target: thiz.document,
-      isEditable: thiz.isEditable || thiz.isGM,
+      target: this.document,
+      isEditable: this.isEditable || this.isGM,
     });
     this.vmBtnDelete = new ButtonDeleteViewModel({
-      parent: thiz,
+      parent: this,
       id: "vmBtnDelete",
-      parent: thiz,
-      target: thiz.document,
+      parent: this,
+      target: this.document,
       withDialog: true,
+      localizedDeletionType: game.i18n.localize(`TYPES.Item.${this.document.type}`),
+      localizedDeletionTarget: this.document.name,
     });
     this.vmRtDescription = new InputRichTextViewModel({
-      parent: thiz,
+      parent: this,
       id: "vmRtDescription",
-      value: thiz.document.description,
+      value: this.document.description,
       onChange: (_, newValue) => {
-        thiz.document.description = newValue;
+        this.document.description = newValue;
       },
     });
   }
@@ -91,7 +91,7 @@ export default class FateCardViewModel extends ViewModel {
   
   /** @override */
   getExtenders() {
-    return super.getExtenders().concat(getExtenders(FateCardViewModel));
+    return super.getExtenders().concat(ExtenderUtil.getExtenders(FateCardViewModel));
   }
 
 }

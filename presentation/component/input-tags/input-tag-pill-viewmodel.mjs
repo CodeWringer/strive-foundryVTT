@@ -1,7 +1,8 @@
-import { isDefined } from "../../../business/util/validation-utility.mjs";
-import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
+import Tag from "../../../business/tags/tag.mjs";
+import { StringUtil } from "../../../business/util/string-utility.mjs";
+import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
 
 /**
  * Represents a single `Tag`. 
@@ -21,7 +22,7 @@ export default class InputTagPillViewModel extends ViewModel {
   static get TEMPLATE() { return game.strive.const.TEMPLATES.COMPONENT_INPUT_TAG; }
 
   get localizedName() {
-    if (isDefined(this.tag.localizableName) === true) {
+    if (ValidationUtil.isDefined(this.tag.localizableName) === true) {
       return game.i18n.localize(this.tag.localizableName);
     } else {
       return this.tag.id;
@@ -37,7 +38,7 @@ export default class InputTagPillViewModel extends ViewModel {
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["tag"]);
+    ValidationUtil.validateOrThrow(args, ["tag"]);
 
     this.tag = args.tag;
     this.onDelete = args.onDelete ?? ((tag) => {});
@@ -47,7 +48,11 @@ export default class InputTagPillViewModel extends ViewModel {
       parent: this,
       iconHtml: '<i class="fas fa-times"></i>',
       isEditable: this.isEditable,
-      localizedTooltip: game.i18n.localize("system.general.delete.label"),
+      localizedToolTip: StringUtil.format(
+        game.i18n.localize("system.general.delete.deleteTypeOf"),
+        game.i18n.localize("system.general.tag.singular"),
+        game.i18n.localize(this.tag.localizableName)
+      ),
       onClick: () => {
         this.onDelete(this.tag);
       }

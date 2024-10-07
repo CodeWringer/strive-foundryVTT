@@ -1,31 +1,49 @@
 $size: 26px;
 
+$brightness: 0.9;
+$brightness-dark: 0.25;
+$brightness-disabled: 0.8;
+$brightness-disabled-dark: 0.35;
+
+$c-ico-light: hsl(0 0% 90% / 1);
+$c-ico-light-disabled: hsl(0 0% 80% / 1);
+$c-ico-dark: hsl(0 0% 25% / 1);
+$c-ico-dark-disabled: hsl(0 0% 35% / 1);
+
 .ico {
   height: $size;
   display: inline-block;
   aspect-ratio: 1/1;
   font-size: $size;
+  filter: brightness($brightness);
 
   &.dark {
-    filter: brightness(0.3);
+    filter: brightness($brightness-dark);
+    
+    &.disabled {
+      filter: brightness($brightness-disabled-dark);
+    }
+  }
+  &.disabled {
+    filter: brightness($brightness-disabled);
+  }
+
+  &.active {
+    filter: drop-shadow(0 0 4px $c-button-highlight);
   }
   
   &.interactible {
     &:hover {
-      filter: drop-shadow(0 0 4px $c-button-highlight);
-
-      &.disabled {
-        filter: brightness(0.3);
-      }
-
       &.dark {
-        filter: brightness(0) drop-shadow(0 0 4px $c-button-highlight);
-
-        &.disabled {
-          filter: brightness(0.3);
-        }
+        filter: brightness($brightness-dark) drop-shadow(0 0 4px $c-button-highlight);
       }
     }
+  }
+}
+
+.interactible {
+  &:hover {
+    filter: drop-shadow(0 0 4px $c-button-highlight);
   }
 }
 
@@ -390,5 +408,25 @@ i.stacked {
 
 .ico-dice-void-line {
   background: url("/systems/strive/presentation/image/dice-void-line.svg");
+  background-size: cover;
+}
+
+.ico-list-flat-solid {
+  background: url("/systems/strive/presentation/image/list-flat-solid.svg");
+  background-size: cover;
+}
+
+.ico-list-hierarchical-solid {
+  background: url("/systems/strive/presentation/image/list-hierarchical-solid.svg");
+  background-size: cover;
+}
+
+.ico-dumbbell-solid {
+  background: url("/systems/strive/presentation/image/dumbbell-solid.svg");
+  background-size: cover;
+}
+
+.ico-dumbbell-curved-solid {
+  background: url("/systems/strive/presentation/image/dumbbell-curved-solid.svg");
   background-size: cover;
 }

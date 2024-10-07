@@ -1,6 +1,6 @@
 import { GameSystemActor } from "../../document/actor/actor.mjs";
 import TransientBaseCharacterActor from "../../document/actor/transient-base-character-actor.mjs";
-import { validateOrThrow } from "../../util/validation-utility.mjs";
+import { ValidationUtil } from "../../util/validation-utility.mjs";
 import Ruleset from "../ruleset.mjs";
 import { ATTRIBUTES } from "./attributes.mjs";
 
@@ -125,7 +125,7 @@ export default class CharacterAttribute {
    * * E. g. `"strength"`
    */
   constructor(actor, name) {
-    validateOrThrow({ a: actor, n: name}, ["a", "n"]);
+    ValidationUtil.validateOrThrow({ a: actor, n: name}, ["a", "n"]);
 
     this._actor = actor;
     this.name = name;

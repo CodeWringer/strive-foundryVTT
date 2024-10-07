@@ -1,10 +1,11 @@
 import { DAMAGE_TYPES, getDamageTypeIconClass } from "../../../business/ruleset/damage-types.mjs"
-import { validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
 import InputDropDownViewModel from "../input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
 import InputTextFieldViewModel from "../input-textfield/input-textfield-viewmodel.mjs";
 import InputViewModel from "../../view-model/input-view-model.mjs";
 import DamageAndType from "../../../business/ruleset/skill/damage-and-type.mjs";
+import { StringUtil } from "../../../business/util/string-utility.mjs";
+import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
 
 /**
  * Represents the definition of a damage roll formula. 
@@ -51,7 +52,10 @@ export default class DamageDefinitionListItemViewModel extends InputViewModel {
    * @type {String}
    * @readonly
    */
-  get localizedDeletionHint() { return game.i18n.localize("system.damageDefinition.delete"); }
+  get localizedDeletionHint() { return StringUtil.format(
+    game.i18n.localize("system.general.delete.deleteType"),
+    game.i18n.localize("system.damageDefinition.label")
+  ); }
 
   /**
    * Returns the CSS class of the icon that represents the current damage type. 
@@ -78,7 +82,7 @@ export default class DamageDefinitionListItemViewModel extends InputViewModel {
    */
   constructor(args = {}) {
     super(args);
-    validateOrThrow(args, ["value", "resolveFormula"]);
+    ValidationUtil.validateOrThrow(args, ["value", "resolveFormula"]);
 
     this.localizedLabel = args.localizedLabel;
     this.resolveFormula = args.resolveFormula;
@@ -115,7 +119,7 @@ export default class DamageDefinitionListItemViewModel extends InputViewModel {
       id: "vmBtnDelete",
       parent: thiz,
       isEditable: thiz.isEditable,
-      localizedTooltip: this.localizedDeletionHint,
+      localizedToolTip: this.localizedDeletionHint,
       iconHtml: '<i class="fas fa-trash"></i>',
       onClick: this.onDelete,
     });

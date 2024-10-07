@@ -1,4 +1,4 @@
-import { createUUID } from '../business/util/uuid-utility.mjs';
+import { UuidUtil } from "../business/util/uuid-utility.mjs";
 
 /**
  * Internal listener representing object. 
@@ -152,7 +152,7 @@ export class EventEmitter {
     const listeners = this._events.get(event) ?? [];
 
     // Create the listener. 
-    const uuid = createUUID();
+    const uuid = UuidUtil.createUUID();
     const listener = new Listener(uuid, isOnce, callback);
     listeners.push(listener);
     

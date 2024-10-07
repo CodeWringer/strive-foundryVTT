@@ -1,0 +1,51 @@
+.damage-finding-header {
+  background-color: $c-dark;
+  color: $c-text-light;
+
+  position: sticky;
+  top: -8px;
+  border-bottom: 1px solid $c-border-medium;
+
+  .sheet-block {
+    border-color: #7a7971;
+  }
+
+  i.ico {
+    filter: brightness($brightness);
+
+    &.interactible {
+      &:hover {
+        &.disabled {
+          filter: brightness($brightness-disabled);
+        }
+  
+        &.dark {
+          filter: brightness($brightness) drop-shadow(0 0 4px $c-button-highlight);
+  
+          &.disabled {
+            filter: brightness($brightness-disabled);
+          }
+        }
+      }
+    }
+  }
+}
+
+.damage-list { 
+  display: grid;
+  grid-template-columns: 2fr 2fr repeat(11, 3.5rem);
+  
+  &-root {
+    background-color: $c-dark;
+    color: $c-text-light;
+  }
+
+  &-item {
+    background-color: rgba($color: #FFF, $alpha: 0.075);
+    border: 1px solid $c-dark;
+
+    &-header {
+      font-size: 1.4rem;
+    }
+  }
+}

@@ -1,4 +1,4 @@
-import { createUUID } from "../../business/util/uuid-utility.mjs";
+import { UuidUtil } from "../../business/util/uuid-utility.mjs";
 
 /**
  * Represents the definition of a button on a modal dialog. 
@@ -27,7 +27,7 @@ export default class DialogButtonDefinition {
    * @param {String | undefined} localizedLabel Localized label string. 
    */
   constructor(args) {
-    this.id = args.id ?? createUUID();
+    this.id = args.id ?? UuidUtil.createUUID();
     this.clickCallback = args.clickCallback;
     this.cssClass = args.cssClass;
     this.iconCssClass = args.iconCssClass;

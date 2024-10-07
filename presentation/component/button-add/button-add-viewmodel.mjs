@@ -1,5 +1,4 @@
 import ButtonViewModel from '../button/button-viewmodel.mjs';
-import { isDefined, validateOrThrow } from "../../../business/util/validation-utility.mjs";
 import DocumentFetcher from "../../../business/document/document-fetcher/document-fetcher.mjs";
 import DynamicInputDialog from '../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs';
 import DynamicInputDefinition from '../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs';
@@ -7,6 +6,8 @@ import { DYNAMIC_INPUT_TYPES } from '../../dialog/dynamic-input-dialog/dynamic-i
 import ChoiceOption from '../input-choice/choice-option.mjs';
 import Expertise from '../../../business/document/item/skill/expertise.mjs';
 import { ITEM_TYPES } from '../../../business/document/item/item-types.mjs';
+import { StringUtil } from '../../../business/util/string-utility.mjs';
+import { ValidationUtil } from '../../../business/util/validation-utility.mjs';
 
 /**
  * A button that allows adding a newly created embedded document to a specific actor. 
@@ -62,7 +63,6 @@ export default class ButtonAddViewModel extends ButtonViewModel {
    * * default `false`
    * @param {Object | undefined} args.creationData Data to pass to the item creation function. 
    * @param {String | undefined} args.localizedType Localized name of the type of thing to add. 
-   * @param {String | undefined} args.localizedDialogTitle Localized title of the dialog. 
    * 
    * @param {Function | undefined} args.onSelectionChanged Asynchronous callback that is invoked when selection changes. Arguments: 
    * * `dialog: DynamicInputDialog`
@@ -77,17 +77,20 @@ export default class ButtonAddViewModel extends ButtonViewModel {
     super({
       ...args,
       iconHtml: '<i class="fas fa-plus"></i>',
-      localizedLabel: args.localizedLabel,
-      localizedToolTip: args.localizedToolTip ?? game.i18n.localize("system.general.add"),
     });
-    validateOrThrow(args, ["target", "creationType"]);
+    ValidationUtil.validateOrThrow(args, ["target", "creationType"]);
 
     this.target = args.target;
     this.creationType = args.creationType;
     this.withDialog = args.withDialog ?? false;
     this.creationData = args.creationData ?? Object.create(null);
     this.localizedType = args.localizedType;
-    this.localizedDialogTitle = args.localizedDialogTitle;
+    if (ValidationUtil.isDefined(this.localizedType)) {
+      this.localizedDialogTitle = StringUtil.format(
+        game.i18n.localize("system.general.add.query"),
+        this.localizedType
+      );
+    }
 
     this.onSelectionChanged = args.onSelectionChanged ?? (async () => {});
     this.selectionLabelMapper = args.selectionLabelMapper;
@@ -210,7 +213,7 @@ export default class ButtonAddViewModel extends ButtonViewModel {
         onChange: async (_, newValue, dialogViewModel) => {
           await this.onSelectionChanged(newValue, sortedOptions, dialogViewModel);
 
-          if (isDefined(this.selectionLabelMapper)) {
+          if (ValidationUtil.isDefined(this.selectionLabelMapper)) {
             const mappedLabel = await this.selectionLabelMapper(newValue);
             $(dialogViewModel.element).find(`#${dialogViewModel.id}-${nameLabel} > p`).text(mappedLabel);
           }
@@ -218,7 +221,7 @@ export default class ButtonAddViewModel extends ButtonViewModel {
       }),
     ];
 
-    if (isDefined(this.selectionLabelMapper)) {
+    if (ValidationUtil.isDefined(this.selectionLabelMapper)) {
       const mappedLabel = await this.selectionLabelMapper(customChoice);
 
       inputDefinitions.push(

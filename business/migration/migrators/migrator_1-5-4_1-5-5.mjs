@@ -1,11 +1,11 @@
 import DocumentUpdater from "../../document/document-updater/document-updater.mjs";
 import AbstractMigrator from "../abstract-migrator.mjs";
 import VersionCode from "../version-code.mjs";
-import * as PropertyUtility from "../../util/property-utility.mjs";
 import DocumentFetcher from "../../document/document-fetcher/document-fetcher.mjs";
 import { DOCUMENT_COLLECTION_SOURCES } from "../../document/document-fetcher/document-collection-source.mjs";
-import { arrayContains, arrayTakeUnless } from "../../util/array-utility.mjs";
 import { HEALTH_STATES } from "../../ruleset/health/health-states.mjs";
+import { PropertyUtil } from "../../util/property-utility.mjs";
+import { ArrayUtil } from "../../util/array-utility.mjs";
 
 export default class Migrator_1_5_4__1_5_5 extends AbstractMigrator {
   /** @override */
@@ -22,7 +22,7 @@ export default class Migrator_1_5_4__1_5_5 extends AbstractMigrator {
   get updater() {
     if (this._updater === undefined) {
       this._updater = new DocumentUpdater({
-        propertyUtility: PropertyUtility,
+        propertyUtility: PropertyUtil,
         logger: game.strive.logger,
       });
     }
@@ -106,9 +106,9 @@ export default class Migrator_1_5_4__1_5_5 extends AbstractMigrator {
       // Collect health state updates. 
       const priorHealthStateName = "dazed";
 
-      if (arrayContains(actorData.health.states, priorHealthStateName) === true) {
+      if (ArrayUtil.arrayContains(actorData.health.states, priorHealthStateName) === true) {
         updateDelta.health = {
-          states: arrayTakeUnless(actorData.health.states, (it) => {
+          states: ArrayUtil.arrayTakeUnless(actorData.health.states, (it) => {
             return it === priorHealthStateName;
           }),
         }

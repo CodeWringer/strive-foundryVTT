@@ -2,7 +2,7 @@ import ScarChatMessageViewModel from "../../../presentation/sheet/item/scar/scar
 import PreparedChatData from "../../../presentation/chat/prepared-chat-data.mjs";
 import { SOUNDS_CONSTANTS } from "../../../presentation/audio/sounds.mjs";
 import TransientBaseItem from "./transient-base-item.mjs";
-import { getExtenders } from "../../../common/extender-util.mjs";
+import { ExtenderUtil } from "../../../common/extender-util.mjs";
 
 /**
  * Represents the full transient data of a scar. 
@@ -81,6 +81,6 @@ export default class TransientScar extends TransientBaseItem {
   
   /** @override */
   getExtenders() {
-    return super.getExtenders().concat(getExtenders(TransientScar));
+    return super.getExtenders().concat(ExtenderUtil.getExtenders(TransientScar));
   }
 }

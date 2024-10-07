@@ -1,4 +1,4 @@
-import * as ConstantsUtils from "../../util/constants-utility.mjs";
+import { ConstantsUtil } from "../../util/constants-utility.mjs";
 
 /**
  * Represents an armor type. 
@@ -36,4 +36,4 @@ export const ARMOR_TYPES = {
     localizableName: "system.character.asset.type.armor.heavy"
   }),
 };
-ConstantsUtils.enrichConstant(ARMOR_TYPES);
+ConstantsUtil.enrichConstant(ARMOR_TYPES);

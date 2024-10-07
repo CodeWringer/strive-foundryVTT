@@ -1,4 +1,4 @@
-import { getExtenders } from "../../../common/extender-util.mjs";
+import { ExtenderUtil } from "../../../common/extender-util.mjs";
 import TransientBaseActor from "./transient-base-actor.mjs";
 
 /**
@@ -9,6 +9,6 @@ import TransientBaseActor from "./transient-base-actor.mjs";
 export default class TransientPlainActor extends TransientBaseActor {
   /** @override */
   getExtenders() {
-    return super.getExtenders().concat(getExtenders(TransientPlainActor));
+    return super.getExtenders().concat(ExtenderUtil.getExtenders(TransientPlainActor));
   }
 }
