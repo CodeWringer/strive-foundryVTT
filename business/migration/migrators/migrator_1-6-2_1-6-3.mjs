@@ -24,7 +24,7 @@ export default class Migrator_1_6_2__1_6_3 extends AbstractMigrator {
     const docUpdater = new DocumentUpdater({
       propertyUtility: PropertyUtil,
       logger: game.strive.logger,
-    })
+    });
 
     for (const actor of editableActors) {
       await docUpdater.deleteByPath(actor, "system.attributes.physical");
