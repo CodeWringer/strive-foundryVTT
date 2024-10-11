@@ -77,9 +77,9 @@ export class SortableListAddItemParams {
  * 
  * @property {Array<SortingOption>} options
  * @property {Boolean} compact
- * @property {Function} onSort Pass-through callback that has to invoke the 
- * `provideSortable` parameter function and provide it an argument that 
- * represents the list of sortable view model instances. 
+ * @property {Function} onSort If defined, this callback function will be 
+ * invoked upon item sorting. Arguments:
+ * * `event: Event`
  */
 export class SortableListSortParams {
   /**
