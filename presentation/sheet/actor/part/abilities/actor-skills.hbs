@@ -6,35 +6,14 @@ cssClass: {undefined | String}
   {{> inputSearch viewModel=viewModel.vmSearch }}
   {{!-- Innate Skills --}}
   <div class="{{#if viewModel.hideInnateSkills}}hidden{{/if}}">
-    {{#> header1 showFancyFont=viewModel.showFancyFont cssClass="flex flex-row flex-middle"}}
-      <span class="flex-grow">{{localize "system.character.skill.innate.label"}}</span>
-      {{#with viewModel.sortControlsTemplate as |template|}}
-        {{> (template) viewModel=../viewModel.vmSortInnate cssClass="font-size-default" }}
-      {{/with}}
-      {{> buttonAdd viewModel=viewModel.vmAddInnateSkill2 cssClass="font-size-lg" }}
-    {{/header1}}
     {{> sortableList viewModel=viewModel.vmInnateSkillList }}
   </div>
   {{!-- Learning Skills --}}
   <div class="{{#if viewModel.hideLearningSkills}}hidden{{/if}}">
-    {{#> header1 showFancyFont=viewModel.showFancyFont cssClass="flex flex-row flex-middle"}}
-      <span class="flex-grow">{{localize "system.character.skill.learning.label"}}</span>
-      {{#with viewModel.sortControlsTemplate as |template|}}
-        {{> (template) viewModel=../viewModel.vmSortLearning cssClass="font-size-default" }}
-      {{/with}}
-      {{> buttonAdd viewModel=viewModel.vmAddLearningSkill2 cssClass="font-size-lg" }}
-    {{/header1}}
     {{> sortableList viewModel=viewModel.vmLearningSkillList }}
   </div>
   {{!-- Known Skills --}}
   <div>
-    {{#> header1 showFancyFont=viewModel.showFancyFont cssClass="flex flex-row flex-middle"}}
-      <span class="flex-grow">{{localize "system.character.skill.known.label"}}</span>
-      {{#with viewModel.sortControlsTemplate as |template|}}
-        {{> (template) viewModel=../viewModel.vmSortKnown cssClass="font-size-default" }}
-      {{/with}}
-      {{> buttonAdd viewModel=viewModel.vmAddKnownSkill2 cssClass="font-size-lg" }}
-    {{/header1}}
     {{> sortableList viewModel=viewModel.vmKnownSkillList }}
   </div>
 </section>

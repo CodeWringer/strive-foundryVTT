@@ -15,7 +15,7 @@ import { ValidationUtil } from '../../../business/util/validation-utility.mjs';
  * @extends ButtonViewModel
  * 
  * @property {Boolean} withDialog If true, will prompt the user to make a selection with a dialog. 
- * @property {String} creationType Must be the internal type name of the type of document to create. 
+ * @property {ITEM_TYPES} creationType Must be the internal type name of the type of document to create. 
  * E. g. `"skill"` or `"expertise"` or `"npc"` and so on.
  * @property {Object} creationData Data to pass to the item creation function. 
  * @property {String | undefined} localizedType Localized name of the type of thing to add. 
@@ -57,7 +57,7 @@ export default class ButtonAddViewModel extends ButtonViewModel {
    * * `data: Item | Expertise` - The created `Item` document or `Expertise`. 
    * 
    * @param {TransientDocument} args.target The target object to affect. 
-   * @param {String} args.creationType Must be the internal type name of the type of document to create. 
+   * @param {ITEM_TYPES} args.creationType Must be the internal type name of the type of document to create. 
    * E. g. `"skill"` or `"expertise"` or `"npc"` and so on.
    * @param {Boolean | undefined} args.withDialog If true, will prompt the user to make a selection with a dialog. 
    * * default `false`

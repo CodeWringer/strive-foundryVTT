@@ -11,7 +11,7 @@ cssClass: {undefined | String}
       <div class="flex flex-row flex-middle font-size-sm margin-l-xl">
         <i class="ico dark ico-bulk-solid" title="{{localize "system.character.asset.bulk"}}"></i>
         <span class="flex flex-row flex-middle">
-          {{#> admonishReadOnlyValue cssClass="pad-l-md pad-r-md" admonish=viewModel.hasExceededBulk}}{{viewModel.group.currentBulk}} / {{viewModel.group.maxBulk}}{{/admonishReadOnlyValue}}
+          {{> admonishReadOnlyValue cssClass="pad-l-md pad-r-md" admonish=viewModel.hasExceededBulk value=viewModel.currentAndMaxBulk }}
         </span>
         <i class="ico dark ico-max-bulk-solid" title="{{localize "system.character.asset.maxBulk"}}"></i>
       </div>

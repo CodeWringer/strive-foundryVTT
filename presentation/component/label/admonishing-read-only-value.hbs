@@ -1,6 +1,7 @@
 {{!-- Parameters:
-cssClass: {undefined | String}
-admonish: {Boolean | undefined}
+cssClass: undefined | String
+admonish: Boolean | undefined
+value: String | Number
 --}}
 <div class="custom-system-read-only pad-sm fill flex flex-row auto-margin-h{{#if admonish}} hint-card error{{/if}}{{#if cssClass}} {{cssClass}}{{/if}}">
   {{#if admonish}}
@@ -8,5 +9,5 @@ admonish: {Boolean | undefined}
     <i class="fas fa-exclamation-triangle"></i>
   </div>
   {{/if}}
-  <span class="flex flex-center flex-grow">{{> @partial-block}}</span>
+  <span class="flex flex-center flex-grow">{{value}}</span>
 </div>

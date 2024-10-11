@@ -83,6 +83,14 @@ export default class ActorAssetSlotViewModel extends ViewModel {
    * @type {Number}
    * @readonly
    */
+  get currentAndMaxBulk() {
+    return `${this.currentBulk} / ${this.moddedMaxBulk}`;
+  }
+
+  /**
+   * @type {Number}
+   * @readonly
+   */
   get moddedMaxBulk() {
     return this.assetSlot.moddedMaxBulk;
   }
