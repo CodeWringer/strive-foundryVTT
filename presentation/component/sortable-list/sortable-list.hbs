@@ -3,9 +3,9 @@ viewModel: SortableListViewModel
 cssClass: String | undefined
 --}}
 <section id="{{viewModel.id}}"{{#if cssClass}} class="{{cssClass}}"{{/if}}>
-  {{#if (eq viewModel.headerLevel 1)}}<h1 class="strive-header flex flex-row flex-middle auto-margin-h-md{{#if viewModel.showFancyFont}} fancy-font{{/if}}">{{/if}}
-  {{#if (eq viewModel.headerLevel 2)}}<h2 class="strive-header flex flex-row flex-middle auto-margin-h-md{{#if viewModel.showFancyFont}} fancy-font{{/if}}">{{/if}}
-  {{#if (eq viewModel.headerLevel 3)}}<h3 class="strive-header flex flex-row flex-middle auto-margin-h-md{{#if viewModel.showFancyFont}} fancy-font{{/if}}">{{/if}}
+  {{#if (eq viewModel.headerLevel 1)}}<h1 class="strive-header flex flex-row flex-middle{{#if viewModel.showFancyFont}} fancy-font{{/if}}">{{/if}}
+  {{#if (eq viewModel.headerLevel 2)}}<h2 class="strive-header flex flex-row flex-middle{{#if viewModel.showFancyFont}} fancy-font{{/if}}">{{/if}}
+  {{#if (eq viewModel.headerLevel 3)}}<h3 class="strive-header flex flex-row flex-middle{{#if viewModel.showFancyFont}} fancy-font{{/if}}">{{/if}}
   {{!-- Title --}}
   {{#if viewModel.localizedTitle}}<span{{#if (eq viewModel.headerLevel 1)}} class="flex-grow"{{/if}}>{{viewModel.localizedTitle}}</span>{{/if}}
   {{!-- Expansion Button --}}
@@ -30,6 +30,7 @@ cssClass: String | undefined
   {{#if (eq viewModel.headerLevel 1)}}</h1>{{/if}}
   {{#if (eq viewModel.headerLevel 2)}}</h2>{{/if}}
   {{#if (eq viewModel.headerLevel 3)}}</h3>{{/if}}
+  {{#> sortableListExtraHeader }}{{/sortableListExtraHeader}}
   <ol class="sortable-list unstyled-list alternating-rows{{#if viewModel.isExpanded}}{{else}} hidden{{/if}}"
     data-vis-group="{{viewModel._visGroupId}}">
     {{#each viewModel.itemViewModelGroups as |itemViewModelGroup key|}}
@@ -66,7 +67,8 @@ cssClass: String | undefined
     {{/if}}
     {{!-- Add button --}}
     {{#if viewModel.isEditable}}
-    <div class="flex flex-row{{#if (neq viewModel.isEditable true)}} hidden{{/if}}">
+    <div class="flex flex-row{{#if (eq viewModel.isExpanded false)}} hidden{{/if}}" 
+      data-vis-group="{{viewModel._visGroupId}}">
       {{> buttonAdd viewModel=viewModel.vmAddItem2 }}
     </div>
     {{/if}}

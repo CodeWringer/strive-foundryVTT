@@ -77,89 +77,93 @@ cssClass: {undefined | String}
     </div>
   </div>
   {{!-- Injuries --}}
-  <div class="auto-margin-v-md">
-    <div class="grid-2col grid-gap-md">
+  {{#> sortableList viewModel=viewModel.vmInjuryList }}
+    {{#*inline "sortableListExtraHeader"}}
+    <div class="grid-2col grid-gap-md margin-b-md">
       <div class="sheet-block">
         <div class="flex flex-row flex-middle flex-right">
           <div class="flex-grow">
-            {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "system.character.health.injury.maximum"}}{{/label}}
+            {{#> label showFancyFont=../viewModel.showFancyFont}}{{localize "system.character.health.injury.maximum"}}{{/label}}
           </div>
           <span class="width-md">
-            {{#> readOnlyValue}}{{viewModel.maxInjuries}}{{/readOnlyValue}}
+            {{#> readOnlyValue}}{{../viewModel.maxInjuries}}{{/readOnlyValue}}
           </span>
-          {{#> labeledControl viewModel=viewModel.vmMaxInjuriesModifier localizedIconToolTip=(localize "system.general.modifier.label") iconClass="ico-modifier-solid" cssClass="width-xl" }}
+          {{#> labeledControl viewModel=../viewModel.vmMaxInjuriesModifier localizedIconToolTip=(localize "system.general.modifier.label") iconClass="ico-modifier-solid" cssClass="width-xl" }}
             {{> inputNumberSpinner }}
           {{/labeledControl}}
           <span class="pad-md font-bold">=</span>
           <span class="width-md">
-            {{#> readOnlyValue}}{{viewModel.modifiedMaxInjuries}}{{/readOnlyValue}}
+            {{#> readOnlyValue}}{{../viewModel.modifiedMaxInjuries}}{{/readOnlyValue}}
           </span>
         </div>
       </div>
       <div class="sheet-block">
         <div class="flex flex-row">
           <div class="flex-grow">
-            {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "system.character.health.injury.plural"}}{{/label}}
+            {{#> label showFancyFont=../viewModel.showFancyFont}}{{localize "system.character.health.injury.plural"}}{{/label}}
           </div>
           <span class="width-md">
-            {{#> readOnlyValue}}{{viewModel.injuryCount}}{{/readOnlyValue}}
+            {{#> readOnlyValue}}{{../viewModel.injuryCount}}{{/readOnlyValue}}
           </span>
         </div>
       </div>
     </div>
-    {{> sortableList viewModel=viewModel.vmInjuryList }}
-  </div>
+    {{/inline}}
+  {{/sortableList}}
   {{!-- Illnesses --}}
-  <div class="auto-margin-v-md">
-    <div class="grid-2col grid-gap-md">
+  {{#> sortableList viewModel=viewModel.vmIllnessList }}
+    {{#*inline "sortableListExtraHeader"}}
+    <div class="grid-2col grid-gap-md margin-b-md">
       <div></div>
       <div class="sheet-block">
         <div class="flex flex-row">
           <div class="flex-grow">
-            {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "system.character.health.illness.plural"}}{{/label}}
+            {{#> label showFancyFont=../viewModel.showFancyFont}}{{localize "system.character.health.illness.plural"}}{{/label}}
           </div>
           <span class="width-md">
-            {{#> readOnlyValue}}{{viewModel.illnessCount}}{{/readOnlyValue}}
+            {{#> readOnlyValue}}{{../viewModel.illnessCount}}{{/readOnlyValue}}
           </span>
         </div>
       </div>
     </div>
-    {{> sortableList viewModel=viewModel.vmIllnessList }}
-  </div>
+    {{/inline}}
+  {{/sortableList}}
   {{!-- Mutations --}}
-  <div class="auto-margin-v-md">
-    <div class="grid-2col grid-gap-md">
+  {{#> sortableList viewModel=viewModel.vmMutationList }}
+    {{#*inline "sortableListExtraHeader"}}
+    <div class="grid-2col grid-gap-md margin-b-md">
       <div></div>
       <div class="sheet-block">
         <div class="flex flex-row">
           <div class="flex-grow">
-            {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "system.character.health.mutation.plural"}}{{/label}}
+            {{#> label showFancyFont=../viewModel.showFancyFont}}{{localize "system.character.health.mutation.plural"}}{{/label}}
           </div>
           <span class="width-md">
-            {{#> readOnlyValue}}{{viewModel.mutationCount}}{{/readOnlyValue}}
+            {{#> readOnlyValue}}{{../viewModel.mutationCount}}{{/readOnlyValue}}
           </span>
         </div>
       </div>
     </div>
-    {{> sortableList viewModel=viewModel.vmMutationList }}
-  </div>
+    {{/inline}}
+  {{/sortableList}}
   {{!-- Scars --}}
-  <div class="auto-margin-v-md">
-    <div class="grid-2col grid-gap-md">
+  {{#> sortableList viewModel=viewModel.vmScarList }}
+    {{#*inline "sortableListExtraHeader"}}
+    <div class="grid-2col grid-gap-md margin-b-md">
       <div></div>
       <div class="sheet-block">
         <div class="flex flex-row">
           <div class="flex-grow">
-            {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "system.character.health.scar.plural"}}{{/label}}
+            {{#> label showFancyFont=../viewModel.showFancyFont}}{{localize "system.character.health.scar.plural"}}{{/label}}
           </div>
           <span class="width-md">
             <div class="strive-read-only pad-sm fill">
-              {{#> readOnlyValue}}{{viewModel.scarCount}}{{/readOnlyValue}}
+              {{#> readOnlyValue}}{{../viewModel.scarCount}}{{/readOnlyValue}}
             </div>
           </span>
         </div>
       </div>
     </div>
-    {{> sortableList viewModel=viewModel.vmScarList }}
-  </div>
+    {{/inline}}
+  {{/sortableList}}
 </section>

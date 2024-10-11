@@ -11,16 +11,17 @@ cssClass: {undefined | String}
     {{/with}}
   </div>
   {{!-- Luggage --}}
-  <div class="auto-margin-v-md">
-    <div class="grid-2col grid-gap-md">
+  {{#> sortableList viewModel=viewModel.vmLuggageList }}
+    {{#*inline "sortableListExtraHeader"}}
+    <div class="grid-2col grid-gap-md margin-b-md">
       {{!-- Maximum bulk --}}
       <div class="sheet-block">
         <div class="flex flex-row">
           <div class="flex-grow">
-            {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "system.character.asset.carryingCapacity.label"}}{{/label}}
+            {{#> label showFancyFont=../viewModel.showFancyFont}}{{localize "system.character.asset.carryingCapacity.label"}}{{/label}}
           </div>
           <span class="width-md">
-            {{#> readOnlyValue}}{{viewModel.maxBulk}}{{/readOnlyValue}}
+            {{#> readOnlyValue}}{{../viewModel.maxBulk}}{{/readOnlyValue}}
           </span>
         </div>
       </div>
@@ -28,16 +29,16 @@ cssClass: {undefined | String}
       <div class="sheet-block">
         <div class="flex flex-row">
           <div class="flex-grow">
-            {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "system.character.asset.carryingCapacity.used"}}{{/label}}
+            {{#> label showFancyFont=../viewModel.showFancyFont}}{{localize "system.character.asset.carryingCapacity.used"}}{{/label}}
           </div>
           <span class="flex flex-row flex-middle width-md">
-            {{#> admonishReadOnlyValue admonish=viewModel.hasExceededBulk}}{{viewModel.currentBulk}}{{/admonishReadOnlyValue}}
+            {{> admonishReadOnlyValue admonish=../viewModel.hasExceededBulk value=../viewModel.currentBulk }}
           </span>
         </div>
       </div>
     </div>
-    {{> sortableList viewModel=viewModel.vmLuggageList }}
-  </div>
+    {{/inline}}
+  {{/sortableList }}
   {{!-- Property --}}
   <div class="auto-margin-v-md">
     {{> sortableList viewModel=viewModel.vmPropertyList }}

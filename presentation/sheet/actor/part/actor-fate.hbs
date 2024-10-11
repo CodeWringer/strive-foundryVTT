@@ -24,7 +24,7 @@ cssClass: {undefined | String}
     </div>
   </div>
   {{#if viewModel.hasExceededFateCardLimit}}
-    {{#> admonishReadOnlyValue cssClass="pad-l-md pad-r-md" admonish=true}}{{localize "system.character.driverSystem.fateSystem.fateCard.limitExceededAdmonish"}}{{/admonishReadOnlyValue}}
+    {{> admonishReadOnlyValue cssClass="pad-l-md pad-r-md" admonish=true value=(localize "system.character.driverSystem.fateSystem.fateCard.limitExceededAdmonish") }}
   {{/if}}
   <div class="flex" style="flex-wrap: wrap;">
     {{#each viewModel.fateCards as |cardViewModel key|}}
