@@ -684,7 +684,7 @@ export default class ViewModel {
     const result = [];
     
     for (const document of documents) {
-      let vm = currentList.find(it => it._id === document.id);
+      let vm = (currentList ?? []).find(it => it._id === document.id);
       if (vm === undefined) {
         vm = factoryFunc({
           id: document.id,

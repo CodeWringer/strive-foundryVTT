@@ -78,13 +78,6 @@ cssClass: {undefined | String}
   </div>
   {{!-- Injuries --}}
   <div class="auto-margin-v-md">
-    {{#> header1 showFancyFont=viewModel.showFancyFont cssClass="flex flex-row" }}
-      <span class="flex-grow">{{localize "system.character.health.injury.plural"}}</span>
-      {{#with viewModel.sortControlsTemplate as |template|}}
-        {{> (template) viewModel=../viewModel.vmSortInjuries cssClass="font-size-default" }}
-      {{/with}}
-      {{> buttonAdd viewModel=viewModel.vmAddInjury2 cssClass="font-size-lg" }}
-    {{/header1}}
     <div class="grid-2col grid-gap-md">
       <div class="sheet-block">
         <div class="flex flex-row flex-middle flex-right">
@@ -118,13 +111,6 @@ cssClass: {undefined | String}
   </div>
   {{!-- Illnesses --}}
   <div class="auto-margin-v-md">
-    {{#> header1 showFancyFont=viewModel.showFancyFont cssClass="flex flex-row" }}
-      <span class="flex-grow">{{localize "system.character.health.illness.plural"}}</span>
-      {{#with viewModel.sortControlsTemplate as |template|}}
-        {{> (template) viewModel=../viewModel.vmSortIllnesses cssClass="font-size-default" }}
-      {{/with}}
-      {{> buttonAdd viewModel=viewModel.vmAddIllness2 cssClass="font-size-lg" }}
-    {{/header1}}
     <div class="grid-2col grid-gap-md">
       <div></div>
       <div class="sheet-block">
@@ -142,13 +128,6 @@ cssClass: {undefined | String}
   </div>
   {{!-- Mutations --}}
   <div class="auto-margin-v-md">
-    {{#> header1 showFancyFont=viewModel.showFancyFont cssClass="flex flex-row" }}
-      <span class="flex-grow">{{localize "system.character.health.mutation.plural"}}</span>
-      {{#with viewModel.sortControlsTemplate as |template|}}
-        {{> (template) viewModel=../viewModel.vmSortMutations cssClass="font-size-default" }}
-      {{/with}}
-      {{> buttonAdd viewModel=viewModel.vmAddMutation2 cssClass="font-size-lg" }}
-    {{/header1}}
     <div class="grid-2col grid-gap-md">
       <div></div>
       <div class="sheet-block">
@@ -166,13 +145,6 @@ cssClass: {undefined | String}
   </div>
   {{!-- Scars --}}
   <div class="auto-margin-v-md">
-    {{#> header1 showFancyFont=viewModel.showFancyFont cssClass="flex flex-row" }}
-      <span class="flex-grow">{{localize "system.character.health.scar.plural"}}</span>
-      {{#with viewModel.sortControlsTemplate as |template|}}
-        {{> (template) viewModel=../viewModel.vmSortScars cssClass="font-size-default" }}
-      {{/with}}
-      {{> buttonAdd viewModel=viewModel.vmAddScar2 cssClass="font-size-lg" }}
-    {{/header1}}
     <div class="grid-2col grid-gap-md">
       <div></div>
       <div class="sheet-block">

@@ -251,9 +251,6 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
       this.vmExpertiseTable = new ExpertiseTableViewModel({
         id: "vmExpertiseTable",
         parent: this,
-        isEditable: this.isEditable,
-        isSendable: this.isSendable,
-        isOwner: this.isOwner,
         document: this.document,
         expertisesInitiallyVisible: this.document.expertises.length > 0,
       });

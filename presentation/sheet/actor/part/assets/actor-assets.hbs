@@ -12,13 +12,6 @@ cssClass: {undefined | String}
   </div>
   {{!-- Luggage --}}
   <div class="auto-margin-v-md">
-    {{#> header1 showFancyFont=viewModel.showFancyFont cssClass="flex flex-row" }}
-      <span class="flex-grow">{{localize "system.character.asset.luggage"}}</span>
-      {{#with viewModel.sortControlsTemplate as |template|}}
-        {{> (template) viewModel=../viewModel.vmSortLuggage cssClass="font-size-default" }}
-      {{/with}}
-      {{> buttonAdd viewModel=viewModel.vmAddLuggage2 cssClass="font-size-lg" }}
-    {{/header1}}
     <div class="grid-2col grid-gap-md">
       {{!-- Maximum bulk --}}
       <div class="sheet-block">
@@ -47,13 +40,6 @@ cssClass: {undefined | String}
   </div>
   {{!-- Property --}}
   <div class="auto-margin-v-md">
-    {{#> header1 showFancyFont=viewModel.showFancyFont cssClass="flex flex-row" }}
-      <span class="flex-grow">{{localize "system.character.asset.property"}}</span>
-      {{#with viewModel.sortControlsTemplate as |template|}}
-        {{> (template) viewModel=../viewModel.vmSortProperty cssClass="font-size-default" }}
-      {{/with}}
-      {{> buttonAdd viewModel=viewModel.vmAddProperty2 cssClass="font-size-lg" }}
-    {{/header1}}
     {{> sortableList viewModel=viewModel.vmPropertyList }}
   </div>
 </section>

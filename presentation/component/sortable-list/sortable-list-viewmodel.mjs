@@ -1,7 +1,11 @@
 import { ArrayUtil } from "../../../business/util/array-utility.mjs";
+import { UuidUtil } from "../../../business/util/uuid-utility.mjs";
 import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
+import ButtonAddViewModel from "../button-add/button-add-viewmodel.mjs";
+import ButtonToggleVisibilityViewModel from "../button-toggle-visibility/button-toggle-visibility-viewmodel.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
+import SortControlsViewModel from "../sort-controls/sort-controls-viewmodel.mjs";
 
 /**
  * This object groups the view models of one list item, to pass through to the UI. 
@@ -15,10 +19,83 @@ import ButtonViewModel from "../button/button-viewmodel.mjs";
  */
 class SortableListViewModelGroup {
   constructor(args = {}) {
+    ValidationUtil.validateOrThrow(args, ["id", "vmBtnMoveUp", "vmBtnMoveDown", "listItemViewModel"]);
+
     this.id = args.id;
     this.vmBtnMoveUp = args.vmBtnMoveUp;
     this.vmBtnMoveDown = args.vmBtnMoveDown;
     this.listItemViewModel = args.listItemViewModel;
+  }
+}
+
+/**
+ * Provides the parameters for the buttons that enable adding items. 
+ * 
+ * @property {Document | TransientDocument} target
+ * @property {ITEM_TYPES} creationType
+ * @property {Object | undefined} creationData
+ * @property {Boolean} withDialog
+ * @property {String | undefined} localizedLabel
+ * @property {String | undefined} localizedToolTip
+ * @property {String | undefined} localizedType
+ * @property {Function | undefined} onItemAdded If defined, this function will be 
+ * invoked upon item creation. Arguments:
+ * * `event: Event`
+ * * `document: Document`
+*/
+export class SortableListAddItemParams {
+  /**
+   * @param {Object} args 
+   * @param {Document | TransientDocument} args.target
+   * @param {ITEM_TYPES} args.creationType
+   * @param {Object | undefined} args.creationData
+   * @param {Boolean} args.withDialog
+   * @param {String | undefined} args.localizedLabel
+   * @param {String | undefined} args.localizedToolTip
+   * @param {String | undefined} args.localizedType
+   * @param {Function | undefined} args.onItemAdded If defined, this callback function will be 
+   * invoked upon item creation. Arguments:
+   * * `event: Event`
+   * * `document: Document`
+   */
+  constructor(args = {}) {
+    ValidationUtil.validateOrThrow(args, ["target", "creationType", "withDialog"]);
+
+    this.target = args.target;
+    this.creationType = args.creationType;
+    this.creationData = args.creationData;
+    this.localizedLabel = args.localizedLabel;
+    this.localizedToolTip = args.localizedToolTip;
+    this.localizedType = args.localizedType;
+    this.withDialog = args.withDialog;
+    this.onItemAdded = args.onItemAdded;
+  }
+}
+
+/**
+ * Provides the parameters for the buttons that enable sorting items. 
+ * 
+ * @property {Array<SortingOption>} options
+ * @property {Boolean} compact
+ * @property {Function} onSort Pass-through callback that has to invoke the 
+ * `provideSortable` parameter function and provide it an argument that 
+ * represents the list of sortable view model instances. 
+ */
+export class SortableListSortParams {
+  /**
+   * @param {Object} args 
+   * @param {Array<SortingOption>} args.options
+   * @param {Boolean} args.compact
+   * @param {Function} args.onSort If defined, this callback function will be 
+   * invoked upon item sorting. Arguments:
+   * * `event: Event`
+   */
+  constructor(args = {}) {
+    ValidationUtil.validateOrThrow(args, ["options", "compact"]);
+
+    this.options = args.options;
+    this.compact = args.compact;
+    this.onSort = args.onSort;
   }
 }
 
@@ -61,12 +138,76 @@ export default class SortableListViewModel extends ViewModel {
   itemViewModelGroups = [];
 
   /**
+   * Returns the `SortControlsViewModel.TEMPLATE`, for use in a Handlebars "with" block. 
+   * 
+   * @type {String}
+   * @readonly
+   */
+  get sortControlsTemplate() { return SortControlsViewModel.TEMPLATE; }
+
+  /**
    * Returns `true`, if there is an "add" button view model. 
    * 
    * @type {Boolean}
    * @readonly
    */
-  get hasAddButton() { return this.vmBtnAddItem !== undefined; }
+  get hasAddButton() { return ValidationUtil.isDefined(this.vmAddItem1) && ValidationUtil.isDefined(this.vmAddItem2); }
+
+  /**
+   * Returns `true`, if sorting controls are defined. 
+   * 
+   * @type {Boolean}
+   * @readonly
+   */
+  get hasSortControls() { return ValidationUtil.isDefined(this.vmSortControls); }
+  
+  /**
+   * @type {Boolean}
+   * @private
+   */
+  _isCollapsible = false;
+  /**
+   * @type {Boolean}
+   */
+  get isCollapsible() {
+    return this._isCollapsible;
+  }
+  set isCollapsible(value) {
+    this._isCollapsible = value;
+    if (value === false) {
+      this.isExpanded = true;
+    }
+  }
+  
+  /**
+   * @type {Boolean}
+   * @private
+   */
+  _isExpanded = true;
+  /**
+   * @type {Boolean}
+   */
+  get isExpanded() {
+    return this._isExpanded;
+  }
+  set isExpanded(value) {
+    if (!this.isCollapsible) return;
+
+    this._isExpanded = value;
+
+    // Synchronize the toggle buttons. 
+    this.vmToggleExpansion1.value = value;
+    this.vmToggleExpansion2.value = value;
+    // Hide the second expansion toggle button if the expertise list is currently hidden. 
+    if (value === true) {
+      this.vmToggleExpansion2.element.parent().removeClass("hidden");
+    } else {
+      this.vmToggleExpansion2.element.parent().addClass("hidden");
+    }
+
+    // Immediately write view state. 
+    this.writeViewState();
+  }
 
   /**
    * @param {Object} args 
@@ -79,7 +220,19 @@ export default class SortableListViewModel extends ViewModel {
    * @param {AbstractListItemIndexDataSource} args.indexDataSource The data source of the indices. 
    * @param {Array<ViewModel>} args.listItemViewModels A list of item view models.
    * @param {String} args.listItemTemplate The absolute path of the template to use for list items. 
-   * @param {ViewModel | undefined} args.vmBtnAddItem View model of the add item button. 
+   * @param {String | undefined} args.localizedTitle The localized title to display at 
+   * the head of the list. 
+   * @param {Number | undefined} args.headerLevel
+   * * Default `1`
+   * @param {Boolean | undefined} args.isCollapsible If `true`, the list will be collapsible. 
+   * * Default `false`
+   * @param {Boolean | undefined} args.isExpanded If `true`, the list is initially expanded. 
+   * * Default `true`
+   * * If `isCollapsible` is set to `false`, will **always** be `true`. 
+   * @param {SortableListAddItemParams | undefined} args.addItemParams If defined, 
+   * buttons to add items will be shown, using these settings. 
+   * @param {SortableListSortParams | undefined} args.sortParams If defined, 
+   * buttons to sort items will be shown, using these settings. 
    */
   constructor(args = {}) {
     super(args);
@@ -88,17 +241,91 @@ export default class SortableListViewModel extends ViewModel {
     this.indexDataSource = args.indexDataSource;
     this.contextTemplate = args.contextTemplate ?? "sortable-list";
     this.listItemTemplate = args.listItemTemplate;
+    this.localizedTitle = args.localizedTitle;
+    this.headerLevel = args.headerLevel ?? 1;
+    this._isCollapsible = args.isCollapsible ?? false;
+    this._isExpanded = args.isCollapsible ? (args.isExpanded ?? true) : true;
+    this._addItemParams = args.addItemParams;
+    this._visGroupId = UuidUtil.createUUID();
+
+    this.registerViewStateProperty("_isExpanded");
+
+    this.vmToggleExpansion1 = new ButtonToggleVisibilityViewModel({
+      parent: this,
+      id: "vmToggleExpansion1",
+      isEditable: true,
+      value: this.isExpanded,
+      iconInactive: '<i class="fas fa-angle-double-down"></i>',
+      iconActive: '<i class="fas fa-angle-double-up"></i>',
+      visGroup: this._visGroupId,
+      onClick: async (event, data) => {
+        this.isExpanded = !this.isExpanded;
+      },
+    });
+    this.vmToggleExpansion2 = new ButtonToggleVisibilityViewModel({
+      parent: this,
+      id: "vmToggleExpansion2",
+      isEditable: true,
+      value: this.isExpanded,
+      iconInactive: '<i class="fas fa-angle-double-down"></i>',
+      iconActive: '<i class="fas fa-angle-double-up"></i>',
+      visGroup: this._visGroupId,
+      onClick: async (event, data) => {
+        this.isExpanded = !this.isExpanded;
+      },
+    });
+    if (ValidationUtil.isDefined(args.addItemParams)) {
+      this.vmAddItem1 = new ButtonAddViewModel({
+        id: "vmAddItem1",
+        parent: this,
+        target: args.addItemParams.target,
+        creationType: args.addItemParams.creationType,
+        creationData: args.addItemParams.creationData,
+        withDialog: args.addItemParams.withDialog,
+        localizedToolTip: args.addItemParams.localizedToolTip,
+        localizedType: args.addItemParams.localizedType,
+        onClick: (event, data) => {
+          if (ValidationUtil.isDefined(args.addItemParams.onItemAdded)) {
+            args.addItemParams.onItemAdded(event, data);
+          }
+        },
+      });
+      this.vmAddItem2 = new ButtonAddViewModel({
+        id: "vmAddItem2",
+        parent: this,
+        target: args.addItemParams.target,
+        creationType: args.addItemParams.creationType,
+        creationData: args.addItemParams.creationData,
+        withDialog: args.addItemParams.withDialog,
+        localizedLabel: args.addItemParams.localizedLabel,
+        localizedType: args.addItemParams.localizedType,
+        onClick: (event, data) => {
+          if (ValidationUtil.isDefined(args.addItemParams.onItemAdded)) {
+            args.addItemParams.onItemAdded(event, data);
+          }
+        },
+      });
+    }
+
+    if (ValidationUtil.isDefined(args.sortParams) && args.sortParams.options.length > 0) {
+      this.vmSortControls = new SortControlsViewModel({
+        id: "vmSortControls",
+        parent: this,
+        options: args.sortParams.options,
+        compact: args.sortParams.compact,
+        onSort: (event, provideSortable) => {
+          provideSortable(this);
+          if (ValidationUtil.isDefined(args.sortParams.onSort)) {
+            args.sortParams.onSort(event);
+          }
+        },
+      });
+    }
     
     // Prepare given list. 
     this.listItemViewModels = args.listItemViewModels;
     for (const listItemViewModel of this.listItemViewModels) {
       listItemViewModel.parent = this;
-    }
-
-    // Prepare given "add" button, if necessary. 
-    this.vmBtnAddItem = args.vmBtnAddItem;
-    if (this.vmBtnAddItem !== undefined) {
-      this.vmBtnAddItem.parent = this;
     }
 
     this._orderedIdList = this._getOrderedIdList();
@@ -235,6 +462,8 @@ export default class SortableListViewModel extends ViewModel {
   }
 
   /**
+   * Generates and returns the groups of view models based on the ordered id list. 
+   * 
    * @returns {Array<SortableListViewModelGroup>}
    * 
    * @private
@@ -258,7 +487,10 @@ export default class SortableListViewModel extends ViewModel {
 
   /**
    * Writes out the item order. 
-   * @param {Boolean | undefined} render 
+   * 
+   * @param {Boolean | undefined} render If `true`, will re-render the list. 
+   * * Default `true`
+   * 
    * @private
    */
   _storeItemOrder(render = true) {
@@ -267,7 +499,9 @@ export default class SortableListViewModel extends ViewModel {
 
   /**
    * Callback for moving an item to the top. 
-   * @param {} item 
+   * 
+   * @param {String} id Id of the item to move. 
+   * 
    * @private
    * @async
    */
@@ -278,6 +512,9 @@ export default class SortableListViewModel extends ViewModel {
 
   /**
    * Callback for moving an item up. 
+   * 
+   * @param {String} id Id of the item to move. 
+   * 
    * @private
    * @async
    */
@@ -288,6 +525,9 @@ export default class SortableListViewModel extends ViewModel {
 
   /**
    * Callback for moving an item down. 
+   * 
+   * @param {String} id Id of the item to move. 
+   * 
    * @private
    * @async
    */
@@ -298,6 +538,9 @@ export default class SortableListViewModel extends ViewModel {
 
   /**
    * Callback for moving an item to the bottom. 
+   * 
+   * @param {String} id Id of the item to move. 
+   * 
    * @private
    * @async
    */

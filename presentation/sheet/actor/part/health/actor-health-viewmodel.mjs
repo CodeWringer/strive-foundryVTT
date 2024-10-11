@@ -7,7 +7,7 @@ import ButtonAddViewModel from "../../../../component/button-add/button-add-view
 import InputNumberSpinnerViewModel from "../../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs"
 import SortControlsViewModel, { SortingOption } from "../../../../component/sort-controls/sort-controls-viewmodel.mjs"
 import DocumentListItemOrderDataSource from "../../../../component/sortable-list/document-list-item-order-datasource.mjs"
-import SortableListViewModel from "../../../../component/sortable-list/sortable-list-viewmodel.mjs"
+import SortableListViewModel, { SortableListAddItemParams, SortableListSortParams } from "../../../../component/sortable-list/sortable-list-viewmodel.mjs"
 import ViewModel from "../../../../view-model/view-model.mjs"
 import AssetListItemViewModel from "../../../item/asset/asset-list-item-viewmodel.mjs"
 import IllnessListItemViewModel from "../../../item/illness/illness-list-item-viewmodel.mjs"
@@ -87,12 +87,6 @@ export default class ActorHealthViewModel extends ViewModel {
    * @readonly
    */
   get modifiedMaxInjuries() { return this.document.health.modifiedMaxInjuries; }
-
-  /**
-   * @type {String}
-   * @readonly
-   */
-  get sortControlsTemplate() { return SortControlsViewModel.TEMPLATE; }
 
   /**
    * @type {Array<IllnessListItemViewModel>}
@@ -243,20 +237,20 @@ export default class ActorHealthViewModel extends ViewModel {
     });
 
     // Prepare illnesses list view models. 
-    this.illnesses = [];
     this.illnesses = this._getIllnessViewModels();
     this.vmIllnessList = new SortableListViewModel({
-      parent: this,
       id: "vmIllnessList",
+      parent: this,
+      isCollapsible: false,
       indexDataSource: new DocumentListItemOrderDataSource({
         document: this.document,
         listName: "illnesses",
       }),
       listItemViewModels: this.illnesses,
       listItemTemplate: IllnessListItemViewModel.TEMPLATE,
-      vmBtnAddItem: new ButtonAddViewModel({
-        id: "vmAddIllness1",
-        parent: this,
+      localizedTitle: game.i18n.localize("system.character.health.illness.plural"),
+      headerLevel: 1,
+      addItemParams: new SortableListAddItemParams({
         target: this.document,
         creationType: ITEM_TYPES.ILLNESS,
         withDialog: true,
@@ -264,37 +258,32 @@ export default class ActorHealthViewModel extends ViewModel {
           game.i18n.localize("system.general.add.addType"),
           game.i18n.localize("system.character.health.illness.singular"),
         ),
+        localizedToolTip: StringUtil.format(
+          game.i18n.localize("system.general.add.addType"),
+          game.i18n.localize("system.character.health.illness.singular"),
+        ),
         localizedType: game.i18n.localize("system.character.health.illness.singular"),
       }),
-    });
-    this.vmAddIllness2 = new ButtonAddViewModel({
-      id: "vmAddIllness2",
-      parent: this,
-      target: this.document,
-      creationType: ITEM_TYPES.ILLNESS,
-      withDialog: true,
-      localizedToolTip: StringUtil.format(
-        game.i18n.localize("system.general.add.addType"),
-        game.i18n.localize("system.character.health.illness.singular"),
-      ),
-      localizedType: game.i18n.localize("system.character.health.illness.singular"),
+      sortParams: new SortableListSortParams({
+        options: this._getTreatableSortingOptions(),
+        compact: true,
+      }),
     });
 
     // Prepare injuries list view models. 
-    this.injuries = [];
     this.injuries = this._getInjuryViewModels();
     this.vmInjuryList = new SortableListViewModel({
-      parent: this,
       id: "vmInjuryList",
+      parent: this,
       indexDataSource: new DocumentListItemOrderDataSource({
         document: this.document,
         listName: "injuries",
       }),
       listItemViewModels: this.injuries,
       listItemTemplate: InjuryListItemViewModel.TEMPLATE,
-      vmBtnAddItem: new ButtonAddViewModel({
-        id: "vmAddInjury1",
-        parent: this,
+      localizedTitle: game.i18n.localize("system.character.health.injury.plural"),
+      headerLevel: 1,
+      addItemParams: new SortableListAddItemParams({
         target: this.document,
         creationType: ITEM_TYPES.INJURY,
         withDialog: true,
@@ -302,37 +291,32 @@ export default class ActorHealthViewModel extends ViewModel {
           game.i18n.localize("system.general.add.addType"),
           game.i18n.localize("system.character.health.injury.singular"),
         ),
+        localizedToolTip: StringUtil.format(
+          game.i18n.localize("system.general.add.addType"),
+          game.i18n.localize("system.character.health.injury.singular"),
+        ),
         localizedType: game.i18n.localize("system.character.health.injury.singular"),
       }),
-    });
-    this.vmAddInjury2 = new ButtonAddViewModel({
-      id: "vmAddInjury2",
-      parent: this,
-      target: this.document,
-      creationType: ITEM_TYPES.INJURY,
-      withDialog: true,
-      localizedToolTip: StringUtil.format(
-        game.i18n.localize("system.general.add.addType"),
-        game.i18n.localize("system.character.health.injury.singular"),
-      ),
-      localizedType: game.i18n.localize("system.character.health.injury.singular"),
+      sortParams: new SortableListSortParams({
+        options: this._getTreatableSortingOptions(),
+        compact: true,
+      }),
     });
 
     // Prepare mutations list view models. 
-    this.mutations = [];
     this.mutations = this._getMutationViewModels();
     this.vmMutationList = new SortableListViewModel({
-      parent: this,
       id: "vmMutationList",
+      parent: this,
       indexDataSource: new DocumentListItemOrderDataSource({
         document: this.document,
         listName: "mutations",
       }),
       listItemViewModels: this.mutations,
       listItemTemplate: MutationListItemViewModel.TEMPLATE,
-      vmBtnAddItem: new ButtonAddViewModel({
-        id: "vmAddMutation1",
-        parent: this,
+      localizedTitle: game.i18n.localize("system.character.health.mutation.plural"),
+      headerLevel: 1,
+      addItemParams: new SortableListAddItemParams({
         target: this.document,
         creationType: ITEM_TYPES.MUTATION,
         withDialog: true,
@@ -340,37 +324,32 @@ export default class ActorHealthViewModel extends ViewModel {
           game.i18n.localize("system.general.add.addType"),
           game.i18n.localize("system.character.health.mutation.singular"),
         ),
+        localizedToolTip: StringUtil.format(
+          game.i18n.localize("system.general.add.addType"),
+          game.i18n.localize("system.character.health.mutation.singular"),
+        ),
         localizedType: game.i18n.localize("system.character.health.mutation.singular"),
       }),
-    });
-    this.vmAddMutation2 = new ButtonAddViewModel({
-      id: "vmAddMutation2",
-      parent: this,
-      target: this.document,
-      creationType: ITEM_TYPES.MUTATION,
-      withDialog: true,
-      localizedToolTip: StringUtil.format(
-        game.i18n.localize("system.general.add.addType"),
-        game.i18n.localize("system.character.health.mutation.singular"),
-      ),
-      localizedType: game.i18n.localize("system.character.health.mutation.singular"),
+      sortParams: new SortableListSortParams({
+        options: this._getNameSortingOptions(),
+        compact: true,
+      }),
     });
 
     // Prepare scars list view models. 
-    this.scars = [];
     this.scars = this._getScarViewModels();
     this.vmScarList = new SortableListViewModel({
-      parent: this,
       id: "vmScarList",
+      parent: this,
       indexDataSource: new DocumentListItemOrderDataSource({
         document: this.document,
         listName: "scars",
       }),
       listItemViewModels: this.scars,
       listItemTemplate: ScarListItemViewModel.TEMPLATE,
-      vmBtnAddItem: new ButtonAddViewModel({
-        id: "vmAddScar1",
-        parent: this,
+      localizedTitle: game.i18n.localize("system.character.health.scar.plural"),
+      headerLevel: 1,
+      addItemParams: new SortableListAddItemParams({
         target: this.document,
         creationType: ITEM_TYPES.SCAR,
         withDialog: true,
@@ -378,60 +357,16 @@ export default class ActorHealthViewModel extends ViewModel {
           game.i18n.localize("system.general.add.addType"),
           game.i18n.localize("system.character.health.scar.singular"),
         ),
+        localizedToolTip: StringUtil.format(
+          game.i18n.localize("system.general.add.addType"),
+          game.i18n.localize("system.character.health.scar.singular"),
+        ),
         localizedType: game.i18n.localize("system.character.health.scar.singular"),
       }),
-    });
-    this.vmAddScar2 = new ButtonAddViewModel({
-      id: "vmAddScar2",
-      parent: this,
-      target: this.document,
-      creationType: ITEM_TYPES.SCAR,
-      withDialog: true,
-      localizedToolTip: StringUtil.format(
-        game.i18n.localize("system.general.add.addType"),
-        game.i18n.localize("system.character.health.scar.singular"),
-      ),
-      localizedType: game.i18n.localize("system.character.health.scar.singular"),
-    });
-
-    this.vmSortInjuries = new SortControlsViewModel({
-      id: "vmSortInjuries",
-      parent: this,
-      options: this._getTreatableSortingOptions(),
-      compact: true,
-      onSort: (_, provideSortable) => {
-        provideSortable(this.vmInjuryList);
-      },
-    });
-
-    this.vmSortIllnesses = new SortControlsViewModel({
-      id: "vmSortIllnesses",
-      parent: this,
-      options: this._getTreatableSortingOptions(),
-      compact: true,
-      onSort: (_, provideSortable) => {
-        provideSortable(this.vmIllnessList);
-      },
-    });
-
-    this.vmSortMutations = new SortControlsViewModel({
-      id: "vmSortMutations",
-      parent: this,
-      options: this._getNameSortingOptions(),
-      compact: true,
-      onSort: (_, provideSortable) => {
-        provideSortable(this.vmMutationList);
-      },
-    });
-
-    this.vmSortScars = new SortControlsViewModel({
-      id: "vmSortScars",
-      parent: this,
-      options: this._getNameSortingOptions(),
-      compact: true,
-      onSort: (_, provideSortable) => {
-        provideSortable(this.vmScarList);
-      },
+      sortParams: new SortableListSortParams({
+        options: this._getNameSortingOptions(),
+        compact: true,
+      }),
     });
 
     this.vmGritPoints = new GritPointsViewModel({

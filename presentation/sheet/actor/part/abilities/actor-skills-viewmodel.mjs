@@ -4,11 +4,10 @@ import { SKILL_TAGS } from "../../../../../business/tags/system-tags.mjs"
 import { StringUtil } from "../../../../../business/util/string-utility.mjs"
 import { ValidationUtil } from "../../../../../business/util/validation-utility.mjs"
 import { ExtenderUtil } from "../../../../../common/extender-util.mjs"
-import ButtonAddViewModel from "../../../../component/button-add/button-add-viewmodel.mjs"
 import InputSearchTextViewModel from "../../../../component/input-search/input-search-viewmodel.mjs"
 import SortControlsViewModel, { SortingOption } from "../../../../component/sort-controls/sort-controls-viewmodel.mjs"
 import DocumentListItemOrderDataSource from "../../../../component/sortable-list/document-list-item-order-datasource.mjs"
-import SortableListViewModel from "../../../../component/sortable-list/sortable-list-viewmodel.mjs"
+import SortableListViewModel, { SortableListAddItemParams, SortableListSortParams } from "../../../../component/sortable-list/sortable-list-viewmodel.mjs"
 import ViewModel from "../../../../view-model/view-model.mjs"
 import SkillListItemViewModel from "../../../item/skill/skill-list-item-viewmodel.mjs"
 
@@ -35,12 +34,6 @@ export default class ActorSkillsViewModel extends ViewModel {
    */
   get hideLearningSkills() { return this.document.progressionVisible === false; }
   
-  /**
-   * @type {String}
-   * @readonly
-   */
-  get sortControlsTemplate() { return SortControlsViewModel.TEMPLATE; }
-
   /**
    * @type {String}
    * @private
@@ -104,172 +97,117 @@ export default class ActorSkillsViewModel extends ViewModel {
       },
     });
 
-    this.innateSkillViewModels = [];
     this.innateSkillViewModels = this._getInnateSkillViewModels();
     if (this.hideInnateSkills === false) {
       this.vmInnateSkillList = new SortableListViewModel({
         id: "vmInnateSkillList",
         parent: this,
-        contextTemplate: this.contextTemplate,
+        isCollapsible: false,
         indexDataSource: new DocumentListItemOrderDataSource({
           document: this.document,
           listName: "innateSkills",
         }),
         listItemViewModels: this.innateSkillViewModels,
         listItemTemplate: SkillListItemViewModel.TEMPLATE,
-        vmBtnAddItem: new ButtonAddViewModel({
-          id: "vmAddInnateSkill1",
-          parent: this,
+        localizedTitle: game.i18n.localize("system.character.skill.innate.label"),
+        headerLevel: 1,
+        addItemParams: new SortableListAddItemParams({
           target: this.document,
           creationType: ITEM_TYPES.SKILL,
-          withDialog: true,
           creationData: {
             level: 1,
             properties: [
               SKILL_TAGS.INNATE.id,
             ],
           },
+          withDialog: true,
           localizedLabel: StringUtil.format(
+            game.i18n.localize("system.general.add.addType"),
+            game.i18n.localize("system.character.skill.innate.singular"),
+          ),
+          localizedToolTip: StringUtil.format(
             game.i18n.localize("system.general.add.addType"),
             game.i18n.localize("system.character.skill.innate.singular"),
           ),
           localizedType: game.i18n.localize("system.character.skill.innate.singular"),
         }),
+        sortParams: new SortableListSortParams({
+          options: this._getKnownSkillSortingOptions(),
+          compact: true,
+        }),
       });
     }
-    this.vmAddInnateSkill2 = new ButtonAddViewModel({
-      id: "vmAddInnateSkill2",
-      parent: this,
-      target: this.document,
-      creationType: ITEM_TYPES.SKILL,
-      withDialog: true,
-      creationData: {
-        level: 1,
-        properties: [
-          SKILL_TAGS.INNATE.id,
-        ],
-      },
-      localizedToolTip: StringUtil.format(
-        game.i18n.localize("system.general.add.addType"),
-        game.i18n.localize("system.character.skill.innate.singular"),
-      ),
-      localizedType: game.i18n.localize("system.character.skill.innate.singular"),
-    });
 
-    this.learningSkillViewModels = [];
     this.learningSkillViewModels = this._getLearningSkillViewModels();
     this.vmLearningSkillList = new SortableListViewModel({
       id: "vmLearningSkillList",
       parent: this,
-      contextTemplate: this.contextTemplate,
+      isCollapsible: false,
       indexDataSource: new DocumentListItemOrderDataSource({
         document: this.document,
         listName: "learningSkills",
       }),
       listItemViewModels: this.learningSkillViewModels,
       listItemTemplate: SkillListItemViewModel.TEMPLATE,
-      vmBtnAddItem: new ButtonAddViewModel({
-        id: "vmAddLearningSkill1",
-        parent: this,
+      localizedTitle: game.i18n.localize("system.character.skill.learning.label"),
+      headerLevel: 1,
+      addItemParams: new SortableListAddItemParams({
         target: this.document,
         creationType: ITEM_TYPES.SKILL,
-        withDialog: true,
         creationData: {
           level: 0,
         },
+        withDialog: true,
         localizedLabel: StringUtil.format(
+          game.i18n.localize("system.general.add.addType"),
+          game.i18n.localize("system.character.skill.learning.singular"),
+        ),
+        localizedToolTip: StringUtil.format(
           game.i18n.localize("system.general.add.addType"),
           game.i18n.localize("system.character.skill.learning.singular"),
         ),
         localizedType: game.i18n.localize("system.character.skill.learning.singular"),
       }),
-    });
-    this.vmAddLearningSkill2 = new ButtonAddViewModel({
-      id: "vmAddLearningSkill2",
-      parent: this,
-      target: this.document,
-      creationType: ITEM_TYPES.SKILL,
-      withDialog: true,
-      creationData: {
-        level: 0,
-      },
-      localizedToolTip: StringUtil.format(
-        game.i18n.localize("system.general.add.addType"),
-        game.i18n.localize("system.character.skill.learning.singular"),
-      ),
-      localizedType: game.i18n.localize("system.character.skill.learning.singular"),
+      sortParams: new SortableListSortParams({
+        options: this._getLearningSkillSortingOptions(),
+        compact: true,
+      }),
     });
 
-    this.knownSkillViewModels = [];
     this.knownSkillViewModels = this._getKnownSkillViewModels();
     this.vmKnownSkillList = new SortableListViewModel({
       id: "vmKnownSkillList",
       parent: this,
-      contextTemplate: this.contextTemplate,
+      isCollapsible: false,
       indexDataSource: new DocumentListItemOrderDataSource({
         document: this.document,
         listName: "knownSkills",
       }),
       listItemViewModels: this.knownSkillViewModels,
       listItemTemplate: SkillListItemViewModel.TEMPLATE,
-      vmBtnAddItem: new ButtonAddViewModel({
-        id: "vmAddKnownSkill1",
-        parent: this,
+      localizedTitle: game.i18n.localize("system.character.skill.known.label"),
+      headerLevel: 1,
+      addItemParams: new SortableListAddItemParams({
         target: this.document,
         creationType: ITEM_TYPES.SKILL,
-        withDialog: true,
         creationData: {
           level: 1,
         },
+        withDialog: true,
         localizedLabel: StringUtil.format(
+          game.i18n.localize("system.general.add.addType"),
+          game.i18n.localize("system.character.skill.known.singular"),
+        ),
+        localizedToolTip: StringUtil.format(
           game.i18n.localize("system.general.add.addType"),
           game.i18n.localize("system.character.skill.known.singular"),
         ),
         localizedType: game.i18n.localize("system.character.skill.known.singular"),
       }),
-    });
-    this.vmAddKnownSkill2 = new ButtonAddViewModel({
-      id: "vmAddKnownSkill2",
-      parent: this,
-      target: this.document,
-      creationType: ITEM_TYPES.SKILL,
-      withDialog: true,
-      creationData: {
-        level: 1,
-      },
-      localizedToolTip: StringUtil.format(
-        game.i18n.localize("system.general.add.addType"),
-        game.i18n.localize("system.character.skill.known.singular"),
-      ),
-      localizedType: game.i18n.localize("system.character.skill.known.singular"),
-    });
-    
-    this.vmSortInnate = new SortControlsViewModel({
-      id: "vmSortInnate",
-      parent: this,
-      options: this._getKnownSkillSortingOptions(),
-      compact: true,
-      onSort: (_, provideSortable) => {
-        provideSortable(this.vmInnateSkillList);
-      },
-    });
-    this.vmSortLearning = new SortControlsViewModel({
-      id: "vmSortLearning",
-      parent: this,
-      options: this._getLearningSkillSortingOptions(),
-      compact: true,
-      onSort: (_, provideSortable) => {
-        provideSortable(this.vmLearningSkillList);
-      },
-    });
-    this.vmSortKnown = new SortControlsViewModel({
-      id: "vmSortKnown",
-      parent: this,
-      options: this._getKnownSkillSortingOptions(),
-      compact: true,
-      onSort: (_, provideSortable) => {
-        provideSortable(this.vmKnownSkillList);
-      },
+      sortParams: new SortableListSortParams({
+        options: this._getKnownSkillSortingOptions(),
+        compact: true,
+      }),
     });
   }
 
