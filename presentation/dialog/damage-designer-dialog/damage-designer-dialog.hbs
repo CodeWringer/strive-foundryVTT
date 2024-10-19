@@ -16,8 +16,15 @@ viewModel: DamageDesignerDialogViewModel
     </span>
     <span class="flex flex-row auto-margin-h-md sheet-block auto-border-r">
       {{#with viewModel.sortControlsTemplate as |template|}}
-        {{> (template) viewModel=../viewModel.vmSortByName }}
+        {{> (template) viewModel=../viewModel.vmSort }}
       {{/with}}
+      {{#> labeledControl viewModel=viewModel.vmSubstitute localizedLabel="Substitute" }}
+        <div class="width-md">
+          {{> inputNumberSpinner }}
+        </div>
+      {{/labeledControl}}
+    </span>
+    <span class="flex flex-row auto-margin-h-md sheet-block auto-border-r">
       {{> inputRadioButtonGroup viewModel=viewModel.vmListViewSelection }}
     </span>
   </div>
