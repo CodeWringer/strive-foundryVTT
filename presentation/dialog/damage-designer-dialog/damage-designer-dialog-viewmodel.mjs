@@ -117,12 +117,12 @@ export default class DamageDesignerDialogViewModel extends ViewModel {
     const listSortingOptions = [
       new StatefulChoiceOption({
         value: LIST_STYLING.HIERARCHY,
-        activeHtml: `<i class="ico ico-list-hierarchical-solid"></i>`,
+        activeHtml: `<i class="ico dark ico-list-hierarchical-solid"></i>`,
         isActive: true,
       }),
       new StatefulChoiceOption({
         value: LIST_STYLING.FLAT,
-        activeHtml: `<i class="ico ico-list-flat-solid"></i>`,
+        activeHtml: `<i class="ico dark ico-list-flat-solid"></i>`,
       }),
     ];
     this.vmListViewSelection = new InputRadioButtonGroupViewModel({
@@ -143,6 +143,7 @@ export default class DamageDesignerDialogViewModel extends ViewModel {
       parent: this,
       options: [
         new SortingOption({
+          iconHtml: '<i class="ico ico-tags-solid dark"></i>',
           localizedToolTip: game.i18n.localize("system.general.name.label"),
           sortingFunc: (a, b) => {
             return a.name.localeCompare(b.name);
