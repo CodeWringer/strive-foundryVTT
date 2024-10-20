@@ -405,9 +405,6 @@
             "active": {
               "label": "Active"
             },
-            "patchedUp": {
-              "label": "Patched Up"
-            },
             "treated": {
               "label": "Treated"
             },

@@ -222,10 +222,6 @@ export default class TransientInjury extends TransientBaseItem {
   compareTreatment(other) {
     if (this.state === INJURY_STATES.active.name && other.state !== INJURY_STATES.active.name) {
       return -1;
-    } else if (this.state === INJURY_STATES.patchedUp.name && other.state === INJURY_STATES.active.name) {
-      return 1;
-    } else if (this.state === INJURY_STATES.patchedUp.name && other.state === INJURY_STATES.treated.name) {
-      return -1;
     } else if (this.state === INJURY_STATES.treated.name && other.state !== INJURY_STATES.treated.name) {
       return 1;
     } else {

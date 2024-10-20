@@ -20,7 +20,6 @@ export class InjuryState {
  * Represents the defined injury states.
  * 
  * @property {InjuryState} active 
- * @property {InjuryState} patchedUp
  * @property {InjuryState} treated
  * 
  * @constant
@@ -30,11 +29,6 @@ export const INJURY_STATES = {
     name: "active",
     localizableName: "system.character.health.injury.state.active.label",
     icon: "fas fa-bone"
-  }),
-  patchedUp: new InjuryState({
-    name: "patchedUp",
-    localizableName: "system.character.health.injury.state.patchedUp.label",
-    icon: "fas fa-band-aid"
   }),
   treated: new InjuryState({
     name: "treated",
