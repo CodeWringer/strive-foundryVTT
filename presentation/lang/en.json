@@ -398,7 +398,6 @@
             "label": "Limit",
             "placeholder": "Arm Count / 2 / None (/)"
           },
-          "maximum": "Max. Injuries",
           "plural": "Injuries",
           "singular": "Injury",
           "state": {
@@ -415,6 +414,11 @@
             "permanent": {
               "label": "Permanent"
             }
+          },
+          "shrugOff": {
+            "count": "Number of shrug-offs",
+            "roll": "Roll for a shrug-off test",
+            "chatMessage": "Rolls to shrug off an injury"
           }
         },
         "mutation": {

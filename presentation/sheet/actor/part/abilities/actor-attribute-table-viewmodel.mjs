@@ -114,7 +114,6 @@ export default class AttributeTableViewModel extends ViewModel {
           id: `vmBtnRoll-${attribute.name}`,
           target: attribute,
           rollSchema: new Ruleset().getAttributeRollSchema(),
-          propertyPath: undefined,
           primaryChatTitle: game.i18n.localize(attribute.localizableName),
           actor: this.document,
         }),

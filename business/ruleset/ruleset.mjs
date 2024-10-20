@@ -154,31 +154,12 @@ export default class Ruleset {
     }
 
     const injuryCount = (actor.items.filter(it => it.type === ITEM_TYPES.INJURY)).length;
-    const level = this.getEffectiveAttributeRawLevel(ATTRIBUTES.toughness, actor);
+    const toughnessLevel = parseInt(this.getEffectiveAttributeRawLevel(ATTRIBUTES.toughness, actor));
+    const hpReductionPerInjury = 10 - Math.floor(toughnessLevel / 2);
 
     const base = 10;
-    return Math.max(base, base + (parseInt(level) * 10) - (injuryCount * 10));
-  }
-
-  /**
-   * Returns the maximum injury threshold of the given actor. 
-   * 
-   * @param {Actor} actor 
-   * 
-   * @returns {Number}
-   * 
-   * @throws {Error} Thrown, if the given actor is not of type `"pc"` or `"npc"`. 
-   */
-  getCharacterMaximumInjuries(actor) {
-    const type = actor.type.toLowerCase();
-    if (type !== ACTOR_TYPES.PC && type !== ACTOR_TYPES.NPC) {
-      throw new Error("Only PC and NPC type actors supported");
-    }
-
-    const level = this.getEffectiveAttributeRawLevel(ATTRIBUTES.toughness, actor);
-
-    const base = 1;
-    return Math.max(base, Math.floor(base + parseInt(level) / 2.0));
+    const hpPerLevel = 10;
+    return Math.max(base, base + (toughnessLevel * hpPerLevel) - (injuryCount * hpReductionPerInjury));
   }
 
   /**

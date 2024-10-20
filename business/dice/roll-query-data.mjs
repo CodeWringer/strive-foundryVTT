@@ -3,7 +3,7 @@ import { ValidationUtil } from "../util/validation-utility.mjs";
 import { ROLL_DICE_MODIFIER_TYPES, RollDiceModifierType } from "./roll-dice-modifier-types.mjs";
 
 /**
- * Holds the data queried from the user via `SkillRollSchema.queryRollData()`. 
+ * Holds the data queried from the user via `RollSchema.queryRollData()`. 
  * 
  * @property {String} ob The obstacle formula. The formula must be resolved, before 
  * it can be evaluated! 
@@ -16,7 +16,7 @@ import { ROLL_DICE_MODIFIER_TYPES, RollDiceModifierType } from "./roll-dice-modi
  */
 export default class RollQueryData {
   /**
-   * Holds the data queried from the user via `SkillRollSchema.queryRollData()`. 
+   * Holds the data queried from the user via `RollSchema.queryRollData()`. 
    * 
    * @param {Object} args
    * @param {String} args.ob The obstacle formula. The formula must be resolved, before 

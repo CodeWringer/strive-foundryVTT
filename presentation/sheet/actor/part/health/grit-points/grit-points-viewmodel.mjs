@@ -100,8 +100,9 @@ export default class GritPointsViewModel extends ViewModel {
 
     // Set up set to value of clicked element. 
     for (let i = 0; i < this.gritPoints.length; i++) {
-      html.find(`#${this.id}-${i}`).click(async (event) => {
-        this.document.gritPoints = i + 1;
+      const gritPoint = this.gritPoints[i];
+      html.find(`#${gritPoint.id}`).click(async (event) => {
+        this.document.gritPoints = gritPoint.value;
       });
     }
   }

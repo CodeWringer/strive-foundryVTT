@@ -381,7 +381,6 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
           id: "vmBtnRoll",
           target: this.document,
           rollSchema: new Ruleset().getSkillRollSchema(),
-          propertyPath: undefined,
           primaryChatTitle: game.i18n.localize(this.document.name),
           primaryChatImage: this.document.img,
           actor: this.document.owningDocument.document,

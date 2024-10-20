@@ -73,7 +73,7 @@
           "HP": 0,
           "exhaustion": 0,
           "maxExhaustionModifier": 0,
-          "maxInjuriesModifier": 0,
+          "injuryShrugOffs": 0,
           "states": [],
           "deathSaves": 0,
           "deathSaveLimit": 3
