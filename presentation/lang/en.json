@@ -378,7 +378,8 @@
         "hp": {
           "label": "Hit-Points",
           "abbreviation": "HP",
-          "maximum": "Max. HP"
+          "maximum": "Max. HP",
+          "formulaExplanation": "%s (base) + %s (from toughness) - %s (penalty from injuries) + %s (modifier) = %s"
         },
         "illness": {
           "plural": "Illnesses",

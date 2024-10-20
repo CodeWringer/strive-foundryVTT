@@ -138,6 +138,67 @@ export default class Ruleset {
   }
 
   /**
+   * Returns the maximum HP reduction per injury of the given actor. 
+   * 
+   * @param {Actor} actor 
+   * 
+   * @returns {Number}
+   */
+  getMaximumHpReductionPerInjury(actor) {
+    const toughnessLevel = parseInt(this.getEffectiveAttributeRawLevel(ATTRIBUTES.toughness, actor));
+    const hpReductionPerInjury = 10 - Math.floor(toughnessLevel / 2);
+
+    return hpReductionPerInjury;
+  }
+
+  /**
+   * Returns the base HP of all characters. 
+   * 
+   * @returns {Number}
+   */
+  getCharacterBaseHp() {
+    return 10;
+  }
+
+  /**
+   * Returns the unmodified maximum HP of the given actor. 
+   * 
+   * Unmodified means without the maximum HP penalty from injuries. 
+   * 
+   * @param {Actor} actor 
+   * 
+   * @returns {Number}
+   */
+  getUnmodifiedMaximumHp(actor) {
+    const baseHp = this.getCharacterBaseHp();
+    const hpPerLevel = 10;
+    const toughnessLevel = parseInt(this.getEffectiveAttributeRawLevel(ATTRIBUTES.toughness, actor));
+
+    return Math.max(baseHp, baseHp + (toughnessLevel * hpPerLevel));
+  }
+
+  /**
+   * Returns the *current* maximum HP penalty from injuries of the given actor. 
+   * 
+   * @param {Actor} actor 
+   * 
+   * @returns {Number}
+   * 
+   * @throws {Error} Thrown, if the given actor is not of type `"pc"` or `"npc"`. 
+   */
+  getCharacterMaximumHpReduction(actor) {
+    const type = actor.type.toLowerCase();
+    if (type !== ACTOR_TYPES.PC && type !== ACTOR_TYPES.NPC) {
+      throw new Error("Only PC and NPC type actors supported");
+    }
+
+    const injuryCount = (actor.items.filter(it => it.type === ITEM_TYPES.INJURY)).length;
+    const hpReductionPerInjury = this.getMaximumHpReductionPerInjury(actor);
+
+    return injuryCount * hpReductionPerInjury;
+  }
+
+  /**
    * Returns the *current* maximum HP of the given actor. 
    * 
    * @param {Actor} actor 
@@ -148,18 +209,14 @@ export default class Ruleset {
    */
   getCharacterMaximumHp(actor) {
     const type = actor.type.toLowerCase();
-
     if (type !== ACTOR_TYPES.PC && type !== ACTOR_TYPES.NPC) {
       throw new Error("Only PC and NPC type actors supported");
     }
 
-    const injuryCount = (actor.items.filter(it => it.type === ITEM_TYPES.INJURY)).length;
-    const toughnessLevel = parseInt(this.getEffectiveAttributeRawLevel(ATTRIBUTES.toughness, actor));
-    const hpReductionPerInjury = 10 - Math.floor(toughnessLevel / 2);
+    const unmodifiedHp = this.getUnmodifiedMaximumHp(actor);
+    const hpReduction = this.getCharacterMaximumHpReduction(actor);
 
-    const base = 10;
-    const hpPerLevel = 10;
-    return Math.max(base, base + (toughnessLevel * hpPerLevel) - (injuryCount * hpReductionPerInjury));
+    return unmodifiedHp - hpReduction;
   }
 
   /**

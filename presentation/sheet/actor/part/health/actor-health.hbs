@@ -13,6 +13,7 @@ cssClass: {undefined | String}
         <div class="sheet-block">
           {{!-- Max HP --}}
           <div class="flex flex-row flex-middle flex-right">
+            <i id="{{viewModel.id}}-max-hp-info" class="far fa-question-circle info-button"></i>
             {{#> labeledControl viewModel=viewModel.vmMaxHp localizedIconToolTip=(localize "system.character.health.hp.maximum") iconClass="ico-heart-limit-solid" cssClass="width-lg" }}
               {{> inputNumberSpinner }}
             {{/labeledControl}}

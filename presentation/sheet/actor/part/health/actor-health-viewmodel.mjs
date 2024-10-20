@@ -4,11 +4,13 @@ import { ROLL_DICE_MODIFIER_TYPES } from "../../../../../business/dice/roll-dice
 import { ACTOR_TYPES } from "../../../../../business/document/actor/actor-types.mjs"
 import { ITEM_TYPES } from "../../../../../business/document/item/item-types.mjs"
 import { ATTRIBUTES } from "../../../../../business/ruleset/attribute/attributes.mjs"
+import Ruleset from "../../../../../business/ruleset/ruleset.mjs"
 import { Sum, SumComponent } from "../../../../../business/ruleset/summed-data.mjs"
 import { StringUtil } from "../../../../../business/util/string-utility.mjs"
 import { ValidationUtil } from "../../../../../business/util/validation-utility.mjs"
 import { ExtenderUtil } from "../../../../../common/extender-util.mjs"
 import ButtonRollViewModel from "../../../../component/button-roll/button-roll-viewmodel.mjs"
+import InfoBubble, { InfoBubbleAutoHidingTypes, InfoBubbleAutoShowingTypes } from "../../../../component/info-bubble/info-bubble.mjs"
 import InputNumberSpinnerViewModel from "../../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs"
 import { SortingOption } from "../../../../component/sort-controls/sort-controls-viewmodel.mjs"
 import DocumentListItemOrderDataSource from "../../../../component/sortable-list/document-list-item-order-datasource.mjs"
@@ -406,6 +408,35 @@ export default class ActorHealthViewModel extends ViewModel {
         document: this.document,
       });
     }
+  }
+
+  /** @override */
+  activateListeners(html) {
+    super.activateListeners(html);
+
+    const ruleset = new Ruleset();
+    const actor = this.document.document;
+    const baseHp = ruleset.getCharacterBaseHp();
+    const unmodifiedMaxHp = ruleset.getUnmodifiedMaximumHp(actor) - baseHp;
+    const hpReduction = ruleset.getCharacterMaximumHpReduction(actor);
+    this.maxHpInfoBubble = new InfoBubble({
+      html: html,
+      map: [
+        {
+          element: html.find(`#${this.id}-max-hp-info`),
+          text: StringUtil.format(
+            game.i18n.localize("system.character.health.hp.formulaExplanation"),
+            baseHp,
+            unmodifiedMaxHp,
+            hpReduction,
+            this.document.health.maxHpModifier,
+            this.document.health.modifiedMaxHp,
+          ),
+        },
+      ],
+      autoShowType: InfoBubbleAutoShowingTypes.MOUSE_ENTER,
+      autoHideType: InfoBubbleAutoHidingTypes.MOUSE_LEAVE,
+    });
   }
   
   /**
