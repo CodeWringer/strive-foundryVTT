@@ -367,9 +367,8 @@
         "treatment": "Treatment",
         "treatmentSkill": "Treatment Skill",
         "timeToHealTreated": "Treated Heal Time Reduction",
-        "selfPatchUp": "Self Patch-Up",
+        "autoTreatment": "Automatic Treatment",
         "requiredSupplies": "Required Supplies",
-        "obstaclePatchUp": "Obstacle Patch-Up",
         "obstacleTreatment": "Obstacle Treatment",
         "exhaustion": {
           "label": "Exhaustion",
@@ -378,7 +377,8 @@
         "hp": {
           "label": "Hit-Points",
           "abbreviation": "HP",
-          "maximum": "Max. HP"
+          "maximum": "Max. HP",
+          "formulaExplanation": "%s (base) + %s (from toughness) - %s (penalty from injuries) + %s (modifier) = %s"
         },
         "illness": {
           "plural": "Illnesses",
@@ -398,7 +398,6 @@
             "label": "Limit",
             "placeholder": "Arm Count / 2 / None (/)"
           },
-          "maximum": "Max. Injuries",
           "plural": "Injuries",
           "singular": "Injury",
           "state": {
@@ -406,15 +405,17 @@
             "active": {
               "label": "Active"
             },
-            "patchedUp": {
-              "label": "Patched Up"
-            },
             "treated": {
               "label": "Treated"
             },
             "permanent": {
               "label": "Permanent"
             }
+          },
+          "shrugOff": {
+            "count": "Number of shrug-offs",
+            "roll": "Roll for a shrug-off test",
+            "chatMessage": "Rolls to shrug off an injury"
           }
         },
         "mutation": {

@@ -15,10 +15,9 @@ import { ExtenderUtil } from "../../../common/extender-util.mjs";
  * @property {String} timeToHealTreated
  * @property {String} limit 
  * @property {String} scar 
- * @property {String} selfPatchUp 
+ * @property {String} autoTreatment 
  * @property {String} treatmentSkill 
  * @property {String} requiredSupplies 
- * @property {String} obstaclePatchUp 
  * @property {String} obstacleTreatment 
  */
 export default class TransientInjury extends TransientBaseItem {
@@ -95,15 +94,15 @@ export default class TransientInjury extends TransientBaseItem {
   /**
    * @type {String}
    */
-  get selfPatchUp() {
-    return this.document.system.selfPatchUp;
+  get autoTreatment() {
+    return this.document.system.autoTreatment;
   }
   /**
    * @param {String} value
    */
-  set selfPatchUp(value) {
-    this.document.system.selfPatchUp = value;
-    this.updateByPath("system.selfPatchUp", value);
+  set autoTreatment(value) {
+    this.document.system.autoTreatment = value;
+    this.updateByPath("system.autoTreatment", value);
   }
   
   /**
@@ -133,21 +132,7 @@ export default class TransientInjury extends TransientBaseItem {
     this.document.system.requiredSupplies = value;
     this.updateByPath("system.requiredSupplies", value);
   }
-  
-  /**
-   * @type {String}
-   */
-  get obstaclePatchUp() {
-    return this.document.system.obstaclePatchUp;
-  }
-  /**
-   * @param {String} value
-   */
-  set obstaclePatchUp(value) {
-    this.document.system.obstaclePatchUp = value;
-    this.updateByPath("system.obstaclePatchUp", value);
-  }
-  
+    
   /**
    * @type {String}
    */
@@ -221,10 +206,6 @@ export default class TransientInjury extends TransientBaseItem {
    */
   compareTreatment(other) {
     if (this.state === INJURY_STATES.active.name && other.state !== INJURY_STATES.active.name) {
-      return -1;
-    } else if (this.state === INJURY_STATES.patchedUp.name && other.state === INJURY_STATES.active.name) {
-      return 1;
-    } else if (this.state === INJURY_STATES.patchedUp.name && other.state === INJURY_STATES.treated.name) {
       return -1;
     } else if (this.state === INJURY_STATES.treated.name && other.state !== INJURY_STATES.treated.name) {
       return 1;

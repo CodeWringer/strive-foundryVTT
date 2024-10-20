@@ -65,19 +65,6 @@ export default class InjuryListItemViewModel extends BaseListItemViewModel {
         template: InputTextFieldViewModel.TEMPLATE,
         viewModel: new InputTextFieldViewModel({
           parent: this,
-          id: "vmObstaclePatchUp",
-          value: this.document.obstaclePatchUp,
-          onChange: (_, newValue) => {
-            this.document.obstaclePatchUp = newValue;
-          },
-        }),
-        localizedIconToolTip: game.i18n.localize("system.character.health.obstaclePatchUp"),
-        iconClass: "ico-obstacle-patch-up-solid",
-      }),
-      new DataFieldComponent({
-        template: InputTextFieldViewModel.TEMPLATE,
-        viewModel: new InputTextFieldViewModel({
-          parent: this,
           id: "vmObstacleTreatment",
           value: this.document.obstacleTreatment,
           onChange: (_, newValue) => {
@@ -86,6 +73,19 @@ export default class InjuryListItemViewModel extends BaseListItemViewModel {
         }),
         localizedIconToolTip: game.i18n.localize("system.character.health.obstacleTreatment"),
         iconClass: "ico-obstacle-treatment-solid",
+      }),
+      new DataFieldComponent({
+        template: InputTextFieldViewModel.TEMPLATE,
+        viewModel: new InputTextFieldViewModel({
+          parent: this,
+          id: "vmAutoTreatment",
+          value: this.document.autoTreatment,
+          onChange: (_, newValue) => {
+            this.document.autoTreatment = newValue;
+          },
+        }),
+        localizedIconToolTip: game.i18n.localize("system.character.health.autoTreatment"),
+        iconClass: "ico-self-patch-up-solid",
       }),
       new DataFieldComponent({
         template: InputTextFieldViewModel.TEMPLATE,
@@ -112,19 +112,6 @@ export default class InjuryListItemViewModel extends BaseListItemViewModel {
         }),
         localizedIconToolTip: game.i18n.localize("system.character.health.timeToHealTreated"),
         iconClass: "ico-time-to-heal-treated-solid",
-      }),
-      new DataFieldComponent({
-        template: InputTextFieldViewModel.TEMPLATE,
-        viewModel: new InputTextFieldViewModel({
-          parent: this,
-          id: "vmSelfPatchUp",
-          value: this.document.selfPatchUp,
-          onChange: (_, newValue) => {
-            this.document.selfPatchUp = newValue;
-          },
-        }),
-        localizedIconToolTip: game.i18n.localize("system.character.health.selfPatchUp"),
-        iconClass: "ico-self-patch-up-solid",
       }),
       new DataFieldComponent({
         template: InputTextFieldViewModel.TEMPLATE,

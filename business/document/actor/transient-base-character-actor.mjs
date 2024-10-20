@@ -55,8 +55,7 @@ import TransientBaseActor from './transient-base-actor.mjs';
  * @property {Number} health.HP 
  * @property {Number} health.maxHP 
  * * Read-only. 
- * @property {Number} health.maxInjuries 
- * * Read-only. 
+ * @property {Number} health.injuryShrugOffs 
  * @property {Number} health.exhaustion 
  * @property {Number} health.maxExhaustion 
  * * Read-only. 
@@ -274,13 +273,9 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
       get exhaustion() { return parseInt(thiz.document.system.health.exhaustion ?? 0); },
       set exhaustion(value) { thiz.updateByPath("system.health.exhaustion", value); },
 
-      // Injuries
-      get maxInjuries() { return new Ruleset().getCharacterMaximumInjuries(thiz.document) },
-      
-      get maxInjuriesModifier() { return parseInt(thiz.document.system.health.maxInjuriesModifier ?? 0); },
-      set maxInjuriesModifier(value) { thiz.updateByPath("system.health.maxInjuriesModifier", value); },
-
-      get modifiedMaxInjuries() { return this.maxInjuries + this.maxInjuriesModifier; },
+      // Injury shrug off
+      get injuryShrugOffs() { return parseInt(thiz.document.system.health.injuryShrugOffs ?? 0); },
+      set injuryShrugOffs(value) { thiz.updateByPath("system.health.injuryShrugOffs", value); },
 
       // Conditions (used to be called health states)
       get states() { return thiz._healthStates.concat([]); },

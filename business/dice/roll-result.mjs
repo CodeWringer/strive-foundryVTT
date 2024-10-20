@@ -156,6 +156,7 @@ export class RollResult {
     }
 
     // Render the results. 
+    const isObstacleRolled = this.results.resolvedObstacle.isPlainNumber === false;
     const renderedContent = await renderTemplate(game.strive.const.TEMPLATES.DICE_ROLL_CHAT_MESSAGE, {
       id: UuidUtil.createUUID(),
       primaryTitle: args.primaryTitle,
@@ -178,11 +179,10 @@ export class RollResult {
 
       diceComposition: this.getJoinedDiceCompositionString(),
 
-      obstacle: this.results.resolvedObstacle.ob,
-      unmodifiedObstacle: this.results.resolvedObstacle.ob - 1,
-      isObstacleRolled: this.results.resolvedObstacle.isPlainNumber === false,
+      isObstacleRolled: isObstacleRolled,
       obFormula: this.results.resolvedObstacle.obFormula,
       resolvedObFormula: this.results.resolvedObstacle.resolvedObFormula,
+      resultingObstacle: isObstacleRolled ? `${this.results.resolvedObstacle.ob - 1} (+ 1) = ${this.results.resolvedObstacle.ob}` : this.results.resolvedObstacle.ob,
 
       showReminder: showReminder,
       additionalContent: args.additionalContent,

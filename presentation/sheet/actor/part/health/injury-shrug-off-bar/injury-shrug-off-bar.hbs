@@ -1,0 +1,20 @@
+{{!--
+viewModel: ShrugOffBarViewModel
+cssClass: String | undefined
+--}}
+{{log viewModel}}
+<div 
+  id="{{viewModel.id}}" 
+  class="flex flex-row flex-wrap flex-gap-sm flex-middle{{#if cssClass}} {{cssClass}}{{/if}}"
+  >
+  <i class="ico dark ico-strongarm-solid" title="{{localize "system.character.health.injury.shrugOff.count"}}"></i>
+  <a id="{{viewModel.id}}-shrug-off-0" class="icon-with-centered-label" style="width: 26px; height: 26px;">
+    <span class="icon-with-centered-label-label">0</span>
+  </a>
+  {{#each viewModel.shrugOffs as |shrugOff|}}
+  <a id="{{shrugOff.id}}" class="icon-with-centered-label {{#if shrugOff.active}}shrug-off-full{{else}}shrug-off-void{{/if}}">
+    <i class="ico {{#if shrugOff.active}}ico-shrug-off-line{{else}}ico-shrug-off-void-line{{/if}} icon-with-centered-label-image"></i>
+    <span class="icon-with-centered-label-label">{{shrugOff.value}}</span>
+  </a>
+  {{/each}}
+</div>

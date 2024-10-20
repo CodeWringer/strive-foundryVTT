@@ -1,6 +1,7 @@
 import ButtonViewModel from "../button/button-viewmodel.mjs";
 import { RollResult } from "../../../business/dice/roll-result.mjs";
 import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
+import { RollSchema } from "../../../business/dice/roll-schema.mjs";
 
 /**
  * A button that allows performing a dice roll and then sending the result to the chat. 

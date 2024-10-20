@@ -2,7 +2,6 @@ import { VISIBILITY_MODES } from "../../presentation/chat/visibility-modes.mjs";
 import DynamicInputDefinition from "../../presentation/dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
 import DynamicInputDialog from "../../presentation/dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
 import { DYNAMIC_INPUT_TYPES } from "../../presentation/dialog/dynamic-input-dialog/dynamic-input-types.mjs";
-import TransientDocument from "../document/transient-document.mjs";
 import RollData from "./roll-data.mjs";
 import RollQueryData from "./roll-query-data.mjs";
 
@@ -119,7 +118,7 @@ export class RollSchema {
   }
 
   /**
-   * Internal abstract method to prompt the user. Is called by 
+   * Internal abstract method to prompt the user. Is called by `queryRollData`. 
    * 
    * @param {Any} document 
    * @param {DynamicInputDialog} dialog The dialog to extend with required inputs. 

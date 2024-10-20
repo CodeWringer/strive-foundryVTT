@@ -230,7 +230,6 @@ export default class ExpertiseListItemViewModel extends BaseListItemViewModel {
           id: "vmBtnRoll",
           target: owningDocument,
           rollSchema: new Ruleset().getSkillRollSchema(),
-          propertyPath: undefined,
           primaryChatTitle: game.i18n.localize(this.document.name),
           primaryChatImage: this.document.img,
           secondaryChatTitle: game.i18n.localize(owningDocument.name),

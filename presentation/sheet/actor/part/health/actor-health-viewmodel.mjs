@@ -1,11 +1,18 @@
+import { SpecificRollDataRollSchema } from "../../../../../business/dice/ability-roll/specific-roll-data-roll-schema.mjs"
+import RollData from "../../../../../business/dice/roll-data.mjs"
+import { ROLL_DICE_MODIFIER_TYPES } from "../../../../../business/dice/roll-dice-modifier-types.mjs"
 import { ACTOR_TYPES } from "../../../../../business/document/actor/actor-types.mjs"
 import { ITEM_TYPES } from "../../../../../business/document/item/item-types.mjs"
+import { ATTRIBUTES } from "../../../../../business/ruleset/attribute/attributes.mjs"
+import Ruleset from "../../../../../business/ruleset/ruleset.mjs"
+import { Sum, SumComponent } from "../../../../../business/ruleset/summed-data.mjs"
 import { StringUtil } from "../../../../../business/util/string-utility.mjs"
 import { ValidationUtil } from "../../../../../business/util/validation-utility.mjs"
 import { ExtenderUtil } from "../../../../../common/extender-util.mjs"
-import ButtonAddViewModel from "../../../../component/button-add/button-add-viewmodel.mjs"
+import ButtonRollViewModel from "../../../../component/button-roll/button-roll-viewmodel.mjs"
+import InfoBubble, { InfoBubbleAutoHidingTypes, InfoBubbleAutoShowingTypes } from "../../../../component/info-bubble/info-bubble.mjs"
 import InputNumberSpinnerViewModel from "../../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs"
-import SortControlsViewModel, { SortingOption } from "../../../../component/sort-controls/sort-controls-viewmodel.mjs"
+import { SortingOption } from "../../../../component/sort-controls/sort-controls-viewmodel.mjs"
 import DocumentListItemOrderDataSource from "../../../../component/sortable-list/document-list-item-order-datasource.mjs"
 import SortableListViewModel, { SortableListAddItemParams, SortableListSortParams } from "../../../../component/sortable-list/sortable-list-viewmodel.mjs"
 import ViewModel from "../../../../view-model/view-model.mjs"
@@ -17,6 +24,7 @@ import ScarListItemViewModel from "../../../item/scar/scar-list-item-viewmodel.m
 import ActorHealthStatesViewModel from "./actor-health-states-viewmodel.mjs"
 import DeathsDoorViewModel from "./deaths-door/deaths-door-viewmodel.mjs"
 import GritPointsViewModel from "./grit-points/grit-points-viewmodel.mjs"
+import InjuryShrugOffBarViewModel from "./injury-shrug-off-bar/injury-shrug-off-bar-viewmodel.mjs"
 
 /**
  * @extends ViewModel
@@ -77,18 +85,6 @@ export default class ActorHealthViewModel extends ViewModel {
   get maxExhaustion() { return this.document.health.maxExhaustion; }
 
   /**
-   * @type {Number}
-   * @readonly
-   */
-  get maxInjuries() { return this.document.health.maxInjuries; }
-
-  /**
-   * @type {Number}
-   * @readonly
-   */
-  get modifiedMaxInjuries() { return this.document.health.modifiedMaxInjuries; }
-
-  /**
    * @type {Array<IllnessListItemViewModel>}
    * @readonly
    */
@@ -123,6 +119,12 @@ export default class ActorHealthViewModel extends ViewModel {
    * @readonly
    */
   get gritPointsTemplate() { return GritPointsViewModel.TEMPLATE; }
+
+  /**
+   * @type {String}
+   * @readonly
+   */
+  get shrugOffBarTemplate() { return InjuryShrugOffBarViewModel.TEMPLATE; }
 
   /**
    * @type {String}
@@ -220,15 +222,38 @@ export default class ActorHealthViewModel extends ViewModel {
     }
 
     // Injury
-    this.vmMaxInjuriesModifier = new InputNumberSpinnerViewModel({
+    this.vmShrugOffBar = new InjuryShrugOffBarViewModel({
+      id: "vmShrugOffBar",
       parent: this,
-      id: "vmMaxInjuriesModifier",
-      value: this.document.health.maxInjuriesModifier,
-      onChange: (_, newValue) => {
-        this.document.health.maxInjuriesModifier = newValue;
-      },
+      document: this.document,
     });
 
+    const toughnessAttribute = this.document.attributes.find(it => it.name === ATTRIBUTES.toughness.name);
+    this.vmRollShrugOff = new ButtonRollViewModel({
+      id: "vmRollShrugOff",
+      parent: this,
+      localizedToolTip: game.i18n.localize("system.character.health.injury.shrugOff.roll"),
+      target: this.document,
+      primaryChatTitle: game.i18n.localize("system.character.health.injury.shrugOff.chatMessage"),
+      primaryChatImage: this.document.img,
+      actor: this.document.document,
+      rollSchema: new SpecificRollDataRollSchema({
+        rollData: new RollData({
+          dieFaces: 6,
+          hitThreshold: 5,
+          obFormula: `${this.injuryCount + 1 + this.document.health.injuryShrugOffs}`,
+          diceComponents: new Sum([
+            new SumComponent(ATTRIBUTES.toughness.name, ATTRIBUTES.toughness.localizableName, toughnessAttribute.modifiedLevel),
+          ]),
+          bonusDiceComponent: new SumComponent("bonus", "", 0),
+          hitModifier: 0,
+          compensationPoints: 0,
+          rollModifier: ROLL_DICE_MODIFIER_TYPES.NONE,
+        }),
+      }),
+    });
+
+    // Conditions (formerly health states)
     this.vmHealthStates = new ActorHealthStatesViewModel({
       id: "vmHealthStates",
       parent: this,
@@ -383,6 +408,35 @@ export default class ActorHealthViewModel extends ViewModel {
         document: this.document,
       });
     }
+  }
+
+  /** @override */
+  activateListeners(html) {
+    super.activateListeners(html);
+
+    const ruleset = new Ruleset();
+    const actor = this.document.document;
+    const baseHp = ruleset.getCharacterBaseHp();
+    const unmodifiedMaxHp = ruleset.getUnmodifiedMaximumHp(actor) - baseHp;
+    const hpReduction = ruleset.getCharacterMaximumHpReduction(actor);
+    this.maxHpInfoBubble = new InfoBubble({
+      html: html,
+      map: [
+        {
+          element: html.find(`#${this.id}-max-hp-info`),
+          text: StringUtil.format(
+            game.i18n.localize("system.character.health.hp.formulaExplanation"),
+            baseHp,
+            unmodifiedMaxHp,
+            hpReduction,
+            this.document.health.maxHpModifier,
+            this.document.health.modifiedMaxHp,
+          ),
+        },
+      ],
+      autoShowType: InfoBubbleAutoShowingTypes.MOUSE_ENTER,
+      autoHideType: InfoBubbleAutoHidingTypes.MOUSE_LEAVE,
+    });
   }
   
   /**

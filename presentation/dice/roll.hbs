@@ -27,11 +27,10 @@ blankCount: String | Number
 
 diceComposition: String
 
-obstacle: Number
-unmodifiedObstacle: Number
 isObstacleRolled: Boolean
 obFormula: String
 resolvedObFormula: String
+resultingObstacle: String
 
 showReminder: Boolean
 additionalContent: String
@@ -99,7 +98,7 @@ additionalContent: String
       <div class="dice-rolls-container mini">
         {{{resolvedObFormula}}}
       </div>
-      <span>{{unmodifiedObstacle}} (+ 1) = {{obstacle}}</span>
+      <span>{{resultingObstacle}}</span>
     </div>
     {{/if}}
     {{#if showIntermediateFaces}}
