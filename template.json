@@ -214,10 +214,9 @@
       "timeToHealTreated": "",
       "limit": "",
       "scar": "",
-      "selfPatchUp": "",
+      "autoTreatment": "",
       "treatmentSkill": "",
       "requiredSupplies": "",
-      "obstaclePatchUp": "",
       "obstacleTreatment": ""
     },
     "illness": {

@@ -34,15 +34,6 @@ cssClass: {undefined | String}
       {{> inputTextField viewModel=viewModel.vmRequiredSupplies }}
     </div>
   </div>
-  {{!-- obstaclePatchUp --}}
-  <div class="sheet-block grid-3col grid-gap-md margin-b-md">
-    <div class="flex flex-middle flex-right">
-      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "system.character.health.obstaclePatchUp"}}{{/label}}
-    </div>
-    <div class="grid-span-2">
-      {{> inputTextField viewModel=viewModel.vmObstaclePatchUp }}
-    </div>
-  </div>
   {{!-- obstacleTreatment --}}
   <div class="sheet-block grid-3col grid-gap-md margin-b-md">
     <div class="flex flex-middle flex-right">
@@ -70,13 +61,13 @@ cssClass: {undefined | String}
       {{> inputTextField viewModel=viewModel.vmTimeToHealTreated }}
     </div>
   </div>
-  {{!-- selfPatchUp --}}
+  {{!-- autoTreatment --}}
   <div class="sheet-block grid-3col grid-gap-md margin-b-md">
     <div class="flex flex-middle flex-right">
-      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "system.character.health.selfPatchUp"}}{{/label}}
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize "system.character.health.autoTreatment"}}{{/label}}
     </div>
     <div class="grid-span-2">
-      {{> inputTextField viewModel=viewModel.vmSelfPatchUp }}
+      {{> inputTextField viewModel=viewModel.vmAutoTreatment }}
     </div>
   </div>
   {{!-- Limit --}}

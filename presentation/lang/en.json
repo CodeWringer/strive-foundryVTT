@@ -367,9 +367,8 @@
         "treatment": "Treatment",
         "treatmentSkill": "Treatment Skill",
         "timeToHealTreated": "Treated Heal Time Reduction",
-        "selfPatchUp": "Self Patch-Up",
+        "autoTreatment": "Automatic Treatment",
         "requiredSupplies": "Required Supplies",
-        "obstaclePatchUp": "Obstacle Patch-Up",
         "obstacleTreatment": "Obstacle Treatment",
         "exhaustion": {
           "label": "Exhaustion",
