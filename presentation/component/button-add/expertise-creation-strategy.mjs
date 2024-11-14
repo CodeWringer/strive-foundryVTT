@@ -23,7 +23,6 @@ export default class ExpertiseCreationStrategy extends DocumentCreationStrategy 
     super(args);
     ValidationUtil.validateOrThrow(args, ["target"])
 
-    this.target = args.target;
     this.creationDataOverrides = args.creationDataOverrides ?? Object.create(null);
   }
 
