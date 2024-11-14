@@ -245,7 +245,7 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
         this.document.damage = newValue;
       },
       resolveFormulaContext: this.getRootOwningDocument(this.document),
-      chatTitle: `${game.i18n.localize("system.damageDefinition.formula")} - ${this.document.name}`,
+      chatTitle: `${game.i18n.localize("system.damageDefinition.label")} - ${this.document.name}`,
     });
     if (this.showExpertises === true) {
       this.vmExpertiseTable = new ExpertiseTableViewModel({

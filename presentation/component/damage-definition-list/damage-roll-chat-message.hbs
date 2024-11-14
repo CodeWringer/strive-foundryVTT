@@ -1,18 +1,21 @@
 {{!-- Parameters:
-rollTotal: {String | Number}
-rolls: {Array<Object>} = {
-  cssClass: {String}
-  rollTotal: {String}
-  localizedLabel: {String}
-  diceResults: {Array<Object>} = {
-    value: {String}
-    isDiceResult: {Boolean}
+id: String
+rollTotal: String
+rolls: Array<Object> = {
+  cssClass: String
+  rollTotal: String
+  formula: String
+  localizedLabel: String
+  iconClass: String
+  diceResults: Array<Object> = {
+    value: String
+    isDiceResult: Boolean
   }
 }
 title: String
-cssClass: {undefined | String}
+cssClass: undefined | String
 --}}
-<div class="dice-roll-chat-message-container{{#if cssClass}} {{cssClass}}{{/if}}">
+<div id="{{id}}" class="dice-roll-chat-message-container custom-system-chat-message{{#if cssClass}} {{cssClass}}{{/if}}">
   {{#if title}}
     <h2>{{title}}</h2>
   {{/if}}
@@ -20,10 +23,26 @@ cssClass: {undefined | String}
     <ol class="unstyled-list">
       {{#each rolls as |roll index|}}
         <li class="flex flex-column sheet-block margin-b-md{{#if roll.cssClass}} {{roll.cssClass}}{{/if}}">
-          <div class="flex flex-row">
-            <h3 class="roll-damage-value">{{roll.rollTotal}} {{roll.localizedLabel}}</h3>
+          <a id="{{../id}}-toggle-details" class="flex-grow">
+            <div class="flex flex-center pad-sm">
+              <span class="strive-pill flex flex-row font-size-default" title="{{localize "system.damageDefinition.label"}}">
+                <div class="flex flex-center">
+                  <span class="dice-number">{{roll.rollTotal}}</span>
+                </div>
+                <div class="flex flex-center margin-l-md margin-r-md">
+                  {{> verticalLine}}
+                </div>
+                <div class="flex flex-center auto-margin-h-md">
+                  <i class="ico interactible {{roll.iconClass}} dark"></i><span>{{roll.localizedLabel}}</span>
+                </div>
+              </span>
+            </div>
+          </a>
+          <div id="{{../id}}-details" class="sheet-block hidden" style="height: 0%;">
+            {{!-- Formula --}}
+            <div class="dice-composition">{{formula}}</div>
           </div>
-          <ol class="dice-rolls">
+          <ol class="dice-rolls auto-margin-h">
             {{#each roll.diceResults as |diceResult diceIndex|}}
               <li class="flex flex-center{{#if diceResult.isDiceResult}} roll d6 die die-sm{{/if}}">{{diceResult.value}}</li>
             {{/each}}

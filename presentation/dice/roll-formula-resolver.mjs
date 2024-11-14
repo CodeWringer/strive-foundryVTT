@@ -70,7 +70,7 @@ export default class RollFormulaResolver {
   /**
    * Resolves and then returns the given formulae. 
    * 
-   * @param {Array<FormulaAndLabel>} formulae The as yet not fully resolved formulae. 
+   * @param {Array<Formula>} formulae The as yet not fully resolved formulae. 
    * @param {Map<String, String>} userResolvedReferences The user defined values for the 
    * unresolved references. 
    * 
@@ -125,6 +125,7 @@ export default class RollFormulaResolver {
         rollTotal: formulaRollResult.total,
         diceResults: diceResults,
         localizedLabel: formula.localizedLabel,
+        iconClass: formula.iconClass,
       }));
     }
     return rolls;
@@ -135,7 +136,7 @@ export default class RollFormulaResolver {
    * 
    * @param {Array<Object>} formulaContainers An array of objects that implement a `resolveFormula` method. 
    * 
-   * @returns {Array<FormulaAndLabel>} An array of collected formulae and their localized label. 
+   * @returns {Array<Formula>} An array of collected formulae and their localized label. 
    * 
    * @private
    */
@@ -144,9 +145,10 @@ export default class RollFormulaResolver {
     for (const formulaContainer of formulaContainers) {
       // This formula may still contain unresolved references.
       const formula = formulaContainer.resolveFormula();
-      formulae.push(new FormulaAndLabel({
+      formulae.push(new Formula({
         formula: formula,
-        localizedLabel: formulaContainer.localizedLabel
+        localizedLabel: formulaContainer.localizedLabel,
+        iconClass: formulaContainer.iconClass,
       }));
     }
     return formulae;
@@ -235,7 +237,7 @@ export default class RollFormulaResolver {
   /**
    * Returns any as yet unresolved '@'-references returned by the formula view models. 
    * 
-   * @param {Array<FormulaAndLabel>} formulae An array of formulae. 
+   * @param {Array<Formula>} formulae An array of formulae. 
    * 
    * @returns {Array<String>} An array of unresolved '@'-references. Returns only 
    * unique entries. Duplicates are culled. The '@'-character is truncated. 
@@ -266,21 +268,26 @@ export default class RollFormulaResolver {
 }
 
 /**
- * Represents a formula and a localized label. 
+ * Represents a formula. 
  * 
  * @property {String} formula A formula. 
- * @property {String} localizedLabel A corresponding localized text. 
+ * @property {String | undefined} localizedLabel A corresponding localized text. 
+ * @property {String | undefined} iconClass An icon representation. 
  */
-export class FormulaAndLabel {
+export class Formula {
   /**
    * 
    * @param {Object} args 
    * @param {String} args.formula A formula. 
-   * @param {String} args.localizedLabel A corresponding localized text. 
+   * @param {String | undefined} args.localizedLabel A corresponding localized text. 
+   * @param {String | undefined} args.iconClass An icon representation. 
    */
   constructor(args = {}) {
+    ValidationUtil.validateOrThrow(args, ["formula"]);
+
     this.formula = args.formula;
     this.localizedLabel = args.localizedLabel;
+    this.iconClass = args.iconClass;
   }
 }
 
@@ -310,7 +317,8 @@ export class EvaluatedDieResult {
  * @property {String} formula The original, unresolved formula. 
  * @property {String} rollTotal The sum of the roll. 
  * @property {Array<EvaluatedDieResult>} diceResults Each individual dice result. 
- * @property {String} localizedLabel A localized text for display of the result sum. 
+ * @property {String | undefined} localizedLabel A localized text for display of the result sum. 
+ * @property {String | undefined} iconClass An icon representation. 
  */
 export class EvaluatedRoll {
   /**
@@ -318,12 +326,14 @@ export class EvaluatedRoll {
    * @param {String} args.formula The original, unresolved formula. 
    * @param {String} args.rollTotal The sum of the roll. 
    * @param {Array<EvaluatedDieResult>} args.diceResults Each individual dice result. 
-   * @param {String} args.localizedLabel A localized text for display of the result sum. 
+   * @param {String | undefined} args.localizedLabel A localized text for display of the result sum. 
+   * @param {String | undefined} args.iconClass An icon representation. 
    */
   constructor(args = {}) {
     this.formula = args.formula;
     this.rollTotal = args.rollTotal;
     this.diceResults = args.diceResults;
     this.localizedLabel = args.localizedLabel;
+    this.iconClass = args.iconClass;
   }
 }
