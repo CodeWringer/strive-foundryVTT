@@ -120,7 +120,7 @@ import ActorHealthViewModel from './presentation/sheet/actor/part/health/actor-h
 import ActorSkillsViewModel from "./presentation/sheet/actor/part/abilities/actor-skills-viewmodel.mjs";
 import ActorAssetsViewModel from "./presentation/sheet/actor/part/assets/actor-assets-viewmodel.mjs";
 import ActorPersonalityViewModel from "./presentation/sheet/actor/part/personality/actor-personality-viewmodel.mjs";
-import ActorFateViewModel from "./presentation/sheet/actor/part/actor-fate-viewmodel.mjs";
+import ActorFateViewModel from "./presentation/sheet/actor/part/personality/actor-fate-viewmodel.mjs";
 import ActorPersonalsViewModel from "./presentation/sheet/actor/part/actor-personals-viewmodel.mjs";
 import ActorSheetViewModel from "./presentation/sheet/actor/actor-sheet-viewmodel.mjs";
 // View models - Item

@@ -1,9 +1,11 @@
+import { GENERAL_DOCUMENT_TYPES } from "../../../../../business/document/general-document-types.mjs"
 import { ITEM_TYPES } from "../../../../../business/document/item/item-types.mjs"
 import { SEARCH_MODES, Search, SearchItem } from "../../../../../business/search/search.mjs"
 import { SKILL_TAGS } from "../../../../../business/tags/system-tags.mjs"
 import { StringUtil } from "../../../../../business/util/string-utility.mjs"
 import { ValidationUtil } from "../../../../../business/util/validation-utility.mjs"
 import { ExtenderUtil } from "../../../../../common/extender-util.mjs"
+import SpecificDocumentCreationStrategy from "../../../../component/button-add/specific-document-creation-strategy.mjs"
 import InputSearchTextViewModel from "../../../../component/input-search/input-search-viewmodel.mjs"
 import SortControlsViewModel, { SortingOption } from "../../../../component/sort-controls/sort-controls-viewmodel.mjs"
 import DocumentListItemOrderDataSource from "../../../../component/sortable-list/document-list-item-order-datasource.mjs"
@@ -112,15 +114,17 @@ export default class ActorSkillsViewModel extends ViewModel {
         localizedTitle: game.i18n.localize("system.character.skill.innate.label"),
         headerLevel: 1,
         addItemParams: new SortableListAddItemParams({
-          target: this.document,
-          creationType: ITEM_TYPES.SKILL,
-          creationData: {
-            level: 1,
-            properties: [
-              SKILL_TAGS.INNATE.id,
-            ],
-          },
-          withDialog: true,
+          creationStrategy: new SpecificDocumentCreationStrategy({
+            generalType: GENERAL_DOCUMENT_TYPES.ITEM,
+            documentType: ITEM_TYPES.SKILL,
+            target: this.document,
+            creationDataOverrides: {
+              level: 1,
+              properties: [
+                SKILL_TAGS.INNATE.id,
+              ],
+            },
+          }),
           localizedLabel: StringUtil.format(
             game.i18n.localize("system.general.add.addType"),
             game.i18n.localize("system.character.skill.innate.singular"),
@@ -129,7 +133,6 @@ export default class ActorSkillsViewModel extends ViewModel {
             game.i18n.localize("system.general.add.addType"),
             game.i18n.localize("system.character.skill.innate.singular"),
           ),
-          localizedType: game.i18n.localize("system.character.skill.innate.singular"),
         }),
         sortParams: new SortableListSortParams({
           options: this._getKnownSkillSortingOptions(),
@@ -152,12 +155,14 @@ export default class ActorSkillsViewModel extends ViewModel {
       localizedTitle: game.i18n.localize("system.character.skill.learning.label"),
       headerLevel: 1,
       addItemParams: new SortableListAddItemParams({
-        target: this.document,
-        creationType: ITEM_TYPES.SKILL,
-        creationData: {
-          level: 0,
-        },
-        withDialog: true,
+        creationStrategy: new SpecificDocumentCreationStrategy({
+          generalType: GENERAL_DOCUMENT_TYPES.ITEM,
+          documentType: ITEM_TYPES.SKILL,
+          target: this.document,
+          creationDataOverrides: {
+            level: 0,
+          },
+        }),
         localizedLabel: StringUtil.format(
           game.i18n.localize("system.general.add.addType"),
           game.i18n.localize("system.character.skill.learning.singular"),
@@ -166,7 +171,6 @@ export default class ActorSkillsViewModel extends ViewModel {
           game.i18n.localize("system.general.add.addType"),
           game.i18n.localize("system.character.skill.learning.singular"),
         ),
-        localizedType: game.i18n.localize("system.character.skill.learning.singular"),
       }),
       sortParams: new SortableListSortParams({
         options: this._getLearningSkillSortingOptions(),
@@ -188,12 +192,14 @@ export default class ActorSkillsViewModel extends ViewModel {
       localizedTitle: game.i18n.localize("system.character.skill.known.label"),
       headerLevel: 1,
       addItemParams: new SortableListAddItemParams({
-        target: this.document,
-        creationType: ITEM_TYPES.SKILL,
-        creationData: {
-          level: 1,
-        },
-        withDialog: true,
+        creationStrategy: new SpecificDocumentCreationStrategy({
+          generalType: GENERAL_DOCUMENT_TYPES.ITEM,
+          documentType: ITEM_TYPES.SKILL,
+          target: this.document,
+          creationDataOverrides: {
+            level: 1,
+          },
+        }),
         localizedLabel: StringUtil.format(
           game.i18n.localize("system.general.add.addType"),
           game.i18n.localize("system.character.skill.known.singular"),
@@ -202,7 +208,6 @@ export default class ActorSkillsViewModel extends ViewModel {
           game.i18n.localize("system.general.add.addType"),
           game.i18n.localize("system.character.skill.known.singular"),
         ),
-        localizedType: game.i18n.localize("system.character.skill.known.singular"),
       }),
       sortParams: new SortableListSortParams({
         options: this._getKnownSkillSortingOptions(),

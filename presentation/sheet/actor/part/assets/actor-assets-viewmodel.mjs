@@ -1,9 +1,11 @@
 import TransientBaseCharacterActor from "../../../../../business/document/actor/transient-base-character-actor.mjs"
+import { GENERAL_DOCUMENT_TYPES } from "../../../../../business/document/general-document-types.mjs"
 import { ITEM_TYPES } from "../../../../../business/document/item/item-types.mjs"
 import TransientAsset from "../../../../../business/document/item/transient-asset.mjs"
 import { StringUtil } from "../../../../../business/util/string-utility.mjs"
 import { ValidationUtil } from "../../../../../business/util/validation-utility.mjs"
 import { ExtenderUtil } from "../../../../../common/extender-util.mjs"
+import SpecificDocumentCreationStrategy from "../../../../component/button-add/specific-document-creation-strategy.mjs"
 import { SortingOption } from "../../../../component/sort-controls/sort-controls-viewmodel.mjs"
 import DocumentListItemOrderDataSource from "../../../../component/sortable-list/document-list-item-order-datasource.mjs"
 import SortableListViewModel, { SortableListAddItemParams, SortableListSortParams } from "../../../../component/sortable-list/sortable-list-viewmodel.mjs"
@@ -108,9 +110,11 @@ export default class ActorAssetsViewModel extends ViewModel {
       localizedTitle: game.i18n.localize("system.character.asset.luggage"),
       headerLevel: 1,
       addItemParams: new SortableListAddItemParams({
-        target: this.document,
-        creationType: ITEM_TYPES.ASSET,
-        withDialog: true,
+        creationStrategy: new SpecificDocumentCreationStrategy({
+          generalType: GENERAL_DOCUMENT_TYPES.ITEM,
+          documentType: ITEM_TYPES.ASSET,
+          target: this.document,
+        }),
         localizedLabel: StringUtil.format(
           game.i18n.localize("system.general.add.addTypeTo"),
           game.i18n.localize("system.character.asset.singular"),
@@ -121,7 +125,6 @@ export default class ActorAssetsViewModel extends ViewModel {
           game.i18n.localize("system.character.asset.singular"),
           game.i18n.localize("system.character.asset.luggage"),
         ),
-        localizedType: game.i18n.localize("system.character.asset.singular"),
         onItemAdded: (_, document) => {
           this.document.assets.luggage = this.document.assets.luggage.concat([
             document.getTransientObject(),
@@ -149,9 +152,11 @@ export default class ActorAssetsViewModel extends ViewModel {
       localizedTitle: game.i18n.localize("system.character.asset.property"),
       headerLevel: 1,
       addItemParams: new SortableListAddItemParams({
-        target: this.document,
-        creationType: ITEM_TYPES.ASSET,
-        withDialog: true,
+        creationStrategy: new SpecificDocumentCreationStrategy({
+          generalType: GENERAL_DOCUMENT_TYPES.ITEM,
+          documentType: ITEM_TYPES.ASSET,
+          target: this.document,
+        }),
         localizedLabel: StringUtil.format(
           game.i18n.localize("system.general.add.addTypeTo"),
           game.i18n.localize("system.character.asset.singular"),
@@ -162,7 +167,6 @@ export default class ActorAssetsViewModel extends ViewModel {
           game.i18n.localize("system.character.asset.singular"),
           game.i18n.localize("system.character.asset.property"),
         ),
-        localizedType: game.i18n.localize("system.character.asset.singular"),
       }),
       sortParams: new SortableListSortParams({
         options: this._getAssetSortingOptions(),

@@ -3,6 +3,7 @@ import { UuidUtil } from "../../../business/util/uuid-utility.mjs";
 import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
 import ButtonAddViewModel from "../button-add/button-add-viewmodel.mjs";
+import { DocumentCreationStrategy } from "../button-add/document-creation-strategy.mjs";
 import ButtonToggleVisibilityViewModel from "../button-toggle-visibility/button-toggle-visibility-viewmodel.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
 import SortControlsViewModel from "../sort-controls/sort-controls-viewmodel.mjs";
@@ -31,13 +32,12 @@ class SortableListViewModelGroup {
 /**
  * Provides the parameters for the buttons that enable adding items. 
  * 
- * @property {Document | TransientDocument} target
- * @property {ITEM_TYPES} creationType
- * @property {Object | undefined} creationData
- * @property {Boolean} withDialog
- * @property {String | undefined} localizedLabel
- * @property {String | undefined} localizedToolTip
- * @property {String | undefined} localizedType
+ * @property {DocumentCreationStrategy} creationStrategy Determines how a user might 
+ * be prompted for input, if at all, to determine the creation data for a new document. 
+ * @property {String | undefined} localizedToolTip A localized text to 
+ * display as a tool tip. 
+ * @property {String | undefined} localizedLabel A localized text to 
+ * display as a button label. 
  * @property {Function | undefined} onItemAdded If defined, this function will be 
  * invoked upon item creation. Arguments:
  * * `event: Event`
@@ -46,28 +46,24 @@ class SortableListViewModelGroup {
 export class SortableListAddItemParams {
   /**
    * @param {Object} args 
-   * @param {Document | TransientDocument} args.target
-   * @param {ITEM_TYPES} args.creationType
-   * @param {Object | undefined} args.creationData
-   * @param {Boolean} args.withDialog
-   * @param {String | undefined} args.localizedLabel
-   * @param {String | undefined} args.localizedToolTip
-   * @param {String | undefined} args.localizedType
+   * @param {DocumentCreationStrategy} args.creationStrategy Determines how a user might 
+   * be prompted for input, if at all, to determine the creation data for a new document. 
+   * @param {String | undefined} args.localizedToolTip A localized text to 
+   * display as a tool tip. 
+   * @param {String | undefined} args.localizedLabel A localized text to 
+   * display as a button label. 
+   * 
    * @param {Function | undefined} args.onItemAdded If defined, this callback function will be 
    * invoked upon item creation. Arguments:
    * * `event: Event`
    * * `document: Document`
    */
   constructor(args = {}) {
-    ValidationUtil.validateOrThrow(args, ["target", "creationType", "withDialog"]);
+    ValidationUtil.validateOrThrow(args, ["creationStrategy"]);
 
-    this.target = args.target;
-    this.creationType = args.creationType;
-    this.creationData = args.creationData;
-    this.localizedLabel = args.localizedLabel;
+    this.creationStrategy = args.creationStrategy;
     this.localizedToolTip = args.localizedToolTip;
-    this.localizedType = args.localizedType;
-    this.withDialog = args.withDialog;
+    this.localizedLabel = args.localizedLabel;
     this.onItemAdded = args.onItemAdded;
   }
 }
@@ -285,12 +281,8 @@ export default class SortableListViewModel extends ViewModel {
       this.vmAddItem1 = new ButtonAddViewModel({
         id: "vmAddItem1",
         parent: this,
-        target: args.addItemParams.target,
-        creationType: args.addItemParams.creationType,
-        creationData: args.addItemParams.creationData,
-        withDialog: args.addItemParams.withDialog,
+        creationStrategy: args.addItemParams.creationStrategy,
         localizedToolTip: args.addItemParams.localizedToolTip,
-        localizedType: args.addItemParams.localizedType,
         onClick: (event, data) => {
           if (ValidationUtil.isDefined(args.addItemParams.onItemAdded)) {
             args.addItemParams.onItemAdded(event, data);
@@ -300,12 +292,8 @@ export default class SortableListViewModel extends ViewModel {
       this.vmAddItem2 = new ButtonAddViewModel({
         id: "vmAddItem2",
         parent: this,
-        target: args.addItemParams.target,
-        creationType: args.addItemParams.creationType,
-        creationData: args.addItemParams.creationData,
-        withDialog: args.addItemParams.withDialog,
+        creationStrategy: args.addItemParams.creationStrategy,
         localizedLabel: args.addItemParams.localizedLabel,
-        localizedType: args.addItemParams.localizedType,
         onClick: (event, data) => {
           if (ValidationUtil.isDefined(args.addItemParams.onItemAdded)) {
             args.addItemParams.onItemAdded(event, data);
