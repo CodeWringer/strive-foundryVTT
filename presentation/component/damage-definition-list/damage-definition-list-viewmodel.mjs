@@ -115,9 +115,14 @@ export default class DamageDefinitionListViewModel extends InputViewModel {
       formulaListItemTemplate: DamageDefinitionListItemViewModel.TEMPLATE,
       chatMessageTemplate: game.strive.const.TEMPLATES.DICE_ROLL_DAMAGE_CHAT_MESSAGE,
       chatMessageDataProvider: (rolls) => {
+        let rollTotal = 0;
+        for (const roll of rolls) {
+          rollTotal += roll.rollTotal;
+        }
         return {
           title: this.chatTitle,
           rolls: rolls,
+          rollTotal: rollTotal,
         };
       },
     });

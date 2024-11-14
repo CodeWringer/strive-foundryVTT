@@ -1,3 +1,4 @@
+import { UuidUtil } from "../../../business/util/uuid-utility.mjs";
 import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
 import { SOUNDS_CONSTANTS } from "../../audio/sounds.mjs";
 import { ChatUtil } from "../../chat/chat-utility.mjs";
@@ -70,7 +71,11 @@ export default class DiceRollListViewModel extends ViewModel {
         if (evaluatedFormulae === undefined) return; // User canceled. 
 
         // Render the results. 
-        const renderData = await this.chatMessageDataProvider(evaluatedFormulae.rolls);
+        const providedData = await this.chatMessageDataProvider(evaluatedFormulae.rolls);
+        const renderData = {
+          id: UuidUtil.createUUID(),
+          ...providedData,
+        };
         const renderedContent = await renderTemplate(this.chatMessageTemplate, renderData);
 
         return ChatUtil.sendToChat({
