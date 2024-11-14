@@ -4,7 +4,7 @@ viewModel: {SkillListItemViewModel}
 <section id="{{viewModel.id}}">
   {{!-- Row --}}
   {{!-- Damage --}}
-  <div class="flex flex-row sheet-block{{#if viewModel.hideDamage}} hidden{{/if}}">
+  <div class="flex flex-row border-t-sm border-b-sm{{#if viewModel.hideDamage}} hidden{{/if}}">
     <div class="flex flex-center">
       <span class="button light square font-size-default flex flex-center" id="{{viewModel.id}}-damage-info">
         <i class="far fa-question-circle info-button"></i>
