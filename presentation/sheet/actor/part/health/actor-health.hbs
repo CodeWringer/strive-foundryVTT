@@ -83,10 +83,10 @@ cssClass: {undefined | String}
     <div class="grid-3col grid-gap-md margin-b-md">
       {{!-- Shrug off --}}
       <div class="flex flex-row grid-span-2 auto-margin-h-md sheet-block">
+        {{> button viewModel=../viewModel.vmRollShrugOff }}
         {{#with ../viewModel.shrugOffBarTemplate as | template |}}
           {{> (template) viewModel=../../viewModel.vmShrugOffBar }}
         {{/with}}
-        {{> button viewModel=../viewModel.vmRollShrugOff }}
       </div>
       {{!-- Current injury count --}}
       <div class="flex flex-row sheet-block">
