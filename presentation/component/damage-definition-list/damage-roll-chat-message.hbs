@@ -17,28 +17,35 @@ cssClass: undefined | String
 --}}
 <div id="{{id}}" class="dice-roll-chat-message-container custom-system-chat-message{{#if cssClass}} {{cssClass}}{{/if}}">
   {{#if title}}
-    <h2>{{title}}</h2>
+    <a id="{{id}}-toggle-details">
+      <h2 class="flex flex-row flex-grow">
+        <span class="flex-grow">{{title}}</span>
+        <div>
+          <i class="ico ico-details-hidden interactible dark toggle-with-details"></i>
+          <i class="ico ico-details-visible hidden interactible dark toggle-with-details"></i>
+        </div>
+      </h2>
+    </a>
   {{/if}}
   <div class="dice-rolls-container">
     <ol class="unstyled-list">
       {{#each rolls as |roll index|}}
-        <li class="flex flex-column sheet-block margin-b-md{{#if roll.cssClass}} {{roll.cssClass}}{{/if}}">
-          <a id="{{../id}}-toggle-details" class="flex-grow">
-            <div class="flex flex-center pad-sm">
-              <span class="strive-pill flex flex-row font-size-default" title="{{localize "system.damageDefinition.label"}}">
-                <div class="flex flex-center">
-                  <span class="dice-number">{{roll.rollTotal}}</span>
-                </div>
-                <div class="flex flex-center margin-l-md margin-r-md">
-                  {{> verticalLine}}
-                </div>
-                <div class="flex flex-center auto-margin-h-md">
-                  <i class="ico interactible {{roll.iconClass}} dark"></i><span>{{roll.localizedLabel}}</span>
-                </div>
-              </span>
-            </div>
-          </a>
-          <div id="{{../id}}-details" class="sheet-block hidden" style="height: 0%;">
+        <li class="flex flex-column margin-b-md{{#if roll.cssClass}} {{roll.cssClass}}{{/if}}">
+          <div class="flex flex-center pad-sm">
+            <span class="strive-pill flex flex-row flex-grow font-size-default" title="{{localize "system.damageDefinition.label"}}">
+              <div class="flex flex-center">
+                <span class="dice-number">{{roll.rollTotal}}</span>
+              </div>
+              <div class="flex flex-center margin-l-md margin-r-md">
+                {{> verticalLine}}
+              </div>
+              <div class="flex flex-center flex-grow auto-margin-h-md">
+                <i class="ico interactible {{roll.iconClass}} dark"></i>
+                <span>{{roll.localizedLabel}}</span>
+              </div>
+            </span>
+          </div>
+          <div id="{{../id}}-details" class="sheet-block hidden">
             {{!-- Formula --}}
             <div class="dice-composition">{{formula}}</div>
           </div>

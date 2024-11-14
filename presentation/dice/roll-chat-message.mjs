@@ -9,28 +9,19 @@ export function activateRollChatMessageListeners(element) {
 
   const buttonDetails = jElement.find(`#${id}-toggle-details`);
   const detailsSection = jElement.find(`#${id}-details`);
+  const elementsToToggleWithDetails = jElement.find(".toggle-with-details");
   
   buttonDetails.click(async (event) => {
     event.preventDefault(); // Prevents side-effects from event-bubbling. 
 
-    const isHidden = detailsSection.hasClass("hidden");
-    if (isHidden === true) {
-      // Expand. 
-      detailsSection.attr("style", "height: 0%");
+    if (detailsSection.hasClass("hidden")) {
+      // Expand
       detailsSection.removeClass("hidden");
-      // detailsSection.animate({
-      //   height: "100%"
-      // }, 300, () => {
-      // });
     } else {
       // Collapse
-      detailsSection.attr("style", "height: 100%");
-      // detailsSection.animate({
-      //   height: "0%"
-      // }, 300, () => {
-      //   detailsSection.addClass("hidden");
-      // });
       detailsSection.addClass("hidden");
     }
+
+    elementsToToggleWithDetails.toggleClass("hidden");
   });
 }

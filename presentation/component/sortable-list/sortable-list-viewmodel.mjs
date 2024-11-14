@@ -194,15 +194,25 @@ export default class SortableListViewModel extends ViewModel {
     if (!this.isCollapsible) return;
 
     this._isExpanded = value;
-
-    // Synchronize the toggle buttons. 
-    this.vmToggleExpansion1.value = value;
+    
+    const elements = document.querySelectorAll(`[${ButtonToggleVisibilityViewModel.ATTRIBUTE_VIS_GROUP}='${this._visGroupId}']`);
+    
+    // Synchronize visibilities. 
     this.vmToggleExpansion2.value = value;
-    // Hide the second expansion toggle button if the expertise list is currently hidden. 
-    if (value === true) {
+    if (value === true) { // Expanded
       this.vmToggleExpansion2.element.parent().removeClass("hidden");
-    } else {
+      this.vmHeaderButton.element.find(".expanded").removeClass("hidden");
+      this.vmHeaderButton.element.find(".collapsed").addClass("hidden");
+      for (const element of elements) {
+        element.classList.remove("hidden");
+      }
+    } else { // Collapsed
       this.vmToggleExpansion2.element.parent().addClass("hidden");
+      this.vmHeaderButton.element.find(".expanded").addClass("hidden");
+      this.vmHeaderButton.element.find(".collapsed").removeClass("hidden");
+      for (const element of elements) {
+        element.classList.add("hidden");
+      }
     }
 
     // Immediately write view state. 
@@ -250,17 +260,14 @@ export default class SortableListViewModel extends ViewModel {
 
     this.registerViewStateProperty("_isExpanded");
 
-    this.vmToggleExpansion1 = new ButtonToggleVisibilityViewModel({
+    this.vmHeaderButton = new ButtonViewModel({
+      id: "vmHeaderButton",
       parent: this,
-      id: "vmToggleExpansion1",
-      isEditable: true,
-      value: this.isExpanded,
-      iconInactive: '<i class="fas fa-angle-double-down"></i>',
-      iconActive: '<i class="fas fa-angle-double-up"></i>',
-      visGroup: this._visGroupId,
-      onClick: async (event, data) => {
+      localizedLabel: this.localizedTitle,
+      onClick: async () => {
         this.isExpanded = !this.isExpanded;
       },
+      isEditable: true, // Even those without editing right should be able to see nested content. 
     });
     this.vmToggleExpansion2 = new ButtonToggleVisibilityViewModel({
       parent: this,

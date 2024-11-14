@@ -76,6 +76,16 @@ i.stacked {
   }
 }
 
+a:hover {
+  .ico.interactible {
+    filter: drop-shadow(0 0 4px $c-button-highlight);
+    
+    &.dark {
+      filter: brightness($brightness-dark) drop-shadow(0 0 4px $c-button-highlight);
+    }
+  }
+}
+
 .ico-action-point-solid {
   background: url("/systems/strive/presentation/image/action-point-solid.svg");
   background-size: cover;
@@ -438,5 +448,15 @@ i.stacked {
 
 .ico-dumbbell-curved-solid {
   background: url("/systems/strive/presentation/image/dumbbell-curved-solid.svg");
+  background-size: cover;
+}
+
+.ico-details-visible {
+  background: url("/systems/strive/presentation/image/details-visible.svg");
+  background-size: cover;
+}
+
+.ico-details-hidden {
+  background: url("/systems/strive/presentation/image/details-hidden.svg");
   background-size: cover;
 }
