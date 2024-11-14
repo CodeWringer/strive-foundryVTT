@@ -6,16 +6,18 @@ cssClass: String | undefined
   {{#if (eq viewModel.headerLevel 1)}}<h1 class="strive-header flex flex-row flex-middle{{#if viewModel.showFancyFont}} fancy-font{{/if}}">{{/if}}
   {{#if (eq viewModel.headerLevel 2)}}<h2 class="strive-header flex flex-row flex-middle{{#if viewModel.showFancyFont}} fancy-font{{/if}}">{{/if}}
   {{#if (eq viewModel.headerLevel 3)}}<h3 class="strive-header flex flex-row flex-middle{{#if viewModel.showFancyFont}} fancy-font{{/if}}">{{/if}}
-  {{!-- Title --}}
-  {{#if viewModel.localizedTitle}}<span{{#if (eq viewModel.headerLevel 1)}} class="flex-grow"{{/if}}>{{viewModel.localizedTitle}}</span>{{/if}}
-  {{!-- Expansion Button --}}
+  {{!-- Identity --}}
   {{#if viewModel.isCollapsible}}
-  {{> buttonToggleVisibility viewModel=viewModel.vmToggleExpansion1 cssClass="flex-grow" }}
+  {{#> button viewModel=viewModel.vmHeaderButton leftAlign=true cssClass="flex-grow pad-l-md font-size-lg font-bold" }}
+    {{!-- Expansion Toggle --}}
+    <div class="flex flex-center margin-l-md">
+      <i class="expanded ico ico-details-visible{{#if ../viewModel.vmHeaderButton.isEditable}} interactible{{/if}} dark{{#if ../viewModel.isExpanded}}{{else}} hidden{{/if}}"></i>
+      <i class="collapsed ico ico-details-hidden{{#if ../viewModel.vmHeaderButton.isEditable}} interactible{{/if}} dark{{#if ../viewModel.isExpanded}} hidden{{/if}}"></i>
+    </div>
+  {{/button}}
   {{else}}
-  {{!-- Spacer --}}
-    {{#if (not (eq viewModel.headerLevel 1))}}
-    <div class="flex-grow"></div>
-    {{/if}}
+    {{!-- Title --}}
+    <span class="flex-grow">{{viewModel.localizedTitle}}</span>
   {{/if}}
   {{!-- Sorting Controls --}}
   {{#if viewModel.hasSortControls}}

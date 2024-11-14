@@ -20,9 +20,9 @@ cssClass: {undefined | String}
     <div id="{{viewModel.id}}-name-area" class="flex-grow">
       {{#if viewModel.enableExpansion}}
         {{#> button viewModel=viewModel.vmHeaderButton leftAlign=true cssClass="flex-grow pad-l-md font-size-lg font-bold" }}
-        <div class="margin-l-md">
-          <i id="{{../viewModel.id}}-expansion-indicator-up" class="fas fa-angle-double-up{{#if ../viewModel.isExpanded}}{{else}} hidden{{/if}}"></i>
-          <i id="{{../viewModel.id}}-expansion-indicator-down" class="fas fa-angle-double-down{{#if ../viewModel.isExpanded}} hidden{{/if}}"></i>
+        <div class="flex flex-center margin-l-md">
+          <i id="{{../viewModel.id}}-expansion-indicator-up" class="ico ico-details-visible{{#if ../viewModel.isEditable}} interactible{{/if}} dark{{#if ../viewModel.isExpanded}}{{else}} hidden{{/if}}"></i>
+          <i id="{{../viewModel.id}}-expansion-indicator-down" class="ico ico-details-hidden{{#if ../viewModel.isEditable}} interactible{{/if}} dark{{#if ../viewModel.isExpanded}} hidden{{/if}}"></i>
         </div>
         {{/button}}
       {{else}}
@@ -50,7 +50,7 @@ cssClass: {undefined | String}
   <div class="flex flex-row border-solid-t-sm border-solid-b-sm">
     {{> inputRichText viewModel=viewModel.vmRtDescription cssClass="fill" }}
   </div>
-  <div id="{{viewModel.id}}-content" {{#if viewModel.isExpanded}}class="" style="height: 100%;"{{else}}class="hidden" style="height: 0%;"{{/if}}>
+  <div id="{{viewModel.id}}-content" {{#if viewModel.isExpanded}}class="auto-margin-v-sm" style="height: 100%;"{{else}}class="auto-margin-v-sm hidden" style="height: 0%;"{{/if}}>
     <div class="grid-2col grid-gap-sm">
       {{#each viewModel.dataFields as |dataField|}}
         {{#with dataField.template as |template|}}
