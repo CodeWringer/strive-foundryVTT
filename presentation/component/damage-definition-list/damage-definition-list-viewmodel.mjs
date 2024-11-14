@@ -58,7 +58,6 @@ export default class DamageDefinitionListViewModel extends InputViewModel {
 
     this.chatTitle = args.chatTitle;
     this.resolveFormulaContext = args.resolveFormulaContext;
-    const thiz = this;
 
     const damageDefinitions = this.value;
     for (let i = 0; i < damageDefinitions.length; i++) {
@@ -66,9 +65,10 @@ export default class DamageDefinitionListViewModel extends InputViewModel {
 
       const vm = new DamageDefinitionListItemViewModel({
         id: `vmDamageDefinition-${i}`,
-        parent: thiz,
+        parent: this,
         value: damageDefinition,
         localizedLabel: game.i18n.localize(damageDefinition.damageType.localizableName),
+        iconClass: damageDefinition.damageType.iconClass,
         onChange: (_, newItemValue) => {
           if (ValidationUtil.isDefined(newItemValue) !== true) return;
           
@@ -85,7 +85,7 @@ export default class DamageDefinitionListViewModel extends InputViewModel {
           // At this point, the string may contain `@`-references. These must be resolved. 
           let resolvedDamage = damageDefinition.damage;
 
-          const resolvedReferences = thiz.resolveFormulaContext.resolveReferences(damageDefinition.damage);
+          const resolvedReferences = this.resolveFormulaContext.resolveReferences(damageDefinition.damage);
           for (const [key, value] of resolvedReferences) {
             // Skip unresolvable values. These are returned as-is. 
             if (value === undefined) continue;
@@ -106,15 +106,20 @@ export default class DamageDefinitionListViewModel extends InputViewModel {
 
     this.vmList = new DiceRollListViewModel({
       id: `vmList`,
-      parent: thiz,
-      isEditable: thiz.isEditable,
-      isSendable: thiz.isSendable,
-      isOwner: thiz.isOwner,
-      isGM: thiz.isGM,
-      formulaViewModels: thiz.damageDefinitionViewModels,
+      parent: this,
+      isEditable: this.isEditable,
+      isSendable: this.isSendable,
+      isOwner: this.isOwner,
+      isGM: this.isGM,
+      formulaViewModels: this.damageDefinitionViewModels,
       formulaListItemTemplate: DamageDefinitionListItemViewModel.TEMPLATE,
       chatMessageTemplate: game.strive.const.TEMPLATES.DICE_ROLL_DAMAGE_CHAT_MESSAGE,
-      chatTitle: this.chatTitle,
+      chatMessageDataProvider: (rolls) => {
+        return {
+          title: this.chatTitle,
+          rolls: rolls,
+        };
+      },
     });
   }
 }

@@ -16,7 +16,10 @@ import ButtonViewModel from "../button/button-viewmodel.mjs";
  * * Read-only. 
  * @property {String} formulaListItemTemplate Template of the formula list item. 
  * @property {String} chatMessageTemplate Template of the results chat message. 
- * @property {String | undefined} chatTitle Title to display above the chat message. 
+ * @property {Function} chatMessageDataProvider An async function that is queried upon rendering of the 
+ * chat message template. The function must return an object that contains all parameters for the rendering. 
+ * Receives arguments:
+ * * `rolls: Object` See `RollFormulaResolver#evaluateFormulae()`
  */
 export default class DiceRollListViewModel extends ViewModel {
   static get TEMPLATE() { return game.strive.const.TEMPLATES.DICE_ROLL_LIST; }
@@ -31,43 +34,44 @@ export default class DiceRollListViewModel extends ViewModel {
   }
 
   /**
+   * @param {Object} args 
    * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
    * @param {Array<ViewModel>} args.formulaViewModels View model instances of formula list items. 
    * * These view models **must** expose a function named `resolveFormula`, which returns a `String`, 
    * which represents a roll formula. E. g. `"5D5 + 2"` or e. g. `"@SI + 5D3"`. 
-   * * These view models *should* expose a property named `localizedLabel`, which returns a `String`,
-   * which represents the localized label of the roll total. 
+   * * These view models *should* expose:
+   * * * A property named `localizedLabel`, which returns a `String`, which represents the localized label of the roll total. 
+   * * * A property named `iconClass`, which returns a `String`, which is an icon class. 
    * @param {String} args.formulaListItemTemplate Template of the formula list item. 
    * @param {String} args.chatMessageTemplate Template of the results chat message. 
-   * @param {String | undefined} args.chatTitle Title to display above the chat message. 
+   * @param {Function} args.chatMessageDataProvider An async function that is queried upon rendering of the 
+   * chat message template. The function must return an object that contains all parameters for the rendering. 
+   * Receives arguments:
+   * * `rolls: Object` See `RollFormulaResolver#evaluateFormulae()`
    */
   constructor(args = {}) {
     super(args);
-    ValidationUtil.validateOrThrow(args, ["formulaViewModels", "formulaListItemTemplate", "chatMessageTemplate"]);
+    ValidationUtil.validateOrThrow(args, ["formulaViewModels", "formulaListItemTemplate", "chatMessageTemplate", "chatMessageDataProvider"]);
 
     this.formulaViewModels = args.formulaViewModels;
     this.formulaListItemTemplate = args.formulaListItemTemplate;
     this.chatMessageTemplate = args.chatMessageTemplate;
-    this.chatTitle = args.chatTitle;
-
-    const thiz = this;
+    this.chatMessageDataProvider = args.chatMessageDataProvider;
 
     this.vmBtnRoll = new ButtonViewModel({
       id: "vmBtnRoll",
-      parent: thiz,
-      isEditable: thiz.isEditable,
+      parent: this,
+      isEditable: this.isEditable,
       localizedToolTip: game.i18n.localize("system.roll.doRoll"),
       iconHtml: '<i class="fas fa-dice-three"></i>',
       onClick: async () => {
-        const evaluatedFormulae = await new RollFormulaResolver().evaluateFormulae(thiz.formulaViewModels);
+        const evaluatedFormulae = await new RollFormulaResolver().evaluateFormulae(this.formulaViewModels);
 
         if (evaluatedFormulae === undefined) return; // User canceled. 
 
         // Render the results. 
-        const renderedContent = await renderTemplate(thiz.chatMessageTemplate, {
-          title: thiz.chatTitle,
-          rolls: evaluatedFormulae.rolls,
-        });
+        const renderData = await this.chatMessageDataProvider(evaluatedFormulae.rolls);
+        const renderedContent = await renderTemplate(this.chatMessageTemplate, renderData);
 
         return ChatUtil.sendToChat({
           renderedContent: renderedContent,

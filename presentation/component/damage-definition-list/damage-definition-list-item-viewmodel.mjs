@@ -1,4 +1,4 @@
-import { DAMAGE_TYPES, getDamageTypeIconClass } from "../../../business/ruleset/damage-types.mjs"
+import { DAMAGE_TYPES } from "../../../business/ruleset/damage-types.mjs"
 import ButtonViewModel from "../button/button-viewmodel.mjs";
 import InputDropDownViewModel from "../input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
 import InputTextFieldViewModel from "../input-textfield/input-textfield-viewmodel.mjs";
@@ -16,6 +16,9 @@ import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
  * @property {Array<ChoiceOption>} damageTypeOptions An array of damage type choices. 
  * * Read-only.
  * @property {String} localizedLabel Returns the localized label of the roll total. 
+ * I. e. the localized damage type. 
+ * * Read-only. 
+ * @property {String} iconClass Returns the localized label of the roll total. 
  * I. e. the localized damage type. 
  * * Read-only. 
  * 
@@ -64,15 +67,21 @@ export default class DamageDefinitionListItemViewModel extends InputViewModel {
    * @readonly
    */
   get damageTypeIconClass() {
-    return getDamageTypeIconClass(this.value.damageType);
+    return this.value.damageType.iconClass;
   }
 
   /**
+   * @param {Object} args 
    * @param {DamageAndType} args.value 
    * @param {Function} args.resolveFormula A function which resolves the damage definition's 
    * formula and returns it. 
    * @param {String | undefined} args.id Optional. Unique ID of this view model instance. 
-   * @param {String | undefined} args.localizedLabel 
+   * @param {String | undefined} args.localizedLabel Returns the localized label of the roll total. 
+   * I. e. the localized damage type. 
+   * * Read-only. 
+   * @param {String | undefined} args.iconClass Returns the icon representation of the roll. 
+   * I. e. the damage type icon. 
+   * * Read-only. 
    * @param {Function | undefined} args.onChange Callback that is invoked 
    * when the value changes. Receives two arguments: 
    * * `oldValue: {DamageAndType}`
@@ -85,11 +94,10 @@ export default class DamageDefinitionListItemViewModel extends InputViewModel {
     ValidationUtil.validateOrThrow(args, ["value", "resolveFormula"]);
 
     this.localizedLabel = args.localizedLabel;
+    this.iconClass = args.iconClass;
     this.resolveFormula = args.resolveFormula;
     this.onDelete = args.onDelete ?? (async () => {});
 
-    const thiz = this;
-    
     this.vmTfDamage = new InputTextFieldViewModel({
       parent: this,
       id: "vmTfDamage",
@@ -117,8 +125,8 @@ export default class DamageDefinitionListItemViewModel extends InputViewModel {
 
     this.vmBtnDelete = new ButtonViewModel({
       id: "vmBtnDelete",
-      parent: thiz,
-      isEditable: thiz.isEditable,
+      parent: this,
+      isEditable: this.isEditable,
       localizedToolTip: this.localizedDeletionHint,
       iconHtml: '<i class="fas fa-trash"></i>',
       onClick: this.onDelete,
