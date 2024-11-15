@@ -1,7 +1,7 @@
 import { ITEM_TYPES } from "../../../business/document/item/item-types.mjs";
 import TransientSkill from "../../../business/document/item/skill/transient-skill.mjs";
 import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
-import { DocumentCreationStrategy } from "./document-creation-strategy.mjs";
+import DocumentCreationStrategy from "./document-creation-strategy.mjs";
 
 /**
  * Adds a new, blank Expertise to the given `target` skill document instance. 
@@ -21,7 +21,7 @@ export default class ExpertiseCreationStrategy extends DocumentCreationStrategy 
    */
   constructor(args = {}) {
     super(args);
-    ValidationUtil.validateOrThrow(args, ["target"])
+    ValidationUtil.validateOrThrow(args, ["target"]);
 
     this.creationDataOverrides = args.creationDataOverrides ?? Object.create(null);
   }

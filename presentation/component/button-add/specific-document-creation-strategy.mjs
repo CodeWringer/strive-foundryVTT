@@ -8,7 +8,7 @@ import DynamicInputDefinition from "../../dialog/dynamic-input-dialog/dynamic-in
 import DynamicInputDialog from "../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
 import { DYNAMIC_INPUT_TYPES } from "../../dialog/dynamic-input-dialog/dynamic-input-types.mjs";
 import ChoiceOption from "../input-choice/choice-option.mjs";
-import { DocumentCreationStrategy } from "./document-creation-strategy.mjs";
+import DocumentCreationStrategy from "./document-creation-strategy.mjs";
 
 /**
  * Lets the user select a specific template document from a given list of options. 

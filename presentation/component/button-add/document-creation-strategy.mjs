@@ -1,12 +1,12 @@
 import { GENERAL_DOCUMENT_TYPES } from "../../../business/document/general-document-types.mjs";
-import TransientDocument from "../../../business/document/transient-document.mjs";
+import TransientBaseActor from "../../../business/document/actor/transient-base-actor.mjs";
 import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
 
 /**
  * Represents a means of determining the creation data for a new 
  * document to be instantiated. 
  */
-export class DocumentCreationStrategy {
+export default class DocumentCreationStrategy {
   /**
    * @param {Object} args 
    * @param {TransientBaseActor | undefined} args.target The Actor document instance on which 
@@ -17,7 +17,7 @@ export class DocumentCreationStrategy {
    * the others untouched. For example, to set a starting level for a skill Item. 
    */
   constructor(args = {}) {
-    ValidationUtil.validateOrThrow(args, ["target"])
+    ValidationUtil.validateOrThrow(args, ["target"]);
 
     this.target = args.target;
     this.creationDataOverrides = args.creationDataOverrides ?? Object.create(null);
