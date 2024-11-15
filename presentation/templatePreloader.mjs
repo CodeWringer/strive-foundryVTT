@@ -77,6 +77,7 @@ export const TEMPLATES = {
   DIALOG_DAMAGE_DESIGNER: `${basePathPresentation}/dialog/damage-designer-dialog/damage-designer-dialog.hbs`,
   DIALOG_DAMAGE_FINDING_LIST_ITEM: `${basePathPresentation}/dialog/damage-designer-dialog/damage-finding-list-item.hbs`,
   DIALOG_DAMAGE_HIERARCHY_LIST_ITEM: `${basePathPresentation}/dialog/damage-designer-dialog/damage-hierarchy-list-item.hbs`,
+  DIALOG_ROLLABLE_SELECTION: `${basePathPresentation}/dialog/rollable-selection-modal-dialog/rollable-selection-modal-dialog.hbs`,
   // --- Settings Dialogs
   DIALOG_SETTINGS_HEALTH_STATES: `${basePathPresentation}/dialog/settings/health-states/health-states-settings-dialog.hbs`,
   CUSTOM_HEALTH_STATE_LIST_ITEM: `${basePathPresentation}/dialog/settings/health-states/custom-health-state-list-item.hbs`,

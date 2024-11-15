@@ -1,0 +1,62 @@
+{{!-- Parameters:
+viewModel: RollableSelectionModalDialogViewModel
+--}}
+{{#> dialogContent}}
+  <div class="card">
+    <h2>
+      {{#> button viewModel=viewModel.vmToggleRollSection leftAlign=true cssClass="flex-grow pad-l-md font-size-lg font-bold" }}
+      <div class="flex-grow"></div>
+      <div class="flex flex-center margin-l-md">
+        <i id="{{../viewModel.id}}-roll-section-expanded" class="ico ico-details-visible interactible dark{{#if ../viewModel.isRollSectionExpanded}}{{else}} hidden{{/if}}"></i>
+        <i id="{{../viewModel.id}}-roll-section-collapsed" class="ico ico-details-hidden interactible dark{{#if ../viewModel.isRollSectionExpanded}} hidden{{/if}}"></i>
+      </div>
+      {{/button}}
+    </h2>
+    <div id="{{viewModel.id}}-roll-section" class="pad-md{{#if viewModel.isRollSectionExpanded}}{{else}} hidden{{/if}}">
+      <div class="flex flex-row flex-middle auto-margin-h-lg margin-b-md">
+        <img src="{{viewModel.rollTable.img}}" height="32" width="32">
+        <h3 class="flex-grow">{{viewModel.rollTable.name}}</h3>
+      </div>
+      <div class="grid grid-2col margin-b-md">
+        <span>{{localize "system.general.formula"}}</span>
+        <span>{{viewModel.rollTable.formula}}</span>
+      </div>
+      <ol class="unstyled-list alternating-rows">
+        {{!-- Header --}}
+        <li class="grid grid-6col">
+          <span class="grid-span-3"></span>
+          <span class="flex flex-center">{{localize "system.rollTable.weight"}}</span>
+          <span class="flex flex-center grid-span-2">{{localize "system.rollTable.range"}}</span>
+        </li>
+        {{#each viewModel.options as |option index|}}
+        <li class="grid grid-6col">
+          {{!-- Identity --}}
+          <div class="grid-span-3 flex flex-row flex-middle auto-margin-h-md">
+            <img src="{{option.img}}" height="24" width="24">
+            <span>{{option.name}}</span>
+          </div>
+          {{!-- Range --}}
+          <span class="flex flex-center sheet-block">{{option.weight}}</span>
+          <span class="flex flex-center sheet-block">{{option.rangeFrom}}</span>
+          <span class="flex flex-center sheet-block">{{option.rangeTo}}</span>
+        </li>
+        {{/each}}
+      </ol>
+    </div>
+    {{!-- TODO Roll button and result display --}}
+  </div>
+  <div class="card">
+    <h2>
+      {{#> button viewModel=viewModel.vmToggleSelectSection leftAlign=true cssClass="flex-grow pad-l-md font-size-lg font-bold" }}
+      <div class="flex-grow"></div>
+      <div class="flex flex-center margin-l-md">
+        <i id="{{../viewModel.id}}-select-section-expanded" class="ico ico-details-visible interactible dark{{#if ../viewModel.isSelectSectionExpanded}}{{else}} hidden{{/if}}"></i>
+        <i id="{{../viewModel.id}}-select-section-collapsed" class="ico ico-details-hidden interactible dark{{#if ../viewModel.isSelectSectionExpanded}} hidden{{/if}}"></i>
+      </div>
+      {{/button}}
+    </h2>
+    <div id="{{viewModel.id}}-roll-section" class="pad-md{{#if viewModel.isSelectSectionExpanded}}{{else}} hidden{{/if}}">
+    {{!-- TODO drop down with choices --}}
+    </div>
+  </div>
+{{/dialogContent}}

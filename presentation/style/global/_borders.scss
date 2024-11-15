@@ -226,3 +226,11 @@ hr {
   margin: 4px auto;
   border: solid 1px $c-border-medium;
 }
+
+.card {
+  border-radius: 0.6rem;
+  border: 1px solid $c-border-beige-light;
+  &.dark {
+    border: 1px solid $c-border-medium;
+  }
+}
