@@ -43,7 +43,9 @@ viewModel: RollableSelectionModalDialogViewModel
         {{/each}}
       </ol>
     </div>
-    {{!-- TODO Roll button and result display --}}
+    <div class="flex flex-row flex-middle">
+      {{> button viewModel=viewModel.vmRoll }}
+    </div>
   </div>
   <div class="card">
     <h2>

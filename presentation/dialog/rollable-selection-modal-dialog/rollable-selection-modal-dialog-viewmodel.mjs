@@ -74,5 +74,14 @@ export default class RollableSelectionModalDialogViewModel extends ViewModel {
         this.isSelectSectionExpanded = true;
       },
     });
+    this.vmRoll = new ButtonViewModel({
+      id: "vmRoll",
+      parent: this,
+      iconHtml: '<i class="fas fa-dice-three"></i>',
+      isEditable: true,
+      onClick: async () => {
+        // TODO
+      },
+    });
   }
 }
