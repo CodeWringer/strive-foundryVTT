@@ -102,7 +102,6 @@ export default class ActorFateViewModel extends ViewModel {
         id: `addViewModel-${i}`,
         parent: this,
         creationStrategy: new FateCardCreationStrategy({
-          documentType: GENERAL_DOCUMENT_TYPES.ITEM,
           creationType: ITEM_TYPES.FATE_CARD,
           target: this.document,
           selectionLabelMapper: async (selected) => {
