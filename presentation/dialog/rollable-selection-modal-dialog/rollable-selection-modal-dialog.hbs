@@ -45,8 +45,10 @@ viewModel: RollableSelectionModalDialogViewModel
         </li>
         {{/each}}
       </ol>
-      <div class="flex flex-row flex-middle">
+      <div class="flex flex-row flex-middle auto-margin-h-md">
         {{> button viewModel=viewModel.vmRoll }}
+        {{!-- Result --}}
+        {{> buttonSendToChat viewModel=viewModel.vmSendToChat1 }}
         <div id="{{viewModel.id}}-roll-result" class="flex flex-row flex-middle auto-margin-h-md hidden">
           <img height="24" width="24">
           <span class="font-size-lg font-bold">N/A</span>
@@ -71,7 +73,11 @@ viewModel: RollableSelectionModalDialogViewModel
       {{#if viewModel.localizedSelectionType}}
       <span>{{viewModel.localizedSelectionType}}</span>
       {{/if}}
-      {{> inputDropDown viewModel=viewModel.vmSelect }}
+      {{!-- Selection --}}
+      <div class="flex flex-row flex-middle">
+        {{> buttonSendToChat viewModel=viewModel.vmSendToChat2 }}
+        {{> inputDropDown viewModel=viewModel.vmSelect }}
+      </div>
     </div>
   </div>
 {{/dialogContent}}

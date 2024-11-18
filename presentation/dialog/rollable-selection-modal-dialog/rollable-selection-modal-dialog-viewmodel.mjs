@@ -1,6 +1,8 @@
+import DocumentFetcher from "../../../business/document/document-fetcher/document-fetcher.mjs";
 import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
 import FoundryWrapper from "../../../common/foundry-wrapper.mjs";
 import { SOUNDS_CONSTANTS } from "../../audio/sounds.mjs";
+import ButtonSendToChatViewModel from "../../component/button-send-to-chat/button-send-to-chat-viewmodel.mjs";
 import ButtonViewModel from "../../component/button/button-viewmodel.mjs";
 import ChoiceOption from "../../component/input-choice/choice-option.mjs";
 import InputDropDownViewModel from "../../component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
@@ -173,6 +175,19 @@ export default class RollableSelectionModalDialogViewModel extends ViewModel {
         this._selectedId = newValue.value;
       },
     });
+
+    this.vmSendToChat1 = new ButtonSendToChatViewModel({
+      id: "vmSendToChat1",
+      parent: this,
+      isEditable: true,
+      target: this,
+    });
+    this.vmSendToChat2 = new ButtonSendToChatViewModel({
+      id: "vmSendToChat2",
+      parent: this,
+      isEditable: true,
+      target: this,
+    });
   }
 
   /** @override */
@@ -183,6 +198,23 @@ export default class RollableSelectionModalDialogViewModel extends ViewModel {
     const roll = await this.selectedRollTable.roll();
     const rollResultId = roll.results[0].documentId;
     this._setRolledResult(rollResultId);
+  }
+
+  /**
+   * Sends the currently selected document to chat. 
+   * 
+   * @param {VisibilityMode} visibilityMode Determines the visibility of the chat message. 
+   * 
+   * @async
+   */
+  async sendToChat(visibilityMode) {
+    const id = (this._isRollSectionExpanded === true) ? this._rolledId : this._selectedId;
+
+    const document = await new DocumentFetcher().find({
+      id: id,
+      includeLocked: true,
+    });
+    await document.getTransientObject().sendToChat(visibilityMode);
   }
 
   /**
