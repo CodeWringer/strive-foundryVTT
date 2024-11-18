@@ -279,7 +279,7 @@ export default class ActorHealthViewModel extends ViewModel {
       headerLevel: 1,
       addItemParams: new SortableListAddItemParams({
         creationStrategy: new RollableSpecificDocumentCreationStrategy({
-          rollTableName: "Illnesses",
+          rollTables: ["Illnesses"],
           localizedSelectionType: game.i18n.localize(`TYPES.Item.${ITEM_TYPES.ILLNESS}`),
           target: this.document,
         }),
@@ -312,8 +312,19 @@ export default class ActorHealthViewModel extends ViewModel {
       localizedTitle: game.i18n.localize("system.character.health.injury.plural"),
       headerLevel: 1,
       addItemParams: new SortableListAddItemParams({
-        creationStrategy: new SpecificDocumentCreationStrategy({
-          documentType: ITEM_TYPES.INJURY,
+        creationStrategy: new RollableSpecificDocumentCreationStrategy({
+          rollTables: [
+            "Injuries (Acid)",
+            "Injuries (Bleeding)",
+            "Injuries (Bludgeoning)",
+            "Injuries (Burning)",
+            "Injuries (Electrical)",
+            "Injuries (Freezing)",
+            "Injuries (Piercing)",
+            "Injuries (Poison)",
+            "Injuries (Slashing)",
+          ],
+          localizedSelectionType: game.i18n.localize(`TYPES.Item.${ITEM_TYPES.INJURY}`),
           target: this.document,
         }),
         localizedLabel: StringUtil.format(
@@ -346,7 +357,7 @@ export default class ActorHealthViewModel extends ViewModel {
       headerLevel: 1,
       addItemParams: new SortableListAddItemParams({
         creationStrategy: new RollableSpecificDocumentCreationStrategy({
-          rollTableName: "Mutations",
+          rollTables: ["Mutations"],
           localizedSelectionType: game.i18n.localize(`TYPES.Item.${ITEM_TYPES.MUTATION}`),
           target: this.document,
         }),

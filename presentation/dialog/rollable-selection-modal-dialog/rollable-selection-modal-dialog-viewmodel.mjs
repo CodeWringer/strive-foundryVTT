@@ -6,6 +6,11 @@ import ChoiceOption from "../../component/input-choice/choice-option.mjs";
 import InputDropDownViewModel from "../../component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
 
+/**
+ * @property {RollTable} selectedRollTable
+ * 
+ * @extends ViewModel
+ */
 export default class RollableSelectionModalDialogViewModel extends ViewModel {
 
   get isRollSectionExpanded() { return this._isRollSectionExpanded; }
@@ -43,32 +48,38 @@ export default class RollableSelectionModalDialogViewModel extends ViewModel {
   }
 
   /**
+   * Returns `true`, if more than one RollTable is available, so the user must choose the one to use. 
+   * 
+   * @type {Boolean}
+   * @readonly
+   */
+  get allowChoosingRollTable() { return this.rollTables.length > 1; }
+
+  /**
    * @param {Object} args 
-   * @param {RollTable} args.rollTable 
-   * @param {String | undefined} args.localizedSelectionType 
+   * @param {Application} args.ui The dialog that contains this view model. 
+   * @param {Array<RollTable>} args.rollTables A list of RollTables that the user can 
+   * choose from. At least one **must** be provided! 
+   * @param {String | undefined} args.selectedRollTable Name of the pre-selected RollTable. 
+   * * default is the first of the given RollTables. 
+   * @param {String | undefined} args.localizedSelectionType The localized type of document 
+   * that is rollable. E. g. `"Injury"`. 
    */
   constructor(args = {}) {
     super(args);
-    ValidationUtil.validateOrThrow(args, ["rollTable"]);
+    ValidationUtil.validateOrThrow(args, ["ui", "rollTables"]);
+
+    this.ui = args.ui;
+
+    this.rollTables = args.rollTables;
+    if (args.rollTables.length < 1) {
+      throw new Error("Must provide at least one RollTable name");
+    }
 
     this._isRollSectionExpanded = true;
     this._isSelectSectionExpanded = false;
     this.localizedSelectionType = args.localizedSelectionType;
 
-    this.rollTable = args.rollTable;
-    this.options = [];
-    for (const result of this.rollTable.results.values()) {
-      this.options.push({
-        id: result.documentId,
-        img: result.img,
-        name: result.text,
-        weight: result.weight,
-        collection: result.documentCollection,
-        rangeFrom: result.range[0],
-        rangeTo: result.range[1],
-      });
-    }
-    
     this.vmToggleRollSection = new ButtonViewModel({
       id: "vmToggleRollSection",
       parent: this,
@@ -89,13 +100,56 @@ export default class RollableSelectionModalDialogViewModel extends ViewModel {
         this.isSelectSectionExpanded = true;
       },
     });
+
+    if (this.allowChoosingRollTable) {
+      this.rollTableOptions = this.rollTables.map(it => new ChoiceOption({
+        value: it.id,
+        localizedValue: it.name,
+        icon: it.img,
+      }));
+      this.vmSelectRollTable1 = new InputDropDownViewModel({
+        id: "vmSelectRollTable1",
+        parent: this,
+        isEditable: true,
+        options: this.rollTableOptions,
+        onChange: (_, newValue) => {
+          this._setRollTable(newValue.value);
+          this.vmSelectRollTable2._value = newValue;
+        },
+      });
+      this.vmSelectRollTable2 = new InputDropDownViewModel({
+        id: "vmSelectRollTable2",
+        parent: this,
+        isEditable: true,
+        options: this.rollTableOptions,
+        onChange: (_, newValue) => {
+          this._setRollTable(newValue.value);
+          this.vmSelectRollTable1._value = newValue;
+        },
+      });
+    }
+
+    this.selectedRollTable = args.selectedRollTable ? (this.rollTables.find(it => it.name === args.selectedRollTable)) : this.rollTables[0];
+    this.options = [];
+    for (const result of this.selectedRollTable.results.values()) {
+      this.options.push({
+        id: result.documentId,
+        img: result.img,
+        name: result.text,
+        weight: result.weight,
+        collection: result.documentCollection,
+        rangeFrom: result.range[0],
+        rangeTo: result.range[1],
+      });
+    }
+    
     this.vmRoll = new ButtonViewModel({
       id: "vmRoll",
       parent: this,
       iconHtml: '<i class="fas fa-dice-three"></i>',
       isEditable: true,
       onClick: async () => {
-        const roll = await this.rollTable.roll();
+        const roll = await this.selectedRollTable.roll();
         const rollResultId = roll.results[0].documentId;
         this._setRolledResult(rollResultId);
         await new FoundryWrapper().playSound(SOUNDS_CONSTANTS.DICE_ROLL)
@@ -126,9 +180,43 @@ export default class RollableSelectionModalDialogViewModel extends ViewModel {
     super.activateListeners(html);
 
     // Pre-roll an initial value.
-    const roll = await this.rollTable.roll();
+    const roll = await this.selectedRollTable.roll();
     const rollResultId = roll.results[0].documentId;
     this._setRolledResult(rollResultId);
+  }
+
+  /**
+   * @param {String} id 
+   * 
+   * @private
+   */
+  _setRollTable(id) {
+    const rollTable = this.rollTables.find(it => it.id === id);
+    this.selectedRollTable = rollTable;
+
+    this.options = [];
+    for (const result of this.selectedRollTable.results.values()) {
+      this.options.push({
+        id: result.documentId,
+        img: result.img,
+        name: result.text,
+        weight: result.weight,
+        collection: result.documentCollection,
+        rangeFrom: result.range[0],
+        rangeTo: result.range[1],
+      });
+    }
+
+    this._choices = this.options.map(it => new ChoiceOption({
+      value: it.id,
+      icon: it.img,
+      localizedValue: it.name,
+    }));
+    this._selectedId = this._choices[0].value;
+    this.vmSelect.options = this._choices;
+    this.vmSelect.value = this._choices[0],
+
+    this.ui.render(true);
   }
 
   /**

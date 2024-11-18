@@ -20,7 +20,7 @@ export default class DocumentCreationStrategy {
     ValidationUtil.validateOrThrow(args, ["target"]);
 
     this.target = args.target;
-    this.creationDataOverrides = args.creationDataOverrides ?? Object.create(null);
+    this.creationDataOverrides = args.creationDataOverrides;
   }
 
   /**
@@ -37,10 +37,15 @@ export default class DocumentCreationStrategy {
       throw new Error("Documents can not be embedded in Items.");
     }
 
-    const creationData = await this._get();
-
+    let creationData = await this._getCreationData();
     // If the creation data is undefined, then the user has canceled. 
     if (!ValidationUtil.isDefined(creationData)) return; // Bail out. 
+    
+    // Apply overrides. 
+    creationData = {
+      ...creationData,
+      ...this.creationDataOverrides,
+    };
 
     const creationDataIsActor = this._getIsTypeAnActor(creationData.type);
     
@@ -98,7 +103,7 @@ export default class DocumentCreationStrategy {
    * @async
    * @protected
    */
-  async _get() {
+  async _getCreationData() {
     throw new Error("Not implemented");
   }
 

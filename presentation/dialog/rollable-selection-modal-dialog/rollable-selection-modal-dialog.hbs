@@ -13,13 +13,16 @@ viewModel: RollableSelectionModalDialogViewModel
       {{/button}}
     </h2>
     <div id="{{viewModel.id}}-roll-section" class="pad-md{{#if viewModel.isRollSectionExpanded}}{{else}} hidden{{/if}} auto-margin-v-md">
+      {{#if viewModel.allowChoosingRollTable}}
+      {{> inputDropDown viewModel=viewModel.vmSelectRollTable1 }}
+      {{/if}}
       <div class="flex flex-row flex-middle auto-margin-h-lg">
-        <img src="{{viewModel.rollTable.img}}" height="32" width="32">
-        <h3 class="flex-grow">{{viewModel.rollTable.name}}</h3>
+        <img src="{{viewModel.selectedRollTable.img}}" height="32" width="32">
+        <h3 class="flex-grow">{{viewModel.selectedRollTable.name}}</h3>
       </div>
       <div class="grid grid-2col">
         <span>{{localize "system.general.formula"}}</span>
-        <span>{{viewModel.rollTable.formula}}</span>
+        <span>{{viewModel.selectedRollTable.formula}}</span>
       </div>
       <ol class="unstyled-list alternating-rows">
         {{!-- Header --}}
@@ -62,6 +65,9 @@ viewModel: RollableSelectionModalDialogViewModel
       {{/button}}
     </h2>
     <div id="{{viewModel.id}}-select-section" class="grid grid-2col pad-md{{#if viewModel.isSelectSectionExpanded}}{{else}} hidden{{/if}}">
+      {{#if viewModel.allowChoosingRollTable}}
+      {{> inputDropDown viewModel=viewModel.vmSelectRollTable2 cssClass="grid-span-2" }}
+      {{/if}}
       {{#if viewModel.localizedSelectionType}}
       <span>{{viewModel.localizedSelectionType}}</span>
       {{/if}}

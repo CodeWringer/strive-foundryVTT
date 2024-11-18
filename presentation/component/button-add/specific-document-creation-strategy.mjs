@@ -13,6 +13,14 @@ import DocumentCreationStrategy from "./document-creation-strategy.mjs";
 /**
  * Lets the user select a specific template document from a given list of options. 
  * 
+ * @property {String} localizedSelectionType The localized type of document 
+ * that is rollable. E. g. `"Injury"`. 
+ * @property {TransientBaseActor | undefined} target The Actor document instance on which 
+ * to embed the new document instance. 
+ * @property {Object | undefined} creationDataOverrides Overrides applied to the selected 
+ * creation data. Can be used to override a specific property, while leaving 
+ * the others untouched. For example, to set a starting level for a skill Item. 
+ * 
  * @extends DocumentCreationStrategy
  */
 export default class SpecificDocumentCreationStrategy extends DocumentCreationStrategy {
@@ -58,7 +66,6 @@ export default class SpecificDocumentCreationStrategy extends DocumentCreationSt
 
     this._generalType = this._getIsTypeAnActor(args.documentType) ? GENERAL_DOCUMENT_TYPES.ACTOR : GENERAL_DOCUMENT_TYPES.ITEM;
     this.documentType = args.documentType;
-    this.creationDataOverrides = args.creationDataOverrides ?? Object.create(null);
 
     this.onSelectionChanged = args.onSelectionChanged ?? (async (dialog, selected, choices) => {});
   }
@@ -158,7 +165,6 @@ export default class SpecificDocumentCreationStrategy extends DocumentCreationSt
         name: `New ${this.documentType.capitalize()}`,
         type: this.documentType,
         system: {
-          ...this.creationDataOverrides,
           isCustom: true,
         }
       };
@@ -174,7 +180,6 @@ export default class SpecificDocumentCreationStrategy extends DocumentCreationSt
         type: templateItem.type,
         system: {
           ...templateItem.system,
-          ...this.creationDataOverrides,
           isCustom: false,
         }
       };
@@ -189,7 +194,7 @@ export default class SpecificDocumentCreationStrategy extends DocumentCreationSt
    * @async
    * @override
    */
-  async _get() {
+  async _getCreationData() {
     const sortedOptions = await this._getChoices();
     const inputDefinitions = await this._getDialogInputs(sortedOptions);
 

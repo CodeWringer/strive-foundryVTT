@@ -8,6 +8,12 @@ import DocumentCreationStrategy from "./document-creation-strategy.mjs";
  * 
  * Does not prompt for anything and can not be canceled. 
  * 
+ * @property {TransientBaseActor | undefined} target The Actor document instance on which 
+ * to embed the new document instance. 
+ * @property {Object | undefined} creationDataOverrides Overrides applied to the selected 
+ * creation data. Can be used to override a specific property, while leaving 
+ * the others untouched. For example, to set a starting level for a skill Item. 
+ * 
  * @extends DocumentCreationStrategy
  */
 export default class ExpertiseCreationStrategy extends DocumentCreationStrategy {
@@ -22,8 +28,6 @@ export default class ExpertiseCreationStrategy extends DocumentCreationStrategy 
   constructor(args = {}) {
     super(args);
     ValidationUtil.validateOrThrow(args, ["target"]);
-
-    this.creationDataOverrides = args.creationDataOverrides ?? Object.create(null);
   }
 
   /** @override */
@@ -33,7 +37,6 @@ export default class ExpertiseCreationStrategy extends DocumentCreationStrategy 
     }
 
     const creationData = {
-      ...this.creationDataOverrides,
       isCustom: true,
     };
 

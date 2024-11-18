@@ -1,4 +1,3 @@
-import { GENERAL_DOCUMENT_TYPES } from "../../../business/document/general-document-types.mjs";
 import { ITEM_TYPES } from "../../../business/document/item/item-types.mjs";
 import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
 import SpecificDocumentCreationStrategy from "./specific-document-creation-strategy.mjs";
@@ -7,6 +6,14 @@ import { DYNAMIC_INPUT_TYPES } from "../../dialog/dynamic-input-dialog/dynamic-i
 
 /**
  * Lets the user select a specific template fate-card from a given list of options. 
+ * 
+ * @property {String} localizedSelectionType The localized type of document 
+ * that is rollable. E. g. `"Injury"`. 
+ * @property {TransientBaseActor | undefined} target The Actor document instance on which 
+ * to embed the new document instance. 
+ * @property {Object | undefined} creationDataOverrides Overrides applied to the selected 
+ * creation data. Can be used to override a specific property, while leaving 
+ * the others untouched. For example, to set a starting level for a skill Item. 
  * 
  * @extends SpecificDocumentCreationStrategy
  */
