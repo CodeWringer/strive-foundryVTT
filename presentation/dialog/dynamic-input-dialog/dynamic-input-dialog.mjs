@@ -103,13 +103,13 @@ export default class DynamicInputDialog extends ConfirmableModalDialog {
   _viewModel;
 
   /**
-   * @param {Object} rollableOptions 
-   * @param {Boolean | undefined} rollableOptions.easyDismissal If true, allows for easier dialog dismissal, 
+   * @param {Object} options 
+   * @param {Boolean | undefined} options.easyDismissal If true, allows for easier dialog dismissal, 
    * by clicking anywhere on the backdrop element. Default `true`. 
-   * @param {Function | undefined} rollableOptions.closeCallback A function to invoke upon the closing 
+   * @param {Function | undefined} options.closeCallback A function to invoke upon the closing 
    * of the dialog. Receives this dialog instance as its only argument. 
-   * @param {String | undefined} rollableOptions.localizedTitle Localized string for the dialog title. 
-   * @param {Array<DynamicInputDefinition>} rollableOptions.inputDefinitions
+   * @param {String | undefined} options.localizedTitle Localized string for the dialog title. 
+   * @param {Array<DynamicInputDefinition>} options.inputDefinitions
    */
   constructor(options = {}) {
     super(options);
