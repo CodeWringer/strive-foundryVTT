@@ -240,8 +240,5 @@ $card-border-radius: 0.6rem;
     border-top-left-radius: $card-border-radius;
     border-top-right-radius: $card-border-radius;
     background-color: rgba(0, 0, 0, 0.2);
-    &.selected {
-      background-color: rgba(255, 255, 255, 0.5);
-    }
   }
 }
