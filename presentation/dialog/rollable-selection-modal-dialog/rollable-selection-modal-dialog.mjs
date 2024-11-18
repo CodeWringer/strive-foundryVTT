@@ -11,12 +11,14 @@ export default class RollableSelectionModalDialog extends ConfirmableModalDialog
   /**
    * @param {Object} args 
    * @param {RollTable} args.rollTable 
+   * @param {String | undefined} args.localizedSelectionType 
    */
   constructor(args = {}) {
     super(args);
 
     this.viewModel = new RollableSelectionModalDialogViewModel({
       rollTable: args.rollTable,
+      localizedSelectionType: args.localizedSelectionType,
     });
   }
   

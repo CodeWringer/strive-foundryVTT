@@ -1,7 +1,6 @@
 import DocumentFetcher from "../../../business/document/document-fetcher/document-fetcher.mjs";
 import { GENERAL_DOCUMENT_TYPES } from "../../../business/document/general-document-types.mjs";
 import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
-import ConfirmableModalDialog from "../../dialog/confirmable-modal-dialog/confirmable-modal-dialog.mjs";
 import RollableSelectionModalDialog from "../../dialog/rollable-selection-modal-dialog/rollable-selection-modal-dialog.mjs";
 import DocumentCreationStrategy from "./document-creation-strategy.mjs";
 
@@ -16,6 +15,7 @@ export default class RollableSpecificDocumentCreationStrategy extends DocumentCr
   /**
    * @param {Object} args 
    * @param {String} args.rollTableName 
+   * @param {String | undefined} args.localizedSelectionType 
    * @param {TransientBaseActor | undefined} args.target The Actor document instance on which 
    * to embed the new document instance. 
    * @param {Object | undefined} args.creationDataOverrides Overrides applied to the selected 
@@ -27,6 +27,7 @@ export default class RollableSpecificDocumentCreationStrategy extends DocumentCr
     ValidationUtil.validateOrThrow(args, ["rollTableName"]);
 
     this.rollTableName = args.rollTableName;
+    this.localizedSelectionType = args.localizedSelectionType;
     this.creationDataOverrides = args.creationDataOverrides ?? Object.create(null);
   }
 
@@ -58,9 +59,22 @@ export default class RollableSpecificDocumentCreationStrategy extends DocumentCr
 
     const dialog = await new RollableSelectionModalDialog({
       rollTable: rollTable,
+      localizedSelectionType: this.localizedSelectionType,
     }).renderAndAwait();
-    // const r = await rollTable.roll();
-    // r.documentId // "OvAqbzQwCJ0vi0jF"
-    // r.documentCollection // "strive.illnesses"
+    
+    if (!dialog.confirmed) return; // User canceled
+
+    const document = await new DocumentFetcher().find({
+      id: dialog.viewModel.selected.id,
+    });
+    return {
+      name: document.name,
+      type: document.type,
+      system: {
+        ...document.system,
+        ...this.creationDataOverrides,
+        isCustom: false,
+      }
+    };
   }
 }

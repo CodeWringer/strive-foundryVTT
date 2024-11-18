@@ -1,6 +1,7 @@
 import { GENERAL_DOCUMENT_TYPES } from "../../../business/document/general-document-types.mjs";
 import TransientBaseActor from "../../../business/document/actor/transient-base-actor.mjs";
 import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
+import { ACTOR_TYPES } from "../../../business/document/actor/actor-types.mjs";
 
 /**
  * Represents a means of determining the creation data for a new 
@@ -10,8 +11,7 @@ export default class DocumentCreationStrategy {
   /**
    * @param {Object} args 
    * @param {TransientBaseActor | undefined} args.target The Actor document instance on which 
-   * to embed the new document instance. Note - this can only apply when `generalType` 
-   * is of value `"Item"`! Otherwise, an error is thrown! 
+   * to embed the new document instance. Note it is only possible to nest Items in Actors. 
    * @param {Object | undefined} args.creationDataOverrides Overrides applied to the selected 
    * creation data. Can be used to override a specific property, while leaving 
    * the others untouched. For example, to set a starting level for a skill Item. 
@@ -33,25 +33,25 @@ export default class DocumentCreationStrategy {
    * @async
    */
   async selectAndCreate() {
-    if (ValidationUtil.isDefined(this.target) && this.generalType === GENERAL_DOCUMENT_TYPES.ACTOR) {
-      throw new Error("Actors can not ever be embedded");
-    } else if (this._targetIsAnItem()) {
-      throw new Error("Items can not be embedded on other Items.");
+    if (this._targetIsAnItem()) {
+      throw new Error("Documents can not be embedded in Items.");
     }
 
     const creationData = await this._get();
 
     // If the creation data is undefined, then the user has canceled. 
     if (!ValidationUtil.isDefined(creationData)) return; // Bail out. 
+
+    const creationDataIsActor = this._getIsTypeAnActor(creationData.type);
     
     // Try to create the document. 
-    if (this._targetIsAnActor() && this.generalType === GENERAL_DOCUMENT_TYPES.ITEM) {
+    if (this._targetIsAnActor() && creationDataIsActor === false) {
       // Create embedded Item document. 
       return await Item.create(creationData, { parent: this.target.document }); 
-    } else if (!ValidationUtil.isDefined(this.target) && this.generalType === GENERAL_DOCUMENT_TYPES.ITEM) {
+    } else if (!ValidationUtil.isDefined(this.target) && creationDataIsActor === false) {
       // Create world Item document. 
       return await Item.create(creationData, {}); 
-    } else if (!ValidationUtil.isDefined(this.target) && this.generalType === GENERAL_DOCUMENT_TYPES.ACTOR) {
+    } else if (!ValidationUtil.isDefined(this.target) && creationDataIsActor === true) {
       // Create world Actor document. 
       return await Actor.create(creationData, {}); 
     } else {
@@ -100,5 +100,20 @@ export default class DocumentCreationStrategy {
    */
   async _get() {
     throw new Error("Not implemented");
+  }
+
+  /**
+   * Returns `true`, if the given type represents an actor. 
+   * 
+   * @param {String} type 
+   * 
+   * @returns {Boolean} `true`, if the given type represents an actor. 
+   * 
+   * @protected
+   */
+  _getIsTypeAnActor(type) {
+    return type === ACTOR_TYPES.NPC 
+      || type === ACTOR_TYPES.PC
+      || type === ACTOR_TYPES.PLAIN;
   }
 }

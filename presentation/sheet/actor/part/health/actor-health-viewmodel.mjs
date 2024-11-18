@@ -2,7 +2,6 @@ import { SpecificRollDataRollSchema } from "../../../../../business/dice/ability
 import RollData from "../../../../../business/dice/roll-data.mjs"
 import { ROLL_DICE_MODIFIER_TYPES } from "../../../../../business/dice/roll-dice-modifier-types.mjs"
 import { ACTOR_TYPES } from "../../../../../business/document/actor/actor-types.mjs"
-import { GENERAL_DOCUMENT_TYPES } from "../../../../../business/document/general-document-types.mjs"
 import { ITEM_TYPES } from "../../../../../business/document/item/item-types.mjs"
 import { ATTRIBUTES } from "../../../../../business/ruleset/attribute/attributes.mjs"
 import Ruleset from "../../../../../business/ruleset/ruleset.mjs"
@@ -281,6 +280,7 @@ export default class ActorHealthViewModel extends ViewModel {
       addItemParams: new SortableListAddItemParams({
         creationStrategy: new RollableSpecificDocumentCreationStrategy({
           rollTableName: "Illnesses",
+          localizedSelectionType: game.i18n.localize(`TYPES.Item.${ITEM_TYPES.ILLNESS}`),
           target: this.document,
         }),
         localizedLabel: StringUtil.format(
@@ -313,7 +313,6 @@ export default class ActorHealthViewModel extends ViewModel {
       headerLevel: 1,
       addItemParams: new SortableListAddItemParams({
         creationStrategy: new SpecificDocumentCreationStrategy({
-          generalType: GENERAL_DOCUMENT_TYPES.ITEM,
           documentType: ITEM_TYPES.INJURY,
           target: this.document,
         }),
@@ -346,9 +345,9 @@ export default class ActorHealthViewModel extends ViewModel {
       localizedTitle: game.i18n.localize("system.character.health.mutation.plural"),
       headerLevel: 1,
       addItemParams: new SortableListAddItemParams({
-        creationStrategy: new SpecificDocumentCreationStrategy({
-          generalType: GENERAL_DOCUMENT_TYPES.ITEM,
-          documentType: ITEM_TYPES.MUTATION,
+        creationStrategy: new RollableSpecificDocumentCreationStrategy({
+          rollTableName: "Mutations",
+          localizedSelectionType: game.i18n.localize(`TYPES.Item.${ITEM_TYPES.MUTATION}`),
           target: this.document,
         }),
         localizedLabel: StringUtil.format(
@@ -381,7 +380,6 @@ export default class ActorHealthViewModel extends ViewModel {
       headerLevel: 1,
       addItemParams: new SortableListAddItemParams({
         creationStrategy: new SpecificDocumentCreationStrategy({
-          generalType: GENERAL_DOCUMENT_TYPES.ITEM,
           documentType: ITEM_TYPES.SCAR,
           target: this.document,
         }),

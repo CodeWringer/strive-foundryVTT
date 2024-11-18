@@ -115,7 +115,6 @@ export default class ActorSkillsViewModel extends ViewModel {
         headerLevel: 1,
         addItemParams: new SortableListAddItemParams({
           creationStrategy: new SpecificDocumentCreationStrategy({
-            generalType: GENERAL_DOCUMENT_TYPES.ITEM,
             documentType: ITEM_TYPES.SKILL,
             target: this.document,
             creationDataOverrides: {
@@ -156,7 +155,6 @@ export default class ActorSkillsViewModel extends ViewModel {
       headerLevel: 1,
       addItemParams: new SortableListAddItemParams({
         creationStrategy: new SpecificDocumentCreationStrategy({
-          generalType: GENERAL_DOCUMENT_TYPES.ITEM,
           documentType: ITEM_TYPES.SKILL,
           target: this.document,
           creationDataOverrides: {
@@ -193,7 +191,6 @@ export default class ActorSkillsViewModel extends ViewModel {
       headerLevel: 1,
       addItemParams: new SortableListAddItemParams({
         creationStrategy: new SpecificDocumentCreationStrategy({
-          generalType: GENERAL_DOCUMENT_TYPES.ITEM,
           documentType: ITEM_TYPES.SKILL,
           target: this.document,
           creationDataOverrides: {

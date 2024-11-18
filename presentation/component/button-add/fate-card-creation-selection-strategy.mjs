@@ -24,8 +24,7 @@ export default class FateCardCreationStrategy extends SpecificDocumentCreationSt
   /**
    * @param {Object} args 
    * @param {TransientBaseActor | undefined} args.target The Actor document instance on which 
-   * to embed the new document instance. Note - this can only apply when `generalType` 
-   * is of value `"Item"`! Otherwise, an error is thrown! 
+   * to embed the new document instance. Note it is only possible to nest Items in Actors. 
    * @param {Object | undefined} args.creationDataOverrides Overrides applied to the selected 
    * creation data. Can be used to override a specific property, while leaving 
    * the others untouched. For example, to set a starting level for a skill Item. 
@@ -43,7 +42,6 @@ export default class FateCardCreationStrategy extends SpecificDocumentCreationSt
   constructor(args = {}) {
     super({
       ...args,
-      generalType: GENERAL_DOCUMENT_TYPES.ITEM,
       documentType: ITEM_TYPES.FATE_CARD,
     });
     this.selectionLabelMapper = args.selectionLabelMapper;

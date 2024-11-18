@@ -38,12 +38,10 @@ export default class SpecificDocumentCreationStrategy extends DocumentCreationSt
 
   /**
    * @param {Object} args 
-   * @param {GENERAL_DOCUMENT_TYPES} args.generalType Must be one of: `"Actor"` | `"Item"`
    * @param {ITEM_TYPES | ACTOR_TYPES} args.documentType Must be the internal type name of 
    * the type of document to create. E. g. `"skill"` or `"expertise"` or `"npc"` and so on.
    * @param {TransientBaseActor | undefined} args.target The Actor document instance on which 
-   * to embed the new document instance. Note - this can only apply when `generalType` 
-   * is of value `"Item"`! Otherwise, an error is thrown! 
+   * to embed the new document instance. Note it is only possible to nest Items in Actors. 
    * @param {Object | undefined} args.creationDataOverrides Overrides applied to the selected 
    * creation data. Can be used to override a specific property, while leaving 
    * the others untouched. For example, to set a starting level for a skill Item. 
@@ -56,9 +54,9 @@ export default class SpecificDocumentCreationStrategy extends DocumentCreationSt
    */
   constructor(args = {}) {
     super(args);
-    ValidationUtil.validateOrThrow(args, ["generalType", "documentType"]);
+    ValidationUtil.validateOrThrow(args, ["documentType"]);
 
-    this.generalType = args.generalType;
+    this._generalType = this._getIsTypeAnActor(args.documentType) ? GENERAL_DOCUMENT_TYPES.ACTOR : GENERAL_DOCUMENT_TYPES.ITEM;
     this.documentType = args.documentType;
     this.creationDataOverrides = args.creationDataOverrides ?? Object.create(null);
 
@@ -76,7 +74,7 @@ export default class SpecificDocumentCreationStrategy extends DocumentCreationSt
    */
   async _getChoices() {
     const documentIndices = new DocumentFetcher().getIndices({
-      documentType: this.generalType,
+      documentType: this._generalType,
       contentType: this.documentType,
     });
 
@@ -123,7 +121,7 @@ export default class SpecificDocumentCreationStrategy extends DocumentCreationSt
    * @protected
    */
   async _getDialogInputs(choices) {
-    const localizedType = game.i18n.localize(`TYPES.${this.generalType}.${this.documentType}`);
+    const localizedType = game.i18n.localize(`TYPES.${this._generalType}.${this.documentType}`);
     const customChoice = choices.find(it => it.value === this.customChoiceValue);
     
     return [
@@ -195,7 +193,7 @@ export default class SpecificDocumentCreationStrategy extends DocumentCreationSt
     const sortedOptions = await this._getChoices();
     const inputDefinitions = await this._getDialogInputs(sortedOptions);
 
-    const localizedType = game.i18n.localize(`TYPES.${this.generalType}.${this.documentType}`);
+    const localizedType = game.i18n.localize(`TYPES.${this._generalType}.${this.documentType}`);
     const localizedDialogTitle = StringUtil.format(
       game.i18n.localize("system.general.add.query"),
       localizedType

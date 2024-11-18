@@ -111,7 +111,6 @@ export default class ActorAssetsViewModel extends ViewModel {
       headerLevel: 1,
       addItemParams: new SortableListAddItemParams({
         creationStrategy: new SpecificDocumentCreationStrategy({
-          generalType: GENERAL_DOCUMENT_TYPES.ITEM,
           documentType: ITEM_TYPES.ASSET,
           target: this.document,
         }),
@@ -153,7 +152,6 @@ export default class ActorAssetsViewModel extends ViewModel {
       headerLevel: 1,
       addItemParams: new SortableListAddItemParams({
         creationStrategy: new SpecificDocumentCreationStrategy({
-          generalType: GENERAL_DOCUMENT_TYPES.ITEM,
           documentType: ITEM_TYPES.ASSET,
           target: this.document,
         }),
