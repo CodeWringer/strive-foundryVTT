@@ -103,6 +103,7 @@ export class SortableListSortParams {
  * @property {Boolean} isEditable If true, input(s) will be in edit mode. If false, input(s) will be in read-only mode.
  */
 export default class SortableListViewModel extends ViewModel {
+  /** @override */
   static get TEMPLATE() { return game.strive.const.TEMPLATES.COMPONENT_SORTABLE_LIST; }
 
   /**
@@ -113,6 +114,16 @@ export default class SortableListViewModel extends ViewModel {
   static registerHandlebarsPartial() {
     Handlebars.registerPartial('sortableList', `{{> "${SortableListViewModel.TEMPLATE}"}}`);
   }
+
+  /**
+   * The css selector with which to detect list item HTML elements. 
+   * 
+   * @type {String}
+   * @static
+   * @readonly
+   * @private
+   */
+  static CSS_SELECTOR_LIST_ITEMS = "> ol > li";
 
   /**
    * This is a list of `entityId`s, in the order that they should be rendered in the list. 
@@ -408,6 +419,15 @@ export default class SortableListViewModel extends ViewModel {
     );
 
     this._storeItemOrder();
+  }
+
+  /**
+   * Returns a list of elements that represent the list items. 
+   * 
+   * @returns {jQuery}
+   */
+  getListElements() {
+    return this.element.find(SortableListViewModel.CSS_SELECTOR_LIST_ITEMS);
   }
  
   /**

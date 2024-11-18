@@ -322,14 +322,14 @@ export default class ActorSkillsViewModel extends ViewModel {
 
     let innateListElements = [];
     if (this.hideInnateSkills === false) {
-      innateListElements = this.vmInnateSkillList.element.find("> li");
+      innateListElements = this.vmInnateSkillList.getListElements();
     }
     
-    const knownListElements = this.vmKnownSkillList.element.find("> li");
+    const knownListElements = this.vmKnownSkillList.getListElements();
 
     let learningListElements = [];
     if (this.hideLearningSkills === false) {
-      learningListElements = this.vmLearningSkillList.element.find("> li");
+      learningListElements = this.vmLearningSkillList.getListElements();
     }
 
     const elements = [];
