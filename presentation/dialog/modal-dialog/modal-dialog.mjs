@@ -3,24 +3,6 @@ import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
 import FoundryWrapper from "../../../common/foundry-wrapper.mjs";
 
 /**
- * Styling class of the back drop element. 
- * 
- * @type {String}
- * @constant
- * @private
- */
-const BACKDROP_ELEMENT_CLASS = "strive-modal-backdrop";
-
-/**
- * Styling class of the dialog element. 
- * 
- * @type {String}
- * @constant
- * @private
- */
-const DIALOG_ELEMENT_CLASS = "strive-modal";
-
-/**
  * @summary
  * Represents the abstract base class for system-specific custom dialogs. 
  * 
@@ -46,12 +28,30 @@ const DIALOG_ELEMENT_CLASS = "strive-modal";
  * Receives this dialog instance as its only argument. 
  */
 export default class ModalDialog extends Application {
+  /**
+   * Styling class of the back drop element. 
+   * 
+   * @type {String}
+   * @readonly
+   * @static
+  */
+  static BACKDROP_ELEMENT_CLASS = "strive-modal-backdrop";
+
+  /**
+   * Styling class of the dialog element. 
+   * 
+   * @type {String}
+   * @readonly
+   * @static
+   */
+  static DIALOG_ELEMENT_CLASS = "strive-modal";
+
   /** @override */
   static get defaultOptions() {
     return new FoundryWrapper().mergeObject(super.defaultOptions, {
       popOut: true,
       resizable: false,
-      classes: [DIALOG_ELEMENT_CLASS, "width-min-lg", "height-min-sm"],
+      classes: [ModalDialog.DIALOG_ELEMENT_CLASS, "width-min-lg", "height-min-sm"],
       minimizable: false,
       height: "unset",
     });
@@ -192,7 +192,7 @@ export default class ModalDialog extends Application {
       this._resolve(this);
     }
   }
-  
+
   /** @override */
   getData(options) {
     return {
@@ -231,7 +231,7 @@ export default class ModalDialog extends Application {
     let element = $(`#${this._backdropElementId}`);
 
     if (element.length < 1) {
-      $('body').append(`<div id="${this._backdropElementId}" class="${BACKDROP_ELEMENT_CLASS}"></div>`);
+      $('body').append(`<div id="${this._backdropElementId}" class="${ModalDialog.BACKDROP_ELEMENT_CLASS}"></div>`);
       element = $(`#${this._backdropElementId}`);
     }
 

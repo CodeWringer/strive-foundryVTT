@@ -1,0 +1,83 @@
+{{!-- Parameters:
+viewModel: RollableSelectionModalDialogViewModel
+--}}
+{{#> dialogContent}}
+  <div class="card">
+    <h2 id="{{viewModel.id}}-header-roll-section" class="header{{#if viewModel.isRollSectionExpanded}} active{{/if}}">
+      {{#> button viewModel=viewModel.vmToggleRollSection leftAlign=true cssClass="flex-grow pad-l-md font-size-lg font-bold" }}
+      <div class="flex-grow"></div>
+      <div class="flex flex-center margin-l-md">
+        <i id="{{../viewModel.id}}-roll-section-expanded" class="ico ico-details-visible interactible dark{{#if ../viewModel.isRollSectionExpanded}}{{else}} hidden{{/if}}"></i>
+        <i id="{{../viewModel.id}}-roll-section-collapsed" class="ico ico-details-hidden interactible dark{{#if ../viewModel.isRollSectionExpanded}} hidden{{/if}}"></i>
+      </div>
+      {{/button}}
+    </h2>
+    <div id="{{viewModel.id}}-roll-section" class="pad-md{{#if viewModel.isRollSectionExpanded}}{{else}} hidden{{/if}} auto-margin-v-md">
+      {{#if viewModel.allowChoosingRollTable}}
+      {{> inputDropDown viewModel=viewModel.vmSelectRollTable1 }}
+      {{/if}}
+      <div class="flex flex-row flex-middle auto-margin-h-lg">
+        <img src="{{viewModel.selectedRollTable.img}}" height="32" width="32">
+        <h3 class="flex-grow">{{viewModel.selectedRollTable.name}}</h3>
+      </div>
+      <div class="grid grid-2col">
+        <span>{{localize "system.general.formula"}}</span>
+        <span>{{viewModel.selectedRollTable.formula}}</span>
+      </div>
+      <ol class="unstyled-list alternating-rows">
+        {{!-- Header --}}
+        <li class="grid grid-6col">
+          <span class="grid-span-3"></span>
+          <span class="flex flex-center">{{localize "system.rollTable.weight"}}</span>
+          <span class="flex flex-center grid-span-2">{{localize "system.rollTable.range"}}</span>
+        </li>
+        {{#each viewModel.options as |option index|}}
+        <li class="grid grid-6col">
+          {{!-- Identity --}}
+          <div class="grid-span-3 flex flex-row flex-middle auto-margin-h-md">
+            <img src="{{option.img}}" height="24" width="24">
+            <span>{{option.name}}</span>
+          </div>
+          {{!-- Range --}}
+          <span class="flex flex-center sheet-block">{{option.weight}}</span>
+          <span class="flex flex-center sheet-block">{{option.rangeFrom}}</span>
+          <span class="flex flex-center sheet-block">{{option.rangeTo}}</span>
+        </li>
+        {{/each}}
+      </ol>
+      <div class="flex flex-row flex-middle auto-margin-h-md">
+        {{> button viewModel=viewModel.vmRoll }}
+        {{!-- Result --}}
+        {{> buttonSendToChat viewModel=viewModel.vmSendToChat1 }}
+        <div id="{{viewModel.id}}-roll-result" class="flex flex-row flex-middle auto-margin-h-md hidden">
+          <img height="24" width="24">
+          <span class="font-size-lg font-bold">N/A</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <h2 id="{{viewModel.id}}-header-select-section" class="header{{#if viewModel.isSelectSectionExpanded}} active{{/if}}">
+      {{#> button viewModel=viewModel.vmToggleSelectSection leftAlign=true cssClass="flex-grow pad-l-md font-size-lg font-bold" }}
+      <div class="flex-grow"></div>
+      <div class="flex flex-center margin-l-md">
+        <i id="{{../viewModel.id}}-select-section-expanded" class="ico ico-details-visible interactible dark{{#if ../viewModel.isSelectSectionExpanded}}{{else}} hidden{{/if}}"></i>
+        <i id="{{../viewModel.id}}-select-section-collapsed" class="ico ico-details-hidden interactible dark{{#if ../viewModel.isSelectSectionExpanded}} hidden{{/if}}"></i>
+      </div>
+      {{/button}}
+    </h2>
+    <div id="{{viewModel.id}}-select-section" class="grid grid-2col pad-md{{#if viewModel.isSelectSectionExpanded}}{{else}} hidden{{/if}}">
+      {{#if viewModel.allowChoosingRollTable}}
+      {{> inputDropDown viewModel=viewModel.vmSelectRollTable2 cssClass="grid-span-2" }}
+      {{/if}}
+      {{#if viewModel.localizedSelectionType}}
+      <span>{{viewModel.localizedSelectionType}}</span>
+      {{/if}}
+      {{!-- Selection --}}
+      <div class="flex flex-row flex-middle">
+        {{> buttonSendToChat viewModel=viewModel.vmSendToChat2 }}
+        {{> inputDropDown viewModel=viewModel.vmSelect }}
+      </div>
+    </div>
+  </div>
+{{/dialogContent}}

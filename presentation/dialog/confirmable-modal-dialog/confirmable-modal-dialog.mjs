@@ -82,6 +82,7 @@ export default class ConfirmableModalDialog extends ModalDialog {
    * 
    * @param {Function | undefined} options.closeOnConfirm If set to true, the dialog will 
    * automatically close itself, if the user clicks the confirm button. Default `true`. 
+   * * default `true`
    */
   constructor(options = {}) {
     super(options);

@@ -1,6 +1,6 @@
 import ViewModel from "../../../../view-model/view-model.mjs"
 import ActorDriversViewModel from "./actor-drivers-viewmodel.mjs"
-import ActorFateViewModel from "../actor-fate-viewmodel.mjs"
+import ActorFateViewModel from "./actor-fate-viewmodel.mjs"
 import PersonalityTraitsViewModel from "./personality-traits/personality-traits-viewmodel.mjs"
 import { ACTOR_TYPES } from "../../../../../business/document/actor/actor-types.mjs"
 import { ExtenderUtil } from "../../../../../common/extender-util.mjs"

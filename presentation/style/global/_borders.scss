@@ -226,3 +226,19 @@ hr {
   margin: 4px auto;
   border: solid 1px $c-border-medium;
 }
+
+$card-border-radius: 0.6rem;
+
+.card {
+  border-radius: $card-border-radius;
+  border: 1px solid $c-border-beige-light;
+  &.dark {
+    border: 1px solid $c-border-medium;
+  }
+
+  .header {
+    border-top-left-radius: $card-border-radius;
+    border-top-right-radius: $card-border-radius;
+    background-color: rgba(0, 0, 0, 0.2);
+  }
+}

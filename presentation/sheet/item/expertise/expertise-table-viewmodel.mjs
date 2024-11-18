@@ -3,6 +3,7 @@ import { DAMAGE_TYPES } from "../../../../business/ruleset/damage-types.mjs"
 import { ATTACK_TYPES } from "../../../../business/ruleset/skill/attack-types.mjs"
 import { StringUtil } from "../../../../business/util/string-utility.mjs"
 import { ValidationUtil } from "../../../../business/util/validation-utility.mjs"
+import ExpertiseCreationStrategy from "../../../component/button-add/expertise-creation-strategy.mjs"
 import { SortingOption } from "../../../component/sort-controls/sort-controls-viewmodel.mjs"
 import DocumentListItemOrderDataSource from "../../../component/sortable-list/document-list-item-order-datasource.mjs"
 import SortableListViewModel, { SortableListAddItemParams, SortableListSortParams } from "../../../component/sortable-list/sortable-list-viewmodel.mjs"
@@ -83,9 +84,9 @@ export default class ExpertiseTableViewModel extends ViewModel {
       localizedTitle: game.i18n.localize("system.character.skill.expertise.plural"),
       headerLevel: 3,
       addItemParams: new SortableListAddItemParams({
-        target: this.document,
-        creationType: ITEM_TYPES.EXPERTISE,
-        withDialog: false,
+        creationStrategy: new ExpertiseCreationStrategy({
+          target: this.document,
+        }),
         localizedLabel: StringUtil.format(
           game.i18n.localize("system.general.add.addType"),
           game.i18n.localize("system.character.skill.expertise.singular"),
@@ -94,7 +95,6 @@ export default class ExpertiseTableViewModel extends ViewModel {
           game.i18n.localize("system.general.add.addType"),
           game.i18n.localize("system.character.skill.expertise.singular"),
         ),
-        localizedType: game.i18n.localize("system.character.skill.expertise.singular"),
       }),
       sortParams: new SortableListSortParams({
         options: [

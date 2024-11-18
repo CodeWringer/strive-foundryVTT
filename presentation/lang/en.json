@@ -77,7 +77,9 @@
       "input": {
         "validationFailed": "The following required fields failed validation. Ensure required fields have a valid value.",
         "query": "Provide Data",
-        "queryFor": "Provide Data for %s"
+        "queryFor": "Provide Data for %s",
+        "rollForIt": "Roll For It",
+        "selectSpecific": "Hand-pick It"
       },
       "messageVisibility": {
         "label": "Visibility",
@@ -627,6 +629,10 @@
       "doRoll": "Roll Dice",
       "hitModifier": "Hit Modifier",
       "query": "Prepare Dice Roll"
+    },
+    "rollTable": {
+      "weight": "Weight",
+      "range": "Range"
     },
     "rules": {
       "hintDeathsDoor": "Death's Door: You must succeed at least one toughness test out of a possible of three, at Ob equal to half your toughness, rounded up. One of these tests must be made at the end of every round. Mark your failures here. Fail all three, and perish."

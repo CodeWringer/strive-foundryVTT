@@ -455,7 +455,7 @@ export default class DocumentFetcher {
    * Can search in a variety of sources, such as compendium packs or the world collections. 
    * 
    * @param {Object} filter 
-   * @param {String | undefined} filter.documentType A document type. 
+   * @param {GENERAL_DOCUMENT_TYPES | String | undefined} filter.documentType A document type. 
    * * E. g. `"Item"` or `"Actor"`
    * * If undefined, `contentType` **must** be defined. 
    * @param {ITEM_TYPES | String | undefined} filter.contentType A content type. 
@@ -545,7 +545,7 @@ export default class DocumentFetcher {
 
       for (const index of pack.index) {
         // Skip, if the entry is of the wrong content type. 
-        if (filter.contentType !== undefined 
+        if (ValidationUtil.isDefined(filter.contentType) 
           && index.type.toLowerCase() != filter.contentType) {
           continue;
         }
