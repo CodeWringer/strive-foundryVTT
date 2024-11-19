@@ -1,3 +1,5 @@
+import { ValidationUtil } from "./validation-utility.mjs";
+
 /**
  * @constant
  */
@@ -180,6 +182,22 @@ export const PropertyUtil = {
 	
 		if (currentObject[lastElement] === undefined) {
 			currentObject[lastElement] = value;
+		}
+	},
+
+	/**
+	 * If the given reference is an object, returns it as-is. Else returns 
+	 * a new blank object. 
+	 * 
+	 * @param {Any} candidate
+	 *  
+	 * @returns {Object}
+	 */
+	guaranteeObject(candidate) {
+		if (ValidationUtil.isObject(candidate)) {
+			return candidate;
+		} else {
+			return {};
 		}
 	},
 }

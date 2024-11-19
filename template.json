@@ -19,8 +19,18 @@
         "properties": []
       },
       "character": {
-        "allowAutomaticActionPointRefill": true,
-        "allowGritPoints": false,
+        "actionPoints": {
+          "current": 0,
+          "maximum": 5,
+          "refill": {
+            "amount": 3,
+            "enable": true
+          }
+        },
+        "gritPoints": {
+          "current": 0,
+          "enable": false
+        },
         "initiative": {
           "perTurn": 1
         },
@@ -157,6 +167,9 @@
         "miFP": 0,
         "maFP": 0,
         "AFP": 0
+      },
+      "gritPoints": {
+        "enable": true
       }
     },
     "npc": {

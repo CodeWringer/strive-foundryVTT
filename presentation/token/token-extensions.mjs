@@ -93,7 +93,7 @@ export default class TokenExtensions {
     
     if (token.inCombat === true) {
       if (ValidationUtil.isDefined(token.actionPoints) === true) {
-        const actionPoints = token.actor.getTransientObject().actionPoints;
+        const actionPoints = token.actor.getTransientObject().actionPoints.current;
         TokenExtensions._updateActionPoints(token, actionPoints);
       } else {
         TokenExtensions._removeActionPointControls(token);
@@ -136,17 +136,22 @@ export default class TokenExtensions {
     const transientActor = token.actor.getTransientObject();
 
     const margin = 5;
+    const caretSizeFactor = 0.5;
     let x = 0;
 
     // Container
     token.actionPoints = new PIXI.Container();
 
     // Action points sprite
-    const sprite = new PIXI.Sprite(
-      getPixiTexture(TEXTURES.ACTION_POINT_EMPTY)
-    );
-    if (transientActor.actionPoints > 0) {
-      sprite.texture = getPixiTexture(TEXTURES.ACTION_POINT_FULL);
+    let actionPointSprite; 
+    if (transientActor.actionPoints.current > 0) {
+      actionPointSprite = new PIXI.Sprite(
+        getPixiTexture(TEXTURES.ACTION_POINT_EMPTY)
+      );
+    } else {
+      actionPointSprite = new PIXI.Sprite(
+        getPixiTexture(TEXTURES.ACTION_POINT_FULL)
+      );
     }
 
     // Caret left
@@ -156,31 +161,31 @@ export default class TokenExtensions {
         onClick: () => {
           if (!token.isOwner && !game.user.isGM) return;
           
-          const newActionPoints = Math.max(0, transientActor.actionPoints - 1);
-          transientActor.actionPoints = newActionPoints;
+          const newActionPoints = Math.max(0, transientActor.actionPoints.current - 1);
+          transientActor.actionPoints.current = newActionPoints;
           TokenExtensions._updateActionPoints(token, newActionPoints);
         },
       });
-      caretLeft.width = caretLeft.width / 2;
-      caretLeft.height = caretLeft.height / 2;
-      caretLeft.position.set(x, (sprite.height / 2) - (caretLeft.height / 2));
+      caretLeft.width = caretLeft.width * caretSizeFactor;
+      caretLeft.height = caretLeft.height * caretSizeFactor;
+      caretLeft.position.set(x, (actionPointSprite.height / 2) - (caretLeft.height / 2));
       token.actionPoints.caretLeft = caretLeft;
       token.actionPoints.addChild(caretLeft.wrapped);
       x = caretLeft.x + caretLeft.width + margin;
     }
     
     // Action points sprite arrangement
-    sprite.position.set(x, 0);
-    token.actionPoints.sprite = sprite;
-    token.actionPoints.addChild(sprite);
-    x = sprite.x + sprite.width;
+    actionPointSprite.position.set(x, 0);
+    token.actionPoints.sprite = actionPointSprite;
+    token.actionPoints.addChild(actionPointSprite);
+    x = actionPointSprite.x + actionPointSprite.width;
 
     // Action points text
     const style = token._getTextStyle();
-    const text = new PreciseText(transientActor.actionPoints, style);
+    const text = new PreciseText(transientActor.actionPoints.current, style);
     text.anchor.set(0.5, 0.5);
     text.scale.set(1.2, 1.2);
-    text.position.set(sprite.x + sprite.width / 2, sprite.y + sprite.height / 2);
+    text.position.set(actionPointSprite.x + actionPointSprite.width / 2, actionPointSprite.y + actionPointSprite.height / 2);
     token.actionPoints.text = text;
     token.actionPoints.addChild(text);
 
@@ -191,14 +196,14 @@ export default class TokenExtensions {
         onClick: () => {
           if (!token.isOwner && !game.user.isGM) return;
           
-          const newActionPoints = Math.min(transientActor.maxActionPoints, transientActor.actionPoints + 1);
-          transientActor.actionPoints = newActionPoints;
+          const newActionPoints = Math.min(transientActor.actionPoints.maximum, transientActor.actionPoints.current + 1);
+          transientActor.actionPoints.current = newActionPoints;
           TokenExtensions._updateActionPoints(token, newActionPoints);
         },
       });
-      caretRight.width = caretRight.width / 2;
-      caretRight.height = caretRight.height / 2;
-      caretRight.position.set(x + margin, (sprite.height / 2) - (caretRight.height / 2));
+      caretRight.width = caretRight.width * caretSizeFactor;
+      caretRight.height = caretRight.height * caretSizeFactor;
+      caretRight.position.set(x + margin, (actionPointSprite.height / 2) - (caretRight.height / 2));
       token.actionPoints.caretRight = caretRight;
       token.actionPoints.addChild(caretRight.wrapped);
     }

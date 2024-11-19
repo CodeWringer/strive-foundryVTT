@@ -23,9 +23,9 @@ export default class GameSystemCombat extends Combat {
     if (refillApGlobalSetting === true) {
       const currentActor = this.turns[this.turn].actor.getTransientObject();
 
-      if (currentActor.allowAutomaticActionPointRefill === true) {
-        const newApCount = Math.min(currentActor.maxActionPoints, currentActor.actionPoints + currentActor.actionPointRefill);
-        currentActor.actionPoints = newApCount;
+      if (currentActor.actionPoints.refill.enable === true) {
+        const newApCount = Math.min(currentActor.actionPoints.maximum, currentActor.actionPoints.current + currentActor.actionPoints.refill.amount);
+        currentActor.actionPoints.current = newApCount;
       }
     }
   }

@@ -21,10 +21,10 @@ export default class CombatTrackerActionPointsViewModel extends ViewModel {
     this.document = args.document;
     this.actionPoints = [];
     const transientActor = this.document.getTransientObject();
-    for (let i = 0; i < transientActor.maxActionPoints; i++) {
+    for (let i = 0; i < transientActor.actionPoints.maximum; i++) {
       this.actionPoints.push({
         id: `${this.id}-${i}`,
-        full: i < transientActor.actionPoints,
+        full: i < transientActor.actionPoints.current,
         value: i + 1,
       });
     }
@@ -40,12 +40,12 @@ export default class CombatTrackerActionPointsViewModel extends ViewModel {
       html.find(`#${this.id}-empty-ap`).click(async (event) => {
         event.preventDefault();
 
-        transientActor.actionPoints = 0;
+        transientActor.actionPoints.current = 0;
       });
 
-      for (let i = 0; i < transientActor.maxActionPoints; i++) {
+      for (let i = 0; i < transientActor.actionPoints.maximum; i++) {
         html.find(`#${this.id}-${i}`).click(async (event) => {
-          transientActor.actionPoints = i + 1;
+          transientActor.actionPoints.current = i + 1;
         });
       }
     }

@@ -154,7 +154,7 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
               specificArgs: {
                 min: 0,
               },
-              defaultValue: this.document.maxActionPoints,
+              defaultValue: this.document.actionPoints.maximum,
             }),
             new DynamicInputDefinition({
               type: DYNAMIC_INPUT_TYPES.NUMBER_SPINNER,
@@ -163,13 +163,13 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
               specificArgs: {
                 min: 0,
               },
-              defaultValue: this.document.actionPointRefill,
+              defaultValue: this.document.actionPoints.refill.amount,
             }),
             new DynamicInputDefinition({
               type: DYNAMIC_INPUT_TYPES.TOGGLE,
               name: inputAllowRefillActionPoints,
               localizedLabel: game.i18n.localize("system.actionPoint.allowRefill"),
-              defaultValue: this.document.allowAutomaticActionPointRefill,
+              defaultValue: this.document.actionPoints.refill.enable,
             }),
             new DynamicInputDefinition({
               type: DYNAMIC_INPUT_TYPES.NUMBER_SPINNER,
@@ -204,7 +204,7 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
                 type: DYNAMIC_INPUT_TYPES.TOGGLE,
                 name: inputEnableGritPoints,
                 localizedLabel: game.i18n.localize("system.character.gritPoint.toggleLabel"),
-                defaultValue: this.document.allowGritPoints,
+                defaultValue: this.document.gritPoints.enable,
               })
             );
           }
@@ -215,16 +215,16 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
   
           if (dialog.confirmed !== true) return;
   
-          this.document.maxActionPoints = parseInt(dialog[inputMaxActionPoints]);
-          this.document.actionPointRefill = parseInt(dialog[inputRefillActionPoints]);
-          this.document.allowAutomaticActionPointRefill = dialog[inputAllowRefillActionPoints] == true;
+          this.document.actionPoints.maximum = parseInt(dialog[inputMaxActionPoints]);
+          this.document.actionPoints.refill.amount = parseInt(dialog[inputRefillActionPoints]);
+          this.document.actionPoints.refill.enable = dialog[inputAllowRefillActionPoints] == true;
 
           this.document.initiative.perTurn = Math.max(1, parseInt(dialog[inputInitiatives]));
 
           if (this.isNPC) {
             this.document.personalityVisible = dialog[inputEnablePersonality] == true;
             this.document.progressionVisible = dialog[inputEnableProgression] == true;
-            this.document.allowGritPoints = dialog[inputEnableGritPoints] == true;
+            this.document.gritPoints.enable = dialog[inputEnableGritPoints] == true;
           }
         },
       });

@@ -38,8 +38,8 @@ export default class CustomCombatTracker extends CombatTracker {
         continue;
       } else if (document.type === ACTOR_TYPES.PLAIN) {
         continue;
-      }
-
+      } 
+      
       // Add action points view model. 
       turn.renderActionPoints = document.type !== ACTOR_TYPES.PLAIN;
       turn.actionPointsTemplate = game.strive.const.TEMPLATES.COMBAT_TRACKER_ACTION_POINTS;
@@ -53,8 +53,8 @@ export default class CustomCombatTracker extends CombatTracker {
       // Add grit points view model. 
       const transientActor = document.getTransientObject();
       turn.gritPointsTemplate = game.strive.const.TEMPLATES.ACTOR_GRIT_POINTS;
-      turn.renderGritPoints = transientActor.type == ACTOR_TYPES.PC 
-      || (transientActor.type == ACTOR_TYPES.NPC && transientActor.allowGritPoints === true);
+      turn.renderGritPoints = transientActor.type === ACTOR_TYPES.PC 
+      || (transientActor.type === ACTOR_TYPES.NPC && transientActor.gritPoints.enable === true);
 
       turn.gritPointsViewModel = new GritPointsViewModel({
         id: `${turn.id}-gplist`,
