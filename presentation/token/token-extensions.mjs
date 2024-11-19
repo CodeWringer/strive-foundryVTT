@@ -93,7 +93,7 @@ export default class TokenExtensions {
     
     if (token.inCombat === true) {
       if (ValidationUtil.isDefined(token.actionPoints) === true) {
-        const actionPoints = token.actor.getTransientObject().actionPoints;
+        const actionPoints = token.actor.getTransientObject().actionPoints.current;
         TokenExtensions._updateActionPoints(token, actionPoints);
       } else {
         TokenExtensions._removeActionPointControls(token);
@@ -145,7 +145,7 @@ export default class TokenExtensions {
     const sprite = new PIXI.Sprite(
       getPixiTexture(TEXTURES.ACTION_POINT_EMPTY)
     );
-    if (transientActor.actionPoints > 0) {
+    if (transientActor.actionPoints.current > 0) {
       sprite.texture = getPixiTexture(TEXTURES.ACTION_POINT_FULL);
     }
 
@@ -156,8 +156,8 @@ export default class TokenExtensions {
         onClick: () => {
           if (!token.isOwner && !game.user.isGM) return;
           
-          const newActionPoints = Math.max(0, transientActor.actionPoints - 1);
-          transientActor.actionPoints = newActionPoints;
+          const newActionPoints = Math.max(0, transientActor.actionPoints.current - 1);
+          transientActor.actionPoints.current = newActionPoints;
           TokenExtensions._updateActionPoints(token, newActionPoints);
         },
       });
@@ -191,8 +191,8 @@ export default class TokenExtensions {
         onClick: () => {
           if (!token.isOwner && !game.user.isGM) return;
           
-          const newActionPoints = Math.min(transientActor.maxActionPoints, transientActor.actionPoints + 1);
-          transientActor.actionPoints = newActionPoints;
+          const newActionPoints = Math.min(transientActor.actionPoints.maximum, transientActor.actionPoints.current + 1);
+          transientActor.actionPoints.current = newActionPoints;
           TokenExtensions._updateActionPoints(token, newActionPoints);
         },
       });

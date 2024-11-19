@@ -40,7 +40,7 @@ export default class GritPointsViewModel extends ViewModel {
    * @readonly
    */
   get shouldBeVisible() {
-    if (this.document.type === ACTOR_TYPES.NPC && this.document.allowGritPoints !== true) {
+    if (this.document.type === ACTOR_TYPES.NPC && this.document.gritPoints.enable !== true) {
       return false;
     } else {
       return true;
@@ -72,7 +72,7 @@ export default class GritPointsViewModel extends ViewModel {
     this.document = args.document;
     this.isInCombatTracker = args.isInCombatTracker;
 
-    const gritPoints = this.document.gritPoints;
+    const gritPoints = this.document.gritPoints.current;
     const gritPointsToRender = Math.max(gritPoints, this.gritPointLimit);
 
     this.gritPoints = [];
@@ -95,14 +95,14 @@ export default class GritPointsViewModel extends ViewModel {
     html.find(`#${this.id}-grit-point-0`).click(async (event) => {
       event.preventDefault();
 
-      this.document.gritPoints = 0;
+      this.document.gritPoints.current = 0;
     });
 
     // Set up set to value of clicked element. 
     for (let i = 0; i < this.gritPoints.length; i++) {
       const gritPoint = this.gritPoints[i];
       html.find(`#${gritPoint.id}`).click(async (event) => {
-        this.document.gritPoints = gritPoint.value;
+        this.document.gritPoints.current = gritPoint.value;
       });
     }
   }

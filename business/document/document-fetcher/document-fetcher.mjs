@@ -252,7 +252,7 @@ export default class DocumentFetcher {
    * @param {Object} filter 
    * @param {String | undefined} filter.id The id of the documents to fetch. 
    * @param {String | undefined} filter.name The name of the documents to fetch. 
-   * @param {String | undefined} filter.documentType A document type. 
+   * @param {GENERAL_DOCUMENT_TYPES | String | undefined} filter.documentType A document type. 
    * * E. g. `"Item"` or `"Actor"`
    * @param {ITEM_TYPES | String | undefined} filter.contentType A content type. 
    * * E. g. `"skill"` or `"npc"`
