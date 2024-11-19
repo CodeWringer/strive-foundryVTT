@@ -314,7 +314,8 @@
         },
         "initiative": {
           "initiative": "Initiative",
-          "baseInitiative": "Base Initiative"
+          "baseInitiative": "Base Initiative",
+          "numberPerRound": "Initiatives per round"
         }
       },
       "biography": {
@@ -705,6 +706,10 @@
       "autoActionPointRefill": {
         "label": "Automatic AP Refilling",
         "hint": "If checked, action points will refill for a character at the start of every combat turn."
+      },
+      "autoRemoveSameCombatants": {
+        "label": "Synchronized Combatant Removal",
+        "hint": "If checked, when removing a combatant that belongs to a character with multiple combat initiatives, will also remove the other entries of that character from the combat tracker."
       },
       "fancyFont": {
         "label": "Fancy Font",

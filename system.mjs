@@ -49,7 +49,8 @@ import "./presentation/dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
 // Document classes
 import { GameSystemActor } from "./business/document/actor/actor.mjs";
 import { GameSystemItem } from "./business/document/item/item.mjs";
-import { GameSystemCombat } from "./presentation/combat/game-system-combat.mjs";
+import GameSystemCombat from "./presentation/combat/game-system-combat.mjs";
+import GameSystemCombatant from "./presentation/combat/game-system-combatant.mjs";
 import TransientBaseCharacterActor from "./business/document/actor/transient-base-character-actor.mjs";
 import TransientBaseActor from "./business/document/actor/transient-base-actor.mjs";
 import TransientNpc from "./business/document/actor/transient-npc.mjs";
@@ -340,6 +341,7 @@ Hooks.once('init', function() {
   CONFIG.Actor.documentClass = GameSystemActor;
   CONFIG.Item.documentClass = GameSystemItem;
   CONFIG.Combat.documentClass = GameSystemCombat;
+  CONFIG.Combatant.documentClass = GameSystemCombatant;
 
   // Override combat tracker. 
   CONFIG.ui.combat = CustomCombatTracker;
