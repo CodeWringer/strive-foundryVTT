@@ -21,6 +21,7 @@ export default class Migrator_1_7_2__1_7_3 extends AbstractMigrator {
       searchEmbedded: false,
     });
 
+    // Also fetch actors from tokens, as there might be synthetic actors. 
     for (const sceneId of game.scenes.keys()) {
       const scene = game.scenes.get(sceneId);
 
@@ -33,7 +34,7 @@ export default class Migrator_1_7_2__1_7_3 extends AbstractMigrator {
 
     for await (const actor of actors) {
       let actionPoints = actor.system.actionPoints;
-      if (!ValidationUtil.isNumber(actionPoints)) {
+      if (!ValidationUtil.isObject(actionPoints)) {
         actionPoints = actor.system.actionPoints.current ?? 0;
       }
       
@@ -42,7 +43,7 @@ export default class Migrator_1_7_2__1_7_3 extends AbstractMigrator {
       const allowAutomaticActionPointRefill = (actor.system.allowAutomaticActionPointRefill ?? PropertyUtil.guaranteeObject(PropertyUtil.guaranteeObject(actor.system.actionPoints).refill).enable) ?? true;
       
       let gritPoints = actor.system.gritPoints;
-      if (!ValidationUtil.isNumber(gritPoints)) {
+      if (!ValidationUtil.isObject(gritPoints)) {
         gritPoints = actor.system.gritPoints.current ?? 0;
       }
       const allowGritPoints = (actor.system.allowGritPoints ?? PropertyUtil.guaranteeObject(actor.system.gritPoints).enable) ?? false;
