@@ -5,8 +5,10 @@ import { ValidationUtil } from "../../business/util/validation-utility.mjs";
 
 /**
  * This class extends FoundryVTT's `Combat` document type. 
+ * 
+ * @see https://foundryvtt.com/api/classes/client.Combat.html 
  */
-export class GameSystemCombat extends Combat {
+export default class GameSystemCombat extends Combat {
   /**
    * After the usual turn logic has been completed, handles action point refilling. 
    * 
