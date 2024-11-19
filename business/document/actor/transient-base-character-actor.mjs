@@ -8,6 +8,7 @@ import { HEALTH_STATES } from '../../ruleset/health/health-states.mjs';
 import Ruleset from '../../ruleset/ruleset.mjs';
 import { SKILL_TAGS } from '../../tags/system-tags.mjs';
 import LoadHealthStatesSettingUseCase from '../../use-case/load-health-states-setting-use-case.mjs';
+import { PropertyUtil } from '../../util/property-utility.mjs';
 import { ValidationUtil } from '../../util/validation-utility.mjs';
 import { ITEM_TYPES } from '../item/item-types.mjs';
 import TransientBaseActor from './transient-base-actor.mjs';
@@ -348,10 +349,10 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
   get actionPoints() {
     const thiz = this;
     return {
-      get current() { return (thiz.document.system.actionPoints ?? {}).current ?? 3; },
+      get current() { return PropertyUtil.guaranteeObject(thiz.document.system.actionPoints).current ?? 3; },
       set current(value) { thiz.updateByPath("system.actionPoints.current", value); },
       
-      get maximum() { return (thiz.document.system.actionPoints ?? {}).maximum ?? 5; },
+      get maximum() { return PropertyUtil.guaranteeObject(thiz.document.system.actionPoints).maximum ?? 5; },
       set maximum(value) {
         thiz.update({
           system: {
@@ -365,10 +366,10 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
 
       get refill() {
         return {
-          get amount() { return ((thiz.document.system.actionPoints ?? {}).refill ?? {}).amount ?? 3; },
+          get amount() { return PropertyUtil.guaranteeObject(PropertyUtil.guaranteeObject(thiz.document.system.actionPoints).refill).amount ?? 3; },
           set amount(value) { thiz.updateByPath("system.actionPoints.refill.amount", value); },
 
-          get enable() { return ((thiz.document.system.actionPoints ?? {}).refill ?? {}).enable ?? true; },
+          get enable() { return PropertyUtil.guaranteeObject(PropertyUtil.guaranteeObject(thiz.document.system.actionPoints).refill).enable ?? true; },
           set enable(value) { thiz.updateByPath("system.actionPoints.refill.enable", value); },
         };
       },
@@ -385,13 +386,13 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
       /**
        * @type {Number}
        */
-      get gritPoints() { return thiz.document.system.gritPoints.current ?? 0; },
+      get gritPoints() { return PropertyUtil.guaranteeObject(thiz.document.system.gritPoints).current ?? 0; },
       set gritPoints(value) { thiz.updateByPath("system.gritPoints.current", value); },
       
       /**
        * @type {Boolean}
        */
-      get allowGritPoints() { return thiz.document.system.gritPoints.enable ?? false; },
+      get allowGritPoints() { return PropertyUtil.guaranteeObject(thiz.document.system.gritPoints).enable ?? false; },
       set allowGritPoints(value) { thiz.updateByPath("system.gritPoints.enable", value); },
     };
   }
@@ -406,7 +407,7 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
       /**
        * @type {Number}
        */
-      get perTurn() { return thiz.document.system.initiative.perTurn ?? 1; },
+      get perTurn() { return PropertyUtil.guaranteeObject(thiz.document.system.initiative).perTurn ?? 1; },
       set perTurn(value) { thiz.updateByPath("system.initiative.perTurn", value); },
     };
   }
