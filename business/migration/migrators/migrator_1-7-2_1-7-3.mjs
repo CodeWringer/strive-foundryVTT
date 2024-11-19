@@ -33,19 +33,24 @@ export default class Migrator_1_7_2__1_7_3 extends AbstractMigrator {
     }
 
     for await (const actor of actors) {
-      let actionPoints = actor.system.actionPoints;
-      if (!ValidationUtil.isObject(actionPoints)) {
-        actionPoints = actor.system.actionPoints.current ?? 0;
+      let actionPoints = 0;
+      if (ValidationUtil.isObject(actor.system.actionPoints) && ValidationUtil.isNumber(actor.system.actionPoints.current)) {
+        actionPoints = actor.system.actionPoints.current;
+      } else if (ValidationUtil.isNumber(actor.system.actionPoints)) {
+        actionPoints = parseInt(actor.system.actionPoints);
       }
       
       const maxActionPoints = (actor.system.maxActionPoints ?? PropertyUtil.guaranteeObject(actor.system.actionPoints).maximum) ?? 5;
       const actionPointRefill = (actor.system.actionPointRefill ?? PropertyUtil.guaranteeObject(PropertyUtil.guaranteeObject(actor.system.actionPoints).refill).amount) ?? 3;
       const allowAutomaticActionPointRefill = (actor.system.allowAutomaticActionPointRefill ?? PropertyUtil.guaranteeObject(PropertyUtil.guaranteeObject(actor.system.actionPoints).refill).enable) ?? true;
       
-      let gritPoints = actor.system.gritPoints;
-      if (!ValidationUtil.isObject(gritPoints)) {
-        gritPoints = actor.system.gritPoints.current ?? 0;
+      let gritPoints = 0;
+      if (ValidationUtil.isObject(actor.system.gritPoints) && ValidationUtil.isNumber(actor.system.gritPoints.current)) {
+        gritPoints = actor.system.gritPoints.current;
+      } else if (ValidationUtil.isNumber(actor.system.gritPoints)) {
+        gritPoints = parseInt(actor.system.gritPoints);
       }
+
       const allowGritPoints = (actor.system.allowGritPoints ?? PropertyUtil.guaranteeObject(actor.system.gritPoints).enable) ?? false;
 
       await actor.update({
