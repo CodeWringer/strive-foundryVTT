@@ -386,14 +386,14 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
       /**
        * @type {Number}
        */
-      get gritPoints() { return PropertyUtil.guaranteeObject(thiz.document.system.gritPoints).current ?? 0; },
-      set gritPoints(value) { thiz.updateByPath("system.gritPoints.current", value); },
+      get current() { return PropertyUtil.guaranteeObject(thiz.document.system.gritPoints).current ?? 0; },
+      set current(value) { thiz.updateByPath("system.gritPoints.current", value); },
       
       /**
        * @type {Boolean}
        */
-      get allowGritPoints() { return PropertyUtil.guaranteeObject(thiz.document.system.gritPoints).enable ?? false; },
-      set allowGritPoints(value) { thiz.updateByPath("system.gritPoints.enable", value); },
+      get enable() { return PropertyUtil.guaranteeObject(thiz.document.system.gritPoints).enable ?? false; },
+      set enable(value) { thiz.updateByPath("system.gritPoints.enable", value); },
     };
   }
 
