@@ -141,6 +141,7 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
           const inputMaxActionPoints = "inputMaxActionPoints";
           const inputRefillActionPoints = "inputRefillActionPoints";
           const inputAllowRefillActionPoints = "inputAllowRefillActionPoints";
+          const inputInitiatives = "inputInitiatives";
           const inputEnablePersonality = "inputEnablePersonality";
           const inputEnableProgression = "inputEnableProgression";
           const inputEnableGritPoints = "inputEnableGritPoints";
@@ -169,6 +170,15 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
               name: inputAllowRefillActionPoints,
               localizedLabel: game.i18n.localize("system.actionPoint.allowRefill"),
               defaultValue: this.document.allowAutomaticActionPointRefill,
+            }),
+            new DynamicInputDefinition({
+              type: DYNAMIC_INPUT_TYPES.NUMBER_SPINNER,
+              name: inputInitiatives,
+              localizedLabel: game.i18n.localize("system.character.attribute.initiative.numberPerRound"),
+              specificArgs: {
+                min: 1,
+              },
+              defaultValue: this.document.initiative.perTurn,
             }),
           ];
 
@@ -208,6 +218,8 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
           this.document.maxActionPoints = parseInt(dialog[inputMaxActionPoints]);
           this.document.actionPointRefill = parseInt(dialog[inputRefillActionPoints]);
           this.document.allowAutomaticActionPointRefill = dialog[inputAllowRefillActionPoints] == true;
+
+          this.document.initiative.perTurn = Math.max(1, parseInt(dialog[inputInitiatives]));
 
           if (this.isNPC) {
             this.document.personalityVisible = dialog[inputEnablePersonality] == true;

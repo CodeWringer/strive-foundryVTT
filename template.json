@@ -21,6 +21,9 @@
       "character": {
         "allowAutomaticActionPointRefill": true,
         "allowGritPoints": false,
+        "initiative": {
+          "perTurn": 1
+        },
         "person": {
           "age": 0,
           "species": "",

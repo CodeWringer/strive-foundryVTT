@@ -112,6 +112,9 @@ import TransientBaseActor from './transient-base-actor.mjs';
  * @property {Number} actionPoints The current number of action points of this character. 
  * @property {Number} gritPoints The current number of grit points of this character. 
  * @property {Boolean} allowGritPoints If `true`, grit points are enabled character. 
+ * 
+ * @property {Object} initiative 
+ * @property {Number} initiative.perTurn 
  */
 export default class TransientBaseCharacterActor extends TransientBaseActor {
   /** @override */
@@ -362,6 +365,21 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
    */
   get allowGritPoints() { return this.document.system.allowGritPoints ?? false; }
   set allowGritPoints(value) { this.updateByPath("system.allowGritPoints", value); }
+
+  /**
+   * @type {Object}
+   * @readonly
+   */
+  get initiative() {
+    const thiz = this;
+    return {
+      /**
+       * @type {Number}
+       */
+      get perTurn() { return thiz.document.system.initiative.perTurn ?? 1; },
+      set perTurn(value) { thiz.updateByPath("system.initiative.perTurn", value); },
+    };
+  }
 
   /**
    * @type {Number}

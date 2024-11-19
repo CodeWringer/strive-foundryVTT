@@ -314,7 +314,8 @@
         },
         "initiative": {
           "initiative": "Initiative",
-          "baseInitiative": "Base Initiative"
+          "baseInitiative": "Base Initiative",
+          "numberPerRound": "Initiatives per round"
         }
       },
       "biography": {
