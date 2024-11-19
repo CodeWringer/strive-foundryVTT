@@ -1,5 +1,4 @@
 import DocumentFetcher from "../../document/document-fetcher/document-fetcher.mjs";
-import DocumentUpdater from "../../document/document-updater/document-updater.mjs";
 import { GENERAL_DOCUMENT_TYPES } from "../../document/general-document-types.mjs";
 import { PropertyUtil } from "../../util/property-utility.mjs";
 import { ValidationUtil } from "../../util/validation-utility.mjs";
