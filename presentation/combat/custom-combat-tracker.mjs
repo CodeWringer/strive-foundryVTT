@@ -33,13 +33,13 @@ export default class CustomCombatTracker extends CombatTracker {
       const combatant = this._getCombatant(turn.id);
       const document = combatant.actor;
 
-      if (document.type === ACTOR_TYPES.PLAIN) {
-        continue;
-      } else if (ValidationUtil.isDefined(document) !== true) {
+      if (ValidationUtil.isDefined(document) !== true) {
         game.strive.logger.logWarn("Failed to get combatant actor");
         continue;
-      }
-
+      } else if (document.type === ACTOR_TYPES.PLAIN) {
+        continue;
+      } 
+      
       // Add action points view model. 
       turn.renderActionPoints = document.type !== ACTOR_TYPES.PLAIN;
       turn.actionPointsTemplate = game.strive.const.TEMPLATES.COMBAT_TRACKER_ACTION_POINTS;
