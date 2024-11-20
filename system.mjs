@@ -333,8 +333,8 @@ Hooks.once('init', function() {
 
   // Set initiative formula on global CONFIG variable provided by FoundryVTT.
   CONFIG.Combat.initiative = {
-    formula: "1D10 + @baseInitiative",
-    decimals: 2
+    formula: "1D20 + @baseInitiative",
+    decimals: 0
   };
 
   // Override document classes. 
