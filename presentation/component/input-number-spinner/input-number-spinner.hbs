@@ -15,13 +15,12 @@ readOnlyCssClass: {String | undefined}
     {{#if viewModel.hasMin}}min="{{viewModel.min}}"{{/if}}
     {{#if viewModel.hasMax}}max="{{viewModel.max}}"{{/if}}
     step="{{viewModel.step}}"
-    title="{{viewModel.localizedToolTip}}"
   />
   <div class="spinner-button-container">
-    <a class="button-spinner button-spinner-up" title="{{localize system.labels.increment}}">
+    <a class="button-spinner button-spinner-up">
       <i class="fas fa-caret-up"></i>
     </a>
-    <a class="button-spinner button-spinner-down" title="{{localize system.labels.decrement}}">
+    <a class="button-spinner button-spinner-down">
       <i class="fas fa-caret-down"></i>
     </a>
   </div>
@@ -29,7 +28,7 @@ readOnlyCssClass: {String | undefined}
 {{else}}
   {{!-- Display read-only value --}}
   <div 
-    class="custom-system-read-only pad-sm fill component-input-number-spinner {{readOnlyCssClass}}" 
+    class="custom-system-read-only pad-sm border-sm fill component-input-number-spinner {{readOnlyCssClass}}" 
     name="{{viewModel.id}}"
     id="{{viewModel.id}}"
   >

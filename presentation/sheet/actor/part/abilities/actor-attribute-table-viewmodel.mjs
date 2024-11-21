@@ -107,8 +107,14 @@ export default class AttributeTableViewModel extends ViewModel {
         attributeName: attribute.name,
         localizableName: attribute.localizableName,
         localizableAbbreviation: attribute.localizableAbbreviation,
-        requiredProgress: attribute.advancementRequirements,
         modifiedLevel: attribute.modifiedLevel,
+        vmRequiredProgress: new InputNumberSpinnerViewModel({
+          parent: this,
+          id: `vmRequiredProgress-${attribute.name}`,
+          value: attribute.advancementRequirements,
+          isEditable: false,
+          localizedToolTip: `DEBUG`,
+        }),
         vmBtnRoll: new ButtonRollViewModel({
           parent: this,
           id: `vmBtnRoll-${attribute.name}`,

@@ -3,7 +3,7 @@ cssClass: undefined | String
 admonish: Boolean | undefined
 value: String | Number
 --}}
-<div class="custom-system-read-only pad-sm fill flex flex-row auto-margin-h{{#if admonish}} hint-card error{{/if}}{{#if cssClass}} {{cssClass}}{{/if}}">
+<div class="custom-system-read-only pad-sm border-sm fill flex flex-row auto-margin-h{{#if admonish}} hint-card error{{/if}}{{#if cssClass}} {{cssClass}}{{/if}}">
   {{#if admonish}}
   <div class="flex flex-center">
     <i class="fas fa-exclamation-triangle"></i>

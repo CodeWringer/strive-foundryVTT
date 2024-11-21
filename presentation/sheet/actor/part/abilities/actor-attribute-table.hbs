@@ -63,7 +63,7 @@ cssClass: {undefined | String}
       </td>
       {{#if ../viewModel.showAdvancementProgression}}
         <td class="attribute-column-requirements">
-          {{#> readOnlyValue}}{{vm.requiredProgress}}{{/readOnlyValue}}
+          {{> inputNumberSpinner viewModel=vm.vmRequiredProgress }}
         </td>
         <td class="attribute-column-progress">
           {{> inputNumberSpinner viewModel=vm.vmNsProgress }}
