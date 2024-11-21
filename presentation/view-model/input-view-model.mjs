@@ -1,4 +1,5 @@
 import { ValidationUtil } from "../../business/util/validation-utility.mjs";
+import Tooltip from "../component/tooltip/tooltip.mjs";
 import { SheetUtil } from "../sheet/sheet-utility.mjs";
 import ViewModel from "./view-model.mjs";
 
@@ -40,6 +41,15 @@ export const SELECTOR_READ = "custom-system-read-only";
  * * `newValue: {Any}`
  */
 export default class InputViewModel extends ViewModel {
+
+  /**
+   * @type {String}
+   * @static
+   * @readonly
+   * @private
+   */
+  static CSS_CLASS_HIGHLIGHT = "highlight";
+
   /**
    * Returns the current value. 
    * 
@@ -92,11 +102,28 @@ export default class InputViewModel extends ViewModel {
     this.iconHtml = args.iconHtml;
     this._value = args.value;
     this.onChange = args.onChange ?? (() => {});
+
+    if (ValidationUtil.isDefined(this.localizedToolTip)) {
+      this._toolTip = new Tooltip({
+        content: this.localizedToolTip,
+        enableArrow: true,
+        onShown: () => {
+          this.element.addClass(InputViewModel.CSS_CLASS_HIGHLIGHT);
+        },
+        onHidden: () => {
+          this.element.removeClass(InputViewModel.CSS_CLASS_HIGHLIGHT);
+        },
+      });
+    }
   }
 
   /** @override */
   async activateListeners(html) {
     await super.activateListeners(html);
+
+    if (ValidationUtil.isDefined(this._toolTip)) {
+      this._toolTip.activateListeners(this.element);
+    }
 
     if (this.isEditable !== true) return;
 

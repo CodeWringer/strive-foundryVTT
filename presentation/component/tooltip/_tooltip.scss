@@ -1,0 +1,10 @@
+.custom-tooltip {
+  position: absolute;
+  display: inline-block;
+  text-align: center;
+  border-radius: 0.3rem;
+  background-color: rgba($color: #464646, $alpha: 0.8);
+  color: var(--color-text-light-highlight);
+  z-index: 600;
+  padding: 0.25rem;
+}
