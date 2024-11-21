@@ -1,5 +1,5 @@
 import { ValidationUtil } from "../../business/util/validation-utility.mjs";
-import Tooltip from "../component/tooltip/tooltip.mjs";
+import Tooltip, { TOOLTIP_PLACEMENTS, TooltipPlacementConstraint } from "../component/tooltip/tooltip.mjs";
 import { SheetUtil } from "../sheet/sheet-utility.mjs";
 import ViewModel from "./view-model.mjs";
 
@@ -107,6 +107,10 @@ export default class InputViewModel extends ViewModel {
       this._toolTip = new Tooltip({
         content: this.localizedToolTip,
         enableArrow: true,
+        constraint: new TooltipPlacementConstraint({
+          placement: TOOLTIP_PLACEMENTS.TOP,
+          offset: 0,
+        }),
         onShown: () => {
           this.element.addClass(InputViewModel.CSS_CLASS_HIGHLIGHT);
         },
