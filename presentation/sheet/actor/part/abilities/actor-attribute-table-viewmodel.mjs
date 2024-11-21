@@ -1,5 +1,6 @@
 import { ACTOR_TYPES } from "../../../../../business/document/actor/actor-types.mjs";
 import CharacterAttribute from "../../../../../business/ruleset/attribute/character-attribute.mjs";
+import RulesetExplainer from "../../../../../business/ruleset/ruleset-explainer.mjs";
 import Ruleset from "../../../../../business/ruleset/ruleset.mjs";
 import { ValidationUtil } from "../../../../../business/util/validation-utility.mjs";
 import ButtonCheckBoxViewModel from "../../../../component/button-checkbox/button-checkbox-viewmodel.mjs";
@@ -113,7 +114,7 @@ export default class AttributeTableViewModel extends ViewModel {
           id: `vmRequiredProgress-${attribute.name}`,
           value: attribute.advancementRequirements,
           isEditable: false,
-          localizedToolTip: `DEBUG`,
+          localizedToolTip: new RulesetExplainer().getExplanationForAttributeAdvancement(attribute),
         }),
         vmBtnRoll: new ButtonRollViewModel({
           parent: this,

@@ -636,7 +636,8 @@
       "range": "Range"
     },
     "rules": {
-      "hintDeathsDoor": "Death's Door: You must succeed at least one toughness test out of a possible of three, at Ob equal to half your toughness, rounded up. One of these tests must be made at the end of every round. Mark your failures here. Fail all three, and perish."
+      "hintDeathsDoor": "Death's Door: You must succeed at least one toughness test out of a possible of three, at Ob equal to half your toughness, rounded up. One of these tests must be made at the end of every round. Mark your failures here. Fail all three, and perish.",
+      "attributeAdvancementRequirements": "%s attribute: raw level (%s) * %s = %s"
     },
     "attackType": {
       "label": "Attack Type",
