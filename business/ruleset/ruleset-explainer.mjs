@@ -118,21 +118,19 @@ export default class RulesetExplainer {
     const hpReduction = this._ruleset.getCharacterMaximumHpReduction(actor);
 
     const injuryCount = (actor.items.filter(it => it.type === ITEM_TYPES.INJURY)).length;
-    return StringUtil.format(
+    return StringUtil.format2(
       game.i18n.localize("system.rules.maxHp"),
-      baseHp,
-      `${modifiedToughnessString} (${toughnessLevel})`,
-      this._ruleset.hpPerLevel,
-      unmodifiedHp,
-      `${modifiedToughnessString} (${toughnessLevel})`,
-      Math.floor(toughnessLevel / 2),
-      hpReductionPerInjury,
-      unmodifiedHp,
-      injuryCount,
-      hpReductionPerInjury,
-      unmodifiedHp,
-      hpReduction,
-      transientActor.health.maxHP,
+      {
+        baseHp: baseHp,
+        toughness: `${modifiedToughnessString} (${toughnessLevel})`,
+        hpPerLevel: this._ruleset.hpPerLevel,
+        unmodifiedHp: unmodifiedHp,
+        halfToughness: Math.floor(toughnessLevel / 2),
+        hpReductionPerInjury: hpReductionPerInjury,
+        injuryCount: injuryCount,
+        hpReduction: hpReduction,
+        finalMaxHp: transientActor.health.maxHP,
+      }
     );
   }
   
