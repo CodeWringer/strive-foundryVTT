@@ -161,6 +161,12 @@ export default class Ruleset {
   }
 
   /**
+   * @type {Number}
+   * @readonly
+   */
+  hpPerLevel = 10;
+
+  /**
    * Returns the unmodified maximum HP of the given actor. 
    * 
    * Unmodified means without the maximum HP penalty from injuries. 
@@ -171,10 +177,9 @@ export default class Ruleset {
    */
   getUnmodifiedMaximumHp(actor) {
     const baseHp = this.getCharacterBaseHp();
-    const hpPerLevel = 10;
     const toughnessLevel = parseInt(this.getEffectiveAttributeRawLevel(ATTRIBUTES.toughness, actor));
 
-    return Math.max(baseHp, baseHp + (toughnessLevel * hpPerLevel));
+    return Math.max(baseHp, baseHp + (toughnessLevel * this.hpPerLevel));
   }
 
   /**

@@ -59,7 +59,7 @@ cssClass: {undefined | String}
       </td>
       <td class="flex flex-row flex-middle pad-r-xl">
         <span class="pad-md font-bold">=</span>
-        {{#> readOnlyValue cssClass="width-min-md font-size-lg flex flex-center"}}{{vm.modifiedLevel}}{{/readOnlyValue}}
+        {{> readOnlyValue viewModel=vm.vmModifiedLevel cssClass="width-min-md font-size-lg flex flex-center"}}
       </td>
       {{#if ../viewModel.showAdvancementProgression}}
         <td class="attribute-column-requirements">

@@ -27,6 +27,8 @@ import ButtonCheckBoxViewModel from "../../../component/button-checkbox/button-c
 import { StringUtil } from "../../../../business/util/string-utility.mjs"
 import { ExtenderUtil } from "../../../../common/extender-util.mjs"
 import { ValidationUtil } from "../../../../business/util/validation-utility.mjs"
+import RulesetExplainer from "../../../../business/ruleset/ruleset-explainer.mjs"
+import ReadOnlyValueViewModel from "../../../component/read-only-value/read-only-value.mjs"
 
 /**
  * @property {TransientSkill} document
@@ -40,18 +42,11 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
   get isExpertiseListVisible() { return (this.isEditable === true) || this.document.expertises.length !== 0 }
 
   /**
-   * Returns the current number of successes. 
-   * @type {Number}
+   * Returns the current advancement requirements. 
+   * @type {Object}
    * @readonly
    */
-  get successes() { return this.document.advancementRequirements.successes; }
-
-  /**
-   * Returns the current number of failures. 
-   * @type {Number}
-   * @readonly
-   */
-  get failures() { return this.document.advancementRequirements.failures; }
+  get advancementRequirements() { return this.document.advancementRequirements; }
 
   /**
    * Returns true, if the expertise list should be rendered. 
@@ -78,11 +73,22 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
    * @readonly
    */
   get prerequisites() {
-    return this.document.prerequisites.map(it => {
+    const thiz = this;
+    return this.document.prerequisites.map(prerequisite => {
       return {
-        id: it.id,
-        name: it.name,
-        minimumLevel: it.minimumLevel,
+        id: prerequisite.id,
+        name: prerequisite.name,
+        minimumLevel: prerequisite.minimumLevel,
+        vmName: new ReadOnlyValueViewModel({
+          id: "vmName",
+          parent: thiz,
+          value: prerequisite.name,
+        }),
+        vmMinimumLevel: new ReadOnlyValueViewModel({
+          id: "vmMinimumLevel",
+          parent: thiz,
+          value: prerequisite.minimumLevel,
+        }),
       };
     });
   }
@@ -208,7 +214,18 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
         this.document.levelModifier = newValue;
       },
     });
+    this.vmModifiedLevel = new ReadOnlyValueViewModel({
+      id: "vmModifiedLevel",
+      parent: this,
+      value: this.modifiedLevel,
+    });
     if (this.showAdvancementProgression) {
+      this.vmAdvancementRequirements = new ReadOnlyValueViewModel({
+        id: "vmAdvancementRequirements",
+        parent: this,
+        value: `${this.advancementRequirements.successes} / ${this.advancementRequirements.failures}`,
+        localizedToolTip: new RulesetExplainer().getExplanationForSkillAdvancementRequirements(this.document),
+      });
       this.vmNsSuccesses = new InputNumberSpinnerViewModel({
         parent: this,
         id: "vmNsSuccesses",

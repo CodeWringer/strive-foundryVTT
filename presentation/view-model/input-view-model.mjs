@@ -137,6 +137,7 @@ export default class InputViewModel extends ViewModel {
   /** @override */
   dispose() {
     this.onChange = null;
+    this._toolTip.deactivateListeners();
 
     super.dispose();
   }

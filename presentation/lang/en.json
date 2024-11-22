@@ -146,6 +146,7 @@
         "advanced": "Advanced",
         "label": "Advancement",
         "level": "Level",
+        "rawLevel": "Raw Level",
         "challengeRating": {
           "label": "Challenge Rating",
           "abbreviation": "CR",
@@ -155,6 +156,7 @@
           }
         },
         "modifiedLevel": "Modified Level",
+        "modifiedAttribute": "Modified %s",
         "minimum": "Minimum Level",
         "modifier": {
           "label": "Level Modifier",
@@ -637,7 +639,11 @@
     },
     "rules": {
       "hintDeathsDoor": "Death's Door: You must succeed at least one toughness test out of a possible of three, at Ob equal to half your toughness, rounded up. One of these tests must be made at the end of every round. Mark your failures here. Fail all three, and perish.",
-      "attributeAdvancementRequirements": "%s attribute: raw level (%s) * %s = %s"
+      "attributeAdvancementRequirements": "raw level (%s) * %s (from %s attribute) = %s",
+      "skillAdvancementRequirements": "from %s skill:<br>Successes: %s = %s<br>Failures: %s = %s",
+      "baseInitiative": "%s (%s) + %s (%s) + %s (%s) = %s",
+      "maxHp": "%s + (%s * %s) = %s (Raw maximum HP)<br>10 - (%s / 2) = 10 - %s (rounded down) = %s (Reduction per injury)<br>Raw maximum HP (%s) - (injury count (%s) * reduction per injury (%s)) = %s - %s = %s",
+      "assetSlotGroupBulk": ""
     },
     "attackType": {
       "label": "Attack Type",

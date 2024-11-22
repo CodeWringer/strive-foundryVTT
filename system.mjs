@@ -142,6 +142,7 @@ import ScarItemSheetViewModel from "./presentation/sheet/item/scar/scar-item-she
 import ScarListItemViewModel from "./presentation/sheet/item/scar/scar-list-item-viewmodel.mjs";
 import SkillItemSheetViewModel from "./presentation/sheet/item/skill/skill-item-sheet-viewmodel.mjs";
 import SkillListItemViewModel from "./presentation/sheet/item/skill/skill-list-item-viewmodel.mjs";
+import ReadOnlyValueViewModel from "./presentation/component/read-only-value/read-only-value.mjs";
 
 /* -------------------------------------------- */
 /*  Initialization                              */
@@ -288,6 +289,7 @@ Hooks.once('init', function() {
         VisibilityToggleListViewModel: VisibilityToggleListViewModel,
         VisibilityToggleListItemViewModel: VisibilityToggleListItemViewModel,
         InputNumberSpinnerViewModel: InputNumberSpinnerViewModel,
+        ReadOnlyValueViewModel: ReadOnlyValueViewModel,
         actor: {
           ActorAttributesViewModel: ActorAttributesViewModel,
           ActorSkillsViewModel: ActorSkillsViewModel,

@@ -6,6 +6,7 @@ import { ValidationUtil } from "../../../../../business/util/validation-utility.
 import ButtonCheckBoxViewModel from "../../../../component/button-checkbox/button-checkbox-viewmodel.mjs";
 import ButtonRollViewModel from "../../../../component/button-roll/button-roll-viewmodel.mjs";
 import InputNumberSpinnerViewModel from "../../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
+import ReadOnlyValueViewModel from "../../../../component/read-only-value/read-only-value.mjs";
 import ViewModel from "../../../../view-model/view-model.mjs";
 
 /**
@@ -157,6 +158,11 @@ export default class AttributeTableViewModel extends ViewModel {
           onChange: (_, newValue) => {
             attribute.advanced = newValue;
           },
+        }),
+        vmModifiedLevel: new ReadOnlyValueViewModel({
+          id: "vmModifiedLevel",
+          parent: this,
+          value: attribute.modifiedLevel,
         }),
       });
     }

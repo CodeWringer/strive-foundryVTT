@@ -5,6 +5,7 @@ import { ValidationUtil } from "../../../../../business/util/validation-utility.
 import ButtonDeleteViewModel from "../../../../component/button-delete/button-delete-viewmodel.mjs";
 import ButtonViewModel from "../../../../component/button/button-viewmodel.mjs";
 import ChoiceOption from "../../../../component/input-choice/choice-option.mjs";
+import ReadOnlyValueViewModel from "../../../../component/read-only-value/read-only-value.mjs";
 import DynamicInputDefinition from "../../../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
 import DynamicInputDialog from "../../../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
 import { DYNAMIC_INPUT_TYPES } from "../../../../dialog/dynamic-input-dialog/dynamic-input-types.mjs";
@@ -153,8 +154,6 @@ export default class ActorAssetSlotViewModel extends ViewModel {
     this.assetSlot = args.assetSlot;
     this.showSlotBulk = args.showSlotBulk ?? false;
 
-    const thiz = this;
-
     this.vmBtnEdit = new ButtonViewModel({
       id: "vmBtnEdit",
       parent: this,
@@ -222,6 +221,15 @@ export default class ActorAssetSlotViewModel extends ViewModel {
     });
 
     this._updateViewModel();
+
+    if (this.showSlotBulk) {
+      this.vmCurrentAndMaxBulk = new ReadOnlyValueViewModel({
+        id: "vmCurrentAndMaxBulk",
+        parent: this,
+        value: this.currentAndMaxBulk,
+        admonish: this.hasExceededBulk,
+      });
+    }
   }
   
   /** @override */

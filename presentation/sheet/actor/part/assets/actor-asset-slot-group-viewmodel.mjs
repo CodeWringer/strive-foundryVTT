@@ -1,8 +1,10 @@
 import CharacterAssetSlotGroup from "../../../../../business/ruleset/asset/character-asset-slot-group.mjs";
+import RulesetExplainer from "../../../../../business/ruleset/ruleset-explainer.mjs";
 import { StringUtil } from "../../../../../business/util/string-utility.mjs";
 import { UuidUtil } from "../../../../../business/util/uuid-utility.mjs";
 import { ValidationUtil } from "../../../../../business/util/validation-utility.mjs";
 import ButtonContextMenuViewModel from "../../../../component/button-context-menu/button-context-menu-viewmodel.mjs";
+import ReadOnlyValueViewModel from "../../../../component/read-only-value/read-only-value.mjs";
 import ConfirmablePlainDialog from "../../../../dialog/plain-confirmable-dialog/plain-confirmable-dialog.mjs";
 import ViewModel from "../../../../view-model/view-model.mjs";
 import ActorAssetSlotViewModel from "./actor-asset-slot-viewmodel.mjs";
@@ -159,6 +161,14 @@ export default class ActorAssetSlotGroupViewModel extends ViewModel {
     });
     this.assetSlotViewModels = [];
     this.assetSlotViewModels = this._getAssetSlotViewModels();
+
+    this.vmBulk = new ReadOnlyValueViewModel({
+      id: "vmBulk",
+      parent: this,
+      value: this.currentAndMaxBulk,
+      admonish: this.hasExceededBulk,
+      localizedToolTip: new RulesetExplainer().getExplanationForAssetSlotGroupBulk(this.group),
+    });
   }
 
   /** @override */

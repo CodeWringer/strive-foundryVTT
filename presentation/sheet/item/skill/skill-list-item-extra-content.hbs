@@ -27,13 +27,13 @@ viewModel: {SkillListItemViewModel}
       {{#each viewModel.prerequisites as |prerequisite index|}}
       <li class="flex flex-row flex-middle">
         <span class="flex flex-row flex-grow">
-          {{#> readOnlyValue cssClass="flex flex-center"}}{{prerequisite.name}}{{/readOnlyValue}}
+          {{> readOnlyValue viewModel=prerequisite.vmName cssClass="flex flex-center"}}
         </span>
         <span style="width: 144px">
           {{#> label showFancyFont=../viewModel.showFancyFont}}{{localize "system.character.advancement.minimum"}}{{/label}}
         </span>
         <span class="width-md">
-          {{#> readOnlyValue cssClass="font-size-md flex flex-center"}}{{prerequisite.minimumLevel}}{{/readOnlyValue}}
+          {{> readOnlyValue viewModel=prerequisite.vmMinimumLevel cssClass="font-size-md flex flex-center"}}
         </span>
       </li>
       {{/each}}

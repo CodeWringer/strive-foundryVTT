@@ -20,7 +20,7 @@ viewModel: {SkillListItemViewModel}
       {{!-- Modified Level --}}
       <div class="flex flex-middle">
         <span class="pad-t-md pad-b-md pad-r-md font-bold font-bold">=</span>
-        {{#> readOnlyValue cssClass="width-sm font-size-lg flex flex-center"}}{{viewModel.modifiedLevel}}{{/readOnlyValue}}
+        {{> readOnlyValue viewModel=viewModel.vmModifiedLevel cssClass="width-sm font-size-lg flex flex-center" }}
       </div>
     </div>
   </div>
@@ -30,9 +30,7 @@ viewModel: {SkillListItemViewModel}
   <div class="flex flex-row flex-middle auto-margin-h sheet-block">
     <div class="flex flex-row">
       <i class="ico ico-dumbbell-curved-solid margin-r-sm dark" title="{{localize "system.character.advancement.requirements.successAndFailure.label"}}"></i>
-      <div class="width-min-md">
-        {{#> readOnlyValue}}{{viewModel.successes}} / {{viewModel.failures}}{{/readOnlyValue}}
-      </div>
+      {{> readOnlyValue viewModel=viewModel.vmAdvancementRequirements cssClass="width-min-md" }}
     </div>
     {{!-- Successes --}}
     {{#> labeledControl viewModel=viewModel.vmNsSuccesses localizedLabel=(localize "system.character.advancement.requirements.success.abbreviation") }}

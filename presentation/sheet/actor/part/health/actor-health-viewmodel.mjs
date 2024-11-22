@@ -2,8 +2,10 @@ import { SpecificRollDataRollSchema } from "../../../../../business/dice/ability
 import RollData from "../../../../../business/dice/roll-data.mjs"
 import { ROLL_DICE_MODIFIER_TYPES } from "../../../../../business/dice/roll-dice-modifier-types.mjs"
 import { ACTOR_TYPES } from "../../../../../business/document/actor/actor-types.mjs"
+import TransientBaseCharacterActor from "../../../../../business/document/actor/transient-base-character-actor.mjs"
 import { ITEM_TYPES } from "../../../../../business/document/item/item-types.mjs"
 import { ATTRIBUTES } from "../../../../../business/ruleset/attribute/attributes.mjs"
+import RulesetExplainer from "../../../../../business/ruleset/ruleset-explainer.mjs"
 import Ruleset from "../../../../../business/ruleset/ruleset.mjs"
 import { Sum, SumComponent } from "../../../../../business/ruleset/summed-data.mjs"
 import { StringUtil } from "../../../../../business/util/string-utility.mjs"
@@ -14,6 +16,7 @@ import SpecificDocumentCreationStrategy from "../../../../component/button-add/s
 import ButtonRollViewModel from "../../../../component/button-roll/button-roll-viewmodel.mjs"
 import InfoBubble, { InfoBubbleAutoHidingTypes, InfoBubbleAutoShowingTypes } from "../../../../component/info-bubble/info-bubble.mjs"
 import InputNumberSpinnerViewModel from "../../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs"
+import ReadOnlyValueViewModel from "../../../../component/read-only-value/read-only-value.mjs"
 import { SortingOption } from "../../../../component/sort-controls/sort-controls-viewmodel.mjs"
 import DocumentListItemOrderDataSource from "../../../../component/sortable-list/document-list-item-order-datasource.mjs"
 import SortableListViewModel, { SortableListAddItemParams, SortableListSortParams } from "../../../../component/sortable-list/sortable-list-viewmodel.mjs"
@@ -166,6 +169,7 @@ export default class ActorHealthViewModel extends ViewModel {
       id: "vmMaxHp",
       value: this.document.health.maxHP,
       isEditable: false, // This should only ever be a read-only view! 
+      localizedToolTip: new RulesetExplainer().getExplanationForMaxHp(this.document),
     });
     this.vmMaxHpModifier = new InputNumberSpinnerViewModel({
       parent: this,
@@ -174,6 +178,11 @@ export default class ActorHealthViewModel extends ViewModel {
       onChange: (_, newValue) => {
         this.document.health.maxHpModifier = newValue;
       },
+    });
+    this.vmModifiedMaxHp = new ReadOnlyValueViewModel({
+      id: "vmModifiedMaxHp",
+      parent: this,
+      value: this.modifiedMaxHp,
     });
     this.vmHp = new InputNumberSpinnerViewModel({
       parent: this,
@@ -206,6 +215,11 @@ export default class ActorHealthViewModel extends ViewModel {
         this.document.health.exhaustion = newValue;
       },
       min: 0,
+    });
+    this.vmModifiedMaxExhaustion = new ReadOnlyValueViewModel({
+      id: "vmModifiedMaxExhaustion",
+      parent: this,
+      value: this.modifiedMaxExhaustion,
     });
 
     // Armor list item (if there is one). 
@@ -297,6 +311,11 @@ export default class ActorHealthViewModel extends ViewModel {
         compact: true,
       }),
     });
+    this.vmIllnessCount = new ReadOnlyValueViewModel({
+      id: "vmIllnessCount",
+      parent: this,
+      value: this.illnessCount,
+    });
 
     // Prepare injuries list view models. 
     this.injuries = this._getInjuryViewModels();
@@ -341,6 +360,11 @@ export default class ActorHealthViewModel extends ViewModel {
         compact: true,
       }),
     });
+    this.vmInjuryCount = new ReadOnlyValueViewModel({
+      id: "vmInjuryCount",
+      parent: this,
+      value: this.injuryCount,
+    });
 
     // Prepare mutations list view models. 
     this.mutations = this._getMutationViewModels();
@@ -375,6 +399,11 @@ export default class ActorHealthViewModel extends ViewModel {
         compact: true,
       }),
     });
+    this.vmMutationCount = new ReadOnlyValueViewModel({
+      id: "vmMutationCount",
+      parent: this,
+      value: this.mutationCount,
+    });
 
     // Prepare scars list view models. 
     this.scars = this._getScarViewModels();
@@ -407,6 +436,11 @@ export default class ActorHealthViewModel extends ViewModel {
         options: this._getNameSortingOptions(),
         compact: true,
       }),
+    });
+    this.vmScarCount = new ReadOnlyValueViewModel({
+      id: "vmScarCount",
+      parent: this,
+      value: this.scarCount,
     });
 
     this.vmGritPoints = new GritPointsViewModel({

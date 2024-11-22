@@ -22,7 +22,7 @@ cssClass: {undefined | String}
             {{/labeledControl}}
             <span class="pad-md font-bold">=</span>
             <span class="width-md">
-              {{#> readOnlyValue}}{{viewModel.modifiedMaxHp}}{{/readOnlyValue}}
+              {{> readOnlyValue viewModel=viewModel.vmModifiedMaxHp }}
             </span>
           </div>
           {{!-- Current HP --}}
@@ -44,7 +44,7 @@ cssClass: {undefined | String}
             {{/labeledControl}}
             <span class="pad-md font-bold">=</span>
             <span class="width-md">
-              {{#> readOnlyValue}}{{viewModel.modifiedMaxExhaustion}}{{/readOnlyValue}}
+              {{> readOnlyValue viewModel=viewModel.vmModifiedMaxExhaustion }}
             </span>
           </div>
           {{!-- Current Exhaustion --}}
@@ -94,7 +94,7 @@ cssClass: {undefined | String}
           {{#> label showFancyFont=../viewModel.showFancyFont}}{{localize "system.character.health.injury.plural"}}{{/label}}
         </div>
         <span class="width-md">
-          {{#> readOnlyValue}}{{../viewModel.injuryCount}}{{/readOnlyValue}}
+          {{> readOnlyValue viewModel=../viewModel.vmInjuryCount }}
         </span>
       </div>
     </div>
@@ -110,7 +110,7 @@ cssClass: {undefined | String}
           {{#> label showFancyFont=../viewModel.showFancyFont}}{{localize "system.character.health.illness.plural"}}{{/label}}
         </div>
         <span class="width-md">
-          {{#> readOnlyValue}}{{../viewModel.illnessCount}}{{/readOnlyValue}}
+          {{> readOnlyValue viewModel=../viewModel.vmIllnessCount }}
         </span>
       </div>
     </div>
@@ -126,7 +126,7 @@ cssClass: {undefined | String}
           {{#> label showFancyFont=../viewModel.showFancyFont}}{{localize "system.character.health.mutation.plural"}}{{/label}}
         </div>
         <span class="width-md">
-          {{#> readOnlyValue}}{{../viewModel.mutationCount}}{{/readOnlyValue}}
+          {{> readOnlyValue viewModel=../viewModel.vmMutationCount }}
         </span>
       </div>
     </div>
@@ -142,9 +142,7 @@ cssClass: {undefined | String}
           {{#> label showFancyFont=../viewModel.showFancyFont}}{{localize "system.character.health.scar.plural"}}{{/label}}
         </div>
         <span class="width-md">
-          <div class="strive-read-only pad-sm fill">
-            {{#> readOnlyValue}}{{../viewModel.scarCount}}{{/readOnlyValue}}
-          </div>
+          {{> readOnlyValue viewModel=../viewModel.vmScarCount }}
         </span>
       </div>
     </div>

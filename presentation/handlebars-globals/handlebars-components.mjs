@@ -29,6 +29,7 @@ import ModalDialog from "../dialog/modal-dialog/modal-dialog.mjs";
 import InputToggleViewModel from "../component/input-toggle/input-toggle-viewmodel.mjs";
 import InputSearchTextViewModel from "../component/input-search/input-search-viewmodel.mjs";
 import InputSliderViewModel from "../component/input-slider/input-slider-viewmodel.mjs";
+import ReadOnlyValueViewModel from "../component/read-only-value/read-only-value.mjs";
 
 /**
  * Registers the Handlebars partials of the components. 
@@ -65,4 +66,5 @@ export function initHandlebarsComponents() {
   InputSearchTextViewModel.registerHandlebarsPartial();
   InputSliderViewModel.registerHandlebarsPartial();
   ModalDialog.registerHandlebarsPartial();
+  ReadOnlyValueViewModel.registerHandlebarsPartial();
 }

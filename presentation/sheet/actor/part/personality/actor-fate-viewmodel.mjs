@@ -7,6 +7,7 @@ import { ExtenderUtil } from "../../../../../common/extender-util.mjs";
 import ButtonAddViewModel from "../../../../component/button-add/button-add-viewmodel.mjs";
 import FateCardCreationStrategy from "../../../../component/button-add/fate-card-creation-selection-strategy.mjs";
 import InputNumberSpinnerViewModel from "../../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
+import ReadOnlyValueViewModel from "../../../../component/read-only-value/read-only-value.mjs";
 import ViewModel from "../../../../view-model/view-model.mjs"
 import FateCardViewModel from "../../../item/fate-card/fate-card-viewmodel.mjs"
 
@@ -95,6 +96,14 @@ export default class ActorFateViewModel extends ViewModel {
       },
       min: 0,
     });
+    if (this.hasExceededFateCardLimit) {
+      this.vmFateCardWarning = new ReadOnlyValueViewModel({
+        id: "vmFateCardWarning",
+        parent: this,
+        value: game.i18n.localize("system.character.driverSystem.fateSystem.fateCard.limitExceededAdmonish"),
+        admonish: true,
+      });
+    }
 
     this.fateCardAddButtonViewModels = [];
     for (let i = 0; i < this.remainingSlots; i++) {

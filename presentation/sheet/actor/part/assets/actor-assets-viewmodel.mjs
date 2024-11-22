@@ -6,6 +6,7 @@ import { StringUtil } from "../../../../../business/util/string-utility.mjs"
 import { ValidationUtil } from "../../../../../business/util/validation-utility.mjs"
 import { ExtenderUtil } from "../../../../../common/extender-util.mjs"
 import SpecificDocumentCreationStrategy from "../../../../component/button-add/specific-document-creation-strategy.mjs"
+import ReadOnlyValueViewModel from "../../../../component/read-only-value/read-only-value.mjs"
 import { SortingOption } from "../../../../component/sort-controls/sort-controls-viewmodel.mjs"
 import DocumentListItemOrderDataSource from "../../../../component/sortable-list/document-list-item-order-datasource.mjs"
 import SortableListViewModel, { SortableListAddItemParams, SortableListSortParams } from "../../../../component/sortable-list/sortable-list-viewmodel.mjs"
@@ -170,6 +171,18 @@ export default class ActorAssetsViewModel extends ViewModel {
         options: this._getAssetSortingOptions(),
         compact: true,
       }),
+    });
+
+    this.vmCurrentBulk = new ReadOnlyValueViewModel({
+      id: "vmCurrentBulk",
+      parent: this,
+      value: this.currentBulk,
+      admonish: this.hasExceededBulk,
+    });
+    this.vmMaxBulk = new ReadOnlyValueViewModel({
+      id: "vmMaxBulk",
+      parent: this,
+      value: this.maxBulk,
     });
   }
   

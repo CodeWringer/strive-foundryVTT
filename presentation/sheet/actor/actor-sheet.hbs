@@ -53,18 +53,17 @@ cssClass: {undefined | String}
   <section class="sheet-body">
     {{#if (eq viewModel.isPlain false)}}
       {{!-- Abilities Tab --}}
-      <div class="tab abilities" data-group="primary" data-tab="abilities">
+      <div class="tab abilities auto-margin-v-lg" data-group="primary" data-tab="abilities">
         {{!-- Attributes --}}
         <div>
           {{> lazy viewModel=viewModel.attributesViewModel}}
         </div>
         {{!-- Base Initiative --}}
-        {{#> header3 cssClass="flex flex-row"}}
+        <div class="flex flex-row flex-middle auto-margin-h-md">
           <span class="flex-grow"></span>
-          {{localize "system.character.attribute.initiative.baseInitiative"}}
-          <span class="width-sm"></span>
-          {{#> readOnlyValue cssClass="width-md"}}{{viewModel.document.baseInitiative}}{{/readOnlyValue}}
-        {{/header3}}
+          <span class="font-size-lg{{#if viewModel.showFancyFont}} fancy-font{{/if}}">{{localize "system.character.attribute.initiative.baseInitiative"}}</span>
+          {{> readOnlyValue viewModel=viewModel.vmBaseInitiative cssClass="width-md" }}
+        </div>
         {{!-- Skills --}}
         <div>
           {{> lazy viewModel=viewModel.skillsViewModel}}
