@@ -26,6 +26,15 @@ export const StringUtil = {
    */
   REGEX_INT: /-?\d+/,
   
+  
+  /**
+   * Pattern for detection of a placeholder. 
+   * 
+   * @type {String}
+   * @constant
+   */
+  REGEX_PLACEHOLDER: /%\{(?<placeholder>[a-zA-Z0-9-_]+)\}/g,
+  
   /**
    * Returns a new String, based on the given string, with any placeholders 
    * replaced with the other given arguments, in the order that they appear. 
@@ -56,6 +65,38 @@ export const StringUtil = {
       newString = newString.substring(0, placeHolderIndex) + argument + newString.substring(placeHolderIndex + this.FORMAT_PLACEHOLDER.length);
     }
   
+    return newString;
+  },
+  
+  
+  /**
+   * Returns a new String, based on the given string, with any placeholders 
+   * replaced with the other given arguments, in the order that they appear. 
+   * 
+   * Any '%s' is replaced. This character sequence can be escaped with '\%s', 
+   * which prints '%s', omitting the backslash. 
+   * 
+   * @example
+   * ```JS
+   * format("Hello, %s!", "Bob"); // Returns "Hello, Bob!"
+   * format("Hello, %s! Goodbye, %s!", "Bob", "Bobette"); // Returns "Hello, Bob! Goodbye, Bobette!"
+   * ```
+   * 
+   * @param {String} str A string that contains placeholders. All placeholders must 
+   * follow the format `%{<placeholder>}`. `"Hello, %{name}!"`
+   * @param {Object} replacements 
+   * 
+   * @returns {String} A formatted string
+   */
+  format2: function(str, replacements) {
+    let newString = str;
+
+    const matches = str.matchAll(new RegExp(StringUtil.REGEX_PLACEHOLDER));
+
+    for (const match of matches) {
+      newString = newString.replaceAll(match[0], replacements[match.groups.placeholder]);
+    }
+
     return newString;
   },
   
