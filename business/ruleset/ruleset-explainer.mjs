@@ -87,13 +87,15 @@ export default class RulesetExplainer {
       successFormula = `${game.i18n.localize("system.character.advancement.rawLevel")} (${skill.level}) + 4`;
       failureFormula = `(${game.i18n.localize("system.character.advancement.rawLevel")} (${skill.level}) * 2) + 5`;
     }
-    return StringUtil.format(
+    return StringUtil.format2(
       game.i18n.localize("system.rules.skillAdvancementRequirements"),
-      game.i18n.localize(tier.localizableName),
-      successFormula,
-      skill.advancementRequirements.successes,
-      failureFormula,
-      skill.advancementRequirements.failures,
+      {
+        tierName: game.i18n.localize(tier.localizableName),
+        successFormula: successFormula,
+        requiredSuccesses: skill.advancementRequirements.successes,
+        failureFormula: failureFormula,
+        requiredFailures: skill.advancementRequirements.failures,
+      },
     );
   }
   
@@ -141,9 +143,30 @@ export default class RulesetExplainer {
    */
   getExplanationForAssetSlotGroupBulk(group) {
     
-    return StringUtil.format(
+    return StringUtil.format2(
       game.i18n.localize("system.rules.assetSlotGroupBulk"),
+      {
 
+      }
+    );
+  }
+  
+  
+  /**
+   * @param {TransientBaseCharacterActor} actor 
+   * 
+   * @returns {String}
+   */
+  getExplanationForMaxExhaustion(actor) {
+    const level = this._ruleset.getEffectiveAttributeRawLevel(ATTRIBUTES.toughness, actor);
+    const maxExhaustion = this._ruleset.getCharacterMaximumExhaustion(actor);
+    return StringUtil.format2(
+      game.i18n.localize("system.rules.maxExhaustion"),
+      {
+        baseExhaustionLimit: 1,
+        toughnessRawLevel: level,
+        maxExhaustion: maxExhaustion,
+      }
     );
   }
   

@@ -198,6 +198,7 @@ export default class ActorHealthViewModel extends ViewModel {
       id: "vmMaxExhaustion",
       value: this.document.health.maxExhaustion,
       isEditable: false, // This should only ever be a read-only view! 
+      localizedToolTip: new RulesetExplainer().getExplanationForMaxExhaustion(this.document),
     });
     this.vmMaxExhaustionModifier = new InputNumberSpinnerViewModel({
       parent: this,
