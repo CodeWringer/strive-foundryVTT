@@ -1,5 +1,4 @@
 import { ValidationUtil } from "../../business/util/validation-utility.mjs";
-import Tooltip, { TOOLTIP_PLACEMENTS, TooltipPlacementConstraint } from "../component/tooltip/tooltip.mjs";
 import { SheetUtil } from "../sheet/sheet-utility.mjs";
 import ViewModel from "./view-model.mjs";
 
@@ -25,9 +24,9 @@ export const SELECTOR_READ = "custom-system-read-only";
  * @property {JQuery | HTMLElement} element The DOM element that is 
  * associated with this view model. 
  * * Read-only
- * 
  * @property {String | undefined} localizedToolTip A localized text to 
  * display as a tool tip. 
+ * 
  * @property {String | undefined} iconHtml Raw HTML to render as 
  * an associated icon. E. g. `'<i class="fas fa-scroll"></i>'`
  * @property {Any | undefined} value The current value. 
@@ -41,14 +40,6 @@ export const SELECTOR_READ = "custom-system-read-only";
  * * `newValue: {Any}`
  */
 export default class InputViewModel extends ViewModel {
-
-  /**
-   * @type {String}
-   * @static
-   * @readonly
-   * @private
-   */
-  static CSS_CLASS_HIGHLIGHT = "highlight";
 
   /**
    * Returns the current value. 
@@ -84,9 +75,9 @@ export default class InputViewModel extends ViewModel {
    * @param {Boolean | undefined} args.isEditable If `true`, input(s) will 
    * be in edit mode. If `false`, will be in read-only mode.
    * * default `false`. 
-   * 
    * @param {String | undefined} args.localizedToolTip A localized text to 
    * display as a tool tip. 
+   * 
    * @param {String | undefined} args.iconHtml Raw HTML to render as 
    * an associated icon. E. g. `'<i class="fas fa-scroll"></i>'`
    * @param {Any | undefined} args.value The current value. 
@@ -98,36 +89,14 @@ export default class InputViewModel extends ViewModel {
   constructor(args = {}) {
     super(args);
 
-    this.localizedToolTip = args.localizedToolTip;
     this.iconHtml = args.iconHtml;
     this._value = args.value;
     this.onChange = args.onChange ?? (() => {});
-
-    if (ValidationUtil.isDefined(this.localizedToolTip)) {
-      this._toolTip = new Tooltip({
-        content: this.localizedToolTip,
-        enableArrow: true,
-        constraint: new TooltipPlacementConstraint({
-          placement: TOOLTIP_PLACEMENTS.TOP,
-          offset: 0,
-        }),
-        onShown: () => {
-          this.element.addClass(InputViewModel.CSS_CLASS_HIGHLIGHT);
-        },
-        onHidden: () => {
-          this.element.removeClass(InputViewModel.CSS_CLASS_HIGHLIGHT);
-        },
-      });
-    }
   }
 
   /** @override */
   async activateListeners(html) {
     await super.activateListeners(html);
-
-    if (ValidationUtil.isDefined(this._toolTip)) {
-      this._toolTip.activateListeners(this.element);
-    }
 
     if (this.isEditable !== true) return;
 
@@ -137,7 +106,6 @@ export default class InputViewModel extends ViewModel {
   /** @override */
   dispose() {
     this.onChange = null;
-    this._toolTip.deactivateListeners();
 
     super.dispose();
   }

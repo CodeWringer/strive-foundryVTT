@@ -8,7 +8,6 @@ import ButtonContextMenuViewModel from "../../../component/button-context-menu/b
 import ButtonRollViewModel from "../../../component/button-roll/button-roll-viewmodel.mjs"
 import ButtonViewModel from "../../../component/button/button-viewmodel.mjs"
 import DamageDefinitionListViewModel from "../../../component/damage-definition-list/damage-definition-list-viewmodel.mjs"
-import InfoBubble, { InfoBubbleAutoHidingTypes, InfoBubbleAutoShowingTypes } from "../../../component/info-bubble/info-bubble.mjs"
 import InputDropDownViewModel from "../../../component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs"
 import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs"
 import InputTagsViewModel from "../../../component/input-tags/input-tags-viewmodel.mjs"
@@ -29,6 +28,7 @@ import { ExtenderUtil } from "../../../../common/extender-util.mjs"
 import { ValidationUtil } from "../../../../business/util/validation-utility.mjs"
 import RulesetExplainer from "../../../../business/ruleset/ruleset-explainer.mjs"
 import ReadOnlyValueViewModel from "../../../component/read-only-value/read-only-value.mjs"
+import ViewModel from "../../../view-model/view-model.mjs"
 
 /**
  * @property {TransientSkill} document
@@ -264,6 +264,11 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
       resolveFormulaContext: this.getRootOwningDocument(this.document),
       chatTitle: `${game.i18n.localize("system.damageDefinition.label")} - ${this.document.name}`,
     });
+    this.vmDamageFormulaInfo = new ViewModel({
+      id: "damage-info",
+      parent: this,
+      localizedToolTip: game.i18n.localize("system.damageDefinition.infoFormulae"),
+    });
     if (this.showExpertises === true) {
       this.vmExpertiseTable = new ExpertiseTableViewModel({
         id: "vmExpertiseTable",
@@ -371,20 +376,6 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
         iconClass: this.attackTypeIconClass,
       }),
     ];
-  }
-
-  /** @override */
-  async activateListeners(html) {
-    await super.activateListeners(html);
-
-    this.damageInfoBubble = new InfoBubble({
-      html: html,
-      map: [
-        { element: html.find(`#${this.id}-damage-info`), text: game.i18n.localize("system.damageDefinition.infoFormulae") },
-      ],
-      autoShowType: InfoBubbleAutoShowingTypes.MOUSE_ENTER,
-      autoHideType: InfoBubbleAutoHidingTypes.MOUSE_LEAVE,
-    });
   }
 
   /** @override */

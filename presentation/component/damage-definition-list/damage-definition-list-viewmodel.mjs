@@ -51,6 +51,7 @@ export default class DamageDefinitionListViewModel extends InputViewModel {
    * * `oldValue: {Any}`
    * * `newValue: {Any}`
    * @param {String | undefined} args.chatTitle 
+   * @param {String | undefined} args.localizedToolTip 
    */
   constructor(args = {}) {
     super(args);
