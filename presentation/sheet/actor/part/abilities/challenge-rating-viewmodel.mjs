@@ -4,6 +4,7 @@ import Ruleset from "../../../../../business/ruleset/ruleset.mjs";
 import { ValidationUtil } from "../../../../../business/util/validation-utility.mjs";
 import ButtonRollViewModel from "../../../../component/button-roll/button-roll-viewmodel.mjs";
 import InputNumberSpinnerViewModel from "../../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
+import ReadOnlyValueViewModel from "../../../../component/read-only-value/read-only-value.mjs";
 import ViewModel from "../../../../view-model/view-model.mjs";
 
 /**
@@ -92,6 +93,11 @@ export default class ChallengeRatingViewModel extends ViewModel {
         });
         this.challengeRating = newChallengeRating;
       },
+    });
+    this.vmModifiedCr = new ReadOnlyValueViewModel({
+      id: "vmModifiedCr",
+      parent: this,
+      value: this.challengeRating.modified,
     });
   }
 

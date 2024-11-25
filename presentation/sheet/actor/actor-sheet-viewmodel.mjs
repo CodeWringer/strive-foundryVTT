@@ -20,6 +20,8 @@ import { DYNAMIC_INPUT_TYPES } from "../../dialog/dynamic-input-dialog/dynamic-i
 import { ACTOR_TYPES } from "../../../business/document/actor/actor-types.mjs"
 import TransientBaseActor from "../../../business/document/actor/transient-base-actor.mjs"
 import { ExtenderUtil } from "../../../common/extender-util.mjs"
+import RulesetExplainer from "../../../business/ruleset/ruleset-explainer.mjs"
+import ReadOnlyValueViewModel from "../../component/read-only-value/read-only-value.mjs"
 
 /**
  * @extends BaseSheetViewModel
@@ -132,6 +134,13 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
       },
     });
     if (this.isNPC || this.isPC) {
+      this.vmBaseInitiative = new ReadOnlyValueViewModel({
+        id: "vmBaseInitiative",
+        parent: this,
+        value: this.document.baseInitiative,
+        localizedToolTip: new RulesetExplainer().getExplanationForBaseInitiative(this.document),
+      });
+      
       this.vmBtnConfigure = new ButtonViewModel({
         id: "vmBtnConfigure",
         parent: this,

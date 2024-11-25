@@ -21,7 +21,7 @@ cssClass: {undefined | String}
             {{#> label showFancyFont=../viewModel.showFancyFont}}{{localize "system.character.asset.carryingCapacity.label"}}{{/label}}
           </div>
           <span class="width-md">
-            {{#> readOnlyValue}}{{../viewModel.maxBulk}}{{/readOnlyValue}}
+            {{> readOnlyValue viewModel=../viewModel.vmMaxBulk }}
           </span>
         </div>
       </div>
@@ -32,7 +32,7 @@ cssClass: {undefined | String}
             {{#> label showFancyFont=../viewModel.showFancyFont}}{{localize "system.character.asset.carryingCapacity.used"}}{{/label}}
           </div>
           <span class="flex flex-row flex-middle width-md">
-            {{> admonishReadOnlyValue admonish=../viewModel.hasExceededBulk value=../viewModel.currentBulk }}
+            {{> readOnlyValue viewModel=../viewModel.vmCurrentBulk }}
           </span>
         </div>
       </div>

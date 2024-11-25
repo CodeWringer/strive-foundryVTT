@@ -27,8 +27,7 @@ export const TEMPLATES = {
   COMPONENT_VERTICAL_LINE: `${basePathComponent}/vertical-line/vertical-line.hbs`,
   // Labels
   COMPONENT_LABEL: `${basePathComponent}/label/label.hbs`,
-  COMPONENT_LABEL_READ_ONLY_VALUE: `${basePathComponent}/label/read-only-value.hbs`,
-  COMPONENT_LABEL_ADMONISHING_READ_ONLY_VALUE: `${basePathComponent}/label/admonishing-read-only-value.hbs`,
+  COMPONENT_READ_ONLY_VALUE: `${basePathComponent}/read-only-value/read-only-value.hbs`,
   COMPONENT_HEADER_PRIMARY: `${basePathComponent}/label/header/primary-header-label.hbs`,
   COMPONENT_HEADER_SECONDARY: `${basePathComponent}/label/header/secondary-header-label.hbs`,
   COMPONENT_HEADER_TERTIARY: `${basePathComponent}/label/header/tertiary-header-label.hbs`,

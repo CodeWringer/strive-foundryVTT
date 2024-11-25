@@ -19,7 +19,7 @@ cssClass: {undefined | String}
     {{#if viewModel.showSlotBulk}}
     <div class="flex flex-row flex-middle font-size-xs">
       <span class="flex flex-row flex-middle">
-        {{> admonishReadOnlyValue cssClass="flex flex-center width-min-md" admonish=viewModel.hasExceededBulk value=viewModel.currentAndMaxBulk }}
+        {{> readOnlyValue viewModel=viewModel.vmCurrentAndMaxBulk cssClass="flex flex-center width-min-md" }}
       </span>
     </div>
     {{/if}}

@@ -29,8 +29,12 @@ export default class InputTextFieldViewModel extends InputViewModel {
   /**
    * @param {Object} args 
    * @param {String | undefined} args.id Unique ID of this view model instance. 
-   * @param {Boolean | undefined} args.isEditable If true, input(s) will be in edit mode. If false, input(s) will be in read-only mode.
+   * @param {Boolean | undefined} args.isEditable If `true`, input(s) will 
+   * be in edit mode. If `false`, will be in read-only mode.
+   * * default `false`. 
    * 
+   * @param {String | undefined} args.localizedToolTip A localized text to 
+   * display as a tool tip. 
    * @param {String | undefined} args.value The current value. 
    * @param {String | undefined} args.placeholder A placeholder text to display while the textfield is empty. 
    * @param {Function | undefined} args.onChange Callback that is invoked 
