@@ -15,6 +15,7 @@ export default class Migrator_1_7_2__1_7_3 extends AbstractMigrator {
   /** @override */
   async _doWork() {
     // Fix up character template data.
+    
     const actors = await new DocumentFetcher().findAll({
       documentType: GENERAL_DOCUMENT_TYPES.ACTOR,
       includeLocked: false,
@@ -28,11 +29,15 @@ export default class Migrator_1_7_2__1_7_3 extends AbstractMigrator {
       for (const tokenId of scene.tokens.keys()) {
         const token = scene.tokens.get(tokenId);
 
-        actors.push(token.actor);
+        if (ValidationUtil.isDefined(token.actor)) {
+          actors.push(token.actor);
+        }
       }
     }
 
     for await (const actor of actors) {
+      if (!ValidationUtil.isDefined(actor) || !ValidationUtil.isDefined(actor.system)) continue;
+
       let actionPoints = 0;
       if (ValidationUtil.isObject(actor.system.actionPoints) && ValidationUtil.isNumber(actor.system.actionPoints.current)) {
         actionPoints = actor.system.actionPoints.current;
