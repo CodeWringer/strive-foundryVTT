@@ -5,16 +5,10 @@ cssClass: {undefined | String}
 <div id="{{viewModel.id}}" class="strive-asset-slot-group flex flex-column flex-grow{{#if cssClass}} {{cssClass}}{{/if}}">
   {{!-- Header Row --}}
   <div class="flex flex-row flex-grow">
-    {{#> header2 showFancyFont=false cssClass="flex flex-row flex-grow flex-middle asset-slot-header"}}
+    {{#> header2 showFancyFont=false cssClass="flex flex-row flex-grow flex-middle asset-slot-header auto-margin-h-lg"}}
       {{#> label showFancyFont=viewModel.showFancyFont cssClass="width-min-xl font-size-xl"}}{{viewModel.localizedName}}{{/label}}
       {{!-- Slot Group Bulk --}}
-      <div class="flex flex-row flex-middle font-size-sm margin-l-xl">
-        <i class="ico dark ico-bulk-solid" title="{{localize "system.character.asset.bulk"}}"></i>
-        <span class="flex flex-row flex-middle">
-          {{> readOnlyValue viewModel=vmBulk cssClass="pad-l-md pad-r-md" }}
-        </span>
-        <i class="ico dark ico-max-bulk-solid" title="{{localize "system.character.asset.maxBulk"}}"></i>
-      </div>
+      {{> readOnlyValue viewModel=viewModel.vmBulk cssClass="width-min-md width-max-lg font-size-sm" }}
       {{!-- Edit Controls --}}
       <div class="flex flex-row flex-grow flex-right font-size-default">
         <div>

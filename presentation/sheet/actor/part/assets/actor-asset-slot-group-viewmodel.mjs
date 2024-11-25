@@ -1,5 +1,4 @@
 import CharacterAssetSlotGroup from "../../../../../business/ruleset/asset/character-asset-slot-group.mjs";
-import RulesetExplainer from "../../../../../business/ruleset/ruleset-explainer.mjs";
 import { StringUtil } from "../../../../../business/util/string-utility.mjs";
 import { UuidUtil } from "../../../../../business/util/uuid-utility.mjs";
 import { ValidationUtil } from "../../../../../business/util/validation-utility.mjs";
@@ -162,12 +161,27 @@ export default class ActorAssetSlotGroupViewModel extends ViewModel {
     this.assetSlotViewModels = [];
     this.assetSlotViewModels = this._getAssetSlotViewModels();
 
+    let usedBulkToolTip;
+    if (this.group.currentBulk > 0) {
+      const usedBulkComponents = [];
+      for (const slot of this.group.slots) {
+        if (slot.asset !== undefined) {
+          const asset = slot.asset;
+          usedBulkComponents.push({
+            value: asset.bulk,
+            name: asset.name,
+          });
+        }
+      }
+      const mappedUsedBulkComponents = usedBulkComponents.map(it => `${it.name} (${it.value})`);
+      usedBulkToolTip = `${mappedUsedBulkComponents.join(" + ")} = ${this.group.currentBulk}`;
+    }
     this.vmBulk = new ReadOnlyValueViewModel({
       id: "vmBulk",
       parent: this,
       value: this.currentAndMaxBulk,
       admonish: this.hasExceededBulk,
-      localizedToolTip: new RulesetExplainer().getExplanationForAssetSlotGroupBulk(this.group),
+      localizedToolTip: usedBulkToolTip,
     });
   }
 
