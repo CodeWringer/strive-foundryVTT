@@ -156,7 +156,7 @@
           }
         },
         "modifiedLevel": "Modified Level",
-        "modifiedAttribute": "Modified %s",
+        "modifiedOf": "Modified %{name}",
         "minimum": "Minimum Level",
         "modifier": {
           "label": "Level Modifier",
@@ -382,8 +382,7 @@
         "hp": {
           "label": "Hit-Points",
           "abbreviation": "HP",
-          "maximum": "Max. HP",
-          "formulaExplanation": "%s (base) + %s (from toughness) - %s (penalty from injuries) + %s (modifier) = %s"
+          "maximum": "Max. HP"
         },
         "illness": {
           "plural": "Illnesses",
@@ -639,12 +638,12 @@
     },
     "rules": {
       "hintDeathsDoor": "Death's Door: You must succeed at least one toughness test out of a possible of three, at Ob equal to half your toughness, rounded up. One of these tests must be made at the end of every round. Mark your failures here. Fail all three, and perish.",
-      "attributeAdvancementRequirements": "raw level (%s) * %s (from %s attribute) = %s",
+      "attributeAdvancementRequirements": "raw level (%{rawLevel}) * %{factor} (from %{attributeTier} attribute) = %{advancementRequirements}",
       "skillAdvancementRequirements": "from %{tierName} skill:<br>Successes: %{successFormula} = %{requiredSuccesses}<br>Failures: %{failureFormula} = %{requiredFailures}",
-      "baseInitiative": "%s (%s) + %s (%s) + %s (%s) = %s",
+      "baseInitiative": "%{localizedAgility} (%{agility}) + %{localizedAwareness} (%{awareness}) + %{localizedWit} (%{wit}) = %{baseInitiative}",
       "maxHp": "%{baseHp} + (%{toughness} * %{hpPerLevel}) = %{unmodifiedHp} (Raw maximum HP)<br>10 - (%{toughness} / 2) = 10 - %{halfToughness} (rounded down) = %{hpReductionPerInjury} (Reduction per injury)<br>Raw maximum HP (%{unmodifiedHp}) - (injury count (%{injuryCount}) * reduction per injury (%{hpReductionPerInjury})) = %{unmodifiedHp} - %{hpReduction} = %{finalMaxHp}",
       "maxExhaustion": "base (%{baseExhaustionLimit}) + raw toughness (%{toughnessRawLevel}) = %{maxExhaustion}",
-      "maxLuggage": "Modified strength (%{strength}) * 3 = %{maxLuggage}"
+      "maxLuggage": "Modified %{localizedStrength} (%{strength}) * 3 = %{maxLuggage}"
     },
     "attackType": {
       "label": "Attack Type",

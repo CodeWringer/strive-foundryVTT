@@ -36,12 +36,14 @@ export default class RulesetExplainer {
     } else if (tier.name === ATTRIBUTE_TIERS.exceptional.name) {
       factor = 8;
     }
-    return StringUtil.format(
+    return StringUtil.format2(
       game.i18n.localize("system.rules.attributeAdvancementRequirements"),
-      attribute.level,
-      factor,
-      game.i18n.localize(tier.localizableName),
-      attribute.advancementRequirements,
+      {
+        rawLevel: attribute.level,
+        factor: factor,
+        attributeTier: game.i18n.localize(tier.localizableName),
+        advancementRequirements: attribute.advancementRequirements,
+      }
     );
   }
 
@@ -55,15 +57,17 @@ export default class RulesetExplainer {
     const characterAgility = transientActor.attributes.find(it => it.name === ATTRIBUTES.agility.name);
     const characterAwareness = transientActor.attributes.find(it => it.name === ATTRIBUTES.awareness.name);
     const characterWit = transientActor.attributes.find(it => it.name === ATTRIBUTES.wit.name);
-    return StringUtil.format(
+    return StringUtil.format2(
       game.i18n.localize("system.rules.baseInitiative"),
-      game.i18n.localize(characterAgility.localizableName),
-      characterAgility.modifiedLevel,
-      game.i18n.localize(characterAwareness.localizableName),
-      characterAwareness.modifiedLevel,
-      game.i18n.localize(characterWit.localizableName),
-      characterWit.modifiedLevel,
-      transientActor.baseInitiative,
+      {
+        localizedAgility: game.i18n.localize(ATTRIBUTES.agility.localizableName),
+        agility: characterAgility.modifiedLevel,
+        localizedAwareness: game.i18n.localize(ATTRIBUTES.awareness.localizableName),
+        awareness: characterAwareness.modifiedLevel,
+        localizedWit: game.i18n.localize(ATTRIBUTES.wit.localizableName),
+        wit: characterWit.modifiedLevel,
+        baseInitiative: transientActor.baseInitiative,
+      }
     );
   }
 
@@ -110,9 +114,11 @@ export default class RulesetExplainer {
     const toughnessLevel = parseInt(this._ruleset.getEffectiveAttributeRawLevel(ATTRIBUTES.toughness, transientActor));
     const hpReductionPerInjury = this._ruleset.getMaximumHpReductionPerInjury(actor);
 
-    const modifiedToughnessString = StringUtil.format(
-      game.i18n.localize("system.character.advancement.modifiedAttribute"),
-      game.i18n.localize(ATTRIBUTES.toughness.localizableName),
+    const modifiedToughnessString = StringUtil.format2(
+      game.i18n.localize("system.character.advancement.modifiedOf"),
+      {
+        name: game.i18n.localize(ATTRIBUTES.toughness.localizableName),
+      }
     );
 
     const unmodifiedHp = this._ruleset.getUnmodifiedMaximumHp(actor);
@@ -178,6 +184,7 @@ export default class RulesetExplainer {
     return StringUtil.format2(
       game.i18n.localize("system.rules.maxLuggage"),
       {
+        localizedStrength: game.i18n.localize(ATTRIBUTES.strength.localizableName),
         strength: level,
         maxLuggage: actor.assets.maxBulk,
       }

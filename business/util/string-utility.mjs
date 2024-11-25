@@ -99,18 +99,19 @@ export const StringUtil = {
    * Returns a new String, based on the given string, with any placeholders 
    * replaced with the other given arguments, in the order that they appear. 
    * 
-   * Any '%s' is replaced. This character sequence can be escaped with '\%s', 
-   * which prints '%s', omitting the backslash. 
+   * Any `%{<placeholder>}` sequence is replaced. 
    * 
    * @example
    * ```JS
-   * format("Hello, %s!", "Bob"); // Returns "Hello, Bob!"
-   * format("Hello, %s! Goodbye, %s!", "Bob", "Bobette"); // Returns "Hello, Bob! Goodbye, Bobette!"
+   * format2("Hello, %{firstName}!", { firstName: "Bob" }); // Returns "Hello, Bob!"
+   * format2("Hello, %{name1}! Goodbye, %{name2}!", { name1: "Bob", name2: "Bobette" }); // Returns "Hello, Bob! Goodbye, Bobette!"
    * ```
    * 
    * @param {String} str A string that contains placeholders. All placeholders must 
-   * follow the format `%{<placeholder>}`. `"Hello, %{name}!"`
-   * @param {Object} replacements 
+   * follow the format `%{<placeholder>}`. 
+   * @param {Object} replacements An object that must contain properties whose names match 
+   * the exact placeholder names in the given string. Their value is the replacement. 
+   * E. g. `{ firstName: "Bob", lastName: "Bauer" }`
    * 
    * @returns {String} A formatted string
    */
