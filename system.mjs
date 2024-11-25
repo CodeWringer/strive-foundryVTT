@@ -143,6 +143,10 @@ import ScarListItemViewModel from "./presentation/sheet/item/scar/scar-list-item
 import SkillItemSheetViewModel from "./presentation/sheet/item/skill/skill-item-sheet-viewmodel.mjs";
 import SkillListItemViewModel from "./presentation/sheet/item/skill/skill-list-item-viewmodel.mjs";
 import ReadOnlyValueViewModel from "./presentation/component/read-only-value/read-only-value.mjs";
+import { StringUtil } from "./business/util/string-utility.mjs";
+import { ConstantsUtil } from "./business/util/constants-utility.mjs";
+import { PropertyUtil } from "./business/util/property-utility.mjs";
+import { UuidUtil } from "./business/util/uuid-utility.mjs";
 
 /* -------------------------------------------- */
 /*  Initialization                              */
@@ -322,8 +326,12 @@ Hooks.once('init', function() {
       },
     },
     util: {
-      validation: ValidationUtil,
       array: ArrayUtil,
+      constants: ConstantsUtil,
+      property: PropertyUtil,
+      string: StringUtil,
+      uuid: UuidUtil,
+      validation: ValidationUtil,
     },
     /**
      * Registered extenders. 
