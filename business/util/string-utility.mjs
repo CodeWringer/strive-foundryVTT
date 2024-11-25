@@ -34,6 +34,32 @@ export const StringUtil = {
    * @constant
    */
   REGEX_PLACEHOLDER: /%\{(?<placeholder>[a-zA-Z0-9-_]+)\}/g,
+
+  /**
+   * Every property corresponds to an HTML special character and its value 
+   * represents its escape sequence. 
+   * 
+   * @type {Object}
+   * @private
+   */
+  _htmlSpecialCharactersEscapeMap: {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;',
+    '/': '&#x2F;',
+    '`': '&#x60;',
+    '=': '&#x3D;'
+  },
+
+  /**
+   * Pattern for detection of an HTML special character. 
+   * 
+   * @type {String}
+   * @constant
+   */
+  REGEX_HTML_ESCAPE: /([<>"'`=\/]|&(?!([a-zA-Z]{1,8}\d{0,2}|#(\d{1,4}|x[a-zA-Z\d]{1,4}));))/g,
   
   /**
    * Returns a new String, based on the given string, with any placeholders 
@@ -121,4 +147,19 @@ export const StringUtil = {
       return value;
     }
   },
+
+  /**
+   * Escapes all HTML special characters contained in the given string 
+   * and then returns a new string with these replacements. 
+   * 
+   * @param {String} string A string containing symbols to be HTML escaped. 
+   * 
+   * @returns {String} The new string with escape replacements. 
+   */
+  escapeHtml (string) {
+    const thiz = this;
+    return String(string).replace(/[&<>"'`=\/]/g, function (s) {
+      return thiz._htmlSpecialCharactersEscapeMap[s];
+    });
+  }
 }
