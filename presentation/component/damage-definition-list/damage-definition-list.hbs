@@ -2,4 +2,6 @@
 viewModel: {DamageDefinitionListViewModel}
 cssClass: {String | undefined}
 --}}
-{{> diceRollList viewModel=viewModel.vmList cssClass="flex-grow" }}
+<div id="{{viewModel.id}}"{{#if cssClass}} class="{{cssClass}}"{{/if}}>
+  {{> diceRollList viewModel=viewModel.vmList cssClass="flex-grow" }}
+</div>

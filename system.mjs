@@ -38,7 +38,6 @@ import DicePoolDesignerDialog from "./presentation/dialog/dice-pool-designer-dia
 import { activateRollChatMessageListeners } from "./presentation/dice/roll-chat-message.mjs";
 import { Sum, SumComponent } from "./business/ruleset/summed-data.mjs";
 import Tag from "./business/tags/tag.mjs";
-import InfoBubble, { InfoBubbleAutoHidingTypes, InfoBubbleAutoShowingTypes } from "./presentation/component/info-bubble/info-bubble.mjs";
 // Migration
 import MigratorInitiator from "./business/migration/migrator-initiator.mjs";
 import MigratorDialog from "./presentation/dialog/migrator-dialog/migrator-dialog.mjs";
@@ -236,9 +235,6 @@ Hooks.once('init', function() {
     classDef: {
       Attribute: Attribute,
       ChoiceOption: ChoiceOption,
-      InfoBubble: InfoBubble,
-      InfoBubbleAutoHidingTypes: InfoBubbleAutoHidingTypes,
-      InfoBubbleAutoShowingTypes: InfoBubbleAutoShowingTypes,
       SumComponent: SumComponent,
       Sum: Sum,
       Ruleset: Ruleset,
