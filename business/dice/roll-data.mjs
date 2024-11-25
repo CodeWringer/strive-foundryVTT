@@ -10,7 +10,7 @@ import { RollInputData, RollResult, RollStepData } from "./roll-result.mjs";
  * @property {Number} dieFaces The number of faces on a die. 
  * @property {Number} hitThreshold Sets the lower bound of faces that are considered 
  * hits. Any face turning up this number and numbers above, are considered hits. 
- * @property {Number} obFormula The obstacle formula to roll against. 
+ * @property {String} obFormula The obstacle formula to roll against. 
  * @property {Sum} diceComponents The number of dice to roll. 
  * @property {SumComponent} bonusDiceComponent
  * @property {Number} hitModifier Number of automatic hits/misses. 

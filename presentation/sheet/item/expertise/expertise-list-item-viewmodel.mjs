@@ -1,7 +1,6 @@
 import { DAMAGE_TYPES } from "../../../../business/ruleset/damage-types.mjs";
 import { ATTACK_TYPES, getAttackTypeIconClass } from "../../../../business/ruleset/skill/attack-types.mjs";
 import DamageAndType from "../../../../business/ruleset/skill/damage-and-type.mjs";
-import InfoBubble, { InfoBubbleAutoHidingTypes, InfoBubbleAutoShowingTypes } from "../../../component/info-bubble/info-bubble.mjs";
 import ViewModel from "../../../view-model/view-model.mjs";
 import DamageDefinitionListViewModel from "../../../component/damage-definition-list/damage-definition-list-viewmodel.mjs";
 import InputDropDownViewModel from "../../../component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
@@ -117,21 +116,12 @@ export default class ExpertiseListItemViewModel extends BaseListItemViewModel {
         this.document.damage = newValue;
       },
       resolveFormulaContext: this.getRootOwningDocument(this.document),
-      chatTitle: `${game.i18n.localize("system.damageDefinition.formula")} - ${this.document.name}`,
+      chatTitle: `${game.i18n.localize("system.damageDefinition.label")} - ${this.document.name}`,
     });
-  }
-
-  /** @override */
-  async activateListeners(html) {
-    await super.activateListeners(html);
-
-    this.damageInfoBubble = new InfoBubble({
-      html: html,
-      map: [
-        { element: html.find(`#${this.id}-damage-info`), text: game.i18n.localize("system.damageDefinition.infoFormulae") },
-      ],
-      autoShowType: InfoBubbleAutoShowingTypes.MOUSE_ENTER,
-      autoHideType: InfoBubbleAutoHidingTypes.MOUSE_LEAVE,
+    this.vmDamageFormulaInfo = new ViewModel({
+      id: "damage-info",
+      parent: this,
+      localizedToolTip: game.i18n.localize("system.damageDefinition.infoFormulae"),
     });
   }
 
@@ -230,7 +220,6 @@ export default class ExpertiseListItemViewModel extends BaseListItemViewModel {
           id: "vmBtnRoll",
           target: owningDocument,
           rollSchema: new Ruleset().getSkillRollSchema(),
-          propertyPath: undefined,
           primaryChatTitle: game.i18n.localize(this.document.name),
           primaryChatImage: this.document.img,
           secondaryChatTitle: game.i18n.localize(owningDocument.name),
@@ -317,13 +306,7 @@ export default class ExpertiseListItemViewModel extends BaseListItemViewModel {
       });
     }
   }
-  /** @override */
-  dispose() {
-    super.dispose();
 
-    this.damageInfoBubble.remove();
-  }
-  
   /** @override */
   getExtenders() {
     return super.getExtenders().concat(ExtenderUtil.getExtenders(ExpertiseListItemViewModel));

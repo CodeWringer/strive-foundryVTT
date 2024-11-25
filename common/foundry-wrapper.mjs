@@ -31,4 +31,21 @@ export default class FoundryWrapper {
       return rolledDice.results.map(it => it.result);
     }
   }
+
+  /**
+   * 
+   * @param {String} soundSrc An audio file url. 
+   * See also `SOUNDS_CONSTANTS`. 
+   * @param {Object} options 
+   * @param {AudioContext} options.context 
+   * @param {Boolean} options.forceBuffer  
+   * 
+   * @see https://foundryvtt.com/api/v12/classes/foundry.audio.Sound.html#constructor
+   */
+  async playSound(soundSrc, options) {
+    await new foundry.audio.Sound(soundSrc, options)
+      .load({
+        autoplay: true,
+      });
+  }
 }

@@ -2,6 +2,7 @@ import GetShowFancyFontUseCase from "../../business/use-case/get-show-fancy-font
 import { PropertyUtil } from "../../business/util/property-utility.mjs";
 import { UuidUtil } from "../../business/util/uuid-utility.mjs";
 import { ValidationUtil } from "../../business/util/validation-utility.mjs";
+import Tooltip, { TOOLTIP_PLACEMENTS, TooltipPlacementConstraint } from "../component/tooltip/tooltip.mjs";
 
 /**
  * @summary
@@ -89,6 +90,8 @@ import { ValidationUtil } from "../../business/util/validation-utility.mjs";
  * @property {String | undefined} contextTemplate Name or path of a contextual template, 
  * which will be displayed in exception log entries, to aid debugging.
  * * Read-only. 
+ * @property {String | undefined} localizedToolTip A localized text to 
+ * display as a tool tip. 
  */
 export default class ViewModel {
   /**
@@ -99,6 +102,14 @@ export default class ViewModel {
    * @readonly
    */
   static get TEMPLATE() { throw new Error("NotImplementedException"); }
+
+  /**
+   * @type {String}
+   * @static
+   * @readonly
+   * @protected
+   */
+  static CSS_CLASS_HIGHLIGHT = "highlight";
 
   /**
    * The data source for view state objects. 
@@ -312,6 +323,8 @@ export default class ViewModel {
    * @param {Boolean | undefined} args.showFancyFont If `true`, will render any text, where 
    * appropriate, with the "fancy" font. 
    * * Default is the globally configured setting. 
+   * @param {String | undefined} args.localizedToolTip A localized text to 
+   * display as a tool tip. 
    */
   constructor(args = {}) {
     this._id = this.sanitizeId(args.id ?? UuidUtil.createUUID());
@@ -319,6 +332,7 @@ export default class ViewModel {
     this.parent = args.parent;
     this.document = args.document;
     this._showFancyFont = args.showFancyFont;
+    this.localizedToolTip = args.localizedToolTip;
 
     this.contextTemplate = args.contextTemplate;
     this._viewStateSource = args.viewStateSource ?? game.strive.viewStates;
@@ -333,6 +347,23 @@ export default class ViewModel {
     extenders.forEach(extender => {
       extender.extend(this);
     });
+
+    if (ValidationUtil.isDefined(this.localizedToolTip)) {
+      this._toolTip = new Tooltip({
+        content: this.localizedToolTip,
+        enableArrow: true,
+        constraint: new TooltipPlacementConstraint({
+          placement: TOOLTIP_PLACEMENTS.TOP,
+          offset: 0,
+        }),
+        onShown: () => {
+          this.element.addClass(ViewModel.CSS_CLASS_HIGHLIGHT);
+        },
+        onHidden: () => {
+          this.element.removeClass(ViewModel.CSS_CLASS_HIGHLIGHT);
+        },
+      });
+    }
   }
 
   /**
@@ -435,6 +466,10 @@ export default class ViewModel {
       game.strive.logger.logWarn(`Failed to get element with id '${this.id}'`);
     }
 
+    if (ValidationUtil.isDefined(this._toolTip)) {
+      this._toolTip.activateListeners(this._element);
+    }
+
     for (const child of this.children) {
       try {
         await child.activateListeners(html);
@@ -454,7 +489,11 @@ export default class ViewModel {
   dispose() {
     this.parent = undefined;
 
-    // First of all, dispose of children. 
+    if (ValidationUtil.isDefined(this._toolTip)) {
+      this._toolTip.deactivateListeners();
+    }
+
+    // Dispose of children. 
     if (this.children !== undefined && this.children !== null) {
       for (const child of this.children) {
         try {
@@ -684,7 +723,7 @@ export default class ViewModel {
     const result = [];
     
     for (const document of documents) {
-      let vm = currentList.find(it => it._id === document.id);
+      let vm = (currentList ?? []).find(it => it._id === document.id);
       if (vm === undefined) {
         vm = factoryFunc({
           id: document.id,

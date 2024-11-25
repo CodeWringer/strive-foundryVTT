@@ -8,7 +8,6 @@ import ButtonContextMenuViewModel from "../../../component/button-context-menu/b
 import ButtonRollViewModel from "../../../component/button-roll/button-roll-viewmodel.mjs"
 import ButtonViewModel from "../../../component/button/button-viewmodel.mjs"
 import DamageDefinitionListViewModel from "../../../component/damage-definition-list/damage-definition-list-viewmodel.mjs"
-import InfoBubble, { InfoBubbleAutoHidingTypes, InfoBubbleAutoShowingTypes } from "../../../component/info-bubble/info-bubble.mjs"
 import InputDropDownViewModel from "../../../component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs"
 import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs"
 import InputTagsViewModel from "../../../component/input-tags/input-tags-viewmodel.mjs"
@@ -27,6 +26,9 @@ import ButtonCheckBoxViewModel from "../../../component/button-checkbox/button-c
 import { StringUtil } from "../../../../business/util/string-utility.mjs"
 import { ExtenderUtil } from "../../../../common/extender-util.mjs"
 import { ValidationUtil } from "../../../../business/util/validation-utility.mjs"
+import RulesetExplainer from "../../../../business/ruleset/ruleset-explainer.mjs"
+import ReadOnlyValueViewModel from "../../../component/read-only-value/read-only-value.mjs"
+import ViewModel from "../../../view-model/view-model.mjs"
 
 /**
  * @property {TransientSkill} document
@@ -40,18 +42,11 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
   get isExpertiseListVisible() { return (this.isEditable === true) || this.document.expertises.length !== 0 }
 
   /**
-   * Returns the current number of successes. 
-   * @type {Number}
+   * Returns the current advancement requirements. 
+   * @type {Object}
    * @readonly
    */
-  get successes() { return this.document.advancementRequirements.successes; }
-
-  /**
-   * Returns the current number of failures. 
-   * @type {Number}
-   * @readonly
-   */
-  get failures() { return this.document.advancementRequirements.failures; }
+  get advancementRequirements() { return this.document.advancementRequirements; }
 
   /**
    * Returns true, if the expertise list should be rendered. 
@@ -78,11 +73,22 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
    * @readonly
    */
   get prerequisites() {
-    return this.document.prerequisites.map(it => {
+    const thiz = this;
+    return this.document.prerequisites.map(prerequisite => {
       return {
-        id: it.id,
-        name: it.name,
-        minimumLevel: it.minimumLevel,
+        id: prerequisite.id,
+        name: prerequisite.name,
+        minimumLevel: prerequisite.minimumLevel,
+        vmName: new ReadOnlyValueViewModel({
+          id: "vmName",
+          parent: thiz,
+          value: prerequisite.name,
+        }),
+        vmMinimumLevel: new ReadOnlyValueViewModel({
+          id: "vmMinimumLevel",
+          parent: thiz,
+          value: prerequisite.minimumLevel,
+        }),
       };
     });
   }
@@ -208,7 +214,18 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
         this.document.levelModifier = newValue;
       },
     });
+    this.vmModifiedLevel = new ReadOnlyValueViewModel({
+      id: "vmModifiedLevel",
+      parent: this,
+      value: this.modifiedLevel,
+    });
     if (this.showAdvancementProgression) {
+      this.vmAdvancementRequirements = new ReadOnlyValueViewModel({
+        id: "vmAdvancementRequirements",
+        parent: this,
+        value: `${this.advancementRequirements.successes} / ${this.advancementRequirements.failures}`,
+        localizedToolTip: new RulesetExplainer().getExplanationForSkillAdvancementRequirements(this.document),
+      });
       this.vmNsSuccesses = new InputNumberSpinnerViewModel({
         parent: this,
         id: "vmNsSuccesses",
@@ -245,15 +262,17 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
         this.document.damage = newValue;
       },
       resolveFormulaContext: this.getRootOwningDocument(this.document),
-      chatTitle: `${game.i18n.localize("system.damageDefinition.formula")} - ${this.document.name}`,
+      chatTitle: `${game.i18n.localize("system.damageDefinition.label")} - ${this.document.name}`,
+    });
+    this.vmDamageFormulaInfo = new ViewModel({
+      id: "damage-info",
+      parent: this,
+      localizedToolTip: game.i18n.localize("system.damageDefinition.infoFormulae"),
     });
     if (this.showExpertises === true) {
       this.vmExpertiseTable = new ExpertiseTableViewModel({
         id: "vmExpertiseTable",
         parent: this,
-        isEditable: this.isEditable,
-        isSendable: this.isSendable,
-        isOwner: this.isOwner,
         document: this.document,
         expertisesInitiallyVisible: this.document.expertises.length > 0,
       });
@@ -360,20 +379,6 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
   }
 
   /** @override */
-  async activateListeners(html) {
-    await super.activateListeners(html);
-
-    this.damageInfoBubble = new InfoBubble({
-      html: html,
-      map: [
-        { element: html.find(`#${this.id}-damage-info`), text: game.i18n.localize("system.damageDefinition.infoFormulae") },
-      ],
-      autoShowType: InfoBubbleAutoShowingTypes.MOUSE_ENTER,
-      autoHideType: InfoBubbleAutoHidingTypes.MOUSE_LEAVE,
-    });
-  }
-
-  /** @override */
   getPrimaryHeaderButtons() {
     const inherited = super.getPrimaryHeaderButtons();
     return [
@@ -384,7 +389,6 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
           id: "vmBtnRoll",
           target: this.document,
           rollSchema: new Ruleset().getSkillRollSchema(),
-          propertyPath: undefined,
           primaryChatTitle: game.i18n.localize(this.document.name),
           primaryChatImage: this.document.img,
           actor: this.document.owningDocument.document,

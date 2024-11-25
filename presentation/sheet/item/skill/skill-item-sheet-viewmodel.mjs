@@ -10,7 +10,6 @@ import ButtonContextMenuViewModel from "../../../component/button-context-menu/b
 import DamageAndType from "../../../../business/ruleset/skill/damage-and-type.mjs";
 import { DAMAGE_TYPES } from "../../../../business/ruleset/damage-types.mjs";
 import { ATTACK_TYPES, getAttackTypeIconClass } from "../../../../business/ruleset/skill/attack-types.mjs";
-import InfoBubble, { InfoBubbleAutoHidingTypes, InfoBubbleAutoShowingTypes } from "../../../component/info-bubble/info-bubble.mjs";
 import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
 import DamageDefinitionListViewModel from "../../../component/damage-definition-list/damage-definition-list-viewmodel.mjs";
 import BaseItemSheetViewModel from "../base/base-item-sheet-viewmodel.mjs";
@@ -23,6 +22,7 @@ import ButtonViewModel from "../../../component/button/button-viewmodel.mjs";
 import { StringUtil } from "../../../../business/util/string-utility.mjs";
 import { ExtenderUtil } from "../../../../common/extender-util.mjs";
 import { ValidationUtil } from "../../../../business/util/validation-utility.mjs";
+import ViewModel from "../../../view-model/view-model.mjs";
 
 /**
  * @property {TransientSkill} document
@@ -246,7 +246,12 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
         this.document.damage = newValue;
       },
       resolveFormulaContext: this._getRootOwningDocument(this.document),
-      chatTitle: `${game.i18n.localize("system.damageDefinition.formula")} - ${this.document.name}`,
+      chatTitle: `${game.i18n.localize("system.damageDefinition.label")} - ${this.document.name}`,
+    });
+    this.vmDamageFormulaInfo = new ViewModel({
+      id: "damage-info",
+      parent: this,
+      localizedToolTip: game.i18n.localize("system.damageDefinition.infoFormulae"),
     });
 
     this.baseAttributeViewModels = this._getBaseAttributeViewModels();
@@ -383,20 +388,6 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
     return new TemplatedComponent({
       template: game.strive.const.TEMPLATES.SKILL_ITEM_SHEET_EXTRA_CONTENT,
       viewModel: this,
-    });
-  }
-
-  /** @override */
-  async activateListeners(html) {
-    await super.activateListeners(html);
-
-    this.damageInfoBubble = new InfoBubble({
-      html: html,
-      map: [
-        { element: html.find(`#${this.id}-damage-info`), text: game.i18n.localize("system.damageDefinition.infoFormulae") },
-      ],
-      autoShowType: InfoBubbleAutoShowingTypes.MOUSE_ENTER,
-      autoHideType: InfoBubbleAutoHidingTypes.MOUSE_LEAVE,
     });
   }
 

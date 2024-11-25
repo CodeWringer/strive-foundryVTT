@@ -8,6 +8,7 @@ import { HEALTH_STATES } from '../../ruleset/health/health-states.mjs';
 import Ruleset from '../../ruleset/ruleset.mjs';
 import { SKILL_TAGS } from '../../tags/system-tags.mjs';
 import LoadHealthStatesSettingUseCase from '../../use-case/load-health-states-setting-use-case.mjs';
+import { PropertyUtil } from '../../util/property-utility.mjs';
 import { ValidationUtil } from '../../util/validation-utility.mjs';
 import { ITEM_TYPES } from '../item/item-types.mjs';
 import TransientBaseActor from './transient-base-actor.mjs';
@@ -55,8 +56,7 @@ import TransientBaseActor from './transient-base-actor.mjs';
  * @property {Number} health.HP 
  * @property {Number} health.maxHP 
  * * Read-only. 
- * @property {Number} health.maxInjuries 
- * * Read-only. 
+ * @property {Number} health.injuryShrugOffs 
  * @property {Number} health.exhaustion 
  * @property {Number} health.maxExhaustion 
  * * Read-only. 
@@ -107,12 +107,21 @@ import TransientBaseActor from './transient-base-actor.mjs';
  * @property {Number} personalityTraits.vengefulOrForgiving
  * * Read-only
  * * Ranges from -3 to +3
- * @property {Number} maxActionPoints The maximum number of action points allowed for this character. 
- * @property {Number} actionPointRefill The number of action points regained each turn for this character. 
- * @property {Boolean} allowAutomaticActionPointRefill If `true`, automatic AP refilling is enabled for this character. 
- * @property {Number} actionPoints The current number of action points of this character. 
- * @property {Number} gritPoints The current number of grit points of this character. 
- * @property {Boolean} allowGritPoints If `true`, grit points are enabled character. 
+ * 
+ * @property {Object} actionPoints 
+ * @property {Number} actionPoints.current The current number of action points of this character. 
+ * @property {Number} actionPoints.maximum The maximum number of action points allowed for this character. 
+ * 
+ * @property {Object} actionPoints.refill 
+ * @property {Boolean} actionPoints.refill.enable If `true`, automatic AP refilling is enabled for this character. 
+ * @property {Number} actionPoints.refill.amount The number of action points regained each turn for this character. 
+ * 
+ * @property {Object} gritPoints
+ * @property {Number} gritPoints.current The current number of grit points of this character. 
+ * @property {Boolean} gritPoints.enable If `true`, grit points are enabled character. 
+ * 
+ * @property {Object} initiative 
+ * @property {Number} initiative.perTurn 
  */
 export default class TransientBaseCharacterActor extends TransientBaseActor {
   /** @override */
@@ -274,13 +283,9 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
       get exhaustion() { return parseInt(thiz.document.system.health.exhaustion ?? 0); },
       set exhaustion(value) { thiz.updateByPath("system.health.exhaustion", value); },
 
-      // Injuries
-      get maxInjuries() { return new Ruleset().getCharacterMaximumInjuries(thiz.document) },
-      
-      get maxInjuriesModifier() { return parseInt(thiz.document.system.health.maxInjuriesModifier ?? 0); },
-      set maxInjuriesModifier(value) { thiz.updateByPath("system.health.maxInjuriesModifier", value); },
-
-      get modifiedMaxInjuries() { return this.maxInjuries + this.maxInjuriesModifier; },
+      // Injury shrug off
+      get injuryShrugOffs() { return parseInt(thiz.document.system.health.injuryShrugOffs ?? 0); },
+      set injuryShrugOffs(value) { thiz.updateByPath("system.health.injuryShrugOffs", value); },
 
       // Conditions (used to be called health states)
       get states() { return thiz._healthStates.concat([]); },
@@ -337,36 +342,75 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
     };
   }
 
-  get maxActionPoints() { return this.document.system.maxActionPoints ?? 5; }
-  set maxActionPoints(value) {
-    this.update({
-      system: {
-        maxActionPoints: value,
-        actionPoints: Math.min(value, this.actionPoints),
-      }
-    });
+  /**
+   * @type {Object}
+   * @readonly
+   */
+  get actionPoints() {
+    const thiz = this;
+    return {
+      get current() { return PropertyUtil.guaranteeObject(thiz.document.system.actionPoints).current ?? 3; },
+      set current(value) { thiz.updateByPath("system.actionPoints.current", value); },
+      
+      get maximum() { return PropertyUtil.guaranteeObject(thiz.document.system.actionPoints).maximum ?? 5; },
+      set maximum(value) {
+        thiz.update({
+          system: {
+            actionPoints: {
+              maximum: value,
+              current: Math.min(value, this.current),
+            }
+          }
+        });
+      },
+
+      get refill() {
+        return {
+          get amount() { return PropertyUtil.guaranteeObject(PropertyUtil.guaranteeObject(thiz.document.system.actionPoints).refill).amount ?? 3; },
+          set amount(value) { thiz.updateByPath("system.actionPoints.refill.amount", value); },
+
+          get enable() { return PropertyUtil.guaranteeObject(PropertyUtil.guaranteeObject(thiz.document.system.actionPoints).refill).enable ?? true; },
+          set enable(value) { thiz.updateByPath("system.actionPoints.refill.enable", value); },
+        };
+      },
+    };
   }
 
-  get actionPointRefill() { return this.document.system.actionPointRefill ?? 3; }
-  set actionPointRefill(value) { this.updateByPath("system.actionPointRefill", value); }
-
-  get allowAutomaticActionPointRefill() { return this.document.system.allowAutomaticActionPointRefill ?? true; }
-  set allowAutomaticActionPointRefill(value) { this.updateByPath("system.allowAutomaticActionPointRefill", value); }
-
-  get actionPoints() { return this.document.system.actionPoints ?? 3; }
-  set actionPoints(value) { this.updateByPath("system.actionPoints", value); }
+  /**
+   * @type {Object}
+   * @readonly
+   */
+  get gritPoints() {
+    const thiz = this;
+    return {
+      /**
+       * @type {Number}
+       */
+      get current() { return PropertyUtil.guaranteeObject(thiz.document.system.gritPoints).current ?? 0; },
+      set current(value) { thiz.updateByPath("system.gritPoints.current", value); },
+      
+      /**
+       * @type {Boolean}
+       */
+      get enable() { return PropertyUtil.guaranteeObject(thiz.document.system.gritPoints).enable ?? false; },
+      set enable(value) { thiz.updateByPath("system.gritPoints.enable", value); },
+    };
+  }
 
   /**
-   * @type {Number}
+   * @type {Object}
+   * @readonly
    */
-  get gritPoints() { return this.document.system.gritPoints ?? 0; }
-  set gritPoints(value) { this.updateByPath("system.gritPoints", value); }
-  
-  /**
-   * @type {Boolean}
-   */
-  get allowGritPoints() { return this.document.system.allowGritPoints ?? false; }
-  set allowGritPoints(value) { this.updateByPath("system.allowGritPoints", value); }
+  get initiative() {
+    const thiz = this;
+    return {
+      /**
+       * @type {Number}
+       */
+      get perTurn() { return PropertyUtil.guaranteeObject(thiz.document.system.initiative).perTurn ?? 1; },
+      set perTurn(value) { thiz.updateByPath("system.initiative.perTurn", value); },
+    };
+  }
 
   /**
    * @type {Number}

@@ -74,6 +74,8 @@ export default class ButtonSendToChatViewModel extends ButtonViewModel {
    * * `event: Event`
    * * `data: undefined`
    * 
+   * @param {Object} args.target The object to send to chat. **Must** expose a `sendToChat` 
+   * method OR must have a property which exposes a `sendToChat` method! 
    * @param {String | undefined} args.propertyPath Property path identifying a property to send to chat. 
    * @param {String | undefined} args.chatTitle Title to display above the chat message. 
    * @param {Actor | undefined} args.actor Actor associated with the chat message. 

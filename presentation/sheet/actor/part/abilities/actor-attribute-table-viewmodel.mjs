@@ -1,10 +1,12 @@
 import { ACTOR_TYPES } from "../../../../../business/document/actor/actor-types.mjs";
 import CharacterAttribute from "../../../../../business/ruleset/attribute/character-attribute.mjs";
+import RulesetExplainer from "../../../../../business/ruleset/ruleset-explainer.mjs";
 import Ruleset from "../../../../../business/ruleset/ruleset.mjs";
 import { ValidationUtil } from "../../../../../business/util/validation-utility.mjs";
 import ButtonCheckBoxViewModel from "../../../../component/button-checkbox/button-checkbox-viewmodel.mjs";
 import ButtonRollViewModel from "../../../../component/button-roll/button-roll-viewmodel.mjs";
 import InputNumberSpinnerViewModel from "../../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
+import ReadOnlyValueViewModel from "../../../../component/read-only-value/read-only-value.mjs";
 import ViewModel from "../../../../view-model/view-model.mjs";
 
 /**
@@ -107,14 +109,19 @@ export default class AttributeTableViewModel extends ViewModel {
         attributeName: attribute.name,
         localizableName: attribute.localizableName,
         localizableAbbreviation: attribute.localizableAbbreviation,
-        requiredProgress: attribute.advancementRequirements,
         modifiedLevel: attribute.modifiedLevel,
+        vmRequiredProgress: new InputNumberSpinnerViewModel({
+          parent: this,
+          id: `vmRequiredProgress-${attribute.name}`,
+          value: attribute.advancementRequirements,
+          isEditable: false,
+          localizedToolTip: new RulesetExplainer().getExplanationForAttributeAdvancement(attribute),
+        }),
         vmBtnRoll: new ButtonRollViewModel({
           parent: this,
           id: `vmBtnRoll-${attribute.name}`,
           target: attribute,
           rollSchema: new Ruleset().getAttributeRollSchema(),
-          propertyPath: undefined,
           primaryChatTitle: game.i18n.localize(attribute.localizableName),
           actor: this.document,
         }),
@@ -151,6 +158,11 @@ export default class AttributeTableViewModel extends ViewModel {
           onChange: (_, newValue) => {
             attribute.advanced = newValue;
           },
+        }),
+        vmModifiedLevel: new ReadOnlyValueViewModel({
+          id: "vmModifiedLevel",
+          parent: this,
+          value: attribute.modifiedLevel,
         }),
       });
     }

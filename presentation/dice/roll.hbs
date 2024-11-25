@@ -27,11 +27,10 @@ blankCount: String | Number
 
 diceComposition: String
 
-obstacle: Number
-unmodifiedObstacle: Number
 isObstacleRolled: Boolean
 obFormula: String
 resolvedObFormula: String
+resultingObstacle: String
 
 showReminder: Boolean
 additionalContent: String
@@ -39,7 +38,8 @@ additionalContent: String
 <div id="{{id}}" class="dice-roll-chat-message-container auto-margin-v-sm custom-system-chat-message{{#if cssClass}} {{cssClass}}{{/if}}">
   {{!-- Header --}}
   {{!-- Secondary Title --}}
-  {{#if (or (neq secondaryTitle undefined) (neq secondaryImage undefined))}}
+  <a id="{{id}}-toggle-details">
+    {{#if (or (neq secondaryTitle undefined) (neq secondaryImage undefined))}}
     <div class="flex flex-row">
       {{#if secondaryImage}}
       <div class="flex flex-center">
@@ -47,14 +47,14 @@ additionalContent: String
       </div>
       {{/if}}
       {{#if secondaryTitle}}
-        <h3>
-          {{localize secondaryTitle}}
-        </h3>
+      <h3>
+        {{localize secondaryTitle}}
+      </h3>
       {{/if}}
     </div>
-  {{/if}}
-  {{!-- Primary Title --}}
-  {{#if (or (neq primaryTitle undefined) (neq primaryImage undefined))}}
+    {{/if}}
+    {{!-- Primary Title --}}
+    {{#if (or (neq primaryTitle undefined) (neq primaryImage undefined))}}
     <div class="flex flex-row">
       {{#if primaryImage}}
       <div class="flex flex-center">
@@ -62,17 +62,22 @@ additionalContent: String
       </div>
       {{/if}}
       {{#if primaryTitle}}
-        <h2 class="flex-grow">
-          {{localize primaryTitle}}
-        </h2>
+      <h2 class="flex flex-row flex-grow">
+        <span class="flex-grow">{{localize primaryTitle}}</span>
+        <div class="flex flex-right">
+          <i class="ico ico-details-hidden interactible dark toggle-with-details"></i>
+          <i class="ico ico-details-visible hidden interactible dark toggle-with-details"></i>
+        </div>
+      </h2>
       {{/if}}
     </div>
-  {{/if}}
+    {{/if}}
+  </a>
   {{!-- Details --}}
   <div class="flex flex-row flex-middle flex-grow flex-wrap auto-margin-h-md">
     {{!-- Number of dice --}}
-    <a id="{{id}}-toggle-details" class="flex-grow">
-      <div class="flex flex-center roll-details-button pad-sm">
+    <div class="flex flex-center pad-sm">
+      <div class="flex flex-center">
         <span class="strive-pill flex flex-row font-size-default" title="{{localize "system.roll.numberOfDice"}}">
           <div class="flex flex-center">
             <i class="fas fa-dice-three"></i>
@@ -85,7 +90,7 @@ additionalContent: String
           </div>
         </span>
       </div>
-    </a>
+    </div>
   </div>
   <div id="{{id}}-details" class="sheet-block hidden" style="height: 0%;">
     {{!-- Dice composition --}}
@@ -99,7 +104,7 @@ additionalContent: String
       <div class="dice-rolls-container mini">
         {{{resolvedObFormula}}}
       </div>
-      <span>{{unmodifiedObstacle}} (+ 1) = {{obstacle}}</span>
+      <span>{{resultingObstacle}}</span>
     </div>
     {{/if}}
     {{#if showIntermediateFaces}}

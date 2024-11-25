@@ -2,12 +2,11 @@ import { ITEM_TYPES } from "../../../../business/document/item/item-types.mjs"
 import { DAMAGE_TYPES } from "../../../../business/ruleset/damage-types.mjs"
 import { ATTACK_TYPES } from "../../../../business/ruleset/skill/attack-types.mjs"
 import { StringUtil } from "../../../../business/util/string-utility.mjs"
-import { UuidUtil } from "../../../../business/util/uuid-utility.mjs"
 import { ValidationUtil } from "../../../../business/util/validation-utility.mjs"
-import ButtonAddViewModel from "../../../component/button-add/button-add-viewmodel.mjs"
-import ButtonToggleVisibilityViewModel from "../../../component/button-toggle-visibility/button-toggle-visibility-viewmodel.mjs"
+import ExpertiseCreationStrategy from "../../../component/button-add/expertise-creation-strategy.mjs"
+import { SortingOption } from "../../../component/sort-controls/sort-controls-viewmodel.mjs"
 import DocumentListItemOrderDataSource from "../../../component/sortable-list/document-list-item-order-datasource.mjs"
-import SortableListViewModel from "../../../component/sortable-list/sortable-list-viewmodel.mjs"
+import SortableListViewModel, { SortableListAddItemParams, SortableListSortParams } from "../../../component/sortable-list/sortable-list-viewmodel.mjs"
 import ViewModel from "../../../view-model/view-model.mjs"
 import ExpertiseListItemViewModel from "./expertise-list-item-viewmodel.mjs"
 
@@ -22,38 +21,16 @@ export default class ExpertiseTableViewModel extends ViewModel {
   document = undefined;
 
   /**
-   * @type {Boolean}
-   * @private
-   */
-  _isExpanded = false;
-  /**
+   * Pass-through of the nested sortable list's `isExpanded` property. 
+   * 
    * @type {Boolean}
    */
   get isExpanded() {
-    return this._isExpanded;
+    return this.vmExpertises.isExpanded;
   }
   set isExpanded(value) {
-    this._isExpanded = value;
-
-    // Synchronize the toggle buttons. 
-    this.vmToggleExpansion1.value = value;
-    this.vmToggleExpansion2.value = value;
-    // Hide the second expansion toggle button if the expertise list is currently hidden. 
-    if (value === true) {
-      this.vmToggleExpansion2.element.parent().removeClass("hidden");
-    } else {
-      this.vmToggleExpansion2.element.parent().addClass("hidden");
-    }
-
-    // Immediately write view state. 
-    this.writeViewState();
+    this.vmExpertises.isExpanded = value;
   }
-
-  /**
-   * @type {String}
-   * @readonly
-   */
-  visGroupId = undefined;
 
   /**
    * @type {Array<ChoiceOption>}
@@ -74,6 +51,7 @@ export default class ExpertiseTableViewModel extends ViewModel {
   expertises = [];
 
   /**
+   * @param {Object} args 
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
    * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 
    * 
@@ -82,87 +60,61 @@ export default class ExpertiseTableViewModel extends ViewModel {
    * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document. 
    * 
    * @param {TransientSkill} args.document
-   * @param {String | undefined} args.visGroupId
    * @param {Boolean | undefined} args.expertisesInitiallyVisible
    */
   constructor(args = {}) {
     super(args);
     ValidationUtil.validateOrThrow(args, ["document"]);
 
-    // Own properties.
     this.document = args.document;
-    this.visGroupId = args.visGroupId ?? UuidUtil.createUUID();
-    this._isExpanded = args.expertisesInitiallyVisible ?? false;
     
-    this.registerViewStateProperty("_isExpanded");
-
-    // Child view models. 
-    this.contextTemplate = "expertise-table";
-    const thiz = this;
-
-    this.vmAddExpertise = new ButtonAddViewModel({
-      id: "vmAddExpertise",
-      parent: this,
-      target: this.document,
-      creationType: ITEM_TYPES.EXPERTISE,
-      localizedToolTip: StringUtil.format(
-        game.i18n.localize("system.general.add.addType"),
-        game.i18n.localize("system.character.skill.expertise.singular"),
-      ),
-      localizedType: game.i18n.localize("system.character.skill.expertise.singular"),
-    });
-
-    this.expertises = [];
     this.expertises = this._getExpertiseViewModels();
 
     this.vmExpertises = new SortableListViewModel({
-      parent: thiz,
-      isEditable: args.isEditable ?? thiz.isEditable,
       id: "vmExpertises",
+      parent: this,
+      isCollapsible: true,
+      isExpanded: args.expertisesInitiallyVisible ?? false,
       indexDataSource: new DocumentListItemOrderDataSource({
-        document: thiz.document,
+        document: this.document,
         listName: "expertises",
       }),
       listItemViewModels: this.expertises,
       listItemTemplate: ExpertiseListItemViewModel.TEMPLATE,
-      vmBtnAddItem: new ButtonAddViewModel({
-        id: "vmBtnAdd",
-        parent: this,
-        target: thiz.document,
-        isEditable: this.isEditable,
-        creationType: ITEM_TYPES.EXPERTISE,
-        withDialog: false,
+      localizedTitle: game.i18n.localize("system.character.skill.expertise.plural"),
+      headerLevel: 3,
+      addItemParams: new SortableListAddItemParams({
+        creationStrategy: new ExpertiseCreationStrategy({
+          target: this.document,
+        }),
         localizedLabel: StringUtil.format(
           game.i18n.localize("system.general.add.addType"),
           game.i18n.localize("system.character.skill.expertise.singular"),
         ),
-        localizedType: game.i18n.localize("system.character.skill.expertise.singular"),
+        localizedToolTip: StringUtil.format(
+          game.i18n.localize("system.general.add.addType"),
+          game.i18n.localize("system.character.skill.expertise.singular"),
+        ),
       }),
-    });
-
-    this.vmToggleExpansion1 = new ButtonToggleVisibilityViewModel({
-      parent: thiz,
-      id: "vmToggleExpansion1",
-      isEditable: true,
-      value: this.isExpanded,
-      iconInactive: '<i class="fas fa-angle-double-down"></i>',
-      iconActive: '<i class="fas fa-angle-double-up"></i>',
-      visGroup: thiz.visGroupId,
-      onClick: async (event, data) => {
-        this.isExpanded = !this.isExpanded;
-      },
-    });
-    this.vmToggleExpansion2 = new ButtonToggleVisibilityViewModel({
-      parent: thiz,
-      id: "vmToggleExpansion2",
-      isEditable: true,
-      value: this.isExpanded,
-      iconInactive: '<i class="fas fa-angle-double-down"></i>',
-      iconActive: '<i class="fas fa-angle-double-up"></i>',
-      visGroup: thiz.visGroupId,
-      onClick: async (event, data) => {
-        this.isExpanded = !this.isExpanded;
-      },
+      sortParams: new SortableListSortParams({
+        options: [
+          new SortingOption({
+            iconHtml: '<i class="ico ico-tags-solid dark"></i>',
+            localizedToolTip: game.i18n.localize("system.general.name.label"),
+            sortingFunc: (a, b) => {
+              return a.document.name.localeCompare(b.document.name);
+            },
+          }),
+          new SortingOption({
+            iconHtml: '<i class="ico ico-level-solid dark"></i>',
+            localizedToolTip: game.i18n.localize("system.character.advancement.level"),
+            sortingFunc: (a, b) => {
+              return a.document.compareRequiredLevel(b.document);
+            },
+          }),
+        ],
+        compact: true,
+      })
     });
   }
 
@@ -191,7 +143,7 @@ export default class ExpertiseTableViewModel extends ViewModel {
     updates.set(this.vmExpertises, {
       ...updates.get(this.vmExpertises),
       listItemViewModels: this.expertises,
-      isEditable: args.isEditable ?? thiz.isEditable,
+      isEditable: args.isEditable ?? this.isEditable,
     });
     
     return updates;
@@ -208,11 +160,9 @@ export default class ExpertiseTableViewModel extends ViewModel {
     for (const expertise of expertises) {
       const vm = new ExpertiseListItemViewModel({
         id: expertise.id,
-        isEditable: this.isEditable,
-        isSendable: this.isSendable,
-        isOwner: this.isOwner,
+        parent: this,
         document: expertise,
-        isExpanded: true,
+        isExpanded: true, // Expertises are expanded by default, so their content is harder to overlook. 
       });
       result.push(vm);
       this[vm._id] = vm;

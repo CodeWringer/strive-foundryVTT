@@ -27,8 +27,7 @@ export const TEMPLATES = {
   COMPONENT_VERTICAL_LINE: `${basePathComponent}/vertical-line/vertical-line.hbs`,
   // Labels
   COMPONENT_LABEL: `${basePathComponent}/label/label.hbs`,
-  COMPONENT_LABEL_READ_ONLY_VALUE: `${basePathComponent}/label/read-only-value.hbs`,
-  COMPONENT_LABEL_ADMONISHING_READ_ONLY_VALUE: `${basePathComponent}/label/admonishing-read-only-value.hbs`,
+  COMPONENT_READ_ONLY_VALUE: `${basePathComponent}/read-only-value/read-only-value.hbs`,
   COMPONENT_HEADER_PRIMARY: `${basePathComponent}/label/header/primary-header-label.hbs`,
   COMPONENT_HEADER_SECONDARY: `${basePathComponent}/label/header/secondary-header-label.hbs`,
   COMPONENT_HEADER_TERTIARY: `${basePathComponent}/label/header/tertiary-header-label.hbs`,
@@ -77,6 +76,7 @@ export const TEMPLATES = {
   DIALOG_DAMAGE_DESIGNER: `${basePathPresentation}/dialog/damage-designer-dialog/damage-designer-dialog.hbs`,
   DIALOG_DAMAGE_FINDING_LIST_ITEM: `${basePathPresentation}/dialog/damage-designer-dialog/damage-finding-list-item.hbs`,
   DIALOG_DAMAGE_HIERARCHY_LIST_ITEM: `${basePathPresentation}/dialog/damage-designer-dialog/damage-hierarchy-list-item.hbs`,
+  DIALOG_ROLLABLE_SELECTION: `${basePathPresentation}/dialog/rollable-selection-modal-dialog/rollable-selection-modal-dialog.hbs`,
   // --- Settings Dialogs
   DIALOG_SETTINGS_HEALTH_STATES: `${basePathPresentation}/dialog/settings/health-states/health-states-settings-dialog.hbs`,
   CUSTOM_HEALTH_STATE_LIST_ITEM: `${basePathPresentation}/dialog/settings/health-states/custom-health-state-list-item.hbs`,
@@ -88,7 +88,7 @@ export const TEMPLATES = {
   ACTOR_ATTRIBUTES: `${basePathPresentation}/sheet/actor/part/abilities/actor-attributes.hbs`,
   ACTOR_SKILLS: `${basePathPresentation}/sheet/actor/part/abilities/actor-skills.hbs`,
   ACTOR_DRIVERS: `${basePathPresentation}/sheet/actor/part/personality/actor-drivers.hbs`,
-  ACTOR_FATE: `${basePathPresentation}/sheet/actor/part/actor-fate.hbs`,
+  ACTOR_FATE: `${basePathPresentation}/sheet/actor/part/personality/actor-fate.hbs`,
   ACTOR_PERSONALITY: `${basePathPresentation}/sheet/actor/part/personality/actor-personality.hbs`,
   ACTOR_HEALTH: `${basePathPresentation}/sheet/actor/part/health/actor-health.hbs`,
   ACTOR_HEALTH_STATES: `${basePathPresentation}/sheet/actor/part/health/actor-health-states.hbs`,
@@ -101,6 +101,7 @@ export const TEMPLATES = {
   ACTOR_ASSET_SLOT: `${basePathPresentation}/sheet/actor/part/assets/actor-asset-slot.hbs`,
   ACTOR_BIOGRAPHY: `${basePathPresentation}/sheet/actor/part/actor-biography.hbs`,
   ACTOR_CHAT_MESSAGE: `${basePathPresentation}/sheet/actor/actor-chat-message.hbs`,
+  ACTOR_INJURY_SHRUG_OFF_BAR: `${basePathPresentation}/sheet/actor/part/health/injury-shrug-off-bar/injury-shrug-off-bar.hbs`,
   CHALLENGE_RATING: `${basePathPresentation}/sheet/actor/part/abilities/challenge-rating.hbs`,
   // --- Item
   // Base

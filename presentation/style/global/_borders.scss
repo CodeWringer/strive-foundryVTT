@@ -3,156 +3,94 @@ $border-size-md: 2px;
 $border-size-lg: 3px;
 $border-size-xl: 4px;
 
-.border-solid-r {
-  &-sm {
-    border-right-color: $c-border-medium !important;
-    border-right-style: solid !important;
-    border-right-width: $border-size-sm !important;
+@mixin directional-border-colorations($direction) {
+  &.highlight {
+    border-#{$direction}-color: $c-border-highlight !important;
+    &.dark {
+      border-#{$direction}-color: $c-border-highlight-dark !important;
+    }
+    &.light {
+      border-#{$direction}-color: $c-border-highlight-light !important;
+    }
   }
-  &-md {
-    border-right-color: $c-border-medium !important;
-    border-right-style: solid !important;
-    border-right-width: $border-size-md !important;
+  &.dark {
+    border-#{$direction}-color: $c-border-dark !important;
   }
-  &-lg {
-    border-right-color: $c-border-medium !important;
-    border-right-style: solid !important;
-    border-right-width: $border-size-lg !important;
-  }
-  &-xl {
-    border-right-color: $c-border-medium !important;
-    border-right-style: solid !important;
-    border-right-width: $border-size-xl !important;
+  &.light {
+    border-#{$direction}-color: $c-border-light !important;
   }
 }
 
-.border-solid-l {
-  &-sm {
-    border-left-color: $c-border-medium !important;
-    border-left-style: solid !important;
-    border-left-width: $border-size-sm !important;
+@mixin border-colorations() {
+  &.highlight {
+    border-color: $c-border-highlight !important;
+    &.dark {
+      border-color: $c-border-highlight-dark !important;
+    }
+    &.light {
+      border-color: $c-border-highlight-light !important;
+    }
   }
-  &-md {
-    border-left-color: $c-border-medium !important;
-    border-left-style: solid !important;
-    border-left-width: $border-size-md !important;
+  &.dark {
+    border-color: $c-border-dark !important;
   }
-  &-lg {
-    border-left-color: $c-border-medium !important;
-    border-left-style: solid !important;
-    border-left-width: $border-size-lg !important;
-  }
-  &-xl {
-    border-left-color: $c-border-medium !important;
-    border-left-style: solid !important;
-    border-left-width: $border-size-xl !important;
+  &.light {
+    border-color: $c-border-light !important;
   }
 }
 
-.border-solid-b {
+@mixin border-template($direction) {
   &-sm {
-    border-bottom-color: $c-border-medium !important;
-    border-bottom-style: solid !important;
-    border-bottom-width: $border-size-sm !important;
+    border-#{$direction}: $border-size-sm solid $c-border-medium !important;
+    @include directional-border-colorations($direction);
   }
   &-md {
-    border-bottom-color: $c-border-medium !important;
-    border-bottom-style: solid !important;
-    border-bottom-width: $border-size-md !important;
+    border-#{$direction}: $border-size-md solid $c-border-medium !important;
+    @include directional-border-colorations($direction);
   }
   &-lg {
-    border-bottom-color: $c-border-medium !important;
-    border-bottom-style: solid !important;
-    border-bottom-width: $border-size-lg !important;
+    border-#{$direction}: $border-size-lg solid $c-border-medium !important;
+    @include directional-border-colorations($direction);
   }
   &-xl {
-    border-bottom-color: $c-border-medium !important;
-    border-bottom-style: solid !important;
-    border-bottom-width: $border-size-xl !important;
+    border-#{$direction}: $border-size-xl solid $c-border-medium !important;
+    @include directional-border-colorations($direction);
+  }
+}
+
+.border {
+  &-sm {
+    border: $border-size-sm solid $c-border-medium !important;
+    @include border-colorations();
+  }
+  &-md {
+    border: $border-size-md solid $c-border-medium !important;
+    @include border-colorations();
+  }
+  &-lg {
+    border: $border-size-lg solid $c-border-medium !important;
+    @include border-colorations();
+  }
+  &-xl {
+    border: $border-size-xl solid $c-border-medium !important;
+    @include border-colorations();
   }
 }
 
 .border-solid-t {
-  &-sm {
-    border-top-color: $c-border-medium !important;
-    border-top-style: solid !important;
-    border-top-width: $border-size-sm !important;
-  }
-  &-md {
-    border-top-color: $c-border-medium !important;
-    border-top-style: solid !important;
-    border-top-width: $border-size-md !important;
-  }
-  &-lg {
-    border-top-color: $c-border-medium !important;
-    border-top-style: solid !important;
-    border-top-width: $border-size-lg !important;
-  }
-  &-xl {
-    border-top-color: $c-border-medium !important;
-    border-top-style: solid !important;
-    border-top-width: $border-size-xl !important;
-  }
+  @include border-template(top);
 }
 
-.border-l {
-  &-sm {
-    border-left: $border-size-sm solid $c-border-beige-light !important;
-    &.dark {
-      border-left: $border-size-sm solid $c-border-medium !important;
-    }
-  }
-  &-md {
-    border-left: $border-size-md solid $c-border-beige-light !important;
-    &.dark {
-      border-left: $border-size-md solid $c-border-medium !important;
-    }
-  }
+.border-solid-b {
+  @include border-template(bottom);
 }
 
-.border-r {
-  &-sm {
-    border-right: $border-size-sm solid $c-border-beige-light !important;
-    &.dark {
-      border-right: $border-size-sm solid $c-border-medium !important;
-    }
-  }
-  &-md {
-    border-right: $border-size-md solid $c-border-beige-light !important;
-    &.dark {
-      border-right: $border-size-md solid $c-border-medium !important;
-    }
-  }
+.border-solid-r {
+  @include border-template(right);
 }
 
-.border-t {
-  &-sm {
-    border-top: $border-size-sm solid $c-border-beige-light !important;
-    &.dark {
-      border-top: $border-size-sm solid $c-border-medium !important;
-    }
-  }
-  &-md {
-    border-top: $border-size-md solid $c-border-beige-light !important;
-    &.dark {
-      border-top: $border-size-md solid $c-border-medium !important;
-    }
-  }
-}
-
-.border-b {
-  &-sm {
-    border-bottom: $border-size-sm solid $c-border-beige-light !important;
-    &.dark {
-      border-bottom: $border-size-sm solid $c-border-medium !important;
-    }
-  }
-  &-md {
-    border-bottom: $border-size-md solid $c-border-beige-light !important;
-    &.dark {
-      border-bottom: $border-size-md solid $c-border-medium !important;
-    }
-  }
+.border-solid-l {
+  @include border-template(left);
 }
 
 .auto-border {
@@ -225,4 +163,20 @@ hr {
   width: 80%;
   margin: 4px auto;
   border: solid 1px $c-border-medium;
+}
+
+$card-border-radius: 0.6rem;
+
+.card {
+  border-radius: $card-border-radius;
+  border: 1px solid $c-border-beige-light;
+  &.dark {
+    border: 1px solid $c-border-medium;
+  }
+
+  .header {
+    border-top-left-radius: $card-border-radius;
+    border-top-right-radius: $card-border-radius;
+    background-color: rgba(0, 0, 0, 0.2);
+  }
 }

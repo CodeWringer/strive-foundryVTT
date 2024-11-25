@@ -447,4 +447,24 @@ export default class Expertise {
   resolveReferences(str) {
     return new AtReferencer().resolveReferences(str, this);
   }
+  
+  /**
+   * Compares the raw required level of this instance with a given instance and returns a numeric comparison result. 
+   * 
+   * @param {TransientSkill} other Another instance to compare with. 
+   * 
+   * @returns {Number} `-1` | `0` | `1`
+   * 
+   * `-1` means that this entity is less than / smaller than `other`, while `0` means equality and `1` means it 
+   * is more than / greater than `other`. 
+   */
+  compareRequiredLevel(other) {
+    if (this.requiredLevel < other.requiredLevel) {
+      return -1;
+    } else if (this.requiredLevel > other.requiredLevel) {
+      return 1;
+    } else {
+      return 0;
+    }
+  }
 }

@@ -124,6 +124,21 @@ export class DamageFinding {
   }
 
   /**
+   * 
+   * @param {Number} substitute 
+   * * Default `0`
+   * 
+   * @returns {Number}
+   */
+  getComparableDamage(substitute = 0) {
+    const evaluated = this.evaluate();
+
+    // Get clamped index - the index is the substitute. 
+    const index = Math.max(0, Math.min(substitute, evaluated.length - 1));
+    return evaluated[index].max;
+  }
+
+  /**
    * Replaces all dice-type variables from the given formula, based on the given 
    * replacement type and returns the resulting formula. 
    * 

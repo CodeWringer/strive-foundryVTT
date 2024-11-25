@@ -93,4 +93,30 @@ export default class DamageFindingHierarchy {
       subHierarchy.sort(sortingFunc);
     });
   }
+  
+  /**
+   * 
+   * @param {Number} substitute 
+   * * Default `0`
+   * 
+   * @returns {Number}
+   */
+  getComparableDamage(substitute = 0) {
+    let result = 999999999;
+
+    this.findings.forEach(finding => {
+      const damage = finding.getComparableDamage(substitute);
+      if (damage < result) {
+        result = damage;
+      }
+    });
+    this.subHierarchies.forEach(subHierarchy => {
+      const damage = subHierarchy.getComparableDamage(substitute);
+      if (damage < result) {
+        result = damage;
+      }
+    });
+
+    return result;
+  }
 }

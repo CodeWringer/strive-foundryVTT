@@ -7,6 +7,7 @@ import ObservableField from "../../../common/observables/observable-field.mjs";
 import ButtonViewModel from "../../component/button/button-viewmodel.mjs";
 import InputRadioButtonGroupViewModel from "../../component/input-choice/input-radio-button-group/input-radio-button-group-viewmodel.mjs";
 import StatefulChoiceOption from "../../component/input-choice/stateful-choice-option.mjs";
+import InputNumberSpinnerViewModel from "../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
 import SortControlsViewModel, { SortingOption } from "../../component/sort-controls/sort-controls-viewmodel.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
 import DamageFindingHierarchy from "./damage-finding-hierarchy.mjs";
@@ -117,12 +118,12 @@ export default class DamageDesignerDialogViewModel extends ViewModel {
     const listSortingOptions = [
       new StatefulChoiceOption({
         value: LIST_STYLING.HIERARCHY,
-        activeHtml: `<i class="ico ico-list-hierarchical-solid"></i>`,
+        activeHtml: `<i class="ico dark ico-list-hierarchical-solid"></i>`,
         isActive: true,
       }),
       new StatefulChoiceOption({
         value: LIST_STYLING.FLAT,
-        activeHtml: `<i class="ico ico-list-flat-solid"></i>`,
+        activeHtml: `<i class="ico dark ico-list-flat-solid"></i>`,
       }),
     ];
     this.vmListViewSelection = new InputRadioButtonGroupViewModel({
@@ -138,14 +139,32 @@ export default class DamageDesignerDialogViewModel extends ViewModel {
       },
     });
 
-    this.vmSortByName = new SortControlsViewModel({
-      id: "vmSortByName",
+    this.vmSort = new SortControlsViewModel({
+      id: "vmSort",
       parent: this,
       options: [
         new SortingOption({
+          iconHtml: '<i class="ico ico-tags-solid dark"></i>',
           localizedToolTip: game.i18n.localize("system.general.name.label"),
           sortingFunc: (a, b) => {
             return a.name.localeCompare(b.name);
+          },
+        }),
+        new SortingOption({
+          iconHtml: '<i class="ico ico-damage-roll-solid dark"></i>',
+          sortingFunc: (a, b) => {
+            const substitute = this.vmSubstitute.value;
+
+            const minDamageA = a.getComparableDamage(substitute);
+            const minDamageB = b.getComparableDamage(substitute);
+
+            if (minDamageA > minDamageB) {
+              return 1;
+            } else if (minDamageA < minDamageB) {
+              return -1;
+            } else {
+              return 0;
+            }
           },
         }),
       ],
@@ -153,6 +172,13 @@ export default class DamageDesignerDialogViewModel extends ViewModel {
       onSort: (_, provideSortable) => {
         provideSortable(this);
       },
+    });
+
+    this.vmSubstitute = new InputNumberSpinnerViewModel({
+      id: "vmSubstitute",
+      parent: this,
+      min: 0,
+      max: 10,
     });
 
     this._uiState.onChange(async (_1, _2, newValue) => {

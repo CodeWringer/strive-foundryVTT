@@ -1,12 +1,15 @@
-import DocumentFetcher from "../../../../business/document/document-fetcher/document-fetcher.mjs";
-import { ITEM_TYPES } from "../../../../business/document/item/item-types.mjs";
-import { StringUtil } from "../../../../business/util/string-utility.mjs";
-import { ValidationUtil } from "../../../../business/util/validation-utility.mjs";
-import { ExtenderUtil } from "../../../../common/extender-util.mjs";
-import ButtonAddViewModel from "../../../component/button-add/button-add-viewmodel.mjs";
-import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
-import ViewModel from "../../../view-model/view-model.mjs"
-import FateCardViewModel from "../../item/fate-card/fate-card-viewmodel.mjs"
+import DocumentFetcher from "../../../../../business/document/document-fetcher/document-fetcher.mjs";
+import { GENERAL_DOCUMENT_TYPES } from "../../../../../business/document/general-document-types.mjs";
+import { ITEM_TYPES } from "../../../../../business/document/item/item-types.mjs";
+import { StringUtil } from "../../../../../business/util/string-utility.mjs";
+import { ValidationUtil } from "../../../../../business/util/validation-utility.mjs";
+import { ExtenderUtil } from "../../../../../common/extender-util.mjs";
+import ButtonAddViewModel from "../../../../component/button-add/button-add-viewmodel.mjs";
+import FateCardCreationStrategy from "../../../../component/button-add/fate-card-creation-selection-strategy.mjs";
+import InputNumberSpinnerViewModel from "../../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs";
+import ReadOnlyValueViewModel from "../../../../component/read-only-value/read-only-value.mjs";
+import ViewModel from "../../../../view-model/view-model.mjs"
+import FateCardViewModel from "../../../item/fate-card/fate-card-viewmodel.mjs"
 
 export default class ActorFateViewModel extends ViewModel {
   /** @override */
@@ -66,73 +69,79 @@ export default class ActorFateViewModel extends ViewModel {
     this.document = args.document;
     this.contextType = args.contextType ?? "actor-fate";
 
-    const thiz = this;
-
     this.vmNsMifp = new InputNumberSpinnerViewModel({
-      parent: thiz,
+      parent: this,
       id: "vmNsMifp",
-      value: thiz.document.fateSystem.miFP,
+      value: this.document.fateSystem.miFP,
       onChange: (_, newValue) => {
-        thiz.document.fateSystem.miFP = newValue;
+        this.document.fateSystem.miFP = newValue;
       },
       min: 0,
     });
     this.vmNsMafp = new InputNumberSpinnerViewModel({
-      parent: thiz,
+      parent: this,
       id: "vmNsMafp",
-      value: thiz.document.fateSystem.maFP,
+      value: this.document.fateSystem.maFP,
       onChange: (_, newValue) => {
-        thiz.document.fateSystem.maFP = newValue;
+        this.document.fateSystem.maFP = newValue;
       },
       min: 0,
     });
     this.vmNsAfp = new InputNumberSpinnerViewModel({
-      parent: thiz,
+      parent: this,
       id: "vmNsAfp",
-      value: thiz.document.fateSystem.AFP,
+      value: this.document.fateSystem.AFP,
       onChange: (_, newValue) => {
-        thiz.document.fateSystem.AFP = newValue;
+        this.document.fateSystem.AFP = newValue;
       },
       min: 0,
     });
+    if (this.hasExceededFateCardLimit) {
+      this.vmFateCardWarning = new ReadOnlyValueViewModel({
+        id: "vmFateCardWarning",
+        parent: this,
+        value: game.i18n.localize("system.character.driverSystem.fateSystem.fateCard.limitExceededAdmonish"),
+        admonish: true,
+      });
+    }
 
     this.fateCardAddButtonViewModels = [];
     for (let i = 0; i < this.remainingSlots; i++) {
       const addViewModel = new ButtonAddViewModel({
-        parent: thiz,
         id: `addViewModel-${i}`,
-        target: thiz.document,
-        creationType: ITEM_TYPES.FATE_CARD,
-        withDialog: true,
+        parent: this,
+        creationStrategy: new FateCardCreationStrategy({
+          creationType: ITEM_TYPES.FATE_CARD,
+          target: this.document,
+          selectionLabelMapper: async (selected) => {
+            let AFP = "?";
+            let MaFP = "?";
+            let MiFP = "?";
+    
+            if (selected.value !== "custom") {
+              const document = await new DocumentFetcher().find({
+                id: selected.value,
+                documentType: GENERAL_DOCUMENT_TYPES.ITEM,
+                contentType: ITEM_TYPES.FATE_CARD,
+                includeLocked: true,
+                searchEmbedded: false,
+              });
+    
+              if (ValidationUtil.isDefined(document)) {
+                const transientFateCard = document.getTransientObject();
+                AFP = transientFateCard.cost.AFP;
+                MaFP = transientFateCard.cost.maFP;
+                MiFP = transientFateCard.cost.miFP;
+              }
+            }
+            
+            return `Cost: ${AFP} AFP, ${MaFP} MaFP, ${MiFP} MiFP`;
+          },
+        }),
         localizedToolTip: StringUtil.format(
           game.i18n.localize("system.general.add.addType"),
           game.i18n.localize("system.character.driverSystem.fateSystem.fateCard.label"),
         ),
-        localizedType: game.i18n.localize("system.character.driverSystem.fateSystem.fateCard.label"),
-        selectionLabelMapper: async (selected) => {
-          let AFP = "?";
-          let MaFP = "?";
-          let MiFP = "?";
-  
-          if (selected.value !== "custom") {
-            const document = await new DocumentFetcher().find({
-              id: selected.value,
-              documentType: "Item",
-              contentType: ITEM_TYPES.FATE_CARD,
-              includeLocked: true,
-              searchEmbedded: false,
-            });
-  
-            if (ValidationUtil.isDefined(document)) {
-              const transientFateCard = document.getTransientObject();
-              AFP = transientFateCard.cost.AFP;
-              MaFP = transientFateCard.cost.maFP;
-              MiFP = transientFateCard.cost.miFP;
-            }
-          }
-          
-          return `Cost: ${AFP} AFP, ${MaFP} MaFP, ${MiFP} MiFP`;
-        }
       });
       this.fateCardAddButtonViewModels.push(addViewModel);
     }
@@ -177,5 +186,4 @@ export default class ActorFateViewModel extends ViewModel {
   getExtenders() {
     return super.getExtenders().concat(ExtenderUtil.getExtenders(ActorFateViewModel));
   }
-
 }

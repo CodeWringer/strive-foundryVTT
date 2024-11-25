@@ -38,7 +38,6 @@ import DicePoolDesignerDialog from "./presentation/dialog/dice-pool-designer-dia
 import { activateRollChatMessageListeners } from "./presentation/dice/roll-chat-message.mjs";
 import { Sum, SumComponent } from "./business/ruleset/summed-data.mjs";
 import Tag from "./business/tags/tag.mjs";
-import InfoBubble, { InfoBubbleAutoHidingTypes, InfoBubbleAutoShowingTypes } from "./presentation/component/info-bubble/info-bubble.mjs";
 // Migration
 import MigratorInitiator from "./business/migration/migrator-initiator.mjs";
 import MigratorDialog from "./presentation/dialog/migrator-dialog/migrator-dialog.mjs";
@@ -49,7 +48,8 @@ import "./presentation/dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
 // Document classes
 import { GameSystemActor } from "./business/document/actor/actor.mjs";
 import { GameSystemItem } from "./business/document/item/item.mjs";
-import { GameSystemCombat } from "./presentation/combat/game-system-combat.mjs";
+import GameSystemCombat from "./presentation/combat/game-system-combat.mjs";
+import GameSystemCombatant from "./presentation/combat/game-system-combatant.mjs";
 import TransientBaseCharacterActor from "./business/document/actor/transient-base-character-actor.mjs";
 import TransientBaseActor from "./business/document/actor/transient-base-actor.mjs";
 import TransientNpc from "./business/document/actor/transient-npc.mjs";
@@ -120,7 +120,7 @@ import ActorHealthViewModel from './presentation/sheet/actor/part/health/actor-h
 import ActorSkillsViewModel from "./presentation/sheet/actor/part/abilities/actor-skills-viewmodel.mjs";
 import ActorAssetsViewModel from "./presentation/sheet/actor/part/assets/actor-assets-viewmodel.mjs";
 import ActorPersonalityViewModel from "./presentation/sheet/actor/part/personality/actor-personality-viewmodel.mjs";
-import ActorFateViewModel from "./presentation/sheet/actor/part/actor-fate-viewmodel.mjs";
+import ActorFateViewModel from "./presentation/sheet/actor/part/personality/actor-fate-viewmodel.mjs";
 import ActorPersonalsViewModel from "./presentation/sheet/actor/part/actor-personals-viewmodel.mjs";
 import ActorSheetViewModel from "./presentation/sheet/actor/actor-sheet-viewmodel.mjs";
 // View models - Item
@@ -141,6 +141,11 @@ import ScarItemSheetViewModel from "./presentation/sheet/item/scar/scar-item-she
 import ScarListItemViewModel from "./presentation/sheet/item/scar/scar-list-item-viewmodel.mjs";
 import SkillItemSheetViewModel from "./presentation/sheet/item/skill/skill-item-sheet-viewmodel.mjs";
 import SkillListItemViewModel from "./presentation/sheet/item/skill/skill-list-item-viewmodel.mjs";
+import ReadOnlyValueViewModel from "./presentation/component/read-only-value/read-only-value.mjs";
+import { StringUtil } from "./business/util/string-utility.mjs";
+import { ConstantsUtil } from "./business/util/constants-utility.mjs";
+import { PropertyUtil } from "./business/util/property-utility.mjs";
+import { UuidUtil } from "./business/util/uuid-utility.mjs";
 
 /* -------------------------------------------- */
 /*  Initialization                              */
@@ -230,9 +235,6 @@ Hooks.once('init', function() {
     classDef: {
       Attribute: Attribute,
       ChoiceOption: ChoiceOption,
-      InfoBubble: InfoBubble,
-      InfoBubbleAutoHidingTypes: InfoBubbleAutoHidingTypes,
-      InfoBubbleAutoShowingTypes: InfoBubbleAutoShowingTypes,
       SumComponent: SumComponent,
       Sum: Sum,
       Ruleset: Ruleset,
@@ -287,6 +289,7 @@ Hooks.once('init', function() {
         VisibilityToggleListViewModel: VisibilityToggleListViewModel,
         VisibilityToggleListItemViewModel: VisibilityToggleListItemViewModel,
         InputNumberSpinnerViewModel: InputNumberSpinnerViewModel,
+        ReadOnlyValueViewModel: ReadOnlyValueViewModel,
         actor: {
           ActorAttributesViewModel: ActorAttributesViewModel,
           ActorSkillsViewModel: ActorSkillsViewModel,
@@ -319,8 +322,12 @@ Hooks.once('init', function() {
       },
     },
     util: {
-      validation: ValidationUtil,
       array: ArrayUtil,
+      constants: ConstantsUtil,
+      property: PropertyUtil,
+      string: StringUtil,
+      uuid: UuidUtil,
+      validation: ValidationUtil,
     },
     /**
      * Registered extenders. 
@@ -332,14 +339,15 @@ Hooks.once('init', function() {
 
   // Set initiative formula on global CONFIG variable provided by FoundryVTT.
   CONFIG.Combat.initiative = {
-    formula: "1D10 + @baseInitiative",
-    decimals: 2
+    formula: "1D20 + @baseInitiative",
+    decimals: 0
   };
 
   // Override document classes. 
   CONFIG.Actor.documentClass = GameSystemActor;
   CONFIG.Item.documentClass = GameSystemItem;
   CONFIG.Combat.documentClass = GameSystemCombat;
+  CONFIG.Combatant.documentClass = GameSystemCombatant;
 
   // Override combat tracker. 
   CONFIG.ui.combat = CustomCombatTracker;

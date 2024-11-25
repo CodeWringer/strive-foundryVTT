@@ -77,7 +77,9 @@
       "input": {
         "validationFailed": "The following required fields failed validation. Ensure required fields have a valid value.",
         "query": "Provide Data",
-        "queryFor": "Provide Data for %s"
+        "queryFor": "Provide Data for %s",
+        "rollForIt": "Roll For It",
+        "selectSpecific": "Hand-pick It"
       },
       "messageVisibility": {
         "label": "Visibility",
@@ -144,6 +146,7 @@
         "advanced": "Advanced",
         "label": "Advancement",
         "level": "Level",
+        "rawLevel": "Raw Level",
         "challengeRating": {
           "label": "Challenge Rating",
           "abbreviation": "CR",
@@ -153,6 +156,7 @@
           }
         },
         "modifiedLevel": "Modified Level",
+        "modifiedOf": "Modified %{name}",
         "minimum": "Minimum Level",
         "modifier": {
           "label": "Level Modifier",
@@ -312,7 +316,8 @@
         },
         "initiative": {
           "initiative": "Initiative",
-          "baseInitiative": "Base Initiative"
+          "baseInitiative": "Base Initiative",
+          "numberPerRound": "Initiatives per round"
         }
       },
       "biography": {
@@ -367,9 +372,8 @@
         "treatment": "Treatment",
         "treatmentSkill": "Treatment Skill",
         "timeToHealTreated": "Treated Heal Time Reduction",
-        "selfPatchUp": "Self Patch-Up",
+        "autoTreatment": "Automatic Treatment",
         "requiredSupplies": "Required Supplies",
-        "obstaclePatchUp": "Obstacle Patch-Up",
         "obstacleTreatment": "Obstacle Treatment",
         "exhaustion": {
           "label": "Exhaustion",
@@ -398,7 +402,6 @@
             "label": "Limit",
             "placeholder": "Arm Count / 2 / None (/)"
           },
-          "maximum": "Max. Injuries",
           "plural": "Injuries",
           "singular": "Injury",
           "state": {
@@ -406,15 +409,17 @@
             "active": {
               "label": "Active"
             },
-            "patchedUp": {
-              "label": "Patched Up"
-            },
             "treated": {
               "label": "Treated"
             },
             "permanent": {
               "label": "Permanent"
             }
+          },
+          "shrugOff": {
+            "count": "Number of shrug-offs",
+            "roll": "Roll for a shrug-off test",
+            "chatMessage": "Rolls to shrug off an injury"
           }
         },
         "mutation": {
@@ -627,8 +632,18 @@
       "hitModifier": "Hit Modifier",
       "query": "Prepare Dice Roll"
     },
+    "rollTable": {
+      "weight": "Weight",
+      "range": "Range"
+    },
     "rules": {
-      "hintDeathsDoor": "Death's Door: You must succeed at least one toughness test out of a possible of three, at Ob equal to half your toughness, rounded up. One of these tests must be made at the end of every round. Mark your failures here. Fail all three, and perish."
+      "hintDeathsDoor": "Death's Door: You must succeed at least one toughness test out of a possible of three, at Ob equal to half your toughness, rounded up. One of these tests must be made at the end of every round. Mark your failures here. Fail all three, and perish.",
+      "attributeAdvancementRequirements": "raw level (%{rawLevel}) * %{factor} (from %{attributeTier} attribute) = %{advancementRequirements}",
+      "skillAdvancementRequirements": "from %{tierName} skill:<br>Successes: %{successFormula} = %{requiredSuccesses}<br>Failures: %{failureFormula} = %{requiredFailures}",
+      "baseInitiative": "%{localizedAgility} (%{agility}) + %{localizedAwareness} (%{awareness}) + %{localizedWit} (%{wit}) = %{baseInitiative}",
+      "maxHp": "%{baseHp} + (%{toughness} * %{hpPerLevel}) = %{unmodifiedHp} (Raw maximum HP)<br>10 - (%{toughness} / 2) = 10 - %{halfToughness} (rounded down) = %{hpReductionPerInjury} (Reduction per injury)<br>Raw maximum HP (%{unmodifiedHp}) - (injury count (%{injuryCount}) * reduction per injury (%{hpReductionPerInjury})) = %{unmodifiedHp} - %{hpReduction} = %{finalMaxHp}",
+      "maxExhaustion": "base (%{baseExhaustionLimit}) + raw toughness (%{toughnessRawLevel}) = %{maxExhaustion}",
+      "maxLuggage": "Modified %{localizedStrength} (%{strength}) * 3 = %{maxLuggage}"
     },
     "attackType": {
       "label": "Attack Type",
@@ -698,6 +713,10 @@
       "autoActionPointRefill": {
         "label": "Automatic AP Refilling",
         "hint": "If checked, action points will refill for a character at the start of every combat turn."
+      },
+      "autoRemoveSameCombatants": {
+        "label": "Synchronized Combatant Removal",
+        "hint": "If checked, when removing a combatant that belongs to a character with multiple combat initiatives, will also remove the other entries of that character from the combat tracker."
       },
       "fancyFont": {
         "label": "Fancy Font",

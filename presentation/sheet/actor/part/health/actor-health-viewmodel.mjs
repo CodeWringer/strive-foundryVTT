@@ -1,13 +1,23 @@
+import { SpecificRollDataRollSchema } from "../../../../../business/dice/ability-roll/specific-roll-data-roll-schema.mjs"
+import RollData from "../../../../../business/dice/roll-data.mjs"
+import { ROLL_DICE_MODIFIER_TYPES } from "../../../../../business/dice/roll-dice-modifier-types.mjs"
 import { ACTOR_TYPES } from "../../../../../business/document/actor/actor-types.mjs"
+import TransientBaseCharacterActor from "../../../../../business/document/actor/transient-base-character-actor.mjs"
 import { ITEM_TYPES } from "../../../../../business/document/item/item-types.mjs"
+import { ATTRIBUTES } from "../../../../../business/ruleset/attribute/attributes.mjs"
+import RulesetExplainer from "../../../../../business/ruleset/ruleset-explainer.mjs"
+import { Sum, SumComponent } from "../../../../../business/ruleset/summed-data.mjs"
 import { StringUtil } from "../../../../../business/util/string-utility.mjs"
 import { ValidationUtil } from "../../../../../business/util/validation-utility.mjs"
 import { ExtenderUtil } from "../../../../../common/extender-util.mjs"
-import ButtonAddViewModel from "../../../../component/button-add/button-add-viewmodel.mjs"
+import RollableSpecificDocumentCreationStrategy from "../../../../component/button-add/rollable-specific-document-creation-strategy.mjs"
+import SpecificDocumentCreationStrategy from "../../../../component/button-add/specific-document-creation-strategy.mjs"
+import ButtonRollViewModel from "../../../../component/button-roll/button-roll-viewmodel.mjs"
 import InputNumberSpinnerViewModel from "../../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs"
-import SortControlsViewModel, { SortingOption } from "../../../../component/sort-controls/sort-controls-viewmodel.mjs"
+import ReadOnlyValueViewModel from "../../../../component/read-only-value/read-only-value.mjs"
+import { SortingOption } from "../../../../component/sort-controls/sort-controls-viewmodel.mjs"
 import DocumentListItemOrderDataSource from "../../../../component/sortable-list/document-list-item-order-datasource.mjs"
-import SortableListViewModel from "../../../../component/sortable-list/sortable-list-viewmodel.mjs"
+import SortableListViewModel, { SortableListAddItemParams, SortableListSortParams } from "../../../../component/sortable-list/sortable-list-viewmodel.mjs"
 import ViewModel from "../../../../view-model/view-model.mjs"
 import AssetListItemViewModel from "../../../item/asset/asset-list-item-viewmodel.mjs"
 import IllnessListItemViewModel from "../../../item/illness/illness-list-item-viewmodel.mjs"
@@ -17,6 +27,7 @@ import ScarListItemViewModel from "../../../item/scar/scar-list-item-viewmodel.m
 import ActorHealthStatesViewModel from "./actor-health-states-viewmodel.mjs"
 import DeathsDoorViewModel from "./deaths-door/deaths-door-viewmodel.mjs"
 import GritPointsViewModel from "./grit-points/grit-points-viewmodel.mjs"
+import InjuryShrugOffBarViewModel from "./injury-shrug-off-bar/injury-shrug-off-bar-viewmodel.mjs"
 
 /**
  * @extends ViewModel
@@ -77,24 +88,6 @@ export default class ActorHealthViewModel extends ViewModel {
   get maxExhaustion() { return this.document.health.maxExhaustion; }
 
   /**
-   * @type {Number}
-   * @readonly
-   */
-  get maxInjuries() { return this.document.health.maxInjuries; }
-
-  /**
-   * @type {Number}
-   * @readonly
-   */
-  get modifiedMaxInjuries() { return this.document.health.modifiedMaxInjuries; }
-
-  /**
-   * @type {String}
-   * @readonly
-   */
-  get sortControlsTemplate() { return SortControlsViewModel.TEMPLATE; }
-
-  /**
    * @type {Array<IllnessListItemViewModel>}
    * @readonly
    */
@@ -134,6 +127,12 @@ export default class ActorHealthViewModel extends ViewModel {
    * @type {String}
    * @readonly
    */
+  get shrugOffBarTemplate() { return InjuryShrugOffBarViewModel.TEMPLATE; }
+
+  /**
+   * @type {String}
+   * @readonly
+   */
   get deathsDoorTemplate() { return DeathsDoorViewModel.TEMPLATE; }
 
   /**
@@ -168,6 +167,7 @@ export default class ActorHealthViewModel extends ViewModel {
       id: "vmMaxHp",
       value: this.document.health.maxHP,
       isEditable: false, // This should only ever be a read-only view! 
+      localizedToolTip: new RulesetExplainer().getExplanationForMaxHp(this.document),
     });
     this.vmMaxHpModifier = new InputNumberSpinnerViewModel({
       parent: this,
@@ -176,6 +176,11 @@ export default class ActorHealthViewModel extends ViewModel {
       onChange: (_, newValue) => {
         this.document.health.maxHpModifier = newValue;
       },
+    });
+    this.vmModifiedMaxHp = new ReadOnlyValueViewModel({
+      id: "vmModifiedMaxHp",
+      parent: this,
+      value: this.modifiedMaxHp,
     });
     this.vmHp = new InputNumberSpinnerViewModel({
       parent: this,
@@ -191,6 +196,7 @@ export default class ActorHealthViewModel extends ViewModel {
       id: "vmMaxExhaustion",
       value: this.document.health.maxExhaustion,
       isEditable: false, // This should only ever be a read-only view! 
+      localizedToolTip: new RulesetExplainer().getExplanationForMaxExhaustion(this.document),
     });
     this.vmMaxExhaustionModifier = new InputNumberSpinnerViewModel({
       parent: this,
@@ -209,6 +215,11 @@ export default class ActorHealthViewModel extends ViewModel {
       },
       min: 0,
     });
+    this.vmModifiedMaxExhaustion = new ReadOnlyValueViewModel({
+      id: "vmModifiedMaxExhaustion",
+      parent: this,
+      value: this.modifiedMaxExhaustion,
+    });
 
     // Armor list item (if there is one). 
     const armorAssetId = this.document.assets.equipmentSlotGroups
@@ -226,15 +237,38 @@ export default class ActorHealthViewModel extends ViewModel {
     }
 
     // Injury
-    this.vmMaxInjuriesModifier = new InputNumberSpinnerViewModel({
+    this.vmShrugOffBar = new InjuryShrugOffBarViewModel({
+      id: "vmShrugOffBar",
       parent: this,
-      id: "vmMaxInjuriesModifier",
-      value: this.document.health.maxInjuriesModifier,
-      onChange: (_, newValue) => {
-        this.document.health.maxInjuriesModifier = newValue;
-      },
+      document: this.document,
     });
 
+    const toughnessAttribute = this.document.attributes.find(it => it.name === ATTRIBUTES.toughness.name);
+    this.vmRollShrugOff = new ButtonRollViewModel({
+      id: "vmRollShrugOff",
+      parent: this,
+      localizedToolTip: game.i18n.localize("system.character.health.injury.shrugOff.roll"),
+      target: this.document,
+      primaryChatTitle: game.i18n.localize("system.character.health.injury.shrugOff.chatMessage"),
+      primaryChatImage: this.document.img,
+      actor: this.document.document,
+      rollSchema: new SpecificRollDataRollSchema({
+        rollData: new RollData({
+          dieFaces: 6,
+          hitThreshold: 5,
+          obFormula: `${this.injuryCount + 1 + this.document.health.injuryShrugOffs}`,
+          diceComponents: new Sum([
+            new SumComponent(ATTRIBUTES.toughness.name, ATTRIBUTES.toughness.localizableName, toughnessAttribute.modifiedLevel),
+          ]),
+          bonusDiceComponent: new SumComponent("bonus", "", 0),
+          hitModifier: 0,
+          compensationPoints: 0,
+          rollModifier: ROLL_DICE_MODIFIER_TYPES.NONE,
+        }),
+      }),
+    });
+
+    // Conditions (formerly health states)
     this.vmHealthStates = new ActorHealthStatesViewModel({
       id: "vmHealthStates",
       parent: this,
@@ -243,195 +277,169 @@ export default class ActorHealthViewModel extends ViewModel {
     });
 
     // Prepare illnesses list view models. 
-    this.illnesses = [];
     this.illnesses = this._getIllnessViewModels();
     this.vmIllnessList = new SortableListViewModel({
-      parent: this,
       id: "vmIllnessList",
+      parent: this,
+      isCollapsible: false,
       indexDataSource: new DocumentListItemOrderDataSource({
         document: this.document,
         listName: "illnesses",
       }),
       listItemViewModels: this.illnesses,
       listItemTemplate: IllnessListItemViewModel.TEMPLATE,
-      vmBtnAddItem: new ButtonAddViewModel({
-        id: "vmAddIllness1",
-        parent: this,
-        target: this.document,
-        creationType: ITEM_TYPES.ILLNESS,
-        withDialog: true,
+      localizedTitle: game.i18n.localize("system.character.health.illness.plural"),
+      headerLevel: 1,
+      addItemParams: new SortableListAddItemParams({
+        creationStrategy: new RollableSpecificDocumentCreationStrategy({
+          rollTables: ["Illnesses"],
+          localizedSelectionType: game.i18n.localize(`TYPES.Item.${ITEM_TYPES.ILLNESS}`),
+          target: this.document,
+        }),
         localizedLabel: StringUtil.format(
           game.i18n.localize("system.general.add.addType"),
           game.i18n.localize("system.character.health.illness.singular"),
         ),
-        localizedType: game.i18n.localize("system.character.health.illness.singular"),
+        localizedToolTip: StringUtil.format(
+          game.i18n.localize("system.general.add.addType"),
+          game.i18n.localize("system.character.health.illness.singular"),
+        ),
+      }),
+      sortParams: new SortableListSortParams({
+        options: this._getTreatableSortingOptions(),
+        compact: true,
       }),
     });
-    this.vmAddIllness2 = new ButtonAddViewModel({
-      id: "vmAddIllness2",
+    this.vmIllnessCount = new ReadOnlyValueViewModel({
+      id: "vmIllnessCount",
       parent: this,
-      target: this.document,
-      creationType: ITEM_TYPES.ILLNESS,
-      withDialog: true,
-      localizedToolTip: StringUtil.format(
-        game.i18n.localize("system.general.add.addType"),
-        game.i18n.localize("system.character.health.illness.singular"),
-      ),
-      localizedType: game.i18n.localize("system.character.health.illness.singular"),
+      value: this.illnessCount,
     });
 
     // Prepare injuries list view models. 
-    this.injuries = [];
     this.injuries = this._getInjuryViewModels();
     this.vmInjuryList = new SortableListViewModel({
-      parent: this,
       id: "vmInjuryList",
+      parent: this,
       indexDataSource: new DocumentListItemOrderDataSource({
         document: this.document,
         listName: "injuries",
       }),
       listItemViewModels: this.injuries,
       listItemTemplate: InjuryListItemViewModel.TEMPLATE,
-      vmBtnAddItem: new ButtonAddViewModel({
-        id: "vmAddInjury1",
-        parent: this,
-        target: this.document,
-        creationType: ITEM_TYPES.INJURY,
-        withDialog: true,
+      localizedTitle: game.i18n.localize("system.character.health.injury.plural"),
+      headerLevel: 1,
+      addItemParams: new SortableListAddItemParams({
+        creationStrategy: new RollableSpecificDocumentCreationStrategy({
+          rollTables: [
+            "Injuries (Acid)",
+            "Injuries (Bleeding)",
+            "Injuries (Bludgeoning)",
+            "Injuries (Burning)",
+            "Injuries (Electrical)",
+            "Injuries (Freezing)",
+            "Injuries (Piercing)",
+            "Injuries (Poison)",
+            "Injuries (Slashing)",
+          ],
+          localizedSelectionType: game.i18n.localize(`TYPES.Item.${ITEM_TYPES.INJURY}`),
+          target: this.document,
+        }),
         localizedLabel: StringUtil.format(
           game.i18n.localize("system.general.add.addType"),
           game.i18n.localize("system.character.health.injury.singular"),
         ),
-        localizedType: game.i18n.localize("system.character.health.injury.singular"),
+        localizedToolTip: StringUtil.format(
+          game.i18n.localize("system.general.add.addType"),
+          game.i18n.localize("system.character.health.injury.singular"),
+        ),
+      }),
+      sortParams: new SortableListSortParams({
+        options: this._getTreatableSortingOptions(),
+        compact: true,
       }),
     });
-    this.vmAddInjury2 = new ButtonAddViewModel({
-      id: "vmAddInjury2",
+    this.vmInjuryCount = new ReadOnlyValueViewModel({
+      id: "vmInjuryCount",
       parent: this,
-      target: this.document,
-      creationType: ITEM_TYPES.INJURY,
-      withDialog: true,
-      localizedToolTip: StringUtil.format(
-        game.i18n.localize("system.general.add.addType"),
-        game.i18n.localize("system.character.health.injury.singular"),
-      ),
-      localizedType: game.i18n.localize("system.character.health.injury.singular"),
+      value: this.injuryCount,
     });
 
     // Prepare mutations list view models. 
-    this.mutations = [];
     this.mutations = this._getMutationViewModels();
     this.vmMutationList = new SortableListViewModel({
-      parent: this,
       id: "vmMutationList",
+      parent: this,
       indexDataSource: new DocumentListItemOrderDataSource({
         document: this.document,
         listName: "mutations",
       }),
       listItemViewModels: this.mutations,
       listItemTemplate: MutationListItemViewModel.TEMPLATE,
-      vmBtnAddItem: new ButtonAddViewModel({
-        id: "vmAddMutation1",
-        parent: this,
-        target: this.document,
-        creationType: ITEM_TYPES.MUTATION,
-        withDialog: true,
+      localizedTitle: game.i18n.localize("system.character.health.mutation.plural"),
+      headerLevel: 1,
+      addItemParams: new SortableListAddItemParams({
+        creationStrategy: new RollableSpecificDocumentCreationStrategy({
+          rollTables: ["Mutations"],
+          localizedSelectionType: game.i18n.localize(`TYPES.Item.${ITEM_TYPES.MUTATION}`),
+          target: this.document,
+        }),
         localizedLabel: StringUtil.format(
           game.i18n.localize("system.general.add.addType"),
           game.i18n.localize("system.character.health.mutation.singular"),
         ),
-        localizedType: game.i18n.localize("system.character.health.mutation.singular"),
+        localizedToolTip: StringUtil.format(
+          game.i18n.localize("system.general.add.addType"),
+          game.i18n.localize("system.character.health.mutation.singular"),
+        ),
+      }),
+      sortParams: new SortableListSortParams({
+        options: this._getNameSortingOptions(),
+        compact: true,
       }),
     });
-    this.vmAddMutation2 = new ButtonAddViewModel({
-      id: "vmAddMutation2",
+    this.vmMutationCount = new ReadOnlyValueViewModel({
+      id: "vmMutationCount",
       parent: this,
-      target: this.document,
-      creationType: ITEM_TYPES.MUTATION,
-      withDialog: true,
-      localizedToolTip: StringUtil.format(
-        game.i18n.localize("system.general.add.addType"),
-        game.i18n.localize("system.character.health.mutation.singular"),
-      ),
-      localizedType: game.i18n.localize("system.character.health.mutation.singular"),
+      value: this.mutationCount,
     });
 
     // Prepare scars list view models. 
-    this.scars = [];
     this.scars = this._getScarViewModels();
     this.vmScarList = new SortableListViewModel({
-      parent: this,
       id: "vmScarList",
+      parent: this,
       indexDataSource: new DocumentListItemOrderDataSource({
         document: this.document,
         listName: "scars",
       }),
       listItemViewModels: this.scars,
       listItemTemplate: ScarListItemViewModel.TEMPLATE,
-      vmBtnAddItem: new ButtonAddViewModel({
-        id: "vmAddScar1",
-        parent: this,
-        target: this.document,
-        creationType: ITEM_TYPES.SCAR,
-        withDialog: true,
+      localizedTitle: game.i18n.localize("system.character.health.scar.plural"),
+      headerLevel: 1,
+      addItemParams: new SortableListAddItemParams({
+        creationStrategy: new SpecificDocumentCreationStrategy({
+          documentType: ITEM_TYPES.SCAR,
+          target: this.document,
+        }),
         localizedLabel: StringUtil.format(
           game.i18n.localize("system.general.add.addType"),
           game.i18n.localize("system.character.health.scar.singular"),
         ),
-        localizedType: game.i18n.localize("system.character.health.scar.singular"),
+        localizedToolTip: StringUtil.format(
+          game.i18n.localize("system.general.add.addType"),
+          game.i18n.localize("system.character.health.scar.singular"),
+        ),
+      }),
+      sortParams: new SortableListSortParams({
+        options: this._getNameSortingOptions(),
+        compact: true,
       }),
     });
-    this.vmAddScar2 = new ButtonAddViewModel({
-      id: "vmAddScar2",
+    this.vmScarCount = new ReadOnlyValueViewModel({
+      id: "vmScarCount",
       parent: this,
-      target: this.document,
-      creationType: ITEM_TYPES.SCAR,
-      withDialog: true,
-      localizedToolTip: StringUtil.format(
-        game.i18n.localize("system.general.add.addType"),
-        game.i18n.localize("system.character.health.scar.singular"),
-      ),
-      localizedType: game.i18n.localize("system.character.health.scar.singular"),
-    });
-
-    this.vmSortInjuries = new SortControlsViewModel({
-      id: "vmSortInjuries",
-      parent: this,
-      options: this._getTreatableSortingOptions(),
-      compact: true,
-      onSort: (_, provideSortable) => {
-        provideSortable(this.vmInjuryList);
-      },
-    });
-
-    this.vmSortIllnesses = new SortControlsViewModel({
-      id: "vmSortIllnesses",
-      parent: this,
-      options: this._getTreatableSortingOptions(),
-      compact: true,
-      onSort: (_, provideSortable) => {
-        provideSortable(this.vmIllnessList);
-      },
-    });
-
-    this.vmSortMutations = new SortControlsViewModel({
-      id: "vmSortMutations",
-      parent: this,
-      options: this._getNameSortingOptions(),
-      compact: true,
-      onSort: (_, provideSortable) => {
-        provideSortable(this.vmMutationList);
-      },
-    });
-
-    this.vmSortScars = new SortControlsViewModel({
-      id: "vmSortScars",
-      parent: this,
-      options: this._getNameSortingOptions(),
-      compact: true,
-      onSort: (_, provideSortable) => {
-        provideSortable(this.vmScarList);
-      },
+      value: this.scarCount,
     });
 
     this.vmGritPoints = new GritPointsViewModel({
@@ -449,7 +457,7 @@ export default class ActorHealthViewModel extends ViewModel {
       });
     }
   }
-  
+
   /**
    * Updates the data of this view model. 
    * 
