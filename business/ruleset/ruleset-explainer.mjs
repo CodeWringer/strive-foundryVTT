@@ -66,7 +66,6 @@ export default class RulesetExplainer {
       transientActor.baseInitiative,
     );
   }
-  
 
   /**
    * @param {TransientSkill} skill 
@@ -151,7 +150,6 @@ export default class RulesetExplainer {
     );
   }
   
-  
   /**
    * @param {TransientBaseCharacterActor} actor 
    * 
@@ -166,6 +164,22 @@ export default class RulesetExplainer {
         baseExhaustionLimit: 1,
         toughnessRawLevel: level,
         maxExhaustion: maxExhaustion,
+      }
+    );
+  }
+  
+  /**
+   * @param {TransientBaseCharacterActor} actor 
+   * 
+   * @returns {String}
+   */
+  getExplanationForMaxLuggage(actor) {
+    const level = this._ruleset.getEffectiveAttributeModifiedLevel(ATTRIBUTES.strength, actor);
+    return StringUtil.format2(
+      game.i18n.localize("system.rules.maxLuggage"),
+      {
+        strength: level,
+        maxLuggage: actor.assets.maxBulk,
       }
     );
   }

@@ -643,7 +643,8 @@
       "skillAdvancementRequirements": "from %{tierName} skill:<br>Successes: %{successFormula} = %{requiredSuccesses}<br>Failures: %{failureFormula} = %{requiredFailures}",
       "baseInitiative": "%s (%s) + %s (%s) + %s (%s) = %s",
       "maxHp": "%{baseHp} + (%{toughness} * %{hpPerLevel}) = %{unmodifiedHp} (Raw maximum HP)<br>10 - (%{toughness} / 2) = 10 - %{halfToughness} (rounded down) = %{hpReductionPerInjury} (Reduction per injury)<br>Raw maximum HP (%{unmodifiedHp}) - (injury count (%{injuryCount}) * reduction per injury (%{hpReductionPerInjury})) = %{unmodifiedHp} - %{hpReduction} = %{finalMaxHp}",
-      "maxExhaustion": "base (%{baseExhaustionLimit}) + raw toughness (%{toughnessRawLevel}) = %{maxExhaustion}"
+      "maxExhaustion": "base (%{baseExhaustionLimit}) + raw toughness (%{toughnessRawLevel}) = %{maxExhaustion}",
+      "maxLuggage": "Modified strength (%{strength}) * 3 = %{maxLuggage}"
     },
     "attackType": {
       "label": "Attack Type",

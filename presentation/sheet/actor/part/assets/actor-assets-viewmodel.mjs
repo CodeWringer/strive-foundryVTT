@@ -1,7 +1,7 @@
 import TransientBaseCharacterActor from "../../../../../business/document/actor/transient-base-character-actor.mjs"
-import { GENERAL_DOCUMENT_TYPES } from "../../../../../business/document/general-document-types.mjs"
 import { ITEM_TYPES } from "../../../../../business/document/item/item-types.mjs"
 import TransientAsset from "../../../../../business/document/item/transient-asset.mjs"
+import RulesetExplainer from "../../../../../business/ruleset/ruleset-explainer.mjs"
 import { StringUtil } from "../../../../../business/util/string-utility.mjs"
 import { ValidationUtil } from "../../../../../business/util/validation-utility.mjs"
 import { ExtenderUtil } from "../../../../../common/extender-util.mjs"
@@ -183,6 +183,7 @@ export default class ActorAssetsViewModel extends ViewModel {
       id: "vmMaxBulk",
       parent: this,
       value: this.maxBulk,
+      localizedToolTip: new RulesetExplainer().getExplanationForMaxLuggage(this.document),
     });
   }
   
