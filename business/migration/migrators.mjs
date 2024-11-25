@@ -25,6 +25,7 @@ import Migrator_1_6_4__1_7_0 from './migrators/migrator_1-6-4_1-7-0.mjs';
 import Migrator_1_7_0__1_7_1 from './migrators/migrator_1-7-0_1-7-1.mjs';
 import Migrator_1_7_1__1_7_2 from './migrators/migrator_1-7-1_1-7-2.mjs';
 import Migrator_1_7_2__1_7_3 from './migrators/migrator_1-7-2_1-7-3.mjs';
+import Migrator_1_7_3__1_7_4 from './migrators/migrator_1-7-3_1-7-4.mjs';
 
 /**
  * Defines the list of system migrators. 
@@ -60,4 +61,5 @@ export const MIGRATORS = [
   new Migrator_1_7_0__1_7_1(),
   new Migrator_1_7_1__1_7_2(),
   new Migrator_1_7_2__1_7_3(),
+  new Migrator_1_7_3__1_7_4(),
 ];
