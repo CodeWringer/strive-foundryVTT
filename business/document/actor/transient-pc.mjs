@@ -10,17 +10,6 @@ import TransientBaseCharacterActor from "./transient-base-character-actor.mjs";
  * 
  * @extends TransientBaseCharacterActor
  * 
- * @property {Object} driverSystem
- * * Read-only. 
- * @property {String} driverSystem.ambition
- * @property {Object} driverSystem.aspirations
- * @property {String} driverSystem.aspirations.0
- * @property {String} driverSystem.aspirations.1
- * @property {String} driverSystem.aspirations.2
- * @property {Object} driverSystem.reactions
- * @property {String} driverSystem.reactions.0
- * @property {String} driverSystem.reactions.1
- * @property {String} driverSystem.reactions.2
  * @property {Object} fateSystem
  * * Read-only. 
  * @property {Array<TransientFateCard>} fateSystem.fateCards
@@ -35,41 +24,6 @@ import TransientBaseCharacterActor from "./transient-base-character-actor.mjs";
  * @property {Number} fateSystem.AFP
  */
 export default class TransientPc extends TransientBaseCharacterActor {
-  /**
-   * @type {Object}
-   * @readonly
-   */
-  get driverSystem() {
-    const thiz = this;
-
-    return {
-      get ambition() { return thiz.document.system.driverSystem.ambition; },
-      set ambition(value) { thiz.updateByPath("system.driverSystem.ambition", value); },
-
-      get aspirations() {
-        return {
-          get _0() { return thiz.document.system.driverSystem.aspirations._0; },
-          set _0(value) { thiz.updateByPath("system.driverSystem.aspirations._0", value); },
-          get _1() { return thiz.document.system.driverSystem.aspirations._1; },
-          set _1(value) { thiz.updateByPath("system.driverSystem.aspirations._1", value); },
-          get _2() { return thiz.document.system.driverSystem.aspirations._2; },
-          set _2(value) { thiz.updateByPath("system.driverSystem.aspirations._2", value); },
-        }
-      },
-     
-      get reactions() {
-        return {
-          get _0() { return thiz.document.system.driverSystem.reactions._0; },
-          set _0(value) { thiz.updateByPath("system.driverSystem.reactions._0", value); },
-          get _1() { return thiz.document.system.driverSystem.reactions._1; },
-          set _1(value) { thiz.updateByPath("system.driverSystem.reactions._1", value); },
-          get _2() { return thiz.document.system.driverSystem.reactions._2; },
-          set _2(value) { thiz.updateByPath("system.driverSystem.reactions._2", value); },
-        }
-      },
-    };
-  }
-  
   /**
    * @type {Object}
    * @readonly
