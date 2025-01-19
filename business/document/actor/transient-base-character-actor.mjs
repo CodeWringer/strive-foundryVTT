@@ -81,32 +81,37 @@ import TransientBaseActor from './transient-base-actor.mjs';
  * @property {Object} personalityTraits
  * * Read-only
  * @property {Number} personalityTraits.arrogantOrHumble
- * * Read-only
  * * Ranges from -3 to +3
  * @property {Number} personalityTraits.cowardlyOrCourageous
- * * Read-only
  * * Ranges from -3 to +3
  * @property {Number} personalityTraits.cruelOrMerciful
- * * Read-only
  * * Ranges from -3 to +3
  * @property {Number} personalityTraits.deceitfulOrHonest
- * * Read-only
  * * Ranges from -3 to +3
  * @property {Number} personalityTraits.lazyOrEnergetic
- * * Read-only
  * * Ranges from -3 to +3
  * @property {Number} personalityTraits.paranoidOrNaive
- * * Read-only
  * * Ranges from -3 to +3
  * @property {Number} personalityTraits.recklessOrPrudent
- * * Read-only
  * * Ranges from -3 to +3
  * @property {Number} personalityTraits.selfishOrConsiderate
- * * Read-only
  * * Ranges from -3 to +3
  * @property {Number} personalityTraits.vengefulOrForgiving
- * * Read-only
  * * Ranges from -3 to +3
+ * 
+ * @property {Object} driverSystem
+ * * Read-only. 
+ * @property {String} driverSystem.ambition
+ * 
+ * @property {Object} driverSystem.aspirations
+ * @property {String} driverSystem.aspirations.0
+ * @property {String} driverSystem.aspirations.1
+ * @property {String} driverSystem.aspirations.2
+ * 
+ * @property {Object} driverSystem.reactions
+ * @property {String} driverSystem.reactions.0
+ * @property {String} driverSystem.reactions.1
+ * @property {String} driverSystem.reactions.2
  * 
  * @property {Object} actionPoints 
  * @property {Number} actionPoints.current The current number of action points of this character. 
@@ -220,6 +225,41 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
 
       get vengefulOrForgiving() { return parseInt((thiz.document.system.personalityTraits ?? {}).vengefulOrForgiving ?? 0); },
       set vengefulOrForgiving(value) { _updateIfNotUndefined("vengefulOrForgiving", value) },
+    };
+  }
+
+  /**
+   * @type {Object}
+   * @readonly
+   */
+  get driverSystem() {
+    const thiz = this;
+
+    return {
+      get ambition() { return (thiz.document.system.driverSystem ?? {}).ambition ?? ""; },
+      set ambition(value) { thiz.updateByPath("system.driverSystem.ambition", value); },
+
+      get aspirations() {
+        return {
+          get _0() { return ((thiz.document.system.driverSystem ?? {}).aspirations ?? {})._0 ?? ""; },
+          set _0(value) { thiz.updateByPath("system.driverSystem.aspirations._0", value); },
+          get _1() { return ((thiz.document.system.driverSystem ?? {}).aspirations ?? {})._1 ?? ""; },
+          set _1(value) { thiz.updateByPath("system.driverSystem.aspirations._1", value); },
+          get _2() { return ((thiz.document.system.driverSystem ?? {}).aspirations ?? {})._2 ?? ""; },
+          set _2(value) { thiz.updateByPath("system.driverSystem.aspirations._2", value); },
+        }
+      },
+      
+      get reactions() {
+        return {
+          get _0() { return ((thiz.document.system.driverSystem ?? {}).reactions ?? {})._0 ?? ""; },
+          set _0(value) { thiz.updateByPath("system.driverSystem.reactions._0", value); },
+          get _1() { return ((thiz.document.system.driverSystem ?? {}).reactions ?? {})._1 ?? ""; },
+          set _1(value) { thiz.updateByPath("system.driverSystem.reactions._1", value); },
+          get _2() { return ((thiz.document.system.driverSystem ?? {}).reactions ?? {})._2 ?? ""; },
+          set _2(value) { thiz.updateByPath("system.driverSystem.reactions._2", value); },
+        }
+      },
     };
   }
   

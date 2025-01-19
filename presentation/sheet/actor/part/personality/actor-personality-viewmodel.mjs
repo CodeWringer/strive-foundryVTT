@@ -5,6 +5,7 @@ import PersonalityTraitsViewModel from "./personality-traits/personality-traits-
 import { ACTOR_TYPES } from "../../../../../business/document/actor/actor-types.mjs"
 import { ExtenderUtil } from "../../../../../common/extender-util.mjs"
 import { ValidationUtil } from "../../../../../business/util/validation-utility.mjs"
+import TransientBaseCharacterActor from "../../../../../business/document/actor/transient-base-character-actor.mjs"
 
 export default class ActorPersonalityViewModel extends ViewModel {
   /** @override */
@@ -35,9 +36,18 @@ export default class ActorPersonalityViewModel extends ViewModel {
    * Returns true, if the actor is a player character. 
    * 
    * @type {Boolean}
-   */
+   * @readonly
+  */
   get isPC() { return this.document.type === ACTOR_TYPES.PC; }
-  
+
+  /**
+   * Returns true, if the driver section is to be displayed. 
+   * 
+   * @type {Boolean}
+    * @readonly
+    */
+  get displayDrivers() { return this.document.type === ACTOR_TYPES.PC || (this.document.type === ACTOR_TYPES.NPC && this.document.personalityVisible); }
+
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
    * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 
@@ -71,7 +81,8 @@ export default class ActorPersonalityViewModel extends ViewModel {
       isOwner: this.isOwner,
       document: this.document,
     });
-    if (this.isPC) {
+
+    if (this.displayDrivers) {
       this.driversViewModel = new ActorDriversViewModel({
         ...args,
         id: "drivers",
@@ -80,6 +91,9 @@ export default class ActorPersonalityViewModel extends ViewModel {
         isEditable: this.isEditable,
         isOwner: this.isOwner,
       });
+    }
+
+    if (this.isPC) {
       this.fateViewModel = new ActorFateViewModel({
         ...args,
         id: "fate",
@@ -90,10 +104,9 @@ export default class ActorPersonalityViewModel extends ViewModel {
       });
     }
   }
-  
+
   /** @override */
   getExtenders() {
     return super.getExtenders().concat(ExtenderUtil.getExtenders(ActorPersonalityViewModel));
   }
-
 }
