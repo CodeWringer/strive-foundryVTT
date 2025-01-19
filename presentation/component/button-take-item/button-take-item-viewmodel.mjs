@@ -70,12 +70,12 @@ export default class ButtonTakeItemViewModel extends ButtonViewModel {
     super({
       ...args,
       iconHtml: '<i class="ico dark interactible ico-take-item"></i>',
+      localizedToolTip: args.localizedToolTip ?? game.i18n.localize("system.character.asset.take"),
     });
     ValidationUtil.validateOrThrow(args, ["target", "contextType"]);
 
     this.target = args.target;
     this.contextType = args.contextType;
-    this.localizedToolTip = args.localizedToolTip ?? game.i18n.localize("system.character.asset.take");
   }
 
   /**

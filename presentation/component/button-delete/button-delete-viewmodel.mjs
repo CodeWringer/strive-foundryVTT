@@ -54,6 +54,18 @@ export default class ButtonDeleteViewModel extends ButtonViewModel {
     super({
       ...args,
       iconHtml: '<i class="fas fa-trash"></i>',
+      localizedToolTip: args.localizedToolTip ?? (
+        ValidationUtil.isDefined(args.localizedDeletionType) ? 
+          StringUtil.format(
+            game.i18n.localize("system.general.delete.deleteTypeOf"), 
+            args.localizedDeletionType, 
+            args.localizedDeletionTarget ?? args.target.name
+          ) : 
+          StringUtil.format(
+            game.i18n.localize("system.general.delete.deleteOf"), 
+            args.localizedDeletionTarget ?? args.target.name
+          )
+      ),
     });
     ValidationUtil.validateOrThrow(args, ["target"]);
 
@@ -64,21 +76,12 @@ export default class ButtonDeleteViewModel extends ButtonViewModel {
     this.propertyPath = args.propertyPath;
 
     if (ValidationUtil.isDefined(this.localizedDeletionType)) {
-      this.localizedToolTip = args.localizedToolTip ?? StringUtil.format(
-        game.i18n.localize("system.general.delete.deleteTypeOf"), 
-        this.localizedDeletionType, 
-        this.localizedDeletionTarget
-      );
       this.localizedDialogContent = StringUtil.format(
         game.i18n.localize("system.general.delete.queryTypeOf"), 
         this.localizedDeletionType, 
         this.localizedDeletionTarget
       );
     } else {
-      this.localizedToolTip = args.localizedToolTip ?? StringUtil.format(
-        game.i18n.localize("system.general.delete.deleteOf"), 
-        this.localizedDeletionTarget
-      );
       this.localizedDialogContent = StringUtil.format(
         game.i18n.localize("system.general.delete.queryOf"), 
         this.localizedDeletionTarget
