@@ -55,6 +55,9 @@ export class TooltipPlacementConstraint {
  * be manually shown and hidden. 
  * @property {Function | undefined} onShown Callback that is invoked whenever the 
  * @property {Function | undefined} onHidden Callback that is invoked whenever the 
+ * 
+ * @property {JQuery | undefined} _element The DOM element. 
+ * * private
  */
 export default class Tooltip {
   /**
@@ -90,6 +93,7 @@ export default class Tooltip {
 
   /**
    * @param {Object} args 
+   * @param {String | undefined} args.id A unique identifier. 
    * @param {JQuery | undefined} args.anchorElement The element to which to anchor the tooltip. 
    * This is also the element that controls the tooltips visibility on hover. 
    * @param {String | undefined} args.content The content to display in the tooltip. 
@@ -112,7 +116,7 @@ export default class Tooltip {
    * tooltip is hidden. 
    */
   constructor(args = {}) {
-    this._id = UuidUtil.createUUID();
+    this._id = UuidUtil.sanitizeId(args.id ?? UuidUtil.createUUID());
 
     this.anchorElement = args.anchorElement;
     this.content = args.content;
@@ -160,6 +164,8 @@ export default class Tooltip {
   show() {
     if (!ValidationUtil.isDefined(this.anchorElement)) return;
 
+    // Ensure lingering instances are cleared and a clean, new one exists. 
+    this._ensureElementRemoved();
     this._ensureElement();
     // Ensure the content is up to date. 
     this._element.html(this.content);
@@ -206,15 +212,34 @@ export default class Tooltip {
   }
 
   /**
+   * Attempts to return the element as it is on the DOM. 
+   * 
+   * @returns {JQuery | undefined}
+   * 
+   * @private
+   */
+  _getElementFromDom() {
+    const elementInDom = $(`body > .${Tooltip.CSS_CLASS}#${this._id}`);
+
+    if (elementInDom.length > 0) {
+      return elementInDom;
+    } else {
+      return undefined;
+    }
+  }
+
+  /**
    * Ensures the element that represents the tooltip is defined and present in the DOM. 
    * 
    * @private
    */
   _ensureElement() {
-    const elementInDom = $(`body > .${Tooltip.CSS_CLASS}#${this._id}`);
-
-    if (!ValidationUtil.isDefined(this._element)) {
+    const elementInDom = this._getElementFromDom();
+    if (ValidationUtil.isDefined(elementInDom)) {
+      this._element = elementInDom;
+    } else {
       let cssClass = Tooltip.CSS_CLASS;
+  
       if (this.enableArrow) {
         if (this.constraint.placement === TOOLTIP_PLACEMENTS.BOTTOM) {
           cssClass = `${cssClass} with-arrow-t`;
@@ -226,30 +251,30 @@ export default class Tooltip {
           cssClass = `${cssClass} with-arrow-l`;
         }
       }
-
+  
       const elementCreationString = `<div id="${this._id}" class="${cssClass}" style="max-width: ${this.maxWidth};">${this.content}</div>`;
       this._element = $($("body").add(elementCreationString)[1]);
-    }
-
-    if (elementInDom.length < 1) {
+  
       $("body").append(this._element);
     }
+    
   }
 
   /**
-   * Removes the tooltip element from the DOM, if possible. 
+   * Removes the tooltip element from the DOM and clears its reference. 
    * 
    * @private
    */
   _ensureElementRemoved() {
     if (ValidationUtil.isDefined(this._element)) {
       this._element.remove();
-    } else {
-      const elementInDom = $(`body > .${Tooltip.CSS_CLASS}#${this._id}`);
-  
-      if (elementInDom.length > 0) {
-        elementInDom.remove();
-      }
     }
+
+    const elementInDom = this._getElementFromDom();
+    if (ValidationUtil.isDefined(elementInDom)) {
+      elementInDom.remove();
+    }
+
+    this._element = undefined;
   }
 }
