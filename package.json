@@ -1,6 +1,6 @@
 {
   "name": "strive",
-  "version": "1.7.4",
+  "version": "1.7.5",
   "description": "STRIVE FoundryVTT development environment",
   "scripts": {
     "build": "node ./npm-scripts/build.mjs",
