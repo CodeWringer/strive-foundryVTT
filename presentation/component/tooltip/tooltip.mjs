@@ -92,6 +92,16 @@ export default class Tooltip {
   static ARROW_SIZE = 8;
 
   /**
+   * Removes ALL tool tip elements from the DOM. 
+   * 
+   * @static
+   * @method
+   */
+  static removeAllToolTipElements() {
+    $(`body > .${Tooltip.CSS_CLASS}`).remove();
+  }
+
+  /**
    * @param {Object} args 
    * @param {String | undefined} args.id A unique identifier. 
    * @param {JQuery | undefined} args.anchorElement The element to which to anchor the tooltip. 
@@ -257,7 +267,6 @@ export default class Tooltip {
   
       $("body").append(this._element);
     }
-    
   }
 
   /**
