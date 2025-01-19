@@ -4,6 +4,7 @@ import ButtonSendToChatViewModel from "../../../component/button-send-to-chat/bu
 import InputImageViewModel from "../../../component/input-image/input-image-viewmodel.mjs";
 import InputRichTextViewModel from "../../../component/input-rich-text/input-rich-text-viewmodel.mjs";
 import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs";
+import Tooltip from "../../../component/tooltip/tooltip.mjs";
 import ViewModel from "../../../view-model/view-model.mjs";
 import { CONTEXT_TYPES } from "../../context-types.mjs";
 import { DataFieldComponent } from "./datafield-component.mjs";
@@ -202,6 +203,15 @@ export default class BaseItemSheetViewModel extends ViewModel {
     } else {
       return this.document;
     }
+  }
+
+  /** @override */
+  dispose() {
+    super.dispose();
+
+    // An extremely aggressive band-aid solution. But, this ensures lingering tool tip elements 
+    // with (at least partially) dynamic IDs are always cleared properly. 
+    Tooltip.removeAllToolTipElements();
   }
 
   /**

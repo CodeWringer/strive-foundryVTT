@@ -37,4 +37,32 @@ export const UuidUtil = {
       return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
     });
   },
+
+  /**
+   * Returns a sanitized version of the given ID. Sanitizes by stripping out invalid characters. 
+   * 
+   * @param {String} id 
+   * 
+   * @returns {String}
+   */
+  sanitizeId(id) {
+    const rgxUnacceptedChars = new RegExp("[^a-zA-z0-9-]", "g");
+    try {
+      const matches = id.match(rgxUnacceptedChars);
+      let sanitized = id;
+  
+      if (matches === null) return sanitized;
+  
+      for (const match of matches) {
+        const index = sanitized.indexOf(match);
+        sanitized = sanitized.substring(0, index) + sanitized.substring(index + 1);
+      }
+      return sanitized;
+    } catch (error) {
+      game.strive.logger.logError("Failed to sanitize the following ID");
+      game.strive.logger.logError(id);
+      game.strive.logger.logError(error);
+      return UuidUtil.createUUID();
+    }
+  },
 }

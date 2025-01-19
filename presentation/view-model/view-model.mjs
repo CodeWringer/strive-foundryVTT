@@ -327,7 +327,7 @@ export default class ViewModel {
    * display as a tool tip. 
    */
   constructor(args = {}) {
-    this._id = this.sanitizeId(args.id ?? UuidUtil.createUUID());
+    this._id = UuidUtil.sanitizeId(args.id ?? UuidUtil.createUUID());
     
     this.parent = args.parent;
     this.document = args.document;
@@ -350,6 +350,7 @@ export default class ViewModel {
 
     if (ValidationUtil.isDefined(this.localizedToolTip)) {
       this._toolTip = new Tooltip({
+        id: `${this.id}-tooltip`,
         content: this.localizedToolTip,
         enableArrow: true,
         constraint: new TooltipPlacementConstraint({
@@ -658,34 +659,6 @@ export default class ViewModel {
       return true;
     } else {
       return this.isParentOf(viewModel.parent);
-    }
-  }
-
-  /**
-   * Returns a sanitized version of the given ID. Sanitizes by stripping out invalid characters. 
-   * 
-   * @param {String} id 
-   * 
-   * @returns {String}
-   */
-  sanitizeId(id) {
-    const rgxUnacceptedChars = new RegExp("[^a-zA-z0-9-]", "g");
-    try {
-      const matches = id.match(rgxUnacceptedChars);
-      let sanitized = id;
-  
-      if (matches === null) return sanitized;
-  
-      for (const match of matches) {
-        const index = sanitized.indexOf(match);
-        sanitized = sanitized.substring(0, index) + sanitized.substring(index + 1);
-      }
-      return sanitized;
-    } catch (error) {
-      game.strive.logger.logError("Failed to sanitize the following ID");
-      game.strive.logger.logError(id);
-      game.strive.logger.logError(error);
-      return UuidUtil.createUUID();
     }
   }
 
