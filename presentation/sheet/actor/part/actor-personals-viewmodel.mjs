@@ -40,7 +40,6 @@ export default class ActorPersonalsViewModel extends ViewModel {
       onChange: (_, newValue) => {
         thiz.document.person.species = newValue;
       },
-      placeholder: game.i18n.localize("system.character.personals.species"),
     });
     this.vmTfCulture = new InputTextFieldViewModel({
       parent: thiz,
@@ -49,7 +48,6 @@ export default class ActorPersonalsViewModel extends ViewModel {
       onChange: (_, newValue) => {
         thiz.document.person.culture = newValue;
       },
-      placeholder: game.i18n.localize("system.character.personals.culture"),
     });
     this.vmTfSex = new InputTextFieldViewModel({
       parent: thiz,
@@ -58,7 +56,6 @@ export default class ActorPersonalsViewModel extends ViewModel {
       onChange: (_, newValue) => {
         thiz.document.person.sex = newValue;
       },
-      placeholder: game.i18n.localize("system.character.personals.sex"),
     });
     this.vmTfAge = new InputTextFieldViewModel({
       parent: thiz,
@@ -67,7 +64,6 @@ export default class ActorPersonalsViewModel extends ViewModel {
       onChange: (_, newValue) => {
         thiz.document.person.age = newValue;
       },
-      placeholder: game.i18n.localize("system.character.personals.age"),
     });
   }
   
