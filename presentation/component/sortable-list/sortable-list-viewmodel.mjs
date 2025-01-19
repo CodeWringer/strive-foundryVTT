@@ -54,7 +54,7 @@ export class SortableListAddItemParams {
    * display as a button label. 
    * 
    * @param {Function | undefined} args.onItemAdded If defined, this callback function will be 
-   * invoked upon item creation. Arguments:
+   * invoked after item creation. Arguments:
    * * `event: Event`
    * * `document: Document`
    */

@@ -198,12 +198,9 @@ export class GameSystemActorSheet extends ActorSheet {
     };
 
     if (templateItem.type === ITEM_TYPES.SKILL) {
-      // For NPCs, ensure skills have at least level one, if they have no advancement progression enabled. 
+      // For NPCs, ensure skills have at least level one. 
       if (this.actor.type === ACTOR_TYPES.NPC) {
-        const npcData = this.actor.getTransientObject();
-        if (npcData.progressionVisible === false) {
-          creationData.system.level = 1;
-        }
+        creationData.system.level = 1;
       }
 
       // Update an existing skill, is possible. Only skills support this behavior, as only skills are 
