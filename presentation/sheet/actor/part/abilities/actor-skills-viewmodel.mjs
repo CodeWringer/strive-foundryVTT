@@ -118,10 +118,12 @@ export default class ActorSkillsViewModel extends ViewModel {
             documentType: ITEM_TYPES.SKILL,
             target: this.document,
             creationDataOverrides: {
-              level: 1,
-              properties: [
-                SKILL_TAGS.INNATE.id,
-              ],
+              system: {
+                level: 1,
+                properties: [
+                  SKILL_TAGS.INNATE.id,
+                ],
+              },
             },
           }),
           localizedLabel: StringUtil.format(
@@ -158,7 +160,9 @@ export default class ActorSkillsViewModel extends ViewModel {
           documentType: ITEM_TYPES.SKILL,
           target: this.document,
           creationDataOverrides: {
-            level: 0,
+            system: {
+              level: 0,
+            },
           },
         }),
         localizedLabel: StringUtil.format(
@@ -194,7 +198,9 @@ export default class ActorSkillsViewModel extends ViewModel {
           documentType: ITEM_TYPES.SKILL,
           target: this.document,
           creationDataOverrides: {
-            level: 1,
+            system: {
+              level: 1,
+            },
           },
         }),
         localizedLabel: StringUtil.format(
