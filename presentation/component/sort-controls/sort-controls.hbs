@@ -8,7 +8,7 @@ cssClass: String | undefined
       {{#if (or option.option.iconHtml option.option.localizedLabel)}}
       <span class="flex flex-row flex-middle auto-margin-h pad-r-md border-solid-r-sm">
         {{#if option.option.iconHtml}}
-        <span class="flex flex-center"{{#if option.option.localizedToolTip}} title="{{option.option.localizedToolTip}}"{{/if}}>{{{option.option.iconHtml}}}</span>
+        <span class="flex flex-center">{{{option.option.iconHtml}}}</span>
         {{/if}}
         {{#if (and option.option.localizedLabel (not ../viewModel.compact))}}
         <span>{{option.option.localizedLabel}}</span>

@@ -85,6 +85,7 @@ export default class ButtonSendToChatViewModel extends ButtonViewModel {
     super({
       ...args,
       iconHtml: '<i class="fas fa-comments"></i>',
+      localizedToolTip: args.localizedToolTip ?? game.i18n.localize("system.general.sendToChat"),
     });
     ValidationUtil.validateOrThrow(args, ["target"]);
 
@@ -92,7 +93,6 @@ export default class ButtonSendToChatViewModel extends ButtonViewModel {
     this._propertyPath = args.propertyPath;
     this._chatTitle = args.chatTitle ?? "";
     this._actor = args.actor;
-    this.localizedToolTip = args.localizedToolTip ?? game.i18n.localize("system.general.sendToChat");
   }
 
   /**

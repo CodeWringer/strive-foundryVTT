@@ -39,11 +39,11 @@ export default class ButtonOpenSheetViewModel extends ButtonViewModel {
     super({
       ...args,
       iconHtml: '<i class="fas fa-external-link-alt"></i>',
+      localizedToolTip: args.localizedToolTip ?? game.i18n.localize("system.general.openSheet"),
     });
     ValidationUtil.validateOrThrow(args, ["target"]);
 
     this.target = args.target;
-    this.localizedToolTip = args.localizedToolTip ?? game.i18n.localize("system.general.openSheet");
   }
 
   /**

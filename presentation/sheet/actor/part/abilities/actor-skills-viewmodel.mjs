@@ -1,3 +1,5 @@
+import { ACTOR_TYPES } from "../../../../../business/document/actor/actor-types.mjs"
+import TransientBaseCharacterActor from "../../../../../business/document/actor/transient-base-character-actor.mjs"
 import { GENERAL_DOCUMENT_TYPES } from "../../../../../business/document/general-document-types.mjs"
 import { ITEM_TYPES } from "../../../../../business/document/item/item-types.mjs"
 import { SEARCH_MODES, Search, SearchItem } from "../../../../../business/search/search.mjs"
@@ -26,7 +28,7 @@ export default class ActorSkillsViewModel extends ViewModel {
    * @type {Boolean}
    * @readonly
    */
-  get hideInnateSkills() { return (this.innateSkillViewModels ?? []).length === 0; }
+  get hideInnateSkills() { return (this.innateSkillViewModels ?? []).length === 0 && this.document.type !== ACTOR_TYPES.NPC; }
 
   /**
    * Returns `true`, if learning skills are to be hidden. 
@@ -118,10 +120,12 @@ export default class ActorSkillsViewModel extends ViewModel {
             documentType: ITEM_TYPES.SKILL,
             target: this.document,
             creationDataOverrides: {
-              level: 1,
-              properties: [
-                SKILL_TAGS.INNATE.id,
-              ],
+              system: {
+                level: 1,
+                properties: [
+                  SKILL_TAGS.INNATE.id,
+                ],
+              },
             },
           }),
           localizedLabel: StringUtil.format(
@@ -158,7 +162,9 @@ export default class ActorSkillsViewModel extends ViewModel {
           documentType: ITEM_TYPES.SKILL,
           target: this.document,
           creationDataOverrides: {
-            level: 0,
+            system: {
+              level: 0,
+            },
           },
         }),
         localizedLabel: StringUtil.format(
@@ -194,7 +200,9 @@ export default class ActorSkillsViewModel extends ViewModel {
           documentType: ITEM_TYPES.SKILL,
           target: this.document,
           creationDataOverrides: {
-            level: 1,
+            system: {
+              level: 1,
+            },
           },
         }),
         localizedLabel: StringUtil.format(

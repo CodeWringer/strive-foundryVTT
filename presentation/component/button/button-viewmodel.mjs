@@ -18,9 +18,9 @@ export const SELECTOR_BUTTON = "custom-system-button";
  * @property {JQuery | HTMLElement} element The DOM element that is 
  * associated with this view model. 
  * * Read-only
- * 
  * @property {String | undefined} localizedToolTip A localized text to 
  * display as a tool tip. 
+ * 
  * @property {String | undefined} localizedLabel A localized text to 
  * display as a button label. 
  * @property {String | undefined} iconHtml Raw HTML to render as 
@@ -69,7 +69,6 @@ export default class ButtonViewModel extends ViewModel {
   constructor(args = {}) {
     super(args);
 
-    this.localizedToolTip = args.localizedToolTip;
     this.localizedLabel = args.localizedLabel;
     this.iconHtml = args.iconHtml;
     this.onClick = args.onClick ?? (async (event, data) => {});

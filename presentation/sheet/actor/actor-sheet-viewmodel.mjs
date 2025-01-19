@@ -22,6 +22,7 @@ import TransientBaseActor from "../../../business/document/actor/transient-base-
 import { ExtenderUtil } from "../../../common/extender-util.mjs"
 import RulesetExplainer from "../../../business/ruleset/ruleset-explainer.mjs"
 import ReadOnlyValueViewModel from "../../component/read-only-value/read-only-value.mjs"
+import Tooltip from "../../component/tooltip/tooltip.mjs"
 
 /**
  * @extends BaseSheetViewModel
@@ -351,6 +352,15 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
     });
 
     await this._renderActiveTab(html);
+  }
+
+  /** @override */
+  dispose() {
+    super.dispose();
+
+    // An extremely aggressive band-aid solution. But, this ensures lingering tool tip elements 
+    // with (at least partially) dynamic IDs are always cleared properly. 
+    Tooltip.removeAllToolTipElements();
   }
 
   /** @override */

@@ -64,6 +64,7 @@ export default class ButtonRollViewModel extends ButtonViewModel {
     super({
       ...args,
       iconHtml: '<i class="fas fa-dice-three"></i>',
+      localizedToolTip: args.localizedToolTip ?? game.i18n.localize("system.roll.doRoll"),
     });
     ValidationUtil.validateOrThrow(args, ["target", "rollSchema"]);
 
@@ -74,7 +75,6 @@ export default class ButtonRollViewModel extends ButtonViewModel {
     this.secondaryChatTitle = args.secondaryChatTitle;
     this.secondaryChatImage = args.secondaryChatImage;
     this._actor = args.actor;
-    this.localizedToolTip = args.localizedToolTip ?? game.i18n.localize("system.roll.doRoll");
   }
 
   /**
