@@ -82,11 +82,13 @@ export default class ButtonToggleVisibilityViewModel extends ButtonToggleIconVie
    * E. g. `<div data-vis-group="1A2b3F4E">My content</div>`. 
    */
   constructor(args = {}) {
-    super(args);
+    super({
+      ...args,
+      localizedToolTip: args.localizedToolTip ?? game.i18n.localize("system.general.toggleVisibility"),
+    });
     ValidationUtil.validateOrThrow(args, ["visGroup"]);
 
     this._visGroup = args.visGroup;
-    this.localizedToolTip = args.localizedToolTip ?? game.i18n.localize("system.general.toggleVisibility");
   }
 
   /**
