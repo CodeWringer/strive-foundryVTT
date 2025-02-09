@@ -91,7 +91,9 @@
           "label": "Self"
         },
         "gm": {
-          "label": "Game-Master"
+          "label": "Game-Master",
+          "secrets": "Game-Master Secrets",
+          "toggleSecrets": "Toggle Game-Master Secrets"
         }
       },
       "modifier": {
