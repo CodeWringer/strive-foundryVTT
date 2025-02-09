@@ -42,10 +42,7 @@ export default class DocumentCreationStrategy {
     if (!ValidationUtil.isDefined(creationData)) return; // Bail out. 
     
     // Apply overrides. 
-    creationData = {
-      ...creationData,
-      ...this.creationDataOverrides,
-    };
+    creationData = foundry.utils.mergeObject(creationData, this.creationDataOverrides);
 
     const creationDataIsActor = this._getIsTypeAnActor(creationData.type);
     
