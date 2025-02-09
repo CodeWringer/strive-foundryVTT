@@ -387,7 +387,7 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
     const activeTab = html.find("nav.sheet-tabs > a.active");
     const tab = activeTab.data("tab");
     await this._renderLazyTab(tab);
-    this._restoreScrollPosition();
+    this.restoreScrollPosition();
   }
 
   /**
