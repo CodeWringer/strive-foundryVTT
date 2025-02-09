@@ -92,7 +92,7 @@ export class GameSystemItemSheet extends ItemSheet {
       classes: [SYSTEM_ID, "sheet", "item"],
       width: 600,
       height: 480,
-      tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "description" }]
+      tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "content" }]
     });
   }
 
