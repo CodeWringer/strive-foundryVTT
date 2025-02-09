@@ -72,6 +72,27 @@ export default class RulesetExplainer {
   }
 
   /**
+   * @param {GameSystemActor | TransientBaseCharacterActor} actor 
+   * 
+   * @returns {String}
+   */
+  getExplanationForSprintingSpeed(actor) {
+    const transientActor = actor.getTransientObject();
+    const characterAgility = transientActor.attributes.find(it => it.name === ATTRIBUTES.agility.name);
+    const characterToughness = transientActor.attributes.find(it => it.name === ATTRIBUTES.toughness.name);
+    return StringUtil.format2(
+      game.i18n.localize("system.rules.sprintingSpeed"),
+      {
+        localizedAgility: game.i18n.localize(ATTRIBUTES.agility.localizableName),
+        agility: characterAgility.modifiedLevel,
+        localizedToughness: game.i18n.localize(ATTRIBUTES.toughness.localizableName),
+        toughness: characterToughness.modifiedLevel,
+        sprintingSpeed: transientActor.sprintingSpeed,
+      }
+    );
+  }
+
+  /**
    * @param {TransientSkill} skill 
    * 
    * @returns {String}

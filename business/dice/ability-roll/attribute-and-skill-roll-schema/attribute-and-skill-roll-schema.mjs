@@ -68,7 +68,7 @@ export class AttributeAndSkillRollSchema extends SkillRollSchema {
     let diceComposition = attributes
       .map(attribute => `${attribute.modifiedLevel} ${game.i18n.localize(attribute.localizableName)}`)
       .join(" | ");
-    diceComposition = `${diceComposition}, ${document.modifiedLevel} ${document.name}`;
+    diceComposition = `(${diceComposition}), ${document.modifiedLevel} ${document.name}`;
 
     dialog.inputDefinitions.splice(0, 0, // Insert the following before the visibility drop down. 
       new DynamicInputDefinition({

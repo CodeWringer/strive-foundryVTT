@@ -23,6 +23,8 @@ import TransientBaseActor from './transient-base-actor.mjs';
  * * Read-only. 
  * @property {Number} baseInitiative 
  * * Read-only. 
+ * @property {Number} sprintingSpeed 
+ * * Read-only. 
  * @property {Object} person
  * * Read-only. 
  * @property {Number} person.age
@@ -469,6 +471,24 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
     });
 
     return result;
+  }
+
+  /**
+   * @type {Number}
+   * @readonly
+   */
+  get sprintingSpeed() {
+    const attributesToSum = [
+      this.attributes.find(it => it.name === ATTRIBUTES.agility.name),
+      this.attributes.find(it => it.name === ATTRIBUTES.toughness.name),
+    ];
+
+    let result = 0;
+    attributesToSum.forEach(attribute => {
+      result += parseInt(attribute.modifiedLevel);
+    });
+
+    return Math.ceil(result / 2);
   }
 
   /**

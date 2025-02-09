@@ -1,8 +1,6 @@
 import { VISIBILITY_MODES } from "../../../presentation/chat/visibility-modes.mjs";
 import DynamicInputDefinition from "../../../presentation/dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
 import { DYNAMIC_INPUT_TYPES } from "../../../presentation/dialog/dynamic-input-dialog/dynamic-input-types.mjs";
-import { ACTOR_TYPES } from "../../document/actor/actor-types.mjs";
-import CharacterAttribute from "../../ruleset/attribute/character-attribute.mjs";
 import { Sum, SumComponent } from "../../ruleset/summed-data.mjs";
 import RollData from "../roll-data.mjs";
 import { ROLL_DICE_MODIFIER_TYPES } from "../roll-dice-modifier-types.mjs";
@@ -10,16 +8,35 @@ import RollQueryData from "../roll-query-data.mjs";
 import { RollSchema } from "../roll-schema.mjs";
 
 /**
- * Defines a schema for rolling dice to test an attribute. 
+ * Defines the roll data of a derived attribute. 
  * 
- * This schema simply takes the modified level of the attribute as the 
- * dice count. 
+ * @property {Number} derivedAttributeValue Sets the number of dice. 
+ * @property {String} internalName 
+ * @property {String} localizableName 
+ */
+export class DerivedAttributeRollData {
+  /**
+   * @param {Object} args 
+   * @param {Number} args.derivedAttributeValue Sets the number of dice. 
+   * @param {String} args.internalName 
+   * @param {String} args.localizableName 
+   * to roll. 
+   */
+  constructor(args = {}) {
+    this.derivedAttributeValue = args.derivedAttributeValue;
+    this.internalName = args.internalName;
+    this.localizableName = args.localizableName;
+  }
+}
+
+/**
+ * Defines a schema for rolling dice to test a derived attribute. 
  * 
  * @extends RollSchema
  */
-export class AttributeRollSchema extends RollSchema {
+export class DerivedAttributeRollSchema extends RollSchema {
   /** 
-   * @param {CharacterAttribute} document 
+   * @param {DerivedAttributeRollData} document 
    * @param {RollQueryData} rollQueryData 
    * 
    * @override 
@@ -40,7 +57,7 @@ export class AttributeRollSchema extends RollSchema {
   }
 
   /** 
-   * @param {CharacterAttribute} document 
+   * @param {DerivedAttributeRollData} document 
    * @param {RollQueryData} rollQueryData 
    * 
    * @override 
@@ -115,20 +132,12 @@ export class AttributeRollSchema extends RollSchema {
   /**
    * Returns the dice components that comprise the attribute. 
    * 
-   * @param {CharacterAttribute} document 
+   * @param {DerivedAttributeRollData} document 
    * @returns {Array<SumComponent>}
    */
   _getDiceComponents(document) {
-    const actor = document.owningActor;
-    if (actor.type === ACTOR_TYPES.NPC && actor.dependsOnActiveCr === true) {
-      return [
-        new SumComponent("challengeRating", "system.character.advancement.challengeRating.label", actor.challengeRating.modified),
-      ];
-    } else {
-      return [
-        new SumComponent(document.name, document.localizableName, document.modifiedLevel),
-      ];
-    }
+    return [
+      new SumComponent(document.internalName, document.localizableName, document.derivedAttributeValue),
+    ];
   }
-
 }
