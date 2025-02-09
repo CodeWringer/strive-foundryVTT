@@ -73,4 +73,8 @@ nav#nav-sheet-tabs.sheet-tabs {
   &-sidebar {
     border-right: $c-border-medium 3px solid;
   }
+
+  &.secret {
+    background-color: $c-bg-secret;
+  }
 }

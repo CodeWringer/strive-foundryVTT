@@ -50,7 +50,15 @@ cssClass: {undefined | String}
   <div class="flex flex-row border-solid-t-sm border-solid-b-sm">
     {{> inputRichText viewModel=viewModel.vmRtDescription cssClass="fill" }}
   </div>
+  {{!-- Expandable Content --}}
   <div id="{{viewModel.id}}-content" {{#if viewModel.isExpanded}}class="auto-margin-v-sm" style="height: 100%;"{{else}}class="auto-margin-v-sm hidden" style="height: 0%;"{{/if}}>
+    {{!-- GM Notes --}}
+    {{#if viewModel.showGmNotes }}
+    <div class="sheet-block secret">
+      {{> inputRichText viewModel=viewModel.vmGmNotes }}
+    </div>
+    {{/if}}
+    {{!-- Data Fields --}}
     <div class="grid-2col grid-gap-sm">
       {{#each viewModel.dataFields as |dataField|}}
         {{#with dataField.template as |template|}}
@@ -62,6 +70,7 @@ cssClass: {undefined | String}
         {{/with}}
       {{/each}}
     </div>
+    {{!-- Additional Content --}}
     {{#if viewModel.additionalContent}}
       <div class="{{#if viewModel.additionalContent.isHidden}}hidden{{/if}}">
       {{#with viewModel.additionalContent.template as |template|}}

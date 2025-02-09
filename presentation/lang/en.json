@@ -91,7 +91,9 @@
           "label": "Self"
         },
         "gm": {
-          "label": "Game-Master"
+          "label": "Game-Master",
+          "secrets": "Game-Master Secrets",
+          "toggleSecrets": "Toggle Game-Master Secrets"
         }
       },
       "modifier": {
@@ -112,6 +114,12 @@
       "sendToChat": "Send to Chat",
       "select": "Select",
       "search": "Search",
+      "sheet": {
+        "tab": {
+          "content": "Content",
+          "gmNotes": "GM"
+        }
+      },
       "toggleVisibility": "Toggle visibility",
       "ordering": {
         "moveToTop": "Move to top",
@@ -503,7 +511,6 @@
           "health": "Health",
           "assets": "Assets",
           "biography": "Biography",
-          "gmNotes": "GM",
           "description": "Description"
         }
       },

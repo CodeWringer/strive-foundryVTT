@@ -102,6 +102,19 @@ export default class BaseListItemViewModel extends ViewModel {
   }
 
   /**
+   * Returns `true`, if the GM notes are to be shown. Can also be used to toggle showing it. 
+   * @type {Boolean}
+   */
+  get showGmNotes() { return this.isGM && ValidationUtil.isNotBlankOrUndefined(this.document.gmNotes); }
+  set showGmNotes(value) {
+    if (value && ValidationUtil.isBlankOrUndefined(this.document.gmNotes)) {
+      this.document.gmNotes = game.i18n.localize("system.general.messageVisibility.gm.secrets");
+    } else {
+      this.document.gmNotes = "";
+    }
+  }
+
+  /**
    * Returns `true`, if the expansion controls should be enabled. 
    * 
    * @type {Boolean}
@@ -185,6 +198,17 @@ export default class BaseListItemViewModel extends ViewModel {
         this.document.description = newValue;
       },
     });
+    if (this.isGM) {
+      this.vmGmNotes = new InputRichTextViewModel({
+        parent: this,
+        id: "vmGmNotes",
+        value: this.document.gmNotes,
+        localizedToolTip: game.i18n.localize("system.general.messageVisibility.gm.secrets"),
+        onChange: (_, newValue) => {
+          this.document.gmNotes = newValue;
+        },
+      });
+    }
   }
 
   /** @override */
@@ -256,7 +280,22 @@ export default class BaseListItemViewModel extends ViewModel {
    * @protected
    */
   getSecondaryHeaderButtons() {
+    const thiz = this;
     return [
+      // Toggle GM notes
+      new TemplatedComponent({
+        template: ButtonContextMenuViewModel.TEMPLATE,
+        isHidden: !this.isGM,
+        viewModel: new ButtonViewModel({
+          id: "vmBtnToggleGmNotes",
+          parent: this,
+          localizedToolTip: game.i18n.localize("system.general.messageVisibility.gm.toggleSecrets"),
+          iconHtml: `<i class="fas fa-eye"></i>`,
+          onClick: () => {
+            thiz.showGmNotes = !thiz.showGmNotes;
+          },
+        }),
+      }),
       // Context menu button
       new TemplatedComponent({
         template: ButtonContextMenuViewModel.TEMPLATE,

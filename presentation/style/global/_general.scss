@@ -6,6 +6,10 @@
   word-wrap: break-word;
 }
 
+.secret {
+  background: $c-bg-secret;
+}
+
 .line-height {
   height: $line-height;
   line-height: 1;
