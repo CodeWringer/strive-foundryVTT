@@ -23,6 +23,8 @@ import { ExtenderUtil } from "../../../common/extender-util.mjs"
 import RulesetExplainer from "../../../business/ruleset/ruleset-explainer.mjs"
 import ReadOnlyValueViewModel from "../../component/read-only-value/read-only-value.mjs"
 import Tooltip from "../../component/tooltip/tooltip.mjs"
+import ButtonRollViewModel from "../../component/button-roll/button-roll-viewmodel.mjs"
+import { DerivedAttributeRollData, DerivedAttributeRollSchema } from "../../../business/dice/ability-roll/derived-attribute-roll-schema.mjs"
 
 /**
  * @extends BaseSheetViewModel
@@ -140,6 +142,26 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
         parent: this,
         value: this.document.baseInitiative,
         localizedToolTip: new RulesetExplainer().getExplanationForBaseInitiative(this.document),
+      });
+      this.vmSprintingSpeed = new ReadOnlyValueViewModel({
+        id: "vmSprintingSpeed",
+        parent: this,
+        value: this.document.sprintingSpeed,
+        localizedToolTip: new RulesetExplainer().getExplanationForSprintingSpeed(this.document),
+      });
+      this.vmRollSprintingSpeed = new ButtonRollViewModel({
+        id: "vmRollSprintingSpeed",
+        parent: this,
+        actor: this.document,
+        target: new DerivedAttributeRollData({
+          derivedAttributeValue: this.document.sprintingSpeed,
+          internalName: "sprintingSpeed",
+          localizableName: "system.character.attribute.sprintingSpeed.label",
+        }),
+        rollSchema: new DerivedAttributeRollSchema({
+          dieFaces: 6,
+          hitThreshold: 5,
+        }),
       });
       
       this.vmBtnConfigure = new ButtonViewModel({
