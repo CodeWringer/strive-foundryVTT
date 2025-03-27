@@ -27,6 +27,8 @@ export default class DynamicInputDialogViewModel extends ViewModel {
    * @param {Object} args 
    * @param {Array<DynamicInputDefinition>} args.inputDefinitions
    * @param {Application} args.ui The dialog that owns this view model. 
+   * @param {String | undefined} args.focused Name of the input field to pre-focus when 
+   * the dialog is opened. 
    */
   constructor(args = {}) {
     super(args);
@@ -35,6 +37,7 @@ export default class DynamicInputDialogViewModel extends ViewModel {
 
     this.inputDefinitions = args.inputDefinitions;
     this.ui = args.ui;
+    this.focused = args.focused;
 
     this.controls = [];
     for (const definition of this.inputDefinitions) {
@@ -202,6 +205,16 @@ export default class DynamicInputDialogViewModel extends ViewModel {
         viewModel: viewModel,
         validationFunc: validationFunc,
       }));
+    }
+  }
+
+  /** @override */
+  async activateListeners(html) {
+    await super.activateListeners(html);
+
+    if (ValidationUtil.isDefined(this.focused)) {
+      const controlToFocus = this.controls.find(it => it.definition.name === this.focused)
+      $(`#${controlToFocus.viewModel.id}`).focus();
     }
   }
 

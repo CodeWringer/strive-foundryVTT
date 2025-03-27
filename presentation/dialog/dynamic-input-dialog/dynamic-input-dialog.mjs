@@ -12,6 +12,8 @@ import DynamicInputDialogViewModel from './dynamic-input-dialog-viewmodel.mjs';
  * 
  * @property {Array<DynamicInputDefinition>} inputDefinitions The list of input fields 
  * to include. 
+ * @property {String | undefined} focused Name of the input field to pre-focus when 
+ * the dialog is opened. 
  * 
  * @example
  * ```JS
@@ -110,12 +112,15 @@ export default class DynamicInputDialog extends ConfirmableModalDialog {
    * of the dialog. Receives this dialog instance as its only argument. 
    * @param {String | undefined} options.localizedTitle Localized string for the dialog title. 
    * @param {Array<DynamicInputDefinition>} options.inputDefinitions
+   * @param {String | undefined} options.focused Name of the input field to pre-focus when 
+   * the dialog is opened. 
    */
   constructor(options = {}) {
     super(options);
     ValidationUtil.validateOrThrow(options, ["inputDefinitions"]);
 
     this.inputDefinitions = options.inputDefinitions;
+    this.focused = options.focused;
   }
   
   /** @override */
@@ -130,6 +135,7 @@ export default class DynamicInputDialog extends ConfirmableModalDialog {
       isEditable: true,
       isSendable: true,
       ui: this,
+      focused: this.focused,
     });
 
     return {
