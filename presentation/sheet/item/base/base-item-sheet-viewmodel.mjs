@@ -185,6 +185,7 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
         viewModel: new ButtonSendToChatViewModel({
           id: "vmBtnSendToChat",
           parent: this,
+          isEditable: true,
           target: this.document,
           localizedToolTip: game.i18n.localize("system.general.sendToChat"),
         }),
