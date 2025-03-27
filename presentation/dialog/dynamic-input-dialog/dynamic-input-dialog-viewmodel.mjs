@@ -11,6 +11,9 @@ import SimpleListViewModel from "../../component/simple-list/simple-list-viewmod
 import InputToggleViewModel from "../../component/input-toggle/input-toggle-viewmodel.mjs";
 import DynamicInputDefinition from "./dynamic-input-definition.mjs";
 import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
+import { KEYBOARD } from "../../keyboard/keyboard.mjs";
+import { KEY_CODES } from "../../keyboard/key-codes.mjs";
+import ConfirmableModalDialog from "../confirmable-modal-dialog/confirmable-modal-dialog.mjs";
 
 /**
  * @property {Array<DynamicInputDefinition>} inputDefinitions The list of input definitions of 
@@ -216,6 +219,9 @@ export default class DynamicInputDialogViewModel extends ViewModel {
       const controlToFocus = this.controls.find(it => it.definition.name === this.focused)
       $(`#${controlToFocus.viewModel.id}`).focus();
     }
+
+    KEYBOARD.onKeyDown(KEY_CODES.ENTER, this._handleConfirm.bind(this));
+    KEYBOARD.onKeyDown(KEY_CODES.ESCAPE, this._handleCancel.bind(this));
   }
 
   /**
@@ -255,6 +261,32 @@ export default class DynamicInputDialogViewModel extends ViewModel {
       validations: validations,
       allValid: allValid
     };
+  }
+
+  /** @override */
+  dispose() {
+    KEYBOARD.offKeyDown(KEY_CODES.ENTER, this._handleConfirm);
+    KEYBOARD.offKeyDown(KEY_CODES.ESCAPE, this._handleCancel);
+
+    super.dispose();
+  }
+  
+  /**
+   * @private
+   */
+  _handleConfirm() { 
+    const button = this.ui.buttons.find(it => it.id === ConfirmableModalDialog.CONFIRM_ID);
+    this.element.find(`#${button.id}`).focus();
+    this.element.find(`#${button.id}`).click();
+  }
+
+  /**
+   * @private
+   */
+  _handleCancel() { 
+    const button = this.ui.buttons.find(it => it.id === ConfirmableModalDialog.CANCEL_ID);
+    this.element.find(`#${button.id}`).focus();
+    this.element.find(`#${button.id}`).click();
   }
 }
 

@@ -62,14 +62,36 @@ export default class DynamicInputDialog extends ConfirmableModalDialog {
   get buttons() { return [
     new DialogButtonDefinition({
       id: ConfirmableModalDialog.CONFIRM_ID,
-      clickCallback: this.handleConfirm.bind(this),
+      clickCallback: (html, dialog) => {
+        const validationResult = dialog._viewModel.validate();
+        if (validationResult.allValid === true) {
+          dialog.confirmed = true;
+
+          if (dialog.closeOnConfirm === true) {
+            dialog.close();
+          }
+        } else {
+          html.find("#required-input-warning").removeClass("hidden");
+
+          const requiredListElement = html.find("#required-input-list");
+          requiredListElement.empty();
+          for (const definitionResult of validationResult.validations) {
+            if (definitionResult.valid === true) continue;
+
+            const name = definitionResult.definition.localizedLabel === undefined ? definitionResult.definition.name : definitionResult.definition.localizedLabel;
+            requiredListElement.append(`<li>${name}</li>`)
+          }
+        }
+      },
       cssClass: "primary-button",
       iconCssClass: "fas fa-check",
       localizedLabel: game.i18n.localize("system.general.confirm"),
     }),
     new DialogButtonDefinition({
       id: ConfirmableModalDialog.CANCEL_ID,
-      clickCallback: this.handleCancel.bind(this),
+      clickCallback: (html, dialog) => {
+        dialog.close();
+      },
       cssClass: "secondary-button",
       iconCssClass: "fas fa-times",
       localizedLabel: game.i18n.localize("system.general.cancel"),
@@ -148,37 +170,5 @@ export default class DynamicInputDialog extends ConfirmableModalDialog {
     }
     
     return super.close();
-  }
-
-  /**
-   * @protected
-   */
-  handleConfirm() {
-    const validationResult = this._viewModel.validate();
-    if (validationResult.allValid === true) {
-      this.confirmed = true;
-
-      if (this.closeOnConfirm === true) {
-        this.close();
-      }
-    } else {
-      this._viewModel.element.find("#required-input-warning").removeClass("hidden");
-      
-      const requiredListElement = this._viewModel.element.find("#required-input-list");
-      requiredListElement.empty();
-      for (const definitionResult of validationResult.validations) {
-        if (definitionResult.valid === true) continue;
-
-        const name = definitionResult.definition.localizedLabel === undefined ? definitionResult.definition.name : definitionResult.definition.localizedLabel;
-        requiredListElement.append(`<li>${name}</li>`)
-      }
-    }
-  }
-
-  /**
-   * @protected
-   */
-  handleCancel() {
-    this.close();
   }
 }
