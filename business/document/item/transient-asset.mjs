@@ -14,6 +14,7 @@ import { ExtenderUtil } from "../../../common/extender-util.mjs";
  * 
  * @property {Number} quantity
  * @property {Number} maxQuantity
+ * @property {Number} quality
  * @property {Number} bulk
  * @property {String} location
  * @property {Boolean} isProperty Returns `true`, if the asset is in the 
@@ -55,6 +56,15 @@ export default class TransientAsset extends TransientBaseItem {
     this.updateByPath("system.maxQuantity", value);
   }
   
+  /**
+   * @type {Number}
+   */
+  get quality() { return parseInt(this.document.system.quality ?? 0); }
+  set quality(value) {
+    this.document.system.quality = value;
+    this.updateByPath("system.quality", value);
+  }
+
   /**
    * @type {Number}
    */

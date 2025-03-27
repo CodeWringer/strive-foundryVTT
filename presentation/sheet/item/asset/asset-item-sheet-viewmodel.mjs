@@ -46,6 +46,20 @@ export default class AssetItemSheetViewModel extends BaseItemSheetViewModel {
         template: InputNumberSpinnerViewModel.TEMPLATE,
         viewModel: new InputNumberSpinnerViewModel({
           parent: this,
+          id: "vmQuality",
+          value: this.document.quality,
+          onChange: (_, newValue) => {
+            this.document.quality = newValue;
+          },
+          min: 0,
+        }),
+        localizedIconToolTip: game.i18n.localize("system.character.asset.quality"),
+        iconClass: "ico-quality-solid",
+      }),
+      new DataFieldComponent({
+        template: InputNumberSpinnerViewModel.TEMPLATE,
+        viewModel: new InputNumberSpinnerViewModel({
+          parent: this,
           id: "vmBulk",
           value: this.document.bulk,
           onChange: (_, newValue) => {

@@ -70,6 +70,15 @@ export default class AssetListItemViewModel extends BaseListItemViewModel {
       },
       min: 1,
     });
+    this.vmQuality = new InputNumberSpinnerViewModel({
+      parent: this,
+      id: "vmQuality",
+      value: this.document.quality,
+      onChange: (_, newValue) => {
+        this.document.quality = newValue;
+      },
+      min: 0,
+    });
     this.vmBulk = new InputNumberSpinnerViewModel({
       parent: this,
       id: "vmBulk",

@@ -13,12 +13,14 @@ viewModel: {IllnessListItemViewModel}
     {{/labeledControl}}
   </div>
   <div class="flex flex-row flex-grow flex-middle auto-margin-h sheet-block">
+    {{!-- Quality --}}
+    {{#> labeledControl viewModel=viewModel.vmQuality localizedIconToolTip=(localize "system.character.asset.quality") iconClass="ico-quality-solid" cssClass="flex-grow" }}
+      {{> inputNumberSpinner }}
+    {{/labeledControl}}
     {{!-- Bulk --}}
     {{#> labeledControl viewModel=viewModel.vmBulk localizedIconToolTip=(localize "system.character.asset.bulk") iconClass="ico-bulk-solid" cssClass="flex-grow" }}
       {{> inputNumberSpinner }}
     {{/labeledControl}}
-    {{!-- Spacer --}}
-    <div class="flex-grow"></div> 
   </div>
 </div>
 {{#if viewModel.isProperty}}
