@@ -39,7 +39,7 @@ export async function queryAssetSlotConfiguration(assetSlot = {}) {
         type: DYNAMIC_INPUT_TYPES.TEXTFIELD,
         name: inputAcceptedTypes,
         localizedLabel: game.i18n.localize("system.character.asset.slot.acceptedTypes"),
-        required: true,
+        required: false,
         defaultValue: ((assetSlot.acceptedTypes ?? []).join(", ")),
         specificArgs: {
           placeholder: "holdable, armor, ..."

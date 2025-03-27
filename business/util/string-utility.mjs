@@ -9,7 +9,7 @@ export const StringUtil = {
    * @constant
    */
   FORMAT_PLACEHOLDER: "%s",
-  
+
   /**
    * Pattern for detection of a float. 
    * 
@@ -17,7 +17,7 @@ export const StringUtil = {
    * @constant
    */
   REGEX_FLOAT: /-?\d+\.\d+/,
-  
+
   /**
    * Pattern for detection of an integer. 
    * 
@@ -26,6 +26,9 @@ export const StringUtil = {
    */
   REGEX_INT: /-?\d+/,
   
+  
+  
+
   
   /**
    * Pattern for detection of a placeholder. 
@@ -60,7 +63,7 @@ export const StringUtil = {
    * @constant
    */
   REGEX_HTML_ESCAPE: /([<>"'`=\/]|&(?!([a-zA-Z]{1,8}\d{0,2}|#(\d{1,4}|x[a-zA-Z\d]{1,4}));))/g,
-  
+
   /**
    * Returns a new String, based on the given string, with any placeholders 
    * replaced with the other given arguments, in the order that they appear. 
@@ -77,23 +80,26 @@ export const StringUtil = {
    * @param {String} str A string that contains formatting placeholders '%s'. 
    * @returns {String} A formatted string
    */
-  format: function(str) {
+  format: function (str) {
     let newString = str;
-  
+
     for (let i = 1; i < arguments.length; i++) {
       const argument = arguments[i];
       const placeHolderIndex = newString.indexOf(this.FORMAT_PLACEHOLDER);
-  
+
       if (placeHolderIndex < 0) {
         break;
       }
-  
+
       newString = newString.substring(0, placeHolderIndex) + argument + newString.substring(placeHolderIndex + this.FORMAT_PLACEHOLDER.length);
     }
-  
+
     return newString;
   },
   
+  
+  
+
   
   /**
    * Returns a new String, based on the given string, with any placeholders 
@@ -115,7 +121,7 @@ export const StringUtil = {
    * 
    * @returns {String} A formatted string
    */
-  format2: function(str, replacements) {
+  format2: function (str, replacements) {
     let newString = str;
 
     const matches = str.matchAll(new RegExp(StringUtil.REGEX_PLACEHOLDER));
@@ -126,7 +132,7 @@ export const StringUtil = {
 
     return newString;
   },
-  
+
   /**
    * Returns a parsed/coerced value, based on the given string value. 
    * 
@@ -134,10 +140,10 @@ export const StringUtil = {
    * 
    * @returns {Boolean | Number | String}
    */
-  coerce: function(value) {
+  coerce: function (value) {
     const matchFloat = value.match(this.REGEX_FLOAT);
     const matchInt = value.match(this.REGEX_INT);
-  
+
     if (value === "true" || value === "false") {
       return value === "true";
     } else if (matchFloat !== null && matchFloat[0].length === value.length) {
@@ -157,7 +163,7 @@ export const StringUtil = {
    * 
    * @returns {String} The new string with escape replacements. 
    */
-  escapeHtml (string) {
+  escapeHtml(string) {
     const thiz = this;
     return String(string).replace(/[&<>"'`=\/]/g, function (s) {
       return thiz._htmlSpecialCharactersEscapeMap[s];

@@ -220,6 +220,7 @@
       "templates": ["base"],
       "quantity": 1,
       "maxQuantity": 1,
+      "quality": 0,
       "bulk": 1,
       "location": ""
     },

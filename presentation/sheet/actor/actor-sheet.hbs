@@ -44,7 +44,7 @@ cssClass: {undefined | String}
         <a class="item flex flex-center flex-grow{{#if viewModel.showFancyFont}} fancy-font{{/if}}" data-tab="description"><div>{{localize "system.character.sheet.tab.description"}}</div></a>
       {{/if}}
       {{#if viewModel.isGM }}
-        <a class="item flex flex-center flex-grow{{#if viewModel.showFancyFont}} fancy-font{{/if}}" data-tab="gm-notes"><div>{{localize "system.character.sheet.tab.gmNotes"}}</div></a>
+        <a class="item flex flex-center flex-grow{{#if viewModel.showFancyFont}} fancy-font{{/if}}" data-tab="gm-notes"><div>{{localize "system.general.sheet.tab.gmNotes"}}</div></a>
       {{/if}}
     </nav>
   {{/if}}
@@ -58,11 +58,20 @@ cssClass: {undefined | String}
         <div>
           {{> lazy viewModel=viewModel.attributesViewModel}}
         </div>
-        {{!-- Base Initiative --}}
-        <div class="flex flex-row flex-middle auto-margin-h-md">
-          <span class="flex-grow"></span>
-          <span class="font-size-lg{{#if viewModel.showFancyFont}} fancy-font{{/if}}">{{localize "system.character.attribute.initiative.baseInitiative"}}</span>
-          {{> readOnlyValue viewModel=viewModel.vmBaseInitiative cssClass="width-md" }}
+        <div class="grid grid-2col">
+          {{!-- Base Initiative --}}
+          <div class="flex flex-row flex-middle auto-margin-h-md">
+            <span class="flex-grow"></span>
+            <span class="font-size-lg{{#if viewModel.showFancyFont}} fancy-font{{/if}}">{{localize "system.character.attribute.initiative.baseInitiative"}}</span>
+            {{> readOnlyValue viewModel=viewModel.vmBaseInitiative cssClass="width-md" }}
+          </div>
+          {{!-- Sprinting Speed --}}
+          <div class="flex flex-row flex-middle auto-margin-h-md">
+            <span class="flex-grow"></span>
+            {{> buttonRoll viewModel=viewModel.vmRollSprintingSpeed }}
+            <span class="font-size-lg{{#if viewModel.showFancyFont}} fancy-font{{/if}}">{{localize "system.character.attribute.sprintingSpeed.label"}}</span>
+            {{> readOnlyValue viewModel=viewModel.vmSprintingSpeed cssClass="width-md" }}
+          </div>
         </div>
         {{!-- Skills --}}
         <div>

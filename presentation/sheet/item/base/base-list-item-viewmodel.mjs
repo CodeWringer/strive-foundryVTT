@@ -1,3 +1,4 @@
+import { ITEM_TYPES } from "../../../../business/document/item/item-types.mjs";
 import TransientDocument from "../../../../business/document/transient-document.mjs";
 import { StringUtil } from "../../../../business/util/string-utility.mjs";
 import { ValidationUtil } from "../../../../business/util/validation-utility.mjs";
@@ -102,6 +103,19 @@ export default class BaseListItemViewModel extends ViewModel {
   }
 
   /**
+   * Returns `true`, if the GM notes are to be shown. Can also be used to toggle showing it. 
+   * @type {Boolean}
+   */
+  get showGmNotes() { return this.isGM && ValidationUtil.isNotBlankOrUndefined(this.document.gmNotes); }
+  set showGmNotes(value) {
+    if (value && ValidationUtil.isBlankOrUndefined(this.document.gmNotes)) {
+      this.document.gmNotes = game.i18n.localize("system.general.messageVisibility.gm.secrets");
+    } else {
+      this.document.gmNotes = "";
+    }
+  }
+
+  /**
    * Returns `true`, if the expansion controls should be enabled. 
    * 
    * @type {Boolean}
@@ -185,6 +199,17 @@ export default class BaseListItemViewModel extends ViewModel {
         this.document.description = newValue;
       },
     });
+    if (this.isGM) {
+      this.vmGmNotes = new InputRichTextViewModel({
+        parent: this,
+        id: "vmGmNotes",
+        value: this.document.gmNotes,
+        localizedToolTip: game.i18n.localize("system.general.messageVisibility.gm.secrets"),
+        onChange: (_, newValue) => {
+          this.document.gmNotes = newValue;
+        },
+      });
+    }
   }
 
   /** @override */
@@ -238,6 +263,7 @@ export default class BaseListItemViewModel extends ViewModel {
         viewModel: new ButtonSendToChatViewModel({
           id: "vmBtnSendToChat",
           parent: this,
+          isEditable: true,
           target: this.document,
           localizedToolTip: game.i18n.localize("system.general.sendToChat"),
         }),
@@ -256,7 +282,22 @@ export default class BaseListItemViewModel extends ViewModel {
    * @protected
    */
   getSecondaryHeaderButtons() {
+    const thiz = this;
     return [
+      // Toggle GM notes
+      new TemplatedComponent({
+        template: ButtonContextMenuViewModel.TEMPLATE,
+        isHidden: !this.isGM,
+        viewModel: new ButtonViewModel({
+          id: "vmBtnToggleGmNotes",
+          parent: this,
+          localizedToolTip: game.i18n.localize("system.general.messageVisibility.gm.toggleSecrets"),
+          iconHtml: `<i class="fas fa-eye"></i>`,
+          onClick: () => {
+            thiz.showGmNotes = !thiz.showGmNotes;
+          },
+        }),
+      }),
       // Context menu button
       new TemplatedComponent({
         template: ButtonContextMenuViewModel.TEMPLATE,
@@ -305,6 +346,13 @@ export default class BaseListItemViewModel extends ViewModel {
         icon: '<i class="fas fa-download"></i>',
         condition: this.context === CONTEXT_TYPES.LIST_ITEM && this.isGM,
         callback: this.import.bind(this),
+      },
+      // Duplicate
+      {
+        name: game.i18n.localize("system.general.duplicate"),
+        icon: '<i class="fas fa-clone"></i>',
+        condition: this.context === CONTEXT_TYPES.LIST_ITEM,
+        callback: this.duplicate.bind(this),
       },
     ];
   }
@@ -356,6 +404,7 @@ export default class BaseListItemViewModel extends ViewModel {
           },
         }),
       ],
+      focused: inputName,
     }).renderAndAwait(true);
 
     if (dialog.confirmed !== true) return;
@@ -376,6 +425,22 @@ export default class BaseListItemViewModel extends ViewModel {
       system: this.document.document.system,
     };
     await Item.create(creationData);
+  }
+
+  /**
+   * Creates a deep copy of the embedded document and adds it to the current owning document. 
+   * 
+   * @protected
+   * @async
+   */
+  async duplicate() {
+    const creationData = {
+      name: this.document.name,
+      type: this.document.type,
+      system: this.document.document.system,
+    };
+    const parentDocument = this.getRootOwningDocument().document;
+    await Item.create(creationData, { parent: parentDocument });
   }
 
   /**

@@ -67,6 +67,7 @@
         "queryTypeOf": "Confirm Deletion of %s '%s'"
       },
       "description": "Description",
+      "duplicate": "Duplicate",
       "edit": "Edit",
       "formula": "Formula",
       "id": "ID",
@@ -91,7 +92,9 @@
           "label": "Self"
         },
         "gm": {
-          "label": "Game-Master"
+          "label": "Game-Master",
+          "secrets": "Game-Master Secrets",
+          "toggleSecrets": "Toggle Game-Master Secrets"
         }
       },
       "modifier": {
@@ -112,6 +115,12 @@
       "sendToChat": "Send to Chat",
       "select": "Select",
       "search": "Search",
+      "sheet": {
+        "tab": {
+          "content": "Content",
+          "gmNotes": "GM"
+        }
+      },
       "toggleVisibility": "Toggle visibility",
       "ordering": {
         "moveToTop": "Move to top",
@@ -214,6 +223,7 @@
           "veryLongReach": "Very Long Reach",
           "weapon": "Weapon"
         },
+        "quality": "Quality",
         "take": "Take",
         "takeToLuggage": "Take to luggage",
         "takeToEquipped": "Take to equipment",
@@ -318,6 +328,9 @@
           "initiative": "Initiative",
           "baseInitiative": "Base Initiative",
           "numberPerRound": "Initiatives per round"
+        },
+        "sprintingSpeed": {
+          "label": "Sprinting Speed"
         }
       },
       "biography": {
@@ -503,7 +516,6 @@
           "health": "Health",
           "assets": "Assets",
           "biography": "Biography",
-          "gmNotes": "GM",
           "description": "Description"
         }
       },
@@ -641,6 +653,7 @@
       "attributeAdvancementRequirements": "raw level (%{rawLevel}) * %{factor} (from %{attributeTier} attribute) = %{advancementRequirements}",
       "skillAdvancementRequirements": "from %{tierName} skill:<br>Successes: %{successFormula} = %{requiredSuccesses}<br>Failures: %{failureFormula} = %{requiredFailures}",
       "baseInitiative": "%{localizedAgility} (%{agility}) + %{localizedAwareness} (%{awareness}) + %{localizedWit} (%{wit}) = %{baseInitiative}",
+      "sprintingSpeed": "(%{localizedAgility} (%{agility}) + %{localizedToughness} (%{toughness})) / 2 (rounded up) = %{sprintingSpeed}",
       "maxHp": "%{baseHp} + (%{toughness} * %{hpPerLevel}) = %{unmodifiedHp} (Raw maximum HP)<br>10 - (%{toughness} / 2) = 10 - %{halfToughness} (rounded down) = %{hpReductionPerInjury} (Reduction per injury)<br>Raw maximum HP (%{unmodifiedHp}) - (injury count (%{injuryCount}) * reduction per injury (%{hpReductionPerInjury})) = %{unmodifiedHp} - %{hpReduction} = %{finalMaxHp}",
       "maxExhaustion": "base (%{baseExhaustionLimit}) + raw toughness (%{toughnessRawLevel}) = %{maxExhaustion}",
       "maxLuggage": "Modified %{localizedStrength} (%{strength}) * 3 = %{maxLuggage}"

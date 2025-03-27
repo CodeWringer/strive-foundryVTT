@@ -4,7 +4,10 @@ import ButtonSendToChatViewModel from "../../../component/button-send-to-chat/bu
 import InputImageViewModel from "../../../component/input-image/input-image-viewmodel.mjs";
 import InputRichTextViewModel from "../../../component/input-rich-text/input-rich-text-viewmodel.mjs";
 import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs";
+import LazyLoadViewModel from "../../../component/lazy-load/lazy-load-viewmodel.mjs";
+import GmNotesViewModel from "../../../component/section-gm-notes/section-gm-notes-viewmodel.mjs";
 import Tooltip from "../../../component/tooltip/tooltip.mjs";
+import BaseSheetViewModel from "../../../view-model/base-sheet-viewmodel.mjs";
 import ViewModel from "../../../view-model/view-model.mjs";
 import { CONTEXT_TYPES } from "../../context-types.mjs";
 import { DataFieldComponent } from "./datafield-component.mjs";
@@ -13,6 +16,8 @@ import { TemplatedComponent } from "./templated-component.mjs";
 /**
  * Represents the abstract base class for all view models that represent 
  * an item sheet. 
+ * 
+ * @extends BaseSheetViewModel
  * 
  * @abstract Inheriting types should override: 
  * * `getDataFields`
@@ -39,7 +44,7 @@ import { TemplatedComponent } from "./templated-component.mjs";
  * this view model instance, as a property whose name is the id of the provided 
  * view model instance. 
  */
-export default class BaseItemSheetViewModel extends ViewModel {
+export default class BaseItemSheetViewModel extends BaseSheetViewModel {
   /** @override */
   static get TEMPLATE() { return game.strive.const.TEMPLATES.BASE_ITEM_SHEET; }
   
@@ -51,6 +56,14 @@ export default class BaseItemSheetViewModel extends ViewModel {
    * @readonly
    */
   get context() { return CONTEXT_TYPES.SHEET; }
+
+  /**
+   * Returns true, if the navigation is to be shown. 
+   * 
+   * @type {Boolean}
+   * @readonly
+   */
+  get showNavigation() { return this.isGM === true }
 
   /**
    * @param {Object} args 
@@ -114,6 +127,20 @@ export default class BaseItemSheetViewModel extends ViewModel {
         this.document.description = newValue;
       },
     });
+
+    if (this.isGM === true) {
+      this.gmNotesViewModel = new LazyLoadViewModel({
+        id: "lazyGmNotes",
+        parent: this,
+        template: game.strive.const.TEMPLATES.COMPONENT_GM_NOTES,
+        viewModelFactoryFunction: (args) => { return new GmNotesViewModel(args); },
+        viewModelArgs: {
+          ...args, 
+          id: "gmNotes", 
+          document: this.document, 
+        },
+      });
+    }
   }
 
   /**
@@ -158,6 +185,7 @@ export default class BaseItemSheetViewModel extends ViewModel {
         viewModel: new ButtonSendToChatViewModel({
           id: "vmBtnSendToChat",
           parent: this,
+          isEditable: true,
           target: this.document,
           localizedToolTip: game.i18n.localize("system.general.sendToChat"),
         }),
@@ -206,6 +234,20 @@ export default class BaseItemSheetViewModel extends ViewModel {
   }
 
   /** @override */
+  async activateListeners(html) {
+    await super.activateListeners(html);
+
+    const thiz = this;
+    const tabs = html.find("nav.sheet-tabs > a");
+    tabs.on("click", function(e) {
+      const tab = $(e.currentTarget).data("tab");
+      thiz._renderLazyTab(tab);
+    });
+
+    await this._renderActiveTab(html);
+  }
+
+  /** @override */
   dispose() {
     super.dispose();
 
@@ -240,4 +282,34 @@ export default class BaseItemSheetViewModel extends ViewModel {
     return super.getExtenders().concat(ExtenderUtil.getExtenders(BaseItemSheetViewModel));
   }
 
+  /**
+   * Renders the contents of the active tab. 
+   * 
+   * @param {JQuery} html 
+   * 
+   * @private
+   * @async
+   */
+  async _renderActiveTab(html) {
+    const activeTab = html.find("nav.sheet-tabs > a.active");
+    const tab = activeTab.data("tab");
+    await this._renderLazyTab(tab);
+    this.restoreScrollPosition();
+  }
+
+  /**
+   * Renders the contents of the tab with the given "tab" dataset attribute. 
+   * 
+   * @param {String} tab The value of the "tab" dataset attribute 
+   * of the tab to render. E. g. `"skills"`. 
+   * 
+   * @private
+   * @async
+   */
+  async _renderLazyTab(tab) {
+    if (tab === "gm-notes") {
+      await this.gmNotesViewModel.render();
+    }
+  }
+  
 }
