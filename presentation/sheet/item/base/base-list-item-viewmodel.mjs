@@ -404,6 +404,7 @@ export default class BaseListItemViewModel extends ViewModel {
           },
         }),
       ],
+      focused: inputName,
     }).renderAndAwait(true);
 
     if (dialog.confirmed !== true) return;
