@@ -222,6 +222,7 @@
           "veryLongReach": "Very Long Reach",
           "weapon": "Weapon"
         },
+        "quality": "Quality",
         "take": "Take",
         "takeToLuggage": "Take to luggage",
         "takeToEquipped": "Take to equipment",
