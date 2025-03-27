@@ -12,6 +12,7 @@ import InputRichTextViewModel from "../../../component/input-rich-text/input-ric
 import DynamicInputDefinition from "../../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
 import DynamicInputDialog from "../../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
 import { DYNAMIC_INPUT_TYPES } from "../../../dialog/dynamic-input-dialog/dynamic-input-types.mjs";
+import { DragDropHandler } from "../../../utility/drag-drop-handler.mjs";
 import ViewModel from "../../../view-model/view-model.mjs";
 import { CONTEXT_TYPES } from "../../context-types.mjs";
 import { DataFieldComponent } from "./datafield-component.mjs";
@@ -217,6 +218,14 @@ export default class BaseListItemViewModel extends ViewModel {
     super.activateListeners(html);
 
     if (this.isEditable === true) {
+      
+      this.dragHandler = new DragDropHandler({
+        entityId: this.document.id,
+        entityDataType: this.document.type,
+        draggableElementId: this.vmHeaderButton.id,
+      });
+      this.dragHandler.activateListeners(html);
+
       new ContextMenu(html, `#${this.id}-name-area`, [
         {
           name: game.i18n.localize("system.general.name.edit"),
