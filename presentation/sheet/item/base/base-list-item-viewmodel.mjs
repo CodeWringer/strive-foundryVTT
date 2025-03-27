@@ -263,6 +263,7 @@ export default class BaseListItemViewModel extends ViewModel {
         viewModel: new ButtonSendToChatViewModel({
           id: "vmBtnSendToChat",
           parent: this,
+          isEditable: true,
           target: this.document,
           localizedToolTip: game.i18n.localize("system.general.sendToChat"),
         }),
