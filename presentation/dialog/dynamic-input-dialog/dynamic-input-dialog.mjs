@@ -63,6 +63,8 @@ export default class DynamicInputDialog extends ConfirmableModalDialog {
     new DialogButtonDefinition({
       id: ConfirmableModalDialog.CONFIRM_ID,
       clickCallback: (html, dialog) => {
+        if (!ValidationUtil.isDefined(dialog._viewModel)) return; // Hack - can not be caught with debugger. Race condition?
+
         const validationResult = dialog._viewModel.validate();
         if (validationResult.allValid === true) {
           dialog.confirmed = true;
