@@ -14,5 +14,7 @@
  * @constant
  */
 export const KEY_CODES = {
+  ENTER: 13,
   ALT: 18,
+  ESCAPE: 27,
 }

@@ -24,11 +24,25 @@ import ModalDialog from "../modal-dialog/modal-dialog.mjs";
 export default class ConfirmableModalDialog extends ModalDialog {
   /** @override */
   get id() { return "confirmable-modal-dialog"; }
+
+  /**
+   * @type {String}
+   * @static
+   * @readonly
+   */
+  static get CONFIRM_ID() { return "confirm"; };
+
+  /**
+   * @type {String}
+   * @static
+   * @readonly
+   */
+  static get CANCEL_ID() { return "cancel"; };
   
   /** @override */
   get buttons() { return [
     new DialogButtonDefinition({
-      id: "confirm",
+      id: ConfirmableModalDialog.CONFIRM_ID,
       clickCallback: (html, dialog) => {
         dialog.confirmed = true;
 
@@ -41,7 +55,7 @@ export default class ConfirmableModalDialog extends ModalDialog {
       localizedLabel: game.i18n.localize("system.general.confirm"),
     }),
     new DialogButtonDefinition({
-      id: "cancel",
+      id: ConfirmableModalDialog.CANCEL_ID,
       clickCallback: (html, dialog) => {
         dialog.close();
       },

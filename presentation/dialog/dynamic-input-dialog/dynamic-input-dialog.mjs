@@ -12,6 +12,8 @@ import DynamicInputDialogViewModel from './dynamic-input-dialog-viewmodel.mjs';
  * 
  * @property {Array<DynamicInputDefinition>} inputDefinitions The list of input fields 
  * to include. 
+ * @property {String | undefined} focused Name of the input field to pre-focus when 
+ * the dialog is opened. 
  * 
  * @example
  * ```JS
@@ -59,18 +61,20 @@ export default class DynamicInputDialog extends ConfirmableModalDialog {
   /** @override */
   get buttons() { return [
     new DialogButtonDefinition({
-      id: "confirm",
+      id: ConfirmableModalDialog.CONFIRM_ID,
       clickCallback: (html, dialog) => {
+        if (!ValidationUtil.isDefined(dialog._viewModel)) return; // Hack - can not be caught with debugger. Race condition?
+
         const validationResult = dialog._viewModel.validate();
         if (validationResult.allValid === true) {
           dialog.confirmed = true;
-  
+
           if (dialog.closeOnConfirm === true) {
             dialog.close();
           }
         } else {
           html.find("#required-input-warning").removeClass("hidden");
-          
+
           const requiredListElement = html.find("#required-input-list");
           requiredListElement.empty();
           for (const definitionResult of validationResult.validations) {
@@ -86,7 +90,7 @@ export default class DynamicInputDialog extends ConfirmableModalDialog {
       localizedLabel: game.i18n.localize("system.general.confirm"),
     }),
     new DialogButtonDefinition({
-      id: "cancel",
+      id: ConfirmableModalDialog.CANCEL_ID,
       clickCallback: (html, dialog) => {
         dialog.close();
       },
@@ -110,12 +114,15 @@ export default class DynamicInputDialog extends ConfirmableModalDialog {
    * of the dialog. Receives this dialog instance as its only argument. 
    * @param {String | undefined} options.localizedTitle Localized string for the dialog title. 
    * @param {Array<DynamicInputDefinition>} options.inputDefinitions
+   * @param {String | undefined} options.focused Name of the input field to pre-focus when 
+   * the dialog is opened. 
    */
   constructor(options = {}) {
     super(options);
     ValidationUtil.validateOrThrow(options, ["inputDefinitions"]);
 
     this.inputDefinitions = options.inputDefinitions;
+    this.focused = options.focused;
   }
   
   /** @override */
@@ -130,6 +137,7 @@ export default class DynamicInputDialog extends ConfirmableModalDialog {
       isEditable: true,
       isSendable: true,
       ui: this,
+      focused: this.focused,
     });
 
     return {
