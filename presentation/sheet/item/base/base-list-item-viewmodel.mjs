@@ -1,3 +1,4 @@
+import { ITEM_TYPES } from "../../../../business/document/item/item-types.mjs";
 import TransientDocument from "../../../../business/document/transient-document.mjs";
 import { StringUtil } from "../../../../business/util/string-utility.mjs";
 import { ValidationUtil } from "../../../../business/util/validation-utility.mjs";
@@ -345,6 +346,13 @@ export default class BaseListItemViewModel extends ViewModel {
         condition: this.context === CONTEXT_TYPES.LIST_ITEM && this.isGM,
         callback: this.import.bind(this),
       },
+      // Duplicate
+      {
+        name: game.i18n.localize("system.general.duplicate"),
+        icon: '<i class="fas fa-clone"></i>',
+        condition: this.context === CONTEXT_TYPES.LIST_ITEM,
+        callback: this.duplicate.bind(this),
+      },
     ];
   }
   
@@ -415,6 +423,22 @@ export default class BaseListItemViewModel extends ViewModel {
       system: this.document.document.system,
     };
     await Item.create(creationData);
+  }
+
+  /**
+   * Creates a deep copy of the embedded document and adds it to the current owning document. 
+   * 
+   * @protected
+   * @async
+   */
+  async duplicate() {
+    const creationData = {
+      name: this.document.name,
+      type: this.document.type,
+      system: this.document.document.system,
+    };
+    const parentDocument = this.getRootOwningDocument().document;
+    await Item.create(creationData, { parent: parentDocument });
   }
 
   /**

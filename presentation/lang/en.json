@@ -67,6 +67,7 @@
         "queryTypeOf": "Confirm Deletion of %s '%s'"
       },
       "description": "Description",
+      "duplicate": "Duplicate",
       "edit": "Edit",
       "formula": "Formula",
       "id": "ID",
