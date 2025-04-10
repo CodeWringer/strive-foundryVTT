@@ -325,6 +325,8 @@ export default class ViewModel {
    * * Default is the globally configured setting. 
    * @param {String | undefined} args.localizedToolTip A localized text to 
    * display as a tool tip. 
+   * @param {String | undefined} args.toolTipStyle A style override to attach to the tool tip's DOM element. 
+   * E. g. `text-align: center`
    */
   constructor(args = {}) {
     this._id = UuidUtil.sanitizeId(args.id ?? UuidUtil.createUUID());
@@ -333,6 +335,7 @@ export default class ViewModel {
     this.document = args.document;
     this._showFancyFont = args.showFancyFont;
     this.localizedToolTip = args.localizedToolTip;
+    this.toolTipStyle = args.toolTipStyle;
 
     this.contextTemplate = args.contextTemplate;
     this._viewStateSource = args.viewStateSource ?? game.strive.viewStates;
@@ -353,6 +356,7 @@ export default class ViewModel {
         id: `${this.id}-tooltip`,
         content: this.localizedToolTip,
         enableArrow: true,
+        style: this.toolTipStyle,
         constraint: new TooltipPlacementConstraint({
           placement: TOOLTIP_PLACEMENTS.TOP,
           offset: 0,

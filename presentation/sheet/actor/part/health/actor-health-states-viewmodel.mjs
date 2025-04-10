@@ -77,6 +77,7 @@ export default class ActorHealthStatesViewModel extends ViewModel {
         return new CharacterHealthState({
           name: healthState.name,
           localizableName: healthState.localizableName,
+          localizableToolTip: healthState.localizableToolTip,
           limit: healthState.limit,
           intensity: 0,
         });
@@ -113,6 +114,7 @@ export default class ActorHealthStatesViewModel extends ViewModel {
           isSendable: this.isSendable,
           isOwner: this.isOwner,
           localizedLabel: game.i18n.localize(state.localizableName),
+          localizedToolTip: game.i18n.localize(state.localizableToolTip),
           stateName: state.name,
           stateIntensity: state.intensity,
           stateLimit: state.limit,

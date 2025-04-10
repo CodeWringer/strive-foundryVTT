@@ -5,6 +5,7 @@ import { HealthState } from "./health-states.mjs";
  * 
  * @property {String} name Internal name. 
  * @property {String | undefined} localizableName Localization key. 
+ * @property {String | undefined} localizableToolTip Localizable tool tip text. 
  * @property {String | undefined} icon CSS class of an icon. 
  * * E. g. `"fas fa-virus"`
  * @property {Number} limit A limit on how many times this health state may be incurred. 
@@ -27,6 +28,7 @@ export class CharacterHealthState extends HealthState {
    * @param {Object} args
    * @param {String} args.name Internal name. 
    * @param {String | undefined} args.localizableName Localization key. 
+   * @param {String | undefined} args.localizableToolTip Localizable tool tip text. 
    * @param {String | undefined} args.icon CSS class of an icon. 
    * * E. g. `"fas fa-virus"`
    * @param {Number | undefined} args.limit A limit on how many times this health state may be incurred. 

@@ -646,6 +646,7 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
       const healthState = new CharacterHealthState({
         name: entry.name,
         localizableName: definition.localizableName ?? entry.name,
+        localizableToolTip: definition.localizableToolTip,
         icon: definition.icon, 
         limit: definition.limit,
         intensity: entry.intensity,

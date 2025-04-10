@@ -450,25 +450,78 @@
         },
         "states": {
           "label": "Conditions",
-          "berserk": "Berserk",
-          "burning": "Burning",
-          "bleeding": "Bleeding",
-          "death": "Death's Door",
-          "dissolving": "Dissolving",
-          "drugAddicted": "Drug-Addicted",
-          "electrified": "Electrified",
-          "exhausted": "Exhausted",
-          "frostbitten": "Frostbitten",
-          "grappled": "Grappled",
-          "hasted": "Hasted",
-          "jealous": "Jealous",
-          "pacified": "Pacified",
-          "poisoned": "Poisoned",
-          "prone": "Prone",
-          "rooted": "Rooted",
-          "terrified": "Terrified",
-          "stunned": "Stunned",
-          "unconscious": "Unconscious"
+          "berserk": {
+            "name": "Berserk",
+            "tooltip": "A character who is in <strong>berserk</strong>, <strong>must</strong> attack the creature nearest to them, regardless of whether it is friend or foe, until it is dead or unconscious. The <strong>berserked</strong> character <strong>must</strong> then move on to the next available and closest victim. <ul><li>Graded</li><li>Shrug off: 1 <em>point</em> with a self-control test with <strong>Ob</strong> <strong>1</strong>. </li><li>Immediate cancel: When the character is made unconscious or no other creatures remain alive and/or conscious. </li></ul>"
+          },
+          "burning": {
+            "name": "Burning",
+            "tooltip": "For every <em>point</em> in <strong>burning</strong>, a character suffers <strong>1 D4</strong> points of burning damage every <em>tick</em>. <ul><li>Graded</li><li>Greedy: automatically increases in <em>degree</em> by 1 <em>point</em> <strong>after</strong> every <em>tick</em>. </li><li>Shrug off: 2 <em>points</em> per AP spent actively patting out flames, rolling on the floor and so on. </li><li>Immediate cancel: When the flames are starved for oxygen (if the flames require oxygen) or otherwise extinguished (for example with an extinguisher). </li></ul>"
+          },
+          "bleeding": {
+            "name": "Bleeding",
+            "tooltip": "For every <em>point</em> in <strong>bleeding</strong>, a character suffers <strong>1 D4</strong> points of bleeding damage every <em>tick</em>. <ul><li>Graded</li><li>Shrug off: 1 <em>point</em> with a toughness test with <strong>Ob</strong> <strong>1</strong>. </li><li>Automatic shrug-off: half (rounded up) <em>points</em> at the end of the turn. </li><li>Immediate cancel: With a successful medicine test, requiring 1 medical supplies with <strong>Ob</strong> at the current <em>degree</em>. </li></ul>"
+          },
+          "dissolving": {
+            "name": "Dissolving",
+            "tooltip": "For every point in <strong>dissolving</strong>, a character suffers <strong>1 D4</strong> points of acid damage every <em>tick</em>. <ul><li>Graded</li><li>Automatic shrug-off: half (rounded up) <em>points</em> at the end of the turn. </li><li>Immediate cancel: With a successful medicine test, requiring 1 medical supplies with <strong>Ob</strong> at the current <em>degree</em>. </li></ul>"
+          },
+          "drugAddicted": {
+            "name": "Drug-Addicted",
+            "tooltip": "A <strong>drug-addicted</strong> character must take their drug once every 24 hours, or else enter <strong>withdrawal</strong>.<br><br>For every 24 hours that a character is in <strong>withdrawal</strong>, they suffer <strong>-1D</strong> to <strong>all</strong> tests. For every 12 hours that they are in <strong>withdrawal</strong> they have to pass a toughness test at <strong>Ob</strong> 2, or else be forced to dedicate their every bit of strength into acquiring and taking a new dose of the drug.<br><br>After 72 consecutive hours (= 3 full days) of having being in <strong>withdrawal</strong>, the character breaks free from their addiction, removing this <strong>condition</strong>."
+          },
+          "electrified": {
+            "name": "Electrified",
+            "tooltip": "An <strong>electrified</strong> character suffers <strong>-1D</strong> for their every test requiring agility. That means attribute and skills. <ul><li>Graded</li><li>Automatic shrug-off: half (rounded up) <em>points</em> at the end of the turn. </li><li>Immediate cancel: After a minute of last suffering one <em>point</em> of <strong>electrified</strong> or at the end of combat. </li></ul>"
+          },
+          "exhausted": {
+            "name": "Exhausted",
+            "tooltip": "An <strong>exhausted</strong> character begins their turn with -2 <strong>AP</strong> and can run at most only half the distance they normally could. Sprinting is impossible. In addition, they suffer a penalty of <strong>-1D</strong> to all tests. The number of dice for a test cannot be reduced to less than 1 by this penalty.<br><br>While <strong>exhausted</strong>, a character suffering further exhaustion, must succeed a self-control test at <strong>Ob</strong> equal to their current level of exhaustion, or else fall unconscious. <br><br>This <strong>condition</strong> can be recovered from by <strong>actively resting</strong> for at least <strong>six uninterrupted hours</strong>."
+          },
+          "frostbitten": {
+            "name": "Frostbitten",
+            "tooltip": "For every <em>point</em> in <strong>frostbitten</strong>, a character suffers <strong>-1</strong> AP and <strong>-1D</strong> to all tests. <ul><li>Graded</li><li>Automatic shrug-off: half (rounded up) <em>points</em> at the end of the turn. </li><li>Immediate cancel: After a minute of last suffering one <em>point</em> of <strong>frostbitten</strong> or at the end of combat. </li></ul>"
+          },
+          "grappled": {
+            "name": "Grappled",
+            "tooltip": "A <strong>grappled</strong> character is unable to move and suffers <strong>-1D</strong> to all defense tests, for as long as they are <strong>grappled</strong>. A <strong>grappled</strong> character can break free, by <strong>completely succeeding</strong> an unarmed combat test against the other character grappling them. <br><br>A character who is grappled, counts as flanked (to one additional degree)."
+          },
+          "hasted": {
+            "name": "Hasted",
+            "tooltip": "A <strong>hasted</strong> character has an additional AP to spend and an additional 9'/3m of movement per AP or every 5 seconds."
+          },
+          "jealous": {
+            "name": "Jealous",
+            "tooltip": "A character who has been made unnaturally <strong>jealous</strong>, will do anything in their power to take a thing, whatever <em>it</em> may be, from whoever might have <em>it</em>. <ul><li>Graded</li><li>Shrug off: 1 <em>point</em> with a self-control test with <strong>Ob</strong> <strong>1</strong>. </li><li>Immediate cancel: When the character is made unconscious, the source of the jealousy is removed or the character acquires that which they covet. </li></ul>"
+          },
+          "pacified": {
+            "name": "Pacified",
+            "tooltip": "A character who is <strong>pacified</strong>, is unable to <em>willingly</em> take any action that would directly or indirectly harm any other creature. Note, the character is not physically unable to cause harm, but they <strong>really</strong> don't want to. <ul><li>Graded</li><li>Shrug off: 1 <em>point</em> with a self-control test with <strong>Ob</strong> <strong>1</strong>. </li><li>Immediate cancel: When the character is made unconscious or the source of the pacification is removed. </li></ul>"
+          },
+          "poisoned": {
+            "name": "Poisoned",
+            "tooltip": "A <strong>poisoned</strong> character suffers <strong>1 D4</strong> points of poison damage every <em>tick</em>. <ul><li>Graded</li><li>Shrug off: 1 <em>point</em> with a toughness test with <strong>Ob</strong> <strong>1</strong>. </li><li>Immediate cancel: With proper treatment. </li></ul>"
+          },
+          "prone": {
+            "name": "Prone",
+            "tooltip": "A character who is prone, is harder to hit with ranged attacks, easier to hit with melee attacks and counts as flanked (to one additional degree), in melee. <ul><li><strong>-2D</strong> to melee defense tests.</li><li><strong>+2D</strong> to ranged defense tests.</li><li><strong>-2D</strong> to any melee attack tests.</li><li><strong>-2D</strong> to any ranged attack tests with a bow, sling, thrown, or similar weapon.</li></ul>It costs 1 AP to stand up."
+          },
+          "rooted": {
+            "name": "Rooted",
+            "tooltip": "A <strong>rooted</strong> character can no longer move their legs. They cannot move from the spot, but can still move their upper body freely. <br><br>This <strong>condition</strong> is usually tied to some condition, before it is removed. If there is no condition, it is automatically shrugged off at the end of the turn. "
+          },
+          "stunned": {
+            "name": "Stunned",
+            "tooltip": "A <strong>stunned</strong> character is unable to act, at all. During combat, their turn is skipped. <ul><li>Graded</li><li>Automatic shrug-off: 1 <em>point</em> at the end of the turn. </li></ul>"
+          },
+          "terrified": {
+            "name": "Terrified",
+            "tooltip": "A <strong>terrified</strong> character suffers <strong>-2D</strong> to defense tests and <strong>has to</strong> flee from whatever it is that terrified them, until they can no longer perceive it. <ul><li>Graded</li><li>Shrug off: 1 <em>point</em> with a self-control test with <strong>Ob</strong> <strong>1</strong>. </li><li>Immediate cancel: When the character is made unconscious, the source of terror is removed or the character can no longer perceive the source of terror in any way for a short time (1-2 turns or 5-10 seconds). </li></ul>"
+          },
+          "unconscious": {
+            "name": "Unconscious",
+            "tooltip": "An <strong>unconscious</strong> character is unable to act and is unaware of their surroundings."
+          }
         }
       },
       "personals": {

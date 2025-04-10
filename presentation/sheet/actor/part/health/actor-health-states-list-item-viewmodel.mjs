@@ -43,6 +43,7 @@ export default class ActorHealthStatesListItemViewModel extends ViewModel {
    * @param {Boolean | undefined} args.isEditable If true, the sheet is editable. 
    * @param {Boolean | undefined} args.isSendable If true, the document represented by the sheet can be sent to chat. 
    * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document. 
+   * @param {String | undefined} args.localizedToolTip A localized tool tip for the state. 
    * 
    * @param {TransientBaseCharacterActor} args.document An actor document on which to set the state. 
    * @param {String} args.localizedLabel A localized label for the state. 
