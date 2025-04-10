@@ -376,7 +376,8 @@
         "abbreviation": "GP",
         "singular": "Grit Point",
         "plural": "Grit Points",
-        "toggleLabel": "Enable Grit Points"
+        "toggleLabel": "Enable Grit Points",
+        "tooltip": "A <strong>Grit Point</strong> lets a character stand up in defiance of their injuries and make a last-ditch effort to turn the wheel of fate around. Every time a character suffers an injury, they gain <strong>1</strong> <strong>Grit Point</strong>. <br><br><strong>Grit Points</strong> are one-time use and last until they are spent or until an injury has fully healed. <br><br>You may spend <strong>Grit Points</strong> at any time during a round for the following effects (but only one <strong>Grit Point</strong> per effect, per round): <ul><li>On a test, gain <strong>+2D</strong>.</li><li>On a test, gain <strong>+1</strong> compensation point.</li><li>Reduce exhaustion by <strong>1D4</strong>.</li><li>On your attack, deal <strong>+1D6</strong> points of additional damage of your weapon's strongest type of damage.</li><li>Gain <strong>+1D4</strong> AP.</li></ul>"
       },
       "health": {
         "duration": "Duration",

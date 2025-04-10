@@ -66,7 +66,10 @@ export default class GritPointsViewModel extends ViewModel {
    * rendering in the combat tracker. 
    */
   constructor(args = {}) {
-    super(args);
+    super({
+      ...args,
+      localizedToolTip: !args.isInCombatTracker ? game.i18n.localize("system.character.gritPoint.tooltip") : "",
+    });
     ValidationUtil.validateOrThrow(args, ["document", "isInCombatTracker"]);
 
     this.document = args.document;
