@@ -120,6 +120,8 @@ export default class Tooltip {
    * tooltip when the `anchorElement` is hovered over. If `false`, then the tooltip must 
    * be manually shown and hidden. 
    * * default `true`
+   * @param {String | undefined} args.style A style override to attach to the tool tip's DOM element. 
+   * E. g. `text-align: center`
    * @param {Function | undefined} args.onShown Callback that is invoked whenever the 
    * tooltip is shown. 
    * @param {Function | undefined} args.onHidden Callback that is invoked whenever the 
@@ -134,6 +136,7 @@ export default class Tooltip {
     this.constraint = args.constraint ?? new TooltipPlacementConstraint();
     this.maxWidth = args.maxWidth ?? "50rem";
     this.showOnHover = args.showOnHover ?? true;
+    this.style = args.style ?? "";
 
     this.onShown = args.onShown ?? (() => {});
     this.onHidden = args.onHidden ?? (() => {});
@@ -262,7 +265,7 @@ export default class Tooltip {
         }
       }
   
-      const elementCreationString = `<div id="${this._id}" class="${cssClass}" style="max-width: ${this.maxWidth};">${this.content}</div>`;
+      const elementCreationString = `<div id="${this._id}" class="${cssClass}" style="max-width: ${this.maxWidth};${this.style}">${this.content}</div>`;
       this._element = $($("body").add(elementCreationString)[1]);
   
       $("body").append(this._element);
