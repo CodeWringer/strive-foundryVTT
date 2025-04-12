@@ -1,0 +1,23 @@
+{{!-- Parameters:
+viewModel: {ActorGeneralCombatAbilitiesViewModel}
+cssClass: {undefined | String}
+--}}
+<section id="{{viewModel.id}}"{{#if cssClass}} class="{{cssClass}}"{{/if}}>
+  {{#> header2 showFancyFont=viewModel.showFancyFont cssClass="flex flex-row"}}
+    {{#> button viewModel=viewModel.vmHeaderButton leftAlign=true cssClass="flex-grow pad-l-md font-size-lg font-bold" }}
+      <span class="flex-grow">{{localize "system.character.abilities.general.header"}}</span>
+      <div class="flex flex-center margin-l-md">
+        <i id="{{../viewModel.id}}-expansion-indicator-up" class="ico ico-details-visible{{#if ../viewModel.isEditable}} interactible{{/if}} dark{{#if ../viewModel.isExpanded}}{{else}} hidden{{/if}}"></i>
+        <i id="{{../viewModel.id}}-expansion-indicator-down" class="ico ico-details-hidden{{#if ../viewModel.isEditable}} interactible{{/if}} dark{{#if ../viewModel.isExpanded}} hidden{{/if}}"></i>
+      </div>
+    {{/button}}
+  {{/header2}}
+  <div id="{{viewModel.id}}-content" class="grid-3col{{#if viewModel.isExpanded}}{{else}} hidden{{/if}}">
+    {{#each viewModel.reminders as |reminder|}}
+    <span id="{{reminder.viewModel.id}}" class="flex flex-row flex-middle auto-margin-h-md">
+      {{#> label showFancyFont=viewModel.showFancyFont}}{{localize reminder.localizableLabel}}{{/label}}
+      <i class="far fa-question-circle font-size-lg"></i>
+    </span>
+    {{/each}}
+  </div>
+</section>

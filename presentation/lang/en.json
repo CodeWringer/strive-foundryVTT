@@ -295,6 +295,39 @@
           "placeholder": "Home / At camp / etc."
         }
       },
+      "abilities": {
+        "general": {
+          "header": "General Combat Abilities",
+          "actionPoints": {
+            "label": "Action Points",
+            "tooltip": "Every turn, every character gets <strong>3 Action Points (AP)</strong> to spend on actions during their turn. Some skills, boons and penalties can alter this number. <br><br>At the start of a combat encounter, <strong>all non-surprised characters start with 3 AP</strong>. After that, AP are only regained per-character, upon the start of their turn.<ul><li>Any basic action, that is, any action not requiring a test, costs 1 AP. <ul><li>Basic movement counts as a basic action.</li><li>Handing an object over to a character adjacent to you, is a basic action (assuming you don't have to force it on them).</li><li>Pulling something from your bag or getting a weapon ready (from your back, scabbard or wherever you keep it) also counts as a movement action and costs 1 AP.</li></ul></li><li>Any action requiring a test, costs 2 AP.</li><li>Expertises can cost varying amounts of AP. The exact number will be noted on the Expertise in question.</li></ul>Once per turn, it is possible to push yourself to gain <strong>+1 AP</strong>, at the cost of <strong>+1 exhaustion</strong>. Pushing yourself when the additional point of exhaustion would bring you to your threshold is not allowed. <br><br>Speaking or shouting a short phrase is free. If you want to have a proper conversation, that will cost you more AP, depending on how much you have to say."
+          },
+          "actionPointSaving": {
+            "label": "Action Point Saving",
+            "tooltip": "If a character ends their turn with any AP unspent, those AP will be saved up and be available as additional AP at the start of their next turn.<br><br>Until the start of their next turn, they can keep up to 5 AP, which they can use for active defense or reactions during the turns of other characters.<br><br>At the start of their next turn, only up to 2 of the saved AP transfer to this next turn. This means a character can normally start their next turn with at most 5 AP.<br><br>It may be possible to go past this limit via some expertises or boons."
+          },
+          "combatMovement": {
+            "label": "Combat Movement",
+            "tooltip": "Under normal circumstances, a character (an average human) can move up to 12'/4m (= 4 fields on a grid) per AP spent. In difficult terrain, the distance moved per AP is half that, at 6'/2m (= 2 fields on a grid). Difficult terrain is any space that slows movement, but does not prevent it outright. Examples would be waist-high water, a surface of glue or a slowing force field.<br><br>It is also possible to sprint, increasing the distance one can move per AP spent, at the cost of 1 point of exhaustion for every AP spent sprinting. The movement distance is increased by 3'/1m for every level in sprinting speed, per AP."
+          },
+          "disengage": {
+            "label": "Disengage",
+            "tooltip": "It is possible to move out of an enemy's range of opportunity without provoking an attack of opportunity. This action costs 2 AP and the disengaging character must move in a direction that will get them out of the range of opportunity the fastest and safest, as far as 1 AP of movement would get them.<br><br>When disengaging from more than one range of opportunity in the same action, every additional range of opportunity past the first adds a cost of 1 AP."
+          },
+          "fleeCombat": {
+            "label": "Flee Combat",
+            "tooltip": "When combat is a decidedly bad idea, one can try to flee from it. A fleeing character can no longer perform any hostile actions. That means, they can no longer attack or hinder any other characters until the end of combat.<br><br>In turn for giving up their offensive capacity, they gain +50% of movement (for an average human on foot, that is +6'/2m) per AP spent. Rules for difficult terrain still apply."
+          },
+          "pushThrough": {
+            "label": "Push Through",
+            "tooltip": "It is possible to push through a range of opportunity, without spending any AP, but in doing so, the attack of opportunity is guaranteed to land successfully, without any attack test necessary (this counts as an automatic success for the attacker)."
+          },
+          "swapOut": {
+            "label": "Swap-Out",
+            "tooltip": "It is possible to swap positions with an adjacent ally, without provoking an attack of opportunity for either character.<br><br>This action costs 2 AP.<br><br>The ally in question can oppose this action with strength (both characters will have to compete with this attribute)."
+          }
+        }
+      },
       "attribute": {
         "singular": "Attribute",
         "plural": "Attributes",
