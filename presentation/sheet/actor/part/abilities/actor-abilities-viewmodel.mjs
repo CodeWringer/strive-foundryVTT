@@ -42,7 +42,7 @@ export default class ActorAbilitiesViewModel extends ViewModel {
    * @type {Boolean}
    * @readonly
    */
-  get isInCombat() { return true; } // TODO
+  get isInCombat() { return this.document.document.inCombat; }
 
   /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
