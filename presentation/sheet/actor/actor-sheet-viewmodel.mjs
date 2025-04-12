@@ -2,8 +2,6 @@ import LazyLoadViewModel from "../../component/lazy-load/lazy-load-viewmodel.mjs
 import GmNotesViewModel from "../../component/section-gm-notes/section-gm-notes-viewmodel.mjs"
 import ViewModel from "../../view-model/view-model.mjs"
 import ActorAssetsViewModel from "./part/assets/actor-assets-viewmodel.mjs"
-import ActorAttributesViewModel from "./part/abilities/actor-attributes-viewmodel.mjs"
-import ActorSkillsViewModel from "./part/abilities/actor-skills-viewmodel.mjs"
 import ActorPersonalityViewModel from "./part/personality/actor-personality-viewmodel.mjs"
 import ActorBiographyViewModel from "./part/actor-biography-viewmodel.mjs"
 import ActorHealthViewModel from "./part/health/actor-health-viewmodel.mjs"
@@ -20,18 +18,14 @@ import { DYNAMIC_INPUT_TYPES } from "../../dialog/dynamic-input-dialog/dynamic-i
 import { ACTOR_TYPES } from "../../../business/document/actor/actor-types.mjs"
 import TransientBaseActor from "../../../business/document/actor/transient-base-actor.mjs"
 import { ExtenderUtil } from "../../../common/extender-util.mjs"
-import RulesetExplainer from "../../../business/ruleset/ruleset-explainer.mjs"
-import ReadOnlyValueViewModel from "../../component/read-only-value/read-only-value.mjs"
 import Tooltip from "../../component/tooltip/tooltip.mjs"
-import ButtonRollViewModel from "../../component/button-roll/button-roll-viewmodel.mjs"
-import { DerivedAttributeRollData, DerivedAttributeRollSchema } from "../../../business/dice/ability-roll/derived-attribute-roll-schema.mjs"
+import ActorAbilitiesViewModel from "./part/abilities/actor-abilities-viewmodel.mjs"
 
 /**
  * @extends BaseSheetViewModel
  * 
  * @property {ViewModel} personalsViewModel
- * @property {LazyLoadViewModel} attributesViewModel
- * @property {LazyLoadViewModel} skillsViewModel
+ * @property {LazyLoadViewModel} abilitiesViewModel
  * @property {LazyLoadViewModel} personalityViewModel
  * @property {LazyLoadViewModel} healthViewModel
  * @property {LazyLoadViewModel} assetsViewModel
@@ -80,7 +74,7 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
    * @type {String}
    * @readonly
    */
-  get templatePersonals() { return game.strive.const.TEMPLATES.ACTOR_PERSONALS; }
+  get templatePersonals() { return ActorPersonalsViewModel.TEMPLATE; }
   
   /**
    * Returns the CSS class for use in the context menu. 
@@ -117,53 +111,24 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
 
     this.contextTemplate = args.contextTemplate ?? "actor-character-sheet";
 
-    const thiz = this;
-
     this.vmTfName = new InputTextFieldViewModel({
-      parent: thiz,
+      parent: this,
       id: "vmTfName",
-      value: thiz.document.name,
+      value: this.document.name,
       onChange: (_, newValue) => {
-        thiz.document.name = newValue;
+        this.document.name = newValue;
       },
       placeholder: game.i18n.localize("system.general.name.label"),
     });
     this.vmImg = new InputImageViewModel({
-      parent: thiz,
+      parent: this,
       id: "vmImg",
-      value: thiz.document.img,
+      value: this.document.img,
       onChange: (_, newValue) => {
-        thiz.document.img = newValue;
+        this.document.img = newValue;
       },
     });
     if (this.isNPC || this.isPC) {
-      this.vmBaseInitiative = new ReadOnlyValueViewModel({
-        id: "vmBaseInitiative",
-        parent: this,
-        value: this.document.baseInitiative,
-        localizedToolTip: new RulesetExplainer().getExplanationForBaseInitiative(this.document),
-      });
-      this.vmSprintingSpeed = new ReadOnlyValueViewModel({
-        id: "vmSprintingSpeed",
-        parent: this,
-        value: this.document.sprintingSpeed,
-        localizedToolTip: new RulesetExplainer().getExplanationForSprintingSpeed(this.document),
-      });
-      this.vmRollSprintingSpeed = new ButtonRollViewModel({
-        id: "vmRollSprintingSpeed",
-        parent: this,
-        actor: this.document,
-        target: new DerivedAttributeRollData({
-          derivedAttributeValue: this.document.sprintingSpeed,
-          internalName: "sprintingSpeed",
-          localizableName: "system.character.attribute.sprintingSpeed.label",
-        }),
-        rollSchema: new DerivedAttributeRollSchema({
-          dieFaces: 6,
-          hitThreshold: 5,
-        }),
-      });
-      
       this.vmBtnConfigure = new ButtonViewModel({
         id: "vmBtnConfigure",
         parent: this,
@@ -265,41 +230,31 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
       parent: this,
       id: "vmBtnSendToChat",
       isEditable: true,
-      target: thiz.document,
-      isEditable: thiz.isEditable || thiz.isGM,
+      target: this.document,
+      isEditable: this.isEditable || this.isGM,
     });
 
     if (this.isPlain !== true) {
       this.personalsViewModel = new ActorPersonalsViewModel({ 
         ...args, 
         id: "personals", 
-        parent: thiz 
+        parent: this,
       });
-      this.attributesViewModel = new LazyLoadViewModel({
-        id: "lazyAttributes",
-        parent: thiz,
-        template: game.strive.const.TEMPLATES.ACTOR_ATTRIBUTES,
-        viewModelFactoryFunction: (args) => { return new ActorAttributesViewModel(args); },
+      this.abilitiesViewModel = new LazyLoadViewModel({
+        id: "lazyAbilities",
+        parent: this,
+        template: ActorAbilitiesViewModel.TEMPLATE,
+        viewModelFactoryFunction: (args) => { return new ActorAbilitiesViewModel(args); },
         viewModelArgs: {
           ...args, 
-          id: "attributes", 
-        },
-      });
-      this.skillsViewModel = new LazyLoadViewModel({
-        id: "lazySkills",
-        parent: thiz,
-        template: game.strive.const.TEMPLATES.ACTOR_SKILLS,
-        viewModelFactoryFunction: (args) => { return new ActorSkillsViewModel(args); },
-        viewModelArgs: {
-          ...args, 
-          id: "skills", 
+          id: "abilities", 
         },
       });
       if (this.showPersonality === true) {
         this.personalityViewModel = new LazyLoadViewModel({
           id: "lazyPersonality",
-          parent: thiz,
-          template: game.strive.const.TEMPLATES.ACTOR_PERSONALITY,
+          parent: this,
+          template: ActorPersonalityViewModel.TEMPLATE,
           viewModelFactoryFunction: (args) => { return new ActorPersonalityViewModel(args); },
           viewModelArgs: {
             ...args, 
@@ -309,8 +264,8 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
       }
       this.healthViewModel = new LazyLoadViewModel({
         id: "lazyHealth",
-        parent: thiz,
-        template: game.strive.const.TEMPLATES.ACTOR_HEALTH,
+        parent: this,
+        template: ActorHealthViewModel.TEMPLATE,
         viewModelFactoryFunction: (args) => { return new ActorHealthViewModel(args); },
         viewModelArgs: {
           ...args, 
@@ -319,8 +274,8 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
       });
       this.assetsViewModel = new LazyLoadViewModel({
         id: "lazyAssets",
-        parent: thiz,
-        template: game.strive.const.TEMPLATES.ACTOR_ASSETS,
+        parent: this,
+        template: ActorAssetsViewModel.TEMPLATE,
         viewModelFactoryFunction: (args) => { return new ActorAssetsViewModel(args); },
         viewModelArgs: {
           ...args, 
@@ -329,8 +284,8 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
       });
       this.biographyViewModel = new LazyLoadViewModel({
         id: "lazyBiography",
-        parent: thiz,
-        template: game.strive.const.TEMPLATES.ACTOR_BIOGRAPHY,
+        parent: this,
+        template: ActorBiographyViewModel.TEMPLATE,
         viewModelFactoryFunction: (args) => { return new ActorBiographyViewModel(args); },
         viewModelArgs: {
           ...args, 
@@ -340,10 +295,10 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
     } else {
       this.vmRtDescription = new InputRichTextViewModel({
         id: "vmRtDescription",
-        parent: thiz,
-        value: thiz.document.description,
+        parent: this,
+        value: this.document.description,
         onChange: (_, newValue) => {
-          thiz.document.description = newValue;
+          this.document.description = newValue;
         },
       });
     }
@@ -351,13 +306,13 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
     if (this.isGM === true) {
       this.gmNotesViewModel = new LazyLoadViewModel({
         id: "lazyGmNotes",
-        parent: thiz,
-        template: game.strive.const.TEMPLATES.COMPONENT_GM_NOTES,
+        parent: this,
+        template: GmNotesViewModel.TEMPLATE,
         viewModelFactoryFunction: (args) => { return new GmNotesViewModel(args); },
         viewModelArgs: {
           ...args, 
           id: "gmNotes", 
-          document: thiz.document, 
+          document: this.document, 
         },
       });
     }
@@ -424,8 +379,7 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
    */
   async _renderLazyTab(tab) {
     if (tab === "abilities") {
-      await this.attributesViewModel.render();
-      await this.skillsViewModel.render();
+      await this.abilitiesViewModel.render();
     } else if (tab === "drivers-fate") {
       await this.personalityViewModel.render();
     } else if (tab === "health") {

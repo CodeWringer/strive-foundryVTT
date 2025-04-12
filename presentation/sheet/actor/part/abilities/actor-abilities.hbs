@@ -1,0 +1,37 @@
+{{!-- Parameters:
+viewModel: {ActorAbilitiesViewModel}
+cssClass: {undefined | String}
+--}}
+<section id="{{viewModel.id}}" class="auto-margin-v-xl{{#if cssClass}} {{cssClass}}{{/if}}">
+  {{!-- General Combat Abilities --}}
+  {{#if viewModel.isInCombat }}
+  {{#with viewModel.generalCombatAbilitiesTemplate as | template |}}
+    {{> (template) viewModel=../viewModel.vmGeneralCombatAbilities }}
+  {{/with}}
+  {{/if}}
+  {{!-- Attributes --}}
+  {{#with viewModel.attributesTemplate as | template |}}
+    {{> (template) viewModel=../viewModel.vmAttributes }}
+  {{/with}}
+  <div class="grid grid-2col">
+    {{!-- Base Initiative --}}
+    <div class="flex flex-row flex-middle auto-margin-h-md">
+      <span class="flex-grow">  </span>
+      <span class="font-size-lg{{#if viewModel.showFancyFont}} fancy-font{{/if}}">{{localize
+        "system.character.attribute.initiative.baseInitiative"}}</span>
+      {{> readOnlyValue viewModel=viewModel.vmBaseInitiative cssClass="width-md" }}
+    </div>
+    {{!-- Sprinting Speed --}}
+    <div class="flex flex-row flex-middle auto-margin-h-md">
+      <span class="flex-grow"></span>
+      {{> buttonRoll viewModel=viewModel.vmRollSprintingSpeed }}
+      <span class="font-size-lg{{#if viewModel.showFancyFont}} fancy-font{{/if}}">{{localize
+        "system.character.attribute.sprintingSpeed.label"}}</span>
+      {{> readOnlyValue viewModel=viewModel.vmSprintingSpeed cssClass="width-md" }}
+    </div>
+  </div>
+  {{!-- Skills --}}
+  {{#with viewModel.skillsTemplate as | template |}}
+    {{> (template) viewModel=../viewModel.vmSkills }}
+  {{/with}}
+</section>
