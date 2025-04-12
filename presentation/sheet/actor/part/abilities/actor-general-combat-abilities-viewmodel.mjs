@@ -151,6 +151,33 @@ export default class ActorGeneralCombatAbilitiesViewModel extends ViewModel {
           localizedToolTip: game.i18n.localize("system.character.abilities.general.swapOut.tooltip"),
         })
       }),
+      new Reminder({
+        id: "attacksOfOpportunityReminder",
+        localizableLabel: "system.character.abilities.general.attacksOfOpportunity.label",
+        viewModel: new ViewModel({
+          id: "vmAttacksOfOpportunity",
+          parent: this,
+          localizedToolTip: game.i18n.localize("system.character.abilities.general.attacksOfOpportunity.tooltip"),
+        })
+      }),
+      new Reminder({
+        id: "flankingReminder",
+        localizableLabel: "system.character.abilities.general.flanking.label",
+        viewModel: new ViewModel({
+          id: "vmFlanking",
+          parent: this,
+          localizedToolTip: game.i18n.localize("system.character.abilities.general.flanking.tooltip"),
+        })
+      }),
+      new Reminder({
+        id: "defenseStuntsReminder",
+        localizableLabel: "system.character.abilities.general.defenseStunts.label",
+        viewModel: new ViewModel({
+          id: "vmDefenseStunts",
+          parent: this,
+          localizedToolTip: game.i18n.localize("system.character.abilities.general.defenseStunts.tooltip"),
+        })
+      }),
     ];
   }
 
