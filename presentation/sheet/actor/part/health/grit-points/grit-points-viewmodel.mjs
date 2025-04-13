@@ -1,5 +1,6 @@
 import { ACTOR_TYPES } from "../../../../../../business/document/actor/actor-types.mjs";
 import TransientBaseCharacterActor from "../../../../../../business/document/actor/transient-base-character-actor.mjs";
+import GameSystemUserSettings from "../../../../../../business/setting/game-system-user-settings.mjs";
 import { ValidationUtil } from "../../../../../../business/util/validation-utility.mjs";
 import ViewModel from "../../../../../view-model/view-model.mjs";
 
@@ -68,7 +69,7 @@ export default class GritPointsViewModel extends ViewModel {
   constructor(args = {}) {
     super({
       ...args,
-      localizedToolTip: !args.isInCombatTracker ? game.i18n.localize("system.character.gritPoint.tooltip") : "",
+      localizedToolTip: (new GameSystemUserSettings().get(GameSystemUserSettings.KEY_TOGGLE_REMINDERS) && !args.isInCombatTracker) ? game.i18n.localize("system.character.gritPoint.tooltip") : undefined,
     });
     ValidationUtil.validateOrThrow(args, ["document", "isInCombatTracker"]);
 
