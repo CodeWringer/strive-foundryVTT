@@ -78,6 +78,12 @@ export class AttributeAndSkillRollSchema extends SkillRollSchema {
         showFancyFont: false,
       }),
       new DynamicInputDefinition({
+        type: DYNAMIC_INPUT_TYPES.LABEL,
+        name: "forkReminderLabel",
+        localizedLabel: `<p>${game.i18n.localize("system.character.skill.forking.reminder.label")}</p>`,
+        showFancyFont: false,
+      }),
+      new DynamicInputDefinition({
         type: DYNAMIC_INPUT_TYPES.TEXTFIELD,
         name: nameInputObstacle,
         localizedLabel: game.i18n.localize("system.roll.obstacle.abbreviation"),
