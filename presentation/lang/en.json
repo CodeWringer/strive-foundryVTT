@@ -634,6 +634,11 @@
           "singular": "Expertise",
           "plural": "Expertises"
         },
+        "forking": {
+          "reminder": {
+            "label": "Don't forget to ask to <strong>fork</strong> related skills!"
+          }
+        },
         "innate": {
           "label": "Innate Skills",
           "plural": "Innate Skills",
