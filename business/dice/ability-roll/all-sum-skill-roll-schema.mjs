@@ -1,9 +1,11 @@
 import { VISIBILITY_MODES } from "../../../presentation/chat/visibility-modes.mjs";
 import DynamicInputDefinition from "../../../presentation/dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
 import { DYNAMIC_INPUT_TYPES } from "../../../presentation/dialog/dynamic-input-dialog/dynamic-input-types.mjs";
+import { ACTOR_TYPES } from "../../document/actor/actor-types.mjs";
 import TransientSkill from "../../document/item/skill/transient-skill.mjs";
 import CharacterAttribute from "../../ruleset/attribute/character-attribute.mjs";
 import { Sum, SumComponent } from "../../ruleset/summed-data.mjs";
+import GameSystemUserSettings from "../../setting/game-system-user-settings.mjs";
 import RollData from "../roll-data.mjs";
 import { ROLL_DICE_MODIFIER_TYPES } from "../roll-dice-modifier-types.mjs";
 import RollQueryData from "../roll-query-data.mjs";
@@ -36,8 +38,8 @@ export class AllSumSkillRollSchema extends SkillRollSchema {
   }
 
   /** @override */
-  async _queryRollData(skillDocument, dialog) {
-    const diceComponents = this._getDiceComponents(skillDocument);
+  async _queryRollData(document, dialog) {
+    const diceComponents = this._getDiceComponents(document);
     const diceComposition = diceComponents
       .map(it => `${it.value} ${game.i18n.localize(it.localizableName)}`)
       .join(", ");
@@ -53,12 +55,6 @@ export class AllSumSkillRollSchema extends SkillRollSchema {
         type: DYNAMIC_INPUT_TYPES.LABEL,
         name: "diceCompositionLabel",
         localizedLabel: `<p>${game.i18n.localize("system.roll.numberOfDice")}: ${diceComponents.total}</p><p class="font-size-sm">${diceComposition}</p>`,
-        showFancyFont: false,
-      }),
-      new DynamicInputDefinition({
-        type: DYNAMIC_INPUT_TYPES.LABEL,
-        name: "forkReminderLabel",
-        localizedLabel: game.i18n.localize("system.character.skill.forking.reminder.label"),
         showFancyFont: false,
       }),
       new DynamicInputDefinition({
@@ -96,6 +92,19 @@ export class AllSumSkillRollSchema extends SkillRollSchema {
         }
       }),
     );
+
+    const showReminders = new GameSystemUserSettings().get(GameSystemUserSettings.KEY_TOGGLE_REMINDERS);
+    const isPC = document.owningDocument.type === ACTOR_TYPES.PC;
+    if (showReminders && isPC) {
+      dialog.inputDefinitions.splice(1, 0, // Insert after the dice composition. 
+        new DynamicInputDefinition({
+          type: DYNAMIC_INPUT_TYPES.LABEL,
+          name: "forkReminderLabel",
+          localizedLabel: `<p>${game.i18n.localize("system.character.skill.forking.reminder.label")}</p>`,
+          showFancyFont: false,
+        }),
+      );
+    }
 
     await dialog.renderAndAwait(true);
     if (dialog.confirmed !== true) return undefined;

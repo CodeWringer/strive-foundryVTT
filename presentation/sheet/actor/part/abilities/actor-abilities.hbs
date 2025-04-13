@@ -4,7 +4,7 @@ cssClass: {undefined | String}
 --}}
 <section id="{{viewModel.id}}" class="auto-margin-v-xl{{#if cssClass}} {{cssClass}}{{/if}}">
   {{!-- General Combat Abilities --}}
-  {{#if viewModel.isInCombat }}
+  {{#if viewModel.showGeneralCombatReminders }}
   {{#with viewModel.generalCombatAbilitiesTemplate as | template |}}
     {{> (template) viewModel=../viewModel.vmGeneralCombatAbilities }}
   {{/with}}

@@ -852,6 +852,10 @@
           "label": "Add Custom Condition"
         },
         "newDefaultName": "New Health State"
+      },
+      "toggleReminders": {
+        "label": "Reminder Hints",
+        "hint": "Toggles the display of rule reminders. For example, when toggled off, will no longer show the general combat actions on the character sheet and won't show the reminder to fork skills on the roll dialog."
       }
     }
   }
