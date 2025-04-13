@@ -295,6 +295,51 @@
           "placeholder": "Home / At camp / etc."
         }
       },
+      "abilities": {
+        "general": {
+          "header": "General Combat Abilities",
+          "actionPoints": {
+            "label": "Action Points",
+            "tooltip": "Every turn, every character gets <strong>3 Action Points (AP)</strong> to spend on actions during their turn. Some skills, boons and penalties can alter this number. <br><br>At the start of a combat encounter, <strong>all non-surprised characters start with 3 AP</strong>. After that, AP are only regained per-character, upon the start of their turn.<ul><li>Any basic action, that is, any action not requiring a test, costs 1 AP. <ul><li>Basic movement counts as a basic action.</li><li>Handing an object over to a character adjacent to you, is a basic action (assuming you don't have to force it on them).</li><li>Pulling something from your bag or getting a weapon ready (from your back, scabbard or wherever you keep it) also counts as a movement action and costs 1 AP.</li></ul></li><li>Any action requiring a test, costs 2 AP.</li><li>Expertises can cost varying amounts of AP. The exact number will be noted on the Expertise in question.</li></ul>Once per turn, it is possible to push yourself to gain <strong>+1 AP</strong>, at the cost of <strong>+1 exhaustion</strong>. Pushing yourself when the additional point of exhaustion would bring you to your threshold is not allowed. <br><br>Speaking or shouting a short phrase is free. If you want to have a proper conversation, that will cost you more AP, depending on how much you have to say."
+          },
+          "actionPointSaving": {
+            "label": "Action Point Saving",
+            "tooltip": "If a character ends their turn with any AP unspent, those AP will be saved up and be available as additional AP at the start of their next turn.<br><br>Until the start of their next turn, they can keep up to 5 AP, which they can use for active defense or reactions during the turns of other characters.<br><br>At the start of their next turn, only up to 2 of the saved AP transfer to this next turn. This means a character can normally start their next turn with at most 5 AP.<br><br>It may be possible to go past this limit via some expertises or boons."
+          },
+          "combatMovement": {
+            "label": "Combat Movement",
+            "tooltip": "Under normal circumstances, a character (an average human) can move up to 12'/4m (= 4 fields on a grid) per AP spent. In difficult terrain, the distance moved per AP is half that, at 6'/2m (= 2 fields on a grid). Difficult terrain is any space that slows movement, but does not prevent it outright. Examples would be waist-high water, a surface of glue or a slowing force field.<br><br>It is also possible to sprint, increasing the distance one can move per AP spent, at the cost of 1 point of exhaustion for every AP spent sprinting. The movement distance is increased by 3'/1m for every level in sprinting speed, per AP."
+          },
+          "disengage": {
+            "label": "Disengage",
+            "tooltip": "It is possible to move out of an enemy's <strong>Range of Opportunity</strong> without provoking an <strong>Attack of Opportunity</strong>. This action costs 2 AP and the disengaging character must move in a direction that will get them out of the <strong>Range of Opportunity</strong> the fastest and safest, as far as 1 AP of movement would get them.<br><br>When disengaging from more than one <strong>Range of Opportunity</strong> in the same action, every additional <strong>Range of Opportunity</strong> past the first adds a cost of 1 AP."
+          },
+          "fleeCombat": {
+            "label": "Flee Combat",
+            "tooltip": "When combat is a decidedly bad idea, one can try to flee from it. A fleeing character can no longer perform any hostile actions. That means, they can no longer attack or hinder any other characters until the end of combat.<br><br>In turn for giving up their offensive capacity, they gain +50% of movement (for an average human on foot, that is +6'/2m) per AP spent. Rules for difficult terrain still apply."
+          },
+          "pushThrough": {
+            "label": "Push Through",
+            "tooltip": "It is possible to push through a <strong>Range of Opportunity</strong>, without spending any AP, but in doing so, the <strong>Attack of Opportunity</strong> is guaranteed to land successfully, without any attack test necessary (this counts as an automatic success for the attacker)."
+          },
+          "swapOut": {
+            "label": "Swap-Out",
+            "tooltip": "It is possible to swap positions with an adjacent ally, without provoking an <strong>Attack of Opportunity</strong> for either character.<br><br>This action costs 2 AP.<br><br>The ally in question can oppose this action with strength (both characters will have to compete with this attribute)."
+          },
+          "attacksOfOpportunity": {
+            "label": "Attacks of Opportunity",
+            "tooltip": "Other characters in weapon's reach are considered in the <strong>Range of Opportunity</strong>. If they move out of range or more than 6'/2m around, they may provoke an <strong>Attack of Opportunity</strong>.<br><br>An <strong>Attack of Opportunity</strong> is a reaction, costs <strong>1 AP</strong> and has a <strong>-1D</strong> penalty.<br><br>An <strong>Attack of Opportunity</strong> always halts the enemy, unless they <strong>push through</strong>. In that case, the attack is guaranteed to hit."
+          },
+          "flanking": {
+            "label": "Flanking",
+            "tooltip": "Multiple allies on opposing sides of an enemy add <strong>degrees of flanking</strong>. The enemy suffers the following:<ul><li>2 allies: <strong>flanked</strong>, the armor and shield protect only half (rounded up) as much. <strong>-1D</strong> to any defense test.</li><li>3 allies: <strong>surrounded</strong>, the armor and shield protect only one fourth (rounded up) as much. <strong>-2D</strong> to any defense test.</li><li>4+ allies: <strong>overwhelmed</strong>, the armor and shield no longer protect <strong>at all</strong>. <strong>-3D</strong> to any defense test.</li></ul>"
+          },
+          "defenseStunts": {
+            "label": "Defense Stunts",
+            "tooltip": "If you succeed an active defense and achieve at least <strong>2 hits</strong> over your attacker, then you may perform one of the following stunts, at the cost of <strong>+1 exhaustion</strong> (but only if that won't bring you to your exhaustion limit):<ul><li><strong>Disarm your opponent</strong> (if they have a detachable weapon).</li><li><strong>Displace your opponent</strong>. They are forced to stumble backwards by 6'/2m in a direction of your choosing. This may provoke <strong>Attacks of Opportunity</strong>.</li><li><strong>Displace yourself</strong>. You move 6'/2m in a direction of your choosing. This does not provoke <strong>Attacks of Opportunity</strong>.</li><li><strong>Throw your opponent to the ground</strong>, making them <strong>proned</strong>.</li><li>Launch a <strong>counter-attack</strong>, for half your weapon's regular damage (rounded up). You'll have to roll a regular attack, which your opponent can choose to defend against. This attack does not cost you any additional AP.</li><li>If defending against a ranged attack, you <strong>catch the projectile</strong> (if such a feat could be \"reasonably\" done). You may immediately throw it back at the attacker, for no additional cost. Normal throwing rules apply.</li></ul>"
+          }
+        }
+      },
       "attribute": {
         "singular": "Attribute",
         "plural": "Attributes",
@@ -376,7 +421,8 @@
         "abbreviation": "GP",
         "singular": "Grit Point",
         "plural": "Grit Points",
-        "toggleLabel": "Enable Grit Points"
+        "toggleLabel": "Enable Grit Points",
+        "tooltip": "A <strong>Grit Point</strong> lets a character stand up in defiance of their injuries and make a last-ditch effort to turn the wheel of fate around. Every time a character suffers an injury, they gain <strong>1</strong> <strong>Grit Point</strong>. <br><br><strong>Grit Points</strong> are one-time use and last until they are spent or until an injury has fully healed. <br><br>You may spend <strong>Grit Points</strong> at any time during a round for the following effects (but only one <strong>Grit Point</strong> per effect, per round): <ul><li>On a test, gain <strong>+2D</strong>.</li><li>On a test, gain <strong>+1</strong> compensation point.</li><li>Reduce exhaustion by <strong>1D4</strong>.</li><li>On your attack, deal <strong>+1D6</strong> points of additional damage of your weapon's strongest type of damage.</li><li>Gain <strong>+1D4</strong> AP.</li></ul>"
       },
       "health": {
         "duration": "Duration",
@@ -450,25 +496,78 @@
         },
         "states": {
           "label": "Conditions",
-          "berserk": "Berserk",
-          "burning": "Burning",
-          "bleeding": "Bleeding",
-          "death": "Death's Door",
-          "dissolving": "Dissolving",
-          "drugAddicted": "Drug-Addicted",
-          "electrified": "Electrified",
-          "exhausted": "Exhausted",
-          "frostbitten": "Frostbitten",
-          "grappled": "Grappled",
-          "hasted": "Hasted",
-          "jealous": "Jealous",
-          "pacified": "Pacified",
-          "poisoned": "Poisoned",
-          "prone": "Prone",
-          "rooted": "Rooted",
-          "terrified": "Terrified",
-          "stunned": "Stunned",
-          "unconscious": "Unconscious"
+          "berserk": {
+            "name": "Berserk",
+            "tooltip": "A character who is in <strong>berserk</strong>, <strong>must</strong> attack the creature nearest to them, regardless of whether it is friend or foe, until it is dead or unconscious. The <strong>berserked</strong> character <strong>must</strong> then move on to the next available and closest victim. <ul><li>Graded</li><li>Shrug off: 1 <em>point</em> with a self-control test with <strong>Ob</strong> <strong>1</strong>. </li><li>Immediate cancel: When the character is made unconscious or no other creatures remain alive and/or conscious. </li></ul>"
+          },
+          "burning": {
+            "name": "Burning",
+            "tooltip": "For every <em>point</em> in <strong>burning</strong>, a character suffers <strong>1 D4</strong> points of burning damage every <em>tick</em>. <ul><li>Graded</li><li>Greedy: automatically increases in <em>degree</em> by 1 <em>point</em> <strong>after</strong> every <em>tick</em>. </li><li>Shrug off: 2 <em>points</em> per AP spent actively patting out flames, rolling on the floor and so on. </li><li>Immediate cancel: When the flames are starved for oxygen (if the flames require oxygen) or otherwise extinguished (for example with an extinguisher). </li></ul>"
+          },
+          "bleeding": {
+            "name": "Bleeding",
+            "tooltip": "For every <em>point</em> in <strong>bleeding</strong>, a character suffers <strong>1 D4</strong> points of bleeding damage every <em>tick</em>. <ul><li>Graded</li><li>Shrug off: 1 <em>point</em> with a toughness test with <strong>Ob</strong> <strong>1</strong>. </li><li>Automatic shrug-off: half (rounded up) <em>points</em> at the end of the turn. </li><li>Immediate cancel: With a successful medicine test, requiring 1 medical supplies with <strong>Ob</strong> at the current <em>degree</em>. </li></ul>"
+          },
+          "dissolving": {
+            "name": "Dissolving",
+            "tooltip": "For every point in <strong>dissolving</strong>, a character suffers <strong>1 D4</strong> points of acid damage every <em>tick</em>. <ul><li>Graded</li><li>Automatic shrug-off: half (rounded up) <em>points</em> at the end of the turn. </li><li>Immediate cancel: With a successful medicine test, requiring 1 medical supplies with <strong>Ob</strong> at the current <em>degree</em>. </li></ul>"
+          },
+          "drugAddicted": {
+            "name": "Drug-Addicted",
+            "tooltip": "A <strong>drug-addicted</strong> character must take their drug once every 24 hours, or else enter <strong>withdrawal</strong>.<br><br>For every 24 hours that a character is in <strong>withdrawal</strong>, they suffer <strong>-1D</strong> to <strong>all</strong> tests. For every 12 hours that they are in <strong>withdrawal</strong> they have to pass a toughness test at <strong>Ob</strong> 2, or else be forced to dedicate their every bit of strength into acquiring and taking a new dose of the drug.<br><br>After 72 consecutive hours (= 3 full days) of having being in <strong>withdrawal</strong>, the character breaks free from their addiction, removing this <strong>condition</strong>."
+          },
+          "electrified": {
+            "name": "Electrified",
+            "tooltip": "An <strong>electrified</strong> character suffers <strong>-1D</strong> for their every test requiring agility. That means attribute and skills. <ul><li>Graded</li><li>Automatic shrug-off: half (rounded up) <em>points</em> at the end of the turn. </li><li>Immediate cancel: After a minute of last suffering one <em>point</em> of <strong>electrified</strong> or at the end of combat. </li></ul>"
+          },
+          "exhausted": {
+            "name": "Exhausted",
+            "tooltip": "An <strong>exhausted</strong> character begins their turn with -2 <strong>AP</strong> and can run at most only half the distance they normally could. Sprinting is impossible. In addition, they suffer a penalty of <strong>-1D</strong> to all tests. The number of dice for a test cannot be reduced to less than 1 by this penalty.<br><br>While <strong>exhausted</strong>, a character suffering further exhaustion, must succeed a self-control test at <strong>Ob</strong> equal to their current level of exhaustion, or else fall unconscious. <br><br>This <strong>condition</strong> can be recovered from by <strong>actively resting</strong> for at least <strong>six uninterrupted hours</strong>."
+          },
+          "frostbitten": {
+            "name": "Frostbitten",
+            "tooltip": "For every <em>point</em> in <strong>frostbitten</strong>, a character suffers <strong>-1</strong> AP and <strong>-1D</strong> to all tests. <ul><li>Graded</li><li>Automatic shrug-off: half (rounded up) <em>points</em> at the end of the turn. </li><li>Immediate cancel: After a minute of last suffering one <em>point</em> of <strong>frostbitten</strong> or at the end of combat. </li></ul>"
+          },
+          "grappled": {
+            "name": "Grappled",
+            "tooltip": "A <strong>grappled</strong> character is unable to move and suffers <strong>-1D</strong> to all defense tests, for as long as they are <strong>grappled</strong>. A <strong>grappled</strong> character can break free, by <strong>completely succeeding</strong> an unarmed combat test against the other character grappling them. <br><br>A character who is grappled, counts as flanked (to one additional degree)."
+          },
+          "hasted": {
+            "name": "Hasted",
+            "tooltip": "A <strong>hasted</strong> character has an additional AP to spend and an additional 9'/3m of movement per AP or every 5 seconds."
+          },
+          "jealous": {
+            "name": "Jealous",
+            "tooltip": "A character who has been made unnaturally <strong>jealous</strong>, will do anything in their power to take a thing, whatever <em>it</em> may be, from whoever might have <em>it</em>. <ul><li>Graded</li><li>Shrug off: 1 <em>point</em> with a self-control test with <strong>Ob</strong> <strong>1</strong>. </li><li>Immediate cancel: When the character is made unconscious, the source of the jealousy is removed or the character acquires that which they covet. </li></ul>"
+          },
+          "pacified": {
+            "name": "Pacified",
+            "tooltip": "A character who is <strong>pacified</strong>, is unable to <em>willingly</em> take any action that would directly or indirectly harm any other creature. Note, the character is not physically unable to cause harm, but they <strong>really</strong> don't want to. <ul><li>Graded</li><li>Shrug off: 1 <em>point</em> with a self-control test with <strong>Ob</strong> <strong>1</strong>. </li><li>Immediate cancel: When the character is made unconscious or the source of the pacification is removed. </li></ul>"
+          },
+          "poisoned": {
+            "name": "Poisoned",
+            "tooltip": "A <strong>poisoned</strong> character suffers <strong>1 D4</strong> points of poison damage every <em>tick</em>. <ul><li>Graded</li><li>Shrug off: 1 <em>point</em> with a toughness test with <strong>Ob</strong> <strong>1</strong>. </li><li>Immediate cancel: With proper treatment. </li></ul>"
+          },
+          "prone": {
+            "name": "Prone",
+            "tooltip": "A character who is prone, is harder to hit with ranged attacks, easier to hit with melee attacks and counts as flanked (to one additional degree), in melee. <ul><li><strong>-2D</strong> to melee defense tests.</li><li><strong>+2D</strong> to ranged defense tests.</li><li><strong>-2D</strong> to any melee attack tests.</li><li><strong>-2D</strong> to any ranged attack tests with a bow, sling, thrown, or similar weapon.</li></ul>It costs 1 AP to stand up."
+          },
+          "rooted": {
+            "name": "Rooted",
+            "tooltip": "A <strong>rooted</strong> character can no longer move their legs. They cannot move from the spot, but can still move their upper body freely. <br><br>This <strong>condition</strong> is usually tied to some condition, before it is removed. If there is no condition, it is automatically shrugged off at the end of the turn. "
+          },
+          "stunned": {
+            "name": "Stunned",
+            "tooltip": "A <strong>stunned</strong> character is unable to act, at all. During combat, their turn is skipped. <ul><li>Graded</li><li>Automatic shrug-off: 1 <em>point</em> at the end of the turn. </li></ul>"
+          },
+          "terrified": {
+            "name": "Terrified",
+            "tooltip": "A <strong>terrified</strong> character suffers <strong>-2D</strong> to defense tests and <strong>has to</strong> flee from whatever it is that terrified them, until they can no longer perceive it. <ul><li>Graded</li><li>Shrug off: 1 <em>point</em> with a self-control test with <strong>Ob</strong> <strong>1</strong>. </li><li>Immediate cancel: When the character is made unconscious, the source of terror is removed or the character can no longer perceive the source of terror in any way for a short time (1-2 turns or 5-10 seconds). </li></ul>"
+          },
+          "unconscious": {
+            "name": "Unconscious",
+            "tooltip": "An <strong>unconscious</strong> character is unable to act and is unaware of their surroundings."
+          }
         }
       },
       "personals": {
@@ -534,6 +633,11 @@
           "requirement": "Required Skill Level",
           "singular": "Expertise",
           "plural": "Expertises"
+        },
+        "forking": {
+          "reminder": {
+            "label": "Don't forget to ask to <strong>fork</strong> related skills!"
+          }
         },
         "innate": {
           "label": "Innate Skills",
@@ -748,6 +852,10 @@
           "label": "Add Custom Condition"
         },
         "newDefaultName": "New Health State"
+      },
+      "toggleReminders": {
+        "label": "Reminder Hints",
+        "hint": "Toggles the display of rule reminders. For example, when toggled off, will no longer show the general combat actions on the character sheet and won't show the reminder to fork skills on the roll dialog."
       }
     }
   }
