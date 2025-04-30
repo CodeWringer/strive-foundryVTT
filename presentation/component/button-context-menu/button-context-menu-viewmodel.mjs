@@ -118,7 +118,7 @@ export default class ButtonContextMenuViewModel extends ButtonViewModel {
    * * `event: Event`
    * * `data: undefined`
    * 
-   * @param {Array<Object> | undefined} menuItems An array of context menu items, 
+   * @param {Array<Object> | undefined} args.menuItems An array of context menu items, 
    * which are used to populate the context menu. The items can have the following properties: 
    * * `{String} name` - The displayed item name
    * * `{String} icon` An icon glyph HTML string
