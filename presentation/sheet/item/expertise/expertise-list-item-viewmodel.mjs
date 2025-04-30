@@ -245,6 +245,7 @@ export default class ExpertiseListItemViewModel extends BaseListItemViewModel {
             {
               name: game.i18n.localize("system.general.name.edit"),
               icon: '<i class="fas fa-edit"></i>',
+              condition: this.isEditable,
               callback: this.queryEditName.bind(this),
             },
             // Add damage
@@ -254,6 +255,7 @@ export default class ExpertiseListItemViewModel extends BaseListItemViewModel {
                 game.i18n.localize("system.damageDefinition.label")
               ),
               icon: '<i class="fas fa-plus"></i>',
+              condition: this.isEditable,
               callback: () => {
                 const damage = this.document.damage.concat([]);
                 damage.push(new DamageAndType({
@@ -264,16 +266,56 @@ export default class ExpertiseListItemViewModel extends BaseListItemViewModel {
               },
             },
           ]
-          // Toggle obstacle
-          .concat(ButtonContextMenuViewModel.createToggleButtons("system.roll.obstacle.label", this.document, "obstacle", ""))
-          // Toggle opposed by
-          .concat(ButtonContextMenuViewModel.createToggleButtons("system.roll.obstacle.opposedBy.label", this.document, "opposedBy", ""))
-          // Toggle distance
-          .concat(ButtonContextMenuViewModel.createToggleButtons("system.character.skill.expertise.distance.label", this.document, "distance", ""))
-          // Toggle attack type
-          .concat(ButtonContextMenuViewModel.createToggleButtons("system.attackType.label", this.document, "attackType", ATTACK_TYPES.none))
-          // Toggle condition
-          .concat(ButtonContextMenuViewModel.createToggleButtons("system.character.skill.expertise.condition.label", this.document, "condition", "")),
+            // Toggle obstacle
+            .concat(
+              ButtonContextMenuViewModel.createToggleButtons({
+                label: "system.roll.obstacle.label",
+                propertyOwner: this.document,
+                propertyName: "obstacle",
+                activeValue: "",
+                isEditable: this.isEditable,
+              })
+            )
+            // Toggle opposed by
+            .concat(
+              ButtonContextMenuViewModel.createToggleButtons({
+                label: "system.roll.obstacle.opposedBy.label",
+                propertyOwner: this.document,
+                propertyName: "opposedBy",
+                activeValue: "",
+                isEditable: this.isEditable,
+              })
+            )
+            // Toggle distance
+            .concat(
+              ButtonContextMenuViewModel.createToggleButtons({
+                label: "system.character.skill.expertise.distance.label",
+                propertyOwner: this.document,
+                propertyName: "distance",
+                activeValue: "",
+                isEditable: this.isEditable,
+              })
+            )
+            // Toggle attack type
+            .concat(
+              ButtonContextMenuViewModel.createToggleButtons({
+                label: "system.attackType.label",
+                propertyOwner: this.document,
+                propertyName: "attackType",
+                activeValue: ATTACK_TYPES.none,
+                isEditable: this.isEditable,
+              })
+            )
+            // Toggle condition
+            .concat(
+              ButtonContextMenuViewModel.createToggleButtons({
+                label: "system.character.skill.expertise.condition.label",
+                propertyOwner: this.document,
+                propertyName: "condition",
+                activeValue: "",
+                isEditable: this.isEditable,
+              })
+            )
         }),
       }),
       // Delete button
@@ -286,7 +328,7 @@ export default class ExpertiseListItemViewModel extends BaseListItemViewModel {
           withDialog: true,
         }),
       }),
-    ]; 
+    ];
   }
 
   /** @override */
