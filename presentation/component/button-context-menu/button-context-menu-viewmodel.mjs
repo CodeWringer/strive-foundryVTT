@@ -28,45 +28,53 @@ export default class ButtonContextMenuViewModel extends ButtonViewModel {
   /**
    * Returns two button definitions for a button to "toggle" a property value. 
    * 
-   * @param {String} label The button's localizable label. 
-   * @param {Object} propertyOwner Parent object of the property. 
-   * @param {String} propertyName Name of the property. 
-   * @param {Any} activeValue Value to set on the property that is set when 
+   * @param {Object} args
+   * @param {String} args.label The button's localizable label. 
+   * @param {Object} args.propertyOwner Parent object of the property. 
+   * @param {String} args.propertyName Name of the property. 
+   * @param {Any} args.activeValue Value to set on the property that is set when 
    * the toggle is active. 
-   * @param {Any} inactiveValue Value to set on the property that is set when 
+   * @param {Any | undefined} args.inactiveValue Value to set on the property that is set when 
    * the toggle is inactive. 
    * * default `null`
+   * @param {Boolean | undefined} args.isEditable If `true`, will show the toggle buttons. If `false`, 
+   * the buttons will not be shown. Intended to hide buttons in read-only mode of a sheet. 
+   * * default `true`
    * 
    * @returns {Array<Object>} Two button definitions. One for each state of the toggle button. 
    */
-  static createToggleButtons(label, propertyOwner, propertyName, activeValue, inactiveValue = null) {
-    const localizedLabel = game.i18n.localize(label);
+  static createToggleButtons(args = {}) {
+    const localizedLabel = game.i18n.localize(args.label);
     return [
       {
         name: localizedLabel,
         icon: '<i class="fas fa-check"></i>',
         condition: () => {
-          const value = propertyOwner[propertyName];
+          if (!args.isEditable) return false;
+          
+          const value = args.propertyOwner[args.propertyName];
           if (typeof(value) === "boolean") {
             return value === true;
           } else {
             return ValidationUtil.isDefined(value) === true;
           }
         },
-        callback: () => { propertyOwner[propertyName] = inactiveValue; },
+        callback: () => { args.propertyOwner[args.propertyName] = args.inactiveValue; },
       },
       {
         name: localizedLabel,
         icon: '',
         condition: () => {
-          const value = propertyOwner[propertyName];
+          if (!args.isEditable) return false;
+
+          const value = args.propertyOwner[args.propertyName];
           if (typeof(value) === "boolean") {
             return value === false;
           } else {
             return ValidationUtil.isDefined(value) === false;
           }
         },
-        callback: () => { propertyOwner[propertyName] = activeValue; },
+        callback: () => { args.propertyOwner[args.propertyName] = args.activeValue; },
       }
     ];
   }
@@ -110,7 +118,7 @@ export default class ButtonContextMenuViewModel extends ButtonViewModel {
    * * `event: Event`
    * * `data: undefined`
    * 
-   * @param {Array<Object> | undefined} menuItems An array of context menu items, 
+   * @param {Array<Object> | undefined} args.menuItems An array of context menu items, 
    * which are used to populate the context menu. The items can have the following properties: 
    * * `{String} name` - The displayed item name
    * * `{String} icon` An icon glyph HTML string

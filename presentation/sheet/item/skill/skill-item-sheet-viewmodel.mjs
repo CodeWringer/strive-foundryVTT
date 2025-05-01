@@ -237,7 +237,7 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
         this.document.tags = newValue;
       },
     });
-    
+
     this.vmDamageDefinitionList = new DamageDefinitionListViewModel({
       id: `vmDamageDefinitionList`,
       parent: this,
@@ -356,6 +356,7 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
                 game.i18n.localize("system.damageDefinition.label")
               ),
               icon: '<i class="fas fa-plus"></i>',
+              condition: this.isEditable,
               callback: () => {
                 const damage = this.document.damage.concat([]);
                 damage.push(new DamageAndType({
@@ -366,18 +367,66 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
               },
             },
           ]
-          // Toggle ap cost
-          .concat(ButtonContextMenuViewModel.createToggleButtons("system.character.skill.expertise.apCost", this.document, "apCost", 0))
-          // Toggle obstacle
-          .concat(ButtonContextMenuViewModel.createToggleButtons("system.roll.obstacle.label", this.document, "obstacle", ""))
-          // Toggle opposed by
-          .concat(ButtonContextMenuViewModel.createToggleButtons("system.roll.obstacle.opposedBy.label", this.document, "opposedBy", ""))
-          // Toggle distance
-          .concat(ButtonContextMenuViewModel.createToggleButtons("system.character.skill.expertise.distance.label", this.document, "distance", ""))
-          // Toggle attack type
-          .concat(ButtonContextMenuViewModel.createToggleButtons("system.attackType.label", this.document, "attackType", ATTACK_TYPES.none))
-          // Toggle condition
-          .concat(ButtonContextMenuViewModel.createToggleButtons("system.character.skill.expertise.condition.label", this.document, "condition", "")),
+            // Toggle ap cost
+            .concat(
+              ButtonContextMenuViewModel.createToggleButtons({
+                label: "system.character.skill.expertise.apCost",
+                propertyOwner: this.document,
+                propertyName: "apCost",
+                activeValue: 0,
+                isEditable: this.isEditable,
+              })
+            )
+            // Toggle obstacle
+            .concat(
+              ButtonContextMenuViewModel.createToggleButtons({
+                label: "system.roll.obstacle.label",
+                propertyOwner: this.document,
+                propertyName: "obstacle",
+                activeValue: "",
+                isEditable: this.isEditable,
+              })
+            )
+            // Toggle opposed by
+            .concat(
+              ButtonContextMenuViewModel.createToggleButtons({
+                label: "system.roll.obstacle.opposedBy.label",
+                propertyOwner: this.document,
+                propertyName: "opposedBy",
+                activeValue: "",
+                isEditable: this.isEditable,
+              })
+            )
+            // Toggle distance
+            .concat(
+              ButtonContextMenuViewModel.createToggleButtons({
+                label: "system.character.skill.expertise.distance.label",
+                propertyOwner: this.document,
+                propertyName: "distance",
+                activeValue: "",
+                isEditable: this.isEditable,
+              })
+            )
+            // Toggle attack type
+            .concat(
+              ButtonContextMenuViewModel.createToggleButtons({
+                label: "system.attackType.label",
+                propertyOwner: this.document,
+                propertyName: "attackType",
+                activeValue: ATTACK_TYPES.none,
+                isEditable: this.isEditable,
+              })
+            )
+            // Toggle condition
+            .concat(
+              ButtonContextMenuViewModel.createToggleButtons({
+                label: "system.character.skill.expertise.condition.label",
+                propertyOwner: this.document,
+                propertyName: "condition",
+                activeValue: "",
+                isEditable: this.isEditable,
+              })
+            )
         }),
       }),
     ].concat(inherited);
@@ -410,7 +459,7 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
         stateName: prerequisite.name,
         stateMinimumLevel: (prerequisite.minimumLevel ?? 0),
         onChange: () => {
-          const prerequisites = this.prerequisiteViewModels.map(viewModel => 
+          const prerequisites = this.prerequisiteViewModels.map(viewModel =>
             viewModel.state
           );
           this.document.prerequisites = prerequisites;
@@ -463,7 +512,7 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
       return this.document;
     }
   }
-  
+
   /** @override */
   getExtenders() {
     return super.getExtenders().concat(ExtenderUtil.getExtenders(SkillItemSheetViewModel));
