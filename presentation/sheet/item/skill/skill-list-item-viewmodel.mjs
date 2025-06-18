@@ -439,17 +439,47 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
       },
     ])
     // Toggle ap cost
-    .concat(ButtonContextMenuViewModel.createToggleButtons("system.character.skill.expertise.apCost", this.document, "apCost", 0))
+    .concat(ButtonContextMenuViewModel.createToggleButtons({
+      label: "system.character.skill.expertise.apCost", 
+      propertyOwner: this.document, 
+      propertyName: "apCost", 
+      activeValue: 0,
+    }))
     // Toggle obstacle
-    .concat(ButtonContextMenuViewModel.createToggleButtons("system.roll.obstacle.label", this.document, "obstacle", ""))
+    .concat(ButtonContextMenuViewModel.createToggleButtons({
+      label: "system.roll.obstacle.label", 
+      propertyOwner: this.document, 
+      propertyName: "obstacle", 
+      activeValue: "",
+    }))
     // Toggle opposed by
-    .concat(ButtonContextMenuViewModel.createToggleButtons("system.roll.obstacle.opposedBy.label", this.document, "opposedBy", ""))
+    .concat(ButtonContextMenuViewModel.createToggleButtons({
+      label: "system.roll.obstacle.opposedBy.label", 
+      propertyOwner: this.document, 
+      propertyName: "opposedBy", 
+      activeValue: "",
+    }))
     // Toggle distance
-    .concat(ButtonContextMenuViewModel.createToggleButtons("system.character.skill.expertise.distance.label", this.document, "distance", ""))
+    .concat(ButtonContextMenuViewModel.createToggleButtons({
+      label: "system.character.skill.expertise.distance.label", 
+      propertyOwner: this.document, 
+      propertyName: "distance", 
+      activeValue: "",
+    }))
     // Toggle attack type
-    .concat(ButtonContextMenuViewModel.createToggleButtons("system.attackType.label", this.document, "attackType", ATTACK_TYPES.none))
+    .concat(ButtonContextMenuViewModel.createToggleButtons({
+      label: "system.attackType.label", 
+      propertyOwner: this.document, 
+      propertyName: "attackType", 
+      activeValue: ATTACK_TYPES.none,
+    }))
     // Toggle condition
-    .concat(ButtonContextMenuViewModel.createToggleButtons("system.character.skill.expertise.condition.label", this.document, "condition", ""));
+    .concat(ButtonContextMenuViewModel.createToggleButtons({
+      label: "system.character.skill.expertise.condition.label", 
+      propertyOwner: this.document, 
+      propertyName: "condition", 
+      activeValue: "",
+    }));
   }
 
   /** @override */

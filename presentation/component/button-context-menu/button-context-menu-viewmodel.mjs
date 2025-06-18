@@ -28,45 +28,50 @@ export default class ButtonContextMenuViewModel extends ButtonViewModel {
   /**
    * Returns two button definitions for a button to "toggle" a property value. 
    * 
-   * @param {String} label The button's localizable label. 
-   * @param {Object} propertyOwner Parent object of the property. 
-   * @param {String} propertyName Name of the property. 
-   * @param {Any} activeValue Value to set on the property that is set when 
+   * @param {Object} params
+   * @param {String} params.label The button's localizable label. 
+   * @param {Object} params.propertyOwner Parent object of the property. 
+   * @param {String} params.propertyName Name of the property. 
+   * @param {Any} params.activeValue Value to set on the property that is set when 
    * the toggle is active. 
-   * @param {Any} inactiveValue Value to set on the property that is set when 
+   * @param {Any} params.inactiveValue Value to set on the property that is set when 
    * the toggle is inactive. 
    * * default `null`
+   * @param {String | undefined} params.activeIcon The icon to show alongside an active 
+   * value. If left `undefined`, will show a checkmark. 
+   * @param {String | undefined} params.inactiveIcon The icon to show alongside an inactive 
+   * value. If left `undefined`, will show no icon. 
    * 
    * @returns {Array<Object>} Two button definitions. One for each state of the toggle button. 
    */
-  static createToggleButtons(label, propertyOwner, propertyName, activeValue, inactiveValue = null) {
-    const localizedLabel = game.i18n.localize(label);
+  static createToggleButtons(params = {}) {
+    const localizedLabel = game.i18n.localize(params.label);
     return [
       {
         name: localizedLabel,
-        icon: '<i class="fas fa-check"></i>',
+        icon: params.activeIcon ?? '<i class="fas fa-check"></i>',
         condition: () => {
-          const value = propertyOwner[propertyName];
+          const value = params.propertyOwner[params.propertyName];
           if (typeof(value) === "boolean") {
             return value === true;
           } else {
             return ValidationUtil.isDefined(value) === true;
           }
         },
-        callback: () => { propertyOwner[propertyName] = inactiveValue; },
+        callback: () => { params.propertyOwner[params.propertyName] = params.inactiveValue; },
       },
       {
         name: localizedLabel,
-        icon: '',
+        icon: params.inactiveIcon ?? '',
         condition: () => {
-          const value = propertyOwner[propertyName];
+          const value = params.propertyOwner[params.propertyName];
           if (typeof(value) === "boolean") {
             return value === false;
           } else {
             return ValidationUtil.isDefined(value) === false;
           }
         },
-        callback: () => { propertyOwner[propertyName] = activeValue; },
+        callback: () => { params.propertyOwner[params.propertyName] = params.activeValue; },
       }
     ];
   }
