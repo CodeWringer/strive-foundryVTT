@@ -292,7 +292,7 @@ export default class BaseListItemViewModel extends ViewModel {
           id: "vmBtnToggleGmNotes",
           parent: this,
           localizedToolTip: game.i18n.localize("system.general.messageVisibility.gm.toggleSecrets"),
-          iconHtml: `<i class="fas fa-eye"></i>`,
+          iconHtml: this.showGmNotes ? `<i class="fas fa-eye"></i>` : `<i class="fas fa-eye-slash"></i>`,
           onClick: () => {
             thiz.showGmNotes = !thiz.showGmNotes;
           },
