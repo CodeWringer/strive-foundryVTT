@@ -7,6 +7,7 @@ import { ITEM_TYPES } from "../../../../../business/document/item/item-types.mjs
 import { ATTRIBUTES } from "../../../../../business/ruleset/attribute/attributes.mjs"
 import RulesetExplainer from "../../../../../business/ruleset/ruleset-explainer.mjs"
 import { Sum, SumComponent } from "../../../../../business/ruleset/summed-data.mjs"
+import GameSystemUserSettings from "../../../../../business/setting/game-system-user-settings.mjs"
 import { StringUtil } from "../../../../../business/util/string-utility.mjs"
 import { ValidationUtil } from "../../../../../business/util/validation-utility.mjs"
 import { ExtenderUtil } from "../../../../../common/extender-util.mjs"
@@ -86,6 +87,12 @@ export default class ActorHealthViewModel extends ViewModel {
    * @readonly
    */
   get maxExhaustion() { return this.document.health.maxExhaustion; }
+
+  /**
+   * @type {boolean}
+   * @readonly
+   */
+  get showReminders() { return new GameSystemUserSettings().get(GameSystemUserSettings.KEY_TOGGLE_REMINDERS); }
 
   /**
    * @type {Array<IllnessListItemViewModel>}
@@ -189,6 +196,11 @@ export default class ActorHealthViewModel extends ViewModel {
       onChange: (_, newValue) => {
         this.document.health.HP = newValue;
       },
+    });
+    this.vmHpInjuryReminder = new ViewModel({
+      id: "vmHpInjuryReminder",
+      parent: this,
+      localizedToolTip: game.i18n.localize("system.character.health.injury.reminder"),
     });
     // Exhaustion
     this.vmMaxExhaustion = new InputNumberSpinnerViewModel({
