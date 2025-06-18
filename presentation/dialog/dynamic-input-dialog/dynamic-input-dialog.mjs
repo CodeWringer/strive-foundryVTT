@@ -1,4 +1,5 @@
 import { ValidationUtil } from '../../../business/util/validation-utility.mjs';
+import FoundryWrapper from '../../../common/foundry-wrapper.mjs';
 import ConfirmableModalDialog from '../confirmable-modal-dialog/confirmable-modal-dialog.mjs';
 import DialogButtonDefinition from '../dialog-button-definition.mjs';
 import DynamicInputDefinition from './dynamic-input-definition.mjs';
@@ -57,6 +58,13 @@ export default class DynamicInputDialog extends ConfirmableModalDialog {
 
   /** @override */
   get id() { return "dynamic-input-dialog"; }
+
+  /** @override */
+  static get defaultOptions() {
+    const r = super.defaultOptions;
+    r.classes = ["width-max-lg"].concat(r.classes);
+    return r;
+  }
 
   /** @override */
   get buttons() { return [

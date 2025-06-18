@@ -14,11 +14,15 @@ import { ExtenderUtil } from "../../../../../common/extender-util.mjs"
 import RollableSpecificDocumentCreationStrategy from "../../../../component/button-add/rollable-specific-document-creation-strategy.mjs"
 import SpecificDocumentCreationStrategy from "../../../../component/button-add/specific-document-creation-strategy.mjs"
 import ButtonRollViewModel from "../../../../component/button-roll/button-roll-viewmodel.mjs"
+import ButtonViewModel from "../../../../component/button/button-viewmodel.mjs"
 import InputNumberSpinnerViewModel from "../../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs"
 import ReadOnlyValueViewModel from "../../../../component/read-only-value/read-only-value.mjs"
 import { SortingOption } from "../../../../component/sort-controls/sort-controls-viewmodel.mjs"
 import DocumentListItemOrderDataSource from "../../../../component/sortable-list/document-list-item-order-datasource.mjs"
 import SortableListViewModel, { SortableListAddItemParams, SortableListSortParams } from "../../../../component/sortable-list/sortable-list-viewmodel.mjs"
+import DynamicInputDefinition from "../../../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs"
+import DynamicInputDialog from "../../../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs"
+import { DYNAMIC_INPUT_TYPES } from "../../../../dialog/dynamic-input-dialog/dynamic-input-types.mjs"
 import ViewModel from "../../../../view-model/view-model.mjs"
 import AssetListItemViewModel from "../../../item/asset/asset-list-item-viewmodel.mjs"
 import IllnessListItemViewModel from "../../../item/illness/illness-list-item-viewmodel.mjs"
@@ -167,6 +171,7 @@ export default class ActorHealthViewModel extends ViewModel {
 
     this.document = args.document;
     this.contextType = args.contextType ?? "actor-health";
+    const thiz = this;
 
     // HP
     this.vmMaxHp = new InputNumberSpinnerViewModel({
@@ -197,6 +202,40 @@ export default class ActorHealthViewModel extends ViewModel {
         this.document.health.HP = newValue;
       },
     });
+    this.vmAdjustHp = new ButtonViewModel({
+      id: "vmAdjustHp",
+      parent: this,
+      localizedToolTip: game.i18n.localize("system.character.health.hp.adjust"),
+      iconHtml: '<i class="dark ico ico-modifier-solid interactible" style="height: 22px;"></i>',
+      onClick: async () => {
+        const inputNumber = "inputNumber";
+        const dialog = await new DynamicInputDialog({
+          easyDismissal: true,
+          focused: inputNumber,
+          inputDefinitions: [
+            new DynamicInputDefinition({
+              type: DYNAMIC_INPUT_TYPES.NUMBER_SPINNER,
+              name: inputNumber,
+              localizedLabel: game.i18n.localize("system.character.health.hp.adjustInputLabel"),
+              required: true,
+              defaultValue: 0,
+            }),
+            new DynamicInputDefinition({
+              type: DYNAMIC_INPUT_TYPES.LABEL,
+              name: "reminder",
+              localizedLabel: game.i18n.localize("system.character.health.injury.reminder"),
+            }),
+          ],
+        }).renderAndAwait(true);
+        
+        if (dialog.confirmed !== true) return;
+
+        const number = parseInt(dialog[inputNumber]);
+        const newHP = thiz.document.health.HP + number;
+        const clampedHP = Math.max(0, Math.min(newHP, thiz.document.health.maxHP));
+        thiz.document.health.HP = clampedHP;
+      },
+    })
     this.vmHpInjuryReminder = new ViewModel({
       id: "vmHpInjuryReminder",
       parent: this,

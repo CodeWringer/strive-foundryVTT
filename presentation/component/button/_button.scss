@@ -12,6 +12,11 @@
     border-radius: unset;
     border: unset;
     background-color: unset;
+
+    &:hover {
+      border-color: unset;
+      background-color: unset;
+    }
   }
 
   &.disabled {
@@ -35,6 +40,11 @@
   &.override {
     min-width: unset;
     min-height: unset;
+  }
+
+  &:hover {
+    border-color: $c-border-highlight-light;
+    background-color: $c-bg-lighter;
   }
 }
 

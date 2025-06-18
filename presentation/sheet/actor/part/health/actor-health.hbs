@@ -11,30 +11,36 @@ cssClass: {undefined | String}
       <div class="grid-2col grid-gap-md">
         {{!-- HP --}}
         <div class="sheet-block">
-          {{!-- Max HP --}}
-          <div class="flex flex-row flex-middle flex-right">
-            {{#> labeledControl viewModel=viewModel.vmMaxHp localizedIconToolTip=(localize "system.character.health.hp.maximum") iconClass="ico-heart-limit-solid" cssClass="width-lg" }}
-              {{> inputNumberSpinner }}
-            {{/labeledControl}}
-            {{#> labeledControl viewModel=viewModel.vmMaxHpModifier localizedIconToolTip=(localize "system.general.modifier.label") iconClass="ico-modifier-solid" cssClass="width-lg" }}
-              {{> inputNumberSpinner }}
-            {{/labeledControl}}
-            <span class="pad-md font-bold">=</span>
-            <span class="width-md">
-              {{> readOnlyValue viewModel=viewModel.vmModifiedMaxHp }}
-            </span>
+          <div class="flex flex-row">
+            {{!-- Max HP --}}
+            <div class="flex flex-row flex-middle flex-right">
+              {{#> labeledControl viewModel=viewModel.vmMaxHp localizedIconToolTip=(localize "system.character.health.hp.maximum") iconClass="ico-heart-limit-solid" cssClass="width-lg" }}
+                {{> inputNumberSpinner }}
+              {{/labeledControl}}
+              {{#> labeledControl viewModel=viewModel.vmMaxHpModifier localizedIconToolTip=(localize "system.general.modifier.label") iconClass="ico-modifier-solid" cssClass="width-lg" }}
+                {{> inputNumberSpinner }}
+              {{/labeledControl}}
+              <span class="pad-md font-bold">=</span>
+              <span class="width-md">
+                {{> readOnlyValue viewModel=viewModel.vmModifiedMaxHp }}
+              </span>
+            </div>
+            <div class="flex flex-row flex-middle flex-right">
+              {{!-- Reminder --}}
+              {{#if viewModel.showReminders}}
+              <span class="button light square font-size-default flex flex-center" id="{{viewModel.vmHpInjuryReminder.id}}">
+                <i class="far fa-question-circle info-button"></i>
+              </span>
+              {{/if}}
+              {{!-- Current HP --}}
+              {{#> labeledControl viewModel=viewModel.vmHp localizedIconToolTip=(localize "system.character.health.hp.label") iconClass="ico-heart-solid" cssClass="width-xl" }}
+                {{> inputNumberSpinner }}
+              {{/labeledControl}}
+            </div>
           </div>
-          <div class="flex flex-row flex-middle flex-right">
-            {{!-- Reminder --}}
-            {{#if viewModel.showReminders}}
-            <span class="button light square font-size-default flex flex-center" id="{{viewModel.vmHpInjuryReminder.id}}">
-              <i class="far fa-question-circle info-button"></i>
-            </span>
-            {{/if}}
-            {{!-- Current HP --}}
-            {{#> labeledControl viewModel=viewModel.vmHp localizedIconToolTip=(localize "system.character.health.hp.label") iconClass="ico-heart-solid" cssClass="width-xl" }}
-              {{> inputNumberSpinner }}
-            {{/labeledControl}}
+          <div class="flex flex-column flex-end">
+            {{!-- Adjust button --}}
+            {{> button viewModel=viewModel.vmAdjustHp heavy=true fill=false skipPadding=true }}
           </div>
         </div>
         {{!-- Exhaustion --}}
