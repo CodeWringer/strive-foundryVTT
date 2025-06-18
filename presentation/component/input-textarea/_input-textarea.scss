@@ -8,6 +8,8 @@ textarea, .textarea-auto-resize-sibling {
   margin: 0;
   box-sizing: border-box;
   border: 1px solid $c-border-input;
+  max-height: 600px;
+  overflow: scroll;
   
   &.resize-vertical {
     resize: vertical;

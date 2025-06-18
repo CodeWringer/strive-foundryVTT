@@ -3,9 +3,11 @@ import ChoiceOption from "../../../../presentation/component/input-choice/choice
 import DynamicInputDefinition from "../../../../presentation/dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
 import DynamicInputDialog from "../../../../presentation/dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
 import { DYNAMIC_INPUT_TYPES } from "../../../../presentation/dialog/dynamic-input-dialog/dynamic-input-types.mjs";
+import { ACTOR_TYPES } from "../../../document/actor/actor-types.mjs";
 import TransientSkill from "../../../document/item/skill/transient-skill.mjs";
 import CharacterAttribute from "../../../ruleset/attribute/character-attribute.mjs";
 import { Sum, SumComponent } from "../../../ruleset/summed-data.mjs";
+import GameSystemUserSettings from "../../../setting/game-system-user-settings.mjs";
 import RollData from "../../roll-data.mjs";
 import { ROLL_DICE_MODIFIER_TYPES } from "../../roll-dice-modifier-types.mjs";
 import { RollSchema } from "../../roll-schema.mjs";
@@ -123,6 +125,19 @@ export class AttributeAndSkillRollSchema extends SkillRollSchema {
         }
       }),
     );
+
+    const showReminders = new GameSystemUserSettings().get(GameSystemUserSettings.KEY_TOGGLE_REMINDERS);
+    const isPC = document.owningDocument.type === ACTOR_TYPES.PC;
+    if (showReminders && isPC) {
+      dialog.inputDefinitions.splice(1, 0, // Insert after the dice composition. 
+        new DynamicInputDefinition({
+          type: DYNAMIC_INPUT_TYPES.LABEL,
+          name: "forkReminderLabel",
+          localizedLabel: `<p>${game.i18n.localize("system.character.skill.forking.reminder.label")}</p>`,
+          showFancyFont: false,
+        }),
+      );
+    }
 
     await dialog.renderAndAwait(true);
     if (dialog.confirmed !== true) return undefined;

@@ -303,6 +303,7 @@ export default class BaseListItemViewModel extends ViewModel {
         viewModel: new ButtonContextMenuViewModel({
           id: "vmBtnContextMenu",
           parent: this,
+          isEditable: (this.isEditable || this.isGM),
           localizedToolTip: game.i18n.localize("system.general.contextMenu"),
           menuItems: this.getContextMenuButtons(),
         }),
@@ -336,21 +337,21 @@ export default class BaseListItemViewModel extends ViewModel {
       {
         name: game.i18n.localize("system.general.name.edit"),
         icon: '<i class="fas fa-edit"></i>',
-        condition: this.context === CONTEXT_TYPES.LIST_ITEM,
+        condition: (this.isEditable && this.context === CONTEXT_TYPES.LIST_ITEM),
         callback: this.queryEditName.bind(this),
       },
       // Import
       {
         name: game.i18n.localize("system.general.import"),
         icon: '<i class="fas fa-download"></i>',
-        condition: this.context === CONTEXT_TYPES.LIST_ITEM && this.isGM,
+        condition: (this.context === CONTEXT_TYPES.LIST_ITEM && this.isGM),
         callback: this.import.bind(this),
       },
       // Duplicate
       {
         name: game.i18n.localize("system.general.duplicate"),
         icon: '<i class="fas fa-clone"></i>',
-        condition: this.context === CONTEXT_TYPES.LIST_ITEM,
+        condition: (this.isEditable && this.context === CONTEXT_TYPES.LIST_ITEM),
         callback: this.duplicate.bind(this),
       },
     ];

@@ -84,6 +84,8 @@ export const TEMPLATES = {
   ACTOR_SHEET: `${basePathPresentation}/sheet/actor/actor-sheet.hbs`,
   ACTOR_PERSONALS: `${basePathPresentation}/sheet/actor/part/actor-personals.hbs`,
   ACTOR_PERSONALITY_TRAITS: `${basePathPresentation}/sheet/actor/part/personality/personality-traits/personality-traits.hbs`,
+  ACTOR_ABILITIES: `${basePathPresentation}/sheet/actor/part/abilities/actor-abilities.hbs`,
+  ACTOR_GENERAL_COMBAT_ABILITIES: `${basePathPresentation}/sheet/actor/part/abilities/actor-general-combat-abilities.hbs`,
   ACTOR_ATTRIBUTE_TABLE: `${basePathPresentation}/sheet/actor/part/abilities/actor-attribute-table.hbs`,
   ACTOR_ATTRIBUTES: `${basePathPresentation}/sheet/actor/part/abilities/actor-attributes.hbs`,
   ACTOR_SKILLS: `${basePathPresentation}/sheet/actor/part/abilities/actor-skills.hbs`,

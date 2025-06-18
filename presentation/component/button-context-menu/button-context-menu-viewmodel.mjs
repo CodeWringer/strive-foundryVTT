@@ -28,50 +28,57 @@ export default class ButtonContextMenuViewModel extends ButtonViewModel {
   /**
    * Returns two button definitions for a button to "toggle" a property value. 
    * 
-   * @param {Object} params
-   * @param {String} params.label The button's localizable label. 
-   * @param {Object} params.propertyOwner Parent object of the property. 
-   * @param {String} params.propertyName Name of the property. 
-   * @param {Any} params.activeValue Value to set on the property that is set when 
+   * @param {Object} args
+   * @param {String} args.label The button's localizable label. 
+   * @param {Object} args.propertyOwner Parent object of the property. 
+   * @param {String} args.propertyName Name of the property. 
+   * @param {Any} args.activeValue Value to set on the property that is set when 
    * the toggle is active. 
-   * @param {Any} params.inactiveValue Value to set on the property that is set when 
+   * @param {Any | undefined} args.inactiveValue Value to set on the property that is set when 
    * the toggle is inactive. 
    * * default `null`
-   * @param {String | undefined} params.activeIcon The icon to show alongside an active 
+   * @param {Boolean | undefined} args.isEditable If `true`, will show the toggle buttons. If `false`, 
+   * the buttons will not be shown. Intended to hide buttons in read-only mode of a sheet. 
+   * * default `true`
+   * @param {String | undefined} args.activeIcon The icon to show alongside an active 
    * value. If left `undefined`, will show a checkmark. 
-   * @param {String | undefined} params.inactiveIcon The icon to show alongside an inactive 
+   * @param {String | undefined} args.inactiveIcon The icon to show alongside an inactive 
    * value. If left `undefined`, will show no icon. 
    * 
    * @returns {Array<Object>} Two button definitions. One for each state of the toggle button. 
    */
-  static createToggleButtons(params = {}) {
-    const localizedLabel = game.i18n.localize(params.label);
+  static createToggleButtons(args = {}) {
+    const localizedLabel = game.i18n.localize(args.label);
     return [
       {
         name: localizedLabel,
-        icon: params.activeIcon ?? '<i class="fas fa-check"></i>',
+        icon: args.activeIcon ?? '<i class="fas fa-check"></i>',
         condition: () => {
-          const value = params.propertyOwner[params.propertyName];
+          if (!args.isEditable) return false;
+          
+          const value = args.propertyOwner[args.propertyName];
           if (typeof(value) === "boolean") {
             return value === true;
           } else {
             return ValidationUtil.isDefined(value) === true;
           }
         },
-        callback: () => { params.propertyOwner[params.propertyName] = params.inactiveValue; },
+        callback: () => { args.propertyOwner[args.propertyName] = args.inactiveValue; },
       },
       {
         name: localizedLabel,
-        icon: params.inactiveIcon ?? '',
+        icon: args.inactiveIcon ?? '',
         condition: () => {
-          const value = params.propertyOwner[params.propertyName];
+          if (!args.isEditable) return false;
+
+          const value = args.propertyOwner[args.propertyName];
           if (typeof(value) === "boolean") {
             return value === false;
           } else {
             return ValidationUtil.isDefined(value) === false;
           }
         },
-        callback: () => { params.propertyOwner[params.propertyName] = params.activeValue; },
+        callback: () => { args.propertyOwner[args.propertyName] = args.activeValue; },
       }
     ];
   }
@@ -115,7 +122,7 @@ export default class ButtonContextMenuViewModel extends ButtonViewModel {
    * * `event: Event`
    * * `data: undefined`
    * 
-   * @param {Array<Object> | undefined} menuItems An array of context menu items, 
+   * @param {Array<Object> | undefined} args.menuItems An array of context menu items, 
    * which are used to populate the context menu. The items can have the following properties: 
    * * `{String} name` - The displayed item name
    * * `{String} icon` An icon glyph HTML string
