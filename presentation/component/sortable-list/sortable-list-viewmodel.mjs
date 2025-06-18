@@ -270,7 +270,6 @@ export default class SortableListViewModel extends ViewModel {
     this.vmHeaderButton = new ButtonViewModel({
       id: "vmHeaderButton",
       parent: this,
-      localizedLabel: this.localizedTitle,
       onClick: async () => {
         this.isExpanded = !this.isExpanded;
       },

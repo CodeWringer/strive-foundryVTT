@@ -184,7 +184,6 @@ export default class BaseListItemViewModel extends ViewModel {
       this.vmHeaderButton = new ButtonViewModel({
         id: "vmHeaderButton",
         parent: this,
-        localizedLabel: this.title,
         onClick: () => {
           this.isExpanded = !this.isExpanded;
         },

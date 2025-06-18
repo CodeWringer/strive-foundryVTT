@@ -229,6 +229,7 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
       this.vmNsSuccesses = new InputNumberSpinnerViewModel({
         parent: this,
         id: "vmNsSuccesses",
+        localizedToolTip: game.i18n.localize("system.character.advancement.requirements.success.label"),
         value: this.document.advancementProgress.successes,
         onChange: (_, newValue) => {
           this.document.advancementProgress.successes = newValue;
@@ -239,6 +240,7 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
         parent: this,
         id: "vmNsFailures",
         value: this.document.advancementProgress.failures,
+        localizedToolTip: game.i18n.localize("system.character.advancement.requirements.failure.label"),
         onChange: (_, newValue) => {
           this.document.advancementProgress.failures = newValue;
         },
@@ -398,29 +400,18 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
   }
 
   /** @override */
-  getSecondaryHeaderButtons() {
-    return [
-      // Edit button
-      new TemplatedComponent({
-        template: ButtonViewModel.TEMPLATE,
-        viewModel: new ButtonViewModel({
-          id: "vmBtnEdit",
-          parent: this,
-          iconHtml: '<i class="fas fa-cog"></i>',
-          localizedToolTip: game.i18n.localize("system.general.edit"),
-          onClick: async () => {
-            const delta = await this._queryAttributesConfiguration();
-            if (ValidationUtil.isDefined(delta) !== true) return;
-            this.document.baseAttributes = delta;
-          },
-        }),
-      }),
-    ].concat(super.getSecondaryHeaderButtons());
-  }
-
-  /** @override */
   getContextMenuButtons() {
     return super.getContextMenuButtons().concat([
+      // Edit meta data
+      {
+        name: game.i18n.localize("system.character.skill.edit.metadata"),
+        icon: '<i class="fas fa-cog"></i>',
+        callback: async () => {
+          const delta = await this._queryAttributesConfiguration();
+            if (ValidationUtil.isDefined(delta) !== true) return;
+            this.document.baseAttributes = delta;
+        }
+      },
       // Add damage
       {
         name: StringUtil.format(

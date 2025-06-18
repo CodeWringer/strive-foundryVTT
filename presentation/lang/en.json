@@ -574,6 +574,9 @@
         }
       },
       "skill": {
+        "edit": {
+          "metadata": "Edit Metadata"
+        },
         "expertise": {
           "apCost": "AP Cost",
           "condition": {

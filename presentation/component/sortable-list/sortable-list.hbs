@@ -8,11 +8,12 @@ cssClass: String | undefined
   {{#if (eq viewModel.headerLevel 3)}}<h3 class="strive-header flex flex-row flex-middle{{#if viewModel.showFancyFont}} fancy-font{{/if}}">{{/if}}
   {{!-- Identity --}}
   {{#if viewModel.isCollapsible}}
-  {{#> button viewModel=viewModel.vmHeaderButton leftAlign=true cssClass="flex-grow pad-l-md font-size-lg font-bold" }}
+  {{#> button viewModel=viewModel.vmHeaderButton leftAlign=true cssClass="flex-grow" }}
+    <span class="flex-grow pad-l-sm font-size-lg font-bold{{#if viewModel.showFancyFont}} fancy-font{{/if}}">{{../viewModel.localizedTitle}}</span>
     {{!-- Expansion Toggle --}}
-    <div class="flex flex-center margin-l-md">
-      <i class="expanded ico ico-details-visible{{#if ../viewModel.vmHeaderButton.isEditable}} interactible{{/if}} dark{{#if ../viewModel.isExpanded}}{{else}} hidden{{/if}}"></i>
-      <i class="collapsed ico ico-details-hidden{{#if ../viewModel.vmHeaderButton.isEditable}} interactible{{/if}} dark{{#if ../viewModel.isExpanded}} hidden{{/if}}"></i>
+    <div class="flex flex-center">
+      <i class="expanded ico ico-chevron-d-solid{{#if ../viewModel.vmHeaderButton.isEditable}} interactible{{/if}} dark{{#if ../viewModel.isExpanded}}{{else}} hidden{{/if}}"></i>
+      <i class="collapsed ico ico-chevron-r-solid{{#if ../viewModel.vmHeaderButton.isEditable}} interactible{{/if}} dark{{#if ../viewModel.isExpanded}} hidden{{/if}}"></i>
     </div>
   {{/button}}
   {{else}}

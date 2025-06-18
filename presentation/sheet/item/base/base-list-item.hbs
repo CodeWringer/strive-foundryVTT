@@ -5,38 +5,43 @@ cssClass: {undefined | String}
 <div id="{{viewModel.id}}" class="custom-system-list-item{{#if cssClass}} {{cssClass}}{{/if}}">
   {{!-- Header Row --}}
   <div class="flex flex-row flex-middle list-item-header">
-    {{!-- Primary header buttons --}}
-    {{#each viewModel.primaryHeaderButtons as |button|}}
-      {{#with button.template as |template|}}
-        <div class="{{#if button.isHidden}}hidden{{/if}}">
-          {{> (template) viewModel=button.viewModel cssClass=button.cssClass }}
-        </div>
-      {{/with}}
-    {{/each}}
     {{!-- Identity --}}
     <div class="list-item-header-img">
       {{> inputImage viewModel=viewModel.vmImg cssClass="custom-icon-sm" }}
     </div>
     <div id="{{viewModel.id}}-name-area" class="flex-grow">
       {{#if viewModel.enableExpansion}}
-        {{#> button viewModel=viewModel.vmHeaderButton leftAlign=true cssClass="flex-grow pad-l-md font-size-lg font-bold" }}
-        <div class="flex flex-center margin-l-md">
-          <i id="{{../viewModel.id}}-expansion-indicator-up" class="ico ico-details-visible{{#if ../viewModel.isEditable}} interactible{{/if}} dark{{#if ../viewModel.isExpanded}}{{else}} hidden{{/if}}"></i>
-          <i id="{{../viewModel.id}}-expansion-indicator-down" class="ico ico-details-hidden{{#if ../viewModel.isEditable}} interactible{{/if}} dark{{#if ../viewModel.isExpanded}} hidden{{/if}}"></i>
-        </div>
+        {{#> button viewModel=viewModel.vmHeaderButton leftAlign=true cssClass="flex-grow" }}
+          <span class="flex-grow pad-l-sm font-size-lg font-bold{{#if viewModel.showFancyFont}} fancy-font{{/if}}">{{../viewModel.title}}</span>
+          <div class="flex flex-center">
+            <i id="{{../viewModel.id}}-expansion-indicator-up" class="ico ico-chevron-d-solid{{#if ../viewModel.isEditable}} interactible{{/if}} dark{{#if ../viewModel.isExpanded}}{{else}} hidden{{/if}}"></i>
+            <i id="{{../viewModel.id}}-expansion-indicator-down" class="ico ico-chevron-r-solid{{#if ../viewModel.isEditable}} interactible{{/if}} dark{{#if ../viewModel.isExpanded}} hidden{{/if}}"></i>
+          </div>
         {{/button}}
       {{else}}
-        <span class="flex-grow pad-l-md font-size-lg font-bold{{#if viewModel.showFancyFont}} fancy-font{{/if}}">{{viewModel.title}}</span>
+        <span class="flex-grow pad-l-sm font-size-lg font-bold{{#if viewModel.showFancyFont}} fancy-font{{/if}}">{{viewModel.title}}</span>
       {{/if}}
     </div>
+    {{!-- Primary header buttons --}}
+    <div class="flex flex-row border-solid-l-sm">
+      {{#each viewModel.primaryHeaderButtons as |button|}}
+        {{#with button.template as |template|}}
+          <div class="{{#if button.isHidden}}hidden{{/if}}">
+            {{> (template) viewModel=button.viewModel cssClass=button.cssClass }}
+          </div>
+        {{/with}}
+      {{/each}}
+    </div>
     {{!-- Secondary header buttons --}}
-    {{#each viewModel.secondaryHeaderButtons as |button|}}
-      {{#with button.template as |template|}}
-        <div class="{{#if button.isHidden}}hidden{{/if}}">
-          {{> (template) viewModel=button.viewModel cssClass=button.cssClass }}
-        </div>
-      {{/with}}
-    {{/each}}
+    <div class="flex flex-row border-solid-l-sm">
+      {{#each viewModel.secondaryHeaderButtons as |button|}}
+        {{#with button.template as |template|}}
+          <div class="{{#if button.isHidden}}hidden{{/if}}">
+            {{> (template) viewModel=button.viewModel cssClass=button.cssClass }}
+          </div>
+        {{/with}}
+      {{/each}}
+    </div>
   </div>
   {{!-- Additional header content --}}
   {{#if viewModel.additionalHeaderContent}}
