@@ -441,7 +441,9 @@
         "hp": {
           "label": "Hit-Points",
           "abbreviation": "HP",
-          "maximum": "Max. HP"
+          "maximum": "Max. HP",
+          "adjust": "Adjust HP",
+          "adjustInputLabel": "HP to add/subtract"
         },
         "illness": {
           "plural": "Illnesses",

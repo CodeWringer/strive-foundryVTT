@@ -312,7 +312,10 @@ export default class TransientBaseCharacterActor extends TransientBaseActor {
       get modifiedMaxHp() { return this.maxHP + this.maxHpModifier; },
 
       get HP() { return parseInt(thiz.document.system.health.HP ?? 0); },
-      set HP(value) { thiz.updateByPath("system.health.HP", value); },
+      set HP(value) {
+        const clampedHP = Math.max(0, Math.min(value, this.maxHP));
+        thiz.updateByPath("system.health.HP", clampedHP);
+      },
 
       // Exhaustion
       get maxExhaustion() { return new Ruleset().getCharacterMaximumExhaustion(thiz.document) },

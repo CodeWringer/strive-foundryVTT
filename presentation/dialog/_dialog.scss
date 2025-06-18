@@ -24,6 +24,24 @@
     }
   }
 
+  &.width-max {
+    &-sm {
+      max-width: 30rem;
+    }
+    &-md {
+      max-width: 40rem;
+    }
+    &-lg {
+      max-width: 50rem;
+    }
+    &-xl {
+      max-width: 60rem;
+    }
+    &-xxl {
+      max-width: 70rem;
+    }
+  }
+
   &.height-min {
     &-sm {
       min-height: 100px;
@@ -39,6 +57,24 @@
     }
     &-xxl {
       min-height: 400px;
+    }
+  }
+  
+  &.height-max {
+    &-sm {
+      max-height: 30rem;
+    }
+    &-md {
+      max-height: 40rem;
+    }
+    &-lg {
+      max-height: 50rem;
+    }
+    &-xl {
+      max-height: 60rem;
+    }
+    &-xxl {
+      max-height: 70rem;
     }
   }
 }
