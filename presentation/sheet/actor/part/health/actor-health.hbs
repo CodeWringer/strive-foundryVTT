@@ -24,8 +24,14 @@ cssClass: {undefined | String}
               {{> readOnlyValue viewModel=viewModel.vmModifiedMaxHp }}
             </span>
           </div>
-          {{!-- Current HP --}}
           <div class="flex flex-row flex-middle flex-right">
+            {{!-- Reminder --}}
+            {{#if viewModel.showReminders}}
+            <span class="button light square font-size-default flex flex-center" id="{{viewModel.vmHpInjuryReminder.id}}">
+              <i class="far fa-question-circle info-button"></i>
+            </span>
+            {{/if}}
+            {{!-- Current HP --}}
             {{#> labeledControl viewModel=viewModel.vmHp localizedIconToolTip=(localize "system.character.health.hp.label") iconClass="ico-heart-solid" cssClass="width-xl" }}
               {{> inputNumberSpinner }}
             {{/labeledControl}}

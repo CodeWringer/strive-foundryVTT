@@ -479,7 +479,8 @@
             "count": "Number of shrug-offs",
             "roll": "Roll for a shrug-off test",
             "chatMessage": "Rolls to shrug off an injury"
-          }
+          },
+          "reminder": "A loss of <code>10+</code> HP may result in an injury. A loss of <code>20+</code> HP may result in two injuries. A shrug-off test (the button below the 'Injuries' heading) will determine whether you actually suffer any injury. <br>On a successful shrug-off, increment the counter of shrug-offs (next to the button). The <b>Ob</b> of the next shrug-off test will be increased by that number."
         },
         "mutation": {
           "plural": "Mutations",
