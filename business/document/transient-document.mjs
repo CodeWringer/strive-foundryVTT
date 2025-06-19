@@ -6,6 +6,7 @@ import DocumentUpdater from "./document-updater/document-updater.mjs";
 import AtReferencer from "../referencing/at-referencer.mjs";
 import { ChatUtil } from '../../presentation/chat/chat-utility.mjs';
 import { PropertyUtil } from '../util/property-utility.mjs';
+import FoundryWrapper from '../../common/foundry-wrapper.mjs';
 
 /**
  * @summary
@@ -303,7 +304,7 @@ export default class TransientDocument {
   async getChatData() {
     const vm = this.getChatViewModel();
 
-    const renderedContent = await renderTemplate(this.chatMessageTemplate, {
+    const renderedContent = await new FoundryWrapper().renderTemplate(this.chatMessageTemplate, {
       viewModel: vm,
     });
 

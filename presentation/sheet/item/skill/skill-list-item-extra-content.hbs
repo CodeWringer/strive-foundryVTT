@@ -39,11 +39,4 @@ viewModel: {SkillListItemViewModel}
       {{/each}}
     </ul>
   </div>
-  {{!-- Row --}}
-  {{!-- Tags --}}
-  <div class="flex flex-row flex-middle auto-margin-h">
-    {{#> labeledControl viewModel=viewModel.vmTags localizedIconToolTip=(localize "system.general.tag.plural") iconClass="ico-tags-solid" cssClass="" }}
-      {{> inputTags }}
-    {{/labeledControl}}
-  </div>
 </section>

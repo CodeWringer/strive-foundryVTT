@@ -6,6 +6,7 @@ import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
  * @property {String} name Internal name. The value of the input will be referencable 
  * by this name. 
  * @property {String | undefined} localizedLabel Localized companion label. 
+ * @property {String | undefined} iconHtml E. g. `'<i class="fas fa-plus"></i>'`
  * @property {Object | undefined} specificArgs Arguments specific to the type 
  * of represented input control. 
  * @property {Boolean} required If true, the represented input must have a valid 
@@ -33,6 +34,7 @@ export default class DynamicInputDefinition {
    * by this name. 
    * @param {String | undefined} args.localizedLabel Localized companion label. 
    * * default `""`
+   * @param {String | undefined} args.iconHtml E. g. `'<i class="fas fa-plus"></i>'`
    * @param {Object | undefined} args.specificArgs Arguments specific to the type 
    * of represented input control. 
    * @param {Boolean | undefined} args.required If true, the represented input must have a valid 
@@ -62,6 +64,7 @@ export default class DynamicInputDefinition {
     this.type = args.type;
     this.name = args.name;
     this.localizedLabel = args.localizedLabel ?? "";
+    this.iconHtml = args.iconHtml;
     this.specificArgs = args.specificArgs ?? {};
     this.required = args.required ?? false;
     this.isEditable = args.isEditable ?? true;

@@ -9,10 +9,16 @@ viewModel: {Array<DynamicInputDialogViewModel>}
     <div id="{{control.viewModel.id}}">{{{control.definition.localizedLabel}}}</div>
     {{else}}
     {{!-- Label --}}
-    <div class="flex flex-row flex-grow">
+    <div class="flex flex-row flex-grow flex-middle">
       {{#> label showFancyFont=viewModel.showFancyFont cssClass="flex-grow"}}{{{control.definition.localizedLabel}}}{{/label}}
       {{#if control.definition.required}}
         <span class="font-size-md font-bold">*</span>
+      {{/if}}
+      {{!-- Icon --}}
+      {{#if control.definition.iconHtml}}
+      <span class="flex flex-center">
+        {{{control.definition.iconHtml}}}
+      </span>
       {{/if}}
     </div>
     {{!-- Input control --}}
@@ -43,6 +49,11 @@ viewModel: {Array<DynamicInputDialogViewModel>}
       {{/if}}
       {{#if (eq control.definition.type "TOGGLE")}}
         {{> inputToggle viewModel=control.viewModel}}
+      {{/if}}
+      {{#if (eq control.definition.type "CUSTOM")}}
+        {{#with control.template as | template |}}
+          {{> (template) viewModel=control.viewModel }}
+        {{/with}}
       {{/if}}
     </div>
     {{/if}}

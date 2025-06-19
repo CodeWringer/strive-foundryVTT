@@ -1,18 +1,14 @@
 import TransientSkill from "../../../../business/document/item/skill/transient-skill.mjs"
-import { ATTRIBUTES, Attribute } from "../../../../business/ruleset/attribute/attributes.mjs"
+import { ATTRIBUTES } from "../../../../business/ruleset/attribute/attributes.mjs"
 import { DAMAGE_TYPES } from "../../../../business/ruleset/damage-types.mjs"
 import { ATTACK_TYPES, getAttackTypeIconClass } from "../../../../business/ruleset/skill/attack-types.mjs"
 import DamageAndType from "../../../../business/ruleset/skill/damage-and-type.mjs"
-import { SKILL_TAGS } from "../../../../business/tags/system-tags.mjs"
 import ButtonContextMenuViewModel from "../../../component/button-context-menu/button-context-menu-viewmodel.mjs"
 import ButtonRollViewModel from "../../../component/button-roll/button-roll-viewmodel.mjs"
-import ButtonViewModel from "../../../component/button/button-viewmodel.mjs"
 import DamageDefinitionListViewModel from "../../../component/damage-definition-list/damage-definition-list-viewmodel.mjs"
 import InputDropDownViewModel from "../../../component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs"
 import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs"
-import InputTagsViewModel from "../../../component/input-tags/input-tags-viewmodel.mjs"
 import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs"
-import DynamicInputDialog from "../../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs"
 import BaseListItemViewModel from "../base/base-list-item-viewmodel.mjs"
 import { DataFieldComponent } from "../base/datafield-component.mjs"
 import { TemplatedComponent } from "../base/templated-component.mjs"
@@ -166,6 +162,49 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
   get hideDamage() { return this.document.damage.length === 0; }
 
   /**
+   * @private
+   * @readonly
+   * 
+   * @returns {String}
+   */
+  get _inputAttributes() { return "inputAttributes"; }
+
+  /** @override */
+  get metaDataInputDefinitions() {
+    const baseAttributes = this.document.baseAttributes.concat([]); // Safe copy
+
+    return super.metaDataInputDefinitions.concat([
+      new DynamicInputDefinition({
+        type: DYNAMIC_INPUT_TYPES.SIMPLE_LIST,
+        name: this._inputAttributes,
+        localizedLabel: game.i18n.localize("system.character.attribute.plural"),
+        required: true,
+        defaultValue: baseAttributes,
+        validationFunc: (value) => {
+          return value.length > 0;
+        },
+        specificArgs: {
+          contentItemTemplate: BaseAttributeListItemViewModel.TEMPLATE,
+          contentItemViewModelFactory: (index, attributes) => {
+            return new BaseAttributeListItemViewModel({
+              id: `vmAttribute${index}`,
+              isEditable: true,
+              attribute: attributes[index],
+              onChange: (newAttribute) => {
+                attributes[index] = newAttribute;
+              },
+            })
+          },
+          newItemDefaultValue: ATTRIBUTES.agility,
+          isItemAddable: this.isEditable,
+          isItemRemovable: this.isEditable,
+          localizedAddLabel: game.i18n.localize("system.general.add.add"),
+        },
+      }),
+    ]);
+  }
+
+  /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
    * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 
    * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 
@@ -184,16 +223,6 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
       title: args.document.nameForDisplay,
     });
     ValidationUtil.validateOrThrow(args, ["document"]);
-
-    this.vmTags = new InputTagsViewModel({
-      id: "vmTags",
-      parent: this,
-      systemTags: SKILL_TAGS.asArray(),
-      value: this.document.tags,
-      onChange: (_, newValue) => {
-        this.document.tags = newValue;
-      },
-    });
 
     const level = this.document.dependsOnActiveCr === true ? (this.document.owningDocument.challengeRating.modified) : this.document.level;
     this.vmNsLevel = new InputNumberSpinnerViewModel({
@@ -402,16 +431,6 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
   /** @override */
   getContextMenuButtons() {
     return super.getContextMenuButtons().concat([
-      // Edit meta data
-      {
-        name: game.i18n.localize("system.character.skill.edit.metadata"),
-        icon: '<i class="fas fa-cog"></i>',
-        callback: async () => {
-          const delta = await this._queryAttributesConfiguration();
-            if (ValidationUtil.isDefined(delta) !== true) return;
-            this.document.baseAttributes = delta;
-        }
-      },
       // Add damage
       {
         name: StringUtil.format(
@@ -508,58 +527,15 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
     });
   }
 
-  /**
-   * Prompts the user to configure the base attributes of the skill and 
-   * returns the updated list. 
-   * 
-   * @returns {Array<Attribute>}
-   * 
-   * @private
-   * @async
-   */
-  async _queryAttributesConfiguration() {
-    const inputAttributes = "attributes";
-    const baseAttributes = this.document.baseAttributes.concat([]); // Safe copy
+  /** @override */
+  async editMetaData() {
+    const dialog = await super.editMetaData();
+    
+    if (ValidationUtil.isDefined(dialog) !== true) return;
 
-    const dialog = await new DynamicInputDialog({
-      localizedTitle: StringUtil.format(
-        game.i18n.localize("system.general.input.queryFor"),
-        this.document.name,
-      ),
-      inputDefinitions: [
-        new DynamicInputDefinition({
-          type: DYNAMIC_INPUT_TYPES.SIMPLE_LIST,
-          name: inputAttributes,
-          localizedLabel: game.i18n.localize("system.character.attribute.plural"),
-          required: true,
-          defaultValue: baseAttributes,
-          validationFunc: (value) => {
-            return value.length > 0;
-          },
-          specificArgs: {
-            contentItemTemplate: BaseAttributeListItemViewModel.TEMPLATE,
-            contentItemViewModelFactory: (index, attributes) => {
-              return new BaseAttributeListItemViewModel({
-                id: `vmAttribute${index}`,
-                isEditable: true,
-                attribute: attributes[index],
-                onChange: (newAttribute) => {
-                  attributes[index] = newAttribute;
-                },
-              })
-            },
-            newItemDefaultValue: ATTRIBUTES.agility,
-            isItemAddable: this.isEditable,
-            isItemRemovable: this.isEditable,
-            localizedAddLabel: game.i18n.localize("system.general.add.add"),
-          },
-        }),
-      ],
-    }).renderAndAwait(true);
-
-    if (dialog.confirmed !== true) return;
-
-    return dialog[inputAttributes];
+    const deltaAttributes = dialog[this._inputAttributes];
+    if (ValidationUtil.isDefined(deltaAttributes) === true)
+      this.document.baseAttributes = deltaAttributes;
   }
 
   /** @override */

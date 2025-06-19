@@ -1,4 +1,6 @@
 import Tag from "../../../business/tags/tag.mjs";
+import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
+import FoundryWrapper from "../../../common/foundry-wrapper.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
 import InputTextFieldViewModel from "../input-textfield/input-textfield-viewmodel.mjs";
 import InputTagPillViewModel from "./input-tag-pill-viewmodel.mjs";
@@ -50,7 +52,7 @@ export default class InputTagsViewModel extends ViewModel {
   set value(newValue) {
     const oldValue = this._value;
     this._value = newValue;
-    this.onChange(oldValue, newValue);
+    this._onChange(oldValue, newValue);
   }
 
   /**
@@ -60,7 +62,37 @@ export default class InputTagsViewModel extends ViewModel {
   get templatePill() { return InputTagPillViewModel.TEMPLATE; }
 
   /**
-   * @param {Object} args
+   * @param {Object} args The arguments object. 
+   * @param {String | undefined} args.id Unique ID of this view model instance. 
+   * 
+   * If no value is provided, a shortened UUID will be generated for it. 
+   * 
+   * This string may not contain any special characters! Alphanumeric symbols, as well as hyphen ('-') and 
+   * underscore ('_') are permitted, but no dots, brackets, braces, slashes, equal sign, and so on. Failing to comply to this 
+   * naming restriction may result in DOM elements not being properly detected by the `activateListeners` method. 
+   * @param {ViewModel | undefined} args.parent Parent ViewModel instance of this instance. 
+   * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 
+   * is expected to be associated with an actor sheet or item sheet or journal entry or chat message and so on.
+   * @param {Boolean | undefined} args.isEditable If true, the view model data is editable.
+   * * Default `false`. 
+   * @param {Boolean | undefined} args.isSendable If true, the document represented by the sheet can be sent to chat.
+   * * Default `false`. 
+   * @param {Boolean | undefined} args.isOwner If true, the current user is the owner of the represented document.
+   * * Default `false`. 
+   * @param {String | undefined} args.contextTemplate Name or path of a contextual template, 
+   * which will be displayed in exception log entries, to aid debugging.
+   * @param {Map<String, Object>} args.viewStateSource The data source for view state objects. 
+   * * Default `game.strive.viewStates`. 
+   * @param {Object | undefined} args.document An associated data document. 
+   * @param {Boolean | undefined} args.showFancyFont If `true`, will render any text, where 
+   * appropriate, with the "fancy" font. 
+   * * Default is the globally configured setting. 
+   * @param {String | undefined} args.localizedToolTip A localized text to 
+   * display as a tool tip. 
+   * @param {String | undefined} args.toolTipStyle A style override to attach to the tool tip's DOM element. 
+   * E. g. `text-align: center`
+   * 
+   * 
    * @param {Array<Tag> | undefined} args.value 
    * @param {Array<Tag> | undefined} args.systemTags Optional. An array 
    * of tags to offer the user for auto-completion. 
@@ -111,11 +143,11 @@ export default class InputTagsViewModel extends ViewModel {
   }
 
   /**
-   * @param 
-   * 
    * @param {Object} args
    * @param {Array<Tag> | undefined} args.systemTags Optional. An array 
    * of tags to offer the user for auto-completion. 
+   * 
+   * @override
    */
   update(args = {}) {
     this.systemTags = args.systemTags ?? this.systemTags;
@@ -146,7 +178,7 @@ export default class InputTagsViewModel extends ViewModel {
           isEditable: args.isEditable,
           onDelete: (tag) => {
             this._deleteTag(tag);
-          }
+          },
         }); 
       }
     );
@@ -169,4 +201,52 @@ export default class InputTagsViewModel extends ViewModel {
       this.value = tags;
     }
   }
+
+  /**
+   * Internal onChange handler. 
+   * 
+   * Is invoked before external subscribers are invoked.
+   * 
+   * @param {Array<Tag>} oldValue 
+   * @param {Array<Tag>} newValue 
+   * 
+   * @private
+   */
+  async _onChange(oldValue, newValue) {
+    // Clear out all existing tags. 
+    this.tagViewModels.forEach(vm => {
+      $(vm.element).remove();
+      vm.dispose();
+    });
+    this.tagViewModels = [];
+
+    const elementsToClearOut = $(this.element).find('li > div.strive-pill');
+    elementsToClearOut.remove();
+
+    // Re-create all tags. 
+    this.value.forEach(tag => {
+      const vm = new InputTagPillViewModel({
+        id: tag.id,
+        parent: this,
+        tag: tag,
+        isEditable: this.isEditable,
+        onDelete: (tag) => {
+          this._deleteTag(tag);
+        },
+      });
+      this.tagViewModels.push(vm);
+    });
+
+    for (let i = this.tagViewModels.length - 1; i >= 0; i--) {
+      const vm = this.tagViewModels[i];
+      
+      const rendered = await new FoundryWrapper().renderTemplate(InputTagPillViewModel.TEMPLATE, {
+        viewModel: vm,
+      });
+      $(this.element).prepend(`<li>${rendered}</li>`);
+    }
+    
+    if (ValidationUtil.isDefined(this.onChange))
+      this.onChange(oldValue, newValue);
+  };
 }
