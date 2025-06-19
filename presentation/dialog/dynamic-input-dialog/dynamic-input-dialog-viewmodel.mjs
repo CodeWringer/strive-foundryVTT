@@ -49,6 +49,7 @@ export default class DynamicInputDialogViewModel extends ViewModel {
       this[definition.name] = definition.defaultValue;
 
       let viewModel;
+      let template;
       if (definition.type === DYNAMIC_INPUT_TYPES.DROP_DOWN) {
         viewModel = new InputDropDownViewModel({
           id: definition.name,
@@ -182,6 +183,21 @@ export default class DynamicInputDialogViewModel extends ViewModel {
             await definition.onChange(oldValue, newValue, this);
           },
         });
+      } else if (definition.type === DYNAMIC_INPUT_TYPES.CUSTOM) {
+        viewModel = definition.specificArgs.viewModelFactory(
+          definition.name, 
+          this,
+          definition.defaultValue,
+          definition.specificArgs.furtherArgs,
+        );
+        viewModel.isEditable = definition.isEditable ?? this.isEditable;
+        if (ValidationUtil.isDefined(viewModel.onChange)) {
+          viewModel.onChange = async (oldValue, newValue) => {
+            this[definition.name] = newValue;
+            await definition.onChange(oldValue, newValue, this);
+          };
+        }
+        template = definition.specificArgs.template;
       } else {
         throw new Error(`Invalid input type: "${definition.type}"`);
       }
@@ -207,6 +223,7 @@ export default class DynamicInputDialogViewModel extends ViewModel {
         definition: definition,
         viewModel: viewModel,
         validationFunc: validationFunc,
+        template: template,
       }));
     }
   }
@@ -305,6 +322,8 @@ class DynamicInputDialogControl {
    * * Receives the current value of the control as its input and must return a boolean 
    * value. `true` signalizes a successful validation without errors, while `false` 
    * indicates validation failed. 
+   * @param {String | undefined} args.template In case of a CUSTOM control, 
+   * this field **must** be set. 
    */
   constructor(args = {}) {
     ValidationUtil.validateOrThrow(args, ["definition", "viewModel"]);
@@ -312,5 +331,9 @@ class DynamicInputDialogControl {
     this.definition = args.definition;
     this.viewModel = args.viewModel;
     this.validationFunc = args.validationFunc;
+    this.template = args.template;
+
+    if (this.definition.type === DYNAMIC_INPUT_TYPES.CUSTOM)
+      ValidationUtil.validateOrThrow(args, ["template"]);
   }
 }

@@ -35,6 +35,16 @@
  * * * `isItemRemovable: {Boolean | undefined}` 
  * * * `localizedAddLabel: {String | undefined}` 
  * @property {String} TOGGLE Toggles a boolean value. 
+ * @property {String} CUSTOM
+ * * `specificArgs`: 
+ * * * `viewModelFactory: {Function}` - Must return a `ViewModel` instance. Receives the following arguments:
+ * * * * `id: String`
+ * * * * `parent: ViewModel`
+ * * * * `value: Any | undefined`
+ * * * * `furtherArgs: Object`
+ * * * `furtherArgs: {Object}` - Passed to the `viewModelFactory`, to allow further, custom args 
+ * to be processed. 
+ * * * `template: {String}` 
  * 
  * @constant
  */
@@ -49,4 +59,5 @@ export const DYNAMIC_INPUT_TYPES = {
   LABEL: "LABEL",
   SIMPLE_LIST: "SIMPLE_LIST",
   TOGGLE: "TOGGLE",
+  CUSTOM: "CUSTOM",
 }
