@@ -68,7 +68,10 @@
       },
       "description": "Description",
       "duplicate": "Duplicate",
-      "edit": "Edit",
+      "edit": {
+        "edit": "Edit",
+        "metadata": "Edit Metadata"
+      },
       "formula": "Formula",
       "id": "ID",
       "increment": "Increment",
@@ -622,9 +625,6 @@
         }
       },
       "skill": {
-        "edit": {
-          "metadata": "Edit Metadata"
-        },
         "expertise": {
           "apCost": "AP Cost",
           "condition": {

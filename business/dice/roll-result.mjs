@@ -10,6 +10,7 @@ import { ChatUtil } from "../../presentation/chat/chat-utility.mjs";
 import { ValidationUtil } from "../util/validation-utility.mjs";
 import { UuidUtil } from "../util/uuid-utility.mjs";
 import GameSystemUserSettings from "../setting/game-system-user-settings.mjs";
+import FoundryWrapper from "../../common/foundry-wrapper.mjs";
 
 /**
  * Represents the input data of a dice (pool) roll. 
@@ -161,7 +162,7 @@ export class RollResult {
 
     // Render the results. 
     const isObstacleRolled = this.results.resolvedObstacle.isPlainNumber === false;
-    const renderedContent = await renderTemplate(game.strive.const.TEMPLATES.DICE_ROLL_CHAT_MESSAGE, {
+    const renderedContent = await new FoundryWrapper().renderTemplate(game.strive.const.TEMPLATES.DICE_ROLL_CHAT_MESSAGE, {
       id: UuidUtil.createUUID(),
       primaryTitle: args.primaryTitle,
       primaryImage: args.primaryImage,

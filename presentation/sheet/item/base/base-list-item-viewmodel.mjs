@@ -1,5 +1,5 @@
-import { ITEM_TYPES } from "../../../../business/document/item/item-types.mjs";
 import TransientDocument from "../../../../business/document/transient-document.mjs";
+import { ASSET_TAGS, SKILL_TAGS } from "../../../../business/tags/system-tags.mjs";
 import { StringUtil } from "../../../../business/util/string-utility.mjs";
 import { ValidationUtil } from "../../../../business/util/validation-utility.mjs";
 import { ExtenderUtil } from "../../../../common/extender-util.mjs";
@@ -9,6 +9,7 @@ import ButtonSendToChatViewModel from "../../../component/button-send-to-chat/bu
 import ButtonViewModel from "../../../component/button/button-viewmodel.mjs";
 import InputImageViewModel from "../../../component/input-image/input-image-viewmodel.mjs";
 import InputRichTextViewModel from "../../../component/input-rich-text/input-rich-text-viewmodel.mjs";
+import InputTagsViewModel from "../../../component/input-tags/input-tags-viewmodel.mjs";
 import DynamicInputDefinition from "../../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
 import DynamicInputDialog from "../../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
 import { DYNAMIC_INPUT_TYPES } from "../../../dialog/dynamic-input-dialog/dynamic-input-types.mjs";
@@ -127,6 +128,60 @@ export default class BaseListItemViewModel extends ViewModel {
       || this.additionalContent !== undefined;
   }
 
+  /**
+   * For use in `metaDataInputDefinitions`. 
+   * 
+   * @private
+   * @readonly
+   * 
+   * @returns {String}
+   */
+  get _inputTags() { return "inputTags"; }
+
+  /**
+   * Returns the list of input definitions for use in the "Edit Metadata" dialog. 
+   * 
+   * Can be overriden by children classes to add their own definitions. E. g. 
+   * ```JS
+   * get metaDataInputDefinitions() {
+   *   return super.metaDataInputDefinitions.concat([
+   *     new DynamicInputDefinition({ ... }),
+   *   ]);
+   * }
+   * ```
+   * 
+   * @readonly
+   * @virtual
+   * 
+   * @returns {Array<DynamicInputDefinition>}
+   */
+  get metaDataInputDefinitions() {
+    return [
+      new DynamicInputDefinition({
+        type: DYNAMIC_INPUT_TYPES.CUSTOM,
+        name: this._inputTags,
+        localizedLabel: game.i18n.localize("system.general.tag.plural"),
+        iconHtml: '<i class="ico dark ico-tags-solid"></i>',
+        defaultValue: this.document.tags,
+        specificArgs: {
+          viewModelFactory: (id, parent, value, furtherArgs) => {
+            return new InputTagsViewModel({
+              id: id,
+              parent: parent,
+              value: value,
+              systemTags: furtherArgs.systemTags,
+            });
+          },
+          furtherArgs: {
+            systemTags: SKILL_TAGS.asArray()
+              .concat(ASSET_TAGS.asArray()),
+          },
+          template: InputTagsViewModel.TEMPLATE,
+        }
+      }),
+    ];
+  }
+  
   /**
    * @param {Object} args 
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
@@ -354,6 +409,12 @@ export default class BaseListItemViewModel extends ViewModel {
         condition: (this.isEditable && this.context === CONTEXT_TYPES.LIST_ITEM),
         callback: this.duplicate.bind(this),
       },
+      // Edit meta data
+      {
+        name: game.i18n.localize("system.general.edit.metadata"),
+        icon: '<i class="fas fa-cog"></i>',
+        callback: this.editMetaData.bind(this),
+      },
     ];
   }
   
@@ -480,6 +541,40 @@ export default class BaseListItemViewModel extends ViewModel {
     }
   }
   
+  /**
+   * Prompts the user to configure the meta data. 
+   * 
+   * @virtual
+   * @protected
+   * @async
+   * 
+   * @returns {DynamicInputDialog} The dialog instance. 
+   * Children of this class can use the dialog to check for input fields they added 
+   * in their own overriden `metaDataInputDefinitions` getter. E. g. 
+   * ```JS
+   * async editMetaData() {
+   *   const dialog = await super.editMetaData();
+   * 
+   *   const myValue = dialog["myInput"];
+   *   this.document.myProperty = myValue;
+   * }
+   * ```
+   */
+  async editMetaData() {
+    const dialog = await new DynamicInputDialog({
+      localizedTitle: StringUtil.format(
+        game.i18n.localize("system.general.input.queryFor"),
+        this.document.name,
+      ),
+      inputDefinitions: this.metaDataInputDefinitions,
+    }).renderAndAwait(true);
+
+    if (dialog.confirmed !== true) return null;
+
+    const deltaTags = dialog[this._inputTags];
+    this.document.tags = deltaTags;
+  }
+
   /** @override */
   getExtenders() {
     return super.getExtenders().concat(ExtenderUtil.getExtenders(BaseListItemViewModel));
