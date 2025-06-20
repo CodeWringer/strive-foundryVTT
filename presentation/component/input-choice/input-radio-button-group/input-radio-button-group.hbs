@@ -1,7 +1,6 @@
 {{!-- Required context:
 viewModel: {InputRadioButtonGroupViewModel}
 cssClass: {String | undefined}
-readOnlyCssClass: {String | undefined}
 --}}
 <div 
   type="hidden"
@@ -11,7 +10,7 @@ readOnlyCssClass: {String | undefined}
   value="{{viewModel.value.value}}"
 >
   {{#each viewModel.options as |option index|}}
-    <div class="radio-button-container flex flex-row flex-grow{{#if option.isActive}} active{{/if}}">
+    <div class="radio-button-container flex flex-row flex-grow{{#if option.isActive}} active{{/if}}{{#if option.cssClass}} {{option.cssClass}}{{/if}}">
       {{#if ../viewModel.isEditable}}
         <input 
           type="radio" 

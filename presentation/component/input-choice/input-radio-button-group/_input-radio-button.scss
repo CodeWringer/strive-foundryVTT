@@ -37,6 +37,10 @@
 
     i.ico {
       filter: drop-shadow(0 0 4px $c-button-highlight);
+
+      &.dark {
+        filter: brightness($brightness-dark) drop-shadow(0 0 4px $c-button-highlight);
+      }
     }
   }
 

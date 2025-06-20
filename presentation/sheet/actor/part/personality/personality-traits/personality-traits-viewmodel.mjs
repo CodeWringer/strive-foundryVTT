@@ -96,36 +96,38 @@ export default class PersonalityTraitsViewModel extends ViewModel {
         value: "-3",
         activeHtml: "X",
         inactiveHtml: "",
+        cssClass: "border-double-r-lg border-double-l-lg"
       }),
       new StatefulChoiceOption({
         value: "-2",
-        activeHtml: "X",
+        activeHtml: '<i class="ico dark ico-personality-two-solid"></i>',
         inactiveHtml: "",
       }),
       new StatefulChoiceOption({
         value: "-1",
-        activeHtml: "X",
+        activeHtml: '<i class="ico dark ico-personality-one-solid"></i>',
         inactiveHtml: "",
       }),
       new StatefulChoiceOption({
         value: "0",
-        activeHtml: "X",
+        activeHtml: "?",
         inactiveHtml: "",
       }),
       new StatefulChoiceOption({
         value: "1",
-        activeHtml: "X",
+        activeHtml: '<i class="ico dark ico-personality-one-solid"></i>',
         inactiveHtml: "",
       }),
       new StatefulChoiceOption({
         value: "2",
-        activeHtml: "X",
+        activeHtml: '<i class="ico dark ico-personality-two-solid"></i>',
         inactiveHtml: "",
       }),
       new StatefulChoiceOption({
         value: "3",
         activeHtml: "X",
         inactiveHtml: "",
+        cssClass: "border-double-r-lg border-double-l-lg"
       }),
     ];
   }

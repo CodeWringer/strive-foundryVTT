@@ -14,6 +14,7 @@ import ChoiceOption from "./choice-option.mjs";
  * * Read-only
  * @property {String | undefined} tooltip A tool tip to display on cursor hover over 
  * the choice. 
+ * @property {String | undefined} cssClass Additional css classes to apply to choices. 
  */
 export default class StatefulChoiceOption extends ChoiceOption {
   /**
@@ -28,6 +29,7 @@ export default class StatefulChoiceOption extends ChoiceOption {
    * the choice. 
    * @param {Boolean | undefined} args.isActive If `true`, this option is active. 
    * * default `false` 
+   * @param {String | undefined} args.cssClass Additional css classes to apply to choices. 
    */
   constructor(args = {}) {
     super(args);
@@ -38,5 +40,6 @@ export default class StatefulChoiceOption extends ChoiceOption {
     this.tooltip = args.tooltip;
     this.inactiveHtml = args.inactiveHtml ?? args.activeHtml;
     this.isActive = args.isActive ?? false;
+    this.cssClass = args.cssClass;
   }
 }
