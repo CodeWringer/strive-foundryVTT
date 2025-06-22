@@ -77,6 +77,16 @@ $border-size-xl: 4px;
   }
 }
 
+.border-solid-v {
+  @include border-template(top, solid, $c-border-medium);
+  @include border-template(bottom, solid, $c-border-medium);
+}
+
+.border-solid-h {
+  @include border-template(left, solid, $c-border-medium);
+  @include border-template(right, solid, $c-border-medium);
+}
+
 .border-solid-t {
   @include border-template(top);
 }
@@ -90,7 +100,33 @@ $border-size-xl: 4px;
 }
 
 .border-solid-l {
-  @include border-template(left);
+  @include border-template(left, solid, $c-border-medium);
+}
+
+.border-double-v {
+  @include border-template(top, double, $c-border-medium);
+  @include border-template(bottom, double, $c-border-medium);
+}
+
+.border-double-h {
+  @include border-template(left, double, $c-border-medium);
+  @include border-template(right, double, $c-border-medium);
+}
+
+.border-double-t {
+  @include border-template(top, double, $c-border-dark);
+}
+
+.border-double-b {
+  @include border-template(bottom, double, $c-border-dark);
+}
+
+.border-double-r {
+  @include border-template(right, double, $c-border-dark);
+}
+
+.border-double-l {
+  @include border-template(left, double, $c-border-dark);
 }
 
 .auto-border {

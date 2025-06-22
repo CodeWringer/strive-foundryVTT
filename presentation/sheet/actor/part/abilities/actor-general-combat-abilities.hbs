@@ -7,8 +7,8 @@ cssClass: {undefined | String}
     {{#> button viewModel=viewModel.vmHeaderButton leftAlign=true cssClass="flex-grow pad-l-md font-size-lg font-bold" }}
       <span class="flex-grow">{{localize "system.character.abilities.general.header"}}</span>
       <div class="flex flex-center margin-l-md">
-        <i id="{{../viewModel.id}}-expansion-indicator-up" class="ico ico-details-visible{{#if ../viewModel.isEditable}} interactible{{/if}} dark{{#if ../viewModel.isExpanded}}{{else}} hidden{{/if}}"></i>
-        <i id="{{../viewModel.id}}-expansion-indicator-down" class="ico ico-details-hidden{{#if ../viewModel.isEditable}} interactible{{/if}} dark{{#if ../viewModel.isExpanded}} hidden{{/if}}"></i>
+        <i id="{{../viewModel.id}}-expansion-indicator-up" class="ico ico-chevron-d-solid{{#if ../viewModel.isEditable}} interactible{{/if}} dark{{#if ../viewModel.isExpanded}}{{else}} hidden{{/if}}"></i>
+        <i id="{{../viewModel.id}}-expansion-indicator-down" class="ico ico-chevron-r-solid{{#if ../viewModel.isEditable}} interactible{{/if}} dark{{#if ../viewModel.isExpanded}} hidden{{/if}}"></i>
       </div>
     {{/button}}
   {{/header2}}
