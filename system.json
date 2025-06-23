@@ -2,7 +2,7 @@
   "id": "strive",
   "title": "STRIVE",
   "description": "The STRIVE system for FoundryVTT",
-  "version": "1.7.9",
+  "version": "1.7.10",
   "compatibility": {
     "minimum": 11,
     "maximum": 12,
@@ -10,7 +10,7 @@
   },
   "authors": [
 		{
-			"name": "Nicolas H.",
+			"name": "Nicolas 'Krubi' H.",
 			"url": "https://github.com/CodeWringer",
 			"discord": "Krubi#1695"
 		}
