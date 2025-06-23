@@ -11,6 +11,7 @@ import { ITEM_TYPES } from '../item-types.mjs';
 import { ChatUtil } from '../../../../presentation/chat/chat-utility.mjs';
 import { ValidationUtil } from '../../../util/validation-utility.mjs';
 import { UuidUtil } from '../../../util/uuid-utility.mjs';
+import FoundryWrapper from '../../../../common/foundry-wrapper.mjs';
 
 /**
  * Represents an expertise. 
@@ -252,7 +253,7 @@ export default class Expertise {
     const actor = ((this.owningDocument ?? {}).owningDocument ?? {}).document;
     const vm = this.getChatViewModel();
 
-    const renderedContent = await renderTemplate(this.chatMessageTemplate, {
+    const renderedContent = await new FoundryWrapper().renderTemplate(this.chatMessageTemplate, {
       viewModel: vm,
     });
 

@@ -1,5 +1,5 @@
-import { ITEM_TYPES } from "../../../../business/document/item/item-types.mjs";
 import TransientDocument from "../../../../business/document/transient-document.mjs";
+import { ASSET_TAGS, SKILL_TAGS } from "../../../../business/tags/system-tags.mjs";
 import { StringUtil } from "../../../../business/util/string-utility.mjs";
 import { ValidationUtil } from "../../../../business/util/validation-utility.mjs";
 import { ExtenderUtil } from "../../../../common/extender-util.mjs";
@@ -9,6 +9,7 @@ import ButtonSendToChatViewModel from "../../../component/button-send-to-chat/bu
 import ButtonViewModel from "../../../component/button/button-viewmodel.mjs";
 import InputImageViewModel from "../../../component/input-image/input-image-viewmodel.mjs";
 import InputRichTextViewModel from "../../../component/input-rich-text/input-rich-text-viewmodel.mjs";
+import InputTagsViewModel from "../../../component/input-tags/input-tags-viewmodel.mjs";
 import DynamicInputDefinition from "../../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
 import DynamicInputDialog from "../../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
 import { DYNAMIC_INPUT_TYPES } from "../../../dialog/dynamic-input-dialog/dynamic-input-types.mjs";
@@ -16,6 +17,23 @@ import ViewModel from "../../../view-model/view-model.mjs";
 import { CONTEXT_TYPES } from "../../context-types.mjs";
 import { DataFieldComponent } from "./datafield-component.mjs";
 import { TemplatedComponent } from "./templated-component.mjs";
+
+/**
+ * Used to determine the level of detail a list item is to be rendered with. 
+ * 
+ * Less detail means less visual clutter, but also fewer means of interaction. 
+ */
+export const LIST_ITEM_DETAIL_MODES = {
+  /**
+   * Will render only minimal detail (i. e. only the header) while collapsed, but will render 
+   * full detail when expanded. 
+   */
+  MINIMAL_COLLAPSED: "MINIMAL_COLLAPSED",
+  /**
+   * Will always render full detail. 
+   */
+  FULL: "FULL",
+}
 
 /**
  * Represents the abstract base class for all view models that represent 
@@ -100,6 +118,21 @@ export default class BaseListItemViewModel extends ViewModel {
       expansionUpIndicatorElement.addClass("hidden");
       expansionDownIndicatorElement.removeClass("hidden");
     }
+
+    if (this.detailMode === LIST_ITEM_DETAIL_MODES.MINIMAL_COLLAPSED) {
+      const primaryHeaderButtonsElement = this.element.find(`#${this.id}-primary-header-buttons`);
+      const secondaryHeaderButtonsElement = this.element.find(`#${this.id}-secondary-header-buttons`);
+      const descriptionElement = this.element.find(`#${this.id}-description`);
+      if (value === true) {
+        primaryHeaderButtonsElement.removeClass("hidden");
+        secondaryHeaderButtonsElement.removeClass("hidden");
+        descriptionElement.removeClass("hidden");
+      } else {
+        primaryHeaderButtonsElement.addClass("hidden");
+        secondaryHeaderButtonsElement.addClass("hidden");
+        descriptionElement.addClass("hidden");
+      }
+    }
   }
 
   /**
@@ -124,7 +157,62 @@ export default class BaseListItemViewModel extends ViewModel {
   get enableExpansion() {
     const dataFields = (this.dataFields ?? []);
     return (dataFields.length > 0 && dataFields.find(it => it.isHidden === false) !== undefined)
-      || this.additionalContent !== undefined;
+      || this.additionalContent !== undefined
+      || this.showGmNotes === true;
+  }
+
+  /**
+   * For use in `metaDataInputDefinitions`. 
+   * 
+   * @private
+   * @readonly
+   * 
+   * @returns {String}
+   */
+  get _inputTags() { return "inputTags"; }
+
+  /**
+   * Returns the list of input definitions for use in the "Edit Metadata" dialog. 
+   * 
+   * Can be overriden by children classes to add their own definitions. E. g. 
+   * ```JS
+   * get metaDataInputDefinitions() {
+   *   return super.metaDataInputDefinitions.concat([
+   *     new DynamicInputDefinition({ ... }),
+   *   ]);
+   * }
+   * ```
+   * 
+   * @readonly
+   * @virtual
+   * 
+   * @returns {Array<DynamicInputDefinition>}
+   */
+  get metaDataInputDefinitions() {
+    return [
+      new DynamicInputDefinition({
+        type: DYNAMIC_INPUT_TYPES.CUSTOM,
+        name: this._inputTags,
+        localizedLabel: game.i18n.localize("system.general.tag.plural"),
+        iconHtml: '<i class="ico dark ico-tags-solid"></i>',
+        defaultValue: this.document.tags,
+        specificArgs: {
+          viewModelFactory: (id, parent, value, furtherArgs) => {
+            return new InputTagsViewModel({
+              id: id,
+              parent: parent,
+              value: value,
+              systemTags: furtherArgs.systemTags,
+            });
+          },
+          furtherArgs: {
+            systemTags: SKILL_TAGS.asArray()
+              .concat(ASSET_TAGS.asArray()),
+          },
+          template: InputTagsViewModel.TEMPLATE,
+        }
+      }),
+    ];
   }
 
   /**
@@ -138,6 +226,8 @@ export default class BaseListItemViewModel extends ViewModel {
    * @param {Boolean | undefined} args.isOwner If `true`, the current user is the owner of the represented document. 
    * @param {Boolean | undefined} args.isExpanded If `true`, will initially render in expanded state. 
    * * default `false`
+   * @param {LIST_ITEM_DETAIL_MODES | undefined} args.detailMode 
+   * * default `LIST_ITEM_DETAIL_MODES.FULL`
    * 
    * @param {TransientDocument} args.document 
    * @param {String | undefined} args.title
@@ -152,6 +242,7 @@ export default class BaseListItemViewModel extends ViewModel {
     this.document = args.document;
     this.title = args.title ?? args.document.name;
     this._isExpanded = args.isExpanded ?? false;
+    this.detailMode = args.detailMode ?? LIST_ITEM_DETAIL_MODES.FULL;
 
     this.dataFields = this.getDataFields();
     this._ensureViewModelsAsProperties(this.dataFields);
@@ -184,7 +275,6 @@ export default class BaseListItemViewModel extends ViewModel {
       this.vmHeaderButton = new ButtonViewModel({
         id: "vmHeaderButton",
         parent: this,
-        localizedLabel: this.title,
         onClick: () => {
           this.isExpanded = !this.isExpanded;
         },
@@ -292,7 +382,7 @@ export default class BaseListItemViewModel extends ViewModel {
           id: "vmBtnToggleGmNotes",
           parent: this,
           localizedToolTip: game.i18n.localize("system.general.messageVisibility.gm.toggleSecrets"),
-          iconHtml: `<i class="fas fa-eye"></i>`,
+          iconHtml: this.showGmNotes ? `<i class="fas fa-eye"></i>` : `<i class="fas fa-eye-slash"></i>`,
           onClick: () => {
             thiz.showGmNotes = !thiz.showGmNotes;
           },
@@ -354,6 +444,12 @@ export default class BaseListItemViewModel extends ViewModel {
         icon: '<i class="fas fa-clone"></i>',
         condition: (this.isEditable && this.context === CONTEXT_TYPES.LIST_ITEM),
         callback: this.duplicate.bind(this),
+      },
+      // Edit meta data
+      {
+        name: game.i18n.localize("system.general.edit.metadata"),
+        icon: '<i class="fas fa-cog"></i>',
+        callback: this.editMetaData.bind(this),
       },
     ];
   }
@@ -481,6 +577,40 @@ export default class BaseListItemViewModel extends ViewModel {
     }
   }
   
+  /**
+   * Prompts the user to configure the meta data. 
+   * 
+   * @virtual
+   * @protected
+   * @async
+   * 
+   * @returns {DynamicInputDialog} The dialog instance. 
+   * Children of this class can use the dialog to check for input fields they added 
+   * in their own overriden `metaDataInputDefinitions` getter. E. g. 
+   * ```JS
+   * async editMetaData() {
+   *   const dialog = await super.editMetaData();
+   * 
+   *   const myValue = dialog["myInput"];
+   *   this.document.myProperty = myValue;
+   * }
+   * ```
+   */
+  async editMetaData() {
+    const dialog = await new DynamicInputDialog({
+      localizedTitle: StringUtil.format(
+        game.i18n.localize("system.general.input.queryFor"),
+        this.document.name,
+      ),
+      inputDefinitions: this.metaDataInputDefinitions,
+    }).renderAndAwait(true);
+
+    if (dialog.confirmed !== true) return null;
+
+    const deltaTags = dialog[this._inputTags];
+    this.document.tags = deltaTags;
+  }
+
   /** @override */
   getExtenders() {
     return super.getExtenders().concat(ExtenderUtil.getExtenders(BaseListItemViewModel));

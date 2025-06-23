@@ -6,13 +6,13 @@
 .radio-button-container {
   background: $c-bg-lighter;
 
-  > input {
+  input.radio-button {
     display: none;
   }
 
   > label {
     cursor: pointer;
-    padding: 4px;
+    padding: $padding-sm;
     border-right: 1px solid $c-border-input;
     color: $c-text-disabled;
     background: $c-bg-light;

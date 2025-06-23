@@ -40,6 +40,10 @@ export default class ButtonContextMenuViewModel extends ButtonViewModel {
    * @param {Boolean | undefined} args.isEditable If `true`, will show the toggle buttons. If `false`, 
    * the buttons will not be shown. Intended to hide buttons in read-only mode of a sheet. 
    * * default `true`
+   * @param {String | undefined} args.activeIcon The icon to show alongside an active 
+   * value. If left `undefined`, will show a checkmark. 
+   * @param {String | undefined} args.inactiveIcon The icon to show alongside an inactive 
+   * value. If left `undefined`, will show no icon. 
    * 
    * @returns {Array<Object>} Two button definitions. One for each state of the toggle button. 
    */
@@ -48,7 +52,7 @@ export default class ButtonContextMenuViewModel extends ButtonViewModel {
     return [
       {
         name: localizedLabel,
-        icon: '<i class="fas fa-check"></i>',
+        icon: args.activeIcon ?? '<i class="fas fa-check"></i>',
         condition: () => {
           if (!args.isEditable) return false;
           
@@ -63,7 +67,7 @@ export default class ButtonContextMenuViewModel extends ButtonViewModel {
       },
       {
         name: localizedLabel,
-        icon: '',
+        icon: args.inactiveIcon ?? '',
         condition: () => {
           if (!args.isEditable) return false;
 

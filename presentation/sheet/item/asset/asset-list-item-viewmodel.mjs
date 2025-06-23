@@ -1,19 +1,16 @@
 import TransientAsset from "../../../../business/document/item/transient-asset.mjs"
 import CharacterAssetSlot from "../../../../business/ruleset/asset/character-asset-slot.mjs"
-import { ASSET_TAGS } from "../../../../business/tags/system-tags.mjs"
 import { ValidationUtil } from "../../../../business/util/validation-utility.mjs"
 import { ExtenderUtil } from "../../../../common/extender-util.mjs"
 import ButtonViewModel from "../../../component/button/button-viewmodel.mjs"
 import ChoiceOption from "../../../component/input-choice/choice-option.mjs"
 import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs"
-import InputTagsViewModel from "../../../component/input-tags/input-tags-viewmodel.mjs"
 import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs"
 import DynamicInputDefinition from "../../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs"
 import DynamicInputDialog from "../../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs"
 import { DYNAMIC_INPUT_TYPES } from "../../../dialog/dynamic-input-dialog/dynamic-input-types.mjs"
 import ViewModel from "../../../view-model/view-model.mjs"
 import BaseListItemViewModel from "../base/base-list-item-viewmodel.mjs"
-import { DataFieldComponent } from "../base/datafield-component.mjs"
 import { TemplatedComponent } from "../base/templated-component.mjs"
 
 /**
@@ -97,27 +94,6 @@ export default class AssetListItemViewModel extends BaseListItemViewModel {
         this.document.location = newValue;
       },
     })
-  }
-
-  /** @override */
-  getDataFields() {
-    return [
-      new DataFieldComponent({
-        template: InputTagsViewModel.TEMPLATE,
-        viewModel: new InputTagsViewModel({
-          id: "vmTags",
-          parent: this,
-          systemTags: ASSET_TAGS.asArray(),
-          value: this.document.tags,
-          onChange: (_, newValue) => {
-            this.document.tags = newValue;
-          },
-        }),
-        localizedIconToolTip: game.i18n.localize("system.general.tag.plural"),
-        iconClass: "ico-tags-solid",
-        cssClass: "grid-span-2",
-      }),
-    ];
   }
 
   /** @override */

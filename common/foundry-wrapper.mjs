@@ -48,4 +48,17 @@ export default class FoundryWrapper {
         autoplay: true,
       });
   }
+
+  /**
+   * Renders and returns a template identified by the given path. 
+   * 
+   * @param {String} templatePath Full path to the template to render. 
+   * @param {Object | undefined} args Optional arguments to pass to the template while 
+   * it is being rendered. 
+   * 
+   * @returns {String} The rendered HTML. 
+   */
+  async renderTemplate(templatePath, args = {}) {
+    return await renderTemplate(templatePath, args);
+  }
 }

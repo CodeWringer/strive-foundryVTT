@@ -6,6 +6,7 @@ import CharacterAssetSlot from "../../ruleset/asset/character-asset-slot.mjs";
 import { ASSET_TAGS } from "../../tags/system-tags.mjs";
 import { ArrayUtil } from "../../util/array-utility.mjs";
 import { ExtenderUtil } from "../../../common/extender-util.mjs";
+import FoundryWrapper from "../../../common/foundry-wrapper.mjs";
 
 /**
  * Represents the full transient data of an asset. 
@@ -157,7 +158,7 @@ export default class TransientAsset extends TransientBaseItem {
   async getChatData() {
     const vm = this.getChatViewModel();
 
-    const renderedContent = await renderTemplate(this.chatMessageTemplate, {
+    const renderedContent = await new FoundryWrapper().renderTemplate(this.chatMessageTemplate, {
       viewModel: vm,
     });
 

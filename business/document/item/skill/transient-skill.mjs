@@ -15,6 +15,7 @@ import { ACTOR_TYPES } from "../../actor/actor-types.mjs";
 import { ExtenderUtil } from "../../../../common/extender-util.mjs";
 import { ValidationUtil } from "../../../util/validation-utility.mjs";
 import { UuidUtil } from "../../../util/uuid-utility.mjs";
+import FoundryWrapper from "../../../../common/foundry-wrapper.mjs";
 
 /**
  * Represents the full transient data of a skill. 
@@ -333,7 +334,7 @@ export default class TransientSkill extends TransientBaseItem {
   async getChatData() {
     const vm = this.getChatViewModel();
 
-    const renderedContent = await renderTemplate(this.chatMessageTemplate, {
+    const renderedContent = await new FoundryWrapper().renderTemplate(this.chatMessageTemplate, {
       viewModel: vm,
     });
 

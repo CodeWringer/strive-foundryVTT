@@ -85,7 +85,7 @@ export class GameSystemActorSheet extends ActorSheet {
   static get defaultOptions() {
     return new FoundryWrapper().mergeObject(super.defaultOptions, {
       classes: [SYSTEM_ID, "sheet", "actor"],
-      width: 700,
+      width: 650,
       height: 800,
       tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "attributes" }]
     });
