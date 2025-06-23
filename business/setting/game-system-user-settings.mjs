@@ -27,6 +27,13 @@ export default class GameSystemUserSettings extends GameSystemSettings {
    */
   static get KEY_TOGGLE_REMINDERS() { return "userToggleReminders"; }
 
+  /**
+   * @static
+   * @type {String}
+   * @readonly
+   */
+  static get KEY_TOGGLE_UNUSABLE_EXPERTISE_VISIBILITY() { return "userToggleUnusableExpertiseVisibility"; }
+
   constructor() {
     super();
 
@@ -53,6 +60,15 @@ export default class GameSystemUserSettings extends GameSystemSettings {
         key: GameSystemUserSettings.KEY_TOGGLE_REMINDERS,
         name: game.i18n.localize("system.settings.toggleReminders.label"),
         hint: game.i18n.localize("system.settings.toggleReminders.hint"),
+        scope: SettingScopes.USER,
+        config: true,
+        default: true,
+        type: Boolean,
+      }),
+      new GameSystemSetting({
+        key: GameSystemUserSettings.KEY_TOGGLE_UNUSABLE_EXPERTISE_VISIBILITY,
+        name: game.i18n.localize("system.settings.toggleExpertiseVisibility.label"),
+        hint: game.i18n.localize("system.settings.toggleExpertiseVisibility.hint"),
         scope: SettingScopes.USER,
         config: true,
         default: true,

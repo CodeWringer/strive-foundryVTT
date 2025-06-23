@@ -638,7 +638,8 @@
           "newDefaultName": "New Expertise",
           "requirement": "Required Skill Level",
           "singular": "Expertise",
-          "plural": "Expertises"
+          "plural": "Expertises",
+          "lockedExplanation": "The Expertises that follow are currently \"locked\". That means they cannot be used, until the level of the skill they belong to is raised."
         },
         "forking": {
           "reminder": {
@@ -862,6 +863,10 @@
       "toggleReminders": {
         "label": "Reminder Hints",
         "hint": "Toggles the display of rule reminders. For example, when toggled off, will no longer show the general combat actions on the character sheet and won't show the reminder to fork skills on the roll dialog."
+      },
+      "toggleExpertiseVisibility": {
+        "label": "Unusable Expertise Visibility",
+        "hint": "Toggles the visibility of Expertises that are unusable (due to their owning skill's level being too low for the Expertise's requirement)."
       }
     }
   }

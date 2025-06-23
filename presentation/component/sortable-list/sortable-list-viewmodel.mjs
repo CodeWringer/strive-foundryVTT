@@ -7,6 +7,7 @@ import DocumentCreationStrategy from "../button-add/document-creation-strategy.m
 import ButtonToggleVisibilityViewModel from "../button-toggle-visibility/button-toggle-visibility-viewmodel.mjs";
 import ButtonViewModel from "../button/button-viewmodel.mjs";
 import SortControlsViewModel from "../sort-controls/sort-controls-viewmodel.mjs";
+import ListFooterViewModel from "./list-footer-viewmodel.mjs";
 
 /**
  * This object groups the view models of one list item, to pass through to the UI. 
@@ -158,7 +159,7 @@ export default class SortableListViewModel extends ViewModel {
    * @type {Boolean}
    * @readonly
    */
-  get hasAddButton() { return ValidationUtil.isDefined(this.vmAddItem1) && ValidationUtil.isDefined(this.vmAddItem2); }
+  get hasAddButton() { return ValidationUtil.isDefined(this.vmAddItem); }
 
   /**
    * Returns `true`, if sorting controls are defined. 
@@ -202,19 +203,19 @@ export default class SortableListViewModel extends ViewModel {
 
     this._isExpanded = value;
     
-    const elements = document.querySelectorAll(`[${ButtonToggleVisibilityViewModel.ATTRIBUTE_VIS_GROUP}='${this._visGroupId}']`);
+    const elements = document.querySelectorAll(`[${ButtonToggleVisibilityViewModel.ATTRIBUTE_VIS_GROUP}='${this.visGroupId}']`);
     
     // Synchronize visibilities. 
-    this.vmToggleExpansion2.value = value;
+    this.vmFooter.vmToggleExpansion.value = value;
     if (value === true) { // Expanded
-      this.vmToggleExpansion2.element.parent().removeClass("hidden");
+      this.vmFooter.vmToggleExpansion.element.parent().removeClass("hidden");
       this.vmHeaderButton.element.find(".expanded").removeClass("hidden");
       this.vmHeaderButton.element.find(".collapsed").addClass("hidden");
       for (const element of elements) {
         element.classList.remove("hidden");
       }
     } else { // Collapsed
-      this.vmToggleExpansion2.element.parent().addClass("hidden");
+      this.vmFooter.vmToggleExpansion.element.parent().addClass("hidden");
       this.vmHeaderButton.element.find(".expanded").addClass("hidden");
       this.vmHeaderButton.element.find(".collapsed").removeClass("hidden");
       for (const element of elements) {
@@ -225,6 +226,12 @@ export default class SortableListViewModel extends ViewModel {
     // Immediately write view state. 
     this.writeViewState();
   }
+
+  /**
+   * @returns {Boolean}
+   * @readonly
+   */
+  get showFooter() { return (this.hasAddButton || this.isCollapsible); }
 
   /**
    * @param {Object} args 
@@ -263,7 +270,7 @@ export default class SortableListViewModel extends ViewModel {
     this._isCollapsible = args.isCollapsible ?? false;
     this._isExpanded = args.isCollapsible ? (args.isExpanded ?? true) : true;
     this._addItemParams = args.addItemParams;
-    this._visGroupId = UuidUtil.createUUID();
+    this.visGroupId = UuidUtil.createUUID();
 
     this.registerViewStateProperty("_isExpanded");
 
@@ -275,35 +282,12 @@ export default class SortableListViewModel extends ViewModel {
       },
       isEditable: true, // Even those without editing right should be able to see nested content. 
     });
-    this.vmToggleExpansion2 = new ButtonToggleVisibilityViewModel({
-      parent: this,
-      id: "vmToggleExpansion2",
-      isEditable: true,
-      value: this.isExpanded,
-      iconInactive: '<i class="fas fa-angle-double-down"></i>',
-      iconActive: '<i class="fas fa-angle-double-up"></i>',
-      visGroup: this._visGroupId,
-      onClick: async (event, data) => {
-        this.isExpanded = !this.isExpanded;
-      },
-    });
     if (ValidationUtil.isDefined(args.addItemParams)) {
-      this.vmAddItem1 = new ButtonAddViewModel({
-        id: "vmAddItem1",
+      this.vmAddItem = new ButtonAddViewModel({
+        id: "vmAddItem",
         parent: this,
         creationStrategy: args.addItemParams.creationStrategy,
         localizedToolTip: args.addItemParams.localizedToolTip,
-        onClick: (event, data) => {
-          if (ValidationUtil.isDefined(args.addItemParams.onItemAdded)) {
-            args.addItemParams.onItemAdded(event, data);
-          }
-        },
-      });
-      this.vmAddItem2 = new ButtonAddViewModel({
-        id: "vmAddItem2",
-        parent: this,
-        creationStrategy: args.addItemParams.creationStrategy,
-        localizedLabel: args.addItemParams.localizedLabel,
         onClick: (event, data) => {
           if (ValidationUtil.isDefined(args.addItemParams.onItemAdded)) {
             args.addItemParams.onItemAdded(event, data);
@@ -325,6 +309,22 @@ export default class SortableListViewModel extends ViewModel {
           }
         },
       });
+    }
+    if (this.hasAddButton || this.isCollapsible) {
+      this.vmFooter = new ListFooterViewModel({
+        id: "vmFooter",
+        parent: this,
+        visGroupId: this.visGroupId,
+        isEditable: this.isEditable,
+        isCollapsible: this.isCollapsible,
+        isExpanded: this.isExpanded,
+        addItemParams: args.addItemParams,
+        onExpansionToggled: (event, data) => {
+          if (ValidationUtil.isDefined(args.addItemParams.onItemAdded)) {
+            args.addItemParams.onItemAdded(event, data);
+          }
+        },
+      })
     }
     
     // Prepare given list. 

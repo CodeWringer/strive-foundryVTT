@@ -19,6 +19,23 @@ import { DataFieldComponent } from "./datafield-component.mjs";
 import { TemplatedComponent } from "./templated-component.mjs";
 
 /**
+ * Used to determine the level of detail a list item is to be rendered with. 
+ * 
+ * Less detail means less visual clutter, but also fewer means of interaction. 
+ */
+export const LIST_ITEM_DETAIL_MODES = {
+  /**
+   * Will render only minimal detail (i. e. only the header) while collapsed, but will render 
+   * full detail when expanded. 
+   */
+  MINIMAL_COLLAPSED: "MINIMAL_COLLAPSED",
+  /**
+   * Will always render full detail. 
+   */
+  FULL: "FULL",
+}
+
+/**
  * Represents the abstract base class for all view models that represent 
  * a list item. 
  * 
@@ -101,6 +118,21 @@ export default class BaseListItemViewModel extends ViewModel {
       expansionUpIndicatorElement.addClass("hidden");
       expansionDownIndicatorElement.removeClass("hidden");
     }
+
+    if (this.detailMode === LIST_ITEM_DETAIL_MODES.MINIMAL_COLLAPSED) {
+      const primaryHeaderButtonsElement = this.element.find(`#${this.id}-primary-header-buttons`);
+      const secondaryHeaderButtonsElement = this.element.find(`#${this.id}-secondary-header-buttons`);
+      const descriptionElement = this.element.find(`#${this.id}-description`);
+      if (value === true) {
+        primaryHeaderButtonsElement.removeClass("hidden");
+        secondaryHeaderButtonsElement.removeClass("hidden");
+        descriptionElement.removeClass("hidden");
+      } else {
+        primaryHeaderButtonsElement.addClass("hidden");
+        secondaryHeaderButtonsElement.addClass("hidden");
+        descriptionElement.addClass("hidden");
+      }
+    }
   }
 
   /**
@@ -182,7 +214,7 @@ export default class BaseListItemViewModel extends ViewModel {
       }),
     ];
   }
-  
+
   /**
    * @param {Object} args 
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
@@ -194,6 +226,8 @@ export default class BaseListItemViewModel extends ViewModel {
    * @param {Boolean | undefined} args.isOwner If `true`, the current user is the owner of the represented document. 
    * @param {Boolean | undefined} args.isExpanded If `true`, will initially render in expanded state. 
    * * default `false`
+   * @param {LIST_ITEM_DETAIL_MODES | undefined} args.detailMode 
+   * * default `LIST_ITEM_DETAIL_MODES.FULL`
    * 
    * @param {TransientDocument} args.document 
    * @param {String | undefined} args.title
@@ -208,6 +242,7 @@ export default class BaseListItemViewModel extends ViewModel {
     this.document = args.document;
     this.title = args.title ?? args.document.name;
     this._isExpanded = args.isExpanded ?? false;
+    this.detailMode = args.detailMode ?? LIST_ITEM_DETAIL_MODES.FULL;
 
     this.dataFields = this.getDataFields();
     this._ensureViewModelsAsProperties(this.dataFields);

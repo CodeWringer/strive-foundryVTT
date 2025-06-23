@@ -39,21 +39,21 @@ $border-size-xl: 4px;
   }
 }
 
-@mixin border-template($direction) {
+@mixin border-template($direction, $style, $color) {
   &-sm {
-    border-#{$direction}: $border-size-sm solid $c-border-medium !important;
+    border-#{$direction}: $border-size-sm $style $color !important;
     @include directional-border-colorations($direction);
   }
   &-md {
-    border-#{$direction}: $border-size-md solid $c-border-medium !important;
+    border-#{$direction}: $border-size-md $style $color !important;
     @include directional-border-colorations($direction);
   }
   &-lg {
-    border-#{$direction}: $border-size-lg solid $c-border-medium !important;
+    border-#{$direction}: $border-size-lg $style $color !important;
     @include directional-border-colorations($direction);
   }
   &-xl {
-    border-#{$direction}: $border-size-xl solid $c-border-medium !important;
+    border-#{$direction}: $border-size-xl $style $color !important;
     @include directional-border-colorations($direction);
   }
 }
@@ -88,15 +88,15 @@ $border-size-xl: 4px;
 }
 
 .border-solid-t {
-  @include border-template(top);
+  @include border-template(top, solid, $c-border-medium);
 }
 
 .border-solid-b {
-  @include border-template(bottom);
+  @include border-template(bottom, solid, $c-border-medium);
 }
 
 .border-solid-r {
-  @include border-template(right);
+  @include border-template(right, solid, $c-border-medium);
 }
 
 .border-solid-l {

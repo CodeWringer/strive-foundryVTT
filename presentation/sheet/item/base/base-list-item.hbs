@@ -23,7 +23,7 @@ cssClass: {undefined | String}
       {{/if}}
     </div>
     {{!-- Primary header buttons --}}
-    <div class="flex flex-row border-solid-l-sm">
+    <div id="{{viewModel.id}}-primary-header-buttons" class="flex flex-row border-solid-l-sm{{#if (eq viewModel.detailMode "MINIMAL_COLLAPSED")}} hidden{{/if}}">
       {{#each viewModel.primaryHeaderButtons as |button|}}
         {{#with button.template as |template|}}
           <div class="{{#if button.isHidden}}hidden{{/if}}">
@@ -33,7 +33,7 @@ cssClass: {undefined | String}
       {{/each}}
     </div>
     {{!-- Secondary header buttons --}}
-    <div class="flex flex-row border-solid-l-sm">
+    <div id="{{viewModel.id}}-secondary-header-buttons" class="flex flex-row border-solid-l-sm{{#if (eq viewModel.detailMode "MINIMAL_COLLAPSED")}} hidden{{/if}}">
       {{#each viewModel.secondaryHeaderButtons as |button|}}
         {{#with button.template as |template|}}
           <div class="{{#if button.isHidden}}hidden{{/if}}">
@@ -52,7 +52,7 @@ cssClass: {undefined | String}
     </div>
   {{/if}}
   {{!-- Description --}}
-  <div class="flex flex-row border-solid-t-sm border-solid-b-sm">
+  <div id="{{viewModel.id}}-description" class="flex flex-row border-solid-t-sm border-solid-b-sm{{#if (eq viewModel.detailMode "MINIMAL_COLLAPSED")}} hidden{{/if}}">
     {{> inputRichText viewModel=viewModel.vmRtDescription cssClass="fill" }}
   </div>
   {{!-- Expandable Content --}}
