@@ -638,7 +638,8 @@
           "newDefaultName": "New Expertise",
           "requirement": "Required Skill Level",
           "singular": "Expertise",
-          "plural": "Expertises"
+          "plural": "Expertises",
+          "lockedExplanation": "The Expertises that follow are currently \"locked\". That means they cannot be used, until the level of the skill they belong to is raised."
         },
         "forking": {
           "reminder": {
