@@ -1,6 +1,7 @@
 import Expertise from "../../../../business/document/item/skill/expertise.mjs"
 import { DAMAGE_TYPES } from "../../../../business/ruleset/damage-types.mjs"
 import { ATTACK_TYPES } from "../../../../business/ruleset/skill/attack-types.mjs"
+import GameSystemUserSettings from "../../../../business/setting/game-system-user-settings.mjs"
 import { StringUtil } from "../../../../business/util/string-utility.mjs"
 import { UuidUtil } from "../../../../business/util/uuid-utility.mjs"
 import { ValidationUtil } from "../../../../business/util/validation-utility.mjs"
@@ -197,9 +198,14 @@ export default class ExpertiseTableViewModel extends ViewModel {
     const sortedUnlockedExpertises = unlockedExpertises.sort(expertiseSortFunc);
     this.unlockedExpertises = this._getExpertiseViewModels(sortedUnlockedExpertises, true);
 
-    const lockedExpertises = this.document.expertises.filter(it => parseInt(it.requiredLevel) > level)
-    const sortedLockedExpertises = lockedExpertises.sort(expertiseSortFunc);
-    this.lockedExpertises = this._getExpertiseViewModels(sortedLockedExpertises, false);
+    const showLockedExpertises = new GameSystemUserSettings().get(GameSystemUserSettings.KEY_TOGGLE_UNUSABLE_EXPERTISE_VISIBILITY);
+    if (showLockedExpertises === true) {
+      const lockedExpertises = this.document.expertises.filter(it => parseInt(it.requiredLevel) > level)
+      const sortedLockedExpertises = lockedExpertises.sort(expertiseSortFunc);
+      this.lockedExpertises = this._getExpertiseViewModels(sortedLockedExpertises, false);
+    } else {
+      this.lockedExpertises = [];
+    }
   }
 
   /**
