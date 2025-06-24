@@ -1,0 +1,52 @@
+{{!-- Parameters:
+viewModel: {BaseListItemViewModel}
+cssClass: {undefined | String}
+--}}
+{{!-- Header Row --}}
+<div class="flex flex-row flex-middle list-item-header">
+  {{!-- Identity --}}
+  <div class="list-item-header-img">
+    {{> inputImage viewModel=viewModel.vmImg cssClass="custom-icon-sm" }}
+  </div>
+  <div id="{{viewModel.id}}-name-area" class="flex-grow">
+    {{#if viewModel.enableExpansion}}
+      {{#> button viewModel=viewModel.vmHeaderButton leftAlign=true cssClass="flex-grow" }}
+        <span class="flex-grow pad-l-sm font-size-lg font-bold{{#if viewModel.showFancyFont}} fancy-font{{/if}}">{{../viewModel.title}}</span>
+        <div class="flex flex-center">
+          <i id="{{../viewModel.id}}-expansion-indicator-up" class="ico ico-chevron-d-solid{{#if ../viewModel.isEditable}} interactible{{/if}} dark{{#if ../viewModel.isExpanded}}{{else}} hidden{{/if}}"></i>
+          <i id="{{../viewModel.id}}-expansion-indicator-down" class="ico ico-chevron-r-solid{{#if ../viewModel.isEditable}} interactible{{/if}} dark{{#if ../viewModel.isExpanded}} hidden{{/if}}"></i>
+        </div>
+      {{/button}}
+    {{else}}
+      <span class="flex-grow pad-l-sm font-size-lg font-bold{{#if viewModel.showFancyFont}} fancy-font{{/if}}">{{viewModel.title}}</span>
+    {{/if}}
+  </div>
+  {{!-- Additional header content --}}
+  {{#if viewModel.additionalHeaderContent}}
+    <div class="{{#if viewModel.additionalHeaderContent.isHidden}}hidden{{/if}}">
+    {{#with viewModel.additionalHeaderContent.template as |template|}}
+      {{> (template) viewModel=../viewModel.additionalHeaderContent.viewModel cssClass=../viewModel.additionalHeaderContent.cssClass }}
+    {{/with}}
+    </div>
+  {{/if}}
+  {{!-- Primary header buttons --}}
+  <div id="{{viewModel.id}}-primary-header-buttons" class="flex flex-row border-solid-l-sm{{#if (eq viewModel.detailMode "MINIMAL_COLLAPSED")}} hidden{{/if}}">
+    {{#each viewModel.primaryHeaderButtons as |button|}}
+      {{#with button.template as |template|}}
+        <div class="{{#if button.isHidden}}hidden{{/if}}">
+          {{> (template) viewModel=button.viewModel cssClass=button.cssClass }}
+        </div>
+      {{/with}}
+    {{/each}}
+  </div>
+  {{!-- Secondary header buttons --}}
+  <div id="{{viewModel.id}}-secondary-header-buttons" class="flex flex-row border-solid-l-sm{{#if (eq viewModel.detailMode "MINIMAL_COLLAPSED")}} hidden{{/if}}">
+    {{#each viewModel.secondaryHeaderButtons as |button|}}
+      {{#with button.template as |template|}}
+        <div class="{{#if button.isHidden}}hidden{{/if}}">
+          {{> (template) viewModel=button.viewModel cssClass=button.cssClass }}
+        </div>
+      {{/with}}
+    {{/each}}
+  </div>
+</div>

@@ -515,13 +515,13 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
           activeValue: "",
           isEditable: this.isEditable,
         })
-      )
+      );
   }
 
   /** @override */
-  getAdditionalHeaderContent() {
+  getPromotedContentTemplate() {
     return new TemplatedComponent({
-      template: game.strive.const.TEMPLATES.SKILL_LIST_ITEM_EXTRA_HEADER,
+      template: game.strive.const.TEMPLATES.SKILL_LIST_ITEM_PROMOTED_CONTENT,
       viewModel: this,
     });
   }

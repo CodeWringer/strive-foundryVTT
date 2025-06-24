@@ -332,9 +332,9 @@ export default class ExpertiseListItemViewModel extends BaseListItemViewModel {
   }
 
   /** @override */
-  getAdditionalHeaderContent() {
+  getPromotedContentTemplate() {
     return new TemplatedComponent({
-      template: game.strive.const.TEMPLATES.EXPERTISE_LIST_ITEM_EXTRA_HEADER,
+      template: game.strive.const.TEMPLATES.EXPERTISE_LIST_ITEM_PROMOTED_CONTENT,
       viewModel: this,
     });
   }
