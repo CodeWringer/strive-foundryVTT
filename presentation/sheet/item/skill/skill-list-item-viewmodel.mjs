@@ -172,8 +172,8 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
   /** @override */
   get metaDataInputDefinitions() {
     const baseAttributes = this.document.baseAttributes.concat([]); // Safe copy
-
-    return super.metaDataInputDefinitions.concat([
+    const metaData = super.metaDataInputDefinitions;
+    metaData.splice(0, 0, 
       new DynamicInputDefinition({
         type: DYNAMIC_INPUT_TYPES.SIMPLE_LIST,
         name: this._inputAttributes,
@@ -201,7 +201,8 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
           localizedAddLabel: game.i18n.localize("system.general.add.add"),
         },
       }),
-    ]);
+    );
+    return metaData;
   }
 
   /**
