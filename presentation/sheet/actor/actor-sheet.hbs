@@ -2,28 +2,43 @@
 viewModel: {ActorSheetViewModel}
 cssClass: {undefined | String}
 --}}
-<form id="{{viewModel.id}}" class="{{viewModel.document.type}} flexcol{{#if cssClass}} {{cssClass}}{{/if}}" autocomplete="off">
+<form id="{{viewModel.id}}" class="{{viewModel.document.type}} flex flex-column{{#if cssClass}} {{cssClass}}{{/if}}" autocomplete="off">
   {{!-- Sheet Header --}}
-  <header class="sheet-header">
-    {{> inputImage viewModel=viewModel.vmImg cssClass="profile-img" }}
-    <div class="header-fields">
-      <div class="flex flex-row">
-        <h1 class="header-name flex-grow{{#if viewModel.showFancyFont}} fancy-font{{/if}}">
-          {{> inputTextField viewModel=viewModel.vmTfName }}
-        </h1>
-        {{!-- Configure --}}
-        {{#if (or viewModel.isNPC viewModel.isPC)}}
-          {{> button viewModel=viewModel.vmBtnConfigure cssClass="font-size-lg" }}
-        {{/if}}
-        {{!-- SendToChat --}}
-        <div class="flex flex-center font-size-lg{{#if viewModel.isSendable}}{{else}} hidden{{/if}}">
-          {{> buttonSendToChat viewModel=viewModel.vmBtnSendToChat }}
+  <header class="margin-b-md">
+    <div class="flex flex-row flex-middle auto-margin-h">
+      {{> inputImage viewModel=viewModel.vmImg cssClass="profile-img" }}
+      <div class="flex flex-column flex-grow auto-margin-v">
+        {{!-- Name Row --}}
+        <div class="flex flex-row">
+          {{> inputTextField viewModel=viewModel.vmTfName cssClass="profile-name" }}
+          {{!-- Configure --}}
+          {{#if (or viewModel.isNPC viewModel.isPC)}}
+            {{> button viewModel=viewModel.vmBtnConfigure cssClass="font-size-lg" }}
+          {{/if}}
+          {{!-- SendToChat --}}
+          <div class="flex flex-center font-size-lg{{#if viewModel.isSendable}}{{else}} hidden{{/if}}">
+            {{> buttonSendToChat viewModel=viewModel.vmBtnSendToChat }}
+          </div>
         </div>
+        {{!-- Personals --}}
+        {{#if (eq viewModel.isPlain false)}}
+        {{#with viewModel.templatePersonals as | template |}}
+          {{> (template) viewModel=../viewModel.personalsViewModel }}
+        {{/with}}
+        {{/if}}
       </div>
+      {{!-- Action Points --}}
       {{#if (eq viewModel.isPlain false)}}
-      {{#with viewModel.templatePersonals as | template |}}
-        {{> (template) viewModel=../viewModel.personalsViewModel }}
-      {{/with}}
+      <div id="{{viewModel.vmActionPoints.id}}" class="flex flex-column flex-wrap flex-gap-sm pad-md sheet-block" style="max-height: 9.5rem;">
+        {{#each viewModel.actionPoints as |actionPoint|}}
+        <div style="width: 21px; height: 21px;">
+        <{{#if ../viewModel.isEditable}}a{{else}}div{{/if}} id="{{actionPoint.id}}" class="combatant-action-point">
+          <img class="combatant-action-point-image unstyled" src="{{#if actionPoint.full}}systems/strive/presentation/image/action-point-full.png{{else}}systems/strive/presentation/image/action-point-empty.png{{/if}}" />
+          <div class="combatant-action-point-label{{#if actionPoint.full}} active{{/if}}">{{actionPoint.value}}</div>
+        </{{#if ../viewModel.isEditable}}a{{else}}div{{/if}}>
+        </div>
+        {{/each}}
+      </div>
       {{/if}}
     </div>
   </header>

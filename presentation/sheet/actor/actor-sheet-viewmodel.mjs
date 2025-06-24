@@ -129,6 +129,21 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
       },
     });
     if (this.isNPC || this.isPC) {
+      this.vmActionPoints = new ViewModel({
+        id: "vmActionPoints",
+        parent: this,
+        localizedToolTip: game.i18n.localize("system.actionPoint.plural"),
+      });
+      this.actionPoints = [];
+      const currentAp = this.document.actionPoints.current;
+      for (let i = 0; i < (this.document.actionPoints.maximum + 1); i++) {
+        this.actionPoints.push({
+          id: `${this.vmActionPoints.id}-ap-${i}`,
+          full: (i > 0) && (i <= currentAp),
+          value: i,
+        });
+      }
+
       this.vmBtnConfigure = new ButtonViewModel({
         id: "vmBtnConfigure",
         parent: this,
@@ -328,6 +343,19 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
       const tab = $(e.currentTarget).data("tab");
       thiz._renderLazyTab(tab);
     });
+
+    if (this.isPlain !== true) {
+      this.actionPoints.forEach(ap => {
+        const element = this.vmActionPoints.element.find(`#${ap.id}`);
+        element.click(async (event) => {
+          event.preventDefault(); // Prevents side-effects from event-bubbling. 
+
+          if (this.isEditable === true) {
+            this.document.actionPoints.current = ap.value;
+          }
+        });
+      });
+    }
 
     await this._renderActiveTab(html);
   }
