@@ -154,104 +154,10 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
         iconHtml: '<i class="fas fa-cog"></i>',
         localizedToolTip: game.i18n.localize("system.character.edit"),
         onClick: async () => {
-          const inputMaxActionPoints = "inputMaxActionPoints";
-          const inputRefillActionPoints = "inputRefillActionPoints";
-          const inputAllowRefillActionPoints = "inputAllowRefillActionPoints";
-          const inputInitiatives = "inputInitiatives";
-          const inputEnablePersonality = "inputEnablePersonality";
-          const inputEnableProgression = "inputEnableProgression";
-          const inputEnableGritPoints = "inputEnableGritPoints";
-
-          const inputDefinitions = [
-            new DynamicInputDefinition({
-              type: DYNAMIC_INPUT_TYPES.NUMBER_SPINNER,
-              name: inputMaxActionPoints,
-              localizedLabel: game.i18n.localize("system.actionPoint.max"),
-              specificArgs: {
-                min: 0,
-              },
-              defaultValue: this.document.actionPoints.maximum,
-            }),
-            new DynamicInputDefinition({
-              type: DYNAMIC_INPUT_TYPES.NUMBER_SPINNER,
-              name: inputRefillActionPoints,
-              localizedLabel: game.i18n.localize("system.actionPoint.refill"),
-              specificArgs: {
-                min: 0,
-              },
-              defaultValue: this.document.actionPoints.refill.amount,
-            }),
-            new DynamicInputDefinition({
-              type: DYNAMIC_INPUT_TYPES.TOGGLE,
-              name: inputAllowRefillActionPoints,
-              localizedLabel: game.i18n.localize("system.actionPoint.allowRefill"),
-              defaultValue: this.document.actionPoints.refill.enable,
-            }),
-            new DynamicInputDefinition({
-              type: DYNAMIC_INPUT_TYPES.NUMBER_SPINNER,
-              name: inputInitiatives,
-              localizedLabel: game.i18n.localize("system.character.attribute.initiative.numberPerRound"),
-              specificArgs: {
-                min: 1,
-              },
-              defaultValue: this.document.initiative.perTurn,
-            }),
-          ];
-
-          if (this.isNPC) {
-            inputDefinitions.push(
-              new DynamicInputDefinition({
-                type: DYNAMIC_INPUT_TYPES.TOGGLE,
-                name: inputEnablePersonality,
-                localizedLabel: game.i18n.localize("system.character.sheet.tab.personality"),
-                defaultValue: this.document.personalityVisible,
-              })
-            );
-            inputDefinitions.push(
-              new DynamicInputDefinition({
-                type: DYNAMIC_INPUT_TYPES.TOGGLE,
-                name: inputEnableProgression,
-                localizedLabel: game.i18n.localize("system.character.advancement.label"),
-                defaultValue: this.document.progressionVisible,
-              })
-            );
-            inputDefinitions.push(
-              new DynamicInputDefinition({
-                type: DYNAMIC_INPUT_TYPES.TOGGLE,
-                name: inputEnableGritPoints,
-                localizedLabel: game.i18n.localize("system.character.gritPoint.toggleLabel"),
-                defaultValue: this.document.gritPoints.enable,
-              })
-            );
-          }
-          const dialog = await new DynamicInputDialog({
-            localizedTitle: game.i18n.localize("system.character.edit"),
-            inputDefinitions: inputDefinitions,
-          }).renderAndAwait(true);
-  
-          if (dialog.confirmed !== true) return;
-  
-          this.document.actionPoints.maximum = parseInt(dialog[inputMaxActionPoints]);
-          this.document.actionPoints.refill.amount = parseInt(dialog[inputRefillActionPoints]);
-          this.document.actionPoints.refill.enable = dialog[inputAllowRefillActionPoints] == true;
-
-          this.document.initiative.perTurn = Math.max(1, parseInt(dialog[inputInitiatives]));
-
-          if (this.isNPC) {
-            this.document.personalityVisible = dialog[inputEnablePersonality] == true;
-            this.document.progressionVisible = dialog[inputEnableProgression] == true;
-            this.document.gritPoints.enable = dialog[inputEnableGritPoints] == true;
-          }
+          await this.promptConfigure();
         },
       });
     }
-    this.vmBtnSendToChat = new ButtonSendToChatViewModel({
-      parent: this,
-      id: "vmBtnSendToChat",
-      isEditable: true,
-      target: this.document,
-      isEditable: this.isEditable || this.isGM,
-    });
 
     if (this.isPlain !== true) {
       this.personalsViewModel = new ActorPersonalsViewModel({ 
@@ -424,7 +330,103 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
       await this.gmNotesViewModel.render();
     }
   }
-  
+
+  /**
+   * Opens the dialog to configure the meta data of the character. 
+   * 
+   * @async
+   */
+  async promptConfigure() {
+    const inputMaxActionPoints = "inputMaxActionPoints";
+    const inputRefillActionPoints = "inputRefillActionPoints";
+    const inputAllowRefillActionPoints = "inputAllowRefillActionPoints";
+    const inputInitiatives = "inputInitiatives";
+    const inputEnablePersonality = "inputEnablePersonality";
+    const inputEnableProgression = "inputEnableProgression";
+    const inputEnableGritPoints = "inputEnableGritPoints";
+
+    const inputDefinitions = [
+      new DynamicInputDefinition({
+        type: DYNAMIC_INPUT_TYPES.NUMBER_SPINNER,
+        name: inputMaxActionPoints,
+        localizedLabel: game.i18n.localize("system.actionPoint.max"),
+        specificArgs: {
+          min: 0,
+        },
+        defaultValue: this.document.actionPoints.maximum,
+      }),
+      new DynamicInputDefinition({
+        type: DYNAMIC_INPUT_TYPES.NUMBER_SPINNER,
+        name: inputRefillActionPoints,
+        localizedLabel: game.i18n.localize("system.actionPoint.refill"),
+        specificArgs: {
+          min: 0,
+        },
+        defaultValue: this.document.actionPoints.refill.amount,
+      }),
+      new DynamicInputDefinition({
+        type: DYNAMIC_INPUT_TYPES.TOGGLE,
+        name: inputAllowRefillActionPoints,
+        localizedLabel: game.i18n.localize("system.actionPoint.allowRefill"),
+        defaultValue: this.document.actionPoints.refill.enable,
+      }),
+      new DynamicInputDefinition({
+        type: DYNAMIC_INPUT_TYPES.NUMBER_SPINNER,
+        name: inputInitiatives,
+        localizedLabel: game.i18n.localize("system.character.attribute.initiative.numberPerRound"),
+        specificArgs: {
+          min: 1,
+        },
+        defaultValue: this.document.initiative.perTurn,
+      }),
+    ];
+
+    if (this.isNPC) {
+      inputDefinitions.push(
+        new DynamicInputDefinition({
+          type: DYNAMIC_INPUT_TYPES.TOGGLE,
+          name: inputEnablePersonality,
+          localizedLabel: game.i18n.localize("system.character.sheet.tab.personality"),
+          defaultValue: this.document.personalityVisible,
+        })
+      );
+      inputDefinitions.push(
+        new DynamicInputDefinition({
+          type: DYNAMIC_INPUT_TYPES.TOGGLE,
+          name: inputEnableProgression,
+          localizedLabel: game.i18n.localize("system.character.advancement.label"),
+          defaultValue: this.document.progressionVisible,
+        })
+      );
+      inputDefinitions.push(
+        new DynamicInputDefinition({
+          type: DYNAMIC_INPUT_TYPES.TOGGLE,
+          name: inputEnableGritPoints,
+          localizedLabel: game.i18n.localize("system.character.gritPoint.toggleLabel"),
+          defaultValue: this.document.gritPoints.enable,
+        })
+      );
+    }
+    const dialog = await new DynamicInputDialog({
+      localizedTitle: game.i18n.localize("system.character.edit"),
+      inputDefinitions: inputDefinitions,
+    }).renderAndAwait(true);
+
+    if (dialog.confirmed !== true) return;
+
+    this.document.actionPoints.maximum = parseInt(dialog[inputMaxActionPoints]);
+    this.document.actionPoints.refill.amount = parseInt(dialog[inputRefillActionPoints]);
+    this.document.actionPoints.refill.enable = dialog[inputAllowRefillActionPoints] == true;
+
+    this.document.initiative.perTurn = Math.max(1, parseInt(dialog[inputInitiatives]));
+
+    if (this.isNPC) {
+      this.document.personalityVisible = dialog[inputEnablePersonality] == true;
+      this.document.progressionVisible = dialog[inputEnableProgression] == true;
+      this.document.gritPoints.enable = dialog[inputEnableGritPoints] == true;
+    }
+  }
+
   /** @override */
   getExtenders() {
     return super.getExtenders().concat(ExtenderUtil.getExtenders(ActorSheetViewModel));

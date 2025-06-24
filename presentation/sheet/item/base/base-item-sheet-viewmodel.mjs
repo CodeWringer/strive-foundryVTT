@@ -178,19 +178,7 @@ export default class BaseItemSheetViewModel extends BaseSheetViewModel {
    * @protected
    */
   getSecondaryHeaderButtons() {
-    return [
-      // Send to chat button
-      new TemplatedComponent({
-        template: ButtonSendToChatViewModel.TEMPLATE,
-        viewModel: new ButtonSendToChatViewModel({
-          id: "vmBtnSendToChat",
-          parent: this,
-          isEditable: true,
-          target: this.document,
-          localizedToolTip: game.i18n.localize("system.general.sendToChat"),
-        }),
-      }),
-    ]; 
+    return []; 
   }
   
   /**
