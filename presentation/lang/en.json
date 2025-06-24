@@ -155,7 +155,7 @@
     "character": {
       "edit": "Configure Character",
       "advancement": {
-        "advanced": "Advanced",
+        "advanced": "Advanced?<br>Whenever an attribute or skill advances (= its level increases), its advancement progress must be reset to `0` and it must be marked as \"advanced\" this session. Once it has advanced, no more progress can be noted for it, for at least the remainder of the session and at most an in-game week.",
         "label": "Advancement",
         "level": "Level",
         "rawLevel": "Raw Level",

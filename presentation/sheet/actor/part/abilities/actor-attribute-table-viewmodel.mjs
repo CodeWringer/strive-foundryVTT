@@ -155,6 +155,7 @@ export default class AttributeTableViewModel extends ViewModel {
           parent: this,
           id: `vmAdvanced-${attribute.name}`,
           value: attribute.advanced,
+          localizedToolTip: game.i18n.localize("system.character.advancement.advanced"),
           onChange: (_, newValue) => {
             attribute.advanced = newValue;
           },
