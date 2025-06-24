@@ -28,22 +28,26 @@ viewModel: {SkillListItemViewModel}
   {{#if viewModel.showAdvancementProgression}}
   {{!-- Advancement Requirements --}}
   <div class="flex flex-row flex-middle auto-margin-h sheet-block">
-    <div class="flex flex-row">
-      <i class="ico ico-dumbbell-curved-solid margin-r-sm dark" title="{{localize "system.character.advancement.requirements.successAndFailure.label"}}"></i>
-      {{> readOnlyValue viewModel=viewModel.vmAdvancementRequirements cssClass="width-min-md" }}
-    </div>
     {{!-- Successes --}}
-    {{#> labeledControl viewModel=viewModel.vmNsSuccesses localizedLabel=(localize "system.character.advancement.requirements.success.abbreviation") }}
-      <div class="width-md">
-        {{> inputNumberSpinner }}
-      </div>
-    {{/labeledControl}}
+    <div class="flex flex-gap-sm flex-middle flex-row">
+      {{#> labeledControl viewModel=viewModel.vmNsSuccesses localizedLabel=(localize "system.character.advancement.requirements.success.abbreviation") }}
+        <div class="width-sm">
+          {{> inputNumberSpinner }}
+        </div>
+      {{/labeledControl}}
+      <span class="font-size-lg">/</span>
+      {{> readOnlyValue viewModel=viewModel.vmAdvancementRequirementSuccesses cssClass="width-min-sm" }}
+    </div>
     {{!-- Failures --}}
-    {{#> labeledControl viewModel=viewModel.vmNsFailures localizedLabel=(localize "system.character.advancement.requirements.failure.abbreviation") }}
-      <div class="width-md">
-        {{> inputNumberSpinner }}
-      </div>
-    {{/labeledControl}}
+    <div class="flex flex-gap-sm flex-middle flex-row">
+      {{#> labeledControl viewModel=viewModel.vmNsFailures localizedLabel=(localize "system.character.advancement.requirements.failure.abbreviation") }}
+        <div class="width-sm">
+          {{> inputNumberSpinner }}
+        </div>
+      {{/labeledControl}}
+      <span class="font-size-lg">/</span>
+      {{> readOnlyValue viewModel=viewModel.vmAdvancementRequirementFailures cssClass="width-min-sm" }}
+    </div>
     {{!-- Advanced --}}
     {{#> labeledControl viewModel=viewModel.vmAdvanced }}
       <div class="width-sm">

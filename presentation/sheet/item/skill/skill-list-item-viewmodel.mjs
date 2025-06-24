@@ -250,12 +250,6 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
       value: this.modifiedLevel,
     });
     if (this.showAdvancementProgression) {
-      this.vmAdvancementRequirements = new ReadOnlyValueViewModel({
-        id: "vmAdvancementRequirements",
-        parent: this,
-        value: `${this.advancementRequirements.successes} / ${this.advancementRequirements.failures}`,
-        localizedToolTip: new RulesetExplainer().getExplanationForSkillAdvancementRequirements(this.document),
-      });
       this.vmNsSuccesses = new InputNumberSpinnerViewModel({
         parent: this,
         id: "vmNsSuccesses",
@@ -266,6 +260,12 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
         },
         min: 0,
       });
+      this.vmAdvancementRequirementSuccesses = new ReadOnlyValueViewModel({
+        id: "vmAdvancementRequirements",
+        parent: this,
+        value: this.advancementRequirements.successes,
+        localizedToolTip: new RulesetExplainer().getExplanationForSkillAdvancementRequirements(this.document),
+      });
       this.vmNsFailures = new InputNumberSpinnerViewModel({
         parent: this,
         id: "vmNsFailures",
@@ -275,6 +275,12 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
           this.document.advancementProgress.failures = newValue;
         },
         min: 0,
+      });
+      this.vmAdvancementRequirementFailures = new ReadOnlyValueViewModel({
+        id: "vmAdvancementRequirementFailures",
+        parent: this,
+        value: this.advancementRequirements.failures,
+        localizedToolTip: new RulesetExplainer().getExplanationForSkillAdvancementRequirements(this.document),
       });
       this.vmAdvanced = new ButtonCheckBoxViewModel({
         parent: this,
