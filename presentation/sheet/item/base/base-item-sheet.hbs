@@ -3,48 +3,45 @@ viewModel: {BaseItemSheetViewModel}
 cssClass: {undefined | String}
 --}}
 <form id="{{viewModel.id}}" class="{{cssClass}}" autocomplete="off">
-  <header class="sheet-header">
-    <div class="flex flex-column flex-grow">
-      <div class="flex flex-row flex-middle">
-        {{!-- Primary header buttons --}}
-        {{#each viewModel.primaryHeaderButtons as |button|}}
-          {{#with button.template as |template|}}
-            <div class="{{#if button.isHidden}}hidden{{/if}}">
-              {{> (template) viewModel=button.viewModel cssClass=button.cssClass }}
-            </div>
-          {{/with}}
-        {{/each}}
-        {{!-- Identity --}}
-        {{> inputImage viewModel=viewModel.vmImg cssClass="custom-icon-md" }}
-        <h1 class="header-name">
-          {{> inputTextField viewModel=viewModel.vmTfName }}
-        </h1>
-        {{!-- Secondary header buttons --}}
-        {{#each viewModel.secondaryHeaderButtons as |button|}}
-          {{#with button.template as |template|}}
-            <div class="{{#if button.isHidden}}hidden{{/if}}">
-              {{> (template) viewModel=button.viewModel cssClass=button.cssClass }}
-            </div>
-          {{/with}}
-        {{/each}}
+  <header class="system-sheet-header pad-b-md">
+    <div class="flex flex-row flex-middle auto-margin-h">
+      {{!-- Primary header buttons --}}
+      {{#each viewModel.primaryHeaderButtons as |button|}}
+      {{#with button.template as |template|}}
+      <div class="{{#if button.isHidden}}hidden{{/if}}">
+        {{> (template) viewModel=button.viewModel cssClass=button.cssClass }}
       </div>
+      {{/with}}
+      {{/each}}
+      {{!-- Identity --}}
+      {{> inputImage viewModel=viewModel.vmImg cssClass="custom-icon-md" }}
+      {{> inputTextField viewModel=viewModel.vmTfName cssClass="document-title" }}
+      {{!-- Secondary header buttons --}}
+      {{#each viewModel.secondaryHeaderButtons as |button|}}
+      {{#with button.template as |template|}}
+      <div class="{{#if button.isHidden}}hidden{{/if}}">
+        {{> (template) viewModel=button.viewModel cssClass=button.cssClass }}
+      </div>
+      {{/with}}
+      {{/each}}
     </div>
   </header>
 
   {{!-- Sheet Tab Navigation --}}
-  <nav class="actor-navigation-bar sheet-tabs tabs flex flex-justify font-size-default{{#if viewModel.showNavigation}}{{else}} hidden{{/if}}" id="nav-sheet-tabs" data-group="primary">
-    <a class="item flex flex-center flex-grow{{#if viewModel.showFancyFont}} fancy-font{{/if}}" data-tab="content"><div>{{localize "system.character.sheet.tab.abilities"}}</div></a>
-    <a class="item flex flex-center flex-grow{{#if viewModel.showFancyFont}} fancy-font{{/if}}" data-tab="gm-notes"><div>{{localize "system.general.sheet.tab.gmNotes"}}</div></a>
+  <nav id="nav-sheet-tabs" class="sheet-tabs tabs flex flex-justify font-size-default{{#if viewModel.showNavigation}}{{else}} hidden{{/if}}" data-group="primary">
+    <a class="item flex flex-center flex-grow fill border-solid-b-md underline{{#if viewModel.showFancyFont}} fancy-font{{/if}}" data-tab="content"><div>{{localize "system.character.sheet.tab.abilities"}}</div></a>
+    <a class="item flex flex-center flex-grow fill border-solid-b-md underline{{#if viewModel.showFancyFont}} fancy-font{{/if}}" data-tab="gm-notes"><div>{{localize "system.general.sheet.tab.gmNotes"}}</div></a>
   </nav>
 
   {{!-- Sheet Body --}}
   <section class="sheet-body">
+    {{!-- Content Tab --}}
     <div class="tab content" data-group="primary" data-tab="content">
-      {{!-- Content --}}
       {{!-- Description --}}
       <div class="sheet-block flex flex-column margin-b-md">
         {{> inputRichText viewModel=viewModel.vmRtDescription }}
       </div>
+      {{!-- Data Fields --}}
       <div class="grid-2col grid-gap-sm">
         {{#each viewModel.dataFields as |dataField|}}
           {{#with dataField.template as |template|}}
@@ -56,6 +53,7 @@ cssClass: {undefined | String}
           {{/with}}
         {{/each}}
       </div>
+      {{!-- Additional Content --}}
       {{#if viewModel.additionalContent}}
         <div class="{{#if viewModel.additionalContent.isHidden}}hidden{{/if}}">
         {{#with viewModel.additionalContent.template as |template|}}
@@ -66,9 +64,9 @@ cssClass: {undefined | String}
     </div>
     {{!-- GM Notes Tab --}}
     {{#if viewModel.isGM }}
-      <div class="tab gm-notes" data-group="primary" data-tab="gm-notes">
-        {{> lazy viewModel=viewModel.gmNotesViewModel}}
-      </div>
+    <div class="tab gm-notes" data-group="primary" data-tab="gm-notes">
+      {{> lazy viewModel=viewModel.gmNotesViewModel}}
+    </div>
     {{/if}}
   </section>
 </form>

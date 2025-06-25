@@ -1,11 +1,10 @@
 img {
-  &.header-image {
-    background: $c-bg-medium;
-    border-radius: 0.2rem;
-    border: 1px solid $c-border-beige-light;
-  }
-
   &.custom-icon {
+    &-chat {
+      background: $c-bg-medium;
+      border-radius: 0.2rem;
+      border: 1px solid $c-border-beige-light;
+    }
     &-sm {
       border: $c-border-input 1px solid;
       flex: none;
@@ -21,8 +20,7 @@ img {
     &-lg {
       border: $c-border-input 1px solid;
       flex: none;
-      width: 100px;
-      height: 100px;
+      height: 6.4rem;
     }
   }
 
@@ -33,7 +31,7 @@ img {
   }
 }
 
-.inline-img {
+img.inline-img {
   border: none;
   display: inline-block;
 }

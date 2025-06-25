@@ -6,7 +6,7 @@ viewModel: DamageDesignerDialogViewModel
     <span class="sheet-block">
       {{> button viewModel=viewModel.vmRefresh }}
     </span>
-    <span class="flex flex-row sheet-block auto-border-r">
+    <span class="flex flex-row sheet-block auto-border-r-sm">
       <span>
         {{> button viewModel=viewModel.vmCollapseAll }}
       </span>
@@ -14,7 +14,7 @@ viewModel: DamageDesignerDialogViewModel
         {{> button viewModel=viewModel.vmExpandAll }}
       </span>
     </span>
-    <span class="flex flex-row auto-margin-h-md sheet-block auto-border-r">
+    <span class="flex flex-row auto-margin-h-md sheet-block auto-border-r-sm">
       {{#with viewModel.sortControlsTemplate as |template|}}
         {{> (template) viewModel=../viewModel.vmSort }}
       {{/with}}
@@ -24,7 +24,7 @@ viewModel: DamageDesignerDialogViewModel
         </div>
       {{/labeledControl}}
     </span>
-    <span class="flex flex-row auto-margin-h-md sheet-block auto-border-r">
+    <span class="flex flex-row auto-margin-h-md sheet-block auto-border-r-sm">
       {{> inputRadioButtonGroup viewModel=viewModel.vmListViewSelection }}
     </span>
   </div>
@@ -43,5 +43,5 @@ viewModel: DamageDesignerDialogViewModel
     <span class="flex flex-center">9</span>
     <span class="flex flex-center">10</span>
   </div>
-  <ol id="table" class="unstyled-list damage-list-root auto-border-b"></ol>
+  <ol id="table" class="unstyled-list damage-list-root auto-border-b-sm"></ol>
 </section>

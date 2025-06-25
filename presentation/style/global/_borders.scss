@@ -3,197 +3,204 @@ $border-size-md: 2px;
 $border-size-lg: 3px;
 $border-size-xl: 4px;
 
-@mixin directional-border-colorations($direction) {
-  &.highlight {
-    border-#{$direction}-color: $c-border-highlight !important;
-    &.dark {
-      border-#{$direction}-color: $c-border-highlight-dark !important;
-    }
-    &.light {
-      border-#{$direction}-color: $c-border-highlight-light !important;
-    }
-  }
-  &.dark {
-    border-#{$direction}-color: $c-border-dark !important;
-  }
-  &.light {
-    border-#{$direction}-color: $c-border-light !important;
-  }
-}
-
-@mixin border-colorations() {
-  &.highlight {
-    border-color: $c-border-highlight !important;
-    &.dark {
-      border-color: $c-border-highlight-dark !important;
-    }
-    &.light {
-      border-color: $c-border-highlight-light !important;
-    }
-  }
-  &.dark {
-    border-color: $c-border-dark !important;
-  }
-  &.light {
-    border-color: $c-border-light !important;
-  }
-}
-
 @mixin border-template($direction, $style, $color) {
   &-sm {
     border-#{$direction}: $border-size-sm $style $color !important;
-    @include directional-border-colorations($direction);
+    &.highlight {
+      border-#{$direction}: $border-size-sm $style $c-border-highlight !important;
+    }
+    &.underline {
+      border-#{$direction}: $border-size-sm $style $c-text-underline !important;
+    }
   }
   &-md {
     border-#{$direction}: $border-size-md $style $color !important;
-    @include directional-border-colorations($direction);
+    &.highlight {
+      border-#{$direction}: $border-size-md $style $c-border-highlight !important;
+    }
+    &.underline {
+      border-#{$direction}: $border-size-md $style $c-text-underline !important;
+    }
   }
   &-lg {
     border-#{$direction}: $border-size-lg $style $color !important;
-    @include directional-border-colorations($direction);
+    &.highlight {
+      border-#{$direction}: $border-size-lg $style $c-border-highlight !important;
+    }
+    &.underline {
+      border-#{$direction}: $border-size-lg $style $c-text-underline !important;
+    }
   }
   &-xl {
     border-#{$direction}: $border-size-xl $style $color !important;
-    @include directional-border-colorations($direction);
+    &.highlight {
+      border-#{$direction}: $border-size-xl $style $c-border-highlight !important;
+    }
+    &.underline {
+      border-#{$direction}: $border-size-xl $style $c-text-underline !important;
+    }
+  }
+}
+
+@mixin borders-template($style) {
+  .border-#{$style}-v {
+    @include border-template(top, $style, $c-border-medium);
+    @include border-template(bottom, $style, $c-border-medium);
+  }
+
+  .border-#{$style}-h {
+    @include border-template(left, $style, $c-border-medium);
+    @include border-template(right, $style, $c-border-medium);
+  }
+
+  .border-#{$style}-t {
+    @include border-template(top, $style, $c-border-medium);
+  }
+
+  .border-#{$style}-b {
+    @include border-template(bottom, $style, $c-border-medium);
+  }
+
+  .border-#{$style}-r {
+    @include border-template(right, $style, $c-border-medium);
+  }
+
+  .border-#{$style}-l {
+    @include border-template(left, $style, $c-border-medium);
   }
 }
 
 .border {
   &-sm {
     border: $border-size-sm solid $c-border-medium !important;
-    @include border-colorations();
   }
   &-md {
     border: $border-size-md solid $c-border-medium !important;
-    @include border-colorations();
   }
   &-lg {
     border: $border-size-lg solid $c-border-medium !important;
-    @include border-colorations();
   }
   &-xl {
     border: $border-size-xl solid $c-border-medium !important;
-    @include border-colorations();
   }
 }
 
-.border-solid-v {
-  @include border-template(top, solid, $c-border-medium);
-  @include border-template(bottom, solid, $c-border-medium);
-}
+@include borders-template(solid);
+@include borders-template(double);
 
-.border-solid-h {
-  @include border-template(left, solid, $c-border-medium);
-  @include border-template(right, solid, $c-border-medium);
-}
-
-.border-solid-t {
-  @include border-template(top, solid, $c-border-medium);
-}
-
-.border-solid-b {
-  @include border-template(bottom, solid, $c-border-medium);
-}
-
-.border-solid-r {
-  @include border-template(right, solid, $c-border-medium);
-}
-
-.border-solid-l {
-  @include border-template(left, solid, $c-border-medium);
-}
-
-.border-double-v {
-  @include border-template(top, double, $c-border-medium);
-  @include border-template(bottom, double, $c-border-medium);
-}
-
-.border-double-h {
-  @include border-template(left, double, $c-border-medium);
-  @include border-template(right, double, $c-border-medium);
-}
-
-.border-double-t {
-  @include border-template(top, double, $c-border-dark);
-}
-
-.border-double-b {
-  @include border-template(bottom, double, $c-border-dark);
-}
-
-.border-double-r {
-  @include border-template(right, double, $c-border-dark);
-}
-
-.border-double-l {
-  @include border-template(left, double, $c-border-dark);
-}
-
-.auto-border {
-  > *:not(:last-child) {
-    border: 1px solid $c-border-beige-light;
-    &.dark {
-      border: 1px solid $c-border-medium;
+@mixin auto-border-template($direction, $size, $style, $lastOrFirstChild) {
+  > *:not(:#{$lastOrFirstChild}) {
+    border-#{$direction}: $size $style $c-border-light !important;
+  }
+  &.highlight {
+    > *:not(:#{$lastOrFirstChild}) {
+      border-#{$direction}: $size $style $c-border-highlight !important;
     }
   }
+}
 
-  &-h {
-    > *:not(:last-child) {
-      border-left: 1px solid $c-border-beige-light;
-      border-right: 1px solid $c-border-beige-light;
-      &.dark {
-        border-left: 1px solid $c-border-medium;
-        border-right: 1px solid $c-border-medium;
+@mixin auto-borders-template($style) {
+  .auto-border {
+    &-h {
+      &-sm {
+        @include auto-border-template(left, $border-size-sm, $style, "first-child");
+        @include auto-border-template(right, $border-size-sm, $style, "last-child");
+      }
+      &-md {
+        @include auto-border-template(left, $border-size-md, $style, "first-child");
+        @include auto-border-template(right, $border-size-md, $style, "last-child");
+      }
+      &-lg {
+        @include auto-border-template(left, $border-size-lg, $style, "first-child");
+        @include auto-border-template(right, $border-size-lg, $style, "last-child");
+      }
+      &-xl {
+        @include auto-border-template(left, $border-size-xl, $style, "first-child");
+        @include auto-border-template(right, $border-size-xl, $style, "last-child");
       }
     }
-  }
-
-  &-l {
-    > *:not(:first-child) {
-      border-left: 1px solid $c-border-beige-light;
-      &.dark {
-        border-left: 1px solid $c-border-medium;
-      }
-    }
-  }
-
-  &-r {
-    > *:not(:last-child) {
-      border-right: 1px solid $c-border-beige-light;
-      &.dark {
-        border-right: 1px solid $c-border-medium;
-      }
-    }
-  }
   
-  &-v {
-    > *:not(:last-child) {
-      border-top: 1px solid $c-border-beige-light;
-      border-bottom: 1px solid $c-border-beige-light;
-      &.dark {
-        border-top: 1px solid $c-border-medium;
-        border-bottom: 1px solid $c-border-medium;
+    &-l {
+      &-sm {
+        @include auto-border-template(left, $border-size-sm, $style, "first-child");
+      }
+      &-md {
+        @include auto-border-template(left, $border-size-md, $style, "first-child");
+      }
+      &-lg {
+        @include auto-border-template(left, $border-size-lg, $style, "first-child");
+      }
+      &-xl {
+        @include auto-border-template(left, $border-size-xl, $style, "first-child");
       }
     }
-  }
   
-  &-b {
-    > *:not(:last-child) {
-      border-bottom: 1px solid $c-border-beige-light;
-      &.dark {
-        border-bottom: 1px solid $c-border-medium;
+    &-r {
+      &-sm {
+        @include auto-border-template(right, $border-size-sm, $style, "last-child");
+      }
+      &-md {
+        @include auto-border-template(right, $border-size-md, $style, "last-child");
+      }
+      &-lg {
+        @include auto-border-template(right, $border-size-lg, $style, "last-child");
+      }
+      &-xl {
+        @include auto-border-template(right, $border-size-xl, $style, "last-child");
       }
     }
-  }
-  &-t {
-    > *:not(:first-child) {
-      border-top: 1px solid $c-border-beige-light;
-      &.dark {
-        border-top: 1px solid $c-border-medium;
+    
+    &-v {
+      &-sm {
+        @include auto-border-template(top, $border-size-sm, $style, "first-child");
+        @include auto-border-template(bottom, $border-size-sm, $style, "last-child");
+      }
+      &-md {
+        @include auto-border-template(top, $border-size-md, $style, "first-child");
+        @include auto-border-template(bottom, $border-size-md, $style, "last-child");
+      }
+      &-lg {
+        @include auto-border-template(top, $border-size-lg, $style, "first-child");
+        @include auto-border-template(bottom, $border-size-lg, $style, "last-child");
+      }
+      &-xl {
+        @include auto-border-template(top, $border-size-xl, $style, "first-child");
+        @include auto-border-template(bottom, $border-size-xl, $style, "last-child");
+      }
+    }
+    
+    &-b {
+      &-sm {
+        @include auto-border-template(top, $border-size-sm, $style, "first-child");
+      }
+      &-md {
+        @include auto-border-template(top, $border-size-md, $style, "first-child");
+      }
+      &-lg {
+        @include auto-border-template(top, $border-size-lg, $style, "first-child");
+      }
+      &-xl {
+        @include auto-border-template(top, $border-size-xl, $style, "first-child");
+      }
+    }
+    &-t {
+      &-sm {
+        @include auto-border-template(bottom, $border-size-sm, $style, "last-child");
+      }
+      &-md {
+        @include auto-border-template(bottom, $border-size-md, $style, "last-child");
+      }
+      &-lg {
+        @include auto-border-template(bottom, $border-size-lg, $style, "last-child");
+      }
+      &-xl {
+        @include auto-border-template(bottom, $border-size-xl, $style, "last-child");
       }
     }
   }
 }
+
+@include auto-borders-template(solid);
 
 hr {
   width: 80%;
