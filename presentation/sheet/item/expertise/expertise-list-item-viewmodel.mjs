@@ -22,6 +22,9 @@ import { ValidationUtil } from "../../../../business/util/validation-utility.mjs
  * @property {Expertise} document 
  */
 export default class ExpertiseListItemViewModel extends BaseListItemViewModel {
+  /** @override */
+  static get HEADER_TEMPLATE() { return game.strive.const.TEMPLATES.EXPERTISE_LIST_ITEM_HEADER; }
+
   /**
    * @type {Array<ChoiceOption>}
    * @readonly
@@ -79,6 +82,12 @@ export default class ExpertiseListItemViewModel extends BaseListItemViewModel {
   }
 
   /**
+   * @returns {Number}
+   * @readonly
+   */
+  get apCost() { return this.document.apCost; }
+
+  /**
    * @param {String | undefined} args.id Optional. Id used for the HTML element's id and name attributes. 
    * @param {ViewModel | undefined} args.parent Optional. Parent ViewModel instance of this instance. 
    * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 
@@ -94,17 +103,9 @@ export default class ExpertiseListItemViewModel extends BaseListItemViewModel {
       parent: this,
       id: "vmNsRequiredLevel",
       value: this.document.requiredLevel,
+      localizedToolTip: game.i18n.localize("system.character.skill.expertise.requirement"),
       onChange: (_, newValue) => {
         this.document.requiredLevel = newValue;
-      },
-      min: 0,
-    });
-    this.vmNsApCost = new InputNumberSpinnerViewModel({
-      parent: this,
-      id: "vmNsApCost",
-      value: this.document.apCost,
-      onChange: (_, newValue) => {
-        this.document.apCost = newValue;
       },
       min: 0,
     });
@@ -131,17 +132,33 @@ export default class ExpertiseListItemViewModel extends BaseListItemViewModel {
 
     return [
       new DataFieldComponent({
+        template: InputNumberSpinnerViewModel.TEMPLATE,
+        viewModel: new InputNumberSpinnerViewModel({
+          parent: this,
+          id: "vmApCost",
+          value: this.document.apCost,
+          localizedToolTip: game.i18n.localize("system.actionPoint.requirement"),
+          min: 0,
+          onChange: (_, newValue) => {
+            this.document.apCost = newValue;
+          },
+        }),
+        isHidden: false,
+        localizedIconToolTip: game.i18n.localize("system.actionPoint.requirement"),
+        iconClass: "ico-action-point-solid",
+      }),
+      new DataFieldComponent({
         template: InputTextFieldViewModel.TEMPLATE,
         viewModel: new InputTextFieldViewModel({
           parent: this,
           id: "vmObstacle",
           value: this.document.obstacle,
+          placeholder: game.i18n.localize("system.roll.obstacle.placeholder"),
           onChange: (_, newValue) => {
             this.document.obstacle = newValue;
           },
         }),
         isHidden: this.hideObstacle,
-        placeholder: game.i18n.localize("system.roll.obstacle.placeholder"),
         localizedIconToolTip: game.i18n.localize("system.roll.obstacle.label"),
         iconClass: "ico-obstacle-solid",
       }),
@@ -151,12 +168,12 @@ export default class ExpertiseListItemViewModel extends BaseListItemViewModel {
           parent: this,
           id: "vmOpposedBy",
           value: this.document.opposedBy,
+          placeholder: game.i18n.localize("system.roll.obstacle.opposedBy.placeholder"),
           onChange: (_, newValue) => {
             this.document.opposedBy = newValue;
           },
         }),
         isHidden: this.hideOpposedBy,
-        placeholder: game.i18n.localize("system.roll.obstacle.opposedBy.placeholder"),
         localizedIconToolTip: game.i18n.localize("system.roll.obstacle.opposedBy.label"),
         iconClass: "ico-opposed-by-solid",
       }),
@@ -166,12 +183,12 @@ export default class ExpertiseListItemViewModel extends BaseListItemViewModel {
           parent: this,
           id: "vmCondition",
           value: this.document.condition,
+          placeholder: game.i18n.localize("system.character.skill.expertise.condition.placeholder"),
           onChange: (_, newValue) => {
             this.document.condition = newValue;
           },
         }),
         isHidden: this.hideCondition,
-        placeholder: game.i18n.localize("system.character.skill.expertise.condition.placeholder"),
         localizedIconToolTip: game.i18n.localize("system.character.skill.expertise.condition.label"),
         iconClass: "ico-condition-solid",
       }),
@@ -181,12 +198,12 @@ export default class ExpertiseListItemViewModel extends BaseListItemViewModel {
           parent: this,
           id: "vmDistance",
           value: this.document.distance,
+          placeholder: game.i18n.localize("system.character.skill.expertise.distance.placeholder"),
           onChange: (_, newValue) => {
             this.document.distance = newValue;
           },
         }),
         isHidden: this.hideDistance,
-        placeholder: game.i18n.localize("system.character.skill.expertise.distance.placeholder"),
         localizedIconToolTip: game.i18n.localize("system.character.skill.expertise.distance.label"),
         iconClass: "ico-distance-solid",
       }),
@@ -332,9 +349,9 @@ export default class ExpertiseListItemViewModel extends BaseListItemViewModel {
   }
 
   /** @override */
-  getPromotedContentTemplate() {
+  getHeaderTemplate() {
     return new TemplatedComponent({
-      template: game.strive.const.TEMPLATES.EXPERTISE_LIST_ITEM_PROMOTED_CONTENT,
+      template: ExpertiseListItemViewModel.HEADER_TEMPLATE,
       viewModel: this,
     });
   }

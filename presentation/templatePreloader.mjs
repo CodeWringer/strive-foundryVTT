@@ -123,8 +123,8 @@ export const TEMPLATES = {
   SKILL_BASE_ATTRIBUTE_LIST_ITEM: `${basePathPresentation}/sheet/item/skill/base-attribute/base-attribute-list-item.hbs`,
   // Expertise
   EXPERTISE_TABLE: `${basePathPresentation}/sheet/item/expertise/expertise-table.hbs`,
+  EXPERTISE_LIST_ITEM_HEADER: `${basePathPresentation}/sheet/item/expertise/expertise-list-item-header.hbs`,
   EXPERTISE_LIST_ITEM_EXTRA_CONTENT: `${basePathPresentation}/sheet/item/expertise/expertise-list-item-extra-content.hbs`,
-  EXPERTISE_LIST_ITEM_PROMOTED_CONTENT: `${basePathPresentation}/sheet/item/expertise/expertise-list-item-promoted-content.hbs`,
   EXPERTISE_CHAT_MESSAGE: `${basePathPresentation}/sheet/item/expertise/expertise-chat-message.hbs`,
   // Fate
   FATE_CARD: `${basePathPresentation}/sheet/item/fate-card/fate-card.hbs`,

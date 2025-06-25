@@ -150,7 +150,8 @@
       "plural": "Action Points",
       "max": "Maximum Action Points",
       "refill": "Action Point Regain",
-      "allowRefill": "Automatic Action Point Regain"
+      "allowRefill": "Automatic Action Point Regain",
+      "requirement": "Required Action Points"
     },
     "character": {
       "edit": "Configure",
