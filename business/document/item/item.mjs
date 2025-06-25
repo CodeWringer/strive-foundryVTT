@@ -75,9 +75,7 @@ export class GameSystemItem extends Item {
         throw new Error(`InvalidTypeException: Item subtype ${this.type} is unrecognized!`);
       }
 
-      game.strive.logger.logPerf(this, "item.getTransientObject (non-cached)", () => {
-        this._transientObject = factoryFunction(this);
-      });
+      this._transientObject = factoryFunction(this);
     }
     return this._transientObject.getTransientObject();
   }

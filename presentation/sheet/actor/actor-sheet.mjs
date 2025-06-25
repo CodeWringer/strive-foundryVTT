@@ -137,12 +137,8 @@ export class GameSystemActorSheet extends ActorSheet {
     SheetUtil.enrichData(context);
 
     // Prepare a new view model instance. 
-    game.strive.logger.logPerf(this, "actor.getData (getViewModel)", () => {
-      this._viewModel = this.subType.getViewModel(context, context.actor, this);
-    });
-    game.strive.logger.logPerf(this, "actor.getData (readAllViewState)", () => {
-      this._viewModel.readAllViewState();
-    });
+    this._viewModel = this.subType.getViewModel(context, context.actor, this);
+    this._viewModel.readAllViewState();
 
     context.viewModel = this._viewModel;
     
@@ -153,12 +149,8 @@ export class GameSystemActorSheet extends ActorSheet {
   async activateListeners(html) {
     await super.activateListeners(html);
 
-    await game.strive.logger.logPerfAsync(this, "actor.activateListeners (subType)", async () => {
-      await this.subType.activateListeners(html);
-    });
-    await game.strive.logger.logPerfAsync(this, "actor.activateListeners (viewModel)", async () => {
-      await this.viewModel.activateListeners(html);
-    });
+    await this.subType.activateListeners(html);
+    await this.viewModel.activateListeners(html);
   }
 
   /**

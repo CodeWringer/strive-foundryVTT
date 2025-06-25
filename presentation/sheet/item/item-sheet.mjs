@@ -11,7 +11,6 @@ import SkillItemSheet from "./skill/skill-item-sheet.mjs";
 import FoundryWrapper from "../../../common/foundry-wrapper.mjs";
 import { SheetUtil } from "../sheet-utility.mjs";
 import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
-import { ACTOR_TYPES } from "../../../business/document/actor/actor-types.mjs";
 import SendToChatHandler from "../../utility/send-to-chat-handler.mjs";
 
 export class GameSystemItemSheet extends ItemSheet {
@@ -140,12 +139,8 @@ export class GameSystemItemSheet extends ItemSheet {
     SheetUtil.enrichData(context);
 
     // Prepare a new view model instance. 
-    game.strive.logger.logPerf(this, "item.getData (getViewModel)", () => {
-      this._viewModel = this.subType.getViewModel(context, context.item, this);
-    });
-    game.strive.logger.logPerf(this, "item.getData (readAllViewState)", () => {
-      this._viewModel.readAllViewState();
-    });
+    this._viewModel = this.subType.getViewModel(context, context.item, this);
+    this._viewModel.readAllViewState();
     context.viewModel = this._viewModel;
     
     return context;
@@ -157,12 +152,8 @@ export class GameSystemItemSheet extends ItemSheet {
 
     const isOwner = (this.actor ?? this.item).isOwner;
     
-    await game.strive.logger.logPerfAsync(this, "item.activateListeners (subType)", async () => {
-      await this.subType.activateListeners(html);
-    });
-    await game.strive.logger.logPerfAsync(this, "item.activateListeners (viewModel)", async () => {
-      await this.viewModel.activateListeners(html);
-    });
+    await this.subType.activateListeners(html);
+    await this.viewModel.activateListeners(html);
 
     if (!isOwner) return;
 
