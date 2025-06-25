@@ -3,9 +3,9 @@ viewModel: SortableListViewModel
 cssClass: String | undefined
 --}}
 <section id="{{viewModel.id}}"{{#if cssClass}} class="{{cssClass}}"{{/if}}>
-  {{#if (eq viewModel.headerLevel 1)}}<h1 class="strive-header flex flex-row flex-middle{{#if viewModel.showFancyFont}} fancy-font{{/if}}">{{/if}}
-  {{#if (eq viewModel.headerLevel 2)}}<h2 class="strive-header flex flex-row flex-middle{{#if viewModel.showFancyFont}} fancy-font{{/if}}">{{/if}}
-  {{#if (eq viewModel.headerLevel 3)}}<h3 class="strive-header flex flex-row flex-middle{{#if viewModel.showFancyFont}} fancy-font{{/if}}">{{/if}}
+  {{#if (eq viewModel.headerLevel 1)}}<h1 class="strive-header flex flex-row flex-middle{{#if viewModel.showFancyFont}} fancy-font{{/if}}" style="margin-bottom: 0;">{{/if}}
+  {{#if (eq viewModel.headerLevel 2)}}<h2 class="strive-header flex flex-row flex-middle{{#if viewModel.showFancyFont}} fancy-font{{/if}}" style="margin-bottom: 0;">{{/if}}
+  {{#if (eq viewModel.headerLevel 3)}}<h3 class="strive-header flex flex-row flex-middle{{#if viewModel.showFancyFont}} fancy-font{{/if}}" style="margin-bottom: 0;">{{/if}}
     {{!-- Identity --}}
     {{#if viewModel.isCollapsible}}
     {{#> button viewModel=viewModel.vmHeaderButton leftAlign=true cssClass="flex-grow" }}

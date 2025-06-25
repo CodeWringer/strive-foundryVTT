@@ -3,9 +3,9 @@ viewModel: {ActorAttributesViewModel}
 cssClass: {undefined | String}
 --}}
 <section id="{{viewModel.id}}"{{#if cssClass}} class="{{cssClass}}"{{/if}}>
-  {{#> header1 showFancyFont=viewModel.showFancyFont cssClass="flex flex-row"}}
+  <h1 class="strive-header flex flex-row flex-middle{{#if viewModel.showFancyFont}} fancy-font{{/if}}" style="margin-bottom: 0;">
     <span class="flex-grow">{{localize "system.character.attribute.plural"}}</span>
-  {{/header1}}
+  </h1>
   {{#with viewModel.childTemplate as | template |}}
     {{> (template) viewModel=../viewModel.vmChild }}
   {{/with}}

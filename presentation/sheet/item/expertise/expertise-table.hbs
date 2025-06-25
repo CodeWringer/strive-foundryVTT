@@ -4,7 +4,7 @@ cssClass: {undefined | String}
 --}}
 <div id="{{viewModel.id}}">
   {{!-- Header --}}
-  <h3 class="strive-header flex flex-row flex-middle{{#if viewModel.showFancyFont}} fancy-font{{/if}}">
+  <h3 class="strive-header flex flex-row flex-middle{{#if viewModel.showFancyFont}} fancy-font{{/if}}" style="margin: 0;">
     {{!-- Expansion Toggle or Plain Title --}}
     {{#> button viewModel=viewModel.vmHeaderButton leftAlign=true cssClass="flex-grow" }}
       <span class="flex-grow pad-l-sm font-size-lg font-bold{{#if viewModel.showFancyFont}} fancy-font{{/if}}">{{../viewModel.localizedTitle}}</span>
