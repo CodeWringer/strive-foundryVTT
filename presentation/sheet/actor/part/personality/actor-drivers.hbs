@@ -3,17 +3,17 @@ viewModel: {ActorDriversViewModel}
 cssClass: {undefined | String}
 --}}
 <section id="{{viewModel.id}}" class="{{cssClass}}">
-  {{#> header3 showFancyFont=viewModel.showFancyFont}}{{localize "system.character.driverSystem.ambition"}}{{/header3}}
+  {{#> header3 showFancyFont=viewModel.showFancyFont}}{{localize "system.character.driverSystem.ambition.header"}}{{/header3}}
   <div class="margin-b-md">
     {{> inputTextField viewModel=viewModel.vmTfAmbition }}
   </div>
-  {{#> header3 showFancyFont=viewModel.showFancyFont}}{{localize "system.character.driverSystem.aspiration.plural"}}{{/header3}}
+  {{#> header3 showFancyFont=viewModel.showFancyFont}}{{localize "system.character.driverSystem.aspiration.header"}}{{/header3}}
   {{#each viewModel.aspirationViewModels as |vm index|}}
     <div class="margin-b-md">
       {{> inputTextField viewModel=vm}}
     </div>
   {{/each}}
-  {{#> header3 showFancyFont=viewModel.showFancyFont}}{{localize "system.character.driverSystem.reaction.plural"}}{{/header3}}
+  {{#> header3 showFancyFont=viewModel.showFancyFont}}{{localize "system.character.driverSystem.reaction.header"}}{{/header3}}
   {{#each viewModel.reactionViewModels as |vm index|}}
     <div class="margin-b-md">
       {{> inputTextField viewModel=vm}}

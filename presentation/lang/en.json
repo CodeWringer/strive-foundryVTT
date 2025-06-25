@@ -390,14 +390,28 @@
       },
       "driverSystem": {
         "label": "Drivers",
-        "ambition": "Ambition",
+        "ambition": {
+          "header": "Your life goal is...",
+          "placeholder": "your Ambition",
+          "reminder": "An Ambition is a life-fulfilling long-term goal to pursue. This can be anything from \"found a family\" to \"become king of the world!\". No matter how unrealistic, an Ambition is a primary driver for a character, to guide them onward, and should be a <i>big</i> achievement."
+        },
         "aspiration": {
-          "singular": "Aspiration",
-          "plural": "Aspirations"
+          "header": "More immediately, you aim towards...",
+          "placeholder": {
+            "1": "your first Aspiration",
+            "2": "your second Aspiration",
+            "3": "your third Aspiration"
+          },
+          "reminder": "An Aspiration is a more immediate goal to pursue, based on recent events and convictions of the character.<br>Good Aspirations are written down as a conviction, followed by an actionable goal to pursue, for which you can clearly tell when it would be considered \"completed\"."
         },
         "reaction": {
-          "singular": "Reaction",
-          "plural": "Reactions"
+          "header": "You will always act according to your...",
+          "placeholder": {
+            "1": "your first Reaction",
+            "2": "your second Reaction",
+            "3": "your third Reaction"
+          },
+          "reminder": "A Reaction is an automatic behavior - something the character is <i>expected</i> to do <i>automatically</i> and without question, when a given situation triggers it.<br>A reaction is an \"if/then\" and \"always/never\" statement.<br>There are two types: <b>Troublemakers</b>, which earn you Fate-Points and <b>Assurances</b>, which act as insurance against some circumstances."
         },
         "fateSystem": {
           "label": "Fate",

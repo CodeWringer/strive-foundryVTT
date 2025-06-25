@@ -67,33 +67,46 @@ export default class ActorDriversViewModel extends ViewModel {
       parent: thiz,
       id: "vmTfAmbition",
       value: thiz.document.driverSystem.ambition,
+      placeholder: game.i18n.localize("system.character.driverSystem.ambition.placeholder"),
+      localizedToolTip: game.i18n.localize("system.character.driverSystem.ambition.reminder"),
       onChange: (_, newValue) => {
         thiz.document.driverSystem.ambition = newValue;
       },
-      placeholder: game.i18n.localize("system.character.driverSystem.ambition"),
     });
 
+    const aspirationPlaceholders = [
+      "system.character.driverSystem.aspiration.placeholder.1",
+      "system.character.driverSystem.aspiration.placeholder.2",
+      "system.character.driverSystem.aspiration.placeholder.3",
+    ];
     for (let i = 0; i < this.aspirations.length; i++) {
       this.aspirationViewModels.push(new InputTextFieldViewModel({
         parent: thiz,
         id: `vmAspiration-${i}`,
         value: thiz.document.driverSystem.aspirations[`_${i}`],
+        placeholder: game.i18n.localize(aspirationPlaceholders[i]),
+        localizedToolTip: game.i18n.localize("system.character.driverSystem.aspiration.reminder"),
         onChange: (_, newValue) => {
           thiz.document.driverSystem.aspirations[`_${i}`] = newValue;
         },
-        placeholder: game.i18n.localize("system.character.driverSystem.aspiration.singular"),
       }));
     }
 
+    const reactionPlaceholders = [
+      "system.character.driverSystem.reaction.placeholder.1",
+      "system.character.driverSystem.reaction.placeholder.2",
+      "system.character.driverSystem.reaction.placeholder.3",
+    ];
     for (let i = 0; i < this.reactions.length; i++) {
       this.reactionViewModels.push(new InputTextFieldViewModel({
         parent: thiz,
         id: `vmReaction-${i}`,
         value: thiz.document.driverSystem.reactions[`_${i}`],
+        placeholder: game.i18n.localize(reactionPlaceholders[i]),
+        localizedToolTip: game.i18n.localize("system.character.driverSystem.reaction.reminder"),
         onChange: (_, newValue) => {
           thiz.document.driverSystem.reactions[`_${i}`] = newValue;
         },
-        placeholder: game.i18n.localize("system.character.driverSystem.reaction.singular"),
       }));
     }
   }
