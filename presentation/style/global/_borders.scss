@@ -73,15 +73,39 @@ $border-size-xl: 4px;
 .border {
   &-sm {
     border: $border-size-sm solid $c-border-medium !important;
+    &.highlight {
+      border: $border-size-sm solid $c-border-highlight !important;
+    }
+    &.underline {
+      border: $border-size-sm solid $c-text-underline !important;
+    }
   }
   &-md {
     border: $border-size-md solid $c-border-medium !important;
+    &.highlight {
+      border: $border-size-md solid $c-border-highlight !important;
+    }
+    &.underline {
+      border: $border-size-md solid $c-text-underline !important;
+    }
   }
   &-lg {
     border: $border-size-lg solid $c-border-medium !important;
+    &.highlight {
+      border: $border-size-lg solid $c-border-highlight !important;
+    }
+    &.underline {
+      border: $border-size-lg solid $c-text-underline !important;
+    }
   }
   &-xl {
     border: $border-size-xl solid $c-border-medium !important;
+    &.highlight {
+      border: $border-size-xl solid $c-border-highlight !important;
+    }
+    &.underline {
+      border: $border-size-xl solid $c-text-underline !important;
+    }
   }
 }
 
