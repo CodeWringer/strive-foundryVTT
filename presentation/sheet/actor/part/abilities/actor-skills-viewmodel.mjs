@@ -93,6 +93,7 @@ export default class ActorSkillsViewModel extends ViewModel {
       parent: this,
       isEditable: true, // Should always be true so that observers can also filter. 
       value: this.searchTerm,
+      localizedPlaceholder: game.i18n.localize("system.character.skill.search"),
       onChange: (oldValue, newValue) => {
         if (oldValue != newValue) {
           this.searchTerm = newValue;

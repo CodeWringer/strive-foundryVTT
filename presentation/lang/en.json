@@ -632,6 +632,7 @@
         }
       },
       "skill": {
+        "search": "Search for skills by their name",
         "expertise": {
           "apCost": "AP Cost",
           "condition": {
