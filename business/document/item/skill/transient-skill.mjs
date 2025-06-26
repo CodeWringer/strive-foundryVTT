@@ -107,7 +107,7 @@ export default class TransientSkill extends TransientBaseItem {
    * @readonly
    */
   get modifiedLevel() {
-    const level = this.dependsOnActiveCr === true ? (this.owningDocument.challengeRating.modified) : this.level;
+    const level = this.level;
 
     if (level > 0) {
       return Math.max(level + this.levelModifier, 1);
@@ -298,24 +298,6 @@ export default class TransientSkill extends TransientBaseItem {
    */
   set advanced(value) {
     this.updateByPath("system.advanced", value);
-  }
-
-  /**
-   * Returns `true`, if the skill's embedded on an actor for which 
-   * a challenge rating is active. 
-   * 
-   * @type {Boolean}
-   * @readonly
-   */
-  get dependsOnActiveCr() {
-    const owningDocument = this.owningDocument;
-    if (ValidationUtil.isDefined(owningDocument) 
-      && owningDocument.type === ACTOR_TYPES.NPC
-      && owningDocument.isChallengeRatingEnabled) {
-      return true;
-    } else {
-      return false;
-    }
   }
 
   /**

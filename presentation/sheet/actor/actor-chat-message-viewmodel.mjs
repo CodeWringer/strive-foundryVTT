@@ -73,11 +73,6 @@ export default class ActorChatMessageViewModel extends ViewModel {
     this.contextTemplate = args.contextTemplate ?? "actor-chat-message";
     
     this.document = args.document;
-    if (this.isNPC === true) {
-      if (this.document.isChallengeRatingEnabled) {
-        this.challengeRating = this.document.challengeRating;
-      }
-    }
 
     if (this.document.type !== ACTOR_TYPES.PLAIN) {
       this.vmLazyBiography = new LazyRichTextViewModel({

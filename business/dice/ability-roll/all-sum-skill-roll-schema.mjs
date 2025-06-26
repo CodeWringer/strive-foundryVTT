@@ -127,28 +127,21 @@ export class AllSumSkillRollSchema extends SkillRollSchema {
    * @private
    */
   _getDiceComponents(skillDocument) {
-    if (skillDocument.dependsOnActiveCr === true) {
-      return [
-        new SumComponent("challengeRating", "system.character.advancement.challengeRating.label", skillDocument.owningDocument.challengeRating.modified),
-        new SumComponent(skillDocument.name, "system.character.advancement.modifier.label", skillDocument.levelModifier),
-      ];
-    } else {
-      const actor = (skillDocument.owningDocument ?? {}).document;
-      const components = [];
-      
-      // Accumulate the dice from base attributes. 
-      for (const attribute of skillDocument.baseAttributes) {
-        const characterAttribute = new CharacterAttribute(actor, attribute.name);
-        const attributeComponent = new SumComponent(characterAttribute.name, characterAttribute.localizableName, characterAttribute.modifiedLevel);
-        components.push(attributeComponent);
-      }
-      // Lastly, add the skill's own dice. 
-      components.push(
-        new SumComponent(skillDocument.name, skillDocument.name, skillDocument.modifiedLevel)
-      );
-
-      return components;
+    const actor = (skillDocument.owningDocument ?? {}).document;
+    const components = [];
+    
+    // Accumulate the dice from base attributes. 
+    for (const attribute of skillDocument.baseAttributes) {
+      const characterAttribute = new CharacterAttribute(actor, attribute.name);
+      const attributeComponent = new SumComponent(characterAttribute.name, characterAttribute.localizableName, characterAttribute.modifiedLevel);
+      components.push(attributeComponent);
     }
+    // Lastly, add the skill's own dice. 
+    components.push(
+      new SumComponent(skillDocument.name, skillDocument.name, skillDocument.modifiedLevel)
+    );
+
+    return components;
   }
 
 }

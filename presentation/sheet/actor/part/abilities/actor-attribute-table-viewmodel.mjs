@@ -15,7 +15,6 @@ import ViewModel from "../../../../view-model/view-model.mjs";
  * @property {Array<CharacterAttribute>} attributes
  * @property {Boolean} isNPC
  * * Read-only
- * @property {Boolean} showChallengeRating
  * @property {Boolean} headerInteractible
  * @property {String | undefined} iconClass CSS class of the icon to display. 
  * E. g. `"ico-strongarm-solid"` or `"fas fa-brain"`
@@ -81,7 +80,6 @@ export default class AttributeTableViewModel extends ViewModel {
    * 
    * @param {TransientBaseCharacterActor} args.document
    * @param {Array<CharacterAttribute>} args.attributes
-   * @param {Boolean | undefined} args.showChallengeRating
    * * default `false`
    * @param {Boolean | undefined} args.headerInteractible
    * * default `false`
@@ -99,7 +97,6 @@ export default class AttributeTableViewModel extends ViewModel {
     this.document = args.document;
     this.attributes = args.attributes;
     this.contextType = args.contextType ?? "component-attribute-table";
-    this.showChallengeRating = args.showChallengeRating ?? false;
     this.headerInteractible = args.headerInteractible ?? false;
     this.onHeaderClicked = args.onHeaderClicked ?? (() => {});
     this.iconClass = args.iconClass;
