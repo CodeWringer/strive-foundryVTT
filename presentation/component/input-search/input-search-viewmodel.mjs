@@ -57,5 +57,8 @@ export default class InputSearchTextViewModel extends InputViewModel {
         return false;
       }
     });
+    this.element.blur((event) => {
+      this._onChange(event);
+    });
   }
 }

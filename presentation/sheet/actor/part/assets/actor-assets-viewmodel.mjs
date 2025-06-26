@@ -110,27 +110,29 @@ export default class ActorAssetsViewModel extends ViewModel {
       listItemTemplate: AssetListItemViewModel.TEMPLATE,
       localizedTitle: game.i18n.localize("system.character.asset.luggage"),
       headerLevel: 1,
-      addItemParams: new SortableListAddItemParams({
-        creationStrategy: new SpecificDocumentCreationStrategy({
-          documentType: ITEM_TYPES.ASSET,
-          target: this.document,
-        }),
-        localizedLabel: StringUtil.format(
-          game.i18n.localize("system.general.add.addTypeTo"),
-          game.i18n.localize("system.character.asset.singular"),
-          game.i18n.localize("system.character.asset.luggage"),
-        ),
-        localizedToolTip: StringUtil.format(
-          game.i18n.localize("system.general.add.addTypeTo"),
-          game.i18n.localize("system.character.asset.singular"),
-          game.i18n.localize("system.character.asset.luggage"),
-        ),
-        onItemAdded: (_, document) => {
-          this.document.assets.luggage = this.document.assets.luggage.concat([
-            document.getTransientObject(),
-          ]);
-        },
-      }),
+      addItemParams: [
+        new SortableListAddItemParams({
+          creationStrategy: new SpecificDocumentCreationStrategy({
+            documentType: ITEM_TYPES.ASSET,
+            target: this.document,
+          }),
+          localizedLabel: StringUtil.format(
+            game.i18n.localize("system.general.add.addTypeTo"),
+            game.i18n.localize("system.character.asset.singular"),
+            game.i18n.localize("system.character.asset.luggage"),
+          ),
+          localizedToolTip: StringUtil.format(
+            game.i18n.localize("system.general.add.addTypeTo"),
+            game.i18n.localize("system.character.asset.singular"),
+            game.i18n.localize("system.character.asset.luggage"),
+          ),
+          onItemAdded: (_, document) => {
+            this.document.assets.luggage = this.document.assets.luggage.concat([
+              document.getTransientObject(),
+            ]);
+          },
+        })
+      ],
       sortParams: new SortableListSortParams({
         options: this._getAssetSortingOptions(),
         compact: true,
@@ -151,22 +153,24 @@ export default class ActorAssetsViewModel extends ViewModel {
       listItemTemplate: AssetListItemViewModel.TEMPLATE,
       localizedTitle: game.i18n.localize("system.character.asset.property"),
       headerLevel: 1,
-      addItemParams: new SortableListAddItemParams({
-        creationStrategy: new SpecificDocumentCreationStrategy({
-          documentType: ITEM_TYPES.ASSET,
-          target: this.document,
-        }),
-        localizedLabel: StringUtil.format(
-          game.i18n.localize("system.general.add.addTypeTo"),
-          game.i18n.localize("system.character.asset.singular"),
-          game.i18n.localize("system.character.asset.property"),
-        ),
-        localizedToolTip: StringUtil.format(
-          game.i18n.localize("system.general.add.addTypeTo"),
-          game.i18n.localize("system.character.asset.singular"),
-          game.i18n.localize("system.character.asset.property"),
-        ),
-      }),
+      addItemParams: [
+          new SortableListAddItemParams({
+          creationStrategy: new SpecificDocumentCreationStrategy({
+            documentType: ITEM_TYPES.ASSET,
+            target: this.document,
+          }),
+          localizedLabel: StringUtil.format(
+            game.i18n.localize("system.general.add.addTypeTo"),
+            game.i18n.localize("system.character.asset.singular"),
+            game.i18n.localize("system.character.asset.property"),
+          ),
+          localizedToolTip: StringUtil.format(
+            game.i18n.localize("system.general.add.addTypeTo"),
+            game.i18n.localize("system.character.asset.singular"),
+            game.i18n.localize("system.character.asset.property"),
+          ),
+        })
+      ],
       sortParams: new SortableListSortParams({
         options: this._getAssetSortingOptions(),
         compact: true,

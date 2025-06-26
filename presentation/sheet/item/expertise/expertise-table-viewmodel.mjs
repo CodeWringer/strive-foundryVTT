@@ -140,18 +140,21 @@ export default class ExpertiseTableViewModel extends ViewModel {
         },
       });
     }
+
     this.vmFooter = new ListFooterViewModel({
       id: "vmFooter",
       parent: this,
-      visGroupId: this.visGroupId,
-      isEditable: this.isEditable,
       isCollapsible: true,
-      isExpanded: this.isExpanded,
-      addItemParams: this.addItemParams,
-      onExpansionToggled: (event, data) => {
-        if (ValidationUtil.isDefined(this.addItemParams.onItemAdded)) {
-          this.addItemParams.onItemAdded(event, data);
-        }
+      addItemParams: [this.addItemParams],
+      localizedCollapseToolTip: StringUtil.format2(
+        game.i18n.localize("system.general.expansion.collapseOf"),
+        { s: StringUtil.format2(
+          game.i18n.localize("system.character.skill.expertise.expertisesOf"),
+          { skill: this.document.name, }
+        ) }
+      ),
+      onExpansionToggled: () => {
+        this.isExpanded = !this.isExpanded;
       },
     });
     this.vmLockedExpertisesSeparator = new ViewModel({

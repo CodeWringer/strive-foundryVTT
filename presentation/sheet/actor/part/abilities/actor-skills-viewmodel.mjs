@@ -101,21 +101,62 @@ export default class ActorSkillsViewModel extends ViewModel {
       },
     });
 
-    this.innateSkillViewModels = this._getInnateSkillViewModels();
-    if (this.hideInnateSkills === false) {
-      this.vmInnateSkillList = new SortableListViewModel({
-        id: "vmInnateSkillList",
-        parent: this,
-        isCollapsible: false,
-        indexDataSource: new DocumentListItemOrderDataSource({
-          document: this.document,
-          listName: "innateSkills",
+    this.skillViewModels = this._getSkillViewModels();
+    this.vmSkills = new SortableListViewModel({
+      id: "vmSkills",
+      parent: this,
+      isCollapsible: false,
+      indexDataSource: new DocumentListItemOrderDataSource({
+        document: this.document,
+        listName: "skills",
+      }),
+      listItemViewModels: this.skillViewModels,
+      listItemTemplate: SkillListItemViewModel.TEMPLATE,
+      localizedTitle: game.i18n.localize("system.character.skill.plural"),
+      headerLevel: 1,
+      addItemParams: [
+        new SortableListAddItemParams({
+          // Learning skill add button
+          creationStrategy: new SpecificDocumentCreationStrategy({
+            documentType: ITEM_TYPES.SKILL,
+            target: this.document,
+            creationDataOverrides: {
+              system: {
+                level: 0,
+              },
+            },
+          }),
+          localizedLabel: StringUtil.format(
+            game.i18n.localize("system.general.add.addType"),
+            game.i18n.localize("system.character.skill.learning.singular"),
+          ),
+          localizedToolTip: StringUtil.format(
+            game.i18n.localize("system.general.add.addType"),
+            game.i18n.localize("system.character.skill.learning.singular"),
+          ),
         }),
-        listItemViewModels: this.innateSkillViewModels,
-        listItemTemplate: SkillListItemViewModel.TEMPLATE,
-        localizedTitle: game.i18n.localize("system.character.skill.innate.label"),
-        headerLevel: 1,
-        addItemParams: new SortableListAddItemParams({
+        // Known skill add button
+        new SortableListAddItemParams({
+          creationStrategy: new SpecificDocumentCreationStrategy({
+            documentType: ITEM_TYPES.SKILL,
+            target: this.document,
+            creationDataOverrides: {
+              system: {
+                level: 1,
+              },
+            },
+          }),
+          localizedLabel: StringUtil.format(
+            game.i18n.localize("system.general.add.addType"),
+            game.i18n.localize("system.character.skill.known.singular"),
+          ),
+          localizedToolTip: StringUtil.format(
+            game.i18n.localize("system.general.add.addType"),
+            game.i18n.localize("system.character.skill.known.singular"),
+          ),
+        }),
+        // Innate skill add button
+        new SortableListAddItemParams({
           creationStrategy: new SpecificDocumentCreationStrategy({
             documentType: ITEM_TYPES.SKILL,
             target: this.document,
@@ -137,85 +178,9 @@ export default class ActorSkillsViewModel extends ViewModel {
             game.i18n.localize("system.character.skill.innate.singular"),
           ),
         }),
-        sortParams: new SortableListSortParams({
-          options: this._getKnownSkillSortingOptions(),
-          compact: true,
-        }),
-      });
-    }
-
-    this.learningSkillViewModels = this._getLearningSkillViewModels();
-    this.vmLearningSkillList = new SortableListViewModel({
-      id: "vmLearningSkillList",
-      parent: this,
-      isCollapsible: false,
-      indexDataSource: new DocumentListItemOrderDataSource({
-        document: this.document,
-        listName: "learningSkills",
-      }),
-      listItemViewModels: this.learningSkillViewModels,
-      listItemTemplate: SkillListItemViewModel.TEMPLATE,
-      localizedTitle: game.i18n.localize("system.character.skill.learning.label"),
-      headerLevel: 1,
-      addItemParams: new SortableListAddItemParams({
-        creationStrategy: new SpecificDocumentCreationStrategy({
-          documentType: ITEM_TYPES.SKILL,
-          target: this.document,
-          creationDataOverrides: {
-            system: {
-              level: 0,
-            },
-          },
-        }),
-        localizedLabel: StringUtil.format(
-          game.i18n.localize("system.general.add.addType"),
-          game.i18n.localize("system.character.skill.learning.singular"),
-        ),
-        localizedToolTip: StringUtil.format(
-          game.i18n.localize("system.general.add.addType"),
-          game.i18n.localize("system.character.skill.learning.singular"),
-        ),
-      }),
+      ],
       sortParams: new SortableListSortParams({
-        options: this._getLearningSkillSortingOptions(),
-        compact: true,
-      }),
-    });
-
-    this.knownSkillViewModels = this._getKnownSkillViewModels();
-    this.vmKnownSkillList = new SortableListViewModel({
-      id: "vmKnownSkillList",
-      parent: this,
-      isCollapsible: false,
-      indexDataSource: new DocumentListItemOrderDataSource({
-        document: this.document,
-        listName: "knownSkills",
-      }),
-      listItemViewModels: this.knownSkillViewModels,
-      listItemTemplate: SkillListItemViewModel.TEMPLATE,
-      localizedTitle: game.i18n.localize("system.character.skill.known.label"),
-      headerLevel: 1,
-      addItemParams: new SortableListAddItemParams({
-        creationStrategy: new SpecificDocumentCreationStrategy({
-          documentType: ITEM_TYPES.SKILL,
-          target: this.document,
-          creationDataOverrides: {
-            system: {
-              level: 1,
-            },
-          },
-        }),
-        localizedLabel: StringUtil.format(
-          game.i18n.localize("system.general.add.addType"),
-          game.i18n.localize("system.character.skill.known.singular"),
-        ),
-        localizedToolTip: StringUtil.format(
-          game.i18n.localize("system.general.add.addType"),
-          game.i18n.localize("system.character.skill.known.singular"),
-        ),
-      }),
-      sortParams: new SortableListSortParams({
-        options: this._getKnownSkillSortingOptions(),
+        options: this._getSkillSortingOptions(),
         compact: true,
       }),
     });
@@ -235,20 +200,9 @@ export default class ActorSkillsViewModel extends ViewModel {
    * @override
    */
   update(args = {}) {
-    // Innate skills
-    const newInnateSkills = this._getInnateSkillViewModels();
-    this._cullObsolete(this.innateSkillViewModels, newInnateSkills);
-    this.innateSkillViewModels = newInnateSkills;
-    
-    // Known skills
-    const newKnownSkills = this._getKnownSkillViewModels();
-    this._cullObsolete(this.knownSkillViewModels, newKnownSkills);
-    this.knownSkillViewModels = newKnownSkills;
-    
-    // Learning skills
-    const newLearningSkills = this._getLearningSkillViewModels();
-    this._cullObsolete(this.learningSkillViewModels, newLearningSkills);
-    this.learningSkillViewModels = newLearningSkills;
+    const newSkillViewModels = this._getSkillViewModels();
+    this._cullObsolete(this.skillViewModels, newSkillViewModels);
+    this.skillViewModels = newSkillViewModels;
 
     super.update(args);
   }
@@ -274,6 +228,25 @@ export default class ActorSkillsViewModel extends ViewModel {
     });
     
     return updates;
+  }
+
+  /**
+   * Returns ALL skill item view model instances. Learning, innate and known skills 
+   * are all returned as a single array. 
+   * 
+   * @returns {Array<SkillListItemViewModel>}
+   * 
+   * @private
+   */
+  _getSkillViewModels() {
+    let skillViewModels = [];
+    if (this.hideInnateSkills === false) {
+      skillViewModels = skillViewModels.concat(this._getInnateSkillViewModels());
+    }
+    if (this.hideLearningSkills === false) {
+      skillViewModels = skillViewModels.concat(this._getLearningSkillViewModels());
+    }
+    return skillViewModels.concat(this._getKnownSkillViewModels());
   }
   
   /**
@@ -324,48 +297,39 @@ export default class ActorSkillsViewModel extends ViewModel {
    * @private
    */
   _filterSkills(searchTerm) {
-    const skills = this.document.skills.innate
-      .concat(this.document.skills.learning)
-      .concat(this.document.skills.known);
-
-    let innateListElements = [];
-    if (this.hideInnateSkills === false) {
-      innateListElements = this.vmInnateSkillList.getListElements();
-    }
-    
-    const knownListElements = this.vmKnownSkillList.getListElements();
-
-    let learningListElements = [];
-    if (this.hideLearningSkills === false) {
-      learningListElements = this.vmLearningSkillList.getListElements();
-    }
-
-    const elements = [];
-    for (const element of innateListElements) {
-      elements.push(element);
-    }
-    for (const element of knownListElements) {
-      elements.push(element);
-    }
-    for (const element of learningListElements) {
-      elements.push(element);
-    }
-
+    const elements = this.vmSkills.getListElements();
     const trimmedSearchTerm = searchTerm.trim();
-    const searchItems = skills.map(it => new SearchItem({
-        id: it.id,
-        term: it.name,
-      }));
-
     if (trimmedSearchTerm.length > 0) {
-      const results = new Search().search(searchItems, trimmedSearchTerm, SEARCH_MODES.STRICT_CASE_INSENSITIVE);
+      // At first, hide all elements. They will be un-hidden again, once the search is done. 
+      for (const element of elements) {
+        $(element).addClass("hidden");
+      }
 
+      let skills = this.document.skills.known;
+      if (this.hideInnateSkills === false) {
+        skills = skills.concat(this.document.skills.innate);
+      }
+      if (this.hideLearningSkills === false) {
+        skills = skills.concat(this.document.skills.learning);
+      }
+      
+      const searchItems = skills.map(it => 
+        new SearchItem({
+          id: it.id,
+          term: it.name,
+        })
+      );
+      const results = new Search().search(searchItems, trimmedSearchTerm, SEARCH_MODES.STRICT_CASE_INSENSITIVE);
       for (const result of results) {
-        const element = elements.find(it => it.id === result.id);
-        if (result.score > 0) {
-          $(element).removeClass("hidden");
-        } else {
-          $(element).addClass("hidden");
+        for (let i = 0; i < elements.length; i++) {
+          const element = elements[i];
+          if (element.id !== result.id) continue;
+          if (result.score > 0) {
+            $(element).removeClass("hidden");
+          } else {
+            $(element).addClass("hidden");
+          }
+          break;
         }
       }
     } else {
@@ -377,32 +341,13 @@ export default class ActorSkillsViewModel extends ViewModel {
   }
 
   /**
-   * Returns the sorting options for learning skill lists. 
-   * 
-   * @returns {Array<SortingOption>}
-   * 
-   * @private
-   */
-  _getLearningSkillSortingOptions() {
-    return [
-      new SortingOption({
-        iconHtml: '<i class="ico ico-tags-solid dark"></i>',
-        localizedToolTip: game.i18n.localize("system.general.name.label"),
-        sortingFunc: (a, b) => {
-          return a.document.name.localeCompare(b.document.name);
-        },
-      }),
-    ];
-  }
-
-  /**
    * Returns the sorting options for known and innate skill lists. 
    * 
    * @returns {Array<SortingOption>}
    * 
    * @private
    */
-  _getKnownSkillSortingOptions() {
+  _getSkillSortingOptions() {
     return [
       new SortingOption({
         iconHtml: '<i class="ico ico-tags-solid dark"></i>',

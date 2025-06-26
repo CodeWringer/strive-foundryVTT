@@ -3,7 +3,7 @@ import { ATTRIBUTES } from "../../../../business/ruleset/attribute/attributes.mj
 import { DAMAGE_TYPES } from "../../../../business/ruleset/damage-types.mjs"
 import { ATTACK_TYPES, getAttackTypeIconClass } from "../../../../business/ruleset/skill/attack-types.mjs"
 import DamageAndType from "../../../../business/ruleset/skill/damage-and-type.mjs"
-import ButtonContextMenuViewModel from "../../../component/button-context-menu/button-context-menu-viewmodel.mjs"
+import ButtonContextMenuViewModel, { ContextMenuItem } from "../../../component/button-context-menu/button-context-menu-viewmodel.mjs"
 import ButtonRollViewModel from "../../../component/button-roll/button-roll-viewmodel.mjs"
 import DamageDefinitionListViewModel from "../../../component/damage-definition-list/damage-definition-list-viewmodel.mjs"
 import InputDropDownViewModel from "../../../component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs"
@@ -25,6 +25,7 @@ import { ValidationUtil } from "../../../../business/util/validation-utility.mjs
 import RulesetExplainer from "../../../../business/ruleset/ruleset-explainer.mjs"
 import ReadOnlyValueViewModel from "../../../component/read-only-value/read-only-value.mjs"
 import ViewModel from "../../../view-model/view-model.mjs"
+import { SKILL_TAGS } from "../../../../business/tags/system-tags.mjs"
 
 /**
  * @property {TransientSkill} document
@@ -183,6 +184,12 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
    * @readonly
    */
   get isLearningSkill() { return this.document.level === 0; }
+
+  /**
+   * @returns {Boolean}
+   * @readonly
+   */
+  get isInnateSkill() { return ValidationUtil.isDefined(this.document.tags.find(it => it.id === SKILL_TAGS.INNATE.id)); }
 
   /** @override */
   get metaDataInputDefinitions() {
@@ -464,7 +471,7 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
   getContextMenuButtons() {
     return super.getContextMenuButtons().concat([
       // Add damage
-      {
+      new ContextMenuItem({
         name: StringUtil.format(
           game.i18n.localize("system.general.add.addType"),
           game.i18n.localize("system.damageDefinition.label")
@@ -479,7 +486,7 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
           }));
           this.document.damage = damage;
         },
-      },
+      }),
     ])
       // Toggle ap cost
       .concat(

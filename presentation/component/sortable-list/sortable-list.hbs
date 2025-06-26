@@ -26,8 +26,12 @@ cssClass: String | undefined
       {{/with}}
     {{/if}}
     {{!-- Button Add Item --}}
-    {{#if viewModel.isEditable}}
+    {{#if (and viewModel.isEditable (neq viewModel.addParamCount 0))}}
+    {{#if (eq viewModel.addParamCount 1)}}
     {{> buttonAdd viewModel=viewModel.vmAddItem }}
+    {{else}}
+    {{> buttonContextMenu viewModel=viewModel.vmContextMenu }}
+    {{/if}}
     {{/if}}
   {{#if (eq viewModel.headerLevel 1)}}</h1>{{/if}}
   {{#if (eq viewModel.headerLevel 2)}}</h2>{{/if}}

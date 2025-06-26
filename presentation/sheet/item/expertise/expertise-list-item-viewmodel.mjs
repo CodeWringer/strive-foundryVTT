@@ -8,7 +8,7 @@ import InputNumberSpinnerViewModel from "../../../component/input-number-spinner
 import Expertise from "../../../../business/document/item/skill/expertise.mjs";
 import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs";
 import ButtonRollViewModel from "../../../component/button-roll/button-roll-viewmodel.mjs";
-import ButtonContextMenuViewModel from "../../../component/button-context-menu/button-context-menu-viewmodel.mjs";
+import ButtonContextMenuViewModel, { ContextMenuItem } from "../../../component/button-context-menu/button-context-menu-viewmodel.mjs";
 import ButtonDeleteViewModel from "../../../component/button-delete/button-delete-viewmodel.mjs";
 import BaseListItemViewModel from "../base/base-list-item-viewmodel.mjs";
 import { DataFieldComponent } from "../base/datafield-component.mjs";
@@ -259,14 +259,14 @@ export default class ExpertiseListItemViewModel extends BaseListItemViewModel {
           parent: this,
           menuItems: [
             // Edit name
-            {
+            new ContextMenuItem({
               name: game.i18n.localize("system.general.name.edit"),
               icon: '<i class="fas fa-edit"></i>',
               condition: this.isEditable,
               callback: this.queryEditName.bind(this),
-            },
+            }),
             // Add damage
-            {
+            new ContextMenuItem({
               name: StringUtil.format(
                 game.i18n.localize("system.general.add.addType"),
                 game.i18n.localize("system.damageDefinition.label")
@@ -281,7 +281,7 @@ export default class ExpertiseListItemViewModel extends BaseListItemViewModel {
                 }));
                 this.document.damage = damage;
               },
-            },
+            }),
           ]
             // Toggle obstacle
             .concat(
