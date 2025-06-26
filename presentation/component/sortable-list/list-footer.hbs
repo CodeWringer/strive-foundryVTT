@@ -5,18 +5,17 @@ cssClass: String | undefined
 <div class="flex flex-row flex-middle">
   {{!-- Collapse button --}}
   {{#if viewModel.isCollapsible}}
-  <div class="flex flex-row flex-grow flex-center font-size-default">
-    {{> buttonToggleVisibility viewModel=viewModel.vmToggleExpansion cssClass=(ifThenElse viewModel.isExpanded "flex-grow" "flex-grow hidden") }}
-  </div>
+  {{> button viewModel=viewModel.vmToggleExpansion cssClass="flex-grow" }}
   {{else}}
   {{!-- Spacer --}}
   <div class="flex-grow"></div>
   {{/if}}
-  {{!-- Add button --}}
+  {{!-- Add button(s) --}}
   {{#if viewModel.isEditable}}
-  <div class="flex flex-row{{#if (eq viewModel.isExpanded false)}} hidden{{/if}}" 
-    data-vis-group="{{viewModel._visGroupId}}">
-    {{> buttonAdd viewModel=viewModel.vmAddItem }}
+  <div class="flex flex-row auto-margin-h-md">
+    {{#each viewModel.addItemButtonViewModels as |viewModel|}}
+    {{> buttonAdd viewModel=viewModel }}
+    {{/each}}
   </div>
   {{/if}}
 </div>

@@ -72,6 +72,10 @@
         "edit": "Edit",
         "metadata": "Edit Metadata"
       },
+      "expansion": {
+        "collapseOf": "Collapse %{s}",
+        "expandOf": "Expand %{s}"
+      },
       "formula": "Formula",
       "id": "ID",
       "increment": "Increment",
@@ -632,7 +636,9 @@
         }
       },
       "skill": {
+        "plural": "Skills",
         "search": "Search for skills by their name",
+        "singular": "Skill",
         "expertise": {
           "apCost": "AP Cost",
           "condition": {
@@ -643,6 +649,7 @@
             "label": "Distance",
             "placeholder": "3' / 1m / 0 / etc."
           },
+          "expertisesOf": "Expertises of '%{skill}'",
           "newDefaultName": "New Expertise",
           "requirement": "Required Skill Level",
           "singular": "Expertise",
@@ -655,27 +662,22 @@
           }
         },
         "innate": {
-          "label": "Innate Skills",
-          "plural": "Innate Skills",
-          "singular": "Innate Skill"
+          "singular": "Innate Skill",
+          "skillChip": "Innate"
         },
         "known": {
-          "label": "Known Skills",
           "plural": "Known Skills",
           "singular": "Known Skill"
         },
         "learning": {
-          "label": "Learning Skills",
           "plural": "Learning Skills",
           "singular": "Learning Skill",
           "skillChip": "Learning"
         },
-        "plural": "Skills",
         "prerequisite": {
           "singular": "Prerequisite",
           "plural": "Prerequisites"
         },
-        "singular": "Skill",
         "properties": {
           "innate": "Innate"
         },
