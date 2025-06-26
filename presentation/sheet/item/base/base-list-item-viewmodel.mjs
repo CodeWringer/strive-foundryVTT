@@ -3,7 +3,7 @@ import { ASSET_TAGS, SKILL_TAGS } from "../../../../business/tags/system-tags.mj
 import { StringUtil } from "../../../../business/util/string-utility.mjs";
 import { ValidationUtil } from "../../../../business/util/validation-utility.mjs";
 import { ExtenderUtil } from "../../../../common/extender-util.mjs";
-import ButtonContextMenuViewModel from "../../../component/button-context-menu/button-context-menu-viewmodel.mjs";
+import ButtonContextMenuViewModel, { ContextMenuItem } from "../../../component/button-context-menu/button-context-menu-viewmodel.mjs";
 import ButtonDeleteViewModel from "../../../component/button-delete/button-delete-viewmodel.mjs";
 import ButtonSendToChatViewModel from "../../../component/button-send-to-chat/button-send-to-chat-viewmodel.mjs";
 import ButtonViewModel from "../../../component/button/button-viewmodel.mjs";
@@ -429,32 +429,32 @@ export default class BaseListItemViewModel extends ViewModel {
   getContextMenuButtons() {
     return [
       // Edit name
-      {
+      new ContextMenuItem({
         name: game.i18n.localize("system.general.name.edit"),
         icon: '<i class="fas fa-edit"></i>',
         condition: (this.isEditable && this.context === CONTEXT_TYPES.LIST_ITEM),
         callback: this.queryEditName.bind(this),
-      },
+      }),
       // Import
-      {
+      new ContextMenuItem({
         name: game.i18n.localize("system.general.import"),
         icon: '<i class="fas fa-download"></i>',
         condition: (this.context === CONTEXT_TYPES.LIST_ITEM && this.isGM),
         callback: this.import.bind(this),
-      },
+      }),
       // Duplicate
-      {
+      new ContextMenuItem({
         name: game.i18n.localize("system.general.duplicate"),
         icon: '<i class="fas fa-clone"></i>',
         condition: (this.isEditable && this.context === CONTEXT_TYPES.LIST_ITEM),
         callback: this.duplicate.bind(this),
-      },
+      }),
       // Edit meta data
-      {
+      new ContextMenuItem({
         name: game.i18n.localize("system.general.edit.metadata"),
         icon: '<i class="fas fa-cog"></i>',
         callback: this.editMetaData.bind(this),
-      },
+      }),
     ];
   }
   

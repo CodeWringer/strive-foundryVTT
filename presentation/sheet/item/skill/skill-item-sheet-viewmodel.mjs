@@ -6,7 +6,7 @@ import ExpertiseTableViewModel from "../expertise/expertise-table-viewmodel.mjs"
 import SkillPrerequisiteListItemViewModel from "./skill-prerequisite-list-item-viewmodel.mjs";
 import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs";
 import InputDropDownViewModel from "../../../component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
-import ButtonContextMenuViewModel from "../../../component/button-context-menu/button-context-menu-viewmodel.mjs";
+import ButtonContextMenuViewModel, { ContextMenuItem } from "../../../component/button-context-menu/button-context-menu-viewmodel.mjs";
 import DamageAndType from "../../../../business/ruleset/skill/damage-and-type.mjs";
 import { DAMAGE_TYPES } from "../../../../business/ruleset/damage-types.mjs";
 import { ATTACK_TYPES, getAttackTypeIconClass } from "../../../../business/ruleset/skill/attack-types.mjs";
@@ -350,7 +350,7 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
           parent: this,
           menuItems: [
             // Add damage
-            {
+            new ContextMenuItem({
               name: StringUtil.format(
                 game.i18n.localize("system.general.add.addType"),
                 game.i18n.localize("system.damageDefinition.label")
@@ -365,7 +365,7 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
                 }));
                 this.document.damage = damage;
               },
-            },
+            }),
           ]
             // Toggle ap cost
             .concat(

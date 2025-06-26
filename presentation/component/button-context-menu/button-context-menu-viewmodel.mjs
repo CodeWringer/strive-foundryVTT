@@ -6,8 +6,8 @@ import ButtonViewModel from "../button/button-viewmodel.mjs";
  * 
  * @extends ButtonViewModel
  * 
- * @property {Array<ContextMenuItem>} menuItems An array of {ContextMenuItem} instances, 
- * which are used to populate the context menu. 
+ * @property {Array<ContextMenuItem>} menuItems The items that define the context menu's 
+ * entries. 
  * 
  * @method onClick Asynchronous callback that is invoked when the button is clicked. Arguments: 
  * * `event: Event`
@@ -45,12 +45,12 @@ export default class ButtonContextMenuViewModel extends ButtonViewModel {
    * @param {String | undefined} args.inactiveIcon The icon to show alongside an inactive 
    * value. If left `undefined`, will show no icon. 
    * 
-   * @returns {Array<Object>} Two button definitions. One for each state of the toggle button. 
+   * @returns {Array<ContextMenuItem>} Two button definitions. One for each state of the toggle button. 
    */
   static createToggleButtons(args = {}) {
     const localizedLabel = game.i18n.localize(args.label);
     return [
-      {
+      new ContextMenuItem({
         name: localizedLabel,
         icon: args.activeIcon ?? '<i class="fas fa-check"></i>',
         condition: () => {
@@ -64,8 +64,8 @@ export default class ButtonContextMenuViewModel extends ButtonViewModel {
           }
         },
         callback: () => { args.propertyOwner[args.propertyName] = args.inactiveValue; },
-      },
-      {
+      }),
+      new ContextMenuItem({
         name: localizedLabel,
         icon: args.inactiveIcon ?? '',
         condition: () => {
@@ -79,7 +79,7 @@ export default class ButtonContextMenuViewModel extends ButtonViewModel {
           }
         },
         callback: () => { args.propertyOwner[args.propertyName] = args.activeValue; },
-      }
+      }),
     ];
   }
 
@@ -122,12 +122,8 @@ export default class ButtonContextMenuViewModel extends ButtonViewModel {
    * * `event: Event`
    * * `data: undefined`
    * 
-   * @param {Array<Object> | undefined} args.menuItems An array of context menu items, 
-   * which are used to populate the context menu. The items can have the following properties: 
-   * * `{String} name` - The displayed item name
-   * * `{String} icon` An icon glyph HTML string
-   * * `{Function} condition` A function which returns a Boolean for whether or not to display the item
-   * * `{Function} callback` A callback function to trigger when the entry of the menu is clicked
+   * @param {Array<ContextMenuItem> | undefined} args.menuItems An array of context menu items, 
+   * which are used to populate the context menu. 
    */
   constructor(args = {}) {
     super({
@@ -207,5 +203,35 @@ export default class ButtonContextMenuViewModel extends ButtonViewModel {
       const delta = outerBounds.top - contextMenuBounds.top;
       contextMenuElement[0].style.top = `${delta}px`;
     }
+  }
+}
+
+/**
+ * Represents a `ButtonContextMenuViewModel` entry. 
+ * 
+ * @property {String} name The displayed item name
+ * @property {String | undefined} icon An icon glyph HTML string
+ * @property {Function | undefined} condition A function which returns a Boolean 
+ * for whether or not to display the item
+ * @property {Function | undefined} callback A callback function to trigger when 
+ * the entry of the menu is clicked
+*/
+export class ContextMenuItem {
+  /**
+   * @param {Object} args 
+   * @param {String} args.name The displayed item name
+   * @param {String | undefined} args.icon An icon glyph HTML string
+   * @param {Function | undefined} args.condition A function which returns a Boolean 
+   * for whether or not to display the item
+   * @param {Function | undefined} args.callback A callback function to trigger when 
+   * the entry of the menu is clicked
+  */
+  constructor(args = {}) {
+    ValidationUtil.validateOrThrow(args, ["name"]);
+
+    this.name = args.name;
+    this.icon = args.icon;
+    this.condition = args.condition;
+    this.callback = args.callback;
   }
 }
