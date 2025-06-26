@@ -7,8 +7,8 @@ cssClass: {undefined | String}
   {{!-- Modified Level --}}
   <div class="flex flex-row auto-margin-h-sm">
     {{> readOnlyValue viewModel=viewModel.vmModifiedLevelHeader cssClass="width-sm font-size-lg flex flex-center" }}
-    {{#if viewModel.isLearningSkill}}
-    <span class="strive-pill flex flex-row flex-center margin-t-sm margin-b-sm border-solid-sm font-size-xs">{{localize "system.character.skill.learning.skillChip"}}</span>
+    {{#if (or viewModel.isLearningSkill viewModel.isInnateSkill)}}
+    <span class="strive-pill flex flex-row flex-center margin-t-sm margin-b-sm border-solid-sm font-size-xs">{{#if viewModel.isLearningSkill}}{{localize "system.character.skill.learning.skillChip"}}{{else}}{{localize "system.character.skill.innate.skillChip"}}{{/if}}</span>
     {{/if}}
   </div>
   <span class="pad-r-md"></span>

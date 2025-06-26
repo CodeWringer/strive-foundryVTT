@@ -25,6 +25,7 @@ import { ValidationUtil } from "../../../../business/util/validation-utility.mjs
 import RulesetExplainer from "../../../../business/ruleset/ruleset-explainer.mjs"
 import ReadOnlyValueViewModel from "../../../component/read-only-value/read-only-value.mjs"
 import ViewModel from "../../../view-model/view-model.mjs"
+import { SKILL_TAGS } from "../../../../business/tags/system-tags.mjs"
 
 /**
  * @property {TransientSkill} document
@@ -183,6 +184,12 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
    * @readonly
    */
   get isLearningSkill() { return this.document.level === 0; }
+
+  /**
+   * @returns {Boolean}
+   * @readonly
+   */
+  get isInnateSkill() { return ValidationUtil.isDefined(this.document.tags.find(it => it.id === SKILL_TAGS.INNATE.id)); }
 
   /** @override */
   get metaDataInputDefinitions() {
