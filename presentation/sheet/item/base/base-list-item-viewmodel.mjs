@@ -43,8 +43,6 @@ export const LIST_ITEM_DETAIL_MODES = {
  * * `getDataFields`
  * * `getPrimaryHeaderButtons`
  * * `getSecondaryHeaderButtons`
- * * `getAdditionalContent`
- * * `getAdditionalHeaderContent`
  * 
  * @property {Array<TemplatedComponent>} primaryHeaderButtons An array of the primary 
  * header buttons. 
@@ -56,9 +54,6 @@ export const LIST_ITEM_DETAIL_MODES = {
  * * Note that each of the provided view model instances will be available for access on 
  * this view model instance, as a property whose name is the id of the provided 
  * view model instance. 
- * @property {additionalHeaderContent | undefined} additionalHeaderContent Additional 
- * header content. Will not be collapsible and will be rendered directly beneath the 
- * header. 
  * @property {Array<TemplatedComponent>} dataFields 
  * * Note that each of the provided view model instances will be available for access on 
  * this view model instance, as a property whose name is the id of the provided 
@@ -68,6 +63,13 @@ export const LIST_ITEM_DETAIL_MODES = {
 export default class BaseListItemViewModel extends ViewModel {
   /** @override */
   static get TEMPLATE() { return game.strive.const.TEMPLATES.BASE_LIST_ITEM; }
+  
+  /**
+   * @returns {String}
+   * @static
+   * @readonly
+   */
+  static get HEADER_TEMPLATE() { return game.strive.const.TEMPLATES.BASE_LIST_ITEM_HEADER; }
 
   /** @override */
   get entityId() { return this.document.id; }
@@ -253,9 +255,11 @@ export default class BaseListItemViewModel extends ViewModel {
     this.secondaryHeaderButtons = this.getSecondaryHeaderButtons();
     this._ensureViewModelsAsProperties(this.secondaryHeaderButtons);
     
-    this.additionalHeaderContent = this.getAdditionalHeaderContent();
-    if (ValidationUtil.isDefined(this.additionalHeaderContent)) {
-      this._ensureViewModelsAsProperties([this.additionalHeaderContent]);
+    this.headerTemplate = this.getHeaderTemplate();
+    
+    this.promotedContent = this.getPromotedContentTemplate();
+    if (ValidationUtil.isDefined(this.promotedContent)) {
+      this._ensureViewModelsAsProperties([this.promotedContent]);
     }
     
     this.additionalContent = this.getAdditionalContent();
@@ -455,14 +459,32 @@ export default class BaseListItemViewModel extends ViewModel {
   }
   
   /**
-   * Returns the definition of the additional header content, if there is one. 
+   * Returns the definition of the header. 
+   * 
+   * Can be overridden to implement a custom header. 
+   * 
+   * @returns {TemplatedComponent}
+   * 
+   * @virtual
+   * @protected
+   */
+  getHeaderTemplate() {
+    return new TemplatedComponent({
+      template: BaseListItemViewModel.HEADER_TEMPLATE,
+      viewModel: this,
+    });
+  }
+  
+  /**
+   * Returns the definition of additional content that is to be rendered just below the header, 
+   * and above the data fields, and which does not get hidden when the list item is collapsed. 
    * 
    * @returns {TemplatedComponent | undefined}
    * 
    * @virtual
    * @protected
    */
-  getAdditionalHeaderContent() {
+  getPromotedContentTemplate() {
     return undefined;
   }
   

@@ -2,49 +2,55 @@
 viewModel: {ActorSheetViewModel}
 cssClass: {undefined | String}
 --}}
-<form id="{{viewModel.id}}" class="{{viewModel.document.type}} flexcol{{#if cssClass}} {{cssClass}}{{/if}}" autocomplete="off">
+<form id="{{viewModel.id}}" class="{{viewModel.document.type}} flex flex-column{{#if cssClass}} {{cssClass}}{{/if}}" autocomplete="off">
   {{!-- Sheet Header --}}
-  <header class="sheet-header">
-    {{> inputImage viewModel=viewModel.vmImg cssClass="profile-img" }}
-    <div class="header-fields">
-      <div class="flex flex-row">
-        <h1 class="header-name flex-grow{{#if viewModel.showFancyFont}} fancy-font{{/if}}">
-          {{> inputTextField viewModel=viewModel.vmTfName }}
-        </h1>
-        {{!-- Configure --}}
-        {{#if (or viewModel.isNPC viewModel.isPC)}}
-          {{> button viewModel=viewModel.vmBtnConfigure cssClass="font-size-lg" }}
+  <header class="system-sheet-header pad-b-md">
+    <div class="flex flex-row flex-middle auto-margin-h">
+      {{!-- Identity --}}
+      {{> inputImage viewModel=viewModel.vmImg cssClass="custom-icon-lg" }}
+      <div class="flex flex-column flex-grow auto-margin-v">
+        {{!-- Name Row --}}
+        {{> inputTextField viewModel=viewModel.vmTfName cssClass="document-title" }}
+        {{!-- Personals --}}
+        {{#if (eq viewModel.isPlain false)}}
+        {{#with viewModel.templatePersonals as | template |}}
+          {{> (template) viewModel=../viewModel.personalsViewModel }}
+        {{/with}}
         {{/if}}
-        {{!-- SendToChat --}}
-        <div class="flex flex-center font-size-lg{{#if viewModel.isSendable}}{{else}} hidden{{/if}}">
-          {{> buttonSendToChat viewModel=viewModel.vmBtnSendToChat }}
-        </div>
       </div>
+      {{!-- Action Points --}}
       {{#if (eq viewModel.isPlain false)}}
-      {{#with viewModel.templatePersonals as | template |}}
-        {{> (template) viewModel=../viewModel.personalsViewModel }}
-      {{/with}}
+      <div id="{{viewModel.vmActionPoints.id}}" class="flex flex-column flex-wrap flex-gap-sm pad-md sheet-block" style="max-height: 9.5rem;">
+        {{#each viewModel.actionPoints as |actionPoint|}}
+        <div style="width: 21px; height: 21px;">
+        <{{#if ../viewModel.isEditable}}a{{else}}div{{/if}} id="{{actionPoint.id}}" class="combatant-action-point">
+          <img class="combatant-action-point-image unstyled" src="{{#if actionPoint.full}}systems/strive/presentation/image/action-point-full.png{{else}}systems/strive/presentation/image/action-point-empty.png{{/if}}" />
+          <div class="combatant-action-point-label{{#if actionPoint.full}} active{{/if}}">{{actionPoint.value}}</div>
+        </{{#if ../viewModel.isEditable}}a{{else}}div{{/if}}>
+        </div>
+        {{/each}}
+      </div>
       {{/if}}
     </div>
   </header>
 
   {{#if viewModel.showNavigation}}
     {{!-- Sheet Tab Navigation --}}
-    <nav class="actor-navigation-bar sheet-tabs tabs flex flex-justify font-size-default" id="nav-sheet-tabs" data-group="primary">
+    <nav id="nav-sheet-tabs" class="sheet-tabs tabs flex flex-justify font-size-default" data-group="primary">
       {{#if (eq viewModel.isPlain false)}}
         {{!-- Default tab is specified in actor-sheet.mjs --}}
-        <a class="item flex flex-center flex-grow{{#if viewModel.showFancyFont}} fancy-font{{/if}}" data-tab="abilities"><div>{{localize "system.character.sheet.tab.abilities"}}</div></a>
+        <a class="item flex flex-center flex-grow fill border-solid-b-md underline{{#if viewModel.showFancyFont}} fancy-font{{/if}}" data-tab="abilities"><div>{{localize "system.character.sheet.tab.abilities"}}</div></a>
         {{#if viewModel.showPersonality }}
-          <a class="item flex flex-center flex-grow{{#if viewModel.showFancyFont}} fancy-font{{/if}}" data-tab="drivers-fate"><div>{{localize "system.character.sheet.tab.personality"}}</div></a>
+          <a class="item flex flex-center flex-grow fill border-solid-b-md underline{{#if viewModel.showFancyFont}} fancy-font{{/if}}" data-tab="drivers-fate"><div>{{localize "system.character.sheet.tab.personality"}}</div></a>
         {{/if}}
-        <a class="item flex flex-center flex-grow{{#if viewModel.showFancyFont}} fancy-font{{/if}}" data-tab="health"><div>{{localize "system.character.sheet.tab.health"}}</div></a>
-        <a class="item flex flex-center flex-grow{{#if viewModel.showFancyFont}} fancy-font{{/if}}" data-tab="assets"><div>{{localize "system.character.sheet.tab.assets"}}</div></a>
-        <a class="item flex flex-center flex-grow{{#if viewModel.showFancyFont}} fancy-font{{/if}}" data-tab="biography"><div>{{localize "system.character.sheet.tab.biography"}}</div></a>
+        <a class="item flex flex-center flex-grow fill border-solid-b-md underline{{#if viewModel.showFancyFont}} fancy-font{{/if}}" data-tab="health"><div>{{localize "system.character.sheet.tab.health"}}</div></a>
+        <a class="item flex flex-center flex-grow fill border-solid-b-md underline{{#if viewModel.showFancyFont}} fancy-font{{/if}}" data-tab="assets"><div>{{localize "system.character.sheet.tab.assets"}}</div></a>
+        <a class="item flex flex-center flex-grow fill border-solid-b-md underline{{#if viewModel.showFancyFont}} fancy-font{{/if}}" data-tab="biography"><div>{{localize "system.character.sheet.tab.biography"}}</div></a>
       {{else}}
-        <a class="item flex flex-center flex-grow{{#if viewModel.showFancyFont}} fancy-font{{/if}}" data-tab="description"><div>{{localize "system.character.sheet.tab.description"}}</div></a>
+        <a class="item flex flex-center flex-grow fill border-solid-b-md underline{{#if viewModel.showFancyFont}} fancy-font{{/if}}" data-tab="description"><div>{{localize "system.character.sheet.tab.description"}}</div></a>
       {{/if}}
       {{#if viewModel.isGM }}
-        <a class="item flex flex-center flex-grow{{#if viewModel.showFancyFont}} fancy-font{{/if}}" data-tab="gm-notes"><div>{{localize "system.general.sheet.tab.gmNotes"}}</div></a>
+        <a class="item flex flex-center flex-grow fill border-solid-b-md underline{{#if viewModel.showFancyFont}} fancy-font{{/if}}" data-tab="gm-notes"><div>{{localize "system.general.sheet.tab.gmNotes"}}</div></a>
       {{/if}}
     </nav>
   {{/if}}

@@ -193,7 +193,8 @@ export default class ExpertiseTableViewModel extends ViewModel {
       }
     };
 
-    const level = parseInt(this.document.modifiedLevel);
+    const documentHasOwner = ValidationUtil.isDefined(this.document.owningDocument);
+    const level = documentHasOwner ? parseInt(this.document.modifiedLevel) : 999999;
     const unlockedExpertises = this.document.expertises.filter(it => parseInt(it.requiredLevel) <= level)
     const sortedUnlockedExpertises = unlockedExpertises.sort(expertiseSortFunc);
     this.unlockedExpertises = this._getExpertiseViewModels(sortedUnlockedExpertises, true);

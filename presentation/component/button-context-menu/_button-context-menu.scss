@@ -1,0 +1,11 @@
+a.context.highlight {
+  &:hover {
+    text-shadow: unset;
+  }
+}
+
+li.context-item {
+  &:hover {
+    text-shadow: 0 0 8px $c-text-highlight;
+  }
+}

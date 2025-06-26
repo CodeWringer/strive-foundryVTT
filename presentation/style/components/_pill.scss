@@ -3,4 +3,8 @@
   background-color: $c-bg-dark;
   padding: $padding-sm $padding-lg;
   text-align: center;
+
+  &.highlight {
+    background-color: #ffbc814c;
+  }
 }

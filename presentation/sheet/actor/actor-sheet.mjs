@@ -9,6 +9,7 @@ import { ITEM_TYPES } from "../../../business/document/item/item-types.mjs";
 import FoundryWrapper from "../../../common/foundry-wrapper.mjs";
 import { SheetUtil } from "../sheet-utility.mjs";
 import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
+import SendToChatHandler from "../../utility/send-to-chat-handler.mjs";
 
 export class GameSystemActorSheet extends ActorSheet {
   /**
@@ -136,12 +137,8 @@ export class GameSystemActorSheet extends ActorSheet {
     SheetUtil.enrichData(context);
 
     // Prepare a new view model instance. 
-    game.strive.logger.logPerf(this, "actor.getData (getViewModel)", () => {
-      this._viewModel = this.subType.getViewModel(context, context.actor, this);
-    });
-    game.strive.logger.logPerf(this, "actor.getData (readAllViewState)", () => {
-      this._viewModel.readAllViewState();
-    });
+    this._viewModel = this.subType.getViewModel(context, context.actor, this);
+    this._viewModel.readAllViewState();
 
     context.viewModel = this._viewModel;
     
@@ -152,12 +149,8 @@ export class GameSystemActorSheet extends ActorSheet {
   async activateListeners(html) {
     await super.activateListeners(html);
 
-    await game.strive.logger.logPerfAsync(this, "actor.activateListeners (subType)", async () => {
-      await this.subType.activateListeners(html);
-    });
-    await game.strive.logger.logPerfAsync(this, "actor.activateListeners (viewModel)", async () => {
-      await this.viewModel.activateListeners(html);
-    });
+    await this.subType.activateListeners(html);
+    await this.viewModel.activateListeners(html);
   }
 
   /**
@@ -218,5 +211,33 @@ export class GameSystemActorSheet extends ActorSheet {
     }
 
     return await Item.create(creationData, { parent: this.actor });
+  }
+
+  /** @override */
+  _getHeaderButtons() {
+    const buttons = super._getHeaderButtons();
+    if (game.user.isGM || this.actor.isOwner) {
+      buttons.splice(0, 0, {
+        class: "send-to-chat",
+        icon: "fas fa-comments",
+        onclick: async () => {
+          await new SendToChatHandler().prompt({
+            target: this.viewModel.document,
+            dialogTitle: game.i18n.localize("system.general.sendToChat"),
+          });
+        },
+      });
+    }
+    if ((game.user.isGM || this.actor.isOwner) && this.actor.type !== ACTOR_TYPES.PLAIN) {
+      buttons.splice(0, 0, {
+        label: game.i18n.localize("system.character.edit"),
+        class: "edit-meta",
+        icon: "fas fa-cog",
+        onclick: async () => {
+          await this.viewModel.promptConfigure();
+        },
+      });
+    }
+    return buttons;
   }
 }

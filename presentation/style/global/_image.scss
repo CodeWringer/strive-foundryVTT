@@ -1,31 +1,37 @@
-img.header-image {
-  background: $c-bg-medium;
-  border-radius: 0.2rem;
-  border: 1px solid $c-border-beige-light;
+img {
+  &.custom-icon {
+    &-chat {
+      background: $c-bg-medium;
+      border-radius: 0.2rem;
+      border: 1px solid $c-border-beige-light;
+    }
+    &-sm {
+      border: $c-border-input 1px solid;
+      flex: none;
+      width: $line-height;
+      height: $line-height;
+    }
+    &-md {
+      border: $c-border-input 1px solid;
+      flex: none;
+      width: 64px;
+      height: 64px;
+    }
+    &-lg {
+      border: $c-border-input 1px solid;
+      flex: none;
+      height: 6.4rem;
+    }
+  }
+
+  &.unstyled {
+    border: unset;
+    margin: 0;
+    padding: 0;
+  }
 }
 
-.inline-img {
+img.inline-img {
   border: none;
   display: inline-block;
-}
-
-img.custom-icon {
-  &-sm {
-    border: $c-border-input 1px solid;
-    flex: none;
-    width: $line-height;
-    height: $line-height;
-  }
-  &-md {
-    border: $c-border-input 1px solid;
-    flex: none;
-    width: 64px;
-    height: 64px;
-  }
-  &-lg {
-    border: $c-border-input 1px solid;
-    flex: none;
-    width: 100px;
-    height: 100px;
-  }
 }
