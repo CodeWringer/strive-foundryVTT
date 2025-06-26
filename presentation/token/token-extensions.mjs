@@ -5,8 +5,6 @@ import { TEXTURES, getPixiTexture } from "../pixi/pixi-preloader.mjs";
 
 /**
  * Provides token utilities. 
- * 
- * Can add challenge ratings and action point controls to tokens. 
  */
 export default class TokenExtensions {
   /**
@@ -21,60 +19,15 @@ export default class TokenExtensions {
   static updateTokenHover(token) {
     if (!ValidationUtil.isDefined(token.actor) && token.actor.type !== ACTOR_TYPES.NPC) return;
 
-    const displayWhen = token.document.displayName;
-    const isOwner = token.actor.isOwner || game.user.isGM;
+    // const displayWhen = token.document.displayName;
+    // const isOwner = token.actor.isOwner || game.user.isGM;
 
-    TokenExtensions._hideChallengeRating(token);
-    if (((displayWhen == CONST.TOKEN_DISPLAY_MODES.CONTROL || displayWhen == CONST.TOKEN_DISPLAY_MODES.OWNER_HOVER || displayWhen == CONST.TOKEN_DISPLAY_MODES.OWNER) && isOwner) 
-      || (displayWhen == CONST.TOKEN_DISPLAY_MODES.HOVER || displayWhen == CONST.TOKEN_DISPLAY_MODES.ALWAYS)) {
-      if (token.hover) {
-        TokenExtensions._showChallengeRating(token);
-      }
-    }
-  }
-
-  /**
-   * Shows the challenge ratings of an NPC represented by the given token, *if* the 
-   * given token represents an NPC. 
-   * 
-   * @param {Token} token 
-   * 
-   * @see https://foundryvtt.com/api/classes/client.Token.html
-   * 
-   * @static
-   * @private
-   */
-  static _showChallengeRating(token) {
-    if (!ValidationUtil.isDefined(token.actor)) return;
-
-    const actor = token.actor.getTransientObject();
-    
-    if (actor.isChallengeRatingEnabled) {
-      const text = `${game.i18n.localize("system.character.advancement.challengeRating.abbreviation")} ${actor.challengeRating.modified}`;
-
-      token.challengeRating = new PreciseText(text, token._getTextStyle());
-      token.challengeRating.anchor.set(0.5, 0);
-      token.challengeRating.position.set(token.w / 2, token.h + token.challengeRating.height);
-
-      token.addChild(token.challengeRating);
-    }
-  }
-  
-  /**
-   * Hides the given token's challenge ratings, if any are currently displayed for it. 
-   * 
-   * @param {Token} token 
-   * 
-   * @see https://foundryvtt.com/api/classes/client.Token.html
-   * 
-   * @private
-   * @static
-   */
-  static _hideChallengeRating(token) {
-    if (ValidationUtil.isDefined(token.challengeRating)) {
-      token.removeChild(token.challengeRating);
-      token.challengeRating = undefined;
-    }
+    // if (((displayWhen == CONST.TOKEN_DISPLAY_MODES.CONTROL || displayWhen == CONST.TOKEN_DISPLAY_MODES.OWNER_HOVER || displayWhen == CONST.TOKEN_DISPLAY_MODES.OWNER) && isOwner) 
+    //   || (displayWhen == CONST.TOKEN_DISPLAY_MODES.HOVER || displayWhen == CONST.TOKEN_DISPLAY_MODES.ALWAYS)) {
+    //   if (token.hover) {
+    //     // Do nothing, atm.
+    //   }
+    // }
   }
 
   /**

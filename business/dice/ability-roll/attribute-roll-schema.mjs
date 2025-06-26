@@ -1,7 +1,6 @@
 import { VISIBILITY_MODES } from "../../../presentation/chat/visibility-modes.mjs";
 import DynamicInputDefinition from "../../../presentation/dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
 import { DYNAMIC_INPUT_TYPES } from "../../../presentation/dialog/dynamic-input-dialog/dynamic-input-types.mjs";
-import { ACTOR_TYPES } from "../../document/actor/actor-types.mjs";
 import CharacterAttribute from "../../ruleset/attribute/character-attribute.mjs";
 import { Sum, SumComponent } from "../../ruleset/summed-data.mjs";
 import RollData from "../roll-data.mjs";
@@ -119,16 +118,8 @@ export class AttributeRollSchema extends RollSchema {
    * @returns {Array<SumComponent>}
    */
   _getDiceComponents(document) {
-    const actor = document.owningActor;
-    if (actor.type === ACTOR_TYPES.NPC && actor.dependsOnActiveCr === true) {
-      return [
-        new SumComponent("challengeRating", "system.character.advancement.challengeRating.label", actor.challengeRating.modified),
-      ];
-    } else {
-      return [
-        new SumComponent(document.name, document.localizableName, document.modifiedLevel),
-      ];
-    }
+    return [
+      new SumComponent(document.name, document.localizableName, document.modifiedLevel),
+    ];
   }
-
 }

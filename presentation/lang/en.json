@@ -160,14 +160,6 @@
         "label": "Advancement",
         "level": "Level",
         "rawLevel": "Raw Level",
-        "challengeRating": {
-          "label": "Challenge Rating",
-          "abbreviation": "CR",
-          "modifier": {
-            "label": "Challenge Rating Modifier",
-            "abbreviation": "Mod."
-          }
-        },
         "modifiedLevel": "Modified Level",
         "modifiedOf": "Modified %{name}",
         "minimum": "Minimum Level",

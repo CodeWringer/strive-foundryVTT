@@ -163,17 +163,10 @@ export class AttributeAndSkillRollSchema extends SkillRollSchema {
    * @private
    */
   _getDiceComponents(document, characterAttribute) {
-    if (document.dependsOnActiveCr === true) {
-      return [
-        new SumComponent("challengeRating", "system.character.advancement.challengeRating.label", document.owningDocument.challengeRating.modified),
-        new SumComponent(document.name, "system.character.advancement.modifier.label", document.levelModifier),
-      ];
-    } else {
-      return [
-        new SumComponent(characterAttribute.name, characterAttribute.localizableName, characterAttribute.modifiedLevel),
-        new SumComponent(document.name, document.name, document.modifiedLevel),
-      ];
-    }
+    return [
+      new SumComponent(characterAttribute.name, characterAttribute.localizableName, characterAttribute.modifiedLevel),
+      new SumComponent(document.name, document.name, document.modifiedLevel),
+    ];
   }
 
   /**

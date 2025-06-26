@@ -16,18 +16,6 @@ cssClass: {undefined | String}
       {{viewModel.document.name}}
     </h2>
   </div>
-  {{#if viewModel.isNPC}}
-    {{#if viewModel.challengeRating}}
-      <div class="flex flex-row sheet-block margin-b-md">
-        <div class="width-min-xl{{#if viewModel.showFancyFont}} fancy-font{{/if}}">
-          {{localize "system.character.advancement.challengeRating.label"}}
-        </div>
-        <div class="flex-grow">
-          <span>{{viewModel.challengeRating.value}}</span>
-        </div>
-      </div>
-    {{/if}}
-  {{/if}}
   {{#if (eq viewModel.isPlain false)}}
     {{!-- Personals --}}
     {{!-- Species --}}

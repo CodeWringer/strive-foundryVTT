@@ -240,7 +240,7 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
     });
     ValidationUtil.validateOrThrow(args, ["document"]);
 
-    const level = this.document.dependsOnActiveCr === true ? (this.document.owningDocument.challengeRating.modified) : this.document.level;
+    const level = this.document.level;
     // Header
     this.vmModifiedLevelHeader = new ReadOnlyValueViewModel({
       id: "vmModifiedLevelHeader",
@@ -253,7 +253,6 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
       parent: this,
       id: "vmNsLevel",
       value: level,
-      isEditable: this.document.dependsOnActiveCr === true ? false : this.isEditable,
       min: 0,
       localizedToolTip: game.i18n.localize("system.character.advancement.level"),
       onChange: (_, newValue) => {

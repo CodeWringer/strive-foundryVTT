@@ -1,5 +1,4 @@
 import ViewModel from "../../../../view-model/view-model.mjs";
-import ChallengeRatingViewModel from "./challenge-rating-viewmodel.mjs";
 import AttributeTableViewModel from "./actor-attribute-table-viewmodel.mjs";
 import TransientBaseCharacterActor from "../../../../../business/document/actor/transient-base-character-actor.mjs";
 import { ACTOR_TYPES } from "../../../../../business/document/actor/actor-types.mjs";
@@ -51,40 +50,14 @@ export default class ActorAttributesViewModel extends ViewModel {
     this.document = args.document;
 
     // Child view models. 
-    const isExpanded = (this.isPC === true || (this.isNPC === true && this.document.isChallengeRatingEnabled === false));
-    if (isExpanded === true) {
-      this.childTemplate = AttributeTableViewModel.TEMPLATE;
-      this.vmChild = new AttributeTableViewModel({
-        id: "vmChild",
-        parent: this,
-        document: this.document,
-        attributes: this.document.attributes,
-        parent: this,
-        headerInteractible: this.isNPC === true,
-        onHeaderClicked: () => {
-          if (this.isNPC === true) {
-            this.document.isChallengeRatingEnabled = true;
-          }
-        },
-      });
-    } else {
-      this.childTemplate = ChallengeRatingViewModel.TEMPLATE;
-      this.vmChild = new ChallengeRatingViewModel({
-        id: "vmChild",
-        parent: this,
-        challengeRating: this.document.challengeRating,
-        localizedLabel: game.i18n.localize("system.character.advancement.challengeRating.label"),
-        actor: this.document,
-        onClicked: () => {
-          if (this.isNPC === true) {
-            this.document.isChallengeRatingEnabled = false;
-          }
-        },
-        onChallengeRatingChanged: (_, newValue) => {
-          this.document.challengeRating = newValue;
-        },
-      });
-    }
+    this.childTemplate = AttributeTableViewModel.TEMPLATE;
+    this.vmChild = new AttributeTableViewModel({
+      id: "vmChild",
+      parent: this,
+      document: this.document,
+      attributes: this.document.attributes,
+      parent: this,
+    });
   }
   
   /** @override */
