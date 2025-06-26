@@ -30,6 +30,9 @@ import ViewModel from "../../../view-model/view-model.mjs"
  * @property {TransientSkill} document
  */
 export default class SkillListItemViewModel extends BaseListItemViewModel {
+  /** @override */
+  static get HEADER_TEMPLATE() { return game.strive.const.TEMPLATES.SKILL_LIST_ITEM_HEADER; }
+
   /**
    * Returns true, if the expertise list should be visible. 
    * @type {Boolean}
@@ -169,6 +172,18 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
    */
   get _inputAttributes() { return "inputAttributes"; }
 
+  /**
+   * @returns {Number}
+   * @readonly
+   */
+  get apCost() { return this.document.apCost; }
+
+  /**
+   * @returns {Boolean}
+   * @readonly
+   */
+  get isLearningSkill() { return this.document.level === 0; }
+
   /** @override */
   get metaDataInputDefinitions() {
     const baseAttributes = this.document.baseAttributes.concat([]); // Safe copy
@@ -226,20 +241,30 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
     ValidationUtil.validateOrThrow(args, ["document"]);
 
     const level = this.document.dependsOnActiveCr === true ? (this.document.owningDocument.challengeRating.modified) : this.document.level;
+    // Header
+    this.vmModifiedLevelHeader = new ReadOnlyValueViewModel({
+      id: "vmModifiedLevelHeader",
+      parent: this,
+      value: this.modifiedLevel,
+      localizedToolTip: game.i18n.localize("system.character.advancement.modifiedLevel"),
+    });
+    // Promoted content
     this.vmNsLevel = new InputNumberSpinnerViewModel({
       parent: this,
       id: "vmNsLevel",
       value: level,
       isEditable: this.document.dependsOnActiveCr === true ? false : this.isEditable,
+      min: 0,
+      localizedToolTip: game.i18n.localize("system.character.advancement.level"),
       onChange: (_, newValue) => {
         this.document.level = newValue;
       },
-      min: 0,
     });
     this.vmNsLevelModifier = new InputNumberSpinnerViewModel({
       parent: this,
       id: "vmNsLevelModifier",
       value: this.document.levelModifier,
+      localizedToolTip: game.i18n.localize("system.character.advancement.modifier.label"),
       onChange: (_, newValue) => {
         this.document.levelModifier = newValue;
       },
@@ -248,6 +273,7 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
       id: "vmModifiedLevel",
       parent: this,
       value: this.modifiedLevel,
+      localizedToolTip: game.i18n.localize("system.character.advancement.modifiedLevel"),
     });
     if (this.showAdvancementProgression) {
       this.vmNsSuccesses = new InputNumberSpinnerViewModel({
@@ -329,10 +355,10 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
           parent: this,
           id: "vmApCost",
           value: this.document.apCost,
+          min: 0,
           onChange: (_, newValue) => {
             this.document.apCost = newValue;
           },
-          min: 0,
         }),
         isHidden: this.hideApCost,
         localizedIconToolTip: game.i18n.localize("system.actionPoint.plural"),
@@ -516,6 +542,14 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
           isEditable: this.isEditable,
         })
       );
+  }
+
+  /** @override */
+  getHeaderTemplate() {
+    return new TemplatedComponent({
+      template: SkillListItemViewModel.HEADER_TEMPLATE,
+      viewModel: this,
+    });
   }
 
   /** @override */

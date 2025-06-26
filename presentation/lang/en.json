@@ -674,7 +674,8 @@
         "learning": {
           "label": "Learning Skills",
           "plural": "Learning Skills",
-          "singular": "Learning Skill"
+          "singular": "Learning Skill",
+          "skillChip": "Learning"
         },
         "plural": "Skills",
         "prerequisite": {

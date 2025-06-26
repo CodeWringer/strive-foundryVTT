@@ -70,7 +70,7 @@ $border-size-xl: 4px;
   }
 }
 
-.border {
+.border-solid {
   &-sm {
     border: $border-size-sm solid $c-border-medium !important;
     &.highlight {
