@@ -3,7 +3,7 @@ import { ATTRIBUTES } from "../../../../business/ruleset/attribute/attributes.mj
 import { DAMAGE_TYPES } from "../../../../business/ruleset/damage-types.mjs"
 import { ATTACK_TYPES, getAttackTypeIconClass } from "../../../../business/ruleset/skill/attack-types.mjs"
 import DamageAndType from "../../../../business/ruleset/skill/damage-and-type.mjs"
-import ButtonContextMenuViewModel from "../../../component/button-context-menu/button-context-menu-viewmodel.mjs"
+import ButtonContextMenuViewModel, { ContextMenuItem } from "../../../component/button-context-menu/button-context-menu-viewmodel.mjs"
 import ButtonRollViewModel from "../../../component/button-roll/button-roll-viewmodel.mjs"
 import DamageDefinitionListViewModel from "../../../component/damage-definition-list/damage-definition-list-viewmodel.mjs"
 import InputDropDownViewModel from "../../../component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs"
@@ -471,7 +471,7 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
   getContextMenuButtons() {
     return super.getContextMenuButtons().concat([
       // Add damage
-      {
+      new ContextMenuItem({
         name: StringUtil.format(
           game.i18n.localize("system.general.add.addType"),
           game.i18n.localize("system.damageDefinition.label")
@@ -486,7 +486,7 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
           }));
           this.document.damage = damage;
         },
-      },
+      }),
     ])
       // Toggle ap cost
       .concat(
