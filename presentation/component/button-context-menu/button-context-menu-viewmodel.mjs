@@ -113,14 +113,24 @@ export default class ButtonContextMenuViewModel extends ButtonViewModel {
   /**
    * @param {Object} args
    * @param {String | undefined} args.id Unique ID of this view model instance. 
+   * @param {ViewModel | undefined} args.parent Parent ViewModel instance of this instance. 
+   * If undefined, then this ViewModel instance may be seen as a "root" level instance. A root level instance 
+   * is expected to be associated with an actor sheet or item sheet or journal entry or chat message and so on.
    * @param {Boolean | undefined} args.isEditable If true, will be interactible. 
    * @param {String | undefined} args.localizedToolTip A localized text to 
    * display as a tool tip. 
    * @param {String | undefined} args.localizedLabel A localized text to 
    * display as a button label. 
-   * @param {Function | undefined} args.onClick Asynchronous callback that is invoked when the button is clicked. Arguments: 
+   * @param {String | undefined} args.iconHtml Raw HTML to render as 
+   * an associated icon. E. g. `'<i class="fas fa-scroll"></i>'`
+   * * default `'<i class="fas fa-bars"></i>'`
+   * @param {Boolean | undefined} args.showFancyFont If `true`, will render 
+   * the `localizedLabel` using the "fancy font". 
+   * @param {Function | undefined} args.onClick Asynchronous callback that is invoked when 
+   * the button is clicked. Arguments: 
    * * `event: Event`
-   * * `data: undefined`
+   * * `data: any | undefined` - Returned data of the click callback, if 
+   * there is any. 
    * 
    * @param {Array<ContextMenuItem> | undefined} args.menuItems An array of context menu items, 
    * which are used to populate the context menu. 
@@ -128,7 +138,7 @@ export default class ButtonContextMenuViewModel extends ButtonViewModel {
   constructor(args = {}) {
     super({
       ...args,
-      iconHtml: '<i class="fas fa-bars"></i>',
+      iconHtml: args.iconHtml ?? '<i class="fas fa-bars"></i>',
       localizedToolTip: args.localizedToolTip ?? game.i18n.localize("system.general.contextMenu"),
     });
 
