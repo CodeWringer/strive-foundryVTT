@@ -631,6 +631,8 @@ export default class BaseListItemViewModel extends ViewModel {
 
     const deltaTags = dialog[this._inputTags];
     this.document.tags = deltaTags;
+
+    return dialog;
   }
 
   /** @override */
