@@ -48,6 +48,8 @@ export default class ButtonContextMenuViewModel extends ButtonViewModel {
    * @returns {Array<ContextMenuItem>} Two button definitions. One for each state of the toggle button. 
    */
   static createToggleButtons(args = {}) {
+    ValidationUtil.validateOrThrow(args, ["activeValue"]);
+    
     const localizedLabel = game.i18n.localize(args.label);
     return [
       new ContextMenuItem({
@@ -63,7 +65,7 @@ export default class ButtonContextMenuViewModel extends ButtonViewModel {
             return ValidationUtil.isDefined(value) === true;
           }
         },
-        callback: () => { args.propertyOwner[args.propertyName] = args.inactiveValue; },
+        callback: () => { args.propertyOwner[args.propertyName] = (args.inactiveValue ?? null); },
       }),
       new ContextMenuItem({
         name: localizedLabel,
