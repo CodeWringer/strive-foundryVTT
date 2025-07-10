@@ -1,3 +1,4 @@
+import GameSystemUserSettings from "../../business/setting/game-system-user-settings.mjs";
 import GetShowFancyFontUseCase from "../../business/use-case/get-show-fancy-font-use-case.mjs";
 import { PropertyUtil } from "../../business/util/property-utility.mjs";
 import { UuidUtil } from "../../business/util/uuid-utility.mjs";
@@ -281,6 +282,14 @@ export default class ViewModel {
   set showFancyFont(value) {
     this._showFancyFont = value;
   }
+
+  /**
+   * Returns true, if rule reminders are enabled. 
+   * 
+   * @type {Boolean}
+   * @readonly
+   */
+  get showReminders() { return new GameSystemUserSettings().get(GameSystemUserSettings.KEY_TOGGLE_REMINDERS); }
 
   /**
    * Name or path of a contextual template, which will be displayed in exception log entries, to aid debugging. 

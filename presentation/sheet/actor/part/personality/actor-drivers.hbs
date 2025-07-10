@@ -3,17 +3,41 @@ viewModel: {ActorDriversViewModel}
 cssClass: {undefined | String}
 --}}
 <section id="{{viewModel.id}}" class="{{cssClass}}">
-  {{#> header3 showFancyFont=viewModel.showFancyFont}}{{localize "system.character.driverSystem.ambition.header"}}{{/header3}}
+  <h3 class="strive-header flex flex-row{{#if viewModel.showFancyFont}} fancy-font{{/if}}">
+    {{!-- Reminder --}}
+    {{#if viewModel.showReminders}}
+    <span class="button light square font-size-default flex flex-center" id="{{viewModel.vmAmbitionReminder.id}}">
+      <i class="far fa-question-circle info-button"></i>
+    </span>
+    {{/if}}
+    <span>{{localize "system.character.driverSystem.ambition.header"}}</span>
+  </h3>
   <div class="margin-b-md">
     {{> inputTextField viewModel=viewModel.vmTfAmbition }}
   </div>
-  {{#> header3 showFancyFont=viewModel.showFancyFont}}{{localize "system.character.driverSystem.aspiration.header"}}{{/header3}}
+  <h3 class="strive-header flex flex-row{{#if viewModel.showFancyFont}} fancy-font{{/if}}">
+    {{!-- Reminder --}}
+    {{#if viewModel.showReminders}}
+    <span class="button light square font-size-default flex flex-center" id="{{viewModel.vmAspirationReminder.id}}">
+      <i class="far fa-question-circle info-button"></i>
+    </span>
+    {{/if}}
+    <span>{{localize "system.character.driverSystem.aspiration.header"}}</span>
+  </h3>
   {{#each viewModel.aspirationViewModels as |vm index|}}
     <div class="margin-b-md">
       {{> inputTextField viewModel=vm}}
     </div>
   {{/each}}
-  {{#> header3 showFancyFont=viewModel.showFancyFont}}{{localize "system.character.driverSystem.reaction.header"}}{{/header3}}
+  <h3 class="strive-header flex flex-row{{#if viewModel.showFancyFont}} fancy-font{{/if}}">
+    {{!-- Reminder --}}
+    {{#if viewModel.showReminders}}
+    <span class="button light square font-size-default flex flex-center" id="{{viewModel.vmReactionReminder.id}}">
+      <i class="far fa-question-circle info-button"></i>
+    </span>
+    {{/if}}
+    <span>{{localize "system.character.driverSystem.reaction.header"}}</span>
+  </h3>
   {{#each viewModel.reactionViewModels as |vm index|}}
     <div class="margin-b-md">
       {{> inputTextField viewModel=vm}}

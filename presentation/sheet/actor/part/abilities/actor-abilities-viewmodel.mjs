@@ -1,7 +1,6 @@
 import { DerivedAttributeRollData, DerivedAttributeRollSchema } from "../../../../../business/dice/ability-roll/derived-attribute-roll-schema.mjs"
 import TransientBaseCharacterActor from "../../../../../business/document/actor/transient-base-character-actor.mjs"
 import RulesetExplainer from "../../../../../business/ruleset/ruleset-explainer.mjs"
-import GameSystemUserSettings from "../../../../../business/setting/game-system-user-settings.mjs"
 import { ValidationUtil } from "../../../../../business/util/validation-utility.mjs"
 import { ExtenderUtil } from "../../../../../common/extender-util.mjs"
 import ButtonRollViewModel from "../../../../component/button-roll/button-roll-viewmodel.mjs"
@@ -44,12 +43,6 @@ export default class ActorAbilitiesViewModel extends ViewModel {
    * @readonly
    */
   get isInCombat() { return this.document.document.inCombat; }
-  
-  /**
-   * @type {Boolean}
-   * @readonly
-   */
-  get showReminders() { return new GameSystemUserSettings().get(GameSystemUserSettings.KEY_TOGGLE_REMINDERS); }
   
   /**
    * @type {Boolean}
