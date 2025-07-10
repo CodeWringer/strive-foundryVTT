@@ -1,3 +1,4 @@
+import GameSystemUserSettings from "../../../../../business/setting/game-system-user-settings.mjs";
 import { ValidationUtil } from "../../../../../business/util/validation-utility.mjs";
 import { ExtenderUtil } from "../../../../../common/extender-util.mjs";
 import InputTextFieldViewModel from "../../../../component/input-textfield/input-textfield-viewmodel.mjs";
@@ -61,18 +62,22 @@ export default class ActorDriversViewModel extends ViewModel {
     this.document = args.document;
     this.contextType = args.contextType ?? "actor-drivers";
 
-    const thiz = this;
-
     this.vmTfAmbition = new InputTextFieldViewModel({
-      parent: thiz,
+      parent: this,
       id: "vmTfAmbition",
-      value: thiz.document.driverSystem.ambition,
+      value: this.document.driverSystem.ambition,
       placeholder: game.i18n.localize("system.character.driverSystem.ambition.placeholder"),
-      localizedToolTip: game.i18n.localize("system.character.driverSystem.ambition.reminder"),
       onChange: (_, newValue) => {
-        thiz.document.driverSystem.ambition = newValue;
+        this.document.driverSystem.ambition = newValue;
       },
     });
+    if (this.showReminders) {
+      this.vmAmbitionReminder = new ViewModel({
+        id: "vmAmbitionReminder",
+        parent: this,
+        localizedToolTip: game.i18n.localize("system.character.driverSystem.ambition.reminder"),
+      })
+    }
 
     const aspirationPlaceholders = [
       "system.character.driverSystem.aspiration.placeholder.1",
@@ -81,15 +86,21 @@ export default class ActorDriversViewModel extends ViewModel {
     ];
     for (let i = 0; i < this.aspirations.length; i++) {
       this.aspirationViewModels.push(new InputTextFieldViewModel({
-        parent: thiz,
+        parent: this,
         id: `vmAspiration-${i}`,
-        value: thiz.document.driverSystem.aspirations[`_${i}`],
+        value: this.document.driverSystem.aspirations[`_${i}`],
         placeholder: game.i18n.localize(aspirationPlaceholders[i]),
-        localizedToolTip: game.i18n.localize("system.character.driverSystem.aspiration.reminder"),
         onChange: (_, newValue) => {
-          thiz.document.driverSystem.aspirations[`_${i}`] = newValue;
+          this.document.driverSystem.aspirations[`_${i}`] = newValue;
         },
       }));
+    }
+    if (this.showReminders) {
+      this.vmAspirationReminder = new ViewModel({
+        id: "vmAspirationReminder",
+        parent: this,
+        localizedToolTip: game.i18n.localize("system.character.driverSystem.aspiration.reminder"),
+      })
     }
 
     const reactionPlaceholders = [
@@ -99,15 +110,21 @@ export default class ActorDriversViewModel extends ViewModel {
     ];
     for (let i = 0; i < this.reactions.length; i++) {
       this.reactionViewModels.push(new InputTextFieldViewModel({
-        parent: thiz,
+        parent: this,
         id: `vmReaction-${i}`,
-        value: thiz.document.driverSystem.reactions[`_${i}`],
+        value: this.document.driverSystem.reactions[`_${i}`],
         placeholder: game.i18n.localize(reactionPlaceholders[i]),
-        localizedToolTip: game.i18n.localize("system.character.driverSystem.reaction.reminder"),
         onChange: (_, newValue) => {
-          thiz.document.driverSystem.reactions[`_${i}`] = newValue;
+          this.document.driverSystem.reactions[`_${i}`] = newValue;
         },
       }));
+    }
+    if (this.showReminders) {
+      this.vmReactionReminder = new ViewModel({
+        id: "vmReactionReminder",
+        parent: this,
+        localizedToolTip: game.i18n.localize("system.character.driverSystem.reaction.reminder"),
+      })
     }
   }
     
