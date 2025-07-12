@@ -53,6 +53,10 @@ export default class SpecificDocumentCreationStrategy extends DocumentCreationSt
    * @param {Object | undefined} args.creationDataOverrides Overrides applied to the selected 
    * creation data. Can be used to override a specific property, while leaving 
    * the others untouched. For example, to set a starting level for a skill Item. 
+   * @param {Function | undefined} args.filter A function that can filter, allowing only 
+   * those documents for which it returns true to be valid choices. **Must** return a boolean
+   * value. Receives arguments:
+   * * `document: TransientDocument` - A document instance
    * 
    * @param {Function | undefined} args.onSelectionChanged Asynchronous callback that is 
    * invoked when selection changes. Arguments: 
@@ -66,8 +70,9 @@ export default class SpecificDocumentCreationStrategy extends DocumentCreationSt
 
     this._generalType = this._getIsTypeAnActor(args.documentType) ? GENERAL_DOCUMENT_TYPES.ACTOR : GENERAL_DOCUMENT_TYPES.ITEM;
     this.documentType = args.documentType;
+    this.filter = args.filter ?? (() => { return true });
 
-    this.onSelectionChanged = args.onSelectionChanged ?? (async (dialog, selected, choices) => {});
+    this.onSelectionChanged = args.onSelectionChanged ?? (async () => {});
   }
 
   /**
@@ -85,26 +90,32 @@ export default class SpecificDocumentCreationStrategy extends DocumentCreationSt
       contentType: this.documentType,
     });
 
-    const documents = new Map;
     // Load the full documents, so their detailed data can be accessed. 
+    const documents = new Map;
     for (let i = 0; i < documentIndices.length; i++) {
       const id = documentIndices[i].id;
       const document = await new DocumentFetcher().find({
         id: id,
       });
-      documents.set(id, document);
+      const transientDocument = document.getTransientObject();
+      if (this.filter(transientDocument) === true) {
+        documents.set(id, transientDocument);
+      }
     }
     
     // Map the documents to choices. 
-    const options = documentIndices.map(documentIndex => {
+    const options = [];
+    for (let i = 0; i < documentIndices.length; i++) {
+      const documentIndex = documentIndices[i];
       const document = documents.get(documentIndex.id);
-      const documentNameForDisplay = ((document ?? {}).getTransientObject() ?? {}).nameForDisplay ?? documentIndex.name;
+      if (!ValidationUtil.isDefined(document)) continue;
+      const documentNameForDisplay = document.nameForDisplay ?? documentIndex.name;
       
-      return new ChoiceOption({
+      options.push(new ChoiceOption({
         value: documentIndex.id,
         localizedValue: `${documentNameForDisplay}   (${documentIndex.sourceName})`,
-      });
-    });
+      }));
+    }
     const sortedOptions = options.sort((a, b) => a.localizedValue.localeCompare(b.localizedValue));
 
     // Insert "custom" choice. 
