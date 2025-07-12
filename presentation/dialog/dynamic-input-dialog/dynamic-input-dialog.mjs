@@ -1,8 +1,7 @@
 import { ValidationUtil } from '../../../business/util/validation-utility.mjs';
-import FoundryWrapper from '../../../common/foundry-wrapper.mjs';
 import ConfirmableModalDialog from '../confirmable-modal-dialog/confirmable-modal-dialog.mjs';
 import DialogButtonDefinition from '../dialog-button-definition.mjs';
-import DynamicInputDefinition from './dynamic-input-definition.mjs';
+import DynamicInputDefinition from './input-types/dynamic-input-definition.mjs';
 import DynamicInputDialogViewModel from './dynamic-input-dialog-viewmodel.mjs';
 
 /**
@@ -34,15 +33,12 @@ import DynamicInputDialogViewModel from './dynamic-input-dialog-viewmodel.mjs';
  *     game.i18n.localize("system.character.asset.slot.label"), 
  *   ),
  *   inputDefinitions: [
- *     new DynamicInputDefinition({
- *       type: DYNAMIC_INPUT_TYPES.DROP_DOWN,
+ *     new DynamicInputDefinitionDropDown({
  *       name: "inputChoices",
  *       localizedLabel: game.i18n.localize("system.general.name.label"),
  *       required: true,
  *       defaultValue: assetChoices[0], // This must be of type `ChoiceOption`! 
- *       specificArgs: {
- *         options: assetChoices, // This must be of type `Array<ChoiceOption>`! 
- *       }
+ *       options: assetChoices, // This must be of type `Array<ChoiceOption>`! 
  *     }),
  *   ],
  * }).renderAndAwait(true); 

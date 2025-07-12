@@ -1,6 +1,20 @@
 import { ValidationUtil } from "../business/util/validation-utility.mjs";
 
+/**
+ * Serves as an integration limiter to FoundryVTTs functions. 
+ * 
+ * This type wraps FoundryVTT functions used in the project, so that whenever the FoundryVTT API changes (which happens 
+ * from time to time), only one place in the project has to be adjusted, accordingly. 
+ */
 export default class FoundryWrapper {
+  /**
+   * Merges `defaultOptions` with `overrides`. Properties with the same name found in `overrides` 
+   * take precedence. 
+   * 
+   * @param {Object} defaultOptions 
+   * @param {Object} overrides 
+   * @returns {Object}
+   */
   mergeObject(defaultOptions, overrides) {
     if (ValidationUtil.isDefined(foundry) && ValidationUtil.isDefined(foundry.utils) && ValidationUtil.isDefined(foundry.utils.mergeObject)) { // Foundry 12
       return foundry.utils.mergeObject(defaultOptions, overrides);

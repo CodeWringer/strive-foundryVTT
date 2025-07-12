@@ -3,9 +3,8 @@ import TransientDocument from "../../business/document/transient-document.mjs";
 import { ValidationUtil } from "../../business/util/validation-utility.mjs";
 import { ChatUtil } from "../chat/chat-utility.mjs";
 import { VISIBILITY_MODES } from "../chat/visibility-modes.mjs";
-import DynamicInputDefinition from "../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
 import DynamicInputDialog from "../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
-import { DYNAMIC_INPUT_TYPES } from "../dialog/dynamic-input-dialog/dynamic-input-types.mjs";
+import DynamicInputDefinitionDropdown from "../dialog/dynamic-input-dialog/input-types/dynamic-input-definition-dropdown.mjs";
 
 export default class SendToChatHandler {
   /**
@@ -29,15 +28,12 @@ export default class SendToChatHandler {
     const dialog = await new DynamicInputDialog({
       localizedTitle: game.i18n.localize(args.dialogTitle),
       inputDefinitions: [
-        new DynamicInputDefinition({
-          type: DYNAMIC_INPUT_TYPES.DROP_DOWN,
+        new DynamicInputDefinitionDropdown({
           name: nameInputVisibility,
           localizedLabel: game.i18n.localize("system.general.messageVisibility.label"),
           required: true,
           defaultValue: VISIBILITY_MODES.asChoices().find(it => it.value === VISIBILITY_MODES.public.name),
-          specificArgs: {
-            options: VISIBILITY_MODES.asChoices(),
-          }
+          options: VISIBILITY_MODES.asChoices(),
         }),
       ],
     }).renderAndAwait(true);

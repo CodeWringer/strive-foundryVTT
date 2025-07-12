@@ -1,8 +1,8 @@
 import { VISIBILITY_MODES } from "../../../../presentation/chat/visibility-modes.mjs";
 import ChoiceOption from "../../../../presentation/component/input-choice/choice-option.mjs";
-import DynamicInputDefinition from "../../../../presentation/dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
+import DynamicInputDefinition from "../../../../presentation/dialog/dynamic-input-dialog/input-types/dynamic-input-definition.mjs";
 import DynamicInputDialog from "../../../../presentation/dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
-import { DYNAMIC_INPUT_TYPES } from "../../../../presentation/dialog/dynamic-input-dialog/dynamic-input-types.mjs";
+import { DYNAMIC_INPUT_TYPES } from "../../../../presentation/dialog/dynamic-input-dialog/input-types/dynamic-input-types.mjs";
 import { ACTOR_TYPES } from "../../../document/actor/actor-types.mjs";
 import TransientSkill from "../../../document/item/skill/transient-skill.mjs";
 import CharacterAttribute from "../../../ruleset/attribute/character-attribute.mjs";
@@ -13,6 +13,10 @@ import { ROLL_DICE_MODIFIER_TYPES } from "../../roll-dice-modifier-types.mjs";
 import { RollSchema } from "../../roll-schema.mjs";
 import { SkillRollSchema } from "../skill-roll-schema.mjs";
 import AttributeAndSkillRollQueryData from "./attribute-and-skill-roll-query-data.mjs";
+import DynamicInputDefinitionLabel from "../../../../presentation/dialog/dynamic-input-dialog/input-types/dynamic-input-definition-label.mjs";
+import DynamicInputDefinitionTextfield from "../../../../presentation/dialog/dynamic-input-dialog/input-types/dynamic-input-definition-textfield.mjs";
+import DynamicInputDefinitionDropdown from "../../../../presentation/dialog/dynamic-input-dialog/input-types/dynamic-input-definition-dropdown.mjs";
+import DynamicInputDefinitionNumberSpinner from "../../../../presentation/dialog/dynamic-input-dialog/input-types/dynamic-input-definition-number-spinner.mjs";
 
 /**
  * Defines a schema for rolling dice to test a skill. 
@@ -73,56 +77,44 @@ export class AttributeAndSkillRollSchema extends SkillRollSchema {
     diceComposition = `(${diceComposition}), ${document.modifiedLevel} ${document.name}`;
 
     dialog.inputDefinitions.splice(0, 0, // Insert the following before the visibility drop down. 
-      new DynamicInputDefinition({
-        type: DYNAMIC_INPUT_TYPES.LABEL,
+      new DynamicInputDefinitionLabel({
         name: "diceCompositionLabel",
         localizedLabel: `<p class="font-size-sm">${diceComposition}</p>`,
         showFancyFont: false,
       }),
-      new DynamicInputDefinition({
-        type: DYNAMIC_INPUT_TYPES.TEXTFIELD,
+      new DynamicInputDefinitionTextfield({
         name: nameInputObstacle,
         localizedLabel: game.i18n.localize("system.roll.obstacle.abbreviation"),
         required: true,
         defaultValue: "0",
-        specificArgs: {
-          placeholder: game.i18n.localize("system.roll.obstacle.rollForPlaceholder"),
-        },
+        placeholder: game.i18n.localize("system.roll.obstacle.rollForPlaceholder"),
       }),
-      new DynamicInputDefinition({
-        type: DYNAMIC_INPUT_TYPES.DROP_DOWN,
+      new DynamicInputDefinitionDropdown({
         name: nameInputAttribute,
         localizedLabel: game.i18n.localize("system.character.attribute.singular"),
         required: true,
         isEditable: baseAttributeChoices.length > 1,
         defaultValue: baseAttributeChoices.find(choice => choice.value === bestAttribute.name),
-        specificArgs: {
-          options: baseAttributeChoices,
-        }
+        options: baseAttributeChoices,
       }),
-      new DynamicInputDefinition({
-        type: DYNAMIC_INPUT_TYPES.NUMBER_SPINNER,
+      new DynamicInputDefinitionNumberSpinner({
         name: nameInputBonusDice,
         localizedLabel: game.i18n.localize("system.roll.bonusDice"),
         required: true,
         defaultValue: 0,
       }),
-      new DynamicInputDefinition({
-        type: DYNAMIC_INPUT_TYPES.NUMBER_SPINNER,
+      new DynamicInputDefinitionNumberSpinner({
         name: nameInputCompensationPoints,
         localizedLabel: game.i18n.localize("system.roll.compensationPoints"),
         required: true,
         defaultValue: 0,
       }),
-      new DynamicInputDefinition({
-        type: DYNAMIC_INPUT_TYPES.DROP_DOWN,
+      new DynamicInputDefinitionDropdown({
         name: nameInputRollDiceModifier,
         localizedLabel: game.i18n.localize("system.roll.diceModifier.plural"),
         required: true,
         defaultValue: ROLL_DICE_MODIFIER_TYPES.asChoices().find(it => it.value === ROLL_DICE_MODIFIER_TYPES.NONE.name),
-        specificArgs: {
-          options: ROLL_DICE_MODIFIER_TYPES.asChoices(),
-        }
+        options: ROLL_DICE_MODIFIER_TYPES.asChoices(),
       }),
     );
 
@@ -130,8 +122,7 @@ export class AttributeAndSkillRollSchema extends SkillRollSchema {
     const isPC = document.owningDocument.type === ACTOR_TYPES.PC;
     if (showReminders && isPC) {
       dialog.inputDefinitions.splice(1, 0, // Insert after the dice composition. 
-        new DynamicInputDefinition({
-          type: DYNAMIC_INPUT_TYPES.LABEL,
+        new DynamicInputDefinitionLabel({
           name: "forkReminderLabel",
           localizedLabel: `<p>${game.i18n.localize("system.character.skill.forking.reminder.label")}</p>`,
           showFancyFont: false,

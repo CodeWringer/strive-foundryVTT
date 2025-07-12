@@ -6,9 +6,8 @@ import ButtonDeleteViewModel from "../../../../component/button-delete/button-de
 import ButtonViewModel from "../../../../component/button/button-viewmodel.mjs";
 import ChoiceOption from "../../../../component/input-choice/choice-option.mjs";
 import ReadOnlyValueViewModel from "../../../../component/read-only-value/read-only-value.mjs";
-import DynamicInputDefinition from "../../../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
 import DynamicInputDialog from "../../../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
-import { DYNAMIC_INPUT_TYPES } from "../../../../dialog/dynamic-input-dialog/dynamic-input-types.mjs";
+import DynamicInputDefinitionDropdown from "../../../../dialog/dynamic-input-dialog/input-types/dynamic-input-definition-dropdown.mjs";
 import ViewModel from "../../../../view-model/view-model.mjs";
 import AssetListItemViewModel from "../../../item/asset/asset-list-item-viewmodel.mjs";
 import { queryAssetSlotConfiguration } from "./assets-utils.mjs";
@@ -181,15 +180,12 @@ export default class ActorAssetSlotViewModel extends ViewModel {
             game.i18n.localize("system.character.asset.slot.label"), 
           ),
           inputDefinitions: [
-            new DynamicInputDefinition({
-              type: DYNAMIC_INPUT_TYPES.DROP_DOWN,
+            new DynamicInputDefinitionDropdown({
               name: inputChoices,
               localizedLabel: game.i18n.localize("system.general.name.label"),
               required: true,
               defaultValue: assetChoices.length > 0 ? assetChoices[0] : undefined,
-              specificArgs: {
-                options: assetChoices,
-              }
+              options: assetChoices,
             }),
           ],
         }).renderAndAwait(true);

@@ -6,9 +6,8 @@ import ButtonViewModel from "../../../component/button/button-viewmodel.mjs"
 import ChoiceOption from "../../../component/input-choice/choice-option.mjs"
 import InputNumberSpinnerViewModel from "../../../component/input-number-spinner/input-number-spinner-viewmodel.mjs"
 import InputTextFieldViewModel from "../../../component/input-textfield/input-textfield-viewmodel.mjs"
-import DynamicInputDefinition from "../../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs"
 import DynamicInputDialog from "../../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs"
-import { DYNAMIC_INPUT_TYPES } from "../../../dialog/dynamic-input-dialog/dynamic-input-types.mjs"
+import DynamicInputDefinitionDropdown from "../../../dialog/dynamic-input-dialog/input-types/dynamic-input-definition-dropdown.mjs"
 import ViewModel from "../../../view-model/view-model.mjs"
 import BaseListItemViewModel from "../base/base-list-item-viewmodel.mjs"
 import { TemplatedComponent } from "../base/templated-component.mjs"
@@ -200,15 +199,12 @@ export default class AssetListItemViewModel extends BaseListItemViewModel {
     const dialog = await new DynamicInputDialog({
       easyDismissal: true,
       inputDefinitions: [
-        new DynamicInputDefinition({
-          type: DYNAMIC_INPUT_TYPES.DROP_DOWN,
+        new DynamicInputDefinitionDropdown({
           name: inputSlots,
           localizedLabel: game.i18n.localize("system.character.asset.slot.label"),
           required: true,
           defaultValue: availableSlotChoices.length > 0 ? availableSlotChoices[0] : undefined,
-          specificArgs: {
-            options: availableSlotChoices,
-          },
+          options: availableSlotChoices,
         }),
       ],
     }).renderAndAwait(true);

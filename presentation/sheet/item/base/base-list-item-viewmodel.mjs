@@ -10,13 +10,13 @@ import ButtonViewModel from "../../../component/button/button-viewmodel.mjs";
 import InputImageViewModel from "../../../component/input-image/input-image-viewmodel.mjs";
 import InputRichTextViewModel from "../../../component/input-rich-text/input-rich-text-viewmodel.mjs";
 import InputTagsViewModel from "../../../component/input-tags/input-tags-viewmodel.mjs";
-import DynamicInputDefinition from "../../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
 import DynamicInputDialog from "../../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
-import { DYNAMIC_INPUT_TYPES } from "../../../dialog/dynamic-input-dialog/dynamic-input-types.mjs";
 import ViewModel from "../../../view-model/view-model.mjs";
 import { CONTEXT_TYPES } from "../../context-types.mjs";
 import { DataFieldComponent } from "./datafield-component.mjs";
 import { TemplatedComponent } from "./templated-component.mjs";
+import DynamicInputDefinitionCustom from "../../../dialog/dynamic-input-dialog/input-types/dynamic-input-definition-custom.mjs";
+import DynamicInputDefinitionTextfield from "../../../dialog/dynamic-input-dialog/input-types/dynamic-input-definition-textfield.mjs";
 
 /**
  * Used to determine the level of detail a list item is to be rendered with. 
@@ -180,7 +180,7 @@ export default class BaseListItemViewModel extends ViewModel {
    * ```JS
    * get metaDataInputDefinitions() {
    *   return super.metaDataInputDefinitions.concat([
-   *     new DynamicInputDefinition({ ... }),
+   *     new DynamicInputDefinitionDropdown({ ... }),
    *   ]);
    * }
    * ```
@@ -188,31 +188,28 @@ export default class BaseListItemViewModel extends ViewModel {
    * @readonly
    * @virtual
    * 
-   * @returns {Array<DynamicInputDefinition>}
+   * @returns {Array<DynamicInputDefinitionCustom>}
    */
   get metaDataInputDefinitions() {
     return [
-      new DynamicInputDefinition({
-        type: DYNAMIC_INPUT_TYPES.CUSTOM,
+      new DynamicInputDefinitionCustom({
         name: this._inputTags,
         localizedLabel: game.i18n.localize("system.general.tag.plural"),
         iconHtml: '<i class="ico dark ico-tags-solid"></i>',
         defaultValue: this.document.tags,
-        specificArgs: {
-          viewModelFactory: (id, parent, value, furtherArgs) => {
-            return new InputTagsViewModel({
-              id: id,
-              parent: parent,
-              value: value,
-              systemTags: furtherArgs.systemTags,
-            });
-          },
-          furtherArgs: {
-            systemTags: SKILL_TAGS.asArray()
-              .concat(ASSET_TAGS.asArray()),
-          },
-          template: InputTagsViewModel.TEMPLATE,
-        }
+        viewModelFactory: (id, parent, value, furtherArgs) => {
+          return new InputTagsViewModel({
+            id: id,
+            parent: parent,
+            value: value,
+            systemTags: furtherArgs.systemTags,
+          });
+        },
+        furtherArgs: {
+          systemTags: SKILL_TAGS.asArray()
+            .concat(ASSET_TAGS.asArray()),
+        },
+        template: InputTagsViewModel.TEMPLATE,
       }),
     ];
   }
@@ -512,8 +509,7 @@ export default class BaseListItemViewModel extends ViewModel {
     const dialog = await new DynamicInputDialog({
       localizedTitle: `${StringUtil.format(game.i18n.localize("system.general.name.editOf"), this.title)}`,
       inputDefinitions: [
-        new DynamicInputDefinition({
-          type: DYNAMIC_INPUT_TYPES.TEXTFIELD,
+        new DynamicInputDefinitionTextfield({
           name: inputName,
           localizedLabel: game.i18n.localize("system.general.name.label"),
           required: true,

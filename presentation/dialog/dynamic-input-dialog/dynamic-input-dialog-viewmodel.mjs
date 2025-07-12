@@ -1,4 +1,4 @@
-import { DYNAMIC_INPUT_TYPES } from "./dynamic-input-types.mjs";
+import { DYNAMIC_INPUT_TYPES } from "./input-types/dynamic-input-types.mjs";
 import ViewModel from "../../view-model/view-model.mjs";
 import InputDropDownViewModel from "../../component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
 import InputImageViewModel from "../../component/input-image/input-image-viewmodel.mjs";
@@ -9,7 +9,7 @@ import InputTextareaViewModel from "../../component/input-textarea/input-textare
 import InputTextFieldViewModel from "../../component/input-textfield/input-textfield-viewmodel.mjs";
 import SimpleListViewModel from "../../component/simple-list/simple-list-viewmodel.mjs";
 import InputToggleViewModel from "../../component/input-toggle/input-toggle-viewmodel.mjs";
-import DynamicInputDefinition from "./dynamic-input-definition.mjs";
+import DynamicInputDefinition from "./input-types/dynamic-input-definition.mjs";
 import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
 import { KEYBOARD } from "../../keyboard/keyboard.mjs";
 import { KEY_CODES } from "../../keyboard/key-codes.mjs";
@@ -60,7 +60,7 @@ export default class DynamicInputDialogViewModel extends ViewModel {
             this[definition.name] = newValue;
             await definition.onChange(oldValue, newValue, this);
           },
-          options: definition.specificArgs.options,
+          options: definition.options,
         });
       } else if (definition.type === DYNAMIC_INPUT_TYPES.IMAGE) {
         viewModel = new InputImageViewModel({
@@ -83,9 +83,9 @@ export default class DynamicInputDialogViewModel extends ViewModel {
             this[definition.name] = newValue;
             await definition.onChange(oldValue, newValue, this);
           },
-          min: definition.specificArgs.min,
-          max: definition.specificArgs.max,
-          step: definition.specificArgs.step,
+          min: definition.min,
+          max: definition.max,
+          step: definition.step,
         });
       } else if (definition.type === DYNAMIC_INPUT_TYPES.RADIO_BUTTONS) {
         viewModel = new InputRadioButtonGroupViewModel({
@@ -97,7 +97,7 @@ export default class DynamicInputDialogViewModel extends ViewModel {
             this[definition.name] = newValue;
             await definition.onChange(oldValue, newValue, this);
           },
-          options: definition.specificArgs.options,
+          options: definition.options,
         });
       } else if (definition.type === DYNAMIC_INPUT_TYPES.RICH_TEXT) {
         viewModel = new InputRichTextViewModel({
@@ -120,8 +120,8 @@ export default class DynamicInputDialogViewModel extends ViewModel {
             this[definition.name] = newValue;
             await definition.onChange(oldValue, newValue, this);
           },
-          spellcheck: definition.specificArgs.spellcheck,
-          placeholder: definition.specificArgs.placeholder,
+          spellcheck: definition.spellcheck,
+          placeholder: definition.placeholder,
         });
       } else if (definition.type === DYNAMIC_INPUT_TYPES.TEXTFIELD) {
         viewModel = new InputTextFieldViewModel({
@@ -133,7 +133,7 @@ export default class DynamicInputDialogViewModel extends ViewModel {
             this[definition.name] = newValue;
             await definition.onChange(oldValue, newValue, this);
           },
-          placeholder: definition.specificArgs.placeholder,
+          placeholder: definition.placeholder,
         });
       } else if (definition.type === DYNAMIC_INPUT_TYPES.LABEL) {
         viewModel = new ViewModel({
@@ -145,7 +145,7 @@ export default class DynamicInputDialogViewModel extends ViewModel {
 
         const viewModels = [];
         for (let index = 0; index < values.length; index++) {
-          const vm = definition.specificArgs.contentItemViewModelFactory(index, values);
+          const vm = definition.contentItemViewModelFactory(index, values);
           viewModels.push(vm);
         }
 
@@ -154,10 +154,10 @@ export default class DynamicInputDialogViewModel extends ViewModel {
           parent: this,
           isEditable: definition.isEditable ?? this.isEditable,
           contentItemViewModels: viewModels,
-          contentItemTemplate: definition.specificArgs.contentItemTemplate,
+          contentItemTemplate: definition.contentItemTemplate,
           onAddClick: async () => {
             const oldValue = values.concat([]);
-            values.push(definition.specificArgs.newItemDefaultValue);
+            values.push(definition.newItemDefaultValue);
             this.ui.render(true);
             await definition.onChange(oldValue, values.concat([]), this);
           },
@@ -167,9 +167,9 @@ export default class DynamicInputDialogViewModel extends ViewModel {
             this.ui.render(true);
             await definition.onChange(oldValue, values.concat([]), this);
           },
-          isItemAddable: definition.specificArgs.isItemAddable,
-          isItemRemovable: definition.specificArgs.isItemRemovable,
-          localizedAddLabel: definition.specificArgs.localizedAddLabel,
+          isItemAddable: definition.isItemAddable,
+          isItemRemovable: definition.isItemRemovable,
+          localizedAddLabel: definition.localizedAddLabel,
         });
         viewModel.value = values;
       } else if (definition.type === DYNAMIC_INPUT_TYPES.TOGGLE) {
@@ -184,11 +184,11 @@ export default class DynamicInputDialogViewModel extends ViewModel {
           },
         });
       } else if (definition.type === DYNAMIC_INPUT_TYPES.CUSTOM) {
-        viewModel = definition.specificArgs.viewModelFactory(
+        viewModel = definition.viewModelFactory(
           definition.name, 
           this,
           definition.defaultValue,
-          definition.specificArgs.furtherArgs,
+          definition.furtherArgs,
         );
         viewModel.isEditable = definition.isEditable ?? this.isEditable;
         if (ValidationUtil.isDefined(viewModel.onChange)) {
@@ -197,7 +197,7 @@ export default class DynamicInputDialogViewModel extends ViewModel {
             await definition.onChange(oldValue, newValue, this);
           };
         }
-        template = definition.specificArgs.template;
+        template = definition.template;
       } else {
         throw new Error(`Invalid input type: "${definition.type}"`);
       }

@@ -1,6 +1,8 @@
 import { VISIBILITY_MODES } from "../../../presentation/chat/visibility-modes.mjs";
-import DynamicInputDefinition from "../../../presentation/dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
-import { DYNAMIC_INPUT_TYPES } from "../../../presentation/dialog/dynamic-input-dialog/dynamic-input-types.mjs";
+import DynamicInputDefinitionDropdown from "../../../presentation/dialog/dynamic-input-dialog/input-types/dynamic-input-definition-dropdown.mjs";
+import DynamicInputDefinitionLabel from "../../../presentation/dialog/dynamic-input-dialog/input-types/dynamic-input-definition-label.mjs";
+import DynamicInputDefinitionNumberSpinner from "../../../presentation/dialog/dynamic-input-dialog/input-types/dynamic-input-definition-number-spinner.mjs";
+import DynamicInputDefinitionTextfield from "../../../presentation/dialog/dynamic-input-dialog/input-types/dynamic-input-definition-textfield.mjs";
 import { Sum, SumComponent } from "../../ruleset/summed-data.mjs";
 import RollData from "../roll-data.mjs";
 import { ROLL_DICE_MODIFIER_TYPES } from "../roll-dice-modifier-types.mjs";
@@ -75,45 +77,36 @@ export class DerivedAttributeRollSchema extends RollSchema {
     const nameInputRollDiceModifier = "inputRollDiceModifier";
 
     dialog.inputDefinitions.splice(0, 0, // Insert the following before the visibility drop down. 
-      new DynamicInputDefinition({
-        type: DYNAMIC_INPUT_TYPES.LABEL,
+      new DynamicInputDefinitionLabel({
         name: "diceCompositionLabel",
         localizedLabel: `<p class="font-size-sm">${diceComposition}</p>`,
         showFancyFont: false,
       }),
-      new DynamicInputDefinition({
-        type: DYNAMIC_INPUT_TYPES.TEXTFIELD,
+      new DynamicInputDefinitionTextfield({
         name: nameInputObstacle,
         localizedLabel: game.i18n.localize("system.roll.obstacle.abbreviation"),
         required: true,
         defaultValue: "0",
-        specificArgs: {
-          placeholder: game.i18n.localize("system.roll.obstacle.rollForPlaceholder"),
-        },
+        placeholder: game.i18n.localize("system.roll.obstacle.rollForPlaceholder"),
       }),
-      new DynamicInputDefinition({
-        type: DYNAMIC_INPUT_TYPES.NUMBER_SPINNER,
+      new DynamicInputDefinitionNumberSpinner({
         name: nameInputBonusDice,
         localizedLabel: game.i18n.localize("system.roll.bonusDice"),
         required: true,
         defaultValue: 0,
       }),
-      new DynamicInputDefinition({
-        type: DYNAMIC_INPUT_TYPES.NUMBER_SPINNER,
+      new DynamicInputDefinitionNumberSpinner({
         name: nameInputCompensationPoints,
         localizedLabel: game.i18n.localize("system.roll.compensationPoints"),
         required: true,
         defaultValue: 0,
       }),
-      new DynamicInputDefinition({
-        type: DYNAMIC_INPUT_TYPES.DROP_DOWN,
+      new DynamicInputDefinitionDropdown({
         name: nameInputRollDiceModifier,
         localizedLabel: game.i18n.localize("system.roll.diceModifier.plural"),
         required: true,
         defaultValue: ROLL_DICE_MODIFIER_TYPES.asChoices().find(it => it.value === ROLL_DICE_MODIFIER_TYPES.NONE.name),
-        specificArgs: {
-          options: ROLL_DICE_MODIFIER_TYPES.asChoices(),
-        }
+        options: ROLL_DICE_MODIFIER_TYPES.asChoices(),
       }),
     );
 

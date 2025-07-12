@@ -1,8 +1,7 @@
 import { ITEM_TYPES } from "../../../business/document/item/item-types.mjs";
 import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
 import SpecificDocumentCreationStrategy from "./specific-document-creation-strategy.mjs";
-import DynamicInputDefinition from "../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
-import { DYNAMIC_INPUT_TYPES } from "../../dialog/dynamic-input-dialog/dynamic-input-types.mjs";
+import DynamicInputDefinitionLabel from "../../dialog/dynamic-input-dialog/input-types/dynamic-input-definition-label.mjs";
 
 /**
  * Lets the user select a specific template fate-card from a given list of options. 
@@ -72,8 +71,7 @@ export default class FateCardCreationStrategy extends SpecificDocumentCreationSt
       };
 
       return superInputs.concat([
-        new DynamicInputDefinition({
-          type: DYNAMIC_INPUT_TYPES.LABEL,
+        new DynamicInputDefinitionLabel({
           name: this.nameLabel,
           localizedLabel: `<p class="font-size-default">${mappedLabel}</p>`,
           showFancyFont: false,

@@ -1,7 +1,7 @@
 import { StringUtil } from "../../../../../business/util/string-utility.mjs";
-import DynamicInputDefinition from "../../../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
 import DynamicInputDialog from "../../../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
-import { DYNAMIC_INPUT_TYPES } from "../../../../dialog/dynamic-input-dialog/dynamic-input-types.mjs";
+import DynamicInputDefinitionNumberSpinner from "../../../../dialog/dynamic-input-dialog/input-types/dynamic-input-definition-number-spinner.mjs";
+import DynamicInputDefinitionTextfield from "../../../../dialog/dynamic-input-dialog/input-types/dynamic-input-definition-textfield.mjs";
 
 /**
  * Queries the user for input for a character asset slot and returns the 
@@ -28,32 +28,25 @@ export async function queryAssetSlotConfiguration(assetSlot = {}) {
       game.i18n.localize("system.character.asset.slot.label"), 
     ),
     inputDefinitions: [
-      new DynamicInputDefinition({
-        type: DYNAMIC_INPUT_TYPES.TEXTFIELD,
+      new DynamicInputDefinitionTextfield({
         name: inputName,
         localizedLabel: game.i18n.localize("system.general.name.label"),
         required: true,
         defaultValue: (assetSlot.name ?? "New Asset Slot"),
       }),
-      new DynamicInputDefinition({
-        type: DYNAMIC_INPUT_TYPES.TEXTFIELD,
+      new DynamicInputDefinitionTextfield({
         name: inputAcceptedTypes,
         localizedLabel: game.i18n.localize("system.character.asset.slot.acceptedTypes"),
         required: false,
         defaultValue: ((assetSlot.acceptedTypes ?? []).join(", ")),
-        specificArgs: {
-          placeholder: "holdable, armor, ..."
-        },
+        placeholder: "holdable, armor, ..."
       }),
-      new DynamicInputDefinition({
-        type: DYNAMIC_INPUT_TYPES.NUMBER_SPINNER,
+      new DynamicInputDefinitionNumberSpinner({
         name: inputMaxBulk,
         localizedLabel: game.i18n.localize("system.character.asset.maxBulk"),
         required: false,
         defaultValue: (assetSlot.maxBulk ?? 1),
-        specificArgs: {
-          min: 1
-        },
+        min: 1,
         validationFunc: (value) => {
           try {
             const int = parseInt(value);

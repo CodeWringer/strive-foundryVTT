@@ -64,7 +64,7 @@ export default class ListFooterViewModel extends ViewModel {
         creationStrategy: it.creationStrategy,
         localizedLabel: it.localizedLabel,
         onClick: (event, data) => {
-          if (ValidationUtil.isDefined(it.onItemAdded)) {
+          if (ValidationUtil.isDefined(data) && ValidationUtil.isDefined(it.onItemAdded)) {
             it.onItemAdded(event, data);
           }
         },

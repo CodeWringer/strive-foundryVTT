@@ -19,9 +19,9 @@ import ReadOnlyValueViewModel from "../../../../component/read-only-value/read-o
 import { SortingOption } from "../../../../component/sort-controls/sort-controls-viewmodel.mjs"
 import DocumentListItemOrderDataSource from "../../../../component/sortable-list/document-list-item-order-datasource.mjs"
 import SortableListViewModel, { SortableListAddItemParams, SortableListSortParams } from "../../../../component/sortable-list/sortable-list-viewmodel.mjs"
-import DynamicInputDefinition from "../../../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs"
 import DynamicInputDialog from "../../../../dialog/dynamic-input-dialog/dynamic-input-dialog.mjs"
-import { DYNAMIC_INPUT_TYPES } from "../../../../dialog/dynamic-input-dialog/dynamic-input-types.mjs"
+import DynamicInputDefinitionLabel from "../../../../dialog/dynamic-input-dialog/input-types/dynamic-input-definition-label.mjs"
+import DynamicInputDefinitionNumberSpinner from "../../../../dialog/dynamic-input-dialog/input-types/dynamic-input-definition-number-spinner.mjs"
 import ViewModel from "../../../../view-model/view-model.mjs"
 import AssetListItemViewModel from "../../../item/asset/asset-list-item-viewmodel.mjs"
 import IllnessListItemViewModel from "../../../item/illness/illness-list-item-viewmodel.mjs"
@@ -206,15 +206,13 @@ export default class ActorHealthViewModel extends ViewModel {
           easyDismissal: true,
           focused: inputNumber,
           inputDefinitions: [
-            new DynamicInputDefinition({
-              type: DYNAMIC_INPUT_TYPES.NUMBER_SPINNER,
+            new DynamicInputDefinitionNumberSpinner({
               name: inputNumber,
               localizedLabel: game.i18n.localize("system.character.health.hp.adjustInputLabel"),
               required: true,
               defaultValue: 0,
             }),
-            new DynamicInputDefinition({
-              type: DYNAMIC_INPUT_TYPES.LABEL,
+            new DynamicInputDefinitionLabel({
               name: "reminder",
               localizedLabel: game.i18n.localize("system.character.health.injury.reminder"),
             }),
