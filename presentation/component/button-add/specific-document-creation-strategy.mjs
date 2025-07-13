@@ -9,6 +9,7 @@ import ChoiceOption from "../input-choice/choice-option.mjs";
 import DocumentCreationStrategy from "./document-creation-strategy.mjs";
 import DynamicInputDefinition from "../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
 import InputDropDownViewModel from "../input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
+import DynamicLabelViewModel from "../label/dynamic-label.mjs";
 
 /**
  * Lets the user select a specific template document from a given list of options. 
@@ -34,6 +35,15 @@ export default class SpecificDocumentCreationStrategy extends DocumentCreationSt
    */
   get nameInputChoices() { return "nameInputChoices"; }
 
+  /**
+   * Returns the name of the label that changes based on the selected entry. 
+   * 
+   * @type {String}
+   * @readonly
+   * @protected
+   */
+  get nameLabel() { return "nameLabel"; }
+  
   /**
    * Returns the value of the custom choice. Can be used to identify this choice 
    * in the list of choices. 
@@ -63,6 +73,10 @@ export default class SpecificDocumentCreationStrategy extends DocumentCreationSt
    * * `dialog: DynamicInputDialog`
    * * `selected: Document`. 
    * * `choices: Array<ChoiceOption>`. 
+   * @param {Function | undefined} args.selectionLabelMapper If not undefined, will be used 
+   * to change the content's of a label based on the currently selected entry. 
+   * Must return a string value. Must be async. Arguments: 
+   * * `selected: ChoiceOption | undefined`
    */
   constructor(args = {}) {
     super(args);
@@ -72,7 +86,8 @@ export default class SpecificDocumentCreationStrategy extends DocumentCreationSt
     this.documentType = args.documentType;
     this.filter = args.filter ?? (() => { return true });
 
-    this.onSelectionChanged = args.onSelectionChanged ?? (async () => {});
+    this.onSelectionChanged = args.onSelectionChanged;
+    this.selectionLabelMapper = args.selectionLabelMapper;
   }
 
   /**
@@ -83,6 +98,7 @@ export default class SpecificDocumentCreationStrategy extends DocumentCreationSt
    * 
    * @async
    * @protected
+   * @virtual
    */
   async _getChoices() {
     const documentIndices = new DocumentFetcher().getIndices({
@@ -131,33 +147,57 @@ export default class SpecificDocumentCreationStrategy extends DocumentCreationSt
   /**
    * Prepares and returns the dynamic dialog input definitions. 
    * 
-   * @param {Array<ChoiceOption>} choices 
-   * 
    * @returns {Array<DynamicInputDefinition>}
    * 
-   * @async
    * @protected
+   * @virtual
    */
-  async _getDialogInputs(choices) {
+  _getDialogInputs() {
     const localizedType = game.i18n.localize(`TYPES.${this._generalType}.${this.documentType}`);
-    const customChoice = choices.find(it => it.value === this.customChoiceValue);
-    
-    return [
+    const inputs = [
       new DynamicInputDefinition({
         name: this.nameInputChoices,
         localizedLabel: localizedType,
         template: InputDropDownViewModel.TEMPLATE,
-        viewModelFactory: (id, parent) => new InputDropDownViewModel({
-          id: id,
-          parent: parent,
-          options: choices,
-          value: customChoice,
-          onChange: async (_, newValue, dialogViewModel) => {
-            await this.onSelectionChanged(dialogViewModel.ui, newValue, choices);
-          },
-        }),
+        viewModelFactory: async (id, parent) => {
+          if (!ValidationUtil.isDefined(this._sortedOptions)) {
+            const sortedOptions = await this._getChoices();
+            this._sortedOptions = sortedOptions;
+          }
+
+          const customChoice = this._sortedOptions.find(it => it.value === this.customChoiceValue);
+          return new InputDropDownViewModel({
+            id: id,
+            parent: parent,
+            options: this._sortedOptions,
+            value: customChoice,
+            onChange: async (_, newValue, dialogViewModel) => {
+              await this._onSelectionChanged(dialogViewModel.ui, newValue, this._sortedOptions);
+            },
+          })
+        },
       }),
     ];
+
+    if (ValidationUtil.isDefined(this.selectionLabelMapper)) {
+      return inputs.concat([
+        new DynamicInputDefinition({
+          name: this.nameLabel,
+          template: DynamicLabelViewModel.TEMPLATE,
+          viewModelFactory: async (id, parent) => {
+            const mappedLabel = await this.selectionLabelMapper(undefined);
+
+            return new DynamicLabelViewModel({
+              id: id,
+              parent: parent,
+              localizedLabel: mappedLabel,
+            });
+          },
+        }),
+      ]);
+    }
+
+    return inputs;
   }
 
   /**
@@ -169,6 +209,7 @@ export default class SpecificDocumentCreationStrategy extends DocumentCreationSt
    * 
    * @async
    * @protected
+   * @virtual
    */
   async _parseCreationData(dialog) {
     const selectedValue = dialog[this.nameInputChoices];
@@ -205,10 +246,10 @@ export default class SpecificDocumentCreationStrategy extends DocumentCreationSt
    * 
    * @async
    * @override
+   * @virtual
    */
   async _getCreationData() {
-    const sortedOptions = await this._getChoices();
-    const inputDefinitions = await this._getDialogInputs(sortedOptions);
+    const inputDefinitions = this._getDialogInputs();
 
     const localizedType = game.i18n.localize(`TYPES.${this._generalType}.${this.documentType}`);
     const localizedDialogTitle = StringUtil.format(
@@ -218,10 +259,40 @@ export default class SpecificDocumentCreationStrategy extends DocumentCreationSt
     const dialog = await new DynamicInputDialog({
       localizedTitle: localizedDialogTitle,
       inputDefinitions: inputDefinitions,
+      onReady: async (dialogViewModel) => {
+        const choicesInst = dialogViewModel.inputInstances.find(it => it.name === this.nameInputChoices);
+        const labelInst = dialogViewModel.inputInstances.find(it => it.name === this.nameLabel);
+
+        if (!ValidationUtil.isDefined(choicesInst) || !ValidationUtil.isDefined(labelInst)) return;
+
+        // Override the original onChange method so it also handles updating the label. 
+        const originalOnChange = choicesInst.viewModel.onChange;
+        choicesInst.viewModel.onChange = async (oldValue, newValue) => {
+          await this._onSelectionChanged(dialogViewModel.ui, newValue, this._sortedOptions);
+          originalOnChange(oldValue, newValue);
+  
+          const mappedLabel = await this.selectionLabelMapper(newValue);
+          labelInst.viewModel.localizedLabel = mappedLabel;
+        };
+      },
     }).renderAndAwait(true);
 
     if (dialog.confirmed !== true) return undefined;
 
     return await this._parseCreationData(dialog);
+  }
+
+  /**
+   * @param {DynamicInputDialog} dialog 
+   * @param {Document} selected 
+   * @param {Array<ChoiceOption>} choices 
+   * 
+   * @async
+   * @private
+   */
+  async _onSelectionChanged(dialog, selected, choices) {
+    if (ValidationUtil.isDefined(this.onSelectionChanged)) {
+      await this.onSelectionChanged(dialog, selected, choices);
+    }
   }
 }

@@ -6,10 +6,10 @@ import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
  * @property {String} name Internal name. The value of the input will be referencable 
  * by this name. 
  * @property {String | undefined} template String path to the template to render the control with. 
- * @property {Function | undefined} viewModelFactory Must return a `ViewModel` instance. Receives the following arguments:
+ * @property {Function | undefined} viewModelFactory Must return a `ViewModel` instance. Is `async` and receives the following arguments:
  * * `id: String`
  * * `parent: ViewModel`
- * * `value: Any | undefined`
+ * * `isEditable: Boolean`
  * @property {String | undefined} localizedLabel Localized companion label. 
  * * default `""`
  * @property {String | undefined} iconHtml E. g. `'<i class="fas fa-plus"></i>'`
@@ -23,6 +23,9 @@ import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
  * * Receives the current value of the control as its input and must return a boolean 
  * value. `true` signalizes a successful validation without errors, while `false` 
  * indicates validation failed. 
+ * 
+ * @property {Boolean} isRenderable Returns `true`, if the control has a defined view model factory and a template. 
+ * 
  * @method onChange Callback that is invoked when the value changes. 
  * Receives the following arguments: 
  * * `oldValue: {Any}`
@@ -30,13 +33,26 @@ import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
  */
 export default class DynamicInputDefinition {
   /**
+   * Returns `true`, if the control has a defined view model factory and a template. 
+   * 
+   * @type {Boolean}
+   * @readonly
+   */
+  get isRenderable() {
+    return ValidationUtil.isDefined(this.viewModelFactory) 
+      && ValidationUtil.isNotBlankOrUndefined(this.template);
+  }
+
+  /**
    * @param {Object} args 
    * @param {String} args.name Internal name. The value of the input will be referencable 
    * by this name. 
    * @param {String | undefined} args.template String path to the template to render the control with. 
-   * @param {Function | undefined} args.viewModelFactory Must return a `ViewModel` instance. Receives the following arguments:
+   * @param {Function | undefined} args.viewModelFactory Must return a `ViewModel` instance. Is `async` 
+   * and receives the following arguments:
    * * `id: String`
    * * `parent: ViewModel`
+   * * `isEditable: Boolean`
    * @param {String | undefined} args.localizedLabel Localized companion label. 
    * * default `""`
    * @param {String | undefined} args.iconHtml E. g. `'<i class="fas fa-plus"></i>'`
@@ -50,7 +66,7 @@ export default class DynamicInputDefinition {
    * value. `true` signalizes a successful validation without errors, while `false` 
    * indicates validation failed. Receives arguments: 
    * * `currentValue: Any`
-   * @param {Function | undefined} onChange Callback that is invoked when the value changes. 
+   * @param {Function | undefined} args.onChange Callback that is invoked when the value changes. 
    * Receives the following arguments: 
    * * `oldValue: {Any}`
    * * `newValue: {Any}`

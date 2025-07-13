@@ -1,33 +1,33 @@
 {{!-- Parameters:
-viewModel: DynamicInputDialog
+viewModel: DynamicInputDialogViewModel
 buttons: Array<Object>
 --}}
 {{#> dialogContent}}
-  {{#each viewModel.controls as |control index|}}
-  <div id="{{control.definition.name}}" class="flex flex-row auto-margin-h-md sheet-block">
+  {{#each viewModel.inputDefinitions as |definition index|}}
+  <div id="{{definition.name}}" class="flex flex-row auto-margin-h-md sheet-block">
     {{!-- Label --}}
-    {{#if (or control.definition.localizedLabel control.definition.iconHtml)}}
+    {{#if (or definition.localizedLabel definition.iconHtml)}}
     <div class="flex flex-row flex-grow flex-middle">
-      {{#if control.definition.localizedLabel}}
-      {{#> label showFancyFont=control.definition.showFancyFont cssClass="flex-grow"}}{{{control.definition.localizedLabel}}}{{/label}}
+      {{#if definition.localizedLabel}}
+      {{#> label showFancyFont=definition.showFancyFont cssClass="flex-grow"}}{{{definition.localizedLabel}}}{{/label}}
       {{/if}}
-      {{#if control.definition.required}}
+      {{#if definition.required}}
         <span class="font-size-md font-bold">*</span>
       {{/if}}
       {{!-- Icon --}}
-      {{#if control.definition.iconHtml}}
+      {{#if definition.iconHtml}}
       <span class="flex flex-center">
-        {{{control.definition.iconHtml}}}
+        {{{definition.iconHtml}}}
       </span>
       {{/if}}
     </div>
     {{/if}}
-    {{!-- Input control --}}
-    {{#if control.isRenderable}}
-    <div class="flex flex-middle flex-grow">
-      {{#with control.template as | template |}}
-        {{> (template) viewModel=control.viewModel }}
-      {{/with}}
+    {{!-- Input element --}}
+    {{#if definition.isRenderable}}
+    <div id="{{definition.name}}-slot" class="flex flex-middle flex-grow">
+			<div id="{{definition.name}}-placeholder" class="flex flex-center">
+        <i class="fa-spinner fas font-size-lg spin"></i>
+      </div>
     </div>
     {{/if}}
   </div>

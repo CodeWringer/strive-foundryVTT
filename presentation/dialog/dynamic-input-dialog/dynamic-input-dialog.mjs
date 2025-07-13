@@ -124,6 +124,10 @@ export default class DynamicInputDialog extends ConfirmableModalDialog {
    * @param {Array<DynamicInputDefinition>} options.inputDefinitions
    * @param {String | undefined} options.focused Name of the input field to pre-focus when 
    * the dialog is opened. 
+   * 
+   * @param {Function | undefined} options.onReady Invoked once all view model instances have 
+   * been created. Receives arguments:
+   * * `dialogViewModel: DynamicInputDialogViewModel`
    */
   constructor(options = {}) {
     super(options);
@@ -131,6 +135,7 @@ export default class DynamicInputDialog extends ConfirmableModalDialog {
 
     this.inputDefinitions = options.inputDefinitions;
     this.focused = options.focused;
+    this.onReady = options.onReady;
   }
   
   /** @override */
@@ -146,6 +151,7 @@ export default class DynamicInputDialog extends ConfirmableModalDialog {
       isSendable: true,
       ui: this,
       focused: this.focused,
+      onReady: this.onReady,
     });
 
     return {
