@@ -1,7 +1,7 @@
 import { ValidationUtil } from '../../../business/util/validation-utility.mjs';
 import ConfirmableModalDialog from '../confirmable-modal-dialog/confirmable-modal-dialog.mjs';
 import DialogButtonDefinition from '../dialog-button-definition.mjs';
-import DynamicInputDefinition from './input-types/dynamic-input-definition.mjs';
+import DynamicInputDefinition from './dynamic-input-definition.mjs';
 import DynamicInputDialogViewModel from './dynamic-input-dialog-viewmodel.mjs';
 
 /**
@@ -33,12 +33,16 @@ import DynamicInputDialogViewModel from './dynamic-input-dialog-viewmodel.mjs';
  *     game.i18n.localize("system.character.asset.slot.label"), 
  *   ),
  *   inputDefinitions: [
- *     new DynamicInputDefinitionDropDown({
+ *     new DynamicInputDefinition({
  *       name: "inputChoices",
  *       localizedLabel: game.i18n.localize("system.general.name.label"),
- *       required: true,
- *       defaultValue: assetChoices[0], // This must be of type `ChoiceOption`! 
- *       options: assetChoices, // This must be of type `Array<ChoiceOption>`! 
+ *       template: InputDropDownViewModel.TEMPLATE,
+ *       viewModelFactory: (id, parent) => new InputTextFieldViewModel({
+ *         id: id,
+ *         parent: parent,
+ *         options: assetChoices,
+ *         value: assetChoices[0],
+ *       }),
  *     }),
  *   ],
  * }).renderAndAwait(true); 

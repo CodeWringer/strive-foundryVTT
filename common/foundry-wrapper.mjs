@@ -47,6 +47,7 @@ export default class FoundryWrapper {
   }
 
   /**
+   * Plays the given sound file once. 
    * 
    * @param {String} soundSrc An audio file url. 
    * See also `SOUNDS_CONSTANTS`. 
@@ -54,6 +55,7 @@ export default class FoundryWrapper {
    * @param {AudioContext} options.context 
    * @param {Boolean} options.forceBuffer  
    * 
+   * @async
    * @see https://foundryvtt.com/api/v12/classes/foundry.audio.Sound.html#constructor
    */
   async playSound(soundSrc, options) {
@@ -71,6 +73,8 @@ export default class FoundryWrapper {
    * it is being rendered. 
    * 
    * @returns {String} The rendered HTML. 
+   * 
+   * @async
    */
   async renderTemplate(templatePath, args = {}) {
     return await renderTemplate(templatePath, args);

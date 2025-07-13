@@ -17,8 +17,9 @@ import TransientBaseActor from "../../../business/document/actor/transient-base-
 import { ExtenderUtil } from "../../../common/extender-util.mjs"
 import Tooltip, { TOOLTIP_PLACEMENTS, TooltipPlacementConstraint } from "../../component/tooltip/tooltip.mjs"
 import ActorAbilitiesViewModel from "./part/abilities/actor-abilities-viewmodel.mjs"
-import DynamicInputDefinitionNumberSpinner from "../../dialog/dynamic-input-dialog/input-types/dynamic-input-definition-number-spinner.mjs"
-import DynamicInputDefinitionToggle from "../../dialog/dynamic-input-dialog/input-types/dynamic-input-definition-toggle.mjs"
+import DynamicInputDefinition from "../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs"
+import InputNumberSpinnerViewModel from "../../component/input-number-spinner/input-number-spinner-viewmodel.mjs"
+import InputToggleViewModel from "../../component/input-toggle/input-toggle-viewmodel.mjs"
 
 /**
  * @extends BaseSheetViewModel
@@ -345,51 +346,86 @@ export default class ActorSheetViewModel extends BaseSheetViewModel {
     const inputEnableGritPoints = "inputEnableGritPoints";
 
     const inputDefinitions = [
-      new DynamicInputDefinitionNumberSpinner({
+      new DynamicInputDefinition({
         name: inputMaxActionPoints,
         localizedLabel: game.i18n.localize("system.actionPoint.max"),
-        min: 0,
-        defaultValue: this.document.actionPoints.maximum,
+        template: InputNumberSpinnerViewModel.TEMPLATE,
+        viewModelFactory: (id, parent) => new InputNumberSpinnerViewModel({
+          id: id,
+          parent: parent,
+          min: 0,
+          value: this.document.actionPoints.maximum,
+        }),
       }),
-      new DynamicInputDefinitionNumberSpinner({
+      new DynamicInputDefinition({
         name: inputRefillActionPoints,
         localizedLabel: game.i18n.localize("system.actionPoint.refill"),
-        min: 0,
-        defaultValue: this.document.actionPoints.refill.amount,
+        template: InputNumberSpinnerViewModel.TEMPLATE,
+        viewModelFactory: (id, parent) => new InputNumberSpinnerViewModel({
+          id: id,
+          parent: parent,
+          min: 0,
+          value: this.document.actionPoints.refill.amount,
+        }),
       }),
-      new DynamicInputDefinitionToggle({
+      new DynamicInputDefinition({
         name: inputAllowRefillActionPoints,
         localizedLabel: game.i18n.localize("system.actionPoint.allowRefill"),
-        defaultValue: this.document.actionPoints.refill.enable,
+        template: InputToggleViewModel.TEMPLATE,
+        viewModelFactory: (id, parent) => new InputToggleViewModel({
+          id: id,
+          parent: parent,
+          value: this.document.actionPoints.refill.enable,
+        }),
       }),
-      new DynamicInputDefinitionNumberSpinner({
+      new DynamicInputDefinition({
         name: inputInitiatives,
         localizedLabel: game.i18n.localize("system.character.attribute.initiative.numberPerRound"),
-        min: 1,
-        defaultValue: this.document.initiative.perTurn,
+        template: InputNumberSpinnerViewModel.TEMPLATE,
+        viewModelFactory: (id, parent) => new InputNumberSpinnerViewModel({
+          id: id,
+          parent: parent,
+          min: 1,
+          value: this.document.initiative.perTurn,
+        }),
       }),
     ];
 
     if (this.isNPC) {
       inputDefinitions.push(
-        new DynamicInputDefinitionToggle({
+        new DynamicInputDefinition({
           name: inputEnablePersonality,
           localizedLabel: game.i18n.localize("system.character.sheet.tab.personality"),
-          defaultValue: this.document.personalityVisible,
+          template: InputToggleViewModel.TEMPLATE,
+          viewModelFactory: (id, parent) => new InputToggleViewModel({
+            id: id,
+            parent: parent,
+            value: this.document.personalityVisible,
+          }),
         })
       );
       inputDefinitions.push(
-        new DynamicInputDefinitionToggle({
+        new DynamicInputDefinition({
           name: inputEnableProgression,
           localizedLabel: game.i18n.localize("system.character.advancement.label"),
-          defaultValue: this.document.progressionVisible,
+          template: InputToggleViewModel.TEMPLATE,
+          viewModelFactory: (id, parent) => new InputToggleViewModel({
+            id: id,
+            parent: parent,
+            value: this.document.progressionVisible,
+          }),
         })
       );
       inputDefinitions.push(
-        new DynamicInputDefinitionToggle({
+        new DynamicInputDefinition({
           name: inputEnableGritPoints,
           localizedLabel: game.i18n.localize("system.character.gritPoint.toggleLabel"),
-          defaultValue: this.document.gritPoints.enable,
+          template: InputToggleViewModel.TEMPLATE,
+          viewModelFactory: (id, parent) => new InputToggleViewModel({
+            id: id,
+            parent: parent,
+            value: this.document.gritPoints.enable,
+          }),
         })
       );
     }

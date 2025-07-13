@@ -1,16 +1,16 @@
 {{!-- Parameters:
-viewModel: {Array<DynamicInputDialogViewModel>}
+viewModel: DynamicInputDialog
+buttons: Array<Object>
 --}}
 {{#> dialogContent}}
   {{#each viewModel.controls as |control index|}}
-  <div class="flex flex-row auto-margin-h-md sheet-block">
-    {{!-- Label only --}}
-    {{#if (eq control.definition.type "LABEL")}}
-    <div id="{{control.viewModel.id}}">{{{control.definition.localizedLabel}}}</div>
-    {{else}}
+  <div id="{{control.definition.name}}" class="flex flex-row auto-margin-h-md sheet-block">
     {{!-- Label --}}
+    {{#if (or control.definition.localizedLabel control.definition.iconHtml)}}
     <div class="flex flex-row flex-grow flex-middle">
-      {{#> label showFancyFont=viewModel.showFancyFont cssClass="flex-grow"}}{{{control.definition.localizedLabel}}}{{/label}}
+      {{#if control.definition.localizedLabel}}
+      {{#> label showFancyFont=control.definition.showFancyFont cssClass="flex-grow"}}{{{control.definition.localizedLabel}}}{{/label}}
+      {{/if}}
       {{#if control.definition.required}}
         <span class="font-size-md font-bold">*</span>
       {{/if}}
@@ -21,40 +21,13 @@ viewModel: {Array<DynamicInputDialogViewModel>}
       </span>
       {{/if}}
     </div>
+    {{/if}}
     {{!-- Input control --}}
+    {{#if control.isRenderable}}
     <div class="flex flex-middle flex-grow">
-      {{#if (eq control.definition.type "DROP_DOWN")}}
-        {{> inputDropDown viewModel=control.viewModel}}
-      {{/if}}
-      {{#if (eq control.definition.type "IMAGE")}}
-        {{> inputImage viewModel=control.viewModel}}
-      {{/if}}
-      {{#if (eq control.definition.type "NUMBER_SPINNER")}}
-        {{> inputNumberSpinner viewModel=control.viewModel}}
-      {{/if}}
-      {{#if (eq control.definition.type "RADIO_BUTTONS")}}
-        {{> inputRadioButtonGroup viewModel=control.viewModel}}
-      {{/if}}
-      {{#if (eq control.definition.type "RICH_TEXT")}}
-        {{> inputRichText viewModel=control.viewModel}}
-      {{/if}}
-      {{#if (eq control.definition.type "TEXTAREA")}}
-        {{> inputTextarea viewModel=control.viewModel}}
-      {{/if}}
-      {{#if (eq control.definition.type "TEXTFIELD")}}
-        {{> inputTextField viewModel=control.viewModel}}
-      {{/if}}
-      {{#if (eq control.definition.type "SIMPLE_LIST")}}
-        {{> simpleList viewModel=control.viewModel cssClass="flex-grow" }}
-      {{/if}}
-      {{#if (eq control.definition.type "TOGGLE")}}
-        {{> inputToggle viewModel=control.viewModel}}
-      {{/if}}
-      {{#if (eq control.definition.type "CUSTOM")}}
-        {{#with control.template as | template |}}
-          {{> (template) viewModel=control.viewModel }}
-        {{/with}}
-      {{/if}}
+      {{#with control.template as | template |}}
+        {{> (template) viewModel=control.viewModel }}
+      {{/with}}
     </div>
     {{/if}}
   </div>

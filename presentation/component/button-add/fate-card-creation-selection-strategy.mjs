@@ -1,7 +1,7 @@
 import { ITEM_TYPES } from "../../../business/document/item/item-types.mjs";
 import { ValidationUtil } from "../../../business/util/validation-utility.mjs";
 import SpecificDocumentCreationStrategy from "./specific-document-creation-strategy.mjs";
-import DynamicInputDefinitionLabel from "../../dialog/dynamic-input-dialog/input-types/dynamic-input-definition-label.mjs";
+import DynamicInputDefinition from "../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
 
 /**
  * Lets the user select a specific template fate-card from a given list of options. 
@@ -43,7 +43,7 @@ export default class FateCardCreationStrategy extends SpecificDocumentCreationSt
    * @param {Function | undefined} args.selectionLabelMapper If not undefined, will be used 
    * to change the content's of a label based on the currently selected entry. 
    * Must return a string value. Arguments: 
-   * * `selected: ChoiceOption`
+   * * `selected: ChoiceOption | undefined`
    */
   constructor(args = {}) {
     super({
@@ -58,20 +58,18 @@ export default class FateCardCreationStrategy extends SpecificDocumentCreationSt
     if (ValidationUtil.isDefined(this.selectionLabelMapper)) {
       const superInputs = await super._getDialogInputs(choices);
       const choicesInput = superInputs.find(it => it.name === this.nameInputChoices);
-
-      const defaultChoice = choicesInput.defaultValue;
-      const mappedLabel = await this.selectionLabelMapper(defaultChoice);
+      const mappedLabel = await this.selectionLabelMapper();
 
       // Override the original onChange method so it also handles updating the label. 
       choicesInput.onChange = async (_, newValue, dialogViewModel) => {
         await this.onSelectionChanged(dialogViewModel.ui, newValue, choices);
 
         const mappedLabel = await this.selectionLabelMapper(newValue);
-        $(dialogViewModel.element).find(`#${dialogViewModel.id}-${this.nameLabel} > p`).text(mappedLabel);
+        $(dialogViewModel.element).find(`#${this.nameLabel} label p`).text(mappedLabel);
       };
 
       return superInputs.concat([
-        new DynamicInputDefinitionLabel({
+        new DynamicInputDefinition({
           name: this.nameLabel,
           localizedLabel: `<p class="font-size-default">${mappedLabel}</p>`,
           showFancyFont: false,

@@ -36,18 +36,6 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
   get isExpertiseListVisible() { return (this.isEditable === true) || this.document.expertises.length !== 0 }
 
   /**
-   * @type {String}
-   * @readonly
-   */
-  get prerequisiteListItemTemplate() { return SkillPrerequisiteListItemViewModel.TEMPLATE; }
-
-  /**
-   * @type {String}
-   * @readonly
-   */
-  get baseAttributeListItemTemplate() { return BaseAttributeListItemViewModel.TEMPLATE; }
-
-  /**
    * @type {Boolean}
    * @readonly
    */
@@ -254,32 +242,28 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
       localizedToolTip: game.i18n.localize("system.damageDefinition.infoFormulae"),
     });
 
-    this.baseAttributeViewModels = this._getBaseAttributeViewModels();
     this.vmBaseAttributeList = new SimpleListViewModel({
       id: "vmBaseAttributeList",
       parent: this,
-      isEditable: this.isEditable,
-      isSendable: this.isSendable,
-      isOwner: this.isOwner,
-      contentItemViewModels: this.baseAttributeViewModels,
-      contentItemTemplate: this.baseAttributeListItemTemplate,
-      onAddClick: () => {
-        const baseAttributes = this.document.baseAttributes.concat([
-          ATTRIBUTES.agility
-        ]);
-        this.document.baseAttributes = baseAttributes;
+      value: this.document.baseAttributes.concat([]),
+      contentItemTemplate: BaseAttributeListItemViewModel.TEMPLATE,
+      contentItemViewModelFactory: (index, attribute) => {
+        return new BaseAttributeListItemViewModel({
+          id: `vmAttribute${index}`,
+          isEditable: true,
+          attribute: attribute,
+        })
       },
-      onRemoveClick: (_, index) => {
-        const newBaseAttributes = this.document.baseAttributes.concat([]);
-        newBaseAttributes.splice(index, 1);
-        this.document.baseAttributes = newBaseAttributes;
-      },
+      newItemDefaultValue: ATTRIBUTES.agility,
       isItemAddable: this.isEditable,
-      isItemRemovable: (this.isEditable && this.baseAttributeViewModels.length > 1),
+      isItemRemovable: (this.isEditable && this.document.baseAttributes.length > 1),
       localizedAddLabel: StringUtil.format(
         game.i18n.localize("system.general.add.addType"),
         game.i18n.localize("system.character.attribute.singular")
       ),
+      onChange: (oldValue, newValue) => {
+        this.document.baseAttributes = newValue;
+      },
     });
     this.vmAddAttribute2 = new ButtonViewModel({
       id: "vmAddAttribute2",
@@ -297,29 +281,30 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
       },
     });
 
-    this.prerequisiteViewModels = this._getPrerequisiteViewModels();
     this.vmPrerequisiteList = new SimpleListViewModel({
       id: "vmPrerequisiteList",
       parent: this,
-      contentItemViewModels: this.prerequisiteViewModels,
-      contentItemTemplate: this.prerequisiteListItemTemplate,
-      onAddClick: () => {
-        const prerequisites = this.document.prerequisites.concat([
-          new SkillPrerequisite()
-        ]);
-        this.document.prerequisites = prerequisites;
+      value: this.document.prerequisites.concat([]),
+      contentItemTemplate: SkillPrerequisiteListItemViewModel.TEMPLATE,
+      contentItemViewModelFactory: (index, prerequisite) => {
+        return new SkillPrerequisiteListItemViewModel({
+          id: `vmAttribute${index}`,
+          isEditable: true,
+          stateId: (prerequisite ?? {}).id,
+          stateName: (prerequisite ?? {}).name,
+          stateMinimumLevel: ((prerequisite ?? {}).minimumLevel ?? 0),
+        });
       },
-      onRemoveClick: (_, index) => {
-        const newPrerequisites = this.document.prerequisites.concat([]);
-        newPrerequisites.splice(index, 1);
-        this.document.prerequisites = newPrerequisites;
-      },
+      newItemDefaultValue: new SkillPrerequisite(),
       isItemAddable: this.isEditable,
       isItemRemovable: this.isEditable,
       localizedAddLabel: StringUtil.format(
         game.i18n.localize("system.general.add.addType"),
         game.i18n.localize("system.character.skill.prerequisite.singular")
       ),
+      onChange: (oldValue, newValue) => {
+        this.document.prerequisites = newValue;
+      },
     });
     this.vmAddPrerequisite2 = new ButtonViewModel({
       id: "vmAddPrerequisite2",
@@ -438,63 +423,6 @@ export default class SkillItemSheetViewModel extends BaseItemSheetViewModel {
       template: game.strive.const.TEMPLATES.SKILL_ITEM_SHEET_EXTRA_CONTENT,
       viewModel: this,
     });
-  }
-
-  /**
-   * @returns {Array<SkillPrerequisiteListItemViewModel>}
-   * 
-   * @private
-   */
-  _getPrerequisiteViewModels() {
-    const result = [];
-
-    const prerequisites = this.document.prerequisites;
-    for (let index = 0; index < prerequisites.length; index++) {
-      const prerequisite = prerequisites[index];
-
-      const vm = new SkillPrerequisiteListItemViewModel({
-        id: `vmPrerequisite${index}`,
-        isEditable: this.isEditable,
-        stateId: prerequisite.id,
-        stateName: prerequisite.name,
-        stateMinimumLevel: (prerequisite.minimumLevel ?? 0),
-        onChange: () => {
-          const prerequisites = this.prerequisiteViewModels.map(viewModel =>
-            viewModel.state
-          );
-          this.document.prerequisites = prerequisites;
-        },
-      });
-      result.push(vm);
-    }
-    return result;
-  }
-
-  /**
-   * @returns {Array<BaseAttributeListItemViewModel>}
-   * 
-   * @private
-   */
-  _getBaseAttributeViewModels() {
-    const result = [];
-
-    const attributes = this.document.baseAttributes;
-    for (let index = 0; index < attributes.length; index++) {
-      const attribute = attributes[index];
-
-      const vm = new BaseAttributeListItemViewModel({
-        id: `vmAttribute${index}`,
-        isEditable: this.isEditable,
-        attribute: attribute,
-        onChange: (newAttribute) => {
-          const newBaseAttributes = this.document.baseAttributes.concat([]);
-          newBaseAttributes[index] = newAttribute;
-          this.document.baseAttributes = newBaseAttributes;
-        },
-      });
-      result.push(vm);
-    }
-    return result;
   }
 
   /**

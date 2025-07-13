@@ -24,7 +24,8 @@ import RulesetExplainer from "../../../../business/ruleset/ruleset-explainer.mjs
 import ReadOnlyValueViewModel from "../../../component/read-only-value/read-only-value.mjs"
 import ViewModel from "../../../view-model/view-model.mjs"
 import { SKILL_TAGS } from "../../../../business/tags/system-tags.mjs"
-import DynamicInputDefinitionSimpleList from "../../../dialog/dynamic-input-dialog/input-types/dynamic-input-definition-simple-list.mjs"
+import DynamicInputDefinition from "../../../dialog/dynamic-input-dialog/dynamic-input-definition.mjs"
+import SimpleListViewModel from "../../../component/simple-list/simple-list-viewmodel.mjs"
 
 /**
  * @property {TransientSkill} document
@@ -195,29 +196,29 @@ export default class SkillListItemViewModel extends BaseListItemViewModel {
     const baseAttributes = this.document.baseAttributes.concat([]); // Safe copy
     const metaData = super.metaDataInputDefinitions;
     metaData.splice(0, 0, 
-      new DynamicInputDefinitionSimpleList({
+      new DynamicInputDefinition({
         name: this._inputAttributes,
         localizedLabel: game.i18n.localize("system.character.attribute.plural"),
+        template: SimpleListViewModel.TEMPLATE,
+        viewModelFactory: (id, parent) => new SimpleListViewModel({
+          id: id,
+          parent: parent,
+          value: baseAttributes,
+          contentItemTemplate: BaseAttributeListItemViewModel.TEMPLATE,
+          contentItemViewModelFactory: (index, attribute) => {
+            return new BaseAttributeListItemViewModel({
+              id: `vmAttribute${index}`,
+              isEditable: true,
+              attribute: attribute,
+            });
+          },
+          newItemDefaultValue: ATTRIBUTES.agility,
+          isItemAddable: this.isEditable,
+          isItemRemovable: this.isEditable,
+          localizedAddLabel: game.i18n.localize("system.general.add.add"),
+        }),
         required: true,
-        defaultValue: baseAttributes,
-        validationFunc: (value) => {
-          return value.length > 0;
-        },
-        contentItemTemplate: BaseAttributeListItemViewModel.TEMPLATE,
-        contentItemViewModelFactory: (index, attributes) => {
-          return new BaseAttributeListItemViewModel({
-            id: `vmAttribute${index}`,
-            isEditable: true,
-            attribute: attributes[index],
-            onChange: (newAttribute) => {
-              attributes[index] = newAttribute;
-            },
-          })
-        },
-        newItemDefaultValue: ATTRIBUTES.agility,
-        isItemAddable: this.isEditable,
-        isItemRemovable: this.isEditable,
-        localizedAddLabel: game.i18n.localize("system.general.add.add"),
+        validationFunc: (value) => { return value.length > 0; },
       }),
     );
     return metaData;

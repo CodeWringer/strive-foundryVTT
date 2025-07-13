@@ -1,10 +1,9 @@
 import { VISIBILITY_MODES } from "../../presentation/chat/visibility-modes.mjs";
-import DynamicInputDefinition from "../../presentation/dialog/dynamic-input-dialog/input-types/dynamic-input-definition.mjs";
+import InputDropDownViewModel from "../../presentation/component/input-choice/input-dropdown/input-dropdown-viewmodel.mjs";
+import DynamicInputDefinition from "../../presentation/dialog/dynamic-input-dialog/dynamic-input-definition.mjs";
 import DynamicInputDialog from "../../presentation/dialog/dynamic-input-dialog/dynamic-input-dialog.mjs";
-import { DYNAMIC_INPUT_TYPES } from "../../presentation/dialog/dynamic-input-dialog/input-types/dynamic-input-types.mjs";
 import RollData from "./roll-data.mjs";
 import RollQueryData from "./roll-query-data.mjs";
-import DynamicInputDefinitionDropdown from "../../presentation/dialog/dynamic-input-dialog/input-types/dynamic-input-definition-dropdown.mjs";
 
 /**
  * Defines a schema for rolling dice. 
@@ -102,12 +101,16 @@ export class RollSchema {
     const dialog = new DynamicInputDialog({
       localizedTitle: game.i18n.localize("system.roll.query"),
       inputDefinitions: [
-        new DynamicInputDefinitionDropdown({
+        new DynamicInputDefinition({
           name: this._nameInputVisibility,
+          template: InputDropDownViewModel.TEMPLATE,
+          viewModelFactory: (id, parent) => new InputDropDownViewModel({
+            id: id,
+            parent: parent,
+            value: VISIBILITY_MODES.asChoices().find(it => it.value === VISIBILITY_MODES.public.name),
+            options: VISIBILITY_MODES.asChoices(),
+          }),
           localizedLabel: game.i18n.localize("system.general.messageVisibility.label"),
-          required: true,
-          defaultValue: VISIBILITY_MODES.asChoices().find(it => it.value === VISIBILITY_MODES.public.name),
-          options: VISIBILITY_MODES.asChoices(),
         }),
       ],
     });

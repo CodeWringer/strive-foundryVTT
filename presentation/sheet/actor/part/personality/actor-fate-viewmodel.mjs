@@ -118,7 +118,7 @@ export default class ActorFateViewModel extends ViewModel {
             let MaFP = "?";
             let MiFP = "?";
     
-            if (selected.value !== "custom") {
+            if (ValidationUtil.isDefined(selected) && selected.value !== "custom") {
               const document = await new DocumentFetcher().find({
                 id: selected.value,
                 documentType: GENERAL_DOCUMENT_TYPES.ITEM,
